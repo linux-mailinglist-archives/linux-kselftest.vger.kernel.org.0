@@ -1,281 +1,295 @@
-Return-Path: <linux-kselftest+bounces-20046-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20047-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 735FC9A2DF8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 21:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D7DC9A2E0F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 21:50:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB3471F24503
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 19:41:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C21E01F2331E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 19:50:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50539227BAF;
-	Thu, 17 Oct 2024 19:40:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A9E61C1ADA;
+	Thu, 17 Oct 2024 19:49:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="BkWTXW4R";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="skBwsOhx"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="WeEWIk8d"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24D8219CAF;
-	Thu, 17 Oct 2024 19:40:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729194059; cv=fail; b=kmq/L009bGtTgL0fSt6XdEV22+rbomcf1fAVb2YD6/Zwmdx/GDPTUNthOV5J0/Z9N1zw3u45VvnCYRQ1x7JQxNXaCNyaMQ9h5LJ/u9yeUqiGla32q6YL6Ey/NaFeSeUgWc+BerNhk+3e9soiDetWlQQvyvQfYZtDlPm7KoTRC8E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729194059; c=relaxed/simple;
-	bh=hNGRtktqdpIlcVmCJ72i78I2ayHRGXqSqoYLRT2GvAE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=AfofGZ4g/NZUeTDOZxb0KOey0FLDaOLfCDE0RYKdrDupa0/K/IwefLVDk3uEWoh4nz4WH2LTNgD9BwaOgScuTeAHfvcLDOMfS22jKj+cVNrH17rlLaZzLlr7+megVDl+NgitfyREE1Whj7G9+hn6M9Lu9a3eEGO9vn8MMuBFadM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=BkWTXW4R; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=skBwsOhx; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49HFBvUI024516;
-	Thu, 17 Oct 2024 19:40:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2023-11-20; bh=/Ceu8/wwh7+1B1fFKv
-	lCde4rlsfKugpyoWExq9/8VzI=; b=BkWTXW4RyPS854G+UmJgHvMuO16MFU+6eP
-	0N4nmMyv0KA7arCP1MdbdS7Q4Y885wQrVTr13WBZnZOvHEkI20xV7po7dKBwyW1y
-	ImION1E/Rp0yhCtpF7LtuYnDumeXJMrPFa8XK0yeeyE4dXhpabL5Uh0W9yyuBctF
-	MQunrQuZM7dJSfbqi+EcMTghqcaMnhCLsnNv44LCxc0n+eeazvUt3L2a0G7gNHdO
-	EoEwPr3J3fsYeWuWHo7VhJOajJeYVbKxrNRRUY8D/DoR5qZEOYlqVowQFx7T0iOi
-	i7T7BJ/9V00q6he8n0W+WTU2AlhDvEszdvxub7Qcb5lryxQ6dUoQ==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427fhcpv18-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Oct 2024 19:40:35 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49HJ1CNr014016;
-	Thu, 17 Oct 2024 19:40:34 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2049.outbound.protection.outlook.com [104.47.57.49])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 427fjapj03-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Oct 2024 19:40:34 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kyKWJ6CYwhtG0vSGRlp2jBqKN2EWKYfmvRzo5wz26taYmhHaQXBPqtSGvXgBUP1X1CQvyaW4qjK6ZZB/bg5r/ScDd0fmWCKla+3BG89gumh3cXsute/w981D123RO+oQRqLXI3OCz/r6zQgUbrbg3hxp1mwTIRRRy9Ttj2f7KB/c/PY27LFbrUC80YeW0sPsLfWbZHw+I5TCyaWoj/ZDh5h27nFBmhWXWpOIzlqK38C1E9s2U/lN7IauAePzhXJyhMew/uQZil+4x/q0VY1beezJP3R9f1dAJID9Y2DEB81ZtXlXZLpKJrEPt1SYdJ/Y7MH1rQHse2Bdupfw4JRJ7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/Ceu8/wwh7+1B1fFKvlCde4rlsfKugpyoWExq9/8VzI=;
- b=Z1zD7hnnUF87oRPsEpUXOm2oQBMfryR0mfFMfHC1emJk4Tnya3CXJfawWPEZMFbhEwSgeSSgh5quOUHccaaHMOrUsxnKx7ORoJAk9da6AKtUjDsy08+qvp+EW+X+8OMxJ5IeiNW5pJqntzKjhp0wwOwqiLfCGMqxKe++jyis/8A20TlWNkyFgi97TPi+HAzDxz5eUEknGjzJ3N8Dfxzx3jXF1QRyuj016S7ZAQFGVpDpTsmnPW6O0Bw9DoGLQEgrPqzTdVGLDWVQvIIuBkw+uV7Tp6ZLYglJCBtZJLvpw3DBg+H5ZXOBOH4CRkf5MyjbiJoJcJ79p0GNClDHq8ZuDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D759117D341
+	for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2024 19:49:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729194599; cv=none; b=FfgRRcvf9q8eJ5Vp3hurXuMzevU/hGddthUaJadUllBVkMXmh86P8QpSC4bBYO+r7jEXOVTgCXLbviOxE0K+xZspdifXIaUoQei6NJ7VuMy8YQzRokLuIeznp9T6tU5XW1HvvB9Iq2oKsqgu4HCeljye60b2q6dPgn3wU7LwZPY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729194599; c=relaxed/simple;
+	bh=bzdp5xZJdhFDkGLVZGcwCXO8VJj0Rya3P/ni8hAFAOQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mU/zdntJxPIw3tq6SxvC+DEKrIBBSi5ksMGFMMfwDlFpFzMFJCVrGTjcw9iguCkWd0ZbcENxixZwo9bHckVYk2p2Hp3h4Dm4qNqV13PfuSbeLl9kTnDsnobvVh4WgtiE9uqQuv5Wcvd7X+GjPA8qpi9PfkOh1YpVeSOhFWQF2ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=WeEWIk8d; arc=none smtp.client-ip=209.85.160.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-288a6df82ebso191337fac.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2024 12:49:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/Ceu8/wwh7+1B1fFKvlCde4rlsfKugpyoWExq9/8VzI=;
- b=skBwsOhx7odcwzd37VZkeHgFHKjNAEK6yJbWYhqZjtd0krcoBhCW996EmNJAw8OXfXDsR4UQkQY++5OrClPltSBPkWBqNK+YBY0DMV/TeK0DEm2Gi9gNxVhMAhG1MIzZvOmmkeOj5nrX6HdUTyHCZyY33JLkfjV+X+TI7ItG+x4=
-Received: from SJ0PR10MB5613.namprd10.prod.outlook.com (2603:10b6:a03:3d0::5)
- by BY5PR10MB4244.namprd10.prod.outlook.com (2603:10b6:a03:207::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.21; Thu, 17 Oct
- 2024 19:40:31 +0000
-Received: from SJ0PR10MB5613.namprd10.prod.outlook.com
- ([fe80::4239:cf6f:9caa:940e]) by SJ0PR10MB5613.namprd10.prod.outlook.com
- ([fe80::4239:cf6f:9caa:940e%5]) with mapi id 15.20.8069.016; Thu, 17 Oct 2024
- 19:40:31 +0000
-Date: Thu, 17 Oct 2024 20:40:23 +0100
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: John Hubbard <jhubbard@nvidia.com>,
-        Christian Brauner <christian@brauner.io>,
-        Shuah Khan <shuah@kernel.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>
-Subject: Re: [PATCH v3 3/3] selftests: pidfd: add tests for PIDFD_SELF_*
-Message-ID: <b7cb4e50-e623-496c-9cbd-e5882ff59d8c@lucifer.local>
-References: <a3778bea-0a1e-41b7-b41c-15b116bcbb32@linuxfoundation.org>
- <a6133831-3fc3-49aa-83c6-f9aeef3713c9@lucifer.local>
- <84c0de17-899e-46fd-8b72-534d8a02c259@linuxfoundation.org>
- <6080fb15-9073-461c-a87d-80e6daa326e6@lucifer.local>
- <6e0bef3a-6667-461a-80f9-791891e11d8d@lucifer.local>
- <97b6a4ea-d53a-47f1-8e64-5b9558f194c1@nvidia.com>
- <28184c3d-3c88-4f8a-a25d-7b5268b55c93@lucifer.local>
- <79f70ce6-f2ad-4fa6-90b9-6a0a936669e5@nvidia.com>
- <de39bf17-a75f-4151-9569-cd85c26fc19c@lucifer.local>
- <a6f56949-7db2-4587-a3c7-3c583cba2fe4@linuxfoundation.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a6f56949-7db2-4587-a3c7-3c583cba2fe4@linuxfoundation.org>
-X-ClientProxiedBy: LO2P123CA0048.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600::36)
- To SJ0PR10MB5613.namprd10.prod.outlook.com (2603:10b6:a03:3d0::5)
+        d=chromium.org; s=google; t=1729194593; x=1729799393; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7XkO2r3zzUNqzUbdoVFCuN5G5HuPfrDJEkzimPq4G1w=;
+        b=WeEWIk8d6yuRNJmEJZjqzUdzdB864oEZcWVzwnrPlNXPAF5dt+VP+Y1HGVtYX2d4Oz
+         XzmFkkxpkbNqXB0cKmpZZJusY8nLw6J/wAQwqoQaGb4+uD1Hqv4nwd5nvSDU/PYrfMwL
+         m1xlU0EsorBiJDgt5wY6ixXstMOLPkT93NO7w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729194593; x=1729799393;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7XkO2r3zzUNqzUbdoVFCuN5G5HuPfrDJEkzimPq4G1w=;
+        b=Z+ZbFDwKxw9QUXTz4vTDxZ7CtwV8IXieFX3vacLgS30kOJx/yqVoz1AoITKfIsmYrd
+         UCPy4gpuMAVQqdi6DjpG2WLF3WkUin67XYBeRiiTe6zKGjRu0R4gkBEjKRv3AK1dO8XZ
+         0Y+wGgCv4L1Dr4juKE7cX1SUb99TqmFEL3o2sY2fhwQjrudgdhZKC/8desQhrp18XDDq
+         wYkW4/rrzsJEfWND009akPaI8A9UQtp8BIqAm3I4nOClD3EovFogKgcZL9FvG9pyPFsa
+         mD2i9QdlooiA92dPYD5QrfMVEGmLMNFWgtghohkZbZ2eIHe2gLuWHtmX5ck7Xv/0KeE1
+         j9Ng==
+X-Forwarded-Encrypted: i=1; AJvYcCWhsk/e8BBnI5atznDCJrC0dDjUeJC6zKjD07egZTAJ+G9lsMTMp7bCyEPSmlgk0jG5o9+yTr7NFf/MJY7zj5U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzqnu40fojpiAoQt61pH+03isvZVZSfxZnzE0yqIW3JprZ9H+k/
+	iz7Djl1F8VoDKSqACPQzMpGotgv3Rili0EmoMaI+Sg7oQP69UMwIA3W5INA6AMppMpLl3QEeCpS
+	XVJHyCSlvR0umvcgrFmZNmyyu3gLbQRYLCXCf
+X-Google-Smtp-Source: AGHT+IEm/koDWIdypp8c7oq3Fku1eryn80Mc4GgdMntt4UDONrJNKs6/3s0FNzVqndj5P3G6PpGYxGY+1ORX2XtKfNw=
+X-Received: by 2002:a05:6870:f115:b0:27c:df37:9e0c with SMTP id
+ 586e51a60fabf-2892c3426e3mr7600fac.8.1729194592767; Thu, 17 Oct 2024 12:49:52
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB5613:EE_|BY5PR10MB4244:EE_
-X-MS-Office365-Filtering-Correlation-Id: 31acca11-9fac-42a0-d441-08dceee38fba
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?TiOolz8jcXsfh/belejXxakgDuZQ5Zeue15tUIxm3zVPe5FQKJwxk9+0eSQt?=
- =?us-ascii?Q?2FXgn72MkGYtME3G+MT35hJIZY6xT4nfTzPn1JzzK84yFsHhrVhxxCwAvQim?=
- =?us-ascii?Q?HmbJEo7QGI48G343uGEoTmJZcwsgaIz51BN9hgKHiP6uhGaBPGjiESDoGOsL?=
- =?us-ascii?Q?1rFOfWWCvrssL9IFefitPdVNzIcxSXunHAGSGDJXc9maL36Zwj+dB3kY5wis?=
- =?us-ascii?Q?bvPjKlK35JR2Aya5UZsg6JMpNFrcN6IrzQQguXrgrXLeqH48TE/N5QK6SrbQ?=
- =?us-ascii?Q?9Xma+UIA9v6iWfDp1c5Ws8aeWbJr1IsMm9QoTF2AKmZmE30l+1Vp/x+6PBW6?=
- =?us-ascii?Q?JPAzPe7Md40WrZhOz67nLUXSaI/P+jk0Dzkq+XHt0BpDbIm9klkgIIME0F78?=
- =?us-ascii?Q?f3ppP5/Jo2nSx6Pmw97hCQHYTMEn58s8q9fRBtIuO85p2GBwbDVZOVD8dEwP?=
- =?us-ascii?Q?wLi5DmhBIsUgLd91IzvVzeVX5BTlE8Q8dUITokNg1RIaNhZTG7b16O3dKgk9?=
- =?us-ascii?Q?kskQb9Y0aED281pORZjb50HdVILT2lQO+zKQxa+x0ZwI+Q/deD/5nww75MmJ?=
- =?us-ascii?Q?xY0FXWZurCoN0BoIicLu6wjjwmNvTRkYX7r7h+GdT4QlmclZFi6RamRqNks7?=
- =?us-ascii?Q?NQy0Fit3HB9FsU5XYA183iyCQ1QvP2tj0Fk/+qbacaNPbBkHKnv+as33dBG3?=
- =?us-ascii?Q?9UrD8XpkOWQp0ainGzxz1px7+qUvsxFoi3eqYa5mdwJdpoVgFZALOhG3K5Ha?=
- =?us-ascii?Q?mixljAAgejOrt7cUrI/TRk+dU/yiWjxeK8NYXkLtv2PT0CVeV5O/aG2CseFe?=
- =?us-ascii?Q?enWFnOsJ8HSLPvkbIfA+IMFTq+72Yr1/pzYUy31X4ExntEj0St3rOF6CE9oT?=
- =?us-ascii?Q?8eN8psW8NLpqm+yOzx4/y74RLLwKIm/Dx5HjpnMPWDeXpNfcVgqj1QBFz0XL?=
- =?us-ascii?Q?zhAO9MDoVPtwNBCgfyyydXi6uebaFMqf9l+sOBH8nsXfl7fgL+ZXPUZ1E2Nw?=
- =?us-ascii?Q?7fwZJDVw/uiJGcbLOr80s9UnWVqMnBrfTdOBbMlmfmisWntBMt2XuVkaXtKi?=
- =?us-ascii?Q?SrGJoHVHCzwU9hPm0mgVXNNESwbagj1JXXwRnIR/vqvZrwPb9foJYsaMJvAs?=
- =?us-ascii?Q?szDKWdt/QU06vyDiTbaOJzzmYa7L05uXY0UFD4ZHpAVG8tHLg5KukIX6OFUX?=
- =?us-ascii?Q?JgI0ae/Qvbdx5e7W4m+i7AmrH6199Pt311qeA34moK+KYI+AKwzoGhefaJq0?=
- =?us-ascii?Q?0bBsWEePCmueJwHpL9ldgMelVbAHIL2LQdcXThrGWcLm8NJFnOl+uY9M7dXX?=
- =?us-ascii?Q?xwoVAhiOKhnN3yT4zMZEl036?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5613.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?4xR39j7WpSb0PLgK5pF71n2/HPhzPF0D2od4E1qBV46BEaKXBoA08bSvNxCH?=
- =?us-ascii?Q?8ZQfieELfDLkgYDyv51himhsIIjGYX8eyW0dobZCUgzcwuIMmWCXQ2cJJU64?=
- =?us-ascii?Q?UMQ7FnB84i0AhzeU7+qVcUV4esFc+RXs54T+ShjzDFLGUc1ex/YXnMb5uuYm?=
- =?us-ascii?Q?Z8jWCYTu6Zq77PvOgiVUDV8Xgdg7QcLplCGsyBhWTK8B9b+sXE+suB8clcan?=
- =?us-ascii?Q?6VVPAymt57oB6BifchO3BqtcwrGQx8rZgYEqR8veabzpJJSVUStTq+zUQNnr?=
- =?us-ascii?Q?M+/IZxHZ9tKKAxKMuLUti3Qr+ljXgTWvhAH77xeq3uAAGEM9uQyh6BaQHU52?=
- =?us-ascii?Q?lPvQjaQWc9+ed4GwFJWt1bk5LfCIIzUlko27Pi6OPmrlLbYu1XFlK63Cr6hV?=
- =?us-ascii?Q?QBsTRNR5si4zsvfF0K/2JcEGeJnpXY1Jm+d/vRH9/WPnA89Ge45Sap+VBqkD?=
- =?us-ascii?Q?kXOBQT+MLtvIH7rQvgJkcS+vKkn0MWGoQOKckHrHU1Xi7RYGX0pD65Bjc+YR?=
- =?us-ascii?Q?Tj65OU2YwY+QtLorcG2Y0kesomECnc+F8nVf/5daysbCLkXaX9BVPbaEH20b?=
- =?us-ascii?Q?qqU/Fpi6roKr03/fZAEsRVMiwaTFzNNfBIAPcaHsi005mqEsTXyLq20x8qeq?=
- =?us-ascii?Q?D+AMRHc8Ki1obG9hcTtiNRryXJHaLFpWROBFej4xQXrYvGN623MosPSK/dp5?=
- =?us-ascii?Q?g1eHcOlZDrSZhG3zn0f9WcRsy/D8z/ZqBigl3LXvghVHkF0zxO7adzN48BXH?=
- =?us-ascii?Q?IeE0cQSCEQZl6+q/dTxsc7tdQnE7VgiwMgwUnoDz8ZU66WvJ6qy4XrY+cBbb?=
- =?us-ascii?Q?HAkDWFNArgMbAEbK1EOBmaUYm41cLDCkoI2HcrHTeuE9DSWyPcaXQm5h5LGn?=
- =?us-ascii?Q?X0UrRSLpFKLrIl3tIXXjhKR8ruCncYfrqHGz8RfPC6YNAQyzDO5GgojQE3er?=
- =?us-ascii?Q?HOP5d6jYQHtZ4Tb2/NqqUfQy6zrSFKSs+zlW2dZucwJUeM+v1rPtvRnntzuG?=
- =?us-ascii?Q?JfOIBsAwl7tYvo9O32as5jOIl69iivIZ7TqzPs0hXFFaMQQgpLgdQpg1AgwQ?=
- =?us-ascii?Q?dAXlR3Rdgz5U7e2HqswYT+nN336bM7wJz7haQiHcRYdbLYs4zi6YlNA5ssvB?=
- =?us-ascii?Q?3x1uTe1CbOT2CWR26sJ9mN0BuwcGJ+1RZDCgDKi8Qo9OXd6DmA2cSJWwdDhI?=
- =?us-ascii?Q?KdU7/6qufE1CcnbHIOvWliugQKQwIOkUhm9CfsDDP/BVUn+lQZy57hBXQxP2?=
- =?us-ascii?Q?fUrk3rUmcGudOUASU3+bX67lcfHHDnqD0wDJ1GyvcgY7NdHVouKW0+wysmfA?=
- =?us-ascii?Q?sichOToCS8D+rnqLDVuq4PJZv4M596vFY/fZ5HQyA7dSVjKn39EpLKFYW2MP?=
- =?us-ascii?Q?mpk6jlg1Qi5+K+yymu6ON9cJOqsb4RrJjDDP9B3UgzfZXTX9hg1pluFdRKgN?=
- =?us-ascii?Q?k17iLezqV2eEd+Xrr6NdypVqbl+ZIVtq3OyyYKhbG9FdMQSr639DFyeX2qN3?=
- =?us-ascii?Q?iSW0ETx4/65EuBjLVK58lRguTs2nsLDobWAvigcwaJrA2971J1BEDPhRa2Lk?=
- =?us-ascii?Q?O7wdaL5R+O0DfCmzqg39EndscKxWCrAAVT41/LePP+mIW5rYxJUlgfZgC99h?=
- =?us-ascii?Q?NQ=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	AmuU9mgYxM2/tiOQAn4j8DmoDIYf0ynnFpkbnVNHAmaQ1QgSQ5FHUKZDX1KAnE/DFybHLmAyDBgs5wW4gS5jGTT3xxCiAjIn+UoEta5lbKyvBI6kfFmp34u4OiA513eSeRz42Yl/zB5magEVlJgOPZn+TTjwl6tLBMCdbZewkeyM7RVIo4AeVGqSluMYnGzMkMOdEYoJzpWinJkoHIwBp4F3heTtgeG5oseLVtry1yH0ciY04u03Jprv9UrjrBcr2is8ZYWZ0mBQbFfSKe8q6O8Fd11QYVQRgW+jrzxnhPodqa2DaL1Ltnz/oJb7m6N9cE66/r+x1WS6/TdcBe4QsfAd4rsbdBV4O5QnLfkYeHij/BCkNf/a8oIzjoRwFspKep2VMRKalMYMXXy8iHVUFm52Mif8CxN59vXqyTckKi/O1Gs6jDctlax1aDQ4jw1V1zrjucyqIUej6rjp3h7tLAzmz365AcIjU6rn/4PJ7OAl1ZvZ4AdlXfd2oK2me2GETnI++xAOUe87/wyqbIu9x3BdHE1HiwO4VX6X/sUGjzbsMho6A1R6Zyr6mFrxLyyBWTYDQ9yNnbsVKuwc75ZbelNGcsJCMhwNkfeuyWsZaTk=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 31acca11-9fac-42a0-d441-08dceee38fba
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB5613.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2024 19:40:31.7300
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3r6FolEbwC+0d9aUY4RPWB6jDp8p9bOcbfcY6kqVdXngLcQPfp/NLFPrW6x+7FaiLXbQ9d4d+gjP4WN/yHCx6mftW3Fk58SvUIFAjciAlco=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4244
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-17_22,2024-10-17_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0 mlxscore=0
- mlxlogscore=974 bulkscore=0 spamscore=0 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
- definitions=main-2410170132
-X-Proofpoint-GUID: yYSDmwzVDTbJ203-qsQHxOZ6pGJ4lzAN
-X-Proofpoint-ORIG-GUID: yYSDmwzVDTbJ203-qsQHxOZ6pGJ4lzAN
+References: <20240830180237.1220027-1-jeffxu@chromium.org> <20240830180237.1220027-5-jeffxu@chromium.org>
+ <e7ea2b84-8d10-40fe-a14f-837bca851ea9@lucifer.local> <fd927106-2fc3-4b96-8014-2c517229bc99@lucifer.local>
+ <CABi2SkUpCf+aOa2sPED8CosG5ccqjFd7ouot8gXi9ECqsHiZhw@mail.gmail.com>
+ <4944ce41-9fe1-4e22-8967-f6bd7eafae3f@lucifer.local> <CABi2SkUgDZtJtRJe+J9UNdtZn=EQzZcbMB685P=1rR7DUhg=6Q@mail.gmail.com>
+ <CABi2SkVEMRHV3swrbb6M5RA6GQpFVVx855CGwdQ1xiz3tygiqA@mail.gmail.com>
+ <f9b9422c-216d-422e-94b4-d8814b0b277e@lucifer.local> <CABi2SkWAv4LXvR1Wb1e31eyZ35JfyieXhDOq1bp_ZvHPLLg-qA@mail.gmail.com>
+ <e0f440b0-5a45-4218-8c51-27f848c0617b@lucifer.local>
+In-Reply-To: <e0f440b0-5a45-4218-8c51-27f848c0617b@lucifer.local>
+From: Jeff Xu <jeffxu@chromium.org>
+Date: Thu, 17 Oct 2024 12:49:40 -0700
+Message-ID: <CABi2SkWNRTCC0LzDSuzgjC1tO=KF==5FXUnPHOrPzEG5abAeDg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] selftests/mseal: add more tests for mmap
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, akpm@linux-foundation.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	pedro.falcato@gmail.com, willy@infradead.org, broonie@kernel.org, 
+	vbabka@suse.cz, Liam.Howlett@oracle.com, rientjes@google.com, 
+	keescook@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 17, 2024 at 01:37:06PM -0600, Shuah Khan wrote:
-> On 10/17/24 11:38, Lorenzo Stoakes wrote:
-> > On Thu, Oct 17, 2024 at 10:37:00AM -0700, John Hubbard wrote:
-> > > On 10/17/24 10:28 AM, Lorenzo Stoakes wrote:
-> > > > On Thu, Oct 17, 2024 at 10:17:54AM -0700, John Hubbard wrote:
-> > > > > On 10/17/24 5:06 AM, Lorenzo Stoakes wrote:
-> > > ...
-> > > > > > 	#ifndef __TOOLS_LINUX_PIDFD_H
-> > > > > > 	#define __TOOLS_LINUX_PIDFD_H
-> > > > > >
-> > > > > > 	/*
-> > > > > > 	 * Some systems have issues with the linux/fcntl.h import in linux/pidfd.h, so
-> > > > > > 	 * work around this by setting the header guard.
-> > > > > > 	 */
-> > > > > > 	#define _LINUX_FCNTL_H
-> > > > > > 	#include "../../../include/uapi/linux/pidfd.h"
-> > > > > > 	#undef _LINUX_FCNTL_H
-> > > > > >
-> > > > > > 	#endif /* __TOOLS_LINUX_PIDFD_H */
-> > > > > >
-> > > > > >
-> > > > > > Then the test code needs only to update the pidfd.h file to #include
-> > > > > > <linux/pidfd.h> and add a simple $(TOOLS_INCLUDES) to the CFLAGS += line in
-> > > > > > the pidfd self tests Makefile and we should be all good.
-> > > > >
+On Thu, Oct 17, 2024 at 12:00=E2=80=AFPM Lorenzo Stoakes
+<lorenzo.stoakes@oracle.com> wrote:
 >
-> I like this solution. I should have read this message first before
-> handling the others.
-
-Thanks!
-
->
-> > > > > Yes.
+> On Thu, Oct 17, 2024 at 11:47:15AM -0700, Jeff Xu wrote:
+> > On Thu, Oct 17, 2024 at 11:29=E2=80=AFAM Lorenzo Stoakes
+> > <lorenzo.stoakes@oracle.com> wrote:
+> > >
+> > > On Thu, Oct 17, 2024 at 11:14:20AM -0700, Jeff Xu wrote:
+> > > > Hi Lorenzo and Muhammad
+> > > >
+> > > > Reviving this thread since the merging window is closed and we have
+> > > > more time to review /work on this code in the next few weeks.
+> > > >
+> > > > On Fri, Sep 13, 2024 at 3:50=E2=80=AFPM Jeff Xu <jeffxu@chromium.or=
+g> wrote:
 > > > > >
+> > > > > Hi Lorenzo
+> > > > >
+> > > > > On Sat, Sep 7, 2024 at 12:28=E2=80=AFPM Lorenzo Stoakes
+> > > > > <lorenzo.stoakes@oracle.com> wrote:
 > > > > > >
-> > > > > > That way we always import everything in this header correctly, we directly
-> > > > > > document this issue, we include the header as you would in userland and we
-> > > > > > should cover off all the issues?
+> > > > > >
+> > > > > > I also suggest we figure out this FAIL_TEST_IF_FALSE() thing at=
+ this point
+> > > > > > too - I may be missing something, but I cannot for the life me =
+understand
+> > > > > > why we have to assert negations only, and other self tests do n=
+ot do this.
+> > > > > >
+> > > > > My most test-infra related comments comes from Muhammad Usama Anj=
+um
+> > > > > (added into this email), e.g. assert is not recommended.[1] ,
 > > > > >
-> > > > > Very nice!
+> > > > > [1] https://lore.kernel.org/all/148fc789-3c03-4490-a653-6a4e58f33=
+6b6@collabora.com/
+> > > > >
+> > > > Specifically regarding Lorenzo's comments about FAIL_TEST_IF_FALSE
 > > > >
-> > > > Thanks!
+> > > > Muhammad Usama Anjum doesn't want assert being used in selftest (se=
+e
+> > > > [1] above), and I quote:
+> > > > "We don't want to terminate the test if one test fails because of a=
+ssert. We
+> > > > want the sub-tests to get executed in-dependent of other tests.
 > > > >
-> > > > I saw from your other thread the idea was to take snapshots and to run scripts
-> > > > to compare etc. but I suppose putting this into the known-stub directory
-> > >
-> > > Actually, I'm not running scripts, because the only time things need to
-> > > change is when new selftests require a new include, or when something
-> > > changes that selftests depend on.
-> > >
-> > > > tools/include/linux rather than tools/include/uapi/linux would avoid a conflict
-> > > > here.
-> > >
-> > > This is the first time I've actually looked at tools/include/linux. That
-> > > sounds about right, though.
-> > >
+> > > > ksft_test_result(condition, fmt, ...);
+> > > > ksft_test_result_pass(fmt, ...);"
 > > > >
-> > > > Or would you say the wrapper should regardless be in the uapi/linux directory?
+> > > > FAIL_TEST_IF_FALSE is a wrapper for ksft_test_result macro, and
+> > > > replacement of assert.
 > > > >
+> > > > Please let me know if you have questions on this and Muhammad might
+> > > > also help to clarify the requirement if needed.
+> > > >
+> > > > Thanks
+> > > > -Jeff
 > > >
-> > > No, not if there is already a better location, as you pointed out.
+> > > Right this is about not failing the test i.e. equivalent of an expect
+> > > rather than an assert, which makes sense.
+> > >
+> > > What I'm saying is we should have something more like
+> > >
+> > > EXPECT_TRUE()
+> > > EXPECT_FALSE()
+> > >
+> > > etc.
+> > >
+> > > Which would avoid these confusing
+> > >
+> > >         FAIL_TEST_IF_FALSE(!expr)
 > >
-> > OK perfect, I have a patch series ready to go with this (and addressing
-> > Christian's comments).
+> > FAIL_TEST_IF_FALSE(expr) is the right way to use this macro.
+>
+> But you don't only test position conditions, you also test negative ones.
+>
+So it is not a problem with the MACRO, but where is it used ?
+
+        ret =3D sys_mseal(ptr, size);
+        FAIL_TEST_IF_FALSE(!ret);
+
+Take this example, it would be
+assert(!ret)
+
+The syscall return usually returns 0 to indicate success, where a
+negative comes from, but dev should be so used to (!ret), it is a
+common pattern to check syscall return code. e.g assert(!ret)
+
+Or do you have specific examples of code that caused confusion ?
+
+
+> 'Fail test if false false thing' is really confusing and hard to read.
+>
+> I struggle to understand your tests as a result.
+>
+> I understand 'fail test if false' is expressive in a way, but it's really=
+ hard
+> to parse.
+>
+If you just read it  as assert(), would that be easier ? (or you don't
+like assert() ?)
+
+> Obviously it's also misleading in that you're saying 'fail the test _late=
+r_
+> if false', which I hadn't even realised...
+>
+> It's well established in basically all normal test suites that:
+>
+> * assert =3D fail test _here_ if this fails (actually a valid thing to do=
+ if
+>            you assert something that means the test simply cannot
+>            reasonably continue if that condition is false).
+> * expect =3D the test will now fail, but carry on.
+>
+> I mean you work for a company that does this :) [0] this is a very well
+> established precedent.
+>
+> [0]:https://github.com/google/googletest
+>
+Let's use expect as an example, let's say I create a new Macro:
+TEST_EXPECT_TRUE, which basically is same syntax as
+FAIL_TEST_IF_FALSE, I'm not sure how it is different: you still have
+!ret in the code.
+
+ ret =3D sys_mseal(ptr, size);
+ TEST_EXPECT_TRUE(!ret);
+
+Or is the FAIL_xxx_IF_FALSE pattern more un-readable than  EXPECT_TURE
+? maybe ..
+
 > >
-> > Shuah - if you are open to this approach then we should be good to go!
+> > It is same syntax as assert(expr), e.g:
+> >
+> > man assert(expr)
+> >        assert - abort the program if assertion is false
+> >
+> > FAIL_TEST_IF_FALSE is a replacement for assert,  instead of aborting
+> > the program, it just reports failure in this test.
 >
-> I am caught up with the discussion now. I am good with this change.
+> So doesn't at all do what assert does, because that _does_ terminate
+> execution on failure...
 >
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+I don't know what you mean, the test case will fail, but the next test
+case will run. This the point, the mseal_test continues to run all
+test cases to finish, even if one of the test cases is failed.
 
-Perfect thanks very much, I will send out the new version of the series with
-this applied, much appreciated! :)
+> We are writing unit tests in a test framework, let's use very well
+> established industry practices please.
+>
+> Also note that you don't even need to reinvent the wheel, there is a
+> fully-featured test harness available in
+> tools/testing/selftests/kselftest_harness.h with both ASSERT_xxx() and
+> EXPECT_xxx() helpers.
+>
+The EXPECT_xxx() doesn't take care of reporting though,  or maybe it
+needs to be combined with FIXTURE_SETUP, FIXTURE_TEARDOWN. I haven't
+spent much time on those, but on brief look, it seems it is for
+repeating some tests, which doesn't exactly fit into what I needed,
+e.g. the sealed memory won't be unmapped.
+It is possible that those tests can be adopted to use test fixtures,
+but I don't see significant gain for that.
 
+> I've used it extensively myself and it works well.
 >
-> thanks,
-> -- Shuah
+> I'd basically suggest you use that. Though moving existing tests to that
+> would be some churn.
 >
+> On the other hand I really can't accept patches which are totally
+> unreadable to me, so you'll need to fix this one way or another, and the
+> churn is worth it as a one-time cost to be honest.
+>
+> >
+> > Is this still confusing ?
+> > (The FAIL_TEST_IF_FALSE is already a descriptive name, and the syntax
+> > of assert is well known.)
+>
+> It's a super misleading name as it says nothing about _WHEN_ the test
+> fails. Also the syntax of assert() may be well known but you don't call
+> this function assert, you don't reference assert anywhere, and you don't =
+do what
+> assert() does so, you know, That's not a great example.
+>
+> The semantics of unit test frameworks are very well known, and already
+> implemented for you, and also do not require you to do unreadable double
+> negations for no reason, so let's use those please.
+>
+As stated previously, I'm not sure whether the test fixture is
+benefiting mseal_test at this moment.  But I'm open for future
+conversion when I have time for this. For now, I like to get those
+tests in so we can properly detect  possible regression for memory
+sealing.
+
+What will help you better review this code? Would the below help ?
+
+s/FAIL_TEST_IF_FALSE/TEST_EXPECT_TRUE/g
+
+
+> >
+> >
+> > >
+> > > Things.
+> > >
+> > > Hopefully that's clear? Thanks!
 
