@@ -1,123 +1,118 @@
-Return-Path: <linux-kselftest+bounces-20052-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20053-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7678E9A2E45
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 22:12:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E7269A2E6C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 22:22:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCA4B1C22A77
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 20:12:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F58C1C21A94
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 20:22:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59A4B227B8D;
-	Thu, 17 Oct 2024 20:12:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D6641DFD9B;
+	Thu, 17 Oct 2024 20:22:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Mx0Izx+d"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GQMUgsim"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DE0721BB0A
-	for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2024 20:12:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854411D07B0;
+	Thu, 17 Oct 2024 20:22:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729195973; cv=none; b=WyRJhkMtpA3qiibZ2FMDzzOjEYhyt5NMt3+A3j+iLcfV20p299E6HVcZuV645v/fYQk0ZDrQcE1rfHOyVn4OywmrI3wZSnVxDbGxYRjjfGRMWNf0ijied0Qy4nvEiT9a9j0s6KrmVdnfbK2mQI8iJ1p2rs6qRiWv0CKEz4CnBXE=
+	t=1729196573; cv=none; b=mAw4SHo1CvOdbn/IpLOzE8kIL6+GICjrUQJYsAM47IZGuvFaP2jEQ6NnNA7nksJ/g0ljlvZIdjTEqNz8HKKdPkUM7x1xRfc7Jog68I5XCW1xzuzFeiydcTcpd4fd34QJYL0RzZm0QnyTpPEUznkrtzOLg6P75qYnkOM81WroRNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729195973; c=relaxed/simple;
-	bh=NBozDxQInUDVX/+SAvu1SlyYGKkBJoWGPhOhoYJAyiw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=US5MN3jLJ4vzonrwIuDVF1+kiVDWbIgugy9xnC3C35hWipEmi2JDwbQiojalYK63c4oyax/+6SEmcUjiczJl0x/nwUlhRaRuey4ykRC0J/Bs0gS3NSP9QshstsbWoHKMiLU1qU3fz0W5kDdXsrjzXEZKuy5zjTps6b1gSMsCmRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Mx0Izx+d; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5c9404cef42so145546a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2024 13:12:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1729195970; x=1729800770; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NBozDxQInUDVX/+SAvu1SlyYGKkBJoWGPhOhoYJAyiw=;
-        b=Mx0Izx+dLcAQUBj1xLzvAffGpii7glWn3UX+QDziUfgkt89XO9p2bE2Qn2r8LHQGKP
-         6SkvkdsujNj2pwyq6qni9IZuEHn41gYNlcD76qz8t+NWMGbLvU0WK4YEKqIQmBvTZA1T
-         Zl9Ox1mm+I2c5TvYwzClaKanuv2MSh6FJB4Bg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729195970; x=1729800770;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NBozDxQInUDVX/+SAvu1SlyYGKkBJoWGPhOhoYJAyiw=;
-        b=fMu9bZlGHZupD1EGK0YG96mZTjgtilAKMukhLVEhNtLnslxugLsU/YaxCWpbEz4UOd
-         fxDsGEPYLD4dczPL7gzCehjqcSDMrAtDtFomfyb3m4K/T3bjEoBI/V7Z2ncXWqqoe1mG
-         ZlzGNW2bkAbr/wjtQyrGGpo9VKWLIs9of5UMW6KJTd/eofmt2CYJSrUn8X//eWl/EAKp
-         OXb2MiUJhJxrdJX1J33VE1SH0YJsaub+03LWSIbzXbfvAKM1rQx/wfbpn2uPIj3VAgeD
-         9TV0MkJl/0X7E5L99BGaKEfrYtoC0oENPacsvEyRe4+LZBhiwxNdhhM94Uo/IlSfDpM0
-         HF4w==
-X-Forwarded-Encrypted: i=1; AJvYcCVQt9Fi/o6kWmZITrfP0tq3/R1PE93qSrqm8xkGqHX/TVLG7r0Ugfn2239aE0tUtEFQxfaS2RRbTi/qi0uZHRU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxqSHfy4sCOjM4bz2IMgNmfo3ZEa2RF/8yqCrEssgXqeOyohrn
-	4K9iEHbYv/Yhxe5EXy0qNQeDvp7054Yfqbc18jMAray8pRnSTy2T6nNCjNz24dl7TtgW/he/lC4
-	wVvO20e0LUV9Ir8qFP1G7GvxfuIqyQygCWKrv
-X-Google-Smtp-Source: AGHT+IHMKwVD92dy+ne41XM8ABFquxk2pbEXlPTudUpzl7Zpa7r8kMniYucLBIkvG/gwVEopvNNS96zlSIhybkKunA0=
-X-Received: by 2002:a05:6402:348a:b0:5c9:879e:6998 with SMTP id
- 4fb4d7f45d1cf-5ca0ac44384mr2981a12.1.1729195969744; Thu, 17 Oct 2024 13:12:49
- -0700 (PDT)
+	s=arc-20240116; t=1729196573; c=relaxed/simple;
+	bh=aiLEByOVnwOznKJHOUWBXqp2FuKLx82PDD5OULTXF+U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IfQcKenyvdiV4yDccn40jTtg6Mi1HOqnQGegXqQDSDnjrNmCKfYaAmwWonvuEYsBd7bEzOP3d4D+DMw41cSXNYsmd1Qjs3g1tDjVQhNFWEJA/Ty/BTkS9jj6uNlU3GAzibOSlhARMZfa84greeVtvB2npKzc4a30zeGBlvMXP9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GQMUgsim; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729196569; x=1760732569;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aiLEByOVnwOznKJHOUWBXqp2FuKLx82PDD5OULTXF+U=;
+  b=GQMUgsimNtpg5kYwy1DW7fZVhdlflETSTQDoL2KtZy5Akt0xN/L7HStG
+   XWFcncj5zWyfIHANzuMiZMo64KhfU6+7uMezV9XnG/SPlCGMTG/4zALBr
+   86zBeIBwkpXGXfViuqSRRf8KhaslnpbWyQERG290MKuMkkFnlh6/dyl3p
+   unyhO05MRvpCTXsUQw42S55jEQp8eru/v66V+MPuYwlwKfJDN6yFFxTgS
+   BH+irHJJKXSlzNcEkeLP0SyYC0JLy2aSFdVmixrKnvHdqbXQaei4g2AZZ
+   94X0EojMZvYQFssUNz2sxNqVn7tlwS6M7qyIzc+TEWf0EVvbTTuduMqGr
+   w==;
+X-CSE-ConnectionGUID: EUnMDDm2RLOrROj+8u4tGw==
+X-CSE-MsgGUID: NA65gI0CS3qxAlbv8evroA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28497493"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="28497493"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 13:22:49 -0700
+X-CSE-ConnectionGUID: UqZb50TSRDiZHsUrZPYrnQ==
+X-CSE-MsgGUID: +kkSlPidR6SXJSmZY8eUbw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,211,1725346800"; 
+   d="scan'208";a="78804674"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 17 Oct 2024 13:22:47 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t1X1A-000MtK-0o;
+	Thu, 17 Oct 2024 20:22:44 +0000
+Date: Fri, 18 Oct 2024 04:22:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Li Zhijian <lizhijian@fujitsu.com>, linux-kselftest@vger.kernel.org,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Li Zhijian <lizhijian@fujitsu.com>
+Subject: Re: [PATCH 1/3] selftests: Add a few missing gitignore files
+Message-ID: <202410180306.uMloezUi-lkp@intel.com>
+References: <20241015010817.453539-1-lizhijian@fujitsu.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241017022627.3112811-1-jeffxu@chromium.org> <3a1bbbdf-1281-4f44-857d-58cba583e3da@lucifer.local>
- <CABi2SkU2yX_Pbr6=6uEiQnro88O5Mhq3NLwOsy=A=Qa5xeC6Yw@mail.gmail.com> <zcizwa4wasrq5si6nsjvougg2lt2dklaujpshdmghwg7oejhlj@zxzqhyff4vba>
-In-Reply-To: <zcizwa4wasrq5si6nsjvougg2lt2dklaujpshdmghwg7oejhlj@zxzqhyff4vba>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Thu, 17 Oct 2024 13:12:36 -0700
-Message-ID: <CABi2SkWBFZkWxDPnc6g2odvvNuMQqL4wQcbQSN2cTow2JLMKJw@mail.gmail.com>
-Subject: Re: [PATCH] munmap sealed memory cause memory to split (bug)
-To: Pedro Falcato <pedro.falcato@gmail.com>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, akpm@linux-foundation.org, 
-	keescook@chromium.org, torvalds@linux-foundation.org, 
-	usama.anjum@collabora.com, corbet@lwn.net, Liam.Howlett@oracle.com, 
-	jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, jannh@google.com, sroettger@google.com, 
-	linux-hardening@vger.kernel.org, willy@infradead.org, 
-	gregkh@linuxfoundation.org, deraadt@openbsd.org, surenb@google.com, 
-	merimus@google.com, rdunlap@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241015010817.453539-1-lizhijian@fujitsu.com>
 
-On Thu, Oct 17, 2024 at 12:14=E2=80=AFPM Pedro Falcato <pedro.falcato@gmail=
-.com> wrote:
->
-> On Thu, Oct 17, 2024 at 09:20:20AM -0700, Jeff Xu wrote:
-> > On Thu, Oct 17, 2024 at 1:18=E2=80=AFAM Lorenzo Stoakes
-> > <lorenzo.stoakes@oracle.com> wrote:
-> > >
-> > > NACK. Greg's bot got to it but...
-> > >
-> > > As per Greg's bot, no signed-off-by line.
-> > >
-> > Sorry for confusion, I wasn't meant to send this as a PATCH, but
-> > reporting the issue.
-> > The diff was just sent as reference to repro the bug, and I forgot to
-> > remove PATCH from the title. I apologize for the confusion.
-> >
->
-> Can you explain what the issue is? I don't get it.
->
-The issue is there is one VMA that gets splitted after an unmap call fails.
-Two splitted VMA share the same attributes. e.g.
+Hi Li,
 
-- Allocate 12 pages (0-11).
-- Seal middle 4 pages (4567)
-- munmap (2345) - this will fail due to 4567 being sealed.
+kernel test robot noticed the following build warnings:
 
-The VMA for page (0123) is split as 2 VMAs (01)-(23), those 2 VMA
-have the same attribute, and should be merged as one.
+[auto build test WARNING on shuah-kselftest/next]
+[also build test WARNING on shuah-kselftest/fixes rafael-pm/linux-next rafael-pm/bleeding-edge tiwai-sound/for-next tiwai-sound/for-linus netfilter-nf/main linus/master v6.12-rc3]
+[cannot apply to akpm-mm/mm-everything nf-next/master next-20241017]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Li-Zhijian/selftests-net-Fix-ns-XXXXXX-not-cleanup/20241015-091039
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+patch link:    https://lore.kernel.org/r/20241015010817.453539-1-lizhijian%40fujitsu.com
+patch subject: [PATCH 1/3] selftests: Add a few missing gitignore files
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241018/202410180306.uMloezUi-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241018/202410180306.uMloezUi-lkp@intel.com/reproduce)
 
-> --
-> Pedro
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410180306.uMloezUi-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   tools/testing/selftests/arm64/tags/.gitignore: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/Makefile: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/tags_test.c: warning: ignored by one of the .gitignore files
+>> tools/testing/selftests/mm/pkey_sighandler_tests.c: warning: ignored by one of the .gitignore files
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
