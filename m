@@ -1,545 +1,1395 @@
-Return-Path: <linux-kselftest+bounces-20069-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20070-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF3579A2F42
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 23:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DCA7A9A2FC9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 23:25:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 851F0284C88
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 21:07:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 963EF281E95
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 21:25:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ED133DAC0C;
-	Thu, 17 Oct 2024 21:06:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B3AC1D54D3;
+	Thu, 17 Oct 2024 21:24:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="SWnbWMSs";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="SCZJKgKX"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YTIn1sXg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF11229110;
-	Thu, 17 Oct 2024 21:06:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729199209; cv=fail; b=iWDYK98h8dbvqCfCZSLLfvbyIcT225wmf56UHAfTbRFJLR9fUwaF/wgdkg+aKf8SMiOVp54NOT5Yf1LapwUGjmBLXmvum7qxWE6nY4ispaTPIQvz1v5JNIAi5c9YWletvONKMp6qkmIP5eFL8SzYuRKgsb3/xeikY2bROrrnVfE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729199209; c=relaxed/simple;
-	bh=3w/o0TwxWEag9v9fIAdmlhVrx510+wdTmfrQQLCNC2M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pcfJZ+dvTE7QsLH6acttV6fpLXvv2PtuqPVMXjYNykSrwFeNYDdUt0QlFGtlf95lw61Fb5yX4MSGiRhr18Leo+Js3AH6VM5mkqRuz8DHP0nQLE/XkO1sCkmxIbpJJYXwUszVCyo8A1SPtkjsWC+JoQuLv5emGrnxOfxkvyfKDTo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=SWnbWMSs; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=SCZJKgKX; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49HKtmDX006167;
-	Thu, 17 Oct 2024 21:06:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=ac0PbsmCn7O3aCDPTuPoVcMPxODIiHle2QXQIdUX6f0=; b=
-	SWnbWMSs2ZwkfxQn4jyryVUUrnKPmcSD358AR9f5FJbeOLuBCGGf9CeGnRUKBLsK
-	UguKfOZ8xLgMXf7GFl97lOZUVMhejbfPAy+RRIYiUoST3kOTZImmQE9OqvNcoeYp
-	g9WRjKhzdEA6zHp5eC5Fk4E19m+MaF24F+YF4DboUXXJ6BjCVMJA/L9U2V85t09F
-	BeIT3AYo+r2UD8gmPLsXzFc6SjrvhlEMn3Owik4aRc2mh5uZ9mne7nJKBgbz869a
-	Gr/ZPSTh/vFiMy1iaqHSay0SxqrgzGvxufRXQkSy6MrnZharX9Ejjfbf1hSKCWk4
-	ORQxT3/g5VoAPywF9HFjZQ==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427g1aq7k1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Oct 2024 21:06:26 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49HK0rrV026193;
-	Thu, 17 Oct 2024 21:06:26 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2174.outbound.protection.outlook.com [104.47.55.174])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 427fjasv6m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Oct 2024 21:06:26 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ksAj1cwYk2b+rMBMIlnN+uRAZci9qwFEHBEOa3NSV9WcPScMqIzXJCToE7V28MLgqlRonA/sNHcScQN4oaYBNfhnY9jsJ+75QIUQXRJSm3WG7njyWVA8MvErsJi1O6w9GiABfGCjs4jsxM8sFh1oZoVSmMko8g2UGbxhD7r/VqKTFOLTU6O8Nx3kTK2uw2o6ggjBo9uJ3iszkBQSiRgQoKGiNuhdvY2Ng+i0sca7KMRfBhC6TFOUFxoHhWJkABFfV/hxYbmNy0KiVaG26AfejZTwr2WNlwCm1oPP4IzExGgPlx9svCivAJwI1RKaLHQkMNUeOswaXe6/mMCEQsxzoA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ac0PbsmCn7O3aCDPTuPoVcMPxODIiHle2QXQIdUX6f0=;
- b=Q5bNdY1CnelNB4DYL/kKfn6juqCeAOWESKTXZXfO+AMyYV+1aBfO7OWZBKKb3NQVaBteDzARTfwc1mHUnbA0sLHrv08Z8l59Tp4CILp8AX4QL9s64Gha5/U4UyWz7Ooy6YgEVmGZJMvPqrXRTuppmZGSUsDR7nIdOwTeK9X73F9k4kjG8NiwFA/UDJBnxEHc/6+IgWG8oR32IRWFqYb4kcHzeMkedFCerrYlS7dNP7UctVArexXdI9OuUGYgTSnmS2jLTRmeP184bXI1wiP9yF85dKYrS0Te5nwGPBU3vAPLMnnpc4pO9s73Ps3HtVkYtqqocm5lPfLFYNXtT+CyWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E9B1D5AC9
+	for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2024 21:24:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729200299; cv=none; b=oFW7V0l8La0pkPSpJr344wT6Fz/14PtaxdINg0n14/PvEs0SsE0d4zoPin6J+f3YoPHQDMxQ3YYIZr6Uby5kZo/EKMdpRdVHN0M0Z//BKFZn/aRxKdvASDiopV6Ibb4R9g329JqsfPy9R9lSCQMSnd7JX+l5ATX+uYiGAQXMLBg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729200299; c=relaxed/simple;
+	bh=J0wFClx5q4an3jKKOjmI+yKpwbKx7FbSqCKGCyDXRI0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sjI2OLJ0VUf81efVLzT21ldT9HvLPRHuQS2OzzBAClXStguhWlfiU7INVaNgRfG9UEgaLZDoYJfFAF50cK1V3ZVp8YHLtaGZlUYgUn0pO/r7tU2uZCSB8uxb5qYsYXtn96NOwbBDanHnwu+OOp3Z7Bu5SmKuIMT6l4GielMM1uQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YTIn1sXg; arc=none smtp.client-ip=209.85.166.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-83a9317f93dso69934839f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2024 14:24:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ac0PbsmCn7O3aCDPTuPoVcMPxODIiHle2QXQIdUX6f0=;
- b=SCZJKgKXfn6Y+KA5StzugSf5VcLgZH5R2Lw6Vr/dj8fGjp6ciyg9XbkLiNPzoz4uXvEfvYJu7+XuOphQQkLaFCC44KHNVyQNAIKDqtJ9iBVSzfn/eEqQkHz9VxhJK457GiUoCs/oXuLjl3o8VVigydRIrst3fS3p6vDQ6umnH68=
-Received: from SJ0PR10MB5613.namprd10.prod.outlook.com (2603:10b6:a03:3d0::5)
- by DS0PR10MB6752.namprd10.prod.outlook.com (2603:10b6:8:13a::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18; Thu, 17 Oct
- 2024 21:06:23 +0000
-Received: from SJ0PR10MB5613.namprd10.prod.outlook.com
- ([fe80::4239:cf6f:9caa:940e]) by SJ0PR10MB5613.namprd10.prod.outlook.com
- ([fe80::4239:cf6f:9caa:940e%5]) with mapi id 15.20.8069.016; Thu, 17 Oct 2024
- 21:06:23 +0000
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Christian Brauner <christian@brauner.io>
-Cc: Shuah Khan <shuah@kernel.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v4 4/4] selftests: pidfd: add tests for PIDFD_SELF_*
-Date: Thu, 17 Oct 2024 22:05:52 +0100
-Message-ID: <b9851fa9f87d22f352f960b847d99459ef7d74a1.1729198898.git.lorenzo.stoakes@oracle.com>
-X-Mailer: git-send-email 2.46.2
-In-Reply-To: <cover.1729198898.git.lorenzo.stoakes@oracle.com>
-References: <cover.1729198898.git.lorenzo.stoakes@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P123CA0546.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:319::17) To SJ0PR10MB5613.namprd10.prod.outlook.com
- (2603:10b6:a03:3d0::5)
+        d=linuxfoundation.org; s=google; t=1729200293; x=1729805093; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gMbCxgTGFZeo8xghXumUnHGUAo1uXMmJhzYDvhqP+2w=;
+        b=YTIn1sXgySrAKshmZzeo+yl41x6mXvX0GivcSsgF7RNEiLzAovPqoCpdS4im/w27SB
+         +kZE2so0j8iPlsbuNdmjqLavHqSjLpb0+9kJFrLfuxYGUX2/1dHDQ4T7SjWGNWjmjyhK
+         zJq7wPM55QIh6GtcUUDQ/nlVWPzJixvrkz3bA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729200293; x=1729805093;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gMbCxgTGFZeo8xghXumUnHGUAo1uXMmJhzYDvhqP+2w=;
+        b=M8kf2oxC0Ct8+dEyVqO3zVJXtooCeQ98byjd2AojGakEcoMTmFjv6CHGrcdnipJMnr
+         We735y2yf6AJXjYv2vQMYHjyIvnZa324HpvwSZV1ZnKu+aqAeZBcMa9VzpyK/PoMVIz5
+         YQtUA+6wMHQnD37oLisuY70J9TrV4i8UStPEvR8qnBwhsh4GGouqE0cRwgc2voBU+V3I
+         aK8d4ISRp3wIcFcxmVooT9DUbcFRcx/c5ulovIrauCibEUg32Iyb2mYhj7UM8rpspj/+
+         QYXcEFZi2JsB6vXyWAtrsX3m75pkMNjGzLGFpsXDjXkRt+w12TZpsDlTlus/ys3U1dYY
+         zTPw==
+X-Forwarded-Encrypted: i=1; AJvYcCWRPA2a7V0PBAcFK2q1CfnjPWbI44CRNW68IB2jtVC21k4H86/Ckq1aOJQLj1RZbyxyxoAv7f+O05gMuK1Exs0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxm64/NsuCWFuE934lTFvPKN5ABHiPUF0pxWAGNGVnnRl0e45R3
+	YtCad5bJDqqypADyoiochXMnCkmYQo07kln8ppUESxnisKLw0ihgdzO4bFi0Bbs=
+X-Google-Smtp-Source: AGHT+IHC3/MvC+py8nduUW2aOgWAkhavkA1wA78l3+pmvg9lkRGXKBxpxvl3gpbXsZYPTh4UEQlbNw==
+X-Received: by 2002:a05:6e02:16cf:b0:3a3:af94:461f with SMTP id e9e14a558f8ab-3a3f4050131mr2223035ab.1.1729200292152;
+        Thu, 17 Oct 2024 14:24:52 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dc10c2b54esm67348173.110.2024.10.17.14.24.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Oct 2024 14:24:51 -0700 (PDT)
+Message-ID: <1d0bbc60-fda7-4c14-bf02-948bdbf8f029@linuxfoundation.org>
+Date: Thu, 17 Oct 2024 15:24:49 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB5613:EE_|DS0PR10MB6752:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8406f4da-2a84-4817-f030-08dceeef8e12
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?3Sm9xHUjBt0S0kL0Aq6GzYagGV2NFo/AJAmkRBQr/aJ9cS+7vUYysFPv6H5h?=
- =?us-ascii?Q?6Z1B+t1Fwag5z14BIT8uPCmUcdhAXH6iC+dn4SD5ZlL1n1tunxznrOStBY1c?=
- =?us-ascii?Q?6cjrD86vhAgwGxn+u5c/ATxAq0ukNAlhY/mC4Fnu+fNBThhrMtN16fpUc7fH?=
- =?us-ascii?Q?Hj/FGIwdBxjiv1fOKLDYFzoIwtdj75o0jfjMV49UtqDxqrvdCxvvi6YvpiaZ?=
- =?us-ascii?Q?pNQukwX+Oq9aLIxWd4bu9ShD5Y+PYP3GTaJNpuBLF1/5NZecXEHcWnlxm29S?=
- =?us-ascii?Q?t97T2rVjZyNkatF+whiNKb4pUA0TwOuOzDwhPKfxoapGx7hxN1Hp5dgjUEuL?=
- =?us-ascii?Q?L5y5C7FPt3dFWQ9BwHDNFJMcEj+QFTZroWUgBsveqIfDfZuHv7fyH7izBtAu?=
- =?us-ascii?Q?xmvo/3xf2myGtjFCp1M+kXdojmkhYk4HY5d5S2QjnDvcISw2N4dRI5U/zrV7?=
- =?us-ascii?Q?NJt1J1XiKiomBLkgq2k7UAJ2LPiKzuLodCB5JT+pheT4I0VvXO7Uok7P8ZTC?=
- =?us-ascii?Q?7ofor6Wo2fdJ35DfoOfQvtW5FOudjn7CegQsvARwCIHMz3BwOQ5tpzzQPwth?=
- =?us-ascii?Q?xXcs1jxmk+jMpNfqH2ufOAi6fiXJ3zNVnYYJgLxAmpVtgtXReBIKKrLKRGY6?=
- =?us-ascii?Q?sNqUaHPSe8dbKBlh81jOIwXxkI/FGm0FMI5ocdd6y9HcYctHA2p63YMPXiQL?=
- =?us-ascii?Q?YwM4DQtZn1hRucyQu3pY5nUD8Y/OUg5Dn1w90u7CORoGPYU7RTx8y+jZQUR7?=
- =?us-ascii?Q?zpE4zuRIy7TiWlsJLHcJ9nUCEEJ5caeDgNYm+p5kkKclNz6PeU7J1EbMVwfe?=
- =?us-ascii?Q?HAdaBS1PjtL1ulshW+xkJ4HUvlxNiH0x87fYyEaLB2IwPdc7eWPT9Hk2okq7?=
- =?us-ascii?Q?iBLCH854OZ+oQNiuRADaQAOmBWJKUpJTAwMdMgdoSfsDCktYwWu0jTNYiygT?=
- =?us-ascii?Q?Hvy0a+/fML2ZogPg2IzbJm5zeLm+bJdohgQNT+j1x9UkGl9cWg08mNUp4TL+?=
- =?us-ascii?Q?EgTFAYmboXUgLS+pccnjGN6j3yaLM3cZqRmMk+ubE/wnpmRDnC8y8+BVTdTu?=
- =?us-ascii?Q?2XjzFkYFJloZagM+2Ezn84AhcoFudbLR/+lG+ZCTFKzxnhWz4pOqrrB6tjxu?=
- =?us-ascii?Q?EkbbvrwEj2ymJeCcwWT0Rp05BIzNvYkUJCH836SX7f83NA++NU0x5zydOnHR?=
- =?us-ascii?Q?+UO1/6/JcpPTMH0Gt5908NvZCEpfHRyaU7LsbsG1Xwiz+OnayAV6e/2Ochfr?=
- =?us-ascii?Q?rWs3tFQw5GertQLO1rJDsCTkkcXhb+rzB9sLS83G3dgSOv5NQ11zq2X2C8s9?=
- =?us-ascii?Q?Wzw=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5613.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?95/I8gP5rafzRPbJMiANvEHgDJMjZiJb5UpWbdHj+bRV3H9bZ7bIIJ6MNzj7?=
- =?us-ascii?Q?Avt7Qcie/etnq304rd8kcyRQOK5uY8fvU8Oo4fd0zBAgOSMZUz8oI2fGTdXn?=
- =?us-ascii?Q?rNxkAJXU0CT9HEH+iMaLs6pVltYDaHh3ela/6uRp2Lp24dCXRmTTuUHrD61o?=
- =?us-ascii?Q?tjxA5IOYNnd5YdGCEDUy0A6/YRaLRnTAMilj32uSBYnmcxLvQt0yOHAk0ivR?=
- =?us-ascii?Q?AuZUOE+7U/UC5dRr7OcaGkY3n/Dzx0FYGHzeKYv6xlIM4C/LAqONoiwcQTa1?=
- =?us-ascii?Q?0+LnnbsW7hnij/LI1dufTBLEtPPl69SW5JZaP8iHYgg4TzyNIkhcdzCTTv/x?=
- =?us-ascii?Q?khfwQisaX2koPkHIFdRqZgkJaxbPYkkfQ8vsOsGUgWBUt0oLMBr8OaqpbNtN?=
- =?us-ascii?Q?nbeTLb5NXMoV0DzhJeBhusH0IVHLLhxgJVGvCvf9ZbFUHsH6Qdnzh9g8rz6W?=
- =?us-ascii?Q?Kki1dOro5/1/XiaVNGOts50qMGEuD683nUSAhSmyO5MBxAX0BDBHJilkPXKn?=
- =?us-ascii?Q?viSvy7hbYbzn2DhK9nBNcWjYaFDodS26+i8GIDV9YS9QfWqjUCa0Ip4MCe9O?=
- =?us-ascii?Q?wGNA8+SLAVRvzADi7sQZgKpSiByUMIlY8oVham0lEOTggaGSF9O3YcrJ34sG?=
- =?us-ascii?Q?l/8xoVYo8e+SzxhVf4h/gZ3HQXEHVP+RUE7jU+Bb+2KpZI94aXx4n87uEYm9?=
- =?us-ascii?Q?UW4a5Fyseux6fU5wETTHpKCjvmby3Mhf54ncxt7oTLAIJufcYf3ZL1YggRYj?=
- =?us-ascii?Q?cJRFTz+YA6syWY9fcUxbP1eUbWvrtnIHRzBibwOCSqEh/aF/K6Ns7VQfMwTY?=
- =?us-ascii?Q?SWYiAZs6V9VrUdiUtEYDNbqpi3Xs5k2OLXg0m+rEsOCbaf3UGHoWcaS/0HQi?=
- =?us-ascii?Q?Xw1NRxGCU/jFpAfHx9yAOtUv7iBNJtJ9+pxj73nEs3IV3ERNQ0Qg7Xkv8rM9?=
- =?us-ascii?Q?QaFm9e0GqdbD+n13yMr8GWYWvYBGyocTTJOsxaJNf4i5+ivWJkyfl9iEyp+r?=
- =?us-ascii?Q?J2zToPToNW/QkKD5ges9GjrkDsAYqj6FGCdt4EvFNRBZg2hA99Wdb+a/QHz3?=
- =?us-ascii?Q?Vqe14pBRrXwizyAOxplbaJfIOTf4WWRO7M1zXjKSsPZObvBRUz7ZGp7vahMT?=
- =?us-ascii?Q?Rsx8IGPFZBu4OcCPmtiaEks6g0eoEzEmex8CW9YfnXo4yYdIZsN+Cl+jls1Z?=
- =?us-ascii?Q?z1svwCIDy7VYuB5nqJ9wYzsn14yagU8T/wKWqgIhQXv22Qa3NGmafzlRKxga?=
- =?us-ascii?Q?odUfY3cpYiwAQO4U9bTeFiqXj9x58xQQRN8KZQtro8VpjzZSn2bVyoM+8Vyw?=
- =?us-ascii?Q?YR40ezHU00ZlaPugy893jQM7a9/bMj8jXuAePknodXnptIVAAmEgGDqmcRwo?=
- =?us-ascii?Q?T/f4xXghhCZHwQd59SCVrVZwfflSQWTdHGDyo4OmbFqM0Um0nAIRIS3GtotD?=
- =?us-ascii?Q?fL5Uc0tDEPD74UGGPQvEOeEDn3s9NilvI9OO5CNnW9JhpZ6ynltzyWCUfria?=
- =?us-ascii?Q?1evRlxoOrxw2/oC+0CYTejoSo0Teyx1pTzmqXLmLWjkmjrjXnBhhkZEAznrV?=
- =?us-ascii?Q?Ii/kfiL2vg2lZMlTz3U8XM1SdOz+m9N1iKa/W9y5YtuvzZD8xMXDqnKxiTXd?=
- =?us-ascii?Q?pw=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	pVSLNO2n1a5BUAqubQuenNR4iPVeM2ZjT9mJY6cn5xeuaEtKP6ijK5E5u/uzqUftFzD8Zo+tk1bYvalzYlrflFb/PRffqFAmlBnOzVHJj8ry/xKQy4HhH47J8H0r55ImU/HlzDS0PXDHiwTTgyvkUW7U/6tM4XXigH2VThn2D1Wa3O+4qNX0DwWrrgFzpwbONb0NKGuYprSgxIC259avMejnW0e2WW0YFbQeYWj2MJxC6CGAQXRJAqY1wwH1IM25gCGDDNlF9p3sBDE/s4rxtOFwANlqqbPkqm8KJ3PoXfTGuP8aZcuPL1mCi1rUAGKUqD+LpuOXMeF2bFrBOh0TbnVKGfz1o1wiFcx93KuEpwjP6TE4KN0bss5aFutM3ONNF+wTCf+mpzvYAg1SmijYAOpwZURowifO4Tucc2WfizTGz4lxj4CLA4QX97a+RG+o4YXjSSPWb9OC5bki1dEdHbhjvQ7P6mlZGjgRpkXAk0I3YjDOZZ94EfSlvYQE5yKDOVejgsOMgZnzMDD5z9us86zqVPyRtNcGMmSXs7dJmyExcDrC5HKgqjt7pFxtwU/poD73jfAGuzCw1r0xslZQTe8b9iUGnzcJkDSZBlUohW4=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8406f4da-2a84-4817-f030-08dceeef8e12
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB5613.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2024 21:06:22.9097
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: z4ScXAueYQvbAc88mI2aZPMdhzH0eZY0QybYN5IIC1ByYzW416I/h3F0YsZ8uAT3NNKXD8V+1pF6LXPJNNr9Vue9ugijNbRopfmjzRgD5AU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB6752
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-17_23,2024-10-17_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 adultscore=0
- bulkscore=0 spamscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
- definitions=main-2410170142
-X-Proofpoint-GUID: hCyz67Y1eTLH-atH14GHW8BZbfemB7yz
-X-Proofpoint-ORIG-GUID: hCyz67Y1eTLH-atH14GHW8BZbfemB7yz
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/4] selftests/mm: add self tests for guard page feature
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Suren Baghdasaryan <surenb@google.com>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>,
+ "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
+ David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, Muchun Song <muchun.song@linux.dev>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+ Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ linux-kselftest@vger.kernel.org, Sidhartha Kumar
+ <sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>,
+ Christoph Hellwig <hch@infradead.org>, Shuah Khan <skhan@linuxfoundation.org>
+References: <cover.1729196871.git.lorenzo.stoakes@oracle.com>
+ <8b1add3c511effb62d68183cae8a954d8339286c.1729196871.git.lorenzo.stoakes@oracle.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <8b1add3c511effb62d68183cae8a954d8339286c.1729196871.git.lorenzo.stoakes@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add tests to assert that PIDFD_SELF_* correctly refers to the current
-thread and process.
+On 10/17/24 14:42, Lorenzo Stoakes wrote:
+> Utilise the kselftest harmness to implement tests for the guard page
 
-This is only practically meaningful to pidfd_send_signal() and
-pidfd_getfd(), but also explicitly test that we disallow this feature for
-setns() where it would make no sense.
+Splleing NIT - harmness -> harness
 
-We cannot reasonably wait on ourself using waitid(P_PIDFD, ...) so while in
-theory PIDFD_SELF_* would work here, we'd be left blocked if we tried it.
+> implementation.
+> 
+> We start by implement basic tests asserting that guard pages can be
 
-We defer testing of mm-specific functionality which uses pidfd, namely
-process_madvise() and process_mrelease() to mm testing (though note the
-latter can not be sensibly tested as it would require the testing process
-to be dying).
+implmenting? By the way checkpatch will catch spelling stuuf.
+Please see comments about warnings below.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
----
- tools/testing/selftests/pidfd/pidfd.h         |   2 +
- .../selftests/pidfd/pidfd_getfd_test.c        | 141 ++++++++++++++++++
- .../selftests/pidfd/pidfd_setns_test.c        |  11 ++
- tools/testing/selftests/pidfd/pidfd_test.c    |  76 ++++++++--
- 4 files changed, 218 insertions(+), 12 deletions(-)
+> established (poisoned), cleared (remedied) and that touching poisoned pages
+> result in SIGSEGV. We also assert that, in remedying a range, non-poison
+> pages remain intact.
+> 
+> We then examine different operations on regions containing poison markers
+> behave to ensure correct behaviour:
+> 
+> * Operations over multiple VMAs operate as expected.
+> * Invoking MADV_GUARD_POISION / MADV_GUARD_REMEDY via process_madvise() in
+>    batches works correctly.
+> * Ensuring that munmap() correctly tears down poison markers.
+> * Using mprotect() to adjust protection bits does not in any way override
+>    or cause issues with poison markers.
+> * Ensuring that splitting and merging VMAs around poison markers causes no
+>    issue - i.e. that a marker which 'belongs' to one VMA can function just
+>    as well 'belonging' to another.
+> * Ensuring that madvise(..., MADV_DONTNEED) does not remove poison markers.
+> * Ensuring that mlock()'ing a range containing poison markers does not
+>    cause issues.
+> * Ensuring that mremap() can move a poisoned range and retain poison
+>    markers.
+> * Ensuring that mremap() can expand a poisoned range and retain poison
+>    markers (perhaps moving the range).
+> * Ensuring that mremap() can shrink a poisoned range and retain poison
+>    markers.
+> * Ensuring that forking a process correctly retains poison markers.
+> * Ensuring that forking a VMA with VM_WIPEONFORK set behaves sanely.
+> * Ensuring that lazyfree simply clears poison markers.
+> * Ensuring that userfaultfd can co-exist with guard pages.
+> * Ensuring that madvise(..., MADV_POPULATE_READ) and
+>    madvise(..., MADV_POPULATE_WRITE) error out when encountering
+>    poison markers.
+> * Ensuring that madvise(..., MADV_COLD) and madvise(..., MADV_PAGEOUT) do
+>    not remove poison markers.
 
-diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
-index 88d6830ee004..cbe1a2be3cec 100644
---- a/tools/testing/selftests/pidfd/pidfd.h
-+++ b/tools/testing/selftests/pidfd/pidfd.h
-@@ -16,6 +16,8 @@
- #include <sys/types.h>
- #include <sys/wait.h>
- 
-+#include <linux/pidfd.h>
-+
- #include "../kselftest.h"
- 
- #ifndef P_PIDFD
-diff --git a/tools/testing/selftests/pidfd/pidfd_getfd_test.c b/tools/testing/selftests/pidfd/pidfd_getfd_test.c
-index cd51d547b751..48d224b13c01 100644
---- a/tools/testing/selftests/pidfd/pidfd_getfd_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_getfd_test.c
-@@ -6,6 +6,7 @@
- #include <limits.h>
- #include <linux/types.h>
- #include <poll.h>
-+#include <pthread.h>
- #include <sched.h>
- #include <signal.h>
- #include <stdio.h>
-@@ -15,6 +16,7 @@
- #include <sys/prctl.h>
- #include <sys/wait.h>
- #include <unistd.h>
-+#include <sys/mman.h>
- #include <sys/socket.h>
- #include <linux/kcmp.h>
- 
-@@ -114,6 +116,94 @@ static int child(int sk)
- 	return ret;
- }
- 
-+static int __pidfd_self_thread_worker(unsigned long page_size)
-+{
-+	int memfd;
-+	int newfd;
-+	char *ptr;
-+	int err = 0;
-+
-+	/*
-+	 * Unshare our FDs so we have our own set. This means
-+	 * PIDFD_SELF_THREAD_GROUP will fal.
-+	 */
-+	if (unshare(CLONE_FILES) < 0) {
-+		err = -errno;
-+		goto exit;
-+	}
-+
-+	/* Truncate, map in and write to our memfd. */
-+	memfd = sys_memfd_create("test_self_child", 0);
-+	if (memfd < 0) {
-+		err = -errno;
-+		goto exit;
-+	}
-+
-+	if (ftruncate(memfd, page_size)) {
-+		err = -errno;
-+		goto exit_close_memfd;
-+	}
-+
-+	ptr = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
-+		   MAP_SHARED, memfd, 0);
-+	if (ptr == MAP_FAILED) {
-+		err = -errno;
-+		goto exit_close_memfd;
-+	}
-+	ptr[0] = 'y';
-+	if (munmap(ptr, page_size)) {
-+		err = -errno;
-+		goto exit_close_memfd;
-+	}
-+
-+	/* Get a thread-local duplicate of our memfd. */
-+	newfd = sys_pidfd_getfd(PIDFD_SELF_THREAD, memfd, 0);
-+	if (newfd < 0) {
-+		err = -errno;
-+		goto exit_close_memfd;
-+	}
-+
-+	if (memfd == newfd) {
-+		err = -EINVAL;
-+		goto exit_close_fds;
-+	}
-+
-+	/* Map in new fd and make sure that the data is as expected. */
-+	ptr = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
-+		   MAP_SHARED, newfd, 0);
-+	if (ptr == MAP_FAILED) {
-+		err = -errno;
-+		goto exit_close_fds;
-+	}
-+
-+	if (ptr[0] != 'y') {
-+		err = -EINVAL;
-+		goto exit_close_fds;
-+	}
-+
-+	if (munmap(ptr, page_size)) {
-+		err = -errno;
-+		goto exit_close_fds;
-+	}
-+
-+exit_close_fds:
-+	close(newfd);
-+exit_close_memfd:
-+	close(memfd);
-+exit:
-+	return err;
-+}
-+
-+static void *pidfd_self_thread_worker(void *arg)
-+{
-+	unsigned long page_size = (unsigned long)arg;
-+	int ret;
-+
-+	/* We forward any errors for the caller to handle. */
-+	ret = __pidfd_self_thread_worker(page_size);
-+	return (void *)(intptr_t)ret;
-+}
-+
- FIXTURE(child)
- {
- 	/*
-@@ -264,6 +354,57 @@ TEST_F(child, no_strange_EBADF)
- 	EXPECT_EQ(errno, ESRCH);
- }
- 
-+TEST(pidfd_self)
-+{
-+	int memfd = sys_memfd_create("test_self", 0);
-+	unsigned long page_size = sysconf(_SC_PAGESIZE);
-+	int newfd;
-+	char *ptr;
-+	pthread_t thread;
-+	void *res;
-+	int err;
-+
-+	ASSERT_GE(memfd, 0);
-+	ASSERT_EQ(ftruncate(memfd, page_size), 0);
-+
-+	/*
-+	 * Map so we can assert that the duplicated fd references the same
-+	 * memory.
-+	 */
-+	ptr = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
-+		   MAP_SHARED, memfd, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+	ptr[0] = 'x';
-+	ASSERT_EQ(munmap(ptr, page_size), 0);
-+
-+	/* Now get a duplicate of our memfd. */
-+	newfd = sys_pidfd_getfd(PIDFD_SELF_THREAD_GROUP, memfd, 0);
-+	ASSERT_GE(newfd, 0);
-+	ASSERT_NE(memfd, newfd);
-+
-+	/* Now map duplicate fd and make sure it references the same memory. */
-+	ptr = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
-+		   MAP_SHARED, newfd, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+	ASSERT_EQ(ptr[0], 'x');
-+	ASSERT_EQ(munmap(ptr, page_size), 0);
-+
-+	/* Cleanup. */
-+	close(memfd);
-+	close(newfd);
-+
-+	/*
-+	 * Fire up the thread and assert that we can lookup the thread-specific
-+	 * PIDFD_SELF_THREAD (also aliased by PIDFD_SELF).
-+	 */
-+	ASSERT_EQ(pthread_create(&thread, NULL, pidfd_self_thread_worker,
-+				 (void *)page_size), 0);
-+	ASSERT_EQ(pthread_join(thread, &res), 0);
-+	err = (int)(intptr_t)res;
-+
-+	ASSERT_EQ(err, 0);
-+}
-+
- #if __NR_pidfd_getfd == -1
- int main(void)
- {
-diff --git a/tools/testing/selftests/pidfd/pidfd_setns_test.c b/tools/testing/selftests/pidfd/pidfd_setns_test.c
-index 7c2a4349170a..bbd39dc5ceb7 100644
---- a/tools/testing/selftests/pidfd/pidfd_setns_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_setns_test.c
-@@ -752,4 +752,15 @@ TEST(setns_einval)
- 	close(fd);
- }
- 
-+TEST(setns_pidfd_self_disallowed)
-+{
-+	ASSERT_EQ(setns(PIDFD_SELF_THREAD, 0), -1);
-+	EXPECT_EQ(errno, EBADF);
-+
-+	errno = 0;
-+
-+	ASSERT_EQ(setns(PIDFD_SELF_THREAD_GROUP, 0), -1);
-+	EXPECT_EQ(errno, EBADF);
-+}
-+
- TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-index 9faa686f90e4..440447cf89ba 100644
---- a/tools/testing/selftests/pidfd/pidfd_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_test.c
-@@ -42,12 +42,41 @@ static pid_t pidfd_clone(int flags, int *pidfd, int (*fn)(void *))
- #endif
- }
- 
--static int signal_received;
-+static pthread_t signal_received;
- 
- static void set_signal_received_on_sigusr1(int sig)
- {
- 	if (sig == SIGUSR1)
--		signal_received = 1;
-+		signal_received = pthread_self();
-+}
-+
-+static int send_signal(int pidfd)
-+{
-+	int ret = 0;
-+
-+	if (sys_pidfd_send_signal(pidfd, SIGUSR1, NULL, 0) < 0) {
-+		ret = -EINVAL;
-+		goto exit;
-+	}
-+
-+	if (signal_received != pthread_self()) {
-+		ret = -EINVAL;
-+		goto exit;
-+	}
-+
-+exit:
-+	signal_received = 0;
-+	return ret;
-+}
-+
-+static void *send_signal_worker(void *arg)
-+{
-+	int pidfd = (int)(intptr_t)arg;
-+	int ret;
-+
-+	/* We forward any errors for the caller to handle. */
-+	ret = send_signal(pidfd);
-+	return (void *)(intptr_t)ret;
- }
- 
- /*
-@@ -56,8 +85,11 @@ static void set_signal_received_on_sigusr1(int sig)
-  */
- static int test_pidfd_send_signal_simple_success(void)
- {
--	int pidfd, ret;
-+	int pidfd;
- 	const char *test_name = "pidfd_send_signal send SIGUSR1";
-+	pthread_t thread;
-+	void *thread_res;
-+	int err;
- 
- 	if (!have_pidfd_send_signal) {
- 		ksft_test_result_skip(
-@@ -66,25 +98,45 @@ static int test_pidfd_send_signal_simple_success(void)
- 		return 0;
- 	}
- 
-+	signal(SIGUSR1, set_signal_received_on_sigusr1);
-+
-+	/* Try sending a signal to ourselves via /proc/self. */
- 	pidfd = open("/proc/self", O_DIRECTORY | O_CLOEXEC);
- 	if (pidfd < 0)
- 		ksft_exit_fail_msg(
- 			"%s test: Failed to open process file descriptor\n",
- 			test_name);
-+	err = send_signal(pidfd);
-+	if (err)
-+		ksft_exit_fail_msg(
-+			"%s test: Error %d on sending pidfd signal\n",
-+			test_name, err);
-+	close(pidfd);
- 
--	signal(SIGUSR1, set_signal_received_on_sigusr1);
-+	/* Now try the same thing only using PIDFD_SELF_THREAD_GROUP. */
-+	err = send_signal(PIDFD_SELF_THREAD_GROUP);
-+	if (err)
-+		ksft_exit_fail_msg(
-+			"%s test: Error %d on PIDFD_SELF_THREAD_GROUP signal\n",
-+			test_name, err);
- 
--	ret = sys_pidfd_send_signal(pidfd, SIGUSR1, NULL, 0);
--	close(pidfd);
--	if (ret < 0)
--		ksft_exit_fail_msg("%s test: Failed to send signal\n",
-+	/*
-+	 * Now try the same thing in a thread and assert thread ID is equal to
-+	 * worker thread ID.
-+	 */
-+	if (pthread_create(&thread, NULL, send_signal_worker,
-+			   (void *)(intptr_t)PIDFD_SELF_THREAD))
-+		ksft_exit_fail_msg("%s test: Failed to create thread\n",
- 				   test_name);
--
--	if (signal_received != 1)
--		ksft_exit_fail_msg("%s test: Failed to receive signal\n",
-+	if (pthread_join(thread, &thread_res))
-+		ksft_exit_fail_msg("%s test: Failed to join thread\n",
- 				   test_name);
-+	err = (int)(intptr_t)thread_res;
-+	if (err)
-+		ksft_exit_fail_msg(
-+			"%s test: Error %d on PIDFD_SELF_THREAD signal\n",
-+			test_name, err);
- 
--	signal_received = 0;
- 	ksft_test_result_pass("%s test: Sent signal\n", test_name);
- 	return 0;
- }
--- 
-2.46.2
+Good summary of test. Does the test require root access?
+If so does it check and skip appropriately?
+
+> 
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> ---
+>   tools/testing/selftests/mm/.gitignore    |    1 +
+>   tools/testing/selftests/mm/Makefile      |    1 +
+>   tools/testing/selftests/mm/guard-pages.c | 1168 ++++++++++++++++++++++
+>   3 files changed, 1170 insertions(+)
+>   create mode 100644 tools/testing/selftests/mm/guard-pages.c
+> 
+> diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
+> index 689bbd520296..8f01f4da1c0d 100644
+> --- a/tools/testing/selftests/mm/.gitignore
+> +++ b/tools/testing/selftests/mm/.gitignore
+> @@ -54,3 +54,4 @@ droppable
+>   hugetlb_dio
+>   pkey_sighandler_tests_32
+>   pkey_sighandler_tests_64
+> +guard-pages
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> index 02e1204971b0..15c734d6cfec 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -79,6 +79,7 @@ TEST_GEN_FILES += hugetlb_fault_after_madv
+>   TEST_GEN_FILES += hugetlb_madv_vs_map
+>   TEST_GEN_FILES += hugetlb_dio
+>   TEST_GEN_FILES += droppable
+> +TEST_GEN_FILES += guard-pages
+>   
+>   ifneq ($(ARCH),arm64)
+>   TEST_GEN_FILES += soft-dirty
+> diff --git a/tools/testing/selftests/mm/guard-pages.c b/tools/testing/selftests/mm/guard-pages.c
+> new file mode 100644
+> index 000000000000..2ab0ff3ba5a0
+> --- /dev/null
+> +++ b/tools/testing/selftests/mm/guard-pages.c
+> @@ -0,0 +1,1168 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +#define _GNU_SOURCE
+> +#include "../kselftest_harness.h"
+> +#include <assert.h>
+> +#include <fcntl.h>
+> +#include <setjmp.h>
+> +#include <errno.h>
+> +#include <linux/userfaultfd.h>
+> +#include <signal.h>
+> +#include <stdbool.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <sys/ioctl.h>
+> +#include <sys/mman.h>
+> +#include <sys/syscall.h>
+> +#include <sys/uio.h>
+> +#include <unistd.h>
+> +
+> +/* These may not yet be available in the uAPI so define if not. */
+> +
+> +#ifndef MADV_GUARD_POISON
+> +#define MADV_GUARD_POISON	102
+> +#endif
+> +
+> +#ifndef MADV_GUARD_UNPOISON
+> +#define MADV_GUARD_UNPOISON	103
+> +#endif
+> +
+> +volatile bool signal_jump_set;
+
+Can you add a comment about why volatile is needed.
+By the way did you happen to run checkpatck on this. There are
+several instances where single statement blocks with braces {}
+
+I noticed a few and ran checkpatch on your patch. There are
+45 warnings regarding codeing style.
+
+Please run checkpatch and clean them up so we can avoid followup
+checkpatch cleanup patches.
+
+> +sigjmp_buf signal_jmp_buf;
+> +
+> +static int userfaultfd(int flags)
+> +{
+> +	return syscall(SYS_userfaultfd, flags);
+> +}
+> +
+> +static void handle_fatal(int c)
+> +{
+> +	if (!signal_jump_set)
+> +		return;
+> +
+> +	siglongjmp(signal_jmp_buf, c);
+> +}
+> +
+> +static int pidfd_open(pid_t pid, unsigned int flags)
+> +{
+> +	return syscall(SYS_pidfd_open, pid, flags);
+> +}
+> +
+> +/*
+> + * Enable our signal catcher and try to read/write the specified buffer. The
+> + * return value indicates whether the read/write succeeds without a fatal
+> + * signal.
+> + */
+> +static bool try_access_buf(char *ptr, bool write)
+> +{
+> +	bool failed;
+> +
+> +	/* Tell signal handler to jump back here on fatal signal. */
+> +	signal_jump_set = true;
+> +	/* If a fatal signal arose, we will jump back here and failed is set. */
+> +	failed = sigsetjmp(signal_jmp_buf, 0) != 0;
+> +
+> +	if (!failed) {
+> +		if (write) {
+> +			*ptr = 'x';
+> +		} else {
+> +			const volatile char *chr = ptr;
+> +
+> +			/* Force read. */
+> +			(void)*chr;
+> +		}
+> +	}
+> +
+> +	signal_jump_set = false;
+> +	return !failed;
+> +}
+> +
+> +/* Try and read from a buffer, return true if no fatal signal. */
+> +static bool try_read_buf(char *ptr)
+> +{
+> +	return try_access_buf(ptr, false);
+> +}
+> +
+> +/* Try and write to a buffer, return true if no fatal signal. */
+> +static bool try_write_buf(char *ptr)
+> +{
+> +	return try_access_buf(ptr, true);
+> +}
+> +
+> +/*
+> + * Try and BOTH read from AND write to a buffer, return true if BOTH operations
+> + * succeed.
+> + */
+> +static bool try_read_write_buf(char *ptr)
+> +{
+> +	return try_read_buf(ptr) && try_write_buf(ptr);
+> +}
+> +
+> +FIXTURE(guard_pages)
+> +{
+> +	unsigned long page_size;
+> +};
+> +
+> +FIXTURE_SETUP(guard_pages)
+> +{
+> +	struct sigaction act = {
+> +		.sa_handler = &handle_fatal,
+> +		.sa_flags = SA_NODEFER,
+> +	};
+> +
+> +	sigemptyset(&act.sa_mask);
+> +	if (sigaction(SIGSEGV, &act, NULL)) {
+> +		perror("sigaction");
+> +		ksft_exit_fail();
+
+Replase the above two with ksft_exit_fail_perror()
+There is no need for perror("sigaction"); followed by
+ksft_exit_fail();
+
+> +	}
+> +
+> +	self->page_size = (unsigned long)sysconf(_SC_PAGESIZE);
+> +};
+> +
+> +FIXTURE_TEARDOWN(guard_pages)
+> +{
+> +	struct sigaction act = {
+> +		.sa_handler = SIG_DFL,
+> +		.sa_flags = SA_NODEFER,
+> +	};
+> +
+> +	sigemptyset(&act.sa_mask);
+> +	sigaction(SIGSEGV, &act, NULL);
+> +}
+> +
+> +TEST_F(guard_pages, basic)
+> +{
+> +	const unsigned long NUM_PAGES = 10;
+> +	const unsigned long page_size = self->page_size;
+> +	char *ptr;
+> +	int i;
+> +
+> +	ptr = mmap(NULL, NUM_PAGES * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_PRIVATE | MAP_ANON, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* Trivially assert we can touch the first page. */
+> +	ASSERT_TRUE(try_read_write_buf(ptr));
+> +
+> +	ASSERT_EQ(madvise(ptr, page_size, MADV_GUARD_POISON), 0);
+> +
+> +	/* Establish that 1st page SIGSEGV's. */
+> +	ASSERT_FALSE(try_read_write_buf(ptr));
+> +
+> +	/* Ensure we can touch everything else.*/
+> +	for (i = 1; i < NUM_PAGES; i++) {
+> +		ASSERT_TRUE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Establish a guard page at the end of the mapping. */
+> +	ASSERT_EQ(madvise(&ptr[(NUM_PAGES - 1) * page_size], page_size,
+> +			  MADV_GUARD_POISON), 0);
+> +
+> +	/* Check that both guard pages result in SIGSEGV. */
+> +	ASSERT_FALSE(try_read_write_buf(ptr));
+> +	ASSERT_FALSE(try_read_write_buf(&ptr[(NUM_PAGES - 1) * page_size]));
+> +
+> +	/* Unpoison the first. */
+> +	ASSERT_FALSE(madvise(ptr, page_size, MADV_GUARD_UNPOISON));
+> +
+> +	/* Make sure we can touch it. */
+> +	ASSERT_TRUE(try_read_write_buf(ptr));
+> +
+> +	/* Unpoison the last. */
+> +	ASSERT_FALSE(madvise(&ptr[(NUM_PAGES - 1) * page_size], page_size,
+> +			     MADV_GUARD_UNPOISON));
+> +
+> +	/* Make sure we can touch it. */
+> +	ASSERT_TRUE(try_read_write_buf(&ptr[(NUM_PAGES - 1) * page_size]));
+> +
+> +	/*
+> +	 *  Test setting a _range_ of pages, namely the first 3. The first of
+> +	 *  these be faulted in, so this also tests that we can poison backed
+> +	 *  pages.
+> +	 */
+> +	ASSERT_EQ(madvise(ptr, 3 * page_size, MADV_GUARD_POISON), 0);
+> +
+> +	/* Make sure they are all poisoned. */
+> +	for (i = 0; i < 3; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +
+
+This one here and
+> +	/* Make sure the rest are not. */
+> +	for (i = 3; i < NUM_PAGES; i++) {
+> +		ASSERT_TRUE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Unpoison them. */
+> +	ASSERT_EQ(madvise(ptr, NUM_PAGES * page_size, MADV_GUARD_UNPOISON), 0);
+> +
+> +	/* Now make sure we can touch everything. */
+> +	for (i = 0; i < NUM_PAGES; i++) {
+> +		ASSERT_TRUE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Now unpoison everything, make sure we don't remove existing entries */
+> +	ASSERT_EQ(madvise(ptr, NUM_PAGES * page_size, MADV_GUARD_UNPOISON), 0);
+> +
+> +	for (i = 0; i < NUM_PAGES * page_size; i += page_size) {
+> +		ASSERT_EQ(ptr[i], 'x');
+> +	}
+> +
+> +	ASSERT_EQ(munmap(ptr, NUM_PAGES * page_size), 0);
+> +}
+> +
+> +/* Assert that operations applied across multiple VMAs work as expected. */
+> +TEST_F(guard_pages, multi_vma)
+> +{
+> +	const unsigned long page_size = self->page_size;
+> +	char *ptr_region, *ptr, *ptr1, *ptr2, *ptr3;
+> +	int i;
+> +
+> +	/* Reserve a 100 page region over which we can install VMAs. */
+> +	ptr_region = mmap(NULL, 100 * page_size, PROT_NONE,
+> +			  MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr_region, MAP_FAILED);
+> +
+> +	/* Place a VMA of 10 pages size at the start of the region. */
+> +	ptr1 = mmap(ptr_region, 10 * page_size, PROT_READ | PROT_WRITE,
+> +		    MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr1, MAP_FAILED);
+> +
+> +	/* Place a VMA of 5 pages size 50 pages into the region. */
+> +	ptr2 = mmap(&ptr_region[50 * page_size], 5 * page_size,
+> +		    PROT_READ | PROT_WRITE,
+> +		    MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr2, MAP_FAILED);
+> +
+> +	/* Place a VMA of 20 pages size at the end of the region. */
+> +	ptr3 = mmap(&ptr_region[80 * page_size], 20 * page_size,
+> +		    PROT_READ | PROT_WRITE,
+> +		    MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr3, MAP_FAILED);
+> +
+> +	/* Unmap gaps. */
+> +	ASSERT_EQ(munmap(&ptr_region[10 * page_size], 40 * page_size), 0);
+> +	ASSERT_EQ(munmap(&ptr_region[55 * page_size], 25 * page_size), 0);
+> +
+> +	/*
+> +	 * We end up with VMAs like this:
+> +	 *
+> +	 * 0    10 .. 50   55 .. 80   100
+> +	 * [---]      [---]      [---]
+> +	 */
+> +
+> +	/* Now poison the whole range and make sure all VMAs are poisoned. */
+> +
+> +	/*
+> +	 * madvise() is certifiable and lets you perform operations over gaps,
+> +	 * everything works, but it indicates an error and errno is set to
+> +	 * -ENOMEM. Also if anything runs out of memory it is set to
+> +	 * -ENOMEM. You are meant to guess which is which.
+> +	 */
+> +	ASSERT_EQ(madvise(ptr_region, 100 * page_size, MADV_GUARD_POISON), -1);
+> +	ASSERT_EQ(errno, ENOMEM);
+> +
+> +	for (i = 0; i < 10; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr1[i * page_size]));
+> +	}
+> +
+> +	for (i = 0; i < 5; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr2[i * page_size]));
+> +	}
+> +
+> +	for (i = 0; i < 20; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr3[i * page_size]));
+> +	}
+> +
+> +	/* Now unpoison the range and assert the opposite. */
+> +
+> +	ASSERT_EQ(madvise(ptr_region, 100 * page_size, MADV_GUARD_UNPOISON), -1);
+> +	ASSERT_EQ(errno, ENOMEM);
+> +
+> +	for (i = 0; i < 10; i++) {
+> +		ASSERT_TRUE(try_read_write_buf(&ptr1[i * page_size]));
+> +	}
+> +
+> +	for (i = 0; i < 5; i++) {
+> +		ASSERT_TRUE(try_read_write_buf(&ptr2[i * page_size]));
+> +	}
+> +
+> +	for (i = 0; i < 20; i++) {
+> +		ASSERT_TRUE(try_read_write_buf(&ptr3[i * page_size]));
+> +	}
+> +
+> +	/* Now map incompatible VMAs in the gaps. */
+> +	ptr = mmap(&ptr_region[10 * page_size], 40 * page_size,
+> +		   PROT_READ | PROT_WRITE | PROT_EXEC,
+> +		   MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +	ptr = mmap(&ptr_region[55 * page_size], 25 * page_size,
+> +		   PROT_READ | PROT_WRITE | PROT_EXEC,
+> +		   MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/*
+> +	 * We end up with VMAs like this:
+> +	 *
+> +	 * 0    10 .. 50   55 .. 80   100
+> +	 * [---][xxxx][---][xxxx][---]
+> +	 *
+> +	 * Where 'x' signifies VMAs that cannot be merged with those adjacent to
+> +	 * them.
+> +	 */
+> +
+> +	/* Multiple VMAs adjacent to one another should result in no error. */
+> +	ASSERT_EQ(madvise(ptr_region, 100 * page_size, MADV_GUARD_POISON), 0);
+> +	for (i = 0; i < 100; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr_region[i * page_size]));
+> +	}
+> +	ASSERT_EQ(madvise(ptr_region, 100 * page_size, MADV_GUARD_UNPOISON), 0);
+> +	for (i = 0; i < 100; i++) {
+> +		ASSERT_TRUE(try_read_write_buf(&ptr_region[i * page_size]));
+> +	}
+> +
+> +	/* Cleanup. */
+> +	ASSERT_EQ(munmap(ptr_region, 100 * page_size), 0);
+> +}
+> +
+> +/*
+> + * Assert that batched operations performed using process_madvise() work as
+> + * expected.
+> + */
+> +TEST_F(guard_pages, process_madvise)
+> +{
+> +	const unsigned long page_size = self->page_size;
+> +	pid_t pid = getpid();
+> +	int pidfd = pidfd_open(pid, 0);
+> +	char *ptr_region, *ptr1, *ptr2, *ptr3;
+> +	ssize_t count;
+> +	struct iovec vec[6];
+> +
+> +	ASSERT_NE(pidfd, -1);
+> +
+> +	/* Reserve region to map over. */
+> +	ptr_region = mmap(NULL, 100 * page_size, PROT_NONE,
+> +			  MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr_region, MAP_FAILED);
+> +
+> +	/* 10 pages offset 1 page into reserve region. */
+> +	ptr1 = mmap(&ptr_region[page_size], 10 * page_size,
+> +		    PROT_READ | PROT_WRITE,
+> +		    MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr1, MAP_FAILED);
+> +	/* We want poison markers at start/end of each VMA. */
+> +	vec[0].iov_base = ptr1;
+> +	vec[0].iov_len = page_size;
+> +	vec[1].iov_base = &ptr1[9 * page_size];
+> +	vec[1].iov_len = page_size;
+> +
+> +	/* 5 pages offset 50 pages into reserve region. */
+> +	ptr2 = mmap(&ptr_region[50 * page_size], 5 * page_size,
+> +		    PROT_READ | PROT_WRITE,
+> +		    MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr2, MAP_FAILED);
+> +	vec[2].iov_base = ptr2;
+> +	vec[2].iov_len = page_size;
+> +	vec[3].iov_base = &ptr2[4 * page_size];
+> +	vec[3].iov_len = page_size;
+> +
+> +	/* 20 pages offset 79 pages into reserve region. */
+> +	ptr3 = mmap(&ptr_region[79 * page_size], 20 * page_size,
+> +		    PROT_READ | PROT_WRITE,
+> +		    MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr3, MAP_FAILED);
+> +	vec[4].iov_base = ptr3;
+> +	vec[4].iov_len = page_size;
+> +	vec[5].iov_base = &ptr3[19 * page_size];
+> +	vec[5].iov_len = page_size;
+> +
+> +	/* Free surrounding VMAs. */
+> +	ASSERT_EQ(munmap(ptr_region, page_size), 0);
+> +	ASSERT_EQ(munmap(&ptr_region[11 * page_size], 39 * page_size), 0);
+> +	ASSERT_EQ(munmap(&ptr_region[55 * page_size], 24 * page_size), 0);
+> +	ASSERT_EQ(munmap(&ptr_region[99 * page_size], page_size), 0);
+> +
+> +	/* Now poison in one step. */
+> +	count = process_madvise(pidfd, vec, 6, MADV_GUARD_POISON, 0);
+> +
+> +	/* OK we don't have permission to do this, skip. */
+> +	if (count == -1 && errno == EPERM)
+> +		ksft_exit_skip("No process_madvise() permissions\n");
+
+Can you make this a bit more informative? What would user do
+if they see this message? Are they supposed to run the test
+as root?
+
+> +
+> +	/* Returns the number of bytes advised. */
+> +	ASSERT_EQ(count, 6 * page_size);
+> +
+> +	/* Now make sure the poisoning was applied. */
+> +
+> +	ASSERT_FALSE(try_read_write_buf(ptr1));
+> +	ASSERT_FALSE(try_read_write_buf(&ptr1[9 * page_size]));
+> +
+> +	ASSERT_FALSE(try_read_write_buf(ptr2));
+> +	ASSERT_FALSE(try_read_write_buf(&ptr2[4 * page_size]));
+> +
+> +	ASSERT_FALSE(try_read_write_buf(ptr3));
+> +	ASSERT_FALSE(try_read_write_buf(&ptr3[19 * page_size]));
+> +
+> +	/* Now do the same with unpoison... */
+> +	count = process_madvise(pidfd, vec, 6, MADV_GUARD_UNPOISON, 0);
+> +
+> +	/* ...and everything should now succeed. */
+> +
+> +	ASSERT_TRUE(try_read_write_buf(ptr1));
+> +	ASSERT_TRUE(try_read_write_buf(&ptr1[9 * page_size]));
+> +
+> +	ASSERT_TRUE(try_read_write_buf(ptr2));
+> +	ASSERT_TRUE(try_read_write_buf(&ptr2[4 * page_size]));
+> +
+> +	ASSERT_TRUE(try_read_write_buf(ptr3));
+> +	ASSERT_TRUE(try_read_write_buf(&ptr3[19 * page_size]));
+> +
+> +	/* Cleanup. */
+> +	ASSERT_EQ(munmap(ptr1, 10 * page_size), 0);
+> +	ASSERT_EQ(munmap(ptr2, 5 * page_size), 0);
+> +	ASSERT_EQ(munmap(ptr3, 20 * page_size), 0);
+> +	close(pidfd);
+> +}
+> +
+> +/* Assert that unmapping ranges does not leave poison behind. */
+> +TEST_F(guard_pages, munmap)
+> +{
+> +	const unsigned long page_size = self->page_size;
+> +	char *ptr, *ptr_new1, *ptr_new2;
+> +
+> +	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* Poison first and last pages. */
+> +	ASSERT_EQ(madvise(ptr, page_size, MADV_GUARD_POISON), 0);
+> +	ASSERT_EQ(madvise(&ptr[9 * page_size], page_size, MADV_GUARD_POISON), 0);
+> +
+> +	/* Assert that they are poisoned. */
+> +	ASSERT_FALSE(try_read_write_buf(ptr));
+> +	ASSERT_FALSE(try_read_write_buf(&ptr[9 * page_size]));
+> +
+> +	/* Unmap them. */
+> +	ASSERT_EQ(munmap(ptr, page_size), 0);
+> +	ASSERT_EQ(munmap(&ptr[9 * page_size], page_size), 0);
+> +
+> +	/* Map over them.*/
+> +	ptr_new1 = mmap(ptr, page_size, PROT_READ | PROT_WRITE,
+> +			MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr_new1, MAP_FAILED);
+> +	ptr_new2 = mmap(&ptr[9 * page_size], page_size, PROT_READ | PROT_WRITE,
+> +			MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr_new2, MAP_FAILED);
+> +
+> +	/* Assert that they are now not poisoned. */
+> +	ASSERT_TRUE(try_read_write_buf(ptr_new1));
+> +	ASSERT_TRUE(try_read_write_buf(ptr_new2));
+> +
+> +	/* Cleanup. */
+> +	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
+> +}
+> +
+> +/* Assert that mprotect() operations have no bearing on guard poison markers. */
+> +TEST_F(guard_pages, mprotect)
+> +{
+> +	const unsigned long page_size = self->page_size;
+> +	char *ptr;
+> +	int i;
+> +
+> +	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* Poison the middle of the range. */
+> +	ASSERT_EQ(madvise(&ptr[5 * page_size], 2 * page_size,
+> +			  MADV_GUARD_POISON), 0);
+> +
+> +	/* Assert that it is indeed poisoned. */
+> +	ASSERT_FALSE(try_read_write_buf(&ptr[5 * page_size]));
+> +	ASSERT_FALSE(try_read_write_buf(&ptr[6 * page_size]));
+> +
+> +	/* Now make these pages read-only. */
+> +	ASSERT_EQ(mprotect(&ptr[5 * page_size], 2 * page_size, PROT_READ), 0);
+> +
+> +	/* Make sure the range is still poisoned. */
+> +	ASSERT_FALSE(try_read_buf(&ptr[5 * page_size]));
+> +	ASSERT_FALSE(try_read_buf(&ptr[6 * page_size]));
+> +
+> +	/* Make sure we can poison again without issue.*/
+> +	ASSERT_EQ(madvise(&ptr[5 * page_size], 2 * page_size,
+> +			  MADV_GUARD_POISON), 0);
+> +
+> +	/* Make sure the range is, yet again, still poisoned. */
+> +	ASSERT_FALSE(try_read_buf(&ptr[5 * page_size]));
+> +	ASSERT_FALSE(try_read_buf(&ptr[6 * page_size]));
+> +
+> +	/* Now unpoison the whole range. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_UNPOISON), 0);
+> +
+> +	/* Make sure the whole range is readable. */
+> +	for (i = 0; i < 10; i++) {
+> +		ASSERT_TRUE(try_read_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Cleanup. */
+> +	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
+> +}
+> +
+> +/* Split and merge VMAs and make sure guard pages still behave. */
+> +TEST_F(guard_pages, split_merge)
+> +{
+> +	const unsigned long page_size = self->page_size;
+> +	char *ptr, *ptr_new;
+> +	int i;
+> +
+> +	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* Poison the whole range. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_POISON), 0);
+> +
+> +	/* Make sure the whole range is poisoned. */
+> +	for (i = 0; i < 10; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Now unmap some pages in the range so we split. */
+> +	ASSERT_EQ(munmap(&ptr[2 * page_size], page_size), 0);
+> +	ASSERT_EQ(munmap(&ptr[5 * page_size], page_size), 0);
+> +	ASSERT_EQ(munmap(&ptr[8 * page_size], page_size), 0);
+> +
+> +	/* Make sure the remaining ranges are poisoned post-split. */
+> +	for (i = 0; i < 2; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +	for (i = 2; i < 5; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +	for (i = 6; i < 8; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +	for (i = 9; i < 10; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Now map them again - the unmap will have cleared the poison. */
+> +	ptr_new = mmap(&ptr[2 * page_size], page_size, PROT_READ | PROT_WRITE,
+> +		       MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr_new, MAP_FAILED);
+> +	ptr_new = mmap(&ptr[5 * page_size], page_size, PROT_READ | PROT_WRITE,
+> +		       MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr_new, MAP_FAILED);
+> +	ptr_new = mmap(&ptr[8 * page_size], page_size, PROT_READ | PROT_WRITE,
+> +		       MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr_new, MAP_FAILED);
+> +
+> +	/* Now make sure poisoning is as expected. */
+> +	for (i = 0; i < 10; i++) {
+> +		bool result = try_read_write_buf(&ptr[i * page_size]);
+> +
+> +		if (i == 2 || i == 5 || i == 8) {
+> +			ASSERT_TRUE(result);
+> +		} else {
+> +			ASSERT_FALSE(result);
+> +		}
+> +	}
+> +
+> +	/* Now poison everything again. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_POISON), 0);
+> +
+> +	/* Make sure the whole range is poisoned. */
+> +	for (i = 0; i < 10; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Now split the range into three. */
+> +	ASSERT_EQ(mprotect(ptr, 3 * page_size, PROT_READ), 0);
+> +	ASSERT_EQ(mprotect(&ptr[7 * page_size], 3 * page_size, PROT_READ), 0);
+> +
+> +	/* Make sure the whole range is poisoned for read. */
+> +	for (i = 0; i < 10; i++) {
+> +		ASSERT_FALSE(try_read_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Now reset protection bits so we merge the whole thing. */
+> +	ASSERT_EQ(mprotect(ptr, 3 * page_size, PROT_READ | PROT_WRITE), 0);
+> +	ASSERT_EQ(mprotect(&ptr[7 * page_size], 3 * page_size,
+> +			   PROT_READ | PROT_WRITE), 0);
+> +
+> +	/* Make sure the whole range is still poisoned. */
+> +	for (i = 0; i < 10; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Split range into 3 again... */
+> +	ASSERT_EQ(mprotect(ptr, 3 * page_size, PROT_READ), 0);
+> +	ASSERT_EQ(mprotect(&ptr[7 * page_size], 3 * page_size, PROT_READ), 0);
+> +
+> +	/* ...and unpoison the whole range. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_UNPOISON), 0);
+> +
+> +	/* Make sure the whole range is remedied for read. */
+> +	for (i = 0; i < 10; i++) {
+> +		ASSERT_TRUE(try_read_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Merge them again. */
+> +	ASSERT_EQ(mprotect(ptr, 3 * page_size, PROT_READ | PROT_WRITE), 0);
+> +	ASSERT_EQ(mprotect(&ptr[7 * page_size], 3 * page_size,
+> +			   PROT_READ | PROT_WRITE), 0);
+> +
+> +	/* Now ensure the merged range is remedied for read/write. */
+> +	for (i = 0; i < 10; i++) {
+> +		ASSERT_TRUE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Cleanup. */
+> +	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
+> +}
+> +
+> +/* Assert that MADV_DONTNEED does not remove guard poison markers. */
+> +TEST_F(guard_pages, dontneed)
+> +{
+> +	const unsigned long page_size = self->page_size;
+> +	char *ptr;
+> +	int i;
+> +
+> +	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* Back the whole range. */
+> +	for (i = 0; i < 10; i++) {
+> +		ptr[i * page_size] = 'y';
+> +	}
+> +
+> +	/* Poison every other page. */
+> +	for (i = 0; i < 10; i += 2) {
+> +		ASSERT_EQ(madvise(&ptr[i * page_size],
+> +				  page_size, MADV_GUARD_POISON), 0);
+> +	}
+> +
+> +	/* Indicate that we don't need any of the range. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_DONTNEED), 0);
+> +
+> +	/* Check to ensure poison markers are still in place. */
+> +	for (i = 0; i < 10; i++) {
+> +		bool result = try_read_buf(&ptr[i * page_size]);
+> +
+> +		if (i % 2 == 0) {
+> +			ASSERT_FALSE(result);
+> +		} else {
+> +			ASSERT_TRUE(result);
+> +			/* Make sure we really did get reset to zero page. */
+> +			ASSERT_EQ(ptr[i * page_size], '\0');
+> +		}
+> +
+> +		/* Now write... */
+> +		result = try_write_buf(&ptr[i * page_size]);
+> +
+> +		/* ...and make sure same result. */
+> +		if (i % 2 == 0) {
+
+You don't need  { here
+> +			ASSERT_FALSE(result);
+> +		} else {
+> +			ASSERT_TRUE(result);
+> +		}
+
+Same here.
+  
+> +	}
+> +
+> +	/* Cleanup. */
+> +	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
+> +}
+> +
+> +/* Assert that mlock()'ed pages work correctly with poison markers. */
+> +TEST_F(guard_pages, mlock)
+> +{
+> +	const unsigned long page_size = self->page_size;
+> +	char *ptr;
+> +	int i;
+> +
+> +	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* Populate. */
+> +	for (i = 0; i < 10; i++) {
+> +		ptr[i * page_size] = 'y';
+> +	}
+> +
+> +	/* Lock. */
+> +	ASSERT_EQ(mlock(ptr, 10 * page_size), 0);
+> +
+> +	/* Now try to poison, should fail with EINVAL. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_POISON), -1);
+> +	ASSERT_EQ(errno, EINVAL);
+> +
+> +	/* OK unlock. */
+> +	ASSERT_EQ(munlock(ptr, 10 * page_size), 0);
+> +
+> +	/* Poison first half of range, should now succeed. */
+> +	ASSERT_EQ(madvise(ptr, 5 * page_size, MADV_GUARD_POISON), 0);
+> +
+> +	/* Make sure poison works. */
+> +	for (i = 0; i < 10; i++) {
+> +		bool result = try_read_write_buf(&ptr[i * page_size]);
+> +
+> +		if (i < 5) {
+> +			ASSERT_FALSE(result);
+> +		} else {
+> +			ASSERT_TRUE(result);
+> +			ASSERT_EQ(ptr[i * page_size], 'x');
+> +		}
+> +	}
+> +
+> +	/*
+> +	 * Now lock the latter part of the range. We can't lock the poisoned
+> +	 * pages, as this would result in the pages being populated and the
+> +	 * poisoning would cause this to error out.
+> +	 */
+> +	ASSERT_EQ(mlock(&ptr[5 * page_size], 5 * page_size), 0);
+> +
+> +	/*
+> +	 * Now unpoison, we do not permit mlock()'d ranges to be remedied as it is
+> +	 * a non-destructive operation.
+> +	 */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_UNPOISON), 0);
+> +
+> +	/* Now check that everything is remedied. */
+> +	for (i = 0; i < 10; i++) {
+> +		ASSERT_TRUE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Cleanup. */
+> +	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
+> +}
+> +
+> +/*
+> + * Assert that moving, extending and shrinking memory via mremap() retains
+> + * poison markers where possible.
+> + *
+> + * - Moving a mapping alone should retain markers as they are.
+> + */
+> +TEST_F(guard_pages, mremap_move)
+> +{
+> +	const unsigned long page_size = self->page_size;
+> +	char *ptr, *ptr_new;
+> +
+> +	/* Map 5 pages. */
+> +	ptr = mmap(NULL, 5 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* Place poison markers at both ends of the 5 page span. */
+> +	ASSERT_EQ(madvise(ptr, page_size, MADV_GUARD_POISON), 0);
+> +	ASSERT_EQ(madvise(&ptr[4 * page_size], page_size, MADV_GUARD_POISON), 0);
+> +
+> +	/* Make sure the poison is in effect. */
+> +	ASSERT_FALSE(try_read_write_buf(ptr));
+> +	ASSERT_FALSE(try_read_write_buf(&ptr[4 * page_size]));
+> +
+> +	/* Map a new region we will move this range into. Doing this ensures
+> +	 * that we have reserved a range to map into.
+> +	 */
+> +	ptr_new = mmap(NULL, 5 * page_size, PROT_NONE, MAP_ANON | MAP_PRIVATE,
+> +		       -1, 0);
+> +	ASSERT_NE(ptr_new, MAP_FAILED);
+> +
+> +	ASSERT_EQ(mremap(ptr, 5 * page_size, 5 * page_size,
+> +			 MREMAP_MAYMOVE | MREMAP_FIXED, ptr_new), ptr_new);
+> +
+> +	/* Make sure the poison is retained. */
+> +	ASSERT_FALSE(try_read_write_buf(ptr_new));
+> +	ASSERT_FALSE(try_read_write_buf(&ptr_new[4 * page_size]));
+> +
+> +	/*
+> +	 * Clean up - we only need reference the new pointer as we overwrote the
+> +	 * PROT_NONE range and moved the existing one.
+> +	 */
+> +	munmap(ptr_new, 5 * page_size);
+> +}
+> +
+> +/*
+> + * Assert that moving, extending and shrinking memory via mremap() retains
+> + * poison markers where possible.
+> + *
+> + * - Expanding should retain, only now in different position. The user will have
+> + *   to unpoison manually to fix up (they'd have to do the same if it were a
+> + *   PROT_NONE mapping)
+> + */
+> +TEST_F(guard_pages, mremap_expand)
+> +{
+> +	const unsigned long page_size = self->page_size;
+> +	char *ptr, *ptr_new;
+> +
+> +	/* Map 10 pages... */
+> +	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +	/* ...But unmap the last 5 so we can ensure we can expand into them. */
+> +	ASSERT_EQ(munmap(&ptr[5 * page_size], 5 * page_size), 0);
+> +
+> +	/* Place poison markers at both ends of the 5 page span. */
+> +	ASSERT_EQ(madvise(ptr, page_size, MADV_GUARD_POISON), 0);
+> +	ASSERT_EQ(madvise(&ptr[4 * page_size], page_size, MADV_GUARD_POISON), 0);
+> +
+> +	/* Make sure the poison is in effect. */
+> +	ASSERT_FALSE(try_read_write_buf(ptr));
+> +	ASSERT_FALSE(try_read_write_buf(&ptr[4 * page_size]));
+> +
+> +	/* Now expand to 10 pages. */
+> +	ptr = mremap(ptr, 5 * page_size, 10 * page_size, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* Make sure the poison is retained in its original positions. */
+> +	ASSERT_FALSE(try_read_write_buf(ptr));
+> +	ASSERT_FALSE(try_read_write_buf(&ptr[4 * page_size]));
+> +
+> +	/* Reserve a region which we can move to and expand into. */
+> +	ptr_new = mmap(NULL, 20 * page_size, PROT_NONE,
+> +		       MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr_new, MAP_FAILED);
+> +
+> +	/* Now move and expand into it. */
+> +	ptr = mremap(ptr, 10 * page_size, 20 * page_size,
+> +		     MREMAP_MAYMOVE | MREMAP_FIXED, ptr_new);
+> +	ASSERT_EQ(ptr, ptr_new);
+> +
+> +	/* Again, make sure the poison is retained in its original
+> +	 * positions. */
+> +	ASSERT_FALSE(try_read_write_buf(ptr));
+> +	ASSERT_FALSE(try_read_write_buf(&ptr[4 * page_size]));
+> +
+> +	/*
+> +	 * A real user would have to unpoison, but would reasonably expect all
+> +	 * characteristics of the mapping to be retained, including poison
+> +	 * markers.
+> +	 */
+> +
+> +	/* Cleanup. */
+> +	munmap(ptr, 20 * page_size);
+> +}
+> +/*
+> + * Assert that moving, extending and shrinking memory via mremap() retains
+> + * poison markers where possible.
+> + *
+> + * - Shrinking will result in markers that are shrunk over being removed. Again,
+> + *   if the user were using a PROT_NONE mapping they'd have to manually fix this
+> + *   up also so this is OK.
+> + */
+> +TEST_F(guard_pages, mremap_shrink)
+> +{
+> +	const unsigned long page_size = self->page_size;
+> +	char *ptr;
+> +	int i;
+> +
+> +	/* Map 5 pages. */
+> +	ptr = mmap(NULL, 5 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* Place poison markers at both ends of the 5 page span. */
+> +	ASSERT_EQ(madvise(ptr, page_size, MADV_GUARD_POISON), 0);
+> +	ASSERT_EQ(madvise(&ptr[4 * page_size], page_size, MADV_GUARD_POISON), 0);
+> +
+> +	/* Make sure the poison is in effect. */
+> +	ASSERT_FALSE(try_read_write_buf(ptr));
+> +	ASSERT_FALSE(try_read_write_buf(&ptr[4 * page_size]));
+> +
+> +	/* Now shrink to 3 pages. */
+> +	ptr = mremap(ptr, 5 * page_size, 3 * page_size, MREMAP_MAYMOVE);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* We expect the poison marker at the start to be retained... */
+> +	ASSERT_FALSE(try_read_write_buf(ptr));
+> +
+> +	/* ...But remaining pages will not have poison markers. */
+> +	for (i = 1; i < 3; i++) {
+> +		ASSERT_TRUE(try_read_write_buf(&ptr[i + page_size]));
+> +	}
+> +
+> +	/*
+> +	 * As with expansion, a real user would have to unpoison and fixup. But
+> +	 * you'd have to do similar manual things with PROT_NONE mappings too.
+> +	 */
+> +
+> +	/*
+> +	 * If we expand back to the original size, the end marker will, of
+> +	 * course, no longer be present.
+> +	 */
+> +	ptr = mremap(ptr, 3 * page_size, 5 * page_size, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* Again, we expect the poison marker at the start to be retained... */
+> +	ASSERT_FALSE(try_read_write_buf(ptr));
+> +
+> +	/* ...But remaining pages will not have poison markers. */
+> +	for (i = 1; i < 5; i++) {
+> +		ASSERT_TRUE(try_read_write_buf(&ptr[i + page_size]));
+> +	}
+> +
+> +	/* Cleanup. */
+> +	munmap(ptr, 5 * page_size);
+> +}
+> +
+> +/*
+> + * Assert that forking a process with VMAs that do not have VM_WIPEONFORK set
+> + * retain guard pages.
+> + */
+> +TEST_F(guard_pages, fork)
+> +{
+> +	const unsigned long page_size = self->page_size;
+> +	char *ptr;
+> +	pid_t pid;
+> +	int i;
+> +
+> +	/* Map 10 pages. */
+> +	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* Poison the first 5 pages. */
+> +	ASSERT_EQ(madvise(ptr, 5 * page_size, MADV_GUARD_POISON), 0);
+> +
+> +	pid = fork();
+> +	ASSERT_NE(pid, -1);
+> +	if (!pid) {
+> +		/* This is the child process now. */
+> +
+> +		/* Assert that the poisoning is in effect. */
+> +		for (i = 0; i < 10; i++) {
+> +			bool result = try_read_write_buf(&ptr[i * page_size]);
+> +
+> +			if (i < 5) {
+> +				ASSERT_FALSE(result);
+> +			} else {
+> +				ASSERT_TRUE(result);
+> +			}
+> +		}
+> +
+> +		/* Now unpoison the range.*/
+> +		ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_UNPOISON), 0);
+> +
+> +		exit(0);
+> +	}
+> +
+> +	/* Parent process. */
+> +
+> +	/* Parent simply waits on child. */
+> +	waitpid(pid, NULL, 0);
+> +
+> +	/* Child unpoison does not impact parent page table state. */
+> +	for (i = 0; i < 10; i++) {
+> +		bool result = try_read_write_buf(&ptr[i * page_size]);
+> +
+> +		if (i < 5) {
+> +			ASSERT_FALSE(result);
+> +		} else {
+> +			ASSERT_TRUE(result);
+> +		}
+> +	}
+> +
+> +	/* Cleanup. */
+> +	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
+> +}
+> +
+> +/*
+> + * Assert that forking a process with VMAs that do have VM_WIPEONFORK set
+> + * behave as expected.
+> + */
+> +TEST_F(guard_pages, fork_wipeonfork)
+> +{
+> +	const unsigned long page_size = self->page_size;
+> +	char *ptr;
+> +	pid_t pid;
+> +	int i;
+> +
+> +	/* Map 10 pages. */
+> +	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* Mark wipe on fork. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_WIPEONFORK), 0);
+> +
+> +	/* Poison the first 5 pages. */
+> +	ASSERT_EQ(madvise(ptr, 5 * page_size, MADV_GUARD_POISON), 0);
+> +
+> +	pid = fork();
+> +	ASSERT_NE(pid, -1);
+> +	if (!pid) {
+> +		/* This is the child process now. */
+> +
+> +		/* Poison will have been wiped. */
+> +		for (i = 0; i < 10; i++) {
+> +			ASSERT_TRUE(try_read_write_buf(&ptr[i * page_size]));
+> +		}
+> +
+> +		exit(0);
+> +	}
+> +
+> +	/* Parent process. */
+> +
+> +	waitpid(pid, NULL, 0);
+> +
+> +	/* Poison should be in effect.*/
+> +	for (i = 0; i < 10; i++) {
+> +		bool result = try_read_write_buf(&ptr[i * page_size]);
+> +
+> +		if (i < 5) {
+> +			ASSERT_FALSE(result);
+> +		} else {
+> +			ASSERT_TRUE(result);
+> +		}
+> +	}
+> +
+> +	/* Cleanup. */
+> +	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
+> +}
+> +
+> +/* Ensure that MADV_FREE frees poison entries as expected. */
+> +TEST_F(guard_pages, lazyfree)
+> +{
+> +	const unsigned long page_size = self->page_size;
+> +	char *ptr;
+> +	int i;
+> +
+> +	/* Map 10 pages. */
+> +	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* Poison range. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_POISON), 0);
+> +
+> +	/* Ensure poisoned. */
+> +	for (i = 0; i < 10; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Lazyfree range. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_FREE), 0);
+> +
+> +	/* This should simply clear the poison markers. */
+> +	for (i = 0; i < 10; i++) {
+> +		ASSERT_TRUE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Cleanup. */
+> +	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
+> +}
+> +
+> +/* Ensure that MADV_POPULATE_READ, MADV_POPULATE_WRITE behave as expected. */
+> +TEST_F(guard_pages, populate)
+> +{
+> +	const unsigned long page_size = self->page_size;
+> +	char *ptr;
+> +
+> +	/* Map 10 pages. */
+> +	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* Poison range. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_POISON), 0);
+> +
+> +	/* Populate read should error out... */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_POPULATE_READ), -1);
+> +	ASSERT_EQ(errno, EFAULT);
+> +
+> +	/* ...as should populate write. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_POPULATE_WRITE), -1);
+> +	ASSERT_EQ(errno, EFAULT);
+> +
+> +	/* Cleanup. */
+> +	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
+> +}
+> +
+> +/* Ensure that MADV_COLD, MADV_PAGEOUT do not remove poison markers. */
+> +TEST_F(guard_pages, cold_pageout)
+> +{
+> +	const unsigned long page_size = self->page_size;
+> +	char *ptr;
+> +	int i;
+> +
+> +	/* Map 10 pages. */
+> +	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* Poison range. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_POISON), 0);
+> +
+> +	/* Ensured poisoned. */
+> +	for (i = 0; i < 10; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Now mark cold. This should have no impact on poison markers. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_COLD), 0);
+> +
+> +	/* Should remain poisoned. */
+> +	for (i = 0; i < 10; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* OK, now page out. This should equally, have no effect on markers. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_PAGEOUT), 0);
+> +
+> +	/* Should remain poisoned. */
+> +	for (i = 0; i < 10; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Cleanup. */
+> +	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
+> +}
+> +
+> +/* Ensure that guard pages do not break userfaultd. */
+> +TEST_F(guard_pages, uffd)
+> +{
+> +	const unsigned long page_size = self->page_size;
+> +	int uffd;
+> +	char *ptr;
+> +	int i;
+> +	struct uffdio_api api = {
+> +		.api = UFFD_API,
+> +		.features = 0,
+> +	};
+> +	struct uffdio_register reg;
+> +	struct uffdio_range range;
+> +
+> +	/* Set up uffd. */
+> +	uffd = userfaultfd(0);
+> +	if (uffd == -1 && errno == EPERM)
+> +		ksft_exit_skip("No uffd permissions\n");
+
+Same comment here about a user friendly message that say what
+user shoul do
+
+> +	ASSERT_NE(uffd, -1);
+> +
+> +	ASSERT_EQ(ioctl(uffd, UFFDIO_API, &api), 0);
+> +
+> +	/* Map 10 pages. */
+> +	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
+> +		   MAP_ANON | MAP_PRIVATE, -1, 0);
+> +	ASSERT_NE(ptr, MAP_FAILED);
+> +
+> +	/* Register the range with uffd. */
+> +	range.start = (unsigned long)ptr;
+> +	range.len = 10 * page_size;
+> +	reg.range = range;
+> +	reg.mode = UFFDIO_REGISTER_MODE_MISSING;
+> +	ASSERT_EQ(ioctl(uffd, UFFDIO_REGISTER, &reg), 0);
+> +
+> +	/* Poison the range. This should not trigger the uffd. */
+> +	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_POISON), 0);
+> +
+> +	/* The poisoning should behave as usual with no uffd intervention. */
+> +	for (i = 0; i < 10; i++) {
+> +		ASSERT_FALSE(try_read_write_buf(&ptr[i * page_size]));
+> +	}
+> +
+> +	/* Cleanup. */
+> +	ASSERT_EQ(ioctl(uffd, UFFDIO_UNREGISTER, &range), 0);
+> +	close(uffd);
+> +	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
+> +}
+> +
+> +TEST_HARNESS_MAIN
+
+thanks,
+-- Shuah
 
 
