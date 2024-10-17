@@ -1,132 +1,150 @@
-Return-Path: <linux-kselftest+bounces-20056-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20057-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB4619A2E8B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 22:35:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E34E9A2E8D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 22:36:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 234D6B23305
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 20:35:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 028532849FC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 20:36:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20BE02281E0;
-	Thu, 17 Oct 2024 20:35:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 968082281DC;
+	Thu, 17 Oct 2024 20:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kECVH+6y"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hkp0Q5Zu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E49227B81
-	for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2024 20:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CB58219CB0
+	for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2024 20:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729197309; cv=none; b=g0uyyVH5MbU8ayn0NT0YdNfcfbRwrnNqV0VW9ZhJgssjd4q8IllGrn+tmWQ4X75LA7frsjWmQ56zZDaHPER5qpREcdlefFcGsDgDX21I6yCRkCrAZH2HuVpmj2vxrnwJMcMAd99mCY3l+WytvXPJ0A3Jp0w8xSyInioYqSNUmi8=
+	t=1729197373; cv=none; b=Aq3ZNoNZfqhZuV9oh0IeTrnHkVZ4fFQFAWyuWUhhQCTrAhUsLTF34aTX5Z2lz7kTrc15dnYvfI5io4xmAd57pl50WB0wyFd3sPOKuGHDOeEGO3HbXqgLlhzkv1gB8zHZrPiScC+W35nUtLQV7c3aQU2Qd3r7oYoqZ7NWys2aApE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729197309; c=relaxed/simple;
-	bh=8dlsU4BSgea+jQl1c4v/WF9/raVOBoEHI3bZllwES5A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iJifiI4bF1mtXbBPPM0SsFSgFw169INw/2e6b2O7Lyvs0tDcT7cdcavPT+HfR8myzDpUiuqj2I6ekjGNXT7RLgXN/Yz0oTwszOMPT7maCOYcel9uYwmrU7YnJz0a2vIHS3Rc1nXepyWU36BED7WwI74Tj7PPHuqmO45l+cGmkts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=kECVH+6y; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4315dfa3e0bso1183395e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2024 13:35:07 -0700 (PDT)
+	s=arc-20240116; t=1729197373; c=relaxed/simple;
+	bh=AORgYkSEpqScrRJBsDbxUjNY993eTA7X1chV49DsV3k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ex7a0PePJFbkDBIwsawFkyezEV5+rTZKwbLVSb9IQd6i2cV8VUlDUxFjArrn1zC+rMUcQ0UHkwF3bWifkUiJZb9q64r2bE1o24X1cs574UFPqdkIrt+KCVg5Yk4OYG+Gbg764KnQm9u6Bnkv80R2INNKHOGFdaqjAOfgHEYMTcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hkp0Q5Zu; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-83a94a6032bso47225839f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2024 13:36:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1729197305; x=1729802105; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8dlsU4BSgea+jQl1c4v/WF9/raVOBoEHI3bZllwES5A=;
-        b=kECVH+6yr6afFpXUs6MwqTx31F+MxNcZu3aZKx3+jXwc7ItPn6BMSpJiko4U5d1HWh
-         fXHUCYBfbheTpnEiwVbGQLvvMs+bMfLfih2DU4MPlQdg3hRA882hZvH02MnPCosxKSSM
-         7oHV/DnnnhxjbkRkVw3Mh9iJvGj2O6ogPrxKg=
+        d=linuxfoundation.org; s=google; t=1729197367; x=1729802167; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=11ToTU7vsMi2SSsjzOsYplAbVYXVrOxGmHdlQUxuJOM=;
+        b=hkp0Q5ZuAuvcKr+X2tI2e4JBjM3RV9JtVex54UgHOLXlEkKlSrMZPIMekVckzk5dLT
+         4xe31MrcOPIBOOBIm7mY0iXgDRUF12niZmMSxHLk99IA0YiJXvS73iGNS7btGDcyoytC
+         mteWPiWkfnWATbnKyX5K9PJd9Ec8tc4KNOQSM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729197305; x=1729802105;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8dlsU4BSgea+jQl1c4v/WF9/raVOBoEHI3bZllwES5A=;
-        b=DQfBdduUWpAcrNW8GFPvPS0IyF0ro0TunQggxipvTndnzaxFBB+lunIn4Mjyb1AhDN
-         ismgpwP/r1ZpCJ5sGl5ZtT7zapJEhRKZocuy84Kvoa2EQOwOoFVPzA+prUkE4VJxc03N
-         xJQaSFMKemqaJbNcBPihHqUdbrzMPPN6H413BKD7EhI1sq4ksGyROlQrxqY2OG02PiCt
-         TH1slHzs2Ew7lIG4kGK1PvNhV7aXdNTw9UuGtR0+Iie+GBsHT/mLaDcDCoqenij6hRIj
-         24BuErQqbx5cBjLnhbuexyTNLlw7xqBxANKUh2ZLXm9+sFo5ObwF6DRIBJL4dt5PPD+o
-         Bw4g==
-X-Forwarded-Encrypted: i=1; AJvYcCX0YPiCnUS380VIMxmoH/3HSHwF7wYQRUi5eWI3r4Q5MLB5tXmP918Z3Rqf2vJjHrAaNhoZ4z4g27SvuyPfPag=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAN9W+qeJSaN1OMT72jMfOr3qHnS7vWufW0Im2Gdeuvvu3jt3d
-	6aA3/r7eqf0bmYiIz5M7tXamHuB8K+k7MifECZtTp9IVv6mkQ00NO8PjHT8sxp+5X9f9hyvdtwG
-	sVZstKLrebDI0nUUCRosQDHcUjDy+FoYvxhK5
-X-Google-Smtp-Source: AGHT+IEnAVG6P37ZI7J79pIs6tetL7SrTTg3vZvZ52j79TfnZhM42LG6dLndso7dEGUcrk8ZVXHBhehUL0AgCVG4AME=
-X-Received: by 2002:a05:600c:1c0d:b0:42c:ba6c:d9a7 with SMTP id
- 5b1f17b1804b1-431585e5c5amr17495305e9.4.1729197305529; Thu, 17 Oct 2024
- 13:35:05 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1729197367; x=1729802167;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=11ToTU7vsMi2SSsjzOsYplAbVYXVrOxGmHdlQUxuJOM=;
+        b=vuZC6UZQC7yz2Vb4i3NTw9wHW/EejkE4e3Efv+EZvSBTZW1/0FXfLDP2fa3GntiEma
+         oWDbtKPFIbexO7vFFvK/GpDdoQIi/I+az1KHS0ilNHSYwvlfZ7Ie8v//lOjNJGtPDcMx
+         nl2suYw0Xv2N6dYDCsLnAkpbkMpSB98n4FDqYnFnI1G5TP0qnxNibPJiKkTvERX+QMpo
+         wYdJRRhdUxXm6Whqt+xDJ04zAPeHdo4BeChT8c2AOo+zqnZZhY2l9jgGp2t5JAi25oPU
+         +KLFS63Fob/RMRoWXb5pQlhn+2Lu+yGw+OiU8Ab3dOx6Goc2xHS0t3WjBQ93kMT+0k/w
+         +Azw==
+X-Forwarded-Encrypted: i=1; AJvYcCX937tBfRncKCE7GRJntlpyHwUNoXj1Fq30c++VLAQ1aaz6jb2pH3f0p7ajm19k1AB1NiX6ubgdqN17BEBCCUw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTVkAI9ZkacKLEGSSO7HMSU9k6t7xO6qwK4s8ccKkyzgJI9qnf
+	sWsuPYm5ccW9V+IEAJGp7jySbgRgl91MUWgW3y6B/WchRJg+R3qCSkwgw0IH16M=
+X-Google-Smtp-Source: AGHT+IEWVBCgEov4mw1J/kJN0ZwoTJEWDfnh4NgHTLEZFUbsmenZRhqLbReeBnLs3cdVCJsyxaShVQ==
+X-Received: by 2002:a05:6e02:1808:b0:3a3:dadc:12f7 with SMTP id e9e14a558f8ab-3a3e5294a27mr33585585ab.3.1729197367437;
+        Thu, 17 Oct 2024 13:36:07 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dc10b83e9dsm49449173.56.2024.10.17.13.36.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Oct 2024 13:36:07 -0700 (PDT)
+Message-ID: <56133d31-c94c-4c4c-9ae4-86f06b463a7d@linuxfoundation.org>
+Date: Thu, 17 Oct 2024 14:36:06 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241017005105.3047458-1-jeffxu@chromium.org> <20241017005105.3047458-2-jeffxu@chromium.org>
- <5svaztlptf4gs4sp6zyzycwjm2fnpd2xw3oirsls67sq7gq7wv@pwcktbixrzdo>
-In-Reply-To: <5svaztlptf4gs4sp6zyzycwjm2fnpd2xw3oirsls67sq7gq7wv@pwcktbixrzdo>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Thu, 17 Oct 2024 13:34:53 -0700
-Message-ID: <CABi2SkXwOkoFcUUx=aALWVqurKhns+JKZqm2EyRTbHtROK8SKg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] mseal: Two fixes for madvise(MADV_DONTNEED) when sealed
-To: Pedro Falcato <pedro.falcato@gmail.com>
-Cc: akpm@linux-foundation.org, keescook@chromium.org, 
-	torvalds@linux-foundation.org, usama.anjum@collabora.com, corbet@lwn.net, 
-	Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, jeffxu@google.com, 
-	jorgelo@chromium.org, groeck@chromium.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, jannh@google.com, 
-	sroettger@google.com, linux-hardening@vger.kernel.org, willy@infradead.org, 
-	gregkh@linuxfoundation.org, deraadt@openbsd.org, surenb@google.com, 
-	merimus@google.com, rdunlap@infradead.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/4] kunit: qemu_configs: add LoongArch config
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow
+ <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+ loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20241014-kunit-loongarch-v1-0-1699b2ad6099@linutronix.de>
+ <20241014-kunit-loongarch-v1-2-1699b2ad6099@linutronix.de>
+ <878d5f26-ef05-44f4-93e8-01f66088c0cc@linuxfoundation.org>
+ <3a49d3e2-2d76-458f-a0fd-fe52a413f376@linutronix.de>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <3a49d3e2-2d76-458f-a0fd-fe52a413f376@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Pedro
+On 10/17/24 14:31, Thomas Weißschuh wrote:
+> Hi Shuah,
+> 
+> Oct 17, 2024 22:27:29 Shuah Khan <skhan@linuxfoundation.org>:
+> 
+>> On 10/14/24 05:36, Thomas Weißschuh wrote:
+>>> Add a basic config to run kunit tests on LoongArch.
+>>> This requires QEMU 9.1.0 or later for the necessary direct kernel boot
+>>> support.
+>>> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+>>> ---
+>>>    tools/testing/kunit/qemu_configs/loongarch.py | 16 ++++++++++++++++
+>>>    1 file changed, 16 insertions(+)
+>>> diff --git a/tools/testing/kunit/qemu_configs/loongarch.py b/tools/testing/kunit/qemu_configs/loongarch.py
+>>> new file mode 100644
+>>> index 0000000000000000000000000000000000000000..e7bb7c07819677dfdefac012821a732555813cae
+>>> --- /dev/null
+>>> +++ b/tools/testing/kunit/qemu_configs/loongarch.py
+>>
+>> Missing SPDX-License-Identifier.
+> 
+> Tue others configs don't have one either.
+> 
+>>> @@ -0,0 +1,16 @@
+>>> +from ..qemu_config import QemuArchParams
+>>> +
+>>> +QEMU_ARCH = QemuArchParams(linux_arch='loongarch',
+>>> +              kconfig='''
+>>> +CONFIG_EFI_STUB=n
+>>> +CONFIG_PCI_HOST_GENERIC=y
+>>> +CONFIG_SERIAL_8250=y
+>>> +CONFIG_SERIAL_8250_CONSOLE=y
+>>> +CONFIG_SERIAL_OF_PLATFORM=y
+>>> +''',
+>>> +              qemu_arch='loongarch64',
+>>> +              kernel_path='arch/loongarch/boot/vmlinux.elf',
+>>> +              kernel_command_line='console=ttyS0',
+>>> +              extra_qemu_params=[
+>>> +                      '-machine', 'virt',
+>>> +                      '-cpu', 'max',])
+>>>
+>>
+>> Please send v2 with all the reviewed by tags. If there
+>> is a resend 3.4 and 4/4 in this series, send them.
+> 
+> I'll do that. But it will take some weeks, as I just went on vacation.
+> 
 
-On Thu, Oct 17, 2024 at 12:37=E2=80=AFPM Pedro Falcato <pedro.falcato@gmail=
-.com> wrote:
->
-> > For PROT_NONE mappings, the previous blocking of
-> > madvise(MADV_DONTNEED) is unnecessary. As PROT_NONE already prohibits
-> > memory access, madvise(MADV_DONTNEED) should be allowed to proceed in
-> > order to free the page.
->
-> I don't get it. Is there an actual use case for this?
->
-Sealing should not over-blocking API that it can allow to pass without
-security concern, this is a case in that principle.
+Sounds good. Enjoy your vacation.
 
-There is a user case for this as well: to seal NX stack on android,
-Android uses PROT_NONE/madvise to set up a guide page to prevent stack
-run over boundary. So we need to let madvise to pass.
+thanks,
+-- Shuah
 
-> > For file-backed, private, read-only memory mappings, we previously did
-> > not block the madvise(MADV_DONTNEED). This was based on
-> > the assumption that the memory's content, being file-backed, could be
-> > retrieved from the file if accessed again. However, this assumption
-> > failed to consider scenarios where a mapping is initially created as
-> > read-write, modified, and subsequently changed to read-only. The newly
-> > introduced VM_WASWRITE flag addresses this oversight.
->
-> We *do not* need this. It's sufficient to just block discard operations o=
-n read-only
-> private mappings.
-I think you meant blocking madvise(MADV_DONTNEED) on all read-only
-private file-backed mappings.
 
-I considered that option, but there is a use case for madvise on those
-mappings that never get modified.
 
-Apps can use that to free up RAM. e.g. Considering read-only .text
-section, which never gets modified, madvise( MADV_DONTNEED) can free
-up RAM when memory is in-stress, memory will be reclaimed from a
-backed-file on next read access. Therefore we can't just block all
-read-only private file-backed mapping, only those that really need to,
-such as mapping changed from rw=3D>r (what you described)
 
