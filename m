@@ -1,136 +1,187 @@
-Return-Path: <linux-kselftest+bounces-20016-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20017-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C1909A2BDD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 20:15:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64B3E9A2C1A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 20:24:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4943A2861AF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 18:15:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C626B21EA4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 18:15:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B9FB1E0491;
-	Thu, 17 Oct 2024 18:14:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0C411E0E0B;
+	Thu, 17 Oct 2024 18:15:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="So5tK1yo"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="DY1D3kmF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B601DFE06
-	for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2024 18:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33C5B1E0DF2;
+	Thu, 17 Oct 2024 18:15:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729188877; cv=none; b=IUK8yThU1UM1DlrBniNn63pxS6QhGzlLfADrthVxJGLW/NJF1vtEOttf8VfoiIUbMAIJKzSvrX3nu5GOReYONqiAt5v8sfvtTqVsRCuu3N1RccKwYfWGq7MxhuuAhIqN+Ad+cqjymbtSnWPVLNeMQgmu8isVDVyFXH8Ghg4g0sA=
+	t=1729188905; cv=none; b=XuWbKySKNJz/E0sbXTgumrJGFysKH80KvlXevqi4YXn1O/hXuGA6j8PyIFqFMKb1B5zD8+Z47x+FJC7OuektZO1PXNfFX45Zj1BpyT4Ot7JpHKpQoqCx1xy+LOm8VFuiQM6VNd32v90X56vfgxAkdwMcVDP2myUsOO9NmpyuNYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729188877; c=relaxed/simple;
-	bh=tuc4W4AtYfN2GY+JESTW7Xxp5b6QqoT46D1gF0g+QEw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gwHjPMBqhjqgSm1GimEhOgrHo0RsRLE+ZSx3r8DduxXLZAstZ7nT4dBjYBiFcrfSVMxYgY2n13mMl9EJFi63mCTWy1VvJfbLG4okLbyaLac5YvZJQhka94RgcK3wkTgfPU71rmHl9g42Gdrk0Z3ZIRjVoTPWrwaCRKsOvJlA+7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=So5tK1yo; arc=none smtp.client-ip=209.85.160.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-268d0979e90so72061fac.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2024 11:14:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1729188871; x=1729793671; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tuc4W4AtYfN2GY+JESTW7Xxp5b6QqoT46D1gF0g+QEw=;
-        b=So5tK1yoNCceX/2d5lckMMUnim05kGN+RDyKXhAqf6mHwushwu+HPnt24J2JKjQXkw
-         R3o12IZLSwFCr66RSh6ltG5RfyL973KXfzhTR7Cblw18BKoGyzA5nCAigElUf0I4NPNz
-         yTLbv4/J2EOWvgkNnIBwF6AhhokbtyP/XVBew=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729188871; x=1729793671;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tuc4W4AtYfN2GY+JESTW7Xxp5b6QqoT46D1gF0g+QEw=;
-        b=b6AVoyi8U+kkfpVvp2Agg5wurKq9YeCyCFdoAu0FMMlQNslQQj3ml2QfLQaOprvwU/
-         xMKy64QBJjh7ZGvS061YOqgM0BkC2Ot9wp/qsI+95fQn5YWV2UekN0byrjSyZp8XBBU/
-         7trsQynDtupN2M1YXkLbsq/B9iM80CTwOUw/BuaqzTuGbfHwoTha6FJLeSIXXfgOoH4W
-         58yyMYSdik7vDdTVWai6Cy2d9d9UQAj1c6LtO39oxEbvQzd0OUZiv1gUDOMslmgNV5EA
-         UcBkcb6hUVTNC7YjU3fyB6HMiO9mDhGJT5lr+fBQE03UDng94hcSvtd00kQxXcsO8wLi
-         1EPg==
-X-Forwarded-Encrypted: i=1; AJvYcCWMlp4AYrLqCMugmyaIr6XDIL0tm6ONYaOC2A0366E26Ne7GRWS1eZ0RhFWgWlkBpPJpzbohwflda3wnH9qmNk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw65hLvQcdWbCh3xc20IHNgz0LWBlfRJfmYf2DzeG6c3ZLuDkGV
-	MU7WzkIgcEPKauf+eoX9qArZ6A7vM1y9+1InW9fygZn106uot4UQKJGMN+gplvB6LIEtROaD/hU
-	JnyhsjfSk5Klc2p9fTx3vpEtZu78aSQl+sWWA
-X-Google-Smtp-Source: AGHT+IEVVY3x9zDyAxMQtSpj1wu+AKPQttF5+Qsw65HIRp9QuQsb3AQbNuaft90UaiRUD5a3DfimZkgaCjLSlrpmkTk=
-X-Received: by 2002:a05:6870:e414:b0:25e:44b9:b2ee with SMTP id
- 586e51a60fabf-2890c617250mr1177242fac.2.1729188871620; Thu, 17 Oct 2024
- 11:14:31 -0700 (PDT)
+	s=arc-20240116; t=1729188905; c=relaxed/simple;
+	bh=kL6ufmsuF1LkuMi/JU1HenRVwYUJQLqcPqSWOhF5/Ww=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iRdq37L6EElF8k5r6ssL6tFXGlMfKTmtTf8OH4aPHSLtJjMVxJqJTXA3BfumG/5JS2bN2/MLzLKwqh+tYlK2/6vixAuLCTj9mZ1LloPtqnvSfdd6L1PX2+kfVgwBpW2UlK2bOBX/bhpTDuCHUnz+Ps5Ur7Z1dbZMAIV7d3QUm44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=DY1D3kmF; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49HFBoAc019283;
+	Thu, 17 Oct 2024 18:14:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2023-11-20; bh=mjXp9PPRWcvNO+lk2JvrDJUVe9249
+	DfZRO3UWKWLLwE=; b=DY1D3kmFyfv23UwlN75E0Hg0t1uK9EF1bLOiId8/uGRRn
+	zdFnWIXpVj1pu+8e9A2w72FLEQJwbFpbKS88liqPuDg1EFzBFngLiRuSlrDOLki9
+	jnRR3JQta79CbmA57hL9fOH3vWJTM9QCfxcWgeu4shCayCpyWXOKjmNN/zzjP6/x
+	Yk+tj5Us4AUM5OIIB8M3fmKv8hYPFpkEICRj+qF9W5i1NpCa+IbUnZVDu3js/Oit
+	sne+0RYqo3EqgEoGhRm5THjN7DFHWvfdIz/kEttuaBTTNzVo66feKmj4LKFfeTCK
+	fDEV70OA/utVbcsp20VG1jGuWjtT6SQiYpTO5dEdQ==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427h5cqgnn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 17 Oct 2024 18:14:41 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49HGl56I011131;
+	Thu, 17 Oct 2024 18:14:40 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjgxkrr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 17 Oct 2024 18:14:40 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49HIA0bL039328;
+	Thu, 17 Oct 2024 18:14:40 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 427fjgxkpk-1;
+	Thu, 17 Oct 2024 18:14:40 +0000
+From: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+To: davem@davemloft.net, Liam.Howlett@Oracle.com
+Cc: edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        vschneid@redhat.com, jiri@resnulli.us, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, akpm@linux-foundation.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, anjali.k.kulkarni@oracle.com,
+        peili.io@oracle.com
+Subject: [PATCH net-next v5 0/3] Threads support in proc connector
+Date: Thu, 17 Oct 2024 11:14:33 -0700
+Message-ID: <20241017181436.2047508-1-anjali.k.kulkarni@oracle.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240830180237.1220027-1-jeffxu@chromium.org> <20240830180237.1220027-5-jeffxu@chromium.org>
- <e7ea2b84-8d10-40fe-a14f-837bca851ea9@lucifer.local> <fd927106-2fc3-4b96-8014-2c517229bc99@lucifer.local>
- <CABi2SkUpCf+aOa2sPED8CosG5ccqjFd7ouot8gXi9ECqsHiZhw@mail.gmail.com>
- <4944ce41-9fe1-4e22-8967-f6bd7eafae3f@lucifer.local> <CABi2SkUgDZtJtRJe+J9UNdtZn=EQzZcbMB685P=1rR7DUhg=6Q@mail.gmail.com>
-In-Reply-To: <CABi2SkUgDZtJtRJe+J9UNdtZn=EQzZcbMB685P=1rR7DUhg=6Q@mail.gmail.com>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Thu, 17 Oct 2024 11:14:20 -0700
-Message-ID: <CABi2SkVEMRHV3swrbb6M5RA6GQpFVVx855CGwdQ1xiz3tygiqA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] selftests/mseal: add more tests for mmap
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: akpm@linux-foundation.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-hardening@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, pedro.falcato@gmail.com, willy@infradead.org, 
-	broonie@kernel.org, vbabka@suse.cz, Liam.Howlett@oracle.com, 
-	rientjes@google.com, keescook@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-17_20,2024-10-17_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
+ adultscore=0 spamscore=0 mlxscore=0 suspectscore=0 bulkscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2409260000 definitions=main-2410170124
+X-Proofpoint-ORIG-GUID: _ZO5FwFOgnGDf2l_3REdYVL_a3UJ7Lf4
+X-Proofpoint-GUID: _ZO5FwFOgnGDf2l_3REdYVL_a3UJ7Lf4
 
-Hi Lorenzo and Muhammad
+Recently we committed a fix to allow processes to receive notifications for
+non-zero exits via the process connector module. Commit is a4c9a56e6a2c.
 
-Reviving this thread since the merging window is closed and we have
-more time to review /work on this code in the next few weeks.
+However, for threads, when it does a pthread_exit(&exit_status) call, the
+kernel is not aware of the exit status with which pthread_exit is called.
+It is sent by child thread to the parent process, if it is waiting in
+pthread_join(). Hence, for a thread exiting abnormally, kernel cannot
+send notifications to any listening processes.
 
-On Fri, Sep 13, 2024 at 3:50=E2=80=AFPM Jeff Xu <jeffxu@chromium.org> wrote=
-:
->
-> Hi Lorenzo
->
-> On Sat, Sep 7, 2024 at 12:28=E2=80=AFPM Lorenzo Stoakes
-> <lorenzo.stoakes@oracle.com> wrote:
-> >
-> >
-> > I also suggest we figure out this FAIL_TEST_IF_FALSE() thing at this po=
-int
-> > too - I may be missing something, but I cannot for the life me understa=
-nd
-> > why we have to assert negations only, and other self tests do not do th=
-is.
-> >
-> My most test-infra related comments comes from Muhammad Usama Anjum
-> (added into this email), e.g. assert is not recommended.[1] ,
->
-> [1] https://lore.kernel.org/all/148fc789-3c03-4490-a653-6a4e58f336b6@coll=
-abora.com/
->
-Specifically regarding Lorenzo's comments about FAIL_TEST_IF_FALSE
+The exception to this is if the thread is sent a signal which it has not
+handled, and dies along with it's process as a result; for eg. SIGSEGV or
+SIGKILL. In this case, kernel is aware of the non-zero exit and sends a
+notification for it.
 
-Muhammad Usama Anjum doesn't want assert being used in selftest (see
-[1] above), and I quote:
-"We don't want to terminate the test if one test fails because of assert. W=
-e
-want the sub-tests to get executed in-dependent of other tests.
+For our use case, we cannot have parent wait in pthread_join, one of the
+main reasons for this being that we do not want to track normal
+pthread_exit(), which could be a very large number. We only want to be
+notified of any abnormal exits. Hence, threads are created with
+pthread_attr_t set to PTHREAD_CREATE_DETACHED.
 
-ksft_test_result(condition, fmt, ...);
-ksft_test_result_pass(fmt, ...);"
+To fix this problem, we add a new type PROC_CN_MCAST_NOTIFY to proc connector
+API, which allows a thread to send it's exit status to kernel either when
+it needs to call pthread_exit() with non-zero value to indicate some
+error or from signal handler before pthread_exit().
 
-FAIL_TEST_IF_FALSE is a wrapper for ksft_test_result macro, and
-replacement of assert.
+We also need to filter packets with non-zero exit notifications futher
+based on instances, which can be identified by task names. Hence, added a
+comm field to the packet's struct proc_event, in which task->comm is
+stored.
 
-Please let me know if you have questions on this and Muhammad might
-also help to clarify the requirement if needed.
+v4->v5 changes:
+- Handled comment by Stanislav Fomichev to fix a print format error.
+- Made thread.c completely automated by starting proc_filter program
+  from within threads.c.
+- Changed name CONFIG_CN_HASH_KUNIT_TEST to CN_HASH_KUNIT_TEST in
+  Kconfig.debug and changed display text.
+ 
+v3->v4 changes:
+- Reduce size of exit.log by removing unnecessary text.
 
-Thanks
--Jeff
+v2->v3 changes:
+- Handled comment by Liam Howlett to set hdev to NULL and add comment on
+  it.
+- Handled comment by Liam Howlett to combine functions for deleting+get
+  and deleting into one in cn_hash.c
+- Handled comment by Liam Howlett to remove extern in the functions
+  defined in cn_hash_test.h
+- Some nits by Liam Howlett fixed.
+- Handled comment by Liam Howlett to make threads test automated.
+  proc_filter.c creates exit.log, which is read by thread.c and checks
+  the values reported.
+- Added "comm" field to struct proc_event, to copy the task's name to
+  the packet to allow further filtering by packets.
+
+v1->v2 changes:
+- Handled comment by Peter Zijlstra to remove locking for PF_EXIT_NOTIFY
+  task->flags.
+- Added error handling in thread.c
+
+v->v1 changes:
+- Handled comment by Simon Horman to remove unused err in cn_proc.c
+- Handled comment by Simon Horman to make adata and key_display static
+  in cn_hash_test.c
+
+Anjali Kulkarni (3):
+  connector/cn_proc: Add hash table for threads
+  connector/cn_proc: Kunit tests for threads hash table
+  connector/cn_proc: Selftest for threads
+
+ drivers/connector/Makefile                    |   2 +-
+ drivers/connector/cn_hash.c                   | 221 +++++++++++++++++
+ drivers/connector/cn_proc.c                   |  62 ++++-
+ drivers/connector/connector.c                 |  75 +++++-
+ include/linux/connector.h                     |  35 +++
+ include/linux/sched.h                         |   2 +-
+ include/uapi/linux/cn_proc.h                  |   5 +-
+ lib/Kconfig.debug                             |  17 ++
+ lib/Makefile                                  |   1 +
+ lib/cn_hash_test.c                            | 167 +++++++++++++
+ lib/cn_hash_test.h                            |  10 +
+ tools/testing/selftests/connector/Makefile    |  23 +-
+ .../testing/selftests/connector/proc_filter.c |  34 ++-
+ tools/testing/selftests/connector/thread.c    | 232 ++++++++++++++++++
+ .../selftests/connector/thread_filter.c       |  96 ++++++++
+ 15 files changed, 967 insertions(+), 15 deletions(-)
+ create mode 100644 drivers/connector/cn_hash.c
+ create mode 100644 lib/cn_hash_test.c
+ create mode 100644 lib/cn_hash_test.h
+ create mode 100644 tools/testing/selftests/connector/thread.c
+ create mode 100644 tools/testing/selftests/connector/thread_filter.c
+
+-- 
+2.46.0
+
 
