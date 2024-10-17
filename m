@@ -1,79 +1,80 @@
-Return-Path: <linux-kselftest+bounces-19937-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19938-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3628D9A1ECA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 11:47:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 305DE9A1ECE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 11:47:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E96B3282246
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 09:47:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C4BB1C2556B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 09:47:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CF2F1D95B7;
-	Thu, 17 Oct 2024 09:47:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41DAF1D8DE4;
+	Thu, 17 Oct 2024 09:47:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="uMeb5V1P"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="uRm46AOV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2074.outbound.protection.outlook.com [40.107.243.74])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2085.outbound.protection.outlook.com [40.107.220.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81ADE1D6DD1;
-	Thu, 17 Oct 2024 09:47:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DAF5199E92;
+	Thu, 17 Oct 2024 09:47:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.85
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729158433; cv=fail; b=euV1ao20e9f81ExJLqHiQXzyKijOdsMf1kmul+CqvppVpcOkyyucTH2gBPSM8/QwT9oBySMD0DxTSfinegDK9nwVRUxx8EL/1e6noGcOG6wGq4omsErUP+mzqT+r4hLoT1sS1OXs+KauHxZtSo+rMl3//Ro4ToBJsqDRW34wQuc=
+	t=1729158440; cv=fail; b=fZM81a6JOLgWDP7St6vk9mZm8RX6hQ2Npx01UN/dXolN7G5JcOcEO4M8UtYF46kdbTpSm9SvkLtGHbql71yLgXiROlej/C0jnJJbaj643cAka6dLi4o83HZC0lmi6B4jyhvjFIYRMJQWReB7mwrYAIbKPw6W+2cVq+aSd7IdFFs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729158433; c=relaxed/simple;
-	bh=b3xf5P2pCNXQvZysfgNNxHcBUXG9uRp9LoQGr8u8Rao=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NgdLwzU3wD/4w1XuJPAL2BTFuD3+OhJVt8b+2Cff4+/WP3sEdh5QDUMmPIXnPiKbc2gM32qpTljaiJ6lR3IB4A9far9VbIk4g12mO5NlTd4U5s389W46ySsvN3YmDUGDdiRp5BjjqT4cyt1RFZ1aeHDRgfkTFma6vGUMAf9iqcM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=uMeb5V1P; arc=fail smtp.client-ip=40.107.243.74
+	s=arc-20240116; t=1729158440; c=relaxed/simple;
+	bh=goKL+L8i/+yheYPP/hZY9ujcT7qZ7MPDgYYlqUekWVM=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=c8RfqX1Wm0tffGWflHL+hHM9QP5PNpW7HMvITsHp1RaX9ActMKGd5PCgP5mPE+UYsexofFZXmJWLhltmSaUTMdfJqoLigscL0zM+BuIgw+Q+8XeMh8EaV0o745mRnVPSIEp/Lh+8fS9tC6JemJCG96+6+J0VE5KpzGbR0dYRBG4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=uRm46AOV; arc=fail smtp.client-ip=40.107.220.85
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ejkTRNqZk2G0c3ro10uNzSC7d/9biEpP87lf+RaIE+RXNI6yN+yZ+Gi/eFcR72/vTu44l/Mr2CtCHvh5OF5+WZClphT4Olt6mg+f7RHL/BUegcy7QLolOUejalW0LzQqwggkquXBe3wv2NWbKYnITNtuQt28DRBxuzJHXxuLK1UycXK8RqKUROXz+fznhfqTH/hnr2XHx50iNGGRwIutMxgoPktHZf/XLSkGfVRCHFlF29EC2SB/Uz2NhiTCkNViYSbhZYPA2JZode3q7/RB7pdHo7D79ntP57gI3zhhmw1/V1A1yBD0T0bIuX3fTXRlAQ7jpTgFs+iqAjdY7xzQTQ==
+ b=LHQER6NbmPZ/SbHN9wTyJeX9SaNrE23UTDnfSylksgG5NTEu+1DofXwRXcvUavxDSEHhfFQc7FQEVgYPzE4KNKChjxPL0lN6+vgogqg9W+p3TTBAnWm28c5HNrcM1EJ9Qel6zJyHJdDChQrZFQX388V2FRRzYJdQbAFAe7Ok35mY8aJIBi9byWKqyU3oa9qVuMFpEimCHrDySCQtew6ZGPapY9Be3HNhpMWYNSWa4k57IS5/I4PHYeREEfGdqAjXoOmoHMJyu4vxNHxmiiwb4JeZZUWLJYS/FZL0ZEwMEl9MV6UqL/wjanGsDaRU/q2GzsItpAPKawuMWlEc9geuxQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3kUa5X4xhY+Gu2J8Jij+sJKNEuql2LIobzjTcPF6vUQ=;
- b=QbO7TKFIj0CpUE9qGyBes83JCWubiHMdiYzZH1cuQ+UjoIYsCyMdN7KkX2EZ+dFdlyArNv5/8nQ4bgk+BzlecmPs9ZhlXZfTp1lj+t2gYZkgY/XFUgP7lxLnqWGl3FXhTeqnj903EZiEuAKql3bmt1FXkb4jmdFmK7ipgBT6oUVvYRShmCHiz8Gyn1CtGR58rlcQ0nAW8jmCPJiIvPMaCVbyvPF1A4VpoX1U7BD9o/jemHTeodFLHQT7qTPw48M4rndCYigkoqusUEWkE/ss6vhIRPzy93e+GxgPYUELz50ggGiFL0FRW5bQgwUYTW5XloZ9uSmjlcuudE+OFj+1sw==
+ bh=ed1HrE/fQ/RaTQ4ZcWnmrS4KJWrqClFbqGRTCXm/uLI=;
+ b=luPaOExBpuXk+gaY6lbLBb3NP7ZfIXvqNCtE4suApADBpwJ6GHe+BseDj7vuX+e7q3OWCSM2GfHxiIImEYPOkm8Y9hjo3F9u7ozCR+nJ8g52GM+Q46yXMoyFs4J9iWIoptj9RBvW2nSkHZMxoCgJ/A+SGbOU+iJpZfgN2P6I4nDwelH9Ohd9WeJj2ZYeVd2msDQZ42E5IIsOea4tTduJGdqcXuI6qQDAAnbVvqxk9K63a4iuOMr9BF0k6H2N+dSeTuDMnVsxRJsfACRwdeBxEALFtzPaYu0puxDkwkmRHC58XPiLl7fUNKI45qtCqW0nQ0UNOMUeD14eJs1Gj4HIrg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3kUa5X4xhY+Gu2J8Jij+sJKNEuql2LIobzjTcPF6vUQ=;
- b=uMeb5V1PqG+wwq2dSzg7SgmdXUVn4kFqZbvjC631uG3uWFisgjNPiTRcQfVBuFb5tCrIoUHy8IHR7+EHd6ssutfG9qrTL+qcvHboCvRBwZ0qz75HY+qtxWcIzYvcwdYVbW06sNRsrJxqJCg+PgPqsnyi/DA83sXRXDQgz6XEOnJVB/gYXs/RdpRCNbH44M68a7/g119YYjv8YNVgLZX4bAeGeYnpMLaMeXclDbFLyZ3HMOr2QojAp4EwCXssEHTXXLkOI5JW1e2QBVBuNRiSWqT9d4Px1nJzqkNAq9H47IBtpmOPJWBWgbLARrUOrkRe+L1oFxx3WpECpoasJvCeVw==
-Received: from SA9PR13CA0170.namprd13.prod.outlook.com (2603:10b6:806:28::25)
- by BY5PR12MB4132.namprd12.prod.outlook.com (2603:10b6:a03:209::22) with
+ bh=ed1HrE/fQ/RaTQ4ZcWnmrS4KJWrqClFbqGRTCXm/uLI=;
+ b=uRm46AOVcAUG71EkQkTaokwMpvt7vM+Uz+CtPNpTYSqSsrZjM0kELzSWmseAPH2aiTKTqsvcKk22nPrficgUVUqhJ0fBOT+fVocc5Hj38NRdt8/8far9w78gLm3v1+EAAi669feB12wkCaMewCzZK0EJ6a/+gV3R1MXkfHBzrTemyfVkKqNoGBKJXz6niEJEw1AnO5pxJt+87K1d1ifAGatG9QX+ktwKU8lZNnp2IxnWqZJvj1nTxenyuvwwCgi2uoAgFNZ1It1V9R3U919I6vtW5ZHnoowgZ5dFCXYPucnSzba3HN6bminVr7Cr6sIopn2U844FDCvqyRz/Jnyecw==
+Received: from SJ0PR03CA0108.namprd03.prod.outlook.com (2603:10b6:a03:333::23)
+ by PH7PR12MB7796.namprd12.prod.outlook.com (2603:10b6:510:275::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18; Thu, 17 Oct
- 2024 09:47:05 +0000
-Received: from SN1PEPF0002636C.namprd02.prod.outlook.com
- (2603:10b6:806:28:cafe::20) by SA9PR13CA0170.outlook.office365.com
- (2603:10b6:806:28::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.19; Thu, 17 Oct
+ 2024 09:47:12 +0000
+Received: from SJ1PEPF00001CDF.namprd05.prod.outlook.com
+ (2603:10b6:a03:333:cafe::a8) by SJ0PR03CA0108.outlook.office365.com
+ (2603:10b6:a03:333::23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18 via Frontend
- Transport; Thu, 17 Oct 2024 09:47:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ Transport; Thu, 17 Oct 2024 09:47:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- SN1PEPF0002636C.mail.protection.outlook.com (10.167.241.137) with Microsoft
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ SJ1PEPF00001CDF.mail.protection.outlook.com (10.167.242.7) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8069.17 via Frontend Transport; Thu, 17 Oct 2024 09:47:04 +0000
+ 15.20.8069.17 via Frontend Transport; Thu, 17 Oct 2024 09:47:11 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 17 Oct
- 2024 02:46:53 -0700
+ 2024 02:46:59 -0700
 Received: from fedora.mtl.com (10.126.231.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 17 Oct
- 2024 02:46:47 -0700
+ 2024 02:46:53 -0700
 From: Petr Machata <petrm@nvidia.com>
 To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
 	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
@@ -84,10 +85,12 @@ CC: <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
 	<idosch@nvidia.com>, "Przemek Kitszel" <przemyslaw.kitszel@intel.com>, Petr
  Machata <petrm@nvidia.com>, Willem de Bruijn <willemb@google.com>,
 	<mlxsw@nvidia.com>
-Subject: [PATCH net-next v2 00/10] selftests: net: Introduce deferred commands
-Date: Thu, 17 Oct 2024 11:45:42 +0200
-Message-ID: <cover.1729157566.git.petrm@nvidia.com>
+Subject: [PATCH net-next v2 01/10] selftests: net: lib: Introduce deferred commands
+Date: Thu, 17 Oct 2024 11:45:43 +0200
+Message-ID: <daa8551601ac52140a0278d729d233e031b96853.1729157566.git.petrm@nvidia.com>
 X-Mailer: git-send-email 2.47.0
+In-Reply-To: <cover.1729157566.git.petrm@nvidia.com>
+References: <cover.1729157566.git.petrm@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -100,143 +103,283 @@ X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF0002636C:EE_|BY5PR12MB4132:EE_
-X-MS-Office365-Filtering-Correlation-Id: 84002106-a26b-4555-cf09-08dcee90a81b
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CDF:EE_|PH7PR12MB7796:EE_
+X-MS-Office365-Filtering-Correlation-Id: c66b8b15-7ec9-4a29-43d9-08dcee90ac7b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|7416014|376014|82310400026;
+	BCL:0;ARA:13230040|7416014|376014|82310400026|36860700013|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?JTh7Fo4XcSu2N7+aso3M6K3NXx0wGp8Lvl3yj2L6H836u2JrR/kaqri+xb0D?=
- =?us-ascii?Q?gTLkx8QQOOzONHbSoHR7TNUN9yW7GHmH0VWWOMjRZ91fvnSoakl/Y2kXh6uY?=
- =?us-ascii?Q?umUUllom39i2KRDn2EU0adNqyx1ArOJ4qZDZSoS6n5xfJ1zNpq3PvUGx9LV1?=
- =?us-ascii?Q?+bz7Pd8+G4PpljxGgBwW/2sONpfHI6CH84ym59H+uSLiYyPq4ZPj2Ne5flY7?=
- =?us-ascii?Q?Ctf0cy4PC7yPzvonj1NGF3wemITbN0pELxCcWIq3TKeXtI4MKrCTEcjSs4GN?=
- =?us-ascii?Q?sbG2O969n3SQdf2APJwRjpfBvo+6YQ1Tww2yBOxhuyrLkPG/gyvnkoidMUGF?=
- =?us-ascii?Q?4t52rOUlndtwQ0Gdby3JgJpC6iBmKbxULve6OAcC4H8Kriq6gc2D+XmkNXgZ?=
- =?us-ascii?Q?i7eqrTBE9NVJh97QiggM2Lx62JxRctbNftMDmNijd4ut9j0fWel6lVBP0BbG?=
- =?us-ascii?Q?Vfe+3CybGazC/RmebhhnRY4LLXO8lWTgN/9h1Pd+/ik87L8S/kmh5gT+O8Al?=
- =?us-ascii?Q?Z+E2uwKGPnnOXHgEonNAP0zvhzvGNmhVsfCRXsZwMAPehY83Xc6O7nmaEYg4?=
- =?us-ascii?Q?06nwx5R8d1SdOzfXzEF6700PwtCty+cQVm3zoxTt1cRp4Bu9GJhPhISPjaI7?=
- =?us-ascii?Q?b3qgi2weQGvNL8MpSRVuK83+0KrUit9tgVF1S508kFxQiuiZDJ6nI8wFU66S?=
- =?us-ascii?Q?mvtAI9VIO2a9XJD+3r50zWvc6FK2pPXT2OcEExSfwmxxrpN9Tj8wmIkREU/V?=
- =?us-ascii?Q?vbQoWr5BC/4DFmzEhsLumSSDyqoM1RuyGojeXDbEqm6WiPmZ/YjgVjIt7E6f?=
- =?us-ascii?Q?LtkgdAtLnkKhFAnm0FbvM+YkNH/wJjjM5mkXG1wAlLBj+6vil0zLF12dhVkl?=
- =?us-ascii?Q?NApRmhdKRtLugHbMGgnTM4DeaWcpDUAtuqw/JFdH0EzZSxgKuK5kBCzJe2Qc?=
- =?us-ascii?Q?eCPBTM3u0w3OF3mVhDQAkeakMVA8F9Nqy4kAuzEt1/YquKZrE4G6+EIofsjO?=
- =?us-ascii?Q?I4Zc9HylNL5M0hZEsYp0Fy9gmJjK70O6H/Cylkm2/maf8eflJiBtQsU3IC9p?=
- =?us-ascii?Q?q0iFm2sZlJi23XuC/ISHG4fdek53rVZUBJVpNmUn63zeMxdkQBlwjTgb+rhu?=
- =?us-ascii?Q?Iug4LRBIQGF7GNLSo9Zq9fxHA5rgHD3VyMKf8KR3otXgalSvN7yVCgi0ds9B?=
- =?us-ascii?Q?I6p4Nk5iqEzYalVL2lo5Cg/RxTntsserbzlftiO6xCQYve+jtqLBcylv8mS8?=
- =?us-ascii?Q?pXu6AuksCarF7dxUiRrMtvmr0pVA8l1xHFzWxqcsLCPkdu2RYDTCeMu5c2L7?=
- =?us-ascii?Q?b5SLEcpA4Ae5Rp0pw712uP9V0rLWf7EgkP7bmdaKhptvL66FZCaO4OG6PO6q?=
- =?us-ascii?Q?BCiAbPOR0D5AqDrL/u0Utw7BWRwWmMz9NS1o1kPGQewZ3CcF6g=3D=3D?=
+	=?us-ascii?Q?U75vEWvp2godu3WCXkDduCMXvaIMVATzt1bwcXvoGxrJx8MI541l/Fs1fwNq?=
+ =?us-ascii?Q?TCKY37EPrjDIyk6Qrtl8uwvJBy+E2rth3FNEPzFPMxavEVBxvQvPUEZuZCzL?=
+ =?us-ascii?Q?n6UuF/sAWuPMfIWlLf4aDeeZMa4oR5x5qRhOAoDyofOm0s+xT6uExZo7tUeA?=
+ =?us-ascii?Q?v+VYaDDTZS8WlSyfUP0PNF8ouGqh3+hMBotjh9BPDCK+mx9zsnW2OrVOvZX1?=
+ =?us-ascii?Q?LIHcQVgd2MLUHVYd5oc/NyceuidGl+UPa4CPNyDqvJbMZD1yJziVG29p6VGc?=
+ =?us-ascii?Q?JO8CGw1r2uGFdea3Fo1R6pm3wSNZr9rd0YEMnct5FUdVjVVbLEwlxfsfyZ9U?=
+ =?us-ascii?Q?O7vOvHpFUH3GlG8CQ/kSfy/0L4SCuPWzLNWo+2ThZ0f1y3n5i7BpkWPTD5SE?=
+ =?us-ascii?Q?ozxAuBSBLwOU3VmmtOhmWxapT9SXIFU7D3U/5QqAf4CD4aKwyE92KFPMThDb?=
+ =?us-ascii?Q?wTreW/WUkrtdzqijrDwJN8Sg5d0OowbSZ2Dmxhp21QRkV1XAsOPhF4RiAw1y?=
+ =?us-ascii?Q?oKgzkYE80BAEhOKf+MbHF/etPsbCNFjgcTxDRYpMiXh9rWJoUUX3cFWw28yW?=
+ =?us-ascii?Q?l5HEkhh3TMFs0z+L1UOaNeVsEblRhnoRsSTlXYkVXoE+Gzqh/W7KrlhWsylZ?=
+ =?us-ascii?Q?bps6P7b3j10WLjKwmacsLJjNndN8jdmQaDXA6OObJphg9xoR+U6G37vG7T++?=
+ =?us-ascii?Q?NWYBwNjtnNb368Hwq2lBaWbeu9FFSXz85c206cIzRfak+YEykf/FvPrT4CIg?=
+ =?us-ascii?Q?PJT/1Dt1PxvlvhYeG44xFO7YmbRSCXhK6k+5MjyD7RmESI3MjoVOAMtSHF//?=
+ =?us-ascii?Q?aRJrG5PZpvHJe2zJnTimCqvsVtvAePzFisj5xhVxRnL4ZljjEAL9XbTtgXRP?=
+ =?us-ascii?Q?Kpcct9XCtEVGurCrKyAKS7SKshx2wK0vLpT4lXkSNeiojpsIRVTlqJ2f1PYy?=
+ =?us-ascii?Q?NoEeeLmkwyAtDa36n9zP3Kfanx7lGID90ekkKnOu8NB7un+xgrNGuRRz+lR6?=
+ =?us-ascii?Q?lenZJ4I5pM1/c2CAjcKUBDbqChMS7i95cXV5c1/oUlF7NvpsfoKSroQSOWAB?=
+ =?us-ascii?Q?i5wm/cYSfy0fXbSYSlrW6eJhQYn4s664lLEcYl8BauONYBABPh6hIPn3kMEm?=
+ =?us-ascii?Q?Jtz6y0OqoB1HgIts74k6JIpQiFKrKvyZsA1D8Plv3oFI0wkheH5OddqTyUEe?=
+ =?us-ascii?Q?FHsWL1+cTUdvie4RqC4pd4EGQ190sI65sjDiHJd9b44M1l0DxcQmeS4L77be?=
+ =?us-ascii?Q?mK4eDNRg37FQNWX2KT692zoUQE3noMeobk7zmaJqlNT3MGx9OGgz5e52uVzm?=
+ =?us-ascii?Q?ycN4eKn6wbTGnc9G0eHvDjDBFM5sVUXI5y1VAN/bpZCBZ75mK/KFqnY05Q3T?=
+ =?us-ascii?Q?iU0A+RxV4BLoxTGkq4jKAziJHtuwAQLdisua3IBCcznnzlll6g=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(7416014)(376014)(82310400026);DIR:OUT;SFP:1101;
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(376014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2024 09:47:04.1457
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2024 09:47:11.6072
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 84002106-a26b-4555-cf09-08dcee90a81b
+X-MS-Exchange-CrossTenant-Network-Message-Id: c66b8b15-7ec9-4a29-43d9-08dcee90ac7b
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF0002636C.namprd02.prod.outlook.com
+	SJ1PEPF00001CDF.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4132
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7796
 
-Recently, a defer helper was added to Python selftests. The idea is to keep
-cleanup commands close to their dirtying counterparts, thereby making it
-more transparent what is cleaning up what, making it harder to miss a
-cleanup, and make the whole cleanup business exception safe. All these
-benefits are applicable to bash as well, exception safety can be
-interpreted in terms of safety vs. a SIGINT.
+In commit 8510801a9dbd ("selftests: drv-net: add ability to schedule
+cleanup with defer()"), a defer helper was added to Python selftests.
+The idea is to keep cleanup commands close to their dirtying counterparts,
+thereby making it more transparent what is cleaning up what, making it
+harder to miss a cleanup, and make the whole cleanup business exception
+safe. All these benefits are applicable to bash as well, exception safety
+can be interpreted in terms of safety vs. a SIGINT.
 
-This patchset therefore introduces a framework of several helpers that
-serve to schedule cleanups in bash selftests.
+This patch therefore introduces a framework of several helpers that serve
+to schedule cleanups in bash selftests:
 
-- Patch #1 has more details about the primitives being introduced.
-  Patch #2 adds a fallback cleanup() function to lib.sh, because ideally
-  selftests wouldn't need to introduce a dedicated cleanup function at all.
+- defer_scope_push(), defer_scope_pop(): Deferred statements can be batched
+  together in scopes. When a scope is popped, the deferred commands
+  scheduled in that scope are executed in the order opposite to order of
+  their scheduling.
 
-- Patch #3 adds a parameter to stop_traffic(), which makes it possible to
-  start other background processes after the traffic is started without
-  confusing the cleanup.
+- defer(): Schedules a defer to the most recently pushed scope (or the
+  default scope if none was pushed.)
 
-- Patches #4 to #10 convert a number of selftests.
+- defer_prio(): Schedules a defer on the priority track. The priority defer
+  queue is run before the default defer queue when scope is popped.
 
-  The goal was to convert all tests that use start_traffic / stop_traffic
-  to the defer framework. Leftover traffic generators are a particularly
-  painful sort of a missed cleanup. Normal unfinished cleanups can usually
-  be cleaned up simply by rerunning the test and interrupting it early to
-  let the cleanups run again / in full. This does not work with
-  stop_traffic, because it is only issued at the end of the test case that
-  starts the traffic. At the same time, leftover traffic generators
-  influence follow-up test runs, and are hard to notice.
+  The issue that this is addressing is specifically the one of restoring
+  devlink shared buffer threshold type. When setting up static thresholds,
+  one has to first change the threshold type to static, then override the
+  individual thresholds. When cleaning up, it would be natural to reset the
+  threshold values first, then change the threshold type. But the values
+  that are valid for dynamic thresholds are generally invalid for static
+  thresholds and vice versa. Attempts to restore the values first would be
+  bounced. Thus one has to first reset the threshold type, then adjust the
+  thresholds.
 
-  The tests were however converted whole-sale, not just their traffic bits.
-  Thus they form a proof of concept of the defer framework.
+  (You could argue that the shared buffer threshold type API is broken and
+  you would be right, but here we are.)
 
-v2:
-- Patch #1:
+  This cannot be solved by pure defers easily. I considered making it
+  possible to disable an existing defer, so that one could then schedule a
+  new defer and disable the original. But this forward-shifting of the
+  defer job would have to take place after every threshold-adjusting
+  command, which would make it very awkward to schedule these jobs.
+
+- defer_scopes_cleanup(): Pops any unpopped scopes, including the default
+  one. The selftests that use defer should run this in their exit trap.
+  This is important to get cleanups of interrupted scripts.
+
+- in_defer_scope(): Sometimes a function would like to introduce a new
+  defer scope, then run whatever it is that it wants to run, and then pop
+  the scope to run the deferred cleanups. The helper in_defer_scope() can
+  be used to run another command within such environment, such that any
+  scheduled defers run after the command finishes.
+
+The framework is added as a separate file lib/sh/defer.sh so that it can be
+used by all bash selftests, including those that do not currently use
+lib.sh. lib.sh however includes the file by default, because ideally all
+tests would use these helpers instead of hand-rolling their cleanups.
+
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+---
+
+Notes:
+    v2:
     - In __defer__schedule(), use ndefers in place of
       ${__DEFER__NJOBS[$ndefers_key]}
-- Patch #4:
-    - Defer stop_traffic including the sleep. The sleep is actually
-      necessary and v1 was wrong in that it had the sleep prior to the
-      stop_traffic invocation.
 
-v1 (from the RFC):
-- Patch #1:
-    - Added the priority defer track
-    - Dropped defer_scoped_fn, added in_defer_scope
-    - Extracted to a separate independent module
-- Patch #2:
-    - Moved this bit to a separate patch
-- Patch #3:
-    - New patch
-- Patch #4 (RED):
-    - Squashed the individual RED-related patches into one
-    - Converted the SW datapath RED selftest as well
-- Patch #5 (TBF):
-    - Fully converted the selftest, not just stop_traffic
-- Patches #6, #7, #8, #9, #10:
-    - New patch
-
-Petr Machata (10):
-  selftests: net: lib: Introduce deferred commands
-  selftests: forwarding: Add a fallback cleanup()
-  selftests: forwarding: lib: Allow passing PID to stop_traffic()
-  selftests: RED: Use defer for test cleanup
-  selftests: TBF: Use defer for test cleanup
-  selftests: ETS: Use defer for test cleanup
-  selftests: mlxsw: qos_mc_aware: Use defer for test cleanup
-  selftests: mlxsw: qos_ets_strict: Use defer for test cleanup
-  selftests: mlxsw: qos_max_descriptors: Use defer for test cleanup
-  selftests: mlxsw: devlink_trap_police: Use defer for test cleanup
-
- .../drivers/net/mlxsw/devlink_trap_policer.sh |  85 ++++----
- .../drivers/net/mlxsw/qos_ets_strict.sh       | 167 ++++++++--------
- .../drivers/net/mlxsw/qos_max_descriptors.sh  | 118 ++++-------
- .../drivers/net/mlxsw/qos_mc_aware.sh         | 146 +++++++-------
- .../selftests/drivers/net/mlxsw/sch_ets.sh    |  26 ++-
- .../drivers/net/mlxsw/sch_red_core.sh         | 185 +++++++++---------
- .../drivers/net/mlxsw/sch_red_ets.sh          |  24 +--
- .../drivers/net/mlxsw/sch_red_root.sh         |  18 +-
- tools/testing/selftests/net/forwarding/lib.sh |  13 +-
- .../selftests/net/forwarding/sch_ets.sh       |   7 +-
- .../selftests/net/forwarding/sch_ets_core.sh  |  81 +++-----
- .../selftests/net/forwarding/sch_ets_tests.sh |  14 +-
- .../selftests/net/forwarding/sch_red.sh       | 103 ++++------
- .../selftests/net/forwarding/sch_tbf_core.sh  |  91 +++------
- .../net/forwarding/sch_tbf_etsprio.sh         |   7 +-
- .../selftests/net/forwarding/sch_tbf_root.sh  |   3 +-
+ tools/testing/selftests/net/forwarding/lib.sh |   3 +-
  tools/testing/selftests/net/lib.sh            |   3 +
  tools/testing/selftests/net/lib/Makefile      |   2 +-
- tools/testing/selftests/net/lib/sh/defer.sh   | 115 +++++++++++
- 19 files changed, 595 insertions(+), 613 deletions(-)
+ tools/testing/selftests/net/lib/sh/defer.sh   | 115 ++++++++++++++++++
+ 4 files changed, 121 insertions(+), 2 deletions(-)
  create mode 100644 tools/testing/selftests/net/lib/sh/defer.sh
 
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index c992e385159c..d24b6af7ebfa 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -1403,7 +1403,8 @@ tests_run()
+ 	local current_test
+ 
+ 	for current_test in ${TESTS:-$ALL_TESTS}; do
+-		$current_test
++		in_defer_scope \
++			$current_test
+ 	done
+ }
+ 
+diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
+index be8707bfb46e..c8991cc6bf28 100644
+--- a/tools/testing/selftests/net/lib.sh
++++ b/tools/testing/selftests/net/lib.sh
+@@ -1,6 +1,9 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+ 
++net_dir=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
++source "$net_dir/lib/sh/defer.sh"
++
+ ##############################################################################
+ # Defines
+ 
+diff --git a/tools/testing/selftests/net/lib/Makefile b/tools/testing/selftests/net/lib/Makefile
+index 82c3264b115e..18b9443454a9 100644
+--- a/tools/testing/selftests/net/lib/Makefile
++++ b/tools/testing/selftests/net/lib/Makefile
+@@ -10,6 +10,6 @@ TEST_FILES += ../../../../net/ynl
+ 
+ TEST_GEN_FILES += csum
+ 
+-TEST_INCLUDES := $(wildcard py/*.py)
++TEST_INCLUDES := $(wildcard py/*.py sh/*.sh)
+ 
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/net/lib/sh/defer.sh b/tools/testing/selftests/net/lib/sh/defer.sh
+new file mode 100644
+index 000000000000..082f5d38321b
+--- /dev/null
++++ b/tools/testing/selftests/net/lib/sh/defer.sh
+@@ -0,0 +1,115 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++# map[(scope_id,track,cleanup_id) -> cleanup_command]
++# track={d=default | p=priority}
++declare -A __DEFER__JOBS
++
++# map[(scope_id,track) -> # cleanup_commands]
++declare -A __DEFER__NJOBS
++
++# scope_id of the topmost scope.
++__DEFER__SCOPE_ID=0
++
++__defer__ndefer_key()
++{
++	local track=$1; shift
++
++	echo $__DEFER__SCOPE_ID,$track
++}
++
++__defer__defer_key()
++{
++	local track=$1; shift
++	local defer_ix=$1; shift
++
++	echo $__DEFER__SCOPE_ID,$track,$defer_ix
++}
++
++__defer__ndefers()
++{
++	local track=$1; shift
++
++	echo ${__DEFER__NJOBS[$(__defer__ndefer_key $track)]}
++}
++
++__defer__run()
++{
++	local track=$1; shift
++	local defer_ix=$1; shift
++	local defer_key=$(__defer__defer_key $track $defer_ix)
++
++	${__DEFER__JOBS[$defer_key]}
++	unset __DEFER__JOBS[$defer_key]
++}
++
++__defer__schedule()
++{
++	local track=$1; shift
++	local ndefers=$(__defer__ndefers $track)
++	local ndefers_key=$(__defer__ndefer_key $track)
++	local defer_key=$(__defer__defer_key $track $ndefers)
++	local defer="$@"
++
++	__DEFER__JOBS[$defer_key]="$defer"
++	__DEFER__NJOBS[$ndefers_key]=$((ndefers + 1))
++}
++
++__defer__scope_wipe()
++{
++	__DEFER__NJOBS[$(__defer__ndefer_key d)]=0
++	__DEFER__NJOBS[$(__defer__ndefer_key p)]=0
++}
++
++defer_scope_push()
++{
++	((__DEFER__SCOPE_ID++))
++	__defer__scope_wipe
++}
++
++defer_scope_pop()
++{
++	local defer_ix
++
++	for ((defer_ix=$(__defer__ndefers p); defer_ix-->0; )); do
++		__defer__run p $defer_ix
++	done
++
++	for ((defer_ix=$(__defer__ndefers d); defer_ix-->0; )); do
++		__defer__run d $defer_ix
++	done
++
++	__defer__scope_wipe
++	((__DEFER__SCOPE_ID--))
++}
++
++defer()
++{
++	__defer__schedule d "$@"
++}
++
++defer_prio()
++{
++	__defer__schedule p "$@"
++}
++
++defer_scopes_cleanup()
++{
++	while ((__DEFER__SCOPE_ID >= 0)); do
++		defer_scope_pop
++	done
++}
++
++in_defer_scope()
++{
++	local ret
++
++	defer_scope_push
++	"$@"
++	ret=$?
++	defer_scope_pop
++
++	return $ret
++}
++
++__defer__scope_wipe
 -- 
 2.45.0
 
