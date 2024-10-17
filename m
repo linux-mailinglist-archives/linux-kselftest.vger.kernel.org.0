@@ -1,108 +1,104 @@
-Return-Path: <linux-kselftest+bounces-19930-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19931-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 420C39A1CA4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 10:11:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35A799A1CF6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 10:19:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8E8F1F234F8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 08:11:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9894CB2101F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 08:19:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D33D1D3194;
-	Thu, 17 Oct 2024 08:08:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10990199944;
+	Thu, 17 Oct 2024 08:19:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="WK43I11h";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="RUJALRD2"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="dxxZJsUZ";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="edYlwgPo"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE131D1724;
-	Thu, 17 Oct 2024 08:08:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B663398B;
+	Thu, 17 Oct 2024 08:18:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729152524; cv=fail; b=L/PQc+D6BDcWS/j5yZVTcMt6YKHhlqD60dlErSPcqXd6RoOIexoxaeHD3uXh3dbVH7EaKAOtBoFq+90XYJpVNkfnMpalYNo09K8wfzbBU9FY9HYxSAEl6CHcpf3WGhY4sUbt4PGtFjNvoKGx7qvDxJkLecK7+1qpR0wIqd2DGWk=
+	t=1729153139; cv=fail; b=O1OeM3XO6esfuILorIqP5BctCYnMN7eqE8KUREgQFtQ41Kyt+63b+D4jBhlMrrvGSBr+mV0FZw2vKg6fwt3ysSS3xJgnKwpQvE3C3T4OmN6cjl6jnNDVYkYmpKeZTbo2Eo4jvwLkdHk20PfuI/PqhrGyScafWqqjU7NUEzghS8Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729152524; c=relaxed/simple;
-	bh=Jw8R6EdusD8bNL76rNmrXLbAgHhXoZjhHeh3phwGCVg=;
+	s=arc-20240116; t=1729153139; c=relaxed/simple;
+	bh=Ftsh9m2DlpU61z8RNMuFEg2De/SSmhMje58rPEj+bKk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=KmjnG506gD6uf7MH/DpJABdO77zs9U25TpJ3k8AyAb3jsEFeP08n50jpqGnF/ppnm4hcHJ/d5NqDY4nU8FckUKOuK1OUDCZWX8jIkm/bdL3xrR/tm6F28WYfAnFECmKDoQYCY5ZfS84z1cCuqrw/v3UEY3vDJNVMtWXzPxqpPoE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=WK43I11h; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=RUJALRD2; arc=fail smtp.client-ip=205.220.165.32
+	 Content-Disposition:In-Reply-To:MIME-Version; b=DjwLkyD2xglYsvmapJ49ZOl69dYgkNDaefEaFSECbrlv+GgGVl4gzafhPvkd0Ha7A115+C177OZcgwjr2RE6mvyh4U6bBjCaTCJ/Tph0iz4aedTIrqGmhxbbZxuq3UtM6+aDLBACFDIsVk4ship+FtwWHw89WKQBjN99oTdNE4E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=dxxZJsUZ; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=edYlwgPo; arc=fail smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49H7fei3031840;
-	Thu, 17 Oct 2024 08:08:26 GMT
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49H7fh4T008517;
+	Thu, 17 Oct 2024 08:18:28 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=Y2vnmh5xn65IDkwHYClzsVfYysubKojclXI8egvId5A=; b=
-	WK43I11h20k3nD1ZXTsnWj2JcfyU9ASeLfC4LjkEL8uOyybhAECNzexhO56hbK2L
-	2P0EadjTclmIQoY9f7IO1GXdoDWzDpUvXVtL5cDxLyu0vV1/bXI1ycPH/IY43+fI
-	C7083aT9tqu94rVw8zLaKXUjkaB+3ywE/X8gjnATPWidkB9ILfV4QnpRE9/11fQa
-	fwZXLVbc1/8zAA3oWR9UV012N+41KcBVRMfHmD0YAZTdIirBSGzpTY/aYz9+66v7
-	IUOfCtpev0Ie75ZqJ9VB1O+LnOe7SoNxAVL0asyXf+H0Ri75EbHsvTj1qtPP8TXL
-	WwOAuim8zEulSNngvRFYzg==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427hntdq28-1
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=Xym90imXt96EU/8l/u
+	X8Dav08I+9ggZINUoKrQTohRs=; b=dxxZJsUZKgqT8fltoeWh/spGMO6IklRSwe
+	dsHnTIZ4QkMpxAZlnYc1Lo1tbYC1yDrzzSq2gCgVNgCBa46CEe6agCc+36K1xyqC
+	5V9+022Hg0I1/9G8z5wWUYsAY6IlYMOY8W0rvfaUDlhpvED3WQ+jn2ndY7tqchju
+	EuMl/DUSaHtTHHJ6U2JbMN9baOujQBPsg2MlLGVMOQwuvmGj+us7QC+r/eU/7r5m
+	f4yuLEFIeJhR8bIipihJF1L6ucDHbrzf5LEFsM8BsEI7m7ATiIULSUveZpGBFIjy
+	ZzZjkrds5Y+go1RF2x3hlw7RuMaoajs2qJBLZjJGKIz20hvilZRg==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427g1anh8n-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Oct 2024 08:08:26 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49H7iRIm014014;
-	Thu, 17 Oct 2024 08:08:25 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2176.outbound.protection.outlook.com [104.47.56.176])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 427fj9vceq-1
+	Thu, 17 Oct 2024 08:18:28 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49H7t64F026420;
+	Thu, 17 Oct 2024 08:18:27 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2043.outbound.protection.outlook.com [104.47.57.43])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 427fj9w9nu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Oct 2024 08:08:25 +0000
+	Thu, 17 Oct 2024 08:18:27 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=G2vHwnI5TOiHiNQoALpsBB1F4F3LDQks48R2VwlbIREbfEydvtM1RcgpmBWKBOFDYh6wEuWDIYk/bLr9+sAC5+Nez9kuqMaLiRvxoIMWs8o9hHHueMfUOzd2B00yXLFOIN7zeGf9R6ejMgwZcZDpJ/ctMmvfugYdv0d53jNa/IGotTuFP7zT7mDcAjOoYbsRUb1Nr5Cto2Woi0YVQCqLeAbyblkVDM6N0ay1dBn7YeimiBlAAvK5Uk5clMmHxg5PQAimC2lUn3N1aPQ291xDBd9nm8qX04U3oZT1AosndaCqXMAqW6iz6KTHn5CmWaGrhLVSMQeM09elLV2EFNQ60w==
+ b=M27wKzmTE2OMe3f7RG+U1r+8ehoJsNxoQCsvAf1qVWkFFV5lWEbownd1ivtdTpjRrXRiRBQx6JffY9pN6Wq9NtdrRV4QFE7WI+rGy//xdKoRbt6+ygS40CIIMDstbbh9tgrFXbuxUOJkZDsL8qUvKgkYmUgKpMqeORHxFt3axN5HqLviaZ+V2wur/s6PtSiEUpy6hMePjs3ZtTfRg8xRW7JOyS8KELFEfyvHAZT1kKDAv6hfiRwldMfyMcmiXfQaC208KYuhx41qDk+tpwaNGAidTCZEnhRfbNVx7TAT/UFu0aGrTx7Q26AYC89wcoqHT/4mrgDTmhAbwl1/wPx9CA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y2vnmh5xn65IDkwHYClzsVfYysubKojclXI8egvId5A=;
- b=ltp2gq38kO13c0zimfI9m3SSYhBUmvPHWrXwS88Ee8nzWj9Uddiojeo/MNDE6IkOkreA1hvBOV8gISq2Kr1MLkGrnfEez+NLaI0sVtDlKfN2br8M4TCssJqFG9KfFYqL7yk9yfyCaSGSHqn7f/ntLs8qcUznXPPkyVj3Sax/mo4+jjrpGlfx0SbDKRbNtBRT9EqvJOv9mZyAO06QQhpOaR1Jr3SQw3lZjmfbJEmoB34Wymga7awRt9xOGW4kkqoPhl09JFqjG1aMt3CcKPtC0RovRbezY1vHtw08TItEg73tvZr+YsRbtCUIAPfv6aW1z+rbW/RoRr0nqW3T+IepZg==
+ bh=Xym90imXt96EU/8l/uX8Dav08I+9ggZINUoKrQTohRs=;
+ b=ZuE7ZIXhMbb/NBCIIMhQYj9fj2aJ2p6OmJR+kN9wumvmQQJMYb/W33CVWHb45khk4+UGTacMOzoAmksg6CgmQuJ5KUbQ/kFglTGZrC6PIpCyMX731OgbzQwsOtuqTv+kXeWKCsqwXmsZmGcRiG1t9G2aLrCtDy50ISts1ip+A3G2Cmq2j4L1QzXHlogmLGpVz0cb3f9LSZRjb08ylJ463iggxrlGiUpqgUWWNUyPnARiVsHvQKmSpGALdvab3RfyaMnX/UhnoAmmsXDr+xbmF/bnu1pjc2vNawG1f+6dmBxFOexF8J0giNXzCz835It3cBMwlobRA29oT+xDKEHb3g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y2vnmh5xn65IDkwHYClzsVfYysubKojclXI8egvId5A=;
- b=RUJALRD2QaT4jHL9wmpQseLMdbH3GmdofVFpcOPaOwTYyFGLbog7e4zI8GjHLw8S+whobSOf4UmYZ3Q8Zj2LRF72fZnRJ5/a2IhM9lbuvb4pGi/fNeYNNj511wfR5g9vgd1IUjyWKR1i9QDNW/b3Bg3vXgTceeuF4Z3piKuc9Wo=
+ bh=Xym90imXt96EU/8l/uX8Dav08I+9ggZINUoKrQTohRs=;
+ b=edYlwgPopI8nz2pLOmrPfKbnk1erx8QQP9/KbiXm58h7KyIw8RNKxB0xAuajbYWUxwsow1xVY7pd4oY1Bk0Lr0YWC83pLcqBBe4g+ve2xxSdXMeCOXr48FjGk4Tjw60EDGoYjXwNEAeicGE9FYREUUBKkmjsejxgD51Bri+VoKA=
 Received: from SJ0PR10MB5613.namprd10.prod.outlook.com (2603:10b6:a03:3d0::5)
- by PH0PR10MB7079.namprd10.prod.outlook.com (2603:10b6:510:28a::12) with
+ by DM6PR10MB4332.namprd10.prod.outlook.com (2603:10b6:5:220::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.19; Thu, 17 Oct
- 2024 08:08:22 +0000
+ 2024 08:18:24 +0000
 Received: from SJ0PR10MB5613.namprd10.prod.outlook.com
  ([fe80::4239:cf6f:9caa:940e]) by SJ0PR10MB5613.namprd10.prod.outlook.com
  ([fe80::4239:cf6f:9caa:940e%5]) with mapi id 15.20.8069.016; Thu, 17 Oct 2024
- 08:08:22 +0000
-Date: Thu, 17 Oct 2024 09:08:19 +0100
+ 08:18:24 +0000
+Date: Thu, 17 Oct 2024 09:18:20 +0100
 From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Christian Brauner <christian@brauner.io>, Shuah Khan <shuah@kernel.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>
-Subject: Re: [PATCH v3 3/3] selftests: pidfd: add tests for PIDFD_SELF_*
-Message-ID: <6080fb15-9073-461c-a87d-80e6daa326e6@lucifer.local>
-References: <cover.1729073310.git.lorenzo.stoakes@oracle.com>
- <c083817403f98ae45a70e01f3f1873ec1ba6c215.1729073310.git.lorenzo.stoakes@oracle.com>
- <a3778bea-0a1e-41b7-b41c-15b116bcbb32@linuxfoundation.org>
- <a6133831-3fc3-49aa-83c6-f9aeef3713c9@lucifer.local>
- <84c0de17-899e-46fd-8b72-534d8a02c259@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
+To: jeffxu@chromium.org
+Cc: akpm@linux-foundation.org, keescook@chromium.org,
+        torvalds@linux-foundation.org, usama.anjum@collabora.com,
+        corbet@lwn.net, Liam.Howlett@oracle.com, jeffxu@google.com,
+        jorgelo@chromium.org, groeck@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com, sroettger@google.com,
+        pedro.falcato@gmail.com, linux-hardening@vger.kernel.org,
+        willy@infradead.org, gregkh@linuxfoundation.org, deraadt@openbsd.org,
+        surenb@google.com, merimus@google.com, rdunlap@infradead.org
+Subject: Re: [PATCH] munmap sealed memory cause memory to split (bug)
+Message-ID: <3a1bbbdf-1281-4f44-857d-58cba583e3da@lucifer.local>
+References: <20241017022627.3112811-1-jeffxu@chromium.org>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <84c0de17-899e-46fd-8b72-534d8a02c259@linuxfoundation.org>
-X-ClientProxiedBy: LO4P123CA0450.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1a9::23) To SJ0PR10MB5613.namprd10.prod.outlook.com
+In-Reply-To: <20241017022627.3112811-1-jeffxu@chromium.org>
+X-ClientProxiedBy: LO4P123CA0160.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:188::21) To SJ0PR10MB5613.namprd10.prod.outlook.com
  (2603:10b6:a03:3d0::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -111,338 +107,229 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB5613:EE_|PH0PR10MB7079:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2a1bbc63-cb98-4a8e-7313-08dcee82de45
+X-MS-TrafficTypeDiagnostic: SJ0PR10MB5613:EE_|DM6PR10MB4332:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8e96f28c-6229-4d93-036d-08dcee8444ec
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Q0Rtb1E3U3IyeE5pYSswM0dNd3phMktCT1J4S1JwVVpVVUQvaXN2Ymp1YW0y?=
- =?utf-8?B?K1YzdGJWWGNyVEpKdjI5Mk1CK3ZOc1A1RDhMS0FhQmlpK3F4RHRhdGVtcDhh?=
- =?utf-8?B?eU1ubjR4NXkwU1JXQXBmVWY0eERtUEdWMXJ6VGNzeGZwbFg5Y1FtR2dJRDJO?=
- =?utf-8?B?bmZGZkVGQzA1eit1Qm10eVYvYU1rVFlZWU9HV3JOVWJ2eGZqOXJjVUpVZjhm?=
- =?utf-8?B?T29uYUNNREFIbFQ3bjJ6SnFZZlFncE9mYllnQm9WRUdveUlNQWhmUUFOK2FQ?=
- =?utf-8?B?cWU3dVE1K3B0V1hPaFdPVlpJOVZJc0laL3JEYVhXOXBoWnltZVp1NDJ6Smpq?=
- =?utf-8?B?VlVMT01tbCsrN01PZkNjMXV6WExHLzhwT2pyVWw3UDVCZ04zUVBQcHNuRlpv?=
- =?utf-8?B?VXllMEMxdnV3OU9UY0oyTkJuVWw2VWRKTzNVWCszd29vNFJSSnh5ODlGSitM?=
- =?utf-8?B?SS95SmNsZTdDd0lkVnpZbGJJWVFjSUljOUs2cHpxUStOVkZicHVqdDhNOVhN?=
- =?utf-8?B?aTU1ZVp0OEVLblh3SGZSZEhUN3UwdXcyOUtPb3crWW9ERTkzYStoWVhXb3or?=
- =?utf-8?B?VWlnVFBTbVQ1ODRmZWd5UTFQSmF4a1J3Y1NsdVU1eHZpWEMvQVpjVzFFYUx5?=
- =?utf-8?B?S3RKSFNQY0FYQmRFRHkwZFMxUVJ5TkdxKy93WkYwZ1phRCs2R1lZWUNwS3RW?=
- =?utf-8?B?ck91U0FJM2QzT2EvVjYyRVpMOVA1Rkk2cnE0YjBsTzlnMVhTNVRXV08xTmox?=
- =?utf-8?B?TXJxdEMzdVp5VU9Yc2NDOVJBSnlzVm9nQmpXYk1saUdDanFLRUNzTEl5bmF5?=
- =?utf-8?B?M21acnZlUHU3MWNWMGxjcytHWEJ3VFJ6ZGxDV3VwMzdlSGRIVkwrUHlTZ1pD?=
- =?utf-8?B?NENQL2dTRHpCdmNaaGduSmNOUkxDRkdLRFdLODFVU0JocVBzUkRWS1BSQ1Q5?=
- =?utf-8?B?bE82OXhHVXpnTm5YY0ZHQ1hFb0F0aDVmMEhtRTQvT3hhaTNNSzk2WjUrVFN0?=
- =?utf-8?B?QXVMRzQ1Y0VPVjMyRFlvTHRDWXJlMWlBSGs5cGY0by9DZ2wraHRDM0RhRE5R?=
- =?utf-8?B?SDNHcFJwb1JmMFZkTWRTSGppYm50MnNibXE4Sk9IS0hUNm8rWlpoS0MvbDgr?=
- =?utf-8?B?UmpkYklhY3dDMmN4ek9nYlN0Y2FoRnBjWm96RFBzK1IwNk9mSjdSMm1OYUpw?=
- =?utf-8?B?Zk1HdDQ0dWVFTHBZYi9GZ2QySUVNQSs5ZTgvSE13aUV5bzR5UUZodjUrRlZZ?=
- =?utf-8?B?bnBhaG5BOS9XK0J1MGxFeE96V2VjS0RqTUFNZjF4alFoWXk2RHZsdXFWZXMw?=
- =?utf-8?B?dW9yUFl4OUU5bm1zK3JmdFcrZHl6NjM3WmNna3FjVnZweDZrNWx4Witrb25w?=
- =?utf-8?B?VDE4UDNYdVducVN6dGRMWngySXczbUVlRmhzK3B6ajBhbGFDazQwNkFFUGpU?=
- =?utf-8?B?cVdkTkxJaGFEMWNySDk2UXZQR3NNYTJxbnN0M2lSalRONTVQSU8rL3M2YStC?=
- =?utf-8?B?a282azFrOTczZzdtTTRJcmZzMmhpSmlRcktTNlhKS2RZNlRYbEw5UW5id2o5?=
- =?utf-8?B?YURnTHlmTXpQdURidWxPNWhHRTNYRUcrL2dOZTViSW0vYXpFNC9weHc2bXhh?=
- =?utf-8?B?UFhtU2tYeXBaL2RJYWNXTDRETjUwem83MVg0SFliaktNc3d4NFZxZzdsUFAr?=
- =?utf-8?B?Qzg0Mzc1WGROTnZyRFhCNy9WVHJqVDMydVFQSzNVVU1OV1ZNN1gxT2JnK0dJ?=
- =?utf-8?Q?TPqrpgrmxSwO+SFDH6K1lF/Kljv2AkgT218oJA1?=
+	=?us-ascii?Q?eAm9JiQ4U72ISjWnUBRoKjyy0q9vJrwVg2/89cxI0Pht1A/JuxOa448MCLQY?=
+ =?us-ascii?Q?H8xCtjHa5CXQjKoNyc5BP3KIU6CpWmooptbE1CogWYfOKxL83elT29l0c10M?=
+ =?us-ascii?Q?fAOi/cVw8TtIBzAhGjdf7x6Fp3OmllULIAA+Xb6ECjAVnwCuRVwaDFXc6GxO?=
+ =?us-ascii?Q?6NY05/3jGQhiZP7+fVA41t9DIh9VuwkDZiuK3C9nDWGHaK8eki9dqR/ytOIn?=
+ =?us-ascii?Q?LFapngYCKTWcoK94E/v1vKoSE0ExB4PT9AQvZcRYxOLXeCkaM5IDFKL9JlgD?=
+ =?us-ascii?Q?NIBrttRxxB3MztELmzluBQU6xbKk9Jl8CSIXtqHNCnt6LSjKAuqowM0D++pV?=
+ =?us-ascii?Q?uvXHoTxlHkdOWl37qQYB7hTG5EZtooMfx1oIvmluMYf+ELdTIpaukAoChS1q?=
+ =?us-ascii?Q?K5xnzOty1nExs6LZVNhEU/pXnWkRwXLyHc6gBb8OHunxKjiNpI9Kq0ebw1hj?=
+ =?us-ascii?Q?5CPRbJx1yIpR2vTaiF0QrBOH0TGiRJpJfG4wgjVan+jQ5vX/iZwdZU1xEtlp?=
+ =?us-ascii?Q?9pQV7l9+yVUmSELfQj8dzec3NAZbY8wQuqrZ+AzuES+6OZT/6+A5eO8MhAG0?=
+ =?us-ascii?Q?z5NWoVsP5QvS5VAo0SY0brkQizm6Mp64O1nPwcyYLq92zNyUnC4HeDpsTHJZ?=
+ =?us-ascii?Q?5LpIfwUpw5cHRuCR1OqJBIWDzOLsAOeeXKLhZyy3OXUT6J3AVAlGp7QfJLLX?=
+ =?us-ascii?Q?+fi75/xdjLsqMBWE74te2al9gxhjt5hsXpBupsd784EZWYS/RAZDc+obKO1b?=
+ =?us-ascii?Q?K6QGVG6oQJrFfyWGk5UMbigSS6AnbA0Zuhs37SHMOJBdhFL2k6XLI5yKw2Xb?=
+ =?us-ascii?Q?BhkSXCtlNcf3h7b2VABkWU7kG3+1LBp7ET6qLI+lddqd8LPnySPtxpaRteAe?=
+ =?us-ascii?Q?qlL53al8xa4fJeZbeuJM1qqOkGu3TrzSifXUve4ZSm9F+2aV6SDjcVXDJp2r?=
+ =?us-ascii?Q?wiSqDSypkG0gjG/AlkRIFHcziREQA8058CJZWxE4iRP889o9X6NBmgzOS3NP?=
+ =?us-ascii?Q?OjcebsKFbi5mvYSj9qnBAa1jqAnmTLbSV90uQ17YDmWzivxHhlzoYWltc8FG?=
+ =?us-ascii?Q?u/jjDmr1NrUyQ582n/NXVjqddEHdDB7+eg0i2kRiXH0zWOkZX18OXZKZwg2A?=
+ =?us-ascii?Q?alBjtzgIZqTDFtYMH7GnIjeZ3zGeqLmsUr63Y9gWAURIHn7J0vKKe0wNbaPZ?=
+ =?us-ascii?Q?SbzwmWQ7+A8UoMv4TIsbXCHZYzXwD+9FU2FfH4uv9+fZorXT760lGFPO26P8?=
+ =?us-ascii?Q?ho3pqFnbbqt9yNnjPaw+owLyzJkPbwWT4whGjT4PxK2A38J656BBcX4qUJNX?=
+ =?us-ascii?Q?S23WBcrjSSZxVfJ4g7vQy0/G?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5613.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5613.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bjNFSGc3enVGQ2lRR2crTFF2OUFUdTd2SFRQc0tMRGdDYk1OLzIvYlZuQjFO?=
- =?utf-8?B?YWJmVkZKVEJEb2xEWmZrcTkzWXhpUHJSS1ZaNzJrcTdTVnpjYWxaTW1HK2U5?=
- =?utf-8?B?c1pRbUk0WFMxUUc4bzZ4VUx1ajdqaDRxT0IzWm5EK2lGOG5OOXA4bU40aUpk?=
- =?utf-8?B?WjJmMzkrSFhRd0dwSk1rR1h5S0NMMGxOTGFlNTBoUUdreHFIdFZnd01MRlFk?=
- =?utf-8?B?WDBOZWVML1ZlVzdlVU1Ubk9lNUNXb1lkTk1FTzMxN1FxVDVtcnRPYVVQbFFh?=
- =?utf-8?B?Zng3TmdkNlFzQTVJSkVsR3RQcjVRY0VEd2hkV3paUlF2U1FQeHkraFZXMmQ5?=
- =?utf-8?B?aE1raXlrRG9GeUo3WE1qQUhoZkhBTndpeWJsU3pyYktvTjM0a3ROK0NkYklT?=
- =?utf-8?B?aURPS2xyQTFGT1ZWUjhPVThRRWZ5TVl3N2h6bWdsVldlcVdzbEVZNTBsc295?=
- =?utf-8?B?TmhrUWVyM2NVbGxIRGhBUGNTNzRMa2w1U1JBVlp4aGwxbnZQWGYvSndyd3Jz?=
- =?utf-8?B?QnRBaU5oVmZtQ0dpUWFucTlsV0o5STVUV0dRZ1ZvdEJQTG95V1lFeWdjWnRR?=
- =?utf-8?B?OExUTGJMeFNPN0ZpdWRFajZ1MFhkMlJxcEVidFUxM2JNOElJVXRvcktvOThH?=
- =?utf-8?B?eG5QRGhNTkxRamJTZU5nQUZwTi93ZTU5T3FqWmFCMUdFd3pYZkVheHlvakR1?=
- =?utf-8?B?T1B4THJQeVQwTWl1R2VmaGVlNmZPRU1JTjZuckRHSlNXVTJBZGVORnFDVjZR?=
- =?utf-8?B?NmI1WHBxS1lzUjFDMGtyeWtrVkI3L3l6cU9DS01VNTVpRnlTWUkxL0RaY1hx?=
- =?utf-8?B?MDlQZjBpSHp6bU0rN3g4eTBIaFRWSi9VaDFKU0dBV2VMejRWWTdjZTRGcXJ2?=
- =?utf-8?B?b0gxYzZ1cGNEbEpMV0swYUZrRUVHK2ZXejdBeDhrRzhoYTd1VDNCNU9HOUh6?=
- =?utf-8?B?YnV0ZDdRbXY4ZC9QWTBGaXNOQVpXcndjS0Zjb05zTmVaVjJobGd1OU5FbVNs?=
- =?utf-8?B?RVJOYTBQRE5TOTQ1WVhaY2F3aE90S1ZiNWJSTkZRMkhhTjVXUThiMlV2Q2c2?=
- =?utf-8?B?eWJuRGZnT3hSN3pGc2tPNlNsK0c4U0YrTm90dVBLZWl5YzQ4VmRVbnNsTm1l?=
- =?utf-8?B?QjFSaE9reWM2TzFzN29oZ09JYldabHdJVE55em1CUERma0J6VmZRQUpDbEkv?=
- =?utf-8?B?OVJjT2taeUYyUFl2dGRRcmQ1ZC9PdmJDSVZleWpFVWk0dlFTbnJ0VHNQRDNl?=
- =?utf-8?B?TEQza2cyV0FoRys1K0c2UjlHQWJoMWR5dERKREZIV0tJYTVGLzVSaVZqbmdB?=
- =?utf-8?B?MHZJWUR3ZGRhd05RZ3NwRU1IOHhNSStwTURMcXNsNTY0T0V0M0RGcGlyMDAr?=
- =?utf-8?B?Ym0wZ2VHYk5renNPRmZ2TGxicUI2dWljOHZxQTM5eEdoTTJDbUZQbCtPMXIv?=
- =?utf-8?B?dUNRZXlEUlEzcHJqdGpMaGYyWXRHcUxRQjNGeWVzdXNDalpzMGdsdVF3SWJQ?=
- =?utf-8?B?Z3RWRnRhR3AyelpxNTcwTW0wWTg3aUE5QXRHcjFXUktxNnJKMVpKemtrZSsy?=
- =?utf-8?B?OWl5cTJkc2JSeVEydHI1UTRjazB6NG1jRzZGVkJSaGVCSUd1TW9xd0lTMVhJ?=
- =?utf-8?B?S2JxcW5NSzIvVzhYZ1N6RUxweXJRV3BKSDFyQXZCcnpjeVA2amxFRDVPejNV?=
- =?utf-8?B?cGlvQmFjM3dTamRwSU5Ed2hpQlFUSFExNXUvRnRrUzBtenVoZit6ekh0U1Mw?=
- =?utf-8?B?Um42ckxjRndSbGl5R3E1aWIrc0gxd2gvUnVIVWdBRjY4OXhiZS9YaXdjbHNN?=
- =?utf-8?B?WVdpaWZtVTd2Qnd0cGtjYVE3RXVyVXFPUUNtbVpsY2EyQzFFYUFmM05BWmxu?=
- =?utf-8?B?WGFrWlp5N3pqMHlpcEJrdEY3WUtGb1FuRjJzZ2JWcW84YmRwN0ppeVU2VE5z?=
- =?utf-8?B?cmY0RHFIT1MzZHdsUDNaMkJzaWlTQ2kyRVlBTXh0NHdxKzZ3M1JZd0tFMGFu?=
- =?utf-8?B?SGplQXdOV2RzSDVwLzAxR21Cc0NiWi9QeGVRRlI5ek5FamlKYWowUkpqTC90?=
- =?utf-8?B?akMxMmF0RlMyZGVUc1RhaGZwa04xWnMxYXRCNkQzTnNYYmNTVy9pK3R3QU5w?=
- =?utf-8?B?QTVPMWxZZEhpNU5jRW5uQSs1OGhJaFFtOTdPRkVETXRvcGYwN3hNcHVRcEJV?=
- =?utf-8?B?akE9PQ==?=
+	=?us-ascii?Q?fucXiU5d7D+yQFYNbsok5yQ+XLGSRRTNoMcFE8WZ6x1TsC1+J954kKo09J6R?=
+ =?us-ascii?Q?tgIzH+kbxdRB3UMw9EGQ83jJDPxkIWivLDGYQOFkcOJlFJFs6rOtdSu3p2A5?=
+ =?us-ascii?Q?oI/U1mCQEPjVRPWHB/HzdtkYoGpg8o2kebVUjYvS2MVLftGQQGQFpZLOE8l7?=
+ =?us-ascii?Q?BU6rAGF2l3lZ8nCK70MWrd6RW5QJNuXWr6A+zubYkhihxYBa9ZcYG3bpJzQ9?=
+ =?us-ascii?Q?IAuT/YnP09f0TFsQmq0aNZ+hdWNK5GQqK3WQDolRwtsM9S+k9y5yL5KDCq71?=
+ =?us-ascii?Q?APFGSDbnpSi4Riy7+UHVztt9y3fChf1116kLgfgtoPAwfYAkVtIu0Jcl7vE4?=
+ =?us-ascii?Q?cAUSfURUfOhY3iK9F1hCT6DuIYLYRknoxSz763OxdAe4cWkLPfNBgqHbMLWJ?=
+ =?us-ascii?Q?J8eg2wDq48Wb3HL60EEp7XZwsNU68m4oywXl1/4w2+HyTHRrjbr6KkGQwf/f?=
+ =?us-ascii?Q?JxRMIQ3MgUiawJV/uR14D8+r7RXQVgzMXPtXMzD1rNnqVK7xeGBAm1DaN2Ve?=
+ =?us-ascii?Q?UQlzDp4UU6TQNByyDKuOo0mE/vF4HemMEYlE/fgjrpnSB5NPUj0VvvmVTPbv?=
+ =?us-ascii?Q?unBCwUlWNZYXH9Fo1w3rZw4sazMWnfdhbUibhjLsMGHJBkIZKkGUp8CkuGxX?=
+ =?us-ascii?Q?5u41TIDMejOvU4kTuXrRqwHW/GdJt0gsE1jYB1SOur+Wp5ZnBTcnBt9+7St6?=
+ =?us-ascii?Q?aua683GNXoaH7hXfXDbzYXB/B2xgcae8Bu3OQoqbRFtpqe8/JDdSmy060CQb?=
+ =?us-ascii?Q?oktForDkIe4PmAn/sL8x9gam/oTfakOFY9Zwh09xK3T/Q0r9XBrrK4vzHWmZ?=
+ =?us-ascii?Q?PYzehFc7+I9vlpZm2p1s24vuhrrnOLPsTiJOhY0gpvB16GTJVJ1/xfymJ1i0?=
+ =?us-ascii?Q?TMfuJ5j8d5tFplsPwnjk31GRcMU1OoZP4z/bnK3oHQdKO8PX0L/hzu63VBHy?=
+ =?us-ascii?Q?QgEat1D/DCQ6JzvOM7m/juJChld5wnNlyhDSAjZ1LbksfbFL4ZhR//K3EAqg?=
+ =?us-ascii?Q?IjAR7k8oseb0H1z8EWg2LXEw0wtkfz+3jw632US3ZD1kPLTbfev1+Js0WtuI?=
+ =?us-ascii?Q?xUC7oSx2nXaoUxR+kLyc7Sk69PZOYiXb5XccWWi8SoymYUOF8NrUmIHTUoup?=
+ =?us-ascii?Q?lHocCKtZT3IzpsCd5Qa33tNSAibGEyHCx3lXR0sPJlzQYjrje1J/U0u6MvAK?=
+ =?us-ascii?Q?JeW98WZYZOLXCjLhf169valtYqddcuEI8gd8xJ9T0VwIDDqfCr/4JRa+ah1R?=
+ =?us-ascii?Q?3/3wSgkKTV4fWp6y38c8DWQmWE0jHibXx54eJKdNMG44YRHK/opoSEYk4Gdc?=
+ =?us-ascii?Q?/pWEA3SMJYya7AyMFKNOcfpo9vpwosrRb11FeaSC91b2Ji7d6icbDIu5du6G?=
+ =?us-ascii?Q?yDjmNMvXzcO0eSTqWyhyNQg0Pqi4+7W1UvHVjGTy8aTI7YUI+MlRR9sPF9Fg?=
+ =?us-ascii?Q?J0jekv1s/pnXBZ3Hgm3o00O86kFy1muRzXNwp36Ps9Sicj7MxdHVUscmQzt1?=
+ =?us-ascii?Q?7160cCCnHQFpgxAnWbMSKfMq7GUvgeUhrVBiKnGfkqmlQCBUJT2i4UHwY0ok?=
+ =?us-ascii?Q?Zkjv1f5+4Wgurv0xHGvJC3nlCoyBH47sQPz0tkBXmbPTShh7EqaQMkmHA9EU?=
+ =?us-ascii?Q?Eg=3D=3D?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	Abrtjz3MNPrU2+mXCqYlzBe47zf3GIwS2qDcFKG/n6y79aa/yX4Z+9ERBzOgNrnVKc6z9sCZTFToLw8xAdvyTe5ZgWk9eSRr13GHQK7IKThz1IDaTbroES44ggv7DYyHchs/6VCPkNaobd9BqiCno+C/CE2E4pQVdB2E51FHNZRhFenrX45Ng43/TcGg6XBw/QzMicpwwjzx9e07z0MzoLJsecYJxzA6rYw9iDxc4BLrsCGn6UwrhBrRFepnDTwbYoGHdAlkyCN/1+9oiT13UtrdAqAHT4ndwccbNNzD98FUL45fwK/UlNkNT/YgvXE9MKDQxwP8pORcarvSNKRgLGGtVbEiHeS05ejMgVXMvw1DciyZhbqZ3spjg0TbdgP2FP/6RRr//nezrXoCzFsQUqUP3NAYrxo67AMZ+2L8jbBkCpDeIHlGuz+T8DKErpAc2otYjJJYpFgB+9hhWxKEaGifQ1qrT1fhCTkulfld8oPTO4dcT9+P0WkL5ZiRerrd8WnMFqDWGZgZaR4Xl4GZrrlwcetLJHD/f3bcuI2q5Sk2jvVvQvKUjRnuG5GXx3Q8lyfTqk6/SoYcLWB887txugHMf22bMX0ZKLGUqkogEVk=
+	W9CGFZR6arDKosM7ZAtaWTnS1zMEuUGlo03EuI70KYU5Za9Wk3WPe4fCIYPNiKk9XF91kj/rNRhV4p7wQGmHq/qha6Y0c55HqZ+b0bYcmGZKqN1eFr60rdFOgUUf32FzAe5esW6P64ccIx4KDiFx1PSPGjUT8dYeO++17TCwBIKwAAhOp1F3nzwwGfgGn3QHRpmmrhQeAgJAmjSlzh4+D7bq+tDGydZdbEP7HpXj4TVxbsLuo6MVu9+HLawn5q09SRyRobAve/0V5BiDI93UwUBtV3IpTJL00ad1+cj8xTinfZ3vsnx+Tf6f/epup/7urUFIZjdWdoMY0Us1KXHshuBmIs3bMD1WFMLKkJvA8l45GB9ElFCIrCgcQkUJx1oOdLu6iBWt9LKQedeuuw7uSRBUSyGHRpR/ZQ6Fo+sUvnmZtyIyqvDjmZifFmB/GTq80hKVSkpcnJi8HnNZ9+D/ibcHXeo6uuH1pwU6lKTojZAUg0RFMtGo5THrFoOek1srLDtAwcXq0ePfSxQyPxYgwQb164x1nsyw4b7588HpfbzNXyP6zi3C1OL5YcSszkmnuszkko3lrDR2Hodf2/Xd0kCesrGxCu9TjAvD017rnnI=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a1bbc63-cb98-4a8e-7313-08dcee82de45
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e96f28c-6229-4d93-036d-08dcee8444ec
 X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB5613.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2024 08:08:22.4195
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2024 08:18:24.0261
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ad6r4OI5dXeEBvDCLMsRobkm5b1+Q52sSVXk9yF6Eh0GPjMk7jMqt2g7bqYIs9vTxrHcC4PGOQ0wu4KYveytkLNvhHks9+4bTCBgRLh1L4c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB7079
+X-MS-Exchange-CrossTenant-UserPrincipalName: tocqnhNsj2NNccYqXhv9LB8kz3UsUzmGYs17M7PuSaGXVIp2uEmhxatPW7TzY0QHqhJb39wTdyH/rXwoSXfNtmbPTZkbmwN4dcHQ5q798GQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4332
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-17_06,2024-10-17_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0 mlxscore=0
- mlxlogscore=999 bulkscore=0 spamscore=0 suspectscore=0 adultscore=0
+ definitions=2024-10-17_08,2024-10-17_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 adultscore=0
+ bulkscore=0 spamscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
- definitions=main-2410170053
-X-Proofpoint-ORIG-GUID: YZg3TyyE0FGq1qlkMLg64eZ-eQhFyru8
-X-Proofpoint-GUID: YZg3TyyE0FGq1qlkMLg64eZ-eQhFyru8
+ definitions=main-2410170055
+X-Proofpoint-GUID: d1C6K2A5yT6dHV9c1ABwlzyXRyLTjFiy
+X-Proofpoint-ORIG-GUID: d1C6K2A5yT6dHV9c1ABwlzyXRyLTjFiy
 
-On Wed, Oct 16, 2024 at 04:38:50PM -0600, Shuah Khan wrote:
-> On 10/16/24 16:06, Lorenzo Stoakes wrote:
-> > On Wed, Oct 16, 2024 at 02:00:27PM -0600, Shuah Khan wrote:
-> > > On 10/16/24 04:20, Lorenzo Stoakes wrote:
-> > > > Add tests to assert that PIDFD_SELF_* correctly refers to the current
-> > > > thread and process.
-> > > >
-> > > > This is only practically meaningful to pidfd_send_signal() and
-> > > > pidfd_getfd(), but also explicitly test that we disallow this feature for
-> > > > setns() where it would make no sense.
-> > > >
-> > > > We cannot reasonably wait on ourself using waitid(P_PIDFD, ...) so while in
-> > > > theory PIDFD_SELF_* would work here, we'd be left blocked if we tried it.
-> > > >
-> > > > We defer testing of mm-specific functionality which uses pidfd, namely
-> > > > process_madvise() and process_mrelease() to mm testing (though note the
-> > > > latter can not be sensibly tested as it would require the testing process
-> > > > to be dying).
-> > > >
-> > > > Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> > > > ---
-> > > >    tools/testing/selftests/pidfd/pidfd.h         |   8 +
-> > > >    .../selftests/pidfd/pidfd_getfd_test.c        | 141 ++++++++++++++++++
-> > > >    .../selftests/pidfd/pidfd_setns_test.c        |  11 ++
-> > > >    tools/testing/selftests/pidfd/pidfd_test.c    |  76 ++++++++--
-> > > >    4 files changed, 224 insertions(+), 12 deletions(-)
-> > > >
-> > > > diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
-> > > > index 88d6830ee004..1640b711889b 100644
-> > > > --- a/tools/testing/selftests/pidfd/pidfd.h
-> > > > +++ b/tools/testing/selftests/pidfd/pidfd.h
-> > > > @@ -50,6 +50,14 @@
-> > > >    #define PIDFD_NONBLOCK O_NONBLOCK
-> > > >    #endif
-> > > > +/* System header file may not have this available. */
-> > > > +#ifndef PIDFD_SELF_THREAD
-> > > > +#define PIDFD_SELF_THREAD -100
-> > > > +#endif
-> > > > +#ifndef PIDFD_SELF_THREAD_GROUP
-> > > > +#define PIDFD_SELF_THREAD_GROUP -200
-> > > > +#endif
-> > > > +
-> > >
-> > > As mentioned in my response to v1 patch:
-> > >
-> > > kselftest has dependency on "make headers" and tests include
-> > > headers from linux/ directory
-> >
-> > Right but that assumes you install the kernel headers on the build system,
-> > which is quite a painful thing to have to do when you are quickly iterating
-> > on a qemu setup.
+NACK. Greg's bot got to it but...
+
+As per Greg's bot, no signed-off-by line.
+
+The subject should be something about adding a test.
+
+You later say you are somehow dependning on things (what?) to make this work but
+it's broken.
+
+Jeff - you're doing things that were raised on previous reviews as if we
+never said them. It's starting to get annoying now. Please try to listen to
+upstream.
+
+On Thu, Oct 17, 2024 at 02:26:27AM +0000, jeffxu@chromium.org wrote:
+> From: Jeff Xu <jeffxu@google.com>
 >
-> Yes that is exactly what we do. kselftest build depends on headers
-> install. The way it works for qemu is either using vitme-ng or
-> building tests and installing them in your vm.. This is what CIs do.
+> It appears there is a regression on the latest mm,
+> when munmap sealed memory, it can cause unexpected VMA split.
+> E.g. repro use this test.
+
+This is an unacceptably short commit message. You've been told about this
+before.
+
+> ---
+>  tools/testing/selftests/mm/mseal_test.c | 76 +++++++++++++++++++++++++
+>  1 file changed, 76 insertions(+)
 >
-> >
-> > This is a use case I use all the time so not at all theoretical.
+> diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
+> index fa74dbe4a684..0af33e13b606 100644
+> --- a/tools/testing/selftests/mm/mseal_test.c
+> +++ b/tools/testing/selftests/mm/mseal_test.c
+> @@ -1969,6 +1969,79 @@ static void test_madvise_filebacked_was_writable(bool seal)
+>  	REPORT_TEST_PASS();
+>  }
 >
-> This is what CIs do. Yes - it works for them to build and install
-> headers. You don't have to install them on the build system. You
-> run "make headers" in your repo. You could use O= option for
-> relocatable build.
+> +static void test_munmap_free_multiple_ranges_with_split(bool seal)
+> +{
+> +	void *ptr;
+> +	unsigned long page_size = getpagesize();
+> +	unsigned long size = 12 * page_size;
+> +	int ret;
+> +	int prot;
+> +
+> +	setup_single_address(size, &ptr);
+> +	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
 
-Right but I'm talking about my local builds in order to test the kernel. See
-John's response.
+I'm not going to accept any test where you do:
 
+	FAIL_TEST_IF_FALSE(<negation>)
+
+As that's totally unreadable. I asked you before for justification and you
+didn't provide it, no other tests appear to do this, I wrote thousands of
+lines of tests recently without doing this - stop it.
+
+Also referene MAP_FAILED here please. You've been told before.
+
+> +
+> +	/* seal the middle 4 page */
+> +	if (seal) {
+> +		ret = sys_mseal(ptr + 4 * page_size, 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(!ret);
+> +
+> +		size = get_vma_size(ptr, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+
+Again, you've been told before, stop referencing numbers instead of
+PROT_... flags.
+
+OK I'm stopping at this point, you _must listen to review_ Jeff.
+
+> +
+> +		size = get_vma_size(ptr +  4 * page_size, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+> +
+> +		size = get_vma_size(ptr +  8 * page_size, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+> +	}
+> +
+> +	/* munmap 4  pages from the third page */
+> +	ret = sys_munmap(ptr + 2 * page_size, 4 * page_size);
+> +	if (seal) {
+> +		FAIL_TEST_IF_FALSE(ret);
+> +		FAIL_TEST_IF_FALSE(errno == EPERM);
+> +
+> +		size = get_vma_size(ptr, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+> +
+> +		size = get_vma_size(ptr +  4 * page_size, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+> +
+> +		size = get_vma_size(ptr +  8 * page_size, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+> +	} else
+> +		FAIL_TEST_IF_FALSE(!ret);
+> +
+> +	/* munmap 4 pages from the sealed page */
+> +	ret = sys_munmap(ptr + 6 * page_size, 4 * page_size);
+> +	if (seal) {
+> +		FAIL_TEST_IF_FALSE(ret);
+> +		FAIL_TEST_IF_FALSE(errno == EPERM);
+> +
+> +		size = get_vma_size(ptr + 4 * page_size, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+> +
+> +		size = get_vma_size(ptr +  4 * page_size, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+> +
+> +		size = get_vma_size(ptr +  8 * page_size, &prot);
+> +		FAIL_TEST_IF_FALSE(size == 4 * page_size);
+> +		FAIL_TEST_IF_FALSE(prot == 4);
+> +	} else
+> +		FAIL_TEST_IF_FALSE(!ret);
+> +
+> +	REPORT_TEST_PASS();
+> +}
+> +
+> +
+>  int main(int argc, char **argv)
+>  {
+>  	bool test_seal = seal_support();
+> @@ -2099,5 +2172,8 @@ int main(int argc, char **argv)
+>  	test_madvise_filebacked_was_writable(false);
+>  	test_madvise_filebacked_was_writable(true);
 >
-> >
-> > Unfortunately this seems broken on my system anyway :( - see below.
-> >
-> > >
-> > > These local make it difficult to maintain these tests in the
-> > > longer term. Somebody has to go clean these up later.
-> >
-> > I don't agree, tests have to be maintained alongside the core code, and if
-> > these values change (seems unlikely) then the tests will fail and can
-> > easily be updated.
-> >
-> > This was the approach already taken in this file with other linux
-> > header-defined values, so we'll also be breaking the precendence.
+> +	test_munmap_free_multiple_ranges_with_split(false);
+> +	test_munmap_free_multiple_ranges_with_split(true);
+> +
+>  	ksft_finished();
+>  }
+> --
+> 2.47.0.rc1.288.g06298d1525-goog
 >
-> Some of these defines were added a while back. Often these defines
-> need cleaning up. I would rather not see new ones added unless it is
-> absolutely necessary.
-
-OK, but just to note that I am now not doing a PIDFD_SELF series, I'm doing a
-'PIDFD_SELF and completely change how pidfd does testing' series.
-
-To me the right thing to do would be to send 2 series and not block this one on
-this issue.
-
->
-> >
-> > >
-> > > The import will be fine and you can control that with -I flag in
-> > > the makefile. Remove these and try to get including linux/pidfd.h
-> > > working.
-> >
-> > I just tried this and it's not fine :) it immediately broke the build as
-> > pidfd.h imports linux/fcntl.h which conflicts horribly with system headers
-> > on my machine.
-> >
-> > For instance f_owner_ex gets redefined among others and fails the build e..g:
-> >
-> > /usr/include/asm-generic/fcntl.h:155:8: error: redefinition of ‘struct f_owner_ex’
-> >    155 | struct f_owner_ex {
-> >        |        ^~~~~~~~~~
-> > In file included from /usr/include/bits/fcntl.h:61,
-> >                   from /usr/include/fcntl.h:35,
-> >                   from pidfd_test.c:6:
-> > /usr/include/bits/fcntl-linux.h:274:8: note: originally defined here
-> >    274 | struct f_owner_ex
-> >        |        ^~~~~~~~~~
-> >
-> > It seems only one other test tries to do this as far as I can tell (I only
-> > did a quick grep), so it's not at all standard it seems.
-> >
-> > This issue occurred even when I used make headers_install to create
-> > sanitised user headers and added them to the include path.
-> >
-> > A quick google suggests linux/fcntl.h (imported by this pidfd.h uapi
-> > header) and system fcntl.h is a known thing. Slightly bizarre...
-> >
-> > I tried removing the <fcntl.h> include and that resulted in <sys/mount.h>
-> > conflicting:
-> >
-> > In file included from /usr/include/fcntl.h:35,
-> >                   from /usr/include/sys/mount.h:24,
-> >                   from pidfd.h:17,
-> >                   from pidfd_test.c:22:
-> > /usr/include/bits/fcntl.h:35:8: error: redefinition of ‘struct flock’
-> >     35 | struct flock
-> >        |        ^~~~~
-> > In file included from /tmp/hdr/include/asm/fcntl.h:1,
-> >                   from /tmp/hdr/include/linux/fcntl.h:5,
-> >                   from /tmp/hdr/include/linux/pidfd.h:7,
-> >                   from pidfd.h:6:
-> > /usr/include/asm-generic/fcntl.h:195:8: note: originally defined here
-> >    195 | struct flock {
-> >        |        ^~~~~
-> >
-> > So I don't think I can actually work around this, at least on my system,
-> > and I can't really sensibly submit a patch that I can't run on my own
-> > machine :)
-> >
-> > I may be missing something here.
-> >
-> > >
-> > > Please revise this patch to include the header file and remove
-> > > these local defines.
-> >
-> > I'm a little stuck because of the above, but I _could_ do the following in
-> > the test pidfd.h header.:
-> >
-> > #define _LINUX_FCNTL_H
-> > #include "../../../../include/uapi/linux/pidfd.h"
-> > #undef _LINUX_FCNTL_H
-> >
->
-> Does this test really need fcntl.h is another question.
-> This is another problem with too many includes. The test
-> built just fine on my system on 6.12-rc3 with
->
-> +/* #include <fcntl.h> */
-
-Like I said to you above (maybe I wasn't clear?) I tried this and doing this
-doesn't work for me, as sys/mount.h implicitly includes this header, and we need
-things from that, so we're just broken.
-
-And I cannot submit a series that literally breaks on my machine obviously.
-
-So simply including this header is a no-go here.
-
-I've provided a workaround above. Also John has suggested using the tools/
-directory as previously agreed upon. I could remove the linux/fcntl.h dependency
-from that and place the header there which is probably the neatest solution.
-
->
-> > Which prevents the problematic linux/fcntl.h header from being included and
-> > includes the right header.
-> >
-> > But I'm not sure this is hugely better than what we already have
-> > maintinability-wise? Either way if something changes to break it it'll
-> > break the test build.
-> >
->
-> If these defines are in a header file - tests include them. Part
-> of test development is figuring out these problems.
-
-Right but part of a series introducing a new feature isn't to permanently break
-tests from working.
-
-And the includes are in that UAPI-exposed header file they're pretty much set in
-stone or risk breaking userland.
-
->
-> > Let me know if this is what you want me to do. Otherwise I'm not sure how
-> > to proceed - this header just seems broken at least on my system (arch
-> > linux at 6.11.1).
-> >
-> > An aside:
-> >
-> > The existing code already taken the approach I take (this is partly why I
-> > did it), I think it'd be out of the scope of my series to change that, for
-> > instance in pidfd.h:
-> >
-> > #ifndef PIDFD_NONBLOCK
-> > #define PIDFD_NONBLOCK O_NONBLOCK
-> > #endif
-> >
-> > Alongside a number of other defines. So those will have to stay at least
-> > for now for being out of scope, but obviously if people would prefer to
-> > move the whole thing that can be followed up later.
-> >
-> > >
->
-> I would like us to explore before giving up and saying these will
-> stay.
-
-I'm not sure how I'm meant to explore 'this breaks the build on my system'. The
-sys/mount.h is a deal-breaker, there are things in there we _need_.
-
->
-> thanks,
-> -- Shuah
->
-
-In any case I think copying the header to the tools/ directory with this
-linux/fcntl.h in some way stubbed out (we could even stub out fcntl.h
-there?) is the sensible way forward.
-
-A 'just include the header' is simply not an option as it breaks the tests.
 
