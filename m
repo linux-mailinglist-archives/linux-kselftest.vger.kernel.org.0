@@ -1,66 +1,66 @@
-Return-Path: <linux-kselftest+bounces-20018-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20019-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C83E99A2BF8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 20:18:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44C069A2BE7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 20:16:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0A01B28D1A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 18:16:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04E88286025
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 18:16:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB8F01E1021;
-	Thu, 17 Oct 2024 18:15:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE5F61E1C07;
+	Thu, 17 Oct 2024 18:15:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="SnvTtGpv"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="G0F8h98F"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B60BE1DDC30;
-	Thu, 17 Oct 2024 18:15:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815BA184D;
+	Thu, 17 Oct 2024 18:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729188906; cv=none; b=n/KxRllJ0qE3prIeeV13nG6DqpM6aQHGfjkvfbsf3bdE+dk9RJLq81BdyivZMSj8JhyZG+aKFqzgI7J+gauVlTZirszKm0ff9CwOE1BKWcjVq5t718+oNpOb1/MZr9aSf8VTX2Y/e3TUFHQQHomaQRyW7YPbxFwuZQZwtP0setY=
+	t=1729188908; cv=none; b=PcYWHQT3+1RTeWmORTjJJYIQJ23I6crUzixo6gCoHyl+0JOZOFRn5HJm88GxZup9cafKy9trt1ZpBW6ZX+oKdms91Cm+7IdyImoxaPf+M4nJ234eOAbjmrvs2OZZTz810O0VGFy7oJBeuoF9xzdp2tK1FlTeH17mX1HPUYrawH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729188906; c=relaxed/simple;
-	bh=DJ3CCaUvtkiHe3gXh/53yEArfDtW24nqxIwLiFuQuIo=;
+	s=arc-20240116; t=1729188908; c=relaxed/simple;
+	bh=vDAAHZj4bDD9eVgphWG10z6ugAaqL/dtWRy/SMZS16E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UKWSo0PThTRy9FgpNBwUN8fbLbwlOq60PZYwh75fknt3+WTtPRO4nfIshB6QwrbCeelilIUVZuyH3hDv0HirPGC1xYUriO40Ayj5M+E7o1hqGAJ/zBiHu5n6Gld2pM7ROmytVGPFLzzijqAc35/DWdVt90s+Ulg1PmsJLFaWOyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=SnvTtGpv; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version; b=oNhyNYeFexc0fflJSLNf9HySge6ZxubDrFwo1HasK35wSpCnB3qfQ3qWZmChWA9RymeyDroJagHLSdrNb5DFXRK3Y5h/ZokvLvAU/Ht4QQmuHe6WlLaIDkEw8LqQbZSqrQLJBvzTSS1c3naJOi+TIgJY2i+BGU4koChCfCioSbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=G0F8h98F; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49HFBo6U019277;
-	Thu, 17 Oct 2024 18:14:46 GMT
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49HFBooB002190;
+	Thu, 17 Oct 2024 18:14:49 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2023-11-20; bh=EFnIQ
-	SkVpIhRNhijs8R7mvpOmjRu172a2fSJRYG/BjM=; b=SnvTtGpva9LgbnPizxAgN
-	OrFQS7CX6SmwzL7k51ERGOXKkn7C4f9JIun3yWRoe/PrOVtt9Sh7XElQKVZZl3Pn
-	Q9lMoCZ7U2lZyv9xGXoWe4j12OsniEXI9ZvP1TzITSSyai2nv91Vfi+KAPadJe/r
-	bgp3iZF/+zWhDwC4R4N1ySndmbE4VvWIgKLEOIeK/nu8EB1hK6TU1cXDcbGu+MDd
-	/9GF2b0ZOr4gD7EY5RWIA/JSU8ok1Jt27wIODfK/Ich7K402N+JAgGDQKM92Vrzz
-	ylErVrfOtjnAVKk2oxGb4hhTHyOnjPIXIKmMfIfa4M2Cn7uIfN4MUfvImZoSzpn7
-	A==
+	:mime-version:references:subject:to; s=corp-2023-11-20; bh=cnhe9
+	VSX2bLWjmOVKj7JINYA/sD/CFH1T1PVnqlW+DQ=; b=G0F8h98FBHrjhwZomSUzA
+	Dzen/xLKtAtbKrOa0fBr01GSIlqLqdDGSbb0PnNsUF1zJ+5/gSuPQIuGMBiCCfUY
+	RCKSreO4gB5zomB2V+QnkGHdWzc9qJXKKnIWaBne7/QnJ1Mp5FxrJaXvchMolm5U
+	g/vRyOkPwdG15jFfo6HmbZG+p3liYRQtvQCNk09Ps8ll0zAxuoyd7G+UgNrgYwlK
+	pgbN63iRmorxFGG7pTxBwrBTZl4JscrjOFa4t8OQQTpaE62tzGp/nm3zzFXLJQfA
+	1SJPkbasBlVIp7jQIFBjH/vQNaANSt9vvy+vh3HdtWd/kIsLymEkt8YW0kjzHdP4
+	w==
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427h5cqgp1-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427fw2q855-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Oct 2024 18:14:46 +0000 (GMT)
+	Thu, 17 Oct 2024 18:14:49 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49HHqBIM010367;
-	Thu, 17 Oct 2024 18:14:46 GMT
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49HHG2ja010433;
+	Thu, 17 Oct 2024 18:14:48 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjgxkvn-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjgxky5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Oct 2024 18:14:45 +0000
+	Thu, 17 Oct 2024 18:14:48 +0000
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49HIA0bP039328;
-	Thu, 17 Oct 2024 18:14:45 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49HIA0bR039328;
+	Thu, 17 Oct 2024 18:14:47 GMT
 Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 427fjgxkpk-3;
-	Thu, 17 Oct 2024 18:14:45 +0000
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 427fjgxkpk-4;
+	Thu, 17 Oct 2024 18:14:47 +0000
 From: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 To: davem@davemloft.net, Liam.Howlett@Oracle.com
 Cc: edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, mingo@redhat.com,
@@ -71,9 +71,9 @@ Cc: edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, mingo@redhat.com,
         netdev@vger.kernel.org, akpm@linux-foundation.org, shuah@kernel.org,
         linux-kselftest@vger.kernel.org, anjali.k.kulkarni@oracle.com,
         peili.io@oracle.com
-Subject: [PATCH net-next v5 2/3] connector/cn_proc: Kunit tests for threads hash table
-Date: Thu, 17 Oct 2024 11:14:35 -0700
-Message-ID: <20241017181436.2047508-3-anjali.k.kulkarni@oracle.com>
+Subject: [PATCH net-next v5 3/3] connector/cn_proc: Selftest for threads
+Date: Thu, 17 Oct 2024 11:14:36 -0700
+Message-ID: <20241017181436.2047508-4-anjali.k.kulkarni@oracle.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20241017181436.2047508-1-anjali.k.kulkarni@oracle.com>
 References: <20241017181436.2047508-1-anjali.k.kulkarni@oracle.com>
@@ -91,353 +91,490 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malw
  adultscore=0 spamscore=0 mlxscore=0 suspectscore=0 bulkscore=0
  mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2409260000 definitions=main-2410170124
-X-Proofpoint-ORIG-GUID: oTALdtOv7-TvqKZJmTg7EW-GFqzMrRnU
-X-Proofpoint-GUID: oTALdtOv7-TvqKZJmTg7EW-GFqzMrRnU
+X-Proofpoint-GUID: Gjt0vaJlCE-tGrJTbaOALzMQUoi8E-E6
+X-Proofpoint-ORIG-GUID: Gjt0vaJlCE-tGrJTbaOALzMQUoi8E-E6
 
-Kunit tests to test hash table add, delete, duplicate add and delete.
-Add following configs and compile kernel code:
+Test to check if setting PROC_CN_MCAST_NOTIFY in proc connector API, allows
+a thread's non-zero exit status to be returned to proc_filter.
 
-CONFIG_CONNECTOR=y
-CONFIG_PROC_EVENTS=y
-CONFIG_NET=y
-CONFIG_KUNIT=m
-CONFIG_CN_HASH_KUNIT_TEST=m
+The threads.c program creates 2 child threads. 1st thread handles signal
+SIGSEGV, and 2nd thread needs to indicate some error condition (value 1)
+to the kernel, instead of using pthread_exit() with 1.
 
-To run kunit tests:
-sudo modprobe cn_hash_test
+In both cases, child sends notify_netlink_thread_exit(exit_code) to kernel,
+to let kernel know it has exited abnormally with exit_code.
 
-Output of kunit tests and hash table contents are displayed in
-/var/log/messages (at KERN_DEBUG level).
+Compile:
+    make thread
+    make proc_filter
+Run:
+    ./threads
 
 Signed-off-by: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 ---
- drivers/connector/cn_hash.c   |  40 ++++++++
- drivers/connector/connector.c |  12 +++
- include/linux/connector.h     |   4 +
- lib/Kconfig.debug             |  17 ++++
- lib/Makefile                  |   1 +
- lib/cn_hash_test.c            | 167 ++++++++++++++++++++++++++++++++++
- lib/cn_hash_test.h            |  10 ++
- 7 files changed, 251 insertions(+)
- create mode 100644 lib/cn_hash_test.c
- create mode 100644 lib/cn_hash_test.h
+ tools/testing/selftests/connector/Makefile    |  23 +-
+ .../testing/selftests/connector/proc_filter.c |  34 ++-
+ tools/testing/selftests/connector/thread.c    | 232 ++++++++++++++++++
+ .../selftests/connector/thread_filter.c       |  96 ++++++++
+ 4 files changed, 378 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/connector/thread.c
+ create mode 100644 tools/testing/selftests/connector/thread_filter.c
 
-diff --git a/drivers/connector/cn_hash.c b/drivers/connector/cn_hash.c
-index a079e9bcea6d..40099b5908ac 100644
---- a/drivers/connector/cn_hash.c
-+++ b/drivers/connector/cn_hash.c
-@@ -170,6 +170,46 @@ int cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid)
- 	return -EINVAL;
- }
+diff --git a/tools/testing/selftests/connector/Makefile b/tools/testing/selftests/connector/Makefile
+index 92188b9bac5c..bf335826bc3b 100644
+--- a/tools/testing/selftests/connector/Makefile
++++ b/tools/testing/selftests/connector/Makefile
+@@ -1,5 +1,26 @@
+ # SPDX-License-Identifier: GPL-2.0
+-CFLAGS += -Wall $(KHDR_INCLUDES)
++KERNEL="../../../.."
++
++CFLAGS += -Wall $(KHDR_INCLUDES) -I $(KERNEL)/include/uapi -I $(KERNEL)/include
++
++proc_filter: proc_filter.o
++	cc proc_filter.o -o proc_filter
++
++proc_filter.o: proc_filter.c
++	cc -c proc_filter.c -o proc_filter.o $(CFLAGS)
++
++thread: thread.o thread_filter.o
++	cc thread.o thread_filter.o -o thread
++
++thread.o: thread.c $(DEPS)
++		cc -c thread.c -o thread.o $(CFLAGS)
++
++thread_filter.o: thread_filter.c
++		cc -c thread_filter.c -o thread_filter.o $(CFLAGS)
++
++define EXTRA_CLEAN
++	rm *.o thread
++endef
  
-+int cn_hash_display_hlist(struct cn_hash_dev *hdev, pid_t pid, int max_len,
-+				int *hkey, int *key_display)
-+{
-+	struct uexit_pid_hnode *hnode;
-+	int key, count = 0;
-+
-+	mutex_lock(&hdev->uexit_hash_lock);
-+	key = hash_min(pid, HASH_BITS(hdev->uexit_pid_htable));
-+	pr_debug("Bucket: %d\n", key);
-+
-+	hlist_for_each_entry(hnode,
-+			&hdev->uexit_pid_htable[key],
-+			uexit_pid_hlist) {
-+		if (key_display[key] != 1) {
-+			if (hnode->uexit_pid_hlist.next == NULL)
-+				pr_debug("pid %d ", hnode->pid);
-+			else
-+				pr_debug("pid %d --> ", hnode->pid);
-+		}
-+		count++;
-+	}
-+
-+	mutex_unlock(&hdev->uexit_hash_lock);
-+
-+	if ((key_display[key] != 1) && !count)
-+		pr_debug("(empty)\n");
-+
-+	pr_debug("\n");
-+
-+	*hkey = key;
-+
-+	if (count > max_len) {
-+		pr_err("%d entries in hlist for key %d, expected %d\n",
-+				count, key, max_len);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- bool cn_hash_table_empty(struct cn_hash_dev *hdev)
- {
- 	bool is_empty;
-diff --git a/drivers/connector/connector.c b/drivers/connector/connector.c
-index c1c0dcec53c0..2be2fe1adc12 100644
---- a/drivers/connector/connector.c
-+++ b/drivers/connector/connector.c
-@@ -304,6 +304,18 @@ int cn_get_exval(pid_t pid)
- }
- EXPORT_SYMBOL_GPL(cn_get_exval);
+ TEST_GEN_PROGS = proc_filter
  
-+int cn_display_hlist(pid_t pid, int max_len, int *hkey, int *key_display)
-+{
-+	struct cn_dev *dev = &cdev;
-+
-+	if (!cn_already_initialized)
-+		return 0;
-+
-+	return cn_hash_display_hlist(dev->hdev, pid, max_len,
-+					hkey, key_display);
-+}
-+EXPORT_SYMBOL_GPL(cn_display_hlist);
-+
- bool cn_table_empty(void)
- {
- 	struct cn_dev *dev = &cdev;
-diff --git a/include/linux/connector.h b/include/linux/connector.h
-index 5384e4bb98e8..a75c3fcf182a 100644
---- a/include/linux/connector.h
-+++ b/include/linux/connector.h
-@@ -168,4 +168,8 @@ int cn_get_exval(pid_t pid);
- bool cn_table_empty(void);
- bool cn_hash_table_empty(struct cn_hash_dev *hdev);
- 
-+int cn_display_hlist(pid_t pid, int max_len, int *hkey, int *key_display);
-+int cn_hash_display_hlist(struct cn_hash_dev *hdev, pid_t pid, int max_len,
-+				int *hkey, int *key_display);
-+
- #endif				/* __CONNECTOR_H */
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 7315f643817a..290cf0a6befa 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2705,6 +2705,23 @@ config HASHTABLE_KUNIT_TEST
- 
- 	  If unsure, say N.
- 
-+config CN_HASH_KUNIT_TEST
-+	tristate "KUnit Test for connector hashtable code" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This builds the hashtable KUnit test suite.
-+	  It tests the basic functionality of the API defined in
-+	  drivers/connector/cn_hash.c.
-+	  CONFIG_CONNECTOR=y, CONFIG_PROC_EVENTS=y and CONFIG_NET=y needs
-+	  to be enabled along with CONFIG_CN_HASH_KUNIT_TEST=m and
-+	  CONFIG_KUNIT=m in .config file to compile and then test as a kernel
-+	  module with "modprobe cn_hash_test".
-+	  For more information on KUnit and unit tests in general please
-+	  refer to the KUnit documentation in Documentation/dev-tools/kunit/.
-+
-+	  If unsure, say N.
-+
- config LINEAR_RANGES_TEST
- 	tristate "KUnit test for linear_ranges"
- 	depends on KUNIT
-diff --git a/lib/Makefile b/lib/Makefile
-index 811ba12c8cd0..2c59c82b0b18 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -379,6 +379,7 @@ obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
- obj-$(CONFIG_SLUB_KUNIT_TEST) += slub_kunit.o
- obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
- obj-$(CONFIG_IS_SIGNED_TYPE_KUNIT_TEST) += is_signed_type_kunit.o
-+obj-$(CONFIG_CN_HASH_KUNIT_TEST) += cn_hash_test.o
- CFLAGS_overflow_kunit.o = $(call cc-disable-warning, tautological-constant-out-of-range-compare)
- obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
- CFLAGS_stackinit_kunit.o += $(call cc-disable-warning, switch-unreachable)
-diff --git a/lib/cn_hash_test.c b/lib/cn_hash_test.c
-new file mode 100644
-index 000000000000..f90989343468
---- /dev/null
-+++ b/lib/cn_hash_test.c
-@@ -0,0 +1,167 @@
-+// SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/connector/proc_filter.c b/tools/testing/selftests/connector/proc_filter.c
+index 4a825b997666..5bf992deb792 100644
+--- a/tools/testing/selftests/connector/proc_filter.c
++++ b/tools/testing/selftests/connector/proc_filter.c
+@@ -1,4 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * KUnit test for the connector threads hashtable code.
++ * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 + *
 + * Copyright (c) 2024 Oracle and/or its affiliates.
-+ * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 + */
-+#include <kunit/test.h>
+ 
+ #include <sys/types.h>
+ #include <sys/epoll.h>
+@@ -28,6 +33,7 @@
+ volatile static int interrupted;
+ static int nl_sock, ret_errno, tcount;
+ static struct epoll_event evn;
++FILE *file;
+ 
+ static int filter;
+ 
+@@ -37,6 +43,8 @@ static int filter;
+ #define Printf ksft_print_msg
+ #endif
+ 
++#define EXIT_LOG
 +
-+#include "cn_hash_test.h"
+ int send_message(void *pinp)
+ {
+ 	char buff[NL_MESSAGE_SIZE];
+@@ -146,6 +154,12 @@ int handle_packet(char *buff, int fd, struct proc_event *event)
+ 		tcount++;
+ 		switch (event->what) {
+ 		case PROC_EVENT_EXIT:
++#ifdef EXIT_LOG
++			fprintf(file, "pid %d tgid %d code %d\n",
++				event->event_data.exit.process_pid,
++				event->event_data.exit.process_tgid,
++				event->event_data.exit.exit_code);
++#endif
+ 			Printf("Exit process %d (tgid %d) with code %d, signal %d\n",
+ 			       event->event_data.exit.process_pid,
+ 			       event->event_data.exit.process_tgid,
+@@ -279,17 +293,24 @@ int main(int argc, char *argv[])
+ 		exit(1);
+ 	}
+ 
++#ifdef EXIT_LOG
++	file = fopen("exit.log", "w");
++	if (file == NULL) {
++		perror("Error opening file exit.log");
++		close(nl_sock);
++		close(epoll_fd);
++		exit(1);
++	}
++#endif
 +
-+#define ARR_SIZE	4
-+#define HASH_TABLE_LEN	1024
+ 	while (!interrupted) {
+ 		err = handle_events(epoll_fd, &proc_ev);
+ 		if (err < 0) {
+ 			if (ret_errno == EINTR)
+ 				continue;
+-			if (err == -2)
+-				close(nl_sock);
+-			if (err == -3) {
+-				close(nl_sock);
+-				close(epoll_fd);
+-			}
++			close(nl_sock);
++			close(epoll_fd);
++			fclose(file);
+ 			exit(1);
+ 		}
+ 	}
+@@ -304,6 +325,7 @@ int main(int argc, char *argv[])
+ 
+ 	close(epoll_fd);
+ 	close(nl_sock);
++	fclose(file);
+ 
+ 	printf("Done total count: %d\n", tcount);
+ 	exit(0);
+diff --git a/tools/testing/selftests/connector/thread.c b/tools/testing/selftests/connector/thread.c
+new file mode 100644
+index 000000000000..70c475ce3176
+--- /dev/null
++++ b/tools/testing/selftests/connector/thread.c
+@@ -0,0 +1,232 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
++ *
++ * Copyright (c) 2024 Oracle and/or its affiliates.
++ */
 +
-+struct add_data {
-+	pid_t pid;
-+	int exit_val;
-+	int key;
-+};
++#include <pthread.h>
++#include <stdio.h>
++#include <unistd.h>
++#include <stdlib.h>
++#include <signal.h>
 +
-+static struct add_data adata[ARR_SIZE];
-+static int key_display[HASH_TABLE_LEN];
++/*
++ * This code tests a thread exit notification when thread exits abnormally.
++ * Normally, when a thread exits abnormally, the kernel is not aware of the
++ * exit code. This is usually only conveyed from child to parent via the
++ * pthread_exit() and pthread_join() calls. Sometimes, however, a parent
++ * process cannot monitor all child processes via pthread_join(), particularly
++ * when there is a huge amount of child processes. In this case, the parent
++ * has created the child with PTHREAD_CREATE_DETACHED attribute.
++ * To fix this problem, either when child wants to convey non-zero exit via
++ * pthread_exit() or in a signal handler, the child can notify the kernel's
++ * connector module it's exit status via a netlink call with new type
++ * PROC_CN_MCAST_NOTIFY. (Implemented in the thread_filter.c file).
++ * This will send the exit code from the child to the kernel, which the kernel
++ * can later return to proc_filter program when the child actually exits.
++ * Compile:
++ *	make thread
++ *	make proc_filter
++ * Run:
++ *	./threads
++ */
 +
-+static int cn_hash_init(struct kunit *test)
++extern int notify_netlink_thread_exit(unsigned int exit_code);
++
++static void sigsegvh(int sig)
 +{
-+	for (int i = 0; i < HASH_TABLE_LEN; i++)
-+		key_display[i] = 0;
++	unsigned int exit_code = (unsigned int) sig;
++	/*
++	 * Send any non-zero value to get a notification. Here we are
++	 * sending the signal number for SIGSEGV which is 11
++	 */
++	notify_netlink_thread_exit(exit_code);
++}
 +
++void *threadc1(void *ptr)
++{
++	signal(SIGSEGV, sigsegvh);
++
++	*(int *)ptr = gettid();
++
++	printf("Child 1 thread id %d, handling SIGSEGV\n", gettid());
++	sleep(10);
++	pthread_exit(NULL);
++}
++
++void *threadc2(void *ptr)
++{
++	int exit_val = 1;
++
++	*(int *)ptr = gettid();
++
++	printf("Child 2 thread id %d, wants to exit with value %d\n",
++			gettid(), exit_val);
++	sleep(2);
++	notify_netlink_thread_exit(exit_val);
++	pthread_exit(NULL);
++}
++
++static void verify_exit_status(int tid1, int tid2)
++{
++	int found1 = 0, found2 = 0;
++	int pid, tgid, exit_code;
++	size_t size = 1024;
++	FILE *file;
++	char *data;
++	int ret;
++
++	data = malloc(size * sizeof(char));
++	if (data == NULL) {
++		perror("malloc for data failed");
++		exit(1);
++	}
++
++	file = fopen("exit.log", "r");
++	if (file == NULL) {
++		perror("fopen of exit.log failed");
++		free(data);
++		exit(1);
++	}
++
++	while (getline(&data, &size, file) != -1) {
++		ret = sscanf(data, "pid %d tgid %d code %d",
++				&pid, &tgid, &exit_code);
++		if (ret != 3) {
++			perror("sscanf error");
++			free(data);
++			fclose(file);
++			exit(1);
++		}
++
++		if (tgid != getpid())
++			continue;
++
++		if (pid == tid1) {
++			if (exit_code == 11) {
++				printf("Successful notification of SIGSEGV, tid %d\n",
++						pid);
++			} else {
++				printf("Failure SIGSEGV tid %d, exit code %d\n",
++					       pid, exit_code);
++			}
++			found1 = 1;
++		} else if (pid == tid2) {
++			if (exit_code == 1) {
++				printf("Successful notification of thread exit tid %d\n",
++						pid);
++			} else {
++				printf("Failure thread exit tid %d, exit code %d\n",
++					       pid, exit_code);
++			}
++			found2 = 1;
++		}
++	}
++
++	if (!found1)
++		printf("tid %d not present in exit.log file\n", tid1);
++
++	if (!found2)
++		printf("tid %d not present in exit.log file\n", tid2);
++
++	fclose(file);
++	free(data);
++}
++
++static inline void init_threads(pthread_attr_t *attr)
++{
++	int ret;
++
++	ret = pthread_attr_init(attr);
++	if (ret != 0) {
++		perror("pthread_attr_init failed");
++		exit(ret);
++	}
++
++	ret = pthread_attr_setdetachstate(attr, PTHREAD_CREATE_DETACHED);
++	if (ret != 0) {
++		perror("pthread_attr_setdetachstate failed");
++		exit(ret);
++	}
++}
++
++static inline void destroy_thread_attr(pthread_attr_t *attr)
++{
++	int ret;
++
++	ret = pthread_attr_destroy(attr);
++	if (ret != 0) {
++		perror("pthread_attr_destroy failed");
++		exit(ret);
++	}
++}
++
++
++static inline pid_t start_proc_filter(void)
++{
++	pid_t proc_filter = 0;
++
++	proc_filter = fork();
++	if (proc_filter == -1) {
++		perror("fork()");
++		exit(1);
++	}
++
++	if (proc_filter == 0) {
++		char* arr[] = {"proc_filter", "-f", NULL};
++		execv("./proc_filter", arr);
++	}
++	sleep(1);
++	return proc_filter;
++}
++
++int main(int argc, char **argv)
++{
++	pthread_t thread1, thread2;
++	pthread_attr_t attr1, attr2;
++	int tid1, tid2, ret;
++	pid_t proc_filter_pid;
++
++	proc_filter_pid = start_proc_filter();
++
++	init_threads(&attr1);
++	ret = pthread_create(&thread1, &attr1, *threadc1, &tid1);
++	if (ret != 0) {
++		perror("pthread_create failed");
++		exit(ret);
++	}
++
++	init_threads(&attr2);
++	ret = pthread_create(&thread2, &attr2, *threadc2, &tid2);
++	if (ret != 0) {
++		perror("pthread_create failed");
++		exit(ret);
++	}
++
++	sleep(1);
++
++	/* Send SIGSEGV to tid1 */
++	kill(tid1, SIGSEGV);
++
++	/*
++	 * Wait for children to exit or be killed and for exit.log to
++	 * be generated by ./proc_filter
++	 */
++	sleep(2);
++
++	/*
++	 * Kill proc_filter to get exit.log
++	 */
++	kill(proc_filter_pid, SIGINT);
++
++	/* Required to allow kill to be processed */
++	sleep(1);
++
++	verify_exit_status(tid1, tid2);
++
++	destroy_thread_attr(&attr1);
++	destroy_thread_attr(&attr2);
++
++	exit(0);
++}
+diff --git a/tools/testing/selftests/connector/thread_filter.c b/tools/testing/selftests/connector/thread_filter.c
+new file mode 100644
+index 000000000000..3da740aa7537
+--- /dev/null
++++ b/tools/testing/selftests/connector/thread_filter.c
+@@ -0,0 +1,96 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
++ *
++ * Copyright (c) 2024 Oracle and/or its affiliates.
++ */
++
++#include <sys/types.h>
++#include <sys/epoll.h>
++#include <sys/socket.h>
++#include <linux/netlink.h>
++#include <linux/connector.h>
++#include <linux/cn_proc.h>
++
++#include <stddef.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <strings.h>
++#include <errno.h>
++#include <signal.h>
++#include <string.h>
++
++#define NL_MESSAGE_SIZE (sizeof(struct nlmsghdr) + sizeof(struct cn_msg) + \
++			sizeof(struct proc_input))
++
++/*
++ * Send PROC_CN_MCAST_NOTIFY type notification to the connector code in kernel.
++ * This will send the exit_code specified by user to the connector layer, so
++ * it can send a notification for that event to any listening process
++ */
++int send_message(int nl_sock, unsigned int exit_code)
++{
++	char buff[NL_MESSAGE_SIZE];
++	struct nlmsghdr *hdr;
++	struct cn_msg *msg;
++
++	hdr = (struct nlmsghdr *)buff;
++	hdr->nlmsg_len = NL_MESSAGE_SIZE;
++	hdr->nlmsg_type = NLMSG_DONE;
++	hdr->nlmsg_flags = 0;
++	hdr->nlmsg_seq = 0;
++	hdr->nlmsg_pid = getpid();
++
++	msg = (struct cn_msg *)NLMSG_DATA(hdr);
++	msg->id.idx = CN_IDX_PROC;
++	msg->id.val = CN_VAL_PROC;
++	msg->seq = 0;
++	msg->ack = 0;
++	msg->flags = 0;
++
++	msg->len = sizeof(struct proc_input);
++	((struct proc_input *)msg->data)->mcast_op =
++		PROC_CN_MCAST_NOTIFY;
++	((struct proc_input *)msg->data)->uexit_code = exit_code;
++
++	if (send(nl_sock, hdr, hdr->nlmsg_len, 0) == -1) {
++		perror("send failed");
++		return -errno;
++	}
 +	return 0;
 +}
 +
-+static void cn_display_htable(struct kunit *test, int len)
++int notify_netlink_thread_exit(unsigned int exit_code)
 +{
-+	int i, err;
++	struct sockaddr_nl sa_nl;
++	int err = 0;
++	int nl_sock;
 +
-+	cn_hash_init(test);
++	nl_sock = socket(PF_NETLINK, SOCK_DGRAM, NETLINK_CONNECTOR);
 +
-+	pr_debug("\n");
-+	pr_debug("Displaying hash table:\n");
-+
-+	for (i = 0; i < len; i++) {
-+		err = cn_display_hlist(adata[i].pid, len, &adata[i].key,
-+					key_display);
-+		key_display[adata[i].key] = 1;
-+		KUNIT_EXPECT_EQ(test, err, 0);
-+	}
-+}
-+
-+static void cn_hash_test_add(struct kunit *test)
-+{
-+	int err, i;
-+	int exit_val;
-+
-+	adata[0].pid = 1;
-+	adata[0].exit_val = 45;
-+
-+	adata[1].pid = 2;
-+	adata[1].exit_val = 13;
-+
-+	adata[2].pid = 1024;
-+	adata[2].exit_val = 16;
-+
-+	adata[3].pid = 1023;
-+	adata[3].exit_val = 71;
-+
-+	for (i = 0; i < ARRAY_SIZE(adata); i++) {
-+		err = cn_add_elem(adata[i].exit_val, adata[i].pid);
-+		KUNIT_EXPECT_EQ_MSG(test, 0, err,
-+				"Adding pid %d returned err %d",
-+				adata[i].pid, err);
-+
-+		exit_val = cn_get_exval(adata[i].pid);
-+		KUNIT_EXPECT_EQ(test, adata[i].exit_val, exit_val);
++	if (nl_sock == -1) {
++		perror("socket failed");
++		return -errno;
 +	}
 +
-+	cn_display_htable(test, ARRAY_SIZE(adata));
-+}
++	bzero(&sa_nl, sizeof(sa_nl));
++	sa_nl.nl_family = AF_NETLINK;
++	sa_nl.nl_groups = CN_IDX_PROC;
++	sa_nl.nl_pid    = gettid();
 +
-+static void cn_hash_test_del(struct kunit *test)
-+{
-+	int i, err;
-+	int exit_val;
-+
-+	for (i = 0; i < ARRAY_SIZE(adata); i++) {
-+		err = cn_del_get_exval(adata[i].pid);
-+		KUNIT_EXPECT_GT_MSG(test, err, 0,
-+				"Deleting pid %d returned err %d",
-+				adata[i].pid, err);
-+
-+		exit_val = cn_get_exval(adata[i].pid);
-+		KUNIT_EXPECT_EQ(test, -EINVAL, exit_val);
++	if (bind(nl_sock, (struct sockaddr *)&sa_nl, sizeof(sa_nl)) == -1) {
++		perror("bind failed");
++		close(nl_sock);
++		return -errno;
 +	}
 +
-+	cn_display_htable(test, ARRAY_SIZE(adata));
-+	KUNIT_EXPECT_TRUE(test, cn_table_empty());
++	err = send_message(nl_sock, exit_code);
++
++	close(nl_sock);
++
++	if (err < 0)
++		return err;
++
++	return 0;
 +}
-+
-+static void cn_hash_test_del_get_exval(struct kunit *test)
-+{
-+	int i, exval;
-+
-+	for (i = 0; i < ARRAY_SIZE(adata); i++) {
-+		exval = cn_del_get_exval(adata[i].pid);
-+		KUNIT_EXPECT_EQ(test, adata[i].exit_val, exval);
-+
-+		cn_display_htable(test, ARRAY_SIZE(adata));
-+	}
-+
-+	KUNIT_EXPECT_TRUE(test, cn_table_empty());
-+}
-+static void cn_hash_test_dup_add(struct kunit *test)
-+{
-+	int err, exit_val;
-+
-+	adata[0].pid = 10;
-+	adata[0].exit_val = 21;
-+
-+	err = cn_add_elem(adata[0].exit_val, adata[0].pid);
-+	KUNIT_EXPECT_EQ(test, 0, err);
-+
-+	exit_val = cn_get_exval(adata[0].pid);
-+	KUNIT_EXPECT_EQ(test, 21, exit_val);
-+
-+	adata[1].pid = 10;
-+	adata[1].exit_val = 12;
-+
-+	err = cn_add_elem(adata[1].exit_val, adata[1].pid);
-+	KUNIT_EXPECT_EQ(test, -EEXIST, err);
-+
-+	exit_val = cn_get_exval(adata[1].pid);
-+	KUNIT_EXPECT_EQ(test, 21, exit_val);
-+
-+	cn_display_htable(test, 1);
-+}
-+
-+static void cn_hash_test_dup_del(struct kunit *test)
-+{
-+	int err;
-+
-+	err = cn_del_get_exval(adata[0].pid);
-+	KUNIT_EXPECT_EQ(test, adata[0].exit_val, err);
-+
-+	err = cn_del_get_exval(adata[0].pid);
-+	KUNIT_EXPECT_EQ(test, -EINVAL, err);
-+
-+	KUNIT_EXPECT_TRUE(test, cn_table_empty());
-+}
-+
-+static struct kunit_case cn_hashtable_test_cases[] = {
-+	KUNIT_CASE(cn_hash_test_add),
-+	KUNIT_CASE(cn_hash_test_del),
-+	KUNIT_CASE(cn_hash_test_dup_add),
-+	KUNIT_CASE(cn_hash_test_dup_del),
-+	KUNIT_CASE(cn_hash_test_add),
-+	KUNIT_CASE(cn_hash_test_del_get_exval),
-+	{},
-+};
-+
-+static struct kunit_suite cn_hashtable_test_module = {
-+	.name = "cn_hashtable",
-+	.init = cn_hash_init,
-+	.test_cases = cn_hashtable_test_cases,
-+};
-+kunit_test_suite(cn_hashtable_test_module);
-+
-+MODULE_DESCRIPTION("KUnit test for the connector threads hashtable code");
-+MODULE_LICENSE("GPL");
-diff --git a/lib/cn_hash_test.h b/lib/cn_hash_test.h
-new file mode 100644
-index 000000000000..b25033feab09
---- /dev/null
-+++ b/lib/cn_hash_test.h
-@@ -0,0 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Copyright (c) 2024 Oracle and/or its affiliates.
-+ * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-+ */
-+int cn_display_hlist(pid_t pid, int max_len, int *hkey, int *key_display);
-+int cn_add_elem(__u32 uexit_code, pid_t pid);
-+int cn_del_get_exval(pid_t pid);
-+int cn_get_exval(pid_t pid);
-+bool cn_table_empty(void);
 -- 
 2.46.0
 
