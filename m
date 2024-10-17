@@ -1,172 +1,178 @@
-Return-Path: <linux-kselftest+bounces-20044-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20045-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D95BF9A2DEA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 21:37:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 546BA9A2DED
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 21:37:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 143861C229F0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 19:37:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3CE91F21052
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 19:37:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADCF3227B80;
-	Thu, 17 Oct 2024 19:37:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66A72202626;
+	Thu, 17 Oct 2024 19:37:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YnFSF1YN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iR6IixGD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92B71FCC46
-	for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2024 19:37:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289B91DE4D3;
+	Thu, 17 Oct 2024 19:37:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729193834; cv=none; b=naiI1yXy/hM9OSvc6GjKBXTionb331KEMp3q86PiGAQQOK/Xx89bizAUNAlP6/mqaGH/7hnWdDfaJVOfe8ZZK2JLcMwkbGWBLxSngqGcSS+ng7elCtAOX/rQGNatTPkrCgcOo5KkRQ2Bu4VWgEtRc+jIXtdmYydoMGDX3THj+fI=
+	t=1729193868; cv=none; b=pyCGkOlbfHytK4qT5b5FEI6P4LcJMQtkU9aoxd23ONFyPAvtx3QvYIGxfyjRJoOK1TRRSBnnQIPRczBnEDvl9FO9O5TtBgl+c/OiKGSQZwSJlbXE4qt88hiMf0iDVI82gK3+deg1ax/i2jEskmOwNuDUIXDH1xQXIACX0qoCb3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729193834; c=relaxed/simple;
-	bh=6L2ezWNP+KL59GOZ8iDTVIF/P5jFnKtwE3A7kCOMqW8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eZPosAkThdyNVhlSjiztoqmNyBEfmfoJJMjS9PNt/uxc0PpV27ThHjzqyTxYT5UiGYAH64dH0nts5TdPRGJzr9N07nHvvZv81eRE0fTe65j/W/b0bIhex4M+LjvfWOzF54zcW+xycUqXzJKQHX7Jp68tcXjSFHXq6Ek3fow62cA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YnFSF1YN; arc=none smtp.client-ip=209.85.166.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3a3a7b80447so5245915ab.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2024 12:37:08 -0700 (PDT)
+	s=arc-20240116; t=1729193868; c=relaxed/simple;
+	bh=Sm6IlIRGd4fjZ3/s15FJf3qVsQozMCTKzEfJAn6ZE98=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lgwYOtZUt8qA1REdxoidxsSL/IKEIjs2mNOzPSjVUdz/atfk/PbvcU1vZFEeyi+04OshVnUZOdBZSELTumUYzhbhZ4DlQ8+Dwax7HLrF3HeHov3+ObA13wDzCS5ItUv7NDI60o1006b3vRqr4Rwd/HIYWbz/LPt4H2iLtgljf3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iR6IixGD; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43123368ea9so12076715e9.0;
+        Thu, 17 Oct 2024 12:37:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1729193828; x=1729798628; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6kDt4PSqwqzed7xdM+ppYuwWc64+1n90tTzAqCyOu+w=;
-        b=YnFSF1YNhRvaF8FL4iIGaevu7KtnoK5ntetHSNcvxqkRy7KNZaeftfj9BrbbSpTBHl
-         e0iFiGzwfwIzBp0b5KYlorjB8GQ4Gu29uF8T2fvjrFe1m1NM2r5R75mDDS51FIrsBv2W
-         BJj5hFEhF7we+hv/j/ogxMwjaWRleiYqZQVkI=
+        d=gmail.com; s=20230601; t=1729193861; x=1729798661; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8h/rSuKMBhpDA5BHmrBSxjpD19Vv1E+3fuCAtBFbBiw=;
+        b=iR6IixGDt7ARSLl78ZMqvdl9nmiM66VQBx11hWzGPb07AVRfaODV+dM6mjLvM7blOt
+         QY+Pd9z29cayvfaKmp1jpruLBw+5+3WVJMpWRmIMG5Cx0fPyiHy+15fBcRX2oEIebihp
+         Zz4QubiFUZDz9rl538Zkwv6E2B44WqKykWeqqXdXvdifaFzgdHVrCTVGO0lXNzuwRLMl
+         WwYEgzcFOYk6fZF9TGZ6MI8THf84zOuURH/pfna95yIETfM1pJbgQwGrydqddznHDPTR
+         RfyG2KuT2+/OHrfiUeND4wLYcbnlhKLslbGE4CVjfBeS6HNjryxJ8tzIqqvRrXv++cWn
+         Jxlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729193828; x=1729798628;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6kDt4PSqwqzed7xdM+ppYuwWc64+1n90tTzAqCyOu+w=;
-        b=VoGg65uJtyPsffmC9CN3EuLXNlIWPb446LLsZNbi6l1ugNOlkZ/RxVaAPg14Tsbo2F
-         rY2nsxXrAn/msgbR7EuoPZF8fxLPE6zQnsZL8/eaizt++B3qPJ85O5G3QgyDKnoAYlRX
-         HXMqeFlLV2vzaqiLwnWZSOWtNY9MKB523OrSsU0HkN3roBAhQfeIk+RRHrlJkHP1lTcd
-         BICpEmRBiM5UTqomRsqfjG65jT6r/GrZBqWQyb5EWCXSuXtC4HApeVwVRHxcn8eN5vun
-         UHObnlzAyoUUI6K7U+nf3iCB7u4GhCihDCG6ThHhPWY9BSh9ryXO8IoIc95o9Fvkr26q
-         m0Cw==
-X-Forwarded-Encrypted: i=1; AJvYcCXszopa10BEYeK9EecPi6nx6fCKbNENLKX2uptOPh83nmkvZrO4+HGw5bGq0e15h6BjYDK6SQX9lj0kN4Xey1o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwE0ZDshvLaAw1hNfnSuGJdY0DXujy5BZHn32n8Gm4u4e9RTtYi
-	SseC1+JFauo08upNhsNDxIP7CtnRP40X588sewLVzIWsavJV3RhHP8DhORBowjc=
-X-Google-Smtp-Source: AGHT+IFkoyHAtNPtcVEkmnW87sgrwm9C/4bHGNtVw7TLSwB6i4QHE4KUdS6c4sui6FUCDwQh0ZK9/g==
-X-Received: by 2002:a92:b701:0:b0:3a3:dadc:12d9 with SMTP id e9e14a558f8ab-3a3dadc1780mr78958115ab.25.1729193827785;
-        Thu, 17 Oct 2024 12:37:07 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a3d70747besm15386025ab.11.2024.10.17.12.37.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Oct 2024 12:37:07 -0700 (PDT)
-Message-ID: <a6f56949-7db2-4587-a3c7-3c583cba2fe4@linuxfoundation.org>
-Date: Thu, 17 Oct 2024 13:37:06 -0600
+        d=1e100.net; s=20230601; t=1729193861; x=1729798661;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8h/rSuKMBhpDA5BHmrBSxjpD19Vv1E+3fuCAtBFbBiw=;
+        b=FhO3Praycw3JnVHG/f2QVt6nqBrklocW7oow4K0SsvnAcuT1ZNY/GBhcKwEYGRryR5
+         RbgEBQ3l4STeP8sQWsogFoLbsAyIe8YcQjEfFkFOPGLTSYKF86fnoC+PKKKg4JYMBzqm
+         psyB0KsYKzpr78cyydxBDhByfbTzptqxDMSuuNCuyFrsdjgqP1eQP7m2AOVrwOuk+ERb
+         7ntwojYhiAQsR53nqsht5+EQLNC6mf8ukLtsaBIeW/Uy5nBLGwIgPTjKtKsW7CIbD3si
+         EnMeYKuOVqLTSCMVk0C5J85QKXpFMLUNg2E1NIf/ErLzFeFESaYm5TEbkCV6RhzRnDXK
+         ewxw==
+X-Forwarded-Encrypted: i=1; AJvYcCViJjBijw3/1n8wKkrgwfOHdGbQi95F82T8pCIAM/BnJPHoeezb7ncCi1rkRMealiRpTSs4m0Rf@vger.kernel.org, AJvYcCWmMX2JVkVAdE7c+EmEskptn6ohsJM9z+JKJ8cPnaiN2Kxa4WgZvVgQrX3V/sGW3D6XUqXLmNRw/FKsVEZbMsw=@vger.kernel.org, AJvYcCXCnyN2nlcPt/PuXNNsJd+RdGFTGieONpdDzBZBPi70Ogr2ZgAIDR9xOW5zyMkYk+Zx+IcrEqFAIJRz8+o7p2GG@vger.kernel.org, AJvYcCXNUnSQ8455ligZzT6ZeJ0XWRiOfc3drYoiS1saJ4Ehz0ftQw4WFW0bWkNp2azNGuWJJi7ZjmOETT7EcJLS@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywhd7CBB15CLNvJE4NjjYaWwVtrF7m8g6ZDQsw/dtpgC7JDQ2fG
+	FiF6NNCGjrGtrpk2e8KxIY0m+kvUnh3nIJj6l6ClxakXoh3JUZLK
+X-Google-Smtp-Source: AGHT+IEtxhKwkjiDOlpe66PvkClngkn2lHQGqPXQiW+OMdxDPk+q4H51x+PeupG9zfJTkn1htd/7eg==
+X-Received: by 2002:a05:600c:5118:b0:431:5f1b:a7c6 with SMTP id 5b1f17b1804b1-4315f1baa8dmr12646175e9.30.1729193860904;
+        Thu, 17 Oct 2024 12:37:40 -0700 (PDT)
+Received: from PC-PEDRO-ARCH ([2001:818:e92f:6400:a118:25f3:b27f:9f34])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d7fa90c60sm8286800f8f.62.2024.10.17.12.37.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Oct 2024 12:37:40 -0700 (PDT)
+Date: Thu, 17 Oct 2024 20:37:37 +0100
+From: Pedro Falcato <pedro.falcato@gmail.com>
+To: jeffxu@chromium.org
+Cc: akpm@linux-foundation.org, keescook@chromium.org, 
+	torvalds@linux-foundation.org, usama.anjum@collabora.com, corbet@lwn.net, 
+	Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, jeffxu@google.com, 
+	jorgelo@chromium.org, groeck@chromium.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, jannh@google.com, sroettger@google.com, 
+	linux-hardening@vger.kernel.org, willy@infradead.org, gregkh@linuxfoundation.org, 
+	deraadt@openbsd.org, surenb@google.com, merimus@google.com, rdunlap@infradead.org, 
+	stable@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] mseal: Two fixes for madvise(MADV_DONTNEED) when
+ sealed
+Message-ID: <5svaztlptf4gs4sp6zyzycwjm2fnpd2xw3oirsls67sq7gq7wv@pwcktbixrzdo>
+References: <20241017005105.3047458-1-jeffxu@chromium.org>
+ <20241017005105.3047458-2-jeffxu@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] selftests: pidfd: add tests for PIDFD_SELF_*
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- John Hubbard <jhubbard@nvidia.com>
-Cc: Christian Brauner <christian@brauner.io>, Shuah Khan <shuah@kernel.org>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>,
- pedro.falcato@gmail.com, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
- linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
- Oliver Sang <oliver.sang@intel.com>, Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1729073310.git.lorenzo.stoakes@oracle.com>
- <c083817403f98ae45a70e01f3f1873ec1ba6c215.1729073310.git.lorenzo.stoakes@oracle.com>
- <a3778bea-0a1e-41b7-b41c-15b116bcbb32@linuxfoundation.org>
- <a6133831-3fc3-49aa-83c6-f9aeef3713c9@lucifer.local>
- <84c0de17-899e-46fd-8b72-534d8a02c259@linuxfoundation.org>
- <6080fb15-9073-461c-a87d-80e6daa326e6@lucifer.local>
- <6e0bef3a-6667-461a-80f9-791891e11d8d@lucifer.local>
- <97b6a4ea-d53a-47f1-8e64-5b9558f194c1@nvidia.com>
- <28184c3d-3c88-4f8a-a25d-7b5268b55c93@lucifer.local>
- <79f70ce6-f2ad-4fa6-90b9-6a0a936669e5@nvidia.com>
- <de39bf17-a75f-4151-9569-cd85c26fc19c@lucifer.local>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <de39bf17-a75f-4151-9569-cd85c26fc19c@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241017005105.3047458-2-jeffxu@chromium.org>
 
-On 10/17/24 11:38, Lorenzo Stoakes wrote:
-> On Thu, Oct 17, 2024 at 10:37:00AM -0700, John Hubbard wrote:
->> On 10/17/24 10:28 AM, Lorenzo Stoakes wrote:
->>> On Thu, Oct 17, 2024 at 10:17:54AM -0700, John Hubbard wrote:
->>>> On 10/17/24 5:06 AM, Lorenzo Stoakes wrote:
->> ...
->>>>> 	#ifndef __TOOLS_LINUX_PIDFD_H
->>>>> 	#define __TOOLS_LINUX_PIDFD_H
->>>>>
->>>>> 	/*
->>>>> 	 * Some systems have issues with the linux/fcntl.h import in linux/pidfd.h, so
->>>>> 	 * work around this by setting the header guard.
->>>>> 	 */
->>>>> 	#define _LINUX_FCNTL_H
->>>>> 	#include "../../../include/uapi/linux/pidfd.h"
->>>>> 	#undef _LINUX_FCNTL_H
->>>>>
->>>>> 	#endif /* __TOOLS_LINUX_PIDFD_H */
->>>>>
->>>>>
->>>>> Then the test code needs only to update the pidfd.h file to #include
->>>>> <linux/pidfd.h> and add a simple $(TOOLS_INCLUDES) to the CFLAGS += line in
->>>>> the pidfd self tests Makefile and we should be all good.
->>>>
-
-I like this solution. I should have read this message first before
-handling the others.
-
->>>> Yes.
->>>>
->>>>>
->>>>> That way we always import everything in this header correctly, we directly
->>>>> document this issue, we include the header as you would in userland and we
->>>>> should cover off all the issues?
->>>>
->>>> Very nice!
->>>
->>> Thanks!
->>>
->>> I saw from your other thread the idea was to take snapshots and to run scripts
->>> to compare etc. but I suppose putting this into the known-stub directory
->>
->> Actually, I'm not running scripts, because the only time things need to
->> change is when new selftests require a new include, or when something
->> changes that selftests depend on.
->>
->>> tools/include/linux rather than tools/include/uapi/linux would avoid a conflict
->>> here.
->>
->> This is the first time I've actually looked at tools/include/linux. That
->> sounds about right, though.
->>
->>>
->>> Or would you say the wrapper should regardless be in the uapi/linux directory?
->>>
->>
->> No, not if there is already a better location, as you pointed out.
+On Thu, Oct 17, 2024 at 12:51:04AM +0000, jeffxu@chromium.org wrote:
+> From: Jeff Xu <jeffxu@chromium.org>
 > 
-> OK perfect, I have a patch series ready to go with this (and addressing
-> Christian's comments).
-> 
-> Shuah - if you are open to this approach then we should be good to go!
+> Two fixes for madvise(MADV_DONTNEED) when sealed.
+>
 
-I am caught up with the discussion now. I am good with this change.
+Please separate these fixes into two separate patches.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> For PROT_NONE mappings, the previous blocking of
+> madvise(MADV_DONTNEED) is unnecessary. As PROT_NONE already prohibits
+> memory access, madvise(MADV_DONTNEED) should be allowed to proceed in
+> order to free the page.
 
-thanks,
--- Shuah
+I don't get it. Is there an actual use case for this?
+
+> For file-backed, private, read-only memory mappings, we previously did
+> not block the madvise(MADV_DONTNEED). This was based on
+> the assumption that the memory's content, being file-backed, could be
+> retrieved from the file if accessed again. However, this assumption
+> failed to consider scenarios where a mapping is initially created as
+> read-write, modified, and subsequently changed to read-only. The newly
+> introduced VM_WASWRITE flag addresses this oversight.
+
+We *do not* need this. It's sufficient to just block discard operations on read-only
+private mappings. Sending a possible (fully untested) fix. If you like this approach
+I can resend properly, or Andrew can pick it up, whatever floats people's boats.
+
+----8<----
+
+From dc5ec662dcb79156f4bdc1cba2a2575dce905ffa Mon Sep 17 00:00:00 2001
+From: Pedro Falcato <pedro.falcato@gmail.com>
+Date: Thu, 17 Oct 2024 20:21:10 +0100
+Subject: [PATCH] mm/mseal: Disallow madvise discard on file-private sealed
+ mappings
+
+Doing an operation such as MADV_DONTNEED on a file-private mapping may
+forcibly alter data by discarding CoW'd, anon pages and replacing them
+with page cache pages fresh from the filesystem.
+
+As such, this somewhat bypasses the mseal of a read-only mapping, and
+should be disallowed.
+
+Signed-off-by: Pedro Falcato <pedro.falcato@gmail.com>
+Fixes: 8be7258aad44 ("mseal: add mseal syscall")
+Cc: <stable@vger.kernel.org> # 6.11.y
+---
+ mm/mseal.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/mm/mseal.c b/mm/mseal.c
+index 28cd17d7aaf2..d053303c5542 100644
+--- a/mm/mseal.c
++++ b/mm/mseal.c
+@@ -36,10 +36,15 @@ static bool is_madv_discard(int behavior)
+        return false;
+ }
+ 
+-static bool is_ro_anon(struct vm_area_struct *vma)
++static bool is_ro_private(struct vm_area_struct *vma)
+ {
+-       /* check anonymous mapping. */
+-       if (vma->vm_file || vma->vm_flags & VM_SHARED)
++       /*
++        * If shared, allow discard operations - it shouldn't
++        * affect the underlying data. Discard on private VMAs may
++        * forcibly alter data by replacing CoW'd anonymous pages
++        * with ones fresh from the page cache.
++        */
++       if (vma->vm_flags & VM_SHARED)
+                return false;
+ 
+        /*
+@@ -61,7 +66,7 @@ bool can_modify_vma_madv(struct vm_area_struct *vma, int behavior)
+        if (!is_madv_discard(behavior))
+                return true;
+ 
+-       if (unlikely(!can_modify_vma(vma) && is_ro_anon(vma)))
++       if (unlikely(!can_modify_vma(vma) && is_ro_private(vma)))
+                return false;
+ 
+        /* Allow by default. */
+-- 
+2.47.0
 
