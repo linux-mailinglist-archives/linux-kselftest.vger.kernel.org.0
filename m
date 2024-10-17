@@ -1,340 +1,243 @@
-Return-Path: <linux-kselftest+bounces-19935-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19937-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80BF09A1DBB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 10:59:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3628D9A1ECA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 11:47:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A3C551C20D3D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 08:59:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E96B3282246
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 09:47:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FFEA1D6DBC;
-	Thu, 17 Oct 2024 08:59:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CF2F1D95B7;
+	Thu, 17 Oct 2024 09:47:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="QN3IC5bq"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="uMeb5V1P"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4B981D63E6;
-	Thu, 17 Oct 2024 08:59:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729155560; cv=none; b=L9G815aUT2xrkY/SXtMORI9+r+wRDSi5VsdmD39U/v7+rrfEUAzX8EGynVFamUbDAu4GmuwDxNzPGDylln+sEH/S/V3WkXeA23UpXtxpNI6nJHvA6dMQbsGgBkseVS4M8ZLVP2V467zRanUNyf0hl67BaJdqWzt4JhCHs9fUS0o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729155560; c=relaxed/simple;
-	bh=gJhvlJnq8dFTPHfGW9ESvjuesnJAYBifZP+PHZbxdKI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S0rcf/QhtQxYheiIFVpgsZ3b9sN6JfK42yfiDOG6uB7TNHLZZWM0DcFRfHlYygM6ekiD811+v72M4JHcoDKSQqH5d6l/dYQ+2K0f7ulQ0AKuYl1sxQyd3KSn/gIhrl8fR6RIGniqH3i57TWRuZaPP7jUT2K0rBdLTEoumcTsH08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=QN3IC5bq; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:From:
-	Content-Type; bh=MEcogBKGnF5OFql5xBOOEvBxjmUMJdyno0Kir1D6Xqw=;
-	b=QN3IC5bqPAqiRYtxxuhtRfUdYTyZF1v/RihQUUPSAigVmPf8rXFvGsC3xbM9xr
-	z9VMJWoRmG7hmMaPygAvI01ip3dgvqk4x0vfGWQc6EFc9DejmRpBGdmbvw/l0RVn
-	zv/3PfKef1aEnIvkmfiKRMwq1hHeBdZgTLHCV6Ojd6lbs=
-Received: from [10.42.12.92] (unknown [111.48.69.246])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgCnNyzJ0RBnQOslAg--.55500S2;
-	Thu, 17 Oct 2024 16:58:51 +0800 (CST)
-Message-ID: <43d6a661-b28a-4318-977c-66a4e7593aea@163.com>
-Date: Thu, 17 Oct 2024 16:58:49 +0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2074.outbound.protection.outlook.com [40.107.243.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81ADE1D6DD1;
+	Thu, 17 Oct 2024 09:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.74
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729158433; cv=fail; b=euV1ao20e9f81ExJLqHiQXzyKijOdsMf1kmul+CqvppVpcOkyyucTH2gBPSM8/QwT9oBySMD0DxTSfinegDK9nwVRUxx8EL/1e6noGcOG6wGq4omsErUP+mzqT+r4hLoT1sS1OXs+KauHxZtSo+rMl3//Ro4ToBJsqDRW34wQuc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729158433; c=relaxed/simple;
+	bh=b3xf5P2pCNXQvZysfgNNxHcBUXG9uRp9LoQGr8u8Rao=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NgdLwzU3wD/4w1XuJPAL2BTFuD3+OhJVt8b+2Cff4+/WP3sEdh5QDUMmPIXnPiKbc2gM32qpTljaiJ6lR3IB4A9far9VbIk4g12mO5NlTd4U5s389W46ySsvN3YmDUGDdiRp5BjjqT4cyt1RFZ1aeHDRgfkTFma6vGUMAf9iqcM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=uMeb5V1P; arc=fail smtp.client-ip=40.107.243.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ejkTRNqZk2G0c3ro10uNzSC7d/9biEpP87lf+RaIE+RXNI6yN+yZ+Gi/eFcR72/vTu44l/Mr2CtCHvh5OF5+WZClphT4Olt6mg+f7RHL/BUegcy7QLolOUejalW0LzQqwggkquXBe3wv2NWbKYnITNtuQt28DRBxuzJHXxuLK1UycXK8RqKUROXz+fznhfqTH/hnr2XHx50iNGGRwIutMxgoPktHZf/XLSkGfVRCHFlF29EC2SB/Uz2NhiTCkNViYSbhZYPA2JZode3q7/RB7pdHo7D79ntP57gI3zhhmw1/V1A1yBD0T0bIuX3fTXRlAQ7jpTgFs+iqAjdY7xzQTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3kUa5X4xhY+Gu2J8Jij+sJKNEuql2LIobzjTcPF6vUQ=;
+ b=QbO7TKFIj0CpUE9qGyBes83JCWubiHMdiYzZH1cuQ+UjoIYsCyMdN7KkX2EZ+dFdlyArNv5/8nQ4bgk+BzlecmPs9ZhlXZfTp1lj+t2gYZkgY/XFUgP7lxLnqWGl3FXhTeqnj903EZiEuAKql3bmt1FXkb4jmdFmK7ipgBT6oUVvYRShmCHiz8Gyn1CtGR58rlcQ0nAW8jmCPJiIvPMaCVbyvPF1A4VpoX1U7BD9o/jemHTeodFLHQT7qTPw48M4rndCYigkoqusUEWkE/ss6vhIRPzy93e+GxgPYUELz50ggGiFL0FRW5bQgwUYTW5XloZ9uSmjlcuudE+OFj+1sw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3kUa5X4xhY+Gu2J8Jij+sJKNEuql2LIobzjTcPF6vUQ=;
+ b=uMeb5V1PqG+wwq2dSzg7SgmdXUVn4kFqZbvjC631uG3uWFisgjNPiTRcQfVBuFb5tCrIoUHy8IHR7+EHd6ssutfG9qrTL+qcvHboCvRBwZ0qz75HY+qtxWcIzYvcwdYVbW06sNRsrJxqJCg+PgPqsnyi/DA83sXRXDQgz6XEOnJVB/gYXs/RdpRCNbH44M68a7/g119YYjv8YNVgLZX4bAeGeYnpMLaMeXclDbFLyZ3HMOr2QojAp4EwCXssEHTXXLkOI5JW1e2QBVBuNRiSWqT9d4Px1nJzqkNAq9H47IBtpmOPJWBWgbLARrUOrkRe+L1oFxx3WpECpoasJvCeVw==
+Received: from SA9PR13CA0170.namprd13.prod.outlook.com (2603:10b6:806:28::25)
+ by BY5PR12MB4132.namprd12.prod.outlook.com (2603:10b6:a03:209::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18; Thu, 17 Oct
+ 2024 09:47:05 +0000
+Received: from SN1PEPF0002636C.namprd02.prod.outlook.com
+ (2603:10b6:806:28:cafe::20) by SA9PR13CA0170.outlook.office365.com
+ (2603:10b6:806:28::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18 via Frontend
+ Transport; Thu, 17 Oct 2024 09:47:05 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SN1PEPF0002636C.mail.protection.outlook.com (10.167.241.137) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8069.17 via Frontend Transport; Thu, 17 Oct 2024 09:47:04 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 17 Oct
+ 2024 02:46:53 -0700
+Received: from fedora.mtl.com (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 17 Oct
+ 2024 02:46:47 -0700
+From: Petr Machata <petrm@nvidia.com>
+To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, <netdev@vger.kernel.org>
+CC: <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+	"Benjamin Poirier" <bpoirier@nvidia.com>, Hangbin Liu <liuhangbin@gmail.com>,
+	"Vladimir Oltean" <vladimir.oltean@nxp.com>, Ido Schimmel
+	<idosch@nvidia.com>, "Przemek Kitszel" <przemyslaw.kitszel@intel.com>, Petr
+ Machata <petrm@nvidia.com>, Willem de Bruijn <willemb@google.com>,
+	<mlxsw@nvidia.com>
+Subject: [PATCH net-next v2 00/10] selftests: net: Introduce deferred commands
+Date: Thu, 17 Oct 2024 11:45:42 +0200
+Message-ID: <cover.1729157566.git.petrm@nvidia.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests: clone3: Use the capget and capset syscall
- directly
-Content-Language: en-US
-To: Shuah Khan <skhan@linuxfoundation.org>, brauner@kernel.org,
- shuah@kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- zhouyuhang <zhouyuhang@kylinos.cn>
-References: <20241015105955.126994-1-zhouyuhang1010@163.com>
- <806bee31-d740-49c9-abe0-06820cfa7395@linuxfoundation.org>
- <dea6d512-64c7-4ec1-a99d-6796e434c9a4@163.com>
- <a0944037-e90a-4884-b12f-284b373a0d63@linuxfoundation.org>
-From: zhouyuhang <zhouyuhang1010@163.com>
-In-Reply-To: <a0944037-e90a-4884-b12f-284b373a0d63@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCgvCgCnNyzJ0RBnQOslAg--.55500S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxtF18GF45Zr4kJF1kWrW3Wrg_yoWfZw1Upa
-	48CF4YkFs5Xr1xGFyIvwsI9Fn2yFW8XF1xXr1UJ34jvrnI9rn7tF40yFyj9F10939xuw4F
-	va18KFWfuF98AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jafOrUUUUU=
-X-CM-SenderInfo: 52kr35xxkd0warqriqqrwthudrp/1tbiLxF6JmcQO6uaSAABsW
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF0002636C:EE_|BY5PR12MB4132:EE_
+X-MS-Office365-Filtering-Correlation-Id: 84002106-a26b-4555-cf09-08dcee90a81b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|7416014|376014|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?JTh7Fo4XcSu2N7+aso3M6K3NXx0wGp8Lvl3yj2L6H836u2JrR/kaqri+xb0D?=
+ =?us-ascii?Q?gTLkx8QQOOzONHbSoHR7TNUN9yW7GHmH0VWWOMjRZ91fvnSoakl/Y2kXh6uY?=
+ =?us-ascii?Q?umUUllom39i2KRDn2EU0adNqyx1ArOJ4qZDZSoS6n5xfJ1zNpq3PvUGx9LV1?=
+ =?us-ascii?Q?+bz7Pd8+G4PpljxGgBwW/2sONpfHI6CH84ym59H+uSLiYyPq4ZPj2Ne5flY7?=
+ =?us-ascii?Q?Ctf0cy4PC7yPzvonj1NGF3wemITbN0pELxCcWIq3TKeXtI4MKrCTEcjSs4GN?=
+ =?us-ascii?Q?sbG2O969n3SQdf2APJwRjpfBvo+6YQ1Tww2yBOxhuyrLkPG/gyvnkoidMUGF?=
+ =?us-ascii?Q?4t52rOUlndtwQ0Gdby3JgJpC6iBmKbxULve6OAcC4H8Kriq6gc2D+XmkNXgZ?=
+ =?us-ascii?Q?i7eqrTBE9NVJh97QiggM2Lx62JxRctbNftMDmNijd4ut9j0fWel6lVBP0BbG?=
+ =?us-ascii?Q?Vfe+3CybGazC/RmebhhnRY4LLXO8lWTgN/9h1Pd+/ik87L8S/kmh5gT+O8Al?=
+ =?us-ascii?Q?Z+E2uwKGPnnOXHgEonNAP0zvhzvGNmhVsfCRXsZwMAPehY83Xc6O7nmaEYg4?=
+ =?us-ascii?Q?06nwx5R8d1SdOzfXzEF6700PwtCty+cQVm3zoxTt1cRp4Bu9GJhPhISPjaI7?=
+ =?us-ascii?Q?b3qgi2weQGvNL8MpSRVuK83+0KrUit9tgVF1S508kFxQiuiZDJ6nI8wFU66S?=
+ =?us-ascii?Q?mvtAI9VIO2a9XJD+3r50zWvc6FK2pPXT2OcEExSfwmxxrpN9Tj8wmIkREU/V?=
+ =?us-ascii?Q?vbQoWr5BC/4DFmzEhsLumSSDyqoM1RuyGojeXDbEqm6WiPmZ/YjgVjIt7E6f?=
+ =?us-ascii?Q?LtkgdAtLnkKhFAnm0FbvM+YkNH/wJjjM5mkXG1wAlLBj+6vil0zLF12dhVkl?=
+ =?us-ascii?Q?NApRmhdKRtLugHbMGgnTM4DeaWcpDUAtuqw/JFdH0EzZSxgKuK5kBCzJe2Qc?=
+ =?us-ascii?Q?eCPBTM3u0w3OF3mVhDQAkeakMVA8F9Nqy4kAuzEt1/YquKZrE4G6+EIofsjO?=
+ =?us-ascii?Q?I4Zc9HylNL5M0hZEsYp0Fy9gmJjK70O6H/Cylkm2/maf8eflJiBtQsU3IC9p?=
+ =?us-ascii?Q?q0iFm2sZlJi23XuC/ISHG4fdek53rVZUBJVpNmUn63zeMxdkQBlwjTgb+rhu?=
+ =?us-ascii?Q?Iug4LRBIQGF7GNLSo9Zq9fxHA5rgHD3VyMKf8KR3otXgalSvN7yVCgi0ds9B?=
+ =?us-ascii?Q?I6p4Nk5iqEzYalVL2lo5Cg/RxTntsserbzlftiO6xCQYve+jtqLBcylv8mS8?=
+ =?us-ascii?Q?pXu6AuksCarF7dxUiRrMtvmr0pVA8l1xHFzWxqcsLCPkdu2RYDTCeMu5c2L7?=
+ =?us-ascii?Q?b5SLEcpA4Ae5Rp0pw712uP9V0rLWf7EgkP7bmdaKhptvL66FZCaO4OG6PO6q?=
+ =?us-ascii?Q?BCiAbPOR0D5AqDrL/u0Utw7BWRwWmMz9NS1o1kPGQewZ3CcF6g=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(7416014)(376014)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2024 09:47:04.1457
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 84002106-a26b-4555-cf09-08dcee90a81b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF0002636C.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4132
 
+Recently, a defer helper was added to Python selftests. The idea is to keep
+cleanup commands close to their dirtying counterparts, thereby making it
+more transparent what is cleaning up what, making it harder to miss a
+cleanup, and make the whole cleanup business exception safe. All these
+benefits are applicable to bash as well, exception safety can be
+interpreted in terms of safety vs. a SIGINT.
 
+This patchset therefore introduces a framework of several helpers that
+serve to schedule cleanups in bash selftests.
 
-在 2024/10/17 07:10, Shuah Khan 写道:
-> On 10/16/24 03:18, zhouyuhang wrote:
->>
->>
->> 在 2024/10/15 23:31, Shuah Khan 写道:
->>> On 10/15/24 04:59, zhouyuhang wrote:
->>>> From: zhouyuhang <zhouyuhang@kylinos.cn>
->>>>
->>>> The libcap commit aca076443591 ("Make cap_t operations thread safe.")
->>>> added a __u8 mutex at the beginning of the struct _cap_struct, it 
->>>> changes
->>>> the offset of the members in the structure that breaks the assumption
->>>> made in the "struct libcap" definition in 
->>>> clone3_cap_checkpoint_restore.c.
->>>> This will make the test fail. So use the capget and capset syscall
->>>> directly and remove the libcap library dependency like the
->>>> commit 663af70aabb7 ("bpf: selftests: Add helpers to directly use
->>>> the capget and capset syscall") does.
->>>>
->>>> Signed-off-by: zhouyuhang <zhouyuhang@kylinos.cn>
->>>> ---
->>>>   tools/testing/selftests/clone3/Makefile       |  1 -
->>>>   .../clone3/clone3_cap_checkpoint_restore.c    | 53 
->>>> ++++++++-----------
->>>>   .../selftests/clone3/clone3_cap_helpers.h     | 23 ++++++++
->>>>   3 files changed, 44 insertions(+), 33 deletions(-)
->>>>   create mode 100644 
->>>> tools/testing/selftests/clone3/clone3_cap_helpers.h
->>>>
->>>> diff --git a/tools/testing/selftests/clone3/Makefile 
->>>> b/tools/testing/selftests/clone3/Makefile
->>>> index 84832c369a2e..59d26e8da8d2 100644
->>>> --- a/tools/testing/selftests/clone3/Makefile
->>>> +++ b/tools/testing/selftests/clone3/Makefile
->>>> @@ -1,6 +1,5 @@
->>>>   # SPDX-License-Identifier: GPL-2.0
->>>>   CFLAGS += -g -std=gnu99 $(KHDR_INCLUDES)
->>>> -LDLIBS += -lcap
->>>>     TEST_GEN_PROGS := clone3 clone3_clear_sighand clone3_set_tid \
->>>>       clone3_cap_checkpoint_restore
->>>> diff --git 
->>>> a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c 
->>>> b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
->>>> index 3c196fa86c99..242088eeec88 100644
->>>> --- a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
->>>> +++ b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
->>>> @@ -15,7 +15,6 @@
->>>>   #include <stdio.h>
->>>>   #include <stdlib.h>
->>>>   #include <stdbool.h>
->>>> -#include <sys/capability.h>
->>>>   #include <sys/prctl.h>
->>>>   #include <sys/syscall.h>
->>>>   #include <sys/types.h>
->>>> @@ -26,6 +25,7 @@
->>>>     #include "../kselftest_harness.h"
->>>>   #include "clone3_selftests.h"
->>>> +#include "clone3_cap_helpers.h"
->>>>     static void child_exit(int ret)
->>>>   {
->>>> @@ -87,47 +87,36 @@ static int test_clone3_set_tid(struct 
->>>> __test_metadata *_metadata,
->>>>       return ret;
->>>>   }
->>>>   -struct libcap {
->>>> -    struct __user_cap_header_struct hdr;
->>>> -    struct __user_cap_data_struct data[2];
->>>> -};
->>>> -
->>>>   static int set_capability(void)
->>>>   {
->>>> -    cap_value_t cap_values[] = { CAP_SETUID, CAP_SETGID };
->>>> -    struct libcap *cap;
->>>> -    int ret = -1;
->>>> -    cap_t caps;
->>>> -
->>>> -    caps = cap_get_proc();
->>>> -    if (!caps) {
->>>> -        perror("cap_get_proc");
->>>> +    struct __user_cap_data_struct data[2];
->>>> +    struct __user_cap_header_struct hdr = {
->>>> +        .version = _LINUX_CAPABILITY_VERSION_3,
->>>> +    };
->>>> +    __u32 cap0 = 1 << CAP_SETUID | 1 << CAP_SETGID;
->>>> +    __u32 cap1 = 1 << (CAP_CHECKPOINT_RESTORE - 32);
->>>> +    int ret;
->>>> +
->>>> +    ret = capget(&hdr, data);
->>>> +    if (ret) {
->>>> +        perror("capget");
->>>>           return -1;
->>>>       }
->>>>         /* Drop all capabilities */
->>>> -    if (cap_clear(caps)) {
->>>> -        perror("cap_clear");
->>>> -        goto out;
->>>> -    }
->>>> +    memset(&data, 0, sizeof(data));
->>>>   -    cap_set_flag(caps, CAP_EFFECTIVE, 2, cap_values, CAP_SET);
->>>> -    cap_set_flag(caps, CAP_PERMITTED, 2, cap_values, CAP_SET);
->>>> +    data[0].effective |= cap0;
->>>> +    data[0].permitted |= cap0;
->>>>   -    cap = (struct libcap *) caps;
->>>> +    data[1].effective |= cap1;
->>>> +    data[1].permitted |= cap1;
->>>>   -    /* 40 -> CAP_CHECKPOINT_RESTORE */
->>>> -    cap->data[1].effective |= 1 << (40 - 32);
->>>> -    cap->data[1].permitted |= 1 << (40 - 32);
->>>> -
->>>> -    if (cap_set_proc(caps)) {
->>>> -        perror("cap_set_proc");
->>>> -        goto out;
->>>> +    ret = capset(&hdr, data);
->>>> +    if (ret) {
->>>> +        perror("capset");
->>>> +        return -1;
->>>>       }
->>>> -    ret = 0;
->>>> -out:
->>>> -    if (cap_free(caps))
->>>> -        perror("cap_free");
->>>>       return ret;
->>>>   }
->>>>   diff --git a/tools/testing/selftests/clone3/clone3_cap_helpers.h 
->>>> b/tools/testing/selftests/clone3/clone3_cap_helpers.h
->>>> new file mode 100644
->>>> index 000000000000..3fa59ef68fb8
->>>> --- /dev/null
->>>> +++ b/tools/testing/selftests/clone3/clone3_cap_helpers.h
->>>> @@ -0,0 +1,23 @@
->>>> +/* SPDX-License-Identifier: GPL-2.0 */
->>>> +#ifndef __CLONE3_CAP_HELPERS_H
->>>> +#define __CLONE3_CAP_HELPERS_H
->>>> +
->>>> +#include <linux/capability.h>
->>>> +
->>>> +/*
->>>> + * Compatible with older version
->>>> + * header file without defined
->>>> + * CAP_CHECKPOINT_RESTORE.
->>>> + */
->>>> +#ifndef CAP_CHECKPOINT_RESTORE
->>>> +#define CAP_CHECKPOINT_RESTORE 40
->>>> +#endif
->>>> +
->>>> +/*
->>>> + * Removed the libcap library dependency.
->>>> + * So declare them here directly.
->>>> + */
->>>> +int capget(cap_user_header_t header, cap_user_data_t data);
->>>> +int capset(cap_user_header_t header, const cap_user_data_t data);
->>>
->>> Sorry you haven't addressed my comments on your v1 yet.
->>>
->>> I repeat that this is not the right direction to define system
->>> calls locally.
->>>
->>
->> I got it. I am willing to modify the code so that syscalls are not 
->> defined in local files,
->> but this would require including sys/capability.h which would not 
->> remove the
->> dependency on the libcap library. So, should we directly use syscalls 
->> or use the
->> libcap library function in the "set_capability" function, or do you 
->> have a better way.
->> I'd like to refer to your advice.
->>
->>> Try this:
->>>
->>> Run make headers in the kernel repo.
->>> Build without making any changes.
->>> Then add you changes and add linux/capability.h to include files
->>>
->>> Tell me what happens.
->>>
->>> thanks,
->>> -- Shuah
->>
->> I tried this, here are my steps.
->>
->> Firstly, I ran 'make headers' in the kernel repo and it was successful.
->> Then I wasn't quite sure which path you were referring to as' build ',
->
-> Sorry if what I said wasn't clear:
->
-> - This test depends on libcap and yes you will have to install it.
-> - Run ake headers in the kernel repo.
-> - Build the test without your patch (changes)
-> - If you don't have libcap, the test build will fail
-> - Install libcap
-> - Build and run.
->
-> Looks like you have done the above. Now:
->
-> - Add your patch without the local capget() and capset()
->   and without removing
+- Patch #1 has more details about the primitives being introduced.
+  Patch #2 adds a fallback cleanup() function to lib.sh, because ideally
+  selftests wouldn't need to introduce a dedicated cleanup function at all.
 
-It will generate the following warning but can be compiled successfully,
-because my patch only includes linux/capability.h and removes the local 
-capget() and capset().
+- Patch #3 adds a parameter to stop_traffic(), which makes it possible to
+  start other background processes after the traffic is started without
+  confusing the cleanup.
 
-CC       clone3_cap_checkpoint_restore
-clone3_cap_checkpoint_restore.c: In function ‘set_capability’:
-clone3_cap_checkpoint_restore.c:105:8: warning: implicit declaration of 
-function ‘capget’ [-Wimplicit-function-declaration]
-105 |  ret = capget(&hdr, data);
-|        ^~~~~~
-clone3_cap_checkpoint_restore.c:120:8: warning: implicit declaration of 
-function ‘capset’ [-Wimplicit-function-declaration]
-120 |  ret = capset(&hdr, data);
+- Patches #4 to #10 convert a number of selftests.
 
->
->> so I compiled and installed libcap, and also compiled test, all of 
->> which were successful.
->
-> Why do you need to compile libcap? Is it because this latest
-> change isn't available to install from the distro you are using?
+  The goal was to convert all tests that use start_traffic / stop_traffic
+  to the defer framework. Leftover traffic generators are a particularly
+  painful sort of a missed cleanup. Normal unfinished cleanups can usually
+  be cleaned up simply by rerunning the test and interrupting it early to
+  let the cleanups run again / in full. This does not work with
+  stop_traffic, because it is only issued at the end of the test case that
+  starts the traffic. At the same time, leftover traffic generators
+  influence follow-up test runs, and are hard to notice.
 
-No, I just didn't fully understand the path you were referring to as 
-"build",
-so I compiled libcap as well, which wasn't really necessary.
+  The tests were however converted whole-sale, not just their traffic bits.
+  Thus they form a proof of concept of the defer framework.
 
->
->> Afterwards, I applied my patch and the test was successfully built 
->> and running.
->> I guess what you're trying to express may be that these system calls 
->> have already
->> been defined in sys/capability, and those defined in the local file 
->> are duplicated with it.
->
-> Correct. You don't need the local defines and in fact you should not
-> define them locally.
->
->> So I included sys/capability.h and linux/capability.h and defined the 
->> system calls in the test,
->> but there were no errors.
->
-> Please don't define system calls locally. What happens if you don't?
+v2:
+- Patch #1:
+    - In __defer__schedule(), use ndefers in place of
+      ${__DEFER__NJOBS[$ndefers_key]}
+- Patch #4:
+    - Defer stop_traffic including the sleep. The sleep is actually
+      necessary and v1 was wrong in that it had the sleep prior to the
+      stop_traffic invocation.
 
-I know it can be successfully compiled without any warnings.
-Because I added sys/capability.h here, which was not included earlier.
+v1 (from the RFC):
+- Patch #1:
+    - Added the priority defer track
+    - Dropped defer_scoped_fn, added in_defer_scope
+    - Extracted to a separate independent module
+- Patch #2:
+    - Moved this bit to a separate patch
+- Patch #3:
+    - New patch
+- Patch #4 (RED):
+    - Squashed the individual RED-related patches into one
+    - Converted the SW datapath RED selftest as well
+- Patch #5 (TBF):
+    - Fully converted the selftest, not just stop_traffic
+- Patches #6, #7, #8, #9, #10:
+    - New patch
 
-What I want to express is that I tested that defining them again in the
-local file would not cause compilation errors, but I know this is 
-incorrect,
-so I will remove them and modify the test to make it pass.
+Petr Machata (10):
+  selftests: net: lib: Introduce deferred commands
+  selftests: forwarding: Add a fallback cleanup()
+  selftests: forwarding: lib: Allow passing PID to stop_traffic()
+  selftests: RED: Use defer for test cleanup
+  selftests: TBF: Use defer for test cleanup
+  selftests: ETS: Use defer for test cleanup
+  selftests: mlxsw: qos_mc_aware: Use defer for test cleanup
+  selftests: mlxsw: qos_ets_strict: Use defer for test cleanup
+  selftests: mlxsw: qos_max_descriptors: Use defer for test cleanup
+  selftests: mlxsw: devlink_trap_police: Use defer for test cleanup
 
-Let's go back to this code.
-I think there may be the following solutions to modify this code on the 
-basis of removing local system calls:
+ .../drivers/net/mlxsw/devlink_trap_policer.sh |  85 ++++----
+ .../drivers/net/mlxsw/qos_ets_strict.sh       | 167 ++++++++--------
+ .../drivers/net/mlxsw/qos_max_descriptors.sh  | 118 ++++-------
+ .../drivers/net/mlxsw/qos_mc_aware.sh         | 146 +++++++-------
+ .../selftests/drivers/net/mlxsw/sch_ets.sh    |  26 ++-
+ .../drivers/net/mlxsw/sch_red_core.sh         | 185 +++++++++---------
+ .../drivers/net/mlxsw/sch_red_ets.sh          |  24 +--
+ .../drivers/net/mlxsw/sch_red_root.sh         |  18 +-
+ tools/testing/selftests/net/forwarding/lib.sh |  13 +-
+ .../selftests/net/forwarding/sch_ets.sh       |   7 +-
+ .../selftests/net/forwarding/sch_ets_core.sh  |  81 +++-----
+ .../selftests/net/forwarding/sch_ets_tests.sh |  14 +-
+ .../selftests/net/forwarding/sch_red.sh       | 103 ++++------
+ .../selftests/net/forwarding/sch_tbf_core.sh  |  91 +++------
+ .../net/forwarding/sch_tbf_etsprio.sh         |   7 +-
+ .../selftests/net/forwarding/sch_tbf_root.sh  |   3 +-
+ tools/testing/selftests/net/lib.sh            |   3 +
+ tools/testing/selftests/net/lib/Makefile      |   2 +-
+ tools/testing/selftests/net/lib/sh/defer.sh   | 115 +++++++++++
+ 19 files changed, 595 insertions(+), 613 deletions(-)
+ create mode 100644 tools/testing/selftests/net/lib/sh/defer.sh
 
-1. Includes linux/capability.h, using capget and capset, but this will 
-result in compilation warnings.
-2. Includes sys/capability.h, using capget and capset.
-3. Includes sys/capability.h, using libcap library functions.
-
-I tend to use capget and capset, By doing so, test may not need to be 
-maintained again in the future.
-Which of the above solutions do you think is better, and I will refer to 
-your suggestions to modify the code and resend the patch.
-
->
-> thanks,
-> -- Shuah
+-- 
+2.45.0
 
 
