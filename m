@@ -1,68 +1,61 @@
-Return-Path: <linux-kselftest+bounces-20167-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20168-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7876E9A45FA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 20:37:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 566309A46E6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 21:19:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98C391C212CC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 18:37:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00CB41F23434
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 19:19:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D9A12038C8;
-	Fri, 18 Oct 2024 18:37:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4615B20513F;
+	Fri, 18 Oct 2024 19:17:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KmF0Fi3m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxq02s7C"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E4120E312;
-	Fri, 18 Oct 2024 18:37:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ADA5204F68;
+	Fri, 18 Oct 2024 19:17:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729276648; cv=none; b=cRZDcFTPjdQ5xws8AYL3i8ZVlMn4gG/bsJVp1UuJoLo+iffylxc/pDmHxEq6UtEObmhiY8LhPEMWNsyZCRcd66PKUM67XYuie378kCuZJ2aHypiZpdWRZ/iSB8yfLR3R3x6cjxLv1fbgZgjdQZtwQEdiMcP9SMnkhCMq22A1Bo4=
+	t=1729279054; cv=none; b=C2tKUKwXBpqR4grZ8gOEyvQe55M9FEll9dzvcrG18YH2A7/in8AbI+ryLukbPIYsEJ5CEDtmc6helHhIkanhvlkoU1NBkw1rBHgh3EV9lLSZCbOihD0nICGVbWYdre7c3l+jfmCI+f/CUI+j3wpq6Poja0jKkjYG+zvW+d/HgXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729276648; c=relaxed/simple;
-	bh=dSqi9IfAa5l3jYcAxFqh5y6voNSnsY/4yK4Ky+osyzY=;
+	s=arc-20240116; t=1729279054; c=relaxed/simple;
+	bh=FhMJHeMxfCHZJv7HzYbAE22jWcvqI+5NkAu445PHzZM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eSMwehQuuKtg/pCUcD1S8FKio7mUomM4mVJmocj5ifnQ9D4ftk+iydByaM6QSY+b8vv8kycGpwI5dzQmMAosvhSYe9/pHX1OnwaNrVWe2smNQTl4TAn/Im10CSJIgkOyr3EWry0y5DSTXeX92CHNzvMAx5qkhGVat29lfTzlaTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KmF0Fi3m; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42D6FC4CEC3;
-	Fri, 18 Oct 2024 18:37:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=UEm99Qb11EexYCMqQU8dUZvQDD8MJ7dQlCfUu2Xzbm8qSUYjcyktymOUOb4kHG/rWOZyOCkQDxY3pi/l6oZ7+jG9xTcQb98xFFJKQcrSzb144DPoNJmiFW1ul4IQGXwFVAlwb/pV2V83cMkCxiDJxR0fqBUUMK57P5zv2BpKDis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dxq02s7C; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CF24C4CEC3;
+	Fri, 18 Oct 2024 19:17:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729276648;
-	bh=dSqi9IfAa5l3jYcAxFqh5y6voNSnsY/4yK4Ky+osyzY=;
+	s=k20201202; t=1729279053;
+	bh=FhMJHeMxfCHZJv7HzYbAE22jWcvqI+5NkAu445PHzZM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KmF0Fi3mLpV6GjbQaCRA6EA3/hmTHOuYNb0OlV7FM0aKT1stkxnb+6quUky7+IjhV
-	 L6o+NKUWoPLD0kfZrKO5Nb0eGG8/hecQqI500alUD6JS5TbiEX+cUIVFI690ETpBfr
-	 aSuR3sl03MMg5zFMW1AVohkqFFSrBrTDvdxUq+P5TWeIaX4iXhjZI0rWojBZSlTWN0
-	 D3tPgPmiXLxe7D8jCX6zsKKNtZg4G4AB6S+35NwFNVl4CNDHes91AISvxq1JAoQibD
-	 QBJl6sB+AlhRRTSEt3HTSH9Ldg2wQPdCNiEi91k5J1rNQEX29k3ixX7+dbWr9Ty8Du
-	 ijJKjWIrDr72A==
-Date: Fri, 18 Oct 2024 19:37:22 +0100
+	b=dxq02s7CqA1347PJeMXmW6mhZ2a4Y7ijHqI9exGxn9cEp8iIo9Ur0uyJVVVmhBtz0
+	 YGLFkSX3K/xA1Jt09l/B6qeKyjMdSz5262JVP3+MbCf069rwc0iWvapV4/x8LLAZti
+	 g2M6FGboAajoTqdHeYjjb15f0lXfFHL3GiV51RIHUz9aITNuzg60+RMyCAJ/h054lr
+	 2fc3CE4qEjPRK5vMPa+hczGF8KtAf6b2M9nhJwD3M2WKohmlwqMkxTsGgYY2nV0fHa
+	 HMYyxZ/yoTmfb5Tbkp8gATSM8LQ9OTEy52XjNvyHfNFyW6k2teWQHooly4ZAiXnZJJ
+	 rbatHg+/EdLCw==
+Date: Fri, 18 Oct 2024 20:17:28 +0100
 From: Mark Brown <broonie@kernel.org>
-To: Jeff Xu <jeffxu@chromium.org>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	akpm@linux-foundation.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org, pedro.falcato@gmail.com,
-	willy@infradead.org, vbabka@suse.cz, Liam.Howlett@oracle.com,
-	rientjes@google.com, keescook@chromium.org
-Subject: Re: [PATCH v3 4/5] selftests/mseal: add more tests for mmap
-Message-ID: <a2652ed4-ea8b-4b56-bac6-6479b3df6c14@sirena.org.uk>
-References: <CABi2SkUpCf+aOa2sPED8CosG5ccqjFd7ouot8gXi9ECqsHiZhw@mail.gmail.com>
- <4944ce41-9fe1-4e22-8967-f6bd7eafae3f@lucifer.local>
- <CABi2SkUgDZtJtRJe+J9UNdtZn=EQzZcbMB685P=1rR7DUhg=6Q@mail.gmail.com>
- <CABi2SkVEMRHV3swrbb6M5RA6GQpFVVx855CGwdQ1xiz3tygiqA@mail.gmail.com>
- <f9b9422c-216d-422e-94b4-d8814b0b277e@lucifer.local>
- <CABi2SkWAv4LXvR1Wb1e31eyZ35JfyieXhDOq1bp_ZvHPLLg-qA@mail.gmail.com>
- <e0f440b0-5a45-4218-8c51-27f848c0617b@lucifer.local>
- <CABi2SkWNRTCC0LzDSuzgjC1tO=KF==5FXUnPHOrPzEG5abAeDg@mail.gmail.com>
- <1f8eff74-005b-4fa9-9446-47f4cdbf3e8d@sirena.org.uk>
- <CABi2SkV38U-ZCAq9W091zYkOM1m5e-C27YmVXdTCi-t+p_W_fQ@mail.gmail.com>
+To: David Gow <davidgow@google.com>
+Cc: Donald Zickus <dzickus@redhat.com>, workflows@vger.kernel.org,
+	automated-testing@lists.yoctoproject.org,
+	linux-kselftest@vger.kernel.org,
+	kernelci <kernelci@lists.linux.dev>,
+	Nikolai Kondrashov <nkondras@redhat.com>,
+	Gustavo Padovan <gustavo.padovan@collabora.com>,
+	kernelci-members <kernelci-members@groups.io>,
+	laura.nao@collabora.com
+Subject: Re: [RFC] Test catalog template
+Message-ID: <a3752d83-7ca2-4ab7-9228-e762d9211a3b@sirena.org.uk>
+References: <CAK18DXYitS7hL1mA3QsPLmW9-R0q6Kin0C5Uv9fj=uS90WSnxA@mail.gmail.com>
+ <CABVgOSk1ng46scbJc-3qPZUhkn+0KrZsFDe-UYnw0q-XksP_2Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,111 +63,63 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="P9lxhlovMTxuF4jF"
+	protocol="application/pgp-signature"; boundary="VyPTSV0RNA4X4lYJ"
 Content-Disposition: inline
-In-Reply-To: <CABi2SkV38U-ZCAq9W091zYkOM1m5e-C27YmVXdTCi-t+p_W_fQ@mail.gmail.com>
+In-Reply-To: <CABVgOSk1ng46scbJc-3qPZUhkn+0KrZsFDe-UYnw0q-XksP_2Q@mail.gmail.com>
 X-Cookie: What is the sound of one hand clapping?
 
 
---P9lxhlovMTxuF4jF
-Content-Type: text/plain; charset=utf-8
+--VyPTSV0RNA4X4lYJ
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 18, 2024 at 11:06:20AM -0700, Jeff Xu wrote:
-> On Fri, Oct 18, 2024 at 6:04=E2=80=AFAM Mark Brown <broonie@kernel.org> w=
-rote:
+On Fri, Oct 18, 2024 at 03:21:58PM +0800, David Gow wrote:
 
-> > The problem is that the macro name is confusing and not terribly
-> > consistent with how the rest of the selftests work.  The standard
-> > kselftest result reporting is
+> It's also probably going to be necessary to have separate sets of
+> tests for different use-cases. For example, there might be a smaller,
+> quicker set of tests to run on every patch, and a much longer, more
+> expensive set which only runs every other day. So I don't think
+> there'll even be a 1:1 mapping between 'test collections' (files) and
+> subsystems. But an automated way of running "this collection of tests"
+> would be very useful, particularly if it's more user-friendly than
+> just writing a shell script (e.g., having nicely formatted output,
+> being able to run things in parallel or remotely, etc).
 
-> >         ksft_test_result(bool result, char *name_format, ...);
-> >
-> > so the result of the test is a boolean flag which is passed in.  This
-> > macro on the other hand sounds like a double negative so you have to
-> > stop and think what the logic is, and it's not seen anywhere else so
-> > nobody is going to be familiar with it.  The main thing this is doing is
-> > burying a return statement in there, that's a bit surprising too.
+This is definitely the case for me, I have an escallating set of tests
+that I run per patch, per branch and for things like sending pull
+requests.
 
-> Thanks for explaining the problem, naming is hard. Do you have a
-> suggestion on a better naming?
+> >   maintainer:
+> >     - name: name1
+> >       email: email1
+> >     - name: name2
+> >       email: email2
+> >   list:
 
-Honestly I'd probably deal with this by refactoring such that the macro
-isn't needed and the tests follow a pattern more like:
+> How important is it to have these in the case where they're already in
+> the MAINTAINERS file? I can see it being important for tests which
+> live elsewhere, though eventually, I'd still prefer the subsystem
+> maintainer to take some responsibility for the tests run for their
+> subsystems.
 
-	if (ret !=3D 0) {
-		ksft_print_msg("$ACTION failed with %d\n", ret);
-		return false;
-	}
+It does seem useful to list the maintainers for tests in addition to the
+maintaienrs for the code, and like you say some of the tests are out of
+tree.
 
-when they encouter a failure, the pattern I sketched in my earlier
-message, or switch to kselftest_harness.h (like I say I don't know if
-the fork()ing is an issue for these tests).  If I had to have a macro
-it'd probably be something like mseal_assert().
-
-> > I'll also note that these macros are resulting in broken kselftest
-> > output, the name for a test has to be stable for automated systems to be
-> > able to associate test results between runs but these print
-
-=2E...
-
-> > which includes the line number of the test in the name which is an
-> > obvious problem, automated systems won't be able to tell that any two
-> > failures are related to each other never mind the passing test.  We
-> > should report why things failed but it's better to do that with a
-> > ksft_print_msg(), ideally one that's directly readable rather than
-> > requiring someone to go into the source code and look it up.
-
-> I don't know what  the issue you described is ? Are you saying that we
-> are missing line numbers ? it is not. here is the sample of output:
-
-No, I'm saying that having the line numbers is a problem.
-
-> Failure in the second test case from last:
-
-> ok 105 test_munmap_free_multiple_ranges
-> not ok 106 test_munmap_free_multiple_ranges_with_split: line:2573
-> ok 107 test_munmap_free_multiple_ranges_with_split
-
-Test 106 here is called "test_munmap_free_multiple_ranges_with_split:
-line:2573" which automated systems aren't going to be able to associate
-with the passing "test_munmap_free_multiple_ranges_with_split", nor with
-any failures that occur on any other lines in the function.
-
-> I would image the needs of something similar to FAIL_TEST_IF_FALSE is
-> common in selftest writing:
-
-> 1> lightweight enough so dev can pick up quickly and adapt to existing
-> tests, instead of rewriting everything from scratch.
-> 2> assert like syntax
-> 3> fail the current test case, but continue running the next test case
-> 4> take care of reporting test failures.
-
-Honestly this just sounds and looks like kselftest_harness.h, it's
-ASSERT_ and EXPECT_ macros sound exactly like what you're looking for
-for asserts.  The main gotchas with it are that it's not particularly
-elegant for test cases which need to enumerate system features (which I
-don't think is the case for mseal()?) and that it runs each test case in
-a fork()ed child which can be inconvenient for some tests.  The use of
-fork() is because that make the overall test program much more robust
-against breakage in individual tests and allows things like per test
-timeouts.
-
---P9lxhlovMTxuF4jF
+--VyPTSV0RNA4X4lYJ
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcSquEACgkQJNaLcl1U
-h9Co7Qf+IFX02DfWKnGFQmrXx/BU2tcsHpr6ALzD+Pf5eVjuzGXP2trUWphjlykz
-xQ1iS/lr0f+4xBGnAVbjryUNyIyPqPJ1an4APNVoEBIb0H4PY6i5vQglTj4qxvVL
-8RUQx3bMWMrfok1duAFTMm/Kpl94uPCH5TYTdvdM2iwrQnOqCsKDnSUItG+n9jVh
-GnArZl82biCNbQfGUdB01rMmMohltm7xfOiu2ZGzT3H+yPf3WXsP0epX12oLOP6j
-13gOBbpJmARrQRdV14gUNl9WoRjblWTYGsjdVEL/m1eV+NC6Zq8QeSfs8MAiEU2v
-dvqGHf0ov9NhgPPLYl3TcjEhGRl7xw==
-=O77y
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcStEcACgkQJNaLcl1U
+h9Av3Af7BWZP998q7HAR9n0kAkjsi6kf2c+3+NX1Yr+i3gyJFihBUdBOclT+A5jz
+3VrnKnLVwmepJ5KhUbDJkHK6v5ATmz8DO8EQEl6lOXnrumi4JPeZB53rsQmHHP5L
+c2gjl7u4IhARS1SzibLfV0edgMrQ/epFvp0nej/3Q1FhviJUEuTykLIwW3NuOmd5
+Fyeh8TkMc+CqTNBmQ29anZ8V+rCgwU3/eLfOP4rdCPeR3HZajhK0myNa2JPSGUsr
+L8qq00nWNh0p9CFCc0Mj+ESjvQwd7SFuGiQCmDia+jCVadEhiWkAeAsJQPVvCNIY
+5KYdJTIRO9CwO9ZtfMVvFrEAs0XM3w==
+=Ef3N
 -----END PGP SIGNATURE-----
 
---P9lxhlovMTxuF4jF--
+--VyPTSV0RNA4X4lYJ--
 
