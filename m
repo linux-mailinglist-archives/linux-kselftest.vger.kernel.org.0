@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-20126-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20127-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CD4F9A3A73
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 11:49:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 310199A3AD0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 12:05:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EAE94B210E8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 09:49:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2687286774
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 10:05:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27B32200CAD;
-	Fri, 18 Oct 2024 09:49:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D62B20103E;
+	Fri, 18 Oct 2024 10:04:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="beOPpKVW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rYHt83gy"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB8D200B89;
-	Fri, 18 Oct 2024 09:49:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D781201030;
+	Fri, 18 Oct 2024 10:04:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729244989; cv=none; b=V844bkw8QZXt8Ush1X5nNG1RGHoy4yWvaP9ww9WX6kkM413E+yWRqVaWWnrodHMko+1LT4Io1bUH9aOifynlw76KyNE4/8Xmly+oJm7TYZdnr6XiKHrUTwhB8VbLn7Y8o/uHBavzUt4COnQnjjyYIjMmn6cwoBORNxx6+7kATW4=
+	t=1729245887; cv=none; b=QzPfY1A7MeKzClzXfqJ4p2gc/E60wFCaOzlu7Yj4OXLs0XR1mbXoH84N23Afvmc4i9/3kfUqoKwdyCabUN7cWizhN/g//w3o3sDy9dAbAo6cvcLvs3y7YSXsYplAmR91x2kBplHhf7PhSnPrnladFN3aC6SJxyXLeqwsI2qMM3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729244989; c=relaxed/simple;
-	bh=lomrO0oUsxKUobrQmwshQwtfyAVPsEmKZo94r7bd44c=;
+	s=arc-20240116; t=1729245887; c=relaxed/simple;
+	bh=XlqX620mv1+3TxjbnqU6cqutUY30PUf1MS0RFO7eNFs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TNaYX4yGy2BRLRtdUg2LMpBHcPX5eDaM1p5JzqEGu1/HezsjuPapzMxeTQsk2xlqy5RXhWgF5YdEaC93usLtNHfYn8Q8f5B1mfMmEil5Lz6i0w7bEAsmHLcHzD/4zwX50VVVwl3qzwU9SdJUt9/HFh6w7vwolkG3KdIrhIGAyM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=beOPpKVW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E416C4CEC3;
-	Fri, 18 Oct 2024 09:49:44 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=HGJSTFuV2OgD4IK5j9fFpvGaaQHWKGAHz6Lv7akKHqF2WWfhbBDtnhxjvyH9Ez4Ac+aTmSrBqGY5EmrYhz4oFJLtMtSf5he3d1NHHGl4RofjYUi3/vfe9IxGsFEm0TeJk4pUuv98w5CuUZOYuiXP9RxBy2RPYlp/dm9LVU83TQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rYHt83gy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FD21C4CEC3;
+	Fri, 18 Oct 2024 10:04:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729244988;
-	bh=lomrO0oUsxKUobrQmwshQwtfyAVPsEmKZo94r7bd44c=;
+	s=k20201202; t=1729245887;
+	bh=XlqX620mv1+3TxjbnqU6cqutUY30PUf1MS0RFO7eNFs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=beOPpKVW4p4v+LhqXnYFMneUGQLnFtJpmqZKfGux5Ye8vU9+tKHi/pnydoPGVwqL9
-	 CeHKvWJrYsesD1qoOggUgLcF6tb46bBezN2yFTzVj64ASOAb+qNNN+PxtEhtCr1bEA
-	 zjkkwJ8pSd4KCCg4dsWJo2nw5e14hCVPBHFGvwvzwH3JqYQkT4qYo9FmLkN/ujLFSB
-	 Koicb7uBwijVx9TQJQNThWwf1MY0kGvmXEzV8+xtQ3qja5F11TlIhVe8Gl0VG7FZYK
-	 oe+9jSWYHvVo+mgS8qFLEhniKG2CRj9/xwT+XvE9alEJ22ieULhj3Q69WHnFXcDDHv
-	 jVeXSlxPCkP5Q==
-Date: Fri, 18 Oct 2024 10:49:42 +0100
+	b=rYHt83gyEPN94gmmQ4zd/8t9/jKaZnTiARIk3mpDHxmWsnCg9XCCAaaoTDSD9ocHi
+	 DZObaLtkYZugfCrN1oL/cjterNn7qzh0Gw1IfQvrxqUeT5Fi91Ez8TLkHiHF78QBmC
+	 BGCZ+XFMDRdHYECp0DeXWgYWg0+7lcT+9t8sUCzHdsACCPgF7A5ZYEfLgJncqbUUqd
+	 8+tTEeay1ByOcKpO6FzzdgG40YD9OywSgQm4fsRU84bzPArc6RnEggyFjOFYaUF0ud
+	 1TcsTAQxM454aw6/oec9YjRdgw8EJI+Xx/zlp3uW/0PbGzALfukveZOOhTFpeny2hn
+	 KTollB6GuUsNA==
+Date: Fri, 18 Oct 2024 11:04:40 +0100
 From: Simon Horman <horms@kernel.org>
 To: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 Cc: davem@davemloft.net, Liam.Howlett@oracle.com, edumazet@google.com,
@@ -52,9 +52,10 @@ Cc: davem@davemloft.net, Liam.Howlett@oracle.com, edumazet@google.com,
 	vschneid@redhat.com, jiri@resnulli.us, linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org, akpm@linux-foundation.org, shuah@kernel.org,
 	linux-kselftest@vger.kernel.org, peili.io@oracle.com
-Subject: Re: [PATCH net-next v5 0/3] Threads support in proc connector
-Message-ID: <20241018094942.GE1697@kernel.org>
+Subject: Re: [PATCH net-next v5 3/3] connector/cn_proc: Selftest for threads
+Message-ID: <20241018100440.GF1697@kernel.org>
 References: <20241017181436.2047508-1-anjali.k.kulkarni@oracle.com>
+ <20241017181436.2047508-4-anjali.k.kulkarni@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,45 +64,107 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241017181436.2047508-1-anjali.k.kulkarni@oracle.com>
+In-Reply-To: <20241017181436.2047508-4-anjali.k.kulkarni@oracle.com>
 
-On Thu, Oct 17, 2024 at 11:14:33AM -0700, Anjali Kulkarni wrote:
-> Recently we committed a fix to allow processes to receive notifications for
-> non-zero exits via the process connector module. Commit is a4c9a56e6a2c.
+On Thu, Oct 17, 2024 at 11:14:36AM -0700, Anjali Kulkarni wrote:
+> Test to check if setting PROC_CN_MCAST_NOTIFY in proc connector API, allows
+> a thread's non-zero exit status to be returned to proc_filter.
 > 
-> However, for threads, when it does a pthread_exit(&exit_status) call, the
-> kernel is not aware of the exit status with which pthread_exit is called.
-> It is sent by child thread to the parent process, if it is waiting in
-> pthread_join(). Hence, for a thread exiting abnormally, kernel cannot
-> send notifications to any listening processes.
+> The threads.c program creates 2 child threads. 1st thread handles signal
+> SIGSEGV, and 2nd thread needs to indicate some error condition (value 1)
+> to the kernel, instead of using pthread_exit() with 1.
 > 
-> The exception to this is if the thread is sent a signal which it has not
-> handled, and dies along with it's process as a result; for eg. SIGSEGV or
-> SIGKILL. In this case, kernel is aware of the non-zero exit and sends a
-> notification for it.
+> In both cases, child sends notify_netlink_thread_exit(exit_code) to kernel,
+> to let kernel know it has exited abnormally with exit_code.
 > 
-> For our use case, we cannot have parent wait in pthread_join, one of the
-> main reasons for this being that we do not want to track normal
-> pthread_exit(), which could be a very large number. We only want to be
-> notified of any abnormal exits. Hence, threads are created with
-> pthread_attr_t set to PTHREAD_CREATE_DETACHED.
+> Compile:
+>     make thread
+>     make proc_filter
+> Run:
+>     ./threads
 > 
-> To fix this problem, we add a new type PROC_CN_MCAST_NOTIFY to proc connector
-> API, which allows a thread to send it's exit status to kernel either when
-> it needs to call pthread_exit() with non-zero value to indicate some
-> error or from signal handler before pthread_exit().
+> Signed-off-by: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+> ---
+>  tools/testing/selftests/connector/Makefile    |  23 +-
+>  .../testing/selftests/connector/proc_filter.c |  34 ++-
+>  tools/testing/selftests/connector/thread.c    | 232 ++++++++++++++++++
+>  .../selftests/connector/thread_filter.c       |  96 ++++++++
+>  4 files changed, 378 insertions(+), 7 deletions(-)
+>  create mode 100644 tools/testing/selftests/connector/thread.c
+>  create mode 100644 tools/testing/selftests/connector/thread_filter.c
 > 
-> We also need to filter packets with non-zero exit notifications futher
-> based on instances, which can be identified by task names. Hence, added a
-> comm field to the packet's struct proc_event, in which task->comm is
-> stored.
+> diff --git a/tools/testing/selftests/connector/Makefile b/tools/testing/selftests/connector/Makefile
+> index 92188b9bac5c..bf335826bc3b 100644
+> --- a/tools/testing/selftests/connector/Makefile
+> +++ b/tools/testing/selftests/connector/Makefile
+> @@ -1,5 +1,26 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -CFLAGS += -Wall $(KHDR_INCLUDES)
+> +KERNEL="../../../.."
+> +
+> +CFLAGS += -Wall $(KHDR_INCLUDES) -I $(KERNEL)/include/uapi -I $(KERNEL)/include
+> +
+> +proc_filter: proc_filter.o
+> +	cc proc_filter.o -o proc_filter
+> +
+> +proc_filter.o: proc_filter.c
+> +	cc -c proc_filter.c -o proc_filter.o $(CFLAGS)
+> +
+> +thread: thread.o thread_filter.o
+> +	cc thread.o thread_filter.o -o thread
+> +
+> +thread.o: thread.c $(DEPS)
+> +		cc -c thread.c -o thread.o $(CFLAGS)
+> +
+> +thread_filter.o: thread_filter.c
+> +		cc -c thread_filter.c -o thread_filter.o $(CFLAGS)
+> +
+> +define EXTRA_CLEAN
+> +	rm *.o thread
+> +endef
+>  
+>  TEST_GEN_PROGS = proc_filter
+>  
 
-As it seems that there will be another revision anyway,
-please run this patch-set through checkpatch with the following arguments.
+I am a little confused by this, as it seems to result in user-space
+code using kernel headers. Is that expected?
 
-	./scripts/checkpatch.pl --strict --max-line-length=80
+$ make -C tools/testing/selftests/connector
+...
+cc -c proc_filter.c -o proc_filter.o -Wall -isystem /home/horms/projects/linux/linux/tools/testing/selftests/../../../usr/include -I "../../../.."/include/uapi -I "../../../.."/include -D_GNU_SOURCE=
+In file included from ../../../../include/uapi/linux/netlink.h:7,
+                 from proc_filter.c:11:
+../../../../include/uapi/linux/types.h:10:2: warning: #warning "Attempt to use kernel headers from user space, see https://kernelnewbies.org/KernelHeaders" [-Wcpp]
+   10 | #warning "Attempt to use kernel headers from user space, see https://kernelnewbies.org/KernelHeaders"
+      |  ^~~~~~~
+...
 
-And please fix warnings about alignment and line length.
-But please do so in such a way that doesn't reduce readability,
-e.g. don't split strings over multiple lines.
+> diff --git a/tools/testing/selftests/connector/thread.c b/tools/testing/selftests/connector/thread.c
+
+...
+
+> +static inline void init_threads(pthread_attr_t *attr)
+
+Please don't use inline in .c files unless there is a demonstrable,
+usually performance, reason to do so.
+
+Likewise twice more in this patch and once in patch 1/3.
+
+> +{
+> +	int ret;
+> +
+> +	ret = pthread_attr_init(attr);
+> +	if (ret != 0) {
+> +		perror("pthread_attr_init failed");
+> +		exit(ret);
+> +	}
+> +
+> +	ret = pthread_attr_setdetachstate(attr, PTHREAD_CREATE_DETACHED);
+> +	if (ret != 0) {
+> +		perror("pthread_attr_setdetachstate failed");
+> +		exit(ret);
+> +	}
+> +}
+
+...
 
