@@ -1,181 +1,214 @@
-Return-Path: <linux-kselftest+bounces-20113-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20114-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96A9E9A384B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 10:15:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 404A59A385F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 10:20:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B77F01C2120D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 08:15:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0AB9285D80
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 08:20:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8E9F18CBEA;
-	Fri, 18 Oct 2024 08:15:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C83618CC13;
+	Fri, 18 Oct 2024 08:20:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SurcIdm6"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="PGObKaIp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19DE183CB0
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2024 08:15:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0052518C939
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2024 08:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729239330; cv=none; b=llguEJEDrzSEyV9/3pz5l1jS/OUEI23kBJD9qP6xMca9yfNMjA+2R5W7eFQ61Yt0sP10tIRAXFocWCTuMVBuF4iaoISmXq+aFiVi97GuE55DZ62VAf6D3Ovt9XXLMVXXEIU4CbKWP1eTUjb6ETA+Bm8bnTtk6OXDXndIC7JyyXQ=
+	t=1729239630; cv=none; b=fGL136YvZ89rm5MEyCIAbt/bRSEHbq1CS7pH/BbG+e+d1R0QKkjwKdlld5TqIokHRLJfC1ri7mKw6YWKTmMYmojmpESfwYFgiX7TtGGTK0SOtJ1cJrUkX895J5XQZYt6Q1fPy3WiO+Xx08v5UYu9+aUbh5O35mLe+kQXOCK1qcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729239330; c=relaxed/simple;
-	bh=RyCuiX7Z7beQNgjkYjzS1E6I9EFHABI+uLFOdorHDUA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=REATReWz1SjdFQl2w+Sl9/3tTYWcDSlTOLcQnhbzWEcUM7tyofjr8/uAopvkadAebgVNIdG1Z7eVhrjsW2vyuKTzqyBR54PDihXpymPPrfLsmRkAtD8fcJ+iG5uGf2bR8Bq6q65EK2XNwZvu2wsQWPiozWB8cJfgQoCEMItS5IM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SurcIdm6; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729239327;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yr2YuJLh1oBlVb3LAJ7sYOHk9wkq05eBctRIWz59ZDw=;
-	b=SurcIdm6DneiQRILf//r8UdHEP4CM454HX008sS8QK7o6BpWI7H+8FNQAsrvYseJG+QLiL
-	+O4fKlJQvKWjZs4HNeC9aOG1BF/CkiXu0cswQOGWW6aXUbEWHIErQ0On57ZhFFlSmjOLhe
-	OTUDlk6sAwmo3qamnQ31COJdyiQXMIU=
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
- [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-692-jZZA-Qq4PeSRD7q_zGjNcA-1; Fri, 18 Oct 2024 04:15:25 -0400
-X-MC-Unique: jZZA-Qq4PeSRD7q_zGjNcA-1
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-7ea9acf089bso1436118a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2024 01:15:25 -0700 (PDT)
+	s=arc-20240116; t=1729239630; c=relaxed/simple;
+	bh=fv4S11jckR2IKANtiqDjpLwmjQ40Sn5yGK77sulA+7I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=f9Sap4E3ZPZX/Q0/ExpeENDMqSBm29S+DM8XVKJjsGs5hG1DcvRKIQUZ+2kbxv+TYdf1ltvb2iH6y5fzCEawH9RJ8pxVu70OYbYJlOhiFlAXqbhTvq0BQSy1AG8VHEjXsEc2tLEWrmGCMp4aiWv9oyxIQmmarbH38jtjAwt6X68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=PGObKaIp; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-539f8490856so2187863e87.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2024 01:20:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvpn.net; s=google; t=1729239625; x=1729844425; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=FRjvf5MP+13+6LLbAr9owLWnQDfNe4pqw2wzXAHPLsY=;
+        b=PGObKaIpYPaNM2v/axHC+ACBneJYDmtt4zbfv+gRx87Do9ss2uihVPvL7zjBrw8lAU
+         irPXLA8X23k4ntmM5kv/cYuceGGuYbcdRFDCOYOv0C0VC+OkyzEa/OXoMD9Mjjy5eE27
+         Hn5nfOU8R8Z6nU8Al+osH1Wt72KB8ZiLMcIGJ5WuGTItqZjVbFpiBnEmuMvhb1/lmq+T
+         K97wrzrKGd1AMZvZtRl26eAgOj2XNd3hXe4WWoLYWrhZ5S21R0Z7iS8KEsuVY3EIIj9n
+         RRjBmXU83ovY59gZDoj/Hsb6FXHoVG3M9SChZR5a7UPsbtsSveidf2X+84QVVOir0IWm
+         lmIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729239324; x=1729844124;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yr2YuJLh1oBlVb3LAJ7sYOHk9wkq05eBctRIWz59ZDw=;
-        b=Ml7nwadK4j6Ej2PYuSh8i+GGqtqrDuscSn4HONMCA6WEmRN++KhU0l1Ypj1yQPabes
-         Gx2Ut0IWnSU5k9moRQCdCun3Wa+ORuGT7VcjNwVPw1RN9RLB9ReKW3XQIApG2s9UBJY0
-         VGR6yOzlQJq288J2RCleZLqTlC5F51CovJvjlnE7oNRoNHeG/FkXOyii0E+Jl0c3/lko
-         iPhdE/BNZBX+dVvGWgSvc7pQHBX/G0b567GsV3VFlo63GrBNyx92ppEQ/InPHwHG8frd
-         k4tyVTKDU+09PoJgsrdXrKL8E20/JNePTV5XM3o0ZUsWRXQdo9Nlnl9ItI15+kWRIGbP
-         XJaA==
-X-Forwarded-Encrypted: i=1; AJvYcCWOF/Gw54mYJTSiW6EDOy7CGxCdOobNm7UAT788QpDy83aURgEeCckgpaExktXxCrums+MvxrwPpYMNLiz6d08=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0OwngIp3c0NmeidvCJaKHl0Ph/zDMLW0mfQH2cUgcQDUKKLGx
-	HVcMQLxJDbk6eGZIrgtaWj0uEwVvhOzM4SMl7YyMfySJxdt++hAmz0r51Be0FJDfjNI3Cs0lwS3
-	ZbfKIhFRMazSaBpKkv2pW4iVn+radWpO/HzRgBl6Wrl9nD8MWRqPMh4k8Ev5j96g84Sd59UVZt7
-	YBxdoO+3XK7IZqvGf+PXOXVfRuEzfT1I2fy7O64McR
-X-Received: by 2002:a05:6a21:178a:b0:1d8:aa1d:b30c with SMTP id adf61e73a8af0-1d92c9f8becmr2035164637.1.1729239324399;
-        Fri, 18 Oct 2024 01:15:24 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGLD3LtPmdn3YgZFunCmr4YCke9ZeVKhkDNBtOgm6i/o4DVa5u2WpwUUag2e6tVVnOKvDE1CSmiKahP3Ex3VII=
-X-Received: by 2002:a05:6a21:178a:b0:1d8:aa1d:b30c with SMTP id
- adf61e73a8af0-1d92c9f8becmr2035126637.1.1729239323920; Fri, 18 Oct 2024
- 01:15:23 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1729239625; x=1729844425;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FRjvf5MP+13+6LLbAr9owLWnQDfNe4pqw2wzXAHPLsY=;
+        b=IYgUakilWp29MFAyjCZj2zQqeib36tJFKd+kYFl4XdVwR/qby3sitNzlGGjH7ouDIV
+         PmCDbFiFaphA5d7x21Yk836FcDwqHdBmJZAPWQ/SJNGXM9oMJOHO9tsGBkZ2TEG1l/nv
+         bov+Aj4bHW9UGOOZT8nkXTKx35/G3kGYFB5cjenzmF50KuB3FUBrEYeAmdkDvQq/CPlO
+         i8OmXOtCRrcBlpZo4ZdJLDUw4tFMofZCOeAF0PBfVM8iaQdsMWFEKCWYJL30gKIXCmrx
+         7XQ2/+yv/o9JlKp+HyInWqUnqmo3L59F1rPfLM7blwpqMQtRY4CuNUtAnOQ/raNf2DRM
+         fIcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXxJ7waZaaGjxnU/xq83JjOwhj+YIe2VJhQQw65hmrP3sxplJ571q1duHpoFAwjLh/OKhmdb6WNEkziUlIuecM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSRh86w/GcLrA+haFMG7xwXDWF0kT4xz+sD4rNr+ek5ei/tYKi
+	CpbG4j7k0j6+bs1Gah3l0idb8Wfrgf9zjmsSoztCls8antIQQYKGcRz7pWGk9mY=
+X-Google-Smtp-Source: AGHT+IHUti02UynMz6KQkKP/PaiU628/OtrvvF5LEx3K146nBh2AmiKAhJ/cnKXScSVkIacS+1jdHg==
+X-Received: by 2002:a05:6512:3b96:b0:539:fb49:c489 with SMTP id 2adb3069b0e04-53a1543edaamr753930e87.9.1729239624870;
+        Fri, 18 Oct 2024 01:20:24 -0700 (PDT)
+Received: from ?IPV6:2001:67c:2fbc:1:b27a:eeb:2c33:713c? ([2001:67c:2fbc:1:b27a:eeb:2c33:713c])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a68bc5300sm61622866b.112.2024.10.18.01.20.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Oct 2024 01:20:24 -0700 (PDT)
+Message-ID: <ad45c95c-c5dc-42e5-b270-4dd0a1d0aa75@openvpn.net>
+Date: Fri, 18 Oct 2024 10:20:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241008-rss-v5-0-f3cf68df005d@daynix.com> <20241008-rss-v5-7-f3cf68df005d@daynix.com>
- <CACGkMEsPNTr3zcstsQGoOiQdCFQ+6EG6cSGiZzNxONsH9Xm=Aw@mail.gmail.com> <4bc7dfaa-a7cd-41f4-a917-e71b5c7241f7@daynix.com>
-In-Reply-To: <4bc7dfaa-a7cd-41f4-a917-e71b5c7241f7@daynix.com>
-From: Jason Wang <jasowang@redhat.com>
-Date: Fri, 18 Oct 2024 16:15:12 +0800
-Message-ID: <CACGkMEtt7a4+gadQt2=3zz+MCUtueuWj+zwaHR_gXCvLg=0PcQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v5 07/10] tun: Introduce virtio-net RSS
-To: Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, kvm@vger.kernel.org, 
-	virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
-	Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>, 
-	Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v9 23/23] testing/selftest: add test tool and
+ scripts for ovpn module
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ openvpn-devel@lists.sourceforge.net, linux-kselftest@vger.kernel.org,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, sd@queasysnail.net, ryazanov.s.a@gmail.com,
+ Andrew Lunn <andrew@lunn.ch>
+References: <20241016-b4-ovpn-v9-0-aabe9d225ad5@openvpn.net>
+ <20241016-b4-ovpn-v9-23-aabe9d225ad5@openvpn.net>
+ <a86855c4-3724-43e8-9bdf-fb53743cd723@linuxfoundation.org>
+ <12609df3-4459-4d86-a505-e4f2daccff93@openvpn.net>
+ <9837c95a-2366-4733-b26a-9bfd27261f56@linuxfoundation.org>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <9837c95a-2366-4733-b26a-9bfd27261f56@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat, Oct 12, 2024 at 6:29=E2=80=AFPM Akihiko Odaki <akihiko.odaki@daynix=
-.com> wrote:
->
-> On 2024/10/09 17:14, Jason Wang wrote:
-> > On Tue, Oct 8, 2024 at 2:55=E2=80=AFPM Akihiko Odaki <akihiko.odaki@day=
-nix.com> wrote:
-> >>
-> >> RSS is a receive steering algorithm that can be negotiated to use with
-> >> virtio_net. Conventionally the hash calculation was done by the VMM.
-> >> However, computing the hash after the queue was chosen defeats the
-> >> purpose of RSS.
-> >>
-> >> Another approach is to use eBPF steering program. This approach has
-> >> another downside: it cannot report the calculated hash due to the
-> >> restrictive nature of eBPF steering program.
-> >>
-> >> Introduce the code to perform RSS to the kernel in order to overcome
-> >> thse challenges. An alternative solution is to extend the eBPF steerin=
-g
-> >> program so that it will be able to report to the userspace, but I didn=
-'t
-> >> opt for it because extending the current mechanism of eBPF steering
-> >> program as is because it relies on legacy context rewriting, and
-> >> introducing kfunc-based eBPF will result in non-UAPI dependency while
-> >> the other relevant virtualization APIs such as KVM and vhost_net are
-> >> UAPIs.
-> >>
-> >> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
-> >> ---
-> >>   drivers/net/tap.c           | 11 +++++-
-> >>   drivers/net/tun.c           | 57 ++++++++++++++++++++-------
-> >>   drivers/net/tun_vnet.h      | 96 +++++++++++++++++++++++++++++++++++=
-++++++----
-> >>   include/linux/if_tap.h      |  4 +-
-> >>   include/uapi/linux/if_tun.h | 27 +++++++++++++
-> >>   5 files changed, 169 insertions(+), 26 deletions(-)
-> >>
+On 17/10/2024 23:40, Shuah Khan wrote:
+> On 10/17/24 05:27, Antonio Quartulli wrote:
+>> On 16/10/2024 23:14, Shuah Khan wrote:
+>>> On 10/15/24 19:03, Antonio Quartulli wrote:
+>>>> The ovpn-cli tool can be compiled and used as selftest for the ovpn
+>>>> kernel module.
+>>>>
+>>>> It implements the netlink API and can thus be integrated in any
+>>>> script for more automated testing.
+>>>>
+>>>> Along with the tool, 2 scripts are added that perform basic
+>>>> functionality tests by means of network namespaces.
+>>>>
+>>>> The scripts can be performed in sequence by running run.sh
+>>>>
+>>>> Cc: shuah@kernel.org
+>>>> Cc: linux-kselftest@vger.kernel.org
+>>>> Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
+>>>
+>>> I almost gave my Reviewed-by when I saw the very long argument parsing
+>>> in the main() - please see comment below under main().
+>>>
+>>> Let's simply the logic using getopt() - it is way too long and
+>>> complex.
+>>
+>> Shuan,
+>>
+>> while looking into this I got the feeling that getopt() may not be the 
+>> right tool for this parser.
+>>
+>> The ovpn-cli tool doesn't truly excpect "options" with their arguments 
+>> on the command line, but it rather takes a "command" followed by 
+>> command-specific arguments/modifiers. More like the 'ip' tool (from 
+>> iproute2).
+>>
+>> The large if/else block is checking for the specified command.
+>> Moreover commands are *mutually exclusive*.
+>>
+>> Converting this logic to getopt() seems quite complicated as I'd need to:
+>> * keep track of the first specified command (which may be in any 
+>> position)
+>> * prevent other commands to be thrown on the command line
+>> * come up with an option for each command-specific argument (and make 
+>> sure only those required by the specified command are present)
+>>
+> 
+> Thank for looking into it. I would like to make a suggestion to
+> add a parse() routine and move this logic there instead of making
+> the main() very long. It will be easier to read the code as well.
 
-[...]
+Ok, I get your point. Let me work something out :)
+Thanks again for your feedback!
 
-> >> diff --git a/include/uapi/linux/if_tun.h b/include/uapi/linux/if_tun.h
-> >> index d11e79b4e0dc..4887f97500a8 100644
-> >> --- a/include/uapi/linux/if_tun.h
-> >> +++ b/include/uapi/linux/if_tun.h
-> >> @@ -75,6 +75,14 @@
-> >>    *
-> >>    * The argument is a pointer to &struct tun_vnet_hash.
-> >>    *
-> >> + * The argument is a pointer to the compound of the following in orde=
-r if
-> >> + * %TUN_VNET_HASH_RSS is set:
-> >> + *
-> >> + * 1. &struct tun_vnet_hash
-> >> + * 2. &struct tun_vnet_hash_rss
-> >> + * 3. Indirection table
-> >> + * 4. Key
-> >> + *
-> >
-> > Let's try not modify uAPI. We can introduce new ioctl if necessary.
->
-> 2, 3, and 4 are new additions. Adding a separate ioctl for them means we
-> need to call two ioctls to configure RSS and it is hard to design the
-> interactions with them.
->
-> For example, if we set TUN_VNET_HASH_RSS with TUNSETVNETHASH before
-> setting struct tun_vnet_hash_rss with another ioctl, tuntap will enable
-> RSS with undefined parameters. Setting struct tun_vnet_hash_rss with
-> TUN_VNET_HASH_RSS unset also sounds unreasnoable.
->
-> Letting the new ioctl set TUN_VNET_HASH_RSS does not help either.
-> TUNSETVNETHASH still sets the bitmask of allowed hash types so RSS will
-> depend on two ioctls.
+Regards,
 
-I meant let's avoid introducing an ioctl with function 1 in one patch,
-and adding 2,3,4 in exactly the same ioctl in the following. It breaks
-the uABI consistency and bisection.
+> 
+>> Are you sure this is the right path to follow?
+>>
+>> The 'ip' tool also implements something similar after all.
+>>
+> 
+> Sometimes argument parsing takes on life as new options get
+> added. It starts out as a couple if else conditionals and
+> expands - when I see a long argument parsing code, I like
+> to pause and ask the question. Sounds like you case is more
+> complex.
+> 
+> thanks,
+> -- Shuah
 
-We can add all in one patch.
-
-Thanks
+-- 
+Antonio Quartulli
+OpenVPN Inc.
 
 
