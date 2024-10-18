@@ -1,79 +1,128 @@
-Return-Path: <linux-kselftest+bounces-20104-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20105-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B242F9A33D3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 06:30:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB7ED9A345D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 07:35:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 153EBB21EA0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 04:30:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DCE11F23463
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 05:35:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C5FD160884;
-	Fri, 18 Oct 2024 04:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CCA617B50A;
+	Fri, 18 Oct 2024 05:35:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="NlhY2q+8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dZ+4zonF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2046.outbound.protection.outlook.com [40.107.93.46])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD8416DC01;
-	Fri, 18 Oct 2024 04:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F040176AC5;
+	Fri, 18 Oct 2024 05:35:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.11
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729225813; cv=fail; b=MZUtWvi/95FVvimjLk8VD48iATfsyRUdMjY7xqCA/ei0Rq9EuSUD1DcoVtjlJlRZIVNFnm/RSNkmsaKDLPInAuYBNy6/6HpEzLsZAFJ6gqTcpeqRqn0M/mCi5MKqBct4NwPlg+ck0OZ8Lj/Ri/VjsooqvpjE3LXd7bEI2xOS6dk=
+	t=1729229747; cv=fail; b=VyKoNcE92/vvURe86+zKHpnm8DcfkcdVYMPx4ninAZUfJodw1IkhwSCAue25F1njoNuvGblR+yFuZ5XQaM+MegFMaCNMenX+0Lv0HQatpGcS3x6grmJCxXHibB5KjX0AsHQuq5WMampR50Npj6RBF4XnTsYZCwysU39xRpkn7sU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729225813; c=relaxed/simple;
-	bh=MSTb+Qk1KvXs2qMOmXTsaPxn9vAQVJh/DxtRzPcXliY=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=EIOHfkIq9E6mcJR9B2IGZXePTWAYwkRE8b4anBRUlSNYg8n3bhferc6jyUOLskkE2NQznoBzcYJWr0j7HRFVx0NnZvntDOnxSqIq9nyS/7odDG02NCKJfwlfIMuW3Z7PmA+/wJVgnj5IejvmFgndZo48nKWlKn1b+87ht0WrUZE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=NlhY2q+8; arc=fail smtp.client-ip=40.107.93.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1729229747; c=relaxed/simple;
+	bh=/BC7ZAeCHiW1XjXDz9aIWiF/ROAs+6LfO49lgYk4lWk=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=gJyAEaOQWH/ca+paOO23RfoOhFVwBwnnfPrjgO6lhpFP93ES6Oti7z7HGGPKVCe0ZLL/hlYMHPmuh1Tno35TtApJNk30YLeS9JCkqNFKKcS0g6X8964ZYlDO5fSgxnIP5zoaEhtRolUJrWNi0U4HWZQ8GLzZ9PNPTUuK2kQ1CP4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dZ+4zonF; arc=fail smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729229745; x=1760765745;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=/BC7ZAeCHiW1XjXDz9aIWiF/ROAs+6LfO49lgYk4lWk=;
+  b=dZ+4zonFR1wmG3ZTNCNwD8a7wKaqneMhVbTuY4xxSPwxnZcyfP9+vLwa
+   rQMbp19FJzinqb9rIFx3gOu6U7RTYrvTkRhpuVixnLRYhgg0UYeB6Q4yb
+   k3mSUEYnCsLa4tI5uzy1gKq1xolgLj9tIg16DtzcUyZKu5aYIK/2YIWK7
+   x5TgKru3T8pvi+jKeUcbfkpm/EZXP74xelCuOGYrc96P7rhbx/SHDfT47
+   L/oBsvkkLiACiI1UW6YZlpt4dXkrmVTT3kQZ+JTICJWany/R0VO8PKuA1
+   1RVQE+kP3rkcy2rVsLcxsD1xB1VReqWYziB4hpgtvGJzfxh1JVR7vmK08
+   g==;
+X-CSE-ConnectionGUID: KYLnFwBoRKGlgymwLzZaXg==
+X-CSE-MsgGUID: 97fABitBSfm8lzNKr+DaHg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="39289018"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="39289018"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 22:35:43 -0700
+X-CSE-ConnectionGUID: PoLB64zJTPCKx/bh/Qf5xA==
+X-CSE-MsgGUID: WIJlBuLAR1asQfQS7afDzQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,212,1725346800"; 
+   d="scan'208";a="102067510"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmviesa002.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 17 Oct 2024 22:35:42 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Thu, 17 Oct 2024 22:35:42 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Thu, 17 Oct 2024 22:35:42 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Thu, 17 Oct 2024 22:35:40 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CELdJXlvjOEdYnd/Qrw19BxZ5M1J18JLjagkCl3r6ftlT6HO1jRP+A0kDnfVo5qfnu0cAlZav5mL8loc7NgSIhSoIAIsod5nYgZ1lAFySZVK1UgGvqsd3s6K1S6jhBS29SPhz5ptu7i3aI5HZc56KuaJSDa4VNeplGQN8wZvqG5W7fdiEaZVw3eUAxV5McSuAuY2YUTXPXjpTcaW29kCk3vGzIysWwIIReLs2seWGIJVwrR1YDaY059Eaw5dBbfIxUSYjNSUqEWOnSSBdh/7EH3IVqrTyz9FmEzEootz7WlIln1It4+bGJMVzXoTdr9HfVEZf49OB/JfqOWJaQUfkg==
+ b=lZLzV52WTZxVrU3LkfAIpOfn+l2zv6domleFq98+XFxAS8rWeiCTZwcek6rsRvNA3zHP7qugxQRwbTLqUScfJThEM/d8WXQtQ4db4+IhHuuCq9fSo+UO99iJuHUwMnalecX5zOf2wLHvFPGRvOBkTAsJGquK4PdRtZpd27hPL+lQJmI/C1IE+oQppOPZKXjY/nve3ynsNw0sTna8BDQd5V+jap11el7HqqTD2munAriKYnrJJjRBGjnqzkZwAdZNdq77GI7vdIwdVXvJ1JGfHupXj7OcsNC3ZwdxeJwjjvBjmanWCI8Ku+5+m5r0mM+8/rQCc2v6CZVIeueBjkfk0g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HRJc3eWfoOUrVNYRDPqV8MTkZLhKcmuI41+pP9aZyLE=;
- b=yl6JC30gU626wAL9C5kxC5bGseTnrfhc76VyWuWi5OlH5kmi3juY5Ifc2Dmfwpc6e3ekfIxxrgfFhp0hEmv/VkBdBFbG/BbsgV/fcBcV1UVLYgSQxqZ+D+ywrRlAyddoVnq9uilJpzmZVp02RkH3UlAjrcu2ngSeNu+/f5Mob1pEI7u4RHgp3EI4e1RMSXdc3hsNYPfNGh25AAUVuTwt0oAH2yOYHlBz/GOIo2VfqG1/w1SuIRwIVKkp6TJySuQZuqZbvi7FqLyJmMrItxDyMxEGkBhveT4vrdKpnDHjnxSq9+THbL1bvLlBWRWODN5BJleXV4aa/6BJKtWqNqjZIw==
+ bh=kIFHAouLHDL2ySB2eflIUho/z0oGHZDtoSxdiSmpCP0=;
+ b=g86GV82FU5Hg0SsXp+02aHo4vYqijPWZoy3XF2uLrqpZA7BhJwxsQZHim8RIfU2hVZgnvYAJF31a0aa0SMYQbhTTBywApSHgMhLapMsIkSFJws2hz56Esm4jAseV41eka66OJK9I2uXmE9novi0eguJiuY/UzgcLD4WMqUszoV/0mO2ERlvFJwsXvVGZhYOohR8geFjQpJ0GK+dUyhT2mpO55DprDMwZY4MdDzc6cKHz1KF70I9P2I9WZOAdQHtknod0cH7adiMuZWb2FD0qNBVNzPYE9NXmuzrFD7p/0jDxi4C18cxWQAU3pr8HNvTNk8MT11oN4vK4kqaSDTbnVw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HRJc3eWfoOUrVNYRDPqV8MTkZLhKcmuI41+pP9aZyLE=;
- b=NlhY2q+8GpGpYEGPpxT1p7h5DNynGs5uegniWxAmPO9VRSXG4MD8XCmIh9YyrxZraLEtbEGCFxyhlLlm1x9rjEcEvH3ocX3I3ijw5bHmLKvxbNuM6FzYqzNCEsKc8Q9xDiOGBx77QlqXeBh3s2vjLG+sIDz7ounMYHISkKOdVMQ1gctkXJx7E1Pn14ZjaA5fDdpOgwaOJZc5t9aq5t7RLGytZFVFmZ0y/HFTobOF3zWm2VBgumG3Cy9u8iJ2zylho/ZSfeW2yzxCRbuGduXiETq8QhfI34Uo46CT5UxdmVfSMa9gtktN/l2Rc+40k6yXQ+1zsroqlHu9Yr4mG9qWkw==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA1PR12MB6580.namprd12.prod.outlook.com (2603:10b6:208:3a0::9)
- by SA1PR12MB7128.namprd12.prod.outlook.com (2603:10b6:806:29c::6) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
+ by DM4PR11MB6479.namprd11.prod.outlook.com (2603:10b6:8:8c::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18; Fri, 18 Oct
- 2024 04:30:08 +0000
-Received: from IA1PR12MB6580.namprd12.prod.outlook.com
- ([fe80::789d:39c0:6386:9f12]) by IA1PR12MB6580.namprd12.prod.outlook.com
- ([fe80::789d:39c0:6386:9f12%5]) with mapi id 15.20.8069.019; Fri, 18 Oct 2024
- 04:30:08 +0000
-Message-ID: <533eb948-a061-4d62-8d89-5edbdaf785e6@nvidia.com>
-Date: Fri, 18 Oct 2024 12:29:58 +0800
+ 2024 05:35:38 +0000
+Received: from DS0PR11MB7529.namprd11.prod.outlook.com
+ ([fe80::d244:15cd:1060:941a]) by DS0PR11MB7529.namprd11.prod.outlook.com
+ ([fe80::d244:15cd:1060:941a%4]) with mapi id 15.20.8069.016; Fri, 18 Oct 2024
+ 05:35:38 +0000
+Message-ID: <7f95f2cc-6691-4f40-bc50-e4430ebdbf1e@intel.com>
+Date: Fri, 18 Oct 2024 13:40:13 +0800
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftest: drivers: Add support to check duplicate hwirq
-To: shuah@kernel.org, tglx@linutronix.de, helgaas@kernel.org,
- mochs@nvidia.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Cc: linux-tegra@vger.kernel.org
-References: <20240904014426.3404397-1-jjang@nvidia.com>
+Subject: Re: [PATCH v3 3/4] vfio: Add VFIO_DEVICE_PASID_[AT|DE]TACH_IOMMUFD_PT
+To: Alex Williamson <alex.williamson@redhat.com>
+CC: Jason Gunthorpe <jgg@nvidia.com>, "Tian, Kevin" <kevin.tian@intel.com>,
+	"joro@8bytes.org" <joro@8bytes.org>, "baolu.lu@linux.intel.com"
+	<baolu.lu@linux.intel.com>, "eric.auger@redhat.com" <eric.auger@redhat.com>,
+	"nicolinc@nvidia.com" <nicolinc@nvidia.com>, "kvm@vger.kernel.org"
+	<kvm@vger.kernel.org>, "chao.p.peng@linux.intel.com"
+	<chao.p.peng@linux.intel.com>, "iommu@lists.linux.dev"
+	<iommu@lists.linux.dev>, "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"vasant.hegde@amd.com" <vasant.hegde@amd.com>
+References: <20240912131729.14951-1-yi.l.liu@intel.com>
+ <20240912131729.14951-4-yi.l.liu@intel.com>
+ <BN9PR11MB5276D2D0EEAC2904EDB60B048C762@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20241001121126.GC1365916@nvidia.com>
+ <a435de20-2c25-46f5-a883-f10d425ef37e@intel.com>
+ <20241014094911.46fba20e.alex.williamson@redhat.com>
+ <2e5733a2-560e-4e8f-b547-ed75618afca5@intel.com>
+ <20241015102215.05cd16c7.alex.williamson@redhat.com>
+ <e76e4dec-f4d7-4a69-a670-88a2f4e10dd7@intel.com>
+ <20241016101134.0e13f7d7.alex.williamson@redhat.com>
 Content-Language: en-US
-From: Joseph Jang <jjang@nvidia.com>
-In-Reply-To: <20240904014426.3404397-1-jjang@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Yi Liu <yi.l.liu@intel.com>
+In-Reply-To: <20241016101134.0e13f7d7.alex.williamson@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR04CA0199.apcprd04.prod.outlook.com
- (2603:1096:4:187::13) To IA1PR12MB6580.namprd12.prod.outlook.com
- (2603:10b6:208:3a0::9)
+X-ClientProxiedBy: SG2PR04CA0214.apcprd04.prod.outlook.com
+ (2603:1096:4:187::17) To DS0PR11MB7529.namprd11.prod.outlook.com
+ (2603:10b6:8:141::20)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,227 +130,278 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6580:EE_|SA1PR12MB7128:EE_
-X-MS-Office365-Filtering-Correlation-Id: f051f900-91e3-45f7-6590-08dcef2d8be8
+X-MS-TrafficTypeDiagnostic: DS0PR11MB7529:EE_|DM4PR11MB6479:EE_
+X-MS-Office365-Filtering-Correlation-Id: 663056b4-abe8-40b1-01fa-08dcef36b264
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ZVdub09ZcFJsWjk2Y2NrYnhESmwrVDRBaTlqcThzYlBSU2ZPZlR5ZHp2OUNj?=
- =?utf-8?B?bVlUOTVtamQzbFJEOFNCTVZoMjVJS1pZZ0ZHZHhoaHI3NkE2WG1TOWhlN05l?=
- =?utf-8?B?UW8zcjJvWkxnV0tiUXg3UTVuZkJpOHByVHpUQ2Uzd1czdGFMYVFxVndKb2Q4?=
- =?utf-8?B?dm9UUXZ2Nmg5SC90VU8zVWdCRkNGMVc3V2Y4enFqZlZWb0s3ancyZVZCUldM?=
- =?utf-8?B?KzVtY1lRSGJGY2pNdTNIRTBhTEptcnpIempxdElCUEE2cDBQeUlGa3FTellm?=
- =?utf-8?B?ZWxUQW16YjV0TDZ5cXduV3ZkbEhZUythakN4eFNoUEQ2VUhVVVZxVFErR1dm?=
- =?utf-8?B?eEpOTGI4UU9tVjB6ZDJ4TGhZQ1Zra25DaVZXZlVsYmdjZ0d3TnRFaUVpb0Zk?=
- =?utf-8?B?R1pGU0c2K0pSbkJjb2t0cmV3MEdjZ3ZqcGp2RVpnTzdPaVdRVzJXZ2xMdkJ1?=
- =?utf-8?B?RlZBR0VnVFJmV1htVVBrWFBpWlVMQkp6RVVyYVNVMnY5cFptM3Q3RXRyblFm?=
- =?utf-8?B?alFLWnVmV2VmMDZqNTErakdFZlJPZHVENVFFbXd2NnR1NUVlMXBnQ2VlZU5y?=
- =?utf-8?B?dHFrYW9oR2F4M3d0QXZNZytRMjJmRkN4ZDdLd3VRKy9WZmwrRXo2ZGlPVFBJ?=
- =?utf-8?B?Qm94bVN5SFN0T2xWYStlcGg2bjR5QXBNaDZ6bEhGMEdWWFRycWN5eGxUam1J?=
- =?utf-8?B?R1JYZ1lkNVZuTDQ4ZktIaEdRd3NIamdJcklrMEs3L0FtVUI2YzdQY3dIVngv?=
- =?utf-8?B?WS9CRWRUdEN5bitpRlRsWmMxVWhTWDBKWkp6VVZTZWdrSDlHdktNQXNNUno2?=
- =?utf-8?B?M0FSSkdIV0VhVktpZDduRWFEOTFCZEtNcWduQW80RGQwNFEzdnBQRlhWYU5s?=
- =?utf-8?B?cG5TSmU1MFN6VEs2UzR0VUVVSVpNMDFpVEFNRkNTUWFCaUZnNzJQNW9uRTdv?=
- =?utf-8?B?K2ZaNjErUVR6Wk9lZXF6Sk1jRFJhamRINlpuL3R5MlpoSllpS2UxN0NXQ1d6?=
- =?utf-8?B?M0xTb0hOZjBDdWI4d293aGIwTVlpUGQ3eS9xc0xBRnVuNEJvUFVPN2o4STZM?=
- =?utf-8?B?a3IxeHMrYTkzWWdpMUI3N0FrdmU1UXdqd0hWTk9zVWlja2g4dXpGcERiUFpr?=
- =?utf-8?B?OXF6SVVxQVUwMHcrZUpKVXhob3VYNEJzdExiL2lGTlZIcjc3SWVBNXZWNG9w?=
- =?utf-8?B?Yk1TVjZqbGhnOExFVGJyN3dGQ2JvQVdaRGRicHNJR1lMR3IzeTNQTkMydjg2?=
- =?utf-8?B?MURjVUNsTS9NNVV6d2ZpUVFwWmxpMTBsQlkrZXJwU0tNdkR0Mys4Lzk1eGtu?=
- =?utf-8?B?N0FsQWQ0ZEwvRHk3RmhieHZyVFB5bXRXcHJ1bGNlMVhHbWVwKytKUUZrbmw3?=
- =?utf-8?B?YWYzc3hsdC9mdytNdThJRFVVMVlaN2s1bWh6SEkzbXM4ZUYzNW5ibU1MR0lB?=
- =?utf-8?B?Zis0OW9qd0tPSmF5NGZSS29seE42WHZBcGp5R0lWZVJqYUVTa0hINTl5d3Jx?=
- =?utf-8?B?WWxHdGwzVXQxZTdpdmN6M2dqK2tyS20rYjFHbjluNW84QWIvQ3NiTGl6WlFa?=
- =?utf-8?B?c2luOW02czNhd01VaDE4bmVpYThZUm9yTHNkcFA0ak1OS2RQanR2UjdkTjhu?=
- =?utf-8?B?RmR5bkJCRk1pVXhvYmlXczg3L0JQRDNjNkJzVTJweDRVNU1aL2Vjd2c0Z1p1?=
- =?utf-8?B?aDVLU3ZlZW52WFpzSVJ0NEltVDZGNDc3UmpUcWgxcmhwMk5VUlRqNmU1bkgx?=
- =?utf-8?Q?PEEEXama53E14A/SInZobXa39KV/ZW9lHMCFgtd?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6580.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?ek96MTdmZmhSek5iY04rclJYUEhmRUZoNmQ5eGcrY2xhNnd2ZEsrcVkzWEtE?=
+ =?utf-8?B?aDdoQTh5cDZyR2wxQ05JOXdIT0ROTWExVkF6dEdMRm9RUEI0dlIveHVuUWJ3?=
+ =?utf-8?B?RnpUdzZ2eUtCak1aVExLR2F2Z21UenM1ZVgvSFdDUU9ha09tdWJqZTF3aUtU?=
+ =?utf-8?B?YXJBSFVpWWJwL2pQeHhCYUN0cjhwSVd1b0Z5bnptcGZNcHM0RjhXSVBjOWRV?=
+ =?utf-8?B?YkJ1WDNMTFJHUEpNVEl1K280OXg4TXA3bjVPakFTRFZibWo4Vko1MXFVSVJV?=
+ =?utf-8?B?dWgvYmhpVUUrY2hFdHhVeWZhZE10S0hxejhBUGdvd25GZFRuVzBSYUZFd25o?=
+ =?utf-8?B?WC9hbTh6eVlHdk14VlBUWjFIa1IxdEFKSVdEdUdITGhad3ZFUDMrK2FKTkpj?=
+ =?utf-8?B?TXIyU3lxNW9PSFRUZldDSWNyRGZXYWQvZXlrZjRTWkVKb2JwdlVWWEZpYkY4?=
+ =?utf-8?B?UTFScU9rd014MytnNU5jZ3hWU2JBdG5JeXcveC96bGFzV0Y5akpSMGVkbWJ4?=
+ =?utf-8?B?ZUVnQm9BdEEwdjVFQUtvMXI5UnNWWlVzSHMycXBZTS9STjRHNUpPWFhuS2hK?=
+ =?utf-8?B?WnBCVlRrR0hXSE5OWjFmYWZFSUhHcE1rSUNYdmxuWkRET00yc3U5Z3N0VDVh?=
+ =?utf-8?B?dEtqNHIycGVYdWcyWDkvOWdKQWxpKzA0TUp5aEpLMzdCRzFUcko5RGxpTmtO?=
+ =?utf-8?B?Q3FucHQxWlJMZFdlQ2FYWXVwT2k1MTh6cStxeElMT0JTM3FvT0crbWhVSGVJ?=
+ =?utf-8?B?WENOcnR3aGdkTFVJMlVhSjh0MUZTc3ZES1ZsUlQ3QXVPS0V1ZU14OHhUQ29D?=
+ =?utf-8?B?RnBEbmpFZjdPS0hwd3dSdS92KzJ6ZEdIZWE1bkV4c0txbG9yNTMwZndKNWNJ?=
+ =?utf-8?B?Z1VmMFNtQ2pKckJiT0VXeEc4SVk5VVQydzU5OHp0Rlc0Q3lrWVRoS0J3RVdz?=
+ =?utf-8?B?amIvUzczYVBBajhjNjF0SExZUUFYcmxpVXlaWEVtYTYxTFNoQlFBKzlBZ0s3?=
+ =?utf-8?B?M09EckxPSVBLR3pXdGlrTFBhWmpNd0IvVml6K1VVKzJZOVQzS3pYYXIrY29Y?=
+ =?utf-8?B?RzNIU3NIQVdYRjdaOXBVZXlTWW5ERGQvNWlGZ3ViMDRlaXJCOEJDd1VxV2tC?=
+ =?utf-8?B?bXI1cEJCbzQxMVBUeEVaZTd4c0Q3ZTNVQ0JUVnRhblg1ckIxZzlWbm91SHVY?=
+ =?utf-8?B?TEl3STNiblFmczVzaDBwdXd4N1hhWkp0THJGVUpUdlppdUY1eGY1bkxmU3BU?=
+ =?utf-8?B?OUJYV0tPZGhRWUd5ZjhneEVyNkZxQ21odWtUSUR0dlFDTlBtaGhNZkRWM29U?=
+ =?utf-8?B?T3hiUUZxOE9ORGFHUlJ2V09PbStQRDZjTVdwOW02T3JMYkdtMHJIeFZMNjNB?=
+ =?utf-8?B?QWpLWEttLzRyOGdENENWSUJmYlJMM3plL1l5VzV5SXh0U1NsZnJsL0xxaVpL?=
+ =?utf-8?B?bGg2dVdGUEdWQ1pwWFJzdFZCR0dFRGgxajJnUjg3TTdpN1dhTVhGcUxIWkJa?=
+ =?utf-8?B?VTMydGhIWlN0Tm5zaEZZQkNDN3MzaFZhNGVZL2tqek1RQ092MmFETVkyaXg3?=
+ =?utf-8?B?c0FtWGRWQXprWGVUUjZPVzNuY0laYllhTURJbkZjZnQzTnZtaUl3VW9WRFBu?=
+ =?utf-8?B?Mjd2UVdFbU5NZmVtQS9iOCszMWNDOGUzaVFkVHNKWnJTaVRwRm4xZ3o4YlpR?=
+ =?utf-8?B?dER0SVhWWkgyVm94M1FqajVPczhha0FzVEZaL0NEN25nWHJDbGNNQ25zUjVl?=
+ =?utf-8?Q?Z3YDdt8wxqXH8sSltE=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TFlkbGxPOHdEL3Q2YkJKWDdnQm9IakdyQmRsNVVpaVcyNk5mbEVJc216bEZU?=
- =?utf-8?B?WDlBRHl4Y09sbUlWSnZxVjBua000V0JGbmYrQ3JiVTllRWtnelR5SFVzVTlB?=
- =?utf-8?B?S3BtZkY3azdXbzRtU2VZdnhlTXhtWGRYdDRGbEpyclZrQlRxL21IeTNUUHJq?=
- =?utf-8?B?TVlUQTRDanVubjMrQjluWFNSMHd6Q0lSNHFKMFB6amdaQ1Zsc2g3VERzaTBG?=
- =?utf-8?B?SFg2Wi8zOE5UanJJMHVTSTdlbTArQTFRTGJNSzZjb0g5bnE3YnQxZkR0NjFF?=
- =?utf-8?B?MC93d01YU1c0L3BoR0dSc09tbTlXRkNDbUpzVXVhSmdiNHpwM2VwemZhVTVD?=
- =?utf-8?B?UEJMZTBjN0wyMDRSQVE5UkF2RmVxejBtKzZCdWR5TjJJQms1dnFGRTRTcVVK?=
- =?utf-8?B?TzRBU1dnY2txVm96eGpUZjJ6QWh1TG1RcGtKbkZDYlA0V3haSXFqekE5bDhQ?=
- =?utf-8?B?WER4L1JEck52S3I4ZzJ6V1hJc2Y2d3FoQzVFZXBYWG56SEhhckZVNTU0b29U?=
- =?utf-8?B?Z0tQcm1nYlJISjdDVDJpbThUcFdLbm1LelBBS3FwZmNtOTJxK2EyYzlPSXdV?=
- =?utf-8?B?K0MvUXAvaDcxb3pIMlpTdVltNGZDUGVVK2o2QXVYZjJHYU9ZNEZWaEhkbVFx?=
- =?utf-8?B?TzFydkZJOTVwOGxxZS90WjlaKzJ0ekdnejA3aFdPTEx4c01MSVJuK0phYUtU?=
- =?utf-8?B?dHlBeU1BbmtqblhrRHBLUU1ISUcxeVpOdENmMnhrZU50VDRJL2l2YzdPSkMx?=
- =?utf-8?B?RVVyRUxkMjhaVHpNU2dEWlBmSGJaOVVBc3lwamNNQ0dac3NLdnJRYzhTWFg1?=
- =?utf-8?B?aDNzV0p3VXNXMjR5Z1RUaWFZUWo5U2RDUEtiU3pWZ1k1V2VIZEMyL1dzRWgv?=
- =?utf-8?B?bWljUVhZTzJEK3VWaEh5NS9KazJ6dzdSZkpRTEF4Z1FwTzNqVzBlQ1piSlhS?=
- =?utf-8?B?cUJocFZMT0Y4Y2t2T0Y3WWIwcTZGVHhYZ3ZOVlV3alNaYjVXalNpaWVGUGlt?=
- =?utf-8?B?aytpSVkzNHNITldkdFdGcEJoTlNIa2JWcW91di9Scy9jNDhlZnBDMWR4cCt2?=
- =?utf-8?B?aTJqdnY0ZW53dEk5ZUwyejIxZW1lb1hEOG0rWHQ3ZmNqOWJPaUprSlZTVUg0?=
- =?utf-8?B?T1pqSnJ1VTZIRGNCSktaaXA5NVJNYzFEMkRvMlNrVk9UWnV0OEl4MGhsaHpy?=
- =?utf-8?B?cVVHNk9sbUxwVzUwSVNjdm9SWTcyRFZvWHM3U3lSSTVTVThWV1ZrcnYvYmZl?=
- =?utf-8?B?TWllTnRpT29NbU12TllCc1NVK3RBS01YTERLa3ExWE1vbzN0NEYvS29TNFc1?=
- =?utf-8?B?SmxNcDJGSWc3a3pNWFQ3d2p4bUJHc1BaQy9wbjBMSGpiK1MwWGd4YWRVb3J2?=
- =?utf-8?B?ZWRKeFhiRG1nOWh1T3dsOGZLUU83Z09yV3VUbUNYS0h3R214ZkRDbkhoaDA5?=
- =?utf-8?B?QjNZalJvVlVaaDE3Rnd2UnRHb0kxbitOek5QU0x6VXA5Nm5vS1g0MHNveDJ1?=
- =?utf-8?B?WEVSRWdDSVp3SWhtZlNlVk5wd3hRR3dHSXJjcmpjcURnajBMRXhINGFWSitB?=
- =?utf-8?B?blJ4dW8vTVRZVldHNnorYmdxM1JZNWZ5M3lyK1djYnBaR2VpQWRHM2UrQXZ1?=
- =?utf-8?B?UTBVVzVJdVJ1anNHc2NYaks2a0IxNVU3NjNlOG00UHNpckQ0MlFWT3g5VWVK?=
- =?utf-8?B?UzNDSEhwSHlEcldXL0lIZGZCdVNYRkRqZ2gvWUpOUDhBeURDZnMyVHZpcWlP?=
- =?utf-8?B?NzY1UHg1RkN3UmIwNW42ZFFuVktSMFRlbVlROFc2NG1XcGw0bnF5bWN6T25D?=
- =?utf-8?B?cFczdGhvWTJXNGlNVG15dXZ2aDB2cTJMYTVVYUh0ei9HUjhwa2p1UDl0cGd1?=
- =?utf-8?B?MWNxRFRDdkt3L2tEbEJ4QVUrSnNzNUlrbVozcjMwaTM0cTVSNFE5a3hzbVF5?=
- =?utf-8?B?UTJrcWV6bmR1WXdHazhaWHZFT1A2VTlNdzZJTFlhcDhudlZHUW1ENEJBRGdV?=
- =?utf-8?B?bS9oSXVjQldiclAyN1B1Mld2YlR1M2pOOXJiUndYd0tkR3JsTHZJSG16Zmwr?=
- =?utf-8?B?cjhvaDFjUVB5VUJUbXg4UmM3b20zQ3hzQWRMSFFwRU5IV3ZoWjUvNnRPY0Qr?=
- =?utf-8?Q?fCPHV/bGJPsg9scmwssOyKlPg?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f051f900-91e3-45f7-6590-08dcef2d8be8
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6580.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MXJyakZTMHJlWmNvYlNVYXVMTXptTmw0Q3NNNDRuKys3YmNHVlBuZSsrUjJ3?=
+ =?utf-8?B?eXhtVlhPOGZudnlldGZVY1FDVFZMSGZLazRtOVlzNDhObmtMMHpzS2NLamlZ?=
+ =?utf-8?B?ZjN3by9sS1ZnQVgySE5PVVp4RWlPZWp3b0JuaXlNbENRdTBBUkh4RHNWN0VD?=
+ =?utf-8?B?dVBleWNuRjVRWnhMN1gxdUE1U0ppMVZGY0VFWGhhRUNCZnY1Vk0vVFBEdVV0?=
+ =?utf-8?B?STNwNVVoLzZqWkhUeEJoaWJqL2lKSEd1VVpwbjI5YkxXMnlkcHErWWh2cEZq?=
+ =?utf-8?B?M0Y3MkhVcVowSXhXTDhNcUsxL1dnYU03NldYdElCaGIyNUxLT0xMZ0hzQmdi?=
+ =?utf-8?B?bkE5bVZKMTVwZFZUWVArMS84c2psaXc0NnpFVVZtdjQ1V1ZWYkJoT0ZhS05l?=
+ =?utf-8?B?azZNdGRFVHpFMmtIRmdCNGp2U2xINFo0Y3VKckZrY1pJeFY2UUM3VHFXN25j?=
+ =?utf-8?B?aW50UmxOWHF0clZuY0VhODBjMFdRTmdJYUxtL0FxYXN6VVFWZmNjZ1JhZWVL?=
+ =?utf-8?B?UWRoTVZtQTZKb0ZuRWMzd0RMLzd3K2lXVHdOWmRybUZhaHE2WitzVms5OTZu?=
+ =?utf-8?B?RTFpTjFuMVVUN2V6LzgvYU5Id3R5WW44ZGxkWlQ3dHIrdGVYaHh0QnJRbkNq?=
+ =?utf-8?B?MTRXZ0hJMURWSFVWYkNOWmI3UWp0c1dZOXo3WCs3dFBJeC85TmhUWnN2LytJ?=
+ =?utf-8?B?M0VMMHdaeG0rUjFoV3hGR1kxZHJhMDh0L2VEWjV0OVprdXdhNGIvYitCVldE?=
+ =?utf-8?B?dlQyN3I4c3M4Zk5wVURDaHBSZmQ3eGlER2x5S0ovWDAxdkZhdFU0bC9sTTJC?=
+ =?utf-8?B?cUtCREJVZzhoZUZ4MTRaQXdiV1g4SVZVZFdrTUZncEYvaEptTXFYUkdOZDNN?=
+ =?utf-8?B?SHRXRExLWlMxOVNjM0RFNnIxWU5JcVdaQmhNWVNNOHhXWlBFYy85eEtsZkFn?=
+ =?utf-8?B?QU9pMHIzaFk0UTR1S0p1b1ozMDY5Ym13d3NpajRmWVd6eXdDcENKUDZudzdP?=
+ =?utf-8?B?ZGhvdFNEOUt1VWJwUmpTTmkzSFJTeVRJdlBkUFJHT3RFTE5xZjhKTXVNZzJr?=
+ =?utf-8?B?aGdpOGwyVVQ3QUZydUFyWUk5Ti9hTUQ3aXNESUgvSW5YdnZ5WGI3UU9LOEZX?=
+ =?utf-8?B?clpNVFdSc0lRQVl2UFNRMmJMUllhMHMyWEprSVN3T2ZKRlhIb0x2cUNDNUNT?=
+ =?utf-8?B?NzVXTnljUlErNjhlcENUbE5NVEd2Y3I1dXE1NGtTbSttcWt6VDNkek9oT2tJ?=
+ =?utf-8?B?YmVRam5NclhtVklSZWhEc1JyRXBPMEVwTjZDMGM2VlVSZzdYMDZQdkRTWG1X?=
+ =?utf-8?B?cnJtREM3T2hOaUQwbnJBNk9Vd2VHdnJQOW9paHNOcjF1aEo0V3UzVU04SGZK?=
+ =?utf-8?B?cG9IYXBYendvN2dJd0xvWHJsdzEzcVpOSmtPclhNU1p4SDd1N2dnbVJWRXQv?=
+ =?utf-8?B?K21DVldTaWlBL0VGK0Q5WHZrM0FIOHZxQ0YrNVJQa2wrUHlnZFh4WFQrUGt4?=
+ =?utf-8?B?VFFBUzZqcHFtQ0hndWduQUxsV3NZWEw3a25mcXphWURxeWhuMTZSUVg5VEtp?=
+ =?utf-8?B?bXNhN2t6TGFLbG8xa0JYc01jb3ZBei9iaWlMb2JLbkVSUVp2cjdLdFdNVHlY?=
+ =?utf-8?B?MzFNTDVTTEVTV054WEJBZFRnTjFRWTFlZFdhbmdkRC9MTjN3ZzRGRTF3RzFL?=
+ =?utf-8?B?bkZ6dTJSdXYxV3VIS0ppVEQyWXhCM0VsS096YUF3MGhjdDNqZmc2ZzhEeGhO?=
+ =?utf-8?B?eEhWdUZ4c0RCenRsRWpEbXl3Y0N0NHVrYzVENjJVZmtFMHA2dGtZcFhKZTVC?=
+ =?utf-8?B?OFB3ZVUzdW1sV0tkTnd6NFRNOHBlZDBrc3ZKQnN6Z3puY0VKandQc0EyYjZp?=
+ =?utf-8?B?czdCRmIrVVJmWG5DSHo3M2dBOUFjdy9TaTluNnA1Q2FPb2FuMkhjakpLZTVY?=
+ =?utf-8?B?MTAySFN3bE1SRUR6WVR5L1MrSm1YRnYyS3V5eVNjK2ZnSG13RTkvMjl0djA0?=
+ =?utf-8?B?QWNRcUMvMDg3cVNWKzFmTVd0bHlhcFg3eElINm8yVTZPU3psNmpEV2laQ0Fr?=
+ =?utf-8?B?dmIzeGdHK1ZWRlg0MmkvTEs1alJja3VSTjQraGZUdWRNNTNpRVpoMW1vUHJI?=
+ =?utf-8?Q?Iz3xNeAUysPHsiXOL18gfeEjv?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 663056b4-abe8-40b1-01fa-08dcef36b264
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2024 04:30:08.1111
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2024 05:35:38.1225
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VMzEPT1OYUZWLJRX5PBUtn+eqKDhhpMDqPZNcnyPSw9zh9X+6GGVPH0g93CbHpdfVBAw08c93YDrqasdjLRnkg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7128
+X-MS-Exchange-CrossTenant-UserPrincipalName: K4xl/+wwJQHJa9hxhO0suDlGvGBDaJ0ldFkMNplhjxruPPhmDlSKUWHfZe2E9NVlWZ8kEC7Kk8/oJXCN+X3LqQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6479
+X-OriginatorOrg: intel.com
 
-
-
-On 2024/9/4 9:44 AM, Joseph Jang wrote:
-> Validate there are no duplicate hwirq from the irq debug
-> file system /sys/kernel/debug/irq/irqs/* per chip name.
+On 2024/10/17 00:11, Alex Williamson wrote:
+> On Wed, 16 Oct 2024 11:35:05 +0800
+> Yi Liu <yi.l.liu@intel.com> wrote:
 > 
-> One example log show 2 duplicated hwirq in the irq debug
-> file system.
+>> On 2024/10/16 00:22, Alex Williamson wrote:
+>>> On Tue, 15 Oct 2024 19:07:52 +0800
+>>> Yi Liu <yi.l.liu@intel.com> wrote:
+>>>    
+>>>> On 2024/10/14 23:49, Alex Williamson wrote:
+>>>>> On Sat, 12 Oct 2024 21:49:05 +0800
+>>>>> Yi Liu <yi.l.liu@intel.com> wrote:
+>>>>>       
+>>>>>> On 2024/10/1 20:11, Jason Gunthorpe wrote:
+>>>>>>> On Mon, Sep 30, 2024 at 07:55:08AM +0000, Tian, Kevin wrote:
+>>>>>>>          
+>>>>>>>>> +struct vfio_device_pasid_attach_iommufd_pt {
+>>>>>>>>> +	__u32	argsz;
+>>>>>>>>> +	__u32	flags;
+>>>>>>>>> +	__u32	pasid;
+>>>>>>>>> +	__u32	pt_id;
+>>>>>>>>> +};
+>>>>>>>>> +
+>>>>>>>>> +#define VFIO_DEVICE_PASID_ATTACH_IOMMUFD_PT	_IO(VFIO_TYPE,
+>>>>>>>>> VFIO_BASE + 21)
+>>>>>>>>
+>>>>>>>> Not sure whether this was discussed before. Does it make sense
+>>>>>>>> to reuse the existing VFIO_DEVICE_ATTACH_IOMMUFD_PT
+>>>>>>>> by introducing a new pasid field and a new flag bit?
+>>>>>>>
+>>>>>>> Maybe? I don't have a strong feeling either way.
+>>>>>>>
+>>>>>>> There is somewhat less code if you reuse the ioctl at least
+>>>>>>
+>>>>>> I had a rough memory that I was suggested to add a separate ioctl for
+>>>>>> PASID. Let's see Alex's opinion.
+>>>>>
+>>>>> I don't recall any previous arguments for separate ioctls, but it seems
+>>>>> to make a lot of sense to me to extend the existing ioctls with a flag
+>>>>> to indicate pasid cscope and id.  Thanks,
+>>>>
+>>>> thanks for the confirmation. How about the below?
+>>>>
+>>>> diff --git a/drivers/vfio/device_cdev.c b/drivers/vfio/device_cdev.c
+>>>> index bb1817bd4ff3..c78533bce3c6 100644
+>>>> --- a/drivers/vfio/device_cdev.c
+>>>> +++ b/drivers/vfio/device_cdev.c
+>>>> @@ -162,21 +162,34 @@ void vfio_df_unbind_iommufd(struct vfio_device_file *df)
+>>>>     int vfio_df_ioctl_attach_pt(struct vfio_device_file *df,
+>>>>     			    struct vfio_device_attach_iommufd_pt __user *arg)
+>>>>     {
+>>>> -	struct vfio_device *device = df->device;
+>>>> +	unsigned long minsz = offsetofend(
+>>>> +			struct vfio_device_attach_iommufd_pt, pt_id);
+>>>>     	struct vfio_device_attach_iommufd_pt attach;
+>>>> -	unsigned long minsz;
+>>>> +	struct vfio_device *device = df->device;
+>>>> +	u32 user_size;
+>>>>     	int ret;
+>>>>
+>>>> -	minsz = offsetofend(struct vfio_device_attach_iommufd_pt, pt_id);
+>>>> +	ret = get_user(user_size, (u32 __user *)arg);
+>>>> +	if (ret)
+>>>> +		return ret;
+>>>>
+>>>> -	if (copy_from_user(&attach, arg, minsz))
+>>>> -		return -EFAULT;
+>>>> +	ret = copy_struct_from_user(&attach, sizeof(attach), arg, user_size);
+>>>> +	if (ret)
+>>>> +		return ret;
+>>>
+>>> I think this could break current users.
+>>
+>> not quite get here. My understanding is as the below:
+>>
+>> If the current user (compiled with the existing uapi struct), it will
+>> provide less data that the new kernel knows. The copy_struct_from_user()
+>> would zero the trailing bytes. And such user won't set the new flag, so
+>> it should be fine.
 > 
-> $ sudo cat /sys/kernel/debug/irq/irqs/163
-> handler:  handle_fasteoi_irq
-> device:   0019:00:00.0
->       <SNIP>
-> node:     1
-> affinity: 72-143
-> effectiv: 76
-> domain:  irqchip@0x0000100022040000-3
->   hwirq:   0xc8000000
->   chip:    ITS-MSI
->    flags:   0x20
+> You're making an assumption that the user is passing exactly the
+> existing struct size as argsz, which is not a requirement.  The user
+> could allocate a buffer page, argsz might be 4K.
+
+I see. If the argsz is far larger than the existing struct size, it might
+be large than the size of the new struct as well. Then the trailing bytes
+would result in failure which does not fail with old user and old kernel.
+
+>> So to me, the trailing bytes concern comes when user is compiled with the
+>> new uapi struct but running on an eld kernel (say <= 6.12).But the eld
+>> kernel uses copy_from_user(), so even there is non-zero trailing bytes in
+>> the user buffer, the eld kernel just ignores them. So this seems not an
+>> issue to me so far.
 > 
-> $ sudo cat /sys/kernel/debug/irq/irqs/174
-> handler:  handle_fasteoi_irq
-> device:   0039:00:00.0
->      <SNIP>
-> node:     3
-> affinity: 216-287
-> effectiv: 221
-> domain:  irqchip@0x0000300022040000-3
->   hwirq:   0xc8000000
->   chip:    ITS-MSI
->    flags:   0x20
+> That's new userspace, old kernel.  I'm referencing an issue with old
+> userspace, new kernel, where old userspace has no requirement that
+> argsz is exactly the structure size, nor that the trailing bytes from
+> the structure size to argsz are zero'd.
+
+got it.
+
+>>> For better or worse, we don't
+>>> currently have any requirements for the remainder of the user buffer,
+>>> whereas copy_struct_from_user() returns an error for non-zero trailing
+>>> bytes.
+>>
+>> This seems to be a general requirement when using copy_struct_from_user().
+>> User needs to zero the fields that it does not intend to use. If there is
+>> no such requirement for user, then the trailing bytes can be a concern in
+>> the future but not this time as the existing kernel uses copy_from_user().
 > 
-> The irq-check.sh can help to collect hwirq and chip name from
-> /sys/kernel/debug/irq/irqs/* and print error log when find duplicate
-> hwirq per chip name.
+> Exactly, the current implementation makes no requirement on trailing
+> non-zero bytes, copy_struct_from_user() does.
+
+got it.
+
+>>> I think we need to monotonically increase the structure size,
+>>> but maybe something more like below, using flags.  The expectation
+>>> would be that if we add another flag that extends the structure, we'd
+>>> test that flag after PASID and clobber xend to a new value further into
+>>> the new structure.  We'd also add that flag to the flags mask, but we'd
+>>> share the copy code.
+>>
+>> agree, this share code might be needed for other path as well. Some macros
+>> I guess.
+>>
+>>>
+>>> 	if (attach.argsz < minsz)
+>>> 		return -EINVAL;
+>>>
+>>> 	if (attach.flags & (~VFIO_DEVICE_ATTACH_PASID))
+>>> 		return -EINVAL;
+>>>
+>>> 	if (attach.flags & VFIO_DEVICE_ATTACH_PASID)
+>>> 		xend = offsetofend(struct vfio_device_attach_iommufd_pt, pasid);
+>>>
+>>> 	if (xend) {
+>>> 		if (attach.argsz < xend)
+>>> 			return -EINVAL;
+>>> 	
+>>> 		if (copy_from_user((void *)&attach + minsz,
+>>> 				    (void __user *)arg + minsz, xend - minsz))
+>>> 			return -EFAULT;
+>>> 	}
+>>
+>> I think it might need to zero the trailing bytes if the user does not set
+>> the extended flag. is it?
 > 
-> Kernel patch ("PCI/MSI: Fix MSI hwirq truncation") [1] fix above issue.
-> [1]: https://lore.kernel.org/all/20240115135649.708536-1-vidyas@nvidia.com/
+> We could zero initialize the attach structure for safety, but the kernel
+> side code should also be driven by flags.  We should never look at a
+> field beyond the base structure that isn't indicated by flags and copied
+> from the user.
+
+yes, zeroing the trailing bytes is for safety, and all the new fields
+should be indicated by flags.
+
+>>> Maybe there are still more elegant options available.
+>>>
+>>> We also generally try to label flags with FLAGS in the name, but it
+>>> does get rather unwieldy, so I'm open to suggestions.  Thanks,
+>>
+>> There is already examples that new field added to a kernel-to-user uapi
+>> struct like the vfio_region_info::cap_offset and
+>> vfio_device_info::cap_offset. But it might be a little bit different
+>> with the case we face here as it's user-to-kernel struct. It's a time for
+>> you to set a rule for such extensions. :)
 > 
-> Signed-off-by: Joseph Jang <jjang@nvidia.com>
-> Reviewed-by: Matthew R. Ochs <mochs@nvidia.com>
-> ---
->   tools/testing/selftests/drivers/irq/Makefile  |  5 +++
->   tools/testing/selftests/drivers/irq/config    |  2 +
->   .../selftests/drivers/irq/irq-check.sh        | 39 +++++++++++++++++++
->   3 files changed, 46 insertions(+)
->   create mode 100644 tools/testing/selftests/drivers/irq/Makefile
->   create mode 100644 tools/testing/selftests/drivers/irq/config
->   create mode 100755 tools/testing/selftests/drivers/irq/irq-check.sh
+> That's a returned structure, so it's a bit different, but the same
+> philosophy, we don't break userspace.  In that case we used argsz as an
+> output field and flags to indicate there are capabilities.  Old
+> userspace ignores the flag and argsz semantics and continues to work.
+> New userspace checks the flag, reallocs the buffer with argsz and
+> retries.  This is however an example of userspace providing an argsz
+> value that exceeds the ioctl structure, with no requirement to zero the
+> buffer, though it is an output structure rather than the input
+> structure here.
 > 
-> diff --git a/tools/testing/selftests/drivers/irq/Makefile b/tools/testing/selftests/drivers/irq/Makefile
-> new file mode 100644
-> index 000000000000..d6998017c861
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/irq/Makefile
-> @@ -0,0 +1,5 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +TEST_PROGS := irq-check.sh
-> +
-> +include ../../lib.mk
-> diff --git a/tools/testing/selftests/drivers/irq/config b/tools/testing/selftests/drivers/irq/config
-> new file mode 100644
-> index 000000000000..a53d3b713728
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/irq/config
-> @@ -0,0 +1,2 @@
-> +CONFIG_GENERIC_IRQ_DEBUGFS=y
-> +CONFIG_GENERIC_IRQ_INJECTION=y
-> diff --git a/tools/testing/selftests/drivers/irq/irq-check.sh b/tools/testing/selftests/drivers/irq/irq-check.sh
-> new file mode 100755
-> index 000000000000..e784777043a1
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/irq/irq-check.sh
-> @@ -0,0 +1,39 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +# This script need root permission
-> +uid=$(id -u)
-> +if [ $uid -ne 0 ]; then
-> +	echo "SKIP: Must be run as root"
-> +	exit 4
-> +fi
-> +
-> +# Ensure debugfs is mounted
-> +mount -t debugfs nodev /sys/kernel/debug 2>/dev/null
-> +if [ ! -d "/sys/kernel/debug/irq/irqs" ]; then
-> +	echo "SKIP: irq debugfs not found"
-> +	exit 4
-> +fi
-> +
-> +# Traverse the irq debug file system directory to collect chip_name and hwirq
-> +hwirq_list=$(for irq_file in /sys/kernel/debug/irq/irqs/*; do
-> +	# Read chip name and hwirq from the irq_file
-> +	chip_name=$(cat "$irq_file" | grep -m 1 'chip:' | awk '{print $2}')
-> +	hwirq=$(cat "$irq_file" | grep -m 1 'hwirq:' | awk '{print $2}' )
-> +
-> +	if [ -z "$chip_name" ] || [ -z "$hwirq" ]; then
-> +		continue
-> +	fi
-> +
-> +	echo "$chip_name $hwirq"
-> +done)
-> +
-> +dup_hwirq_list=$(echo "$hwirq_list" | sort | uniq -cd)
-> +
-> +if [ -n "$dup_hwirq_list" ]; then
-> +	echo "ERROR: Found duplicate hwirq"
-> +	echo "$dup_hwirq_list"
-> +	exit 1
-> +fi
-> +
-> +exit 0
+> I think the same holds here, our policy is to not break userspace.  We
+> potentially do break userspace if we impose a requirement that the
+> trailing buffer size must now be zero.  We have the flags field so that
+> we don't need to blindly base the structure version on the size of the
+> user buffer.  We should use the flags field to determine relevant and
+> valid fields beyond the base structure without imposing new
+> requirements to userspace.  Thanks,
 
-Hi Tglx,
+got it. let me send another version.
 
-I follow your suggestions 
-https://www.mail-archive.com/linux-kselftest@vger.kernel.org/msg16952.html 
-to enable IRQ DEBUG_FS and create a new script to scan duplicated hwirq. 
-If you have available time, would you please help to take a look at new 
-patch again ?
-
-
-https://lore.kernel.org/all/20240904014426.3404397-1-jjang@nvidia.com/T/
-
-
-Hi Shuah,
-
-If you have time, could you help to take a look at the new patch ?
-
-
-Thank you,
-Joseph.
+-- 
+Regards,
+Yi Liu
 
