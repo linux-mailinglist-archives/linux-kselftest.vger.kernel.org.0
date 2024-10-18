@@ -1,68 +1,57 @@
-Return-Path: <linux-kselftest+bounces-20129-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20132-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 108B99A3B14
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 12:14:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C08669A3C97
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 13:03:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9656F1F21BFA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 10:14:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1ED71C21BDC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 11:03:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FD4F201033;
-	Fri, 18 Oct 2024 10:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=laura.nao@collabora.com header.b="E78oKcep"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF60920495E;
+	Fri, 18 Oct 2024 11:00:14 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC74188A18;
-	Fri, 18 Oct 2024 10:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729246474; cv=pass; b=cOa8k4W5Zj5qvCbxU4EuhvPszg/zH7F75x/vNhUxVukfvQmPnMB/l52NxBoY6is70SwLvdYJVEgQZ9TwbEjaQbUxjdcbYhwfW583f4w06CaaOmKmg99raC6GFp1j8cAF49umdqdDKkh0myIsr2cJR68OOI9Z/+zeGzUxlYH61w8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729246474; c=relaxed/simple;
-	bh=NYvOUxpVgYoK3sYkpSJnOD/N7FKJJHg08DiKJLhL9UU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Bz7dYisfL+mcZQG4Lf7bCPi0YxuhMj6ZYQE0SaS8T1Vdtv5bXQAL4Ghd8feckOZM8Am1REnySFvps5URQQV3YWAkvm7VX+m8G6cwohIneCEpM/y4DttajsWCZbtUewWTYASCDkM4VrF1guJCAJ3BPOrvoUKb1h8oC54k7ioqcKI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=laura.nao@collabora.com header.b=E78oKcep; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1729246456; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=gMGzn/9eEyiJVQ1DsuOobKU1bbqK4wzcv55WxSJVsJDSf0fw8M2MXWty4QoAdH0CETVvH8dzlmUCmQxshCuN3vD7JQnVtQ3QBpNybWGNWnsr+6sKoq6PBiwG7LzzOBj9FynnwTuFLKRP6AKZLNbnBTCG5fdgc/ufind1bFd/k2M=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1729246456; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=UhMDyqiYC37BE8WnfdqPMkYIHUHA3WhURp8QKOLssWg=; 
-	b=eX67o5OyuUbUSuNdbDO+0ItyM0zzp6fiL1Q5Bfyn1MGt0goj82iGGZsDOnpKxGIfrMNxV2pB9DUQSGbfRuo/EJWbIR8xNaKWSFFTbObEeDHaezGrd0mSzg3dd+BfNQVZpMJxiDT1B5ppR2w5XRzkpGAyFko7nfuFB1pu0upfOCw=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=laura.nao@collabora.com;
-	dmarc=pass header.from=<laura.nao@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1729246456;
-	s=zohomail; d=collabora.com; i=laura.nao@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=UhMDyqiYC37BE8WnfdqPMkYIHUHA3WhURp8QKOLssWg=;
-	b=E78oKcepe44F2PW4Y7UriCg5ZbjRyqqDssSEj1UkWGGBFci/B+vhSWg6nvDj3tdF
-	OQN79d+0m9Y6yXof83SsPp76Q1UTwm24iH8+MwdttiGTpw59Frbky+1ljUAa21yy7N9
-	Rq2ZKxrFGIGv7GBuqPsew49zy8opXhQnbhoqc5m0=
-Received: by mx.zohomail.com with SMTPS id 1729246455946654.0125228174601;
-	Fri, 18 Oct 2024 03:14:15 -0700 (PDT)
-From: Laura Nao <laura.nao@collabora.com>
-To: shuah@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel@collabora.com,
-	kernelci@lists.linux.dev,
-	tim.bird@sony.com,
-	mhiramat@kernel.org,
-	Laura Nao <laura.nao@collabora.com>
-Subject: [PATCH v2] kselftests: Add test to detect boot event slowdowns
-Date: Fri, 18 Oct 2024 12:14:39 +0200
-Message-Id: <20241018101439.20849-1-laura.nao@collabora.com>
-X-Mailer: git-send-email 2.30.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F418201106;
+	Fri, 18 Oct 2024 11:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729249214; cv=none; b=RDX0arkyjoqXzzOJamIWOpE5Q7fuhEs/sCMF4vAnx1e/36ynyJZq9IXH5XGnY/w1O4GBPM4NqGUiOBKoz1mHb7+ZWv0wQURUzeTccPM6A1D9rPdKLMtqawp/XCGaJu83esQuluVrfB1eTq3ytjnmzRT0On1KZBKHTyg+45AkpFo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729249214; c=relaxed/simple;
+	bh=5CjTkbzakHS9WZzMwsza8vzF/tctD6wz7fL5r9pUHiU=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=g1D6W2Dn2NoNwPxNxwdJddUxi2An5hM7FkObPfZoerhSRT5NDW+GKqobgPBambXbAZ6fhHpLCKvQxHVnbEbDEkQYwwtKpXoyIFGqt4jqoCi/mZGhnRoFoC/kKNd5HHVfhOmrdZuC5r/ehgemweX0+hyED1Lu+ZzlmC8hMZio0w4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4XVMBB6bdXzpX6N;
+	Fri, 18 Oct 2024 18:58:10 +0800 (CST)
+Received: from dggpemf200006.china.huawei.com (unknown [7.185.36.61])
+	by mail.maildlp.com (Postfix) with ESMTPS id E22681402CF;
+	Fri, 18 Oct 2024 19:00:08 +0800 (CST)
+Received: from localhost.localdomain (10.90.30.45) by
+ dggpemf200006.china.huawei.com (7.185.36.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 18 Oct 2024 19:00:08 +0800
+From: Yunsheng Lin <linyunsheng@huawei.com>
+To: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Yunsheng Lin
+	<linyunsheng@huawei.com>, Alexander Duyck <alexander.duyck@gmail.com>,
+	Alexander Duyck <alexanderduyck@fb.com>, Andrew Morton
+	<akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+	<linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH net-next v22 01/14] mm: page_frag: add a test module for page_frag
+Date: Fri, 18 Oct 2024 18:53:38 +0800
+Message-ID: <20241018105351.1960345-2-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20241018105351.1960345-1-linyunsheng@huawei.com>
+References: <20241018105351.1960345-1-linyunsheng@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,434 +59,487 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemf200006.china.huawei.com (7.185.36.61)
 
-Introduce a new kselftest to identify slowdowns in key boot events.
-This test uses ftrace to monitor the start and end times, as well as
-the durations of all initcalls, and compares these timings to reference
-values to identify significant slowdowns.
-The script functions in two modes: the 'generate' mode allows to create
-a JSON file containing initial reference timings for all initcalls from
-a known stable kernel. The 'test' mode can be used during subsequent
-boots to assess current timings against the reference values and
-determine if there are any significant differences.
-The test ships with a bootconfig file for setting up ftrace and a
-configuration fragment for the necessary kernel configs.
+The testing is done by ensuring that the fragment allocated
+from a frag_frag_cache instance is pushed into a ptr_ring
+instance in a kthread binded to a specified cpu, and a kthread
+binded to a specified cpu will pop the fragment from the
+ptr_ring and free the fragment.
 
-Signed-off-by: Laura Nao <laura.nao@collabora.com>
+CC: Alexander Duyck <alexander.duyck@gmail.com>
+Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
 ---
-Hello,
+ tools/testing/selftests/mm/Makefile           |   3 +
+ tools/testing/selftests/mm/page_frag/Makefile |  18 ++
+ .../selftests/mm/page_frag/page_frag_test.c   | 198 ++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh     |   8 +
+ tools/testing/selftests/mm/test_page_frag.sh  | 175 ++++++++++++++++
+ 5 files changed, 402 insertions(+)
+ create mode 100644 tools/testing/selftests/mm/page_frag/Makefile
+ create mode 100644 tools/testing/selftests/mm/page_frag/page_frag_test.c
+ create mode 100755 tools/testing/selftests/mm/test_page_frag.sh
 
-This v2 is a follow-up to RFCv1[1] and includes changes based on feedback
-from the LPC 2024 session [2], along with some other fixes.
-
-[1] https://lore.kernel.org/all/20240725110622.96301-1-laura.nao@collabora.com/
-[2] https://www.youtube.com/watch?v=rWhW2-Vzi40
-
-After reviewing other available tests and considering the feedback from
-discussions at Plumbers, I decided to stick with the bootconfig file
-approach but extend it to track all initcalls instead of a fixed set of
-functions or events. The bootconfig file can be expanded and adapted to
-track additional functions if needed for specific use cases.
-
-I also defined a synthetic event to calculate initcall durations, while
-still tracking their start and end times. Users are then allowed to choose
-whether to compare start times, end times, or durations. Support for
-specifying different rules for different initcalls has also been added.
-
-In RFCv1, there was some discussion about using existing tools like
-bootgraph.py. However, the output from these tools is mainly for manual
-inspection (e.g., HTML visual output), whereas this test is designed to run
-in automated CI environments too. The kselftest proposed here combines the
-process of generating reference data and running tests into a single script
-with two modes, making it easy to integrate into automated workflows.
-
-Many of the features in this v2 (e.g., generating a JSON reference file,
-comparing timings, and reporting results in KTAP format) could potentially
-be integrated into bootgraph.py with some effort.
-However, since this test is intended for automated execution rather than
-manual use, I've decided to keep it separate for now and explore the
-options suggested at LPC, such as using ftrace histograms for initcall
-latencies. I'm open to revisiting this decision and working toward
-integrating the changes into bootgraph.py if there's a strong preference
-for unifying the tools.
-
-Let me know your thoughts.
-
-A comprehensive changelog is reported below.
-
-Thanks,
-
-Laura
----
-Changes in v2:
-- Updated ftrace configuration to track all initcall start times, end
-  times, and durations, and generate a histogram.
-- Modified test logic to compare initcall durations by default, with the
-  option to compare start or end times if needed.
-- Added warnings if the initcalls in the reference file differ from those
-  detected in the running system.
-- Combined the scripts into a single script with two modes: one for
-  generating the reference file and one for running the test.
-- Added support for specifying different rules for individual initcalls.
-- Switched the reference format from YAML to JSON.
-- Added metadata to the reference file, including kernel version, kernel
-  configuration, and cmdline.
-- Link to v1: https://lore.kernel.org/all/20240725110622.96301-1-laura.nao@collabora.com/
----
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/boot-time/Makefile    |  16 ++
- tools/testing/selftests/boot-time/bootconfig  |  15 +
- tools/testing/selftests/boot-time/config      |   6 +
- .../selftests/boot-time/test_boot_time.py     | 265 ++++++++++++++++++
- 5 files changed, 303 insertions(+)
- create mode 100644 tools/testing/selftests/boot-time/Makefile
- create mode 100644 tools/testing/selftests/boot-time/bootconfig
- create mode 100644 tools/testing/selftests/boot-time/config
- create mode 100755 tools/testing/selftests/boot-time/test_boot_time.py
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index b38199965f99..1bb20d1e3854 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -3,6 +3,7 @@ TARGETS += acct
- TARGETS += alsa
- TARGETS += amd-pstate
- TARGETS += arm64
-+TARGETS += boot-time
- TARGETS += bpf
- TARGETS += breakpoints
- TARGETS += cachestat
-diff --git a/tools/testing/selftests/boot-time/Makefile b/tools/testing/selftests/boot-time/Makefile
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 02e1204971b0..acec529baaca 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -36,6 +36,8 @@ MAKEFLAGS += --no-builtin-rules
+ CFLAGS = -Wall -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
+ LDLIBS = -lrt -lpthread -lm
+ 
++TEST_GEN_MODS_DIR := page_frag
++
+ TEST_GEN_FILES = cow
+ TEST_GEN_FILES += compaction_test
+ TEST_GEN_FILES += gup_longterm
+@@ -126,6 +128,7 @@ TEST_FILES += test_hmm.sh
+ TEST_FILES += va_high_addr_switch.sh
+ TEST_FILES += charge_reserved_hugetlb.sh
+ TEST_FILES += hugetlb_reparenting_test.sh
++TEST_FILES += test_page_frag.sh
+ 
+ # required by charge_reserved_hugetlb.sh
+ TEST_FILES += write_hugetlb_memory.sh
+diff --git a/tools/testing/selftests/mm/page_frag/Makefile b/tools/testing/selftests/mm/page_frag/Makefile
 new file mode 100644
-index 000000000000..cdcdc1bbe779
+index 000000000000..58dda74d50a3
 --- /dev/null
-+++ b/tools/testing/selftests/boot-time/Makefile
-@@ -0,0 +1,16 @@
-+PY3 = $(shell which python3 2>/dev/null)
++++ b/tools/testing/selftests/mm/page_frag/Makefile
+@@ -0,0 +1,18 @@
++PAGE_FRAG_TEST_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
++KDIR ?= $(abspath $(PAGE_FRAG_TEST_DIR)/../../../../..)
 +
-+ifneq ($(PY3),)
-+
-+TEST_PROGS := test_boot_time.py
-+
-+include ../lib.mk
-+
++ifeq ($(V),1)
++Q =
 +else
-+
-+all: no_py3_warning
-+
-+no_py3_warning:
-+	@echo "Missing python3. This test will be skipped."
-+
++Q = @
 +endif
-\ No newline at end of file
-diff --git a/tools/testing/selftests/boot-time/bootconfig b/tools/testing/selftests/boot-time/bootconfig
++
++MODULES = page_frag_test.ko
++
++obj-m += page_frag_test.o
++
++all:
++	+$(Q)make -C $(KDIR) M=$(PAGE_FRAG_TEST_DIR) modules
++
++clean:
++	+$(Q)make -C $(KDIR) M=$(PAGE_FRAG_TEST_DIR) clean
+diff --git a/tools/testing/selftests/mm/page_frag/page_frag_test.c b/tools/testing/selftests/mm/page_frag/page_frag_test.c
 new file mode 100644
-index 000000000000..e4b89a33b7a3
+index 000000000000..912d97b99107
 --- /dev/null
-+++ b/tools/testing/selftests/boot-time/bootconfig
-@@ -0,0 +1,15 @@
-+ftrace.event {
-+    synthetic.initcall_latency {
-+        # Synthetic event to record initcall latency, start, and end times
-+        fields = "unsigned long func", "u64 lat", "u64 start", "u64 end"
-+        actions = "hist:keys=func.sym,start,end:vals=lat:sort=lat"
-+    }
-+    initcall.initcall_start {
-+        # Capture the start time (ts0) when initcall starts
-+        actions = "hist:keys=func:ts0=common_timestamp.usecs"
-+    }
-+    initcall.initcall_finish {
-+        # Capture the end time, calculate latency, and trigger synthetic event
-+        actions = "hist:keys=func:lat=common_timestamp.usecs-$ts0:start=$ts0:end=common_timestamp.usecs:onmatch(initcall.initcall_start).initcall_latency(func,$lat,$start,$end)"
-+    }
++++ b/tools/testing/selftests/mm/page_frag/page_frag_test.c
+@@ -0,0 +1,198 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Test module for page_frag cache
++ *
++ * Copyright (C) 2024 Yunsheng Lin <linyunsheng@huawei.com>
++ */
++
++#include <linux/mm.h>
++#include <linux/module.h>
++#include <linux/cpumask.h>
++#include <linux/completion.h>
++#include <linux/ptr_ring.h>
++#include <linux/kthread.h>
++
++#define TEST_FAILED_PREFIX	"page_frag_test failed: "
++
++static struct ptr_ring ptr_ring;
++static int nr_objs = 512;
++static atomic_t nthreads;
++static struct completion wait;
++static struct page_frag_cache test_nc;
++static int test_popped;
++static int test_pushed;
++static bool force_exit;
++
++static int nr_test = 2000000;
++module_param(nr_test, int, 0);
++MODULE_PARM_DESC(nr_test, "number of iterations to test");
++
++static bool test_align;
++module_param(test_align, bool, 0);
++MODULE_PARM_DESC(test_align, "use align API for testing");
++
++static int test_alloc_len = 2048;
++module_param(test_alloc_len, int, 0);
++MODULE_PARM_DESC(test_alloc_len, "alloc len for testing");
++
++static int test_push_cpu;
++module_param(test_push_cpu, int, 0);
++MODULE_PARM_DESC(test_push_cpu, "test cpu for pushing fragment");
++
++static int test_pop_cpu;
++module_param(test_pop_cpu, int, 0);
++MODULE_PARM_DESC(test_pop_cpu, "test cpu for popping fragment");
++
++static int page_frag_pop_thread(void *arg)
++{
++	struct ptr_ring *ring = arg;
++
++	pr_info("page_frag pop test thread begins on cpu %d\n",
++		smp_processor_id());
++
++	while (test_popped < nr_test) {
++		void *obj = __ptr_ring_consume(ring);
++
++		if (obj) {
++			test_popped++;
++			page_frag_free(obj);
++		} else {
++			if (force_exit)
++				break;
++
++			cond_resched();
++		}
++	}
++
++	if (atomic_dec_and_test(&nthreads))
++		complete(&wait);
++
++	pr_info("page_frag pop test thread exits on cpu %d\n",
++		smp_processor_id());
++
++	return 0;
 +}
-\ No newline at end of file
-diff --git a/tools/testing/selftests/boot-time/config b/tools/testing/selftests/boot-time/config
-new file mode 100644
-index 000000000000..bcb646ec3cd8
---- /dev/null
-+++ b/tools/testing/selftests/boot-time/config
-@@ -0,0 +1,6 @@
-+CONFIG_TRACING=y
-+CONFIG_BOOTTIME_TRACING=y
-+CONFIG_BOOT_CONFIG_EMBED=y
-+CONFIG_BOOT_CONFIG_EMBED_FILE="tools/testing/selftests/boot-time/bootconfig"
-+CONFIG_SYNTH_EVENTS=y
-+CONFIG_HIST_TRIGGERS=y
-\ No newline at end of file
-diff --git a/tools/testing/selftests/boot-time/test_boot_time.py b/tools/testing/selftests/boot-time/test_boot_time.py
++
++static int page_frag_push_thread(void *arg)
++{
++	struct ptr_ring *ring = arg;
++
++	pr_info("page_frag push test thread begins on cpu %d\n",
++		smp_processor_id());
++
++	while (test_pushed < nr_test && !force_exit) {
++		void *va;
++		int ret;
++
++		if (test_align) {
++			va = page_frag_alloc_align(&test_nc, test_alloc_len,
++						   GFP_KERNEL, SMP_CACHE_BYTES);
++
++			if ((unsigned long)va & (SMP_CACHE_BYTES - 1)) {
++				force_exit = true;
++				WARN_ONCE(true, TEST_FAILED_PREFIX "unaligned va returned\n");
++			}
++		} else {
++			va = page_frag_alloc(&test_nc, test_alloc_len, GFP_KERNEL);
++		}
++
++		if (!va)
++			continue;
++
++		ret = __ptr_ring_produce(ring, va);
++		if (ret) {
++			page_frag_free(va);
++			cond_resched();
++		} else {
++			test_pushed++;
++		}
++	}
++
++	pr_info("page_frag push test thread exits on cpu %d\n",
++		smp_processor_id());
++
++	if (atomic_dec_and_test(&nthreads))
++		complete(&wait);
++
++	return 0;
++}
++
++static int __init page_frag_test_init(void)
++{
++	struct task_struct *tsk_push, *tsk_pop;
++	int last_pushed = 0, last_popped = 0;
++	ktime_t start;
++	u64 duration;
++	int ret;
++
++	test_nc.va = NULL;
++	atomic_set(&nthreads, 2);
++	init_completion(&wait);
++
++	if (test_alloc_len > PAGE_SIZE || test_alloc_len <= 0 ||
++	    !cpu_active(test_push_cpu) || !cpu_active(test_pop_cpu))
++		return -EINVAL;
++
++	ret = ptr_ring_init(&ptr_ring, nr_objs, GFP_KERNEL);
++	if (ret)
++		return ret;
++
++	tsk_push = kthread_create_on_cpu(page_frag_push_thread, &ptr_ring,
++					 test_push_cpu, "page_frag_push");
++	if (IS_ERR(tsk_push))
++		return PTR_ERR(tsk_push);
++
++	tsk_pop = kthread_create_on_cpu(page_frag_pop_thread, &ptr_ring,
++					test_pop_cpu, "page_frag_pop");
++	if (IS_ERR(tsk_pop)) {
++		kthread_stop(tsk_push);
++		return PTR_ERR(tsk_pop);
++	}
++
++	start = ktime_get();
++	wake_up_process(tsk_push);
++	wake_up_process(tsk_pop);
++
++	pr_info("waiting for test to complete\n");
++
++	while (!wait_for_completion_timeout(&wait, msecs_to_jiffies(10000))) {
++		/* exit if there is no progress for push or pop size */
++		if (last_pushed == test_pushed || last_popped == test_popped) {
++			WARN_ONCE(true, TEST_FAILED_PREFIX "no progress\n");
++			force_exit = true;
++			continue;
++		}
++
++		last_pushed = test_pushed;
++		last_popped = test_popped;
++		pr_info("page_frag_test progress: pushed = %d, popped = %d\n",
++			test_pushed, test_popped);
++	}
++
++	if (force_exit) {
++		pr_err(TEST_FAILED_PREFIX "exit with error\n");
++		goto out;
++	}
++
++	duration = (u64)ktime_us_delta(ktime_get(), start);
++	pr_info("%d of iterations for %s testing took: %lluus\n", nr_test,
++		test_align ? "aligned" : "non-aligned", duration);
++
++out:
++	ptr_ring_cleanup(&ptr_ring, NULL);
++	page_frag_cache_drain(&test_nc);
++
++	return -EAGAIN;
++}
++
++static void __exit page_frag_test_exit(void)
++{
++}
++
++module_init(page_frag_test_init);
++module_exit(page_frag_test_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Yunsheng Lin <linyunsheng@huawei.com>");
++MODULE_DESCRIPTION("Test module for page_frag");
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index c5797ad1d37b..2c5394584af4 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -75,6 +75,8 @@ separated by spaces:
+ 	read-only VMAs
+ - mdwe
+ 	test prctl(PR_SET_MDWE, ...)
++- page_frag
++	test handling of page fragment allocation and freeing
+ 
+ example: ./run_vmtests.sh -t "hmm mmap ksm"
+ EOF
+@@ -456,6 +458,12 @@ CATEGORY="mkdirty" run_test ./mkdirty
+ 
+ CATEGORY="mdwe" run_test ./mdwe_test
+ 
++CATEGORY="page_frag" run_test ./test_page_frag.sh smoke
++
++CATEGORY="page_frag" run_test ./test_page_frag.sh aligned
++
++CATEGORY="page_frag" run_test ./test_page_frag.sh nonaligned
++
+ echo "SUMMARY: PASS=${count_pass} SKIP=${count_skip} FAIL=${count_fail}" | tap_prefix
+ echo "1..${count_total}" | tap_output
+ 
+diff --git a/tools/testing/selftests/mm/test_page_frag.sh b/tools/testing/selftests/mm/test_page_frag.sh
 new file mode 100755
-index 000000000000..556dacf04b6d
+index 000000000000..f55b105084cf
 --- /dev/null
-+++ b/tools/testing/selftests/boot-time/test_boot_time.py
-@@ -0,0 +1,265 @@
-+#!/usr/bin/env python3
++++ b/tools/testing/selftests/mm/test_page_frag.sh
+@@ -0,0 +1,175 @@
++#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# Copyright (c) 2024 Collabora Ltd
++# Copyright (C) 2024 Yunsheng Lin <linyunsheng@huawei.com>
++# Copyright (C) 2018 Uladzislau Rezki (Sony) <urezki@gmail.com>
 +#
-+# This script reads the
-+# /sys/kernel/debug/tracing/events/synthetic/initcall_latency/hist file,
-+# extracts function names and timings, and compares them against reference
-+# timings provided in an input JSON file to identify significant boot
-+# slowdowns.
-+# The script operates in two modes:
-+# - Generate Mode: parses initcall timings from the current kernel's ftrace
-+#   event histogram and generates a JSON reference file with function
-+#   names, start times, end times, and latencies.
-+# - Test Mode: compares current initcall timings against the reference
-+#   file, allowing users to define a maximum allowed difference between the
-+#   values (delta). Users can also apply custom delta thresholds for
-+#   specific initcalls using regex-based overrides. The comparison can be
-+#   done on latency, start, or end times.
++# This is a test script for the kernel test driver to test the
++# correctness and performance of page_frag's implementation.
++# Therefore it is just a kernel module loader. You can specify
++# and pass different parameters in order to:
++#     a) analyse performance of page fragment allocations;
++#     b) stressing and stability check of page_frag subsystem.
++
++DRIVER="./page_frag/page_frag_test.ko"
++CPU_LIST=$(grep -m 2 processor /proc/cpuinfo | cut -d ' ' -f 2)
++TEST_CPU_0=$(echo $CPU_LIST | awk '{print $1}')
++
++if [ $(echo $CPU_LIST | wc -w) -gt 1 ]; then
++	TEST_CPU_1=$(echo $CPU_LIST | awk '{print $2}')
++	NR_TEST=100000000
++else
++	TEST_CPU_1=$TEST_CPU_0
++	NR_TEST=1000000
++fi
++
++# 1 if fails
++exitcode=1
++
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
++check_test_failed_prefix() {
++	if dmesg | grep -q 'page_frag_test failed:';then
++		echo "page_frag_test failed, please check dmesg"
++		exit $exitcode
++	fi
++}
++
 +#
++# Static templates for testing of page_frag APIs.
++# Also it is possible to pass any supported parameters manually.
++#
++SMOKE_PARAM="test_push_cpu=$TEST_CPU_0 test_pop_cpu=$TEST_CPU_1"
++NONALIGNED_PARAM="$SMOKE_PARAM test_alloc_len=75 nr_test=$NR_TEST"
++ALIGNED_PARAM="$NONALIGNED_PARAM test_align=1"
 +
-+import os
-+import sys
-+import argparse
-+import gzip
-+import json
-+import re
-+import subprocess
++check_test_requirements()
++{
++	uid=$(id -u)
++	if [ $uid -ne 0 ]; then
++		echo "$0: Must be run as root"
++		exit $ksft_skip
++	fi
 +
-+this_dir = os.path.dirname(os.path.realpath(__file__))
-+sys.path.append(os.path.join(this_dir, "../kselftest/"))
++	if ! which insmod > /dev/null 2>&1; then
++		echo "$0: You need insmod installed"
++		exit $ksft_skip
++	fi
 +
-+import ksft
++	if [ ! -f $DRIVER ]; then
++		echo "$0: You need to compile page_frag_test module"
++		exit $ksft_skip
++	fi
++}
 +
-+def load_reference_from_json(file_path):
-+    """
-+    Load reference data from a JSON file and returns the parsed data.
-+    @file_path: path to the JSON file.
-+    """
++run_nonaligned_check()
++{
++	echo "Run performance tests to evaluate how fast nonaligned alloc API is."
 +
-+    try:
-+        with open(file_path, 'r', encoding="utf-8") as file:
-+            return json.load(file)
-+    except FileNotFoundError:
-+        ksft.print_msg(f"Error: File {file_path} not found.")
-+        ksft.exit_fail()
-+    except json.JSONDecodeError:
-+        ksft.print_msg(f"Error: Failed to decode JSON from {file_path}.")
-+        ksft.exit_fail()
++	insmod $DRIVER $NONALIGNED_PARAM > /dev/null 2>&1
++}
 +
++run_aligned_check()
++{
++	echo "Run performance tests to evaluate how fast aligned alloc API is."
 +
-+def mount_debugfs(path):
-+    """
-+    Mount debugfs at the specified path if it is not already mounted.
-+    @path: path where debugfs should be mounted
-+    """
-+    # Check if debugfs is already mounted
-+    with open('/proc/mounts', 'r', encoding="utf-8") as mounts:
-+        for line in mounts:
-+            if 'debugfs' in line and path in line:
-+                print(f"debugfs is already mounted at {path}")
-+                return True
++	insmod $DRIVER $ALIGNED_PARAM > /dev/null 2>&1
++}
 +
-+    # Mount debugfs
-+    try:
-+        subprocess.run(['mount', '-t', 'debugfs', 'none', path], check=True)
-+        return True
-+    except subprocess.CalledProcessError as e:
-+        print(f"Failed to mount debugfs: {e.stderr}")
-+        return False
++run_smoke_check()
++{
++	echo "Run smoke test."
 +
++	insmod $DRIVER $SMOKE_PARAM > /dev/null 2>&1
++}
 +
-+def ensure_unique_function_name(func, initcall_entries):
-+    """
-+    Ensure the function name is unique by appending a suffix if necessary.
-+    @func: the original function name.
-+    @initcall_entries: a dictionary containing parsed initcall entries.
-+    """
-+    i = 2
-+    base_func = func
-+    while func in initcall_entries:
-+        func = f'{base_func}[{i}]'
-+        i += 1
-+    return func
++usage()
++{
++	echo -n "Usage: $0 [ aligned ] | [ nonaligned ] | | [ smoke ] | "
++	echo "manual parameters"
++	echo
++	echo "Valid tests and parameters:"
++	echo
++	modinfo $DRIVER
++	echo
++	echo "Example usage:"
++	echo
++	echo "# Shows help message"
++	echo "$0"
++	echo
++	echo "# Smoke testing"
++	echo "$0 smoke"
++	echo
++	echo "# Performance testing for nonaligned alloc API"
++	echo "$0 nonaligned"
++	echo
++	echo "# Performance testing for aligned alloc API"
++	echo "$0 aligned"
++	echo
++	exit 0
++}
 +
++function validate_passed_args()
++{
++	VALID_ARGS=`modinfo $DRIVER | awk '/parm:/ {print $2}' | sed 's/:.*//'`
 +
-+def parse_initcall_latency_hist():
-+    """
-+    Parse the ftrace histogram for the initcall_latency event, extracting
-+    function names, start times, end times, and latencies. Return a
-+    dictionary where each entry is structured as follows:
-+    {
-+        <function symbolic name>: {
-+            "start": <start time>,
-+            "end": <end time>,
-+            "latency": <latency>
-+        }
-+    }
-+    """
++	#
++	# Something has been passed, check it.
++	#
++	for passed_arg in $@; do
++		key=${passed_arg//=*/}
++		valid=0
 +
-+    pattern = re.compile(r'\{ func: \[\w+\] ([\w_]+)\s*, start: *(\d+), end: *(\d+) \} hitcount: *\d+  lat: *(\d+)')
-+    initcall_entries = {}
++		for valid_arg in $VALID_ARGS; do
++			if [[ $key = $valid_arg ]]; then
++				valid=1
++				break
++			fi
++		done
 +
-+    try:
-+        with open('/sys/kernel/debug/tracing/events/synthetic/initcall_latency/hist', 'r', encoding="utf-8") as hist_file:
-+            for line in hist_file:
-+                match = pattern.search(line)
-+                if match:
-+                    func = match.group(1).strip()
-+                    start = int(match.group(2))
-+                    end = int(match.group(3))
-+                    latency = int(match.group(4))
++		if [[ $valid -ne 1 ]]; then
++			echo "Error: key is not correct: ${key}"
++			exit $exitcode
++		fi
++	done
++}
 +
-+                    # filter out unresolved names
-+                    if not func.startswith("0x"):
-+                        func = ensure_unique_function_name(func, initcall_entries)
++function run_manual_check()
++{
++	#
++	# Validate passed parameters. If there is wrong one,
++	# the script exists and does not execute further.
++	#
++	validate_passed_args $@
 +
-+                        initcall_entries[func] = {
-+                            "start": start,
-+                            "end": end,
-+                            "latency": latency
-+                        }
-+    except FileNotFoundError:
-+        print("Error: Histogram file not found.")
++	echo "Run the test with following parameters: $@"
++	insmod $DRIVER $@ > /dev/null 2>&1
++}
 +
-+    return initcall_entries
++function run_test()
++{
++	if [ $# -eq 0 ]; then
++		usage
++	else
++		if [[ "$1" = "smoke" ]]; then
++			run_smoke_check
++		elif [[ "$1" = "nonaligned" ]]; then
++			run_nonaligned_check
++		elif [[ "$1" = "aligned" ]]; then
++			run_aligned_check
++		else
++			run_manual_check $@
++		fi
++	fi
 +
++	check_test_failed_prefix
 +
-+def compare_initcall_list(ref_initcall_entries, cur_initcall_entries):
-+    """
-+    Compare the current list of initcall functions against the reference
-+    file. Print warnings if there are unique entries in either.
-+    @ref_initcall_entries: reference initcall entries.
-+    @cur_initcall_entries: current initcall entries.
-+    """
-+    ref_entries = set(ref_initcall_entries.keys())
-+    cur_entries = set(cur_initcall_entries.keys())
++	echo "Done."
++	echo "Check the kernel ring buffer to see the summary."
++}
 +
-+    unique_to_ref = ref_entries - cur_entries
-+    unique_to_cur = cur_entries - ref_entries
++check_test_requirements
++run_test $@
 +
-+    if (unique_to_ref):
-+        ksft.print_msg(
-+            f"Warning: {list(unique_to_ref)} not found in current data. Consider updating reference file.")
-+    if unique_to_cur:
-+        ksft.print_msg(
-+            f"Warning: {list(unique_to_cur)} not found in reference data. Consider updating reference file.")
-+
-+
-+def run_test(ref_file_path, delta, overrides, mode):
-+    """
-+    Run the test comparing the current timings with the reference values.
-+    @ref_file_path: path to the JSON file containing reference values.
-+    @delta: default allowed difference between reference and current
-+    values.
-+    @overrides: override rules in the form of regex:threshold.
-+    @mode: the comparison mode (either 'start', 'end', or 'latency').
-+    """
-+
-+    ref_data = load_reference_from_json(ref_file_path)
-+
-+    ref_initcall_entries = ref_data['data']
-+    cur_initcall_entries = parse_initcall_latency_hist()
-+
-+    compare_initcall_list(ref_initcall_entries, cur_initcall_entries)
-+
-+    ksft.set_plan(len(ref_initcall_entries))
-+
-+    for func_name in ref_initcall_entries:
-+        effective_delta = delta
-+        for regex, override_delta in overrides.items():
-+            if re.match(regex, func_name):
-+                effective_delta = override_delta
-+                break
-+        if (func_name in cur_initcall_entries):
-+            ref_metric = ref_initcall_entries[func_name].get(mode)
-+            cur_metric = cur_initcall_entries[func_name].get(mode)
-+            if (cur_metric > ref_metric and (cur_metric - ref_metric) >= effective_delta):
-+                ksft.test_result_fail(func_name)
-+                ksft.print_msg(f"'{func_name}' {mode} differs by "
-+                               f"{(cur_metric - ref_metric)} usecs.")
-+            else:
-+                ksft.test_result_pass(func_name)
-+        else:
-+            ksft.test_result_skip(func_name)
-+
-+
-+def generate_reference_file(file_path):
-+    """
-+    Generate a reference file in JSON format, containing kernel metadata
-+    and initcall timing data.
-+    @file_path: output file path.
-+    """
-+    metadata = {}
-+
-+    config_file = "/proc/config.gz"
-+    if os.path.isfile(config_file):
-+        with gzip.open(config_file, "rt", encoding="utf-8") as f:
-+            config = f.read()
-+            metadata["config"] = config
-+
-+    metadata["version"] = os.uname().release
-+
-+    cmdline_file = "/proc/cmdline"
-+    if os.path.isfile(cmdline_file):
-+        with open(cmdline_file, "r", encoding="utf-8") as f:
-+            cmdline = f.read().strip()
-+            metadata["cmdline"] = cmdline
-+
-+    ref_data = {
-+        "metadata": metadata,
-+        "data": parse_initcall_latency_hist(),
-+    }
-+
-+    with open(file_path, "w", encoding='utf-8') as f:
-+        json.dump(ref_data, f, indent=4)
-+        print(f"Generated {file_path}")
-+
-+
-+if __name__ == "__main__":
-+    parser = argparse.ArgumentParser(
-+        description="")
-+
-+    subparsers = parser.add_subparsers(dest='mode', required=True, help='Choose between generate or test modes')
-+
-+    generate_parser = subparsers.add_parser('generate', help="Generate a reference file")
-+    generate_parser.add_argument('out_ref_file', nargs='?', default='reference_initcall_timings.json',
-+                                 help='Path to output JSON reference file (default: reference_initcall_timings.json)')
-+
-+    compare_parser = subparsers.add_parser('test', help='Test against a reference file')
-+    compare_parser.add_argument('in_ref_file', help='Path to JSON reference file')
-+    compare_parser.add_argument(
-+        'delta', type=int, help='Maximum allowed delta between the current and the reference timings (usecs)')
-+    compare_parser.add_argument('--override', '-o', action='append', type=str,
-+                                help="Specify regex-based rules as regex:delta (e.g., '^acpi_.*:50')")
-+    compare_parser.add_argument('--mode', '-m', default='latency', choices=[
-+                                'start', 'end', 'latency'],
-+                                help="Comparison mode: 'latency' (default) for latency, 'start' for start times, or 'end' for end times.")
-+
-+    args = parser.parse_args()
-+
-+    if args.mode == 'generate':
-+        generate_reference_file(args.out_ref_file)
-+        sys.exit(0)
-+
-+    # Process overrides
-+    overrides = {}
-+    if args.override:
-+        for override in args.override:
-+            try:
-+                pattern, delta = override.split(":")
-+                overrides[pattern] = int(delta)
-+            except ValueError:
-+                print(f"Invalid override format: {override}. Expected format is 'regex:delta'.")
-+                sys.exit(1)
-+
-+    # Ensure debugfs is mounted
-+    if not mount_debugfs("/sys/kernel/debug"):
-+        ksft.exit_fail()
-+
-+    ksft.print_header()
-+
-+    run_test(args.in_ref_file, args.delta, overrides, args.mode)
-+
-+    ksft.finished()
++exit 0
 -- 
-2.30.2
+2.33.0
 
 
