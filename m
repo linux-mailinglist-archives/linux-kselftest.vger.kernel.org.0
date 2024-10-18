@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-20088-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20090-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A8E19A32B2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 04:24:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 937AB9A32B5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 04:24:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91B2FB23413
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 02:24:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EAD7284481
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 02:24:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEA9F17C21B;
-	Fri, 18 Oct 2024 02:22:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E40D17DFF1;
+	Fri, 18 Oct 2024 02:22:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C2Y08xqy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SdAZi4Sg"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D72014F136;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8AA8158DB1;
 	Fri, 18 Oct 2024 02:22:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729218160; cv=none; b=X4ZmOUemESxpH+H2dE84WEW6tlZ3G63cq97YfSbg+NLvisA4tVCaA71dQEDCNLKDW/z0fwnwfCxdubAmSr7v3/9t+Cg5w6vfAiFvVAGEa+ZFDnrLAX5eebHJjTVSZLcV9WU+GViXqm52Lopmddns2eOn5yupm+tLp97FUFc/Rh8=
+	t=1729218162; cv=none; b=Pvap6AU2yRg9PFHRHgsRwAf/LJgP7rdylPVoGAjSevJdAAxh4Bo3vw5iTcHjIqNrTWjYhCqKqPJEibI0g3aGbmV7PIcwVVHlqEb5dmzdRZPvrVk9kQQo9RU0jL1DSwszWHX4bRGlmwNYm9/1k1CSJ4NBfa0hJcFx88/9xlS9nJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729218160; c=relaxed/simple;
-	bh=RQwgwAvH1yN3WgCkSsFG9U5A6uInT75JDIW0Wm5kvAI=;
+	s=arc-20240116; t=1729218162; c=relaxed/simple;
+	bh=2MBkITOraGEw2CIFCHHG4AS4AEaaronvpkHeMTP5ofs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BTrnkrptwETctMGJuj1aL4w8edVwG8NTxNtGdlOb3T+v/rVzzE/cpQO97VPiYw2abMK2yL/Emy/JBkJLNp7V75R2cuGmfr9Hsgu5bc0irt6XRZHldQcGLgscTWnIG9bdy2rpVDoSUvK54UYwxJ1w9tyzpnwXTMWJIOMON61rr00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=fail smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C2Y08xqy; arc=none smtp.client-ip=192.198.163.7
+	 MIME-Version:Content-Type; b=U8qxTghbvvJciKC0RVJ9wKrWkDDFDcsT/nGPV72ZOw7jHODLcsuO1IhlhB2LaF1SOjnU7lgcYWzqu55zmKdPnd0usQVKuxQESkaCY17HPB+BLe4wWYWpt8q+3TaA1BjmA7J7+hhMcAk4sACx6WKOcggeQXPrbVVL/uxku+F40vA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SdAZi4Sg; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729218159; x=1760754159;
+  t=1729218160; x=1760754160;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=RQwgwAvH1yN3WgCkSsFG9U5A6uInT75JDIW0Wm5kvAI=;
-  b=C2Y08xqy8wVF+zc05OlsLN1KdhynfZFccQnzVTReoDKGohzUt6PEEfTp
-   WoeXsTbuxqenQ6sTkw0adT7SSphQQb3OJBiVRTcfGxzEXchPUfDsqmtaW
-   GBgrOMflRQTVZUgk/kgAGVph/2E+Ob5pvm95S5oB8B0FFCIJRFDxfJ/pL
-   tCO2d9BY0/miNj3KzMnu+M8Y/id/FYZOQsujgnBfVQ+55hrTpXBb7hOWH
-   MLqQWx7jNdKDUod3dxmZXK+VfJ7aVF1DErPcaXsVUnxpWjOoBHE8xBdkp
-   6+84km4a7QkET9daz4OpLIh+HFVxmkABY3TGyyPwTgLnL2J4yovKWxYd0
-   g==;
-X-CSE-ConnectionGUID: jODhIKreRj+e9Y+Lg3t5xw==
-X-CSE-MsgGUID: 9GfiYav+QsGFm5aGsCk6mg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11228"; a="54149673"
+  bh=2MBkITOraGEw2CIFCHHG4AS4AEaaronvpkHeMTP5ofs=;
+  b=SdAZi4SgNE8tiUQxPzWTia3EHidU5bqrY00/FlJ3qBFOxxXsrWpb7cbY
+   YbawOSssNVDpoDUKPPHXazG4P0uJCJ79BoliB6rOTMMRIiuj67AFeENHY
+   04FJb4oaYBt4QfuGmiNUXrdyNvyMRBFPM8/+EyMWoI9l7gnhWGTYpxsTq
+   NRMBcdzM0LnrLKp+Etvxi5kCTh1zQkKjaJ0p9kFMvqNTZ6dl/GiqSvum/
+   wRFMZkInJVvYGbg59mHFRGxKGZ6HtWIIbCvkT02p58IzwucXQG7QvSfjZ
+   wFsUCTIjBz6fjZZlH74CG+QmWBtwtWY424xRvmaSMmDyQilISoHYX7GGy
+   A==;
+X-CSE-ConnectionGUID: O7T3lv6lQzebpFPjE+NTjg==
+X-CSE-MsgGUID: 4z+cjZsxScu+LaQo6i0LtA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11228"; a="54149682"
 X-IronPort-AV: E=Sophos;i="6.11,212,1725346800"; 
-   d="scan'208";a="54149673"
+   d="scan'208";a="54149682"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
   by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 19:22:37 -0700
-X-CSE-ConnectionGUID: KZhemtkoQjeZ7UzJNcRgeA==
-X-CSE-MsgGUID: seUgJXrCRw+kT529DcBUNw==
+X-CSE-ConnectionGUID: xTYmW/x7T1qrJllEzu6Rag==
+X-CSE-MsgGUID: sVOQzbYcTQ26IfWtweFxqA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,212,1725346800"; 
-   d="scan'208";a="78697701"
+   d="scan'208";a="78697704"
 Received: from rchatre-desk1.jf.intel.com ([10.165.154.99])
   by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 19:22:36 -0700
 From: Reinette Chatre <reinette.chatre@intel.com>
@@ -69,9 +69,9 @@ Cc: maciej.wieczor-retman@intel.com,
 	reinette.chatre@intel.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH V3 02/15] selftests/resctrl: Print accurate buffer size as part of MBM results
-Date: Thu, 17 Oct 2024 19:33:17 -0700
-Message-ID: <f7c200b42bf514e587e88e5be6e866fa797eed66.1729218182.git.reinette.chatre@intel.com>
+Subject: [PATCH V3 03/15] selftests/resctrl: Fix memory overflow due to unhandled wraparound
+Date: Thu, 17 Oct 2024 19:33:18 -0700
+Message-ID: <bdd02a0506924a101af066349b6417a28153eee8.1729218182.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.46.2
 In-Reply-To: <cover.1729218182.git.reinette.chatre@intel.com>
 References: <cover.1729218182.git.reinette.chatre@intel.com>
@@ -81,86 +81,51 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-By default the MBM test uses the "fill_buf" benchmark to keep reading
-from a buffer with size DEFAULT_SPAN while measuring memory bandwidth.
-User space can provide an alternate benchmark or amend the size of
-the buffer "fill_buf" should use.
+alloc_buffer() allocates and initializes (with random data) a
+buffer of requested size. The initialization starts from the beginning
+of the allocated buffer and incrementally assigns sizeof(uint64_t) random
+data to each cache line. The initialization uses the size of the
+buffer to control the initialization flow, decrementing the amount of
+buffer needing to be initialized after each iteration.
 
-Analysis of the MBM measurements do not require that a buffer be used
-and thus do not require knowing the size of the buffer if it was used
-during testing. Even so, the buffer size is printed as informational
-as part of the MBM test results. What is printed as buffer size is
-hardcoded as DEFAULT_SPAN, even if the test relied on another benchmark
-(that may or may not use a buffer) or if user space amended the buffer
-size.
+The size of the buffer is stored in an unsigned (size_t) variable s64
+and the test "s64 > 0" is used to decide if initialization is complete.
+The problem is that decrementing the buffer size may wrap around
+if the buffer size is not divisible by "CL_SIZE / sizeof(uint64_t)"
+resulting in the "s64 > 0" test being true and memory beyond the buffer
+"initialized".
 
-Ensure that accurate buffer size is printed when using "fill_buf"
-benchmark and omit the buffer size information if another benchmark
-is used.
+Use a signed value for the buffer size to support all buffer sizes.
 
-Fixes: ecdbb911f22d ("selftests/resctrl: Add MBM test")
+Fixes: a2561b12fe39 ("selftests/resctrl: Add built in benchmark")
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
-Backporting is not recommended. Backporting this fix will be
-a challenge with all the refactoring done since then. This issue
-does not impact default tests and there is no sign that
-folks run these tests with anything but the defaults. This issue is
-also minor since it does not impact actual test runs or results,
-just the information printed during a test run.
-
 Changes since V2:
-- Make user input checks more robust. (Ilpo)
+- Add Ilpo's Reviewed-by tag.
 
 Changes since V1:
 - New patch.
 ---
- tools/testing/selftests/resctrl/mbm_test.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ tools/testing/selftests/resctrl/fill_buf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 6b5a3b52d861..36ae29a03784 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -40,7 +40,8 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
- 	ksft_print_msg("%s Check MBM diff within %d%%\n",
- 		       ret ? "Fail:" : "Pass:", MAX_DIFF_PERCENT);
- 	ksft_print_msg("avg_diff_per: %d%%\n", avg_diff_per);
--	ksft_print_msg("Span (MB): %zu\n", span / MB);
-+	if (span)
-+		ksft_print_msg("Span (MB): %zu\n", span / MB);
- 	ksft_print_msg("avg_bw_imc: %lu\n", avg_bw_imc);
- 	ksft_print_msg("avg_bw_resc: %lu\n", avg_bw_resc);
- 
-@@ -138,15 +139,26 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
- 		.setup		= mbm_setup,
- 		.measure	= mbm_measure,
- 	};
-+	char *endptr = NULL;
-+	size_t span = 0;
+diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
+index ae120f1735c0..34e5df721430 100644
+--- a/tools/testing/selftests/resctrl/fill_buf.c
++++ b/tools/testing/selftests/resctrl/fill_buf.c
+@@ -127,7 +127,7 @@ unsigned char *alloc_buffer(size_t buf_size, int memflush)
+ {
+ 	void *buf = NULL;
+ 	uint64_t *p64;
+-	size_t s64;
++	ssize_t s64;
  	int ret;
  
- 	remove(RESULT_FILE_NAME);
- 
-+	if (uparams->benchmark_cmd[0] && strcmp(uparams->benchmark_cmd[0], "fill_buf") == 0) {
-+		if (uparams->benchmark_cmd[1]) {
-+			errno = 0;
-+			span = strtoul(uparams->benchmark_cmd[1], &endptr, 10);
-+			if (errno || *endptr != '\0')
-+				return -errno;
-+		}
-+	}
-+
- 	ret = resctrl_val(test, uparams, uparams->benchmark_cmd, &param);
- 	if (ret)
- 		return ret;
- 
--	ret = check_results(DEFAULT_SPAN);
-+	ret = check_results(span);
- 	if (ret && (get_vendor() == ARCH_INTEL))
- 		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
- 
+ 	ret = posix_memalign(&buf, PAGE_SIZE, buf_size);
 -- 
 2.46.2
 
