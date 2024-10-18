@@ -1,173 +1,165 @@
-Return-Path: <linux-kselftest+bounces-20138-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20139-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C26F9A3F1B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 15:04:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 567E59A410D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 16:23:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF7C3B21409
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 13:04:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B01D1B2269C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 14:23:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE4F644375;
-	Fri, 18 Oct 2024 13:04:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14CB31D969C;
+	Fri, 18 Oct 2024 14:23:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sy70iDxd"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=gustavo.padovan@collabora.com header.b="SdVbTYML"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CF84084C;
-	Fri, 18 Oct 2024 13:04:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729256650; cv=none; b=TOqZwmoo0ZT33H0x7zseG/8n7tsazVzOLYeGlBn00jmC5XV6BTDU9det1/mrQwrl0GpTOcUNWxi/dwx3EEexXNGS0uXnlVkmyiBmmNRmXw93ogI27m5YFu1j3VmpM7F8hJihySsOK1u1sIOSCeCzP8PT/bIRENvPC8s9KazxN0U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729256650; c=relaxed/simple;
-	bh=g2CJxGpTFCOsw8YxyBZm5iz4MWqWWqjHA92Ubpkewfk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CWLq15S4Dp1QRcLmw+kkl0MRldkOig1z42dqdcUxdeUxr4z3Fymqr+zDnxs04ILVArdtVxiGqeHZMPSKrds9PMUSL2pdDQQqrpgZhLNcE6gbNi1nVJBn4bamXVU1ke+HKbUiSW7MFizMslaUeP3qf13hW8+ovL1K3IeTYRpv9no=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sy70iDxd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B843C4CEC3;
-	Fri, 18 Oct 2024 13:04:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729256650;
-	bh=g2CJxGpTFCOsw8YxyBZm5iz4MWqWWqjHA92Ubpkewfk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sy70iDxdvegIxSpbXgc5l5sDisr1CZ4sC7k1lbpyMO3ps7QBlrYogssUkxA3itTq3
-	 AQEoQL9PclRAphMwOGvXczd3YP5474UnFMyGtofrV7wewmUhWgb36+D/mxX0TSNS9T
-	 f/lVPozmAReEZcHeTg1Kr5WVXMFXZYL56yvSNJocnM2MQT14uIf4KFaoaWuUmH2N9u
-	 j6TTPE83B54c0FIDFMWZnWB6v9ey8dIJiiRCeaLi84cRr3FGSDOSn6r3l8GdREAatz
-	 wjnSiM+Q3gG6VspsFgyIlOd22BZENkjey1+D1sWRaKBTI22bIf8/K8mo1mVq3sihH0
-	 aeBFQqweIx1hw==
-Date: Fri, 18 Oct 2024 14:04:04 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Jeff Xu <jeffxu@chromium.org>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	akpm@linux-foundation.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org, pedro.falcato@gmail.com,
-	willy@infradead.org, vbabka@suse.cz, Liam.Howlett@oracle.com,
-	rientjes@google.com, keescook@chromium.org
-Subject: Re: [PATCH v3 4/5] selftests/mseal: add more tests for mmap
-Message-ID: <1f8eff74-005b-4fa9-9446-47f4cdbf3e8d@sirena.org.uk>
-References: <e7ea2b84-8d10-40fe-a14f-837bca851ea9@lucifer.local>
- <fd927106-2fc3-4b96-8014-2c517229bc99@lucifer.local>
- <CABi2SkUpCf+aOa2sPED8CosG5ccqjFd7ouot8gXi9ECqsHiZhw@mail.gmail.com>
- <4944ce41-9fe1-4e22-8967-f6bd7eafae3f@lucifer.local>
- <CABi2SkUgDZtJtRJe+J9UNdtZn=EQzZcbMB685P=1rR7DUhg=6Q@mail.gmail.com>
- <CABi2SkVEMRHV3swrbb6M5RA6GQpFVVx855CGwdQ1xiz3tygiqA@mail.gmail.com>
- <f9b9422c-216d-422e-94b4-d8814b0b277e@lucifer.local>
- <CABi2SkWAv4LXvR1Wb1e31eyZ35JfyieXhDOq1bp_ZvHPLLg-qA@mail.gmail.com>
- <e0f440b0-5a45-4218-8c51-27f848c0617b@lucifer.local>
- <CABi2SkWNRTCC0LzDSuzgjC1tO=KF==5FXUnPHOrPzEG5abAeDg@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E246E13C8E2;
+	Fri, 18 Oct 2024 14:23:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729261415; cv=pass; b=ZfkBl+/p7LHKLImpV+bAGVnO6ZkyBOHc0XruddjKKcbQZkgEz8eeW2q/k3jiUfFyVDnAiOe8F5nSlM6F4qWMlCIfoSKGc0LFXLrEnvcJGgN8CjCfFEji5BQrCpH4ZfMpk6mKxk7D2oGqC4Rs2vpD+jir8tgqqIx/mtEBtNT/nmk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729261415; c=relaxed/simple;
+	bh=fwm6F1waUYlZmpjON4M0/tCzSIvM2BeoAkSP9zIsXrk=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=E/9nc5nKQMULRMZzZRO+pKhnBb6mX9hNkTEGwkjadvRvSTPTMjCnt5yLPPfp81uEk982MI8RgYFZ/Zp3HQfbFJMigMq8Tx5RD3+LQcoLpjyQeLbero6JPwdenB9ngoxNDepy1vgCUetxQaSds36fRW+OhfV8pViq/Py3hqLivIM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=gustavo.padovan@collabora.com header.b=SdVbTYML; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1729261402; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=KIAyqUQN30RwIjlwXi20mKsI54vVnEuAng+Y8CaGIai+bz4Nr/F01424pAMQx3oBw8KFPw27W9c4UoqXL3YoD7qxxJCOzSn+4BU1UTUNrhOonqmBc/kXmr8aKRsnwYtD7hCspnmqZwTjVWobawDZIDQ8cKyfGCGxMvGBPyfbiys=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1729261402; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=QIAhrezxUtXF4gEkgEiGP9TNMCNjCrJRts1YkaKxqFI=; 
+	b=WGJ1SKvsO+nCHjc1P1osPTV1J5b9BWqdj9aEX7dw2bxj+bQ1IzCxugEoDGlRT3YBm87qR+g3BNEEuEfVBOrT7JpJcKKuQ/S1FiWq2c1FXp/CjbpHQ2B6mRizLwVY1HEio56jpIU6nRLo/ve7PywZj0dkwAbHYJ2KZWaF+aSBg4A=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=gustavo.padovan@collabora.com;
+	dmarc=pass header.from=<gustavo.padovan@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1729261402;
+	s=zohomail; d=collabora.com; i=gustavo.padovan@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=QIAhrezxUtXF4gEkgEiGP9TNMCNjCrJRts1YkaKxqFI=;
+	b=SdVbTYMLJyJzgRy0P4SqEXPiv9stROswwkByYJp7uSSheCpliLqk/wfyAZoHqu1B
+	WA27D2/AC4xpbTw8InZ7fHG5WYg/zJvm6nkSG0FRhf3Bh+k2+3O3SWKtagr0gB8PFLf
+	DcpoZMIOH8OhRz50Awbd+26fJY9UJ2rymdSMRcTo=
+Received: from mail.zoho.com by mx.zohomail.com
+	with SMTP id 1729261399679794.5165976461445; Fri, 18 Oct 2024 07:23:19 -0700 (PDT)
+Date: Fri, 18 Oct 2024 11:23:19 -0300
+From: Gustavo Padovan <gustavo.padovan@collabora.com>
+To: "David Gow" <davidgow@google.com>
+Cc: "Donald Zickus" <dzickus@redhat.com>,
+	"workflows" <workflows@vger.kernel.org>,
+	"automated-testing" <automated-testing@lists.yoctoproject.org>,
+	"linux-kselftest" <linux-kselftest@vger.kernel.org>,
+	"kernelci" <kernelci@lists.linux.dev>,
+	"Nikolai Kondrashov" <nkondras@redhat.com>,
+	"kernelci-members" <kernelci-members@groups.io>,
+	"laura.nao" <laura.nao@collabora.com>
+Message-ID: <192a002ee68.e1e6c6282027214.1199547115557464780@collabora.com>
+In-Reply-To: <CABVgOSk1ng46scbJc-3qPZUhkn+0KrZsFDe-UYnw0q-XksP_2Q@mail.gmail.com>
+References: <CAK18DXYitS7hL1mA3QsPLmW9-R0q6Kin0C5Uv9fj=uS90WSnxA@mail.gmail.com> <CABVgOSk1ng46scbJc-3qPZUhkn+0KrZsFDe-UYnw0q-XksP_2Q@mail.gmail.com>
+Subject: Re: [RFC] Test catalog template
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="YLYxAeMluy/4woDv"
-Content-Disposition: inline
-In-Reply-To: <CABi2SkWNRTCC0LzDSuzgjC1tO=KF==5FXUnPHOrPzEG5abAeDg@mail.gmail.com>
-X-Cookie: What is the sound of one hand clapping?
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+
+Hello,
 
 
---YLYxAeMluy/4woDv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+---- On Fri, 18 Oct 2024 04:21:58 -0300 David Gow  wrote ---
 
-On Thu, Oct 17, 2024 at 12:49:40PM -0700, Jeff Xu wrote:
+ > Hi Don, 
+ >  
+ > Thanks for putting this together: the discussion at Plumbers was very useful. 
+ >  
+ > On Tue, 15 Oct 2024 at 04:33, Donald Zickus dzickus@redhat.com> wrote: 
+ > > 
+ > > Hi, 
+ > > 
+ > > At Linux Plumbers, a few dozen of us gathered together to discuss how 
+ > > to expose what tests subsystem maintainers would like to run for every 
+ > > patch submitted or when CI runs tests.  We agreed on a mock up of a 
+ > > yaml template to start gathering info.  The yaml file could be 
+ > > temporarily stored on kernelci.org until a more permanent home could 
+ > > be found.  Attached is a template to start the conversation. 
+ > > 
+ >  
+ > I think that there are two (maybe three) separate problems here: 
+ > 1. What tests do we want to run (for a given patch/subsystem/environment/etc)? 
+ > 2. How do we describe those tests in such a way that running them can 
+ > be automated? 
+ > 3. (Exactly what constitutes a 'test'? A single 'test', a whole suite 
+ > of tests, a test framework/tool? What about the environment: is, e.g., 
+ > KUnit on UML different from KUnit on qemu-x86_64 different from KUnit 
+ > on qemu-arm64?) 
+ >  
+ > My gut feeling here is that (1) is technically quite easy: worst-case 
+ > we just make every MAINTAINERS entry link to a document describing 
+ > what tests should be run. Actually getting people to write these 
+ > documents and then run the tests, though, is very difficult. 
+ >  
+ > (2) is the area where I think this will be most useful. We have some 
+ > arbitrary (probably .yaml) file which describes a series of tests to 
+ > run in enough detail that we can automate it. My ideal outcome here 
+ > would be to have a 'kunit.yaml' file which I can pass to a tool 
+ > (either locally or automatically on some CI system) which will run all 
+ > of the checks I'd run on an incoming patch. This would include 
+ > everything from checkpatch, to test builds, to running KUnit tests and 
+ > other test scripts. Ideally, it'd even run these across a bunch of 
+ > different environments (architectures, emulators, hardware, etc) to 
+ > catch issues which only show up on big-endian or 32-bit machines. 
+ >  
+ > If this means I can publish that yaml file somewhere, and not only 
+ > give contributors a way to check that those tests pass on their own 
+ > machine before sending a patch out, but also have CI systems 
+ > automatically run them (so the results are ready waiting before I 
+ > manually review the patch), that'd be ideal. 
 
-> So it is not a problem with the MACRO, but where is it used ?
+This though makes sense to me. It will be very interesting for CI systems to be
+able to figure out which tests to run for a set of folder/file changes. 
 
->         ret = sys_mseal(ptr, size);
->         FAIL_TEST_IF_FALSE(!ret);
+However, I also feel that a key part of the work is actually convincing people
+to write (and maintain!) these specs. Only automation through CI we may be able
+to show the value of this tasks, prompting maintainers to keep their files
+updated, otherwise we are going create a sea of specs that will just be outdated
+pretty quickly.
 
-> Take this example, it would be
-> assert(!ret)
+In the new KernelCI maestro, we started with only a handful of tests, so we could
+actually look at the results, find regressions and report them. Maybe we could
+start in the same way with a few tests. Eg kselftest-dt and kselftests-acpi. It
+should be relatively simple to make something that will decide on testing probe
+of drivers based on which files are being changed.
 
-The problem is that the macro name is confusing and not terribly
-consistent with how the rest of the selftests work.  The standard
-kselftest result reporting is
+There needs to be a sort of cultural shift on how we track tests first. Just documenting
+our current tests may not take us far, but starting small with a comprehensive process
+from test spec to CI automation to clear ways of deliverying results is the game changer.
 
-	ksft_test_result(bool result, char *name_format, ...);
+Then there are other perspectives that crosses this. For example, many of the LTP and
+kselftests will just fail, but there is no accumulated knowledge on what the result of
+each test means. So understanding what is expected to pass/fail for each platform is
+a sort of dependance in this extensive documentation effort we are set ourselves for.
 
-so the result of the test is a boolean flag which is passed in.  This
-macro on the other hand sounds like a double negative so you have to
-stop and think what the logic is, and it's not seen anywhere else so
-nobody is going to be familiar with it.  The main thing this is doing is
-burying a return statement in there, that's a bit surprising too.
+Best,
 
-I'll also note that these macros are resulting in broken kselftest
-output, the name for a test has to be stable for automated systems to be
-able to associate test results between runs but these print
+- Gus
 
-                        ksft_test_result_fail("%s: line:%d\n",          \
-                                                __func__, __LINE__);    \
-                        return;                                         \
 
-which includes the line number of the test in the name which is an
-obvious problem, automated systems won't be able to tell that any two
-failures are related to each other never mind the passing test.  We
-should report why things failed but it's better to do that with a
-ksft_print_msg(), ideally one that's directly readable rather than
-requiring someone to go into the source code and look it up.
 
-A more standard way to write what you've got here would be to have the
-tests return a bool then have a runner loop which iterates over the
-tests:
 
-	struct {
-		char *name;
-		bool (*func)(void);
-	} tests[];
 
-	...
-
-	for (i = 0; i < ARRAY_SIZE(tests); i++)
-		ksft_test_result(tests[i].test(), tests[i].name);
-
-then the tests can just have explicit return statements and don't need
-to worry about logging anything other than diagnostics.
-
-Depending on how much you need to share between tests you might also be
-able to use kselftest_harness.h which fork()s each test into a separate
-child and allows you to just fault to fail if that's easier.
-
-> > We are writing unit tests in a test framework, let's use very well
-> > established industry practices please.
-
-Plus also the fact that we have a framework here...
-
-> > Also note that you don't even need to reinvent the wheel, there is a
-> > fully-featured test harness available in
-> > tools/testing/selftests/kselftest_harness.h with both ASSERT_xxx() and
-> > EXPECT_xxx() helpers.
-
-> The EXPECT_xxx() doesn't take care of reporting though,  or maybe it
-
-I rather think people would've noticed if the test harness was so broken
-that it was unable to report failures.  If it is that broken we should
-fix it rather than open coding something else.
-
---YLYxAeMluy/4woDv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcSXMMACgkQJNaLcl1U
-h9AmKAf/Tu4kW1hhmlXQ1Agr7BitWMDgVw9arn8ymLeyxIk/tu+VEoRY7AhaMvzd
-3J00TJc8rCiabRtgebGDooegImXGlwOPo+OozAKDSoqY+XL5NQxnakmMrk0vSUfQ
-jJzLnl2Bxo/43T6/xPQKzUdxMz8NY4uHDF3X0FPWWnvF4F/5XMZ44uDRMmFrL+aI
-FsP7ZEB4W1A7wn5bpj83e58whRSO5G2Y/3Z5kl5oh49cTIXBM4nNIVtOcOWt5976
-FWtpGPSQEHqtBj840j7dVwFCRAJ9aobcbBWt4lOhOVftuOf1fE0QeLgGaE9/tOHB
-gYLIyF/x8ZauAuQattbuUL3nOp6iqw==
-=r5Sq
------END PGP SIGNATURE-----
-
---YLYxAeMluy/4woDv--
 
