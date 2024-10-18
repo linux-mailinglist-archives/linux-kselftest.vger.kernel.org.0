@@ -1,312 +1,188 @@
-Return-Path: <linux-kselftest+bounces-20155-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20156-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52E419A43CB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 18:26:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F20D79A43DF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 18:31:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DE87282D3B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 16:26:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39846B219E7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 16:31:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AAC82022F5;
-	Fri, 18 Oct 2024 16:26:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DE9F202F83;
+	Fri, 18 Oct 2024 16:31:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="H+/zmRRV"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="n1RjF9DQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2045.outbound.protection.outlook.com [40.107.236.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ABDA2036F2
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2024 16:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729268762; cv=none; b=bqCWenwsOSnxH+kXC4930KXkFCh7fUhj3Y9eWyZ7KCG+ngX0kO+0HEbTLNugzyObu8dgLrZZXp0ymAcVOGFhSI9n/poDS1RiYrQlaQX7uWa+hbVTh21HEl2mZ1qpwTza7XOjxbfvpEbz55zA8BhqfUWVf35bSDEgmtnVZKrD8pM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729268762; c=relaxed/simple;
-	bh=5jbP6qgUgoq1McrR3RLDeRE04owyYxOG4RL62eRi/S0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N0qNe5sDVMMnw14gnfhpwJt81MdmSjSgLpKqLloCXrjDII64LJfNsG37HvqBbl5MMJCRKssNN/B2nxjcojkPqULM4z4wMasrf4Ugv/wJUKlSavtUV9LVTNFMTUln55UdTZPu+0AyqBtEJrcIsiQnsDLr5pHFh++Ada/RxDRtx8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=H+/zmRRV; arc=none smtp.client-ip=209.85.160.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-286f0dcead5so1980452fac.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2024 09:25:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1729268758; x=1729873558; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P4qNWvLVpxYbIRtwTadaIjM03ETyiiYE+F1EJeQJjHY=;
-        b=H+/zmRRV8q4r4+UlnQN+A0sP2z3gWgJIB1zMRgg6lSVwQDwtf4E85CCQQQpAg5ByQZ
-         syk1Lhzseqd9xZSU4/I/HS2vk/XrXimgUu6t+n555D68Yz7svJcvHY1nTQOyg+tYj36k
-         YsPJaR6eYmdifwgngf3DaWrxI6vYfn+aABy5o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729268758; x=1729873558;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P4qNWvLVpxYbIRtwTadaIjM03ETyiiYE+F1EJeQJjHY=;
-        b=rK9cbCBuTnn0IOt85+OYen1ZKIBtsT9NuQu2hHyoOwacDbYlql5/n30B9BoBKDHgV6
-         Kb1clDkZWbGyJu2/un0miPO7VgaOCI0giWhViQs31/rhCsAEwBRU06zs8xj32r4LoJ4/
-         SXbL8obsVwiQgmjatEsGUqKfiTus6lK/+rN+rZXK+5ztf9fwukX8E5qBFJtXSc14C/v+
-         b5RaCNtnKJg0vD1s0z3afQNBnT+3ZFO+I0+jdk/2bNoso0CcLFirnNCleJqfveIGslC5
-         dKvlqknlcsVsOrnZKvi1+Xruwk+XJJxWCdEO5fuNzlwUvTBZkYVVeoDtCImFI5R6c1Ji
-         fL8w==
-X-Forwarded-Encrypted: i=1; AJvYcCWaTsr5UqPMTYqzCrVtREUfaFeTz1m3QGbvQdeDNPXTp+E7Q9q/VopPyFZv50Bj3HJOhLVVuHGNsrU5vhUUj6c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yymb69MvChywdEfLHWtGt4k1xhwaeldBfEBUoVrEfupyLMdZnDG
-	+Cr7IlbMxkhOvB5qMv5Zzu3YAneyCvT98YBo6IG61sPKqgwsE4XdHB+mkker5yI=
-X-Google-Smtp-Source: AGHT+IGaroc9U1gTQH8oIv9XintQoQrlC7c5FvJNC3/Om1CneZ+0NGXExK3IjmCzNnhwYO6jdZ3JsA==
-X-Received: by 2002:a05:6870:d60e:b0:288:aed8:c43d with SMTP id 586e51a60fabf-2890cf88610mr4183890fac.15.1729268758143;
-        Fri, 18 Oct 2024 09:25:58 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-718195da5f0sm377033a34.60.2024.10.18.09.25.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Oct 2024 09:25:57 -0700 (PDT)
-Message-ID: <3a41a1b5-e9a7-43db-b50e-84d6cc275d10@linuxfoundation.org>
-Date: Fri, 18 Oct 2024 10:25:55 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E9C201273
+	for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2024 16:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729269083; cv=fail; b=lpl7cHlmT6v+I4mtB06T9C+gz4ajLwgFJr6yL9pOv5xnXFLjme7kalF02mN4IiGl4W3Glbo6zeM+6OTj4BwT5moC46VI64rMLFKblPPGjt2v5KefufnUdQTZsP7OUOXiCjHuV5cpO9mrvtI7bDGnJlfAsPhyEDhvGFTZzEjgNOo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729269083; c=relaxed/simple;
+	bh=+tgOKbCmcGgoficNKSUvmLnY4PM5NBlWIOWbcH+Ztjg=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=DaysXqt8LTxlasFj3u6r/YrHk7r6iIFcMHgABLuPka37g8YJ/8sj29LxcbBKhx1wxCfQaIYJvvmtoMa9pUBrwMfbLJjCG/4E+RYJTTDSmdckpkbR082cKuCR8cu/I3txosOS1hcMnwoWx5kkdi5tj4DMY63nwvWMtf+ISGM8OkQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=n1RjF9DQ; arc=fail smtp.client-ip=40.107.236.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=eGl8IN8je2P8YeTIo8amxI2vel5A+RLBetLv29/m3j7kEZxLRwSJTfQwzx/v6vjuNUnkYOqYjdHliHNXYU5LBrP73bgiXr9IrfJAA4bN0Wly3qh5EymtcpTArzzKg8vIet1eckX81HBf8B/d/jki0ySU1GKQXcnDevMZCmmo9RFsBGNiNC4H25b66LWL5d7INlS9064mfkE2kwqnhAYuJfejhRyWxccwGaq90MIG1y4t2ekficVk68yzKGn4/LLCXjpy/42GMHtTvyQUY8lH9k7zebbMA8qsvF3zqQwANDQuEemdvfVinSZTgSO+R9w+eJzI364Tj4VgMgvZVDwlaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Rs1ECvGTFSekFx2J+unCO5Wmp/IISQsh+xcysf6S6nw=;
+ b=YgbvOnfRReWIk/qVyY8q+UurmV2wyX1LpnOHWLRWyXcTVINdaexOXLZ7scGbooOvjvYqJJF+i1VUmLbzrfDipeo7RB/dxG2d02qDHRREZbwOTCWtds6GNAlQES076gGs1jzMNgnW2BU3WFuCuK9HGLFkA2FaWwawE9UqQKb8QJYAlBOmOCajc66G2X6s6HnamwFLxiAOVoLhl87HmY4QXIdoyvcdhZja+INLRlz4QE3DF+IuvcvAHZsYBcpCYsJW0JWOUrh/X+EN/0d3WFzA4JBV3T4eVKGKAh9fHmWoB9EsM+VJBSJiNq3MirXU8g5tb/ov7DvP3RbqL70sSp0lLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Rs1ECvGTFSekFx2J+unCO5Wmp/IISQsh+xcysf6S6nw=;
+ b=n1RjF9DQR9/xUnMdcCBJTpEHaEF96CiRdt4wt2lt8ohpDF3+bfK/+0rd1C8q+JuoSTU7Cz7nVQL9Wqsb2Y/JVmkXC2eFxa9F9DyBhrw7VFl/braJ4SIECxbiwM8G4cdFyw1EROeDbeJYtnPHW1ZGzKMsre9bUWs3KH9Pgvq5R2a1/vCuqbIf/nJ6Bxx/zh6pVT8uuCAvl6QcGkJiaubnew2HwSHQh8qB2OWKLsNVK73gADrwDXKjx6CpC77oZBOQAvdxo+z0SeO3Vw97R5dzVJxVzXOEuK7skCKqXnWzeSsxfYqKRmH6MbbswTw3ff2Xq1dCRwrlFM7lciZK3chgkA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
+ by SN7PR12MB7107.namprd12.prod.outlook.com (2603:10b6:806:2a2::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.19; Fri, 18 Oct
+ 2024 16:31:16 +0000
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.8069.020; Fri, 18 Oct 2024
+ 16:31:15 +0000
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	kunit-dev@googlegroups.com,
+	linux-kselftest@vger.kernel.org,
+	Rae Moar <rmoar@google.com>
+Cc: patches@lists.linux.dev
+Subject: [PATCH] kunit: tool: catch warnings generated by the kernel
+Date: Fri, 18 Oct 2024 13:31:14 -0300
+Message-ID: <0-v1-60207444aa55+22-kunit_panic_warn_jgg@nvidia.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BN9PR03CA0310.namprd03.prod.outlook.com
+ (2603:10b6:408:112::15) To CH3PR12MB8659.namprd12.prod.outlook.com
+ (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] selftests/mm: add self tests for guard page feature
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Suren Baghdasaryan <surenb@google.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>,
- "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
- David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, Muchun Song <muchun.song@linux.dev>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
- Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- linux-kselftest@vger.kernel.org, Sidhartha Kumar
- <sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>,
- Christoph Hellwig <hch@infradead.org>, Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1729196871.git.lorenzo.stoakes@oracle.com>
- <8b1add3c511effb62d68183cae8a954d8339286c.1729196871.git.lorenzo.stoakes@oracle.com>
- <1d0bbc60-fda7-4c14-bf02-948bdbf8f029@linuxfoundation.org>
- <dfbf9ccb-6834-4181-a382-35c9c9af8064@lucifer.local>
- <22d386cd-e62f-43f9-905e-2d0881781abe@linuxfoundation.org>
- <7bbfc635-8d42-4c3d-8808-cb060cd9f658@lucifer.local>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <7bbfc635-8d42-4c3d-8808-cb060cd9f658@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|SN7PR12MB7107:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6570868c-48cd-437c-7920-08dcef924960
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?5Hw4uiTUWPrkQV9uQiaRjbC1aY0slm1/IHCWfFOWBxZfn13LQvFzLmyhY2Tj?=
+ =?us-ascii?Q?aI08GYdlKh3+EN5BfbkL2VOXpfKt88Mp8uC0HY9MoVpHC2tOp3KWBRDF8wXs?=
+ =?us-ascii?Q?4Pbj87iwkegYA8jNc3qKJk5DvnSwE6+qyV028Mki/wAdsFRLxFWpqKdA6NOF?=
+ =?us-ascii?Q?BS5nKKUR0hJZf0ECMyb1YXykwj3TD0s5X+QfQfBgE0ELC37/6vCT/nwtIM8U?=
+ =?us-ascii?Q?ILVH9p2NfYWgSG0YUwORtCn62rRFOJd93+8nZ13izCnQ73gYwLBAwadUaCmQ?=
+ =?us-ascii?Q?remu77qX54eYX01D0P7/HOQzqQ9EomKiCXohkHYK7F/HhC2AcxWfv9+lUted?=
+ =?us-ascii?Q?W0pz5u12SK6jHmvKDqZrJ5xlSXCUfcqDA/jMGB2cGu6ueIb7JpPyMnQDrQ+X?=
+ =?us-ascii?Q?na3UsQyGt7zSTeCLUWCI45InEKkYfEbmS9j2LKxOU7XE8B64vPG6xd++TitW?=
+ =?us-ascii?Q?nIP3qUHidX6vxn142ot9nm9BQQ31tv71BMzeOe6yllC+yz1ia5r16z1WKWSO?=
+ =?us-ascii?Q?gihR5OqzLPJMvNj4oxUmwtYJyBSh6J2LWt7J8UwArhGXXObclveDWutIjwGR?=
+ =?us-ascii?Q?qzzSdPneuLEM2XQNTfs6WueNztD/H4m1GW+/Brr2OjVhNPoMNfGowP6FbxbB?=
+ =?us-ascii?Q?5mLI48mgc8UfVfHSsBTxZW6oNPaclHZMwWHZkvOTE6kmRl8r0MIwDIKk4wpA?=
+ =?us-ascii?Q?G+DiOLVYbnPDXvm9Pbv5H4+lYV9iumQp8BvhaxMbiEgLiZT1kjWcnTK35PWD?=
+ =?us-ascii?Q?iUJQKAVzlZGpwk1lU/MRCbkrmDpSjnCM8Cub88TxAOwdrSj2kfVNgGF95uyr?=
+ =?us-ascii?Q?twxzTLwdlCiRgk7n7KbNoESYEvrdXsYIbR+ofyUJqiGq0j+5ch5dpB2lKHaD?=
+ =?us-ascii?Q?1cjRvxMwt+s/LV5KsSiISzCTtD/Npv3D6EkxUl8gBtowfLK+LrhGPkOMJDah?=
+ =?us-ascii?Q?H/x8dDt6bj0VzIFk//3cCoCVu9//4wt3BWCxftpJOpHTfAg11PBlPraAwLIm?=
+ =?us-ascii?Q?71kAp2/AgzmyOmbkinjVKkWvGe+Wmblntbgw1LnqYFrHWpdTGmnWJTkKMb+c?=
+ =?us-ascii?Q?A1/BbNqhrxLMrjrGtv/cGl57XXmMsGAmpJgML6eEYYwDVnEYpjjEpTNnXf7w?=
+ =?us-ascii?Q?S+3tG6010cPvf3pvvmRJI4FBd4WhF/bgkpu02EmhSPEnyJe8VUP6M/O8pwbZ?=
+ =?us-ascii?Q?JMgPLw56lbg87xTKduqvpskoVuqkcIFRq03WGPFm29E+ck9eZSl9iCQfFArJ?=
+ =?us-ascii?Q?XEgHuULNdbPYbufOICikF4fN3xxkwxtNGImS1iFDN0RUYXqquN7gLPYq1Fs+?=
+ =?us-ascii?Q?GvnO52+dJUxhhbINNWaaPYlQ?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?M9sooGLriBbHSgqF5L01yferRdSPSIlVfsip9uDbWyAKTdzOwUI+JUSV1U4D?=
+ =?us-ascii?Q?OPhJ8PdyKwb4DHK76oC1ecuDplRPu0QMbSXoX/HUekl6mVxC4FdLoMGlDjcp?=
+ =?us-ascii?Q?6UXrrQDzeq7SlDTH2aAzhAAGmeDqnLaF6R+bsfZ9LsWXD82xcukjtKAt/FBj?=
+ =?us-ascii?Q?PeWq6gZzbI3HS5CQBK3j1CN0kCBF0dXuAI8v1IU15IID/J+3g1UZNp6xK94n?=
+ =?us-ascii?Q?Cix+5S+xK6DyC/7eRHb++oEuWHZRjvwENRGqDo7e/N6gxCUiN2k5HYikRygG?=
+ =?us-ascii?Q?FHR61rUhnxtJw89pKLFS7GV+BOhb5eFVxsMtH3DwBnPvu297yBhyAubaXhWq?=
+ =?us-ascii?Q?2PXXYvyeUaUdHBKdH7ickET7KUxLOw/XWjOJ6UZ2tKNnJSWDyr+0pbeLZNfw?=
+ =?us-ascii?Q?AmwZAdYXgB/9iodJxH62C/RyJN2RV/ZDyLVLDLVZGoFniLmlU7j8yq2gt87i?=
+ =?us-ascii?Q?TmMjxl9hqmBdTIrlYoKv0+nRclrghtZr6CrlUKAcqLrKbaaQOphk/x4lgZbe?=
+ =?us-ascii?Q?m7n/gTgW2834u+5jnblNNKTY9dbS90W1DIzdN7G+NQBLtzx+5rlHBB4SGdCt?=
+ =?us-ascii?Q?ofbSi8D5sVn3gqxTqftR3AijAHQQ9j8U9tgiV6eIB+xvOc3vFdaB23dDtMOF?=
+ =?us-ascii?Q?as3sMTkTeRUGCfrxtFnfyicnRgLw2/Mewo4QwEcta/TqOolehYmbAe5lNnPw?=
+ =?us-ascii?Q?n1FqYr1vcjD6t+Z3HWUrnYmK8qpAqvrJrW1ar2iQMx8XIEzZA4VR+Us+Izob?=
+ =?us-ascii?Q?gEncmquyic3796GFbMup7eZlyK2PXnXJtUga20q1lWFh0BTfLLZ1pW99ahTv?=
+ =?us-ascii?Q?giUb8ZHZd7T7tf+iBZThPwBVm7J4R2Us6RBpSnw2rcr76rxPfXLvf+6ISEzF?=
+ =?us-ascii?Q?5IlFYPNnYfXkb1LI7YiRZ6ZMaC6s/5J4DxQIH7D1SKGf6X9lTIOTn7yQzVYw?=
+ =?us-ascii?Q?Zd8mcRyRZWokeM46eNS2cG9TwLPQDh2B4nEPgxVdQ4TkSc4DmCCSK8nzswLl?=
+ =?us-ascii?Q?km9bOe+Bs34o61c4KOyBIOEKpzPb0tG0c0PStKdB4SgCgFnd0/Z1tDDujVEO?=
+ =?us-ascii?Q?JRTpJk3tenyiq8p1cHiDr98ZAZuQn0R0G7atuqeYRS/4luQwgYLJCS0SmqO+?=
+ =?us-ascii?Q?fKTQbizZRJcpLGukAErJukv6PoNRRp3U6KJb7xTWB5emVUB/OyWKm9RyU4YJ?=
+ =?us-ascii?Q?0UYIZQAYp0u0P9M1pJo7yzTaQIetCLn5PoplpZc5kQPJO2KrXMDaYnvKdkcm?=
+ =?us-ascii?Q?mCnUaRmXdxdKTTHAY/Yj36fX6QWyuwHnlCkH2mqBl6w36XPe6YMV3z+lXhiV?=
+ =?us-ascii?Q?RBy6q2mcwUTCbWDyCo+s1LSIf+/lJePZL4sLkq37ZqL2X127J2TnLFAXD3Em?=
+ =?us-ascii?Q?rrTXlV5e/NUXkOMjxZagFy0L5D7XsmJAhAM2SlZ075z+JAjoCQ6Q6lbu9VV0?=
+ =?us-ascii?Q?secu4fsHm+Ry2JtF0/jqwPoupVpCMMJsquXS3BKiqLU4xsjBpdvq+0dqyzuV?=
+ =?us-ascii?Q?AQFxl1Gwip93hQzsbZxL/S7Q9XFC96u4S7HW4c4NWB2rQIkpiF2yC8v+pNiN?=
+ =?us-ascii?Q?8koMNuUVbqUTAyRKkaI=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6570868c-48cd-437c-7920-08dcef924960
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Oct 2024 16:31:15.6750
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ltctrKx6oGOwR6q8dSkGtL3Qz1uaUVm7M39pq//Pb541VaHTktfeGkvVCclTapda
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7107
 
-On 10/18/24 10:07, Lorenzo Stoakes wrote:
-> On Fri, Oct 18, 2024 at 09:32:17AM -0600, Shuah Khan wrote:
->> On 10/18/24 01:12, Lorenzo Stoakes wrote:
->>> On Thu, Oct 17, 2024 at 03:24:49PM -0600, Shuah Khan wrote:
->>>> On 10/17/24 14:42, Lorenzo Stoakes wrote:
->>>>> Utilise the kselftest harmness to implement tests for the guard page
->>>>
->>>> Splleing NIT - harmness -> harness
->>>>
->>>>> implementation.
->>>>>
->>>>> We start by implement basic tests asserting that guard pages can be
->>>>
->>>> implmenting? By the way checkpatch will catch spelling stuuf.
->>>> Please see comments about warnings below.
->>>
->>> Thanks. The majority of the checkpatch warnings are invalid so I missed
->>> this. Will fix on respin.
->>>
->>>>
->>>>> established (poisoned), cleared (remedied) and that touching poisoned pages
->>>>> result in SIGSEGV. We also assert that, in remedying a range, non-poison
->>>>> pages remain intact.
->>>>>
->>>>> We then examine different operations on regions containing poison markers
->>>>> behave to ensure correct behaviour:
->>>>>
->>>>> * Operations over multiple VMAs operate as expected.
->>>>> * Invoking MADV_GUARD_POISION / MADV_GUARD_REMEDY via process_madvise() in
->>>>>      batches works correctly.
->>>>> * Ensuring that munmap() correctly tears down poison markers.
->>>>> * Using mprotect() to adjust protection bits does not in any way override
->>>>>      or cause issues with poison markers.
->>>>> * Ensuring that splitting and merging VMAs around poison markers causes no
->>>>>      issue - i.e. that a marker which 'belongs' to one VMA can function just
->>>>>      as well 'belonging' to another.
->>>>> * Ensuring that madvise(..., MADV_DONTNEED) does not remove poison markers.
->>>>> * Ensuring that mlock()'ing a range containing poison markers does not
->>>>>      cause issues.
->>>>> * Ensuring that mremap() can move a poisoned range and retain poison
->>>>>      markers.
->>>>> * Ensuring that mremap() can expand a poisoned range and retain poison
->>>>>      markers (perhaps moving the range).
->>>>> * Ensuring that mremap() can shrink a poisoned range and retain poison
->>>>>      markers.
->>>>> * Ensuring that forking a process correctly retains poison markers.
->>>>> * Ensuring that forking a VMA with VM_WIPEONFORK set behaves sanely.
->>>>> * Ensuring that lazyfree simply clears poison markers.
->>>>> * Ensuring that userfaultfd can co-exist with guard pages.
->>>>> * Ensuring that madvise(..., MADV_POPULATE_READ) and
->>>>>      madvise(..., MADV_POPULATE_WRITE) error out when encountering
->>>>>      poison markers.
->>>>> * Ensuring that madvise(..., MADV_COLD) and madvise(..., MADV_PAGEOUT) do
->>>>>      not remove poison markers.
->>>>
->>>> Good summary of test. Does the test require root access?
->>>> If so does it check and skip appropriately?
->>>
->>> Thanks and some do, in those cases we skip.
->>>
->>>>
->>>>>
->>>>> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
->>>>> ---
->>>>>     tools/testing/selftests/mm/.gitignore    |    1 +
->>>>>     tools/testing/selftests/mm/Makefile      |    1 +
->>>>>     tools/testing/selftests/mm/guard-pages.c | 1168 ++++++++++++++++++++++
->>>>>     3 files changed, 1170 insertions(+)
->>>>>     create mode 100644 tools/testing/selftests/mm/guard-pages.c
->>>>>
->>>>> diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
->>>>> index 689bbd520296..8f01f4da1c0d 100644
->>>>> --- a/tools/testing/selftests/mm/.gitignore
->>>>> +++ b/tools/testing/selftests/mm/.gitignore
->>>>> @@ -54,3 +54,4 @@ droppable
->>>>>     hugetlb_dio
->>>>>     pkey_sighandler_tests_32
->>>>>     pkey_sighandler_tests_64
->>>>> +guard-pages
->>>>> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
->>>>> index 02e1204971b0..15c734d6cfec 100644
->>>>> --- a/tools/testing/selftests/mm/Makefile
->>>>> +++ b/tools/testing/selftests/mm/Makefile
->>>>> @@ -79,6 +79,7 @@ TEST_GEN_FILES += hugetlb_fault_after_madv
->>>>>     TEST_GEN_FILES += hugetlb_madv_vs_map
->>>>>     TEST_GEN_FILES += hugetlb_dio
->>>>>     TEST_GEN_FILES += droppable
->>>>> +TEST_GEN_FILES += guard-pages
->>>>>     ifneq ($(ARCH),arm64)
->>>>>     TEST_GEN_FILES += soft-dirty
->>>>> diff --git a/tools/testing/selftests/mm/guard-pages.c b/tools/testing/selftests/mm/guard-pages.c
->>>>> new file mode 100644
->>>>> index 000000000000..2ab0ff3ba5a0
->>>>> --- /dev/null
->>>>> +++ b/tools/testing/selftests/mm/guard-pages.c
->>>>> @@ -0,0 +1,1168 @@
->>>>> +// SPDX-License-Identifier: GPL-2.0-or-later
->>>>> +
->>>>> +#define _GNU_SOURCE
->>>>> +#include "../kselftest_harness.h"
->>>>> +#include <assert.h>
->>>>> +#include <fcntl.h>
->>>>> +#include <setjmp.h>
->>>>> +#include <errno.h>
->>>>> +#include <linux/userfaultfd.h>
->>>>> +#include <signal.h>
->>>>> +#include <stdbool.h>
->>>>> +#include <stdio.h>
->>>>> +#include <stdlib.h>
->>>>> +#include <string.h>
->>>>> +#include <sys/ioctl.h>
->>>>> +#include <sys/mman.h>
->>>>> +#include <sys/syscall.h>
->>>>> +#include <sys/uio.h>
->>>>> +#include <unistd.h>
->>>>> +
->>>>> +/* These may not yet be available in the uAPI so define if not. */
->>>>> +
->>>>> +#ifndef MADV_GUARD_POISON
->>>>> +#define MADV_GUARD_POISON	102
->>>>> +#endif
->>>>> +
->>>>> +#ifndef MADV_GUARD_UNPOISON
->>>>> +#define MADV_GUARD_UNPOISON	103
->>>>> +#endif
->>>>> +
->>>>> +volatile bool signal_jump_set;
->>>>
->>>> Can you add a comment about why volatile is needed.
->>>
->>> I'm not sure it's really necessary, it's completely standard to do this
->>> with signal handling and is one of the exceptions to the 'volatile
->>> considered harmful' rule.
->>>
->>>> By the way did you happen to run checkpatck on this. There are
->>>> several instances where single statement blocks with braces {}
->>>>
->>>> I noticed a few and ran checkpatch on your patch. There are
->>>> 45 warnings regarding codeing style.
->>>>
->>>> Please run checkpatch and clean them up so we can avoid followup
->>>> checkpatch cleanup patches.
->>>
->>> No sorry I won't, checkpatch isn't infallible and series trying to 'clean
->>> up' things that aren't issues will be a waste of everybody's time.
->>>
->>
->> Sorry - this violates the coding styles and makes it hard to read.
->>
->> See process/coding-style.rst:
->>
->> Do not unnecessarily use braces where a single statement will do.
->>
->> .. code-block:: c
->>
->>          if (condition)
->>                  action();
->>
->> and
->>
->> .. code-block:: c
->>
->>          if (condition)
->>                  do_this();
->>          else
->>                  do_that();
->>
->> This does not apply if only one branch of a conditional statement is a single
->> statement; in the latter case use braces in both branches:
->>
->> .. code-block:: c
->>
->>          if (condition) {
->>                  do_this();
->>                  do_that();
->>          } else {
->>                  otherwise();
->>          }
->>
->> Also, use braces when a loop contains more than a single simple statement:
->>
->> .. code-block:: c
->>
->>          while (condition) {
->>                  if (test)
->>                          do_something();
->>          }
->>
->> thanks,
->> -- Shuah
-> 
-> Shuah, quoting coding standards to an experienced kernel developer
-> (maintainer now) is maybe not the best way to engage here + it may have
-> been more productive for you to first engage on why it is I'm deviating
-> here.
-> 
+If the kunit being run generates a WARN for some reason kunit.py ignores it
+and declares the tested PASSED. This is very much not desirable, as tests that
+are hitting WARN's are probably actually failing.
 
-This is not the only comment I gave you in this patch and your
-other patches.
+Take the simple approach to reducing this by setting panic_on_warn when
+running the kernel. The kernel crashes and kunit.py shows the WARN and reports
+the test fails.
 
-thanks,
--- Shuah
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+---
+ tools/testing/kunit/kunit_kernel.py | 2 ++
+ 1 file changed, 2 insertions(+)
+
+I saw there was an earlier series working to make tests that deliberately made
+WARNs not do that, so this would be consistent with that idea, tests should not
+make WARNs, and WARNs should not be ignored..
+
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 61931c4926fd66..7a4228568dd73c 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -342,6 +342,8 @@ class LinuxSourceTree:
+ 		if filter_action:
+ 			args.append('kunit.filter_action=' + filter_action)
+ 		args.append('kunit.enable=1')
++		args.append('panic_on_warn=1')
++		args.append('panic=-1')
+ 
+ 		process = self._ops.start(args, build_dir)
+ 		assert process.stdout is not None  # tell mypy it's set
+
+base-commit: 2872987b1d009df556c0061ecdeede6a5f9bf42c
+-- 
+2.46.2
 
 
