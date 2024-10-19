@@ -1,165 +1,268 @@
-Return-Path: <linux-kselftest+bounces-20183-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20184-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95C729A4A5C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2024 01:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E43FB9A4A6A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2024 02:10:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FB181F23B9B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2024 23:58:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67D191F23DAD
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2024 00:10:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71654191F9C;
-	Fri, 18 Oct 2024 23:57:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BCDE36D;
+	Sat, 19 Oct 2024 00:10:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YkdOtbVo"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fD7jR+Mt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469D41922CC
-	for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2024 23:57:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28911632
+	for <linux-kselftest@vger.kernel.org>; Sat, 19 Oct 2024 00:10:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729295861; cv=none; b=CZwESEWaKcqLY1vX8nUWZTiBvGelNBhFAWDiT6H4B28bltoTqb19ruSCeIi64e9Ag4cLhZf+C6PfNMEilN64pTYuLvtGaefyPdGjV0ffTOw50+hjpDtvcCfBzshgGQODayOrdq65uLX4Vbi0A6yXZSFs8xD/sOWrNZY4/K5YHIk=
+	t=1729296617; cv=none; b=fQHuCPtJ/bkJHelonGeiPcJV3dO/1jHKG6Gfhq4qMsTHHgElJo04nv+YJebA42DMNTPOZwTvIIredPRjQ7+knDPSNO0uz5Vj6wCbhIjVLu4CsOtDSRxZNOcqn0YDV76t2yBLZjAn616Qnu7BNC1h2Dl27bZOfeeSHng3mrrqeuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729295861; c=relaxed/simple;
-	bh=/LHSdJHkp1l77T+lIpZRGhDuFNKfe0atYWZA1rVZ40s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XHOps0PkrezDMOj1XW2VCLJvjTVWzdAPKyaUr4uwxXV8iDBEsMEftyrW5VTJpYcia8AnYstYjun44isUk0wjF6O3Krh9Z1Ix5jtyjx7PCKhoicABdPqhkTPhxA5SFGvVBEQN0uMbMlbhOgQQqSN3oiLfqg3Lp0Ld9OgWQUMNoLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YkdOtbVo; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <18cb274a-a214-42c0-bcec-cbda34703893@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1729295852;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=amGDfV5HdFNuReXcjkk4EaaJ7Bh/Ri0Tvnzi7osykXQ=;
-	b=YkdOtbVocWMr74bXPrrLp9BXcB80E0e5dh/zolhPL4gFKP1jxrWrisN/Xcmy2DHXt5jvcY
-	2vCJQMHWqVSCTDu2oqd+UWEY/gJy/Y3KRsG6aRqAY0m8jYcLpyGDWTvuOPzF7iRMeGmhKB
-	C4twQLIBTLFaAYtP4NjNTPvkMeW5hOg=
-Date: Fri, 18 Oct 2024 16:57:20 -0700
+	s=arc-20240116; t=1729296617; c=relaxed/simple;
+	bh=9YE7dqGfVDQ/xH6Sdx54Ef6PxJ+cJabmZ9vzvXPouRY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gDHnvzn8rlk0jI4tsBoLvkzZ12bZ7IHGELOepemywY2TYZoxd7KbWDInBi+UNdMfqHCsXIWpMNHs5B0gDO35PNqLIot6tedxsplM2S928pRNYZa2KC8lax2WFIKy1aZPpCT0AC01E/TTFlNDPtQ4U0pIqtXCu1PrIV1TCuhTo2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=fD7jR+Mt; arc=none smtp.client-ip=209.85.160.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-28893cc3acdso438001fac.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2024 17:10:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1729296614; x=1729901414; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E22HImJZ028W/1sQ4maAbpjY4QAR955Gkk9SdRCpvUQ=;
+        b=fD7jR+MtDCj3/nnkGWJvDef832IaUFNUGhQ3yI6u7ebatdSGu2CzvhD4WSk7PfIyVU
+         9wFmFFIHFlB3DnMI9XuQFAATV42E1iwRA4Hf9c8YCGi0iVTV3SJFHRsVB1cuMHR7cv1U
+         A4+yOyxc3W/LXOMwsAtQsTsA7wH+SfcndIrgM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729296614; x=1729901414;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E22HImJZ028W/1sQ4maAbpjY4QAR955Gkk9SdRCpvUQ=;
+        b=ILhcMz4l0WOyJMV+0e2gomnUTRB4nlntu22r73mFwYTZ4o2bqM2645laSTQS1dIbTq
+         jAFml/BoIaXFDCedn+T9iOJsFSVqPQpuPziIg4j5oISnGi0SEpcb0OgNl7yT+8V1u0YD
+         GGbH2L0JHfYN7mrQBT2GHDguRPeQ7NS/wFp11lGtIxgpK4RtHUsCdlV/uPLUBBE/VGNc
+         1iCZ3wMLyU/MMkDhEiKmaCML2viUKZsQuILOkOudPtN2ZH0EwQ9oGx8lm360ocrOOTfK
+         WVOLz1qZsNC8dieyVn3bziC9U+xdeluE93tah4wbflYWIGEmCStnWcWFspFvUduAKA21
+         /wGg==
+X-Forwarded-Encrypted: i=1; AJvYcCUsylktDx/6FGP404Q6FbWl75BgwF8nqprMcSDt/NP+TeukXFFTixn2QGVmH+ZGuGlJVb21MZNwhk3J6XF51sc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0mteuIh5b+rwAbpiOl2JhyCx9RT3rzuwWMnP3seu2hpREhD22
+	8EpIYkSwG6oC+iagOsCexR5DcxbZVbkdL+G6158TzDLQE2jQiCJvY0QlXz035XoWFbojOqow+bH
+	mEairNcavFxCcfAbKgss0BMOEX6JdlYq3lECj
+X-Google-Smtp-Source: AGHT+IFIihPyXoNPdentrsybY42eayzsimY1yFxEH7573nql2cE6j/C/m4TScAB/nVOH3efQdB/x8+eCEYm3oUOJiR8=
+X-Received: by 2002:a05:6870:95a1:b0:27b:9f8a:7a80 with SMTP id
+ 586e51a60fabf-2892c55337bmr967265fac.13.1729296613985; Fri, 18 Oct 2024
+ 17:10:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 2/6] selftests/bpf: add missing ns cleanups in
- btf_skc_cls_ingress
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
- <alexis.lothore@bootlin.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- ebpf@linuxfoundation.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Lorenz Bauer <lmb@cloudflare.com>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org
-References: <20241016-syncookie-v1-0-3b7a0de12153@bootlin.com>
- <20241016-syncookie-v1-2-3b7a0de12153@bootlin.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20241016-syncookie-v1-2-3b7a0de12153@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <CABi2SkUgDZtJtRJe+J9UNdtZn=EQzZcbMB685P=1rR7DUhg=6Q@mail.gmail.com>
+ <CABi2SkVEMRHV3swrbb6M5RA6GQpFVVx855CGwdQ1xiz3tygiqA@mail.gmail.com>
+ <f9b9422c-216d-422e-94b4-d8814b0b277e@lucifer.local> <CABi2SkWAv4LXvR1Wb1e31eyZ35JfyieXhDOq1bp_ZvHPLLg-qA@mail.gmail.com>
+ <e0f440b0-5a45-4218-8c51-27f848c0617b@lucifer.local> <CABi2SkWNRTCC0LzDSuzgjC1tO=KF==5FXUnPHOrPzEG5abAeDg@mail.gmail.com>
+ <1f8eff74-005b-4fa9-9446-47f4cdbf3e8d@sirena.org.uk> <CABi2SkV38U-ZCAq9W091zYkOM1m5e-C27YmVXdTCi-t+p_W_fQ@mail.gmail.com>
+ <a2652ed4-ea8b-4b56-bac6-6479b3df6c14@sirena.org.uk> <CABi2SkVF3OtRcq9cCgLh_hOjxRnWq0owypw++xodrEfm=dt_qA@mail.gmail.com>
+ <6aefd38b-d758-4e7c-a910-254251c2a294@sirena.org.uk>
+In-Reply-To: <6aefd38b-d758-4e7c-a910-254251c2a294@sirena.org.uk>
+From: Jeff Xu <jeffxu@chromium.org>
+Date: Fri, 18 Oct 2024 17:10:01 -0700
+Message-ID: <CABi2SkUG8bhKQeHd_pvLw4y3ZY+Z8CvxZ_iV4YhTc+JQqe9TxA@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] selftests/mseal: add more tests for mmap
+To: Mark Brown <broonie@kernel.org>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	akpm@linux-foundation.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, pedro.falcato@gmail.com, willy@infradead.org, 
+	vbabka@suse.cz, Liam.Howlett@oracle.com, rientjes@google.com, 
+	keescook@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/16/24 11:35 AM, Alexis Lothoré (eBPF Foundation) wrote:
-> btf_skc_cls_ingress.c currently runs two subtests, and create a
-> dedicated network namespace for each, but never cleans up the created
-> namespace once the test has ended.
-> 
-> Add missing namespace cleanup after each namespace to avoid accumulating
-> namespaces for each new subtest. While at it, switch namespace
-> management to netns_{new,free}
-> 
-> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> ---
->   .../selftests/bpf/prog_tests/btf_skc_cls_ingress.c | 31 ++++++++++++++--------
->   1 file changed, 20 insertions(+), 11 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
-> index 5d8d7736edc095b647ca3fbc12cac0440b60140e..8d1fa8806cdda088d264b44104f7c80726b025e2 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
-> @@ -17,32 +17,34 @@
->   #include "test_progs.h"
->   #include "test_btf_skc_cls_ingress.skel.h"
->   
-> +#define TEST_NS "skc_cls_ingress"
-> +
->   static struct test_btf_skc_cls_ingress *skel;
->   static struct sockaddr_in6 srv_sa6;
->   static __u32 duration;
->   
-> -static int prepare_netns(void)
-> +static struct netns_obj *prepare_netns(void)
->   {
->   	LIBBPF_OPTS(bpf_tc_hook, qdisc_lo, .attach_point = BPF_TC_INGRESS);
->   	LIBBPF_OPTS(bpf_tc_opts, tc_attach,
->   		    .prog_fd = bpf_program__fd(skel->progs.cls_ingress));
-> +	struct netns_obj *ns = NULL;
->   
-> -	if (CHECK(unshare(CLONE_NEWNET), "create netns",
-> -		  "unshare(CLONE_NEWNET): %s (%d)",
-> -		  strerror(errno), errno))
-> -		return -1;
-> +	ns = netns_new(TEST_NS, true);
-> +	if (!ASSERT_OK_PTR(ns, "create and join netns"))
-> +		return ns;
->   
->   	if (CHECK(system("ip link set dev lo up"),
->   		  "ip link set dev lo up", "failed\n"))
+HI Mark
 
-nit. netns_new() takes care of "lo up" also, so the above can be removed.
+On Fri, Oct 18, 2024 at 2:05=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
+te:
+>
+> On Fri, Oct 18, 2024 at 12:32:37PM -0700, Jeff Xu wrote:
+> > On Fri, Oct 18, 2024 at 11:37=E2=80=AFAM Mark Brown <broonie@kernel.org=
+> wrote:
+> > > On Fri, Oct 18, 2024 at 11:06:20AM -0700, Jeff Xu wrote:
+>
+> > > Test 106 here is called "test_munmap_free_multiple_ranges_with_split:
+> > > line:2573" which automated systems aren't going to be able to associa=
+te
+> > > with the passing "test_munmap_free_multiple_ranges_with_split", nor w=
+ith
+> > > any failures that occur on any other lines in the function.
+>
+> > I see. That will happen when those tests are modified and line number
+> > changes. I could see reasoning for this argument, especially when
+> > those tests are flaky and get updated often.
+>
+> > In practice, I hope any of those kernel self-test failures should get
+> > fixed immediately, or even better, run before dev submitting the patch
+> > that affects the mm area.
+>
+> That's not the entire issue - it is also a problem that the test name
+> is not the same between passes and failures so automated systems can't
+> associate the failures with the passes.
+I failed to understand this part.
+Maybe you meant the failing logging  is not the same across the
+multiple versions of test code, by testname you meant "failing
+logging"
 
-test_progs.c has restore_netns() after each test, so the netns was not cleaned 
-up. The second unshare should have freed the earlier netns also.
+>When a test starts failing they
+> will see the passing test disappear and a new test appears that has never
+> worked.
+ > This will mean that for example if they have bisection support
+> or UI for showing when a test started regressing those won't work.  The
+> test name needs to be stable, diagnostics identifying why or where it
+> failed should be separate prints.
+>
+If the test hasn't been changed for a while,  and start failing. Then
+it is quite easy to run the same test on recent code changes. I think
+you might agree with me on this. The only thing that bisec needs to
+check is if the entire tests are failing or not.
 
-Using netns_new() removed the boiler plate codes. It is nice to see this change 
-here regardless.
+I haven't used the biset functionality, so I'm not sure how it works
+exactly, e.g. when it runs on the old version of kernel, does it use
+the test binary from the old kernel ? or the test binary provided by
+dev ?
 
-> -		return -1;
-> +		goto free_ns;
->   
->   	qdisc_lo.ifindex = if_nametoindex("lo");
->   	if (!ASSERT_OK(bpf_tc_hook_create(&qdisc_lo), "qdisc add dev lo clsact"))
-> -		return -1;
-> +		goto free_ns;
->   
->   	if (!ASSERT_OK(bpf_tc_attach(&qdisc_lo, &tc_attach),
->   		       "filter add dev lo ingress"))
-> -		return -1;
-> +		goto free_ns;
->   
->   	/* Ensure 20 bytes options (i.e. in total 40 bytes tcp header) for the
->   	 * bpf_tcp_gen_syncookie() helper.
-> @@ -50,9 +52,13 @@ static int prepare_netns(void)
->   	if (write_sysctl("/proc/sys/net/ipv4/tcp_window_scaling", "1") ||
->   	    write_sysctl("/proc/sys/net/ipv4/tcp_timestamps", "1") ||
->   	    write_sysctl("/proc/sys/net/ipv4/tcp_sack", "1"))
-> -		return -1;
-> +		goto free_ns;
-> +
-> +	return ns;
->   
-> -	return 0;
-> +free_ns:
-> +	netns_free(ns);
-> +	return NULL;
->   }
+> Actually, prompted by the comments below about test variants I've now
+> run the test and see that what's in -next is also broken in that it's
+> running a lot of the tests twice with sealing enabled or disabled but
+> not including this in the reported test name resulting in most of the
+> tests reporting like this:
+>
+>    ok 11 test_seal_mprotect
+>    ok 12 test_seal_mprotect
+>
+> which is also going to confuse automated systems, they have a hard time
+> working out which instance is which (generally the test numbers get
+> ignored between runs as they're not at all stable).  The test names need
+> to roll in the parameterisation:
+>
+>    ok 11 test_seal_mprotect seal=3Dtrue
+>    ok 12 test_seal_mprotect seal=3Dfalse
+>
+> (or something, the specific format doesn't matter so long as the names
+> are both stable and distinct).
+>
+Yes. Agree that this is a limitation of this macro.
 
+> > Having line number does help dev to go to error directly, and I'm not
+> > against filling in the "action" field, but you might also agree with
+> > me, finding unique text for each error would require some decent
+> > amount of time, especially for large tests such as mseal_test.
+>
+> In these situations if it's a typical Unix API function setting errno
+> that failed I tend to end up writing diagnostics like:
+>
+>         ksft_perror("open()")
+>
+> possibly with some of the arguments included as well, or something
+> equivalently basic for other kinds of error.  This is fairly mindless so
+> quick and easy to do and more robust against line number slips if you're
+> not looking at exactly the same version of the code, sometimes it's even
+> enough you don't even need to look at the test to understand why it's
+> upset.
+>
+I understand what you are saying, but personally, I still think line
+numbers are a faster and more direct way to failure.
 
+> > > Honestly this just sounds and looks like kselftest_harness.h, it's
+> > > ASSERT_ and EXPECT_ macros sound exactly like what you're looking for
+> > > for asserts.  The main gotchas with it are that it's not particularly
+>
+> > OK, I didn't know that ASSERT_ and EXPECT_ were part of the test fixtur=
+e.
+>
+> > If I  switch to test_fixture, e,g, using TEST(test_name)
+>
+> > how do I pass the "seal" flag to it ?
+> > e.g. how do I run the same test twice, first seal =3D true, and second =
+seal=3Dfalse.
+>
+> >         test_seal_mmap_shrink(false);
+> >         test_seal_mmap_shrink(true);
+>
+> That looks like fixture variants to me, using those with
+> kselftest_harness.h will also fix the problem with duplicate test names
+> being used since it generates different names for each instance of the
+> test.  Something like:
+>
+> FIXTURE(with_seal)
+> {
+> };
+>
+> FIXTURE_VARIANT(with_seal)
+> {
+>         bool seal;
+> };
+>
+> FIXTURE_VARIANT_ADD(with_seal, yes)
+> {
+>         .seal =3D true,
+> };
+>
+> FIXTURE_VARIANT_ADD(with_seal, no)
+> {
+>         .seal =3D false,
+> };
+>
+> FIXTURE_SETUP(with_seal)
+> {
+> }
+>
+> FIXTURE_TEARDOWN(with_seal)
+> {
+> }
+>
+> then a bunch of tests using that fixture:
+>
+> TEST_F(with_seal, test_seal_mmap_shrink)
+> {
+>         if (variant->seal) {
+>                 /* setup sealing */
+>         }
+>
+>         ...
+> }
+>
+> TEST_F(with_seal, test_seal_mprotect)
+> {
+>         if (variant->seal) {
+>                 /* setup sealing */
+>         }
+>
+>         ...
+> }
+>
+> You don't need to actually set up anything in your fixture, but you do
+> need to have setup and teardown functions so the framework can emit
+> required boilerplate.  The gcs-locking.c test I recently added in -next
+> is an example of a similar thing where we just need the variants,
+> there's no actual fixture.
+
+Thanks! This is really helpful, I think the existing mseal_test can be
+quickly converted using this example.
+
+(A side note: if selftest documentation is updated to include this
+example, it will be much easier to future dev to follow)
+
+Thanks
+-Jeff
 
