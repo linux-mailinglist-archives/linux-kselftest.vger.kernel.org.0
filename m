@@ -1,209 +1,126 @@
-Return-Path: <linux-kselftest+bounces-20193-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20194-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5838F9A4D88
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2024 13:56:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F7C79A4DBF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2024 14:14:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 070F51F26F13
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2024 11:56:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F06AF282E77
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2024 12:14:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C35EA1E0B67;
-	Sat, 19 Oct 2024 11:52:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1791E1E04B0;
+	Sat, 19 Oct 2024 12:14:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JnKmWoay"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="FjNrm0cd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A601E04B7;
-	Sat, 19 Oct 2024 11:52:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9AF1DE2AE;
+	Sat, 19 Oct 2024 12:13:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729338748; cv=none; b=jEaUbJbEQVr1cIiVL5Hngc5IdGyODWCiOlKjD4hNkYdT21kyogSHl/MEdmejGxqmrCxSkgs+UvN4OJLHTwXaRKBTWTFOUGG5PkNG81dDiju2R6UJ9x1curV221B+GqwLpfyuYUrjEn9vIHdsuvmis6ORskY8dK5UAGT5SlpZ+fM=
+	t=1729340043; cv=none; b=EKXH6AjkpdXxbQ3hNqvpj6K9lAqwejt6QBS4urfFW4Oe7Tmu/uJgpwjORM0Z3QhJWhJTL41gwzDWoRKGjQ8NAT9dEI+glr3PpaGGzzciU1uc0hN8ICONYkx1Kwwqawk7M6HKYAcmXshGg+UVw9sDMF3fzhQVnUV1UUvgRqAlHTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729338748; c=relaxed/simple;
-	bh=b7NVwrOnb2BCwyvcz8TEDalOhz7k0I5C6ajKPj0qW98=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=SF3Nv4P/LXoLqwasuOsOYYHFlGzyNjcWwEWJYrC5nFeBf1D6seB7V71HAigKc0pKWGTEskG5mFi0+XBNG7X9SrfXeYeToCOraktWu+H1xUeJK/urBaTjOefxkEbpWmw+QGkdqIs6Ok58e9QQG1u6k3al9ZeAs1w85Ppt+ojT8co=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JnKmWoay; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2e2bd0e2c4fso2332889a91.3;
-        Sat, 19 Oct 2024 04:52:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729338746; x=1729943546; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TcCobt2mC1z+TR6O67zCBK8k7nUf6ZEbehWixO+szIg=;
-        b=JnKmWoay82sbZtMCS9piKcS1VseYvQwuDnrp+RwV/6ZbBHXdP0E2mfyA4NRgY5ORxk
-         Th8lS+w1+0CpJseiqSuKWUU4chkOMOVxko8IweeGNBgN8Ry9MlwBkt1mjD+D9KC7cmd+
-         CSAwrsZiML1QCwdkl1vsRJbOyFZOzPn4YhJ/eV0oseRzKBiX5+it0gPp2kOi4DVjqBTw
-         BwBzHDJiRSfXiMt55oA4ggK8PXnSAO+WbWJfd0/4DcAQrLqz426LFIk5myXPMv3jUxlu
-         qKA/qSLalkumhOWmnyIKLYfZEfUEC5uP6K5h0fRLFsyj0EoQ3E22wR/hEODlsAPiA9il
-         918Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729338746; x=1729943546;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TcCobt2mC1z+TR6O67zCBK8k7nUf6ZEbehWixO+szIg=;
-        b=VydTk7Viy6a5Kyg6vDx5HuS0OpnWfKvMlqKaYTErOftUhQiGkwSj+YEgUF2Lv+yNKT
-         34ekox23hi2cs7oHZCfLPsTzAwuJBCzZ2GS6Th+sD/uLEMYxz6mEXQ/mCdpxevV5FL98
-         tiE6PSpiM2JipGaAMploHoPvrhqm/xV1CbO/pslxeSVU+udjuq8zaPSMU+sj3neahjAx
-         L3LkUbFheJX0YLNOlSBNMNclKIeDi/kKdx2BNt6/69lZkWlZ4rL/6TAB5WnCPIzDCkW6
-         8TG1N89BTfNh7qtRZdktQaKvHPJZEVU6hSqqRsLT1R8Z+qvYl5OvIsRbbEE68XHi8KsA
-         f7iw==
-X-Forwarded-Encrypted: i=1; AJvYcCXZvM2Q0q+1tpmdttcgYgjjfcoCJ81VdKamiEKXZo3ovue4reQcLnP+Cpo6CYac3h4OlNXuO3ShK+bj+fbnvVy4@vger.kernel.org, AJvYcCXkhnB/wleYrauaPLd2S8Rxd20ghto8i+EgEOxMyG13MEGTrHiB8iT27AwHPSJ/BcW893I274RIaiHq+0Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+TVEtYGu94MG9y1RqmItGEhEynfK3ZYbCQJnYTOAHr3Y33vow
-	/ZeOfYCrUI7Mk0JOsQmOhspZey3JtrHd3hFEsj/khbVDsVMrUyNH
-X-Google-Smtp-Source: AGHT+IGr7TDoDZLZABzVodXS3kaumggPe/3qcRR5CFL22s1nHdPVZD8j+8SAtq9XqlCimG4JaBSK5A==
-X-Received: by 2002:a17:90a:986:b0:2e2:d15c:1a24 with SMTP id 98e67ed59e1d1-2e56167f574mr6476351a91.23.1729338745837;
-        Sat, 19 Oct 2024 04:52:25 -0700 (PDT)
-Received: from Emma ([2401:4900:1c96:190:5054:ff:fe53:2787])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e5611d4416sm3907065a91.19.2024.10.19.04.52.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Oct 2024 04:52:25 -0700 (PDT)
-From: Karan Sanghavi <karansanghvi98@gmail.com>
-Date: Sat, 19 Oct 2024 11:52:21 +0000
-Subject: [PATCH] selftests: tc-testing: Fixed typo error
+	s=arc-20240116; t=1729340043; c=relaxed/simple;
+	bh=Zh3CNlvJGgEu6+hGG/XSE58JLkiLtoLZGdNKNVgf8xw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=S4aXxeA9h6nFHaPErO7pwBW8uvbJiOb6v8bgVfsj6GHEDjNZf+cRuJ/S+qlDEGpmUCk+EOykhPZW/gedg62uoOzYbEo3zs6qCBuEltf+F/+UtSZS5E5vG6IAso37FhjqJpxMuzHQUsvgCOUCrtTVrEf8wGJQ+Hu0fwntqyqbxyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=FjNrm0cd; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D9759E0002;
+	Sat, 19 Oct 2024 12:13:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1729340037;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=J3svayMFxw0v0m0oN6qpWeSzMSDxNCpu8Ituu40pyy0=;
+	b=FjNrm0cdmER2Z/qwTmF1DxYAsGtb+6BspLseSNudntV/cu8KhLEs+8bTYfC0kPh7ABgjBZ
+	OUKy6XJXA4+itlgqghRr2nrVRNgQYMELkeI/ESsddtihHMkQA5fVEwE4G9iVRy/JXeFpiR
+	1InCfl6J4Ww6fpqkpg68H5saJKLUhcRc0iGNb968J39GFDlPhMXwzdeYVm2izTlTCkWRq1
+	KKEiNe10mcKf+fpLBvWO27+ZuKQEvcKjV8Sb/C2XgMQwaMRWqOcj2UqEYpeQdMYeMNYqWK
+	E6LP7wJq8ekZ5QA+UJkqs1yUtP88lNYYgUcmMPWmKFzc6kTxyI8GzQ09oeSd/Q==
+Message-ID: <4d438cdf-7e16-4a75-b2ca-d3dea6f1c045@bootlin.com>
+Date: Sat, 19 Oct 2024 14:13:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241019-multiple_spell_error-v1-1-facff43b5610@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAHSdE2cC/x2M3QpAQBQGX0Xn2pbdZOVVJPn5cGqxnUVK3t1m7
- uZi5qEAYQSqkocEFwfetyg6TWhYum2G4jE6mczkOtNWrac72Du0wcO5FiK7qLI3hZ0iyC3F1As
- mvv9t3bzvB441ahhmAAAA
-To: Jamal Hadi Salim <jhs@mojatatu.com>, 
- Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>, 
- Anup <anupnewsmail@gmail.com>, Karan Sanghavi <karansanghvi98@gmail.com>, 
- Simon Horman <horms@kernel.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1729338742; l=4399;
- i=karansanghvi98@gmail.com; s=20241017; h=from:subject:message-id;
- bh=b7NVwrOnb2BCwyvcz8TEDalOhz7k0I5C6ajKPj0qW98=;
- b=BlyI5J3X1LqLKvIWVA3maYCsIRRglafKpwm/auGhgCrwsbvdUdAFdImyxM2YNILQY1cVEY7v3
- UoyVldmqCDHCZ6KrQyI92OU+aOn5usrMUDwRbuMZoKYSc/E1Vix/20N
-X-Developer-Key: i=karansanghvi98@gmail.com; a=ed25519;
- pk=UAcbefT1C06npNVDJHdgpPqTm4WE9IhaA1fmJb3A37Y=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/6] selftests/bpf: add missing ns cleanups in
+ btf_skc_cls_ingress
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ ebpf@linuxfoundation.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Lorenz Bauer <lmb@cloudflare.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org
+References: <20241016-syncookie-v1-0-3b7a0de12153@bootlin.com>
+ <20241016-syncookie-v1-2-3b7a0de12153@bootlin.com>
+ <18cb274a-a214-42c0-bcec-cbda34703893@linux.dev>
+From: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Content-Language: en-US
+In-Reply-To: <18cb274a-a214-42c0-bcec-cbda34703893@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-Corrected the multiple and different typo errors in json files
+Hi Martin, thanks for the review !
 
-- "diffferent" is corrected to "different".
-- "muliple" and "miltiple" is corrected to "multiple".
+On 10/19/24 01:57, Martin KaFai Lau wrote:
+> On 10/16/24 11:35 AM, Alexis Lothoré (eBPF Foundation) wrote:
+>> btf_skc_cls_ingress.c currently runs two subtests, and create a
+>> dedicated network namespace for each, but never cleans up the created
+>> namespace once the test has ended.
+>>
+>> Add missing namespace cleanup after each namespace to avoid accumulating
+>> namespaces for each new subtest. While at it, switch namespace
+>> management to netns_{new,free}
+>>
+>> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 
-Signed-off-by: Karan Sanghavi <karansanghvi98@gmail.com>
----
- tools/testing/selftests/tc-testing/tc-tests/filters/basic.json  | 6 +++---
- tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json | 6 +++---
- tools/testing/selftests/tc-testing/tc-tests/filters/flow.json   | 2 +-
- tools/testing/selftests/tc-testing/tc-tests/filters/route.json  | 2 +-
- 4 files changed, 8 insertions(+), 8 deletions(-)
+[...]
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json b/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json
-index d1278de8ebc3..c9309a44a87e 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json
-@@ -67,7 +67,7 @@
-     },
-     {
-         "id": "4943",
--        "name": "Add basic filter with cmp ematch u32/link layer and miltiple actions",
-+        "name": "Add basic filter with cmp ematch u32/link layer and multiple actions",
-         "category": [
-             "filter",
-             "basic"
-@@ -155,7 +155,7 @@
-     },
-     {
-         "id": "32d8",
--        "name": "Add basic filter with cmp ematch u32/network layer and miltiple actions",
-+        "name": "Add basic filter with cmp ematch u32/network layer and multiple actions",
-         "category": [
-             "filter",
-             "basic"
-@@ -243,7 +243,7 @@
-     },
-     {
-         "id": "62d7",
--        "name": "Add basic filter with cmp ematch u32/transport layer and miltiple actions",
-+        "name": "Add basic filter with cmp ematch u32/transport layer and multiple actions",
-         "category": [
-             "filter",
-             "basic"
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json b/tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json
-index 03723cf84379..35c9a7dbe1c4 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json
-@@ -67,7 +67,7 @@
-     },
-     {
-         "id": "0234",
--        "name": "Add cgroup filter with cmp ematch u32/link layer and miltiple actions",
-+        "name": "Add cgroup filter with cmp ematch u32/link layer and multiple actions",
-         "category": [
-             "filter",
-             "cgroup"
-@@ -155,7 +155,7 @@
-     },
-     {
-         "id": "2733",
--        "name": "Add cgroup filter with cmp ematch u32/network layer and miltiple actions",
-+        "name": "Add cgroup filter with cmp ematch u32/network layer and multiple actions",
-         "category": [
-             "filter",
-             "cgroup"
-@@ -1189,7 +1189,7 @@
-     },
-     {
-         "id": "4319",
--        "name": "Replace cgroup filter with diffferent match",
-+        "name": "Replace cgroup filter with different match",
-         "category": [
-             "filter",
-             "cgroup"
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json b/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
-index 58189327f644..996448afe31b 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
-@@ -507,7 +507,7 @@
-     },
-     {
-         "id": "4341",
--        "name": "Add flow filter with muliple ops",
-+        "name": "Add flow filter with multiple ops",
-         "category": [
-             "filter",
-             "flow"
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/route.json b/tools/testing/selftests/tc-testing/tc-tests/filters/route.json
-index 8d8de8f65aef..05cedca67cca 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/filters/route.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/route.json
-@@ -111,7 +111,7 @@
-     },
-     {
-         "id": "7994",
--        "name": "Add route filter with miltiple actions",
-+        "name": "Add route filter with multiple actions",
-         "category": [
-             "filter",
-             "route"
+>>   -    if (CHECK(unshare(CLONE_NEWNET), "create netns",
+>> -          "unshare(CLONE_NEWNET): %s (%d)",
+>> -          strerror(errno), errno))
+>> -        return -1;
+>> +    ns = netns_new(TEST_NS, true);
+>> +    if (!ASSERT_OK_PTR(ns, "create and join netns"))
+>> +        return ns;
+>>         if (CHECK(system("ip link set dev lo up"),
+>>             "ip link set dev lo up", "failed\n"))
+> 
+> nit. netns_new() takes care of "lo up" also, so the above can be removed.
 
----
-base-commit: 8e929cb546ee42c9a61d24fae60605e9e3192354
-change-id: 20241017-multiple_spell_error-8b267ffffe47
+Ah, indeed, I missed it in make_netns. Thanks, I'll remove this part from the
+test then.
+> 
+> test_progs.c has restore_netns() after each test, so the netns was not cleaned
+> up. The second unshare should have freed the earlier netns also.
+> 
+> Using netns_new() removed the boiler plate codes. It is nice to see this change
+> here regardless.
 
-Best regards,
+
+
 -- 
-Karan Sanghavi <karansanghvi98@gmail.com>
-
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
