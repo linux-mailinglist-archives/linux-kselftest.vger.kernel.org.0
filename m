@@ -1,268 +1,459 @@
-Return-Path: <linux-kselftest+bounces-20184-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20185-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E43FB9A4A6A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2024 02:10:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BFD79A4AA1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2024 02:30:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67D191F23DAD
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2024 00:10:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 604E7B21B38
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2024 00:30:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BCDE36D;
-	Sat, 19 Oct 2024 00:10:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDC561922D5;
+	Sat, 19 Oct 2024 00:30:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fD7jR+Mt"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uexD/jq8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28911632
-	for <linux-kselftest@vger.kernel.org>; Sat, 19 Oct 2024 00:10:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173EB2CA7
+	for <linux-kselftest@vger.kernel.org>; Sat, 19 Oct 2024 00:30:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729296617; cv=none; b=fQHuCPtJ/bkJHelonGeiPcJV3dO/1jHKG6Gfhq4qMsTHHgElJo04nv+YJebA42DMNTPOZwTvIIredPRjQ7+knDPSNO0uz5Vj6wCbhIjVLu4CsOtDSRxZNOcqn0YDV76t2yBLZjAn616Qnu7BNC1h2Dl27bZOfeeSHng3mrrqeuc=
+	t=1729297848; cv=none; b=GlL7e0ermSuRqRSNO8aYyJA5SAYrwdYAX2F2JcRYHriCnooPLbqWhH5+NwuWWmDXPqH/X0LDem2FyFH8P+QysOeo+nkOLg+KOKEKCYThZYv6FXqawQmLudhI+G1YSQg5Q2ffJcP0UI/9z/4KE+ImtV1Wpx6hGKlzEBaJ6nRuNTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729296617; c=relaxed/simple;
-	bh=9YE7dqGfVDQ/xH6Sdx54Ef6PxJ+cJabmZ9vzvXPouRY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gDHnvzn8rlk0jI4tsBoLvkzZ12bZ7IHGELOepemywY2TYZoxd7KbWDInBi+UNdMfqHCsXIWpMNHs5B0gDO35PNqLIot6tedxsplM2S928pRNYZa2KC8lax2WFIKy1aZPpCT0AC01E/TTFlNDPtQ4U0pIqtXCu1PrIV1TCuhTo2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=fD7jR+Mt; arc=none smtp.client-ip=209.85.160.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-28893cc3acdso438001fac.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2024 17:10:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1729296614; x=1729901414; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E22HImJZ028W/1sQ4maAbpjY4QAR955Gkk9SdRCpvUQ=;
-        b=fD7jR+MtDCj3/nnkGWJvDef832IaUFNUGhQ3yI6u7ebatdSGu2CzvhD4WSk7PfIyVU
-         9wFmFFIHFlB3DnMI9XuQFAATV42E1iwRA4Hf9c8YCGi0iVTV3SJFHRsVB1cuMHR7cv1U
-         A4+yOyxc3W/LXOMwsAtQsTsA7wH+SfcndIrgM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729296614; x=1729901414;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E22HImJZ028W/1sQ4maAbpjY4QAR955Gkk9SdRCpvUQ=;
-        b=ILhcMz4l0WOyJMV+0e2gomnUTRB4nlntu22r73mFwYTZ4o2bqM2645laSTQS1dIbTq
-         jAFml/BoIaXFDCedn+T9iOJsFSVqPQpuPziIg4j5oISnGi0SEpcb0OgNl7yT+8V1u0YD
-         GGbH2L0JHfYN7mrQBT2GHDguRPeQ7NS/wFp11lGtIxgpK4RtHUsCdlV/uPLUBBE/VGNc
-         1iCZ3wMLyU/MMkDhEiKmaCML2viUKZsQuILOkOudPtN2ZH0EwQ9oGx8lm360ocrOOTfK
-         WVOLz1qZsNC8dieyVn3bziC9U+xdeluE93tah4wbflYWIGEmCStnWcWFspFvUduAKA21
-         /wGg==
-X-Forwarded-Encrypted: i=1; AJvYcCUsylktDx/6FGP404Q6FbWl75BgwF8nqprMcSDt/NP+TeukXFFTixn2QGVmH+ZGuGlJVb21MZNwhk3J6XF51sc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0mteuIh5b+rwAbpiOl2JhyCx9RT3rzuwWMnP3seu2hpREhD22
-	8EpIYkSwG6oC+iagOsCexR5DcxbZVbkdL+G6158TzDLQE2jQiCJvY0QlXz035XoWFbojOqow+bH
-	mEairNcavFxCcfAbKgss0BMOEX6JdlYq3lECj
-X-Google-Smtp-Source: AGHT+IFIihPyXoNPdentrsybY42eayzsimY1yFxEH7573nql2cE6j/C/m4TScAB/nVOH3efQdB/x8+eCEYm3oUOJiR8=
-X-Received: by 2002:a05:6870:95a1:b0:27b:9f8a:7a80 with SMTP id
- 586e51a60fabf-2892c55337bmr967265fac.13.1729296613985; Fri, 18 Oct 2024
- 17:10:13 -0700 (PDT)
+	s=arc-20240116; t=1729297848; c=relaxed/simple;
+	bh=8bjhY3fyWEYub3ts6cL8vQGQfnWUD8MKG1y4Bd6UjAM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=izrnC2UhuNbpnJtRUO7NiJwiqZO56w0QeIGhk+Ma3tHOd87lqoQdAqKCO/ww3taLulY8y4uhmSZ13cOl/p9bt4l0VxQ+Ml25rvVzkvsm3sY7uvIqzoKuXCXbpXhd5VesGtUo/Uc2PUtZqAvYT+5WEFbisvy9jjidoNz/DZ8cJ3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uexD/jq8; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <43f0d39a-b353-4f38-85f7-e0a557f911f9@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1729297843;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vQqknBHkBHp7SLl5cKxu6mLg1IO4q1QAVqIR3aA/3WI=;
+	b=uexD/jq8WOw6h3h6ZEMdvCszPdwecJwYw8BOLNdGpMWovSXOzcz9Qz4ZVW1oBLtz04emvB
+	XnEeEJznRSDu1zjFfODKRu0k9RvXZLVsFE8qc+8Rmar4423GTZudsur6weuEBVBn/8fOMv
+	2FV0/LxAHIzDhS5du+VnOrrMcT2EUlI=
+Date: Fri, 18 Oct 2024 17:30:29 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CABi2SkUgDZtJtRJe+J9UNdtZn=EQzZcbMB685P=1rR7DUhg=6Q@mail.gmail.com>
- <CABi2SkVEMRHV3swrbb6M5RA6GQpFVVx855CGwdQ1xiz3tygiqA@mail.gmail.com>
- <f9b9422c-216d-422e-94b4-d8814b0b277e@lucifer.local> <CABi2SkWAv4LXvR1Wb1e31eyZ35JfyieXhDOq1bp_ZvHPLLg-qA@mail.gmail.com>
- <e0f440b0-5a45-4218-8c51-27f848c0617b@lucifer.local> <CABi2SkWNRTCC0LzDSuzgjC1tO=KF==5FXUnPHOrPzEG5abAeDg@mail.gmail.com>
- <1f8eff74-005b-4fa9-9446-47f4cdbf3e8d@sirena.org.uk> <CABi2SkV38U-ZCAq9W091zYkOM1m5e-C27YmVXdTCi-t+p_W_fQ@mail.gmail.com>
- <a2652ed4-ea8b-4b56-bac6-6479b3df6c14@sirena.org.uk> <CABi2SkVF3OtRcq9cCgLh_hOjxRnWq0owypw++xodrEfm=dt_qA@mail.gmail.com>
- <6aefd38b-d758-4e7c-a910-254251c2a294@sirena.org.uk>
-In-Reply-To: <6aefd38b-d758-4e7c-a910-254251c2a294@sirena.org.uk>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Fri, 18 Oct 2024 17:10:01 -0700
-Message-ID: <CABi2SkUG8bhKQeHd_pvLw4y3ZY+Z8CvxZ_iV4YhTc+JQqe9TxA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] selftests/mseal: add more tests for mmap
-To: Mark Brown <broonie@kernel.org>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	akpm@linux-foundation.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-hardening@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, pedro.falcato@gmail.com, willy@infradead.org, 
-	vbabka@suse.cz, Liam.Howlett@oracle.com, rientjes@google.com, 
-	keescook@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next 4/6] selftests/bpf: add ipv4 and dual ipv4/ipv6
+ support in btf_skc_cls_ingress
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
+ <alexis.lothore@bootlin.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ ebpf@linuxfoundation.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Lorenz Bauer <lmb@cloudflare.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org
+References: <20241016-syncookie-v1-0-3b7a0de12153@bootlin.com>
+ <20241016-syncookie-v1-4-3b7a0de12153@bootlin.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20241016-syncookie-v1-4-3b7a0de12153@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-HI Mark
+On 10/16/24 11:35 AM, Alexis Lothoré (eBPF Foundation) wrote:
+> btf_skc_cls_ingress test currently checks that syncookie and
+> bpf_sk_assign/release helpers behave correctly in multiple scenarios,
+> but only with ipv4 socket.
+> 
+> Increase those helpers coverage by adding testing support for IPv6-only
+> sockets and IPv4/IPv6 sockets. The rework is mostly based on features
+> brought earlier in test_tcp_check_syncookie.sh to cover some fixes
+> performed on those helpers, but test_tcp_check_syncookie.sh is not
+> integrated in test_progs. The most notable changes linked to this are:
+> - some rework in the corresponding eBPF program to support both types of
+>    traffic
+> - the switch from start_server to start_server_str to allow to check
+>    some socket options
+> - the introduction of new subtests for ipv4 and ipv4/ipv6
+> 
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+> ---
+> The rework has been tested in a local Qemu environment and in CI:
+>    # ./test_progs -a btf_skc_cls_ingress
+>    #38/1    btf_skc_cls_ingress/conn_ipv4:OK
+>    #38/2    btf_skc_cls_ingress/conn_ipv6:OK
+>    #38/3    btf_skc_cls_ingress/conn_dual:OK
+>    #38/4    btf_skc_cls_ingress/syncookie_ipv4:OK
+>    #38/5    btf_skc_cls_ingress/syncookie_ipv6:OK
+>    #38/6    btf_skc_cls_ingress/syncookie_dual:OK
+>    #38      btf_skc_cls_ingress:OK
+>    Summary: 1/6 PASSED, 0 SKIPPED, 0 FAILED
+> ---
+>   .../selftests/bpf/prog_tests/btf_skc_cls_ingress.c | 116 ++++++++++++++++++---
+>   .../selftests/bpf/progs/test_btf_skc_cls_ingress.c |  81 +++++++++-----
+>   2 files changed, 161 insertions(+), 36 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+> index a20d104f9909e5ba20ddc4c107b910956f042fc1..e0f8fe818f4230a1d5bf0118133c5a9fb50345e1 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+> @@ -19,6 +19,15 @@
+>   
+>   #define TEST_NS "skc_cls_ingress"
+>   
+> +#define BIT(n)		(1 << (n))
+> +#define TEST_MODE_IPV4	BIT(0)
+> +#define TEST_MODE_IPV6	BIT(1)
+> +#define TEST_MODE_DUAL	(TEST_MODE_IPV4 | TEST_MODE_IPV6)
+> +
+> +#define SERVER_ADDR_IPV4	"127.0.0.1"
+> +#define SERVER_ADDR_IPV6	"::1"
+> +#define SERVER_ADDR_DUAL	"::0"
+> +
+>   static struct netns_obj *prepare_netns(struct test_btf_skc_cls_ingress *skel)
+>   {
+>   	LIBBPF_OPTS(bpf_tc_hook, qdisc_lo, .attach_point = BPF_TC_INGRESS);
+> @@ -57,6 +66,7 @@ static struct netns_obj *prepare_netns(struct test_btf_skc_cls_ingress *skel)
+>   
+>   static void reset_test(struct test_btf_skc_cls_ingress *skel)
+>   {
+> +	memset(&skel->bss->srv_sa4, 0, sizeof(skel->bss->srv_sa4));
+>   	memset(&skel->bss->srv_sa6, 0, sizeof(skel->bss->srv_sa6));
+>   	skel->bss->listen_tp_sport = 0;
+>   	skel->bss->req_sk_sport = 0;
+> @@ -71,26 +81,84 @@ static void print_err_line(struct test_btf_skc_cls_ingress *skel)
+>   		printf("bpf prog error at line %u\n", skel->bss->linum);
+>   }
+>   
+> -static void run_test(struct test_btf_skc_cls_ingress *skel, bool gen_cookies)
+> +static int v6only_true(int fd, void *opts)
+> +{
+> +	int mode = true;
+> +
+> +	return setsockopt(fd, IPPROTO_IPV6, IPV6_V6ONLY, &mode, sizeof(mode));
+> +}
+> +
+> +static int v6only_false(int fd, void *opts)
+> +{
+> +	int mode = false;
+> +
+> +	return setsockopt(fd, IPPROTO_IPV6, IPV6_V6ONLY, &mode, sizeof(mode));
+> +}
+> +
+> +static void run_test(struct test_btf_skc_cls_ingress *skel, bool gen_cookies,
+> +		     int ip_mode)
+>   {
+>   	const char *tcp_syncookies = gen_cookies ? "2" : "1";
+>   	int listen_fd = -1, cli_fd = -1, srv_fd = -1, err;
+> +	struct network_helper_opts opts = { 0 };
+> +	struct sockaddr_storage *addr;
+>   	struct sockaddr_in6 srv_sa6;
+> -	socklen_t addrlen = sizeof(srv_sa6);
+> +	struct sockaddr_in srv_sa4;
+> +	socklen_t addr_len;
+> +	int sock_family;
+> +	char *srv_addr;
+>   	int srv_port;
+>   
+> +	switch (ip_mode) {
+> +	case TEST_MODE_IPV4:
+> +		sock_family = AF_INET;
+> +		srv_addr = SERVER_ADDR_IPV4;
+> +		addr = (struct sockaddr_storage *)&srv_sa4;
+> +		addr_len = sizeof(srv_sa4);
+> +		break;
+> +	case TEST_MODE_IPV6:
+> +		opts.post_socket_cb = v6only_true;
+> +		sock_family = AF_INET6;
+> +		srv_addr = SERVER_ADDR_IPV6;
+> +		addr = (struct sockaddr_storage *)&srv_sa6;
+> +		addr_len = sizeof(srv_sa6);
+> +		break;
+> +	case TEST_MODE_DUAL:
+> +		opts.post_socket_cb = v6only_false;
+> +		sock_family = AF_INET6;
+> +		srv_addr = SERVER_ADDR_DUAL;
+> +		addr = (struct sockaddr_storage *)&srv_sa6;
+> +		addr_len = sizeof(srv_sa6);
+> +		break;
+> +	default:
+> +			break;
 
-On Fri, Oct 18, 2024 at 2:05=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
-te:
->
-> On Fri, Oct 18, 2024 at 12:32:37PM -0700, Jeff Xu wrote:
-> > On Fri, Oct 18, 2024 at 11:37=E2=80=AFAM Mark Brown <broonie@kernel.org=
-> wrote:
-> > > On Fri, Oct 18, 2024 at 11:06:20AM -0700, Jeff Xu wrote:
->
-> > > Test 106 here is called "test_munmap_free_multiple_ranges_with_split:
-> > > line:2573" which automated systems aren't going to be able to associa=
-te
-> > > with the passing "test_munmap_free_multiple_ranges_with_split", nor w=
-ith
-> > > any failures that occur on any other lines in the function.
->
-> > I see. That will happen when those tests are modified and line number
-> > changes. I could see reasoning for this argument, especially when
-> > those tests are flaky and get updated often.
->
-> > In practice, I hope any of those kernel self-test failures should get
-> > fixed immediately, or even better, run before dev submitting the patch
-> > that affects the mm area.
->
-> That's not the entire issue - it is also a problem that the test name
-> is not the same between passes and failures so automated systems can't
-> associate the failures with the passes.
-I failed to understand this part.
-Maybe you meant the failing logging  is not the same across the
-multiple versions of test code, by testname you meant "failing
-logging"
+nit. indentation is off.
 
->When a test starts failing they
-> will see the passing test disappear and a new test appears that has never
-> worked.
- > This will mean that for example if they have bisection support
-> or UI for showing when a test started regressing those won't work.  The
-> test name needs to be stable, diagnostics identifying why or where it
-> failed should be separate prints.
->
-If the test hasn't been changed for a while,  and start failing. Then
-it is quite easy to run the same test on recent code changes. I think
-you might agree with me on this. The only thing that bisec needs to
-check is if the entire tests are failing or not.
+better directly "return;", in case future something complains vars are not init.
 
-I haven't used the biset functionality, so I'm not sure how it works
-exactly, e.g. when it runs on the old version of kernel, does it use
-the test binary from the old kernel ? or the test binary provided by
-dev ?
+> +	}
+> +
+>   	if (write_sysctl("/proc/sys/net/ipv4/tcp_syncookies", tcp_syncookies))
+>   		return;
+>   
+> -	listen_fd = start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
+> +	listen_fd = start_server_str(sock_family, SOCK_STREAM, srv_addr,  0,
+> +				     &opts);
+>   	if (!ASSERT_OK_FD(listen_fd, "start server"))
+>   		return;
+>   
+> -	err = getsockname(listen_fd, (struct sockaddr *)&srv_sa6, &addrlen);
+> +	err = getsockname(listen_fd, (struct sockaddr *)addr, &addr_len);
+>   	if (!ASSERT_OK(err, "getsockname(listen_fd)"))
+>   		goto done;
+> -	memcpy(&skel->bss->srv_sa6, &srv_sa6, sizeof(srv_sa6));
+> -	srv_port = ntohs(srv_sa6.sin6_port);
+> +
+> +	switch (ip_mode) {
+> +	case TEST_MODE_IPV4:
+> +		memcpy(&skel->bss->srv_sa4, &srv_sa4, sizeof(srv_sa4));
+> +		srv_port = ntohs(srv_sa4.sin_port);
+> +		break;
+> +	case TEST_MODE_IPV6:
+> +	case TEST_MODE_DUAL:
+> +		memcpy(&skel->bss->srv_sa6, &srv_sa6, sizeof(srv_sa6));
+> +		srv_port = ntohs(srv_sa6.sin6_port);
+> +		break;
+> +	default:
+> +			break;
 
-> Actually, prompted by the comments below about test variants I've now
-> run the test and see that what's in -next is also broken in that it's
-> running a lot of the tests twice with sealing enabled or disabled but
-> not including this in the reported test name resulting in most of the
-> tests reporting like this:
->
->    ok 11 test_seal_mprotect
->    ok 12 test_seal_mprotect
->
-> which is also going to confuse automated systems, they have a hard time
-> working out which instance is which (generally the test numbers get
-> ignored between runs as they're not at all stable).  The test names need
-> to roll in the parameterisation:
->
->    ok 11 test_seal_mprotect seal=3Dtrue
->    ok 12 test_seal_mprotect seal=3Dfalse
->
-> (or something, the specific format doesn't matter so long as the names
-> are both stable and distinct).
->
-Yes. Agree that this is a limitation of this macro.
+indentation off. also "goto done;"
 
-> > Having line number does help dev to go to error directly, and I'm not
-> > against filling in the "action" field, but you might also agree with
-> > me, finding unique text for each error would require some decent
-> > amount of time, especially for large tests such as mseal_test.
->
-> In these situations if it's a typical Unix API function setting errno
-> that failed I tend to end up writing diagnostics like:
->
->         ksft_perror("open()")
->
-> possibly with some of the arguments included as well, or something
-> equivalently basic for other kinds of error.  This is fairly mindless so
-> quick and easy to do and more robust against line number slips if you're
-> not looking at exactly the same version of the code, sometimes it's even
-> enough you don't even need to look at the test to understand why it's
-> upset.
->
-I understand what you are saying, but personally, I still think line
-numbers are a faster and more direct way to failure.
+> +	}
+>   
+>   	cli_fd = connect_to_fd(listen_fd, 0);
+>   	if (!ASSERT_OK_FD(cli_fd, "connect client"))
+> @@ -127,14 +195,34 @@ static void run_test(struct test_btf_skc_cls_ingress *skel, bool gen_cookies)
+>   		close(srv_fd);
+>   }
+>   
+> -static void test_conn(struct test_btf_skc_cls_ingress *skel)
+> +static void test_conn_ipv4(struct test_btf_skc_cls_ingress *skel)
+> +{
+> +	run_test(skel, false, TEST_MODE_IPV4);
+> +}
+> +
+> +static void test_conn_ipv6(struct test_btf_skc_cls_ingress *skel)
+> +{
+> +	run_test(skel, false, TEST_MODE_IPV6);
+> +}
+> +
+> +static void test_conn_dual(struct test_btf_skc_cls_ingress *skel)
+> +{
+> +	run_test(skel, false, TEST_MODE_DUAL);
+> +}
+> +
+> +static void test_syncookie_ipv4(struct test_btf_skc_cls_ingress *skel)
+> +{
+> +	run_test(skel, true, TEST_MODE_IPV4);
+> +}
+> +
+> +static void test_syncookie_ipv6(struct test_btf_skc_cls_ingress *skel)
+>   {
+> -	run_test(skel, false);
+> +	run_test(skel, true, TEST_MODE_IPV6);
+>   }
+>   
+> -static void test_syncookie(struct test_btf_skc_cls_ingress *skel)
+> +static void test_syncookie_dual(struct test_btf_skc_cls_ingress *skel)
+>   {
+> -	run_test(skel, true);
+> +	run_test(skel, true, TEST_MODE_DUAL);
+>   }
+>   
+>   struct test {
+> @@ -144,8 +232,12 @@ struct test {
+>   
+>   #define DEF_TEST(name) { #name, test_##name }
+>   static struct test tests[] = {
+> -	DEF_TEST(conn),
+> -	DEF_TEST(syncookie),
+> +	DEF_TEST(conn_ipv4),
+> +	DEF_TEST(conn_ipv6),
+> +	DEF_TEST(conn_dual),
+> +	DEF_TEST(syncookie_ipv4),
+> +	DEF_TEST(syncookie_ipv6),
+> +	DEF_TEST(syncookie_dual),
+>   };
+>   
+>   void test_btf_skc_cls_ingress(void)
+> diff --git a/tools/testing/selftests/bpf/progs/test_btf_skc_cls_ingress.c b/tools/testing/selftests/bpf/progs/test_btf_skc_cls_ingress.c
+> index f0759efff6ef15d2663927400dd064c53b020f78..cd528f8792ff2eb14683cbc13e8b0f3fd38329e9 100644
+> --- a/tools/testing/selftests/bpf/progs/test_btf_skc_cls_ingress.c
+> +++ b/tools/testing/selftests/bpf/progs/test_btf_skc_cls_ingress.c
+> @@ -10,6 +10,7 @@
+>   #endif
+>   
+>   struct sockaddr_in6 srv_sa6 = {};
+> +struct sockaddr_in srv_sa4 = {};
+>   __u16 listen_tp_sport = 0;
+>   __u16 req_sk_sport = 0;
+>   __u32 recv_cookie = 0;
+> @@ -18,8 +19,8 @@ __u32 linum = 0;
+>   
+>   #define LOG() ({ if (!linum) linum = __LINE__; })
+>   
+> -static void test_syncookie_helper(struct ipv6hdr *ip6h, struct tcphdr *th,
+> -				  struct tcp_sock *tp,
+> +static void test_syncookie_helper(void *iphdr, int iphdr_size,
+> +				  struct tcphdr *th, struct tcp_sock *tp,
+>   				  struct __sk_buff *skb)
+>   {
+>   	if (th->syn) {
+> @@ -38,7 +39,7 @@ static void test_syncookie_helper(struct ipv6hdr *ip6h, struct tcphdr *th,
+>   			return;
+>   		}
+>   
+> -		mss_cookie = bpf_tcp_gen_syncookie(tp, ip6h, sizeof(*ip6h),
+> +		mss_cookie = bpf_tcp_gen_syncookie(tp, iphdr, iphdr_size,
+>   						   th, 40);
+>   		if (mss_cookie < 0) {
+>   			if (mss_cookie != -ENOENT)
+> @@ -48,7 +49,7 @@ static void test_syncookie_helper(struct ipv6hdr *ip6h, struct tcphdr *th,
+>   		}
+>   	} else if (gen_cookie) {
+>   		/* It was in cookie mode */
+> -		int ret = bpf_tcp_check_syncookie(tp, ip6h, sizeof(*ip6h),
+> +		int ret = bpf_tcp_check_syncookie(tp, iphdr, iphdr_size,
+>   						  th, sizeof(*th));
+>   
+>   		if (ret < 0) {
+> @@ -60,26 +61,63 @@ static void test_syncookie_helper(struct ipv6hdr *ip6h, struct tcphdr *th,
+>   	}
+>   }
+>   
+> -static int handle_ip6_tcp(struct ipv6hdr *ip6h, struct __sk_buff *skb)
+> +static int handle_ip_tcp(struct ethhdr *eth, struct __sk_buff *skb)
+>   {
+> -	struct bpf_sock_tuple *tuple;
+> +	struct bpf_sock_tuple *tuple = NULL;
+> +	unsigned int tuple_len = 0;
+>   	struct bpf_sock *bpf_skc;
+> -	unsigned int tuple_len;
+> +	struct ipv6hdr *ip6h;
+> +	void *iphdr = NULL;
+> +	int iphdr_size = 0;
+> +	struct iphdr *ip4h;
 
-> > > Honestly this just sounds and looks like kselftest_harness.h, it's
-> > > ASSERT_ and EXPECT_ macros sound exactly like what you're looking for
-> > > for asserts.  The main gotchas with it are that it's not particularly
->
-> > OK, I didn't know that ASSERT_ and EXPECT_ were part of the test fixtur=
-e.
->
-> > If I  switch to test_fixture, e,g, using TEST(test_name)
->
-> > how do I pass the "seal" flag to it ?
-> > e.g. how do I run the same test twice, first seal =3D true, and second =
-seal=3Dfalse.
->
-> >         test_seal_mmap_shrink(false);
-> >         test_seal_mmap_shrink(true);
->
-> That looks like fixture variants to me, using those with
-> kselftest_harness.h will also fix the problem with duplicate test names
-> being used since it generates different names for each instance of the
-> test.  Something like:
->
-> FIXTURE(with_seal)
-> {
-> };
->
-> FIXTURE_VARIANT(with_seal)
-> {
->         bool seal;
-> };
->
-> FIXTURE_VARIANT_ADD(with_seal, yes)
-> {
->         .seal =3D true,
-> };
->
-> FIXTURE_VARIANT_ADD(with_seal, no)
-> {
->         .seal =3D false,
-> };
->
-> FIXTURE_SETUP(with_seal)
-> {
-> }
->
-> FIXTURE_TEARDOWN(with_seal)
-> {
-> }
->
-> then a bunch of tests using that fixture:
->
-> TEST_F(with_seal, test_seal_mmap_shrink)
-> {
->         if (variant->seal) {
->                 /* setup sealing */
->         }
->
->         ...
-> }
->
-> TEST_F(with_seal, test_seal_mprotect)
-> {
->         if (variant->seal) {
->                 /* setup sealing */
->         }
->
->         ...
-> }
->
-> You don't need to actually set up anything in your fixture, but you do
-> need to have setup and teardown functions so the framework can emit
-> required boilerplate.  The gcs-locking.c test I recently added in -next
-> is an example of a similar thing where we just need the variants,
-> there's no actual fixture.
+nit. All new "= 0;" and "= NULL;" init should not be needed.
 
-Thanks! This is really helpful, I think the existing mseal_test can be
-quickly converted using this example.
+>   	struct tcphdr *th;
+>   	void *data_end;
+>   
+>   	data_end = (void *)(long)(skb->data_end);
+>   
+> -	th = (struct tcphdr *)(ip6h + 1);
+> -	if (th + 1 > data_end)
+> -		return TC_ACT_OK;
+> +	switch (eth->h_proto) {
+> +	case bpf_htons(ETH_P_IP):
+> +		ip4h = (struct iphdr *)(eth + 1);
+> +		if (ip4h + 1 > data_end)
+> +			return TC_ACT_OK;
+> +		if (ip4h->protocol != IPPROTO_TCP)
+> +			return TC_ACT_OK;
+> +		th = (struct tcphdr *)(ip4h + 1);
+> +		if (th + 1 > data_end)
+> +			return TC_ACT_OK;
+> +		/* Is it the testing traffic? */
+> +		if (th->dest != srv_sa4.sin_port)
+> +			return TC_ACT_OK;
+> +		tuple_len = sizeof(tuple->ipv4);
+> +		tuple = (struct bpf_sock_tuple *)&ip4h->saddr;
+> +		iphdr = ip4h;
+> +		iphdr_size = sizeof(*ip4h);
+> +		break;
+> +	case bpf_htons(ETH_P_IPV6):
+> +		ip6h = (struct ipv6hdr *)(eth + 1);
+> +		if (ip6h + 1 > data_end)
+> +			return TC_ACT_OK;
+> +		if (ip6h->nexthdr != IPPROTO_TCP)
+> +			return TC_ACT_OK;
+> +		th = (struct tcphdr *)(ip6h + 1);
+> +		if (th + 1 > data_end)
+> +			return TC_ACT_OK;
+> +		/* Is it the testing traffic? */
+> +		if (th->dest != srv_sa6.sin6_port)
+> +			return TC_ACT_OK;
+> +		tuple_len = sizeof(tuple->ipv6);
+> +		tuple = (struct bpf_sock_tuple *)&ip6h->saddr;
+> +		iphdr = ip6h;
+> +		iphdr_size = sizeof(*ip6h);
+> +		break;
+> +	default:
+> +			return TC_ACT_OK;
 
-(A side note: if selftest documentation is updated to include this
-example, it will be much easier to future dev to follow)
+indentation is off also.
 
-Thanks
--Jeff
+> +	}
+>   
+> -	/* Is it the testing traffic? */
+> -	if (th->dest != srv_sa6.sin6_port)
+> +	if (!tuple) {
+
+!tuple should not be possible. can be removed.
+
+> +		LOG();
+>   		return TC_ACT_OK;
+> -
+> -	tuple_len = sizeof(tuple->ipv6);
+> -	tuple = (struct bpf_sock_tuple *)&ip6h->saddr;
+> +	}
+>   	if ((void *)tuple + tuple_len > data_end) {
+>   		LOG();
+>   		return TC_ACT_OK;
+> @@ -126,7 +164,7 @@ static int handle_ip6_tcp(struct ipv6hdr *ip6h, struct __sk_buff *skb)
+>   
+>   		listen_tp_sport = tp->inet_conn.icsk_inet.sk.__sk_common.skc_num;
+>   
+> -		test_syncookie_helper(ip6h, th, tp, skb);
+> +		test_syncookie_helper(iphdr, iphdr_size, th, tp, skb);
+>   		bpf_sk_release(tp);
+>   		return TC_ACT_OK;
+>   	}
+> @@ -142,7 +180,6 @@ static int handle_ip6_tcp(struct ipv6hdr *ip6h, struct __sk_buff *skb)
+>   SEC("tc")
+>   int cls_ingress(struct __sk_buff *skb)
+>   {
+> -	struct ipv6hdr *ip6h;
+>   	struct ethhdr *eth;
+>   	void *data_end;
+>   
+> @@ -152,15 +189,11 @@ int cls_ingress(struct __sk_buff *skb)
+>   	if (eth + 1 > data_end)
+>   		return TC_ACT_OK;
+>   
+> -	if (eth->h_proto != bpf_htons(ETH_P_IPV6))
+> -		return TC_ACT_OK;
+> -
+> -	ip6h = (struct ipv6hdr *)(eth + 1);
+> -	if (ip6h + 1 > data_end)
+> +	if (eth->h_proto != bpf_htons(ETH_P_IP) &&
+> +	    eth->h_proto != bpf_htons(ETH_P_IPV6))
+>   		return TC_ACT_OK;
+>   
+> -	if (ip6h->nexthdr == IPPROTO_TCP)
+> -		return handle_ip6_tcp(ip6h, skb);
+> +	return handle_ip_tcp(eth, skb);
+>   
+>   	return TC_ACT_OK;
+
+The last double return should have been removed also.
+
+>   }
+> 
+
 
