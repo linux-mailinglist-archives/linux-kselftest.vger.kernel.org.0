@@ -1,53 +1,53 @@
-Return-Path: <linux-kselftest+bounces-20223-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20225-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A26299A5615
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Oct 2024 21:23:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 013DB9A561D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Oct 2024 21:24:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58F1F1F22037
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Oct 2024 19:23:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 221B81C208E6
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Oct 2024 19:24:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8133A198A39;
-	Sun, 20 Oct 2024 19:23:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C23F199937;
+	Sun, 20 Oct 2024 19:23:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ak9oM2U6"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CZm3AO6s"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F4F3194AEF;
-	Sun, 20 Oct 2024 19:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E322B198838;
+	Sun, 20 Oct 2024 19:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729452198; cv=none; b=ev/4XPMSU8EFS4TRH//qVw4l3KR1nQO0ayRDF/nft3F12HcCtVbFVVGDNfxMr+8gCSzCR1gbasTGwwIyBIjH6St4w/CMjBdiwwS77malq0aiFIB2y71PfObRMIgrP+GFzs2slcQdiBcUNi9z5pbEYFH4Ze7M9ZlO4a+1a7O4zi4=
+	t=1729452200; cv=none; b=s3Y+0snF83P/JSXUwmXxZtH3GmtPPFd3Gn34nL9D4tI6XcGq5Y41hidgHTzMWcs/8biVrUcXGqYehlkPRjVggksvMeR1KOeBoiqow+RDIXyh1F1PFPKBtelNSebwc/pIRCofyS07LwRKtHneS/qnXNiSJPEv4Se76IyQNRoz3ZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729452198; c=relaxed/simple;
-	bh=wz9PJsLLUbmr/HE8nvXkiEUh9OfFFPwNBZQ8P+LzMVA=;
+	s=arc-20240116; t=1729452200; c=relaxed/simple;
+	bh=royLK8HneMJIN5mi9f3zh29HK6pvTNrY2UM+X45Tveo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sI7BEVVTAX2qybWeDi/uaVaLs+/Ky5bxKVGLxrb+ejxQNcqwULYbQYyuY3D0XHM1tZQ+BFxAORjcinmq7wOVHSZ/YC225fRxYSAHE/wx8lSJRjc4WWasz2wu4dhFaIkBmHXht7RxO8mTdHtuQm877Qbg4HX74sFd9SNis4DPd/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ak9oM2U6; arc=none smtp.client-ip=217.70.183.193
+	 In-Reply-To:To:Cc; b=kwqeQ5u123btaLr1IX/dmVB62v1e8vNbN5OwgkQ+CPLUDAlA9UkxLpsn5guH0/yIh0uE3rJxGpGms8xGF1nyezI4tm2ISPBfiH4WOYgwNJf8/bdhhRVRTNZGs/sAuuN7AgKf6dNMLHTxxz15IFpSCufHVt8ZnEnj9sDuVJy8Mz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=CZm3AO6s; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5632F240008;
-	Sun, 20 Oct 2024 19:23:07 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A96A8240006;
+	Sun, 20 Oct 2024 19:23:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1729452188;
+	t=1729452189;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=iyh5DMLy0yZvA/x/k9jCnet9GEiLYSrWjqf2wFa2L8U=;
-	b=ak9oM2U6rh3IOZCL71V7v/YhJLLcYc9E/h3QF2/wqhRCwA0fhn+fcbyo4gOSGnhic9I7ot
-	zTuAYvmMO5x5ljLns4aiW3d6oIRHMZc0Y4V4Yws7x2H8kTXQ6+KBtSp2U6AZulTbiZ+QOm
-	eUISdSbSas8zzSqRHxTXLeUsQpDPjUYpWRIMgFO4JGYMOTGChr97TQO34QXV/yJugrmS8i
-	0XQnv9CxLVMv9Bsqen5e/l1iv0BJL59I7xJztN652eQK85cGDEBt7nMuq/v3eMTNmwjmYl
-	DHrtB902zxIYkbxRHeWbDviZUvQBiSnI+e1CwVQE7ZK5Z0Bsqg1eDUlmdKhOyQ==
+	bh=VteMgUSqlqNb/CuHG/IuBbAFCgt0Pb5LrMMxVGZroTw=;
+	b=CZm3AO6ssh5vVpMZbj1vsRrJ77K1rHziW21UK5C7P0ZpAxuBoE588lmCv5/WBn/QkXedn1
+	ZP52VhC4sdJANDISQlEljwrNZbKQNN+3Iy3GgrZOZ4NAYMraJGNqHdXFJt+ssP9/o0e6ga
+	OhIg3KKHf3j7uWoXxjG4No2JrdiRtQqZzI8fFE8MSFzWX8K3XJj8PD2L7dAJVmW1Lsq2dG
+	6mmCjtzNxd3MBCbi8lG1FTN7beZm92T4vcETzjgm+LdVTO282PnzoJizwHBgnMTzw/NmUB
+	hAyRLzrkm4ZxKJJvDhyrAIZcNekCGJAz7vv61CqQwPOJKXKyeNAOknLMimmOxw==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Sun, 20 Oct 2024 21:22:54 +0200
-Subject: [PATCH bpf-next v2 2/6] selftests/bpf: add missing ns cleanups in
+Date: Sun, 20 Oct 2024 21:22:55 +0200
+Subject: [PATCH bpf-next v2 3/6] selftests/bpf: get rid of global vars in
  btf_skc_cls_ingress
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241020-syncookie-v2-2-2db240225fed@bootlin.com>
+Message-Id: <20241020-syncookie-v2-3-2db240225fed@bootlin.com>
 References: <20241020-syncookie-v2-0-2db240225fed@bootlin.com>
 In-Reply-To: <20241020-syncookie-v2-0-2db240225fed@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -79,110 +79,206 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: alexis.lothore@bootlin.com
 
-btf_skc_cls_ingress.c currently runs two subtests, and create a
-dedicated network namespace for each, but never cleans up the created
-namespace once the test has ended.
-
-Add missing namespace cleanup after each subtest to avoid accumulating
-namespaces for each new subtest. While at it, switch namespace
-management to netns_{new,free}
+There are a few global variables in btf_skc_cls_ingress.c, which are not
+really used by different tests. Get rid of those global variables, by
+performing the following updates:
+- make srv_sa6 local to the main runner function
+- make skel local to the main function, and propagate it through
+  function arguments
+- get rid of duration by replacing CHECK macros with the ASSERT_XXX
+  macros. While updating those assert macros:
+  - do not return early on asserts performing some actual tests, let the
+    other tests run as well (keep the early return for parts handling
+    test setup)
+  - instead of converting the CHECK on skel->bss->linum, just remove it,
+    since there is already a call to print_err_line after the test to
+    print the failing line in the bpf program
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
-Changes in v2:
-- slightly reword commit message to fix mistake
-- remove `ip link set lo up` in dedicated ns, handled by netns_new
----
- .../selftests/bpf/prog_tests/btf_skc_cls_ingress.c | 33 +++++++++++++---------
- 1 file changed, 19 insertions(+), 14 deletions(-)
+ .../selftests/bpf/prog_tests/btf_skc_cls_ingress.c | 87 +++++++++-------------
+ 1 file changed, 34 insertions(+), 53 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
-index 5d8d7736edc095b647ca3fbc12cac0440b60140e..c88fb0e3048c81a09cf4b0b9df434cf8d4c6ff33 100644
+index c88fb0e3048c81a09cf4b0b9df434cf8d4c6ff33..426c9d5402fa8fd57f233feb1f43ffe66e386b7a 100644
 --- a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
 +++ b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
-@@ -17,32 +17,30 @@
- #include "test_progs.h"
- #include "test_btf_skc_cls_ingress.skel.h"
+@@ -19,11 +19,7 @@
  
-+#define TEST_NS "skc_cls_ingress"
-+
- static struct test_btf_skc_cls_ingress *skel;
- static struct sockaddr_in6 srv_sa6;
- static __u32 duration;
+ #define TEST_NS "skc_cls_ingress"
  
--static int prepare_netns(void)
-+static struct netns_obj *prepare_netns(void)
+-static struct test_btf_skc_cls_ingress *skel;
+-static struct sockaddr_in6 srv_sa6;
+-static __u32 duration;
+-
+-static struct netns_obj *prepare_netns(void)
++static struct netns_obj *prepare_netns(struct test_btf_skc_cls_ingress *skel)
  {
  	LIBBPF_OPTS(bpf_tc_hook, qdisc_lo, .attach_point = BPF_TC_INGRESS);
  	LIBBPF_OPTS(bpf_tc_opts, tc_attach,
- 		    .prog_fd = bpf_program__fd(skel->progs.cls_ingress));
-+	struct netns_obj *ns = NULL;
- 
--	if (CHECK(unshare(CLONE_NEWNET), "create netns",
--		  "unshare(CLONE_NEWNET): %s (%d)",
--		  strerror(errno), errno))
--		return -1;
--
--	if (CHECK(system("ip link set dev lo up"),
--		  "ip link set dev lo up", "failed\n"))
--		return -1;
-+	ns = netns_new(TEST_NS, true);
-+	if (!ASSERT_OK_PTR(ns, "create and join netns"))
-+		return ns;
- 
- 	qdisc_lo.ifindex = if_nametoindex("lo");
- 	if (!ASSERT_OK(bpf_tc_hook_create(&qdisc_lo), "qdisc add dev lo clsact"))
--		return -1;
-+		goto free_ns;
- 
- 	if (!ASSERT_OK(bpf_tc_attach(&qdisc_lo, &tc_attach),
- 		       "filter add dev lo ingress"))
--		return -1;
-+		goto free_ns;
- 
- 	/* Ensure 20 bytes options (i.e. in total 40 bytes tcp header) for the
- 	 * bpf_tcp_gen_syncookie() helper.
-@@ -50,9 +48,13 @@ static int prepare_netns(void)
- 	if (write_sysctl("/proc/sys/net/ipv4/tcp_window_scaling", "1") ||
- 	    write_sysctl("/proc/sys/net/ipv4/tcp_timestamps", "1") ||
- 	    write_sysctl("/proc/sys/net/ipv4/tcp_sack", "1"))
--		return -1;
-+		goto free_ns;
-+
-+	return ns;
- 
--	return 0;
-+free_ns:
-+	netns_free(ns);
-+	return NULL;
+@@ -57,7 +53,7 @@ static struct netns_obj *prepare_netns(void)
+ 	return NULL;
  }
  
- static void reset_test(void)
-@@ -169,6 +171,7 @@ void test_btf_skc_cls_ingress(void)
+-static void reset_test(void)
++static void reset_test(struct test_btf_skc_cls_ingress *skel)
+ {
+ 	memset(&skel->bss->srv_sa6, 0, sizeof(skel->bss->srv_sa6));
+ 	skel->bss->listen_tp_sport = 0;
+@@ -67,16 +63,17 @@ static void reset_test(void)
+ 	skel->bss->linum = 0;
+ }
+ 
+-static void print_err_line(void)
++static void print_err_line(struct test_btf_skc_cls_ingress *skel)
+ {
+ 	if (skel->bss->linum)
+ 		printf("bpf prog error at line %u\n", skel->bss->linum);
+ }
+ 
+-static void run_test(bool gen_cookies)
++static void run_test(struct test_btf_skc_cls_ingress *skel, bool gen_cookies)
+ {
+ 	const char *tcp_syncookies = gen_cookies ? "2" : "1";
+ 	int listen_fd = -1, cli_fd = -1, srv_fd = -1, err;
++	struct sockaddr_in6 srv_sa6;
+ 	socklen_t addrlen = sizeof(srv_sa6);
+ 	int srv_port;
+ 
+@@ -84,58 +81,41 @@ static void run_test(bool gen_cookies)
+ 		return;
+ 
+ 	listen_fd = start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
+-	if (CHECK_FAIL(listen_fd == -1))
++	if (!ASSERT_OK_FD(listen_fd, "start server"))
+ 		return;
+ 
+ 	err = getsockname(listen_fd, (struct sockaddr *)&srv_sa6, &addrlen);
+-	if (CHECK(err, "getsockname(listen_fd)", "err:%d errno:%d\n", err,
+-		  errno))
++	if (!ASSERT_OK(err, "getsockname(listen_fd)"))
+ 		goto done;
+ 	memcpy(&skel->bss->srv_sa6, &srv_sa6, sizeof(srv_sa6));
+ 	srv_port = ntohs(srv_sa6.sin6_port);
+ 
+ 	cli_fd = connect_to_fd(listen_fd, 0);
+-	if (CHECK_FAIL(cli_fd == -1))
++	if (!ASSERT_OK_FD(cli_fd, "connect client"))
+ 		goto done;
+ 
+ 	srv_fd = accept(listen_fd, NULL, NULL);
+-	if (CHECK_FAIL(srv_fd == -1))
++	if (!ASSERT_OK_FD(srv_fd, "accept connection"))
+ 		goto done;
+ 
+-	if (CHECK(skel->bss->listen_tp_sport != srv_port,
+-		  "Unexpected listen tp src port",
+-		  "listen_tp_sport:%u expected:%u\n",
+-		  skel->bss->listen_tp_sport, srv_port))
+-		goto done;
++	ASSERT_EQ(skel->bss->listen_tp_sport, srv_port, "listen tp src port");
+ 
+ 	if (!gen_cookies) {
+-		if (CHECK(skel->bss->req_sk_sport != srv_port,
+-			  "Unexpected req_sk src port",
+-			  "req_sk_sport:%u expected:%u\n",
+-			  skel->bss->req_sk_sport, srv_port))
+-			goto done;
+-		if (CHECK(skel->bss->gen_cookie || skel->bss->recv_cookie,
+-			  "Unexpected syncookie states",
+-			  "gen_cookie:%u recv_cookie:%u\n",
+-			  skel->bss->gen_cookie, skel->bss->recv_cookie))
+-			goto done;
++		ASSERT_EQ(skel->bss->req_sk_sport, srv_port,
++			  "request socket source port with syncookies disabled");
++		ASSERT_EQ(skel->bss->gen_cookie, 0,
++			  "generated syncookie with syncookies disabled");
++		ASSERT_EQ(skel->bss->recv_cookie, 0,
++			  "received syncookie with syncookies disabled");
+ 	} else {
+-		if (CHECK(skel->bss->req_sk_sport,
+-			  "Unexpected req_sk src port",
+-			  "req_sk_sport:%u expected:0\n",
+-			  skel->bss->req_sk_sport))
+-			goto done;
+-		if (CHECK(!skel->bss->gen_cookie ||
+-			  skel->bss->gen_cookie != skel->bss->recv_cookie,
+-			  "Unexpected syncookie states",
+-			  "gen_cookie:%u recv_cookie:%u\n",
+-			  skel->bss->gen_cookie, skel->bss->recv_cookie))
+-			goto done;
++		ASSERT_EQ(skel->bss->req_sk_sport, 0,
++			  "request socket source port with syncookies enabled");
++		ASSERT_NEQ(skel->bss->gen_cookie, 0,
++			   "syncookie properly generated");
++		ASSERT_EQ(skel->bss->gen_cookie, skel->bss->recv_cookie,
++			  "matching syncookies on client and server");
+ 	}
+ 
+-	CHECK(skel->bss->linum, "bpf prog detected error", "at line %u\n",
+-	      skel->bss->linum);
+-
+ done:
+ 	if (listen_fd != -1)
+ 		close(listen_fd);
+@@ -145,19 +125,19 @@ static void run_test(bool gen_cookies)
+ 		close(srv_fd);
+ }
+ 
+-static void test_conn(void)
++static void test_conn(struct test_btf_skc_cls_ingress *skel)
+ {
+-	run_test(false);
++	run_test(skel, false);
+ }
+ 
+-static void test_syncookie(void)
++static void test_syncookie(struct test_btf_skc_cls_ingress *skel)
+ {
+-	run_test(true);
++	run_test(skel, true);
+ }
+ 
+ struct test {
+ 	const char *desc;
+-	void (*run)(void);
++	void (*run)(struct test_btf_skc_cls_ingress *skel);
+ };
+ 
+ #define DEF_TEST(name) { #name, test_##name }
+@@ -168,25 +148,26 @@ static struct test tests[] = {
+ 
+ void test_btf_skc_cls_ingress(void)
+ {
++	struct test_btf_skc_cls_ingress *skel;
++	struct netns_obj *ns;
  	int i;
  
  	skel = test_btf_skc_cls_ingress__open_and_load();
-+	struct netns_obj *ns;
- 	if (CHECK(!skel, "test_btf_skc_cls_ingress__open_and_load", "failed\n"))
+-	struct netns_obj *ns;
+-	if (CHECK(!skel, "test_btf_skc_cls_ingress__open_and_load", "failed\n"))
++	if (!ASSERT_OK_PTR(skel, "test_btf_skc_cls_ingress__open_and_load"))
  		return;
  
-@@ -176,13 +179,15 @@ void test_btf_skc_cls_ingress(void)
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
  		if (!test__start_subtest(tests[i].desc))
  			continue;
  
--		if (prepare_netns())
-+		ns = prepare_netns();
-+		if (!ns)
+-		ns = prepare_netns();
++		ns = prepare_netns(skel);
+ 		if (!ns)
  			break;
  
- 		tests[i].run();
+-		tests[i].run();
++		tests[i].run(skel);
  
- 		print_err_line();
- 		reset_test();
-+		netns_free(ns);
+-		print_err_line();
+-		reset_test();
++		print_err_line(skel);
++		reset_test(skel);
+ 		netns_free(ns);
  	}
  
- 	test_btf_skc_cls_ingress__destroy(skel);
 
 -- 
 2.47.0
