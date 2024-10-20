@@ -1,628 +1,256 @@
-Return-Path: <linux-kselftest+bounces-20224-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20227-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 772EB9A5619
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Oct 2024 21:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E49C9A5669
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Oct 2024 21:47:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A5F528151D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Oct 2024 19:24:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 183EA28136E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Oct 2024 19:47:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAD8E1990C3;
-	Sun, 20 Oct 2024 19:23:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA3CB198841;
+	Sun, 20 Oct 2024 19:46:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Gab/gp3t"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="kdZRrCJL";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="v/QnMfcW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E7DD194C67;
-	Sun, 20 Oct 2024 19:23:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729452198; cv=none; b=g7FwzXNRUBUHmT3ARZzR9HSMF3osadEvl5NNSguO1EeoFgVSGBGlZ1VEYR3ck8g4M327kGmU345n9GypvEdw3/pLqV5sE7kUy06hEWwpkmZRmJ3OwExPh8b0r7jOT+KOPLpHraEF0eWYJGLpgbundsloEoAlJvmutk0x98THMFU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729452198; c=relaxed/simple;
-	bh=F6Roq7f9tTvCuSePQs3sDrJZuIt9ToqhCnAdISXkF1I=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=L5mTcDIuA/dctBnoeyyJ8xXwol1vIlM6gR7KYJ+X+P3uNjwISackZtMER+G3NXZMT/RS8AUy9LsT99xJ7iq3lATlv3TYbQBlO5KrRnBb7chV84W+IJVNO5ooAdnt82/rQWwsygR3kwC7+6mes+asLPsIrYXZymQ1f7jTip27mhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Gab/gp3t; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B18EB24000C;
-	Sun, 20 Oct 2024 19:23:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1729452193;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Fx9i21pAqjrbU0cXkWsBZAKAK0ryJsZV4ejVPP7rKRU=;
-	b=Gab/gp3tAMN2Y6I2Ch1bPBnsdLVi/z7S/P5tRPbNUb4GmJ8sF1l+rIKFCwVt9y76vZhi3X
-	OW/tYTw+o+I6D7H+5LnpcoMbFfIVJR0fGIq/36lBXV0hgnZ6CTXlZAvw9Rkf8YEJq4qTgQ
-	wTsJTll3NLsmxZe9cG+N3PiD/Kt2rgD9xaTxaE9hgJ0Jm/6vT4T0fH6w1BmP5auQNbSifc
-	ZwXuPA+KXuyHjZ8N943OUIvhx284hqjuNEmvuZhZP9Gy5BtUG0HvRrfYjH91uzclyE3j59
-	rZYptGKs65E/1/TExJ0daraI9Ep9fYa9oQJhIYRyaYqhVFasmNXJKf9KsOYDug==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Sun, 20 Oct 2024 21:22:58 +0200
-Subject: [PATCH bpf-next v2 6/6] selftests/bpf: remove
- test_tcp_check_syncookie
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD44191F6D;
+	Sun, 20 Oct 2024 19:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729453579; cv=fail; b=O2HF0smGntj9ZGGOZ3qt1uT1w1xOc/SeaQVzdYOA2ji/2GXwCjI9i/ABbO6SFuUg/QU7WVQDTzKEzI94dwGe3Gy8WTjHWlgxbc11LJ8PGpP7SGyGzFBUP3+zXvBE3pHDA1kqLCxtHI8jRw5s1Oi21YB2gkkc95Cf+Nff0HA+CYQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729453579; c=relaxed/simple;
+	bh=utL9u2F2VG1y8K2MaDygzOsE6/+/1kch00d1I29SuzA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=iWiHMpW/R1fdNG6XvauSeJ+IX81VgjqZuNPCijhlWmmcj7OVK2N6Ye+BJhkYELpNkGABz8fm1jZ5o7QioX6QK0xAD207fARJiIEeD+KXn3xm2o+66js8/XhQ8n6AAS08+oRjeB1nTUss4RsyaFCCPP0AiaTDlQTYKCLt9ME21/A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=kdZRrCJL; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=v/QnMfcW; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49KDBjaF032077;
+	Sun, 20 Oct 2024 19:45:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=yXr8LZNvBd/C2+u/Dx
+	T1HI7/TnWtBeWrE61AdAGAkjQ=; b=kdZRrCJLsyF+QI2uh2HGhhV3dwHr+4l3lK
+	OnE/3SPb0iuaU1v/WH4LDKLbe/5IUbUuoG08p5EJ/kQmUjDXG3Haq2HnBY3sAPkp
+	79pmQPkSJcEOvbxChVeyy7MyZSlASZvt252UgUNFMuhdJQP5tc2s+4acl32uHzE2
+	Jku4pjnvaxURYylT5eSXoVwWrEh7ul7NGvBiqC9OlUUOjOJDnfB8atdQNHJV5zkZ
+	jRZnOTgaI+hJqMFt3EhMsgubAh1zUZBMYhyMf2nkErzAXkBlXGmmGKHRMzN29aif
+	zWw9QGTj8NQji1ipKfTmSUibMQofJsc3doheMM1xW4KLtqo71aPA==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42c5as9wpu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 20 Oct 2024 19:45:24 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49KHqnA7008250;
+	Sun, 20 Oct 2024 19:45:20 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2173.outbound.protection.outlook.com [104.47.55.173])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42c375kmms-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 20 Oct 2024 19:45:20 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hF10Ja2/xIJSvGTqmIdOS3A/W8oucpcmMsxB6CO6uBI3R+dzMUPVPmFMsMTbrZywxgX5WEV5ZBPkiufF0T29qlHsmAcspAMMxZ38rWeMZPrNFinYsN7OJcpT8tSACPYyS5BPXSknpx3E6pDONxQoe3U6cIGhMI7GLpCgNzuFufmylITwic3huFJcNwA2YOBKTe8JK5sFkt4m04yQijprRorl99P1FoFk3f/SuelC8H88HY5mwAGNKcPVEZVu/d+jXaHJW/FIIT/RRKnn6kMdSJ6QT9xk60fjwOWLf0um46OWgccUSv0IK5nzkHcPycCLGj5qr0KJyXOePu7fqdNuvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yXr8LZNvBd/C2+u/DxT1HI7/TnWtBeWrE61AdAGAkjQ=;
+ b=rozowNqcvtbgPa2912BLoZOKrcmV7XmGVa0wbC7QdXqp2UVVOZjjxq72o6wYH3e41yW1dpth/fq4qp7cjrSVLz7XXucokp/20NfHP7A9JNmIR+PTjgeD6sSg9JPr0V9pTyaCTQ/eLb2Nf8t06c3l9xFpR5t9hvphHFJHsqsAHjSB+0M8DaiSFbm2JiiU1LW5KCLCpifWB7QGFYMm113LNXuH/J52OVY4QUMASZW8YFsnNwsGhdcZoBSNcZOf7CrArjbct1aca4GBiROHzr/t39afrtDgfOf5oExcPE+Y7FNGZTIGBUQ06/wdeItsbOf0Ge0bj7lTy0zG16ZoVd/p9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yXr8LZNvBd/C2+u/DxT1HI7/TnWtBeWrE61AdAGAkjQ=;
+ b=v/QnMfcWiQHRmXdoblbV2oURscZrN1f1X3bhG2I+ZaiNnjal1+YoMohGgrYZXnP/CphlJ9Hm6fierKiBTQBWmn+DMMb2nSj//Im4NSiy/m90ionu+eQIoBNTIF4wbgWDObSFAnPQxLnGVVE4aVQBxuz+r0ZwLzsba+zw45JZP9Y=
+Received: from BYAPR10MB3366.namprd10.prod.outlook.com (2603:10b6:a03:14f::25)
+ by CY8PR10MB6850.namprd10.prod.outlook.com (2603:10b6:930:9e::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.28; Sun, 20 Oct
+ 2024 19:45:11 +0000
+Received: from BYAPR10MB3366.namprd10.prod.outlook.com
+ ([fe80::baf2:dff1:d471:1c9]) by BYAPR10MB3366.namprd10.prod.outlook.com
+ ([fe80::baf2:dff1:d471:1c9%6]) with mapi id 15.20.8069.024; Sun, 20 Oct 2024
+ 19:45:11 +0000
+Date: Sun, 20 Oct 2024 20:45:08 +0100
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: Florian Weimer <fw@deneb.enyo.de>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>,
+        "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
+        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Muchun Song <muchun.song@linux.dev>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Jeff Xu <jeffxu@chromium.org>, Christoph Hellwig <hch@infradead.org>,
+        linux-api@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v2 0/5] implement lightweight guard pages
+Message-ID: <57e6c8d9-5893-4221-966d-065f98189eb7@lucifer.local>
+References: <cover.1729440856.git.lorenzo.stoakes@oracle.com>
+ <87a5eysmj1.fsf@mid.deneb.enyo.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a5eysmj1.fsf@mid.deneb.enyo.de>
+X-ClientProxiedBy: LO4P123CA0251.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1a7::22) To BYAPR10MB3366.namprd10.prod.outlook.com
+ (2603:10b6:a03:14f::25)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20241020-syncookie-v2-6-2db240225fed@bootlin.com>
-References: <20241020-syncookie-v2-0-2db240225fed@bootlin.com>
-In-Reply-To: <20241020-syncookie-v2-0-2db240225fed@bootlin.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: ebpf@linuxfoundation.org, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Lorenz Bauer <lorenz.bauer@isovalent.com>, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-Sasl: alexis.lothore@bootlin.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR10MB3366:EE_|CY8PR10MB6850:EE_
+X-MS-Office365-Filtering-Correlation-Id: fedef79c-96a7-4848-cc6f-08dcf13fb5a3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|10070799003;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?UwtIPrb3vu11670VrfrUbTeumIyz68vq99qf9J2LM7nP5BfXxWV3YUlgWRHy?=
+ =?us-ascii?Q?db2RcArKmq5pO7Qukr+VQ7mrXENTnV5Dw8HsBS01mvXkKE5KqfHPJ6flEBna?=
+ =?us-ascii?Q?idXQ9I6JWDIwpQgnvygKlATl0DIeLYIk/UUlfgXKyAcyZJyCFzNC1TBMh44+?=
+ =?us-ascii?Q?+e91u3gvl0GGKauNV9vhz/a2s1rx9DeAuC+6aq6nr/FtPaEq9KsoJzYV1lfW?=
+ =?us-ascii?Q?ojIZn2KJPUGugI/UT06VmLvzYx3IOtihT1AqpoJhq6SuFXfEYGLfAVGi/vOf?=
+ =?us-ascii?Q?rj3gbzi8zJQoAw3wL9hKtV9JXyZx/oEKV18GGjrWYVhyHwzqgkNAj9Tl2QmB?=
+ =?us-ascii?Q?Cvxc5ukK3XuLPe6560hDq0JJek5l/FOxq8b07BgKEYpJ2zjNu3+eynmrBUvq?=
+ =?us-ascii?Q?0c1z40F4/l7q9ZVq9CC3f3b6JoW/tNjyyD16EyDGUFPN1aQ2JKPtMyOzfq2G?=
+ =?us-ascii?Q?6n1MawT1gIoHTF/fOAlDV0oxgvTTEjJ02ZkJe6iB54086BgiXmh/agrl4LNZ?=
+ =?us-ascii?Q?x0Bk6fdBYQ7KSDN/9dRKw2eLqM26GnpRjhjkFGKtx3z86r/FrsXpVPhMGMsG?=
+ =?us-ascii?Q?UAJmxV1Zmx8JcQmGuj/tRyzkOl6cu22mRZI8GWS67sH4Hk4HHx4TkJUjlwuP?=
+ =?us-ascii?Q?rfif4Eq/vWIzkSTrvhRf7j47JoDutq0Yr85/L3l8eEIyGo+B4MLQHTXu4oMy?=
+ =?us-ascii?Q?nDFWSGKVIzmWSpQwnZLg0udrGwzsbfNY38yW/2ElJcj3AimoRGakmo2+56IT?=
+ =?us-ascii?Q?uG4DVgc5Vk3+d9qPoUdXAXr1sStAoRCMuO8G5lJwtpBvzIZ3VhV+8z/s92Un?=
+ =?us-ascii?Q?wVKnZsuBYsV+MAvNNkTfEPtj83OPzmEstqGGZB8Va0b3Sl8Tput9VtNuvewF?=
+ =?us-ascii?Q?DUTJbGlO8vJfnFh6Ag3PUpClbONceuaBj1EKzBzwM5Z0t+OI+u1V1Hea4X2m?=
+ =?us-ascii?Q?OcnEuguBf7r7KkeUJ4NPLqR2665azGz2D1YZtYNCW7u0s5Lx0AAyWjdQQSAW?=
+ =?us-ascii?Q?r5vM9l78aSLHmcFW/nEbd9hJg3ZZ5xJcMgxYeRjyB0GXxmYH+OzjEkJtV38G?=
+ =?us-ascii?Q?/MU9e3Y1M5zLYLhjPTCbDjsSqDHmwCcxHGoEJutUnmZ4hvQ3YSjB6pjwfwBA?=
+ =?us-ascii?Q?CmyG4zp1YdWeNRN0GWGVktTs2x03ts0c+phI9XjMj0Q5+hcmJIQoXJwYdu8x?=
+ =?us-ascii?Q?AGLGKw06CJY4k056gAUV9c3VQS987wyJskbrGtjplVGwrhWrVvevydERncZD?=
+ =?us-ascii?Q?1Z+MTnG/FSmB4euLilOiX+f0trzXmTXgFemGDHHa25F/8VpXyR4vEiLy7U4x?=
+ =?us-ascii?Q?PHqSwDPxw2UMKYy4LKHcvv5O?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3366.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(10070799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?KMGy83HiZdiMFExZb+09l9AjjzZzzXsXWPZiBTfXjoOX7kEMSJNZpB2McxU3?=
+ =?us-ascii?Q?l0AuuMIiSfYZcF7KZLANF9V28AULG4zSgHu/nRQKA7evYFKD5YNZvq5CShdO?=
+ =?us-ascii?Q?lUrSVw22oOKgDS0PUAlcrXoHraeNoryFjwwSVtWZZ95YWBWoynOw/wWCyayY?=
+ =?us-ascii?Q?zGpwWREeUUrez0gTHWVFxNJlBZfNqCueykluX2vhpHFLXfXbg23XEnDzOZ6V?=
+ =?us-ascii?Q?8Vj6YQXwgNoJwpTitu0y/yddOION4eqY1PEYOCHzalqTwl5CVFWWaDwNjM0E?=
+ =?us-ascii?Q?SjK2FnxiQA8/TLsTyYcA9d3pTe2dI7j5aM+h2g1NiAFiIJNrkaKzeAzvXzEZ?=
+ =?us-ascii?Q?4HL6Kgc7R5TWK4Axf2J8fzbbyGv4QKEZ1abRe1uNxF22HvnOyWRUJ+tCMFZH?=
+ =?us-ascii?Q?ltHcdKZYY40eYlArn/4ArN6mAYCaN15e1Rc4jHec05SllCTpVwiORtv89DBy?=
+ =?us-ascii?Q?Joq/QswE3w8KFIlgmDtp1cr66SISRdhjP6svBiNwz8sasCReo1vI3ShVT7a/?=
+ =?us-ascii?Q?jvl0TnWpfishRDR0YYYdLlCbabr0ymM5fUFR2GAJ6vyp3LcN2EgNysY3/MmB?=
+ =?us-ascii?Q?ioy9JNb/Lmi5K9uhOuvRfstIqomR/xmhVHKDtARdycjmcztx1xHAGTYEK6bY?=
+ =?us-ascii?Q?BHcqV+bda3f4A3uoc38CVWladZYWFxpcYVkX5CFkgvCqfp77P1qkh7ezK7Pe?=
+ =?us-ascii?Q?EQzZXT3MxJwBecOg7IsI/99X/+KTDzjmuyDjMBkD2J6edsJ345Yf9FbES1VM?=
+ =?us-ascii?Q?XIWwbv/Z0paemvRSnnDgJBuGOAtPJ686zc3AFopYTswHJd5ezFTMR/vQ1BqV?=
+ =?us-ascii?Q?1x/wj4+6PN6qUcBGCKa/7wdxAp3vN1Du0K8E3C+4WvTDKpUS7XHeTRKd+8yW?=
+ =?us-ascii?Q?wHQD0kD0g8EqyfKc3nCCNeIUUXeMkZB95wAJMc7d77hUe6123pkDDpZTa9In?=
+ =?us-ascii?Q?+EiL2nGGdohem5BzP+d5Io5pyffEbNnHWAt53OoCmY4uBAZ4uEoqNZds2fmu?=
+ =?us-ascii?Q?KeVLtXwcETZcghnHuLtn5EJ5ZZiksK/20IKCeYEfBCsxUQR6FpXxTkdjF6+o?=
+ =?us-ascii?Q?wI91SAicN0ZUruQmYuWaPKSjgSQICbOnFTvY7FdS5hJjPa9P4XO4MMev7izi?=
+ =?us-ascii?Q?IjoLiNWtz7kQSQzY2dmkDritTL9udN9SnjFZ/lsiZNqCSqWbGjb/kbcDNOlq?=
+ =?us-ascii?Q?pyxOclhUl/Jan/+KhGaAmsT/2Xv95A7com6bR/8xq2gblRe+EtbCbMHOHKgM?=
+ =?us-ascii?Q?nScwEi82uD55BtAuUtOYSugah7tFmsfQio1I2xRN+LUMQ8KXRm1m8rQzs5GO?=
+ =?us-ascii?Q?laN1BcSPeOf+3CVRlqz6KgMR6LK7ebbH2w4WN9axvy7NDZPKhCAgejl4UoFD?=
+ =?us-ascii?Q?I2kHXggHgVnrjpJ2Tm3k+6Wh4D7BzbGmdXyVekiOpysapGt9+t0iJiwqWGWd?=
+ =?us-ascii?Q?cGs9DX8hG80nkTYb+OVjhpFBjO/Bk9UuXMlXaOsZqzlkIea/2EDlNp/MYmHU?=
+ =?us-ascii?Q?TdD77RBW24WWCRvvk+Il41m6leJ1NUEeFUE7pv8Hi9qSuGQCKYkN9QiitHhC?=
+ =?us-ascii?Q?8AxRRreuAP7UtYEoDMLw0nqMFYC9Ltm/q7f5UmD74izvuWeTaCwLT3yv1SHw?=
+ =?us-ascii?Q?UVdtqHQyxniXYwB47h9BqCCY/pvbFMekigamd7T1Yx/s1CL5Vs3RR2+PutqC?=
+ =?us-ascii?Q?Vh47QQ=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	XrRVI/nbTljVyvvV3tCl5LZ0TsfTAQgHJkDtVszrsFCDflF/J7ayLE7G75ygd8nOAu4UhX7c8p9tVJqdFi5ITAOvVkkPM8ieQO8ffpjNzFDMJjZN5f7eQrnGo8D0kvu7SrdoE7zYaCWjCxt6V/bNj9s+yV+pWUUOYQo1Gj/qnTWEiJpwvzWS3nkiwxzIPeJcW1A01rFS8ENGrrd6kBDqHxRJVHDNijwxVIkMhQKjaHb9sexPcyAMjuhC67PAD295zSy8AvjjYkPBiMmlvtoPt3iHh9IXDAZil80f3Etcpz7U7WXxhLzDLr+k5oHMKQrQEf3McY5ehWbagWFcMyhNIwCQVk5oE5xphWtt5XRY/XoLJX7rQ9AVTzGT6YB4TNV5aCS8ozqsWFaLkpbKOqWV5Ql8wnmcpyB+ai9Rvp28pHpeJmMT/SuqZV1cUyVzW16UmPjHZuKv5y/cHQUmwpo7gO25FB/VvZ0u1l7OteJJ6RZQOPII4+DIaUkq+Of8IMX8iwFHiVRp8ufuAamcp4R8fMQuqeBFHVm6d1F0fxHgpG3Bc8l+nE1fY7CAs7Kw/corEnivy/xq2459NGsQ+GC+yRGDOj6oIC6EWNytUIho9KI=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fedef79c-96a7-4848-cc6f-08dcf13fb5a3
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3366.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2024 19:45:11.3340
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nZGRhP/lS9BE0SKJJNSg6jqJ1pEYH2Su+eqe+VJi8vMjpcdp/b1aaFMR5dqXrm1/zMf0nUzmB4glqQt2jCj72Wf2gnI+WwB8+ohAhbHAjao=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR10MB6850
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-20_17,2024-10-17_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 bulkscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=774 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
+ definitions=main-2410200140
+X-Proofpoint-GUID: oDbFHu4eveWIq_xy_WqxrhcO5eqMYzPK
+X-Proofpoint-ORIG-GUID: oDbFHu4eveWIq_xy_WqxrhcO5eqMYzPK
 
-Now that btf_skc_cls_ingress has the same coverage as
-test_tcp_check_syncookie, remove the second one and keep the first one
-as it is integrated in test_progs
+On Sun, Oct 20, 2024 at 07:37:54PM +0200, Florian Weimer wrote:
+> * Lorenzo Stoakes:
+>
+> > Early testing of the prototype version of this code suggests a 5 times
+> > speed up in memory mapping invocations (in conjunction with use of
+> > process_madvise()) and a 13% reduction in VMAs on an entirely idle android
+> > system and unoptimised code.
+> >
+> > We expect with optimisation and a loaded system with a larger number of
+> > guard pages this could significantly increase, but in any case these
+> > numbers are encouraging.
+> >
+> > This way, rather than having separate VMAs specifying which parts of a
+> > range are guard pages, instead we have a VMA spanning the entire range of
+> > memory a user is permitted to access and including ranges which are to be
+> > 'guarded'.
+> >
+> > After mapping this, a user can specify which parts of the range should
+> > result in a fatal signal when accessed.
+> >
+> > By restricting the ability to specify guard pages to memory mapped by
+> > existing VMAs, we can rely on the mappings being torn down when the
+> > mappings are ultimately unmapped and everything works simply as if the
+> > memory were not faulted in, from the point of view of the containing VMAs.
+>
+> We have a glibc (so not Android) dynamic linker bug that asks us to
+> remove PROT_NONE mappings in mapped shared objects:
+>
+>   Extra struct vm_area_struct with ---p created when PAGE_SIZE < max-page-size
+>   <https://sourceware.org/bugzilla/show_bug.cgi?id=31076>
+>
+> It's slightly different from a guard page because our main goal is to
+> avoid other mappings to end up in those gaps, which has been shown to
+> cause odd application behavior in cases where it happens.  If I
+> understand the series correctly, the kernel would not automatically
+> attribute those PROT_NONE gaps to the previous or subsequent mapping.
+> We would have to extend one of the surrounding mapps and apply
+> MADV_POISON to that over-mapped part.  That doesn't seem too onerous.
+>
+> Could the ELF loader in the kernel do the same thing for the main
+> executable and the program loader?
 
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
----
- tools/testing/selftests/bpf/.gitignore             |   1 -
- tools/testing/selftests/bpf/Makefile               |   9 +-
- .../bpf/progs/test_tcp_check_syncookie_kern.c      | 167 ----------------
- .../selftests/bpf/test_tcp_check_syncookie.sh      |  85 --------
- .../selftests/bpf/test_tcp_check_syncookie_user.c  | 213 ---------------------
- 5 files changed, 3 insertions(+), 472 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index e6533b3400de5ef9b0c0e02aa0e1afedcab9b349..7e88551f2d38bdfa87fd56ac83874c88c4335927 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -24,7 +24,6 @@ test_flow_dissector
- flow_dissector_load
- test_tcpnotify_user
- test_libbpf
--test_tcp_check_syncookie_user
- test_sysctl
- xdping
- test_cpp
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 28a76baa854d3ef45bc6d511ad9188e737f0ebe8..7815b815fcef4a8e42f0211253c1e351a9af2abf 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -137,7 +137,6 @@ TEST_PROGS := test_kmod.sh \
- 	test_xdp_vlan_mode_generic.sh \
- 	test_xdp_vlan_mode_native.sh \
- 	test_lwt_ip_encap.sh \
--	test_tcp_check_syncookie.sh \
- 	test_tc_tunnel.sh \
- 	test_tc_edt.sh \
- 	test_xdping.sh \
-@@ -154,10 +153,9 @@ TEST_PROGS_EXTENDED := with_addr.sh \
- 
- # Compile but not part of 'make run_tests'
- TEST_GEN_PROGS_EXTENDED = \
--	flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
--	test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko \
--	xskxceiver xdp_redirect_multi xdp_synproxy veristat xdp_hw_metadata \
--	xdp_features bpf_test_no_cfi.ko
-+	flow_dissector_load test_flow_dissector	test_lirc_mode2_user xdping \
-+	test_cpp runqslower bench bpf_testmod.ko xskxceiver xdp_redirect_multi \
-+	xdp_synproxy veristat xdp_hw_metadata xdp_features bpf_test_no_cfi.ko
- 
- TEST_GEN_FILES += liburandom_read.so urandom_read sign-file uprobe_multi
- 
-@@ -347,7 +345,6 @@ $(OUTPUT)/flow_dissector_load: $(TESTING_HELPERS)
- $(OUTPUT)/test_maps: $(TESTING_HELPERS)
- $(OUTPUT)/test_verifier: $(TESTING_HELPERS) $(CAP_HELPERS) $(UNPRIV_HELPERS)
- $(OUTPUT)/xsk.o: $(BPFOBJ)
--$(OUTPUT)/test_tcp_check_syncookie_user: $(NETWORK_HELPERS)
- 
- BPFTOOL ?= $(DEFAULT_BPFTOOL)
- $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
-diff --git a/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c b/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
-deleted file mode 100644
-index 6edebce563b57e96b04a20b6d14dbcdca62152d5..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
-+++ /dev/null
-@@ -1,167 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--// Copyright (c) 2018 Facebook
--// Copyright (c) 2019 Cloudflare
--
--#include <string.h>
--
--#include <linux/bpf.h>
--#include <linux/pkt_cls.h>
--#include <linux/if_ether.h>
--#include <linux/in.h>
--#include <linux/ip.h>
--#include <linux/ipv6.h>
--#include <sys/socket.h>
--#include <linux/tcp.h>
--
--#include <bpf/bpf_helpers.h>
--#include <bpf/bpf_endian.h>
--
--struct {
--	__uint(type, BPF_MAP_TYPE_ARRAY);
--	__type(key, __u32);
--	__type(value, __u32);
--	__uint(max_entries, 3);
--} results SEC(".maps");
--
--static __always_inline __s64 gen_syncookie(void *data_end, struct bpf_sock *sk,
--					   void *iph, __u32 ip_size,
--					   struct tcphdr *tcph)
--{
--	__u32 thlen = tcph->doff * 4;
--
--	if (tcph->syn && !tcph->ack) {
--		// packet should only have an MSS option
--		if (thlen != 24)
--			return 0;
--
--		if ((void *)tcph + thlen > data_end)
--			return 0;
--
--		return bpf_tcp_gen_syncookie(sk, iph, ip_size, tcph, thlen);
--	}
--	return 0;
--}
--
--static __always_inline void check_syncookie(void *ctx, void *data,
--					    void *data_end)
--{
--	struct bpf_sock_tuple tup;
--	struct bpf_sock *sk;
--	struct ethhdr *ethh;
--	struct iphdr *ipv4h;
--	struct ipv6hdr *ipv6h;
--	struct tcphdr *tcph;
--	int ret;
--	__u32 key_mss = 2;
--	__u32 key_gen = 1;
--	__u32 key = 0;
--	__s64 seq_mss;
--
--	ethh = data;
--	if (ethh + 1 > data_end)
--		return;
--
--	switch (bpf_ntohs(ethh->h_proto)) {
--	case ETH_P_IP:
--		ipv4h = data + sizeof(struct ethhdr);
--		if (ipv4h + 1 > data_end)
--			return;
--
--		if (ipv4h->ihl != 5)
--			return;
--
--		tcph = data + sizeof(struct ethhdr) + sizeof(struct iphdr);
--		if (tcph + 1 > data_end)
--			return;
--
--		tup.ipv4.saddr = ipv4h->saddr;
--		tup.ipv4.daddr = ipv4h->daddr;
--		tup.ipv4.sport = tcph->source;
--		tup.ipv4.dport = tcph->dest;
--
--		sk = bpf_skc_lookup_tcp(ctx, &tup, sizeof(tup.ipv4),
--					BPF_F_CURRENT_NETNS, 0);
--		if (!sk)
--			return;
--
--		if (sk->state != BPF_TCP_LISTEN)
--			goto release;
--
--		seq_mss = gen_syncookie(data_end, sk, ipv4h, sizeof(*ipv4h),
--					tcph);
--
--		ret = bpf_tcp_check_syncookie(sk, ipv4h, sizeof(*ipv4h),
--					      tcph, sizeof(*tcph));
--		break;
--
--	case ETH_P_IPV6:
--		ipv6h = data + sizeof(struct ethhdr);
--		if (ipv6h + 1 > data_end)
--			return;
--
--		if (ipv6h->nexthdr != IPPROTO_TCP)
--			return;
--
--		tcph = data + sizeof(struct ethhdr) + sizeof(struct ipv6hdr);
--		if (tcph + 1 > data_end)
--			return;
--
--		memcpy(tup.ipv6.saddr, &ipv6h->saddr, sizeof(tup.ipv6.saddr));
--		memcpy(tup.ipv6.daddr, &ipv6h->daddr, sizeof(tup.ipv6.daddr));
--		tup.ipv6.sport = tcph->source;
--		tup.ipv6.dport = tcph->dest;
--
--		sk = bpf_skc_lookup_tcp(ctx, &tup, sizeof(tup.ipv6),
--					BPF_F_CURRENT_NETNS, 0);
--		if (!sk)
--			return;
--
--		if (sk->state != BPF_TCP_LISTEN)
--			goto release;
--
--		seq_mss = gen_syncookie(data_end, sk, ipv6h, sizeof(*ipv6h),
--					tcph);
--
--		ret = bpf_tcp_check_syncookie(sk, ipv6h, sizeof(*ipv6h),
--					      tcph, sizeof(*tcph));
--		break;
--
--	default:
--		return;
--	}
--
--	if (seq_mss > 0) {
--		__u32 cookie = (__u32)seq_mss;
--		__u32 mss = seq_mss >> 32;
--
--		bpf_map_update_elem(&results, &key_gen, &cookie, 0);
--		bpf_map_update_elem(&results, &key_mss, &mss, 0);
--	}
--
--	if (ret == 0) {
--		__u32 cookie = bpf_ntohl(tcph->ack_seq) - 1;
--
--		bpf_map_update_elem(&results, &key, &cookie, 0);
--	}
--
--release:
--	bpf_sk_release(sk);
--}
--
--SEC("tc")
--int check_syncookie_clsact(struct __sk_buff *skb)
--{
--	check_syncookie(skb, (void *)(long)skb->data,
--			(void *)(long)skb->data_end);
--	return TC_ACT_OK;
--}
--
--SEC("xdp")
--int check_syncookie_xdp(struct xdp_md *ctx)
--{
--	check_syncookie(ctx, (void *)(long)ctx->data,
--			(void *)(long)ctx->data_end);
--	return XDP_PASS;
--}
--
--char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh b/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
-deleted file mode 100755
-index b42c24282c2543a61b559e70c4961011ddb8c463..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
-+++ /dev/null
-@@ -1,85 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0
--# Copyright (c) 2018 Facebook
--# Copyright (c) 2019 Cloudflare
--
--set -eu
--readonly NS1="ns1-$(mktemp -u XXXXXX)"
--
--wait_for_ip()
--{
--	local _i
--	printf "Wait for IP %s to become available " "$1"
--	for _i in $(seq ${MAX_PING_TRIES}); do
--		printf "."
--		if ns1_exec ping -c 1 -W 1 "$1" >/dev/null 2>&1; then
--			echo " OK"
--			return
--		fi
--		sleep 1
--	done
--	echo 1>&2 "ERROR: Timeout waiting for test IP to become available."
--	exit 1
--}
--
--get_prog_id()
--{
--	awk '/ id / {sub(/.* id /, "", $0); print($1)}'
--}
--
--ns1_exec()
--{
--	ip netns exec ${NS1} "$@"
--}
--
--setup()
--{
--	ip netns add ${NS1}
--	ns1_exec ip link set lo up
--
--	ns1_exec sysctl -w net.ipv4.tcp_syncookies=2
--	ns1_exec sysctl -w net.ipv4.tcp_window_scaling=0
--	ns1_exec sysctl -w net.ipv4.tcp_timestamps=0
--	ns1_exec sysctl -w net.ipv4.tcp_sack=0
--
--	wait_for_ip 127.0.0.1
--	wait_for_ip ::1
--}
--
--cleanup()
--{
--	ip netns del ns1 2>/dev/null || :
--}
--
--main()
--{
--	trap cleanup EXIT 2 3 6 15
--	setup
--
--	printf "Testing clsact..."
--	ns1_exec tc qdisc add dev "${TEST_IF}" clsact
--	ns1_exec tc filter add dev "${TEST_IF}" ingress \
--		bpf obj "${BPF_PROG_OBJ}" sec "${CLSACT_SECTION}" da
--
--	BPF_PROG_ID=$(ns1_exec tc filter show dev "${TEST_IF}" ingress | \
--		      get_prog_id)
--	ns1_exec "${PROG}" "${BPF_PROG_ID}"
--	ns1_exec tc qdisc del dev "${TEST_IF}" clsact
--
--	printf "Testing XDP..."
--	ns1_exec ip link set "${TEST_IF}" xdp \
--		object "${BPF_PROG_OBJ}" section "${XDP_SECTION}"
--	BPF_PROG_ID=$(ns1_exec ip link show "${TEST_IF}" | get_prog_id)
--	ns1_exec "${PROG}" "${BPF_PROG_ID}"
--}
--
--DIR=$(dirname $0)
--TEST_IF=lo
--MAX_PING_TRIES=5
--BPF_PROG_OBJ="${DIR}/test_tcp_check_syncookie_kern.bpf.o"
--CLSACT_SECTION="tc"
--XDP_SECTION="xdp"
--BPF_PROG_ID=0
--PROG="${DIR}/test_tcp_check_syncookie_user"
--
--main
-diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-deleted file mode 100644
-index 3844f9b8232a25278e8190bc9b878ed73060fd4d..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-+++ /dev/null
-@@ -1,213 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--// Copyright (c) 2018 Facebook
--// Copyright (c) 2019 Cloudflare
--
--#include <limits.h>
--#include <string.h>
--#include <stdlib.h>
--#include <unistd.h>
--
--#include <arpa/inet.h>
--#include <netinet/in.h>
--#include <sys/types.h>
--#include <sys/socket.h>
--
--#include <bpf/bpf.h>
--#include <bpf/libbpf.h>
--
--#include "cgroup_helpers.h"
--#include "network_helpers.h"
--
--static int get_map_fd_by_prog_id(int prog_id, bool *xdp)
--{
--	struct bpf_prog_info info = {};
--	__u32 info_len = sizeof(info);
--	__u32 map_ids[1];
--	int prog_fd = -1;
--	int map_fd = -1;
--
--	prog_fd = bpf_prog_get_fd_by_id(prog_id);
--	if (prog_fd < 0) {
--		log_err("Failed to get fd by prog id %d", prog_id);
--		goto err;
--	}
--
--	info.nr_map_ids = 1;
--	info.map_ids = (__u64)(unsigned long)map_ids;
--
--	if (bpf_prog_get_info_by_fd(prog_fd, &info, &info_len)) {
--		log_err("Failed to get info by prog fd %d", prog_fd);
--		goto err;
--	}
--
--	if (!info.nr_map_ids) {
--		log_err("No maps found for prog fd %d", prog_fd);
--		goto err;
--	}
--
--	*xdp = info.type == BPF_PROG_TYPE_XDP;
--
--	map_fd = bpf_map_get_fd_by_id(map_ids[0]);
--	if (map_fd < 0)
--		log_err("Failed to get fd by map id %d", map_ids[0]);
--err:
--	if (prog_fd >= 0)
--		close(prog_fd);
--	return map_fd;
--}
--
--static int run_test(int server_fd, int results_fd, bool xdp)
--{
--	int client = -1, srv_client = -1;
--	int ret = 0;
--	__u32 key = 0;
--	__u32 key_gen = 1;
--	__u32 key_mss = 2;
--	__u32 value = 0;
--	__u32 value_gen = 0;
--	__u32 value_mss = 0;
--
--	if (bpf_map_update_elem(results_fd, &key, &value, 0) < 0) {
--		log_err("Can't clear results");
--		goto err;
--	}
--
--	if (bpf_map_update_elem(results_fd, &key_gen, &value_gen, 0) < 0) {
--		log_err("Can't clear results");
--		goto err;
--	}
--
--	if (bpf_map_update_elem(results_fd, &key_mss, &value_mss, 0) < 0) {
--		log_err("Can't clear results");
--		goto err;
--	}
--
--	client = connect_to_fd(server_fd, 0);
--	if (client == -1)
--		goto err;
--
--	srv_client = accept(server_fd, NULL, 0);
--	if (srv_client == -1) {
--		log_err("Can't accept connection");
--		goto err;
--	}
--
--	if (bpf_map_lookup_elem(results_fd, &key, &value) < 0) {
--		log_err("Can't lookup result");
--		goto err;
--	}
--
--	if (value == 0) {
--		log_err("Didn't match syncookie: %u", value);
--		goto err;
--	}
--
--	if (bpf_map_lookup_elem(results_fd, &key_gen, &value_gen) < 0) {
--		log_err("Can't lookup result");
--		goto err;
--	}
--
--	if (xdp && value_gen == 0) {
--		// SYN packets do not get passed through generic XDP, skip the
--		// rest of the test.
--		printf("Skipping XDP cookie check\n");
--		goto out;
--	}
--
--	if (bpf_map_lookup_elem(results_fd, &key_mss, &value_mss) < 0) {
--		log_err("Can't lookup result");
--		goto err;
--	}
--
--	if (value != value_gen) {
--		log_err("BPF generated cookie does not match kernel one");
--		goto err;
--	}
--
--	if (value_mss < 536 || value_mss > USHRT_MAX) {
--		log_err("Unexpected MSS retrieved");
--		goto err;
--	}
--
--	goto out;
--
--err:
--	ret = 1;
--out:
--	close(client);
--	close(srv_client);
--	return ret;
--}
--
--static int v6only_true(int fd, void *opts)
--{
--	int mode = true;
--
--	return setsockopt(fd, IPPROTO_IPV6, IPV6_V6ONLY, &mode, sizeof(mode));
--}
--
--static int v6only_false(int fd, void *opts)
--{
--	int mode = false;
--
--	return setsockopt(fd, IPPROTO_IPV6, IPV6_V6ONLY, &mode, sizeof(mode));
--}
--
--int main(int argc, char **argv)
--{
--	struct network_helper_opts opts = { 0 };
--	int server = -1;
--	int server_v6 = -1;
--	int server_dual = -1;
--	int results = -1;
--	int err = 0;
--	bool xdp;
--
--	if (argc < 2) {
--		fprintf(stderr, "Usage: %s prog_id\n", argv[0]);
--		exit(1);
--	}
--
--	/* Use libbpf 1.0 API mode */
--	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
--
--	results = get_map_fd_by_prog_id(atoi(argv[1]), &xdp);
--	if (results < 0) {
--		log_err("Can't get map");
--		goto err;
--	}
--
--	server = start_server_str(AF_INET, SOCK_STREAM, "127.0.0.1", 0, NULL);
--	if (server == -1)
--		goto err;
--
--	opts.post_socket_cb = v6only_true;
--	server_v6 = start_server_str(AF_INET6, SOCK_STREAM, "::1", 0, &opts);
--	if (server_v6 == -1)
--		goto err;
--
--	opts.post_socket_cb = v6only_false;
--	server_dual = start_server_str(AF_INET6, SOCK_STREAM, "::0", 0, &opts);
--	if (server_dual == -1)
--		goto err;
--
--	if (run_test(server, results, xdp))
--		goto err;
--
--	if (run_test(server_v6, results, xdp))
--		goto err;
--
--	if (run_test(server_dual, results, xdp))
--		goto err;
--
--	printf("ok\n");
--	goto out;
--err:
--	err = 1;
--out:
--	close(server);
--	close(server_v6);
--	close(server_dual);
--	close(results);
--	return err;
--}
-
--- 
-2.47.0
-
+Currently this implementation is only available for private anonymous
+memory. We may look at extending it to shmem and file-backed memory in the
+future but there are a whole host of things to overcome to make that work
+so it's one step at a time! :)
 
