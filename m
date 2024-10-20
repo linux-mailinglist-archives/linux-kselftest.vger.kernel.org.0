@@ -1,83 +1,84 @@
-Return-Path: <linux-kselftest+bounces-20210-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20211-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D0609A533C
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Oct 2024 11:21:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A62E9A533F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Oct 2024 11:21:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A84E1C20A23
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Oct 2024 09:21:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C05C82824F3
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Oct 2024 09:21:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65D1480603;
-	Sun, 20 Oct 2024 09:21:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D9DD13DDB8;
+	Sun, 20 Oct 2024 09:21:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ecqblAWR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OFdnxIB6"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD30E17BA9;
-	Sun, 20 Oct 2024 09:21:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E0B84E0A;
+	Sun, 20 Oct 2024 09:21:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729416099; cv=none; b=ph45Fx6U+HzofsUfprkUsqk00eoswGunQGVFhu/DaJAHt7eQjCJfbUHs4yZ+Fj+6VZ7rNTPZF4cKbAuAVuKlDLMNgmWzBnddtW9kE6tl0cHby7W+7tyVp/9IEjAbKX6n4hLkkFXV85U8rm3bxpfJNvsBolj/UoNXe/U6AXtl1yE=
+	t=1729416101; cv=none; b=Cl2/FypmQFunsqjkjsGfTYQ0wtXXTqVn4itASg+RWUVDzd2w+5fXEMwhh/Zu4682tN6zLmkofH61B5zJKsffftmc+76CFE60F5hzyl2xFwDqFrvK67//NvSy5Tmcf3REijGbGFdAMOZBijOlm4vjYZxaC4U+ok2mt493YNyYiIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729416099; c=relaxed/simple;
-	bh=5Ez5yxwcYXssvPQZU8ZzXuZN34JeHSKPfpOXJy0mTDw=;
+	s=arc-20240116; t=1729416101; c=relaxed/simple;
+	bh=0FjaOJikJqwtGL+Y9iaV7osiQQ6qFUvD/z2eON8YtPE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BTf/FfQ7tUtEJBCuC+OSDLd1JCsNGA70uJq9KZLSi5gPDKb9kKG9/9NzRoEjzpZAOotvY8/TPns3g7zVN+p6omjZwWQKrH5QRE7DNXp1IB3bgrFLhiZFuss8PFA9bn1sLpbnCW64y8dswRP8lVxfwij+gOqyTs3OQYU4v7CLUGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ecqblAWR; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=alv9HYZvCkWwYIctfQx1FfNT43xQ1/5p2+KPe783Ik4MYArmK5fefTcEqrmqywUNDAOVT65QW9tAh4BKv4f/6nC5Je600L/CXIYz2NOS4jOsskFnytetKmX/Qgsj9ifzpboLq0Zi8SlF0ru/Z43eRgFJ7/tWygzHY30XhLK0DCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OFdnxIB6; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729416097; x=1760952097;
+  t=1729416100; x=1760952100;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=5Ez5yxwcYXssvPQZU8ZzXuZN34JeHSKPfpOXJy0mTDw=;
-  b=ecqblAWRsMJF44GWDH2OvLmarWfOtee8emFP+6LMLbsiPeUvC9YK6Df1
-   eDfQOd70jSwKtzgUOE6WmqMI4fSS+5nmEfS63zRZluJqv0qc3o9TQ11BU
-   +nfxWDCYZkWapThycS9WTOqfTolMJGcQCs6ROPCPcR5YanXAR7PbMOIPn
-   xRNhLQvkwLQzYw0EaJvsvcK5ANVyviW5z/XsxnlIyxfWKM0G+72GpaLWi
-   hrt6vwZdl6lLBnJETv7NBCFqLenDwAdG4+2itVElgGRJPVDkjNEI8g2+Z
-   NXF9uaa9hRssJSI+GQ9qz+trOO8ibA+xywMcQqQunvSWvybcK2Vq7azb8
-   w==;
-X-CSE-ConnectionGUID: SA1oXYX7Rk6gjrwVO0iAUQ==
-X-CSE-MsgGUID: 3cBgAWr5SiC2+uZdQF4eKg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11230"; a="39528695"
+  bh=0FjaOJikJqwtGL+Y9iaV7osiQQ6qFUvD/z2eON8YtPE=;
+  b=OFdnxIB6dQT5B3f4Osh4G1881zHIJexQl0HwsKnOfL9O0azBpb49tbL5
+   I7VwqRlhfBoBgBsppPyn5ofvu276/nKq3OsfjrZHNhvSKAuK+Oif58pnl
+   gNBypY8aFOXiy79rtbcRQntYcMnn8uPZXvp08Nd3VJJCrNke2raQ6H0es
+   5+42ADgjs2xKtnbskjmJVX8yZFJ1PJzQL88FA1TuOiElqKDkKppGMMAuE
+   1WjhPNla7hoi1Sp3rFB/JTRmnozBir4t4jNPuYmkgJ2ssSmYhzjNn86T0
+   mjMMEcBVYSAUTQ9d9hrH1Le+kJVI4X9BZ4eHuP4V2Z+4ojOM1xjzEHy3V
+   g==;
+X-CSE-ConnectionGUID: WP4d/s5IQaesapM3pU6f9A==
+X-CSE-MsgGUID: cJqNOoXFQ92BLjV5A0CSaQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11230"; a="39528708"
 X-IronPort-AV: E=Sophos;i="6.11,218,1725346800"; 
-   d="scan'208";a="39528695"
+   d="scan'208";a="39528708"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
   by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2024 02:21:36 -0700
-X-CSE-ConnectionGUID: DGH5La/ySNOwfpyxY8+Lqg==
-X-CSE-MsgGUID: rk7Y5pOyQCaXLKX+BhfWCA==
+X-CSE-ConnectionGUID: S96oavzKT2aa8bDdJHdbug==
+X-CSE-MsgGUID: ISIQzx7HTDKxdHRiAqcjcw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,218,1725346800"; 
-   d="scan'208";a="79183516"
+   d="scan'208";a="79183515"
 Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
   by orviesa009.jf.intel.com with ESMTP; 20 Oct 2024 02:21:30 -0700
 Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1t2S7r-000Q99-2M;
+	id 1t2S7r-000Q9C-2Q;
 	Sun, 20 Oct 2024 09:21:27 +0000
-Date: Sun, 20 Oct 2024 17:20:39 +0800
+Date: Sun, 20 Oct 2024 17:20:40 +0800
 From: kernel test robot <lkp@intel.com>
 To: jeffxu@chromium.org, akpm@linux-foundation.org, keescook@chromium.org,
 	torvalds@linux-foundation.org, usama.anjum@collabora.com,
 	corbet@lwn.net, Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com
-Cc: oe-kbuild-all@lists.linux.dev, jeffxu@google.com, jorgelo@chromium.org,
-	groeck@chromium.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	jannh@google.com, sroettger@google.com, pedro.falcato@gmail.com,
-	linux-hardening@vger.kernel.org, willy@infradead.org,
-	gregkh@linuxfoundation.org, deraadt@openbsd.org, surenb@google.com,
-	merimus@google.com, rdunlap@infradead.org,
-	Jeff Xu <jeffxu@chromium.org>, stable@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jeffxu@google.com,
+	jorgelo@chromium.org, groeck@chromium.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, jannh@google.com, sroettger@google.com,
+	pedro.falcato@gmail.com, linux-hardening@vger.kernel.org,
+	willy@infradead.org, gregkh@linuxfoundation.org,
+	deraadt@openbsd.org, surenb@google.com, merimus@google.com,
+	rdunlap@infradead.org, Jeff Xu <jeffxu@chromium.org>,
+	stable@vger.kernel.org
 Subject: Re: [PATCH v1 1/2] mseal: Two fixes for madvise(MADV_DONTNEED) when
  sealed
-Message-ID: <202410201611.Xd6J8QCm-lkp@intel.com>
+Message-ID: <202410201724.kKCsANsw-lkp@intel.com>
 References: <20241017005105.3047458-2-jeffxu@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -104,26 +105,24 @@ url:    https://github.com/intel-lab-lkp/linux/commits/jeffxu-chromium-org/mseal
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
 patch link:    https://lore.kernel.org/r/20241017005105.3047458-2-jeffxu%40chromium.org
 patch subject: [PATCH v1 1/2] mseal: Two fixes for madvise(MADV_DONTNEED) when sealed
-config: i386-allnoconfig (https://download.01.org/0day-ci/archive/20241020/202410201611.Xd6J8QCm-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241020/202410201611.Xd6J8QCm-lkp@intel.com/reproduce)
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20241020/202410201724.kKCsANsw-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241020/202410201724.kKCsANsw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410201611.Xd6J8QCm-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410201724.kKCsANsw-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   mm/mprotect.c: In function 'do_mprotect_pkey':
->> mm/mprotect.c:825:37: error: 'VM_WASWRITE' undeclared (first use in this function); did you mean 'VM_MAYWRITE'?
+>> mm/mprotect.c:825:16: error: use of undeclared identifier 'VM_WASWRITE'
      825 |                         newflags |= VM_WASWRITE;
-         |                                     ^~~~~~~~~~~
-         |                                     VM_MAYWRITE
-   mm/mprotect.c:825:37: note: each undeclared identifier is reported only once for each function it appears in
+         |                                     ^
+   1 error generated.
 
 
-vim +825 mm/mprotect.c
+vim +/VM_WASWRITE +825 mm/mprotect.c
 
    705	
    706	/*
