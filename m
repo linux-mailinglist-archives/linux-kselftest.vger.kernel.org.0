@@ -1,101 +1,102 @@
-Return-Path: <linux-kselftest+bounces-20248-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20249-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A85619A6185
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 12:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id ADF329A618D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 12:08:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52AFA1F23CB5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 10:07:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59F681F20978
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 10:08:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 221D71E47A5;
-	Mon, 21 Oct 2024 10:06:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 074E91E47BD;
+	Mon, 21 Oct 2024 10:06:59 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F3441E0DD6
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Oct 2024 10:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from cmccmta2.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 696951974F4;
+	Mon, 21 Oct 2024 10:06:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729505195; cv=none; b=Dp1Yos2qemTiG1pcVw1kVQzVZkxiZcfoEQOXDYRvgdyMSMRozR0H0rHMdA2Udfr+S3h/0Z5lyGp/QBEf9jdp2zyEXjFdOujaIaC0jYeq24yXFvFM88YuYbaIZyMHtk5vaBfNa7z3IYQRL2jiVHrsXNByOR3J3PHMhDCyH4TQBNg=
+	t=1729505218; cv=none; b=js3WYm7LrX4HzNagtYCT+eTQGjbCzz2F2J3r2tKlDOC++tD0cTYB09MmfyQkw+nlw3vKsoww5m+d+4GlDBfFIR2rPVn+XDtPyh41eihdXGdbI0x/CXd3vpI6i9y3EuCWRZ0+7aOSJvN2LvmuNm7waQWdt4TifsHUbuaYQrY6xJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729505195; c=relaxed/simple;
-	bh=5yxIvM/q7hEra3NiLu1dppB10SS3WKaWw2cNVD3BDUI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sY0eJn8Jjh0fFkwu0SdXclJ+TcWw8rGx6hPgQbxLraaXQdgV43rcda07ZtvOEg7d6zaWy/Hliq3RjDbzeh7seg0JhL3qG25X+5hr4K6SWB0WYA5B7ohQcqDWZxVDq59VUs2lfw4XvloIV0ccOkCzufODM5J8HNfQgutMnTOBgjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72015DA7;
-	Mon, 21 Oct 2024 03:07:02 -0700 (PDT)
-Received: from [10.57.65.82] (unknown [10.57.65.82])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 72E003F73B;
-	Mon, 21 Oct 2024 03:06:28 -0700 (PDT)
-Message-ID: <627c1297-8151-43d1-b46b-a962301b18fa@arm.com>
-Date: Mon, 21 Oct 2024 12:06:25 +0200
+	s=arc-20240116; t=1729505218; c=relaxed/simple;
+	bh=jiNx/VbfXMWt8MLnrl4L90+qNhzCBpFOuZw48hxTOKs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dxLPcrC8n4K0e76vH/UBIcVh65Jstjh0+7UMxYGi+r4y5CFokv5Mz8UZ7l57JfIn3HZ4YG04yY7k2BUgrbN1RtGXOR8yY6LBU80IB5ouzHF/fXLgaoe2z5IyIyENQQK6ebeYiyXh/WN0pKkfxWVckYOt1o0OlyXS8iLl68zYfp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee5671627bb7b3-557c2;
+	Mon, 21 Oct 2024 18:06:51 +0800 (CST)
+X-RM-TRANSID:2ee5671627bb7b3-557c2
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from localhost.localdomain (unknown[223.108.79.103])
+	by rmsmtp-syy-appsvr04-12004 (RichMail) with SMTP id 2ee4671627bad7c-47302;
+	Mon, 21 Oct 2024 18:06:51 +0800 (CST)
+X-RM-TRANSID:2ee4671627bad7c-47302
+From: Liu Jing <liujing@cmss.chinamobile.com>
+To: borntraeger@linux.ibm.com
+Cc: frankja@linux.ibm.com,
+	imbrenda@linux.ibm.com,
+	david@redhat.com,
+	pbonzini@redhat.com,
+	shuah@kernel.org,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Liu Jing <liujing@cmss.chinamobile.com>
+Subject: [PATCH] selftests: kvm: Adds a judgment on the return value
+Date: Mon, 21 Oct 2024 18:06:44 +0800
+Message-Id: <20241021100644.3591-1-liujing@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/5] Improve arm64 pkeys handling in signal delivery
-To: Dave Martin <Dave.Martin@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
- anshuman.khandual@arm.com, aruna.ramakrishna@oracle.com, broonie@kernel.org,
- catalin.marinas@arm.com, dave.hansen@linux.intel.com, jeffxu@chromium.org,
- joey.gouly@arm.com, shuah@kernel.org, will@kernel.org,
- linux-kselftest@vger.kernel.org, x86@kernel.org, pierre.langlois@arm.com
-References: <20241017133909.3837547-1-kevin.brodsky@arm.com>
- <ZxEx5aXPX2mHngoB@e133380.arm.com>
-Content-Language: en-GB
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-In-Reply-To: <ZxEx5aXPX2mHngoB@e133380.arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 17/10/2024 17:48, Dave Martin wrote:
-> On Thu, Oct 17, 2024 at 02:39:04PM +0100, Kevin Brodsky wrote:
->> This series is a follow-up to Joey's Permission Overlay Extension (POE)
->> series [1] that recently landed on mainline. The goal is to improve the
->> way we handle the register that governs which pkeys/POIndex are
->> accessible (POR_EL0) during signal delivery. As things stand, we may
->> unexpectedly fail to write the signal frame on the stack because POR_EL0
->> is not reset before the uaccess operations. See patch 3 for more details
->> and the main changes this series brings.
->>
->> A similar series landed recently for x86/MPK [2]; the present series
->> aims at aligning arm64 with x86. Worth noting: once the signal frame is
->> written, POR_EL0 is still set to POR_EL0_INIT, granting access to pkey 0
->> only. This means that a program that sets up an alternate signal stack
->> with a non-zero pkey will need some assembly trampoline to set POR_EL0
->> before invoking the real signal handler, as discussed here [3].
-> This feels a bit bogus (though it's anyway orthogonal to this series).
+The global variable errno is not recommended to be assigned,
+    and rc in the function does not check its return value, so it is fixed
 
-I'm not very fond of this either. However I believe this is the correct
-first step: bring arm64 in line with x86. Removing all restrictions
-before uaccess and then setting POR_EL0 to POR_EL0_INIT enables
-userspace to use any pkey for the alternate signal stack without an ABI
-change, albeit not in a very comfortable way (if the pkey is not 0).
+Signed-off-by: Liu Jing <liujing@cmss.chinamobile.com>
+---
+ tools/testing/selftests/kvm/s390x/cmma_test.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-> Really, we want some way for userspace to tell the kernel what
-> permissions to use for the alternate signal stack and signal handlers
-> using it, and then honour that request consistently (just as we try to
-> do for the main stack today).
->
-> ss_flags is mostly unused... I wonder whether we could add something in
-> there?  Or add a sigaltstack2()?
+diff --git a/tools/testing/selftests/kvm/s390x/cmma_test.c b/tools/testing/selftests/kvm/s390x/cmma_test.c
+index e32dd59703a0..c59c21f28bbd 100644
+--- a/tools/testing/selftests/kvm/s390x/cmma_test.c
++++ b/tools/testing/selftests/kvm/s390x/cmma_test.c
+@@ -210,7 +210,7 @@ static int vm_get_cmma_bits(struct kvm_vm *vm, u64 flags, int *errno_out)
+ 	struct kvm_s390_cmma_log args;
+ 	int rc;
+ 
+-	errno = 0;
++	*errno_out = 0;
+ 
+ 	args = (struct kvm_s390_cmma_log){
+ 		.start_gfn = 0,
+@@ -219,8 +219,10 @@ static int vm_get_cmma_bits(struct kvm_vm *vm, u64 flags, int *errno_out)
+ 		.values = (__u64)&cmma_value_buf[0]
+ 	};
+ 	rc = __vm_ioctl(vm, KVM_S390_GET_CMMA_BITS, &args);
++	if (rc < 0) {
++		*errno_out = errno;
++	}
+ 
+-	*errno_out = errno;
+ 	return rc;
+ }
+ 
+-- 
+2.27.0
 
-Yes, this would be sensible as a second step (backwards-compatible
-extension). Exactly how that API would look like is not trivial though:
-is the pkey implicitly derived from the pointer provided to
-sigaltstack()? Is there a need to specify another pkey for code, or do
-we just assume that the signal handler is only using code with pkey 0?
-(Not a concern on x86 as MPK doesn't restrict execution.) Would be very
-interested to hear opinions on this.
 
-Kevin
+
 
