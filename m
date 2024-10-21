@@ -1,306 +1,176 @@
-Return-Path: <linux-kselftest+bounces-20273-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20274-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 060339A6D37
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 16:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C34AF9A6D74
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 16:59:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 157AD1C2299B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 14:54:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC6531C222A8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 14:59:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C60EC1F9ED0;
-	Mon, 21 Oct 2024 14:54:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB22B1FA265;
+	Mon, 21 Oct 2024 14:59:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="s7jRDk65";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="sQdL5ECs";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="s7jRDk65";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="sQdL5ECs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i0Ii4OXY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EEBC1D517D;
-	Mon, 21 Oct 2024 14:54:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964041F8936;
+	Mon, 21 Oct 2024 14:59:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729522451; cv=none; b=IdqpS3/B3UFRwA8L0I1mXK2k8PxfM9NLDns8KCSXZOn6xwRKDj0hTI+uxe8Q81YJdq8yGu5uKiCOIbZFP9xxRGzzkOGJmFu12GUGdnb0VFjXbN8GOE3vlYYB5V74J1dn690gyfPy8HPsLSZztMikRkwroswgUmaV4toewjE7arc=
+	t=1729522771; cv=none; b=CVGtYqmKzhvKarWAgJjDXsat0kNFFJl8gek/1fV8yEcR575HySReBBtoPwBfU7+InPe0lQJ++LkezcxjcfBaHzA5XgRL9AyfBe8u7Sd6jL1OtE6wAfTn8lL59QkNi03uYpFsAU1Ak+shKEjuALveTZUyxQ2LD091h+XDaO+Wjs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729522451; c=relaxed/simple;
-	bh=oqRZDTTe4MF/DbAWYno+v6i6nbbzjqccUT1JUdfFYSc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jwUzTFUB+WMVZ6usYtCuLRjpPiRozAqoYgGhNbkrMNJA9IJImINfy/3G/RLwHnBWd0r9H4klrdvtXSKAYwNVw64V5TkbsFahASQeg0P1voaWyJRrpy007Y/lJEIG0V/uET5riH0ysKJcidtTzgBL1lF8WZOtOTrqNXcc7knbiJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=s7jRDk65; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=sQdL5ECs; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=s7jRDk65; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=sQdL5ECs; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 099A71F7E9;
-	Mon, 21 Oct 2024 14:54:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1729522447; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=nRI3sbkmnwOK+Lkb9FefXrZ7ZGht1xUlXQS9Se85dJs=;
-	b=s7jRDk65dXPM9sqi5FebmAmjOq990Otj25sm+mTxtyacbJmiJCEXID7gzUvpYzrkLOCSlW
-	38IrqTGFOR5zzzBbPv0QeBohVAmVJWJ5Qmy5tceuYbG+JDnGVwHUWv/PZ+YG7gBSvmI4dd
-	i0CXYQnDjq6LwCymkh4sBMop5v4ZN2U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1729522447;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=nRI3sbkmnwOK+Lkb9FefXrZ7ZGht1xUlXQS9Se85dJs=;
-	b=sQdL5ECsXTNp2qeCI6E997OfEUobMwAFczHwOsmd8cHt8PaDNU6lmWdd9itCT+EPWaswCA
-	By1E737FIhl5z4BA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=s7jRDk65;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=sQdL5ECs
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1729522447; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=nRI3sbkmnwOK+Lkb9FefXrZ7ZGht1xUlXQS9Se85dJs=;
-	b=s7jRDk65dXPM9sqi5FebmAmjOq990Otj25sm+mTxtyacbJmiJCEXID7gzUvpYzrkLOCSlW
-	38IrqTGFOR5zzzBbPv0QeBohVAmVJWJ5Qmy5tceuYbG+JDnGVwHUWv/PZ+YG7gBSvmI4dd
-	i0CXYQnDjq6LwCymkh4sBMop5v4ZN2U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1729522447;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=nRI3sbkmnwOK+Lkb9FefXrZ7ZGht1xUlXQS9Se85dJs=;
-	b=sQdL5ECsXTNp2qeCI6E997OfEUobMwAFczHwOsmd8cHt8PaDNU6lmWdd9itCT+EPWaswCA
-	By1E737FIhl5z4BA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BBC18136DC;
-	Mon, 21 Oct 2024 14:54:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id K03gLA5rFmfDXgAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Mon, 21 Oct 2024 14:54:06 +0000
-Message-ID: <caf95a99-e975-4f3d-a94b-298a5fc88b5a@suse.cz>
-Date: Mon, 21 Oct 2024 16:54:06 +0200
+	s=arc-20240116; t=1729522771; c=relaxed/simple;
+	bh=albO36l24SFKiOm+yXAcpi7rfrjp7joQOfomUwb920c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LQuo/hpgii05BMOKQ5dp/KaXJIpW0aiSIDerlsEnucRVSGbbiXQsSrRTbIb0soXI38nqHSKK9wlj+wao94nGS1vDtmtxHP7HKTxeAgaDCbKFm7mnbwqe7eOhvGaXrFU8kNgAMZVKrqw1LfPPclefrvC01pExdG28mTu1PRRqUCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i0Ii4OXY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C477C4CEC3;
+	Mon, 21 Oct 2024 14:59:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729522771;
+	bh=albO36l24SFKiOm+yXAcpi7rfrjp7joQOfomUwb920c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=i0Ii4OXYK3I8yRGtboVVVGKd4BxaOPScyZm4KX4qupSOZnr+P2JZB8hZNEDc4nNI7
+	 o5nH/bTrY0jxuNWE/J3FFUlQNEK90VBzMbmBTQRIbfv/QdqNZtVaVzMbCpmw6EOUep
+	 kDGDUBSzKPgy3qFwVoqEUXWhqQowew3les07r5VJZ2t3gpBxtnZ4ZmCcMUxVS+3061
+	 Qplyp9jHTIzNkdeLGJcRMP50OhEW09UBMelDCid0Xe7DpPu7x7ordT5W0xd5LXcBcD
+	 PPdmLNgPN/peOctn3WZJeaUC889Sy7qu/V9zHL0bW+rYtw4LMT0vP30yjKbsB4Rp/S
+	 V67SXlF4POitA==
+Date: Mon, 21 Oct 2024 15:59:25 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Jeff Xu <jeffxu@chromium.org>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	akpm@linux-foundation.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-hardening@vger.kernel.org,
+	linux-kernel@vger.kernel.org, pedro.falcato@gmail.com,
+	willy@infradead.org, vbabka@suse.cz, Liam.Howlett@oracle.com,
+	rientjes@google.com, keescook@chromium.org
+Subject: Re: [PATCH v3 4/5] selftests/mseal: add more tests for mmap
+Message-ID: <a7b8f7a4-4202-489e-badf-6ef50463745e@sirena.org.uk>
+References: <f9b9422c-216d-422e-94b4-d8814b0b277e@lucifer.local>
+ <CABi2SkWAv4LXvR1Wb1e31eyZ35JfyieXhDOq1bp_ZvHPLLg-qA@mail.gmail.com>
+ <e0f440b0-5a45-4218-8c51-27f848c0617b@lucifer.local>
+ <CABi2SkWNRTCC0LzDSuzgjC1tO=KF==5FXUnPHOrPzEG5abAeDg@mail.gmail.com>
+ <1f8eff74-005b-4fa9-9446-47f4cdbf3e8d@sirena.org.uk>
+ <CABi2SkV38U-ZCAq9W091zYkOM1m5e-C27YmVXdTCi-t+p_W_fQ@mail.gmail.com>
+ <a2652ed4-ea8b-4b56-bac6-6479b3df6c14@sirena.org.uk>
+ <CABi2SkVF3OtRcq9cCgLh_hOjxRnWq0owypw++xodrEfm=dt_qA@mail.gmail.com>
+ <6aefd38b-d758-4e7c-a910-254251c2a294@sirena.org.uk>
+ <CABi2SkUG8bhKQeHd_pvLw4y3ZY+Z8CvxZ_iV4YhTc+JQqe9TxA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/5] mm: add PTE_MARKER_GUARD PTE marker
-Content-Language: en-US
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Suren Baghdasaryan <surenb@google.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Matthew Wilcox <willy@infradead.org>, "Paul E . McKenney"
- <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
- David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, Muchun Song <muchun.song@linux.dev>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
- Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- linux-kselftest@vger.kernel.org, Sidhartha Kumar
- <sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>,
- Christoph Hellwig <hch@infradead.org>, linux-api@vger.kernel.org,
- John Hubbard <jhubbard@nvidia.com>
-References: <cover.1729440856.git.lorenzo.stoakes@oracle.com>
- <081837b697a98c7fa5832542b20f603d49e0b557.1729440856.git.lorenzo.stoakes@oracle.com>
- <470886d2-9f6f-4486-a935-daea4c5bea09@suse.cz>
- <434a440a-d6a4-4144-b4fb-8e0d8535f03f@lucifer.local>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- EP+ylKVEKb0Q2A==
-In-Reply-To: <434a440a-d6a4-4144-b4fb-8e0d8535f03f@lucifer.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 099A71F7E9
-X-Spam-Score: -4.51
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	ARC_NA(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.de];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[32];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[linux-foundation.org,google.com,oracle.com,infradead.org,kernel.org,redhat.com,kvack.org,vger.kernel.org,linux.dev,linaro.org,jurassic.park.msu.ru,gmail.com,alpha.franken.de,hansenpartnership.com,gmx.de,zankel.net,arndb.de,chromium.org,nvidia.com];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	R_RATELIMIT(0.00)[to_ip_from(RLz1534diqmneu69wx1fp4cing)];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2vh7jJ4clxa55i2K"
+Content-Disposition: inline
+In-Reply-To: <CABi2SkUG8bhKQeHd_pvLw4y3ZY+Z8CvxZ_iV4YhTc+JQqe9TxA@mail.gmail.com>
+X-Cookie: Most people prefer certainty to truth.
 
-On 10/21/24 16:33, Lorenzo Stoakes wrote:
-> On Mon, Oct 21, 2024 at 04:13:34PM +0200, Vlastimil Babka wrote:
->> On 10/20/24 18:20, Lorenzo Stoakes wrote:
->> > Add a new PTE marker that results in any access causing the accessing
->> > process to segfault.
->> >
->> > This is preferable to PTE_MARKER_POISONED, which results in the same
->> > handling as hardware poisoned memory, and is thus undesirable for cases
->> > where we simply wish to 'soft' poison a range.
->> >
->> > This is in preparation for implementing the ability to specify guard pages
->> > at the page table level, i.e. ranges that, when accessed, should cause
->> > process termination.
->> >
->> > Additionally, rename zap_drop_file_uffd_wp() to zap_drop_markers() - the
->> > function checks the ZAP_FLAG_DROP_MARKER flag so naming it for this single
->> > purpose was simply incorrect.
->> >
->> > We then reuse the same logic to determine whether a zap should clear a
->> > guard entry - this should only be performed on teardown and never on
->> > MADV_DONTNEED or the like.
->>
->> Since I would have personally put MADV_FREE among "or the like" here, it's
->> surprising to me that it in fact it's tearing down the guard entries now. Is
->> that intentional? It should be at least mentioned very explicitly. But I'd
->> really argue against it, as MADV_FREE is to me a weaker form of
->> MADV_DONTNEED - the existing pages are not zapped immediately but
->> prioritized for reclaim. If MADV_DONTNEED leaves guard PTEs in place, why
->> shouldn't MADV_FREE too?
-> 
-> That is not, as I understand it, what MADV_FREE is, semantically. From the
-> man pages:
-> 
->        MADV_FREE (since Linux 4.5)
-> 
->               The application no longer requires the pages in the range
->               specified by addr and len.  The kernel can thus free these
->               pages, but the freeing could be delayed until memory pressure
->               occurs.
-> 
->        MADV_DONTNEED
-> 
->               Do not expect access in the near future.  (For the time
->               being, the application is finished with the given range, so
->               the kernel can free resources associated with it.)
-> 
-> MADV_FREE is 'we are completely done with this range'. MADV_DONTNEED is 'we
-> don't expect to use it in the near future'.
 
-I think the description gives a wrong impression. What I think matters it
-what happens (limited to anon private case as MADV_FREE doesn't support any
-other)
+--2vh7jJ4clxa55i2K
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-MADV_DONTNEED - pages discarded immediately, further access gives new
-zero-filled pages
+On Fri, Oct 18, 2024 at 05:10:01PM -0700, Jeff Xu wrote:
+> On Fri, Oct 18, 2024 at 2:05=E2=80=AFPM Mark Brown <broonie@kernel.org> w=
+rote:
 
-MADV_FREE - pages prioritized for discarding, if that happens before next
-write, it gets zero-filled page on next access, but a write done soon enough
- can cancel the upcoming discard.
+> > That's not the entire issue - it is also a problem that the test name
+> > is not the same between passes and failures so automated systems can't
+> > associate the failures with the passes.
 
-In that sense, MADV_FREE is a weaker form of DONTNEED, no?
+> I failed to understand this part.
+> Maybe you meant the failing logging  is not the same across the
+> multiple versions of test code, by testname you meant "failing
+> logging"
 
->>
->> Seems to me rather currently an artifact of MADV_FREE implementation - if it
->> encounters hwpoison entries it will tear them down because why not, we have
->> detected a hw memory error and are lucky the program wants to discard the
->> pages and not access them, so best use the opportunity and get rid of the
->> PTE entries immediately (if MADV_DONTNEED doesn't do that too, it certainly
->> could).
-> 
-> Right, but we explicitly do not tear them down in the case of MADV_DONTNEED
-> which matches the description in the manpages that the user _might_ come
-> back to the range, whereas MADV_FREE means they are truly done but just
-> don't want the overhead of actually unmapping at this point.
+Tests are identified by the string given in the line reporting their
+result, that's not *really* a log message but rather a test name.  The
+strings for a given test need to be the same between different runs of
+the test program for tooling to be able to see that it's the same test.
 
-But it's also defined what happens if user comes back to the range after a
-MADV_FREE. I think the overhead saved happens in the case of actually coming
-back soon enough to prevent the discard. With MADV_DONTNEED its immediate
-and unconditional.
+> >When a test starts failing they
+> > will see the passing test disappear and a new test appears that has nev=
+er
+> > worked.
+>  > This will mean that for example if they have bisection support
+> > or UI for showing when a test started regressing those won't work.  The
+> > test name needs to be stable, diagnostics identifying why or where it
+> > failed should be separate prints.
 
-> Seems to be this is moreso that MADV_FREE is a not-really-as-efficient
-> version of what Rik wants to do with his MADV_LAZYFREE thing.
+> If the test hasn't been changed for a while,  and start failing. Then
 
-I think that further optimizes MADV_FREE, which is already more optimized
-than MADV_DONTNEED.
+Well, you'd hope that the tests never start failing but yet we still
+have tests and keep running them. =20
 
->>
->> But to extend this to guard PTEs which are result of an explicit userspace
->> action feels wrong, unless the semantics is the same for MADV_DONTEED. The
->> semantics chosen for MADV_DONTNEED makes sense, so MADV_FREE should behave
->> the same?
-> 
-> My understanding from the above is that MADV_FREE is a softer version of
-> munmap(), i.e. 'totally done with this range', whereas MADV_DONTNEED is a
-> 'revert state to when I first mapped this stuff because I'm done with it
-> for now but might use it later'.
+> it is quite easy to run the same test on recent code changes. I think
+> you might agree with me on this. The only thing that bisec needs to
+> check is if the entire tests are failing or not.
 
-From the implementation I get the opposite understanding. Neither tears down
-the vma like a proper unmap(). MADV_DONTNEED zaps page tables immediately,
-MADV_FREE effectively too but with a delay depending on memory pressure.
+Unfortunately we're not in a position where people can reliably assume
+that every test program will always work everywhere so people work on
+individual tests, and it's certainly useful for UIs to be able to give
+an overview of what specifically failed.  A bunch of that is tests that
+just don't implement feature detection/skipping properly.
 
+> I haven't used the biset functionality, so I'm not sure how it works
+> exactly, e.g. when it runs on the old version of kernel, does it use
+> the test binary from the old kernel ? or the test binary provided by
+> dev ?
+
+That's up to whoever is doing the testing, but I think most people run
+the selftests from the version of the code they're testing.  Some of the
+subsystems aren't very enthusiastic about supporting running on older
+kernels.
+
+> > > how do I pass the "seal" flag to it ?
+> > > e.g. how do I run the same test twice, first seal =3D true, and secon=
+d seal=3Dfalse.
+> >
+> > >         test_seal_mmap_shrink(false);
+> > >         test_seal_mmap_shrink(true);
+
+> > That looks like fixture variants to me, using those with
+> > kselftest_harness.h will also fix the problem with duplicate test names
+> > being used since it generates different names for each instance of the
+> > test.  Something like:
+
+> Thanks! This is really helpful, I think the existing mseal_test can be
+> quickly converted using this example.
+
+Great!
+
+> (A side note: if selftest documentation is updated to include this
+> example, it will be much easier to future dev to follow)
+
+Possibly send a patch adding that wherever you were looking?  That was
+just a quick hack down of the gcs-locking program verifying that it had
+what I thought you needed.
+
+--2vh7jJ4clxa55i2K
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcWbEwACgkQJNaLcl1U
+h9D7kgf/Q8O65O7KSc2ZO90h5zDrTW5/re+yyLl6rrA33pKJ3+HBeThhcoovMeVD
+UGIP6+ppSvCsERN01Havz3+k+ekJefqaaZFRnRn7PKoD4SyxguuojkO6hJMASnsK
+QUSlPb7+jf+VjQA09AZO7Rt65pr3drmlPjZk7eVXh4Gi0y+oPsV/TZ3CZA74Tnc1
+3mGmetqcL4LsStRWPrO25RoJqkZrayX9P/WnjF5duR7r82pIIt7e5FdwyZIsWeia
+q3Reo7UQrCYnPWrZqJg64W1IKsVneN0FYMyUgtVBzlcQ2tR/Ncz5D/ySDxK6p+/r
+KZawNXyH8jQfs2HcpHmhVShtAw+/cQ==
+=ivod
+-----END PGP SIGNATURE-----
+
+--2vh7jJ4clxa55i2K--
 
