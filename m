@@ -1,297 +1,261 @@
-Return-Path: <linux-kselftest+bounces-20279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20280-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1737E9A6EEC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 18:00:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3022C9A6F6D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 18:29:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE23F283E11
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 16:00:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A9F7D1F23F3F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 16:29:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23FA61CF5E5;
-	Mon, 21 Oct 2024 16:00:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D7F41E0E0E;
+	Mon, 21 Oct 2024 16:29:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gZ9KjBam"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="RqStx5iP";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="YupffbQX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C361CF288
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Oct 2024 16:00:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729526429; cv=none; b=pa+oVcw3G3Ea0tIFpr+dXer5visjDDOmn7ZLuPS+3Zsv61PZFPwN3zunJ185rHJiQsV6HbhNyG3Ma6q2y2oS2XotDD4evZNUHB9C+3agNgWf6ap1JdBDjkzOlS1hhnQu8a6unbyS7LXZ0OWoS1Dp5hmPC4wY2wZmm5qmv02hE0c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729526429; c=relaxed/simple;
-	bh=U8P/OFCCPZoyYnSkjN2vuTZuaoFFmM2gAUQ3I1AfQYg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AWF8D+y8E/S0m244eD/cn/UmwqKnad0lCQ+sfSBB7mH+9xSqbp2xF7V7p9I5FKnLx/u7U30+m/Hj+jVN8w8eznSffQm/80FRnb6NLFp5AobLyTH4Ukf13qhjOac+p6cbsQJ41jAJ1K0ZVTobnmuzcLoiwM6FNI4ro4wDUDh+qnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gZ9KjBam; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729526425;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=5VsY7FPrNp4m1XJEjZKgoy8LpJYgb+68r1Vy+j6mDVY=;
-	b=gZ9KjBam4co8kGPQSp4V8pSHZokkdWx5m49dhM389mhKJmet++ESIvNeQ3YUIXXe22ysSp
-	W/LrZXoRn2KBqrFeLPYFS1nZHYEfx5mxAJoVXZq3rrI4Ty9BHhDAcZvYVAY/lsMAC5VG2y
-	UNBsKOVxPSDJbZHT4ZNhV093FyGUaNY=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-608-hnZ9GWAEMle2TZ2bi5D2eA-1; Mon, 21 Oct 2024 12:00:24 -0400
-X-MC-Unique: hnZ9GWAEMle2TZ2bi5D2eA-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4316300bb15so24842095e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Oct 2024 09:00:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729526423; x=1730131223;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=5VsY7FPrNp4m1XJEjZKgoy8LpJYgb+68r1Vy+j6mDVY=;
-        b=CnGXk7SBjaBzwG43tIl0aNr59/yE1vNmpZ+oEpOJzFceGsmpLA/ABn2vC4F4vfullO
-         1nad5aPRYn/qP/kZM3IJRpqzDiwVG95AorInoSyc8qSWUtdxQFEAeO19sRLQT5aqwlIE
-         1Y2arMhYdB4bcjwzLRlVZQpleQeQSQqYwjnottZ4pRYHLtIwpUcSxaiW7T+H7tKpnVXt
-         UcyziWQ77Lam/M8uINxKqZ/K8XScDH2bDjj6qijAcVR36wiLqKmyy8+JjL7do6njGvX1
-         IQrCQfzUFfY8vefJ6tnReZKg76D5OhFZJMAtTRYxwISRIJUpWmt/yU5qQFd9O81QteEn
-         9Qzg==
-X-Forwarded-Encrypted: i=1; AJvYcCVCouF0F2c+DhwFprt8o8leVme7pYzprVj6/b9LT9zFa8pDt9LyR7IW4OWgfCNJQeCAAUTV64RgF1HyB97q9Ik=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4oQmdm3p5l/Mi8ZEULXJzHMImbYEsG9i4dXJ+GmZ1TGjzCdDE
-	VTcpEB4d6S603PRJ/MO/BzJVEpLDEuzzmASC6SexTtceA1G+hBHJ/kLfJSokcl3NAKZ66dgPXt2
-	KjOcURHkOy5ojL+ZmtGtmSnL4Qzg5NxlCWDUXcMyY0XW2nvJiNSpbf1aRDsZ5zN2cqw==
-X-Received: by 2002:a5d:4d92:0:b0:37d:4527:ba1c with SMTP id ffacd0b85a97d-37eb48a0950mr8454099f8f.49.1729526423158;
-        Mon, 21 Oct 2024 09:00:23 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFqzeoFoaFHGhJoRGq8gloEj+8bzb49r8wGRuqyWhN1x9H9EeLTdyAQ/MXpihhxtbbMiv9R/Q==
-X-Received: by 2002:a5d:4d92:0:b0:37d:4527:ba1c with SMTP id ffacd0b85a97d-37eb48a0950mr8454067f8f.49.1729526422732;
-        Mon, 21 Oct 2024 09:00:22 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c728:1600:e899:f836:758b:6fef? (p200300cbc7281600e899f836758b6fef.dip0.t-ipconnect.de. [2003:cb:c728:1600:e899:f836:758b:6fef])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a37b7dsm4645112f8f.24.2024.10.21.09.00.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Oct 2024 09:00:22 -0700 (PDT)
-Message-ID: <cb0e49be-7b4e-4760-884c-8f4bf74ec1e1@redhat.com>
-Date: Mon, 21 Oct 2024 18:00:20 +0200
-Precedence: bulk
-X-Mailing-List: linux-kselftest@vger.kernel.org
-List-Id: <linux-kselftest.vger.kernel.org>
-List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1291C330C;
+	Mon, 21 Oct 2024 16:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729528191; cv=fail; b=rk55sfmCNZtMgjBQwaPVyumH8xsDp8YZvI5M1yIBZsl/j2xyzFGZ6pHyQkaVciONrSwXJ6RT7lwUMG7k/1h8ve/IGGpddMY+F0tpxImvdz3F6+9O3nDnC+M2f3IZhD9P+THMCBQ8tDdQN/JtxIDMOWJyZ2aZKuG2TfTnd9VVfzg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729528191; c=relaxed/simple;
+	bh=eDu7w4k/jB1Ftp4uJ5gA8P+8NZHg2D5rWlgHrSSrOX0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=KQWQurHwANk0NaSXxfoV/CYa6laMT+qcJs5UaDDeQnaRrYhfMXQkT7ap8ItRZMytLcCW8OFYE8mGixRyu2bZna/a9jgrAyV3lc0AWWslc8HuHQ6EwCdvdStixwYdrM7/xim8Tzl4umwJ38PYeMe5yC3hzqzksUP6w1ut1Kl7h/I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=RqStx5iP; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=YupffbQX; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49LFtgoK017510;
+	Mon, 21 Oct 2024 16:23:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=eQypnQwDNfpl4Qoriu
+	WHQD64a27qnVDh397s1tMdyRU=; b=RqStx5iPgutJTZFyQiNedr1lueBLgeYxB9
+	NJcbRpG/pbV+cSnyuuX28CcDR9EtGk+yEGPTAMJC5C5IxtmYnOewJbcxXGIHCVMU
+	YMz1c/x/Tnt8PVRymnBSmJ3JujmXjHWQOu632hxtqRUvoFAMcA5GeujU5DuBC1LX
+	dGHlZZNaIL3ku5KHFXgp8K0zcux9VtVJNXnwA62PjGsZ8PTBCFl7Io1hK/9XwBJV
+	i0nfuGPnpoMV/EmTCfXUU8uFOLrhFU0HvTf0ZY4wLq2nBK9mFvLuXYtCpo+umWyc
+	GnOus8NEMMngr20d3yFnJ95XkymTZXHS6xPjouObZm7WZqUHslAQ==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42c55ebhfv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 21 Oct 2024 16:23:18 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49LG81Ca007729;
+	Mon, 21 Oct 2024 16:23:17 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42c376jgxa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 21 Oct 2024 16:23:17 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=S1FO8K9tLCYHlqS4zxHIFk/V2FKmRsCuRgIDfRIfGAVLfMhEjtxcLVhn5T6EOsN+8A6PaSsHDVUkXa4dX6TAZKQ1GC+vDVHJkNloi7DSJeDbsylAo1yWVj0oQaGHb8pLv1PQqESyPooGRJeuqzM0HI6DSRsmXCKJSsCtCcSeigRxrIah3TqBZAvyXT+zsMY0j3dz4ijQFwCchW8sM/QHnHNMXBCrRTt/U7hS/ZyGjRGIGToga96UuT9wz+FaOgb7EsJ4gz41L02TXeUP4B6chWXRvBtPxk1SiarSvmaKfdghyxllWRYeaq+0z+jQtYueXmA+0jVSprA5PniEIfkGgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eQypnQwDNfpl4QoriuWHQD64a27qnVDh397s1tMdyRU=;
+ b=svamwtxWHqnEDM9o73RxTxr3V8bvjge2ptWLE6H+nW7uZN9jC51n175LkiKdlAe7xcXz8aA9EQi2/KroiQ6r9WVXjNkRy/CYvX5qgIwh/LOLnJOI5hWPCqyICG5fpoQU9ucXcVSxEOoUzI2I1a97LVOVLvN9VM9IZ0cRzxGRfBrFNDMMsNIl026hrvVb2sG6USpOo/1t3Uwdyaq38Elz3uB7/6Tr1JjZBdkE2zgTpyyi29zj3psPSLQE45rO6Y9snG5IA6pAlzpI857iNtLvbtWBFHZS6QZWPYxNDGjhcM6QtAGYyXkXcuc2EoHrITC4SInol/uD349n2u7UVGhv4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eQypnQwDNfpl4QoriuWHQD64a27qnVDh397s1tMdyRU=;
+ b=YupffbQXlldwk7Isurbbc3H18QiUC/s4l6q4S3J+kIZrZ0XKmYt7QFalRYBODGjHCetbJskzUFBKIdOO/fAmjen1Kbzg9wE64SIB8JES+O+RcJHizlGPIwpfWq6CebOCONv6GNLd7F/u+IVXrNJCwsWmXiRZpw5fcd98aTz05ro=
+Received: from BYAPR10MB3366.namprd10.prod.outlook.com (2603:10b6:a03:14f::25)
+ by PH8PR10MB6315.namprd10.prod.outlook.com (2603:10b6:510:1ce::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.28; Mon, 21 Oct
+ 2024 16:23:13 +0000
+Received: from BYAPR10MB3366.namprd10.prod.outlook.com
+ ([fe80::baf2:dff1:d471:1c9]) by BYAPR10MB3366.namprd10.prod.outlook.com
+ ([fe80::baf2:dff1:d471:1c9%6]) with mapi id 15.20.8069.024; Mon, 21 Oct 2024
+ 16:23:13 +0000
+Date: Mon, 21 Oct 2024 17:23:08 +0100
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Muchun Song <muchun.song@linux.dev>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Jeff Xu <jeffxu@chromium.org>, Christoph Hellwig <hch@infradead.org>,
+        linux-api@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>
 Subject: Re: [PATCH v2 2/5] mm: add PTE_MARKER_GUARD PTE marker
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Suren Baghdasaryan <surenb@google.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Matthew Wilcox <willy@infradead.org>, "Paul E . McKenney"
- <paulmck@kernel.org>, Jann Horn <jannh@google.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, Muchun Song <muchun.song@linux.dev>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
- Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- linux-kselftest@vger.kernel.org, Sidhartha Kumar
- <sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>,
- Christoph Hellwig <hch@infradead.org>, linux-api@vger.kernel.org,
- John Hubbard <jhubbard@nvidia.com>
+Message-ID: <ea771edf-0e38-440f-b264-3cbe285a628b@lucifer.local>
 References: <cover.1729440856.git.lorenzo.stoakes@oracle.com>
  <081837b697a98c7fa5832542b20f603d49e0b557.1729440856.git.lorenzo.stoakes@oracle.com>
  <470886d2-9f6f-4486-a935-daea4c5bea09@suse.cz>
  <434a440a-d6a4-4144-b4fb-8e0d8535f03f@lucifer.local>
  <caf95a99-e975-4f3d-a94b-298a5fc88b5a@suse.cz>
  <4f4e41f1-531c-4686-b44d-dacdf034c241@lucifer.local>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <4f4e41f1-531c-4686-b44d-dacdf034c241@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <cb0e49be-7b4e-4760-884c-8f4bf74ec1e1@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cb0e49be-7b4e-4760-884c-8f4bf74ec1e1@redhat.com>
+X-ClientProxiedBy: LO3P123CA0032.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:388::8) To BYAPR10MB3366.namprd10.prod.outlook.com
+ (2603:10b6:a03:14f::25)
+Precedence: bulk
+X-Mailing-List: linux-kselftest@vger.kernel.org
+List-Id: <linux-kselftest.vger.kernel.org>
+List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR10MB3366:EE_|PH8PR10MB6315:EE_
+X-MS-Office365-Filtering-Correlation-Id: 33adc5f1-683a-4a25-e7f4-08dcf1eca8ef
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?M1G0yyYRrBBTePkDCmA8XciMAHeIsnRSiqqVf8yHTNTuzea0FnMuXlW5Eri9?=
+ =?us-ascii?Q?7zZB6TJ8Z423mKaUcgnrDRHCtZbqKedBMiTUo+5umIvbG2FyygjoUMU/SmxO?=
+ =?us-ascii?Q?cE4YHj9fq9fB28rwWwE04hRb0C1HyVteDiKAJipXgyMFKyFuQfCQKFQQJnsD?=
+ =?us-ascii?Q?LnjK5cji0OybUdofNlpgzL3WYxyjrLPOHLSH1sqROqj/IBtxvHVca6aEOUB0?=
+ =?us-ascii?Q?8GMTjEzLHX0kTdTyHP0jNVdSGNoWK0DeWTi6uobjlIf6q2/huEAWgcQ9jKb+?=
+ =?us-ascii?Q?19kB6Pptwzqc6/dXtCIuD4KmOh+iVsEgVm7MKz3tBO3gcyOoja9eOvDwRYB1?=
+ =?us-ascii?Q?H+YVCyqzi0x+GQgTEm8H9M6RtrG0HDPYGNNwW61Bj9dAAWPo1SC3gyjOXM8t?=
+ =?us-ascii?Q?pBGEU0hTqS75AKZccge38Id3dfL+9KqloVEsOn0k2ffzP6UkWo8BizIE8xaw?=
+ =?us-ascii?Q?/P9ONMyMt9AeWcIgD2PhsXA80oqxnZpP+/vbvOzAeGrlsRzTGhmOgSC65kVm?=
+ =?us-ascii?Q?G0GiWywuUHbyg5BfMOVF00kvZaztUa+1x/CVlx4q/Bp8wRgkNQTJo3X9TeJ7?=
+ =?us-ascii?Q?3LdfD0cjFCrSy5VzRGBJynRlTPxA8aWTflmTY09ahz9je1FxfxN+n3NR77mP?=
+ =?us-ascii?Q?eCdlMt04l+Tc/9TSE95IQSOsghNuutsRIKVT8cmtIK1ehtk/rq/YvZdIk8dw?=
+ =?us-ascii?Q?KrXZ+Fv9sdz/CcbiTrrSCcoDJekqLVXf3O7WDqJzu6FbZY1NkRMvwxD7Ii4o?=
+ =?us-ascii?Q?hM3YnA3iTA4z4Ch7ozwVQjCtk1bk68V01keVYZaqNXq0+wvSokzLQSg9FWep?=
+ =?us-ascii?Q?JR9uV7vB4tCg/9lXxeL+bjYFfouoL04BEVtKG9ezOcZTG6Px4+rlJDHxqcyb?=
+ =?us-ascii?Q?7DcGU2fE7bX7AfVO9onCe+TgiOzgBPbnDgTODBMXKWKLGRTKcWY94o3RCq7U?=
+ =?us-ascii?Q?++TKKHK7zzv+Z+BbcgQ4+EbLc52v5VfYwZ38MLsuPWvY9aJSx8CWFsmtg6Vg?=
+ =?us-ascii?Q?OPmQa4OOKuKtNQyKk8dhaX7fez8j/4RAPVSs5an2oYWVwYUEu/UI3P19dBUu?=
+ =?us-ascii?Q?JhGiYKJQxLK+JVyQh8tIsEfl5oD8DZ9jp0tR1omFfVk0VAw+QRYUXQ/VG94D?=
+ =?us-ascii?Q?O+jis9GbMKpNkP3ZMX7nYftcLIQEFvFgWIjNe5Ck9GcBjrFx9aUSt3+PXRTt?=
+ =?us-ascii?Q?K46FSlJe4kapp0/tMPWJhD1+qKU/JDW/BLvTEljM0iHux04igmtPTAz9Xr06?=
+ =?us-ascii?Q?C7h0YkznuxaYf7sOlx2qtqeTJBn1C3N9uN+jkFj/0z5LGm0CqShMjrkeeVjE?=
+ =?us-ascii?Q?yKdPaE0vKvL1DP6mcv8fsPJp?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3366.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?7mYiz1sWFlWo7+tSGzH+MLOuX+TVzFp+ihI9K1NBgMIUbCmvspHzyz8uyCWz?=
+ =?us-ascii?Q?vf86Z4j1Uac/W6OUdw17PdCsqZaA/yp7YCdrQMjGExnn+8wA8ISzlaLOJxVH?=
+ =?us-ascii?Q?n7CrtbiEgoJNSehc2PZ+eckrVu9uI0ihs00MOiGoA5wmM4oustMlQfWyZmUr?=
+ =?us-ascii?Q?VE5aHsvTEQ1IlN+3206cMmwPrwFr4fcwRUWMOtaMtbg7WA3m+dknf5TBL6Lb?=
+ =?us-ascii?Q?XWnElRsyCWV7MpqbP/ZXfbZgTCkk1MVk4IXu3Psk+tK20Fw7sKh8dYcgaT7e?=
+ =?us-ascii?Q?lPtgIsZFb7zBdHdOBF2gC/3LYlXchDw+xXhgg1/5issGYTSc/rYqZjPqj65T?=
+ =?us-ascii?Q?cp4aLTizExrkmA6QN6+WoH0Xd6NI22twMwYbqGO9njloihx05VKtW5w7hpfa?=
+ =?us-ascii?Q?GNfG+Kj3zzwZ//+Oci8vsZ7Y6yU7cI5+k1YKH1PNm/MdS6KlPHfcx2lkPOfj?=
+ =?us-ascii?Q?ewG/ZSuZsmIliorierWfe4lhFNBRyX3G19uGRh0MzKsd8OhDKlMIa6XNcoOq?=
+ =?us-ascii?Q?qKQyqfP1YY7Fy8kNwMWrrNU8XSaET9rAA8AJ9gQPFCrfBBDi81s3jHQyW2GM?=
+ =?us-ascii?Q?zmGOH5yF4HqZAlZBawDgedr3Y6cCX1U/vNUY6/cjc9UT1DXSPAspOz7Nk+rY?=
+ =?us-ascii?Q?oBJDPtta5pP8I/FBU022+dNyQtN2gVCs19kDo26E0lwy7/b5G+zLGQr2xPvw?=
+ =?us-ascii?Q?2yLZuCzQuXO0nz0v07LebWp6Hvr5Uf8o5P41JSzyre4qq5Stml8Plmn7ywuT?=
+ =?us-ascii?Q?9iDD7pWWV5fUF7WDXQtR282gukx1j4OAL0uhawzGzU7/brTMev6lCKH0fm5/?=
+ =?us-ascii?Q?bDlx9U7gbu5PLCpriuKVcTQzjaX91uoMbG1UdeSh3d7lzWn5/nRdq3bQdDvT?=
+ =?us-ascii?Q?FzyYOYiD1UEchSz5eLGvU7K3SofmPkvuNGz0Tyur7GhfoskVGOQqPf0HHZcT?=
+ =?us-ascii?Q?M4Cnuwn4VsC7u8lv2LouhqHbEQTz1EehjpO4zv/e/Vf4I30xjtMWPN9Mqe0i?=
+ =?us-ascii?Q?+TcBU1yPgyyG/yGNBF6FrXl4PqIzfHfwKzjY/o1VkLBrvvjU8wUmZDDYymb+?=
+ =?us-ascii?Q?eZtWn8iDSsc6iBegGrTjglYibD2QwRHzn+yzcqChF81VDELDTmcAawoVsxa+?=
+ =?us-ascii?Q?Cr3BuuyexMWj3spqEGRSIjNg6XztILOJ6Utmb0KbV9BJYEJ292WiJwCeckli?=
+ =?us-ascii?Q?NGPHSzdmJFawNAcW94Zz/eiyNif/Xbwf6OB/2X1bHqrL+GPVLdI9HcrGHQOa?=
+ =?us-ascii?Q?xqj4iq6+u4XEM92qoh4jqWWFsoEO6WDaIT9kfLuLCURfpqkeVOMJ0U6fAaCV?=
+ =?us-ascii?Q?cw1GfouZVLR8oUstAlkh0Jm42gWL7zll6Lf4MvPU4fneRej99BjrG6WTA8gm?=
+ =?us-ascii?Q?Fbfv9K5on4pQ2hRBrRYWbcE623vVmpKOvSgUa4ZV5IPsLTL/y5q3bXmCnoWg?=
+ =?us-ascii?Q?56u6MqeihrN5iO5ZRrcKjY2CVBL6x134xi3sZ0aGCTY1z2ER6/i09rNONtii?=
+ =?us-ascii?Q?Z90W0H+1keOCOv9jb0NOY7BhDeL3hoXPNDBKJVR69hDAnaKWj3UN1yVsaazQ?=
+ =?us-ascii?Q?2yr6SPV3akT5MnqK6CXtEkMUwDoikah+PY3wHJrNEAC+Rcm8SlCUXQ2HGeku?=
+ =?us-ascii?Q?wQ=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	2wiPSV17liI9PZ+31RMAo0Fg95JlNbBaPn+cBRb44/FsQd7YYt5RuMXcNe3K3pBlUb1JCwSkCBUaGWqYYVaLnV9Ojh6GFnEK3RbGO7kc+K2m3EagBOQ79rZ50CKsEMHAYn6qPz/mKcZF1+gmlphAXg6vOs6y/uGOiyj4ytksDSkIt9glOJnbF0oO6wBnrfuHGLz7Rcx7IFyQ/yGNMqpIi1y9fVv8QTEMwyGj28AU6u2hpNzS9dSTHAg+T3sUfOlFurlrp+9OALwTj9oDrwXRiNl7L9dxILzhcHp3oGe2ONp1D96EbOz7iLQ09K8YeXIHJYhT090GAjn/2RMDLo9RRkJ6QpD9nICCm31F4eLhdxD8W784h4xlY+Fzf5XmttilDvD6cAk9C21EJr5GS5iMbDsh3Cn3bHJ4gL47ugt3PQZ6xOEZ8X4xHbcsBwmqnvvQ+LAtkpAqR8bgAssIsuj2hF2JS2c+RSFUz5dCPGPzK1GmNbwLF3x8qB8eI5CD0RXY9fuBEbCctMrh4WO0m6iDNno0+8CD8BEOJQCu6ziwK1f5LWRfHp3E9TCdfHu/guNS9flolTFoSpGZJx9/Kke1hOlHvYc5cSlIa31rt+ZT170=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 33adc5f1-683a-4a25-e7f4-08dcf1eca8ef
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3366.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2024 16:23:12.9871
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dgZac59hcPWzqDQg519One+Fp8B2Vp12O8j9pSXZUC0bW9ZXLs4TCMTkQ78egZb4bYOnLAqBU0EBOiWEMSF4JsbdFuz+DPQO6UxlapVP/Zo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR10MB6315
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-21_14,2024-10-21_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 bulkscore=0
+ malwarescore=0 spamscore=0 mlxlogscore=999 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
+ definitions=main-2410210117
+X-Proofpoint-ORIG-GUID: TdGl0xLKf78M1BBXPQ11_JSEXodFY_Fl
+X-Proofpoint-GUID: TdGl0xLKf78M1BBXPQ11_JSEXodFY_Fl
 
-On 21.10.24 17:33, Lorenzo Stoakes wrote:
-> On Mon, Oct 21, 2024 at 04:54:06PM +0200, Vlastimil Babka wrote:
->> On 10/21/24 16:33, Lorenzo Stoakes wrote:
->>> On Mon, Oct 21, 2024 at 04:13:34PM +0200, Vlastimil Babka wrote:
->>>> On 10/20/24 18:20, Lorenzo Stoakes wrote:
->>>>> Add a new PTE marker that results in any access causing the accessing
->>>>> process to segfault.
->>>>>
->>>>> This is preferable to PTE_MARKER_POISONED, which results in the same
->>>>> handling as hardware poisoned memory, and is thus undesirable for cases
->>>>> where we simply wish to 'soft' poison a range.
->>>>>
->>>>> This is in preparation for implementing the ability to specify guard pages
->>>>> at the page table level, i.e. ranges that, when accessed, should cause
->>>>> process termination.
->>>>>
->>>>> Additionally, rename zap_drop_file_uffd_wp() to zap_drop_markers() - the
->>>>> function checks the ZAP_FLAG_DROP_MARKER flag so naming it for this single
->>>>> purpose was simply incorrect.
->>>>>
->>>>> We then reuse the same logic to determine whether a zap should clear a
->>>>> guard entry - this should only be performed on teardown and never on
->>>>> MADV_DONTNEED or the like.
->>>>
->>>> Since I would have personally put MADV_FREE among "or the like" here, it's
->>>> surprising to me that it in fact it's tearing down the guard entries now. Is
->>>> that intentional? It should be at least mentioned very explicitly. But I'd
->>>> really argue against it, as MADV_FREE is to me a weaker form of
->>>> MADV_DONTNEED - the existing pages are not zapped immediately but
->>>> prioritized for reclaim. If MADV_DONTNEED leaves guard PTEs in place, why
->>>> shouldn't MADV_FREE too?
->>>
->>> That is not, as I understand it, what MADV_FREE is, semantically. From the
->>> man pages:
->>>
->>>         MADV_FREE (since Linux 4.5)
->>>
->>>                The application no longer requires the pages in the range
->>>                specified by addr and len.  The kernel can thus free these
->>>                pages, but the freeing could be delayed until memory pressure
->>>                occurs.
->>>
->>>         MADV_DONTNEED
->>>
->>>                Do not expect access in the near future.  (For the time
->>>                being, the application is finished with the given range, so
->>>                the kernel can free resources associated with it.)
->>>
->>> MADV_FREE is 'we are completely done with this range'. MADV_DONTNEED is 'we
->>> don't expect to use it in the near future'.
->>
->> I think the description gives a wrong impression. What I think matters it
->> what happens (limited to anon private case as MADV_FREE doesn't support any
->> other)
->>
->> MADV_DONTNEED - pages discarded immediately, further access gives new
->> zero-filled pages
->>
->> MADV_FREE - pages prioritized for discarding, if that happens before next
->> write, it gets zero-filled page on next access, but a write done soon enough
->>   can cancel the upcoming discard.
->>
->> In that sense, MADV_FREE is a weaker form of DONTNEED, no?
->>
->>>>
->>>> Seems to me rather currently an artifact of MADV_FREE implementation - if it
->>>> encounters hwpoison entries it will tear them down because why not, we have
->>>> detected a hw memory error and are lucky the program wants to discard the
->>>> pages and not access them, so best use the opportunity and get rid of the
->>>> PTE entries immediately (if MADV_DONTNEED doesn't do that too, it certainly
->>>> could).
->>>
->>> Right, but we explicitly do not tear them down in the case of MADV_DONTNEED
->>> which matches the description in the manpages that the user _might_ come
->>> back to the range, whereas MADV_FREE means they are truly done but just
->>> don't want the overhead of actually unmapping at this point.
->>
->> But it's also defined what happens if user comes back to the range after a
->> MADV_FREE. I think the overhead saved happens in the case of actually coming
->> back soon enough to prevent the discard. With MADV_DONTNEED its immediate
->> and unconditional.
->>
->>> Seems to be this is moreso that MADV_FREE is a not-really-as-efficient
->>> version of what Rik wants to do with his MADV_LAZYFREE thing.
->>
->> I think that further optimizes MADV_FREE, which is already more optimized
->> than MADV_DONTNEED.
->>
->>>>
->>>> But to extend this to guard PTEs which are result of an explicit userspace
->>>> action feels wrong, unless the semantics is the same for MADV_DONTEED. The
->>>> semantics chosen for MADV_DONTNEED makes sense, so MADV_FREE should behave
->>>> the same?
->>>
->>> My understanding from the above is that MADV_FREE is a softer version of
->>> munmap(), i.e. 'totally done with this range', whereas MADV_DONTNEED is a
->>> 'revert state to when I first mapped this stuff because I'm done with it
->>> for now but might use it later'.
->>
->>  From the implementation I get the opposite understanding. Neither tears down
->> the vma like a proper unmap(). MADV_DONTNEED zaps page tables immediately,
->> MADV_FREE effectively too but with a delay depending on memory pressure.
->>
-> 
-> OK so based on IRC chat I think the conclusion here is TL;DR yes we have to
-> change this, you're right :)
-> 
-> To summarise for on-list:
-> 
-> * MADV_FREE, while ostensibly being a 'lazy free' mechanism, has the
->    ability to be 'cancelled' if you write to the memory. Also, after the
->    freeing is complete, you can write to the memory to reuse it, the mapping
->    is still there.
-> 
-> * For hardware poison markers it makes sense to drop them as you're
->    effectively saying 'I am done with this range that is now unbacked and
->    expect to get an empty page should I use it now'. UFFD WP I am not sure
->    about but presumably also fine.
-> 
-> * However, guard pages are different - if you 'cancel' and you are left
->    with a block of memory allocated to you by a pthread or userland
->    allocator implementation, you don't want to then no longer be protected
->    from overrunning into other thread memory.
+On Mon, Oct 21, 2024 at 06:00:20PM +0200, David Hildenbrand wrote:
+[snip]
+> >
+> > To summarise for on-list:
+> >
+> > * MADV_FREE, while ostensibly being a 'lazy free' mechanism, has the
+> >    ability to be 'cancelled' if you write to the memory. Also, after the
+> >    freeing is complete, you can write to the memory to reuse it, the mapping
+> >    is still there.
+> >
+> > * For hardware poison markers it makes sense to drop them as you're
+> >    effectively saying 'I am done with this range that is now unbacked and
+> >    expect to get an empty page should I use it now'. UFFD WP I am not sure
+> >    about but presumably also fine.
+> >
+> > * However, guard pages are different - if you 'cancel' and you are left
+> >    with a block of memory allocated to you by a pthread or userland
+> >    allocator implementation, you don't want to then no longer be protected
+> >    from overrunning into other thread memory.
+>
+> Agreed. What happens on MADV_DONTNEED/MADV_FREE on guard pages? Ignored or
+> error? It sounds like a usage "error" to me (in contrast to munmap()).
 
-Agreed. What happens on MADV_DONTNEED/MADV_FREE on guard pages? Ignored 
-or error? It sounds like a usage "error" to me (in contrast to munmap()).
+It's ignored, no errror. On MADV_DONTNEED we already left the guard pages in
+place, from v3 we will do the same for MADV_FREE.
 
--- 
-Cheers,
+I'm not sure I'd say it's an error per se, as somebody might have a use case
+where they want to zap over a range but keep guard pages, perhaps an allocator
+or something?
 
-David / dhildenb
+Also the existing logic is that existing markers (HW poison, uffd-simulated HW
+poison, uffd wp marker) are retained and no error raised on MADV_DONTNEED, and
+no error on MADV_FREE either, so it'd be consistent with existing behaviour.
 
+Also semantically you are achieving what the calls expect you are freeing the
+ranges since the guard page regions are unbacked so are already freed... so yeah
+I don't think an error really makes sense here.
+
+We might also be limiting use cases by assuming they might _only_ be used for
+allocators and such.
+
+>
+> --
+> Cheers,
+>
+> David / dhildenb
+>
 
