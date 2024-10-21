@@ -1,189 +1,145 @@
-Return-Path: <linux-kselftest+bounces-20244-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20245-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13F5E9A602E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 11:35:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B214E9A6032
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 11:35:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3F8E2866B7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 09:35:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D25C31C21742
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 09:35:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C12921E3DDD;
-	Mon, 21 Oct 2024 09:34:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62A291E3773;
+	Mon, 21 Oct 2024 09:34:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CC1wTz1o"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lI3iwcA+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4FDF1E32B0
-	for <linux-kselftest@vger.kernel.org>; Mon, 21 Oct 2024 09:34:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5263E194C79;
+	Mon, 21 Oct 2024 09:34:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729503248; cv=none; b=BuQXEOd8Ks6/WhSBbz5rgTEc7QVPDn7jJC5q/ocN0FWWZyCH94QXFhHQQz6kdONZEexT2SsapKOla547hJQ9pG0ITOvfE/7KKC7MEwd0D9qogtNMO7Y01v84A34fVlVvh9zGXzzP5pODdsBR6lBp0LGi08Q8+EBF/lWtYmYtSa8=
+	t=1729503290; cv=none; b=dEtPHgeENv23bHC3TvElMrNPByxU2eUYhCbIS0Jv0xiIRGubefUkTckNB0QsDS10bJZPC7oAdStKIYeN8jght/rluRCZe0O451pbVh1Cv8s56y0mG+oErzV7GtJ+iPL/aJgcW7AIInL1oizhyoBj7BeAYHTcnXSZR4PXcNcQTTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729503248; c=relaxed/simple;
-	bh=WKXZCgs18X9S5ywX9Jm7kT5M22O5Qvm/MvLJ/K2dOVk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kuo+4R2TGSVoYSXlqUCjK53ICCh1CjCZtTGS6SWxKRok5EyBn5jrNJ3a6REJCZT65cxzNKTO1CtEmIbdYM1173SRmBpaNVwNARVw3pQIKGX0Joa6zfLZGbaKxI6/cFzzgo1O9JFZg3aP+J6ZjgntS5QYzdKjvc4tCtWgQ9MV4Hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CC1wTz1o; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729503245;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=N1qrMQuES5B03MGFeoy/Tls0FHqUcPfUE/C/kE01yJ0=;
-	b=CC1wTz1oWBryQnPEcLYR/+4PtrIcIS7AAJJoFA4SHctA546AYwI31Wm8KdJQbwALH5pXc/
-	8KWHBuvAAo4iWqrXSZHthq+L4GKO9uPanKRc6y/LY0N2Z4/SPfJXt8pSV5oekWe64bU8C8
-	a7OEzO3T87tmwTOQxqnUuULsuVRGfL4=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-658-Uea6MRRBN6yrw8vwoCkuUg-1; Mon, 21 Oct 2024 05:34:02 -0400
-X-MC-Unique: Uea6MRRBN6yrw8vwoCkuUg-1
-Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-539ead6c504so2434083e87.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Oct 2024 02:34:02 -0700 (PDT)
+	s=arc-20240116; t=1729503290; c=relaxed/simple;
+	bh=5WqFv76qM4ugyABO6dLP+kIwg9Lncdqs6yKVuy54srA=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UBQsB68ZZYzlHL/p7UDOLBs01M2/jKOzOzhU+mJxN57cihYJd2FS+kNz7BKcgZ7v6JU8W6ud5panPWi1Rh8pa4TybaHyq5Bk0i2OCwWLHPsOu3ylZvN9QGcY19n9a02vE6x2faYCGOTENA7lTebfh+cY9yUIvB82KCnyzJKJEVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lI3iwcA+; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a9a977d6cc7so75576266b.3;
+        Mon, 21 Oct 2024 02:34:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729503286; x=1730108086; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/FjAzIQJ4B6zcRlVKwNhNL1pS7sRl/wzKTSA8WVDbOM=;
+        b=lI3iwcA+ksAkaontZQamJYYG4MwTOoqQkqXgKAYiZw2nKgJJ0BM17T82lrYYDpjVUH
+         tZUl3tlV8J5N1mTCfhdmzWojg/2LEIIw9dMzQoaxZJcSY+qaJXsUjpWHZTL4vYVPe8xL
+         zyicAnZAqO9JS1M9VKd2+Atg23mvrnQr3x2748HpjTI+6a3NWPJrIln1JwXk6Q6NE19y
+         5P8M7gKclcj0bjnFYsFohrHGD6N4kshRjxSkwxP0eP2U/ntZgRINymHhMX/QS6yU3ICi
+         gh0VEYApZtBR3OmQl25B6/Y7vwn00YRpA+yP0F/EOkf2229dvhxm1Srd+20jExNO96RZ
+         7lWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729503241; x=1730108041;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1729503286; x=1730108086;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N1qrMQuES5B03MGFeoy/Tls0FHqUcPfUE/C/kE01yJ0=;
-        b=jYefQ3I5MzaqFep1i88spLBi3dgT6SKErOt9P6iygvyvyQggNzOvDoUd6h/Lq1+97+
-         he9/IyD9NBqTgzY7WRaALsrSF9Y99OqRLpYcEcWADXvn0rQtilxjge3boIj3zy/LOLdt
-         kieg3HSo8rcYXenS3LAZPJptGYfiOsv+GFCLfZRKFzAdwxXU7Qia76JmOdELqiqNopr3
-         x6p2v4wJQk56B5PIq+mAlhRxToByoADC1tiuTMFkXCfb/RB5Nir2cTHPRhAZB4cd68qo
-         tR6ecbDQGfkL2NBWtd9mFkk8Yb3SFXOPJWVICA73TeFgk1HMLfaGV99l3x9fq1ATYHzt
-         RDaA==
-X-Forwarded-Encrypted: i=1; AJvYcCUJplEHy1mxw54zWg0D7aS10WU+3qse3vur3JIYrEinYd/PsgqxhZR5HMSEGWkpkaf1mjCNG3g24sfgMDYKPH0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTAWuxFGNYLDmnRIDXKItN/DBEYGSqe/J9MDT/XBR9o9cpWtP8
-	mIfWG57pSmIpIbH773YMdbWiCBc3f3qoGWR1M9OUpfHI6yM3/7RH1ebGu+MDt/q7tB/YhJ0qD8u
-	YgU9w6RN60xVHv5d+v+VqmZVyKFjS5DcSPXHiFQxkEoXLUCQMBnZQShFjVRhoSaYcsQ==
-X-Received: by 2002:a05:6512:b19:b0:539:df2f:e115 with SMTP id 2adb3069b0e04-53a1521993cmr4562871e87.23.1729503241164;
-        Mon, 21 Oct 2024 02:34:01 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH9rOgj5iTkXbIp620Wgo630E2yBpSB1XyYMCGTDIjsvmCiEgeU3T276NXuPJl62rHEL7ftng==
-X-Received: by 2002:a05:6512:b19:b0:539:df2f:e115 with SMTP id 2adb3069b0e04-53a1521993cmr4562842e87.23.1729503240709;
-        Mon, 21 Oct 2024 02:34:00 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:36d3:2b96:a142:a05b? ([2a09:80c0:192:0:36d3:2b96:a142:a05b])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4316f570dd5sm51388215e9.3.2024.10.21.02.33.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Oct 2024 02:33:59 -0700 (PDT)
-Message-ID: <4a775fd6-cb07-46eb-aa15-026e61317c16@redhat.com>
-Date: Mon, 21 Oct 2024 11:33:57 +0200
+        bh=/FjAzIQJ4B6zcRlVKwNhNL1pS7sRl/wzKTSA8WVDbOM=;
+        b=MGuJewrfs8JWsFnHA3R/HJpBZpywVeTABIsaXhMLvQgY+ID53I7yeHVbVhcC/dbfKA
+         GcxkySYZIn85PhKB5wJ3fXYef6X+KfV/HKuElLwM6UhucMGZYBdf0QTDk1dA0NpCQ0Sn
+         sW2j1+rgzQp63vCFx/T3ks/LI8JHnluRez1RdDH5cJDAcsbc/5vC/+Yr0f7zz6aBW/rA
+         3hzjhsC6a7xX5pDaW1XGsShdgY2/s3htnhKPciYViFwTfgnyBCB/JMaf7ooFiC2SR/JP
+         uq2XfMge/Wq4vk/3UrRojuQw+vxc7MRwGupQvWC7NTY21aIwMXscc4xDTlr5s7kWJgO+
+         sASA==
+X-Forwarded-Encrypted: i=1; AJvYcCWe/IDZTMp/hTC9qQV/6pMvjmK4I+WWqnM0lIHF7dwTPJ4tukcbrwyFEfvOTaHaVLnnT0Q=@vger.kernel.org, AJvYcCXdgRR2TQJDPLJd+l4DPlDJW14kBMlFpICekRDLzUBGQkLW7dLJc8OkJcOu/4W1RhCMAfTv2TR2kvBV+W5cFY3y@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz++EGISlRkt99Be+SW48mq8ukewFerItVDc7soVgbmtGdZm2SR
+	JmtXwrpBiVzZx5i57G8MuluZUPMguBqf+GSTSUNIOcHz3uSWnkwu
+X-Google-Smtp-Source: AGHT+IE0z9obeTqvXwKkLsAd3V+WleFbeXL7J0i0qYvl1lDxIyr/ZNYs+wK+DqQLpurrCKOjo+8JTA==
+X-Received: by 2002:a05:6402:13c8:b0:5cb:728e:926b with SMTP id 4fb4d7f45d1cf-5cb728e9311mr2146008a12.17.1729503286215;
+        Mon, 21 Oct 2024 02:34:46 -0700 (PDT)
+Received: from krava (85-193-35-184.rib.o2.cz. [85.193.35.184])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cb66c7255esm1812592a12.80.2024.10.21.02.34.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Oct 2024 02:34:45 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 21 Oct 2024 11:34:43 +0200
+To: Jason Xing <kerneljasonxing@gmail.com>,
+	Alan Maguire <alan.maguire@oracle.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com,
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+	haoluo@google.com, shuah@kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>
+Subject: Re: [PATCH bpf-next v2] bpf: handle MADV_PAGEOUT error in
+ uprobe_multi.c
+Message-ID: <ZxYgM_YDoSJO1TxL@krava>
+References: <20241021050706.29403-1-kerneljasonxing@gmail.com>
+ <ZxYFn7fko5C9BnHe@krava>
+ <CAL+tcoB-tHf5kW6Hq0TtsnqFLU3nWZEuZ+L7roDyJ0q_qW=WxA@mail.gmail.com>
+ <CAL+tcoAw1WGnJs2DQjEyzsh_rNXKA44oYX5RvQi8nCvt4+ynLQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Bug Report] Wrong value of __NR_userfaultfd in
- asm-generic/unistd.h
-To: Muhammad Usama Anjum <Usama.Anjum@collabora.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Peter Xu <peterx@redhat.com>, "Dr. David Alan Gilbert"
- <dgilbert@redhat.com>, Andrea Arcangeli <aarcange@redhat.com>,
- Kim Phillips <kim.phillips@arm.com>
-Cc: kernel@collabora.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- John Hubbard <jhubbard@nvidia.com>, Shuah Khan <skhan@linuxfoundation.org>
-References: <3d07e4c3-e413-4378-82da-265a477bedb3@collabora.com>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-In-Reply-To: <3d07e4c3-e413-4378-82da-265a477bedb3@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL+tcoAw1WGnJs2DQjEyzsh_rNXKA44oYX5RvQi8nCvt4+ynLQ@mail.gmail.com>
 
-
-
-Am 21.10.24 um 08:48 schrieb Muhammad Usama Anjum:
-> Hi,
+On Mon, Oct 21, 2024 at 04:07:15PM +0800, Jason Xing wrote:
+> On Mon, Oct 21, 2024 at 3:51 PM Jason Xing <kerneljasonxing@gmail.com> wrote:
+> >
+> > On Mon, Oct 21, 2024 at 3:41 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > >
+> > > On Mon, Oct 21, 2024 at 01:07:06PM +0800, Jason Xing wrote:
+> > > > From: Jason Xing <kernelxing@tencent.com>
+> > > >
+> > > > When I compiled the tools/testing/selftests/bpf, the following error
+> > > > pops out:
+> > > > uprobe_multi.c: In function ‘trigger_uprobe’:
+> > > > uprobe_multi.c:109:26: error: ‘MADV_PAGEOUT’ undeclared (first use in this function); did you mean ‘MADV_RANDOM’?
+> > > >    madvise(addr, page_sz, MADV_PAGEOUT);
+> > > >                           ^~~~~~~~~~~~
+> > > >                           MADV_RANDOM
+> > > >
+> > > > Including the <linux/linux/mman.h> header file solves this compilation error.
+> > >
+> > > hi,
+> > > strange, uprobe_multi.c even has:
+> > >
+> > > #ifndef MADV_PAGEOUT
+> > > #define MADV_PAGEOUT 21
+> > > #endif
+> > >
+> > > and '#include <sys/mman.h>' should be all that's needed
+> > >
+> > > could you please share more details (extra flags) on how you compile?
+> >
+> > OMG, thanks for reminding me. The net-next branch that I compiled
+> > doesn't have those three lines. Now I can see them in bpf-next. So I
+> > think the issue has been fixed already :)
 > 
-> The asm-generic/unistd.h file has wrong __NR_userfaultfd syscall number which
-> doesn't even depend on the architecture. This has caused failure of a selftest
-> which was fixed recently [1].
+> Link is https://lore.kernel.org/bpf/d9846ceb-b758-4c17-82d1-e5504122a50a@oracle.com/
 > 
-> grep -rnIF "#define __NR_userfaultfd"
-> tools/include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
-> arch/x86/include/generated/uapi/asm/unistd_32.h:374:#define __NR_userfaultfd 374
-> arch/x86/include/generated/uapi/asm/unistd_64.h:327:#define __NR_userfaultfd 323
-> arch/x86/include/generated/uapi/asm/unistd_x32.h:282:#define __NR_userfaultfd (__X32_SYSCALL_BIT + 323)
-> arch/arm/include/generated/uapi/asm/unistd-eabi.h:347:#define __NR_userfaultfd (__NR_SYSCALL_BASE + 388)
-> arch/arm/include/generated/uapi/asm/unistd-oabi.h:359:#define __NR_userfaultfd (__NR_SYSCALL_BASE + 388)
-> include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
-> 
-> The number is dependent on the architecture. The above data shows that it
-> is different for different arch:
-> x86	374
-> x86_64	323
-> ARM     347/358
-> 
-> It seems include/uapi/asm-generic/unistd has wrong 282 value in it. Maybe I'm
-> missing some context.. Please have a look at it.
-> 
-> The __NR_userfaultfd was added to include/uapi/asm-generic/unistd.h in
-> 09f7298100ea ("Subject: [PATCH] userfaultfd: register uapi generic syscall (aarch64)").
+> The previous comment is not that right. Making sure to include
+> <sys/mman.h> first solves the issue so there are no complaints when
+> compiling. No need to define MADV_PAGEOUT, I think.
 
-This is not specific to __NR_userfaultfd, just take a look at some of the other 
-syscalls (e.g., __NR_membarrier).
+right, but looks like it was not enough on Alan's setup [1]
 
-Now, some of the files you list above are "generated". Doing it on a clean tree:
-
-$ grep -rnIF "#define __NR_userfaultfd"
-arch/arm64/include/asm/unistd32.h:789:#define __NR_userfaultfd 388
-tools/include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
-include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
+jirka
 
 
-But now comes the tricky part: an architecture defines whether it wants to
-
-(a) Use the asm-generic unistd.h
-(b) Use a custom one
-
-E.g.,
-
-$ cat include/uapi/linux/unistd.h
-/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-#ifndef _LINUX_UNISTD_H_
-#define _LINUX_UNISTD_H_
-
-/*
-  * Include machine specific syscall numbers
-  */
-#include <asm/unistd.h>
-
-#endif /* _LINUX_UNISTD_H_ */
-
-
-For example on riscv arch/riscv/include/asm/unistd.h  will include 
-arch/riscv/include/uapi/asm/unistd.h which will include "asm-generic/unistd.h".
-
-If you follow the flow on x86, you'll find that it will not include that 
-asm-generic one as default.
-
-So the asm-generic variant only applies if an arch wants to do it in the generic 
-way.
-
-$ find tools -name unistd.h
-tools/arch/x86/include/uapi/asm/unistd.h
-tools/arch/arc/include/uapi/asm/unistd.h
-tools/arch/riscv/include/uapi/asm/unistd.h
-tools/arch/hexagon/include/uapi/asm/unistd.h
-tools/arch/arm64/include/uapi/asm/unistd.h
-tools/arch/loongarch/include/uapi/asm/unistd.h
-tools/include/uapi/asm-generic/unistd.h
-tools/include/nolibc/unistd.h
-
-Consequently, the asm-generic one should never be used directly.
-
--- 
-Cheers,
-
-David / dhildenb
-
+[1] c27d8235ba97 selftests/bpf: Fix uprobe_multi compilation error
 
