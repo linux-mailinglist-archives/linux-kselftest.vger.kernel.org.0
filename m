@@ -1,108 +1,149 @@
-Return-Path: <linux-kselftest+bounces-20236-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20237-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 662179A5B17
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 08:51:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A05E19A5D51
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 09:41:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FC5E1F219E9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 06:51:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C11501C2339F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 07:41:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F39BC15575F;
-	Mon, 21 Oct 2024 06:49:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B68951E0B94;
+	Mon, 21 Oct 2024 07:41:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="KBzUJF3p"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sq4jHJPX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D6A1D0E1A;
-	Mon, 21 Oct 2024 06:49:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729493363; cv=pass; b=ib21ixMQh8+k5h0Rg37Qubv0P/u2hLqafBM0SxNhzm+zO7T/Vvn6ukQFSxvf04xoQL8EtXd78U65odwhl9ZynIPW5BjfoHSl+ydQfI88EP51l6W4bPYyhWPkzt2CTWvH/xOL6aLHEdo6BwWA2QkHfvsUJxFf4B5cdkpHWz4hTF8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729493363; c=relaxed/simple;
-	bh=O31qd5SCkfOYqmj8pjHYTWjM/5OuBWMei43eQiK/a+I=;
-	h=Message-ID:Date:MIME-Version:Cc:From:To:Subject:Content-Type; b=Gph7isqcRXiT98eZViBb1O2mEaCkcI1hwgA620mSWO4vBGVrzlKvGegc6JlM/N0NHh+dOxIUOaYHGqmtsRsiWCeB5AeO6QF0ve+jfsfDFKEydH0+7nhYJYgr6RqyUNmc/pS9xVHSWBRArdJ4ZEUXtYjwTMk4GIVU2vJD49hUG0s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=KBzUJF3p; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1729493345; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Gh7OYhG8mPDzF2AxEmqphfR9zhQAvQfUh5+TBVlbGhO2yONNOS4oHjDKAGO+O4pt03ILd/AhxtWX7K7lDb5hSML/6xPPoYC3VKE7dU1Hq4VO3yysIwQ6gkA4UWbsZvsiLYQGRPqHpNfE9CsYnZJ6jpQcm9q8M7NeU7GyYoDU/l0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1729493345; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=v8iHK6bjZYLzIOEmNBVWQXJWM7Hq1uPf06zA4c17Sso=; 
-	b=i4oWBID16wvPn/fu4spRBm+YDtEQ+uyXci34sOkDWWsDeUBCxj2tpnZ520s25KpqQJvKLvrxtCsjKYEyMfkH0GAWOji5F9gZh5XBOo0jyqeg6gey914tVMRjUDqHH4cTgrO9+wBMSn/JpeX2KYpMQVkGcCG09Q4bmTkydDZj4pQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
-	dmarc=pass header.from=<Usama.Anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1729493345;
-	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:From:From:To:To:Subject:Subject:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=v8iHK6bjZYLzIOEmNBVWQXJWM7Hq1uPf06zA4c17Sso=;
-	b=KBzUJF3pV1I1LM5ZMXZwq7xhAOC/2iybKdC1qUwB31FLsdWX6rLOHfRq5VXtfJbh
-	O1mFrAGNH2lXuiZ2KNDHMhqo4BCAFHl84V8Mde29Hz01T6iNiWI5ASdAxiPSMS9rDk2
-	Nwrbc92XhOzBqar4ee9yt8DUev5iFk7Wjg24M8pU=
-Received: by mx.zohomail.com with SMTPS id 1729493342530119.03883380317552;
-	Sun, 20 Oct 2024 23:49:02 -0700 (PDT)
-Message-ID: <3d07e4c3-e413-4378-82da-265a477bedb3@collabora.com>
-Date: Mon, 21 Oct 2024 11:48:57 +0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A571E04A5;
+	Mon, 21 Oct 2024 07:41:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729496486; cv=none; b=coEZXlZIjxgW7qIgMWxAY/68p/nl1K5ZxG3GUMn2VZ1yNxUc9DE8xokYmba9Pbd6QlFRVrTmHARKmZIXHL7i+IKXxwRnBGKyeW8z/Ic1ugZk0evLi7H3sYv8kRS4lCt8HEEdYpr+XW9wJTBTxIs7TodjlOVRXN6OtnsM4jE1P0I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729496486; c=relaxed/simple;
+	bh=AF/tbeqoppPcHSq02WnJEwEhrIxXk2E6dRGZickPP+A=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YFsW4SxuOgTOiykEWXktmfrbDzTb4ZmCYDrFP2bf/+ooJDJr1CGn0RxhtJAryIbmPk5xV3Qa402o8M0BWNyrjxsIYGfaOqdn+R+dSEmLlfsJyGqKeVZUK8yQx6xcJkadtCygbNTrxHO5bpkOmUJs3IpUv9eoJwHBnY8r7YiwYvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sq4jHJPX; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a9a2cdc6f0cso571227766b.2;
+        Mon, 21 Oct 2024 00:41:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729496483; x=1730101283; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=C3DgUAwHGp1ylHvrACNvY7xdDBF/rQq7hdSmsZeGjcM=;
+        b=Sq4jHJPXWFXyyckb/5c9vI8McKM52snunEWRjqKkeEIwu5tAGkZLH/usEN+vWb56j4
+         BonQN0vmBxjfCZXYbRAIjfwESPegOhbG2Rd/JI2L/ZoHVeZlV0JRMndZkHGZmPoWbar8
+         V+9jj/w+fVoYkySSVFpJhaazB1h5e1jeI20parbnT/4KnObxAPohRrRMe749aRfPq0Gd
+         nwgWQAHUbIEyKDsA0yX+1z1QMQTh8gfsJ4NXJn01g12NfwiHPbT0u7Pm+ujcOhbbyl19
+         YtZqI6S+jiiNMUahdGtk4riduQprw4dWB9EjrmOFjERm6YmZYOowHBUoIkB9IF7yR9xA
+         hHIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729496483; x=1730101283;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C3DgUAwHGp1ylHvrACNvY7xdDBF/rQq7hdSmsZeGjcM=;
+        b=tnnP+VnVI8XgjrZJTiGFRVRorXqEOcQTGbUXZ9BW+aoTrMGbb3sNyPL7eFYoVgEULV
+         R6Z4oANhR+375xKQNMCi2U3cyPh70pZlYUuvINmjMtnEt8Xa9dF1C2UZTAQ0yaeVFVjK
+         tVvNpHG1vF4WvgmkxVq9G+zq9SeEzF+aJmYayyVRFihtMAEU2MQGf+Gr2x0PfozLdoFM
+         +UKt2ooKCSRotQDVG3mGq75WHKSoN6H9TqlbixHqEW3k+nrQWsDEuq6Fp9y3PB99+qw2
+         wQykTNhRm30fNVyXrDSzzCGQ0NCFpDlTU0JdMoAvg2AHTaXJNI3i3rQxLklh+ZIbFodu
+         cebw==
+X-Forwarded-Encrypted: i=1; AJvYcCXMyK0IGGVHAkHPJNmHxdIL2jFS32Z3Y4Od2wn+qsby1ikxILlJ8xv1HhdlCzJ0WXZc12k=@vger.kernel.org, AJvYcCXVFuHWVvWUuJZery5TOOtUL36DQPANkSclO3zsqzk3ChTiNjZlovMdHpXjy7mMoEIxkh/EgeOde7JYkyeXUUrN@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxh09EfdlZE2C82AFNOX2wDRQgPlpJjq2UGRCM5LFUqmdg4kz6V
+	rnHV+XFeVDzW2E05/O8cHZUqvHEgE9jWnY0KZY7Cni8p/O1NhKRI
+X-Google-Smtp-Source: AGHT+IF7XOM4S/WeTzS1fsASv+aOkD2OCEqGxgPjQ8cOLEgniqdobMUU2CUskDtdSsh1Co6hPV6IaA==
+X-Received: by 2002:a17:907:3a95:b0:a9a:80f9:d4e0 with SMTP id a640c23a62f3a-a9a80f9d8bamr526312466b.34.1729496482617;
+        Mon, 21 Oct 2024 00:41:22 -0700 (PDT)
+Received: from krava (85-193-35-184.rib.o2.cz. [85.193.35.184])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a9155a871sm171134466b.111.2024.10.21.00.41.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Oct 2024 00:41:22 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 21 Oct 2024 09:41:19 +0200
+To: Jason Xing <kerneljasonxing@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	eddyz87@gmail.com, mykolal@fb.com, martin.lau@linux.dev,
+	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+	shuah@kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>
+Subject: Re: [PATCH bpf-next v2] bpf: handle MADV_PAGEOUT error in
+ uprobe_multi.c
+Message-ID: <ZxYFn7fko5C9BnHe@krava>
+References: <20241021050706.29403-1-kerneljasonxing@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Usama.Anjum@collabora.com, kernel@collabora.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- John Hubbard <jhubbard@nvidia.com>, Shuah Khan <skhan@linuxfoundation.org>
-Content-Language: en-US
-From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
-To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
- "Dr. David Alan Gilbert" <dgilbert@redhat.com>,
- Andrea Arcangeli <aarcange@redhat.com>, Kim Phillips <kim.phillips@arm.com>
-Subject: [Bug Report] Wrong value of __NR_userfaultfd in asm-generic/unistd.h
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241021050706.29403-1-kerneljasonxing@gmail.com>
 
-Hi,
+On Mon, Oct 21, 2024 at 01:07:06PM +0800, Jason Xing wrote:
+> From: Jason Xing <kernelxing@tencent.com>
+> 
+> When I compiled the tools/testing/selftests/bpf, the following error
+> pops out:
+> uprobe_multi.c: In function ‘trigger_uprobe’:
+> uprobe_multi.c:109:26: error: ‘MADV_PAGEOUT’ undeclared (first use in this function); did you mean ‘MADV_RANDOM’?
+>    madvise(addr, page_sz, MADV_PAGEOUT);
+>                           ^~~~~~~~~~~~
+>                           MADV_RANDOM
+> 
+> Including the <linux/linux/mman.h> header file solves this compilation error.
 
-The asm-generic/unistd.h file has wrong __NR_userfaultfd syscall number which
-doesn't even depend on the architecture. This has caused failure of a selftest
-which was fixed recently [1]. 
+hi,
+strange, uprobe_multi.c even has:
 
-grep -rnIF "#define __NR_userfaultfd"
-tools/include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
-arch/x86/include/generated/uapi/asm/unistd_32.h:374:#define __NR_userfaultfd 374
-arch/x86/include/generated/uapi/asm/unistd_64.h:327:#define __NR_userfaultfd 323
-arch/x86/include/generated/uapi/asm/unistd_x32.h:282:#define __NR_userfaultfd (__X32_SYSCALL_BIT + 323)
-arch/arm/include/generated/uapi/asm/unistd-eabi.h:347:#define __NR_userfaultfd (__NR_SYSCALL_BASE + 388)
-arch/arm/include/generated/uapi/asm/unistd-oabi.h:359:#define __NR_userfaultfd (__NR_SYSCALL_BASE + 388)
-include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
+#ifndef MADV_PAGEOUT
+#define MADV_PAGEOUT 21
+#endif
 
-The number is dependent on the architecture. The above data shows that it
-is different for different arch:
-x86	374
-x86_64	323
-ARM     347/358
+and '#include <sys/mman.h>' should be all that's needed
 
-It seems include/uapi/asm-generic/unistd has wrong 282 value in it. Maybe I'm
-missing some context.. Please have a look at it.
+could you please share more details (extra flags) on how you compile?
 
-The __NR_userfaultfd was added to include/uapi/asm-generic/unistd.h in
-09f7298100ea ("Subject: [PATCH] userfaultfd: register uapi generic syscall (aarch64)").
+thanks,
+jirka
 
-[1] https://lore.kernel.org/all/20240912103151.1520254-1-usama.anjum@collabora.com 
 
--- 
-BR,
-/Muhammad Usama Anjum
+> 
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> ---
+> v2
+> Link: https://lore.kernel.org/all/20241020031422.46894-1-kerneljasonxing@gmail.com/
+> 1. handle it in a proper way
+> ---
+>  tools/testing/selftests/bpf/uprobe_multi.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/uprobe_multi.c b/tools/testing/selftests/bpf/uprobe_multi.c
+> index c7828b13e5ff..40231f02b95d 100644
+> --- a/tools/testing/selftests/bpf/uprobe_multi.c
+> +++ b/tools/testing/selftests/bpf/uprobe_multi.c
+> @@ -4,6 +4,7 @@
+>  #include <string.h>
+>  #include <stdbool.h>
+>  #include <stdint.h>
+> +#include <linux/mman.h>
+>  #include <sys/mman.h>
+>  #include <unistd.h>
+>  #include <sdt.h>
+> -- 
+> 2.37.3
+> 
 
