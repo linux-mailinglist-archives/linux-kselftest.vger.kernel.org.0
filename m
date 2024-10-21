@@ -1,155 +1,111 @@
-Return-Path: <linux-kselftest+bounces-20275-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20276-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DE3E9A6D90
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 17:04:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26CDE9A6E23
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 17:30:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 435F51F22539
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 15:04:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3F87B20DD0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2024 15:30:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1DD11F4731;
-	Mon, 21 Oct 2024 15:04:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DKA+ZeFK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5996219AD71;
+	Mon, 21 Oct 2024 15:30:10 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4AC21EBA08;
-	Mon, 21 Oct 2024 15:04:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 413CA19ABBD
+	for <linux-kselftest@vger.kernel.org>; Mon, 21 Oct 2024 15:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729523093; cv=none; b=C4s74bD0J4N6QEwAgqTyACuHZ1Wcxp3D2CJQ4kVVodnG/AVM17EHnkEfaqnaQgckY+BL6Cmi1lOlUpPxUxkSp6zuxo3XbRMqKi5dCRHILGiK/R0EWjUYE31THAyMgRXaC1hvSrSJeT8ed0V04QKnnZmFyuI1XBmq2ycqQ93N3oA=
+	t=1729524610; cv=none; b=id/StMUSq6gwKI3AUQnGz1aMDs6vKIRCl3uOwsXm2eTEdlLiKcyrPsyiGNu/Aa/WS9DT+ZUzX04erqcvH5RRvDltRw0JxjHZsxIAgxRQYxnhAJIgAsw++pcrnTPnA+dgCuKcfnMLuAUtA2V1rBQBDTP112+gAOOruncCW7aSkgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729523093; c=relaxed/simple;
-	bh=YpyR+0oK6sTRh5iMM2mhp9NQ7lGx0lwNLgFecx7Zzgo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r3lvN9a9MU2kvkgySrHINkFYeATzkOYTXBYfChek/L/9nONa8NuF4PcSq8j6EVMx06mc5yWw56YgXKWAa5rfjkIjSqq0p/QVOQsL+l8tWh90rjG+2leMyaKtaWWq5mtjWRG9DorD6RVLYHz4pw3By4jO4J02Gl6vgjZAUlnYNmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DKA+ZeFK; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5c9c28c1e63so5349742a12.0;
-        Mon, 21 Oct 2024 08:04:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729523090; x=1730127890; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r/JRIMg2z82gb0miw9gdPsnIiJdQXVNTFbR+DAY8GrU=;
-        b=DKA+ZeFK0DcrUvnkVlZBmQbzLxHIk18ytUan+O3rRVuIs9k7KXw8+Qbld8zPGkEzBk
-         XzeZKbNGVfDaxs2C7U17Zh7fme97TsM/YE4SmNXC/eNb13CtFu7LIFSAVtNMehGV10jj
-         iwI1PqU/yWYctorNDiXAz2P+Y4M9d6M322BFVNcaGqCywBu2Mvhq+Eu2fReUhDyEMlLQ
-         xQhLOtoFJekR4m5dn1qzsxYkNPX3tG+jMg9tI16FwhQhjP7h3dBeJO1oSnndv8CyCpFH
-         QS6liK/KEoRyFAtNGoKoY5XLK5j64IuDlmp2Lwiw8wiHblMr4+vDvY6A/S52ViPhUorQ
-         TN4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729523090; x=1730127890;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r/JRIMg2z82gb0miw9gdPsnIiJdQXVNTFbR+DAY8GrU=;
-        b=WOPikS23M8HKi3rAjgR1Jp3aqK6Txmqn0xQzjO+2IR1Ohp0egIWLVOpR9bghyk1Fw7
-         LANKbZgMp9i850ei75nIkdYmEuvC/oPzswX+XahO9xDmfBHMJOfUYcu3smnWUnaRU8Sq
-         JsWmz9H0OpROB0iQGosXvT9RWytZhu0Jt06OymVThkchckLlzWSnIBGgx8a0hxjZXP10
-         QlhE1N+pqDNW4tlvT8RUvTMSKPYkRgC0Vi0UjvkwFhy1gBX6hfRUsGHq5qL+hWSPYJBB
-         R13nCk5qeYAe+cEkS+7e0HFhewVTCOuuTfnVPqG4q0485X+HHWc1s9bh3qOFxD7q1iwP
-         YXKw==
-X-Forwarded-Encrypted: i=1; AJvYcCV44KRX+xyTk6E3jPpVp6UKuMmIrDkaMVsFjJAZxu7OjB45bmUGKDNtXL8VDz/7tDjMy+l6Acbs1OylGXE=@vger.kernel.org, AJvYcCWB0oRPf/sPK9zJUd2O82N3M2LUyAD1NExRiYXL7l88/rMe+lWpVag2PhQpRu7a4YE+u1JlT+O+5k8Cnkov42LZ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2TZqzMmruN/mrjb8ivJSTRzvwmNdIEnevyRH07VPCb4w+LZLK
-	tM9ztqUXDgN4vPWYNa9Ad2SirhEWqasiut0pScaXw9YCBjdMESXwwsYhC5R1gOSlXfzOPAtEFeZ
-	/1ndZ6wUt0m0wD8emCxk7S7VwiU0=
-X-Google-Smtp-Source: AGHT+IHNUDkn7YmuzYRyjxAXSLvzGs3jkNwapjUsiQvvFToFgyk5dU2LfTFToOW2bJY0IS0ThCPlDb/4DawJHeu7tNE=
-X-Received: by 2002:a05:6402:270f:b0:5c9:5a96:2869 with SMTP id
- 4fb4d7f45d1cf-5ca0ac85068mr9895133a12.10.1729523089591; Mon, 21 Oct 2024
- 08:04:49 -0700 (PDT)
+	s=arc-20240116; t=1729524610; c=relaxed/simple;
+	bh=WUhKvgFzA8q4xUQNuKSndWjbdDM60hjEK/2J28f2M1Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I5F0C+lDRC7N/tQwVuzvo7rmL/zTPbr5Ll6KGsVum3F93Y2Q553wW3WnqGmBRcShvdU8UEJ8+ARGF18QYCFLFgfSY3wrsWk2BTDzvED4cJWtbtfBG1LBEZdgenJprizttS5YySX8YmmG+QLMHuhIFPVRBppdlPsiA4lXbYpu008=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 381C7C4CEC3;
+	Mon, 21 Oct 2024 15:30:07 +0000 (UTC)
+Date: Mon, 21 Oct 2024 16:30:04 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Dave Martin <Dave.Martin@arm.com>
+Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
+	linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
+	anshuman.khandual@arm.com, aruna.ramakrishna@oracle.com,
+	broonie@kernel.org, dave.hansen@linux.intel.com,
+	jeffxu@chromium.org, joey.gouly@arm.com, shuah@kernel.org,
+	will@kernel.org, linux-kselftest@vger.kernel.org, x86@kernel.org,
+	pierre.langlois@arm.com
+Subject: Re: [PATCH 0/5] Improve arm64 pkeys handling in signal delivery
+Message-ID: <ZxZzfMV0dbjJ55UD@arm.com>
+References: <20241017133909.3837547-1-kevin.brodsky@arm.com>
+ <ZxEx5aXPX2mHngoB@e133380.arm.com>
+ <627c1297-8151-43d1-b46b-a962301b18fa@arm.com>
+ <ZxZXnM9vUj+tex/z@e133380.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241014172149.324639-1-alessandro.zanni87@gmail.com>
- <41d157fc-6413-4061-95af-518ec7b923f1@linuxfoundation.org> <4hxgkaxray75k2z4zyhhq6nb6iegsfokhsv6gdthai7bfzbpnw@6doocomldm6m>
-In-Reply-To: <4hxgkaxray75k2z4zyhhq6nb6iegsfokhsv6gdthai7bfzbpnw@6doocomldm6m>
-From: Alessandro Zanni <alessandro.zanni87@gmail.com>
-Date: Mon, 21 Oct 2024 17:04:12 +0200
-Message-ID: <CABq9Dx6b0TxXfvsmaaAMG+O=x8v3pD4CY2TTowcGzkL2q=Q1Yg@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests/intel_pstate: fix operand expected
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, anupnewsmail@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZxZXnM9vUj+tex/z@e133380.arm.com>
 
-> On 24/10/14 06:05, Shuah Khan wrote:
-> > On 10/14/24 11:21, Alessandro Zanni wrote:
-> > > This fix solves theses errors, when calling kselftest with
-> > > targets "intel_pstate":
-> > >
-> > > ./run.sh: line 90: / 1000: syntax error: operand expected (error token is "/ 1000")
-> > >
-> > > ./run.sh: line 92: / 1000: syntax error: operand expected (error token is "/ 1000")
-> > >
-> > > To error was found by running tests manually with the command:
-> > > make kselftest TARGETS=intel_pstate
-> > >
-> > > Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
-> > > ---
-> > >
-> > > Notes:
-> > >      v2: removed debug echos
-> >
-> > See my comments on your v1. It would help to wait a bit
-> > to send v2.
->
-> Ok and thanks for the comments.
->
-> > I can't reproduce this problem on Linux 6.12-rc3.
-> > What's you environment like?
->
-> My kernel version is 6.12.0-rc3 from "make kernelversion".
->
-> I think the errors are related to the bash type and version, rather than the kernel version.
-> My bash version is: GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)
->
-> In fact, some shell do not complete expressions in variables and $var and command substitutions
-> are done before the arithmetic expression itself is parsed.
-> That expansion happens without regard for the arithmetic syntax, so with $var you can mess
-> with that.
-> So, I suggest to avoid to use $var inside a arithmetic expansion in order to be cross-platform.
+On Mon, Oct 21, 2024 at 02:31:08PM +0100, Dave P Martin wrote:
+> > > On Thu, Oct 17, 2024 at 02:39:04PM +0100, Kevin Brodsky wrote:
+> > >> This series is a follow-up to Joey's Permission Overlay Extension (POE)
+> > >> series [1] that recently landed on mainline. The goal is to improve the
+> > >> way we handle the register that governs which pkeys/POIndex are
+> > >> accessible (POR_EL0) during signal delivery. As things stand, we may
+> > >> unexpectedly fail to write the signal frame on the stack because POR_EL0
+> > >> is not reset before the uaccess operations. See patch 3 for more details
+> > >> and the main changes this series brings.
+> > >>
+> > >> A similar series landed recently for x86/MPK [2]; the present series
+> > >> aims at aligning arm64 with x86. Worth noting: once the signal frame is
+> > >> written, POR_EL0 is still set to POR_EL0_INIT, granting access to pkey 0
+> > >> only. This means that a program that sets up an alternate signal stack
+> > >> with a non-zero pkey will need some assembly trampoline to set POR_EL0
+> > >> before invoking the real signal handler, as discussed here [3].
+[...]
+> Memory with a non-zero pkey cannot be used 100% portably, period, and
+> having non-RW(X) permissions on pkey 0 at any time is also not
+> portable, period.  So I'm not sure that having libc magically guess
+> what userspace's pkeys policy is supposed to be based on racily digging
+> metadata out of /proc/self/maps or a cache of it etc. would be such a
+> good idea.
 
-Hello,
-any thoughts about this patch?
+I agree that changing RWX overlay permission for pkey 0 to anything else
+is a really bad idea. We can't prevent it but we shouldn't actively try
+to work around it in the kernel either. With the current signal ABI, I
+don't think we should support anything other than pkey 0 for the stack.
+Since the user shouldn't change the pkey 0 RWX overlay permission
+anyway, I don't think we should reset POR_EL0 _prior_ to writing the
+signal frame. The best we can do is document it somewhere.
 
-Were you able to replicate the error?
+So on patch 3 I'd only ensure that we have POR_EL0_INIT when invoking
+the signal handler and not when performing the uaccess. If the uaccess
+fails, we'd get a fatal SIGSEGV. The user may have got it already if it
+made the stack read-only.
 
-> > >
-> > >   tools/testing/selftests/intel_pstate/run.sh | 4 ++--
-> > >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/tools/testing/selftests/intel_pstate/run.sh b/tools/testing/selftests/intel_pstate/run.sh
-> > > index e7008f614ad7..0c1b6c1308a4 100755
-> > > --- a/tools/testing/selftests/intel_pstate/run.sh
-> > > +++ b/tools/testing/selftests/intel_pstate/run.sh
-> > > @@ -87,9 +87,9 @@ mkt_freq=${_mkt_freq}0
-> > >   # Get the ranges from cpupower
-> > >   _min_freq=$(cpupower frequency-info -l | tail -1 | awk ' { print $1 } ')
-> > > -min_freq=$(($_min_freq / 1000))
-> > > +min_freq=$((_min_freq / 1000))
-> > >   _max_freq=$(cpupower frequency-info -l | tail -1 | awk ' { print $2 } ')
-> > > -max_freq=$(($_max_freq / 1000))
-> > > +max_freq=$((_max_freq / 1000))
-> > >   [ $EVALUATE_ONLY -eq 0 ] && for freq in `seq $max_freq -100 $min_freq`
-> >
-> > thanks,
-> > -- Shuah
->
-> Thanks,
-> Alessandro
+Currently the primary use of pkeys is for W^X and signal stacks
+shouldn't fall into this category. If we ever have a strong case for
+non-zero pkeys on the signal stack, we'll need to look into some new
+ABI. I'm not sure about SS_* flags though, I think the signal POR_EL0
+should be associated with the sigaction rather than the stack (the
+latter would just be mapped by the user with the right pkey, the kernel
+doesn't need to know which, only what POR_EL0 is needed by the handler).
 
-Feel free to indicate if I can provide something useful for your evaluation.
+Until such case turns up, I'd not put any effort into ABI improvements.
+I can think of some light compartmentalisation where we have a pkey
+that's "privileged" and all threads have a POR_EL0 that prevents access
+to that pkey. The signal handler would have more permissive rights to
+that privileged pkey. I'd not proactively add support for this though.
 
-Thanks,
-Alessandro
+-- 
+Catalin
 
