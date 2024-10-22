@@ -1,112 +1,128 @@
-Return-Path: <linux-kselftest+bounces-20385-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20386-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABFFB9AA15E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 13:50:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2ACC9AA187
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 13:57:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 572451F23CDF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 11:50:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 777361F239AC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 11:57:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFABD19B5B2;
-	Tue, 22 Oct 2024 11:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1863819CC21;
+	Tue, 22 Oct 2024 11:56:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dmZxp+Kn"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="mDwyxCNv";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="ZGUMA4I2";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Bij662Zk";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="VmYygXF7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE4EA45026;
-	Tue, 22 Oct 2024 11:50:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ECF319AA53;
+	Tue, 22 Oct 2024 11:56:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729597826; cv=none; b=uQdUFAG56P77anWYH+O43/5DpWbr/gaW7PKRj+sln3VGolwJ0hdtSOqRtF207D9ZhxR80r90TEM6oUh0c0fIEem415tqK8iyoh5FE00bTWOIutahlj7bAanuaEmoGhrQ6QilWmeCMhyEw2+Cz1yFjNZYRyuUGPKWYV5Z2FtjWXg=
+	t=1729598214; cv=none; b=ndrrqRPx9rNBb8X4077ZE9M+uaJ4syUA+aQxd5IjX0isRAoMue/q3E8HKiUijaUv4yBzwOLhAL81Ezjwe7B/80JmXOzw9QODsb31teZWFWuFcgQh7iXWDEte/di1YvRtfGUIYNwX5GqHaTFq8PQIQYIa6f3DDECzM5kxXUB9q48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729597826; c=relaxed/simple;
-	bh=ePIKOQ17IOxRynZ7Lysj39uHoOsCMlQxkrG15XbYY8E=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=GIkSnPBmbaFAQG4AzqfKXXkKZNjygJI5phby3Z6O5cwXzO/rM3NhPCQP0UB9xzDCTXzvps4Cck2Myk3dzhG8kFspZJZDWmDFlCmuGXXQozIadVxh7LhWmMNMLtx32TDT2Wh809KhgB7XLOoeItTPfIsxynIBxGN8THQBP2GN2eM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dmZxp+Kn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C483C4CEC3;
-	Tue, 22 Oct 2024 11:50:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729597826;
-	bh=ePIKOQ17IOxRynZ7Lysj39uHoOsCMlQxkrG15XbYY8E=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=dmZxp+KnE/gL7fjp2rOiXsUmgPPXQGKuZ1LiV6hpi8n3R6mPny1JFUzYHkbEMRnJv
-	 hsIxEOsnMRPYfP3MMUW0IeHG06xZpNvmVu5jaRk9kVkumE27gFd5rA/eQus/2MwSke
-	 sRQvE1TPccAb91hAmdfJGYIbOyQVlz/YTCQNPpZDzmsSPgbILxCHjdSyUTRdUJNKNG
-	 v/OVzxKhfKRIezyJ/9f2fzxeSATLXNbHTfHV8ZKqCdswcj/RldI2bTL4arko04+ERY
-	 WRFRve+LiyeYaMwMotTLL5Rseosfel0nVd7rFBYZYNL7b7vbxKjRa9j6OhvWyOm5pY
-	 nr6iEv0TV5r1w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADE5D3809A8A;
-	Tue, 22 Oct 2024 11:50:33 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1729598214; c=relaxed/simple;
+	bh=mneF1aYI+/3E7kfrtRg3xECSKw4MZRU4SWtMWjJrKK4=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=KsTHNuMGg0N98zDCsFop5M2+L/iP7zwQdGRtDJ7R/yeipfnMXbCnhGJ6mse+yE3IjXxVt6WDO91hhiji+vWS6hWrCsU26iNRa2BlZPBZkEA1/V8i9afafhhVtBzinep7CWvnUb9EmypnVmNN2l7FCj/PvDIFUmnpxzfzeo+H4AY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=mDwyxCNv; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=ZGUMA4I2; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Bij662Zk; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=VmYygXF7; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from pobox.suse.cz (unknown [10.100.2.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 3F65121BBA;
+	Tue, 22 Oct 2024 11:56:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1729598210; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I9S2ssDExBIzpSbGz4cukm9iZBCMafEuEs4DF3aW+pQ=;
+	b=mDwyxCNvHJeGPUrfC2BkzXiOaJKwCzstsPET/WqUvtd8mD50aG9tcJLxfD/W8wPbQspuOS
+	i2lT08pXLO1BnN5oqAHHhUyIHr2J/CMqBibireqoxPzxV5IElVPSeUitcTi64Q9n9qwYX1
+	sbssqKq0xFLudxE/YnCQdjuRRsdYpik=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1729598210;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I9S2ssDExBIzpSbGz4cukm9iZBCMafEuEs4DF3aW+pQ=;
+	b=ZGUMA4I260rhdarGfqE1BPJ1op1+JflIfZUjc9Vi12O5bo9EaJuvsd4KDKLcXtbVWveEae
+	T83BcknEYM+oVEDw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1729598209; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I9S2ssDExBIzpSbGz4cukm9iZBCMafEuEs4DF3aW+pQ=;
+	b=Bij662ZkHWfKiH5+bxU7Bd5b9Ej0lUP83+SsclpqVhtSCxbG0Op9dDwYDI7jghlrAroCse
+	0JSzsl5z3qYgburOR15GqlJsbr9djKU3gXL/BQixfPOOsWEQ3Z1XcfJR3rhXmEtArnFuYZ
+	5Q2k3MJFIRH87bOTYJCIrO/K0UEk+QE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1729598209;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I9S2ssDExBIzpSbGz4cukm9iZBCMafEuEs4DF3aW+pQ=;
+	b=VmYygXF71+YTb9XqqC2jmBcSFKGQqlfuGbj5ne3Ynq4oo8LQUhmcxAeI2xSVLZT50EM1X4
+	IfJaXrBmElr+vOBA==
+Date: Tue, 22 Oct 2024 13:56:49 +0200 (CEST)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Michael Vetter <mvetter@suse.com>
+cc: linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org, 
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] selftests: livepatch: rename KLP_SYSFS_DIR to
+ SYSFS_KLP_DIR
+In-Reply-To: <20241017200132.21946-2-mvetter@suse.com>
+Message-ID: <alpine.LSU.2.21.2410221356180.13912@pobox.suse.cz>
+References: <20241017200132.21946-1-mvetter@suse.com> <20241017200132.21946-2-mvetter@suse.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 00/10] selftests: net: Introduce deferred commands
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <172959783250.942320.16165385423521166401.git-patchwork-notify@kernel.org>
-Date: Tue, 22 Oct 2024 11:50:32 +0000
-References: <cover.1729157566.git.petrm@nvidia.com>
-In-Reply-To: <cover.1729157566.git.petrm@nvidia.com>
-To: Petr Machata <petrm@nvidia.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- shuah@kernel.org, bpoirier@nvidia.com, liuhangbin@gmail.com,
- vladimir.oltean@nxp.com, idosch@nvidia.com, przemyslaw.kitszel@intel.com,
- willemb@google.com, mlxsw@nvidia.com
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Score: -4.30
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.994];
+	MIME_GOOD(-0.10)[text/plain];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_HAS_DN(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_COUNT_ZERO(0.00)[0];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,pobox.suse.cz:mid,pobox.suse.cz:helo,suse.com:email]
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-Hello:
+On Thu, 17 Oct 2024, Michael Vetter wrote:
 
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Thu, 17 Oct 2024 11:45:42 +0200 you wrote:
-> Recently, a defer helper was added to Python selftests. The idea is to keep
-> cleanup commands close to their dirtying counterparts, thereby making it
-> more transparent what is cleaning up what, making it harder to miss a
-> cleanup, and make the whole cleanup business exception safe. All these
-> benefits are applicable to bash as well, exception safety can be
-> interpreted in terms of safety vs. a SIGINT.
+> This naming makes more sense according to the directory structure.
+> Especially when we later add more paths.
 > 
-> [...]
+> Addtionally replace `/sys/kernel/livepatch` with `$SYSFS_KLP_DIR` in
+> the livepatch test files.
+> 
+> Signed-off-by: Michael Vetter <mvetter@suse.com>
 
-Here is the summary with links:
-  - [net-next,v2,01/10] selftests: net: lib: Introduce deferred commands
-    https://git.kernel.org/netdev/net-next/c/a6e263f125cd
-  - [net-next,v2,02/10] selftests: forwarding: Add a fallback cleanup()
-    https://git.kernel.org/netdev/net-next/c/b4b0549a4e59
-  - [net-next,v2,03/10] selftests: forwarding: lib: Allow passing PID to stop_traffic()
-    https://git.kernel.org/netdev/net-next/c/0e07d5dbfbd9
-  - [net-next,v2,04/10] selftests: RED: Use defer for test cleanup
-    (no matching commit)
-  - [net-next,v2,05/10] selftests: TBF: Use defer for test cleanup
-    https://git.kernel.org/netdev/net-next/c/a1b3741dcfd1
-  - [net-next,v2,06/10] selftests: ETS: Use defer for test cleanup
-    (no matching commit)
-  - [net-next,v2,07/10] selftests: mlxsw: qos_mc_aware: Use defer for test cleanup
-    (no matching commit)
-  - [net-next,v2,08/10] selftests: mlxsw: qos_ets_strict: Use defer for test cleanup
-    https://git.kernel.org/netdev/net-next/c/424745af5271
-  - [net-next,v2,09/10] selftests: mlxsw: qos_max_descriptors: Use defer for test cleanup
-    https://git.kernel.org/netdev/net-next/c/919419a8870b
-  - [net-next,v2,10/10] selftests: mlxsw: devlink_trap_police: Use defer for test cleanup
-    https://git.kernel.org/netdev/net-next/c/cebd281f3c75
+Reviewed-by: Miroslav Benes <mbenes@suse.cz>
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+M
 
