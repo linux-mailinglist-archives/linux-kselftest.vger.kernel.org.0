@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-20399-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20397-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D44F09AB179
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 16:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E4839AB176
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 16:52:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEB901C22450
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 14:52:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66E8D1C224F7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 14:52:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 497801A262D;
-	Tue, 22 Oct 2024 14:52:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79E451A2562;
+	Tue, 22 Oct 2024 14:52:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Cbyu1Q0w"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="rZta4UsD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2070.outbound.protection.outlook.com [40.107.236.70])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2085.outbound.protection.outlook.com [40.107.92.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45F2F19EED4;
-	Tue, 22 Oct 2024 14:52:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D871A0BE0;
+	Tue, 22 Oct 2024 14:52:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.85
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729608740; cv=fail; b=OeBa+Zs9aUinK0Hp5wVS1o62fkUYO/xRagq/+5XU2/RQrYuSgqjE0VkFGhon1m4LKzqpCbOibxA6E8LUtLOFXEVf70LAHd4XXcxhz9FiLZO+hnxu+SLkiFY7v2p6xJwlydKyXtdKXIqep1rr4p5+QK37hBZ2ciT0CjFVU6TWeJA=
+	t=1729608727; cv=fail; b=K/lF5FSr4uernpvplyxpJ/gyWLThO95SfGqDFzR4Z2igKDlc9h4Ve0C2cIAJSxmtnt4fI8BWgpeRy88CvQTVEd/uVPWGo0/u2vp6SVFhXYHwkhPef2RPORLuz+Tfynjzs/wyMvAbe11bj/JjW6cbAdP7CM6nyH4Y2UvEYZuCVgE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729608740; c=relaxed/simple;
-	bh=UJmnmlTfL7DKpX0epTT+DWDmctUFH/S0+XoPbo1yvgI=;
+	s=arc-20240116; t=1729608727; c=relaxed/simple;
+	bh=w6vLrNc06EtXLU0weol+DYdC4k1JkQaPnfFHKrgNuj0=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sYEEK3d4K/BGs0hxpj8n2TT0vCGuoRa/CqKqXuFUpeYcoB2B9suH1Xt2liuSWSTIDRAEFrxGZixyciwAXJywF4fI26108TKdnzTC4bMKFTPVy1HKTc+gynr3N1Zb76PKAMvY68ftyH56YXa/lvlOssIIsWslB20s20SGxERcTuA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Cbyu1Q0w; arc=fail smtp.client-ip=40.107.236.70
+	 MIME-Version:Content-Type; b=jDoYaiHNuOIVAdENCJAsyFJUATng3oVAHQtFASVy6wORD2C8xoia16AaCfHmUwzsIJfuoCdrWdVWceL75t9P3Fe9Kf/5NtbHQfYg7Es9JPytQIVjIEeqW6Ph7hAw6CiESQigudyfs0GtMW7wiAQYYhb15ThNynLbi5cgaITf5ww=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=rZta4UsD; arc=fail smtp.client-ip=40.107.92.85
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XUliAKWwWB+Ewv5+Ld/PyhyJ2qxAGOliH3vgGKt2NXk/AqDv+25zc7OII1Xty9Fc1mHnEeA7hpxHPOPSfMXoMWyB7h66kGY4dvBgnKpSy0AAQwA+WPJlsYgaBTfaZeLN8+DDf7p3eh/gOMa40M6SiG+tnJfzDEE2geHnASMAA1Hqu74OJrumN3MrSsohZ8qRj/7xJgG7FZSo5n5bOrDz9zQPJx+Apg/BiIyUnyt/9HxpY0BRKuLNTDff/6elGrtaDXXSBYSacgRSgR7ZEXi+ikk/S00CnUNEYm74s/aUcitfkY+X4mms3Sh89yUXDnZSXU+7Pjiqx/UE8o7SHxbUPg==
+ b=zKjtbDN/qlKt7reKNei9Yi1LCnXy3yy/in3+3B76jCDKu+MVYT+mHyPWHmZ8jHfVrS7fVIOUbMKqugZInFsmbE8S8dv9/lOn6ZPNsBbHU1Dgl++Ofih4gsDhA6iiCzfhuyod/RaZThsOfn3epfD8dwejnLjU6I4jEexefH4nWOzeMfZpkN3upkVdTE5PI6A2XVcuLzOXjJIzE8Gx267mBI3S0RswOGgY9nUafoA++8Uz1f5CguBDEOc5dJA8lQzd4hkyQiIntR2xBDENo/BycSmAr3m3eKieNAxerJETRadknFlCpCn2gDsoSwClMLitcERJwpt58IM8ADGXMY7qbg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=r6xOfbvduhWp3r2ZbJXG/bT3O79FynaTkLVDmv++o1M=;
- b=rtqyWAGJCjZRZvvolxn649cqsUc9TfwcW/QJHl8buanID2zu5Z1665oBe+ZXA19t549AogMSd/fgrLKmP6piWoYIIrMlGhegyEw+ZmHlWCt9pkf9yc8u/rWhKgmK+bQ7Sdj7KBxlOKA/UsyUDXAghJH0OgIl09s4BXHqwMSq1A3VR+5hTtrd4n05Yk6QdKktKgkzaG02HOLv0op97fWDfu8wGOAVN69XYGE4qgTJx+7bt0lIcwSAyEaqAe8qhSMopsXH1zjV/pwCeEWJTkmbQDSlrU/3vIBxsLKIedcaMjtz8QtW0HFT5yRJQDB7X4I5+MOPANXHnVP3uhNsPu39JQ==
+ bh=9yO46m1wrD3vR22LA5vKZnXRrx/Xfxf/OgkDidzy+B4=;
+ b=mQCCx8dV2TNpqEh/47bbYJqvVmM+RqM0EW8gD1O0olnH5ly41P3uN2Ax+QY+XIFQj8Ieq+IgH0dcWkO3HzCzwXwPLEUGFCsYFlVew5OKNy+5R5jhT/JPOa+Jr3wFFABzvm11W1o9lvFoJ9GL0Vi5L1GQVXze1NSEUKAzH3Wn33iLAL/QY/fYLnYYlU8rKMgL1sf3dzQjQmn52CBeV5aY5HWe5+AgqXKhrEMXP3iqm8cZZy6N5oXaPFJmvpiul8WsRujNco8OTgFdPipHIjNEveCWcnW59soQxABDz8zbNyUZqC5l+M/uaj7aHjZfrTrJt3V2XW+/hOBAogg64KYv/Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=r6xOfbvduhWp3r2ZbJXG/bT3O79FynaTkLVDmv++o1M=;
- b=Cbyu1Q0wDdqC2ex7svnLpEno7ExPUKU8WtCKuucqNqTH8HAskUOAJ/4HO2cZdxe0BNx4Y5q8FmPkrhw4VB64rNAzz00f3CFlzS7TNvjxolSGtLjhnTBhh4ldclx/NeqrhIQW5OsEhFlY5ySJTc8MgkeKaHsfiZGls65QhrC/S9smYNZ4hMtYxdVbYG0fwpCk696RbDsP+jd8eo6s7ts/YxnOnhp32A31XUh0jkpBzT5/tga4EKqLdxsvMXLyix9FCs4zfe0tAluonSG73K5SHLIJLgoa9AsGJbQ7rnZpRcum7yIusRtUhjXYPuuFjw5bPLrVVxJJWMpNFND45cC+LQ==
-Received: from CH0PR03CA0351.namprd03.prod.outlook.com (2603:10b6:610:11a::13)
- by SJ0PR12MB6688.namprd12.prod.outlook.com (2603:10b6:a03:47d::19) with
+ bh=9yO46m1wrD3vR22LA5vKZnXRrx/Xfxf/OgkDidzy+B4=;
+ b=rZta4UsDtqzkcEsGAWMq6WXBGD8R1uKcFW2bEhQG1KMJJIkgKeuB/+38ZFpbixjI5LJvpQIagx77/T9fCEhGUmzBQz0Sf1aZ0hqlijycqQqU10XQScPMCxQOLALnWPOGsUGi8+GtSTSX0zldqDytxPJFttClAvSy4K9Ij1tzpKIuC6C1WrtluQlX2d8yVg2ER2fXQAP3S5J93Fwc4fvA/0mkhIYpLfFybuh52FmOHjPzx+KATLGr1LvLd9CCZ9GPUNBfS4dPb9hX0SukncL1YYCfCI3XKvI1REMdkQr/HiHhlSYQEE7Hr+MojryYklzSjo9eHJrgncsyjtj4og/8VA==
+Received: from BYAPR08CA0063.namprd08.prod.outlook.com (2603:10b6:a03:117::40)
+ by SA1PR12MB8698.namprd12.prod.outlook.com (2603:10b6:806:38b::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.28; Tue, 22 Oct
- 2024 14:51:59 +0000
-Received: from DS3PEPF0000C381.namprd04.prod.outlook.com
- (2603:10b6:610:11a:cafe::27) by CH0PR03CA0351.outlook.office365.com
- (2603:10b6:610:11a::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.16 via Frontend
- Transport; Tue, 22 Oct 2024 14:51:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ 2024 14:52:00 +0000
+Received: from SJ1PEPF000023D8.namprd21.prod.outlook.com
+ (2603:10b6:a03:117:cafe::7e) by BYAPR08CA0063.outlook.office365.com
+ (2603:10b6:a03:117::40) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.29 via Frontend
+ Transport; Tue, 22 Oct 2024 14:52:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DS3PEPF0000C381.mail.protection.outlook.com (10.167.23.11) with Microsoft
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SJ1PEPF000023D8.mail.protection.outlook.com (10.167.244.73) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8093.14 via Frontend Transport; Tue, 22 Oct 2024 14:51:58 +0000
+ 15.20.8114.2 via Frontend Transport; Tue, 22 Oct 2024 14:51:59 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 22 Oct
- 2024 07:51:39 -0700
+ 2024 07:51:46 -0700
 Received: from fedora.mtl.com (10.126.231.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 22 Oct
- 2024 07:51:33 -0700
+ 2024 07:51:39 -0700
 From: Petr Machata <petrm@nvidia.com>
 To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
 	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
@@ -83,10 +83,11 @@ CC: Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>, "Amit
  Cohen" <amcohen@nvidia.com>, Vladimir Oltean <vladimir.oltean@nxp.com>,
 	<mlxsw@nvidia.com>, Shuah Khan <shuah@kernel.org>, Benjamin Poirier
 	<bpoirier@nvidia.com>, Hangbin Liu <liuhangbin@gmail.com>,
-	<linux-kselftest@vger.kernel.org>, Jiri Pirko <jiri@resnulli.us>
-Subject: [PATCH net-next 6/8] selftests: net: lib: Move checks from forwarding/lib.sh here
-Date: Tue, 22 Oct 2024 16:50:17 +0200
-Message-ID: <6e337cad958bf489d0dba5446cc01e90d2d9ac02.1729607879.git.petrm@nvidia.com>
+	<linux-kselftest@vger.kernel.org>, Jiri Pirko <jiri@resnulli.us>, Andrew Lunn
+	<andrew+netdev@lunn.ch>
+Subject: [PATCH net-next 7/8] selftests: net: lib: Add kill_process
+Date: Tue, 22 Oct 2024 16:50:18 +0200
+Message-ID: <53b69a578d52e69c5cecb897140523560a72a514.1729607879.git.petrm@nvidia.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1729607879.git.petrm@nvidia.com>
 References: <cover.1729607879.git.petrm@nvidia.com>
@@ -102,59 +103,54 @@ X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS3PEPF0000C381:EE_|SJ0PR12MB6688:EE_
-X-MS-Office365-Filtering-Correlation-Id: bb211a50-7efb-4dcb-8300-08dcf2a914a8
+X-MS-TrafficTypeDiagnostic: SJ1PEPF000023D8:EE_|SA1PR12MB8698:EE_
+X-MS-Office365-Filtering-Correlation-Id: d2660e60-f5ba-4afb-a9d3-08dcf2a91541
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|7416014|1800799024|36860700013;
+	BCL:0;ARA:13230040|82310400026|36860700013|376014|7416014|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?syduBq444RUWzg/IHfaiiy5ukLEKEQG0Lz0+MpwnB2lLcGi7JyIOEh/MN+4P?=
- =?us-ascii?Q?X/sv4AQPbYBVycIBx6nn4BmQ4YstOKZVV+79Ie0zSYlJgNiPiI2iISPMgLAI?=
- =?us-ascii?Q?eviINTqsJN1WmzAVohCkHOlWMySBGBebsVaHOxc6KvbpeyjX4OWzNhbAFILj?=
- =?us-ascii?Q?ZWxgIcFWhSQFb6UJNJzRxWHDVd9r5+5kUR9ALqjHOgkW2jALVK1B1Jok7vsc?=
- =?us-ascii?Q?O9i6LcBQZUVRCAoWUc1z54KeoVD6hKDRA/K2il4zFeiV07qRn/ZPzehPbAa9?=
- =?us-ascii?Q?a3rnCzsneE3cSSUksFhZE4rbeenqoz1ov7b/h9whHuS0Ez8/x2Hm/2NoFD5g?=
- =?us-ascii?Q?pMWi0uarP0EH/9ricezNusEMrzcu245/e1EemvAhfE4rthU2DHwO6GX1baK/?=
- =?us-ascii?Q?gP1Jn+XZ+QrLviZtQex11wRJFNtIbwIpQDAw5b9CfmGqttGxXiY/iVL+J/zI?=
- =?us-ascii?Q?JSUQRGHuK3gJChBgnIa1ZbZI5hv9hECDqyVdkHbMIjtG+3hCxgyIi2WXq0XR?=
- =?us-ascii?Q?B+0vpHc2G++lYKU1FI5xDHFZjzrJqyc0GfFJ3WWFfvDsiF/3m/tDhw+C2OP7?=
- =?us-ascii?Q?jmFBWPrgUzjJWLi0zZpkdnGud2Gy2jmMU3jw6gAAj3vD9D98/S1vptMDRH7o?=
- =?us-ascii?Q?z3vw7ER/r4OFE6mznu6jcQkNwr4Rp30VpYb0DjgsPCPd3LNejjd1PPYhYGw6?=
- =?us-ascii?Q?B24zQ78PjShooKC5pqkKX5EFz/VGYdi3BEwfJabfc78rTJrCVPW6NlurlCw3?=
- =?us-ascii?Q?D1vJkSOt6PaCwXVufeK3gQpCS3wmO5S5CrHq+6bvSsrSoIrUGASAyBzADPTT?=
- =?us-ascii?Q?bxG4Q1hZZMxKbc/Zu/TJ+XlPmctxrwBzOFoood2gy6lEFofBV2xb38lUvgIq?=
- =?us-ascii?Q?QiJxH0WVzhaDQTF0t6XC24Y0eWc/vQZUuOwgjDL7SMVp8p/1pgAf/X41a+m7?=
- =?us-ascii?Q?GvIw4sD6n+pKeoHDW1uB3Ue7UnF7JuIjkX26y3q95USEKt5jMMSdfzEzoWa8?=
- =?us-ascii?Q?3BtJhd7SOjXl6DOo8dlFb6Vg0mhflfyG23OobFKUsZQk7xfu+kejbCAxsW8C?=
- =?us-ascii?Q?gnoMZRK2ogQaNzG0ISktIv74TEtstohEbRFO7km2isHyUBbaKgSR6LF9DQWX?=
- =?us-ascii?Q?okOxKJsYliliY977Z6AuoTAKTQXRnH3AWyfVuDLUXZhntPKSnATCe2RNxv20?=
- =?us-ascii?Q?ijhyqmaclB7HAJbcd/HfCckj4cYq8bxmcOEK0q7SDtjqFOAHXX3xJ9eSfo9Z?=
- =?us-ascii?Q?qFC77MfEb0b2L2DSKGSKpS1EeVSN3FLIXdUFqhr2KbEv4Cl2UJFYifAw8nHb?=
- =?us-ascii?Q?d6FctgwR2Q6ZldSQOPAwZRh8k861n01HalAVXCX4jkJIPX8GDhAcUOI0taKS?=
- =?us-ascii?Q?MTVlypjXqnN7V8VDnPzi/M0v9VQYKC4P6cOAsdkOYl9h6oaRfw=3D=3D?=
+	=?us-ascii?Q?2HCEf/NhrCSR4TUR8+/BipjGO9s0LI5EuZihLnp8gFpMEGkmklYyK3rFIjoG?=
+ =?us-ascii?Q?s/QEwLU3yw5iySsIsav8XQSrIev15R0ICMQpPnTl9DnAihzampUDhJcH2ShZ?=
+ =?us-ascii?Q?NHr6c6FTGePkRv+WMdLiE8OF6NECOOeNOGOHhMPScM747OxcDTJGMe0Xk44v?=
+ =?us-ascii?Q?3ngYhzW3Q1QdNHkiZuEl44ZRNQ9/Dk6Xq/3RAqM6mSa90JKOL3HZSyE89PND?=
+ =?us-ascii?Q?euL/4Z4CYC1eGZ7ESPRYzv1ChE4A4ZUT8JomxC3TPEGiefX0mb3DsoU1ceEG?=
+ =?us-ascii?Q?Bpgobhr93BRs9Unq6tPebHQq9ToFKgFNdplLgv1bd/ff2RhoUDQEGAUMZQN0?=
+ =?us-ascii?Q?nDopoayNS41ICCVljPNZNuiHng5v155Q2M5KIFvKBQB6rXh/ISV71MFuCh1Y?=
+ =?us-ascii?Q?6I82IEcjG2Z8x6P16prqcZQEGn/R1ETfo0qER/i1gTxRNvnWotOiH/H9VrS0?=
+ =?us-ascii?Q?hFUqWnW6fKG8INQpltXBcIgZps/6pkd7kwfJflEclz0PjKHnspjiVUsXGlxy?=
+ =?us-ascii?Q?TNPyr5q7rgmpJ2FnmnxW4vigIbKI3WXkhI34ADrddCeZW34n/ty1pfgn1+ow?=
+ =?us-ascii?Q?aygpYO3fEC7UgYc7MLBveP1MtMS8sLDnc/K79pOStVxInyWbGfmf2P+h1s27?=
+ =?us-ascii?Q?wS0SgOnoxtidph0ma4j8D3RY4TRg8VwJ4It5z4tnqZhjjLhEye6+HHS+MgGZ?=
+ =?us-ascii?Q?nXvx6Kcfv9HNwEU8OBGB2Dbo6NZEM+i433YPw8LWwV4VBLEpwbz6TCYCUA6a?=
+ =?us-ascii?Q?kdqgZ7eur/CQeP+PhA71P60724PJdRdJT3us5bt7P/sy57CuMSjSgJE0cf6M?=
+ =?us-ascii?Q?j1dOtO8ulGcU+wuIFG1R4xvuwIpJGwD98M/Rv+ptR8RZhPYK1SFn0CBx15B3?=
+ =?us-ascii?Q?pILmh9CVkuTTVoPlpB+mRp7s0YR6Ykuxcu+Q/DTjb9XnUbySziYUWIJ9n8QY?=
+ =?us-ascii?Q?4ZCsvdLWe1aAxIDUfB07yCqSAVAGMEmYrt7/Bup9SCIOZSo6mR6hVB9OdKy8?=
+ =?us-ascii?Q?tbhMClcfwtEWY5E4NS6QcIT7zUgm4qgtDAoNLbXqwC0Gq/LPYSV26AKjMhGS?=
+ =?us-ascii?Q?QNEH6VvAAFpSwQnUliSMHrZmi/26bMCiwF2e05pKWyr8Ema5jBKpKL19Cix1?=
+ =?us-ascii?Q?y86YTt7L7HtS1QE/qeXjxU63mGTJ5PTB/NeHUI1NhbdZoTjGzhTpAJxTfweZ?=
+ =?us-ascii?Q?cOYwuJlQDItBls00MVIXjIZh7qGOlCgqHFwbEDLYYpyfiCicTOdEFmCRJOLp?=
+ =?us-ascii?Q?zE2LiCKQ8ZQRH54JHme+JGG6ZdtGqtqPHWr3mEylQ/c00f3/KiJikChsAZS8?=
+ =?us-ascii?Q?Ligk0sb0g0VIK0RT3MLikh01sl9kX73IqAbhWh3GbNB9GYDYhdCrbPqwwebK?=
+ =?us-ascii?Q?YQX2cVrVGJM+Qd72VlUbTnIY2381WIZGZJef6S9DFNPVQWlhcA=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2024 14:51:58.8188
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2024 14:51:59.8381
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bb211a50-7efb-4dcb-8300-08dcf2a914a8
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2660e60-f5ba-4afb-a9d3-08dcf2a91541
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	DS3PEPF0000C381.namprd04.prod.outlook.com
+	SJ1PEPF000023D8.namprd21.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6688
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8698
 
-For logging to be useful, something has to set RET and retmsg by calling
-ret_set_ksft_status(). There is a suite of functions to that end in
-forwarding/lib: check_err, check_fail et.al. Move them to net/lib.sh so
-that every net test can use them.
-
-Existing lib.sh users might be using these same names for their functions.
-However lib.sh is always sourced near the top of the file (checked), and
-whatever new definitions will simply override the ones provided by lib.sh.
+A number of selftests run processes in the background and need to kill them
+afterwards. Instead for everyone to open-code the kill / wait / redirect
+mantra, add a helper in net/lib.sh. Convert existing open-code sites.
 
 Signed-off-by: Petr Machata <petrm@nvidia.com>
 Reviewed-by: Amit Cohen <amcohen@nvidia.com>
@@ -164,175 +160,394 @@ CC: Benjamin Poirier <bpoirier@nvidia.com>
 CC: Hangbin Liu <liuhangbin@gmail.com>
 CC: linux-kselftest@vger.kernel.org
 CC: Jiri Pirko <jiri@resnulli.us>
+CC: Andrew Lunn <andrew+netdev@lunn.ch>
 ---
- tools/testing/selftests/net/forwarding/lib.sh | 73 -------------------
- tools/testing/selftests/net/lib.sh            | 73 +++++++++++++++++++
- 2 files changed, 73 insertions(+), 73 deletions(-)
+ .../selftests/drivers/net/mlxsw/devlink_trap.sh      |  2 +-
+ .../drivers/net/mlxsw/devlink_trap_l3_drops.sh       |  4 ++--
+ .../drivers/net/mlxsw/devlink_trap_l3_exceptions.sh  | 12 ++++++------
+ .../drivers/net/mlxsw/devlink_trap_tunnel_ipip.sh    |  4 ++--
+ .../drivers/net/mlxsw/devlink_trap_tunnel_ipip6.sh   |  4 ++--
+ .../drivers/net/mlxsw/devlink_trap_tunnel_vxlan.sh   |  4 ++--
+ .../net/mlxsw/devlink_trap_tunnel_vxlan_ipv6.sh      |  4 ++--
+ .../testing/selftests/drivers/net/mlxsw/tc_sample.sh |  4 ++--
+ .../drivers/net/netdevsim/fib_notifications.sh       |  6 +++---
+ tools/testing/selftests/net/drop_monitor_tests.sh    |  2 +-
+ tools/testing/selftests/net/fib_tests.sh             |  8 ++++----
+ .../testing/selftests/net/forwarding/devlink_lib.sh  |  2 +-
+ tools/testing/selftests/net/forwarding/lib.sh        |  3 +--
+ tools/testing/selftests/net/forwarding/tc_police.sh  |  8 ++++----
+ tools/testing/selftests/net/lib.sh                   |  8 ++++++++
+ 15 files changed, 41 insertions(+), 34 deletions(-)
 
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap.sh b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap.sh
+index 89b55e946eed..36055279ba92 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap.sh
+@@ -116,7 +116,7 @@ dev_del_test()
+ 
+ 	log_test "Device delete"
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ }
+ 
+ trap cleanup EXIT
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_l3_drops.sh b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_l3_drops.sh
+index 160891dcb4bc..db5806d189bb 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_l3_drops.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_l3_drops.sh
+@@ -595,7 +595,7 @@ irif_disabled_test()
+ 
+ 	log_test "Ingress RIF disabled"
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	ip link set dev $rp1 nomaster
+ 	__addr_add_del $rp1 add 192.0.2.2/24 2001:db8:1::2/64
+ 	ip link del dev br0 type bridge
+@@ -645,7 +645,7 @@ erif_disabled_test()
+ 
+ 	log_test "Egress RIF disabled"
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	__addr_add_del $rp1 add 192.0.2.2/24 2001:db8:1::2/64
+ 	ip link del dev br0 type bridge
+ 	devlink_trap_action_set $trap_name "drop"
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_l3_exceptions.sh b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_l3_exceptions.sh
+index 190c1b6b5365..5d6d88b600f0 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_l3_exceptions.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_l3_exceptions.sh
+@@ -202,7 +202,7 @@ mtu_value_is_too_small_test()
+ 
+ 	mtu_restore $rp2
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	tc filter del dev $h1 ingress protocol ip pref 1 handle 101 flower
+ }
+ 
+@@ -235,7 +235,7 @@ __ttl_value_is_too_small_test()
+ 
+ 	log_test "TTL value is too small: TTL=$ttl_val"
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	tc filter del dev $h1 ingress protocol ip pref 1 handle 101 flower
+ }
+ 
+@@ -299,7 +299,7 @@ __mc_reverse_path_forwarding_test()
+ 
+ 	log_test "Multicast reverse path forwarding: $desc"
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	tc filter del dev $rp2 egress protocol $proto pref 1 handle 101 flower
+ }
+ 
+@@ -347,7 +347,7 @@ __reject_route_test()
+ 
+ 	log_test "Reject route: $desc"
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	ip route del unreachable $unreachable
+ 	tc filter del dev $h1 ingress protocol $proto pref 1 handle 101 flower
+ }
+@@ -542,7 +542,7 @@ ipv4_lpm_miss_test()
+ 
+ 	log_test "LPM miss: IPv4"
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	vrf_without_routes_destroy
+ }
+ 
+@@ -569,7 +569,7 @@ ipv6_lpm_miss_test()
+ 
+ 	log_test "LPM miss: IPv6"
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	vrf_without_routes_destroy
+ }
+ 
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_tunnel_ipip.sh b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_tunnel_ipip.sh
+index e9a82cae8c9a..4ac1dae92d0f 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_tunnel_ipip.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_tunnel_ipip.sh
+@@ -176,7 +176,7 @@ ecn_decap_test()
+ 
+ 	log_test "$desc: Inner ECN is not ECT and outer is $ecn_desc"
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	tc filter del dev $swp1 egress protocol ip pref 1 handle 101 flower
+ }
+ 
+@@ -207,7 +207,7 @@ no_matching_tunnel_test()
+ 
+ 	log_test "$desc"
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	tc filter del dev $swp1 egress protocol ip pref 1 handle 101 flower
+ }
+ 
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_tunnel_ipip6.sh b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_tunnel_ipip6.sh
+index 878125041fc3..fce885184404 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_tunnel_ipip6.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_tunnel_ipip6.sh
+@@ -176,7 +176,7 @@ ecn_decap_test()
+ 
+ 	log_test "$desc: Inner ECN is not ECT and outer is $ecn_desc"
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	tc filter del dev $swp1 egress protocol ipv6 pref 1 handle 101 flower
+ }
+ 
+@@ -207,7 +207,7 @@ no_matching_tunnel_test()
+ 
+ 	log_test "$desc"
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	tc filter del dev $swp1 egress protocol ipv6 pref 1 handle 101 flower
+ }
+ 
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_tunnel_vxlan.sh b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_tunnel_vxlan.sh
+index 5f6eb965cfd1..7aca8e5922cf 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_tunnel_vxlan.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_tunnel_vxlan.sh
+@@ -183,7 +183,7 @@ ecn_decap_test()
+ 
+ 	log_test "$desc: Inner ECN is not ECT and outer is $ecn_desc"
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	tc filter del dev $swp1 egress protocol ip pref 1 handle 101 flower
+ }
+ 
+@@ -253,7 +253,7 @@ corrupted_packet_test()
+ 
+ 	log_test "$desc"
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	tc filter del dev $swp1 egress protocol ip pref 1 handle 101 flower
+ }
+ 
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_tunnel_vxlan_ipv6.sh b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_tunnel_vxlan_ipv6.sh
+index f6c16cbb6cf7..4599c331240b 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_tunnel_vxlan_ipv6.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/devlink_trap_tunnel_vxlan_ipv6.sh
+@@ -188,7 +188,7 @@ ecn_decap_test()
+ 
+ 	log_test "$desc: Inner ECN is not ECT and outer is $ecn_desc"
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	tc filter del dev $swp1 egress protocol ipv6 pref 1 handle 101 flower
+ }
+ 
+@@ -262,7 +262,7 @@ corrupted_packet_test()
+ 
+ 	log_test "$desc"
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	tc filter del dev $swp1 egress protocol ipv6 pref 1 handle 101 flower
+ }
+ 
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/tc_sample.sh b/tools/testing/selftests/drivers/net/mlxsw/tc_sample.sh
+index 83a0210e7544..bc7ea2df49fb 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/tc_sample.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/tc_sample.sh
+@@ -218,7 +218,7 @@ psample_capture_start()
+ 
+ psample_capture_stop()
+ {
+-	{ kill %% && wait %%; } 2>/dev/null
++	kill_process %%
+ }
+ 
+ __tc_sample_rate_test()
+@@ -499,7 +499,7 @@ tc_sample_md_out_tc_occ_test()
+ 	backlog=$(tc -j -p -s qdisc show dev $rp2 | jq '.[0]["backlog"]')
+ 
+ 	# Kill mausezahn.
+-	{ kill %% && wait %%; } 2>/dev/null
++	kill_process %%
+ 
+ 	psample_capture_stop
+ 
+diff --git a/tools/testing/selftests/drivers/net/netdevsim/fib_notifications.sh b/tools/testing/selftests/drivers/net/netdevsim/fib_notifications.sh
+index 8d91191a098c..9896580c3d85 100755
+--- a/tools/testing/selftests/drivers/net/netdevsim/fib_notifications.sh
++++ b/tools/testing/selftests/drivers/net/netdevsim/fib_notifications.sh
+@@ -94,7 +94,7 @@ route_addition_check()
+ 	sleep 1
+ 	$IP route add $route dev dummy1
+ 	sleep 1
+-	kill %% && wait %% &> /dev/null
++	kill_process %%
+ 
+ 	route_notify_check $outfile $expected_num_notifications $offload_failed
+ 	rm -f $outfile
+@@ -148,7 +148,7 @@ route_deletion_check()
+ 	sleep 1
+ 	$IP route del $route dev dummy1
+ 	sleep 1
+-	kill %% && wait %% &> /dev/null
++	kill_process %%
+ 
+ 	route_notify_check $outfile $expected_num_notifications
+ 	rm -f $outfile
+@@ -191,7 +191,7 @@ route_replacement_check()
+ 	sleep 1
+ 	$IP route replace $route dev dummy2
+ 	sleep 1
+-	kill %% && wait %% &> /dev/null
++	kill_process %%
+ 
+ 	route_notify_check $outfile $expected_num_notifications
+ 	rm -f $outfile
+diff --git a/tools/testing/selftests/net/drop_monitor_tests.sh b/tools/testing/selftests/net/drop_monitor_tests.sh
+index 7c4818c971fc..507d0a82f5f0 100755
+--- a/tools/testing/selftests/net/drop_monitor_tests.sh
++++ b/tools/testing/selftests/net/drop_monitor_tests.sh
+@@ -77,7 +77,7 @@ sw_drops_test()
+ 
+ 	rm ${dir}/packets.pcap
+ 
+-	{ kill %% && wait %%; } 2>/dev/null
++	kill_process %%
+ 	timeout 5 dwdump -o sw -w ${dir}/packets.pcap
+ 	(( $(tshark -r ${dir}/packets.pcap \
+ 		-Y 'ip.dst == 192.0.2.10' 2> /dev/null | wc -l) == 0))
+diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+index 5f3c28fc8624..3ea6f886a210 100755
+--- a/tools/testing/selftests/net/fib_tests.sh
++++ b/tools/testing/selftests/net/fib_tests.sh
+@@ -689,7 +689,7 @@ fib6_notify_test()
+ 
+ 	log_test $ret 0 "ipv6 route add notify"
+ 
+-	{ kill %% && wait %%; } 2>/dev/null
++	kill_process %%
+ 
+ 	#rm errors.txt
+ 
+@@ -736,7 +736,7 @@ fib_notify_test()
+ 
+ 	log_test $ret 0 "ipv4 route add notify"
+ 
+-	{ kill %% && wait %%; } 2>/dev/null
++	kill_process %%
+ 
+ 	rm  errors.txt
+ 
+@@ -2328,7 +2328,7 @@ ipv4_mangle_test()
+ 	$IP route del table 123 172.16.101.0/24 dev veth1
+ 	$IP rule del pref 100
+ 
+-	{ kill %% && wait %%; } 2>/dev/null
++	kill_process %%
+ 	rm $tmp_file
+ 
+ 	route_cleanup
+@@ -2386,7 +2386,7 @@ ipv6_mangle_test()
+ 	$IP -6 route del table 123 2001:db8:101::/64 dev veth1
+ 	$IP -6 rule del pref 100
+ 
+-	{ kill %% && wait %%; } 2>/dev/null
++	kill_process %%
+ 	rm $tmp_file
+ 
+ 	route_cleanup
+diff --git a/tools/testing/selftests/net/forwarding/devlink_lib.sh b/tools/testing/selftests/net/forwarding/devlink_lib.sh
+index 62a05bca1e82..18afa89ebbcc 100644
+--- a/tools/testing/selftests/net/forwarding/devlink_lib.sh
++++ b/tools/testing/selftests/net/forwarding/devlink_lib.sh
+@@ -501,7 +501,7 @@ devlink_trap_drop_cleanup()
+ 	local pref=$1; shift
+ 	local handle=$1; shift
+ 
+-	kill $mz_pid && wait $mz_pid &> /dev/null
++	kill_process $mz_pid
+ 	tc filter del dev $dev egress protocol $proto pref $pref handle $handle flower
+ }
+ 
 diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index d28dbf27c1f0..8625e3c99f55 100644
+index 8625e3c99f55..7337f398f9cc 100644
 --- a/tools/testing/selftests/net/forwarding/lib.sh
 +++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -445,79 +445,6 @@ done
- ##############################################################################
- # Helpers
- 
--# Whether FAILs should be interpreted as XFAILs. Internal.
--FAIL_TO_XFAIL=
--
--check_err()
--{
--	local err=$1
--	local msg=$2
--
--	if ((err)); then
--		if [[ $FAIL_TO_XFAIL = yes ]]; then
--			ret_set_ksft_status $ksft_xfail "$msg"
--		else
--			ret_set_ksft_status $ksft_fail "$msg"
--		fi
--	fi
--}
--
--check_fail()
--{
--	local err=$1
--	local msg=$2
--
--	check_err $((!err)) "$msg"
--}
--
--check_err_fail()
--{
--	local should_fail=$1; shift
--	local err=$1; shift
--	local what=$1; shift
--
--	if ((should_fail)); then
--		check_fail $err "$what succeeded, but should have failed"
--	else
--		check_err $err "$what failed"
--	fi
--}
--
--xfail()
--{
--	FAIL_TO_XFAIL=yes "$@"
--}
--
--xfail_on_slow()
--{
--	if [[ $KSFT_MACHINE_SLOW = yes ]]; then
--		FAIL_TO_XFAIL=yes "$@"
--	else
--		"$@"
--	fi
--}
--
--omit_on_slow()
--{
--	if [[ $KSFT_MACHINE_SLOW != yes ]]; then
--		"$@"
--	fi
--}
--
--xfail_on_veth()
--{
--	local dev=$1; shift
--	local kind
--
--	kind=$(ip -j -d link show dev $dev |
--			jq -r '.[].linkinfo.info_kind')
--	if [[ $kind = veth ]]; then
--		FAIL_TO_XFAIL=yes "$@"
--	else
--		"$@"
--	fi
--}
--
- not()
+@@ -1574,8 +1574,7 @@ stop_traffic()
  {
- 	"$@"
+ 	local pid=${1-%%}; shift
+ 
+-	# Suppress noise from killing mausezahn.
+-	{ kill $pid && wait $pid; } 2>/dev/null
++	kill_process "$pid"
+ }
+ 
+ declare -A cappid
+diff --git a/tools/testing/selftests/net/forwarding/tc_police.sh b/tools/testing/selftests/net/forwarding/tc_police.sh
+index 5103f64a71d6..509fdedfcfa1 100755
+--- a/tools/testing/selftests/net/forwarding/tc_police.sh
++++ b/tools/testing/selftests/net/forwarding/tc_police.sh
+@@ -148,7 +148,7 @@ police_common_test()
+ 
+ 	log_test "$test_name"
+ 
+-	{ kill %% && wait %%; } 2>/dev/null
++	kill_process %%
+ 	tc filter del dev $h2 ingress protocol ip pref 1 handle 101 flower
+ }
+ 
+@@ -198,7 +198,7 @@ police_shared_common_test()
+ 
+ 	log_test "$test_name"
+ 
+-	{ kill %% && wait %%; } 2>/dev/null
++	kill_process %%
+ }
+ 
+ police_shared_test()
+@@ -278,7 +278,7 @@ police_mirror_common_test()
+ 
+ 	log_test "$test_name"
+ 
+-	{ kill %% && wait %%; } 2>/dev/null
++	kill_process %%
+ 	tc filter del dev $pol_if $dir protocol ip pref 1 handle 101 flower
+ 	tc filter del dev $h3 ingress protocol ip pref 1 handle 101 flower
+ 	tc filter del dev $h2 ingress protocol ip pref 1 handle 101 flower
+@@ -320,7 +320,7 @@ police_pps_common_test()
+ 
+ 	log_test "$test_name"
+ 
+-	{ kill %% && wait %%; } 2>/dev/null
++	kill_process %%
+ 	tc filter del dev $h2 ingress protocol ip pref 1 handle 101 flower
+ }
+ 
 diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-index 4f52b8e48a3a..6bcf5d13879d 100644
+index 6bcf5d13879d..24f63e45735d 100644
 --- a/tools/testing/selftests/net/lib.sh
 +++ b/tools/testing/selftests/net/lib.sh
-@@ -361,3 +361,76 @@ tests_run()
- 			$current_test
- 	done
+@@ -434,3 +434,11 @@ xfail_on_veth()
+ 		"$@"
+ 	fi
  }
 +
-+# Whether FAILs should be interpreted as XFAILs. Internal.
-+FAIL_TO_XFAIL=
-+
-+check_err()
++kill_process()
 +{
-+	local err=$1
-+	local msg=$2
++	local pid=$1; shift
 +
-+	if ((err)); then
-+		if [[ $FAIL_TO_XFAIL = yes ]]; then
-+			ret_set_ksft_status $ksft_xfail "$msg"
-+		else
-+			ret_set_ksft_status $ksft_fail "$msg"
-+		fi
-+	fi
-+}
-+
-+check_fail()
-+{
-+	local err=$1
-+	local msg=$2
-+
-+	check_err $((!err)) "$msg"
-+}
-+
-+check_err_fail()
-+{
-+	local should_fail=$1; shift
-+	local err=$1; shift
-+	local what=$1; shift
-+
-+	if ((should_fail)); then
-+		check_fail $err "$what succeeded, but should have failed"
-+	else
-+		check_err $err "$what failed"
-+	fi
-+}
-+
-+xfail()
-+{
-+	FAIL_TO_XFAIL=yes "$@"
-+}
-+
-+xfail_on_slow()
-+{
-+	if [[ $KSFT_MACHINE_SLOW = yes ]]; then
-+		FAIL_TO_XFAIL=yes "$@"
-+	else
-+		"$@"
-+	fi
-+}
-+
-+omit_on_slow()
-+{
-+	if [[ $KSFT_MACHINE_SLOW != yes ]]; then
-+		"$@"
-+	fi
-+}
-+
-+xfail_on_veth()
-+{
-+	local dev=$1; shift
-+	local kind
-+
-+	kind=$(ip -j -d link show dev $dev |
-+			jq -r '.[].linkinfo.info_kind')
-+	if [[ $kind = veth ]]; then
-+		FAIL_TO_XFAIL=yes "$@"
-+	else
-+		"$@"
-+	fi
++	# Suppress noise from killing the process.
++	{ kill $pid && wait $pid; } 2>/dev/null
 +}
 -- 
 2.45.0
