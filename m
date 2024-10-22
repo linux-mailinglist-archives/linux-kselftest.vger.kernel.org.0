@@ -1,215 +1,165 @@
-Return-Path: <linux-kselftest+bounces-20419-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20420-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3DD89AB747
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 21:58:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 969DF9AB762
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 22:04:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B5B2B22A9C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 19:58:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB5C91C23F88
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 20:04:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CF2E1CBEB5;
-	Tue, 22 Oct 2024 19:58:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A0F81A08DB;
+	Tue, 22 Oct 2024 20:04:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="isaIfpbx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LnV6PnIy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8AC31CB530
-	for <linux-kselftest@vger.kernel.org>; Tue, 22 Oct 2024 19:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4376E1BDA89;
+	Tue, 22 Oct 2024 20:04:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729627099; cv=none; b=QowIhUd4xWbJX5wN8ytODAotz3JrSEOR7d8baeCLHx3ogabxLIWMFzng2nSJyWb/mYUKO/qJ5busJquDPq67IM3yRl+eNmup6PileUbG4jce7qVyd4Z0AS0d33j1u7XaYVq77xBnNDOOXnL7BdsrUlN8zV6spXTGm+nhIfT36vU=
+	t=1729627458; cv=none; b=We/posloJl+suU9H4V1sZrfoMSO0x+25SxZdMWevnE1J0e8WmV8m4vv7PbCu0UXUuSKHm83A9cnohEifEFMxdfZIGKxekQvhUKa6JCb6Fq0lIrcGc5Bj/TOOX6A1SJtpqbv+vjbY4mdmpvJ7eZqbg5G5ZSsn04UHqSrgDWPCO8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729627099; c=relaxed/simple;
-	bh=xkDklXPQlr4HBd8TsidmEPMdu+Yvhj+vb3uSwdwtaEA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f9yJNyp7qYa5Uz8uJnHMITYqrBeJ8kIR+Dz62u6TSF/dlaEOKArAWoxawFITtG010VliVfUvnxR0KpwxBStXoXAw2llnl7fJfXeJhb7BTUmDECROsOSoTWITxx+TXM2/2iXJiiFAJegTKlMmThElZZQvgNgIWnZgTk3zA4DHM00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=isaIfpbx; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43150ea2db6so61365e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Oct 2024 12:58:17 -0700 (PDT)
+	s=arc-20240116; t=1729627458; c=relaxed/simple;
+	bh=T/LpGdAqbCENOzb45jhG1O4Oa7I14+ESSEV89GZTlmM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=juUBK8lH2mpXO1GToe3bfmIE3w35I0cRbabE9B5JP7ptKReTO1vGxF3dbQ7Frk+kQYshvkoPFWTOI1bwSpo0wXIVrObxj1WJDuUcjn6KeMN/pvZ33WFYabQVK0fYOIXDdOWZSBvJiU4qs1yUfIZDeJnuurk7ve8Yqn2eV1aloLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LnV6PnIy; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a9a1b71d7ffso953933566b.1;
+        Tue, 22 Oct 2024 13:04:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729627096; x=1730231896; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UI9a6JxWBBH+S3C6zR+p95GIu67ToNwJVnSyMsWGv7s=;
-        b=isaIfpbxiVd9X8rz63TDlvpNTzypGlBt4QBE6DvWbe1P1h0e/O+2AKSPNGyaN+NLtk
-         eHSfv/QwDswnWs7WHpFylzDa5aRtv7lakCWRl6u5/nrylFVpjqxzgH13M9WF4lYkmEj3
-         JzxqK5imCYvXwKL65NIT+eFu/Vso5l7vbhGO1vCRPhIOwAjD68yON6FDK+8R+qeE1Y2O
-         hFyvcvxFm1Av6AiXubxfVNCPja9IUhuyY65sPTRS6XBBEXtEOxYlUmqAZfNmK+ybQWrW
-         0pbV6gKuYGLDdaLfTxvnm/uFQb72leFtR7zCJrlFNdl4/YVSALHXsCCh4iNOW0T4I+7i
-         92oA==
+        d=gmail.com; s=20230601; t=1729627455; x=1730232255; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hatEP+Fej9bXOQWJZd5WckT7eSEdtgm4yaQHG/Q8RoE=;
+        b=LnV6PnIycdS/SG2UkLBUa99t7J3AZjqG8FMcW0CCF7wyNQJQDMYH6p82h7eCgD63Gu
+         DW5Y/OvsrVOD5K90wb276CDL3YkEcDrbnoxJAO68QbRUfXD6pR/X6v/KcLlo6BqbV4zb
+         8y1fhbPHwWcgXqKF81Wp9DQs7vAFTRKDaSpEayH2p8eNsqMhhGUxpGsCiXGOxIada44y
+         Yi1c/LlS1W3qDM7S1Yz2MELUKHOGu2PLMa+wbZkT56+Y23B5vg3aUDUcjNpue8mFAYG5
+         sI0zxCdnxMOsXetBnAVjZpy9CRwOsjWhyt5BvAHT3N6aY7cYhAK9wSq8hTwQlDxZLuZc
+         AdYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729627096; x=1730231896;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UI9a6JxWBBH+S3C6zR+p95GIu67ToNwJVnSyMsWGv7s=;
-        b=Nw5MQVjtb7CPLjc54/lSnRMVxsfXEOq8hewETxVL7SH9PFC6bSFgz7ODIIX/Vlj/hZ
-         qh8Ll1PV+0bK5zdUHM0ITkoovmrswQelwgDsVKrIY+mzbaSqGeyR89Yst3VzE+54xE3r
-         5GWDDCWiMaCEBkL/v7ZCZe0a0HXLIzEE/FeVGlMJXZ4MZIjEKqGN8LXxX6g06pEuZlfS
-         ZAZvfCE5bKDdljwcdzd82rEx3TfTQ7MxaKRKPcrQADucib3ER9RsRSTSWmaynOIfyWSs
-         sjuM25mAscol+rSwGeJnWK3NJpVJ7O1/XUv+cQ9avG193UK40AvwiZCWma9hEza6sDL+
-         SSRA==
-X-Forwarded-Encrypted: i=1; AJvYcCVDGbHnnD0BvPQJHoTeQsUbD2lH7qn+E+Ho9F4OHqr3shSlDpVQjtj9H4E+qxYN41hiCgLQVxfEXSe3hcZokhU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7aHXbec6fb+IqFEOQc2gFWFVQMhXFowzTdjItZAuEwuxRr1xO
-	xzVULYn5LYgbmWH38qwoW7QeUF1WiqxkHTU/KKWwCKXIztHmD+Ax+umNli4Q7dJvZm79B7yWtUq
-	QxWzX/xKJQYGTmUiABdXF40sOP1UVHMxgJt/8
-X-Google-Smtp-Source: AGHT+IFeWIyT88dGlsdB6/p06aq90kLyVYjy4rjrqh6CY+sRs1htAUUVZyjMS+uR8oPhtq3VpqNiR+I6FEIsDJOzmq4=
-X-Received: by 2002:a05:600c:4e4e:b0:426:6edd:61a7 with SMTP id
- 5b1f17b1804b1-4318479635dmr176525e9.7.1729627095385; Tue, 22 Oct 2024
- 12:58:15 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1729627455; x=1730232255;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hatEP+Fej9bXOQWJZd5WckT7eSEdtgm4yaQHG/Q8RoE=;
+        b=ieCWXLIQP+OApxMYFCUuGk2WEqhlXO2vkkN7ror51GLOjTFZBTdbbPoCo0kMZ81SGV
+         0gNqfF0KzVvbJIbGD91EZqmYhasTcIYomNgCWalANnrgLiT0DQIW4/kYsfqT84JrRa3p
+         iuXZZPyK/RcvqZKRojEbA9xTB+SKef1bKiz4eykcXHTZrMfoDoKGM1i5JC2OiAvkVLeL
+         r3IiAXrF+1rNudriDuZnGws5zKqp5L058gI48MLfjVvVHZxOAUAb7BpeHBeTe9Lbxt33
+         ElfcNjIFbuBFyiZ9uvXJF05XE+WZ4CT/3qsUpaEwFp6QPbRO4rqnoM9N7iQ7Rd/2W7Sg
+         MdzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU6wGITxU+VH/Re4r05d+mQzq6rHrA9Wh8fMQh4mtv9nhakjcZjiHDKeakQ8QC40SsbLi3+b0R0Mtc8KMU=@vger.kernel.org, AJvYcCXsa7osZovmDTpLfzDQnOBMdALmYYcY7XO3eWweJRBn3n3tslMvHkFQCmj4W9uDcmKeoZ1X1UToptlzeyjtl5/W@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoEsGdPRTpV4AyE3FuXkAyF1F0pq3bPDe/OQSvzYE/bjUmilbY
+	sYocJqPM1WFLc3lda0PgxqUlBlkWfcmY7UUydnJaQ+2XgmQ5ZOFG
+X-Google-Smtp-Source: AGHT+IHr+KbkteF3BQofMieMcUIXOEO1bsHJWGnErLq5b38VoEbRlh5y6ihcPUNLSk4HTXJbnLeFSA==
+X-Received: by 2002:a17:907:97d6:b0:a9a:3fd8:9c95 with SMTP id a640c23a62f3a-a9abf92ccfdmr17351166b.47.1729627455316;
+        Tue, 22 Oct 2024 13:04:15 -0700 (PDT)
+Received: from alessandro-pc.station (net-93-66-158-115.cust.vodafonedsl.it. [93.66.158.115])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a912d6383sm381045466b.6.2024.10.22.13.04.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Oct 2024 13:04:13 -0700 (PDT)
+From: Alessandro Zanni <alessandro.zanni87@gmail.com>
+To: shuah@kernel.org
+Cc: Alessandro Zanni <alessandro.zanni87@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	skhan@linuxfoundation.org,
+	anupnewsmail@gmail.com
+Subject: [PATCH 1/2] selftests/intel_pstate: fix operand expected
+Date: Tue, 22 Oct 2024 22:03:44 +0200
+Message-ID: <20241022200346.5610-1-alessandro.zanni87@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1729440856.git.lorenzo.stoakes@oracle.com>
- <fce49bbbfe41b82161a37b022c8eb1e6c20e1d85.1729440856.git.lorenzo.stoakes@oracle.com>
- <c37ada68-5bf5-4ca5-9de8-c0838160c443@suse.cz> <393b0932-1c52-4d59-9466-e5e6184a7daf@lucifer.local>
- <f2448c59-0456-49e8-9676-609629227808@suse.cz> <CAG48ez3WS3EH9DuhE1b+7AX3+1=dVtd1M7y_5Ev4Shp2YxiYWg@mail.gmail.com>
- <2647d37b-3482-4fc9-8da2-1158ebdc919e@lucifer.local>
-In-Reply-To: <2647d37b-3482-4fc9-8da2-1158ebdc919e@lucifer.local>
-From: Jann Horn <jannh@google.com>
-Date: Tue, 22 Oct 2024 21:57:39 +0200
-Message-ID: <CAG48ez2rrHeq5aNPA9pB-1T6n1WjCh+g+8Hp4QrZemqVb6UsYg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] mm: madvise: implement lightweight guard page mechanism
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Andrew Morton <akpm@linux-foundation.org>, 
-	Suren Baghdasaryan <surenb@google.com>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
-	Matthew Wilcox <willy@infradead.org>, "Paul E . McKenney" <paulmck@kernel.org>, 
-	David Hildenbrand <david@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	Muchun Song <muchun.song@linux.dev>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org, 
-	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, linux-kselftest@vger.kernel.org, 
-	Sidhartha Kumar <sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>, 
-	Christoph Hellwig <hch@infradead.org>, linux-api@vger.kernel.org, 
-	John Hubbard <jhubbard@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 22, 2024 at 9:35=E2=80=AFPM Lorenzo Stoakes
-<lorenzo.stoakes@oracle.com> wrote:
-> On Tue, Oct 22, 2024 at 09:08:53PM +0200, Jann Horn wrote:
-> > On Mon, Oct 21, 2024 at 10:46=E2=80=AFPM Vlastimil Babka <vbabka@suse.c=
-z> wrote:
-> > > On 10/21/24 22:27, Lorenzo Stoakes wrote:
-> > > > On Mon, Oct 21, 2024 at 10:11:29PM +0200, Vlastimil Babka wrote:
-> > > >> On 10/20/24 18:20, Lorenzo Stoakes wrote:
-> > > >> > +  while (true) {
-> > > >> > +          /* Returns < 0 on error, =3D=3D 0 if success, > 0 if =
-zap needed. */
-> > > >> > +          err =3D walk_page_range_mm(vma->vm_mm, start, end,
-> > > >> > +                                   &guard_poison_walk_ops, NULL=
-);
-> > > >> > +          if (err <=3D 0)
-> > > >> > +                  return err;
-> > > >> > +
-> > > >> > +          /*
-> > > >> > +           * OK some of the range have non-guard pages mapped, =
-zap
-> > > >> > +           * them. This leaves existing guard pages in place.
-> > > >> > +           */
-> > > >> > +          zap_page_range_single(vma, start, end - start, NULL);
-> > > >>
-> > > >> ... however the potentially endless loop doesn't seem great. Could=
- a
-> > > >> malicious program keep refaulting the range (ignoring any segfault=
-s if it
-> > > >> loses a race) with one thread while failing to make progress here =
-with
-> > > >> another thread? Is that ok because it would only punish itself?
-> > > >
-> > > > Sigh. Again, I don't think you've read the previous series have you=
-? Or
-> > > > even the changelog... I added this as Jann asked for it. Originally=
- we'd
-> > > > -EAGAIN if we got raced. See the discussion over in v1 for details.
-> > > >
-> > > > I did it that way specifically to avoid such things, but Jann didn'=
-t appear
-> > > > to think it was a problem.
-> > >
-> > > If Jann is fine with this then it must be secure enough.
-> >
-> > My thinking there was:
-> >
-> > We can legitimately race with adjacent faults populating the area
-> > we're operating on with THP pages; as long as the zapping and
-> > poison-marker-setting are separate, *someone* will have to do the
-> > retry. Either we do it in the kernel, or we tell userspace to handle
-> > it, but having the kernel take care of it is preferable because it
-> > makes the stable UAPI less messy.
-> >
-> > One easy way to do it in the kernel would be to return -ERESTARTNOINTR
-> > after the zap_page_range_single() instead of jumping back up, which in
-> > terms of locking and signal handling and such would be equivalent to
-> > looping in userspace (because really that's what -ERESTARTNOINTR does
-> > - it returns out to userspace and moves the instruction pointer back
-> > to restart the syscall). Though if we do that immediately, it might
-> > make MADV_POISON unnecessarily slow, so we should probably retry once
-> > before doing that. The other easy way is to just loop here.
->
-> Yes we should definitely retry probably a few times to cover the rare
-> situation of a THP race as you describe under non-abusive circumstances.
->
-> >
-> > The cond_resched() and pending fatal signal check mean that (except on
-> > CONFIG_PREEMPT_NONE) the only differences between the current
-> > implementation and looping in userspace are that we don't handle
-> > non-fatal signals in between iterations and that we keep hogging the
-> > mmap_lock in read mode. We do already have a bunch of codepaths that
-> > retry on concurrent page table changes, like when zap_pte_range()
-> > encounters a pte_offset_map_lock() failure; though I guess the
-> > difference is that the retry on those is just a couple instructions,
-> > which would be harder to race consistently, while here we redo walks
-> > across the entire range, which should be fairly easy to race
-> > repeatedly.
-> >
-> > So I guess you have a point that this might be the easiest way to
-> > stall other tasks that are trying to take mmap_lock for an extended
-> > amount of time, I did not fully consider that... and then I guess you
-> > could use that to slow down usercopy fault handling (once the lock
-> > switches to handoff mode because of a stalled writer?) or slow down
-> > other processes trying to read /proc/$pid/cmdline?
->
-> Hm does that need a write lock?
+Running "make kselftest TARGETS=intel_pstate" results in
+the following errors:
+- ./run.sh: line 90: / 1000: syntax error: operand expected
+(error token is "/ 1000")
+- ./run.sh: line 92: / 1000: syntax error: operand expected
+(error token is "/ 1000")
 
-No, but if you have one reader that is hogging the rwsem, and then a
-writer is queued up on the rwsem afterwards, I think new readers will
-sometimes be queued up behind the writer. So even though the rwsem is
-only actually held by a reader, new readers can't immediately take the
-rwsem because the rwsem code thinks that would be unfair to a pending
-writer who just wants to make some quick change. I'm not super
-familiar with this code, but basically I think it works roughly like
-this:
+This fix allows to have cross-platform compatibility when
+using arithmetic expression with command substitutions.
 
-If the rwsem code notices that a bunch of readers are preventing a
-writer from taking the lock, the rwsem code will start queuing new
-readers behind the queued writer. You can see in rwsem_read_trylock()
-that the trylock fastpath is skipped if anyone is waiting on the rwsem
-or the handoff flag is set, and in rwsem_down_read_slowpath() the
-"reader optimistic lock stealing" path is skipped if the lock is
-currently held by multiple readers or if the handoff bit is set.
+Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
+---
+ tools/testing/selftests/intel_pstate/run.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The handoff bit can be set in rwsem_try_write_lock() by a writer "if
-it is an RT task or wait in the wait queue for too long". Basically I
-think it means something like "I think other users of the lock are
-hogging it more than they should, stop stealing the lock from me".
-And the RWSEM_WAIT_TIMEOUT for triggering handoff mode is pretty
-short, RWSEM_WAIT_TIMEOUT is defined to something like 4ms, so I think
-that's how long writers tolerate the lock being hogged by readers
-before they prevent new readers from stealing the lock.
+diff --git a/tools/testing/selftests/intel_pstate/run.sh b/tools/testing/selftests/intel_pstate/run.sh
+index e7008f614ad7..0c1b6c1308a4 100755
+--- a/tools/testing/selftests/intel_pstate/run.sh
++++ b/tools/testing/selftests/intel_pstate/run.sh
+@@ -87,9 +87,9 @@ mkt_freq=${_mkt_freq}0
+ 
+ # Get the ranges from cpupower
+ _min_freq=$(cpupower frequency-info -l | tail -1 | awk ' { print $1 } ')
+-min_freq=$(($_min_freq / 1000))
++min_freq=$((_min_freq / 1000))
+ _max_freq=$(cpupower frequency-info -l | tail -1 | awk ' { print $2 } ')
+-max_freq=$(($_max_freq / 1000))
++max_freq=$((_max_freq / 1000))
+ 
+ 
+ [ $EVALUATE_ONLY -eq 0 ] && for freq in `seq $max_freq -100 $min_freq`
+-- 
+2.43.0
+
+
+From d6500cf7c800bd39ae3ef2930cece5b3be460c0b Mon Sep 17 00:00:00 2001
+From: Alessandro Zanni <alessandro.zanni87@gmail.com>
+Date: Tue, 22 Oct 2024 17:22:13 +0200
+Subject: [PATCH 2/2] selftests/intel_pstate: cpupower command not found
+To: shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+    linux-kernel@vger.kernel.org,
+    skhan@linuxfoundation.org,
+    anupnewsmail@gmail.com
+
+Running "make kselftest TARGETS=intel_pstate" results in the following errors:
+- ./run.sh: line 89: cpupower: command not found
+- ./run.sh: line 91: cpupower: command not found
+
+if the cpupower is not installed.
+
+Since the test depends on cpupower, this patch stops the test if the cpupower
+is not installed.
+
+Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
+---
+ tools/testing/selftests/intel_pstate/run.sh | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tools/testing/selftests/intel_pstate/run.sh b/tools/testing/selftests/intel_pstate/run.sh
+index 0c1b6c1308a4..6a3b8503264e 100755
+--- a/tools/testing/selftests/intel_pstate/run.sh
++++ b/tools/testing/selftests/intel_pstate/run.sh
+@@ -44,6 +44,11 @@ if [ $UID != 0 ] && [ $EVALUATE_ONLY == 0 ]; then
+     exit $ksft_skip
+ fi
+ 
++if ! command -v cpupower &> /dev/null; then
++	echo $msg cpupower could not be found, please install it >&2
++	exit $ksft_skip
++fi
++
+ max_cpus=$(($(nproc)-1))
+ 
+ function run_test () {
+-- 
+2.43.0
+
 
