@@ -1,126 +1,142 @@
-Return-Path: <linux-kselftest+bounces-20427-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C22C09AB9C7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 01:01:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA3709AB9EF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 01:21:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 791EB2818B3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 23:01:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80F8C2828C1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 23:21:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6822E1CDA25;
-	Tue, 22 Oct 2024 23:00:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21C981CDFD6;
+	Tue, 22 Oct 2024 23:21:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b="lFjN3toC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RQqhPZnY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cvs.openbsd.org (cvs.openbsd.org [199.185.137.3])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E822A198846;
-	Tue, 22 Oct 2024 23:00:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.185.137.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA5F130AF6;
+	Tue, 22 Oct 2024 23:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729638057; cv=none; b=DZvUgZDQwCahltSyJFwg4mViN8R1jrbkWBpUAvhLa6W65J7fR86lKE0d2l7fhYC0vzH0m39XEUQ0fbK9YIs3vnBoIsG3p7VJEJ3Hwz9ife66+qzpGOn1NUByjz9ClmwPoovXSKXcF51bzHZnUQzgBH+/5JbG0fkWKX2DngAGYs0=
+	t=1729639260; cv=none; b=EXL6kP4v6cGiNshRnubEv+8claGnfXZwQJvr2ERRgbr+mcQU2Pw6S3JsLhpgMapT8tTqRc+F8sCzSGOicIAaHTLmK5ytT3LlxNfCgERUQO5eqTrFiRvUkTB/ee+iTU8nVp0+ebUpvdKl4tIP1JIsRk65gRPOb5oY9gFZ4EkAvJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729638057; c=relaxed/simple;
-	bh=WHzMrjfMruvIpHlEeAVxdb46yOKuKbxbn7rKbjAxujE=;
-	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-	 Content-Type:Date:Message-ID; b=RBgEik8JF6BtdBt5jcZX0dgrzqzfyXYh5/sU9kPld29MJ7CFGNKO2Eg1YXz1ZsBqnYPeZ5omefFCgc+o7NY4n8raLDHfxVjLFnv1IidY6N7USZ5A1XJtExhVqsJibvYw/j8peIZrVyfDyJcrqu+OjqdRrld7JQ4qp2bjZ9UNh/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org; spf=pass smtp.mailfrom=openbsd.org; dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b=lFjN3toC; arc=none smtp.client-ip=199.185.137.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openbsd.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openbsd.org
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=selector1; bh=WHzMrjfMru
-	vIpHlEeAVxdb46yOKuKbxbn7rKbjAxujE=; h=date:references:in-reply-to:
-	subject:cc:to:from; d=openbsd.org; b=lFjN3toCofQICkNsgOwYoO6iSIp7lx39o
-	awIIft8WIVAsZ9DztAffz7LJqnfH4DTfPocBxsBD6t67EXKeu3eipzkVdvleVoAkNZ8a1P
-	FsKJ7gzPEwP+23He9FJlEzg2+K3mmwy/TILcjoDQXKU7Fr6PoNzr95etBic+wJMXZ/vuhj
-	4eq9tNnt5AhWjWtsvhiBVvSqiRqdBo1C3er+wU8Vh4PYeCnf+6CUwY5tE15VpSZmmVxoxZ
-	PeiduAN5QDp9t7qyBuIpDDjWLMJRYGzQArETpt9tnzpcSrNafYSiou39NpF7libGRiz3Cn
-	CI3803K611G0LzgunV2rb1ur943gA==
-Received: from cvs.openbsd.org (localhost [127.0.0.1])
-	by cvs.openbsd.org (OpenSMTPD) with ESMTP id 373605c3;
-	Tue, 22 Oct 2024 16:54:10 -0600 (MDT)
-From: "Theo de Raadt" <deraadt@openbsd.org>
-To: Vlastimil Babka <vbabka@suse.cz>
-cc: Jeff Xu <jeffxu@chromium.org>,
-    Pedro Falcato <pedro.falcato@gmail.com>, akpm@linux-foundation.org,
-    keescook@chromium.org, torvalds@linux-foundation.org,
-    usama.anjum@collabora.com, corbet@lwn.net, Liam.Howlett@oracle.com,
-    lorenzo.stoakes@oracle.com, jeffxu@google.com, jorgelo@chromium.org,
-    groeck@chromium.org, linux-kernel@vger.kernel.org,
-    linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-    jannh@google.com, sroettger@google.com,
-    linux-hardening@vger.kernel.org, willy@infradead.org,
-    gregkh@linuxfoundation.org, surenb@google.com, merimus@google.com,
-    rdunlap@infradead.org, stable@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] mseal: Two fixes for madvise(MADV_DONTNEED) when sealed
-In-reply-to: <8f68ad82-2f60-49f8-b150-0cf183c9cc71@suse.cz>
-References: <20241017005105.3047458-1-jeffxu@chromium.org> <20241017005105.3047458-2-jeffxu@chromium.org> <5svaztlptf4gs4sp6zyzycwjm2fnpd2xw3oirsls67sq7gq7wv@pwcktbixrzdo> <CABi2SkXwOkoFcUUx=aALWVqurKhns+JKZqm2EyRTbHtROK8SKg@mail.gmail.com> <r5ljdglhtbapgqddtr6gxz5lszvq2yek2rd6bnllxk5i6difzv@imuu3pxh5fcc> <CABi2SkXArA+yfodoOxDbTTOpWCbU5Ce1p1HadSo0=CL23K4-dQ@mail.gmail.com> <8f68ad82-2f60-49f8-b150-0cf183c9cc71@suse.cz>
-Comments: In-reply-to Vlastimil Babka <vbabka@suse.cz>
-   message dated "Tue, 22 Oct 2024 17:55:43 +0200."
+	s=arc-20240116; t=1729639260; c=relaxed/simple;
+	bh=mYR/ssdjgfhPcrNhC0KC0PPm1VnAe2ZOjmzl7QmBqbs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZOPOKFQ0K+M8PYJOGLhqZwrOfmVCc0dwWAWpEkPcxMcqop+ZkwCbvFn8PMFWUTji9MtbXEMes9JZUQsjqraD9daRHU/4KISN153qk23PIeCeAOqxp7lt8XS6/d3Gh9EDgiXQLBG3pn8aqVW4z4GdhqgNOcRvtTwiRay725hgzRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RQqhPZnY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A524C4CEC3;
+	Tue, 22 Oct 2024 23:20:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729639258;
+	bh=mYR/ssdjgfhPcrNhC0KC0PPm1VnAe2ZOjmzl7QmBqbs=;
+	h=From:Date:Subject:To:Cc:From;
+	b=RQqhPZnYi+hu1W9+0Gb1JegoQyjren/wSbeN62tNOBVVyJwZSA+zeOQQm/RuWvcFf
+	 qwaU3640jRT8+Oh2TqAEfkBZYlXdpc6idHMvOQQvrAOhsG54sp/kc+/WNWolwXiZvm
+	 JXVXJ4WTowaRAYmqA23wexFUeeP5kjUGn5X09eyvUB93Z4rujRAxH+eIiXcRbVrmBE
+	 9dLXZsQyVie+VHbvzpCVnhk6pdNSp0A9LqFlRt2MvKZWfZUz+XJPWOOU8siAbXaNZ1
+	 CM2fh0NsANoOECxKZilHRJt5isJMFWbQ9xGBoUJAxjsl5nYA61mo2JYPHazBGgxImf
+	 abJxA6sW2iEWw==
+From: Mark Brown <broonie@kernel.org>
+Date: Wed, 23 Oct 2024 00:20:45 +0100
+Subject: [PATCH] kselftest/arm64: Log fp-stress child startup errors to
+ stdout
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 22 Oct 2024 16:54:10 -0600
-Message-ID: <35887.1729637650@cvs.openbsd.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241023-arm64-fp-stress-exec-fail-v1-1-ee3c62932c15@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAEwzGGcC/x3MQQqDMBBG4avIrB1IYqilVxEXIf6pA9bKjIgg3
+ r2hy2/x3kUGFRi9mosUh5h81wrfNpTntL7BMlVTcCF653tO+nlELhvbrjBjnMhckiw8uT4iP0M
+ usaPab4oi5/89jPf9A6VbXN5rAAAA
+X-Change-ID: 20241017-arm64-fp-stress-exec-fail-d074ec82cf43
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-9b746
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2334; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=mYR/ssdjgfhPcrNhC0KC0PPm1VnAe2ZOjmzl7QmBqbs=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnGDNXQVJDieT+Ucl7taR/RCE7oQToa7f5rzjnl7vR
+ Bx07CM6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZxgzVwAKCRAk1otyXVSH0KP/B/
+ 0f7yI4J1eqPI/60TFfWUCAy/B74dWLr3AI0oXXkTBeC8Iw5PbSnnSYTmYE8GYLZ1hLdWzGUmXLvZhz
+ QT52ebR/rVoO+6mo4xMYB1gGhubU9rSnWxO6VHO7THtMbkQ2jf0KfYfBmKrFIeWdTb6ur6zMThmMsT
+ T1QnVt+cd73XvT9DtzmdiISNdZ8O7hut/3iZOqeDK2C2JxS/b5TL4aXmfqytnukeFUjsJs8enw4f+D
+ AdfGjDS5a53HRT2Ny7MkI8cbf/6ZnQGTlLkLmSrfWIT26FEM7lOOZvCyqTRb8L9oih1aKBpxxId7jV
+ Tmu/lXqMXR+gTai1JVaeEPx44zIyyH
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Vlastimil Babka <vbabka@suse.cz> wrote:
+Currently if we encounter an error between fork() and exec() of a child
+process we log the error to stderr. This means that the errors don't get
+annotated with the child information which makes diagnostics harder and
+means that if we miss the exit signal from the child we can deadlock
+waiting for output from the child. Improve robustness and output quality
+by logging to stdout instead.
 
-> On 10/17/24 22:57, Jeff Xu wrote:
-> > On Thu, Oct 17, 2024 at 1:49=E2=80=AFPM Pedro Falcato <pedro.falcato@gm=
-ail.com> wrote:
-> >> >
-> >> > > > For file-backed, private, read-only memory mappings, we previous=
-ly did
-> >> > > > not block the madvise(MADV_DONTNEED). This was based on
-> >> > > > the assumption that the memory's content, being file-backed, cou=
-ld be
-> >> > > > retrieved from the file if accessed again. However, this assumpt=
-ion
-> >> > > > failed to consider scenarios where a mapping is initially create=
-d as
-> >> > > > read-write, modified, and subsequently changed to read-only. The=
- newly
-> >> > > > introduced VM_WASWRITE flag addresses this oversight.
-> >> > >
-> >> > > We *do not* need this. It's sufficient to just block discard opera=
-tions on read-only
-> >> > > private mappings.
-> >> > I think you meant blocking madvise(MADV_DONTNEED) on all read-only
-> >> > private file-backed mappings.
-> >> >
-> >> > I considered that option, but there is a use case for madvise on tho=
-se
-> >> > mappings that never get modified.
-> >> >
-> >> > Apps can use that to free up RAM. e.g. Considering read-only .text
-> >> > section, which never gets modified, madvise( MADV_DONTNEED) can free
-> >> > up RAM when memory is in-stress, memory will be reclaimed from a
-> >> > backed-file on next read access. Therefore we can't just block all
-> >> > read-only private file-backed mapping, only those that really need t=
-o,
-> >> > such as mapping changed from rw=3D>r (what you described)
-> >>
-> >> Does anyone actually do this? If so, why? WHYYYY?
-> >>
-> > This is a legit use case, I can't argue that it isn't.
->=20
-> Could the same effect be simply achieved with MADV_COLD/MADV_PAGEOUT? That
-> should be able to reclaim the pages as well if they are indeed not used, =
-but
-> it's non-destructive and you don't want to allow destructive madvise anyw=
-ay
-> (i.e. no throwing away data that would be replaced by zeroes or original
-> file content on the next touch) so it seems overall a better fit for seal=
-ed
-> areas?
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/fp/fp-stress.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-Comment from the sidelines: That seems clever enough.
+diff --git a/tools/testing/selftests/arm64/fp/fp-stress.c b/tools/testing/selftests/arm64/fp/fp-stress.c
+index faac24bdefeb9436e2daf20b7250d0ae25ca23a7..80f22789504d661efc52a90d4b0893fbebec42f8 100644
+--- a/tools/testing/selftests/arm64/fp/fp-stress.c
++++ b/tools/testing/selftests/arm64/fp/fp-stress.c
+@@ -79,7 +79,7 @@ static void child_start(struct child_data *child, const char *program)
+ 		 */
+ 		ret = dup2(pipefd[1], 1);
+ 		if (ret == -1) {
+-			fprintf(stderr, "dup2() %d\n", errno);
++			printf("dup2() %d\n", errno);
+ 			exit(EXIT_FAILURE);
+ 		}
+ 
+@@ -89,7 +89,7 @@ static void child_start(struct child_data *child, const char *program)
+ 		 */
+ 		ret = dup2(startup_pipe[0], 3);
+ 		if (ret == -1) {
+-			fprintf(stderr, "dup2() %d\n", errno);
++			printf("dup2() %d\n", errno);
+ 			exit(EXIT_FAILURE);
+ 		}
+ 
+@@ -107,16 +107,15 @@ static void child_start(struct child_data *child, const char *program)
+ 		 */
+ 		ret = read(3, &i, sizeof(i));
+ 		if (ret < 0)
+-			fprintf(stderr, "read(startp pipe) failed: %s (%d)\n",
+-				strerror(errno), errno);
++			printf("read(startp pipe) failed: %s (%d)\n",
++			       strerror(errno), errno);
+ 		if (ret > 0)
+-			fprintf(stderr, "%d bytes of data on startup pipe\n",
+-				ret);
++			printf("%d bytes of data on startup pipe\n", ret);
+ 		close(3);
+ 
+ 		ret = execl(program, program, NULL);
+-		fprintf(stderr, "execl(%s) failed: %d (%s)\n",
+-			program, errno, strerror(errno));
++		printf("execl(%s) failed: %d (%s)\n",
++		       program, errno, strerror(errno));
+ 
+ 		exit(EXIT_FAILURE);
+ 	} else {
+
+---
+base-commit: 8e929cb546ee42c9a61d24fae60605e9e3192354
+change-id: 20241017-arm64-fp-stress-exec-fail-d074ec82cf43
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
 
