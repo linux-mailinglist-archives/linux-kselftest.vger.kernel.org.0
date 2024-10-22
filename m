@@ -1,187 +1,277 @@
-Return-Path: <linux-kselftest+bounces-20407-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20408-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF9539AB2DA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 17:56:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCCDF9AB351
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 18:06:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2CB3FB252A0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 15:56:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA4931C22BF0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 16:06:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD5FF1A76B7;
-	Tue, 22 Oct 2024 15:56:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D3311BD501;
+	Tue, 22 Oct 2024 16:02:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="yWY593mf";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="PpslFFz/";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ChkLK7o+";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="XCGMKk1V"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pegB8CoT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D8291A7066;
-	Tue, 22 Oct 2024 15:55:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF1A1BD4E0;
+	Tue, 22 Oct 2024 16:01:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729612560; cv=none; b=AS+lZUfJDK939z9pLKM+Y+JQ8LdjQ7GLqKkgg6AomQg557xglP0Z1kF1EClaTh7CZftomSQdLV/MDCEMJseqikhftXn1g/C9jgbx7i8r/oJJ8vGydNiRGHMFmaQDIiPQkGp8i2LoETgKgBIkFO5L2DDXD1g2FBv16B+oNuSB+Wk=
+	t=1729612922; cv=none; b=u4UHXCybuiSIuv4+jY/iCd2Ih4Dwxq8yDoEVB/l7HWIYI/bpQgcFzUVJi08bgBmiontlqX9+5IUC2ugum/TMKuUWiwyB1ExrHSEyL3TE811gbikKNo1HQ50gi6eJva3eKc1lV3R3qfwySPvEvWxgc/3DpkytF5IG1rlEOVhECg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729612560; c=relaxed/simple;
-	bh=qdiw+9iWWIUdBQsa8uZIUdsCsqPh/ECLmNwq+10aTbE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dUR3sqKekg++hTesrqItR1QJN4SSkkhFHKk+q2X+ijpsgdDED+rKWGsovVsbr8PEUBiSUA31lGOZxZy6E12wV7ds7A9CcpgMLdyS2Rioc7AZkXF+8vos2SHJNR9joARcpbQHXOhygt2lamQsqj/ekt1g3tQsIsKvWozW7pGawCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=yWY593mf; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=PpslFFz/; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ChkLK7o+; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=XCGMKk1V; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id BFC5D1FD2A;
-	Tue, 22 Oct 2024 15:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1729612544; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
+	s=arc-20240116; t=1729612922; c=relaxed/simple;
+	bh=ewumsz+GK1jAcVcRM+HBUcNMz73tC/m0TcrqhvMpLFg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o8H/zuiqUXKptnf+qNcduzjK6PZSdKr0MI7NsoJ8iL6lFHUTWMzoGguYkpilin8mH5eXh3wQeLI2z7mLrnBHDxHv2lj+php6LQujobOA0TMDcUQyIBUpxmbHFKLu5GqsjBYS7DaAqlzTGamQVmhkRLkssF9h3FGwfQlHs6Cy+Zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pegB8CoT; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 205A11C000B;
+	Tue, 22 Oct 2024 16:01:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1729612917;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=qdiw+9iWWIUdBQsa8uZIUdsCsqPh/ECLmNwq+10aTbE=;
-	b=yWY593mfxM7+fXjWrlzFpoyWifGwzGDz5T5beh+7sIhv8cDAo9AV7jaVlhz/cGkHntcUCg
-	xarqy89Lw/X0ItHfgNGYHCbryc4a6DLeOddRw1KIXGVDCbtt3NwFZmeuhSo7PTgWIy4SVw
-	AvNJBe/BIWu+s3x0bTK/8qOJRZTqH5w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1729612544;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qdiw+9iWWIUdBQsa8uZIUdsCsqPh/ECLmNwq+10aTbE=;
-	b=PpslFFz/8aTVtMVrdRn7CxhtHZlBHHDyDyQMLZe4xz69mOiHyxlkTh0ty8MztyysIhwy2P
-	BJMxzr614KJaP+Cg==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1729612543; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qdiw+9iWWIUdBQsa8uZIUdsCsqPh/ECLmNwq+10aTbE=;
-	b=ChkLK7o+mdekXp6JBUjmsDoZrK94rdcyr/uoh0ReQNdZS/GX39UCStxeLebN2qzq6THNcl
-	Q4UgzvE3YSOtW5SGNg+9iZ6fCOZXgrhLjXR4LqMu3/RVT//O8LHmDb9Y49XBrh/q7ShAnm
-	oMLOVFA6VSztY6P+41f5tYxicnN93FI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1729612543;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qdiw+9iWWIUdBQsa8uZIUdsCsqPh/ECLmNwq+10aTbE=;
-	b=XCGMKk1Vd0VE4kQFHxYirSe3QRx0BUxPLBY125RsCscNeQ/3vxQftsbEbCqAjl+LI/t57a
-	OHAl0pOQsf2ZdbBA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8D43B13AC9;
-	Tue, 22 Oct 2024 15:55:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id xOQkIv/KF2dBDwAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Tue, 22 Oct 2024 15:55:43 +0000
-Message-ID: <8f68ad82-2f60-49f8-b150-0cf183c9cc71@suse.cz>
-Date: Tue, 22 Oct 2024 17:55:43 +0200
+	bh=ZlVEyjHwbz0slojlLbzr1PpnHBXIeHtm+szXTJChAAU=;
+	b=pegB8CoTggveMjIXnxFvxx8DNAzBeLZVZ/coKMtYdZV6n2tea0u9VOHwlVNUo24WX+5D6O
+	63SAgaM/7MVjDxAT9HmfY/XDGFDDIrFFc7wW+ie28KvxFKg7aGH9r1yFff20QAjjKO4Q9i
+	j5069MqPLT8V420i7Ajbp4DxzcfK0qX1yQ9qy5FMGY/mOFcGtzu3ySSbKk1l1Ro7A0+zic
+	+m+EF8LnVN6GfPCU0+entlecW+rztWOelNEkatHp0EUHmukzOT2wqcZZLgeTRfusR9O3VW
+	Wo4vJW+CnqVSCm3QLsFEzDRCgBvMrXExah+7Q5qNVwo5AHsoKdUPCNX6kDoUYQ==
+Date: Tue, 22 Oct 2024 18:01:56 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Joseph Jang <jjang@nvidia.com>
+Cc: shuah@kernel.org, avagin@google.com, amir73il@gmail.com,
+	brauner@kernel.org, mochs@nvidia.com, kobak@nvidia.com,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] selftest: rtc: Add to check rtc alarm status for
+ alarm related test
+Message-ID: <202410221601561f631bc7@mail.local>
+References: <20241021032213.1915224-1-jjang@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] mseal: Two fixes for madvise(MADV_DONTNEED) when
- sealed
-Content-Language: en-US
-To: Jeff Xu <jeffxu@chromium.org>, Pedro Falcato <pedro.falcato@gmail.com>
-Cc: akpm@linux-foundation.org, keescook@chromium.org,
- torvalds@linux-foundation.org, usama.anjum@collabora.com, corbet@lwn.net,
- Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, jeffxu@google.com,
- jorgelo@chromium.org, groeck@chromium.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org, jannh@google.com,
- sroettger@google.com, linux-hardening@vger.kernel.org, willy@infradead.org,
- gregkh@linuxfoundation.org, deraadt@openbsd.org, surenb@google.com,
- merimus@google.com, rdunlap@infradead.org, stable@vger.kernel.org
-References: <20241017005105.3047458-1-jeffxu@chromium.org>
- <20241017005105.3047458-2-jeffxu@chromium.org>
- <5svaztlptf4gs4sp6zyzycwjm2fnpd2xw3oirsls67sq7gq7wv@pwcktbixrzdo>
- <CABi2SkXwOkoFcUUx=aALWVqurKhns+JKZqm2EyRTbHtROK8SKg@mail.gmail.com>
- <r5ljdglhtbapgqddtr6gxz5lszvq2yek2rd6bnllxk5i6difzv@imuu3pxh5fcc>
- <CABi2SkXArA+yfodoOxDbTTOpWCbU5Ce1p1HadSo0=CL23K4-dQ@mail.gmail.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <CABi2SkXArA+yfodoOxDbTTOpWCbU5Ce1p1HadSo0=CL23K4-dQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -2.80
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FREEMAIL_TO(0.00)[chromium.org,gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[25];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TAGGED_RCPT(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241021032213.1915224-1-jjang@nvidia.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-On 10/17/24 22:57, Jeff Xu wrote:
-> On Thu, Oct 17, 2024 at 1:49 PM Pedro Falcato <pedro.falcato@gmail.com> wrote:
->> >
->> > > > For file-backed, private, read-only memory mappings, we previously did
->> > > > not block the madvise(MADV_DONTNEED). This was based on
->> > > > the assumption that the memory's content, being file-backed, could be
->> > > > retrieved from the file if accessed again. However, this assumption
->> > > > failed to consider scenarios where a mapping is initially created as
->> > > > read-write, modified, and subsequently changed to read-only. The newly
->> > > > introduced VM_WASWRITE flag addresses this oversight.
->> > >
->> > > We *do not* need this. It's sufficient to just block discard operations on read-only
->> > > private mappings.
->> > I think you meant blocking madvise(MADV_DONTNEED) on all read-only
->> > private file-backed mappings.
->> >
->> > I considered that option, but there is a use case for madvise on those
->> > mappings that never get modified.
->> >
->> > Apps can use that to free up RAM. e.g. Considering read-only .text
->> > section, which never gets modified, madvise( MADV_DONTNEED) can free
->> > up RAM when memory is in-stress, memory will be reclaimed from a
->> > backed-file on next read access. Therefore we can't just block all
->> > read-only private file-backed mapping, only those that really need to,
->> > such as mapping changed from rw=>r (what you described)
->>
->> Does anyone actually do this? If so, why? WHYYYY?
->>
-> This is a legit use case, I can't argue that it isn't.
+On 20/10/2024 20:22:13-0700, Joseph Jang wrote:
+> In alarm_wkalm_set and alarm_wkalm_set_minute test, they use different
+> ioctl (RTC_ALM_SET/RTC_WKALM_SET) for alarm feature detection. They will
+> skip testing if RTC_ALM_SET/RTC_WKALM_SET ioctl returns an EINVAL error
+> code. This design may miss detecting real problems when the
+> efi.set_wakeup_time() return errors and then RTC_ALM_SET/RTC_WKALM_SET
+> ioctl returns an EINVAL error code with RTC_FEATURE_ALARM enabled.
+> 
+> In order to make rtctest more explicit and robust, we propose to use
+> RTC_PARAM_GET ioctl interface to check rtc alarm feature state before
+> running alarm related tests. If the kernel does not support RTC_PARAM_GET
+> ioctl interface, we will fallback to check the error number of
+> (RTC_ALM_SET/RTC_WKALM_SET) ioctl call for alarm feature detection.
+> 
+> Requires commit 101ca8d05913b ("rtc: efi: Enable SET/GET WAKEUP services
+> as optional")
+> 
+> Reviewed-by: Koba Ko <kobak@nvidia.com>
+> Reviewed-by: Matthew R. Ochs <mochs@nvidia.com>
+> Signed-off-by: Joseph Jang <jjang@nvidia.com>
 
-Could the same effect be simply achieved with MADV_COLD/MADV_PAGEOUT? That
-should be able to reclaim the pages as well if they are indeed not used, but
-it's non-destructive and you don't want to allow destructive madvise anyway
-(i.e. no throwing away data that would be replaced by zeroes or original
-file content on the next touch) so it seems overall a better fit for sealed
-areas?
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
+> ---
+> Changes in v2:
+> - Changed to use $(top_srcdir) instead of hardcoding the path.
+> 
+>  tools/testing/selftests/rtc/Makefile  |  2 +-
+>  tools/testing/selftests/rtc/rtctest.c | 64 +++++++++++++++++++++++++++
+>  2 files changed, 65 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/rtc/Makefile b/tools/testing/selftests/rtc/Makefile
+> index 55198ecc04db..6e3a98fb24ba 100644
+> --- a/tools/testing/selftests/rtc/Makefile
+> +++ b/tools/testing/selftests/rtc/Makefile
+> @@ -1,5 +1,5 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -CFLAGS += -O3 -Wl,-no-as-needed -Wall
+> +CFLAGS += -O3 -Wl,-no-as-needed -Wall -I$(top_srcdir)/usr/include
+>  LDLIBS += -lrt -lpthread -lm
+>  
+>  TEST_GEN_PROGS = rtctest
+> diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+> index 63ce02d1d5cc..2b12497eb30d 100644
+> --- a/tools/testing/selftests/rtc/rtctest.c
+> +++ b/tools/testing/selftests/rtc/rtctest.c
+> @@ -25,6 +25,12 @@
+>  
+>  static char *rtc_file = "/dev/rtc0";
+>  
+> +enum rtc_alarm_state {
+> +	RTC_ALARM_UNKNOWN,
+> +	RTC_ALARM_ENABLED,
+> +	RTC_ALARM_DISABLED,
+> +};
+> +
+>  FIXTURE(rtc) {
+>  	int fd;
+>  };
+> @@ -82,6 +88,24 @@ static void nanosleep_with_retries(long ns)
+>  	}
+>  }
+>  
+> +static enum rtc_alarm_state get_rtc_alarm_state(int fd)
+> +{
+> +	struct rtc_param param = { 0 };
+> +	int rc;
+> +
+> +	/* Validate kernel reflects unsupported RTC alarm state */
+> +	param.param = RTC_PARAM_FEATURES;
+> +	param.index = 0;
+> +	rc = ioctl(fd, RTC_PARAM_GET, &param);
+> +	if (rc < 0)
+> +		return RTC_ALARM_UNKNOWN;
+> +
+> +	if ((param.uvalue & _BITUL(RTC_FEATURE_ALARM)) == 0)
+> +		return RTC_ALARM_DISABLED;
+> +
+> +	return RTC_ALARM_ENABLED;
+> +}
+> +
+>  TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
+>  	int rc;
+>  	long iter_count = 0;
+> @@ -197,11 +221,16 @@ TEST_F(rtc, alarm_alm_set) {
+>  	fd_set readfds;
+>  	time_t secs, new;
+>  	int rc;
+> +	enum rtc_alarm_state alarm_state = RTC_ALARM_UNKNOWN;
+>  
+>  	if (self->fd == -1 && errno == ENOENT)
+>  		SKIP(return, "Skipping test since %s does not exist", rtc_file);
+>  	ASSERT_NE(-1, self->fd);
+>  
+> +	alarm_state = get_rtc_alarm_state(self->fd);
+> +	if (alarm_state == RTC_ALARM_DISABLED)
+> +		SKIP(return, "Skipping test since alarms are not supported.");
+> +
+>  	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
+>  	ASSERT_NE(-1, rc);
+>  
+> @@ -210,6 +239,11 @@ TEST_F(rtc, alarm_alm_set) {
+>  
+>  	rc = ioctl(self->fd, RTC_ALM_SET, &tm);
+>  	if (rc == -1) {
+> +		/*
+> +		 * Report error if rtc alarm was enabled. Fallback to check ioctl
+> +		 * error number if rtc alarm state is unknown.
+> +		 */
+> +		ASSERT_EQ(RTC_ALARM_UNKNOWN, alarm_state);
+>  		ASSERT_EQ(EINVAL, errno);
+>  		TH_LOG("skip alarms are not supported.");
+>  		return;
+> @@ -255,11 +289,16 @@ TEST_F(rtc, alarm_wkalm_set) {
+>  	fd_set readfds;
+>  	time_t secs, new;
+>  	int rc;
+> +	enum rtc_alarm_state alarm_state = RTC_ALARM_UNKNOWN;
+>  
+>  	if (self->fd == -1 && errno == ENOENT)
+>  		SKIP(return, "Skipping test since %s does not exist", rtc_file);
+>  	ASSERT_NE(-1, self->fd);
+>  
+> +	alarm_state = get_rtc_alarm_state(self->fd);
+> +	if (alarm_state == RTC_ALARM_DISABLED)
+> +		SKIP(return, "Skipping test since alarms are not supported.");
+> +
+>  	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
+>  	ASSERT_NE(-1, rc);
+>  
+> @@ -270,6 +309,11 @@ TEST_F(rtc, alarm_wkalm_set) {
+>  
+>  	rc = ioctl(self->fd, RTC_WKALM_SET, &alarm);
+>  	if (rc == -1) {
+> +		/*
+> +		 * Report error if rtc alarm was enabled. Fallback to check ioctl
+> +		 * error number if rtc alarm state is unknown.
+> +		 */
+> +		ASSERT_EQ(RTC_ALARM_UNKNOWN, alarm_state);
+>  		ASSERT_EQ(EINVAL, errno);
+>  		TH_LOG("skip alarms are not supported.");
+>  		return;
+> @@ -307,11 +351,16 @@ TEST_F_TIMEOUT(rtc, alarm_alm_set_minute, 65) {
+>  	fd_set readfds;
+>  	time_t secs, new;
+>  	int rc;
+> +	enum rtc_alarm_state alarm_state = RTC_ALARM_UNKNOWN;
+>  
+>  	if (self->fd == -1 && errno == ENOENT)
+>  		SKIP(return, "Skipping test since %s does not exist", rtc_file);
+>  	ASSERT_NE(-1, self->fd);
+>  
+> +	alarm_state = get_rtc_alarm_state(self->fd);
+> +	if (alarm_state == RTC_ALARM_DISABLED)
+> +		SKIP(return, "Skipping test since alarms are not supported.");
+> +
+>  	rc = ioctl(self->fd, RTC_RD_TIME, &tm);
+>  	ASSERT_NE(-1, rc);
+>  
+> @@ -320,6 +369,11 @@ TEST_F_TIMEOUT(rtc, alarm_alm_set_minute, 65) {
+>  
+>  	rc = ioctl(self->fd, RTC_ALM_SET, &tm);
+>  	if (rc == -1) {
+> +		/*
+> +		 * Report error if rtc alarm was enabled. Fallback to check ioctl
+> +		 * error number if rtc alarm state is unknown.
+> +		 */
+> +		ASSERT_EQ(RTC_ALARM_UNKNOWN, alarm_state);
+>  		ASSERT_EQ(EINVAL, errno);
+>  		TH_LOG("skip alarms are not supported.");
+>  		return;
+> @@ -365,11 +419,16 @@ TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
+>  	fd_set readfds;
+>  	time_t secs, new;
+>  	int rc;
+> +	enum rtc_alarm_state alarm_state = RTC_ALARM_UNKNOWN;
+>  
+>  	if (self->fd == -1 && errno == ENOENT)
+>  		SKIP(return, "Skipping test since %s does not exist", rtc_file);
+>  	ASSERT_NE(-1, self->fd);
+>  
+> +	alarm_state = get_rtc_alarm_state(self->fd);
+> +	if (alarm_state == RTC_ALARM_DISABLED)
+> +		SKIP(return, "Skipping test since alarms are not supported.");
+> +
+>  	rc = ioctl(self->fd, RTC_RD_TIME, &alarm.time);
+>  	ASSERT_NE(-1, rc);
+>  
+> @@ -380,6 +439,11 @@ TEST_F_TIMEOUT(rtc, alarm_wkalm_set_minute, 65) {
+>  
+>  	rc = ioctl(self->fd, RTC_WKALM_SET, &alarm);
+>  	if (rc == -1) {
+> +		/*
+> +		 * Report error if rtc alarm was enabled. Fallback to check ioctl
+> +		 * error number if rtc alarm state is unknown.
+> +		 */
+> +		ASSERT_EQ(RTC_ALARM_UNKNOWN, alarm_state);
+>  		ASSERT_EQ(EINVAL, errno);
+>  		TH_LOG("skip alarms are not supported.");
+>  		return;
+> -- 
+> 2.34.1
+> 
 
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
