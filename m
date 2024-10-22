@@ -1,275 +1,331 @@
-Return-Path: <linux-kselftest+bounces-20376-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20377-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62E6A9A9FA5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 12:08:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 649B99A9FC8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 12:18:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F49E284026
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 10:08:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85E411C21562
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 10:18:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF27C1991B5;
-	Tue, 22 Oct 2024 10:08:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B48F199FCD;
+	Tue, 22 Oct 2024 10:17:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="QLeo2YYd"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f1M4qi4X"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2065.outbound.protection.outlook.com [40.107.220.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88A0B19005D;
-	Tue, 22 Oct 2024 10:08:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729591710; cv=fail; b=gsF5ldeUQHrtByFjOz9qYFTh3B3Ot+8g74VuHLqD3zhjk2aQybLhtyx0btd0i/U+1bEHEY0iP0aQOnII/nB2PanGxc7K8IQcJo6IrFFH1DmKdSn3SEgZ9tDUn430yCKogwBpny3aCo3U2Bv8xJb45eHHtQXXIueRRMMabJ5Y6xI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729591710; c=relaxed/simple;
-	bh=1PARjlBvH7AvtMC6JMwKNXlDop+5gUXA9ht1xy8syrw=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=T5wji59UoxUVsiegaNHTQxYYcqFIbTnsQWhawTR116BaEtTQmIU7HDa8o4Emr/DD3u35g6AKWaqns1Z38tx0kZgiXbTBki+5aanuEd6U8bhiykhXQqQBqrk5q1KayGdJ/TddXpiX4lqyEMalci4gmvioPuMlm3Cn44aBSRTWR3s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=QLeo2YYd; arc=fail smtp.client-ip=40.107.220.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=eApVx/XpCfJz+i2sT2kY3bP4n2IjYcPGpO3oxLAyKQIcg9qV1b3DoZ2Nv8/2XyWLmVUQ3RCi0JYnsPK+We94Q9ljgEJ8S+eqSV2H5L/ghZhZn+asbz/B4eD7JSSdKHBNg2nT/10UJLI1ec8EciwsXexdm1FQAYJVhDKH1FKyaHIj8KUD6JTKHejL+7JcpXgSjc7QP/tWL5PuJhDz4uFFHzbX6zkokDhttI3o0U7TVk0GDgRaTJka3oPyocDjn153KoVzywMPi8/sYvwZ8o6HbzfoPWVyo9Nin9aBjkPqxywxynJsJHHjmCThHDqRcJsZ2lDiK3IzQaD5tYNE8IDVOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tXPp9jAa+41ixeCqpHxf6tF7BlTESGUOEP2cPL+u9gI=;
- b=J8+jr5FZz/VeXiPDh1HbMiHtIJFLNSHw+phFwIBzKUbPdT1O92QNpJgyKo82jvWiVgmK8d5Xij9CfKJUpqD3bOeme5l94DyGAlZeCzW26ArmC1qgGw7AdN/ppxaAh1jQhR84I8odc68PBOXIEAZZeoSGHm6g3scrvPlyQ8mx2k7gw8My8MUHI1j1aRCNL53wRSex+EkSuMh5uK8le3W6O41af+EUeOtzpmJgXTK2j2L76SqENdbAUO+eLXGXrE0cieUUy6Bgx1QX83PpxC2uKJNmyf83tzhNk8hyQh3nKoEk+0W0EXVlc+SFfgqHa+IjCbRwzKTT3wVB3n1MVml6Cw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tXPp9jAa+41ixeCqpHxf6tF7BlTESGUOEP2cPL+u9gI=;
- b=QLeo2YYd+btTBFb3RdlI/++dKODIEdVaI+OEDaBBqBziaarofEqh7vFeA9KsOLZ4BYjFq6hPbnbmddwwxLw8go6oNdqeCciaA8X2SqHIZox7rOsyr3cv3xFnvY4ZEry/o/kup4GFGBJJNIiGzer6DUGVeJ3fffX9BdBSKexabWU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB6048.namprd12.prod.outlook.com (2603:10b6:8:9f::5) by
- MN0PR12MB6149.namprd12.prod.outlook.com (2603:10b6:208:3c7::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.16; Tue, 22 Oct
- 2024 10:08:25 +0000
-Received: from DS7PR12MB6048.namprd12.prod.outlook.com
- ([fe80::6318:26e5:357a:74a5]) by DS7PR12MB6048.namprd12.prod.outlook.com
- ([fe80::6318:26e5:357a:74a5%4]) with mapi id 15.20.8069.027; Tue, 22 Oct 2024
- 10:08:25 +0000
-Message-ID: <94b67623-17a4-412b-959b-a1d3c50190bf@amd.com>
-Date: Tue, 22 Oct 2024 15:38:15 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/4] iommufd: Extend IOMMU_GET_HW_INFO to report PASID
- capability
-To: Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org, jgg@nvidia.com,
- kevin.tian@intel.com, baolu.lu@linux.intel.com
-Cc: alex.williamson@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
- kvm@vger.kernel.org, chao.p.peng@linux.intel.com, iommu@lists.linux.dev,
- zhenzhong.duan@intel.com, linux-kselftest@vger.kernel.org
-References: <20240912131729.14951-1-yi.l.liu@intel.com>
- <20240912131729.14951-5-yi.l.liu@intel.com>
-Content-Language: en-US
-From: Vasant Hegde <vasant.hegde@amd.com>
-In-Reply-To: <20240912131729.14951-5-yi.l.liu@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0095.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:9b::8) To DS7PR12MB6048.namprd12.prod.outlook.com
- (2603:10b6:8:9f::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96F8C12D1EA
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Oct 2024 10:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729592279; cv=none; b=KMFsmIv9c0ap4sdzdE3dVHpxc4HhihtI/HFul4TTND0FnOINlF3ymjp0xzv/UbvdYxZ4I+MSHfcOCV2UU0SiPK/CnWh8H5J2x1XPeeF3UD8N+rP+YPCljYtPkm4crxzFZrjayIQHSuIAeIwiYrowJMcTfD81Ym/AaM/44zeUZ2c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729592279; c=relaxed/simple;
+	bh=F7fYLHf1F0ibUk3B9Dlg8qjLYPMjBGsNz+cA6zjGjew=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mgzwxZ3ZC6i2JIZqMvVR6FpQuJZHo5fE+PEfnuHX2xZL+eHxV0GWxbBqi75Zrwgv7QrofmBUZa+HJxF/grjSTTqnvzoHDf18vXstcLWfFqYDSrZrknyTcZzc16GD+2lqoTautE4mDB3VGIj9LuwrPgLG0z6p4CukVEPmFNekXrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f1M4qi4X; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729592276;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=afEMX6hvhF+bEuSBXuy4vMwiJ/UEHN0+5JysSySMVE0=;
+	b=f1M4qi4XT1astljOjemFWtO5x6QmYFNuboDeJ3x9/MfFUJF1hNKgIGXWXY2ua32PpN7J/u
+	UMiteset9DZCPgwQpEsmTjdxRcqzlyTQQhmum/VIG67TGnq8JGfvLCTlkeOSpqKQRsmKoc
+	qz2t14+NjS8aqz5A+23feUYuaSNl7ic=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-659-KcNdpY8CMT2JTenWScG-1g-1; Tue, 22 Oct 2024 06:17:55 -0400
+X-MC-Unique: KcNdpY8CMT2JTenWScG-1g-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4314c6ca114so43712275e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Oct 2024 03:17:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729592272; x=1730197072;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=afEMX6hvhF+bEuSBXuy4vMwiJ/UEHN0+5JysSySMVE0=;
+        b=KZ3QrXw8SF1zyBRywmkAWPPxtgsEeVUz1q9WTZ8Hg5qmLa07Z9eWdZ3P2ZmNZoKmOE
+         9R+iZ/xwh2BZI5h6v+NnGAfbYaya33lZXhkHHL/L3zfx7nF5EIu5s4aY9fV0xZ8Yzr/X
+         o5gmSEjPIAdUrCJgjVRdqclZf652MmeeQGb88WrrqvKN1eBAXc7ypArfojJGj0pvb4c8
+         N7igOEiUwRJ6jguopcZMWkjw3L2CSvXdy2YVKxDv7CHWxIYqk2WLas7Eg0aTIX7692DX
+         lA+mE0buZLtAwTGc1bW4wX+b1XvSxTa4Hv7x/+g9HFZWAWd4FdPhE1dDgG5I1iq1gl9O
+         vatw==
+X-Forwarded-Encrypted: i=1; AJvYcCV2wj9biBGKEDiz1H9UCrnFAP8JAJz23CaznGNGjmnCYodF5O27S2xuor/e3hRB9ugBhwpPRKs96oExp3mZsR0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIX/jFWIG8hhLdc6Mh3pQWh56ve+doLbMK32PzCinluonFjRTn
+	IN8Dz/qANK0e7tHiRNIMHfswtPGwuDSkHy6EllQyMk5S2lrvGMNB/UfCWJ7B1n5vMhmVEMav404
+	V4bESJL1KfC+FZ49VW548TIvM4LrHEy1MQBZ96z7gvIaJEMY10t+82X1JmRrRLpT3ZA==
+X-Received: by 2002:a05:600c:3b07:b0:426:61e8:fb3b with SMTP id 5b1f17b1804b1-4317caf6bd7mr14830695e9.27.1729592272381;
+        Tue, 22 Oct 2024 03:17:52 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFHPXMmPoqqnTUIWtOfsOzji8AphQjUnwdrJKcXlc99EyaDOrkLUeeqnDFzrVNdeOKdUaR+9g==
+X-Received: by 2002:a05:600c:3b07:b0:426:61e8:fb3b with SMTP id 5b1f17b1804b1-4317caf6bd7mr14830285e9.27.1729592271864;
+        Tue, 22 Oct 2024 03:17:51 -0700 (PDT)
+Received: from ?IPV6:2a0d:3344:1b73:a910:d583:6ebb:eb80:7cd8? ([2a0d:3344:1b73:a910:d583:6ebb:eb80:7cd8])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a47b74sm6268704f8f.27.2024.10.22.03.17.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Oct 2024 03:17:51 -0700 (PDT)
+Message-ID: <c1890a67-6cc5-4f37-bc33-5fd49b6839c5@redhat.com>
+Date: Tue, 22 Oct 2024 12:17:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6048:EE_|MN0PR12MB6149:EE_
-X-MS-Office365-Filtering-Correlation-Id: ea1737aa-f600-4b10-07ca-08dcf2817795
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?enFESjRUazBYNU90YUozelIvMElEM0xFdzJ0UWNJNXJZellWNWwrOUJhTEY3?=
- =?utf-8?B?MEw3R3NtTjhJOTdGWTRHemVDRWlNYVVMN1U5WXNEMEdSYWVoSnp3eHVPVkVE?=
- =?utf-8?B?SFpGaEpMVDJFUU5uOXJNanlwL0xBRnhCeE9hL2VCS2RLVVFpZnpRcGluL1RU?=
- =?utf-8?B?SlBpZk1EMkhrb29tbHpORTBnK2pZeEE3b3QzRGZqRkhnVXBGaUdEK2gwUi9X?=
- =?utf-8?B?RHV5QWh1azI1dmg2aFlEVW52ZFAyK1lpbUVSL3VyTGZmQU9QU0I5WURYTmpJ?=
- =?utf-8?B?Y1N5V0YvdG16V1hqdnZUVUpnWWNUVjJBTm9uMFAwR0gycFJySFRrbWUwc1l4?=
- =?utf-8?B?WU92L2hyWGlvWk90U2N6d0R1T0RnOHc5Q0huY1IrblFWenJmY3B4bFBuamdL?=
- =?utf-8?B?bkYvMUhua1JKSUtublVkcjR6TXlTakJKZmwrdW16dFo2TGgzS0NYbG1wT2x4?=
- =?utf-8?B?NHlkMm5aajVDeW0vbWRTSW9ZNVJKRTRDd3E3akRZNWg3SCsvOHozYXI3Vkhk?=
- =?utf-8?B?TjcyQkkrNGM1alZkZmJ4VDJnMEo0ODV6VXl2eTBiZnlZMHFVZCtpdUwxVWRv?=
- =?utf-8?B?SXFwYlBkN2ZSM0ZSWmk4MzB1aW40YVhPQVNYUGpEQWRHR1dwT2FYL1ZiTTNa?=
- =?utf-8?B?UU90b0loN3ZQcDRSWStkcHN4S0xsb0NxOU1BYUZCOTRaeFZwZis0TExrQU51?=
- =?utf-8?B?bDZleW1Wd3hPWGs5QWJmNVgrZE13N3EyUEVQbTREV3Rnb0RIcWE4dUN5ditG?=
- =?utf-8?B?V1lyMjc4cmpPNjZRd0ZpS0dmd2wzWG40YktaVHJxTDlQckNSanVYSmp1N3g2?=
- =?utf-8?B?QU9TVEEwQmlzZzQxN3Z2QmJ2WmozN3VDSmR5c2VMYlJ0eE1ZV3A4bDE4Tktn?=
- =?utf-8?B?TmppYVNHZVlGT1BqRWpUenBMVUp5c3orWGxWNDVvR2NRZ1hxeU5wQnUyQ0Yv?=
- =?utf-8?B?UDM0WjVnSVBiZW9scUc3TXA5YXdiYU44d2VVWUtRTk9aZnE3Z29DSjhGVCtS?=
- =?utf-8?B?eEpjd0ZJZ3dHVnV6aTM0cDNLY1lYd2lONXJZNVBLUzZ4cTcvVlJoY3BLR0Iv?=
- =?utf-8?B?K3kvQU1BZVRQTC9xQUpOcnpzZk5IazlDTnFORWVQUklzbXdPZzRFdFhUV1Q4?=
- =?utf-8?B?SlJoa25pQkh6aWlTY08yMTR5dldBalhBSDcvTXZVOFJlYnFIS0ltVkpOaWl4?=
- =?utf-8?B?OHdmSk9EWEJTL1lPamU0Ulhhdmx5d3pjU1V3TEpEYnAxWXFNaFdZTCs3bDFZ?=
- =?utf-8?B?dHIyZURsbzMrejExUTdoTnBYUGU4bmxlV2lDbFBIM2RZQUpzcDQwbVBzSmtR?=
- =?utf-8?B?TWxrNDdLczhDTElWYVFIVlpHWDVhK01CamRJU0pYY1puazlOczR5YzExK3k0?=
- =?utf-8?B?d0lIdWFxYUFETk4xd084eFJ4bU81UXpCUm94UVNFWWl1cEV0ZklqNTJQWi9L?=
- =?utf-8?B?TXEvZnF1MkZGc3l0c0s4TWxuRHA0VlRNelE0ajFrM1EzMWlaL3B3Y1drR0tN?=
- =?utf-8?B?c2ZnQnpVM0FuNEcyeUhlL2ZYMU1SdSsvMmFxQzZjaENRWFBwU1hkWjFPMWxT?=
- =?utf-8?B?Q2pEbU8rZmtYRGcxRTBJWDB5WVRNT3lmWVVHU2xyVncwTFpNWVpVcWo5V0px?=
- =?utf-8?B?Ti8xUitZUUhRV0NRNmViY1ZXbkNUYWUzVzFoZHA4K3Z3L2lVSUtFR3VCbTYz?=
- =?utf-8?B?c2J3MmZ3dmdnVkUvaVZwaFJKRTJycmFXVkpNdTg5K0dYRnh5RDNlYUVnWDQw?=
- =?utf-8?Q?HMygd2Ph8fER7imgkskVSHMwAhOtwK4yv9INB2S?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6048.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SnFzWFlrTm0wUEpOajg3RU9YU2xMekRNWW93QTZabmFUcHcxcnFGYXNSeU9p?=
- =?utf-8?B?NTc4Q1lLbjFaaGlNSFhyRmdjdU8wakw3TmF6QzdQdnhxamhkRHJzWmttMStK?=
- =?utf-8?B?djROUGloRktSdjJzYXR6Mm92RlBJYU51UjduNE5ZOFJBS2NVQVB4VGk1U01D?=
- =?utf-8?B?Q1dwOUtRemhTTFhaUkdyTTJiMmRkMlJTQ0NtSHRoS2VlTlphM0N5MzNYK3pV?=
- =?utf-8?B?ZWpNd3BxbG96amgyaWlKZUNsMllqcWJ6ZkI3dFp3MEgvaWIxQTF3WS9wM3ZK?=
- =?utf-8?B?aWpUanJ3SFMyY3B1T3BqbWpFQWN5UnNuZTRmc0ZjdDJtckptT2JxMmJEcDRt?=
- =?utf-8?B?djBKKy8rWEdxdFg0QWtNZ0svcDdubTlQT2F1K3A4UnkwTmdGYVZ3MjB0eFBq?=
- =?utf-8?B?cjJma0x4U0dldUNmZzRacHpvZFNrLzViN1JPMXZaNXA0cGY3UHdjZmMwZ0pn?=
- =?utf-8?B?NWdwZEVTM1p2UzN0MzZEZG9jdjlXYWR3Unl6aXp1UFhkM3l3ZEIyaVN0UzdF?=
- =?utf-8?B?aDVhRkIxbEErNERqYWFQY3FGVjN6a0VtMGJSblR4LzhiRHllOFBvZG9kM01Q?=
- =?utf-8?B?cEtDNWdLWVJiZXE3ejV0YzdhMTJnblVzcUZsdWFqTFBIY3FvaGYyTXM3TVFh?=
- =?utf-8?B?RW84UndGM0FPb3pEMWVTQlk2Y0pIeEZvOEtMU0dsNVhBK2hJMCtBNkFmUWZi?=
- =?utf-8?B?b1VxYWJaRER0YzhFVUMxUWl5REdnWWZMN2I4TWw1cDJjc3F1TWl6Wk5GTVpt?=
- =?utf-8?B?aTBjcGlGcXh2aGl5cTFuUUNENVFkUmVNQklvb1RPKzZ0czFha3FkTkhrUjhV?=
- =?utf-8?B?c213bnFSKzlTRHNsZGp4N1NCVm5WZFdaMGljaHM3dXRLYWFzVnRJMU5kUUR6?=
- =?utf-8?B?TmxITFFGRnlFeDhRK1hZZVpTWFZGQnhoTVVHVmZ6OVI5Ni9tMmRlYXRlT0N2?=
- =?utf-8?B?Tm5ZNHkvUjBVUGxNWWhVNE5CYzVteHpCUW9sUEtHREQ5U1VYVVNIZUVkdFhu?=
- =?utf-8?B?RHRLbGh1OFpLMEZZMkRVZ1dCQVZzemh5eWdvSitEL2ZsY2lrSWxLTEdKVkJh?=
- =?utf-8?B?ME5TZUlLQkVoY2FyNnVLTDBsM2tTdWI0L0VjMHpXd3ZQMGUwQlhaNFNJa0V2?=
- =?utf-8?B?a0xKcDA3MzNHd0JXLzI2QTZVMFVRVE9TYzRseElnLzlWLy9oVWZtTGkyck9N?=
- =?utf-8?B?bjdKLy9mTGt1b1ZCRUZINDVHUWRWNFhMWmdJT29QaThkVWxXc0RxckZkUUph?=
- =?utf-8?B?bmJpcTMwUXh3Y0dPdTNtdXV0MUVic3hqK3dKWWQ0S3VoMGcrN0lldFVzYzVx?=
- =?utf-8?B?SytKN1o2Z1JxL1U0eWdUczNLN0ZMbFMyYzNmcFgwdlhtU0EvS1hGQm9TUDVI?=
- =?utf-8?B?TnVXR1A1Z08rUlExUnhrV0lUdlJVTWlWVVlCVmJSdjVienRHT3JWVEtuTE95?=
- =?utf-8?B?T2FtU0krQnloUGJiN0lLUzlnMDN2MXNZeThFazMzREhianJGRHNiRmJDM2xU?=
- =?utf-8?B?dnAxbGtoUWlzL0N4Yy9MY3dvc0x5dnBTVGtESm9Mc2R3MWdOMDFmTEk4aEhN?=
- =?utf-8?B?bE1DQXE3UW8vQWJ2eXNmVHJEbWdXSWNGTm5JdXFIQ09PSHF6aWdocEcybXNE?=
- =?utf-8?B?RDZQTEw0TlhweExkcU5zellrZUlCY1NuN3JmK203R2xDb0x4a0xCNUJsUzk0?=
- =?utf-8?B?eWM0NEEyS1l4SVlxMmRpTkFYWk9qNk1NNHRYMWIyMWZBZXVUZzgrTzRyNG5m?=
- =?utf-8?B?OW1oYmJrNi9iQXMzTHdsRzd0ckhURndtOGZmSHk0dkpTdndueE1BTWFpQ2pC?=
- =?utf-8?B?c2lwNzNkWnVUZmtEc0l3VU1EWFFJbmtITTFuSW9qQ3VobVAvMEJ3VzlQNU1s?=
- =?utf-8?B?TUVBMlBsNjNaNUVQYWd6V1k5V2JGRkdUNVQwUGxoamdzSVhjaGxaeEx6Rlp0?=
- =?utf-8?B?aTlsU0dVK25oSmZFbjdoTStmN0dybm9McVpyTUhLbzJnTFRjelFzWkhLYTQy?=
- =?utf-8?B?VGxBQ01NNHZSSytYcjhWVi8rV2FqS2QyT1ZvR3NTbEtkNVg5N1V2dXRZclND?=
- =?utf-8?B?OVNqbUdVajFIZE84c2J3enlnSWFqekEveGRjSkEzNlVtY2pzS1RZWEltanFY?=
- =?utf-8?Q?cA4Iwz8Lj2NOtXYVrmSbXF8p1?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea1737aa-f600-4b10-07ca-08dcf2817795
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6048.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2024 10:08:25.4044
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uNFudN7h5FRsYeWBXPXjybpu9cO2lI/ehlTrl1t0hiojxkVeIE9bclItfi/uYf16B/PbnhXkNmisRslEBOY71A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6149
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v3 1/3] selftests: nic_link_layer: Add link layer
+ selftest for NIC driver
+To: Mohan Prasad J <mohan.prasad@microchip.com>, netdev@vger.kernel.org,
+ davem@davemloft.net, kuba@kernel.org, andrew@lunn.ch
+Cc: edumazet@google.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, horms@kernel.org, brett.creeley@amd.com,
+ rosenp@gmail.com, UNGLinuxDriver@microchip.com, willemb@google.com,
+ petrm@nvidia.com
+References: <20241016215014.401476-1-mohan.prasad@microchip.com>
+ <20241016215014.401476-2-mohan.prasad@microchip.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20241016215014.401476-2-mohan.prasad@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Yi,
-
-
-On 9/12/2024 6:47 PM, Yi Liu wrote:
-> PASID usage requires PASID support in both device and IOMMU. Since the
-> iommu drivers always enable the PASID capability for the device if it
-> is supported, so it is reasonable to extend the IOMMU_GET_HW_INFO to
-> report the PASID capability to userspace.
+On 10/16/24 23:50, Mohan Prasad J wrote:
+> Add selftest file for the link layer tests of a NIC driver.
+> Test for auto-negotiation is added.
+> Add LinkConfig class for changing link layer configs.
+> Selftest makes use of ksft modules and ethtool.
+> Include selftest file in the Makefile.
 > 
-> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+> Signed-off-by: Mohan Prasad J <mohan.prasad@microchip.com>
 > ---
->  drivers/iommu/iommufd/device.c | 27 ++++++++++++++++++++++++++-
->  drivers/pci/ats.c              | 32 ++++++++++++++++++++++++++++++++
->  include/linux/pci-ats.h        |  3 +++
->  include/uapi/linux/iommufd.h   | 14 +++++++++++++-
->  4 files changed, 74 insertions(+), 2 deletions(-)
+>  .../testing/selftests/drivers/net/hw/Makefile |   1 +
+>  .../drivers/net/hw/lib/py/__init__.py         |   1 +
+>  .../drivers/net/hw/lib/py/linkconfig.py       | 220 ++++++++++++++++++
+>  .../drivers/net/hw/nic_link_layer.py          |  84 +++++++
+>  4 files changed, 306 insertions(+)
+>  create mode 100644 tools/testing/selftests/drivers/net/hw/lib/py/linkconfig.py
+>  create mode 100644 tools/testing/selftests/drivers/net/hw/nic_link_layer.py
 > 
-> diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-> index 18f94aa462ea..6b7e3e5f4598 100644
-> --- a/drivers/iommu/iommufd/device.c
-> +++ b/drivers/iommu/iommufd/device.c
-> @@ -4,6 +4,8 @@
->  #include <linux/iommufd.h>
->  #include <linux/slab.h>
->  #include <linux/iommu.h>
-> +#include <linux/pci.h>
-> +#include <linux/pci-ats.h>
->  #include <uapi/linux/iommufd.h>
->  #include "../iommu-priv.h"
->  
-> @@ -1185,7 +1187,8 @@ int iommufd_get_hw_info(struct iommufd_ucmd *ucmd)
->  	void *data;
->  	int rc;
->  
-> -	if (cmd->flags || cmd->__reserved)
-> +	if (cmd->flags || cmd->__reserved[0] || cmd->__reserved[1] ||
-> +	    cmd->__reserved[2])
->  		return -EOPNOTSUPP;
->  
->  	idev = iommufd_get_device(ucmd, cmd->dev_id);
-> @@ -1242,6 +1245,28 @@ int iommufd_get_hw_info(struct iommufd_ucmd *ucmd)
->  	if (device_iommu_capable(idev->dev, IOMMU_CAP_DIRTY_TRACKING))
->  		cmd->out_capabilities |= IOMMU_HW_CAP_DIRTY_TRACKING;
->  
-> +	cmd->out_max_pasid_log2 = 0;
+> diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
+> index c9f2f48fc..0dac40c4e 100644
+> --- a/tools/testing/selftests/drivers/net/hw/Makefile
+> +++ b/tools/testing/selftests/drivers/net/hw/Makefile
+> @@ -10,6 +10,7 @@ TEST_PROGS = \
+>  	hw_stats_l3.sh \
+>  	hw_stats_l3_gre.sh \
+>  	loopback.sh \
+> +	nic_link_layer.py \
+>  	pp_alloc_fail.py \
+>  	rss_ctx.py \
+>  	#
+> diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
+> index b58288578..399789a96 100644
+> --- a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
+> +++ b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
+> @@ -9,6 +9,7 @@ try:
+>      sys.path.append(KSFT_DIR.as_posix())
+>      from net.lib.py import *
+>      from drivers.net.lib.py import *
+> +    from .linkconfig import LinkConfig
+>  except ModuleNotFoundError as e:
+>      ksft_pr("Failed importing `net` library from kernel sources")
+>      ksft_pr(str(e))
+> diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/linkconfig.py b/tools/testing/selftests/drivers/net/hw/lib/py/linkconfig.py
+> new file mode 100644
+> index 000000000..86cbf10a3
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/hw/lib/py/linkconfig.py
+> @@ -0,0 +1,220 @@
+> +# SPDX-License-Identifier: GPL-2.0
 > +
-> +	if (dev_is_pci(idev->dev)) {
-> +		struct pci_dev *pdev = to_pci_dev(idev->dev);
-> +		int ctrl;
+> +from lib.py import cmd
+> +from lib.py import ethtool
+> +from lib.py import ksft_pr, ksft_eq
+> +import re
+> +import time
+> +import json
 > +
-> +		if (pdev->is_virtfn)
-> +			pdev = pci_physfn(pdev);
+> +#The LinkConfig class is implemented to handle the link layer configurations.
+> +#Required minimum ethtool version is 6.10
+> +#The ethtool and ip would require authentication to make changes, so better
+> +# to check them for sudo privileges for interruption free testing.
 > +
-> +		ctrl = pci_pasid_ctrl_status(pdev);
-> +		if (ctrl >= 0 && (ctrl & PCI_PASID_CTRL_ENABLE)) {
-> +			cmd->out_max_pasid_log2 =
-> +					ilog2(idev->dev->iommu->max_pasids);
-> +			if (ctrl & PCI_PASID_CTRL_EXEC)
-> +				cmd->out_capabilities |=
-> +						IOMMU_HW_CAP_PCI_PASID_EXEC;
-> +			if (ctrl & PCI_PASID_CTRL_PRIV)
-> +				cmd->out_capabilities |=
-> +						IOMMU_HW_CAP_PCI_PASID_PRIV;
-> +		}
-> +	}
+> +class LinkConfig:
+> +    """Class for handling the link layer configurations"""
+> +    def __init__(self, cfg):
+> +        self.cfg = cfg
+> +        self.partner_netif = self.get_partner_netif_name()
 > +
->  	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
->  out_free:
->  	kfree(data);
-> diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
-> index c570892b2090..886f24e3999f 100644
-> --- a/drivers/pci/ats.c
-> +++ b/drivers/pci/ats.c
-> @@ -505,4 +505,36 @@ int pci_max_pasids(struct pci_dev *pdev)
->  	return (1 << FIELD_GET(PCI_PASID_CAP_WIDTH, supported));
->  }
->  EXPORT_SYMBOL_GPL(pci_max_pasids);
+> +        """Get the initial link configuration of local interface"""
+> +        self.common_link_modes = self.get_common_link_modes()
 > +
-> +/**
-> + * pci_pasid_ctrl_status - Check the PASID status
-> + * @pdev: PCI device structure
-> + *
-> + * Returns a negative value when no PASI capability is present.
+> +    def get_partner_netif_name(self):
 
-s/PASI/PASID/
+You should use type hints for both the arguments and the return type.
+
+> +        partner_netif = None
+> +        try:
+> +            """Get partner interface name"""
+> +            partner_cmd = f"ip -o -f inet addr show | grep '{self.cfg.remote_addr}' " + "| awk '{print $2}'"
+
+It's better if you use json output even here
+
+[...]
+> +    def reset_interface(self, local=True, remote=True):
+> +        ksft_pr("Resetting interfaces in local and remote")
+> +        if remote:
+> +            if self.partner_netif is not None:
+> +                ifname = self.partner_netif
+> +                link_up_cmd = f"sudo ip link set up {ifname}"
+> +                link_down_cmd = f"sudo ip link set down {ifname}"
+> +                reset_cmd = f"{link_down_cmd} && sleep 5 && {link_up_cmd}"
+> +                try:
+> +                    cmd(f"{reset_cmd}", host=self.cfg.remote)
+> +                except Exception as e:
+> +                    ksft_pr("Check sudo permission for ip command")
+> +                    ksft_pr(f"Unexpected error occurred: {e}")
+
+Please, don't use sudo, just run the command directly. The selftests
+should be executed only by privileged users.
+
+[...]
+> +    def check_autoneg_supported(self, remote=False):
+> +        if remote==False:
+> +            local_autoneg = self.get_ethtool_field("supports-auto-negotiation")
+> +            if local_autoneg is None:
+> +                ksft_pr(f"Unable to fetch auto-negotiation status for interface {self.cfg.ifname}")
+> +            """Return autoneg status of the local interface"""
+> +            status = True if local_autoneg == True else False
+> +            return status
+
+Out of sheer ignorance, in't
+
+		return local_autoneg
+
+enough?
 
 
-> + * Otherwise the value of the control register is returned.
-> + * Status reported are:
-> + *
-> + * PCI_PASID_CTRL_ENABLE - PASID enabled
-> + * PCI_PASID_CTRL_EXEC - Execute permission enabled
-> + * PCI_PASID_CTRL_PRIV - Privileged mode enabled
-> + */
-> +int pci_pasid_ctrl_status(struct pci_dev *pdev)
-> +{
-> +	u16 ctrl = 0;
+> +        else:
+> +            """Check remote auto-negotiation support status"""
+> +            partner_autoneg = False
+> +            if self.partner_netif is not None:
+> +                partner_autoneg = self.get_ethtool_field("supports-auto-negotiation", remote=True)
+> +                if partner_autoneg is None:
+> +                    ksft_pr(f"Unable to fetch auto-negotiation status for interface {partner_netif}")
+> +            status = True if partner_autoneg is True else False
+> +            return status
+> +
+> +    def get_common_link_modes(self):
+> +        common_link_modes = None
+> +        """Populate common link modes"""
+> +        link_modes = self.get_ethtool_field("supported-link-modes")
+> +        partner_link_modes = self.get_ethtool_field("link-partner-advertised-link-modes")
+> +        if link_modes is None:
+> +            raise Exception(f"Link modes not available for {self.cfg.ifname}")
+> +        if partner_link_modes is None:
+> +            raise Exception(f"Partner link modes not available for {self.cfg.ifname}")
+> +        common_link_modes = set(link_modes) and set(partner_link_modes)
+> +        return common_link_modes
+> +
+> +    def get_speed_duplex_values(self, link_modes):
+> +        speed = []
+> +        duplex = []
+> +        """Check the link modes"""
+> +        for data in link_modes:
+> +            parts = data.split('/')
+> +            speed_value = re.match(r'\d+', parts[0])
+> +            if speed_value:
+> +                speed.append(speed_value.group())
+> +            else:
+> +                ksft_pr(f"No speed value found for interface {self.ifname}")
+> +                return None, None
+> +            duplex.append(parts[1].lower())
+> +        return speed, duplex
+> +
+> +    def get_ethtool_field(self, field: str, remote=False):
+> +        process = None
+> +        if remote == False:
+> +            """Get the ethtool field value for the local interface"""
+> +            ifname = self.cfg.ifname
+> +            try:
+> +                process = ethtool(f"--json {ifname}")
+> +            except Exception as e:
+> +                ksft_pr("Required minimum ethtool version is 6.10")
+> +                ksft_pr(f"Unexpected error occurred: {e}")
+> +        else:
+> +            """Get the ethtool field value for the remote interface"""
+> +            remote = True
+> +            ifname = self.partner_netif
+> +            self.cfg.require_cmd("ethtool", remote)
+> +            command = f"ethtool --json {ifname}"
+> +            try:
+> +                process = cmd(command, host=self.cfg.remote)
+> +            except Exception as e:
+> +                ksft_pr("Required minimum ethtool version is 6.10")
+> +                ksft_pr("Unexpected error occurred: {e}")
+> +        if process is None or process.ret != 0:
+> +            print(f"Error while getting the ethtool content for interface {ifname}. Required minimum ethtool version is 6.10")
+> +            return None
+> +        output = json.loads(process.stdout)
+> +        json_data = output[0]
+> +        """Check if the field exist in the json data"""
+> +        if field not in json_data:
+> +            raise Exception(f"Field {field} does not exist in the output of interface {json_data["ifname"]}")
+> +            return None
+> +        return json_data[field]
+> diff --git a/tools/testing/selftests/drivers/net/hw/nic_link_layer.py b/tools/testing/selftests/drivers/net/hw/nic_link_layer.py
+> new file mode 100644
+> index 000000000..fb046efbe
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/hw/nic_link_layer.py
+> @@ -0,0 +1,84 @@
+> +#!/usr/bin/env python3
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +#Introduction:
+> +#This file has basic link layer tests for generic NIC drivers.
+> +#The test comprises of auto-negotiation, speed and duplex checks.
+> +#
+> +#Setup:
+> +#Connect the DUT PC with NIC card to partner pc back via ethernet medium of your choice(RJ45, T1)
+> +#
+> +#        DUT PC                                              Partner PC
+> +#┌───────────────────────┐                         ┌──────────────────────────┐
+> +#│                       │                         │                          │
+> +#│                       │                         │                          │
+> +#│           ┌───────────┐                         │                          │
+> +#│           │DUT NIC    │         Eth             │                          │
+> +#│           │Interface ─┼─────────────────────────┼─    any eth Interface    │
+> +#│           └───────────┘                         │                          │
+> +#│                       │                         │                          │
+> +#│                       │                         │                          │
+> +#└───────────────────────┘                         └──────────────────────────┘
+> +#
+> +#Configurations:
+> +#To prevent interruptions, Add ethtool, ip to the sudoers list in remote PC and get the ssh key from remote.
+> +#Required minimum ethtool version is 6.10
+> +#Change the below configuration based on your hw needs.
+> +# """Default values"""
+> +time_delay = 8 #time taken to wait for transitions to happen, in seconds.
+> +test_duration = 10  #performance test duration for the throughput check, in seconds.
 
-No need to initialize ctrl.
+It would be probably useful to allow the user overriding the above
+values via env variables and/or command line arguments.
 
--Vasant
+'test_duration' declaration should probably moved to a later patch,
+where it's used.
+
+Thanks,
+
+Paolo
+
 
