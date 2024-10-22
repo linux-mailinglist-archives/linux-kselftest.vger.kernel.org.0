@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-20403-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20405-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4B509AB210
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 17:29:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4A729AB213
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 17:29:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68AB61F25393
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 15:29:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FDE72853AD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2024 15:29:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19AD71A705C;
-	Tue, 22 Oct 2024 15:29:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A25451AC435;
+	Tue, 22 Oct 2024 15:29:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TqWA4B02"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uYElJWcZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FCF91A3049
-	for <linux-kselftest@vger.kernel.org>; Tue, 22 Oct 2024 15:29:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D10A1A76B5
+	for <linux-kselftest@vger.kernel.org>; Tue, 22 Oct 2024 15:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729610962; cv=none; b=mF7LAisKsxrIRGXtu4g1nT72jN+t5Z/hRgqbW0PZ5U8jBqP/QFCk1paoJdsp1jTsagjgADYRrmsGbj9SaDIxEkQ0KSMQO5lN1Plx1gSCYioVoJ7T0PSSSjLrw5pe85PG57dZlfF+cEhuSxNsSj/97bg/qb3qdjOeTbHUrkYEfG8=
+	t=1729610964; cv=none; b=oBOzXJxmdzPmd6FGjDdbxoHaphLY2DRB2mReNGn6NFxqEYsMU1dwzWoRO8YvCdwqED8s7q9GykXIyU454uDGm3fwLxBkKmTfmSbrTX/kcrEw4NwmxdlrQ/BXz/SRxlyZf0ttpx1JslbFid20t19jelaM/JJS7rIs++TQiy3kkrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729610962; c=relaxed/simple;
-	bh=PIBElrUWYvv2PwD1OtHxNlMP6ZaEK/i5ZNf+lnSa2TI=;
+	s=arc-20240116; t=1729610964; c=relaxed/simple;
+	bh=3qLyPOB/ZouuEbuTECDdTIHS6tRCR9JHU62sQnKCWKg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=aEJrE4XWewKlp4vxSfkA0yYxkDzz+IVayWFwiGdKT+584lDmfYhDEvPP+JTnaoQyOKa5h5z55jivBoyX5a4xsGsZC0xoq3yuiaoBNjbP+w4/8OoyRodRsv0/IPtiUfiQrI5kC1glniCA5JyAW9NuB6iqHeliU8XvwrzGNu0i5c8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TqWA4B02; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=qQoA9Ce0e/QHoD4FSMsQpcoZF3gpA4fcTxYr4i/ujDht3GyDeRVBXLvFZzNbPom8jxb5feMHi9weeaYMDVtZ1EqD7ZFhg/6LPNNvGxQ6tRlCxRraUz6LJgw0OpLcJpavUZRLBN7Aozbba4rI78AL6Az1j5ANO+/lEbkCeI1FHNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uYElJWcZ; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-6507e2f0615so4867335a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Oct 2024 08:29:20 -0700 (PDT)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6e383ba6763so99792077b3.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Oct 2024 08:29:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729610960; x=1730215760; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1729610962; x=1730215762; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uAWSt/btbjFtiBghyaLDlopKWtLgN/X+E84XHJl7PxM=;
-        b=TqWA4B02z+15Hu0D5WDFe/SMKvt+noeXCXI+LNN+Yk/k3h5OOd2nS/3Gx1I4S7fPFc
-         Pztj7SRMtupaO+KLk6eYAXokhF9txVJpEHfi3wZCSgFAHjGvpMGe8ojviLj9M7nfErvi
-         Cy6P/0aQF41IuJkUzwQR4PmmE0znAHVqnkbjGs0z5yy571VPudC/61m4jeERgQk749f/
-         LlepBSHUW/HkWpauzL0wzBUOZcM6MawBfNEfAuS+JYzvgAOGDoar/EjRCO+Y9SAUlOVf
-         QpD6l+p8GBdYhsApjAV1X5eMmmyRnsmpZG54SiQ63GUwy4Q5E2GjK8mGnPAEooa4ZVvx
-         8ONA==
+        bh=yUCjbbljoI9jzFIh4A06ghACAZm6MQI0CcikHIHbYsM=;
+        b=uYElJWcZWRMA9TESuifRnN0TPAarDwSXizHWjWr9EeduaopRgIQthhzvLd7td9aWEm
+         n92TkGkhwXNVk+FdgRnPU9RlmEASzYLma9VsTUiBS1zz/tA3hV9bB93N2wfua5Xm/t9N
+         kdxzg0DzzQBtYQjTyOvC7b48wYzRw9KC8jkG/9VF+yYPjEjb1YutZ0lkPRxZp8h7OlZR
+         4+4nTSNALDsdPxmsE8dkppWjFhsFFAZOZsycYaRaxONw6Nai1TILoAu+KdiJhxC85Rik
+         xeb5x3kRJYPYtSmToQ3xZ4sxhpq8FKd+S/P7u+gMk6WRMMjJlzaWlBQKvb8xVWyBV7AL
+         Oqfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729610960; x=1730215760;
+        d=1e100.net; s=20230601; t=1729610962; x=1730215762;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uAWSt/btbjFtiBghyaLDlopKWtLgN/X+E84XHJl7PxM=;
-        b=N0btX0TGYdfcBrcldfuSXcDzM/ZaY5XaPoD0OOJQLf/nmocjB25sJicTlF/iyPUGyi
-         yB7fsAE9JAeBQDN4CG8VmowHFKKQ9fA6Fs30nLRTLaNK9lHGr6CvSEflR2o6xbCA+FBT
-         GL0vtLf98dy9WA2luOdtvUDVgnfsZ3r6NKvcdftRCXts5t84ZJjeNnR6FBEE+/Jgzhud
-         e+OtAQlGFouL+7+n8UQkDOH5sxNNVNIVkuVej6nKyjxUnsmWggeoGeJtW63fGTD4SVNn
-         fgA2nI5XSDLQ8XHuFOW4YWGuGEVffNeDvgGg28fTcRHqRtoK/ZV8lIKvD9G0wG31oRMS
-         mcgg==
-X-Forwarded-Encrypted: i=1; AJvYcCUQck1rvKJnIxc26TNmKUvjQBDrZopDmeMkpXXw1cOutzNCPpzf/FVRLCVqrLrASt97D4PbxH8p+307InQElYE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyDHN2yOdke1aoycs4i0+RVWDRD/OP6OEjycBSfh348BueUTFJ
-	R6M2+MxFwIF2j2rJLr0VexAZR1RWUxQYxV+RO6C2eRqrKSW/TX77bD+SDySSONXJBEF4cmT6FQ=
+        bh=yUCjbbljoI9jzFIh4A06ghACAZm6MQI0CcikHIHbYsM=;
+        b=qeZwbzajP9+txML7hCsJeRgK3iqttL6H8ugSeIjjQ0cRuSI+Dr1juI4rPf8EhONtzA
+         nsZXFXuVbBCAJqtgFiUuFviuKDIQLG5y7/9ajVI7OLoy/uc1awEaWeTZkT2MMGBWYvI5
+         CTgHXfnSo2EROUNPm2PAhWMJUUhrUgufLHK10KAfU1g6hdQB1Negzu4s8o0prYoIU38m
+         UuZQcjGcnGh4JYaOJJXyTQYn/ud5LKQi01P0qnwYX7aBXTRfB8nWiqjXnrvlPj6zg2bd
+         ix0c8szzx37dKj9IZ8TLGCD1AbIDDK2USIRZ8UT7QTOjTowKm0y82H2uYbnVkWQ6zx3T
+         0REw==
+X-Forwarded-Encrypted: i=1; AJvYcCVoaJH5i2pNo+NRsXrp203v1CcaUI1SB63/rUiCzXXDHfnTzQFYk8YglFisXHme50NjLxZe5W5/GEeW1cloZqk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxC8GGPKpSnbjqGQ/xwVAk1YQd0G6y7KLHzbYxzBTwGYmmgseGa
+	v4MQsZmwf4lI8ezDzUTvn8pTNUx0TTJu6yJdsXaIOWTJSPIgu/MLZ8kt0I9356mZMgkpkhmbbA=
 	=
-X-Google-Smtp-Source: AGHT+IG+8WtYAIvE5hMOTDDIDnESEKs9cooxGmHJzmkpUQR6rSf3ErATiOoioVL9hjQPnMGv1+BjKVw55A==
+X-Google-Smtp-Source: AGHT+IF5Qzl4E1YzPe65Wb29Sgrc2HFfLaCNohGBGUfp4TZa7t5neoeyoWwHzW3x6GrdLBjYC9RP4+2Kkw==
 X-Received: from jrife-kvm.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:63c1])
- (user=jrife job=sendgmr) by 2002:a63:3741:0:b0:7ea:7e29:be5 with SMTP id
- 41be03b00d2f7-7eacc86642bmr17501a12.6.1729610959685; Tue, 22 Oct 2024
- 08:29:19 -0700 (PDT)
-Date: Tue, 22 Oct 2024 15:29:02 +0000
+ (user=jrife job=sendgmr) by 2002:a05:690c:6f85:b0:6db:bd8f:2c59 with SMTP id
+ 00721157ae682-6e5bfbdab09mr3656147b3.4.1729610961939; Tue, 22 Oct 2024
+ 08:29:21 -0700 (PDT)
+Date: Tue, 22 Oct 2024 15:29:03 +0000
 In-Reply-To: <20241022152913.574836-1-jrife@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,9 +74,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20241022152913.574836-1-jrife@google.com>
 X-Mailer: git-send-email 2.47.0.105.g07ac214952-goog
-Message-ID: <20241022152913.574836-3-jrife@google.com>
-Subject: [PATCH bpf-next v2 2/4] selftests/bpf: Migrate LOAD_REJECT test cases
- to prog_tests
+Message-ID: <20241022152913.574836-4-jrife@google.com>
+Subject: [PATCH bpf-next v2 3/4] selftests/bpf: Migrate BPF_CGROUP_INET_SOCK_CREATE
+ test cases to prog_tests
 From: Jordan Rife <jrife@google.com>
 To: bpf@vger.kernel.org
 Cc: Jordan Rife <jrife@google.com>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -87,147 +87,108 @@ Cc: Jordan Rife <jrife@google.com>, Andrii Nakryiko <andrii@kernel.org>,
 	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Move LOAD_REJECT test cases from test_sock.c to an equivalent set of
-verifier tests in progs/verifier_sock.c.
+Move the "load w/o expected_attach_type" test case to
+prog_tests/sock_create.c and drop the remaining test case, as it is made
+redundant with the existing coverage inside prog_tests/sock_create.c.
 
 Signed-off-by: Jordan Rife <jrife@google.com>
 ---
- .../selftests/bpf/progs/verifier_sock.c       | 60 +++++++++++++++++++
- tools/testing/selftests/bpf/test_sock.c       | 52 ----------------
- 2 files changed, 60 insertions(+), 52 deletions(-)
+ .../selftests/bpf/prog_tests/sock_create.c    | 35 +++++++++++++------
+ tools/testing/selftests/bpf/test_sock.c       | 28 ---------------
+ 2 files changed, 25 insertions(+), 38 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_sock.c b/tools/testing/selftests/bpf/progs/verifier_sock.c
-index ee76b51005ab..d3e70e38e442 100644
---- a/tools/testing/selftests/bpf/progs/verifier_sock.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_sock.c
-@@ -977,4 +977,64 @@ l1_%=:	r0 = *(u8*)(r7 + 0);				\
- 	: __clobber_all);
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/sock_create.c b/tools/testing/selftests/bpf/prog_tests/sock_create.c
+index 17a3713621dd..187ffc5e60c4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sock_create.c
++++ b/tools/testing/selftests/bpf/prog_tests/sock_create.c
+@@ -237,6 +237,19 @@ static struct sock_create_test {
  
-+SEC("cgroup/post_bind4")
-+__description("sk->src_ip6[0] [load 1st byte]")
-+__failure __msg("invalid bpf_context access off=28 size=2")
-+__naked void post_bind4_read_src_ip6(void)
-+{
-+	asm volatile ("					\
-+	r6 = r1;					\
-+	r7 = *(u16*)(r6 + %[bpf_sock_src_ip6_0]);	\
-+	r0 = 1;						\
-+	exit;						\
-+"	:
-+	: __imm_const(bpf_sock_src_ip6_0, offsetof(struct bpf_sock, src_ip6[0]))
-+	: __clobber_all);
-+}
+ 		.error = DENY_CREATE,
+ 	},
++	{
++		.descr = "load w/o expected_attach_type (compat mode)",
++		.insns = {
++			/* return 1 */
++			BPF_MOV64_IMM(BPF_REG_0, 1),
++			BPF_EXIT_INSN(),
++		},
++		.expected_attach_type = 0,
++		.attach_type = BPF_CGROUP_INET_SOCK_CREATE,
 +
-+SEC("cgroup/post_bind4")
-+__description("sk->mark [load mark]")
-+__failure __msg("invalid bpf_context access off=16 size=2")
-+__naked void post_bind4_read_mark(void)
-+{
-+	asm volatile ("					\
-+	r6 = r1;					\
-+	r7 = *(u16*)(r6 + %[bpf_sock_mark]);		\
-+	r0 = 1;						\
-+	exit;						\
-+"	:
-+	: __imm_const(bpf_sock_mark, offsetof(struct bpf_sock, mark))
-+	: __clobber_all);
-+}
++		.domain = AF_INET,
++		.type = SOCK_STREAM,
++	},
+ };
+ 
+ static int load_prog(const struct bpf_insn *insns,
+@@ -291,16 +304,18 @@ static int run_test(int cgroup_fd, struct sock_create_test *test)
+ 		goto detach_prog;
+ 	}
+ 
+-	err = getsockopt(sock_fd, SOL_SOCKET, test->optname, &optval, &optlen);
+-	if (err) {
+-		log_err("Failed to call getsockopt");
+-		goto cleanup;
+-	}
+-
+-	if (optval != test->optval) {
+-		errno = 0;
+-		log_err("getsockopt returned unexpected optval");
+-		goto cleanup;
++	if (test->optname) {
++		err = getsockopt(sock_fd, SOL_SOCKET, test->optname, &optval, &optlen);
++		if (err) {
++			log_err("Failed to call getsockopt");
++			goto cleanup;
++		}
 +
-+SEC("cgroup/post_bind6")
-+__description("sk->src_ip4 [load src_ip4]")
-+__failure __msg("invalid bpf_context access off=24 size=2")
-+__naked void post_bind6_read_src_ip4(void)
-+{
-+	asm volatile ("					\
-+	r6 = r1;					\
-+	r7 = *(u16*)(r6 + %[bpf_sock_src_ip4]);		\
-+	r0 = 1;						\
-+	exit;						\
-+"	:
-+	: __imm_const(bpf_sock_src_ip4, offsetof(struct bpf_sock, src_ip4))
-+	: __clobber_all);
-+}
-+
-+SEC("cgroup/sock_create")
-+__description("sk->src_port [word load]")
-+__failure __msg("invalid bpf_context access off=44 size=2")
-+__naked void sock_create_read_src_port(void)
-+{
-+	asm volatile ("					\
-+	r6 = r1;					\
-+	r7 = *(u16*)(r6 + %[bpf_sock_src_port]);	\
-+	r0 = 1;						\
-+	exit;						\
-+"	:
-+	: __imm_const(bpf_sock_src_port, offsetof(struct bpf_sock, src_port))
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
++		if (optval != test->optval) {
++			errno = 0;
++			log_err("getsockopt returned unexpected optval");
++			goto cleanup;
++		}
+ 	}
+ 
+ 	ret = test->error != OK;
 diff --git a/tools/testing/selftests/bpf/test_sock.c b/tools/testing/selftests/bpf/test_sock.c
-index 9ed908163d98..26dff88abbaa 100644
+index 26dff88abbaa..f97850f1d84a 100644
 --- a/tools/testing/selftests/bpf/test_sock.c
 +++ b/tools/testing/selftests/bpf/test_sock.c
-@@ -47,58 +47,6 @@ struct sock_test {
+@@ -47,34 +47,6 @@ struct sock_test {
  };
  
  static struct sock_test tests[] = {
 -	{
--		.descr = "bind4 load with invalid access: src_ip6",
+-		.descr = "sock_create load w/o expected_attach_type (compat mode)",
 -		.insns = {
--			BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
--			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
--				    offsetof(struct bpf_sock, src_ip6[0])),
 -			BPF_MOV64_IMM(BPF_REG_0, 1),
 -			BPF_EXIT_INSN(),
 -		},
--		.expected_attach_type = BPF_CGROUP_INET4_POST_BIND,
--		.attach_type = BPF_CGROUP_INET4_POST_BIND,
--		.result = LOAD_REJECT,
+-		.expected_attach_type = 0,
+-		.attach_type = BPF_CGROUP_INET_SOCK_CREATE,
+-		.domain = AF_INET,
+-		.type = SOCK_STREAM,
+-		.ip = "127.0.0.1",
+-		.port = 8097,
+-		.result = SUCCESS,
 -	},
 -	{
--		.descr = "bind4 load with invalid access: mark",
+-		.descr = "sock_create load w/ expected_attach_type",
 -		.insns = {
--			BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
--			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
--				    offsetof(struct bpf_sock, mark)),
--			BPF_MOV64_IMM(BPF_REG_0, 1),
--			BPF_EXIT_INSN(),
--		},
--		.expected_attach_type = BPF_CGROUP_INET4_POST_BIND,
--		.attach_type = BPF_CGROUP_INET4_POST_BIND,
--		.result = LOAD_REJECT,
--	},
--	{
--		.descr = "bind6 load with invalid access: src_ip4",
--		.insns = {
--			BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
--			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
--				    offsetof(struct bpf_sock, src_ip4)),
--			BPF_MOV64_IMM(BPF_REG_0, 1),
--			BPF_EXIT_INSN(),
--		},
--		.expected_attach_type = BPF_CGROUP_INET6_POST_BIND,
--		.attach_type = BPF_CGROUP_INET6_POST_BIND,
--		.result = LOAD_REJECT,
--	},
--	{
--		.descr = "sock_create load with invalid access: src_port",
--		.insns = {
--			BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
--			BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6,
--				    offsetof(struct bpf_sock, src_port)),
 -			BPF_MOV64_IMM(BPF_REG_0, 1),
 -			BPF_EXIT_INSN(),
 -		},
 -		.expected_attach_type = BPF_CGROUP_INET_SOCK_CREATE,
 -		.attach_type = BPF_CGROUP_INET_SOCK_CREATE,
--		.result = LOAD_REJECT,
+-		.domain = AF_INET,
+-		.type = SOCK_STREAM,
+-		.ip = "127.0.0.1",
+-		.port = 8097,
+-		.result = SUCCESS,
 -	},
- 	{
- 		.descr = "sock_create load w/o expected_attach_type (compat mode)",
- 		.insns = {
+ };
+ 
+ static size_t probe_prog_length(const struct bpf_insn *fp)
 -- 
 2.47.0.105.g07ac214952-goog
 
