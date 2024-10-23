@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-20480-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20481-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7A999ACF41
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 17:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 345739ACF43
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 17:48:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6929D286AB5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 15:48:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E96EB286B93
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 15:48:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A64671D14E4;
-	Wed, 23 Oct 2024 15:44:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB5121D1E9D;
+	Wed, 23 Oct 2024 15:44:19 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 047991D0799;
-	Wed, 23 Oct 2024 15:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4599F1CF29B;
+	Wed, 23 Oct 2024 15:44:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729698258; cv=none; b=N7xrxsobiU6u0upsV5ZUhsA5p0kVwN4Uu/nMiaFG1uykhDji5qbZj4Tor7cdeV9zVp3UxUtIM37RRPDr0OEKc5e7M71hTgR0nVgKbVJkIKQo99wMCte4V9IxFjPKUyWeosyNL3AkdWjzB5QsmeQ2CHenvKJWWao83BfVltYhdJY=
+	t=1729698259; cv=none; b=m2XQldZQcbgUR89mMX6CuBh1/82OczMMqJjCANgP0n+6m3GMZQrhZjhFn3EFNVopJfBW2Xce8KjGkTICojurndMfrd5Th9739PSpRXAh3ntBz6imlP3vGaMSTtvnxIgpQSm5cRgcdJByeOXqr5bs6ND1RQ/vx1v7MA0RqKM3P9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729698258; c=relaxed/simple;
-	bh=QNIVoaUG6HoJ02+8aCHTzhZtbDvKJFEGC7k27W7G0/k=;
+	s=arc-20240116; t=1729698259; c=relaxed/simple;
+	bh=k3NksgKMGGwSiQjqqQDiIoWxu2o4MtjaGnPwO3kHGQE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q9pAOQqij2Bl6lbBAm13jEziLwj7i6zWBi/20JLexuMZUuDTSPHeHAr1xi8KCvSYQXs11nQIlu6gjqvMZOeztYMC1qUnccO4OMAfqzEP7WZTAIzbWwlITOfVCtLnsV5wRX50niPtsQR34GG8prFeW59yBAKPisRuG7yANOdFJJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.175
+	 MIME-Version; b=R3r2u7aeQf61NhFf3dRv537Uj4Cq0oCcN7OgMswKvpIu4DfoXqVb0FjTX1ehPIv7MmJzgZsQTcrCg/LPiJONNuHlBm5JCBPBC4rcsBe5vxKqryalZtiZ0vshneaNACPN3MeVWDgRQCQFnidXYkiLaZdvjuuRT56nkfO1igZai9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-718e9c8bd83so779477b3a.1;
-        Wed, 23 Oct 2024 08:44:16 -0700 (PDT)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20c6f492d2dso81004595ad.0;
+        Wed, 23 Oct 2024 08:44:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729698256; x=1730303056;
+        d=1e100.net; s=20230601; t=1729698257; x=1730303057;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WLuAo808h43hPUqDZon7CMUoTgxLTq7GJOn3Y6RziyQ=;
-        b=jgMTHa5gbSUl9OxBuAc62Q4nBsyk4AGrvjF8pK5EcE4pppmYyf03xybhhxtG3FoSHM
-         KmSUW9rLrh3/lHjk3Xg6kzboCq3CJxQWu3mVIroTOhH1/7HF088bgX2LwpcBoa01W9mT
-         XpKU6tuycOrzJFWgj7sVjXU6Y6Yu8A69EVKVD9dT5m9emP4yEb+csvEsXdxodiNLS0za
-         aWX4c+CdgXOX0sJe/XnBPzEdA2nBcWA841tPyk7cAWSQtL61eIooQhi6G6TzDJYYcYU0
-         Tajs71AQGGM2stfb6UAuPTbwoECcHjhExflStRMvLv7LHtjfclxUNPWD0Xfx1aO9MP7w
-         sr0w==
-X-Forwarded-Encrypted: i=1; AJvYcCWL3cW5cwSZfKYxAuCSm+jtjHwmakVPDOVFuMFNvPH7tyRmJNFT5Cp45TrlS73iA+NaUNhehceW8yo1kXXYnyHN@vger.kernel.org, AJvYcCXxj/iKuiQeT2sISzZx8E0tx22+su71jEULu1zWb0XB43Vnr/PIKFge2bgGemGY8vQWof4wkl86fcoZotw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyP2cm2R4Dpm34QWmzooapfz0Y1kiNeYfjD7GiWiDjtVYusGvdv
-	U0WfB4rsPs6ahRWZftWMe4vOtqtfejHhEgfvklq/v/CC+8OkWlee9xlrnjA=
-X-Google-Smtp-Source: AGHT+IEOaI887BOI704vql0OLz3gq+9dRFk/uA2lyriK37cKHhq3KVNlDCQI2vpUYt6hR7vam91DcA==
-X-Received: by 2002:a05:6a00:1142:b0:71e:76dc:10f7 with SMTP id d2e1a72fcca58-72030f79cd7mr5038113b3a.4.1729698255965;
-        Wed, 23 Oct 2024 08:44:15 -0700 (PDT)
+        bh=X3YqyV0YwGuilWF+8lpqEcTlB/FpyMoTdw0SNw6nZVo=;
+        b=NDX9XE9CFSH16J/AwLJa6RmvNVaM3WuWVNaOYcO4t6n1rCioKBQin5NZwkNRmq3QUp
+         5Uhtns9r9HZJc+6l+Vte9dNjEgxn9tYqfQrGOKwgFZ5tePvL1Ff2l9Pe1VAdbJncvIIg
+         XmcNjmMaH2ElqjIWM1Ma8iK8175xAtB93D/Xd2AJgaUASldymPLNyQhOcxR+Oe0J6jN8
+         YsY8B8RRpXhjvaxQDqrUc0ks+usdmhEpi6HRpmYrZjT4x4ZOZmEzAG8gVZEu0XAhSXdb
+         EkIFdnDsi5dZiGOImRLHAQpIsEGeisp1P+56j0d6kfVPFbzgD0YRWBbgZ3/39JnS6NHH
+         1GbA==
+X-Forwarded-Encrypted: i=1; AJvYcCUm4S9CGv4fzPM/yCUF4FxO2xItvuaWOXNoQ+qUUcYOiKtDGUgCroIiL2LgSAh3nWOyG2mhs+Mmqq4JgELGHOGW@vger.kernel.org, AJvYcCVbOe21gStxYkEXzezx/NsCRRiN5oSJMZGB8nWscKJZmsy+vB6Gt/rPu0NPDsw2hIQ3xbrDhpfcGA014hs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWXzXex5UBDx6b75IUHhwJhY5vyNPGMEOXgNmEMN8C/tlyZNKv
+	nzgSoe3MvfkrE7wQ6MvHmgX7QUL0F1Ct/3j6N4Z8gseKoSPHPVIhP1KVsT0=
+X-Google-Smtp-Source: AGHT+IG5tIKpYeuEz6ZLsiWpOGSrUCthd3VQ2flnhUoELbeYmk26pijtnqS/JXJt/3edd7064c+NAA==
+X-Received: by 2002:a17:902:ce86:b0:20b:58f2:e1a0 with SMTP id d9443c01a7336-20fa9e246e0mr30293045ad.18.1729698257223;
+        Wed, 23 Oct 2024 08:44:17 -0700 (PDT)
 Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec1312d14sm6713485b3a.16.2024.10.23.08.44.15
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7f0bcb75sm59576405ad.176.2024.10.23.08.44.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2024 08:44:15 -0700 (PDT)
+        Wed, 23 Oct 2024 08:44:16 -0700 (PDT)
 From: Stanislav Fomichev <sdf@fomichev.me>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -67,9 +67,9 @@ Cc: davem@davemloft.net,
 	sdf@fomichev.me,
 	willemb@google.com,
 	petrm@nvidia.com
-Subject: [PATCH net-next v5 11/12] selftests: ncdevmem: Move ncdevmem under drivers/net/hw
-Date: Wed, 23 Oct 2024 08:44:01 -0700
-Message-ID: <20241023154402.441510-12-sdf@fomichev.me>
+Subject: [PATCH net-next v5 12/12] selftests: ncdevmem: Add automated test
+Date: Wed, 23 Oct 2024 08:44:02 -0700
+Message-ID: <20241023154402.441510-13-sdf@fomichev.me>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241023154402.441510-1-sdf@fomichev.me>
 References: <20241023154402.441510-1-sdf@fomichev.me>
@@ -81,88 +81,98 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is where all the tests that depend on the HW functionality live in
-and this is where the automated test is gonna be added in the next
-patch.
+Only RX side for now and small message to test the setup.
+In the future, we can extend it to TX side and to testing
+both sides with a couple of megs of data.
+
+  make \
+  	-C tools/testing/selftests \
+  	TARGETS="drivers/hw/net" \
+  	install INSTALL_PATH=~/tmp/ksft
+
+  scp ~/tmp/ksft ${HOST}:
+  scp ~/tmp/ksft ${PEER}:
+
+  cfg+="NETIF=${DEV}\n"
+  cfg+="LOCAL_V6=${HOST_IP}\n"
+  cfg+="REMOTE_V6=${PEER_IP}\n"
+  cfg+="REMOTE_TYPE=ssh\n"
+  cfg+="REMOTE_ARGS=root@${PEER}\n"
+
+  echo -e "$cfg" | ssh root@${HOST} "cat > ksft/drivers/net/net.config"
+  ssh root@${HOST} "cd ksft && ./run_kselftest.sh -t drivers/net:devmem.py"
 
 Reviewed-by: Mina Almasry <almasrymina@google.com>
 Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
 ---
- tools/testing/selftests/drivers/net/hw/.gitignore         | 1 +
- tools/testing/selftests/drivers/net/hw/Makefile           | 8 ++++++++
- .../testing/selftests/{net => drivers/net/hw}/ncdevmem.c  | 0
- tools/testing/selftests/net/.gitignore                    | 1 -
- tools/testing/selftests/net/Makefile                      | 8 --------
- 5 files changed, 9 insertions(+), 9 deletions(-)
- create mode 100644 tools/testing/selftests/drivers/net/hw/.gitignore
- rename tools/testing/selftests/{net => drivers/net/hw}/ncdevmem.c (100%)
+ .../testing/selftests/drivers/net/hw/Makefile |  1 +
+ .../selftests/drivers/net/hw/devmem.py        | 45 +++++++++++++++++++
+ 2 files changed, 46 insertions(+)
+ create mode 100755 tools/testing/selftests/drivers/net/hw/devmem.py
 
-diff --git a/tools/testing/selftests/drivers/net/hw/.gitignore b/tools/testing/selftests/drivers/net/hw/.gitignore
-new file mode 100644
-index 000000000000..e9fe6ede681a
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/hw/.gitignore
-@@ -0,0 +1 @@
-+ncdevmem
 diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index c9f2f48fc30f..182348f4bd40 100644
+index 182348f4bd40..1c6a77480923 100644
 --- a/tools/testing/selftests/drivers/net/hw/Makefile
 +++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -26,4 +26,12 @@ TEST_INCLUDES := \
- 	../../../net/forwarding/tc_common.sh \
- 	#
- 
-+# YNL files, must be before "include ..lib.mk"
-+YNL_GEN_FILES := ncdevmem
-+TEST_GEN_FILES += $(YNL_GEN_FILES)
+@@ -3,6 +3,7 @@
+ TEST_PROGS = \
+ 	csum.py \
+ 	devlink_port_split.py \
++	devmem.py \
+ 	ethtool.sh \
+ 	ethtool_extended_state.sh \
+ 	ethtool_mm.sh \
+diff --git a/tools/testing/selftests/drivers/net/hw/devmem.py b/tools/testing/selftests/drivers/net/hw/devmem.py
+new file mode 100755
+index 000000000000..1416c31ff81e
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/hw/devmem.py
+@@ -0,0 +1,45 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
 +
- include ../../../lib.mk
++from lib.py import ksft_run, ksft_exit
++from lib.py import ksft_eq, KsftSkipEx
++from lib.py import NetDrvEpEnv
++from lib.py import bkg, cmd, rand_port, wait_port_listen
++from lib.py import ksft_disruptive
 +
-+# YNL build
-+YNL_GENS := ethtool netdev
-+include ../../../net/ynl.mk
-diff --git a/tools/testing/selftests/net/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-similarity index 100%
-rename from tools/testing/selftests/net/ncdevmem.c
-rename to tools/testing/selftests/drivers/net/hw/ncdevmem.c
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index 217d8b7a7365..a78debbd1fe7 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -18,7 +18,6 @@ ipv6_flowlabel_mgr
- log.txt
- msg_oob
- msg_zerocopy
--ncdevmem
- nettest
- psock_fanout
- psock_snd
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 759b1d2dc8b4..22a5d6a7c3f3 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -97,10 +97,6 @@ TEST_PROGS += fq_band_pktlimit.sh
- TEST_PROGS += vlan_hw_filter.sh
- TEST_PROGS += bpf_offload.py
- 
--# YNL files, must be before "include ..lib.mk"
--YNL_GEN_FILES := ncdevmem
--TEST_GEN_FILES += $(YNL_GEN_FILES)
--
- TEST_FILES := settings
- TEST_FILES += in_netns.sh lib.sh net_helper.sh setup_loopback.sh setup_veth.sh
- 
-@@ -110,10 +106,6 @@ TEST_INCLUDES := forwarding/lib.sh
- 
- include ../lib.mk
- 
--# YNL build
--YNL_GENS := ethtool netdev
--include ynl.mk
--
- $(OUTPUT)/epoll_busy_poll: LDLIBS += -lcap
- $(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma
- $(OUTPUT)/tcp_mmap: LDLIBS += -lpthread -lcrypto
++
++def require_devmem(cfg):
++    if not hasattr(cfg, "_devmem_probed"):
++        port = rand_port()
++        probe_command = f"./ncdevmem -f {cfg.ifname}"
++        cfg._devmem_supported = cmd(probe_command, fail=False, shell=True).ret == 0
++        cfg._devmem_probed = True
++
++    if not cfg._devmem_supported:
++        raise KsftSkipEx("Test requires devmem support")
++
++
++@ksft_disruptive
++def check_rx(cfg) -> None:
++    cfg.require_v6()
++    require_devmem(cfg)
++
++    port = rand_port()
++    listen_cmd = f"./ncdevmem -l -f {cfg.ifname} -s {cfg.v6} -p {port}"
++
++    with bkg(listen_cmd) as nc:
++        wait_port_listen(port)
++        cmd(f"echo -e \"hello\\nworld\"| nc {cfg.v6} {port}", host=cfg.remote, shell=True)
++
++    ksft_eq(nc.stdout.strip(), "hello\nworld")
++
++
++def main() -> None:
++    with NetDrvEpEnv(__file__) as cfg:
++        ksft_run([check_rx],
++                 args=(cfg, ))
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
 -- 
 2.47.0
 
