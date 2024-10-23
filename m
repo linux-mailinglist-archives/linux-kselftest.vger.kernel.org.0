@@ -1,196 +1,263 @@
-Return-Path: <linux-kselftest+bounces-20438-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20439-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D487E9AC00C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 09:19:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3C459AC021
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 09:22:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27591B24AB1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 07:19:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10AF31C211CE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 07:22:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3225E1552EB;
-	Wed, 23 Oct 2024 07:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 566BC153801;
+	Wed, 23 Oct 2024 07:22:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XjwuUp+M"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="G6krWYzK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2071.outbound.protection.outlook.com [40.107.94.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4720F153801
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Oct 2024 07:19:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729667952; cv=none; b=VMs+YbHRpkfURZUMyVng1bzNhGse2i5LggmzudnJPiwZ5oqOPwXI17SObmNLvzRp5AK26QCGzzda8QVaPeT4cvhM4wkV0HXQTdCdYzPQDZ875gewSsHHVXmxrdqGF3hJXig3vqtrBRDq9brqasjVgZbnfZMxTUi/0JOxut0b380=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729667952; c=relaxed/simple;
-	bh=bKrUGf4U7cuFbm/oePLuNwJ0rXtkr0eVGYDs+YteWIY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LK5rHv5veTbYMczIQlTPnzo7CPALVvwHoNZm785pxOYz4U2BPiyA8p7FCELzmqGA83bj3Ym65ANDO6Rq85un1JjW9/r7D4WoXPlnhTqU6OvKcNkfV5uQU9vX049Lm07q3odSlNlc8iTJ9MpSji5Z4yUQaCtBhq87fb2ZKc8p+Lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XjwuUp+M; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729667949;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=2J8ZqubO+8AlKbFE9Qv2kRLiKggvUmjZRZtAw8rfrEY=;
-	b=XjwuUp+M7Sq75P4Tkp6gUAtALTFniP9d/EDhT8BqCUMGQhTAhXGKiC0YfybY9NTvNxR4vH
-	iyzCRj5cuOoIi/HH9DkI/MNmkq5gMjzfXqOy3ImYvKIZuIGnOazLvsYTT0ykJJWAhMzWXh
-	9tnAEyvWY6yLtNZIMZO/DQllPVa5Q4Q=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-122-iZGv5dUNM3q_XzpOnsV9Wg-1; Wed, 23 Oct 2024 03:19:08 -0400
-X-MC-Unique: iZGv5dUNM3q_XzpOnsV9Wg-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-37d4cf04bcfso2996695f8f.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Oct 2024 00:19:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729667947; x=1730272747;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2J8ZqubO+8AlKbFE9Qv2kRLiKggvUmjZRZtAw8rfrEY=;
-        b=HGjzj7rzrFzeH6mgsX9nADCDsAVxvfW/J6RIoOM2iol/9tuY+3GtJYmRf+TA6y0QJJ
-         fjmI9ZXk1qxdftIsYBh3IzjcoosKCiKpAXs9Ieq1FbEtbZQSi2YLUvtCcXMrvw32aLbT
-         7YDuLl6P0RSanpvY7IMUnbDJhzWIeu2eXn77BDcq6eAhP6fhfoJhAmdZZxhuXRlIINUc
-         VyR2htfZsGC6XYy7BnqmHLaaCnqhGOjNkpOsZCmFCqmNFaF6EWIdtrArg5kxZZWTZxPp
-         vjsQYQSfHFBTcrmWraCoZ6hcc2RGjx8OBZwvcnnehAdOGzAeyrhLFpW83dgl0GgqY1bC
-         89dA==
-X-Forwarded-Encrypted: i=1; AJvYcCUHD2bc1/TEH2qbjnjm526WIhxCxaPj3WMf6tYxwCzOfHVP5olqz1X5WtHQ9ByKzhk0TsWnOlSh5IPQJWwmwus=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykMwD4Kt7D9ZD5tl8HQsicyX8ZSyGNcGyH5BzbpzivDw3jBxfb
-	7vhCXU6kC89fg+y6Tdv2pi51+dFet7gy/e56pIWBm3fDRhqtLqz1aPDAZj8v02H7lO6EQ1gJ2er
-	RvwLVv6TWpQFi5S6MqcNB4qsHFduqI9PKHBuIE+7LP2rdKCtaY6DQeUDxCnWKYpRKwQ==
-X-Received: by 2002:a05:6000:d08:b0:37d:446b:7dfa with SMTP id ffacd0b85a97d-37efcf7ebd9mr912443f8f.39.1729667946893;
-        Wed, 23 Oct 2024 00:19:06 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFqzEDQ57fgD1+CK3sngwj8y5ncZ+zhRCIKvEIDF/zJ+B/m+m+ZwPj3lma4Yv4rl/K1V35C/w==
-X-Received: by 2002:a05:6000:d08:b0:37d:446b:7dfa with SMTP id ffacd0b85a97d-37efcf7ebd9mr912404f8f.39.1729667946324;
-        Wed, 23 Oct 2024 00:19:06 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70c:cd00:c139:924e:3595:3b5? (p200300cbc70ccd00c139924e359503b5.dip0.t-ipconnect.de. [2003:cb:c70c:cd00:c139:924e:3595:3b5])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a37d25sm8269356f8f.23.2024.10.23.00.19.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Oct 2024 00:19:05 -0700 (PDT)
-Message-ID: <8471d7b1-576b-41a6-91fb-1c9baae8c540@redhat.com>
-Date: Wed, 23 Oct 2024 09:19:03 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A0451547EF;
+	Wed, 23 Oct 2024 07:22:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.71
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729668161; cv=fail; b=fq0JfFqnGf+h/DY0HpiANJj9+26KgBMiIRNtF1/PwhHHOgk3UHolb4Q7pLY6Q6GoCQhk9S0Ta9LqawqTkeNKcSDqiWdGclwExBgoIeFuOP1JB7B/MTNdIvCHi5Ys5DtV/LAMY/YX3X+8ucMC/J9fRTbricK7BakBmKUY3R5S7xI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729668161; c=relaxed/simple;
+	bh=/dCFw/GM2+5xkiw+yyKb+YZG2Zif2asbaTZ5wbjt5FQ=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KCcPkqtx9sRLiggfLxqbbGdZfEDxvUFnU9UdMN+rmlRjMNAaou5WSGuHyB1J/JwGv17sTF6BhQS93fTKfRsX9Qw9mKdgPo2WT+Zuz6Nmievcqg0uIZd4lOnWttGiMJU8adeB/bIL4zifGQVaYo4MSBQa5T2cxOsReep+0ZFRZCM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=G6krWYzK; arc=fail smtp.client-ip=40.107.94.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=KxynW0yd9uKlnA2G7347GgKGze66LusGwFQneColv+bb58LtfnybiNTadl0zIQiG7mnhBTLtBTJrplNnXJy9QfUeWBViyPnTf1nkQSLsxE3kjASteaKYi05wdMWAK8lW+ym8yz9AuBRZ2W+cq9an0NYF/7hEXwwb99Ojh+6APFacDj6UfL4g12p0xHa4T7jMDCsUV0KvFRIQv0HQEgkQf1Vno05ZbB/LeGLOzgS1DY0D8mB7tZLhZfaeWpY8ZQEpdHtncnYY8d9nOZ0UNWzfY8vFt8q5EgCXqr1Bnv+3xsibxiWsjbgHP6gg3QOMGt4fp82De7oMz03kBJTW7zh/rQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Cc6h/YzzQqgj6jEa/pB+5U8cxgBjKfQcfixAXu5zEpQ=;
+ b=W43Gt9xy1DH3KQL03o/OyAYtt6GXGA/46WKyLmOIzFeUeADU1zkA9Wph42mCerj2gSvNsmGT0+1KxSFuwdA1geEY5mTvYwj6edGAdpyWLtCvFANmse+2IzActpVQPWHFBYMz+UqGibW0bEeIUlrVIopCo1vR+9KlG/wuGSM0Z4z7dqwiuFP6vo+eSmpFowfm7ChACyzjzD8AHo9IQ2/a9DsUFeMkBm25D5pWKUiS8EAoXhXcHCoegb62ySSpSv6rNND2IQVmuqE+Zakz0kRZDQQyMk3SPcxGeDXoOcOcqfysF/xd4N0S58svDjil//ambIL4DXPSBiZS/lWhyJcvTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=huawei.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Cc6h/YzzQqgj6jEa/pB+5U8cxgBjKfQcfixAXu5zEpQ=;
+ b=G6krWYzK1Fe1f7j1ZCi3otqxPyICOLsBzt/H5/5IUiq8nhK+wy8hCY0jgd6GnfRKZLPkGkNqXcHzVHEak8eymNXL7USDIvX1DAWA8LyDsamylHa3xQqehO5uUeacz4NoKkC7Xc04eZAU/Pzu82s+SRq5fYP0E26VTeR8Jcp1Ms2MRZ8cKReTS3VnOEYH+Dgzqj0iDPPajfSuqA4f0y5URb/Mse7oef4HAgA6h8Zmd39Ug8QBpHNJJCae6zikVaZPo5HC/BmAxoqNooASMdzGFoxff3uHbVFBZXZPu84y9Nx7wrVdp/HxQ1bq/zJOoHtIo5YxLV3xBKzOqZEiwvvqGA==
+Received: from CH2PR08CA0004.namprd08.prod.outlook.com (2603:10b6:610:5a::14)
+ by DS7PR12MB8249.namprd12.prod.outlook.com (2603:10b6:8:ea::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.29; Wed, 23 Oct
+ 2024 07:22:33 +0000
+Received: from CH2PEPF0000009D.namprd02.prod.outlook.com
+ (2603:10b6:610:5a:cafe::e7) by CH2PR08CA0004.outlook.office365.com
+ (2603:10b6:610:5a::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.30 via Frontend
+ Transport; Wed, 23 Oct 2024 07:22:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CH2PEPF0000009D.mail.protection.outlook.com (10.167.244.25) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8093.14 via Frontend Transport; Wed, 23 Oct 2024 07:22:32 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 23 Oct
+ 2024 00:22:18 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 23 Oct
+ 2024 00:22:18 -0700
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
+ Transport; Wed, 23 Oct 2024 00:22:17 -0700
+Date: Wed, 23 Oct 2024 00:22:15 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: <kevin.tian@intel.com>, <will@kernel.org>, <joro@8bytes.org>,
+	<suravee.suthikulpanit@amd.com>, <robin.murphy@arm.com>,
+	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>, <shuah@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
+	<eric.auger@redhat.com>, <jean-philippe@linaro.org>, <mdf@kernel.org>,
+	<mshavit@google.com>, <shameerali.kolothum.thodi@huawei.com>,
+	<smostafa@google.com>, <yi.l.liu@intel.com>
+Subject: Re: [PATCH v1 04/10] iommufd/viommu: Allow drivers to control
+ vdev_id lifecycle
+Message-ID: <ZxikJwzq8rLPgtmS@Asurada-Nvidia>
+References: <cover.1724777091.git.nicolinc@nvidia.com>
+ <3ab48d4978318938911d91833654b296947668ad.1724777091.git.nicolinc@nvidia.com>
+ <20240905180119.GY1358970@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/5] implement lightweight guard pages
-To: Dmitry Vyukov <dvyukov@google.com>, fw@deneb.enyo.de
-Cc: James.Bottomley@HansenPartnership.com, Liam.Howlett@oracle.com,
- akpm@linux-foundation.org, arnd@arndb.de, brauner@kernel.org,
- chris@zankel.net, deller@gmx.de, hch@infradead.org,
- ink@jurassic.park.msu.ru, jannh@google.com, jcmvbkbc@gmail.com,
- jeffxu@chromium.org, jhubbard@nvidia.com, linux-alpha@vger.kernel.org,
- linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mm@kvack.org,
- linux-parisc@vger.kernel.org, lorenzo.stoakes@oracle.com,
- mattst88@gmail.com, muchun.song@linux.dev, paulmck@kernel.org,
- richard.henderson@linaro.org, shuah@kernel.org, sidhartha.kumar@oracle.com,
- surenb@google.com, tsbogend@alpha.franken.de, vbabka@suse.cz,
- willy@infradead.org, elver@google.com
-References: <87a5eysmj1.fsf@mid.deneb.enyo.de>
- <20241023062417.3862170-1-dvyukov@google.com>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <20241023062417.3862170-1-dvyukov@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240905180119.GY1358970@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PEPF0000009D:EE_|DS7PR12MB8249:EE_
+X-MS-Office365-Filtering-Correlation-Id: a445fd23-dabe-4ef4-9d62-08dcf33375e2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|36860700013|7416014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Iy38ArqFaE8WWs88SZGglWrn89mY84Ebr8yT5dsHiUHWQ5SFPxZzdNgCvrhg?=
+ =?us-ascii?Q?rUpmmy35uvRLS6uNCICVQRzZubWP2U1OEKwiSiKNIvgHn+ADS56/sP3kMkDS?=
+ =?us-ascii?Q?GfKfbK124D3/Nwt4RsBFpmQMzygRdZLKn6NF80dxF1ibrVDHjvDOmWlCXei+?=
+ =?us-ascii?Q?1p70HglNJPYLCHDyBlyoYPNioIbvjG3XXus6tn0hIdeVR3rvoHoNTyH69XBn?=
+ =?us-ascii?Q?ekNUHSrgh5FcSan7N3HzSbalG5tySc9be62uv3OTLGdVdRcF9Qwh3th5X0Tz?=
+ =?us-ascii?Q?Ne2Yf2Bx1CS3ysqM6a0kQdqbB4Y0V6V60Fuh6+v94FOjaBHYsS+maop2N1Us?=
+ =?us-ascii?Q?T6PrvcnSqAyKWEog9ykc4YNruMcY3HFvK5hSVY5ND8Oy+BKllshuOhFryxbg?=
+ =?us-ascii?Q?KoqngCyvOxTeadTrE9nGbov3m8wq+M4gwfhVQePHT5WzAicjEX123W6bPnZr?=
+ =?us-ascii?Q?tIK8npiAaj/KKXG3xGzW2Pox9yHDpvKS9s8CHjfL6k54OJZ6ipR36ad+mPbF?=
+ =?us-ascii?Q?7NMDak3Hd1lMlb54mzXLb/WwV4kaQSJl6kTYR/EAJ+VsKhHlgmOt/JUB/7HR?=
+ =?us-ascii?Q?/e0Sxie4/yOUrE2wkJLD0oQk1Y37OSHC6+5vmAVIOHcqiALQoel5bkbl6Btc?=
+ =?us-ascii?Q?ntZYX2y/qWBDekM/VDA3uRnUejNJ0+2lP2uHspmvmdCx5cvuKb2xWtpUesvF?=
+ =?us-ascii?Q?GH7x6HYpaE5nsIuMBfvY5Ixw4OcX3hollBF1lpWGo/7gZGh17txhqMqj5c4K?=
+ =?us-ascii?Q?gN5M08sA0PHnHvUZ9XoRIsLVsFUdty9v9lF8cIKLPv42LM33rszHfLmLz6uN?=
+ =?us-ascii?Q?7rU9zOc/RitQfHgNHzo/mG/pJ8c4S+tGocgQnRXv0rn0kURc5CENtTlxi+2G?=
+ =?us-ascii?Q?9QFl99nbYO2Fk4OzHtmI9ikDNOzx2BXgh5Vc6Wb68oxzvP3frOW0Va5Opkv0?=
+ =?us-ascii?Q?4LTIbTdeI11A6BNiFoy9D4OnzMLbloK4nIw2LHauo3atVJDES/JSqb2NcTYm?=
+ =?us-ascii?Q?dK7ObKGMrMQ4aq247tEPnVr1ybt/Tj5lDTmCMJISaDeyOaIxgCoEw5vFZKTe?=
+ =?us-ascii?Q?3OXq/vdONqagV0iGdPUO8HJj7jconC932ELfyhaTRphjnt/rZWWDVorcjc+Q?=
+ =?us-ascii?Q?AgrpUasFjMkeWetNE1b0IMZpq6QFQDpO7r1PDQWFr/oosNJ15vAYbp/EDiDy?=
+ =?us-ascii?Q?8i6TvqInIuY2CuJj+ZbanfIgvoupMzFjnwcdqC06oRzOHTFi00aCo/D0n5dZ?=
+ =?us-ascii?Q?P3RH/l2Mt9DKTZBAUFRPh5NQ1J4ZIhYjiNUgWumYreZztZj0IKJRwrD8NKZW?=
+ =?us-ascii?Q?1YbhY6e0s79MzI5CxhKPUORt3ZIhXq0BzSLNoDNviGshhDLBxNvDWZ6KTyEe?=
+ =?us-ascii?Q?XMLBHhIL0yy3BrjDNlNiXUKytEobD4viKUehHW8gQCWTDQGHTg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700013)(7416014)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2024 07:22:32.4872
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a445fd23-dabe-4ef4-9d62-08dcf33375e2
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH2PEPF0000009D.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8249
 
-On 23.10.24 08:24, Dmitry Vyukov wrote:
-> Hi Florian, Lorenzo,
+On Thu, Sep 05, 2024 at 03:01:19PM -0300, Jason Gunthorpe wrote:
+> On Tue, Aug 27, 2024 at 10:02:06AM -0700, Nicolin Chen wrote:
+> > The iommufd core provides a lookup helper for an IOMMU driver to find a
+> > device pointer by device's per-viommu virtual ID. Yet a driver may need
+> > an inverted lookup to find a device's per-viommu virtual ID by a device
+> > pointer, e.g. when reporting virtual IRQs/events back to the user space.
+> > In this case, it'd be unsafe for iommufd core to do an inverted lookup,
+> > as the driver can't track the lifecycle of a viommu object or a vdev_id
+> > object.
+> > 
+> > Meanwhile, some HW can even support virtual device ID lookup by its HW-
+> > accelerated virtualization feature. E.g. Tegra241 CMDQV HW supports to
+> > execute vanilla guest-issued SMMU commands containing virtual Stream ID
+> > but requires software to configure a link between virtual Stream ID and
+> > physical Stream ID via HW registers. So not only the iommufd core needs
+> > a vdev_id lookup table, drivers will want one too.
+> > 
+> > Given the two justifications above, it's the best practice to provide a
+> > a pair of set_vdev_id/unset_vdev_id ops in the viommu ops, so a driver
+> > can implement them to control a vdev_id's lifecycle, and configure the
+> > HW properly if required.
 > 
-> This looks great!
+> I think the lifecycle rules should be much simpler.
 > 
-> What I am VERY interested in is if poisoned pages cause SIGSEGV even when
-> the access happens in the kernel. Namely, the syscall still returns EFAULT,
-> but also SIGSEGV is queued on return to user-space.
+> If a nested domain is attached to a STE/RID/device then the vIOMMU
+> affiliated with that nested domain is pinned while the STE is in place
 > 
-> Catching bad accesses in system calls is currently the weak spot for
-> all user-space bug detection tools (GWP-ASan, libefence, libefency, etc).
-> It's almost possible with userfaultfd, but catching faults in the kernel
-> requires admin capability, so not really an option for generic bug
-> detection tools (+inconvinience of userfaultfd setup/handler).
-> Intercepting all EFAULT from syscalls is not generally possible
-> (w/o ptrace, usually not an option as well), and EFAULT does not always
-> mean a bug.
+> So the driver only need to provide locking around attach changing the
+> STE's vIOMMU vs async operations translating from a STE to a
+> vIOMMU. This can be a simple driver lock of some kind, ie a rwlock
+> across the STE table.
 > 
-> Triggering SIGSEGV even in syscalls would be not just a performance
-> optimization, but a new useful capability that would allow it to catch
-> more bugs.
+> Generally that is how all the async events should work, go from the
+> STE to the VIOMMU to a iommufd callback to the iommufd event
+> queue. iommufd will translate the struct device from the driver to an
+> idev_id (or maybe even a vdevid) the same basic way the PRI code works
 
-Right, we discussed that offline also as a possible extension to the 
-userfaultfd SIGBUS mode.
+I am trying to draft something following this, and here is what
+it would look like:
 
-I did not look into that yet, but I was wonder if there could be cases 
-where a different process could trigger that SIGSEGV, and how to (and if 
-to) handle that.
+------------------------draft---------------------------
+struct arm_smmu_master {
+	....
++	struct rw_semaphore lock;
++	struct arm_vsmmu *vsmmu;
+	....
+};
 
-For example, ptrace (access_remote_vm()) -> GUP likely can trigger that. 
-I think with userfaultfd() we will currently return -EFAULT, because we 
-call get_user_page_vma_remote() that is not prepared for dropping the 
-mmap lock. Possibly that is the right thing to do, but not sure :)
+->attach_dev() {
+	down_write(&master->lock);
+	if (domain->type == IOMMU_DOMAIN_NESTED)
+		master->vsmmu = to_smmu_domain(domain)->vsmmu;
+	else
+		master->vsmmu = NULL;
+	up_write(&master->lock);
+}
 
-These "remote" faults set FOLL_REMOTE -> FAULT_FLAG_REMOTE, so we might 
-be able to distinguish them and perform different handling.
+isr() {
+	down_read(&master->lock);
+	if (master->vsmmu) {
+		xa_lock(&master->vsmmu->core.vdevs);
+		vdev = iommufd_viommu_dev_to_vdev(&master->vsmmu->core,
+						  master->dev);
+		if (vdev) {
+			struct iommu_virq_arm_smmuv3 virq_data = evt;
 
--- 
-Cheers,
+			virq_data.evt[0] &= ~EVTQ_0_SID;
+			virq_data.evt[0] |= FIELD_PREP(EVTQ_0_SID, vdev->id);
+			return iommufd_viommu_report_irq(
+					vdev->viommu,
+					IOMMU_VIRQ_TYPE_ARM_SMMUV3, &virq_data,
+					sizeof(virq_data));
+		} else {
+			rc = -ENOENT;
+		}
+		xa_unlock(&master->vsmmu->core.vdevs);
+	}
+	up_read(&master->lock);
+}
+--------------------------------------------------------
 
-David / dhildenb
+[Comparison]      | This v1                 | Draft
+1. Adds to master | A lock and vdev ptr     | A lock and viommu ptr
+2. Set/unset ptr  | In ->vdevice_alloc/free | In all ->attach_dev
+3. Do dev_to_vdev | master->vdev->id        | attach_handle?
 
+Both solutions needs a driver-level lock and an extra pointer in
+the master structure. And both ISR routines require that driver-
+level lock to avoid race against attach_dev v.s. vdev alloc/free.
+Overall, taking step.3 into consideration, it seems that letting
+master lock&hold the vdev pointer (i.e. this v1) is simpler?
+
+As for the implementation of iommufd_viommu_dev_to_vdev(), I read
+the attach_handle part in the PRI code, yet I don't see the lock
+that protects the handle returned by iommu_attach_handle_get() in
+iommu_report_device_fault/find_fault_handler().
+
+And I see the kdoc of iommu_attach_handle_get() mentioning:
+  "Callers are required to synchronize the call of
+   iommu_attach_handle_get() with domain attachment
+   and detachment. The attach handle can only be used
+   during its life cycle."
+But the caller iommu_report_device_fault() is an async event that
+cannot guarantee the lifecycle. Would you please shed some light?
+
+Thanks
+Nicolin
 
