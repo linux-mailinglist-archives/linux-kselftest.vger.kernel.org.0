@@ -1,203 +1,151 @@
-Return-Path: <linux-kselftest+bounces-20467-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20465-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DA299ACE57
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 17:13:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECFB79ACE4B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 17:11:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 444A4B2AB88
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 15:11:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE4C0282515
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 15:11:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B643E1DB344;
-	Wed, 23 Oct 2024 15:05:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 145A51D6DBB;
+	Wed, 23 Oct 2024 15:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JyxQfkZQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA34C1DC19E
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Oct 2024 15:05:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 982051D278A;
+	Wed, 23 Oct 2024 15:05:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729695940; cv=none; b=aAboGMgozRX3m2sNyZpLbP1JEERIITfHC2P4sB6ehmZ5Sig5mO8PdbismmorQRg2zNkhpbooAAhyxIkmCcfjh+wggaaweqgvRzy4JgPMwGiqRLg/Mzinv/EvDY+e2ulvbgF1gXWz34Ks/fp8bto293VHVxdaKMccRiECJVoe33U=
+	t=1729695937; cv=none; b=YtmkANdfx2vaoFCMNaRWC7ZcXeQEFzZV/vHkn5RoTlkubh/1qTblGsMPlkFNF8eORkBiyGi3flPTB5y7I25Ffc7XY9ONwksiGFlZarjy1WSAovGSVJtYZUYBFiOXfDwfBE/z+d8apAII3peP6D5kUPmRcO7SVYu8Ux1tUBWGw6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729695940; c=relaxed/simple;
-	bh=rNWtdajToAoN4vjDculLE+cS1c+v1R5bSiYrspEWwv8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AkJqp/kmSRu3HIJ8GKqeolQYcuY9rdojFxNEloXkSYMrcEeerGiPiE6mkK+pu1zZDrDuZdz0O1nmMlksWMoT9xHPpoa8cOD+/fJ+NugR0QKmMnzqr/QsSU+dtqrs1+wh/HXckvapF4YTZdOpTM+T/jS/Mxv2O0/MHt4Vl/x90lM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DCE65339;
-	Wed, 23 Oct 2024 08:06:07 -0700 (PDT)
-Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2EA713F528;
-	Wed, 23 Oct 2024 08:05:36 -0700 (PDT)
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-To: linux-arm-kernel@lists.infradead.org
-Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
-	akpm@linux-foundation.org,
-	anshuman.khandual@arm.com,
-	aruna.ramakrishna@oracle.com,
-	broonie@kernel.org,
-	catalin.marinas@arm.com,
-	dave.hansen@linux.intel.com,
-	dave.martin@arm.com,
-	jeffxu@chromium.org,
-	joey.gouly@arm.com,
-	pierre.langlois@arm.com,
-	shuah@kernel.org,
-	sroettger@google.com,
-	will@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	x86@kernel.org
-Subject: [PATCH v2 5/5] selftests/mm: Enable pkey_sighandler_tests on arm64
-Date: Wed, 23 Oct 2024 16:05:11 +0100
-Message-ID: <20241023150511.3923558-6-kevin.brodsky@arm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241023150511.3923558-1-kevin.brodsky@arm.com>
-References: <20241023150511.3923558-1-kevin.brodsky@arm.com>
+	s=arc-20240116; t=1729695937; c=relaxed/simple;
+	bh=6dqizTZi3MjLkY7UZ5URJEGE70fGc1UGn/v55vian+4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hj3Nzx1gioR/p6U2cHOD1VPSQ6kp8oH1pQ4hu/ZUTxdQg3ySU8a3hnjOIlQ7dUlb2DAKeiK0sQXAA8ElQfVflGp2WYU25ff58aCesgYCGpScyOZCW4eR0nh8xjEpOUox0C2S7xvkL1ZYWhtY8TsgcbRxB1Bmv5cTRFlHFaBEC+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JyxQfkZQ; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-7163489149eso5291821a12.1;
+        Wed, 23 Oct 2024 08:05:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729695935; x=1730300735; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=7/xr6R6L67/bTFViqslA7RLr8Ha+9B35qwhr0RZOMhQ=;
+        b=JyxQfkZQTe3JuuY9fJlgT2WTAs5FJBx7noGfvXQcjLIXKLVKLwvvu7dsEbB5DQIkpG
+         HbiGUeZMNAfEvDCCuuAxhk4OrWxJscyEUbBiwzvBCl0g9WaSwG90yuS+9kS/KtpB+BIz
+         /BpZd8YH1/E7C57qxvfX+tuh2UQ/YyQxiSfA/B8AF1aPM+qhPowaluYjHN149i9Rj9uP
+         JQWKvBJs/I0obN68ET9frEdMQd1WiGUsxVtUYlt9jI9KA1LvoYtGUmPkoSM1TwY57X8R
+         0a2eZatHwNlDdlubJQVozrbEQtitXvqaDVs9/Utr3m9rjp99tQv0qvVxQWAhcpL6pB5T
+         ZAOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729695935; x=1730300735;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7/xr6R6L67/bTFViqslA7RLr8Ha+9B35qwhr0RZOMhQ=;
+        b=YFe1+9E7ndrs5EE/3NhSJ7JdbB5tILCvKuMr92SKe+8heeV2XQ0uiwfBWdIopHoaC7
+         og8HIkLKe0aZIt87vLAYHP2vc+25IdZZ+Do2aJ8TUFt9ozutlG4vQJpGA1bgucCigzL1
+         OfJn5cgxqBUj2VsqO/inETQWzbUiyYI/wwYwWlsRiDHDvlINeCp1mT9pxHyWiGfKwGAh
+         hP0w5MODVmpgBXbOVvSyyzah16xGKjrv8+I/apuE8bH84NuOrsiazP1HJjUz39UoeaUe
+         N8lub/ZGi3YMs7EEdYACAlOAH7v7viBDQdyF6aMhtlfdJ04WzZKh7pKhIJIoh9kXAcAZ
+         PM0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUZV3/+Fg54OOCD1qCj6UwW9A3bZSDMuk1SZNNrmH/qX8dO+6kiOM5WL4c+08FiNBltLkssy+Oz@vger.kernel.org, AJvYcCUj6NXP5UKoA8ihyglBjVXnqIcLJ6/R4qX7BU2CGZkqs4x+iXHljNlItft39B3iThphxPyIfnaQUrI9z8Y=@vger.kernel.org, AJvYcCVOFIyqAdgmdraP+SxjMQaSbMpIYzYI9H5e745KdrX5SmpniFH8M5lvO6VMbrt5Y2n7X4kSOiVnRhhLBREitzmp@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqWPPzJkXKd8B8as06Hi/yXnLX0WZuu+BaRvN5acfeleSU+KGq
+	oY+1FVFf2+/hxObNc36bFS90cXoRTRx+N7ItPU4nKArn1EcxxEM=
+X-Google-Smtp-Source: AGHT+IFWJ753ImcFrdZjWX9Z2JRm17SUYFzy1gfZEpI0eTGGy7td2Fby4f8HOsgJOYX31jMSxkuQRQ==
+X-Received: by 2002:a05:6a21:e8f:b0:1cf:6d20:4d6 with SMTP id adf61e73a8af0-1d978b0a072mr3128784637.16.1729695934731;
+        Wed, 23 Oct 2024 08:05:34 -0700 (PDT)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec1312d05sm6418000b3a.35.2024.10.23.08.05.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Oct 2024 08:05:34 -0700 (PDT)
+Date: Wed, 23 Oct 2024 08:05:33 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+Cc: "davem@davemloft.net" <davem@davemloft.net>,
+	Liam Howlett <liam.howlett@oracle.com>,
+	"edumazet@google.com" <edumazet@google.com>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"peterz@infradead.org" <peterz@infradead.org>,
+	"juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+	"dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+	"rostedt@goodmis.org" <rostedt@goodmis.org>,
+	"bsegall@google.com" <bsegall@google.com>,
+	"mgorman@suse.de" <mgorman@suse.de>,
+	"vschneid@redhat.com" <vschneid@redhat.com>,
+	"jiri@resnulli.us" <jiri@resnulli.us>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	Pei Li <peili.io@oracle.com>
+Subject: Re: [PATCH net-next v5 2/3] connector/cn_proc: Kunit tests for
+ threads hash table
+Message-ID: <ZxkQvYNVGA90srE7@mini-arch>
+References: <08EFFA25-7C8F-444A-B229-2A9F99B0C028@oracle.com>
+ <Zxg6KhhpCGc-5Mw0@mini-arch>
+ <39B736F3-F7E1-420C-9567-0447464A95BA@oracle.com>
+ <CDE1D110-A3F5-4BB7-A8DF-4D24E2AC98B0@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CDE1D110-A3F5-4BB7-A8DF-4D24E2AC98B0@oracle.com>
 
-pkey_sighandler_tests.c makes raw syscalls using its own helper,
-syscall_raw(). One of those syscalls is clone, which is problematic
-as every architecture has a different opinion on the order of its
-arguments.
+On 10/23, Anjali Kulkarni wrote:
+> […snip…]
+> 
+> >>>> 
+> >>>> Yes, make sure all required options are picked up by
+> >>>> "./tools/testing/kunit/kunit.py run" instead of manually adding options
+> >>>> and doing modprobe.
+> >>> 
+> >>> The environment issues are resolved and I am able to run kunit.py, but my tests
+> >>> are not invoked without giving options via —kconfig-add. Other tests are also not
+> >>> invoked. Running with the manual options runs 413 tests, and with just kunit.py
+> >>> runs 389 tests. (I have added 6). Any idea how I can make it run my tests?
+> >> 
+> >> The runner does: ./tools/testing/kunit/kunit.py run --alltests
+> >> Is it not enough in your case? What options do you pass via
+> >> --kconfig-add? Is it because CONNECTOR stuff is disabled by default?
+> > 
+> > No, it still does not run.
+> > However, I added to tools/testing/kunit/configs/all_tests.config:
+> > 
+> > CONFIG_CONNECTOR=y
+> > CONFIG_PROC_EVENTS=y
+> > CONFIG_NET=y
+> > CONFIG_CN_HASH_KUNIT_TEST=y
+> > 
+> > And now it does run.
+> > Should I make the change above? I will also check with the kunit guys.
+> > But I do not understand how it ran for you(and run into the error), or did
+> > it just try to compile?
+> 
+> I see this in comments on top of all_tests.config.
+> 
+> # The config is manually maintained, though it uses KUNIT_ALL_TESTS=y to enable
+> # any tests whose dependencies are already satisfied. Please feel free to add
+> # more options if they any new tests.
+> 
+> So I suppose if a test needs more dependencies, it needs to be added here.
 
-To complete arm64 support, we therefore add an appropriate
-implementation in syscall_raw(), and introduce a clone_raw() helper
-that shuffles arguments as needed for each arch.
-
-Having done this, we enable building pkey_sighandler_tests for arm64
-in the Makefile.
-
-Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
----
- tools/testing/selftests/mm/Makefile           |  8 +--
- .../selftests/mm/pkey_sighandler_tests.c      | 62 ++++++++++++++-----
- 2 files changed, 50 insertions(+), 20 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 02e1204971b0..0f8c110e0805 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -105,12 +105,12 @@ endif
- ifeq ($(CAN_BUILD_X86_64),1)
- TEST_GEN_FILES += $(BINARIES_64)
- endif
--else
- 
--ifneq (,$(filter $(ARCH),arm64 powerpc))
-+else ifeq ($(ARCH),arm64)
-+TEST_GEN_FILES += protection_keys
-+TEST_GEN_FILES += pkey_sighandler_tests
-+else ifeq ($(ARCH),powerpc)
- TEST_GEN_FILES += protection_keys
--endif
--
- endif
- 
- ifneq (,$(filter $(ARCH),arm64 mips64 parisc64 powerpc riscv64 s390x sparc64 x86_64 s390))
-diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-index b5e1767ee5d9..97460980811c 100644
---- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
-+++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-@@ -61,12 +61,44 @@ long syscall_raw(long n, long a1, long a2, long a3, long a4, long a5, long a6)
- 		      : "=a"(ret)
- 		      : "a"(n), "b"(a1), "c"(a2), "d"(a3), "S"(a4), "D"(a5)
- 		      : "memory");
-+#elif defined __aarch64__
-+	register long x0 asm("x0") = a1;
-+	register long x1 asm("x1") = a2;
-+	register long x2 asm("x2") = a3;
-+	register long x3 asm("x3") = a4;
-+	register long x4 asm("x4") = a5;
-+	register long x5 asm("x5") = a6;
-+	register long x8 asm("x8") = n;
-+	asm volatile ("svc #0"
-+		      : "=r"(x0)
-+		      : "r"(x0), "r"(x1), "r"(x2), "r"(x3), "r"(x4), "r"(x5), "r"(x8)
-+		      : "memory");
-+	ret = x0;
- #else
- # error syscall_raw() not implemented
- #endif
- 	return ret;
- }
- 
-+static inline long clone_raw(unsigned long flags, void *stack,
-+			     int *parent_tid, int *child_tid)
-+{
-+	long a1 = flags;
-+	long a2 = (long)stack;
-+	long a3 = (long)parent_tid;
-+#if defined(__x86_64__) || defined(__i386)
-+	long a4 = (long)child_tid;
-+	long a5 = 0;
-+#elif defined(__aarch64__)
-+	long a4 = 0;
-+	long a5 = (long)child_tid;
-+#else
-+# error clone_raw() not implemented
-+#endif
-+
-+	return syscall_raw(SYS_clone, a1, a2, a3, a4, a5, 0);
-+}
-+
- static void sigsegv_handler(int signo, siginfo_t *info, void *ucontext)
- {
- 	pthread_mutex_lock(&mutex);
-@@ -279,14 +311,13 @@ static void test_sigsegv_handler_with_different_pkey_for_stack(void)
- 	memset(&siginfo, 0, sizeof(siginfo));
- 
- 	/* Use clone to avoid newer glibcs using rseq on new threads */
--	long ret = syscall_raw(SYS_clone,
--			       CLONE_VM | CLONE_FS | CLONE_FILES |
--			       CLONE_SIGHAND | CLONE_THREAD | CLONE_SYSVSEM |
--			       CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID |
--			       CLONE_DETACHED,
--			       (long) ((char *)(stack) + STACK_SIZE),
--			       (long) &parent_pid,
--			       (long) &child_pid, 0, 0);
-+	long ret = clone_raw(CLONE_VM | CLONE_FS | CLONE_FILES |
-+			     CLONE_SIGHAND | CLONE_THREAD | CLONE_SYSVSEM |
-+			     CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID |
-+			     CLONE_DETACHED,
-+			     stack + STACK_SIZE,
-+			     &parent_pid,
-+			     &child_pid);
- 
- 	if (ret < 0) {
- 		errno = -ret;
-@@ -448,14 +479,13 @@ static void test_pkru_sigreturn(void)
- 	sigstack.ss_size = STACK_SIZE;
- 
- 	/* Use clone to avoid newer glibcs using rseq on new threads */
--	long ret = syscall_raw(SYS_clone,
--			       CLONE_VM | CLONE_FS | CLONE_FILES |
--			       CLONE_SIGHAND | CLONE_THREAD | CLONE_SYSVSEM |
--			       CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID |
--			       CLONE_DETACHED,
--			       (long) ((char *)(stack) + STACK_SIZE),
--			       (long) &parent_pid,
--			       (long) &child_pid, 0, 0);
-+	long ret = clone_raw(CLONE_VM | CLONE_FS | CLONE_FILES |
-+			     CLONE_SIGHAND | CLONE_THREAD | CLONE_SYSVSEM |
-+			     CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID |
-+			     CLONE_DETACHED,
-+			     stack + STACK_SIZE,
-+			     &parent_pid,
-+			     &child_pid);
- 
- 	if (ret < 0) {
- 		errno = -ret;
--- 
-2.43.0
-
+Let's try and CC a bunch of kunit people to confirm :-)
 
