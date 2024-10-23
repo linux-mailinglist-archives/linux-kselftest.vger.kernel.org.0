@@ -1,123 +1,95 @@
-Return-Path: <linux-kselftest+bounces-20517-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20518-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80D639AD756
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 00:07:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 985A79AD827
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 01:04:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F41CB1F2408F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 22:07:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C0CFC1C21742
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 23:04:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E660E1FDFA3;
-	Wed, 23 Oct 2024 22:06:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 068301F891E;
+	Wed, 23 Oct 2024 23:04:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="X9FOsctA"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="K3xUv+m/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A551FAC36
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Oct 2024 22:06:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9041155345;
+	Wed, 23 Oct 2024 23:04:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729721202; cv=none; b=qS1oztzTATpDwxLLAwERw/d8/qD1DGQqUO2/rskB2h3gBXqrZBmgtGLD3G4BBkNPK7sw88HBGsJEkYu65ilAB4To2lNe9fsGNsoeI5UNXsPzk6roTlVsSHHiOP1rzrMSJIppFXmxZqSes76+XD9S6w1rkS7FCN+Z7pvEf/qpbXc=
+	t=1729724647; cv=none; b=jdksllQslCS5k/+jQzjbql8PAHcIKUVuLHsD8OBvO2ezCqsgfhugD/nuJogf47BPME7g9QHwgBFy2RDkw1ixnACFdEaTxObnMXFNCUgGBQ4PkvXZachfAY4cg08wdyCWMAZBkltSIYs3qg99Thcat6uY5Ns6IkJnUISwZNFJ4dE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729721202; c=relaxed/simple;
-	bh=9o354F/S+aGjYhcwyc7jfdfnzKzchuynSUyj93Y1I68=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uAxJC1vCanHXuXWTcAgE8h1kbE3EqjtanFvH3IZEQDfMZb/dfKVqXDTCJ1gppyRkNJjD8AQUXdcd4sy+0s4qZ4M2qBAsjskIrRQPbyInvnwXpcGEt8SusfyHNGQebA6AW9SEEmd7ILoGTmL/XHpwsQWkm/tu+Vw6ZG00ZUOtb9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=X9FOsctA; arc=none smtp.client-ip=209.85.166.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3a4dacfda3eso1196755ab.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Oct 2024 15:06:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1729721199; x=1730325999; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/FIv5osE/5E7L52TcWGFW9t+c/c1Dcvw2X671jP6DA4=;
-        b=X9FOsctANCtJPLJyC/v8Vb71eLq6h8ti4ddLJzA1SLOTtp4vp+oi9d9GJ69qQYiuS+
-         NU2F070W+rW1lxeFmUGVxwk6oUTX8IhuqgR1yF5HDhAVlRI4PAzlF30gH+w06vpis2Qc
-         DACJKkV2in9J+pbs5O/z8InRqfOwvvZkCLIK8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729721199; x=1730325999;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/FIv5osE/5E7L52TcWGFW9t+c/c1Dcvw2X671jP6DA4=;
-        b=r341iC/Bg6viZFsOgTItfI9XUfLrMsNI6zF0TfsTVhsayc+vbLqkgkuCPiouErMZlN
-         86+3Q+Og6YXmYK2ugo1v5ybQ/PE3KlBoucU5dFheSn3jCqFpLnwPY56YFVWt9zK2fPNv
-         E3XQKqeGDy0PgNmcdyMgJlo/nov/HlpJJQUkU+H/3iw/67WTnOCDDZ95F8aF9XMPRF+j
-         mUqsyqlW9nDCCQboz+dVls/hrj9PUKnter5yWW7va3xe2VLhzCspOleGZxIpSLPJkrzq
-         gYU5bx/y5vZzvpZxmPQrf6MHI6TVqs2cApLKeg0VmuQJhCbtNKecL9Q6U3TicuudvVxs
-         3j9Q==
-X-Gm-Message-State: AOJu0YwevOZ5a0wz7t4heYPkXS/zgLGxy3JDqjEFDGci5FHC/slRKBXY
-	1tI/CQcf5lEMBggu1GHgutpQOmgqICx3ePjRbPF2UEw5f4NjS8+EmvabQjYlpeU=
-X-Google-Smtp-Source: AGHT+IGapNawIgcnWs1i8F/W37QDXOwfZSRntZ3VGUdss1NgPThJz1m+4ArkuptnYFOiWWENDYp/1A==
-X-Received: by 2002:a05:6e02:1a4b:b0:3a0:9a32:dedc with SMTP id e9e14a558f8ab-3a4d594546fmr49606565ab.6.1729721199497;
-        Wed, 23 Oct 2024 15:06:39 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dc2a530140sm2413108173.21.2024.10.23.15.06.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Oct 2024 15:06:39 -0700 (PDT)
-Message-ID: <5ea4792b-c509-4afa-ac80-44194a54eb32@linuxfoundation.org>
-Date: Wed, 23 Oct 2024 16:06:38 -0600
+	s=arc-20240116; t=1729724647; c=relaxed/simple;
+	bh=SW7zk5YIdDFzBZiXaPsu8LMcyr3b9ExBrJBUQkf3olo=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=UUONu6fmkUo18HlTdDjiLrfzYJimbk0sd6emJJoOMAPTxrLMoLsJm1wpiZUBiZdG+vFVez66LGRLzRlHZmnKI9QB0bv+qOWsG+tKDD6eatC4vYHjdeL11pTzKfI/8see8cC4+o/6aP/8bqZWBkgq+GpVHEqVOIyfEByCldgqZPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=K3xUv+m/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 622E3C4CEC6;
+	Wed, 23 Oct 2024 23:04:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1729724647;
+	bh=SW7zk5YIdDFzBZiXaPsu8LMcyr3b9ExBrJBUQkf3olo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=K3xUv+m/KQuYP+4Jbr6VP77i2LjZj+ZZpjW5f6vY+ymdzzXKonCFLAFiuQPn4KWF1
+	 FOV4IWRH8CCkN0eVKriG0PL5Kyc4OyDZC1kr5QgWPgbxEF8T3mTepn9ohoTPzMJTuJ
+	 BpZQTKPkEJkK/0IQfIixeN9rNU0+UiypaxpSdQgQ=
+Date: Wed, 23 Oct 2024 16:04:05 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Suren Baghdasaryan <surenb@google.com>, "Liam R . Howlett"
+ <Liam.Howlett@oracle.com>, Matthew Wilcox <willy@infradead.org>, Vlastimil
+ Babka <vbabka@suse.cz>, "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn
+ <jannh@google.com>, David Hildenbrand <david@redhat.com>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, Muchun Song
+ <muchun.song@linux.dev>, Richard Henderson <richard.henderson@linaro.org>,
+ Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, "James E . J . Bottomley"
+ <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
+ Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, Arnd
+ Bergmann <arnd@kernel.org>, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linux-arch@vger.kernel.org, Shuah Khan <shuah@kernel.org>, Christian
+ Brauner <brauner@kernel.org>, linux-kselftest@vger.kernel.org, Sidhartha
+ Kumar <sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>,
+ Christoph Hellwig <hch@infradead.org>, linux-api@vger.kernel.org, John
+ Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v3 1/5] mm: pagewalk: add the ability to install PTEs
+Message-Id: <20241023160405.33995c68f20c141325a8fadb@linux-foundation.org>
+In-Reply-To: <9be732fd0e897453116b433fe2f468ef7795602e.1729699916.git.lorenzo.stoakes@oracle.com>
+References: <cover.1729699916.git.lorenzo.stoakes@oracle.com>
+	<9be732fd0e897453116b433fe2f468ef7795602e.1729699916.git.lorenzo.stoakes@oracle.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Add Selftest to test fork() syscall
-To: Shivam Chaudhary <cvam0000@gmail.com>, selftests@ellerman.id.au
-Cc: linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20241022204215.61256-1-cvam0000@gmail.com>
- <237ef4e1-786a-41d4-919d-9907bc76263f@linuxfoundation.org>
- <c95ada18-e0bd-4df7-b990-3a9bda2efee3@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <c95ada18-e0bd-4df7-b990-3a9bda2efee3@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 10/23/24 15:11, Shivam Chaudhary wrote:
-> 
-> On 24/10/24 2:15 AM, Shuah Khan wrote:
->> On 10/22/24 14:42, Shivam Chaudhary wrote:
->>> This test verifies the correct behavior of the fork() system call,
->>> which creates a child process by duplicating the parent process.
->>>
->>> The test checks the following:
->>> - The child PID returned by fork() is present in /proc.
->>> - The child PID is different from the parent PID.
->>> - The memory allocated to a variable in the child process is independent
->>>    of the parent process.
->>
->> Short log should incude the subsystem:
->>
->> e.g: selftests: add test for fork() syscall
->>
->> In anycase, I don't see any value to adding this test.
->> fork() is a heavily used system call.
->>
-> 
-> Thanks for responding Shuah,
-> 
-> Yes, you are correct that fork() is a heavily used syscall, that is why my concern is that
-> 
-> it could fail millions of other program that depends on fork() if any error or regression
-> 
-> occurs in the future. In my opinion, that is why we should test it every way possible.
-> 
-> 
+On Wed, 23 Oct 2024 17:24:38 +0100 Lorenzo Stoakes <lorenzo.stoakes@oracle.com> wrote:
 
-Sorry. I don't see any value in adding this test.
+> 
+> ...
+>
+> Existing mechanism for performing a walk which also installs page table
+> entries if necessary are heavily duplicated throughout the kernel,
 
-thanks,
--- Shuah
+How complicated is it to migrate those to use this?
 
+> ...
+>
+> We explicitly do not allow the existing page walk API to expose this
+> feature as it is dangerous and intended for internal mm use only. Therefore
+> we provide a new walk_page_range_mm() function exposed only to
+> mm/internal.h.
+>
+
+Is this decision compatible with the above migrations?
 
