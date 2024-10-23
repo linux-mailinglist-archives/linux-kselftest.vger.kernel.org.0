@@ -1,680 +1,304 @@
-Return-Path: <linux-kselftest+bounces-20487-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20488-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFBE39AD013
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 18:22:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B25FF9AD02E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 18:24:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C280282CE9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 16:22:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4134F1F21AC0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 16:24:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE0B11CFEA1;
-	Wed, 23 Oct 2024 16:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA3B11D014F;
+	Wed, 23 Oct 2024 16:22:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="d4lDUPBC"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="C9whuHCw";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ORFCBFFe"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A41A1CEAAD;
-	Wed, 23 Oct 2024 16:20:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729700449; cv=none; b=axL8WGm68EFutUn7bTBC+9NtWHRScVGk49I1pJkvDqYETajRnB9r0Ob58OJZkPu5PpAjPdeVBybDGu6d7Vt+5m22FVOUVR+FbhPSntcp0uFXEOT7rLTym+qcV8nbdecYXwDfD/YlYcHJTNylZC5i+jmxLqYFiTUcOQROuQgAUb4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729700449; c=relaxed/simple;
-	bh=f3a5263cep6TMWDKytJuxxu5LUUGOGKI9hEekwR+4dc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fHhbK16I+U5ua8/ZUTTOt5rFHTgdAufFUJ1cEQABZQGhSC5Jb99ff2fU1bzDaCDnDYs1E/jSYtjRVrBnhieyB/XO0hpDdGPkkXk0GBNK+p/i3BTSWXyEbqdUohDVkJei0FumNttkNHzCFrWWRzPGn4gJy4iIpn8d4LSAUXOKPGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=d4lDUPBC; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABB91CFEA4;
+	Wed, 23 Oct 2024 16:22:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729700549; cv=fail; b=bpGC07ubpbAVARRPixpAvTPdHRL9zEDzSXVvrs2x2S5/DsxWTtzAjE75yi7JVpXKwiH7CebdADyhlmODx61J31xZd2+QxWrqvzN3fsqM5ZRvJx3vttEt2KJyMJnBMHxZppf9/yYBiFKb8NA4puiCekfVqGxjFZEjNcKyXNmx8XU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729700549; c=relaxed/simple;
+	bh=Vv2wvlEzXkAWDaIf9pv/80Ip7adK8QyYii8+wo4TyPY=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=c3Tp81Pxv00374/k/MhNaXsgZsb/InqkcbYRyOosxlT0rSIqPEd1NU2dXqkVwNjPr7YYmxI8mkDVpOS98ZzdvkKISTiKiePODVC6fnwM8AVUxD1D9eeiTFJHyHUSf3rQ0IZaBiAs+cAEvnEShmxiVGGQjc8KHrk7GyXEafSBXTI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=C9whuHCw; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ORFCBFFe; arc=fail smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49NFfcaN013899;
-	Wed, 23 Oct 2024 16:20:16 GMT
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49NFfdPL025347;
+	Wed, 23 Oct 2024 16:21:26 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2023-11-20; bh=DPkq/
-	LKcaMxzmYyQwnKcUdgK/rCr0jNZ3OtFlccvxvg=; b=d4lDUPBCQT8EPTd92hkA1
-	UrQdAF7pBBxTe3qmDBXQ+Nc91n0IKCpNFHj+Zzlmq2L6qFZpg8QeZI2octXQtPXf
-	HHQptCcD45x3o7YztMuy22sRXoo57QUIbvX6tZvokff5OIm/6HOskJR+SjqAVYEk
-	KE+DDeLBm6Q16sX0oKHSnE/Po/n38NoSejYppXLmu8VGljsEeTkybkkOfiSk5310
-	Y+dNlPYU8tBdZoQEkz0Gsvc1BC6G3yZBDdM8RPz5saWOmnlW02TJ5nmDZkG/qLUl
-	lv7ZEa5cpUglr4nyLVWClTBYnk+Lu8QYwKghDF4SHQJJxE1EcOECA3tt4Ux5pp5f
-	Q==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42c55v0hf8-1
+	:content-id:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	corp-2023-11-20; bh=Uk/CRNpPCjkKn91bzXpnuKQxqTJl1pqa2VontwKCt7k=; b=
+	C9whuHCwmcCJvE27t9K1vw6vfiHbgg/qOeUbOdgP0mbqRh5VDTQPbM86SsTd7ouI
+	IeKEXXSg+40NhSvI9mYtdkzRfnVsNAAlwbodNXQ1YXHb/E8lvISsxZORlg5/f0PN
+	WE6khRWHZDWkn4wDCy3L2VTY2zliYAIXGBhRAQXrSw6quvR0qEkEawC4oMx11Ut+
+	jL62o7tk2WAN7FtyuuN6hgPbFpT15SSEIeImKG02K9x+BcWdRvRM7g5gbfhVow1v
+	yZLwcmpXSmb+IUMb9gyAfMx+w3lABzQMAPYUrvh8+I3M4IFIh/GzCFqofECQ4iE5
+	eIgATgTTJvdHECSQMnvOSg==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42c5asghx6-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 23 Oct 2024 16:20:16 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49NGHsQU025233;
-	Wed, 23 Oct 2024 16:20:15 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42emh9r67x-1
+	Wed, 23 Oct 2024 16:21:25 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49NFu1HM018529;
+	Wed, 23 Oct 2024 16:21:24 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2040.outbound.protection.outlook.com [104.47.55.40])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 42emhjs2vf-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 23 Oct 2024 16:20:15 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49NGK80C012043;
-	Wed, 23 Oct 2024 16:20:14 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 42emh9r5x9-4;
-	Wed, 23 Oct 2024 16:20:14 +0000
-From: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-To: davem@davemloft.net, Liam.Howlett@Oracle.com
-Cc: edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        vschneid@redhat.com, jiri@resnulli.us, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, akpm@linux-foundation.org,
-        brendan.higgins@linux.dev, davidgow@google.com, rmoar@google.com,
-        johannes.berg@intel.com, mic@digikod.net, gnoack@google.com,
-        jk@codeconstruct.com.au, kunit-dev@googlegroups.com, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, anjali.k.kulkarni@oracle.com,
-        peili.io@oracle.com
-Subject: [PATCH net-next v6 3/3] connector/cn_proc: Selftest for threads
-Date: Wed, 23 Oct 2024 09:20:06 -0700
-Message-ID: <20241023162006.1725309-4-anjali.k.kulkarni@oracle.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20241023162006.1725309-1-anjali.k.kulkarni@oracle.com>
-References: <20241023162006.1725309-1-anjali.k.kulkarni@oracle.com>
+	Wed, 23 Oct 2024 16:21:24 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=iCF5pjMx8LXSQvyUSu346UljjVlogexMYW5lDkwLmHBuRsqjOnYVkxpwoyTf1uYyZ4OKsUniqbVKmD4im4JaRRLbnOrXFMTMy7D5plUyzr0GnLahqU1QOZse2T++sB1JFS01EtBw4uhNzURRWvJIB880+rXaz7UNrqyLP23cszBH+ZuGEJ06yBzPfgDQg1sIl7xz7K+fJWex12OqPcPhaS6vJ+FNmbafKRsDHsSXLruyVPOW2NNWngl13JYQh/q2hGovfLRs6NU2yzLHQLa8CTpG9TsL0x9UzhCEFe9fHfSPScgvcP2SMFeYujch9YLGGKmH6ZJNyRiYhX38hn8CYQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Uk/CRNpPCjkKn91bzXpnuKQxqTJl1pqa2VontwKCt7k=;
+ b=ClFNTgmCZqhkt3InkeEWQrhQcDz6zye7xRRMZa192WlDJHSJ0f8mO/MVLbG1cnqLXmJkmcWCx6zG8pb6crbYxjhGwk/qb9kVBiOHZOX1eUwA9KVBcROCzt0jIWyLcaoKJqzaLkUyyxTzAzdYRTv+z1U48qUU7FbzEwavMutCwxAiolBfCSwSyA/9NiAa2LhykxI2H0pBWGNklxwVbpkR0iViKQw+6I5jIpbKMYx4Uny20kymmZuTA2f+6MWufv/3KIxfyqb3Ni2JoQzYh2DYWVjnKWNPeWac7WBvPXLBCR2dxTk5wD1BZjN5Zsni+6exhteRcolkuX7h0+QdPalyuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Uk/CRNpPCjkKn91bzXpnuKQxqTJl1pqa2VontwKCt7k=;
+ b=ORFCBFFeROU6afkEUKzyigfUBDp4HjOhYAZQKflYIzaMuDaxn96wlUxcOj8mLB8YbhIoQxXqsTqpFMOiyvpafeHx4vDixdEHpI9rrh8Y42RVCycaZJsgOaJzLpFQp2S32LNKMOnMS7g25V8lKxu6VPxEHaDiDBXO02boFzLgmaE=
+Received: from PH0PR10MB5433.namprd10.prod.outlook.com (2603:10b6:510:e0::9)
+ by PH0PR10MB5893.namprd10.prod.outlook.com (2603:10b6:510:149::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.16; Wed, 23 Oct
+ 2024 16:21:21 +0000
+Received: from PH0PR10MB5433.namprd10.prod.outlook.com
+ ([fe80::47be:ad6e:e3be:ba80]) by PH0PR10MB5433.namprd10.prod.outlook.com
+ ([fe80::47be:ad6e:e3be:ba80%7]) with mapi id 15.20.8093.014; Wed, 23 Oct 2024
+ 16:21:20 +0000
+From: Miguel Luis <miguel.luis@oracle.com>
+To: David Woodhouse <dwmw2@infradead.org>
+CC: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
+        James
+ Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo
+ Pieralisi <lpieralisi@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>, Shuah Khan
+	<shuah@kernel.org>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>,
+        "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>,
+        "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>,
+        Francesco Lavra
+	<francescolavra.fl@gmail.com>
+Subject: Re: [PATCH v6 3/6] KVM: arm64: Add support for PSCI v1.2 and v1.3
+Thread-Topic: [PATCH v6 3/6] KVM: arm64: Add support for PSCI v1.2 and v1.3
+Thread-Index: AQHbIkvgwayiQjBgCkaUzLnUZaycrrKUiokA
+Date: Wed, 23 Oct 2024 16:21:20 +0000
+Message-ID: <31FFAD74-391B-4A6F-8B17-D269E3C103D4@oracle.com>
+References: <20241019172459.2241939-1-dwmw2@infradead.org>
+ <20241019172459.2241939-4-dwmw2@infradead.org>
+In-Reply-To: <20241019172459.2241939-4-dwmw2@infradead.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR10MB5433:EE_|PH0PR10MB5893:EE_
+x-ms-office365-filtering-correlation-id: 92577e51-0a9a-48c7-96ab-08dcf37ebb08
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|7416014|376014|366016|1800799024|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?OyuHsPf9TykG/b+/KNO0Z3q8DhkO6qjGfwAJx5y6tBgQ2b0ZVhb70yfYs1kw?=
+ =?us-ascii?Q?MWk/pyRucJsJav15j12Jgulm5MpK+Hpfn7Vir9tYIVIsgKu9rgaRP9h2RSiV?=
+ =?us-ascii?Q?YpjLOho9qpfyBN8ok15zIDhMjjudJU8RUNNNWgMCp4qOKqb7Tw8aF3jjGgKw?=
+ =?us-ascii?Q?wres4j4gLc1UeUfaZh6ElDgPwZg1xAQBkk9VM1BMiIwJ8Lmh6Ft1PTVz1e3v?=
+ =?us-ascii?Q?7xdI13MbODtcWGDCglxQhyl95OTyxro7Plcj6stM0N5jfPerpFCgbMAe0Tyi?=
+ =?us-ascii?Q?bgPodYXC2ZBfW6DzOB8/shAtcl4n6AmO2QGEyiZ+JPGquYhphcYgN+u8ATEo?=
+ =?us-ascii?Q?onWs7usqN4tG1NjVH3gdYdu6hNuw3WoctDziXdaOkmbL+JJw5phksNF3x3Jq?=
+ =?us-ascii?Q?cKEqLfF9hNTBya+f1jsbsL2NRo8PBd9w7iPHYQ4v0kE0W0uDXgaxVqo88P86?=
+ =?us-ascii?Q?vH6n4z/N7KPOjY6Sy4/tf5bFnRCCEt6ivgfYc3KYhEPTg3onbjPizBXs7vVn?=
+ =?us-ascii?Q?l4bhiz9yV/5O2aLMkvYESWQXNtRQssYLGEH1MnuOa/xkikX7iMfYLOIdEmvy?=
+ =?us-ascii?Q?dLHDVAQuPAkQyIx11h7JbdkchiqaJiZiFQBCSd131iiPoN1CABlYCdfZYzg8?=
+ =?us-ascii?Q?lrYX3i8KVKStJXd5sgkbN4i6ONw/M3ifO42Xm27BM6nGrBdi4FnKglaQ5Z6X?=
+ =?us-ascii?Q?qVL6jfGjhbQuBGDgSM0liilmsfBEcXdvdGbe5WCPHLVI2mnGMwI1lvSA9ugr?=
+ =?us-ascii?Q?o6sb3i0MxaxSO1LLAxdsYKJYb1YksWYZly5uKr3Jecq841URcf27pMihwXd+?=
+ =?us-ascii?Q?pWpzXCrYDzuReXcURkW5Xrnze5VHXMbkr0XAS3lPFWCzsl/I9XZI6qBhZDMp?=
+ =?us-ascii?Q?dDbnSK0qTRi3f6gY6DXNXkpUyaDASBWC3JwJ6hQGN3u/9uWF7B99wJE0hltp?=
+ =?us-ascii?Q?ViaUte5vsHb89Aqvt7Gi6TBeulXsbCvYTJi0UZUnX+Oa9Sqm42JherVA5Y+n?=
+ =?us-ascii?Q?4SkcKuQ83HnI8lTYG9vz5kac/4EsKUyIWNsu8gskRjD0AnLH9A1hDm8nnWqj?=
+ =?us-ascii?Q?8aZypqtanMmTEFyCZWz3m2Kf4rqACtSNfjpGmVYt56vS5c45WiH/++MF0cJw?=
+ =?us-ascii?Q?vlWDLvX/jAzNXS8bAaXu2uO4wn7EanpsFEh0HXKMPmYTLCSOU7Xc4sraEHUu?=
+ =?us-ascii?Q?NyiL+DVITOd5TQas6CL07P8tQlrlh0Tj4eMN1sqSzrqc7O+kbuWuhiZbobV7?=
+ =?us-ascii?Q?L49ucBmKCVPLL4WuA7lw7I3R6zHKtWgt0Hq2+Xb7oa0DsvKG5WnIXNsQncQ5?=
+ =?us-ascii?Q?IS6kLZnVLLUTW6JraF04+uaWKgwM3m3utP0gdruPpytgJ6zJWfK8MxVMZ0EY?=
+ =?us-ascii?Q?Fjoqj+s=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5433.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?HOsoNg/4mE4QGngGuKDu2VbT0wq8+FvAqhcLHln+JP3pyoeu4aKK8UnNVW3A?=
+ =?us-ascii?Q?EnHnwQD1QnZWpAcrMYcQEt3bLQAOzi7m6Zc9nCvxS0rLNr7ReSbB/GmWp0oI?=
+ =?us-ascii?Q?LFAq1+RtOzqoNsK6F4r0/tHgJSqlpaDIQh0G1qyPd8IysvqF52IbTDPGI1bF?=
+ =?us-ascii?Q?Z80rE3rKb1Xsy516V1cZww2OkCEtNuqRZP1uhpAwRbfKE2S/cf6eOYH1LOzs?=
+ =?us-ascii?Q?XaFAsuaKA6LH3dUMIABJ7N3IIt2m2bjKo3Ppkq6Td5yddAHX1AnLrLroqqUf?=
+ =?us-ascii?Q?trAkB8fyfB1ONqYBczX1NJdy0qswMbGza76PjJjoMeJ8GcDSxkAQeYWGNx1m?=
+ =?us-ascii?Q?DGQhn0Pc7/z1felYmclQMKxfXDxgxFINORCpJB/VK5atF59FVwbIkNfDAfxV?=
+ =?us-ascii?Q?WoGef6Z6Rj5FBMm+YeP9Fr9WSZQEIIdN5WLB5q8QXYCnDXRwZFbPYMMHfdeo?=
+ =?us-ascii?Q?VsIuLh1ZjemPOk/RvLtGpxrCdO1N0hcqGjBI8qhdniunXt0H7jiIFYsuzj5U?=
+ =?us-ascii?Q?whmJ7mFOSRq7nwm2fw2uIgTA/H4LzWJigdxxmsupVHVyAgZLDmgoDUbqsZcv?=
+ =?us-ascii?Q?bc73unpMCW8QIvL6UHKzClOVbMYWlAFrQpjawaLJa8IPe9cCMyvz1XUUZ1rD?=
+ =?us-ascii?Q?rY7cecUmEQhEv856r9OZTpZQvhqdefg6NhdmmqFwtIj0fjT1ojhpgLC6IjdB?=
+ =?us-ascii?Q?aW3EGnHeM55IGgIhg48mAw9QjzuOyLEcaMXJTqV38W6LA51Vgb8vexzvB1u/?=
+ =?us-ascii?Q?m5nR9ll/MA72LOzn1Y7WyUWh+KzWgshW8YdhA3wiioK7y8swpaV+AIKJygpP?=
+ =?us-ascii?Q?qoa2G6QAGwc2O+fvn+uDedtg/tzfkKhp8gHuKUJBNsQZ1NKZUmkMa25bMzwf?=
+ =?us-ascii?Q?yyZdKPiWq3Xo0EFXTaEESzDLvOSsjmkV5bRB5x0Z2ExKv5uQQqTHYS+zJxeL?=
+ =?us-ascii?Q?g9ctmU/GVo7uDrmD3wg2BW3PVDbEpq6FTsNcPHGIQRdCPCeiSqllmoutNSlJ?=
+ =?us-ascii?Q?Z4uTYPmNvOcomtPFXRxNIN/lngSQt1+1j8h+TOE9exIe3gmgKPc7/PuYMvnF?=
+ =?us-ascii?Q?frBdrUarlbR1F3ngO1UG2K7qtmC2FkS2XRb/4j82mAdzOqBBhg5qKDOrkft9?=
+ =?us-ascii?Q?Ps5Df5lglmqtdPc4yv7XHYITKMRvl1hzO+Xltp/hPfi5RDLAJ5XmuC7/9Ybu?=
+ =?us-ascii?Q?/a0c6hIcWtglDUj1lKnvtf8HMR+48uKFu/iQkVYwSIqaUSOYFwDMtUPl3VKr?=
+ =?us-ascii?Q?Qk+PHN4kpnJYsNWSGJdGgFm1zw7VaXcDf4QmObkPDy57Nq//4ucnaVGmixw4?=
+ =?us-ascii?Q?Z781vTSwWrbLLjqWV16PtppEhjYowsvL8ml2Y3vWrVP4AFe0K7a+0ecWCVO/?=
+ =?us-ascii?Q?BrnzqJt56Iuy8tYVnYIxW4lXRVJTCbtkrOo0p+pk5EHMtOorky0SkBfHzpNw?=
+ =?us-ascii?Q?zR9IeSgoG/IX+NdIO8YXr6yXtyKM1SbxC1XSP+8Jw8FHCg8BmCo3B+Ck6eO7?=
+ =?us-ascii?Q?JkT0idYr+5omCDiILhSavZp9etP3rc0TRzpEON2uI2qboNv74bI9gkbIaOwX?=
+ =?us-ascii?Q?09Jj/rY/SpAGwAlhaulCblBztTCCYNwZOoWUFSzjdZ/8LioQGDflW4RvwqtA?=
+ =?us-ascii?Q?Ww=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3720D609C71B654E993191C3A22F7234@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	mxuIHnYUULT0rLUbQPPHgzC3yrqBwO5wf3y4X24NAtwliHKh+407hr7knK6pOaCUO4yDhWDxkEXmB6gIpUuCNJ/RLxS9jHIF+CCpYRRj9qMAvIVHW3ZUKoTkVlvPvE1C8GgNAQjYZd67QvbmeIUOMaZ3o1qgv9cBu0+Ib89ndvXMtlpEWUEIeCzCTHbRP9zSGzBVKT7sUvq1gSVVgeTki2PyAmPfKP78wwL+icSNLdqS3LaTu9mXBdy69RSEx8XORMKFgQjV0FUUoE2FINvet/9L0KamT20ihcFF76jU7+sbVTDrsdSNQUQdLc6ffX6XEbYbTDOpK1P/Hb7aYLEcDLoF+shNeaTojIKMLDf0pZGZFZnHPn6pl9DLi0D08BBNKaTd+IK8e7RZSNtdrpplbkdo/tDVngeBJau+3NYmyq9hRcQwyAGr+7UTR5z8gfAdR04IVboe+/EoXqxlyI4yLLHzHDdANul5lk9ezHvpuzAbZXL2G5z/vQ0wAjbhaIvAto+h9tsPh8SzyO8MRNufscNt2GjKjDb/hPPumN56L0BWFnILRsD9/NLObBQQYjz5plDSS+82f+H7gMdYTg/3R6wxzIXxyIgRdO/bpcUKh0w=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5433.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92577e51-0a9a-48c7-96ab-08dcf37ebb08
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Oct 2024 16:21:20.9029
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bmaxMTMuymLwHMFxq0WMlVNHZD11qVaUY0PvWEcj2nJpY1Q7rSfag1+3IYh+oRJPKZYwa07PZbUoUJUhUNHrAA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5893
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-23_13,2024-10-23_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 adultscore=0
- suspectscore=0 mlxscore=0 bulkscore=0 mlxlogscore=999 phishscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 mlxlogscore=999 mlxscore=0 phishscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
  definitions=main-2410230095
-X-Proofpoint-GUID: qvvO9B7RzzkrnbDugTNLMdx5hJPLCKPw
-X-Proofpoint-ORIG-GUID: qvvO9B7RzzkrnbDugTNLMdx5hJPLCKPw
+X-Proofpoint-GUID: jpxev5ap9_XC61PSVqYryWlVbs0NJpIp
+X-Proofpoint-ORIG-GUID: jpxev5ap9_XC61PSVqYryWlVbs0NJpIp
 
-Test to check if setting PROC_CN_MCAST_NOTIFY in proc connector API, allows
-a thread's non-zero exit status to be returned to proc_filter.
 
-The threads.c program creates 2 child threads. 1st thread handles signal
-SIGSEGV, and 2nd thread needs to indicate some error condition (value 1)
-to the kernel, instead of using pthread_exit() with 1.
 
-In both cases, child sends notify_netlink_thread_exit(exit_code) to kernel,
-to let kernel know it has exited abnormally with exit_code.
+> On 19 Oct 2024, at 17:15, David Woodhouse <dwmw2@infradead.org> wrote:
+>=20
+> From: David Woodhouse <dwmw@amazon.co.uk>
+>=20
+> As with PSCI v1.1 in commit 512865d83fd9 ("KVM: arm64: Bump guest PSCI
+> version to 1.1"), expose v1.3 to the guest by default. The SYSTEM_OFF2
+> call which is exposed by doing so is compatible for userspace because
+> it's just a new flag in the event that KVM raises, in precisely the same
+> way that SYSTEM_RESET2 was compatible when v1.1 was enabled by default.
+>=20
+> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+> ---
+> arch/arm64/kvm/hypercalls.c | 2 ++
+> arch/arm64/kvm/psci.c       | 6 +++++-
+> include/kvm/arm_psci.h      | 4 +++-
+> 3 files changed, 10 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+> index 5763d979d8ca..9c6267ca2b82 100644
+> --- a/arch/arm64/kvm/hypercalls.c
+> +++ b/arch/arm64/kvm/hypercalls.c
+> @@ -575,6 +575,8 @@ int kvm_arm_set_fw_reg(struct kvm_vcpu *vcpu, const s=
+truct kvm_one_reg *reg)
+> case KVM_ARM_PSCI_0_2:
+> case KVM_ARM_PSCI_1_0:
+> case KVM_ARM_PSCI_1_1:
+> + case KVM_ARM_PSCI_1_2:
+> + case KVM_ARM_PSCI_1_3:
+> if (!wants_02)
+> return -EINVAL;
+> vcpu->kvm->arch.psci_version =3D val;
+> diff --git a/arch/arm64/kvm/psci.c b/arch/arm64/kvm/psci.c
+> index df834f2e928e..6c24a9252fa3 100644
+> --- a/arch/arm64/kvm/psci.c
+> +++ b/arch/arm64/kvm/psci.c
+> @@ -328,7 +328,7 @@ static int kvm_psci_1_x_call(struct kvm_vcpu *vcpu, u=
+32 minor)
+>=20
+> switch(psci_fn) {
+> case PSCI_0_2_FN_PSCI_VERSION:
+> - val =3D minor =3D=3D 0 ? KVM_ARM_PSCI_1_0 : KVM_ARM_PSCI_1_1;
+> + val =3D PSCI_VERSION(1, minor);
+> break;
+> case PSCI_1_0_FN_PSCI_FEATURES:
+> arg =3D smccc_get_arg1(vcpu);
+> @@ -493,6 +493,10 @@ int kvm_psci_call(struct kvm_vcpu *vcpu)
+> }
+>=20
+> switch (version) {
+> + case KVM_ARM_PSCI_1_3:
+> + return kvm_psci_1_x_call(vcpu, 3);
+> + case KVM_ARM_PSCI_1_2:
+> + return kvm_psci_1_x_call(vcpu, 2);
+> case KVM_ARM_PSCI_1_1:
+> return kvm_psci_1_x_call(vcpu, 1);
+> case KVM_ARM_PSCI_1_0:
+> diff --git a/include/kvm/arm_psci.h b/include/kvm/arm_psci.h
+> index e8fb624013d1..cbaec804eb83 100644
+> --- a/include/kvm/arm_psci.h
+> +++ b/include/kvm/arm_psci.h
+> @@ -14,8 +14,10 @@
+> #define KVM_ARM_PSCI_0_2 PSCI_VERSION(0, 2)
+> #define KVM_ARM_PSCI_1_0 PSCI_VERSION(1, 0)
+> #define KVM_ARM_PSCI_1_1 PSCI_VERSION(1, 1)
+> +#define KVM_ARM_PSCI_1_2 PSCI_VERSION(1, 2)
+> +#define KVM_ARM_PSCI_1_3 PSCI_VERSION(1, 3)
+>=20
+> -#define KVM_ARM_PSCI_LATEST KVM_ARM_PSCI_1_1
+> +#define KVM_ARM_PSCI_LATEST KVM_ARM_PSCI_1_3
+>=20
 
-Compile:
-    make thread
-    make proc_filter
-Run:
-    ./threads
+Reviewed-by: Miguel Luis <miguel.luis@oracle.com>
 
-Signed-off-by: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
----
- tools/testing/selftests/connector/Makefile    |  25 ++
- .../testing/selftests/connector/proc_filter.c |  63 +++--
- tools/testing/selftests/connector/thread.c    | 238 ++++++++++++++++++
- .../selftests/connector/thread_filter.c       |  96 +++++++
- 4 files changed, 403 insertions(+), 19 deletions(-)
- create mode 100644 tools/testing/selftests/connector/thread.c
- create mode 100644 tools/testing/selftests/connector/thread_filter.c
-
-diff --git a/tools/testing/selftests/connector/Makefile b/tools/testing/selftests/connector/Makefile
-index 92188b9bac5c..675015bdf8ee 100644
---- a/tools/testing/selftests/connector/Makefile
-+++ b/tools/testing/selftests/connector/Makefile
-@@ -1,6 +1,31 @@
- # SPDX-License-Identifier: GPL-2.0
-+
-+# Enable if you want to use build kernel header files instead of installed
-+# kernel files
-+# KERNEL="../../../.."
-+# CFLAGS += -Wall $(KHDR_INCLUDES) -I $(KERNEL)/include/uapi -I $(KERNEL)/include
-+
- CFLAGS += -Wall $(KHDR_INCLUDES)
- 
-+proc_filter: proc_filter.o
-+	cc proc_filter.o -o proc_filter
-+
-+proc_filter.o: proc_filter.c
-+	cc -c proc_filter.c -o proc_filter.o $(CFLAGS)
-+
-+thread: thread.o thread_filter.o
-+	cc thread.o thread_filter.o -o thread
-+
-+thread.o: thread.c $(DEPS)
-+		cc -c thread.c -o thread.o $(CFLAGS)
-+
-+thread_filter.o: thread_filter.c
-+		cc -c thread_filter.c -o thread_filter.o $(CFLAGS)
-+
-+define EXTRA_CLEAN
-+	rm *.o thread
-+endef
-+
- TEST_GEN_PROGS = proc_filter
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/connector/proc_filter.c b/tools/testing/selftests/connector/proc_filter.c
-index 4a825b997666..32a655f95c7f 100644
---- a/tools/testing/selftests/connector/proc_filter.c
-+++ b/tools/testing/selftests/connector/proc_filter.c
-@@ -1,4 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-+ *
-+ * Copyright (c) 2024 Oracle and/or its affiliates.
-+ */
- 
- #include <sys/types.h>
- #include <sys/epoll.h>
-@@ -28,6 +33,7 @@
- volatile static int interrupted;
- static int nl_sock, ret_errno, tcount;
- static struct epoll_event evn;
-+FILE *file;
- 
- static int filter;
- 
-@@ -37,6 +43,8 @@ static int filter;
- #define Printf ksft_print_msg
- #endif
- 
-+#define EXIT_LOG
-+
- int send_message(void *pinp)
- {
- 	char buff[NL_MESSAGE_SIZE];
-@@ -146,58 +154,65 @@ int handle_packet(char *buff, int fd, struct proc_event *event)
- 		tcount++;
- 		switch (event->what) {
- 		case PROC_EVENT_EXIT:
--			Printf("Exit process %d (tgid %d) with code %d, signal %d\n",
-+#ifdef EXIT_LOG
-+			fprintf(file, "pid %d tgid %d code %d\n",
-+				event->event_data.exit.process_pid,
-+				event->event_data.exit.process_tgid,
-+				event->event_data.exit.exit_code);
-+#else
-+			Printf("Exit pid %d (tgid %d) exitcode %d, signal %d\n",
- 			       event->event_data.exit.process_pid,
- 			       event->event_data.exit.process_tgid,
- 			       event->event_data.exit.exit_code,
- 			       event->event_data.exit.exit_signal);
-+#endif
- 			break;
- 		case PROC_EVENT_FORK:
--			Printf("Fork process %d (tgid %d), parent %d (tgid %d)\n",
-+			Printf("Fork pid %d (tgid %d), parent %d (tgid %d)\n",
- 			       event->event_data.fork.child_pid,
- 			       event->event_data.fork.child_tgid,
- 			       event->event_data.fork.parent_pid,
- 			       event->event_data.fork.parent_tgid);
- 			break;
- 		case PROC_EVENT_EXEC:
--			Printf("Exec process %d (tgid %d)\n",
-+			Printf("Exec pid %d (tgid %d)\n",
- 			       event->event_data.exec.process_pid,
- 			       event->event_data.exec.process_tgid);
- 			break;
- 		case PROC_EVENT_UID:
--			Printf("UID process %d (tgid %d) uid %d euid %d\n",
-+			Printf("UID pid %d (tgid %d) uid %d euid %d\n",
- 			       event->event_data.id.process_pid,
- 			       event->event_data.id.process_tgid,
- 			       event->event_data.id.r.ruid,
- 			       event->event_data.id.e.euid);
- 			break;
- 		case PROC_EVENT_GID:
--			Printf("GID process %d (tgid %d) gid %d egid %d\n",
-+			Printf("GID pid %d (tgid %d) gid %d egid %d\n",
- 			       event->event_data.id.process_pid,
- 			       event->event_data.id.process_tgid,
- 			       event->event_data.id.r.rgid,
- 			       event->event_data.id.e.egid);
- 			break;
- 		case PROC_EVENT_SID:
--			Printf("SID process %d (tgid %d)\n",
-+			Printf("SID pid %d (tgid %d)\n",
- 			       event->event_data.sid.process_pid,
- 			       event->event_data.sid.process_tgid);
- 			break;
- 		case PROC_EVENT_PTRACE:
--			Printf("Ptrace process %d (tgid %d), Tracer %d (tgid %d)\n",
-+			Printf("Ptrace pid %d (tgid %d), Tracer %d (tgid %d)\n",
- 			       event->event_data.ptrace.process_pid,
- 			       event->event_data.ptrace.process_tgid,
- 			       event->event_data.ptrace.tracer_pid,
- 			       event->event_data.ptrace.tracer_tgid);
- 			break;
- 		case PROC_EVENT_COMM:
--			Printf("Comm process %d (tgid %d) comm %s\n",
-+			Printf("Comm pid %d (tgid %d) comm %s\n",
- 			       event->event_data.comm.process_pid,
- 			       event->event_data.comm.process_tgid,
- 			       event->event_data.comm.comm);
- 			break;
- 		case PROC_EVENT_COREDUMP:
--			Printf("Coredump process %d (tgid %d) parent %d, (tgid %d)\n",
-+			Printf("Coredump pid %d (tgid %d) parent %d, (tgid %d)\n",
- 			       event->event_data.coredump.process_pid,
- 			       event->event_data.coredump.process_tgid,
- 			       event->event_data.coredump.parent_pid,
-@@ -263,10 +278,11 @@ int main(int argc, char *argv[])
- 	if (filter) {
- 		input.event_type = PROC_EVENT_NONZERO_EXIT;
- 		input.mcast_op = PROC_CN_MCAST_LISTEN;
--		err = register_proc_netlink(&epoll_fd, (void*)&input);
-+		err = register_proc_netlink(&epoll_fd, (void *)&input);
- 	} else {
- 		enum proc_cn_mcast_op op = PROC_CN_MCAST_LISTEN;
--		err = register_proc_netlink(&epoll_fd, (void*)&op);
-+
-+		err = register_proc_netlink(&epoll_fd, (void *)&op);
- 	}
- 
- 	if (err < 0) {
-@@ -279,31 +295,40 @@ int main(int argc, char *argv[])
- 		exit(1);
- 	}
- 
-+#ifdef EXIT_LOG
-+	file = fopen("exit.log", "w");
-+	if (!file) {
-+		perror("Error opening file exit.log");
-+		close(nl_sock);
-+		close(epoll_fd);
-+		exit(1);
-+	}
-+#endif
-+
- 	while (!interrupted) {
- 		err = handle_events(epoll_fd, &proc_ev);
- 		if (err < 0) {
- 			if (ret_errno == EINTR)
- 				continue;
--			if (err == -2)
--				close(nl_sock);
--			if (err == -3) {
--				close(nl_sock);
--				close(epoll_fd);
--			}
-+			close(nl_sock);
-+			close(epoll_fd);
-+			fclose(file);
- 			exit(1);
- 		}
- 	}
- 
- 	if (filter) {
- 		input.mcast_op = PROC_CN_MCAST_IGNORE;
--		send_message((void*)&input);
-+		send_message((void *)&input);
- 	} else {
- 		enum proc_cn_mcast_op op = PROC_CN_MCAST_IGNORE;
--		send_message((void*)&op);
-+
-+		send_message((void *)&op);
- 	}
- 
- 	close(epoll_fd);
- 	close(nl_sock);
-+	fclose(file);
- 
- 	printf("Done total count: %d\n", tcount);
- 	exit(0);
-diff --git a/tools/testing/selftests/connector/thread.c b/tools/testing/selftests/connector/thread.c
-new file mode 100644
-index 000000000000..0c12f8e9f1e1
---- /dev/null
-+++ b/tools/testing/selftests/connector/thread.c
-@@ -0,0 +1,238 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-+ *
-+ * Copyright (c) 2024 Oracle and/or its affiliates.
-+ */
-+
-+#include <pthread.h>
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <stdlib.h>
-+#include <signal.h>
-+
-+/*
-+ * This code tests a thread exit notification when thread exits abnormally.
-+ * Normally, when a thread exits abnormally, the kernel is not aware of the
-+ * exit code. This is usually only conveyed from child to parent via the
-+ * pthread_exit() and pthread_join() calls. Sometimes, however, a parent
-+ * process cannot monitor all child processes via pthread_join(), particularly
-+ * when there is a huge amount of child processes. In this case, the parent
-+ * has created the child with PTHREAD_CREATE_DETACHED attribute.
-+ * To fix this problem, either when child wants to convey non-zero exit via
-+ * pthread_exit() or in a signal handler, the child can notify the kernel's
-+ * connector module it's exit status via a netlink call with new type
-+ * PROC_CN_MCAST_NOTIFY. (Implemented in the thread_filter.c file).
-+ * This will send the exit code from the child to the kernel, which the kernel
-+ * can later return to proc_filter program when the child actually exits.
-+ * Compile:
-+ *	make thread
-+ *	make proc_filter
-+ * Run:
-+ *	./threads
-+ */
-+
-+extern int notify_netlink_thread_exit(unsigned int exit_code);
-+
-+static void sigsegvh(int sig)
-+{
-+	unsigned int exit_code = (unsigned int)sig;
-+	/*
-+	 * Send any non-zero value to get a notification. Here we are
-+	 * sending the signal number for SIGSEGV which is 11
-+	 */
-+	notify_netlink_thread_exit(exit_code);
-+}
-+
-+void *threadc1(void *ptr)
-+{
-+	signal(SIGSEGV, sigsegvh);
-+
-+	*(int *)ptr = gettid();
-+
-+	printf("Child 1 thread id %d, handling SIGSEGV\n", gettid());
-+	sleep(10);
-+	pthread_exit(NULL);
-+}
-+
-+void *threadc2(void *ptr)
-+{
-+	int exit_val = 1;
-+
-+	*(int *)ptr = gettid();
-+
-+	printf("Child 2 thread id %d, wants to exit with value %d\n",
-+	       gettid(), exit_val);
-+	sleep(2);
-+	notify_netlink_thread_exit(exit_val);
-+	pthread_exit(NULL);
-+}
-+
-+static void verify_exit_status(int tid1, int tid2)
-+{
-+	int found1 = 0, found2 = 0;
-+	int pid, tgid, exit_code;
-+	size_t size = 1024;
-+	FILE *file;
-+	char *data;
-+	int ret;
-+
-+	data = malloc(size * sizeof(char));
-+	if (!data) {
-+		perror("malloc for data failed");
-+		exit(1);
-+	}
-+
-+	file = fopen("exit.log", "r");
-+	if (!file) {
-+		perror("fopen of exit.log failed");
-+		free(data);
-+		exit(1);
-+	}
-+
-+	while (getline(&data, &size, file) != -1) {
-+		ret = sscanf(data, "pid %d tgid %d code %d",
-+			     &pid, &tgid, &exit_code);
-+		if (ret != 3) {
-+			perror("sscanf error in exit.log");
-+			free(data);
-+			fclose(file);
-+			exit(1);
-+		}
-+
-+		if (tgid != getpid())
-+			continue;
-+
-+		if (pid == tid1) {
-+			if (exit_code == 11) {
-+				printf("Success: notify of SIGSEGV, tid %d\n",
-+				       pid);
-+			} else {
-+				printf("Failure SIGSEGV tid %d, exit code %d\n",
-+				       pid, exit_code);
-+			}
-+			found1 = 1;
-+		} else if (pid == tid2) {
-+			if (exit_code == 1) {
-+				printf("Success: notify thread exit tid %d\n",
-+				       pid);
-+			} else {
-+				printf("Failure thread exit tid %d, exit code %d\n",
-+				       pid, exit_code);
-+			}
-+			found2 = 1;
-+		}
-+	}
-+
-+	if (!found1)
-+		printf("tid %d not present in exit.log file\n", tid1);
-+
-+	if (!found2)
-+		printf("tid %d not present in exit.log file\n", tid2);
-+
-+	fclose(file);
-+	free(data);
-+}
-+
-+static void init_threads(pthread_attr_t *attr)
-+{
-+	int ret;
-+
-+	ret = pthread_attr_init(attr);
-+	if (ret != 0) {
-+		perror("pthread_attr_init failed");
-+		exit(1);
-+	}
-+
-+	ret = pthread_attr_setdetachstate(attr, PTHREAD_CREATE_DETACHED);
-+	if (ret != 0) {
-+		perror("pthread_attr_setdetachstate failed");
-+		exit(1);
-+	}
-+}
-+
-+static void destroy_thread_attr(pthread_attr_t *attr)
-+{
-+	int ret;
-+
-+	ret = pthread_attr_destroy(attr);
-+	if (ret != 0)
-+		perror("pthread_attr_destroy failed");
-+}
-+
-+static pid_t start_proc_filter(void)
-+{
-+	pid_t proc_filter = 0;
-+
-+	proc_filter = fork();
-+	if (proc_filter == -1) {
-+		perror("fork() failed");
-+		exit(1);
-+	}
-+
-+	if (proc_filter == 0) {
-+		static char * const arr[] = {"proc_filter", "-f", NULL};
-+		int ret = execv("./proc_filter", arr);
-+
-+		if (ret == -1) {
-+			perror("execv() of proc_filter failed");
-+			exit(1);
-+		}
-+	}
-+	sleep(1);
-+	return proc_filter;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	pthread_t thread1, thread2;
-+	pthread_attr_t attr1, attr2;
-+	int tid1, tid2, ret;
-+	pid_t proc_filter_pid;
-+
-+	proc_filter_pid = start_proc_filter();
-+
-+	init_threads(&attr1);
-+	ret = pthread_create(&thread1, &attr1, *threadc1, &tid1);
-+	if (ret != 0) {
-+		perror("pthread_create failed");
-+		exit(1);
-+	}
-+
-+	init_threads(&attr2);
-+	ret = pthread_create(&thread2, &attr2, *threadc2, &tid2);
-+	if (ret != 0) {
-+		perror("pthread_create failed");
-+		exit(1);
-+	}
-+
-+	sleep(1);
-+
-+	/* Send SIGSEGV to tid1 */
-+	ret = kill(tid1, SIGSEGV);
-+	if (ret == -1)
-+		perror("kill SIGSEGV failed");
-+
-+	/*
-+	 * Wait for children to exit or be killed and for exit.log to
-+	 * be generated by ./proc_filter
-+	 */
-+	sleep(2);
-+
-+	/*
-+	 * Kill proc_filter to get exit.log
-+	 */
-+	ret = kill(proc_filter_pid, SIGINT);
-+	if (ret == -1)
-+		perror("kill to proc_filter failed");
-+
-+	/* Required to allow kill to be processed */
-+	sleep(1);
-+
-+	verify_exit_status(tid1, tid2);
-+
-+	destroy_thread_attr(&attr1);
-+	destroy_thread_attr(&attr2);
-+
-+	exit(0);
-+}
-diff --git a/tools/testing/selftests/connector/thread_filter.c b/tools/testing/selftests/connector/thread_filter.c
-new file mode 100644
-index 000000000000..3da740aa7537
---- /dev/null
-+++ b/tools/testing/selftests/connector/thread_filter.c
-@@ -0,0 +1,96 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-+ *
-+ * Copyright (c) 2024 Oracle and/or its affiliates.
-+ */
-+
-+#include <sys/types.h>
-+#include <sys/epoll.h>
-+#include <sys/socket.h>
-+#include <linux/netlink.h>
-+#include <linux/connector.h>
-+#include <linux/cn_proc.h>
-+
-+#include <stddef.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <strings.h>
-+#include <errno.h>
-+#include <signal.h>
-+#include <string.h>
-+
-+#define NL_MESSAGE_SIZE (sizeof(struct nlmsghdr) + sizeof(struct cn_msg) + \
-+			sizeof(struct proc_input))
-+
-+/*
-+ * Send PROC_CN_MCAST_NOTIFY type notification to the connector code in kernel.
-+ * This will send the exit_code specified by user to the connector layer, so
-+ * it can send a notification for that event to any listening process
-+ */
-+int send_message(int nl_sock, unsigned int exit_code)
-+{
-+	char buff[NL_MESSAGE_SIZE];
-+	struct nlmsghdr *hdr;
-+	struct cn_msg *msg;
-+
-+	hdr = (struct nlmsghdr *)buff;
-+	hdr->nlmsg_len = NL_MESSAGE_SIZE;
-+	hdr->nlmsg_type = NLMSG_DONE;
-+	hdr->nlmsg_flags = 0;
-+	hdr->nlmsg_seq = 0;
-+	hdr->nlmsg_pid = getpid();
-+
-+	msg = (struct cn_msg *)NLMSG_DATA(hdr);
-+	msg->id.idx = CN_IDX_PROC;
-+	msg->id.val = CN_VAL_PROC;
-+	msg->seq = 0;
-+	msg->ack = 0;
-+	msg->flags = 0;
-+
-+	msg->len = sizeof(struct proc_input);
-+	((struct proc_input *)msg->data)->mcast_op =
-+		PROC_CN_MCAST_NOTIFY;
-+	((struct proc_input *)msg->data)->uexit_code = exit_code;
-+
-+	if (send(nl_sock, hdr, hdr->nlmsg_len, 0) == -1) {
-+		perror("send failed");
-+		return -errno;
-+	}
-+	return 0;
-+}
-+
-+int notify_netlink_thread_exit(unsigned int exit_code)
-+{
-+	struct sockaddr_nl sa_nl;
-+	int err = 0;
-+	int nl_sock;
-+
-+	nl_sock = socket(PF_NETLINK, SOCK_DGRAM, NETLINK_CONNECTOR);
-+
-+	if (nl_sock == -1) {
-+		perror("socket failed");
-+		return -errno;
-+	}
-+
-+	bzero(&sa_nl, sizeof(sa_nl));
-+	sa_nl.nl_family = AF_NETLINK;
-+	sa_nl.nl_groups = CN_IDX_PROC;
-+	sa_nl.nl_pid    = gettid();
-+
-+	if (bind(nl_sock, (struct sockaddr *)&sa_nl, sizeof(sa_nl)) == -1) {
-+		perror("bind failed");
-+		close(nl_sock);
-+		return -errno;
-+	}
-+
-+	err = send_message(nl_sock, exit_code);
-+
-+	close(nl_sock);
-+
-+	if (err < 0)
-+		return err;
-+
-+	return 0;
-+}
--- 
-2.46.0
+> static inline int kvm_psci_version(struct kvm_vcpu *vcpu)
+> {
+> --=20
+> 2.44.0
+>=20
 
 
