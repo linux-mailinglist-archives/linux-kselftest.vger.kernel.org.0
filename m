@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-20505-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20506-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AE5D9AD552
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 22:07:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57E1D9AD568
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 22:16:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0F9D1C2168E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 20:07:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66EBCB22C30
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2024 20:16:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71AC21DB344;
-	Wed, 23 Oct 2024 20:07:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B11561E7678;
+	Wed, 23 Oct 2024 20:16:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Vo2MbbFb"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="f1DwpIO/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 946F4142623
-	for <linux-kselftest@vger.kernel.org>; Wed, 23 Oct 2024 20:07:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273871E5735
+	for <linux-kselftest@vger.kernel.org>; Wed, 23 Oct 2024 20:16:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729714063; cv=none; b=ifCf++EPEGJc4i1KJSXePUDbvdUd5PqJfWGuDQLnmgqFRyCfl7uGE5y6zIY5JuRwCH4pbQHrQ/QdS3HsMgFdHV1DRijc8J8B0glK0H/YAqKN9CCKjS/DbD6AC2SxCIjxlN6MCkFvphYcbqy8Xd+I6Tikd4/xYNQQTufV9EASBeQ=
+	t=1729714577; cv=none; b=kRtxiXASoiHe4vS6m8wRCgc3fH6E8mRQIoMTygyuHA7jewsjlo2L/YZvOupWkZPnsy2QKg898JDFoCxFU74KYK2kcSbqxCB+HLoLRd7UFneG3PJ6T5q2IWWuwObnqWp7XuP+WGeGToFWpgxiMugbYa7ELWz3wIRnT4M4OmFamEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729714063; c=relaxed/simple;
-	bh=Oc9T20sL9GzDJ9MXtms2CQ0BCWRW+F5FKpOhylFGpDA=;
+	s=arc-20240116; t=1729714577; c=relaxed/simple;
+	bh=t+pBwRES099gjbIXm7AKphItx7J8kvYpUlt7TQ7aHTQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sWTvjUjMvI607Zed1CgKe226qfMDIs1opY7IQsAhPxJ08gSAh56EF8b1B98oTg/xKB6pjt7bVUekDb23UtAFxExX9tpQonQxg7aDPkfszKi6du00HoXkCwhASqrNjFffDZTe5us2JM23W24VaEvFOZmM4K4f3E/88Pk3o9B6CbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Vo2MbbFb; arc=none smtp.client-ip=209.85.166.43
+	 In-Reply-To:Content-Type; b=J41ncCW1Frn2xCtbYTOdMHyX0IlGMWFHopn3lXtez6poAha3HTEW+mMOymjL73R3T54vHQuIk2DcI0/boCmT8uOX8+GKXcbfOJWOKpPhXzOUwY7C4wS1UsLzTD6wCQzdA5sLAGAp+RPd4vLQ7EjVPr2n+HRbjGh+oJD3PHUHtf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=f1DwpIO/; arc=none smtp.client-ip=209.85.166.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-83a9be2c0e6so5846539f.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Oct 2024 13:07:41 -0700 (PDT)
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-83ab94452a7so6799539f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Oct 2024 13:16:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1729714061; x=1730318861; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1729714574; x=1730319374; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zQKCB6RcE9DVN+QliMh7NeyWWCz4zTZwRk5ZndcDook=;
-        b=Vo2MbbFbPn0ZCnv0gEXyhdVaNups0TZtS4zjZpm0XkI9OQYPrqCVd+UpXaLtSISliH
-         XEwOANiArFbRlz7jJq/6/vUcbjajD5GHhzifR/noYAQ/ZqyQ98cqqx1m3r1QtIL1QyYF
-         GfO9XYCnchMgh4D8KIxqJ9leAE5o+ejOymr18=
+        bh=8kDCSZhRA7POBerNB1e7kbi71ZsjNfGfCME90BjKh8U=;
+        b=f1DwpIO/aOuuk/h5qA/YXkBI+HjnYIuH5SCbgaiXXzKGIlzvPT59WPMSoqf85kaCeD
+         gmFatEdohan57nZBqC74W9mRbKO+yGb20Rmt+UT8240/7Fj7pqQ5CG0xWgpf0ccKVrR7
+         sX39l8GcufjrYRI62+pSi4OTTwPXv6F+7HmN4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729714061; x=1730318861;
+        d=1e100.net; s=20230601; t=1729714574; x=1730319374;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zQKCB6RcE9DVN+QliMh7NeyWWCz4zTZwRk5ZndcDook=;
-        b=JOk4UFRGhe2WxG4qjABUGCrGNxVqU77F/GZr6NI5Y/3npJx8bFB6CXMqTmO/fMhCdi
-         vZlo7QTA9rqxGolnj6dRYQ3e3qyNHRYlHjkS1rJ/sqwbNOcDriIg9gzitZwJUcHkeA91
-         mpzBIcTuoFElZYiFOdSXeys3HDm2oBvXb4rvS3KwIAS2CByRrjlo6Kn9xhk7KXbfbnrP
-         8x7AD04NFaIioO4qhzNaUJGiLKPaQLm9bOfB6bgpp8uEvq6/+DOxiHpB5HkXs9+ekj3O
-         3IknT0SjRsQWki6hGPBYfwm5VlrIpW21yYVcX5A7NuBd8uyEcsQ7TWDNcnTGvQ8Y1Y6T
-         u9ow==
-X-Forwarded-Encrypted: i=1; AJvYcCVww4gjAaPOrlA4I24E1CKyhu9VlFxRLJwp/chKUU4H0CeUhyZZWO04k16kcmcP2eNpbLgc2gPZnXhFbkVH7mE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPFn9Hgjm0G6UVs+8YLR+aXOE+rrCQimcjmBB30JD0RUzTTh6c
-	VpJoJ9tuhBJUUTg0XGotHIxkMD3d+b7xzNpclb/GWjK+nyCQMBQfndXzkMr9AFE=
-X-Google-Smtp-Source: AGHT+IGJAXZLXw8YfyNAKL+7k84dokIL7fMfI0LUJtlRPUYDDDSyMVeTAwledsk56TvI+yeEVlnQuw==
-X-Received: by 2002:a05:6602:641e:b0:83a:a82b:f856 with SMTP id ca18e2360f4ac-83af614d256mr368001339f.3.1729714060543;
-        Wed, 23 Oct 2024 13:07:40 -0700 (PDT)
+        bh=8kDCSZhRA7POBerNB1e7kbi71ZsjNfGfCME90BjKh8U=;
+        b=nmD2/6r4Bk+mFBmNwZ7FUZXLiFpNIcfTH+cTSD1bWE9HAcOFJu3r2pDdwGwiA5GwDw
+         Iz8TCjVzdEeEM2oVs/Y4t2xjkHqGTQQUkzbwJayQRfgxF+idXYv/BWAVLsRyastAGH/y
+         DJEBRSh/NtaUHs+Uli0f2P7+0145AJhepdBEdl+5pm+Wlb66vestDpbHe0Ktj6VYMN2l
+         SUfdddR/USXdayL2ONVXJ/9aSCI/zEDSsSxffX2KQwqu75jjiYsUhyPMLtBjl24KFBRE
+         5ThszxuJ6Veldr8L7jdrcCZtxiE+GFOApzjiqY5DLK4n7r9wYlESccyOmz+f7oGu6i/Q
+         uS+g==
+X-Forwarded-Encrypted: i=1; AJvYcCVc6a9vXB8/gY4Ry2EyL2RzerhIvHOuCUmLvZ2QvTsL2iWZcYgFIvB0ye8qs/CsaDhgjgvxhfOBy2m/U1I9eds=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/gD8HQ7lxH81Cr1xeqC8JMOwMZYpyaKsaf445moxxkecLDxFN
+	Oj9nyug8bZO7T5yXG4wecNYHn1RS5AijBo314AxRBbh+aXFxjWQiCXBP1ptaptQ=
+X-Google-Smtp-Source: AGHT+IFxlWgPQhu1E+mBKyy2YSke5qTMx4jKDLlyDjXa5E0AFKuVNbwNPENGDajCm726+x5G05keqA==
+X-Received: by 2002:a05:6602:2c94:b0:82d:16fa:52dd with SMTP id ca18e2360f4ac-83af6192782mr301558139f.7.1729714574207;
+        Wed, 23 Oct 2024 13:16:14 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dc2a5570fesm2242840173.51.2024.10.23.13.07.39
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dc2a65e512sm2226878173.156.2024.10.23.13.16.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Oct 2024 13:07:39 -0700 (PDT)
-Message-ID: <477cac2e-606d-4c78-ba5e-ce7e594bb6f5@linuxfoundation.org>
-Date: Wed, 23 Oct 2024 14:07:38 -0600
+        Wed, 23 Oct 2024 13:16:13 -0700 (PDT)
+Message-ID: <2b3052bb-1235-4785-a7bb-a993332b4d83@linuxfoundation.org>
+Date: Wed, 23 Oct 2024 14:16:12 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,53 +73,57 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 4/8] selftests: net: lib: Move logging from
- forwarding/lib.sh here
-To: Petr Machata <petrm@nvidia.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc: Ido Schimmel <idosch@nvidia.com>, Amit Cohen <amcohen@nvidia.com>,
- Vladimir Oltean <vladimir.oltean@nxp.com>, mlxsw@nvidia.com,
- Shuah Khan <shuah@kernel.org>, Benjamin Poirier <bpoirier@nvidia.com>,
- Hangbin Liu <liuhangbin@gmail.com>, linux-kselftest@vger.kernel.org,
- Jiri Pirko <jiri@resnulli.us>, Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1729607879.git.petrm@nvidia.com>
- <4421094dd36be3714eeea70d577ff761454de3b3.1729607879.git.petrm@nvidia.com>
+Subject: Re: [PATCH v2 1/2] selftest: rtc: Add to check rtc alarm status for
+ alarm related test
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Joseph Jang <jjang@nvidia.com>
+Cc: shuah@kernel.org, avagin@google.com, amir73il@gmail.com,
+ brauner@kernel.org, mochs@nvidia.com, kobak@nvidia.com,
+ linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-tegra@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20241021032213.1915224-1-jjang@nvidia.com>
+ <202410221601561f631bc7@mail.local>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <4421094dd36be3714eeea70d577ff761454de3b3.1729607879.git.petrm@nvidia.com>
+In-Reply-To: <202410221601561f631bc7@mail.local>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 10/22/24 08:50, Petr Machata wrote:
-> Many net selftests invent their own logging helpers. These really should be
-> in a library sourced by these tests. Currently forwarding/lib.sh has a
-> suite of perfectly fine logging helpers, but sourcing a forwarding/ library
-> from a higher-level directory smells of layering violation. In this patch,
-> move the logging helpers to net/lib.sh so that every net test can use them.
+On 10/22/24 10:01, Alexandre Belloni wrote:
+> On 20/10/2024 20:22:13-0700, Joseph Jang wrote:
+>> In alarm_wkalm_set and alarm_wkalm_set_minute test, they use different
+>> ioctl (RTC_ALM_SET/RTC_WKALM_SET) for alarm feature detection. They will
+>> skip testing if RTC_ALM_SET/RTC_WKALM_SET ioctl returns an EINVAL error
+>> code. This design may miss detecting real problems when the
+>> efi.set_wakeup_time() return errors and then RTC_ALM_SET/RTC_WKALM_SET
+>> ioctl returns an EINVAL error code with RTC_FEATURE_ALARM enabled.
+>>
+>> In order to make rtctest more explicit and robust, we propose to use
+>> RTC_PARAM_GET ioctl interface to check rtc alarm feature state before
+>> running alarm related tests. If the kernel does not support RTC_PARAM_GET
+>> ioctl interface, we will fallback to check the error number of
+>> (RTC_ALM_SET/RTC_WKALM_SET) ioctl call for alarm feature detection.
+>>
+>> Requires commit 101ca8d05913b ("rtc: efi: Enable SET/GET WAKEUP services
+>> as optional")
+>>
+>> Reviewed-by: Koba Ko <kobak@nvidia.com>
+>> Reviewed-by: Matthew R. Ochs <mochs@nvidia.com>
+>> Signed-off-by: Joseph Jang <jjang@nvidia.com>
 > 
-> Together with the logging helpers, it's also necessary to move
-> pause_on_fail(), and EXIT_STATUS and RET.
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 > 
-> Existing lib.sh users might be using these same names for their functions
-> or variables. However lib.sh is always sourced near the top of the
-> file (checked), and whatever new definitions will simply override the ones
-> provided by lib.sh.
+>> ---
+>> Changes in v2:
+>> - Changed to use $(top_srcdir) instead of hardcoding the path.
+>>
 
-I like the direction to leverage and make logging functions
-common. It make sense to use prefix to clearly indicate
-that they are common and to namespace conflicts in the future.
+Thanks.
 
-> 
-> Signed-off-by: Petr Machata <petrm@nvidia.com>
-> Reviewed-by: Amit Cohen <amcohen@nvidia.com>
-> ---
-> CC: Shuah Khan <shuah@kernel.org>
-
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-
-for all patches 4/8 through 8/8 I have been cc'ed on.
+Applied to linux-kselftest next for Linux 6.13-rc1
 
 thanks,
 -- Shuah
+
 
