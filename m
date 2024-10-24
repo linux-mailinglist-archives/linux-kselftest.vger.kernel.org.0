@@ -1,165 +1,256 @@
-Return-Path: <linux-kselftest+bounces-20554-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20555-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEE669AEBBA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 18:19:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 545349AECBD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 18:55:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E286E1C22814
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 16:19:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7DEE1F22A1A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 16:55:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 896B71AB6CC;
-	Thu, 24 Oct 2024 16:19:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81C6C1F81AE;
+	Thu, 24 Oct 2024 16:55:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dLWSww/Y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD891F5836
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Oct 2024 16:19:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50BF11F80C3
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Oct 2024 16:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729786758; cv=none; b=jtNPmYFhUL1X375ZL59aXiiQCapj34cbPc6ffo0wsFxYdovRy46TjLioRURzNheoshEk7jbFPH8wwUDUwdATtwCp20mscxYICQoPx6n+jnYhKpJwI6KMVOvlDMHDg1d5rT+rp8rSECwl3t7W4mn8BkdJZ11m3rpjorYcAUoar2w=
+	t=1729788934; cv=none; b=V17QkrGGoMa32g9zHOSHky9sNbx0B9kcVVfPDyPHA+xxfyFG9PM2cpPzzNgHiGb+Ok8fTba7/5Y1kV835PW+PD5Vr7iz4cMSBjxgad8HBevs73pdk35B/C0NXJQ5xoQ7JgJHzfeSEZUhUkAC4huQVKfJAMMUu55Gq0YjZhYDBdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729786758; c=relaxed/simple;
-	bh=u5uC7qF0dq0wID+ajlzRnrBY1BxKs8ocJz9hz8WXcfo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qHiKgdkAiX4erzUmMN0CXvQBlS8pnGYCVXiG3u420FyngOBg2h6DfqCZi36nj+deFz7O//zk13xt3QplS/UAxOfmZALFh0vQVDckPGfilGDdolsXy4TGEo0EPmid2uq06LGoEJhQ/QbVc9Nortp90ytTxfGtivWea0q5yGKajpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 154F6339;
-	Thu, 24 Oct 2024 09:19:44 -0700 (PDT)
-Received: from e133380.arm.com (e133380.arm.com [10.1.197.69])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 76A263F71E;
-	Thu, 24 Oct 2024 09:19:12 -0700 (PDT)
-Date: Thu, 24 Oct 2024 17:19:07 +0100
-From: Dave Martin <Dave.Martin@arm.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
-	linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
-	anshuman.khandual@arm.com, aruna.ramakrishna@oracle.com,
-	broonie@kernel.org, dave.hansen@linux.intel.com,
-	jeffxu@chromium.org, joey.gouly@arm.com, pierre.langlois@arm.com,
-	shuah@kernel.org, sroettger@google.com, will@kernel.org,
-	linux-kselftest@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v2 3/5] arm64: signal: Improve POR_EL0 handling to avoid
- uaccess failures
-Message-ID: <ZxpzexqNIfys3MnJ@e133380.arm.com>
-References: <20241023150511.3923558-1-kevin.brodsky@arm.com>
- <20241023150511.3923558-4-kevin.brodsky@arm.com>
- <ZxoooqtuqTK5CAMR@arm.com>
- <80688edf-83dd-43c6-a1a8-b69acd30f5c3@arm.com>
- <Zxpq0k3b9q8nWrYa@arm.com>
+	s=arc-20240116; t=1729788934; c=relaxed/simple;
+	bh=eLk9DnjwYUighE0iYEt8H3h8YBFG5NSuRgaO8lDKgzg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UK45GUDi1VSg11enFHkyqGusIySqyxHhG/+ZXojZXEbzdoE8loTYgIIuTKaL1Gsv+7DANjUFqYbWamr19YlHqFH6ZLNPDvJU2VqOEEk//eYeM6zwo9aRM5c0hXaDyjaOZORzTdzVynd4ZIocOpKnXrx8q2tbpo/01ex7icp8DAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dLWSww/Y; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2e2ed2230d8so918612a91.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Oct 2024 09:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729788931; x=1730393731; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eevhDzdCE/ZTj1eNsgYl4TEHf9uXE1aqifwdMlg8WCA=;
+        b=dLWSww/YzVoP3R724sD/OPMWitdiDqDWNiWNtftOe7kZpzhqoWACY21fM8jmZrMnJm
+         xQgbuhU7H1VhK9sifKpSSsz+edoWCOuVGQ2+ndBGPXKpWXJxceBvKucxIWRVtJZlOeig
+         HGYhDhylINEsZ9wk0RWnWX59KVW6m20kA6vJFL8g584UY7a8wjh0FMmOSKcDAqWyUL7Q
+         CceXTsUONqYAlw04g3bXrq8ujupbg94YgTTJMaIs0KkKcQiqk9Ar6HmF9JSg8CF92lxo
+         OKljCRXGO46dCSwOnck91zw9gHPZOTF7MlxuulsaFALSOQWorHq/5Y1vy+lsk9bRWtvV
+         RUpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729788931; x=1730393731;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eevhDzdCE/ZTj1eNsgYl4TEHf9uXE1aqifwdMlg8WCA=;
+        b=V8mZfIyrTZtleKLBm8dwk9l9JHQdB/VwKimsg/YDxHDrDHBvBiquEQhW2RIDwDewnO
+         h4VfubcsuuqOaOj93IgZ62yhLohbT5kzuydivS30KHdUhS3xKqiduj8QY2HULUkpudoN
+         OlOe+dqGXNXsLzMANdE2rkYHvv5AAk376Rn5l+kyn7hbxourweDy+JRd+M+rV5sNo83o
+         RjFkUXyJQwc4KsRWVDuMtwBaaf/hVF546Xl0yN6bjZbCZH/T12sytxt/69tunrjiBKVb
+         w9N9Vi/ba+VEnB4/kcKAtOtckUKTt3jRQedWXlwkusi3PvJAhxs7GLlchxtO1NQumGQE
+         JenQ==
+X-Gm-Message-State: AOJu0Yxy/SAsN/NQrkhuaaJ9yjBXegTeWUSFqjgERQbKCbSfqyCZ0hVE
+	W9A5TImozFq9JrAMZ17pKJGLRFBs3rMLGTUnIqoYSKI3L74uPVUM
+X-Google-Smtp-Source: AGHT+IEjVs0x4twk0WWK/+qEUTcMAPINKqsT0FUadD/Sidd+OOyYSC90sR2Ioeqr/uXnJKmRvqN1yg==
+X-Received: by 2002:a17:90b:23d1:b0:2e3:b168:70f5 with SMTP id 98e67ed59e1d1-2e76b60be7emr6697864a91.21.1729788931451;
+        Thu, 24 Oct 2024 09:55:31 -0700 (PDT)
+Received: from 2abb50c-lcedt.nvidia.com ([203.200.25.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e77e5c894dsm1724266a91.57.2024.10.24.09.55.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2024 09:55:31 -0700 (PDT)
+From: Shivam Chaudhary <cvam0000@gmail.com>
+To: skhan@linuxfoundation.org
+Cc: linux-kselftest@vger.kernel.org,
+	selftests@ellerman.id.au,
+	Shivam Chaudhary <cvam0000@gmail.com>
+Subject: [PATCH] selftests: Add kselftest framework to the testfile
+Date: Thu, 24 Oct 2024 22:25:20 +0530
+Message-Id: <20241024165520.948936-1-cvam0000@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zxpq0k3b9q8nWrYa@arm.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 24, 2024 at 04:42:10PM +0100, Catalin Marinas wrote:
-> On Thu, Oct 24, 2024 at 04:55:48PM +0200, Kevin Brodsky wrote:
-> > On 24/10/2024 12:59, Catalin Marinas wrote:
-> > > On Wed, Oct 23, 2024 at 04:05:09PM +0100, Kevin Brodsky wrote:
-> > >> +/*
-> > >> + * Save the unpriv access state into ua_state and reset it to disable any
-> > >> + * restrictions.
-> > >> + */
-> > >> +static void save_reset_user_access_state(struct user_access_state *ua_state)
-> > >> +{
-> > >> +	if (system_supports_poe()) {
-> > >> +		/*
-> > >> +		 * Enable all permissions in all 8 keys
-> > >> +		 * (inspired by REPEAT_BYTE())
-> > >> +		 */
-> > >> +		u64 por_enable_all = (~0u / POE_MASK) * POE_RXW;
-> > > I think this should be ~0ul.
-> > 
-> > It is ~0u on purpose, because unlike in REPEAT_BYTE(), I only wanted the
-> > lower 32 bits to be filled with POE_RXW (we only have 8 keys, the top 32
-> > bits are RES0). That said, given that D128 has 4-bit pkeys, we could
-> > anticipate and fill the top 32 bits too (should make no difference on D64).
-> 
-> I guess we could leave it as 32-bit for now and remember to update it
-> when we enable more keys with D128. Setting the top RES0 bits doesn't
-> hurt either since they are already documented in the Arm ARM. Up to you,
-> it's fine like above as well.
+This patch updates the existing test that checks
+for `open(O_TMPFILE)` and `linkat()` behaviors in
+mount namespaces to use the kselftest framework.
 
-Can we maybe just have a brute-force loop that constructs the value
-using the appropriate #define macros?
+This includes the following changes:
 
-The compiler will const-fold it; I'd be prepared to bet that the
-generated code would be identical...
+- Replaced direct error handling with
+ `ksft_test_result_*` macros for better reporting
+  of test outcomes.
 
+- Added `ksft_print_header()` and `ksft_set_plan()`
+ to structure test outputs more effectively.
 
-> > >> @@ -907,6 +964,7 @@ SYSCALL_DEFINE0(rt_sigreturn)
-> > >>  {
-> > >>  	struct pt_regs *regs = current_pt_regs();
-> > >>  	struct rt_sigframe __user *frame;
-> > >> +	struct user_access_state ua_state;
-> > >>  
-> > >>  	/* Always make any pending restarted system calls return -EINTR */
-> > >>  	current->restart_block.fn = do_no_restart_syscall;
-> > >> @@ -923,12 +981,14 @@ SYSCALL_DEFINE0(rt_sigreturn)
-> > >>  	if (!access_ok(frame, sizeof (*frame)))
-> > >>  		goto badframe;
-> > >>  
-> > >> -	if (restore_sigframe(regs, frame))
-> > >> +	if (restore_sigframe(regs, frame, &ua_state))
-> > >>  		goto badframe;
-> > >>  
-> > >>  	if (restore_altstack(&frame->uc.uc_stack))
-> > >>  		goto badframe;
-> > >>  
-> > >> +	restore_user_access_state(&ua_state);
-> > >> +
-> > >>  	return regs->regs[0];
-> > >>  
-> > >>  badframe:
-> > > The saving part I'm fine with. For restoring, I was wondering whether we
-> > > can get a more privileged POR_EL0 if reading the frame somehow failed.
-> > > This is largely theoretical, there are other ways to attack like
-> > > writing POR_EL0 directly than unmapping/remapping the signal stack.
-> > >
-> > > What I'd change here is always restore_user_access_state() to
-> > > POR_EL0_INIT. Maybe just initialise ua_state above and add the function
-> > > call after the badframe label.
-> > 
-> > I'm not sure I understand. When we enter this function, POR_EL0 is set
-> > to whatever the signal handler set it to (POR_EL0_INIT by default).
-> > There are then two cases:
-> > 1) Everything succeeds, including reading the saved POR_EL0 from the
-> > frame. We then call restore_user_access_state(), setting POR_EL0 to the
-> > value we've read, and return to userspace.
-> > 2) Any uaccess fails (for instance reading POR_EL0). In that case we
-> > leave POR_EL0 unchanged and deliver SIGSEGV.
-> > 
-> > In case 2 POR_EL0 is most likely already set to POR_EL0_INIT, or
-> > whatever the signal handler set it to. It's not clear to me that forcing
-> > it to POR_EL0_INIT helps much. Either way it's doubtful that the SIGSEGV
-> > handler will be able to recover, since the new signal frame we will
-> > create for it may be a mix of interrupted state and signal handler state
-> > (depending on exactly where we fail).
-> 
-> If the SIGSEGV delivery succeeds, returning would restore the POR_EL0
-> set up by the previous signal handler, potentially more privileged. Does
-> it matter? Can it return all the way to the original context?
+- Introduced the helper function `is_unshare()` to
+  handle unshare-related checks.
 
-That seems a valid concern.
+- Improved the test flow by adding more detailed pass/fail
+  reporting for unshare, mounting, file opening, and linking
+  operations.
 
-It looks a bit like we don't back out the temporary change to POR_EL0
-if writing the sigframe fails, so the temporary "allow all" perms might
-get saved out into the SIGSEGV sigframe on the alternate signal
-stack, and will then be restored as the user thread's POR_EL0 when the
-SIGSEGV returns.
+- Skips the test if it's not run as root, providing an
+  appropriate Warning.
 
-(This is all assuming that the force_sig(SIGSEGV) logic works properly
-at all...  I'm still trying to puzzle it out!)
+Test logs:
 
-Cheers
----Dave
+Before change:
+
+- Withou root
+ error: unshare, errno 1
+
+- With root
+ No, output
+
+After change:
+
+- Without root
+ TAP version 13
+ 1..1
+ ok 1 # SKIP This test needs root to ru
+
+- With root
+ TAP version 13
+ 1..1
+ ok 1 unshare(): we have a new mount namespace.
+ 1..2
+ ok 2 mount(): Root filesystem private mount: Success
+ 1..3
+ ok 3 mount(): Mounting tmpfs on /tmp: Success
+ 1..4
+ ok 4 openat(): Open first temporary file: Success
+ 1..5
+ ok 5 linkat(): Linking the temporary file: Success
+ 1..6
+ ok 6 openat(): Opening the second temporary file: Success
+ # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+Signed-off-by: Shivam Chaudhary <cvam0000@gmail.com>
+---
+ .../selftests/tmpfs/bug-link-o-tmpfile.c      | 72 +++++++++++++++----
+ 1 file changed, 58 insertions(+), 14 deletions(-)
+
+diff --git a/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c b/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
+index b5c3ddb90942..26dea19c1614 100644
+--- a/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
++++ b/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
+@@ -23,45 +23,89 @@
+ #include <sys/mount.h>
+ #include <unistd.h>
+ 
+-int main(void)
+-{
+-	int fd;
++#include "../kselftest.h"
+ 
+-	if (unshare(CLONE_NEWNS) == -1) {
++static int is_unshare(int flag)
++{
++	if (unshare(flag) == -1) {
+ 		if (errno == ENOSYS || errno == EPERM) {
+-			fprintf(stderr, "error: unshare, errno %d\n", errno);
+-			return 4;
++			ksft_test_result_fail("error: unshare, errno %d\n", errno);
++			return -1; // Return -1 for failure
+ 		}
+ 		fprintf(stderr, "error: unshare, errno %d\n", errno);
++		return -1;
++	}
++
++	return 0; // Return 0 for success
++}
++
++int main(void)
++{
++	int fd;
++
++	// Setting up kselftest framework
++	ksft_print_header();
++	ksft_set_plan(1);
++
++	// Check if test is run as root
++	if (geteuid()) {
++		ksft_test_result_skip("This test needs root to run!\n");
+ 		return 1;
+ 	}
+-	if (mount(NULL, "/", NULL, MS_PRIVATE|MS_REC, NULL) == -1) {
+-		fprintf(stderr, "error: mount '/', errno %d\n", errno);
++
++	if (is_unshare(CLONE_NEWNS) == 0) {
++		ksft_test_result_pass("unshare(): we have a new mount namespace.\n");
++	} else {
++		ksft_test_result_fail("unshare(): failed\n");
+ 		return 1;
+ 	}
+ 
++	ksft_set_plan(2);
++
++	if (mount(NULL, "/", NULL, MS_PRIVATE | MS_REC, NULL) == -1) {
++		ksft_test_result_fail("mount(): Root filesystem private mount: Fail %d\n", errno);
++		return 1;
++	} else {
++		ksft_test_result_pass("mount(): Root filesystem private mount: Success\n");
++	}
++
++	ksft_set_plan(3);
+ 	/* Our heroes: 1 root inode, 1 O_TMPFILE inode, 1 permanent inode. */
+ 	if (mount(NULL, "/tmp", "tmpfs", 0, "nr_inodes=3") == -1) {
+-		fprintf(stderr, "error: mount tmpfs, errno %d\n", errno);
++		ksft_test_result_fail("mount(): Mounting tmpfs on /tmp: Fail %d\n", errno);
+ 		return 1;
++	} else {
++		ksft_test_result_pass("mount(): Mounting tmpfs on /tmp: Success\n");
+ 	}
+ 
+-	fd = openat(AT_FDCWD, "/tmp", O_WRONLY|O_TMPFILE, 0600);
++	ksft_set_plan(4);
++	fd = openat(AT_FDCWD, "/tmp", O_WRONLY | O_TMPFILE, 0600);
+ 	if (fd == -1) {
+-		fprintf(stderr, "error: open 1, errno %d\n", errno);
++		ksft_test_result_fail("openat(): Open first temporary file: Fail %d\n", errno);
+ 		return 1;
++	} else {
++		ksft_test_result_pass("openat(): Open first temporary file: Success\n");
+ 	}
++
++	ksft_set_plan(5);
+ 	if (linkat(fd, "", AT_FDCWD, "/tmp/1", AT_EMPTY_PATH) == -1) {
+-		fprintf(stderr, "error: linkat, errno %d\n", errno);
++		ksft_test_result_fail("linkat(): Linking the temporary file: Fail %d\n", errno);
++		close(fd); // Ensure fd is closed on failure
+ 		return 1;
++	} else {
++		ksft_test_result_pass("linkat(): Linking the temporary file: Success\n");
+ 	}
+ 	close(fd);
+ 
+-	fd = openat(AT_FDCWD, "/tmp", O_WRONLY|O_TMPFILE, 0600);
++	ksft_set_plan(6);
++	fd = openat(AT_FDCWD, "/tmp", O_WRONLY | O_TMPFILE, 0600);
+ 	if (fd == -1) {
+-		fprintf(stderr, "error: open 2, errno %d\n", errno);
++		ksft_test_result_fail("openat(): Opening the second temporary file: Fail %d\n", errno);
+ 		return 1;
++	} else {
++		ksft_test_result_pass("openat(): Opening the second temporary file: Success\n");
+ 	}
+ 
++	ksft_exit_pass();
+ 	return 0;
+ }
+-- 
+2.34.1
+
 
