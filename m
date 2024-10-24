@@ -1,322 +1,276 @@
-Return-Path: <linux-kselftest+bounces-20561-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 766D69AECFC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 18:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CA1A9AEE62
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 19:40:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFFF41F22B56
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 16:59:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21BFF1F25A83
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 17:40:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 913721FBF59;
-	Thu, 24 Oct 2024 16:59:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B144E1F9EB1;
+	Thu, 24 Oct 2024 17:40:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="C0YEB8BV"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LyQzDTjp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2041.outbound.protection.outlook.com [40.107.237.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1075E1FAF1F;
-	Thu, 24 Oct 2024 16:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729789157; cv=fail; b=ZPDyq4bzS5cc6oC6PYhD/djdhvFEohGivvvuZrDBfRFrKhUgGNGtISa7I3uzeeaSKo7CycPnSo/s3Yqiovsp/hN2jfRYjOd4PN0tyVKsm943f11q3bJLzH1Ykklcbspgm+MqdtCk+Nxg2CY00BzwPTSokLg0QXqBFSj0n4V9Cmw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729789157; c=relaxed/simple;
-	bh=SqmKoOyxJbusXs1HirNMeqT8OSxn4yExkFS3AOQdfTI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ucqerTteI5GGcE0ILdaJ99D0B7mFeJGT5W4J+GJlH9FNtP96L8RObwfOunrgv11kSQkcyOgl3q8hf58/9P273lBnwn+SoOG8CHQnYBP05dKQuEOjsW1YrhLzhEnfwT387sIf1AuxebO47M01FraSA1XvjKF00n1bG7gJK368skM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=C0YEB8BV; arc=fail smtp.client-ip=40.107.237.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=eYZDf7fuYz0trcu86/mXHQZvljI3VY5P+++EACyFzA9R8Me0BJgci7RkSmy6UBVPo3rdpnQAcegDeDRgDWs0Ob6sSSF9q7o+qizl7UtvXPEMkqO3CsYyTuYWTM5YtB8lnoPoHwDirypXXpHYv6Cj9cvR4huO6I8BuMjZjEO4fKDWgsYAMHcOnfGubLcxy4Jfm8zSyDNjyqioUtsCAwATZXLnPz9PbdsaJ4vhfGzASSCSv/60iEJFg9j7NKu0qAmyd4ES2KzHZT7rf8WEP4qO7aRr6tEj4466oirVmQ2bFLn9C833wdQImQ3Vj4a4r/rwq5Uify5APrP0dMf391eUaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yzHXYOyqnaDXp8RSPJk72+eqZOrffk/t6kNw6CHFUIg=;
- b=OSbuXzzb7zBcMhdjUgtOm79JFzqFSGK0otAHZuoVTsABFDHLKPDKmf4RVuIGzw5F0w1+r0jMtjxfuW4oH2dRWfBDyTnsnuRVFWbPkTOEQRIiBJu8T1am2LzaenZ0Ms1JzhDVU/DrP8VvOE8vLj3jUb3Abary0iut6je3jKU7iXuwd/5rvuCjRcUU5EXQzBGx6teGd4OuF7coTFIMzTw0ok0jjtVD8zMT6ReVQ49KYhvFTTnBLBm4FNIohu+qWdiIlfYFrXR80AJOUCDa8vKzSsIClzmUzaxbBWJtuLX84D00qGgGsB/m+KwsCQ/dVGynbFuiBzr6UfJtAcbDcjSP9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yzHXYOyqnaDXp8RSPJk72+eqZOrffk/t6kNw6CHFUIg=;
- b=C0YEB8BVTHlbOHDfZjDfPsb6bmVWhid2XO4OLTauoicF5nE46rHzOz32jy4JuXErSKAgQlz2IWZ4cLr4FWeEULPuB+IqOpiVIOlfx4Y7N4GdiN1i74/15/cYQN5iKg8moOtuptFgkxHuvFxyTT6xXqVsRoBPAe2o3Kao2bpi+Udt+ZaBY92+56N2jwCprgNcQNaX0GFIrnkbX4nlYdF7b1Fdyg/X8UY3zCyvlLRutCjZEJrlZyW44lEp1/pUi/J8u2VoNKmvFjOzQMPSIje6dh5592Kl9qsvpJOZ8FcaeLCYGXcc/O9qBzXS6Nzovt+TYso6dQy6cxBQWlHXV9AjNg==
-Received: from MW4PR04CA0136.namprd04.prod.outlook.com (2603:10b6:303:84::21)
- by MW4PR12MB7311.namprd12.prod.outlook.com (2603:10b6:303:227::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.17; Thu, 24 Oct
- 2024 16:59:10 +0000
-Received: from SJ1PEPF00002310.namprd03.prod.outlook.com
- (2603:10b6:303:84:cafe::ba) by MW4PR04CA0136.outlook.office365.com
- (2603:10b6:303:84::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.17 via Frontend
- Transport; Thu, 24 Oct 2024 16:59:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SJ1PEPF00002310.mail.protection.outlook.com (10.167.242.164) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8093.14 via Frontend Transport; Thu, 24 Oct 2024 16:59:09 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 24 Oct
- 2024 09:58:57 -0700
-Received: from fedora.mtl.com (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 24 Oct
- 2024 09:58:51 -0700
-From: Petr Machata <petrm@nvidia.com>
-To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, <netdev@vger.kernel.org>
-CC: Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>, "Amit
- Cohen" <amcohen@nvidia.com>, Vladimir Oltean <vladimir.oltean@nxp.com>, "Andy
- Roulin" <aroulin@nvidia.com>, <mlxsw@nvidia.com>, Shuah Khan
-	<skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Benjamin Poirier
-	<bpoirier@nvidia.com>, Hangbin Liu <liuhangbin@gmail.com>,
-	<linux-kselftest@vger.kernel.org>, Jiri Pirko <jiri@resnulli.us>
-Subject: [PATCH net-next v2 8/8] selftests: net: fdb_notify: Add a test for FDB notifications
-Date: Thu, 24 Oct 2024 18:57:43 +0200
-Message-ID: <4920232d77e781b563cc477b56495c3cca2ea1d1.1729786087.git.petrm@nvidia.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <cover.1729786087.git.petrm@nvidia.com>
-References: <cover.1729786087.git.petrm@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21131FAC51
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Oct 2024 17:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729791605; cv=none; b=chQ6a3XFOnUKLXuNX3YeYnNIIF/sV2vZfwbbWLocJUxqzFO9resCYYahhBvZAEJGKddMAOKuGn5BaLF7mZad166zzdG6G+zooj9y1pxf2IqKCVYH8A5qMOMSMUYOX+8LTwuJqjz6toP8/qw4hbYWkGZBwK+1LKrtnPuEsy47wtE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729791605; c=relaxed/simple;
+	bh=m5BnLuZVxaHa2LzZTz2MjsgnwaJqgooy8CvhIhoEANg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ura/PZ2IRGnRwLf08l3VQivQGOtdtpI8wMU60vrCamsLVhI0WtPH/XKOd7q9DYwR9fZypvI5NK0yIK5TLH7RhpoUYmuNUp9FWKw5re6LEu/6TshhD5MZI2a0zdJWCRLs89x4vP/jxBGIFMU7N/63jVbphkFYC0xMCyLnMYsAhKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LyQzDTjp; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-83ac05206f6so47322239f.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Oct 2024 10:40:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1729791601; x=1730396401; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HOy9fihu5RTfl+fM0Y788CNOP+6McDxVQH2YQDhwNnE=;
+        b=LyQzDTjpGtZoaw6uN2b0KQBX/4hiNQvmAWdjw1un3d2kEMwo/z1e6rYb9S75nixl+G
+         FIAP27vC7gJZ3QTi2psIPE2rFCUORB2vFMsgPicI2WgM2joFCbB4Lz8zl1BvnMzxpoIM
+         vhUuQTi+g/avvjyImXt4aV8AICvKKsSPIGmKA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729791601; x=1730396401;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HOy9fihu5RTfl+fM0Y788CNOP+6McDxVQH2YQDhwNnE=;
+        b=kRx/DrAQ0h40+Is/bW3GKkpBNsNzzzoWg2znud7O+z3Vo3S0Uq1dl4gLu1QClLhkQQ
+         tePb8W76TQyuhtjHDtqf7FmHcBwCOhJQ7LMUf5bijx803ra09xr5caG/9dgwSpXu6kgn
+         Im40tEn3WTiiRT2ojlY8HEves9L7Y4iIZZ91evEn/MSE3tW43F6vsTNHMBi4Yy23wjKZ
+         IhyLrYcEvxuofhibKy6l9nNVgVBClipkJyhG8Eh3oviyHFvZF3bAw02M0pZJn3IuY80G
+         BDDCEM6ElzskLkTyKRSr4cugA5UUw0Euusdg39sQUq15riAouTQx5ywfsyBX5E31epQi
+         iX0g==
+X-Gm-Message-State: AOJu0Yy7io6WTEbZu6pNv3A2XfpmNIKqih0Bqun28OLxU53UTjEE0l1c
+	Oo7FTVbWEX7qNdOwgs/Vkmb8gQkMc5u93YDCo7+9alt8mUoqNTOrn28ZUiP5wtbkGinnMYyMGoB
+	r
+X-Google-Smtp-Source: AGHT+IHv82b2cb65dwMRPzEl4Hs7BXMwM9DTwRrmmBEY97BhVAWgrkTf8wnMXOzHC9pMpTe9oIY2yQ==
+X-Received: by 2002:a05:6e02:1e0d:b0:3a3:63c3:352e with SMTP id e9e14a558f8ab-3a4d59bbd73mr90960595ab.19.1729791601425;
+        Thu, 24 Oct 2024 10:40:01 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a400a7b37esm31353845ab.13.2024.10.24.10.40.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Oct 2024 10:40:00 -0700 (PDT)
+Message-ID: <15feeb54-5136-41e2-9d8a-10524efc92f2@linuxfoundation.org>
+Date: Thu, 24 Oct 2024 11:39:59 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00002310:EE_|MW4PR12MB7311:EE_
-X-MS-Office365-Filtering-Correlation-Id: 293cd9e3-f5bb-4069-b065-08dcf44d2ddd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|82310400026|1800799024|376014|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?KPQR2qjJy7X3AAFtvM34EbdG9EOQcUgABBCmghBAyRjC2UgiSPgCzNH8FHmh?=
- =?us-ascii?Q?sHLBUvMLjTv7zBetWICkVfJMsDDHZSgw9Am2hNX2UUHIsPZcshI2m1mimkW7?=
- =?us-ascii?Q?4sa891kz1pkbGPpPchVOqVI+hQKCwb+3Q5Z41n2lFqTkvNG8eAeqAFauVele?=
- =?us-ascii?Q?NDS4TWlwZSdLn2jTtQNvkmSCodKDxYlACbBQNy3lwwfIj60LnkpWrUwL1Ugv?=
- =?us-ascii?Q?6rIXOu7DNnmIU7rOGKzr0bJjdNufNKDeZIx+z4cO4aH37PnnDf4ybSQFV+xM?=
- =?us-ascii?Q?GWLA7xjf8dDrjYnmmaTVEtmW27QEMesRQIPRshBmQDdYM0LQcZYWXwXIK6dE?=
- =?us-ascii?Q?JvEA0c+yZQsjHpqzFqmWfz6i0WrbUKNlTPE83ahALHjgNzkUcmXGmRLjCV+W?=
- =?us-ascii?Q?KQcMRJVxrD/dYTMC1H6gVYHV7iQb906aoI7P4PSThzZZamq+bctI3O7NrABG?=
- =?us-ascii?Q?vyAXHd/yQ1c5wvA9DpTs/tR//Cn6ULWG8/N1nm6D6lWN6MSQmuDVj1a3HaoG?=
- =?us-ascii?Q?4mPe4rLfT7EuiZLLY68f4ROCbrKVDD8JnzGuZoEltznhsVVkrQJyTDoxWFMM?=
- =?us-ascii?Q?beG+dA0uhR6AwPKL5DPYjH3djn7hcb6+p8b27TC7+1HXfJFg3Xm7H1RuXlEQ?=
- =?us-ascii?Q?oFhNEuxEXWVelEUXSkVoOR7o9gwZDrJFknmcWEEc1X+a798R8pVWqwDzJgQM?=
- =?us-ascii?Q?FHZvLuyTNtZau3cTDgj19MhHieeDCxG29ZZa4HNfQAtJOUVj4Xt/nGU6YFVa?=
- =?us-ascii?Q?V2/SAEAISg3NICDlMsWpvfnZhQTy4GKwY6OIOn027rC8qa3iW0R65D8bnVti?=
- =?us-ascii?Q?TSd7+I7oF6/GW3Pw9R3rlbAukY2hoyBCKTA5pssADp8hkhH3eFLCsWFKOqdy?=
- =?us-ascii?Q?OtA8ntMsdEp+0MSfHBoFXHgXd7HDPWmHd27+V6qvY4kOQMb4WgpxZQEJCZns?=
- =?us-ascii?Q?U4vHgalhNdVY/MWsi1L8mN3ok7IFMw3jsON4cSPMSyxGZW3/NafPS2KuM/S6?=
- =?us-ascii?Q?rMRIL2yvEnt4KNjKm9Tum9vH0oduTeqnPHjQ3lQGC8TRZDiWZs91cfUKSGwL?=
- =?us-ascii?Q?Va/G737fpChRk2l6iA4nsJFZFu9eGTT7bh6FzgDbten9h8/N10eHwhW91W9U?=
- =?us-ascii?Q?wY4AZgobtQglGFpSbfpx+V6C9oeM43ex90/LoOs4rkZDLbAwt8P6++VpaDEm?=
- =?us-ascii?Q?gQk05fodaBm7+oOuihjvUBYArkZei2NXbUSIcV3StHDXxhw1wUSbtLQ/tDty?=
- =?us-ascii?Q?RvTBnqxn8YXuIlvcDplkT0eduhDwqU6snk0VjcNei3Pqx6mTEWg434vBWsyv?=
- =?us-ascii?Q?ZOZNxNnbUIHYBKalJAtTEak46w0DIHH0iKYy+PYozeJ+qVEAm4csI1BJLVxe?=
- =?us-ascii?Q?zNg+7IgN8LZ0lQTuMOdMFlAjFrfZ5UBS28pPSu8Hhuh9wA155A=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(82310400026)(1800799024)(376014)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2024 16:59:09.8617
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 293cd9e3-f5bb-4069-b065-08dcf44d2ddd
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00002310.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7311
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: Add kselftest framework to the testfile
+To: Shivam Chaudhary <cvam0000@gmail.com>
+Cc: linux-kselftest@vger.kernel.org, selftests@ellerman.id.au,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20241024165520.948936-1-cvam0000@gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20241024165520.948936-1-cvam0000@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Check that only one notification is produced for various FDB edit
-operations.
+On 10/24/24 10:55, Shivam Chaudhary wrote:
+> This patch updates the existing test that checks
+> for `open(O_TMPFILE)` and `linkat()` behaviors in
+> mount namespaces to use the kselftest framework.
+> 
+> This includes the following changes:
+> 
+> - Replaced direct error handling with
+>   `ksft_test_result_*` macros for better reporting
+>    of test outcomes.
 
-Regarding the ip_link_add() and ip_link_master() helpers. This pattern of
-action plus corresponding defer is bound to come up often, and a dedicated
-vocabulary to capture it will be handy. tunnel_create() and vlan_create()
-from forwarding/lib.sh are somewhat opaque and perhaps too kitchen-sinky,
-so I tried to go in the opposite direction with these ones, and wrapped
-only the bare minimum to schedule a corresponding cleanup.
+Replace
 
-Signed-off-by: Petr Machata <petrm@nvidia.com>
-Reviewed-by: Amit Cohen <amcohen@nvidia.com>
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
----
+> 
+> - Added `ksft_print_header()` and `ksft_set_plan()`
+>   to structure test outputs more effectively.
+> 
+> - Introduced the helper function `is_unshare()` to
+>    handle unshare-related checks.
+> 
 
-Notes:
-CC: Shuah Khan <shuah@kernel.org>
-CC: Benjamin Poirier <bpoirier@nvidia.com>
-CC: Hangbin Liu <liuhangbin@gmail.com>
-CC: linux-kselftest@vger.kernel.org
-CC: Jiri Pirko <jiri@resnulli.us>
----
+Introduce
 
- tools/testing/selftests/net/Makefile      |  2 +-
- tools/testing/selftests/net/fdb_notify.sh | 95 +++++++++++++++++++++++
- tools/testing/selftests/net/lib.sh        | 17 ++++
- 3 files changed, 113 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/net/fdb_notify.sh
+> - Improved the test flow by adding more detailed pass/fail
+>    reporting for unshare, mounting, file opening, and linking
+>    operations.
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 26a4883a65c9..ab0e8f30bfe7 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -92,7 +92,7 @@ TEST_PROGS += test_vxlan_mdb.sh
- TEST_PROGS += test_bridge_neigh_suppress.sh
- TEST_PROGS += test_vxlan_nolocalbypass.sh
- TEST_PROGS += test_bridge_backup_port.sh
--TEST_PROGS += fdb_flush.sh
-+TEST_PROGS += fdb_flush.sh fdb_notify.sh
- TEST_PROGS += fq_band_pktlimit.sh
- TEST_PROGS += vlan_hw_filter.sh
- TEST_PROGS += bpf_offload.py
-diff --git a/tools/testing/selftests/net/fdb_notify.sh b/tools/testing/selftests/net/fdb_notify.sh
-new file mode 100755
-index 000000000000..a98047361988
---- /dev/null
-+++ b/tools/testing/selftests/net/fdb_notify.sh
-@@ -0,0 +1,95 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source lib.sh
-+
-+ALL_TESTS="
-+	test_dup_bridge
-+	test_dup_vxlan_self
-+	test_dup_vxlan_master
-+	test_dup_macvlan_self
-+	test_dup_macvlan_master
-+"
-+
-+do_test_dup()
-+{
-+	local op=$1; shift
-+	local what=$1; shift
-+	local tmpf
-+
-+	RET=0
-+
-+	tmpf=$(mktemp)
-+	defer rm "$tmpf"
-+
-+	defer_scope_push
-+		bridge monitor fdb &> "$tmpf" &
-+		defer kill_process $!
-+
-+		bridge fdb "$op" 00:11:22:33:44:55 vlan 1 "$@"
-+		sleep 0.2
-+	defer_scope_pop
-+
-+	local count=$(grep -c -e 00:11:22:33:44:55 $tmpf)
-+	((count == 1))
-+	check_err $? "Got $count notifications, expected 1"
-+
-+	log_test "$what $op: Duplicate notifications"
-+}
-+
-+test_dup_bridge()
-+{
-+	ip_link_add br up type bridge vlan_filtering 1
-+	do_test_dup add "bridge" dev br self
-+	do_test_dup del "bridge" dev br self
-+}
-+
-+test_dup_vxlan_self()
-+{
-+	ip_link_add br up type bridge vlan_filtering 1
-+	ip_link_add vx up type vxlan id 2000 dstport 4789
-+	ip_link_master vx br
-+
-+	do_test_dup add "vxlan" dev vx self dst 192.0.2.1
-+	do_test_dup del "vxlan" dev vx self dst 192.0.2.1
-+}
-+
-+test_dup_vxlan_master()
-+{
-+	ip_link_add br up type bridge vlan_filtering 1
-+	ip_link_add vx up type vxlan id 2000 dstport 4789
-+	ip_link_master vx br
-+
-+	do_test_dup add "vxlan master" dev vx master
-+	do_test_dup del "vxlan master" dev vx master
-+}
-+
-+test_dup_macvlan_self()
-+{
-+	ip_link_add dd up type dummy
-+	ip_link_add mv up link dd type macvlan mode passthru
-+
-+	do_test_dup add "macvlan self" dev mv self
-+	do_test_dup del "macvlan self" dev mv self
-+}
-+
-+test_dup_macvlan_master()
-+{
-+	ip_link_add br up type bridge vlan_filtering 1
-+	ip_link_add dd up type dummy
-+	ip_link_add mv up link dd type macvlan mode passthru
-+	ip_link_master mv br
-+
-+	do_test_dup add "macvlan master" dev mv self
-+	do_test_dup del "macvlan master" dev mv self
-+}
-+
-+cleanup()
-+{
-+	defer_scopes_cleanup
-+}
-+
-+trap cleanup EXIT
-+tests_run
-+
-+exit $EXIT_STATUS
-diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-index 24f63e45735d..8994fec1c38f 100644
---- a/tools/testing/selftests/net/lib.sh
-+++ b/tools/testing/selftests/net/lib.sh
-@@ -442,3 +442,20 @@ kill_process()
- 	# Suppress noise from killing the process.
- 	{ kill $pid && wait $pid; } 2>/dev/null
- }
-+
-+ip_link_add()
-+{
-+	local name=$1; shift
-+
-+	ip link add name "$name" "$@"
-+	defer ip link del dev "$name"
-+}
-+
-+ip_link_master()
-+{
-+	local member=$1; shift
-+	local master=$1; shift
-+
-+	ip link set dev "$member" master "$master"
-+	defer ip link set dev "$member" nomaster
-+}
--- 
-2.45.0
+Improve
+
+> 
+> - Skips the test if it's not run as root, providing an
+>    appropriate Warning.
+
+Check submitting patches document for details how to write
+short log and change log that hep reviewers.
+
+Also - you haven't cc'ed the right mailing lists. Send v2
+cc'ing kselftest mailing list and correcting the short
+log and change log problems.
+
+
+> 
+> Test logs:
+> 
+> Before change:
+> 
+> - Withou root
+>   error: unshare, errno 1
+> 
+> - With root
+>   No, output
+> 
+> After change:
+> 
+> - Without root
+>   TAP version 13
+>   1..1
+>   ok 1 # SKIP This test needs root to ru
+> 
+> - With root
+>   TAP version 13
+>   1..1
+>   ok 1 unshare(): we have a new mount namespace.
+>   1..2
+>   ok 2 mount(): Root filesystem private mount: Success
+>   1..3
+>   ok 3 mount(): Mounting tmpfs on /tmp: Success
+>   1..4
+>   ok 4 openat(): Open first temporary file: Success
+>   1..5
+>   ok 5 linkat(): Linking the temporary file: Success
+>   1..6
+>   ok 6 openat(): Opening the second temporary file: Success
+>   # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> Signed-off-by: Shivam Chaudhary <cvam0000@gmail.com>
+> ---
+>   .../selftests/tmpfs/bug-link-o-tmpfile.c      | 72 +++++++++++++++----
+>   1 file changed, 58 insertions(+), 14 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c b/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
+> index b5c3ddb90942..26dea19c1614 100644
+> --- a/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
+> +++ b/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
+> @@ -23,45 +23,89 @@
+>   #include <sys/mount.h>
+>   #include <unistd.h>
+>   
+> -int main(void)
+> -{
+> -	int fd;
+> +#include "../kselftest.h"
+>   
+> -	if (unshare(CLONE_NEWNS) == -1) {
+> +static int is_unshare(int flag)
+> +{
+> +	if (unshare(flag) == -1) {
+>   		if (errno == ENOSYS || errno == EPERM) {
+> -			fprintf(stderr, "error: unshare, errno %d\n", errno);
+> -			return 4;
+> +			ksft_test_result_fail("error: unshare, errno %d\n", errno);
+> +			return -1; // Return -1 for failure
+>   		}
+>   		fprintf(stderr, "error: unshare, errno %d\n", errno);
+> +		return -1;
+> +	}
+> +
+> +	return 0; // Return 0 for success
+> +}
+> +
+> +int main(void)
+> +{
+> +	int fd;
+> +
+> +	// Setting up kselftest framework
+> +	ksft_print_header();
+> +	ksft_set_plan(1);
+> +
+> +	// Check if test is run as root
+> +	if (geteuid()) {
+> +		ksft_test_result_skip("This test needs root to run!\n");
+>   		return 1;
+>   	}
+> -	if (mount(NULL, "/", NULL, MS_PRIVATE|MS_REC, NULL) == -1) {
+> -		fprintf(stderr, "error: mount '/', errno %d\n", errno);
+> +
+> +	if (is_unshare(CLONE_NEWNS) == 0) {
+> +		ksft_test_result_pass("unshare(): we have a new mount namespace.\n");
+> +	} else {
+> +		ksft_test_result_fail("unshare(): failed\n");
+>   		return 1;
+>   	}
+>   
+> +	ksft_set_plan(2);
+> +
+> +	if (mount(NULL, "/", NULL, MS_PRIVATE | MS_REC, NULL) == -1) {
+> +		ksft_test_result_fail("mount(): Root filesystem private mount: Fail %d\n", errno);
+> +		return 1;
+> +	} else {
+> +		ksft_test_result_pass("mount(): Root filesystem private mount: Success\n");
+> +	}
+> +
+> +	ksft_set_plan(3);
+>   	/* Our heroes: 1 root inode, 1 O_TMPFILE inode, 1 permanent inode. */
+>   	if (mount(NULL, "/tmp", "tmpfs", 0, "nr_inodes=3") == -1) {
+> -		fprintf(stderr, "error: mount tmpfs, errno %d\n", errno);
+> +		ksft_test_result_fail("mount(): Mounting tmpfs on /tmp: Fail %d\n", errno);
+>   		return 1;
+> +	} else {
+> +		ksft_test_result_pass("mount(): Mounting tmpfs on /tmp: Success\n");
+>   	}
+>   
+> -	fd = openat(AT_FDCWD, "/tmp", O_WRONLY|O_TMPFILE, 0600);
+> +	ksft_set_plan(4);
+> +	fd = openat(AT_FDCWD, "/tmp", O_WRONLY | O_TMPFILE, 0600);
+>   	if (fd == -1) {
+> -		fprintf(stderr, "error: open 1, errno %d\n", errno);
+> +		ksft_test_result_fail("openat(): Open first temporary file: Fail %d\n", errno);
+>   		return 1;
+> +	} else {
+> +		ksft_test_result_pass("openat(): Open first temporary file: Success\n");
+>   	}
+> +
+> +	ksft_set_plan(5);
+>   	if (linkat(fd, "", AT_FDCWD, "/tmp/1", AT_EMPTY_PATH) == -1) {
+> -		fprintf(stderr, "error: linkat, errno %d\n", errno);
+> +		ksft_test_result_fail("linkat(): Linking the temporary file: Fail %d\n", errno);
+> +		close(fd); // Ensure fd is closed on failure
+>   		return 1;
+> +	} else {
+> +		ksft_test_result_pass("linkat(): Linking the temporary file: Success\n");
+>   	}
+>   	close(fd);
+>   
+> -	fd = openat(AT_FDCWD, "/tmp", O_WRONLY|O_TMPFILE, 0600);
+> +	ksft_set_plan(6);
+> +	fd = openat(AT_FDCWD, "/tmp", O_WRONLY | O_TMPFILE, 0600);
+>   	if (fd == -1) {
+> -		fprintf(stderr, "error: open 2, errno %d\n", errno);
+> +		ksft_test_result_fail("openat(): Opening the second temporary file: Fail %d\n", errno);
+>   		return 1;
+> +	} else {
+> +		ksft_test_result_pass("openat(): Opening the second temporary file: Success\n");
+>   	}
+>   
+> +	ksft_exit_pass();
+>   	return 0;
+>   }
 
 
