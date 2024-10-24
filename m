@@ -1,34 +1,34 @@
-Return-Path: <linux-kselftest+bounces-20582-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20583-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 438C09AF45B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 23:09:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A8AF9AF45E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 23:10:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD5041F22107
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 21:09:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0ACDF1F22388
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 21:10:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A573219CAF;
-	Thu, 24 Oct 2024 21:08:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AA7A21A709;
+	Thu, 24 Oct 2024 21:08:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j+LBriGK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CWBbkZi/"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD76C218D7D;
-	Thu, 24 Oct 2024 21:08:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 463CA219484;
+	Thu, 24 Oct 2024 21:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729804091; cv=none; b=m4i/zOll8Pr4yfVHElpsvQyac/rtrti0TdfL34PKqSk6swoxPVfykcNFxyRA+eQhQRzbWBol1+qwSUxzXrswg8nPpA6Ja4SJIh/PWLkVjkeCMhlKAPHtdWJbn5+fjhfxfGkBB2oO6icBLh4tEMIpsOpQE2MyArP1cCN4jwIGVGY=
+	t=1729804093; cv=none; b=kZ2Lnm7/v8x0nH6mgwO7RHQrPIpUUMpi0UDHNHz+iCszM9kzrXuKkI2SGgd2x6l4F8jrVdo9DeGvFHJmYF9RhP+sJXXwrYRHBy+LuF+HblebMqDFoS6paj4u4sYbrhV94pfOwU7v18MPZFjluy4m5nkNxLcf4LGdG4NEVllSqRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729804091; c=relaxed/simple;
-	bh=aQX0cjK9HHCJqQRg1lw6DusEwJtaCqS8ZGRtHEIO3g0=;
+	s=arc-20240116; t=1729804093; c=relaxed/simple;
+	bh=JE/B3/kve8BNJ5315YERJUiTrYkzwZHKHzLT5lPRnBs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=T0EOaYOzoLMmR7jU3335uES4Os353YE2pWluEKGHUrsRhl4pFBgz/VzuTRePxYXmhDybHAoYyZVZuTsAc7/dkbijJPb9OAPJfQEbC1lA07Mwx8V0gTXcgHC6lx7WrW69E7+JyySjb4ekquv42qVkrtut6GdSEiIkbJTibUZJ6so=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j+LBriGK; arc=none smtp.client-ip=192.198.163.16
+	 MIME-Version:Content-Type; b=i2GpTnGo9qvR8cZyWHqHw/k7bzV7SiVczFI9uiHSgMGnQMIkLTpJ2g/GPXrKr9lGffaUf/TOUT/SuaXVvBtwHclDC6oZPNnRL/dbLdP084Ba6jMBTAyjxYuQ3mcN7ODDoXt0StFiUZ+4jpWDUdZQVLWigDGgFA5B0BYY5HNy+wQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CWBbkZi/; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -36,26 +36,26 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1729804089; x=1761340089;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=aQX0cjK9HHCJqQRg1lw6DusEwJtaCqS8ZGRtHEIO3g0=;
-  b=j+LBriGKJTA18CTopVSvqPuX3yGlQzdXsHFlO20Bx+IUz5qi8Ja3wfEn
-   hPfdsBGRiMfnwDJRP1HTSqwHq25cpm4EP/cua02cuF0F8k5DnolQvYL8l
-   4RDkr3b9/Xf8XwBlFczX7FQGHHNrdUvY+CUPE+Rehjy5lBJuD3iXET5mt
-   /imJz8m4CCAM1Lm+k9uL8JSDh49kMzGk2KP3tMK+k8C5lDK/bClQwAJ8c
-   pDatM7GdJB0fVrtaOwej0FFmJCU3Nf7/KSJGZ3cHiAWy8+kfaxgk7KCbB
-   kNOZr/YO8tTnE0odiYLFEYUErssKrPA/E4vEfwfVmf2CXwXbmBk4WYJz6
-   g==;
-X-CSE-ConnectionGUID: xCj2dOt7SQeTDSbJM/R1PQ==
-X-CSE-MsgGUID: UfqdJqxyRu+Qdh6OiQwzWw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="17090914"
+  bh=JE/B3/kve8BNJ5315YERJUiTrYkzwZHKHzLT5lPRnBs=;
+  b=CWBbkZi/apAuzULHcihV4UND5zzV8V6sXbfT4Y1LHM5kClgJtmFzHRcg
+   0QuvtqR36ZcgNQy/5NkQOm5Mdd9WmDwoPtYlIHZ12mt4OPZVUEsqCHx+0
+   HPiFdPgd4R1cs9QphGbAkXHV0uxNtCKozmIi0ggrYmNBD/Ak5Jqw4ZgGx
+   eMEvURttYB5+MR4ZTALVhhnIBzF6Dg/p499qNWtX0FUHN2+oQByK3yTeQ
+   YrMmE3Mdt/b5Dj5KMj8K76ehVeJpc3aaQ+GuqxsOqO+dDWcP3MaAmJR9y
+   cect/0zoInTZAPoo/df7iWwSMooNd5VmOShbrwlIl6uQcM7sGLVY8/lLp
+   A==;
+X-CSE-ConnectionGUID: 5YqYOe9vRZGssEVI+jKckg==
+X-CSE-MsgGUID: 7muJQh3xRDyXB7u+WpmuFw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="17090918"
 X-IronPort-AV: E=Sophos;i="6.11,230,1725346800"; 
-   d="scan'208";a="17090914"
+   d="scan'208";a="17090918"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
   by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 14:08:01 -0700
-X-CSE-ConnectionGUID: Ou62wbVTTgOA4w77/hv6Ug==
-X-CSE-MsgGUID: /cwRFDxvTkumHed3dIV2tw==
+X-CSE-ConnectionGUID: 29u2VMr4TTKlVl1qiHV9BQ==
+X-CSE-MsgGUID: zNv0sv/gRWuKfQTymQqQ2g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="85488044"
+   d="scan'208";a="85488047"
 Received: from rchatre-desk1.jf.intel.com ([10.165.154.99])
   by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 14:08:01 -0700
 From: Reinette Chatre <reinette.chatre@intel.com>
@@ -69,9 +69,9 @@ Cc: maciej.wieczor-retman@intel.com,
 	reinette.chatre@intel.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH V4 08/15] selftests/resctrl: Only support measured read operation
-Date: Thu, 24 Oct 2024 14:18:45 -0700
-Message-ID: <ca80dbc5d8a52645cb16cb729a2ff601ccda6be2.1729804024.git.reinette.chatre@intel.com>
+Subject: [PATCH V4 09/15] selftests/resctrl: Remove unused measurement code
+Date: Thu, 24 Oct 2024 14:18:46 -0700
+Message-ID: <5e30d173b98588b5c8580f710b71d5dc1a2886b3.1729804024.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1729804024.git.reinette.chatre@intel.com>
 References: <cover.1729804024.git.reinette.chatre@intel.com>
@@ -84,172 +84,589 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The CMT, MBM, and MBA tests rely on a benchmark to generate
-memory traffic. By default this is the "fill_buf" benchmark that
-can be replaced via the "-b" command line argument.
+The MBM and MBA resctrl selftests run a benchmark during which
+it takes measurements of read memory bandwidth via perf.
+Code exists to support measurements of write memory bandwidth
+but there exists no path with which this code can execute.
 
-The original intent of the "-b" command line parameter was
-to replace the default "fill_buf" benchmark, but the implementation
-also exposes an alternative use case where the "fill_buf" parameters
-itself can be modified. One of the parameters to "fill_buf" is the
-"operation" that can be either "read" or "write" and indicates
-whether the "fill_buf" should use "read" or "write" operations on the
-allocated buffer.
-
-While replacing "fill_buf" default parameters is technically possible,
-replacing the default "read" parameter with "write" is not supported
-because the MBA and MBM tests only measure "read" operations. The
-"read" operation is also most appropriate for the CMT test that aims
-to use the benchmark to allocate into the cache.
-
-Avoid any potential inconsistencies between test and measurement by
-removing code for unsupported "write" operations to the buffer.
-Ignore any attempt from user space to enable this unsupported test
-configuration, instead always use read operations.
-
-Keep the initialization of the, now unused, "fill_buf" parameters
-to reserve these parameter positions since it has been exposed as an API.
-Future parameter additions cannot use these parameter positions.
+While code exists for write memory bandwidth measurement
+there has not yet been a use case for it. Remove this unused code.
+Rename relevant functions to include "read" so that it is clear
+that it relates only to memory bandwidth reads, while renaming
+the functions also add consistency by changing the "membw"
+instances to more prevalent "mem_bw".
 
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
-Changes since V3:
-- Add Ilpo's Reviewed-by tag.
-
 Changes since V2:
-- Update changelog to justify keeping the assignment to benchmark_cmd[4].
-  (Ilpo)
+- Add Ilpo's Reviewed-by tag.
 
 Changes since V1:
 - New patch.
 ---
- tools/testing/selftests/resctrl/fill_buf.c    | 28 ++-----------------
- tools/testing/selftests/resctrl/resctrl.h     |  2 +-
- .../testing/selftests/resctrl/resctrl_tests.c |  5 +++-
- tools/testing/selftests/resctrl/resctrl_val.c |  5 ++--
- 4 files changed, 9 insertions(+), 31 deletions(-)
+ tools/testing/selftests/resctrl/mba_test.c    |   4 +-
+ tools/testing/selftests/resctrl/mbm_test.c    |   4 +-
+ tools/testing/selftests/resctrl/resctrl.h     |   8 +-
+ tools/testing/selftests/resctrl/resctrl_val.c | 234 ++++++------------
+ tools/testing/selftests/resctrl/resctrlfs.c   |  17 --
+ 5 files changed, 85 insertions(+), 182 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
-index 854f0108d8e6..e4f1cea317f1 100644
---- a/tools/testing/selftests/resctrl/fill_buf.c
-+++ b/tools/testing/selftests/resctrl/fill_buf.c
-@@ -88,18 +88,6 @@ static int fill_one_span_read(unsigned char *buf, size_t buf_size)
- 	return sum;
+diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+index da40a8ed4413..be0ead73e55d 100644
+--- a/tools/testing/selftests/resctrl/mba_test.c
++++ b/tools/testing/selftests/resctrl/mba_test.c
+@@ -21,7 +21,7 @@ static int mba_init(const struct resctrl_val_param *param, int domain_id)
+ {
+ 	int ret;
+ 
+-	ret = initialize_mem_bw_imc();
++	ret = initialize_read_mem_bw_imc();
+ 	if (ret)
+ 		return ret;
+ 
+@@ -68,7 +68,7 @@ static int mba_setup(const struct resctrl_test *test,
+ static int mba_measure(const struct user_params *uparams,
+ 		       struct resctrl_val_param *param, pid_t bm_pid)
+ {
+-	return measure_mem_bw(uparams, param, bm_pid, "reads");
++	return measure_read_mem_bw(uparams, param, bm_pid);
  }
  
--static void fill_one_span_write(unsigned char *buf, size_t buf_size)
--{
--	unsigned char *end_ptr = buf + buf_size;
--	unsigned char *p;
--
--	p = buf;
--	while (p < end_ptr) {
--		*p = '1';
--		p += (CL_SIZE / 2);
--	}
--}
--
- void fill_cache_read(unsigned char *buf, size_t buf_size, bool once)
+ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
+diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+index cf08ba5e314e..defa94293915 100644
+--- a/tools/testing/selftests/resctrl/mbm_test.c
++++ b/tools/testing/selftests/resctrl/mbm_test.c
+@@ -91,7 +91,7 @@ static int mbm_init(const struct resctrl_val_param *param, int domain_id)
  {
- 	int ret = 0;
-@@ -114,15 +102,6 @@ void fill_cache_read(unsigned char *buf, size_t buf_size, bool once)
- 	*value_sink = ret;
+ 	int ret;
+ 
+-	ret = initialize_mem_bw_imc();
++	ret = initialize_read_mem_bw_imc();
+ 	if (ret)
+ 		return ret;
+ 
+@@ -122,7 +122,7 @@ static int mbm_setup(const struct resctrl_test *test,
+ static int mbm_measure(const struct user_params *uparams,
+ 		       struct resctrl_val_param *param, pid_t bm_pid)
+ {
+-	return measure_mem_bw(uparams, param, bm_pid, "reads");
++	return measure_read_mem_bw(uparams, param, bm_pid);
  }
  
--static void fill_cache_write(unsigned char *buf, size_t buf_size, bool once)
--{
--	while (1) {
--		fill_one_span_write(buf, buf_size);
--		if (once)
--			break;
--	}
--}
--
- unsigned char *alloc_buffer(size_t buf_size, int memflush)
- {
- 	void *buf = NULL;
-@@ -151,7 +130,7 @@ unsigned char *alloc_buffer(size_t buf_size, int memflush)
- 	return buf;
- }
- 
--int run_fill_buf(size_t buf_size, int memflush, int op)
-+int run_fill_buf(size_t buf_size, int memflush)
- {
- 	unsigned char *buf;
- 
-@@ -159,10 +138,7 @@ int run_fill_buf(size_t buf_size, int memflush, int op)
- 	if (!buf)
- 		return -1;
- 
--	if (op == 0)
--		fill_cache_read(buf, buf_size, false);
--	else
--		fill_cache_write(buf, buf_size, false);
-+	fill_cache_read(buf, buf_size, false);
- 
- 	free(buf);
- 
+ static void mbm_test_cleanup(void)
 diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 51f5f4b25e06..ba1ce1b35699 100644
+index ba1ce1b35699..82801245e4c1 100644
 --- a/tools/testing/selftests/resctrl/resctrl.h
 +++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -142,7 +142,7 @@ int perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu,
- unsigned char *alloc_buffer(size_t buf_size, int memflush);
+@@ -126,7 +126,6 @@ int filter_dmesg(void);
+ int get_domain_id(const char *resource, int cpu_no, int *domain_id);
+ int mount_resctrlfs(void);
+ int umount_resctrlfs(void);
+-const char *get_bw_report_type(const char *bw_report);
+ bool resctrl_resource_exists(const char *resource);
+ bool resctrl_mon_feature_exists(const char *resource, const char *feature);
+ bool resource_info_file_exists(const char *resource, const char *file);
+@@ -143,10 +142,9 @@ unsigned char *alloc_buffer(size_t buf_size, int memflush);
  void mem_flush(unsigned char *buf, size_t buf_size);
  void fill_cache_read(unsigned char *buf, size_t buf_size, bool once);
--int run_fill_buf(size_t buf_size, int memflush, int op);
-+int run_fill_buf(size_t buf_size, int memflush);
- int initialize_mem_bw_imc(void);
- int measure_mem_bw(const struct user_params *uparams,
- 		   struct resctrl_val_param *param, pid_t bm_pid,
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index e7878077883f..0f91c475b255 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -265,13 +265,16 @@ int main(int argc, char **argv)
- 			ksft_exit_fail_msg("Out of memory!\n");
- 		uparams.benchmark_cmd[1] = span_str;
- 		uparams.benchmark_cmd[2] = "1";
--		uparams.benchmark_cmd[3] = "0";
- 		/*
-+		 * Third parameter was previously used for "operation"
-+		 * (read/write) of which only (now default) "read"/"0"
-+		 * works.
- 		 * Fourth parameter was previously used to indicate
- 		 * how long "fill_buf" should run for, with "false"
- 		 * ("fill_buf" will keep running until terminated)
- 		 * the only option that works.
- 		 */
-+		uparams.benchmark_cmd[3] = NULL;
- 		uparams.benchmark_cmd[4] = NULL;
- 	}
- 
+ int run_fill_buf(size_t buf_size, int memflush);
+-int initialize_mem_bw_imc(void);
+-int measure_mem_bw(const struct user_params *uparams,
+-		   struct resctrl_val_param *param, pid_t bm_pid,
+-		   const char *bw_report);
++int initialize_read_mem_bw_imc(void);
++int measure_read_mem_bw(const struct user_params *uparams,
++			struct resctrl_val_param *param, pid_t bm_pid);
+ void initialize_mem_bw_resctrl(const struct resctrl_val_param *param,
+ 			       int domain_id);
+ int resctrl_val(const struct resctrl_test *test,
 diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index b0f3c594c4da..113ca18d67c1 100644
+index 113ca18d67c1..c4ebf70a46ef 100644
 --- a/tools/testing/selftests/resctrl/resctrl_val.c
 +++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -622,8 +622,8 @@ int measure_mem_bw(const struct user_params *uparams,
-  */
- static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
+@@ -12,13 +12,10 @@
+ 
+ #define UNCORE_IMC		"uncore_imc"
+ #define READ_FILE_NAME		"events/cas_count_read"
+-#define WRITE_FILE_NAME		"events/cas_count_write"
+ #define DYN_PMU_PATH		"/sys/bus/event_source/devices"
+ #define SCALE			0.00006103515625
+ #define MAX_IMCS		20
+ #define MAX_TOKENS		5
+-#define READ			0
+-#define WRITE			1
+ 
+ #define CON_MBM_LOCAL_BYTES_PATH		\
+ 	"%s/%s/mon_data/mon_L3_%02d/mbm_local_bytes"
+@@ -41,44 +38,43 @@ struct imc_counter_config {
+ 
+ static char mbm_total_path[1024];
+ static int imcs;
+-static struct imc_counter_config imc_counters_config[MAX_IMCS][2];
++static struct imc_counter_config imc_counters_config[MAX_IMCS];
+ static const struct resctrl_test *current_test;
+ 
+-static void membw_initialize_perf_event_attr(int i, int j)
++static void read_mem_bw_initialize_perf_event_attr(int i)
  {
--	int operation, ret, memflush;
- 	char **benchmark_cmd;
-+	int ret, memflush;
- 	size_t span;
- 	FILE *fp;
+-	memset(&imc_counters_config[i][j].pe, 0,
++	memset(&imc_counters_config[i].pe, 0,
+ 	       sizeof(struct perf_event_attr));
+-	imc_counters_config[i][j].pe.type = imc_counters_config[i][j].type;
+-	imc_counters_config[i][j].pe.size = sizeof(struct perf_event_attr);
+-	imc_counters_config[i][j].pe.disabled = 1;
+-	imc_counters_config[i][j].pe.inherit = 1;
+-	imc_counters_config[i][j].pe.exclude_guest = 0;
+-	imc_counters_config[i][j].pe.config =
+-		imc_counters_config[i][j].umask << 8 |
+-		imc_counters_config[i][j].event;
+-	imc_counters_config[i][j].pe.sample_type = PERF_SAMPLE_IDENTIFIER;
+-	imc_counters_config[i][j].pe.read_format =
++	imc_counters_config[i].pe.type = imc_counters_config[i].type;
++	imc_counters_config[i].pe.size = sizeof(struct perf_event_attr);
++	imc_counters_config[i].pe.disabled = 1;
++	imc_counters_config[i].pe.inherit = 1;
++	imc_counters_config[i].pe.exclude_guest = 0;
++	imc_counters_config[i].pe.config =
++		imc_counters_config[i].umask << 8 |
++		imc_counters_config[i].event;
++	imc_counters_config[i].pe.sample_type = PERF_SAMPLE_IDENTIFIER;
++	imc_counters_config[i].pe.read_format =
+ 		PERF_FORMAT_TOTAL_TIME_ENABLED | PERF_FORMAT_TOTAL_TIME_RUNNING;
+ }
  
-@@ -643,9 +643,8 @@ static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
- 		/* Execute default fill_buf benchmark */
- 		span = strtoul(benchmark_cmd[1], NULL, 10);
- 		memflush =  atoi(benchmark_cmd[2]);
--		operation = atoi(benchmark_cmd[3]);
+-static void membw_ioctl_perf_event_ioc_reset_enable(int i, int j)
++static void read_mem_bw_ioctl_perf_event_ioc_reset_enable(int i)
+ {
+-	ioctl(imc_counters_config[i][j].fd, PERF_EVENT_IOC_RESET, 0);
+-	ioctl(imc_counters_config[i][j].fd, PERF_EVENT_IOC_ENABLE, 0);
++	ioctl(imc_counters_config[i].fd, PERF_EVENT_IOC_RESET, 0);
++	ioctl(imc_counters_config[i].fd, PERF_EVENT_IOC_ENABLE, 0);
+ }
  
--		if (run_fill_buf(span, memflush, operation))
-+		if (run_fill_buf(span, memflush))
- 			fprintf(stderr, "Error in running fill buffer\n");
- 	} else {
- 		/* Execute specified benchmark */
+-static void membw_ioctl_perf_event_ioc_disable(int i, int j)
++static void read_mem_bw_ioctl_perf_event_ioc_disable(int i)
+ {
+-	ioctl(imc_counters_config[i][j].fd, PERF_EVENT_IOC_DISABLE, 0);
++	ioctl(imc_counters_config[i].fd, PERF_EVENT_IOC_DISABLE, 0);
+ }
+ 
+ /*
+- * get_event_and_umask:	Parse config into event and umask
++ * get_read_event_and_umask:	Parse config into event and umask
+  * @cas_count_cfg:	Config
+  * @count:		iMC number
+- * @op:			Operation (read/write)
+  */
+-static void get_event_and_umask(char *cas_count_cfg, int count, bool op)
++static void get_read_event_and_umask(char *cas_count_cfg, int count)
+ {
+ 	char *token[MAX_TOKENS];
+ 	int i = 0;
+@@ -91,34 +87,22 @@ static void get_event_and_umask(char *cas_count_cfg, int count, bool op)
+ 	for (i = 0; i < MAX_TOKENS - 1; i++) {
+ 		if (!token[i])
+ 			break;
+-		if (strcmp(token[i], "event") == 0) {
+-			if (op == READ)
+-				imc_counters_config[count][READ].event =
+-				strtol(token[i + 1], NULL, 16);
+-			else
+-				imc_counters_config[count][WRITE].event =
+-				strtol(token[i + 1], NULL, 16);
+-		}
+-		if (strcmp(token[i], "umask") == 0) {
+-			if (op == READ)
+-				imc_counters_config[count][READ].umask =
+-				strtol(token[i + 1], NULL, 16);
+-			else
+-				imc_counters_config[count][WRITE].umask =
+-				strtol(token[i + 1], NULL, 16);
+-		}
++		if (strcmp(token[i], "event") == 0)
++			imc_counters_config[count].event = strtol(token[i + 1], NULL, 16);
++		if (strcmp(token[i], "umask") == 0)
++			imc_counters_config[count].umask = strtol(token[i + 1], NULL, 16);
+ 	}
+ }
+ 
+-static int open_perf_event(int i, int cpu_no, int j)
++static int open_perf_read_event(int i, int cpu_no)
+ {
+-	imc_counters_config[i][j].fd =
+-		perf_event_open(&imc_counters_config[i][j].pe, -1, cpu_no, -1,
++	imc_counters_config[i].fd =
++		perf_event_open(&imc_counters_config[i].pe, -1, cpu_no, -1,
+ 				PERF_FLAG_FD_CLOEXEC);
+ 
+-	if (imc_counters_config[i][j].fd == -1) {
++	if (imc_counters_config[i].fd == -1) {
+ 		fprintf(stderr, "Error opening leader %llx\n",
+-			imc_counters_config[i][j].pe.config);
++			imc_counters_config[i].pe.config);
+ 
+ 		return -1;
+ 	}
+@@ -126,7 +110,7 @@ static int open_perf_event(int i, int cpu_no, int j)
+ 	return 0;
+ }
+ 
+-/* Get type and config (read and write) of an iMC counter */
++/* Get type and config of an iMC counter's read event. */
+ static int read_from_imc_dir(char *imc_dir, int count)
+ {
+ 	char cas_count_cfg[1024], imc_counter_cfg[1024], imc_counter_type[1024];
+@@ -140,7 +124,7 @@ static int read_from_imc_dir(char *imc_dir, int count)
+ 
+ 		return -1;
+ 	}
+-	if (fscanf(fp, "%u", &imc_counters_config[count][READ].type) <= 0) {
++	if (fscanf(fp, "%u", &imc_counters_config[count].type) <= 0) {
+ 		ksft_perror("Could not get iMC type");
+ 		fclose(fp);
+ 
+@@ -148,9 +132,6 @@ static int read_from_imc_dir(char *imc_dir, int count)
+ 	}
+ 	fclose(fp);
+ 
+-	imc_counters_config[count][WRITE].type =
+-				imc_counters_config[count][READ].type;
+-
+ 	/* Get read config */
+ 	sprintf(imc_counter_cfg, "%s%s", imc_dir, READ_FILE_NAME);
+ 	fp = fopen(imc_counter_cfg, "r");
+@@ -167,34 +148,19 @@ static int read_from_imc_dir(char *imc_dir, int count)
+ 	}
+ 	fclose(fp);
+ 
+-	get_event_and_umask(cas_count_cfg, count, READ);
+-
+-	/* Get write config */
+-	sprintf(imc_counter_cfg, "%s%s", imc_dir, WRITE_FILE_NAME);
+-	fp = fopen(imc_counter_cfg, "r");
+-	if (!fp) {
+-		ksft_perror("Failed to open iMC config file");
+-
+-		return -1;
+-	}
+-	if  (fscanf(fp, "%1023s", cas_count_cfg) <= 0) {
+-		ksft_perror("Could not get iMC cas count write");
+-		fclose(fp);
+-
+-		return -1;
+-	}
+-	fclose(fp);
+-
+-	get_event_and_umask(cas_count_cfg, count, WRITE);
++	get_read_event_and_umask(cas_count_cfg, count);
+ 
+ 	return 0;
+ }
+ 
+ /*
+  * A system can have 'n' number of iMC (Integrated Memory Controller)
+- * counters, get that 'n'. For each iMC counter get it's type and config.
+- * Also, each counter has two configs, one for read and the other for write.
+- * A config again has two parts, event and umask.
++ * counters, get that 'n'. Discover the properties of the available
++ * counters in support of needed performance measurement via perf.
++ * For each iMC counter get it's type and config. Also obtain each
++ * counter's event and umask for the memory read events that will be
++ * measured.
++ *
+  * Enumerate all these details into an array of structures.
+  *
+  * Return: >= 0 on success. < 0 on failure.
+@@ -255,55 +221,46 @@ static int num_of_imcs(void)
+ 	return count;
+ }
+ 
+-int initialize_mem_bw_imc(void)
++int initialize_read_mem_bw_imc(void)
+ {
+-	int imc, j;
++	int imc;
+ 
+ 	imcs = num_of_imcs();
+ 	if (imcs <= 0)
+ 		return imcs;
+ 
+ 	/* Initialize perf_event_attr structures for all iMC's */
+-	for (imc = 0; imc < imcs; imc++) {
+-		for (j = 0; j < 2; j++)
+-			membw_initialize_perf_event_attr(imc, j);
+-	}
++	for (imc = 0; imc < imcs; imc++)
++		read_mem_bw_initialize_perf_event_attr(imc);
+ 
+ 	return 0;
+ }
+ 
+-static void perf_close_imc_mem_bw(void)
++static void perf_close_imc_read_mem_bw(void)
+ {
+ 	int mc;
+ 
+ 	for (mc = 0; mc < imcs; mc++) {
+-		if (imc_counters_config[mc][READ].fd != -1)
+-			close(imc_counters_config[mc][READ].fd);
+-		if (imc_counters_config[mc][WRITE].fd != -1)
+-			close(imc_counters_config[mc][WRITE].fd);
++		if (imc_counters_config[mc].fd != -1)
++			close(imc_counters_config[mc].fd);
+ 	}
+ }
+ 
+ /*
+- * perf_open_imc_mem_bw - Open perf fds for IMCs
++ * perf_open_imc_read_mem_bw - Open perf fds for IMCs
+  * @cpu_no: CPU number that the benchmark PID is bound to
+  *
+  * Return: = 0 on success. < 0 on failure.
+  */
+-static int perf_open_imc_mem_bw(int cpu_no)
++static int perf_open_imc_read_mem_bw(int cpu_no)
+ {
+ 	int imc, ret;
+ 
+-	for (imc = 0; imc < imcs; imc++) {
+-		imc_counters_config[imc][READ].fd = -1;
+-		imc_counters_config[imc][WRITE].fd = -1;
+-	}
++	for (imc = 0; imc < imcs; imc++)
++		imc_counters_config[imc].fd = -1;
+ 
+ 	for (imc = 0; imc < imcs; imc++) {
+-		ret = open_perf_event(imc, cpu_no, READ);
+-		if (ret)
+-			goto close_fds;
+-		ret = open_perf_event(imc, cpu_no, WRITE);
++		ret = open_perf_read_event(imc, cpu_no);
+ 		if (ret)
+ 			goto close_fds;
+ 	}
+@@ -311,60 +268,52 @@ static int perf_open_imc_mem_bw(int cpu_no)
+ 	return 0;
+ 
+ close_fds:
+-	perf_close_imc_mem_bw();
++	perf_close_imc_read_mem_bw();
+ 	return -1;
+ }
+ 
+ /*
+- * do_mem_bw_test - Perform memory bandwidth test
++ * do_imc_read_mem_bw_test - Perform memory bandwidth test
+  *
+  * Runs memory bandwidth test over one second period. Also, handles starting
+  * and stopping of the IMC perf counters around the test.
+  */
+-static void do_imc_mem_bw_test(void)
++static void do_imc_read_mem_bw_test(void)
+ {
+ 	int imc;
+ 
+-	for (imc = 0; imc < imcs; imc++) {
+-		membw_ioctl_perf_event_ioc_reset_enable(imc, READ);
+-		membw_ioctl_perf_event_ioc_reset_enable(imc, WRITE);
+-	}
++	for (imc = 0; imc < imcs; imc++)
++		read_mem_bw_ioctl_perf_event_ioc_reset_enable(imc);
+ 
+ 	sleep(1);
+ 
+-	/* Stop counters after a second to get results (both read and write) */
+-	for (imc = 0; imc < imcs; imc++) {
+-		membw_ioctl_perf_event_ioc_disable(imc, READ);
+-		membw_ioctl_perf_event_ioc_disable(imc, WRITE);
+-	}
++	/* Stop counters after a second to get results. */
++	for (imc = 0; imc < imcs; imc++)
++		read_mem_bw_ioctl_perf_event_ioc_disable(imc);
+ }
+ 
+ /*
+- * get_mem_bw_imc - Memory bandwidth as reported by iMC counters
+- * @bw_report: Bandwidth report type (reads, writes)
++ * get_read_mem_bw_imc - Memory read bandwidth as reported by iMC counters
+  *
+- * Memory bandwidth utilized by a process on a socket can be calculated
+- * using iMC counters. Perf events are used to read these counters.
++ * Memory read bandwidth utilized by a process on a socket can be calculated
++ * using iMC counters' read events. Perf events are used to read these
++ * counters.
+  *
+  * Return: = 0 on success. < 0 on failure.
+  */
+-static int get_mem_bw_imc(const char *bw_report, float *bw_imc)
++static int get_read_mem_bw_imc(float *bw_imc)
+ {
+-	float reads, writes, of_mul_read, of_mul_write;
++	float reads = 0, of_mul_read = 1;
+ 	int imc;
+ 
+-	/* Start all iMC counters to log values (both read and write) */
+-	reads = 0, writes = 0, of_mul_read = 1, of_mul_write = 1;
+-
+ 	/*
+-	 * Get results which are stored in struct type imc_counter_config
++	 * Log read event values from all iMC counters into
++	 * struct imc_counter_config.
+ 	 * Take overflow into consideration before calculating total bandwidth.
+ 	 */
+ 	for (imc = 0; imc < imcs; imc++) {
+ 		struct imc_counter_config *r =
+-			&imc_counters_config[imc][READ];
+-		struct imc_counter_config *w =
+-			&imc_counters_config[imc][WRITE];
++			&imc_counters_config[imc];
+ 
+ 		if (read(r->fd, &r->return_value,
+ 			 sizeof(struct membw_read_format)) == -1) {
+@@ -372,12 +321,6 @@ static int get_mem_bw_imc(const char *bw_report, float *bw_imc)
+ 			return -1;
+ 		}
+ 
+-		if (read(w->fd, &w->return_value,
+-			 sizeof(struct membw_read_format)) == -1) {
+-			ksft_perror("Couldn't get write bandwidth through iMC");
+-			return -1;
+-		}
+-
+ 		__u64 r_time_enabled = r->return_value.time_enabled;
+ 		__u64 r_time_running = r->return_value.time_running;
+ 
+@@ -385,27 +328,10 @@ static int get_mem_bw_imc(const char *bw_report, float *bw_imc)
+ 			of_mul_read = (float)r_time_enabled /
+ 					(float)r_time_running;
+ 
+-		__u64 w_time_enabled = w->return_value.time_enabled;
+-		__u64 w_time_running = w->return_value.time_running;
+-
+-		if (w_time_enabled != w_time_running)
+-			of_mul_write = (float)w_time_enabled /
+-					(float)w_time_running;
+ 		reads += r->return_value.value * of_mul_read * SCALE;
+-		writes += w->return_value.value * of_mul_write * SCALE;
+-	}
+-
+-	if (strcmp(bw_report, "reads") == 0) {
+-		*bw_imc = reads;
+-		return 0;
+-	}
+-
+-	if (strcmp(bw_report, "writes") == 0) {
+-		*bw_imc = writes;
+-		return 0;
+ 	}
+ 
+-	*bw_imc = reads + writes;
++	*bw_imc = reads;
+ 	return 0;
+ }
+ 
+@@ -551,35 +477,31 @@ static int print_results_bw(char *filename, pid_t bm_pid, float bw_imc,
+ }
+ 
+ /*
+- * measure_mem_bw - Measures memory bandwidth numbers while benchmark runs
++ * measure_read_mem_bw - Measures read memory bandwidth numbers while benchmark runs
+  * @uparams:		User supplied parameters
+  * @param:		Parameters passed to resctrl_val()
+  * @bm_pid:		PID that runs the benchmark
+- * @bw_report:		Bandwidth report type (reads, writes)
+  *
+  * Measure memory bandwidth from resctrl and from another source which is
+  * perf imc value or could be something else if perf imc event is not
+  * available. Compare the two values to validate resctrl value. It takes
+  * 1 sec to measure the data.
++ * resctrl does not distinguish between read and write operations so
++ * its data includes all memory operations.
+  */
+-int measure_mem_bw(const struct user_params *uparams,
+-		   struct resctrl_val_param *param, pid_t bm_pid,
+-		   const char *bw_report)
++int measure_read_mem_bw(const struct user_params *uparams,
++			struct resctrl_val_param *param, pid_t bm_pid)
+ {
+ 	unsigned long bw_resc, bw_resc_start, bw_resc_end;
+ 	FILE *mem_bw_fp;
+ 	float bw_imc;
+ 	int ret;
+ 
+-	bw_report = get_bw_report_type(bw_report);
+-	if (!bw_report)
+-		return -1;
+-
+ 	mem_bw_fp = open_mem_bw_resctrl(mbm_total_path);
+ 	if (!mem_bw_fp)
+ 		return -1;
+ 
+-	ret = perf_open_imc_mem_bw(uparams->cpu);
++	ret = perf_open_imc_read_mem_bw(uparams->cpu);
+ 	if (ret < 0)
+ 		goto close_fp;
+ 
+@@ -589,17 +511,17 @@ int measure_mem_bw(const struct user_params *uparams,
+ 
+ 	rewind(mem_bw_fp);
+ 
+-	do_imc_mem_bw_test();
++	do_imc_read_mem_bw_test();
+ 
+ 	ret = get_mem_bw_resctrl(mem_bw_fp, &bw_resc_end);
+ 	if (ret < 0)
+ 		goto close_imc;
+ 
+-	ret = get_mem_bw_imc(bw_report, &bw_imc);
++	ret = get_read_mem_bw_imc(&bw_imc);
+ 	if (ret < 0)
+ 		goto close_imc;
+ 
+-	perf_close_imc_mem_bw();
++	perf_close_imc_read_mem_bw();
+ 	fclose(mem_bw_fp);
+ 
+ 	bw_resc = (bw_resc_end - bw_resc_start) / MB;
+@@ -607,7 +529,7 @@ int measure_mem_bw(const struct user_params *uparams,
+ 	return print_results_bw(param->filename, bm_pid, bw_imc, bw_resc);
+ 
+ close_imc:
+-	perf_close_imc_mem_bw();
++	perf_close_imc_read_mem_bw();
+ close_fp:
+ 	fclose(mem_bw_fp);
+ 	return ret;
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index a53cd1cb6e0c..d38d6dd90be4 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -831,23 +831,6 @@ int filter_dmesg(void)
+ 	return 0;
+ }
+ 
+-const char *get_bw_report_type(const char *bw_report)
+-{
+-	if (strcmp(bw_report, "reads") == 0)
+-		return bw_report;
+-	if (strcmp(bw_report, "writes") == 0)
+-		return bw_report;
+-	if (strcmp(bw_report, "nt-writes") == 0) {
+-		return "writes";
+-	}
+-	if (strcmp(bw_report, "total") == 0)
+-		return bw_report;
+-
+-	fprintf(stderr, "Requested iMC bandwidth report type unavailable\n");
+-
+-	return NULL;
+-}
+-
+ int perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu,
+ 		    int group_fd, unsigned long flags)
+ {
 -- 
 2.47.0
 
