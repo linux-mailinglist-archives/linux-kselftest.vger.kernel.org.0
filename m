@@ -1,211 +1,221 @@
-Return-Path: <linux-kselftest+bounces-20590-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20591-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C7779AF57F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 00:36:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0280E9AF596
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 00:51:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EFDF8282BB4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 22:36:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE4581C217D6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 22:51:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEB1421859F;
-	Thu, 24 Oct 2024 22:36:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F2C221730D;
+	Thu, 24 Oct 2024 22:51:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QA7Kp6AH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yga4K9Kh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B1022B641
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Oct 2024 22:36:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729809384; cv=none; b=gJhvpDgLMygi5pP0oNNcylM+KnW2zZ68z5CkffawElm/+qkey1hpLC+Lh+J530JzNCidZpw5gaxeA0liVZWCxQFbZheho6Xng0gu/f3VJQ2DTYnGpEpxrPvOC34PkJ3wdSQkW4yhiNhhhiUHoL9SOL8U7U3qc955//ZkIqo6Zic=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729809384; c=relaxed/simple;
-	bh=vjY9PQ/fSOGrXYcy+DPjFpgaY4oqGzpSqS2jZzjAeew=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=phBUM2v7bEwONszmKiRSq0Gm6rdR4/md5t7oXlR/tV+O6F2RhalNKgj2EUH1g+5uJydRLSAcKsz9nGAmAs+LUuby27gDkHCOH8yLVivzE/8Ew7onFV16tr2pQYCl/EmkIjQmDlrkwNEz3W9sj5oWwyud2X0JzZB9JZqNYEwsxPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QA7Kp6AH; arc=none smtp.client-ip=209.85.166.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-83a9cd37a11so59124039f.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Oct 2024 15:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1729809381; x=1730414181; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Fajw6Yb5oBtjoaGy3t+Nls7OPnROoeYaSLrgcGe/cBo=;
-        b=QA7Kp6AHFo8UodwyqDwi2H394nHu7L96A6OiVVQ97bVTCrJpUOx+VBuXuFZbSu7HON
-         M6T9xuFHDVn0yQe/aMvi/wrSyFuBJx8C1Pv64sSRP/m2kqVbyugxoJmAqYX/4HMNAvKm
-         WcpkrgwOHWel5b9RxMRtqd18i5BuTSHDfkUhc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729809381; x=1730414181;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fajw6Yb5oBtjoaGy3t+Nls7OPnROoeYaSLrgcGe/cBo=;
-        b=wA/y7HDXJ+TZspIXWSFu3iLJ0UdbpFjCqdYNKNv55Jbu32CEyOTXFStkTh0AcMB3O6
-         GJOjl8e1uw5qOgEDA6cXvZNhS8BerBvZSD5IUeoY+aYgVkWKUPBb/YGVy6LNPC7iCe8b
-         Yf37GGpcVRRsx0elnKHDoH08dw9TzgemT6fwQ8fx9EAffXFnnZ/FP/1gUXNrpRhDFApT
-         lX6pjoOz8D6y4fYsXrKZrjZHP6XvD/K3y8+ju8bi3YiF7PoPJlSkE/wfAr1iR7uHDh+9
-         285S9ZT4rtlHQ7xSm9OSSSYcA6gcOv3YduJccnereD4Ma0lKmOxhH1LnmW8jaBU/18vi
-         DZIg==
-X-Forwarded-Encrypted: i=1; AJvYcCXAA1tgrjL8vGMPJks0+RDMtmDaRIJtnn6AaLuw6WGTew8oB0R1myF4+q3pQCjeCM8Qplvk/yzY/SQNrROyoyA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLb7ll2jNNWuRkmE6sYpVKbw4n+OtuYAPBisrzelU2ltXMrtUj
-	Y2C/+dO77IXEwUaAMfI9djMklXJD2NyxREvmtTDYLUP0iB/S/h5Txt1JFNej1wA=
-X-Google-Smtp-Source: AGHT+IFppNs58S49k+9JdMjDH86ZkENL8o/9rLiiXFrc5zDNo/r7xxieU79q8mCZV9qW0hGhg6EekA==
-X-Received: by 2002:a05:6602:60ca:b0:835:4cb5:4fa7 with SMTP id ca18e2360f4ac-83b041817c7mr358279339f.12.1729809380790;
-        Thu, 24 Oct 2024 15:36:20 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-83ae6b2261dsm210989039f.54.2024.10.24.15.36.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Oct 2024 15:36:20 -0700 (PDT)
-Message-ID: <aa643c9b-8ce5-4cb1-98f6-645224aafdf8@linuxfoundation.org>
-Date: Thu, 24 Oct 2024 16:36:19 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2232322B644;
+	Thu, 24 Oct 2024 22:51:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729810292; cv=fail; b=G7+lokvTbPdUz8X3WMGrkOEqxsFRVoDu9QjqvlfCJmpbrKN34hhijEh/3rYN9l96XGxTn1stLSsizqIcba9l3ECDetpTU49q6xpJBtWQsSq6C4Z578XlYD0U52MQsm0ojLOrXDYyPIxXR3RGk6BAZiKSWh+Vw3EJFI1ZHeblViU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729810292; c=relaxed/simple;
+	bh=F3VaF9lKVgk4rhWysom2FAfKKzYAzG+cWpVH4YQ21uY=;
+	h=Message-ID:Date:From:Subject:To:CC:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Z9M2HAW51dBP6Rcja/k3yXrzLyhyCqtOreQ2DfDuRdrVbGzPU5+cK2F5RO132MIAujMOGmrSb64NU5VV0plPVuBUKZs2aNIJuPSgfWPowKEUxFcb169WZK2ZrBP6kC7a3Sav0onnENnVOymYMYL000ujNFKFMlavdc+BDl1z4Zk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yga4K9Kh; arc=fail smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729810290; x=1761346290;
+  h=message-id:date:from:subject:to:cc:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=F3VaF9lKVgk4rhWysom2FAfKKzYAzG+cWpVH4YQ21uY=;
+  b=Yga4K9KhqNrdsg/KBzQTbnleUwrqQbkv2P2cpGus+fDrGl0CJAntlrbL
+   xFR9Cxyv18UspXH9QtO5R0Ot8sYZ6oG06acwd6zFs1q/foLyT8eJA0h3C
+   3ZEnkHxCC5PR4McSw9FrRc59Z4PBH25+siK8Zr29dZj4gFZF/nIb70LJZ
+   ZUio+qHzIW4VPP73taiDhgu/ZHfxhKD4cu7MEEFAcVbhqUXsVR+reUwUL
+   u0xRZGgWLJScJ+PkKeFTX+ibed6fJu2L6kCelQ534MNCRkMsipXIrV1K3
+   hA+w+OKf022UEEepyHRTX0ht90bMtNli5/pcsodzt1wdUO89Ke5hajz/q
+   A==;
+X-CSE-ConnectionGUID: HL9ArYX6RYOMEljldU/00Q==
+X-CSE-MsgGUID: eqzEihqgSJawgS3wscxqxQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="40058438"
+X-IronPort-AV: E=Sophos;i="6.11,230,1725346800"; 
+   d="scan'208";a="40058438"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 15:51:30 -0700
+X-CSE-ConnectionGUID: ddOX8heuQqSarVG2qAigPQ==
+X-CSE-MsgGUID: HM3M+ie7T2+N/+b2SE5afg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,230,1725346800"; 
+   d="scan'208";a="104050645"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmviesa002.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 24 Oct 2024 15:51:29 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Thu, 24 Oct 2024 15:51:29 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Thu, 24 Oct 2024 15:51:29 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Thu, 24 Oct 2024 15:51:28 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Wf5KzWB98iP8RVd0HJOndH3AeuoO79WExchjP38j5DBZhnuI7JU51KeNul8xJUHPeA5CeNWPC9E+2kCBwutcSHsHJkQoNlR0OkO5aE2scoXgcSgPbIDdSoiMvkMcvc5hta/8afxMTOaXX1NuVx4nRlalmNvTIleQv+4OMX4Bn6Fqldw5+PjQtvMceRqVDhlbtwiIavhGvGXvQwnrno2XY9wBhd1grkBsJwasrudJrKXwZmFeP/472z/sRWPA9QZuPSZvd8DGG8oYQyrwcbBsEsz7ZQZPSUBdwIIElVHW/eLuQIufrc8OeA+8bbGXAsBKRxRTT9cKJ3HUM+aaczMdQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wmTh6ZeBisPfzyD0P6Y/nTvJ3hBn7JzktYvXe2qVTaU=;
+ b=iz82wb2VJ04fhSCJUp5gjcwjOoCPozG4qSTkwdBk+kQnZ6o8nt3pclOld7NUwPJfagR71G1coEO0XOC0OA9VVo/n3PXnrbscfVsnvnbSOqqG5/GaRe6DF3Lw4+AR1E2g5LNt8DH7lYgMR49I/ovUrf1K6YsS2G1VNHNS+Dn4rWXMvJVR6+EMXlHs8qkcyzrT1DXD9mHAzI64n6ypxcXdSpWfpLPQLs3H9Onx2MG+Fgr/WwjIBz9E2V7pKvaUYDosT18CNzhcVtoksjkUjFrXBAUvxhf7Fe2TADiA17axTn8gKxUB9Nx3vXvCJATEmZA1rgUI1aomd+LGGYXtFXWm1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
+ by LV3PR11MB8744.namprd11.prod.outlook.com (2603:10b6:408:215::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.17; Thu, 24 Oct
+ 2024 22:51:21 +0000
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::61a:aa57:1d81:a9cf]) by SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::61a:aa57:1d81:a9cf%7]) with mapi id 15.20.8093.014; Thu, 24 Oct 2024
+ 22:51:20 +0000
+Message-ID: <b0ff78c0-2fe5-4350-94bc-cc6b21960cdb@intel.com>
+Date: Thu, 24 Oct 2024 15:51:18 -0700
+User-Agent: Mozilla Thunderbird
+From: Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [PATCH V4 00/15] selftests/resctrl: Support diverse platforms
+ with MBM and MBA tests
+To: Shuah Khan <skhan@linuxfoundation.org>, <fenghua.yu@intel.com>,
+	<shuah@kernel.org>, <tony.luck@intel.com>, <peternewman@google.com>,
+	<babu.moger@amd.com>, <ilpo.jarvinen@linux.intel.com>
+CC: <maciej.wieczor-retman@intel.com>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+References: <cover.1729804024.git.reinette.chatre@intel.com>
+ <aa643c9b-8ce5-4cb1-98f6-645224aafdf8@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <aa643c9b-8ce5-4cb1-98f6-645224aafdf8@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR03CA0225.namprd03.prod.outlook.com
+ (2603:10b6:303:b9::20) To SJ2PR11MB7573.namprd11.prod.outlook.com
+ (2603:10b6:a03:4d2::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V4 00/15] selftests/resctrl: Support diverse platforms
- with MBM and MBA tests
-To: Reinette Chatre <reinette.chatre@intel.com>, fenghua.yu@intel.com,
- shuah@kernel.org, tony.luck@intel.com, peternewman@google.com,
- babu.moger@amd.com, ilpo.jarvinen@linux.intel.com
-Cc: maciej.wieczor-retman@intel.com, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <cover.1729804024.git.reinette.chatre@intel.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <cover.1729804024.git.reinette.chatre@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|LV3PR11MB8744:EE_
+X-MS-Office365-Filtering-Correlation-Id: c25770a3-2325-4f0d-0fc3-08dcf47e60c8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?b2lJZzNUaGhiMDRGem9YZ1dOOUUxNW5BWU5ES3hUVDY2SHhkWmE1bXZWTFlu?=
+ =?utf-8?B?YVhSREtRSGdBTm1hV3BTNEdzZ1BxTHRJYThVeDEwS3oxTlZLRGtXUnQ2VkU4?=
+ =?utf-8?B?c1JSSmRkMitma2diV0tkU2pmd0swb0IvN1QwTDU0Z01kTFhYTjgweGJkNWg3?=
+ =?utf-8?B?T0czUzBjVWZnckUyTlZrbXRuZ2JuUnIvUEhXd0N4K1EvVk9PcFVxSi9sTW5q?=
+ =?utf-8?B?SDhYTUZyTFhxbGJQd1g1N2lNWjN4TCtPN0lqWjJvM1dyL1dWRkFsQTFGSmkz?=
+ =?utf-8?B?YzVjMy85Mkh3cFpwR3VXeFFQaFVIQnIwa2FBNms2QTU0b2pNaDZ5TUthYk56?=
+ =?utf-8?B?Y2F3TTloTXNlKytkZjRucWlFUFR2bm41NGp3dHk0b1VrK2hiWEgrbHNlSWhS?=
+ =?utf-8?B?a3ZpUk9DRzZJcDk1YzBHTHV5NVE5TklWWDdUcGdOWGxZbm9KMHNtODh4VmFj?=
+ =?utf-8?B?SUlCTkdnQ3hMeEZWSFl5cWlGZTdsOG5JZmt5cWJzcENqbEJmeGlGWU1sQ1R0?=
+ =?utf-8?B?Y3EzVkVPeDI1dGxML3A0LytrdENvWUpLZHJsNlFTNnNmUmRJYUp2RFEremo1?=
+ =?utf-8?B?d0VNVFNqWU16N254V3B6QWF3bnRuUCt3YTJCMzVVdGgydDhyaGt5L3RoUXo4?=
+ =?utf-8?B?Z1dIbk1VZk1nSmVJT1RoMHFlTzI5WUxKa1ZXRHEwQWFkOExEL2liV1ZsVXJK?=
+ =?utf-8?B?eklzSW53NHVlYjdQVVZ4TDkzTDRpV3VUUlRHVytneGU3dU9iMC9veVlxK25L?=
+ =?utf-8?B?MzN3V01Mc3p6Z3ArVUNVYkFoTG9ESU1KM3RFNFV2cVBZMFAzUU5yWmtKdHRE?=
+ =?utf-8?B?eDFCZEhFRGhIdnFaYURQU043MDVtcWNFUmpqb3ArVGpsTG9KR2E3dXA2WFF5?=
+ =?utf-8?B?ZDdwMTFpWThKejVHd1d5a3BYdkt5RjFOUG9RYVVmQkVwcmxpLzBiY0V4RWVL?=
+ =?utf-8?B?ZVlHSDZWV2NFeHlOTEgyaDNscVVGM21XZCtkQ1hmZnJRT0twYmhhdTRPbXpL?=
+ =?utf-8?B?OVo5WllzelcrQkhkc0dnekJVKzFaQjBNdTNzMGhIZjF1cUcvRGc5LytoVWpz?=
+ =?utf-8?B?b21sQTRHZytaaDlWZytkUGYwdlgxT2ZmMTkxK0xsYWcydjhSdFZGSHhUYkdo?=
+ =?utf-8?B?d0FPRnMvZXRmS2xDV042bkcxbDlCU0g2c1Yxc0tHTCtKd0FjcVozVVB5TkZx?=
+ =?utf-8?B?RXk1ZElpaDVhbi9TMDNlUm4rWGoxdEtTR0VKbVZ1V05VdWhNUHFPZ0lzOGVW?=
+ =?utf-8?B?a0tuTWwvTmpBR3h0ejBLWlB1OThMTHpoMWp4MytLUk5leWVBcmI3aHNlZVVU?=
+ =?utf-8?B?UjdQMHdOVkUyeE10dDkyU2ttR0FEMldTL3JpbnRUNkJFMmZEa1pQSjMwRzhN?=
+ =?utf-8?B?cGJoVmVIbnl2dU1nbUcxWjVrZHlTekZtOVRaSnlvaER4NWF4S3lUUEcyaUdh?=
+ =?utf-8?B?MjJ5ZE9OSlg0TnRGZHBQMHI2YXhPZXlwZm5QSFRycnhGZXoxVkkzSDFjWHJT?=
+ =?utf-8?B?TDhCL0ZFVGdWMnZ2Ykd6YVBIKy9LRkwvZ0ZoVFptdGprdmhUUEZJdXhzb3Ev?=
+ =?utf-8?B?QVBLWFgyTHh1ckRqekUxUGQ3UDhEOXBHVUhpSzN1ZExKcVVaMzdKVXJwcFZ0?=
+ =?utf-8?B?S1ZkanVFbUFUb0RNRXhjdEVlYXF1a25CajlCZ01zZC81c0twd0ZQbmlBSHZP?=
+ =?utf-8?B?UlEzRGJsUHhkNnIwTFh3dUkxWjFEbHk1Z3BZblFDS3gxdVBPSFlkdTUzc1R4?=
+ =?utf-8?Q?Wxk/J1wWac2RN6eQWczssi5L5As57twBXSKz6Lg?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VGxVc1BGV1JtclNMenZpWFBCU1F1SWVQLzE2R2lTclV4OXVKVWFvNFc4Z3Rl?=
+ =?utf-8?B?V0h2L0NqT0IyYUZRUCtVMmZZRFBjSStMMHVnY3dXK3hrc0dPY1NkSzMxcFR4?=
+ =?utf-8?B?VTc3RmJwVGRFYlNZWnYxOUVmNHo0cUh1YnJiV0txRXF5RGVIK1ZwZTd1MmVQ?=
+ =?utf-8?B?blNUSHBraGM3Z3VJNDFpTjNOWmc5SzBBZTdnNEwrVjVsZ1BkZTdER1NKZUpa?=
+ =?utf-8?B?bW01SnB5QS9MUFM0bzVSN0szV3Fsd3JuRWxpdFhwaHM2UlhGZWJVRkUvaVow?=
+ =?utf-8?B?YnB6QVZmalFObHkxWGN4VDdtYkRQY3k0V2Jpem5mY2Irand6MjkxKzRXcmZL?=
+ =?utf-8?B?NC9TOE11YkQxYUdBR0pIWHdpQ2k4eWRMcUQrbHhKTXh2djRnSHZoaFZ3VUs2?=
+ =?utf-8?B?OUxYaTFyZ1lEa1M0NmNLQWd3VnJ6SVRnT2dDa2xPUzJTeUErUDhUeFI1ZW5a?=
+ =?utf-8?B?VUVWeXNYOVdmL0l3YzcxeU9KQ3B1bGhBS3JIZ016U3FiZGl0eWxPaDVleTlz?=
+ =?utf-8?B?MGRXR3pYVGRGcVpjN2hSVHU4cmM5SDJscEI2ODB5b3Z0d0ZDSkY0Z05qRlUr?=
+ =?utf-8?B?NUFtSEM1ZFhjYzBuLy9oZnVqZCszaXZ5L05kbzN3Q0Zhc0NvTkNnWmVZREdX?=
+ =?utf-8?B?NWpVZTJxaTgwR2l5a1hWaXkwYnd4blFLajM1YlJTdW1pYzgxaVhQUTZaZmxy?=
+ =?utf-8?B?OVJYMW9iQlBVTnlDRHhiWlI2ZkhqVFRjb2ZaUmdMRGFaZnprRW5sMktvWFVp?=
+ =?utf-8?B?SXZQbjZPUkpCWGVDRTl5cHJRQkw4TTlwVFhwZ2ZkWEx5b2FHRnNCd2ZldGhz?=
+ =?utf-8?B?RmFVSUtLcm5VWFdjbXA0OG1vcVNhT3hsMFd2d2xmMXJCS0Q0Q0VTSjA2KzUr?=
+ =?utf-8?B?SDB2ckpHU0xZamprM05ZTkZvMitQM3laQkJ4ZWpKSTUwZm00MGJsNk1ERkJT?=
+ =?utf-8?B?QjVIOHdzOWEvclI2MGk5ZFBrZDhob3l2Qkg4bVcvSmRKcUFYVk1ESXNDV2VU?=
+ =?utf-8?B?V0VsdEQ2NU92Q0pxNkJTOVQ2WE1mYTRKempWWTVkaXpqc3J1VjdtNGxBcjAw?=
+ =?utf-8?B?WFg4K21hV1lBN0NFWEUxajh5NnZIRmRzalZqMEJVUnJ5eitxbDludld6VXNQ?=
+ =?utf-8?B?RGUzQzlFazdyaEJLM2t1Zmp2Nklld040b3lXK2NVNG05bExON1M5dVlqZWdP?=
+ =?utf-8?B?MUJxTlZZWjhkVlFIU0d4UUs4Y0hnd3hXZjFRTkN1Q3p6cjFyM1VVMVMvUkYy?=
+ =?utf-8?B?alRUSXpoWU95NWY3K3NiSllmbDNOVkZndElTS2pwL2lqVDFmelVQeGVUdUdr?=
+ =?utf-8?B?VzFrczFmWVJFeTluT2lhelYwUEtCdHF6VmR2cEwzSDNBWkxjTW9RUjh1Y2FY?=
+ =?utf-8?B?d3FHK0Zva1crQk96aERudW9lZ0J5NE1heVhpbk9QN0c5WUtTbVV2U2RGN2hx?=
+ =?utf-8?B?MnZWOERscDdjM3YzanN5NTFLY0gzMjNhRGZuT2pQSHJqT3VPbU40bTZ0K2ww?=
+ =?utf-8?B?N3FCdlhYSWtCZXQyaldTTjR2eU8wVDJRejVnQkxrNGdyaVhMUDZYVkVQcGNn?=
+ =?utf-8?B?VkUwajd6c1gwcm4xcCtlMm0vUE16dzRuVDA0eFNGdmR1K2FCSlMyWDNZblhE?=
+ =?utf-8?B?WUdXa1JaTGpLMnJJbTA2ZnlxaVMzbk9PY2lUWE5LQWNpanV1bGh6c2NMV2Ry?=
+ =?utf-8?B?aG1tejEyQllpcER5a0ljVDc1Z2hkMDF4ekxyMWtMY2VDM2lDVG9kN1h0aHdI?=
+ =?utf-8?B?QjBJNU00Z1JyeVh1SEVMSnczV29PUDF4bE90cjY0cTlTRFYyZ0FqbGF2Sk1S?=
+ =?utf-8?B?YlB6UVRUTE9YcnhwR2l2MmdDYnF4bUhrbDIyMDg3Vk5nczBrcW5oakxreVpS?=
+ =?utf-8?B?OWZCbjQ3MHljSVRldkVseS9ZbTQ4NDFTZHhHY0JwNEtMLzMrVUUrdFZ0K3g5?=
+ =?utf-8?B?UEo3bVRqSm9kYjI3VDJmTlJOemtjTU52WVdaSzZCSmVqWEVRYVE4cFdBYStM?=
+ =?utf-8?B?UXFqSklJenpJOFo1NlVGMCtNUkcwQ1VwYTV1SERLcW13dTNkK2NNdVFHLzBn?=
+ =?utf-8?B?SlhkUzZUUEl0QWRDVDQzT2xmM0d1RGhyN1FkQXMxd2JQYnBQOCtjOWJEc0I0?=
+ =?utf-8?B?aGxvUFNDZzROOXJkUk4yaGo2RkxidXZVaWxsbTNtMTZ2Z2pqQkpacEdiU1Vn?=
+ =?utf-8?B?T2c9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c25770a3-2325-4f0d-0fc3-08dcf47e60c8
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2024 22:51:20.8682
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cDw8ELGHPuEeFN+9y4HikSrgvx126sAKp6tAArR5L1248m2XKFlBHeklxstO7uMUmZVtCcqeQfEf33H2lkjXy6sYI0I8M8ZAlJxsyY31xcM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR11MB8744
+X-OriginatorOrg: intel.com
 
-On 10/24/24 15:18, Reinette Chatre wrote:
-> Changes since V3:
-> - V3: https://lore.kernel.org/all/cover.1729218182.git.reinette.chatre@intel.com/
-> - Rebased on HEAD 2a027d6bb660 of kselftest/next.
-> - Fix empty string parsing issues pointed out by Ilpo.
-> - Add Reviewed-by tags.
-> - Please see individual patches for detailed changes.
-> 
-> Changes since V2:
-> - V2: https://lore.kernel.org/all/cover.1726164080.git.reinette.chatre@intel.com/
-> - Add fix to protect against buffer overflow when parsing text from sysfs files.
-> - Add cleanup patch to address use of magic constants as pointed out by
->    Ilpo.
-> - Add Reviewed-by tags where received, except for "selftests/resctrl: Use cache
->    size to determine "fill_buf" buffer size" that changed too much since
->    receiving the Reviewed-by tag.
-> - Please see individual patches for detailed changes.
-> 
-> Changes since V1:
-> - V1: https://lore.kernel.org/cover.1724970211.git.reinette.chatre@intel.com/
-> - V2 contains the same general solutions to stated problem as V1 but these
->    are now preceded by more fixes (patches 1 to 5) and improved robustness
->    (patches 6 to 9) to existing tests before the series gets back
->    to solving the original problem with more confidence in patches 10 to 13.
-> - The posibility of making "memflush = false" for CMT test was discussed
->    during V1. Modifying this setting does not have a significant impact on the
->    observed results that are already well within acceptable range and this
->    version thus keeps original default. If performance was a goal it may
->    be possible to do further experimentation where "memflush = false" could
->    eliminate the need for the sleep(1) within the test wrapper, but
->    improving the performance is not a goal of this work.
-> - (New) Support what seems to be unintended ability for user space to provide
->    parameters to "fill_buf" by making the parsing robust and only support
->    changing parameters that are supported to be changed. Drop support for
->    "write" operation since it has never been measured.
-> - (New) Improve wraparound handling. (Ilpo)
-> - (New) A couple of new fixes addressing issues discovered during development.
-> - (Change from V1) To support fill_buf parameters provided by user space as
->    well as test specific fill_buf parameters struct fill_buf_param is no longer
->    just a member of struct resctrl_val_param, instead there could be at most
->    two instances of struct fill_buf_param, the immutable parameters provided
->    by user space and the parameters used by individual tests. (Ilpo)
-> - Please see individual patches for detailed changes.
-> 
-> V1 cover:
-> 
-> The resctrl selftests for Memory Bandwidth Allocation (MBA) and Memory
-> Bandwidth Monitoring (MBM) are failing on some (for example [1]) Emerald
-> Rapids systems. The test failures result from the following two
-> properties of these systems:
-> 1) Emerald Rapids systems can have up to 320MB L3 cache. The resctrl
->     MBA and MBM selftests measure memory traffic for which a hardcoded
->     250MB buffer has been sufficient so far. On platforms with L3 cache
->     larger than the buffer, the buffer fits in the L3 cache and thus
->     no/very little memory traffic is generated during the "memory
->     bandwidth" tests.
-> 2) Some platform features, for example RAS features or memory
->     performance features that generate memory traffic may drive accesses
->     that are counted differently by performance counters and MBM
->     respectively, for instance generating "overhead" traffic which is not
->     counted against any specific RMID. Until now these counting
->     differences have always been "in the noise". On Emerald Rapids
->     systems the maximum MBA throttling (10% memory bandwidth)
->     throttles memory bandwidth to where memory accesses by these other
->     platform features push the memory bandwidth difference between
->     memory controller performance counters and resctrl (MBM) beyond the
->     tests' hardcoded tolerance.
-> 
-> Make the tests more robust against platform variations:
-> 1) Let the buffer used by memory bandwidth tests be guided by the size
->     of the L3 cache.
-> 2) Larger buffers require longer initialization time before the buffer can
->     be used to measurement. Rework the tests to ensure that buffer
->     initialization is complete before measurements start.
-> 3) Do not compare performance counters and MBM measurements at low
->     bandwidth. The value of "low" is hardcoded to 750MiB based on
->     measurements on Emerald Rapids, Sapphire Rapids, and Ice Lake
->     systems. This limit is not applicable to AMD systems since it
->     only applies to the MBA and MBM tests that are isolated to Intel.
-> 
-> [1]
-> https://ark.intel.com/content/www/us/en/ark/products/237261/intel-xeon-platinum-8592-processor-320m-cache-1-9-ghz.html
-> 
-> Reinette Chatre (15):
->    selftests/resctrl: Make functions only used in same file static
->    selftests/resctrl: Print accurate buffer size as part of MBM results
->    selftests/resctrl: Fix memory overflow due to unhandled wraparound
->    selftests/resctrl: Protect against array overrun during iMC config
->      parsing
->    selftests/resctrl: Protect against array overflow when reading strings
->    selftests/resctrl: Make wraparound handling obvious
->    selftests/resctrl: Remove "once" parameter required to be false
->    selftests/resctrl: Only support measured read operation
->    selftests/resctrl: Remove unused measurement code
->    selftests/resctrl: Make benchmark parameter passing robust
->    selftests/resctrl: Ensure measurements skip initialization of default
->      benchmark
->    selftests/resctrl: Use cache size to determine "fill_buf" buffer size
->    selftests/resctrl: Do not compare performance counters and resctrl at
->      low bandwidth
->    selftests/resctrl: Keep results from first test run
->    selftests/resctrl: Replace magic constants used as array size
-> 
->   tools/testing/selftests/resctrl/cmt_test.c    |  37 +-
->   tools/testing/selftests/resctrl/fill_buf.c    |  45 +-
->   tools/testing/selftests/resctrl/mba_test.c    |  54 ++-
->   tools/testing/selftests/resctrl/mbm_test.c    |  37 +-
->   tools/testing/selftests/resctrl/resctrl.h     |  79 +++-
->   .../testing/selftests/resctrl/resctrl_tests.c |  95 +++-
->   tools/testing/selftests/resctrl/resctrl_val.c | 447 +++++-------------
->   tools/testing/selftests/resctrl/resctrlfs.c   |  19 +-
->   8 files changed, 354 insertions(+), 459 deletions(-)
-> 
-> 
-> base-commit: 2a027d6bb66002c8e50e974676f932b33c5fce10
+Hi Shuah,
 
-Is this patch series ready to be applied?
+On 10/24/24 3:36 PM, Shuah Khan wrote:
+> 
+> Is this patch series ready to be applied?
+> 
 
-thanks,
--- Shuah
+I believe it is close ... I would like to give Ilpo some time to peek
+at patches 2 and 10 to confirm if I got their fixes right this time. The
+rest of the series is ready.
 
+Thank you
+
+Reinette
 
