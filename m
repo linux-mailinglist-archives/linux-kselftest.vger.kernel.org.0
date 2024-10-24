@@ -1,122 +1,260 @@
-Return-Path: <linux-kselftest+bounces-20572-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20573-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4FF49AF322
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 21:57:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A4FE9AF347
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 22:02:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48353B230FB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 19:57:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD9222824EC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 20:02:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABEC91AB512;
-	Thu, 24 Oct 2024 19:57:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 155C8189F3E;
+	Thu, 24 Oct 2024 20:02:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tPILtAAX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YtvJlLmw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D706199FA8;
-	Thu, 24 Oct 2024 19:57:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C1A22B67E;
+	Thu, 24 Oct 2024 20:02:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729799873; cv=none; b=HOATN7fomzaw8wGsH7NkZTqibC3AOhkiEExOuBV49GNx/0E4G4NYSUdecKR6A+VxpEswsCzGsC/A+p481JnS6AN8POAXB4XcYJ+gUWwViABqDU6/Gkyi4+7DdsdvIb2GTd2vmezbqQS5UgnHHMH+hrIGRregXjjgEhr9ZM2nQZw=
+	t=1729800163; cv=none; b=fqRUoorWwXTLbj28W03QBx60ykHXt4hbpgyFVeiZIqAh+R2CTKrAkplzlr2F/HBPj8a0f1gHInRcpg+b4YSDDGzNpaapiq9CwcSizA21fLGQ0ATunfgB5tfwkpUDryfgiNYqL5MPL7OTzwncD+iG2lmEacMNTOdVooFJ5iUbmlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729799873; c=relaxed/simple;
-	bh=bTSZ+AIYW4PtKktAhtWQiw/nwwUpqv9LctwwUYhZcYs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o+yvqSwixk5bwMAcLJD5bjbrWx7TBWIffbG1BeaUqSfobvTsCGmKP02HU7L6ncM/XGKaD6RpDYJT4srt61obhgq/RbHPZa8d2D+WyD2h3o64NWxVTbQPoOcNPCxQvdtiCBh5vzoWomSp19syoFcsygbNUcawWvzxUzD8nIrLwsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tPILtAAX; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Thu, 24 Oct 2024 12:57:38 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1729799868;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8BK0ZcosXDoOXzSbDL6svDcVkcl94/C1ybPNkAKv7is=;
-	b=tPILtAAXE+IgUeUPC4X+luEap2SlsyS17q2HLFknCMik+U8I3s2RvzCZUnSAzQqNJDKt9e
-	M/MTZyMVUnCKCJYUBNzj0u5ZsYLzm6ShCLECXJkxN//oG4dDtOWhz5P9RCDzSDwfta6E2h
-	1b0NgK8VyuKZarNkmkLJPSv4ZjfS/hI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Miguel Luis <miguel.luis@oracle.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-	Shuah Khan <shuah@kernel.org>, David Woodhouse <dwmw@amazon.co.uk>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	Francesco Lavra <francescolavra.fl@gmail.com>
-Subject: Re: [PATCH v6 6/6] arm64: Use SYSTEM_OFF2 PSCI call to power off for
- hibernate
-Message-ID: <ZxqmsiXV6ZYTANKY@linux.dev>
-References: <20241019172459.2241939-1-dwmw2@infradead.org>
- <20241019172459.2241939-7-dwmw2@infradead.org>
- <23C91005-7304-4312-A5E0-F5E6C05B3209@oracle.com>
- <ECD0CA58-2C3B-48F3-AF12-95E37CB0FC48@infradead.org>
- <ZxprcWDe2AXuLhD_@linux.dev>
- <691447A1-8F3F-4890-B00F-8068A14CA126@infradead.org>
+	s=arc-20240116; t=1729800163; c=relaxed/simple;
+	bh=T0zvTMLKc1EKkc6/hTXrYzFtHL3m7tGwMEmDi8YyM8A=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=jquzuqXbJkiNMf9yRpOxU9QDyksSoHySrDWGOZMvuvx5SYuPBwtGQCv1FLBeRpmn9DoEfCf+VW3Z2jKfd0DLTOLyN5Xig1BSJD6rau0SmbonCqKmiIMt1B1qO7vsGeqjdcsj7HKNgJ3cOPpwD9GwFDP6p6IgRzy487f4KvwLols=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YtvJlLmw; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-71e67d12d04so989826b3a.1;
+        Thu, 24 Oct 2024 13:02:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729800159; x=1730404959; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wHwbfY63UDzTO8b8icriFJsFY8pcas/NTsbRH/s+R88=;
+        b=YtvJlLmwEU86FB8aYNVJL5umbw8Dwckk1qXuKOV3HgTehI4WnK6NyHRp0Klzo+U6zn
+         qKtYyYLPkq5GIn1cOzs5rbHfIVcvXzUT3lOl6jOYTZnInJPI3im+tHfRyPqAwxpcE2La
+         kkwFXt1TQfJ3ZN0orarnkjpKzh7nPDXP2tKQARtrKVh8atO7XrYb24PK5zlN4qPvo9fX
+         t4KgKpvQpgslctALwabGW+sDPIfx8kPLI2lOtPlz8l/R2aMiXP+/AKZBv+Qosrg3QJWC
+         oGPiVdREOST7pkmRrfnc7GCB/FvX93Dcz/Oez9FLtVjTTqf3GLV9dn86CWpnLZQGbXJh
+         QG8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729800159; x=1730404959;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wHwbfY63UDzTO8b8icriFJsFY8pcas/NTsbRH/s+R88=;
+        b=ubdc38CiJgseD0sIccYE1LJXHxPUCNmiot2gKSO6UspE6l2YD0m8g3jNAs0eqpTw+F
+         /yRs1MqfJuQ6RAcTuZoKkC4fj92HfuixS6p19WENGvKFuD9hA7bVS9dY435t+F5PdvY6
+         DIX1uyEQOHu70BqjrMCezjP7l1cBg9epqvWVYIOcVrIVqlgXzqVv+k12jihOJINAeOZI
+         iCzRqtSyrqBPN0SmSPvhPsWiwKmL6MADcgtEk2Y+yFUQHgHCpU8luznSZcg0bYE8Uy5v
+         2qCd0a+bNPvXwnjOpjhpwhDwIZVxSV0+iHTIlc26jsdhG5AbYbcCQ7pNPqmqMe/VdOXl
+         /ILA==
+X-Forwarded-Encrypted: i=1; AJvYcCXhb9hkTzJk9RNkBJ74VMmiJFqDaWAOFd6aMdj38B1fY5Ge3luCsUHQAJXMn5WNI9qznRtVXCWA3gMFQ78=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+fbloOQyUr6K/pFqzvQ5c+NEYw4wNtMx19Ct16xDca4sSCjsO
+	sBErlAuSkNrEXK+aW4regkkeG+pVZI77WU/c1SZJQE3wb+dwJE2+
+X-Google-Smtp-Source: AGHT+IFi9mf5mlXQvgESgnEmpyDpyeRtCjGFBbfd2MjU7oyAlOqka7FHVYWSyJ9tTS7rHRYCflstMg==
+X-Received: by 2002:a05:6a21:4a4c:b0:1d9:175a:c2ba with SMTP id adf61e73a8af0-1d978b0245fmr9675442637.20.1729800159150;
+        Thu, 24 Oct 2024 13:02:39 -0700 (PDT)
+Received: from 2abb50c-lcedt.nvidia.com ([203.200.25.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec13334f7sm8328426b3a.77.2024.10.24.13.02.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2024 13:02:38 -0700 (PDT)
+From: Shivam Chaudhary <cvam0000@gmail.com>
+To: skhan@linuxfoundation.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Shivam Chaudhary <cvam0000@gmail.com>
+Subject: [PATCH v2] selftests: tmpfs: Add kselftest support to tmpfs
+Date: Fri, 25 Oct 2024 01:32:28 +0530
+Message-Id: <20241024200228.1075840-1-cvam0000@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <15feeb54-5136-41e2-9d8a-10524efc92f2@linuxfoundation.org>
+References: <15feeb54-5136-41e2-9d8a-10524efc92f2@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <691447A1-8F3F-4890-B00F-8068A14CA126@infradead.org>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 24, 2024 at 05:56:09PM +0200, David Woodhouse wrote:
-> On 24 October 2024 17:44:49 CEST, Oliver Upton <oliver.upton@linux.dev> wrote:
-> >IIUC, you're really wanting to 0x0 because there are hypervisors out
-> >there that violate the final spec and *only* accept this value.
-> >
-> >That's perfectly fine, but it'd help avoid confusion if the supporting
-> >comment was a bit more direct:
-> >
-> >	/*
-> >	 * If no hibernate type is specified SYSTEM_OFF2 defaults to
-> >	 * selecting HIBERNATE_OFF.
-> >	 *
-> >	 * There are hypervisors in the wild that violate the spec and
-> >	 * reject calls that explicitly provide a hibernate type. For
-> >	 * compatibility with these nonstandard implementations, pass 0
-> >	 * as the type.
-> >	 */
-> >	 if (system_entering_hibernation())
-> >		invoke_psci_fn(PSCI_FN_NATIVE(1_3, SYSTEM_OFF2), 0 , 0, 0);
-> 
-> By the time this makes it into released versions of the guest Linux kernel, that comment won't be true any more.
+Add kselftest support for open, linkat, unshare, mount tests
 
-Then does it even matter? What is the problem you're trying to solve
-with using a particular value for the hibernate type?
+- Replace direct error handling with
+ `ksft_test_result_*` macros for better reporting
+  of test outcomes.
 
-Either the goal of this is to make the PSCI client code compatible with
-your hypervisor today (and any other implementation based on 'F ALP1') or
-we don't care and go with whatever value we want.
+- Add `ksft_print_header()` and `ksft_set_plan()`
+ to structure test outputs more effectively.
 
-Even if the comment eventually becomes stale, there is a ton of value in
-documenting the exact implementation decision being made.
+- Introduce the helper function `is_unshare()` to
+  handle unshare() related checks.
 
+- Improve the test flow by adding more detailed pass/fail
+  reporting for unshare, mounting, file opening, and linking
+  operations.
+
+- Skip the test if it's not run as root, providing an
+  appropriate Warning.
+
+Test logs:
+
+Before change:
+
+- Without root
+ error: unshare, errno 1
+
+- With root
+ No, output
+
+After change:
+
+- Without root
+ TAP version 13
+ 1..1
+ ok 1 # SKIP This test needs root to run
+
+- With root
+ TAP version 13
+ 1..1
+ ok 1 unshare(): we have a new mount namespace.
+ 1..2
+ ok 2 mount(): Root filesystem private mount: Success
+ 1..3
+ ok 3 mount(): Mounting tmpfs on /tmp: Success
+ 1..4
+ ok 4 openat(): Open first temporary file: Success
+ 1..5
+ ok 5 linkat(): Linking the temporary file: Success
+ 1..6
+ ok 6 openat(): Opening the second temporary file: Success
+ # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+Signed-off-by: Shivam Chaudhary <cvam0000@gmail.com>
+---
+Changes in v2:
+  - Make the commit message more clear.
+
+ .../selftests/tmpfs/bug-link-o-tmpfile.c      | 72 +++++++++++++++----
+ 1 file changed, 58 insertions(+), 14 deletions(-)
+
+diff --git a/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c b/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
+index b5c3ddb90942..26dea19c1614 100644
+--- a/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
++++ b/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
+@@ -23,45 +23,89 @@
+ #include <sys/mount.h>
+ #include <unistd.h>
+ 
+-int main(void)
+-{
+-	int fd;
++#include "../kselftest.h"
+ 
+-	if (unshare(CLONE_NEWNS) == -1) {
++static int is_unshare(int flag)
++{
++	if (unshare(flag) == -1) {
+ 		if (errno == ENOSYS || errno == EPERM) {
+-			fprintf(stderr, "error: unshare, errno %d\n", errno);
+-			return 4;
++			ksft_test_result_fail("error: unshare, errno %d\n", errno);
++			return -1; // Return -1 for failure
+ 		}
+ 		fprintf(stderr, "error: unshare, errno %d\n", errno);
++		return -1;
++	}
++
++	return 0; // Return 0 for success
++}
++
++int main(void)
++{
++	int fd;
++
++	// Setting up kselftest framework
++	ksft_print_header();
++	ksft_set_plan(1);
++
++	// Check if test is run as root
++	if (geteuid()) {
++		ksft_test_result_skip("This test needs root to run!\n");
+ 		return 1;
+ 	}
+-	if (mount(NULL, "/", NULL, MS_PRIVATE|MS_REC, NULL) == -1) {
+-		fprintf(stderr, "error: mount '/', errno %d\n", errno);
++
++	if (is_unshare(CLONE_NEWNS) == 0) {
++		ksft_test_result_pass("unshare(): we have a new mount namespace.\n");
++	} else {
++		ksft_test_result_fail("unshare(): failed\n");
+ 		return 1;
+ 	}
+ 
++	ksft_set_plan(2);
++
++	if (mount(NULL, "/", NULL, MS_PRIVATE | MS_REC, NULL) == -1) {
++		ksft_test_result_fail("mount(): Root filesystem private mount: Fail %d\n", errno);
++		return 1;
++	} else {
++		ksft_test_result_pass("mount(): Root filesystem private mount: Success\n");
++	}
++
++	ksft_set_plan(3);
+ 	/* Our heroes: 1 root inode, 1 O_TMPFILE inode, 1 permanent inode. */
+ 	if (mount(NULL, "/tmp", "tmpfs", 0, "nr_inodes=3") == -1) {
+-		fprintf(stderr, "error: mount tmpfs, errno %d\n", errno);
++		ksft_test_result_fail("mount(): Mounting tmpfs on /tmp: Fail %d\n", errno);
+ 		return 1;
++	} else {
++		ksft_test_result_pass("mount(): Mounting tmpfs on /tmp: Success\n");
+ 	}
+ 
+-	fd = openat(AT_FDCWD, "/tmp", O_WRONLY|O_TMPFILE, 0600);
++	ksft_set_plan(4);
++	fd = openat(AT_FDCWD, "/tmp", O_WRONLY | O_TMPFILE, 0600);
+ 	if (fd == -1) {
+-		fprintf(stderr, "error: open 1, errno %d\n", errno);
++		ksft_test_result_fail("openat(): Open first temporary file: Fail %d\n", errno);
+ 		return 1;
++	} else {
++		ksft_test_result_pass("openat(): Open first temporary file: Success\n");
+ 	}
++
++	ksft_set_plan(5);
+ 	if (linkat(fd, "", AT_FDCWD, "/tmp/1", AT_EMPTY_PATH) == -1) {
+-		fprintf(stderr, "error: linkat, errno %d\n", errno);
++		ksft_test_result_fail("linkat(): Linking the temporary file: Fail %d\n", errno);
++		close(fd); // Ensure fd is closed on failure
+ 		return 1;
++	} else {
++		ksft_test_result_pass("linkat(): Linking the temporary file: Success\n");
+ 	}
+ 	close(fd);
+ 
+-	fd = openat(AT_FDCWD, "/tmp", O_WRONLY|O_TMPFILE, 0600);
++	ksft_set_plan(6);
++	fd = openat(AT_FDCWD, "/tmp", O_WRONLY | O_TMPFILE, 0600);
+ 	if (fd == -1) {
+-		fprintf(stderr, "error: open 2, errno %d\n", errno);
++		ksft_test_result_fail("openat(): Opening the second temporary file: Fail %d\n", errno);
+ 		return 1;
++	} else {
++		ksft_test_result_pass("openat(): Opening the second temporary file: Success\n");
+ 	}
+ 
++	ksft_exit_pass();
+ 	return 0;
+ }
 -- 
-Thanks,
-Oliver
+2.34.1
+
 
