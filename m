@@ -1,63 +1,55 @@
-Return-Path: <linux-kselftest+bounces-20548-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20549-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45A2A9AE9F9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 17:11:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAB099AEA27
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 17:17:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 694801C250BD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 15:11:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A6FD1C225D4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 15:17:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D88691E378A;
-	Thu, 24 Oct 2024 15:11:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CC3D1C8788;
+	Thu, 24 Oct 2024 15:17:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="R6UGdaQO"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="jHIPwf0d"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7967B1D86C0;
-	Thu, 24 Oct 2024 15:11:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F28AF15853B;
+	Thu, 24 Oct 2024 15:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729782691; cv=none; b=VTyGXv0OwzhC7yZ3RZriAZR8Ig4cMqmMu1ncenijld7pfNMV9eX54mXZra2mKbMMZtRgeAhvncdHBoBO5U4Ry6Y9gPFPEEHejLmtuaSOtPyDZblML/PUF5bjtr7esQQnNnwjWI9buPErYT74tq/6CUo1JvjLXVBevVJ1vM0DYaU=
+	t=1729783031; cv=none; b=j4XC4H0Eq8uffbnsnsdoMlPt3PdrEw8cMwpKp0cBwgMeTk8RxX6DUrHuNsWEQ4MtqabuU+rilbXiQhS+n8F+OHL3jf0fl8/XbtO1yJs8YpFEfoB8LV8kkDEPM3+ROOQjH+2B+TRoQGOw5LS+IbAHzJc1X7ulWgLyWdfg0dezxXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729782691; c=relaxed/simple;
-	bh=a3TyFKV8bQ2C8AsfpldZwdswGP6i35LA5XbAJ7NzHjs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=kO8PTsRzBw2bdWpXeeFXSIl/018obda0tu+nBW49qw0M0e3KU2Y+2xWU5X50VsJXMk3NQJlNuRZtYWbV2BEB88p5vrZfOtdvMRWFtzULc3Mz4TPQc2+LA1lJ8jJFyL+CQozSH888DTZbnCq14zxa3acayqGy2asjyJq/SM6e0hE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=R6UGdaQO; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 49OFAcd0051743;
-	Thu, 24 Oct 2024 10:10:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1729782638;
-	bh=Lx0RGIhvjGwcm6FPAAxd+CivzPqBmE5HANWs11llh7w=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=R6UGdaQO9DZCB7vWxWzLoZ+4H0Dy5Q55in+6fHw3vssJT7047rifKDXQsey2V2pTN
-	 vQKh8/aFREz8Pw5Vrwg+VmzVHq9o7CCAdPZLNybMrbsuoINi0XaFiRlS5vVjn97eir
-	 uy051Mx5xEtV4iVqoStmBVuXpOl8QDA4c0dVPU6M=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 49OFAcfW032095
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 24 Oct 2024 10:10:38 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 24
- Oct 2024 10:10:38 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 24 Oct 2024 10:10:38 -0500
-Received: from [10.249.129.69] ([10.249.129.69])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 49OFATsf028284;
-	Thu, 24 Oct 2024 10:10:30 -0500
-Message-ID: <d8cf61e5-2c56-4c48-9cf3-fd54754c3816@ti.com>
-Date: Thu, 24 Oct 2024 20:40:28 +0530
+	s=arc-20240116; t=1729783031; c=relaxed/simple;
+	bh=2Kve0loElZNKii6MgyGBUDusGqHjRRmkEVjHcH8MDHI=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=KSp9Hp6Z3gTLHu6civLdjS1LCM/4ExuogBoUqHZ88DdGZOf34H6sTTTrvVmxsMQrK+xFCv2J9ZfNPyxKHeb3zoCwmlQtlIg+OIywyF8mz7wQkV/AN6KXLC6f/cFN73x1ADnU0jr5euAQm1d5jml459B0qgkSkCzXH7wDSCvCceU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=jHIPwf0d; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1729783027;
+	bh=2Kve0loElZNKii6MgyGBUDusGqHjRRmkEVjHcH8MDHI=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=jHIPwf0da3VkiA6MyWCQRxgWZMsLgxaXSmYoBtUKQPclhbCIjta2dEo48riMRAvS/
+	 IR60w0PmCG98ZQeCVU0WSbwYlOgmdZfTPQj3Ulwg6H5UDySFiXjF7RV/D5CskfYdoH
+	 5JjB74wb4Bd2kfaOTPYr4q2hUw1HX4TTho8rMLR40duK+qL98i98jnkZL1kCnMDNqx
+	 k27UlrSnqGk5PeTfaM/pEAip5Oa/4gRZTPjmc0Is219kemSiP6pkNXsqqNRYupcdJn
+	 u2rT9NPZjRqisz8L6AlvkoxqERXHP8TyyDLCwmgi5BHdltbvl9UpNpA0Pl1XDxsOB5
+	 z2hd18mJStVjA==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id A23C217E1543;
+	Thu, 24 Oct 2024 17:17:06 +0200 (CEST)
+Message-ID: <8fdeec5c-5de7-44ae-9086-7930d02d610e@collabora.com>
+Date: Thu, 24 Oct 2024 17:17:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,175 +57,112 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 2/4] net: hsr: Add VLAN CTAG filter support
-To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-        MD Danish Anwar
-	<danishanwar@ti.com>, <geliang@kernel.org>,
-        <liuhangbin@gmail.com>, <dan.carpenter@linaro.org>, <jiri@resnulli.us>,
-        <n.zhandarovich@fintech.ru>, <aleksander.lobakin@intel.com>,
-        <lukma@denx.de>, <horms@kernel.org>, <jan.kiszka@siemens.com>,
-        <diogo.ivo@siemens.com>, <shuah@kernel.org>, <pabeni@redhat.com>,
-        <kuba@kernel.org>, <edumazet@google.com>, <davem@davemloft.net>,
-        <andrew+netdev@lunn.ch>
-CC: <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <srk@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros
-	<rogerq@kernel.org>, <m-malladi@ti.com>
-References: <20241024103056.3201071-1-danishanwar@ti.com>
- <20241024103056.3201071-3-danishanwar@ti.com>
- <6cd4d59d-b635-47a3-8207-c07a18603037@linux.dev>
+Subject: Re: [PATCH RFC 1/3] pinctrl: mediatek: paris: Expose more
+ configurations to GPIO set_config
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
+ Sean Wang <sean.wang@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ Bamvor Jian Zhang <bamv2005@gmail.com>, Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com, linux-mediatek@lists.infradead.org,
+ linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org,
+ kernelci@lists.linux.dev
+References: <20240909-kselftest-gpio-set-get-config-v1-0-16a065afc3c1@collabora.com>
+ <20240909-kselftest-gpio-set-get-config-v1-1-16a065afc3c1@collabora.com>
+ <01020191e0901d10-d427a5dd-af4e-4ecf-99e1-4bb051ad1475-000000@eu-west-1.amazonses.com>
 Content-Language: en-US
-From: "Anwar, Md Danish" <a0501179@ti.com>
-In-Reply-To: <6cd4d59d-b635-47a3-8207-c07a18603037@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <01020191e0901d10-d427a5dd-af4e-4ecf-99e1-4bb051ad1475-000000@eu-west-1.amazonses.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Hi Vadim,
-
-On 10/24/2024 7:06 PM, Vadim Fedorenko wrote:
-> On 24/10/2024 11:30, MD Danish Anwar wrote:
->> From: Murali Karicheri <m-karicheri2@ti.com>
+Il 11/09/24 12:10, AngeloGioacchino Del Regno ha scritto:
+> Il 09/09/24 20:37, Nícolas F. R. A. Prado ha scritto:
+>> Currently the set_config callback in the gpio_chip registered by the
+>> pinctrl_paris driver only supports PIN_CONFIG_INPUT_DEBOUNCE, despite
+> 
+> [...] only supports operations configuring the input debounce parameter
+> of the EINT controller and denies configuring params on the other AP GPIOs [...]
+> 
+> (reword as needed)
+> 
+>> many other configurations already being implemented and available
+>> through the pinctrl API for configuration of pins by the Devicetree and
+>> other drivers.
 >>
->> This patch adds support for VLAN ctag based filtering at slave devices.
->> The slave ethernet device may be capable of filtering ethernet packets
->> based on VLAN ID. This requires that when the VLAN interface is created
->> over an HSR/PRP interface, it passes the VID information to the
->> associated slave ethernet devices so that it updates the hardware
->> filters to filter ethernet frames based on VID. This patch adds the
->> required functions to propagate the vid information to the slave
->> devices.
+>> Expose all configurations currently implemented through the GPIO API so
+>> they can also be set from userspace, which is particularly useful to
+>> allow testing them from userspace.
 >>
->> Signed-off-by: Murali Karicheri <m-karicheri2@ti.com>
->> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+>> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 >> ---
->>   net/hsr/hsr_device.c | 71 +++++++++++++++++++++++++++++++++++++++++++-
->>   1 file changed, 70 insertions(+), 1 deletion(-)
+>>   drivers/pinctrl/mediatek/pinctrl-paris.c | 20 ++++++++++----------
+> 
+> You can do the same for pinctrl-moore too, it's trivial.
+> 
+> Other than that, I agree about performing this change, as this may be useful
+> for more than just testing.
+> 
+
+Nicolas, please don't forget to respin this patch.
+
+Thanks,
+Angelo
+
+
+>>   1 file changed, 10 insertions(+), 10 deletions(-)
 >>
->> diff --git a/net/hsr/hsr_device.c b/net/hsr/hsr_device.c
->> index 0ca47ebb01d3..ff586bdc2bde 100644
->> --- a/net/hsr/hsr_device.c
->> +++ b/net/hsr/hsr_device.c
->> @@ -515,6 +515,68 @@ static void hsr_change_rx_flags(struct net_device
->> *dev, int change)
->>       }
+>> diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c b/drivers/pinctrl/mediatek/ 
+>> pinctrl-paris.c
+>> index e12316c42698..668f8055a544 100644
+>> --- a/drivers/pinctrl/mediatek/pinctrl-paris.c
+>> +++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
+>> @@ -255,10 +255,9 @@ static int mtk_pinconf_get(struct pinctrl_dev *pctldev,
+>>       return err;
 >>   }
->>   +static int hsr_ndo_vlan_rx_add_vid(struct net_device *dev,
->> +                   __be16 proto, u16 vid)
->> +{
->> +    struct hsr_port *port;
->> +    struct hsr_priv *hsr;
->> +    int ret = 0;
->> +
->> +    hsr = netdev_priv(dev);
->> +
->> +    hsr_for_each_port(hsr, port) {
->> +        if (port->type == HSR_PT_MASTER)
->> +            continue;
->> +
->> +        ret = vlan_vid_add(port->dev, proto, vid);
->> +        switch (port->type) {
->> +        case HSR_PT_SLAVE_A:
->> +            if (ret) {
->> +                netdev_err(dev, "add vid failed for Slave-A\n");
->> +                return ret;
->> +            }
->> +            break;
->> +
->> +        case HSR_PT_SLAVE_B:
->> +            if (ret) {
->> +                /* clean up Slave-A */
->> +                netdev_err(dev, "add vid failed for Slave-B\n");
->> +                vlan_vid_del(port->dev, proto, vid);
->> +                return ret;
->> +            }
->> +            break;
->> +        default:
->> +            break;
->> +        }
+>> -static int mtk_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
+>> +static int mtk_pinconf_set(struct mtk_pinctrl *hw, unsigned int pin,
+>>                  enum pin_config_param param, u32 arg)
+>>   {
+>> -    struct mtk_pinctrl *hw = pinctrl_dev_get_drvdata(pctldev);
+>>       const struct mtk_pin_desc *desc;
+>>       int err = -ENOTSUPP;
+>>       u32 reg;
+>> @@ -795,7 +794,7 @@ static int mtk_pconf_group_set(struct pinctrl_dev *pctldev, 
+>> unsigned group,
+>>       int i, ret;
+>>       for (i = 0; i < num_configs; i++) {
+>> -        ret = mtk_pinconf_set(pctldev, grp->pin,
+>> +        ret = mtk_pinconf_set(hw, grp->pin,
+>>                         pinconf_to_config_param(configs[i]),
+>>                         pinconf_to_config_argument(configs[i]));
+>>           if (ret < 0)
+>> @@ -937,18 +936,19 @@ static int mtk_gpio_set_config(struct gpio_chip *chip, 
+>> unsigned int offset,
+>>   {
+>>       struct mtk_pinctrl *hw = gpiochip_get_data(chip);
+>>       const struct mtk_pin_desc *desc;
+>> -    u32 debounce;
+>> +    enum pin_config_param param = pinconf_to_config_param(config);
+>> +    u32 arg = pinconf_to_config_argument(config);
+>>       desc = (const struct mtk_pin_desc *)&hw->soc->pins[offset];
+>> -    if (!hw->eint ||
+>> -        pinconf_to_config_param(config) != PIN_CONFIG_INPUT_DEBOUNCE ||
+>> -        desc->eint.eint_n == EINT_NA)
+>> -        return -ENOTSUPP;
+>> +    if (param == PIN_CONFIG_INPUT_DEBOUNCE) {
+>> +        if (!hw->eint || desc->eint.eint_n == EINT_NA)
+>> +            return -ENOTSUPP;
+>> -    debounce = pinconf_to_config_argument(config);
+>> +        return mtk_eint_set_debounce(hw->eint, desc->eint.eint_n, arg);
 >> +    }
->> +
->> +    return 0;
->> +}
-> 
-> This function doesn't match with hsr_ndo_vlan_rx_kill_vid().
-> vlan_vid_add() can potentially be executed for port->type
-> equals to HSR_PT_INTERLINK, but the result will be ignored. And
-> the vlan_vid_del() will never happen in this case. Is it desired
-> behavior? Maybe it's better to synchronize add/del code and refactor
-> error path to avoid coping the code?
-> 
-
-The kill_vid / add_vid is not similar because during add_vid, if
-vlan_vid_add() succeeds for one port but fails for other, we need to
-delete it for the earlier port. We can only continue if vlan_vid_add()
-succeeds for both ports. That's the reason the switch case handling of
-add_vid can not match the same for kill_vid. Since cleanup of port is
-needed, it's not possible to synchronize add/kill code
-
-We only care about HSR_PT_SLAVE_A and HSR_PT_SLAVE_B here. So it's okay
-to ignore HSR_PT_INTERLINK. It's a desired behaviour here.
-
->> +
->> +static int hsr_ndo_vlan_rx_kill_vid(struct net_device *dev,
->> +                    __be16 proto, u16 vid)
->> +{
->> +    struct hsr_port *port;
->> +    struct hsr_priv *hsr;
->> +
->> +    hsr = netdev_priv(dev);
->> +
->> +    hsr_for_each_port(hsr, port) {
->> +        if (port->type == HSR_PT_MASTER)
->> +            continue;
->> +        switch (port->type) {
->> +        case HSR_PT_SLAVE_A:
->> +        case HSR_PT_SLAVE_B:
->> +            vlan_vid_del(port->dev, proto, vid);
->> +            break;
->> +        default:
->> +            break;
->> +        }
->> +    }
->> +
->> +    return 0;
->> +}
->> +
->>   static const struct net_device_ops hsr_device_ops = {
->>       .ndo_change_mtu = hsr_dev_change_mtu,
->>       .ndo_open = hsr_dev_open,
->> @@ -523,6 +585,8 @@ static const struct net_device_ops hsr_device_ops = {
->>       .ndo_change_rx_flags = hsr_change_rx_flags,
->>       .ndo_fix_features = hsr_fix_features,
->>       .ndo_set_rx_mode = hsr_set_rx_mode,
->> +    .ndo_vlan_rx_add_vid = hsr_ndo_vlan_rx_add_vid,
->> +    .ndo_vlan_rx_kill_vid = hsr_ndo_vlan_rx_kill_vid,
->>   };
->>     static const struct device_type hsr_type = {
->> @@ -569,7 +633,8 @@ void hsr_dev_setup(struct net_device *dev)
->>         dev->hw_features = NETIF_F_SG | NETIF_F_FRAGLIST |
->> NETIF_F_HIGHDMA |
->>                  NETIF_F_GSO_MASK | NETIF_F_HW_CSUM |
->> -               NETIF_F_HW_VLAN_CTAG_TX;
->> +               NETIF_F_HW_VLAN_CTAG_TX |
->> +               NETIF_F_HW_VLAN_CTAG_FILTER;
->>         dev->features = dev->hw_features;
+>> -    return mtk_eint_set_debounce(hw->eint, desc->eint.eint_n, debounce);
+>> +    return mtk_pinconf_set(hw, offset, param, arg);
 >>   }
->> @@ -647,6 +712,10 @@ int hsr_dev_finalize(struct net_device *hsr_dev,
->> struct net_device *slave[2],
->>           (slave[1]->features & NETIF_F_HW_HSR_FWD))
->>           hsr->fwd_offloaded = true;
->>   +    if ((slave[0]->features & NETIF_F_HW_VLAN_CTAG_FILTER) &&
->> +        (slave[1]->features & NETIF_F_HW_VLAN_CTAG_FILTER))
->> +        hsr_dev->features |= NETIF_F_HW_VLAN_CTAG_FILTER;
->> +
->>       res = register_netdevice(hsr_dev);
->>       if (res)
->>           goto err_unregister;
+>>   static int mtk_build_gpiochip(struct mtk_pinctrl *hw)
+>>
+> 
 > 
 
--- 
-Thanks and Regards,
-Md Danish Anwar
+
 
