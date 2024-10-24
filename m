@@ -1,496 +1,235 @@
-Return-Path: <linux-kselftest+bounces-20520-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20522-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 295E59ADB4C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 07:16:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E1989ADD89
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 09:26:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE7531F22F02
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 05:16:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17AB5282F7E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 07:26:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23AB016DEBB;
-	Thu, 24 Oct 2024 05:16:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E1C018BC13;
+	Thu, 24 Oct 2024 07:26:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BParNCL3"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="eSFBx0e+";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="jnYSn5Mn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE01416191B;
-	Thu, 24 Oct 2024 05:16:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729746992; cv=none; b=h6sNMbCmpJQ7aKVu9rXKAS694gasonTBiBlbBpTtaZQIkLBE7agsa8QdnsNZp6QD3HnOG/V70UEiIBC39yCgHtLRUzOds6v0uOhaF+Vjd32CjcZpgO6B1bnnTHmMwelkpy7ie2mWoa20ZbOsv2BIC3UUiGa0Na0eVH+AD4pBLGE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729746992; c=relaxed/simple;
-	bh=b7KYyoBgE218B+MIC+ckMSWqZ2L1w+EmcKBzKPhmGKE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CzAQ2a9MdQQvKQaxl8wU9NMhrItaboiiBgxFTWxhQAOQ3ii9tQ4Pwtpd5TqanWbPyu9LP5CjPOuHDtEWSlw/HkiyF4+oR184NNa+2P3ihAYpyRApkP/Bys4aZaZ4c6j6Oyp0HNpEHo+S0BnWVfDELODMcTIKOECjpo4TOtIRDmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BParNCL3; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49O40GYQ027510;
-	Thu, 24 Oct 2024 05:16:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=DAdAfcYlMsCwuT6+h2lZCbJEehf4W+XKhHDc9Q4/F
-	ok=; b=BParNCL35LaZOJc2/2HijhMrSyrYQNcWYOAQDoZN/WqDdI+kvYAMgQsBf
-	zeg2o7Oy36IWwft/UwPgPMZVAU9V7w2/iPuEtum8csCUCz3Dt8T0Mkf/7yQp07j3
-	WToSAUwVxdon2fdMg2/I745n/w8mnwjVlCoKiE5oQfURQtnC9EAUWCn29vaWfa4u
-	Ts0QGBf6zux9CmYo6AwdnJWMImMyn4gPjMI2PQXwlYyLLzVhnvVbwmGqANOJO4x/
-	MkPb1HCbjh8V1BpBuXj8gttw95k8Iqcq1vUkRjXjVIaNGhuzVsuHZeAFINXrpwuZ
-	CxLup1uDbnip883VW1S58WzmV0DNw==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42emaexk7e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 24 Oct 2024 05:16:21 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49O2ixrY006862;
-	Thu, 24 Oct 2024 05:16:21 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 42emjcxp22-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 24 Oct 2024 05:16:21 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49O5GJEW50856436
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 24 Oct 2024 05:16:19 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2974C20043;
-	Thu, 24 Oct 2024 05:16:19 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id F3F6B20040;
-	Thu, 24 Oct 2024 05:16:17 +0000 (GMT)
-Received: from vishalc-ibm.in.ibm.com (unknown [9.109.245.217])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 24 Oct 2024 05:16:17 +0000 (GMT)
-From: Vishal Chourasia <vishalc@linux.ibm.com>
-To: linux-kselftest@vger.kernel.org
-Cc: tj@kernel.org, linux-kernel@vger.kernel.org,
-        Vishal Chourasia <vishalc@linux.ibm.com>
-Subject: [PATCH] sched_ext: Fix function pointer type mismatches in BPF selftests
-Date: Thu, 24 Oct 2024 10:46:09 +0530
-Message-ID: <20241024051608.358683-2-vishalc@linux.ibm.com>
-X-Mailer: git-send-email 2.47.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E139018B485;
+	Thu, 24 Oct 2024 07:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729754807; cv=fail; b=YlOt6uXtmfx9MQIymNC8sLqEdqQ2r4fqYljCoM76cuuxKKtsYqef8FSS25myWat2LV5X8I8+TnPELT1uam3X3gTELDqn/6731S6PUsI29Pg+SixXi8EzBtIqFneBIt6kRkWZiEfndHT9LC0//ZfUP39LtK8h1KUVy4AMxrduV/0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729754807; c=relaxed/simple;
+	bh=VRW/nFfK3w4WzY2yLXb/PJp0kD7MUtVKdoDwJqzOWCQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=RBhv0ym+gI5iDSntKP3WQU1+u7E8JwUgsPk0RFNM8+gDyfPpFAXuNOMcALF4Md2cQrCdkkDMRXnv82eGMWymOCbzs7Ej1erK3q2bjNmZu8jqDVRUrzNOHxE5NXuTjDXBUIc88x6v4jhJBpFf2CO+25KgdIzXkR0R59HbKnNSvUQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=eSFBx0e+; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=jnYSn5Mn; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49O2fqTK008684;
+	Thu, 24 Oct 2024 07:25:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=VRW/nFfK3w4WzY2yLX
+	b/PJp0kD7MUtVKdoDwJqzOWCQ=; b=eSFBx0e+eq1OWqRBddQoxBMfDmeZWl/+6C
+	B3T6F4fu80xw2GlCrvnvxsruBpLUwVPZ21RT39F2dgnPPIaHxXG4dqw+5i/CCOaF
+	XlSjAjGb7T3NL3il5kwWDbxDBV+BN4zSfCDtErSY1n94StLJxec6TgPMhZDcQn5P
+	bJ+2C2W2T/CD8tP7YA988hNhkxERT3WAdITeUGdjNd/K+G7gaUa5noQOz+wzGmxf
+	0dYs8wV8YXr391KfrOa1d9f0avAAQxko0qBF3tDvsplHzyjbdFNGJvnbfzQQ0IQe
+	NRFj0WfG7vPYdncJskmdLhzNhcHk/MundO7TXyjg5+nUL3XDzfTw==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42c55v1ut9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 24 Oct 2024 07:25:57 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49O71ZXF018830;
+	Thu, 24 Oct 2024 07:25:56 GMT
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2172.outbound.protection.outlook.com [104.47.73.172])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 42emhkjn0d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 24 Oct 2024 07:25:56 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=if/86WDjGmQxMUX1mHIn8TukqXlDj0TWBVPZ9PDxV6RjMnAfajtNKJTHYpKSV082uCcJiSeLiRmXdA8C+j5ByIivmisuXgJS8NJ/+eeMxG3F1KIL3c9inf8E4XbM/ZieNPJYTuPTqpQ94nIQ43jLuX0ZtCVU163XpbctQxQqaRKWQO+1vSiyCIZlYsUNBXPq1/BMUfjn3MP1vmlmURzu/rZLQ27VreTlWjnp/j+LMuUEAw1f+Dn4/pJVoUwkoQzqktW8VXPMjOLxqQ0d0xAxiKNCGKxfGfzbNIvLdjsxcwhOmlXBXnbhplnLLsWbHvXjqhxfzXcPDrYk+WGhODl2DQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VRW/nFfK3w4WzY2yLXb/PJp0kD7MUtVKdoDwJqzOWCQ=;
+ b=EoJXXDryQXQpsKRVLGo8PROKJ64VmLQAfgBfkUjWQ0s0rRoQovS6JQtx+9646YTgJ1uRHiWsPrbpa7TIybDpjdI932+cGSi5po7qf4A6JiqzXle0viM4NeqZjDbNFTTy2dmZG2JIfV8dfh4UwCbxy8ghgPTOAGtKqkqLO3dhAMfREus1EhsJd03H80Cj1qhD5h3VcRDumKdSTkVBT8I6OpCI2mPzP0LYl8rx3eyh+veG5cewuOlkDOEvybHUpDI4faLHlAyh+tv1WrVj/47tRusC4/ui5jvirW5z//oHzti1mfaUUejx0unZWYnUyBksjIa5n8jdX2GjJIor1Jy66Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VRW/nFfK3w4WzY2yLXb/PJp0kD7MUtVKdoDwJqzOWCQ=;
+ b=jnYSn5MnRAEbbuT631F2sjD9N6XdfNgl9IaDutmGM+y0QTNq0BPmn6PmuyjYHac9rPlER4n7duOkvFa+Ffk9Xel33XsK5NyT8Su4Qr6V2H3BMyndEEj9UPaf7J3S0plnF3bEFJH8x0kurC/mNL8XNVZ9U2OWh81HoyeI2wod5ZQ=
+Received: from BYAPR10MB3366.namprd10.prod.outlook.com (2603:10b6:a03:14f::25)
+ by BLAPR10MB5105.namprd10.prod.outlook.com (2603:10b6:208:325::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.20; Thu, 24 Oct
+ 2024 07:25:51 +0000
+Received: from BYAPR10MB3366.namprd10.prod.outlook.com
+ ([fe80::baf2:dff1:d471:1c9]) by BYAPR10MB3366.namprd10.prod.outlook.com
+ ([fe80::baf2:dff1:d471:1c9%6]) with mapi id 15.20.8093.014; Thu, 24 Oct 2024
+ 07:25:50 +0000
+Date: Thu, 24 Oct 2024 08:25:46 +0100
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Suren Baghdasaryan <surenb@google.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>,
+        "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
+        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Muchun Song <muchun.song@linux.dev>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@kernel.org>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Jeff Xu <jeffxu@chromium.org>, Christoph Hellwig <hch@infradead.org>,
+        linux-api@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v3 3/5] mm: madvise: implement lightweight guard page
+ mechanism
+Message-ID: <a10c26ea-3a48-452c-a02d-7522eefd494d@lucifer.local>
+References: <cover.1729699916.git.lorenzo.stoakes@oracle.com>
+ <415da1e6c5828d96db3af480d243a7f68ccabf6d.1729699916.git.lorenzo.stoakes@oracle.com>
+ <20241023161205.003ad735d5f6ec50ec2eb054@linux-foundation.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241023161205.003ad735d5f6ec50ec2eb054@linux-foundation.org>
+X-ClientProxiedBy: LO4P265CA0113.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c3::17) To BYAPR10MB3366.namprd10.prod.outlook.com
+ (2603:10b6:a03:14f::25)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: GdAHNn_rJdpMr_I2k5MmbnZkJ25-LYid
-X-Proofpoint-ORIG-GUID: GdAHNn_rJdpMr_I2k5MmbnZkJ25-LYid
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR10MB3366:EE_|BLAPR10MB5105:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5b8e9342-1e64-41b3-75f8-08dcf3fd15f8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|10070799003|366016|1800799024|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?dRMTVz/aA7WGkgPyvJQmy34JC8c5B44YSfAfbfgLdRTh4wA6V0Co4ggpeV07?=
+ =?us-ascii?Q?fByl4Hg5WOtKn+ED6VWIPoZabRi2oQp2ktCcGsSZfPkV7wUTkD8M3d4YN3UA?=
+ =?us-ascii?Q?VgffFIvoIvX2DH4qeE758AJYi8A1VcKECPtJCDgVtZDY4SgxidQMS5SdfeAK?=
+ =?us-ascii?Q?CN1FaWgBdC0UbS/jqaWyZ/G1WPaXPiP1NToliS/N8t36s6m29SOoPLm9cXk8?=
+ =?us-ascii?Q?MaQrs0i43UTh0ntpeIFxiYB8JjmcI6/zsAYxAcKJC6l5/TNQfuCJJC8766RB?=
+ =?us-ascii?Q?UlhEa3usbRQul3fI2p2SxjhhPE4Jup5YonrYhPAjdwmY6F/VrYD+jLKxEPL+?=
+ =?us-ascii?Q?DXmDxjfjNxGM0qUnTbk4qm+49yXt7MAbE8LI6/R//Ynz8oc49AleRoE762UA?=
+ =?us-ascii?Q?QvGE+RfuqeDOegbmIIViLwGqJIyCvHLX5IBzdsxWBkHF0KndEcI5MyDIWXKH?=
+ =?us-ascii?Q?Ob2qCOQGGOzvi1AH017xa7rLN/ioQQ02cIhzyOs8CMu0qG6ohDWwMChzf1vi?=
+ =?us-ascii?Q?ftjsG4aHatEYGGKo2z3eU7+3XzY47NmmuyOr8G1Q2SNsYN3VPFC12ryWfu7Y?=
+ =?us-ascii?Q?Kk7ozfvUAT/9s88396TUIdPb3vQGFViRCHigSqLPtb+5L77k6kCz89TXP7Ui?=
+ =?us-ascii?Q?iysNf3rfS5EGu2D4yzWuQsxSpMnv74ZRYhzh1dOzhvuWr5MR+L5AZuhFh7/O?=
+ =?us-ascii?Q?6ogedHg4H+pBo3mEyE53whd1j1Lo5bH1JIQa49Bxm3J2ytf3SnJYiT//RW97?=
+ =?us-ascii?Q?6XD2C64lzOOU7r6EMRwB4CNWx2PNRhGcq6WJviS/kEdZXr57h2mXnc/NYr11?=
+ =?us-ascii?Q?4uvjuNYeKlc08hZj1Av65BFKvMmagh4LPwwdvCrsaUpuz7TQngj4o4F0wqkm?=
+ =?us-ascii?Q?csIYh3DYv22RbWmIuj+++EsjHXm6SEZXoIgVUvtMlNg3Vl297yTKj7/GJQmb?=
+ =?us-ascii?Q?f91RX0d2Mjn7A7OsWV+HQ8CR02KxucNoKJ7LAw58E9rzzbULzlxEfO9twaMN?=
+ =?us-ascii?Q?VLlKrnzr5iPrQ9Ce5/+zfbgB+9+h2p7vMvNPPJqpgP6X434Wm7i/1vzrPwhL?=
+ =?us-ascii?Q?eKI2c95RYFiH5cGF2arX5iTbJtebTxn49Omg4AmMcwaeok8aAFpTxp9rxfX6?=
+ =?us-ascii?Q?HWqka1qAD4V5yLOHNGbXcSGEv6QkR08GgFhGV2odpu7WmmTV0fKZo1uzI+h/?=
+ =?us-ascii?Q?PGUBObxN/J0v7W61BVDATYrWApYJeuqOX8jqIo/HOsXNjqoOHbYzdoX1tEBH?=
+ =?us-ascii?Q?wEn+avGk6jhFzIqMZ7IdtRxbhoiHRP3JZefMcJXC3Vp2rBSe4D5fj7UHC82d?=
+ =?us-ascii?Q?ZYPDKWa9k1gnduXkje1vYsUe?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3366.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?dpKZ5s1d283euepXCzkt5zx3jJl+aPnMJKTMuad/7KLKpDdQCb3+gHoHBc8a?=
+ =?us-ascii?Q?6RRrEgEqkg6fd88s+piNY6sxFs0X79HfIeluy2lAOtrFFAVowgFq3yL1QlyW?=
+ =?us-ascii?Q?UFe2Mx9J3TggOw+0Sa3f1fayZFcPFxuQiDeiKalWHa2v1BAqtwpZ6t/YJLwl?=
+ =?us-ascii?Q?PADh5LB3aHzwJBNOJmQQ+40pQTslk3tYdN1uu2BnNejtFHVosl9GLGL5oeah?=
+ =?us-ascii?Q?KXdODf/mc8F8J3sjCfQMSS48bjWAFuO2s/2NjUnZ/ExWGBiXO2vLyGTAwro4?=
+ =?us-ascii?Q?K45fD58GeZsD/Kw+GQNTFkEVZ7e+0TCAMuKd3yKN9gWhk4/xIRXi37Z9On1f?=
+ =?us-ascii?Q?70qNkibG4VV2I+XhNrFUb6/arGjujNnGFUh7VTk/kZffY9ZkRunicJYvndtJ?=
+ =?us-ascii?Q?B5BBT5CcwI2zed8QxyBOi7DXWDqtB1rrOX2Kpl+Yh1oYyxJNmbO5DYgR+n/1?=
+ =?us-ascii?Q?qVdgO/Gb1eBcB3/RirXrkdp1oroGe4K8odeYmIGYhobgp4oR1dz+uu7PxKL4?=
+ =?us-ascii?Q?hXUDiYyHSlwoccGa4T9iIhtnFsdqA1i/3tU/FVr/92feDEqeRzg/mBjtm/HS?=
+ =?us-ascii?Q?tKhY/yj6Glpu1oS1GPmFsuCK0O59nTWlcSDkqNav1g9yBsL4SnFgizRMJCbE?=
+ =?us-ascii?Q?FeFlmensyxE4Em34PX/PpJi5oUYiY95sn13g6K/eBCswF3WjUyP1ck3pthhU?=
+ =?us-ascii?Q?R0lii2ujs3pU8LaZ/p56ofS9TrF51SJ9F+qTTj+tfMtIBUXY2r6QnY2k2nNk?=
+ =?us-ascii?Q?6tlxgnVYuOYw3p/hRccEcOgQx0kVT13CYnDZhgRshUF3TX3xA3YJGxSumwpc?=
+ =?us-ascii?Q?pm0aFIAOkqJIRQe7FhRck9mkKZvdsRGXa2FBMMciik+4EB4wbnzRM2d292V7?=
+ =?us-ascii?Q?LftOXUH6/cJz4+0Ver4GBE41lU3nTA6EEWMsOc4cxH1hAURCZoNUBebCYuFe?=
+ =?us-ascii?Q?SrEPJncEfdLtnlgTeahOQHLSLddyfmTv5UCBlbfv5h/wa3yX8GQoPrWeeeGD?=
+ =?us-ascii?Q?U+uh0VKHrkGcrvgK6A2U0yJuMnCpFb85W2pMCyOw4MFRIcSrmPLxEDPE8Vys?=
+ =?us-ascii?Q?crgg8rqP3R6Pnzfhse/Gb7GMpLfcgHYCIcoz+t8pkmZQ/iy5lNSPSFmfMFG3?=
+ =?us-ascii?Q?1X39DqcPCI88HtVxpXtFzsJsZXPGWZf/hHCRVmcQZPejtBeaWJ1UsgJ4zq2m?=
+ =?us-ascii?Q?yNbPcdzuL6Zf45G3sq3g/xOEespgrBz//2K5lm1q3Jyiq8ucJ+qN3t+wlPOv?=
+ =?us-ascii?Q?CljtZ3VBH5Eo3HASEKBbyq9Fhzy6+2oyHOLDpfeQD5uBLzlGRPQiipE1m90t?=
+ =?us-ascii?Q?EXusFgpKr5y3MUOH1GzhmCbcyMxZ73D6b13FVRm0LgFWO2DGp3H2Zgxm5cO2?=
+ =?us-ascii?Q?VnepCueCafnYTcgkcQGZ8Fh655t1P1XJTD8DC+2J4fD3WV97Ghnwr/gOfI+c?=
+ =?us-ascii?Q?W4fbMwwV3Gjv1W1H6P8OPTLDrQYXmTjNaQmGJ1gBhkbO5yECS1z3A83TwWzy?=
+ =?us-ascii?Q?54u7YvadB7H5Zcm+ByZ+B7mjxhOmffv+G7Oe6tkcoZj21reds00ma3YQBLyO?=
+ =?us-ascii?Q?lFMOuZ5UpdxREyo+O3FBLkhWfkOv+L0VWRiHQef5B1/dQ4GLgn5LfPSgYmol?=
+ =?us-ascii?Q?G+AcA+TLxSNfkr9/eD2ZqxKh4n7zGVHFTEBLbALIC6HmkzfVMm59mw+Gtu41?=
+ =?us-ascii?Q?u9jyjA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	+QybDt8Nr2OluMRtaRvsEGqEM5mPRzkJAX1v+HRHPSWcQC/0BQnpFeWYVSUM6L1UKMTUex6O4UAb7MzjI9YCG7yPRkgySAEPffVMdQlWMdxLIKJkIHyG4XQKhdxB9PEO9G4RLrowUZSKLxK++bfJ89LyBKtsyA9aHe3hVX6OhSYQAaaCmABrGXrCfyTk/Z+k5IDyL++YX50otNaLCdL1wykCAZKia/G9WN/7dilyYq1ODclTcDlceIW95EXfiAYHPHm2gcYSnNHe+HkdFddxml7caecdRfbwG64U6hb27IPfYR1LUV+iJRpQsJyhqvrXbLrBe8zH28BaZlc+5fg5JKrQ5hFequ5hSJPsZZp8wmSn7N5bmSrTYRPotPMR43q2HKFdNbOm91j3kdmAhgmLih63S1FoQuOfAQiwpLjQc0pOhoxJnxOe7ISVNb+B1/eZQscKLgzUxBG8fWvmgT8Uu+PNnSQpr7We/SEnqHZWuHwy2Y+Goc3dVs+KrlQ8EZgBfF+RKS7ERc08oiQaMR5YWD9mrknPCms/h8q5RX60EJsS8FkntFhzPpxSF9ztmhM8v4Ktbd6erOEnY3ZBl0dnjkkKhPRiBoJYYRh0wNRUoWI=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b8e9342-1e64-41b3-75f8-08dcf3fd15f8
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3366.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2024 07:25:50.2539
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3UKd7vw3stjcdya77ITw8ajdAH6vqcDxm59NOUHnkssBv36JfUmuUygeEydW2crowUfOCH0gn8cVHRQF5ZGag8srG0WpkFX9LJ3yi98Lcm0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5105
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 mlxscore=0 mlxlogscore=937
- priorityscore=1501 suspectscore=0 clxscore=1015 impostorscore=0
- bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410240034
+ definitions=2024-10-24_07,2024-10-24_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 mlxlogscore=697 mlxscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
+ definitions=main-2410240056
+X-Proofpoint-GUID: CAFHZIWPdh4Wdhq55zwAe4JHtkoBAvN0
+X-Proofpoint-ORIG-GUID: CAFHZIWPdh4Wdhq55zwAe4JHtkoBAvN0
 
-Fix incompatible function pointer type warnings in sched_ext BPF selftests by
-explicitly casting the function pointers when initializing struct_ops.
-This addresses multiple -Wincompatible-function-pointer-types warnings from the
-clang compiler where function signatures didn't match exactly.
+On Wed, Oct 23, 2024 at 04:12:05PM -0700, Andrew Morton wrote:
+> On Wed, 23 Oct 2024 17:24:40 +0100 Lorenzo Stoakes <lorenzo.stoakes@oracle.com> wrote:
+>
+> > We permit this operation on anonymous memory only
+>
+> What is the reason for this restriction?
 
-The void * cast ensures the compiler accepts the function pointer
-assignment despite minor type differences in the parameters.
+At this stage it's a simplification as there are numerous issues that would
+need to be overcome to support file-backed mappings.
 
-Signed-off-by: Vishal Chourasia <vishalc@linux.ibm.com>
----
- .../selftests/sched_ext/create_dsq.bpf.c      |  6 +-
- .../sched_ext/ddsp_bogus_dsq_fail.bpf.c       |  4 +-
- .../sched_ext/ddsp_vtimelocal_fail.bpf.c      |  4 +-
- .../selftests/sched_ext/dsp_local_on.bpf.c    |  8 +--
- .../sched_ext/enq_select_cpu_fails.bpf.c      |  4 +-
- tools/testing/selftests/sched_ext/exit.bpf.c  | 14 ++---
- .../testing/selftests/sched_ext/hotplug.bpf.c |  8 +--
- .../sched_ext/init_enable_count.bpf.c         |  8 +--
- .../testing/selftests/sched_ext/maximal.bpf.c | 58 +++++++++----------
- .../selftests/sched_ext/maybe_null.bpf.c      |  6 +-
- .../sched_ext/maybe_null_fail_dsp.bpf.c       |  4 +-
- .../sched_ext/maybe_null_fail_yld.bpf.c       |  4 +-
- .../selftests/sched_ext/prog_run.bpf.c        |  2 +-
- .../selftests/sched_ext/select_cpu_dfl.bpf.c  |  2 +-
- .../sched_ext/select_cpu_dfl_nodispatch.bpf.c |  6 +-
- .../sched_ext/select_cpu_dispatch.bpf.c       |  2 +-
- .../select_cpu_dispatch_bad_dsq.bpf.c         |  4 +-
- .../select_cpu_dispatch_dbl_dsp.bpf.c         |  4 +-
- .../sched_ext/select_cpu_vtime.bpf.c          | 12 ++--
- 19 files changed, 80 insertions(+), 80 deletions(-)
+I actually do plan to extend this work to support shmem and file-backed
+mappings in the future as a revision to this work.
 
-diff --git a/tools/testing/selftests/sched_ext/create_dsq.bpf.c b/tools/testing/selftests/sched_ext/create_dsq.bpf.c
-index 23f79ed343f02..2cfc4ffd60e28 100644
---- a/tools/testing/selftests/sched_ext/create_dsq.bpf.c
-+++ b/tools/testing/selftests/sched_ext/create_dsq.bpf.c
-@@ -51,8 +51,8 @@ s32 BPF_STRUCT_OPS_SLEEPABLE(create_dsq_init)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops create_dsq_ops = {
--	.init_task		= create_dsq_init_task,
--	.exit_task		= create_dsq_exit_task,
--	.init			= create_dsq_init,
-+	.init_task		= (void *) create_dsq_init_task,
-+	.exit_task		= (void *) create_dsq_exit_task,
-+	.init			= (void *) create_dsq_init,
- 	.name			= "create_dsq",
- };
-diff --git a/tools/testing/selftests/sched_ext/ddsp_bogus_dsq_fail.bpf.c b/tools/testing/selftests/sched_ext/ddsp_bogus_dsq_fail.bpf.c
-index e97ad41d354ad..37d9bf6fb7458 100644
---- a/tools/testing/selftests/sched_ext/ddsp_bogus_dsq_fail.bpf.c
-+++ b/tools/testing/selftests/sched_ext/ddsp_bogus_dsq_fail.bpf.c
-@@ -35,8 +35,8 @@ void BPF_STRUCT_OPS(ddsp_bogus_dsq_fail_exit, struct scx_exit_info *ei)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops ddsp_bogus_dsq_fail_ops = {
--	.select_cpu		= ddsp_bogus_dsq_fail_select_cpu,
--	.exit			= ddsp_bogus_dsq_fail_exit,
-+	.select_cpu		= (void *) ddsp_bogus_dsq_fail_select_cpu,
-+	.exit			= (void *) ddsp_bogus_dsq_fail_exit,
- 	.name			= "ddsp_bogus_dsq_fail",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/ddsp_vtimelocal_fail.bpf.c b/tools/testing/selftests/sched_ext/ddsp_vtimelocal_fail.bpf.c
-index dde7e7dafbfbc..dffc97d9cdf14 100644
---- a/tools/testing/selftests/sched_ext/ddsp_vtimelocal_fail.bpf.c
-+++ b/tools/testing/selftests/sched_ext/ddsp_vtimelocal_fail.bpf.c
-@@ -32,8 +32,8 @@ void BPF_STRUCT_OPS(ddsp_vtimelocal_fail_exit, struct scx_exit_info *ei)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops ddsp_vtimelocal_fail_ops = {
--	.select_cpu		= ddsp_vtimelocal_fail_select_cpu,
--	.exit			= ddsp_vtimelocal_fail_exit,
-+	.select_cpu		= (void *) ddsp_vtimelocal_fail_select_cpu,
-+	.exit			= (void *) ddsp_vtimelocal_fail_exit,
- 	.name			= "ddsp_vtimelocal_fail",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/dsp_local_on.bpf.c b/tools/testing/selftests/sched_ext/dsp_local_on.bpf.c
-index efb4672decb41..6a7db1502c29e 100644
---- a/tools/testing/selftests/sched_ext/dsp_local_on.bpf.c
-+++ b/tools/testing/selftests/sched_ext/dsp_local_on.bpf.c
-@@ -56,10 +56,10 @@ void BPF_STRUCT_OPS(dsp_local_on_exit, struct scx_exit_info *ei)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops dsp_local_on_ops = {
--	.select_cpu		= dsp_local_on_select_cpu,
--	.enqueue		= dsp_local_on_enqueue,
--	.dispatch		= dsp_local_on_dispatch,
--	.exit			= dsp_local_on_exit,
-+	.select_cpu		= (void *) dsp_local_on_select_cpu,
-+	.enqueue		= (void *) dsp_local_on_enqueue,
-+	.dispatch		= (void *) dsp_local_on_dispatch,
-+	.exit			= (void *) dsp_local_on_exit,
- 	.name			= "dsp_local_on",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/enq_select_cpu_fails.bpf.c b/tools/testing/selftests/sched_ext/enq_select_cpu_fails.bpf.c
-index b3dfc1033cd6a..1efb50d61040a 100644
---- a/tools/testing/selftests/sched_ext/enq_select_cpu_fails.bpf.c
-+++ b/tools/testing/selftests/sched_ext/enq_select_cpu_fails.bpf.c
-@@ -36,8 +36,8 @@ void BPF_STRUCT_OPS(enq_select_cpu_fails_enqueue, struct task_struct *p,
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops enq_select_cpu_fails_ops = {
--	.select_cpu		= enq_select_cpu_fails_select_cpu,
--	.enqueue		= enq_select_cpu_fails_enqueue,
-+	.select_cpu		= (void *) enq_select_cpu_fails_select_cpu,
-+	.enqueue		= (void *) enq_select_cpu_fails_enqueue,
- 	.name			= "enq_select_cpu_fails",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/exit.bpf.c b/tools/testing/selftests/sched_ext/exit.bpf.c
-index ae12ddaac921b..bf79ccd55f8f0 100644
---- a/tools/testing/selftests/sched_ext/exit.bpf.c
-+++ b/tools/testing/selftests/sched_ext/exit.bpf.c
-@@ -72,13 +72,13 @@ s32 BPF_STRUCT_OPS_SLEEPABLE(exit_init)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops exit_ops = {
--	.select_cpu		= exit_select_cpu,
--	.enqueue		= exit_enqueue,
--	.dispatch		= exit_dispatch,
--	.init_task		= exit_init_task,
--	.enable			= exit_enable,
--	.exit			= exit_exit,
--	.init			= exit_init,
-+	.select_cpu		= (void *) exit_select_cpu,
-+	.enqueue		= (void *) exit_enqueue,
-+	.dispatch		= (void *) exit_dispatch,
-+	.init_task		= (void *) exit_init_task,
-+	.enable			= (void *) exit_enable,
-+	.exit			= (void *) exit_exit,
-+	.init			= (void *) exit_init,
- 	.name			= "exit",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/hotplug.bpf.c b/tools/testing/selftests/sched_ext/hotplug.bpf.c
-index 8f2601db39f37..6c9f25c9bf53e 100644
---- a/tools/testing/selftests/sched_ext/hotplug.bpf.c
-+++ b/tools/testing/selftests/sched_ext/hotplug.bpf.c
-@@ -46,16 +46,16 @@ void BPF_STRUCT_OPS_SLEEPABLE(hotplug_cpu_offline, s32 cpu)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops hotplug_cb_ops = {
--	.cpu_online		= hotplug_cpu_online,
--	.cpu_offline		= hotplug_cpu_offline,
--	.exit			= hotplug_exit,
-+	.cpu_online		= (void *) hotplug_cpu_online,
-+	.cpu_offline		= (void *) hotplug_cpu_offline,
-+	.exit			= (void *) hotplug_exit,
- 	.name			= "hotplug_cbs",
- 	.timeout_ms		= 1000U,
- };
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops hotplug_nocb_ops = {
--	.exit			= hotplug_exit,
-+	.exit			= (void *) hotplug_exit,
- 	.name			= "hotplug_nocbs",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/init_enable_count.bpf.c b/tools/testing/selftests/sched_ext/init_enable_count.bpf.c
-index 47ea89a626c37..5eb9edb1837dc 100644
---- a/tools/testing/selftests/sched_ext/init_enable_count.bpf.c
-+++ b/tools/testing/selftests/sched_ext/init_enable_count.bpf.c
-@@ -45,9 +45,9 @@ void BPF_STRUCT_OPS(cnt_disable, struct task_struct *p)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops init_enable_count_ops = {
--	.init_task	= cnt_init_task,
--	.exit_task	= cnt_exit_task,
--	.enable		= cnt_enable,
--	.disable	= cnt_disable,
-+	.init_task	= (void *) cnt_init_task,
-+	.exit_task	= (void *) cnt_exit_task,
-+	.enable		= (void *) cnt_enable,
-+	.disable	= (void *) cnt_disable,
- 	.name		= "init_enable_count",
- };
-diff --git a/tools/testing/selftests/sched_ext/maximal.bpf.c b/tools/testing/selftests/sched_ext/maximal.bpf.c
-index 00bfa9cb95d38..4d4cd8d966dba 100644
---- a/tools/testing/selftests/sched_ext/maximal.bpf.c
-+++ b/tools/testing/selftests/sched_ext/maximal.bpf.c
-@@ -131,34 +131,34 @@ void BPF_STRUCT_OPS(maximal_exit, struct scx_exit_info *info)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops maximal_ops = {
--	.select_cpu		= maximal_select_cpu,
--	.enqueue		= maximal_enqueue,
--	.dequeue		= maximal_dequeue,
--	.dispatch		= maximal_dispatch,
--	.runnable		= maximal_runnable,
--	.running		= maximal_running,
--	.stopping		= maximal_stopping,
--	.quiescent		= maximal_quiescent,
--	.yield			= maximal_yield,
--	.core_sched_before	= maximal_core_sched_before,
--	.set_weight		= maximal_set_weight,
--	.set_cpumask		= maximal_set_cpumask,
--	.update_idle		= maximal_update_idle,
--	.cpu_acquire		= maximal_cpu_acquire,
--	.cpu_release		= maximal_cpu_release,
--	.cpu_online		= maximal_cpu_online,
--	.cpu_offline		= maximal_cpu_offline,
--	.init_task		= maximal_init_task,
--	.enable			= maximal_enable,
--	.exit_task		= maximal_exit_task,
--	.disable		= maximal_disable,
--	.cgroup_init		= maximal_cgroup_init,
--	.cgroup_exit		= maximal_cgroup_exit,
--	.cgroup_prep_move	= maximal_cgroup_prep_move,
--	.cgroup_move		= maximal_cgroup_move,
--	.cgroup_cancel_move	= maximal_cgroup_cancel_move,
--	.cgroup_set_weight	= maximal_cgroup_set_weight,
--	.init			= maximal_init,
--	.exit			= maximal_exit,
-+	.select_cpu		= (void *) maximal_select_cpu,
-+	.enqueue		= (void *) maximal_enqueue,
-+	.dequeue		= (void *) maximal_dequeue,
-+	.dispatch		= (void *) maximal_dispatch,
-+	.runnable		= (void *) maximal_runnable,
-+	.running		= (void *) maximal_running,
-+	.stopping		= (void *) maximal_stopping,
-+	.quiescent		= (void *) maximal_quiescent,
-+	.yield			= (void *) maximal_yield,
-+	.core_sched_before	= (void *) maximal_core_sched_before,
-+	.set_weight		= (void *) maximal_set_weight,
-+	.set_cpumask		= (void *) maximal_set_cpumask,
-+	.update_idle		= (void *) maximal_update_idle,
-+	.cpu_acquire		= (void *) maximal_cpu_acquire,
-+	.cpu_release		= (void *) maximal_cpu_release,
-+	.cpu_online		= (void *) maximal_cpu_online,
-+	.cpu_offline		= (void *) maximal_cpu_offline,
-+	.init_task		= (void *) maximal_init_task,
-+	.enable			= (void *) maximal_enable,
-+	.exit_task		= (void *) maximal_exit_task,
-+	.disable		= (void *) maximal_disable,
-+	.cgroup_init		= (void *) maximal_cgroup_init,
-+	.cgroup_exit		= (void *) maximal_cgroup_exit,
-+	.cgroup_prep_move	= (void *) maximal_cgroup_prep_move,
-+	.cgroup_move		= (void *) maximal_cgroup_move,
-+	.cgroup_cancel_move	= (void *) maximal_cgroup_cancel_move,
-+	.cgroup_set_weight	= (void *) maximal_cgroup_set_weight,
-+	.init			= (void *) maximal_init,
-+	.exit			= (void *) maximal_exit,
- 	.name			= "maximal",
- };
-diff --git a/tools/testing/selftests/sched_ext/maybe_null.bpf.c b/tools/testing/selftests/sched_ext/maybe_null.bpf.c
-index 27d0f386acfb1..cf4ae870cd4e5 100644
---- a/tools/testing/selftests/sched_ext/maybe_null.bpf.c
-+++ b/tools/testing/selftests/sched_ext/maybe_null.bpf.c
-@@ -29,8 +29,8 @@ bool BPF_STRUCT_OPS(maybe_null_success_yield, struct task_struct *from,
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops maybe_null_success = {
--	.dispatch               = maybe_null_success_dispatch,
--	.yield			= maybe_null_success_yield,
--	.enable			= maybe_null_running,
-+	.dispatch               = (void *) maybe_null_success_dispatch,
-+	.yield			= (void *) maybe_null_success_yield,
-+	.enable			= (void *) maybe_null_running,
- 	.name			= "minimal",
- };
-diff --git a/tools/testing/selftests/sched_ext/maybe_null_fail_dsp.bpf.c b/tools/testing/selftests/sched_ext/maybe_null_fail_dsp.bpf.c
-index c0641050271d3..ec724d7b33d18 100644
---- a/tools/testing/selftests/sched_ext/maybe_null_fail_dsp.bpf.c
-+++ b/tools/testing/selftests/sched_ext/maybe_null_fail_dsp.bpf.c
-@@ -19,7 +19,7 @@ void BPF_STRUCT_OPS(maybe_null_fail_dispatch, s32 cpu, struct task_struct *p)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops maybe_null_fail = {
--	.dispatch               = maybe_null_fail_dispatch,
--	.enable			= maybe_null_running,
-+	.dispatch               = (void *) maybe_null_fail_dispatch,
-+	.enable			= (void *) maybe_null_running,
- 	.name			= "maybe_null_fail_dispatch",
- };
-diff --git a/tools/testing/selftests/sched_ext/maybe_null_fail_yld.bpf.c b/tools/testing/selftests/sched_ext/maybe_null_fail_yld.bpf.c
-index 3c1740028e3b9..e6552cace020e 100644
---- a/tools/testing/selftests/sched_ext/maybe_null_fail_yld.bpf.c
-+++ b/tools/testing/selftests/sched_ext/maybe_null_fail_yld.bpf.c
-@@ -22,7 +22,7 @@ bool BPF_STRUCT_OPS(maybe_null_fail_yield, struct task_struct *from,
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops maybe_null_fail = {
--	.yield			= maybe_null_fail_yield,
--	.enable			= maybe_null_running,
-+	.yield			= (void *) maybe_null_fail_yield,
-+	.enable			= (void *) maybe_null_running,
- 	.name			= "maybe_null_fail_yield",
- };
-diff --git a/tools/testing/selftests/sched_ext/prog_run.bpf.c b/tools/testing/selftests/sched_ext/prog_run.bpf.c
-index 6a4d7c48e3f22..00c267626a68f 100644
---- a/tools/testing/selftests/sched_ext/prog_run.bpf.c
-+++ b/tools/testing/selftests/sched_ext/prog_run.bpf.c
-@@ -28,6 +28,6 @@ void BPF_STRUCT_OPS(prog_run_exit, struct scx_exit_info *ei)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops prog_run_ops = {
--	.exit			= prog_run_exit,
-+	.exit			= (void *) prog_run_exit,
- 	.name			= "prog_run",
- };
-diff --git a/tools/testing/selftests/sched_ext/select_cpu_dfl.bpf.c b/tools/testing/selftests/sched_ext/select_cpu_dfl.bpf.c
-index 2ed2991afafe3..f171ac4709706 100644
---- a/tools/testing/selftests/sched_ext/select_cpu_dfl.bpf.c
-+++ b/tools/testing/selftests/sched_ext/select_cpu_dfl.bpf.c
-@@ -35,6 +35,6 @@ void BPF_STRUCT_OPS(select_cpu_dfl_enqueue, struct task_struct *p,
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops select_cpu_dfl_ops = {
--	.enqueue		= select_cpu_dfl_enqueue,
-+	.enqueue		= (void *) select_cpu_dfl_enqueue,
- 	.name			= "select_cpu_dfl",
- };
-diff --git a/tools/testing/selftests/sched_ext/select_cpu_dfl_nodispatch.bpf.c b/tools/testing/selftests/sched_ext/select_cpu_dfl_nodispatch.bpf.c
-index 4bb5abb2d3690..9efdbb7da9288 100644
---- a/tools/testing/selftests/sched_ext/select_cpu_dfl_nodispatch.bpf.c
-+++ b/tools/testing/selftests/sched_ext/select_cpu_dfl_nodispatch.bpf.c
-@@ -82,8 +82,8 @@ s32 BPF_STRUCT_OPS(select_cpu_dfl_nodispatch_init_task,
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops select_cpu_dfl_nodispatch_ops = {
--	.select_cpu		= select_cpu_dfl_nodispatch_select_cpu,
--	.enqueue		= select_cpu_dfl_nodispatch_enqueue,
--	.init_task		= select_cpu_dfl_nodispatch_init_task,
-+	.select_cpu		= (void *) select_cpu_dfl_nodispatch_select_cpu,
-+	.enqueue		= (void *) select_cpu_dfl_nodispatch_enqueue,
-+	.init_task		= (void *) select_cpu_dfl_nodispatch_init_task,
- 	.name			= "select_cpu_dfl_nodispatch",
- };
-diff --git a/tools/testing/selftests/sched_ext/select_cpu_dispatch.bpf.c b/tools/testing/selftests/sched_ext/select_cpu_dispatch.bpf.c
-index f0b96a4a04b2c..59bfc4f36167a 100644
---- a/tools/testing/selftests/sched_ext/select_cpu_dispatch.bpf.c
-+++ b/tools/testing/selftests/sched_ext/select_cpu_dispatch.bpf.c
-@@ -35,7 +35,7 @@ s32 BPF_STRUCT_OPS(select_cpu_dispatch_select_cpu, struct task_struct *p,
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops select_cpu_dispatch_ops = {
--	.select_cpu		= select_cpu_dispatch_select_cpu,
-+	.select_cpu		= (void *) select_cpu_dispatch_select_cpu,
- 	.name			= "select_cpu_dispatch",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/select_cpu_dispatch_bad_dsq.bpf.c b/tools/testing/selftests/sched_ext/select_cpu_dispatch_bad_dsq.bpf.c
-index 7b42ddce0f56c..3bbd5fcdfb18e 100644
---- a/tools/testing/selftests/sched_ext/select_cpu_dispatch_bad_dsq.bpf.c
-+++ b/tools/testing/selftests/sched_ext/select_cpu_dispatch_bad_dsq.bpf.c
-@@ -30,8 +30,8 @@ void BPF_STRUCT_OPS(select_cpu_dispatch_bad_dsq_exit, struct scx_exit_info *ei)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops select_cpu_dispatch_bad_dsq_ops = {
--	.select_cpu		= select_cpu_dispatch_bad_dsq_select_cpu,
--	.exit			= select_cpu_dispatch_bad_dsq_exit,
-+	.select_cpu		= (void *) select_cpu_dispatch_bad_dsq_select_cpu,
-+	.exit			= (void *) select_cpu_dispatch_bad_dsq_exit,
- 	.name			= "select_cpu_dispatch_bad_dsq",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/select_cpu_dispatch_dbl_dsp.bpf.c b/tools/testing/selftests/sched_ext/select_cpu_dispatch_dbl_dsp.bpf.c
-index 653e3dc0b4dc8..0fda57fe0ecfa 100644
---- a/tools/testing/selftests/sched_ext/select_cpu_dispatch_dbl_dsp.bpf.c
-+++ b/tools/testing/selftests/sched_ext/select_cpu_dispatch_dbl_dsp.bpf.c
-@@ -31,8 +31,8 @@ void BPF_STRUCT_OPS(select_cpu_dispatch_dbl_dsp_exit, struct scx_exit_info *ei)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops select_cpu_dispatch_dbl_dsp_ops = {
--	.select_cpu		= select_cpu_dispatch_dbl_dsp_select_cpu,
--	.exit			= select_cpu_dispatch_dbl_dsp_exit,
-+	.select_cpu		= (void *) select_cpu_dispatch_dbl_dsp_select_cpu,
-+	.exit			= (void *) select_cpu_dispatch_dbl_dsp_exit,
- 	.name			= "select_cpu_dispatch_dbl_dsp",
- 	.timeout_ms		= 1000U,
- };
-diff --git a/tools/testing/selftests/sched_ext/select_cpu_vtime.bpf.c b/tools/testing/selftests/sched_ext/select_cpu_vtime.bpf.c
-index 7f3ebf4fc2ead..e6c67bcf5e6e3 100644
---- a/tools/testing/selftests/sched_ext/select_cpu_vtime.bpf.c
-+++ b/tools/testing/selftests/sched_ext/select_cpu_vtime.bpf.c
-@@ -81,12 +81,12 @@ s32 BPF_STRUCT_OPS_SLEEPABLE(select_cpu_vtime_init)
- 
- SEC(".struct_ops.link")
- struct sched_ext_ops select_cpu_vtime_ops = {
--	.select_cpu		= select_cpu_vtime_select_cpu,
--	.dispatch		= select_cpu_vtime_dispatch,
--	.running		= select_cpu_vtime_running,
--	.stopping		= select_cpu_vtime_stopping,
--	.enable			= select_cpu_vtime_enable,
--	.init			= select_cpu_vtime_init,
-+	.select_cpu		= (void *) select_cpu_vtime_select_cpu,
-+	.dispatch		= (void *) select_cpu_vtime_dispatch,
-+	.running		= (void *) select_cpu_vtime_running,
-+	.stopping		= (void *) select_cpu_vtime_stopping,
-+	.enable			= (void *) select_cpu_vtime_enable,
-+	.init			= (void *) select_cpu_vtime_init,
- 	.name			= "select_cpu_vtime",
- 	.timeout_ms		= 1000U,
- };
--- 
-2.47.0
+>
+> (generally, it would be nice to include the proposed manpage update at
+> this time, so people can review it while the code change is fresh in
+> their minds)
 
+It'd be nice to have the man pages live somewhere within the kernel so we
+can do this as part of the patch change as things evolve during review, but
+obviously moving things about like that is out of scope for this discussion
+:)
+
+I do explicitly intend to send a manpage update once this series lands
+however.
 
