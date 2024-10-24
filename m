@@ -1,355 +1,239 @@
-Return-Path: <linux-kselftest+bounces-20547-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20548-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48B079AE9C4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 17:06:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45A2A9AE9F9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 17:11:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE6101F21500
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 15:06:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 694801C250BD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 15:11:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8317C1EABAE;
-	Thu, 24 Oct 2024 15:05:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D88691E378A;
+	Thu, 24 Oct 2024 15:11:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jtM2Kcjn"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="R6UGdaQO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C981B983F;
-	Thu, 24 Oct 2024 15:05:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7967B1D86C0;
+	Thu, 24 Oct 2024 15:11:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729782341; cv=none; b=qSgKFpTlzO3TrbJqkJKw1vple6lDeOk0RaaSsie2jJkgZZdBH421M8v4IF8fJNw5qXPp+p+Pm8pjqO+Z8kyfPz2qQeYkQ1SK8jS/PZgDu8lAg8+gjTFb4lCogc8OUKW/WDRm92qrO/1kL0JPAeBgzHYMuQt5kd+xgH+q/1j0N7A=
+	t=1729782691; cv=none; b=VTyGXv0OwzhC7yZ3RZriAZR8Ig4cMqmMu1ncenijld7pfNMV9eX54mXZra2mKbMMZtRgeAhvncdHBoBO5U4Ry6Y9gPFPEEHejLmtuaSOtPyDZblML/PUF5bjtr7esQQnNnwjWI9buPErYT74tq/6CUo1JvjLXVBevVJ1vM0DYaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729782341; c=relaxed/simple;
-	bh=PEQ1QWu3pvku7u4JDiIPHuakSqYqP2l9xHPA6y1y3gk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aO/U2UXJQiQzLDS3ko7w3hxmIFMPgfkGe6jruq9MaLuYOeYHPZBbUG3oyKj32ilGmHVl6g7fk2ZmFw0fIdD0t28aglTBvtdr+yViOlXm7yLlDMidlcov5DCQtQWi7DX0WxuzYAuFN8k3DGE5bziJSdn7WUBRoYBUIFEdZsqyYX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=jtM2Kcjn; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49O9uElQ032158;
-	Thu, 24 Oct 2024 15:05:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=UD6tTEkLajguDRwaJgV750ggvgiKjGiKpbF
-	kzqOOtzc=; b=jtM2KcjniKCLeI6SlqENneS9MfwOkPs6ZMU/lEvqdM4Lz268OEz
-	C/fDtIE+JIBluKYNx+WqB8+JZj0wWRNQrVvCyfGQ2H7OCEHSHDsge79sidHHX3ki
-	27qSpiJdlNEY6NnwUuFNIbofyjfw/mcIDIbVAeAihd1T7Ozil/NcKBLTya9Gq+yh
-	fA86XIP/K/tEd3zOpCwGx/TyELgxgR7ce2kj8PO2a+IAkR71RJgku20CbSQfT3Hf
-	2zBT4qDufr8kbOG9ImI38EJZRuDpJIOAkrVx/xvTyCV3YotRoD5XWkKSjNd+immr
-	XQVPc1ZYTxfTo1nYVkzMhEJ5BvmHVAU8HZw==
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42em3vx4sy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 24 Oct 2024 15:05:33 +0000 (GMT)
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 49OF5DkQ007765;
-	Thu, 24 Oct 2024 15:05:13 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 42cq6abpbf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 24 Oct 2024 15:05:13 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49OF5Da9007760;
-	Thu, 24 Oct 2024 15:05:13 GMT
-Received: from hu-devc-hyd-u22-c.qualcomm.com (hu-wasimn-hyd.qualcomm.com [10.147.246.180])
-	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 49OF5DvR007744
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 24 Oct 2024 15:05:13 +0000
-Received: by hu-devc-hyd-u22-c.qualcomm.com (Postfix, from userid 3944840)
-	id 21C3D589; Thu, 24 Oct 2024 20:35:12 +0530 (+0530)
-From: Wasim Nazir <quic_wasimn@quicinc.com>
-To: Shuah Khan <shuah@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        Wasim Nazir <quic_wasimn@quicinc.com>
-Subject: [PATCH v3] selftest: remoteproc: Add test for start/stop sequence
-Date: Thu, 24 Oct 2024 20:35:05 +0530
-Message-ID: <20241024150505.988479-1-quic_wasimn@quicinc.com>
-X-Mailer: git-send-email 2.46.1
+	s=arc-20240116; t=1729782691; c=relaxed/simple;
+	bh=a3TyFKV8bQ2C8AsfpldZwdswGP6i35LA5XbAJ7NzHjs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=kO8PTsRzBw2bdWpXeeFXSIl/018obda0tu+nBW49qw0M0e3KU2Y+2xWU5X50VsJXMk3NQJlNuRZtYWbV2BEB88p5vrZfOtdvMRWFtzULc3Mz4TPQc2+LA1lJ8jJFyL+CQozSH888DTZbnCq14zxa3acayqGy2asjyJq/SM6e0hE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=R6UGdaQO; arc=none smtp.client-ip=198.47.19.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 49OFAcd0051743;
+	Thu, 24 Oct 2024 10:10:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1729782638;
+	bh=Lx0RGIhvjGwcm6FPAAxd+CivzPqBmE5HANWs11llh7w=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=R6UGdaQO9DZCB7vWxWzLoZ+4H0Dy5Q55in+6fHw3vssJT7047rifKDXQsey2V2pTN
+	 vQKh8/aFREz8Pw5Vrwg+VmzVHq9o7CCAdPZLNybMrbsuoINi0XaFiRlS5vVjn97eir
+	 uy051Mx5xEtV4iVqoStmBVuXpOl8QDA4c0dVPU6M=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 49OFAcfW032095
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 24 Oct 2024 10:10:38 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 24
+ Oct 2024 10:10:38 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 24 Oct 2024 10:10:38 -0500
+Received: from [10.249.129.69] ([10.249.129.69])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 49OFATsf028284;
+	Thu, 24 Oct 2024 10:10:30 -0500
+Message-ID: <d8cf61e5-2c56-4c48-9cf3-fd54754c3816@ti.com>
+Date: Thu, 24 Oct 2024 20:40:28 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 2/4] net: hsr: Add VLAN CTAG filter support
+To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+        MD Danish Anwar
+	<danishanwar@ti.com>, <geliang@kernel.org>,
+        <liuhangbin@gmail.com>, <dan.carpenter@linaro.org>, <jiri@resnulli.us>,
+        <n.zhandarovich@fintech.ru>, <aleksander.lobakin@intel.com>,
+        <lukma@denx.de>, <horms@kernel.org>, <jan.kiszka@siemens.com>,
+        <diogo.ivo@siemens.com>, <shuah@kernel.org>, <pabeni@redhat.com>,
+        <kuba@kernel.org>, <edumazet@google.com>, <davem@davemloft.net>,
+        <andrew+netdev@lunn.ch>
+CC: <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <srk@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros
+	<rogerq@kernel.org>, <m-malladi@ti.com>
+References: <20241024103056.3201071-1-danishanwar@ti.com>
+ <20241024103056.3201071-3-danishanwar@ti.com>
+ <6cd4d59d-b635-47a3-8207-c07a18603037@linux.dev>
+Content-Language: en-US
+From: "Anwar, Md Danish" <a0501179@ti.com>
+In-Reply-To: <6cd4d59d-b635-47a3-8207-c07a18603037@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: uGtnkimSQIED6QNNHj1MKZq8iPGrbebS
-X-Proofpoint-ORIG-GUID: uGtnkimSQIED6QNNHj1MKZq8iPGrbebS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- malwarescore=0 spamscore=0 clxscore=1011 lowpriorityscore=0
- mlxlogscore=999 priorityscore=1501 mlxscore=0 suspectscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410240124
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Add test to validate end-to-end start/stop sequence for
-each remoteproc instances available on target.
+Hi Vadim,
 
-Add first test sequence to validated each instance sequencially
-to identify any issue while booting each instance.
-Add second test sequence to validate all instances concurrently
-to identify any race scenario within instances doing bootup.
+On 10/24/2024 7:06 PM, Vadim Fedorenko wrote:
+> On 24/10/2024 11:30, MD Danish Anwar wrote:
+>> From: Murali Karicheri <m-karicheri2@ti.com>
+>>
+>> This patch adds support for VLAN ctag based filtering at slave devices.
+>> The slave ethernet device may be capable of filtering ethernet packets
+>> based on VLAN ID. This requires that when the VLAN interface is created
+>> over an HSR/PRP interface, it passes the VID information to the
+>> associated slave ethernet devices so that it updates the hardware
+>> filters to filter ethernet frames based on VID. This patch adds the
+>> required functions to propagate the vid information to the slave
+>> devices.
+>>
+>> Signed-off-by: Murali Karicheri <m-karicheri2@ti.com>
+>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+>> ---
+>>   net/hsr/hsr_device.c | 71 +++++++++++++++++++++++++++++++++++++++++++-
+>>   1 file changed, 70 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/net/hsr/hsr_device.c b/net/hsr/hsr_device.c
+>> index 0ca47ebb01d3..ff586bdc2bde 100644
+>> --- a/net/hsr/hsr_device.c
+>> +++ b/net/hsr/hsr_device.c
+>> @@ -515,6 +515,68 @@ static void hsr_change_rx_flags(struct net_device
+>> *dev, int change)
+>>       }
+>>   }
+>>   +static int hsr_ndo_vlan_rx_add_vid(struct net_device *dev,
+>> +                   __be16 proto, u16 vid)
+>> +{
+>> +    struct hsr_port *port;
+>> +    struct hsr_priv *hsr;
+>> +    int ret = 0;
+>> +
+>> +    hsr = netdev_priv(dev);
+>> +
+>> +    hsr_for_each_port(hsr, port) {
+>> +        if (port->type == HSR_PT_MASTER)
+>> +            continue;
+>> +
+>> +        ret = vlan_vid_add(port->dev, proto, vid);
+>> +        switch (port->type) {
+>> +        case HSR_PT_SLAVE_A:
+>> +            if (ret) {
+>> +                netdev_err(dev, "add vid failed for Slave-A\n");
+>> +                return ret;
+>> +            }
+>> +            break;
+>> +
+>> +        case HSR_PT_SLAVE_B:
+>> +            if (ret) {
+>> +                /* clean up Slave-A */
+>> +                netdev_err(dev, "add vid failed for Slave-B\n");
+>> +                vlan_vid_del(port->dev, proto, vid);
+>> +                return ret;
+>> +            }
+>> +            break;
+>> +        default:
+>> +            break;
+>> +        }
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+> 
+> This function doesn't match with hsr_ndo_vlan_rx_kill_vid().
+> vlan_vid_add() can potentially be executed for port->type
+> equals to HSR_PT_INTERLINK, but the result will be ignored. And
+> the vlan_vid_del() will never happen in this case. Is it desired
+> behavior? Maybe it's better to synchronize add/del code and refactor
+> error path to avoid coping the code?
+> 
 
-Additional user argument (--seqdelay) is available to add
-delay is seconds, between start/stop sequence. This is added
-as different target might have different threshold to start
-any instance (default is 5 secs).
+The kill_vid / add_vid is not similar because during add_vid, if
+vlan_vid_add() succeeds for one port but fails for other, we need to
+delete it for the earlier port. We can only continue if vlan_vid_add()
+succeeds for both ports. That's the reason the switch case handling of
+add_vid can not match the same for kill_vid. Since cleanup of port is
+needed, it's not possible to synchronize add/kill code
 
-Running tests:
-	./remoteproc_test.sh --seqdelay 10
+We only care about HSR_PT_SLAVE_A and HSR_PT_SLAVE_B here. So it's okay
+to ignore HSR_PT_INTERLINK. It's a desired behaviour here.
 
-Signed-off-by: Wasim Nazir <quic_wasimn@quicinc.com>
----
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/remoteproc/Makefile   |   4 +
- tools/testing/selftests/remoteproc/config     |   1 +
- .../selftests/remoteproc/remoteproc_test.sh   | 157 ++++++++++++++++++
- 5 files changed, 164 insertions(+)
- create mode 100644 tools/testing/selftests/remoteproc/Makefile
- create mode 100644 tools/testing/selftests/remoteproc/config
- create mode 100644 tools/testing/selftests/remoteproc/remoteproc_test.sh
+>> +
+>> +static int hsr_ndo_vlan_rx_kill_vid(struct net_device *dev,
+>> +                    __be16 proto, u16 vid)
+>> +{
+>> +    struct hsr_port *port;
+>> +    struct hsr_priv *hsr;
+>> +
+>> +    hsr = netdev_priv(dev);
+>> +
+>> +    hsr_for_each_port(hsr, port) {
+>> +        if (port->type == HSR_PT_MASTER)
+>> +            continue;
+>> +        switch (port->type) {
+>> +        case HSR_PT_SLAVE_A:
+>> +        case HSR_PT_SLAVE_B:
+>> +            vlan_vid_del(port->dev, proto, vid);
+>> +            break;
+>> +        default:
+>> +            break;
+>> +        }
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>>   static const struct net_device_ops hsr_device_ops = {
+>>       .ndo_change_mtu = hsr_dev_change_mtu,
+>>       .ndo_open = hsr_dev_open,
+>> @@ -523,6 +585,8 @@ static const struct net_device_ops hsr_device_ops = {
+>>       .ndo_change_rx_flags = hsr_change_rx_flags,
+>>       .ndo_fix_features = hsr_fix_features,
+>>       .ndo_set_rx_mode = hsr_set_rx_mode,
+>> +    .ndo_vlan_rx_add_vid = hsr_ndo_vlan_rx_add_vid,
+>> +    .ndo_vlan_rx_kill_vid = hsr_ndo_vlan_rx_kill_vid,
+>>   };
+>>     static const struct device_type hsr_type = {
+>> @@ -569,7 +633,8 @@ void hsr_dev_setup(struct net_device *dev)
+>>         dev->hw_features = NETIF_F_SG | NETIF_F_FRAGLIST |
+>> NETIF_F_HIGHDMA |
+>>                  NETIF_F_GSO_MASK | NETIF_F_HW_CSUM |
+>> -               NETIF_F_HW_VLAN_CTAG_TX;
+>> +               NETIF_F_HW_VLAN_CTAG_TX |
+>> +               NETIF_F_HW_VLAN_CTAG_FILTER;
+>>         dev->features = dev->hw_features;
+>>   }
+>> @@ -647,6 +712,10 @@ int hsr_dev_finalize(struct net_device *hsr_dev,
+>> struct net_device *slave[2],
+>>           (slave[1]->features & NETIF_F_HW_HSR_FWD))
+>>           hsr->fwd_offloaded = true;
+>>   +    if ((slave[0]->features & NETIF_F_HW_VLAN_CTAG_FILTER) &&
+>> +        (slave[1]->features & NETIF_F_HW_VLAN_CTAG_FILTER))
+>> +        hsr_dev->features |= NETIF_F_HW_VLAN_CTAG_FILTER;
+>> +
+>>       res = register_netdevice(hsr_dev);
+>>       if (res)
+>>           goto err_unregister;
+> 
 
-
-Test output with 4 remoteproc instances:
-
-TAP version 13
-1..5
-# Testing rproc start/stop sequence for each instance sequencially
-# Testing rproc sequence for 4080000.remoteproc
-ok 1 4080000.remoteproc
-# Testing rproc sequence for 3700000.remoteproc
-ok 2 3700000.remoteproc
-# Testing rproc sequence for 8a00000.remoteproc
-ok 3 8a00000.remoteproc
-# Testing rproc sequence for a300000.remoteproc
-ok 4 a300000.remoteproc
-# Testing rproc start/stop sequence for all instances concurrently
-ok 5 for all remoteproc0 remoteproc1 remoteproc2 remoteproc3
-# Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Changes in v3:
-	- Add user argument for sequence delay (--sedelay).
-	- Update commit & add comments.
-	- v2: https://lore.kernel.org/all/20240927112132.3927298-1-quic_wasimn@quicinc.com/
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e9659a5a7fb3..1f8182473be1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19481,6 +19481,7 @@ F:	Documentation/staging/remoteproc.rst
- F:	drivers/remoteproc/
- F:	include/linux/remoteproc.h
- F:	include/linux/remoteproc/
-+F:	tools/testing/selftests/remoteproc/
-
- REMOTE PROCESSOR MESSAGING (RPMSG) SUBSYSTEM
- M:	Bjorn Andersson <andersson@kernel.org>
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 363d031a16f7..78669153be90 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -82,6 +82,7 @@ TARGETS += proc
- TARGETS += pstore
- TARGETS += ptrace
- TARGETS += openat2
-+TARGETS += remoteproc
- TARGETS += resctrl
- TARGETS += riscv
- TARGETS += rlimits
-diff --git a/tools/testing/selftests/remoteproc/Makefile b/tools/testing/selftests/remoteproc/Makefile
-new file mode 100644
-index 000000000000..a84b3934fd36
---- /dev/null
-+++ b/tools/testing/selftests/remoteproc/Makefile
-@@ -0,0 +1,4 @@
-+# SPDX-License-Identifier: GPL-2.0
-+TEST_PROGS := remoteproc_test.sh
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/remoteproc/config b/tools/testing/selftests/remoteproc/config
-new file mode 100644
-index 000000000000..a5c237d2f3b4
---- /dev/null
-+++ b/tools/testing/selftests/remoteproc/config
-@@ -0,0 +1 @@
-+CONFIG_REMOTEPROC=y
-diff --git a/tools/testing/selftests/remoteproc/remoteproc_test.sh b/tools/testing/selftests/remoteproc/remoteproc_test.sh
-new file mode 100644
-index 000000000000..d58c1e10005c
---- /dev/null
-+++ b/tools/testing/selftests/remoteproc/remoteproc_test.sh
-@@ -0,0 +1,157 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
-+#
-+
-+DIR="$(dirname $(readlink -f "$0"))"
-+
-+KTAP_HELPERS="${DIR}/../kselftest/ktap_helpers.sh"
-+if [ -e "$KTAP_HELPERS" ]; then
-+    . "$KTAP_HELPERS"
-+else
-+    echo -n "1..0 # SKIP $KTAP_HELPERS file not found"
-+    exit 4
-+fi
-+
-+RPROC_SYS=/sys/class/remoteproc
-+RPROC_SEQ_SLEEP=5
-+
-+rproc_instances=
-+num_tests=0
-+test_err=0
-+
-+check_error() {
-+	if [ $? -ne 0 ]; then
-+		test_err=$((test_err+1))
-+		ktap_print_msg "$@"
-+	fi
-+}
-+
-+parse_args() {
-+	script=${0##*/}
-+
-+	if [ $# -eq 2 ] && [ "$1" = "--seqdelay" ]; then
-+		shift || true
-+		RPROC_SEQ_SLEEP=$1
-+	else
-+		ktap_print_msg "Usage: ${script} --seqdelay <time in secs>"
-+		ktap_print_msg "Proceed with default sequence delay = $RPROC_SEQ_SLEEP"
-+	fi
-+}
-+
-+rproc_stop_instances() {
-+	for instance in ${rproc_instances}; do
-+		rproc=${RPROC_SYS}/$instance
-+		rproc_name=$(cat $rproc/name)
-+		rproc_state=$(cat $rproc/state)
-+
-+		echo stop > "$rproc/state"
-+		check_error "$rproc_name state-stop failed at state $rproc_state"
-+	done
-+	sleep ${RPROC_SEQ_SLEEP}
-+}
-+
-+rproc_start_instances() {
-+	for instance in ${rproc_instances}; do
-+		rproc=${RPROC_SYS}/$instance
-+		rproc_name=$(cat $rproc/name)
-+		rproc_state=$(cat $rproc/state)
-+
-+		echo start > "$rproc/state"
-+		check_error "$rproc_name state-start failed at state $rproc_state"
-+	done
-+	sleep ${RPROC_SEQ_SLEEP}
-+}
-+
-+rproc_seq_test_instance_one() {
-+	instance=$1
-+	rproc=${RPROC_SYS}/$instance
-+	rproc_name=$(cat $rproc/name)
-+	rproc_state=$(cat $rproc/state)
-+	ktap_print_msg "Testing rproc sequence for $rproc_name"
-+
-+	# Reset test_err value
-+	test_err=0
-+
-+	# Begin start/stop sequence
-+	echo start > "$rproc/state"
-+	check_error "$rproc_name state-start failed at state $rproc_state"
-+
-+	sleep ${RPROC_SEQ_SLEEP}
-+
-+	echo stop > "$rproc/state"
-+	check_error "$rproc_name state-stop failed at state $rproc_state"
-+
-+	if [ $test_err -ne 0 ]; then
-+		ktap_test_fail "$rproc_name"
-+	else
-+		ktap_test_pass "$rproc_name"
-+	fi
-+}
-+
-+rproc_seq_test_instances_concurrently() {
-+	# Reset test_err value
-+	test_err=0
-+
-+	rproc_start_instances
-+
-+	rproc_stop_instances
-+
-+	if [ $test_err -ne 0 ]; then
-+		ktap_test_fail "for any of $rproc_instances"
-+	else
-+		ktap_test_pass "for all $rproc_instances"
-+	fi
-+}
-+
-+#################################
-+### Test starts here
-+#################################
-+
-+ktap_print_header
-+
-+# Parse user arguments
-+parse_args $@
-+
-+# Check for required sysfs entries
-+if [ ! -d "${RPROC_SYS}" ]; then
-+	ktap_skip_all "${RPROC_SYS} doesn't exist."
-+	exit "${KSFT_SKIP}"
-+fi
-+
-+rproc_instances=$(find ${RPROC_SYS}/remoteproc* -maxdepth 1 -exec basename {} \;)
-+num_tests=$(echo ${rproc_instances} | wc -w)
-+if [ "${num_tests}" -eq 0 ]; then
-+	ktap_skip_all "${RPROC_SYS}/remoteproc* doesn't exist."
-+	exit "${KSFT_SKIP}"
-+fi
-+
-+# Total tests will be:
-+# 1) Seq tests for each instance sequencially
-+# 2) Seq tests for all instances concurrently
-+num_tests=$((num_tests+1))
-+
-+ktap_set_plan "${num_tests}"
-+
-+### Stop all instances
-+#
-+# Intention is to stop all running instances. If any instances are not yet
-+# started it will be don't care case as test_err is not checked.
-+# NOTE: Assuming no instances are in crashed state
-+rproc_stop_instances
-+
-+### Test 1
-+ktap_print_msg "Testing rproc start/stop sequence for each instance sequencially"
-+for instance in ${rproc_instances}; do
-+	rproc_seq_test_instance_one $instance
-+done
-+
-+### Test 2
-+ktap_print_msg "Testing rproc start/stop sequence for all instances concurrently"
-+rproc_seq_test_instances_concurrently
-+
-+### Restore all instances
-+rproc_start_instances
-+
-+ktap_finished
---
-2.46.1
-
+-- 
+Thanks and Regards,
+Md Danish Anwar
 
