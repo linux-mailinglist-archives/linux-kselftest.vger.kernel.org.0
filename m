@@ -1,112 +1,104 @@
-Return-Path: <linux-kselftest+bounces-20567-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20568-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27B779AEF14
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 20:01:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04F479AEF3A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 20:10:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0068283B43
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 18:01:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A39E01F21107
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 18:10:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B3A71FBF6A;
-	Thu, 24 Oct 2024 18:00:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F6A5200111;
+	Thu, 24 Oct 2024 18:10:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="qNLLN7MA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m/t23/5a"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E39B52003CF
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Oct 2024 18:00:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4772B1FF7D1;
+	Thu, 24 Oct 2024 18:10:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729792851; cv=none; b=GK7y1Vi0E23EtdR56xwi6Y08Rb0NzCuqV344iXyhgVIV7p953VjxWMJl2Tq9fdcpDDKOnURRduSiyZEW9qd3Mo56vaeee/fNTfH8CLKK04jZ8bP4O5Z/zvEV2ZQZUMB3FEBOXTQHRXpKXeCf2NvwrAsJUw0e74UjmjNQUBqOifI=
+	t=1729793430; cv=none; b=U0LVRfZgp4ZyTsnOl6GIZqKsSc5Q1N7+H3vu5y+Dd3Be7MJBaSsOV8XB76AkA/5IPVDrxzQYX/5I2ViQgd5z/hzQfnrt+z9pT9tq8DFtgmODEOfgVQDtsDmMfUVrO1kLOgfmL4VAy35lcqMQhPOK/mugPIysotXwY675LyyORHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729792851; c=relaxed/simple;
-	bh=cn5X3AkK7SOjJzCQhPem5vUa0eeAjshXQ8pfClrIxnw=;
-	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
-	 Content-Type; b=tCTlCvBelRwJJ3vvMl9ZWC+lfPx/5dWAky6vSk3cIc8fRZCkMhPu/mdhAMCX2lrkAaqf56CNpCbP1LX0O1gjc2ozb446ZfSuQl//5jwGtNc6wr4RWqAinSjPUg2ydXLosIyePwVSiKpGfhOViQy7vh6Tul4awuZQaW5XWEX9h3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=qNLLN7MA; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2e2e050b1c3so1639827a91.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Oct 2024 11:00:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1729792848; x=1730397648; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SKFTwGg9t3aAI0dYQJFy+Q5hfy/zjV2LsgAZPzWGPLI=;
-        b=qNLLN7MArs8s66Dzlfx5HiXe/kUTvJ1i5iGW2X7EwnmwXZj1wNR2pOMgzKvW4FWkwx
-         rQNMpp+Sphfo27EeBFJ0+I7ZyBKewrJjRYs4OHdpO1ljcYtj82E6LABBS8FxubkqFlzL
-         hClovLi+pHfgDG7bTkA42BpVrrL8u1Jyt+ATRslTKt+/sJknizrWao5S6t17+59ubUqe
-         aWebEVoI2tO1EZuQVYBykRZESKGyLXmkk1NpNLNmUrsAxuMrHfWQ2vqwb0wR/PRJFNVG
-         vMuiwQDB86FndXNpiY21uhsLRHo50ZbPbLxlFEasLwDHwKueBnjMswt2dp35bQO0/s5c
-         WBcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729792848; x=1730397648;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SKFTwGg9t3aAI0dYQJFy+Q5hfy/zjV2LsgAZPzWGPLI=;
-        b=vD30KPozVXuImW/t+1a+cePexRKUkcvAKUYwtoIwoJEx7aj5P8PMNS7eubPbsvSCDY
-         Ni0huHlvzf/0azRcsuapc+b6Bc/4SNR3bjM0sX6H2/JzdoR1aaNTS0pT56RCG3AkoFsM
-         2giFNZavp25ByT0KkOpRx0IaNvNrx9/FvWOgLE0oGoopVpT3GQtPkHSKB5S1EmpTE4A+
-         GgurAd4u2uuvTPsq73Hh1RCoL094MomNrxuC0TYYNqTya1AmFbZe/oVSb3kNGUIn4PJl
-         BdK2zypXDsDDqfrJGwPnR9bhJcSAoGWzKxPsWGgwzZp8SZnZhg0Ffcb6l6iaMNkTAyvM
-         KYQg==
-X-Forwarded-Encrypted: i=1; AJvYcCWdUIUKdnUrNLSzFY0zbHWFxfs/FB7GHdQhYJbqHjtFhPykHyrLBZwvhOASsMLN5+UXsB1i7tocx2VdESAHAz8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5o8/O19FQtj5I3tobJY4fwN9EOsR899Q5FM29yGCwTwyV8Mxg
-	hivEVFUpJ/cv3y27n7oluU2I4svoYvZ8pS5jFBx9uJ33SCrUqKJMHR+3h2Wg1xg=
-X-Google-Smtp-Source: AGHT+IGiCgZKgSuJv93hUr5hChCUjQsiSQq3PX+NDu60a4swnVwA7uAJkOhnlQF4ihAdw8OcHOqkVg==
-X-Received: by 2002:a17:90b:3b91:b0:2e2:85b8:14e with SMTP id 98e67ed59e1d1-2e77e7dca22mr4650526a91.15.1729792848304;
-        Thu, 24 Oct 2024 11:00:48 -0700 (PDT)
-Received: from localhost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e5df40bf66sm4706770a91.0.2024.10.24.11.00.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 11:00:47 -0700 (PDT)
-Date: Thu, 24 Oct 2024 11:00:47 -0700 (PDT)
-X-Google-Original-Date: Thu, 24 Oct 2024 11:00:13 PDT (-0700)
-Subject:     Re: [PATCH V2 0/4] A few fixes for RISC-V
-In-Reply-To: <20241008094141.549248-1-zhangchunyan@iscas.ac.cn>
-CC: akpm@linux-foundation.org, shuah@kernel.org,
-  Paul Walmsley <paul.walmsley@sifive.com>, alex@ghiti.fr, Charlie Jenkins <charlie@rivosinc.com>, linux-mm@kvack.org,
-  linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-  zhang.lyra@gmail.com
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: zhangchunyan@iscas.ac.cn
-Message-ID: <mhng-539e6cce-55db-4170-b3d6-cb63e7ec0a25@palmer-ri-x1c9a>
+	s=arc-20240116; t=1729793430; c=relaxed/simple;
+	bh=OqL6FsvcsJdLGD36/xtR504tOLGaOA7KNoONdtMbKik=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=JMTDsWrPJxH3S4B1lgx4u/3+eggObMotsFdkKHmFjk0xmlfNmpX+HaudEBK61CHeQllhnjuaPGQ8FzYPjXvb/0g07z00qy+Y0dIlpRoHGk2nCxELLljNlnMGgEHZTCDyQWjPGFB6fK7kBG2Xv6UFZDVMBlsgsux0SljiPXc0ekw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m/t23/5a; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC2BBC4CEE4;
+	Thu, 24 Oct 2024 18:10:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729793429;
+	bh=OqL6FsvcsJdLGD36/xtR504tOLGaOA7KNoONdtMbKik=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=m/t23/5aQJk/UpUvlVmli0FE+oiCdC08hINCtLKz9be53DDMo9vz4mJBy+7Uu09xw
+	 NZa8ElUC6A/JUn73uVbpGHBj0zd5G1rFQgwu5DUfTSODLwtQkTvjFojg6xXbczrpG0
+	 XF0O3rO/R31eiqp3xsG2X7eMYbaExpvU0IsnBKZYcQRZEVFMozT7FGyiTfxkDDp/Tx
+	 US0+IDURCfOh8XRVNygjqYaMDMOCMQD3M5ULjQqh+pk6SCf6D0Hiu/RAXmA99CD+F+
+	 xZXp4V0hz0YbQS+we7+rLuiCtiRLrTqns4V8gmJXGuGyJUTNdItwMSpi3kjr3G7uw8
+	 K/kGHgWxAw7Dw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE304380DBDC;
+	Thu, 24 Oct 2024 18:10:37 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH V2 0/4] A few fixes for RISC-V
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <172979343650.2335128.10301613190246629595.git-patchwork-notify@kernel.org>
+Date: Thu, 24 Oct 2024 18:10:36 +0000
+References: <20241008094141.549248-1-zhangchunyan@iscas.ac.cn>
+In-Reply-To: <20241008094141.549248-1-zhangchunyan@iscas.ac.cn>
+To: Chunyan Zhang <zhangchunyan@iscas.ac.cn>
+Cc: linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+ akpm@linux-foundation.org, shuah@kernel.org, paul.walmsley@sifive.com,
+ alex@ghiti.fr, charlie@rivosinc.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ zhang.lyra@gmail.com
 
-On Tue, 08 Oct 2024 02:41:37 PDT (-0700), zhangchunyan@iscas.ac.cn wrote:
+Hello:
+
+This series was applied to riscv/linux.git (fixes)
+by Palmer Dabbelt <palmer@rivosinc.com>:
+
+On Tue,  8 Oct 2024 17:41:37 +0800 you wrote:
 > These patches are all simple fixes with no strong dependency though,
 > I hope that making them a patchset will be more convenient for merge.
-
-It doesn't: there's two RISC-V fixes and two MM cleanups, which makes 
-stuff likely to get lost.  I'll take the first two, but you might need 
-to resend the others.
-
+> 
 > The patchset are based on v6.12-rc2.
->
+> 
 > Chunyan Zhang (4):
 >   riscv: Remove unused GENERATING_ASM_OFFSETS
 >   riscv: Remove duplicated GET_RM
 >   selftest/mm: Fix typo in virtual_address_range
 >   selftests/mm: skip virtual_address_range tests on riscv
->
->  arch/riscv/kernel/asm-offsets.c                    |  2 --
->  arch/riscv/kernel/traps_misaligned.c               |  2 --
->  tools/testing/selftests/mm/Makefile                |  2 ++
->  tools/testing/selftests/mm/run_vmtests.sh          | 10 ++++++----
->  tools/testing/selftests/mm/virtual_address_range.c |  4 ++--
->  5 files changed, 10 insertions(+), 10 deletions(-)
+> 
+> [...]
+
+Here is the summary with links:
+  - [V2,1/4] riscv: Remove unused GENERATING_ASM_OFFSETS
+    https://git.kernel.org/riscv/c/cb873b28bc2a
+  - [V2,2/4] riscv: Remove duplicated GET_RM
+    https://git.kernel.org/riscv/c/4c6b61b5d35e
+  - [V2,3/4] selftest/mm: Fix typo in virtual_address_range
+    (no matching commit)
+  - [V2,4/4] selftests/mm: skip virtual_address_range tests on riscv
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
