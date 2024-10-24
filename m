@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-20579-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20580-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95DF19AF455
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 23:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 554EE9AF456
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 23:09:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 137711F22324
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 21:09:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00CB61F22240
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 21:09:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D134B218D79;
-	Thu, 24 Oct 2024 21:08:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CFF5219488;
+	Thu, 24 Oct 2024 21:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IOo4+yMn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="atis4df6"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2DA189F3E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3EF21832E;
 	Thu, 24 Oct 2024 21:08:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729804088; cv=none; b=hxAdQ9KJ17AKd9e0uYhN6ee81chZG3bJLjw/CyvqbSo3ATUUzAMSk8SNW/lPrJUd3kil8byTKxOqBUTd52Nv4NC1eYS3KcGe0o5lqVS8tlT6FwTyjMnziLQ6UHZlZFU9bz0WlLtmBZWfrVy5kYEfcuyzZCkvL3cEIvjDGKI4vYc=
+	t=1729804089; cv=none; b=qv5AX9fQ9sjTfu/MtZnyrqkGgDtOhigfIY2Pwy3R6Z43gS0OLP91YkpH6kqPobxJ+29+KHG9vSqdgEr6KsP9WFJ8w+Hc+VznM1z6Dq8IYLo6Vl/08RlnhyE58KJ9J5nqBQlXkIqwbrCuQDkj3pDEee6Q8WW4uDLQTMgorZ1Ruxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729804088; c=relaxed/simple;
-	bh=7BFETFF+Lrhf1bsYmQmPo4keg+4a9mpHorYCi83s0Ww=;
+	s=arc-20240116; t=1729804089; c=relaxed/simple;
+	bh=K3dDL/ARG9AHDi3oOFzH+WG7DuBUfvcX+mwZNnT6MGw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sMuw4A71OqyoK1PjvqGNIZhwLwHNaNqRfMHeAyKhq6w32t1sr7dOzbFZOdRcH5Uq54QoVcjE3hQDB7KMSNAXtDIxQ9gX0sb/v+EHhGdAJt2fTzewUc7gV3RjubCPuzPecSePMrbQH3nNgo09aQpRZ3/aNty4W4kvrI3fMgjBiGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IOo4+yMn; arc=none smtp.client-ip=192.198.163.16
+	 MIME-Version:Content-Type; b=SeUtLL8MYf82Iyom2ifP6O3JjcJYAyXynxaIaL5LWwWhDxzMmNqR2YkPNePFhf01UolF47M3nyIlcDYaOUWfxlgjElqtcnCmUlf267zTZ1OnHi+H6wuP6V5XzLKRRQO+4be2Ap/GP7GQwlnH2Nh+nIjKE9mmn/SgktvW2YwWT9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=atis4df6; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729804086; x=1761340086;
+  t=1729804087; x=1761340087;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7BFETFF+Lrhf1bsYmQmPo4keg+4a9mpHorYCi83s0Ww=;
-  b=IOo4+yMnhjQfHchi6ElN+dDW3Q6v6hEWz9gYSHqjOl2nNa2gy3NojCgm
-   G/CAZUrFyYo7wFCcZNnVkVfMuMuTac4WEBsoGEJ+GAlwWEMNhOtJXkBqI
-   38KWby8GbGZfKtJQk82eHLTT6Viqvfm6RVU4JemCFH5mW6RYpcsh0ubdi
-   kd4cc6fhm3LC9eyVnzqkN/T6lUzvFGC8VpAWPJN2fq+qv0XNuSJQgQKQw
-   RWTnI9ig7nvXsUxN0vg5qgYEVhhVLIm0zxPYvMfowq6SOhJMYS2LmCxSo
-   yRipl38RhN1uRwo6Y2eXTbcdlo3Ds0FACTNIr7B6AYrfFhjkjBURjMbyS
-   w==;
-X-CSE-ConnectionGUID: 03BM610MRke62VyUUNTO3w==
-X-CSE-MsgGUID: zRRxaJ0+S6afT5xuaxabEg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="17090899"
+  bh=K3dDL/ARG9AHDi3oOFzH+WG7DuBUfvcX+mwZNnT6MGw=;
+  b=atis4df6Kg3mK63XiapyT0N2N/xCG+YVZkfhwvzzOxgsKa66PQkUQ5IO
+   DEaU76AtVG1mOWZxnlPsahpYnFVZk/NDwYgMI75lrU0CmT9fkhDoclqG2
+   mHb86j+j6eSwvJijJ1ETs03cjNx2rDIBm7DWXuopWPGn6BcmBAJoH9+ej
+   04kU0PlMSwUi+daDTyqdQUSv9qF5ZzaOev5UHLi5+3H19rUAn8jzuQiPu
+   VLNDVAjhYodNkGKHpNZRqjCxON4EYG4X63VNlTVh6p/W6FY5lyGBwlrjs
+   Irh6G/Xk91JTXZc/S6DpriYmZ3yflChFPggphkaM55HyK9WbmIicpvZ13
+   A==;
+X-CSE-ConnectionGUID: j/dPH2bnSTWh3m5F6lOX2A==
+X-CSE-MsgGUID: O5hFrmLEQLKr7/qQOV+Edg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="17090905"
 X-IronPort-AV: E=Sophos;i="6.11,230,1725346800"; 
-   d="scan'208";a="17090899"
+   d="scan'208";a="17090905"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
   by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 14:08:01 -0700
-X-CSE-ConnectionGUID: 8yXDKXrCQw+3P0eLxSdP4A==
-X-CSE-MsgGUID: 3ujS6rGhRGqK3Sn3YBsZbQ==
+X-CSE-ConnectionGUID: TK8Vk/jXR1qcmmLPcEbsvw==
+X-CSE-MsgGUID: e9NfCFGfR6eApHvDs72UQA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="85488033"
+   d="scan'208";a="85488036"
 Received: from rchatre-desk1.jf.intel.com ([10.165.154.99])
   by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2024 14:08:01 -0700
 From: Reinette Chatre <reinette.chatre@intel.com>
@@ -69,9 +69,9 @@ Cc: maciej.wieczor-retman@intel.com,
 	reinette.chatre@intel.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH V4 05/15] selftests/resctrl: Protect against array overflow when reading strings
-Date: Thu, 24 Oct 2024 14:18:42 -0700
-Message-ID: <96c86bb56a520945eee493a938161f50549ce6a5.1729804024.git.reinette.chatre@intel.com>
+Subject: [PATCH V4 06/15] selftests/resctrl: Make wraparound handling obvious
+Date: Thu, 24 Oct 2024 14:18:43 -0700
+Message-ID: <890c35b8c7b1aef384db0a1f9042322cf2dd23c8.1729804024.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1729804024.git.reinette.chatre@intel.com>
 References: <cover.1729804024.git.reinette.chatre@intel.com>
@@ -84,76 +84,85 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-resctrl selftests discover system properties via a variety of sysfs files.
-The MBM and MBA tests need to discover the event and umask with which to
-configure the performance event used to measure read memory bandwidth.
-This is done by parsing the contents of
-/sys/bus/event_source/devices/uncore_imc_<imc instance>/events/cas_count_read
-Similarly, the resctrl selftests discover the cache size via
-/sys/bus/cpu/devices/cpu<id>/cache/index<index>/size.
+Within mba_setup() the programmed bandwidth delay value starts
+at the maximum (100, or rather ALLOCATION_MAX) and progresses
+towards ALLOCATION_MIN by decrementing with ALLOCATION_STEP.
 
-Take care to do bounds checking when using fscanf() to read the
-contents of files into a string buffer because by default fscanf() assumes
-arbitrarily long strings. If the file contains more bytes than the array
-can accommodate then an overflow will occur.
+The programmed bandwidth delay should never be negative, so
+representing it with an unsigned int is most appropriate. This
+may introduce confusion because of the "allocation > ALLOCATION_MAX"
+check used to check wraparound of the subtraction.
 
-Provide a maximum field width to the conversion specifier to protect
-against array overflow. The maximum is one less than the array size because
-string input stores a terminating null byte that is not covered by the
-maximum field width.
+Modify the mba_setup() flow to start at the minimum, ALLOCATION_MIN,
+and incrementally, with ALLOCATION_STEP steps, adjust the
+bandwidth delay value. This avoids wraparound while making the purpose
+of "allocation > ALLOCATION_MAX" clear and eliminates the
+need for the "allocation < ALLOCATION_MIN" check.
 
+Reported-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Closes: https://lore.kernel.org/lkml/1903ac13-5c9c-ef8d-78e0-417ac34a971b@linux.intel.com/
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
-This makes the code robust against any changes in information read
-from sysfs. The existing sysfs content fit well into the arrays, thus
-this is not considered a bugfix.
-
-Changes since V3:
-- Add Ilpo's Reviewed-by tag.
-
-Changes since V2:
+Changes since V1:
 - New patch
+- Add Ilpo's Reviewed-by tag.
 ---
- tools/testing/selftests/resctrl/resctrl_val.c | 4 ++--
- tools/testing/selftests/resctrl/resctrlfs.c   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/resctrl/mba_test.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index e88d5ca30517..c9dd70ce3ea8 100644
---- a/tools/testing/selftests/resctrl/resctrl_val.c
-+++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -159,7 +159,7 @@ static int read_from_imc_dir(char *imc_dir, int count)
+diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+index ab8496a4925b..da40a8ed4413 100644
+--- a/tools/testing/selftests/resctrl/mba_test.c
++++ b/tools/testing/selftests/resctrl/mba_test.c
+@@ -39,7 +39,8 @@ static int mba_setup(const struct resctrl_test *test,
+ 		     const struct user_params *uparams,
+ 		     struct resctrl_val_param *p)
+ {
+-	static int runs_per_allocation, allocation = 100;
++	static unsigned int allocation = ALLOCATION_MIN;
++	static int runs_per_allocation;
+ 	char allocation_str[64];
+ 	int ret;
  
- 		return -1;
- 	}
--	if (fscanf(fp, "%s", cas_count_cfg) <= 0) {
-+	if (fscanf(fp, "%1023s", cas_count_cfg) <= 0) {
- 		ksft_perror("Could not get iMC cas count read");
- 		fclose(fp);
+@@ -50,7 +51,7 @@ static int mba_setup(const struct resctrl_test *test,
+ 	if (runs_per_allocation++ != 0)
+ 		return 0;
  
-@@ -177,7 +177,7 @@ static int read_from_imc_dir(char *imc_dir, int count)
+-	if (allocation < ALLOCATION_MIN || allocation > ALLOCATION_MAX)
++	if (allocation > ALLOCATION_MAX)
+ 		return END_OF_TESTS;
  
- 		return -1;
- 	}
--	if  (fscanf(fp, "%s", cas_count_cfg) <= 0) {
-+	if  (fscanf(fp, "%1023s", cas_count_cfg) <= 0) {
- 		ksft_perror("Could not get iMC cas count write");
- 		fclose(fp);
+ 	sprintf(allocation_str, "%d", allocation);
+@@ -59,7 +60,7 @@ static int mba_setup(const struct resctrl_test *test,
+ 	if (ret < 0)
+ 		return ret;
  
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 250c320349a7..a53cd1cb6e0c 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -182,7 +182,7 @@ int get_cache_size(int cpu_no, const char *cache_type, unsigned long *cache_size
+-	allocation -= ALLOCATION_STEP;
++	allocation += ALLOCATION_STEP;
  
- 		return -1;
- 	}
--	if (fscanf(fp, "%s", cache_str) <= 0) {
-+	if (fscanf(fp, "%63s", cache_str) <= 0) {
- 		ksft_perror("Could not get cache_size");
- 		fclose(fp);
+ 	return 0;
+ }
+@@ -72,8 +73,9 @@ static int mba_measure(const struct user_params *uparams,
  
+ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
+ {
+-	int allocation, runs;
++	unsigned int allocation;
+ 	bool ret = false;
++	int runs;
+ 
+ 	ksft_print_msg("Results are displayed in (MB)\n");
+ 	/* Memory bandwidth from 100% down to 10% */
+@@ -103,7 +105,7 @@ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
+ 			       avg_diff_per > MAX_DIFF_PERCENT ?
+ 			       "Fail:" : "Pass:",
+ 			       MAX_DIFF_PERCENT,
+-			       ALLOCATION_MAX - ALLOCATION_STEP * allocation);
++			       ALLOCATION_MIN + ALLOCATION_STEP * allocation);
+ 
+ 		ksft_print_msg("avg_diff_per: %d%%\n", avg_diff_per);
+ 		ksft_print_msg("avg_bw_imc: %lu\n", avg_bw_imc);
 -- 
 2.47.0
 
