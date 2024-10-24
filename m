@@ -1,83 +1,83 @@
-Return-Path: <linux-kselftest+bounces-20565-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20566-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25A009AEF11
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 20:00:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54FBB9AEF12
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 20:00:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7786281EF4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 18:00:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18182283477
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 18:00:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDE3A1FF7DA;
-	Thu, 24 Oct 2024 18:00:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C6CC2003AA;
+	Thu, 24 Oct 2024 18:00:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="PsMoJYT2"
+	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="TMqUymJ2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 613DB1FF5FD
-	for <linux-kselftest@vger.kernel.org>; Thu, 24 Oct 2024 18:00:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3200E1FC7F6
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Oct 2024 18:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729792845; cv=none; b=K/aG4QPSYKWKgWR4WWue6t2zOyLHjiDZYLDJKyEPXOGoPdBWnJzKaAUrD5EzSPLqSHziHKSWE1G+rbg9k2r8MlthYOTPdeIHwYGMO6TqA7Wh/yvqrYPEHR+515Eq8TatpuAgqdcZjs8H1HgFIyHjK0iogFocmLTCXRmQLo1hAcc=
+	t=1729792847; cv=none; b=IxGuflhJpDw7/HQ/db2GQlkrP4aJlNAwlMWZqoB3HcPBrJIqJDsgpFHiNy7/fOzodsSdS7050vLUJQwm/uT5TeCbpoS5lp1pwSGJCY0bhdYEVUhd5jehurXo0lA+sHxsN9dzG6ZTsGvsEyngnKHcsp7vjSNcuV88Crqhm8n2uXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729792845; c=relaxed/simple;
-	bh=v/HtRG5S2NVKfvlArIvjBQp0JcOSotOovrvIG+I/hzI=;
+	s=arc-20240116; t=1729792847; c=relaxed/simple;
+	bh=muBTsnGgt4lv8pYJw02Ph/NywXN6cCSzdY71FcJMJg0=;
 	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
-	 Content-Type; b=QIqb/r1DfyTIYFLvL+01DIVrHaBMjvFPOh7wBMggdMnE6KjHvcIYDtvgfS2tYXTpyvvuXxdlGEY67IYCqYKAFtDtJIxz4DHIC0Nv89VyCoCMWfKKBomNuaeQutI5i5e95gxpBa1ZyyDN9j1lbibDVMpm26cUD0kmzi0Wd9lJrVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=PsMoJYT2; arc=none smtp.client-ip=209.85.210.169
+	 Content-Type; b=caBdiq9whKP7lLxs6jRTRJBGHjn8NiqSgkpnAjtph0P1g1hLaWFYAcaqtf8O5nkRlwcEWkJweFh3WUg7LKaP7tjBBwRPr8a7mNu0GyHLXR1iRFzzB1rYR39OTiEItGyK8ae4rngbzcuiDJRnQcfeeGdfEu+b51GB09SIjjhavwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=TMqUymJ2; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-71e8235f0b6so894173b3a.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Oct 2024 11:00:42 -0700 (PDT)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-20bb39d97d1so9413875ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Oct 2024 11:00:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1729792841; x=1730397641; darn=vger.kernel.org;
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1729792844; x=1730397644; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=U/q1WiGJcS/tkbhu37qaq0jxibdm+CvDbpDg/bK1kAU=;
-        b=PsMoJYT2tmiGPrUZrz+ssmCo4jRYcyKBn+sTM4JUwUm5JfU0+/9TNxu4dE6dLKaJVe
-         mYtoZi4XdJPcnIjlv2ftF3EofleHO1/VP934gWmWz5UdQOMNonhIysNGK4N79/kyGl0H
-         1codQpw53H71dqZ9mDXicx/kqdy14rkIepp+f5TSeB13PBWvHRIomusOQJ2Qg8CuUT4Y
-         ljWHofVgJGIYCX/L9WxesJtLdx4zk/tGPSKv38h8SUzWAjykcw9zzj7+4ddrtqeCbWr8
-         AV+5niDfMf80rCANBNDGYXLGUYsmSf/ETeivZaIuYwHNeu3mGfSa91rwgmnRSN8bl/vD
-         81xg==
+        bh=Uq3Sx3k7CbWldci8VdjhK0lmnb+JNksv0KZ/tegkNgc=;
+        b=TMqUymJ2N0LCY/YFINTOhn23AtuOAYUGk5I2CKnganONbFuIAHXjmsV5Dn4wxpJHjX
+         PalXb69o2En9Jj9mxRpaNogtsapAJKsp8vzOrnLMFK1Guee3Iv2u82QPtpLjJymt0lJB
+         CmRgHmwwu4TNe4wPrCs/5/o+6XF+2gXN0qixO2UK/ZTuO4Z8PEfigmQnAxm+B/tfjWND
+         dXW/QdI/DC63k9jmFBXaBWvfMhiUs+6f8rUldsLScILzV4MRqWxbhPtaIt2GL4P/K2Es
+         0H1NntOtXaiopuD6LA6N8XQZ4v9BGx97wNCHDYI3RciJ+fhpg7U2pQ88rrp2MfyARnUZ
+         yNKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729792841; x=1730397641;
+        d=1e100.net; s=20230601; t=1729792844; x=1730397644;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U/q1WiGJcS/tkbhu37qaq0jxibdm+CvDbpDg/bK1kAU=;
-        b=ML8hf7aHrT58gs5RFL73Rv83biRFI9YUDITg61acdvcHeSRnFARWZg6MwGSqMjIlZi
-         Y2h+YcUL6ZqiDnK1dqYv7cabnYhta14DaJxudsUtCBUGpCxlDYOUsZkIEjdtVpXXv3j2
-         Dq7buKKP38LlEX7pBFaetmLhHf/8aFcgAHst9SywTjEpcMB7Wvi1JY4wKlBzBGwiJoug
-         MP1kSLljk1Qk3t2jvGQODJIbdtR2eZaHrP9ngIfAqVnbsLKXXaCbkPuYj/aMs7eIOO3C
-         ejTeMGGuL9a1rbw8o5AOxtfSCibs5Rep1+xGgT0j7Zpb52k2VMwjhQT7xeXWS3h0mIuL
-         x81w==
-X-Forwarded-Encrypted: i=1; AJvYcCXslmWVicfCo7X2SpXNC+dsjnwwhQQStyWast8SXnAjw2fnsleSs6zsLLCwIp5icqSjpG/TVpJy6Y5GqPLne0I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7Snowk2PMr2xEnb7rFfGK7uFPY84HFQxpCxkueZLJYibvGhjf
-	86CGlavVxwmEY4+K4sBqsi39NV+USzVoER3FUAVNq4X6+fl2sOTRH4GKLF/gpVY=
-X-Google-Smtp-Source: AGHT+IEWB1udhSviA9LAWrRVloAe7iAHeKwlFuxSRB7lYrklQRgkKc7BVJq9iQgQFB+GNpPYe7xzxw==
-X-Received: by 2002:a05:6a00:2e1c:b0:71e:634e:fe0d with SMTP id d2e1a72fcca58-72030a8ae4bmr10220156b3a.12.1729792841339;
-        Thu, 24 Oct 2024 11:00:41 -0700 (PDT)
+        bh=Uq3Sx3k7CbWldci8VdjhK0lmnb+JNksv0KZ/tegkNgc=;
+        b=wn4qtfZkok6LNaRBinMZNTOsNBQPjWRcC79bkkv5REuwb45A5hFlIABYYitIlZBiSX
+         CBIBYl2DXqXWTPJZhB3zAOuTQxaWirNQSZU+Kk8Cz50Ru/LNrCnIjZr5F00Pq0gj1XiB
+         Qi6e6CcxVAFQ1KQkse/HOQLhkEp81jmlpqcZT16zjzbq4g9mdVMy9fNYz1taamp6IF5F
+         lG4Xyg7yBBo+XERaGSPjSM/rTXikRHN1RwTZCdLIJoO+nyVEtTSqASZU6Zu8WVvT+StA
+         H/VT236V0HTstEMculeTOqwUE2wXeq4/Zz7gmgY6wmJvUIngbtxQvXJ2H5WLGwau7Ye8
+         /siw==
+X-Forwarded-Encrypted: i=1; AJvYcCVoGRGnJivlVIvrl1oUaKPObXo+8LIGOGMYDL9couo69QSrfXrOTkr9sXJyVSrBorBgY2Oion0ykhsRDrN+M7w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVVc49jDfpQaO0raWuecVSs4MUrjVZHygykMiEyde2Oe8gHleP
+	6ZacPKN8MaB2s9nulTz+h0KLCqdcqmcnVe2bQxVJOw5CSTLze7EYxZGJ6sHIasM=
+X-Google-Smtp-Source: AGHT+IG6scKr4Ed7CrsoFYPBrwdrqHCqMwM3BvTaed47lJT2cbMpV1ZnIibL+NTBPSm65i2rdkQzqw==
+X-Received: by 2002:a17:902:e5ca:b0:20c:b876:5046 with SMTP id d9443c01a7336-20fa9ea37c0mr67231345ad.50.1729792844371;
+        Thu, 24 Oct 2024 11:00:44 -0700 (PDT)
 Received: from localhost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ec13ea720sm8218735b3a.157.2024.10.24.11.00.40
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7ef15992sm75616485ad.74.2024.10.24.11.00.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 11:00:40 -0700 (PDT)
-Date: Thu, 24 Oct 2024 11:00:40 -0700 (PDT)
-X-Google-Original-Date: Thu, 24 Oct 2024 10:54:46 PDT (-0700)
-Subject:     Re: [PATCH V2 4/4] selftests/mm: skip virtual_address_range tests on riscv
-In-Reply-To: <20241008094141.549248-5-zhangchunyan@iscas.ac.cn>
+        Thu, 24 Oct 2024 11:00:43 -0700 (PDT)
+Date: Thu, 24 Oct 2024 11:00:43 -0700 (PDT)
+X-Google-Original-Date: Thu, 24 Oct 2024 10:57:56 PDT (-0700)
+Subject:     Re: [PATCH V2 3/4] selftest/mm: Fix typo in virtual_address_range
+In-Reply-To: <20241008094141.549248-4-zhangchunyan@iscas.ac.cn>
 CC: akpm@linux-foundation.org, shuah@kernel.org,
   Paul Walmsley <paul.walmsley@sifive.com>, alex@ghiti.fr, Charlie Jenkins <charlie@rivosinc.com>, linux-mm@kvack.org,
   linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
   zhang.lyra@gmail.com
 From: Palmer Dabbelt <palmer@dabbelt.com>
-To: zhangchunyan@iscas.ac.cn
-Message-ID: <mhng-d7045132-a4e1-409a-9646-d8ecd3d6a48f@palmer-ri-x1c9a>
+To: zhangchunyan@iscas.ac.cn, akpm@linux-foundation.org
+Message-ID: <mhng-43cbba56-67ba-4f5a-a929-0805662b22bf@palmer-ri-x1c9a>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -87,58 +87,42 @@ Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On Tue, 08 Oct 2024 02:41:41 PDT (-0700), zhangchunyan@iscas.ac.cn wrote:
-> RISC-V doesn't currently have the behavior of restricting the virtual
-> address space which virtual_address_range tests check, this will
-> cause the tests fail. So lets disable the whole test suite for riscv64
-> for now, not build it and run_vmtests.sh will skip it if it is not present.
+On Tue, 08 Oct 2024 02:41:40 PDT (-0700), zhangchunyan@iscas.ac.cn wrote:
+> The function name should be *hint* address, so correct it.
 >
 > Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
 > Signed-off-by: Chunyan Zhang <zhangchunyan@iscas.ac.cn>
 > ---
 > V1: https://lore.kernel.org/linux-mm/ZuOuedBpS7i3T%2Fo0@ghost/T/
 > ---
->  tools/testing/selftests/mm/Makefile       |  2 ++
->  tools/testing/selftests/mm/run_vmtests.sh | 10 ++++++----
->  2 files changed, 8 insertions(+), 4 deletions(-)
+>  tools/testing/selftests/mm/virtual_address_range.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-> index 02e1204971b0..76a378c5c141 100644
-> --- a/tools/testing/selftests/mm/Makefile
-> +++ b/tools/testing/selftests/mm/Makefile
-> @@ -115,7 +115,9 @@ endif
+> diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
+> index 4e4c1e311247..2a2b69e91950 100644
+> --- a/tools/testing/selftests/mm/virtual_address_range.c
+> +++ b/tools/testing/selftests/mm/virtual_address_range.c
+> @@ -64,7 +64,7 @@
+>  #define NR_CHUNKS_HIGH  NR_CHUNKS_384TB
+>  #endif
 >
->  ifneq (,$(filter $(ARCH),arm64 mips64 parisc64 powerpc riscv64 s390x sparc64 x86_64 s390))
->  TEST_GEN_FILES += va_high_addr_switch
-> +ifneq ($(ARCH),riscv64)
->  TEST_GEN_FILES += virtual_address_range
-> +endif
->  TEST_GEN_FILES += write_to_hugetlbfs
->  endif
+> -static char *hind_addr(void)
+> +static char *hint_addr(void)
+>  {
+>  	int bits = HIGH_ADDR_SHIFT + rand() % (63 - HIGH_ADDR_SHIFT);
 >
-> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> index c5797ad1d37b..4493bfd1911c 100755
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -347,10 +347,12 @@ if [ $VADDR64 -ne 0 ]; then
->  	# allows high virtual address allocation requests independent
->  	# of platform's physical memory.
+> @@ -185,7 +185,7 @@ int main(int argc, char *argv[])
+>  	}
 >
-> -	prev_policy=$(cat /proc/sys/vm/overcommit_memory)
-> -	echo 1 > /proc/sys/vm/overcommit_memory
-> -	CATEGORY="hugevm" run_test ./virtual_address_range
-> -	echo $prev_policy > /proc/sys/vm/overcommit_memory
-> +	if [ -x ./virtual_address_range ]; then
-> +		prev_policy=$(cat /proc/sys/vm/overcommit_memory)
-> +		echo 1 > /proc/sys/vm/overcommit_memory
-> +		CATEGORY="hugevm" run_test ./virtual_address_range
-> +		echo $prev_policy > /proc/sys/vm/overcommit_memory
-> +	fi
->
->  	# va high address boundary switch test
->  	ARCH_ARM64="arm64"
+>  	for (i = 0; i < NR_CHUNKS_HIGH; i++) {
+> -		hint = hind_addr();
+> +		hint = hint_addr();
+>  		hptr[i] = mmap(hint, MAP_CHUNK_SIZE, PROT_READ | PROT_WRITE,
+>  			       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
 Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-(I'm taking the first two as they're RISC-V bits)
+In case that helps, but this has nothing to do with RISC-V so you might 
+need to re-send it so someone else notices.  Though +Andrew, in case 
+that's enough...
 
