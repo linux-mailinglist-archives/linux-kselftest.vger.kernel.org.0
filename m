@@ -1,50 +1,85 @@
-Return-Path: <linux-kselftest+bounces-20568-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20569-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04F479AEF3A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 20:10:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A69869AF28D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 21:22:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A39E01F21107
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 18:10:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E55228B20F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2024 19:22:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F6A5200111;
-	Thu, 24 Oct 2024 18:10:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 015842178F4;
+	Thu, 24 Oct 2024 19:17:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m/t23/5a"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N6TZmFxW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4772B1FF7D1;
-	Thu, 24 Oct 2024 18:10:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0DEF208968
+	for <linux-kselftest@vger.kernel.org>; Thu, 24 Oct 2024 19:17:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729793430; cv=none; b=U0LVRfZgp4ZyTsnOl6GIZqKsSc5Q1N7+H3vu5y+Dd3Be7MJBaSsOV8XB76AkA/5IPVDrxzQYX/5I2ViQgd5z/hzQfnrt+z9pT9tq8DFtgmODEOfgVQDtsDmMfUVrO1kLOgfmL4VAy35lcqMQhPOK/mugPIysotXwY675LyyORHc=
+	t=1729797459; cv=none; b=WyALqpTvAwHlZQ6GRfh+e+1wpNgmniI7GPtJGYd3hrCX/uAo94GnpGXy0CFWcv+duS5KFNwE531rcVLd7PaoJKrBcTnvab5LjdHBrAmlyPfO6XLX+WvLst4KGn+K95kkWE6Tj2B1h67DU3zbUzyekrIrAvdb4zZ+zFkZPmLxW10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729793430; c=relaxed/simple;
-	bh=OqL6FsvcsJdLGD36/xtR504tOLGaOA7KNoONdtMbKik=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=JMTDsWrPJxH3S4B1lgx4u/3+eggObMotsFdkKHmFjk0xmlfNmpX+HaudEBK61CHeQllhnjuaPGQ8FzYPjXvb/0g07z00qy+Y0dIlpRoHGk2nCxELLljNlnMGgEHZTCDyQWjPGFB6fK7kBG2Xv6UFZDVMBlsgsux0SljiPXc0ekw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m/t23/5a; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC2BBC4CEE4;
-	Thu, 24 Oct 2024 18:10:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729793429;
-	bh=OqL6FsvcsJdLGD36/xtR504tOLGaOA7KNoONdtMbKik=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=m/t23/5aQJk/UpUvlVmli0FE+oiCdC08hINCtLKz9be53DDMo9vz4mJBy+7Uu09xw
-	 NZa8ElUC6A/JUn73uVbpGHBj0zd5G1rFQgwu5DUfTSODLwtQkTvjFojg6xXbczrpG0
-	 XF0O3rO/R31eiqp3xsG2X7eMYbaExpvU0IsnBKZYcQRZEVFMozT7FGyiTfxkDDp/Tx
-	 US0+IDURCfOh8XRVNygjqYaMDMOCMQD3M5ULjQqh+pk6SCf6D0Hiu/RAXmA99CD+F+
-	 xZXp4V0hz0YbQS+we7+rLuiCtiRLrTqns4V8gmJXGuGyJUTNdItwMSpi3kjr3G7uw8
-	 K/kGHgWxAw7Dw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE304380DBDC;
-	Thu, 24 Oct 2024 18:10:37 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1729797459; c=relaxed/simple;
+	bh=+4IttYR4kTs3BgakyteqDLXe6FUHJAKHRCl8Q2HFcqA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ty7f8wa56Nau0PCKHeXJyKXnGBf+DsLsJPwjY+olO6dpLWzUo7B0/LogXPHlpXt1EyTiwL8icJcWfz9uuC+Jdd9EBqXe1pHWuP4ibEuhRWuWUSyV/kzvDYjZW/r0QbWwOOH6mtJsPY7VXmz6ZLmJow6OQUU7Aq3+3UR02RcHo6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N6TZmFxW; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e2e2d013f2dso1498836276.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Oct 2024 12:17:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729797456; x=1730402256; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZOWx7jnVLhhYqmmc0kk5hR8SpqsjGY3VnKJpFaYMEEE=;
+        b=N6TZmFxWheJccVY/baKcZSlIYT3iSBhH1PSkgbbrX/NkPfYY2eMIoAX+YK/yFYuoln
+         7tQ3O4il7Nt4U/KoUdPY6rQYOrjnj696zWfExtRYhgUlyyASWYZMgQIyOR7qdllfBsBg
+         m+U1fYSRaegSea00Pp5uFuMtOWnYdrL8zFHwSSLsSnKMCQ6qk9JvqM6oEZFP7ZBp9xJP
+         PB1POR3F7bVQ02+6Imz2HC1HetUIRUXH10yicsuy7hRShwC4fS+CnJst+h2zy7V8brV1
+         Pts1d4dr4psreryyC6/mQQQxyvpSmVP12m5s1Cdf9O7ibtcNkemZ19aBqjVymlzXhZ+R
+         54pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729797456; x=1730402256;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZOWx7jnVLhhYqmmc0kk5hR8SpqsjGY3VnKJpFaYMEEE=;
+        b=V/BslcJ6+nl6laoV8z7neNz4+g4gc6sFLwMLKycYVWuAwcemydBzlypWDC5CzGVmGr
+         gJwIkwCGkywaePna7i2Vhb3nm8GFeTfVZrJvTEYT90S5mOY4r2rJwLOKhLZ+DtuTI6th
+         WY15vFY+d85/38lbFIN6Ebzbc4QOwoxGFCf54wKV7I5jGd4QP3xqiGcJzVLXxbz7irY4
+         Y9sxC2sT0Tk9qwLT5o9oMsuM9Ta36C25vLPGzPNdpFfn7ilMBk+JDGnmPa3CUlmCumWu
+         LQKAh8A+uHcGBLPju7bu8Y9c3aA5cFUp6+AE/AsnceLL8sHVi4spwl7ovjYHHQHex6t4
+         v2Lg==
+X-Forwarded-Encrypted: i=1; AJvYcCUmZ/SEMDTJzFPweCPzKuSuajahNwNeRktJANi4x8aBMP69O2tQqksnjBwdSjDSLbxgJZZVUc8pM5TL/Hed20k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzndieYGSErGiN+9RcB6k3UNP9lHKWwsTXhjqmmw4CvmOtZiv4m
+	VupSQIXJv1J+jxCqewN6PHaIJSHJCpMrK7LCorcMy9u/UGDibJAX
+X-Google-Smtp-Source: AGHT+IHNpssd6UN8JLxojgixsRYKJvUh/JkCow3Wp0tb3/0LUzQwzYXgmxyzyOR6if9R4VcVR1Ma2A==
+X-Received: by 2002:a05:690c:308a:b0:6e2:50a:f436 with SMTP id 00721157ae682-6e7f0f7e58cmr76490317b3.36.1729797456463;
+        Thu, 24 Oct 2024 12:17:36 -0700 (PDT)
+Received: from x13.. ([157.23.249.72])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e5f5d749e2sm20787287b3.142.2024.10.24.12.17.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Oct 2024 12:17:35 -0700 (PDT)
+From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+To: brendan.higgins@linux.dev,
+	davidgow@google.com
+Cc: Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	skhan@linuxfoundation.org,
+	ricardo@marliere.net,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	andriy.shevchenko@linux.intel.com,
+	davidlohr.bueso@hp.com
+Subject: [PATCH] lib/math: Add int_sqrt test suite
+Date: Thu, 24 Oct 2024 15:17:28 -0400
+Message-ID: <20241024191730.69542-1-luis.hernandez093@gmail.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,53 +87,123 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH V2 0/4] A few fixes for RISC-V
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <172979343650.2335128.10301613190246629595.git-patchwork-notify@kernel.org>
-Date: Thu, 24 Oct 2024 18:10:36 +0000
-References: <20241008094141.549248-1-zhangchunyan@iscas.ac.cn>
-In-Reply-To: <20241008094141.549248-1-zhangchunyan@iscas.ac.cn>
-To: Chunyan Zhang <zhangchunyan@iscas.ac.cn>
-Cc: linux-riscv@lists.infradead.org, palmer@dabbelt.com,
- akpm@linux-foundation.org, shuah@kernel.org, paul.walmsley@sifive.com,
- alex@ghiti.fr, charlie@rivosinc.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- zhang.lyra@gmail.com
 
-Hello:
+Adds test suite for integer based square root function.
 
-This series was applied to riscv/linux.git (fixes)
-by Palmer Dabbelt <palmer@rivosinc.com>:
+The test suite is designed to verify the correctness of the int_sqrt
+math library function.
 
-On Tue,  8 Oct 2024 17:41:37 +0800 you wrote:
-> These patches are all simple fixes with no strong dependency though,
-> I hope that making them a patchset will be more convenient for merge.
-> 
-> The patchset are based on v6.12-rc2.
-> 
-> Chunyan Zhang (4):
->   riscv: Remove unused GENERATING_ASM_OFFSETS
->   riscv: Remove duplicated GET_RM
->   selftest/mm: Fix typo in virtual_address_range
->   selftests/mm: skip virtual_address_range tests on riscv
-> 
-> [...]
+Signed-off-by: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+---
+ lib/Kconfig.debug               | 17 ++++++++++++
+ lib/math/Makefile               |  1 +
+ lib/math/tests/Makefile         |  1 +
+ lib/math/tests/int_sqrt_kunit.c | 48 +++++++++++++++++++++++++++++++++
+ 4 files changed, 67 insertions(+)
+ create mode 100644 lib/math/tests/int_sqrt_kunit.c
 
-Here is the summary with links:
-  - [V2,1/4] riscv: Remove unused GENERATING_ASM_OFFSETS
-    https://git.kernel.org/riscv/c/cb873b28bc2a
-  - [V2,2/4] riscv: Remove duplicated GET_RM
-    https://git.kernel.org/riscv/c/4c6b61b5d35e
-  - [V2,3/4] selftest/mm: Fix typo in virtual_address_range
-    (no matching commit)
-  - [V2,4/4] selftests/mm: skip virtual_address_range tests on riscv
-    (no matching commit)
-
-You are awesome, thank you!
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 7312ae7c3cc5..a7e63dae9281 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2993,6 +2993,23 @@ config TEST_OBJPOOL
+ 
+ 	  If unsure, say N.
+ 
++config INT_SQRT_KUNIT_TEST
++	tristate "Integer square root test test" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  This option enables the KUnit test suite for the int_sqrt function,
++	  which performs square root calculation. The test suite is designed to
++	  verify that the implementation of int_sqrt correctly computes the
++	  square root of a number.
++
++	  Enabling this option will include tests that check various scenarios
++	  and edge cases to ensure the accuracy and reliability of the square root
++	  function.
++
++	  If unsure, say N
++
++
+ endif # RUNTIME_TESTING_MENU
+ 
+ config ARCH_USE_MEMTEST
+diff --git a/lib/math/Makefile b/lib/math/Makefile
+index 3ef11305f8d2..c7b043ffb249 100644
+--- a/lib/math/Makefile
++++ b/lib/math/Makefile
+@@ -9,3 +9,4 @@ obj-$(CONFIG_INT_POW_TEST)  += tests/int_pow_kunit.o
+ obj-$(CONFIG_TEST_DIV64)	+= test_div64.o
+ obj-$(CONFIG_TEST_MULDIV64)	+= test_mul_u64_u64_div_u64.o
+ obj-$(CONFIG_RATIONAL_KUNIT_TEST) += rational-test.o
++obj-y  += tests/
+\ No newline at end of file
+diff --git a/lib/math/tests/Makefile b/lib/math/tests/Makefile
+index 6a169123320a..e1a79f093b2d 100644
+--- a/lib/math/tests/Makefile
++++ b/lib/math/tests/Makefile
+@@ -1,3 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ 
+ obj-$(CONFIG_INT_POW_TEST) += int_pow_kunit.o
++obj-$(CONFIG_INT_SQRT_KUNIT_TEST) += int_sqrt_kunit.o
+diff --git a/lib/math/tests/int_sqrt_kunit.c b/lib/math/tests/int_sqrt_kunit.c
+new file mode 100644
+index 000000000000..9935f52e808f
+--- /dev/null
++++ b/lib/math/tests/int_sqrt_kunit.c
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <kunit/test.h>
++#include <linux/math.h>
++
++struct test_case_params {
++	unsigned long x;
++	unsigned long expected_result;
++	const char *name;
++};
++
++static const struct test_case_params params[] = {
++	{ 0, 0, "edge-case: square root of 0" },
++	{ 4, 2, "perfect square: square root of 4" },
++	{ 81, 9, "perfect square: square root of 9" },
++	{ 2, 1, "non-perfect square: square root of 2" },
++	{ 5, 2, "non-perfect square: square root of 5"},
++	{ ULONG_MAX, 4294967295, "large input"},
++};
++
++static void get_desc(const struct test_case_params *tc, char *desc)
++{
++	strscpy(desc, tc->name, KUNIT_PARAM_DESC_SIZE);
++}
++
++KUNIT_ARRAY_PARAM(int_sqrt, params, get_desc);
++
++static void int_sqrt_test(struct kunit *test)
++{
++	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
++
++	KUNIT_EXPECT_EQ(test, tc->expected_result, int_sqrt(tc->x));
++}
++
++static struct kunit_case math_int_sqrt_test_cases[] = {
++	KUNIT_CASE_PARAM(int_sqrt_test, int_sqrt_gen_params),
++	{}
++};
++
++static struct kunit_suite int_sqrt_test_suite = {
++	.name = "math-int_sqrt",
++	.test_cases = math_int_sqrt_test_cases,
++};
++
++kunit_test_suites(&int_sqrt_test_suite);
++
++MODULE_DESCRIPTION("math.int_sqrt KUnit test suite");
++MODULE_LICENSE("GPL");
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.47.0
 
 
