@@ -1,76 +1,76 @@
-Return-Path: <linux-kselftest+bounces-20592-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20593-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE7BB9AF6E9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 03:39:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69D2F9AF6EB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 03:39:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C8801C20E08
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 01:39:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEDAD1F22B2C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 01:39:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB3B51173F;
-	Fri, 25 Oct 2024 01:39:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C0724879B;
+	Fri, 25 Oct 2024 01:39:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="QQQfNITR"
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="ENF4RvO+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from esa5.hc1455-7.c3s2.iphmx.com (esa5.hc1455-7.c3s2.iphmx.com [68.232.139.130])
+Received: from esa8.hc1455-7.c3s2.iphmx.com (esa8.hc1455-7.c3s2.iphmx.com [139.138.61.253])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A3A2261D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351AC23774;
 	Fri, 25 Oct 2024 01:39:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.139.130
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.61.253
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729820345; cv=none; b=SmTsKuXkmDEXQFTmoJwpMBKZHB9EjcBnsHw19Jcmt2Jc21l+WaF5ThWrBTyeV48QVIgzTf4/W25HzmfcBVJRLYhx+h1qEijhK/GstTItbhJ1wonBSKWQhbcEdrhIWTjFMb2SSxvMtDZ28omoPF15L19CuhvBfS9KAgO3A3hFnss=
+	t=1729820347; cv=none; b=rmA+AWrL4edorHSCQ3va0YAGCZh+xrx1u7Iv/u0E9N80H9/5McNPUIadjJfbYu69dSSemdcCdR3hl6dRzQR844KSE0I4Y0+hC8lKMaAfUOnltkb/vVDknd6zyaEb4zmvBlmJgbfY2IGwV8R3WzoOQubh3mtSlYDtL1+DyRPbhcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729820345; c=relaxed/simple;
-	bh=HnPtkT7fpVyFtq4I3xKJYtqJTPjsAp1EyhBqcABcKp4=;
+	s=arc-20240116; t=1729820347; c=relaxed/simple;
+	bh=7Ou85phjMNye1YCifzMzi9QSOAtJ4MXYhgDnyFLOnCI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AMqMh4fmlscSP5jgNElSZJmddCe5pcMvUjZOUuDSKuaajUG2keqD+FxoJlqD/3w21Fl3adcWgdZAM1Ol9ipHZ4eyzfiN9Mvwf63YzZrV/Mv3eDf3fk6rs9+/j6phfqpBPCIM2Uu2ioe0DeGz9fPfw8bOO0d7szm2hpod7iqyg7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=QQQfNITR; arc=none smtp.client-ip=68.232.139.130
+	 MIME-Version; b=YP6Q+yQ0aUdSUHc48NiyAYyFXZN/Jzm04ja5xh6F045m7zG8aum1yuCKdXV6SOJjqP9YfDK0w2voEqgJ6IHodPBZ2ojZi0QYlBX7Uj6VlfzDIzCNYBSHCJCjtiZusiPXU9UwdTihE62HregVK8rJ7TVFqaLF538NtM9ga7MbReM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=ENF4RvO+; arc=none smtp.client-ip=139.138.61.253
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1729820343; x=1761356343;
+  t=1729820344; x=1761356344;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=HnPtkT7fpVyFtq4I3xKJYtqJTPjsAp1EyhBqcABcKp4=;
-  b=QQQfNITRcemzSMwnoEAY6N7JQvK+hvCnZzpWnZ5O2kLp82G04KT6P2m8
-   CQfDPC9lzx/edN/ZXHDYrIxwP+4VWuk66vOq4v7vYHnYGuUNukXp65/A3
-   deith+kxZQbp0fCLWhSWfot6XdN2HjuPMonn/U8DItgZE4kwKjasii+kc
-   JGarlh0Owwbz4Mq1ib/+b3bACJiw/OZJ7ccY9LWXQk73pMqRdCMJCrxM5
-   tVe1gyZ9ErKxdC8hHXqgcnjOqOzUhbzhU4rqS8gDvsdsqvQJehen4pcXa
-   ai8TRS7rBEYkmPcnbb4rcM29jJIehHAHIWA6beEBTJ6CcEm2TnwJiQpg9
-   Q==;
-X-CSE-ConnectionGUID: Bc0kWaKDQBCj/QXMfEtG0A==
-X-CSE-MsgGUID: XRmRSx5zSJO/O8SPjJqGFA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="177131237"
+  bh=7Ou85phjMNye1YCifzMzi9QSOAtJ4MXYhgDnyFLOnCI=;
+  b=ENF4RvO+Zfemzno092gmhen0aDqHeacp1D716sNqfC3caolavZQlgDnF
+   8LDlKbAse7q/qCqbPV2ndj9dTh1XR/1xi2MKyMGuVKU71IFWlauMFKLzg
+   H2OtQjIJPzgNHcCCMwrppCj1CfOSLwG+RRdUSDnwzm2h42apFuwOgttEw
+   42y/VLqUupmKhCacSBE6YxOYVtN+lVUssErKDWZatx/oigETlOsf5iTey
+   PBeJGLSePf8MeXd8KSiZQDlF+h4GpyhaAOzoOr4Wx5TOj7SsCXPJ5Lurp
+   l8do2r4aPwayobI9Rn9tiQ1pxH7drbrku5blSJEJbMo+ibuwmUVDqAj/S
+   A==;
+X-CSE-ConnectionGUID: ICVMqaF/QaONnHakaO3ILg==
+X-CSE-MsgGUID: gUSRz4r5RO6ehmtsa9detw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11235"; a="165907792"
 X-IronPort-AV: E=Sophos;i="6.11,230,1725289200"; 
-   d="scan'208";a="177131237"
-Received: from unknown (HELO oym-r2.gw.nic.fujitsu.com) ([210.162.30.90])
-  by esa5.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 10:38:55 +0900
-Received: from oym-m2.gw.nic.fujitsu.com (oym-nat-oym-m2.gw.nic.fujitsu.com [192.168.87.59])
-	by oym-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id 61A84D922F;
+   d="scan'208";a="165907792"
+Received: from unknown (HELO yto-r4.gw.nic.fujitsu.com) ([218.44.52.220])
+  by esa8.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 10:38:56 +0900
+Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
+	by yto-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id EA8B56C9CC;
 	Fri, 25 Oct 2024 10:38:53 +0900 (JST)
-Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
-	by oym-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 9CAF9BF3FF;
-	Fri, 25 Oct 2024 10:38:52 +0900 (JST)
+Received: from kws-ab4.gw.nic.fujitsu.com (kws-ab4.gw.nic.fujitsu.com [192.51.206.22])
+	by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 26DF614156;
+	Fri, 25 Oct 2024 10:38:53 +0900 (JST)
 Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id 3D91920074739;
+	by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id 8E7D21EB430;
 	Fri, 25 Oct 2024 10:38:52 +0900 (JST)
 Received: from iaas-rdma.. (unknown [10.167.135.44])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id C1C9E1A01E9;
-	Fri, 25 Oct 2024 09:38:51 +0800 (CST)
+	by edo.cn.fujitsu.com (Postfix) with ESMTP id 213761A000B;
+	Fri, 25 Oct 2024 09:38:52 +0800 (CST)
 From: Li Zhijian <lizhijian@fujitsu.com>
 To: linux-kselftest@vger.kernel.org
 Cc: shuah@kernel.org,
 	linux-kernel@vger.kernel.org,
 	Li Zhijian <lizhijian@fujitsu.com>
-Subject: [PATCH for-next 2/3] selftests/watchdog: exit watchdog-test with error code
-Date: Fri, 25 Oct 2024 09:39:32 +0800
-Message-ID: <20241025013933.6516-2-lizhijian@fujitsu.com>
+Subject: [PATCH for-next 3/3] selftests/watchdog: Add run_watchdog-test.sh to run watchdog tests
+Date: Fri, 25 Oct 2024 09:39:33 +0800
+Message-ID: <20241025013933.6516-3-lizhijian@fujitsu.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20241025013933.6516-1-lizhijian@fujitsu.com>
 References: <20241025013933.6516-1-lizhijian@fujitsu.com>
@@ -85,79 +85,128 @@ X-TM-AS-GCONF: 00
 X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28752.003
 X-TM-AS-User-Approved-Sender: Yes
 X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28752.003
-X-TMASE-Result: 10-6.818500-10.000000
-X-TMASE-MatchedRID: J0iUJQuzfPCq4Yzi/atV+4XQ/hu1OV/0FcWhaEbO5t1xxW5R7o+bOdnf
-	JrUSEbFDTaQ+iJAfFMooSJ1XMXiioS/7QU2czuUNOWUWxTQJdI8hBMJtJ3C24rytpyEazVjcVXF
-	z93jC3xdkdVEclM52h7c/bhbftAlrIg67HHizFeEZgmFGHqyx69DEMPvvoocvDx0O254JWHYoK3
-	Mur/AaLNfzNj9c+mz2VfvWvmVRqVkfE8yM4pjsD7q9UFRTJ0kKxEHRux+uk8jHUU+U0ACZwFcl5
-	PKwJcGA/gQCdRKK8PSt9N+2v8PC/h8zRhcWZIiE9Ree/Crsuxe5aq1sNoQWdcAeeCEAgQxHRNs/
-	ohMOgYsNDF8g51SDmQ==
+X-TMASE-Result: 10--8.569700-10.000000
+X-TMASE-MatchedRID: cSoPLjBYd52ZsNAndtGo7RMxKDqgAFSzx7Z86wvHt/gB+kZ9/05jkOLS
+	dVP2tZn5EDhghh9GReY+T46mdEugcdGETJv1/WyOIGmn4OlOtCNr2qJoNIuCjRnLDSQE/NUqPbx
+	0HPA711ApVPxqKrQDZASAV03Nbefppbeu4XjpXOS9/kMM+y0cUSLLJGCSgZKknhD4vcFcha51N6
+	CkrtCdcVIeZmiiCQMf5p98cjyQCaKnhintEWTpJ8kX80ZK4JFBKQNhMboqZlq4GyTmeN+AbFSyG
+	GjquCee4vM1YF6AJbbCCfuIMF6xLSAHAopEd76vuArEwRbHc1dzQ0yzRqxnVSoiSe8ff6an9yQH
+	AjQkxq01hyrTj5a3Ww==
 X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
-So that we can check its exit code to judge whether it succeeds
-or not.
+We are ready to run the watchdog tests and check its exit code.
+An example output is like below:
+  linux/tools/testing/selftests/watchdog# make run_tests
+  TAP version 13
+  1..1
+  # timeout set to 45
+  # selftests: watchdog: run_watchdog-test.sh
+  # ./run_watchdog-test.sh: Feed dog
+  # Watchdog Ticking Away!
+  # ..
+  # ./run_watchdog-test.sh: Show watchdog_info
+  # watchdog_info:
+  #  identity:            iTCO_wdt
+  #  firmware_version:    2
+  # Support/Status: Set timeout (in seconds)
+  # Support/Status: Supports magic close char
+  # Support/Status: Keep alive ping reply
+  #
+  # ./run_watchdog-test.sh Turn off the watchdog timer
+  # Watchdog card disabled.
+  # Watchdog Ticking Away!
+  # ..
+  # ./run_watchdog-test.sh: Turn off the watchdog timer
+  # Watchdog card enabled.
+  # Watchdog Ticking Away!
+  # ..
+  # ./run_watchdog-test.sh: Set timeout to T seconds
+  # Watchdog card disabled.
+  # Watchdog timeout set to 10 seconds.
+  # Watchdog card enabled.
+  # Watchdog Ticking Away!
+  # ..
+  # ./run_watchdog-test.sh: Get the timeout
+  # WDIOC_GETTIMEOUT returns 10 seconds.
+  #
+  # ./run_watchdog-test.sh: Get the pretimeout to T seconds
+  # Watchdog card disabled.
+  # WDIOC_GETPRETIMEOUT returns 0 seconds.
+  # Watchdog card enabled.
+  #
+  # ./run_watchdog-test.sh Get the time left until timer expires
+  # WDIOC_GETTIMELEFT returns 9 seconds.
+  #
+  # Get status & supported features
+  # Support/Status: Keep alive ping reply
+  # WDIOC_GETTEMP: 'Inappropriate ioctl for device'
+  not ok 1 selftests: watchdog: run_watchdog-test.sh # exit=1
 
 Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
 ---
- .../testing/selftests/watchdog/watchdog-test.c  | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ tools/testing/selftests/watchdog/Makefile     |  3 +-
+ .../selftests/watchdog/run_watchdog-test.sh   | 41 +++++++++++++++++++
+ 2 files changed, 43 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/watchdog/run_watchdog-test.sh
 
-diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
-index 2f8fd2670897..d42fc2fd790d 100644
---- a/tools/testing/selftests/watchdog/watchdog-test.c
-+++ b/tools/testing/selftests/watchdog/watchdog-test.c
-@@ -51,7 +51,7 @@ static const struct option lopts[] = {
-  * the PC Watchdog card to reset its internal timer so it doesn't trigger
-  * a computer reset.
-  */
--static void keep_alive(void)
-+static int keep_alive(void)
- {
- 	int dummy;
- 	int ret;
-@@ -59,6 +59,8 @@ static void keep_alive(void)
- 	ret = ioctl(fd, WDIOC_KEEPALIVE, &dummy);
- 	if (!ret)
- 		printf(".");
-+
-+	return ret;
- }
+diff --git a/tools/testing/selftests/watchdog/Makefile b/tools/testing/selftests/watchdog/Makefile
+index 6b5598b55252..4d1cb1d292a1 100644
+--- a/tools/testing/selftests/watchdog/Makefile
++++ b/tools/testing/selftests/watchdog/Makefile
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+-TEST_GEN_PROGS := watchdog-test
++TEST_GEN_FILES := watchdog-test
++TEST_PROGS := run_watchdog-test.sh
  
- /*
-@@ -175,7 +177,7 @@ int main(int argc, char *argv[])
- 	int flags;
- 	unsigned int ping_rate = DEFAULT_PING_RATE;
- 	int ret;
--	int c;
-+	int c, n;
- 	int oneshot = 0, stop = 1, count = 0;
- 	char *file = "/dev/watchdog";
- 	struct watchdog_info info;
-@@ -342,7 +344,9 @@ int main(int argc, char *argv[])
- 	signal(SIGINT, term);
- 
- 	while (stop || count--) {
--		exit_code = keep_alive();
-+		ret = keep_alive();
-+		if (ret)
-+			goto end;
- 		sleep(ping_rate);
- 	}
- end:
-@@ -350,9 +354,10 @@ int main(int argc, char *argv[])
- 	 * Send specific magic character 'V' just in case Magic Close is
- 	 * enabled to ensure watchdog gets disabled on close.
- 	 */
--	ret = write(fd, &v, 1);
--	if (ret < 0)
-+	n = write(fd, &v, 1);
-+	if (n < 0)
- 		printf("Stopping watchdog ticks failed (%d)...\n", errno);
- 	close(fd);
--	return 0;
+ include ../lib.mk
+diff --git a/tools/testing/selftests/watchdog/run_watchdog-test.sh b/tools/testing/selftests/watchdog/run_watchdog-test.sh
+new file mode 100755
+index 000000000000..0ea4b7770f1d
+--- /dev/null
++++ b/tools/testing/selftests/watchdog/run_watchdog-test.sh
+@@ -0,0 +1,41 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
 +
-+	return ret || n < 0;
- }
++echo "$0: Feed dog"
++./watchdog-test -c 2 || exit
++
++echo
++echo "$0: Show watchdog_info"
++./watchdog-test -i -c 2 || exit
++
++echo
++echo "$0 Turn off the watchdog timer"
++./watchdog-test -d -c 2 || exit
++
++echo
++echo "$0: Turn on the watchdog timer"
++./watchdog-test -e -c 2 || exit
++
++echo
++echo "$0: Set timeout to T seconds"
++./watchdog-test -d -t 10 -c 2 -e || exit
++
++echo
++echo "$0: Get the timeout"
++./watchdog-test -T -c 2 || exit
++
++echo
++echo "$0: Get the pretimeout to T seconds"
++./watchdog-test -d -N -c 2 -e || exit
++
++echo
++echo "$0 Get the time left until timer expires"
++./watchdog-test -L -c 2 || exit
++
++echo
++echo "Get status & supported features"
++./watchdog-test -s || exit
++
++echo
++echo "$0: Set the pretimeout to T seconds"
++./watchdog-test -n 3 -c 2 || exit
 -- 
 2.44.0
 
