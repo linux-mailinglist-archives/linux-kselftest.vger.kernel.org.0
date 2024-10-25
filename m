@@ -1,57 +1,58 @@
-Return-Path: <linux-kselftest+bounces-20678-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20679-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 120FC9B0971
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 18:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8412E9B0973
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 18:14:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 434991C2288C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 16:14:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B617A1C22DF2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 16:14:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17BE317D896;
-	Fri, 25 Oct 2024 16:14:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FC4518870D;
+	Fri, 25 Oct 2024 16:14:36 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2D121A4C8;
-	Fri, 25 Oct 2024 16:14:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEDE17082B;
+	Fri, 25 Oct 2024 16:14:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729872874; cv=none; b=tB8whbjV6EwEa/9PK5wMyOYQecJEvQbPdvNgMJGI0ekTz+zeItkQus+xkunyEhu2qkwgEvt8RBu9028uMsbSKx0wS0Q8LYfuSex3dZ6KbMNtlOS0+jdJHAt5Al7c8513Kypij6coV+S61EbS/zRC4NUJTS+zUY5U4nW2vSmO4U4=
+	t=1729872876; cv=none; b=q/tdXG6BFai0myho7Pbu3TCcJ7/pqc6uMjxXA6nImxsP5bIw/rSEeVeV9vbEdJszke6Mipr4khSxIELR107UsVEN6Af2p5eKtNcgRcQRot8S8MsVhprvhiUN62wy70ZLIEuw4x+e9QzgusptlVtk+UGrevme/fWuOT8xQW1z5CE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729872874; c=relaxed/simple;
-	bh=QBRg+BAsO4rzPVpUtbFYYnBbh6zPHcJdisFyxAIOJYY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=s1c+s0l5eWf+7TLgzG2nWX+K3/5vuCQUZZxu89SE7R6fIYtMKfLtQhCu2b0rTiIViUzUuVkyqr/yXWMHecACtkwpCVORRzjwqGYrqxboT9wT0pgvckmOXIM1lZewDki64YHTuNaWABBkOI2nS4aTUXfQ58JTtKcExnevb/0f/NE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.46
+	s=arc-20240116; t=1729872876; c=relaxed/simple;
+	bh=iRMbskNOi1COk9/chyRw3Ro2vtmKl+VeKlcxOeCGirw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=eWkILdKerdtdHN27+E1UsRoX5Qyla5UQpGn5mU7v4+Um4vg5ojqubqxJZK+3OKJfAkuD98XKDVbRgyBIQ+G7qpNRVbSPRxPhevalplhgIdehTSJm7S25rCV6wLo3iRdLdD//fN96xtvlRKfm6geHzt35t7HiRlzCMvEufA7Q/kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5cb6704ff6bso2901442a12.3;
-        Fri, 25 Oct 2024 09:14:31 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a9a156513a1so324918566b.0;
+        Fri, 25 Oct 2024 09:14:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729872870; x=1730477670;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B2UebL5ZjmVkOrNFeX8IB8xmj1z+yG1JYVmo1T3bbsg=;
-        b=l6tZ1DjX7uWNmPTgPB8a/iCpeuNvV1sHDwfUI3wzPvJ8+NVdY5KFx/dT395NXrjOv6
-         lYk2gpX2sqZneeZuMYCLe1hwhtQBH1+xEzIfZJZGPIVYNyMdk9ssqicUnNIsVqaaT0SZ
-         rOMhYFzz4sZgkHTGvhgS6yVxNFgZLujHUZYawwfU446oYn+wPFRaaRyzYwwDmesOo+rx
-         TlvzMEnd4ntpKvv/rLOz1Wtoa3aac5x75KHf5a3H79PbrFCQSCiaxW/OTWRNYxcjQLgg
-         ubtmhHz+1wgPyA5e9qwG+DIj/fOt0bYbfEkdJS8Qxutu7gSdy+BZNsLQGSJq0zFOaJtM
-         3FQg==
-X-Forwarded-Encrypted: i=1; AJvYcCWWjlPY0rmRnHd3GaSVqZeiHVCRkyqrqoDwxcLA6/k3jwebaRXQ4HPLwxwdXy2dZ2cu5ceCgLUB@vger.kernel.org, AJvYcCXIIMEWbZq2im9bwHz1DrtGvGbKHi/YlR5DKYaVX3RCACDQtYVLL6BDWvAc719Z8n8SpIUrHR/Se41OZr3td5DI@vger.kernel.org, AJvYcCXgtWilbTDv3YrsgWIiQ2rLwUk8f6kVXYUwiuOoOwIte6GysaphwcmNzWx9IMQhpXEMx21UlhbTJKB540A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygqZFNTlVCL/fRjNOC6l57a5XUZT2oNunJhT82BzWzpDd7gzxW
-	C03jJyclaQpyo0ErPG4ey7KqYOfR0b0Vg8MqBGREMGaNAbqLAGwc
-X-Google-Smtp-Source: AGHT+IE3poFlOHNZUFgJKmTjVy6PWsH4AbobGe/sDX62Yt4Gzf44SsC2AS6dDoW+2BjahOSwlVEQaw==
-X-Received: by 2002:a05:6402:1e92:b0:5c8:9f3e:1419 with SMTP id 4fb4d7f45d1cf-5cb8ae70636mr9267765a12.5.1729872869962;
-        Fri, 25 Oct 2024 09:14:29 -0700 (PDT)
-Received: from localhost (fwdproxy-lla-008.fbsv.net. [2a03:2880:30ff:8::face:b00c])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cbb631b0bcsm757771a12.60.2024.10.25.09.14.29
+        d=1e100.net; s=20230601; t=1729872872; x=1730477672;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Mck4w3ufI078SKMeX83WF7cSZnSJ+nv2Om7NNhnVrpk=;
+        b=XJgUPcH4TB8sPgyRYfLXKYOPwjoSNfpkmF8VH0Ot6M2hUkfPVELcpgmgqprkyfHvjP
+         DaFzA8FY4NieSMIRdAxkUTYCzuR6r4i9l6rxTWBkOhnNUi5OZ5xJLm19yXDolhie6y9O
+         mtkRK3bkEnv+dT6fj6fu599S3Q2ZtZHSMtzH+v1JE+CTiUBXUqoztuU3pdivgDG6uls9
+         MsE22eUmqmdIkKKqlbeR2ctLSYoe3MsU7L+EccmtuTv5wsMu/QCicvBEto2WIeJG8Spd
+         vtCHWPkpv0aDTICVOg2307+BGeEvwHltcVDF3URzL/HgrHp/tCYgRlWlfyeNFu28P9Dr
+         59gQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUe2mtskcZrAUpcmIo4xyUCFZv0bVuAI1w/+6Es/Q+9mtgCOu5vrZH6IRtcJJnmpt+MRhSYhmXxyNcdp7peOAna@vger.kernel.org, AJvYcCV/px/iBpdrF+gBIPhAj4L8aX7UksLzAqjDALCawE2Cc946FeSS2f2m9fb/PJ8/vyDC9HygDEK8@vger.kernel.org, AJvYcCXvFpAdp5wwWJnF6RlO/X6z3xyuJv5I7H3ewnPrPK+Omdrx1FlieywldbioJ98wvSOwrXelpMD0cjsDL7Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIsKrNS5mbDVpJV0ot3OTkGpHZ/dRHSpl7zJTBNlxWv+wnsWwj
+	0sXjdaFOoTJgKVuumo3njwcl78yaBY/L2Mo7mRYhRSiVi0qLanEU
+X-Google-Smtp-Source: AGHT+IE9wvNdJoZ1wRErVgzp/oeZPvFb/8mAxNhzhoaQkWN3SgsihpQE4oSqzeuHnBY2hgMpTI0hUg==
+X-Received: by 2002:a17:907:9452:b0:a99:60c8:f2c4 with SMTP id a640c23a62f3a-a9ad2730bc2mr522796066b.15.1729872872050;
+        Fri, 25 Oct 2024 09:14:32 -0700 (PDT)
+Received: from localhost (fwdproxy-lla-112.fbsv.net. [2a03:2880:30ff:70::face:b00c])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9b1dec773fsm87395566b.18.2024.10.25.09.14.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2024 09:14:29 -0700 (PDT)
+        Fri, 25 Oct 2024 09:14:31 -0700 (PDT)
 From: Breno Leitao <leitao@debian.org>
 To: kuba@kernel.org,
 	horms@kernel.org,
@@ -69,12 +70,13 @@ Cc: thepacketgeek@gmail.com,
 	max@kutsevol.com,
 	kernel-team@meta.com,
 	aehkn@xenhub.one,
-	Petr Machata <petrm@nvidia.com>,
 	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH net-next 1/2] net: netconsole: selftests: Change the IP subnet
-Date: Fri, 25 Oct 2024 09:14:13 -0700
-Message-ID: <20241025161415.238215-1-leitao@debian.org>
+Subject: [PATCH net-next 2/2] net: netconsole: selftests: Add userdata validation
+Date: Fri, 25 Oct 2024 09:14:14 -0700
+Message-ID: <20241025161415.238215-2-leitao@debian.org>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20241025161415.238215-1-leitao@debian.org>
+References: <20241025161415.238215-1-leitao@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,31 +85,97 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use a less populated IP range to run the tests, as suggested by Petr in
-Link: https://lore.kernel.org/netdev/87ikvukv3s.fsf@nvidia.com/.
+Extend netcons_basic selftest to verify the userdata functionality by:
+ 1. Creating a test key in the userdata configfs directory
+ 2. Writing a known value to the key
+ 3. Validating the key-value pair appears in the captured network output
 
-Suggested-by: Petr Machata <petrm@nvidia.com>
+This ensures the userdata feature is properly tested during selftests.
+
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- tools/testing/selftests/drivers/net/netcons_basic.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../selftests/drivers/net/netcons_basic.sh    | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
 diff --git a/tools/testing/selftests/drivers/net/netcons_basic.sh b/tools/testing/selftests/drivers/net/netcons_basic.sh
-index 06021b2059b7..4ad1e216c6b0 100755
+index 4ad1e216c6b0..d182dcc2a10b 100755
 --- a/tools/testing/selftests/drivers/net/netcons_basic.sh
 +++ b/tools/testing/selftests/drivers/net/netcons_basic.sh
-@@ -20,9 +20,9 @@ SCRIPTDIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
- 
- # Simple script to test dynamic targets in netconsole
- SRCIF="" # to be populated later
--SRCIP=192.168.1.1
-+SRCIP=192.168.2.1
- DSTIF="" # to be populated later
--DSTIP=192.168.1.2
-+DSTIP=192.168.2.2
+@@ -26,10 +26,13 @@ DSTIP=192.168.2.2
  
  PORT="6666"
  MSG="netconsole selftest"
++USERDATA_KEY="key"
++USERDATA_VALUE="value"
+ TARGET=$(mktemp -u netcons_XXXXX)
+ DEFAULT_PRINTK_VALUES=$(cat /proc/sys/kernel/printk)
+ NETCONS_CONFIGFS="/sys/kernel/config/netconsole"
+ NETCONS_PATH="${NETCONS_CONFIGFS}"/"${TARGET}"
++KEY_PATH="${NETCONS_PATH}/userdata/${USERDATA_KEY}"
+ # NAMESPACE will be populated by setup_ns with a random value
+ NAMESPACE=""
+ 
+@@ -122,6 +125,8 @@ function cleanup() {
+ 
+ 	# delete netconsole dynamic reconfiguration
+ 	echo 0 > "${NETCONS_PATH}"/enabled
++	# Remove key
++	rmdir "${KEY_PATH}"
+ 	# Remove the configfs entry
+ 	rmdir "${NETCONS_PATH}"
+ 
+@@ -136,6 +141,18 @@ function cleanup() {
+ 	echo "${DEFAULT_PRINTK_VALUES}" > /proc/sys/kernel/printk
+ }
+ 
++function set_user_data() {
++	if [[ ! -d "${NETCONS_PATH}""/userdata" ]]
++	then
++		echo "Userdata path not available in ${NETCONS_PATH}/userdata"
++		exit "${ksft_skip}"
++	fi
++
++	mkdir -p "${KEY_PATH}"
++	VALUE_PATH="${KEY_PATH}""/value"
++	echo "${USERDATA_VALUE}" > "${VALUE_PATH}"
++}
++
+ function listen_port_and_save_to() {
+ 	local OUTPUT=${1}
+ 	# Just wait for 2 seconds
+@@ -146,6 +163,10 @@ function listen_port_and_save_to() {
+ function validate_result() {
+ 	local TMPFILENAME="$1"
+ 
++	# TMPFILENAME will contain something like:
++	# 6.11.1-0_fbk0_rc13_509_g30d75cea12f7,13,1822,115075213798,-;netconsole selftest: netcons_gtJHM
++	#  key=value
++
+ 	# Check if the file exists
+ 	if [ ! -f "$TMPFILENAME" ]; then
+ 		echo "FAIL: File was not generated." >&2
+@@ -158,6 +179,12 @@ function validate_result() {
+ 		exit "${ksft_fail}"
+ 	fi
+ 
++	if ! grep -q "${USERDATA_KEY}=${USERDATA_VALUE}" "${TMPFILENAME}"; then
++		echo "FAIL: ${USERDATA_KEY}=${USERDATA_VALUE} not found in ${TMPFILENAME}" >&2
++		cat "${TMPFILENAME}" >&2
++		exit "${ksft_fail}"
++	fi
++
+ 	# Delete the file once it is validated, otherwise keep it
+ 	# for debugging purposes
+ 	rm "${TMPFILENAME}"
+@@ -220,6 +247,8 @@ trap cleanup EXIT
+ set_network
+ # Create a dynamic target for netconsole
+ create_dynamic_target
++# Set userdata "key" with the "value" value
++set_user_data
+ # Listed for netconsole port inside the namespace and destination interface
+ listen_port_and_save_to "${OUTPUT_FILE}" &
+ # Wait for socat to start and listen to the port.
 -- 
 2.43.5
 
