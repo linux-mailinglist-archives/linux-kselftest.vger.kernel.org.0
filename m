@@ -1,151 +1,113 @@
-Return-Path: <linux-kselftest+bounces-20705-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20706-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5333E9B0FF9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 22:41:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A37A39B1153
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 23:05:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09B0B1F22291
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 20:41:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EA88281FA8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 21:05:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E32821621F;
-	Fri, 25 Oct 2024 20:40:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B71020D510;
+	Fri, 25 Oct 2024 21:04:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wiBV5pfA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R0EbxU/v"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EAA52161F8;
-	Fri, 25 Oct 2024 20:40:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4528F17B4E2;
+	Fri, 25 Oct 2024 21:04:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729888837; cv=none; b=XWibrtZhjkpvSfBnwpVW2WUW6OXpE1SU/h/6gicj+1VN1qyGelms6FkHxN5aXaRZ0SD3OS3xAi8acWe2Dt6UKOEkZDAgZ+cOS9qaP02o7q+z03ymrejflN3C1AVmRCAJCMjGTWeEox9JlsNh5ozuCXaIYLFVTq8WCzBZucBmwY4=
+	t=1729890250; cv=none; b=BsgyiQKy+u/RynCzjNdhlsR1ChSbzTX5gh5TQUHXByqwzu20E7HKE4D2LJjOIJEu5d8yyoEAXR1ajVLTOXDUiisokE/uN5LQdXzx+/+hxm7dNGn0QyqKVW2PArBojVEtpfs8L1eoZ9fqySRSv0+dXpxbIVtAOZGRXEwVMFMQzo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729888837; c=relaxed/simple;
-	bh=1VR9nQjGldSxwX5w5pEmypJuoDm8azOUI2JHhYVwkjE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JPWOZqh9tgGl7VutoMuPg1dvddpl/novXuX+QokO79AzVcghyawWZt2ckhBrSvl3wsOgkz+sVt3WmOEjItCJBBs3DJRBI1U3auyrhCtegTuEVFZpcBFPbY4aJhz0PQVlRBEfMawmubnNAa4m0qisPEo8yyXq1Nm1ePnh3wLa5As=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wiBV5pfA; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Fri, 25 Oct 2024 13:40:24 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1729888833;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YMAXXsBpu7Ehcn655+wzQ1uMVEuNQVBFhx8QRZMZ0rg=;
-	b=wiBV5pfAS60vsXVuI1GT02TDemB6eoQa7vMvOYPdvau9og9kfHNCrIwzOsxNAEvNzLpZH5
-	nEbImKrpEPXD3n9ZjlOveq+RV/QdwpoLnPdZkIzeOVTkeyM+wnWeOnrb2/cM7PjeccRfV0
-	hCmdOXTju1vks2ugKnuwkE14UmBoEuk=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Miguel Luis <miguel.luis@oracle.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-	Shuah Khan <shuah@kernel.org>, David Woodhouse <dwmw@amazon.co.uk>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	Francesco Lavra <francescolavra.fl@gmail.com>
-Subject: Re: [PATCH v6 6/6] arm64: Use SYSTEM_OFF2 PSCI call to power off for
- hibernate
-Message-ID: <ZxwCOHd-DbUT8dsT@linux.dev>
-References: <20241019172459.2241939-1-dwmw2@infradead.org>
- <20241019172459.2241939-7-dwmw2@infradead.org>
- <23C91005-7304-4312-A5E0-F5E6C05B3209@oracle.com>
- <ECD0CA58-2C3B-48F3-AF12-95E37CB0FC48@infradead.org>
- <ZxprcWDe2AXuLhD_@linux.dev>
- <691447A1-8F3F-4890-B00F-8068A14CA126@infradead.org>
- <ZxqmsiXV6ZYTANKY@linux.dev>
- <627769A8-AF84-47A1-B4F9-5F44C75A8058@infradead.org>
+	s=arc-20240116; t=1729890250; c=relaxed/simple;
+	bh=VJKV4LrI5L8DhuTg3MSljqrmjjT5q3geeSrutGfW3EU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=VEnLtgwnQlbzsd37VRzQl/CDfk/21sFd35v7m2ZSAG9/risCZHYutZH0eoKMdlviDGwoU4QyC7icS20GZpyAdXbtZ6nnm2TWKiiS6DbtwGA0pOvBxgNBE021Z7hLtBT7QjOSFUdufNTC3y31PxmVFK5JEI2yG00hNlErjw2ze5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R0EbxU/v; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7b155cca097so213874785a.1;
+        Fri, 25 Oct 2024 14:04:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729890247; x=1730495047; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fCOUqGYGdXwZAD/0YHVIkmuyEJpONqidEVQgV58FvY8=;
+        b=R0EbxU/v4GRvaKziqBZWzxSrINpApwyi/HhlUujlzF3oRGcn9bO8tmRlBMgC/SWby2
+         f4ydzqMgduFJgDyB76T4bow46fkJMpVrF6iwpMN/r9GCcoHPQxOfqoKZs8Q0zI+jKmsm
+         ZZcH2jq/t6E9mBOqKmsMfBswWSqOUWLzW9TMNTSFzZZU29FFwiJ1llNS/IEVhUJtzaJC
+         JxZH/ShrvRWID3z0v6hcfdlhmiPFRXo3OshOvH0w0G00uBSddQawi7yXYDqNFyIV6Yie
+         IMbfW1rY0rmkQ4IUs59uYyH7lGEW6SFXif0RvalqBpJSS55JNNhzec7Giq/xQDMxG3jl
+         Vu1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729890247; x=1730495047;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fCOUqGYGdXwZAD/0YHVIkmuyEJpONqidEVQgV58FvY8=;
+        b=iKJnFQ7sARRnAM3lGshZASs7zamK/FV4ccO0iROG9J+XNUr76PdroiVDqMl2hqRPNC
+         waEKYmbFhBVof7T53LbFjRubOmIWdRcGvJkOneAjiUXE3GG7Sz3/a6bJ+M/2FuJakiU/
+         xoo7OhNP5i2+C+zprrBXvGE6w2Mimrac4TcbXNZs15MKhKUOHtrKNaQPPwYx/FOpizTx
+         8/yfZ9be0ueYZ+sPoxn0a2EvhZstQUARpFsyoftgBIGwFAS8A7wCIbODyp7ns6+wQqy0
+         xX3auXDLNSADEICpwW2+8qdRrcjzCsCshzYiwmxcQ0S2LFxmnpe9oYC3xI04bAwoU9GV
+         kktg==
+X-Forwarded-Encrypted: i=1; AJvYcCXlJB0nBcTrp7+oipXfDsv69BZbkjFXEDd05qm0PIwr7dPVoFMJim6v4q6cjZJm9/m4GL0IxCXVtTTPFlQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrVcn+9A25VYhwjKcxO8Wq3YEoy5KCzcahQOr7eLmirLaOm8Ll
+	v1N8dXvzUtsVxYTojA3rcHd5cJoSc+7yaYeMex8uLLf8hiLEHdvX
+X-Google-Smtp-Source: AGHT+IG9mK1qknus5DSITlS+DTa0v2eHN3Gwr320jPSMEeCSZSYlZYrS3oOTRZ6OJZyNY/Fjhjn7/A==
+X-Received: by 2002:a05:620a:29c3:b0:7a9:aaef:305e with SMTP id af79cd13be357-7b193c69083mr173155285a.12.1729890247191;
+        Fri, 25 Oct 2024 14:04:07 -0700 (PDT)
+Received: from 156.1.168.192.in-addr.arpa (pool-100-37-170-231.nycmny.fios.verizon.net. [100.37.170.231])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b18d27be4csm91036185a.15.2024.10.25.14.04.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Oct 2024 14:04:06 -0700 (PDT)
+From: Tamir Duberstein <tamird@gmail.com>
+Subject: [PATCH 0/2] kunit: enable hardware virtualization
+Date: Fri, 25 Oct 2024 17:03:52 -0400
+Message-Id: <20241025-kunit-qemu-accel-macos-v1-0-2f30c26192d4@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <627769A8-AF84-47A1-B4F9-5F44C75A8058@infradead.org>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALgHHGcC/x3MQQqDMBBG4avIrB2IQwTpVUoXYfzVwRrbREUQ7
+ 97Q5bd476KMZMj0qC5KOCzbGguauiKdQhzB1heTOPGNk5bnPdrGXyw7B1W8eQm6ZpbOO3iVHkN
+ LJf4kDHb+x8/Xff8AzIsfF2gAAAA=
+X-Change-ID: 20241025-kunit-qemu-accel-macos-2840e4c2def5
+To: Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ linux-kernel@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>
+X-Mailer: b4 0.15-dev
 
-On Fri, Oct 25, 2024 at 08:13:03AM +0200, David Woodhouse wrote:
-> On 24 October 2024 21:57:38 CEST, Oliver Upton <oliver.upton@linux.dev> wrote:
-> >On Thu, Oct 24, 2024 at 05:56:09PM +0200, David Woodhouse wrote:
-> >> On 24 October 2024 17:44:49 CEST, Oliver Upton <oliver.upton@linux.dev> wrote:
-> >> >IIUC, you're really wanting to 0x0 because there are hypervisors out
-> >> >there that violate the final spec and *only* accept this value.
-> >> >
-> >> >That's perfectly fine, but it'd help avoid confusion if the supporting
-> >> >comment was a bit more direct:
-> >> >
-> >> >	/*
-> >> >	 * If no hibernate type is specified SYSTEM_OFF2 defaults to
-> >> >	 * selecting HIBERNATE_OFF.
-> >> >	 *
-> >> >	 * There are hypervisors in the wild that violate the spec and
-> >> >	 * reject calls that explicitly provide a hibernate type. For
-> >> >	 * compatibility with these nonstandard implementations, pass 0
-> >> >	 * as the type.
-> >> >	 */
-> >> >	 if (system_entering_hibernation())
-> >> >		invoke_psci_fn(PSCI_FN_NATIVE(1_3, SYSTEM_OFF2), 0 , 0, 0);
-> >> 
-> >> By the time this makes it into released versions of the guest Linux kernel, that comment won't be true any more.
-> >
-> >Then does it even matter? What is the problem you're trying to solve
-> >with using a particular value for the hibernate type?
-> >
-> >Either the goal of this is to make the PSCI client code compatible with
-> >your hypervisor today (and any other implementation based on 'F ALP1') or
-> >we don't care and go with whatever value we want.
-> >
-> >Even if the comment eventually becomes stale, there is a ton of value in
-> >documenting the exact implementation decision being made.
-> >
-> 
-> Eventually it won't matter and we can go with whatever value we want. But yes, the goal is to be compatible with the hypervisor *today* until it catches up the changes to the final versions of the spec. I didn't spend much time overthinking the comment. What was it....
-> 
-> 	/*
-> 	 * Zero is an acceptable alternative to PSCI_1_3_OFF_TYPE_HIBERNATE_OFF
-> 	 * and is supported by hypervisors implementing an earlier version
-> 	 * of the pSCI v1.3 spec.
-> 	 */
-> 
-> That seems to cover it just fine, I think.
+This series implements feature detection of hardware virtualization on
+Linux and macOS; the latter being my primary use case.
 
-No. You're leaving the work for the reader to:
+This yields approximately a 6x improvement using HVF on M3 Pro.
 
- (1) Figure out what you're talking about
- (2) Go dig up an "earlier version" of the spec
- (3) Realise that it means certain hypervisors only take 0x0 as an
-     argument
+Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+---
+Tamir Duberstein (2):
+      kunit: add fallback for os.sched_getaffinity
+      kunit: enable hardware acceleration when available
 
-If you speak *directly* about the problem you're trying to address then
-reviewers are less likely to get hung up on what you're trying to do.
+ tools/testing/kunit/kunit.py              | 11 ++++++++++-
+ tools/testing/kunit/kunit_kernel.py       | 26 +++++++++++++++++++++++++-
+ tools/testing/kunit/qemu_configs/arm64.py |  2 +-
+ 3 files changed, 36 insertions(+), 3 deletions(-)
+---
+base-commit: ae90f6a6170d7a7a1aa4fddf664fbd093e3023bc
+change-id: 20241025-kunit-qemu-accel-macos-2840e4c2def5
 
-I'm genuinely at a loss for why you would want to present this as an
-"acceptable alterantive" rather than a functional requirement for this
-driver to run on your hypervisor.
-
+Best regards,
 -- 
-Thanks,
-Oliver
+Tamir Duberstein <tamird@gmail.com>
+
 
