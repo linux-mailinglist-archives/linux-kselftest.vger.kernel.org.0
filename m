@@ -1,327 +1,135 @@
-Return-Path: <linux-kselftest+bounces-20690-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20691-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DECA79B0CE8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 20:14:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C9EA9B0D84
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 20:39:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5C3D1C224A8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 18:14:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABFF22830DF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 18:39:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F26D20EA42;
-	Fri, 25 Oct 2024 18:13:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEDEE20D4EC;
+	Fri, 25 Oct 2024 18:39:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Jnrff6cZ";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="3NgZMXIE";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Jnrff6cZ";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="3NgZMXIE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PMdwQHrz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C7320BB3C;
-	Fri, 25 Oct 2024 18:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D1E1D8E10;
+	Fri, 25 Oct 2024 18:39:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729880011; cv=none; b=GfhM+IuwHtthdYlHhPWRByy0m4VNlnESb0nN1phVkchiohmxrNsPGNrtXPl0yCIiBJi4IERvfzlzShqmkS4MeV/RiBSLkpJmZLNQA1V31ZjNoPesZpbu9gHBeNoSbOeqx5rLHsU6IAOwWATy1pYBQjzFvPlODqKjb57IRAM/In4=
+	t=1729881553; cv=none; b=OWqF16S9nnvSjykSkvml6l1GwqbzTstNVuVaqKQAv0l2Jf81n0Wmvw+4d1tGfk0uyFIyOXCknsIYRnTPPD+J5MvCXEuxKOTK7yQ2uqIpvqp3ZCTtNjc6B6A0g8LD1D3Ap/JvYoj8JW2OPMF9IAsYGsRBwdExETTkTjH5s9bxdZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729880011; c=relaxed/simple;
-	bh=/PDztJNHx/avwMtJDa4GSCL4ZVfxliImRbrp3B3rzL8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z+P85JE1LG8Rx56PoaB3cBxo9+PsF9DL13XKw1kfLYYSH9Z/KIRkqQ53cC7NToQlv5QgyFTPMcUteeubCi52DfGU/8l5lxzDj7hpEKtmCG66GXc2VQ9UDrfrzt1eOxme5X28DNYPE+tQiBPf8bjfYmOKLZEoYMC3VDOodrpavxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Jnrff6cZ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=3NgZMXIE; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Jnrff6cZ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=3NgZMXIE; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 011E31FE29;
-	Fri, 25 Oct 2024 18:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1729880007; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zKXJJEviamphxC/DA/8mSG5DEJnMjhmEflprXxZTXok=;
-	b=Jnrff6cZgnegSXi9fKCBaBsAV7wjOxbBywa2Yrbp1Nc5KJ/20qOogMfdqgaUtE2nJye/H0
-	vHmQm2sPJgy9stbr1gTKHyF9ii3nypSNfDCQV+A8eC+chXVx42hP3AVoMa6/on5+EkBsqP
-	ICKmUybNlTRppjoOCXYCLEtgUtFpHms=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1729880007;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zKXJJEviamphxC/DA/8mSG5DEJnMjhmEflprXxZTXok=;
-	b=3NgZMXIE3ZBeAqZQyJ3SQbfDyHo/PPltA0sQ3+akKvPcFgWPIOzY2jRut8HKSvH97pGqSI
-	IZTwamiefcKK7LCw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1729880007; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zKXJJEviamphxC/DA/8mSG5DEJnMjhmEflprXxZTXok=;
-	b=Jnrff6cZgnegSXi9fKCBaBsAV7wjOxbBywa2Yrbp1Nc5KJ/20qOogMfdqgaUtE2nJye/H0
-	vHmQm2sPJgy9stbr1gTKHyF9ii3nypSNfDCQV+A8eC+chXVx42hP3AVoMa6/on5+EkBsqP
-	ICKmUybNlTRppjoOCXYCLEtgUtFpHms=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1729880007;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=zKXJJEviamphxC/DA/8mSG5DEJnMjhmEflprXxZTXok=;
-	b=3NgZMXIE3ZBeAqZQyJ3SQbfDyHo/PPltA0sQ3+akKvPcFgWPIOzY2jRut8HKSvH97pGqSI
-	IZTwamiefcKK7LCw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7D347132D3;
-	Fri, 25 Oct 2024 18:13:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id HFLaG8bfG2edIQAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Fri, 25 Oct 2024 18:13:26 +0000
-Message-ID: <8b1854b5-5c0a-43b1-aed7-aa4e8b8e8a1a@suse.cz>
-Date: Fri, 25 Oct 2024 20:13:26 +0200
+	s=arc-20240116; t=1729881553; c=relaxed/simple;
+	bh=Bx1WolEnd/YIJN1S54UWNZpg5E+EUTLa0+1yugHcioM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mKiHCtYoAPE8qoV6duQy0Hvr7linSHoNjb6hiTGByYnnov2uP1lLGbn5Hzqp1bH/dj0BqPFyEdm6vBzP9F+zT27wLEsxTWlIqPSm0bN90ODD+OWthqWiBEauZifMUMUE8IGEE1G3ncw5VfNzBHDLnkt6QtSeXXIjmv4/3bTgIoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PMdwQHrz; arc=none smtp.client-ip=209.85.222.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-84fccf51df1so717887241.2;
+        Fri, 25 Oct 2024 11:39:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729881551; x=1730486351; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GrkqYuMSqbUzEQhPW44lBubxGtAuzrgS+e75bGGESs0=;
+        b=PMdwQHrzxVXjPZ8zI7u435ZgkpE+/YpHKAo9w1rzThsOKCz4tDK2oM62faGjsIDBWs
+         l/xjZzKtoMuSjRIvN03hK7MDbqGRw8ZJDAv5SeHs5GAHMo59vLs/vpwHh26UjOs1FENu
+         QgbteoryNSFzs38sZLiucaIvmTMf6wAKXfhLpsoBVknr+BtcieQioUM4N7i37BGlrLqC
+         s7oOkkedN6KtMub+G9FMVvtU1ejMkmZj//kUJBa7lOx5E4UPPGyU9rTdhRjGPIdOO/AT
+         CuA8nqrBjwXWOQFgNRp1488cVlHgVejWJAbar6o/OFK/k//5kSVbNwmwcIOQ7KkxX4Wb
+         ZwaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729881551; x=1730486351;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GrkqYuMSqbUzEQhPW44lBubxGtAuzrgS+e75bGGESs0=;
+        b=fRHfHJF5BiCOlxMZaTaNSDlZXmv8ogdvscGwjIjoYCbVWoANcP2d2gJiOEDnk5aMXG
+         L+JAUW4DkoBm6Qb9vpF2Mjv1AmWK8pih07uh3B+aHvxBvbLFTwjrW4a0F1teYI6Csuif
+         9rdQGBXq/JW4XZ5MwhA8TSCUp4Py2gg3wLrrJOwKkOb9WBDWCCuRrHvFx3+JrFDCizQv
+         fmOniAp3DVx9zatZYCrjD2Fha4C1XSLFxNqU8RwPvnUHfHdi11F6AmK1Nlrm1mP+pRru
+         kCmbWqPV8WIFkv2qc1RSvg2Sn28ThBz3KDnDlYaqZPozXzfNXclmiy9w21/lgxPLPKfo
+         DgmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUDhF8p29GsCLVUPyUXKZWA5/JU5lBwS0RKUaj8yrsoxlxRtvxY42JmnGyvf6bWTYT0DHgN7yVu0E1xgS2LMX5Q@vger.kernel.org, AJvYcCUYcHGt/738n2xHYX1PZoohp4GNoBh25qXrVgXVpo/cb/IC0CMd/XKgTrDSgXhDudmwXcRuZZD9s5moHf/l4A==@vger.kernel.org, AJvYcCW1Uh94J7AjG77UdfQlYnR8Qo7phEwiZTYbo/xrr67olkGFHUw2Uo77pQ0f/J1iwZbiwMPu3hxnpRk=@vger.kernel.org, AJvYcCXwLPGANVUY81yVpaO+jzIhyX+Mi55Dcmf2kK5JT3S2kQK52o5E4DDn4RR/4RVxGtn2vDrH3QUsz0iBZSRb@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfYnd10d6jsEu+VDkIq2EpEznNUJ66vBGcHRQYXfXOk4r+F7qC
+	TQsFKu4DJLTi8AfyCUXzBHrT3isZX68QO3cBD62RuSX7HpswBzSYf/9YHtYvFlfY2Tl0HScoHr8
+	utCr2v3lyRA4UMycFk75eAq2s5bd26OMy
+X-Google-Smtp-Source: AGHT+IEVUq57VuR5XJDhYVOCvnCwTfmEHGvoTOOB+teIWs3F3TJQh8yeiHRLwccdv5kTX5+vj5zTsLfWMZ4F/nufsZs=
+X-Received: by 2002:a05:6102:32ca:b0:4a4:7609:35f with SMTP id
+ ada2fe7eead31-4a8cfd6d7bemr401289137.24.1729881550725; Fri, 25 Oct 2024
+ 11:39:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/5] mm: pagewalk: add the ability to install PTEs
-Content-Language: en-US
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Suren Baghdasaryan <surenb@google.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Matthew Wilcox <willy@infradead.org>, "Paul E . McKenney"
- <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
- David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, Muchun Song <muchun.song@linux.dev>,
- Richard Henderson <richard.henderson@linaro.org>,
- Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
- Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@kernel.org>,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- linux-kselftest@vger.kernel.org, Sidhartha Kumar
- <sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>,
- Christoph Hellwig <hch@infradead.org>, linux-api@vger.kernel.org,
- John Hubbard <jhubbard@nvidia.com>
-References: <cover.1729699916.git.lorenzo.stoakes@oracle.com>
- <9be732fd0e897453116b433fe2f468ef7795602e.1729699916.git.lorenzo.stoakes@oracle.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- EP+ylKVEKb0Q2A==
-In-Reply-To: <9be732fd0e897453116b433fe2f468ef7795602e.1729699916.git.lorenzo.stoakes@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -4.30
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[31];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.de];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[google.com,oracle.com,infradead.org,kernel.org,redhat.com,kvack.org,vger.kernel.org,linux.dev,linaro.org,gmail.com,alpha.franken.de,HansenPartnership.com,gmx.de,zankel.net,chromium.org,nvidia.com];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	R_RATELIMIT(0.00)[to_ip_from(RL3py1j7x8bxoj6nr7eaeb97sq)]
-X-Spam-Flag: NO
-X-Spam-Level: 
+References: <cover.1729848252.git.lorenzo.stoakes@oracle.com>
+ <788fdfcc9ef602b408951d68097918d6ae379395.1729848252.git.lorenzo.stoakes@oracle.com>
+ <CAKbZUD2ZB+U3GKJftfRH_2ejNja26v38OLVE2Lbfn_1KSOKhNQ@mail.gmail.com> <828674d9-e862-4438-86b6-61977f4cf3b5@nvidia.com>
+In-Reply-To: <828674d9-e862-4438-86b6-61977f4cf3b5@nvidia.com>
+From: Pedro Falcato <pedro.falcato@gmail.com>
+Date: Fri, 25 Oct 2024 19:38:59 +0100
+Message-ID: <CAKbZUD0fxczjSJo34MnWRNT4M6HTfWN0DRXr9CFe_+cKJW_mog@mail.gmail.com>
+Subject: Re: [PATCH v5 2/5] pidfd: add PIDFD_SELF_* sentinels to refer to own thread/process
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Christian Brauner <christian@brauner.io>, 
+	Shuah Khan <shuah@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/23/24 18:24, Lorenzo Stoakes wrote:
-> The existing generic pagewalk logic permits the walking of page tables,
-> invoking callbacks at individual page table levels via user-provided
-> mm_walk_ops callbacks.
-> 
-> This is useful for traversing existing page table entries, but precludes
-> the ability to establish new ones.
-> 
-> Existing mechanism for performing a walk which also installs page table
-> entries if necessary are heavily duplicated throughout the kernel, each
-> with semantic differences from one another and largely unavailable for use
-> elsewhere.
-> 
-> Rather than add yet another implementation, we extend the generic pagewalk
-> logic to enable the installation of page table entries by adding a new
-> install_pte() callback in mm_walk_ops. If this is specified, then upon
-> encountering a missing page table entry, we allocate and install a new one
-> and continue the traversal.
-> 
-> If a THP huge page is encountered at either the PMD or PUD level we split
-> it only if there are ops->pte_entry() (or ops->pmd_entry at PUD level),
-> otherwise if there is only an ops->install_pte(), we avoid the unnecessary
-> split.
-> 
-> We do not support hugetlb at this stage.
-> 
-> If this function returns an error, or an allocation fails during the
-> operation, we abort the operation altogether. It is up to the caller to
-> deal appropriately with partially populated page table ranges.
-> 
-> If install_pte() is defined, the semantics of pte_entry() change - this
-> callback is then only invoked if the entry already exists. This is a useful
-> property, as it allows a caller to handle existing PTEs while installing
-> new ones where necessary in the specified range.
-> 
-> If install_pte() is not defined, then there is no functional difference to
-> this patch, so all existing logic will work precisely as it did before.
-> 
-> As we only permit the installation of PTEs where a mapping does not already
-> exist there is no need for TLB management, however we do invoke
-> update_mmu_cache() for architectures which require manual maintenance of
-> mappings for other CPUs.
-> 
-> We explicitly do not allow the existing page walk API to expose this
-> feature as it is dangerous and intended for internal mm use only. Therefore
-> we provide a new walk_page_range_mm() function exposed only to
-> mm/internal.h.
-> 
-> Reviewed-by: Jann Horn <jannh@google.com>
-> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+On Fri, Oct 25, 2024 at 6:41=E2=80=AFPM John Hubbard <jhubbard@nvidia.com> =
+wrote:
+>
+> On 10/25/24 5:50 AM, Pedro Falcato wrote:
+> > On Fri, Oct 25, 2024 at 10:41=E2=80=AFAM Lorenzo Stoakes
+> > <lorenzo.stoakes@oracle.com> wrote:
+> ...
+> >> +static inline int pidfd_is_self_sentinel(pid_t pid)
+> >> +{
+> >> +       return pid =3D=3D PIDFD_SELF_THREAD || pid =3D=3D PIDFD_SELF_T=
+HREAD_GROUP;
+> >> +}
+> >
+> > Do we want this in the uapi header? Even if this is useful, it might
+> > come with several drawbacks such as breaking scripts that parse kernel
+> > headers (and a quick git grep suggests we do have static inlines in
+> > headers, but in rather obscure ones) and breaking C89:
+> >
+>
+> Let's please not say "C89" anymore, we've moved on! :)
+>
+> The notes in [1], which is now nearly 2.5 years old, discuss the move to
+> C11, and specifically how to handle the inline keyword.
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+That seems to only apply to the kernel internally, uapi headers are
+included from userspace too (-std=3Dc89 -pedantic doesn't know what a
+gnu extension is). And uapi headers _generally_ keep to defining
+constants and structs, nothing more.
+I don't know what the guidelines for uapi headers are nowadays, but we
+generally want to not break userspace.
 
-Just a small subjective suggestion in case you agree and there's a respin or
-followups:
+>
+> I think it's quite clear at this point, that we should not hold up new
+> work, based on concerns about handling the inline keyword, nor about
+> C89.
 
-> @@ -109,18 +131,19 @@ static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
->  
->  		if (walk->action == ACTION_AGAIN)
->  			goto again;
-> -
-> -		/*
-> -		 * Check this here so we only break down trans_huge
-> -		 * pages when we _need_ to
-> -		 */
-> -		if ((!walk->vma && (pmd_leaf(*pmd) || !pmd_present(*pmd))) ||
-> -		    walk->action == ACTION_CONTINUE ||
-> -		    !(ops->pte_entry))
-> +		if (walk->action == ACTION_CONTINUE)
->  			continue;
-> +		if (!ops->install_pte && !ops->pte_entry)
-> +			continue; /* Nothing to do. */
-> +		if (!ops->pte_entry && ops->install_pte &&
-> +		    pmd_present(*pmd) &&
-> +		    (pmd_trans_huge(*pmd) || pmd_devmap(*pmd)))
-> +			continue; /* Avoid unnecessary split. */
+Right, but the correct solution is probably to move
+pidfd_is_self_sentinel to some other place, since it's not even
+supposed to be used by userspace (it's semantically useless to
+userspace, and it's only two users are in the kernel, kernel/pid.c and
+exit.c).
 
-Much better now, thanks, but maybe the last 2 parts could be:
-
-if (!ops->pte_entry) {
-	if (!ops->install_pte)
-		continue; /* Nothing to do. */
-	else if (pmd_present(*pmd)
-		 && (pmd_trans_huge(*pmd) || pmd_devmap(*pmd)))
-		continue; /* Avoid unnecessary split. */
-}
-
-Or at least put !ops->pte_entry first in both conditions?
-
->  		if (walk->vma)
->  			split_huge_pmd(walk->vma, pmd, addr);
-> +		else if (pmd_leaf(*pmd) || !pmd_present(*pmd))
-> +			continue; /* Nothing to do. */
->  
->  		err = walk_pte_range(pmd, addr, next, walk);
->  		if (err)
-> @@ -148,11 +171,14 @@ static int walk_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
->   again:
->  		next = pud_addr_end(addr, end);
->  		if (pud_none(*pud)) {
-> -			if (ops->pte_hole)
-> +			if (ops->install_pte)
-> +				err = __pmd_alloc(walk->mm, pud, addr);
-> +			else if (ops->pte_hole)
->  				err = ops->pte_hole(addr, next, depth, walk);
->  			if (err)
->  				break;
-> -			continue;
-> +			if (!ops->install_pte)
-> +				continue;
->  		}
->  
->  		walk->action = ACTION_SUBTREE;
-> @@ -164,14 +190,20 @@ static int walk_pud_range(p4d_t *p4d, unsigned long addr, unsigned long end,
->  
->  		if (walk->action == ACTION_AGAIN)
->  			goto again;
-> -
-> -		if ((!walk->vma && (pud_leaf(*pud) || !pud_present(*pud))) ||
-> -		    walk->action == ACTION_CONTINUE ||
-> -		    !(ops->pmd_entry || ops->pte_entry))
-> +		if (walk->action == ACTION_CONTINUE)
->  			continue;
-> +		if (!ops->install_pte && !ops->pte_entry && !ops->pmd_entry)
-> +			continue;  /* Nothing to do. */
-> +		if (!ops->pmd_entry && !ops->pte_entry && ops->install_pte &&
-> +		    pud_present(*pud) &&
-> +		    (pud_trans_huge(*pud) || pud_devmap(*pud)))
-> +			continue; /* Avoid unnecessary split. */
-
-Ditto.
-
-Thanks!
-
+--=20
+Pedro
 
