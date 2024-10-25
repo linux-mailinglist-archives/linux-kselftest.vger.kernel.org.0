@@ -1,39 +1,39 @@
-Return-Path: <linux-kselftest+bounces-20661-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20662-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 614399B00D4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 13:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3712E9B0167
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 13:33:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 259A1280ECA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 11:04:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB11F283DAD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 11:33:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38BF51D363D;
-	Fri, 25 Oct 2024 11:04:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9A1B201114;
+	Fri, 25 Oct 2024 11:33:25 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0661C1E8834
-	for <linux-kselftest@vger.kernel.org>; Fri, 25 Oct 2024 11:04:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F66E2003BC
+	for <linux-kselftest@vger.kernel.org>; Fri, 25 Oct 2024 11:33:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729854260; cv=none; b=Iev6/aDkKs5m8NIRhY5Nx7PaKrTevAm9FKklfnEqJiNMu/GSmAL/rXejeIqGYaBlm5zQd0bjLopzK0i0yKKhb2+u24lAYJ21S5FpNwchYHWVrrJBElbZe1j7bGjsQtfOoHQzlRyGouSpLkvqoHa9oMIlcLdkDoa1dC5ObR/ouDk=
+	t=1729856005; cv=none; b=t9lv86unL9Ids/8MtNdSnaHYDRCoN/3pcz36CnGlLXAHBExsgIvGCHO0OXFuzwC1eNxT+PMtAWtBvFKjevptzYNb335oAmRCRMUere497BWGZZ/u4uKhZN087LM6YbCwWDtT28ny0z9N8K7ljlLyjCDw6tzmj8+1m83fbgvY7RI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729854260; c=relaxed/simple;
-	bh=Rz1HjbMXSgBYDny7GTFsW97TcQvrfC7O4g14R4ekU+E=;
+	s=arc-20240116; t=1729856005; c=relaxed/simple;
+	bh=Nloq3YJBWHgChG6XZsUlEVIZEN8pMWapXLqXVurlN0Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qmhilm2rQOo8mW23AMmw+Ugb20h1/hVGeiFRJsoYeNNw+1lc8DuhFDcSpmRxDQddjKDmUsH/BJU1nhgeBvubzcDPVAeu4EI7NQapBzPiLr6rWI30OKDtiovZeBi6DtIz74E/p4+ki2F8iLA2PpviYWHEECL8v4Teki43CUPTHbU=
+	 Content-Type:Content-Disposition:In-Reply-To; b=G9OONBa/EAmhu0cN03RgKua/0F6KqRiuIBtj5l+U59tLOPPaozXACqazkRbNS0w5AfgqR6MgwuGruugToCK0B3n2nUG4XLnLr5wvPZ4kBvOKa1i112pQ5d9kOkefnlwBJr0J60JC2ybQGDQtWaQuBHy3Gt92IDRheM9inxovbiY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0115E339;
-	Fri, 25 Oct 2024 04:04:47 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3C5C8339;
+	Fri, 25 Oct 2024 04:33:51 -0700 (PDT)
 Received: from e133380.arm.com (e133380.arm.com [10.1.197.69])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 066903F73B;
-	Fri, 25 Oct 2024 04:04:14 -0700 (PDT)
-Date: Fri, 25 Oct 2024 12:04:09 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DF32F3F73B;
+	Fri, 25 Oct 2024 04:33:18 -0700 (PDT)
+Date: Fri, 25 Oct 2024 12:33:16 +0100
 From: Dave Martin <Dave.Martin@arm.com>
 To: Kevin Brodsky <kevin.brodsky@arm.com>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
@@ -45,7 +45,7 @@ Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	linux-kselftest@vger.kernel.org, x86@kernel.org
 Subject: Re: [PATCH v2 3/5] arm64: signal: Improve POR_EL0 handling to avoid
  uaccess failures
-Message-ID: <Zxt7KQ2b0oyMp1zR@e133380.arm.com>
+Message-ID: <ZxuB/M7qMDPtLRuk@e133380.arm.com>
 References: <20241023150511.3923558-1-kevin.brodsky@arm.com>
  <20241023150511.3923558-4-kevin.brodsky@arm.com>
  <ZxoooqtuqTK5CAMR@arm.com>
@@ -100,14 +100,117 @@ On Fri, Oct 25, 2024 at 10:24:41AM +0200, Kevin Brodsky wrote:
 > :) Building that value based on arch_max_pkey() is probably a better
 > idea in the long run. (And indeed the codegen is the same, it boils down
 > to a mov w0, #0x77777777 in both case.)
+> 
+> >>>>> @@ -907,6 +964,7 @@ SYSCALL_DEFINE0(rt_sigreturn)
+> >>>>>  {
+> >>>>>  	struct pt_regs *regs = current_pt_regs();
+> >>>>>  	struct rt_sigframe __user *frame;
+> >>>>> +	struct user_access_state ua_state;
+> >>>>>  
+> >>>>>  	/* Always make any pending restarted system calls return -EINTR */
+> >>>>>  	current->restart_block.fn = do_no_restart_syscall;
+> >>>>> @@ -923,12 +981,14 @@ SYSCALL_DEFINE0(rt_sigreturn)
+> >>>>>  	if (!access_ok(frame, sizeof (*frame)))
+> >>>>>  		goto badframe;
+> >>>>>  
+> >>>>> -	if (restore_sigframe(regs, frame))
+> >>>>> +	if (restore_sigframe(regs, frame, &ua_state))
+> >>>>>  		goto badframe;
+> >>>>>  
+> >>>>>  	if (restore_altstack(&frame->uc.uc_stack))
+> >>>>>  		goto badframe;
+> >>>>>  
+> >>>>> +	restore_user_access_state(&ua_state);
+> >>>>> +
+> >>>>>  	return regs->regs[0];
+> >>>>>  
+> >>>>>  badframe:
+> >>>> The saving part I'm fine with. For restoring, I was wondering whether we
+> >>>> can get a more privileged POR_EL0 if reading the frame somehow failed.
+> >>>> This is largely theoretical, there are other ways to attack like
+> >>>> writing POR_EL0 directly than unmapping/remapping the signal stack.
+> >>>>
+> >>>> What I'd change here is always restore_user_access_state() to
+> >>>> POR_EL0_INIT. Maybe just initialise ua_state above and add the function
+> >>>> call after the badframe label.
+> >>> I'm not sure I understand. When we enter this function, POR_EL0 is set
+> >>> to whatever the signal handler set it to (POR_EL0_INIT by default).
+> >>> There are then two cases:
+> >>> 1) Everything succeeds, including reading the saved POR_EL0 from the
+> >>> frame. We then call restore_user_access_state(), setting POR_EL0 to the
+> >>> value we've read, and return to userspace.
+> >>> 2) Any uaccess fails (for instance reading POR_EL0). In that case we
+> >>> leave POR_EL0 unchanged and deliver SIGSEGV.
+> >>>
+> >>> In case 2 POR_EL0 is most likely already set to POR_EL0_INIT, or
+> >>> whatever the signal handler set it to. It's not clear to me that forcing
+> >>> it to POR_EL0_INIT helps much. Either way it's doubtful that the SIGSEGV
+> >>> handler will be able to recover, since the new signal frame we will
+> >>> create for it may be a mix of interrupted state and signal handler state
+> >>> (depending on exactly where we fail).
+> >> If the SIGSEGV delivery succeeds, returning would restore the POR_EL0
+> >> set up by the previous signal handler, potentially more privileged. Does
+> >> it matter? Can it return all the way to the original context?
+> 
+> What we store into the signal frame when delivering that SIGSEGV is a
+> mixture of the original state (up to the point of failure) and the
+> signal handler's state (what we couldn't restore). It's hard to reason
+> about how that SIGSEGV handler could possibly handle this, but in any
+> case it would have to massage its signal frame so that the next
+> sigreturn does the right thing. Restoring only part of the frame records
+> is bound to cause trouble and that's true for POR_EL0 as well - I doubt
+> there's much value in special-casing it.
 
-The one-line was a neat trick (after the brief WTF moment) :)
+This feels like a simplification?
 
-I guess my uneasiness comes from baking the number of pkeys in via the
-type of 0u and an implicit relationship that this happens to have with
-the number bits per pkey in the POR.
+We can leave a mix of restored and unrestored state when generating the
+SIGSEGV signal frame, providing that those changes will make no
+difference when the rt_sigreturn is replayed.
 
-[...]
+POR_EL0 will make a difference, though.
+
+The POR_EL0 image in the SIGSEGV signal frame needs be the same value
+that caused the original rt_sigreturn to barf (if this is what caused
+the barf).  It should be up to the SIGSEGV handler to decide what (if
+anything) to do about that.  The kernel can't know what userspace
+intended.
+
+Note that for this to work, the SIGSEGV stack (whether main or
+alternate) must be accessible with POR_EL0_INIT permissions, or the
+SIGSEGV handler must start with a (gross) asm shim to establish a
+usable POR_EL0.  But that's not really our problem here.
+
+(I'm not saying that the kernel necessarily fails to do this -- I
+haven't checked -- but just trying to understand the problem here.)
+
+
+The actual problem here is that if the SIGSEGV handler wants to bail
+out with a siglongjmp(), there is no way to determine the correct value
+of POR_EL0 to restore.
+
+I wonder whether POR_EL0 should be saved in sigjmp_buf (depending on
+whether sigjmp_buf is horribly inextensible and also full up, or merely
+horribly inextensible).
+
+Does anyone know whether PKRU in sigjmp_buf on x86?
+
+> 
+> >
+> > That seems a valid concern.
+> >
+> > It looks a bit like we don't back out the temporary change to POR_EL0
+> > if writing the sigframe fails, so the temporary "allow all" perms might
+> > get saved out into the SIGSEGV sigframe on the alternate signal
+> > stack, and will then be restored as the user thread's POR_EL0 when the
+> > SIGSEGV returns.
+> 
+> It sounds like you're referring to the delivery case, not the return
+> case. In the delivery case (setup_rt_frame()), the "allow all" value
+> will never be saved into the sigframe because we call
+> restore_user_access_state() if anything failed (this is new in v2,
+> exactly to prevent that scenario).
+
+Ah, right -- I missed that detail.
 
 Cheers
 ---Dave
