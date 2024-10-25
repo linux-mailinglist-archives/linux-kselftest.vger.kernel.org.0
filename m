@@ -1,57 +1,57 @@
-Return-Path: <linux-kselftest+bounces-20696-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20697-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12C3E9B0F53
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 21:46:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 352119B0F55
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 21:46:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 80332B270E3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 19:46:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC9281F23E38
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 19:46:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B179B20F3D0;
-	Fri, 25 Oct 2024 19:46:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A411212163;
+	Fri, 25 Oct 2024 19:46:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="BgYrs3ek"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="JfRE3Bf5"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F6920BB2E;
-	Fri, 25 Oct 2024 19:46:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A44220BB35;
+	Fri, 25 Oct 2024 19:46:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729885572; cv=none; b=OfJNuOQ+VyYv2QnHxWdQ2l+ZVeeMnCHtTycM/qjx2EgVeXAdqkFC7jNFJaQu/s2R5dRTYi89vYkgOqMRR+tPLHETgHogZRNbxE4rzOvOGaeLn6lTGR0SoLNdGG4qogb6fLADB5BVd06Jegc90idro5F1NOabTJU7vTVmQJCeH9k=
+	t=1729885574; cv=none; b=sqyuFMkVQRLYC7QqBfpN/I6cx9KcxKpi27MfEm+BH0ejp7hjj4M4BNBgnI15n0m/L55+Dq2fag8k2yP5uh5PjXuRQoZbuIrK8a/V6e5J8sc3M5MJjekiYKHNTo3sietVbx6Ev9Okv6dt7RDfhfTUttFI9p4AkcOsocwsL3Bl3BU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729885572; c=relaxed/simple;
-	bh=a1xD5U+KJRHHHihCSOYqaYazM7sD048UvQTjfIB42Gs=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fFjrJbcW5Zq+Z0bXujINIgSYXe01TkdSdP0p4E0blddIQmytZYPbZqS5x2G2SGBw6xaH8gor6npGXQdFHoBmKrOgpo9O9j0jrMDFdA0EmHoMg+vWXOBNbuQA9fI625W7HopV0oUDPcGCT5SM7zIZa3X9FpU6emKZbqa2GQUt2rE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=BgYrs3ek; arc=none smtp.client-ip=148.251.105.195
+	s=arc-20240116; t=1729885574; c=relaxed/simple;
+	bh=xueF8NL4biPM6Tjkyld4sBVF/E87RcWAqU59Qy6ahiw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=BAZPYnFYpufV7IdqB2IHcoO7GKQC3zHMoesedzFjPsLV08jlhTTGQhIsyN4S9JJ/+ASJgN0zrF1NIDHnbAhp5Vk73WEUdZ10SX4DiC7vo2KPGs74zPgkXHcyW6dzwaVZ2aK5MeF3O3bdp0EO37V8Hl3GvykEvGzRMtA9+VcPG4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=JfRE3Bf5; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1729885568;
-	bh=a1xD5U+KJRHHHihCSOYqaYazM7sD048UvQTjfIB42Gs=;
-	h=From:Subject:Date:To:Cc:From;
-	b=BgYrs3ekdOayxKEFAUcDI91I69Pms2obdaqO60iGnJ+8ccKCq+VqafhPQliizIHv2
-	 4/Om4Yu589ezyURJsJqv4HmTZmRQ0bIRkLyXIhhWdsZvV7fbdVJK7xLUuQ9DnEZlG6
-	 R/ZjygaS8Y0NGtodknIvfvg+Mhfzj4hq3SORioMWnx3ykaCuGIS2ZP2AK93ttOPA5A
-	 wF0Gv6sKFJ+hkGAfHQbzI0xcI5VktsE4SCHngYoRNgToH3lCXZGihUZ/kV/9QUsrdd
-	 T3jufgDRuN2iiogTP0S2o7IqebXyfot3eEEngGO0DIeZbEfA4ZBgCuMeKUEw3xT9Ji
-	 x6O8hHrJY1O6g==
+	s=mail; t=1729885570;
+	bh=xueF8NL4biPM6Tjkyld4sBVF/E87RcWAqU59Qy6ahiw=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=JfRE3Bf5Gfu+OpGxQvbs1PSFqG70Pn28Sq2qOU7LQ4hw4W+nB67hd9iDvxcsSREL8
+	 p1A7xZIQW0LnL0uAlmfFuyju47fyw5wCkybqvrQ0iysKmk0CNN/IeRPvsgskBfFpfb
+	 cRQGmn6gx9uvcSH/pBtOzK0eVcgHQZikWjxJHsRD4O9G6cSR18lERuuHtsvdKEB1UM
+	 uM+ELKf6iGPCJBfwkMCVILAsdRpXs271f0T1OL3D5U5/vJpffLXEoCfyUxbhT1VLTt
+	 Y38wrzXU4n1z55CNULfAO3TrDzcM8kEj5S+zjESHfZhrVuLDf2sx0Hg4KTI6Y9mBIK
+	 CtVOFr7/XZBLA==
 Received: from [192.168.1.54] (pool-100-2-116-133.nycmny.fios.verizon.net [100.2.116.133])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: nfraprado)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 85DC217E3704;
-	Fri, 25 Oct 2024 21:46:06 +0200 (CEST)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id BFB6817E3706;
+	Fri, 25 Oct 2024 21:46:08 +0200 (CEST)
 From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Subject: [PATCH RFC v2 0/5] Verify bias functionality for pinctrl_paris
- driver through new gpio test
-Date: Fri, 25 Oct 2024 15:45:35 -0400
-Message-Id: <20241025-kselftest-gpio-set-get-config-v2-0-040d748840bb@collabora.com>
+Date: Fri, 25 Oct 2024 15:45:36 -0400
+Subject: [PATCH RFC v2 1/5] pinctrl: mediatek: paris: Expose more
+ configurations to GPIO set_config
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,11 +60,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAF/1G2cC/4WNTQrCMBCFr1JmbSSpNlJXguAB3EoX6ThpB9tOS
- UpRSu9uKO5dPHg/8L0FIgWmCOdsgUAzR5YhhXyXAbZuaEjxM2XIdX7UpbbqFanzE8VJNSOLipR
- MEsrguVGWirq2J43GFZAYYyDP743/gPvtClUqW46ThM/2OZtt+uHLP/jZKK2MddoWzuMBzQWl6
- 1wtwe1ReqjWdf0C88Dq29MAAAA=
-X-Change-ID: 20240906-kselftest-gpio-set-get-config-6e5bb670c1a5
+Message-Id: <20241025-kselftest-gpio-set-get-config-v2-1-040d748840bb@collabora.com>
+References: <20241025-kselftest-gpio-set-get-config-v2-0-040d748840bb@collabora.com>
+In-Reply-To: <20241025-kselftest-gpio-set-get-config-v2-0-040d748840bb@collabora.com>
 To: Sean Wang <sean.wang@kernel.org>, 
  Linus Walleij <linus.walleij@linaro.org>, 
  Matthias Brugger <matthias.bgg@gmail.com>, 
@@ -77,106 +75,81 @@ Cc: kernel@collabora.com, linux-mediatek@lists.infradead.org,
  =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
 X-Mailer: b4 0.14.2
 
-This series was motivated by the regression fixed by 166bf8af9122
-("pinctrl: mediatek: common-v2: Fix broken bias-disable for
-PULL_PU_PD_RSEL_TYPE"). A bug was introduced in the pinctrl_paris driver
-which prevented certain pins from having their bias configured.
+Currently the set_config callback in the gpio_chip registered by the
+pinctrl_paris driver only supports configuring a single parameter on
+specific pins (the input debounce of the EINT controller, on pins that
+support it), even though many other configurations are already
+implemented and available through the pinctrl API for configuration of
+pins by the Devicetree and other drivers.
 
-Running this test on the mt8195-tomato platform with the test plan
-included below[1] shows the test passing with the fix applied, but failing
-without the fix:
-
-With fix:
-  $ ./gpio-setget-config.py
-  TAP version 13
-  # Using test plan file: ./google,tomato.yaml
-  1..3
-  ok 1 pinctrl_paris.34.pull-up
-  ok 2 pinctrl_paris.34.pull-down
-  ok 3 pinctrl_paris.34.disabled
-  # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Without fix:
-  $ ./gpio-setget-config.py
-  TAP version 13
-  # Using test plan file: ./google,tomato.yaml
-  1..3
-  # Bias doesn't match: Expected pull-up, read pull-down.
-  not ok 1 pinctrl_paris.34.pull-up
-  ok 2 pinctrl_paris.34.pull-down
-  # Bias doesn't match: Expected disabled, read pull-down.
-  not ok 3 pinctrl_paris.34.disabled
-  # Totals: pass:1 fail:2 xfail:0 xpass:0 skip:0 error:0
-
-In order to achieve this, the first three patches expose bias
-configuration through the GPIO API in the MediaTek pinctrl drivers,
-notably, pinctrl_paris, patch 4 extends the gpio-mockup-cdev utility for
-use by patch 5, and patch 5 introduces a new GPIO kselftest that takes a
-test plan in YAML, which can be tailored per-platform to specify the
-configurations to test, and sets and gets back each pin configuration to
-verify that they match and thus that the driver is behaving as expected.
-
-Since the GPIO uAPI only allows setting the pin configuration, getting
-it back is done through pinconf-pins in the pinctrl debugfs folder.
-
-The test currently only verifies bias but it would be easy to extend to
-verify other pin configurations.
-
-The test plan YAML file can be customized for each use-case and is
-platform-dependant. For that reason, only an example is included in
-patch 3 and the user is supposed to provide their test plan. That said,
-the aim is to collect test plans for ease of use at [2].
-
-[1] This is the test plan used for mt8195-tomato:
-
-- label: "pinctrl_paris"
-  tests:
-  # Pin 34 has type MTK_PULL_PU_PD_RSEL_TYPE and is unused.
-  # Setting bias to MTK_PULL_PU_PD_RSEL_TYPE pins was fixed by
-  # 166bf8af9122 ("pinctrl: mediatek: common-v2: Fix broken bias-disable for PULL_PU_PD_RSEL_TYPE")
-  - pin: 34
-    bias: "pull-up"
-  - pin: 34
-    bias: "pull-down"
-  - pin: 34
-    bias: "disabled"
-
-[2] https://github.com/kernelci/platform-test-parameters
+Expose all configurations currently implemented through the GPIO API so
+they can also be set from userspace, which is particularly useful to
+allow testing them from userspace.
 
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
-Changes in v2:
-- Added patches 2 and 3 enabling the extra GPIO pin configurations on
-  the other mediatek drivers: pinctrl-moore and pinctrl-mtk-common
-- Tweaked function name in patch 1:
-  mtk_pinconf_set -> mtk_paris_pin_config_set,
-  to make it clear it is not a pinconf_ops
-- Adjusted commit message to make it clear the current support is
-  limited to pins supported by the EINT controller
-- Link to v1: https://lore.kernel.org/r/20240909-kselftest-gpio-set-get-config-v1-0-16a065afc3c1@collabora.com
+ drivers/pinctrl/mediatek/pinctrl-paris.c | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
----
-Nícolas F. R. A. Prado (5):
-      pinctrl: mediatek: paris: Expose more configurations to GPIO set_config
-      pinctrl: mediatek: moore: Expose more configurations to GPIO set_config
-      pinctrl: mediatek: common: Expose more configurations to GPIO set_config
-      selftest: gpio: Add wait flag to gpio-mockup-cdev
-      selftest: gpio: Add a new set-get config test
+diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c b/drivers/pinctrl/mediatek/pinctrl-paris.c
+index 87e958d827bf939aa6006794287698be4936f25e..c9455de266a447ab7f5446c1511bef0ef9c9128e 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-paris.c
++++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
+@@ -255,10 +255,9 @@ static int mtk_pinconf_get(struct pinctrl_dev *pctldev,
+ 	return err;
+ }
+ 
+-static int mtk_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
+-			   enum pin_config_param param, u32 arg)
++static int mtk_paris_pin_config_set(struct mtk_pinctrl *hw, unsigned int pin,
++				    enum pin_config_param param, u32 arg)
+ {
+-	struct mtk_pinctrl *hw = pinctrl_dev_get_drvdata(pctldev);
+ 	const struct mtk_pin_desc *desc;
+ 	int err = -ENOTSUPP;
+ 	u32 reg;
+@@ -795,9 +794,9 @@ static int mtk_pconf_group_set(struct pinctrl_dev *pctldev, unsigned group,
+ 	int i, ret;
+ 
+ 	for (i = 0; i < num_configs; i++) {
+-		ret = mtk_pinconf_set(pctldev, grp->pin,
+-				      pinconf_to_config_param(configs[i]),
+-				      pinconf_to_config_argument(configs[i]));
++		ret = mtk_paris_pin_config_set(hw, grp->pin,
++					       pinconf_to_config_param(configs[i]),
++					       pinconf_to_config_argument(configs[i]));
+ 		if (ret < 0)
+ 			return ret;
+ 
+@@ -937,18 +936,19 @@ static int mtk_gpio_set_config(struct gpio_chip *chip, unsigned int offset,
+ {
+ 	struct mtk_pinctrl *hw = gpiochip_get_data(chip);
+ 	const struct mtk_pin_desc *desc;
+-	u32 debounce;
++	enum pin_config_param param = pinconf_to_config_param(config);
++	u32 arg = pinconf_to_config_argument(config);
+ 
+ 	desc = (const struct mtk_pin_desc *)&hw->soc->pins[offset];
+ 
+-	if (!hw->eint ||
+-	    pinconf_to_config_param(config) != PIN_CONFIG_INPUT_DEBOUNCE ||
+-	    desc->eint.eint_n == EINT_NA)
+-		return -ENOTSUPP;
++	if (param == PIN_CONFIG_INPUT_DEBOUNCE) {
++		if (!hw->eint || desc->eint.eint_n == EINT_NA)
++			return -ENOTSUPP;
+ 
+-	debounce = pinconf_to_config_argument(config);
++		return mtk_eint_set_debounce(hw->eint, desc->eint.eint_n, arg);
++	}
+ 
+-	return mtk_eint_set_debounce(hw->eint, desc->eint.eint_n, debounce);
++	return mtk_paris_pin_config_set(hw, offset, param, arg);
+ }
+ 
+ static int mtk_build_gpiochip(struct mtk_pinctrl *hw)
 
- drivers/pinctrl/mediatek/pinctrl-moore.c           | 283 +++++++++++----------
- drivers/pinctrl/mediatek/pinctrl-mtk-common.c      |  48 ++--
- drivers/pinctrl/mediatek/pinctrl-paris.c           |  26 +-
- tools/testing/selftests/gpio/Makefile              |   2 +-
- tools/testing/selftests/gpio/gpio-mockup-cdev.c    |  14 +-
- .../gpio-set-get-config-example-test-plan.yaml     |  15 ++
- .../testing/selftests/gpio/gpio-set-get-config.py  | 183 +++++++++++++
- 7 files changed, 395 insertions(+), 176 deletions(-)
----
-base-commit: a39230ecf6b3057f5897bc4744a790070cfbe7a8
-change-id: 20240906-kselftest-gpio-set-get-config-6e5bb670c1a5
-
-Best regards,
 -- 
-Nícolas F. R. A. Prado <nfraprado@collabora.com>
+2.47.0
 
 
