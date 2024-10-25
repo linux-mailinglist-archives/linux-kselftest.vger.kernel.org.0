@@ -1,103 +1,103 @@
-Return-Path: <linux-kselftest+bounces-20659-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20660-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 583439AFF62
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 12:02:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 050DB9AFF82
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 12:06:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB3F3B22BE1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 10:02:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37FFDB25A2A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 10:06:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1761DDA1C;
-	Fri, 25 Oct 2024 10:00:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7569F1D63EA;
+	Fri, 25 Oct 2024 10:05:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LA56r5ua"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YbeKOElD"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E6C1A0BEE;
-	Fri, 25 Oct 2024 10:00:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF3C1C0DF0;
+	Fri, 25 Oct 2024 10:05:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729850457; cv=none; b=m3iOXMyeL39a8xF+lFP2DRm+qLsa1BxJ3/dp3+BSS6HgdMnSX2tcLp+A0k3iCKEZmMmU1TQnaTYa41n86RC3vQMxKuzFp6WKh3J00PHZuW8rCbVBi4N0DDH81oSaPh5DJ+qcPEPXKnsYFeMAq0f640otl5KXTWR2K/T+KbSQum0=
+	t=1729850755; cv=none; b=QF5dQKOfczkVzwLU9/LZfMmXQ6vmZ32EbiMadKs062oByhYYeep/8Jczk5cLdzwZWynXEdswLCAUS7vxACdBM+dz0qqObnEESeJi+KVBIouSOqiUDkSUVJVld4jSKjz77AgVe0bIWf4yynt1IO9Hl6eY+FQZSCFlxTLTbivYKBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729850457; c=relaxed/simple;
-	bh=aVscTLXVO2A6+3+8E/Ek0ANx+Z3F0Cm1Fng5HkdRojk=;
+	s=arc-20240116; t=1729850755; c=relaxed/simple;
+	bh=d80JKrTzHZwxS7GVDWBKiR0+iPVCU3MTwX4pzo7j3Q4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oR345UTfVIIWJS1iKJKH5+HEXpyPZQPHwE+fke3EealpEvXX3iCL5yi8cF4rzVYXeNIxQAVGgBkvt1miyyxetqsdoIXoucmv4corbKonU/mqjPyt36V12I0Uj/5V6KM2QVw/ikA4P4iB/rHzPagMYalRIfOk4/3cUrSpfu1Xw84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LA56r5ua; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C095C4CECD;
-	Fri, 25 Oct 2024 10:00:53 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=bhdzvPaTrGGobHJx9V3hoxE+KbGi07tHcS+dJHSuz7pawzFjpEKHMYbGbkvyeKUEB9170nOn/x4hf+JSGVRMjawBbozGtyvxLYfi60BTgHR4+CtjeC/6qCGOd4XvQ2TqY1J+s/TdZzvQe0kO54WP6I3GmVwL1tVRS+pXihxi1XQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YbeKOElD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CF13C4CEC3;
+	Fri, 25 Oct 2024 10:05:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729850456;
-	bh=aVscTLXVO2A6+3+8E/Ek0ANx+Z3F0Cm1Fng5HkdRojk=;
+	s=k20201202; t=1729850754;
+	bh=d80JKrTzHZwxS7GVDWBKiR0+iPVCU3MTwX4pzo7j3Q4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LA56r5uaoLwbRheEYnLRqfCHnEID20EJj9AVZCo7bTAEDQfIcMjZdWR/PPDta8XUg
-	 9fDwO6M/kyEB9qcKY1fqBPDF880trPwrdyo0PP1y2CAzU/gcHyZd8l+UcoNpBhZUjK
-	 5dLp1LeN83iwhUaiie22v0f2u3HyqAI44kwdEJgy0fZu0tlMdVKkXo4psK4A87+STV
-	 yYKoVS33pZmre/5Y+rIK+hGbL6oc7366qlw1YOM2KvNzf4Dbd5NltYVAu4NsC28Uph
-	 dBWwFRfZmW52BrwXwuDYzlrkaxWD82PkCLha3PwoPqq4IeZnhNf/vAzpZmGKR/yMeN
-	 ycMm3RJXU88Yw==
-Date: Fri, 25 Oct 2024 11:00:51 +0100
-From: Simon Horman <horms@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Gregory Detal <gregory.detal@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH net 2/3] mptcp: remove unneeded lock when listing scheds
-Message-ID: <20241025100051.GN1202098@kernel.org>
-References: <20241021-net-mptcp-sched-lock-v1-0-637759cf061c@kernel.org>
- <20241021-net-mptcp-sched-lock-v1-2-637759cf061c@kernel.org>
- <20241023122128.GT402847@kernel.org>
- <4ca239db-6a05-4735-916c-73cee0ee22a0@kernel.org>
+	b=YbeKOElDGrzQwUM9UVmzs4FTlB9A0/BYnlt1Kg2q3SwmDNNKLtLP2xWkROR5qMeWB
+	 mxSqBKRtSWalfWKej0GSOdeoxwMD+nmr/L3OKNoP+ICLc2KEcf3kKXFhs/2Q1uDJAj
+	 /W2bCFozALgudtfsbx/7fOxX3AE+SDLwt3s89zL8XtGigGq0xgmoLUD04hfqVVwNNt
+	 4yoBYQk6T56I085+aEglB8syzhbUGl1tqaOQK49u/xjp1E8PW2xQq/UPKxLOVRDOn7
+	 euLfbxTPTf4umhWhUh2KykEc2bqaBYqHlGxnp1vkgeOMco/WgpBPkMbW3OZyyEFLTu
+	 Rc/QNVU2Ysr7A==
+Date: Fri, 25 Oct 2024 11:05:50 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Li Zhijian <lizhijian@fujitsu.com>
+Cc: linux-kselftest@vger.kernel.org, shuah@kernel.org,
+	linux-kernel@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>, linux-sound@vger.kernel.org
+Subject: Re: [PATCH for-next 1/7] selftests/alsa: Add a few missing gitignore
+ files
+Message-ID: <831f5cfd-2a4a-4b48-9ce0-55215cf2c600@sirena.org.uk>
+References: <20241025014010.6533-1-lizhijian@fujitsu.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ZPDZZejE6/rt7ECm"
+Content-Disposition: inline
+In-Reply-To: <20241025014010.6533-1-lizhijian@fujitsu.com>
+X-Cookie: Often things ARE as bad as they seem!
+
+
+--ZPDZZejE6/rt7ECm
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4ca239db-6a05-4735-916c-73cee0ee22a0@kernel.org>
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 23, 2024 at 04:13:36PM +0200, Matthieu Baerts wrote:
-> Hi Simon,
-> 
-> Thank you for the reviews!
-> 
-> On 23/10/2024 14:21, Simon Horman wrote:
-> > On Mon, Oct 21, 2024 at 12:25:27PM +0200, Matthieu Baerts (NGI0) wrote:
-> >> mptcp_get_available_schedulers() needs to iterate over the schedulers'
-> >> list only to read the names: it doesn't modify anything there.
-> >>
-> >> In this case, it is enough to hold the RCU read lock, no need to combine
-> >> this with the associated spin lock.
-> >>
-> >> Fixes: 73c900aa3660 ("mptcp: add net.mptcp.available_schedulers")
-> >> Cc: stable@vger.kernel.org
-> >> Suggested-by: Paolo Abeni <pabeni@redhat.com>
-> >> Reviewed-by: Geliang Tang <geliang@kernel.org>
-> >> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-> > 
-> > I do wonder if it would be more appropriate to route this via net-next
-> > (without a fixes tag) rather than via net. But either way this looks good
-> > to me.
-> Good point. On one hand, I marked it as a fix, because when working on
-> the patch 1/3, we noticed these spin_(un)lock() were not supposed to be
-> there in the first place. On the other hand, even it's fixing a small
-> performance issue, it is not fixing a regression.
-> 
-> I think it is easier to route this via -net, but I'm fine if it is
-> applied in net-next.
+On Fri, Oct 25, 2024 at 09:40:04AM +0800, Li Zhijian wrote:
 
-Understood. FTR, I don't feel strongly about this either way.
+> index 12dc3fcd3456..1407fd24a97b 100644
+> --- a/tools/testing/selftests/alsa/.gitignore
+> +++ b/tools/testing/selftests/alsa/.gitignore
+> @@ -1,3 +1,5 @@
+>  mixer-test
+>  pcm-test
+>  test-pcmtest-driver
+> +global-timer
+> +utimer-test
+> --=20
+
+Please keep the file sorted, this avoids spurious conflicts in future.
+
+--ZPDZZejE6/rt7ECm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcbbW0ACgkQJNaLcl1U
+h9DLngf9HZN3G/r08l2XIWByPI07w1WsERP+h6ZC6ozmgsOl+NOMfYEArrLAKTTw
+Q1Y3hA2E/Iga3ATg1w6z/2ycTGSS0YYnO4A2pl2Z6IMopFzho/bQoZQ5OTZ2/ITH
+n9/ENmyjP8xF2Xz2iYsWVWCDEZijX1ZW541cSHD6QF7XJVAZjAGt3gNPPi7e7AJx
+79bZJihkwKdWIlpZuJT7aNzWOydA6cIoj1X1AoM3tWo+Qvt4LRciJ/Cx78oZg+XA
+KRfjUYceQbe5e04ZvLNHu+zbv72i2ogzVZJOOnn/001NF8aFNP4mYHHwWVgqYyOV
+VbDxvShANHI/UsPo7QJl4KRZ9o9NBA==
+=gRPk
+-----END PGP SIGNATURE-----
+
+--ZPDZZejE6/rt7ECm--
 
