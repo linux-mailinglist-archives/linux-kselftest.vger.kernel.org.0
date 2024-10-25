@@ -1,182 +1,188 @@
-Return-Path: <linux-kselftest+bounces-20679-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20680-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8412E9B0973
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 18:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A15BC9B0980
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 18:15:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B617A1C22DF2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 16:14:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C64E41C22E3B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2024 16:15:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FC4518870D;
-	Fri, 25 Oct 2024 16:14:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37B161E00BF;
+	Fri, 25 Oct 2024 16:15:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="UD8mDVr5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2059.outbound.protection.outlook.com [40.107.237.59])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEDE17082B;
-	Fri, 25 Oct 2024 16:14:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729872876; cv=none; b=q/tdXG6BFai0myho7Pbu3TCcJ7/pqc6uMjxXA6nImxsP5bIw/rSEeVeV9vbEdJszke6Mipr4khSxIELR107UsVEN6Af2p5eKtNcgRcQRot8S8MsVhprvhiUN62wy70ZLIEuw4x+e9QzgusptlVtk+UGrevme/fWuOT8xQW1z5CE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729872876; c=relaxed/simple;
-	bh=iRMbskNOi1COk9/chyRw3Ro2vtmKl+VeKlcxOeCGirw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eWkILdKerdtdHN27+E1UsRoX5Qyla5UQpGn5mU7v4+Um4vg5ojqubqxJZK+3OKJfAkuD98XKDVbRgyBIQ+G7qpNRVbSPRxPhevalplhgIdehTSJm7S25rCV6wLo3iRdLdD//fN96xtvlRKfm6geHzt35t7HiRlzCMvEufA7Q/kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a9a156513a1so324918566b.0;
-        Fri, 25 Oct 2024 09:14:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729872872; x=1730477672;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Mck4w3ufI078SKMeX83WF7cSZnSJ+nv2Om7NNhnVrpk=;
-        b=XJgUPcH4TB8sPgyRYfLXKYOPwjoSNfpkmF8VH0Ot6M2hUkfPVELcpgmgqprkyfHvjP
-         DaFzA8FY4NieSMIRdAxkUTYCzuR6r4i9l6rxTWBkOhnNUi5OZ5xJLm19yXDolhie6y9O
-         mtkRK3bkEnv+dT6fj6fu599S3Q2ZtZHSMtzH+v1JE+CTiUBXUqoztuU3pdivgDG6uls9
-         MsE22eUmqmdIkKKqlbeR2ctLSYoe3MsU7L+EccmtuTv5wsMu/QCicvBEto2WIeJG8Spd
-         vtCHWPkpv0aDTICVOg2307+BGeEvwHltcVDF3URzL/HgrHp/tCYgRlWlfyeNFu28P9Dr
-         59gQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUe2mtskcZrAUpcmIo4xyUCFZv0bVuAI1w/+6Es/Q+9mtgCOu5vrZH6IRtcJJnmpt+MRhSYhmXxyNcdp7peOAna@vger.kernel.org, AJvYcCV/px/iBpdrF+gBIPhAj4L8aX7UksLzAqjDALCawE2Cc946FeSS2f2m9fb/PJ8/vyDC9HygDEK8@vger.kernel.org, AJvYcCXvFpAdp5wwWJnF6RlO/X6z3xyuJv5I7H3ewnPrPK+Omdrx1FlieywldbioJ98wvSOwrXelpMD0cjsDL7Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIsKrNS5mbDVpJV0ot3OTkGpHZ/dRHSpl7zJTBNlxWv+wnsWwj
-	0sXjdaFOoTJgKVuumo3njwcl78yaBY/L2Mo7mRYhRSiVi0qLanEU
-X-Google-Smtp-Source: AGHT+IE9wvNdJoZ1wRErVgzp/oeZPvFb/8mAxNhzhoaQkWN3SgsihpQE4oSqzeuHnBY2hgMpTI0hUg==
-X-Received: by 2002:a17:907:9452:b0:a99:60c8:f2c4 with SMTP id a640c23a62f3a-a9ad2730bc2mr522796066b.15.1729872872050;
-        Fri, 25 Oct 2024 09:14:32 -0700 (PDT)
-Received: from localhost (fwdproxy-lla-112.fbsv.net. [2a03:2880:30ff:70::face:b00c])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9b1dec773fsm87395566b.18.2024.10.25.09.14.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2024 09:14:31 -0700 (PDT)
-From: Breno Leitao <leitao@debian.org>
-To: kuba@kernel.org,
-	horms@kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	matttbe@kernel.org,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Shuah Khan <shuah@kernel.org>
-Cc: thepacketgeek@gmail.com,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	davej@codemonkey.org.uk,
-	vlad.wing@gmail.com,
-	max@kutsevol.com,
-	kernel-team@meta.com,
-	aehkn@xenhub.one,
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH net-next 2/2] net: netconsole: selftests: Add userdata validation
-Date: Fri, 25 Oct 2024 09:14:14 -0700
-Message-ID: <20241025161415.238215-2-leitao@debian.org>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241025161415.238215-1-leitao@debian.org>
-References: <20241025161415.238215-1-leitao@debian.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FAC11B0F3F;
+	Fri, 25 Oct 2024 16:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.59
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729872913; cv=fail; b=qedghB5Wi744dojuhYHLS2LCJ5vjyUjxzV39KE7Vm4512ldBV6c3mCqrd5B16mMl4FNTK5JcOMJpoCXSR2QGFsXnxvAEvEcLjLG0pULIMhsSl0IrDu50bJQWYe20HEe+fv7Vdr1h/7Y1/15/kCA06PojPWDmJmO+jzXhBnSmVco=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729872913; c=relaxed/simple;
+	bh=JAweqgE/E9bNq6kyaNP9/ul3ltHvRGCUQv3AtFNB7JQ=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MX1lEqNrsZnQrA7Si2djmaV6OzEyCPxawKfU99U8oGjI9LYl1gW/d6MSgszfhiMbKX6xqd5MmATWRsc1WaUIfE20Hl1p8kS9Hw0jlX2cvU0MaTH/AY0EglLeVRmFndWN99i+qLqta5Yw1p0izEkRKAntDiObS+kB+ukft3NSRrk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=UD8mDVr5; arc=fail smtp.client-ip=40.107.237.59
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hsfZv+msXBkw1sKOIfb1P9s5jF0Web6nhfO5m3q+mLaaWkKeIM9sdJipOOtD56af9HGDE5W03Vl4HHdeu5Ped5lohMisbeRmc3kSLMX/N8ltWFGToG3xVI65Y4QAtSAg+lcxf3z6kxVccHqrf82jBmzgbTN86gaZ8rD3ppkx+3pjAdho7XBCP2vFuiYqyoIBshd8JMhh0SQTO7+cuD/cBlLr+c6X1QolqXcld5CjTtGVpVOe2TbV606NitXNVtdTBgAv+a7neNBON/dvSqI2WIjjcd+HiVOg/PqWBN9kfg2IgCBAYT9qXcovvWpXqWBOWTcDHokC+s7pVmzYHVFuBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AnXiCdGD/CKTEHm2nBL85/df2l6mhhB4s0DdikOIGyg=;
+ b=PR8T/q9VtAPX/y8lfjTadhflM9YXeMGcjrfZ2xwShLb8esU6UrAO7ZZ2osRl/ZicsE+jLeaUThmGDXY1u4ziwE9wJDM4MBYC8j2jiCDcGlMsUIhWb9gt1YIitgAbpmbJhrgYCXMrZWAgYYbspqLu8LxF/nsM17ZhV0QiuRuGZGRtzuWEM81vd/VTnU0QqGMkv1l7LoQ1j4M8Q0QCWoM507I4MMau+Kdu4Py+LgAvebkijzZbMtnGjEduGZFidXnGuxFIzBT9lopfiCvHOjao44hszappZRHNIVYigQyycJw2X8H14JMv+pNo5dm5IM8jci2oDQeffC4tOGR2PdwNKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AnXiCdGD/CKTEHm2nBL85/df2l6mhhB4s0DdikOIGyg=;
+ b=UD8mDVr59mlVG4efXEJkDILqtda2K1qcOWJlsTVyCxCgyIKat8Wi70ePfImNDrqkMIOD6d4tjA16iXYxWh0ozGYSOuYPYnNHuDaTs8qWu1E2ptr03/k3/xcctsgzNw/Otp0dRRpb5VKOG822dbbOid9zai1Irbb1mkPf3L4lrUMwUhmzbLx5zqMSid8FgYqikHRuR7VLcWUGXTAjDaULj7TgDxfR2uuz2AQ1zBRgLLt+EtFs42UAuU2fdwNEAHY38Bdk9BEPQJovgxiR/GHMOnO/kF9h5RSxRHLPxFVHzD4VJRAbxyoUDvUZtJj0n8I6L7cuweuPO3H+YTHKaXdhCA==
+Received: from BLAPR03CA0150.namprd03.prod.outlook.com (2603:10b6:208:32e::35)
+ by CH3PR12MB7762.namprd12.prod.outlook.com (2603:10b6:610:151::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.22; Fri, 25 Oct
+ 2024 16:15:04 +0000
+Received: from BL02EPF0002992C.namprd02.prod.outlook.com
+ (2603:10b6:208:32e:cafe::e7) by BLAPR03CA0150.outlook.office365.com
+ (2603:10b6:208:32e::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.19 via Frontend
+ Transport; Fri, 25 Oct 2024 16:15:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BL02EPF0002992C.mail.protection.outlook.com (10.167.249.57) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8093.14 via Frontend Transport; Fri, 25 Oct 2024 16:15:04 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 25 Oct
+ 2024 09:14:54 -0700
+Received: from drhqmail201.nvidia.com (10.126.190.180) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Fri, 25 Oct 2024 09:14:54 -0700
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.180)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
+ Transport; Fri, 25 Oct 2024 09:14:53 -0700
+Date: Fri, 25 Oct 2024 09:14:52 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: "Tian, Kevin" <kevin.tian@intel.com>
+CC: "jgg@nvidia.com" <jgg@nvidia.com>, "will@kernel.org" <will@kernel.org>,
+	"joro@8bytes.org" <joro@8bytes.org>, "suravee.suthikulpanit@amd.com"
+	<suravee.suthikulpanit@amd.com>, "robin.murphy@arm.com"
+	<robin.murphy@arm.com>, "dwmw2@infradead.org" <dwmw2@infradead.org>,
+	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>, "shuah@kernel.org"
+	<shuah@kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "iommu@lists.linux.dev"
+	<iommu@lists.linux.dev>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "eric.auger@redhat.com"
+	<eric.auger@redhat.com>, "jean-philippe@linaro.org"
+	<jean-philippe@linaro.org>, "mdf@kernel.org" <mdf@kernel.org>,
+	"mshavit@google.com" <mshavit@google.com>,
+	"shameerali.kolothum.thodi@huawei.com"
+	<shameerali.kolothum.thodi@huawei.com>, "smostafa@google.com"
+	<smostafa@google.com>, "Liu, Yi L" <yi.l.liu@intel.com>, "aik@amd.com"
+	<aik@amd.com>, "zhangfei.gao@linaro.org" <zhangfei.gao@linaro.org>,
+	"patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: Re: [PATCH v4 06/11] iommufd: Allow pt_id to carry viommu_id for
+ IOMMU_HWPT_ALLOC
+Message-ID: <ZxvD/KEnzjTMOYnA@Asurada-Nvidia>
+References: <cover.1729553811.git.nicolinc@nvidia.com>
+ <ba9ce9b3c8a93c9c790fee52961d075dfbb63ca7.1729553811.git.nicolinc@nvidia.com>
+ <BN9PR11MB5276BEF20579F3CE7DBA15908C4F2@BN9PR11MB5276.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276BEF20579F3CE7DBA15908C4F2@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0002992C:EE_|CH3PR12MB7762:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8eaaf42a-e82c-4a12-e6e2-08dcf5102f5c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|376014|7416014|82310400026|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?nrZmgaZb3t6PbpfXD94b+7Q0AmL/BhK6cxqeCs2t0GbNgu5RlidD+YOgHRwM?=
+ =?us-ascii?Q?mpIcg/dXnsKj8z9fGNeiAYF5fjjxnrVva6bT9xSWRLmaiVb3zcC64ln/ANp7?=
+ =?us-ascii?Q?IYmFT9Z1oyfUdY6EPK4ad76N4+3cm74KBHgYjA3dD1TrlJgVku+d/iPYO0hJ?=
+ =?us-ascii?Q?UryUuwxDP8PBbmaAIJnN5vlMbtZBl5mbJmqn/oZNLpSKHttLCxUEEHLZ3UqF?=
+ =?us-ascii?Q?dE+hbP/+nynwpMyexB+/zs4nRIpT68kmI0UWBWXCT8Gws/dX8/b+8FwTSofT?=
+ =?us-ascii?Q?IFiJ5ho4kqhcmOFhJQz9r6OT0Hrh8Rj5E2E9xOQmomJ96p+S8wSu+8VY4usX?=
+ =?us-ascii?Q?/hd3DG0iuJjtrz2xlMVyoiNNzq/1TqE4MRmA8W7whvvcqBvcHHhG7OF7ilVH?=
+ =?us-ascii?Q?4Ne8Tx2lCxh43iJZUsPiePjkgEWv/VWhUaNo1VNBmX3XcVBO+raMt8LbB+Qp?=
+ =?us-ascii?Q?uO3ZBR00bXq7M5DtJbLX+kbnzrBGVlVYkv14JWME/7MzU9G6R9cICyss7fX/?=
+ =?us-ascii?Q?lDel1nTpjcfQvBO55Wum0iTxmN8GKIc74bbXjFRFVI8xMPcIgLFCkaaaYgih?=
+ =?us-ascii?Q?FL8lqq+zXwgMsVJx1My92fhvkqWpaGGNY6nc0tpQLAHoNWQecHWOsHnp1ybK?=
+ =?us-ascii?Q?qrBl0PKFYiLYLaQMIyCB1xXV6TwB8mSm81OOtbXIf6byInezO3QDkkpTXUEw?=
+ =?us-ascii?Q?9xHPZsJU6PBHT+2wJsB6Qp8nAPx5cAgD06M6zQjuhrFimSTl3vtNS9Fe31GW?=
+ =?us-ascii?Q?K/PWRN2qVs1UyiCWbANyjVToV0RUHm1AdQrL1r+eqSWq71klPTftvkrA+1Iz?=
+ =?us-ascii?Q?ONyE+VR+4yWeUH+As03mmYVIQU4rb5U+Hdj8gBftfSijRtIib2uuRSWsrhxu?=
+ =?us-ascii?Q?IPDaS0W161OpYrp6BzHAG0KiYed5ZvPf5G6A3FNdNajB/wML7icd3CczFHNO?=
+ =?us-ascii?Q?wnS4CSW31trpaw1rEQeyqIWo49eu6xMUOhhcHQE8D7YgiuY7hi2C+x8C5rqR?=
+ =?us-ascii?Q?ombN6kWV1sfXU3PeQ3QA1cUGUlP7dX371GgW8C7QxwRuvOSizWeoxZpiRGO8?=
+ =?us-ascii?Q?a5daMOEWSiVc8yK49UuQar0x4HQNrARp1nJjUC153ga9hqp7CmDKzFsTkcUK?=
+ =?us-ascii?Q?SmyGBizQskyZghOBwRqr/bO8IH8Ry2eZED3jDgxAYlRn9G3I1gBrA9D6rRHU?=
+ =?us-ascii?Q?ebgbsHK9sZeBq9PYVRI1ETCw7gfp60Cy16CsWrV/jaWU5CnKrdShp5DNvy7l?=
+ =?us-ascii?Q?n0z/kRTKrS8SiiCzbzLqp+fscZ9AP8tlLdpnTyY5vBinD6f5Dv+SbROOuFYl?=
+ =?us-ascii?Q?f2VjNXpbTtR6ZW2NbClXt++QJPJsugK7uHLyH/AuSmAk4c1ufla8iZpUsmxO?=
+ =?us-ascii?Q?mnvpxqObdy278X/DhcLekrNEfmTmnrApoH/fT4XO+/5LCfiDSA=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(376014)(7416014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2024 16:15:04.0792
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8eaaf42a-e82c-4a12-e6e2-08dcf5102f5c
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF0002992C.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7762
 
-Extend netcons_basic selftest to verify the userdata functionality by:
- 1. Creating a test key in the userdata configfs directory
- 2. Writing a known value to the key
- 3. Validating the key-value pair appears in the captured network output
+On Fri, Oct 25, 2024 at 09:04:15AM +0000, Tian, Kevin wrote:
+> > From: Nicolin Chen <nicolinc@nvidia.com>
+> > Sent: Tuesday, October 22, 2024 8:19 AM
+> >
+> > +static struct iommufd_hwpt_nested *
+> > +iommufd_hwpt_nested_alloc_for_viommu(struct iommufd_viommu
+> > *viommu,
+> > +                                  const struct iommu_user_data *user_data)
+> 
+> probably "_for" can be skipped to reduce the name length
 
-This ensures the userdata feature is properly tested during selftests.
+That would sound like a hwpt_nested allocating vIOMMU...
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- .../selftests/drivers/net/netcons_basic.sh    | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
+It'd be probably neutral to have iommufd_viommu_alloc_hwpt_nested,
+yet we have iommufd_hwpt_nested_alloc (HWPT-based) to align with..
 
-diff --git a/tools/testing/selftests/drivers/net/netcons_basic.sh b/tools/testing/selftests/drivers/net/netcons_basic.sh
-index 4ad1e216c6b0..d182dcc2a10b 100755
---- a/tools/testing/selftests/drivers/net/netcons_basic.sh
-+++ b/tools/testing/selftests/drivers/net/netcons_basic.sh
-@@ -26,10 +26,13 @@ DSTIP=192.168.2.2
- 
- PORT="6666"
- MSG="netconsole selftest"
-+USERDATA_KEY="key"
-+USERDATA_VALUE="value"
- TARGET=$(mktemp -u netcons_XXXXX)
- DEFAULT_PRINTK_VALUES=$(cat /proc/sys/kernel/printk)
- NETCONS_CONFIGFS="/sys/kernel/config/netconsole"
- NETCONS_PATH="${NETCONS_CONFIGFS}"/"${TARGET}"
-+KEY_PATH="${NETCONS_PATH}/userdata/${USERDATA_KEY}"
- # NAMESPACE will be populated by setup_ns with a random value
- NAMESPACE=""
- 
-@@ -122,6 +125,8 @@ function cleanup() {
- 
- 	# delete netconsole dynamic reconfiguration
- 	echo 0 > "${NETCONS_PATH}"/enabled
-+	# Remove key
-+	rmdir "${KEY_PATH}"
- 	# Remove the configfs entry
- 	rmdir "${NETCONS_PATH}"
- 
-@@ -136,6 +141,18 @@ function cleanup() {
- 	echo "${DEFAULT_PRINTK_VALUES}" > /proc/sys/kernel/printk
- }
- 
-+function set_user_data() {
-+	if [[ ! -d "${NETCONS_PATH}""/userdata" ]]
-+	then
-+		echo "Userdata path not available in ${NETCONS_PATH}/userdata"
-+		exit "${ksft_skip}"
-+	fi
-+
-+	mkdir -p "${KEY_PATH}"
-+	VALUE_PATH="${KEY_PATH}""/value"
-+	echo "${USERDATA_VALUE}" > "${VALUE_PATH}"
-+}
-+
- function listen_port_and_save_to() {
- 	local OUTPUT=${1}
- 	# Just wait for 2 seconds
-@@ -146,6 +163,10 @@ function listen_port_and_save_to() {
- function validate_result() {
- 	local TMPFILENAME="$1"
- 
-+	# TMPFILENAME will contain something like:
-+	# 6.11.1-0_fbk0_rc13_509_g30d75cea12f7,13,1822,115075213798,-;netconsole selftest: netcons_gtJHM
-+	#  key=value
-+
- 	# Check if the file exists
- 	if [ ! -f "$TMPFILENAME" ]; then
- 		echo "FAIL: File was not generated." >&2
-@@ -158,6 +179,12 @@ function validate_result() {
- 		exit "${ksft_fail}"
- 	fi
- 
-+	if ! grep -q "${USERDATA_KEY}=${USERDATA_VALUE}" "${TMPFILENAME}"; then
-+		echo "FAIL: ${USERDATA_KEY}=${USERDATA_VALUE} not found in ${TMPFILENAME}" >&2
-+		cat "${TMPFILENAME}" >&2
-+		exit "${ksft_fail}"
-+	fi
-+
- 	# Delete the file once it is validated, otherwise keep it
- 	# for debugging purposes
- 	rm "${TMPFILENAME}"
-@@ -220,6 +247,8 @@ trap cleanup EXIT
- set_network
- # Create a dynamic target for netconsole
- create_dynamic_target
-+# Set userdata "key" with the "value" value
-+set_user_data
- # Listed for netconsole port inside the namespace and destination interface
- listen_port_and_save_to "${OUTPUT_FILE}" &
- # Wait for socat to start and listen to the port.
--- 
-2.43.5
+> looks there missed a check on flags in this path.
 
+Oh yes, I missed that. Will pass in the cmd->flags.
+
+Thanks
+Nicolin
 
