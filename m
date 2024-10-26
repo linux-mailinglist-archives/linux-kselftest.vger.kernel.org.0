@@ -1,85 +1,85 @@
-Return-Path: <linux-kselftest+bounces-20753-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20754-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20FC19B15DE
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Oct 2024 09:26:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71A829B15E4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Oct 2024 09:26:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8B6E283490
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Oct 2024 07:26:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EBDCA1F2298A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Oct 2024 07:26:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 027CB1991D5;
-	Sat, 26 Oct 2024 07:25:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F239B1C07FD;
+	Sat, 26 Oct 2024 07:25:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="PWuAKu/5";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="MNcY7ilh"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="FKjxNgI0";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="rb3ZBBtg"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACD6E184551;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B837B1925B2;
 	Sat, 26 Oct 2024 07:25:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729927539; cv=fail; b=PpDAtZfnhrUFl4CfzAN86B/XQT0t4YG55HXQdOrEtb7B7/7Vzd2N5s8Lvy0Fo0OPausyafaDMKdBqXQap4c+025s6W+DRKLuaErWGKQRdjHbdq3cqzzb+lO7R98mFHrnMEi0ff4322rD2cnpjc7XhGBAvydzQAbdMs5V8TnJnAg=
+	t=1729927541; cv=fail; b=R82+Mmvno32+KmfB+Qel/gKmLCqI3B86cH/BgNGY5guzhdmbbvbQQVYuHSDns5b1ZDn8wPCv0GRh4lN+yCkdvBEY/VKflyxQnxbu4/qHejQPfPmQ0ZbFUX8kTgeSsBxrOkXMbJfhoAivMsdpwUR1CXQGOmLkgcHScSy4fVYC50s=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729927539; c=relaxed/simple;
-	bh=URx+MB+d6wqrYB/3X5ImI7mIBPKhLFs10r0aaSX/1/4=;
+	s=arc-20240116; t=1729927541; c=relaxed/simple;
+	bh=kGXVtdaQIb521qU3APu1XFO+uq3Q/fUT3w4fjLT70e0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AkH3cSF0lL6FxpLr1I7htPcKd3g/as2EpKlbPzIIVOfNuitfxFpTKk2/JWOlmGyyY4PICvs7l5V9+Be8JQY3kKTitP/HZeGhgQOL4qjvpHfVGwUx1fy2JLDTX6xwPYlcqoWLAgQ0+2FYCcrIwgfd4THiUQKVVGIoh2lTxkdw2sY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=PWuAKu/5; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=MNcY7ilh; arc=fail smtp.client-ip=205.220.165.32
+	 Content-Type:MIME-Version; b=O+oiib80ihL/yepYmQwWMJTouJqXcPxzBABwQVcOl/qPVIeF3rrdNS8CQ76o1s9LaA3yCEm/CIQ/4BPfI/GZV40nnx7ryZ57iGxEKI+nvvFV8z1aBtqs6sRnCvzZbJ2JZb+07UMsrrf4bLSMOl++niIXv2aalV1arffqv27SqQg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=FKjxNgI0; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=rb3ZBBtg; arc=fail smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49Q3G69V024667;
-	Sat, 26 Oct 2024 07:25:20 GMT
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49Q4CPtA019896;
+	Sat, 26 Oct 2024 07:25:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=SLlbDZlZ3nLzA+OMshfpAja8xZBB1l8GJOD6tbMQ7pA=; b=
-	PWuAKu/5Lk8XFEOjSH8gp0D/U+y2LRPkZ8K2PDwW6OkApIxNxqq3Q9aQYh6nb+bM
-	5k70SiOh/qSq9M24x3ERBUaR0HZEjul3qKOQCQ7eZY9PEP8ICc3MKUzKfth3ma9u
-	lcs/o9BHtuMy5tTDpSZB6WQHqsAi5Ul3e4h6kWyLaAkdNn1cDTYBq9BmtDC4zttl
-	Yg3pUbkjAhM4PHx9QpIKlislD/t6YSnvTvVTGog+7DcRUcq/yB3EH5ZJq7LVfRfg
-	TTtKGZue8eGV0yz8majGCRe3r+B1JEPCszO+qOW288/Cch34GMAZiAwVKPBkJU4m
-	aJDalVgOSezW4OfKHtCdFA==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42grc8r4qv-1
+	corp-2023-11-20; bh=//aIKsfakC4UDo1gdtqhmI6TrmfLl1HZuQqSyReu2Fg=; b=
+	FKjxNgI0jpufHS7K0sdlNOuPC+tXa37xtdLgGhxvYQD6elrrSrq0iXrFNn7fUpES
+	S/FvXQSfrgOsr7kEUYxnv1I+B1sfuqCfZoc1hrNP7Rcq9I6pHz0yCMwkRkvrr3u6
+	C3rJTv8FmtnBRAj5ppS7e7kXv2ttLTUklXUgEeJdDFisdzdtx2suC37KqkVqCnsu
+	sc5fBjUqUc4EcJVSHI25zEJOQ+b4XcyHwPlmrsitDVqqRl2juAbys/WPF9uTr62T
+	ApYPZ7MG7p0nMcAO5s+gKNr+ZQ70th/yF1dEV0dgJ+8avBHEZLxhVeRnaz6/YwxE
+	caDK6lgRX6LirL4QYJBHHg==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42grgw84md-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 26 Oct 2024 07:25:20 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49Q3Duxv031966;
-	Sat, 26 Oct 2024 07:25:19 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2044.outbound.protection.outlook.com [104.47.70.44])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42gpv44tug-1
+	Sat, 26 Oct 2024 07:25:23 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49Q71Gbd016456;
+	Sat, 26 Oct 2024 07:25:22 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2049.outbound.protection.outlook.com [104.47.70.49])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42gpv44vtq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 26 Oct 2024 07:25:19 +0000
+	Sat, 26 Oct 2024 07:25:22 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cY+WVuFezljjN0sms6nRYNy7HGp+P6eP6yMT5Hkr6V8A2gDddSyXBIiASTDVzz0U0OUtwZEDJEdSYLF8T4W80pJXWaGynl7PoiKY0DWx7ZlrcrpnxZYr3Q3eo3M3Pt37hD4o08cqDpSFW81UtYHjhR1WzZzfObk3/FBohxBx21faM6UhaKcnX79KGGmspUpBeHO4821PZg+Zk5eJj62NDqLr4Hida1dMW+ZviODMhB9jSpsKqeMODxkIL43OUXBN5vjVZ8fdjmkPCPevjOurWDaAbW2qCHEOQSx6Xr+lLY/mnmJe61kBGu1L1r778D6N1R/eVxxU1oVq7SPwp3lY5g==
+ b=sHEECgoInfWP09Qa6wRPpev3IO2Q+D9VAB4nPnFaKM9QL5Lcd4QQIArVQvnCpYhy25ohSDRMyyW6e4bMUtp59MlXaet7TR8oo0R5SosWfvKlUwDo6zLHiZjfzFovqXpLUk5Q2lteKcEpJUqAwg/TpDjtS24D2WX8+dAchLEXawnQQeY93qrdsmiUSqTP2orCByFj3q8X84KqS8j/o9cvhYrFs5BIvx1GKK3d7gF/Sg2I1Pc7pW3Vda9GyNzwvoA9lPv1vyZyxFUd82fwgR9DP1nTtIndCmRCYL7l3ymc/4A4D6RKF9H8yToJzkksP6NIqeJyxruwtYwAdYV7j7gK5Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SLlbDZlZ3nLzA+OMshfpAja8xZBB1l8GJOD6tbMQ7pA=;
- b=U9RtpMbmm9ps1nmKQwWlWQMjlKW5C0qTinMzSSzvMwYC6UOogSq/ujhBFkC+abEkIuWpviwzNC9bJLBBUJxdBxZLtKwq1USBXoSM5WYhUDJ1OwDGeCXfsiW6nIyCytLG4R56aIBkobbiVIICoKf5rOp0/0jjkgJyXFVifcu9dUA/zAHCceQm1EAGuVXhTepXxIV5PRBiXdHxIJ/kj5W1ZP5tg8MuOG+VfVeiPOn2pUZj+CTOHl8kQiNIedUhRsR4bKeHgKDnZvNbufyQnCO8e/ZWjNHY11MZcQ2f7mVjr9+dv4t7Q2qp1cDImhvBqblZDoyvUf4jmhE2mymXERBIiQ==
+ bh=//aIKsfakC4UDo1gdtqhmI6TrmfLl1HZuQqSyReu2Fg=;
+ b=X8c0MolUxsGy0+tNJXh5DBLzi0QIeNkqDABZ7GxOHPtKOgHnsvHllchqg/yVAOI9sYxdI+Zs8TyxLpPAjWyQh/OALgXEydbB2SFGoVsdnvkvtJ5mNHYfS/R2hOcQ7hZkQz9DVnOg/i5qLeKnH6gjgTV0RUsgAaMGaAUfyGDWHgZbMKjcoKOLQq6+rb11VksxfnMLPLLoP7fC6hzO9NBUXFQZf0qeK/3YOa4q4jftnmri8C6JBQEIxjnIqPLrT4PyB9//b4QtOKIiCiL865lzmyyqvC44BFvUDfbHWi8jPTjlEt1J+M5J4NCp3DKkcO/zJZmYqRUj6VJAGkoSibXBBw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SLlbDZlZ3nLzA+OMshfpAja8xZBB1l8GJOD6tbMQ7pA=;
- b=MNcY7ilhVVvwPC0YoKlr+IW6RQETezAZ08TCkRA6IyYSbAQLFqVg8RrM51eUaA6cWo6ZTQ+e2I5vk77KXCH7XZhkGDBRv9ekbVktYNgyMqD7GQzCiCtjC/zzmp0hE3KOCVYaSTiHJ4uEnj6x6wJ7pwEUKRzyqYyXqMdyYrKNLpU=
+ bh=//aIKsfakC4UDo1gdtqhmI6TrmfLl1HZuQqSyReu2Fg=;
+ b=rb3ZBBtgd6llz+TWLplmkYOYmrzqoU6zaVu1VV1t32phWPVPHbACeqen8+IZlf3L3F0jPv/pL8n7pJbGMkwZD3otu+lQ4nkO3eYTuEYVpN8gqjmy3Mc7LRdB8zbU4HTqekkQmRglpsrXhT7ylEgjQSt31UWJrgd4nLU8psSEbWk=
 Received: from BYAPR10MB3366.namprd10.prod.outlook.com (2603:10b6:a03:14f::25)
  by SJ0PR10MB4543.namprd10.prod.outlook.com (2603:10b6:a03:2d9::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.23; Sat, 26 Oct
- 2024 07:25:17 +0000
+ 2024 07:25:19 +0000
 Received: from BYAPR10MB3366.namprd10.prod.outlook.com
  ([fe80::baf2:dff1:d471:1c9]) by BYAPR10MB3366.namprd10.prod.outlook.com
  ([fe80::baf2:dff1:d471:1c9%6]) with mapi id 15.20.8093.014; Sat, 26 Oct 2024
- 07:25:17 +0000
+ 07:25:19 +0000
 From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 To: Christian Brauner <christian@brauner.io>
 Cc: Shuah Khan <shuah@kernel.org>,
@@ -90,16 +90,16 @@ Cc: Shuah Khan <shuah@kernel.org>,
         linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
         linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>,
         John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v6 3/5] tools: testing: separate out wait_for_pid() into helper header
-Date: Sat, 26 Oct 2024 08:24:59 +0100
-Message-ID: <334ba78c4a6f4e58c60634709df26debf4b4de29.1729926229.git.lorenzo.stoakes@oracle.com>
+Subject: [PATCH v6 4/5] selftests: pidfd: add pidfd.h UAPI wrapper
+Date: Sat, 26 Oct 2024 08:25:00 +0100
+Message-ID: <185b546439c29e9c36272462768af014a262985a.1729926229.git.lorenzo.stoakes@oracle.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1729926229.git.lorenzo.stoakes@oracle.com>
 References: <cover.1729926229.git.lorenzo.stoakes@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: LO2P265CA0389.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:f::17) To BYAPR10MB3366.namprd10.prod.outlook.com
+X-ClientProxiedBy: LO4P265CA0109.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c3::13) To BYAPR10MB3366.namprd10.prod.outlook.com
  (2603:10b6:a03:14f::25)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -109,220 +109,146 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BYAPR10MB3366:EE_|SJ0PR10MB4543:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0f2d9740-534d-4abd-70f6-08dcf58f56fb
+X-MS-Office365-Filtering-Correlation-Id: 28d26bbb-28f9-4e84-126c-08dcf58f58b9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?eY20M5syZkPI+27aKfC1RLMwz6h6tBaY6PEIU1ANwk4Afwhkb8VUxiJhCBI0?=
- =?us-ascii?Q?mN/1Kj4uw7tMMqC9dvaHUYWvp8tZacxlCvrhMoh7qGh7Rxk4zLpIhgAhoA+9?=
- =?us-ascii?Q?QUenE/b6wt9FIGfLDISQ3zIz6DOKBoGUef6gmCuTM3xpGNT4coqk1n0lKxWF?=
- =?us-ascii?Q?ZP4CnwmbhP+9nEngX4Umm9sPD15A3HATM4H9iKLlKpnBp8mhKWoA66X8CRPk?=
- =?us-ascii?Q?Zhd+gY/Ne7PWF8plmXrFGgkDa2F2i6jdpys9UXOqVN6Df+xrW/w425qbRiEB?=
- =?us-ascii?Q?GePS1kOsQ7jM+Iac7h3gfabvT0uNGZRCpR26bDqj7XnIr0cpVGHXoT6wVKXk?=
- =?us-ascii?Q?ERrN924t4n7C28vZn8wXFVHcFuDs/wxte5lMPMx2QuBZ7eUpBGWD9FnIYuyw?=
- =?us-ascii?Q?Ss/dQbQ3SrG8N0x8RNLIo+GxbdWd0m4nxRrO8RYh7yBvcR2MGHmAXyHOlojo?=
- =?us-ascii?Q?40Rou/W+rXDy/IK/OMoUxc+6nv7Y+VivD1kqYcejcgdxNlUzl5KEMPrz3og4?=
- =?us-ascii?Q?mqUh0urVeMj5vqa9epld/begNms9sETIvdPiRWabS+9xM2H7LdPk7Q+ZC1Qe?=
- =?us-ascii?Q?OifNrjCOuqYMnlEG91g4krxBURyXUK+5FBjzrDwjoFuF/bsVvAxLW0/NRPDt?=
- =?us-ascii?Q?DlZhSgLJ2h6QgQ/st+fHRjqLThHf0BHVIImHUCAQRSHrucu91oIePNJJ6ekj?=
- =?us-ascii?Q?Ni9cgnvpdNH2arjkrvoUo/za7SU1rlYzJivBZBegDDhrDJqoSf9+zb1FhAJN?=
- =?us-ascii?Q?Dk7hbNNE7UmJT1xxtqwfycP/ZNC5ypwAN30Gr82uvkeLcbrdWx6krLOdq6aW?=
- =?us-ascii?Q?aRRQIOqbxf/GyO8bj3wX82rLdWBmDOV2PbBQimKRnUSeTyKFEwyp5DeIS1Yx?=
- =?us-ascii?Q?UXqdiPfqvumN8IS2Q1w7AIFfVZbmAPp7hAYrl3NoS3ygbJtaAH22voU4lDJO?=
- =?us-ascii?Q?fh1my9IVhT8i5m4Euva7JDnoyQtp+5LVEGf9NPzoE9O9oF6UCEuHzBZazswH?=
- =?us-ascii?Q?tlJjPs8Sx7Jg6JJQ2BZcKXTqsuP1De7HQrEpnRekSh64v/RXG6bRZ0I44YeZ?=
- =?us-ascii?Q?qa6swYv4d+lAxWddOrTYEU3tSPx6Sl7TduCvuztWMnUa/7vkqiW53skSz9dv?=
- =?us-ascii?Q?hatSrkFcgoWnUKNsXLd5QbW+nJDdOgE08y6o9zV/ahCdG8XOM0kc2Xw20KyW?=
- =?us-ascii?Q?P5M2L39QMD0MQkAdHSVQ1AzJ6JTrd6cRTKps/W/d6+pNuTQ8bVxTayL64yd8?=
- =?us-ascii?Q?vs1cQgAprpw22oySJuJ6a4N0tJ5rKKVWZjrms0e3I1jVigAyUcXoIb84BXYv?=
- =?us-ascii?Q?yYTtLUpSNyQ/1vop4xJ8tps0?=
+	=?us-ascii?Q?Am2cCXO6PfuZ7ExJlpXoaxYpeAtgIA5DfV2Cn8Fmy/ia53WY/82hMq1nWrsu?=
+ =?us-ascii?Q?pqwSqVnGWPRjHLeaHQgXrpi6y/PEAwjV/zOzoh+SgeOiejuAgT10hrTBNfC5?=
+ =?us-ascii?Q?pk5rewGCn/JFaAV3hni4jTOiozLIA2isTU+9dNCLkmPv7YqGC+CZWxdSyOf7?=
+ =?us-ascii?Q?dLzS0ic+twJgLhvzUYhxMQa9/F+sHZwSye/zToFxw9bbO+2Lk4n/WqHRGVGR?=
+ =?us-ascii?Q?Fhihlv+IEbbX+Zs7AehKerQ7RD66hn40XE5SG5iKeSLIiJrikyTOLqgpx8tm?=
+ =?us-ascii?Q?GeLuTlHzpZJAESqm7ZlOp6CD0wIEBDJADM44+8x+pN8AN8muWwvqOITmvMvi?=
+ =?us-ascii?Q?M5wPD1P883cP8NmJ2QqoTL8mnVOszWpjzUuPvVi+U5JGwQ7GIoOeS4UPBIe6?=
+ =?us-ascii?Q?0Sa94U5yYUKpOoX/hkx+zDNqtSQK31llc1js6YPcjarpA1VNE0NyhGH+Go80?=
+ =?us-ascii?Q?g9v1wYHhdJ002OJyDMDf3IbCqVnxz3hJIPG6njTzFe2DtIDh9/+535waba+p?=
+ =?us-ascii?Q?65skN+xCxc4wDIhMD5C70RqbGaC8D41JjY8RNAl/YoRsgaY3mqjzx61crUb1?=
+ =?us-ascii?Q?g/BF9CXYDg04TkCSMXumCQhg2c0U3MGD/8qECwfvsSSGGgJl6xC8WWiil1Pe?=
+ =?us-ascii?Q?2YOGYKL/wlUUWlJyAELvQn4fcI7393SohcNuIcnvkqynwzL9JzcTArY6p77d?=
+ =?us-ascii?Q?pJt6RSRRgx1fhJ6X0QDPWxP68LYqebHZfNSrqBWZe4FsAR+gIm2JdOwZOt3+?=
+ =?us-ascii?Q?ZSu9Z2sClAjwju3AWqpJ59VIR4RQV3WpBLsTxOG1nGqPFfsvUmQGrcTdhjh6?=
+ =?us-ascii?Q?E3r8CbClQ/AH+dpBaBvRS2N1/lZD8YK4EVEmF3sGWE85Pa2Ed+7+kMndvFGB?=
+ =?us-ascii?Q?UeqrNS4MX7yGt+xz7NX3N9qwsrwZq/YljHUTA/53Z0Nmq/lX8p5Eys3By4aw?=
+ =?us-ascii?Q?/ivSTsUru/kihMKjKYUD+nIcsvwuspcYrH7mZjQWwxao6Rq8W+pHgLNAXmf2?=
+ =?us-ascii?Q?pOg/AM7bYjHAa+W9uP14Ddy6Xgdv8dQ9qojtYcnwpnPeYjz7bF7C2SxRARy9?=
+ =?us-ascii?Q?06GwQnc+i+/QH/uwK+LjbrE4q1r2UHQD7+R//n4E59FOwBbRDBhdw9Vu94Qb?=
+ =?us-ascii?Q?RAe0PWGTcPWBbIQGo2bewGWINJjnsw9STNPqdu9ilXLxzodleOH2/Akt6ZB3?=
+ =?us-ascii?Q?084PC/DNWndJHFAPFUTWLOpF/Dc9Tu/nio2HzMOc1OWWL4VVgvYJAvmJ85vs?=
+ =?us-ascii?Q?2rgnew4IRotpPXwAxs4EZYAx8un5Iax7T/Ga9BBeECiSSt3JbxKVc5sEuk3y?=
+ =?us-ascii?Q?8/9TzmPKjEUeJL7NJ7s+wM8m?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3366.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?eCVE5teT6+iRCX4ywqzriyflKQEcCZ7c3gb/Y/eKdgVTg7ocrBzj7QG8o9bF?=
- =?us-ascii?Q?lIiwrpPtCi6K/lM8vPq8xGwpGJnW8wP7s68lZTE2rsFFA5Ffwob0c7jJFfYq?=
- =?us-ascii?Q?bCXS57zJ8dTsLHIH1INirNTlPWwICMCgP0VxVkaA5RL3ilv5N1X2AtI4Q8K0?=
- =?us-ascii?Q?4Ta71jHzjh6QFKoegAo27QV6jvIc12kfmUQ4D9WLEbgDNF3d9QbYA0NSOoyh?=
- =?us-ascii?Q?C/wQsCpColL58KfdYJAeFGjBIp7G4iFbgG5pqrUh/xutxH60g17admGuhAwS?=
- =?us-ascii?Q?l8dL2q2DI7oAnNAGd76J9JbQRyqYh1qyWVKP7geM3+/5jZ/thFJ4gumeei2r?=
- =?us-ascii?Q?IwJryL4vK1/fCgEtZQbiq0ymWwT0N+YCxT2YDoJ6QnooYme3B5eaoexaxAeN?=
- =?us-ascii?Q?mH/lZ6y4zS32FhJ/peQ0znxGIJCRVL0wKfAsh9lpDXg45TTfIKd2SJw9B/fX?=
- =?us-ascii?Q?KG+wKbZhI1saX04KODA1e3+I/PKmFF4SaGmEgVneVhlrZtEYCQUvmSFpPVAV?=
- =?us-ascii?Q?INp9hAPtKHtOXFI68B2wLYA/3+bMAuBnl3a/VgesFstiy44ri8hlZpkmoEWZ?=
- =?us-ascii?Q?zLyXjcI/YtOcagWNZxyVEt16i/y2E+1MThvTC/Zdg2s1tm86WgFCikawkn/R?=
- =?us-ascii?Q?rVsEMTiO3+Tm9arXkbMQezm8Rky+hZ+9eG+UqwFMsqv6nU8SQbLSpSHc5SNz?=
- =?us-ascii?Q?zSq+bCZOISGrkkOmykmM0cV3kCK1EB+cOACZJ8a6GhkqD8OFJFPQSsTs9cZ8?=
- =?us-ascii?Q?DXET/23a3Z73ONke6/ai8nYWfZX8EYCrqn/BtXsFsI2iGbLZIwwJ+RlKZspf?=
- =?us-ascii?Q?rEMCSPtM5RA4u/p+Xdq8b/fS8MOSrHmyT4YRUrOKFvXChpahYr4Q+TARWm/I?=
- =?us-ascii?Q?NEANK/iM3h6xKmomVZZ2KRW8umvHvXTRX0aiT9GyZtOBrh0dzjcJcuIj7DEW?=
- =?us-ascii?Q?TJg2AI08bODuBtWhtBw3EMDqEh3TYGFPRR5hSIy50/KrmRanwAkQoltbSq/w?=
- =?us-ascii?Q?USiFLRKrF/gshD4VyG+dUUqifmkUQKD0JnHczJtIE1DBNY9xgVkqgh5xtpjK?=
- =?us-ascii?Q?KvuU2I0VHonHFJvHDMWOvPnuO2vey3vqxql49/Z/PfX3fjV31DeybdNsBea7?=
- =?us-ascii?Q?E+wjDFsoeFS1jjVZHw1uxVQD5JhuZNhZLH9R4lOAuYRtFny866lc0oh3QNjr?=
- =?us-ascii?Q?1aChQv5Czen4Dhx80WBgn0Ca0KQgTQt/dAnfiqb6p8pYOw7ZoKP7aUaL4Okz?=
- =?us-ascii?Q?WlozyyYnSJyV6YJyyfNyfR2obxYAQtCuqZnYYm34v333wPQRnOvTmjCOrb+M?=
- =?us-ascii?Q?rwUJbqicgml/zGEt1OqTQCwrWFI0Fm8s10qEx147BgOfHMUz2C8LRdLyL2RJ?=
- =?us-ascii?Q?lrcdH7Ae47POEGc07smoTn0QPjyoI4Bp/ry6hLZmr1DC6UZWh904s9UQSabx?=
- =?us-ascii?Q?TFTld5gF+rQ9x5ZN6F8vbqrpaxzPsU2MvsMq3XnoNe5Sd+YQQL16Quj5BtS8?=
- =?us-ascii?Q?fsrymMvZOcDYf/JlIz1ZmhVjlZ4W7t9VATE+VfvSCVPBecqbEnaB4UDeec5U?=
- =?us-ascii?Q?R6Uz03TIkwcqsK7vL1TG/Hz9tYP7O+saEQHMX/YQxaqNkjLpB/9qg2UCpk8a?=
- =?us-ascii?Q?7Q=3D=3D?=
+	=?us-ascii?Q?Aw8tl1A8/mOq/6H8o1T9AdRHiuZxU0fBPIR+98nBHKQUrIts6UZPuy6M/t/l?=
+ =?us-ascii?Q?u8LbVB290I6rTABLVuLmbPIQyISjk5Ux9J61lneZofTdlYIy63VJb8eVIUEP?=
+ =?us-ascii?Q?9necLtrKYZwkWf55k56sG6q10LIMifIo836Tw99JCtUjmAPYydU3m/q+r8tQ?=
+ =?us-ascii?Q?SaAqSmLP3HIaQi94TAoZdA0R44huLMBVBuvmOUYsLpO3RErzCmXFgGCE5rC2?=
+ =?us-ascii?Q?sqGeUCfxT8G7AC2GtCGjuTVmE+gaxquk9UMuTqnyH2yJO9Dr4jnemUmUEqTw?=
+ =?us-ascii?Q?nzZPaXS86v218CTYrESbObzOmp4+TtwO876IZyM3YT0kqnrRSnk2zEebpXRw?=
+ =?us-ascii?Q?+eFhjV5kVTLm+5UlMfRZXa5dSRODtvdsncnSd3TGoC2W8DBIdEpAcYqwVxmZ?=
+ =?us-ascii?Q?aZuK66oOMZc+0lkWHtNDjEJwOf6YCDcmJa5QHVgDRjQMIRlcO6pvVeA6ZUOX?=
+ =?us-ascii?Q?gkXI7I1/kVyfikbJpTIEC+1uxB50Fy6ehO1AxnEyJXgWHK3jM8Wm73bpcGAz?=
+ =?us-ascii?Q?OuDbuMamJAtEjzGnpBQPHDkFkh6cPbnT6RsowccR3vdwXNTtBV3EFfCbtO9i?=
+ =?us-ascii?Q?0lQ4TGOVDWgX8K3yMzwYzkraGOHgv1Yw0uiM8sLq3cY6j+XzU2z04GOo8zh8?=
+ =?us-ascii?Q?tSKvguWFoU1WAfWYvi0kxGvVZYK6NCqPjU6kepp+Dn8nt/uLo+c6a1dX2BqL?=
+ =?us-ascii?Q?DKSk0TRXMof6jbdmRhx7TVjtfHbKLYjguCec9W/xcVIg0N1CTrTnaYTy890g?=
+ =?us-ascii?Q?W4J0L9E6qaqI9J0GXSTiv39CZm/eaFtptVme2a31tKXLHRkE6KYaS1c+mkcD?=
+ =?us-ascii?Q?t7ToZqwCo1N8Fbdtbpejv0xwpac+/BOegcsrl7QMq0XzrqYk7F+UQqVs9rQ5?=
+ =?us-ascii?Q?b3wPcOjDCTgKu3rR8ICQDWF2D/xKwiNChBof5GJtkCNa4hkMj5Fd2Qd7EnSP?=
+ =?us-ascii?Q?P0rWRTbZ30lQ+2WzmA/CukRWfKVdRDTmnxZd6d6f461MByAwh6x2QHWHFhB9?=
+ =?us-ascii?Q?CYy+Mk1hp1IWLW7MkHOY+qC95Fdwh5g8R/UkbzBRNb/puZi+qovY7B7YbXAC?=
+ =?us-ascii?Q?OTEkJhIHFWPAGZf1IC7GRft3jAQ7xNpKavJpu9EVLw9/kd06f8pYhbb6Rx0H?=
+ =?us-ascii?Q?YPdZ2kO03TmPcyhTZUvdFRwUD0e2bqLXVcgH83sTj2sQBm7/6KdFdvQYefLo?=
+ =?us-ascii?Q?b12e/nPDpj6wtkO/Ty+LZGkOR582GLSMQoaak9Eb0gLC/DYXNR7+4noobUrI?=
+ =?us-ascii?Q?r9VIC5Snn7gn12IEs0dv27IRHXhAQHWswOFYMAp6ohaZVAYCPgGLCcg9J08N?=
+ =?us-ascii?Q?lMY7IMP65dt6sSFkEM5ywRyHJ6/+g3dj1F1ydQbfZzIEu+iLU9fEL46me8+3?=
+ =?us-ascii?Q?zfN2y/OHZHow+uJOS+NmtHfQIhOhFcVleQ72fVdt8scmkoJlYjXSkuIyCjKx?=
+ =?us-ascii?Q?Wy4/qDBnq21BZY7l3D3kzoIPVxR1RxkDzWtk5tPsvb26wj+Y0b1J/CeqdSBg?=
+ =?us-ascii?Q?z95BeRsVEu5ruWP3+LNRkzfBDNy+81mObJd/QX8BOFpWf+Odlb7eZWlVdrxD?=
+ =?us-ascii?Q?PfSW32weIVvVtPJa5BzuO2vMLDPyHjerQXaoxzxqz0VeMx0ER+UuVfKx1+es?=
+ =?us-ascii?Q?dQ=3D=3D?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	HK2Kbpu2+XCjwz6YiZa7I2F4RHB8xJ2k2uNtnP1VLuOVtHsoKLnoOLvfSFQ7GjKENSv+j24rxoDkXhyJ3jzn21+un/zSKaFTLi2LHAoKdRTP7RwoRGkkEtaxznTu7TakH4Ljn4wyq+XzwbJrPBrwdQImxoLItDsFexVjrVbLGPSpVIBWN+VrTiKUlbghrN8BIXibFzZCElUcYjZdVFMAOXYZ9+D8UEKZd//dTnc94dWwR3acGekWGy+rBYe4xdyvHG5oc7oVuvEjjCkaVK7+6cGP2jajHNp21ONtD7/L+l3PHts5+/C4ByJq//hdIsuJ2SRuIguVWhCBv7RlnD+DsdHgEqmlNRDaRfGGImhqZiq2lGYSCN9pujrzLFCiWnQ5k6vn7e5VkQ/u3ogV84X0JvkJbVXWvGYsUJ58gWOv2zDp/xxQozXGHx97Bmj/8UAwrymIL10oTOW5E3wNUj2Jez7BtJfjxnpfQZHi+jIJlShD0MFQQzRaSTy0bvzvDpGMXmxDeTXodbwsaoUV1puCfFA8E6nnAEb+ZkcNnN/QZYyX8rp2XDc+DDMXFmWf3o4fxeLaCGwC4rArDQLjL8tp4zftlTQqzyGUFsYAYfoZBb8=
+	kpCkyleklZU5WYV/Q+RZB/FUXQR+JMWnXSbbF2oN0A8XHNZpd5uLm1WxRRzuLODRSihElNDbW/O2/4oIukTBT9sl8U2wWRYGM9li6mlYPtDG94FeEUGhK1PI/xqJeoErfObbDWng1QgMSCpyLFWMOXzGxe/gsQZLWuEiI5s/UB/bNqOi35ld2aKM0T13+fs6u6molsGt0dRJyq2/CVK3y0RrqGcjYGS3WIQYB2VDoMXFhyDvqgX3ERR2wqPfj4E8lABt8+ClNXsbsO7emaIWvkP1lHKH010xTdMxNtW+qkxFVVo3ENnJ+A7pzmbUsq+aRsS1cSJ9CoNd1B7/dJcGLOFwLD9wXRSLqMpANtrQSqC4Fyq2vM482b/1qWY+kcU5g+av3ZmTCJQnusF2Ko5jPUWW9KeZB9M8TXXNQP+LM7N1KyIIgxmbZtVrqbTbxUnv+JnlE8iq1a8nOshdFRXkSrUVkqj6qvBT2d72ZU8FJZWMxi8/SxX7gn/TiESHjffR5oY0qmpd1DJXJ5wrV8UkQER9n1upsh1KvAulI6OUQ82N0GKGZQ7648qZg0G/Y0n+K/8QsiboIbIM5EpenkcU66oxKTEydbCB4y6/QdfD3a4=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0f2d9740-534d-4abd-70f6-08dcf58f56fb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28d26bbb-28f9-4e84-126c-08dcf58f58b9
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3366.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2024 07:25:17.0290
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2024 07:25:19.8133
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LsARB6aulFmDebW5ZA/IqmfWfJF0kX0UP7psNSmXlqREAGoMv22sQVjOue3r66Yghtwf8JA5tDl9cV8+FuahN8MKUJXTpqxooysZb/wRrzg=
+X-MS-Exchange-CrossTenant-UserPrincipalName: p3ruLJlrA+9xs1Vrn7L6iGYzhcHuDMqJmhkxwiwQVzJKD49dMrZT3g4Vp/mPTMIa8zYFBQYD8/5HeCOfrcNVdT9QzEjBUcJGpuzz9LISliw=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4543
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-25_14,2024-10-25_02,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0
- mlxlogscore=999 mlxscore=0 suspectscore=0 adultscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2409260000 definitions=main-2410260060
-X-Proofpoint-GUID: 0jM3AnRQHFUG9kVm2YZz7Pi2VNggFJyV
-X-Proofpoint-ORIG-GUID: 0jM3AnRQHFUG9kVm2YZz7Pi2VNggFJyV
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 adultscore=0 bulkscore=0
+ suspectscore=0 mlxscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
+ definitions=main-2410260060
+X-Proofpoint-ORIG-GUID: Gaq-OBWvUkuEf77HGwlNH2BC56nN9RUp
+X-Proofpoint-GUID: Gaq-OBWvUkuEf77HGwlNH2BC56nN9RUp
 
-It seems tests other than the pidfd tests use the wait_for_pid() function
-declared in pidfd.h.
+Conflicts can arise between system fcntl.h and linux/fcntl.h, imported by
+the linux/pidfd.h UAPI header.
 
-Since we will shortly be modifying pidfd.h in a way that might clash with
-other tests, separate this out and update tests accordingly.
+Work around this by adding a wrapper for linux/pidfd.h to
+tools/include/ which sets the linux/fcntl.h header guard ahead of
+importing the pidfd.h header file.
 
+Adjust the pidfd selftests Makefile to reference this include directory and
+put it at a higher precidence than any make header installed headers to
+ensure the wrapper is preferred.
+
+This way we can directly import the UAPI header file without issue, use the
+latest system header file without having to duplicate anything.
+
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 ---
- tools/testing/selftests/cgroup/test_kill.c    |  2 +-
- .../pid_namespace/regression_enomem.c         |  2 +-
- tools/testing/selftests/pidfd/pidfd.h         | 26 +------------
- tools/testing/selftests/pidfd/pidfd_helpers.h | 39 +++++++++++++++++++
- 4 files changed, 42 insertions(+), 27 deletions(-)
- create mode 100644 tools/testing/selftests/pidfd/pidfd_helpers.h
+ tools/include/linux/pidfd.h            | 14 ++++++++++++++
+ tools/testing/selftests/pidfd/Makefile |  3 +--
+ 2 files changed, 15 insertions(+), 2 deletions(-)
+ create mode 100644 tools/include/linux/pidfd.h
 
-diff --git a/tools/testing/selftests/cgroup/test_kill.c b/tools/testing/selftests/cgroup/test_kill.c
-index 0e5bb6c7307a..2367f645fe89 100644
---- a/tools/testing/selftests/cgroup/test_kill.c
-+++ b/tools/testing/selftests/cgroup/test_kill.c
-@@ -10,7 +10,7 @@
- #include <unistd.h>
- 
- #include "../kselftest.h"
--#include "../pidfd/pidfd.h"
-+#include "../pidfd/pidfd_helpers.h"
- #include "cgroup_util.h"
- 
- /*
-diff --git a/tools/testing/selftests/pid_namespace/regression_enomem.c b/tools/testing/selftests/pid_namespace/regression_enomem.c
-index 7d84097ad45c..f3e6989c8069 100644
---- a/tools/testing/selftests/pid_namespace/regression_enomem.c
-+++ b/tools/testing/selftests/pid_namespace/regression_enomem.c
-@@ -12,7 +12,7 @@
- #include <sys/wait.h>
- 
- #include "../kselftest_harness.h"
--#include "../pidfd/pidfd.h"
-+#include "../pidfd/pidfd_helpers.h"
- 
- /*
-  * Regression test for:
-diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
-index 88d6830ee004..0f3fc51cec73 100644
---- a/tools/testing/selftests/pidfd/pidfd.h
-+++ b/tools/testing/selftests/pidfd/pidfd.h
-@@ -17,6 +17,7 @@
- #include <sys/wait.h>
- 
- #include "../kselftest.h"
-+#include "pidfd_helpers.h"
- 
- #ifndef P_PIDFD
- #define P_PIDFD 3
-@@ -68,31 +69,6 @@
- #define PIDFD_SKIP 3
- #define PIDFD_XFAIL 4
- 
--static inline int wait_for_pid(pid_t pid)
--{
--	int status, ret;
--
--again:
--	ret = waitpid(pid, &status, 0);
--	if (ret == -1) {
--		if (errno == EINTR)
--			goto again;
--
--		ksft_print_msg("waitpid returned -1, errno=%d\n", errno);
--		return -1;
--	}
--
--	if (!WIFEXITED(status)) {
--		ksft_print_msg(
--		       "waitpid !WIFEXITED, WIFSIGNALED=%d, WTERMSIG=%d\n",
--		       WIFSIGNALED(status), WTERMSIG(status));
--		return -1;
--	}
--
--	ret = WEXITSTATUS(status);
--	return ret;
--}
--
- static inline int sys_pidfd_open(pid_t pid, unsigned int flags)
- {
- 	return syscall(__NR_pidfd_open, pid, flags);
-diff --git a/tools/testing/selftests/pidfd/pidfd_helpers.h b/tools/testing/selftests/pidfd/pidfd_helpers.h
+diff --git a/tools/include/linux/pidfd.h b/tools/include/linux/pidfd.h
 new file mode 100644
-index 000000000000..5637bfe888de
+index 000000000000..113c8023072d
 --- /dev/null
-+++ b/tools/testing/selftests/pidfd/pidfd_helpers.h
-@@ -0,0 +1,39 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
++++ b/tools/include/linux/pidfd.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
 +
-+#ifndef __PIDFD_HELPERS_H
-+#define __PIDFD_HELPERS_H
++#ifndef _TOOLS_LINUX_PIDFD_H
++#define _TOOLS_LINUX_PIDFD_H
 +
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <stdlib.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+#include "../kselftest.h"
++/*
++ * Some systems have issues with the linux/fcntl.h import in linux/pidfd.h, so
++ * work around this by setting the header guard.
++ */
++#define _LINUX_FCNTL_H
++#include "../../../include/uapi/linux/pidfd.h"
++#undef _LINUX_FCNTL_H
 +
-+static inline int wait_for_pid(pid_t pid)
-+{
-+	int status, ret;
-+
-+again:
-+	ret = waitpid(pid, &status, 0);
-+	if (ret == -1) {
-+		if (errno == EINTR)
-+			goto again;
-+
-+		ksft_print_msg("waitpid returned -1, errno=%d\n", errno);
-+		return -1;
-+	}
-+
-+	if (!WIFEXITED(status)) {
-+		ksft_print_msg(
-+		       "waitpid !WIFEXITED, WIFSIGNALED=%d, WTERMSIG=%d\n",
-+		       WIFSIGNALED(status), WTERMSIG(status));
-+		return -1;
-+	}
-+
-+	ret = WEXITSTATUS(status);
-+	return ret;
-+}
-+
-+#endif /* __PIDFD_HELPERS_H */
++#endif /* _TOOLS_LINUX_PIDFD_H */
+diff --git a/tools/testing/selftests/pidfd/Makefile b/tools/testing/selftests/pidfd/Makefile
+index d731e3e76d5b..f5038c9dae14 100644
+--- a/tools/testing/selftests/pidfd/Makefile
++++ b/tools/testing/selftests/pidfd/Makefile
+@@ -1,8 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-CFLAGS += -g $(KHDR_INCLUDES) -pthread -Wall
++CFLAGS += -g -isystem $(top_srcdir)/tools/include $(KHDR_INCLUDES) -pthread -Wall
+ 
+ TEST_GEN_PROGS := pidfd_test pidfd_fdinfo_test pidfd_open_test \
+ 	pidfd_poll_test pidfd_wait pidfd_getfd_test pidfd_setns_test
+ 
+ include ../lib.mk
+-
 -- 
 2.47.0
 
