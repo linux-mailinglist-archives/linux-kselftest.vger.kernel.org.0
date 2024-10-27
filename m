@@ -1,183 +1,158 @@
-Return-Path: <linux-kselftest+bounces-20764-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20765-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98B4F9B1B8A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Oct 2024 02:29:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF0B79B1F07
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Oct 2024 16:02:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A12D1F21BF7
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Oct 2024 00:29:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD9F91C20A33
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Oct 2024 15:02:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0AC44C83;
-	Sun, 27 Oct 2024 00:29:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4BDE16CD35;
+	Sun, 27 Oct 2024 15:02:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="T/G6a9Tf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ok+Mo1Xd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447991362
-	for <linux-kselftest@vger.kernel.org>; Sun, 27 Oct 2024 00:29:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5829478C9D
+	for <linux-kselftest@vger.kernel.org>; Sun, 27 Oct 2024 15:02:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729988973; cv=none; b=SNQqtXD5Y7DzIyv3HXOQizQRbqUTf5O45H+RFRuttFFQGX166aENjyYHWyHG34En1YTs6XSkcEvACzvHXbVXmmZ0a7kPsNnBw9fi6iARxivttGsyWKzDfGeeZb4d9iXy0HCIkIGF12PIN+yQsmouGKryerS+hDxsLfmpcmuQXVs=
+	t=1730041367; cv=none; b=PtlyrsPaOYOHGW/KsNW8hr5FdNEyQt1dgnwsRGfHZwrp2Tqk9lp2ZlXpJYlfBtGlVLn5klVX9q6N+QxFRnMn1hmbtbTGQZbu+3NBCklPzw0LWelMfqZTITP0zvAPicaIMdhuxI3iVuRtGj5uWyY06IyhRwUODagU/IQyb/is9Go=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729988973; c=relaxed/simple;
-	bh=a2J+nNa1zs1AD4dHS1jmu/TnHxzKKXVyBrmGSj2ksE0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qj75ZXQyCyLpG38oghnetzeYwu6461cS0YUY4UlYcPc9eP3IM7IPy/Zv8zTHOlkJGpqJUU4SmXMn6MF823TxgLEhRVmA0qTAZoNvIuUcgNFHMZy0ffNYiLiMYdM2KW8scc7qrWeKuvIEyCfe7ZaujZXf5LGsEiFH+h+SU+PahMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=T/G6a9Tf; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7b15d330ce1so260583385a.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 26 Oct 2024 17:29:30 -0700 (PDT)
+	s=arc-20240116; t=1730041367; c=relaxed/simple;
+	bh=YN5uOcCVqLCrU2rPWl/pSKH8JOoi5g+jhmSQm5uMpRE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M0T+HzgbSx5mBAz7qS1DI5R2mYEYMYeJIoBdb6GYVzzIm0OPZMczmUfgdvUORrCs/NwdQA+LSs2tgG1oDp96sCzc9R1OwOPaOA6mXnhxASvLR1FR8YAMvOiB3VDXBZRXlokl1xqPb0VyPu6RKnv+uJ0f+1EQgbdkzI3I5i3SguU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ok+Mo1Xd; arc=none smtp.client-ip=209.85.208.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2fb51f39394so33514641fa.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Oct 2024 08:02:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1729988969; x=1730593769; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nf7dY4XiUOsGpMj412qO4GMRiVERCsox/7G1qGLca9E=;
-        b=T/G6a9TfgBZQ2MWxCj0AfhI5mJSSlFdNAGLSIzMUBaEgCV6osnoBDA2w4YwY+RV1SP
-         UzmFq1QiowsgMMaKM0BnRkbv9Id73ILvZMf41LYYoOqfDp7z9FBxRtByyihyDLsa/sb9
-         MZ7sB+jfc5icR4R7tXYsOZNC2yn9OOwzanWQM=
+        d=linaro.org; s=google; t=1730041363; x=1730646163; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=x4R7lu/kAshlAJXnNL3llyVtKBCbHq8h1Es4W4nUkAU=;
+        b=Ok+Mo1XdMSmBfukwMK/1uL2Oi3DUXB7nSgxv53QmRrtpU19kHBV6YSCq1dxceYcf1V
+         cizcgK1PgSsV3NL0mgNrSYEza9F/L1fQUrq9bKsMhVpm3NWmWdjoa35cIHKqnEL4dP/Z
+         u0alj15/4lTPHq2XcHObxUKUrGgRvi0HYN+IIlYaCvwgHxDSiHaeL3WHrK40bJIX0+F+
+         vD0T54/kAz/FCoxcb4Q0CU9FksGQpOwAU/nVOXtqORQgzwJVbYwm/tYpxqODampAWei6
+         a9AlRPJeLn0A7TGiDbpb3Yr1PQgZSKIZI8+8csqEFQ2kHWiSupbH4jx0viXP5RSnCSaV
+         80BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729988969; x=1730593769;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nf7dY4XiUOsGpMj412qO4GMRiVERCsox/7G1qGLca9E=;
-        b=gdxPm4pudekMa+BB0taJtkZc4RUlm5EFgK9aGrilQVRLtWZ7hEiI5DqKhAkCaNeBLH
-         w2T7z5hhPaB3zRikAiCWXpVIjQVQR//9kNToeADP6AfGZbH0znL0/9/NQlG7fGfAqVGM
-         bLrr0bDgTQtA7szw68M0LrBFjop1y6yefjFSlntId0KkthpeS62bbLZ89l8YEVlWv7xH
-         7Fe94fvNjbROIgdUsHdDV+wrT6ckOHxTDv00FHsd1X+8AQkTL1G0pDU46P7stjq1YldP
-         LoXy1lO4N0pjDicZyoEbljlAqbp3hzKQzYaGniDXqBheJmjz/d+7NPlkkfQl14y4ROaI
-         yQFA==
-X-Forwarded-Encrypted: i=1; AJvYcCWewTXp12rEufzJN4mzStsevJM+yXwl/m7sHJuTvMWxvupd3TWtMITXIbALAcqQBCit2L7dkLtcg81F1bsQq3E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNoluEJkMEJckpywuRTLE8CfnZh4aq6xr+kUEnT00DxHHtUlxm
-	k7uLE1MEl9SYY5ue7v2wALZN/ZeBv+mn0Yul7vO0uf7OWxB+Pdnxij9MZG9IYNQ=
-X-Google-Smtp-Source: AGHT+IHN/knW5u9MOAU0WJWsokuS3LbChU0sTtWcinNJDCj2TQmt1WG+fI5gZJ3AS944joo6ITllZQ==
-X-Received: by 2002:a05:620a:4511:b0:7b1:43d7:12a8 with SMTP id af79cd13be357-7b193ed1cd7mr789756085a.8.1729988969139;
-        Sat, 26 Oct 2024 17:29:29 -0700 (PDT)
-Received: from [172.19.248.149] ([205.220.129.21])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b18d334ae4sm192268485a.77.2024.10.26.17.29.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Oct 2024 17:29:28 -0700 (PDT)
-Message-ID: <c2cae7a7-1a0d-48ef-9b8f-8d2436532ea7@linuxfoundation.org>
-Date: Sat, 26 Oct 2024 18:28:56 -0600
+        d=1e100.net; s=20230601; t=1730041363; x=1730646163;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x4R7lu/kAshlAJXnNL3llyVtKBCbHq8h1Es4W4nUkAU=;
+        b=JTaU8PlbJIzx87GP+HiJt0M0JzJ7s8bYCpqpsyH4cu/IPTvarxDz7/BWRDX1Bm/1bB
+         gBWGMlRN6PIPqZWbo7pqf2J92+hWiJlU7I+0XVx8NqidRrTg4t0BumYyV3UK/TfihcJb
+         Gh4vnUbMYleHPoz7VL6LRpYu4Z12mF3QlRpvNHia9tJJIH0FSwSR2Uk7bccpG2/ru0VW
+         BUAYrLFf4vmDYzg/v6fYgUliRtNn2+efgECDqRDysybopKj0e7iZBgvPSJFyp+ftPgW0
+         xgQ/XahleTRj1BEtI5zyjnda+MR7bbmVrVBdn5chMFjsTa66n8tuTvEOGsbuv5EO4WRH
+         3sig==
+X-Forwarded-Encrypted: i=1; AJvYcCVBNi62j+L2RK8bd0jYFAqWe8jbmXSN80LtHV5OOuOXjWP89z8AiKu2jZfmdegdQudxskdAEFXbiKPTi5lhJno=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUoJB5k/K63yCLS6noMiN7jro3azi+H8WmLeWk/uvguqpI1qZj
+	D7n4bw9S3XmG1zw6Vqm0gyXw2tM0jdWrZQcY1GS+j+ttOahQMciiOuxDSge0PIrtnnG2QnmQ+By
+	urnB1pReqvgKKkwb9xWEdVH7U7smr1DaQq7sHMw==
+X-Google-Smtp-Source: AGHT+IFqLjsyKJ5CxjDNJGvvyW3lXMFUulX6UFQluIj2OcmHgocN09ZljnrI5ISQ8+uIxzhs+el7dmiVvKGjST2wbUc=
+X-Received: by 2002:a05:6512:1092:b0:53b:20a1:1c4a with SMTP id
+ 2adb3069b0e04-53b34a19077mr1821924e87.42.1730041363426; Sun, 27 Oct 2024
+ 08:02:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH for-next 1/3] selftests/watchdog: add count parameter for
- watchdog-test
-To: Li Zhijian <lizhijian@fujitsu.com>, linux-kselftest@vger.kernel.org
-Cc: shuah@kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20241025013933.6516-1-lizhijian@fujitsu.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241025013933.6516-1-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cover.1729897278.git.nicolinc@nvidia.com> <384f7b4333a1f75da09e390902b8f82be21a0dd3.1729897278.git.nicolinc@nvidia.com>
+In-Reply-To: <384f7b4333a1f75da09e390902b8f82be21a0dd3.1729897278.git.nicolinc@nvidia.com>
+From: Zhangfei Gao <zhangfei.gao@linaro.org>
+Date: Sun, 27 Oct 2024 23:02:31 +0800
+Message-ID: <CABQgh9EpGPwdQhv7mepiMGVgR-8NMx5dcXyJ2A92W8ZzQt3bJw@mail.gmail.com>
+Subject: Re: [PATCH v5 07/13] iommufd/viommu: Add iommufd_viommu_find_dev helper
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: jgg@nvidia.com, kevin.tian@intel.com, will@kernel.org, joro@8bytes.org, 
+	suravee.suthikulpanit@amd.com, robin.murphy@arm.com, dwmw2@infradead.org, 
+	baolu.lu@linux.intel.com, shuah@kernel.org, linux-kernel@vger.kernel.org, 
+	iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org, eric.auger@redhat.com, 
+	jean-philippe@linaro.org, mdf@kernel.org, mshavit@google.com, 
+	shameerali.kolothum.thodi@huawei.com, smostafa@google.com, yi.l.liu@intel.com, 
+	aik@amd.com, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 10/24/24 19:39, Li Zhijian wrote:
-> Currently, watchdog-test keep running until it gets a SIGINT. However,
-> when watchdog-test is executed from the kselftests framework, where it
-> launches test via timeout which will send SIGTERM in time up. This could
-> lead to
-> 1. watchdog haven't stop, a watchdog reset is triggered to reboot the OS
->     in silent.
-> 2. kselftests gets an timeout exit code, and judge watchdog-test as
->    'not ok'
-> 
-This test isn't really supposed to be run from kselftest framework.
-This is the reason why it isn't included in the default run.
-
-> This patch is prepare to fix above 2 issues
-
-This series needs a separate cover letter explaining how this problem is
-being fixed.
-
-> 
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+On Sat, 26 Oct 2024 at 07:51, Nicolin Chen <nicolinc@nvidia.com> wrote:
+>
+> This avoids a bigger trouble of exposing struct iommufd_device and struct
+> iommufd_vdevice in the public header.
+>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 > ---
-> Hey,
-> Cover letter is here.
-> 
-> It's notice that a OS reboot was triggerred after ran the watchdog-test
-> in kselftests framwork 'make run_tests', that's because watchdog-test
-> didn't stop feeding the watchdog after enable it.
-> 
-> In addition, current watchdog-test didn't adapt to the kselftests
-> framework which launchs the test with /usr/bin/timeout and no timeout
-> is expected.
-> ---
->   tools/testing/selftests/watchdog/watchdog-test.c | 13 +++++++++----
->   1 file changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
-> index bc71cbca0dde..2f8fd2670897 100644
-> --- a/tools/testing/selftests/watchdog/watchdog-test.c
-> +++ b/tools/testing/selftests/watchdog/watchdog-test.c
-> @@ -27,7 +27,7 @@
->   
->   int fd;
->   const char v = 'V';
-> -static const char sopts[] = "bdehp:st:Tn:NLf:i";
-> +static const char sopts[] = "bdehp:st:Tn:NLf:c:i";
->   static const struct option lopts[] = {
->   	{"bootstatus",          no_argument, NULL, 'b'},
->   	{"disable",             no_argument, NULL, 'd'},
-> @@ -42,6 +42,7 @@ static const struct option lopts[] = {
->   	{"gettimeleft",		no_argument, NULL, 'L'},
->   	{"file",          required_argument, NULL, 'f'},
->   	{"info",		no_argument, NULL, 'i'},
-> +	{"count",         required_argument, NULL, 'c'},
->   	{NULL,                  no_argument, NULL, 0x0}
->   };
->   
-> @@ -95,6 +96,7 @@ static void usage(char *progname)
->   	printf(" -n, --pretimeout=T\tSet the pretimeout to T seconds\n");
->   	printf(" -N, --getpretimeout\tGet the pretimeout\n");
->   	printf(" -L, --gettimeleft\tGet the time left until timer expires\n");
-> +	printf(" -c, --count\tStop after feeding the watchdog count times\n");
->   	printf("\n");
->   	printf("Parameters are parsed left-to-right in real-time.\n");
->   	printf("Example: %s -d -t 10 -p 5 -e\n", progname);
-> @@ -174,7 +176,7 @@ int main(int argc, char *argv[])
->   	unsigned int ping_rate = DEFAULT_PING_RATE;
->   	int ret;
->   	int c;
-> -	int oneshot = 0;
-> +	int oneshot = 0, stop = 1, count = 0;
->   	char *file = "/dev/watchdog";
->   	struct watchdog_info info;
->   	int temperature;
-> @@ -307,6 +309,9 @@ int main(int argc, char *argv[])
->   			else
->   				printf("WDIOC_GETTIMELEFT error '%s'\n", strerror(errno));
->   			break;
-> +		case 'c':
-> +			stop = 0;
-> +			count = strtoul(optarg, NULL, 0);
->   		case 'f':
->   			/* Handled above */
->   			break;
-> @@ -336,8 +341,8 @@ int main(int argc, char *argv[])
->   
->   	signal(SIGINT, term);
->   
-> -	while (1) {
-> -		keep_alive();
-> +	while (stop || count--) {
-> +		exit_code = keep_alive();
->   		sleep(ping_rate);
->   	}
->   end:
+>  include/linux/iommufd.h        |  8 ++++++++
+>  drivers/iommu/iommufd/driver.c | 13 +++++++++++++
+>  2 files changed, 21 insertions(+)
+>
+> diff --git a/include/linux/iommufd.h b/include/linux/iommufd.h
+> index 0287a6d00192..dc174d02132b 100644
+> --- a/include/linux/iommufd.h
+> +++ b/include/linux/iommufd.h
+> @@ -184,6 +184,8 @@ static inline int iommufd_vfio_compat_set_no_iommu(struct iommufd_ctx *ictx)
+>  struct iommufd_object *_iommufd_object_alloc(struct iommufd_ctx *ictx,
+>                                              size_t size,
+>                                              enum iommufd_object_type type);
+> +struct device *iommufd_viommu_find_dev(struct iommufd_viommu *viommu,
+> +                                      unsigned long vdev_id);
+>  #else /* !CONFIG_IOMMUFD_DRIVER */
+>  static inline struct iommufd_object *
+>  _iommufd_object_alloc(struct iommufd_ctx *ictx, size_t size,
+> @@ -191,6 +193,12 @@ _iommufd_object_alloc(struct iommufd_ctx *ictx, size_t size,
+>  {
+>         return ERR_PTR(-EOPNOTSUPP);
+>  }
+> +
+> +static inline struct device *
+> +iommufd_viommu_find_dev(struct iommufd_viommu *viommu, unsigned long vdev_id)
+> +{
+> +       return NULL;
+> +}
+>  #endif /* CONFIG_IOMMUFD_DRIVER */
+>
+>  /*
+> diff --git a/drivers/iommu/iommufd/driver.c b/drivers/iommu/iommufd/driver.c
+> index c0876d3f91c7..3604443f82a1 100644
+> --- a/drivers/iommu/iommufd/driver.c
+> +++ b/drivers/iommu/iommufd/driver.c
+> @@ -36,3 +36,16 @@ struct iommufd_object *_iommufd_object_alloc(struct iommufd_ctx *ictx,
+>         return ERR_PTR(rc);
+>  }
+>  EXPORT_SYMBOL_NS_GPL(_iommufd_object_alloc, IOMMUFD);
+> +
+> +/* Caller should xa_lock(&viommu->vdevs) to protect the return value */
+> +struct device *iommufd_viommu_find_dev(struct iommufd_viommu *viommu,
+> +                                      unsigned long vdev_id)
+> +{
+> +       struct iommufd_vdevice *vdev;
+> +
+> +       lockdep_is_held(&viommu->vdevs.xa_lock);
+> +
+> +       vdev = xa_load(&viommu->vdevs, vdev_id);
+> +       return vdev ? vdev->idev->dev : NULL;
+> +}
 
+Got this error?
+
+ld: Unexpected GOT/PLT entries detected!
+ld: Unexpected run-time procedure linkages detected!
+ld: drivers/iommu/iommufd/driver.o: in function `iommufd_viommu_find_dev':
+linux/drivers/iommu/iommufd/driver.c:47: undefined reference to
+`lockdep_is_held'
+make[2]: *** [scripts/Makefile.vmlinux:34: vmlinux] Error 1
+make[1]: *** [/home/linaro/iommufd/linux/Makefile:1166: vmlinux] Error 2
+make: *** [Makefile:224: __sub-make] Error 2
 
