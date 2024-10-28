@@ -1,121 +1,110 @@
-Return-Path: <linux-kselftest+bounces-20815-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20816-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66ECC9B3377
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 15:27:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40E8D9B33AE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 15:36:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 983DE1C2129B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 14:27:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C44E1B21377
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 14:36:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A93B81DD89F;
-	Mon, 28 Oct 2024 14:26:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50AC11DDC30;
+	Mon, 28 Oct 2024 14:36:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="t5q3c3mi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9ED31DE3C6;
-	Mon, 28 Oct 2024 14:26:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F0E1DDA1B
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Oct 2024 14:36:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730125614; cv=none; b=WSyRBgcr9NQJgnYE6415GeVxm6gFrM1A3NyD/ZVFL2evLj4Ru2XySxrcZoQfRbR/tHJJgNjwmzu/TRqNjMc512KPNi8+pzsVhrT8qTyygYAYwpr588fl+XLjnOMQ5vPiKbO03NdqBkl3VRjEQt5dbtN1hpB4MhxidtuD4hbOgOs=
+	t=1730126212; cv=none; b=t3U3k5K4p1S99TUrGPdPI5u2jXPW3va/ACIrOkCJ928ONbgxAf+V0Gk5MbftEOM0JP5kVY3ife81oK6Vs/YC8LyKSSm4gEjLajPb7rlDh1vulfr4jwayrcQBAz9tFrd2aahCobnW7EB0CJEVBtux3VdKegn1+KjGlzpMnDNjCpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730125614; c=relaxed/simple;
-	bh=iq9Wl1uyCw5tq9oG+BKQG3+OcMuua5p/qAtUFxuWOU0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AS+Wcn7ouLWl0WJnqqbW01pZotXuUEJAhMwmXlBwgoMz6txjqfkYeOzWdp1qigxdowmHaZMuaaFdcLRGkOoYJ26Tr5j7DItMmDFHOPODRiuiicNJXNJdGv45tEXGpFauwY3JlN801CU8ZevTv5BIFnRsGrl7FSOzUfsGcBOHBhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ADA90497;
-	Mon, 28 Oct 2024 07:27:20 -0700 (PDT)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9D8D03F66E;
-	Mon, 28 Oct 2024 07:26:49 -0700 (PDT)
-Date: Mon, 28 Oct 2024 14:26:44 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/6] kselftest/arm64: Test floating point signal context
- restore in fp-stress
-Message-ID: <Zx-fEtzrpxrL4N3_@J2N7QTR9R3>
-References: <20241023-arm64-fp-stress-irritator-v1-0-a51af298d449@kernel.org>
+	s=arc-20240116; t=1730126212; c=relaxed/simple;
+	bh=AuCV83JNF5xt/o7+RdWbgGzw1E9aI+J1rqqbiHJI0pk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mvfJK8DOhxr5WK2d9yzntXKn6L4MrwWCgkwD8DvLarIql7GWt2u7QNZd44o1A4CTmviXNwfksYBEqZH99oygtmSNIs4P12x5dcnrQsJWE2E2KlpO5fw3p/LSoi9S2IikmdK2oxvaOcG2N0qZG02uxm2Vg5P2XOy5WP/bK/lM/mY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=t5q3c3mi; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-539f4d8ef84so4970109e87.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Oct 2024 07:36:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730126208; x=1730731008; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AuCV83JNF5xt/o7+RdWbgGzw1E9aI+J1rqqbiHJI0pk=;
+        b=t5q3c3miHHsf2cHayjpY3BNsjRedncYDv+bWgPkRbvUN3MYpMQZETPwOdlZcbD+KxF
+         j7EwZGarJJ4ZXh42PXWggkjNtZSigROn6ClvfHrGIuRKjKZVJnYnURqCzG3tjSnwDbDW
+         1vOmX3JgyP05iCsajz3sx5ezPugtj1C5SwjzlpT7wXhLIRPsPHFqU+HQ99DTyB8Fg/At
+         CePCn5zPkpVj0ADk0t4SAVnfJFOrInuz8Z6VBTuAgCpQUbZcNCK764Y2mmJ5Yn6wlkx+
+         4xVejicw0Xdw0hiFEpLKsXoGGr5o3alINb6Es+yjGq02Fz2qZCEJoCLjDHN32QiIfrcj
+         7Umw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730126208; x=1730731008;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AuCV83JNF5xt/o7+RdWbgGzw1E9aI+J1rqqbiHJI0pk=;
+        b=jpvqrL6S4tayGdTdlmRVjsZjaC5mIVmiA/lbFKkst6rhAqsckKhXU8l7HTbzR2z1ug
+         dedMustOASudnV387a9qaZ0t8muf4OWxOCfjQ0pR6ziQTETsJl19i+s5q9VYbf7LuYpW
+         8ydH9EW5/j5E70lGJ2d4MlPi9zRcUFTrudKNpOfgOgCCQ3Id8PCzmcSeS4PrCeF1nNkM
+         XznWmo9kryClKSTFGl+Y9UIKnBqksF0E3w62jX7UUxVzVToig6ChIo/gz4418Ypba1zN
+         dYemrxNSK9i72fRZj9kTJR0mRIbBQOTv0MMrAjwCQfPZ4RQJOCoumWAqCFfXFva4LAi+
+         z4uQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV130lrmTk6yKraX98S/h3HCLjaq68k0BaC5MoDUjAwgdpG/BL4MCMBG6FngnQ9FqZzS5lDwImh0quKg0SsGbA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCBoZ8UXwJLs1rAyuOILREQTQf7664jUjNQGP3/McXHKOeBIXE
+	ed/Zzufq1YLYRSB2Bie5rzgBKDhJ9q97ppshc0MfOn2ess+A/FE9JBsatVj9D2As+9S7DXuWxqA
+	4cpp2YZY08F7YI5fu1AhLq7+TJVBnrmALlbg8Aw==
+X-Google-Smtp-Source: AGHT+IFMXRyPb+X0jTeOQPVKekZJqG3FwwMxDwb4pHs5ttD6aPRHRy5s8zoMSwymv42X/0WESdQov/Yws8ZdNY7ZJJI=
+X-Received: by 2002:a05:6512:3c8f:b0:539:8fcd:524 with SMTP id
+ 2adb3069b0e04-53b348e576amr3463522e87.30.1730126208152; Mon, 28 Oct 2024
+ 07:36:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241023-arm64-fp-stress-irritator-v1-0-a51af298d449@kernel.org>
+References: <20241025-kselftest-gpio-set-get-config-v2-0-040d748840bb@collabora.com>
+ <20241025-kselftest-gpio-set-get-config-v2-4-040d748840bb@collabora.com>
+In-Reply-To: <20241025-kselftest-gpio-set-get-config-v2-4-040d748840bb@collabora.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Mon, 28 Oct 2024 15:36:37 +0100
+Message-ID: <CACRpkdbBAa5piO8BJoxx04spOc22CBJ-zbi82BT9sG54c=csNw@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 4/5] selftest: gpio: Add wait flag to gpio-mockup-cdev
+To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc: Sean Wang <sean.wang@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Bamvor Jian Zhang <bamv2005@gmail.com>, Shuah Khan <shuah@kernel.org>, kernel@collabora.com, 
+	linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org, kernelci@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 23, 2024 at 09:38:28PM +0100, Mark Brown wrote:
-> Currently we test signal delivery to the programs run by fp-stress but
-> our signal handlers simply count the number of signals seen and don't do
-> anything with the floating point state.  The original fpsimd-test and
-> sve-test programs had signal handlers called irritators which modify the
-> live register state, verifying that we restore the signal context on
-> return, but a combination of misleading comments and code resulted in
-> them never being used and the equivalent handlers in the other tests
-> being stubbed or omitted.
-> 
-> Clarify the code, implement effective irritator handlers for the test
-> programs that can have them and then switch the signals generated by the
-> fp-stress program over to use the irritators, ensuring that we validate
-> that we restore the saved signal context properly.
+On Fri, Oct 25, 2024 at 9:46=E2=80=AFPM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
 
-Superficially these look good, but two thing stand out:
 
-1) We only singal the tasks once a second. Dave's original shell test
-   script hammered this constantly, and it makes a substantial impact
-   actually triggering a bug.
+> Add a -w flag to the gpio-mockup-cdev utility that causes the program to
+> wait until a signal is received before exiting, even when its behavior
+> is to retrieve the GPIO value of the line. This allows using this
+> utility to keep a GPIO line configured even when in input mode, which
+> will be relied on in other tests.
+>
+> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
 
-   Without these patches, I hacked the fp-stress.c main loop to trigger
-   a signal every ~1ms (by reducing the epoll_wait() timeout to 1 and
-   scaling the overall timeout to 10000 accordingly), and those changes
-   make the tests reliably trigger the "Bad SVCR" splats within a few
-   seconds after a few hundred signals, even if only using the SIGUSR2
-   tickle handlers.
+Bartosz has to look at this patch!
 
-   Can we change the fp-stress.c main loop to signal threads more often?
+But overall the idea looks sound to me.
 
-   I had some minor changes to only log every ~1000 iterations or so, to
-   avoid spamming the log.
-
-2) The SIGUSR2 tickle handlers are left behind. 
-
-   Given they're unused, it'd be nice to clean them up.
-
-Mark.
-
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
-> Mark Brown (6):
->       kselftest/arm64: Correct misleading comments on fp-stress irritators
->       kselftest/arm64: Remove unused ADRs from irritator handlers
->       kselftest/arm64: Corrupt P15 in the irritator when testing SSVE
->       kselftest/arm64: Implement irritators for ZA and ZT
->       kselftest/arm64: Provide a SIGUSR1 handler in the kernel mode FP stress test
->       kselftest/arm64: Test signal handler state modification in fp-stress
-> 
->  tools/testing/selftests/arm64/fp/fp-stress.c   |  2 +-
->  tools/testing/selftests/arm64/fp/fpsimd-test.S |  4 +---
->  tools/testing/selftests/arm64/fp/kernel-test.c |  4 ++++
->  tools/testing/selftests/arm64/fp/sve-test.S    |  6 ++----
->  tools/testing/selftests/arm64/fp/za-test.S     | 13 ++++---------
->  tools/testing/selftests/arm64/fp/zt-test.S     | 13 ++++---------
->  6 files changed, 16 insertions(+), 26 deletions(-)
-> ---
-> base-commit: 8e929cb546ee42c9a61d24fae60605e9e3192354
-> change-id: 20241023-arm64-fp-stress-irritator-5415fe92adef
-> 
-> Best regards,
-> -- 
-> Mark Brown <broonie@kernel.org>
-> 
+Yours,
+Linus Walleij
 
