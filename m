@@ -1,123 +1,114 @@
-Return-Path: <linux-kselftest+bounces-20822-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20823-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2E759B350B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 16:38:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F4559B353F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 16:48:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E6851F21CB4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 15:38:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 157591F22888
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 15:48:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7847D1DE3AA;
-	Mon, 28 Oct 2024 15:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CSfqeO5D"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1898E1DE4F3;
+	Mon, 28 Oct 2024 15:48:21 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F9C11DE2D6;
-	Mon, 28 Oct 2024 15:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59EA1DE2DC;
+	Mon, 28 Oct 2024 15:48:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730129892; cv=none; b=Ukp5Wvp6+mGAsk8YjAO3CX7BwY/5PxW0b3zaZvQMHQO7psBnDfFyzfAm9B+0YWQIo6bxVZwJVRzNXWVDQkCI/S06sBTtveGyDF+TxFixI4uHVEcg89vfIxN+Jd/h2vnhQD19d/3kYTszDLehq1JmwtDVsmtzEoleE07z/c5ZCm8=
+	t=1730130500; cv=none; b=ZGlbYgxP5MSfN7mIQLrFu8riyfBSItS22R2Tyrl86TKDpzrX6h/c6d3zkVISwldETkDnT3MsUxzcIYr1d6zedA5FAjvdAuephBbaRYl8kVv6NBuCPaB76xMA6iN0ZR7bWlKX78SklyRftZ60f7M2JWI8hLIuvPaegfZx8mrXT4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730129892; c=relaxed/simple;
-	bh=mpanH/RWOt6jLt75EsDkjLmF7diSzO5Zc5R74hVVK3A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KqSInfabOykMnx1Wwd33GO+pgXudnS4WuxY689oL4qFC6Z/miUV2dkZFW7KTeAY0wXuZFuwvP2i76DZjtsWkauiKbaW3c1mqpwFug6fA7kWicG+sh/VNhyHrnfpkqEiB82nqoP+NkU6QGBORNk+hoKzIN1aKW5WfiAPy7Wf/HwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CSfqeO5D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE5CC4CEE4;
-	Mon, 28 Oct 2024 15:38:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730129891;
-	bh=mpanH/RWOt6jLt75EsDkjLmF7diSzO5Zc5R74hVVK3A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CSfqeO5DgLutgeOAsan21AgHmQaNB3PavNFf5zVhKjB5mzhdvwix65XNleZfMfyZp
-	 UOlHwo7EpgePECjRES+XACp9GDQeTQNPwo7QfhthwNGJEBbx6BoGj9GxxlubSANJ+j
-	 74T+gLLpQfOWPOPCxesJSJsylIn0f+xlwNjxO5D50ftOwCCD0aHwtojQvoDI0nRvJU
-	 Mk6NZe3jvf3Hx7GasCfgPACdjofRf0awBrfyuzBb/ngtohZqLLeeSPqElIDsxUx2wp
-	 1C/ECszxo/bYgqXJH/dvrwM6kJYWS66FVCJ8bK6AmTwYu6e2Fn2IjB6K73vCKbJ5Q9
-	 HdQZZTlGpYhNQ==
-Date: Mon, 28 Oct 2024 15:38:07 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/6] kselftest/arm64: Test floating point signal context
- restore in fp-stress
-Message-ID: <3f3f3807-a363-4847-a543-c97f2f405ce2@sirena.org.uk>
-References: <20241023-arm64-fp-stress-irritator-v1-0-a51af298d449@kernel.org>
- <Zx-fEtzrpxrL4N3_@J2N7QTR9R3>
+	s=arc-20240116; t=1730130500; c=relaxed/simple;
+	bh=QBRg+BAsO4rzPVpUtbFYYnBbh6zPHcJdisFyxAIOJYY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jCwaddNwg5oSI79IGHp2wBUT2ionlUT4HSoFjTsUSvXbwFezODnpFod5/4TKfgPczN2kwG5P9KdLVo8huu0KsYKL4lPy2zpYt8iGK4I/dUsjaTyC4/cLZnOeiUfpyUH0HpseXob4VgJ8Y5zltHdGG1IquUzEl0JG2tcS/YIP1ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a9a26a5d6bfso684767566b.1;
+        Mon, 28 Oct 2024 08:48:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730130496; x=1730735296;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B2UebL5ZjmVkOrNFeX8IB8xmj1z+yG1JYVmo1T3bbsg=;
+        b=fbsrT4dKTAvXbcgWdKo+5YNyXIe6LKOcdeaCmoEDWcKPTB64uu3N+cmom5NTJvoPkg
+         ykl4nCmmtQzuk9AVi5VchO9P7vxpkNsj2Gw4XYOcCDejlfkljiScYVgsuvW/evf/OQWP
+         oZIENMuk8cWHLJ+Jy7b9LjUVFGYeU+xR/Ss1jIl/j+/yYhngqKAXS6wEHXWK3uRI4os0
+         0hp3EageP8BWHH183V0SRPowGyxG01rp+UY8DNWmWxKbMkxaKIFYJ0oToWTvRlPuJd+F
+         Sdm1+4BgCpUpqlShFxzEdQgFgZS+/k35RVwx4dl2ojyG8h8I271yfsajWjqDpQCQLBOP
+         /Q/A==
+X-Forwarded-Encrypted: i=1; AJvYcCUXBWpOwTUcPDc1h7CUUvQI/H+S0hDxbgObLgO2T9GGs+XD8zcJrhgipmt6Ztz33VDId6z3PCI4TI2Ct+2Sg5rS@vger.kernel.org, AJvYcCUe0Yru2mWGhkXlKhAlhX63ozkceYoDnTbwMzR1V0pYjbomFfKaVuuHuGWK3EwV6PlEGBn7cHlP@vger.kernel.org, AJvYcCVOsyV8/hLT88+ba3oYzaDaWDSVk2EgdfLyJn2DSceW0R+K/CzJjTSmvanNamFEz703TWgjDOvvW4+TFIs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzNBJOwMsnS/qUsynT8a2FSN1kLrKOzD8Oky8v3ke5ed/cfviJ
+	Ue2bBH6fXOOIslgujSITQuy/xAA4rMLjsMJ4+ZxqVR6yrBoi4Vmb+uKptw==
+X-Google-Smtp-Source: AGHT+IHIvHm/tkjByNPyE/Ey30QLuagKVIz6iBWyY11ifefCD0/p97TVP8Vje4fMCaRiJxpLzBEcGg==
+X-Received: by 2002:a17:907:728e:b0:a99:389a:63c2 with SMTP id a640c23a62f3a-a9de61997d9mr859656466b.62.1730130495846;
+        Mon, 28 Oct 2024 08:48:15 -0700 (PDT)
+Received: from localhost (fwdproxy-lla-115.fbsv.net. [2a03:2880:30ff:73::face:b00c])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9b30f5899csm389539966b.150.2024.10.28.08.48.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Oct 2024 08:48:15 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+To: kuba@kernel.org,
+	horms@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	matttbe@kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Shuah Khan <shuah@kernel.org>
+Cc: thepacketgeek@gmail.com,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	davej@codemonkey.org.uk,
+	vlad.wing@gmail.com,
+	max@kutsevol.com,
+	kernel-team@meta.com,
+	aehkn@xenhub.one,
+	Petr Machata <petrm@nvidia.com>,
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [PATCH net-next 1/2] net: netconsole: selftests: Change the IP subnet
+Date: Mon, 28 Oct 2024 08:48:03 -0700
+Message-ID: <20241028154805.1394611-1-leitao@debian.org>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="mzPAUqQv9GMuniFg"
-Content-Disposition: inline
-In-Reply-To: <Zx-fEtzrpxrL4N3_@J2N7QTR9R3>
-X-Cookie: Remember the... the... uhh.....
+Content-Transfer-Encoding: 8bit
 
+Use a less populated IP range to run the tests, as suggested by Petr in
+Link: https://lore.kernel.org/netdev/87ikvukv3s.fsf@nvidia.com/.
 
---mzPAUqQv9GMuniFg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Suggested-by: Petr Machata <petrm@nvidia.com>
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ tools/testing/selftests/drivers/net/netcons_basic.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, Oct 28, 2024 at 02:26:44PM +0000, Mark Rutland wrote:
+diff --git a/tools/testing/selftests/drivers/net/netcons_basic.sh b/tools/testing/selftests/drivers/net/netcons_basic.sh
+index 06021b2059b7..4ad1e216c6b0 100755
+--- a/tools/testing/selftests/drivers/net/netcons_basic.sh
++++ b/tools/testing/selftests/drivers/net/netcons_basic.sh
+@@ -20,9 +20,9 @@ SCRIPTDIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
+ 
+ # Simple script to test dynamic targets in netconsole
+ SRCIF="" # to be populated later
+-SRCIP=192.168.1.1
++SRCIP=192.168.2.1
+ DSTIF="" # to be populated later
+-DSTIP=192.168.1.2
++DSTIP=192.168.2.2
+ 
+ PORT="6666"
+ MSG="netconsole selftest"
+-- 
+2.43.5
 
-> 1) We only singal the tasks once a second. Dave's original shell test
->    script hammered this constantly, and it makes a substantial impact
->    actually triggering a bug.
-
->    Without these patches, I hacked the fp-stress.c main loop to trigger
->    a signal every ~1ms (by reducing the epoll_wait() timeout to 1 and
->    scaling the overall timeout to 10000 accordingly), and those changes
->    make the tests reliably trigger the "Bad SVCR" splats within a few
->    seconds after a few hundred signals, even if only using the SIGUSR2
->    tickle handlers.
-
->    Can we change the fp-stress.c main loop to signal threads more often?
-
-Yeah, the once a second number was kind of pulled out of thin air (IIRC
-I originally picked that for UI purposes and then added the signalling
-later without specific purpose, I wasn't particularly referencing the
-shell scripts here since I never used them much).  I don't see any
-reason not to raise the rate, we do need it to be low enough to allow
-the main loops of the test programs to make reasonable progress so
-miliseconds feels like it might be a bit aggressive for a fully loaded
-FVP configuration.  That'd be a separate patch anyway.
-
-> 2) The SIGUSR2 tickle handlers are left behind.=20
-
->    Given they're unused, it'd be nice to clean them up.
-
-I don't see an urgent need to remove them, like the SIGUSR1 handlers
-previously they're not doing any harm sitting there and could come in
-handy when debugging things - the programs get a reasonable amount of
-use standalone.
-
---mzPAUqQv9GMuniFg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcfr94ACgkQJNaLcl1U
-h9Bt8Qf7BLploh05661KJyynNHiasO8b4194O/dwPlAmnt36eJcyNZyCIueWYCqT
-CURcNmLPc/fJDDdvxKJXYexiXR37hdlXQqCSt8XrJSuN6fTRKyaLRFSo+vT1iwTx
-3+C5JfP3CyV/0rYSpTf/eTrydoMmi8D4nIQrv3ku/R6SienpKbiDw0yl7utB7Drd
-sp27NmviihfB8TO4/KPEqc6BWZC0D6C5v5g8PWDIevJYTrVuwXpe+/oWHRoHmgov
-7HlOszL2j/Wfj1tNWd78aWfBUvx55GLxfD6+C+KNtzLpJOSa95vd20OswejobhLS
-VRdWMegRkT77RmlnRdfU46K04sLC7g==
-=w85r
------END PGP SIGNATURE-----
-
---mzPAUqQv9GMuniFg--
 
