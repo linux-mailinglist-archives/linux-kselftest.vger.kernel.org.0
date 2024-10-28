@@ -1,153 +1,132 @@
-Return-Path: <linux-kselftest+bounces-20783-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20784-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C5809B2388
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 04:29:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFBD19B2396
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 04:41:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F03F31F210B8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 03:29:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09CF61F21A15
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 03:41:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6774518892F;
-	Mon, 28 Oct 2024 03:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C47D516A395;
+	Mon, 28 Oct 2024 03:41:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="FVbn+X9w"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fEaL4eT3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59EE38C11
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Oct 2024 03:29:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F070E161;
+	Mon, 28 Oct 2024 03:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730086164; cv=none; b=N+dHHLLiWfDr3lKqkrpOJG3VWsy5RjOM7LsYIsEMC/gGutRj79B8ilSrrgDe4sCnmnLxXBeaFfNQDAHkiEWN969eMAk2YVwchLl8sT4+F+dZdV94GzyXKimQ41ZCUbImHBugo9KtiafRU30tRJtsXaA+f/u4JKVjAZlfiN1FhNA=
+	t=1730086912; cv=none; b=PpiSH1AA2sM51MuBEyK+22N0wD3EvSzmqadfA8xYerbDglhO7huZQwy6dDSP26+uxenA8nQedP9kOBewRxXbmASyuR9PlF4yWQBTn3pLOx+1Mww8uhDE/H4tygDHuWGXfnRWA+Bi2APmm7EFFjh+DqEmJSbxrCVLOcEPu/MIQUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730086164; c=relaxed/simple;
-	bh=ZUgn5auMAqHVPGMBEicG+OSOIN+nAWJczwe8jhTNqCk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pfIGZCnxCSV1+82gelFbuOZf2wEz6MZChPOgwsxRfq2wPp/mm4lWqDwePam75qJIJbXw09g/nafefa3sai47mdIC/PhaYi3rc/KDmae+/Ftd9LxjnPWCU5gxfdt2//1Hp/UiRIzu/0FroRxAxfL/ES70Pos7jO0ogc7oc+fw3Ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=FVbn+X9w; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20cbb1cf324so32201805ad.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 27 Oct 2024 20:29:22 -0700 (PDT)
+	s=arc-20240116; t=1730086912; c=relaxed/simple;
+	bh=0KdL3h9TPkM2JlRYHJJCIpQjO/bIMhVOh2E4rmOp6vI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=WIHbG0mxP1xdLJ7HRVp3GxxoaJkPCBAxHzCvAyP7v/EV6cHhXkgP+HoUAX7tgTLqdzTkF/mmyiUVL+wT/ITGFodYHMXhdouqbZl1TSG+lCu8rW/zzyMuiyE8yn+4X0fhYFpxqul15P3hHvHU8eL/EgH7iaRlnh+fla94QWPLJZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fEaL4eT3; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-20cd76c513cso33550595ad.3;
+        Sun, 27 Oct 2024 20:41:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1730086162; x=1730690962; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2JNX2llXAHJCeRvWQ/Q2ie2XQ3BEH+ykwHa6OOhEWog=;
-        b=FVbn+X9wlamLIIxX11oPr60+jzDDFbTea/imgJMhqL1ypa386NiJ8LQxSOYcCnPR6G
-         bjoGzVqkK+4o7lre2YR5FtNZ6Yqyqe8UeqVWUHVhllfWVXpB7fpSYO4AzOFVWuMz/R3a
-         XWotbs5oB+EFQBfK0SOshziI9mMO2Ol0cghvw=
+        d=gmail.com; s=20230601; t=1730086910; x=1730691710; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JDbethT0XQq/2eRWjXORusHC8QdieIAX64J/ApXJme0=;
+        b=fEaL4eT3QbGTiOcfxd35c8C9sQmc2skPqenGCh8mt89xRbvW+wkwcz+ixKz90FqL+N
+         EE2nB3bUY0HpPlZZVbYrsX+ZMqH9Frqae5OfBzeTKqKHwqjwA2HoTbJRMz3N+CneB3zg
+         2vdLl3ryN99CB1tCZYd/iPa0uGDMieG2WPe03ntWcd2TM71zuI9wi+QlBYYliTIHkHUA
+         SZuzpgwVytUbUNjB14cCzPou4lg6FKg7iMF0nHkGNqnkjsbwAsX3bXunOmXk6kfOuV7P
+         eIR1tBfGHxeM7/1OGKcK56/15T7f6f1oYpgj7mXHPBCQ+bcjaLM1Cqg81rIlAHd7HslA
+         8Ymg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730086162; x=1730690962;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2JNX2llXAHJCeRvWQ/Q2ie2XQ3BEH+ykwHa6OOhEWog=;
-        b=LCWh0bODe4xl5x+7JMgZ48mAZHrE24aUr6eZZL+iwzrnqDoRKiDo5W4R6kkc19q2A3
-         90IlxCA2Vez5LhbEETismDc05efTXyqiCveuspeXPKN3ztnJc8ZWtvxC1mL9ZKNhGju+
-         j0p2kmf3BDIObZeg/hjfL9IqrYVqlugxYvxo1G0InGN5r5eKo6kin8DDISTOMVfjAqaq
-         LjsIX3QSoacxfxIEJJZ+BY7Hn+MA460wYPnAr1D9BAH9x6R9aH04tasZ3uZ14hd9auec
-         QbKFDreBziU29VT8pu+sQuCAYMgr7LDg3TrWSkxFL5DIcLjCeEQsLgvSgZqpR+zLN9XQ
-         3FuA==
-X-Forwarded-Encrypted: i=1; AJvYcCXTdIh9Ky1O06x/StNZ6XZ4jDhIFtqnnZYlsU4+hXYY4EjPJ9RzByEKhDwCjkzbo3DnHlnQGNSgBIr4C+LTqVI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzbcdp+c4wUrX6GuVZXRrtJ1aMnRswQxltM/URu1gnnI5SuAuYk
-	xqSqHk0oc3UNw/A9ygwIvcAw4suvS96dAaTd40W6kjmC48L4wgXLWGVp5U/bzgE=
-X-Google-Smtp-Source: AGHT+IHIYevKtlUJ14/kpJ+BcCcgfP6lKOhNeT5/W5EOcUEYMJiTWOpFdRq9nDEZG5FNDfJJSXun9w==
-X-Received: by 2002:a17:902:d50a:b0:20b:57f0:b38b with SMTP id d9443c01a7336-210c68d748amr92451575ad.19.1730086161664;
-        Sun, 27 Oct 2024 20:29:21 -0700 (PDT)
-Received: from [10.200.3.216] (fs96f9c361.tkyc007.ap.nuro.jp. [150.249.195.97])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-210bc016911sm41526035ad.155.2024.10.27.20.29.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Oct 2024 20:29:21 -0700 (PDT)
-Message-ID: <e907e67d-9116-4dd2-9b61-f93191737de6@linuxfoundation.org>
-Date: Sun, 27 Oct 2024 21:29:18 -0600
+        d=1e100.net; s=20230601; t=1730086910; x=1730691710;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JDbethT0XQq/2eRWjXORusHC8QdieIAX64J/ApXJme0=;
+        b=pxsktc99+WlSE3rUVtPKCS3aOl+vNQt2eGyoUZO3KGdnTYYU/ia0pq4mORONaCQ0d0
+         OI96SZ8mVpejdK6/B74WemB6gn19GT7OgM9Z5tzt/kgdrPDcx0VopK8w5/eWkg1fIFXw
+         tpfwhi3mU9uOw7EC3qYoQlJP3KZeElaKnCMh0s7Am1AoIGPn5JxV4LhRG4Lz7W3cMXr4
+         8xuNmahkwBPzxC4re5M4pkjJuELNyN+QpqR73BxrqA03qjbHW65ksR7p/Xq3VDXuo+IT
+         D+O0gO5o/WvkCLBQmVX5J4e+5aa9HrU/BqA9zJ9Jmy62lS+e4NjgHVFVT85Qj2pwGIpm
+         FZdw==
+X-Forwarded-Encrypted: i=1; AJvYcCW7N9YIlUnIVzQtnBdaSqCREqO19Dx79UwVvGuJ+Pr5eXi2PYuSEb0M4iQXpOqWP1pVAdtSJhDpKNnUZ6tmFSY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzN+NTS/Xh+NdNdVFRNajvnFe25nIHCSOkYMeoBwUrLJU3JK9sz
+	gpPOt0vh3caCPSzirpbfFhqMpWtnatg38faRskkUWSfXr6d1SfcQ
+X-Google-Smtp-Source: AGHT+IHgnETDz6Ld44mVjoLBQnQ1UPHQH3pfCPUFnb93Gvf6//TB8LHf78LERRpQHXPuH8A4ZLYCkw==
+X-Received: by 2002:a17:902:db0b:b0:20f:c225:f288 with SMTP id d9443c01a7336-210c69eabb6mr108284285ad.23.1730086910220;
+        Sun, 27 Oct 2024 20:41:50 -0700 (PDT)
+Received: from KERNELXING-MB0.tencent.com ([43.132.141.20])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-210bc030a05sm41958925ad.229.2024.10.27.20.41.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Oct 2024 20:41:49 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	mykolal@fb.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH bpf-next] bpf: handle implicit declaration of function gettid in bpf_iter.c
+Date: Mon, 28 Oct 2024 11:41:43 +0800
+Message-Id: <20241028034143.14675-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH for-next 1/3] selftests/watchdog: add count parameter for
- watchdog-test
-To: "Zhijian Li (Fujitsu)" <lizhijian@fujitsu.com>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Cc: "shuah@kernel.org" <shuah@kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20241025013933.6516-1-lizhijian@fujitsu.com>
- <c2cae7a7-1a0d-48ef-9b8f-8d2436532ea7@linuxfoundation.org>
- <0861d73d-4fd9-4118-91c8-5a619c7d7ca0@fujitsu.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <0861d73d-4fd9-4118-91c8-5a619c7d7ca0@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 10/27/24 18:50, Zhijian Li (Fujitsu) wrote:
-> 
-> 
-> On 27/10/2024 08:28, Shuah Khan wrote:
->> On 10/24/24 19:39, Li Zhijian wrote:
->>> Currently, watchdog-test keep running until it gets a SIGINT. However,
->>> when watchdog-test is executed from the kselftests framework, where it
->>> launches test via timeout which will send SIGTERM in time up. This could
->>> lead to
->>> 1. watchdog haven't stop, a watchdog reset is triggered to reboot the OS
->>>      in silent.
->>> 2. kselftests gets an timeout exit code, and judge watchdog-test as
->>>     'not ok'
->>>
->> This test isn't really supposed to be run from kselftest framework.
->> This is the reason why it isn't included in the default run.
-> 
-> May I know what's the default run, is it different from `make run_tests` ?
+From: Jason Xing <kernelxing@tencent.com>
 
-No it isn't. "make kselftest" runs only the targets mentioned in the
-selftests Makefile. That is considered the kselftest default run.
+As we can see from the title, when I compiled the selftests/bpf, I
+saw the error:
+implicit declaration of function ‘gettid’ ; did you mean ‘getgid’? [-Werror=implicit-function-declaration]
+  skel->bss->tid = gettid();
+                   ^~~~~~
+                   getgid
 
-There is a reason why watchdog isn't included in the default run.
-It isn't intended to be run by users by default as this is test is
-just for testing watchdog api
+Adding a define to fix it (referring to
+tools/perf/tests/shell/coresight/thread_loop/thread_loop.c file.
 
-> 
-> 
->>
->>> This patch is prepare to fix above 2 issues
->>
->> This series needs a separate cover letter explaining how this problem is
->> being fixed.
-> 
-> Cover letter is in this patch, see below:
-> In addition, we can get the 'How' by reading the simple change in each change.
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
+---
+ tools/testing/selftests/bpf/prog_tests/bpf_iter.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-That isn't enough to understand why this change is needed.
-Send patch series with a cover letter explaining what you are
-doing.
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+index f0a3a9c18e9e..a105759f3dcf 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -34,6 +34,8 @@
+ #include "bpf_iter_ksym.skel.h"
+ #include "bpf_iter_sockmap.skel.h"
+ 
++#define gettid() syscall(SYS_gettid)
++
+ static void test_btf_id_or_null(void)
+ {
+ 	struct bpf_iter_test_kern3 *skel;
+-- 
+2.37.3
 
-> 
-> 
->>
->>>
->>> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
->>> ---
->>> Hey,
->>> Cover letter is here.
->>>
->>> It's notice that a OS reboot was triggerred after ran the watchdog-test
->>> in kselftests framwork 'make run_tests', that's because watchdog-test
->>> didn't stop feeding the watchdog after enable it.
->>>
->>> In addition, current watchdog-test didn't adapt to the kselftests
->>> framework which launchs the test with /usr/bin/timeout and no timeout
->>> is expected.
->>> ---
-
-thanks,
--- Shuah
 
