@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-20870-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20871-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5F3F9B3E6D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 00:31:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E889A9B3E6F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 00:31:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23AE81C21015
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 23:31:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1BCFB21DA4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 23:31:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95C6A1EE02D;
-	Mon, 28 Oct 2024 23:31:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 620B91F9ED4;
+	Mon, 28 Oct 2024 23:31:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="adxrEJO2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sluuL5Qf"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64CDF1E1C0D;
-	Mon, 28 Oct 2024 23:31:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354FB1F8918;
+	Mon, 28 Oct 2024 23:31:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730158265; cv=none; b=Wg6cH42ww92cebEMCY57xISKFs/bLVqQn+iZdPBAfOItBhtyuHaT+VJV4UOZb4N3C0cautnUUVqot2jNXyfJvmmrqCkIAeqwOwBLu6w+30ky1CQdjaSYijvbTBTxPTddYHT9wVOUHCml//6Alp8QACM23KWyqfYH0xFUhUuzrH0=
+	t=1730158266; cv=none; b=Y/13aaAQsltuP4GxPF3yMsD/NjAxm5UP2XnglhOXnUZnK75M63zKKgYCQeUYthi7m2GQch1eE9EffZaPRmLV1hOHoWRj8oDsfObvk69/cxp5ymaFkZnaDVtcUiBQyWFmc+7egdtob1IhnfwRAlsKSK7mAF7UeHl77Dt8TvvwqfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730158265; c=relaxed/simple;
-	bh=HKc1o0/C7r3MGYeFYTfFeVOVH7j7sttnDPnYOtW0PLk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KqGydC8OY/lb/2hU883iMx4DYQB61zZjPSXh5D/Lwm7WfLpiHXf54nXJJMJs5XTsrqALM0umJGNV8TVwDbhWOhuZ1oIBiLMfFAX4jQbpqzePRe1z7b3FLo2U8avJOG1Wl5kZ5czGsyqnp9lnuQXbZnjfgK9m1Xr2a/IG6Xr9dH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=adxrEJO2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC259C4CEC3;
-	Mon, 28 Oct 2024 23:31:04 +0000 (UTC)
+	s=arc-20240116; t=1730158266; c=relaxed/simple;
+	bh=xqdqcFrJAdIHqtvRzPwvhIaKJQv8dhV6x+KleToE+hw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=AZeyjqBe229qajlo1Eu+SQ8lzMUP3GyR8OCS7uakB2amFcvnPmH6O8OXfdrw/u7p5dBxjXhuYUSWv88xUG7f15IcUJecnGzgkkDei2gWMMW6tXvpK5dB7GBkdqQO1vgBCpJ/C+VXcF1q7XlbG/Rp+6+AvKAYrxH0W8gvCBqVex0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sluuL5Qf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1D40C4CEE7;
+	Mon, 28 Oct 2024 23:31:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730158265;
-	bh=HKc1o0/C7r3MGYeFYTfFeVOVH7j7sttnDPnYOtW0PLk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=adxrEJO24bmDoUKOpxXJ2+XvWjOSq9UIh01TnE0Bz3BEZeD0H6ZyerkfxcL1Iz4M3
-	 pX0AAMPF8F8mTqdy8C3ptJFFUKkntaG42GqROikR8EKrOCppaWJUAToU2e6OWoy4iw
-	 MWYMH7eXYfOwR2xQpfQhzH3mPGDpAMJQg2+g9ZFXYB8/++wii+3DnkmL/17GSjlS+O
-	 Vvv3jTsECw3AWsGLUWz+MxSApzdEg6l6tatlHrQJBJkNgdZLPS2MtSd342YsdyFrQh
-	 TikkI6isIeTBjyqpn3FnHNlWu8oaA8ksuwoOwEb8adUWDEEdeKwneZXZjQCW7aC1LJ
-	 rGJKfwZtvVguA==
+	s=k20201202; t=1730158266;
+	bh=xqdqcFrJAdIHqtvRzPwvhIaKJQv8dhV6x+KleToE+hw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=sluuL5Qfuq8491dKARsQzWeCtUedCMTYGcyGjvxjlRv5WlaXuUh/5QlkYD9CgXlCZ
+	 QTkVugJy4hHJGuxbXmKHkCzJfV1HSeIeqOG+0I46pnvhANoxtU0z+fA91AQFi9bgAB
+	 hA2br121iIiFL/DihHj36y0zePO0y/8ewlDotbHHO7pnjTKFOKfsWAVXDkgyhsZV1a
+	 qP9y8Mrqymaf2EsCdsYQXPKdz8tf4JrFHyaHYLCl4w7tIwA5/UXkDwSrj7W48cX1Os
+	 Z1aPgduqXj62mbPP60QuPCviIf/QpxLDJC4vlqTscmP7uvdlzFuEyEa1ZldsyviNi1
+	 zrY+2zZWJhBzg==
 From: SeongJae Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SeongJae Park <sj@kernel.org>,
-	Andrew Paniakin <apanyaki@amazon.com>,
+Cc: Andrew Paniakin <apanyaki@amazon.com>,
+	SeongJae Park <sj@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
 	damon@lists.linux.dev,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/6] damon/{self,kunit}tests: minor fixups for DAMON debugfs interface tests
-Date: Mon, 28 Oct 2024 16:30:52 -0700
-Message-Id: <20241028233058.283381-1-sj@kernel.org>
+Subject: [PATCH 1/6] selftests/damon/huge_count_read_write: provide sufficiently large buffer for DEPRECATED file read
+Date: Mon, 28 Oct 2024 16:30:53 -0700
+Message-Id: <20241028233058.283381-2-sj@kernel.org>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20241028233058.283381-1-sj@kernel.org>
+References: <20241028233058.283381-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,43 +64,47 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fixup small broken window panes in DAMON selftests and kunit tests.
+From: Andrew Paniakin <apanyaki@amazon.com>
 
-First four patches clean up DAMON debugfs interface selftests output, by
-fixing segmentation fault of a test program (patch 1), removing
-unnecessary debugging messages (patch 2), and hiding error messages from
-expected failures (patches 3 and 4).
+'huge_count_read_write' crashes with segmentation fault when reading
+DEPRECATED file of DAMON debugfs interface.  This is not causing any
+problem for users or other tests because the purpose of the test is just
+ensuring the read is not causing kernel warning messages.  Nonetheless,
+it makes the output unnecessarily noisy, and the DEPRECATED file is not
+properly being tested.
 
-Following two patches fix copy-paste mistakes in DAMON Kconfig help
-message that copied from debugfs kunit test (patch 5) and a comment on
-the debugfs kunit test code (patch 6).
+It happens because the size of the content of the file is larger than
+the size of the buffer for the read.  The file contains about 170
+characters.  Increase the buffer size to 256 characters.
 
+Fixes: b4a002889d24 ("selftests/damon: test debugfs file reads/writes with huge count")
+Signed-off-by: Andrew Paniakin <apanyaki@amazon.com>
 Signed-off-by: SeongJae Park <sj@kernel.org>
+---
 
-Andrew Paniakin (1):
-  selftests/damon/huge_count_read_write: provide sufficiently large
-    buffer for DEPRECATED file read
+Note that this fix has originally wrote[1] by Andrew for the downstream
+version of the same test.  Because the downstream version is hosted on
+GitHub, the original patch was posted via GitHub pull request, not to
+the mailing list.
 
-SeongJae Park (5):
-  selftests/damon/huge_count_read_write: remove unnecessary debugging
-    message
-  selftests/damon/_debugfs_common: hide expected error message from
-    test_write_result()
-  selftests/damon/debugfs_duplicate_context_creation: hide errors from
-    expected file write failures
-  mm/damon/Kconfig: update DBGFS_KUNIT prompt copy for SYSFS_KUNIT
-  mm/damon/tests/dbgfs-kunit: fix the header double inclusion guarding
-    ifdef comment
+[1] https://github.com/damonitor/damon-tests/commit/fec6e1f4559a
 
- mm/damon/Kconfig                                           | 2 +-
- mm/damon/tests/dbgfs-kunit.h                               | 2 +-
- tools/testing/selftests/damon/_debugfs_common.sh           | 7 ++++++-
- .../selftests/damon/debugfs_duplicate_context_creation.sh  | 2 +-
- tools/testing/selftests/damon/huge_count_read_write.c      | 4 +---
- 5 files changed, 10 insertions(+), 7 deletions(-)
+ tools/testing/selftests/damon/huge_count_read_write.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-base-commit: 13583c750117b4e10cdaf5578dcc7723b305ce4e
+diff --git a/tools/testing/selftests/damon/huge_count_read_write.c b/tools/testing/selftests/damon/huge_count_read_write.c
+index a6fe0689f88d..f3c199dc8eba 100644
+--- a/tools/testing/selftests/damon/huge_count_read_write.c
++++ b/tools/testing/selftests/damon/huge_count_read_write.c
+@@ -18,7 +18,7 @@
+ void write_read_with_huge_count(char *file)
+ {
+ 	int filedesc = open(file, O_RDWR);
+-	char buf[25];
++	char buf[256];
+ 	int ret;
+ 
+ 	printf("%s %s\n", __func__, file);
 -- 
 2.39.5
 
