@@ -1,113 +1,123 @@
-Return-Path: <linux-kselftest+bounces-20857-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20858-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D939F9B3D78
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 23:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B62B39B3D7B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 23:05:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A328B28B65B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 22:05:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75D0D28BAA9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 22:05:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB52F1E230E;
-	Mon, 28 Oct 2024 22:05:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 012D81EF0B7;
+	Mon, 28 Oct 2024 22:05:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="L1iUXEXX"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1QH1M2Xv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A00CB18FC67
-	for <linux-kselftest@vger.kernel.org>; Mon, 28 Oct 2024 22:05:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9081EE010
+	for <linux-kselftest@vger.kernel.org>; Mon, 28 Oct 2024 22:05:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730153109; cv=none; b=GnDyvLi57/aoSLVMQBf7WINB02gFEkw3lwz1NS3rUZqOxOlm1OsdyDzxf+L12/MGT783tRVeZ/N2UIdCPJq6Ejq4Ok34cH/kD74oP5yfdZdFfzwgnOns2Qp+ZgHxI0r5MsC72Dwi26zIvEKYon8wn5NYp1oxzHzCkB23Y2vUM0k=
+	t=1730153133; cv=none; b=qer9+RL5CZhCmqf44wsNY3+5rp1UWg/woSW0uhhEfjJ0EbWMZB5pcAgPLTuBB237/cjZjQqDRIjmSUzL1IcRtmPvDPq6341NiuiSLYbF/xtVsk6s4CrKRDKXRvTEJQBNTFNLaNoHurw1Fi74YjTbe/n8IDwWGA0Ur5d8+LJgXx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730153109; c=relaxed/simple;
-	bh=0hoHck181vRn1NSr2f2PwuVWiPIZTgKgLGSUOf4IQxI=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=pxCu55TTd86gvZkhDNid4+34vw85TgpdBBkriO0DbMYV/Cv5Z67vVWNMiYLw9KqjxOEBFodzp4StyU6MJg5MqOvLe6YZjNPpChIVDJbrHdCkHFx49rHBYyb6Yjj1nhFJos8o9OoHKBTUrMCCRCCV/KE5i9Hc6hza3U/cSgmiews=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=L1iUXEXX; arc=none smtp.client-ip=209.85.128.201
+	s=arc-20240116; t=1730153133; c=relaxed/simple;
+	bh=b7NDcp0ZbtvVvN+n9OTWm8KVIbatbAAOOj0YER5oc7c=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=ncIYf0w/8OrPlVRS9Q+HU7/K8NHECkeo+5XgjTQ9zIwtZ+F19H3eqKYmLmKOD9CsGoK34ancayawuiBYaAz75avZ0AaNrFu8tWBy3s+3vdVDcKPSdSTi3dVVskUoZ2Za8LVvBv07LadvzUsw8xdJjc47Xxo4OAE1eGTlgt/strU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1QH1M2Xv; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6e370139342so87993817b3.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Oct 2024 15:05:07 -0700 (PDT)
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e290947f6f8so8639568276.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Oct 2024 15:05:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730153106; x=1730757906; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=oWhquCb49LKi5H2UYgYKpnhN10davrTJtCE6vqtRvG0=;
-        b=L1iUXEXX23c7s4SOJfwXncF8st+C577cU7wbrxCeM0rC6RBqgRRNhucnuFc6Fuls2B
-         nhYB5LkBne2C/+b9lkOfOC2gMVwbN+ER4p9Fu2gvNOAtjD/lpSIAz1Uy9nYcHaSWrwW0
-         md+SXybpg2NVcb+/fVbjipXe2zNG+di/HB+7NpmvEgVMaTwi3m1OLuR5zNq5SjqhPIQ/
-         ERpIrF0pjUCVrD7WsQFMPRIQWpzckSWjV+rko9e+2wFnQr4NdM6PxlaykQKOx9bRzX50
-         SwcP7KBOhXLVLacbTK/75uG+I29BMVSpNOTYGcXxJhTJ7KqBi0+VubR9VDHDtxlQcM2R
-         a4sg==
+        d=google.com; s=20230601; t=1730153130; x=1730757930; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=w3ou0NFxNBMI+LK68R3aSahBHwkUL88oLn/g1FPlgGI=;
+        b=1QH1M2XvwYrj5izJC2xtekYMt62DZ7zG56TLeFpFr+e2UGI8abFbMX2L9Jnx1vVFvR
+         k6M7y9RPM3pGXIM5utjHALB9qanTcptdnOZ2md3wpZXuY+kxTc8ymFNzU3yJKMcvUb2W
+         C1ExmcbWlPK5oY9E24/d/qxV6l5obOKux90exJcfkgopWqYxyos1tgYIHUK21mN0EjRp
+         qzD8aUd9Gmu7bB7c9TBa1dnMC7nx/iuLeRgs+FL0H1mScvIBKJ0DvSRtHsemjhBU7C3J
+         1cBUhKju+oYaT6Ao97CpfvINrGbpqBzA+MQa5I1gnfiupx4TEA96FVMgPFVLEUC2cOJr
+         rBaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730153106; x=1730757906;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oWhquCb49LKi5H2UYgYKpnhN10davrTJtCE6vqtRvG0=;
-        b=JX2HTt2vMJGwoW7Gnp85DJhweaNa4VrU4gA/oA/hGtU3NoTeWvApI420eMmwhiJ1Tg
-         oeY0ZJbTvKzOmqJjU+xcZLUbpn/ASVEILwn/gceC2WxxiqOdWPrjnk5KdQaxHTAWwmf6
-         r/BgUpc8b28Df9emHJ/lgf10cEy7sWnqnkNoUvrTXxzIvsI0RU2GfrVHZFKn64NUNAAY
-         rQgrbL7YVmtvZ1GtoycAz3t2iEy2uCoqVmgVCa6r8oCmCuOEeO4Ni142hghdnhYytohc
-         uAczIUF6QhxLFm7Xf0hpivbL+f5hZ8QDt3B+jRkKXEIx1YxHAb2njK0NrVdJBPp2WDIQ
-         QsWA==
-X-Forwarded-Encrypted: i=1; AJvYcCUrmEeOm514oFlaPxKpeXlRTTvdJJcCFhSd7U4kJn72ksUfqfWy+kQ/hhko4uvIRIIxew7kOq7JIYKlH06gOQU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2YJ8EbOUxg/fb9F3uCVBYz1lhAwallpk/eLGmAzRMTCYy5iRI
-	rHVx8NgEicieCKChD8QhK6BsAnm+KE8ev9v9IIbOi+xZpmf5HUIoomhYKa31EgMGYki9Pp1OCd+
-	XvqweyRG2VUx/UCWjYd7OyA==
-X-Google-Smtp-Source: AGHT+IEAnCfdVLBm6ktQBhqpFyGMf87tkH/Lnfvvyg2A06ArHO+JMopPeHeJSfmCQLpmkvHXVSBQbL+oME5hPCmQMQ==
+        d=1e100.net; s=20230601; t=1730153130; x=1730757930;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w3ou0NFxNBMI+LK68R3aSahBHwkUL88oLn/g1FPlgGI=;
+        b=gKcAfoCvNCyyY9ZNgP6lDnnM+jYUFeCmS/MctGcHw3gXM89zS/DfR+fVPDsatdNFpo
+         pMLg+VxWmjEjLmYY5vRytJglBhBRefJCxOLsG7NrHpfrBxo0D1jLXa1W+Os4CsAcz0bZ
+         NlFxFtHldBIbbO9oN4rmu4KA6m1FUPUrPHXZxqrDgLTSIwlvuLPfdXOU4uCcDwIfEfoh
+         dzQD2UZO+ZhqgTmHtiEK0kUeeVchtVv5LTeTkcZkXAY1jSigJfLQc5bPpqpIcZBuM8j4
+         bj601oEGJX31sXYTfrz6zv65n6a1kHhYyjDXc3dmu4BVEPhuyHo1xDc/OnOdfKYrkhSF
+         hbnw==
+X-Forwarded-Encrypted: i=1; AJvYcCXjD0g+Gxqqam5yB7aGnddlSR2jYY2f3x33/UiAR4Zmc3//ZpG9kY444Z1w5a2bh/ZLYMdsEIpnBga+cJOHJTc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqjJISdFpZqbMA18Fd2cisKIDyi/B1UiqD07XXj3Lsla33xU43
+	XYNSZZITSqlQQU5k0G7UtK9eQz5F2uxpfFKcZyDvEvYFI8yBpHRfxgYThQOIbnzShN0yMITm2Ag
+	6+0Cf9igQ0bEG3O9iX3tXhA==
+X-Google-Smtp-Source: AGHT+IEoJvt/jAg/wrQgLrbnpd1PYPhm7g2qxg9aTFmYZoLnT+5hMX+dRMvN53ZNPQP7hmPh/zEREK2sEQRWA+pWew==
 X-Received: from kalesh.mtv.corp.google.com ([2a00:79e0:2e3f:8:dd17:1d2c:7822:7fdf])
- (user=kaleshsingh job=sendgmr) by 2002:a05:6902:521:b0:e29:7dd4:a945 with
- SMTP id 3f1490d57ef6-e308784b3c3mr25736276.2.1730153106526; Mon, 28 Oct 2024
- 15:05:06 -0700 (PDT)
-Date: Mon, 28 Oct 2024 14:43:56 -0700
+ (user=kaleshsingh job=sendgmr) by 2002:a05:6902:3297:b0:e2e:2e79:207c with
+ SMTP id 3f1490d57ef6-e3087728d56mr8839276.0.1730153130042; Mon, 28 Oct 2024
+ 15:05:30 -0700 (PDT)
+Date: Mon, 28 Oct 2024 14:43:57 -0700
+In-Reply-To: <20241028214550.2099923-1-kaleshsingh@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20241028214550.2099923-1-kaleshsingh@google.com>
 X-Mailer: git-send-email 2.47.0.163.g1226f6d8fa-goog
-Message-ID: <20241028214550.2099923-1-kaleshsingh@google.com>
-Subject: [PATCH 0/3] Tracefs gid mount option fixes
+Message-ID: <20241028214550.2099923-2-kaleshsingh@google.com>
+Subject: [PATCH 1/3] tracing: Document tracefs gid mount option
 From: Kalesh Singh <kaleshsingh@google.com>
 To: dhowells@redhat.com, rostedt@goodmis.org, mhiramat@kernel.org
 Cc: surenb@google.com, jyescas@google.com, kernel-team@android.com, 
 	android-mm@google.com, Kalesh Singh <kaleshsingh@google.com>, 
 	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Shuah Khan <shuah@kernel.org>, 
-	Ali Zahraee <ahzahraee@gmail.com>, Eric Sandeen <sandeen@redhat.com>, 
-	Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org, 
+	Ali Zahraee <ahzahraee@gmail.com>, Christian Brauner <brauner@kernel.org>, 
+	Eric Sandeen <sandeen@redhat.com>, linux-kernel@vger.kernel.org, 
 	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hi all,
+[1] and [2] introduced a new gid mount options that could apply to a
+group to all entries in tracefs.
 
-This series is based on v6.12-rc4. It fixes an issue with the  tracefs
-gid mount option. Adds test case to prevent future breakages and updates
-the tracefs readme to document the expected behavior of this option.
+Document this in the tracing readme.
 
-Thanks,
-Kalesh
+[1] https://lore.kernel.org/r/20211208075720.4855d180@gandalf.local.home/T/#u
+[2] https://lore.kernel.org/r/20211207171729.2a54e1b3@gandalf.local.home/T/#u
 
-Kalesh Singh (3):
-  tracing: Document tracefs gid mount option
-  tracing/selftests: Add tracefs mount options test
-  tracing: Fix tracefs gid mount option
+Cc: David Howells <dhowells@redhat.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+---
+ kernel/trace/trace.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- fs/tracefs/inode.c                            |  12 ++-
- kernel/trace/trace.c                          |   4 +
- .../ftrace/test.d/00basic/mount_options.tc    | 101 ++++++++++++++++++
- .../ftrace/test.d/00basic/test_ownership.tc   |  16 +--
- .../testing/selftests/ftrace/test.d/functions |  25 +++++
- 5 files changed, 142 insertions(+), 16 deletions(-)
- create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/mount_options.tc
-
-
-base-commit: 42f7652d3eb527d03665b09edac47f85fb600924
---
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index a8f52b6527ca..2b64b3ec67d9 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -5501,6 +5501,10 @@ static const struct file_operations tracing_iter_fops = {
+ 
+ static const char readme_msg[] =
+ 	"tracing mini-HOWTO:\n\n"
++	"By default tracefs removes all OTH file permission bits.\n"
++	"When mounting tracefs an optional group id can be specified\n"
++	"which adds the group to every directory and file in tracefs:\n\n"
++	"\t e.g. mount -t tracefs [-o [gid=<gid>]] nodev /sys/kernel/tracing\n\n"
+ 	"# echo 0 > tracing_on : quick way to disable tracing\n"
+ 	"# echo 1 > tracing_on : quick way to re-enable tracing\n\n"
+ 	" Important files:\n"
+-- 
 2.47.0.163.g1226f6d8fa-goog
 
 
