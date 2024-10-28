@@ -1,117 +1,96 @@
-Return-Path: <linux-kselftest+bounces-20810-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20814-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E30FF9B3300
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 15:15:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC7C59B3320
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 15:17:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AB7E28137F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 14:15:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7D8B1C219FF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 14:17:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 722D71DE2C6;
-	Mon, 28 Oct 2024 14:14:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E27101DD0F3;
+	Mon, 28 Oct 2024 14:17:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="mGkZh6IQ";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="tAr60T+A"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="i0LuVf1y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2074.outbound.protection.outlook.com [40.107.95.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2575C1DD866;
-	Mon, 28 Oct 2024 14:14:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50461DA631;
+	Mon, 28 Oct 2024 14:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.74
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730124886; cv=fail; b=W7wpe35TIoOb7Wa3nmR11zpXsiPu5vOR4rzn25V8e5ZEdRo4O7vfvOKCERvpH9vC1Jc/nw0aulxBvkYthdZwHCpAN6bTW0yfwXlKY7W7dbIN/JMTwbnGfvNndqnsv2WXYAlEWvf7PxX1GjV8T7/sZXma73+PJSDr3xJlgbBUeUs=
+	t=1730125058; cv=fail; b=heAptnD99wnuR5+vA3ZoX+ge2rNdaBWWyEDDS/BXnBNAm6NirgG4V/eKUHsOGG37OkX03D6p9oISUVrfLCnGsps4T5xmDrg7qaqmoxpimbl0Vsbj23FOVZqW/fwamEG9ToF39KBzjcjg3GYvBxvo/1FgCUpp1IrafrU+Wa24HcI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730124886; c=relaxed/simple;
-	bh=wxhb4S3TTaodVbn+k0PKWOFe8xrWtFI5LL1XhIL0i9Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=msnAdjGG335VPi7veNOx5H+8p7U9sAeIFDJEoxgy7TRudgbEzoQ9tzIf3N4BZ98xnMshWFZMgaG48gp5AETixIR4dwLoJ1bjP0xDcvi+U8EEvfvJB5NH5f45/XzlpGg8r/m46Zd3as9fnLlduRgcljdAARCO9GuQe01SoyuuNYY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=mGkZh6IQ; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=tAr60T+A; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49SBSeBY008467;
-	Mon, 28 Oct 2024 14:14:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=LBh+jjlGoXwF/ry0qUh43fW8qF0i5f0NsG1YJiqgt7Q=; b=
-	mGkZh6IQpL9N/7E4Er2cm9CL6b6uBtlvOmSg1ywYN3iQm5oBk/SPc7cEFl3ewBB3
-	EFcMa+gK6h5l4y3sL2jABb4qsRP218clPmLDELn+aeQwXYH5G+DQu1lv3yR2WIa/
-	IIBrOLQ7S1Ih5IBU1Fhsb9EphV709NiDXBQKw3FvlvZ/sscHdmtxiFA4xaL+BVz/
-	8x4qHLh2+GX0Civv4/RRMRlahRBC9pcBeoLL6h/xPOTxERBY+KYk7tXUNhPx0v5A
-	badwJ9aUKgreGYT+aDfhpi7zCYaZRJOOOvlsSICdp0K0R8gu2zNLQQYgvp5QvkGN
-	ljHdLt6e7HxOha417Lrdiw==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42grc1tx37-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 28 Oct 2024 14:14:00 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49SDkJGk011982;
-	Mon, 28 Oct 2024 14:13:59 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2172.outbound.protection.outlook.com [104.47.57.172])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 42hnaas58k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 28 Oct 2024 14:13:59 +0000
+	s=arc-20240116; t=1730125058; c=relaxed/simple;
+	bh=P9WVVi1TN1t0bxF3rZ9o2gKm5V1V8Muhrx3hJ2ZHaD4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=YrUHka4RxfMb9MS87apoXh949/tIEewkCAJFKOQdezsDwGqPjqmOnouHoBO1v+uBTNrvUXg0/biQWallZ8Ev79KnOkIZ6zNwRovcFWptrxPUPyvQER7Daxe0LyTGlPvng9Xssx4Oi5zEu3X7RwoSOUNC1mniC/9jQcr0XgFDJaM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=i0LuVf1y; arc=fail smtp.client-ip=40.107.95.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=BZUG1sfTZTkcjyz51d7IGKuuazxJI+EQFrx8HMnW1Lg0mrFX09b1n+UuAt1X6qXXJ1qgVSXmwpe6nb/HKnnfS8ZMYBNIkmqMkEWMCqHALZTZfBXGVnTbxKgfsQfbWmZl34wK4sxw2+vUOoQl+I3FQ20/vJBTrhwFjKjJznsOGTfEiNScY8l6CbUL/YyiJ0oXsw1Nb0fDf6ff3ebQrSpCogsyo26km8Yalbsjhc6dH0kjy1l+cih3IFC8mYR/RMO1CcQXnDf5JMWVNboqX7K0Xph4AMNwXclpgWLRKgcirEnJK6LePaXHm/aXeiNPFN4zCii46KzI6eLSToqUqHg8oA==
+ b=VhL81Oy6pcarp/XOE/7/XeZ9sGZoyRZo4v6EL//fsEvJc4jeICKDRlo5idEh5skZXOWHvgkzBoGeUDZuOnpcOgHxYhgamLvJ2AV0xtyS+y4CAjik+b3WQNqr4vK3SD4lTV++emxRJeuYI3j8Md4Ju4/DgegQKJZXc4a536XM7pPhtmc8uMGbVgGRuHV6X5UUYAZ7NtcQWgnNd3c+PA1pCu6cdrNCsisKpVjeSVBQb2fAA33iW4RwpcMq6JlEjA5PuGRVAMXeap8/k0qmQ5RSg9b3CBa1UIlZ3O4NP5ByE0qTBvYE8XVZvCNM9JZ3GpYy4Lh91fOrzhDZnDXCbIlzlQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LBh+jjlGoXwF/ry0qUh43fW8qF0i5f0NsG1YJiqgt7Q=;
- b=tvTMp9AAon3XcHfIgk8vtSbgmfna8jbV92hnVzFOxExBHCCjs2pwa/N0dikPKUz1ZwXitaicIXNWnOJbd2B6Yhy0aFoWfyo0WZubD6LSReNikTEK8IcjJMq2TvDywQDg72A3TmqDGG+Ckr6dAO3MkqjotHqibj0ishni+D7VbNz9AJRuolSLdjcDygcvHHVb+FFqP8jO3tKDxVzOAUFUxPJ+G/gS1Zfm8azDdWynQ02/1nQ2mA6bmmqRKccSDa2D4Nque+XRdSTYUUm9yR7gODfKa4MmIQaeCY0eztXEX03idi9zM+d+c3/SXHNdj/sr+cR+J4Dwq2ldScO4VHgDLA==
+ bh=6tbr8xWXEAsGn8XE+3EXL1/BYRbTxBxe8MoPo1mYh14=;
+ b=rpK/WI32BXkV0E2Blv8DZX0YqBPlSVijwde5kYZpK6Q8FrQCALzY9/14pfQBPvv3OKxLk0AugiFP7aux6tztGQNg9JX7pYLSLZ74U8PpzCA1lVfKlCxLDOr+Ml80vtr3rE/ng5JepBmsG132Mfx+Gwephdhn5rofkhDlB94n8SlRedhLT1VJzt7Urqu4x3BIYh9BgWKyTd/BcfV5aslrK0loH/IFJV0sPmg3eOL28bUj4ZiWc1sCchnFlLNHf+j3QbyrMTGpUpdTCcYWHWGIOuDlncYWkvSSdfRFk4Szj2KQYeSJUB5Mx0Du/+zMf5NMI2gyrpbpiIUhjBzB6vyHmg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LBh+jjlGoXwF/ry0qUh43fW8qF0i5f0NsG1YJiqgt7Q=;
- b=tAr60T+A100iwiZ3s/TRZv2PIZV9PrDBuJSR1Vu/pKVL9nIIc5gXDZvFiuNdAvP1WwDAizLAVdGDezFskoWFgXDrd3x3M554qTXpmAIOV7xUgOoZeYmaKY2lwOCbJ9xhQr+pYUrAEln6CjR4HyaFUqKchwMkTP+sMGqLrfQ3vNA=
-Received: from BYAPR10MB3366.namprd10.prod.outlook.com (2603:10b6:a03:14f::25)
- by SJ2PR10MB7598.namprd10.prod.outlook.com (2603:10b6:a03:540::22) with
+ bh=6tbr8xWXEAsGn8XE+3EXL1/BYRbTxBxe8MoPo1mYh14=;
+ b=i0LuVf1yM2B9EexrLMpaLJrstoeTH1ZgwYT4dfjGiMdMlDssmTH4cevQx3+UXingc3NQIwBcmklqi5dDvl4iuUwyS2ASp70An7pMnDKRJIMh9NDlmPFdulzrgfwNJhARvpVT6/C/y6HaY2bng4P+ufEbD8657XBtdoFzfH1Fgy5sUKg6fUbnZ+cA8h/n4DDFEJcw9J08LMSCk49ZIrO9gro36kpg4hM+9fpR79p0Pn3Nu55eAOy/mNHKCQM6LU/BCqqGu7zuUiwMG9eke3dcFpCR52Qw3H7aojOiJoc5/l3hy3dCnmJsV7ebUhsFCtH7GXj6M6pJ7sV3jNc9jc5G+g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
+ by DS0PR12MB8019.namprd12.prod.outlook.com (2603:10b6:8:14e::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.24; Mon, 28 Oct
- 2024 14:13:52 +0000
-Received: from BYAPR10MB3366.namprd10.prod.outlook.com
- ([fe80::baf2:dff1:d471:1c9]) by BYAPR10MB3366.namprd10.prod.outlook.com
- ([fe80::baf2:dff1:d471:1c9%6]) with mapi id 15.20.8093.024; Mon, 28 Oct 2024
- 14:13:52 +0000
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Suren Baghdasaryan <surenb@google.com>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>,
-        "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Muchun Song <muchun.song@linux.dev>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@kernel.org>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Jeff Xu <jeffxu@chromium.org>, Christoph Hellwig <hch@infradead.org>,
-        linux-api@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v4 5/5] selftests/mm: add self tests for guard page feature
-Date: Mon, 28 Oct 2024 14:13:31 +0000
-Message-ID: <c3dcca76b736bac0aeaf1dc085927536a253ac94.1730123433.git.lorenzo.stoakes@oracle.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <cover.1730123433.git.lorenzo.stoakes@oracle.com>
-References: <cover.1730123433.git.lorenzo.stoakes@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LNXP123CA0024.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:d2::36) To BYAPR10MB3366.namprd10.prod.outlook.com
- (2603:10b6:a03:14f::25)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.23; Mon, 28 Oct
+ 2024 14:17:28 +0000
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.8093.018; Mon, 28 Oct 2024
+ 14:17:28 +0000
+Date: Mon, 28 Oct 2024 11:17:26 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: "Tian, Kevin" <kevin.tian@intel.com>
+Cc: Nicolin Chen <nicolinc@nvidia.com>, "will@kernel.org" <will@kernel.org>,
+	"joro@8bytes.org" <joro@8bytes.org>,
+	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+	"robin.murphy@arm.com" <robin.murphy@arm.com>,
+	"dwmw2@infradead.org" <dwmw2@infradead.org>,
+	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"eric.auger@redhat.com" <eric.auger@redhat.com>,
+	"jean-philippe@linaro.org" <jean-philippe@linaro.org>,
+	"mdf@kernel.org" <mdf@kernel.org>,
+	"mshavit@google.com" <mshavit@google.com>,
+	"shameerali.kolothum.thodi@huawei.com" <shameerali.kolothum.thodi@huawei.com>,
+	"smostafa@google.com" <smostafa@google.com>,
+	"Liu, Yi L" <yi.l.liu@intel.com>, "aik@amd.com" <aik@amd.com>,
+	"zhangfei.gao@linaro.org" <zhangfei.gao@linaro.org>,
+	"patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: Re: [PATCH v5 00/13] iommufd: Add vIOMMU infrastructure (Part-2:
+ vDEVICE)
+Message-ID: <20241028141726.GQ6956@nvidia.com>
+References: <cover.1729897278.git.nicolinc@nvidia.com>
+ <BN9PR11MB5276FFE90D75B2146674E0BC8C4A2@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276FFE90D75B2146674E0BC8C4A2@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: BN9PR03CA0157.namprd03.prod.outlook.com
+ (2603:10b6:408:f4::12) To CH3PR12MB8659.namprd12.prod.outlook.com
+ (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -119,1412 +98,98 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR10MB3366:EE_|SJ2PR10MB7598:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5f9612d2-1da5-452a-5c1e-08dcf75ac004
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|DS0PR12MB8019:EE_
+X-MS-Office365-Filtering-Correlation-Id: fa452227-3f9d-4935-5a87-08dcf75b4090
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?vjFcx2pKfh9zdfpZupS07fdW7J4TNdjmrQ36frypScVhBzOINNVEKOH3jXvE?=
- =?us-ascii?Q?gBwSMM29fm1US6K6J+CUFJOfdUvGPZ3DvcpHG3kKhwrbRVZDEs8VsTPXLrLz?=
- =?us-ascii?Q?PrMYr2EMnVC0uulphnnsM9IpJ80df6z/xW3TT3oZQifR0HkfErbyOkxJyRMe?=
- =?us-ascii?Q?uZQjlTATLrbat+ffJ2YLBIMn7mxZy9UEOFANfIXNsjvJgDd1XSXEndp50Whm?=
- =?us-ascii?Q?53A1XKEEjnPeCdx77f+mJRrmWSaUUt2CVZf0YvXg5wswwNmrnjK3p6UigMyJ?=
- =?us-ascii?Q?EuWhKLD66tQfMr+zmwZ7yoXUxtxyDkAZwSejIL4Zc3QxbNcijYFTTKEFGeKY?=
- =?us-ascii?Q?3lc4RTaxhmZqYTwT7AknrqZmhSWV/BkVycTWkqNxGdnricdcqZkbM9O6fUl2?=
- =?us-ascii?Q?x6bEX8UtGiEmXBh9TWDffZqJPqIoa8JhQ1cu1tiREKOe2vB7XTv2nGY4gBRM?=
- =?us-ascii?Q?bV265ItV+Zt+cgolLVPgfgkMYGqnrSEGglc+DcZXn210AT2V6YTC6v52jWov?=
- =?us-ascii?Q?ZtEoWTq412Znr124wil+jNijRlfSZQFEwyuUqky9pHKm8jpum3KrkQxTc0S8?=
- =?us-ascii?Q?Zc1ZPpDo7kbyqEjDby8shsz9Jg/5oMKX+XH6107RNeed9IqKIq+M02WFNuG4?=
- =?us-ascii?Q?urGfMgf8aUN/TcwU9J8TBjoECx9a4eFLV8+3tJcO/MtGJSIZP2WoPNTUGkvV?=
- =?us-ascii?Q?fEiK+vWAGLLtL4T7nA5Dx0Rmv1ZmkCatcVbRoFHa+UI2A1OoLURYV3srlW7I?=
- =?us-ascii?Q?JB/lF4NuSzYXJDKa8HxxpMeen9ERC1XVG410I1c61m8eQHIDu6bUU3z4vAIB?=
- =?us-ascii?Q?lY6c24nPzjzrrFFYs03y3FUHTllQOO/PnnogI1qes4VtLZy6OL33hZ0XtlYY?=
- =?us-ascii?Q?Je4Lfefjo0T3IEL79HeESeQ6yifT2nSPHAFVNsIPa30LDJhAj9T4ryvGM5sA?=
- =?us-ascii?Q?oX84KqbLrPMZ2pCfJsUDR5/G+qjxdviTHOz3BBXKQ6uSDMXKjqxXatA62ukE?=
- =?us-ascii?Q?2aBumS9LaqvX8KuCvLgRTBErfAKZfXwPgL2PB9Q5sbp+0Im0Y1cY2ieSM7Ek?=
- =?us-ascii?Q?fRIywKRtXVeXonHirgp1ZrEvR38hn83XgsbDN259ZPRC/PVOjbjGyFUmbDag?=
- =?us-ascii?Q?a8WeYJCzlHBl1dPR2iummfXut1+ataKR8gh+4OXwHQyopJ9lwgA9k8CO/nM/?=
- =?us-ascii?Q?GfEegMGqplK5w1wBRwOzvBe9nSe2pAXEBL1rV13rE43KkdtBwynCGF+hVPeI?=
- =?us-ascii?Q?MpMLhegecvJ0m4Pv0DG83vktzxYWxSXup05nYWVhNrW2TsC1hjjgPGLTvG5z?=
- =?us-ascii?Q?o8JAkYtoFvMHKXTBhSKe3aZj?=
+	=?us-ascii?Q?iaqF2ijpLCWQ956trmglik1iKt67jJ0eYojSOHnVZ/gJY4BUY8/g2NaiMA6m?=
+ =?us-ascii?Q?nvYYI0EhAcoDav2tCeh+IFgk6SHplaZXycn2JHDk6CasfX452Oa9Ap+XRYLS?=
+ =?us-ascii?Q?f50MPZA0/a8xIkf9VhRvSYYv/2GSPg0BVUl7aFb2i1cS7pJrUnbeLMHihyUp?=
+ =?us-ascii?Q?27kFYoaNiyYz5C/Bmt+dig4K6AqPd+Bk8PUQjktjQ+STs6uu5HGV3ESmGhla?=
+ =?us-ascii?Q?VtlK82vAkja3FSny+1IDim4mjkcGL92KrpJ9qRH5t5uDX5egHVJQ6WA2YsG4?=
+ =?us-ascii?Q?JDldkUFsRzv9wGyPy2dflceLA1QalNLr8UQoITKl9M58xfY+g15xBtEn1yYd?=
+ =?us-ascii?Q?Gf+S6hdTJmdkG+zHZNqo2l7J5kPJzrcNuX+WLmcUyeV3GWyDdQ0l7sQHKmR5?=
+ =?us-ascii?Q?8ihpBw/BkydW15/u2j5MdTlM7k0wTcqBWxT/864B43WM3Fvk0LXe6yqqTqOb?=
+ =?us-ascii?Q?LercCtcr4DAPK8PNQt5p0AfmzODNoMuKfAmxoqPKTVi4YFtBjRdkAZcRayQ9?=
+ =?us-ascii?Q?hEQuh1FR8OxoZ/kFdZ17vQAiDkBfED6W41oWPJswQF8NcFVLSe3AOQBql5SB?=
+ =?us-ascii?Q?Zuu6bMrIllMqvF07u8Uun79sIQjzYjsO1t6jg/HUd8sBZGr/0/r2O8YePFtj?=
+ =?us-ascii?Q?/cnM+gj/y8mzdv+JI6BAoYdKQyLRGiJ9DupuMno87Ky+fChvzww52PZLE0HY?=
+ =?us-ascii?Q?Qn/qr41yx46YlxpmECca2xj7q6UB9kLqdh6xFARmbp3hgoHN/qpXqyF4fiMf?=
+ =?us-ascii?Q?0U9rvRzSTOZQN4I6CRTSRuZF5WDnoPjjARkZvCFwjP6MZfUmJkiUGYv3DZQ4?=
+ =?us-ascii?Q?C2wPU9gQ7COlUnqVkZsBZ3ssCEwoAiNh2ogKRadVib4eD+LtLFiisNm6dqCP?=
+ =?us-ascii?Q?kJF7fxulwLdAqkRYNvo1qfIQXoi5OdDWZkaN5EJ+rYT17Uuuy/UtWlZ+EVMq?=
+ =?us-ascii?Q?iIiM5RseGWOBlaKphmdBWG4c0SBr0a7Y09zHS16crnbm4+unegcZdonXS9e3?=
+ =?us-ascii?Q?TssBhkgRoRLeqwQl39FOg2K7XaEVi0/sisksWIou55l6bgMUhS7CFRMkyaKf?=
+ =?us-ascii?Q?VWZB+iT6zSombR5E2ZXGAQDPuXWq4f/sIEcm4EPtC/0FY0bt4mn1K1ZnTn8A?=
+ =?us-ascii?Q?0aLDXhGgHkijYS0bJIwxbpgjdb63+ds3JhH9+RgzfkiFHkp3Waxc9lq9+xgn?=
+ =?us-ascii?Q?yUOTSZvsbpOsQd0H9dxSRUAJRDMZbf9CZawz8W4LOPtxJ6szaPCqyU+sSaIK?=
+ =?us-ascii?Q?S1oFP0HQa180gO0sy3HBktMGXsz/yk7CPo9r+OOjItyvuf3JlDC4Tuz7t3XC?=
+ =?us-ascii?Q?WfNE6Z1/KJybNLf2fmP/M4xA?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3366.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?jzl6Aynb6EX4u8iGgtxVDcBZuV/rVPjyvoJJbzX8bH+nDzoR7xAvYDhFodi6?=
- =?us-ascii?Q?SZMZR2azd2Bj4VYLvZjRGva5HIfU2pknELD79XzmB6UDEvJMU5OT4gKQP+ZF?=
- =?us-ascii?Q?uSC7U/p5QeWYdZ6as0VpgaFCyWMnysgB/FmPAiB03QT31IjvVyQT0EyM7Hzq?=
- =?us-ascii?Q?XXzfviaIQ9tLljrgpX+BHsFFcFPhZU2hlDKs0ErXzi7NJksLiyS0xEe8TAc2?=
- =?us-ascii?Q?HXVoGVtXXjktAzxGedJ5ve2DTvP8kPjeRKPE2X5/wCns/LnWHoios9tp5qAx?=
- =?us-ascii?Q?Sn715t+RF3L9ZIDWjY1V+auORGJVzdM7pHzANeuvOkv8jz4ebBi2kIJ+zV+8?=
- =?us-ascii?Q?4xEc8/Ee3H9hp8uiEZ1Rpkfe8b57qgAajDzNSA6K9tpQDmfXopzC6mdsXPOp?=
- =?us-ascii?Q?1aTL+zd4xrpRe5JXgxx8V49vROdomJKx/XASGKaHzOpa07D9k4klJz0JgwGY?=
- =?us-ascii?Q?toBkh3fMXe7Sy15uFSj9gfHSjP/r4y5g30HFB5HzTVYiAnjaytjv8pH4lP9C?=
- =?us-ascii?Q?2kzQe2s6wY+CbLnUihSGiSSiayuWcPgaTUGVk7ei+aCy2HNc6QQfFxyBEnfQ?=
- =?us-ascii?Q?Kl5Em5LKINTmTlrgrSbQx5YF+j4uYcAdRz4ncA39gGYa1CLdPrdqmN021Igl?=
- =?us-ascii?Q?gR+MX7fs7xcbhTb3BWEMBvSwZ9T6Eh3uGoglG9SiKKME+i52USKUtWUj4OEY?=
- =?us-ascii?Q?G2nxOu9GWkgeUd+Cvm6eKYoS+DBAfZRw/tAaMQBDq5jx8lOXVC2sr91BXGMG?=
- =?us-ascii?Q?XyLcdsNyDDqmpiaEEAsAIlyehiZjvWomEyrdQCOoC7SofZJjJlaYWl1w1+tl?=
- =?us-ascii?Q?WoFgipliLQOPu0ofgnGzZg+JucNu5fffkWLCy2mbSiYz1CqWRq/BsF9EHIWc?=
- =?us-ascii?Q?BjSc4fOR4m2UoPhRESUovZExk3b9h/0h8L3NutQP1wQ2Fw/9g7lr6x0CK4Ei?=
- =?us-ascii?Q?xSbwmDvno112a4AYTlFEmwN9HV77kKZ4tK8bEPQcUAvfIiJnE8lqbcDVx127?=
- =?us-ascii?Q?YuQxkoVJr+S64TSV9vxRHMjmYcgQs2p3FXGTuafaA9ovS032penAbllw8iDX?=
- =?us-ascii?Q?4r07ybsy7Z/ifpvJye/FpzJAHclNWx552ofSyG9Z+LQjBWc6VxANHm4X9d//?=
- =?us-ascii?Q?Ds/3FBF1rvOarVjx9uoJeAbHz/2BB7pkxGZqVJsq41vH2USmqJl8kmHNxPNg?=
- =?us-ascii?Q?hw/ckwG8xfa7Wou0zOodDm1TlyeBOXKDlwjWpFtYRcJu6WZmTjq5EM9u5Xau?=
- =?us-ascii?Q?Hf+4FDlKDXDx2NacFSITAtr0F+J1jupnhKUN8++bml2CGcrSuoPEcCS14r/1?=
- =?us-ascii?Q?wgPqMYn1Yo/41bAlGTuDhI0/XakF91AnLcF6DMUnYVxS+8V3rb5w+XN1Mv8M?=
- =?us-ascii?Q?aInyp10eHa0p0dUw69dD36G2CatKAF2Ug0H+uiXE5xVD/CL6rIXe/AHCqEop?=
- =?us-ascii?Q?BuLhNOPV8DtFL57eUHu70IOtf8gMjp4H124vjJNuecowWJU2D7N8XZIkWvsC?=
- =?us-ascii?Q?NSnhQOrOHgx8tcBwnl1qlRSP8+geN++G3qPxACoCwOpqbix5fhl/EuXE0xaK?=
- =?us-ascii?Q?6Q9qHE15L1ZI9rPdpa+mgVEXFMFxwYe1EkmYqKvbBEAjwMd41mVGflT4YmG/?=
- =?us-ascii?Q?GA=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	IbwDSwCiCbKFWl49WuWKIlXDJnt0j682jq2PI76MJ2OkeAJMVkun2DIA8s+30mBE3xP7i1T49FYgGL0Rbuj7JQBafSyA0ig23JFQ9sRDME09Fqj9F67KWnWUMfOnPDrNBndODZN6cnyxxnZvWFcFN+cGTdXNp0RapHA8dySCHkCexdboADu3tgQiha/HvUJRHkyRCxPQB82Pb5F5bH9njgH68Gh05azUpaOZ4QFQcG9QNlSRRV+JwFLjfd+jH9FVDJvGdCuB6YyGeKP1csY+hsE8KYMSOLvcggLUiXgP5+8sFnci+dazEIXavS75EgIvzN2J0E9Za8b95F283Ma1hYmJNJR3a3Lf+yKDbUe4YwlsrOI5WTRuDiCpXpgaX+Go7di61f716fR5XTeHNFmPDJkoS9mT4Na27uGu7aALwO8b43v3UPDMzxQNXe+whg7iI298NXwQfUHwgr/JNXm5QurHqjXZgDh9zaFswwFUF1zXW/HyKzAzun+sDhTDyl4KYt2BOny5YJPpzXBYDjbW8sPE6Tt4k/ikY2KShhv8Nd9QhFgx7B9kj9M+mbVy3r3Tu4rQteEAoK49RjIHyMsjWCyu6y1pBNMfNnq4wTsduQE=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f9612d2-1da5-452a-5c1e-08dcf75ac004
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3366.namprd10.prod.outlook.com
+	=?us-ascii?Q?0iXCjL6MezErf5YmVF9YWGe8PvzgIsZz0Ebb/ltg17dM52U/Jh0jkJAecWl/?=
+ =?us-ascii?Q?r/VFyzBoYBYwQBvUAHIKpawGXhejWLPDLIHRrfcYvHmTTjezP/0Bp4Ob01/5?=
+ =?us-ascii?Q?Ku8fX7tM2wyR+R3xtZks5kcUmEOOAPWR05i8NgRWd5RNqsbDMjZGunfqAphX?=
+ =?us-ascii?Q?Qwg5CiNbW3WtiZHI4s32H83ALhg/KkyAR7+5kjrK9rtbupu4os0vCQCv+0Qe?=
+ =?us-ascii?Q?UwhIuKlPTGpl1oN5KqtLPNa3bTse+mAwExUghi0CYDZWK/9rVwsX2HKPQL6F?=
+ =?us-ascii?Q?QpigdpaTr4BCQYaRD3mCl7TOT1gHEWavstknq3awsO3EH4J8SxnjG7ITfv2w?=
+ =?us-ascii?Q?HoPNQ1hMyDVN8rfU3IXm6cg2Sjx9CTe/nsIMXshWJqlj2muTvpaFCJ+KB5al?=
+ =?us-ascii?Q?KGYjM2p3Yey/l0kgq/AUHNA2hJRmwj1onKBu5wL8W9KgwkiUZ9sQP7snFglM?=
+ =?us-ascii?Q?zCIuW+ctULmngcNXnwvCD/5D+z1CMLBxZUWfMeS+Dvryuqu+AIG99dj/yeVG?=
+ =?us-ascii?Q?XKk+Lebt07nTpiiK4QY/OH5ChFsjQyPELHRy9k+6A76P2ejggQO4q0WZvpGJ?=
+ =?us-ascii?Q?Tyfj14+7GLloB0QcXf0mf7O4y7zCSbFI3OqFVovK0JWRAwCcz4TH8vnLAFde?=
+ =?us-ascii?Q?jd85I/ei8NK8jHP0EImSbVtHPHkC2yxe05tsfwfBpqBg+kHcodIrCYIIScK/?=
+ =?us-ascii?Q?v/o/6JpwIFpnrcmjj36prHcJjQXsw9WVjndCHFTOZvuUR6S479PlMQtegZyA?=
+ =?us-ascii?Q?3lSx8pohdiDz9HkCIXlyTWD187p+uTyCcRjUUr+nsYWQeivnRzo7OYDfdlpP?=
+ =?us-ascii?Q?ApBmb3ZxioPAnVmw3+aLzp7KmFm20/XbHHeseIltz/jGnWlzvzqW25guZdWt?=
+ =?us-ascii?Q?e5xoRgZ1U08M1ldv7WJK34CfRbRbZJMZL1gIJmFot2XBzdo/wfJNxAUA6BNG?=
+ =?us-ascii?Q?WXTnW4khoNNOhzJk+npt61vY4MUMBwJizNAlnnPnxhUEhpXlqkBI84nrRh/2?=
+ =?us-ascii?Q?Kubqb2aKiOrvSwXrazfHVwzADEQsNF8Tk0En2z76zg39ZuYcmTvXyx2gwlL+?=
+ =?us-ascii?Q?YtjyeFBTqv57CSOeJeiCbkIQsq5dPoT0RgjHjBRN/O9gCwQhMf7KwoEWx74K?=
+ =?us-ascii?Q?4hMi1t/G4d7PbHeN6c3/PmxiWZeLAJRrd4cDJXeIlRvD+GRYHZiQ7z8RhfGI?=
+ =?us-ascii?Q?uWUT2pYR0hg9l63UuaH4XN5p3AQYz7E5JQ5xSVs3owRXA83/XWYt8AECa/s2?=
+ =?us-ascii?Q?HMvuHZA5FN5CZLSHzwK0QkSVRcBj7HAOK/oUMkLQnm88i62AVT7QJbbzOzvp?=
+ =?us-ascii?Q?c/AVQzhmrTYKGCT7TIGJ3gXhA7UVGSPN/PQmws4+IhUa68RO2T4lnY2mMw0b?=
+ =?us-ascii?Q?IISEUzzmPolisYqpiK6OxSCMO5qh93R7hUvaZfBP5haFuZF954XcVw8kqNtP?=
+ =?us-ascii?Q?p31BQpRjp8k2EKfbuqWGqnlERzXUOv9xtHWotlpwcha7E+0E1nyFq9bkm1Uw?=
+ =?us-ascii?Q?WrphDzPWZcZ99UACkuhTqodkPBVlI9SgEQRc44ExaAzWYnKbU8VlCm41AevY?=
+ =?us-ascii?Q?AsygE2orJfcfuP7Aa3FCPKE1W1rsMb3IdeukTh3R?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fa452227-3f9d-4935-5a87-08dcf75b4090
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2024 14:13:52.3284
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2024 14:17:27.9492
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oKQ6r5cLRvFZ7+7im/BsKC+rGBAYjPXmCOtcXt7+VuhLOTnLM4p69ZyRohR67B5z1fCa1RdmqSSwv5HjiX+zqX+DQbGW24veFOb7FP9yiFs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR10MB7598
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-28_04,2024-10-28_02,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 spamscore=0
- bulkscore=0 mlxscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
- definitions=main-2410280114
-X-Proofpoint-GUID: sJ-EkXUgdpPn4xv-A4dvwxEp1Xk3kZcZ
-X-Proofpoint-ORIG-GUID: sJ-EkXUgdpPn4xv-A4dvwxEp1Xk3kZcZ
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7kjg55FUNx51BLBXd7AJN/r70TEGktWWrm30uPWqBVt/Ox1PO97xsXQ2nnSGtRn1
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8019
 
-Utilise the kselftest harmness to implement tests for the guard page
-implementation.
+> > to
+> > a Context Table. This virt_id helps IOMMU drivers to link the vID to a pID
+> > of the device against the physical IOMMU instance. This is essential for a
+> > vIOMMU-based invalidation, where the request contains a device's vID for a
+> > device cache flush, e.g. ATC invalidation.
+> 
+> probably connect this to vCMDQ passthrough? otherwise for sw-based
+> invalidation the userspace can always replace vID with pID before
+> submitting the request.
 
-We start by implement basic tests asserting that guard pages can be
-installed, removed and that touching guard pages result in SIGSEGV. We also
-assert that, in removing guard pages from a range, non-guard pages remain
-intact.
+You can't just do that, the ID in the invalidation command has to be
+validated by the kernel.
 
-We then examine different operations on regions containing guard markers
-behave to ensure correct behaviour:
+At that point you may as well just use the vID instead of inventing a
+new means to validate raw pIDs.
 
-* Operations over multiple VMAs operate as expected.
-* Invoking MADV_GUARD_INSTALL / MADV_GUARD_REMOVE via process_madvise() in
-  batches works correctly.
-* Ensuring that munmap() correctly tears down guard markers.
-* Using mprotect() to adjust protection bits does not in any way override
-  or cause issues with guard markers.
-* Ensuring that splitting and merging VMAs around guard markers causes no
-  issue - i.e. that a marker which 'belongs' to one VMA can function just
-  as well 'belonging' to another.
-* Ensuring that madvise(..., MADV_DONTNEED) and madvise(..., MADV_FREE)
-  do not remove guard markers.
-* Ensuring that mlock()'ing a range containing guard markers does not
-  cause issues.
-* Ensuring that mremap() can move a guard range and retain guard markers.
-* Ensuring that mremap() can expand a guard range and retain guard
-  markers (perhaps moving the range).
-* Ensuring that mremap() can shrink a guard range and retain guard markers.
-* Ensuring that forking a process correctly retains guard markers.
-* Ensuring that forking a VMA with VM_WIPEONFORK set behaves sanely.
-* Ensuring that lazyfree simply clears guard markers.
-* Ensuring that userfaultfd can co-exist with guard pages.
-* Ensuring that madvise(..., MADV_POPULATE_READ) and
-  madvise(..., MADV_POPULATE_WRITE) error out when encountering
-  guard markers.
-* Ensuring that madvise(..., MADV_COLD) and madvise(..., MADV_PAGEOUT) do
-  not remove guard markers.
+VT-D avoided this so far because it is pushing the invalidation
+through the device object and the device object provides the ID
+directly. No IDs in commands, no switching devices during a command
+batch.
 
-If any test is unable to be run due to lack of permissions, that test is
-skipped.
-
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
----
- tools/testing/selftests/mm/.gitignore    |    1 +
- tools/testing/selftests/mm/Makefile      |    1 +
- tools/testing/selftests/mm/guard-pages.c | 1243 ++++++++++++++++++++++
- 3 files changed, 1245 insertions(+)
- create mode 100644 tools/testing/selftests/mm/guard-pages.c
-
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index 689bbd520296..8f01f4da1c0d 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -54,3 +54,4 @@ droppable
- hugetlb_dio
- pkey_sighandler_tests_32
- pkey_sighandler_tests_64
-+guard-pages
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 02e1204971b0..15c734d6cfec 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -79,6 +79,7 @@ TEST_GEN_FILES += hugetlb_fault_after_madv
- TEST_GEN_FILES += hugetlb_madv_vs_map
- TEST_GEN_FILES += hugetlb_dio
- TEST_GEN_FILES += droppable
-+TEST_GEN_FILES += guard-pages
- 
- ifneq ($(ARCH),arm64)
- TEST_GEN_FILES += soft-dirty
-diff --git a/tools/testing/selftests/mm/guard-pages.c b/tools/testing/selftests/mm/guard-pages.c
-new file mode 100644
-index 000000000000..7cdf815d0d63
---- /dev/null
-+++ b/tools/testing/selftests/mm/guard-pages.c
-@@ -0,0 +1,1243 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#define _GNU_SOURCE
-+#include "../kselftest_harness.h"
-+#include <asm-generic/mman.h> /* Force the import of the tools version. */
-+#include <assert.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/userfaultfd.h>
-+#include <setjmp.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+#include <sys/mman.h>
-+#include <sys/syscall.h>
-+#include <sys/uio.h>
-+#include <unistd.h>
-+
-+/*
-+ * Ignore the checkpatch warning, as per the C99 standard, section 7.14.1.1:
-+ *
-+ * "If the signal occurs other than as the result of calling the abort or raise
-+ *  function, the behavior is undefined if the signal handler refers to any
-+ *  object with static storage duration other than by assigning a value to an
-+ *  object declared as volatile sig_atomic_t"
-+ */
-+static volatile sig_atomic_t signal_jump_set;
-+static sigjmp_buf signal_jmp_buf;
-+
-+/*
-+ * Ignore the checkpatch warning, we must read from x but don't want to do
-+ * anything with it in order to trigger a read page fault. We therefore must use
-+ * volatile to stop the compiler from optimising this away.
-+ */
-+#define FORCE_READ(x) (*(volatile typeof(x) *)x)
-+
-+static int userfaultfd(int flags)
-+{
-+	return syscall(SYS_userfaultfd, flags);
-+}
-+
-+static void handle_fatal(int c)
-+{
-+	if (!signal_jump_set)
-+		return;
-+
-+	siglongjmp(signal_jmp_buf, c);
-+}
-+
-+static int pidfd_open(pid_t pid, unsigned int flags)
-+{
-+	return syscall(SYS_pidfd_open, pid, flags);
-+}
-+
-+/*
-+ * Enable our signal catcher and try to read/write the specified buffer. The
-+ * return value indicates whether the read/write succeeds without a fatal
-+ * signal.
-+ */
-+static bool try_access_buf(char *ptr, bool write)
-+{
-+	bool failed;
-+
-+	/* Tell signal handler to jump back here on fatal signal. */
-+	signal_jump_set = true;
-+	/* If a fatal signal arose, we will jump back here and failed is set. */
-+	failed = sigsetjmp(signal_jmp_buf, 0) != 0;
-+
-+	if (!failed) {
-+		if (write)
-+			*ptr = 'x';
-+		else
-+			FORCE_READ(ptr);
-+	}
-+
-+	signal_jump_set = false;
-+	return !failed;
-+}
-+
-+/* Try and read from a buffer, return true if no fatal signal. */
-+static bool try_read_buf(char *ptr)
-+{
-+	return try_access_buf(ptr, false);
-+}
-+
-+/* Try and write to a buffer, return true if no fatal signal. */
-+static bool try_write_buf(char *ptr)
-+{
-+	return try_access_buf(ptr, true);
-+}
-+
-+/*
-+ * Try and BOTH read from AND write to a buffer, return true if BOTH operations
-+ * succeed.
-+ */
-+static bool try_read_write_buf(char *ptr)
-+{
-+	return try_read_buf(ptr) && try_write_buf(ptr);
-+}
-+
-+FIXTURE(guard_pages)
-+{
-+	unsigned long page_size;
-+};
-+
-+FIXTURE_SETUP(guard_pages)
-+{
-+	struct sigaction act = {
-+		.sa_handler = &handle_fatal,
-+		.sa_flags = SA_NODEFER,
-+	};
-+
-+	sigemptyset(&act.sa_mask);
-+	if (sigaction(SIGSEGV, &act, NULL))
-+		ksft_exit_fail_perror("sigaction");
-+
-+	self->page_size = (unsigned long)sysconf(_SC_PAGESIZE);
-+};
-+
-+FIXTURE_TEARDOWN(guard_pages)
-+{
-+	struct sigaction act = {
-+		.sa_handler = SIG_DFL,
-+		.sa_flags = SA_NODEFER,
-+	};
-+
-+	sigemptyset(&act.sa_mask);
-+	sigaction(SIGSEGV, &act, NULL);
-+}
-+
-+TEST_F(guard_pages, basic)
-+{
-+	const unsigned long NUM_PAGES = 10;
-+	const unsigned long page_size = self->page_size;
-+	char *ptr;
-+	int i;
-+
-+	ptr = mmap(NULL, NUM_PAGES * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_PRIVATE | MAP_ANON, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/* Trivially assert we can touch the first page. */
-+	ASSERT_TRUE(try_read_write_buf(ptr));
-+
-+	ASSERT_EQ(madvise(ptr, page_size, MADV_GUARD_INSTALL), 0);
-+
-+	/* Establish that 1st page SIGSEGV's. */
-+	ASSERT_FALSE(try_read_write_buf(ptr));
-+
-+	/* Ensure we can touch everything else.*/
-+	for (i = 1; i < NUM_PAGES; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_TRUE(try_read_write_buf(curr));
-+	}
-+
-+	/* Establish a guard page at the end of the mapping. */
-+	ASSERT_EQ(madvise(&ptr[(NUM_PAGES - 1) * page_size], page_size,
-+			  MADV_GUARD_INSTALL), 0);
-+
-+	/* Check that both guard pages result in SIGSEGV. */
-+	ASSERT_FALSE(try_read_write_buf(ptr));
-+	ASSERT_FALSE(try_read_write_buf(&ptr[(NUM_PAGES - 1) * page_size]));
-+
-+	/* Remove the first guard page. */
-+	ASSERT_FALSE(madvise(ptr, page_size, MADV_GUARD_REMOVE));
-+
-+	/* Make sure we can touch it. */
-+	ASSERT_TRUE(try_read_write_buf(ptr));
-+
-+	/* Remove the last guard page. */
-+	ASSERT_FALSE(madvise(&ptr[(NUM_PAGES - 1) * page_size], page_size,
-+			     MADV_GUARD_REMOVE));
-+
-+	/* Make sure we can touch it. */
-+	ASSERT_TRUE(try_read_write_buf(&ptr[(NUM_PAGES - 1) * page_size]));
-+
-+	/*
-+	 *  Test setting a _range_ of pages, namely the first 3. The first of
-+	 *  these be faulted in, so this also tests that we can install guard
-+	 *  pages over backed pages.
-+	 */
-+	ASSERT_EQ(madvise(ptr, 3 * page_size, MADV_GUARD_INSTALL), 0);
-+
-+	/* Make sure they are all guard pages. */
-+	for (i = 0; i < 3; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+
-+	/* Make sure the rest are not. */
-+	for (i = 3; i < NUM_PAGES; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_TRUE(try_read_write_buf(curr));
-+	}
-+
-+	/* Remove guard pages. */
-+	ASSERT_EQ(madvise(ptr, NUM_PAGES * page_size, MADV_GUARD_REMOVE), 0);
-+
-+	/* Now make sure we can touch everything. */
-+	for (i = 0; i < NUM_PAGES; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_TRUE(try_read_write_buf(curr));
-+	}
-+
-+	/*
-+	 * Now remove all guard pages, make sure we don't remove existing
-+	 * entries.
-+	 */
-+	ASSERT_EQ(madvise(ptr, NUM_PAGES * page_size, MADV_GUARD_REMOVE), 0);
-+
-+	for (i = 0; i < NUM_PAGES * page_size; i += page_size) {
-+		char chr = ptr[i];
-+
-+		ASSERT_EQ(chr, 'x');
-+	}
-+
-+	ASSERT_EQ(munmap(ptr, NUM_PAGES * page_size), 0);
-+}
-+
-+/* Assert that operations applied across multiple VMAs work as expected. */
-+TEST_F(guard_pages, multi_vma)
-+{
-+	const unsigned long page_size = self->page_size;
-+	char *ptr_region, *ptr, *ptr1, *ptr2, *ptr3;
-+	int i;
-+
-+	/* Reserve a 100 page region over which we can install VMAs. */
-+	ptr_region = mmap(NULL, 100 * page_size, PROT_NONE,
-+			  MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr_region, MAP_FAILED);
-+
-+	/* Place a VMA of 10 pages size at the start of the region. */
-+	ptr1 = mmap(ptr_region, 10 * page_size, PROT_READ | PROT_WRITE,
-+		    MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr1, MAP_FAILED);
-+
-+	/* Place a VMA of 5 pages size 50 pages into the region. */
-+	ptr2 = mmap(&ptr_region[50 * page_size], 5 * page_size,
-+		    PROT_READ | PROT_WRITE,
-+		    MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr2, MAP_FAILED);
-+
-+	/* Place a VMA of 20 pages size at the end of the region. */
-+	ptr3 = mmap(&ptr_region[80 * page_size], 20 * page_size,
-+		    PROT_READ | PROT_WRITE,
-+		    MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr3, MAP_FAILED);
-+
-+	/* Unmap gaps. */
-+	ASSERT_EQ(munmap(&ptr_region[10 * page_size], 40 * page_size), 0);
-+	ASSERT_EQ(munmap(&ptr_region[55 * page_size], 25 * page_size), 0);
-+
-+	/*
-+	 * We end up with VMAs like this:
-+	 *
-+	 * 0    10 .. 50   55 .. 80   100
-+	 * [---]      [---]      [---]
-+	 */
-+
-+	/*
-+	 * Now mark the whole range as guard pages and make sure all VMAs are as
-+	 * such.
-+	 */
-+
-+	/*
-+	 * madvise() is certifiable and lets you perform operations over gaps,
-+	 * everything works, but it indicates an error and errno is set to
-+	 * -ENOMEM. Also if anything runs out of memory it is set to
-+	 * -ENOMEM. You are meant to guess which is which.
-+	 */
-+	ASSERT_EQ(madvise(ptr_region, 100 * page_size, MADV_GUARD_INSTALL), -1);
-+	ASSERT_EQ(errno, ENOMEM);
-+
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr1[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+
-+	for (i = 0; i < 5; i++) {
-+		char *curr = &ptr2[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+
-+	for (i = 0; i < 20; i++) {
-+		char *curr = &ptr3[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+
-+	/* Now remove guar pages over range and assert the opposite. */
-+
-+	ASSERT_EQ(madvise(ptr_region, 100 * page_size, MADV_GUARD_REMOVE), -1);
-+	ASSERT_EQ(errno, ENOMEM);
-+
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr1[i * page_size];
-+
-+		ASSERT_TRUE(try_read_write_buf(curr));
-+	}
-+
-+	for (i = 0; i < 5; i++) {
-+		char *curr = &ptr2[i * page_size];
-+
-+		ASSERT_TRUE(try_read_write_buf(curr));
-+	}
-+
-+	for (i = 0; i < 20; i++) {
-+		char *curr = &ptr3[i * page_size];
-+
-+		ASSERT_TRUE(try_read_write_buf(curr));
-+	}
-+
-+	/* Now map incompatible VMAs in the gaps. */
-+	ptr = mmap(&ptr_region[10 * page_size], 40 * page_size,
-+		   PROT_READ | PROT_WRITE | PROT_EXEC,
-+		   MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+	ptr = mmap(&ptr_region[55 * page_size], 25 * page_size,
-+		   PROT_READ | PROT_WRITE | PROT_EXEC,
-+		   MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/*
-+	 * We end up with VMAs like this:
-+	 *
-+	 * 0    10 .. 50   55 .. 80   100
-+	 * [---][xxxx][---][xxxx][---]
-+	 *
-+	 * Where 'x' signifies VMAs that cannot be merged with those adjacent to
-+	 * them.
-+	 */
-+
-+	/* Multiple VMAs adjacent to one another should result in no error. */
-+	ASSERT_EQ(madvise(ptr_region, 100 * page_size, MADV_GUARD_INSTALL), 0);
-+	for (i = 0; i < 100; i++) {
-+		char *curr = &ptr_region[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+	ASSERT_EQ(madvise(ptr_region, 100 * page_size, MADV_GUARD_REMOVE), 0);
-+	for (i = 0; i < 100; i++) {
-+		char *curr = &ptr_region[i * page_size];
-+
-+		ASSERT_TRUE(try_read_write_buf(curr));
-+	}
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(ptr_region, 100 * page_size), 0);
-+}
-+
-+/*
-+ * Assert that batched operations performed using process_madvise() work as
-+ * expected.
-+ */
-+TEST_F(guard_pages, process_madvise)
-+{
-+	const unsigned long page_size = self->page_size;
-+	pid_t pid = getpid();
-+	int pidfd = pidfd_open(pid, 0);
-+	char *ptr_region, *ptr1, *ptr2, *ptr3;
-+	ssize_t count;
-+	struct iovec vec[6];
-+
-+	ASSERT_NE(pidfd, -1);
-+
-+	/* Reserve region to map over. */
-+	ptr_region = mmap(NULL, 100 * page_size, PROT_NONE,
-+			  MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr_region, MAP_FAILED);
-+
-+	/*
-+	 * 10 pages offset 1 page into reserve region. We MAP_POPULATE so we
-+	 * overwrite existing entries and test this code path against
-+	 * overwriting existing entries.
-+	 */
-+	ptr1 = mmap(&ptr_region[page_size], 10 * page_size,
-+		    PROT_READ | PROT_WRITE,
-+		    MAP_FIXED | MAP_ANON | MAP_PRIVATE | MAP_POPULATE, -1, 0);
-+	ASSERT_NE(ptr1, MAP_FAILED);
-+	/* We want guard markers at start/end of each VMA. */
-+	vec[0].iov_base = ptr1;
-+	vec[0].iov_len = page_size;
-+	vec[1].iov_base = &ptr1[9 * page_size];
-+	vec[1].iov_len = page_size;
-+
-+	/* 5 pages offset 50 pages into reserve region. */
-+	ptr2 = mmap(&ptr_region[50 * page_size], 5 * page_size,
-+		    PROT_READ | PROT_WRITE,
-+		    MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr2, MAP_FAILED);
-+	vec[2].iov_base = ptr2;
-+	vec[2].iov_len = page_size;
-+	vec[3].iov_base = &ptr2[4 * page_size];
-+	vec[3].iov_len = page_size;
-+
-+	/* 20 pages offset 79 pages into reserve region. */
-+	ptr3 = mmap(&ptr_region[79 * page_size], 20 * page_size,
-+		    PROT_READ | PROT_WRITE,
-+		    MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr3, MAP_FAILED);
-+	vec[4].iov_base = ptr3;
-+	vec[4].iov_len = page_size;
-+	vec[5].iov_base = &ptr3[19 * page_size];
-+	vec[5].iov_len = page_size;
-+
-+	/* Free surrounding VMAs. */
-+	ASSERT_EQ(munmap(ptr_region, page_size), 0);
-+	ASSERT_EQ(munmap(&ptr_region[11 * page_size], 39 * page_size), 0);
-+	ASSERT_EQ(munmap(&ptr_region[55 * page_size], 24 * page_size), 0);
-+	ASSERT_EQ(munmap(&ptr_region[99 * page_size], page_size), 0);
-+
-+	/* Now guard in one step. */
-+	count = process_madvise(pidfd, vec, 6, MADV_GUARD_INSTALL, 0);
-+
-+	/* OK we don't have permission to do this, skip. */
-+	if (count == -1 && errno == EPERM)
-+		ksft_exit_skip("No process_madvise() permissions, try running as root.\n");
-+
-+	/* Returns the number of bytes advised. */
-+	ASSERT_EQ(count, 6 * page_size);
-+
-+	/* Now make sure the guarding was applied. */
-+
-+	ASSERT_FALSE(try_read_write_buf(ptr1));
-+	ASSERT_FALSE(try_read_write_buf(&ptr1[9 * page_size]));
-+
-+	ASSERT_FALSE(try_read_write_buf(ptr2));
-+	ASSERT_FALSE(try_read_write_buf(&ptr2[4 * page_size]));
-+
-+	ASSERT_FALSE(try_read_write_buf(ptr3));
-+	ASSERT_FALSE(try_read_write_buf(&ptr3[19 * page_size]));
-+
-+	/* Now do the same with unguard... */
-+	count = process_madvise(pidfd, vec, 6, MADV_GUARD_REMOVE, 0);
-+
-+	/* ...and everything should now succeed. */
-+
-+	ASSERT_TRUE(try_read_write_buf(ptr1));
-+	ASSERT_TRUE(try_read_write_buf(&ptr1[9 * page_size]));
-+
-+	ASSERT_TRUE(try_read_write_buf(ptr2));
-+	ASSERT_TRUE(try_read_write_buf(&ptr2[4 * page_size]));
-+
-+	ASSERT_TRUE(try_read_write_buf(ptr3));
-+	ASSERT_TRUE(try_read_write_buf(&ptr3[19 * page_size]));
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(ptr1, 10 * page_size), 0);
-+	ASSERT_EQ(munmap(ptr2, 5 * page_size), 0);
-+	ASSERT_EQ(munmap(ptr3, 20 * page_size), 0);
-+	close(pidfd);
-+}
-+
-+/* Assert that unmapping ranges does not leave guard markers behind. */
-+TEST_F(guard_pages, munmap)
-+{
-+	const unsigned long page_size = self->page_size;
-+	char *ptr, *ptr_new1, *ptr_new2;
-+
-+	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/* Guard first and last pages. */
-+	ASSERT_EQ(madvise(ptr, page_size, MADV_GUARD_INSTALL), 0);
-+	ASSERT_EQ(madvise(&ptr[9 * page_size], page_size, MADV_GUARD_INSTALL), 0);
-+
-+	/* Assert that they are guarded. */
-+	ASSERT_FALSE(try_read_write_buf(ptr));
-+	ASSERT_FALSE(try_read_write_buf(&ptr[9 * page_size]));
-+
-+	/* Unmap them. */
-+	ASSERT_EQ(munmap(ptr, page_size), 0);
-+	ASSERT_EQ(munmap(&ptr[9 * page_size], page_size), 0);
-+
-+	/* Map over them.*/
-+	ptr_new1 = mmap(ptr, page_size, PROT_READ | PROT_WRITE,
-+			MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr_new1, MAP_FAILED);
-+	ptr_new2 = mmap(&ptr[9 * page_size], page_size, PROT_READ | PROT_WRITE,
-+			MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr_new2, MAP_FAILED);
-+
-+	/* Assert that they are now not guarded. */
-+	ASSERT_TRUE(try_read_write_buf(ptr_new1));
-+	ASSERT_TRUE(try_read_write_buf(ptr_new2));
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
-+}
-+
-+/* Assert that mprotect() operations have no bearing on guard markers. */
-+TEST_F(guard_pages, mprotect)
-+{
-+	const unsigned long page_size = self->page_size;
-+	char *ptr;
-+	int i;
-+
-+	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/* Guard the middle of the range. */
-+	ASSERT_EQ(madvise(&ptr[5 * page_size], 2 * page_size,
-+			  MADV_GUARD_INSTALL), 0);
-+
-+	/* Assert that it is indeed guarded. */
-+	ASSERT_FALSE(try_read_write_buf(&ptr[5 * page_size]));
-+	ASSERT_FALSE(try_read_write_buf(&ptr[6 * page_size]));
-+
-+	/* Now make these pages read-only. */
-+	ASSERT_EQ(mprotect(&ptr[5 * page_size], 2 * page_size, PROT_READ), 0);
-+
-+	/* Make sure the range is still guarded. */
-+	ASSERT_FALSE(try_read_buf(&ptr[5 * page_size]));
-+	ASSERT_FALSE(try_read_buf(&ptr[6 * page_size]));
-+
-+	/* Make sure we can guard again without issue.*/
-+	ASSERT_EQ(madvise(&ptr[5 * page_size], 2 * page_size,
-+			  MADV_GUARD_INSTALL), 0);
-+
-+	/* Make sure the range is, yet again, still guarded. */
-+	ASSERT_FALSE(try_read_buf(&ptr[5 * page_size]));
-+	ASSERT_FALSE(try_read_buf(&ptr[6 * page_size]));
-+
-+	/* Now unguard the whole range. */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_REMOVE), 0);
-+
-+	/* Make sure the whole range is readable. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_TRUE(try_read_buf(curr));
-+	}
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
-+}
-+
-+/* Split and merge VMAs and make sure guard pages still behave. */
-+TEST_F(guard_pages, split_merge)
-+{
-+	const unsigned long page_size = self->page_size;
-+	char *ptr, *ptr_new;
-+	int i;
-+
-+	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/* Guard the whole range. */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_INSTALL), 0);
-+
-+	/* Make sure the whole range is guarded. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+
-+	/* Now unmap some pages in the range so we split. */
-+	ASSERT_EQ(munmap(&ptr[2 * page_size], page_size), 0);
-+	ASSERT_EQ(munmap(&ptr[5 * page_size], page_size), 0);
-+	ASSERT_EQ(munmap(&ptr[8 * page_size], page_size), 0);
-+
-+	/* Make sure the remaining ranges are guarded post-split. */
-+	for (i = 0; i < 2; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+	for (i = 2; i < 5; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+	for (i = 6; i < 8; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+	for (i = 9; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+
-+	/* Now map them again - the unmap will have cleared the guards. */
-+	ptr_new = mmap(&ptr[2 * page_size], page_size, PROT_READ | PROT_WRITE,
-+		       MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr_new, MAP_FAILED);
-+	ptr_new = mmap(&ptr[5 * page_size], page_size, PROT_READ | PROT_WRITE,
-+		       MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr_new, MAP_FAILED);
-+	ptr_new = mmap(&ptr[8 * page_size], page_size, PROT_READ | PROT_WRITE,
-+		       MAP_FIXED | MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr_new, MAP_FAILED);
-+
-+	/* Now make sure guard pages are established. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+		bool result = try_read_write_buf(curr);
-+		bool expect_true = i == 2 || i == 5 || i == 8;
-+
-+		ASSERT_TRUE(expect_true ? result : !result);
-+	}
-+
-+	/* Now guard everything again. */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_INSTALL), 0);
-+
-+	/* Make sure the whole range is guarded. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+
-+	/* Now split the range into three. */
-+	ASSERT_EQ(mprotect(ptr, 3 * page_size, PROT_READ), 0);
-+	ASSERT_EQ(mprotect(&ptr[7 * page_size], 3 * page_size, PROT_READ), 0);
-+
-+	/* Make sure the whole range is guarded for read. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_FALSE(try_read_buf(curr));
-+	}
-+
-+	/* Now reset protection bits so we merge the whole thing. */
-+	ASSERT_EQ(mprotect(ptr, 3 * page_size, PROT_READ | PROT_WRITE), 0);
-+	ASSERT_EQ(mprotect(&ptr[7 * page_size], 3 * page_size,
-+			   PROT_READ | PROT_WRITE), 0);
-+
-+	/* Make sure the whole range is still guarded. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+
-+	/* Split range into 3 again... */
-+	ASSERT_EQ(mprotect(ptr, 3 * page_size, PROT_READ), 0);
-+	ASSERT_EQ(mprotect(&ptr[7 * page_size], 3 * page_size, PROT_READ), 0);
-+
-+	/* ...and unguard the whole range. */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_REMOVE), 0);
-+
-+	/* Make sure the whole range is remedied for read. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_TRUE(try_read_buf(curr));
-+	}
-+
-+	/* Merge them again. */
-+	ASSERT_EQ(mprotect(ptr, 3 * page_size, PROT_READ | PROT_WRITE), 0);
-+	ASSERT_EQ(mprotect(&ptr[7 * page_size], 3 * page_size,
-+			   PROT_READ | PROT_WRITE), 0);
-+
-+	/* Now ensure the merged range is remedied for read/write. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_TRUE(try_read_write_buf(curr));
-+	}
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
-+}
-+
-+/* Assert that MADV_DONTNEED does not remove guard markers. */
-+TEST_F(guard_pages, dontneed)
-+{
-+	const unsigned long page_size = self->page_size;
-+	char *ptr;
-+	int i;
-+
-+	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/* Back the whole range. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		*curr = 'y';
-+	}
-+
-+	/* Guard every other page. */
-+	for (i = 0; i < 10; i += 2) {
-+		char *curr = &ptr[i * page_size];
-+		int res = madvise(curr, page_size, MADV_GUARD_INSTALL);
-+
-+		ASSERT_EQ(res, 0);
-+	}
-+
-+	/* Indicate that we don't need any of the range. */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_DONTNEED), 0);
-+
-+	/* Check to ensure guard markers are still in place. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+		bool result = try_read_buf(curr);
-+
-+		if (i % 2 == 0) {
-+			ASSERT_FALSE(result);
-+		} else {
-+			ASSERT_TRUE(result);
-+			/* Make sure we really did get reset to zero page. */
-+			ASSERT_EQ(*curr, '\0');
-+		}
-+
-+		/* Now write... */
-+		result = try_write_buf(&ptr[i * page_size]);
-+
-+		/* ...and make sure same result. */
-+		ASSERT_TRUE(i % 2 != 0 ? result : !result);
-+	}
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
-+}
-+
-+/* Assert that mlock()'ed pages work correctly with guard markers. */
-+TEST_F(guard_pages, mlock)
-+{
-+	const unsigned long page_size = self->page_size;
-+	char *ptr;
-+	int i;
-+
-+	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/* Populate. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		*curr = 'y';
-+	}
-+
-+	/* Lock. */
-+	ASSERT_EQ(mlock(ptr, 10 * page_size), 0);
-+
-+	/* Now try to guard, should fail with EINVAL. */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_INSTALL), -1);
-+	ASSERT_EQ(errno, EINVAL);
-+
-+	/* OK unlock. */
-+	ASSERT_EQ(munlock(ptr, 10 * page_size), 0);
-+
-+	/* Guard first half of range, should now succeed. */
-+	ASSERT_EQ(madvise(ptr, 5 * page_size, MADV_GUARD_INSTALL), 0);
-+
-+	/* Make sure guard works. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+		bool result = try_read_write_buf(curr);
-+
-+		if (i < 5) {
-+			ASSERT_FALSE(result);
-+		} else {
-+			ASSERT_TRUE(result);
-+			ASSERT_EQ(*curr, 'x');
-+		}
-+	}
-+
-+	/*
-+	 * Now lock the latter part of the range. We can't lock the guard pages,
-+	 * as this would result in the pages being populated and the guarding
-+	 * would cause this to error out.
-+	 */
-+	ASSERT_EQ(mlock(&ptr[5 * page_size], 5 * page_size), 0);
-+
-+	/*
-+	 * Now remove guard pages, we permit mlock()'d ranges to have guard
-+	 * pages removed as it is a non-destructive operation.
-+	 */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_REMOVE), 0);
-+
-+	/* Now check that no guard pages remain. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_TRUE(try_read_write_buf(curr));
-+	}
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
-+}
-+
-+/*
-+ * Assert that moving, extending and shrinking memory via mremap() retains
-+ * guard markers where possible.
-+ *
-+ * - Moving a mapping alone should retain markers as they are.
-+ */
-+TEST_F(guard_pages, mremap_move)
-+{
-+	const unsigned long page_size = self->page_size;
-+	char *ptr, *ptr_new;
-+
-+	/* Map 5 pages. */
-+	ptr = mmap(NULL, 5 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/* Place guard markers at both ends of the 5 page span. */
-+	ASSERT_EQ(madvise(ptr, page_size, MADV_GUARD_INSTALL), 0);
-+	ASSERT_EQ(madvise(&ptr[4 * page_size], page_size, MADV_GUARD_INSTALL), 0);
-+
-+	/* Make sure the guard pages are in effect. */
-+	ASSERT_FALSE(try_read_write_buf(ptr));
-+	ASSERT_FALSE(try_read_write_buf(&ptr[4 * page_size]));
-+
-+	/* Map a new region we will move this range into. Doing this ensures
-+	 * that we have reserved a range to map into.
-+	 */
-+	ptr_new = mmap(NULL, 5 * page_size, PROT_NONE, MAP_ANON | MAP_PRIVATE,
-+		       -1, 0);
-+	ASSERT_NE(ptr_new, MAP_FAILED);
-+
-+	ASSERT_EQ(mremap(ptr, 5 * page_size, 5 * page_size,
-+			 MREMAP_MAYMOVE | MREMAP_FIXED, ptr_new), ptr_new);
-+
-+	/* Make sure the guard markers are retained. */
-+	ASSERT_FALSE(try_read_write_buf(ptr_new));
-+	ASSERT_FALSE(try_read_write_buf(&ptr_new[4 * page_size]));
-+
-+	/*
-+	 * Clean up - we only need reference the new pointer as we overwrote the
-+	 * PROT_NONE range and moved the existing one.
-+	 */
-+	munmap(ptr_new, 5 * page_size);
-+}
-+
-+/*
-+ * Assert that moving, extending and shrinking memory via mremap() retains
-+ * guard markers where possible.
-+ *
-+ * Expanding should retain guard pages, only now in different position. The user
-+ * will have to remove guard pages manually to fix up (they'd have to do the
-+ * same if it were a PROT_NONE mapping).
-+ */
-+TEST_F(guard_pages, mremap_expand)
-+{
-+	const unsigned long page_size = self->page_size;
-+	char *ptr, *ptr_new;
-+
-+	/* Map 10 pages... */
-+	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+	/* ...But unmap the last 5 so we can ensure we can expand into them. */
-+	ASSERT_EQ(munmap(&ptr[5 * page_size], 5 * page_size), 0);
-+
-+	/* Place guard markers at both ends of the 5 page span. */
-+	ASSERT_EQ(madvise(ptr, page_size, MADV_GUARD_INSTALL), 0);
-+	ASSERT_EQ(madvise(&ptr[4 * page_size], page_size, MADV_GUARD_INSTALL), 0);
-+
-+	/* Make sure the guarding is in effect. */
-+	ASSERT_FALSE(try_read_write_buf(ptr));
-+	ASSERT_FALSE(try_read_write_buf(&ptr[4 * page_size]));
-+
-+	/* Now expand to 10 pages. */
-+	ptr = mremap(ptr, 5 * page_size, 10 * page_size, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/*
-+	 * Make sure the guard markers are retained in their original positions.
-+	 */
-+	ASSERT_FALSE(try_read_write_buf(ptr));
-+	ASSERT_FALSE(try_read_write_buf(&ptr[4 * page_size]));
-+
-+	/* Reserve a region which we can move to and expand into. */
-+	ptr_new = mmap(NULL, 20 * page_size, PROT_NONE,
-+		       MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr_new, MAP_FAILED);
-+
-+	/* Now move and expand into it. */
-+	ptr = mremap(ptr, 10 * page_size, 20 * page_size,
-+		     MREMAP_MAYMOVE | MREMAP_FIXED, ptr_new);
-+	ASSERT_EQ(ptr, ptr_new);
-+
-+	/*
-+	 * Again, make sure the guard markers are retained in their original positions.
-+	 */
-+	ASSERT_FALSE(try_read_write_buf(ptr));
-+	ASSERT_FALSE(try_read_write_buf(&ptr[4 * page_size]));
-+
-+	/*
-+	 * A real user would have to remove guard markers, but would reasonably
-+	 * expect all characteristics of the mapping to be retained, including
-+	 * guard markers.
-+	 */
-+
-+	/* Cleanup. */
-+	munmap(ptr, 20 * page_size);
-+}
-+/*
-+ * Assert that moving, extending and shrinking memory via mremap() retains
-+ * guard markers where possible.
-+ *
-+ * Shrinking will result in markers that are shrunk over being removed. Again,
-+ * if the user were using a PROT_NONE mapping they'd have to manually fix this
-+ * up also so this is OK.
-+ */
-+TEST_F(guard_pages, mremap_shrink)
-+{
-+	const unsigned long page_size = self->page_size;
-+	char *ptr;
-+	int i;
-+
-+	/* Map 5 pages. */
-+	ptr = mmap(NULL, 5 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/* Place guard markers at both ends of the 5 page span. */
-+	ASSERT_EQ(madvise(ptr, page_size, MADV_GUARD_INSTALL), 0);
-+	ASSERT_EQ(madvise(&ptr[4 * page_size], page_size, MADV_GUARD_INSTALL), 0);
-+
-+	/* Make sure the guarding is in effect. */
-+	ASSERT_FALSE(try_read_write_buf(ptr));
-+	ASSERT_FALSE(try_read_write_buf(&ptr[4 * page_size]));
-+
-+	/* Now shrink to 3 pages. */
-+	ptr = mremap(ptr, 5 * page_size, 3 * page_size, MREMAP_MAYMOVE);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/* We expect the guard marker at the start to be retained... */
-+	ASSERT_FALSE(try_read_write_buf(ptr));
-+
-+	/* ...But remaining pages will not have guard markers. */
-+	for (i = 1; i < 3; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_TRUE(try_read_write_buf(curr));
-+	}
-+
-+	/*
-+	 * As with expansion, a real user would have to remove guard pages and
-+	 * fixup. But you'd have to do similar manual things with PROT_NONE
-+	 * mappings too.
-+	 */
-+
-+	/*
-+	 * If we expand back to the original size, the end marker will, of
-+	 * course, no longer be present.
-+	 */
-+	ptr = mremap(ptr, 3 * page_size, 5 * page_size, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/* Again, we expect the guard marker at the start to be retained... */
-+	ASSERT_FALSE(try_read_write_buf(ptr));
-+
-+	/* ...But remaining pages will not have guard markers. */
-+	for (i = 1; i < 5; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_TRUE(try_read_write_buf(curr));
-+	}
-+
-+	/* Cleanup. */
-+	munmap(ptr, 5 * page_size);
-+}
-+
-+/*
-+ * Assert that forking a process with VMAs that do not have VM_WIPEONFORK set
-+ * retain guard pages.
-+ */
-+TEST_F(guard_pages, fork)
-+{
-+	const unsigned long page_size = self->page_size;
-+	char *ptr;
-+	pid_t pid;
-+	int i;
-+
-+	/* Map 10 pages. */
-+	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/* Establish guard apges in the first 5 pages. */
-+	ASSERT_EQ(madvise(ptr, 5 * page_size, MADV_GUARD_INSTALL), 0);
-+
-+	pid = fork();
-+	ASSERT_NE(pid, -1);
-+	if (!pid) {
-+		/* This is the child process now. */
-+
-+		/* Assert that the guarding is in effect. */
-+		for (i = 0; i < 10; i++) {
-+			char *curr = &ptr[i * page_size];
-+			bool result = try_read_write_buf(curr);
-+
-+			ASSERT_TRUE(i >= 5 ? result : !result);
-+		}
-+
-+		/* Now unguard the range.*/
-+		ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_REMOVE), 0);
-+
-+		exit(0);
-+	}
-+
-+	/* Parent process. */
-+
-+	/* Parent simply waits on child. */
-+	waitpid(pid, NULL, 0);
-+
-+	/* Child unguard does not impact parent page table state. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+		bool result = try_read_write_buf(curr);
-+
-+		ASSERT_TRUE(i >= 5 ? result : !result);
-+	}
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
-+}
-+
-+/*
-+ * Assert that forking a process with VMAs that do have VM_WIPEONFORK set
-+ * behave as expected.
-+ */
-+TEST_F(guard_pages, fork_wipeonfork)
-+{
-+	const unsigned long page_size = self->page_size;
-+	char *ptr;
-+	pid_t pid;
-+	int i;
-+
-+	/* Map 10 pages. */
-+	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/* Mark wipe on fork. */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_WIPEONFORK), 0);
-+
-+	/* Guard the first 5 pages. */
-+	ASSERT_EQ(madvise(ptr, 5 * page_size, MADV_GUARD_INSTALL), 0);
-+
-+	pid = fork();
-+	ASSERT_NE(pid, -1);
-+	if (!pid) {
-+		/* This is the child process now. */
-+
-+		/* Guard will have been wiped. */
-+		for (i = 0; i < 10; i++) {
-+			char *curr = &ptr[i * page_size];
-+
-+			ASSERT_TRUE(try_read_write_buf(curr));
-+		}
-+
-+		exit(0);
-+	}
-+
-+	/* Parent process. */
-+
-+	waitpid(pid, NULL, 0);
-+
-+	/* Guard markers should be in effect.*/
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+		bool result = try_read_write_buf(curr);
-+
-+		ASSERT_TRUE(i >= 5 ? result : !result);
-+	}
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
-+}
-+
-+/* Ensure that MADV_FREE retains guard entries as expected. */
-+TEST_F(guard_pages, lazyfree)
-+{
-+	const unsigned long page_size = self->page_size;
-+	char *ptr;
-+	int i;
-+
-+	/* Map 10 pages. */
-+	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/* Guard range. */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_INSTALL), 0);
-+
-+	/* Ensure guarded. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+
-+	/* Lazyfree range. */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_FREE), 0);
-+
-+	/* This should leave the guard markers in place. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
-+}
-+
-+/* Ensure that MADV_POPULATE_READ, MADV_POPULATE_WRITE behave as expected. */
-+TEST_F(guard_pages, populate)
-+{
-+	const unsigned long page_size = self->page_size;
-+	char *ptr;
-+
-+	/* Map 10 pages. */
-+	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/* Guard range. */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_INSTALL), 0);
-+
-+	/* Populate read should error out... */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_POPULATE_READ), -1);
-+	ASSERT_EQ(errno, EFAULT);
-+
-+	/* ...as should populate write. */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_POPULATE_WRITE), -1);
-+	ASSERT_EQ(errno, EFAULT);
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
-+}
-+
-+/* Ensure that MADV_COLD, MADV_PAGEOUT do not remove guard markers. */
-+TEST_F(guard_pages, cold_pageout)
-+{
-+	const unsigned long page_size = self->page_size;
-+	char *ptr;
-+	int i;
-+
-+	/* Map 10 pages. */
-+	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/* Guard range. */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_INSTALL), 0);
-+
-+	/* Ensured guarded. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+
-+	/* Now mark cold. This should have no impact on guard markers. */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_COLD), 0);
-+
-+	/* Should remain guarded. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+
-+	/* OK, now page out. This should equally, have no effect on markers. */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_PAGEOUT), 0);
-+
-+	/* Should remain guarded. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
-+}
-+
-+/* Ensure that guard pages do not break userfaultd. */
-+TEST_F(guard_pages, uffd)
-+{
-+	const unsigned long page_size = self->page_size;
-+	int uffd;
-+	char *ptr;
-+	int i;
-+	struct uffdio_api api = {
-+		.api = UFFD_API,
-+		.features = 0,
-+	};
-+	struct uffdio_register reg;
-+	struct uffdio_range range;
-+
-+	/* Set up uffd. */
-+	uffd = userfaultfd(0);
-+	if (uffd == -1 && errno == EPERM)
-+		ksft_exit_skip("No userfaultfd permissions, try running as root.\n");
-+	ASSERT_NE(uffd, -1);
-+
-+	ASSERT_EQ(ioctl(uffd, UFFDIO_API, &api), 0);
-+
-+	/* Map 10 pages. */
-+	ptr = mmap(NULL, 10 * page_size, PROT_READ | PROT_WRITE,
-+		   MAP_ANON | MAP_PRIVATE, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	/* Register the range with uffd. */
-+	range.start = (unsigned long)ptr;
-+	range.len = 10 * page_size;
-+	reg.range = range;
-+	reg.mode = UFFDIO_REGISTER_MODE_MISSING;
-+	ASSERT_EQ(ioctl(uffd, UFFDIO_REGISTER, &reg), 0);
-+
-+	/* Guard the range. This should not trigger the uffd. */
-+	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_GUARD_INSTALL), 0);
-+
-+	/* The guarding should behave as usual with no uffd intervention. */
-+	for (i = 0; i < 10; i++) {
-+		char *curr = &ptr[i * page_size];
-+
-+		ASSERT_FALSE(try_read_write_buf(curr));
-+	}
-+
-+	/* Cleanup. */
-+	ASSERT_EQ(ioctl(uffd, UFFDIO_UNREGISTER, &range), 0);
-+	close(uffd);
-+	ASSERT_EQ(munmap(ptr, 10 * page_size), 0);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.47.0
-
+Jason
 
