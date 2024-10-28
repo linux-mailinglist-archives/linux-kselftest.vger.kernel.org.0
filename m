@@ -1,203 +1,238 @@
-Return-Path: <linux-kselftest+bounces-20856-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20861-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 340A69B3D60
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 23:02:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D74A59B3DA8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 23:22:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABDCF1F219DE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 22:02:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 673E3280614
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2024 22:22:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C59320400B;
-	Mon, 28 Oct 2024 21:54:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20B061EBA14;
+	Mon, 28 Oct 2024 22:22:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="mJX3zQBG"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="U3poT4r2";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="wsfbg/G1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20A0C2038DE;
-	Mon, 28 Oct 2024 21:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730152495; cv=none; b=uIDlH+0kk5FKzj0Ci9qdywD6aWH+VmYvlo2vvDNGCsX6DiZV3v8IxbHcEGU+0ziKjYx6lyZ5sKSa5ec2gJgMNo7jy4WC6gCn/2ufjD2bjxkjmKhb5EILExzzm7wr4DwfdhHu8vGuJIHDEa4p4XZ1oZ+8Q48TmFQoIY3FUQdMJQI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730152495; c=relaxed/simple;
-	bh=iKoO5F5vZf5IP84eXhvSQeuy1fLwS0yU4UnnlVf1K/E=;
-	h=Subject:From:To:Cc:Date:Message-ID:MIME-Version:Content-Type; b=N09Vdh5A6uyR15hziTz5qpeoNRaEzvX76xk1SOn5OIG+ZYfaVin1EfPcY1hiwyxMxvZFV1ylRTdNBIkNuqFdJWAfDlR+nzEcf5j6PGRsxqCXRb7pkO1Pzg02mjd8+PXpxqZJEl/KMShLQJt13DrxbXaQGtWA1TahQ2SRtVJJDkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=mJX3zQBG; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from skinsburskii-cloud-desktop.internal.cloudapp.net (unknown [40.64.70.95])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 80036211F5FE;
-	Mon, 28 Oct 2024 14:54:52 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 80036211F5FE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1730152492;
-	bh=zc+ZWSTdJbJ1KMumAS3CGewM5edd8U/JCF3ameY+J4c=;
-	h=Subject:From:To:Cc:Date:From;
-	b=mJX3zQBG7BkAQVyVhFykb779YdpEz0fuOOZJmK7735VYB97yn52cyVnoUKP9HKLpB
-	 yNriw7p6iNm2HGlrxa2k9QZP5OzQN2v1SUeazaItS2a4XGfOYNnv/eP70Nf5491IcM
-	 40heyq0HLc6PPXAJYXy0aOhplk3E0+TAJssJcRTU=
-Subject: [PATCH v2] kunit: Introduce autorun option
-From: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-To: brendan.higgins@linux.dev, davidgow@google.com
-Cc: rmoar@google.com, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Date: Mon, 28 Oct 2024 21:54:52 +0000
-Message-ID: 
- <173015245931.4747.16419517391658830640.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-User-Agent: StGit/0.19
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD24A2E414;
+	Mon, 28 Oct 2024 22:22:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730154164; cv=fail; b=Uujrvxl2Qocs3eZVMZTIKtei46wSHFcBKV+7Wsc0U42WDQkHd4S/6MS3pEANKVCHkDS/36CBKdVau8gWR6WseCEBw0MmGkL2k8tgRCLUi3Zu8vT3spmZVbfHI2z7DgkzIHIVI3Xjz+JAOxTNTcmCx+8kzTEAMyTp11kfbSpCrXA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730154164; c=relaxed/simple;
+	bh=Wk6bq8JkGB7GPfXtvt57DYu76nZLtpeo37nvOiFQ7WE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=VwSYPl4LDoqV0FUQOT0zaqpZ8lcqPs29Ai7lVdEyXvp5KaFdmRroXTuMGBKvPpGAViCipc7hsXxBNpHSjm02Sa9Yfo83NI0FsXlHhqU+3eisynvmIrMkAIL17y0EvAjg46MMq8TSEtzWyPnXVzY5XWbPajPugRPGiTOb/ww0V6k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=U3poT4r2; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=wsfbg/G1; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49SKtaqR024333;
+	Mon, 28 Oct 2024 22:22:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=cBF5TGeKKuIIS1jRZw
+	xQv8r99f4XGNrlTUQb8CpUUtI=; b=U3poT4r2aWze1UhpctdQUUkF0StRWjoupf
+	yH/NH0mtaMFYYvumjiVn715QNeLB2C3MXGOutUQxuK1VCCrryqNOd6gvvEObjntq
+	wXBalY92wxKBeuk/fEhw/QlPp9qgLcR9Yi65zxXUoeJlgSsrMRla+bQo7leHEPwZ
+	CiSksHVu1G852wSJZpdUSbSZKDZXj01o1wWdqJYu/SO9nEK/1DEAn09878LNkXj2
+	9+tJVoV+2Mj+vWMLDDuvF7SVurIgjf2mkcv1pbplPsALBNVCTDgQWgzv/aop7JRW
+	iQiTDJZkAmKJGzvzRztQ1rPQDrpExfEBW89HL2R9wNmv7fWjm4Ag==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42grdqc21x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 28 Oct 2024 22:22:12 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49SKiTDu040616;
+	Mon, 28 Oct 2024 22:22:11 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2047.outbound.protection.outlook.com [104.47.73.47])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42hnan5jem-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 28 Oct 2024 22:22:11 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YY+Sw4mU8pNDINDUwyGMCW12QVRLAJVf8goo3f9Blsq22MKJzAFz1sKOUuKT+GIG3hKx3Um7nNsCdHEion5nGlKgDPFMfWxa1hDZ2G8oorZaOu63iEdKYHgUsbrZl0NqcZgJ7PXPgzYGOoNIoqPW1fSriE4N2umspaSGXvajoOckCjBG3d6Nithn2/m1BC9ySkFq3Bqo3ITPJ+GYcDQguS6TfRf63Mdi6dTfXSt1z2D8Y6vxJRQ3w9LjbEY+JSgM0xkWczN6oevsOusYVwsz/JtwmVFN66VVmFXYVRXwuZUMsOcpYQm5wm1rY2iW3JO0MDYp1RN7zKC5itJpo0TBow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cBF5TGeKKuIIS1jRZwxQv8r99f4XGNrlTUQb8CpUUtI=;
+ b=Ny4HWDzJgzEW1zz4a2xFjZZp3g8BooUrndUOqOj54o1O/NCw/08IkM1RVcBh9nMDaPNkpY1Tq9UeOr6krPIKewr/US52irIQqcdCH3tczhw92X8zdJgkbxxXxVVT6ak1Bk4b9rq1u4RGWl83NfLxmejXYkyNZQdZnGgKAwYo1YzvMTCvJ25cpskAmOkhR8NspoYSr9jXyKCAFpCg/xoT1bE+McocXnyGOOzwEuUzBNoR6eykxNoGvC6aQ8pAu9S/bVySOl2G+yRLk0i5hGofRmA8xbuSNB9+68ouQob79DUGf8jY9QF7DaV3i3zGs2VzLOnmffRTm77IzPv9k6n8wQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cBF5TGeKKuIIS1jRZwxQv8r99f4XGNrlTUQb8CpUUtI=;
+ b=wsfbg/G1r2dxJg4L5KMDzWBmmp0i0ZRiEn5ym8OfyojgBDGFpvE+n3ObCI+FTo4I+G8lALHvYPz88lssiRJ2kvffUfCRCCm1hycKLo8Q9jfb77PQ4C5e/fNq/vpo2a3EpyXQbUzhB5nwRcji15N+dDgMlckK3nGcOYsWeewn7DM=
+Received: from BYAPR10MB3366.namprd10.prod.outlook.com (2603:10b6:a03:14f::25)
+ by DS0PR10MB7270.namprd10.prod.outlook.com (2603:10b6:8:f4::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.27; Mon, 28 Oct
+ 2024 22:22:07 +0000
+Received: from BYAPR10MB3366.namprd10.prod.outlook.com
+ ([fe80::baf2:dff1:d471:1c9]) by BYAPR10MB3366.namprd10.prod.outlook.com
+ ([fe80::baf2:dff1:d471:1c9%6]) with mapi id 15.20.8093.024; Mon, 28 Oct 2024
+ 22:22:07 +0000
+Date: Mon, 28 Oct 2024 22:22:05 +0000
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: SeongJae Park <sj@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>,
+        "Paul E . McKenney" <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
+        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Muchun Song <muchun.song@linux.dev>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@kernel.org>,
+        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Jeff Xu <jeffxu@chromium.org>, Christoph Hellwig <hch@infradead.org>,
+        linux-api@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v4 0/5] implement lightweight guard pages
+Message-ID: <114723fd-131c-44f4-be0a-3387dcc540f1@lucifer.local>
+References: <cover.1730123433.git.lorenzo.stoakes@oracle.com>
+ <20241028182413.277218-1-sj@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241028182413.277218-1-sj@kernel.org>
+X-ClientProxiedBy: LO4P302CA0019.GBRP302.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c1::11) To BYAPR10MB3366.namprd10.prod.outlook.com
+ (2603:10b6:a03:14f::25)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR10MB3366:EE_|DS0PR10MB7270:EE_
+X-MS-Office365-Filtering-Correlation-Id: aea4ad01-f248-4ddb-a8da-08dcf79ef595
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?A9vH3nX3/bbvGaCoeSnzuqITf0nnNNX92hxaiSBhuXbCVvpBFogtIYtYkInO?=
+ =?us-ascii?Q?V97ENUTW/tg7F3c41WG5FQZJqC3gCCBvFdsBZUOu9qiMpAcsPWon+6tyVRTB?=
+ =?us-ascii?Q?pXPsbtLSoh6mpl9nwFurVoR7jGjwUWqpOq9qoLGgJbbxpn9Dg9pLuJcOVaD7?=
+ =?us-ascii?Q?epmXICBeni4Bf4JMAd3kuiU8f/Dm0C0l4ft5iEzmUWFKOT6DGj7ab8U/goVu?=
+ =?us-ascii?Q?zYH+3sueAWmCiIwBKTyOY+vLwfwK+CrZ8QawbCkTrI6bYB5/TShyQUxcITeh?=
+ =?us-ascii?Q?3t7LGEhk2kQ99Q3+s3rOybww34/w8ppPEKpQw9WOH5COaqt+TkuyKIbjNDT8?=
+ =?us-ascii?Q?x1XQfnoiaa0bcmdbkueVM/nK2H3A88zMP4Y3JglOa6iOPUVRjtSCx3dR9SKa?=
+ =?us-ascii?Q?bCTsgJxnmzwZj63F5tUXwM7a3wjsUYX9rJPcEtozjVsDLHw29ch9G+ONQOeP?=
+ =?us-ascii?Q?OG/FhB1X+yt3zD/6aelObVg+5+0RsVW2soykT7NWiCk535zmXV/Cq/qPVIls?=
+ =?us-ascii?Q?5kXp3ev6WvWYquJFpxAwEFVUOXNldg7VWjSXpgNAWp3E4EzHA999Y25RGqsr?=
+ =?us-ascii?Q?4HoaWOEoL1IRT+CGyTwdBRI8xPNWXg1OmlC7MSIgHnlVwFbDdF2xBUytHCoa?=
+ =?us-ascii?Q?Z5srjCtkgadi2KS1RqCp+oQngvikbsO0XuqgjqrSyvZldqyt1CDg1dAp6NGT?=
+ =?us-ascii?Q?Dx9Ei7yYphwCN/06fR9eYOPmghKohz++39/OT4ogD2QZG+0sBuKyH5x3CS2j?=
+ =?us-ascii?Q?FqcQWyHVOzp2TGE5m8ylqjT3jbp+4ityGBrouol8ppyGtOtVOJDThocp+1+5?=
+ =?us-ascii?Q?bZV1IkRuyWdcG4j0a1YTL9hAGxzDIeKiN9h+m+KcGaeoKqFYXl5u+oPEgpEs?=
+ =?us-ascii?Q?ZWNj2PSAl4x11X6+gLeEVROq1f39DB3upkx20OBZwmihGJxE6/LeQctLCHUP?=
+ =?us-ascii?Q?pwtYVbktV6u+3muNd4hCvDoKRJGAL83yBYooKkSMkG9fNB2Mxv/3n4y/7wrn?=
+ =?us-ascii?Q?wo1arY6mtgU+XEvmwElcHCSToFjcR90vYm/MgiPadIbU/fWoQsT2SA4SsegJ?=
+ =?us-ascii?Q?8mLxmQ/xYntmDHrc1nsmfzVo+Me07MtneZF6M691LLk0S2VPAb+/ApAJQMvR?=
+ =?us-ascii?Q?g10QBE9f5WR2/jhuAckzsE00Z3gFw+5wsDA+cAgbSNybAK3NAJz5Qirp7cKD?=
+ =?us-ascii?Q?/ubaB2Jf/f/6h6oZXlCICNbSlmpD2B0RUyQEhoxCyVvEYhlUWw0th5ccA6dD?=
+ =?us-ascii?Q?nW/w42MzrEh0XvKURmZMIWLzQ+baUqFqS1mCiXYIwJLToJqATXNRT2wMy6ci?=
+ =?us-ascii?Q?bN46zf2zSIIfGs2mGtI8AT6M?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3366.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?taKQBo27OaPYq8HZcSb3wWLjGavIbNj/3SJq+MHYssb64dCyY2tOGBSMbXt6?=
+ =?us-ascii?Q?VEv4vGWxeTLD3HdyPlxLg4xwhupWQGUJi+Qq8CdYFbJHPM32T+WzrrMO8/Y8?=
+ =?us-ascii?Q?G/TPOUswOtR7zL8QF6RitrTPuykMJ3lvv26aT9W4lrKxNFsrWmJjI4wNlgDn?=
+ =?us-ascii?Q?qq974OmyyOKP6XrPPimAANtuwAh1GEWnNbF8dfTlH9TTgIda98zf2la0S6Z3?=
+ =?us-ascii?Q?2zy+HpVBF+405ob10BGIzByZxSgBAdqawEJGr543TT+lUxqanEHG7TX+jC8H?=
+ =?us-ascii?Q?ZitYkzyyUzkF8N4HWUNWytYIIcd+uzYMhIS9bH4rBEcBmNbyufeFevdDsH2Z?=
+ =?us-ascii?Q?sMo8G5auzBQKR94lqcfodQjwjNx0YtvU5MHsqhIZ1gJR9haMCpARglVUJzp2?=
+ =?us-ascii?Q?485k9ZuLg1veT40HjCbU3TgQRDahUKEpXH9coxrxra36C2A52KMHp2+Hlqav?=
+ =?us-ascii?Q?vXwLBvjKNbjZtYWbF8HNW6MJC5H3Yu07XoZC9cbsIxLIXHJEEaVwX6jPPXW9?=
+ =?us-ascii?Q?mh3NfmD3QkYLvCx5RX5k1biWJc5E6ZukT3OMkJ5uOnQjcFz6BASqwYBY9zUI?=
+ =?us-ascii?Q?bVNCvKVEwWwu1MGS4btOXd2Po9yiazOUUo7CaRfZ6MyE8D6YfcudBQOt221P?=
+ =?us-ascii?Q?Qz9wIDUdwGsgHbczGZiXxIHq4UeCqVOAVsDzEf/DC1LT7/q9n+2CLRgL8MZg?=
+ =?us-ascii?Q?IHLc7Y29uGTSxeNF4dpU5wWl7Cp7ZIUkHAzWkzAhCpUJqZ1y3pIEWDy2tnpC?=
+ =?us-ascii?Q?QHLQxb6GsT24HOCN0DLk3BdrFp9mIx3ItIlIB5PkNVpTJdRoP9dIp4vyREfY?=
+ =?us-ascii?Q?6KstpQE3hZAy8hQlXuBFYCLEzev1rOgflZlzWfYqR6TmXbqZ3n3SV59gYJfT?=
+ =?us-ascii?Q?+mxCZ8yKOnviaB4XX3dhS2R9nwXh4agP6vdn3bYzpNk+lC+C50O08q9Pv+Ha?=
+ =?us-ascii?Q?04mu310lpDLHPT9WOW1psttBRPc66D+Ah3pArWDT0sqmz+uBZXBXtFlXiOjm?=
+ =?us-ascii?Q?8VDG9ydLtDwIb/pAK6MAS2L3OwqSBltjXih96kF3Pav3/1wiBwIER6tDANf2?=
+ =?us-ascii?Q?Rw3/g7PBTe+PIu9c7ZMDsgs6q4zfFVmEUhfva4BM/Io4f0TNKBCyqU+/oV52?=
+ =?us-ascii?Q?0ABoswUFkZ2gYGyZ8ylwYLboylO2xrEg0nSdboUlyEHjhbN5wH7hbp5KJEz/?=
+ =?us-ascii?Q?CyxHDQuucAwnhHWc2gv4gl0x6eDzpSnlJY1lY24IFI7/5WqKNcAQD82f7IDP?=
+ =?us-ascii?Q?OSoafZcAggDL3/ncztoezAVoJViEFAmH1qos65c+2tkYhwCWFwKrwq8XbvEt?=
+ =?us-ascii?Q?x0BOpbijUdkTdoaHn8T5dVh92+3TpuMdi+LFWEZkV2itEE0yuMc65XKiw8EQ?=
+ =?us-ascii?Q?RqQU4U1X4Qg/y2a68wnkDDVfQSDD5GzLLtH2sBBY1M3GMWGjYLbk+u+GehB7?=
+ =?us-ascii?Q?UWAkxbhxcjK87YBx+CX2bkwPfUUsbnMFTifrkLgg3mdqI3hNBnp4yCDjI2cu?=
+ =?us-ascii?Q?UY1RG9WNv3zS0KpbRxQJYdhwJ1k8NnAjnrNbBJUyqgTkqhK6B5tfRY/mGmLn?=
+ =?us-ascii?Q?AUeq6X5SoiSa2gSacm6AWsj1Qh4dLqFYQERIqGWaHAWl9ctS+TmD8WlTTpob?=
+ =?us-ascii?Q?kw=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	RHAe5JaV3URBIL9Xe6IvuOvfN5TrHXYVKMYpHn9EewcRNtYauOEd7mUBaI5eDE+nmyLtVlnywpx5yj8W0wy+Ipk0S2NPmLjKpaR1C56lqkSBzbDJMw6R/mj5EpsJgcH3UeT0OTt4eTrmasv1z8+FjPRXkeOH8IWA5Wqwd5R28C0+l95Nz47XYqSwKqDxSuDPpQhvfCisWGVgcQKYtoatpNmFMuyO8DDGN+1WsQ7dYQSX/44OIpkJ+0YlPNxJUuto3TV2RXS0+wBEZgYukJtS8CUuqQvSxGKo6vpGzxycVmHm+pD2WCpCWyBQDRzJNiGvJ+8QiAUkXHt1KG/IIG8AM05PJLDLKLMKgepWQYcuu3sIoEVHqshyY3iHIxHtr7lnkmPI2MNu0cL6+3e5qKQdSKAMiRSM5DXLr9jnBi2ht4N02fn1nkSe7kEmOS9p30kS6dk6dyv+uNuoI+RK2pEyKZHsfNQOPKFfTzE5fjtXYxNr8V2vCFkB3XOebFaiG6D2/CiG2Jvr9KFmWHcpkLwwDiQHUdTbvrw/LHssB4ZjixcbuCjIjUWGLyIH9yyNaQGkfF1ABu7qz8AaCozH5v+rbt2mTJQ4No3LXoNLsOsrLgs=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aea4ad01-f248-4ddb-a8da-08dcf79ef595
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3366.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2024 22:22:07.8200
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: d25rup79holdA9h7gdQpRJD2lNqA2ERRYtllMwBXv+yZdwHFqZ/7OecNuzEY29ec6V4D9KZflnke3ylGl9/LyV13PBHUo2ra59Mpt7sakTE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB7270
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-28_10,2024-10-28_02,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 adultscore=0
+ mlxlogscore=610 phishscore=0 bulkscore=0 malwarescore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
+ definitions=main-2410280174
+X-Proofpoint-GUID: VJcjYJQQH_3H8YKHfhpGR1PfrdkQnIzf
+X-Proofpoint-ORIG-GUID: VJcjYJQQH_3H8YKHfhpGR1PfrdkQnIzf
 
-The new option controls tests run on boot or module load. With the new
-debugfs "run" dentry allowing to run tests on demand, an ability to disable
-automatic tests run becomes a useful option in case of intrusive tests.
+On Mon, Oct 28, 2024 at 11:24:13AM -0700, SeongJae Park wrote:
+> On Mon, 28 Oct 2024 14:13:26 +0000 Lorenzo Stoakes <lorenzo.stoakes@oracle.com> wrote:
+>
+> > Userland library functions such as allocators and threading implementations
+> > often require regions of memory to act as 'guard pages' - mappings which,
+> > when accessed, result in a fatal signal being sent to the accessing
+> > process.
+> >
+> > The current means by which these are implemented is via a PROT_NONE mmap()
+> > mapping, which provides the required semantics however incur an overhead of
+> > a VMA for each such region.
+> >
+> > With a great many processes and threads, this can rapidly add up and incur
+> > a significant memory penalty. It also has the added problem of preventing
+> > merges that might otherwise be permitted.
+> >
+> > This series takes a different approach - an idea suggested by Vlasimil
+> > Babka (and before him David Hildenbrand and Jann Horn - perhaps more - the
+>
+> Nit.  s/Vlasimil/Vlastimil/ ;)
 
-The option is set to true by default to preserve the existent behavior. It
-can be overridden by either the corresponding module option or by the
-corresponding config build option.
+Ugh oops sorry Vlastimil! This was a silly typo... Andrew would you mind fixing
+this up? I'll edit my local file for this so if I respin this will be corrected.
 
-Signed-off-by: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
----
- include/kunit/test.h |    4 +++-
- lib/kunit/Kconfig    |   12 ++++++++++++
- lib/kunit/debugfs.c  |    2 +-
- lib/kunit/executor.c |   21 +++++++++++++++++++--
- lib/kunit/test.c     |    6 ++++--
- 5 files changed, 39 insertions(+), 6 deletions(-)
+Thanks!
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 34b71e42fb10..58dbab60f853 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -312,6 +312,7 @@ static inline void kunit_set_failure(struct kunit *test)
- }
- 
- bool kunit_enabled(void);
-+bool kunit_autorun(void);
- const char *kunit_action(void);
- const char *kunit_filter_glob(void);
- char *kunit_filter(void);
-@@ -334,7 +335,8 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
- 		    int *err);
- void kunit_free_suite_set(struct kunit_suite_set suite_set);
- 
--int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites);
-+int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites,
-+			     bool run_tests);
- 
- void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suites);
- 
-diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-index 34d7242d526d..a97897edd964 100644
---- a/lib/kunit/Kconfig
-+++ b/lib/kunit/Kconfig
-@@ -81,4 +81,16 @@ config KUNIT_DEFAULT_ENABLED
- 	  In most cases this should be left as Y. Only if additional opt-in
- 	  behavior is needed should this be set to N.
- 
-+config KUNIT_AUTORUN_ENABLED
-+	bool "Default value of kunit.autorun"
-+	default y
-+	help
-+	  Sets the default value of kunit.autorun. If set to N then KUnit
-+	  tests will not run after initialization unless kunit.autorun=1 is
-+	  passed to the kernel command line. The test can still be run manually
-+	  via debugfs interface.
-+
-+	  In most cases this should be left as Y. Only if additional opt-in
-+	  behavior is needed should this be set to N.
-+
- endif # KUNIT
-diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-index d548750a325a..9df064f40d98 100644
---- a/lib/kunit/debugfs.c
-+++ b/lib/kunit/debugfs.c
-@@ -145,7 +145,7 @@ static ssize_t debugfs_run(struct file *file,
- 	struct inode *f_inode = file->f_inode;
- 	struct kunit_suite *suite = (struct kunit_suite *) f_inode->i_private;
- 
--	__kunit_test_suites_init(&suite, 1);
-+	__kunit_test_suites_init(&suite, 1, true);
- 
- 	return count;
- }
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 34b7b6833df3..3f39955cb0f1 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -29,6 +29,22 @@ const char *kunit_action(void)
- 	return action_param;
- }
- 
-+/*
-+ * Run KUnit tests after initialization
-+ */
-+#ifdef CONFIG_KUNIT_AUTORUN_ENABLED
-+static bool autorun_param = true;
-+#else
-+static bool autorun_param;
-+#endif
-+module_param_named(autorun, autorun_param, bool, 0);
-+MODULE_PARM_DESC(autorun, "Run KUnit tests after initialization");
-+
-+bool kunit_autorun(void)
-+{
-+	return autorun_param;
-+}
-+
- static char *filter_glob_param;
- static char *filter_param;
- static char *filter_action_param;
-@@ -260,13 +276,14 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
- void kunit_exec_run_tests(struct kunit_suite_set *suite_set, bool builtin)
- {
- 	size_t num_suites = suite_set->end - suite_set->start;
-+	bool autorun = kunit_autorun();
- 
--	if (builtin || num_suites) {
-+	if (autorun && (builtin || num_suites)) {
- 		pr_info("KTAP version 1\n");
- 		pr_info("1..%zu\n", num_suites);
- 	}
- 
--	__kunit_test_suites_init(suite_set->start, num_suites);
-+	__kunit_test_suites_init(suite_set->start, num_suites, autorun);
- }
- 
- void kunit_exec_list_tests(struct kunit_suite_set *suite_set, bool include_attr)
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 089c832e3cdb..146d1b48a096 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -708,7 +708,8 @@ bool kunit_enabled(void)
- 	return enable_param;
- }
- 
--int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites)
-+int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_suites,
-+			     bool run_tests)
- {
- 	unsigned int i;
- 
-@@ -731,7 +732,8 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
- 
- 	for (i = 0; i < num_suites; i++) {
- 		kunit_init_suite(suites[i]);
--		kunit_run_tests(suites[i]);
-+		if (run_tests)
-+			kunit_run_tests(suites[i]);
- 	}
- 
- 	static_branch_dec(&kunit_running);
-
-
+>
+>
+> Thanks,
+> SJ
+>
+> [...]
 
