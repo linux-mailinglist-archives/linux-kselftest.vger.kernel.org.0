@@ -1,156 +1,169 @@
-Return-Path: <linux-kselftest+bounces-20899-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20900-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0B6E9B43BE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 09:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B9209B4401
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 09:19:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33902B215BE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 08:06:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 081AEB21874
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 08:19:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A53202F65;
-	Tue, 29 Oct 2024 08:06:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4473C1E049E;
+	Tue, 29 Oct 2024 08:19:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eWGjIyIB"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="Ii79eSRU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E7A01854;
-	Tue, 29 Oct 2024 08:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E58318A95A
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 08:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730189196; cv=none; b=m8uuge8rBfJTesV8bicqYmjmm0EFSyAG023ZVTAng/LN7KwE9M2pc9AV1jNAG6qgSGmIPXnZeJLHGyvvubuguQFYFawtciZxAmXWa6+hQFdygDyv+G2S8z7Zm9mteqVed69aireCPX2LFsr8dBzAigzHJtvhd3Q77a2+SrD3eHo=
+	t=1730189955; cv=none; b=FvPMwWKshaW7eRIhbtbGOv1TnevQVoHwW5aCFF/MQUKRHGrGuTYIzMFHrKcdEcF8LZOqeNpQ6o+ObW69juuKWYbG2GcTgyo54lSrm233JI+msmR4o+DDz9koKU3mDAAFR/4c+X9rdofXU1namN3sCSiE/dsZh5lSQ0MZy/B5mTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730189196; c=relaxed/simple;
-	bh=b6ORu50y88S7RMLQz6KA5JfYQ3oIvh0lix92w+9Q6jw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KSVE2ydSa0Gz5aKYdsNw3N7GUbY57+qB2alxGLkkCTWDbJpWW6b89r4ln6jk/DXrdtYKhSYd5W/riMVMwK+aaOHHLNGMD7p31uM71Mcxsr9XJEU1o402Q/WK5oNuYY0VyGwOkzecKVPKUs4+wI0d1Y+b5IZU5rfRgdUFkhJmeFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eWGjIyIB; arc=none smtp.client-ip=209.85.210.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7180bd5b79dso2023667a34.2;
-        Tue, 29 Oct 2024 01:06:33 -0700 (PDT)
+	s=arc-20240116; t=1730189955; c=relaxed/simple;
+	bh=lNMeMXIAc1Psms2CgMltMK3KdPyLzyWC0MQ9k6U9h7A=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=jT/iLFJWYVMOtmNDXJEg6gEwborhhiNQCy9X35Jyp3IOCcRN6ZJD2eT1cMfNijPhr2J9nCVLWNzomJybkuobvouAfkuGWB68S7PaAU8k7s8YckrtajX7NXKOCrVAUgh15HrEjcjNCqIhmx08B8LeZ05qtHWXGEoujD0a12V48o0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=Ii79eSRU; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2e2e88cb0bbso3934652a91.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 01:19:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730189193; x=1730793993; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=erYrvbuM+zOt800Pswb5/FeIgISJC9qqJWCYratTQZU=;
-        b=eWGjIyIByFs4qG2sjNx/YnsJ4WoyVaFajWEmkS3r386ctJ5awv+lmME2z7X9uucefW
-         dmo+5D8xlPBQPnWJSrjukF9t1gTVA4wK1fA1/Bp40VdkahjzO1S0vGCm6vMdtd780+yx
-         fdgV8XEuAJ9R8I/2OBC47LMDiBO5GSKaY6anzAEG2hDuuDrnlEiNf4ROLE4Ve4IHJUDr
-         lsuI1/PJ4VA3JDlPj5N72pcX1BTSlU5oIYIl16AwMxukI8yHder0qQz2k2r3pZkt9VCb
-         tUlBaP9sn4Vxy2I+B2D4/yqBM6qOWmz8/7U9VIN3UZ+mFB9CFJyno3lvpuUkWLbxcumn
-         7tQw==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1730189952; x=1730794752; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=sHm33D3V6lEYupRZbzGheD5WM7UWUa6CO6WIPQOz9rg=;
+        b=Ii79eSRUNuwHYcRDgfTXnBKVDedgu78/He3em/VC5FhVqqxJ0/UPrm2XmRNHs7fO2e
+         zREgekwZ0d9EB+pokNRSlpnljyfi/qTZTciiDOZpkZniNHp77cG4QGnMrTqaOppUyoIZ
+         fTEVFn3DhBfKfvGE33I+S9l2DuUExHYye9Fag+rZ0Yaou9jdT4y+HCKaioKFbkLi9tyi
+         /o02HWCMTfXY2UZKKFRHW+JPPdSrVVG9lMljiJnHa3NzbuOgvy8WslyaSgur1tQm4Kqk
+         tkmQF/IJNLkVt2sYo1oYEOH4QaztkeFX+fhcoHmnLORZa+Jg+8n0E5t6nNogeSsDNvYV
+         P6TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730189193; x=1730793993;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=erYrvbuM+zOt800Pswb5/FeIgISJC9qqJWCYratTQZU=;
-        b=buUV9GTXFzA/EJJaqq4OeN5zf9tNurPWYdGhZZK2U/MXj/Gn7fOZCWWoil0ZuE8UZy
-         7VA4/8v+fcsgG4tM871pvzfEYJa5NKYYV97z9tlc6Z4/qcqMlPUgOtwNdNyerMt0KWcA
-         SAOeBoTYwsdU9z9ysZzMzFH0fX4AIJWchSOL8LDuPcVpQyROaiUj5St0E/PQZIcCC7Yi
-         JXRZ1y6PhtMmk0YW2oBs+wcLTPQAbkdSMWfZL8KlHsskd16dJg6uXgPmBJ3QavZZ9Ew9
-         zS0b078bdlHNeXf4r0TZaJX9KGogZfLUseXhlwfd5FFnbLrTfYcshQz/uKePZw98FJUi
-         /z9A==
-X-Forwarded-Encrypted: i=1; AJvYcCWwe3PdXuJ02eajS35l3D+9HvxkUteXaco4bwWyUJvX9MrFGTiX2ky3Ohev/YkCHRgXd7+LrtfnQ8EQisE=@vger.kernel.org, AJvYcCXh7mee5Z3fHJQmlBmkNtCdydeTXucqdsiQGq9SSLZ0UYAkaZtLFBaA3LemC4h/F5mFFxFogrzxKvD4FxQiYcKU@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4WmI6lgi5XQZ8abx4rImus6RShrFLBguboMqUYNXjLyEkA3uZ
-	OKexMgbPAMtLZqSSXNcRfvOhbbWUDZwaNVVguUGFTeqCUl19pJrum7wnUGM3mSiKnVwLPin1Vs5
-	KfT4v7UhqIkZ6MzQLjRjJT07M/9Y=
-X-Google-Smtp-Source: AGHT+IFDFWL4mUjTprma/osZp1KJIoCHwGw0y8thgiAfWKZzlyBnrv8BrxgAMiSJRJIJRIEpMo2FiY9XYcdbCsPmb4I=
-X-Received: by 2002:a05:6830:4189:b0:718:678:56e3 with SMTP id
- 46e09a7af769-71867f1012cmr11989419a34.5.1730189192952; Tue, 29 Oct 2024
- 01:06:32 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1730189952; x=1730794752;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sHm33D3V6lEYupRZbzGheD5WM7UWUa6CO6WIPQOz9rg=;
+        b=qlVPO7P22E0pvLbMKHzkYjzkhiOlPfOpV6iCIqKIg1IaTZK4GDkVsHVvPEG+akG3ee
+         SOsYNW/LhtfZ+5Wtm6Y8Ki5YsXlyXJTZKpvvB86dNQlFNGtlNcoN6Ol92JT2kKZurZhS
+         uEF2gPcO0tdHv5ONhr+D/uw/kpW/qSuuCcYQJchR4L++/23Mm5zwWYIKb1Yf4swJMlqk
+         iNBRoe7TJeI1UeKM6aW+FRWEFKjtUbzjkzk3iHvGGGyGPFMo5c6eGABj88ql+A5HhvdT
+         eGkmD1Bx7dMroL7EUIldq/NRiawhx1Y7xOG2mIl5X2SmuScUpkJpzMYkmlLVKp4bT94B
+         qf/w==
+X-Forwarded-Encrypted: i=1; AJvYcCW6In9jeOzflzc0VMM2aV+m+2aXYhU/nrT0l57VBjWJC3tzXMxjK337Y+mSIbzhNDlY78aXJMAiJmHXtKxej+A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqUFLP9yP7+orxf3dJKd8dGDCFelFln7/pruRxfi8s+LBJAhQh
+	7ONKGN3KYQIflC5queI4wvzQ1Z3aBEiJHNzmsnddkq1HnHL5o2AYGPFVLQqLwn3kL++q5j1Bk6f
+	r
+X-Google-Smtp-Source: AGHT+IHU/nz53Mki47SvszfuY9QwvtiDwvxg5tkiw7+6bn4Zeps7OxH9qov2hSyQfYw2vqK4qqI5SQ==
+X-Received: by 2002:a17:90a:f185:b0:2e1:682b:361a with SMTP id 98e67ed59e1d1-2e8f11bad82mr12476291a91.28.1730189952331;
+        Tue, 29 Oct 2024 01:19:12 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e8e3555c33sm8825153a91.3.2024.10.29.01.19.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Oct 2024 01:19:12 -0700 (PDT)
+Message-ID: <67209a80.170a0220.3bd00c.f7e1@mx.google.com>
+Date: Tue, 29 Oct 2024 01:19:12 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241008094141.549248-5-zhangchunyan@iscas.ac.cn> <mhng-d7045132-a4e1-409a-9646-d8ecd3d6a48f@palmer-ri-x1c9a>
-In-Reply-To: <mhng-d7045132-a4e1-409a-9646-d8ecd3d6a48f@palmer-ri-x1c9a>
-From: Chunyan Zhang <zhang.lyra@gmail.com>
-Date: Tue, 29 Oct 2024 16:05:56 +0800
-Message-ID: <CAAfSe-t7iAomibbCJQJv6d6cig8eESgHCfWCuZkRUr9Jz+aY5Q@mail.gmail.com>
-Subject: Re: [PATCH V2 4/4] selftests/mm: skip virtual_address_range tests on riscv
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: zhangchunyan@iscas.ac.cn, shuah@kernel.org, 
-	Paul Walmsley <paul.walmsley@sifive.com>, alex@ghiti.fr, 
-	Charlie Jenkins <charlie@rivosinc.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Palmer Dabbelt <palmer@dabbelt.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.12-rc3-8-gcecc795329fc
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+Subject: kselftest/next build: 6 builds: 2 failed, 4 passed,
+ 1 warning (v6.12-rc3-8-gcecc795329fc)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi Andrew=EF=BC=8C
+kselftest/next build: 6 builds: 2 failed, 4 passed, 1 warning (v6.12-rc3-8-=
+gcecc795329fc)
 
-On Fri, 25 Oct 2024 at 02:00, Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
-> On Tue, 08 Oct 2024 02:41:41 PDT (-0700), zhangchunyan@iscas.ac.cn wrote:
-> > RISC-V doesn't currently have the behavior of restricting the virtual
-> > address space which virtual_address_range tests check, this will
-> > cause the tests fail. So lets disable the whole test suite for riscv64
-> > for now, not build it and run_vmtests.sh will skip it if it is not pres=
-ent.
-> >
-> > Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
-> > Signed-off-by: Chunyan Zhang <zhangchunyan@iscas.ac.cn>
-> > ---
-> > V1: https://lore.kernel.org/linux-mm/ZuOuedBpS7i3T%2Fo0@ghost/T/
-> > ---
-> >  tools/testing/selftests/mm/Makefile       |  2 ++
-> >  tools/testing/selftests/mm/run_vmtests.sh | 10 ++++++----
-> >  2 files changed, 8 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selfte=
-sts/mm/Makefile
-> > index 02e1204971b0..76a378c5c141 100644
-> > --- a/tools/testing/selftests/mm/Makefile
-> > +++ b/tools/testing/selftests/mm/Makefile
-> > @@ -115,7 +115,9 @@ endif
-> >
-> >  ifneq (,$(filter $(ARCH),arm64 mips64 parisc64 powerpc riscv64 s390x s=
-parc64 x86_64 s390))
-> >  TEST_GEN_FILES +=3D va_high_addr_switch
-> > +ifneq ($(ARCH),riscv64)
-> >  TEST_GEN_FILES +=3D virtual_address_range
-> > +endif
-> >  TEST_GEN_FILES +=3D write_to_hugetlbfs
-> >  endif
-> >
-> > diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/=
-selftests/mm/run_vmtests.sh
-> > index c5797ad1d37b..4493bfd1911c 100755
-> > --- a/tools/testing/selftests/mm/run_vmtests.sh
-> > +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> > @@ -347,10 +347,12 @@ if [ $VADDR64 -ne 0 ]; then
-> >       # allows high virtual address allocation requests independent
-> >       # of platform's physical memory.
-> >
-> > -     prev_policy=3D$(cat /proc/sys/vm/overcommit_memory)
-> > -     echo 1 > /proc/sys/vm/overcommit_memory
-> > -     CATEGORY=3D"hugevm" run_test ./virtual_address_range
-> > -     echo $prev_policy > /proc/sys/vm/overcommit_memory
-> > +     if [ -x ./virtual_address_range ]; then
-> > +             prev_policy=3D$(cat /proc/sys/vm/overcommit_memory)
-> > +             echo 1 > /proc/sys/vm/overcommit_memory
-> > +             CATEGORY=3D"hugevm" run_test ./virtual_address_range
-> > +             echo $prev_policy > /proc/sys/vm/overcommit_memory
-> > +     fi
-> >
-> >       # va high address boundary switch test
-> >       ARCH_ARM64=3D"arm64"
->
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
->
-> (I'm taking the first two as they're RISC-V bits)
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v6.12-rc3-8-gcecc795329fc/
 
-Could you please pick up the last two through your tree?
+Tree: kselftest
+Branch: next
+Git Describe: v6.12-rc3-8-gcecc795329fc
+Git Commit: cecc795329fc3e0ea2e84567ee57570cc050cf6b
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
-Thanks,
-Chunyan
+Build Failures Detected:
+
+arm64:
+    defconfig+kselftest+arm64-chromebook: (clang-16) FAIL
+    defconfig+kselftest+arm64-chromebook: (gcc-12) FAIL
+
+Warnings Detected:
+
+arm64:
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
+
+
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
+ !ENDBR: .text+0x14fd19
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-12) =E2=80=94 FAIL, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, clang-16) =E2=80=94 FAIL, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
+BR: .text+0x14fd19
+
+---
+For more info write to <info@kernelci.org>
 
