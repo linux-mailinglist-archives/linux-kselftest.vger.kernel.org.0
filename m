@@ -1,71 +1,80 @@
-Return-Path: <linux-kselftest+bounces-20888-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20889-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEDC69B4091
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 03:42:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DF709B40B3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 04:00:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9651F1F22D46
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 02:42:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DD211C21FEF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 03:00:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AA2B1E0B6C;
-	Tue, 29 Oct 2024 02:42:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 215F216F84F;
+	Tue, 29 Oct 2024 03:00:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Z2edLyAb"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A2GV0qbY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3447D1DF73A
-	for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 02:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0784198A0F
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 03:00:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730169744; cv=none; b=SpO0t4GSGZoISz/XCPHzS9kFyPyK1Mv8Cqor945ZnGgK1VheDR8IFCamzj6l4Gw4btDSgSo0GXuMGUAyy+05dHdIbWSGHFH8AFUOH91oIw9jvMD6PDTvAFNrY9at7vBzrKtOVrJNdL0WapZADkRg/tH7fFEJPekoEqzUT30jDhY=
+	t=1730170813; cv=none; b=ZeB8E7AItPcB8Nk0vjr4WQ9i/XDUlXhu+f0Jf3ZErYIQc1xRxy/XyEJJ1rAkfj/k1Iw7n5Gq7EFtt8F07wDup5vJmdgB8BE4Y21r+d/7R/rCihq56m3IjPZIrbpI0f82XGRmhUVNtruS4wuGs6PRetbtLAtf2im4nVmoLLxBWSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730169744; c=relaxed/simple;
-	bh=PAjJ9Ou71Uqgdpy0Kz/QpxRFDbhbU7vB9xt2porGJQg=;
+	s=arc-20240116; t=1730170813; c=relaxed/simple;
+	bh=VyTJt0xPH4N8n02lC7V7N8uV5NqqDi7U2Mnpgj43mds=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jj6xdm6zpVKz1nw1UV4vAX2iDXJ3JCazPgXwGV+4zwuPagNIjECfODIeWJAqT4hi8LDKW0VhLBRuBf9ASeCp+8syHVjf2nBvZZIoc3sxsEjkZQc5emJ8xi5pT1vrboAltbVq/qXEJ/nOclr308qjdTnL1kAYsvuTI4fIS/g66NU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Z2edLyAb; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-7ea8c4ce232so4128246a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Oct 2024 19:42:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1730169741; x=1730774541; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NhwueTBuyyDS6MSGHD4L/PRA/gmfkEl47Swjzb9s/GI=;
-        b=Z2edLyAbHhGFMd1vFhIcGOfI/bI+/x5zqS9VoPUi2+jG3tmA6NwW1FyDAsCpxGdkba
-         rRQmkxScsqGx3E8JfBinZPLPG28Y4KPHMkb5a8wF33ZjkkjNdwb1uB1gvEcoXNEntIt2
-         98U2lIyWS5219bOs+yPL5bsxC2bhNQyx4sns4=
+	 In-Reply-To:Content-Type; b=bQSYMVsD5kSjLoWHivIQsp/yWqDHsGVg+Nbdy2chiT8c2rtITD36GLb/OyAwGqTzV//PRpzDgNJbhYxZ3S/PjTJsXGKP+5GArlED7fpGVd02HL4zWDxdd6Gk1A3qSwr0mHCw5uBNYySxFmfGywWxX0fIhBOpfwEfq+7OvCOblNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A2GV0qbY; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1730170808;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XM3NDn8/RrcDaH2dNFMKJrRw9os6K2fG5KwyMJ9szmk=;
+	b=A2GV0qbYZwtpKny/fYiEZSL3Yx39OGK3Lu4PrN8Lcg7PZMAjVmfRYoy8r8JYdXBWLRG3Yd
+	TCkX/2b+vQdl8o1PCajCKwB1QzMkC1PWQ8k6/5tUtHAAycprrKsOwO62nB+mwM4WQreUdb
+	PvWunb//G6/19vbKS0LRgOru3QRpTAo=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-102-Yrxkyw8cObOkrAsk3Gjvsw-1; Mon, 28 Oct 2024 23:00:04 -0400
+X-MC-Unique: Yrxkyw8cObOkrAsk3Gjvsw-1
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3a3ae3c2cacso47854685ab.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Oct 2024 20:00:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730169741; x=1730774541;
+        d=1e100.net; s=20230601; t=1730170803; x=1730775603;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NhwueTBuyyDS6MSGHD4L/PRA/gmfkEl47Swjzb9s/GI=;
-        b=vBKu963KJXTjg0PqPhEEWVZOi5g1+IhIdBJI1CV3kiEgqxx4U3vSeFHdPGWrxXg8Jk
-         lGNlyi5juzboDJRhutf+NAeNfw0n0rdff84N0sMlmm+10WVVOnNyjWD8t5y1VNY7pyZo
-         iFt5q32cF32gPnU9LRusy38rp8U2dHJqPeNxjR99FP2xVxT0R4Zee05Qv4WcDCutKWk8
-         eQFqt+9800C2ft9VMkw99Os/xDE/PAS84dGfYHfXxxgYXY1nww/AS/XFkwrKPL4yrtkc
-         GyHK4c1o/C9RfcGX9rH95PcZgrJ1eL8zylb9ucddkaeGPIM/+/z8axqtwU/uG6QwGgiq
-         NdyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXleANBgPlM7p9466xAU5m2J3hFgEhQ0DAhgIJii9P33DQkF/GxXZVP1Ww8iDi2IaLOi/mq+quLoRpKngSHFQg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbvMY8jXTi/eOVbj08buVv0rIR0hjkFECRDt00ILGUr6COJfFp
-	Ynb6xrAmw54v1y85BgZ/6C5odUFJ3RZHIDqduZJQWDfTATfYgs5qQ6aYR1cmRqo=
-X-Google-Smtp-Source: AGHT+IEEBAFSTLUWRggpy/zSgYYAMfS9zMnB4WTf3rwU/wiDXRiRmmXCC9HC+DDgqHm/wOcSVYkVbg==
-X-Received: by 2002:a05:6a20:d8b:b0:1d9:1071:9175 with SMTP id adf61e73a8af0-1d9a84d70dfmr13069474637.32.1730169741393;
-        Mon, 28 Oct 2024 19:42:21 -0700 (PDT)
-Received: from [10.200.3.216] (p99249-ipoefx.ipoe.ocn.ne.jp. [153.246.134.248])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7205780e3f5sm6504801b3a.0.2024.10.28.19.42.19
+        bh=XM3NDn8/RrcDaH2dNFMKJrRw9os6K2fG5KwyMJ9szmk=;
+        b=m86+1Hr9dPaUVh/2aczzFIThgkZCllUay/KTE6MqGqIl9J9vdMifhPRhYJDPg3q1CB
+         A9L5eQX3iXqCRnwKTFC1LL9aXAFpsoF6CgewUfnx4F+/hKN33DoswKE3i55UJlscsDRy
+         kIGDjf0Kdff2mXZRw7O1eLqDpE5CMEBr4v1FqzG1gv/9QE9yo3zYwj1COPx0M0F9HIdN
+         dwlCzw4fiUMXZszxR2XjNjVqwrKRGI8Vn9+9dc85JxdZbH0ncr1+Y3TaRQZlBo6L/g1N
+         q83ddqpOUTQDmS5YrBYRq/iUiQ6mE5am5EIk8z7DfUtbhkjp68rKribbigYy/oh9sICI
+         oqFA==
+X-Forwarded-Encrypted: i=1; AJvYcCVzLoXjAhWZmvseei5GlLC40o6jO8grYnZTP0I6HQfl6H8/tf+y8XenMGXGSBSG5dpmQH+SXLQWPWDkUsdHf1E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrW08LAmWmpw55tKZR73+g9mYSYmSCEEtyDE/aDZURddotDcLW
+	34+JjOVbQygBkeJJ4WBgn0JLnmgDvnO1Ktaac7YKmDQMwy+nvOGeHM0yQmweM3ArsTW3vD66Aen
+	13JKdid+JA/ZZiuPsUWnaghVUduwMnR39aeoCtrI30PctWCLOr8FJbpDHSotuMnAG/g==
+X-Received: by 2002:a05:6e02:1c0d:b0:3a4:e8cc:2a89 with SMTP id e9e14a558f8ab-3a4ed2a9d71mr95089635ab.10.1730170802629;
+        Mon, 28 Oct 2024 20:00:02 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHHJe1SOujsJgAA42pQ3L9xxLdE1LSrArTcwDuo+h5DT5bavlNuHR/AF4+9mUBERX5gv6wGYQ==
+X-Received: by 2002:a05:6e02:1c0d:b0:3a4:e8cc:2a89 with SMTP id e9e14a558f8ab-3a4ed2a9d71mr95089355ab.10.1730170802234;
+        Mon, 28 Oct 2024 20:00:02 -0700 (PDT)
+Received: from [10.0.0.71] ([65.128.110.20])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a4e6df5919sm19338285ab.41.2024.10.28.20.00.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Oct 2024 19:42:21 -0700 (PDT)
-Message-ID: <c620491d-7bb9-47f5-bd2f-52d8fc814486@linuxfoundation.org>
-Date: Mon, 28 Oct 2024 20:42:18 -0600
+        Mon, 28 Oct 2024 20:00:01 -0700 (PDT)
+Message-ID: <bbbbaa42-444f-4973-b749-7c56b937ae5f@redhat.com>
+Date: Mon, 28 Oct 2024 22:00:00 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,53 +82,136 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/mount_setattr: fix idmap_mount_tree_invalid
- failed to run
-To: Christian Brauner <brauner@kernel.org>,
- zhouyuhang <zhouyuhang1010@163.com>
-Cc: sforshee@kernel.org, shuah@kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- zhouyuhang <zhouyuhang@kylinos.cn>, Shuah Khan <skhan@linuxfoundation.org>
-References: <20241028084132.3212598-1-zhouyuhang1010@163.com>
- <20241028-rodung-kotzen-577438c3b82c@brauner>
+Subject: Re: [PATCH 3/3] tracing: Fix tracefs gid mount option
+To: Kalesh Singh <kaleshsingh@google.com>, dhowells@redhat.com,
+ rostedt@goodmis.org, mhiramat@kernel.org
+Cc: surenb@google.com, jyescas@google.com, kernel-team@android.com,
+ android-mm@google.com, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Shuah Khan <shuah@kernel.org>, Ali Zahraee <ahzahraee@gmail.com>,
+ Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20241028214550.2099923-1-kaleshsingh@google.com>
+ <20241028214550.2099923-4-kaleshsingh@google.com>
 Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241028-rodung-kotzen-577438c3b82c@brauner>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Eric Sandeen <sandeen@redhat.com>
+In-Reply-To: <20241028214550.2099923-4-kaleshsingh@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/28/24 06:11, Christian Brauner wrote:
-> On Mon, Oct 28, 2024 at 04:41:32PM +0800, zhouyuhang wrote:
->> From: zhouyuhang <zhouyuhang@kylinos.cn>
->>
->> Test case idmap_mount_tree_invalid failed to run on the newer kernel
->> with the following output:
->>
->>   #  RUN           mount_setattr_idmapped.idmap_mount_tree_invalid ...
->>   # mount_setattr_test.c:1428:idmap_mount_tree_invalid:Expected sys_mount_setattr(open_tree_fd, "", AT_EMPTY_PATH, &attr,  sizeof(attr)) (0) ! = 0 (0)
->>   # idmap_mount_tree_invalid: Test terminated by assertion
->>
->> This is because tmpfs is mounted at "/mnt/A", and tmpfs already
->> contains the flag FS_ALLOW_IDMAP after the commit 7a80e5b8c6fa ("shmem:
->> support idmapped mounts for tmpfs"). So calling sys_mount_setattr here
->> returns 0 instead of -EINVAL as expected.
->>
->> Ramfs does not support idmap mounts, so we can use it here to test invalid mounts,
->> which allows the test case to pass with the following output:
->>
->>   # Starting 1 tests from 1 test cases.
->>   #  RUN           mount_setattr_idmapped.idmap_mount_tree_invalid ...
->>   #            OK  mount_setattr_idmapped.idmap_mount_tree_invalid
->>   ok 1 mount_setattr_idmapped.idmap_mount_tree_invalid
->>   # PASSED: 1 / 1 tests passed.
->>
->> Signed-off-by: zhouyuhang <zhouyuhang@kylinos.cn>
->> ---
+On 10/28/24 4:43 PM, Kalesh Singh wrote:
+> Commit 78ff64081949 ("vfs: Convert tracefs to use the new mount API")
+> tracefs to use the new mount APIs caused mounting with the gid=<gid>
+> option to not take effect.
+
+Or any other mount options. I'm sure this isn't unique to gid, right?
+So, might want to fix the commit title.
+
+> The tracefs superblock can be updated from multiple paths:
+>     - on fs_initcall() to init_trace_printk_function_export()
+>     - form a work queue to initialize eventfs
+>       tracer_init_tracefs_work_func()
+>     - fsconfig() syscall to mount of remount sysfs
 > 
-> Reviewed-by: Christian Brauner <brauner@kernel.org>
+> The tracefs super block root inode gets created early on in
+> init_trace_printk_function_export().
+> 
+> With the new mount API tracefs effectively uses get_tree_single() instead
+> of the old API mount_single().
+> 
+> Previously, mount_single() ensured that the options are alway applied to
+> the superblock root inode:
+>     (1) If the root inode didn't exist, called fill_super() to create it
+>         and apply the options.
+>     (2) If the root inode exists, called reconfigure_single() which
+>         effectively called tracefs_apply_options() to parse and apply
+>         options to the subperblock's fs_info and inode and remount
+>         eventfs (if necessary)
+> 
+> On the other hand, get_tree_single() effectively calls vfs_get_super()
+> which:
+>     (3) If the root inode doesn't exists calls fill_super() to create it
+>         and apply the options.
+>     (4) If the root inode already exists, updates the fs_context root
+>         with the superblock's root inode.
 
-Thank you. Applied to kselftest fixes branch for next rc.
+I'm honestly a little lost here, but given the differences between mount_single()
+and get_tree_single() - are other get_tree_single() users similarly broken?
 
-thanks,
--- Shuah
+Should get_tree_single() just be calling reconfigure_single() internally like
+mount_single() did? The comment in reconfigure_single() confuses me.
+
+> (4) above is always the case for tracefs mounts, since the super block's
+> root inode will already be created by init_trace_printk_function_export().
+
+this reminds me a little of 
+
+commit a6097180d884ddab769fb25588ea8598589c218c
+Author: NeilBrown <neilb@suse.de>
+Date:   Mon Jan 17 09:07:26 2022 +1100
+
+    devtmpfs regression fix: reconfigure on each mount
+
+> This means that the gid mount option gets ignored:
+>     - Since it isn't applied to the super block's root inode, it doesn't
+>       get inherited by the children.
+>     - Since eventfs is initialized from form a separate work queue and
+>       before call to mount with the options, and it doesn't get remounted
+>       for mount.
+> 
+> Ensure that the mount options are applied to the super block and eventfs
+> is remounted to respect the new mount options.
+> 
+> [1] https://lore.kernel.org/r/536e99d3-345c-448b-adee-a21389d7ab4b@redhat.com/
+> 
+> Fixes: 78ff64081949 ("vfs: Convert tracefs to use the new mount API")
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> ---
+>  fs/tracefs/inode.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/tracefs/inode.c b/fs/tracefs/inode.c
+> index 1748dff58c3b..cfc614c638da 100644
+> --- a/fs/tracefs/inode.c
+> +++ b/fs/tracefs/inode.c
+> @@ -392,6 +392,9 @@ static int tracefs_reconfigure(struct fs_context *fc)
+>  	struct tracefs_fs_info *sb_opts = sb->s_fs_info;
+>  	struct tracefs_fs_info *new_opts = fc->s_fs_info;
+>  
+> +	if (!new_opts)
+> +		return 0;
+
+Can this really happen?
+
+> +
+>  	sync_filesystem(sb);
+>  	/* structure copy of new mount options to sb */
+>  	*sb_opts = *new_opts;
+
+FWIW doing this as a structure copy was probably a terrible choice on my part. :(
+
+> @@ -478,14 +481,17 @@ static int tracefs_fill_super(struct super_block *sb, struct fs_context *fc)
+>  	sb->s_op = &tracefs_super_operations;
+>  	sb->s_d_op = &tracefs_dentry_operations;
+>  
+> -	tracefs_apply_options(sb, false);
+> -
+>  	return 0;
+>  }
+>  
+>  static int tracefs_get_tree(struct fs_context *fc)
+>  {
+> -	return get_tree_single(fc, tracefs_fill_super);
+> +	int err = get_tree_single(fc, tracefs_fill_super);
+> +
+> +	if (err)
+> +		return err;
+> +
+> +	return tracefs_reconfigure(fc);
+>  }
+>  
+>  static void tracefs_free_fc(struct fs_context *fc)
+
 
