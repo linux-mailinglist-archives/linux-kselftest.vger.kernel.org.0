@@ -1,251 +1,213 @@
-Return-Path: <linux-kselftest+bounces-20924-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20925-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B2319B46EB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 11:32:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38D919B473E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 11:49:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B075B1F22063
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 10:32:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7C8D5B22110
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 10:49:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9652220495C;
-	Tue, 29 Oct 2024 10:32:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D4C1205E00;
+	Tue, 29 Oct 2024 10:48:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="acwtNuT7";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="WZPs66H3";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cq2KhkjX";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Clgn/UKp"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="LoTs3zc9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C08771F4267;
-	Tue, 29 Oct 2024 10:32:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B794205145
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 10:48:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730197952; cv=none; b=NnxtGnWIK0AoNM3qx5NJ5A3/ES51dBxeZgWEk51kIGo81MJsV8Ls6+nnA45+62s7fMn4Nqp4j90GKPLhE1OrdLp+8Ci1i7d9d2z5cA3PYt5cGD6ZeUvK16TQJZyrIzLoZd/NVzK7ozTdZkKYvOYh9O5ITLQZL6jp0Ofc9m7/F+4=
+	t=1730198883; cv=none; b=j8Q3Nb8+PV8BVkloTdyJugbdIlpt3uSG3KQO4QPIWXJTq7lXwljIP/2N9uKbRS2iQ+oTvDEFELDfSppWfChVr7FJpHi2fgaLQV6OU97t10Hhn+VESWT3H5iy5ZPuzQkCJXFw0FOAuIzRuQ6tHRlPG61giehrdl648OBtrsFo5Cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730197952; c=relaxed/simple;
-	bh=b2YGMIHcMhYOul37rqzrzOR5yyKkJB1pb0RuX59geQQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=I05IrOYPv9EetAjw3eGsIDOVHatZeEMeT2qa5uyWjT1ENaCefk4V9w2ljo5+V4SrpNac7i/J/aHtOtFFnTiysFn+pjIA9VLOqMUm+yKUqwfEYwU1VLcEYXQxWPDmPqCI/B6pXbJ6Yyh4C/KDCgyJHMWLsFEVNVwjiiLXHFjLHTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=acwtNuT7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=WZPs66H3; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cq2KhkjX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Clgn/UKp; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id DD4941F769;
-	Tue, 29 Oct 2024 10:32:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1730197948; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ntaXvlj8VX2gqmNbb08q47BKhx23raUNm2lE9u9+/tY=;
-	b=acwtNuT7yMHfInjUWr6CxmdMKRaCCZbKzSpVwc6kN5CIEPkxckI90cEaNdshL3E5/km1Tf
-	LcYIq5MKL5e42WZmmPggW/6L1H6rRgOR4ySegqE4/GGpP6Gye7gNHy84Gt7F1XI/ox0UAL
-	di0LXFZ4p/MyQOFr++UjCkjvGxO32K8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1730197948;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ntaXvlj8VX2gqmNbb08q47BKhx23raUNm2lE9u9+/tY=;
-	b=WZPs66H3uWTDqZTI6vIL45NzYS7bqR4WlHPU8LPno7xamiwUvKdnLdzZc+yvRmT/oUKEk2
-	LSqfSu6LB0BV0jAQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1730197947; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ntaXvlj8VX2gqmNbb08q47BKhx23raUNm2lE9u9+/tY=;
-	b=cq2KhkjXTD6KE0ta/hwKhpBo6OiNKdqaU9bmPNu78lpQV5ilkmYClUrWrn4LSB8yMA34if
-	fEeOtPppF7mMVTjONFamEJPGvWMCRQlLexM+f1NHgxv+A2IbTgP89BLOsFaaiXCkmctAST
-	xRLVJeAKSkVrwRCzoMEkKcx6nWtXiUM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1730197947;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ntaXvlj8VX2gqmNbb08q47BKhx23raUNm2lE9u9+/tY=;
-	b=Clgn/UKpLOepmZqyKaLy6pMylDAVKwjchXfoMCq7o0hfwb/F3kqv07oiIPdyWpP59utI43
-	+LpTkMB5etIW6iCQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 980A9139A2;
-	Tue, 29 Oct 2024 10:32:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id MkaFJLu5IGeENAAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Tue, 29 Oct 2024 10:32:27 +0000
-Message-ID: <a9d8d380-a531-4f2f-a2b1-b36943ef7264@suse.cz>
-Date: Tue, 29 Oct 2024 11:32:27 +0100
+	s=arc-20240116; t=1730198883; c=relaxed/simple;
+	bh=Hu1KhzQ/mPXUGyE0AK7vnTBVLVxNbFml2w8/c7bCUcQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fhLPQwr7sc3oXrN0k5FZeUX/66juDHEraoNmz4x8B2ELXwXcVFyKs/izAvHeLZb1m5Z1eZfcQqSIq2hdUajQXZMuibaVqmZdc4QxLlD1xX7Y91Kzq/gVsbD48KlcfPgcq81Hc5Jss2v4L+UnbEQA9vgnoSjYdSKj3T3r8lnC2Ok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=LoTs3zc9; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4316cce103dso69642505e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 03:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvpn.net; s=google; t=1730198878; x=1730803678; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zFaHDr0T41HKWiMkbZ9pj+p6GJbEFF9Bz1xBJxmYU4A=;
+        b=LoTs3zc9iA5VvXINEYT+KPRRsLD47WkB0AQaVozOuArANKNSuMNZ0xZX9Fk4BjVMtL
+         iHJEE2OVAFocpCGZt12pbJm8yM7Xy7Ib/WguGJw/xaHHsQdTnNCmlssHXZPTjeodrf2J
+         /tvkP3ZfqWLbtgQ5pXLV1XrkA++//sjYxMGXLly3mtdMGiqi9ToXIa2FNV7/aSSS/1Ym
+         pHLKXfJn12pKXw08KTjFfou0+NnSXLOH988hInw2mHeOkhQMXneQj5l/o+xs9OFe38gd
+         ZUOkoO9gFKE4t/robudDgJ0d7g1ROPSZALOl8VzccUwz6ebDXQFnxTK4E6W2zp/54tup
+         8hcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730198878; x=1730803678;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zFaHDr0T41HKWiMkbZ9pj+p6GJbEFF9Bz1xBJxmYU4A=;
+        b=XylMJBMpWBtcqueB3kQOZpM5GRpq4MD8u30waZaSnYneIhGAGAK7VzdrUY5CXGAQP0
+         qf4NauXiUK7chq7SPdfm3ydj5F8Gz7wXqa2yqdE3yX53jzy4CuP/llyk6RYmx/KlvV3u
+         KMtEd4wQaF44DHDiUDQngdIpHUEMrSJBw6LnAIrB6kjRfU/9KPuv9gP9uYjqXVr9FzHN
+         Eyx1swDhOFFF6PHm1kaFPqMUMnPVzgXKpjuinOrtgYpxjQYkwbxYDBQkJToZ+DVkiIy1
+         dnlYs6khQdCH/BcUUaZOVe9kOpapsNQbeCYSd0BsbTxyoneK032zLrtSGsblH0Yc2zMl
+         r4yg==
+X-Forwarded-Encrypted: i=1; AJvYcCVZBvVJVQWmw6I5SJraaZqFb1CEG/LO2Tn7HmDxUQI9GIHHdr/qdkyFDF9kmsNYNwuWyBeLS8yko6vEbAZA32Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0Ha1gws4OKgN509x/0V5EjtuglJwYv8ZNH2vbjOs2vbNvM9dh
+	eBysyCzJBpLp1R4DCOSFHhqucezeytTsJ7C9cM0jWj4ugjwYUoLvzXz3+RKeqmEcGfHrG19YQT7
+	R
+X-Google-Smtp-Source: AGHT+IENqXxnZ5AFVAQkKmGXz+A/5ptKcjzq/X/YXRc2l+r/rr2avJABfmHyzUVxhrTMAHuie4Yx1w==
+X-Received: by 2002:a05:600c:4fce:b0:431:4f29:9539 with SMTP id 5b1f17b1804b1-4319ad29f7cmr127948825e9.32.1730198878502;
+        Tue, 29 Oct 2024 03:47:58 -0700 (PDT)
+Received: from serenity.mandelbit.com ([2001:67c:2fbc:1:3dcf:a6cb:47af:d9f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-431934be328sm141124785e9.0.2024.10.29.03.47.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Oct 2024 03:47:57 -0700 (PDT)
+From: Antonio Quartulli <antonio@openvpn.net>
+Subject: [PATCH net-next v11 00/23] Introducing OpenVPN Data Channel
+ Offload
+Date: Tue, 29 Oct 2024 11:47:13 +0100
+Message-Id: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/5] mm: madvise: implement lightweight guard page
- mechanism
-Content-Language: en-US
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Suren Baghdasaryan <surenb@google.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Matthew Wilcox <willy@infradead.org>, "Paul E . McKenney"
- <paulmck@kernel.org>, Jann Horn <jannh@google.com>,
- David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, Muchun Song <muchun.song@linux.dev>,
- Richard Henderson <richard.henderson@linaro.org>,
- Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
- Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@kernel.org>,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- linux-kselftest@vger.kernel.org, Sidhartha Kumar
- <sidhartha.kumar@oracle.com>, Jeff Xu <jeffxu@chromium.org>,
- Christoph Hellwig <hch@infradead.org>, linux-api@vger.kernel.org,
- John Hubbard <jhubbard@nvidia.com>
-References: <cover.1730123433.git.lorenzo.stoakes@oracle.com>
- <6aafb5821bf209f277dfae0787abb2ef87a37542.1730123433.git.lorenzo.stoakes@oracle.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- EP+ylKVEKb0Q2A==
-In-Reply-To: <6aafb5821bf209f277dfae0787abb2ef87a37542.1730123433.git.lorenzo.stoakes@oracle.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.de];
-	RCPT_COUNT_TWELVE(0.00)[31];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[google.com,oracle.com,infradead.org,kernel.org,redhat.com,kvack.org,vger.kernel.org,linux.dev,linaro.org,gmail.com,alpha.franken.de,HansenPartnership.com,gmx.de,zankel.net,chromium.org,nvidia.com];
-	R_RATELIMIT(0.00)[to_ip_from(RL3py1j7x8bxoj6nr7eaeb97sq)];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,suse.cz:email,suse.cz:mid]
-X-Spam-Score: -4.30
-X-Spam-Flag: NO
+X-B4-Tracking: v=1; b=H4sIADG9IGcC/1WOzQ7CIBCEX8VwFgVainjyPYwHaFfLwaWBhtQ0f
+ Xcpxr+97c5+MzOTCMFBJMfNTAIkF53HvHC+3ZC2N3gD6rp8IIKJmjMmqK2pTwNSyFPJttG1ESR
+ /DwGubipWZ4IwUoRpJJesWBOB2mCw7Vent7a/G4cr2bs4+vAoHZIu/CuNN5+0pCmjxljQnRDSd
+ PLkB8Cs7LJdSUmc/aBCflHOMmsPSlZMKWVB/bPLsjwBqopVYAcBAAA=
+X-Change-ID: 20241002-b4-ovpn-eeee35c694a2
+To: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>, 
+ Antonio Quartulli <antonio@openvpn.net>, Shuah Khan <shuah@kernel.org>, 
+ donald.hunter@gmail.com, sd@queasysnail.net, ryazanov.s.a@gmail.com, 
+ Andrew Lunn <andrew@lunn.ch>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, steffen.klassert@secunet.com, 
+ antony.antony@secunet.com, Shuah Khan <skhan@linuxfoundation.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5217; i=antonio@openvpn.net;
+ h=from:subject:message-id; bh=Hu1KhzQ/mPXUGyE0AK7vnTBVLVxNbFml2w8/c7bCUcQ=;
+ b=owEBbQGS/pANAwAIAQtw5TqgONWHAcsmYgBnIL1pIFDeq9+/uEw6XGgPu2/BnHNfVoQZvAknr
+ J7YkRO6b/6JATMEAAEIAB0WIQSZq9xs+NQS5N5fwPwLcOU6oDjVhwUCZyC9aQAKCRALcOU6oDjV
+ h7XLCACnLNc0NtK/SAcf2gwZ8rgS7k31jxJB8NWWateDObctvjkM8YiBxgofvXGwUHoliow6WQC
+ DPiB/YgJBuPCoV5EHnocUAlSmjjgycEQbGDWElTncbn+r5kjwR+blZZD3lJjJ2X4e2yzsuB0z8Z
+ O+YWMz8/56DJVMJE/WflXGjWeRCzFlfwOde1T7F1PS0yN/69dZci8+waBX+qhlJZApQs6n9Wtfz
+ qFt26Tkbx8VmMJUZwyL0dGlMun27IIhyYGCmoFRXooYTOrVQN/PwkYoyY9GVqLyZ2rk697IvAUR
+ MZ75GpYx8mhBeE/govlsGeRkXsDwZITFO3gRrZj9R3C5XHjO
+X-Developer-Key: i=antonio@openvpn.net; a=openpgp;
+ fpr=CABDA1282017C267219885C748F0CCB68F59D14C
 
-On 10/28/24 15:13, Lorenzo Stoakes wrote:
-> Implement a new lightweight guard page feature, that is regions of userland
-> virtual memory that, when accessed, cause a fatal signal to arise.
-> 
-> Currently users must establish PROT_NONE ranges to achieve this.
-> 
-> However this is very costly memory-wise - we need a VMA for each and every
-> one of these regions AND they become unmergeable with surrounding VMAs.
-> 
-> In addition repeated mmap() calls require repeated kernel context switches
-> and contention of the mmap lock to install these ranges, potentially also
-> having to unmap memory if installed over existing ranges.
-> 
-> The lightweight guard approach eliminates the VMA cost altogether - rather
-> than establishing a PROT_NONE VMA, it operates at the level of page table
-> entries - establishing PTE markers such that accesses to them cause a fault
-> followed by a SIGSGEV signal being raised.
-> 
-> This is achieved through the PTE marker mechanism, which we have already
-> extended to provide PTE_MARKER_GUARD, which we installed via the generic
-> page walking logic which we have extended for this purpose.
-> 
-> These guard ranges are established with MADV_GUARD_INSTALL. If the range in
-> which they are installed contain any existing mappings, they will be
-> zapped, i.e. free the range and unmap memory (thus mimicking the behaviour
-> of MADV_DONTNEED in this respect).
-> 
-> Any existing guard entries will be left untouched. There is therefore no
-> nesting of guarded pages.
-> 
-> Guarded ranges are NOT cleared by MADV_DONTNEED nor MADV_FREE (in both
-> instances the memory range may be reused at which point a user would expect
-> guards to still be in place), but they are cleared via MADV_GUARD_REMOVE,
-> process teardown or unmapping of memory ranges.
-> 
-> The guard property can be removed from ranges via MADV_GUARD_REMOVE. The
-> ranges over which this is applied, should they contain non-guard entries,
-> will be untouched, with only guard entries being cleared.
-> 
-> We permit this operation on anonymous memory only, and only VMAs which are
-> non-special, non-huge and not mlock()'d (if we permitted this we'd have to
-> drop locked pages which would be rather counterintuitive).
-> 
-> Racing page faults can cause repeated attempts to install guard pages that
-> are interrupted, result in a zap, and this process can end up being
-> repeated. If this happens more than would be expected in normal operation,
-> we rescind locks and retry the whole thing, which avoids lock contention in
-> this scenario.
-> 
-> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
-> Suggested-by: Jann Horn <jannh@google.com>
-> Suggested-by: David Hildenbrand <david@redhat.com>
-> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Notable changes from v10:
+* extended commit message of 23/23 with brief description of the output
+* Link to v10: https://lore.kernel.org/r/20241025-b4-ovpn-v10-0-b87530777be7@openvpn.net
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Please note that some patches were already reviewed by Andre Lunn,
+Donald Hunter and Shuah Khan. They have retained the Reviewed-by tag
+since no major code modification has happened since the review.
+
+The latest code can also be found at:
+
+https://github.com/OpenVPN/linux-kernel-ovpn
+
+Thanks a lot!
+Best Regards,
+
+Antonio Quartulli
+OpenVPN Inc.
+
+---
+Antonio Quartulli (23):
+      netlink: add NLA_POLICY_MAX_LEN macro
+      net: introduce OpenVPN Data Channel Offload (ovpn)
+      ovpn: add basic netlink support
+      ovpn: add basic interface creation/destruction/management routines
+      ovpn: keep carrier always on
+      ovpn: introduce the ovpn_peer object
+      ovpn: introduce the ovpn_socket object
+      ovpn: implement basic TX path (UDP)
+      ovpn: implement basic RX path (UDP)
+      ovpn: implement packet processing
+      ovpn: store tunnel and transport statistics
+      ovpn: implement TCP transport
+      ovpn: implement multi-peer support
+      ovpn: implement peer lookup logic
+      ovpn: implement keepalive mechanism
+      ovpn: add support for updating local UDP endpoint
+      ovpn: add support for peer floating
+      ovpn: implement peer add/get/dump/delete via netlink
+      ovpn: implement key add/get/del/swap via netlink
+      ovpn: kill key and notify userspace in case of IV exhaustion
+      ovpn: notify userspace when a peer is deleted
+      ovpn: add basic ethtool support
+      testing/selftests: add test tool and scripts for ovpn module
+
+ Documentation/netlink/specs/ovpn.yaml              |  362 +++
+ MAINTAINERS                                        |   11 +
+ drivers/net/Kconfig                                |   14 +
+ drivers/net/Makefile                               |    1 +
+ drivers/net/ovpn/Makefile                          |   22 +
+ drivers/net/ovpn/bind.c                            |   54 +
+ drivers/net/ovpn/bind.h                            |  117 +
+ drivers/net/ovpn/crypto.c                          |  214 ++
+ drivers/net/ovpn/crypto.h                          |  145 ++
+ drivers/net/ovpn/crypto_aead.c                     |  386 ++++
+ drivers/net/ovpn/crypto_aead.h                     |   33 +
+ drivers/net/ovpn/io.c                              |  462 ++++
+ drivers/net/ovpn/io.h                              |   25 +
+ drivers/net/ovpn/main.c                            |  337 +++
+ drivers/net/ovpn/main.h                            |   24 +
+ drivers/net/ovpn/netlink-gen.c                     |  212 ++
+ drivers/net/ovpn/netlink-gen.h                     |   41 +
+ drivers/net/ovpn/netlink.c                         | 1135 ++++++++++
+ drivers/net/ovpn/netlink.h                         |   18 +
+ drivers/net/ovpn/ovpnstruct.h                      |   61 +
+ drivers/net/ovpn/packet.h                          |   40 +
+ drivers/net/ovpn/peer.c                            | 1201 ++++++++++
+ drivers/net/ovpn/peer.h                            |  165 ++
+ drivers/net/ovpn/pktid.c                           |  130 ++
+ drivers/net/ovpn/pktid.h                           |   87 +
+ drivers/net/ovpn/proto.h                           |  104 +
+ drivers/net/ovpn/skb.h                             |   56 +
+ drivers/net/ovpn/socket.c                          |  178 ++
+ drivers/net/ovpn/socket.h                          |   55 +
+ drivers/net/ovpn/stats.c                           |   21 +
+ drivers/net/ovpn/stats.h                           |   47 +
+ drivers/net/ovpn/tcp.c                             |  506 +++++
+ drivers/net/ovpn/tcp.h                             |   44 +
+ drivers/net/ovpn/udp.c                             |  406 ++++
+ drivers/net/ovpn/udp.h                             |   26 +
+ include/net/netlink.h                              |    1 +
+ include/uapi/linux/if_link.h                       |   15 +
+ include/uapi/linux/ovpn.h                          |  109 +
+ include/uapi/linux/udp.h                           |    1 +
+ tools/net/ynl/ynl-gen-c.py                         |    4 +-
+ tools/testing/selftests/Makefile                   |    1 +
+ tools/testing/selftests/net/ovpn/.gitignore        |    2 +
+ tools/testing/selftests/net/ovpn/Makefile          |   17 +
+ tools/testing/selftests/net/ovpn/config            |   10 +
+ tools/testing/selftests/net/ovpn/data64.key        |    5 +
+ tools/testing/selftests/net/ovpn/ovpn-cli.c        | 2370 ++++++++++++++++++++
+ tools/testing/selftests/net/ovpn/tcp_peers.txt     |    5 +
+ .../testing/selftests/net/ovpn/test-chachapoly.sh  |    9 +
+ tools/testing/selftests/net/ovpn/test-float.sh     |    9 +
+ tools/testing/selftests/net/ovpn/test-tcp.sh       |    9 +
+ tools/testing/selftests/net/ovpn/test.sh           |  183 ++
+ tools/testing/selftests/net/ovpn/udp_peers.txt     |    5 +
+ 52 files changed, 9494 insertions(+), 1 deletion(-)
+---
+base-commit: ab101c553bc1f76a839163d1dc0d1e715ad6bb4e
+change-id: 20241002-b4-ovpn-eeee35c694a2
+
+Best regards,
+-- 
+Antonio Quartulli <antonio@openvpn.net>
 
 
