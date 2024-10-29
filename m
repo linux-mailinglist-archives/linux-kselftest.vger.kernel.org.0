@@ -1,147 +1,146 @@
-Return-Path: <linux-kselftest+bounces-20884-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20885-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 079209B3F71
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 02:04:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCA559B405B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 03:25:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0F0028368F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 01:04:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23EF9B21F62
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 02:24:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC387179A3;
-	Tue, 29 Oct 2024 01:04:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA4F314D6F9;
+	Tue, 29 Oct 2024 02:24:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aIod6kLK"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="R1xceYQw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 910FD168B1;
-	Tue, 29 Oct 2024 01:04:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD76FD51C
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 02:24:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730163840; cv=none; b=cbC+PJAzgQDN16nW8DddozCHI8fG9TjDL4dhQrkApYftncZGJ324qZY40YRPZTk2t/WBGrXccFq/TtBtGKEcA3fFEbtBOe5wDLyWBKeQKNkQDpXCWg/DAdMJSJBNj0BjSGWURRxJhz2tyLg6GDyLJqtarffVUV4VddNZTF6HzEU=
+	t=1730168693; cv=none; b=aT6fVRladaLrkp17XJAl9SRhtJmGjHid+j76wX8CE9dojt81670JeduwKBBI4ayj8IRaf5Gu3gBMZ9q5bRHYoczf7ZYTVH8q23raK9P/qdLrrhw/n0SXcCUISYFm3pbCQyOm+C0PdpWi3c1zJi+yEVRwLGWaJsEysf3gPtk4NBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730163840; c=relaxed/simple;
-	bh=YU6zL+S91zVz79lMB5TTT0iiLFRBvoFA82gjQYE2qy4=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Pc6zqebzMNS6LWZAubkWXksxlwbPcVJeRAZll1AQKxWW4BNjjCK7ULYkVnTDHkYM4SojuFeVSSqJWI6c+9pz0Z4WDHUnYOV2L4BQcLa7ruwsdpyU0ql+9T4OJiut9hBvB73o8EVR3Q8NrBE8mV+ecnJLnOBMPTC4mtvimYJTIJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aIod6kLK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996BEC4CEC3;
-	Tue, 29 Oct 2024 01:03:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730163840;
-	bh=YU6zL+S91zVz79lMB5TTT0iiLFRBvoFA82gjQYE2qy4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=aIod6kLKsuQtMvrc0kXNNzxRMGhWCGGLV7u7KLix015CZn2EPdvYL37TBJTWfnekT
-	 kI6Q4iHz4QSj8tgm0LL0iW2/rJHljzTX8AxYwLzn/0qty3INbLHJk8kx+/DvbCszbt
-	 nEHec4tT3GEwfXog/1YwbcyqJ1wFHRJrbA0W4usII4VRseh1pTrNyEzWLhoLpLR1zQ
-	 Xr28HucsTTC23DJGrZs0x9yDnOO7320TCbZdjrMwLDDvZWmcVzzLtudjqaltL1p+5/
-	 0ALIsg1CEOzhuicuPcQ3e5a3mm0zmYWFUnlO2T5sXy652PEyKcDs8CelU8S0wY+1dp
-	 k1K4gQE9nufVw==
-Date: Tue, 29 Oct 2024 10:03:56 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>, Tom
- Zanussi <zanussi@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 0/3] tracing: Support poll on event hist file
-Message-Id: <20241029100356.099a6e639846aae4d0a6083f@kernel.org>
-In-Reply-To: <172907575534.470540.12941248697563459082.stgit@mhiramat.roam.corp.google.com>
-References: <172907575534.470540.12941248697563459082.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1730168693; c=relaxed/simple;
+	bh=BejeLQbo1KIgBvo+J8tJNR3BIiYcqRbZZewiSlPizpU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=u7MsncAU0BQPJABsaNy1xwAABUuh2OmAMOH95dK78C3kbr95ocDsHF2g2CVWODX1YTJ5BJ2fE5nZarqiaORBlIE5V5jIhS0FKdvgff5RgO+zFH/MXWnT1HMEyinc/I+t7QRLHHzavRr0p3CICi190yU9BkPupmwoKqJpkUxLegE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=R1xceYQw; arc=none smtp.client-ip=209.85.219.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e291cbbf05bso5070058276.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Oct 2024 19:24:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1730168691; x=1730773491; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hr1MZwBwlO+YKQauQw2Es16qQ1idtsr720ZzDRpS9+Y=;
+        b=R1xceYQwsJIwhG6WGlwsbUamI96Tfflhgy7i+SNiH30dcYivLKdpZWJJPQEqRW0P3u
+         pGyKq8EK09FVmT/XPt+aHlrP57iLnDQ/jPpVe7ECyQLvxvfbmEMD493V2CDgYd7YMNKK
+         7g0g2IkwZKuasJP9014+7AtLTIBzpKZTD6bsw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730168691; x=1730773491;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hr1MZwBwlO+YKQauQw2Es16qQ1idtsr720ZzDRpS9+Y=;
+        b=Ao/QwXLaZoWo1aPLz79e6r1CgDOJXRXxhTJ2pZuhbTaSBmslwqF0JR3EZmpqS5q6T/
+         EsBaVEZi3982jXuym1JkxSdZW6ZXlXqTIBORzgZhbciDhrp9Rfh2zun21IhAPZzl7/Se
+         26vIRJOkkYFoy1Z8omYtR6UJAjlFZS/a0ZD3DXY1OFS8ZH5OQdGsqWl274JlQ2401mrO
+         7epnc5OUoTDqrhO02/3p7CWlkWjwD7gy8jFYz5uYjiuEqwlE2VXssxjNZGkFwLoLL+CT
+         NMUIL9MjRM+NorQNquq7HXhYBYoZeZ0gFx7bxn0HyxbOA8tscaDosqvuD+v2CNqiEaHO
+         SsBg==
+X-Forwarded-Encrypted: i=1; AJvYcCX5Ib+GiS08TfRMX+8UP9pVHFQlh0r7ZNui3XOU3XngZdGXrdLJIfH1/ly4VtzKNKG6prlMTPBVEFnCshk6LDA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWO2cyp9hOGrhkYDumnfc5ml9TptvNEIdrrSeLSd6yvAy5WOk4
+	tk/nL9OiwhATqx/iGp3rEDAXex9Srk/rH9r4T9BfiO8rQ9akvs90k28pdKuiq3w=
+X-Google-Smtp-Source: AGHT+IEy08sPP3WsUtLOOnwON+JZxjpLJsAm3I7cFUijFCnA3vDdX1Ydp2n4L/4Ve45L/tFUc29ZCg==
+X-Received: by 2002:a05:690c:f87:b0:6e3:2e4b:ad9a with SMTP id 00721157ae682-6e9d895d649mr106694387b3.12.1730168690820;
+        Mon, 28 Oct 2024 19:24:50 -0700 (PDT)
+Received: from [10.200.3.216] (p99249-ipoefx.ipoe.ocn.ne.jp. [153.246.134.248])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72057a433dcsm6461059b3a.217.2024.10.28.19.24.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Oct 2024 19:24:50 -0700 (PDT)
+Message-ID: <3d36bb3c-07b8-43b3-a5ef-fe63b65429ce@linuxfoundation.org>
+Date: Mon, 28 Oct 2024 20:24:47 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH for-next 1/3] selftests/watchdog: add count parameter for
+ watchdog-test
+To: "Zhijian Li (Fujitsu)" <lizhijian@fujitsu.com>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Cc: "shuah@kernel.org" <shuah@kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20241025013933.6516-1-lizhijian@fujitsu.com>
+ <c2cae7a7-1a0d-48ef-9b8f-8d2436532ea7@linuxfoundation.org>
+ <0861d73d-4fd9-4118-91c8-5a619c7d7ca0@fujitsu.com>
+ <e907e67d-9116-4dd2-9b61-f93191737de6@linuxfoundation.org>
+ <b7b3deec-47fd-43e4-a9b5-7099e3c00623@fujitsu.com>
+ <54cbf018-eba1-4227-b464-78bfa41fa4ae@linuxfoundation.org>
+ <3ee0d14a-7f6b-4ef4-9349-d6b0f14ba9e8@fujitsu.com>
+ <f10e8a78-3b50-4212-9b5d-ba99a3421379@linuxfoundation.org>
+ <6862e399-b169-4ffb-b9c6-904f99d96e56@fujitsu.com>
+ <19579b1c-0a9b-4c72-be00-44871dd37b9a@linuxfoundation.org>
+ <a6a5d13b-c550-4a99-9a84-b28e8314ccd1@fujitsu.com>
+ <e0bf1824-c476-490c-b63c-0789dabd788b@linuxfoundation.org>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <e0bf1824-c476-490c-b63c-0789dabd788b@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Wed, 16 Oct 2024 19:49:15 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+On 10/28/24 00:44, Shuah Khan wrote:
+> On 10/28/24 00:32, Zhijian Li (Fujitsu) wrote:
+>>
+>>
+>> On 28/10/2024 14:25, Shuah Khan wrote:
+>>> On 10/28/24 00:06, Zhijian Li (Fujitsu) wrote:
+>>>> linux/tools/testing/selftests/watchdog# make run_tests
+>>>> TAP version 13
+>>>> 1..1
+>>>> # timeout set to 45
+>>>> # selftests: watchdog: watchdog-test
+>>>> # Watchdog Ticking Away!
+>>>> # .............................................#
+>>>> not ok 1 selftests: watchdog: watchdog-test # TIMEOUT 45 seconds
+>>>>
+>>>>
+>>>> And i got warning in dmesg
+>>>>
+>>>> [ 1953.229511] watchdog: watchdog0: watchdog did not stop!
+>>>>
+>>>>
+>>>>
+>>>>
+>>>
+>>> Run "make run_tests" under strace and send me the output.
+>>
+>>
+>> Could you share the exact command, how to 'Run "make run_tests" under strace'
+>>
+> 
+> strace make run_tests > strace.out 2>&1
+> 
+> Send me strace.out
 
-> Overview
-> --------
-> This patch set allows user to `poll`(or `select`, `epoll`) on event
-> histogram interface. As you know each event has its own `hist` file
-> which shows histograms generated by trigger action. So user can set
-> a new hist trigger on any event you want to monitor, and poll on the
-> `hist` file until it is updated.
+Thank you for the strace output. kselftest uses a timeout to terminate
+hung tests - that timeout is 45 seconds. When you run "make run_tests"
+under watchdog directory, you are running into this.
 
-Note: This `hist` is not disabled by tracing_on interface, because
-that interface only disables `recording`.
-Thus to monitor events via this interface, user must ensure the
-tracing_on is enabled, also, set the same "filter" to the hist
-action.
+Yes your fix to add SIGTERM handling makes sense. Please also handle
+other signals - SIGKILL, SIGQUIT.
 
-Thank you,
+Thanks for the find.
 
-> 
-> There are 2 poll events are supported, POLLIN and POLLPRI. POLLIN
-> means that there are any readable update on `hist` file and this
-> event will be flashed only when you call read(). So, this is
-> useful if you want to read the histogram periodically.
-> The other POLLPRI event is for monitoring trace event. Like the
-> POLLIN, this will be returned when the histogram is updated, but
-> you don't need to read() the file and use poll() again.
-> 
-> Note that this waits for histogram update (not event arrival), thus
-> you must set a histogram on the event at first.
-> 
-> Usage
-> -----
-> Here is an example usage:
-> 
-> ----
-> TRACEFS=/sys/kernel/tracing
-> EVENT=$TRACEFS/events/sched/sched_process_free
-> 
-> # setup histogram trigger and enable event
-> echo "hist:key=comm" >> $EVENT/trigger
-> echo 1 > $EVENT/enable
-> 
-> # Wait for update
-> poll pri $EVENT/hist
-> 
-> # Event arrived.
-> echo "process free event is comming"
-> tail $TRACEFS/trace
-> ----
-> 
-> The 'poll' command is in the selftest patch.
-> 
-> You can take this series also from here;
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/log/?h=topic/event-hist-poll
-> 
-> Thank you,
-> ---
-> 
-> Masami Hiramatsu (Google) (3):
->       tracing/hist: Add poll(POLLIN) support on hist file
->       tracing/hist: Support POLLPRI event for poll on histogram
->       selftests/tracing: Add hist poll() support test
-> 
-> 
->  include/linux/trace_events.h                       |   14 +++
->  kernel/trace/trace_events.c                        |   14 +++
->  kernel/trace/trace_events_hist.c                   |  100 +++++++++++++++++++-
->  tools/testing/selftests/ftrace/Makefile            |    2 
->  tools/testing/selftests/ftrace/poll.c              |   74 +++++++++++++++
->  .../ftrace/test.d/trigger/trigger-hist-poll.tc     |   74 +++++++++++++++
->  6 files changed, 275 insertions(+), 3 deletions(-)
->  create mode 100644 tools/testing/selftests/ftrace/poll.c
->  create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-poll.tc
-> 
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+thanks,
+-- Shuah
 
