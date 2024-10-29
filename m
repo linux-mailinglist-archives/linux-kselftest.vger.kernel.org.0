@@ -1,230 +1,167 @@
-Return-Path: <linux-kselftest+bounces-20957-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20958-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC9969B4C5C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 15:42:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAB189B4C6A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 15:46:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C80D1F24641
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 14:42:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 806E828133F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 14:46:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDD452071E7;
-	Tue, 29 Oct 2024 14:42:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="XoV1iF7X"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9C4E1865E3;
+	Tue, 29 Oct 2024 14:46:00 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2044.outbound.protection.outlook.com [40.107.244.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03F3206E9A;
-	Tue, 29 Oct 2024 14:42:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730212974; cv=fail; b=CZS+HGx76t6Vy0uleLzWosNhJM4sV6xy6zDsVCdDWsbWgHjM1Q+I6ra0A4o6gS/BOU+7Hq04x2N5cdJ/ZHMA+h/yfnF2xRYaVqjw3tZLanfpTp/4xWzcHerMTRYN+FJhADnxhJEb/D5PtbaM6iVCHQHaUEnZfk2XaqZi+BWelVw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730212974; c=relaxed/simple;
-	bh=3ml3QESvHyTtaNd+FHxwJss+zjqT0Q6YpMH2WUkU1Fk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=A7pDwoWj5+Y2zJh7TpWLWHsNO30Oz/jGJV8I37LiZWfgJRQkvAjBYfZ8IiQ54sg/froUb1UnZiUSkdEGlCXOKRD9LnuuxiFenBPdSx5eZL607IO0oLW08usRNdG7abNwDV3mOe9fjpnSROmbpUqXefiWDeenNEU4GFmgN60saR0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=XoV1iF7X; arc=fail smtp.client-ip=40.107.244.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kyqMpZKjf3bsssewNegdX5bad9mBNiXeAJdxDlQXs3fN6fvZe15/OtHGzTRDxPMsZHF3VOr6MD4akKjkD2AS7WjvbL9WkCJvYrjtXouJoapDwyzPYHjq/0EYrMKeNycV95Kfv6xvJtsmLBvW2XXeFo8hADGHqoLuSOIe1uDa7vlsoWOa3Fzh2p2N9KvRPy5MDuIue9xPh5l2HTLYjqJdvCLJ0/XH0fCmE78ONmk4ZFWs1IfdFnsxFo+dwN9/1erx7QX34YhomZOsa8UEKJDQtYCDbISaiTKye1wXopY1Mwir3JOU/iVSVDL/xp66rfhW8OZsz3ZI3DOaFBWtpnq6Jw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6h5vQxCJeDzyRwVKNHxGKWLM4F24idCZCnk5/EbgZp4=;
- b=C65BstvbRzFJTaxOOLFnrm+YGpj87aUHB0a04ojOKf21wrz34dWDOU2TYwHlOuRvRU658KZOSL1O4wznicr5XU9WiXH3wxkMyYiaUqun6wsdbxYiCj7NnW6Qz7kw6IinH9ZclGgp4xuhbc29NgbYS61cZ56rznnUD4qC3GXVTD9Q8r4TWv9uZI4BHtkP2SVknwG8wQLaAvODSD+lfl9D1ZbTRMwH5zjbRdDLYACzUYpvItw0FwGkaJ1cS2VJBILPwDOQnGdrW8m7FTXje4q9KGmIWsk4So2xIHjoTD98IVO1rKUTWz16DMZgmJk5LhFRaLJx9+hExEb2X0rU9X8nww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6h5vQxCJeDzyRwVKNHxGKWLM4F24idCZCnk5/EbgZp4=;
- b=XoV1iF7XoDUIsWrzZWyxZkP014oVamJcP+g3UqVdlX7huuWNqT/h2K3ur5HmlfQtJeTyolsFnvVFpqNKvG0TIKc6wrdv20F91Z0Gr6wR/rigF9asxrzJm7g4SW3S0fvS6+61wSmIW6t+3Q7UGxgqI9hCbQeXCzSj8uVJlMLf/Lpowbr+kqQTkJ9MlcVjc0XnLylev+b3akAFkrmNhz5jz/kZOkc0nNcVfWGxryfG6P9YvO8dCSv6TifuY6wsq2GiAhT+8kgQis5rf47pA1BDKcTtBQZUTn0oXrh0gCRQtLZFIxGFlYBOh1a21MpFM2ATL0s8z5aauaiMVlBEYuVwEg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by IA1PR12MB8221.namprd12.prod.outlook.com (2603:10b6:208:3f0::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.32; Tue, 29 Oct
- 2024 14:42:48 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.8093.018; Tue, 29 Oct 2024
- 14:42:48 +0000
-Date: Tue, 29 Oct 2024 11:42:47 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: kevin.tian@intel.com, will@kernel.org, joro@8bytes.org,
-	suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
-	dwmw2@infradead.org, baolu.lu@linux.intel.com, shuah@kernel.org,
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, eric.auger@redhat.com,
-	jean-philippe@linaro.org, mdf@kernel.org, mshavit@google.com,
-	shameerali.kolothum.thodi@huawei.com, smostafa@google.com,
-	yi.l.liu@intel.com, aik@amd.com, zhangfei.gao@linaro.org,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v5 02/13] iommufd: Introduce IOMMUFD_OBJ_VIOMMU and its
- related struct
-Message-ID: <20241029144247.GA209124@nvidia.com>
-References: <cover.1729897352.git.nicolinc@nvidia.com>
- <e172d2370223a5a012a70aea76175b71a95964f0.1729897352.git.nicolinc@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e172d2370223a5a012a70aea76175b71a95964f0.1729897352.git.nicolinc@nvidia.com>
-X-ClientProxiedBy: BN9PR03CA0115.namprd03.prod.outlook.com
- (2603:10b6:408:fd::30) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DCB210F9
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 14:45:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730213160; cv=none; b=UT8mNsU/kayCkdJAtn859Q9thmkzNAWB4EoFl4U/kZdkLZmxBPq0G/djH0iRqMppC8Hdp/M01MXhSQABz4zznZiTN4kxoGDmprcxIHvsNoqLXwSorBjQ5fyS1wWjbeqkadSYT8uwUhaPduK8PDhbi04mMBBRvljBZNItiLTkqmQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730213160; c=relaxed/simple;
+	bh=x221B/LCgNAlf7v4QOjjbTajYjUt9DP00VlKkpM4Rds=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=caox3Bfp+QSLjm8qbuBq46QvXk4ik3gHAT+gLJu1Lmy7o3B3kKNMrdB1acyYD5tCj9rvdmSQiXZ0OnKjooDULMHsHd3BjryD32y+5RVenNRWG1pQVIyoe7j0FeVLqxNFpqr9xiLmahjhtOdBILWMJZZitRfQ/qRuvkII3lykCwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9423C113E;
+	Tue, 29 Oct 2024 07:46:26 -0700 (PDT)
+Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 12BC83F528;
+	Tue, 29 Oct 2024 07:45:53 -0700 (PDT)
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+To: linux-arm-kernel@lists.infradead.org
+Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
+	akpm@linux-foundation.org,
+	anshuman.khandual@arm.com,
+	aruna.ramakrishna@oracle.com,
+	broonie@kernel.org,
+	catalin.marinas@arm.com,
+	dave.hansen@linux.intel.com,
+	Dave.Martin@arm.com,
+	jeffxu@chromium.org,
+	joey.gouly@arm.com,
+	keith.lucas@oracle.com,
+	pierre.langlois@arm.com,
+	shuah@kernel.org,
+	sroettger@google.com,
+	tglx@linutronix.de,
+	will@kernel.org,
+	yury.khrustalev@arm.com,
+	linux-kselftest@vger.kernel.org,
+	x86@kernel.org
+Subject: [PATCH v3 0/5] Improve arm64 pkeys handling in signal delivery
+Date: Tue, 29 Oct 2024 14:45:34 +0000
+Message-ID: <20241029144539.111155-1-kevin.brodsky@arm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|IA1PR12MB8221:EE_
-X-MS-Office365-Filtering-Correlation-Id: 28cb35d3-f43c-46c6-db7c-08dcf827f52d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?PQQVEpzsLkpnVjjiE1/fYaQGcYVag8aZX+iwSbZuNnKkQm7PLX+Z0ieWht7E?=
- =?us-ascii?Q?yQp0TKulp8EBeHVC1j/DlGycXsvejzxjiI2Zof0zTLUR9SNS7mBfU6dbS+EA?=
- =?us-ascii?Q?FEGEickezvCkOwDBAar0rCri/mc1ZCSU193f012YVnOat0M53QrMIZRYpLy9?=
- =?us-ascii?Q?pVremj5E51RxknciLx8MRJKafSgwmdyf23GVoY7cG0BkAVe3QcUaWkZZoPe1?=
- =?us-ascii?Q?/GCtJ/wB0nm0SmGvPyFt+D1tzgeNuXMdLWq5yCNExvJIWNqoobY4Ops9+RKt?=
- =?us-ascii?Q?6XY9jaUJ2Ua6yspjTYsH/lrVP0wIXm9afArktZq27hhztkPct0MBq1AXYMVl?=
- =?us-ascii?Q?lgOf/9RDTkQFFJ3csSUfCBEX4XI6iywsJvTDOhF6O6hzMqt5NIf1Uh3mzWVc?=
- =?us-ascii?Q?mnt5mUs9AYkI3niYQ/RsGKBNo0AVCNEOVpRznQvpZIIoNN2L7MNB3G9a0eZm?=
- =?us-ascii?Q?5xNS3xJjbfxY83Gzvr1qpBo7ELCdbKJFclJ3/mVYKUpzitm3tV3Xt/3C+td3?=
- =?us-ascii?Q?94GT3Py6x62T4wxCJUIrfpwKAnflkHwDguIgATPufYOHRVv5wIdIEGOJkSrG?=
- =?us-ascii?Q?aXgBNi6X1L5bkDehWOQ0F/hDuBC27aQIJHgmyvpCA3QVW2UWJpb+A+pmcbkC?=
- =?us-ascii?Q?L1FAQt+yrB5JcGdeMW4kzcSH05u5C2ODXQUisFAuzSpCb733jA1/sWF14/yB?=
- =?us-ascii?Q?nVvkqqb9h4ouzU6IBSFW3M+bka3GbP4Y3s201DbporTq1NTqwWDd23oR5IBn?=
- =?us-ascii?Q?LwyZvGWdhcBllfDgue+QDNX4M4zrrqNydTURKCEIPJnT+7j74CREBfZHICe7?=
- =?us-ascii?Q?ZBIR/Iq0rGOffyytkmB/8keXVF0N8a8MNdotSh2TjtLdE5DQ9u1ee93EViFv?=
- =?us-ascii?Q?UcS1kZEX3/S0Xp7pqZZb1SQKhulKVP45mF8BT9M7lwp20aMcrHMn8hHjJjwz?=
- =?us-ascii?Q?OftziGLQZjF2v0mlqPctTPF7bvfNOmKwfZq5uJ8+zflPi25NMvGzbx51khlb?=
- =?us-ascii?Q?KLTz8MrkVkM0RUYHZiUUy6eEIYi8wQmapVzPKRc07InD4CpDrc6uDDyV34z4?=
- =?us-ascii?Q?Q7KRJUtnCLb2XROAIBVt1w888bqOOetalhmHbVWhyuz7OgOx7frab11GJkbS?=
- =?us-ascii?Q?iouDLJmG6ThySIAFXxzE7lrM27wYyVWjJtdeJe7L+XDfqmNagyTCfIjRuwLY?=
- =?us-ascii?Q?ZWHSLEoy5yGw8GAsNc/1qFGofzyZMR0Qw1vJOLTCNnVcCetq8okOKRWM/Py2?=
- =?us-ascii?Q?P84/Pg/EwenSvBqBIcZTc7DpxUIqlwWv0R1KWHfIQYYl2N08XsiSQZlHskmf?=
- =?us-ascii?Q?pdzAl+zd77KtV9VUMFXvbYX3?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?b/hIRD13EX0KjXxuzk81QxwvJaChd89+bwZUOcLTljBEhqIaAc3SIfhFOJUB?=
- =?us-ascii?Q?1PWzrt/qMs2O4kAQWgRUGEDtAUta8mDDhs8X0eBwM0xKJqYxfmEQ2uXMJICv?=
- =?us-ascii?Q?j06AVG3tj/C5a7sDz02of2EBIi8I62KntUAjgmsWmtD9Fi08G+gtbaO0+aLp?=
- =?us-ascii?Q?YmPotfVmla6ERHBwmL5WspVP86zlTT8f4cGG3Z1a9z59dbM7js83HPcPZFfb?=
- =?us-ascii?Q?ytEyvl8PZqStCPcrustj75O6gXdy6Zle0TtgXsOGaYRkGk/TH/bE+S1Fz5EN?=
- =?us-ascii?Q?1PFcJyKDwDYV+3385mMgJ0B+s7TEe1AvJDzoxLAc2AyIQG8PeOj2x1koVw/j?=
- =?us-ascii?Q?cyy59y/O4do6BpwoVpT+8VXwkuLYvyh0Rco/4szmNs2MBuX5EwpPM0MqQkoY?=
- =?us-ascii?Q?SEL4lCmKiFBMdeSliq4aSsmQ+h6FPLM0MwqLAhzC2S/PPrUS7AsIDXbniR/p?=
- =?us-ascii?Q?ip42zIlZKVaKMjD63MtbLNSDoSfQjpMnPRDdEJGrsn0I1mjhwqpRm+z+bu3x?=
- =?us-ascii?Q?AcrQGriYdmeANpvgXz4NovztpvnrATx29u40KRCy29sATBbZ8hvQDFz91XNf?=
- =?us-ascii?Q?A1DRKdcTR3fQRTzicPSYcotdONc+FJ5OM7XSjIaXQnSXxgFvMNLPG6P40rMy?=
- =?us-ascii?Q?0lUsjpatsAAvOAFMhgChdhgqpLrSjoYYCJ/Dcc+icc74p62ZSkMruj7mder0?=
- =?us-ascii?Q?HnqdMjWv/G639e1jY1aTQrhnhQD6MRQmL6ujj6DxXGwWgx+OxCAZ6rfiPDpC?=
- =?us-ascii?Q?VgtoZkrpCDEA3/TYLjaF8jjjw/hGXnkb+1aiK7cMRZCzj169H3M8TwuN+gSw?=
- =?us-ascii?Q?xflL7Zdc7JRZsYsil40ZTA+vZq+y27GqQImZ2K/LeDHjV9doAV5+28myGnKX?=
- =?us-ascii?Q?16aCObGS+dbSLUM0GE6ITDjWQyCRRcMaT1mLAmyzq4AFu+IbGzQqK1dCcE0d?=
- =?us-ascii?Q?KMO3MLGFMc1VkuMJMiYO00AlTgHWWbmfYNvqrzGip3RjpyOJ0pgpOu535YBc?=
- =?us-ascii?Q?M7WGzp/aonQWDpCPnarIJqcDLP3GWTW8FE9MVac3bAmacTNFPrCtEa840Oyl?=
- =?us-ascii?Q?RlOkZQqdfZWmmwAP7EJnzoyr+id1d0yPUa3nrOOT1GC82DvnSP+5WfVlfJ+d?=
- =?us-ascii?Q?tr3ojewCBOesnQ/5MhC2D8LC+2gTaLcxzedanZqBSQbWvtXefg2yQa5O/X1k?=
- =?us-ascii?Q?LmhntKiFObWQ9vI/7vYPs2Dp715wKh0p7eyku0QpwdwD1jqNALn8XuySuN5w?=
- =?us-ascii?Q?0SN9INVL32WfMf+EBh+wlKOJ27cLkIA1AJXwqoxQCZU4i4fPd2wAclPyaYoS?=
- =?us-ascii?Q?DBCFCoYleW8a5fqK1xFwlqR+i1MNMGfXVernZel38iAxsljjBj/d+yVo7ZuI?=
- =?us-ascii?Q?+W2jvErBeiWz68c5DQsVzCcuYda4w78M3n8JUy7x0p/KE/K3FGQgwYKtCO9X?=
- =?us-ascii?Q?zC74BiD9S4RyJFUQazwBpsZkasuX8p/pTZ4PR2173X1AGZXsGvuBce37Y3O/?=
- =?us-ascii?Q?3cmaX+q4u7TTsM95DyPAyupBhRkOPDku5Cm1kEtSCcW/z9q8ao1ciaxXJoAg?=
- =?us-ascii?Q?fHjgbDpf1q6cyfOClDc=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 28cb35d3-f43c-46c6-db7c-08dcf827f52d
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Oct 2024 14:42:48.2585
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2ID8Ju49NMB3z/NXKM/iSB5xZutpz3hOK933nw8H+Fugw/ron3y+WezUOmj1BGiy
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8221
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 25, 2024 at 04:49:42PM -0700, Nicolin Chen wrote:
-> Add a new IOMMUFD_OBJ_VIOMMU with an iommufd_viommu structure to represent
-> a slice of physical IOMMU device passed to or shared with a user space VM.
-> This slice, now a vIOMMU object, is a group of virtualization resources of
-> a physical IOMMU's, such as:
->  - Security namespace for guest owned ID, e.g. guest-controlled cache tags
->  - Access to a sharable nesting parent pagetable across physical IOMMUs
->  - Virtualization of various platforms IDs, e.g. RIDs and others
->  - Delivery of paravirtualized invalidation
->  - Direct assigned invalidation queues
->  - Direct assigned interrupts
->  - Non-affiliated event reporting
-> 
-> Add a new viommu_alloc op in iommu_ops, for drivers to allocate their own
-> vIOMMU structures. And this allocation also needs a free(), so add struct
-> iommufd_viommu_ops.
-> 
-> To simplify a vIOMMU allocation, provide a iommufd_viommu_alloc() helper.
-> It's suggested that a driver should embed a core-level viommu structure in
-> its driver-level viommu struct and call the iommufd_viommu_alloc() helper,
-> meanwhile the driver can also implement a viommu ops:
->     struct my_driver_viommu {
->         struct iommufd_viommu core;
->         /* driver-owned properties/features */
->         ....
->     };
-> 
->     static const struct iommufd_viommu_ops my_driver_viommu_ops = {
->         .free = my_driver_viommu_free,
->         /* future ops for virtualization features */
->         ....
->     };
-> 
->     static struct iommufd_viommu my_driver_viommu_alloc(...)
->     {
->         struct my_driver_viommu *my_viommu =
->                 iommufd_viommu_alloc(ictx, my_driver_viommu, core,
->                                      my_driver_viommu_ops);
->         /* Init my_viommu and related HW feature */
->         ....
->         return &my_viommu->core;
->     }
-> 
->     static struct iommu_domain_ops my_driver_domain_ops = {
->         ....
->         .viommu_alloc = my_driver_viommu_alloc,
->     };
-> 
-> To make the Kernel config work between a driver and the iommufd core, move
-> the _iommufd_object_alloc helper into a new driver.c file that builds with
-> CONFIG_IOMMUFD_DRIVER.
-> 
-> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> ---
->  drivers/iommu/iommufd/Makefile          |  2 +-
->  drivers/iommu/iommufd/iommufd_private.h |  4 --
->  include/linux/iommu.h                   | 14 +++++++
->  include/linux/iommufd.h                 | 53 +++++++++++++++++++++++++
->  drivers/iommu/iommufd/driver.c          | 38 ++++++++++++++++++
->  drivers/iommu/iommufd/main.c            | 32 ---------------
->  6 files changed, 106 insertions(+), 37 deletions(-)
->  create mode 100644 drivers/iommu/iommufd/driver.c
+This series is a follow-up to Joey's Permission Overlay Extension (POE)
+series [1] that recently landed on mainline. The goal is to improve the
+way we handle the register that governs which pkeys/POIndex are
+accessible (POR_EL0) during signal delivery. As things stand, we may
+unexpectedly fail to write the signal frame on the stack because POR_EL0
+is not reset before the uaccess operations. See patch 1 for more details
+and the main changes this series brings.
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+A similar series landed recently for x86/MPK [2]; the present series
+aims at aligning arm64 with x86. Worth noting: once the signal frame is
+written, POR_EL0 is still set to POR_EL0_INIT, granting access to pkey 0
+only. This means that a program that sets up an alternate signal stack
+with a non-zero pkey will need some assembly trampoline to set POR_EL0
+before invoking the real signal handler, as discussed here [3]. This is
+not ideal, but it makes experimentation with pkeys in signal handlers
+possible while waiting for a potential interface to control the pkey
+state when delivering a signal. See Pierre's reply [4] for more
+information about use-cases and a potential interface.
 
-Jason
+The x86 series also added kselftests to ensure that no spurious SIGSEGV
+occurs during signal delivery regardless of which pkey is accessible at
+the point where the signal is delivered. This series adapts those
+kselftests to allow running them on arm64 (patch 4-5). There is a
+dependency on Yury's PKEY_UNRESTRICTED patch [7] for patch 4
+specifically.
+
+Finally patch 2 is a clean-up following feedback on Joey's series [5].
+
+I have tested this series on arm64 and x86_64 (booting and running the
+protection_keys and pkey_sighandler_tests mm kselftests).
+
+- Kevin
+
+---
+
+v2..v3:
+* Reordered patches (patch 1 is now the main patch).
+* Patch 1: compute por_enable_all with an explicit loop, based on
+  arch_max_pkey() (suggestion from Dave M).
+* Patch 4: improved naming, replaced global pkey reg value with inline
+  helper, made use of Yury's PKEY_UNRESTRICTED macro [7] (suggestions
+  from Dave H).
+
+v2: https://lore.kernel.org/linux-arm-kernel/20241023150511.3923558-1-kevin.brodsky@arm.com/
+
+v1..v2:
+* In setup_rt_frame(), ensured that POR_EL0 is reset to its original
+  value if we fail to deliver the signal (addresses Catalin's concern [6]).
+* Renamed *unpriv_access* to *user_access* in patch 3 (suggestion from
+  Dave).
+* Made what patch 1-2 do explicit in the commit message body (suggestion
+  from Dave).
+
+v1: https://lore.kernel.org/linux-arm-kernel/20241017133909.3837547-1-kevin.brodsky@arm.com/
+
+[1] https://lore.kernel.org/linux-arm-kernel/20240822151113.1479789-1-joey.gouly@arm.com/
+[2] https://lore.kernel.org/lkml/20240802061318.2140081-1-aruna.ramakrishna@oracle.com/
+[3] https://lore.kernel.org/lkml/CABi2SkWxNkP2O7ipkP67WKz0-LV33e5brReevTTtba6oKUfHRw@mail.gmail.com/
+[4] https://lore.kernel.org/linux-arm-kernel/87plns8owh.fsf@arm.com/
+[5] https://lore.kernel.org/linux-arm-kernel/20241015114116.GA19334@willie-the-truck/
+[6] https://lore.kernel.org/linux-arm-kernel/Zw6D2waVyIwYE7wd@arm.com/
+[7] https://lore.kernel.org/all/20241028090715.509527-2-yury.khrustalev@arm.com/
+
+Cc: akpm@linux-foundation.org
+Cc: anshuman.khandual@arm.com
+Cc: aruna.ramakrishna@oracle.com
+Cc: broonie@kernel.org
+Cc: catalin.marinas@arm.com
+Cc: dave.hansen@linux.intel.com
+Cc: Dave.Martin@arm.com
+Cc: jeffxu@chromium.org
+Cc: joey.gouly@arm.com
+Cc: keith.lucas@oracle.com
+Cc: pierre.langlois@arm.com
+Cc: shuah@kernel.org
+Cc: sroettger@google.com
+Cc: tglx@linutronix.de
+Cc: will@kernel.org
+Cc: yury.khrustalev@arm.com
+Cc: linux-kselftest@vger.kernel.org
+Cc: x86@kernel.org
+
+Kevin Brodsky (5):
+  arm64: signal: Improve POR_EL0 handling to avoid uaccess failures
+  arm64: signal: Remove unnecessary check when saving POE state
+  arm64: signal: Remove unused macro
+  selftests/mm: Use generic pkey register manipulation
+  selftests/mm: Enable pkey_sighandler_tests on arm64
+
+ arch/arm64/kernel/signal.c                    |  95 ++++++++++++---
+ tools/testing/selftests/mm/Makefile           |   8 +-
+ tools/testing/selftests/mm/pkey-arm64.h       |   1 +
+ tools/testing/selftests/mm/pkey-x86.h         |   2 +
+ .../selftests/mm/pkey_sighandler_tests.c      | 115 ++++++++++++++----
+ 5 files changed, 176 insertions(+), 45 deletions(-)
+
+-- 
+2.43.0
+
 
