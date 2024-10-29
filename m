@@ -1,231 +1,370 @@
-Return-Path: <linux-kselftest+bounces-20922-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20923-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF9A39B45A9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 10:25:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 299509B45DE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 10:42:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C30F1F230F5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 09:25:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8E281F2349F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 09:42:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35951204931;
-	Tue, 29 Oct 2024 09:24:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56D2F2038D3;
+	Tue, 29 Oct 2024 09:42:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NWsuspQ4"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="SRVMMa3h"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C7A4203708
-	for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 09:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042F01E1025
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 09:41:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730193888; cv=none; b=U+dC9juP/xjg+Vy+/rgXDwaIue0jzz3B8oIgMwHhg6yNUKeg9bVs0DR4TZrCyL7q9LoRQCMblMK7CUq2/JSnwuy6moYFpLC2rGH/qUDVCYVV/HP8ikYtetsl/+kLzibiNr3KZIZMjdFd39woaFYu0bbEXUmOXRIzia5G9GCSTZc=
+	t=1730194920; cv=none; b=EEuXv5n238DlJ8N9lio/Crcqrz46zMjbQgazaL2h6BicY+w1yvqM4SbWa9STSEpnlm/m5vFBNQ60sHlIwX7/p8yXFL6TEUPoN4+uO4OV1j00NRaYR+lXyzgLu1cLazNllTpHALakRPDyysGOwaRy2fkbtixjMdYXqQZzl9+TaXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730193888; c=relaxed/simple;
-	bh=lvKDYgMcSvvhTyIBb6ECAc1q865WqLsWsBgNoK5wF70=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=aZo/yzyHjPqmciyGdfA4y0t4l43wUeH2+w12LLbhONpNjTKtxkUhzd2h7DfNiMMOXKKujaGOXyJerMEoxSq5O8NqCPh+8GITQ/Hv0U+2H8iuri2l2qdY/QVkjDZu+pIA7TzCsVXBGRTQ7T8455a52XyueSMqwp/37st1mzGG1JI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NWsuspQ4; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e290947f6f8so9361977276.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 02:24:45 -0700 (PDT)
+	s=arc-20240116; t=1730194920; c=relaxed/simple;
+	bh=Rk1U0Q8IPzGXyW42DR/flbGw6vgMx+pYnP4sPaLW3FY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cMssG3UOKPWnWy5qwMIStYsJNQdzljwmhsZA2Gowrgjk0nneSo7KDaT2Rhn3IeFD6wHCfZsscYHDzT4dJmpUiGrouuMJPFS9MiCFracLn3I14zSxHXHH1E+7xWHJo2pGuQtfwRiAULalqSdvXydafyBMuzXs6fQ3PA+EZZaE9vE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=SRVMMa3h; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-37d3ecad390so4534855f8f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 02:41:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730193885; x=1730798685; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ci1oKFH7l7WT9pl4IwsUJvvMv23hze9L/lrXNyoJlVo=;
-        b=NWsuspQ4VW5XaQgZXor47tgDVdnrt9Fq80ycCRpfD4phtzLiR/T7C2X4JImcNhwsTY
-         o93zF+dQUTDr5VD+m7UgKWfEzLfoSmmug8FCtLOgeMkrAhxpRH6FcZ8IT7sW/lVxrqUv
-         wonhjgnHysSjYPah294jE28LVB/cNcEe1jTCr1ZwDWQj69d/uS9vDjUxTi+7C6OCYfV7
-         tIxTnnDOsaVuoVKHZHXyF0HPx1l0X2SE37DzSJz7Vfy8Ss39IUMsykztOfBrX1/n/Z35
-         8+AAKLoo39AznLENhwdD80zIFr3pIlaALJuNeBWA6cvwRfZiFfeBSPZIXP4ljG041Mda
-         lk3g==
+        d=openvpn.net; s=google; t=1730194915; x=1730799715; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=gLtr73VHqwgdcXGBbLOcbwXiHKwoIVyQG3J6RSZ3YZs=;
+        b=SRVMMa3hn04cPq8TfRTkmFUq8h1qw6olJ5xv16506j/oS1nxovegaQk8g+hZkJdQx1
+         ON1zMTufq2aocOi5WokkMR6haIIgrvRX7jpuLQz6fjvkp70P+a0SDAQhGXLjUd9YCE+x
+         2vGROjiVfPEQoTqzdQ4l5iP7WaiXzag6okfKqGeLQVYugeHN6fAGKdDpl8uD5amaRz2v
+         CN7uuFmUGJcOcJ65xUe43PP0KFn3FiD9Ze5KHKCgqEBV7OuFRfoY3jFvwraspJI0v0Lk
+         Dt22KI16KA4L8HUJVWTegId8j/BX8GM+PXYNMngwuD8Mey+neZ7it0E29U1C432ira/8
+         QquA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730193885; x=1730798685;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ci1oKFH7l7WT9pl4IwsUJvvMv23hze9L/lrXNyoJlVo=;
-        b=pLWvzXrG5uc7gzHZ0NriyBDtRDSG1IH8hS6WhERtIF4zJvT23DzIPfrV6GtZdb+2Oc
-         4YC9slMIN0pD3OemzZcxF3IZ/S/37VwuP99YML2DTR84IuxGnsNrbMUwZniyTua1Q/G7
-         2SkRDPupVB1mMiHv3Md+WTw9nVAgIF1xau3NgDvrw66eD8gz2G8QhdAoCclMeJcR99Po
-         apD0RAN/ooogMVGo16EMOGfdBSSCW8suTOUGR8msC+vYy5bLJeLNlN+hLCtALiJTHYqA
-         AImi9He3jomHAIGrX5h+N/H71iFUvsKnL7meNGkb83COkVI/yoM4p5XUq8uOPCUtGvS8
-         j4KA==
-X-Forwarded-Encrypted: i=1; AJvYcCWSaV3V94h46bQ32SL8gwVZ83q4PX9kGdxKXjKkpTrB/WWvXN7aIyCBmRnrklifNNPGu7+pOioIjIJCUGj0vWY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxt4D6lXsahG1Y7NKYuBBaqsJwBT7HklLzxbcISqVNFz4t4drZR
-	6m5PBIIpgAVe568TkYcZpdyKckfg5GOVmaGNUHDIIDSL/WJ3UxY2J7aiDMe4w0Q6MG9/40s/wkS
-	HOLcjOuDdqQ==
-X-Google-Smtp-Source: AGHT+IEqlyW4/tadreX6bN11wpCmzXQCZWMdmwaTsthqhgrxW9b3cNSTo/5NH/qdY8Gte5je22w3U1+J/ieEyw==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:b1:7045:ac11:6237])
- (user=davidgow job=sendgmr) by 2002:a5b:2ca:0:b0:e30:bf92:7a64 with SMTP id
- 3f1490d57ef6-e30bf927b96mr1319276.2.1730193884736; Tue, 29 Oct 2024 02:24:44
- -0700 (PDT)
-Date: Tue, 29 Oct 2024 17:24:19 +0800
-In-Reply-To: <20241029092422.2884505-1-davidgow@google.com>
+        d=1e100.net; s=20230601; t=1730194915; x=1730799715;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gLtr73VHqwgdcXGBbLOcbwXiHKwoIVyQG3J6RSZ3YZs=;
+        b=b63NsuLhXy8Ht0tJA6h4j9UjbjeBF1AgzjvtVwv9GlDRxcRCJTmXxbJAkoluTVtr+P
+         OOkvf8BFrOKJa+QN+2jkVSkgM/g7FSxcp9M+/GWJ36Gx5IJSDGaArKoPfNnD17au7tcf
+         cva9lwV2NBGxxCgNrknXvs44VAN1YkMI27Gb/9n4wM1BwdS8T9hn9SAj8acel+1fAf1z
+         CR62p+1fnkzb9Jzet7+Cx9mW9ZfHn+dGumiDFTi4IzOppOJcoktHCdGv04M1hL1uJYAm
+         MYc/ExP/beOLRcLYuMiakVr/M8tmLxdugOuxvyFr4VpQ6pLVIeDb4p//VjfALWB1Ef7p
+         zQbg==
+X-Forwarded-Encrypted: i=1; AJvYcCXyywqWlLZGFxHTg7sg8sHv9DT5E4zBpdQsAgKOgrgULRWf1/63CDl98KdKmLbTAICaGHInJf+iuP7Cf493Ntk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyj9yod2YUv7wMGWDIzM33LExzADqFOu+bFkujTjZ5ErPKwEtLa
+	/PfQmXAft+o2J4fKtB/5s3zZHU2r5grV0VoGrQVfn+LIVgzQbwbOZoObdNLzdq4=
+X-Google-Smtp-Source: AGHT+IGqXDwnFNH7alnVVvpJskyB5278JBHkmt0HsSMEI09m7FRSIIR7myTRb9sj6Ecl9UHEE9DuWQ==
+X-Received: by 2002:a5d:45c5:0:b0:374:bf6b:1021 with SMTP id ffacd0b85a97d-38162916869mr1208668f8f.27.1730194915081;
+        Tue, 29 Oct 2024 02:41:55 -0700 (PDT)
+Received: from ?IPV6:2001:67c:2fbc:1:3dcf:a6cb:47af:d9f? ([2001:67c:2fbc:1:3dcf:a6cb:47af:d9f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-431935f6e47sm139676855e9.38.2024.10.29.02.41.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Oct 2024 02:41:54 -0700 (PDT)
+Message-ID: <2f178d43-8a40-4f1a-b8cf-85d26ad0a063@openvpn.net>
+Date: Tue, 29 Oct 2024 10:42:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241029092422.2884505-1-davidgow@google.com>
-X-Mailer: git-send-email 2.47.0.163.g1226f6d8fa-goog
-Message-ID: <20241029092422.2884505-4-davidgow@google.com>
-Subject: [PATCH v2 3/3] rust: kunit: allow to know if we are in a test
-From: David Gow <davidgow@google.com>
-To: Miguel Ojeda <ojeda@kernel.org>, 
-	"=?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?=" <jose.exposito89@gmail.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	Rae Moar <rmoar@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Benno Lossin <benno.lossin@proton.me>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Matt Gilbride <mattgilbride@google.com>
-Cc: kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	David Gow <davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v10 23/23] testing/selftests: add test tool and
+ scripts for ovpn module
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Donald Hunter <donald.hunter@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+ Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+ sd@queasysnail.net, Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+ Eric Dumazet <edumazet@google.com>, linux-kselftest@vger.kernel.org
+References: <20241025-b4-ovpn-v10-0-b87530777be7@openvpn.net>
+ <20241025-b4-ovpn-v10-23-b87530777be7@openvpn.net>
+ <fe2b641f-a8aa-428c-9f04-f099015e0eb9@linuxfoundation.org>
+ <feef6601-0e68-4913-b305-3be3face4a9e@openvpn.net>
+ <24edee6f-9f77-43f2-8565-566668e5f697@linuxfoundation.org>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <24edee6f-9f77-43f2-8565-566668e5f697@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-From: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
 
-In some cases, we need to call test-only code from outside the test
-case, for example, to mock a function or a module.
 
-In order to check whether we are in a test or not, we need to test if
-`CONFIG_KUNIT` is set.
-Unfortunately, we cannot rely only on this condition because:
-- a test could be running in another thread,
-- some distros compile KUnit in production kernels, so checking at runtime
-  that `current->kunit_test !=3D NULL` is required.
+On 29/10/2024 03:29, Shuah Khan wrote:
+> On 10/28/24 04:13, Antonio Quartulli wrote:
+>> On 27/10/2024 01:40, Shuah Khan wrote:
+>>> On 10/25/24 03:14, Antonio Quartulli wrote:
+>>>> The ovpn-cli tool can be compiled and used as selftest for the ovpn
+>>>> kernel module.
+>>>>
+>>>> It implements the netlink API and can thus be integrated in any
+>>>> script for more automated testing.
+>>>>
+>>>> Along with the tool, 4 scripts are added that perform basic
+>>>> functionality tests by means of network namespaces.
+>>>>
+>>>> Cc: shuah@kernel.org
+>>>> Cc: linux-kselftest@vger.kernel.org
+>>>> Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
+>>>> ---
+>>>>   MAINTAINERS                                        |    1 +
+>>>>   tools/testing/selftests/Makefile                   |    1 +
+>>>>   tools/testing/selftests/net/ovpn/.gitignore        |    2 +
+>>>>   tools/testing/selftests/net/ovpn/Makefile          |   17 +
+>>>>   tools/testing/selftests/net/ovpn/config            |   10 +
+>>>>   tools/testing/selftests/net/ovpn/data64.key        |    5 +
+>>>>   tools/testing/selftests/net/ovpn/ovpn-cli.c        | 2370 ++++++++ 
+>>>> ++ ++++++++++
+>>>>   tools/testing/selftests/net/ovpn/tcp_peers.txt     |    5 +
+>>>>   .../testing/selftests/net/ovpn/test-chachapoly.sh  |    9 +
+>>>>   tools/testing/selftests/net/ovpn/test-float.sh     |    9 +
+>>>>   tools/testing/selftests/net/ovpn/test-tcp.sh       |    9 +
+>>>>   tools/testing/selftests/net/ovpn/test.sh           |  183 ++
+>>>>   tools/testing/selftests/net/ovpn/udp_peers.txt     |    5 +
+>>>>   13 files changed, 2626 insertions(+)
+>>>>
+>>>
+>>> What does the test output look like? Add that to the change log.
+>>
+>> Hi Shuan,
+>>
+>> is there any expected output for kselftest scripts?
+>> Right now it just prints a bunch of messages about what is being 
+>> tested, plus the output from `ping` and `iperf`.
+>>
+>> My assumption is that the output would be useful in case of failures, 
+>> to understand where and what went wrong.
+>>
+>> I can document that, but I am not sure it is truly helpful (?).
+>> What do you think?
+>>
+>> Is there any specific output format I should obey to?
+>>
+>>
+>> [...]
+>>
+>>
+>>>> +
+>>>> +static void usage(const char *cmd)
+>>>> +{
+>>>> +    fprintf(stderr,
+>>>> +        "Usage %s <command> <iface> [arguments..]\n",
+>>>> +        cmd);
+>>>> +    fprintf(stderr, "where <command> can be one of the 
+>>>> following\n\n");
+>>>> +
+>>>> +    fprintf(stderr, "* new_iface <iface> [mode]: create new ovpn 
+>>>> interface\n");
+>>>> +    fprintf(stderr, "\tiface: ovpn interface name\n");
+>>>> +    fprintf(stderr, "\tmode:\n");
+>>>> +    fprintf(stderr, "\t\t- P2P for peer-to-peer mode (i.e. 
+>>>> client)\n");
+>>>> +    fprintf(stderr, "\t\t- MP for multi-peer mode (i.e. server)\n");
+>>>> +
+>>>> +    fprintf(stderr, "* del_iface <iface>: delete ovpn interface\n");
+>>>> +    fprintf(stderr, "\tiface: ovpn interface name\n");
+>>>> +
+>>>> +    fprintf(stderr,
+>>>> +        "* listen <iface> <lport> <peers_file> [ipv6]: listen for 
+>>>> incoming peer TCP connections\n");
+>>>> +    fprintf(stderr, "\tiface: ovpn interface name\n");
+>>>> +    fprintf(stderr, "\tlport: TCP port to listen to\n");
+>>>> +    fprintf(stderr,
+>>>> +        "\tpeers_file: file containing one peer per line: Line 
+>>>> format:\n");
+>>>> +    fprintf(stderr, "\t\t<peer_id> <vpnaddr>\n");
+>>>> +    fprintf(stderr,
+>>>> +        "\tipv6: whether the socket should listen to the IPv6 
+>>>> wildcard address\n");
+>>>> +
+>>>> +    fprintf(stderr,
+>>>> +        "* connect <iface> <peer_id> <raddr> <rport> [key_file]: 
+>>>> start connecting peer of TCP-based VPN session\n");
+>>>> +    fprintf(stderr, "\tiface: ovpn interface name\n");
+>>>> +    fprintf(stderr, "\tpeer_id: peer ID of the connecting peer\n");
+>>>> +    fprintf(stderr, "\traddr: peer IP address to connect to\n");
+>>>> +    fprintf(stderr, "\trport: peer TCP port to connect to\n");
+>>>> +    fprintf(stderr,
+>>>> +        "\tkey_file: file containing the symmetric key for 
+>>>> encryption\n");
+>>>> +
+>>>> +    fprintf(stderr,
+>>>> +        "* new_peer <iface> <peer_id> <lport> <raddr> <rport> 
+>>>> [vpnaddr]: add new peer\n");
+>>>> +    fprintf(stderr, "\tiface: ovpn interface name\n");
+>>>> +    fprintf(stderr, "\tlport: local UDP port to bind to\n");
+>>>> +    fprintf(stderr,
+>>>> +        "\tpeer_id: peer ID to be used in data packets to/from this 
+>>>> peer\n");
+>>>> +    fprintf(stderr, "\traddr: peer IP address\n");
+>>>> +    fprintf(stderr, "\trport: peer UDP port\n");
+>>>> +    fprintf(stderr, "\tvpnaddr: peer VPN IP\n");
+>>>> +
+>>>> +    fprintf(stderr,
+>>>> +        "* new_multi_peer <iface> <lport> <peers_file>: add 
+>>>> multiple peers as listed in the file\n");
+>>>> +    fprintf(stderr, "\tiface: ovpn interface name\n");
+>>>> +    fprintf(stderr, "\tlport: local UDP port to bind to\n");
+>>>> +    fprintf(stderr,
+>>>> +        "\tpeers_file: text file containing one peer per line. Line 
+>>>> format:\n");
+>>>> +    fprintf(stderr, "\t\t<peer_id> <raddr> <rport> <vpnaddr>\n");
+>>>> +
+>>>> +    fprintf(stderr,
+>>>> +        "* set_peer <iface> <peer_id> <keepalive_interval> 
+>>>> <keepalive_timeout>: set peer attributes\n");
+>>>> +    fprintf(stderr, "\tiface: ovpn interface name\n");
+>>>> +    fprintf(stderr, "\tpeer_id: peer ID of the peer to modify\n");
+>>>> +    fprintf(stderr,
+>>>> +        "\tkeepalive_interval: interval for sending ping messages\n");
+>>>> +    fprintf(stderr,
+>>>> +        "\tkeepalive_timeout: time after which a peer is timed 
+>>>> out\n");
+>>>> +
+>>>> +    fprintf(stderr, "* del_peer <iface> <peer_id>: delete peer\n");
+>>>> +    fprintf(stderr, "\tiface: ovpn interface name\n");
+>>>> +    fprintf(stderr, "\tpeer_id: peer ID of the peer to delete\n");
+>>>> +
+>>>> +    fprintf(stderr, "* get_peer <iface> [peer_id]: retrieve peer(s) 
+>>>> status\n");
+>>>> +    fprintf(stderr, "\tiface: ovpn interface name\n");
+>>>> +    fprintf(stderr,
+>>>> +        "\tpeer_id: peer ID of the peer to query. All peers are 
+>>>> returned if omitted\n");
+>>>> +
+>>>> +    fprintf(stderr,
+>>>> +        "* new_key <iface> <peer_id> <slot> <key_id> <cipher> 
+>>>> <key_dir> <key_file>: set data channel key\n");
+>>>> +    fprintf(stderr, "\tiface: ovpn interface name\n");
+>>>> +    fprintf(stderr,
+>>>> +        "\tpeer_id: peer ID of the peer to configure the key for\n");
+>>>> +    fprintf(stderr, "\tslot: either 1 (primary) or 2 (secondary)\n");
+>>>> +    fprintf(stderr, "\tkey_id: an ID from 0 to 7\n");
+>>>> +    fprintf(stderr,
+>>>> +        "\tcipher: cipher to use, supported: aes (AES-GCM), 
+>>>> chachapoly (CHACHA20POLY1305)\n");
+>>>> +    fprintf(stderr,
+>>>> +        "\tkey_dir: key direction, must 0 on one host and 1 on the 
+>>>> other\n");
+>>>> +    fprintf(stderr, "\tkey_file: file containing the pre-shared 
+>>>> key\n");
+>>>> +
+>>>> +    fprintf(stderr,
+>>>> +        "* del_key <iface> <peer_id> [slot]: erase existing data 
+>>>> channel key\n");
+>>>> +    fprintf(stderr, "\tiface: ovpn interface name\n");
+>>>> +    fprintf(stderr, "\tpeer_id: peer ID of the peer to modify\n");
+>>>> +    fprintf(stderr, "\tslot: slot to erase. PRIMARY if omitted\n");
+>>>> +
+>>>> +    fprintf(stderr,
+>>>> +        "* get_key <iface> <peer_id> <slot>: retrieve non sensible 
+>>>> key data\n");
+>>>> +    fprintf(stderr, "\tiface: ovpn interface name\n");
+>>>> +    fprintf(stderr, "\tpeer_id: peer ID of the peer to query\n");
+>>>> +    fprintf(stderr, "\tslot: either 1 (primary) or 2 (secondary)\n");
+>>>> +
+>>>> +    fprintf(stderr,
+>>>> +        "* swap_keys <iface> <peer_id>: swap content of primary and 
+>>>> secondary key slots\n");
+>>>> +    fprintf(stderr, "\tiface: ovpn interface name\n");
+>>>> +    fprintf(stderr, "\tpeer_id: peer ID of the peer to modify\n");
+>>>> +
+>>>> +    fprintf(stderr,
+>>>> +        "* listen_mcast: listen to ovpn netlink multicast 
+>>>> messages\n");
+>>>> +}
+>>>
+>>> If this test is run from "make kselftest" as default run does this usage
+>>> output show up in the report?
+>>
+>> No.
+>> This usage is only printed when invoking ovpn-cli with wrong arguments 
+>> and this can't be the case in the kselftest.
+> 
+> The usage() is great and much needed. My concern is if this usage would 
+> show up
+> when we run "make kselftest" - some tests do this by adding wrapper 
+> shell script
+> to run the test with different options to cover all the cases.
+> 
+>>
+>>
+>> Other than documenting the output, do you think there is any other 
+>> critical part to be adjusted in this patch?
+> 
+> No - I don't have any other comments on the test itself. I just want to 
+> make
+> sure this usage inadvertently doesn't end up in the "make kselftest" run.
+> 
+> With that
+> 
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Forturately, KUnit provides an optimised check in
-`kunit_get_current_test()`, which checks CONFIG_KUNIT, a global static
-key, and then the current thread's running KUnit test.
+Thanks a lot for your feedback.
+I promise no usage() output will pollute the reports :-)
 
-Add a safe wrapper function around this to know whether or not we are in
-a KUnit test and examples showing how to mock a function and a module.
+Ok then, I will extend the commit message with a description of the 
+output and retain your Reviewed-by in v11.
 
-Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
-Co-developed-by: David Gow <davidgow@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
----
+I'll try to send it out today.
 
-Changes since v1:
-https://lore.kernel.org/lkml/20230720-rustbind-v1-3-c80db349e3b5@google.com=
-/
-- Rebased on top of rust-next.
-- Use the `kunit_get_current_test()` C function, which wasn't previously
-  available, instead of rolling our own.
-- (Thanks also to Boqun for suggesting a nicer way of implementing this,
-  which I tried, but the `kunit_get_current_test()` version obsoleted.)
+Thanks.
+Regards,
 
----
- rust/kernel/kunit.rs | 72 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
+> 
+> thanks,
+> -- Shuah
 
-diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-index abcf0229ffee..bfc80394546a 100644
---- a/rust/kernel/kunit.rs
-+++ b/rust/kernel/kunit.rs
-@@ -272,11 +272,83 @@ macro_rules! kunit_unsafe_test_suite {
-     };
- }
-=20
-+/// In some cases, you need to call test-only code from outside the test c=
-ase, for example, to
-+/// create a function mock. This function can be invoked to know whether w=
-e are currently running a
-+/// KUnit test or not.
-+///
-+/// # Examples
-+///
-+/// This example shows how a function can be mocked to return a well-known=
- value while testing:
-+///
-+/// ```
-+/// # use kernel::kunit::in_kunit_test;
-+/// #
-+/// fn fn_mock_example(n: i32) -> i32 {
-+///     if in_kunit_test() {
-+///         100
-+///     } else {
-+///         n + 1
-+///     }
-+/// }
-+///
-+/// let mock_res =3D fn_mock_example(5);
-+/// assert_eq!(mock_res, 100);
-+/// ```
-+///
-+/// Sometimes, you don't control the code that needs to be mocked. This ex=
-ample shows how the
-+/// `bindings` module can be mocked:
-+///
-+/// ```
-+/// // Import our mock naming it as the real module.
-+/// #[cfg(CONFIG_KUNIT)]
-+/// use bindings_mock_example as bindings;
-+///
-+/// // This module mocks `bindings`.
-+/// mod bindings_mock_example {
-+///     use kernel::kunit::in_kunit_test;
-+///     use kernel::bindings::u64_;
-+///
-+///     // Make the other binding functions available.
-+///     pub(crate) use kernel::bindings::*;
-+///
-+///     // Mock `ktime_get_boot_fast_ns` to return a well-known value when=
- running a KUnit test.
-+///     pub(crate) unsafe fn ktime_get_boot_fast_ns() -> u64_ {
-+///         if in_kunit_test() {
-+///             1234
-+///         } else {
-+///             unsafe { kernel::bindings::ktime_get_boot_fast_ns() }
-+///         }
-+///     }
-+/// }
-+///
-+/// // This is the function we want to test. Since `bindings` has been moc=
-ked, we can use its
-+/// // functions seamlessly.
-+/// fn get_boot_ns() -> u64 {
-+///     unsafe { bindings::ktime_get_boot_fast_ns() }
-+/// }
-+///
-+/// let time =3D get_boot_ns();
-+/// assert_eq!(time, 1234);
-+/// ```
-+pub fn in_kunit_test() -> bool {
-+    // SAFETY: kunit_get_current_test() is always safe to call from C (it =
-has fallbacks for
-+    // when KUnit is not enabled), and we're only comparing the result to =
-NULL.
-+    unsafe { !bindings::kunit_get_current_test().is_null() }
-+}
-+
- #[kunit_tests(rust_kernel_kunit)]
- mod tests {
-+    use super::*;
-+
-     #[test]
-     fn rust_test_kunit_kunit_tests() {
-         let running =3D true;
-         assert_eq!(running, true);
-     }
-+
-+    #[test]
-+    fn rust_test_kunit_in_kunit_test() {
-+        let in_kunit =3D in_kunit_test();
-+        assert_eq!(in_kunit, true);
-+    }
- }
---=20
-2.47.0.163.g1226f6d8fa-goog
+-- 
+Antonio Quartulli
+OpenVPN Inc.
 
 
