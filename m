@@ -1,37 +1,38 @@
-Return-Path: <linux-kselftest+bounces-20958-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20959-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAB189B4C6A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 15:46:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D80459B4C6B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 15:46:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 806E828133F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 14:46:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98EB6284A1E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 14:46:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9C4E1865E3;
-	Tue, 29 Oct 2024 14:46:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFA0218787F;
+	Tue, 29 Oct 2024 14:46:03 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DCB210F9
-	for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 14:45:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8C628F6E
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 14:46:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730213160; cv=none; b=UT8mNsU/kayCkdJAtn859Q9thmkzNAWB4EoFl4U/kZdkLZmxBPq0G/djH0iRqMppC8Hdp/M01MXhSQABz4zznZiTN4kxoGDmprcxIHvsNoqLXwSorBjQ5fyS1wWjbeqkadSYT8uwUhaPduK8PDhbi04mMBBRvljBZNItiLTkqmQ=
+	t=1730213163; cv=none; b=mNdyxgdqZHOLWLvfL29GskOUxEc+dnH9zbCLsYE72kFwvCWJ48Uy8ojvebwJyz5EMWOrH0GIw+mrC42KPOAzLqV6OJgA+Enbbr5V0YIC01TrVvrnyvvS/DsTByQywCneT4toz/KQbEofzL5ROrm/5A7UUtf+fy2TV5CH6dPcms0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730213160; c=relaxed/simple;
-	bh=x221B/LCgNAlf7v4QOjjbTajYjUt9DP00VlKkpM4Rds=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=caox3Bfp+QSLjm8qbuBq46QvXk4ik3gHAT+gLJu1Lmy7o3B3kKNMrdB1acyYD5tCj9rvdmSQiXZ0OnKjooDULMHsHd3BjryD32y+5RVenNRWG1pQVIyoe7j0FeVLqxNFpqr9xiLmahjhtOdBILWMJZZitRfQ/qRuvkII3lykCwU=
+	s=arc-20240116; t=1730213163; c=relaxed/simple;
+	bh=IbMTR8mBcpEyYN2slMEeIGRW6DKWtt5ZdaIxtlLKwOM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qtHkKcnU0WT3uesYIBoAQwyUlbsSyxpzQdc1V71EQNw1kGRNymw7pG2TZb2lvG1DD7hesI/ujF5X7MkN4vlg5V2T0MeDFu7D7uG0CaH4KSncxLtCMbMDN1GrmB3+kmAvK273UjwZFtJw7UFgNS7BSKVpqIZ78+YoALfCqoi6cs0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9423C113E;
-	Tue, 29 Oct 2024 07:46:26 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C513A13D5;
+	Tue, 29 Oct 2024 07:46:29 -0700 (PDT)
 Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 12BC83F528;
-	Tue, 29 Oct 2024 07:45:53 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 20A0F3F528;
+	Tue, 29 Oct 2024 07:45:57 -0700 (PDT)
 From: Kevin Brodsky <kevin.brodsky@arm.com>
 To: linux-arm-kernel@lists.infradead.org
 Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
@@ -53,10 +54,12 @@ Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
 	yury.khrustalev@arm.com,
 	linux-kselftest@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH v3 0/5] Improve arm64 pkeys handling in signal delivery
-Date: Tue, 29 Oct 2024 14:45:34 +0000
-Message-ID: <20241029144539.111155-1-kevin.brodsky@arm.com>
+Subject: [PATCH v3 1/5] arm64: signal: Improve POR_EL0 handling to avoid uaccess failures
+Date: Tue, 29 Oct 2024 14:45:35 +0000
+Message-ID: <20241029144539.111155-2-kevin.brodsky@arm.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241029144539.111155-1-kevin.brodsky@arm.com>
+References: <20241029144539.111155-1-kevin.brodsky@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,102 +68,294 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series is a follow-up to Joey's Permission Overlay Extension (POE)
-series [1] that recently landed on mainline. The goal is to improve the
-way we handle the register that governs which pkeys/POIndex are
-accessible (POR_EL0) during signal delivery. As things stand, we may
-unexpectedly fail to write the signal frame on the stack because POR_EL0
-is not reset before the uaccess operations. See patch 1 for more details
-and the main changes this series brings.
+TL;DR: reset POR_EL0 to "allow all" before writing the signal frame,
+preventing spurious uaccess failures.
 
-A similar series landed recently for x86/MPK [2]; the present series
-aims at aligning arm64 with x86. Worth noting: once the signal frame is
-written, POR_EL0 is still set to POR_EL0_INIT, granting access to pkey 0
-only. This means that a program that sets up an alternate signal stack
-with a non-zero pkey will need some assembly trampoline to set POR_EL0
-before invoking the real signal handler, as discussed here [3]. This is
-not ideal, but it makes experimentation with pkeys in signal handlers
-possible while waiting for a potential interface to control the pkey
-state when delivering a signal. See Pierre's reply [4] for more
-information about use-cases and a potential interface.
+When POE is supported, the POR_EL0 register constrains memory
+accesses based on the target page's POIndex (pkey). This raises the
+question: what constraints should apply to a signal handler? The
+current answer is that POR_EL0 is reset to POR_EL0_INIT when
+invoking the handler, giving it full access to POIndex 0. This is in
+line with x86's MPK support and remains unchanged.
 
-The x86 series also added kselftests to ensure that no spurious SIGSEGV
-occurs during signal delivery regardless of which pkey is accessible at
-the point where the signal is delivered. This series adapts those
-kselftests to allow running them on arm64 (patch 4-5). There is a
-dependency on Yury's PKEY_UNRESTRICTED patch [7] for patch 4
-specifically.
+This is only part of the story, though. POR_EL0 constrains all
+unprivileged memory accesses, meaning that uaccess routines such as
+put_user() are also impacted. As a result POR_EL0 may prevent the
+signal frame from being written to the signal stack (ultimately
+causing a SIGSEGV). This is especially concerning when an alternate
+signal stack is used, because userspace may want to prevent access
+to it outside of signal handlers. There is currently no provision
+for that: POR_EL0 is reset after writing to the stack, and
+POR_EL0_INIT only enables access to POIndex 0.
 
-Finally patch 2 is a clean-up following feedback on Joey's series [5].
+This patch ensures that POR_EL0 is reset to its most permissive
+state before the signal stack is accessed. Once the signal frame has
+been fully written, POR_EL0 is still set to POR_EL0_INIT - it is up
+to the signal handler to enable access to additional pkeys if
+needed. As to sigreturn(), it expects having access to the stack
+like any other syscall; we only need to ensure that POR_EL0 is
+restored from the signal frame after all uaccess calls. This
+approach is in line with the recent x86/pkeys series [1].
 
-I have tested this series on arm64 and x86_64 (booting and running the
-protection_keys and pkey_sighandler_tests mm kselftests).
+Resetting POR_EL0 early introduces some complications, in that we
+can no longer read the register directly in preserve_poe_context().
+This is addressed by introducing a struct (user_access_state)
+and helpers to manage any such register impacting user accesses
+(uaccess and accesses in userspace). Things look like this on signal
+delivery:
 
-- Kevin
+1. Save original POR_EL0 into struct [save_reset_user_access_state()]
+2. Set POR_EL0 to "allow all"  [save_reset_user_access_state()]
+3. Create signal frame
+4. Write saved POR_EL0 value to the signal frame [preserve_poe_context()]
+5. Finalise signal frame
+6. If all operations succeeded:
+  a. Set POR_EL0 to POR_EL0_INIT [set_handler_user_access_state()]
+  b. Else reset POR_EL0 to its original value [restore_user_access_state()]
 
+If any step fails when setting up the signal frame, the process will
+be sent a SIGSEGV, which it may be able to handle. Step 6.b ensures
+that the original POR_EL0 is saved in the signal frame when
+delivering that SIGSEGV (so that the original value is restored by
+sigreturn).
+
+The return path (sys_rt_sigreturn) doesn't strictly require any change
+since restore_poe_context() is already called last. However, to
+avoid uaccess calls being accidentally added after that point, we
+use the same approach as in the delivery path, i.e. separating
+uaccess from writing to the register:
+
+1. Read saved POR_EL0 value from the signal frame [restore_poe_context()]
+2. Set POR_EL0 to the saved value [restore_user_access_state()]
+
+[1] https://lore.kernel.org/lkml/20240802061318.2140081-1-aruna.ramakrishna@oracle.com/
+
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
 ---
+ arch/arm64/kernel/signal.c | 92 ++++++++++++++++++++++++++++++++------
+ 1 file changed, 78 insertions(+), 14 deletions(-)
 
-v2..v3:
-* Reordered patches (patch 1 is now the main patch).
-* Patch 1: compute por_enable_all with an explicit loop, based on
-  arch_max_pkey() (suggestion from Dave M).
-* Patch 4: improved naming, replaced global pkey reg value with inline
-  helper, made use of Yury's PKEY_UNRESTRICTED macro [7] (suggestions
-  from Dave H).
-
-v2: https://lore.kernel.org/linux-arm-kernel/20241023150511.3923558-1-kevin.brodsky@arm.com/
-
-v1..v2:
-* In setup_rt_frame(), ensured that POR_EL0 is reset to its original
-  value if we fail to deliver the signal (addresses Catalin's concern [6]).
-* Renamed *unpriv_access* to *user_access* in patch 3 (suggestion from
-  Dave).
-* Made what patch 1-2 do explicit in the commit message body (suggestion
-  from Dave).
-
-v1: https://lore.kernel.org/linux-arm-kernel/20241017133909.3837547-1-kevin.brodsky@arm.com/
-
-[1] https://lore.kernel.org/linux-arm-kernel/20240822151113.1479789-1-joey.gouly@arm.com/
-[2] https://lore.kernel.org/lkml/20240802061318.2140081-1-aruna.ramakrishna@oracle.com/
-[3] https://lore.kernel.org/lkml/CABi2SkWxNkP2O7ipkP67WKz0-LV33e5brReevTTtba6oKUfHRw@mail.gmail.com/
-[4] https://lore.kernel.org/linux-arm-kernel/87plns8owh.fsf@arm.com/
-[5] https://lore.kernel.org/linux-arm-kernel/20241015114116.GA19334@willie-the-truck/
-[6] https://lore.kernel.org/linux-arm-kernel/Zw6D2waVyIwYE7wd@arm.com/
-[7] https://lore.kernel.org/all/20241028090715.509527-2-yury.khrustalev@arm.com/
-
-Cc: akpm@linux-foundation.org
-Cc: anshuman.khandual@arm.com
-Cc: aruna.ramakrishna@oracle.com
-Cc: broonie@kernel.org
-Cc: catalin.marinas@arm.com
-Cc: dave.hansen@linux.intel.com
-Cc: Dave.Martin@arm.com
-Cc: jeffxu@chromium.org
-Cc: joey.gouly@arm.com
-Cc: keith.lucas@oracle.com
-Cc: pierre.langlois@arm.com
-Cc: shuah@kernel.org
-Cc: sroettger@google.com
-Cc: tglx@linutronix.de
-Cc: will@kernel.org
-Cc: yury.khrustalev@arm.com
-Cc: linux-kselftest@vger.kernel.org
-Cc: x86@kernel.org
-
-Kevin Brodsky (5):
-  arm64: signal: Improve POR_EL0 handling to avoid uaccess failures
-  arm64: signal: Remove unnecessary check when saving POE state
-  arm64: signal: Remove unused macro
-  selftests/mm: Use generic pkey register manipulation
-  selftests/mm: Enable pkey_sighandler_tests on arm64
-
- arch/arm64/kernel/signal.c                    |  95 ++++++++++++---
- tools/testing/selftests/mm/Makefile           |   8 +-
- tools/testing/selftests/mm/pkey-arm64.h       |   1 +
- tools/testing/selftests/mm/pkey-x86.h         |   2 +
- .../selftests/mm/pkey_sighandler_tests.c      | 115 ++++++++++++++----
- 5 files changed, 176 insertions(+), 45 deletions(-)
-
+diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+index 561986947530..c7d311d8b92a 100644
+--- a/arch/arm64/kernel/signal.c
++++ b/arch/arm64/kernel/signal.c
+@@ -19,6 +19,7 @@
+ #include <linux/ratelimit.h>
+ #include <linux/rseq.h>
+ #include <linux/syscalls.h>
++#include <linux/pkeys.h>
+ 
+ #include <asm/daifflags.h>
+ #include <asm/debug-monitors.h>
+@@ -66,10 +67,63 @@ struct rt_sigframe_user_layout {
+ 	unsigned long end_offset;
+ };
+ 
++/*
++ * Holds any EL0-controlled state that influences unprivileged memory accesses.
++ * This includes both accesses done in userspace and uaccess done in the kernel.
++ *
++ * This state needs to be carefully managed to ensure that it doesn't cause
++ * uaccess to fail when setting up the signal frame, and the signal handler
++ * itself also expects a well-defined state when entered.
++ */
++struct user_access_state {
++	u64 por_el0;
++};
++
+ #define BASE_SIGFRAME_SIZE round_up(sizeof(struct rt_sigframe), 16)
+ #define TERMINATOR_SIZE round_up(sizeof(struct _aarch64_ctx), 16)
+ #define EXTRA_CONTEXT_SIZE round_up(sizeof(struct extra_context), 16)
+ 
++/*
++ * Save the user access state into ua_state and reset it to disable any
++ * restrictions.
++ */
++static void save_reset_user_access_state(struct user_access_state *ua_state)
++{
++	if (system_supports_poe()) {
++		u64 por_enable_all = 0;
++
++		for (int pkey = 0; pkey < arch_max_pkey(); pkey++)
++			por_enable_all |= POE_RXW << (pkey * POR_BITS_PER_PKEY);
++
++		ua_state->por_el0 = read_sysreg_s(SYS_POR_EL0);
++		write_sysreg_s(por_enable_all, SYS_POR_EL0);
++		/* Ensure that any subsequent uaccess observes the updated value */
++		isb();
++	}
++}
++
++/*
++ * Set the user access state for invoking the signal handler.
++ *
++ * No uaccess should be done after that function is called.
++ */
++static void set_handler_user_access_state(void)
++{
++	if (system_supports_poe())
++		write_sysreg_s(POR_EL0_INIT, SYS_POR_EL0);
++}
++
++/*
++ * Restore the user access state to the values saved in ua_state.
++ *
++ * No uaccess should be done after that function is called.
++ */
++static void restore_user_access_state(const struct user_access_state *ua_state)
++{
++	if (system_supports_poe())
++		write_sysreg_s(ua_state->por_el0, SYS_POR_EL0);
++}
++
+ static void init_user_layout(struct rt_sigframe_user_layout *user)
+ {
+ 	const size_t reserved_size =
+@@ -261,18 +315,20 @@ static int restore_fpmr_context(struct user_ctxs *user)
+ 	return err;
+ }
+ 
+-static int preserve_poe_context(struct poe_context __user *ctx)
++static int preserve_poe_context(struct poe_context __user *ctx,
++				const struct user_access_state *ua_state)
+ {
+ 	int err = 0;
+ 
+ 	__put_user_error(POE_MAGIC, &ctx->head.magic, err);
+ 	__put_user_error(sizeof(*ctx), &ctx->head.size, err);
+-	__put_user_error(read_sysreg_s(SYS_POR_EL0), &ctx->por_el0, err);
++	__put_user_error(ua_state->por_el0, &ctx->por_el0, err);
+ 
+ 	return err;
+ }
+ 
+-static int restore_poe_context(struct user_ctxs *user)
++static int restore_poe_context(struct user_ctxs *user,
++			       struct user_access_state *ua_state)
+ {
+ 	u64 por_el0;
+ 	int err = 0;
+@@ -282,7 +338,7 @@ static int restore_poe_context(struct user_ctxs *user)
+ 
+ 	__get_user_error(por_el0, &(user->poe->por_el0), err);
+ 	if (!err)
+-		write_sysreg_s(por_el0, SYS_POR_EL0);
++		ua_state->por_el0 = por_el0;
+ 
+ 	return err;
+ }
+@@ -850,7 +906,8 @@ static int parse_user_sigframe(struct user_ctxs *user,
+ }
+ 
+ static int restore_sigframe(struct pt_regs *regs,
+-			    struct rt_sigframe __user *sf)
++			    struct rt_sigframe __user *sf,
++			    struct user_access_state *ua_state)
+ {
+ 	sigset_t set;
+ 	int i, err;
+@@ -899,7 +956,7 @@ static int restore_sigframe(struct pt_regs *regs,
+ 		err = restore_zt_context(&user);
+ 
+ 	if (err == 0 && system_supports_poe() && user.poe)
+-		err = restore_poe_context(&user);
++		err = restore_poe_context(&user, ua_state);
+ 
+ 	return err;
+ }
+@@ -908,6 +965,7 @@ SYSCALL_DEFINE0(rt_sigreturn)
+ {
+ 	struct pt_regs *regs = current_pt_regs();
+ 	struct rt_sigframe __user *frame;
++	struct user_access_state ua_state;
+ 
+ 	/* Always make any pending restarted system calls return -EINTR */
+ 	current->restart_block.fn = do_no_restart_syscall;
+@@ -924,12 +982,14 @@ SYSCALL_DEFINE0(rt_sigreturn)
+ 	if (!access_ok(frame, sizeof (*frame)))
+ 		goto badframe;
+ 
+-	if (restore_sigframe(regs, frame))
++	if (restore_sigframe(regs, frame, &ua_state))
+ 		goto badframe;
+ 
+ 	if (restore_altstack(&frame->uc.uc_stack))
+ 		goto badframe;
+ 
++	restore_user_access_state(&ua_state);
++
+ 	return regs->regs[0];
+ 
+ badframe:
+@@ -1035,7 +1095,8 @@ static int setup_sigframe_layout(struct rt_sigframe_user_layout *user,
+ }
+ 
+ static int setup_sigframe(struct rt_sigframe_user_layout *user,
+-			  struct pt_regs *regs, sigset_t *set)
++			  struct pt_regs *regs, sigset_t *set,
++			  const struct user_access_state *ua_state)
+ {
+ 	int i, err = 0;
+ 	struct rt_sigframe __user *sf = user->sigframe;
+@@ -1097,10 +1158,9 @@ static int setup_sigframe(struct rt_sigframe_user_layout *user,
+ 		struct poe_context __user *poe_ctx =
+ 			apply_user_offset(user, user->poe_offset);
+ 
+-		err |= preserve_poe_context(poe_ctx);
++		err |= preserve_poe_context(poe_ctx, ua_state);
+ 	}
+ 
+-
+ 	/* ZA state if present */
+ 	if (system_supports_sme() && err == 0 && user->za_offset) {
+ 		struct za_context __user *za_ctx =
+@@ -1237,9 +1297,6 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
+ 		sme_smstop();
+ 	}
+ 
+-	if (system_supports_poe())
+-		write_sysreg_s(POR_EL0_INIT, SYS_POR_EL0);
+-
+ 	if (ka->sa.sa_flags & SA_RESTORER)
+ 		sigtramp = ka->sa.sa_restorer;
+ 	else
+@@ -1253,6 +1310,7 @@ static int setup_rt_frame(int usig, struct ksignal *ksig, sigset_t *set,
+ {
+ 	struct rt_sigframe_user_layout user;
+ 	struct rt_sigframe __user *frame;
++	struct user_access_state ua_state;
+ 	int err = 0;
+ 
+ 	fpsimd_signal_preserve_current_state();
+@@ -1260,13 +1318,14 @@ static int setup_rt_frame(int usig, struct ksignal *ksig, sigset_t *set,
+ 	if (get_sigframe(&user, ksig, regs))
+ 		return 1;
+ 
++	save_reset_user_access_state(&ua_state);
+ 	frame = user.sigframe;
+ 
+ 	__put_user_error(0, &frame->uc.uc_flags, err);
+ 	__put_user_error(NULL, &frame->uc.uc_link, err);
+ 
+ 	err |= __save_altstack(&frame->uc.uc_stack, regs->sp);
+-	err |= setup_sigframe(&user, regs, set);
++	err |= setup_sigframe(&user, regs, set, &ua_state);
+ 	if (err == 0) {
+ 		setup_return(regs, &ksig->ka, &user, usig);
+ 		if (ksig->ka.sa.sa_flags & SA_SIGINFO) {
+@@ -1276,6 +1335,11 @@ static int setup_rt_frame(int usig, struct ksignal *ksig, sigset_t *set,
+ 		}
+ 	}
+ 
++	if (err == 0)
++		set_handler_user_access_state();
++	else
++		restore_user_access_state(&ua_state);
++
+ 	return err;
+ }
+ 
 -- 
 2.43.0
 
