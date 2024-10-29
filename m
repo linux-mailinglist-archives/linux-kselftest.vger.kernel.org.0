@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-20955-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20956-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D0E49B4A74
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 14:01:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DEAD9B4BE8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 15:15:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED9D92843EF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 13:01:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91C2E1C2290F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 14:15:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3BF520650E;
-	Tue, 29 Oct 2024 13:00:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FD83206E7A;
+	Tue, 29 Oct 2024 14:15:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F2W0luUt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bUTXdvw1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6078C2064FD;
-	Tue, 29 Oct 2024 13:00:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C9A1E507;
+	Tue, 29 Oct 2024 14:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730206844; cv=none; b=FOoUWhfuGymB7oEP45kZA4dRDvRPPgy6V96xxsHKxehC/Mz6MIK86ueD8rxynPenPDxCd1uxoA7LRb4yYAuJo+eymQJ9MJE37dmrvLMN6uP9UGAVMkHc08p8F+RZeIoE2SSueSpwZPM5XAoIim9OnQ1cNZhqO8Pzb8mxURcjOIU=
+	t=1730211334; cv=none; b=XKXxmwIECeSUkTdpq8LBbso7DnilIsOjwdFjboN6xqttmIxfK2go1QQpqo++jQRPBrUV63gqjGyzPykUk7hA6n2uktB/BJ9J/IqxWBDQKw2Cv32G0yFgDur49T1qak3xxLyrtW/I2PMQ2bopJm4XINxuHhDWz7CJKKiAiJyla8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730206844; c=relaxed/simple;
-	bh=NlGCxJtvSDZcc48LjMfcWH/FamyvO+HfkSx5n+s2kdU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rer6/cLIO6kqUJfb4BfXLDp5FO38ED4eOwJOgOZV/eUV6kg6zoG4YzjTSBBRQMutXE43wtkGdcC25yYSDtxCJ+tEvTHGv9rSs0+tdCpud/tRuW81d+9gk3MtQSUuTsZ+tnDQkkGwGvQAl8RN8tQC7Eovx2Sd5zR4cbHbUDBpP+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F2W0luUt; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1730211334; c=relaxed/simple;
+	bh=vn3Jy7U8Kr606XKwuMr/9U1lMzlyFHE13781XmAPJTM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KMheoS1CEjuQwb4BZdQcMv2E5BKoIXKThXR/pw74BXnd142AX2geB9EiUgpiftMHqYFL/rOp1hU11YuKOoBeiEUvfQoipTfVUjkfacqqT2tlI6gVeEoiqk+3ilTOVt8prtFdDTqjmQ5kfRHtgPjpHkfcR71QBvneWr+beZgiHD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bUTXdvw1; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730206842; x=1761742842;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NlGCxJtvSDZcc48LjMfcWH/FamyvO+HfkSx5n+s2kdU=;
-  b=F2W0luUty4KmqxGZDEXYlpk6U2AhwvV4po4nKMWZFlD2Am4mqzC7cJV9
-   4ZzFM9WQfiRQiQxp6GLdgOwqgUToelvkcKXR/8jrK2o5t8a+MMlfh7ldY
-   WKa5W2eRGk0O9lUADf5nUoga1uRbH3PIJdz1ozVUfxPw+YZiOOBQUkwOo
-   aPLICJANa124xgnvdoFiaQ8epJ0L6jpKfWdqdEWWEEmJu9tnMCB02+5ZO
-   zXlA1YFP585fMxwQR4jl00u+K0sl2LgwapnhiBIcDzE2+ZWYd3yiONzFn
-   SSN8tQff1XYnb+pleBuhko5CU3/Vn1aoj+EGGnE9vgJ/pKVkjLKQbH8nq
-   w==;
-X-CSE-ConnectionGUID: sr/955+dSge1mj5SNmNEIQ==
-X-CSE-MsgGUID: 9jamUg4vSp2F0pqMwuvxVg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="29952539"
+  t=1730211332; x=1761747332;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vn3Jy7U8Kr606XKwuMr/9U1lMzlyFHE13781XmAPJTM=;
+  b=bUTXdvw1PhEdd+YdxuHIEEBjyfUz2AIm1zgerzap23HWmS+39JCTFZs1
+   HIe/gJN8mwvQoIm/1VzRmmHISzxIoUGErQ6jF87+Kl8YWQBJ4WymnqPrw
+   L9lMknro6gLMZAbx/t+ZHv2/nScpq4bubT25QmNg5KXPDWOwhODeLcZmn
+   H7Zo7nqNw2Ew58ZAeO/i19Xy1qj5VDj5z8wDmki7XpNMbbpG8LmgxYnM5
+   pzWgFIxSWXtNZJXXjvYJBsPUso9OIQN/FcefacmSWWwt7cxtJLIsb5Mfb
+   XdM5UnYFHaCnLhTj8BiS+TtK96PAanQyI51uvbka92Dy70nuEIjznOGWj
+   A==;
+X-CSE-ConnectionGUID: GaY6ZA/ZQ3uNpwhnFGrSFg==
+X-CSE-MsgGUID: bn7s7oz+Sg+V+9tbQoaDSw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="41252608"
 X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="29952539"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 06:00:42 -0700
-X-CSE-ConnectionGUID: 6FcZ6JbZQwSsHJ8aGw+Ttg==
-X-CSE-MsgGUID: +4YvNJWcTcedKOOGoxlxJg==
+   d="scan'208";a="41252608"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 07:15:31 -0700
+X-CSE-ConnectionGUID: OXhBVyCyTZSe0g6WtEzk3g==
+X-CSE-MsgGUID: aoxULuKgQCuIUshc/F96iA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,241,1725346800"; 
-   d="scan'208";a="81584713"
+   d="scan'208";a="82042910"
 Received: from oandoniu-mobl3.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.244.38])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 06:00:39 -0700
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 07:15:28 -0700
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: fenghua.yu@intel.com,
-	reinette.chatre@intel.com,
-	shuah@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	ilpo.jarvinen@linux.intel.com,
-	tony.luck@intel.com
-Subject: [PATCH v5 2/2] selftests/resctrl: Adjust SNC support messages
-Date: Tue, 29 Oct 2024 14:00:29 +0100
-Message-ID: <adeb1b7d2998bba69d1a57e38300f83e646ee849.1730206468.git.maciej.wieczor-retman@intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: kirill@shutemov.name,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/lam: Test get_user() LAM pointer handling
+Date: Tue, 29 Oct 2024 15:14:20 +0100
+Message-ID: <20241029141421.715686-1-maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.46.2
-In-Reply-To: <cover.1730206468.git.maciej.wieczor-retman@intel.com>
-References: <cover.1730206468.git.maciej.wieczor-retman@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,180 +80,152 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Resctrl selftest prints a message on test failure that Sub-Numa
-Clustering (SNC) could be enabled and points the user to check their BIOS
-settings. No actual check is performed before printing that message so
-it is not very accurate in pinpointing a problem.
+Recent change in how get_user() handles pointers [1] has a specific case
+for LAM. It assigns a different bitmask that's later used to check
+whether a pointer comes from userland in get_user().
 
-Figuring out if SNC is enabled is only one part of the problem, the
-others being whether the detected SNC mode is reliable and whether the
-kernel supports SNC in resctrl.
+While currently commented out (until LASS [2] is merged into the kernel)
+it's worth making changes to the LAM selftest ahead of time.
 
-When there is SNC support for kernel's resctrl subsystem and SNC is
-enabled then sub node files are created for each node in the resctrlfs.
-The sub node files exist in each regular node's L3 monitoring directory.
-The reliable path to check for existence of sub node files is
-/sys/fs/resctrl/mon_data/mon_L3_00/mon_sub_L3_00.
+Add test case to LAM that utilizes a ioctl (FIOASYNC) syscall which uses
+get_user() in its implementation. Execute the syscall with differently
+tagged pointers to verify that valid user pointers are passing through
+and invalid kernel/non-canonical pointers are not.
 
-To check if SNC detection is reliable one can check the
-/sys/devices/system/cpu/offline file. If it's empty, it means all cores
-are operational and the ratio should be calculated correctly. If it has
-any contents, it means the detected SNC mode can't be trusted and should
-be disabled.
+Code was tested on a Sierra Forest Xeon machine that's LAM capable. The
+test was ran without issues with both the LAM lines from [1] untouched
+and commented out. The test was also ran without issues with LAM_SUP
+both enabled and disabled.
 
-Add helpers for all operations mentioned above.
-
-Detect SNC mode once and let other tests inherit that information.
-
-Add messages to alert the user when SNC detection could return incorrect
-results. Correct old messages to account for kernel support of SNC in
-resctrl.
+[1] https://lore.kernel.org/all/20241024013214.129639-1-torvalds@linux-foundation.org/
+[2] https://lore.kernel.org/all/20240710160655.3402786-1-alexander.shishkin@linux.intel.com/
 
 Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 ---
-Changelog v5:
-- Move all resctrlfs.c code from this patch to 1/2. (Reinette)
-- Remove kernel support check and error message from CAT since it can't
-  be happen.
-- Remove snc checks in CAT since snc doesn't affect it here.
-- Skip MBM, MBA and CMT tests if snc is unreliable.
+ tools/testing/selftests/x86/lam.c | 85 +++++++++++++++++++++++++++++++
+ 1 file changed, 85 insertions(+)
 
-Changelog v4:
-- Change messages at the end of tests and at the start of
-  run_single_test. (Reinette)
-- Add messages at the end of CAT since it can also fail due to enabled
-  SNC + lack of kernel support.
-- Remove snc_mode global variable. (Reinette)
-- Fix wrong description of snc_kernel_support(). (Reinette)
-- Move call to cpus_offline_empty() into snc_nodes_per_l3_cache() so the
-  whole detection flow is in one place as discussed. (Reinette)
-
-Changelog v3:
-- Change snc_ways() to snc_nodes_per_l3_cache(). (Reinette)
-- Add printing the discovered SNC mode. (Reinette)
-- Change method of kernel support discovery from cache sizes to
-  existance of sub node files.
-- Check if SNC detection is unreliable.
-- Move SNC detection to only the first run_single_test() instead on
-  error at the end of test runs.
-- Add global value to remind user at the end of relevant tests if SNC
-  detection was found to be unreliable.
-- Redo the patch message after the changes.
-
-Changelog v2:
-- Move snc_ways() checks from individual tests into
-  snc_kernel_support().
-- Write better comment for snc_kernel_support().
-
- tools/testing/selftests/resctrl/cmt_test.c |  8 ++++++--
- tools/testing/selftests/resctrl/mba_test.c |  8 +++++++-
- tools/testing/selftests/resctrl/mbm_test.c | 10 +++++++---
- tools/testing/selftests/resctrl/resctrl.h  |  3 +++
- 4 files changed, 23 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index 0c045080d808..1470bd64d158 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -133,6 +133,10 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
- 	ret = get_cache_size(uparams->cpu, "L3", &cache_total_size);
- 	if (ret)
- 		return ret;
+diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
+index 0ea4f6813930..3c53d4b7aa61 100644
+--- a/tools/testing/selftests/x86/lam.c
++++ b/tools/testing/selftests/x86/lam.c
+@@ -4,6 +4,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <sys/syscall.h>
++#include <sys/ioctl.h>
+ #include <time.h>
+ #include <signal.h>
+ #include <setjmp.h>
+@@ -43,10 +44,19 @@
+ #define FUNC_INHERITE           0x20
+ #define FUNC_PASID              0x40
+ 
++/* get_user() pointer test cases */
++#define GET_USER_USER           0
++#define GET_USER_KERNEL_TOP     1
++#define GET_USER_KERNEL_BOT     2
++#define GET_USER_KERNEL         3
 +
-+	if ((get_vendor() == ARCH_INTEL) && snc_unreliable)
-+		ksft_exit_skip("Sub-NUMA Clustering could not be detected properly. Skipping...\n");
-+
- 	ksft_print_msg("Cache size :%lu\n", cache_total_size);
+ #define TEST_MASK               0x7f
++#define L5_SIGN_EXT_MASK        (0xFFUL << 56)
++#define L4_SIGN_EXT_MASK        (0x1FFFFUL << 47)
  
- 	count_of_bits = count_bits(long_mask);
-@@ -175,8 +179,8 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
- 		goto out;
+ #define LOW_ADDR                (0x1UL << 30)
+ #define HIGH_ADDR               (0x3UL << 48)
++#define L5_ADDR                 (0x1UL << 48)
  
- 	ret = check_results(&param, span, n);
--	if (ret && (get_vendor() == ARCH_INTEL))
--		ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
-+	if (ret && (get_vendor() == ARCH_INTEL) && !snc_kernel_support())
-+		ksft_print_msg("Kernel doesn't support Sub-NUMA Clustering but it is enabled on the system.\n");
+ #define MALLOC_LEN              32
  
- out:
- 	free(span_str);
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index ab8496a4925b..8f4e198da047 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -170,15 +170,21 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
- 		.setup		= mba_setup,
- 		.measure	= mba_measure,
- 	};
--	int ret;
-+	int ret, snc_support;
- 
- 	remove(RESULT_FILE_NAME);
- 
-+	snc_support = snc_kernel_support();
-+	if ((get_vendor() == ARCH_INTEL) && snc_unreliable)
-+		ksft_exit_skip("Sub-NUMA Clustering could not be detected properly. Skipping...\n");
-+
- 	ret = resctrl_val(test, uparams, uparams->benchmark_cmd, &param);
- 	if (ret)
- 		return ret;
- 
- 	ret = check_results();
-+	if (ret && (get_vendor() == ARCH_INTEL) && !snc_support)
-+		ksft_print_msg("Kernel doesn't support Sub-NUMA Clustering but it is enabled on the system.\n");
- 
+@@ -370,6 +380,54 @@ static int handle_syscall(struct testcases *test)
  	return ret;
  }
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 6b5a3b52d861..a68f70589b91 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -138,17 +138,21 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
- 		.setup		= mbm_setup,
- 		.measure	= mbm_measure,
- 	};
--	int ret;
-+	int ret, snc_support;
  
- 	remove(RESULT_FILE_NAME);
- 
-+	snc_support = snc_kernel_support();
-+	if ((get_vendor() == ARCH_INTEL) && snc_unreliable)
-+		ksft_exit_skip("Sub-NUMA Clustering could not be detected properly. Skipping...\n");
++static int get_user_syscall(struct testcases *test)
++{
++	int ret = 0;
++	int ptr_value = 0;
++	void *ptr = &ptr_value;
++	int fd;
 +
- 	ret = resctrl_val(test, uparams, uparams->benchmark_cmd, &param);
- 	if (ret)
- 		return ret;
- 
- 	ret = check_results(DEFAULT_SPAN);
--	if (ret && (get_vendor() == ARCH_INTEL))
--		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
-+	if (ret && (get_vendor() == ARCH_INTEL) && !snc_support)
-+		ksft_print_msg("Kernel doesn't support Sub-NUMA Clustering but it is enabled on the system.\n");
- 
- 	return ret;
- }
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 851b37c9c38a..488bdca01e4f 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -121,6 +121,8 @@ struct perf_event_read {
-  */
- extern volatile int *value_sink;
- 
-+extern int snc_unreliable;
++	uint64_t bitmask = ((uint64_t)ptr & L5_ADDR) ? L5_SIGN_EXT_MASK :
++						       L4_SIGN_EXT_MASK;
 +
- extern char llc_occup_path[1024];
++	if (test->lam != 0)
++		if (set_lam(test->lam) != 0)
++			return 2;
++
++	fd = memfd_create("lam_ioctl", 0);
++	if (fd == -1)
++		exit(EXIT_FAILURE);
++
++	switch (test->later) {
++	case GET_USER_USER:
++		/* Control group - properly tagger user pointer */
++		ptr = (void *)set_metadata((uint64_t)ptr, test->lam);
++		break;
++	case GET_USER_KERNEL_TOP:
++		/* Kernel address with top bit cleared */
++		bitmask &= (bitmask >> 1);
++		ptr = (void *)((uint64_t)ptr | bitmask);
++		break;
++	case GET_USER_KERNEL_BOT:
++		/* Kernel address with bottom sign-extension bit cleared */
++		bitmask &= (bitmask << 1);
++		ptr = (void *)((uint64_t)ptr | bitmask);
++		break;
++	case GET_USER_KERNEL:
++		/* Try to pass a kernel address */
++		ptr = (void *)((uint64_t)ptr | bitmask);
++		break;
++	default:
++		printf("Invalid test case value passed!\n");
++		break;
++	}
++
++	if (ioctl(fd, FIOASYNC, ptr) != 0)
++		ret = 1;
++
++	return ret;
++}
++
+ int sys_uring_setup(unsigned int entries, struct io_uring_params *p)
+ {
+ 	return (int)syscall(__NR_io_uring_setup, entries, p);
+@@ -883,6 +941,33 @@ static struct testcases syscall_cases[] = {
+ 		.test_func = handle_syscall,
+ 		.msg = "SYSCALL:[Negative] Disable LAM. Dereferencing pointer with metadata.\n",
+ 	},
++	{
++		.later = GET_USER_USER,
++		.lam = LAM_U57_BITS,
++		.test_func = get_user_syscall,
++		.msg = "GET_USER: get_user() and pass a properly tagged user pointer.\n",
++	},
++	{
++		.later = GET_USER_KERNEL_TOP,
++		.expected = 1,
++		.lam = LAM_U57_BITS,
++		.test_func = get_user_syscall,
++		.msg = "GET_USER:[Negative] get_user() with a kernel pointer and the top bit cleared.\n",
++	},
++	{
++		.later = GET_USER_KERNEL_BOT,
++		.expected = 1,
++		.lam = LAM_U57_BITS,
++		.test_func = get_user_syscall,
++		.msg = "GET_USER:[Negative] get_user() with a kernel pointer and the bottom sign-extension bit cleared.\n",
++	},
++	{
++		.later = GET_USER_KERNEL,
++		.expected = 1,
++		.lam = LAM_U57_BITS,
++		.test_func = get_user_syscall,
++		.msg = "GET_USER:[Negative] get_user() and pass a kernel pointer.\n",
++	},
+ };
  
- int snc_nodes_per_l3_cache(void);
-@@ -167,6 +169,7 @@ void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
- int signal_handler_register(const struct resctrl_test *test);
- void signal_handler_unregister(void);
- unsigned int count_bits(unsigned long n);
-+int snc_kernel_support(void);
- 
- void perf_event_attr_initialize(struct perf_event_attr *pea, __u64 config);
- void perf_event_initialize_read_format(struct perf_event_read *pe_read);
+ static struct testcases mmap_cases[] = {
 -- 
 2.46.2
 
