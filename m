@@ -1,67 +1,73 @@
-Return-Path: <linux-kselftest+bounces-20915-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20917-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC9079B454B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 10:08:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FA1D9B456D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 10:17:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 493AAB212B9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 09:08:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B2C21C2105D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 09:17:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7A6D20402D;
-	Tue, 29 Oct 2024 09:07:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41E781DEFFD;
+	Tue, 29 Oct 2024 09:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="ll5DFeeB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28242038D6;
-	Tue, 29 Oct 2024 09:07:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616FB4C6E
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 09:17:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730192876; cv=none; b=WWtHm1H1aUCwyvQdM4VuwPGyfWVDJQkcN1KlA1GxG1F7/bnvEqnvh41h4dQVB3ccHOx+brcNRJLMQxOV6mSubE6Vd8EqH2GM5DhSZq55RjTJ45E/cpR/LIruwoSE2Gvk9qNMkR0+ojPvuQJE62gbN7ZRab8CpPwBBzHhNtdwCZs=
+	t=1730193449; cv=none; b=cwKE5anmoSwRBsSYWNPLCLp13VK9N89+qnyhZk3aPWfbqwEjm/DMPqAGFH06iCSqUZqVc1VzVF6J+ZTCRlGZUG8UfujxG4KYnp2iDdsX0AEgYuJsCcuBKTugWtHCJ62rfRx3Oxt0O8X/Av+fR7ilFIQ4eYCzyrGT3lvlWaT2h5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730192876; c=relaxed/simple;
-	bh=M/C1cujMBoGsYQ+whXWiOHF+dXGjNS+U8F/EhMSfB74=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fUHwonNS3jgKCS14HyP1P/mRGi823nEmwr7R5TVZWuEybdy00/zbtLrgJqMnD8CmUPHLgDBDh4zVcmlzQkQVP5/lX+RjURhMkO7A2yTDw5/WaU1xRND72RnIz6Z3+I6V0YNcDX594r4KXH0/9Y0SgQm4NgPNnN1ATFvspwaNN60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 440c4a8695d511efa216b1d71e6e1362-20241029
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:54c2b0f6-89e5-443c-bac1-b75c49d9f6d9,IP:0,U
-	RL:0,TC:0,Content:37,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:7
-X-CID-META: VersionHash:82c5f88,CLOUDID:e5403f415e945219ad716e641d1b49f4,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:4,EDM:2,IP:nil,URL:11
-	|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SP
-	R:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: 440c4a8695d511efa216b1d71e6e1362-20241029
-Received: from node2.com.cn [(10.44.16.197)] by mailgw.kylinos.cn
-	(envelope-from <luyun@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 2125861745; Tue, 29 Oct 2024 17:07:47 +0800
-Received: from node2.com.cn (localhost [127.0.0.1])
-	by node2.com.cn (NSMail) with SMTP id 39D7CB807587;
-	Tue, 29 Oct 2024 17:07:47 +0800 (CST)
-X-ns-mid: postfix-6720A5E3-1226771029
-Received: from localhost.localdomain (unknown [10.42.43.204])
-	by node2.com.cn (NSMail) with ESMTPA id CB2A5B807587;
-	Tue, 29 Oct 2024 09:07:46 +0000 (UTC)
-From: Yun Lu <luyun@kylinos.cn>
-To: jikos@kernel.org,
-	bentiss@kernel.org,
-	shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftest/hid: increase timeout to 10 min
-Date: Tue, 29 Oct 2024 17:07:46 +0800
-Message-Id: <20241029090746.179108-1-luyun@kylinos.cn>
-X-Mailer: git-send-email 2.27.0
+	s=arc-20240116; t=1730193449; c=relaxed/simple;
+	bh=DN3zhVVSYtNZdIFUJyS2AvP1pvgozbqO8vrwX+1iohU=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=UhRGKsewhom6PeS19uNKLQXCalOxm5cu1YFCDlydToY0+tz+StUiy1KLBiONRjlUsDrjVBdBJ5WqgZf+hzmUiA0QIczsYeQoz7rdLxYvvBOkJdlj5HIAY3HrGx1u0vhbmtqtifdI1TPVSxduh/IFa7Q4KWo18pdbMddOTbfk8fI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=ll5DFeeB; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-71ec997ad06so3741243b3a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 02:17:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1730193447; x=1730798247; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=w5+/haa+niblan4ksAxGM4Qi5oCUWhSQgLaMDwtYAmk=;
+        b=ll5DFeeBBUQA68OyTK5JIWSb1gMtGExmuC/QwpOlNdadKMO/eP4e/pNpnP9MPou39J
+         +I7X0tRvlL9RGfew7rwOVS4RXZMUC39bvWchVlzr4X+S6AkJ4b9P4noOxCP4l+I+whX/
+         zaYP5R4J9r4L+0Wp01tXCei4k1lJr2Ud0Vqsr85pdIQJaC++p9mPDej5rErG3k6LAuU/
+         NYXqmmmTSdnbMfx+70474oC4da6tB11bIVqEl9JSlshf8gHb+vRkV54EJhGaicf0UceD
+         5gu+5AbjcAy8Osfd/8qdQEI4zyCIc93E1RaK41yRGpOaMwX5G5QTLvEY7rGdgcbM4iUn
+         oAtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730193447; x=1730798247;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w5+/haa+niblan4ksAxGM4Qi5oCUWhSQgLaMDwtYAmk=;
+        b=a1Rh3MM2WYcCkiLBg9kF74npGHTutiBboFRK9zjmWLXMcrxm4XOKNNTY2kcuWGi9zN
+         QDjd5KN+QxECXCmW1mJyUXOk+YND3Qmd96tkpgu5W2lsUuB03bodka5vtsN529g5wgxN
+         Ctq2CyNKkdk2TDCBRx5UOWFW87+ZzCcxfuE0RSJg7EiE5GNGz8rBiwHjs5ThPT6HAAvf
+         N1Ji0pXzQwA9wwU9EtOZG2ui4Bu6NqQpth4EdOwOW4kaxTMWKoJprnzgxeb4fw/4Gqo2
+         WESwBSEjtuJxDCpRzrhgljwckrPYVUaRFdEzowkj9togE+41ryZbNfRvk1PrnwBupBpO
+         Hw2g==
+X-Forwarded-Encrypted: i=1; AJvYcCUb/y3QYB77uFE/FeKHsqDPsOT68AhNHVkng39H1DE5eI10NYXbwQCCSqypN1bfITN+CcNXtR0z05pojMDMZpI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yya9f2gMGYSUaKHBY4u+DpZJJJfIqQWEw1jL4cf50ONWtTKLd6H
+	dWwNjKDb+z9ZhxG2zC7x41+S0LwXjyt3KQPtaG9mwBA74mOKm9BsJVSNzdebI/E=
+X-Google-Smtp-Source: AGHT+IEsC0TpwAbCbEBKTe8NbI3iVaEVUABk6bpjRs0JcMyQK9vchnf7sncCO8eDaz3GOUkjl+hurQ==
+X-Received: by 2002:a05:6a00:4f96:b0:71e:3b8f:926 with SMTP id d2e1a72fcca58-7206303df84mr17585656b3a.22.1730193446620;
+        Tue, 29 Oct 2024 02:17:26 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72057a0b65asm7106492b3a.113.2024.10.29.02.17.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Oct 2024 02:17:26 -0700 (PDT)
+Message-ID: <6720a826.050a0220.e10f2.9b07@mx.google.com>
+Date: Tue, 29 Oct 2024 02:17:26 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,35 +75,76 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v6.12-rc3-8-gcecc795329fc
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+Subject: kselftest/next kselftest-lkdtm: 1 runs,
+ 1 regressions (v6.12-rc3-8-gcecc795329fc)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-If running hid testcases with command "./run_kselftest.sh -c hid",
-the following tests will take longer than the kselftest framework
-timeout (now 200 seconds) to run and thus got terminated with TIMEOUT
-error:
+kselftest/next kselftest-lkdtm: 1 runs, 1 regressions (v6.12-rc3-8-gcecc795=
+329fc)
 
-  hid-multitouch.sh - took about 6min41s
-  hid-tablet.sh - took about 6min30s
+Regressions Summary
+-------------------
 
-Increase the timeout setting to 10 minutes to allow them have a chance
-to finish.
+platform                    | arch | lab         | compiler | defconfig    =
+                | regressions
+----------------------------+------+-------------+----------+--------------=
+----------------+------------
+stm32mp157a-dhcor-avenger96 | arm  | lab-broonie | gcc-12   | multi_v7_defc=
+onfig+kselftest | 1          =
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Yun Lu <luyun@kylinos.cn>
----
- tools/testing/selftests/hid/settings | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/hid/settings b/tools/testing/selftes=
-ts/hid/settings
-index b3cbfc521b10..dff0d947f9c2 100644
---- a/tools/testing/selftests/hid/settings
-+++ b/tools/testing/selftests/hid/settings
-@@ -1,3 +1,3 @@
- # HID tests can be long, so give a little bit more time
- # to them
--timeout=3D200
-+timeout=3D600
---=20
-2.27.0
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.1=
+2-rc3-8-gcecc795329fc/plan/kselftest-lkdtm/
 
+  Test:     kselftest-lkdtm
+  Tree:     kselftest
+  Branch:   next
+  Describe: v6.12-rc3-8-gcecc795329fc
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      cecc795329fc3e0ea2e84567ee57570cc050cf6b =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                    | arch | lab         | compiler | defconfig    =
+                | regressions
+----------------------------+------+-------------+----------+--------------=
+----------------+------------
+stm32mp157a-dhcor-avenger96 | arm  | lab-broonie | gcc-12   | multi_v7_defc=
+onfig+kselftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/6720a2196a6ed469cec8688c
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+kselftest
+  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.12-rc3-8-gce=
+cc795329fc/arm/multi_v7_defconfig+kselftest/gcc-12/lab-broonie/kselftest-lk=
+dtm-stm32mp157a-dhcor-avenger96.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.12-rc3-8-gce=
+cc795329fc/arm/multi_v7_defconfig+kselftest/gcc-12/lab-broonie/kselftest-lk=
+dtm-stm32mp157a-dhcor-avenger96.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
+elftest/20240313.0/armhf/initrd.cpio.gz =
+
+
+
+  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/6720a2196a6ed4=
+69cec8688d
+        failing since 91 days (last pass: v6.10-rc7-29-gdf09b0bb09ea, first=
+ fail: v6.11-rc1) =
+
+ =20
 
