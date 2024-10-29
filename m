@@ -1,176 +1,269 @@
-Return-Path: <linux-kselftest+bounces-20973-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20975-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64A3F9B4E45
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 16:41:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 641CE9B4E52
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 16:44:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22E7C282D17
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 15:41:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A953AB25465
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 15:44:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9194F194ACF;
-	Tue, 29 Oct 2024 15:41:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC472195B1A;
+	Tue, 29 Oct 2024 15:43:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="rJt1duLm"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TuToelo6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2081.outbound.protection.outlook.com [40.107.101.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2BA71922FA;
-	Tue, 29 Oct 2024 15:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.81
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730216496; cv=fail; b=C6526g1f0n98DsUwA44Wl6Kiww+DoHRF8XJQZwSYJXgS93cEhE8RjhROzojmAtRap8ILRt/rawR5LFNXySMvG1Ra8Jk9SI0MAKxOt2UeaEp+Z/2NT+6qvaRVfjnah8Aso73uIDwZVuVWTbiOaHXJ7qXefFUeMhjBqT7eYcVXevE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730216496; c=relaxed/simple;
-	bh=SyZoaYnz9qxlbWB620tG8j+pnvUYGzVxClnG8+vhnv4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ufzceSFFIpzyzycT5kXYGs6NelH08yrpkHj0SahNnDWVnxAuOE6rnfr1c8H2avALRstZkP8/cn0pWXMRUr2g7p/Wt27orDx/CMpRmg6VMSIXiwCcaQgvii3r2/dftPtO8zgz/ePdJvulFPaHnUNL1XhTAtOrTNmc9JOlio/vy2Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=rJt1duLm; arc=fail smtp.client-ip=40.107.101.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=DFepFOICoRCdEwqYwrt9a4xACAf2IUgEdzYu+fbswNq6ldbWBTnr0Bh00ILRa1fXSpHP6H+NVtw+SnkMgpYsQNr5ElRLGslUvHTGRKsnK8xTR4Ikuu0tw3LpTHG9GJ0DSXLh+hCzEI6jzlIjPpRZiEREeX9O9+wEvV80OoOC8e+xYsmH7tHEk9J56avSGC67GN5ZfkWLnW+EqdAYxeu7/4GrxI3a+gkSajV4zGXf6QkVeXrIso+utXiW9H4wkXwQNYlNOu9ZFqSkvXwcpMPltYyJacP+J5LmkMYbkRU2yA/h6GlZI5YC/D7pqs3NZsj/ei81APOYgzH1hgBBJ+6SJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yBWtl/Os3ZLSb9wPLGrvLs6Qj4XSVj55IRBiLAkNoPg=;
- b=asSwUfhnYQ+ApMxa5K5tBJVX+jvojsfN4ELVdjuUkiqqIMQuCwXbUbDWXC1JbBlvVdM/P8ZfutzG0NZVqKZd7AFruvpyBKrwmRXnqJ/jTdfm5EW5AVVtzScU1BY3MyrXBzvCMvXj3QdYcAnYqwsgzpCiCMMc7VTd6Z775I1oJ/ceYqdhVPTLX4haYQ8nk/1JuZBeshW1h96rgjN3/pal3aUjfxAXgAfHT19tMUpr5M1bww1l414M9aAmVU7UoPOOm7gMuBpRSJDqpQxDoCOfI5Yf10CbqIAbaJjI/OC/w1A31urboJocOmmorbEEJb8FIek8c/r6C2d3STtIKLZ6+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yBWtl/Os3ZLSb9wPLGrvLs6Qj4XSVj55IRBiLAkNoPg=;
- b=rJt1duLmgtiM0QHP1Mu5H4J+w7VNK61qGe86+0ktDd32lbOG9+ESgzd52zaNt5eSWxlRijk96z06DHpAIu+fIr2/XVxm26AWWIg5UlVQCEULYHjvp55UfEkubURWNsuR0Be8Z9rznsRd05emvfOkEgXzq91TtVVvGoyDEbYzOWZo/q6ufa5N0mv0QtCCkycDYW/yt1I5eCbj5TYzI+IjHzXcJP7WykcXjRxbxg7xlNB+miyH2ORTPVGLFYb1S4Dn7Wz7+Htdx4+OBRlxDIcKBWV5fQCp/BZuUyFSd2od5oP+/XtXEZWuWdcL7+0kJRh5HbM8ef3aBY+4Xi/AHSG2Ag==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by SJ0PR12MB7457.namprd12.prod.outlook.com (2603:10b6:a03:48d::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.32; Tue, 29 Oct
- 2024 15:41:30 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.8093.018; Tue, 29 Oct 2024
- 15:41:30 +0000
-Date: Tue, 29 Oct 2024 12:41:29 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: kevin.tian@intel.com, will@kernel.org, joro@8bytes.org,
-	suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
-	dwmw2@infradead.org, baolu.lu@linux.intel.com, shuah@kernel.org,
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, eric.auger@redhat.com,
-	jean-philippe@linaro.org, mdf@kernel.org, mshavit@google.com,
-	shameerali.kolothum.thodi@huawei.com, smostafa@google.com,
-	yi.l.liu@intel.com, aik@amd.com, zhangfei.gao@linaro.org,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v5 10/13] iommufd/selftest: Add IOMMU_VIOMMU_TYPE_SELFTEST
-Message-ID: <20241029154129.GI209124@nvidia.com>
-References: <cover.1729897352.git.nicolinc@nvidia.com>
- <30f593e688e881b8cfee007e2ed2eb7a190a01d5.1729897352.git.nicolinc@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <30f593e688e881b8cfee007e2ed2eb7a190a01d5.1729897352.git.nicolinc@nvidia.com>
-X-ClientProxiedBy: MN0PR04CA0016.namprd04.prod.outlook.com
- (2603:10b6:208:52d::8) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA9E192D91
+	for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 15:43:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730216630; cv=none; b=AFDPoJXBF/XUblCIGQLgSfrr+95+1G3PIikBTsoNq5Z4E8EPL2Nlraavr5wcQuaUN1EnK78oQLwlJFeaEKQEOAqyT7cwaNQ5mDdGe4lrtBgfMtcCSvwLRYsq5nAUbJkP+B6yHu0Dwm1/9XBt4KGSZbSeT876l754jvMgIKcwG7k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730216630; c=relaxed/simple;
+	bh=/1y8wy/+8RsNiczZdUc9OTqY+F7kGhxHvR2T0Vw7BaI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O6P7gl2IFeIMB08LjHgTWjwHpYO4nWg2G+p1o+fPl3xutwxK9QHF1sqF8qwQmIMyIBUsEEPcOvkzs4OPlnyUJq1mv7VAXv+FZRJ4yW5Tmz9LcyBgvdPOV0gb4galmBn8ZJJsGLUq7ISYgmShdTPgYDiqvyPT3mCgchGRRZiWt2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TuToelo6; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-71e983487a1so4135648b3a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 08:43:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1730216628; x=1730821428; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dNrBCtbdWT9WqWi/UcHw/O+xVwFE+xizukhtenAkdnc=;
+        b=TuToelo6xLMi1xGZkF9QBftqsihqwPYtcb41TJkfAabHFMfHTVGLEMadwlRq4BsO2B
+         3BKCZKuVqP1QH05ABfCd1Y51XSli9pyszR5M8MmjK79oSduxiObLC+ayZXa+6iwPxHfo
+         tt5qgAWn8pPycEb2pFv6otqb9tUt7utGioqKJNTcUQ0RRz1kws3fdJLUR7n/VaM2pbo5
+         6WX9ste3rNgFW0O2n0WT/U3NB4d4EtuGXqvLFNFKq8UeMUwrniAMnahSKvYexle6lPpU
+         jPmy7GktNMQJatrwuD3bLri3ewq4WFOHj9XIO8qDFRUI5Lq2mNi5M04Zb6CKfbYAwvsL
+         Koxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730216628; x=1730821428;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dNrBCtbdWT9WqWi/UcHw/O+xVwFE+xizukhtenAkdnc=;
+        b=N0kyXLuXo0XT7ITwZzsMJ0mcoZNjjumhAyile9X2yGrIhXk2wyeCwR1/HJ8D0bS+TS
+         twYEp1wBOGuaRfHYMSYeDMIO9YqpKMzs5Szuydr03t4pOxMviIK0bsiGLh3QlHGSmrWf
+         8Ie+q0vhlNATRiS79O2iNiO6q7nYCqgWhVYumXMnUt0vAqKEkxASEnFW/ArR5I6MU26/
+         s9W23xrb5n7SBijQy1RpbAQmujDFkag+dzC4RDYUMGJcAuRfMxqrQv4tpTel9eimTtv8
+         LNdMj/rQHC9IKIUPlDpsz7jKChWRCipF45Z1hvjnifwqEDbLenbqaVv9zr7YcB3wm+CK
+         tYng==
+X-Forwarded-Encrypted: i=1; AJvYcCXfd+i3jt14ObysczyugTnWEAFIiOUcQ66r7UzlyIHBAEPlGSvsDEgXdZ7iuxRyCdXiThGi4dFlpzCEKYjKTjI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhCrSVY7T7vQiFDM6oxGwHzKm3lkz5wjNaNdQXQn9Syl5lOq1y
+	o4Dx+qb8O/lhttjMl1kZ1D06zXTAeWyRD39JX6JuhUvB81FnGXYcIlgB6Kqj2QnoHKOVH2ByQCf
+	38XfBibePLz/sQ5Qd3bwUEgeoilJA77lkD8Uu
+X-Google-Smtp-Source: AGHT+IHuHITAnMQg/vpdknOyzHnFC9zzfu+BGV4bB0VUAyKolP0v/4oWZlpvxVXw/wpnxXnUu3vpjZkmmJ7+SFaBR40=
+X-Received: by 2002:a05:6a20:d74d:b0:1d9:cc2:2c00 with SMTP id
+ adf61e73a8af0-1d9a83c9ff4mr16244776637.14.1730216627412; Tue, 29 Oct 2024
+ 08:43:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|SJ0PR12MB7457:EE_
-X-MS-Office365-Filtering-Correlation-Id: 98c0dba3-b0f8-46be-c74a-08dcf8302891
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?jCWSYeKBdt7pQbN+Rq2Kam3IsV/mLzho+98oCHQmWe8Ai56kQhMbgPRCnkN0?=
- =?us-ascii?Q?rYirNmlYfvUz25qX4pVaMJprEZqdYIYn1g4WhVhvuJewKYhwlQSJfb1QE2Ch?=
- =?us-ascii?Q?OMRXj3dynvT6Ux/GRkYE5Qr3c+WZjH+SBInmiiUZvNJkYukAiTn8n+MDOkWB?=
- =?us-ascii?Q?NcfRuOYMs+gckdx65WySbN43GzH/abRUZenOnkyBxcpZLTJ/ozlAqeQnYyLX?=
- =?us-ascii?Q?vQhrELtg1IQDWpcWZ//+6PbRk8nibglU2Qbcaoozo1tIuXNdCihMibLOovin?=
- =?us-ascii?Q?2TKhX4N+chpr0UtkjK94fDg5bUmmKRiIlQZWeyZNQWxJQmsbhTTm2P5JiRZv?=
- =?us-ascii?Q?+MxZaY8Dt5g23jCLmV8oCF4drZFg4NgU5xmWMfIrOe1EMvl6ERwQ0R1uZerG?=
- =?us-ascii?Q?l7YBnzq9kYOs9u1nImKlTPVyp0gxzhSSVqWjCw0goNpIlxKg+g7b6Sirn989?=
- =?us-ascii?Q?jSVLs7EVDGdGSD3/7/ugbH/0rysQ2TXw82EBCv8DxiQSuoGCSNkd0PARAkgd?=
- =?us-ascii?Q?gQH0SG+/IPasMB5loAi2MvYCN61J15lnpD2SqEepl0LeG1l1wTkViNV5PKXi?=
- =?us-ascii?Q?kjMqpVBO7VGsc9e514erVO8kfJfSXBlroOuxKZ2d59EWr8ZCkeFtZZjhuMpE?=
- =?us-ascii?Q?uyOOnTB1hyI7Xwvprwr+Yq5ZSnFA6ch8SKIDtfjdTgHZDt2XnPxbKf7iYOsa?=
- =?us-ascii?Q?PZgWObdQbt5FOLPltg1fJrM12lhki6ib5QK5/3UT6ZF40pVbLvqQQfuXxEnX?=
- =?us-ascii?Q?fsYl6CMlTg4kFlf2gL5mNlo6UDsrTcXRs27GSSi8hZEbxaG6EC75SBU4SAYZ?=
- =?us-ascii?Q?W0RGuVXqjjMnzXwE6ddIXVXRXod9Q1qYSO5mfmx/I345cW7KI7AJ5pWQPhgb?=
- =?us-ascii?Q?j3W7S7R2snQVy+GNwhwa9jOeYtC5BzCnRQjMWTgXVNoUCN9c5UkTWVYUpksw?=
- =?us-ascii?Q?oLYUqOWrqx3owgeF6jNWmnQHMXlBDR99dKD/Q3EYPocVPK17tbE0Pt9tAs0n?=
- =?us-ascii?Q?TKI1A1s4h2o0QRt6ysoCThsEBBDGXKQYdxx+ovpxPRnpLxz/Pw+yzkI0JqEx?=
- =?us-ascii?Q?cp61ygnh2jPZOQTf+2WIe/ybmV207YWV8rhX+Yn7iDVCIrCBkLxdBeYwBbO/?=
- =?us-ascii?Q?pUhCBl9ZMk/7JkidrNddIj6kKfBMHfQTjuARI/tcqPNss1+XErtdoZqZCLD8?=
- =?us-ascii?Q?y1yH2n4lj6+0YLFLvTJm5KObz03d0S6DQ5t8x+YkfQpwNtwywm5MzhGtGTM0?=
- =?us-ascii?Q?k2C5qngRwSHlGpGhsDl4Bx2WwyYyIPT7CG8IteXCapdSKu54YEXAa1KAXFpQ?=
- =?us-ascii?Q?ydiBd6ouGjbclfsJmpGWEZtF?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?htF4zGndzzvkTEgp6cUqqK4SP5AnIEjv6v6KAutvdn9gapysvzl9/183XB6x?=
- =?us-ascii?Q?BTObZHEWNrn09/TT7gtiqeSKU8fexLVfri7mJNSwWvTFIfYQqJQYLiwZioQo?=
- =?us-ascii?Q?xwM8s7Z7dmWgSq3wO6feB8B9MX76VFn0AyHNY8S1OZMaBE2zBk+0fw7Zgnmq?=
- =?us-ascii?Q?Ao/u8fDOjMyVFLysBT7A2bihtMGmZ4zJjRNB4XeJU5+rNgxymrPK8m0L0ACQ?=
- =?us-ascii?Q?B6VlWw2K3n0xN+4dzL7Ncki1Z6E28ZQhEGJDZri3yF65kQ89kGNgnAEND76s?=
- =?us-ascii?Q?ts//qxZpEkWz9+WS22EJVyYaCb4MK//PX+n5V5Z0qYQSQ/sAKRJGrvw6pkKa?=
- =?us-ascii?Q?K8c+87jCHZuCzogGnuoNJRA7iOZYgvqtmHxEq+D1Ppy73/uXy0oiv9xEnd2p?=
- =?us-ascii?Q?Jx8vvMszNMjfKM405fEu9jbmo4LJcLkXgU7OF4N0KsvyEmgoBmYrvezSq3ZN?=
- =?us-ascii?Q?bXRhg2+IuIj+W0baeJ/oUcNojVxa6+km2FzM4MNIGjOyf41EXm6+fAXel3G/?=
- =?us-ascii?Q?nzElBKI2XxN4/3B24ETh1iSeymHPvrkDl6crDYCukMCYeIjxDto+EM7Ymlyw?=
- =?us-ascii?Q?8eZZbjXw4c+DFHMOlfG+H69sb8xqysvBAD1vCrC0H1l2cRYblyfU8bWN6T8c?=
- =?us-ascii?Q?1kJH/4PGaK5X2q7pVuvG+vs+41YM/lR5CwaqIT4IHDw7qKUKCsIXmI1d7+rD?=
- =?us-ascii?Q?i0S1MI27MnciQBBUTopGQZMeywxXw/DHdEGq6Gj59E4fEPonY1bg4QxY1DYo?=
- =?us-ascii?Q?jLNQbFJTVHKxrkyGy28szk64QXp4J2ZPjwFyTJJ8POXWnK/fgL37TYvYvvd0?=
- =?us-ascii?Q?eq5AV7q00OsQAp7w/YAE999jxzbKYMZ3rvqQyESE4T6+U3+y45lRd8NUZJEI?=
- =?us-ascii?Q?X4hXzOndq72h6hH7t7G70a8AwkD4LR/tYa1pSxrFhpJ64R2btwRZOhjvT+DJ?=
- =?us-ascii?Q?sI968P018BOEGccBzympgJPpIfY+d4r5Cmrv8M3p2A71x8GXecE7DUCNwDu+?=
- =?us-ascii?Q?z7Df+fcgyNd84gBkbjCR32QChrpIzoKcyvOz3NfBtJoyqB94DO22G7CfOL9x?=
- =?us-ascii?Q?zqsOEZl3C1FgVaP9RRanqFpoWnFm2S++bOTywPEneMxMmCcEOonFMmwSeSf/?=
- =?us-ascii?Q?D9XfvK+M398LJnEWYDdUV8KFH/c0eOg+Ay4QADhLUFQpbQyC0iE9WVa0cdPA?=
- =?us-ascii?Q?CdkvsISqJY3R3AEG+J7mmS3ZvIC7OMJO08Vd9BnSH/sky/UjzVKTyBr6fxqh?=
- =?us-ascii?Q?F7Zm6GYVro+kIsnvCok0cAuTQknFXF8SA/m+eczUh3k8rUEtJMBlXH6K73qC?=
- =?us-ascii?Q?6o1NIwscfxMX80cruU1i9OuQDJK2QW48pW0D8aW1omng9BljlcBBhNAVWRpf?=
- =?us-ascii?Q?cn2DB7LgrlKbxvw5oPiLPDjrk2J6M2uxx0vgQx/r6HJuqXXvsiEQ05q28cb0?=
- =?us-ascii?Q?XGaa3n3LoSwkkkokVdkvzIHrGTPhncpxLK3M6HlmywzwI0gBfYXqZcR652PO?=
- =?us-ascii?Q?XIJMkvzhEGe6ByMownnlfbiKcFJXTiKnbGzZV84dGbYaU/4t+lYWuoY8PRm2?=
- =?us-ascii?Q?qbakQ/OVv+iJVbDkl1o=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98c0dba3-b0f8-46be-c74a-08dcf8302891
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Oct 2024 15:41:30.4803
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: I5QCMLl+rXO/wc5rCvrvHKMzYJWd6XDegSV6MIk5gAb7OhbWBuDAk20s8zqpp6Bw
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7457
+References: <173015245931.4747.16419517391658830640.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+In-Reply-To: <173015245931.4747.16419517391658830640.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+From: Rae Moar <rmoar@google.com>
+Date: Tue, 29 Oct 2024 11:43:35 -0400
+Message-ID: <CA+GJov7YB9b3nA0rUexZ=2gU5h49mCuJuZ-gRFkqppSwDPimxA@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: Introduce autorun option
+To: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+Cc: brendan.higgins@linux.dev, davidgow@google.com, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 25, 2024 at 04:49:50PM -0700, Nicolin Chen wrote:
-> Implement the viommu alloc/free functions to increase/reduce refcount of
-> its dependent mock iommu device. User space can verify this loop via the
-> IOMMU_VIOMMU_TYPE_SELFTEST.
-> 
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+On Mon, Oct 28, 2024 at 5:54=E2=80=AFPM Stanislav Kinsburskii
+<skinsburskii@linux.microsoft.com> wrote:
+>
+> The new option controls tests run on boot or module load. With the new
+> debugfs "run" dentry allowing to run tests on demand, an ability to disab=
+le
+> automatic tests run becomes a useful option in case of intrusive tests.
+>
+> The option is set to true by default to preserve the existent behavior. I=
+t
+> can be overridden by either the corresponding module option or by the
+> corresponding config build option.
+>
+> Signed-off-by: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+
+Hello,
+
+This looks good to me!
+
+Reviewed-by: Rae Moar <rmoar@google.com>
+
+Thanks!
+-Rae
+
 > ---
->  drivers/iommu/iommufd/iommufd_test.h |  2 +
->  drivers/iommu/iommufd/selftest.c     | 64 ++++++++++++++++++++++++++++
->  2 files changed, 66 insertions(+)
-
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-
-Jason
+>  include/kunit/test.h |    4 +++-
+>  lib/kunit/Kconfig    |   12 ++++++++++++
+>  lib/kunit/debugfs.c  |    2 +-
+>  lib/kunit/executor.c |   21 +++++++++++++++++++--
+>  lib/kunit/test.c     |    6 ++++--
+>  5 files changed, 39 insertions(+), 6 deletions(-)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 34b71e42fb10..58dbab60f853 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -312,6 +312,7 @@ static inline void kunit_set_failure(struct kunit *te=
+st)
+>  }
+>
+>  bool kunit_enabled(void);
+> +bool kunit_autorun(void);
+>  const char *kunit_action(void);
+>  const char *kunit_filter_glob(void);
+>  char *kunit_filter(void);
+> @@ -334,7 +335,8 @@ kunit_filter_suites(const struct kunit_suite_set *sui=
+te_set,
+>                     int *err);
+>  void kunit_free_suite_set(struct kunit_suite_set suite_set);
+>
+> -int __kunit_test_suites_init(struct kunit_suite * const * const suites, =
+int num_suites);
+> +int __kunit_test_suites_init(struct kunit_suite * const * const suites, =
+int num_suites,
+> +                            bool run_tests);
+>
+>  void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suite=
+s);
+>
+> diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
+> index 34d7242d526d..a97897edd964 100644
+> --- a/lib/kunit/Kconfig
+> +++ b/lib/kunit/Kconfig
+> @@ -81,4 +81,16 @@ config KUNIT_DEFAULT_ENABLED
+>           In most cases this should be left as Y. Only if additional opt-=
+in
+>           behavior is needed should this be set to N.
+>
+> +config KUNIT_AUTORUN_ENABLED
+> +       bool "Default value of kunit.autorun"
+> +       default y
+> +       help
+> +         Sets the default value of kunit.autorun. If set to N then KUnit
+> +         tests will not run after initialization unless kunit.autorun=3D=
+1 is
+> +         passed to the kernel command line. The test can still be run ma=
+nually
+> +         via debugfs interface.
+> +
+> +         In most cases this should be left as Y. Only if additional opt-=
+in
+> +         behavior is needed should this be set to N.
+> +
+>  endif # KUNIT
+> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
+> index d548750a325a..9df064f40d98 100644
+> --- a/lib/kunit/debugfs.c
+> +++ b/lib/kunit/debugfs.c
+> @@ -145,7 +145,7 @@ static ssize_t debugfs_run(struct file *file,
+>         struct inode *f_inode =3D file->f_inode;
+>         struct kunit_suite *suite =3D (struct kunit_suite *) f_inode->i_p=
+rivate;
+>
+> -       __kunit_test_suites_init(&suite, 1);
+> +       __kunit_test_suites_init(&suite, 1, true);
+>
+>         return count;
+>  }
+> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> index 34b7b6833df3..3f39955cb0f1 100644
+> --- a/lib/kunit/executor.c
+> +++ b/lib/kunit/executor.c
+> @@ -29,6 +29,22 @@ const char *kunit_action(void)
+>         return action_param;
+>  }
+>
+> +/*
+> + * Run KUnit tests after initialization
+> + */
+> +#ifdef CONFIG_KUNIT_AUTORUN_ENABLED
+> +static bool autorun_param =3D true;
+> +#else
+> +static bool autorun_param;
+> +#endif
+> +module_param_named(autorun, autorun_param, bool, 0);
+> +MODULE_PARM_DESC(autorun, "Run KUnit tests after initialization");
+> +
+> +bool kunit_autorun(void)
+> +{
+> +       return autorun_param;
+> +}
+> +
+>  static char *filter_glob_param;
+>  static char *filter_param;
+>  static char *filter_action_param;
+> @@ -260,13 +276,14 @@ kunit_filter_suites(const struct kunit_suite_set *s=
+uite_set,
+>  void kunit_exec_run_tests(struct kunit_suite_set *suite_set, bool builti=
+n)
+>  {
+>         size_t num_suites =3D suite_set->end - suite_set->start;
+> +       bool autorun =3D kunit_autorun();
+>
+> -       if (builtin || num_suites) {
+> +       if (autorun && (builtin || num_suites)) {
+>                 pr_info("KTAP version 1\n");
+>                 pr_info("1..%zu\n", num_suites);
+>         }
+>
+> -       __kunit_test_suites_init(suite_set->start, num_suites);
+> +       __kunit_test_suites_init(suite_set->start, num_suites, autorun);
+>  }
+>
+>  void kunit_exec_list_tests(struct kunit_suite_set *suite_set, bool inclu=
+de_attr)
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 089c832e3cdb..146d1b48a096 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -708,7 +708,8 @@ bool kunit_enabled(void)
+>         return enable_param;
+>  }
+>
+> -int __kunit_test_suites_init(struct kunit_suite * const * const suites, =
+int num_suites)
+> +int __kunit_test_suites_init(struct kunit_suite * const * const suites, =
+int num_suites,
+> +                            bool run_tests)
+>  {
+>         unsigned int i;
+>
+> @@ -731,7 +732,8 @@ int __kunit_test_suites_init(struct kunit_suite * con=
+st * const suites, int num_
+>
+>         for (i =3D 0; i < num_suites; i++) {
+>                 kunit_init_suite(suites[i]);
+> -               kunit_run_tests(suites[i]);
+> +               if (run_tests)
+> +                       kunit_run_tests(suites[i]);
+>         }
+>
+>         static_branch_dec(&kunit_running);
+>
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion visit https://groups.google.com/d/msgid/kunit-dev=
+/173015245931.4747.16419517391658830640.stgit%40skinsburskii-cloud-desktop.=
+internal.cloudapp.net.
 
