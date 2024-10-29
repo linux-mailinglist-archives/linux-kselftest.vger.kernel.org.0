@@ -1,269 +1,180 @@
-Return-Path: <linux-kselftest+bounces-20975-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20974-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 641CE9B4E52
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 16:44:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A0D89B4E50
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 16:43:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A953AB25465
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 15:44:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44EFB28296C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2024 15:43:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC472195B1A;
-	Tue, 29 Oct 2024 15:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TuToelo6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64C74194C61;
+	Tue, 29 Oct 2024 15:43:45 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA9E192D91
-	for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 15:43:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29E24192D91;
+	Tue, 29 Oct 2024 15:43:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730216630; cv=none; b=AFDPoJXBF/XUblCIGQLgSfrr+95+1G3PIikBTsoNq5Z4E8EPL2Nlraavr5wcQuaUN1EnK78oQLwlJFeaEKQEOAqyT7cwaNQ5mDdGe4lrtBgfMtcCSvwLRYsq5nAUbJkP+B6yHu0Dwm1/9XBt4KGSZbSeT876l754jvMgIKcwG7k=
+	t=1730216625; cv=none; b=LUHOC1F14Bn4b2udLeIFTEKdrgWPSu3roJI8PSFTvCAtCbobl8ZES3reDUUhQwqRjuwfCL2fS8Mb8AeH0pyW0lW7yr8P2jSSZ9P34P3UgmofmNc/Zbq7noYMC8lGGMxcB1esny9uE7zVW0x1SJDeQYadfwZVTcJSEkCkx216Yn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730216630; c=relaxed/simple;
-	bh=/1y8wy/+8RsNiczZdUc9OTqY+F7kGhxHvR2T0Vw7BaI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O6P7gl2IFeIMB08LjHgTWjwHpYO4nWg2G+p1o+fPl3xutwxK9QHF1sqF8qwQmIMyIBUsEEPcOvkzs4OPlnyUJq1mv7VAXv+FZRJ4yW5Tmz9LcyBgvdPOV0gb4galmBn8ZJJsGLUq7ISYgmShdTPgYDiqvyPT3mCgchGRRZiWt2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TuToelo6; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-71e983487a1so4135648b3a.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 29 Oct 2024 08:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730216628; x=1730821428; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dNrBCtbdWT9WqWi/UcHw/O+xVwFE+xizukhtenAkdnc=;
-        b=TuToelo6xLMi1xGZkF9QBftqsihqwPYtcb41TJkfAabHFMfHTVGLEMadwlRq4BsO2B
-         3BKCZKuVqP1QH05ABfCd1Y51XSli9pyszR5M8MmjK79oSduxiObLC+ayZXa+6iwPxHfo
-         tt5qgAWn8pPycEb2pFv6otqb9tUt7utGioqKJNTcUQ0RRz1kws3fdJLUR7n/VaM2pbo5
-         6WX9ste3rNgFW0O2n0WT/U3NB4d4EtuGXqvLFNFKq8UeMUwrniAMnahSKvYexle6lPpU
-         jPmy7GktNMQJatrwuD3bLri3ewq4WFOHj9XIO8qDFRUI5Lq2mNi5M04Zb6CKfbYAwvsL
-         Koxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730216628; x=1730821428;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dNrBCtbdWT9WqWi/UcHw/O+xVwFE+xizukhtenAkdnc=;
-        b=N0kyXLuXo0XT7ITwZzsMJ0mcoZNjjumhAyile9X2yGrIhXk2wyeCwR1/HJ8D0bS+TS
-         twYEp1wBOGuaRfHYMSYeDMIO9YqpKMzs5Szuydr03t4pOxMviIK0bsiGLh3QlHGSmrWf
-         8Ie+q0vhlNATRiS79O2iNiO6q7nYCqgWhVYumXMnUt0vAqKEkxASEnFW/ArR5I6MU26/
-         s9W23xrb5n7SBijQy1RpbAQmujDFkag+dzC4RDYUMGJcAuRfMxqrQv4tpTel9eimTtv8
-         LNdMj/rQHC9IKIUPlDpsz7jKChWRCipF45Z1hvjnifwqEDbLenbqaVv9zr7YcB3wm+CK
-         tYng==
-X-Forwarded-Encrypted: i=1; AJvYcCXfd+i3jt14ObysczyugTnWEAFIiOUcQ66r7UzlyIHBAEPlGSvsDEgXdZ7iuxRyCdXiThGi4dFlpzCEKYjKTjI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhCrSVY7T7vQiFDM6oxGwHzKm3lkz5wjNaNdQXQn9Syl5lOq1y
-	o4Dx+qb8O/lhttjMl1kZ1D06zXTAeWyRD39JX6JuhUvB81FnGXYcIlgB6Kqj2QnoHKOVH2ByQCf
-	38XfBibePLz/sQ5Qd3bwUEgeoilJA77lkD8Uu
-X-Google-Smtp-Source: AGHT+IHuHITAnMQg/vpdknOyzHnFC9zzfu+BGV4bB0VUAyKolP0v/4oWZlpvxVXw/wpnxXnUu3vpjZkmmJ7+SFaBR40=
-X-Received: by 2002:a05:6a20:d74d:b0:1d9:cc2:2c00 with SMTP id
- adf61e73a8af0-1d9a83c9ff4mr16244776637.14.1730216627412; Tue, 29 Oct 2024
- 08:43:47 -0700 (PDT)
+	s=arc-20240116; t=1730216625; c=relaxed/simple;
+	bh=Vm7aoA5pnFaMAKC3ESPROQTMibusFmYq0cqGc4TgUgo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JmXViduGDP464hPi6uTiVfsDn85EZ3Oj/jRdUw11/81wM9P6mYBWK/hK/lLTg39R+B8QxrDPVwwdd8a2CPEKf/Pi92XjI8Ux548jtCS1xVjW5MWJLnA30NjE9ndDgIblfujBcksddSZKHvGYYOlIGcvbl9IQ30jHRL4VsUePjQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EABE1497;
+	Tue, 29 Oct 2024 08:44:10 -0700 (PDT)
+Received: from J2N7QTR9R3.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F27CF3F73B;
+	Tue, 29 Oct 2024 08:43:39 -0700 (PDT)
+Date: Tue, 29 Oct 2024 15:43:37 +0000
+From: Mark Rutland <mark.rutland@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] kselftest/arm64: Increase frequency of signal
+ delivery in fp-stress
+Message-ID: <ZyECqagB1tGdE4uz@J2N7QTR9R3.cambridge.arm.com>
+References: <20241029-arm64-fp-stress-interval-v1-0-db540abf6dd5@kernel.org>
+ <20241029-arm64-fp-stress-interval-v1-1-db540abf6dd5@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <173015245931.4747.16419517391658830640.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-In-Reply-To: <173015245931.4747.16419517391658830640.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-From: Rae Moar <rmoar@google.com>
-Date: Tue, 29 Oct 2024 11:43:35 -0400
-Message-ID: <CA+GJov7YB9b3nA0rUexZ=2gU5h49mCuJuZ-gRFkqppSwDPimxA@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: Introduce autorun option
-To: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-Cc: brendan.higgins@linux.dev, davidgow@google.com, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241029-arm64-fp-stress-interval-v1-1-db540abf6dd5@kernel.org>
 
-On Mon, Oct 28, 2024 at 5:54=E2=80=AFPM Stanislav Kinsburskii
-<skinsburskii@linux.microsoft.com> wrote:
->
-> The new option controls tests run on boot or module load. With the new
-> debugfs "run" dentry allowing to run tests on demand, an ability to disab=
-le
-> automatic tests run becomes a useful option in case of intrusive tests.
->
-> The option is set to true by default to preserve the existent behavior. I=
-t
-> can be overridden by either the corresponding module option or by the
-> corresponding config build option.
->
-> Signed-off-by: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+Hi Mark,
 
-Hello,
+On Tue, Oct 29, 2024 at 12:10:39AM +0000, Mark Brown wrote:
+> Currently we only deliver signals to the processes being tested about
+> once a second, meaning that the signal code paths are subject to
+> relatively little stress. Increase this frequency substantially to
+> 25ms intervals, along with some minor refactoring to make this more
+> readily tuneable and maintain the 1s logging interval. This interval
+> was chosen based on some experimentation with emulated platforms to
+> avoid causing so much extra load that the test starts to run into the
+> 45s limit for selftests or generally completely disconnect the timeout
+> numbers from the
 
-This looks good to me!
+Looks like the end of the sentence got deleted?
 
-Reviewed-by: Rae Moar <rmoar@google.com>
+On those emulated platforms (FVP?), does this change trigger the faukure
+more often?
 
-Thanks!
--Rae
+I gave this a quick test, and with this change, running fp-stress on a
+defconfig kernel running on 1 CPU triggers the "Bad SVCR: 0" splat in
+35/100 runs. Hacking that down to 5ms brings that to 89/100 runs. So
+even if we have to keep this high for an emulated platform, it'd
+probably be worth being able to override that as a parameter?
 
+Otherwise, maybe it's worth increasing the timeout for the fp-stress
+test specifically? The docs at:
+
+  https://docs.kernel.org/dev-tools/kselftest.html#timeout-for-selftests
+
+... imply that is possible, but don't say exactly how, and it seems
+legitimate for a stress test.
+
+> We could increase this if we moved the signal generation out of the main
+> supervisor thread, though we should also consider that he percentage of
+> time that we spend interacting with the floating point state is also a
+> consideration.
+> 
+> Suggested-by: Mark Rutland <mark.rutland@arm.com>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->  include/kunit/test.h |    4 +++-
->  lib/kunit/Kconfig    |   12 ++++++++++++
->  lib/kunit/debugfs.c  |    2 +-
->  lib/kunit/executor.c |   21 +++++++++++++++++++--
->  lib/kunit/test.c     |    6 ++++--
->  5 files changed, 39 insertions(+), 6 deletions(-)
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 34b71e42fb10..58dbab60f853 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -312,6 +312,7 @@ static inline void kunit_set_failure(struct kunit *te=
-st)
->  }
->
->  bool kunit_enabled(void);
-> +bool kunit_autorun(void);
->  const char *kunit_action(void);
->  const char *kunit_filter_glob(void);
->  char *kunit_filter(void);
-> @@ -334,7 +335,8 @@ kunit_filter_suites(const struct kunit_suite_set *sui=
-te_set,
->                     int *err);
->  void kunit_free_suite_set(struct kunit_suite_set suite_set);
->
-> -int __kunit_test_suites_init(struct kunit_suite * const * const suites, =
-int num_suites);
-> +int __kunit_test_suites_init(struct kunit_suite * const * const suites, =
-int num_suites,
-> +                            bool run_tests);
->
->  void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suite=
-s);
->
-> diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-> index 34d7242d526d..a97897edd964 100644
-> --- a/lib/kunit/Kconfig
-> +++ b/lib/kunit/Kconfig
-> @@ -81,4 +81,16 @@ config KUNIT_DEFAULT_ENABLED
->           In most cases this should be left as Y. Only if additional opt-=
-in
->           behavior is needed should this be set to N.
->
-> +config KUNIT_AUTORUN_ENABLED
-> +       bool "Default value of kunit.autorun"
-> +       default y
-> +       help
-> +         Sets the default value of kunit.autorun. If set to N then KUnit
-> +         tests will not run after initialization unless kunit.autorun=3D=
-1 is
-> +         passed to the kernel command line. The test can still be run ma=
-nually
-> +         via debugfs interface.
+>  tools/testing/selftests/arm64/fp/fp-stress.c | 24 ++++++++++++++----------
+>  1 file changed, 14 insertions(+), 10 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/arm64/fp/fp-stress.c b/tools/testing/selftests/arm64/fp/fp-stress.c
+> index faac24bdefeb9436e2daf20b7250d0ae25ca23a7..c986c68fbcacdd295f4db57277075209193cb943 100644
+> --- a/tools/testing/selftests/arm64/fp/fp-stress.c
+> +++ b/tools/testing/selftests/arm64/fp/fp-stress.c
+> @@ -28,6 +28,9 @@
+>  
+>  #define MAX_VLS 16
+>  
+> +#define SIGNAL_INTERVAL_MS 25
+> +#define LOG_INTERVALS (1000 / SIGNAL_INTERVAL_MS)
+
+Running this, I see that by default test logs:
+
+	# Will run for 400s
+
+... for a timeout that's actually ~10s, due to the following, which isn't in
+the diff:
+
+	if (timeout > 0)
+		ksft_print_msg("Will run for %ds\n", timeout);
+
+... so that probably wants an update to either convert to seconds or be in
+terms of signals, and likewise for the "timeout remaining" message below.
+
+Otherwise, this looks good to me.
+
+Mark.
+
 > +
-> +         In most cases this should be left as Y. Only if additional opt-=
-in
-> +         behavior is needed should this be set to N.
-> +
->  endif # KUNIT
-> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-> index d548750a325a..9df064f40d98 100644
-> --- a/lib/kunit/debugfs.c
-> +++ b/lib/kunit/debugfs.c
-> @@ -145,7 +145,7 @@ static ssize_t debugfs_run(struct file *file,
->         struct inode *f_inode =3D file->f_inode;
->         struct kunit_suite *suite =3D (struct kunit_suite *) f_inode->i_p=
-rivate;
->
-> -       __kunit_test_suites_init(&suite, 1);
-> +       __kunit_test_suites_init(&suite, 1, true);
->
->         return count;
->  }
-> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> index 34b7b6833df3..3f39955cb0f1 100644
-> --- a/lib/kunit/executor.c
-> +++ b/lib/kunit/executor.c
-> @@ -29,6 +29,22 @@ const char *kunit_action(void)
->         return action_param;
->  }
->
-> +/*
-> + * Run KUnit tests after initialization
-> + */
-> +#ifdef CONFIG_KUNIT_AUTORUN_ENABLED
-> +static bool autorun_param =3D true;
-> +#else
-> +static bool autorun_param;
-> +#endif
-> +module_param_named(autorun, autorun_param, bool, 0);
-> +MODULE_PARM_DESC(autorun, "Run KUnit tests after initialization");
-> +
-> +bool kunit_autorun(void)
-> +{
-> +       return autorun_param;
-> +}
-> +
->  static char *filter_glob_param;
->  static char *filter_param;
->  static char *filter_action_param;
-> @@ -260,13 +276,14 @@ kunit_filter_suites(const struct kunit_suite_set *s=
-uite_set,
->  void kunit_exec_run_tests(struct kunit_suite_set *suite_set, bool builti=
-n)
+>  struct child_data {
+>  	char *name, *output;
+>  	pid_t pid;
+> @@ -449,7 +452,7 @@ static const struct option options[] = {
+>  int main(int argc, char **argv)
 >  {
->         size_t num_suites =3D suite_set->end - suite_set->start;
-> +       bool autorun =3D kunit_autorun();
->
-> -       if (builtin || num_suites) {
-> +       if (autorun && (builtin || num_suites)) {
->                 pr_info("KTAP version 1\n");
->                 pr_info("1..%zu\n", num_suites);
->         }
->
-> -       __kunit_test_suites_init(suite_set->start, num_suites);
-> +       __kunit_test_suites_init(suite_set->start, num_suites, autorun);
->  }
->
->  void kunit_exec_list_tests(struct kunit_suite_set *suite_set, bool inclu=
-de_attr)
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 089c832e3cdb..146d1b48a096 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -708,7 +708,8 @@ bool kunit_enabled(void)
->         return enable_param;
->  }
->
-> -int __kunit_test_suites_init(struct kunit_suite * const * const suites, =
-int num_suites)
-> +int __kunit_test_suites_init(struct kunit_suite * const * const suites, =
-int num_suites,
-> +                            bool run_tests)
->  {
->         unsigned int i;
->
-> @@ -731,7 +732,8 @@ int __kunit_test_suites_init(struct kunit_suite * con=
-st * const suites, int num_
->
->         for (i =3D 0; i < num_suites; i++) {
->                 kunit_init_suite(suites[i]);
-> -               kunit_run_tests(suites[i]);
-> +               if (run_tests)
-> +                       kunit_run_tests(suites[i]);
->         }
->
->         static_branch_dec(&kunit_running);
->
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion visit https://groups.google.com/d/msgid/kunit-dev=
-/173015245931.4747.16419517391658830640.stgit%40skinsburskii-cloud-desktop.=
-internal.cloudapp.net.
+>  	int ret;
+> -	int timeout = 10;
+> +	int timeout = 10 * (1000 / SIGNAL_INTERVAL_MS);
+>  	int cpus, i, j, c;
+>  	int sve_vl_count, sme_vl_count;
+>  	bool all_children_started = false;
+> @@ -578,14 +581,14 @@ int main(int argc, char **argv)
+>  			break;
+>  
+>  		/*
+> -		 * Timeout is counted in seconds with no output, the
+> -		 * tests print during startup then are silent when
+> -		 * running so this should ensure they all ran enough
+> -		 * to install the signal handler, this is especially
+> -		 * useful in emulation where we will both be slow and
+> -		 * likely to have a large set of VLs.
+> +		 * Timeout is counted in poll intervals with no
+> +		 * output, the tests print during startup then are
+> +		 * silent when running so this should ensure they all
+> +		 * ran enough to install the signal handler, this is
+> +		 * especially useful in emulation where we will both
+> +		 * be slow and likely to have a large set of VLs.
+>  		 */
+> -		ret = epoll_wait(epoll_fd, evs, tests, 1000);
+> +		ret = epoll_wait(epoll_fd, evs, tests, SIGNAL_INTERVAL_MS);
+>  		if (ret < 0) {
+>  			if (errno == EINTR)
+>  				continue;
+> @@ -625,8 +628,9 @@ int main(int argc, char **argv)
+>  			all_children_started = true;
+>  		}
+>  
+> -		ksft_print_msg("Sending signals, timeout remaining: %d\n",
+> -			       timeout);
+> +		if ((timeout % LOG_INTERVALS) == 0)
+> +			ksft_print_msg("Sending signals, timeout remaining: %d\n",
+> +				       timeout);
+>  
+>  		for (i = 0; i < num_children; i++)
+>  			child_tickle(&children[i]);
+> 
+> -- 
+> 2.39.2
+> 
 
