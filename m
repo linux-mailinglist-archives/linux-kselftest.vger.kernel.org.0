@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-21059-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21060-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDA839B5824
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 01:02:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 21C3F9B5826
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 01:02:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AD6B1C25D7C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 00:02:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53C671C25CB1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 00:02:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2800410A1E;
-	Wed, 30 Oct 2024 00:02:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 288648F7D;
+	Wed, 30 Oct 2024 00:02:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mGabhJiW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kQDOJqxm"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3EE6F4E2;
-	Wed, 30 Oct 2024 00:02:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1ED063CB;
+	Wed, 30 Oct 2024 00:02:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730246537; cv=none; b=irFPPWEciMZsdq5rQ8vb6DgO5I32/5YUVhaOcVmX6D0x5jf8mmXQZ0/cGsD0JC8Xhzr1G1KKkjoqrSm72eihJjUISKo6+k2g6R1atoXJSrViFU5dQmmDlZRes3WgtW9w+Y32u9lgdS6Kc1uhVskl+NZFe7ncZGvmP/YaTQQISrI=
+	t=1730246539; cv=none; b=K2wTlQVKL6ka4FD5F0J927Zlf+f30tgVhyd1hqw1WE9eWSuyXmoZS5Xt0Y2mVQzFGqjXoCfGNMu4TAchGUD7LPZp/8W2su4B7BK0/RT2FlnydgyY6vtdNAKwAyNfBigRj6NhhFTGRPVg0Vxcjqmh63pDqNGnB4l8qg0NxIi4C6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730246537; c=relaxed/simple;
-	bh=vfX4nbW4kowy7IUtSJ8IaSqrtLKsP7rLoMKjBgXuBGg=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Nq9nG/j4Y8OEQfHiZrdHHQHimqsNAPlk4HxDnIABTb53fgQUbCFRoqjv5pXApzmaXx9umrT+FyMZ2oQkWUcPVzfmoMp6w15D+xSS3xirpyxiPA85z/MqNJ9hObrcPgawRUW8ktc6zilX54xvt+EzpVWH7A+w6T1p6qDuzenVGgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mGabhJiW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42770C4CEE3;
-	Wed, 30 Oct 2024 00:02:15 +0000 (UTC)
+	s=arc-20240116; t=1730246539; c=relaxed/simple;
+	bh=ZTF3X5004ugxu+b0r8whBammEg+NJnKe47itkV+Nzn0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=agCY3b6pjT9PDp+DTJIDW0i8R8Di95BxS9cvu72qbehwk0pMez54WE+ofhxrN8szYRmWn5STdCqkdVF4SFprhyf5biS4CJrjguT/7kHFgyDrCN90f+F3tQ6afDDFbhFQ3uU6mE+2qutK4floMLmTNkLE+hYEDPNyKB/PgcVXXrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kQDOJqxm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44B96C4CEE6;
+	Wed, 30 Oct 2024 00:02:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730246536;
-	bh=vfX4nbW4kowy7IUtSJ8IaSqrtLKsP7rLoMKjBgXuBGg=;
-	h=From:Subject:Date:To:Cc:From;
-	b=mGabhJiWp2yr+cfAuEkEMIOVXMD5r3xovvjDIeNhn2eh4AAkJ+KYxmHZyWeACZht5
-	 Ifa9eu7Upu+sKHSZZuWA61YaufGHR6uQNQUS0kyV3ZfHSYxlrvL3Ap29Q4+3krw5MT
-	 9RRYadhEJN5Np2L/AwPGTxgSWzdbNChzWY6UriSLzKyccTll2qblJINT5Hn4Ut3qxG
-	 000XFXC6Tq9wKElRGX3Yv9xxHtW8cJb/gjHXAA+xsAg+P3FsxN8QXdNx0yyNw/h6ez
-	 tN8Ly/AFCV3Y0PsJi3JVov580ZoWc1oxA1S2zdnT6R2ko+X9+GGTWh9Ui1CX9X7wpt
-	 G0QzO27WicusQ==
+	s=k20201202; t=1730246538;
+	bh=ZTF3X5004ugxu+b0r8whBammEg+NJnKe47itkV+Nzn0=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=kQDOJqxmlCo+b8vm1je6stxuX61EXkKfESgokOQ/AGJ9HYuTrFJBdeBHATvhzK75A
+	 FfYZVlSwoKeKYuHryjM3HLdb2yVjUSjdExW0mnFNVytYociEp7NHM3flJFjW7nK+jO
+	 sdoQ5H1vAivIRZGR95Yn5yZ9LP1tsV3nbQHt01+2nw2Rd5vs6CYKbaTxHAC4xD3Z8m
+	 +81dnaNmDZwZPvpBq5jQh/feSLgqKsBhWLjwbSwqVHUyWrTkAakI639nhcCusko83c
+	 1sQTk63gWMS1bFF6PCsFMVakMfvP3V7cFAZ1Tk8pN8UiA40DVHzBy60wU55UM6UoYL
+	 dHyJyfq0kJgiw==
 From: Mark Brown <broonie@kernel.org>
-Subject: [PATCH v2 0/2] kselftest/arm64: fp-stress signal delivery interval
- improvements
-Date: Wed, 30 Oct 2024 00:02:01 +0000
-Message-Id: <20241030-arm64-fp-stress-interval-v2-0-bd3cef48c22c@kernel.org>
+Date: Wed, 30 Oct 2024 00:02:02 +0000
+Subject: [PATCH v2 1/2] kselftest/arm64: Increase frequency of signal
+ delivery in fp-stress
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,57 +53,115 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHl3IWcC/3WNQQqDMBBFryJZd0oSNNiueo/iIpqJDrVRJiG0i
- HdvKnTZ5Xvw399ERCaM4lptgjFTpCUU0KdKDJMNIwK5wkJLXSupW7D8NDX4FWJijBEoJORsZ2h
- 9g0YP0qDSosxXRk+vI33vCk8U08Lv4ymrr/1FL/+jWYEE1ze1tL03zjW3B3LA+bzwKLp93z/OA
- AytwQAAAA==
-X-Change-ID: 20241028-arm64-fp-stress-interval-8f5e62c06e12
+Message-Id: <20241030-arm64-fp-stress-interval-v2-1-bd3cef48c22c@kernel.org>
+References: <20241030-arm64-fp-stress-interval-v2-0-bd3cef48c22c@kernel.org>
+In-Reply-To: <20241030-arm64-fp-stress-interval-v2-0-bd3cef48c22c@kernel.org>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
  Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
 Cc: Mark Rutland <mark.rutland@arm.com>, 
  linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-9b746
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1244; i=broonie@kernel.org;
- h=from:subject:message-id; bh=vfX4nbW4kowy7IUtSJ8IaSqrtLKsP7rLoMKjBgXuBGg=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnIXeEQX3ZnpyxHhcbEA+5T7ZncKjnsWPSGQng27oY
- QhNxq8yJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZyF3hAAKCRAk1otyXVSH0JTxB/
- 9GTxbnEKrWGh2epcF+v4WIllG00TQeqlIs6DOZ7YsmXiF6C2wQ8+A11TnS+xsQin8dNyb4Dy5dhAc9
- HTq0yXhY9o96J4qY6cZ7EojkCXuPp5j0V8c1BfbV9hp/pfH6RFkpEev5//vbh+1uqpU2ANqV627Byv
- xIcQ9Q69xjWf+y9SXduHqnVRRZmejm54CAaSY15zgZfQejQDaGDeeqLrTtk5vawxvWZca4NvtoydFM
- 1UD6Zwcr+Fa1dQuzkywYFK4ONqDJ7Z5/AihGQbRIRqE4YbY4zjrrSpoBuM/+08UYanz9b4zAt5ud/2
- EOKnq45ZKuAuirtIG9bsRMiKhG8I4/
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3429; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=ZTF3X5004ugxu+b0r8whBammEg+NJnKe47itkV+Nzn0=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnIXeFYSH8SGYUE/hJ8iQ2ZUyfWpkt2Dk/ZTv7+x1X
+ OSLwqTiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZyF3hQAKCRAk1otyXVSH0CUGB/
+ sHLIuDk/FjxdcsHp3mOCJNmYoruZN13js6UA45pOJSK0IElqkbQDzOTc3emdQmh4RwUAr8zTLkBYn3
+ dyXdEhVoRWrOEDSVS1aRh4ppE/LOv2rcCjq0ZhgFsn0B9YKFTTJTMQFBxizmt4hiZ/asHJUHof+Ko3
+ m+pVNLKYtvGMAgmWlekFYK4Mwv/D7JT81Blu4O3K/XL1IqktL+njQEpnZhuU3AI2usd02jDZQyX8ro
+ zc9rrffUMIGyYl6jv2mMurXNR8J9mpzeu1jXYFdGqmiidlQldbpPMZ9yciDO7LDPdta0DppNUKydY+
+ K9ncEw/UKKAvXCdYGXvG4l5wKKB59u
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-One of the things that fp-stress does to stress the floating point
-context switching is send signals to the test threads it spawns.
-Currently we do this once per second but as suggested by Mark Rutland if
-we increase this we can improve the chances of triggering any issues
-with context switching the signal handling code.  Do a quick change to 
-increase the rate of signal delivery, trying to avoid excessive impact
-on emulated platforms, and a further change to mitigate the impact that
-this creates during startup.
+Currently we only deliver signals to the processes being tested about once
+a second, meaning that the signal code paths are subject to relatively
+little stress. Increase this frequency substantially to 25ms intervals,
+along with some minor refactoring to make this more readily tuneable and
+maintain the 1s logging interval. This interval was chosen based on some
+experimentation with emulated platforms to avoid causing so much extra load
+that the test starts to run into the 45s limit for selftests or generally
+completely disconnect the timeout numbers from the
 
+We could increase this if we moved the signal generation out of the main
+supervisor thread, though we should also consider that he percentage of
+time that we spend interacting with the floating point state is also a
+consideration.
+
+Suggested-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-Changes in v2:
-- Minor clarifications in commit message and log output.
-- Link to v1: https://lore.kernel.org/r/20241029-arm64-fp-stress-interval-v1-0-db540abf6dd5@kernel.org
+ tools/testing/selftests/arm64/fp/fp-stress.c | 26 +++++++++++++++-----------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
 
----
-Mark Brown (2):
-      kselftest/arm64: Increase frequency of signal delivery in fp-stress
-      kselftest/arm64: Poll less often while waiting for fp-stress children
+diff --git a/tools/testing/selftests/arm64/fp/fp-stress.c b/tools/testing/selftests/arm64/fp/fp-stress.c
+index faac24bdefeb9436e2daf20b7250d0ae25ca23a7..71d02c701bf56be56b7ad00a5f6614e33dc8e01b 100644
+--- a/tools/testing/selftests/arm64/fp/fp-stress.c
++++ b/tools/testing/selftests/arm64/fp/fp-stress.c
+@@ -28,6 +28,9 @@
+ 
+ #define MAX_VLS 16
+ 
++#define SIGNAL_INTERVAL_MS 25
++#define LOG_INTERVALS (1000 / SIGNAL_INTERVAL_MS)
++
+ struct child_data {
+ 	char *name, *output;
+ 	pid_t pid;
+@@ -449,7 +452,7 @@ static const struct option options[] = {
+ int main(int argc, char **argv)
+ {
+ 	int ret;
+-	int timeout = 10;
++	int timeout = 10 * (1000 / SIGNAL_INTERVAL_MS);
+ 	int cpus, i, j, c;
+ 	int sve_vl_count, sme_vl_count;
+ 	bool all_children_started = false;
+@@ -505,7 +508,7 @@ int main(int argc, char **argv)
+ 		       have_sme2 ? "present" : "absent");
+ 
+ 	if (timeout > 0)
+-		ksft_print_msg("Will run for %ds\n", timeout);
++		ksft_print_msg("Will run for %d\n", timeout);
+ 	else
+ 		ksft_print_msg("Will run until terminated\n");
+ 
+@@ -578,14 +581,14 @@ int main(int argc, char **argv)
+ 			break;
+ 
+ 		/*
+-		 * Timeout is counted in seconds with no output, the
+-		 * tests print during startup then are silent when
+-		 * running so this should ensure they all ran enough
+-		 * to install the signal handler, this is especially
+-		 * useful in emulation where we will both be slow and
+-		 * likely to have a large set of VLs.
++		 * Timeout is counted in poll intervals with no
++		 * output, the tests print during startup then are
++		 * silent when running so this should ensure they all
++		 * ran enough to install the signal handler, this is
++		 * especially useful in emulation where we will both
++		 * be slow and likely to have a large set of VLs.
+ 		 */
+-		ret = epoll_wait(epoll_fd, evs, tests, 1000);
++		ret = epoll_wait(epoll_fd, evs, tests, SIGNAL_INTERVAL_MS);
+ 		if (ret < 0) {
+ 			if (errno == EINTR)
+ 				continue;
+@@ -625,8 +628,9 @@ int main(int argc, char **argv)
+ 			all_children_started = true;
+ 		}
+ 
+-		ksft_print_msg("Sending signals, timeout remaining: %d\n",
+-			       timeout);
++		if ((timeout % LOG_INTERVALS) == 0)
++			ksft_print_msg("Sending signals, timeout remaining: %d\n",
++				       timeout);
+ 
+ 		for (i = 0; i < num_children; i++)
+ 			child_tickle(&children[i]);
 
- tools/testing/selftests/arm64/fp/fp-stress.c | 28 +++++++++++++++++-----------
- 1 file changed, 17 insertions(+), 11 deletions(-)
----
-base-commit: 8e929cb546ee42c9a61d24fae60605e9e3192354
-change-id: 20241028-arm64-fp-stress-interval-8f5e62c06e12
-
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
+2.39.2
 
 
