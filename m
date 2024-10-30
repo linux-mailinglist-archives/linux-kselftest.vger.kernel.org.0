@@ -1,110 +1,230 @@
-Return-Path: <linux-kselftest+bounces-21155-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21156-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 008B89B6B7B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 18:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 20AA39B6DEB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 21:42:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB6251F222AF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 17:57:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A4B8A1F21FF2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 20:42:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B331214424;
-	Wed, 30 Oct 2024 17:57:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 691922144DB;
+	Wed, 30 Oct 2024 20:38:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S1mG1TBC"
+	dkim=pass (2048-bit key) header.d=tycho.pizza header.i=@tycho.pizza header.b="c6L15Xnn";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EIBGCnWG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90FC11EBFEF
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2024 17:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3347A19CC24;
+	Wed, 30 Oct 2024 20:38:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730311029; cv=none; b=JglHr+KrAL4Q8HQwZU8ip60TjnfvNV8tasPqSBvJLNgDwNm5HYUyc/G0+WsTgebEUlKvwtak9XaRnhq4aIga+GI7uZtuX8szzi+/tJhc0D9MZEd2TjkbwSZs1rWNO8FxHGrgHJvcFHiJw0mgjyHf0w3Txn6WpDIiY3gjtBsg1os=
+	t=1730320708; cv=none; b=ZyCGAAvS1SrPVN1dIZ6pEwmz4aVFS9xRTMiJoS0EmY0h2Qw2V5m81AUTUkdskD3rbrunt1QV2Hu7rJhzKcjNvcXqGtb9zRk9xDf9z9Bco5tYkmR1ow3CqVRRb1u8oOEpMxPjp7MohdpCY1PEHxx+C1ZvsCX3arBJpPe8p5evTw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730311029; c=relaxed/simple;
-	bh=HXbZbbEbISWZDvCQL2LRu8qBoXGWfihRMp1PGTLERlA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=giSi0MC+bakCjm+F6CIxXEga14kwA7NOQQrd6FDJ1aijA4K55sHmwVaaUJ/PEBxz4lEkhUZnlaqAhebiMS7/iAaCz+cSznJFG46AePeVR8CeNuP4B2sHTBRw83PxTHMgYEUYVNNkdmBMlE9aI9bJg0puLTnMRwmP5pG+X/cKVv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S1mG1TBC; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e1159159528so1873707276.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2024 10:57:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730311025; x=1730915825; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Js0851Wg/yN4BQPMb8zIhsnP1AdasvixqJsqtfPfy8=;
-        b=S1mG1TBCpJXphib/kmXkuqCxlsxoPJyuMwCFIKRYBgNR1YdIA3G4tS6Y33fKDCQ0eV
-         rh7f9CDC4/zRzpwrn82rM8ePXG8SYqFgQSI4+Kd5pmMCHeduhcPg25Cp58KNXYXw7CS8
-         MTeiZUZSg66sbFZXVFJgPwelCUvr1091HxQI2rOZgYpzXgGHuZAZuDHDTAalxP9Fx/09
-         kyHfyEXwO3KkQu+my9qbPBjN5cKtQGtH0KY18K3f4ge3vOvxEeChdzaBABqhZF/npeUH
-         wBFL+TDsFlQVTAftn86CkqlMtu9sAqyHYiebjGFLt66ToqZy4PUelICv+b54fSlz/2r5
-         yULg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730311025; x=1730915825;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Js0851Wg/yN4BQPMb8zIhsnP1AdasvixqJsqtfPfy8=;
-        b=r7NQt8suFk+H8APcWoIzq+ojTqZF9tniG/K11XgRBTutg7llfsYF3eC1cNj2nR0Eak
-         sgrvACjeXLEzWkwxdIsTHEaiqK2SU2XWL2S0EK7QJTpUQFnAph549weWlVRzdLg8YyF9
-         ETitKKDjtcmTjm92Kj9smNCfoQbENWSUxAjTB+ZlMmC3xylPdCRvoIeWU0PU5loCh5rP
-         Kb+OkabfSHTITBfxTT4WLH3WGfLmzlJYduBteeu0JXmya0pBDKyA4i9hCnmpwnevCdyB
-         jEQ5hzoXo/n98mU3ljG54dcTih48OSvjVXnpzwDxb4w7kSIYfXmOosldVtbSKjB28IR4
-         +pwA==
-X-Forwarded-Encrypted: i=1; AJvYcCWZYPsIHySe67INkAzd5X+iF6gmoKqApu14M8jLeVvBKTLCAA5kcNT6OEg72D88TdylGfMm68I/+kC4OJVdJPI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJwbzqV0ZSkA7gE7FYGONYpLC9AAa5ZkOPaDnWyF34mFCOhSSx
-	kH46P3rZTdKv5MONxlLYmjS9VM+0NCJnx9r5kEUSEQMS2rwwMGo9avY564HnXoKyNqZZ077QeYP
-	hcg==
-X-Google-Smtp-Source: AGHT+IEYu76tmgovzI1MJ4Q0ogjcSHvzLY7LpCf9XIb8Oyf3mLX6BXz6eqH4rINu/IoBsyC7/Or/ksRFTcQ=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:9d:3983:ac13:c240])
- (user=seanjc job=sendgmr) by 2002:a25:ad5b:0:b0:e30:b89f:e3d with SMTP id
- 3f1490d57ef6-e30d51da951mr62418276.1.1730311025650; Wed, 30 Oct 2024 10:57:05
- -0700 (PDT)
-Date: Wed, 30 Oct 2024 10:57:04 -0700
-In-Reply-To: <de2a6758-a906-4dc0-b481-6ce73aba24b9@amd.com>
+	s=arc-20240116; t=1730320708; c=relaxed/simple;
+	bh=XW+2yYnLSZA6VCwNVaMITfxJ2XyzVUU4uthSz2ozD0Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Y8wtXFDswSsvUksCs9oniSAJEbJJNvaZZihLEpvN4m0HGek1o3iasx1zddfJNTEA88ooK9DivX8Jg0qsVHTkX0Srl8fIfsMWRzyx1JZ/dBMfsTM6q7LrYe/p9gjMk4Oi5qfXS0dgqF8NsEmQ/BLXPVtWAcqp8wgUhLO/tuQq9UI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tycho.pizza; spf=pass smtp.mailfrom=tycho.pizza; dkim=pass (2048-bit key) header.d=tycho.pizza header.i=@tycho.pizza header.b=c6L15Xnn; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EIBGCnWG; arc=none smtp.client-ip=202.12.124.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tycho.pizza
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tycho.pizza
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id DB33E25400F2;
+	Wed, 30 Oct 2024 16:38:23 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-07.internal (MEProxy); Wed, 30 Oct 2024 16:38:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1730320703; x=1730407103; bh=jP
+	lW8lpVwjQjFu6EM0sMGNKdNqoUomEoUkzIuxowlG4=; b=c6L15XnnPdIx76gYls
+	mLPF+Vj8HhekzJlPdwh00/LuPwaztVz5W6E3Zufy+9NAVbCq2Z34ALuRmg+yfkfQ
+	CqbCs1vP4HxwOP+rviHSOW9P9vsyLWAUHg95cVoV6i4r5/WNaBradrCUROex6L0E
+	uUW0yp3/O90QxV+uWh92Pdao1ZbtU8Qj75K5THQWjHka7OjxeefUFN9G8HaAAB0r
+	x8G8w+G8KJZq4OFfdh8Ql2ZVpQhU84Q943CuA35v50+26eoaaAgCluJBubgM2nnj
+	sotGQHnRDM+CrVOgtRpGNt60EuLZEzP0eFuq9+4OKgqjmKXlzjKUl1z+qaC519Wl
+	cHEQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1730320703; x=1730407103; bh=jPlW8lpVwjQjFu6EM0sMGNKdNqoU
+	omEoUkzIuxowlG4=; b=EIBGCnWGiWp0ccL6z7gBbF+e04ercRMGUfkF1/9JGyaa
+	Uiw8TaJ7jL2hkapoSh9KUwRp9nH0+ygGKKBzIzfJ2BG63fuhBC13iOV7VuOVSbOK
+	sgFlaxjJgeSRV6K1aFYJK2cA4kZv6Xi034lAshJ+1vg8Zg4m6EPto4WPxfouKckP
+	kV8U5RtcvHJU80rZa6u1s0+3rBtPxDzdZlVEgBs8OsOZnEsqTv34iKgGuNEwX86t
+	qHKni9IFOjvTUaJdhpgQRNHzROi6s7tImOQuO69Yq0LftkWjzu3A5M2lpnJIsdzo
+	Y7T6HG6h6d1EyugTzfgP0dtrYy7Z6+SAaxHUKYSsaw==
+X-ME-Sender: <xms:PpkiZ_3PTaznljJ4NcMyouFhsaEAvZNHHSH0OTe8l7l7gDQ3hto9wg>
+    <xme:PpkiZ-H4MLHgM9eif5DevHAbwpDJ62xpW1HazYrZlb3M6gMNulILcFyw-aUNR_1Dr
+    n2fvKIiz6iCU_npK2c>
+X-ME-Received: <xmr:PpkiZ_51QPaZJRIxvgI4UjsnqimJ77CmGOvjoDGGTHEl0D-3Qjfxmj0zZ-fXcNFiFN4f2A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekfedgudefkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffogggtgfesthekredtredtjeen
+    ucfhrhhomhepvfihtghhohcutehnuggvrhhsvghnuceothihtghhohesthihtghhohdrph
+    hiiiiirgeqnecuggftrfgrthhtvghrnhepueeuueejffffkeehvedviedufffgtdetvedu
+    vdethfegudffheduvdejfffhgfeunecuffhomhgrihhnpehgihhthhhusgdrtghomhenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehthigthhho
+    sehthigthhhordhpihiiiigrpdhnsggprhgtphhtthhopedugedpmhhouggvpehsmhhtph
+    houhhtpdhrtghpthhtohepvhhirhhoseiivghnihhvrdhlihhnuhigrdhorhhgrdhukhdp
+    rhgtphhtthhopegsrhgruhhnvghrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjrg
+    gtkhesshhushgvrdgtiidprhgtphhtthhopegvsghivgguvghrmhesgihmihhsshhiohhn
+    rdgtohhmpdhrtghpthhtohepkhgvvghssehkvghrnhgvlhdrohhrghdprhgtphhtthhope
+    hskhhhrghnsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtohepiigs
+    hihsiigvkhesihhnrdifrgifrdhplhdprhgtphhtthhopegthihphhgrrhestgihphhhrg
+    hrrdgtohhmpdhrtghpthhtoheplhhinhhugidqfhhsuggvvhgvlhesvhhgvghrrdhkvghr
+    nhgvlhdrohhrgh
+X-ME-Proxy: <xmx:PpkiZ03dfxIsPXMPSLjeXWkiw-c9d6qo7UdRUNiYevuofml19dR2qw>
+    <xmx:PpkiZyEshMZGLb_Bv9MZGjsdXP8am97A2qAW43VsYSzvXPQ635k7CQ>
+    <xmx:PpkiZ18MPxNV_A_U-qpeLD5tZIggpxAtMkGUqZIwRE_DdsGmsfpOzw>
+    <xmx:PpkiZ_kvJxMJItXGHZ4U66_INxKy4Boj7aupd32BJX3eTMd4KozXgg>
+    <xmx:P5kiZ_cn4oUF2_tdWs4pniqwWD3SOPlESWACEEuJyBcGv9GZrXKcvtQ->
+Feedback-ID: i21f147d5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 30 Oct 2024 16:38:20 -0400 (EDT)
+From: Tycho Andersen <tycho@tycho.pizza>
+To: Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <kees@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: =?UTF-8?q?Zbigniew=20J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
+	Aleksa Sarai <cyphar@cyphar.com>,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Tycho Andersen <tycho@tycho.pizza>,
+	Tycho Andersen <tandersen@netflix.com>
+Subject: [PATCH 1/2] exec: fix up /proc/pid/comm in the execveat(AT_EMPTY_PATH) case
+Date: Wed, 30 Oct 2024 14:37:31 -0600
+Message-Id: <20241030203732.248767-1-tycho@tycho.pizza>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240905124107.6954-1-pratikrajesh.sampat@amd.com>
- <20240905124107.6954-3-pratikrajesh.sampat@amd.com> <Zw2fW2AJU-_Yi5U6@google.com>
- <4984cba7-427a-4065-9fcc-97b9f67163ed@amd.com> <Zx_QJJ1iAYewvP-k@google.com>
- <71f0fb41-d5a7-450b-ba47-ad6c39dce586@amd.com> <ZyI4cRLsaTQ3FMk7@google.com> <de2a6758-a906-4dc0-b481-6ce73aba24b9@amd.com>
-Message-ID: <ZyJzcOCPJstrumbE@google.com>
-Subject: Re: [PATCH v3 2/9] KVM: selftests: Add a basic SNP smoke test
-From: Sean Christopherson <seanjc@google.com>
-To: "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>
-Cc: kvm@vger.kernel.org, pbonzini@redhat.com, pgonda@google.com, 
-	thomas.lendacky@amd.com, michael.roth@amd.com, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 30, 2024, Pratik R. Sampat wrote:
-> On 10/30/2024 8:46 AM, Sean Christopherson wrote:
-> > +/* Minimum firmware version required for the SEV-SNP support */
-> > +#define SNP_FW_REQ_VER_MAJOR   1
-> > +#define SNP_FW_REQ_VER_MINOR   51
-> > 
-> > Side topic, why are these hardcoded?  And where did they come from?  If they're
-> > arbitrary KVM selftests values, make that super duper clear.
-> 
-> Well, it's not entirely arbitrary. This was the version that SNP GA'd
-> with first so that kind of became the minimum required version needed.
-> 
-> I think the only place we've documented this is here -
-> https://github.com/AMDESE/AMDSEV/tree/snp-latest?tab=readme-ov-file#upgrade-sev-firmware.
-> 
-> Maybe, I can modify the comment above to say something like -
-> Minimum general availability release firmware required for SEV-SNP support.
+From: Tycho Andersen <tandersen@netflix.com>
 
-Hmm, so if AMD says SNP is only supported for firmware version >= 1.51, why on
-earth is that not checked and enforced by the kernel?  Relying on userspace to
-not crash the host (or worse) because of unsupported firmware is not a winning
-strategy.
+Zbigniew mentioned at Linux Plumber's that systemd is interested in
+switching to execveat() for service execution, but can't, because the
+contents of /proc/pid/comm are the file descriptor which was used,
+instead of the path to the binary. This makes the output of tools like
+top and ps useless, especially in a world where most fds are opened
+CLOEXEC so the number is truly meaningless.
+
+Change exec path to fix up /proc/pid/comm in the case where we have
+allocated one of these synthetic paths in bprm_init(). This way the actual
+exec machinery is unchanged, but cosmetically the comm looks reasonable to
+admins investigating things.
+
+Signed-off-by: Tycho Andersen <tandersen@netflix.com>
+Suggested-by: Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl>
+CC: Aleksa Sarai <cyphar@cyphar.com>
+Link: https://github.com/uapi-group/kernel-features#set-comm-field-before-exec
+---
+v2: * drop the flag, everyone :)
+    * change the rendered value to f_path.dentry->d_name.name instead of
+      argv[0], Eric
+v3: * fix up subject line, Eric
+v4: * switch to no flag, always rewrite approach, with some cleanup
+      suggested by Kees
+---
+ fs/exec.c               | 36 +++++++++++++++++++++++++++++++++++-
+ include/linux/binfmts.h |  1 +
+ 2 files changed, 36 insertions(+), 1 deletion(-)
+
+diff --git a/fs/exec.c b/fs/exec.c
+index 6c53920795c2..3b559f598c74 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1347,7 +1347,16 @@ int begin_new_exec(struct linux_binprm * bprm)
+ 		set_dumpable(current->mm, SUID_DUMP_USER);
+ 
+ 	perf_event_exec();
+-	__set_task_comm(me, kbasename(bprm->filename), true);
++
++	/*
++	 * If argv0 was set, alloc_bprm() made up a path that will
++	 * probably not be useful to admins running ps or similar.
++	 * Let's fix it up to be something reasonable.
++	 */
++	if (bprm->argv0)
++		__set_task_comm(me, kbasename(bprm->argv0), true);
++	else
++		__set_task_comm(me, kbasename(bprm->filename), true);
+ 
+ 	/* An exec changes our domain. We are no longer part of the thread
+ 	   group */
+@@ -1497,9 +1506,28 @@ static void free_bprm(struct linux_binprm *bprm)
+ 	if (bprm->interp != bprm->filename)
+ 		kfree(bprm->interp);
+ 	kfree(bprm->fdpath);
++	kfree(bprm->argv0);
+ 	kfree(bprm);
+ }
+ 
++static int bprm_add_fixup_comm(struct linux_binprm *bprm,
++			       struct user_arg_ptr argv)
++{
++	const char __user *p = get_user_arg_ptr(argv, 0);
++
++	/*
++	 * If p == NULL, let's just fall back to fdpath.
++	 */
++	if (!p)
++		return 0;
++
++	bprm->argv0 = strndup_user(p, MAX_ARG_STRLEN);
++	if (bprm->argv0)
++		return 0;
++
++	return -EFAULT;
++}
++
+ static struct linux_binprm *alloc_bprm(int fd, struct filename *filename, int flags)
+ {
+ 	struct linux_binprm *bprm;
+@@ -1906,6 +1934,12 @@ static int do_execveat_common(int fd, struct filename *filename,
+ 		goto out_ret;
+ 	}
+ 
++	if (unlikely(bprm->fdpath)) {
++		retval = bprm_add_fixup_comm(bprm, argv);
++		if (retval != 0)
++			goto out_free;
++	}
++
+ 	retval = count(argv, MAX_ARG_STRINGS);
+ 	if (retval == 0)
+ 		pr_warn_once("process '%s' launched '%s' with NULL argv: empty string added\n",
+diff --git a/include/linux/binfmts.h b/include/linux/binfmts.h
+index e6c00e860951..bab5121a746b 100644
+--- a/include/linux/binfmts.h
++++ b/include/linux/binfmts.h
+@@ -55,6 +55,7 @@ struct linux_binprm {
+ 				   of the time same as filename, but could be
+ 				   different for binfmt_{misc,script} */
+ 	const char *fdpath;	/* generated filename for execveat */
++	const char *argv0;	/* argv0 from execveat */
+ 	unsigned interp_flags;
+ 	int execfd;		/* File descriptor of the executable */
+ 	unsigned long loader, exec;
+
+base-commit: c1e939a21eb111a6d6067b38e8e04b8809b64c4e
+-- 
+2.34.1
+
 
