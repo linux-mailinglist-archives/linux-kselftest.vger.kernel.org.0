@@ -1,181 +1,278 @@
-Return-Path: <linux-kselftest+bounces-21142-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21143-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EDAC9B6933
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 17:31:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDDE69B6947
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 17:36:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92A921F222CC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 16:31:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 528251F221FE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 16:36:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 363A42144A9;
-	Wed, 30 Oct 2024 16:31:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A028E2144C9;
+	Wed, 30 Oct 2024 16:36:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ciSt+G/C"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ISa0fKPU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2068.outbound.protection.outlook.com [40.107.236.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EADF68C1F;
-	Wed, 30 Oct 2024 16:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730305882; cv=none; b=R24CKVCdtwZkdxNbpdckRjupd3s1G46RP/f1y+ZpvOfpoiiHnUOk3tjXG5dP105I+5k5OiyMgXzXp9v/wHa5s1miRpoG1tBLS+VeI5UuEAHGzyttpAcoc5AC3yema22sdqkduoAHrkGplbaYwRgy+NxSprxEFPLByTt1JO/66Ow=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730305882; c=relaxed/simple;
-	bh=oO8e/qytpViysImJ2eTakDtB0b0Ol/dLIvB1fQFw8Ww=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QbGJUAlLpeWeqgvxPjJJ8nNSM0AFNyyEcw60/gxRE/lAtVrPyLb8ltPg2cW2L3XLUkaz0jMrpDhOzg2eGNsoAIh9teevjkYkyqTw04iQwCVP0lfgRUHUtHKkQQrvyvD+EKaYTL+8mthg9ruHZRblI5v8S2OaTyEcOFgAazc+hgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ciSt+G/C; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B22D6C4CECE;
-	Wed, 30 Oct 2024 16:31:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730305881;
-	bh=oO8e/qytpViysImJ2eTakDtB0b0Ol/dLIvB1fQFw8Ww=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ciSt+G/CDYMj9JF989JWCb0qe/e8mg9VVp7vv0YPzDMdGPEnYGnb3vRdjoYbJ3qsK
-	 mX7HMq6efm2oi5vL5WeKkSgnCnO0BLJ5YhhisDEo/qEGWaNI0EBYrmc3f9Tq18e7UZ
-	 xFmIwkD2eYaMil6laBElh9xu7WR2RY67PjK87fVKhWDf7WpiAbyKIBTle3j6p1Fz0B
-	 BPSflJ+JP7dvSuxOykFLss1FlY0uCWq0pH2SRvwCOL0DYDyoo4caQfWvzmcOx/deKm
-	 GQBx7u/OMRetmRvYmzU3aTjfS4sPuRD8V1XuLo52T0B4+wNo/7y/L4tVzLXQ4n0N7D
-	 3aFoUz4CrWJgg==
-Message-ID: <9b2b3c98-503b-45ae-bcdd-ac2fcc62e14c@kernel.org>
-Date: Wed, 30 Oct 2024 17:31:15 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C8D214412;
+	Wed, 30 Oct 2024 16:36:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730306166; cv=fail; b=WiIEI13ug5a4wQmKMYcNq1jmQvtk/RgFFScJETw/w5PVjP0yCsOZi1clx/SGZ/Jwha3i8nU0vR91LAzf1Us2Emk6/qNo6ftx2wOTLfEG2Uo43K/OAdNpE1kvbDoCiM7KmPha5yG5De0vs8QkHt49v7XAjWXDoZVrvhSYCw4+iJg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730306166; c=relaxed/simple;
+	bh=QNsfkGj4PuZ4k6gUo0SGvlKFXCm4RXNVuu2vonCLFDk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=c7uY1KX0JvUmdyYsrFZM/pAp0U6Fr67EIi+k8SVuykHDn/hQLpt/Os/l2Q6JHJNYBSCBd9f5E5eNbD/H/4+WEMPtn9D5eiDfbWi0ZqpuvRpDk/020h3O0vVB6WnW/PQCymBObzGaDb5cDoWqBfBJxQ2N/ONZNhdw+Fj68lu4aIU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ISa0fKPU; arc=fail smtp.client-ip=40.107.236.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Lck9fW9PoEVCXNObeapjULpihUrWbtbN2y092ow5W+61D8bxm1uJwgpoNFtOWaHLUDIPJn2kmDVZEwn0GEfWGny3xgC+BORKveV+i8yDZBEDh5xYq1eFKTUOP2xFn3etoKtA7adinDgdTMGMe1la3xoykYX8WbOfmrL7/vYIo7Sn/718VDfI01LmvBeCiZv94RDTIsL+YcHE482m+6di/LBQwxFix3jFe8DhoWMCYlsxR7eH8MMqzgQlXzxS7tgRIcvAHElW7SnFCD/sblKPTWvZxAa3N5zQqsklitlcvPJw7B/TyhTp8VdkYocD3QdKYwj55o2VBHH0yQsqB99cQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Kv6YLn4RWGqUIXoFxjILXNt6pCY047Y8gcK09VR5NOc=;
+ b=EXpuArf3+WQN0gVUv4hqh+/jLuZZhXI/zZK5IeDstVjTsRPROlr4N/jrPrJp+SEh6edbB/sXkpCHJwg4FqxEkMN49ezKNRCAy5TCCvOlkw/9DvTCDDzFY9qPLzKRkk+a8Ll4Jf2USB8JOohQgnrA3Av7o9KmrKmFyn2PC+JysEENLilK0A23Zsi2Wfy9z0MfFQV9/W1+MvSGY23HKURvIpf7bJKFFsCzAkL8UEKysUAupXqUpIzjh9QdSbhFhZpoopc2Upn1E3DQfgKDl4WdtY3zf8xSRj/0DdEKD+ghEnpCVQ/blu3C6ckND/OgMnPL8cDfq4JWep0birtBio7sNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Kv6YLn4RWGqUIXoFxjILXNt6pCY047Y8gcK09VR5NOc=;
+ b=ISa0fKPUes8sYDEZofI4Pq5FLtQ38XFhvf0QmRal3Hdi8ztq8cygFRux7jFYtdL2zkCw2S/QpsZViDw/txJ9yzQ27RrCm9EPAGUXSggmrD8lb5hD7F88AJ1vuVk9KrkOdotl24KaaFuK1pVphxx/36qeLIFqrXF+vuB5ZkHWTD8=
+Received: from CH2PR07CA0025.namprd07.prod.outlook.com (2603:10b6:610:20::38)
+ by IA1PR12MB6458.namprd12.prod.outlook.com (2603:10b6:208:3aa::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.32; Wed, 30 Oct
+ 2024 16:35:57 +0000
+Received: from CH1PEPF0000AD80.namprd04.prod.outlook.com
+ (2603:10b6:610:20:cafe::4c) by CH2PR07CA0025.outlook.office365.com
+ (2603:10b6:610:20::38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.20 via Frontend
+ Transport; Wed, 30 Oct 2024 16:35:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CH1PEPF0000AD80.mail.protection.outlook.com (10.167.244.90) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8114.16 via Frontend Transport; Wed, 30 Oct 2024 16:35:57 +0000
+Received: from [10.236.186.64] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 30 Oct
+ 2024 11:35:56 -0500
+Message-ID: <de2a6758-a906-4dc0-b481-6ce73aba24b9@amd.com>
+Date: Wed, 30 Oct 2024 11:35:55 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix compile error when MPTCP not
- support
-Content-Language: en-GB
-To: Tao Chen <chen.dylane@gmail.com>, Mat Martineau <martineau@kernel.org>,
- Geliang Tang <geliang@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev
-References: <20241030100108.2443371-1-chen.dylane@gmail.com>
- <abb72d1b-3347-4493-9a18-43c1655b7449@kernel.org>
- <3bc02b33-421e-4c95-8f69-33ec89782621@gmail.com>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <3bc02b33-421e-4c95-8f69-33ec89782621@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/9] KVM: selftests: Add a basic SNP smoke test
+To: Sean Christopherson <seanjc@google.com>
+CC: <kvm@vger.kernel.org>, <pbonzini@redhat.com>, <pgonda@google.com>,
+	<thomas.lendacky@amd.com>, <michael.roth@amd.com>, <shuah@kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20240905124107.6954-1-pratikrajesh.sampat@amd.com>
+ <20240905124107.6954-3-pratikrajesh.sampat@amd.com>
+ <Zw2fW2AJU-_Yi5U6@google.com> <4984cba7-427a-4065-9fcc-97b9f67163ed@amd.com>
+ <Zx_QJJ1iAYewvP-k@google.com> <71f0fb41-d5a7-450b-ba47-ad6c39dce586@amd.com>
+ <ZyI4cRLsaTQ3FMk7@google.com>
+Content-Language: en-US
+From: "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>
+In-Reply-To: <ZyI4cRLsaTQ3FMk7@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD80:EE_|IA1PR12MB6458:EE_
+X-MS-Office365-Filtering-Correlation-Id: b09d6639-208d-424b-41de-08dcf900ee59
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|36860700013|82310400026|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?cllBTEZKeXFPeGdKY2tuR2M0ZnlNZERDMHZETEUySm5yVzRIeFg3YzZFN2VB?=
+ =?utf-8?B?TXI5cVh1enRKUVRTL0xTQ2Nvb1UyWnlyTHdMeFoyUXVzRFNoNkFZZGpMaFBY?=
+ =?utf-8?B?Rkl6ZGNUL25DYU5sQVg4Znk1cVRFRVpZY1diNEo2VEQxTXBFS3dyOEg2UDFQ?=
+ =?utf-8?B?OTZscVhsRXJVclhGeFNHdDlmQUtWeFBURWdSU3ZpY0RUbFlmRC9VTHhHOWUy?=
+ =?utf-8?B?VkpzYXRmak5UWU81RmRNamhIajQ5amZkMkY2aFc2dDBiNjVhT3VnYjZBWUpp?=
+ =?utf-8?B?bnR4dU5iZm56dElOOW1wZGhueFdHZTd5L2Q4Q05ybkZQNUFSQk5aZyt0MGxW?=
+ =?utf-8?B?aFBoeGFFL3dTNlhST2dIK2tMUmMweWwrTHozN1M4OFhXNU1POGROdFpVckho?=
+ =?utf-8?B?ZW0zWGduWUFsbngwYmh5VytYa0hEVnIwMUZiM2djVXEreGVLdkp3QVlkREl1?=
+ =?utf-8?B?bzFoaW1VVmNhVm5HdXJJMVdwd2plM2s5cVpXT01YVzV6L3M4aGdseU1yK3Ja?=
+ =?utf-8?B?ZC91N0RsSzdZNEM1Q0d4OUt3V3pBL0tHLzhxdEFBU3NETG9GaUNLTDNjK3I3?=
+ =?utf-8?B?V0h4MVpwQjlZV0NTRG9UK1dtNy9kNXAxWlhKOVZuY3ZLR2ZPV0hiLzczWUFJ?=
+ =?utf-8?B?Yk92MTFFcjQ4VCt2eFdob3dXQkk0am5ocE9Xd01NSHFVa3d2cXJlOHZJU0th?=
+ =?utf-8?B?TnNFMjRuSVpmRE13UHRQbm1seWQwT3RpVkJTOWlwVkp1eC9hZ0ZmN1lwNTBE?=
+ =?utf-8?B?N3RDZitZYy9LUnQzbFFYNE5oenNURVVnYUdlZ3JTQnY3L3JybTB2N2lObUE1?=
+ =?utf-8?B?MXMzbmJyTDJIMGU4TVhaNlpCK2VWd09Xb2FEUmtrY0ViMk5vc2dmdGZkRTh5?=
+ =?utf-8?B?TCtSSkpsVFF4b2FRcFFiZHFqWGN0bk5SMFRnY2hkM3FJL01YU0ZNQnAva09I?=
+ =?utf-8?B?eU5BWFNYY0IwV2xPNk5NNzdoV3dSYU8wN1M3cERBSnRWczJOdnp3eTRpVFNP?=
+ =?utf-8?B?bkthc2pUNzJwa3NQN3R5MW1iVHNZbERLT1VCV3FIOFNyOGw3aFdBL2xzQUw1?=
+ =?utf-8?B?VlZVRzU3S0FMRHdkNU1XdGszcXBOWEg0Skp6SGdCSW1LYVBiR2VWNkp5aXAy?=
+ =?utf-8?B?NFhFQ0o1NU1vLytLV1hROHZmSjNHTm52UFFFZ3UzNmtqZ055NWdXWmpoMjd3?=
+ =?utf-8?B?OWRLMEVnWjhjRVh4WXBieGsxZkxRTjUwVE5MOS9wdFFtSzZFeXZBcDRlQ0Fk?=
+ =?utf-8?B?T2xoTmpUV01INVJHVXNDMFBISjVaZ3d3MmdEcnQzMDF0aDBoY09PR0ZoSnJC?=
+ =?utf-8?B?bUdncTQrNldlRHo3YmwyY2lxaWNYS1czTnV1RXFNRWFQU1E0ZXJjRU5OV3FN?=
+ =?utf-8?B?aGhhZUZFMTRvaC9JcXNWSkJnaThmUlh1dUNZVWxrYmVjUWNBK2Rhek1KcWVs?=
+ =?utf-8?B?KzN2dkYrcmdQOGN5ZU9KWHViVVc0WFU5WitNYzVQckpaL3hwVFl2MGtoZzQ5?=
+ =?utf-8?B?dkM4cXlJN3gzaEV5STBmUjNFSGtrVFIvQksybFgzRkU0WDdPVURsSm90WHR6?=
+ =?utf-8?B?SmovTjNkRmV3QUJSQWRLbW05dUtyQTV3SzhzL3JRZVplRW9YWXVZOW1oS2Iv?=
+ =?utf-8?B?aHNVSkxGdFpmY2FqM1M5WDFLM3h3bU5NNndMOSttWXVUdjZYZXllZmE1NnRa?=
+ =?utf-8?B?ZTdWYWpyYm96RjF2VnZtVkZTS25iaGNYWkJGQVpBc3hjbU5yTDNZdmFRa2xZ?=
+ =?utf-8?B?Nk1xQXNRUW9zSDBockNoTkpNSWhLMG1wSGltcmRRMnM0VFN4UFNYVEF3MExT?=
+ =?utf-8?Q?dU5jcab5yb+Nm5UKWn6y4L42+ilDE1tmDFBXU=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2024 16:35:57.2817
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b09d6639-208d-424b-41de-08dcf900ee59
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH1PEPF0000AD80.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6458
 
-Hi Tao, BPF maintainers,
+Hi Sean,
 
-On 30/10/2024 12:12, Tao Chen wrote:
-> 在 2024/10/30 18:49, Matthieu Baerts 写道:
->> Hi Tao Chen,
->>
->> Thank you for having shared this patch.
->>
->> On 30/10/2024 11:01, Tao Chen wrote:
->>> Fix compile error when MPTCP feature not support, though eBPF core check
->>> already done which seems invalid in this situation, the error info like:
->>> progs/mptcp_sock.c:49:40: error: no member named 'is_mptcp' in 'struct
->>> tcp_sock'
->>>     49 |         is_mptcp = bpf_core_field_exists(tsk->is_mptcp) ?
+On 10/30/2024 8:46 AM, Sean Christopherson wrote:
+> On Mon, Oct 28, 2024, Pratik R. Sampat wro4te:
+>> On 10/28/2024 12:55 PM, Sean Christopherson wrote:
+>>> On Mon, Oct 21, 2024, Pratik R. Sampat wrote:
+>>>>>> +		if (unlikely(!is_smt_active()))
+>>>>>> +			snp_policy &= ~SNP_POLICY_SMT;
+>>>>>
+>>>>> Why does SNP_POLICY assume SMT?  And what is RSVD_MBO?  E.g. why not this?
+>>>>>
+>>>>> 		u64 policy = is_smt_active() ? SNP_POLICY_SMT : SNP_POLICY;
+>>>>>
+>>>>
+>>>> I think most systems support SMT so I enabled the bit in by default and
+>>>> only unset it when there isn't any support.
 >>>
->>> The filed created in new definitions with eBPF core feature to solve
->>> this build problem, and test case result still ok in MPTCP kernel.
+>>> That's confusing though, because you're mixing architectural defines with semi-
+>>> arbitrary selftests behavior.  RSVD_MBO on the other is apparently tightly coupled
+>>> with SNP, i.e. SNP can't exist without that bit, so it makes sense that RSVD_MBO
+>>> needs to be part of SNP_POLICY
 >>>
->>> 176/1   mptcp/base:OK
->>> 176/2   mptcp/mptcpify:OK
->>> 176     mptcp:OK
->>> Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+>>> If you want to have a *software*-defined default policy, then make it obvious that
+>>> it's software defined.  E.g. name the #define SNP_DEFAULT_POLICY, not simply
+>>> SNP_POLICY, because the latter is too easily misconstrued as the base SNP policy,
+>>> which it is not.  That said, IIUC, SMT *must* match the host configuration, i.e.
+>>> whether or not SMT is set is non-negotiable.  In that case, there's zero value in
+>>> defining SNP_DEFAULT_POLICY, because it can't be a sane default for all systems.
 >>>
->>> Fixes: 8039d353217c ("selftests/bpf: Add MPTCP test base")
 >>
->> The commit you mentioned here is more than 2 years old, and as far as I
->> can see, nobody else reported this compilation issue. I guess that's
->> because people used tools/testing/selftests/bpf/config file as expected
->> to populate the kernel config, and I suppose you didn't, right?
+>> Right, SMT should match the host configuration. Would a
+>> SNP_DEFAULT_POLICY work if we made it check for SMT too in the macro?
 >>
-> 
-> Hi Matt, thank you for your reply, as you said, i did not use tools/
-> testing/selftests/bpf/config to compile kernel, i will use this helpful
-> feature.
-> 
->> I don't think other BPF selftests check for missing kernel config if
->> they are specified in the 'config' file, but even if it is the case, I
->> think it would be better to skip all the MPTCP tests, and not try to
->> have them checking something that doesn't exist: no need to validate
->> these tests if the expected kernel config has not been enabled.
+>> Instead of,
+>> #define SNP_POLICY	(SNP_POLICY_SMT | SNP_POLICY_RSVD_MBO)
 >>
+>> Have something like this instead to make it generic and less ambiguous?
+>> #define SNP_DEFAULT_POLICY()		 			       \
+>> ({								       \
+>> 	SNP_POLICY_RSVD_MBO | (is_smt_active() ? SNP_POLICY_SMT : 0);  \
+>> })
 > 
-> If i use the kernel not support MPTCP, the compile error still exists,
-> and i can not build the bpf test successfully. Maybe skill the test case
-> seems better when kernel not support. Now that bpf_core_field_exists
-> check already used in the code, i think it is better to use new
-> definition mode.
+> No, unless it's the least awful option, don't hide dynamic functionality in a macro
+> that looks like it holds static data.  The idea is totally fine, but put it in an
+> actual helper, not a macro, _if_ there's actually a need for a default policy.
+> If there's only ever one main path that creates SNP VMs, then I don't see the point
+> in specifying a default policy.
+> 
 
-I understand it would be better, but it means more code to maintain to
-handle that (and remembering that in future test cases). If that's not
-necessary, then no need to do the effort.
+Currently, there just seems to be one path of doing (later the prefault
+tests exercise it) so I'm not too averse to just dropping it and having
+what bits needs to be set during the main path.
 
-@BPF maintainers: do we need to support kernels not respecting the
-tools/testing/selftests/bpf/config file? Should we detect when a
-required kernel config is not set and skip some tests?
+I had only introduced it so that it would be easy to specify a minimal
+working SNP policy as it was for SEV and SEV-ES without too much
+ambiguity. But if it's causing more issues than resolving, I can
+definitely get rid of it.
 
->> But again, please correct me if I'm wrong, but I don't think there is
->> anything to change here to fix your compilation issue: simply make sure
->> to use this tools/testing/selftests/bpf/config file to generate your
->> kernel config, no?
+>>> Side topic, I assume one of SEV_POLICY_NO_DBG or SNP_POLICY_DBG *must* be specified, 
+>>> and that they are mutualy exclusive?  E.g. what happens if the full policy is simply
+>>> SNP_POLICY_RSVD_MBO?
+>>
+>> SEV_POLICY_NO_DBG is mainly for the guest policy structure of SEV and
+>> SEV-ES - pg 31, Table 2
+>> https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/programmer-references/55766_SEV-KM_API_Specification.pdf
+>>
+>> and, SNP_POLICY_DBG is a bit in the guest policy structure of SNP - pg
+>> 27, Table 9
+>> https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/56860.pdf
+>>
+>> In the former, a SEV guest disables debugging if SEV_POLICY_NO_DBG is
+>> set. Similarly, a SNP guest enables debugging if SNP_POLICY_DBG is set.
+> 
+> Ugh, one is SEV_xxx, the other is SNP_xxx.  Argh!  And IIUC, they are mutually
+> exclusive (totally separate thigns?), because SNP guests use an 8-byte structure,
+> whereas SEV/SEV-ES use a 4-byte structure, and with different layouts.
+> 
+> That means this is _extremely_ confusing.  Separate the SEV_xxx defines from the
+> SNP_xxx defines, because other than a name, they have nothing in common.
+> 
 
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
+Right. I see how that can be confusing. Sure I can make sure not to
+bundle up these defines together.
+
+> +/* Minimum firmware version required for the SEV-SNP support */
+> +#define SNP_FW_REQ_VER_MAJOR   1
+> +#define SNP_FW_REQ_VER_MINOR   51
+> 
+> Side topic, why are these hardcoded?  And where did they come from?  If they're
+> arbitrary KVM selftests values, make that super duper clear.
+
+Well, it's not entirely arbitrary. This was the version that SNP GA'd
+with first so that kind of became the minimum required version needed.
+
+I think the only place we've documented this is here -
+https://github.com/AMDESE/AMDSEV/tree/snp-latest?tab=readme-ov-file#upgrade-sev-firmware.
+
+Maybe, I can modify the comment above to say something like -
+Minimum general availability release firmware required for SEV-SNP support.
+
+> 
+> +#define SNP_POLICY_MINOR_BIT   0
+> +#define SNP_POLICY_MAJOR_BIT   8
+> 
+> s/BIT/SHIFT.  "BIT" implies they are a single bit, which is obviously not the
+> case.  But I vote to omit the extra #define entirely and just open code the shift
+> in the SNP_FW_VER_{MAJOR,MINOR} macros.
+
+Sure, I'll get rid of those couple of #defines and use them directly in
+the macros.
+
+Thanks!
+Pratik
+
+> 
+>  #define SEV_POLICY_NO_DBG      (1UL << 0)
+>  #define SEV_POLICY_ES          (1UL << 2)
+> +#define SNP_POLICY_SMT         (1ULL << 16)
+> +#define SNP_POLICY_RSVD_MBO    (1ULL << 17)
+> +#define SNP_POLICY_DBG         (1ULL << 19)
+> +#define SNP_POLICY             (SNP_POLICY_SMT | SNP_POLICY_RSVD_MBO)
+> +
+> +#define SNP_FW_VER_MAJOR(maj)  ((uint8_t)(maj) << SNP_POLICY_MAJOR_BIT)
+> +#define SNP_FW_VER_MINOR(min)  ((uint8_t)(min) << SNP_POLICY_MINOR_BIT)
 
 
