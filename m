@@ -1,241 +1,203 @@
-Return-Path: <linux-kselftest+bounces-21186-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21187-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 548379B6F77
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 22:45:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2783B9B6F89
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 22:47:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77E611C22814
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 21:45:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB4992822E4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 21:47:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3232B2308B0;
-	Wed, 30 Oct 2024 21:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBAC721A4DB;
+	Wed, 30 Oct 2024 21:42:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="o+X3eBaE"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="lsPxMLfj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2067.outbound.protection.outlook.com [40.107.244.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC35E22EF0F;
-	Wed, 30 Oct 2024 21:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.67
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730324187; cv=fail; b=rSWXgCfuNKjJniDC/J2nnMTn5pdyX5W2UkPVPW/GX8pbYtjBK0vh21fQHRdV88ShltVs0TwW9UajJaF8vYA3UDmxdNnUKiDY8W0HT4428zpk2l2ADLYzdrQ8wM//Goo3kDXRF2KmcJexUYqTBjayZfrFnn3/Uq1kiTOiAXPeIgA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730324187; c=relaxed/simple;
-	bh=gqAmTtjGNe//h7WyfJWTfYQcfzTYpZbrdNYuBztEhfo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oChVuU+xbzr6wXjKmkD6yQtsaQciU8PiUgz9vHlpp/QCwZJpKCrHrOufh6D4VrRv1/rdrAOvCsT4Bi50OJGVhzNhZqewl4x9X0l8yxSm6lrmsxCQD1kZLKo2lBGeD5C1ksWL798py4a6KvGSIjekTJcWlwXxGDrntDwVp3avebY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=o+X3eBaE; arc=fail smtp.client-ip=40.107.244.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ThGEW2gxE+RmVwdL95It0okmGYKEp1JKO6QWTi68QLBSquLi0yOdxWsUOL/+lhdMiBwQGKzILJuLyhevm4j1P8c7ZiLv/YnBjyKpMVt5/+ypqlhCAVm1O/Vd0Yt9FomnI6H4yHxaf8HLrenqdLagzrbj3HduhRBWVfNsuTYg1wzdq4HuKc8W8lkMNvS8uKs99RY0Jqut6dkDiNAlEf8Wcf466MSuKDmq9K0YYjCp/lwFy+kRM4mjgHGOu1HAGHOuOH4CAdJt4zMdYMpHB+DmpIcDSAKZAL35SCfgp8ilgt7tcADctmo5ZfYNDP+jc66KuNFGksztEs3yK/yHQWz+IA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vry/3B2n3DbjWYyPpSM9wzN3eWtoc60oWW2YJWfIQVQ=;
- b=HOysrR26DRWkFW1VYLS2kevPcAtCO8uOOMBdlCb6VPYx1T8/OxaR0AnTABvAgMoVGHNWg2duUTYA62uZSVX+SvzbXGxX129q4aCPyyPdksMcPE3Lc/C+f8cox2isAYXnBP2bdhs3Lbi4miAtSn0ir7tbKlexXWClPD0vCzi3AJ0Ba4t08eZuzIi0Yt5Xcyi2FA8vCD6zC/4PDYysFs8eicp/CY6RZuAYLyUgCOfyWPscEd+IMvZRAYk/R2xhxYxps/cGX2ffcvi0ya0C1TU02hGuhlXzsdHN5fdliwd5PNVQB4ZFmJpyciufzru48yDnHhMDyvk1zQdZTZ1HAgDCPQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vry/3B2n3DbjWYyPpSM9wzN3eWtoc60oWW2YJWfIQVQ=;
- b=o+X3eBaETMv6lnhA+7IoYv8MkKmJFDlqvxPX8jOxg2XrN+s4EvLdeZSqZoT+uQF9fwwqFFuCCxc+mdc/eqmqOCNYKO+vwRdGNkP5kkwXqMkeuHDiyhSiWmtGzUsfDO7Q0v6crm0ipCCUz9/306tkA2zcTqXIS674PZU6Bcqy8xtNA2mkM1FGA+yHKQQiLQsg2UPKJ0EekPP1ATWeT0OaOZe8lICclRaKkHHqJcXzWUrswqzuNUvvN2dpFjz8iMeh5+rcWETLzNFhw9+jYBVYJHvi03VPJL8jvGsUqpzKcSFukqlkAC3/6gIKpAaLDz4U+X/4W1ZxKaFQtiUKxDxlMA==
-Received: from MW4PR04CA0195.namprd04.prod.outlook.com (2603:10b6:303:86::20)
- by MW6PR12MB9020.namprd12.prod.outlook.com (2603:10b6:303:240::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.32; Wed, 30 Oct
- 2024 21:36:18 +0000
-Received: from CO1PEPF000066E6.namprd05.prod.outlook.com
- (2603:10b6:303:86:cafe::ce) by MW4PR04CA0195.outlook.office365.com
- (2603:10b6:303:86::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.20 via Frontend
- Transport; Wed, 30 Oct 2024 21:36:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1PEPF000066E6.mail.protection.outlook.com (10.167.249.4) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8114.16 via Frontend Transport; Wed, 30 Oct 2024 21:36:17 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 30 Oct
- 2024 14:35:55 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 30 Oct
- 2024 14:35:55 -0700
-Received: from Asurada-Nvidia.nvidia.com (10.127.8.12) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Wed, 30 Oct 2024 14:35:54 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>
-CC: <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>, <will@kernel.org>,
-	<robin.murphy@arm.com>, <dwmw2@infradead.org>, <shuah@kernel.org>,
-	<iommu@lists.linux.dev>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<baolu.lu@linux.intel.com>, <eric.auger@redhat.com>,
-	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
-	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>,
-	<yi.l.liu@intel.com>, <aik@amd.com>, <zhangfei.gao@linaro.org>,
-	<patches@lists.linux.dev>
-Subject: [PATCH v6 10/10] Documentation: userspace-api: iommufd: Update vDEVICE
-Date: Wed, 30 Oct 2024 14:35:36 -0700
-Message-ID: <637d97557328ee158ac2cc9039bde9bd114629bf.1730313494.git.nicolinc@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1730313494.git.nicolinc@nvidia.com>
-References: <cover.1730313494.git.nicolinc@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7301D0E0D
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2024 21:42:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730324565; cv=none; b=rNhVFzoRVzX5eNVvddQO314WMswTNS+BswcW2nCqrCl9XAXHkLpfCu4ocaggHGeAipaCfWdTi1bysbXlOQtvmIerPFO93uSZeMdL5WJnKh1o9bm90crwpjPmxMOp0cpxl1KeMQUuw13Y3gLoDu34raVOwuCPNyxrQx2L0FsyyYg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730324565; c=relaxed/simple;
+	bh=rucg5whNbj0MIf+KsFVqBycgNaOxrJPN8Sa8dKhqJn0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LJpE/lzNlwjh+VQ4Rg0FYzZLILzrYExy4/NDcB5YuGsI6vQ5hPh0u7kbabWEUWqgIRBx64kaBT9ag4QHPKFsz3S/ixMqz32I+mWNCToTKrymWQoh7hQq7EBRJ2dWkEVR16hLEkv0iiUJdZTS53ybo8B8yOWjM499gQ33kqB+1js=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=lsPxMLfj; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2e2e2d09decso1099314a91.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2024 14:42:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1730324562; x=1730929362; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2BdQ8I1/iVHZTqbEU+uI3XwCIW70vWl0AHAkkkOUHa4=;
+        b=lsPxMLfjdqektbm+albSHd1yo/8FqT7xiv9N1GLeNw/v8+SLsNrn2xkGk27y0taG0i
+         wGTm7xRMqMHtMKZn89uMHRi7fbTX4NMKAOhKKpyq3KRVSFIt4yDNNY6MfdAZDmfp/0ot
+         q/BZP7p2MTHXRU/3L9p0MzhxvC87mAYttH4GgY3t0dHsyHf405DXJhHthdTF65KgGtjc
+         PSUBl1Rpe6o0/S8hFZPrDFbW1LHOj0fO78y6NYawPVxvigOLifO7QZBFKubIFqgPXWRB
+         xWO9oecgBfSrJ6At8GEHsrnRvYpJLT3L/D5gKQnPSu+cajYHMVxWCShCfyQng+gBlgsK
+         RT4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730324562; x=1730929362;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2BdQ8I1/iVHZTqbEU+uI3XwCIW70vWl0AHAkkkOUHa4=;
+        b=JMBbXkGQ5S0uciwVZ2QGniKb0LPKEfTwxRYqgo+alz8EErfX12ms1H+PgIUjPD2BPg
+         bOhC+JMXNu76/V/huDir2aMoK5KB1M7F6nXvFyaZcnj81PVH3MVelPM831VII0c+J8x3
+         TkWgxbaYbvFJz54NCZ8olGCtjf2wi+0dlPkRsPn36Ir7OSolNGTyhd9Fzs9R229swkwA
+         bSctfPFWXQzr29Zj5/OvAsWg7cZZOBzPl6O2fobEm1e1mu9MkRa/ecDbAKvbX//1WVmz
+         EQ2B+Rj8PhhARI0qJAP0sFVRLAoKNSjobpm41Fq3oR56C/RxWuclGAaxtO1tnrHN+rtR
+         Yq0w==
+X-Forwarded-Encrypted: i=1; AJvYcCWpDfkOJb+MMwjxitFpHr1NgDxmgi1jtl01kJY1Vc5yDEYfH11UJw4Idk2SB3KL3M8MNZ83nV/kZEPhS6fVFN4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx401K1AIYk5aHrZ4kPiCf5hbwraCJn8ADz7X1B8kBa24teOqS6
+	utCZzwpSSMoKeAoSDNrn+IqZonfW8Ouj6u62eEKsaE3z718mCDd7XR7Xomd6l+Y=
+X-Google-Smtp-Source: AGHT+IFy/kVyXGrqtNtAvxVjR4gsi2Os3+luFSdpZIwpcWZFvkvKwsZgpNzjHfWBEiMYl3HDGVYUug==
+X-Received: by 2002:a17:90b:51cc:b0:2e2:af80:8f7a with SMTP id 98e67ed59e1d1-2e93e0fd8f4mr220918a91.20.1730324562278;
+        Wed, 30 Oct 2024 14:42:42 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e92fbe0252sm2400168a91.45.2024.10.30.14.42.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Oct 2024 14:42:41 -0700 (PDT)
+Date: Wed, 30 Oct 2024 14:42:39 -0700
+From: Deepak Gupta <debug@rivosinc.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, jannh@google.com,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
+	Kees Cook <kees@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH RFT v11 2/8] Documentation: userspace-api: Add shadow
+ stack API documentation
+Message-ID: <ZyKoT00lI3d2rpYc@debug.ba.rivosinc.com>
+References: <20241005-clone3-shadow-stack-v11-0-2a6a2bd6d651@kernel.org>
+ <20241005-clone3-shadow-stack-v11-2-2a6a2bd6d651@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000066E6:EE_|MW6PR12MB9020:EE_
-X-MS-Office365-Filtering-Correlation-Id: dd0e8c53-8138-42e2-7bdc-08dcf92ae375
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|7416014|376014|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?03v7LP/56+g95H//dcCIBL5H1NAcJRLmZN04rGbbgj6xyPqvMZlBnMVL9a1d?=
- =?us-ascii?Q?MohmZYFoFdb1/p+N0eG+DF+RbMVGwId0Oa1pfd9z+STqUR3QKyzxE2euW8PZ?=
- =?us-ascii?Q?1mtB2WaRX2CH/rvrBzAH1DUykoIY8pSuZf45/mki/6snhME2Uw9rlRQ0J+ck?=
- =?us-ascii?Q?5+r+gwardvQPXUS4uw0s8JFpOkIbZnbDiAU+sHt7U8CRYD9r2Y7xz16ZMczI?=
- =?us-ascii?Q?Lhtyz1zcuoUh/QRJV5mm5wVWkEXhK5SmiUHVL/OZ55qDwB8WT8wzo0AjyG3K?=
- =?us-ascii?Q?Tmy8IR69pfBRGXD2FBMKolRJMjqzgwXfRkomVrRoAr3DspT/sZFEiKrkraS6?=
- =?us-ascii?Q?EJo3oxSz1kW15LB9i5vZiXiNUY6qeXbJiHRcZB9EIQQktXlCmvAzvcLOveJS?=
- =?us-ascii?Q?5hah6yOaqYoUiL2UBTiRUYA6+bUhZfKsWK+gS5flHa+Y5uHCu4wKaMlmcXGR?=
- =?us-ascii?Q?mgBAjSllYjFBbWGvulpr6Sy9ssZp58uurjXU1/JDXGb6Zm3L0rfjVMsTxq54?=
- =?us-ascii?Q?Ru5MXKjBUVUzDVbs2EZy81Ab4ESf/ufvgAc6OZh2suamm5Y3jE216lp2zlc9?=
- =?us-ascii?Q?mgIDAHdXAJU9Thi8sERMBbUYN1c7Z0kZSzOwLbGD1yXYXLKGksoi+gecUDAl?=
- =?us-ascii?Q?ipr27Jk9b0z9qyEY/yPxEHwkRgZswFbKoDOqz2W6QwkKaMH+iB++CZ1NpQ3T?=
- =?us-ascii?Q?gVAtGrYadpZICyPZ2FZQMWTxTqojwGN2xxVRYXt1FSTF6UJbsnlkzvq+MWn0?=
- =?us-ascii?Q?BuAX/2IJJ91tk6PY2D2LYTrymfK14d/QVwfjwGKbgV1AOywMZ+sYIMy6MfIu?=
- =?us-ascii?Q?STr6izJqEqMCmjPAffX7sS98JLMySwXkdWH/K6s/b8BFJUxxn37CokQlWsrS?=
- =?us-ascii?Q?EU4gR4gqs1XdgD+b/zHzRlfIN61mbWZvhXuworavjd/IkQNAayWEnCaUiizy?=
- =?us-ascii?Q?JpdsqN/5zwc/p3qYBqEa7DLNYFTqyzgFyadYqzWQpXCz3ehblUG+nSP9qXOZ?=
- =?us-ascii?Q?cgyY9eWq5xCj54qYtILujQ1aPTk18+tHwgM/+030c1fZu4abP9xcIy7upokB?=
- =?us-ascii?Q?sFCYzh+Dfl0Ouew+d4IxhYrs2C2BtPeEs3impyTyL2k/dMpPAce5XYrbYiJo?=
- =?us-ascii?Q?85uOYCnwcaHXkc07TkihujrVwnCOnwOcsPUxLdRFdbu7RYvZ6dexU2t/95BL?=
- =?us-ascii?Q?4Cv8m4RNetWAllQVI5OzReKAWYxAa+T9tDZ2xFOSy+Wa3fXVP1MOzC37O1Ow?=
- =?us-ascii?Q?lcstWn+QqQgP5rBLHhsg+tLECpwi+G96U6GJePk3o8dyj8hH+8SPJZqy6428?=
- =?us-ascii?Q?UmIlWq1XZq9Cu03kKb1LU28L0UEpyadXHR3kuClOJDv5iKPL7OXO4Sh7Z+I4?=
- =?us-ascii?Q?SIUtTgHDKRjWHpULCKWIajT2MX3+diyhfjhY/P+V9l4k7/nEFA=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(7416014)(376014)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2024 21:36:17.8900
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dd0e8c53-8138-42e2-7bdc-08dcf92ae375
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000066E6.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB9020
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20241005-clone3-shadow-stack-v11-2-2a6a2bd6d651@kernel.org>
 
-With the introduction of the new object and its infrastructure, update the
-doc and the vIOMMU graph to reflect that.
+On Sat, Oct 05, 2024 at 11:31:29AM +0100, Mark Brown wrote:
+>There are a number of architectures with shadow stack features which we are
+>presenting to userspace with as consistent an API as we can (though there
+>are some architecture specifics). Especially given that there are some
+>important considerations for userspace code interacting directly with the
+>feature let's provide some documentation covering the common aspects.
+>
+>Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+>Reviewed-by: Kees Cook <kees@kernel.org>
+>Tested-by: Kees Cook <kees@kernel.org>
+>Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+>Signed-off-by: Mark Brown <broonie@kernel.org>
+>---
+> Documentation/userspace-api/index.rst        |  1 +
+> Documentation/userspace-api/shadow_stack.rst | 41 ++++++++++++++++++++++++++++
+> 2 files changed, 42 insertions(+)
+>
+>diff --git a/Documentation/userspace-api/index.rst b/Documentation/userspace-api/index.rst
+>index 274cc7546efc2a042d2dc00aa67c71c52372179a..c39709bfba2c5682d0d1a22444db17c17bcf01ce 100644
+>--- a/Documentation/userspace-api/index.rst
+>+++ b/Documentation/userspace-api/index.rst
+>@@ -59,6 +59,7 @@ Everything else
+>
+>    ELF
+>    netlink/index
+>+   shadow_stack
+>    sysfs-platform_profile
+>    vduse
+>    futex2
+>diff --git a/Documentation/userspace-api/shadow_stack.rst b/Documentation/userspace-api/shadow_stack.rst
+>new file mode 100644
+>index 0000000000000000000000000000000000000000..c576ad3d7ec12f0f75bffa4e2bafd0c9d7230c9f
+>--- /dev/null
+>+++ b/Documentation/userspace-api/shadow_stack.rst
+>@@ -0,0 +1,41 @@
+>+=============
+>+Shadow Stacks
+>+=============
+>+
+>+Introduction
+>+============
+>+
+>+Several architectures have features which provide backward edge
+>+control flow protection through a hardware maintained stack, only
+>+writeable by userspace through very limited operations.  This feature
+>+is referred to as shadow stacks on Linux, on x86 it is part of Intel
+>+Control Enforcement Technology (CET), on arm64 it is Guarded Control
+>+Stacks feature (FEAT_GCS) and for RISC-V it is the Zicfiss extension.
+>+It is expected that this feature will normally be managed by the
+>+system dynamic linker and libc in ways broadly transparent to
+>+application code, this document covers interfaces and considerations.
+>+
+>+
+>+Enabling
+>+========
+>+
+>+Shadow stacks default to disabled when a userspace process is
+>+executed, they can be enabled for the current thread with a syscall:
+>+
+>+ - For x86 the ARCH_SHSTK_ENABLE arch_prctl()
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
----
- Documentation/userspace-api/iommufd.rst | 41 +++++++++++++++++++------
- 1 file changed, 32 insertions(+), 9 deletions(-)
+I know when you started out, gcs and risc-v shadow stack patches were
+only catching up. But now that gcs patches are in -next and risc-v
+patches have also reached some maturity. And considering this generic
+generic shadow stack documentation, may be it's worth to mention
+arch agnostic prctls here for shadow stack (that will be used by arm64
+and riscv)? What do you think?
 
-diff --git a/Documentation/userspace-api/iommufd.rst b/Documentation/userspace-api/iommufd.rst
-index a8b7766c2849..0ef22b3ca30b 100644
---- a/Documentation/userspace-api/iommufd.rst
-+++ b/Documentation/userspace-api/iommufd.rst
-@@ -94,6 +94,19 @@ Following IOMMUFD objects are exposed to userspace:
-      backed by corresponding vIOMMU objects, in which case a guest OS would do
-      the "dispatch" naturally instead of VMM trappings.
- 
-+- IOMMUFD_OBJ_VDEVICE, representing a virtual device for an IOMMUFD_OBJ_DEVICE
-+  against an IOMMUFD_OBJ_VIOMMU. This virtual device holds the device's virtual
-+  information or attributes (related to the vIOMMU) in a VM. An immediate vDATA
-+  example can be the virtual ID of the device on a vIOMMU, which is a unique ID
-+  that VMM assigns to the device for a translation channel/port of the vIOMMU,
-+  e.g. vSID of ARM SMMUv3, vDeviceID of AMD IOMMU, and vRID of Intel VT-d to a
-+  Context Table. Potential use cases of some advanced security information can
-+  be forwarded via this object too, such as security level or realm information
-+  in a Confidential Compute Architecture. A VMM should create a vDEVICE object
-+  to forward all the device information in a VM, when it connects a device to a
-+  vIOMMU, which is a separate ioctl call from attaching the same device to an
-+  HWPT_PAGING that the vIOMMU holds.
-+
- All user-visible objects are destroyed via the IOMMU_DESTROY uAPI.
- 
- The diagrams below show relationships between user-visible objects and kernel
-@@ -133,16 +146,16 @@ creating the objects and links::
-                          |____________|     |____________|     |______|
- 
-   _______________________________________________________________________
-- |                      iommufd (with vIOMMU)                            |
-+ |                      iommufd (with vIOMMU/vDEVICE)                    |
-  |                                                                       |
-- |                             [5]                                       |
-- |                        _____________                                  |
-- |                       |             |                                 |
-- |      |----------------|    vIOMMU   |                                 |
-- |      |                |             |                                 |
-- |      |                |             |                                 |
-- |      |      [1]       |             |          [4]             [2]    |
-- |      |     ______     |             |     _____________     ________  |
-+ |                             [5]                [6]                    |
-+ |                        _____________      _____________               |
-+ |                       |             |    |             |              |
-+ |      |----------------|    vIOMMU   |<---|   vDEVICE   |<----|        |
-+ |      |                |             |    |_____________|     |        |
-+ |      |                |             |                        |        |
-+ |      |      [1]       |             |          [4]           | [2]    |
-+ |      |     ______     |             |     _____________     _|______  |
-  |      |    |      |    |     [3]     |    |             |   |        | |
-  |      |    | IOAS |<---|(HWPT_PAGING)|<---| HWPT_NESTED |<--| DEVICE | |
-  |      |    |______|    |_____________|    |_____________|   |________| |
-@@ -215,6 +228,15 @@ creating the objects and links::
-    the vIOMMU object and the HWPT_PAGING, then this vIOMMU object can be used
-    as a nesting parent object to allocate an HWPT_NESTED object described above.
- 
-+6. IOMMUFD_OBJ_VDEVICE can be only manually created via the IOMMU_VDEVICE_ALLOC
-+   uAPI, provided a viommu_id for an iommufd_viommu object and a dev_id for an
-+   iommufd_device object. The vDEVICE object will be the binding between these
-+   two parent objects. Another @virt_id will be also set via the uAPI providing
-+   the iommufd core an index to store the vDEVICE object to a vDEVICE array per
-+   vIOMMU. If necessary, the IOMMU driver may choose to implement a vdevce_alloc
-+   op to init its HW for virtualization feature related to a vDEVICE. Successful
-+   completion of this operation sets up the linkages between vIOMMU and device.
-+
- A device can only bind to an iommufd due to DMA ownership claim and attach to at
- most one IOAS object (no support of PASID yet).
- 
-@@ -228,6 +250,7 @@ User visible objects are backed by following datastructures:
- - iommufd_hwpt_paging for IOMMUFD_OBJ_HWPT_PAGING.
- - iommufd_hwpt_nested for IOMMUFD_OBJ_HWPT_NESTED.
- - iommufd_viommu for IOMMUFD_OBJ_VIOMMU.
-+- iommufd_vdevice for IOMMUFD_OBJ_VDEVICE
- 
- Several terminologies when looking at these datastructures:
- 
--- 
-2.43.0
+>+
+>+It is expected that this will normally be done by the dynamic linker.
+>+Any new threads created by a thread with shadow stacks enabled will
+>+themselves have shadow stacks enabled.
+>+
+>+
+>+Enablement considerations
+>+=========================
+>+
+>+- Returning from the function that enables shadow stacks without first
+>+  disabling them will cause a shadow stack exception.
+nit:
+s/shadow stack exception/arch specific exception indicating control flow
+violation
 
+>+ This includes
+>+  any syscall wrapper or other library functions, the syscall will need
+>+  to be inlined.
+>+- A lock feature allows userspace to prevent disabling of shadow stacks.
+>+- Those that change the stack context like longjmp() or use of ucontext
+>+  changes on signal return will need support from libc.
+>
+>-- 
+>2.39.2
+>
 
