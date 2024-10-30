@@ -1,69 +1,69 @@
-Return-Path: <linux-kselftest+bounces-21102-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21103-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D85949B64B3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 14:51:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 788A49B64B7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 14:51:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 080CE1C21BF7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 13:51:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C3381C21895
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 13:51:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B33721EE039;
-	Wed, 30 Oct 2024 13:50:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A89BF1F470F;
+	Wed, 30 Oct 2024 13:50:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b="oDrV65BT"
+	dkim=pass (1024-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b="H0LPKZEl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-52005.amazon.com (smtp-fw-52005.amazon.com [52.119.213.156])
+Received: from smtp-fw-80009.amazon.com (smtp-fw-80009.amazon.com [99.78.197.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6B91EB9E3;
-	Wed, 30 Oct 2024 13:50:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 822E01F429B;
+	Wed, 30 Oct 2024 13:50:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730296225; cv=none; b=PlCDqg/eHtY4KC/xsZXFEOGxs4K3oezbPpYROcNyqRelRXtQrqedbPr2HZDcMxLOx9AOeNSPpswoeTvKmCCQ55qQpryReZznWtCwG086fYf9hqJT9sgUbpoEV1jdmgHQIm3vZLz9EmTQMB8FQntrtGCp45SJ2MFw3ZTIFCP+W4Y=
+	t=1730296229; cv=none; b=JFO9sNJPzrc4q9NlUldfO3bJ3V2Iy8ExURtX+JlZ8TpYGLBF/SP10J5a7bjl07jKgj2LInNEMWyKkOanDeat5RvEt8tfviy5pCB9D3ekCrwY/0y6QPztAAEm4N4LPNhZq+YrYvRIWZJ517QNaHfflRMel2a4kewxqmB/3VEqHdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730296225; c=relaxed/simple;
-	bh=o28RC50910aHKQu18l82oQQPAJIOFbPuumxlWDQ4D1M=;
+	s=arc-20240116; t=1730296229; c=relaxed/simple;
+	bh=FAJGeRXl9a0HaaXXjrMbG8MsdF8trJRmwI5h5Mf4g50=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KUjcRws4gJl3v0aj5w3AsjiOsoj0f0Hdt1JsE51SIroFpvlVrGqa6lBJpXb6r8KobqQVlLHa2NbD0a9qiWVj6bRMiYKhsEtc9wa0StBZEXsKdd48YWKF/qk+raawYTdrKZ/7W3pzb2g3Vi8FTWXEtL6/Go34eWVWrRP1VOjVKgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b=oDrV65BT; arc=none smtp.client-ip=52.119.213.156
+	 MIME-Version:Content-Type; b=VVjEzGNngPLEU6hHw/zCwCiZCz+7QDdzpYXB5m8U/CB1ICQARKEfStJloMRepXn6bPcYUFXRW8tSP1NJoiyEBzWT8LitTGr5cnOsWIKiY9yJp64u/wagrii+ok4zHQIt/FGQ0tvYNe8SLYj4sKEpQYPezL+brdvnEW2j7WiK4Kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b=H0LPKZEl; arc=none smtp.client-ip=99.78.197.220
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
-  s=amazon201209; t=1730296224; x=1761832224;
+  s=amazon201209; t=1730296227; x=1761832227;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ynq07QFehgBeqYs8R/uKHAJgtPgDIcbxY2M616fmmig=;
-  b=oDrV65BTT+7F34u4+gjz5JlHr55nkHWLuYHUXyYBJ6aImCdk8DcbgVRx
-   Szl7FJ5pjLnNgaoj1cOiC8xwTE3nZXd01sCIcMCDCbHT7qMvvjUs42CE1
-   iP+s065v7pJKlVC36vG9G1BjxwOEBLbVNAS5dQOzwf10GMYr7uG2QLoFJ
-   o=;
+  bh=k/QSX0mI8qQz8W316WTJxbTS4bB3Lyue/iJHbqNfB18=;
+  b=H0LPKZElGSyh8F95k4F7Snm1mijNWKwD48JnAiP9h5u08WMGqEmkfJZp
+   spbAfawmiWksmQBvcRzQ5x+LcioguecGAlLrmWGj4Aiuly5wMpmvwHNuX
+   ebzRFCjzewRIROFQExbIF+i6yC/qQ4vNmyKUz4+D64yKi0OI/tEikyvyW
+   U=;
 X-IronPort-AV: E=Sophos;i="6.11,245,1725321600"; 
-   d="scan'208";a="691697056"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-52005.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 13:50:17 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [10.0.38.20:54095]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.35.102:2525] with esmtp (Farcaster)
- id e1e6c02d-939e-42c5-ab8b-438e8ae0b6bc; Wed, 30 Oct 2024 13:50:16 +0000 (UTC)
-X-Farcaster-Flow-ID: e1e6c02d-939e-42c5-ab8b-438e8ae0b6bc
-Received: from EX19D020UWA002.ant.amazon.com (10.13.138.222) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+   d="scan'208";a="142980689"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
+  by smtp-border-fw-80009.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 13:50:27 +0000
+Received: from EX19MTAEUB001.ant.amazon.com [10.0.43.254:32764]
+ by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.20.52:2525] with esmtp (Farcaster)
+ id cb6221e8-e82a-4b95-aff9-f29080c6cf67; Wed, 30 Oct 2024 13:50:26 +0000 (UTC)
+X-Farcaster-Flow-ID: cb6221e8-e82a-4b95-aff9-f29080c6cf67
+Received: from EX19D014EUA004.ant.amazon.com (10.252.50.41) by
+ EX19MTAEUB001.ant.amazon.com (10.252.51.28) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Wed, 30 Oct 2024 13:50:11 +0000
-Received: from EX19MTAUWC001.ant.amazon.com (10.250.64.145) by
- EX19D020UWA002.ant.amazon.com (10.13.138.222) with Microsoft SMTP Server
+ Wed, 30 Oct 2024 13:50:23 +0000
+Received: from EX19MTAUEA002.ant.amazon.com (10.252.134.9) by
+ EX19D014EUA004.ant.amazon.com (10.252.50.41) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Wed, 30 Oct 2024 13:50:11 +0000
+ Wed, 30 Oct 2024 13:50:23 +0000
 Received: from email-imr-corp-prod-pdx-all-2c-8a67eb17.us-west-2.amazon.com
- (10.25.36.210) by mail-relay.amazon.com (10.250.64.145) with Microsoft SMTP
+ (10.43.8.2) by mail-relay.amazon.com (10.252.134.34) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id
- 15.2.1258.34 via Frontend Transport; Wed, 30 Oct 2024 13:50:11 +0000
+ 15.2.1258.34 via Frontend Transport; Wed, 30 Oct 2024 13:50:22 +0000
 Received: from ua2d7e1a6107c5b.home (dev-dsk-roypat-1c-dbe2a224.eu-west-1.amazon.com [172.19.88.180])
-	by email-imr-corp-prod-pdx-all-2c-8a67eb17.us-west-2.amazon.com (Postfix) with ESMTPS id E3BF841309;
-	Wed, 30 Oct 2024 13:50:01 +0000 (UTC)
+	by email-imr-corp-prod-pdx-all-2c-8a67eb17.us-west-2.amazon.com (Postfix) with ESMTPS id 93E2B41303;
+	Wed, 30 Oct 2024 13:50:13 +0000 (UTC)
 From: Patrick Roy <roypat@amazon.co.uk>
 To: <tabba@google.com>, <quic_eberman@quicinc.com>, <david@redhat.com>,
 	<seanjc@google.com>, <pbonzini@redhat.com>, <jthoughton@google.com>,
@@ -84,9 +84,9 @@ CC: Patrick Roy <roypat@amazon.co.uk>, <graf@amazon.com>,
 	<linux-arm-kernel@lists.infradead.org>, <loongarch@lists.linux.dev>,
 	<linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
 	<linux-trace-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [RFC PATCH v3 3/6] kvm: gmem: implement direct map manipulation routines
-Date: Wed, 30 Oct 2024 13:49:07 +0000
-Message-ID: <20241030134912.515725-4-roypat@amazon.co.uk>
+Subject: [RFC PATCH v3 4/6] kvm: gmem: add trace point for direct map state changes
+Date: Wed, 30 Oct 2024 13:49:08 +0000
+Message-ID: <20241030134912.515725-5-roypat@amazon.co.uk>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241030134912.515725-1-roypat@amazon.co.uk>
 References: <20241030134912.515725-1-roypat@amazon.co.uk>
@@ -99,178 +99,85 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain
 
-Implement (yet unused) routines for manipulating guest_memfd direct map
-state. This is largely for illustration purposes.
+Add tracepoints to kvm_gmem_set_direct_map and
+kvm_gmem_folio_set_direct_map.
 
-kvm_gmem_set_direct_map allows manipulating arbitrary pgoff_t
-ranges, even if the covered memory has not yet been faulted in (in which
-case the requested direct map state is recorded in the xarray and will
-be applied by kvm_gmem_folio_configure_direct_map after the folio is
-faulted in and prepared/populated). This can be used to realize
-private/shared conversions on not-yet-faulted in memory, as discussed in
-the guest_memfd upstream call [1].
-
-kvm_gmem_folio_set_direct_map allows manipulating the direct map entries
-for a gmem folio that the caller already holds a reference for (whereas
-kvm_gmem_set_direct_map needs to look up all folios intersecting the
-given pgoff range in the filemap first).
-
-The xa lock serializes calls to kvm_gmem_folio_set_direct_map and
-kvm_gmem_set_direct_map, while the read side
-(kvm_gmem_folio_configure_direct_map) is protected by RCU. This is
-sufficient to ensure consistency between the xarray and the folio's
-actual direct map state, as kvm_gmem_folio_configure_direct_map is
-called only for freshly allocated folios, and before the folio lock is
-dropped for the first time, meaning kvm_gmem_folio_configure_direct_map
-always does it's set_direct_map calls before either of
-kvm_gmem_[folio_]set_direct_map get a chance. Even if a concurrent call
-to kvm_gmem_[folio_]set_direct_map happens, this ensures a sort of
-"eventual consistency" between xarray and actual direct map
-configuration by the time kvm_gmem_[folio_]set_direct_map exits.
-
-[1]: https://lore.kernel.org/kvm/4b49248b-1cf1-44dc-9b50-ee551e1671ac@redhat.com/
+The above operations can cause folios to be insert/removed into/from the
+direct map. We want to be able to make sure that only those gmem folios
+that we expect KVM to access are ever reinserted into the direct map,
+and that all folios that are temporarily reinserted are also removed
+again at a later point. Processing ftrace output is one way to verify
+this.
 
 Signed-off-by: Patrick Roy <roypat@amazon.co.uk>
 ---
- virt/kvm/guest_memfd.c | 125 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 125 insertions(+)
+ include/trace/events/kvm.h | 22 ++++++++++++++++++++++
+ virt/kvm/guest_memfd.c     |  5 +++++
+ 2 files changed, 27 insertions(+)
 
+diff --git a/include/trace/events/kvm.h b/include/trace/events/kvm.h
+index 74e40d5d4af42..f3d852c18fa08 100644
+--- a/include/trace/events/kvm.h
++++ b/include/trace/events/kvm.h
+@@ -489,6 +489,28 @@ TRACE_EVENT(kvm_test_age_hva,
+ 	TP_printk("mmu notifier test age hva: %#016lx", __entry->hva)
+ );
+ 
++#ifdef CONFIG_KVM_PRIVATE_MEM
++TRACE_EVENT(kvm_gmem_direct_map_state_change,
++	TP_PROTO(pgoff_t start, pgoff_t end, bool state),
++	TP_ARGS(start, end, state),
++
++	TP_STRUCT__entry(
++		__field(pgoff_t, start)
++		__field(pgoff_t, end)
++		__field(bool, state)
++	),
++
++	TP_fast_assign(
++		__entry->start = start;
++		__entry->end = end;
++		__entry->state = state;
++	),
++
++	TP_printk("changed direct map state of guest_memfd range %lu to %lu to %s",
++		  __entry->start, __entry->end, __entry->state ? "present" : "not present")
++);
++#endif
++
+ #endif /* _TRACE_KVM_MAIN_H */
+ 
+ /* This part must be outside protection */
 diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-index 50ffc2ad73eda..54387828dcc6a 100644
+index 54387828dcc6a..a0b3b9cacd361 100644
 --- a/virt/kvm/guest_memfd.c
 +++ b/virt/kvm/guest_memfd.c
-@@ -96,6 +96,131 @@ static int kvm_gmem_folio_configure_direct_map(struct folio *folio)
- 	return r;
- }
+@@ -7,6 +7,7 @@
+ #include <linux/set_memory.h>
  
-+/*
-+ * Updates the range [@start, @end] in @gmem_priv's direct map state xarray to be @state,
-+ * e.g. erasing entries in this range if @state is the default state, and creating
-+ * entries otherwise.
-+ *
-+ * Assumes the xa_lock is held.
-+ */
-+static int __kvm_gmem_update_xarray(struct kvm_gmem_inode_private *gmem_priv, pgoff_t start,
-+				    pgoff_t end, bool state)
-+{
-+	struct xarray *xa = &gmem_priv->direct_map_state;
-+	int r = 0;
+ #include "kvm_mm.h"
++#include "trace/events/kvm.h"
+ 
+ struct kvm_gmem {
+ 	struct kvm *kvm;
+@@ -169,6 +170,8 @@ static __always_unused int kvm_gmem_folio_set_direct_map(struct folio *folio, pg
+ 	r = __kvm_gmem_folio_set_direct_map(folio, start, end, state);
+ 	folio_unlock(folio);
+ 
++	trace_kvm_gmem_direct_map_state_change(start, end, state);
 +
-+	/*
-+	 * Cannot use xa_store_range, as multi-indexes cannot easily
-+	 * be partially updated.
-+	 */
-+	for (pgoff_t index = start; index < end; ++index) {
-+		if (state == gmem_priv->default_direct_map_state)
-+			__xa_erase(xa, index);
-+		else
-+			/* don't care _what_ we store in the xarray, only care about presence */
-+			__xa_store(xa, index, gmem_priv, GFP_KERNEL);
+ unlock_xa:
+ 	xa_unlock(&gmem_priv->direct_map_state);
+ out:
+@@ -216,6 +219,8 @@ static __always_unused int kvm_gmem_set_direct_map(struct inode *inode, pgoff_t
+ 		folio_batch_release(&fbatch);
+ 	}
+ 
++	trace_kvm_gmem_direct_map_state_change(start, end, state);
 +
-+		r = xa_err(xa);
-+		if (r)
-+			goto out;
-+	}
-+
-+out:
-+	return r;
-+}
-+
-+static int __kvm_gmem_folio_set_direct_map(struct folio *folio, pgoff_t start, pgoff_t end,
-+					   bool state)
-+{
-+	unsigned long npages = end - start + 1;
-+	struct page *first_page = folio_file_page(folio, start);
-+
-+	int r = set_direct_map_valid_noflush(first_page, npages, state);
-+
-+	flush_tlb_kernel_range((unsigned long)page_address(first_page),
-+			       (unsigned long)page_address(first_page) +
-+				       npages * PAGE_SIZE);
-+	return r;
-+}
-+
-+/*
-+ * Updates the direct map status for the given range from @start to @end (inclusive), returning
-+ * -EINVAL if this range is not completely contained within @folio. Also updates the
-+ * xarray stored in the private data of the inode @folio is attached to.
-+ *
-+ * Takes and drops the folio lock.
-+ */
-+static __always_unused int kvm_gmem_folio_set_direct_map(struct folio *folio, pgoff_t start,
-+								 pgoff_t end, bool state)
-+{
-+	struct inode *inode = folio_inode(folio);
-+	struct kvm_gmem_inode_private *gmem_priv = inode->i_private;
-+	int r = -EINVAL;
-+
-+	if (!folio_contains(folio, start) || !folio_contains(folio, end))
-+		goto out;
-+
-+	xa_lock(&gmem_priv->direct_map_state);
-+	r = __kvm_gmem_update_xarray(gmem_priv, start, end, state);
-+	if (r)
-+		goto unlock_xa;
-+
-+	folio_lock(folio);
-+	r = __kvm_gmem_folio_set_direct_map(folio, start, end, state);
-+	folio_unlock(folio);
-+
-+unlock_xa:
-+	xa_unlock(&gmem_priv->direct_map_state);
-+out:
-+	return r;
-+}
-+
-+/*
-+ * Updates the direct map status for the given range from @start to @end (inclusive)
-+ * of @inode. Folios in this range have their direct map entries reconfigured,
-+ * and the xarray in the @inode's private data is updated.
-+ */
-+static __always_unused int kvm_gmem_set_direct_map(struct inode *inode, pgoff_t start,
-+							   pgoff_t end, bool state)
-+{
-+	struct kvm_gmem_inode_private *gmem_priv = inode->i_private;
-+	struct folio_batch fbatch;
-+	pgoff_t index = start;
-+	unsigned int count, i;
-+	int r = 0;
-+
-+	xa_lock(&gmem_priv->direct_map_state);
-+
-+	r = __kvm_gmem_update_xarray(gmem_priv, start, end, state);
-+	if (r)
-+		goto out;
-+
-+	folio_batch_init(&fbatch);
-+	while (!filemap_get_folios(inode->i_mapping, &index, end, &fbatch) && !r) {
-+		count = folio_batch_count(&fbatch);
-+		for (i = 0; i < count; i++) {
-+			struct folio *folio = fbatch.folios[i];
-+			pgoff_t folio_start = max(folio_index(folio), start);
-+			pgoff_t folio_end =
-+				min(folio_index(folio) + folio_nr_pages(folio),
-+				    end);
-+
-+			folio_lock(folio);
-+			r = __kvm_gmem_folio_set_direct_map(folio, folio_start,
-+							    folio_end, state);
-+			folio_unlock(folio);
-+
-+			if (r)
-+				break;
-+		}
-+		folio_batch_release(&fbatch);
-+	}
-+
-+	xa_unlock(&gmem_priv->direct_map_state);
-+out:
-+	return r;
-+}
-+
- /**
-  * folio_file_pfn - like folio_file_page, but return a pfn.
-  * @folio: The folio which contains this index.
+ 	xa_unlock(&gmem_priv->direct_map_state);
+ out:
+ 	return r;
 -- 
 2.47.0
 
