@@ -1,177 +1,191 @@
-Return-Path: <linux-kselftest+bounces-21098-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21099-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EECF69B648C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 14:46:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B0F19B649F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 14:49:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E0B11F216E1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 13:46:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E6D81C2104F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 13:49:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C371F1EABAC;
-	Wed, 30 Oct 2024 13:46:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C80481EB9EE;
+	Wed, 30 Oct 2024 13:49:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Gr5l+MEg"
+	dkim=pass (1024-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b="i+aouXCT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857161E260E
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2024 13:46:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77FD613FEE;
+	Wed, 30 Oct 2024 13:49:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730295989; cv=none; b=KyrWhZk89FFxleq7pncUPYuwoZevepW+9d6mxsUH6azzW3518cYHpHyWkhncNohFPvgAtfLaNwROyyOgUzhflOTWXa/n3GWQJgi3I++KRJFIw0a6XKGHlM1/Ct3jCKJXPI5+3k522LctKyfWQStDea9P0b5fqtdOyDIz+E2aHts=
+	t=1730296183; cv=none; b=GWohMfwgrOw9ZvilZf1q127trlmBheN4wT4a5NeYof6GMDblwy1mGgeF+/4MQTKOnxXPo8FyiRQtvkuFl9O0h+MGs8K/ivOIgXh+lj1pBq7HYjACqHab7J1m4gb0FOV2yzfivyCzz58cdspsjckOwRMxuRAgZJCBPd61lMVym9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730295989; c=relaxed/simple;
-	bh=Y1a9aM6tWWaV5uzVx8wzzg/C3IB0sCgO5AuemKo86Jo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=rM4cgnzckftk7ZW4RPVnZ2c+HopGh3DrhQwobqPPvXmaZPmVJi69U5TPVnl9+WtFDrnWpSpIVAmc9yg4krJEjSyXszAqXd2QV3qKS96XLeAZiroHIupw53jixgVWkl1Ww2e99sTM5TL/ZAxOcLykP1F7N60IzUgzz+TxicV+DHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Gr5l+MEg; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-7edbbc3a9f2so4496346a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2024 06:46:26 -0700 (PDT)
+	s=arc-20240116; t=1730296183; c=relaxed/simple;
+	bh=XEZK53E2LoP/MsvOnXL4Hb1nrrUl4RW9PyyRhFcQTY8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QBjMQxzZo8jzbvSPJZVR+jvhxRXQS04K8h4VTMrGgnKxKtNTAOlyLxr27jmzTpsw8t5oxnsJCzikisYvVEDBmRhxd5+SHI/hTOlpiNOfm880DSCCVzevrbFFJq829NfD/jKvKmgUDVCxuvMykNl1s2X9AsaRfXPyMbzuqIRZvkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b=i+aouXCT; arc=none smtp.client-ip=99.78.197.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730295986; x=1730900786; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FtfXzQfaJ/EYKD+CJMQGAg9z8wKP66O4MQ222guzR8o=;
-        b=Gr5l+MEgTcxy1MB28zEiYeQDW7I6oTVbV++EJGlKny+0rQ0cKlEa7wbA9OARJxjWn7
-         Bm1Cv1ioADW2pW5u7SdZtMGu8Qf//aTALXfsqpfAJaCQ/LBzzpMX6W8O4vx2iu7Nd0BD
-         C+kGKHGGKzyKLj6qfgaDf+6Ed5dLcezCcbiXUc3XL11LAiym6nd4dRwRdVCOUQs5xsJo
-         ePQQIIE6crzyH05Y/U6/tEgLBGr6jyAJ+DWat++QwQCW0pp1SyPwk+dZFo/MAejZeG+u
-         U/17MudTLn5hqB207ZKFAzIch6+4t8wCN9b8g3b0GpImVe4Jy7LB/3erJJ8h/VZy4dF7
-         CR1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730295986; x=1730900786;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FtfXzQfaJ/EYKD+CJMQGAg9z8wKP66O4MQ222guzR8o=;
-        b=MNcfkk9S6e4YO6y8mBgJDWod0dLmLZP7UkTyR5zNb/yWsWEVuF7Mi82Xfc3YIRiL4n
-         TViuVGfpxYt/kLPJDwBUq7WyKNDc2qBK1cMPwTRX7L2s/jgHszCidPNaV03iu8WO4MRd
-         PA9Jpk/sNL0SGSdBCOIMQXCMjeuizFAVR+8YNH4rXeQVv8w6SseOQPf0ucfch5P3EWiy
-         Xb9RxAF733PglKdiDOenW6NbpRcAHt54o2u1DlGgn5KU8J1PPNzpC1iDkrEdkg3NnypU
-         /9XQiV+90eZzKzzsXQEji7GuISAYjsF5pi9on3k7XmpajVPctc8xL5BOB0hP+oE5UzLf
-         vQ9g==
-X-Forwarded-Encrypted: i=1; AJvYcCWpH+DvH6pndMnJ3uYbCU5J/mfyLbxPd2F4mfDiE/2OkpfEMf6B6/DAmfFKouqaniilcPcIwfgphe1ePvhe9hk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzp1bVgI6nxFYyQurjtHVvdNyz5A6vMEqRgahutC2+zBtTjQEui
-	BJZqhH4D5zgPK7ltbPZ0ew1grtDQK86o1IoTf9SA6HCkNLxSpFd/hoD0EdLgZq2Iil1a9HwNz+r
-	7hw==
-X-Google-Smtp-Source: AGHT+IFm2Yxq+cP+3QVS7378b8ToiwEaMp35x6FfIFMaHRLEbNI+8XbUnisHEWBxThlhwzgcDC7XrtglZ9o=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:9d:3983:ac13:c240])
- (user=seanjc job=sendgmr) by 2002:a63:4f62:0:b0:6d4:4eea:bd22 with SMTP id
- 41be03b00d2f7-7edd7b857bfmr25632a12.4.1730295985486; Wed, 30 Oct 2024
- 06:46:25 -0700 (PDT)
-Date: Wed, 30 Oct 2024 06:46:24 -0700
-In-Reply-To: <71f0fb41-d5a7-450b-ba47-ad6c39dce586@amd.com>
+  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
+  s=amazon201209; t=1730296181; x=1761832181;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=r1QMDZCnRymQeRRBpcOx6ZreXT7450ZDAPuRRJDuiN0=;
+  b=i+aouXCTuryFwwmX9zGipDzExIUvjlTZDjjcfz0Ap5NR4G9H/Pdd1jxM
+   9thLbUD6HdEwtJNlS5Me9QDkgqkm2FonplFsjvpyQS8WVoAn/eqbEBy5g
+   qJjX35Re6wFTmg30NYyI2m5P6rt8jc5TaPu7R9f6fvRlNBNVLMPFQgsS7
+   E=;
+X-IronPort-AV: E=Sophos;i="6.11,245,1725321600"; 
+   d="scan'208";a="141949542"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.25.36.214])
+  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 13:49:37 +0000
+Received: from EX19MTAUWA001.ant.amazon.com [10.0.38.20:55646]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.24.36:2525] with esmtp (Farcaster)
+ id b62929fd-fda7-42c8-9f60-587e2125a407; Wed, 30 Oct 2024 13:49:36 +0000 (UTC)
+X-Farcaster-Flow-ID: b62929fd-fda7-42c8-9f60-587e2125a407
+Received: from EX19D003UWB004.ant.amazon.com (10.13.138.24) by
+ EX19MTAUWA001.ant.amazon.com (10.250.64.218) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
+ Wed, 30 Oct 2024 13:49:36 +0000
+Received: from EX19MTAUWA001.ant.amazon.com (10.250.64.204) by
+ EX19D003UWB004.ant.amazon.com (10.13.138.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.35;
+ Wed, 30 Oct 2024 13:49:35 +0000
+Received: from email-imr-corp-prod-pdx-all-2c-8a67eb17.us-west-2.amazon.com
+ (10.25.36.214) by mail-relay.amazon.com (10.250.64.204) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id
+ 15.2.1258.34 via Frontend Transport; Wed, 30 Oct 2024 13:49:35 +0000
+Received: from ua2d7e1a6107c5b.home (dev-dsk-roypat-1c-dbe2a224.eu-west-1.amazon.com [172.19.88.180])
+	by email-imr-corp-prod-pdx-all-2c-8a67eb17.us-west-2.amazon.com (Postfix) with ESMTPS id C4A404032D;
+	Wed, 30 Oct 2024 13:49:26 +0000 (UTC)
+From: Patrick Roy <roypat@amazon.co.uk>
+To: <tabba@google.com>, <quic_eberman@quicinc.com>, <david@redhat.com>,
+	<seanjc@google.com>, <pbonzini@redhat.com>, <jthoughton@google.com>,
+	<ackerleytng@google.com>, <vannapurve@google.com>, <rppt@kernel.org>
+CC: Patrick Roy <roypat@amazon.co.uk>, <graf@amazon.com>,
+	<jgowans@amazon.com>, <derekmn@amazon.com>, <kalyazin@amazon.com>,
+	<xmarcalx@amazon.com>, <linux-mm@kvack.org>, <corbet@lwn.net>,
+	<catalin.marinas@arm.com>, <will@kernel.org>, <chenhuacai@kernel.org>,
+	<kernel@xen0n.name>, <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+	<aou@eecs.berkeley.edu>, <hca@linux.ibm.com>, <gor@linux.ibm.com>,
+	<agordeev@linux.ibm.com>, <borntraeger@linux.ibm.com>, <svens@linux.ibm.com>,
+	<gerald.schaefer@linux.ibm.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
+	<bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+	<hpa@zytor.com>, <luto@kernel.org>, <peterz@infradead.org>,
+	<rostedt@goodmis.org>, <mhiramat@kernel.org>,
+	<mathieu.desnoyers@efficios.com>, <shuah@kernel.org>, <kvm@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <loongarch@lists.linux.dev>,
+	<linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: [RFC PATCH v3 0/6] Direct Map Removal for guest_memfd
+Date: Wed, 30 Oct 2024 13:49:04 +0000
+Message-ID: <20241030134912.515725-1-roypat@amazon.co.uk>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240905124107.6954-1-pratikrajesh.sampat@amd.com>
- <20240905124107.6954-3-pratikrajesh.sampat@amd.com> <Zw2fW2AJU-_Yi5U6@google.com>
- <4984cba7-427a-4065-9fcc-97b9f67163ed@amd.com> <Zx_QJJ1iAYewvP-k@google.com> <71f0fb41-d5a7-450b-ba47-ad6c39dce586@amd.com>
-Message-ID: <ZyI4cRLsaTQ3FMk7@google.com>
-Subject: Re: [PATCH v3 2/9] KVM: selftests: Add a basic SNP smoke test
-From: Sean Christopherson <seanjc@google.com>
-To: "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>
-Cc: kvm@vger.kernel.org, pbonzini@redhat.com, pgonda@google.com, 
-	thomas.lendacky@amd.com, michael.roth@amd.com, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On Mon, Oct 28, 2024, Pratik R. Sampat wro4te:
-> On 10/28/2024 12:55 PM, Sean Christopherson wrote:
-> > On Mon, Oct 21, 2024, Pratik R. Sampat wrote:
-> >>>> +		if (unlikely(!is_smt_active()))
-> >>>> +			snp_policy &= ~SNP_POLICY_SMT;
-> >>>
-> >>> Why does SNP_POLICY assume SMT?  And what is RSVD_MBO?  E.g. why not this?
-> >>>
-> >>> 		u64 policy = is_smt_active() ? SNP_POLICY_SMT : SNP_POLICY;
-> >>>
-> >>
-> >> I think most systems support SMT so I enabled the bit in by default and
-> >> only unset it when there isn't any support.
-> > 
-> > That's confusing though, because you're mixing architectural defines with semi-
-> > arbitrary selftests behavior.  RSVD_MBO on the other is apparently tightly coupled
-> > with SNP, i.e. SNP can't exist without that bit, so it makes sense that RSVD_MBO
-> > needs to be part of SNP_POLICY
-> > 
-> > If you want to have a *software*-defined default policy, then make it obvious that
-> > it's software defined.  E.g. name the #define SNP_DEFAULT_POLICY, not simply
-> > SNP_POLICY, because the latter is too easily misconstrued as the base SNP policy,
-> > which it is not.  That said, IIUC, SMT *must* match the host configuration, i.e.
-> > whether or not SMT is set is non-negotiable.  In that case, there's zero value in
-> > defining SNP_DEFAULT_POLICY, because it can't be a sane default for all systems.
-> > 
-> 
-> Right, SMT should match the host configuration. Would a
-> SNP_DEFAULT_POLICY work if we made it check for SMT too in the macro?
-> 
-> Instead of,
-> #define SNP_POLICY	(SNP_POLICY_SMT | SNP_POLICY_RSVD_MBO)
-> 
-> Have something like this instead to make it generic and less ambiguous?
-> #define SNP_DEFAULT_POLICY()		 			       \
-> ({								       \
-> 	SNP_POLICY_RSVD_MBO | (is_smt_active() ? SNP_POLICY_SMT : 0);  \
-> })
+Unmapping virtual machine guest memory from the host kernel's direct map
+is a successful mitigation against Spectre-style transient execution
+issues: If the kernel page tables do not contain entries pointing to
+guest memory, then any attempted speculative read through the direct map
+will necessarily be blocked by the MMU before any observable
+microarchitectural side-effects happen. This means that Spectre-gadgets
+and similar cannot be used to target virtual machine memory. Roughly 60%
+of speculative execution issues fall into this category [1, Table 1].
 
-No, unless it's the least awful option, don't hide dynamic functionality in a macro
-that looks like it holds static data.  The idea is totally fine, but put it in an
-actual helper, not a macro, _if_ there's actually a need for a default policy.
-If there's only ever one main path that creates SNP VMs, then I don't see the point
-in specifying a default policy.
+This patch series extends guest_memfd with the ability to remove its
+memory from the host kernel's direct map, to be able to attain the above
+protection for KVM guests running inside guest_memfd.
 
-> > Side topic, I assume one of SEV_POLICY_NO_DBG or SNP_POLICY_DBG *must* be specified, 
-> > and that they are mutualy exclusive?  E.g. what happens if the full policy is simply
-> > SNP_POLICY_RSVD_MBO?
-> 
-> SEV_POLICY_NO_DBG is mainly for the guest policy structure of SEV and
-> SEV-ES - pg 31, Table 2
-> https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/programmer-references/55766_SEV-KM_API_Specification.pdf
-> 
-> and, SNP_POLICY_DBG is a bit in the guest policy structure of SNP - pg
-> 27, Table 9
-> https://www.amd.com/content/dam/amd/en/documents/epyc-technical-docs/specifications/56860.pdf
-> 
-> In the former, a SEV guest disables debugging if SEV_POLICY_NO_DBG is
-> set. Similarly, a SNP guest enables debugging if SNP_POLICY_DBG is set.
+=== Changes to v2 ===
 
-Ugh, one is SEV_xxx, the other is SNP_xxx.  Argh!  And IIUC, they are mutually
-exclusive (totally separate thigns?), because SNP guests use an 8-byte structure,
-whereas SEV/SEV-ES use a 4-byte structure, and with different layouts.
+- Handle direct map removal for physically contiguous pages in arch code
+  (Mike R.)
+- Track the direct map state in guest_memfd itself instead of at the
+  folio level, to prepare for huge pages support (Sean C.)
+- Allow configuring direct map state of not-yet faulted in memory
+  (Vishal A.)
+- Pay attention to alignment in ftrace structs (Steven R.)
 
-That means this is _extremely_ confusing.  Separate the SEV_xxx defines from the
-SNP_xxx defines, because other than a name, they have nothing in common.
+Most significantly, I've reduced the patch series to focus only on
+direct map removal for guest_memfd for now, leaving the whole "how to do
+non-CoCo VMs in guest_memfd" for later. If this separation is
+acceptable, then I think I can drop the RFC tag in the next revision
+(I've mainly kept it here because I'm not entirely sure what to do with
+patches 3 and 4).
 
-+/* Minimum firmware version required for the SEV-SNP support */
-+#define SNP_FW_REQ_VER_MAJOR   1
-+#define SNP_FW_REQ_VER_MINOR   51
+=== Implementation ===
 
-Side topic, why are these hardcoded?  And where did they come from?  If they're
-arbitrary KVM selftests values, make that super duper clear.
+This patch series introduces a new flag to the KVM_CREATE_GUEST_MEMFD
+that causes guest_memfd to remove its pages from the host kernel's
+direct map immediately after population/preparation.  It also adds
+infrastructure for tracking the direct map state of all gmem folios
+inside the guest_memfd inode. Storing this information in the inode has
+the advantage that the code is ready for future hugepages extensions,
+where only removing/reinserting direct map entries for sub-ranges of a
+huge folio is a valid usecase, and it allows pre-configuring the direct
+map state of not-yet faulted in parts of memory (for example, when the
+VMM is receiving a RX virtio buffer from the guest).
 
-+#define SNP_POLICY_MINOR_BIT   0
-+#define SNP_POLICY_MAJOR_BIT   8
+=== Summary ===
 
-s/BIT/SHIFT.  "BIT" implies they are a single bit, which is obviously not the
-case.  But I vote to omit the extra #define entirely and just open code the shift
-in the SNP_FW_VER_{MAJOR,MINOR} macros.
+Patch 1 (from Mike Rapoport) adds arch APIs for manipulating the direct
+map for ranges of physically contiguous pages, which are used by
+guest_memfd in follow up patches. Patch 2 adds the
+KVM_GMEM_NO_DIRECT_MAP flag and the logic for configuring direct map
+state of freshly prepared folios. Patches 3 and 4 mainly serve an
+illustrative purpose, to show how the framework from patch 2 can be
+extended with routines for runtime direct map manipulation. Patches 5
+and 6 deal with documentation and self-tests respectively.
 
- #define SEV_POLICY_NO_DBG      (1UL << 0)
- #define SEV_POLICY_ES          (1UL << 2)
-+#define SNP_POLICY_SMT         (1ULL << 16)
-+#define SNP_POLICY_RSVD_MBO    (1ULL << 17)
-+#define SNP_POLICY_DBG         (1ULL << 19)
-+#define SNP_POLICY             (SNP_POLICY_SMT | SNP_POLICY_RSVD_MBO)
-+
-+#define SNP_FW_VER_MAJOR(maj)  ((uint8_t)(maj) << SNP_POLICY_MAJOR_BIT)
-+#define SNP_FW_VER_MINOR(min)  ((uint8_t)(min) << SNP_POLICY_MINOR_BIT)
+[1]: https://download.vusec.net/papers/quarantine_raid23.pdf
+[RFC v1]: https://lore.kernel.org/kvm/20240709132041.3625501-1-roypat@amazon.co.uk/
+[RFC v2]: https://lore.kernel.org/kvm/20240910163038.1298452-1-roypat@amazon.co.uk/
+
+Mike Rapoport (Microsoft) (1):
+  arch: introduce set_direct_map_valid_noflush()
+
+Patrick Roy (5):
+  kvm: gmem: add flag to remove memory from kernel direct map
+  kvm: gmem: implement direct map manipulation routines
+  kvm: gmem: add trace point for direct map state changes
+  kvm: document KVM_GMEM_NO_DIRECT_MAP flag
+  kvm: selftests: run gmem tests with KVM_GMEM_NO_DIRECT_MAP set
+
+ Documentation/virt/kvm/api.rst                |  14 +
+ arch/arm64/include/asm/set_memory.h           |   1 +
+ arch/arm64/mm/pageattr.c                      |  10 +
+ arch/loongarch/include/asm/set_memory.h       |   1 +
+ arch/loongarch/mm/pageattr.c                  |  21 ++
+ arch/riscv/include/asm/set_memory.h           |   1 +
+ arch/riscv/mm/pageattr.c                      |  15 +
+ arch/s390/include/asm/set_memory.h            |   1 +
+ arch/s390/mm/pageattr.c                       |  11 +
+ arch/x86/include/asm/set_memory.h             |   1 +
+ arch/x86/mm/pat/set_memory.c                  |   8 +
+ include/linux/set_memory.h                    |   6 +
+ include/trace/events/kvm.h                    |  22 ++
+ include/uapi/linux/kvm.h                      |   2 +
+ .../testing/selftests/kvm/guest_memfd_test.c  |   2 +-
+ .../kvm/x86_64/private_mem_conversions_test.c |   7 +-
+ virt/kvm/guest_memfd.c                        | 280 +++++++++++++++++-
+ 17 files changed, 384 insertions(+), 19 deletions(-)
+
+
+base-commit: 5cb1659f412041e4780f2e8ee49b2e03728a2ba6
+-- 
+2.47.0
+
 
