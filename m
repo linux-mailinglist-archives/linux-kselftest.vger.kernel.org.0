@@ -1,157 +1,244 @@
-Return-Path: <linux-kselftest+bounces-21153-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21154-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD2F29B6B1D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 18:35:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 536139B6B5A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 18:51:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D46E282456
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 17:35:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76D8E1C23886
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 17:51:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F090C1F4738;
-	Wed, 30 Oct 2024 17:35:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23D991C5799;
+	Wed, 30 Oct 2024 17:51:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QZlFrTJ4"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HFP83xYm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC96C1EF95A;
-	Wed, 30 Oct 2024 17:35:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9190A199E9D
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2024 17:51:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730309731; cv=none; b=MgnJZ+M6/sI6xti9XuKOlMut4tYd4uN5eUcmRK0czb2X/tswKJHbd0LHjwaVoi6zBhJwqSmYozES9kDGzxspD5v6R2CkepG47d91MR9mCOwhbEmg3u4BAUtXvD+4BuygJoQF9QhMN9QJRrZUzLVOm6oyfcdFs+obnIEVKSuDBTA=
+	t=1730310711; cv=none; b=j3/g9vrSoecjfZs+ZD7ktew9sJGxpLpoDFMEMo6294NCxaysF/t8aKXbFWql+YVpkTpZmHlSKKX6JU2anFq3Qw0xZaecoOnlHdnm0ZCiPrxMQGmBe6z+0Yf8z58AMQiUpRT7nxeOn4U9S+l0RfqTU/N8xHEBaJdS4q6olROoVN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730309731; c=relaxed/simple;
-	bh=hN96yDzjFZnW0iLyGa0XM7KqV9VA85GMqGjCMXwqqhc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mqMQ9ETDH0JwN/4aOBS+kULL8gThiv3+vehnhOjdWFsD4mu3BI32lgk+puxzMmg6UkdE3yj7+qeVVml8+Op9S2HrxTpZ9vHnvCGvIGBDMnX2lmcx50AH085ExxhhgEN0rxcORm5mrunmZA6Z14u/nVaUfhFxPlOwuyQ3dqlNT7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QZlFrTJ4; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2e5a0177531so34146a91.2;
-        Wed, 30 Oct 2024 10:35:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730309729; x=1730914529; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BiP+OVHkwJ2WwEc50c1zL6X+ty2T+Id/9XryhgE+LVs=;
-        b=QZlFrTJ4/x1XoNI2NR7+s7HYkA5wjEMaRyYGzb7hz7kET0F5VeO+OUZB6lnMw1e4tp
-         VrtesHdWjnCVzXCM4YK7OIAnuXdhnjQ4uUiFPevSmDslLeKDK8O3Qtq1UXHKAn6rhZ7L
-         vgbeYHpeAQDHGDo9UYUBuvSY82WC4BP+C8O3dkovdxYpKp7EJEW3dU9WjMmjxIk8zFio
-         j9nc5sS7McavPRawn09qkkdU7HvFjgXcH+qupc896ER0JQ4FyjgiSDr+dN2CVuHR+8YJ
-         +o57FINxJb8nNAfzg9TIiGGgegp4orAJCFhm8DnQjB2+EjxxfsHHOSaQ79ooiL4QFEo/
-         XKjw==
+	s=arc-20240116; t=1730310711; c=relaxed/simple;
+	bh=0pIesdiGle/M5oGuboOVgbnpZYXhOJ34Bhll9orZflw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uhp+eptNM3joOzy0SvIop+EOkGkKX9Ga24GRfmvuk5d87Ko/5BWGcGk1/Ued2ds2M/gtbhcAE2MQT8mBKb8Krkl8z6q7NjQXV1Od5ZI/r9wgAFbSVpp1uUj5cfSoPOvzeDIU6SPHQc7P9xaPQSZ1vOSrnYRCPDHPpxN/gUB9f8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HFP83xYm; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1730310707;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BlMqPGC69f2ZEKA06LeNQcKifqh1+b0YfPHQw2uDodk=;
+	b=HFP83xYmlZCylhujwvwddUOyUF7RFCoPvkQvUUbS+9W5Vv7fGtUINrvnN8TP34mON2YMLm
+	JIV9zaHoZLuvb2VVfWILZLTmjGkHsAQAT/hvs8CoS6Mg9VBzn+BKvpq3auzjMQB2FjR08t
+	Ehkz1WIpwVXUoE5Ceo5KjMyy8o0Gyao=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-645-0Cf7yjmzNGSgMwHDI1b2dA-1; Wed, 30 Oct 2024 13:51:45 -0400
+X-MC-Unique: 0Cf7yjmzNGSgMwHDI1b2dA-1
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-83aab538da1so348439f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2024 10:51:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730309729; x=1730914529;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1730310704; x=1730915504;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BiP+OVHkwJ2WwEc50c1zL6X+ty2T+Id/9XryhgE+LVs=;
-        b=YyDSWd51mMp5/arTJWtVzNB9q7lctBpjoqKsioD5FDstJg7jergk2pJuXqU+fo20N8
-         aes5eXl0G2qhYSbrCMrb6Eekg2ch8xbSN+uWb/AcsClDn6TokA1TCwoo9yjeQI82jSeV
-         8zkf8oewHV+xAkfQfPr8JOfEkl3vp8DO3F0//T+2O5ezGl4dmbbDKLnoCn3EqaWU/L46
-         toQUWhMan6IDLoqK9Pxq8mTKe4RXnbupFxUwqk7lRi9mVxKzNHhBVJIV0ailq0ADGZNk
-         srb+Oy0wrA0US7kb4U7oRQKJ09nkDKwckBydk70vuiA0jwF2hqDBN2cmNcWcaIkVR0Th
-         UXXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUbL1xgIg/MtCl70MRVd6wl4px1Ume5ZwCSxIzOf8FvATjX03NKXd/2hV/pE60fwkeiL9HJiZfDiE/prNxlMAoB@vger.kernel.org, AJvYcCWRXJku8WWp/jY3oVMiSeGJqJVxtHfZ9bfEJG2IKuxzhvHN0sPCbtEteJpszuEzWuvHE9ItTSuAaDRLmIw1@vger.kernel.org, AJvYcCWhYrW54rx6Bxdpi6h1ZS1xti7x8x+S3HWmpCkBgaB9VjlfxBftUTo3WqyGCxfP0WchOMoMfyVNqRTjJKttZUl2/Ps8@vger.kernel.org, AJvYcCXRVD8Jg12diRlMGd6MgMwEVmIFplOczG1WHIfZpgfmVK8AvsKCxPK0uVMbfJVLNJY8hSQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyXeueLd/8tvXc16vmjJbDy5WULzlGhz9DtV0FrUlWveLPXNUU
-	nWGUSbhPz4uEdP/J1P3WuDHxC/QGXcp+LSCf5u33s5FRhrWSxnH4M2kspp5Dxrb5mt4Hbdnsl0B
-	rGYZZmBEwNCwv7wKyIOhGe8DDk2ZHwA==
-X-Google-Smtp-Source: AGHT+IH95yXMclFnAHy8QB+eHNc4rmInj2I+LJ/8aDsx3EJqpaOzdT6/yEgEZy6tveL6Lgr1C9KElhWkO7Mhr4OuAnE=
-X-Received: by 2002:a17:90b:1d0c:b0:2e2:d7db:41fc with SMTP id
- 98e67ed59e1d1-2e8f10683a4mr18135770a91.10.1730309729183; Wed, 30 Oct 2024
- 10:35:29 -0700 (PDT)
+        bh=BlMqPGC69f2ZEKA06LeNQcKifqh1+b0YfPHQw2uDodk=;
+        b=ZotyS7LTKzUu/3PrX93j/9GgKASCm0NeB9BrttRDoseZopyRVimOeT3CJpyyMzcqNr
+         3uthTEgGbBaAGlABVoiwRA0XKsP6MXlwvAfZ6HxcR1vUa0cwyjC/K9SEnTMBlp4M3eyF
+         gaU4Fz9TrxBjMX0ESA9NW9KKrScE/LQUN3NndqN4dQCsr+F9Z3FXjzNcCi+KJsyHxE6u
+         H3O9zDMTGpNF16zjHvzwhUNYaWU8kDPYmXKwoTDepW7c5bIEoUlbyGVNxSHTzv0oKi+m
+         fv31FnEeQxv65kVHXu3y9G9/c6AxXj0XEROKD+Gi086dtjt143U7sk98a87YN8zg2AEN
+         XCgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVpFpEFydnSb0Kc7cPPcMuhKu5Du1/HMZ2IK6n31toDikMHO7pEwVhNCrYTVJFaaOss50gTJ+Bc6CqO0FjzY6c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwdnNKaCb+a+yTHM4ctxJ9d1cfpoC5pqPL82XCJ7U6yJzyyh8P
+	Q/1Rz+eQJPenNc8Dsa31lwaQ69NfLpPQDY1+vq/ob11Wlt+Q9nYmTKiChmJdvWI9qX2+yJ/WzAA
+	njV9AS61/Wj//uA46AIIGBYcabRAN+QPr0TXHYGRTIy9GENdzrDfRZKaAcH+Y4gQsyg==
+X-Received: by 2002:a05:6e02:20e4:b0:3a1:a179:bb40 with SMTP id e9e14a558f8ab-3a4ed30cd2emr40336915ab.3.1730310704722;
+        Wed, 30 Oct 2024 10:51:44 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEo36jEi2FfwuOtKXpUTZdSh49MOAvafNJJvwYdaWjXfrDGx6qbO4/TWGSuq+5pB5erbrb8yQ==
+X-Received: by 2002:a05:6e02:20e4:b0:3a1:a179:bb40 with SMTP id e9e14a558f8ab-3a4ed30cd2emr40336785ab.3.1730310704251;
+        Wed, 30 Oct 2024 10:51:44 -0700 (PDT)
+Received: from redhat.com ([38.15.36.11])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a5e7c159c5sm1866885ab.74.2024.10.30.10.51.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Oct 2024 10:51:43 -0700 (PDT)
+Date: Wed, 30 Oct 2024 11:51:42 -0600
+From: Alex Williamson <alex.williamson@redhat.com>
+To: Yi Liu <yi.l.liu@intel.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>, "Tian, Kevin" <kevin.tian@intel.com>,
+ "joro@8bytes.org" <joro@8bytes.org>, "baolu.lu@linux.intel.com"
+ <baolu.lu@linux.intel.com>, "eric.auger@redhat.com"
+ <eric.auger@redhat.com>, "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+ "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "chao.p.peng@linux.intel.com"
+ <chao.p.peng@linux.intel.com>, "iommu@lists.linux.dev"
+ <iommu@lists.linux.dev>, "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "vasant.hegde@amd.com" <vasant.hegde@amd.com>
+Subject: Re: [PATCH v3 3/4] vfio: Add
+ VFIO_DEVICE_PASID_[AT|DE]TACH_IOMMUFD_PT
+Message-ID: <20241030115142.47272017.alex.williamson@redhat.com>
+In-Reply-To: <7d8b2457-8dc4-43d1-9a12-19e2a71a0821@intel.com>
+References: <20240912131729.14951-1-yi.l.liu@intel.com>
+	<20240912131729.14951-4-yi.l.liu@intel.com>
+	<BN9PR11MB5276D2D0EEAC2904EDB60B048C762@BN9PR11MB5276.namprd11.prod.outlook.com>
+	<20241001121126.GC1365916@nvidia.com>
+	<a435de20-2c25-46f5-a883-f10d425ef37e@intel.com>
+	<20241014094911.46fba20e.alex.williamson@redhat.com>
+	<2e5733a2-560e-4e8f-b547-ed75618afca5@intel.com>
+	<20241015102215.05cd16c7.alex.williamson@redhat.com>
+	<e76e4dec-f4d7-4a69-a670-88a2f4e10dd7@intel.com>
+	<20241016101134.0e13f7d7.alex.williamson@redhat.com>
+	<7f95f2cc-6691-4f40-bc50-e4430ebdbf1e@intel.com>
+	<7d8b2457-8dc4-43d1-9a12-19e2a71a0821@intel.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241029002208.1947947-1-dolinux.peng@gmail.com>
- <20241029002208.1947947-2-dolinux.peng@gmail.com> <CAEf4BzbVjkhtQPcsDOLX_aR_vvB1nCQj357EQ5xwey8486=Niw@mail.gmail.com>
- <CAErzpmuHJ-qZqzS11GPK5_=UsuxtPk1gbexbhJ7nj59M-NzSHA@mail.gmail.com>
-In-Reply-To: <CAErzpmuHJ-qZqzS11GPK5_=UsuxtPk1gbexbhJ7nj59M-NzSHA@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 30 Oct 2024 10:35:17 -0700
-Message-ID: <CAEf4BzaXHrjoEWmEcvK62bqKuT3de__+juvGctR3=e8avRWpMQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] libbpf: Sort btf_types in ascending order by name
-To: Donglin Peng <dolinux.peng@gmail.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, rostedt@goodmis.org, 
-	mhiramat@kernel.org, bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 30, 2024 at 8:13=E2=80=AFAM Donglin Peng <dolinux.peng@gmail.co=
-m> wrote:
->
-> On Wed, Oct 30, 2024 at 5:58=E2=80=AFAM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Mon, Oct 28, 2024 at 5:22=E2=80=AFPM Donglin Peng <dolinux.peng@gmai=
-l.com> wrote:
-> > >
-> > > To enhance the searching performance of btf_find_by_name_kind, we
-> > > can sort the btf_types in ascending order based on their names.
-> > > This allows us to implement a binary search method.
-> > >
-> > > Co-developed-by: Eduard Zingerman <eddyz87@gmail.com>
-> > > Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-> > > Signed-off-by: Donglin Peng <dolinux.peng@gmail.com>
-> > > ---
-> > > v4:
-> > >  - Divide the patch into two parts: kernel and libbpf
-> > >  - Use Eduard's code to sort btf_types in the btf__dedup function
-> > >  - Correct some btf testcases due to modifications of the order of bt=
-f_types.
-> > > ---
-> > >  tools/lib/bpf/btf.c                           | 115 +++++--
-> > >  tools/testing/selftests/bpf/prog_tests/btf.c  | 296 +++++++++-------=
---
-> > >  .../bpf/prog_tests/btf_dedup_split.c          |  64 ++--
-> > >  3 files changed, 268 insertions(+), 207 deletions(-)
-> > >
-> >
-> > I don't think we should do any extra sorting by default. Maybe we need
-> > some extra API to explicitly re-sort underlying types. But then again,
->
-> How do you feel about adding a new feature to the '--btf_features' option=
-,
-> which could be used to control sorting?
+On Wed, 30 Oct 2024 20:54:09 +0800
+Yi Liu <yi.l.liu@intel.com> wrote:
 
-This is pahole question, and yes, having a --btf_features makes sense to me=
-.
+> Hi Alex,
+>=20
+> On 2024/10/18 13:40, Yi Liu wrote:
+> >>>> I think we need to monotonically increase the structure size,
+> >>>> but maybe something more like below, using flags.=C2=A0 The expectat=
+ion
+> >>>> would be that if we add another flag that extends the structure, we'd
+> >>>> test that flag after PASID and clobber xend to a new value further i=
+nto
+> >>>> the new structure.=C2=A0 We'd also add that flag to the flags mask, =
+but we'd
+> >>>> share the copy code. =20
+> >>>
+> >>> agree, this share code might be needed for other path as well. Some m=
+acros
+> >>> I guess.
+> >>> =20
+> >>>>
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0if (attach.argsz < minsz)
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
+> >>>>
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0if (attach.flags & (~VFIO_DEVICE_ATTACH_PASI=
+D))
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
+> >>>>
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0if (attach.flags & VFIO_DEVICE_ATTACH_PASID)
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 xend =3D offsetofend(stru=
+ct vfio_device_attach_iommufd_pt, pasid);
+> >>>>
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0if (xend) {
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (attach.argsz < xend)
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
+eturn -EINVAL; =20
+>=20
+> Need to check the future usage of 'xend'. In understanding, 'xend' should
+> always be offsetofend(struct, the_last_field). A userspace that uses @pas=
+id=20
+> field would set argsz >=3D offsetofend(struct, pasid), most likely it wou=
+ld
+> just set argsz=3D=3Doffsetofend(struct, pasid). If so, such userspace wou=
+ld be
+> failed when running on a kernel that has added new fields behind @pasid.
 
->
-> > why just by type name? What if type names are equal, what do we use to
-> > disambiguate. None of this is considered in this patch.
->
-> If there are multiple btf_types with identical names in a btf file,
-> they will have different kinds. These btf_types will be grouped
+No, xend denotes the end of the structure we need to satisfy the flags
+that are requested by the user.
+=20
+> Say two decades later, we add a new field (say @xyz) to this user struct,
+> the 'xend' would be updated to be offsetofend(struct, xyz). This 'xend'
+> would be larger than the argsz provided by the aforementioned userspace.
+> Hence it would be failed in the above check.
 
-Not necessarily, you can easily have types of the same kind with the
-same name. But this changes nothing, I'd still define fuller search
-criteria.
+New field xyz would require a new flag, VFIO_DEVICE_XYZ and we'd extend
+the above code as:
 
-> together after being sorted according to their names. We can
-> determine the range of the group and verify the btf_types within
-> that range by their kind to obtain the appropriate btf_type.
->
-> >
-> > pw-bot: cr
-> >
-> > > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> > > index 3c131039c523..5290e9d59997 100644
-> > > --- a/tools/lib/bpf/btf.c
-> > > +++ b/tools/lib/bpf/btf.c
-> > > @@ -1,6 +1,9 @@
-> > >  // SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-> > >  /* Copyright (c) 2018 Facebook */
-> > >
+	if (attach.argsz < minsz)
+		return -EINVAL;
 
-[...]
+	if (attach.flags & (~(VFIO_DEVICE_ATTACH_PASID |
+			      VFIO_DEVICE_XYZ)))
+		return -EINVAL;
+
+	if (attach.flags & VFIO_DEVICE_ATTACH_PASID)
+		xend =3D offsetofend(struct vfio_device_attach_iommufd_pt, pasid);
+
+	if (attach.flags & VFIO_DEVICE_XYZ)
+		xend =3D offsetofend(struct vfio_device_attach_iommufd_pt, xyz);
+
+	if (xend) {
+		if (attach.argsz < xend)
+			return -EINVAL; =20
+
+New userspace can provide argsz =3D offsetofend(, xyz), just as it could
+provide argsz =3D PAGE_SIZE now if it really wanted, but argsz > minsz is
+only required if the user sets any of these new flags.  Therefore old
+userspace on new kernel continues to work.
+
+> To make it work, I'm
+> considering to make some changes to the code. When argsz < xend, we only
+> copy extra data with size=3D=3Dargsz-minsz. Just as the below.
+>=20
+> 	if (xend) {
+> 		unsigned long size;
+>=20
+> 		if (attach.argsz < xend)
+
+This is an -EINVAL condition, xend tracks the flags the user has set.
+The user must provide a sufficient buffer for the flags they've set.
+
+> 			size =3D attach.argsz - minsz;
+> 		else
+> 			size =3D xend - minsz;
+
+This is the only correct copy size.
+
+>=20
+> 		if (copy_from_user((void *)&attach + minsz,
+> 				  (void __user *)arg + minsz, size))
+> 			return -EFAULT;
+> 	}
+>=20
+> However, it seems to have another problem. If the userspace that uses
+> @pasid set the argsz=3D=3Doffsetofend(struct, pasid) - 1, such userspace =
+is
+> not supposed to work and should be failed by kernel. is it? However, my
+> above code cannot fail it. :(
+>=20
+> Any suggestion about it?
+
+If a user sets the ATTACH_PASID flag and argsz is less than
+offsetofend(struct, pasid), we need to return -EINVAL as indicated
+above.  Thanks,
+
+Alex
+
+>=20
+> >>>>
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (copy_from_user((void =
+*)&attach + minsz,
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (void __user *)arg + minsz=
+, xend - minsz))
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r=
+eturn -EFAULT;
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0} =20
+> >>> =20
+>=20
+
 
