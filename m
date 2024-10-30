@@ -1,149 +1,122 @@
-Return-Path: <linux-kselftest+bounces-21130-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21132-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE8F29B67C0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 16:27:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFFA39B6804
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 16:40:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1ECC01C20B6B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 15:27:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 859032845C8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 15:40:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 863112144BD;
-	Wed, 30 Oct 2024 15:24:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3BCC213143;
+	Wed, 30 Oct 2024 15:40:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UCY+f7Hz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qOW/D+Eb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7982144A6;
-	Wed, 30 Oct 2024 15:24:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C114138F91;
+	Wed, 30 Oct 2024 15:40:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730301869; cv=none; b=iARNJkxEVbTfN4f2+rZq5iPfGTmUr48e08Lcnmo4lbgHNJCLpvi2TFYJQx9MdVcdHxHgWflJl2EMzkbwyC8PUlJFcWdv7Nu5JKB6QCfNPgeNYbJP2NRouHOiusgkp7FB+ZDGv3+LlLbwUd21HClhqc7KajI2n5/AvcLrszVW52Y=
+	t=1730302828; cv=none; b=tLoM5qF3iWUxLQ2sfN0yT9EMDLn56T470WHOI1/MzFlKQKeacwNqb021PwncOfghPD43wM+5/ZtEC/urKeSxTFTkjs2W0pHHi6mLe7uqEx/eianTtOZQrvNQ7yDAQoAu1MtZ7LJ+NpKWMYb7wjICXZfLkIhaj1zSKCXV8/o0cvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730301869; c=relaxed/simple;
-	bh=n999IZOA4rDYc27Hp0H+miRj5tRQoBGIlyVHQmeFAb0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bYGOWeH8rdOb2gz/VB15/Lkvb0PDv/VKR1RACqf/8fNaOBAzGkBR1p9iJOAnolSMh6FO54ipVmhA+foTMLAGwfsgJnliwZTID0KUfgKguv8HcUmz0ieoJVrvc9K0sXuQpmqioL79FgNkYd33F+mHlEfqfRAjSPm8Ca8pKCW/OVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UCY+f7Hz; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a9a1b71d7ffso992316566b.1;
-        Wed, 30 Oct 2024 08:24:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730301865; x=1730906665; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lH03TetyHfAgyaa2uTodt4n0nCoJG2QadBNpvOTrh70=;
-        b=UCY+f7HziinpdOPcW2+WnKgKq0s6+ba5YaGcivNsd0NT/YBJQAvOt05Hg1i1SpelAR
-         ZmiIHAYM+x4f55wIFsbo/YQrPsnYHgYgvBtpixW2ukTDPti5f93U2ryM3/Sp96KOftF8
-         IZ5zNtNWF4cpw5lue2ZBkxaFTsuRmWNWSTryhJFcODfamFIVpIgDMgqUQieRisEG1f+l
-         XftghNUJm0znNrphrdNEUJp4OBdT3pFcHLTPgoj3uzsqFuttkdXCI3kGSJLXQiMMDoi0
-         G6nKv4207U+Mk5ENVfqdgZz8dRxHmo4YyLaqUTTE55MGc0tkgq8GmpMKqJvcGcUH8lr5
-         PP9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730301865; x=1730906665;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lH03TetyHfAgyaa2uTodt4n0nCoJG2QadBNpvOTrh70=;
-        b=U0yHcE8X1DYp18hpIHHzSWLniOu6hyeLyLoucv9zUO1gfcXZ6JYSukUTsHjKNXRI/4
-         8/tS7CSjau6teCeygWgNHgU+9nSncJKpwk3KzeHVg6BNu2/SQz+DvL2QehTNBCaGevCU
-         TfrK1ITJjNh6D6JF4ERfps45zKXrlp80M/ox5TkoSJnfgK+khH06r6vJgHeXPKHcQnHQ
-         c38qrVSG0BpzMw5Ct3S744xTGLBwG1ic0rU6bMetpFPJqk3hXMOHK2YzYqfAvsZPtHrG
-         SF8xN201C2GfjqiGPLeDADb82sQU++janJdNpx3wZP3QTSWiBnZ0zKkUCp3J6iE6AeGl
-         QzmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUdOzvY/u3vm6TRNkjULjx/L3aFQPWcLAK6fk7VTtmFRwhUGdkYvshc4NGYTQ9SuVC4WhY=@vger.kernel.org, AJvYcCUzgMGQrke3fnF3ek926oG/DLptGT9bfmH10hWC+7WoXjgpmE1Kih/Ceus0oB5+OprPY2hIT4knypmUgLE+@vger.kernel.org, AJvYcCWVwuMB7Xl7DEV8qV7t11FfWEaImSo0TNX5dHS5CoGaWyTxgecwraG8fNbp+qQZzzzCjWsR0d5qLqH3l9LDBmna@vger.kernel.org, AJvYcCXNyNJxAOxD3yiRcFHUe8o4x3uzLPXb4kK9dmeU9LHzquyvK7lfxj3GrfryDPQHoczB2h2DrE2qSrDGxztuNtzts4eg@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFXYTotpkPcftODwaFVuiUj6yC0j0GWlJeqAzUTxiu6AzJk/Pa
-	xQfIdl/n9TjVsDuyzB7yt8Djuej2dYZKQo7462gSq9AbYNdtn1rE95vCQUmTSjDiF0HtQ9FwaHb
-	nX1Od1GnvqtVhZmnfjpK3GI5OCNU=
-X-Google-Smtp-Source: AGHT+IEOif/f/Zl1LrJt+2Gcyo6SzzYJtNymmKKu1iahMKcKCBKKgoSUjNWuEBzxjc1lnPieK9zMO7mK1eUPJ+v9MGg=
-X-Received: by 2002:a17:907:9722:b0:a99:403e:2578 with SMTP id
- a640c23a62f3a-a9e3a57531amr379536766b.5.1730301865101; Wed, 30 Oct 2024
- 08:24:25 -0700 (PDT)
+	s=arc-20240116; t=1730302828; c=relaxed/simple;
+	bh=Bl+5Ay3FFAKvbhH35eUMEt83qx9zkSG64B9jfI7uxUM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FVPf673RpJ7Af3aF/WqofAWlxTVaQ0bFqECnYxWbmOAPCejc5haXnygmGNHjItqL5HIq6Me7FVretV/fPL3FUevdwsFUJdcGSo1usjNHbzcLD39oODljUdnMNMjSeCiYA8xp/R75pdAERKweOokQs7J/UFz6f601q3QdMZ/xVaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qOW/D+Eb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F60BC4CECE;
+	Wed, 30 Oct 2024 15:40:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730302828;
+	bh=Bl+5Ay3FFAKvbhH35eUMEt83qx9zkSG64B9jfI7uxUM=;
+	h=From:Subject:Date:To:Cc:From;
+	b=qOW/D+EbmBVAn7zk80NEXzG8+OmGSsRUnuuO5kc7a373sZbp/9JOtuhn8iwKC9d93
+	 RTNm7dSttbfV/68DueQWTmBZcGyqm5iEJbHT9xqTQiQfMEuFmfeOnDSuYWrlCFu9IG
+	 7oNHtYRDrj4W1QUdwddUEMXKoDJVnOxXcuk/WJxr1LsDFlh3zY6fNfJzt1wZMN9thQ
+	 9MwNkmckzyGdyKPtYsVrXdJXipUMZ2CQzSSOb0J6y68haSxRl97BeL9/D4nXCVlTSU
+	 vDZKc8uvM+x6HqDgA7+6t1WfT2Q9fwvuRYe+MEZxSB4bIAo/9e1G4N0qDUQIl4WtjI
+	 B4+3+0VhYQEnQ==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/9] arm64: Support 2024 dpISA extensions
+Date: Wed, 30 Oct 2024 15:34:45 +0000
+Message-Id: <20241030-arm64-2024-dpisa-v2-0-b6601a15d2a5@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241029002208.1947947-1-dolinux.peng@gmail.com>
- <20241029002208.1947947-4-dolinux.peng@gmail.com> <CAEf4BzYZgAPZSQTTk20s8vUwDMipe+0HRyKNnQchM+C10-1qOQ@mail.gmail.com>
-In-Reply-To: <CAEf4BzYZgAPZSQTTk20s8vUwDMipe+0HRyKNnQchM+C10-1qOQ@mail.gmail.com>
-From: Donglin Peng <dolinux.peng@gmail.com>
-Date: Wed, 30 Oct 2024 23:24:13 +0800
-Message-ID: <CAErzpmsuf0e9O4p1srdadoCwn7zNN6rEb8wt5yEOT0FByx5RJw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] libbpf: Using binary search to improve the
- performance of btf__find_by_name_kind
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, rostedt@goodmis.org, 
-	mhiramat@kernel.org, bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABVSImcC/22NQQ6CMBBFr0Jm7ZhpbaS64h6GRZUBJiolU0M0h
+ LtbiEuX7yf/vRkSq3CCczGD8iRJ4pDB7gq49WHoGKXJDJasM0Qegz6PDlfEZpQU0NPJUOlC2To
+ P+TYqt/LelJc6cy/pFfWzFSazrj+Z/SObDBKGg2/IX3Mt+OrOOvBjH7WDelmWL8HYHB6xAAAA
+X-Change-ID: 20241008-arm64-2024-dpisa-8091074a7f48
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+ Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, 
+ linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-9b746
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1867; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=Bl+5Ay3FFAKvbhH35eUMEt83qx9zkSG64B9jfI7uxUM=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnIlNhsrSy+xHNERieWXqP1j/YLwVf78bhUbTyAurw
+ QfZkv3WJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZyJTYQAKCRAk1otyXVSH0BrECA
+ CB6c/mPpV22NP6+WBfhlhYwKlwBchS7yWzpSBftwPoSuYGS0t4BoON04mg80CKZZ77jSxS2kBkPehz
+ kyddpgAq8Ox3wQxlE98z5L7tyQZEantMU8PD3ETBZw6aQaXKuBT4YeYFwvl2sKRnzw47NzWA27z1/k
+ dNbgFlS22UXo5xRxEVqY50qFuR95vOWZULgDA5NaLG7Nj0Yg9iQVo44Fbk2GanuB1+P0UB4JVdVdRY
+ rW7AC78fY5NRsevuhLVA7AsNj82qqf4f/3LQGAu5cHIZvTxYqpa780AgZCaAZTqpGBUSJdHbyJhDR8
+ kFD1bJxDlLQyReI4OogHPtyEHlgN96
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Wed, Oct 30, 2024 at 6:15=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Oct 28, 2024 at 5:22=E2=80=AFPM Donglin Peng <dolinux.peng@gmail.=
-com> wrote:
-> >
-> > Currently, we are only using the linear search method to find the type =
-id
-> > by the name, which has a time complexity of O(n). This change involves
-> > sorting the names of btf types in ascending order and using binary sear=
-ch,
-> > which has a time complexity of O(log(n)).
-> >
-> > Another change is the search direction, where we search the BTF first a=
-nd
-> > then its base.
-> >
-> > Signed-off-by: Donglin Peng <dolinux.peng@gmail.com>
-> > ---
-> >  tools/lib/bpf/btf.c | 159 ++++++++++++++++++++++++++++++++++++++------
-> >  1 file changed, 140 insertions(+), 19 deletions(-)
-> >
->
-> same complaints as with kernel-side implementation
->
-> I'm not sure if this is the right approach, overall. I can see how
-> pre-sorting might be useful if done by pahole. But then I'd say we
-> should record some bit somewhere in btf_header claiming that this is
-> sorted BTF, and then if that bit is set and we confirmed (on the
-> kernel side) that sorting is indeed correct (and if not, reject, don't
-> silently ignore), then we can use that sorting to our advantage.
+The 2024 architecture release includes a number of data processing
+extensions, mostly SVE and SME additions with a few others.  These are
+all very straightforward extensions which add instructions but no
+architectural state so only need hwcaps and exposing of the ID registers
+to KVM guests and userspace.
 
-Thank you, I also agree. we could utilize a bit of the flags within the
-btf_header structure to indicate if the btf file has been sorted.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v2:
+- Filter KVM guest visible bitfields in ID_AA64ISAR3_EL1 to only those
+  we make writeable.
+- Link to v1: https://lore.kernel.org/r/20241028-arm64-2024-dpisa-v1-0-a38d08b008a8@kernel.org
 
->
-> I don't think libbpf should unconditionally sort or check sorting in
-> the way that you implemented.
+---
+Mark Brown (9):
+      arm64/sysreg: Update ID_AA64PFR2_EL1 to DDI0601 2024-09
+      arm64/sysreg: Update ID_AA64ISAR3_EL1 to DDI0601 2024-09
+      arm64/sysreg: Update ID_AA64FPFR0_EL1 to DDI0601 2024-09
+      arm64/sysreg: Update ID_AA64ZFR0_EL1 to DDI0601 2024-09
+      arm64/sysreg: Update ID_AA64SMFR0_EL1 to DDI0601 2024-09
+      arm64/sysreg: Update ID_AA64ISAR2_EL1 to DDI0601 2024-09
+      arm64/hwcap: Describe 2024 dpISA extensions to userspace
+      KVM: arm64: Allow control of dpISA extensions in ID_AA64ISAR3_EL1
+      kselftest/arm64: Add 2024 dpISA extensions to hwcap test
 
->
-> > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> > index 5290e9d59997..cbf88a6b92e5 100644
-> > --- a/tools/lib/bpf/btf.c
-> > +++ b/tools/lib/bpf/btf.c
-> > @@ -94,6 +94,10 @@ struct btf {
-> >          *   - for split BTF counts number of types added on top of bas=
-e BTF.
-> >          */
-> >         __u32 nr_types;
-> > +       /* number of types in this BTF instance which are sorted by nam=
-e:
-> > +        *   - doesn't include special [0] void type;
-> > +        */
-> > +       __u32 nr_types_sorted;
-> >         /* if not NULL, points to the base BTF on top of which the curr=
-ent
-> >          * split BTF is based
-> >          */
->
-> [...]
+ Documentation/arch/arm64/elf_hwcaps.rst   |  51 ++++++
+ arch/arm64/include/asm/hwcap.h            |  17 ++
+ arch/arm64/include/uapi/asm/hwcap.h       |  17 ++
+ arch/arm64/kernel/cpufeature.c            |  35 ++++
+ arch/arm64/kernel/cpuinfo.c               |  17 ++
+ arch/arm64/kvm/sys_regs.c                 |   6 +-
+ arch/arm64/tools/sysreg                   |  87 +++++++++-
+ tools/testing/selftests/arm64/abi/hwcap.c | 273 +++++++++++++++++++++++++++++-
+ 8 files changed, 493 insertions(+), 10 deletions(-)
+---
+base-commit: 8e929cb546ee42c9a61d24fae60605e9e3192354
+change-id: 20241008-arm64-2024-dpisa-8091074a7f48
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
 
