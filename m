@@ -1,125 +1,150 @@
-Return-Path: <linux-kselftest+bounces-21107-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21108-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A271F9B6551
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 15:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 296F49B65BC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 15:27:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3F8F1C22D3A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 14:09:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B30B1C22691
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 14:27:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C89C1F1306;
-	Wed, 30 Oct 2024 14:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qa8KLYzM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A863D1F429A;
+	Wed, 30 Oct 2024 14:27:28 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EEE71EBFFD;
-	Wed, 30 Oct 2024 14:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C1E1F1318;
+	Wed, 30 Oct 2024 14:27:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730297350; cv=none; b=o/OG/h8+YRBt0lYD9Ql9WOn/rQeiVYV6WSft8DMJqs8T9Xi+PWOZEAc8HP4XrDF/CW0wJ/iAN1sgi1XmTwaRgrpYjx8hXdZAcYT3uuOJ21mSTo14mPHrxWENWB4F3o6cobNvbSitNT90fjdvh+hCCxGMxaxljFw7qYFvnp7qMm0=
+	t=1730298448; cv=none; b=WH1fbLC+bBcG1EVzd5aXnziT1hiRq38JGeZ/rH8d6pInDiuPSNqq0MRUjJM790xS8j9LaeXtvVi1woLMx+x5zi2ERbkI8xFuQyGPfmiAtJUfEKpDE06t3SCjKMlPjGceu22oBnDjfmDNcO+LVGW3w1F1+cGnVsjOblxUdGATS7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730297350; c=relaxed/simple;
-	bh=6urYDJMFL8UfCsl1Fzqxyc1jmEIEOvVoGCYwStPXqkA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J8LGPS/0OMl4pxiYe8oQZWNGeQZ/ySSt55dLHyhXmIsbca8D4z6afs2FbQ0ozCZZVjzFobrG4dTfOTFEffoHMBVDLoK2gbxaHYR9cH5dmugYaUNXFctIuy/QnmjGZ4z/tQUuTQsTcWPFNB6AiDx/GSaY2WPsdfbNkyBsrzAJMPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qa8KLYzM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59823C4CECE;
-	Wed, 30 Oct 2024 14:09:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730297349;
-	bh=6urYDJMFL8UfCsl1Fzqxyc1jmEIEOvVoGCYwStPXqkA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Qa8KLYzMTD0/Ny2o9kgu9jCNo0P4WE28G+HbAk6eDyVzi4GSmCefpSa3JPr268yZk
-	 HYX4AEnJqk28zbnGLpnNhxxu89/RweShj+28BLQ+HxyqYUpxehnQjqS+7QnlmtQhb/
-	 USYC/9DDmNp0dYfSy9jvAC7SFLLZ/5eh7lghCYZtQoC+1MIKvLeF2PVPaqsIpN/Z7y
-	 n5DOKrdRC+3wWCMc31aGY4+Ab0cV2xTPEri4BHLskNS8Kp9HBK/RAjiwyn65VKbvcX
-	 J5UrnKfuKbEfML8hQngajwTHzrggPr97l3u7nCfY/+RfpYpmlp9U0DgPb/zQAXH2ZD
-	 ncU21nUuCYiFQ==
-Date: Wed, 30 Oct 2024 14:08:59 +0000
-From: Mark Brown <broonie@kernel.org>
-To: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, jannh@google.com,
-	Yury Khrustalev <yury.khrustalev@arm.com>,
-	Wilco Dijkstra <wilco.dijkstra@arm.com>,
-	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
-	Kees Cook <kees@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH RFT v11 0/8] fork: Support shadow stacks in clone3()
-Message-ID: <9843cdfb-6cc6-40b1-94b3-768c48351945@sirena.org.uk>
-References: <20241005-clone3-shadow-stack-v11-0-2a6a2bd6d651@kernel.org>
+	s=arc-20240116; t=1730298448; c=relaxed/simple;
+	bh=fdTlufCbZhiUYgshLzgCtmAceM3onaTjAgEf6R64lN4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JKOi/KGOQGeA9B8OFvobmDFKA/oFfbFxypX2FSqrouuBZ2SzXN1yzKR6K10V6NmrBFrvpo9T5TUvtymTYgczk2ZbUjqPZhXSS5Q2iIkOYM6xddyTnO3f9PUo/9Fi0SGPB7WRS3Yw99ZjzXZWiievHlbOvGv82SEHBAPd6CTj6RE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-7eb0bc007edso3438576a12.3;
+        Wed, 30 Oct 2024 07:27:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730298445; x=1730903245;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ALb0tBs4NDBt4u3K1Ou6MF9SiXOV/Onh0/EFY/ivrUI=;
+        b=UQcbluAHG2wg/M1j5MpWEhCpCfbg1v0NEnQa/9tfViEyNMNgnxQRXKz6esOEpyFNUa
+         RlvefZ212lgwMbpqPRVLrnP9tg7WPSx2I2brHABICnYGkvXmbHZCG6RszQmqEMowtuGT
+         sltV+S6VbFRB3dXf9vLNazQdNFeMnUBDTjYPOac2NFQVgs4JYmpAmiin/PMenMpml/C9
+         QxfNr/HSf4MjgQtj348xP15NrRbr5ciuLh5Durpm5HLwWyk0H2c3YFfrnYOJQAF+NDPJ
+         i8zGy3a0QkG/nYOImD9acIHbJT/F/y1a4stGgc4anCp25dEWCFc3qw091F9U5rwiPWsa
+         B61w==
+X-Forwarded-Encrypted: i=1; AJvYcCUlYO8D6AL8lJ76AvTdklfB+os45vyIeN5d6z4ffVf53HeP0cQDDQOkfpX5s9jr3INQ6zXrIA8iblF7+DY=@vger.kernel.org, AJvYcCWVdWYShCwnwii4YB0BfdTWlYA5bnz+rgyhSW21SKMXUhB5K343q54CQeRXI0PuSjykHJ7P99IfYi7MTZ+T+LgF@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzvj0dk5ucZ9jJRa3n9kyGYCytC/NefU67SCGqm2G6CmLrzPpbS
+	PWNd3Qkdedr1EjavTOqsuy8RgnVI2kh1rV0sF5tBEDafPuCpem4BiPlXi5k=
+X-Google-Smtp-Source: AGHT+IF7CE5jtvVBGnU/qez672fRz6aDeNOCseUmK9IyiVNs1IRC6vimUzOVgVduDPxsQ1l8jiXnMA==
+X-Received: by 2002:a05:6a21:3941:b0:1d9:69cd:ae22 with SMTP id adf61e73a8af0-1d9a8431ab7mr16966490637.30.1730298443893;
+        Wed, 30 Oct 2024 07:27:23 -0700 (PDT)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72057a0b82asm9311008b3a.111.2024.10.30.07.27.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Oct 2024 07:27:23 -0700 (PDT)
+From: Stanislav Fomichev <sdf@fomichev.me>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	andrew+netdev@lunn.ch,
+	shuah@kernel.org,
+	horms@kernel.org,
+	sdf@fomichev.me,
+	almasrymina@google.com,
+	willemb@google.com,
+	petrm@nvidia.com
+Subject: [PATCH net-next v6 00/12] selftests: ncdevmem: Add ncdevmem to ksft
+Date: Wed, 30 Oct 2024 07:27:10 -0700
+Message-ID: <20241030142722.2901744-1-sdf@fomichev.me>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tDhb735K0XmDRkCI"
-Content-Disposition: inline
-In-Reply-To: <20241005-clone3-shadow-stack-v11-0-2a6a2bd6d651@kernel.org>
-X-Cookie: I feel partially hydrogenated!
+Content-Transfer-Encoding: 8bit
 
+The goal of the series is to simplify and make it possible to use
+ncdevmem in an automated way from the ksft python wrapper.
 
---tDhb735K0XmDRkCI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+ncdevmem is slowly mutated into a state where it uses stdout
+to print the payload and the python wrapper is added to
+make sure the arrived payload matches the expected one.
 
-On Sat, Oct 05, 2024 at 11:31:27AM +0100, Mark Brown wrote:
-> The kernel has recently added support for shadow stacks, currently
-> x86 only using their CET feature but both arm64 and RISC-V have
-> equivalent features (GCS and Zicfiss respectively), I am actively
-> working on GCS[1].  With shadow stacks the hardware maintains an
-> additional stack containing only the return addresses for branch
-> instructions which is not generally writeable by userspace and ensures
-> that any returns are to the recorded addresses.  This provides some
-> protection against ROP attacks and making it easier to collect call
-> stacks.  These shadow stacks are allocated in the address space of the
-> userspace process.
+v6:
+- fix compilation issue in 'Unify error handling' patch (Jakub)
 
-Does anyone have any thoughts on this?  I reworked things to specify the
-address for the shadow stack pointer rather than the extent of the stack
-as Rick and Yuri suggested, otherwise the only change from the prior
-version was rebasing onto the arm64 GCS support since that's queued in
--next.  I think the only substantial question is picking the ABI for
-specifying the shadow stack.
+v5:
+- properly handle errors from inet_pton() and socket() (Paolo)
+- remove unneeded import from python selftest (Paolo)
 
---tDhb735K0XmDRkCI
-Content-Type: application/pgp-signature; name="signature.asc"
+v4:
+- keep usage example with validation (Mina)
+- fix compilation issue in one patch (s/start_queues/start_queue/)
 
------BEGIN PGP SIGNATURE-----
+v3:
+- keep and refine the comment about ncdevmem invocation (Mina)
+- add the comment about not enforcing exit status for ntuple reset (Mina)
+- make configure_headersplit more robust (Mina)
+- use num_queues/2 in selftest and let the users override it (Mina)
+- remove memory_provider.memcpy_to_device (Mina)
+- keep ksft as is (don't use -v validate flags): we are gonna
+  need a --debug-disable flag to make it less chatty; otherwise
+  it times out when sending too much data; so leaving it as
+  a separate follow up
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmciPfoACgkQJNaLcl1U
-h9ByZAf7BJTj2pxo1IrLT45sZZaPAjyEqSup5XazXYJcfpzSjaAMgXfb3SXzK3xq
-VfTCfGto6Vy8BEQcghOJJwkzpxVXWFeT+PkSq7NWRgGh9hfAPvRypyGbp7r7v3HD
-c20NAibhagaiMzY/Z4jllV0HRw+0ivw3rfsMYQGau7qN5LEx1HvK+5Nf751WSx6m
-MSPw2rFyS/iVExob0A7VeNVChTfB5hQoVswFRvUppz/TabTfoeVflwvLvH74SumH
-YJdboeil2TWbeySM2XKqEFNxNaAiyqZG2FQkhab0hTmdNgzmknNwpHz5wIesGFxL
-iiLXtEIpvzFmWLY5Kv5hVnt10MW9/A==
-=VJVF
------END PGP SIGNATURE-----
+v2:
+- don't remove validation (Mina)
+- keep 5-tuple flow steering but use it only when -c is provided (Mina)
+- remove separate flag for probing (Mina)
+- move ncdevmem under drivers/net/hw, not drivers/net (Jakub)
 
---tDhb735K0XmDRkCI--
+Cc: Mina Almasry <almasrymina@google.com>
+
+Stanislav Fomichev (12):
+  selftests: ncdevmem: Redirect all non-payload output to stderr
+  selftests: ncdevmem: Separate out dmabuf provider
+  selftests: ncdevmem: Unify error handling
+  selftests: ncdevmem: Make client_ip optional
+  selftests: ncdevmem: Remove default arguments
+  selftests: ncdevmem: Switch to AF_INET6
+  selftests: ncdevmem: Properly reset flow steering
+  selftests: ncdevmem: Use YNL to enable TCP header split
+  selftests: ncdevmem: Remove hard-coded queue numbers
+  selftests: ncdevmem: Run selftest when none of the -s or -c has been
+    provided
+  selftests: ncdevmem: Move ncdevmem under drivers/net/hw
+  selftests: ncdevmem: Add automated test
+
+ .../selftests/drivers/net/hw/.gitignore       |   1 +
+ .../testing/selftests/drivers/net/hw/Makefile |   9 +
+ .../selftests/drivers/net/hw/devmem.py        |  45 +
+ .../selftests/drivers/net/hw/ncdevmem.c       | 773 ++++++++++++++++++
+ tools/testing/selftests/net/.gitignore        |   1 -
+ tools/testing/selftests/net/Makefile          |   8 -
+ tools/testing/selftests/net/ncdevmem.c        | 570 -------------
+ 7 files changed, 828 insertions(+), 579 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/hw/.gitignore
+ create mode 100755 tools/testing/selftests/drivers/net/hw/devmem.py
+ create mode 100644 tools/testing/selftests/drivers/net/hw/ncdevmem.c
+ delete mode 100644 tools/testing/selftests/net/ncdevmem.c
+
+-- 
+2.47.0
+
 
