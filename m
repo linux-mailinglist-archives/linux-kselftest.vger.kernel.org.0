@@ -1,225 +1,253 @@
-Return-Path: <linux-kselftest+bounces-21123-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21124-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91D929B6651
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 15:47:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 426159B66BA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 16:00:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF107B213D3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 14:47:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 962CCB23598
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 15:00:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 256461F4704;
-	Wed, 30 Oct 2024 14:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF7BB1F472D;
+	Wed, 30 Oct 2024 15:00:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HadkQECS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2FwYuAiT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46C413FEE
-	for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2024 14:46:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B3801E8850
+	for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2024 15:00:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730299618; cv=none; b=s+tAW71egbdQGtKRCja91Hz5AzLRozRqTI72fB9HjuXTtwt6UkvH5A51HISzpF43LVdRBlO5+NKGohYxKK3JZTYD91BjAkTNHflB26rgDbFNSqQBhc8WxzebKM82KQiROjJScD7TfOCXIZ+fyStEy3f9dSBieIRWuwuJPNhDN0M=
+	t=1730300403; cv=none; b=YeBpTLhbMyhe30gP4DjKc0UxWNSc8QuNl/6z60fo7AuRgEYplfspFLkbDbtKqUbyIWh25PCbfepHpmtAPFBDMvWzmr87LG19lspyhlhD+kKJnaIQEkol6NTZMlbaZ07hn0G/jG7QkK71quTPMJ1HkE17wpc1XjMW0wn2aCnNjpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730299618; c=relaxed/simple;
-	bh=NhwqWyY/+B3HNQ4Zf0F1u8UUhwHCc0U85k9UaImZi+M=;
+	s=arc-20240116; t=1730300403; c=relaxed/simple;
+	bh=uoWze0AFqGEBBuJL+IHIOIyHzv7bxNM24tB4dFyRAlU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sLcJyonh3a6/A/8u+8kK5UJVWXz+srXWEvpxYTDrDruN8KJThOjEY5GYxvSzEJC85wDtgKfGRGXxh7cyCw1n3+yKao7CvwbQiAKN+g7xCxP2c9LYMiJhlSyqlgRq4GWnOpoqSr8Qxy0O7Z/+4jA3Y1N2TSj7vWvsizyjjfwfh1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HadkQECS; arc=none smtp.client-ip=209.85.160.177
+	 To:Cc:Content-Type; b=NXjYsodjJ+OTXvrj8DCKTWRZW5Rz/14T67sdYNX/9wJ/PEgA/sMW3Eil+K6JHPmEoMHbLo83jfivszBZ8ncDVpIw1oXSjyA3pniumz1jm6Er3ddrFn2x0Aud5z3HYeN2Zc02W5sYfRcZvk8bw7UI6bDc0CaqsU0WTw0DvMh1W8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2FwYuAiT; arc=none smtp.client-ip=209.85.160.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-460b295b9eeso282771cf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2024 07:46:54 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-460969c49f2so311301cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2024 08:00:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730299613; x=1730904413; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1730300400; x=1730905200; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XuDgcDjnMSaWBwmR/hE5gS6R3pwsgWNYwLcvCI/5raw=;
-        b=HadkQECSYCRg/8LnumacTNk/raXMe1BUBkRjAqiIFZ3LhYHdla5lW61+hqMppRlVtu
-         1zMqviiRosPfa83lGeiIQjtpmRcVDpmn1GcHoxIHJ6JuRhw5SaZB+TP93BW7sPSHgjWL
-         zFEaLbQHGz2shOu+6R8HLkoYV4EYkDc5knGeAs4bKIPPyygsbG5/93BYDvsHlvz/RUyw
-         bkwMSAW71rxHxX8/UKDtgq/QjcZicrXdFc6H9TKfEblOWUqLfB6cQ+YbG1OUJ36yuikZ
-         aQc/Ns/dhOBPx7gwuhlwSfPKx4fJRYNESaq6ECRiKNbdf1ZECi+axbipF3mXQPkxKF2H
-         Reig==
+        bh=JW8S8WBlORDTYGL1pb5mR6Fb+1WUMKbWZMEBW0G2lRs=;
+        b=2FwYuAiTPw15hfw1ZxlQqdEXJDNuxI6K/8wgqjY7aNKve07s9scPeGHuwVhZo20SkS
+         +ELZqdD/nUyott9tkJTDx6ZTAO96DwxvSwi+UkPpG4GQYOHg+k4trxYYHxc0OtVSi7ot
+         g4lQcsY91jF1BnzDd/auiHX5CdDCd+MGTEA7UK9NXl2EEK3VatHzOqxMLB51TTMKxLWT
+         cof1Jdf6YPoNXDVLQb7f6/h/wTxhMZwDxNUetdO2StMzvpwGMGfrmoLkIeskJMmo/i8C
+         fjtXhNbLNZGzWN1Kf9OzFG0kTtVchMx36dx5rfHEreAE2j2ouB2XGgfO0Fl5oFLLYcWX
+         gRLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730299613; x=1730904413;
+        d=1e100.net; s=20230601; t=1730300400; x=1730905200;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XuDgcDjnMSaWBwmR/hE5gS6R3pwsgWNYwLcvCI/5raw=;
-        b=GAgh4e5Ntgu9EBPtp5gTzyHlJTz/TY2y5f3POoVL+aCeCKTGpkjKTYjJ6EVpn/yKtM
-         PGTBrovpnfziupjxFNdYD/mHiuMjsdLhSBo4QlfpIrcIpFHAQkGpAk7TEa5LF4TykT7g
-         kJ7HPf6YxKVoInNvX8mdnp2ONZPzL9cSlW0hCYsBgMebkLjc/uFyF0KvDKT+ePAHz07y
-         QJ15uLT648d3BhLM7g9nkh9XedkMzfeVQRfn/U30FrD1dn9QM6rPMfEMb1XzXtySPVfm
-         HtoFZXMY4XFFamUh1xSeWlgiYbC7mIy452cIrVcx+UGBUN41LxM4isZr2C2q/xKO+MnJ
-         2MRg==
-X-Forwarded-Encrypted: i=1; AJvYcCWfTdhyYnXJI0JmcdoqPQBrCLbvVQ57CRgkclXdujCpFWrLtoWRdEHTzsLXzwI/LyMx6A9OQ6AmrSEpfdMuLLs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8bs42xAApxO68OCWPD4GRaEvEmg1cyIhfP73539g7WQUkayui
-	44a/LH+Hxlc+8aYYNd9q1vAucMnDdf9oKaGxxC8Z5iye1SLCl+2JmOd5lGC6ZkvIZKEdKaZxCbr
-	FyRwGAx3itF4Kz4Ny+DWmYUvQu74FurEvppcW
-X-Gm-Gg: ASbGncveQzRMSfVBl6Sx1NrOFPw+JffGwAZi5Cx6EV1rPzudxoAw8SuCIViWddFl3es
-	7hHY7EDSBk0sURgkDThCJcvgg19I38yY=
-X-Google-Smtp-Source: AGHT+IHO71Bgm3DP3V5XUI+nKDL6o15iOeRQ0hNxysL/MW5H5VlmppL+MsAbA04+c6Sv5xzLC92i8Rvoo7uv21QiiBM=
-X-Received: by 2002:ac8:7d55:0:b0:460:3f4a:40a1 with SMTP id
- d75a77b69052e-46166dc4566mr8035791cf.13.1730299613385; Wed, 30 Oct 2024
- 07:46:53 -0700 (PDT)
+        bh=JW8S8WBlORDTYGL1pb5mR6Fb+1WUMKbWZMEBW0G2lRs=;
+        b=tRR6J9tG9POuIHPatUJP7lNTABDpTU4p6lJyyCAdNVxcJWcDf+ogYdh6duPt47G5nM
+         4nE1q1/q9uENtlTe6lVmF+dpV4Nb+4U//xJIQBXeOjIMLUyHyCoQPlNL7ExtRb0SF+UZ
+         8SSJTsyQpxJ7lxKlSnjAvEmJ30m2fSWpRHrycZl6ykDGal0jTt99OP9qjn4MbbUsY3qc
+         yoq+2rn870HtJmP05bIEFFPeOxZ+jnUMGTqH/9LqTYjlGjUYX5PM4VH2JuwGinfwhXk+
+         YdZCyIHj2LXJ+GowC1Oa7//2UXuT6OcnyWr0OeH7vPb2bbbypE3Q7DcLbPq11THBFmQP
+         CX1g==
+X-Forwarded-Encrypted: i=1; AJvYcCUgWO9QQvGNCXu9tEvX5GZT3ksqictc81S/oD6dzh28EWEePBW6+rxI3uspwP3BLR3Hiwn42nal7m0wjYYDxgA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJvbS1vplqBDIA3UHphUGz9YRODYz3R8ofYqfayBGBJfFt/y2j
+	XEPcOVLRCShdrHZZwrUiGfUbZee2REE4KVvxxXSMvZ2+b5tbimDqDDowdF7StDF2/D0rovA9ICF
+	an1Ra9zwRNttdWZf7NQUNH/rUdoC7gK1L6U9s
+X-Gm-Gg: ASbGnctuLf2U65Mb5BOb+INIXKKM+/m2KnO5kqeFaBVS58iHPFo8Y0lTBSA845x/wKa
+	Ni+YPJSyedG3sNEGAB/AanHFqhwZwm+I=
+X-Google-Smtp-Source: AGHT+IFwQRC1OM1gOyKoR/O/t02TCtvuvF1tbAha8ccPoXgqMdwrxYU0mf40JkfMIXKC4/9HFpcyjbWJ5vMjBZtQKT0=
+X-Received: by 2002:ac8:5d91:0:b0:460:b4e3:49e with SMTP id
+ d75a77b69052e-46166dadbe0mr7711771cf.9.1730300400312; Wed, 30 Oct 2024
+ 08:00:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241029205524.1306364-1-almasrymina@google.com>
- <20241029205524.1306364-2-almasrymina@google.com> <ZyJDxK5stZ_RF71O@mini-arch>
-In-Reply-To: <ZyJDxK5stZ_RF71O@mini-arch>
+References: <20241030142722.2901744-1-sdf@fomichev.me>
+In-Reply-To: <20241030142722.2901744-1-sdf@fomichev.me>
 From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 30 Oct 2024 07:46:41 -0700
-Message-ID: <CAHS8izNKbQHFAHm2Sz=bwwO_A0S_dOLNDff7GTSM=tJiJD2m0A@mail.gmail.com>
-Subject: Re: [PATCH net-next v1 6/7] net: fix SO_DEVMEM_DONTNEED looping too long
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Shuah Khan <shuah@kernel.org>, 
-	Yi Lai <yi1.lai@linux.intel.com>
+Date: Wed, 30 Oct 2024 07:59:48 -0700
+Message-ID: <CAHS8izOBp4yXBg-nOSouD+A7gOGs9MPmdFc9_hB8=Ni0QdeZHg@mail.gmail.com>
+Subject: Re: [PATCH net-next v6 00/12] selftests: ncdevmem: Add ncdevmem to ksft
+To: Stanislav Fomichev <sdf@fomichev.me>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org, 
+	horms@kernel.org, willemb@google.com, petrm@nvidia.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 30, 2024 at 7:33=E2=80=AFAM Stanislav Fomichev <stfomichev@gmai=
-l.com> wrote:
+On Wed, Oct 30, 2024 at 7:27=E2=80=AFAM Stanislav Fomichev <sdf@fomichev.me=
+> wrote:
 >
-> On 10/29, Mina Almasry wrote:
-> > Check we're going to free a reasonable number of frags in token_count
-> > before starting the loop, to prevent looping too long.
-> >
-> > Also minor code cleanups:
-> > - Flip checks to reduce indentation.
-> > - Use sizeof(*tokens) everywhere for consistentcy.
-> >
-> > Cc: Yi Lai <yi1.lai@linux.intel.com>
-> >
-> > Signed-off-by: Mina Almasry <almasrymina@google.com>
-> >
-> > ---
-> >  net/core/sock.c | 46 ++++++++++++++++++++++++++++------------------
-> >  1 file changed, 28 insertions(+), 18 deletions(-)
-> >
-> > diff --git a/net/core/sock.c b/net/core/sock.c
-> > index 7f398bd07fb7..8603b8d87f2e 100644
-> > --- a/net/core/sock.c
-> > +++ b/net/core/sock.c
-> > @@ -1047,11 +1047,12 @@ static int sock_reserve_memory(struct sock *sk,=
- int bytes)
-> >
-> >  #ifdef CONFIG_PAGE_POOL
-> >
-> > -/* This is the number of tokens that the user can SO_DEVMEM_DONTNEED i=
-n
-> > +/* This is the number of frags that the user can SO_DEVMEM_DONTNEED in
-> >   * 1 syscall. The limit exists to limit the amount of memory the kerne=
-l
-> > - * allocates to copy these tokens.
-> > + * allocates to copy these tokens, and to prevent looping over the fra=
-gs for
-> > + * too long.
-> >   */
-> > -#define MAX_DONTNEED_TOKENS 128
-> > +#define MAX_DONTNEED_FRAGS 1024
-> >
-> >  static noinline_for_stack int
-> >  sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int o=
-ptlen)
-> > @@ -1059,43 +1060,52 @@ sock_devmem_dontneed(struct sock *sk, sockptr_t=
- optval, unsigned int optlen)
-> >       unsigned int num_tokens, i, j, k, netmem_num =3D 0;
-> >       struct dmabuf_token *tokens;
-> >       netmem_ref netmems[16];
-> > +     u64 num_frags =3D 0;
-> >       int ret =3D 0;
-> >
-> >       if (!sk_is_tcp(sk))
-> >               return -EBADF;
-> >
-> > -     if (optlen % sizeof(struct dmabuf_token) ||
-> > -         optlen > sizeof(*tokens) * MAX_DONTNEED_TOKENS)
-> > +     if (optlen % sizeof(*tokens) ||
-> > +         optlen > sizeof(*tokens) * MAX_DONTNEED_FRAGS)
-> >               return -EINVAL;
-> >
-> > -     tokens =3D kvmalloc_array(optlen, sizeof(*tokens), GFP_KERNEL);
-> > +     num_tokens =3D optlen / sizeof(*tokens);
-> > +     tokens =3D kvmalloc_array(num_tokens, sizeof(*tokens), GFP_KERNEL=
-);
-> >       if (!tokens)
-> >               return -ENOMEM;
-> >
-> > -     num_tokens =3D optlen / sizeof(struct dmabuf_token);
-> >       if (copy_from_sockptr(tokens, optval, optlen)) {
-> >               kvfree(tokens);
-> >               return -EFAULT;
-> >       }
-> >
-> > +     for (i =3D 0; i < num_tokens; i++) {
-> > +             num_frags +=3D tokens[i].token_count;
-> > +             if (num_frags > MAX_DONTNEED_FRAGS) {
-> > +                     kvfree(tokens);
-> > +                     return -E2BIG;
-> > +             }
-> > +     }
-> > +
-> >       xa_lock_bh(&sk->sk_user_frags);
-> >       for (i =3D 0; i < num_tokens; i++) {
-> >               for (j =3D 0; j < tokens[i].token_count; j++) {
-> >                       netmem_ref netmem =3D (__force netmem_ref)__xa_er=
-ase(
-> >                               &sk->sk_user_frags, tokens[i].token_start=
- + j);
-> >
-> > -                     if (netmem &&
-> > -                         !WARN_ON_ONCE(!netmem_is_net_iov(netmem))) {
-> > -                             netmems[netmem_num++] =3D netmem;
-> > -                             if (netmem_num =3D=3D ARRAY_SIZE(netmems)=
-) {
-> > -                                     xa_unlock_bh(&sk->sk_user_frags);
-> > -                                     for (k =3D 0; k < netmem_num; k++=
-)
-> > -                                             WARN_ON_ONCE(!napi_pp_put=
-_page(netmems[k]));
-> > -                                     netmem_num =3D 0;
-> > -                                     xa_lock_bh(&sk->sk_user_frags);
-> > -                             }
-> > -                             ret++;
+> The goal of the series is to simplify and make it possible to use
+> ncdevmem in an automated way from the ksft python wrapper.
 >
-> [..]
+> ncdevmem is slowly mutated into a state where it uses stdout
+> to print the payload and the python wrapper is added to
+> make sure the arrived payload matches the expected one.
 >
-> > +                     if (!netmem || WARN_ON_ONCE(!netmem_is_net_iov(ne=
-tmem)))
-> > +                             continue;
+> v6:
+> - fix compilation issue in 'Unify error handling' patch (Jakub)
 >
-> Any reason we are not returning explicit error to the callers here?
-> That probably needs some mechanism to signal which particular one failed
-> so the users can restart?
 
-Only because I can't think of a simple way to return an array of frags
-failed to DONTNEED to the user.
+Since I saw a compilation failures on a couple of iterations I
+cherry-picked this locally and tested compilation. I'm seeing this:
 
-Also, this error should be extremely rare or never hit really. I don't
-know how we end up not finding a netmem here or the netmem is page.
-The only way is if the user is malicious (messing with the token ids
-passed to the kernel) or if a kernel bug is happening.
+sudo CFLAGS=3D"-static" make -C ./tools/testing/selftests/drivers/net/hw
+TARGETS=3Dncdevmem 2>&1
+make: Entering directory
+'/usr/local/google/home/almasrymina/cos-kernel/tools/testing/selftests/driv=
+ers/net/hw'
+  CC       ncdevmem
+In file included from ncdevmem.c:63:
+/usr/local/google/home/almasrymina/cos-kernel/tools/testing/selftests/../..=
+/../tools/net/ynl/generated/ethtool-user.h:23:43:
+warning: =E2=80=98enum ethtool_header_flags=E2=80=99 declared inside parame=
+ter list
+will not be visible outside of this definition or declaration
+   23 | const char *ethtool_header_flags_str(enum ethtool_header_flags valu=
+e);
+      |                                           ^~~~~~~~~~~~~~~~~~~~
+/usr/local/google/home/almasrymina/cos-kernel/tools/testing/selftests/../..=
+/../tools/net/ynl/generated/ethtool-user.h:25:41:
+warning: =E2=80=98enum ethtool_module_fw_flash_status=E2=80=99 declared ins=
+ide
+parameter list will not be visible outside of this definition or
+declaration
+   25 | ethtool_module_fw_flash_status_str(enum
+ethtool_module_fw_flash_status value);
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~
+/usr/local/google/home/almasrymina/cos-kernel/tools/testing/selftests/../..=
+/../tools/net/ynl/generated/ethtool-user.h:6766:45:
+error: field =E2=80=98status=E2=80=99 has incomplete type
+ 6766 |         enum ethtool_module_fw_flash_status status;
+      |                                             ^~~~~~
+ncdevmem.c: In function =E2=80=98do_server=E2=80=99:
+ncdevmem.c:517:37: error: storage size of =E2=80=98token=E2=80=99 isn=E2=80=
+=99t known
+  517 |                 struct dmabuf_token token;
+      |                                     ^~~~~
+ncdevmem.c:542:47: error: =E2=80=98SCM_DEVMEM_DMABUF=E2=80=99 undeclared (f=
+irst use in
+this function)
+  542 |                             (cm->cmsg_type !=3D SCM_DEVMEM_DMABUF &=
+&
+      |                                               ^~~~~~~~~~~~~~~~~
+ncdevmem.c:542:47: note: each undeclared identifier is reported only
+once for each function it appears in
+ncdevmem.c:543:47: error: =E2=80=98SCM_DEVMEM_LINEAR=E2=80=99 undeclared (f=
+irst use in
+this function)
+  543 |                              cm->cmsg_type !=3D SCM_DEVMEM_LINEAR))=
+ {
+      |                                               ^~~~~~~~~~~~~~~~~
+ncdevmem.c:557:52: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  557 |                                         dmabuf_cmsg->frag_size);
+      |                                                    ^~
+ncdevmem.c:562:56: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  562 |                         token.token_start =3D dmabuf_cmsg->frag_tok=
+en;
+      |                                                        ^~
+ncdevmem.c:566:42: error: =E2=80=98SO_DEVMEM_DONTNEED=E2=80=99 undeclared (=
+first use
+in this function)
+  566 |                                          SO_DEVMEM_DONTNEED, &token=
+,
+      |                                          ^~~~~~~~~~~~~~~~~~
+ncdevmem.c:573:56: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  573 |                         token.token_start =3D dmabuf_cmsg->frag_tok=
+en;
+      |                                                        ^~
+ncdevmem.c:576:54: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  576 |                         total_received +=3D dmabuf_cmsg->frag_size;
+      |                                                      ^~
+ncdevmem.c:579:44: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  579 |                                 dmabuf_cmsg->frag_offset >> PAGE_SH=
+IFT,
+      |                                            ^~
+ncdevmem.c:580:44: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  580 |                                 dmabuf_cmsg->frag_offset %
+getpagesize(),
+      |                                            ^~
+ncdevmem.c:581:44: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  581 |                                 dmabuf_cmsg->frag_offset,
+      |                                            ^~
+ncdevmem.c:582:44: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  582 |                                 dmabuf_cmsg->frag_size,
+dmabuf_cmsg->frag_token,
+      |                                            ^~
+ncdevmem.c:582:68: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  582 |                                 dmabuf_cmsg->frag_size,
+dmabuf_cmsg->frag_token,
+      |                                                                    =
+^~
+ncdevmem.c:583:60: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  583 |                                 total_received, dmabuf_cmsg->dmabuf=
+_id);
+      |                                                            ^~
+ncdevmem.c:585:40: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  585 |                         if (dmabuf_cmsg->dmabuf_id !=3D dmabuf_id)
+      |                                        ^~
+ncdevmem.c:589:40: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  589 |                         if (dmabuf_cmsg->frag_size % getpagesize())
+      |                                        ^~
+ncdevmem.c:595:65: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  595 |
+dmabuf_cmsg->frag_offset,
+      |                                                                 ^~
+ncdevmem.c:596:65: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  596 |
+dmabuf_cmsg->frag_size);
+      |                                                                 ^~
+ncdevmem.c:601:60: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  601 |
+dmabuf_cmsg->frag_offset,
+      |                                                            ^~
+ncdevmem.c:602:52: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  602 |                                         dmabuf_cmsg->frag_size);
+      |                                                    ^~
+ncdevmem.c:604:73: error: invalid use of undefined type =E2=80=98struct dma=
+buf_cmsg=E2=80=99
+  604 |                                 print_nonzero_bytes(tmp_mem,
+dmabuf_cmsg->frag_size);
+      |
+         ^~
+make: *** [../../../lib.mk:222:
+/usr/local/google/home/almasrymina/cos-kernel/tools/testing/selftests/drive=
+rs/net/hw/ncdevmem]
+Error 1
+make: Leaving directory
+'/usr/local/google/home/almasrymina/cos-kernel/tools/testing/selftests/driv=
+ers/net/hw'
 
-Also, the information is useless to the user. If the user sees 'frag
-128 failed to free'. There is nothing really the user can do to
-recover at runtime. Only usefulness that could come is for the user to
-log the error. We already WARN_ON_ONCE on the error the user would not
-be able to trigger.
-
---=20
-Thanks,
-Mina
+The errors are still there even without the CFLAGS=3D"-static". Can you
+take a look before merge?
 
