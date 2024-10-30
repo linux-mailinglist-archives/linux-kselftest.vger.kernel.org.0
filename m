@@ -1,180 +1,194 @@
-Return-Path: <linux-kselftest+bounces-21120-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21121-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 275659B65E4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 15:31:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A6239B6615
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 15:36:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5F89284733
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 14:31:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B2C91F20F95
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 14:36:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF9381FA270;
-	Wed, 30 Oct 2024 14:27:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5AA21EE039;
+	Wed, 30 Oct 2024 14:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ew12GuLe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C641F9EBB;
-	Wed, 30 Oct 2024 14:27:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4EB61E7C12;
+	Wed, 30 Oct 2024 14:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730298462; cv=none; b=mytIsM66lT+8MwoTw3CxY6pvwI6M+0DjA3itQTiZQ+ZetIrhHlHMvHtObvGyBVARII4n1uYmyrwH6pfqzh8kbsTC+aPUGRIEt+u477VI0zILPWx/w19heb9Im96wZCvVtf3nDcSDovbZF9cdxOu3tl1Mv/4ivAE3lnC+5EOuxJs=
+	t=1730298823; cv=none; b=TaT511c9SdOYBc3GfHwn9u5y2rFV6nTqf8v7lbu6cyq1LYX12mzALnVAA3zpd2tn2WGveXeJ+SHV7xPAhOxPIFtFK1EnNjlpli3xz/3JhtxFlbI576uJE3C6T2aFvpcc5ZLUsUCtGV3vTbCx/3QMK/5Llv7mLWrrbQNytohF8Ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730298462; c=relaxed/simple;
-	bh=k3NksgKMGGwSiQjqqQDiIoWxu2o4MtjaGnPwO3kHGQE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kFtt4t+Q4WPxNHpNJw1/wK+1xPlY6hFhzTZaGE3R3dCKh2qgH17TwxMMeV08+EcJaOtpzX+l+BMu6VcavXg4da7/zlm8JrdyXNpkqF3uEuI6Czex2zOeXH9J4ML9GtcfinUyqFAY217wiRN3uNjNeHL8THuKvsFHEDVC3EKmA04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
+	s=arc-20240116; t=1730298823; c=relaxed/simple;
+	bh=GdrLnAcoyLbuyIkP4M7EWVlAvKcTHkaUfN511LRxwPA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xty+wTzYGywlm2PSuIMg6C00qh8V5XVNAiSWGHuBXz8gC1mhWjY91yKa8tVbQtdlVrn7w++oKg9u2YjYTotvNhNXrqu5YVG5pT6XZ+1BVKJf8uA/7bnwZYMb4t+wf2I4pWaD68MdK2/A0yYgY1w2KNWiLKnTyJhNuSTTKMLJpD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ew12GuLe; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-7ea76a12c32so5144035a12.1;
-        Wed, 30 Oct 2024 07:27:40 -0700 (PDT)
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7ee020ec76dso2486901a12.3;
+        Wed, 30 Oct 2024 07:33:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730298821; x=1730903621; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kdt8y8wCusL4+S51EkCSh7l/zTm5/WwfbbuBF+5V9wY=;
+        b=Ew12GuLe1KJgiX5Fh3SwLWcgqGnMDPDHEjYkjYWP2JThQODnTU8tVMDlT0yhJ3Sidb
+         nTXc/mvTNYHGCLySHazgGrCE7KbZHYs9QJbRkUYtmJwSf8PR0VcEMuS29zYqKfAXgMzW
+         THLlzrzq47EpnO1eWMLQ+ifJ9HouiTyyPI9LHA76H5lDGHYt8A8J3u3c+lkGG3CaoaiA
+         3QAP0Sm9l/RMAX8VaEMRzSL0veydKGLLtIwDAbI2VDzaZ8wxIFaL8WatoHmmlhyz0HIA
+         CmqyU0D0szzJQk8k68tRwQz6j4BcVXDGM5j3LTnDBRsbun+Wu6/ghn2SttOUPlqSuQpK
+         qZKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730298459; x=1730903259;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X3YqyV0YwGuilWF+8lpqEcTlB/FpyMoTdw0SNw6nZVo=;
-        b=hBWfQHUe7ygOTl1jFrJirurdos6WzAOSd/MKc/YiyZKZ2ffCNcSfAm2dZuzOFPvyCu
-         P5tctNe6eqBpn0i/Ve4X/RyII3Bu8ICBiX144M4Jf+Jw+t7C3RwaiWicdD7yPq4uS+Bv
-         oD/A1bNXkf42wT3M56fQm3V9R8ifBb2LtPQkNgjYouKBudPcB0fKqAUGTCh/QnXGpvxd
-         3tFaJhllDYUuuwclRbYw5WmBQvrDNeJ2jHOGEpRJX6AxNF8VrSDES9xDb/rFwczsB5sH
-         beLSzgwEOfnebQecLQeu3WztYRJ0NjxGzlO3OCU9Qbz5gu1+Sh6eIjM3NnUf8KDtggRA
-         DhWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVB8bx/Zax0THTk5tQFirphC46sRUjY0de91fjjhYgIeGMBFQif8bxTjbrpOg8X7c0xwASl/2oqqY1pMF9Y8Wel@vger.kernel.org, AJvYcCWDbiv8eSNXEK3zxE4Q1xTqYz5lpGWhP+tWCZw1CPugducTNEJZ620tvcic3Zz/o6QRudX+xmpSD3jJy1c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqUdSIf3ttiAdSEbPwlnFHxU0s/geonF8ZMTGzaG7VGUCn41Y9
-	qhAm8VARWliLwC+BTLfEDR/PiDIRkI4djCV9zMT1rUnPoqASQNt9zVQRerc=
-X-Google-Smtp-Source: AGHT+IFa0T3NhLLZTVYB47aMtxMkeD80BrpeKBP22/0bqgcXxhS+vEBtm3n6X1TYaNAhdmXADKD2sQ==
-X-Received: by 2002:a05:6a21:1707:b0:1d9:d8d:d0a4 with SMTP id adf61e73a8af0-1d9a83a913emr19237362637.9.1730298459536;
-        Wed, 30 Oct 2024 07:27:39 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1730298821; x=1730903621;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Kdt8y8wCusL4+S51EkCSh7l/zTm5/WwfbbuBF+5V9wY=;
+        b=AxcOPgH7HMkb9lBVNwdf0r04lOMLrd4LkvoCftKcCm50Z1oY0qRYCdlPPJsyrXoebS
+         l/LIcGxQD08KuG58b/mz1llNrkEOai4fEyYvhNSx8SQNPNlI9RqdgcumZefqFErWhXI3
+         Q5Wv1pvrZ9BPgscvAZ8E9MfWMx0npwQp/FxQjyoMQsGvZkZPtKzLUKMvGlkj3mbBUwSM
+         /Ij1oUXudSeNA75AqpESgkKatCC3l12Y3m5+wimWgEQT+xXfcMdQ2hlOlz3ukN3oad9V
+         zkk5oz76MnHestzpPx+iJmXyI0pRe8l156fQtprQN+eGmgv9ajWuq4ZZgZiVewSN/tgw
+         4y1w==
+X-Forwarded-Encrypted: i=1; AJvYcCUTrPX5Olgw0GYccVRGkrk8IJEjUe0Q6csR+ZQwKk58SmEPO+x7EGQSTHRpOEkULrXrIpCZ6+FEOgPfX0g=@vger.kernel.org, AJvYcCXC8xOotc+U1cPbfpjY0TRIbaEbD7QoPBHBIA44uSQdjm9sS1qMfRdbF/0suXmPDjZvSN1EgF7ebczVd7DrpRqq@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsUVF412BlAE388VdpeEVESi8SJVmPemNDlqUa77HEnp9gJgWd
+	jhzNWTP2g7q6JVK8n7rBAT/KhYvQOhvLt+VVOgDPEnOKyEUlKMc=
+X-Google-Smtp-Source: AGHT+IEve8HxoMBLYPBXREW/IQ8rQr+VlBoXiX0uAQiQOUjrlCCv7vNIOQoUXXJ5gLY/N23zW/Vv6g==
+X-Received: by 2002:a05:6a20:c793:b0:1d8:d613:7d6f with SMTP id adf61e73a8af0-1d9a83a9a56mr20896378637.4.1730298821018;
+        Wed, 30 Oct 2024 07:33:41 -0700 (PDT)
 Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720579397d8sm9346440b3a.86.2024.10.30.07.27.38
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72057a20f9asm9627350b3a.170.2024.10.30.07.33.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2024 07:27:39 -0700 (PDT)
-From: Stanislav Fomichev <sdf@fomichev.me>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	linux-kernel@vger.kernel.org,
+        Wed, 30 Oct 2024 07:33:40 -0700 (PDT)
+Date: Wed, 30 Oct 2024 07:33:40 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	andrew+netdev@lunn.ch,
-	shuah@kernel.org,
-	horms@kernel.org,
-	sdf@fomichev.me,
-	almasrymina@google.com,
-	willemb@google.com,
-	petrm@nvidia.com
-Subject: [PATCH net-next v6 12/12] selftests: ncdevmem: Add automated test
-Date: Wed, 30 Oct 2024 07:27:22 -0700
-Message-ID: <20241030142722.2901744-13-sdf@fomichev.me>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241030142722.2901744-1-sdf@fomichev.me>
-References: <20241030142722.2901744-1-sdf@fomichev.me>
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Shuah Khan <shuah@kernel.org>, Yi Lai <yi1.lai@linux.intel.com>
+Subject: Re: [PATCH net-next v1 6/7] net: fix SO_DEVMEM_DONTNEED looping too
+ long
+Message-ID: <ZyJDxK5stZ_RF71O@mini-arch>
+References: <20241029205524.1306364-1-almasrymina@google.com>
+ <20241029205524.1306364-2-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241029205524.1306364-2-almasrymina@google.com>
 
-Only RX side for now and small message to test the setup.
-In the future, we can extend it to TX side and to testing
-both sides with a couple of megs of data.
+On 10/29, Mina Almasry wrote:
+> Check we're going to free a reasonable number of frags in token_count
+> before starting the loop, to prevent looping too long.
+> 
+> Also minor code cleanups:
+> - Flip checks to reduce indentation.
+> - Use sizeof(*tokens) everywhere for consistentcy.
+> 
+> Cc: Yi Lai <yi1.lai@linux.intel.com>
+> 
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> 
+> ---
+>  net/core/sock.c | 46 ++++++++++++++++++++++++++++------------------
+>  1 file changed, 28 insertions(+), 18 deletions(-)
+> 
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 7f398bd07fb7..8603b8d87f2e 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -1047,11 +1047,12 @@ static int sock_reserve_memory(struct sock *sk, int bytes)
+> 
+>  #ifdef CONFIG_PAGE_POOL
+> 
+> -/* This is the number of tokens that the user can SO_DEVMEM_DONTNEED in
+> +/* This is the number of frags that the user can SO_DEVMEM_DONTNEED in
+>   * 1 syscall. The limit exists to limit the amount of memory the kernel
+> - * allocates to copy these tokens.
+> + * allocates to copy these tokens, and to prevent looping over the frags for
+> + * too long.
+>   */
+> -#define MAX_DONTNEED_TOKENS 128
+> +#define MAX_DONTNEED_FRAGS 1024
+> 
+>  static noinline_for_stack int
+>  sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
+> @@ -1059,43 +1060,52 @@ sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
+>  	unsigned int num_tokens, i, j, k, netmem_num = 0;
+>  	struct dmabuf_token *tokens;
+>  	netmem_ref netmems[16];
+> +	u64 num_frags = 0;
+>  	int ret = 0;
+> 
+>  	if (!sk_is_tcp(sk))
+>  		return -EBADF;
+> 
+> -	if (optlen % sizeof(struct dmabuf_token) ||
+> -	    optlen > sizeof(*tokens) * MAX_DONTNEED_TOKENS)
+> +	if (optlen % sizeof(*tokens) ||
+> +	    optlen > sizeof(*tokens) * MAX_DONTNEED_FRAGS)
+>  		return -EINVAL;
+> 
+> -	tokens = kvmalloc_array(optlen, sizeof(*tokens), GFP_KERNEL);
+> +	num_tokens = optlen / sizeof(*tokens);
+> +	tokens = kvmalloc_array(num_tokens, sizeof(*tokens), GFP_KERNEL);
+>  	if (!tokens)
+>  		return -ENOMEM;
+> 
+> -	num_tokens = optlen / sizeof(struct dmabuf_token);
+>  	if (copy_from_sockptr(tokens, optval, optlen)) {
+>  		kvfree(tokens);
+>  		return -EFAULT;
+>  	}
+> 
+> +	for (i = 0; i < num_tokens; i++) {
+> +		num_frags += tokens[i].token_count;
+> +		if (num_frags > MAX_DONTNEED_FRAGS) {
+> +			kvfree(tokens);
+> +			return -E2BIG;
+> +		}
+> +	}
+> +
+>  	xa_lock_bh(&sk->sk_user_frags);
+>  	for (i = 0; i < num_tokens; i++) {
+>  		for (j = 0; j < tokens[i].token_count; j++) {
+>  			netmem_ref netmem = (__force netmem_ref)__xa_erase(
+>  				&sk->sk_user_frags, tokens[i].token_start + j);
+> 
+> -			if (netmem &&
+> -			    !WARN_ON_ONCE(!netmem_is_net_iov(netmem))) {
+> -				netmems[netmem_num++] = netmem;
+> -				if (netmem_num == ARRAY_SIZE(netmems)) {
+> -					xa_unlock_bh(&sk->sk_user_frags);
+> -					for (k = 0; k < netmem_num; k++)
+> -						WARN_ON_ONCE(!napi_pp_put_page(netmems[k]));
+> -					netmem_num = 0;
+> -					xa_lock_bh(&sk->sk_user_frags);
+> -				}
+> -				ret++;
 
-  make \
-  	-C tools/testing/selftests \
-  	TARGETS="drivers/hw/net" \
-  	install INSTALL_PATH=~/tmp/ksft
+[..]
 
-  scp ~/tmp/ksft ${HOST}:
-  scp ~/tmp/ksft ${PEER}:
+> +			if (!netmem || WARN_ON_ONCE(!netmem_is_net_iov(netmem)))
+> +				continue;
 
-  cfg+="NETIF=${DEV}\n"
-  cfg+="LOCAL_V6=${HOST_IP}\n"
-  cfg+="REMOTE_V6=${PEER_IP}\n"
-  cfg+="REMOTE_TYPE=ssh\n"
-  cfg+="REMOTE_ARGS=root@${PEER}\n"
-
-  echo -e "$cfg" | ssh root@${HOST} "cat > ksft/drivers/net/net.config"
-  ssh root@${HOST} "cd ksft && ./run_kselftest.sh -t drivers/net:devmem.py"
-
-Reviewed-by: Mina Almasry <almasrymina@google.com>
-Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
----
- .../testing/selftests/drivers/net/hw/Makefile |  1 +
- .../selftests/drivers/net/hw/devmem.py        | 45 +++++++++++++++++++
- 2 files changed, 46 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/hw/devmem.py
-
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index 182348f4bd40..1c6a77480923 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -3,6 +3,7 @@
- TEST_PROGS = \
- 	csum.py \
- 	devlink_port_split.py \
-+	devmem.py \
- 	ethtool.sh \
- 	ethtool_extended_state.sh \
- 	ethtool_mm.sh \
-diff --git a/tools/testing/selftests/drivers/net/hw/devmem.py b/tools/testing/selftests/drivers/net/hw/devmem.py
-new file mode 100755
-index 000000000000..1416c31ff81e
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/hw/devmem.py
-@@ -0,0 +1,45 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+from lib.py import ksft_run, ksft_exit
-+from lib.py import ksft_eq, KsftSkipEx
-+from lib.py import NetDrvEpEnv
-+from lib.py import bkg, cmd, rand_port, wait_port_listen
-+from lib.py import ksft_disruptive
-+
-+
-+def require_devmem(cfg):
-+    if not hasattr(cfg, "_devmem_probed"):
-+        port = rand_port()
-+        probe_command = f"./ncdevmem -f {cfg.ifname}"
-+        cfg._devmem_supported = cmd(probe_command, fail=False, shell=True).ret == 0
-+        cfg._devmem_probed = True
-+
-+    if not cfg._devmem_supported:
-+        raise KsftSkipEx("Test requires devmem support")
-+
-+
-+@ksft_disruptive
-+def check_rx(cfg) -> None:
-+    cfg.require_v6()
-+    require_devmem(cfg)
-+
-+    port = rand_port()
-+    listen_cmd = f"./ncdevmem -l -f {cfg.ifname} -s {cfg.v6} -p {port}"
-+
-+    with bkg(listen_cmd) as nc:
-+        wait_port_listen(port)
-+        cmd(f"echo -e \"hello\\nworld\"| nc {cfg.v6} {port}", host=cfg.remote, shell=True)
-+
-+    ksft_eq(nc.stdout.strip(), "hello\nworld")
-+
-+
-+def main() -> None:
-+    with NetDrvEpEnv(__file__) as cfg:
-+        ksft_run([check_rx],
-+                 args=(cfg, ))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
--- 
-2.47.0
-
+Any reason we are not returning explicit error to the callers here?
+That probably needs some mechanism to signal which particular one failed
+so the users can restart?
 
