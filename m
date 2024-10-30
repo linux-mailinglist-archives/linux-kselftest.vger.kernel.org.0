@@ -1,408 +1,229 @@
-Return-Path: <linux-kselftest+bounces-21125-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21126-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8F889B66BF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 16:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C1D119B66FF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 16:07:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3812A1F21B7B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 15:00:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 453C61F2169E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2024 15:07:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B69CD1F4729;
-	Wed, 30 Oct 2024 15:00:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90A80200B8D;
+	Wed, 30 Oct 2024 15:07:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZfpRA9zD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cyKqntCY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE5E439FD6;
-	Wed, 30 Oct 2024 15:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 516431F4737;
+	Wed, 30 Oct 2024 15:07:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730300424; cv=none; b=s7Vve80t5y8qCwDZYKxCzr5sYc8tkjLP9nMqoTuCWAKPkHBcGUK0tcNX18odWxocXNChVrkowTJV4+5DJXLZQUuLCFzVb/ldVGIWXJEJFwtb8ADmipkJMR7pezU3DTNkAzFk4o0sXsP0t7ra4RYjJFKRvopDRgfnPI6NVDg/cMQ=
+	t=1730300822; cv=none; b=JM/oFXC2z7ib7gBEQ+LaNQ56xwKOgGg3YjhRL6N08tpwVEOtBJZliazX2wNNwDmG/+A+PGyHnVlH1wXPRvlbN9bPMZfu96GLUTEG7tOi9mwP2NvC6hPW3lJ3pt+kxRMwUsqtDBAPQLTj2QA2SNQuwhflJTNzdxOYQUc/pU3gx5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730300424; c=relaxed/simple;
-	bh=+rRcm/+lwSj8hWVg0dE37lMtT1/fgx5HJ7K0cdIA8OU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DekM8KHAwa4M2Nl3w+NvU8I5cuySkyNesdZgurFtolcWy5g3ntDnAFMu2NOO7N6ZDnhR/BTbDDhjwEDxWRmHXvnHh9N6EuxKlIto/56rZDJsY1wzBtX/WW7/DD/DefUij2haQt8X95g5SA0lwvhKn/ULAidrU9CuwEGW5p06yII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZfpRA9zD; arc=none smtp.client-ip=209.85.218.41
+	s=arc-20240116; t=1730300822; c=relaxed/simple;
+	bh=voi/WMWGAYJexGuW4J0qxHijwgOTwDVYv2O9Z9zK46s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rWE9PizQZ6xnT9apn+gnMFU6ZE0+CP9lpWQT1cylZfzN3zUJ85iAXP7ZOFL+wjisdVBaqZCx/ZoH3aOKAKzctz5LSElMOO+KXjRAAf6nCYg1OXrD8fr3qf8TBYE33l+D+Ocjz1OumTL2Zd3cFrWZ0D35MEz76VpAyW4VLy2Oq2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cyKqntCY; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a99f646ff1bso849163666b.2;
-        Wed, 30 Oct 2024 08:00:21 -0700 (PDT)
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-71e61b47c6cso5500439b3a.2;
+        Wed, 30 Oct 2024 08:07:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730300420; x=1730905220; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pq4Crpai+j8EarT4yJAmPFOWuTkKpFLe4uskxwo42T4=;
-        b=ZfpRA9zDavl3J/LaQDT8j7vw59x0dBLtMo+ukPw7E7fncdFW35R8cI/rlvN6KwYfVK
-         c+cYaqOVw61AGgXCfEu/xgPk/myX5M/1+LJPzksflmH8VmBhVDTVT41/W4FTMeKdJx1a
-         BrW7z+1L/OeoCgZzfLofGa0ZXDtipDnOvAo15sgexuvjapbK/SFyT6yzMd/VlCjfdW9R
-         GSEW7x1dARuglp/JmH7E9YenrTxxTqel5qNx56UoR9rTG1TDWna8VzjBSiCkZL6Y5zmS
-         zh0o9+gGtZ15cHWAIBhyyMyoohmq2hrKHU6YByqVMyxuHHQB8/JAz9kR1E9EGJ16oLMd
-         37Yg==
+        d=gmail.com; s=20230601; t=1730300820; x=1730905620; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MB84HWvBH3NxPapEB0SefI1X/ByDzD9jXGtFhi1lXmQ=;
+        b=cyKqntCYqWa4Wuv75ghJh3/5k5omadFPBjrnJxLOjzbe05Z3dIfNDIB1Mvkcxdojma
+         3Xym7OAJwAEiV28ywilcldB6vdAqhFGcGj1j43P6HT/MI+SmaTMBmjazdkkPlZC0U1xH
+         aMj9w76fLpuEZhKQ5spEKOs3rP3daTJ0vHdSQWNm4WdFMUj/7nvfMsTr9LNOSWD068FH
+         Aw9pES6+TC1dxBJn8xkFkwDZH4CC9hwDx53mTwWIA/xl11W8ubgdf+KQSbNFs/nV5bc0
+         vtiVvSuYE0DUgxLKhXAWu6dJ029WCdmR1g0L+pYNu1dIWi05zKhqfZ5otUgMczR140y0
+         XBOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730300420; x=1730905220;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Pq4Crpai+j8EarT4yJAmPFOWuTkKpFLe4uskxwo42T4=;
-        b=peA/W6f0QtHBpjmQdcIZgv5fX9ijAQQBCb5SNPbXJzCVpsiDsJKdXgZhfVa20dMn7T
-         v9PVR5tS4H/1jqRjlc5JgNQuvBfoyKaFxzkyVxnmZ5YAnwtrX+TKnRWWmTrACN3rnl60
-         IBkCSsscA1gn1OXJJ69zD1XsMQ6urvQw+exRnrLF1ioAcO9UyCgA6fmYJNm5yP4TaohP
-         dKIZAMBy9R8wmd5MriSrd/0N11uPHvQ1Dj6C36m0qaanmYOcYJfhoQDT0e+XRuPqtqtq
-         JZTmNlPdZA5fSOmLL18PYuMHfjIsJYta5jCi8A1sabCHHCgYVyN+ZPsjFIHCqdlD5JsH
-         2R1A==
-X-Forwarded-Encrypted: i=1; AJvYcCVyBYdP1aJsE2dUobaw/hom5cP6jPMnzCDE9w9Ms5qYrSWqpjVG9GlxtXCBDLXtE+WBxow=@vger.kernel.org, AJvYcCWyfhR33kIVgbnXn30gRRBE4EB9s2rCptAQsj1Bf4oVN1DM60a6DBQ/5hTpDnPwEsXrA/s5nAGpEvHM5BwO@vger.kernel.org, AJvYcCX8O/bg4UQsCks2Mnh7JIooQeRykN3ZDwF/SHI1Bwjaf2uTujjxbEWJHEY31yw3viTnR/jLS6z36Z3Jrv9SRIzZ4Cm1@vger.kernel.org, AJvYcCXb85vtmKjuF8anqY0AfirovBJDY3DZhL2JmrsQiwAMmpfBdi6aE7oHshoNEgp5ZNRxAKP4YeZRmLr1FpcWmY5A@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsI8p4DNUCawYcaWPEYID3v/ubEFiMChTkBU2jyKndG7Rees0K
-	+DZ/2nLwoUvmr5NdvJg+0Jg3eOp2OnZEXlbQzgtnQHqrlVCMR0+5n+FNqudzYXFQC8t+BVfWXR8
-	rMtNsO5Y9WecsDvw2Zo042QzadEQ=
-X-Google-Smtp-Source: AGHT+IGdDp7OKx8EOkzr8ntq+WhIBI9ptYcflNyLOYd8E1VLYMxkIsNJogF+SSt30ez+eTw1pHxkwBLFGvonAH39H0E=
-X-Received: by 2002:a17:907:3202:b0:a9a:1a6a:b5f5 with SMTP id
- a640c23a62f3a-a9e3a7f0abamr367067766b.56.1730300419761; Wed, 30 Oct 2024
- 08:00:19 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1730300820; x=1730905620;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MB84HWvBH3NxPapEB0SefI1X/ByDzD9jXGtFhi1lXmQ=;
+        b=Z+IkyylVhvvzkWlGLQPOsvzSZHGWPeth90IPoJGLsE9P8DBLnLLvkuEeEfHYy9rPKQ
+         knlo2S5msTH3/w88GzhArz8ou7ms+bqqw3OAPVq5dNbD7bJooUd9RZUqCEBxRoi8gECJ
+         PRubGiGrVhVk9g1hlw4Al9PUoudN5kDMduDckGlOvQoJRhtpxF5mTRlTQ/K0MsZOvtIk
+         nVeKHU+anxXbb9htvxmyX36m0TetKsW3fhIolbwNsOd7ORY0UCEfdAjiV1m+9iU7mOyh
+         ROxgrc3wxc6YpjuMduqhR3E5MJAJnY5kTOUs4TK5sOY4dcL2fZoJYx8jvSwKek0cOhqg
+         J59Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU/Ok/PZDmOgKfwyf2sfsNsv+pugL+D7HpAjcEsIdey7ITwiPw+sB5JYw6Xn8gwbus7dOOBHkl5DB3jiZh2wf2G@vger.kernel.org, AJvYcCWZW/1IHF7OO6/rsw8ssdaC9J1YHicvXa3x8ByaMh0JRZ5FIb1B/Fku4i2zEwFAvgTm3VlRovW05wSQnYc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyv2mzWKdVS6DRIcLArLHmas5JBJF3XqSl0okL7ol0RLZ10kTy9
+	I7RuccRJF7lsZAieXw1sO1t9Vx3lntNqx6+L3Mihn9bYjrK2QzQ=
+X-Google-Smtp-Source: AGHT+IHWQsFYQ+/1CjBOC2KuLnSgq+FLfdQk+eaCTU+JoZgp3d066RPg8EvTg7d1ZDBQIPuOzRDRIQ==
+X-Received: by 2002:a05:6a00:3929:b0:71e:2a0:b0d0 with SMTP id d2e1a72fcca58-72062fd4b4bmr22516404b3a.13.1730300819407;
+        Wed, 30 Oct 2024 08:06:59 -0700 (PDT)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72057a1fc16sm9393619b3a.161.2024.10.30.08.06.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Oct 2024 08:06:59 -0700 (PDT)
+Date: Wed, 30 Oct 2024 08:06:58 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Shuah Khan <shuah@kernel.org>, Yi Lai <yi1.lai@linux.intel.com>
+Subject: Re: [PATCH net-next v1 6/7] net: fix SO_DEVMEM_DONTNEED looping too
+ long
+Message-ID: <ZyJLkn3uM1Qz6NZn@mini-arch>
+References: <20241029205524.1306364-1-almasrymina@google.com>
+ <20241029205524.1306364-2-almasrymina@google.com>
+ <ZyJDxK5stZ_RF71O@mini-arch>
+ <CAHS8izNKbQHFAHm2Sz=bwwO_A0S_dOLNDff7GTSM=tJiJD2m0A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241029002208.1947947-1-dolinux.peng@gmail.com>
- <20241029002208.1947947-3-dolinux.peng@gmail.com> <CAEf4BzYBffp+47SLaV5sMWVAVSbxyDX3DnNoOju1y9wr+wupeQ@mail.gmail.com>
-In-Reply-To: <CAEf4BzYBffp+47SLaV5sMWVAVSbxyDX3DnNoOju1y9wr+wupeQ@mail.gmail.com>
-From: Donglin Peng <dolinux.peng@gmail.com>
-Date: Wed, 30 Oct 2024 23:00:07 +0800
-Message-ID: <CAErzpmsyV46Pexj3CUCSaX+MzckoKSAe9D3eeEcTGK8m5BKJUg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] bpf: Using binary search to improve the
- performance of btf_find_by_name_kind
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, rostedt@goodmis.org, 
-	mhiramat@kernel.org, bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHS8izNKbQHFAHm2Sz=bwwO_A0S_dOLNDff7GTSM=tJiJD2m0A@mail.gmail.com>
 
-On Wed, Oct 30, 2024 at 6:13=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Oct 28, 2024 at 5:22=E2=80=AFPM Donglin Peng <dolinux.peng@gmail.=
-com> wrote:
+On 10/30, Mina Almasry wrote:
+> On Wed, Oct 30, 2024 at 7:33 AM Stanislav Fomichev <stfomichev@gmail.com> wrote:
 > >
-> > Currently, we are only using the linear search method to find the type =
-id
-> > by the name, which has a time complexity of O(n). This change involves
-> > sorting the names of btf types in ascending order and using binary sear=
-ch,
-> > which has a time complexity of O(log(n)). This idea was inspired by the
-> > following patch:
+> > On 10/29, Mina Almasry wrote:
+> > > Check we're going to free a reasonable number of frags in token_count
+> > > before starting the loop, to prevent looping too long.
+> > >
+> > > Also minor code cleanups:
+> > > - Flip checks to reduce indentation.
+> > > - Use sizeof(*tokens) everywhere for consistentcy.
+> > >
+> > > Cc: Yi Lai <yi1.lai@linux.intel.com>
+> > >
+> > > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> > >
+> > > ---
+> > >  net/core/sock.c | 46 ++++++++++++++++++++++++++++------------------
+> > >  1 file changed, 28 insertions(+), 18 deletions(-)
+> > >
+> > > diff --git a/net/core/sock.c b/net/core/sock.c
+> > > index 7f398bd07fb7..8603b8d87f2e 100644
+> > > --- a/net/core/sock.c
+> > > +++ b/net/core/sock.c
+> > > @@ -1047,11 +1047,12 @@ static int sock_reserve_memory(struct sock *sk, int bytes)
+> > >
+> > >  #ifdef CONFIG_PAGE_POOL
+> > >
+> > > -/* This is the number of tokens that the user can SO_DEVMEM_DONTNEED in
+> > > +/* This is the number of frags that the user can SO_DEVMEM_DONTNEED in
+> > >   * 1 syscall. The limit exists to limit the amount of memory the kernel
+> > > - * allocates to copy these tokens.
+> > > + * allocates to copy these tokens, and to prevent looping over the frags for
+> > > + * too long.
+> > >   */
+> > > -#define MAX_DONTNEED_TOKENS 128
+> > > +#define MAX_DONTNEED_FRAGS 1024
+> > >
+> > >  static noinline_for_stack int
+> > >  sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
+> > > @@ -1059,43 +1060,52 @@ sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
+> > >       unsigned int num_tokens, i, j, k, netmem_num = 0;
+> > >       struct dmabuf_token *tokens;
+> > >       netmem_ref netmems[16];
+> > > +     u64 num_frags = 0;
+> > >       int ret = 0;
+> > >
+> > >       if (!sk_is_tcp(sk))
+> > >               return -EBADF;
+> > >
+> > > -     if (optlen % sizeof(struct dmabuf_token) ||
+> > > -         optlen > sizeof(*tokens) * MAX_DONTNEED_TOKENS)
+> > > +     if (optlen % sizeof(*tokens) ||
+> > > +         optlen > sizeof(*tokens) * MAX_DONTNEED_FRAGS)
+> > >               return -EINVAL;
+> > >
+> > > -     tokens = kvmalloc_array(optlen, sizeof(*tokens), GFP_KERNEL);
+> > > +     num_tokens = optlen / sizeof(*tokens);
+> > > +     tokens = kvmalloc_array(num_tokens, sizeof(*tokens), GFP_KERNEL);
+> > >       if (!tokens)
+> > >               return -ENOMEM;
+> > >
+> > > -     num_tokens = optlen / sizeof(struct dmabuf_token);
+> > >       if (copy_from_sockptr(tokens, optval, optlen)) {
+> > >               kvfree(tokens);
+> > >               return -EFAULT;
+> > >       }
+> > >
+> > > +     for (i = 0; i < num_tokens; i++) {
+> > > +             num_frags += tokens[i].token_count;
+> > > +             if (num_frags > MAX_DONTNEED_FRAGS) {
+> > > +                     kvfree(tokens);
+> > > +                     return -E2BIG;
+> > > +             }
+> > > +     }
+> > > +
+> > >       xa_lock_bh(&sk->sk_user_frags);
+> > >       for (i = 0; i < num_tokens; i++) {
+> > >               for (j = 0; j < tokens[i].token_count; j++) {
+> > >                       netmem_ref netmem = (__force netmem_ref)__xa_erase(
+> > >                               &sk->sk_user_frags, tokens[i].token_start + j);
+> > >
+> > > -                     if (netmem &&
+> > > -                         !WARN_ON_ONCE(!netmem_is_net_iov(netmem))) {
+> > > -                             netmems[netmem_num++] = netmem;
+> > > -                             if (netmem_num == ARRAY_SIZE(netmems)) {
+> > > -                                     xa_unlock_bh(&sk->sk_user_frags);
+> > > -                                     for (k = 0; k < netmem_num; k++)
+> > > -                                             WARN_ON_ONCE(!napi_pp_put_page(netmems[k]));
+> > > -                                     netmem_num = 0;
+> > > -                                     xa_lock_bh(&sk->sk_user_frags);
+> > > -                             }
+> > > -                             ret++;
 > >
-> > 60443c88f3a8 ("kallsyms: Improve the performance of kallsyms_lookup_nam=
-e()").
+> > [..]
 > >
-> > At present, this improvement is only for searching in vmlinux's and
-> > module's BTFs.
+> > > +                     if (!netmem || WARN_ON_ONCE(!netmem_is_net_iov(netmem)))
+> > > +                             continue;
 > >
-> > Another change is the search direction, where we search the BTF first a=
-nd
-> > then its base, the type id of the first matched btf_type will be return=
-ed.
-> >
-> > Here is a time-consuming result that finding 87590 type ids by their na=
-mes in
-> > vmlinux's BTF.
-> >
-> > Before: 158426 ms
-> > After:     114 ms
-> >
-> > The average lookup performance has improved more than 1000x in the abov=
-e scenario.
-> >
-> > Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > Signed-off-by: Donglin Peng <dolinux.peng@gmail.com>
-> > ---
-> > v4:
-> >  - move the modification of libbpf to another patch
-> >
-> > v3:
-> >  - Link: https://lore.kernel.org/all/20240608140835.965949-1-dolinux.pe=
-ng@gmail.com/
-> >  - Sort btf_types during build process other than during boot, to reduc=
-e the
-> >    overhead of memory and boot time.
-> >
-> > v2:
-> >  - Link: https://lore.kernel.org/all/20230909091646.420163-1-pengdongli=
-n@sangfor.com.cn
-> > ---
-> >  include/linux/btf.h |   1 +
-> >  kernel/bpf/btf.c    | 157 ++++++++++++++++++++++++++++++++++++++++----
-> >  2 files changed, 147 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/include/linux/btf.h b/include/linux/btf.h
-> > index b8a583194c4a..64c35aaa22fa 100644
-> > --- a/include/linux/btf.h
-> > +++ b/include/linux/btf.h
-> > @@ -216,6 +216,7 @@ bool btf_is_module(const struct btf *btf);
-> >  bool btf_is_vmlinux(const struct btf *btf);
-> >  struct module *btf_try_get_module(const struct btf *btf);
-> >  u32 btf_nr_types(const struct btf *btf);
-> > +u32 btf_type_cnt(const struct btf *btf);
-> >  struct btf *btf_base_btf(const struct btf *btf);
-> >  bool btf_member_is_reg_int(const struct btf *btf, const struct btf_typ=
-e *s,
-> >                            const struct btf_member *m,
-> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > index 5cd1c7a23848..6d0d58989640 100644
-> > --- a/kernel/bpf/btf.c
-> > +++ b/kernel/bpf/btf.c
-> > @@ -262,6 +262,7 @@ struct btf {
-> >         u32 data_size;
-> >         refcount_t refcnt;
-> >         u32 id;
-> > +       u32 nr_types_sorted;
-> >         struct rcu_head rcu;
-> >         struct btf_kfunc_set_tab *kfunc_set_tab;
-> >         struct btf_id_dtor_kfunc_tab *dtor_kfunc_tab;
-> > @@ -548,23 +549,102 @@ u32 btf_nr_types(const struct btf *btf)
-> >         return total;
-> >  }
-> >
-> > -s32 btf_find_by_name_kind(const struct btf *btf, const char *name, u8 =
-kind)
-> > +u32 btf_type_cnt(const struct btf *btf)
-> > +{
-> > +       return btf->start_id + btf->nr_types;
-> > +}
-> > +
-> > +static s32 btf_find_by_name_bsearch(const struct btf *btf, const char =
-*name,
-> > +                                   int *start, int *end)
-> >  {
-> >         const struct btf_type *t;
-> > -       const char *tname;
-> > -       u32 i, total;
-> > +       const char *name_buf;
-> > +       int low, low_start, mid, high, high_end;
-> > +       int ret, start_id;
-> > +
-> > +       start_id =3D btf->base_btf ? btf->start_id : 1;
-> > +       low_start =3D low =3D start_id;
-> > +       high_end =3D high =3D start_id + btf->nr_types_sorted - 1;
-> > +
-> > +       while (low <=3D high) {
-> > +               mid =3D low + (high - low) / 2;
-> > +               t =3D btf_type_by_id(btf, mid);
-> > +               name_buf =3D btf_name_by_offset(btf, t->name_off);
-> > +               ret =3D strcmp(name, name_buf);
-> > +               if (ret > 0)
-> > +                       low =3D mid + 1;
-> > +               else if (ret < 0)
-> > +                       high =3D mid - 1;
-> > +               else
-> > +                       break;
-> > +       }
-> >
-> > -       total =3D btf_nr_types(btf);
-> > -       for (i =3D 1; i < total; i++) {
-> > -               t =3D btf_type_by_id(btf, i);
-> > -               if (BTF_INFO_KIND(t->info) !=3D kind)
-> > -                       continue;
-> > +       if (low > high)
-> > +               return -ESRCH;
-> >
-> > -               tname =3D btf_name_by_offset(btf, t->name_off);
-> > -               if (!strcmp(tname, name))
-> > -                       return i;
-> > +       if (start) {
-> > +               low =3D mid;
-> > +               while (low > low_start) {
-> > +                       t =3D btf_type_by_id(btf, low-1);
-> > +                       name_buf =3D btf_name_by_offset(btf, t->name_of=
-f);
-> > +                       if (strcmp(name, name_buf))
-> > +                               break;
-> > +                       low--;
-> > +               }
-> > +               *start =3D low;
-> > +       }
-> > +
-> > +       if (end) {
-> > +               high =3D mid;
-> > +               while (high < high_end) {
-> > +                       t =3D btf_type_by_id(btf, high+1);
-> > +                       name_buf =3D btf_name_by_offset(btf, t->name_of=
-f);
-> > +                       if (strcmp(name, name_buf))
-> > +                               break;
-> > +                       high++;
-> > +               }
-> > +               *end =3D high;
-> >         }
-> >
->
-> this is an overcomplicated implementation, you need something like
-> find_linfo() implementation in kernel/bpf/log.c. Note how much shorter
-> and leaner it is.
->
-> I also don't think you need to return `end`. Given you always start
-> from start and linearly scan forward, you just need to make sure that
-> you never go beyond the BTF type array, for which you can use
-> btf_type_cnt(). So no need for doing this linear scan twice.
+> > Any reason we are not returning explicit error to the callers here?
+> > That probably needs some mechanism to signal which particular one failed
+> > so the users can restart?
+> 
+> Only because I can't think of a simple way to return an array of frags
+> failed to DONTNEED to the user.
 
-Thank you, but the situation here is different. When
-the btf file is sorted, the btf_types with a name are
-placed at the beginning of the file, while those without
-a name are placed at the end. Additionally, if there
-are multiple btf_types with the same name in a btf file,
-they will have different kinds, and these btf_types with
-the same name will be grouped together. For example, in
-the following case:
+I'd expect the call to return as soon as it hits the invalid frag
+entry (plus the number of entries that it successfully refilled up to
+the invalid one). But too late I guess.
 
-...
-[13561] FUNC 'bp_constraints_unlock' type_id=3D105264 linkage=3Dstatic
-[13562] STRUCT 'bp_cpuinfo' size=3D20 vlen=3D2
-        'cpu_pinned' type_id=3D66670 bits_offset=3D0
-        'tsk_pinned' type_id=3D13568 bits_offset=3D32
-[13563] VAR 'bp_cpuinfo' type_id=3D103076, linkage=3Dstatic
-[13564] FUNC 'bp_init_aperfmperf' type_id=3D70013 linkage=3Dstatic
-[13565] STRUCT 'bp_patching_desc' size=3D16 vlen=3D3
-...
+> Also, this error should be extremely rare or never hit really. I don't
+> know how we end up not finding a netmem here or the netmem is page.
+> The only way is if the user is malicious (messing with the token ids
+> passed to the kernel) or if a kernel bug is happening.
 
-Both 13562 and 13563 have the name 'bp_cpuinfo', but their
-kinds are different. Therefore, when using the btf_find_by_name_bsearch
-function to find the btf_type named 'bp_cpuinfo', the start
-parameter will be set to 11562 and the end parameter will
-be set to 11563. We can then check their kind to obtain the
-correct btf_type.
+I do hit this error with 1500 mtu, so it would've been nice to
+understand which particular token triggered that. It might be
+something buggy on the driver side, I need to investigate. (it's
+super low prio because 1500)
 
->
-> > +       return mid;
-> > +}
-> > +
-> > +s32 btf_find_by_name_kind(const struct btf *btf, const char *name, u8 =
-kind)
-> > +{
-> > +       const struct btf_type *t;
-> > +       const char *tname;
-> > +       int start, end;
-> > +       s32 id, total;
-> > +
-> > +       do {
-> > +               if (btf->nr_types_sorted) {
-> > +                       /* binary search */
-> > +                       id =3D btf_find_by_name_bsearch(btf, name, &sta=
-rt, &end);
-> > +                       if (id > 0) {
-> > +                               while (start <=3D end) {
-> > +                                       t =3D btf_type_by_id(btf, start=
-);
-> > +                                       if (BTF_INFO_KIND(t->info) =3D=
-=3D kind)
-> > +                                               return start;
-> > +                                       start++;
-> > +                               }
-> > +                       }
-> > +               } else {
-> > +                       /* linear search */
-> > +                       total =3D btf_type_cnt(btf);
-> > +                       for (id =3D btf->base_btf ? btf->start_id : 1;
-> > +                               id < total; id++) {
-> > +                               t =3D btf_type_by_id(btf, id);
-> > +                               if (BTF_INFO_KIND(t->info) !=3D kind)
-> > +                                       continue;
-> > +
-> > +                               tname =3D btf_name_by_offset(btf, t->na=
-me_off);
-> > +                               if (!strcmp(tname, name))
-> > +                                       return id;
-> > +                       }
-> > +               }
-> > +               btf =3D btf->base_btf;
-> > +       } while (btf);
-> > +
-> >         return -ENOENT;
-> >  }
-> >
-> > @@ -6141,6 +6221,53 @@ int get_kern_ctx_btf_id(struct bpf_verifier_log =
-*log, enum bpf_prog_type prog_ty
-> >         return kctx_type_id;
-> >  }
-> >
-> > +static int btf_check_sort(struct btf *btf, int start_id)
-> > +{
-> > +       int i, n, nr_names =3D 0;
-> > +
-> > +       n =3D btf_nr_types(btf);
-> > +       for (i =3D start_id; i < n; i++) {
-> > +               const struct btf_type *t;
-> > +               const char *name;
-> > +
-> > +               t =3D btf_type_by_id(btf, i);
-> > +               if (!t)
-> > +                       return -EINVAL;
-> > +
-> > +               name =3D btf_str_by_offset(btf, t->name_off);
-> > +               if (!str_is_empty(name))
-> > +                       nr_names++;
-> > +       }
-> > +
->
-> this loop makes zero sense to me, what are you trying to achieve with
-> it and why?
+> Also, the information is useless to the user. If the user sees 'frag
+> 128 failed to free'. There is nothing really the user can do to
+> recover at runtime. Only usefulness that could come is for the user to
+> log the error. We already WARN_ON_ONCE on the error the user would not
+> be able to trigger.
 
-As previously mentioned, if the btf file is sorted, the
-btf_type with a name will be placed at the beginning of
-the file in ascending order, while those without a name
-will be placed at the end. Therefore, we can verify if
-the btf file is sorted by following these steps:
-
-Step 1: Count the number of btf_types with a name and
-             store it as nr_names.
-
-Step 2: Inspect the first nr_names btf_types. If any of
-            the following cases occur, it indicates that the
-            btf file is not sorted:
-           1. A btf_type without a name is encountered.
-           2. The name of the current btf_type is greater  than
-               the name of the next btf_type.
-
->
-> > +       for (i =3D 0; i < nr_names - 1; i++) {
->
-> just start from start_id + 1, all the way to n, and check that sorting
-> invariant holds for all items
->
-> > +               const struct btf_type *t1, *t2;
-> > +               const char *s1, *s2;
-> > +
-> > +               t1 =3D btf_type_by_id(btf, start_id + i);
-> > +               if (!t1)
-> > +                       return -EINVAL;
-> > +
-> > +               s1 =3D btf_str_by_offset(btf, t1->name_off);
-> > +               if (str_is_empty(s1))
-> > +                       goto out;
-> > +
-> > +               t2 =3D btf_type_by_id(btf, start_id + i + 1);
-> > +               if (!t2)
-> > +                       return -EINVAL;
-> > +
-> > +               s2 =3D btf_str_by_offset(btf, t2->name_off);
-> > +               if (str_is_empty(s2))
-> > +                       goto out;
-> > +
-> > +               if (strcmp(s1, s2) > 0)
-> > +                       goto out;
-> > +       }
-> > +
-> > +       btf->nr_types_sorted =3D nr_names;
-> > +out:
-> > +       return 0;
-> > +}
->
-> [...]
+I'm thinking from the pow of user application. It might have bugs as
+well and try to refill something that should not have been refilled.
+Having info about which particular token has failed (even just for
+the logging purposes) might have been nice.
 
