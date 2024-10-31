@@ -1,444 +1,182 @@
-Return-Path: <linux-kselftest+bounces-21204-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21205-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F4FC9B7A15
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 12:57:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 769569B7A21
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 12:59:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E97828318D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 11:57:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B4991C21720
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 11:59:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3716719B3E2;
-	Thu, 31 Oct 2024 11:57:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8508619B5B4;
+	Thu, 31 Oct 2024 11:59:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IJX3MAv9"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="KfMRV80W"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2074.outbound.protection.outlook.com [40.107.212.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3460F153BC7;
-	Thu, 31 Oct 2024 11:57:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730375842; cv=none; b=MQeTElwoV4nwChZFKTHpTY8XBbiAONnVW0dnjVtHIw05asesOp7V3xI01WPYO77q44i/rIYiZLCM3KblYgLIh6stMjdVqZFyz3NkAGcSv94qGlfD8QwGDo8MXo91W4Vz17dIPhwx0FcAOjSQ1bntIWa3ftRrlutehGMU2EMjWkY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730375842; c=relaxed/simple;
-	bh=BTN38ve7ZHiN9RoGPVE/D2FFgtrmU/y8viJLtxkciaI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ID1KdfxuwcHlYIKF+B3aZU3O6kWVV/+Qd7tcNk8fJ0CnyhsaR+bJsjfRSGTQXb58SlTwqQvfSK45ghQ/R1Qtx4ZYZzJSsv3jN4XzEgX/A7zadzIrCYJQtnidwcVI+GcHQZSCnYRR6YlDJeHu7w/nAN+aVIBpr8HaAQK4vwjfzMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IJX3MAv9; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a9a0f198d38so127434866b.1;
-        Thu, 31 Oct 2024 04:57:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730375837; x=1730980637; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lKIyLE2zQdyO5Hcqyq1E5hXSPBVJ2YpMPKsp9FVyOPU=;
-        b=IJX3MAv9505Q/Z/COVY8OhdlwJMiTZ+8XNZR6iQBqToItYgXmHxYRac+6ktXVrdsqw
-         rESVQZmKU+ljbIsx32WEt3SFkY7tylxPAtZnFMt3CL9sQG8ftrl9NkEn9ldhUSxO848V
-         JNWRg5ieaIcLTEBkMuCPwPJb88SziHfbr9HjLdEFu/6RR3LMH5eR34pkj+fehK0yuA7d
-         R+cm4fu/1+VhvwZ2j9XtH396T5akQYM5oTlvw7ZEFXevlYYGY27CjuEMNf6Ektwam/we
-         YtdE9kXGe5CklL3fgZPzDZbFd0aibWrBqZaqmpHkQ3mBSrNKnZ7jt0DERRrTDfL2wCK8
-         YWZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730375837; x=1730980637;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lKIyLE2zQdyO5Hcqyq1E5hXSPBVJ2YpMPKsp9FVyOPU=;
-        b=RuC64TyDPm9gR2Z153Sf0qaSZyiF1DN1ZkouV9v04daoB//Qj+84RHsW+Dmu8Qva2z
-         CmRV8AgH8KavznzFpkO1xRhdNKLKcqoSxdp+rvZGCpEKV/9kiAS3AOu3FKIMY4iaR4/6
-         jXz7Ffu8sef75LNOugPbno0kZU5kf5cYFq0/CST5xl7gbSxbQ/LSe7WR1aQNyZNnPWTg
-         5gxWHGXbmzQvI1id7MZaDk2yjL5mQ5MNoPR9Rgf+2rvN9NdQIQSmviJ2HQsM0EjNk094
-         w+fOtHNZZcYtjKdLjo9yyHzcwI9ySuycCFQcHLNfmRaRAmkgPq/qbl9k/H81PY6zKHPW
-         CLgA==
-X-Forwarded-Encrypted: i=1; AJvYcCUABKuuKdogrvcnYhKnchCTfAs711RIknU6/7ImIffYxq/nKZOlJkYsWK3IZRsKc6LSWmefQC9GlW0N6YRSVvQR@vger.kernel.org, AJvYcCUttNSRv2L0Ts0amAe14eKeso5VjbBpomALwr3TVCMGxJuvNQ+ufuLms25QHhS3x59yWTpDyHLo92vcu/U1@vger.kernel.org, AJvYcCW/8PUgWmjqYeQrc9BV/IGRZxg0j758bGvus0Dh0KXTBpuEbbkfzwwKvSohTiqxo58nhdM=@vger.kernel.org, AJvYcCX0/xahe4ed9MW9+4U5AV7tMZlQsfJhhMY+2dqGepsQiXBjACCepgKngzlk9Q7FL0JHMDzuTSe02qYHJjOsq4wvTiLo@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywoc2eJg1RohJ5kzlW/vX1Hh26Q8txAqdgTPt5rhsZppXEabJD+
-	FgeX9XF3nKUxzvLW3+zlV4fbnFmkuKgHTsJBzDNWwK2LXaoma1Ys2Mn7SLHX62PlfEb140hwk5J
-	D76mOrGqTiC09Q1PpRwBz2Uz/iok=
-X-Google-Smtp-Source: AGHT+IFVyWMCJp4ypcB1SCqphOPxg+DYfnGVczoC6vL3foJeAnIkQEYAte0Ok85oC+uL77BHORxI763WhPk+Tyctfk8=
-X-Received: by 2002:a17:906:6a09:b0:a99:8edf:a367 with SMTP id
- a640c23a62f3a-a9de61eb5a1mr2034895966b.57.1730375837082; Thu, 31 Oct 2024
- 04:57:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E999153BC7;
+	Thu, 31 Oct 2024 11:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.74
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730375984; cv=fail; b=U+g9p661vdUwj0JgoU+u2xH9LyIA+edR+fFPeb/wbC5EvXq4K1Jh/zI5vCTUN6Mc7GOUO454el+NqQZW2E4kqVP19DSx2GaZZzFY7Lfk4wK0viM4UUhdo0nDcrJAkau4xhX9XPm7ktl1ezCuxIYVAEg2nhN7ZUyFYJ/0wL1zwNo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730375984; c=relaxed/simple;
+	bh=aT6QUvSw/Y1QrGgFFqc3l7z0qhnYj7XlHbxPq+TMzcs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=evVWbh59HcUl8/9QwmACQBlneAKFSTCxD8KxGuRNUNXY+D7YpRw+2I0CXiB6n6yuALC8UDaCuz2nHIH9CXVQMARxO7jqAWmyHc/fCiGpNU7bOe3p5vRXHAGqNSxbYGpJczBmffLGBZm/jsqoFUt4QXyB3qY7D5piw7D+3SxENKg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=KfMRV80W; arc=fail smtp.client-ip=40.107.212.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Ln/zwa4UWd4+L+TmY7yr4c3TT2tCai0zoJaw1K+S3YATwc/u3GI1gHpglEK6iZ8uLxZbuKVg2wjck/HfkyKc5bHleRp1D0aTBZ3nWGjoLFwHM8Rc6d8lQdRLQnxAJfxwQKcTYs+4DWlrwTlObgeXKgh4q4rjIZmblgBwwiEyECq4DCs0rBeNCoGvl8pADAhRmkSPXOosQj5aqoxW1Jd3SEjJ/7KVkVzu12RlQoDOg6yldoGUN1a6rQf2uQjxzJsTLtqXoqiWmF5cfANgjoutVULOXrsrdHoptRCptlu+3C1wflIVJurWDOfLdrut/IFzQhuYcKXfFgtDx+qAuIzi6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NMDJHDA5tCd2GoubyZuU/oUxFosg5i5sWOlvzY9InUw=;
+ b=dDkn13SmemfVii45LwjfU8e+DjqjPgU4psC5NhAMZRWa8C00G0bauCDIjkfTyy/7skREQrQM6nsOX2aSCR3NdlBsN4TxxR2NgR08SruZIr9WnTpoOmZnGzQxLwiorA9XJnU1dcDVQ60ctZI5AVdH3yMyFd42OndUporp8vE1HzwlQ1NM4ymnhrtPVpfp4unBPzbiogkzj2b68HtKdResvemkkZ8tYZo8ru/GjI1BTSfOtG8ZaCFBciVYdJHcTDXUBmwLHeU8huPgEMMu9Wo/4E2Yq9ZbLuEjX7vi86sshgTnIxj7mkyYJE2SX0mqI4audmPyw4vJQqEz1zWt3WYZBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NMDJHDA5tCd2GoubyZuU/oUxFosg5i5sWOlvzY9InUw=;
+ b=KfMRV80WohDtXABbIx7POFRUARZwbcGRPFbJ/mkvXjTBqrorR/nHoHlgxJrkxsTGqLfuA2j7nvTmv6BSbzVAhp0XyZm+cLkp5Z9KWM41C+8AMh8lDLZfGcnN4eSo5FxWiq27B3i//pV3ZoN8bXBZT/0Xl353O+W0k7JQazN1qrGkh92XkNIJv1cVLteR+yKWZycDKFNxt7xguMSwsYfZ5gwl4YMtWjhR0rbZemCmeicb+lR+OyMc+Bf7UxCF0ipO3+qs2rriCWTA0INqI59vwviO6VgAeiQk3Idhf3dy3oYuCLBsvy/5meJNN+HEn2yK6S4SxkGXoy0f9KfsMoi52Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
+ by IA1PR12MB9523.namprd12.prod.outlook.com (2603:10b6:208:595::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.23; Thu, 31 Oct
+ 2024 11:59:39 +0000
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.8093.018; Thu, 31 Oct 2024
+ 11:59:39 +0000
+Date: Thu, 31 Oct 2024 08:59:37 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Zhangfei Gao <zhangfei.gao@linaro.org>
+Cc: Nicolin Chen <nicolinc@nvidia.com>, kevin.tian@intel.com,
+	corbet@lwn.net, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+	will@kernel.org, robin.murphy@arm.com, dwmw2@infradead.org,
+	shuah@kernel.org, iommu@lists.linux.dev, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	baolu.lu@linux.intel.com, eric.auger@redhat.com,
+	jean-philippe@linaro.org, mdf@kernel.org, mshavit@google.com,
+	shameerali.kolothum.thodi@huawei.com, smostafa@google.com,
+	yi.l.liu@intel.com, aik@amd.com, patches@lists.linux.dev
+Subject: Re: [PATCH v6 00/10] iommufd: Add vIOMMU infrastructure (Part-2:
+ vDEVICE)
+Message-ID: <20241031115937.GD10193@nvidia.com>
+References: <cover.1730313494.git.nicolinc@nvidia.com>
+ <CABQgh9GYOgBJwRhvsWpPwS4vgDzCvXCAUxc8DQy8ObHAOvpbRQ@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABQgh9GYOgBJwRhvsWpPwS4vgDzCvXCAUxc8DQy8ObHAOvpbRQ@mail.gmail.com>
+X-ClientProxiedBy: BL1PR13CA0012.namprd13.prod.outlook.com
+ (2603:10b6:208:256::17) To CH3PR12MB8659.namprd12.prod.outlook.com
+ (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241029002208.1947947-1-dolinux.peng@gmail.com>
- <20241029002208.1947947-3-dolinux.peng@gmail.com> <CAEf4BzYBffp+47SLaV5sMWVAVSbxyDX3DnNoOju1y9wr+wupeQ@mail.gmail.com>
- <CAErzpmsyV46Pexj3CUCSaX+MzckoKSAe9D3eeEcTGK8m5BKJUg@mail.gmail.com> <CAEf4BzY=vfFBPFUNPy3LfrCTM0qpU=L0dgY+aK4GkGhkjPGw3A@mail.gmail.com>
-In-Reply-To: <CAEf4BzY=vfFBPFUNPy3LfrCTM0qpU=L0dgY+aK4GkGhkjPGw3A@mail.gmail.com>
-From: Donglin Peng <dolinux.peng@gmail.com>
-Date: Thu, 31 Oct 2024 19:57:01 +0800
-Message-ID: <CAErzpms+do7vuFtDcxAEJx-ZxyrEZjRT+KAAkt9wfqfPfqrydg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] bpf: Using binary search to improve the
- performance of btf_find_by_name_kind
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, rostedt@goodmis.org, 
-	mhiramat@kernel.org, bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|IA1PR12MB9523:EE_
+X-MS-Office365-Filtering-Correlation-Id: a790a5f7-b8ba-49b3-2f5c-08dcf9a37ed6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?ueCtsDBIH8ix9JaWBEfn5TNnldOAJuiDWAUfECoFPE3/CL80kcCUT72g1kun?=
+ =?us-ascii?Q?/fK1FmfpIFqTIoFqB7PI5m/ORFjcuiI0yhvu24YyfhnJJ7i0j/XfC8QqG7US?=
+ =?us-ascii?Q?2+4M4g5F4+zp/ILV46eyBvPBPg0SEfP9K8KdZDIVgvwQ/nUOdNdAg3h+sxjO?=
+ =?us-ascii?Q?IancjBKFdH6j41f7gqJHqDjnHWGHOS92p/2e4w92xdGNLv5ryZ3RrR9I+xrS?=
+ =?us-ascii?Q?MdWjrAhq+gUpgj1si8Vre+C+7wN1IU7l2VN+oyxsXntaKGzZbtlHbO6fGJfK?=
+ =?us-ascii?Q?st3cqVjYaaYnXWG0a6at1pDCGg7cV0/rlt5Bo5pPpXk8BNhc2Y+VzKxK0NgX?=
+ =?us-ascii?Q?wKKiy8vh/BNneBJkHrw4m4AVffd5PTGHGno9ixeth2X3oiWs0Q7vtDblPbBi?=
+ =?us-ascii?Q?Qfbgcu6aiiqgV1igF8m7hO/W5cabDHZgrpk0vqlzZgyrfaPy6KM01OKn8nHU?=
+ =?us-ascii?Q?vO91P9QelHYAOzBs3khP0P3its91U8Z9Iiw5mx0nuje/vnxbM68uNjgAquIy?=
+ =?us-ascii?Q?x5DEZ4V6G5mzm0qsuaJCxP80itNiE6Na8J4FeiUjJV5to69P2sT/dYD/XLNO?=
+ =?us-ascii?Q?7b7r3HmqW1Xn+6SkuTTmzN2G+CyiytzLj4hrLaoxgotwNBZIjnGJMqel1za2?=
+ =?us-ascii?Q?J2tLjW9Q6l94o+mxIuyazsfXu/2aUUtLSsUd4O5Nq2FjmGKMThuZgqLx0B1/?=
+ =?us-ascii?Q?GNOo5auLk9nfiYDx1zet8bZOXzOCXFPsJKniJS8cyKLdEgDxFBSCRcUD3etB?=
+ =?us-ascii?Q?SFAFF9TH1NVKRyJ2JGemfOea2r6irpzbKu0oL/sMB2c6morI1tOYjqK36f4z?=
+ =?us-ascii?Q?BPkmhrOa6g6njFg9iu9b8YAAbMBafQTCiYrMTv2JDe4O6htapdlcJS7urfMH?=
+ =?us-ascii?Q?pZM4Hq/Gl7M/Td54EvJE96ogPC3D6nxM2KAdju4Lvk6WUCIzAv5z6Y7kx+ay?=
+ =?us-ascii?Q?suBphmqYEOTadO4OlfMc9sY6JWmeAr/NoLWHKezE4ZBM3CWLAt9KDDKAqXkR?=
+ =?us-ascii?Q?0EVAClxQ68IsjuB5QTCjZIGy7d+/epiGEfYIckO14wSOotePZ3bEwQWGOeDe?=
+ =?us-ascii?Q?iWoRbrN/xrjq28y6bS7tbeofWA/eMSrFqG9gcFOaW09a71NTSktSfU/rFjVC?=
+ =?us-ascii?Q?CHoRMWviToaJdyd4mweSRWE4A5wTtf9L0Q7e6eKu/Pc8oNgdlq3R5ADuqylD?=
+ =?us-ascii?Q?zeu1wli9Z266SN/Jx0ZigkGbyIRQJdyGa/IbHq987lT51U/f6fnMvt1BmXzd?=
+ =?us-ascii?Q?xUEQztt9H7X6kCD3WraW2AZ9NIGM+Pq1B9iAyOO/1Mxpcn1ZtFg899PzkEa8?=
+ =?us-ascii?Q?ibxB+bkKoi/AMF36BLRHmwFX?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?d7o43CMTAl4pTEplKoK0rDzpYGvMDtATd4kPTc/MrUlr3iTYhjYQJ2hu+0MW?=
+ =?us-ascii?Q?8f4+Hvh+lDmIJrSQYQveiO/XwNXEmWO6ibTBn7goO4HyMCdu4xPpdIObedKf?=
+ =?us-ascii?Q?liF3/CllQCe7n/4EejgBnd5Yjv8g2ef7nL1EhaEWFoqcxiz2ZMCS+5yYhcpY?=
+ =?us-ascii?Q?DxX2GrhpQtNmA/fKRuLGTh8qTFGRGmlaqTnxG8E8O5DZztjuxSgg9YpoqtMA?=
+ =?us-ascii?Q?IT02FRVTwlUzUzO2DDSjGGRuTFSaJwFJYeFhKFFUcmbaeyF8LsWk2lmqRJNJ?=
+ =?us-ascii?Q?3XK4+Rayx5nYP2+ipyMOu5JUd2QLqAO4tuolbo/UR825Z4VdlLzM2+0/+7v7?=
+ =?us-ascii?Q?w9q0Y7Mlq8fCzG717cAX6aMT8GOE5g9FlasHOYPblbV5OzOOgadQZSF6MsAt?=
+ =?us-ascii?Q?Fk7QVb9m9m9hxWjNNfYsEfv+WG897PQ4Apu+8F1HjuenME3sNgIShHQdz+Nh?=
+ =?us-ascii?Q?AuIOO4xKFlfruglQ9gdaHu1qaIiWBbxlPF0B4rCD2sqZQYRx/imQC9Ebwr/H?=
+ =?us-ascii?Q?tWV0sHmQNr6dP5EG5MywAza3W2qNnU4zaqcTILohkP9VvwNSf4PWl8z9eYqn?=
+ =?us-ascii?Q?bO2CO59flNJrmcOYGQqqP35XXsYIRT71hNg1RkyWezRyt0dxQJ7MkL1A6pP/?=
+ =?us-ascii?Q?PBzEaTP57s0mwSsy3GP4kAxzOtLifgtx56uXqEvL4Wfuu7YptWzgIOpwypAU?=
+ =?us-ascii?Q?E/p4cspCjH1n+FGuv1qrbKxdkbUyDS/XjHq8ui3AGlNtvGUdz5zTMEkpnmqw?=
+ =?us-ascii?Q?B0fz9ST5WYs+k/A7ztogOZa3hlNxM89D4LkWgPPgOT07tWUg/T2IQjQ7DppJ?=
+ =?us-ascii?Q?f5B/Sz3tb6wKFqlZ/XKc4AFlHSoFMeWW0/rtfdZj+mmYN6MGhnuvvNd6ZS2O?=
+ =?us-ascii?Q?j8gEPepENKDyOvOjzyBh/XOg9IUWCQkBrdRknFS4ZAoy9Gs9zuDGulSecNO3?=
+ =?us-ascii?Q?DHjPlmZr3E+6adRxBcYsKgYllPgtpN6KZ7kC28FGGPUc9LlPs8GRTfixE6Fd?=
+ =?us-ascii?Q?mfl+Fn+EFKBIUGC/o9RJKSw+7PabPBlNTmB6uMGIl9U+JXYVs9rBOUCMth4r?=
+ =?us-ascii?Q?c2HXUPmHyTzSfMEQ4l+ilpD3dLaM7uOprHCycAhlXeN3a/QUKht6NNIDne6D?=
+ =?us-ascii?Q?iYYnlIQJ+E7qL1Fewcu7yLPMpjcQmeFnP5Oy9rd9fL75V/VXIXMfpC/fqrmN?=
+ =?us-ascii?Q?up1jeXu7VTdjP2/YmGh6hGLv19Pw+HT2/QZuJtYM6sru7MvOdmqktDey3Awg?=
+ =?us-ascii?Q?6jilspjz7Y4RiVuirJ5x3j+kMKJdtjJM0Wc45anNsrRQC7pVJcUblDdd14R8?=
+ =?us-ascii?Q?xlRJlAreE9go6NPI0d1zKqaEm1J088ri1hrOuTUDZjjGBZXQs4JlqJXA5v34?=
+ =?us-ascii?Q?fiOnegcxekj5FSmg4zU2qCKfglXboYe+iAaOw6tbO8BKes72UElsDm8N82D2?=
+ =?us-ascii?Q?0ZjUZRp7fl/JGhWbpWc84iug2pwzufXw6lW7zWgvoiNzpvMPW3SCs9qVfBPJ?=
+ =?us-ascii?Q?NYWnBOmCNTMWxAOu7wLQB7AEFZ2MCfxNYiiw3MsSfDklionG9IO7FPw0v0zG?=
+ =?us-ascii?Q?ZG4DoUrDFs6c1EeDK6k=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a790a5f7-b8ba-49b3-2f5c-08dcf9a37ed6
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2024 11:59:38.4317
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ukPibTx+u6Bx0I+EPXmEvYA/QAnIdntoWzRxR9T/FkC26y7N+kZIdiMJjMWYRSMp
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB9523
 
-On Thu, Oct 31, 2024 at 1:33=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Wed, Oct 30, 2024 at 8:00=E2=80=AFAM Donglin Peng <dolinux.peng@gmail.=
-com> wrote:
-> >
-> > On Wed, Oct 30, 2024 at 6:13=E2=80=AFAM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Mon, Oct 28, 2024 at 5:22=E2=80=AFPM Donglin Peng <dolinux.peng@gm=
-ail.com> wrote:
-> > > >
-> > > > Currently, we are only using the linear search method to find the t=
-ype id
-> > > > by the name, which has a time complexity of O(n). This change invol=
-ves
-> > > > sorting the names of btf types in ascending order and using binary =
-search,
-> > > > which has a time complexity of O(log(n)). This idea was inspired by=
- the
-> > > > following patch:
-> > > >
-> > > > 60443c88f3a8 ("kallsyms: Improve the performance of kallsyms_lookup=
-_name()").
-> > > >
-> > > > At present, this improvement is only for searching in vmlinux's and
-> > > > module's BTFs.
-> > > >
-> > > > Another change is the search direction, where we search the BTF fir=
-st and
-> > > > then its base, the type id of the first matched btf_type will be re=
-turned.
-> > > >
-> > > > Here is a time-consuming result that finding 87590 type ids by thei=
-r names in
-> > > > vmlinux's BTF.
-> > > >
-> > > > Before: 158426 ms
-> > > > After:     114 ms
-> > > >
-> > > > The average lookup performance has improved more than 1000x in the =
-above scenario.
-> > > >
-> > > > Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > > Signed-off-by: Donglin Peng <dolinux.peng@gmail.com>
-> > > > ---
-> > > > v4:
-> > > >  - move the modification of libbpf to another patch
-> > > >
-> > > > v3:
-> > > >  - Link: https://lore.kernel.org/all/20240608140835.965949-1-dolinu=
-x.peng@gmail.com/
-> > > >  - Sort btf_types during build process other than during boot, to r=
-educe the
-> > > >    overhead of memory and boot time.
-> > > >
-> > > > v2:
-> > > >  - Link: https://lore.kernel.org/all/20230909091646.420163-1-pengdo=
-nglin@sangfor.com.cn
-> > > > ---
-> > > >  include/linux/btf.h |   1 +
-> > > >  kernel/bpf/btf.c    | 157 ++++++++++++++++++++++++++++++++++++++++=
-----
-> > > >  2 files changed, 147 insertions(+), 11 deletions(-)
-> > > >
-> > > > diff --git a/include/linux/btf.h b/include/linux/btf.h
-> > > > index b8a583194c4a..64c35aaa22fa 100644
-> > > > --- a/include/linux/btf.h
-> > > > +++ b/include/linux/btf.h
-> > > > @@ -216,6 +216,7 @@ bool btf_is_module(const struct btf *btf);
-> > > >  bool btf_is_vmlinux(const struct btf *btf);
-> > > >  struct module *btf_try_get_module(const struct btf *btf);
-> > > >  u32 btf_nr_types(const struct btf *btf);
-> > > > +u32 btf_type_cnt(const struct btf *btf);
-> > > >  struct btf *btf_base_btf(const struct btf *btf);
-> > > >  bool btf_member_is_reg_int(const struct btf *btf, const struct btf=
-_type *s,
-> > > >                            const struct btf_member *m,
-> > > > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > > > index 5cd1c7a23848..6d0d58989640 100644
-> > > > --- a/kernel/bpf/btf.c
-> > > > +++ b/kernel/bpf/btf.c
-> > > > @@ -262,6 +262,7 @@ struct btf {
-> > > >         u32 data_size;
-> > > >         refcount_t refcnt;
-> > > >         u32 id;
-> > > > +       u32 nr_types_sorted;
-> > > >         struct rcu_head rcu;
-> > > >         struct btf_kfunc_set_tab *kfunc_set_tab;
-> > > >         struct btf_id_dtor_kfunc_tab *dtor_kfunc_tab;
-> > > > @@ -548,23 +549,102 @@ u32 btf_nr_types(const struct btf *btf)
-> > > >         return total;
-> > > >  }
-> > > >
-> > > > -s32 btf_find_by_name_kind(const struct btf *btf, const char *name,=
- u8 kind)
-> > > > +u32 btf_type_cnt(const struct btf *btf)
-> > > > +{
-> > > > +       return btf->start_id + btf->nr_types;
-> > > > +}
-> > > > +
-> > > > +static s32 btf_find_by_name_bsearch(const struct btf *btf, const c=
-har *name,
-> > > > +                                   int *start, int *end)
-> > > >  {
-> > > >         const struct btf_type *t;
-> > > > -       const char *tname;
-> > > > -       u32 i, total;
-> > > > +       const char *name_buf;
-> > > > +       int low, low_start, mid, high, high_end;
-> > > > +       int ret, start_id;
-> > > > +
-> > > > +       start_id =3D btf->base_btf ? btf->start_id : 1;
-> > > > +       low_start =3D low =3D start_id;
-> > > > +       high_end =3D high =3D start_id + btf->nr_types_sorted - 1;
-> > > > +
-> > > > +       while (low <=3D high) {
-> > > > +               mid =3D low + (high - low) / 2;
-> > > > +               t =3D btf_type_by_id(btf, mid);
-> > > > +               name_buf =3D btf_name_by_offset(btf, t->name_off);
-> > > > +               ret =3D strcmp(name, name_buf);
-> > > > +               if (ret > 0)
-> > > > +                       low =3D mid + 1;
-> > > > +               else if (ret < 0)
-> > > > +                       high =3D mid - 1;
-> > > > +               else
-> > > > +                       break;
-> > > > +       }
-> > > >
-> > > > -       total =3D btf_nr_types(btf);
-> > > > -       for (i =3D 1; i < total; i++) {
-> > > > -               t =3D btf_type_by_id(btf, i);
-> > > > -               if (BTF_INFO_KIND(t->info) !=3D kind)
-> > > > -                       continue;
-> > > > +       if (low > high)
-> > > > +               return -ESRCH;
-> > > >
-> > > > -               tname =3D btf_name_by_offset(btf, t->name_off);
-> > > > -               if (!strcmp(tname, name))
-> > > > -                       return i;
-> > > > +       if (start) {
-> > > > +               low =3D mid;
-> > > > +               while (low > low_start) {
-> > > > +                       t =3D btf_type_by_id(btf, low-1);
-> > > > +                       name_buf =3D btf_name_by_offset(btf, t->nam=
-e_off);
-> > > > +                       if (strcmp(name, name_buf))
-> > > > +                               break;
-> > > > +                       low--;
-> > > > +               }
-> > > > +               *start =3D low;
-> > > > +       }
-> > > > +
-> > > > +       if (end) {
-> > > > +               high =3D mid;
-> > > > +               while (high < high_end) {
-> > > > +                       t =3D btf_type_by_id(btf, high+1);
-> > > > +                       name_buf =3D btf_name_by_offset(btf, t->nam=
-e_off);
-> > > > +                       if (strcmp(name, name_buf))
-> > > > +                               break;
-> > > > +                       high++;
-> > > > +               }
-> > > > +               *end =3D high;
-> > > >         }
-> > > >
-> > >
-> > > this is an overcomplicated implementation, you need something like
-> > > find_linfo() implementation in kernel/bpf/log.c. Note how much shorte=
-r
-> > > and leaner it is.
-> > >
-> > > I also don't think you need to return `end`. Given you always start
-> > > from start and linearly scan forward, you just need to make sure that
-> > > you never go beyond the BTF type array, for which you can use
-> > > btf_type_cnt(). So no need for doing this linear scan twice.
-> >
-> > Thank you, but the situation here is different. When
-> > the btf file is sorted, the btf_types with a name are
-> > placed at the beginning of the file, while those without
-> > a name are placed at the end. Additionally, if there
-> > are multiple btf_types with the same name in a btf file,
-> > they will have different kinds, and these btf_types with
-> > the same name will be grouped together. For example, in
-> > the following case:
-> >
-> > ...
-> > [13561] FUNC 'bp_constraints_unlock' type_id=3D105264 linkage=3Dstatic
-> > [13562] STRUCT 'bp_cpuinfo' size=3D20 vlen=3D2
-> >         'cpu_pinned' type_id=3D66670 bits_offset=3D0
-> >         'tsk_pinned' type_id=3D13568 bits_offset=3D32
-> > [13563] VAR 'bp_cpuinfo' type_id=3D103076, linkage=3Dstatic
-> > [13564] FUNC 'bp_init_aperfmperf' type_id=3D70013 linkage=3Dstatic
-> > [13565] STRUCT 'bp_patching_desc' size=3D16 vlen=3D3
-> > ...
-> >
-> > Both 13562 and 13563 have the name 'bp_cpuinfo', but their
-> > kinds are different. Therefore, when using the btf_find_by_name_bsearch
-> > function to find the btf_type named 'bp_cpuinfo', the start
-> > parameter will be set to 11562 and the end parameter will
-> > be set to 11563. We can then check their kind to obtain the
-> > correct btf_type.
->
-> I understand that, thank you. find_linfo() shows an example of binary
-> search to find the rightmost item that's <=3D than requested search key.
-> You have a similar problem here. You need to find the leftmost item
-> that's equal to the search key.
+On Thu, Oct 31, 2024 at 02:28:12PM +0800, Zhangfei Gao wrote:
 
-Thank you, I will modify it.
-
->
-> Both of these problems are solved by binary search without any extra
-> post-processing and linear scans.
-
-Thank you, I get it.
-
->
+> > As for the implementation of the series, add driver support in ARM SMMUv3
+> > for a real world use case.
 > >
-> > >
-> > > > +       return mid;
-> > > > +}
-> > > > +
-> > > > +s32 btf_find_by_name_kind(const struct btf *btf, const char *name,=
- u8 kind)
-> > > > +{
-> > > > +       const struct btf_type *t;
-> > > > +       const char *tname;
-> > > > +       int start, end;
-> > > > +       s32 id, total;
-> > > > +
-> > > > +       do {
-> > > > +               if (btf->nr_types_sorted) {
-> > > > +                       /* binary search */
-> > > > +                       id =3D btf_find_by_name_bsearch(btf, name, =
-&start, &end);
-> > > > +                       if (id > 0) {
-> > > > +                               while (start <=3D end) {
-> > > > +                                       t =3D btf_type_by_id(btf, s=
-tart);
-> > > > +                                       if (BTF_INFO_KIND(t->info) =
-=3D=3D kind)
-> > > > +                                               return start;
-> > > > +                                       start++;
-> > > > +                               }
-> > > > +                       }
-> > > > +               } else {
-> > > > +                       /* linear search */
-> > > > +                       total =3D btf_type_cnt(btf);
-> > > > +                       for (id =3D btf->base_btf ? btf->start_id :=
- 1;
-> > > > +                               id < total; id++) {
-> > > > +                               t =3D btf_type_by_id(btf, id);
-> > > > +                               if (BTF_INFO_KIND(t->info) !=3D kin=
-d)
-> > > > +                                       continue;
-> > > > +
-> > > > +                               tname =3D btf_name_by_offset(btf, t=
-->name_off);
-> > > > +                               if (!strcmp(tname, name))
-> > > > +                                       return id;
-> > > > +                       }
-> > > > +               }
-> > > > +               btf =3D btf->base_btf;
-> > > > +       } while (btf);
-> > > > +
-> > > >         return -ENOENT;
-> > > >  }
-> > > >
-> > > > @@ -6141,6 +6221,53 @@ int get_kern_ctx_btf_id(struct bpf_verifier_=
-log *log, enum bpf_prog_type prog_ty
-> > > >         return kctx_type_id;
-> > > >  }
-> > > >
-> > > > +static int btf_check_sort(struct btf *btf, int start_id)
-> > > > +{
-> > > > +       int i, n, nr_names =3D 0;
-> > > > +
-> > > > +       n =3D btf_nr_types(btf);
-> > > > +       for (i =3D start_id; i < n; i++) {
-> > > > +               const struct btf_type *t;
-> > > > +               const char *name;
-> > > > +
-> > > > +               t =3D btf_type_by_id(btf, i);
-> > > > +               if (!t)
-> > > > +                       return -EINVAL;
-> > > > +
-> > > > +               name =3D btf_str_by_offset(btf, t->name_off);
-> > > > +               if (!str_is_empty(name))
-> > > > +                       nr_names++;
-> > > > +       }
-> > > > +
-> > >
-> > > this loop makes zero sense to me, what are you trying to achieve with
-> > > it and why?
-> >
-> > As previously mentioned, if the btf file is sorted, the
-> > btf_type with a name will be placed at the beginning of
-> > the file in ascending order, while those without a name
-> > will be placed at the end. Therefore, we can verify if
-> > the btf file is sorted by following these steps:
-> >
-> > Step 1: Count the number of btf_types with a name and
-> >              store it as nr_names.
-> >
-> > Step 2: Inspect the first nr_names btf_types. If any of
-> >             the following cases occur, it indicates that the
-> >             btf file is not sorted:
-> >            1. A btf_type without a name is encountered.
-> >            2. The name of the current btf_type is greater  than
-> >                the name of the next btf_type.
->
-> This is convoluted and unnecessary. Just go over all items and
-> validate that each pair maintains the sorting criteria.
+> > This series is on Github:
+> > https://github.com/nicolinc/iommufd/commits/iommufd_viommu_p2-v6
+> > (QEMU branch for testing will be provided in Jason's nesting series)
+> 
+> Thanks Nico
+> 
+> I tested on aarch64, functions are OK.
+> 
+> But with some hacks
+> https://github.com/Linaro/linux-kernel-uadk/commit/22f47d6f3a34a0867a187473bd5ba0e0ee3395d4
 
-Thank you, I will modify it.
+Hmm, it seems like we should permit IOMMU_HWPT_FAULT_ID_VALID domain
+creation on ARM?
 
->
-> >
-> > >
-> > > > +       for (i =3D 0; i < nr_names - 1; i++) {
-> > >
-> > > just start from start_id + 1, all the way to n, and check that sortin=
-g
-> > > invariant holds for all items
-> > >
-> > > > +               const struct btf_type *t1, *t2;
-> > > > +               const char *s1, *s2;
-> > > > +
-> > > > +               t1 =3D btf_type_by_id(btf, start_id + i);
-> > > > +               if (!t1)
-> > > > +                       return -EINVAL;
-> > > > +
-> > > > +               s1 =3D btf_str_by_offset(btf, t1->name_off);
-> > > > +               if (str_is_empty(s1))
-> > > > +                       goto out;
-> > > > +
-> > > > +               t2 =3D btf_type_by_id(btf, start_id + i + 1);
-> > > > +               if (!t2)
-> > > > +                       return -EINVAL;
-> > > > +
-> > > > +               s2 =3D btf_str_by_offset(btf, t2->name_off);
-> > > > +               if (str_is_empty(s2))
-> > > > +                       goto out;
-> > > > +
-> > > > +               if (strcmp(s1, s2) > 0)
-> > > > +                       goto out;
-> > > > +       }
-> > > > +
-> > > > +       btf->nr_types_sorted =3D nr_names;
-> > > > +out:
-> > > > +       return 0;
-> > > > +}
-> > >
-> > > [...]
+Jason
 
