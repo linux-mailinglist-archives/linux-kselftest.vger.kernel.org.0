@@ -1,176 +1,161 @@
-Return-Path: <linux-kselftest+bounces-21201-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21202-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0193E9B78DA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 11:42:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 228F09B79AE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 12:29:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25AD71C21F72
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 10:42:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6F6F285A11
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 11:29:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB1031993B9;
-	Thu, 31 Oct 2024 10:42:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA17E19AD78;
+	Thu, 31 Oct 2024 11:29:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b="eE2nQMdK"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="heIam3FV";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NsrpDDDF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-52003.amazon.com (smtp-fw-52003.amazon.com [52.119.213.152])
+Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2D6199395;
-	Thu, 31 Oct 2024 10:42:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 335F219AD48;
+	Thu, 31 Oct 2024 11:29:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730371346; cv=none; b=gnI2TVUtl5K/AJDuVZcHf1TtdelpCBH0YuoVQ/sYYWDFRxo7pSFV2AoaKuGTIMRT6os3Y8X7IDIyLERAwPr1rjd23w3BzJ5k3ahkS04jgid+8ISpmfUHKhG/ThrHRjoBzBfiapDlM/XMS/4QD21+IuPuhghq4e0J7884+kmH88w=
+	t=1730374150; cv=none; b=gG7opQXsck0NgKyqdovkXc3EEQ/NOgzkwnuqDs4skU8RLSMxwKX0yj4MQZk9epQJtaL9vIvyltIAPBsH42ktim2B5d/siTixf0K97NUuUqlWqzyR1bE1qdw41NeI9ce9sFSbu5thN35I4yfyXfikFXsXZSlPbbmwSwrdOQrr31U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730371346; c=relaxed/simple;
-	bh=LirR3kzbScaAvwOKGcEk0tU8aX0hkYtaRdjnyAUg0cA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=gMCcwrT8qGm18JX3KLTwGt8USSqCHAPTWHPx8psi55r7JDjVkLjHf2eWazlM0J7uF9yfY5HzBCpdd7qWG9Zzb8to1TBEtPx9yXeVpXYB1iq3sLyGzNgIA34P/726lzshHlrusc4RKRE05XnE3CODNjkcNDWBtOTk+gvUkVse31Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b=eE2nQMdK; arc=none smtp.client-ip=52.119.213.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
-  s=amazon201209; t=1730371345; x=1761907345;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2XSQmg9XPL/tUl5Uy9X9cqzqndsoHfM/nyIda+DnmYs=;
-  b=eE2nQMdKcNLuqicCNqHp/j4fLUzG++kDn/aXTaIkjrxy5eY2/n2qc5ry
-   EzFguMwjRcOQS5VGG5a41lkhKP6ZfTWaqVDNzaPKrgKQYgBX0k0gFbeLE
-   JPgqQh8ZhswAKPqQP8H1Rp4WrKhK2Ha3PN+RHSxJuaQgS+TfABckgWvzv
-   0=;
-X-IronPort-AV: E=Sophos;i="6.11,247,1725321600"; 
-   d="scan'208";a="37873631"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-52003.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 10:42:19 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [10.0.38.20:53488]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.22.121:2525] with esmtp (Farcaster)
- id f575b9e2-c87c-4dc7-9ccf-8641a67b176b; Thu, 31 Oct 2024 10:42:18 +0000 (UTC)
-X-Farcaster-Flow-ID: f575b9e2-c87c-4dc7-9ccf-8641a67b176b
-Received: from EX19D003UWB002.ant.amazon.com (10.13.138.11) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Thu, 31 Oct 2024 10:42:09 +0000
-Received: from EX19MTAUWA001.ant.amazon.com (10.250.64.204) by
- EX19D003UWB002.ant.amazon.com (10.13.138.11) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.35;
- Thu, 31 Oct 2024 10:42:09 +0000
-Received: from email-imr-corp-prod-iad-all-1b-a03c1db8.us-east-1.amazon.com
- (10.25.36.214) by mail-relay.amazon.com (10.250.64.204) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id
- 15.2.1258.34 via Frontend Transport; Thu, 31 Oct 2024 10:42:08 +0000
-Received: from [127.0.0.1] (dev-dsk-roypat-1c-dbe2a224.eu-west-1.amazon.com [172.19.88.180])
-	by email-imr-corp-prod-iad-all-1b-a03c1db8.us-east-1.amazon.com (Postfix) with ESMTPS id 524C0804C3;
-	Thu, 31 Oct 2024 10:42:02 +0000 (UTC)
-Message-ID: <27646c08-f724-49f7-9f45-d03bad500219@amazon.co.uk>
-Date: Thu, 31 Oct 2024 10:42:00 +0000
+	s=arc-20240116; t=1730374150; c=relaxed/simple;
+	bh=UnZX91+/sQM8sS5+OTRnIXvFmFdxwbZ9VqP4wheZNog=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QkfgRMYQw7hxVHVdd8oW+fUhjo56TfEUfAnpzUrgVhgzGVJ7+E/5jKFWeplNJ64U/E+w8kQB1l04sp7A/dNon5r2P84CxuVkkyzCXxq2zqMiKFjm2sIbttt9ESHNjVUKbsxSq07uSA//O1ePOnVCM+U0sw32L3/7KSJILN/+Ok4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=heIam3FV; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NsrpDDDF; arc=none smtp.client-ip=202.12.124.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailflow.stl.internal (Postfix) with ESMTP id B66991D400F4;
+	Thu, 31 Oct 2024 07:29:04 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-07.internal (MEProxy); Thu, 31 Oct 2024 07:29:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1730374144; x=
+	1730377744; bh=gbk2Ss8q1PE7LytElzmZKH60/pFHvmJOtscWfzfiW6U=; b=h
+	eIam3FVft+wIAMxEiwUBm+yrngKlgGBEInd8P5WHuG0MYrW+pPB9uzWwVhdBbfs5
+	vJz122evkXigKGnAwXe00jYLl4+qjm0EFt0dqw8DYJyVa9DFKCfY+7zbbLP9m4BG
+	iTxyCphnQRaS8ixqda3rJ8aN5NH6KScYjHM7F++jg5EN7C7Mb9bqI8Wv1lrwuSRD
+	oh6e8kTRFkJloMHhV0IC8xqAsXMNCH/kTa/Q6OUEqPeMurvzyS2XdHK5Q8oQm2p8
+	usZAiuPt48ViD+WScwPI8odwqji/TquyijHko8ggztDlCSDM1H5fnqq9EYREgWJw
+	YUUR7yXKL0IZ8Q2BKlKzw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1730374144; x=1730377744; bh=gbk2Ss8q1PE7LytElzmZKH60/pFHvmJOtsc
+	WfzfiW6U=; b=NsrpDDDFPsEJNUXtvq+hUUyQ+PuaGh6wSy1QIoe6wJvXv+3mABA
+	X4FpfSbR21ekiJMpQHDwlEwGyhq9A7pnkx/rNxQpF27nCJqi7KeLYZgoS7iytD71
+	49ntniFH2r36WTPQTCgizMy8xzexy6zN8ehTS3dWwNNDGtaeiOM2lXiCKRDM60yT
+	ZHc0w1EX+nyruuEkSXgLx24nTgu6mzLbQ54a03iXsBkXLCtMcp3EKXem0NS5Ut/v
+	sSvpxPTI4adA+qEXrkxWFD1hDkwqjcdLTkAqrMGJZCju33gAdpmbBc1iGHWc3kEN
+	lPbWRtjjkPKJzkPkymkl9T032wuylshviZg==
+X-ME-Sender: <xms:_2kjZ_NS2J05sVtpUpcKyfuqs9E8qHPfAQSs7VxtyTRMYjD8dlAdjw>
+    <xme:_2kjZ5-_mwlaT120Gl5A_Kf-9gacRVazrCvxKHijxgSgRBBFPuXf_LftCjfSka0Re
+    L0dVEwAdDvS2K03ofs>
+X-ME-Received: <xmr:_2kjZ-TIbYXNPHM3lDKmaa28Fn-hHkfMtnERXNKgq1vcHGjOmGUtEOv-t8nz>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekhedgvdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtjeen
+    ucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrg
+    hilhdrnhgvtheqnecuggftrfgrthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfek
+    geetheegheeifffguedvuefffefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggp
+    rhgtphhtthhopeduuddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnthhonh
+    hiohesohhpvghnvhhpnhdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhg
+    lhgvrdgtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtth
+    hopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepughonhgrlhgurdhh
+    uhhnthgvrhesghhmrghilhdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehrhigriigrnhhovhdrshdrrgesghhmrghilhdrtghomhdp
+    rhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehnvghtuggvvh
+    esvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:_2kjZzvNTqEm_lrGfkTOl6rLKFksu2FEleiizyZz2E9NYWkK301s3g>
+    <xmx:_2kjZ3comBMwBJoTsvSs3XqkCb0uNSKf7AMZJweICidGhZ65VaddJg>
+    <xmx:_2kjZ_3AvgyXaJtvWv6u0cWtQNLsFhKOR1AKFVXBzSsjP3WNO4-wAA>
+    <xmx:_2kjZz8LdZCfj1cZgX7pHp1ulmTxPaUn_I5W9nM013C_A05_qHflRg>
+    <xmx:AGojZ2yycHuetLEWJErbEG3p792N2DgvxpliJKTDAmdmRB14p8cucSXJ>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 31 Oct 2024 07:29:03 -0400 (EDT)
+Date: Thu, 31 Oct 2024 12:29:01 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v11 09/23] ovpn: implement basic RX path (UDP)
+Message-ID: <ZyNp_WSG6ClueLe_@hog>
+References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-9-de4698c73a25@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v3 0/6] Direct Map Removal for guest_memfd
-To: David Hildenbrand <david@redhat.com>, <tabba@google.com>,
-	<quic_eberman@quicinc.com>, <seanjc@google.com>, <pbonzini@redhat.com>,
-	<jthoughton@google.com>, <ackerleytng@google.com>, <vannapurve@google.com>,
-	<rppt@kernel.org>
-CC: <graf@amazon.com>, <jgowans@amazon.com>, <derekmn@amazon.com>,
-	<kalyazin@amazon.com>, <xmarcalx@amazon.com>, <linux-mm@kvack.org>,
-	<corbet@lwn.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
-	<chenhuacai@kernel.org>, <kernel@xen0n.name>, <paul.walmsley@sifive.com>,
-	<palmer@dabbelt.com>, <aou@eecs.berkeley.edu>, <hca@linux.ibm.com>,
-	<gor@linux.ibm.com>, <agordeev@linux.ibm.com>, <borntraeger@linux.ibm.com>,
-	<svens@linux.ibm.com>, <gerald.schaefer@linux.ibm.com>, <tglx@linutronix.de>,
-	<mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
-	<x86@kernel.org>, <hpa@zytor.com>, <luto@kernel.org>, <peterz@infradead.org>,
-	<rostedt@goodmis.org>, <mhiramat@kernel.org>,
-	<mathieu.desnoyers@efficios.com>, <shuah@kernel.org>, <kvm@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <loongarch@lists.linux.dev>,
-	<linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20241030134912.515725-1-roypat@amazon.co.uk>
- <4aa0ccf4-ebbe-4244-bc85-8bc8dcd14e74@redhat.com>
-From: Patrick Roy <roypat@amazon.co.uk>
-Content-Language: en-US
-Autocrypt: addr=roypat@amazon.co.uk; keydata=
- xjMEY0UgYhYJKwYBBAHaRw8BAQdA7lj+ADr5b96qBcdINFVJSOg8RGtKthL5x77F2ABMh4PN
- NVBhdHJpY2sgUm95IChHaXRodWIga2V5IGFtYXpvbikgPHJveXBhdEBhbWF6b24uY28udWs+
- wpMEExYKADsWIQQ5DAcjaM+IvmZPLohVg4tqeAbEAgUCY0UgYgIbAwULCQgHAgIiAgYVCgkI
- CwIEFgIDAQIeBwIXgAAKCRBVg4tqeAbEAmQKAQC1jMl/KT9pQHEdALF7SA1iJ9tpA5ppl1J9
- AOIP7Nr9SwD/fvIWkq0QDnq69eK7HqW14CA7AToCF6NBqZ8r7ksi+QLOOARjRSBiEgorBgEE
- AZdVAQUBAQdAqoMhGmiXJ3DMGeXrlaDA+v/aF/ah7ARbFV4ukHyz+CkDAQgHwngEGBYKACAW
- IQQ5DAcjaM+IvmZPLohVg4tqeAbEAgUCY0UgYgIbDAAKCRBVg4tqeAbEAtjHAQDkh5jZRIsZ
- 7JMNkPMSCd5PuSy0/Gdx8LGgsxxPMZwePgEAn5Tnh4fVbf00esnoK588bYQgJBioXtuXhtom
- 8hlxFQM=
-In-Reply-To: <4aa0ccf4-ebbe-4244-bc85-8bc8dcd14e74@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241029-b4-ovpn-v11-9-de4698c73a25@openvpn.net>
 
-On Thu, 2024-10-31 at 09:50 +0000, David Hildenbrand wrote:
-> On 30.10.24 14:49, Patrick Roy wrote:
->> Unmapping virtual machine guest memory from the host kernel's direct map
->> is a successful mitigation against Spectre-style transient execution
->> issues: If the kernel page tables do not contain entries pointing to
->> guest memory, then any attempted speculative read through the direct map
->> will necessarily be blocked by the MMU before any observable
->> microarchitectural side-effects happen. This means that Spectre-gadgets
->> and similar cannot be used to target virtual machine memory. Roughly 60%
->> of speculative execution issues fall into this category [1, Table 1].
->>
->> This patch series extends guest_memfd with the ability to remove its
->> memory from the host kernel's direct map, to be able to attain the above
->> protection for KVM guests running inside guest_memfd.
->>
->> === Changes to v2 ===
->>
->> - Handle direct map removal for physically contiguous pages in arch code
->>    (Mike R.)
->> - Track the direct map state in guest_memfd itself instead of at the
->>    folio level, to prepare for huge pages support (Sean C.)
->> - Allow configuring direct map state of not-yet faulted in memory
->>    (Vishal A.)
->> - Pay attention to alignment in ftrace structs (Steven R.)
->>
->> Most significantly, I've reduced the patch series to focus only on
->> direct map removal for guest_memfd for now, leaving the whole "how to do
->> non-CoCo VMs in guest_memfd" for later. If this separation is
->> acceptable, then I think I can drop the RFC tag in the next revision
->> (I've mainly kept it here because I'm not entirely sure what to do with
->> patches 3 and 4).
-> 
-> Hi,
-> 
-> keeping upcoming "shared and private memory in guest_memfd" in mind, I
-> assume the focus would be to only remove the direct map for private memory?
-> 
-> So in the current upstream state, you would only be removing the direct
-> map for private memory, currently translating to "encrypted"/"protected"
-> memory that is inaccessible either way already.
-> 
-> Correct?
+2024-10-29, 11:47:22 +0100, Antonio Quartulli wrote:
+> +static int ovpn_udp_encap_recv(struct sock *sk, struct sk_buff *skb)
+> +{
+[...]
+> +	opcode = ovpn_opcode_from_skb(skb, sizeof(struct udphdr));
+> +	if (unlikely(opcode != OVPN_DATA_V2)) {
+> +		/* DATA_V1 is not supported */
+> +		if (opcode == OVPN_DATA_V1)
 
-Yea, with the upcomming "shared and private" stuff, I would expect the
-the shared<->private conversions would call the routines from patch 3 to
-restore direct map entries on private->shared, and zap them on
-shared->private.
+The TCP encap code passes everything that's not V2 to userspace. Why
+not do that with UDP as well?
 
-But as you said, the current upstream state has no notion of "shared"
-memory in guest_memfd, so everything is private and thus everything is
-direct map removed (although it is indeed already inaccessible anyway
-for TDX and friends. That's what makes this patch series a bit awkward
-:( )
+> +			goto drop;
+> +
+> +		/* unknown or control packet: let it bubble up to userspace */
+> +		return 1;
+> +	}
+> +
+> +	peer_id = ovpn_peer_id_from_skb(skb, sizeof(struct udphdr));
+> +	/* some OpenVPN server implementations send data packets with the
+> +	 * peer-id set to undef. In this case we skip the peer lookup by peer-id
+> +	 * and we try with the transport address
+> +	 */
+> +	if (peer_id != OVPN_PEER_ID_UNDEF) {
+> +		peer = ovpn_peer_get_by_id(ovpn, peer_id);
+> +		if (!peer) {
+> +			net_err_ratelimited("%s: received data from unknown peer (id: %d)\n",
+> +					    __func__, peer_id);
+> +			goto drop;
+> +		}
+> +	}
+> +
+> +	if (!peer) {
 
-> -- 
-> Cheers,
-> 
-> David / dhildenb
-> 
+nit: that could be an "else" combined with the previous case?
 
-Best, 
-Patrick
+> +		/* data packet with undef peer-id */
+> +		peer = ovpn_peer_get_by_transp_addr(ovpn, skb);
+> +		if (unlikely(!peer)) {
+> +			net_dbg_ratelimited("%s: received data with undef peer-id from unknown source\n",
+> +					    __func__);
+> +			goto drop;
+> +		}
+> +	}
+
+-- 
+Sabrina
 
