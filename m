@@ -1,203 +1,247 @@
-Return-Path: <linux-kselftest+bounces-21247-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21248-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F08059B82D0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 19:46:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D495A9B8359
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 20:25:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 756851F229CF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 18:46:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 941C4282BFE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 19:25:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFA7A146580;
-	Thu, 31 Oct 2024 18:46:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 684661CB331;
+	Thu, 31 Oct 2024 19:25:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="dBZN2DlG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sNvPsJTU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2072.outbound.protection.outlook.com [40.107.92.72])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1B6D1386C9;
-	Thu, 31 Oct 2024 18:46:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.72
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730400414; cv=fail; b=GZL+mNQi3JGzBWKMlz9IIMYkXpwtM7HHtimr0No/KgXnvHNiTwttXCA6DvpwfMl+d1iKb/UoY7bPRtfUdkBitnScaKS4Qa7TqrHGd983IWot0OhEvvbRdmHRMsMuapDHsb7CEXFTRBlLgcSsvk/fE/oJn7T/YkqsRPb8qE7TjMY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730400414; c=relaxed/simple;
-	bh=mzi7hc8Rzq4K/ymIX8ujDz8E1hxJ5gDthDwyAmmT17A=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vALOCTRE3SuhGDVk2W7fPwoiIUZetmL8Ac9Zl77j6t1iY2zB5WzGP16H0GznXWkAsdmhXOoFO2o+TojLO7hmrFSn1obURz97pMHFLAU+lfBXudwkuTZtQS1eg8YRit1DS+3mCI6xE+ci8svvysAUFWPzM3cVjvoaizpx5I7D2Rg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=dBZN2DlG; arc=fail smtp.client-ip=40.107.92.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=odPRWT7+T/4QR75Crcd5lxbuwZhri8mEPy6CZHZM39ORJVlpWHGcVWqMDiBiKu81sJ3CYkb0KX3lUx5Zm+pkL57DhpuXrx65GzxRr+/DA/lz3z2BbNJ9oeLcBqM3nt+zvuZqnvNy9Axt2mJVZbDq0XDJBYUl6u6+LgbJ3oZrg3Vc28XI6bzT/XQBePFgwHCk+VnIZMeEf3D/OTb1b8IIHbGvi875AV3hQ/jrNbRqpS76AkOuA4rk0ATlbnjWJc2zAQ+ISmI7irT9leSiMzRc1sXMECQ2it/ZpzM+57kj4RtNyCPRIBdYbjlO8ERyE4ylcOpyu4e2YG6fZnszFjFhxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/S+/8u+WetCcfsd5nbj6p9sHaenJtcdeSP3oR7ZRs/I=;
- b=AiVS5+53vksncpdVPwMPwe/6YYYg1E4Sqm3/eSgfs1scm/U+AtgzamD4CaBSyaQhj/Q+mtq0qqfjFufarhf+utqGo1GQiYSpVBj/R3EsxhOZEYVb32Q0jZjV8yTHBGcWkOeb5Pb9aeFFb8mtVKo1J1S4s5stmsVQoBva4sW3JAjy8ce/qWJUgTjFF9XpNibUzlS8Wx192/k+VIpifHs8fBSjkwVzVs+5WppqgzN4gMkTcP+l6bPOjBOq9/US/FOG5cFpsub8RVV9FS5QOnU0hUP02r7Oe8c5J9tAY56gmhp/4cS6ile7xqcCqilVMLW/X2s0z07AuctInXtPmSr6jw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/S+/8u+WetCcfsd5nbj6p9sHaenJtcdeSP3oR7ZRs/I=;
- b=dBZN2DlG2S6bp8O7uTq9I0d8J3PGeBotXYUIkCreLjABhJAPC8BGyzuZCptx3klNTG1RipX4iLTkSufoolYtANkAuZrcqSHmOk6POvzwT3Isv7BVO2XE00pyeoXeFHLRwKMW/TpecPzo3v0cNmQY0sKQ47OXWwc1Z+eCFOgDn+RVTFQmStcRBmekV1CZa5svapQPGLJJq1m0jjeAxdGF1EuiSOWvS6iJNAM1RxrAFc59RKN/Wj8uPb6qvbuFjy36r8fEb9qomT9hWZ5NgGRz5TebZ4m0cQYZBShfxQE3g95pO5yYfZWEDwqVmh38fy3jE6c9q62cx+lhlLwOP7KwgQ==
-Received: from DS7P222CA0019.NAMP222.PROD.OUTLOOK.COM (2603:10b6:8:2e::12) by
- DM4PR12MB6447.namprd12.prod.outlook.com (2603:10b6:8:bf::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8093.25; Thu, 31 Oct 2024 18:46:49 +0000
-Received: from CY4PEPF0000E9D3.namprd03.prod.outlook.com
- (2603:10b6:8:2e:cafe::1f) by DS7P222CA0019.outlook.office365.com
- (2603:10b6:8:2e::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.23 via Frontend
- Transport; Thu, 31 Oct 2024 18:46:49 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CY4PEPF0000E9D3.mail.protection.outlook.com (10.167.241.138) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8114.16 via Frontend Transport; Thu, 31 Oct 2024 18:46:49 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 31 Oct
- 2024 11:46:33 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 31 Oct
- 2024 11:46:33 -0700
-Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
- Transport; Thu, 31 Oct 2024 11:46:31 -0700
-Date: Thu, 31 Oct 2024 11:46:30 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: <kevin.tian@intel.com>, <corbet@lwn.net>, <joro@8bytes.org>,
-	<suravee.suthikulpanit@amd.com>, <will@kernel.org>, <robin.murphy@arm.com>,
-	<dwmw2@infradead.org>, <shuah@kernel.org>, <iommu@lists.linux.dev>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <baolu.lu@linux.intel.com>,
-	<eric.auger@redhat.com>, <jean-philippe@linaro.org>, <mdf@kernel.org>,
-	<mshavit@google.com>, <shameerali.kolothum.thodi@huawei.com>,
-	<smostafa@google.com>, <yi.l.liu@intel.com>, <aik@amd.com>,
-	<zhangfei.gao@linaro.org>, <patches@lists.linux.dev>
-Subject: Re: [PATCH v6 01/10] iommufd/viommu: Add IOMMUFD_OBJ_VDEVICE and
- IOMMU_VDEVICE_ALLOC ioctl
-Message-ID: <ZyPQhn+DlT4Zy3Qq@Asurada-Nvidia>
-References: <cover.1730313494.git.nicolinc@nvidia.com>
- <19e20e54d41a0c1ab7403264e1016c4b19293135.1730313494.git.nicolinc@nvidia.com>
- <20241031132941.GL10193@nvidia.com>
- <ZyO2xfe95Y1TCaqG@Asurada-Nvidia>
- <20241031170446.GQ10193@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 382AA1C9DD5;
+	Thu, 31 Oct 2024 19:25:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730402735; cv=none; b=EgPbCb9rGW6J0RCsnCnxH/Gh8M7lZSoISgr8Zsax87AvikfnCwwuI89JGRk3tSRjTkdRiP+s91aoYsFXZx9HfmTuIMefDPXpjXS6oJaBAq1Yw3GCX4Z1Jvw21XiPP4hcWkLm3ZDh4KlrkMPn8aPA+KgiHX5JYt+qTacDWXury/k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730402735; c=relaxed/simple;
+	bh=0dhCQRIzX+qyTds6/CRN/SjbYJIaKhjCWRSx6ZxfOMo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NQ+sOdD6+zCrXCGlHSmM7JOHYmO433NYB9FqQJoCDifwweje71PoRz68JG+I2l28/75ex8ue4bu9Xu7VjjyrjQ4JggObsASUu/v6Y61AibirL/+TFXOK82xPEIZbBXsN5D0U24oJIfVKGW+n7f4X7p7mEFCMXUlBENf6bvNsUPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sNvPsJTU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9AFCC4CED1;
+	Thu, 31 Oct 2024 19:25:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730402734;
+	bh=0dhCQRIzX+qyTds6/CRN/SjbYJIaKhjCWRSx6ZxfOMo=;
+	h=From:Subject:Date:To:Cc:From;
+	b=sNvPsJTU5iJvCgTMPLXqgMrEm0yKeWXGEVJfoVI0VLuZKILj/aBqLmZjVy8X/Gv70
+	 mw2Ehjt/c2GUbtVFld+eeZ0SGo7xb5Q4DBDjsftKaBczo91OuNY5NBHKtTdYD1YzmN
+	 aORqAvDXuO5H5xAHGm6wanEkq65nRLBX5bhp6VcNy0Jghe6J9nDX0XZ87RRUdAHr0i
+	 6575r+b5iCooy1zzCLSxxaVqMp5yOGgcbz83drADx/nUZwtrehC8Njw/3FHyNJmmq8
+	 gO/j0rJtgKZDh9/umPaQjxfY3d8tVTa7y9tyYhnI3GDfWxKkys+2OOznM2/rUa3knG
+	 RcbVbBwJ9Gpcw==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH RFT v12 0/8] fork: Support shadow stacks in clone3()
+Date: Thu, 31 Oct 2024 19:25:01 +0000
+Message-Id: <20241031-clone3-shadow-stack-v12-0-7183eb8bee17@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20241031170446.GQ10193@nvidia.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D3:EE_|DM4PR12MB6447:EE_
-X-MS-Office365-Filtering-Correlation-Id: 79045e1b-f3a0-4855-ea23-08dcf9dc60d3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|7416014|376014|1800799024|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?1yyWaIv466aDIbajOy635k+din/Jp33ZyyO8cQ92u1b94gkUMRNcP+HUJUTr?=
- =?us-ascii?Q?D1mqufRRVfJw7ty6Yz/cUzskeu2Z1FRVwrUzdqeJrQTf3wIjtSYUPrVUGCo4?=
- =?us-ascii?Q?q3FtoGdziIVGW8+ZzxEHKYjUS4QE3WtIhaPiCcqgAsJ0kfx3NBVViN+gwEYH?=
- =?us-ascii?Q?nHBBQNVclcHghK8viGdTDTqo+qnF7CedIhLOmoLQsT4FDEYVDtklNIAUNYIc?=
- =?us-ascii?Q?uHlMEIgJCq/NKiSWLtxmOhNibJ70dxpGztF1TJjXZT/JW2XF7SjDkbgEgQu+?=
- =?us-ascii?Q?hwFc2QDsT920R15l40867V67UatN50mohlXA9v+gB4Rjs7d1Fdroqd5TJKdU?=
- =?us-ascii?Q?TtSvZgx/zgWD4sTCAd1ovaPbgAnZbNNrLCi1PnYaS861p4GHO6HCNGSLHF/2?=
- =?us-ascii?Q?i2AyBmvBFeg5rd0k2SuPDVNC4tBx1EeEr4wTOFlyASJyVlcDXLVE6jMq3izg?=
- =?us-ascii?Q?EjlycUUFWFbLXgckC/qwzuPYiwf+ogutCrLI353HKswmXD+gvar/FzloFcjf?=
- =?us-ascii?Q?kcXM+CnStCz4xtXHK3T2catgOWmW7dLNHqc6S2K0lBjIncxA0gXsIt02ePh6?=
- =?us-ascii?Q?TvIO+Qh3uTx7A9x9rJe1uocaYwCNfR336HwhMImVMKDTAXK4cGoPnhXX9E5T?=
- =?us-ascii?Q?OAHQTo6SEoZpjo0n44eXPlXOOyzM1KJ6vwDWoevQzqHIwRl6EGu9qzd2Vn6M?=
- =?us-ascii?Q?g2rKAbUxIJvaBw5pbfWCGjtHgr4TWgaXuDGwGdwAhl7fk5o6r5sPrFH1pWus?=
- =?us-ascii?Q?6SLhJ+hbQN0dA0gQMdwza9jA4bMZrsW9Kjkqz6LTotzttzE6HPegKik9NmMk?=
- =?us-ascii?Q?MJ9dnessrp4LtV1ZzQ4GwS/Y5DOU5ypGlV+d83sO5Q+td0TWJaKBvfBcTaNK?=
- =?us-ascii?Q?MowFe9tQGgmzycQkkPunnnBW5x1J5Sgx7N1tmaE/5jag2iFk06ZqCKSYKDa7?=
- =?us-ascii?Q?rr/gqPiOHUjKMh7VusbPUMpweC6b4tEeiZriteRw1l71okL3Pjq8ljMYOvLK?=
- =?us-ascii?Q?/NDRxEio1Adp+C9VO4U5UBsl8ltzJANpSZonooKQP5yd5pFs13HYKaud0g9Q?=
- =?us-ascii?Q?91goZCbSa7vnQrp0Yps8XCPIhnsAvJyY/TbjwsUgFdCy/whSk1izz5305QLP?=
- =?us-ascii?Q?zil84SWDGHuNydHAYIgzeQT9MZ/P8VBgmI0icGHkjYYl4z8zMOPYQDpBfgu9?=
- =?us-ascii?Q?zaaL8JMbg3RsAqncJCTOxmadAYI40zegbGaeSK3jOWvxuZPHJbrO8p9xOnGv?=
- =?us-ascii?Q?O3Y0XGLcNx63Y5ImfGk3BFAFfB0rDHi03nJ+A5st/okZxwzdxlAvngGYZPxN?=
- =?us-ascii?Q?ANV0lJ9rEBYEOns2Di8VSqInzpR6iPjEjhZXkT5vHHTRh3C/YMKC0syRQA7K?=
- =?us-ascii?Q?mdqZxUF7U6t0ExKRJh9h8YnvkVp5Lh/JCPV0CDz9B3f7WbMhdQ=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(7416014)(376014)(1800799024)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2024 18:46:49.1296
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 79045e1b-f3a0-4855-ea23-08dcf9dc60d3
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000E9D3.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6447
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAI7ZI2cC/3XSTU7DMBAF4KtUXhPkGf+zYsUBEDvEwo7HbdQqQ
+ UkVQFXvjhMEKXKytC1/9jy9Cxuob2hgD7sL62lshqZr8wLwbsfqg2/3VDUxbzDkKICDq+pT15K
+ ohoOP3Uc1nH19rEBFySOGpIRm+eZ7T6n5nNlX9vz0wt7y5qEZzl3/NT81wnz0g6JYRUeoeBWtN
+ pGH7Ef+eKS+pdN91+9ncMQFAZDrCGYkaBDJagugVIGIGwT5OiIy4k2wFAWhr+sCkbeIXUdkRmx
+ AmxLJpI0uEPWLSI58IxOVEYFYa6ecJRkKRC+I3gpWZ8QRGWNFgBRcgZgFMQLWETNl4pRAopACx
+ AKxC2L5RiY2I9zXSZjaJ5BlsO4G2Sjf6KZxNEYjk3NSywIBfqPgxjzAp79ossaZ4KQsmwJ/pZX
+ Audpgptai1x5D1FEr+Mdcr9dvPdgCgXMDAAA=
+X-Change-ID: 20231019-clone3-shadow-stack-15d40d2bf536
+To: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
+ Deepak Gupta <debug@rivosinc.com>, Szabolcs Nagy <Szabolcs.Nagy@arm.com>, 
+ "H.J. Lu" <hjl.tools@gmail.com>, Florian Weimer <fweimer@redhat.com>, 
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+ Vincent Guittot <vincent.guittot@linaro.org>, 
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
+ Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, jannh@google.com, bsegall@google.com, 
+ Yury Khrustalev <yury.khrustalev@arm.com>, 
+ Wilco Dijkstra <wilco.dijkstra@arm.com>, linux-kselftest@vger.kernel.org, 
+ linux-api@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
+ Kees Cook <kees@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Shuah Khan <skhan@linuxfoundation.org>
+X-Mailer: b4 0.15-dev-9b746
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7352; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=0dhCQRIzX+qyTds6/CRN/SjbYJIaKhjCWRSx6ZxfOMo=;
+ b=owGbwMvMwMWocq27KDak/QLjabUkhnTlmwtz2zdkbr6Xf1hZ4rvMOvd4m8YfF3d2Nm6odHm57Ru7
+ X4xBJ6MxCwMjF4OsmCLL2mcZq9LDJbbOfzT/FcwgViaQKQxcnAIwkT0R7P/zC1alCMn4BPKtvtW9Ma
+ blmtGbCTyunPI1/PETLvausah+15bIasHVzzjzXCxrt2Dzhv9nK/aIn7hVJDkhSCj/gm6bBQNraHGA
+ 8BWljqy1c6wLFgtVrnU5v/XAyQjJltSu7y7c3olcvN/nuc/m8s4/d+y0bbGNpXfIweAFUZI+i7bcN/
+ q6Kpar/VIHS99tS1P9iZEC4QYsJWxHuYzKGBYenvXj7AP1558089e3iIhkdtw6U7bmjfecr9b8HJtf
+ Zm38n13s5ekVF6HwzDX76arenV4972Xe51edajZki2qN9sjTbDPbnGEhIb7tNX/LzJdb283zd+w2Vb
+ GaN2/jxDcz0iOzlY88Nxc3XvIEAA==
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Thu, Oct 31, 2024 at 02:04:46PM -0300, Jason Gunthorpe wrote:
-> On Thu, Oct 31, 2024 at 09:56:37AM -0700, Nicolin Chen wrote:
-> > On Thu, Oct 31, 2024 at 10:29:41AM -0300, Jason Gunthorpe wrote:
-> > > On Wed, Oct 30, 2024 at 02:35:27PM -0700, Nicolin Chen wrote:
-> > > > +void iommufd_vdevice_destroy(struct iommufd_object *obj)
-> > > > +{
-> > > > +	struct iommufd_vdevice *vdev =
-> > > > +		container_of(obj, struct iommufd_vdevice, obj);
-> > > > +	struct iommufd_viommu *viommu = vdev->viommu;
-> > > > +
-> > > > +	/* xa_cmpxchg is okay to fail if alloc returned -EEXIST previously */
-> > > > +	xa_cmpxchg(&viommu->vdevs, vdev->id, vdev, NULL, GFP_KERNEL);
-> > > 
-> > > There are crazy races that would cause this not to work. Another
-> > > thread could have successfully destroyed whatever caused EEXIST and
-> > > the successfully registered this same vdev to the same id. Then this
-> > > will wrongly erase the other threads entry.
-> > >
-> > > It would be better to skip the erase directly if the EEXIST unwind is
-> > > being taken.
-> >
-> > Hmm, is the "another thread" an alloc() or a destroy()? 
-> 
-> I was thinking both
-> 
-> > It doesn't seem to me that there could be another destroy() on the
-> > same object since this current destroy() is the abort to an
-> > unfinalized object.  And it doesn't seem that another alloc() will
-> > get the same vdev ptr since every vdev allocation in the alloc()
-> > will be different?
-> 
-> Ah so you are saying that since the vdev 'old' is local to this thread
-> it can't possibly by aliased by another?
-> 
-> I was worried the id could be aliased, but yes, that seems right that
-> the vdev cmpxchg would reject that.
-> 
-> So lets leave it
+The kernel has recently added support for shadow stacks, currently
+x86 only using their CET feature but both arm64 and RISC-V have
+equivalent features (GCS and Zicfiss respectively), I am actively
+working on GCS[1].  With shadow stacks the hardware maintains an
+additional stack containing only the return addresses for branch
+instructions which is not generally writeable by userspace and ensures
+that any returns are to the recorded addresses.  This provides some
+protection against ROP attacks and making it easier to collect call
+stacks.  These shadow stacks are allocated in the address space of the
+userspace process.
 
-Ack. I'll still update this since xa_cmpxchg can give other errno:
-+	/* xa_cmpxchg is okay to fail if alloc returned -EEXIST previously */
--	/* xa_cmpxchg is okay to fail if alloc failed xa_cmpxchg previously */
+Our API for shadow stacks does not currently offer userspace any
+flexiblity for managing the allocation of shadow stacks for newly
+created threads, instead the kernel allocates a new shadow stack with
+the same size as the normal stack whenever a thread is created with the
+feature enabled.  The stacks allocated in this way are freed by the
+kernel when the thread exits or shadow stacks are disabled for the
+thread.  This lack of flexibility and control isn't ideal, in the vast
+majority of cases the shadow stack will be over allocated and the
+implicit allocation and deallocation is not consistent with other
+interfaces.  As far as I can tell the interface is done in this manner
+mainly because the shadow stack patches were in development since before
+clone3() was implemented.
 
-Thanks
-Nicolin
+Since clone3() is readily extensible let's add support for specifying a
+shadow stack when creating a new thread or process, keeping the current
+implicit allocation behaviour if one is not specified either with
+clone3() or through the use of clone().  The user must provide a shadow
+stack pointer, this must point to memory mapped for use as a shadow
+stackby map_shadow_stack() with an architecture specified shadow stack
+token at the top of the stack.
+
+Please note that the x86 portions of this code are build tested only, I
+don't appear to have a system that can run CET available to me.
+
+[1] https://lore.kernel.org/linux-arm-kernel/20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org/T/#mc58f97f27461749ccf400ebabf6f9f937116a86b
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v12:
+- Add the regular prctl() to the userspace API document since arm64
+  support is queued in -next.
+- Link to v11: https://lore.kernel.org/r/20241005-clone3-shadow-stack-v11-0-2a6a2bd6d651@kernel.org
+
+Changes in v11:
+- Rebase onto arm64 for-next/gcs, which is based on v6.12-rc1, and
+  integrate arm64 support.
+- Rework the interface to specify a shadow stack pointer rather than a
+  base and size like we do for the regular stack.
+- Link to v10: https://lore.kernel.org/r/20240821-clone3-shadow-stack-v10-0-06e8797b9445@kernel.org
+
+Changes in v10:
+- Integrate fixes & improvements for the x86 implementation from Rick
+  Edgecombe.
+- Require that the shadow stack be VM_WRITE.
+- Require that the shadow stack base and size be sizeof(void *) aligned.
+- Clean up trailing newline.
+- Link to v9: https://lore.kernel.org/r/20240819-clone3-shadow-stack-v9-0-962d74f99464@kernel.org
+
+Changes in v9:
+- Pull token validation earlier and report problems with an error return
+  to parent rather than signal delivery to the child.
+- Verify that the top of the supplied shadow stack is VM_SHADOW_STACK.
+- Rework token validation to only do the page mapping once.
+- Drop no longer needed support for testing for signals in selftest.
+- Fix typo in comments.
+- Link to v8: https://lore.kernel.org/r/20240808-clone3-shadow-stack-v8-0-0acf37caf14c@kernel.org
+
+Changes in v8:
+- Fix token verification with user specified shadow stack.
+- Don't track user managed shadow stacks for child processes.
+- Link to v7: https://lore.kernel.org/r/20240731-clone3-shadow-stack-v7-0-a9532eebfb1d@kernel.org
+
+Changes in v7:
+- Rebase onto v6.11-rc1.
+- Typo fixes.
+- Link to v6: https://lore.kernel.org/r/20240623-clone3-shadow-stack-v6-0-9ee7783b1fb9@kernel.org
+
+Changes in v6:
+- Rebase onto v6.10-rc3.
+- Ensure we don't try to free the parent shadow stack in error paths of
+  x86 arch code.
+- Spelling fixes in userspace API document.
+- Additional cleanups and improvements to the clone3() tests to support
+  the shadow stack tests.
+- Link to v5: https://lore.kernel.org/r/20240203-clone3-shadow-stack-v5-0-322c69598e4b@kernel.org
+
+Changes in v5:
+- Rebase onto v6.8-rc2.
+- Rework ABI to have the user allocate the shadow stack memory with
+  map_shadow_stack() and a token.
+- Force inlining of the x86 shadow stack enablement.
+- Move shadow stack enablement out into a shared header for reuse by
+  other tests.
+- Link to v4: https://lore.kernel.org/r/20231128-clone3-shadow-stack-v4-0-8b28ffe4f676@kernel.org
+
+Changes in v4:
+- Formatting changes.
+- Use a define for minimum shadow stack size and move some basic
+  validation to fork.c.
+- Link to v3: https://lore.kernel.org/r/20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org
+
+Changes in v3:
+- Rebase onto v6.7-rc2.
+- Remove stale shadow_stack in internal kargs.
+- If a shadow stack is specified unconditionally use it regardless of
+  CLONE_ parameters.
+- Force enable shadow stacks in the selftest.
+- Update changelogs for RISC-V feature rename.
+- Link to v2: https://lore.kernel.org/r/20231114-clone3-shadow-stack-v2-0-b613f8681155@kernel.org
+
+Changes in v2:
+- Rebase onto v6.7-rc1.
+- Remove ability to provide preallocated shadow stack, just specify the
+  desired size.
+- Link to v1: https://lore.kernel.org/r/20231023-clone3-shadow-stack-v1-0-d867d0b5d4d0@kernel.org
+
+---
+Mark Brown (8):
+      arm64/gcs: Return a success value from gcs_alloc_thread_stack()
+      Documentation: userspace-api: Add shadow stack API documentation
+      selftests: Provide helper header for shadow stack testing
+      fork: Add shadow stack support to clone3()
+      selftests/clone3: Remove redundant flushes of output streams
+      selftests/clone3: Factor more of main loop into test_clone3()
+      selftests/clone3: Allow tests to flag if -E2BIG is a valid error code
+      selftests/clone3: Test shadow stack support
+
+ Documentation/userspace-api/index.rst             |   1 +
+ Documentation/userspace-api/shadow_stack.rst      |  42 ++++
+ arch/arm64/include/asm/gcs.h                      |   8 +-
+ arch/arm64/kernel/process.c                       |   8 +-
+ arch/arm64/mm/gcs.c                               |  62 +++++-
+ arch/x86/include/asm/shstk.h                      |  11 +-
+ arch/x86/kernel/process.c                         |   2 +-
+ arch/x86/kernel/shstk.c                           |  57 +++++-
+ include/asm-generic/cacheflush.h                  |  11 ++
+ include/linux/sched/task.h                        |  17 ++
+ include/uapi/linux/sched.h                        |  10 +-
+ kernel/fork.c                                     |  96 +++++++--
+ tools/testing/selftests/clone3/clone3.c           | 226 ++++++++++++++++++----
+ tools/testing/selftests/clone3/clone3_selftests.h |  65 ++++++-
+ tools/testing/selftests/ksft_shstk.h              |  98 ++++++++++
+ 15 files changed, 633 insertions(+), 81 deletions(-)
+---
+base-commit: d17cd7b7cc92d37ee8b2df8f975fc859a261f4dc
+change-id: 20231019-clone3-shadow-stack-15d40d2bf536
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
 
