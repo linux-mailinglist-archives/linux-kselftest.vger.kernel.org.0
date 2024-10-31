@@ -1,205 +1,202 @@
-Return-Path: <linux-kselftest+bounces-21210-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21211-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16D739B7B6F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 14:12:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93B469B7B75
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 14:12:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9024E1F21E63
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 13:12:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5163F281250
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 13:12:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDCF119E7D0;
-	Thu, 31 Oct 2024 13:12:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49A8E19E985;
+	Thu, 31 Oct 2024 13:12:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="YA9lGHOn"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="BhFxCH+I"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2084.outbound.protection.outlook.com [40.107.220.84])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB82613A869;
-	Thu, 31 Oct 2024 13:12:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.84
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730380330; cv=fail; b=GcvTyIDMM9EyINY/fO58UAfe5YQdw4aUAztCrs03kEBJjOrzZWW7bc5LgNxGrsdUCKHp0j3EcXSc/xz65KfSE2M1yvf6sv66IbN0b7qsdhyOuMTOzhoJQWmhPB1j/x0PcBn0PC9zY66nl3ReTb7j2BpGyrHJpCSr3CWyEsweXmo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730380330; c=relaxed/simple;
-	bh=tDrIk7KvH0bPYzQG61efQjx2hAhSIIHlJXu2WC59UTU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ssaycNsqwWEtPL9+4sg6ycQmBAqlrZoBGhM4LdK7tHNPdZHhj70aDPWf9h1WjXw3VmDKecPjmXAIPMKnkeJsynJHzxOKFdQiUyWfyiEeCo3dBALcWYeOLTPVvQZ7q6WN0f5dX++HJsNSi86ioiaYih7pmZS+AjaCaKbVyT1TgYE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=YA9lGHOn; arc=fail smtp.client-ip=40.107.220.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RJPiLEMlNbvTO4B+t6nZBQwvSkEOp476Ma3e9g3yDejzF37XfjGtzLX7+TwUagUJH5N3lLDPJMRNHBMHdnRSWjRhI201tAJ93nPLHdvgDO/0GH39NOXSK2xNzfco3rtQCSTjvjpyvEpqx0KWz+BlL7ZbIGSSrYYxhtYLlsYANYDCV+DUXvj0L1nKnaqgtK8awB8LW38gQi/HVo0ZyJcP9sxjKNd13o/1UsbhLQZCTf1LxnOJNf6jWFSX2mUK8CySxeO5tqopJc8JGvHmsShoe8hyyzBnhKiYsYkui9zpkJxNzuEO7rfdVOkWSl8n5ignM5H2vDO/NNMYiCS+SG297Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WYT++5TrMUSTDSarr4q2vGrKIvKPdXkJ7jAVZP1fR9s=;
- b=QWyHYhNunFyumvew8CM4bfRhfPoWheSpoH/r2RFXa34eXiBJz4a58sajVdHnRl74qrpd0PuIWr1+wfbrRM7rL8QmwPuxEe/fdFKnohjNEVDcKV5hAlNCo55txCsErjmHSIX5zzSsQayH2J4diskHOLlr3FUMUAXXSMKhbCUTP6ZkOZQ5IRmyplQvY/HO8AZHXiCpgWHohK5eG8TEWe5mQ9gyBFKQLIqtB3hA20+nwQLaYDkiWbyeoeyPQxjVDIO+DXwwSAK3UO5l19IIFCR40dFPIQeWXhTG4MAoXqWhGV0lnk/nKppm6XTXANC7gU611HibadmNFDtUrVBt7wvURw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WYT++5TrMUSTDSarr4q2vGrKIvKPdXkJ7jAVZP1fR9s=;
- b=YA9lGHOniyWaFPFo3agtz2D/htK5dvUy3TopSnT5Co2qY9Xgfq2d1xO09+9mipcaxENr9cYMSlIopu4YF+FXqlI6VMc96PvfQR5wAEBJSdzl2lWR5tiUm1AqhJOM8qUqfcoITF4Z97/rovxF5UbjZwuSh6+1nMouA43vXhv5djvt2J4eyMjadOoGQejIL3KEmkv64iWniLv52qDHwX6TE9/+yniI0mEf00htE1MMm229AUpq1CCp/NHzL5BJTPNiCJ9d6j5/D8apIhBiP6fVpJlw7q4n92dX1DaBOio8vxSTqviRjzUQrPfR8H9yVdCC13x0IPPqAr9dfU90r4UcdQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by IA0PR12MB8423.namprd12.prod.outlook.com (2603:10b6:208:3dc::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8093.21; Thu, 31 Oct
- 2024 13:12:03 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.8093.018; Thu, 31 Oct 2024
- 13:12:02 +0000
-Date: Thu, 31 Oct 2024 10:12:01 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: kevin.tian@intel.com, corbet@lwn.net, joro@8bytes.org,
-	suravee.suthikulpanit@amd.com, will@kernel.org,
-	robin.murphy@arm.com, dwmw2@infradead.org, shuah@kernel.org,
-	iommu@lists.linux.dev, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	baolu.lu@linux.intel.com, eric.auger@redhat.com,
-	jean-philippe@linaro.org, mdf@kernel.org, mshavit@google.com,
-	shameerali.kolothum.thodi@huawei.com, smostafa@google.com,
-	yi.l.liu@intel.com, aik@amd.com, zhangfei.gao@linaro.org,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v6 02/13] iommufd: Move _iommufd_object_alloc helper to a
- sharable file
-Message-ID: <20241031131201.GH10193@nvidia.com>
-References: <cover.1730313237.git.nicolinc@nvidia.com>
- <52abef167409b25bfee559a0c03f2607ce77be3c.1730313237.git.nicolinc@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <52abef167409b25bfee559a0c03f2607ce77be3c.1730313237.git.nicolinc@nvidia.com>
-X-ClientProxiedBy: BN9PR03CA0683.namprd03.prod.outlook.com
- (2603:10b6:408:10e::28) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9AA19DF4F
+	for <linux-kselftest@vger.kernel.org>; Thu, 31 Oct 2024 13:12:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730380355; cv=none; b=n0glCqZNx7FNTvxJ/ZzYwxVYBnSa7MrjrE1YyQzyJfLBO9TbaVpLTB6XbRjTPJ8Via0Ox2z8MCZFWN9NNR7LXEcwoy6N+Y/MzUireTKjOgG0FGeUl6wSgB4bDJUWJDLpqW6lb7JUo0NpU+zwBpEHkXnPSga/VWC5SGrgPUBevJo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730380355; c=relaxed/simple;
+	bh=ym1N7c/6t26tf3cwKfcmnn3Yn8xExbWlFoew4YMulTk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TbYykwSm6D0wSBw6Rl4mjVLZvlXiMG8pDOcWhRW4fPtEh5lvyAzG70XFNqdWru60YPNCXtENo75eytNM4vvGtvByEtyqwgAt+vfuUBmuWomsXl6TesMtdy4Rnh8lfDwjEC0l+XoEkq0wlsUxXQmHvW8NVncPSQSRT6eTcIs4Wms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=BhFxCH+I; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2fb518014b9so7530041fa.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 31 Oct 2024 06:12:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvpn.net; s=google; t=1730380350; x=1730985150; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fd/LPVoyjETqDW8hwsq6kKowR64Os6FT/cO5AcmEZkM=;
+        b=BhFxCH+Ibexl7n0cs1uXSeV2kFbkk5kp/4tOyTdkFOAPaRRShaFbecptmRRwAeB9Wg
+         FWMA9EiEN/WRhGIUG+er5HiG78dUoQUoLdiT/cEgIlIrunu1Fd/+UqbaG47mDHY3exB8
+         WilWwytvu1XiRKX5xwJi4Avgle10KXDPzwpO53SzxiH7qHr2s61e22qX06beTMZL841a
+         dfZF+sfyAT6hl6sSFLH1dJuB0thjxo5GuWZQKAq1zsMwz8TvbFr3APFbvmWwAR1ijccy
+         2wMtPY//b46PFSkGQJt5wqoBBgecsE8dzl4PRh0NikQktQMdoC8bPUUg8IHBCK08G1NI
+         /1Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730380350; x=1730985150;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fd/LPVoyjETqDW8hwsq6kKowR64Os6FT/cO5AcmEZkM=;
+        b=HclIr50j3yoO5G+KTNTXE9shGVOIJ/BDU6DLUNkbD6GiaX0ayTEq5yeHqZKRaFl1qW
+         AUNNb+XEqZeEWy5jM0chPmrArseQpPMXvLvHWdmUWpR5ftH7iEnj80jydHto5ZVdYsjg
+         hpMr+KJoGbWv8N7QKoHFGEWxRMkAWvhnpd/wcDJ8q+XqmvLAJph5fXJBb6bSFzUocJcO
+         sucLAOV7+7lNNttyv+WfFEUudqKnzAOBpHOcNCcHp386gob9SMccPbC6L8SUZZul93yi
+         rj6pvCg6UTr2njc27D00n7NtYl0DTv+2oeuSsAOKvn+iJ/DFBUIkSke4BehQMCrwVX+A
+         D69w==
+X-Forwarded-Encrypted: i=1; AJvYcCUeUZngz7Jk7z/NDWLJLbVCBQAvJtouoBEU1JtxCLJh2PV0VoJct3EHaQ17DuFy2KasxJXaf40m3Kfj9NEgFJs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YytGckrnTUYCEoNqhEt/zPYbZ3ue76WS/SS2+PHQt1pUFWUiNjJ
+	/0ZhXmsG+KEI55Fqg2Gxoss+qzNqXGU7XBfd4QsQCzxavGLF6yXsr5uzLDKrn+Q=
+X-Google-Smtp-Source: AGHT+IGwfCnMclAPIygCvndVaVYKRM/k1M1XD+ZIVh82kXsNZRIL+Dj41Kg6TyhmPNfbB7wFa7tdqQ==
+X-Received: by 2002:a05:651c:19ab:b0:2fb:8774:4412 with SMTP id 38308e7fff4ca-2fcbdfc9303mr81193491fa.24.1730380349566;
+        Thu, 31 Oct 2024 06:12:29 -0700 (PDT)
+Received: from ?IPV6:2001:67c:2fbc:1:634e:2582:d0aa:ee79? ([2001:67c:2fbc:1:634e:2582:d0aa:ee79])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5ceac770204sm601592a12.35.2024.10.31.06.12.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Oct 2024 06:12:29 -0700 (PDT)
+Message-ID: <41d80bb3-0bcc-44da-a5f0-d933d7c0e85a@openvpn.net>
+Date: Thu, 31 Oct 2024 14:12:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|IA0PR12MB8423:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8e4fea9f-b76a-4d4c-029a-08dcf9ad9c39
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?/qjcREiaXHms1iO5bDa/fT1mDmOsBJAyF/P+7vLnHUebaBYQH2RHiw5yx0ky?=
- =?us-ascii?Q?a5MzRpNKA6LQ/e45DzsQbBwlAHHwjGS8t/2+leH4IPDJCykr8Y506lV0+ld6?=
- =?us-ascii?Q?7c761gYfDnBMr/Tm2GThlUdi0eKH3S5wchZnWIpkhqcMBIjFCHf95Mo1l4KA?=
- =?us-ascii?Q?HETsNEwE1JTMIVBRhu244WLjBfTFG91HHWwWNT2NHP1qOx9KdOzHXVKR7kC4?=
- =?us-ascii?Q?rEVjj91AZgfJFIKTe1ENTeS13/ZVHjhaULYVZYfwQel6xDK21s28fJXBn05x?=
- =?us-ascii?Q?YMUBw1pRfymk2mei061zX63whHgORDi7icPnQJ4b+LWu2CgL8PdV7w2fOY2f?=
- =?us-ascii?Q?2SS4YkT1IN5HaerFEYVU6nTdPc7DClbsz/OlglEtfdLp1Lhd1kvix81HAWqj?=
- =?us-ascii?Q?XVmp9c2xzWdbgSOIBa3vpfx5aYawwSF2yJifezA5Nl1jku7QbaPWRuYlCgAH?=
- =?us-ascii?Q?dkWNDKrCBUVmxKaPIxJHXXFs/t0OPXI43UadmODMJsuu3VOMyFEEHp4DFQj3?=
- =?us-ascii?Q?V1ho4iD0PKUO36AAxXM47/WjCgMnqbXJjeFB+vM9dMLforfqS9UtQKh2NteB?=
- =?us-ascii?Q?wOAPOurqYTI+1FirwQDgoSKJp2MqeXl9k3bYVUbVcXpnbd6TY3lOs5EW6vzJ?=
- =?us-ascii?Q?qe3o+UiYrwUNTrtp4DI8gNWD4sUPAifTJAAOwshJApRb3zW4pM8jV5764lQb?=
- =?us-ascii?Q?mbw6zdBR+4cUe+aCEqkDS7EUmkaI8TxrjCtm7mbXOL3GGpgkLtsi0oq2j8yu?=
- =?us-ascii?Q?jL1POTWG3riHpqxUp4UCPo1DBqNPhpUgIMVs/iWq6h/1GgUErWpSe8YiwvvH?=
- =?us-ascii?Q?liHM8H8rhQmYR7FAxQDOth8fu39jQsr+weeLs9ZE4XZ8iYU5KQfFx+22KxaX?=
- =?us-ascii?Q?CZ7IzNdHNUKCgkUsttr3qJbB7+tbO2pJi5L8G2RJOWHfSFzaaJ/1FttGY1Ja?=
- =?us-ascii?Q?XlLdHEsY/PQx3EtD5KhnWOYsnOYMXEw3ZUsld/gFloCsqJ0o7UC0JssB3kZU?=
- =?us-ascii?Q?/Sl0/SOl41hXlRwJ/ytCa9/Bnr0OLe4uCDjryDOoVmqhviN664JlTct48wjm?=
- =?us-ascii?Q?nMUtPy7Ug9iLOr18bzT+TyFHHeqDBfGaDNVivXAOENnUionm/wqyOOJSy3ib?=
- =?us-ascii?Q?e2WlLNQWbw2qwfpODOerTGak6pl62OOlCqZqhmnKMlgjNmUzbLXQgrcEPQmB?=
- =?us-ascii?Q?gpGVAPkhw7d+Op4tseDhnJSPR2p1bmk9B4WRTNKlPI9OW97WJFZUJ+clcZCS?=
- =?us-ascii?Q?zRakPRqPpJXPD2arzeB9CEo5j3eT27lfJVD8qWIJVNLvzvaFAUJ3cMTfzvhC?=
- =?us-ascii?Q?NxGZu92fVrInMOAM11lxdo7E?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?NvaYDQieSNl3V3Emi3XqfJphg1zTDndWFDgu3x2JrbPAcs4C3EwxXukBqkjl?=
- =?us-ascii?Q?OORILrgwyr5fEWhQi54LCfJu78WWKHSuyNbWhvgUMMAt3/fYJ51cA4NihD22?=
- =?us-ascii?Q?Z+Oq5WDa2mp26N/WNAOmUWkX5AeIxRF8tUrfWY1iMzymS+36unPXRG/wFbwb?=
- =?us-ascii?Q?tmdnVIz4SMSWnUk9dCFEdcgy4SwmISYf5c1KlX73gq++bXLoiQ83NuWOIigg?=
- =?us-ascii?Q?rNraTuwC4xQgZlsHx9ih7oH4xAnCIwdnZktHY+dnlht6x+Pox9JfXFsWIGLm?=
- =?us-ascii?Q?la3FfZAU3caK0SP6R+2TsJsvoOyizwl02yEmRSZvXXCWym79Va13gBMxoc1A?=
- =?us-ascii?Q?Jg+OO4uBv+bS6YNNqRqyEFd0g4yvFMs9hKjLS3ZuJsEg6Fjmerl8tOb4UFDB?=
- =?us-ascii?Q?To3RLand5DiWOdDfwHa0isuRHCB6CTzXnowr5quMzAz8dHXY58YmF+RTto54?=
- =?us-ascii?Q?eAyWHyda3LWeITbmAh93ZhNTHiXIboA/6cHF9jgrRZpsncKMspRF8uhBWpIE?=
- =?us-ascii?Q?8vbMZLG1lYszCAQQvRdMriWY9puOM9qabtCj/OZQO9OoxFcPCSz6J2HVg/H0?=
- =?us-ascii?Q?cLMGZHOEx4hNsMXHAHhK/ZLpbeGY+1G94TarvWIkCP9mbW5lstNvz/jA5k9u?=
- =?us-ascii?Q?t3gm96AmIx+rS5ymVgOzJRvGArLeBfJILw19lm5eNuKIX5PJHP3rnAyzmeAp?=
- =?us-ascii?Q?uXKgX25OFk5WcbrbrnQCXdQ6n7b+xCJgo+vqC8KFY39diG9P0kUy5fpEjMc1?=
- =?us-ascii?Q?KhOXCNqRlW2YTb2hKWkGK+CWNyB335Fws1eqoy7w+wW9UDhDPL0RQVLH/p/W?=
- =?us-ascii?Q?wmhGdWyY3VaSQgGc93pUumOUKR23k6UI1AEAj/RQd6F7iZuoP0cm7fTIsLes?=
- =?us-ascii?Q?UQjMJludH+4fZNQjzXRdq0ebwZnzHp4p4Zb2NAf4j/uR74/0mQlX/7yRwti2?=
- =?us-ascii?Q?04QKrJ89jo6ntuT3HVJHxkLB9dgyNk1lnuz6pLphqnC5eZXKZjxTwNpYmsrI?=
- =?us-ascii?Q?wf5tTbZHKyzPT4apMr4IqshujM6cTD3wGKSEX6pDo/LG/2DWt4eilJUuHnc0?=
- =?us-ascii?Q?EprVfo+QzQ4/9K9+PQvGy85Nw3OLliV3lqphV0vUKg+UkE0F4tBSH1uilCS0?=
- =?us-ascii?Q?Pab2QPkyMIeVW/CQYXbiQzhtsl4/R6GliR0mf6dVAlFb825yerjPkoztCH/t?=
- =?us-ascii?Q?YrG1TaMZ9rvioGzRaddvrXVvtpi/WbUQMjK1vaTkCr84iXDb7hotE41E7Hk3?=
- =?us-ascii?Q?5ZPmkfws6/KDSC7lhnjUr/TX2KQxQIlfwOmTbPgxZG6l4fSOl8XDSQ6Q6MJQ?=
- =?us-ascii?Q?lhsoFzlkwSbsgW37YwqmRuTRNnkKH4Bf5JzI9aaprrj84bqiGkgJWDjL/11e?=
- =?us-ascii?Q?SqDa4Dl5RUqo/Dc7KuRPoLsNLCEyhywP4p1u+EBupsPbqBSRJAJvTA9qRrf2?=
- =?us-ascii?Q?9moif5Rc9EMllSeOucvof0pXyUGbhut+qFZHBIkJPcR9jNSeM6UYGCm9Cf02?=
- =?us-ascii?Q?Rcs9NXkS1vpm+b3dEVJqP7HvPAzZI8BTLtwqMuEE4/7J0ZKCJchJxFOGrsvP?=
- =?us-ascii?Q?XDiA32RPfEFisJfMrAc=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e4fea9f-b76a-4d4c-029a-08dcf9ad9c39
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2024 13:12:02.7423
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: d9OrtMzqvCKWqBZty1C0m2SDxLU3ONqm4cOrCsILFqqmiSubli2y/YlHIAZAIDFD
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8423
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v11 11/23] ovpn: store tunnel and transport
+ statistics
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+ Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-11-de4698c73a25@openvpn.net> <ZyNsFyx3fUtVxSSy@hog>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <ZyNsFyx3fUtVxSSy@hog>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 30, 2024 at 02:34:28PM -0700, Nicolin Chen wrote:
-> The following patch will add a new vIOMMU allocator that will require this
-> _iommufd_object_alloc to be sharable with IOMMU drivers (and iommufd too).
+
+
+On 31/10/2024 12:37, Sabrina Dubroca wrote:
+> 2024-10-29, 11:47:24 +0100, Antonio Quartulli wrote:
+>> @@ -136,6 +139,10 @@ void ovpn_decrypt_post(void *data, int ret)
+>>   		goto drop;
+>>   	}
+>>   
+>> +	/* increment RX stats */
+>> +	ovpn_peer_stats_increment_rx(&peer->vpn_stats, skb->len);
+>> +	ovpn_peer_stats_increment_rx(&peer->link_stats, orig_len);
 > 
-> Add a new driver.c file that will be built with CONFIG_IOMMUFD_DRIVER_CORE
-> selected by CONFIG_IOMMUFD, and put the CONFIG_DRIVER under that remaining
-> to be selectable for drivers to build the existing iova_bitmap.c file.
+> [I don't know much about the userspace implementation, so maybe this
+> is a silly question]
 > 
-> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> ---
->  drivers/iommu/iommufd/Kconfig           |  5 ++++
->  drivers/iommu/iommufd/Makefile          |  5 +++-
->  drivers/iommu/iommufd/iommufd_private.h |  4 ---
->  include/linux/iommufd.h                 | 10 +++++++
->  drivers/iommu/iommufd/driver.c          | 40 +++++++++++++++++++++++++
->  drivers/iommu/iommufd/main.c            | 32 --------------------
->  6 files changed, 59 insertions(+), 37 deletions(-)
->  create mode 100644 drivers/iommu/iommufd/driver.c
+> What's the value of keeping track of 2 separate stats if they are
+> incremented exactly at the same time? Packet count will be the same,
+> and the difference in bytes will be just measuring the encap overhead.
 > 
-> diff --git a/drivers/iommu/iommufd/Kconfig b/drivers/iommu/iommufd/Kconfig
-> index 76656fe0470d..83addbe2ff7b 100644
-> --- a/drivers/iommu/iommufd/Kconfig
-> +++ b/drivers/iommu/iommufd/Kconfig
-> @@ -1,9 +1,14 @@
->  # SPDX-License-Identifier: GPL-2.0-only
-> +config IOMMUFD_DRIVER_CORE
-> +	tristate
-> +	default IOMMUFD_DRIVER || IOMMUFD
-> +
->  config IOMMUFD
->  	tristate "IOMMU Userspace API"
->  	select INTERVAL_TREE
->  	select INTERVAL_TREE_SPAN_ITER
->  	select IOMMU_API
-> +	select IOMMUFD_DRIVER_CORE
+> Should one of them be "packets/individual messages that get received
+> over the UDP/TCP link" and the other "packets that get passed up to
+> the stack"?
 
-Should drop the select
+You're correct: link_stats if "received over the TCP/UDP socket", while 
+vpn_stats if what is passing through the ovpn virtual device.
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Packet count may not match though, for example when something happens 
+between "received packet on the link" and "packet passed up to the 
+device" (i.e. decryption error).
 
-Jason
+This makes me wonder why we increment them at the very same place....
+link_stats should be increased upon RX from the socket, while vpn_stats 
+just before delivery. I'll double check.
+
+> 
+> 
+>> @@ -197,6 +206,8 @@ void ovpn_encrypt_post(void *data, int ret)
+>>   		goto err;
+>>   
+>>   	skb_mark_not_on_list(skb);
+>> +	ovpn_peer_stats_increment_tx(&peer->link_stats, skb->len);
+>> +	ovpn_peer_stats_increment_tx(&peer->vpn_stats, orig_len);
+>>   
+>>   	switch (peer->sock->sock->sk->sk_protocol) {
+>>   	case IPPROTO_UDP:
+> 
+> And on TX maybe something like "packets that the stack wants to send
+> through the tunnel" and "packets that actually make it onto the
+> UDP/TCP socket after encap/encrypt"?
+
+Correct.
+
+Same issue here. Increments should not happen back to back.
+
+
+Thanks a lot for spotting these.
+
+Regards,
+
+
+> 
+
+-- 
+Antonio Quartulli
+OpenVPN Inc.
+
 
