@@ -1,258 +1,189 @@
-Return-Path: <linux-kselftest+bounces-21245-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21246-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E6589B82A5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 19:33:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 198969B82C4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 19:44:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2EB21F2252B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 18:33:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4F9D283494
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 18:44:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 674CF1BC9F3;
-	Thu, 31 Oct 2024 18:33:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B9C31CCB26;
+	Thu, 31 Oct 2024 18:43:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="q3Sd+ldg"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="JKs9cVWB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2050.outbound.protection.outlook.com [40.107.95.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 327941E495;
-	Thu, 31 Oct 2024 18:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730399628; cv=fail; b=nkoLr87IDpVcEyIEbXwwFAFsECbAe890SGr7fgNigiXXyAMQUz+LyEMlfWvEEW4i3F/Bp34PM5VP4h3jKbWshtf8N9h3pnaF5BkFDClTZ/KeY7mZ4pCc3cNel3AAo1qgazwImZsynK463eT1cZlJBowzqqAQMmzyC6lsiC/mylk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730399628; c=relaxed/simple;
-	bh=AC5R0abFBRS8yWsme8gZPKYV4HebATPq9QQVyM7/KaA=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gg9IvXaTomP2g4TWbSxD+sFcsVo6h/aieRaqAiLbkRi2azJ0CFDq3A30AQBiKzbq7JVRXuM4zW9vhV5Di4uq7fAAEXg5PAP4bg3Fpp4pXQJgK5/yMbp4Y6P941W/cXJACX22z5U/V7EMzgyc89ecmLcKp69kRUQI41lJP6MGxnI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=q3Sd+ldg; arc=fail smtp.client-ip=40.107.95.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YUxjwLuOSAPkNS8y3cir1kZxgSGZOPc1EE8AFFNaIA3umLvbQtKQyEOJniFXz3yffUowWZUB0vwihKaOIKpg6cIUm3JL5t4CdJk+//FKmmcEIxFM3jbxOjgOTrqMr32taGI9VOh+s9wMiEi96ncJK9KdI5zpXTQ6MsEE+BpDEYj8qO6+5X3SKzKI9itZVKdS2Jr0RaKFyAqCfIDI+CE2mu/tbqOQj5jLiYLXrNXNG2hpj38rkYAtde6O1oKRrTTN8pFMex5XU4Q1aH2x3AkXLqwme0yCkXuAxmwBgnTE39ZgKaOtl+2d/oDxGuSkB4FtQt2AC2mBxiQLQKOpvGYckw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AaGtt5UWke7eKLBcn9GJysdUCXPLuMsJR2N2fnRzcT0=;
- b=ZC8oovF0FQUhGgkxz76EmAOqDY1FPCW+Ypb5Jeh2KdtaOn3oD93hkRzahrp71uzKaYYqlXfaYhrFRWXb09/J93R3VnHE/JYFRx0csSBwY7RDaL3FKDC26IxesG1u3i0n/2lTKBzmP9c0mrd8217UTN7UexQvtlnbaMdfDMbCBxfm9v0pUF4MLTjf10cAmGP6LziTqmidMX9O3hn+KqA6BGKS6mIir+aTKT9ayKdVGzncuiQWtZCg/NjXUIeqhlzvrtxZwg6mwMZquhAFp/E7YY29az0I55S+/boD/pi8AuCrru6QnfI1o0PwMXO7vub4N2cYf98kNDXj5TDRHIBlXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AaGtt5UWke7eKLBcn9GJysdUCXPLuMsJR2N2fnRzcT0=;
- b=q3Sd+ldgXUGRihb0iUEvrCE0DSPnGmcgBxZR1hBB2P5GJJ6SLLnMCgh8/dtq+Nq/S5wOmcA846o7oYvVY+K7D7zzgQMiCYTnEgI7BhYX3hm/5C/zRylnTS+/7zv1qJR6yWVdlLp1L4r5cJcA8MFernW4CCwyBrcjueTrpjMu9VLXNgBKjxDPPJcXRi4jhmqYuq4hDXec9aRBP+RzRh79ZWAzmZdngqmxmpwd0Q+clt9QGKfV1IGh3c2mmPwqIp6Auw0+1mdhduU2SzkE+osQon+lzPKPbiMKxSJ0qkee/2CWd/hVOuuBQJuPOHL+3KQHha+7HAWPSMQTX6shc4NYsw==
-Received: from PH7P220CA0135.NAMP220.PROD.OUTLOOK.COM (2603:10b6:510:327::35)
- by MN2PR12MB4301.namprd12.prod.outlook.com (2603:10b6:208:1d4::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.20; Thu, 31 Oct
- 2024 18:33:42 +0000
-Received: from CY4PEPF0000E9D0.namprd03.prod.outlook.com
- (2603:10b6:510:327:cafe::bf) by PH7P220CA0135.outlook.office365.com
- (2603:10b6:510:327::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.22 via Frontend
- Transport; Thu, 31 Oct 2024 18:33:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- CY4PEPF0000E9D0.mail.protection.outlook.com (10.167.241.135) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8114.16 via Frontend Transport; Thu, 31 Oct 2024 18:33:42 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 31 Oct
- 2024 11:33:26 -0700
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Thu, 31 Oct 2024 11:33:25 -0700
-Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
- Transport; Thu, 31 Oct 2024 11:33:24 -0700
-Date: Thu, 31 Oct 2024 11:33:23 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: <kevin.tian@intel.com>, <corbet@lwn.net>, <joro@8bytes.org>,
-	<suravee.suthikulpanit@amd.com>, <will@kernel.org>, <robin.murphy@arm.com>,
-	<dwmw2@infradead.org>, <shuah@kernel.org>, <iommu@lists.linux.dev>,
-	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <baolu.lu@linux.intel.com>,
-	<eric.auger@redhat.com>, <jean-philippe@linaro.org>, <mdf@kernel.org>,
-	<mshavit@google.com>, <shameerali.kolothum.thodi@huawei.com>,
-	<smostafa@google.com>, <yi.l.liu@intel.com>, <aik@amd.com>,
-	<zhangfei.gao@linaro.org>, <patches@lists.linux.dev>
-Subject: Re: [PATCH v6 12/13] iommufd/selftest: Add IOMMU_VIOMMU_ALLOC test
- coverage
-Message-ID: <ZyPNc0VhJUrTGZAq@Asurada-Nvidia>
-References: <cover.1730313237.git.nicolinc@nvidia.com>
- <8188b47bbee49e071907e1df37a3af269bd840b6.1730313237.git.nicolinc@nvidia.com>
- <20241031131637.GK10193@nvidia.com>
- <ZyOydn+/s6enh1jg@Asurada-Nvidia>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E97BE1CC88F
+	for <linux-kselftest@vger.kernel.org>; Thu, 31 Oct 2024 18:43:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730400211; cv=none; b=mwIZB6xrHeLKFIlcuc9BUNy5YbIUCmwoMr/OCkl83GvlQ+WqLCuUnoh7RnMNBGFfRYGf4XbVZ1/7jjFXvPNLCBsGOOfEoGo+YUPGNC2NVr404b+d5h9TqzL6oiV2yAYWHMMcYnfGYXWdFUFbQeZNffdSmTRCWazYDFQk2JBkV4k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730400211; c=relaxed/simple;
+	bh=fbRxElWAfw0KCiVDJKBevq3Ta0/tr5/VpNOm+QxkSUs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ii0g5bH0aIg0DnMHACrur1A7IU4xe1KEP4DptbggS5Ud0W8SlvZlRDi83ww7SfspHBAy7SSdr81jVWWfvLfV8xx3lG8EuYO7j4tit1JR23zqv4gO+7DHYnhyVhfBHs8WojYu8qHGAEwPaTyRz03DigJRP3FqHzhJ1iDDh4yxxxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=JKs9cVWB; arc=none smtp.client-ip=209.85.160.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-268d0979e90so118122fac.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 31 Oct 2024 11:43:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1730400208; x=1731005008; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m9pkCMrlG+6d8KDFXYWlMBHxdGI2r5U3tUuEXE09VQM=;
+        b=JKs9cVWB+3WbGW2MebYxAk+QX2N8PwgofGKjAyMjqKpy4G7G3BEc26iW3zQ8Wr8TJs
+         qecQ4Ikp4Pit0wTy6VPjf70Ye9FXagXRydi0+p7LEtIzhtjzxvDP9jDRvWywS2xW/dpS
+         nxepEyhjgon2N9OAmPR8aqGG2bghuWucTlbeg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730400208; x=1731005008;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m9pkCMrlG+6d8KDFXYWlMBHxdGI2r5U3tUuEXE09VQM=;
+        b=KDIZ5i9DSixhYPw7bDtTqXxxAHFLIjqjrXvGhoOOY2FC6cIUJ2UEE8OYZW199Iag29
+         nlAIWK945kOGqhArC61KM9BOCZQI1kRazF4uTkb+mmSohYiEGYyM5TzlD62O5KH+2515
+         zdTtoki2kRuE4Bp2v0uVpVvyYW7XcyK4WGcujbNSWvzWduhquI2VDwFy2uIo04fVBi8n
+         LCggF4kOSGxu8E6yl0Fd4hl3jAXyILJbJDNnOdGolLpPNgkduGA2ZYLu2/Xd2jCOPtje
+         x75dyfhEz4rT5FsVry9pFdOvaOd23RBF/WWg+Nqd5weSMK/fa+t5CcZ+Jxl/sjurM4Jc
+         7F8g==
+X-Forwarded-Encrypted: i=1; AJvYcCVY/IjPj8hZnFQdEwmosxEFa5a9nxg908kpb8EshF9FXG/aljEj7mDqq0jEOS4Uv63av9j4l8FfbAo73cZIkrI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOtbzmToAYrl9K6KRFCmfhwmWDlN3wVxWfbgRFxblKUXXR9e0I
+	GCapghN5wPwGjLYeFroqUYt3LS1x5WSGp9eeLLHxzyyX//+NjuGBMtngnODJClJUg6oMWUuW0Ce
+	9bWNHMhETxdtedeiJxajc9ZA0OLo0Q0oBsKGo
+X-Google-Smtp-Source: AGHT+IFGIJKLWI/BUm9W6oX5BAu9UJongzEp3ksTnogYOtUiu9chLn5n70BL50s4fYBWdm9xYpy2QybIo/hGZpLsz+c=
+X-Received: by 2002:a05:6870:7311:b0:288:2955:3efb with SMTP id
+ 586e51a60fabf-29051c4e8a4mr4891117fac.8.1730400207786; Thu, 31 Oct 2024
+ 11:43:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZyOydn+/s6enh1jg@Asurada-Nvidia>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D0:EE_|MN2PR12MB4301:EE_
-X-MS-Office365-Filtering-Correlation-Id: 94bf1a32-fd93-4dd5-a0c9-08dcf9da8bca
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|36860700013|82310400026|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?DuJOHwUzdb2FSrznFbT2l+vcrenBbAPr262kbsWyKYvUvbXFJj9MR9fpGq04?=
- =?us-ascii?Q?seg+P7DpSI+giWta97QKGYeigrgbLm0eMbVZzEfVS0eYMlnzYFN7OdT249kR?=
- =?us-ascii?Q?TY/GfwipvNWI3H+Ll12ob+G+ldLwFhAPU9dNymbg2ReV6dOYIQj2+2tnTuyt?=
- =?us-ascii?Q?PTpYKweR90+AfDLkiT6EQ6yfw0NEM7vVwHDARy2TblAgLim/Hm4YFnfkeyPb?=
- =?us-ascii?Q?OjRLTU7mxmvzRPNiJfmClWJieKM5FDeztOItH3PvkufWjTEhJ6vmJ6Xi6wUj?=
- =?us-ascii?Q?yxky27d5fgXt3tLfm6n3TIiMjFOLwYOeu02iwtbvXKVU5Y6lnCvF6aOAPeSY?=
- =?us-ascii?Q?TbQlsvBNoIeXZXzre0S/jeIMbavgWVB0AOvzvnqj9qbfg0yPYsvVxgM85xPm?=
- =?us-ascii?Q?tl2vYgO9pYkt9zitz0RV5ww9e92qCqXGAnbDeFVQaBubPuaXj8ykIiPnllTi?=
- =?us-ascii?Q?nlWKDqiyYN+Sz0f2E1t6QkMmCNYsGnTmxdLuUp8/QPsFbBbf3HgBZzNH/FUB?=
- =?us-ascii?Q?gfnpVA1Bssue2CkNUI019CzMFYxDX4/WU/C5S2+5eKAqZBZL4Wd3FtkDrsNw?=
- =?us-ascii?Q?zBdlIFZU2Z+94qTdG+uNeXBonNBQEjglUgbihPxt8t9saOtNmI53znH5t8WY?=
- =?us-ascii?Q?g6r+xiqBXQXCoRlFJCwXaMn/cVAEeQL2f23zb47kLfFWvcrvVvFxAHbZn7yo?=
- =?us-ascii?Q?0Nn5OvELKGG/OdtC43NffMsrT9CCS5as0nnVnnghcI25swuQO2+EzlUsMBAr?=
- =?us-ascii?Q?y+YpoYS766f2xSh2re14dvWRsrYoK5xDJepUwtQtw16dn8/aoUe4QQwARAJo?=
- =?us-ascii?Q?97fNnExz88TYbMengTdsXTGn5bGtAQS7mZEZNLKAFcEumARb20QZWt2BJAEG?=
- =?us-ascii?Q?dl4SQql4xrPBfChFUoh6iB9cbi71UUccJJ4yL3z0OcqmrqeXv/qznOn+Jvpi?=
- =?us-ascii?Q?FAGInubu2TOBsYQCrcAI4TKn9DoXQCSJKR+vv84pBO/LgGyVbTcbER8zvP17?=
- =?us-ascii?Q?RKRXerHgMAEKkWMTK0JzM928AI/V40NDs2QYzwKJttvWl6+aDQEljOpOxh0j?=
- =?us-ascii?Q?CSmNABMdVlvcEbvoAYnHdwB8Fylm3OJPEiksG2/TIrWt+Qh9H5K2nQIbceKR?=
- =?us-ascii?Q?rjOcmXHGtFawdtjvuhqahoDAW1MvWXQJftkxYivPeW+XDQEaSmy65fyaj2uk?=
- =?us-ascii?Q?KHZvLGN+R2FWM+oPj+4TdCBD6Xq7Vg9Ik4fgo/sHlqrTsZl9i7dX7WR1V6GX?=
- =?us-ascii?Q?FPYrIuzpGppnIUkA1bGTzzxiIgAaM/KckD3iF3gOEPscmlHsHHktZ5yxrR0r?=
- =?us-ascii?Q?ZGIXtP7VbfORjJwztK7i8yug8aztXVJrPPHC9gFf2aDB14k16i+u/AydyAHm?=
- =?us-ascii?Q?oFz4kM2alBfpkfJ3hkqUKxex2RWjp/iwhcZjVJMhQYzkA5kReA=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2024 18:33:42.2329
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94bf1a32-fd93-4dd5-a0c9-08dcf9da8bca
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000E9D0.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4301
+References: <20241029144539.111155-1-kevin.brodsky@arm.com>
+ <20241029144539.111155-2-kevin.brodsky@arm.com> <CABi2SkUTSuk_PS9==_czM=64FGWK_5DyUe5QELxiFHtPFsKaHw@mail.gmail.com>
+ <cd0e114d-57eb-4c90-bb6f-9abf0cc8920f@arm.com>
+In-Reply-To: <cd0e114d-57eb-4c90-bb6f-9abf0cc8920f@arm.com>
+From: Jeff Xu <jeffxu@chromium.org>
+Date: Thu, 31 Oct 2024 11:43:16 -0700
+Message-ID: <CABi2SkW6_CACjYheaEMuCYGnwnXKoVGuACtnCyDb8Zjfac6Wog@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] arm64: signal: Improve POR_EL0 handling to avoid
+ uaccess failures
+To: Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org, 
+	anshuman.khandual@arm.com, aruna.ramakrishna@oracle.com, broonie@kernel.org, 
+	catalin.marinas@arm.com, dave.hansen@linux.intel.com, Dave.Martin@arm.com, 
+	joey.gouly@arm.com, keith.lucas@oracle.com, pierre.langlois@arm.com, 
+	shuah@kernel.org, sroettger@google.com, tglx@linutronix.de, will@kernel.org, 
+	yury.khrustalev@arm.com, linux-kselftest@vger.kernel.org, x86@kernel.org, 
+	Kees Cook <keescook@chromium.org>, Jorge Lucangeli Obes <jorgelo@chromium.org>, 
+	Jann Horn <jannh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 31, 2024 at 09:38:17AM -0700, Nicolin Chen wrote:
-> On Thu, Oct 31, 2024 at 10:16:37AM -0300, Jason Gunthorpe wrote:
-> > On Wed, Oct 30, 2024 at 02:34:38PM -0700, Nicolin Chen wrote:
-> > > +FIXTURE_SETUP(iommufd_viommu)
-...
-> > > +		EXPECT_ERRNO(EBUSY,
-> > > +			     _test_ioctl_destroy(self->fd, self->hwpt_id));
-> > 
-> > There shouldn't be testing in the FIXTURE_SETUP, it should just do
-> > enough to setup the fixture. negative tests/etc should be in their own
-> > function
-> 
-> OK. I'll make a change by moving all EXPECT_ERRNOs to a TEST_F.
+On Thu, Oct 31, 2024 at 1:45=E2=80=AFAM Kevin Brodsky <kevin.brodsky@arm.co=
+m> wrote:
+>
+> On 30/10/2024 23:01, Jeff Xu wrote:
+> >> -static int restore_poe_context(struct user_ctxs *user)
+> >> +static int restore_poe_context(struct user_ctxs *user,
+> >> +                              struct user_access_state *ua_state)
+> >>  {
+> >>         u64 por_el0;
+> >>         int err =3D 0;
+> >> @@ -282,7 +338,7 @@ static int restore_poe_context(struct user_ctxs *u=
+ser)
+> >>
+> >>         __get_user_error(por_el0, &(user->poe->por_el0), err);
+> >>         if (!err)
+> >> -               write_sysreg_s(por_el0, SYS_POR_EL0);
+> >> +               ua_state->por_el0 =3D por_el0;
+> >>
+> >>         return err;
+> >>  }
+> >> @@ -850,7 +906,8 @@ static int parse_user_sigframe(struct user_ctxs *u=
+ser,
+> >>  }
+> >>
+> >>  static int restore_sigframe(struct pt_regs *regs,
+> >> -                           struct rt_sigframe __user *sf)
+> >> +                           struct rt_sigframe __user *sf,
+> >> +                           struct user_access_state *ua_state)
+> >>  {
+> >>         sigset_t set;
+> >>         int i, err;
+> >> @@ -899,7 +956,7 @@ static int restore_sigframe(struct pt_regs *regs,
+> >>                 err =3D restore_zt_context(&user);
+> >>
+> >>         if (err =3D=3D 0 && system_supports_poe() && user.poe)
+> >> -               err =3D restore_poe_context(&user);
+> >> +               err =3D restore_poe_context(&user, ua_state);
+> >>
+> >>         return err;
+> >>  }
+> >> @@ -908,6 +965,7 @@ SYSCALL_DEFINE0(rt_sigreturn)
+> >>  {
+> >>         struct pt_regs *regs =3D current_pt_regs();
+> >>         struct rt_sigframe __user *frame;
+> >> +       struct user_access_state ua_state;
+> >>
+> >>         /* Always make any pending restarted system calls return -EINT=
+R */
+> >>         current->restart_block.fn =3D do_no_restart_syscall;
+> >> @@ -924,12 +982,14 @@ SYSCALL_DEFINE0(rt_sigreturn)
+> >>         if (!access_ok(frame, sizeof (*frame)))
+> >>                 goto badframe;
+> >>
+> >> -       if (restore_sigframe(regs, frame))
+> >> +       if (restore_sigframe(regs, frame, &ua_state))
+> >>                 goto badframe;
+> >>
+> >>         if (restore_altstack(&frame->uc.uc_stack))
+> >>                 goto badframe;
+> >>
+> > Do you need to move restore_altstack ahead of restore_sigframe?
+>
+> This is not necessary because restore_sigframe() no longer writes to
+> POR_EL0. restore_poe_context() (above) now saves the original POR_EL0
+> value into ua_state, and it is restore_user_access_state() (called below
+> just before returning to userspace) that actually writes to POR_EL0,
+> after all uaccess is completed.
+>
+Got it, thanks for the explanation.
 
-Will squash the followings into this patch in v7:
+-Jeff
 
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index 4fc5185fca0dc..bad11f65b63dd 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -2424,42 +2424,21 @@ FIXTURE_SETUP(iommufd_viommu)
- 		test_cmd_mock_domain(self->ioas_id, &self->stdev_id, NULL,
- 				     &self->device_id);
- 
--		/* Negative test -- invalid hwpt */
--		test_err_viommu_alloc(ENOENT, self->device_id, self->hwpt_id,
--				      IOMMU_VIOMMU_TYPE_SELFTEST, NULL);
--
--		/* Negative test -- not a nesting parent hwpt */
--		test_cmd_hwpt_alloc(self->device_id, self->ioas_id, 0,
--				    &self->hwpt_id);
--		test_err_viommu_alloc(EINVAL, self->device_id, self->hwpt_id,
--				      IOMMU_VIOMMU_TYPE_SELFTEST, NULL);
--		test_ioctl_destroy(self->hwpt_id);
--
- 		/* Allocate a nesting parent hwpt */
- 		test_cmd_hwpt_alloc(self->device_id, self->ioas_id,
- 				    IOMMU_HWPT_ALLOC_NEST_PARENT,
- 				    &self->hwpt_id);
--		/* Negative test -- unsupported viommu type */
--		test_err_viommu_alloc(EOPNOTSUPP, self->device_id,
--				      self->hwpt_id, 0xdead, NULL);
- 
- 		/* Allocate a vIOMMU taking refcount of the parent hwpt */
- 		test_cmd_viommu_alloc(self->device_id, self->hwpt_id,
- 				      IOMMU_VIOMMU_TYPE_SELFTEST,
- 				      &self->viommu_id);
--		EXPECT_ERRNO(EBUSY,
--			     _test_ioctl_destroy(self->fd, self->hwpt_id));
- 
- 		/* Allocate a regular nested hwpt */
- 		test_cmd_hwpt_alloc_nested(self->device_id, self->viommu_id, 0,
- 					   &self->nested_hwpt_id,
- 					   IOMMU_HWPT_DATA_SELFTEST, &data,
- 					   sizeof(data));
--		EXPECT_ERRNO(EBUSY,
--			     _test_ioctl_destroy(self->fd, self->viommu_id));
--	} else {
--		test_err_viommu_alloc(ENOENT, self->device_id, self->hwpt_id,
--				      IOMMU_VIOMMU_TYPE_SELFTEST, NULL);
- 	}
- }
- 
-@@ -2482,6 +2461,36 @@ TEST_F(iommufd_viommu, viommu_auto_destroy)
- {
- }
- 
-+TEST_F(iommufd_viommu, viommu_negative_tests)
-+{
-+	uint32_t device_id = self->device_id;
-+	uint32_t ioas_id = self->ioas_id;
-+	uint32_t hwpt_id;
-+
-+	if (self->device_id) {
-+		/* Negative test -- invalid hwpt (hwpt_id=0) */
-+		test_err_viommu_alloc(ENOENT, device_id, 0,
-+				      IOMMU_VIOMMU_TYPE_SELFTEST, NULL);
-+
-+		/* Negative test -- not a nesting parent hwpt */
-+		test_cmd_hwpt_alloc(device_id, ioas_id, 0, &hwpt_id);
-+		test_err_viommu_alloc(EINVAL, device_id, hwpt_id,
-+				      IOMMU_VIOMMU_TYPE_SELFTEST, NULL);
-+		test_ioctl_destroy(hwpt_id);
-+
-+		/* Negative test -- unsupported viommu type */
-+		test_err_viommu_alloc(EOPNOTSUPP, device_id, self->hwpt_id,
-+				      0xdead, NULL);
-+		EXPECT_ERRNO(EBUSY,
-+			     _test_ioctl_destroy(self->fd, self->hwpt_id));
-+		EXPECT_ERRNO(EBUSY,
-+			     _test_ioctl_destroy(self->fd, self->viommu_id));
-+	} else {
-+		test_err_viommu_alloc(ENOENT, self->device_id, self->hwpt_id,
-+				      IOMMU_VIOMMU_TYPE_SELFTEST, NULL);
-+	}
-+}
-+
- TEST_F(iommufd_viommu, viommu_alloc_nested_iopf)
- {
- 	struct iommu_hwpt_selftest data = {
+> Having said that, I somehow missed the call to restore_altstack() when
+> writing the commit message, so these changes in sys_rt_sigreturn are in
+> fact necessary. Good catch! At least the patch itself should be doing
+> the right thing.
+>
+> - Kevin
+>
+> > similar as x86 change [1],
+> > the discussion for this  happened  in [2] [3]
+> >
+> > [1] https://lore.kernel.org/lkml/20240802061318.2140081-5-aruna.ramakri=
+shna@oracle.com/
+> > [2] https://lore.kernel.org/lkml/20240425210540.3265342-1-jeffxu@chromi=
+um.org/
+> > [3] https://lore.kernel.org/lkml/d0162c76c25bc8e1c876aebe8e243ff2e68623=
+59.camel@intel.com/
+> >
+> > Thanks
+> > -Jeff
+> >
+> >
+> >> +       restore_user_access_state(&ua_state);
+> >> +
+> >>         return regs->regs[0];
+>
 
