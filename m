@@ -1,189 +1,203 @@
-Return-Path: <linux-kselftest+bounces-21246-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21247-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 198969B82C4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 19:44:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F08059B82D0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 19:46:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4F9D283494
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 18:44:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 756851F229CF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 18:46:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B9C31CCB26;
-	Thu, 31 Oct 2024 18:43:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFA7A146580;
+	Thu, 31 Oct 2024 18:46:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="JKs9cVWB"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="dBZN2DlG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2072.outbound.protection.outlook.com [40.107.92.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E97BE1CC88F
-	for <linux-kselftest@vger.kernel.org>; Thu, 31 Oct 2024 18:43:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730400211; cv=none; b=mwIZB6xrHeLKFIlcuc9BUNy5YbIUCmwoMr/OCkl83GvlQ+WqLCuUnoh7RnMNBGFfRYGf4XbVZ1/7jjFXvPNLCBsGOOfEoGo+YUPGNC2NVr404b+d5h9TqzL6oiV2yAYWHMMcYnfGYXWdFUFbQeZNffdSmTRCWazYDFQk2JBkV4k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730400211; c=relaxed/simple;
-	bh=fbRxElWAfw0KCiVDJKBevq3Ta0/tr5/VpNOm+QxkSUs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ii0g5bH0aIg0DnMHACrur1A7IU4xe1KEP4DptbggS5Ud0W8SlvZlRDi83ww7SfspHBAy7SSdr81jVWWfvLfV8xx3lG8EuYO7j4tit1JR23zqv4gO+7DHYnhyVhfBHs8WojYu8qHGAEwPaTyRz03DigJRP3FqHzhJ1iDDh4yxxxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=JKs9cVWB; arc=none smtp.client-ip=209.85.160.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-268d0979e90so118122fac.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 31 Oct 2024 11:43:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1730400208; x=1731005008; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m9pkCMrlG+6d8KDFXYWlMBHxdGI2r5U3tUuEXE09VQM=;
-        b=JKs9cVWB+3WbGW2MebYxAk+QX2N8PwgofGKjAyMjqKpy4G7G3BEc26iW3zQ8Wr8TJs
-         qecQ4Ikp4Pit0wTy6VPjf70Ye9FXagXRydi0+p7LEtIzhtjzxvDP9jDRvWywS2xW/dpS
-         nxepEyhjgon2N9OAmPR8aqGG2bghuWucTlbeg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730400208; x=1731005008;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m9pkCMrlG+6d8KDFXYWlMBHxdGI2r5U3tUuEXE09VQM=;
-        b=KDIZ5i9DSixhYPw7bDtTqXxxAHFLIjqjrXvGhoOOY2FC6cIUJ2UEE8OYZW199Iag29
-         nlAIWK945kOGqhArC61KM9BOCZQI1kRazF4uTkb+mmSohYiEGYyM5TzlD62O5KH+2515
-         zdTtoki2kRuE4Bp2v0uVpVvyYW7XcyK4WGcujbNSWvzWduhquI2VDwFy2uIo04fVBi8n
-         LCggF4kOSGxu8E6yl0Fd4hl3jAXyILJbJDNnOdGolLpPNgkduGA2ZYLu2/Xd2jCOPtje
-         x75dyfhEz4rT5FsVry9pFdOvaOd23RBF/WWg+Nqd5weSMK/fa+t5CcZ+Jxl/sjurM4Jc
-         7F8g==
-X-Forwarded-Encrypted: i=1; AJvYcCVY/IjPj8hZnFQdEwmosxEFa5a9nxg908kpb8EshF9FXG/aljEj7mDqq0jEOS4Uv63av9j4l8FfbAo73cZIkrI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOtbzmToAYrl9K6KRFCmfhwmWDlN3wVxWfbgRFxblKUXXR9e0I
-	GCapghN5wPwGjLYeFroqUYt3LS1x5WSGp9eeLLHxzyyX//+NjuGBMtngnODJClJUg6oMWUuW0Ce
-	9bWNHMhETxdtedeiJxajc9ZA0OLo0Q0oBsKGo
-X-Google-Smtp-Source: AGHT+IFGIJKLWI/BUm9W6oX5BAu9UJongzEp3ksTnogYOtUiu9chLn5n70BL50s4fYBWdm9xYpy2QybIo/hGZpLsz+c=
-X-Received: by 2002:a05:6870:7311:b0:288:2955:3efb with SMTP id
- 586e51a60fabf-29051c4e8a4mr4891117fac.8.1730400207786; Thu, 31 Oct 2024
- 11:43:27 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1B6D1386C9;
+	Thu, 31 Oct 2024 18:46:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.72
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730400414; cv=fail; b=GZL+mNQi3JGzBWKMlz9IIMYkXpwtM7HHtimr0No/KgXnvHNiTwttXCA6DvpwfMl+d1iKb/UoY7bPRtfUdkBitnScaKS4Qa7TqrHGd983IWot0OhEvvbRdmHRMsMuapDHsb7CEXFTRBlLgcSsvk/fE/oJn7T/YkqsRPb8qE7TjMY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730400414; c=relaxed/simple;
+	bh=mzi7hc8Rzq4K/ymIX8ujDz8E1hxJ5gDthDwyAmmT17A=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=vALOCTRE3SuhGDVk2W7fPwoiIUZetmL8Ac9Zl77j6t1iY2zB5WzGP16H0GznXWkAsdmhXOoFO2o+TojLO7hmrFSn1obURz97pMHFLAU+lfBXudwkuTZtQS1eg8YRit1DS+3mCI6xE+ci8svvysAUFWPzM3cVjvoaizpx5I7D2Rg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=dBZN2DlG; arc=fail smtp.client-ip=40.107.92.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=odPRWT7+T/4QR75Crcd5lxbuwZhri8mEPy6CZHZM39ORJVlpWHGcVWqMDiBiKu81sJ3CYkb0KX3lUx5Zm+pkL57DhpuXrx65GzxRr+/DA/lz3z2BbNJ9oeLcBqM3nt+zvuZqnvNy9Axt2mJVZbDq0XDJBYUl6u6+LgbJ3oZrg3Vc28XI6bzT/XQBePFgwHCk+VnIZMeEf3D/OTb1b8IIHbGvi875AV3hQ/jrNbRqpS76AkOuA4rk0ATlbnjWJc2zAQ+ISmI7irT9leSiMzRc1sXMECQ2it/ZpzM+57kj4RtNyCPRIBdYbjlO8ERyE4ylcOpyu4e2YG6fZnszFjFhxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/S+/8u+WetCcfsd5nbj6p9sHaenJtcdeSP3oR7ZRs/I=;
+ b=AiVS5+53vksncpdVPwMPwe/6YYYg1E4Sqm3/eSgfs1scm/U+AtgzamD4CaBSyaQhj/Q+mtq0qqfjFufarhf+utqGo1GQiYSpVBj/R3EsxhOZEYVb32Q0jZjV8yTHBGcWkOeb5Pb9aeFFb8mtVKo1J1S4s5stmsVQoBva4sW3JAjy8ce/qWJUgTjFF9XpNibUzlS8Wx192/k+VIpifHs8fBSjkwVzVs+5WppqgzN4gMkTcP+l6bPOjBOq9/US/FOG5cFpsub8RVV9FS5QOnU0hUP02r7Oe8c5J9tAY56gmhp/4cS6ile7xqcCqilVMLW/X2s0z07AuctInXtPmSr6jw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/S+/8u+WetCcfsd5nbj6p9sHaenJtcdeSP3oR7ZRs/I=;
+ b=dBZN2DlG2S6bp8O7uTq9I0d8J3PGeBotXYUIkCreLjABhJAPC8BGyzuZCptx3klNTG1RipX4iLTkSufoolYtANkAuZrcqSHmOk6POvzwT3Isv7BVO2XE00pyeoXeFHLRwKMW/TpecPzo3v0cNmQY0sKQ47OXWwc1Z+eCFOgDn+RVTFQmStcRBmekV1CZa5svapQPGLJJq1m0jjeAxdGF1EuiSOWvS6iJNAM1RxrAFc59RKN/Wj8uPb6qvbuFjy36r8fEb9qomT9hWZ5NgGRz5TebZ4m0cQYZBShfxQE3g95pO5yYfZWEDwqVmh38fy3jE6c9q62cx+lhlLwOP7KwgQ==
+Received: from DS7P222CA0019.NAMP222.PROD.OUTLOOK.COM (2603:10b6:8:2e::12) by
+ DM4PR12MB6447.namprd12.prod.outlook.com (2603:10b6:8:bf::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8093.25; Thu, 31 Oct 2024 18:46:49 +0000
+Received: from CY4PEPF0000E9D3.namprd03.prod.outlook.com
+ (2603:10b6:8:2e:cafe::1f) by DS7P222CA0019.outlook.office365.com
+ (2603:10b6:8:2e::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.23 via Frontend
+ Transport; Thu, 31 Oct 2024 18:46:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CY4PEPF0000E9D3.mail.protection.outlook.com (10.167.241.138) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8114.16 via Frontend Transport; Thu, 31 Oct 2024 18:46:49 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 31 Oct
+ 2024 11:46:33 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 31 Oct
+ 2024 11:46:33 -0700
+Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
+ Transport; Thu, 31 Oct 2024 11:46:31 -0700
+Date: Thu, 31 Oct 2024 11:46:30 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: <kevin.tian@intel.com>, <corbet@lwn.net>, <joro@8bytes.org>,
+	<suravee.suthikulpanit@amd.com>, <will@kernel.org>, <robin.murphy@arm.com>,
+	<dwmw2@infradead.org>, <shuah@kernel.org>, <iommu@lists.linux.dev>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <baolu.lu@linux.intel.com>,
+	<eric.auger@redhat.com>, <jean-philippe@linaro.org>, <mdf@kernel.org>,
+	<mshavit@google.com>, <shameerali.kolothum.thodi@huawei.com>,
+	<smostafa@google.com>, <yi.l.liu@intel.com>, <aik@amd.com>,
+	<zhangfei.gao@linaro.org>, <patches@lists.linux.dev>
+Subject: Re: [PATCH v6 01/10] iommufd/viommu: Add IOMMUFD_OBJ_VDEVICE and
+ IOMMU_VDEVICE_ALLOC ioctl
+Message-ID: <ZyPQhn+DlT4Zy3Qq@Asurada-Nvidia>
+References: <cover.1730313494.git.nicolinc@nvidia.com>
+ <19e20e54d41a0c1ab7403264e1016c4b19293135.1730313494.git.nicolinc@nvidia.com>
+ <20241031132941.GL10193@nvidia.com>
+ <ZyO2xfe95Y1TCaqG@Asurada-Nvidia>
+ <20241031170446.GQ10193@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241029144539.111155-1-kevin.brodsky@arm.com>
- <20241029144539.111155-2-kevin.brodsky@arm.com> <CABi2SkUTSuk_PS9==_czM=64FGWK_5DyUe5QELxiFHtPFsKaHw@mail.gmail.com>
- <cd0e114d-57eb-4c90-bb6f-9abf0cc8920f@arm.com>
-In-Reply-To: <cd0e114d-57eb-4c90-bb6f-9abf0cc8920f@arm.com>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Thu, 31 Oct 2024 11:43:16 -0700
-Message-ID: <CABi2SkW6_CACjYheaEMuCYGnwnXKoVGuACtnCyDb8Zjfac6Wog@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] arm64: signal: Improve POR_EL0 handling to avoid
- uaccess failures
-To: Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org, 
-	anshuman.khandual@arm.com, aruna.ramakrishna@oracle.com, broonie@kernel.org, 
-	catalin.marinas@arm.com, dave.hansen@linux.intel.com, Dave.Martin@arm.com, 
-	joey.gouly@arm.com, keith.lucas@oracle.com, pierre.langlois@arm.com, 
-	shuah@kernel.org, sroettger@google.com, tglx@linutronix.de, will@kernel.org, 
-	yury.khrustalev@arm.com, linux-kselftest@vger.kernel.org, x86@kernel.org, 
-	Kees Cook <keescook@chromium.org>, Jorge Lucangeli Obes <jorgelo@chromium.org>, 
-	Jann Horn <jannh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20241031170446.GQ10193@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D3:EE_|DM4PR12MB6447:EE_
+X-MS-Office365-Filtering-Correlation-Id: 79045e1b-f3a0-4855-ea23-08dcf9dc60d3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|7416014|376014|1800799024|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?1yyWaIv466aDIbajOy635k+din/Jp33ZyyO8cQ92u1b94gkUMRNcP+HUJUTr?=
+ =?us-ascii?Q?D1mqufRRVfJw7ty6Yz/cUzskeu2Z1FRVwrUzdqeJrQTf3wIjtSYUPrVUGCo4?=
+ =?us-ascii?Q?q3FtoGdziIVGW8+ZzxEHKYjUS4QE3WtIhaPiCcqgAsJ0kfx3NBVViN+gwEYH?=
+ =?us-ascii?Q?nHBBQNVclcHghK8viGdTDTqo+qnF7CedIhLOmoLQsT4FDEYVDtklNIAUNYIc?=
+ =?us-ascii?Q?uHlMEIgJCq/NKiSWLtxmOhNibJ70dxpGztF1TJjXZT/JW2XF7SjDkbgEgQu+?=
+ =?us-ascii?Q?hwFc2QDsT920R15l40867V67UatN50mohlXA9v+gB4Rjs7d1Fdroqd5TJKdU?=
+ =?us-ascii?Q?TtSvZgx/zgWD4sTCAd1ovaPbgAnZbNNrLCi1PnYaS861p4GHO6HCNGSLHF/2?=
+ =?us-ascii?Q?i2AyBmvBFeg5rd0k2SuPDVNC4tBx1EeEr4wTOFlyASJyVlcDXLVE6jMq3izg?=
+ =?us-ascii?Q?EjlycUUFWFbLXgckC/qwzuPYiwf+ogutCrLI353HKswmXD+gvar/FzloFcjf?=
+ =?us-ascii?Q?kcXM+CnStCz4xtXHK3T2catgOWmW7dLNHqc6S2K0lBjIncxA0gXsIt02ePh6?=
+ =?us-ascii?Q?TvIO+Qh3uTx7A9x9rJe1uocaYwCNfR336HwhMImVMKDTAXK4cGoPnhXX9E5T?=
+ =?us-ascii?Q?OAHQTo6SEoZpjo0n44eXPlXOOyzM1KJ6vwDWoevQzqHIwRl6EGu9qzd2Vn6M?=
+ =?us-ascii?Q?g2rKAbUxIJvaBw5pbfWCGjtHgr4TWgaXuDGwGdwAhl7fk5o6r5sPrFH1pWus?=
+ =?us-ascii?Q?6SLhJ+hbQN0dA0gQMdwza9jA4bMZrsW9Kjkqz6LTotzttzE6HPegKik9NmMk?=
+ =?us-ascii?Q?MJ9dnessrp4LtV1ZzQ4GwS/Y5DOU5ypGlV+d83sO5Q+td0TWJaKBvfBcTaNK?=
+ =?us-ascii?Q?MowFe9tQGgmzycQkkPunnnBW5x1J5Sgx7N1tmaE/5jag2iFk06ZqCKSYKDa7?=
+ =?us-ascii?Q?rr/gqPiOHUjKMh7VusbPUMpweC6b4tEeiZriteRw1l71okL3Pjq8ljMYOvLK?=
+ =?us-ascii?Q?/NDRxEio1Adp+C9VO4U5UBsl8ltzJANpSZonooKQP5yd5pFs13HYKaud0g9Q?=
+ =?us-ascii?Q?91goZCbSa7vnQrp0Yps8XCPIhnsAvJyY/TbjwsUgFdCy/whSk1izz5305QLP?=
+ =?us-ascii?Q?zil84SWDGHuNydHAYIgzeQT9MZ/P8VBgmI0icGHkjYYl4z8zMOPYQDpBfgu9?=
+ =?us-ascii?Q?zaaL8JMbg3RsAqncJCTOxmadAYI40zegbGaeSK3jOWvxuZPHJbrO8p9xOnGv?=
+ =?us-ascii?Q?O3Y0XGLcNx63Y5ImfGk3BFAFfB0rDHi03nJ+A5st/okZxwzdxlAvngGYZPxN?=
+ =?us-ascii?Q?ANV0lJ9rEBYEOns2Di8VSqInzpR6iPjEjhZXkT5vHHTRh3C/YMKC0syRQA7K?=
+ =?us-ascii?Q?mdqZxUF7U6t0ExKRJh9h8YnvkVp5Lh/JCPV0CDz9B3f7WbMhdQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(7416014)(376014)(1800799024)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2024 18:46:49.1296
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79045e1b-f3a0-4855-ea23-08dcf9dc60d3
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000E9D3.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6447
 
-On Thu, Oct 31, 2024 at 1:45=E2=80=AFAM Kevin Brodsky <kevin.brodsky@arm.co=
-m> wrote:
->
-> On 30/10/2024 23:01, Jeff Xu wrote:
-> >> -static int restore_poe_context(struct user_ctxs *user)
-> >> +static int restore_poe_context(struct user_ctxs *user,
-> >> +                              struct user_access_state *ua_state)
-> >>  {
-> >>         u64 por_el0;
-> >>         int err =3D 0;
-> >> @@ -282,7 +338,7 @@ static int restore_poe_context(struct user_ctxs *u=
-ser)
-> >>
-> >>         __get_user_error(por_el0, &(user->poe->por_el0), err);
-> >>         if (!err)
-> >> -               write_sysreg_s(por_el0, SYS_POR_EL0);
-> >> +               ua_state->por_el0 =3D por_el0;
-> >>
-> >>         return err;
-> >>  }
-> >> @@ -850,7 +906,8 @@ static int parse_user_sigframe(struct user_ctxs *u=
-ser,
-> >>  }
-> >>
-> >>  static int restore_sigframe(struct pt_regs *regs,
-> >> -                           struct rt_sigframe __user *sf)
-> >> +                           struct rt_sigframe __user *sf,
-> >> +                           struct user_access_state *ua_state)
-> >>  {
-> >>         sigset_t set;
-> >>         int i, err;
-> >> @@ -899,7 +956,7 @@ static int restore_sigframe(struct pt_regs *regs,
-> >>                 err =3D restore_zt_context(&user);
-> >>
-> >>         if (err =3D=3D 0 && system_supports_poe() && user.poe)
-> >> -               err =3D restore_poe_context(&user);
-> >> +               err =3D restore_poe_context(&user, ua_state);
-> >>
-> >>         return err;
-> >>  }
-> >> @@ -908,6 +965,7 @@ SYSCALL_DEFINE0(rt_sigreturn)
-> >>  {
-> >>         struct pt_regs *regs =3D current_pt_regs();
-> >>         struct rt_sigframe __user *frame;
-> >> +       struct user_access_state ua_state;
-> >>
-> >>         /* Always make any pending restarted system calls return -EINT=
-R */
-> >>         current->restart_block.fn =3D do_no_restart_syscall;
-> >> @@ -924,12 +982,14 @@ SYSCALL_DEFINE0(rt_sigreturn)
-> >>         if (!access_ok(frame, sizeof (*frame)))
-> >>                 goto badframe;
-> >>
-> >> -       if (restore_sigframe(regs, frame))
-> >> +       if (restore_sigframe(regs, frame, &ua_state))
-> >>                 goto badframe;
-> >>
-> >>         if (restore_altstack(&frame->uc.uc_stack))
-> >>                 goto badframe;
-> >>
-> > Do you need to move restore_altstack ahead of restore_sigframe?
->
-> This is not necessary because restore_sigframe() no longer writes to
-> POR_EL0. restore_poe_context() (above) now saves the original POR_EL0
-> value into ua_state, and it is restore_user_access_state() (called below
-> just before returning to userspace) that actually writes to POR_EL0,
-> after all uaccess is completed.
->
-Got it, thanks for the explanation.
+On Thu, Oct 31, 2024 at 02:04:46PM -0300, Jason Gunthorpe wrote:
+> On Thu, Oct 31, 2024 at 09:56:37AM -0700, Nicolin Chen wrote:
+> > On Thu, Oct 31, 2024 at 10:29:41AM -0300, Jason Gunthorpe wrote:
+> > > On Wed, Oct 30, 2024 at 02:35:27PM -0700, Nicolin Chen wrote:
+> > > > +void iommufd_vdevice_destroy(struct iommufd_object *obj)
+> > > > +{
+> > > > +	struct iommufd_vdevice *vdev =
+> > > > +		container_of(obj, struct iommufd_vdevice, obj);
+> > > > +	struct iommufd_viommu *viommu = vdev->viommu;
+> > > > +
+> > > > +	/* xa_cmpxchg is okay to fail if alloc returned -EEXIST previously */
+> > > > +	xa_cmpxchg(&viommu->vdevs, vdev->id, vdev, NULL, GFP_KERNEL);
+> > > 
+> > > There are crazy races that would cause this not to work. Another
+> > > thread could have successfully destroyed whatever caused EEXIST and
+> > > the successfully registered this same vdev to the same id. Then this
+> > > will wrongly erase the other threads entry.
+> > >
+> > > It would be better to skip the erase directly if the EEXIST unwind is
+> > > being taken.
+> >
+> > Hmm, is the "another thread" an alloc() or a destroy()? 
+> 
+> I was thinking both
+> 
+> > It doesn't seem to me that there could be another destroy() on the
+> > same object since this current destroy() is the abort to an
+> > unfinalized object.  And it doesn't seem that another alloc() will
+> > get the same vdev ptr since every vdev allocation in the alloc()
+> > will be different?
+> 
+> Ah so you are saying that since the vdev 'old' is local to this thread
+> it can't possibly by aliased by another?
+> 
+> I was worried the id could be aliased, but yes, that seems right that
+> the vdev cmpxchg would reject that.
+> 
+> So lets leave it
 
--Jeff
+Ack. I'll still update this since xa_cmpxchg can give other errno:
++	/* xa_cmpxchg is okay to fail if alloc returned -EEXIST previously */
+-	/* xa_cmpxchg is okay to fail if alloc failed xa_cmpxchg previously */
 
-> Having said that, I somehow missed the call to restore_altstack() when
-> writing the commit message, so these changes in sys_rt_sigreturn are in
-> fact necessary. Good catch! At least the patch itself should be doing
-> the right thing.
->
-> - Kevin
->
-> > similar as x86 change [1],
-> > the discussion for this  happened  in [2] [3]
-> >
-> > [1] https://lore.kernel.org/lkml/20240802061318.2140081-5-aruna.ramakri=
-shna@oracle.com/
-> > [2] https://lore.kernel.org/lkml/20240425210540.3265342-1-jeffxu@chromi=
-um.org/
-> > [3] https://lore.kernel.org/lkml/d0162c76c25bc8e1c876aebe8e243ff2e68623=
-59.camel@intel.com/
-> >
-> > Thanks
-> > -Jeff
-> >
-> >
-> >> +       restore_user_access_state(&ua_state);
-> >> +
-> >>         return regs->regs[0];
->
+Thanks
+Nicolin
 
