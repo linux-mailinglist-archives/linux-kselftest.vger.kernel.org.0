@@ -1,240 +1,188 @@
-Return-Path: <linux-kselftest+bounces-21282-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21283-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A59C9B8B4E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 07:46:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B45819B8C27
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 08:42:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D8051C21E5C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 06:46:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73A16282C90
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 07:42:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D569155A25;
-	Fri,  1 Nov 2024 06:45:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6A211547FD;
+	Fri,  1 Nov 2024 07:42:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H0FBm8o7"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="l4u9d3QB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05CB415535B
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 Nov 2024 06:45:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57EB31547D8
+	for <linux-kselftest@vger.kernel.org>; Fri,  1 Nov 2024 07:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730443527; cv=none; b=Kz0a4fzMRCQxx74rYbzyZcG+ErIMxpe1z+JXbGh1prKvijOkfnZoBW3iSKgl6jg2x+Be9n2rTYHm9sfSEXPL1QUxjrs+doBlVxijyQtqn4unV4b5i4Rb7+SojcR3G729f5knEZRvngdEFeEWUgRk9vkSr9z0K9c3wIegimuG+lI=
+	t=1730446930; cv=none; b=lRshRSTPSWdFSCDWU0aZDEUF6MnvD+2TPFj6c5QwAe83OWgz1GqIYnZPKPPoccl0Sxwdc9URHcAaS1lK13DZox+eLis1L9W6c41dYWxu2UcNiizuFkh6IsYuSCGGBmV8uGmASSiszb4hgzv4x/hD+fYTlAJTynOciLxxrg3CcXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730443527; c=relaxed/simple;
-	bh=f3EQWER6RRuCLdLa6B3j/75NplNWzvD63Oagrzez9Kg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=oviGDYZdaCf4TOLFtTm6UqX34KadZcqVHF7IVAgGXPvRM8qcfoSZeUY19O9/cPz9jNYQWnUpXsnOGBmwi5uviDzTgstF1+7j1EmlJx2/+NmI05Tb8foP67i6/9+peSfAaR4ZHQz9PQdIkBeTMeSqAdddAdX6qah6g/KugU1zIFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H0FBm8o7; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e2e3321aae0so2862898276.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 31 Oct 2024 23:45:24 -0700 (PDT)
+	s=arc-20240116; t=1730446930; c=relaxed/simple;
+	bh=g+B7AVhh8UjWeq4IJJekLF0zC8V8tvpQXB0el9dq2a4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IrzZssKR5uzg4cp+O5P+jx81PYjSmsH+auwp1AbkSupZ2GwQmrNF+g3YZ/5Ej7dzV7XFebENQJJzSTt6eY8pgybTcpkqCC6tmAz9sprAPwGMoEK3Mqc7PkvETF8OTqz73AG+4QCk9bvJ1Dckcea/Ydei6biYWl9fNdFfj/OOWDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=l4u9d3QB; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-539e3f35268so2220569e87.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 Nov 2024 00:42:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730443524; x=1731048324; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lHPJiykftORb/g35WFmCs+9SKBvzp/KNUqXI3sEF0e8=;
-        b=H0FBm8o75WDSOJooUUCigqPjMN3jae5MqpmZunAzEgBkm6gJ5vbwxfhq+yKMVTvleH
-         6Wgc5bsj7iVTFbtCt+xBIQLohnIL68AQJlj1qtD2tuOWBWCEoM+xXulN5cF4PDavEGjT
-         BY3iD0BkUqTXzoI9v4K8gHp+Qp4x4AjYPCahqf/m5gHnOqyBhEp/CkzW1oEVfjNisAqz
-         wfUiU2PkB8X1C7hvzk/t8mLIIkNJF7zclY3M81JI/p5sFJGBYJkXON/ktQbhrN9B7y7M
-         2WnqMp/HzSgCZd6JAaye4Pstz2ghkF63RktuA11RM+OwsWsIO85tgTCTNX70ivF+CbYD
-         o8uw==
+        d=chromium.org; s=google; t=1730446926; x=1731051726; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AIdrzBhxaYOudwVJlEqwarkgMuVinNcfj9JrlrLM6E0=;
+        b=l4u9d3QBVURpqfp3dzAm6yDH7Rnekt6MU04gx/A9sikrOWUaMnBVb2Ij7zzBqmPo0X
+         XxfIhfbCQRSolidmaE9AUVpYobsvxUuWVICBWB+gnD9fPL04Abv0YBGYnxS/XPMZpIiF
+         jZ6Fr//iwczbO9Ubcf2xd7P0SYJUuq0lilWro=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730443524; x=1731048324;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=lHPJiykftORb/g35WFmCs+9SKBvzp/KNUqXI3sEF0e8=;
-        b=e7WeBX4A/kNZjxVb02GhHV+Bv0Ut2qMnId5b7oOQUfLrVezRyqhhu3NVf8bQf91CG7
-         aaOMitYc7EWWBQr4u8+yILT4xCAxogoheAWFAisjyuxC7GZcQygxOSl7i4YoMqe3M1jc
-         9urY5+kw4NFsQn1e+yj57KcaL2Vf6tavA86XcmDU4CntuszWyQUuxUBRrHvnozqRk+OE
-         O4pWYzX5Z5iDX+z76rTV8IfSCjiUgWED1jDbK0Q3z78eZGrOmBgH8dHfJp1GWXsaov3q
-         uj0j+W/neOHqcTE2xQCOwsBCzm86y/GI2yY+81edgi9X5+Kr4qaJftgTW9+dV9N1iw0n
-         EJLg==
-X-Forwarded-Encrypted: i=1; AJvYcCWi7pnEI8gYWk9N5UVkHDF3uFo4iqJc9UI/EVpKc1wAk1wNFmbPllX5OAP9P3yk8I7AU2TW4eBRr34O6MSHMCY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLdPZOSp8IJNHGOzj/BcdeoTpJr68LL/hoLA5s4TgXEKxBJ8r2
-	q59D2wOssl5Ajwr4inZKZWnxqDGkMHjui4B9hkdmwdca/6EDwA21zmOlIZ7tCoJlUo80fAyrMs7
-	TKzWvOh2Hmw==
-X-Google-Smtp-Source: AGHT+IEIXo3M6l3NU9Qv2uOCk9CnzdlHFgd4U1XPtBHdD4Ek09zM+pvRo5MbMvTvDW7Nu3Tut9Zu4gtndT2qHg==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:b1:7045:ac11:6237])
- (user=davidgow job=sendgmr) by 2002:a25:aa83:0:b0:e30:c235:d79f with SMTP id
- 3f1490d57ef6-e30e5b282d1mr2857276.8.1730443523956; Thu, 31 Oct 2024 23:45:23
- -0700 (PDT)
-Date: Fri,  1 Nov 2024 14:45:02 +0800
-In-Reply-To: <20241101064505.3820737-1-davidgow@google.com>
+        d=1e100.net; s=20230601; t=1730446926; x=1731051726;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AIdrzBhxaYOudwVJlEqwarkgMuVinNcfj9JrlrLM6E0=;
+        b=Rmo+mh3hIjgDKtra81gHrM6yvCv72AwI98WgiF8krS4BQARBKnPVF6Sz6uV7mRASWm
+         YEg2m7OZmr/fxpD4MyGKFG/8JTeuWTDruQw2LGz9pgOVRqt5bH8PlUzquH0ZQQlpzTGG
+         XEr47QbLHu9DhBthXwjkJDBH8SJhNDXVIRqc8URqmAeUEpTxohL3yR9lo95dErBnQ4ji
+         6W8BHY3X4YUNJhQsZnvGwtt0azjPJVAW+sEVYcrxSOebZESD0/ZbZRg3whX13Bjfyfmr
+         OSBx6dc8oJaWMIW1v3nxVI88ttrrvTWKm5e3XP24+YlPlHrxT80JA5kEUWKK4Cpz2X8Y
+         tHfg==
+X-Forwarded-Encrypted: i=1; AJvYcCVztSMxc2HvFRvBH7zIbVCxCHlZvpY5cyeaU2fCemueCpRAO07ZLvbDf2I6cYTqZg+jHYpTj8TRPNju5Vsyh/c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUwWZFZZx4iQiR8XkdlMup9lUBsIK6b3RatQkr6VsPVVZMC7i+
+	U2g9h3Ruk99+RfZxTzz67rq7oLsomtQ2lPxr0p5rTKncjEQAtf0E1tGz3aWVePDKSaAmoy+86Vo
+	U2B9qVMjxNQrQB1KBLdrIt6aIcCjR0EOw3aJO
+X-Google-Smtp-Source: AGHT+IEH94/fyCantPWg+JSDsdCT1KoXU+c1gdEceLGqvlXMPVHqZ/SsqaDoW07J3kRkVsMcqqlDVlzNv5mQm5MpnK0=
+X-Received: by 2002:a05:6512:3e22:b0:536:54df:bff2 with SMTP id
+ 2adb3069b0e04-53d65e265e8mr1216351e87.54.1730446926248; Fri, 01 Nov 2024
+ 00:42:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241101064505.3820737-1-davidgow@google.com>
-X-Mailer: git-send-email 2.47.0.199.ga7371fff76-goog
-Message-ID: <20241101064505.3820737-4-davidgow@google.com>
-Subject: [PATCH v4 3/3] rust: kunit: allow to know if we are in a test
-From: David Gow <davidgow@google.com>
-To: Miguel Ojeda <ojeda@kernel.org>, 
-	"=?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?=" <jose.exposito89@gmail.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	Rae Moar <rmoar@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Benno Lossin <benno.lossin@proton.me>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Matt Gilbride <mattgilbride@google.com>
-Cc: kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	David Gow <davidgow@google.com>
+MIME-Version: 1.0
+References: <20241025-kselftest-gpio-set-get-config-v2-0-040d748840bb@collabora.com>
+ <20241025-kselftest-gpio-set-get-config-v2-1-040d748840bb@collabora.com>
+In-Reply-To: <20241025-kselftest-gpio-set-get-config-v2-1-040d748840bb@collabora.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
+Date: Fri, 1 Nov 2024 15:41:55 +0800
+Message-ID: <CAGXv+5HNwk2B_01_o90nZ1smDcZoFf3O-4-+n+E7vKtLTS9-rQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v2 1/5] pinctrl: mediatek: paris: Expose more
+ configurations to GPIO set_config
+To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>
+Cc: Sean Wang <sean.wang@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Bamvor Jian Zhang <bamv2005@gmail.com>, Shuah Khan <shuah@kernel.org>, kernel@collabora.com, 
+	linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org, kernelci@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-From: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
+On Sat, Oct 26, 2024 at 4:06=E2=80=AFAM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
+>
+> Currently the set_config callback in the gpio_chip registered by the
+> pinctrl_paris driver only supports configuring a single parameter on
+> specific pins (the input debounce of the EINT controller, on pins that
+> support it), even though many other configurations are already
+> implemented and available through the pinctrl API for configuration of
+> pins by the Devicetree and other drivers.
+>
+> Expose all configurations currently implemented through the GPIO API so
+> they can also be set from userspace, which is particularly useful to
+> allow testing them from userspace.
+>
+> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
 
-In some cases, we need to call test-only code from outside the test
-case, for example, to mock a function or a module.
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 
-In order to check whether we are in a test or not, we need to test if
-`CONFIG_KUNIT` is set.
-Unfortunately, we cannot rely only on this condition because:
-- a test could be running in another thread,
-- some distros compile KUnit in production kernels, so checking at runtime
-  that `current->kunit_test !=3D NULL` is required.
-
-Forturately, KUnit provides an optimised check in
-`kunit_get_current_test()`, which checks CONFIG_KUNIT, a global static
-key, and then the current thread's running KUnit test.
-
-Add a safe wrapper function around this to know whether or not we are in
-a KUnit test and examples showing how to mock a function and a module.
-
-Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
-Co-developed-by: David Gow <davidgow@google.com>
-Signed-off-by: David Gow <davidgow@google.com>
----
-
-Changes since v3:
-https://lore.kernel.org/linux-kselftest/20241030045719.3085147-8-davidgow@g=
-oogle.com/
-- The example test has been updated to no longer use assert_eq!() with
-  a constant bool argument (fixes a clippy warning).
-
-No changes since v2:
-https://lore.kernel.org/linux-kselftest/20241029092422.2884505-4-davidgow@g=
-oogle.com/
-
-Changes since v1:
-https://lore.kernel.org/lkml/20230720-rustbind-v1-3-c80db349e3b5@google.com=
-/
-- Rebased on top of rust-next.
-- Use the `kunit_get_current_test()` C function, which wasn't previously
-  available, instead of rolling our own.
-- (Thanks also to Boqun for suggesting a nicer way of implementing this,
-  which I tried, but the `kunit_get_current_test()` version obsoleted.)
-
----
- rust/kernel/kunit.rs | 72 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
-
-diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-index 71ce1d145be8..ad38d6d62446 100644
---- a/rust/kernel/kunit.rs
-+++ b/rust/kernel/kunit.rs
-@@ -276,10 +276,82 @@ macro_rules! kunit_unsafe_test_suite {
-     };
- }
-=20
-+/// In some cases, you need to call test-only code from outside the test c=
-ase, for example, to
-+/// create a function mock. This function can be invoked to know whether w=
-e are currently running a
-+/// KUnit test or not.
-+///
-+/// # Examples
-+///
-+/// This example shows how a function can be mocked to return a well-known=
- value while testing:
-+///
-+/// ```
-+/// # use kernel::kunit::in_kunit_test;
-+/// #
-+/// fn fn_mock_example(n: i32) -> i32 {
-+///     if in_kunit_test() {
-+///         100
-+///     } else {
-+///         n + 1
-+///     }
-+/// }
-+///
-+/// let mock_res =3D fn_mock_example(5);
-+/// assert_eq!(mock_res, 100);
-+/// ```
-+///
-+/// Sometimes, you don't control the code that needs to be mocked. This ex=
-ample shows how the
-+/// `bindings` module can be mocked:
-+///
-+/// ```
-+/// // Import our mock naming it as the real module.
-+/// #[cfg(CONFIG_KUNIT)]
-+/// use bindings_mock_example as bindings;
-+///
-+/// // This module mocks `bindings`.
-+/// mod bindings_mock_example {
-+///     use kernel::kunit::in_kunit_test;
-+///     use kernel::bindings::u64_;
-+///
-+///     // Make the other binding functions available.
-+///     pub(crate) use kernel::bindings::*;
-+///
-+///     // Mock `ktime_get_boot_fast_ns` to return a well-known value when=
- running a KUnit test.
-+///     pub(crate) unsafe fn ktime_get_boot_fast_ns() -> u64_ {
-+///         if in_kunit_test() {
-+///             1234
-+///         } else {
-+///             unsafe { kernel::bindings::ktime_get_boot_fast_ns() }
-+///         }
-+///     }
-+/// }
-+///
-+/// // This is the function we want to test. Since `bindings` has been moc=
-ked, we can use its
-+/// // functions seamlessly.
-+/// fn get_boot_ns() -> u64 {
-+///     unsafe { bindings::ktime_get_boot_fast_ns() }
-+/// }
-+///
-+/// let time =3D get_boot_ns();
-+/// assert_eq!(time, 1234);
-+/// ```
-+pub fn in_kunit_test() -> bool {
-+    // SAFETY: kunit_get_current_test() is always safe to call from C (it =
-has fallbacks for
-+    // when KUnit is not enabled), and we're only comparing the result to =
-NULL.
-+    unsafe { !bindings::kunit_get_current_test().is_null() }
-+}
-+
- #[kunit_tests(rust_kernel_kunit)]
- mod tests {
-+    use super::*;
-+
-     #[test]
-     fn rust_test_kunit_example_test() {
-         assert_eq!(1 + 1, 2);
-     }
-+
-+    #[test]
-+    fn rust_test_kunit_in_kunit_test() {
-+        let in_kunit =3D in_kunit_test();
-+        assert!(in_kunit);
-+    }
- }
---=20
-2.47.0.199.ga7371fff76-goog
-
+> ---
+>  drivers/pinctrl/mediatek/pinctrl-paris.c | 26 +++++++++++++-------------
+>  1 file changed, 13 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c b/drivers/pinctrl/m=
+ediatek/pinctrl-paris.c
+> index 87e958d827bf939aa6006794287698be4936f25e..c9455de266a447ab7f5446c15=
+11bef0ef9c9128e 100644
+> --- a/drivers/pinctrl/mediatek/pinctrl-paris.c
+> +++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
+> @@ -255,10 +255,9 @@ static int mtk_pinconf_get(struct pinctrl_dev *pctld=
+ev,
+>         return err;
+>  }
+>
+> -static int mtk_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin=
+,
+> -                          enum pin_config_param param, u32 arg)
+> +static int mtk_paris_pin_config_set(struct mtk_pinctrl *hw, unsigned int=
+ pin,
+> +                                   enum pin_config_param param, u32 arg)
+>  {
+> -       struct mtk_pinctrl *hw =3D pinctrl_dev_get_drvdata(pctldev);
+>         const struct mtk_pin_desc *desc;
+>         int err =3D -ENOTSUPP;
+>         u32 reg;
+> @@ -795,9 +794,9 @@ static int mtk_pconf_group_set(struct pinctrl_dev *pc=
+tldev, unsigned group,
+>         int i, ret;
+>
+>         for (i =3D 0; i < num_configs; i++) {
+> -               ret =3D mtk_pinconf_set(pctldev, grp->pin,
+> -                                     pinconf_to_config_param(configs[i])=
+,
+> -                                     pinconf_to_config_argument(configs[=
+i]));
+> +               ret =3D mtk_paris_pin_config_set(hw, grp->pin,
+> +                                              pinconf_to_config_param(co=
+nfigs[i]),
+> +                                              pinconf_to_config_argument=
+(configs[i]));
+>                 if (ret < 0)
+>                         return ret;
+>
+> @@ -937,18 +936,19 @@ static int mtk_gpio_set_config(struct gpio_chip *ch=
+ip, unsigned int offset,
+>  {
+>         struct mtk_pinctrl *hw =3D gpiochip_get_data(chip);
+>         const struct mtk_pin_desc *desc;
+> -       u32 debounce;
+> +       enum pin_config_param param =3D pinconf_to_config_param(config);
+> +       u32 arg =3D pinconf_to_config_argument(config);
+>
+>         desc =3D (const struct mtk_pin_desc *)&hw->soc->pins[offset];
+>
+> -       if (!hw->eint ||
+> -           pinconf_to_config_param(config) !=3D PIN_CONFIG_INPUT_DEBOUNC=
+E ||
+> -           desc->eint.eint_n =3D=3D EINT_NA)
+> -               return -ENOTSUPP;
+> +       if (param =3D=3D PIN_CONFIG_INPUT_DEBOUNCE) {
+> +               if (!hw->eint || desc->eint.eint_n =3D=3D EINT_NA)
+> +                       return -ENOTSUPP;
+>
+> -       debounce =3D pinconf_to_config_argument(config);
+> +               return mtk_eint_set_debounce(hw->eint, desc->eint.eint_n,=
+ arg);
+> +       }
+>
+> -       return mtk_eint_set_debounce(hw->eint, desc->eint.eint_n, debounc=
+e);
+> +       return mtk_paris_pin_config_set(hw, offset, param, arg);
+>  }
+>
+>  static int mtk_build_gpiochip(struct mtk_pinctrl *hw)
+>
+> --
+> 2.47.0
+>
+>
 
