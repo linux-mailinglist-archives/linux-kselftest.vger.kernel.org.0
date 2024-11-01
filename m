@@ -1,128 +1,130 @@
-Return-Path: <linux-kselftest+bounces-21313-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21314-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9CAB9B96D1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 18:51:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47E089B978B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 19:31:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 810FC1F2151E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 17:51:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CCFB283A8E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 18:31:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FED41CEAB0;
-	Fri,  1 Nov 2024 17:49:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FC5D1A76C7;
+	Fri,  1 Nov 2024 18:31:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LjtBASiJ"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="eCAhZMbj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89201CDA1E;
-	Fri,  1 Nov 2024 17:49:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF61A146592;
+	Fri,  1 Nov 2024 18:31:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730483343; cv=none; b=tZY3HUMapFdNO77K7KQYxXlnU9j/FnKICgpCqKybG39nOh8Nx4HtjqsS5ugcPYmJ2dk7qq1y8gzfHuobZrf9pyq7SfFGZ2tqSe+gQTiCpL1oRwcGIml4fSCCUId4FSQnbpigAq3p+UdNtDzPnKxHlJEkoZYvy1j1DYnFOMaCr1o=
+	t=1730485880; cv=none; b=pIYomHORwYEI9SiEnfS6jdUwwmIBP3xZeK71ocDAY3Un/zLv6YOSmzROwq+tN12uQFluB4GxjlLI756HNXuGuS+FLpY3RGkd/FetX2t9aJopXb7AZzx6LiRGpomyU0vIreLotMyNNj60MMuUMJoDFSG7l05Mnxoea55Rz7SafUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730483343; c=relaxed/simple;
-	bh=/b91CoH0L4+ZOxrMGr0zsD4PKr5FuOWyhTBccBHPH7w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pY862RUOU+qViJAjj52Nv2gVmc4W5gp2DCC8UZV54Gn3TF9TcjTxI2PEQg0+W8cXl6wPIt+I7AwA/3Z3ZAqS1azIiIGimxWA5gPFVOPHu423TM7ciklJfpNEhRC1A7Aqnyt0dkrzDYv+u9FdaZeWR1sB1QEpPm8Bd5/80yVondc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LjtBASiJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01E5DC4CECD;
-	Fri,  1 Nov 2024 17:48:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730483343;
-	bh=/b91CoH0L4+ZOxrMGr0zsD4PKr5FuOWyhTBccBHPH7w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LjtBASiJpj3wSWJdTJkZgQD3yarqRwCy6apE0QFm4Yo6QoTSPUahEDoXH/eZR5Wd6
-	 loXUanal2E/JmK4aF1aCq61B4EkINhFbMdzBp21IbCNAnSVmM7wQEdroXQVurZg9Dl
-	 WdjtXYLh3YN+FlE7SojVKHollfTiMWZ3WUSCE/Vnl5hbcudFjg+YsV6bwC5VhD2hdW
-	 rwHsJ3S7bKIes/RzbFtfxPjx4qZDEoueK/xypG9lfrEjtOe5CpRmzRrkkS/a6RqPht
-	 so5a9ymD7x0VWkisb6FJTR0pGEnM+OYO8duhU05uFutMCvjJPGgA6Rl7Jdg6rGQ/lB
-	 ukMPsfwBG2mTg==
-Date: Fri, 1 Nov 2024 18:48:55 +0100
-From: Lorenzo Pieralisi <lpieralisi@kernel.org>
-To: David Woodhouse <dwmw2@infradead.org>, sami.mujawar@arm.com,
-	ardb@kernel.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-	Shuah Khan <shuah@kernel.org>, David Woodhouse <dwmw@amazon.co.uk>,
-	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Francesco Lavra <francescolavra.fl@gmail.com>,
-	Miguel Luis <miguel.luis@oracle.com>
-Subject: Re: [PATCH v6 6/6] arm64: Use SYSTEM_OFF2 PSCI call to power off for
- hibernate
-Message-ID: <ZyUUh6KawapLkj0z@lpieralisi>
-References: <20241019172459.2241939-1-dwmw2@infradead.org>
- <20241019172459.2241939-7-dwmw2@infradead.org>
- <ZyPEn4qhaYyYqrzk@lpieralisi>
+	s=arc-20240116; t=1730485880; c=relaxed/simple;
+	bh=VBXbIFvMdAI0b5axWwLGdBXRoBbolCT6d2ZfYFcgkm4=;
+	h=Message-ID:Date:MIME-Version:To:CC:References:Subject:From:
+	 In-Reply-To:Content-Type; b=eoZwB+eV71tk5QqFs6PCGXJCgsKWn3L1T0vnoxMDjbA76LJOrckRAy0tbzq1whHgioXBSWwxLWuUDKtGiTsAASZUnjntd5u+V+0jcCyZlI4xPcEAh9xBoxnu1d5pSWKzvu7FcBsMXh74mMbH/fS4/87mxNOgNM2kYXPsvN8Ok/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=eCAhZMbj; arc=none smtp.client-ip=99.78.197.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1730485878; x=1762021878;
+  h=message-id:date:mime-version:to:cc:references:subject:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VBXbIFvMdAI0b5axWwLGdBXRoBbolCT6d2ZfYFcgkm4=;
+  b=eCAhZMbjCsb1Ubg5PIF0neLVul3DHRNBD4YRpV/5j/xrdj+lEIZiS04b
+   DhYuyza5iscJnNXF103HVVzmUFPjzwETJuL4RiFO8nRdj0Xlan2TeqLmt
+   ZTNjpjkM/yKJFh2Zi84tkjV2yLQVOQkLoYFN9OOxiH5sVoeot3iWUMVfh
+   Y=;
+X-IronPort-AV: E=Sophos;i="6.11,250,1725321600"; 
+   d="scan'208";a="142665536"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
+  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 18:31:18 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [10.0.38.20:58862]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.34.72:2525] with esmtp (Farcaster)
+ id dae0559c-5720-41e8-8da6-e0592ac6ae3b; Fri, 1 Nov 2024 18:31:17 +0000 (UTC)
+X-Farcaster-Flow-ID: dae0559c-5720-41e8-8da6-e0592ac6ae3b
+Received: from EX19D003UWC002.ant.amazon.com (10.13.138.169) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
+ Fri, 1 Nov 2024 18:31:17 +0000
+Received: from [10.142.234.83] (10.142.234.83) by
+ EX19D003UWC002.ant.amazon.com (10.13.138.169) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.35;
+ Fri, 1 Nov 2024 18:31:14 +0000
+Message-ID: <37fbfc65-b145-4a22-a48c-1921204d5635@amazon.com>
+Date: Fri, 1 Nov 2024 11:31:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZyPEn4qhaYyYqrzk@lpieralisi>
+User-Agent: Mozilla Thunderbird
+To: <dave.hansen@intel.com>
+CC: <ackerleytng@google.com>, <agordeev@linux.ibm.com>,
+	<aou@eecs.berkeley.edu>, <borntraeger@linux.ibm.com>, <bp@alien8.de>,
+	<canellac@amazon.at>, <catalin.marinas@arm.com>, <chenhuacai@kernel.org>,
+	<corbet@lwn.net>, <dave.hansen@linux.intel.com>, <david@redhat.com>,
+	<derekmn@amazon.com>, <elena.reshetova@intel.com>,
+	<gerald.schaefer@linux.ibm.com>, <gor@linux.ibm.com>, <graf@amazon.com>,
+	<hca@linux.ibm.com>, <hpa@zytor.com>, <jgowans@amazon.com>,
+	<jthoughton@google.com>, <kalyazin@amazon.com>, <kernel@xen0n.name>,
+	<kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-mm@kvack.org>,
+	<linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <loongarch@lists.linux.dev>,
+	<luto@kernel.org>, <mathieu.desnoyers@efficios.com>, <mhiramat@kernel.org>,
+	<mingo@redhat.com>, <mlipp@amazon.at>, <palmer@dabbelt.com>,
+	<paul.walmsley@sifive.com>, <pbonzini@redhat.com>, <peterz@infradead.org>,
+	<quic_eberman@quicinc.com>, <rostedt@goodmis.org>, <roypat@amazon.co.uk>,
+	<rppt@kernel.org>, <seanjc@google.com>, <shuah@kernel.org>,
+	<svens@linux.ibm.com>, <tabba@google.com>, <tglx@linutronix.de>,
+	<vannapurve@google.com>, <will@kernel.org>, <x86@kernel.org>,
+	<xmarcalx@amazon.com>
+References: <51fe5ad1-7057-4d43-b92c-580d187d2aeb@intel.com>
+Subject: Re: [RFC PATCH v3 0/6] Direct Map Removal for guest_memfd
+Content-Language: en-US
+From: "Manwaring, Derek" <derekmn@amazon.com>
+In-Reply-To: <51fe5ad1-7057-4d43-b92c-580d187d2aeb@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: EX19D040UWB001.ant.amazon.com (10.13.138.82) To
+ EX19D003UWC002.ant.amazon.com (10.13.138.169)
 
-[+Ard, Sami, for EFI]
+On 2024-11-01 at 17:20+0000, Dave Hansen wrote:
+> On 11/1/24 09:56, Manwaring, Derek wrote:
+> > But if other mitigations completely prevent even speculative access
+> > of TD private memory like you're saying, then agree nothing to gain
+> > from direct map removal in the TDX case.
+> Remember, guest unmapping is done in the VMM.  The VMM is not trusted in
+> the TDX (or SEV-SNP) model.  If any VMM can harm the protections on
+> guest memory, then we have a big problem.
+>
+> That isn't to say big problem can't happen.  Say some crazy attack comes
+> to light where the VMM can attack TDX if the VMM has mapping for a guest
+> (or TDX module) memory.  Crazier things have happened, and guest
+> unmapping _would_ help there, if you trusted the VMM.
+>
+> Basically, I think guest unmapping only helps system security as a whole
+> if you must _already_ trust the VMM.
 
-On Thu, Oct 31, 2024 at 06:55:43PM +0100, Lorenzo Pieralisi wrote:
-> On Sat, Oct 19, 2024 at 06:15:47PM +0100, David Woodhouse wrote:
-> 
-> [...]
-> 
-> > +#ifdef CONFIG_HIBERNATION
-> > +static int psci_sys_hibernate(struct sys_off_data *data)
-> > +{
-> > +	/*
-> > +	 * Zero is an acceptable alternative to PSCI_1_3_OFF_TYPE_HIBERNATE_OFF
-> > +	 * and is supported by hypervisors implementing an earlier version
-> > +	 * of the pSCI v1.3 spec.
-> > +	 */
-> 
-> It is obvious but with this patch applied a host kernel would start executing
-> SYSTEM_OFF2 too if supported in firmware to hibernate, it is not a hypervisor
-> only code path.
-> 
-> Related to that: is it now always safe to override
-> 
-> commit 60c0d45a7f7a ("efi/arm64: use UEFI for system reset and poweroff")
-> 
-> for hibernation ? It is not very clear to me why overriding PSCI for
-> poweroff was the right thing to do - tried to follow that patch history but
-> the question remains (it is related to UpdateCapsule() but I don't know
-> how that applies to the hibernation use case).
+Yeah that makes a lot of sense. I just view the ideal outcome as a
+composition of strong, independent defenses. So as a guest you have the
+confidentiality and integrity guarantees of the hardware, *and* you have
+an up-to-date, good-hygiene (albeit not attested) host kernel just in
+case some crazy attack/gap comes up.
 
-RFC: It is unclear to me what happens in current mainline if we try to
-hibernate with EFI runtime services enabled and a capsule update pending (we
-issue EFI ResetSystem(EFI_RESET_SHUTDOWN,..) which might not be compatible
-with the reset required by the pending capsule update request) what happens
-in this case I don't know but at least the choice is all contained in
-EFI firmware.
+From that standpoint I'm still tempted to turn the question around a bit
+for the host kernel's perspective. Like if the host kernel should not
+(and indeed cannot with TDX controls in place) access guest private
+memory, why not remove it from the direct map?
 
-Then if in the same scenario now we are switching to PSCI SYSTEM_OFF2 for the
-hibernate reset I suspect that what happens to the in-flight capsule
-update requests strictly depends on what "reset" PSCI SYSTEM_OFF2 will
-end up doing ?
-
-I think this is just a corner case and it is unlikely it has been ever
-tested (is it even possible ? Looking at EFI folks) - it would be good
-to clarify it at least to make sure we understand this code path.
-
-Thanks,
-Lorenzo
+Derek
 
