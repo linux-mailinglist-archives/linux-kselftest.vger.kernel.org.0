@@ -1,173 +1,139 @@
-Return-Path: <linux-kselftest+bounces-21299-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21300-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B5459B9295
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 14:52:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FC149B92F0
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 15:16:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8143FB209EB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 13:52:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CB1E1C20B3A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 14:16:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C21C1A072A;
-	Fri,  1 Nov 2024 13:52:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5F7E3BBE5;
+	Fri,  1 Nov 2024 14:16:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alyssa.is header.i=@alyssa.is header.b="J/1qwaVP";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WD4Sy3tW"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="kMbq5D5u"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C14158DD0;
-	Fri,  1 Nov 2024 13:52:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730469169; cv=none; b=BbjZzMWCAO813W0yIcjW5A87l/yW6LxXL/LF7n/51lN8Ov2JZ0FaAdiNIvm2+LYdaaZ8nQ9BKYO6aTILjQod0fUW0WLgocMSfIthg1zwgwrKs9HyxFRoqR8WaF6bYYIbSC2Y86r6uKOxh6rekBdnAWeWHisdPXPqLr/MEzZsVOU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730469169; c=relaxed/simple;
-	bh=naw23hsmsf6GRAwCdWA77TY/jiszs6qesqCKe7WNEDQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YJy+K8/KmdsOkGWmwW+8neIqskL7MBau/XoZhXCZys/BZbNOUkt2GagISvFkMaetzeAAPQ8mNCR43KAkVW0B9HbWXcDfH40MXaBe7capRuhLhy0rbsxfORqxfsNb195ZGQu3yYdhWpeae96wtEdDx6x16FRwJg30irEND23cOLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alyssa.is; spf=pass smtp.mailfrom=alyssa.is; dkim=pass (2048-bit key) header.d=alyssa.is header.i=@alyssa.is header.b=J/1qwaVP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WD4Sy3tW; arc=none smtp.client-ip=202.12.124.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alyssa.is
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alyssa.is
-Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
-	by mailfout.stl.internal (Postfix) with ESMTP id 14A8911400F7;
-	Fri,  1 Nov 2024 09:52:42 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-03.internal (MEProxy); Fri, 01 Nov 2024 09:52:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1730469161; x=1730555561; bh=OM4a9KmiKy
-	BYymvUt/3Ss+GNBym2SjdQJLLohwjJ+bo=; b=J/1qwaVPoY/CP3CWiMVOQ4zh/9
-	xHWItsbIbKTvINImd8nAjP3dhcsjUI6rp7jMHlGeGAx4Tt1fhvJzDe+briiACM3M
-	6TXY7L+OXAF8r3g95jS+WbqmVZZqhkLJ8yXTo6Rb9DziyfGwYD85Pdaxft1RBExI
-	POTVb2ynsA1g5ZmJDD/SruWn+vD3bM+CDa6oTxrE/4BMLyB8Fn+vTVNGCEjsJpbK
-	bvoji4QcxieO93sTZUxztnkFtyOCbMVB4fJztrNEzngY4r5MDKaIJpK9Lnzyi0fQ
-	laJOVC3+KH3AEnomEEGZ0omdxkpaUQemCUBpjymFcIwfxLyUNL4xVl3cUi9Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1730469161; x=1730555561; bh=OM4a9KmiKyBYymvUt/3Ss+GNBym2SjdQJLL
-	ohwjJ+bo=; b=WD4Sy3tW1u5Wc7jnHI/lUlfuItn6PTNPneLNtw1EOIN3RxBK5CY
-	Wa014ELgAy6rxuA4Rwg19SC/7MxA8dSioyxi5hUaZubLhRXM6qoN/kNYhMvAqgCu
-	zBMQIybjF3b4LljZCZfAtSB5Ky/AsysXY7/bGLSDw9j++I1hNm0YqvgBUKrBPrju
-	kV79UUKlPTRXAY/FaveOXu5oupjOiyAcmj7fJWb8O8cHO3Iys7WykwnUKSklv0CF
-	/wp2R323CL+8UC68V9o+UO8R4t4TSl44c4FJcYL4v1MJov8KFUD4W69ZOzwzKtTo
-	hQg1KstbG7fDpyVUQSI64tAojkzFA4NsZuQ==
-X-ME-Sender: <xms:Kd0kZ4r1TXm3h3fsDELlcIm9VJFWC0QSikt4C6vi1iFp2Bd92N2WIw>
-    <xme:Kd0kZ-qj-f8oumc10ND6ehhQpVaoaOnGiBpnz-nwVSfBT5aHyMc8APHsFn3mvuFv1
-    4aTa4FRve1G0vem0g>
-X-ME-Received: <xmr:Kd0kZ9Nep0UT1SJRFM0TxApcCetfjETsVkuzpD0Gx24Ow7hW_JBnARK5g-W7VXW_4OMldH1S6IS6kQ5w1FQ-qyGwEEo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekledgheejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvden
-    ucfhrhhomheptehlhihsshgrucftohhsshcuoehhihesrghlhihsshgrrdhisheqnecugg
-    ftrfgrthhtvghrnheptdejueetkeehfeeuleeugfevieffkefhteefiedvfeehuefhjeeg
-    vdeiffeihfeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhephhhisegrlhihshhsrgdrihhspdhnsggprhgtphhtthhopeejpdhmohguvgepshhm
-    thhpohhuthdprhgtphhtthhopehtrghmihhrugesghhmrghilhdrtghomhdprhgtphhtth
-    hopegurghvihgughhofiesghhoohhglhgvrdgtohhmpdhrtghpthhtoheprhhmohgrrhes
-    ghhoohhglhgvrdgtohhmpdhrtghpthhtohepkhhunhhithdquggvvhesghhoohhglhgvgh
-    hrohhuphhsrdgtohhmpdhrtghpthhtohepsghrvghnuggrnhdrhhhighhgihhnsheslhhi
-    nhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvg
-    hrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgv
-    rhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:Kd0kZ_5d3LDLh1DekeT9AwgpKb3K3LEt2rH5_8b5VVkBofwhBOCNMw>
-    <xmx:Kd0kZ379sXAOM_dQgTdOjQQt3gsPVQCaFLaD-VWVZrz4d9ROio3T_A>
-    <xmx:Kd0kZ_i-llo3F56A_mcGNlURkBAej3eiHke5eGkODjH_XqytylXGwQ>
-    <xmx:Kd0kZx6x_5A2QAd5kXrXGN1txawY5U3pxRMBRlpwkfhPrU9CTRo5Pw>
-    <xmx:Kd0kZ6b8G-q6L1C_peNDYwxmMN0fIFxoi8yj9Ab28GI69MWSlBPgbTp->
-Feedback-ID: i12284293:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 1 Nov 2024 09:52:41 -0400 (EDT)
-Received: by sf.qyliss.net (Postfix, from userid 1000)
-	id 5AE2289888E9; Fri, 01 Nov 2024 14:52:39 +0100 (CET)
-Date: Fri, 1 Nov 2024 14:52:39 +0100
-From: Alyssa Ross <hi@alyssa.is>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] kunit: enable hardware acceleration when available
-Message-ID: <jhmonkl53vrgz3pjhbbopvrx6infgbezlsvba3luccrpwtnmtb@ptobfcxrr4ud>
-References: <20241025-kunit-qemu-accel-macos-v1-0-2f30c26192d4@gmail.com>
- <20241025-kunit-qemu-accel-macos-v1-2-2f30c26192d4@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629929475;
+	Fri,  1 Nov 2024 14:16:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730470588; cv=pass; b=YxftPWmZUEfeMmvg5Y7+swc0Nmwq7WjsOZA8tIcP1ijYJZsAPSY614IYdWC1Ia53N0sT14xOWcATru+Ww+4sxCuHjw24ikg+idoIKmz0YMATqxbu6rflIBGRSt0ELA0CriSp+uCxyrJJEEn/tOS4yFaE3ncdS96Eu50Y875GDpQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730470588; c=relaxed/simple;
+	bh=HbN9Tc2DvDZuyWjnp1OhvQikIf+Sz8xYcrmXdiycAug=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aSgEr1OjPmKDnDvGt7Rx+fWxIpFfTPRTikx0drMQqmoXTZDRgAA5DSM8KVhzlKEYVekIhT34vNkIytRqIpWxxdl91beJTj7ZDVGQgh298HYwArwE/F5n2DXds9trvc1EaLA4NNUzN6W/eseCktmUCdNYO2u2dVVrX3poTmOgLEo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=kMbq5D5u; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1730470575; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=kVEf9La18gUx61NeS/ypACpSeDx1iIBtgSHdQr8OlXV9fgbtxXYqCRudmVnItPieZ5Z1bHTG3azswRiKahVYNvhaHCP3tLC/sJ9KB7oY33norhcr1Cz1xRmbgZ4xvdXEBCtm8yw6NlbBHwCDABwdouGnLiccZ3kNwHBlP2jKUB0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1730470575; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=g44Wl7tnRmFijuzlRmhgh38eYyyvVTOHdNmRVeRjRyg=; 
+	b=LabxpNW+KExwUo6U+UghWKhnPmVGLfAcqZ9Q+LF8WVLLcO/w/YlBvbBtv8i/q3+xkdit3VB/Dc522ElQ4JLoTCyKaoGKoBWYcOABg7d3al9c9Voe0NS3Yowpi31uqylQrNYUz3sz9lbvHOWbACOVZc2MqQI/RjJsQrH1mfh2Zl8=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
+	dmarc=pass header.from=<usama.anjum@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1730470575;
+	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+	bh=g44Wl7tnRmFijuzlRmhgh38eYyyvVTOHdNmRVeRjRyg=;
+	b=kMbq5D5uY0xiYgLnuuV4gUtAEAznDJq+y9o+YsskO2il0WL/lMICQebmbpO6f4ts
+	WBGoM7MI9wLhHV0iKKzSTjyFS2EGmLcn+ptzGzu1YVYWSazyrCpWpogUiANkkvprRM5
+	W6BfF8TpgnSEebJl9XZgUXTcDK1mf6WvLgue0WBM=
+Received: by mx.zohomail.com with SMTPS id 1730470574622616.129871650149;
+	Fri, 1 Nov 2024 07:16:14 -0700 (PDT)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	kernel@collabora.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: hugetlb_dio: Check for initial conditions to skip in the start
+Date: Fri,  1 Nov 2024 19:15:57 +0500
+Message-Id: <20241101141557.3159432-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="z4djprvhauy3hwsd"
-Content-Disposition: inline
-In-Reply-To: <20241025-kunit-qemu-accel-macos-v1-2-2f30c26192d4@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
+The test should be skipped if initial conditions aren't fulfilled in
+the start instead of failing and outputting non-compliant TAP logs. This
+kind of failure pollutes the results. The initial conditions are:
+- The test should only execute if /tmp file can be allocated.
+- The test should only execute if huge pages are free.
 
---z4djprvhauy3hwsd
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Subject: Re: [PATCH 2/2] kunit: enable hardware acceleration when available
-MIME-Version: 1.0
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+Before:
+TAP version 13
+1..4
+Bail out! Error opening file
+: Read-only file system (30)
+ # Planned tests != run tests (4 != 0)
+ # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
 
-On Fri, Oct 25, 2024 at 05:03:54PM -0400, Tamir Duberstein wrote:
-> @@ -124,6 +125,29 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
->  				'-no-reboot',
->  				'-nographic',
->  				'-serial', self._serial] + self._extra_qemu_params
-> +		accelerators = {
-> +			line.strip()
-> +			for line in subprocess.check_output([qemu_binary, "-accel", "help"], text=True).splitlines()
-> +			if line and line.islower()
-> +		}
-> +		if 'kvm' in accelerators:
-> +			try:
-> +				with open('/dev/kvm', 'rb+'):
-> +					qemu_command.extend(['-accel', 'kvm'])
-> +			except OSError as e:
-> +				print(e)
-> +		elif 'hvf' in accelerators:
-> +			try:
-> +				for line in subprocess.check_output(['sysctl', 'kern.hv_support'], text=True).splitlines():
-> +					if not line:
-> +						continue
-> +					key, value = line.split(':')
-> +					if key == 'kern.hv_support' and bool(value):
-> +						qemu_command.extend(['-accel', 'hvf'])
-> +						break
-> +			except subprocess.CalledProcessError as e:
-> +				print(e)
-> +
+After:
+TAP version 13
+1..0 # SKIP Unable to allocate file: Read-only file system
+---
+ tools/testing/selftests/mm/hugetlb_dio.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
-QEMU supports falling back if one accelerator is not available, if you
-specify multiple like -accel kvm:tcg.  Couldn't you rely on that rather
-than re-implementing the availability checks here?
+diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
+index f9ac20c657ec6..60001c142ce99 100644
+--- a/tools/testing/selftests/mm/hugetlb_dio.c
++++ b/tools/testing/selftests/mm/hugetlb_dio.c
+@@ -44,13 +44,6 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
+ 	if (fd < 0)
+ 		ksft_exit_fail_perror("Error opening file\n");
+ 
+-	/* Get the free huge pages before allocation */
+-	free_hpage_b = get_free_hugepages();
+-	if (free_hpage_b == 0) {
+-		close(fd);
+-		ksft_exit_skip("No free hugepage, exiting!\n");
+-	}
+-
+ 	/* Allocate a hugetlb page */
+ 	orig_buffer = mmap(NULL, h_pagesize, mmap_prot, mmap_flags, -1, 0);
+ 	if (orig_buffer == MAP_FAILED) {
+@@ -94,8 +87,20 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
+ int main(void)
+ {
+ 	size_t pagesize = 0;
++	int fd;
+ 
+ 	ksft_print_header();
++
++	/* Open the file to DIO */
++	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
++	if (fd < 0)
++		ksft_exit_skip("Unable to allocate file: %s\n", strerror(errno));
++	close(fd);
++
++	/* Check if huge pages are free */
++	if (!get_free_hugepages())
++		ksft_exit_skip("No free hugepage, exiting\n");
++
+ 	ksft_set_plan(4);
+ 
+ 	/* Get base page size */
+-- 
+2.39.5
 
---z4djprvhauy3hwsd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEH9wgcxqlHM/ARR3h+dvtSFmyccAFAmck3R8ACgkQ+dvtSFmy
-ccDsHBAAonD29UCU+Ic/GmKgoVj3InBFyhVA3AlAE7jqh2rO8nzwjmHY7t9mGXIV
-36XHtgv5f7HK5b3pixZbULMDnWRhreT7TMYSQ/7T5GGXvlDYyXQsuwjyNhehdJQF
-PlGpIhyM33pjI6TEEKs579h771hrSGwtrDfzKToMEDKYYbM36fPP/YWOnCMSeJeA
-2FhyoW8pd5FgQDbDVgsHZQFDk9m9g3R3sTKwl8zyUDdG8PCh5go4k7WTLRlCGzAd
-uJxdEG7IjLs3xiaTILDpFBWPcnPDlvqrd9IYCQvNQbVpFAJo7zfoZyeodIiczBAf
-ydNjaC4vB43TebBepQQDw2dWOKssbzEnxlDIHDuATVcWGRqOX35p71bjPrK+2ge+
-RJ6x4qabr+BYUw62YiFz/JxYMqtf2xfovYhJFyvUfVQBlg9eN159V+7fSd6MS4tW
-gBO54874n8Lt2GftkqvFIqZu9hbDby6j1Kece+sVjmKvHntf9g+JQYbh6ZqpdzLr
-ms4zvSwasn4i+dSBemTeORjcsSqOSplA882gTV/uwEpbh3+Ss+7TJnWcIB2G6ppD
-4whU8T+yURQCP2Kll+/JUp2w5MGXFb4XiLEomwivL4fBoQwGwXIe8rZ/1sfg9YZk
-rBPdywmjODmm/axrAekXdU15EcCYLonX7gzhy7OxEM55V17o+7Q=
-=N5Ic
------END PGP SIGNATURE-----
-
---z4djprvhauy3hwsd--
 
