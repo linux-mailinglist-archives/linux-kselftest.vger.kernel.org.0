@@ -1,121 +1,173 @@
-Return-Path: <linux-kselftest+bounces-21298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21299-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B5229B9270
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 14:49:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B5459B9295
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 14:52:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3BCFC281266
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 13:49:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8143FB209EB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 13:52:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B650B175D2D;
-	Fri,  1 Nov 2024 13:48:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C21C1A072A;
+	Fri,  1 Nov 2024 13:52:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JndgZ3c6"
+	dkim=pass (2048-bit key) header.d=alyssa.is header.i=@alyssa.is header.b="J/1qwaVP";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WD4Sy3tW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EE519CC2D
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 Nov 2024 13:48:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C14158DD0;
+	Fri,  1 Nov 2024 13:52:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730468907; cv=none; b=J4Vv1Kp6ft96vHnnLp3p16RziSBkyppU2+RHuX+zVVYbh7ZHO5edIhSqtA16wJ2hkAHcu2NCqbLrdg9O0tD7ARxydUCVj0o3WQHC8PyKFFWH7qpzxQi7qf8zorNnG1DaqedDnpzx1yhhbjTlaKOZ0gQviX7wSqYAgSCIC+A/Ado=
+	t=1730469169; cv=none; b=BbjZzMWCAO813W0yIcjW5A87l/yW6LxXL/LF7n/51lN8Ov2JZ0FaAdiNIvm2+LYdaaZ8nQ9BKYO6aTILjQod0fUW0WLgocMSfIthg1zwgwrKs9HyxFRoqR8WaF6bYYIbSC2Y86r6uKOxh6rekBdnAWeWHisdPXPqLr/MEzZsVOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730468907; c=relaxed/simple;
-	bh=s7R+wdV0+mmYmY9C610nIqKazjHMd4Jtw3jsp9IV9FQ=;
+	s=arc-20240116; t=1730469169; c=relaxed/simple;
+	bh=naw23hsmsf6GRAwCdWA77TY/jiszs6qesqCKe7WNEDQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=alGTe2TiFI0CnmuZzvmCKquKxa/Ut5Lu4rDb61wlHwi3s98ktut6eBOgLz3fWh+dMkzSN61ZS5ASfGyV83Rq97CH9UuubFPiRngmlFYhh9DNhiEbjfLyfZLx1g/b8lbRHOs3TxHM7nJm+m3r6DJ+HU1a8VE9vOlfLZqQkYuVYLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JndgZ3c6; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1730468904;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=F5YDS2IxgbCyYVyHmTnSV22QiC1yW1f4+0Ftmvdu5UQ=;
-	b=JndgZ3c6yZiyh7npYH4QP2rTT2NCqlFBSfywvQqFfOK8RtkhadnC0kfzFniKla4pwinqtk
-	e5KW03Scr8t+ZcS5N8G7pfBcyErrufv+bzvfrxORxc9qaw6IHXLQnpBzbfnPD6qUkAn6k5
-	meJAgd3DYAHrYJGGM0IZcPs0tI+gn50=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-634-WYRCULxePMuRfkKJHXjwBg-1; Fri, 01 Nov 2024 09:48:23 -0400
-X-MC-Unique: WYRCULxePMuRfkKJHXjwBg-1
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6cbd12b8b60so69310186d6.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Nov 2024 06:48:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730468902; x=1731073702;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F5YDS2IxgbCyYVyHmTnSV22QiC1yW1f4+0Ftmvdu5UQ=;
-        b=eJDds/YCRtZQQoZEVZtHgK/3MnUfXuvsCrP5nKGBAgMFe7/WLsVJHASQBV7ibTRHZI
-         U4rjTbLZqK0R3Go5cy6Xu5m0e8lwh4sTw41UdjJsl3U1FVfq/9vbRChYjCUjFRj7mRG3
-         GEWRA/LdsJC/BptRGJtJqq3bh2wrBJRF4qxSwb3vxZLtHf6Xy0SbQHoblUhlJ/BZGBFA
-         i9YbAQHoxG1OvJshBorckrwzud1dtmvQiBTKZEW87wqdc9z+Zjm9jdyFXY6ERfw4TF6g
-         7OV8czttADqrWnjf5LNPbcXoEvowYAEv+EMFPo+y2rFRA7Gm61ZouoFe4xntz2kUidqs
-         tYOw==
-X-Forwarded-Encrypted: i=1; AJvYcCU+vcT4qxoSgbQz2MSz5nbf2m67AJM8WOw/z4EgF/kdBKafTu8OK+99x/Q77gZ0eiBaMypfXKplNtl/aZUOQa8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9pBdU0bl72MKk7T2aMS+r2QBFwi9HXaq+AJAOGtKIW5Sw9L0n
-	2y0ZsQnLfIU0orfwNJ3cCqcaXkCK6lwatvMlTWOC+qyemjzBESGA9GdvOamy24TTe39eapLtiPR
-	aIOWTH54Qi7yw+lUtGt8kcU18xhPhEiLMbP9QPevBC3pXdzgN+xCS5O+voChNX5R8HQ==
-X-Received: by 2002:a05:6214:3f88:b0:6ce:23c0:b5d3 with SMTP id 6a1803df08f44-6d354304791mr99767046d6.19.1730468902562;
-        Fri, 01 Nov 2024 06:48:22 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHbSckCZXlW9k8OKL6LD/JMrWFH2jo6zfSiWlytLvy9/1m4eOCAP+JBhW4y4WuHqZXBK6W5Ww==
-X-Received: by 2002:a05:6214:3f88:b0:6ce:23c0:b5d3 with SMTP id 6a1803df08f44-6d354304791mr99766656d6.19.1730468902229;
-        Fri, 01 Nov 2024 06:48:22 -0700 (PDT)
-Received: from x1n (pool-99-254-114-190.cpe.net.cable.rogers.com. [99.254.114.190])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d353f9edfdsm19373306d6.6.2024.11.01.06.48.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2024 06:48:21 -0700 (PDT)
-Date: Fri, 1 Nov 2024 09:48:20 -0400
-From: Peter Xu <peterx@redhat.com>
-To: Mirsad Todorovac <mtodorovac69@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Suren Baghdasaryan <surenb@google.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v1 2/2] selftests/mm: fix coccinelle WARNING recommending
- the use of ARRAY_SIZE()
-Message-ID: <ZyTcJHUXWWaTIA7O@x1n>
-References: <20241101111523.1293193-2-mtodorovac69@gmail.com>
- <20241101111523.1293193-4-mtodorovac69@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=YJy+K8/KmdsOkGWmwW+8neIqskL7MBau/XoZhXCZys/BZbNOUkt2GagISvFkMaetzeAAPQ8mNCR43KAkVW0B9HbWXcDfH40MXaBe7capRuhLhy0rbsxfORqxfsNb195ZGQu3yYdhWpeae96wtEdDx6x16FRwJg30irEND23cOLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alyssa.is; spf=pass smtp.mailfrom=alyssa.is; dkim=pass (2048-bit key) header.d=alyssa.is header.i=@alyssa.is header.b=J/1qwaVP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WD4Sy3tW; arc=none smtp.client-ip=202.12.124.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alyssa.is
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alyssa.is
+Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
+	by mailfout.stl.internal (Postfix) with ESMTP id 14A8911400F7;
+	Fri,  1 Nov 2024 09:52:42 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-03.internal (MEProxy); Fri, 01 Nov 2024 09:52:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1730469161; x=1730555561; bh=OM4a9KmiKy
+	BYymvUt/3Ss+GNBym2SjdQJLLohwjJ+bo=; b=J/1qwaVPoY/CP3CWiMVOQ4zh/9
+	xHWItsbIbKTvINImd8nAjP3dhcsjUI6rp7jMHlGeGAx4Tt1fhvJzDe+briiACM3M
+	6TXY7L+OXAF8r3g95jS+WbqmVZZqhkLJ8yXTo6Rb9DziyfGwYD85Pdaxft1RBExI
+	POTVb2ynsA1g5ZmJDD/SruWn+vD3bM+CDa6oTxrE/4BMLyB8Fn+vTVNGCEjsJpbK
+	bvoji4QcxieO93sTZUxztnkFtyOCbMVB4fJztrNEzngY4r5MDKaIJpK9Lnzyi0fQ
+	laJOVC3+KH3AEnomEEGZ0omdxkpaUQemCUBpjymFcIwfxLyUNL4xVl3cUi9Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1730469161; x=1730555561; bh=OM4a9KmiKyBYymvUt/3Ss+GNBym2SjdQJLL
+	ohwjJ+bo=; b=WD4Sy3tW1u5Wc7jnHI/lUlfuItn6PTNPneLNtw1EOIN3RxBK5CY
+	Wa014ELgAy6rxuA4Rwg19SC/7MxA8dSioyxi5hUaZubLhRXM6qoN/kNYhMvAqgCu
+	zBMQIybjF3b4LljZCZfAtSB5Ky/AsysXY7/bGLSDw9j++I1hNm0YqvgBUKrBPrju
+	kV79UUKlPTRXAY/FaveOXu5oupjOiyAcmj7fJWb8O8cHO3Iys7WykwnUKSklv0CF
+	/wp2R323CL+8UC68V9o+UO8R4t4TSl44c4FJcYL4v1MJov8KFUD4W69ZOzwzKtTo
+	hQg1KstbG7fDpyVUQSI64tAojkzFA4NsZuQ==
+X-ME-Sender: <xms:Kd0kZ4r1TXm3h3fsDELlcIm9VJFWC0QSikt4C6vi1iFp2Bd92N2WIw>
+    <xme:Kd0kZ-qj-f8oumc10ND6ehhQpVaoaOnGiBpnz-nwVSfBT5aHyMc8APHsFn3mvuFv1
+    4aTa4FRve1G0vem0g>
+X-ME-Received: <xmr:Kd0kZ9Nep0UT1SJRFM0TxApcCetfjETsVkuzpD0Gx24Ow7hW_JBnARK5g-W7VXW_4OMldH1S6IS6kQ5w1FQ-qyGwEEo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekledgheejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvden
+    ucfhrhhomheptehlhihsshgrucftohhsshcuoehhihesrghlhihsshgrrdhisheqnecugg
+    ftrfgrthhtvghrnheptdejueetkeehfeeuleeugfevieffkefhteefiedvfeehuefhjeeg
+    vdeiffeihfeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhephhhisegrlhihshhsrgdrihhspdhnsggprhgtphhtthhopeejpdhmohguvgepshhm
+    thhpohhuthdprhgtphhtthhopehtrghmihhrugesghhmrghilhdrtghomhdprhgtphhtth
+    hopegurghvihgughhofiesghhoohhglhgvrdgtohhmpdhrtghpthhtoheprhhmohgrrhes
+    ghhoohhglhgvrdgtohhmpdhrtghpthhtohepkhhunhhithdquggvvhesghhoohhglhgvgh
+    hrohhuphhsrdgtohhmpdhrtghpthhtohepsghrvghnuggrnhdrhhhighhgihhnsheslhhi
+    nhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvg
+    hrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgv
+    rhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:Kd0kZ_5d3LDLh1DekeT9AwgpKb3K3LEt2rH5_8b5VVkBofwhBOCNMw>
+    <xmx:Kd0kZ379sXAOM_dQgTdOjQQt3gsPVQCaFLaD-VWVZrz4d9ROio3T_A>
+    <xmx:Kd0kZ_i-llo3F56A_mcGNlURkBAej3eiHke5eGkODjH_XqytylXGwQ>
+    <xmx:Kd0kZx6x_5A2QAd5kXrXGN1txawY5U3pxRMBRlpwkfhPrU9CTRo5Pw>
+    <xmx:Kd0kZ6b8G-q6L1C_peNDYwxmMN0fIFxoi8yj9Ab28GI69MWSlBPgbTp->
+Feedback-ID: i12284293:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 1 Nov 2024 09:52:41 -0400 (EDT)
+Received: by sf.qyliss.net (Postfix, from userid 1000)
+	id 5AE2289888E9; Fri, 01 Nov 2024 14:52:39 +0100 (CET)
+Date: Fri, 1 Nov 2024 14:52:39 +0100
+From: Alyssa Ross <hi@alyssa.is>
+To: Tamir Duberstein <tamird@gmail.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] kunit: enable hardware acceleration when available
+Message-ID: <jhmonkl53vrgz3pjhbbopvrx6infgbezlsvba3luccrpwtnmtb@ptobfcxrr4ud>
+References: <20241025-kunit-qemu-accel-macos-v1-0-2f30c26192d4@gmail.com>
+ <20241025-kunit-qemu-accel-macos-v1-2-2f30c26192d4@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="z4djprvhauy3hwsd"
 Content-Disposition: inline
-In-Reply-To: <20241101111523.1293193-4-mtodorovac69@gmail.com>
+In-Reply-To: <20241025-kunit-qemu-accel-macos-v1-2-2f30c26192d4@gmail.com>
 
-On Fri, Nov 01, 2024 at 12:15:25PM +0100, Mirsad Todorovac wrote:
-> Coccinelle gives WARNING recommending the use of ARRAY_SIZE() macro definition
-> to improve the code readability:
-> 
-> ./tools/testing/selftests/mm/uffd-unit-tests.c:1484:32-33: WARNING: Use ARRAY_SIZE
-> ./tools/testing/selftests/mm/uffd-unit-tests.c:1485:30-31: WARNING: Use ARRAY_SIZE
-> 
-> Fixes: 16a45b57cbf2 ("selftests/mm: add framework for uffd-unit-test")
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Peter Xu <peterx@redhat.com>
-> Cc: linux-mm@kvack.org
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Mirsad Todorovac <mtodorovac69@gmail.com>
 
-Acked-by: Peter Xu <peterx@redhat.com>
+--z4djprvhauy3hwsd
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Subject: Re: [PATCH 2/2] kunit: enable hardware acceleration when available
+MIME-Version: 1.0
 
--- 
-Peter Xu
+On Fri, Oct 25, 2024 at 05:03:54PM -0400, Tamir Duberstein wrote:
+> @@ -124,6 +125,29 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+>  				'-no-reboot',
+>  				'-nographic',
+>  				'-serial', self._serial] + self._extra_qemu_params
+> +		accelerators = {
+> +			line.strip()
+> +			for line in subprocess.check_output([qemu_binary, "-accel", "help"], text=True).splitlines()
+> +			if line and line.islower()
+> +		}
+> +		if 'kvm' in accelerators:
+> +			try:
+> +				with open('/dev/kvm', 'rb+'):
+> +					qemu_command.extend(['-accel', 'kvm'])
+> +			except OSError as e:
+> +				print(e)
+> +		elif 'hvf' in accelerators:
+> +			try:
+> +				for line in subprocess.check_output(['sysctl', 'kern.hv_support'], text=True).splitlines():
+> +					if not line:
+> +						continue
+> +					key, value = line.split(':')
+> +					if key == 'kern.hv_support' and bool(value):
+> +						qemu_command.extend(['-accel', 'hvf'])
+> +						break
+> +			except subprocess.CalledProcessError as e:
+> +				print(e)
+> +
 
+QEMU supports falling back if one accelerator is not available, if you
+specify multiple like -accel kvm:tcg.  Couldn't you rely on that rather
+than re-implementing the availability checks here?
+
+--z4djprvhauy3hwsd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEH9wgcxqlHM/ARR3h+dvtSFmyccAFAmck3R8ACgkQ+dvtSFmy
+ccDsHBAAonD29UCU+Ic/GmKgoVj3InBFyhVA3AlAE7jqh2rO8nzwjmHY7t9mGXIV
+36XHtgv5f7HK5b3pixZbULMDnWRhreT7TMYSQ/7T5GGXvlDYyXQsuwjyNhehdJQF
+PlGpIhyM33pjI6TEEKs579h771hrSGwtrDfzKToMEDKYYbM36fPP/YWOnCMSeJeA
+2FhyoW8pd5FgQDbDVgsHZQFDk9m9g3R3sTKwl8zyUDdG8PCh5go4k7WTLRlCGzAd
+uJxdEG7IjLs3xiaTILDpFBWPcnPDlvqrd9IYCQvNQbVpFAJo7zfoZyeodIiczBAf
+ydNjaC4vB43TebBepQQDw2dWOKssbzEnxlDIHDuATVcWGRqOX35p71bjPrK+2ge+
+RJ6x4qabr+BYUw62YiFz/JxYMqtf2xfovYhJFyvUfVQBlg9eN159V+7fSd6MS4tW
+gBO54874n8Lt2GftkqvFIqZu9hbDby6j1Kece+sVjmKvHntf9g+JQYbh6ZqpdzLr
+ms4zvSwasn4i+dSBemTeORjcsSqOSplA882gTV/uwEpbh3+Ss+7TJnWcIB2G6ppD
+4whU8T+yURQCP2Kll+/JUp2w5MGXFb4XiLEomwivL4fBoQwGwXIe8rZ/1sfg9YZk
+rBPdywmjODmm/axrAekXdU15EcCYLonX7gzhy7OxEM55V17o+7Q=
+=N5Ic
+-----END PGP SIGNATURE-----
+
+--z4djprvhauy3hwsd--
 
