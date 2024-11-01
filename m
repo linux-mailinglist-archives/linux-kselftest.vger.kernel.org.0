@@ -1,212 +1,143 @@
-Return-Path: <linux-kselftest+bounces-21301-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21302-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A427D9B9346
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 15:32:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B91E39B93BD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 15:50:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E553AB22B29
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 14:32:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 475FF1F217F2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 14:50:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 562351A4E98;
-	Fri,  1 Nov 2024 14:32:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 429791A256C;
+	Fri,  1 Nov 2024 14:50:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="QMUjBLIZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="guPzqbm+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D43A60DCF
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 Nov 2024 14:32:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED76919DF53;
+	Fri,  1 Nov 2024 14:50:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730471548; cv=none; b=KMjshrtsRKOExlriEMV1XXCn+m8RjbttrYAZVbQzxdlCCca24Auj32686B5zDTnv47I8WYqO64Ye5kBj+779r6cB2+G/H2uwy7bZwjbTRu1FgJ2H9n7+sDtdgrpVKRG3CCZYF0ioAariIiZA/dvTD2yc0li6Mdhd7fv9jzVC/OE=
+	t=1730472617; cv=none; b=iclsVVIW1XPdTP+GjZuzpW1mZ3CoW+7xEKXDJzkY42sbWwDrZMZMpCuk59m2RBsc006Tqx2/e6nubAdq3qBAANoxG+6Z7bKoTdbYB9+dfMr9e1+PEAXK12qS/vDsUEapuWUA6dz4WdhSboNPvhob/UsUWKkPEkcYZaJ9mOmK9qQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730471548; c=relaxed/simple;
-	bh=zRufYQTM2AyaUG/3MkZBNIjcR4kJ1MSCKM92Jc2SsTk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DcOAyIunz8fGrOx8NK5ZhKwLtbXDhWTUcB8FJFvWB2NfYpD9XdLdRcJudaQhU0tinhqJdZmyIVkugAt7WeOfOG7QX03Fjt0UFRxOpvnF9bnCGGPRkQI5GONP03eJ8n4IqQ1aL3WfrsUZcAoE+/Q/hH8E3IKlviyRfzB16YFJ6fE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=QMUjBLIZ; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-20c6f492d2dso21971915ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Nov 2024 07:32:25 -0700 (PDT)
+	s=arc-20240116; t=1730472617; c=relaxed/simple;
+	bh=ljeC521u4evp5cZBupSeKdyQnELeagQB8AYdKxuvGF0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tKy5x/aIsbg8dg3mtzvyadjpPqIAjFd7PcYGkrUDzRbg2XkqGY6nBRJhKuTvzgTJ1Lv6YXYR69ESbpBwA+XKiD7jk/WYqYuU0yWPb6Z+JR8UeKAtVRZ1aZQZrOfcUy5ToHSvnAJoa96H9N/cKnNBPSMsI5IVKsaHr5uagXSMJHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=guPzqbm+; arc=none smtp.client-ip=209.85.208.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2fb498a92f6so18609901fa.1;
+        Fri, 01 Nov 2024 07:50:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1730471544; x=1731076344; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gruszeIpxYM6GpwIDsKD9euVO3Z3vPd1Uc086E1jl5g=;
-        b=QMUjBLIZ6Aked778FkpRgf5IglINFkqxiEqYAKA7OaT4lV4oUPFjNEV3zTYYXmZ7J+
-         Mz33RM69FHIifQp8weOOVrlwC4OCmbUL9y9WbzJxZBCX1OgYuP2wpIEJICNmYgsG0Ia4
-         oWFqycOJkHS9j9GdA7Purhtm9YtARMmufLf9vxiMYkcmqlPtvGxEI5YU5RvdzWv63q0y
-         xPJ49F0Za2TDS/nSvt5ty3v1ANQECt3yjt1vivAE1QhUs+SUs0FHCCV3BAact9PbihAy
-         7PVSROpyL2u+Cy2oNml3pyiWP0DjNZAb54YExu/VbNh/c4tRmT7yxFsAuDI9viGqiL94
-         nvtg==
+        d=gmail.com; s=20230601; t=1730472613; x=1731077413; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9hJYuNrDZmqlVcyIK/zA2RvDFZ2InchFcFx47BVpnR4=;
+        b=guPzqbm+lxMdsuKq2joiUhlDDcDkj0YnZcT7Znk7KR/EQgwdL8fUsvbY4TqQWNRLDv
+         stp0BKhTk8EJM+Z4muy9J+5fmR0X8hKctiso735yCY+FACYK7RRUbwViENmtwzNgBhNS
+         T29XgjGGFIL62Lg2HaRKdQVzvn0ylSbqjBW3Hgb7YRr7H9FXafl7IJhaQav10Y92SVoJ
+         f8YJGQI0OeZLvaw9PpEhWLxD/Zyazxf0S3/Ly3duWs06VDQFX8FsfUcLysAb1IipsTAN
+         65PQTRvX9JQoyNmDB1Iw8pde619ndzb3WrS6OoHIUgLDz/fGTL8DQuSOHNugJpXy0Fnm
+         WLyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730471544; x=1731076344;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1730472613; x=1731077413;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gruszeIpxYM6GpwIDsKD9euVO3Z3vPd1Uc086E1jl5g=;
-        b=MREPL9O/BBzCVGHPEYzsh9z+0qgvx0bJqP/n0yrEtzlp7R4WfOBfi+lixAYXyeFGwz
-         /1lXaFMj4Q7myWS4AwsUO0zEJsADRrl5Mn0+7BizRauwkd7/WJi33R3iP7o/PIOUfZ35
-         nTlv2zdjxPEg8GRmEZGaXiXdY4LSjQN68Vb6AhIOGvNUzcnW/5NvTKJBGDcbf+uBsjVQ
-         SBr2G2xZKUX+C8hsLRGoi1mvdx9Bkzvv93ugRvv8imoq+osacaKLOz6/XYZtrof2VNFI
-         ythAkM9nXaZOIbq4aIux7QKFmZHpdJmwoFDKuFU4Uf2Z4oZlWvJPfbatDy+xdmLrWUU4
-         zymg==
-X-Forwarded-Encrypted: i=1; AJvYcCX8A0aK4y6UVi3/qaA6t+QzgpIXNDCzlzBNcXmkVJclDnefr1mAma81iRGO6s6E+3TQufsFg52tFnkm0RflV4E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJsHwDO3czLBBBUYJ6g/6Qp7J5FVbnSs0WPECq5h0L3OqPR74+
-	X+iSF5ST/xc7cC91i13ytM22369K3fhFnK048Ge2p3ro3yONtmNqocrrK5J8Xw==
-X-Google-Smtp-Source: AGHT+IEJf1H/GvLhyEhHmZm/gVhBTi+P/f977a9UB1J2PxbHQ1I2inYwcwuyo3yIHhvEk7trWKFpUw==
-X-Received: by 2002:a17:902:d481:b0:20b:6918:30b5 with SMTP id d9443c01a7336-2111af5a6bcmr42574355ad.41.1730471544449;
-        Fri, 01 Nov 2024 07:32:24 -0700 (PDT)
-Received: from rogue-one.tail33bf8.ts.net ([179.218.14.134])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2110570bfe6sm21926665ad.109.2024.11.01.07.32.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2024 07:32:24 -0700 (PDT)
-From: Pedro Tammela <pctammela@mojatatu.com>
-To: netdev@vger.kernel.org
-Cc: jhs@mojatatu.com,
-	xiyou.wangcong@gmail.com,
-	jiri@resnulli.us,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Pedro Tammela <pctammela@mojatatu.com>
-Subject: [PATCH net-next] selftests/tc-testing: add tests for qdisc_tree_reduce_backlog
-Date: Fri,  1 Nov 2024 11:31:48 -0300
-Message-ID: <20241101143148.1218890-1-pctammela@mojatatu.com>
-X-Mailer: git-send-email 2.43.0
+        bh=9hJYuNrDZmqlVcyIK/zA2RvDFZ2InchFcFx47BVpnR4=;
+        b=evtSVbx6h5nw73Lgjq70KHNXMD0XaUbHFFYQ7WliQ0teUHzz7qP7IM8efbOsYUw9fY
+         MI+hoPzYqohiqN6hChaRriR0UTRF5xVveIYuDWEorjNjEM41CNdnSszw5+EiWHJV9+j5
+         /zAOYsxRxgx7JiO3EUgkj5gzLJY1Y8KEW+VgbJ6ATI6L1zTQQRRMi0wv0VqDHYIjUOki
+         /zxESzNiAg3LIA9j9JuCj5qu9VrDv8jT8ERXvWoHeZz44JSeD/4kp/qMDzCxbe3ZB1Yi
+         oT4+PrZGgYIghu19XxhklJz3OWEpB9MjpteT5eh5yUnuhpDbgPwhURD3bsIosxnsqmLN
+         /lLw==
+X-Forwarded-Encrypted: i=1; AJvYcCUQqPXLUDslEANeQQ++8Ic+R27LN8p7CflV/p1bJ1Ae34KBz7TTa0EJMIUy47uP6doinYeXHd4PAVhkpr6TfHZ4@vger.kernel.org, AJvYcCXt61HRPyprUO+MCijEatVqgj1Gdg0niiFgqRusGNQqojYr/lJOCrKMNpixboAQ0/R9U0UD8mVkd7CWNsU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YybdGrFtB7hzWwcfXJT6varknJv+2EDvcDSZ+1eOTB49/EORXZ+
+	n3ul0d5FseyYPaXXy5nJgha/zSbuM5mcs/jmcXHDdy73XVCAra8xAYQVYj9ErpBWyzDzKziRrQY
+	EgNIqovC05m59dCjrwAu5NSCb8HNjSRCVvSk=
+X-Google-Smtp-Source: AGHT+IGFLZSNiICgjAOj5BzvClatyHo1q6xPc2fzZwASomksDcKDY4rt0uQqp7EtXlR/7Pb2l3QGV5JanPMBEzDMOVM=
+X-Received: by 2002:a2e:be20:0:b0:2fb:3a12:a582 with SMTP id
+ 38308e7fff4ca-2fcbe004c83mr117643281fa.23.1730472612781; Fri, 01 Nov 2024
+ 07:50:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241025-kunit-qemu-accel-macos-v1-0-2f30c26192d4@gmail.com>
+ <20241025-kunit-qemu-accel-macos-v1-2-2f30c26192d4@gmail.com> <jhmonkl53vrgz3pjhbbopvrx6infgbezlsvba3luccrpwtnmtb@ptobfcxrr4ud>
+In-Reply-To: <jhmonkl53vrgz3pjhbbopvrx6infgbezlsvba3luccrpwtnmtb@ptobfcxrr4ud>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Fri, 1 Nov 2024 10:49:36 -0400
+Message-ID: <CAJ-ks9m8AD2fon4Nxvc_S-DwY4TkRPHpq0icT0jPwCiCxy6Tqw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kunit: enable hardware acceleration when available
+To: Alyssa Ross <hi@alyssa.is>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Add 3 tests to check for the expected behaviour of
-qdisc_tree_reduce_backlog in special scenarios.
+On Fri, Nov 1, 2024, 09:52 Alyssa Ross <hi@alyssa.is> wrote:
+>
+> On Fri, Oct 25, 2024 at 05:03:54PM -0400, Tamir Duberstein wrote:
+> > @@ -124,6 +125,29 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+> >                               '-no-reboot',
+> >                               '-nographic',
+> >                               '-serial', self._serial] + self._extra_qemu_params
+> > +             accelerators = {
+> > +                     line.strip()
+> > +                     for line in subprocess.check_output([qemu_binary, "-accel", "help"], text=True).splitlines()
+> > +                     if line and line.islower()
+> > +             }
+> > +             if 'kvm' in accelerators:
+> > +                     try:
+> > +                             with open('/dev/kvm', 'rb+'):
+> > +                                     qemu_command.extend(['-accel', 'kvm'])
+> > +                     except OSError as e:
+> > +                             print(e)
+> > +             elif 'hvf' in accelerators:
+> > +                     try:
+> > +                             for line in subprocess.check_output(['sysctl', 'kern.hv_support'], text=True).splitlines():
+> > +                                     if not line:
+> > +                                             continue
+> > +                                     key, value = line.split(':')
+> > +                                     if key == 'kern.hv_support' and bool(value):
+> > +                                             qemu_command.extend(['-accel', 'hvf'])
+> > +                                             break
+> > +                     except subprocess.CalledProcessError as e:
+> > +                             print(e)
+> > +
+>
+> QEMU supports falling back if one accelerator is not available, if you
+> specify multiple like -accel kvm:tcg.  Couldn't you rely on that rather
+> than re-implementing the availability checks here?
 
-- The first test checks if the qdisc class is notified of deletion for
-major handle 'ffff:'.
-- The second test checks the same as the first test but with 'ffff:' as the root
-qdisc.
-- The third test checks if everything works if ingress is active.
+Have you ever used that? Here's what I get when I try:
 
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
----
- .../tc-testing/tc-tests/infra/qdiscs.json     | 98 +++++++++++++++++++
- 1 file changed, 98 insertions(+)
- create mode 100644 tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.json
+tamird@Tamirs-MacBook-Pro linux % tools/testing/kunit/kunit.py run
+--arch arm64 --make_options LLVM=1 --raw_output=all
+[10:45:03] Configuring KUnit Kernel ...
+[10:45:03] Building KUnit Kernel ...
+Populating config with:
+$ make ARCH=arm64 O=.kunit olddefconfig LLVM=1
+Building with:
+$ make all compile_commands.json ARCH=arm64 O=.kunit --jobs=12 LLVM=1
+[10:45:07] Starting KUnit Kernel (1/1)...
+Running tests with:
+$ qemu-system-aarch64 -nodefaults -m 1024 -kernel
+.kunit/arch/arm64/boot/Image.gz -append 'kunit.enable=1
+console=ttyAMA0 kunit_shutdown=reboot' -no-reboot -nographic -serial
+stdio -accel kvm:tcg -machine virt -cpu max
+qemu-system-aarch64: -accel kvm:tcg: invalid accelerator kvm:tcg
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.json b/tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.json
-new file mode 100644
-index 000000000000..d3dd65b05b5f
---- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/infra/qdiscs.json
-@@ -0,0 +1,98 @@
-+[
-+    {
-+        "id": "ca5e",
-+        "name": "Check class delete notification for ffff:",
-+        "category": [
-+            "qdisc"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link set dev $DUMMY up || true",
-+            "$IP addr add 10.10.10.10/24 dev $DUMMY || true",
-+            "$TC qdisc add dev $DUMMY root handle 1: drr",
-+            "$TC filter add dev $DUMMY parent 1: basic classid 1:1",
-+            "$TC class add dev $DUMMY parent 1: classid 1:1 drr",
-+            "$TC qdisc add dev $DUMMY parent 1:1 handle ffff: drr",
-+            "$TC filter add dev $DUMMY parent ffff: basic classid ffff:1",
-+            "$TC class add dev $DUMMY parent ffff: classid ffff:1 drr",
-+            "$TC qdisc add dev $DUMMY parent ffff:1 netem delay 1s",
-+            "ping -c1 -W0.01 -I $DUMMY 10.10.10.1 || true",
-+            "$TC class del dev $DUMMY classid ffff:1",
-+            "$TC class add dev $DUMMY parent ffff: classid ffff:1 drr"
-+        ],
-+        "cmdUnderTest": "ping -c1 -W0.01 -I $DUMMY 10.10.10.1",
-+        "expExitCode": "1",
-+        "verifyCmd": "$TC -s qdisc ls dev $DUMMY",
-+        "matchPattern": "drr 1: root",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY root handle 1: drr",
-+            "$IP addr del 10.10.10.10/24 dev $DUMMY"
-+        ]
-+    },
-+    {
-+        "id": "e4b7",
-+        "name": "Check class delete notification for root ffff:",
-+        "category": [
-+            "qdisc"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link set dev $DUMMY up || true",
-+            "$IP addr add 10.10.10.10/24 dev $DUMMY || true",
-+            "$TC qdisc add dev $DUMMY root handle ffff: drr",
-+            "$TC filter add dev $DUMMY parent ffff: basic classid ffff:1",
-+            "$TC class add dev $DUMMY parent ffff: classid ffff:1 drr",
-+            "$TC qdisc add dev $DUMMY parent ffff:1 netem delay 1s",
-+            "ping -c1 -W0.01 -I $DUMMY 10.10.10.1 || true",
-+            "$TC class del dev $DUMMY classid ffff:1",
-+            "$TC class add dev $DUMMY parent ffff: classid ffff:1 drr"
-+        ],
-+        "cmdUnderTest": "ping -c1 -W0.01 -I $DUMMY 10.10.10.1",
-+        "expExitCode": "1",
-+        "verifyCmd": "$TC qdisc ls dev $DUMMY",
-+        "matchPattern": "drr ffff: root",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY root handle ffff: drr",
-+            "$IP addr del 10.10.10.10/24 dev $DUMMY"
-+        ]
-+    },
-+    {
-+        "id": "33a9",
-+        "name": "Check ingress is not searchable on backlog update",
-+        "category": [
-+            "qdisc"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "$IP link set dev $DUMMY up || true",
-+            "$IP addr add 10.10.10.10/24 dev $DUMMY || true",
-+            "$TC qdisc add dev $DUMMY ingress",
-+            "$TC qdisc add dev $DUMMY root handle 1: drr",
-+            "$TC filter add dev $DUMMY parent 1: basic classid 1:1",
-+            "$TC class add dev $DUMMY parent 1: classid 1:1 drr",
-+            "$TC qdisc add dev $DUMMY parent 1:1 handle 2: drr",
-+            "$TC filter add dev $DUMMY parent 2: basic classid 2:1",
-+            "$TC class add dev $DUMMY parent 2: classid 2:1 drr",
-+            "$TC qdisc add dev $DUMMY parent 2:1 netem delay 1s",
-+            "ping -c1 -W0.01 -I $DUMMY 10.10.10.1 || true"
-+        ],
-+        "cmdUnderTest": "$TC class del dev $DUMMY classid 2:1",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC qdisc ls dev $DUMMY",
-+        "matchPattern": "drr 1: root",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY root handle 1: drr",
-+            "$TC qdisc del dev $DUMMY ingress",
-+            "$IP addr del 10.10.10.10/24 dev $DUMMY"
-+        ]
-+    }
-+]
--- 
-2.43.0
+The same thing happens with hvf:kvm:tcg or just hvf:tcg.
 
+I also can't find this in the documentation.
+Tamir
 
