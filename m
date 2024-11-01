@@ -1,108 +1,109 @@
-Return-Path: <linux-kselftest+bounces-21324-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21325-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 105EB9B9A3B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 22:29:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1851D9B9A4B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 22:38:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 916871F22F9B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 21:29:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4215283E63
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 21:38:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76F791E2612;
-	Fri,  1 Nov 2024 21:29:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EDBF1E571D;
+	Fri,  1 Nov 2024 21:38:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="exGovcmf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CkGTGYk/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE84F1547DC;
-	Fri,  1 Nov 2024 21:29:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20C4A1E47A5;
+	Fri,  1 Nov 2024 21:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730496585; cv=none; b=PsWN39mixXy6s/KebXlrD8lZOhNgcIo9+mdJo47FGE9zlcR2fFk7/pwh8+ymq6nJR5b2QCS+cg019D3BRlqlGXKIYvH2kdEkfC0nndBxC1fkGFI6D3HPzINQlWZmIK1kMxw7VcYKYKYg2nRNZIvDBA/51RSWB4X4BtIYt1/p1ug=
+	t=1730497101; cv=none; b=u9WCkp9rig2DnslMRg9yV/FkBBMsRDq7/YIO8Rilgg88jRD1r724y2soUJwYjP1fwXUMqTiRwrV9mamjBgP2IOB48XfS4ySJw+SSccvh1plP8A1kxat76PGpBm5wiBtq7WPGExUtkApYZomnYCW05phykpCzweigf3e/12mHI2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730496585; c=relaxed/simple;
-	bh=wUv4Mmyden8QXixNRuHywr5j0xg1h8babFVNw+OZ6Ak=;
+	s=arc-20240116; t=1730497101; c=relaxed/simple;
+	bh=NaUGQoO+qua7rt17PrqWsXidf3yvC6bM0P7qWmzWNvQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aOiuYzH/htkrk3Gvu4f5Hls7FcN8oOYK7Tl9WkvXOBlLVUfDwXwODIeqj2OVyJSS78I8NrxY93ynlXb3fP9m12tZMI3AAuzdJz1Q7ebuVs7VjGcIhlBvcVAAleMRWbntFmCHZxCqnuI5XaKgwADMxDmALl1eOJ0SPZJ+kdJiRUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=exGovcmf; arc=none smtp.client-ip=209.85.219.41
+	 Content-Type:Content-Disposition:In-Reply-To; b=Aiwp+prRCKvYaTswJOyxj58UJW28lnYG1G/q3wykIPMgOn2Jj3cDQHW7bcuYGQT6Vb+OMOHQplq0fKBWSM2mIVnGbiGyBSst5Ix1p5DSzys5fBvUhoNIH6EGaTCJHggZtZa7/ufSXG3qRzVyvaP5RqF5yQpGRs5D68UH4g6DS3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CkGTGYk/; arc=none smtp.client-ip=209.85.160.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6cbe90c7c95so15643886d6.1;
-        Fri, 01 Nov 2024 14:29:43 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-460e6d331d6so15129581cf.2;
+        Fri, 01 Nov 2024 14:38:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730496583; x=1731101383; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730497099; x=1731101899; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q6RqVmSnLlS+aTA+4ijNGjm2L+S42vaFccd3PBdWHCU=;
-        b=exGovcmf5Eedqh81c752ZYWnxBTaZM23VoY41OeObVD5NNHIA52DwsGddEyzFyGUQE
-         Dnx/ZSOsdFh6tFu/fKAenx0aSVeYanN436BISEc+9e/1goua+KiaWsbNnvyyp8cMY+Fy
-         5cDGC0D4LUedAWDZwZhgmobDN5tYZTUtGR4pbmcSBmnQhUuWuvmCQUyp+3vPMK5ICGFb
-         ni/Ofqu0C5HRZpJlyGiHxCFITR3MkQwJ6sHe44KX6oKbpyNHB8Rv2M+shjMZ1eVJ21sB
-         Pc1UaGSWTM3dwNfTD2X4SmUKYF0neTQHVfwpSuqLaBcW59S+Lb9bUw3rp1vuX5mcuXuY
-         2uKA==
+        bh=xCOILmRNqBE6ZWY1p4IX8uvti1SM8oZ7fsEHU+TvcSA=;
+        b=CkGTGYk/XJ4M+jEfKLmfc3G65Gc5dXlCAcLst7nghrKqnsWDparsXJzSAUsEDo+wXN
+         LFM3FLOygfMaZRTzKRD/CCKyKcFE8e+NHrkO2KP5lfMWCeRAtCQqGfV+nNvxTODQOpQZ
+         JzsLkJ5TiVI05rbtBbb4gsYvRLbvfld2MXDhacKoLJC6QiL9Zkc+Qvw3EG8cIGQfNSmc
+         +ulyImzzi4c3w+9yU/IyQY+kWkcfQ2aJwMsSSRkGlPyxKDPMplAFqexb9GSOYOJqata3
+         NlBckCqUx1akpM5dKmmjBfRPPp2yBDjZBfqLYuOnyKBessBH49vfDzyepe5XK0xa6R9G
+         zOKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730496583; x=1731101383;
+        d=1e100.net; s=20230601; t=1730497099; x=1731101899;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Q6RqVmSnLlS+aTA+4ijNGjm2L+S42vaFccd3PBdWHCU=;
-        b=EO7NeQW/hHzTbOm6QOTJOmyiEAwejBT91C/RkY5UjGKOKT4X9rgEOJPqO+PljUzvki
-         CnyZo0oXY/kiMO/KCOA9nPD195XgORmLF9AUYK85Vx/l21+8c9I5UcaQPpXwph3owzzA
-         VbCH11zvs1qu878BrSypeQxCakwV659Ll98s1A/9a3SwUPKXm/WMqywiFGTuLh30JX3l
-         d8MJ6llovN+fUZJuXerpOIHFGtEr5BPw85ZGtlMZW2k1iEXO/9OAK7YDqkQTRpluPnle
-         boYl99jwUNTIWQnK06LEmWpkIyNamvwggNmfLE5CHMXHT+kUDY96yht3aZ6jLQbS+thx
-         x8HA==
-X-Forwarded-Encrypted: i=1; AJvYcCVQSjo7tBNFbAMNVbO6XRahMwbKIWtFgupvE7zyFbpjVmOM+LY/q41qLLrukmt7qJiNg3KQg2iEcg72GGhtkFI=@vger.kernel.org, AJvYcCVk/s/FZ4VoaQ4LBJ234QcdZHid/UzGDuZG2WSUNQVnL6SlS2nY76y3P06r8xidElj1oVlOZig7sU5BYP4D2nRc@vger.kernel.org, AJvYcCWF/MzM+evfEycg0ADy/YoTGoezIOerN4J4fqUxrt3LphES7LZAIP5YoN17JQ6dbRQZiUFDieGhUCTGxNM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyL38zj2AzTYoAKTxBG/J8/6Vh8bsmlEFW30do78pXfckl6+2U3
-	Tv2p4VkYVHkJIFFHG7gSWUVSC+JYhydymyx+D3kTNcqfRn1dDMpz
-X-Google-Smtp-Source: AGHT+IHg6WfvVjXsdZ9cmM2dc/TNrHtqK2fwwM81+rrqESxKCi4tQDqTMFY8TEdHmsS0quOjMnzWHQ==
-X-Received: by 2002:a05:6214:2e47:b0:6cc:41cb:4c6c with SMTP id 6a1803df08f44-6d35c1aeedfmr58433476d6.48.1730496582679;
-        Fri, 01 Nov 2024 14:29:42 -0700 (PDT)
+        bh=xCOILmRNqBE6ZWY1p4IX8uvti1SM8oZ7fsEHU+TvcSA=;
+        b=lcrGcxKnMtMDmoRJg7ZLIlU4FfNL0wxwa8G8Qk9rLCi90YkpqTbttKLX/9i12ZezsY
+         z5h+YglJE0SfKJ7ivqS8YhDLRSCe8/afuZPG5cQPkT7eWLbOZwO+Hscwby0pvtqjjHal
+         0CGmhC/BRIc3qahT0EYE17rLOkXrtiyNAH53AigZaS1DarD2g432+ezx3El5aIJr13QL
+         FdwOA391FMeK9DFYddyU//hSA1NN0WMspdX0KZoORea7OY1La/3OVfK0xNFNhrVF1vUf
+         ER10ENOtkLKwgtWMt8ysXGq+8FH1p4VRU2nP4QTZ01zaHVObjFU+IrbDtIebPgM6heyx
+         5uJA==
+X-Forwarded-Encrypted: i=1; AJvYcCViApLZf3xfOw2ibOQYZJm4Bc7reBxXGpFO5V0hqEf8SAHqAqjtP6zMmLvsCeNlEuoclrjeUFrArer8wGE=@vger.kernel.org, AJvYcCWXtL9Cl0lSDsBLbMPAPSdf6ERbtu9KKYcYf0ctMpkIFn6ASyE2qmOpR8pslFXRfBNTWegKvV6AMe26qQNPgbU=@vger.kernel.org, AJvYcCWcbUj7QuF4Yi1ZX0qBYC/mzoD+t2vKXB2KmWb79EEp4kHNDrymWCg6i+7l4x//6eHEhaaM0KA9VC+KY5GJOkuI@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz86B/zl3C6NSMI8Hg2NQJX51dlXIjYWWtkJDhhRG/N4e5b9FwJ
+	Ull2HvEhvmY8QXaaVqPdMCMnCLGZB7K1gUxWfjtLXwhSeDmTlEbQ
+X-Google-Smtp-Source: AGHT+IFzuAuuMva5coyqLPg9S15y8Mlaf80dpYp9sux05DwQgjZpyiJ8ElxROSwl3wxI07O7wq0IFA==
+X-Received: by 2002:ac8:4e35:0:b0:462:c322:47b9 with SMTP id d75a77b69052e-462c32249bfmr21194581cf.17.1730497098666;
+        Fri, 01 Nov 2024 14:38:18 -0700 (PDT)
 Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d35c73440esm13139686d6.63.2024.11.01.14.29.41
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-462ad0893e3sm22421981cf.6.2024.11.01.14.38.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2024 14:29:42 -0700 (PDT)
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 784FD1200043;
-	Fri,  1 Nov 2024 17:29:41 -0400 (EDT)
+        Fri, 01 Nov 2024 14:38:18 -0700 (PDT)
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfauth.phl.internal (Postfix) with ESMTP id A1C701200043;
+	Fri,  1 Nov 2024 17:38:17 -0400 (EDT)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-09.internal (MEProxy); Fri, 01 Nov 2024 17:29:41 -0400
-X-ME-Sender: <xms:RUglZ7TbCS-pn0w_fjxb_XLpfMkQxnOy9lWXgvBx0EqB8D8yXWbMbQ>
-    <xme:RUglZ8xffMw00fieXW7voXJBA3hS_hM2rzl-Y9d-anZ5qMCcnKJ3Cyj51wmjhkJTr
-    -zWYTqW7uNdgMsGPA>
-X-ME-Received: <xmr:RUglZw1qdv4kMgMHUwxZWYeGHZf6DXwzEPdYbwV--LCQV3woV9P9MwhhRww>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekledgudegkecutefuodetggdotefrod
+  by phl-compute-10.internal (MEProxy); Fri, 01 Nov 2024 17:38:17 -0400
+X-ME-Sender: <xms:SUolZ67Zi6tFQeKLYrDAGgygskeNElk99V5waD3BD2Epu8Iw_lEIVw>
+    <xme:SUolZz4ffIiMw4fjIG4bFoafs1Or_JQ34pfEempuwmnQ1ynOCM2OVhu6B69DupIBw
+    ND1VZO9sI8UEOzyDg>
+X-ME-Received: <xmr:SUolZ5dZcym49XMSNA-ceTX4wwhpeB0O_o_grNBmCoRasKdmWQbLnAgUCZI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdekledgudehtdcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddv
-    necuhfhrohhmpeeuohhquhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilh
-    drtghomheqnecuggftrfgrthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleel
-    ieevtdeguefhgeeuveeiudffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghl
-    ihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepgh
-    hmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopeduiedpmhho
-    uggvpehsmhhtphhouhhtpdhrtghpthhtohepuggrvhhiughgohifsehgohhoghhlvgdrtg
-    homhdprhgtphhtthhopehojhgvuggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehj
-    ohhsvgdrvgigphhoshhithhokeelsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghrvg
-    hnuggrnhdrhhhighhgihhnsheslhhinhhugidruggvvhdprhgtphhtthhopehrmhhorghr
-    sehgohhoghhlvgdrtghomhdprhgtphhtthhopegrlhgvgidrghgrhihnohhrsehgmhgrih
-    hlrdgtohhmpdhrtghpthhtohepghgrrhihsehgrghrhihguhhordhnvghtpdhrtghpthht
-    ohepsggvnhhnohdrlhhoshhsihhnsehprhhothhonhdrmhgvpdhrtghpthhtohepsghjoh
-    hrnhefpghghhesphhrohhtohhnmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:RUglZ7BBkgqbyQJwGHJeTooJomjJ0EQGII8nPsf3Hk2odjYjKFXP5A>
-    <xmx:RUglZ0jczVGMkeOXnFilCk6aFdH9OzhKSxqX8ojTUe_kYgb1WBMlVA>
-    <xmx:RUglZ_oW1stnW4619jlhvPzMznM-o_AL31N4JKWn4ZtEhJEtO7I-rw>
-    <xmx:RUglZ_j14Y86mgdQnXUIOeoN3Zx9jXIQH2cHoQxdxYaQWPiiYPwWcg>
-    <xmx:RUglZ3RXgx9whNMXvTdasYdZaONS9nfEgNB6BJ3PTqJ4jCP4DqjTlghX>
+    hnthhsucdlqddutddtmdenogfuuhhsphgvtghtffhomhgrihhnucdlgeelmdenucfjughr
+    peffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhnucfhvg
+    hnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvghr
+    nhepkeejgfdufefhiefggffhtdehgefgtdduvdekjeelffehueefffetteevgfefueejne
+    cuffhomhgrihhnpehgihhthhhusgdrihhonecuvehluhhsthgvrhfuihiivgeptdenucfr
+    rghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsoh
+    hnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhg
+    peepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgvpdhnsggprhgtphhtthhopeduie
+    dpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepuggrvhhiughgohifsehgohhoghhl
+    vgdrtghomhdprhgtphhtthhopehojhgvuggrsehkvghrnhgvlhdrohhrghdprhgtphhtth
+    hopehjohhsvgdrvgigphhoshhithhokeelsehgmhgrihhlrdgtohhmpdhrtghpthhtohep
+    sghrvghnuggrnhdrhhhighhgihhnsheslhhinhhugidruggvvhdprhgtphhtthhopehrmh
+    horghrsehgohhoghhlvgdrtghomhdprhgtphhtthhopegrlhgvgidrghgrhihnohhrsehg
+    mhgrihhlrdgtohhmpdhrtghpthhtohepghgrrhihsehgrghrhihguhhordhnvghtpdhrtg
+    hpthhtohepsggvnhhnohdrlhhoshhsihhnsehprhhothhonhdrmhgvpdhrtghpthhtohep
+    sghjohhrnhefpghghhesphhrohhtohhnmhgrihhlrdgtohhm
+X-ME-Proxy: <xmx:SUolZ3I7shbs8uYlTvA_--JMSUBThRNdym6H__rY5PKLeht3FhgyZA>
+    <xmx:SUolZ-J_p7BK9E4_RDDjZL3nmk_CsYM4kPqTew2Q8FoxrOSaV7qiVg>
+    <xmx:SUolZ4wbdRWtJHgTeccwd_MwD_YSUdupY-2vIFaaMdWWwqg9oQrdMg>
+    <xmx:SUolZyIUSpnf6l39nX2cFK3c3EAi_5YlJ5TGIVCLVjs_YYMcPB_ePQ>
+    <xmx:SUolZ1brqeYtkrotPzyhNGlOSSIcse4LCf7ne9eiTYAHJhOL8ygTmsyM>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 1 Nov 2024 17:29:40 -0400 (EDT)
-Date: Fri, 1 Nov 2024 14:29:39 -0700
+ 1 Nov 2024 17:38:17 -0400 (EDT)
+Date: Fri, 1 Nov 2024 14:38:16 -0700
 From: Boqun Feng <boqun.feng@gmail.com>
 To: David Gow <davidgow@google.com>
 Cc: Miguel Ojeda <ojeda@kernel.org>,
@@ -115,10 +116,10 @@ Cc: Miguel Ojeda <ojeda@kernel.org>,
 	Matt Gilbride <mattgilbride@google.com>, kunit-dev@googlegroups.com,
 	linux-kselftest@vger.kernel.org, rust-for-linux@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] rust: kunit: allow to know if we are in a test
-Message-ID: <ZyVIQxTf1qkts1d_@Boquns-Mac-mini.local>
+Subject: Re: [PATCH v4 2/3] rust: macros: add macro to easily run KUnit tests
+Message-ID: <ZyVKSKUq_bKH5jn_@Boquns-Mac-mini.local>
 References: <20241101064505.3820737-1-davidgow@google.com>
- <20241101064505.3820737-4-davidgow@google.com>
+ <20241101064505.3820737-3-davidgow@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -127,78 +128,40 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241101064505.3820737-4-davidgow@google.com>
+In-Reply-To: <20241101064505.3820737-3-davidgow@google.com>
 
-On Fri, Nov 01, 2024 at 02:45:02PM +0800, David Gow wrote:
+On Fri, Nov 01, 2024 at 02:45:01PM +0800, David Gow wrote:
 [...]
-> +/// ```
-> +/// // Import our mock naming it as the real module.
-> +/// #[cfg(CONFIG_KUNIT)]
-> +/// use bindings_mock_example as bindings;
-> +///
-> +/// // This module mocks `bindings`.
-> +/// mod bindings_mock_example {
-> +///     use kernel::kunit::in_kunit_test;
-> +///     use kernel::bindings::u64_;
-> +///
-> +///     // Make the other binding functions available.
-> +///     pub(crate) use kernel::bindings::*;
-> +///
-> +///     // Mock `ktime_get_boot_fast_ns` to return a well-known value when running a KUnit test.
-> +///     pub(crate) unsafe fn ktime_get_boot_fast_ns() -> u64_ {
+> @@ -273,3 +275,11 @@ macro_rules! kunit_unsafe_test_suite {
+>          };
+>      };
+>  }
+> +
+> +#[kunit_tests(rust_kernel_kunit)]
+> +mod tests {
+> +    #[test]
+> +    fn rust_test_kunit_example_test() {
+> +        assert_eq!(1 + 1, 2);
 
-Clippy complains this `unsafe` pub function doesn't have a "# Safety"
-section. Actually this function is not necessarily to be `unsafe`.
+Clippy reported:
 
-> +///         if in_kunit_test() {
-> +///             1234
-> +///         } else {
-> +///             unsafe { kernel::bindings::ktime_get_boot_fast_ns() }
+ERROR:root:error: identical args used in this `assert_eq!` macro call
+   --> ../rust/kernel/kunit.rs:348:20
+    |
+348 |         assert_eq!(1 + 1, 2);
+    |                    ^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#eq_op
+    = note: `-D clippy::eq-op` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::eq_op)]`
 
-Need safety comments here,
-
-> +///         }
-> +///     }
-> +/// }
-> +///
-> +/// // This is the function we want to test. Since `bindings` has been mocked, we can use its
-> +/// // functions seamlessly.
-> +/// fn get_boot_ns() -> u64 {
-> +///     unsafe { bindings::ktime_get_boot_fast_ns() }
-
-and here. If you make ktime_get_boot_fast_ns() safe, then no unsafe
-block is needed here.
+but this lint doesn't make sense to me, I would say we just drop this
+lint?
 
 Regards,
 Boqun
 
-> +/// }
-> +///
-> +/// let time = get_boot_ns();
-> +/// assert_eq!(time, 1234);
-> +/// ```
-> +pub fn in_kunit_test() -> bool {
-> +    // SAFETY: kunit_get_current_test() is always safe to call from C (it has fallbacks for
-> +    // when KUnit is not enabled), and we're only comparing the result to NULL.
-> +    unsafe { !bindings::kunit_get_current_test().is_null() }
-> +}
-> +
->  #[kunit_tests(rust_kernel_kunit)]
->  mod tests {
-> +    use super::*;
-> +
->      #[test]
->      fn rust_test_kunit_example_test() {
->          assert_eq!(1 + 1, 2);
->      }
-> +
-> +    #[test]
-> +    fn rust_test_kunit_in_kunit_test() {
-> +        let in_kunit = in_kunit_test();
-> +        assert!(in_kunit);
 > +    }
->  }
-> -- 
-> 2.47.0.199.ga7371fff76-goog
-> 
+> +}
+[...]
 
