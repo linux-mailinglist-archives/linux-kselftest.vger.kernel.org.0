@@ -1,96 +1,74 @@
-Return-Path: <linux-kselftest+bounces-21275-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21276-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8142D9B896B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 03:41:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA5F49B8973
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 03:42:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C2291F22076
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 02:41:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F5D9282DD7
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 02:42:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 820A71474A7;
-	Fri,  1 Nov 2024 02:40:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C563913B7A1;
+	Fri,  1 Nov 2024 02:41:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fOVfOR6L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eV72FeFL"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599F814601F;
-	Fri,  1 Nov 2024 02:40:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97A6C136331;
+	Fri,  1 Nov 2024 02:41:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730428830; cv=none; b=uVOIl+N7Y2wn1wRnGC/a/E6YftEU5vhgBlp9KdJEbbnquVxrH/jLBF3gO10q/QLyLF6GRoRdMqfj7kMMd1uHF1o8p87OlHmkj1KhZGm68cxBrD4vPC3OPw+HZVdY/oQoSYegpjzhZw8jbNkDHh9N4p5yousjSCkKM8kLMve7uBg=
+	t=1730428863; cv=none; b=OWN5qNMn/qMuMX0r4mfvOiubanD6gfjasFEYFtr74sw3Gn7wYCJr0yXZVuSHB/0hnzICtgJTQLxGZO6shRs56iyOCUBslGjTM3fwcPBkoPEsFCvPcFx/sXtGS5o4ZaRqV/KLf+g/Ol5JVoQ2yGeDWxgU3O2PCdMXfYLay7EoVYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730428830; c=relaxed/simple;
-	bh=9CcQ2QOz4gtm1gzkXUI26ERleSJSxxWrIcX7E5UXnVY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=c3Aoox2H36cEbbazxEqH+ridjKNMkW2uf63OrsATAhPFVDux1rvNTOrQQ6gAj8FtEAPtFOxtj3vgEhnB+9ZX7kKjy0MZPOOq/RrfbSDdZYdr0zgvE3YMzf62XxsgPrEue39H5Bq8gLGobVo/URc8WcCHFF1wclkCHAcDy9w5SCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fOVfOR6L; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAE60C4CED0;
-	Fri,  1 Nov 2024 02:40:29 +0000 (UTC)
+	s=arc-20240116; t=1730428863; c=relaxed/simple;
+	bh=+BCgbnOp2L3ugtDf9+H+hEWt/ljhMyGFBI2Aulp9FpM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FQ2rf4AjvK6voUUsiGixO/Ak2GrJM0dEkp8id0dJexjR3QVpHP6skzdqRJWWT4+zmFz7FWR6E2YfSWa06qImHLh0e+sQRtpztUQXZnvUKmuGvjXRWqstETzjcWNkSSmbxOt1na7fqiRMoUgDmDGVjNhPeM6W5PvZFiaqclvCEzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eV72FeFL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88B33C4CEC3;
+	Fri,  1 Nov 2024 02:41:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730428829;
-	bh=9CcQ2QOz4gtm1gzkXUI26ERleSJSxxWrIcX7E5UXnVY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=fOVfOR6LZPSh0QNRZbZ9DHteAisuLY0/iQuqka1NXsJclU65WBrs2BNhFOiwwQuHj
-	 vK1Q8/RCYy2gGMfaG8Qcbs4KjDq+ytTIne599JXwIqgwrGQk57uxvjbB92v6z6ygcE
-	 5lf5iBJpvUfxVgKDHtTF09qGtYf6UKCyxAVE+EDNEv9mkvSldjqjrYDwkPV2fW9H/U
-	 PvXF/9/3+o0GjxmJctFGYmcFV07uZROLu/fHKxDnCOfD4k04BOwneD3ckeK6M8yU/R
-	 6+j9wwlOYRSp0oBftIPO4ocwii5M3ptCHMbJ6BJ3pfnHY80yCVE4dLX6IqYDpNHXTv
-	 E2c17Fx0jGrEQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB341380AC02;
-	Fri,  1 Nov 2024 02:40:38 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1730428863;
+	bh=+BCgbnOp2L3ugtDf9+H+hEWt/ljhMyGFBI2Aulp9FpM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=eV72FeFLgv/NehsGyVD9F7We6JPl1ov5lZvHvN0rGa9m3a0PWvopdIu8Js7MvB9ZR
+	 /1MhdLatRuNif6K0hLc1z3tYEJKHhgDjySSZSH/+hffI6ZfwZbNqdheSNjbW+eiJxl
+	 mY7GVCEH60kKCus1FhSFXzheskqM/x29swTlZ1frkMf4yk7IYzwKiDi1VNRKmdMaXl
+	 Zf9w16+mVHDf/b6kaOZKAxaMUb4gG5FvfXEMjaZLC3Sbz3wmmQcAxw602aSKhq1Rnx
+	 PANl8rrahZF4C6w88lpVI1JpR50GQIZCcrMCBEl3LqW8OV1oQFarEfs6MwmdYXGIkH
+	 v1YEroV4K3vnA==
+Date: Thu, 31 Oct 2024 19:41:01 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Ilias
+ Apalodimas <ilias.apalodimas@linaro.org>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH net-next v1 0/7] devmem TCP fixes
+Message-ID: <20241031194101.301f1f72@kernel.org>
+In-Reply-To: <20241029205524.1306364-1-almasrymina@google.com>
+References: <20241029205524.1306364-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests: netdevsim: add fib_notifications to
- Makefile
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173042883750.2159382.1479790840240979138.git-patchwork-notify@kernel.org>
-Date: Fri, 01 Nov 2024 02:40:37 +0000
-References: <20241029192603.509295-1-kuba@kernel.org>
-In-Reply-To: <20241029192603.509295-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, petrm@nvidia.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Tue, 29 Oct 2024 20:55:20 +0000 Mina Almasry wrote:
+> A few unrelated devmem TCP fixes bundled in a series for some
+> convenience (if that's ok).
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+These two should go to net I presume? It's missing input validation.
 
-On Tue, 29 Oct 2024 12:26:03 -0700 you wrote:
-> Commit 19d36d2971e6 ("selftests: netdevsim: Add fib_notifications test")
-> added the test but didn't include it in the Makefile.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: andrew+netdev@lunn.ch
-> CC: shuah@kernel.org
-> CC: linux-kselftest@vger.kernel.org
-> CC: petrm@nvidia.com
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next] selftests: netdevsim: add fib_notifications to Makefile
-    https://git.kernel.org/netdev/net-next/c/7f66456d776a
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Either way you gotta repost either as two properly separate series,
+or combine them as one, cause right now they are neither and patchwork
+doesn't recognize they are related.
 
