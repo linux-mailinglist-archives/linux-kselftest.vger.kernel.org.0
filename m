@@ -1,72 +1,64 @@
-Return-Path: <linux-kselftest+bounces-21264-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21265-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60F809B866B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 23:59:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3347A9B8781
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 01:10:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF254B20DE9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2024 22:59:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E58F4282A85
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2024 00:10:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2DC41CC8B7;
-	Thu, 31 Oct 2024 22:59:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7823810F4;
+	Fri,  1 Nov 2024 00:10:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LNgey6bm"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="PBjMG6r+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97707198E92
-	for <linux-kselftest@vger.kernel.org>; Thu, 31 Oct 2024 22:59:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A4B36B;
+	Fri,  1 Nov 2024 00:10:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.190.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730415552; cv=none; b=aYdnPvF6GBGb/wSRQIZCJIx+pS23jF9o0X+RtoDZeIip0yNdQFd6GlH0+2fizQafJf7pQpQe6O/d/KPGKDUbmUcc63EWYDI9llMAfB9mWsEXcQ7KbX2CjbXjV65aaFUWVTXgY/lDKcu5GcuUjPR0tRaRtM7U5RXYXB58yfeGOCE=
+	t=1730419823; cv=none; b=ohBMag/8VrfoIZZpvC7QIXXq/5ThxSIGuYjwulu9W4CMMBICfkrI3BRXjdV+2qhBuENK0NgiUgQW/Fq623M8azVaMBXwQcUO7owdfsyRW7QoBJ9RVLS2Ok+gw1Qo4ndHWmGPyOw8oLuH7ndL7hJAFHjzDwk1elip9n5OEG00UF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730415552; c=relaxed/simple;
-	bh=dMZYa1/BBUZnoALeQgDMIM11iIQRpTDtFxihjAneHaU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sLyKGDNAKKB/Rg3NsEYmRiTCAzjNaHXvJaRv9MAR1cgpGZN9A32YCurv9w0ATtaCelo7htOX4gsuCNwGb/r9LfyxQyA8s1gcC+07sLm4IL1lIJGYNWewf5OpfC/lHeHWNSOfgxNxyDGplTuOJCXf+HDVDF0FHo52VaInqNUIhbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LNgey6bm; arc=none smtp.client-ip=209.85.166.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-83ab6cbd8b1so54529939f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 31 Oct 2024 15:59:06 -0700 (PDT)
+	s=arc-20240116; t=1730419823; c=relaxed/simple;
+	bh=jNxyG945mWZFitSBBl3P/Pi37LkMXgLexJ4MyYO00SI=;
+	h=Message-ID:Date:MIME-Version:To:CC:References:Subject:From:
+	 In-Reply-To:Content-Type; b=niixt4GDyZOaJhLQPm4WH6TUz/iGLymPsIiqnMMwkr3oEasE63SYBaAD30riYeO5lnyXCttuSITXLioQDk0mnya7nO+KkmegbuIHntXgrul3q502Qu7oyVhhu8s5OI6LujHvZGtJnEO+O3msCZSCsI3gbeS9x5gQvY4dhkdXB4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=PBjMG6r+; arc=none smtp.client-ip=207.171.190.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1730415546; x=1731020346; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lGefwQ1P0wOgvwKYhBBohTiaStRH2947+iO8xsolrDg=;
-        b=LNgey6bmAFeCGo8Dd9IBPFcCttwyuE3znebpAp/pm514p2y1DNRJtPsDYHwcEjR8fe
-         H4SX6272zCTHLVoADQeRpAkaDwMJL32c3TIOIG27s+dP474FzvKWyhY13rlK9ZE7aHSq
-         MKk9YZAflLoYf4V7ZPy55XsxUONIaqpUMEwMM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730415546; x=1731020346;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lGefwQ1P0wOgvwKYhBBohTiaStRH2947+iO8xsolrDg=;
-        b=j73rea3iuA1qwTQ21yp/Skx7b3MluyFmZ4H1pjfqDi9qVOjtPdeVRLtBJwzKUyJf62
-         00O8sfqDf/jlfgy3NDO9CcoFGXlhcZ8PWX3Pcrl1Mp3eqgsHM7Pb6BcP/zV1rg52os+8
-         aql84GRlLnWZeANRWuBcE3d70pqe4S/Uj7TixRrxSzvwZeSjc5DL6Kh0uDmaCr6a6Hij
-         cMu67VJMyrReOFLfXfPDXX/D16mXazlrra3gpJm9/ew0j3WvSD8YlxmfCJxNIExYeLcs
-         b+Jb6yG/WL1IxcXJWQxwaSdIEy90bykR/+kAJnFBjzyYudnybtsPIz3FWyt2ChRhj0uk
-         jsFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXW3i8P/KMS3KCHipUmO3ec9M67hyYPwym9vo4bi5mr2nE93UODJc6gcarjjSFnMPvqxQtwoD5vm+Hjoe9jx0w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmcmCWOfA2I3GRkhMaxNgCQfCglKBzWZcS0rhBCuy4xUyx1e2c
-	jPnE7VjH+ie6LKobhZKQuKfbcvWA33/sjgpGsvMZKgzDVqHqLhtYcVfrpWWv8K6NL+WemaNfuwq
-	h
-X-Google-Smtp-Source: AGHT+IHuQJNDP+ErBhgVYHSWVNUoJRkBof+T43WABDbY78sBsPTZbY1yxTrj43O0mofFjkRzlnnYDA==
-X-Received: by 2002:a05:6602:168e:b0:837:7f1a:40af with SMTP id ca18e2360f4ac-83b719edb9bmr159104739f.14.1730415545623;
-        Thu, 31 Oct 2024 15:59:05 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4de049a4e31sm483777173.143.2024.10.31.15.59.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Oct 2024 15:59:04 -0700 (PDT)
-Message-ID: <703c3b4f-399c-45a5-a1e1-45c628fb94fb@linuxfoundation.org>
-Date: Thu, 31 Oct 2024 16:59:04 -0600
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1730419818; x=1761955818;
+  h=message-id:date:mime-version:to:cc:references:subject:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jNxyG945mWZFitSBBl3P/Pi37LkMXgLexJ4MyYO00SI=;
+  b=PBjMG6r+2XgemzvXNiRS/nOv26MvOljajnGdveYrMBpmA1MwWUkwdHpn
+   0LAz0d39k1fVkEsQ+H8ilkocCRFpfEwi+SBZJtFtHrCuccr/i2HbIrzNC
+   Vzn1knGOIQtMoIqaIKI4RHXVOWTcnEdhNS/r/bhbu2U1Xe/JRt25G52Hl
+   o=;
+X-IronPort-AV: E=Sophos;i="6.11,248,1725321600"; 
+   d="scan'208";a="381598034"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 00:10:17 +0000
+Received: from EX19MTAUWA001.ant.amazon.com [10.0.7.35:3117]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.50.158:2525] with esmtp (Farcaster)
+ id 9403627f-3ea8-485f-95a8-ff158371f477; Fri, 1 Nov 2024 00:10:16 +0000 (UTC)
+X-Farcaster-Flow-ID: 9403627f-3ea8-485f-95a8-ff158371f477
+Received: from EX19D003UWC002.ant.amazon.com (10.13.138.169) by
+ EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
+ Fri, 1 Nov 2024 00:10:15 +0000
+Received: from [192.168.20.174] (10.106.101.30) by
+ EX19D003UWC002.ant.amazon.com (10.13.138.169) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.35;
+ Fri, 1 Nov 2024 00:10:12 +0000
+Message-ID: <2233397c-f423-40e3-8546-728b50ce0489@amazon.com>
+Date: Thu, 31 Oct 2024 17:10:11 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,165 +66,74 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] selftests: clone3: Use the capget and capset syscall
- directly
-To: zhouyuhang <zhouyuhang1010@163.com>, brauner@kernel.org, shuah@kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- zhouyuhang <zhouyuhang@kylinos.cn>, Shuah Khan <skhan@linuxfoundation.org>
-References: <20241030025045.1156941-1-zhouyuhang1010@163.com>
+To: <roypat@amazon.co.uk>
+CC: <ackerleytng@google.com>, <agordeev@linux.ibm.com>,
+	<aou@eecs.berkeley.edu>, <borntraeger@linux.ibm.com>, <bp@alien8.de>,
+	<catalin.marinas@arm.com>, <chenhuacai@kernel.org>, <corbet@lwn.net>,
+	<dave.hansen@linux.intel.com>, <david@redhat.com>, <derekmn@amazon.com>,
+	<gerald.schaefer@linux.ibm.com>, <gor@linux.ibm.com>, <graf@amazon.com>,
+	<hca@linux.ibm.com>, <hpa@zytor.com>, <jgowans@amazon.com>,
+	<jthoughton@google.com>, <kalyazin@amazon.com>, <kernel@xen0n.name>,
+	<kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-mm@kvack.org>,
+	<linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <loongarch@lists.linux.dev>,
+	<luto@kernel.org>, <mathieu.desnoyers@efficios.com>, <mhiramat@kernel.org>,
+	<mingo@redhat.com>, <palmer@dabbelt.com>, <paul.walmsley@sifive.com>,
+	<pbonzini@redhat.com>, <peterz@infradead.org>, <quic_eberman@quicinc.com>,
+	<rostedt@goodmis.org>, <rppt@kernel.org>, <seanjc@google.com>,
+	<shuah@kernel.org>, <svens@linux.ibm.com>, <tabba@google.com>,
+	<tglx@linutronix.de>, <vannapurve@google.com>, <will@kernel.org>,
+	<x86@kernel.org>, <xmarcalx@amazon.com>
+References: <27646c08-f724-49f7-9f45-d03bad500219@amazon.co.uk>
+Subject: Re: [RFC PATCH v3 0/6] Direct Map Removal for guest_memfd
 Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241030025045.1156941-1-zhouyuhang1010@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: "Manwaring, Derek" <derekmn@amazon.com>
+In-Reply-To: <27646c08-f724-49f7-9f45-d03bad500219@amazon.co.uk>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EX19D031UWA004.ant.amazon.com (10.13.139.19) To
+ EX19D003UWC002.ant.amazon.com (10.13.138.169)
 
-On 10/29/24 20:50, zhouyuhang wrote:
-> From: zhouyuhang <zhouyuhang@kylinos.cn>
-> 
-> The libcap commit aca076443591 ("Make cap_t operations thread safe.")
-> added a __u8 mutex at the beginning of the struct _cap_struct, it changes
-> the offset of the members in the structure that breaks the assumption
-> made in the "struct libcap" definition in clone3_cap_checkpoint_restore.c.
-> This will cause the test case to fail with the following output:
-> 
->   #  RUN           global.clone3_cap_checkpoint_restore ...
->   # clone3() syscall supported
->   # clone3_cap_checkpoint_restore.c:151:clone3_cap_checkpoint_restore:Child has PID 130508
->   cap_set_proc: Operation not permitted
+On 2024-10-31 at 10:42+0000 Patrick Roy wrote:
+> On Thu, 2024-10-31 at 09:50 +0000, David Hildenbrand wrote:
+> > On 30.10.24 14:49, Patrick Roy wrote:
+> >> Most significantly, I've reduced the patch series to focus only on
+> >> direct map removal for guest_memfd for now, leaving the whole "how to do
+> >> non-CoCo VMs in guest_memfd" for later. If this separation is
+> >> acceptable, then I think I can drop the RFC tag in the next revision
+> >> (I've mainly kept it here because I'm not entirely sure what to do with
+> >> patches 3 and 4).
+> >
+> > Hi,
+> >
+> > keeping upcoming "shared and private memory in guest_memfd" in mind, I
+> > assume the focus would be to only remove the direct map for private memory?
+> >
+> > So in the current upstream state, you would only be removing the direct
+> > map for private memory, currently translating to "encrypted"/"protected"
+> > memory that is inaccessible either way already.
+> >
+> > Correct?
+>
+> Yea, with the upcomming "shared and private" stuff, I would expect the
+> the shared<->private conversions would call the routines from patch 3 to
+> restore direct map entries on private->shared, and zap them on
+> shared->private.
+>
+> But as you said, the current upstream state has no notion of "shared"
+> memory in guest_memfd, so everything is private and thus everything is
+> direct map removed (although it is indeed already inaccessible anyway
+> for TDX and friends. That's what makes this patch series a bit awkward
+> :( )
 
-Sounds like EPERM is returned here. What's the error number from
-cap_set_proc().
-  
->   # clone3_cap_checkpoint_restore.c:160:clone3_cap_checkpoint_restore:Expected set_capability() (-1) == 0 (0)
+TDX and SEV encryption happens between the core and main memory, so
+cached guest data we're most concerned about for transient execution
+attacks isn't necessarily inaccessible.
 
-What's the error number here? Looks like this test simply
-uses perror - it is better to use strerror() which includes
-the error number.
+I'd be interested what Intel, AMD, and other folks think on this, but I
+think direct map removal is worthwhile for CoCo cases as well.
 
-Is this related EPERM?
-  
->   # clone3_cap_checkpoint_restore.c:161:clone3_cap_checkpoint_restore:Could not set CAP_CHECKPOINT_RESTORE
->   # clone3_cap_checkpoint_restore: Test terminated by assertion
->   #          FAIL  global.clone3_cap_checkpoint_restore
-> 
-> Changing to using capget and capset syscall directly here can fix this error,
-> just like what the commit 663af70aabb7 ("bpf: selftests: Add helpers to directly
-> use the capget and capset syscall") does.
-
-Is this still accurate for v3 - Does this patch match the
-bpf commit?
-
-What is the output with this patch? Include it in the change log.
-
-> 
-> Signed-off-by: zhouyuhang <zhouyuhang@kylinos.cn>> ---
-
-Please mention the changes from v2 to v3 here so it makes it
-easier for reviewers associating the changes to the reviewer.
-
-I had to go look up v1 and v2.
-
->   .../clone3/clone3_cap_checkpoint_restore.c    | 58 +++++++++----------
->   1 file changed, 27 insertions(+), 31 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
-> index 3c196fa86c99..8b61702bf721 100644
-> --- a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
-> +++ b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
-> @@ -27,6 +27,13 @@
->   #include "../kselftest_harness.h"
->   #include "clone3_selftests.h"
->   
-> +/*
-> + * Prevent not being defined in the header file
-> + */
-> +#ifndef CAP_CHECKPOINT_RESTORE
-> +#define CAP_CHECKPOINT_RESTORE 40
-> +#endif
-> +
->   static void child_exit(int ret)
->   {
->   	fflush(stdout);
-> @@ -87,47 +94,36 @@ static int test_clone3_set_tid(struct __test_metadata *_metadata,
->   	return ret;
->   }
->   
-> -struct libcap {
-> -	struct __user_cap_header_struct hdr;
-> -	struct __user_cap_data_struct data[2];
-> -};
-> -
->   static int set_capability(void)
->   {
-> -	cap_value_t cap_values[] = { CAP_SETUID, CAP_SETGID };
-> -	struct libcap *cap;
-> -	int ret = -1;
-> -	cap_t caps;
-> -
-> -	caps = cap_get_proc();
-> -	if (!caps) {
-> -		perror("cap_get_proc");
-> +	struct __user_cap_data_struct data[2];
-> +	struct __user_cap_header_struct hdr = {
-> +		.version = _LINUX_CAPABILITY_VERSION_3,
-
-cap_validate_magic() handles _LINUX_CAPABILITY_VERSION_1,
-_LINUX_CAPABILITY_VERSION_2, and _LINUX_CAPABILITY_VERSION_3
-
-It would help to add a comment on why it is necessary to
-set the version here.
-
-> +	};
-> +	__u32 cap0 = 1 << CAP_SETUID | 1 << CAP_SETGID;
-> +	__u32 cap1 = 1 << (CAP_CHECKPOINT_RESTORE - 32);
-
-Explain why this is necessary - a comment will help future
-maintenance of this code.
-
-> +	int ret;
-> +
-> +	ret = capget(&hdr, data);
-> +	if (ret) {
-> +		perror("capget");
-
-
->   		return -1;
->   	}
->   
->   	/* Drop all capabilities */
-> -	if (cap_clear(caps)) {
-> -		perror("cap_clear");
-> -		goto out;
-> -	}
-> -
-> -	cap_set_flag(caps, CAP_EFFECTIVE, 2, cap_values, CAP_SET);
-> -	cap_set_flag(caps, CAP_PERMITTED, 2, cap_values, CAP_SET);
-> +	memset(&data, 0, sizeof(data));
->   
-> -	cap = (struct libcap *) caps;
-> +	data[0].effective |= cap0;
-> +	data[0].permitted |= cap0;
->   
-> -	/* 40 -> CAP_CHECKPOINT_RESTORE */
-> -	cap->data[1].effective |= 1 << (40 - 32);
-> -	cap->data[1].permitted |= 1 << (40 - 32);
-> +	data[1].effective |= cap1;
-> +	data[1].permitted |= cap1;
->   
-> -	if (cap_set_proc(caps)) {
-> -		perror("cap_set_proc");
-> -		goto out;
-> +	ret = capset(&hdr, data);
-> +	if (ret) {
-> +		perror("capset");
-> +		return -1;
->   	}
-> -	ret = 0;
-> -out:
-> -	if (cap_free(caps))
-> -		perror("cap_free");
->   	return ret;
->   }
->   
-
+Derek
 
