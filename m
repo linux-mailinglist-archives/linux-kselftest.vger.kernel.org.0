@@ -1,133 +1,291 @@
-Return-Path: <linux-kselftest+bounces-21341-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21342-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AB799BA14E
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2024 16:58:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD8D19BA167
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2024 17:30:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44D21282090
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2024 15:58:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 489941F21504
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2024 16:30:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 092F51A2557;
-	Sat,  2 Nov 2024 15:58:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EED8F1953BB;
+	Sat,  2 Nov 2024 16:30:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b="ZCnNZl+E"
+	dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b="HYFVZ5cM"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from qs51p00im-qukt01071901.me.com (qs51p00im-qukt01071901.me.com [17.57.155.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C02189BAD
-	for <linux-kselftest@vger.kernel.org>; Sat,  2 Nov 2024 15:58:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DDB776410
+	for <linux-kselftest@vger.kernel.org>; Sat,  2 Nov 2024 16:30:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.57.155.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730563128; cv=none; b=TOdZ9PS71SubGZdVGdZFGzQFzybtLeiKTMNNPBRJV6HkGRj1MWP60/u1PYNLufKA1Obo5EiukkN/0RviWM08a2YVRDuwzuonkbuCIAu012UrlCvee+LP5gkoNPSIIVnxhM2o8nD3GVwKW88BpdwxZx+p3E4bv6B9UMjqRqVSGqs=
+	t=1730565020; cv=none; b=pEIpzJVSZhP5zfq4dCw0MbC20tHjKpn36/HYFUGmywl+m9Zc7C5ABBIT1GL99RkkS85+lFHnyZNF8Ggm13fPzDWN5I2fufDMwxKFZaQgavSxskKF5tkqNkpwmahDmIEbDR61Y2KPEJIsLcYX3yx5YecvoWsbZsVpGl3XgVSn7Ro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730563128; c=relaxed/simple;
-	bh=8ZCIjqe6nbbqsWqN3Vcpxe64gjYHyzF400J/Pb64xNM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=mNjEtv2x2252iL1OltGmAOSfV6NVkwWTGG3EvClxAldoO1bAkPK1fNCsUxY4xEw4PKbLZPxxDEHLj+PEW+7zrrW/qpAWvX3FIPBmoYJ7wle9E0JWDYwAL/8+CM/89CH6VT+VsSKIwm8Ekk4Bpkhj3vEU+nWurhBGRaTbI0Mb/uQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg; spf=pass smtp.mailfrom=verdict.gg; dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b=ZCnNZl+E; arc=none smtp.client-ip=17.57.155.8
+	s=arc-20240116; t=1730565020; c=relaxed/simple;
+	bh=oL4LOaaxYyFSbzDq0ODh4Una+IuybqTzNiRpPeFEqRY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DkPZOZ6PlJQockIcnKFPIV0erimcTB+Yus+47Gl33wXIMHluSiqZo1Ns+es2t8vFR2y0OTwYkuqHaJELYTYD2cZivoS7L0rbRyYRpi8NUfMkeznA4PKcTJgvkvaHGZv+XqHMzOwrby4eAUBJzgac1jT1nfH1PH2eXUhzCaOM3yo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg; spf=pass smtp.mailfrom=verdict.gg; dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b=HYFVZ5cM; arc=none smtp.client-ip=17.57.155.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verdict.gg
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1;
-	t=1730563124; bh=dAlXGCff2WQWMMo4l+7vl5vNILyFo+zASwJ92FaKpGc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:
-	 x-icloud-hme;
-	b=ZCnNZl+EQahElN4bOzUbvSJ0tMxXtcXDEBBxtsnUY3DNgKAPFZcCvKewXWEIzW/UK
-	 nieMnjztjGtzYbiTO1LADcx/f8Dw5Fc8JZURkvsVtPSeLGP58UyLMoBbtTUM89iapl
-	 OqvJYBmLFF+MyC7+pfTVNYCQ6sbQ+DtGKMVBrwRGZCfICQ0+mDXRjnLgupF1Mwpi9t
-	 NQnAXQ9jEbxQPx7epPyL5IvUWUpQh7Bk0PtelFtu/9hhhbvG8ue1H8e7guVWf+9ppj
-	 CzKNJONBHAgHHE5OR8ekgNGse9ar6U1PtwQsg5u0yql4+l7OdL9nzzpm8he9G1RZ5E
-	 zSL9C2DbB3mQQ==
-Received: from localhost (qs51p00im-dlb-asmtp-mailmevip.me.com [17.57.155.28])
-	by qs51p00im-qukt01071901.me.com (Postfix) with ESMTPSA id 53C4D628000C;
-	Sat,  2 Nov 2024 15:58:42 +0000 (UTC)
+	t=1730565017; bh=9VtYuPUT2G/ApaJA1R0BoIWRl+u+eqDfegUTEXx4cXs=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme;
+	b=HYFVZ5cML/A61z2hI7EyNH8DBa7bebIOc06nrC12sIiKm0OBX4/D6nLY+fAkUViiG
+	 3F5M63QvYb5cyjDgxkVLK+qFsuwR0y/uQ5WqfMGsPXoATdLzolMiNX0u1SJDJw7siL
+	 63u6LkCnX0ZqgTJryotxvb7reTXDOd2W+kQGGU9N5v9+6YwNIAgG3aPSUH7L/8a0r4
+	 jF6ouwisxLYoLePtVaGosWI8a5J41HHHCDozIKb8QplKcw3HJPcanyB5HU71tBbTpQ
+	 6qyKEY+d7hHV1w/Ncidwbl5flkcN39iLDKi53lv48DRFQkpX1N2Xb/EDyrJcTsYstv
+	 P/5BWxZa+X+WA==
+Received: from almalinux-std3-4-4-10gb.novalocal (qs51p00im-dlb-asmtp-mailmevip.me.com [17.57.155.28])
+	by qs51p00im-qukt01071901.me.com (Postfix) with ESMTPSA id 20B01628031E;
+	Sat,  2 Nov 2024 16:30:13 +0000 (UTC)
+From: Vladimir Vdovin <deliran@verdict.gg>
+To: netdev@vger.kernel.org,
+	dsahern@kernel.org,
+	davem@davemloft.net
+Cc: Vladimir Vdovin <deliran@verdict.gg>,
+	idosch@idosch.org,
+	edumazet@google.com,
+	linux-kselftest@vger.kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	horms@kernel.org
+Subject: [PATCH v6] net: ipv4: Cache pmtu for all packet paths if multipath enabled
+Date: Sat,  2 Nov 2024 16:29:35 +0000
+Message-ID: <20241102163000.2392-1-deliran@verdict.gg>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 02 Nov 2024 18:58:39 +0300
-Message-Id: <D5BTFE1AXSVK.2YNEV7RO2T5IT@verdict.gg>
-From: "Vladimir Vdovin" <deliran@verdict.gg>
-To: "Paolo Abeni" <pabeni@redhat.com>, "Jakub Kicinski" <kuba@kernel.org>
-Cc: <netdev@vger.kernel.org>, <dsahern@kernel.org>, <davem@davemloft.net>,
- <idosch@idosch.org>, <edumazet@google.com>,
- <linux-kselftest@vger.kernel.org>, <shuah@kernel.org>, <horms@kernel.org>
-Subject: Re: [PATCH v5] net: ipv4: Cache pmtu for all packet paths if
- multipath enabled
-X-Mailer: aerc 0.18.2
-References: <736cdd43-4c4b-4341-bd77-c9a365dec2e5@kernel.org>
- <20241101104922.68956-1-deliran@verdict.gg>
- <20241101064511.1ef698db@kernel.org>
- <D5B0U1C0N9JC.3PXNVEEH12786@verdict.gg>
- <141acc87-19a4-44b5-a222-3f159835c711@redhat.com>
-In-Reply-To: <141acc87-19a4-44b5-a222-3f159835c711@redhat.com>
-X-Proofpoint-ORIG-GUID: OZfPGOPG-8bvVJjDkRysZ1ZR0LpBklyj
-X-Proofpoint-GUID: OZfPGOPG-8bvVJjDkRysZ1ZR0LpBklyj
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: hv5YLIg5UkfTLKwaxUp2sfbRKMIvSWIW
+X-Proofpoint-ORIG-GUID: hv5YLIg5UkfTLKwaxUp2sfbRKMIvSWIW
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-11-02_13,2024-11-01_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1030 mlxscore=0
- phishscore=0 malwarescore=0 spamscore=0 adultscore=0 mlxlogscore=512
+ definitions=2024-11-02_14,2024-11-01_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 malwarescore=0
+ phishscore=0 clxscore=1030 mlxlogscore=999 adultscore=0 bulkscore=0
  suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2411020142
+ engine=8.19.0-2308100000 definitions=main-2411020147
 
-On Sat Nov 2, 2024 at 11:49 AM MSK, Paolo Abeni wrote:
-> Hi,
->
-> On 11/1/24 18:34, Vladimir Vdovin wrote:
-> > On Fri Nov 1, 2024 at 4:45 PM MSK, Jakub Kicinski wrote:
-> >> On Fri,  1 Nov 2024 10:48:57 +0000 Vladimir Vdovin wrote:
-> >>> +	pmtu_ipv4_mp_exceptions		ipv4: PMTU multipath nh exceptions		0"
-> >>
-> >> This new test seems to fail in our CI:
-> >>
-> >> # TEST: ipv4: PMTU multipath nh exceptions                            =
-[FAIL]
-> >> #   there are not enough cached exceptions
-> >>
-> >> https://netdev-3.bots.linux.dev/vmksft-net/results/840861/3-pmtu-sh/st=
-dout
-> >=20
-> > Yes it failed in V4 patch, in this V5 its already ok:
-> >=20
-> > # TEST: ipv4: PMTU multipath nh exceptions                            [=
- OK ]
-> > ok 1 selftests: net: pmtu.sh
-> >=20
-> > https://netdev-3.bots.linux.dev/vmksft-net-dbg/results/841042/2-pmtu-sh=
-/stdout
-> >=20
-> > But in V5, there is failed test, not sure that this patch causes fail:
-> > https://netdev-3.bots.linux.dev/vmksft-net-dbg/results/841042/31-busy-p=
-oll-test-sh/stdout
-> >=20
-> >>
-> >> Also some process notes:
-> >>  - please don't post multiple versions of the patch a day:
-> >>    https://www.kernel.org/doc/html/next/process/maintainer-netdev.html=
-#tl-dr
-> >>  - please avoid posting new versions in-reply-to the old one
-> > Thanks, will keep it in mind next time, sorry for my ignorance
->
-> Some additional notes:
->
-> - please do answer to Ido's question: what about ipv6?
-> - move the changelog after the SoB tag and a '---' separator, so that it
-> will not be included into the git commit message
-> - post new revisions of the patch in a different thread
->
-> Thanks,
->
-> Paolo
+Check number of paths by fib_info_num_path(),
+and update_or_create_fnhe() for every path.
+Problem is that pmtu is cached only for the oif
+that has received icmp message "need to frag",
+other oifs will still try to use "default" iface mtu.
 
-Thanks for your comments,=20
-I will resend patch with fixed commit message as new thread.
+An example topology showing the problem:
+
+                    |  host1
+                +---------+
+                |  dummy0 | 10.179.20.18/32  mtu9000
+                +---------+
+        +-----------+----------------+
+    +---------+                     +---------+
+    | ens17f0 |  10.179.2.141/31    | ens17f1 |  10.179.2.13/31
+    +---------+                     +---------+
+        |    (all here have mtu 9000)    |
+    +------+                         +------+
+    | ro1  |  10.179.2.140/31        | ro2  |  10.179.2.12/31
+    +------+                         +------+
+        |                                |
+---------+------------+-------------------+------
+                        |
+                    +-----+
+                    | ro3 | 10.10.10.10  mtu1500
+                    +-----+
+                        |
+    ========================================
+                some networks
+    ========================================
+                        |
+                    +-----+
+                    | eth0| 10.10.30.30  mtu9000
+                    +-----+
+                        |  host2
+
+host1 have enabled multipath and
+sysctl net.ipv4.fib_multipath_hash_policy = 1:
+
+default proto static src 10.179.20.18
+        nexthop via 10.179.2.12 dev ens17f1 weight 1
+        nexthop via 10.179.2.140 dev ens17f0 weight 1
+
+When host1 tries to do pmtud from 10.179.20.18/32 to host2,
+host1 receives at ens17f1 iface an icmp packet from ro3 that ro3 mtu=1500.
+And host1 caches it in nexthop exceptions cache.
+
+Problem is that it is cached only for the iface that has received icmp,
+and there is no way that ro3 will send icmp msg to host1 via another path.
+
+Host1 now have this routes to host2:
+
+ip r g 10.10.30.30 sport 30000 dport 443
+10.10.30.30 via 10.179.2.12 dev ens17f1 src 10.179.20.18 uid 0
+    cache expires 521sec mtu 1500
+
+ip r g 10.10.30.30 sport 30033 dport 443
+10.10.30.30 via 10.179.2.140 dev ens17f0 src 10.179.20.18 uid 0
+    cache
+
+So when host1 tries again to reach host2 with mtu>1500,
+if packet flow is lucky enough to be hashed with oif=ens17f1 its ok,
+if oif=ens17f0 it blackholes and still gets icmp msgs from ro3 to ens17f1,
+until lucky day when ro3 will send it through another flow to ens17f0.
+
+Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
+---
+
+V6:
+  - make commit message cleaner
+
+V5:
+  - make self test cleaner
+
+V4:
+  - fix selftest, do route lookup before checking cached exceptions
+
+V3:
+  - added selftest
+  - fixed compile error
+
+V2:
+  - fix fib_info_num_path parameter pass
+---
+ net/ipv4/route.c                    | 13 +++++
+ tools/testing/selftests/net/pmtu.sh | 78 ++++++++++++++++++++++++++++-
+ 2 files changed, 90 insertions(+), 1 deletion(-)
+
+diff --git a/net/ipv4/route.c b/net/ipv4/route.c
+index 723ac9181558..41162b5cc4cb 100644
+--- a/net/ipv4/route.c
++++ b/net/ipv4/route.c
+@@ -1027,6 +1027,19 @@ static void __ip_rt_update_pmtu(struct rtable *rt, struct flowi4 *fl4, u32 mtu)
+ 		struct fib_nh_common *nhc;
+ 
+ 		fib_select_path(net, &res, fl4, NULL);
++#ifdef CONFIG_IP_ROUTE_MULTIPATH
++		if (fib_info_num_path(res.fi) > 1) {
++			int nhsel;
++
++			for (nhsel = 0; nhsel < fib_info_num_path(res.fi); nhsel++) {
++				nhc = fib_info_nhc(res.fi, nhsel);
++				update_or_create_fnhe(nhc, fl4->daddr, 0, mtu, lock,
++							  jiffies + net->ipv4.ip_rt_mtu_expires);
++			}
++			rcu_read_unlock();
++			return;
++		}
++#endif /* CONFIG_IP_ROUTE_MULTIPATH */
+ 		nhc = FIB_RES_NHC(res);
+ 		update_or_create_fnhe(nhc, fl4->daddr, 0, mtu, lock,
+ 				      jiffies + net->ipv4.ip_rt_mtu_expires);
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+index 569bce8b6383..a0159340fe84 100755
+--- a/tools/testing/selftests/net/pmtu.sh
++++ b/tools/testing/selftests/net/pmtu.sh
+@@ -266,7 +266,8 @@ tests="
+ 	list_flush_ipv4_exception	ipv4: list and flush cached exceptions	1
+ 	list_flush_ipv6_exception	ipv6: list and flush cached exceptions	1
+ 	pmtu_ipv4_route_change		ipv4: PMTU exception w/route replace	1
+-	pmtu_ipv6_route_change		ipv6: PMTU exception w/route replace	1"
++	pmtu_ipv6_route_change		ipv6: PMTU exception w/route replace	1
++	pmtu_ipv4_mp_exceptions		ipv4: PMTU multipath nh exceptions		0"
+ 
+ # Addressing and routing for tests with routers: four network segments, with
+ # index SEGMENT between 1 and 4, a common prefix (PREFIX4 or PREFIX6) and an
+@@ -2329,6 +2330,81 @@ test_pmtu_ipv6_route_change() {
+ 	test_pmtu_ipvX_route_change 6
+ }
+ 
++test_pmtu_ipv4_mp_exceptions() {
++	setup namespaces routing || return $ksft_skip
++
++	ip nexthop ls >/dev/null 2>&1
++	if [ $? -ne 0 ]; then
++		echo "Nexthop objects not supported; skipping tests"
++		exit $ksft_skip
++	fi
++
++	trace "${ns_a}"  veth_A-R1    "${ns_r1}" veth_R1-A \
++	      "${ns_r1}" veth_R1-B    "${ns_b}"  veth_B-R1 \
++	      "${ns_a}"  veth_A-R2    "${ns_r2}" veth_R2-A \
++	      "${ns_r2}" veth_R2-B    "${ns_b}"  veth_B-R2
++
++	dummy0_a="192.168.99.99"
++	dummy0_b="192.168.88.88"
++
++	# Set up initial MTU values
++	mtu "${ns_a}"  veth_A-R1 2000
++	mtu "${ns_r1}" veth_R1-A 2000
++	mtu "${ns_r1}" veth_R1-B 1500
++	mtu "${ns_b}"  veth_B-R1 1500
++
++	mtu "${ns_a}"  veth_A-R2 2000
++	mtu "${ns_r2}" veth_R2-A 2000
++	mtu "${ns_r2}" veth_R2-B 1500
++	mtu "${ns_b}"  veth_B-R2 1500
++
++	fail=0
++
++	#Set up host A with multipath routes to host B dummy0_b
++	run_cmd ${ns_a} sysctl -q net.ipv4.fib_multipath_hash_policy=1
++	run_cmd ${ns_a} sysctl -q net.ipv4.ip_forward=1
++	run_cmd ${ns_a} ip link add dummy0 mtu 2000 type dummy
++	run_cmd ${ns_a} ip link set dummy0 up
++	run_cmd ${ns_a} ip addr add ${dummy0_a} dev dummy0
++	run_cmd ${ns_a} ip nexthop add id 201 via ${prefix4}.${a_r1}.2 dev veth_A-R1
++	run_cmd ${ns_a} ip nexthop add id 202 via ${prefix4}.${a_r2}.2 dev veth_A-R2
++	run_cmd ${ns_a} ip nexthop add id 203 group 201/202
++	run_cmd ${ns_a} ip route add ${dummy0_b} nhid 203
++
++	#Set up host B with multipath routes to host A dummy0_a
++	run_cmd ${ns_b} sysctl -q net.ipv4.fib_multipath_hash_policy=1
++	run_cmd ${ns_b} sysctl -q net.ipv4.ip_forward=1
++	run_cmd ${ns_b} ip link add dummy0 mtu 2000 type dummy
++	run_cmd ${ns_b} ip link set dummy0 up
++	run_cmd ${ns_b} ip addr add ${dummy0_b} dev dummy0
++	run_cmd ${ns_b} ip nexthop add id 201 via ${prefix4}.${b_r1}.2 dev veth_A-R1
++	run_cmd ${ns_b} ip nexthop add id 202 via ${prefix4}.${b_r2}.2 dev veth_A-R2
++	run_cmd ${ns_b} ip nexthop add id 203 group 201/202
++	run_cmd ${ns_b} ip route add ${dummy0_a} nhid 203
++
++	#Set up routers with routes to dummies
++	run_cmd ${ns_r1} ip route add ${dummy0_a} via ${prefix4}.${a_r1}.1
++	run_cmd ${ns_r2} ip route add ${dummy0_a} via ${prefix4}.${a_r2}.1
++	run_cmd ${ns_r1} ip route add ${dummy0_b} via ${prefix4}.${b_r1}.1
++	run_cmd ${ns_r2} ip route add ${dummy0_b} via ${prefix4}.${b_r2}.1
++
++
++	#Ping and expect two nexthop exceptions for two routes in nh group
++	run_cmd ${ns_a} ping -q -M want -i 0.1 -c 2 -s 1800 "${dummy0_b}"
++
++	#Do route lookup before checking cached exceptions
++	run_cmd ${ns_a} ip route get ${dummy0_b} oif veth_A-R1
++	run_cmd ${ns_a} ip route get ${dummy0_b} oif veth_A-R2
++
++	#Check cached exceptions
++	if [ "$(${ns_a} ip -oneline route list cache| grep mtu | wc -l)" -ne 2 ]; then
++		err "  there are not enough cached exceptions"
++		fail=1
++	fi
++
++	return ${fail}
++}
++
+ usage() {
+ 	echo
+ 	echo "$0 [OPTIONS] [TEST]..."
+
+base-commit: 66600fac7a984dea4ae095411f644770b2561ede
+-- 
+2.43.5
 
 
