@@ -1,139 +1,133 @@
-Return-Path: <linux-kselftest+bounces-21340-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21341-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBB939B9FE7
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2024 13:10:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AB799BA14E
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2024 16:58:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C73C1F2184B
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2024 12:10:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44D21282090
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2024 15:58:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09700189503;
-	Sat,  2 Nov 2024 12:10:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 092F51A2557;
+	Sat,  2 Nov 2024 15:58:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S9+/MqLN"
+	dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b="ZCnNZl+E"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from qs51p00im-qukt01071901.me.com (qs51p00im-qukt01071901.me.com [17.57.155.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69BFD189F5A;
-	Sat,  2 Nov 2024 12:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C02189BAD
+	for <linux-kselftest@vger.kernel.org>; Sat,  2 Nov 2024 15:58:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.57.155.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730549413; cv=none; b=msTxn2WEYPLesIcakCoICTYz6Kd0CzFW2rX1Nyg4yqTRj+UcWrpfMdRzo545GVHiHq8h2Cr1IPo5oKu9fedc22gS0cEy0IFSEM5RsRFQhX0LOGLgkHtaV5fJjNkd40E0wSopBhs2a19LikDSW6FokYjrkuxtp4HuCXjFIwpxFx8=
+	t=1730563128; cv=none; b=TOdZ9PS71SubGZdVGdZFGzQFzybtLeiKTMNNPBRJV6HkGRj1MWP60/u1PYNLufKA1Obo5EiukkN/0RviWM08a2YVRDuwzuonkbuCIAu012UrlCvee+LP5gkoNPSIIVnxhM2o8nD3GVwKW88BpdwxZx+p3E4bv6B9UMjqRqVSGqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730549413; c=relaxed/simple;
-	bh=RmETCFe5x+lP5bHc1J8Jizfo3pKb/RAereNfrUN5osY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YbixxCdnE88PqKUJgtG+v+2uNIQcNIKtwkw+2X+uBO0oHioGy9imIIpQZkygTF0OPpOvH31cgOSbM0d6NydfV3Z1Ev4uqJ+0sYPsY9kP6O6Q6bHMkHylQGWop27URguParQGSJag54FK17AN0/ri3z2/1j9yrDYwZwQ8IxBT94U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S9+/MqLN; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e2918664a3fso2337194276.0;
-        Sat, 02 Nov 2024 05:10:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730549411; x=1731154211; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZqvRtfQjrnuWPv8FX2A9hzDN4crJUYk0z9dSFXFnBv4=;
-        b=S9+/MqLNrhVgaQsmMWBIycdB9P9W2FczSitz6hPl9Zg4XyJofroRdzpdeOuxgU0umV
-         He3O0mvETlJi0V1PbhLgIaJnyUvUJOW9Bih2jFMy3NpkBQ+tOowevSf7QcD1Dy7EFDW/
-         ihJdcBQOJ4z5JPaG+8ZSi4XQ7oHrcn+NA/sx5Z0+WcbGvAfXuzeI9jLKMy5hR0cpu5et
-         0IKtS9Oo+/5mFlX4939LqYSXmYocen/DxMXVjuyq/HQetWbY/FhMXPaQ2zIOsfaWufJl
-         JP33Tp3nke/XAi45aYLOHsQzIZ1KYkh/q13SLUGAw3qtenMkXZYIC3jl6Pza3/SGj0Ew
-         E+1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730549411; x=1731154211;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZqvRtfQjrnuWPv8FX2A9hzDN4crJUYk0z9dSFXFnBv4=;
-        b=E9eoOxfG0lhk47tpSi4aUhkBSi/hSNtnh0m97zS9DO6lfee8nY7DVtbiTn4LD8q+iY
-         +AyTySYzeTY2UQts5isZD2IBtUuuBlH7SIbxjUgRTDWgwLLvteON2awC45zqMf8JPc7Y
-         /PcFQaxX/Sf3cBdyiUx2WxXp8A6lFCC7ruNgZWqnBAgHzg9FHOA6/XHzNe6SRYdK1mcj
-         MBujJWXKvEuRijP7zDZVfW1+3JC8tDUxGqVG8SWzN480N/SK09fbCrLj6ThyyGWEHaUm
-         WbrD+D3lEmmUJRqCs4JTltyu2IN+KerArZmvj/Mmxw8WHCYQK6eBLsOKKsiNnJMzoLMz
-         MRkA==
-X-Forwarded-Encrypted: i=1; AJvYcCWeCzinxqwBARONfd86ed6xVItohY4MUhcrMUfTcaufmY0TyM9voXuQTdl/jGGjmUUaPhQBWr8YGvHNHtg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVDNirSwGdgbvpmH52XIFUdbW0S+a+7SGbpzLzp7LetAP5+wbO
-	5QAeOE0mdWAbuW9LILw3RgwjLbR20vgVnbBJoQbtMw8IxPCvrzrL5TfhVrcN3zI=
-X-Google-Smtp-Source: AGHT+IGwC6VkGtOUhcvUVsS9q/sBhaGEqtCp7G2bPHETsYXTRGmu5CNrP2r7h8lxcqfE6owAlOXniQ==
-X-Received: by 2002:a05:6902:c0d:b0:e29:2560:914c with SMTP id 3f1490d57ef6-e30e8bce90fmr7190642276.9.1730549410862;
-        Sat, 02 Nov 2024 05:10:10 -0700 (PDT)
-Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa (186-189-35-150.setardsl.aw. [186.189.35.150])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e30e8adf9ecsm1139393276.59.2024.11.02.05.10.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Nov 2024 05:10:09 -0700 (PDT)
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Sat, 02 Nov 2024 08:09:49 -0400
-Subject: [PATCH v2 2/2] kunit: enable hardware acceleration when available
+	s=arc-20240116; t=1730563128; c=relaxed/simple;
+	bh=8ZCIjqe6nbbqsWqN3Vcpxe64gjYHyzF400J/Pb64xNM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=mNjEtv2x2252iL1OltGmAOSfV6NVkwWTGG3EvClxAldoO1bAkPK1fNCsUxY4xEw4PKbLZPxxDEHLj+PEW+7zrrW/qpAWvX3FIPBmoYJ7wle9E0JWDYwAL/8+CM/89CH6VT+VsSKIwm8Ekk4Bpkhj3vEU+nWurhBGRaTbI0Mb/uQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg; spf=pass smtp.mailfrom=verdict.gg; dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b=ZCnNZl+E; arc=none smtp.client-ip=17.57.155.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verdict.gg
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1;
+	t=1730563124; bh=dAlXGCff2WQWMMo4l+7vl5vNILyFo+zASwJ92FaKpGc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:
+	 x-icloud-hme;
+	b=ZCnNZl+EQahElN4bOzUbvSJ0tMxXtcXDEBBxtsnUY3DNgKAPFZcCvKewXWEIzW/UK
+	 nieMnjztjGtzYbiTO1LADcx/f8Dw5Fc8JZURkvsVtPSeLGP58UyLMoBbtTUM89iapl
+	 OqvJYBmLFF+MyC7+pfTVNYCQ6sbQ+DtGKMVBrwRGZCfICQ0+mDXRjnLgupF1Mwpi9t
+	 NQnAXQ9jEbxQPx7epPyL5IvUWUpQh7Bk0PtelFtu/9hhhbvG8ue1H8e7guVWf+9ppj
+	 CzKNJONBHAgHHE5OR8ekgNGse9ar6U1PtwQsg5u0yql4+l7OdL9nzzpm8he9G1RZ5E
+	 zSL9C2DbB3mQQ==
+Received: from localhost (qs51p00im-dlb-asmtp-mailmevip.me.com [17.57.155.28])
+	by qs51p00im-qukt01071901.me.com (Postfix) with ESMTPSA id 53C4D628000C;
+	Sat,  2 Nov 2024 15:58:42 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241102-kunit-qemu-accel-macos-v2-2-9d4579fddd20@gmail.com>
-References: <20241102-kunit-qemu-accel-macos-v2-0-9d4579fddd20@gmail.com>
-In-Reply-To: <20241102-kunit-qemu-accel-macos-v2-0-9d4579fddd20@gmail.com>
-To: Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
- Alyssa Ross <hi@alyssa.is>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- linux-kernel@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>
-X-Mailer: b4 0.15-dev
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 02 Nov 2024 18:58:39 +0300
+Message-Id: <D5BTFE1AXSVK.2YNEV7RO2T5IT@verdict.gg>
+From: "Vladimir Vdovin" <deliran@verdict.gg>
+To: "Paolo Abeni" <pabeni@redhat.com>, "Jakub Kicinski" <kuba@kernel.org>
+Cc: <netdev@vger.kernel.org>, <dsahern@kernel.org>, <davem@davemloft.net>,
+ <idosch@idosch.org>, <edumazet@google.com>,
+ <linux-kselftest@vger.kernel.org>, <shuah@kernel.org>, <horms@kernel.org>
+Subject: Re: [PATCH v5] net: ipv4: Cache pmtu for all packet paths if
+ multipath enabled
+X-Mailer: aerc 0.18.2
+References: <736cdd43-4c4b-4341-bd77-c9a365dec2e5@kernel.org>
+ <20241101104922.68956-1-deliran@verdict.gg>
+ <20241101064511.1ef698db@kernel.org>
+ <D5B0U1C0N9JC.3PXNVEEH12786@verdict.gg>
+ <141acc87-19a4-44b5-a222-3f159835c711@redhat.com>
+In-Reply-To: <141acc87-19a4-44b5-a222-3f159835c711@redhat.com>
+X-Proofpoint-ORIG-GUID: OZfPGOPG-8bvVJjDkRysZ1ZR0LpBklyj
+X-Proofpoint-GUID: OZfPGOPG-8bvVJjDkRysZ1ZR0LpBklyj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-11-02_13,2024-11-01_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1030 mlxscore=0
+ phishscore=0 malwarescore=0 spamscore=0 adultscore=0 mlxlogscore=512
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2411020142
 
-Use KVM or HVF if supported by the QEMU binary and available on the
-system.
+On Sat Nov 2, 2024 at 11:49 AM MSK, Paolo Abeni wrote:
+> Hi,
+>
+> On 11/1/24 18:34, Vladimir Vdovin wrote:
+> > On Fri Nov 1, 2024 at 4:45 PM MSK, Jakub Kicinski wrote:
+> >> On Fri,  1 Nov 2024 10:48:57 +0000 Vladimir Vdovin wrote:
+> >>> +	pmtu_ipv4_mp_exceptions		ipv4: PMTU multipath nh exceptions		0"
+> >>
+> >> This new test seems to fail in our CI:
+> >>
+> >> # TEST: ipv4: PMTU multipath nh exceptions                            =
+[FAIL]
+> >> #   there are not enough cached exceptions
+> >>
+> >> https://netdev-3.bots.linux.dev/vmksft-net/results/840861/3-pmtu-sh/st=
+dout
+> >=20
+> > Yes it failed in V4 patch, in this V5 its already ok:
+> >=20
+> > # TEST: ipv4: PMTU multipath nh exceptions                            [=
+ OK ]
+> > ok 1 selftests: net: pmtu.sh
+> >=20
+> > https://netdev-3.bots.linux.dev/vmksft-net-dbg/results/841042/2-pmtu-sh=
+/stdout
+> >=20
+> > But in V5, there is failed test, not sure that this patch causes fail:
+> > https://netdev-3.bots.linux.dev/vmksft-net-dbg/results/841042/31-busy-p=
+oll-test-sh/stdout
+> >=20
+> >>
+> >> Also some process notes:
+> >>  - please don't post multiple versions of the patch a day:
+> >>    https://www.kernel.org/doc/html/next/process/maintainer-netdev.html=
+#tl-dr
+> >>  - please avoid posting new versions in-reply-to the old one
+> > Thanks, will keep it in mind next time, sorry for my ignorance
+>
+> Some additional notes:
+>
+> - please do answer to Ido's question: what about ipv6?
+> - move the changelog after the SoB tag and a '---' separator, so that it
+> will not be included into the git commit message
+> - post new revisions of the patch in a different thread
+>
+> Thanks,
+>
+> Paolo
 
-This produces a nice improvement on my Apple M3 Pro running macOS 14.7:
-
-Before:
-./tools/testing/kunit/kunit.py exec --arch arm64
-[HH:MM:SS] Elapsed time: 10.145s
-
-After:
-./tools/testing/kunit/kunit.py exec --arch arm64
-[HH:MM:SS] Elapsed time: 1.773s
-
-Signed-off-by: Tamir Duberstein <tamird@gmail.com>
----
- tools/testing/kunit/kunit_kernel.py       | 3 +++
- tools/testing/kunit/qemu_configs/arm64.py | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 61931c4926fd6645f2c62dd13f9842a432ec4167..3146acb884ecf0bcff94d5938535aabd4486fe82 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -123,6 +123,9 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
- 				'-append', ' '.join(params + [self._kernel_command_line]),
- 				'-no-reboot',
- 				'-nographic',
-+				'-accel', 'kvm',
-+				'-accel', 'hvf',
-+				'-accel', 'tcg',
- 				'-serial', self._serial] + self._extra_qemu_params
- 		# Note: shlex.join() does what we want, but requires python 3.8+.
- 		print('Running tests with:\n$', ' '.join(shlex.quote(arg) for arg in qemu_command))
-diff --git a/tools/testing/kunit/qemu_configs/arm64.py b/tools/testing/kunit/qemu_configs/arm64.py
-index d3ff27024755411441f910799be30399295c9541..5c44d3a87e6dd2cd6b086138186a277a1473585b 100644
---- a/tools/testing/kunit/qemu_configs/arm64.py
-+++ b/tools/testing/kunit/qemu_configs/arm64.py
-@@ -9,4 +9,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
- 			   qemu_arch='aarch64',
- 			   kernel_path='arch/arm64/boot/Image.gz',
- 			   kernel_command_line='console=ttyAMA0',
--			   extra_qemu_params=['-machine', 'virt', '-cpu', 'max,pauth-impdef=on'])
-+			   extra_qemu_params=['-machine', 'virt', '-cpu', 'max'])
-
--- 
-2.47.0
+Thanks for your comments,=20
+I will resend patch with fixed commit message as new thread.
 
 
