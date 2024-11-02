@@ -1,161 +1,99 @@
-Return-Path: <linux-kselftest+bounces-21344-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21345-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37D939BA218
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2024 19:56:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3656A9BA258
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2024 20:58:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A833E1F217C6
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2024 18:56:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B868B21BA6
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2024 19:58:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 036201AA7B6;
-	Sat,  2 Nov 2024 18:56:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1943A1AB535;
+	Sat,  2 Nov 2024 19:58:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bDbAlzr/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DdmKgENs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2592B15E5B5;
-	Sat,  2 Nov 2024 18:56:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0F8A14F12F;
+	Sat,  2 Nov 2024 19:58:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730573790; cv=none; b=Jj2OZTpPpgWZ/9/7O3DMkPGGQLB12Z27CeF9wRfnSDySkunGi8eIIgR8JLN9BFDwELWL0xFt+vCWnjcNRYYynIE6zMnFe2Hlxnls5lrWF9igKOyM1a7YOQFNwQG+Ip2X+CR9vKbZSc8EIMMONsp2zUqP0Bu2Jsyn3nU1epvMQTo=
+	t=1730577531; cv=none; b=XkOBU8lEZnAjsaUAoFArlfJ0QLwaNF2vsiH9r1tGvJiaFoD02lLLIXUn1q5J7IaaRk/7yZNFhddZgDVLe53SR/D9itndXyQDBPN1Z5MqOESnagC67uP5f6gmsM6iHClOw6nCGDzQ6sm1iiRGF8HW38tJ6Ju5FofA6EJSJSa56sU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730573790; c=relaxed/simple;
-	bh=7QeM04EM0YFR3Z3/S/OYVO+OfYGTXCTZU0XRDgRkxL0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MM41eUjp/Bi//CmwJt0oYUkDCRZlJhSBnX4w2tfjwB46oJ1Ae+uZeQo2YCpgnKPfhp0lbaT/DllrnmR6Rq5ffwDzuMJR9zxYQ3J+aAKQ8vABjW1X3FM5i5z64+ydb/J09MXSg2JJlPP6tpf6azlNEJwL6fIqtpdppCJ3kRuSYzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bDbAlzr/; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5ceb75f9631so2638441a12.0;
-        Sat, 02 Nov 2024 11:56:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730573787; x=1731178587; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NWC+gjEyCqr5E3blGfY3A7hEvdkevCUpxwSqcipkieA=;
-        b=bDbAlzr/hEt1Qs6qIrV0d2/7DoLvVIYwCiXNQsMFgnzCWwDwZjVgzyc8qvKQJS8CrB
-         CI9CP21mLBesIEJ264cidR9GNT/uElqC6gFKAUSLfoApOXAOcO5ssXNdSNNLblAedSu+
-         VcnZZmUIwKWN5hU+wotdNDR1eURk3Q/uCnoAYthxhB2cxo4h0E1Vdo0mZq/f/xKmWDI0
-         q2Bx9Lf1ejSYk96+yYykHfwhcZiLV533N27lZpcnqtF82fYesnMtt9y9qwXNkOikGwBP
-         qW1I5jLzpRnI97w9tKP9OuKn3SXr9GguRrI7QH6BOSimGTnsm1YSDnCrO/wmBtVbCKmC
-         F9iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730573787; x=1731178587;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NWC+gjEyCqr5E3blGfY3A7hEvdkevCUpxwSqcipkieA=;
-        b=QkDUHsXAVYSofwDo/esIhb7AI/UADl+a4n3Phwe1ocy2PlaI6mZivNouNFZYRRDrIi
-         4kp012wpCZDdeYQ0ha64ZQ455r7zWN76+Ss1dsVZbnQFJ3DggeX30gDOaFOvClHPikp6
-         ChWa06Oc0rc46siuCXn5fP8I7dsdR5qXV4LGy38haeEROP0Y30HKacAK9+3KMQystfqU
-         mnl+AAL33Q/J5L5DQy5DiyoXjfhEb69mg9SDaC7uQEWvJjq9Ps7ob0VvsOccpR1jscDo
-         i2Z3rmSD5kZ+V1KUVDqXv96Nx19p1pbKGuMX99ZGvsxWLVlhh67Wx0VzrnIywiuxdB+a
-         CDdw==
-X-Forwarded-Encrypted: i=1; AJvYcCVbwUZefo0fLiO7SVloK18F7r376cuGKbkYsL+mIpuCQ7KnyP7JNz41axLLj+Can0Q9xqcC2IEDbtRqHg8=@vger.kernel.org, AJvYcCWH+4znQ1hS+kiFeiTgbi7P2nMRwVmcSoqAECqs5cDAnStZBKxkR4ogKlE29Zgf68IXHeQkOqsCDOkc0JXu2Jlr@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbGiZee+Jd9xFB4COkoHR9X38zy5OthsjaUa58Qwh2Fv651WBr
-	z0DwlyzzMtHrQskotpfdiLrgHRGgWGRnCFkrapupv8yvWh7PfBCg
-X-Google-Smtp-Source: AGHT+IGEQWz6ooYjGaCSgLNXrz5MuxJzqSOc83IxilSTdsdldQljy0mpnCM/Mqu8m3Q48kAxrDNPOA==
-X-Received: by 2002:a17:907:31cb:b0:a9a:296:b501 with SMTP id a640c23a62f3a-a9de5f660a2mr2709296166b.26.1730573787115;
-        Sat, 02 Nov 2024 11:56:27 -0700 (PDT)
-Received: from [192.168.178.20] (dh207-40-94.xnet.hr. [88.207.40.94])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9e566812eesm334973566b.194.2024.11.02.11.56.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Nov 2024 11:56:26 -0700 (PDT)
-Message-ID: <04b9c37a-d39f-49eb-b7d9-fced64eb12e8@gmail.com>
-Date: Sat, 2 Nov 2024 19:55:22 +0100
+	s=arc-20240116; t=1730577531; c=relaxed/simple;
+	bh=JUI6hhefhoPmDatTKsy4pqsfjwmhOnV4eb6LBjksVQ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dre3vOaBlrNheU/s3pMAEnDUgyHWbZWIq5zqyzG1qay5u9bCnNBODK8+501P+r88ZIzmp8L/Zf4raD90OKuI5InR3Fq4OL64ohu+HJKdfVdZa+sXugsIWn2sbBHm1Eo+ZwlJ5SV99RijnNxnv2bCIVjBDEd5ywH7xj5XXA5IwSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DdmKgENs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61E6DC4CEC3;
+	Sat,  2 Nov 2024 19:58:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730577530;
+	bh=JUI6hhefhoPmDatTKsy4pqsfjwmhOnV4eb6LBjksVQ8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DdmKgENsI5ODLmVFU2RNr0QQqkmCaoHm8FA3BgVkYnpB/nGQyoTRgnZbFf0YxSIUD
+	 7PEiu6+LBVAiAcb8Zs2CeSt/Cxd7h4p9RlaI5AUmuu7zN6pA/WJ5vQ3xxzG+PnJHju
+	 /Q2qZCl5fSwFi8G8rlsBrb3vBX5dLSsvWB2zCNAwaP5KirBFdPFzI6MPeuXBGBG/GC
+	 hF6VIdsI5bKImG9CkjtTZw3C64a55hbM9OgPjeUeCuBi89jvJAMnQ5/N8bTpYds22v
+	 iqRaBJ3EliDPPKpUlXahMqJ+UNpEfubJl/Q+G+TDFyTJHI3NUFiKFZsmVRAtCs+Det
+	 SN2d/j5IrA5lQ==
+Date: Sat, 2 Nov 2024 12:58:47 -0700
+From: Kees Cook <kees@kernel.org>
+To: Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Cc: Tycho Andersen <tycho@tycho.pizza>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Aleksa Sarai <cyphar@cyphar.com>, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Tycho Andersen <tandersen@netflix.com>
+Subject: Re: [PATCH 1/2] exec: fix up /proc/pid/comm in the
+ execveat(AT_EMPTY_PATH) case
+Message-ID: <202411021258.6F1CD2AE28@keescook>
+References: <20241030203732.248767-1-tycho@tycho.pizza>
+ <173041263505.1781237.9706368369948860422.b4-ty@kernel.org>
+ <ZyYNM58N-Fp_1xB8@kawka3.in.waw.pl>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] selftests/x86/syscall: fix coccinelle WARNING
- recommending the use of ARRAY_SIZE()
-To: Muhammad Usama Anjum <Usama.Anjum@collabora.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Suren Baghdasaryan <surenb@google.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>
-References: <20241101111523.1293193-2-mtodorovac69@gmail.com>
- <a2a9995c-deed-4545-bf65-9ce7a811609a@collabora.com>
-Content-Language: en-US
-From: Mirsad Todorovac <mtodorovac69@gmail.com>
-In-Reply-To: <a2a9995c-deed-4545-bf65-9ce7a811609a@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZyYNM58N-Fp_1xB8@kawka3.in.waw.pl>
 
-
-
-On 11/1/24 13:04, Muhammad Usama Anjum wrote:
-> On 11/1/24 4:15 PM, Mirsad Todorovac wrote:
->> Coccinelle gives WARNING recommending the use of ARRAY_SIZE() macro definition
->> to improve the code readability:
->>
->> ./tools/testing/selftests/x86/syscall_numbering.c:316:35-36: WARNING: Use ARRAY_SIZE
->>
->> Fixes: 15c82d98a0f78 ("selftests/x86/syscall: Update and extend syscall_numbering_64")
->> Cc: Thomas Gleixner <tglx@linutronix.de>
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Borislav Petkov <bp@alien8.de>
->> Cc: Dave Hansen <dave.hansen@linux.intel.com>
->> Cc: x86@kernel.org
->> Cc: "H. Peter Anvin" <hpa@zytor.com>
->> Cc: Shuah Khan <shuah@kernel.org>
->> Cc: linux-kernel@vger.kernel.org
->> Cc: linux-kselftest@vger.kernel.org
->> Signed-off-by: Mirsad Todorovac <mtodorovac69@gmail.com>
-
-> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-
-Dear Sir,
-
-Thank you for your positive review of the patch.
-
-There are much more suggestions by the coccinelle check, but that's a substantial work to do.
-
-It would help to set some priorities in this by some more experienced developer.
-
-Thank you.
-
-Best regards,
-Mirsad Todorovac
- 
->> ---
->>  v1: initial version.
->>
->>  tools/testing/selftests/x86/syscall_numbering.c | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/x86/syscall_numbering.c b/tools/testing/selftests/x86/syscall_numbering.c
->> index 991591718bb0..41c42b7b54a6 100644
->> --- a/tools/testing/selftests/x86/syscall_numbering.c
->> +++ b/tools/testing/selftests/x86/syscall_numbering.c
->> @@ -25,6 +25,7 @@
->>  #include <sys/mman.h>
->>  
->>  #include <linux/ptrace.h>
->> +#include "../kselftest.h"
->>  
->>  /* Common system call numbers */
->>  #define SYS_READ	  0
->> @@ -313,7 +314,7 @@ static void test_syscall_numbering(void)
->>  	 * The MSB is supposed to be ignored, so we loop over a few
->>  	 * to test that out.
->>  	 */
->> -	for (size_t i = 0; i < sizeof(msbs)/sizeof(msbs[0]); i++) {
->> +	for (size_t i = 0; i < ARRAY_SIZE(msbs); i++) {
->>  		int msb = msbs[i];
->>  		run("Checking system calls with msb = %d (0x%x)\n",
->>  		    msb, msb);
+On Sat, Nov 02, 2024 at 11:29:55AM +0000, Zbigniew Jędrzejewski-Szmek wrote:
+> On Thu, Oct 31, 2024 at 03:10:37PM -0700, Kees Cook wrote:
+> > On Wed, 30 Oct 2024 14:37:31 -0600, Tycho Andersen wrote:
+> > > Zbigniew mentioned at Linux Plumber's that systemd is interested in
+> > > switching to execveat() for service execution, but can't, because the
+> > > contents of /proc/pid/comm are the file descriptor which was used,
+> > > instead of the path to the binary. This makes the output of tools like
+> > > top and ps useless, especially in a world where most fds are opened
+> > > CLOEXEC so the number is truly meaningless.
+> > > 
+> > > [...]
+> > 
+> > Applied to for-next/execve, thanks!
+> > 
+> > [1/2] exec: fix up /proc/pid/comm in the execveat(AT_EMPTY_PATH) case
+> >       https://git.kernel.org/kees/c/7bdc6fc85c9a
+> > [2/2] selftests/exec: add a test for execveat()'s comm
+> >       https://git.kernel.org/kees/c/bd104872311a
 > 
+> I tested this with systemd compiled with -Dfexece=true and it all
+> seems to work fine. Thanks!
+
+Great; thank you!
+
+-- 
+Kees Cook
 
