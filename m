@@ -1,74 +1,75 @@
-Return-Path: <linux-kselftest+bounces-21338-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21339-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9C2E9B9FE3
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2024 13:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 18BB79B9FE5
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2024 13:10:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0881F1C20BE8
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2024 12:10:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F46C1C20BB7
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2024 12:10:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14FD117D340;
-	Sat,  2 Nov 2024 12:10:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C228189BA8;
+	Sat,  2 Nov 2024 12:10:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CobOeLfF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lGpnJqU9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79BD46AB8;
-	Sat,  2 Nov 2024 12:10:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1204C189917;
+	Sat,  2 Nov 2024 12:10:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730549407; cv=none; b=ZNHvihDNks4jNaLcS96DezIQr9IKUFDBjBBDV2CC7keFARf7Sic2O0fXLaKyPVKEL8gJm6ZakZfcRnpbfqvdMmUuf8SqVUF9BjZVCq6dYsu/IiVqDzfCsBpoQ3IOzDQ9tQNLrfHSSDUcDQe7Lb6M54ALTuWF/ILH+WCB0+BUiCA=
+	t=1730549409; cv=none; b=cswGvNJFOTdzoINUkWFlrde8HFcqVlvRelCZpQ8PTFjv3EpCiEIVKba12nOsrA+zvRrpcP7SU51bmGzcixdjhUrsRU7jXDakmQcyvESPEtaH2Aoe0QuwQgws4LHFZIvoxkidgYC+QB00Z2CkIakEN3BGeeKq2q9V2BY0N0fztS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730549407; c=relaxed/simple;
-	bh=wCierMFjGUCTmOLcXeHYu6FDvOE6M0AivVXmNHy3OvA=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=GzAKuN92+oKVmpVEoNXs1s9A3P6Q8V212AOTPTk02z3jgTAj47oeKhDPqIfXwDPfu8X1iGQECwXJ9prOgwVjX0TFj+uhdhbBXWPOgmpYHXWfPE5sJ6CGA3GWhKZPg1xvo/cW5vmHrpF7sqtRYvBCx1TXRul/gWSUE+hPvdDr99g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CobOeLfF; arc=none smtp.client-ip=209.85.219.171
+	s=arc-20240116; t=1730549409; c=relaxed/simple;
+	bh=Jxmn0a09bYemFLfrW2DTbbdvDTTlIeGxQHPWXzKjUSs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=QiZvK1FDpW5ufxcAKLZJsijDG+vO0dsz9leeRLmu0xoyQmcl2KMEsl7v5DBURRs7kUZOjRZ1np0cDLUPTgpOdPMiauHsclWBEPRzV+Sy4n2cNF5xhIQhpabEKmFZMIEwHgFljU/YEJwqweAAkNgI0lywJduPOPgmzbSwdGEOdsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lGpnJqU9; arc=none smtp.client-ip=209.85.219.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e30eca40dedso2197039276.3;
-        Sat, 02 Nov 2024 05:10:05 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e29327636f3so2477636276.2;
+        Sat, 02 Nov 2024 05:10:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730549403; x=1731154203; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ddnnep1GVh/a9Y2rD/AHUUIDuQdTwL2dDaSpCymsRq4=;
-        b=CobOeLfF8RPPvu2rjmYL9BT9uew/G7DcAnqSJJR2xGtusQ4Z+Q0TSKe95/udZbSrSi
-         iIOOKcJp+xaNTJVkzGpD3vYXYTlhLmUK5npB80omPLkA/BXAejKEsSuocNI940rzLbk+
-         Y5uB10IgNn2s2G+I/PNo44Le/gYQFwGHMiBwiw+ieHgA1ZRESCM4yIMLDIWku8Az2Az/
-         4NMcgYs1LKuYcv4PWrvxZ9rJGMA0JH99bZYf86lKz394McOb2Glq6Q1R0K8z+hMtpMxe
-         zoeY898F80R3qxMEWnxry2cJ5ILtdzLHD5+DCySzH8Ky7WXXJzuUqHsFQU9t5oWuufYg
-         15ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730549403; x=1731154203;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1730549407; x=1731154207; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ddnnep1GVh/a9Y2rD/AHUUIDuQdTwL2dDaSpCymsRq4=;
-        b=NxqoAfShBFFuvR2yyYxg+fLSlUJ9DM3sE22WUHp0xXKsI9aHAK10XZ72tCWAd14lap
-         /JACJAI6INFAevBTAWpttwI1KfZxDFmX8xnKHp6eoTqD19YlUh4l+LaZcv18dYvo44sO
-         D57NE5rpB5afNWr7mx7kU0+LBASuAS1cFx71ekJoCTslclfQc4D8opXp2+A1H3Ax9Ubi
-         DHQAKkGmtkYubNUyuTOJpi3Lqh3+84uR1R92WpEh5J5rW9dbvLPClOkFPOBfuoJ0YxBT
-         88/wYV0+TTkQZAV7nVhvCS3IOgxL9gq8z1xwtuaRRBb0UCcN/HyYaviandXzr4rh74X6
-         NA8w==
-X-Forwarded-Encrypted: i=1; AJvYcCUdgzKF8oxtE2WnfGAtF2CqQLf2GuViWDDUoci45/EUGRrkq7FFdLlBng3AoS6xz0WDXrTbE5Scxx7Fd6A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxW+PVOvwbdstBK5z8eFkcrZ2U6/lMfugQa6oj0NRgKlQkSCF+b
-	gsfE5E5gomCfPSoj8UvHsW5Q5h0n/p4Qp+wj9EmIF9NoYXsAHjyuBQYiISUDCw8=
-X-Google-Smtp-Source: AGHT+IEck9jo7+8IH38pwM8sGjcGVmpGBoVfkNdSARMBz0Mvdk9BhCjG5Jdn+URMTut1RqryqH/C/Q==
-X-Received: by 2002:a05:6902:20c9:b0:e2b:dd83:6fb5 with SMTP id 3f1490d57ef6-e33025a9369mr5029626276.32.1730549403405;
-        Sat, 02 Nov 2024 05:10:03 -0700 (PDT)
+        bh=Hb+dSAVB+gCBHU4Z6scAiWCZx92W1Nb8NhAE30zLAkM=;
+        b=lGpnJqU9TuzL67L6MHvKe9nBtBlpF8Y75yFdQxZBgxflf7KxbU+9AQzmN7a5TiHoYN
+         p6s/Bsx/exti2USX2R9zPkHRqqO5VMThhnG02tS2I/7Ivs9Tu/IyAO/8cVt16CMoWqFU
+         D/rHK7oexFcggEWXP9XVfXfcDx3ZCg8GQeHwJF59hdesl/wRYxMbHcWZ90FNo/00mEwi
+         YvrJk/Fh+HlWXMRNw3nUdNBTxpbm/ZkcBNOadxoQoICp9wgwjY7VO+yj7C7M7fLLhRIC
+         sDPeoWQR/bnAgD1VrvYXcEMoXxzNSXcLWpr46Dt+GEZmLWmMK/POMukC+pxRJ5qJoX4R
+         IaJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730549407; x=1731154207;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Hb+dSAVB+gCBHU4Z6scAiWCZx92W1Nb8NhAE30zLAkM=;
+        b=SA529Oh6zlBaHpjM+Oc8Pxn7QnvJiVDC/dxLPya8tRmaKBUE2UrgDC5TS9HOAB6d3O
+         ptDTOaoupWbsYaYv5iM44enbfIIeX8YwuvQsLMGNXC/h/N8BTZOf3VuZQDhcptlSW4zI
+         LPhrqcbitDntzcVEZVJfIjsxfEQUrzy7IicchNyBeZGW23s07sgKZ1QCkHLvNysbthys
+         zf5XbVtnZ28PISvdGv4n06IXn/7CqREB8zntJLWC592ogGa7p1Pw1TAAWFzgaMsGfHoU
+         OilomGn7oOQ5qiJCtifbJb8qEymuSWsvKwPz0u0IidE82ciVZ4q1qe5I06jvEGpFrym1
+         TbMg==
+X-Forwarded-Encrypted: i=1; AJvYcCUbg9JwFUJkAVBhZ9rFWq8h92BwnGwLtZUVL5ZWrDG/J6k1VRWMSe8z7Jue0UiG21Nr4AFvQaF+3oL6wEM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxoEptMhShZfRTUzHCltABmxrqPiYwiTKOHdD2dU7sZP1H6BXIM
+	WkyF/hszMBma5KwzUBjmEksbNFBo3M/FE45ItCRIN7Vm/z2p7ChVw+rhYxYWTGI=
+X-Google-Smtp-Source: AGHT+IHdhIcg50hxTMTYzx99Cj+1BVVYgg7b6c4dyjvRiID1ZrUxyMBWCstlqfkomK0dbaArl5v1IQ==
+X-Received: by 2002:a05:6902:18d4:b0:e30:df1f:8926 with SMTP id 3f1490d57ef6-e3302540d2emr6246182276.12.1730549406715;
+        Sat, 02 Nov 2024 05:10:06 -0700 (PDT)
 Received: from 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa (186-189-35-150.setardsl.aw. [186.189.35.150])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e30e8adf9ecsm1139393276.59.2024.11.02.05.10.00
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e30e8adf9ecsm1139393276.59.2024.11.02.05.10.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Nov 2024 05:10:01 -0700 (PDT)
+        Sat, 02 Nov 2024 05:10:05 -0700 (PDT)
 From: Tamir Duberstein <tamird@gmail.com>
-Subject: [PATCH v2 0/2] kunit: enable hardware virtualization
-Date: Sat, 02 Nov 2024 08:09:47 -0400
-Message-Id: <20241102-kunit-qemu-accel-macos-v2-0-9d4579fddd20@gmail.com>
+Date: Sat, 02 Nov 2024 08:09:48 -0400
+Subject: [PATCH v2 1/2] kunit: add fallback for os.sched_getaffinity
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,12 +77,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAIsWJmcC/4WNQQ6CMBBFr0K6dkw7FqOuvIdh0QwDTKQUWyAaw
- t2tXMDle8l/f1WJo3BSt2JVkRdJEoYMeCgUdW5oGaTOrFCjNRpLeM6DTPBiP4Mj4h68o5AAL1a
- zJay5KVUej5Ebee/hR5W5kzSF+Nl/FvOzf5OLAQ3YnDTh2VyxtvfWO+mPFLyqtm37AqT9aO28A
- AAA
-X-Change-ID: 20241025-kunit-qemu-accel-macos-2840e4c2def5
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241102-kunit-qemu-accel-macos-v2-1-9d4579fddd20@gmail.com>
+References: <20241102-kunit-qemu-accel-macos-v2-0-9d4579fddd20@gmail.com>
+In-Reply-To: <20241102-kunit-qemu-accel-macos-v2-0-9d4579fddd20@gmail.com>
 To: Brendan Higgins <brendan.higgins@linux.dev>, 
  David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
  Alyssa Ross <hi@alyssa.is>, 
@@ -90,32 +89,41 @@ Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
  linux-kernel@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>
 X-Mailer: b4 0.15-dev
 
-This series implements feature detection of hardware virtualization on
-Linux and macOS; the latter being my primary use case.
+Python 3.13 added os.process_cpu_count as a cross-platform alternative
+for the Linux-only os.sched_getaffinity. Use it when it's available and
+provide a fallback when it's not.
 
-This yields approximately a 6x improvement using HVF on M3 Pro.
+This allows kunit to run on macOS.
 
 Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
-Changes in v2:
-- Use QEMU accelerator fallback (Alyssa Ross, Thomas Weißschuh).
-- Link to v1: https://lore.kernel.org/r/20241025-kunit-qemu-accel-macos-v1-0-2f30c26192d4@gmail.com
+ tools/testing/kunit/kunit.py | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
----
-Tamir Duberstein (2):
-      kunit: add fallback for os.sched_getaffinity
-      kunit: enable hardware acceleration when available
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index bc74088c458aee20b1a21fdeb9f3cb01ab20fec4..3a8cbb868ac559f68d047e38be92f7c64a3314ea 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -303,7 +303,16 @@ def massage_argv(argv: Sequence[str]) -> Sequence[str]:
+ 	return list(map(massage_arg, argv))
+ 
+ def get_default_jobs() -> int:
+-	return len(os.sched_getaffinity(0))
++	if sys.version_info >= (3, 13):
++		if (ncpu := os.process_cpu_count()) is not None:
++			return ncpu
++		raise RuntimeError("os.process_cpu_count() returned None")
++	 # See https://github.com/python/cpython/blob/b61fece/Lib/os.py#L1175-L1186.
++	if sys.platform != "darwin":
++		return len(os.sched_getaffinity(0))
++	if (ncpu := os.cpu_count()) is not None:
++		return ncpu
++	raise RuntimeError("os.cpu_count() returned None")
+ 
+ def add_common_opts(parser: argparse.ArgumentParser) -> None:
+ 	parser.add_argument('--build_dir',
 
- tools/testing/kunit/kunit.py              | 11 ++++++++++-
- tools/testing/kunit/kunit_kernel.py       |  3 +++
- tools/testing/kunit/qemu_configs/arm64.py |  2 +-
- 3 files changed, 14 insertions(+), 2 deletions(-)
----
-base-commit: 81983758430957d9a5cb3333fe324fd70cf63e7e
-change-id: 20241025-kunit-qemu-accel-macos-2840e4c2def5
-
-Best regards,
 -- 
-Tamir Duberstein <tamird@gmail.com>
+2.47.0
 
 
