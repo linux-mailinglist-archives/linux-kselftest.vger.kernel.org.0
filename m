@@ -1,323 +1,220 @@
-Return-Path: <linux-kselftest+bounces-21410-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21411-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C29F9BC0A5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 23:13:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48C6D9BC0AF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 23:16:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0F3D282B71
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 22:13:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D99372835F8
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 22:16:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C2CE1FDFA3;
-	Mon,  4 Nov 2024 22:13:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0231B1AC88B;
+	Mon,  4 Nov 2024 22:16:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hSQcESI4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QLBQRA38"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9501B1FDF83
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 Nov 2024 22:13:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730758421; cv=none; b=axOFU4TxMcKA+HxleZUawh0zKTmfzn8Oo3r5JzcUX6jhMiesM10LjguSU5T3QdbPC4rP+fB8Kne6+hnLunI0X1Vp/7vGV4HLgyUDKU6sKzaNEz01RRU5vpzfYN9TrkPjVPXiq1It/YEhtYEcR71w0euPraGaAab7vSuxehWIGtw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730758421; c=relaxed/simple;
-	bh=cJ2iwD6JRX1oQ7TlSGkMpG6bt4+iE1zrhCDc/1XXcoQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bQmjPWCGzuWyJ3MV0LKZpNomFl8u/nf/xoM7WgE+RhG2dRMz+EIDxyVc3UGdY4T9MiFIrbnpOZL9GmqtenSqhHSFYSracjs3k313wUmKbZojePbPYzOR7QGufB7ie9K5IZcXeB0G8057VMYbs9GUNmMhl6A1T9vNcNzlrk/84Dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hSQcESI4; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1730758417;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+n54qAXwoDA0o8dpKjuMOMxb/8VNmkgzn+Qg2NOh5q8=;
-	b=hSQcESI4UsQhOCpAc02g9juZOGF/CZfm8eRSUxmYAsqkYrj5Il8ySh/sLu7cfjDS0QO+Vz
-	bGain6sv0uQB1H/hpslgjLoFJ76wZVtRfM13EyX/EWtTzxS98lTBuAt45Fdo9zWhiceo7T
-	v3bGWdy1lqeQkolyJmNmck+PvVxDxsg=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-173-mzN2cCEtNw63D6EeFxIP7Q-1; Mon, 04 Nov 2024 17:13:35 -0500
-X-MC-Unique: mzN2cCEtNw63D6EeFxIP7Q-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a9a01cba9f7so341355366b.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 Nov 2024 14:13:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730758412; x=1731363212;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+n54qAXwoDA0o8dpKjuMOMxb/8VNmkgzn+Qg2NOh5q8=;
-        b=lXe9honG2fT21WxaVIbwpWGqKjnZlcSkTTAtMquzhGuDmn2STbUA7GTyL4jedJ6KjD
-         T9EKB9+LpiGZJNMoMApyqzNbVXb7OW8/cdAK7NoioV6MT5bvZ+BCDyT2HAkdEBWrrThc
-         LwF6ujG1ytPoiF4ua2t3JfFFm/t16E8KLL3cWEbM+hgJVD5BYZh53HKqNyUwq5p77IKc
-         GYWofDoTPvknKIKgEND3EY/RMLWoS4OLchFPVZhBo2fTGIajHlsr47jGj8Eqq0ehpuqA
-         Hh8BocTInIlPzZuRvrxyfxShyr7FpeCoS3H2+/f8pJNvguXq9lUhcvyp2R9CYKrOBQsi
-         JDnw==
-X-Forwarded-Encrypted: i=1; AJvYcCWpI7ZS1bUAwZFrJaPSgvUsj3m9SxrFMRKh6FGzH95iMte+N3CtemXbRxk4Cblr8YAkJD7wsizipt1JHpQoBBU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuzJfzGQysmNtjmQ+EybRCPRHuQBwiK6gdCejEYGrwxqRZfkJg
-	luhR5Y/Nw5edyfeqIUBGe2Aa73UqN3c8ofuf1gfaMgL4oaw4UzaW3qPe8nfCcslAQY8TjOhCjz+
-	FwSUgEGma4XYw2CGkChRdf57qGIcAq8DsmD+OQbSfvwmPZ1rQQ8ZMpoICURfjEw/skG8/FOunLH
-	A6Jb0DhGkE1AkzDQk8KU/EaePMsyCCK57EspB7x9lH
-X-Received: by 2002:a17:906:bc02:b0:a9e:b150:a99d with SMTP id a640c23a62f3a-a9eb150ac01mr87097966b.5.1730758412403;
-        Mon, 04 Nov 2024 14:13:32 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHH2wZtDD4ih8RSP9Ec74C122Mrbbr52FxVrmRQ+KVDAu3AMFOkZE+zT7hfkabKsdI7s2BGZw234GeAMJiwEY8=
-X-Received: by 2002:a17:906:bc02:b0:a9e:b150:a99d with SMTP id
- a640c23a62f3a-a9eb150ac01mr87095466b.5.1730758411924; Mon, 04 Nov 2024
- 14:13:31 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA422AF12;
+	Mon,  4 Nov 2024 22:16:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730758577; cv=fail; b=oOKZASFIc8sBTn+F8PtXJJgcbb3Gw8RYEp/FaFjWl1YthIKT77mjHpqMs1XqZEEJ+v3tv529qaXa9bEbJHqYd0AuHPOz8AP7Rjv71l3S8ArK3IfAgaviyl9ZHZlPs/L3Pgw9bMKxPq/0iQSBV3tESnxQmcodfl83zYVka9/nSY8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730758577; c=relaxed/simple;
+	bh=Bh7KP32ml9I9nNdx0HitZ7u9WoLTyKbjctHyWszf9Hs=;
+	h=Message-ID:Date:From:Subject:To:CC:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=lbbxPvgWK7SqiIVI304B4LrPSPx5Fpr5Ij8NJP73kkN8VYntwpnaPi7WGfrjtfLl21tPoIW5S7kvzZULP6xIbeJ20kS+9HAsDbJ5hrIgiTNt3VSeQSGeGhHwUZxBmGkQGYtYwJAUAS5PG0aIg4Jzwkz7LkxGLRFVLbU6/tlyzts=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QLBQRA38; arc=fail smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730758576; x=1762294576;
+  h=message-id:date:from:subject:to:cc:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Bh7KP32ml9I9nNdx0HitZ7u9WoLTyKbjctHyWszf9Hs=;
+  b=QLBQRA38ZCjj2Y7mu2EaWtvTQwFfnNU/zciz4AOvW0rR3sOmo4zIq7TG
+   2T6b4Bo6tp8eQAgbz0W9IUFv1apz4HsqzU9RYZQDsQA9K8TIMbP8WXOgS
+   maLkRbrUf4gLicp8NNdERkahh93Dbgj1qBjiZZkKOyAg+CyCZcGqv1tcZ
+   K+tnfVWPGmmNAhTplehehdNGTtgVL3A6NBZPZAMM8yKdFoEHV9KmZY+oX
+   1DNFivwZIiIk+CnN28EI5Wvh8HUzeUXrxs8HlRdR9KkFHHjP+F/iq8qMp
+   rJevV1qG/b9ICtqSr72LlI0u58DdhL08IMoDRBZlSETBGSd1X56k1mj+i
+   w==;
+X-CSE-ConnectionGUID: pt4tAh1KSQWe0LmBXh0WLw==
+X-CSE-MsgGUID: hdMITgnOQU2wX6NQpNZ4Ww==
+X-IronPort-AV: E=McAfee;i="6700,10204,11246"; a="29905513"
+X-IronPort-AV: E=Sophos;i="6.11,258,1725346800"; 
+   d="scan'208";a="29905513"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 14:16:15 -0800
+X-CSE-ConnectionGUID: lUE/CraKRz+ZRvWl2hRGww==
+X-CSE-MsgGUID: LEB1hTn/Q7mXObkD0sI2zA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,258,1725346800"; 
+   d="scan'208";a="114572539"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orviesa002.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 04 Nov 2024 14:16:14 -0800
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Mon, 4 Nov 2024 14:16:14 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Mon, 4 Nov 2024 14:16:14 -0800
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.40) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Mon, 4 Nov 2024 14:16:13 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RXRh7O+6bEsngojlB9h0fvmcnW+S49021Ouy/WAXlmL/7E/Pzm8Q0KEDL2qwYEkM9dbqLHQx5lw+zUKwtwwCmcpPWAw17PLPIZox0XmyeLhVzOi/LqKfsiN846QYZgi5EwGPCPnanZPKmAHSsJ61xbcKLSLlv18VRkxrRs3ydXWLGXsE5AYROgB2gEaeOSsCRtrv9iZAAhufCTYH85c6YfLn4Xzi3gK+B+qRTPlLgo8ifOBEf/FETtsQvj3eIvqafZ/aDZlLns0dFsMmyH2dY9Xs6WFgOaEDUeCAe+qrdQbBxI3gkiYEcalw05D4q+JrTduWbZa4HjcpK6BHWm+WTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ez5++fuVO/XU4BKJ0WZRT9Cz0fv9nyF8lReMPUARi2A=;
+ b=niXHdAVyqzHcevwaDAGtiGHdNFHXJfK7xkFf2mBRIOqo12TkZgbeyXPSieDhiVqNpjBRNw303FYd97dnWLwb12j0ijBw/GknYhG6Bl32jfOV6yrW7ENrRSSNQ5Vlqy6I5gRLi0qI6OgNIbW8T44AqXvOMxISMdDwfo0bDGEz/rF8ndmx+hAiM/w38d6/7t2CQAu5qndWC5uBFni4yLO7YtkMYcmUv3jf+pwRzLfsVzkYCIsmNINORqiLPZbupvIuT/jsPGkCZwaBhWhzRr24QcsfZEzhUHQo8BMfoZRAFeAxKRVXIBF4uZPX4eA6adZbw93XJKt1+BcabkvjIIn66A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SN7PR11MB7566.namprd11.prod.outlook.com (2603:10b6:806:34d::7)
+ by CYXPR11MB8661.namprd11.prod.outlook.com (2603:10b6:930:e4::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.30; Mon, 4 Nov
+ 2024 22:16:03 +0000
+Received: from SN7PR11MB7566.namprd11.prod.outlook.com
+ ([fe80::2b7:f80e:ff6b:9a15]) by SN7PR11MB7566.namprd11.prod.outlook.com
+ ([fe80::2b7:f80e:ff6b:9a15%4]) with mapi id 15.20.8114.028; Mon, 4 Nov 2024
+ 22:16:03 +0000
+Message-ID: <5b2b54b8-77fa-4ef9-aa08-549cab91eb32@intel.com>
+Date: Mon, 4 Nov 2024 14:16:00 -0800
+User-Agent: Mozilla Thunderbird
+From: Reinette Chatre <reinette.chatre@intel.com>
+Subject: Re: [PATCH V4 00/15] selftests/resctrl: Support diverse platforms
+ with MBM and MBA tests
+To: Shuah Khan <skhan@linuxfoundation.org>, <fenghua.yu@intel.com>,
+	<shuah@kernel.org>, <tony.luck@intel.com>, <peternewman@google.com>,
+	<babu.moger@amd.com>, <ilpo.jarvinen@linux.intel.com>
+CC: <maciej.wieczor-retman@intel.com>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+References: <cover.1729804024.git.reinette.chatre@intel.com>
+ <aa643c9b-8ce5-4cb1-98f6-645224aafdf8@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <aa643c9b-8ce5-4cb1-98f6-645224aafdf8@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR04CA0053.namprd04.prod.outlook.com
+ (2603:10b6:303:6a::28) To SN7PR11MB7566.namprd11.prod.outlook.com
+ (2603:10b6:806:34d::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241030033514.1728937-1-zack.rusin@broadcom.com> <20241030033514.1728937-3-zack.rusin@broadcom.com>
-In-Reply-To: <20241030033514.1728937-3-zack.rusin@broadcom.com>
-From: Paolo Bonzini <pbonzini@redhat.com>
-Date: Mon, 4 Nov 2024 23:13:19 +0100
-Message-ID: <CABgObfaRP6zKNhrO8_atGDLcHs=uvE0aT8cPKnt_vNHHM+8Nxg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] KVM: x86: Add support for VMware guest specific hypercalls
-To: Zack Rusin <zack.rusin@broadcom.com>
-Cc: kvm@vger.kernel.org, Doug Covelli <doug.covelli@broadcom.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@redhat.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Joel Stanley <joel@jms.id.au>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN7PR11MB7566:EE_|CYXPR11MB8661:EE_
+X-MS-Office365-Filtering-Correlation-Id: 134af439-b296-499e-b7e1-08dcfd1e44e7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?aFQ5c2JEUjg5anU4M0JQWE1wVjlxeG5hSUhYRGlvQ1lndGtSejQzaGowdjZ0?=
+ =?utf-8?B?RXpHb1pmQkVwYnhIL08vcFUwanVRRWFoV095cXBObEx1K1FXWDhOZXNrUlpI?=
+ =?utf-8?B?RnlVNzVwWk9FN0huQ3VsMHR0VFJwcWtkZzJUdC9qUzJMWUdnejZhZGw4UXdB?=
+ =?utf-8?B?NTJBUW1qZ0ZvOU5sdkVOMUtBRXFwcGR0Tmx2NGVxUGRDdENuWXJGYjEwa0tp?=
+ =?utf-8?B?S2NsWVVBWDR0U3phL3FiZkZKVms4TnZjSlE0eFRDM01jTG5FbjUwVFJiQmty?=
+ =?utf-8?B?eHZRUkJheU5kKzZnTXF2N05ZRlBFS3BVNEU5VE8rUklhditMMitIWktjdW41?=
+ =?utf-8?B?ZmU1YmR6NVpqL2ZIVFE0UGEwWmtsUGRXVnNGblZJaGh1UFB6T1dMM05mVTNu?=
+ =?utf-8?B?TTFqbmg3WlRTajRsL0psRGdETDYxM3Q1V25GMGZvQkNwQkxpQ2d3RXJpSmJv?=
+ =?utf-8?B?WW10MVRlMUtPQXZGbFhseEVCdjdiUUdhS0JzdmVJc1F5UU8xbWNKcmZEV3pZ?=
+ =?utf-8?B?RWpXQld3NHFNdzBpWVI2bHFoU2JBR0kyOS84NGdiN2RHOExVMlJSbnBXVEdz?=
+ =?utf-8?B?ZzJjaEVXRUpmK2kzeTFwMEROYzFuM0dMeEpjSUx0NS93U2t2bDFkbFZLS25z?=
+ =?utf-8?B?YlBUL2hENm8wcVh2M1RZZnp3d3Z3UmlnUFZ4T3JvZG9rbldheVgwTW5RUC82?=
+ =?utf-8?B?Y1pIeVMyY1lHNC91Ym9pcWFUTWlEVEJtVkFvM04wZWVxano4ay9mRCs2QW80?=
+ =?utf-8?B?Qy82S3IzdnV3cVVtNUtZZFZXa2Y2Z1pnOUNEcXliR3dPVnI4ZUMrdzdEdC9X?=
+ =?utf-8?B?UGVKSFdZNHB1K2RSSXJOWm9xTWx2S0ZiUXc2V2hZdFJhTTNuVEFHS3VjVzVU?=
+ =?utf-8?B?MitIVVRiM0hmSnNuOFcyd0tUcEMrWm9ZSmJHblJhK1Y5WC9BWTRaNjdhS2gz?=
+ =?utf-8?B?QkgwaDlSS0xsM24vRjhjV2R2YzQwd25GSlB5UXYyLzZkdThXNXpxajY3U1lV?=
+ =?utf-8?B?SUYrTWtHSnJ0clJZc3ZORzNBMkUxUGtoWEFhRnJKOHRMSDROTUpiUmV3NXM2?=
+ =?utf-8?B?TWxsREgrZmZOTFkvT01qWWNNa1VObXN1NmRjWUV5dVFhcjN4c3RBQXUzZUtr?=
+ =?utf-8?B?MU9xZ21PMWdRZEtEdXRIQkhkamczNHAvZUQxdkJBUUR6UEUwNy9PanV3ME5V?=
+ =?utf-8?B?WTk3MUNKeGtBc3JlOGNTVTNyZVdxbUZ1ZFdKVHN6dnNCMk91Z1I5Z1pmV09m?=
+ =?utf-8?B?T2tSL0pUekVnblIwa083VjdSTWFaSXF3NFlkY1hkb1hsd2pwTEVSV1JBRG5Q?=
+ =?utf-8?B?RHBCSFhUY1BkQThMN1NhTndRNklRa2xHRmtjeHBmeFBJMmlhOVZRemxod2lO?=
+ =?utf-8?B?TkFkN3dobVgyVzZOODJvZXN4VXdFaEdoM0FkWHZNeld2MEFXQ2VPMDlHWVJq?=
+ =?utf-8?B?YWg1STVIWG5NVkhPZWZ5YVpsTDlxeFN4WE04SW9nVkdYZHBvd1FRYlZWdUs2?=
+ =?utf-8?B?anhpaFBpRVpITTQ2ek5OblN4N1V6RWZ0R1ZYbGV4Nm4vSzhhRDF1UWZoOUY1?=
+ =?utf-8?B?ZGIyOVBmcVR0RnRRd1dqNGpuajBwWGRRNVgvcld5ck9LTUR3REFjQ3Q4YUF6?=
+ =?utf-8?B?TVJDb3JFcFBLL2JTWFppOEFnazRWaFIwRHd4OUN4eU5rTit0NzJWMjVOQldF?=
+ =?utf-8?B?TllYVmFGek1EdHNvSzExb1htSnlPZHVsTVk2ZTZKVWNBaGdRQWltZjF3MzFj?=
+ =?utf-8?Q?8mPahv0OLp+CX82ygXl+ILXgeO4KEyjiKx9HoHC?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR11MB7566.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?azhad3duVWxjZ3ZZaTlCWHR6cS8xMHpLeVkyYnJseW9GSHhIK04yVUs4bldS?=
+ =?utf-8?B?MDVxVGI1RTJZVGZXRkVmM0JqMWllNUhvU1FRemxNQ2I1YVhXV09pK0g5cm5X?=
+ =?utf-8?B?bjBMdlUrdjNmT2ppYkVrdHYxdmc0OUxYeWlwdDFxSW40WFJQcld5aXpHREhB?=
+ =?utf-8?B?TXRaK2lGcWlaalI1ZHo4NUFBR2o2dWdtVlZNSlR5V3JVNzNJaUVmMDVIYnA3?=
+ =?utf-8?B?eDlzYy9CVzhicU5zaXV0THRJcmlyVitERnlLWXNzM0ZUWFo4K0krSGZtUEhu?=
+ =?utf-8?B?MVYxRFFJVW44UTlRelgwUFlSYmZXcmM5WEI0L3E5Q1lsUkFUR1RSR1dXc1oz?=
+ =?utf-8?B?VUVJeUpVZENSMitwU0Rtc3Z1Wk9TY0NrZVAzK2tjZVcvaDBac2xrQXA1c0Iw?=
+ =?utf-8?B?c2ZyTVYxWFEzNXNjTm1ZWWIrdGlobWNRNmJpcHNWeVdndGdIQ3BZZGl0S1lz?=
+ =?utf-8?B?SGRqUytzaHIwL1JSZEppcGxDTll4UW85ZDJCWkN6OFNNZTVXOWJDS1RWanMr?=
+ =?utf-8?B?M2xiZGJCNjFRRjNoRElpZE41OW1ISXlJRlR6bkhBOUVwVnhJbUdxZ2VZdVRm?=
+ =?utf-8?B?bXdIUEZXRlc1M0ZTMXRJT2ZlN21idll4bmQ5cU1oQmc5SlpIVlE1cWFmSTI4?=
+ =?utf-8?B?RFUvWFdsVy9rTE1ydHRLMDhEQnE1U1p1aGczYVoxczNBWFIxMFNwODJydWx5?=
+ =?utf-8?B?WWlZUzRPTGhzMi8zcDJCekZuN0lwNk81M0J0Tmoyb2hiWWwraTNGZWlSQ3gx?=
+ =?utf-8?B?aHpDblUzRXp2dmt2K3ZsMWwxYmYvZ3pYRU1aa3hpY0Y0SnVLaEF1bVp0clZ0?=
+ =?utf-8?B?L05keng1RTVvREdHY1c5QWVYdWY1SWZhaTZYU2pwSnU4NTZXZ2ZCMm0yUjlX?=
+ =?utf-8?B?L0JhZ3RJREhhTHlxKzhKdWxuaXFxUDZQWnNYM1dzY3RxNmpTSWtzYzVHR1p6?=
+ =?utf-8?B?RUI0R1lJTTkrazJrODB4R2ZnOHdVY0FGTkdaaXg1WEpaTDczRGdVaWFldGVo?=
+ =?utf-8?B?U05xZHJhYUNoQThwNkJQcHh3NFZ5Mms4RkRCVkdHWU9kUUhiV2pHSTdmbzZl?=
+ =?utf-8?B?T3UyWXAvc2J0ZU5zT0RYV0loREVUUEtoU0xCNmhweXlCM1F2MWlKTndRQ1di?=
+ =?utf-8?B?V2xZOTZaeFNhZ2toK01jTlRTQndaOG82dWpqd01EcFFuM3dYMkFmZWtXcFhz?=
+ =?utf-8?B?NU9OYjBvNnh2QXQ2bktScnp3MUUvN3ZybU94WnF5c2taaHQyU3RybmptTDBq?=
+ =?utf-8?B?VjNRY3h3QVF1TXArcGMrZ203MG5sb0g1OW5sbGo2QytGY093VHBqclY4SzVR?=
+ =?utf-8?B?R3VGMXNoZ1p1N1NqNlJGa0hBd244TXdvREU2YXRuYXVEMmVZdUJqQ0RJNmNp?=
+ =?utf-8?B?RGFndi9iMlBMZ1ZhS0JoVUJmR2lTOXgxYWtEVGhoTnZpcXlJajFlQkJocGM4?=
+ =?utf-8?B?b0NGWXRxdTR5UFk5RGptUEN6MmE1VWdLVENydDZobGRZdXhCQXo0ZkdmSVZM?=
+ =?utf-8?B?YWpPSVcxWUtXeEZDeFVGeGJTYlZHOHV4RXRrMHowQzBaTVdscnBWUlpBTEZX?=
+ =?utf-8?B?MFYrZDMzajRtMkJ0dzFLNVNxVVl6WGJaSnVaR3dlMnpWVjdVNlk3S0w4RW1a?=
+ =?utf-8?B?NXB5MUhkUTAwZTBjQThDYVc2Ly9DakNFWU9NeU1JdHlSRCtSMnNjZHpRNjRJ?=
+ =?utf-8?B?eGlSdXh6dEt2VXl2TXdEVVJPRmxxR1J6NzVJOW9yaHNUN0Mvb0ZNRG1qN0Ft?=
+ =?utf-8?B?QXI3M3VDZTQ1eFZtMkR3Sy8rbHVrNCtNNFdPTFRuVDhyQU0wUzNQSGI3djdV?=
+ =?utf-8?B?UXEzUURQTFZQdlJOaW5lVUxjRWFoUndhUzIydkplM3lPdXhpQ243UFlBSE9t?=
+ =?utf-8?B?TjlldGZaQmQ2MjQ0N2NGMEJkK1ZwVm9XYUV0RVpwOTg1Vzc1eFJmc2RjQ0lK?=
+ =?utf-8?B?Mkk3NEk1UnpwNTVWbVZLbjhobUplbDN1NFFXUEJ5c1IvcXNMbTZZVThKQXhi?=
+ =?utf-8?B?dDdGRjhhYW5xbnN0cjd3K1dZRlg3ZWR1dmtRcGFXY3JPaXF3SlNHZmFVZTBM?=
+ =?utf-8?B?ZXdEM1JqaG9yVHdWUWRpdlpDWVBPd1lnbGs0cmtUQ2R5Z1Z5VlQweHR1UGpZ?=
+ =?utf-8?B?VUkxT2hQdGRaTkJJbW4xa25NM0NibFJ5dXY3Q1hVcS9tOG9YYThudjdwdjZB?=
+ =?utf-8?B?dXc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 134af439-b296-499e-b7e1-08dcfd1e44e7
+X-MS-Exchange-CrossTenant-AuthSource: SN7PR11MB7566.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2024 22:16:02.9694
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4Ut4JWOV1LqQ8LbH8YO0zXxqK4F9a03RmpGLH7/2ctXMCL4CLAwgKpTpkU+4YYiswoiZoHad4FbYMoYbifV53CpfN94DR4H8VwpNJPMwzaI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYXPR11MB8661
+X-OriginatorOrg: intel.com
 
-On Wed, Oct 30, 2024 at 4:35=E2=80=AFAM Zack Rusin <zack.rusin@broadcom.com=
-> wrote:
->
-> VMware products handle hypercalls in userspace. Give KVM the ability
-> to run VMware guests unmodified by fowarding all hypercalls to the
-> userspace.
->
-> Enabling of the KVM_CAP_X86_VMWARE_HYPERCALL_ENABLE capability turns
-> the feature on - it's off by default. This allows vmx's built on top
-> of KVM to support VMware specific hypercalls.
+Hi Shuah,
 
-Hi Zack,
+On 10/24/24 3:36 PM, Shuah Khan wrote:
+> On 10/24/24 15:18, Reinette Chatre wrote:
+> 
+> Is this patch series ready to be applied?
+> 
 
-is there a spec of the hypercalls that are supported by userspace? I
-would like to understand if there's anything that's best handled in
-the kernel.
+It is now ready after receiving anticipated tags. Could you please consider it for inclusion?
 
-If we allow forwarding _all_ hypercalls to userspace, then people will
-use it for things other than VMware and there goes all hope of
-accelerating stuff in the kernel in the future.
+Thank you very much.
 
-So even having _some_ checks in the kernel before going out to
-userspace would keep that door open, or at least try.
-
-Patch 1 instead looks good from an API point of view.
-
-Paolo
-
-> Signed-off-by: Zack Rusin <zack.rusin@broadcom.com>
-> Cc: Doug Covelli <doug.covelli@broadcom.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-> Cc: Isaku Yamahata <isaku.yamahata@intel.com>
-> Cc: Joel Stanley <joel@jms.id.au>
-> Cc: Zack Rusin <zack.rusin@broadcom.com>
-> Cc: kvm@vger.kernel.org
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-kselftest@vger.kernel.org
-> ---
->  Documentation/virt/kvm/api.rst  | 41 +++++++++++++++++++++++++++++----
->  arch/x86/include/asm/kvm_host.h |  1 +
->  arch/x86/kvm/x86.c              | 33 ++++++++++++++++++++++++++
->  include/uapi/linux/kvm.h        |  1 +
->  4 files changed, 72 insertions(+), 4 deletions(-)
->
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.=
-rst
-> index 33ef3cc785e4..5a8c7922f64f 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -6601,10 +6601,11 @@ to the byte array.
->  .. note::
->
->        For KVM_EXIT_IO, KVM_EXIT_MMIO, KVM_EXIT_OSI, KVM_EXIT_PAPR, KVM_E=
-XIT_XEN,
-> -      KVM_EXIT_EPR, KVM_EXIT_X86_RDMSR and KVM_EXIT_X86_WRMSR the corres=
-ponding
-> -      operations are complete (and guest state is consistent) only after=
- userspace
-> -      has re-entered the kernel with KVM_RUN.  The kernel side will firs=
-t finish
-> -      incomplete operations and then check for pending signals.
-> +      KVM_EXIT_EPR, KVM_EXIT_HYPERCALL, KVM_EXIT_X86_RDMSR and KVM_EXIT_=
-X86_WRMSR
-> +      the corresponding operations are complete (and guest state is cons=
-istent)
-> +      only after userspace has re-entered the kernel with KVM_RUN. The k=
-ernel
-> +      side will first finish incomplete operations and then check for pe=
-nding
-> +      signals.
->
->        The pending state of the operation is not preserved in state which=
- is
->        visible to userspace, thus userspace should ensure that the operat=
-ion is
-> @@ -8201,6 +8202,38 @@ default value for it is set via the kvm.enable_vmw=
-are_backdoor
->  kernel parameter (false when not set). Must be set before any
->  VCPUs have been created.
->
-> +7.38 KVM_CAP_X86_VMWARE_HYPERCALL
-> +---------------------------------
-> +
-> +:Architectures: x86
-> +:Parameters: args[0] whether the feature should be enabled or not
-> +:Returns: 0 on success.
-> +
-> +Capability allows userspace to handle hypercalls. When enabled
-> +whenever the vcpu has executed a VMCALL(Intel) or a VMMCALL(AMD)
-> +instruction kvm will exit to userspace with KVM_EXIT_HYPERCALL.
-> +
-> +On exit the hypercall structure of the kvm_run structure will
-> +look as follows:
-> +
-> +::
-> +   /* KVM_EXIT_HYPERCALL */
-> +   struct {
-> +      __u64 nr;      // rax
-> +      __u64 args[6]; // rbx, rcx, rdx, rsi, rdi, rbp
-> +      __u64 ret;     // cpl, whatever userspace
-> +                     // sets this to on return will be
-> +                     // written to the rax
-> +      __u64 flags;   // KVM_EXIT_HYPERCALL_LONG_MODE if
-> +                     // the hypercall was executed in
-> +                     // 64bit mode, 0 otherwise
-> +   } hypercall;
-> +
-> +Except when running in compatibility mode with VMware hypervisors
-> +userspace handling of hypercalls is discouraged. To implement
-> +such functionality, use KVM_EXIT_IO (x86) or KVM_EXIT_MMIO
-> +(all except s390).
-> +
->  8. Other capabilities.
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_h=
-ost.h
-> index 7fcf185e337f..7fbb11682517 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1404,6 +1404,7 @@ struct kvm_arch {
->         struct kvm_xen xen;
->  #endif
->         bool vmware_backdoor_enabled;
-> +       bool vmware_hypercall_enabled;
->
->         bool backwards_tsc_observed;
->         bool boot_vcpu_runs_old_kvmclock;
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index d7071907d6a5..b676c54266e7 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -4689,6 +4689,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, l=
-ong ext)
->         case KVM_CAP_MEMORY_FAULT_INFO:
->         case KVM_CAP_X86_GUEST_MODE:
->         case KVM_CAP_X86_VMWARE_BACKDOOR:
-> +       case KVM_CAP_X86_VMWARE_HYPERCALL:
->                 r =3D 1;
->                 break;
->         case KVM_CAP_PRE_FAULT_MEMORY:
-> @@ -6784,6 +6785,13 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
->                 }
->                 mutex_unlock(&kvm->lock);
->                 break;
-> +       case KVM_CAP_X86_VMWARE_HYPERCALL:
-> +               r =3D -EINVAL;
-> +               if (cap->args[0] & ~1)
-> +                       break;
-> +               kvm->arch.vmware_hypercall_enabled =3D cap->args[0];
-> +               r =3D 0;
-> +               break;
->         default:
->                 r =3D -EINVAL;
->                 break;
-> @@ -10127,6 +10135,28 @@ static int complete_hypercall_exit(struct kvm_vc=
-pu *vcpu)
->         return kvm_skip_emulated_instruction(vcpu);
->  }
->
-> +static int kvm_vmware_hypercall(struct kvm_vcpu *vcpu)
-> +{
-> +       struct kvm_run *run =3D vcpu->run;
-> +       bool is_64_bit =3D is_64_bit_hypercall(vcpu);
-> +       u64 mask =3D is_64_bit ? U64_MAX : U32_MAX;
-> +
-> +       vcpu->run->hypercall.flags =3D is_64_bit ? KVM_EXIT_HYPERCALL_LON=
-G_MODE : 0;
-> +       run->hypercall.nr =3D kvm_rax_read(vcpu) & mask;
-> +       run->hypercall.args[0] =3D kvm_rbx_read(vcpu) & mask;
-> +       run->hypercall.args[1] =3D kvm_rcx_read(vcpu) & mask;
-> +       run->hypercall.args[2] =3D kvm_rdx_read(vcpu) & mask;
-> +       run->hypercall.args[3] =3D kvm_rsi_read(vcpu) & mask;
-> +       run->hypercall.args[4] =3D kvm_rdi_read(vcpu) & mask;
-> +       run->hypercall.args[5] =3D kvm_rbp_read(vcpu) & mask;
-> +       run->hypercall.ret =3D kvm_x86_call(get_cpl)(vcpu);
-> +
-> +       run->exit_reason =3D KVM_EXIT_HYPERCALL;
-> +       vcpu->arch.complete_userspace_io =3D complete_hypercall_exit;
-> +
-> +       return 0;
-> +}
-> +
->  unsigned long __kvm_emulate_hypercall(struct kvm_vcpu *vcpu, unsigned lo=
-ng nr,
->                                       unsigned long a0, unsigned long a1,
->                                       unsigned long a2, unsigned long a3,
-> @@ -10225,6 +10255,9 @@ int kvm_emulate_hypercall(struct kvm_vcpu *vcpu)
->         int op_64_bit;
->         int cpl;
->
-> +       if (vcpu->kvm->arch.vmware_hypercall_enabled)
-> +               return kvm_vmware_hypercall(vcpu);
-> +
->         if (kvm_xen_hypercall_enabled(vcpu->kvm))
->                 return kvm_xen_hypercall(vcpu);
->
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index c7b5f1c2ee1c..4c2cc6ed29a0 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -934,6 +934,7 @@ struct kvm_enable_cap {
->  #define KVM_CAP_X86_APIC_BUS_CYCLES_NS 237
->  #define KVM_CAP_X86_GUEST_MODE 238
->  #define KVM_CAP_X86_VMWARE_BACKDOOR 239
-> +#define KVM_CAP_X86_VMWARE_HYPERCALL 240
->
->  struct kvm_irq_routing_irqchip {
->         __u32 irqchip;
-> --
-> 2.43.0
->
-
+Reinette
 
