@@ -1,147 +1,274 @@
-Return-Path: <linux-kselftest+bounces-21386-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21387-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0267B9BB8A3
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 16:11:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 380929BB8B6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 16:15:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB4432838F8
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 15:11:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BDFF91F22122
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 15:15:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D8881BC065;
-	Mon,  4 Nov 2024 15:11:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2936B1BD4E1;
+	Mon,  4 Nov 2024 15:15:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lxceTN5N"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="MAHwzciq";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RpgEJMuh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3407D4A08;
-	Mon,  4 Nov 2024 15:11:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EC62B9A2;
+	Mon,  4 Nov 2024 15:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730733096; cv=none; b=KEnJpt3f8QHCEV6AttZFYTsAr5voZ5++aWHrEtSmxGw468dfa8lIjKXpr2XlL4zKWZZMVW07fJTtCETZJ4elgnhQTINg+a7OVgdlBF9XB9/zg9onRGhZKyhzGWYhuQF2DfkWMaYINi+o1yyj5SfFZl82Gw6dSg7Th6tn6sipj8w=
+	t=1730733304; cv=none; b=VWcFhhIHLQlgI1DMCOQcNT+BtbkdNvRLfFnrOijJuxZ4B3OojmoaY4t824hJOLnqDE2ts+nK93ybtTichyMiRI8EwRJhjb1IlBYT1REHZ52DwTHNnkRbKimE5VJoCmG4P6eUcy1ymIPXdISEOfEFn7G2CsuCwu6r7ppOgUw9UcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730733096; c=relaxed/simple;
-	bh=kTcIvo7yioetmpNQbu0IC5h4s6IrPCBWdMVl5D73t7g=;
+	s=arc-20240116; t=1730733304; c=relaxed/simple;
+	bh=kTYnw999nI/JqFsVK3bbbPIO4nM5nyfIH9Mdw+awRCk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s/4MfXs2h+9gsFfPmilwtAYpQkgUwk6S05C5oHqmpFIz0Z9ZYutPwMQ+02wIfwFjKa/SJePEV8nX4ww7DplNcppNQMooYqFZBBLZJrISpYPeYMGfTWodu6hbYc9zeoLV6UvkhQrCFz9FLv94WDE4yj9jV1tO49q6IgZ/Fc1KT4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lxceTN5N; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B3BEC4CECE;
-	Mon,  4 Nov 2024 15:11:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730733095;
-	bh=kTcIvo7yioetmpNQbu0IC5h4s6IrPCBWdMVl5D73t7g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lxceTN5NoMnOb7R/VPtFgRQBTl8fQIQGc+4Gk8OT4K//G+8yFdf1m763nh4hbSYjQ
-	 Q8L0dM+aIbjCHQBdLLToU6JHIkL0xE1N1MhABdTFa4no5VZJo28LxZQQBoWB/t2irM
-	 h5+K4mIJXpoBeCpFomfpoaJA0yVQ95MKtcPaM1xFuLRiXCcZpu4o9nJ6qlaqTN5121
-	 YfE8P7UqD3VEHAvSGFS2dsG4TFkL6XuDxtv562XTMv3j6/0Cdx0wFHXFycCvk81Ndz
-	 w+K2Nd4Qks64XUx2V2qChbExvIWBEDSFoFlvjbEWoQUHMeDg67rC+qPPhYHGReiBK2
-	 bN5bKB2JDwa6w==
-Date: Mon, 4 Nov 2024 16:11:23 +0100
-From: Lorenzo Pieralisi <lpieralisi@kernel.org>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: David Woodhouse <dwmw2@infradead.org>, sami.mujawar@arm.com,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-	Shuah Khan <shuah@kernel.org>, David Woodhouse <dwmw@amazon.co.uk>,
-	kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Francesco Lavra <francescolavra.fl@gmail.com>,
-	Miguel Luis <miguel.luis@oracle.com>
-Subject: Re: [PATCH v6 6/6] arm64: Use SYSTEM_OFF2 PSCI call to power off for
- hibernate
-Message-ID: <ZyjkGwkrQ+R+fI8m@lpieralisi>
-References: <20241019172459.2241939-1-dwmw2@infradead.org>
- <20241019172459.2241939-7-dwmw2@infradead.org>
- <ZyPEn4qhaYyYqrzk@lpieralisi>
- <ZyUUh6KawapLkj0z@lpieralisi>
- <CAMj1kXFma8-GqKuOs5-UAQY9asbq2p9EubSjjbywaURa4T4WnA@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=kNcDMgkgw86K0QwV/NaafKYkdKEqnCmhRZw5qcJlaC3X0qjNR3utVEWH+90HE1hvrgWS0g2hTzr9F6j6SiE3ONYyIrVW6X7y1YQ2dgKzyRpVkxzMhh+lJHSkuOkSiBhYTZyxXaUQMSQQNCVmIhiEMoF40u34ya/gnLKrlVWPf4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=MAHwzciq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RpgEJMuh; arc=none smtp.client-ip=202.12.124.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
+	by mailflow.stl.internal (Postfix) with ESMTP id 4282A1D40250;
+	Mon,  4 Nov 2024 10:14:58 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-08.internal (MEProxy); Mon, 04 Nov 2024 10:14:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1730733298; x=
+	1730736898; bh=3t9S8lMLsxZ1l3HwamcmToJ6jU6n7DJ3ZQs7SNN8Hic=; b=M
+	AHwzciqVjMKKlxsMroKfrWYj5+RS/+kjkeRxP22cj4OLrn6yPV4r2GTyrZepKjFa
+	1QXM9SqJpzab0QJqVkgKeZZr7Gwjo4pYd+L5zIfE7uJHS+7Hif64oewXF3xhHDSn
+	rHO51dzAxxxVepdMHWjPch871rwu1dkmW9bp0U6rgMtANZfI2itHG2qyVMvzbO9u
+	T9ssSyhQ7UYU2A5ngyApd81WGxo+V3nFKJC64qeU7uEHU0coHxvvoRAnibr3nLFz
+	4buop86n2YKIFKB0Ae4gyeE2EGGrxE/nckXCKBPpVmSzLa+kKbBU5AFZzRz3+Ws5
+	P/3wBGJ03FPdsSVOzMoVg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1730733298; x=1730736898; bh=3t9S8lMLsxZ1l3HwamcmToJ6jU6n7DJ3ZQs
+	7SNN8Hic=; b=RpgEJMuhNjKezwpkkFC9FefBRL4pCAvhaljD6qj6LsTWeeE5J7n
+	lhxLHm2O2q0FO+x9oso698a+cXrD1kCfW92TIA6jswsAcXkjQ/OGZVQq//meigEk
+	kt9AOrnVjw5OlMVFp+0FO0q8M18Gs8loPY6nG7HvDE/vfMDkbv/ab0LFtobU5sOk
+	g0wWprw3oWfXmAYTYnKBXhoR4vApKoGKa77Gn57mQLfcGzVspWJoKTJCoirwbvZG
+	0kmQTO7cYmyJ4VOFEB5N5d5R1eEdb17ye6cf/277l4SryE1QEMbXyKjX1FObU5kl
+	cP72/m8V+qdNFA19dptUOaNZ1uW32239qDw==
+X-ME-Sender: <xms:8eQoZ_LQsKsq3EqKMGVb7qr5lVLUqJGmIVERuS04WjM8YeOt6soKtg>
+    <xme:8eQoZzJ_ELm3eCWgOtnDhPcyqnycdV5RuIstPhqfJKOPFpkFqDFcjaw00kqZOnbuI
+    cRyGwd5jQDxDSp2Ses>
+X-ME-Received: <xmr:8eQoZ3tsxTPHIYnlVEz93_C0ft-JIOKRMYrUCXhftEk6Lru8oN1rqBWSSjuw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdeliedgjedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtjeen
+    ucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrg
+    hilhdrnhgvtheqnecuggftrfgrthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfek
+    geetheegheeifffguedvuefffefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggp
+    rhgtphhtthhopeduuddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnthhonh
+    hiohesohhpvghnvhhpnhdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhg
+    lhgvrdgtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtth
+    hopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepughonhgrlhgurdhh
+    uhhnthgvrhesghhmrghilhdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehrhigriigrnhhovhdrshdrrgesghhmrghilhdrtghomhdp
+    rhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehnvghtuggvvh
+    esvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:8eQoZ4YezVoEN7itU2VG_p2WoaN59K977P6RyrNVbXfE4zB01eiUyw>
+    <xmx:8eQoZ2YnjobwfIBfKcYrHYS0ZetYmM1GDE92pV90O8UE_oJm4UA-Ag>
+    <xmx:8eQoZ8AG20jetaub2NhxzGIgym1DE9NDr4zp4XY59mkU_X-tEfUnNA>
+    <xmx:8eQoZ0bx7_hf0EqTNLcQ5YUG5SlMJcinK4lbyxsUau4bueTCTbTIxg>
+    <xmx:8eQoZ8NpZC-2xPS8DPENXui-NuvkzcESRUmoB-dcrDYthvLLW0pFlWpd>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 4 Nov 2024 10:14:57 -0500 (EST)
+Date: Mon, 4 Nov 2024 16:14:55 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v11 18/23] ovpn: implement peer
+ add/get/dump/delete via netlink
+Message-ID: <Zyjk781vOqV4kXhJ@hog>
+References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-18-de4698c73a25@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMj1kXFma8-GqKuOs5-UAQY9asbq2p9EubSjjbywaURa4T4WnA@mail.gmail.com>
+In-Reply-To: <20241029-b4-ovpn-v11-18-de4698c73a25@openvpn.net>
 
-On Mon, Nov 04, 2024 at 02:54:12PM +0100, Ard Biesheuvel wrote:
-> On Fri, 1 Nov 2024 at 18:49, Lorenzo Pieralisi <lpieralisi@kernel.org> wrote:
-> >
-> > [+Ard, Sami, for EFI]
-> >
-> > On Thu, Oct 31, 2024 at 06:55:43PM +0100, Lorenzo Pieralisi wrote:
-> > > On Sat, Oct 19, 2024 at 06:15:47PM +0100, David Woodhouse wrote:
-> > >
-> > > [...]
-> > >
-> > > > +#ifdef CONFIG_HIBERNATION
-> > > > +static int psci_sys_hibernate(struct sys_off_data *data)
-> > > > +{
-> > > > +   /*
-> > > > +    * Zero is an acceptable alternative to PSCI_1_3_OFF_TYPE_HIBERNATE_OFF
-> > > > +    * and is supported by hypervisors implementing an earlier version
-> > > > +    * of the pSCI v1.3 spec.
-> > > > +    */
-> > >
-> > > It is obvious but with this patch applied a host kernel would start executing
-> > > SYSTEM_OFF2 too if supported in firmware to hibernate, it is not a hypervisor
-> > > only code path.
-> > >
-> > > Related to that: is it now always safe to override
-> > >
-> > > commit 60c0d45a7f7a ("efi/arm64: use UEFI for system reset and poweroff")
-> > >
-> > > for hibernation ? It is not very clear to me why overriding PSCI for
-> > > poweroff was the right thing to do - tried to follow that patch history but
-> > > the question remains (it is related to UpdateCapsule() but I don't know
-> > > how that applies to the hibernation use case).
-> >
-> > RFC: It is unclear to me what happens in current mainline if we try to
-> > hibernate with EFI runtime services enabled and a capsule update pending (we
-> > issue EFI ResetSystem(EFI_RESET_SHUTDOWN,..) which might not be compatible
-> > with the reset required by the pending capsule update request) what happens
-> > in this case I don't know but at least the choice is all contained in
-> > EFI firmware.
-> >
-> > Then if in the same scenario now we are switching to PSCI SYSTEM_OFF2 for the
-> > hibernate reset I suspect that what happens to the in-flight capsule
-> > update requests strictly depends on what "reset" PSCI SYSTEM_OFF2 will
-> > end up doing ?
-> >
-> > I think this is just a corner case and it is unlikely it has been ever
-> > tested (is it even possible ? Looking at EFI folks) - it would be good
-> > to clarify it at least to make sure we understand this code path.
-> >
-> 
-> I'm not aware of any OS that actually uses capsule update at runtime
-> (both Windows and Linux queue up the capsule and call the
-> UpdateCapsule() runtime service at boot time after a reboot).
-> 
-> So it is unlikely that this would break anything, and I'd actually be
-> inclined to disable capsule update at runtime altogether.
-> 
-> I will also note that hibernation with EFI is flaky in general, given
-> that EFI memory regions may move around
+2024-10-29, 11:47:31 +0100, Antonio Quartulli wrote:
+> +static int ovpn_nl_peer_precheck(struct ovpn_struct *ovpn,
+> +				 struct genl_info *info,
+> +				 struct nlattr **attrs)
+> +{
+> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_PEER], attrs,
+> +			      OVPN_A_PEER_ID))
+> +		return -EINVAL;
+> +
+> +	if (attrs[OVPN_A_PEER_REMOTE_IPV4] && attrs[OVPN_A_PEER_REMOTE_IPV6]) {
+> +		NL_SET_ERR_MSG_MOD(info->extack,
+> +				   "cannot specify both remote IPv4 or IPv6 address");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (!attrs[OVPN_A_PEER_REMOTE_IPV4] &&
+> +	    !attrs[OVPN_A_PEER_REMOTE_IPV6] && attrs[OVPN_A_PEER_REMOTE_PORT]) {
+> +		NL_SET_ERR_MSG_MOD(info->extack,
+> +				   "cannot specify remote port without IP address");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (!attrs[OVPN_A_PEER_REMOTE_IPV4] &&
+> +	    attrs[OVPN_A_PEER_LOCAL_IPV4]) {
+> +		NL_SET_ERR_MSG_MOD(info->extack,
+> +				   "cannot specify local IPv4 address without remote");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (!attrs[OVPN_A_PEER_REMOTE_IPV6] &&
+> +	    attrs[OVPN_A_PEER_LOCAL_IPV6]) {
 
-Thank you for chiming in, I think we are OK (I don't think this patch
-will create more issues than the ones that are already there for hibernate
-anyway) - the reasoning behind the change is in the commit logs.
+I think these consistency checks should account for v4mapped
+addresses. With remote=v4mapped and local=v6 we'll end up with an
+incorrect ipv4 "local" address (taken out of the ipv6 address's first
+4B by ovpn_peer_reset_sockaddr). With remote=ipv6 and local=v4mapped,
+we'll pass the last 4B of OVPN_A_PEER_LOCAL_IPV6 to
+ovpn_peer_reset_sockaddr and try to read 16B (the full ipv6 address)
+out of that.
 
-Lorenzo
+> +		NL_SET_ERR_MSG_MOD(info->extack,
+> +				   "cannot specify local IPV6 address without remote");
+> +		return -EINVAL;
+> +	}
+
+
+[...]
+>  int ovpn_nl_peer_set_doit(struct sk_buff *skb, struct genl_info *info)
+>  {
+[...]
+> +	ret = ovpn_nl_peer_modify(peer, info, attrs);
+> +	if (ret < 0) {
+> +		ovpn_peer_put(peer);
+> +		return ret;
+> +	}
+> +
+> +	/* ret == 1 means that VPN IPv4/6 has been modified and rehashing
+> +	 * is required
+> +	 */
+> +	if (ret > 0) {
+
+&& mode == MP ?
+
+I don't see ovpn_nl_peer_modify checking that before returning 1, and
+in P2P mode ovpn->peers will be NULL.
+
+> +		spin_lock_bh(&ovpn->peers->lock);
+> +		ovpn_peer_hash_vpn_ip(peer);
+> +		spin_unlock_bh(&ovpn->peers->lock);
+> +	}
+> +
+> +	ovpn_peer_put(peer);
+> +
+> +	return 0;
+> +}
+
+>  int ovpn_nl_peer_get_dumpit(struct sk_buff *skb, struct netlink_callback *cb)
+>  {
+[...]
+> +	} else {
+> +		rcu_read_lock();
+> +		hash_for_each_rcu(ovpn->peers->by_id, bkt, peer,
+> +				  hash_entry_id) {
+> +			/* skip already dumped peers that were dumped by
+> +			 * previous invocations
+> +			 */
+> +			if (last_idx > 0) {
+> +				last_idx--;
+> +				continue;
+> +			}
+
+If a peer that was dumped during a previous invocation is removed in
+between, we'll miss one that's still present in the overall dump. I
+don't know how much it matters (I guses it depends on how the results
+of this dump are used by userspace), so I'll let you decide if this
+needs to be fixed immediately or if it can be ignored for now.
+
+> +
+> +			if (ovpn_nl_send_peer(skb, info, peer,
+> +					      NETLINK_CB(cb->skb).portid,
+> +					      cb->nlh->nlmsg_seq,
+> +					      NLM_F_MULTI) < 0)
+> +				break;
+> +
+> +			/* count peers being dumped during this invocation */
+> +			dumped++;
+> +		}
+> +		rcu_read_unlock();
+> +	}
+> +
+> +out:
+> +	netdev_put(ovpn->dev, &ovpn->dev_tracker);
+> +
+> +	/* sum up peers dumped in this message, so that at the next invocation
+> +	 * we can continue from where we left
+> +	 */
+> +	cb->args[1] += dumped;
+> +	return skb->len;
+>  }
+>  
+>  int ovpn_nl_peer_del_doit(struct sk_buff *skb, struct genl_info *info)
+>  {
+> -	return -EOPNOTSUPP;
+> +	struct nlattr *attrs[OVPN_A_PEER_MAX + 1];
+> +	struct ovpn_struct *ovpn = info->user_ptr[0];
+> +	struct ovpn_peer *peer;
+> +	u32 peer_id;
+> +	int ret;
+> +
+> +	if (GENL_REQ_ATTR_CHECK(info, OVPN_A_PEER))
+> +		return -EINVAL;
+> +
+> +	ret = nla_parse_nested(attrs, OVPN_A_PEER_MAX, info->attrs[OVPN_A_PEER],
+> +			       ovpn_peer_nl_policy, info->extack);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_PEER], attrs,
+> +			      OVPN_A_PEER_ID))
+> +		return -EINVAL;
+> +
+> +	peer_id = nla_get_u32(attrs[OVPN_A_PEER_ID]);
+> +
+> +	peer = ovpn_peer_get_by_id(ovpn, peer_id);
+> +	if (!peer)
+
+maybe c/p the extack from ovpn_nl_peer_get_doit?
+
+> +		return -ENOENT;
+> +
+> +	netdev_dbg(ovpn->dev, "%s: peer id=%u\n", __func__, peer->id);
+> +	ret = ovpn_peer_del(peer, OVPN_DEL_PEER_REASON_USERSPACE);
+> +	ovpn_peer_put(peer);
+> +
+> +	return ret;
+>  }
+
+-- 
+Sabrina
 
