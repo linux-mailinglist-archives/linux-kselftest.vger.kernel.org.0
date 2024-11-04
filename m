@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-21373-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21374-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAEFE9BB225
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 12:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EE3B9BB254
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 12:07:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 725151F21170
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 11:03:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EABF51F20F41
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 11:07:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B3E41D63E9;
-	Mon,  4 Nov 2024 10:53:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98BC91E3796;
+	Mon,  4 Nov 2024 10:54:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yc7qSyOe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ExRIp/N2"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6106C1D63E2;
-	Mon,  4 Nov 2024 10:53:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720761E3790;
+	Mon,  4 Nov 2024 10:54:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730717628; cv=none; b=mI1IdTuRKrP7kN2TO/QuB2yVSaw1fpYWFDlhxP2qZ4wBKiPzHu+ieZCsvw/PcKj8dcE/3ZQ3gOWPCnt7uikGA6TACDxljqsydy6qlikWN9Y7tiV4vRRh7UZflk4WF3lmDojVZFnOGFbaBqp0u8D/5UxC5A484Ff7qc50egSUz50=
+	t=1730717678; cv=none; b=GnC87HnqUCNA4wsxks+TOIPJWYasNnCXCtmdaBw1tHzic2/bYwGDtLkEMIGrcO6eUc0NDo2emcveRNKydVfodFpQuCqI6y0xEYa9Vs3EEfSM1GNXqYZAnM9dDeNgPKDrtvF5K5yMa2KW9OMw1ojHBN6bEQdeXbNz/wNlXARdpwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730717628; c=relaxed/simple;
+	s=arc-20240116; t=1730717678; c=relaxed/simple;
 	bh=+yqfSSt6kLDRneh9fTkP2DWL8YT9Gj+cYVQcFnLkFkw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=myCIEJVXOOYtnm9qN5LyG77rfttLL8dz9Gn81mMRioNfqnIUHhaEI4jvdKypjq/eJDt0JjY8UF1RSKoUN2qBpRAKqi5esWMCSDkrQGNjAgpFdib62LaKerE8Q3SAQC7jnpVixIV/VSXNoZtvWN9U3ehjlFNcIQF0sztkGvyzkDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yc7qSyOe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CD83C4CED1;
-	Mon,  4 Nov 2024 10:53:47 +0000 (UTC)
+	 MIME-Version; b=JbVGwRUbQNWqwdGs8SGqGxzhRwZqMM7nuOvOMzn7oKVKuoZiLiX+6M3CMEXidYMU0JZE7PNjnebjivL2PwSMNPOjCFDfrAk6YKOHicS/i1QHr7hJZDzlxsTbDfPxYvpQ0YywxkksYxmap2TjNIRsgqiJhuj4HSgsB1avUYC7YCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ExRIp/N2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A82CC4CECE;
+	Mon,  4 Nov 2024 10:54:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730717628;
+	s=k20201202; t=1730717678;
 	bh=+yqfSSt6kLDRneh9fTkP2DWL8YT9Gj+cYVQcFnLkFkw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Yc7qSyOefwNgL7D/DT6xgZNNPMDo8b3LVu5wnHR+BQrjBZ2Jjl9PrRFRBTRdixPGQ
-	 c09bMq4/IJ+DBL/DH9owHYYWLh2js3/LLJvt603jv1JXn+9uX1K1YsCiH1eR1tO9er
-	 Ye7KRF2okPg6vFOKPNaLjPSxfn6oenYKjv6EIZThebn4/QKqneP6gaeu2ps5OD8muY
-	 m7IigU3lBIfqeVJIPZLTmhDXUIRnatuANCpIDUsNusrPnLapvyDNBh3ycv7GHuHNJQ
-	 W/UixAockAbZDKpMH6uy+SagJkKzDXGN2NmZjxZ6oDoOr2tIMdc0bc77RB/iFkFbw/
-	 U9iYHoo4kz+fg==
+	b=ExRIp/N2xNRRmIvFVIJu9SqaE6WWAm7rUCzxpoB7Kr55ZU0oaZrm5LtP+/FJKMTbN
+	 4D0QVgqTYQCmEihQfdxtnKGF+mrFqj9+1H1Rz2Nmx7BLjuJIz3lRhQrB/JhD7sMfyP
+	 yy3kK7jwzpkvJ2jn0yf+gaSmJz1vU9j4TGUnN/i2AnKuu1irdXBLbfKK2Z6rT5yCH4
+	 tLtFgxaONGN2rHT8HxQAuMDtKyfWX+6inVIRQnePyhdA12a9b9MzHCv2GWKKz45hWk
+	 AEiqnCu2znjKWTq7QuKn0TqbNbxYbtRHVN/h9u82itdOtJqeox3FSVkp02vQ2mqzAH
+	 y9e7LAtc/U9Ig==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,12 +49,12 @@ Cc: Li Zhijian <lizhijian@fujitsu.com>,
 	Sasha Levin <sashal@kernel.org>,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 07/11] selftests/watchdog-test: Fix system accidentally reset after watchdog-test
-Date: Mon,  4 Nov 2024 05:53:05 -0500
-Message-ID: <20241104105324.97393-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 07/10] selftests/watchdog-test: Fix system accidentally reset after watchdog-test
+Date: Mon,  4 Nov 2024 05:53:56 -0500
+Message-ID: <20241104105414.97666-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241104105324.97393-1-sashal@kernel.org>
-References: <20241104105324.97393-1-sashal@kernel.org>
+In-Reply-To: <20241104105414.97666-1-sashal@kernel.org>
+References: <20241104105414.97666-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.115
+X-stable-base: Linux 5.15.170
 Content-Transfer-Encoding: 8bit
 
 From: Li Zhijian <lizhijian@fujitsu.com>
