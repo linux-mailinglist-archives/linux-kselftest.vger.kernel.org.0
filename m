@@ -1,274 +1,147 @@
-Return-Path: <linux-kselftest+bounces-21387-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21388-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 380929BB8B6
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 16:15:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB6B19BB8F7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 16:27:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BDFF91F22122
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 15:15:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18C2A1C2081B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 15:27:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2936B1BD4E1;
-	Mon,  4 Nov 2024 15:15:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="MAHwzciq";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RpgEJMuh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1488D1BC9EE;
+	Mon,  4 Nov 2024 15:27:08 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EC62B9A2;
-	Mon,  4 Nov 2024 15:14:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D2413C827;
+	Mon,  4 Nov 2024 15:27:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730733304; cv=none; b=VWcFhhIHLQlgI1DMCOQcNT+BtbkdNvRLfFnrOijJuxZ4B3OojmoaY4t824hJOLnqDE2ts+nK93ybtTichyMiRI8EwRJhjb1IlBYT1REHZ52DwTHNnkRbKimE5VJoCmG4P6eUcy1ymIPXdISEOfEFn7G2CsuCwu6r7ppOgUw9UcY=
+	t=1730734028; cv=none; b=cyqLi5vwcwXO2lSiVKnmsP/l90uOcOZXjIAvz3dyLifTMAPsn47YVXpnAgnIff4nonoBo0EJA81CecCCcw5xsiRFZq9JPTX44ftprdnKIM6a4vtifU7HB+ryYKahYfm8fj+Aqn6R1P5dcgMChISd/lyJNOuW89zMC0al24AJI7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730733304; c=relaxed/simple;
-	bh=kTYnw999nI/JqFsVK3bbbPIO4nM5nyfIH9Mdw+awRCk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kNcDMgkgw86K0QwV/NaafKYkdKEqnCmhRZw5qcJlaC3X0qjNR3utVEWH+90HE1hvrgWS0g2hTzr9F6j6SiE3ONYyIrVW6X7y1YQ2dgKzyRpVkxzMhh+lJHSkuOkSiBhYTZyxXaUQMSQQNCVmIhiEMoF40u34ya/gnLKrlVWPf4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=MAHwzciq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RpgEJMuh; arc=none smtp.client-ip=202.12.124.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailflow.stl.internal (Postfix) with ESMTP id 4282A1D40250;
-	Mon,  4 Nov 2024 10:14:58 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-08.internal (MEProxy); Mon, 04 Nov 2024 10:14:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1730733298; x=
-	1730736898; bh=3t9S8lMLsxZ1l3HwamcmToJ6jU6n7DJ3ZQs7SNN8Hic=; b=M
-	AHwzciqVjMKKlxsMroKfrWYj5+RS/+kjkeRxP22cj4OLrn6yPV4r2GTyrZepKjFa
-	1QXM9SqJpzab0QJqVkgKeZZr7Gwjo4pYd+L5zIfE7uJHS+7Hif64oewXF3xhHDSn
-	rHO51dzAxxxVepdMHWjPch871rwu1dkmW9bp0U6rgMtANZfI2itHG2qyVMvzbO9u
-	T9ssSyhQ7UYU2A5ngyApd81WGxo+V3nFKJC64qeU7uEHU0coHxvvoRAnibr3nLFz
-	4buop86n2YKIFKB0Ae4gyeE2EGGrxE/nckXCKBPpVmSzLa+kKbBU5AFZzRz3+Ws5
-	P/3wBGJ03FPdsSVOzMoVg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1730733298; x=1730736898; bh=3t9S8lMLsxZ1l3HwamcmToJ6jU6n7DJ3ZQs
-	7SNN8Hic=; b=RpgEJMuhNjKezwpkkFC9FefBRL4pCAvhaljD6qj6LsTWeeE5J7n
-	lhxLHm2O2q0FO+x9oso698a+cXrD1kCfW92TIA6jswsAcXkjQ/OGZVQq//meigEk
-	kt9AOrnVjw5OlMVFp+0FO0q8M18Gs8loPY6nG7HvDE/vfMDkbv/ab0LFtobU5sOk
-	g0wWprw3oWfXmAYTYnKBXhoR4vApKoGKa77Gn57mQLfcGzVspWJoKTJCoirwbvZG
-	0kmQTO7cYmyJ4VOFEB5N5d5R1eEdb17ye6cf/277l4SryE1QEMbXyKjX1FObU5kl
-	cP72/m8V+qdNFA19dptUOaNZ1uW32239qDw==
-X-ME-Sender: <xms:8eQoZ_LQsKsq3EqKMGVb7qr5lVLUqJGmIVERuS04WjM8YeOt6soKtg>
-    <xme:8eQoZzJ_ELm3eCWgOtnDhPcyqnycdV5RuIstPhqfJKOPFpkFqDFcjaw00kqZOnbuI
-    cRyGwd5jQDxDSp2Ses>
-X-ME-Received: <xmr:8eQoZ3tsxTPHIYnlVEz93_C0ft-JIOKRMYrUCXhftEk6Lru8oN1rqBWSSjuw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdeliedgjedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtjeen
-    ucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrg
-    hilhdrnhgvtheqnecuggftrfgrthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfek
-    geetheegheeifffguedvuefffefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggp
-    rhgtphhtthhopeduuddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnthhonh
-    hiohesohhpvghnvhhpnhdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhg
-    lhgvrdgtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtth
-    hopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepughonhgrlhgurdhh
-    uhhnthgvrhesghhmrghilhdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehrhigriigrnhhovhdrshdrrgesghhmrghilhdrtghomhdp
-    rhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehnvghtuggvvh
-    esvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:8eQoZ4YezVoEN7itU2VG_p2WoaN59K977P6RyrNVbXfE4zB01eiUyw>
-    <xmx:8eQoZ2YnjobwfIBfKcYrHYS0ZetYmM1GDE92pV90O8UE_oJm4UA-Ag>
-    <xmx:8eQoZ8AG20jetaub2NhxzGIgym1DE9NDr4zp4XY59mkU_X-tEfUnNA>
-    <xmx:8eQoZ0bx7_hf0EqTNLcQ5YUG5SlMJcinK4lbyxsUau4bueTCTbTIxg>
-    <xmx:8eQoZ8NpZC-2xPS8DPENXui-NuvkzcESRUmoB-dcrDYthvLLW0pFlWpd>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 4 Nov 2024 10:14:57 -0500 (EST)
-Date: Mon, 4 Nov 2024 16:14:55 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
-	Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v11 18/23] ovpn: implement peer
- add/get/dump/delete via netlink
-Message-ID: <Zyjk781vOqV4kXhJ@hog>
-References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-18-de4698c73a25@openvpn.net>
+	s=arc-20240116; t=1730734028; c=relaxed/simple;
+	bh=vY0rBH99vGqCYCoZ8m5NHbbAj/+DeHnaysoxqekFov8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EotfordXswP6Ql6OXgzi30Q05NUDV/BIFkF4+I7zzb1ceRTLAqsFvhbhWjMFx6Jdzf6b3EfPIEWtd9cXbolYySwiZfTA5Y8/sweQhFva8l7N6JiC51839vZTqu3eRd98GTkazUAqux2PH2XGoETB90C7nMqNglJqvVoq1HO0qX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C6E8C4CECE;
+	Mon,  4 Nov 2024 15:27:06 +0000 (UTC)
+Date: Mon, 4 Nov 2024 10:27:04 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Segher Boessenkool <segher@kernel.crashing.org>
+Cc: Hari Bathini <hbathini@linux.ibm.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
+ Michael Ellerman <mpe@ellerman.id.au>, Madhavan Srinivasan
+ <maddy@linux.ibm.com>, "Naveen N. Rao" <naveen@kernel.org>, lkml
+ <linux-kernel@vger.kernel.org>, linux-trace-kernel@vger.kernel.org,
+ linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH] selftests/ftrace: update kprobe syntax error test for
+ ppc64le
+Message-ID: <20241104102704.7c20dc0b@gandalf.local.home>
+In-Reply-To: <20241104103615.GZ29862@gate.crashing.org>
+References: <20241101191925.1550493-1-hbathini@linux.ibm.com>
+	<20241101205948.GW29862@gate.crashing.org>
+	<1916cb5c-cb3d-427c-bcf0-2c1b905fd6d1@linux.ibm.com>
+	<20241104094431.GY29862@gate.crashing.org>
+	<245fed6f-5fb4-4925-ba0a-fb2f32e650d0@linux.ibm.com>
+	<20241104103615.GZ29862@gate.crashing.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241029-b4-ovpn-v11-18-de4698c73a25@openvpn.net>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-2024-10-29, 11:47:31 +0100, Antonio Quartulli wrote:
-> +static int ovpn_nl_peer_precheck(struct ovpn_struct *ovpn,
-> +				 struct genl_info *info,
-> +				 struct nlattr **attrs)
-> +{
-> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_PEER], attrs,
-> +			      OVPN_A_PEER_ID))
-> +		return -EINVAL;
-> +
-> +	if (attrs[OVPN_A_PEER_REMOTE_IPV4] && attrs[OVPN_A_PEER_REMOTE_IPV6]) {
-> +		NL_SET_ERR_MSG_MOD(info->extack,
-> +				   "cannot specify both remote IPv4 or IPv6 address");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (!attrs[OVPN_A_PEER_REMOTE_IPV4] &&
-> +	    !attrs[OVPN_A_PEER_REMOTE_IPV6] && attrs[OVPN_A_PEER_REMOTE_PORT]) {
-> +		NL_SET_ERR_MSG_MOD(info->extack,
-> +				   "cannot specify remote port without IP address");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (!attrs[OVPN_A_PEER_REMOTE_IPV4] &&
-> +	    attrs[OVPN_A_PEER_LOCAL_IPV4]) {
-> +		NL_SET_ERR_MSG_MOD(info->extack,
-> +				   "cannot specify local IPv4 address without remote");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (!attrs[OVPN_A_PEER_REMOTE_IPV6] &&
-> +	    attrs[OVPN_A_PEER_LOCAL_IPV6]) {
+On Mon, 4 Nov 2024 04:36:15 -0600
+Segher Boessenkool <segher@kernel.crashing.org> wrote:
 
-I think these consistency checks should account for v4mapped
-addresses. With remote=v4mapped and local=v6 we'll end up with an
-incorrect ipv4 "local" address (taken out of the ipv6 address's first
-4B by ovpn_peer_reset_sockaddr). With remote=ipv6 and local=v4mapped,
-we'll pass the last 4B of OVPN_A_PEER_LOCAL_IPV6 to
-ovpn_peer_reset_sockaddr and try to read 16B (the full ipv6 address)
-out of that.
+> > >>Querying for function arguments is supported on kprobes only at function
+> > >>entry. This is a negative test case where the offset is intentionally
+> > >>set beyond function entry while querying for function arguments.
+> > >>I guess, simply setting the offset to 20 (vfs_read is anyway
+> > >>going to be beyond 5 instructions) instead of 8 for powerpc would
+> > >>make all platforms and ABI variants happy?  
+> > >
+> > >I have no idea.  What is this "offset" anyway?  
+> > 
+> > offset (in bytes) from function start address..  
+> 
+> But what is there?
 
-> +		NL_SET_ERR_MSG_MOD(info->extack,
-> +				   "cannot specify local IPV6 address without remote");
-> +		return -EINVAL;
-> +	}
+Function start address is what kallsyms returns. That is:
+
+  grep function /proc/kallsyms
+
+> 
+> > >This is just the ELFv2 ABI.  No platform can make up its own thing at
+> > >all (well, none decided to be gratuitously incompatible, so far).  And
+> > >there are no "ABI variants"!  
+> > 
+> > The test case applies for ABIv1 & ABIv2. All ppc32 & ppc64 platforms..  
+> 
+> Hrm.  So you allow essentially random entry points on other ABIs to
+> work?
+> 
+> > >You're just making assumptions here that are based on nothing else but
+> > >observations of what is done most of the time.  That might work for a
+> > >while -- maybe a long while even! -- but it can easily break down.  
+> > 
+> > Hmmm.. I understand that you want the test case to read st_other field
+> > but would you rather suggest an offset of 64?  
+> 
+> I have no idea what "offset" means here.
+
+The offset is the number of bytes from the address that is returned by
+kallsyms.
 
 
-[...]
->  int ovpn_nl_peer_set_doit(struct sk_buff *skb, struct genl_info *info)
->  {
-[...]
-> +	ret = ovpn_nl_peer_modify(peer, info, attrs);
-> +	if (ret < 0) {
-> +		ovpn_peer_put(peer);
-> +		return ret;
-> +	}
-> +
-> +	/* ret == 1 means that VPN IPv4/6 has been modified and rehashing
-> +	 * is required
-> +	 */
-> +	if (ret > 0) {
+> 
+> > Is a GEP of 8/16 instructions going to be true anytime soon or is it
+> > true already for some cases? The reason I ask that is some kprobe/ftrace
+> > code in the kernel might need a bit of re-look if that is the case.  
+> 
+> An entry point has no instructions at all.  Oh, you mean the code at
+> the GEP.
+> 
+> The LEP can already be all the allowed distances after the GEP.  And
+> the .localentry GAS directive already supports all those distances
+> always.  Not a lot of code written in assembler does use that, and
+> certainly GCC does not use a lot of the freedom it has here, but it
+> could (and so could assembler programmers).  Typically people will want
+> to make the code here as short as possible, and there are restrictions
+> on what is *allowed* to be done here anyway (ld, the link editor, can
+> change this code after all!), so it is not too likely you will ever see
+> big code at the GEP often, but times change, etc.
 
-&& mode == MP ?
 
-I don't see ovpn_nl_peer_modify checking that before returning 1, and
-in P2P mode ovpn->peers will be NULL.
+This is all determined by the kernel. It's considered a function entry by
+the function:
 
-> +		spin_lock_bh(&ovpn->peers->lock);
-> +		ovpn_peer_hash_vpn_ip(peer);
-> +		spin_unlock_bh(&ovpn->peers->lock);
-> +	}
-> +
-> +	ovpn_peer_put(peer);
-> +
-> +	return 0;
-> +}
+   arch_kprobe_on_func_entry()
 
->  int ovpn_nl_peer_get_dumpit(struct sk_buff *skb, struct netlink_callback *cb)
->  {
-[...]
-> +	} else {
-> +		rcu_read_lock();
-> +		hash_for_each_rcu(ovpn->peers->by_id, bkt, peer,
-> +				  hash_entry_id) {
-> +			/* skip already dumped peers that were dumped by
-> +			 * previous invocations
-> +			 */
-> +			if (last_idx > 0) {
-> +				last_idx--;
-> +				continue;
-> +			}
+Which on PowerPC has:
 
-If a peer that was dumped during a previous invocation is removed in
-between, we'll miss one that's still present in the overall dump. I
-don't know how much it matters (I guses it depends on how the results
-of this dump are used by userspace), so I'll let you decide if this
-needs to be fixed immediately or if it can be ignored for now.
+static bool arch_kprobe_on_func_entry(unsigned long offset)
+{
+#ifdef CONFIG_PPC64_ELF_ABI_V2
+#ifdef CONFIG_KPROBES_ON_FTRACE
+        return offset <= 16;
+#else
+        return offset <= 8;
+#endif
+#else
+        return !offset;
+#endif  
+}
 
-> +
-> +			if (ovpn_nl_send_peer(skb, info, peer,
-> +					      NETLINK_CB(cb->skb).portid,
-> +					      cb->nlh->nlmsg_seq,
-> +					      NLM_F_MULTI) < 0)
-> +				break;
-> +
-> +			/* count peers being dumped during this invocation */
-> +			dumped++;
-> +		}
-> +		rcu_read_unlock();
-> +	}
-> +
-> +out:
-> +	netdev_put(ovpn->dev, &ovpn->dev_tracker);
-> +
-> +	/* sum up peers dumped in this message, so that at the next invocation
-> +	 * we can continue from where we left
-> +	 */
-> +	cb->args[1] += dumped;
-> +	return skb->len;
->  }
->  
->  int ovpn_nl_peer_del_doit(struct sk_buff *skb, struct genl_info *info)
->  {
-> -	return -EOPNOTSUPP;
-> +	struct nlattr *attrs[OVPN_A_PEER_MAX + 1];
-> +	struct ovpn_struct *ovpn = info->user_ptr[0];
-> +	struct ovpn_peer *peer;
-> +	u32 peer_id;
-> +	int ret;
-> +
-> +	if (GENL_REQ_ATTR_CHECK(info, OVPN_A_PEER))
-> +		return -EINVAL;
-> +
-> +	ret = nla_parse_nested(attrs, OVPN_A_PEER_MAX, info->attrs[OVPN_A_PEER],
-> +			       ovpn_peer_nl_policy, info->extack);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_PEER], attrs,
-> +			      OVPN_A_PEER_ID))
-> +		return -EINVAL;
-> +
-> +	peer_id = nla_get_u32(attrs[OVPN_A_PEER_ID]);
-> +
-> +	peer = ovpn_peer_get_by_id(ovpn, peer_id);
-> +	if (!peer)
+So, being greater than 16 on powerpc with config CONFIG_PPC64_ELF_ABI_V2
+set, would work. If that function changes, then the test needs to change.
 
-maybe c/p the extack from ovpn_nl_peer_get_doit?
-
-> +		return -ENOENT;
-> +
-> +	netdev_dbg(ovpn->dev, "%s: peer id=%u\n", __func__, peer->id);
-> +	ret = ovpn_peer_del(peer, OVPN_DEL_PEER_REASON_USERSPACE);
-> +	ovpn_peer_put(peer);
-> +
-> +	return ret;
->  }
-
--- 
-Sabrina
+-- Steve
 
