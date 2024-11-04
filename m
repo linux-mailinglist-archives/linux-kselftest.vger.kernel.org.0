@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-21399-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21400-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A1B79BBD13
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 19:16:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A62E9BBD17
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 19:16:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3E101F23684
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 18:16:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACEB81C224B2
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 18:16:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00AAB1D1319;
-	Mon,  4 Nov 2024 18:14:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6577D1D1E77;
+	Mon,  4 Nov 2024 18:14:43 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57EAA1D094B;
-	Mon,  4 Nov 2024 18:14:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC9931D12E6;
+	Mon,  4 Nov 2024 18:14:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730744081; cv=none; b=EdDhG5me7GFAe+Sj8iBawsFHiVcIn0BgM7Hd/JmAZHqF9XZDXuL0/VxbrlQfnYsftzq2Abg4SXLoUdBTIv5tFr53Q+eH5OAElzifJpTW78EX+yMxgbItmc8CFFJPITwoVLCnc0daSj1uvP7n50/F+IRUslXJlLRwzyeo08wyRo0=
+	t=1730744083; cv=none; b=n0njrZrmKFHUeQSM9Q/y48r4Zws+hsPdh7MvRr80JOWPTnPNEYwREnyN+WQ4EqK89V44NGGmQha0g+Y9m4Zn4P2sq9uTCMrsoMWucnr7ZN9cTFzrKYdI6okQ8uL0ksUeNe6DdkqZptcgiZuxnK4RMqNxUZClEvtrr1WNXjjKUQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730744081; c=relaxed/simple;
-	bh=b0Dkv5Sy5ji+/9wdnjShe98xD6WGhX0x1ggGrQrv4Qs=;
+	s=arc-20240116; t=1730744083; c=relaxed/simple;
+	bh=t4oQZFMur9cxBRlJZS0+COIzhW6jkWYV4QpeYt2kroU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MroVZiuzrGzQrIrvvSQs6L30TXGhErfUfgDmPTqdMTSJjUacgXV8asPRaS2jrhRADdHJqTBvbOXHtOQX3ORF6pMpei42sFIRbAchEe/sLhTH0kOZGu6MNgEEnOgAZJ5SZTNLN+IcysGmsQwxYhgGEhIF3fGcMNRj4G2pPSlgl8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.178
+	 MIME-Version; b=AwvzS5O5NJ15RFXtmWKj04zEuVv2cadXHXB7izVl3d6snY7YiqarydjFfaGt7sZphOlekhMwlSzteSQz/vCB3XE2lZAAy26VuXGZzL/ICSO5fueQv6v6PFzY3tTnpbrDAIDP3akWDOpZOgJtbCpsoJcbl2g6ByV8hdBdbam3Xig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-71e467c3996so3847363b3a.2;
-        Mon, 04 Nov 2024 10:14:40 -0800 (PST)
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-71e5a62031aso3675308b3a.1;
+        Mon, 04 Nov 2024 10:14:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730744079; x=1731348879;
+        d=1e100.net; s=20230601; t=1730744081; x=1731348881;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8X35Ea0gz6V3qdg4j5NOe8UKNtP5acIZlBezrrhgypI=;
-        b=MqbLcwR00g96DXRceNAt6HLx+PdCGihW9i5fI63mn5RKBCXXTLPwZlVDtbjYlpYmzJ
-         /q8f2ijJG9/xoPD+UuuOqLF1bjhupuuVnBH3+kFXpAc6N4q5pkeM3GZoC6juvi+/Dwsh
-         nlq+uA/I47+2ukjMiY9UsS7GJ/0bPlKMzl0xhfguZ/ZJyxxcvvV/ha8/N8UfiPKIp/UZ
-         ym4iWyZWc/kFaoc5Zq8x+QS4VuAb3wLk/kF5favRIamA5UKq7U78iw62jb5XhtgRhPvd
-         NfCLUIRTlzDlCp2pF7t47joI6S4lRw+MXaeRUOpTYtd5x1rQqFFEgyfw+pXz4tUVqJ7i
-         aEEw==
-X-Forwarded-Encrypted: i=1; AJvYcCX8QKOPZzcfbb0Pq/rup6jb59ijdO0qKUtEElq0qhjFEyesAGqvgqIXnKJQ6W7qi9EgaIeL4SCYxfy9iJPqZNBI@vger.kernel.org, AJvYcCXN+0pSPcIHSe7MQNFVKLCdQeA8Z/0hiSDxo4E7ul73SYAPiQu9cipz0Z42Qklzf8nNWQdLRAowmOdX4No=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIEL7mXtMhHw1Q9Hkb3zLs6EQS5hE0IH2gzLy5RXY7UT36ntNa
-	8YMg0eptWL/8RsB1sJqo2k2y2VwcIarLK34qLHFwG5y0nLVzE+kdCxsY
-X-Google-Smtp-Source: AGHT+IEWUiEq0a5bX1B33Rpzfhsz7vTOsBQVWJU64wJHkE+NBxwcLgeybNC9yB973pZ9nFMHpZWjxQ==
-X-Received: by 2002:a05:6a00:3d0d:b0:71d:ee1b:c851 with SMTP id d2e1a72fcca58-72062f13bd9mr47350527b3a.7.1730744079429;
-        Mon, 04 Nov 2024 10:14:39 -0800 (PST)
+        bh=cZ1Tvv0gMz3ty3u2/2A4hNdfs43uiaMnj09QJfrx3rc=;
+        b=Xqp1rY7CxdZSOtbupRsuoeiIgvnNTMIwy5HDU//ByqSqx5vXKyEh8LYRtzS8EMjACp
+         QSYFMr25e1FCG2FGDN+scq1voTG5eX/iKcHrtmR9G0dvAhNIlfVGtnbEq1BqDXp0tMuh
+         dQgIvzMbbC2lfUiOjH8n2BeMMaIJB7fTfh+td4gnl/sLFBjIgCtnsd098k9xOeg/leXM
+         KCaHaKgu2BFpLWVQIWx9W0ITbRF4qHguGeMgacs+041qz1m0Ba96uFaT95HNbJyaXKSa
+         6v/yWgI9kLVxYw+RMozNAGXGl4a0wZ8gA9iQV7vCKma7umwDO+l8SI7F/Qye09VgWv/W
+         Rf9w==
+X-Forwarded-Encrypted: i=1; AJvYcCWSxg51pJZgGdXg8qsvsZui1yh2bv72OrKV+GwxyWOf0dIW7lILhmXYIfUfms8wDycAg/BwYbVkjrpskQk=@vger.kernel.org, AJvYcCXOvY+F5yN2S2advxvEupTKqhAHXlpgSFeQgiHXwTtiHXjl7+oAyfTScELX0iCmdMfxmXnehihTmrJUZSoYQN/O@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxa+yRlm6ofmQhJ0Ar7dcr6JsNz0qh0aTlAVZYnQbiA+mGmQyPd
+	37Mk34o5sKZ+gXTz5+/6/iXuGFvUuwWYJQuNde+4UJ6dQ5SPD2/sxwjE
+X-Google-Smtp-Source: AGHT+IF/BD2lQwztMAI1ojDceoAS38rYjiPu8o9NbmTwOVFc4a3eYhaRCVDtH5kTKDANMtgJuJRNgQ==
+X-Received: by 2002:a05:6a21:6da0:b0:1db:eb2f:e281 with SMTP id adf61e73a8af0-1dbeb2fe2aamr2308494637.26.1730744080885;
+        Mon, 04 Nov 2024 10:14:40 -0800 (PST)
 Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc1b8971sm8114424b3a.12.2024.11.04.10.14.38
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72119bca1ccsm3616749b3a.128.2024.11.04.10.14.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 10:14:38 -0800 (PST)
+        Mon, 04 Nov 2024 10:14:40 -0800 (PST)
 From: Stanislav Fomichev <sdf@fomichev.me>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -68,9 +68,9 @@ Cc: davem@davemloft.net,
 	sdf@fomichev.me,
 	willemb@google.com,
 	petrm@nvidia.com
-Subject: [PATCH net-next v7 06/12] selftests: ncdevmem: Switch to AF_INET6
-Date: Mon,  4 Nov 2024 10:14:24 -0800
-Message-ID: <20241104181430.228682-7-sdf@fomichev.me>
+Subject: [PATCH net-next v7 07/12] selftests: ncdevmem: Properly reset flow steering
+Date: Mon,  4 Nov 2024 10:14:25 -0800
+Message-ID: <20241104181430.228682-8-sdf@fomichev.me>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241104181430.228682-1-sdf@fomichev.me>
 References: <20241104181430.228682-1-sdf@fomichev.me>
@@ -82,183 +82,45 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use dualstack socket to support both v4 and v6. v4-mapped-v6 address
-can be used to do v4.
+ntuple off/on might be not enough to do it on all NICs.
+Add a bunch of shell crap to explicitly remove the rules.
 
 Reviewed-by: Mina Almasry <almasrymina@google.com>
 Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
 ---
- tools/testing/selftests/net/ncdevmem.c | 99 ++++++++++++++++++--------
- 1 file changed, 71 insertions(+), 28 deletions(-)
+ tools/testing/selftests/net/ncdevmem.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
 diff --git a/tools/testing/selftests/net/ncdevmem.c b/tools/testing/selftests/net/ncdevmem.c
-index 0feeca56c049..c4897b2bdc7c 100644
+index c4897b2bdc7c..8062d26fbce0 100644
 --- a/tools/testing/selftests/net/ncdevmem.c
 +++ b/tools/testing/selftests/net/ncdevmem.c
-@@ -242,13 +242,26 @@ static int configure_channels(unsigned int rx, unsigned int tx)
- 	return run_command("sudo ethtool -L %s rx %u tx %u", ifname, rx, tx);
- }
+@@ -217,13 +217,18 @@ void validate_buffer(void *line, size_t size)
  
--static int configure_flow_steering(void)
-+static int configure_flow_steering(struct sockaddr_in6 *server_sin)
+ static int reset_flow_steering(void)
  {
--	return run_command("sudo ethtool -N %s flow-type tcp4 %s %s dst-ip %s %s %s dst-port %s queue %d >&2",
-+	const char *type = "tcp6";
-+	const char *server_addr;
-+	char buf[256];
-+
-+	inet_ntop(AF_INET6, &server_sin->sin6_addr, buf, sizeof(buf));
-+	server_addr = buf;
-+
-+	if (IN6_IS_ADDR_V4MAPPED(&server_sin->sin6_addr)) {
-+		type = "tcp4";
-+		server_addr = strrchr(server_addr, ':') + 1;
-+	}
-+
-+	return run_command("sudo ethtool -N %s flow-type %s %s %s dst-ip %s %s %s dst-port %s queue %d >&2",
- 			   ifname,
-+			   type,
- 			   client_ip ? "src-ip" : "",
- 			   client_ip ?: "",
--			   server_ip,
-+			   server_addr,
- 			   client_ip ? "src-port" : "",
- 			   client_ip ? port : "",
- 			   port, start_queue);
-@@ -299,13 +312,53 @@ static int bind_rx_queue(unsigned int ifindex, unsigned int dmabuf_fd,
- 	return -1;
- }
- 
-+static int enable_reuseaddr(int fd)
-+{
-+	int opt = 1;
-+	int ret;
-+
-+	ret = setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &opt, sizeof(opt));
-+	if (ret)
-+		return -errno;
-+
-+	ret = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
-+	if (ret)
-+		return -errno;
-+
-+	return 0;
-+}
-+
-+static int parse_address(const char *str, int port, struct sockaddr_in6 *sin6)
-+{
-+	int ret;
-+
-+	sin6->sin6_family = AF_INET6;
-+	sin6->sin6_port = htons(port);
-+
-+	ret = inet_pton(sin6->sin6_family, str, &sin6->sin6_addr);
-+	if (ret != 1) {
-+		/* fallback to plain IPv4 */
-+		ret = inet_pton(AF_INET, str, &sin6->sin6_addr.s6_addr32[3]);
-+		if (ret != 1)
-+			return -1;
-+
-+		/* add ::ffff prefix */
-+		sin6->sin6_addr.s6_addr32[0] = 0;
-+		sin6->sin6_addr.s6_addr32[1] = 0;
-+		sin6->sin6_addr.s6_addr16[4] = 0;
-+		sin6->sin6_addr.s6_addr16[5] = 0xffff;
-+	}
-+
-+	return 0;
-+}
-+
- int do_server(struct memory_buffer *mem)
- {
- 	char ctrl_data[sizeof(int) * 20000];
- 	struct netdev_queue_id *queues;
- 	size_t non_page_aligned_frags = 0;
--	struct sockaddr_in client_addr;
--	struct sockaddr_in server_sin;
-+	struct sockaddr_in6 client_addr;
-+	struct sockaddr_in6 server_sin;
- 	size_t page_aligned_frags = 0;
- 	size_t total_received = 0;
- 	socklen_t client_addr_len;
-@@ -317,9 +370,12 @@ int do_server(struct memory_buffer *mem)
- 	int socket_fd;
- 	int client_fd;
- 	size_t i = 0;
--	int opt = 1;
- 	int ret;
- 
-+	ret = parse_address(server_ip, atoi(port), &server_sin);
-+	if (ret < 0)
-+		error(1, 0, "parse server address");
-+
- 	if (reset_flow_steering())
- 		error(1, 0, "Failed to reset flow steering\n");
- 
-@@ -328,7 +384,7 @@ int do_server(struct memory_buffer *mem)
- 		error(1, 0, "Failed to configure rss\n");
- 
- 	/* Flow steer our devmem flows to start_queue */
--	if (configure_flow_steering())
-+	if (configure_flow_steering(&server_sin))
- 		error(1, 0, "Failed to configure flow steering\n");
- 
- 	sleep(1);
-@@ -349,29 +405,16 @@ int do_server(struct memory_buffer *mem)
- 	if (!tmp_mem)
- 		error(1, ENOMEM, "malloc failed");
- 
--	server_sin.sin_family = AF_INET;
--	server_sin.sin_port = htons(atoi(port));
+-	int ret = 0;
 -
--	ret = inet_pton(server_sin.sin_family, server_ip, &server_sin.sin_addr);
--	if (ret < 0)
--		error(1, errno, "%s: [FAIL, create socket]\n", TEST_PREFIX);
--
--	socket_fd = socket(server_sin.sin_family, SOCK_STREAM, 0);
-+	socket_fd = socket(AF_INET6, SOCK_STREAM, 0);
- 	if (socket_fd < 0)
- 		error(1, errno, "%s: [FAIL, create socket]\n", TEST_PREFIX);
- 
--	ret = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEPORT, &opt,
--			 sizeof(opt));
+-	ret = run_command("sudo ethtool -K %s ntuple off >&2", ifname);
 -	if (ret)
--		error(1, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
+-		return ret;
 -
--	ret = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &opt,
--			 sizeof(opt));
-+	ret = enable_reuseaddr(socket_fd);
- 	if (ret)
--		error(1, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
-+		error(1, errno, "%s: [FAIL, reuseaddr]\n", TEST_PREFIX);
+-	return run_command("sudo ethtool -K %s ntuple on >&2", ifname);
++	/* Depending on the NIC, toggling ntuple off and on might not
++	 * be allowed. Additionally, attempting to delete existing filters
++	 * will fail if no filters are present. Therefore, do not enforce
++	 * the exit status.
++	 */
++
++	run_command("sudo ethtool -K %s ntuple off >&2", ifname);
++	run_command("sudo ethtool -K %s ntuple on >&2", ifname);
++	run_command(
++		"sudo ethtool -n %s | grep 'Filter:' | awk '{print $2}' | xargs -n1 ethtool -N %s delete >&2",
++		ifname, ifname);
++	return 0;
+ }
  
- 	fprintf(stderr, "binding to address %s:%d\n", server_ip,
--		ntohs(server_sin.sin_port));
-+		ntohs(server_sin.sin6_port));
- 
- 	ret = bind(socket_fd, &server_sin, sizeof(server_sin));
- 	if (ret)
-@@ -383,16 +426,16 @@ int do_server(struct memory_buffer *mem)
- 
- 	client_addr_len = sizeof(client_addr);
- 
--	inet_ntop(server_sin.sin_family, &server_sin.sin_addr, buffer,
-+	inet_ntop(AF_INET6, &server_sin.sin6_addr, buffer,
- 		  sizeof(buffer));
- 	fprintf(stderr, "Waiting or connection on %s:%d\n", buffer,
--		ntohs(server_sin.sin_port));
-+		ntohs(server_sin.sin6_port));
- 	client_fd = accept(socket_fd, &client_addr, &client_addr_len);
- 
--	inet_ntop(client_addr.sin_family, &client_addr.sin_addr, buffer,
-+	inet_ntop(AF_INET6, &client_addr.sin6_addr, buffer,
- 		  sizeof(buffer));
- 	fprintf(stderr, "Got connection from %s:%d\n", buffer,
--		ntohs(client_addr.sin_port));
-+		ntohs(client_addr.sin6_port));
- 
- 	while (1) {
- 		struct iovec iov = { .iov_base = iobuf,
+ static int configure_headersplit(bool on)
 -- 
 2.47.0
 
