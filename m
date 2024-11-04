@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-21395-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21396-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DB309BBD08
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 19:15:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C92B9BBD0A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 19:15:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9BA8AB22532
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 18:15:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00455282E96
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 18:15:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1F9D1CCEE2;
-	Mon,  4 Nov 2024 18:14:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3D941CEAD3;
+	Mon,  4 Nov 2024 18:14:37 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 164491CBE85;
-	Mon,  4 Nov 2024 18:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 545AF1CB9E5;
+	Mon,  4 Nov 2024 18:14:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730744076; cv=none; b=m7tXmZoOuMLJ9gnnXlVbe82pVGJ89NNb84rVH4H//zyncfda6pYi75qf0087P4CDi8F2sCnNJ4nV06xx7jervzCDxQKozZXG53j6KuZnwgKvz+j3uYXFHVS50h5Y2u5vLUNJsuXE5SKKPcV6oEdeHiZjJ7i+6YeG98LquRjH5CY=
+	t=1730744077; cv=none; b=EtKPM12E3O6BXXY3afJb2wju0WEWIf9CwSwZtnclubNep9kzt+GfEpTu73769uM/WL6df+E6USJF/v1rPcQhve5DQuJd22QQifpzdVMgLPsJDTMTbKFwYzrE7uuulOYUrzq7G6bMYe31MbQUnQP2YLbih+v5mSj0uZMQcXvS7+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730744076; c=relaxed/simple;
-	bh=6SOqd5ang15aObvyf3Fy0XcXsj2Q7Cf1mPOUGeSoWSo=;
+	s=arc-20240116; t=1730744077; c=relaxed/simple;
+	bh=OUr7UbIXtV5F/r5JGVxieSj3s2Uf+l56sMqWfLXByW4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XWfIe+UXWFThxXFMaggjr6PEJFQiHiFwXx6LHbmjayy1lb2K7VHnjiZgqGAOaAbL2fL5WGp+LBNpBLLwdIpgS7giAJ9FlSuUdhAXF8LYYuay6KZsPdce/lsObING7npn4MztWukSTKluSbLDo7vzL93MyczEss0o5fZBL81Eno8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.172
+	 MIME-Version; b=OxQPRnvIctyLqRsiOrY4PNUq1UTYgAJdqzZ1ABu+bIJrV+Yb1Vv458YKKotMJK8RB4HGAOiUotqaIZnSkvB0TSJ63Ki9bF9j1guzTuTvqr0xqoouQk50/iLeOCQMZX1eNmJhTlWF8pYtN+7tENrPJ6H/bVqa23C7jkzQrI1izQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-71e4c2e36daso3558785b3a.0;
-        Mon, 04 Nov 2024 10:14:34 -0800 (PST)
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-7ee4c57b037so2810708a12.0;
+        Mon, 04 Nov 2024 10:14:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730744074; x=1731348874;
+        d=1e100.net; s=20230601; t=1730744075; x=1731348875;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bEuQvf/RcvTcHpPd2XswcRl8oLleAdL4B8h7BSvpz40=;
-        b=kQVKAzIJH61obXCr58F9OwL1KK3MVn38WZyFxKm2imS7PVCrks/eeA0QAQaIpudLjr
-         vjuwr6qvhaSc4KJZIyfXn+ClG9WbHLl9GBy7B0G0pCt+pYhiFGd7lcuZBW4mpHP7Ifbz
-         a78LgCmVTmlIC/8YfePf0mWK6p59ZN5xtO5riVcx1nrLTptIt4PtlUqCEMqN8iWjU8M4
-         s6NRj2swYLnTZ4pajkfeXfAa7KKd73qF2Rbayj5E+vNRtRK44XCpO0eDGbjlW92VriHP
-         f0kgFJhXSzVUUnpA73mUwYMid+ryXxdbnGMcKyPCCwENB0u9Bdb3SV+yKEQRpMfDFwov
-         R0Bg==
-X-Forwarded-Encrypted: i=1; AJvYcCVajtTQrEO7ojQZaItBJsInNVBYPMlzFtOPEedJW5FIr+fWw5sYxto/eDpThEeMchQfzt/yTpwhhXmuBTCxEikl@vger.kernel.org, AJvYcCWP3arIo7SMPt6UIppn7ru6ci8rQjVJb6wRUdL2OechHOu3m7i+9DmyETnIHn82jDQ0Lx1gGyRQf2HrPQU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwaU6TnvePgTnwWXK5yUQZ4IzUzHSZeQid1k3H99ubfw0Eahgo
-	tXiLbNV7tC17EZ+MDCMb4YOuPOeJcZFmI7W8hWwFs18p77y5y39f5O4K
-X-Google-Smtp-Source: AGHT+IHP6dvpRcTiJ1qceYF8Zp3nQjzSdcK2hZf1cCWt/rmdikgNkwIH2BHFMeCoFxDSiGwxvTeBnw==
-X-Received: by 2002:a05:6a00:2290:b0:71e:66e6:ca17 with SMTP id d2e1a72fcca58-720c97f35c3mr24918411b3a.9.1730744073957;
-        Mon, 04 Nov 2024 10:14:33 -0800 (PST)
+        bh=/3/Gw3ir+FV9hqmx4cbabiMNpLz/qP2wnn0S+2scwDo=;
+        b=Ol3yuFv8GSeN/J8BwDh4oVSktpFhbfr99VBrjUnCzhfaNaPmC46qHqvlkzD1fde9Yl
+         VnsI8XfkymcZXSrdk9r4oT5vyMT4AIsYPqOXeerpKAOpfZF731kSrnlmrk3puzkbsBZ5
+         fL4lRkb6w9cA0qotDepYgdMmbIEmD/PhEdfAJnPPrIdB7/vMgdNIIPJqqhZi4SeXhzXo
+         CDQSTOBBazl5zgvIMm/mjEjYmlPz47P/F0kSu+yof8tn6U4pV8eQUtb/CygoMgjZhh7E
+         sX4KDaO5v+G2fkiJT/+NmxLQia29+pUeu1cbHCdjj5w01T4mExB9vakuWu8algat734g
+         swpA==
+X-Forwarded-Encrypted: i=1; AJvYcCUOhLIsUBw8+9EhdwTn0946m5HJ+doe7DQRzGnVGO8HEDGqTSUusamKjbOm4NCg+6+LXcD5md2jXZ6wTik=@vger.kernel.org, AJvYcCXSPfxyXY9Yo6zu2UN0MrA4MW3U3FwwNxLyDJdFlr+IBS6MIAhyZaWz4x1AwjrDhms+keILX/PHMpZI7LuZx2yr@vger.kernel.org
+X-Gm-Message-State: AOJu0YypgwJWKOIbVArzeYrcTeIRtlC7WA/0rNkOQ+xGPwb7rKw1TbgT
+	+3d/gtqcsIj1BYjMwhLYWy3AuGAO3/UPLxZZD6Wr4cwmVKb0gDzxeTuS
+X-Google-Smtp-Source: AGHT+IFKz78OOOgmoJsZEYNL1ytho71uwEre0CcD7w+r/UaD7HBnhbqlYYmFZapW71b1taVJc4Lp7g==
+X-Received: by 2002:a05:6a20:8403:b0:1db:eb76:578d with SMTP id adf61e73a8af0-1dbeb765792mr1955530637.36.1730744075395;
+        Mon, 04 Nov 2024 10:14:35 -0800 (PST)
 Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc1b8cb9sm8127825b3a.11.2024.11.04.10.14.33
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720c6a39a53sm7354819b3a.178.2024.11.04.10.14.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 10:14:33 -0800 (PST)
+        Mon, 04 Nov 2024 10:14:34 -0800 (PST)
 From: Stanislav Fomichev <sdf@fomichev.me>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -68,9 +68,9 @@ Cc: davem@davemloft.net,
 	sdf@fomichev.me,
 	willemb@google.com,
 	petrm@nvidia.com
-Subject: [PATCH net-next v7 02/12] selftests: ncdevmem: Separate out dmabuf provider
-Date: Mon,  4 Nov 2024 10:14:20 -0800
-Message-ID: <20241104181430.228682-3-sdf@fomichev.me>
+Subject: [PATCH net-next v7 03/12] selftests: ncdevmem: Unify error handling
+Date: Mon,  4 Nov 2024 10:14:21 -0800
+Message-ID: <20241104181430.228682-4-sdf@fomichev.me>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241104181430.228682-1-sdf@fomichev.me>
 References: <20241104181430.228682-1-sdf@fomichev.me>
@@ -82,340 +82,61 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-So we can plug the other ones in the future if needed.
+There is a bunch of places where error() calls look out of place.
+Use the same error(1, errno, ...) pattern everywhere.
 
 Reviewed-by: Mina Almasry <almasrymina@google.com>
 Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
 ---
- tools/testing/selftests/net/ncdevmem.c | 203 +++++++++++++++----------
- 1 file changed, 119 insertions(+), 84 deletions(-)
+ tools/testing/selftests/net/ncdevmem.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/tools/testing/selftests/net/ncdevmem.c b/tools/testing/selftests/net/ncdevmem.c
-index 9245d3f158dd..3e7ef2eedd60 100644
+index 3e7ef2eedd60..4733d1a0aab5 100644
 --- a/tools/testing/selftests/net/ncdevmem.c
 +++ b/tools/testing/selftests/net/ncdevmem.c
-@@ -71,17 +71,101 @@ static char *ifname = "eth1";
- static unsigned int ifindex;
- static unsigned int dmabuf_id;
- 
--void print_bytes(void *ptr, size_t size)
-+struct memory_buffer {
-+	int fd;
-+	size_t size;
-+
-+	int devfd;
-+	int memfd;
-+	char *buf_mem;
-+};
-+
-+struct memory_provider {
-+	struct memory_buffer *(*alloc)(size_t size);
-+	void (*free)(struct memory_buffer *ctx);
-+	void (*memcpy_from_device)(void *dst, struct memory_buffer *src,
-+				   size_t off, int n);
-+};
-+
-+static struct memory_buffer *udmabuf_alloc(size_t size)
- {
--	unsigned char *p = ptr;
--	int i;
-+	struct udmabuf_create create;
-+	struct memory_buffer *ctx;
-+	int ret;
- 
--	for (i = 0; i < size; i++)
--		printf("%02hhX ", p[i]);
--	printf("\n");
-+	ctx = malloc(sizeof(*ctx));
-+	if (!ctx)
-+		error(1, ENOMEM, "malloc failed");
-+
-+	ctx->size = size;
-+
-+	ctx->devfd = open("/dev/udmabuf", O_RDWR);
-+	if (ctx->devfd < 0)
-+		error(1, errno,
-+		      "%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
-+		      TEST_PREFIX);
-+
-+	ctx->memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
-+	if (ctx->memfd < 0)
-+		error(1, errno, "%s: [skip,no-memfd]\n", TEST_PREFIX);
-+
-+	ret = fcntl(ctx->memfd, F_ADD_SEALS, F_SEAL_SHRINK);
-+	if (ret < 0)
-+		error(1, errno, "%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
-+
-+	ret = ftruncate(ctx->memfd, size);
-+	if (ret == -1)
-+		error(1, errno, "%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
-+
-+	memset(&create, 0, sizeof(create));
-+
-+	create.memfd = ctx->memfd;
-+	create.offset = 0;
-+	create.size = size;
-+	ctx->fd = ioctl(ctx->devfd, UDMABUF_CREATE, &create);
-+	if (ctx->fd < 0)
-+		error(1, errno, "%s: [FAIL, create udmabuf]\n", TEST_PREFIX);
-+
-+	ctx->buf_mem = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED,
-+			    ctx->fd, 0);
-+	if (ctx->buf_mem == MAP_FAILED)
-+		error(1, errno, "%s: [FAIL, map udmabuf]\n", TEST_PREFIX);
-+
-+	return ctx;
-+}
-+
-+static void udmabuf_free(struct memory_buffer *ctx)
-+{
-+	munmap(ctx->buf_mem, ctx->size);
-+	close(ctx->fd);
-+	close(ctx->memfd);
-+	close(ctx->devfd);
-+	free(ctx);
- }
- 
--void print_nonzero_bytes(void *ptr, size_t size)
-+static void udmabuf_memcpy_from_device(void *dst, struct memory_buffer *src,
-+				       size_t off, int n)
-+{
-+	struct dma_buf_sync sync = {};
-+
-+	sync.flags = DMA_BUF_SYNC_START;
-+	ioctl(src->fd, DMA_BUF_IOCTL_SYNC, &sync);
-+
-+	memcpy(dst, src->buf_mem + off, n);
-+
-+	sync.flags = DMA_BUF_SYNC_END;
-+	ioctl(src->fd, DMA_BUF_IOCTL_SYNC, &sync);
-+}
-+
-+static struct memory_provider udmabuf_memory_provider = {
-+	.alloc = udmabuf_alloc,
-+	.free = udmabuf_free,
-+	.memcpy_from_device = udmabuf_memcpy_from_device,
-+};
-+
-+static struct memory_provider *provider = &udmabuf_memory_provider;
-+
-+static void print_nonzero_bytes(void *ptr, size_t size)
- {
- 	unsigned char *p = ptr;
- 	unsigned int i;
-@@ -201,42 +285,7 @@ static int bind_rx_queue(unsigned int ifindex, unsigned int dmabuf_fd,
- 	return -1;
- }
- 
--static void create_udmabuf(int *devfd, int *memfd, int *buf, size_t dmabuf_size)
--{
--	struct udmabuf_create create;
--	int ret;
--
--	*devfd = open("/dev/udmabuf", O_RDWR);
--	if (*devfd < 0) {
--		error(70, 0,
--		      "%s: [skip,no-udmabuf: Unable to access DMA buffer device file]\n",
--		      TEST_PREFIX);
--	}
--
--	*memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
--	if (*memfd < 0)
--		error(70, 0, "%s: [skip,no-memfd]\n", TEST_PREFIX);
--
--	/* Required for udmabuf */
--	ret = fcntl(*memfd, F_ADD_SEALS, F_SEAL_SHRINK);
--	if (ret < 0)
--		error(73, 0, "%s: [skip,fcntl-add-seals]\n", TEST_PREFIX);
--
--	ret = ftruncate(*memfd, dmabuf_size);
--	if (ret == -1)
--		error(74, 0, "%s: [FAIL,memfd-truncate]\n", TEST_PREFIX);
--
--	memset(&create, 0, sizeof(create));
--
--	create.memfd = *memfd;
--	create.offset = 0;
--	create.size = dmabuf_size;
--	*buf = ioctl(*devfd, UDMABUF_CREATE, &create);
--	if (*buf < 0)
--		error(75, 0, "%s: [FAIL, create udmabuf]\n", TEST_PREFIX);
--}
--
--int do_server(void)
-+int do_server(struct memory_buffer *mem)
- {
- 	char ctrl_data[sizeof(int) * 20000];
- 	struct netdev_queue_id *queues;
-@@ -244,23 +293,18 @@ int do_server(void)
- 	struct sockaddr_in client_addr;
- 	struct sockaddr_in server_sin;
- 	size_t page_aligned_frags = 0;
--	int devfd, memfd, buf, ret;
- 	size_t total_received = 0;
- 	socklen_t client_addr_len;
- 	bool is_devmem = false;
--	char *buf_mem = NULL;
-+	char *tmp_mem = NULL;
- 	struct ynl_sock *ys;
--	size_t dmabuf_size;
- 	char iobuf[819200];
- 	char buffer[256];
- 	int socket_fd;
- 	int client_fd;
- 	size_t i = 0;
- 	int opt = 1;
--
--	dmabuf_size = getpagesize() * NUM_PAGES;
--
--	create_udmabuf(&devfd, &memfd, &buf, dmabuf_size);
-+	int ret;
- 
- 	if (reset_flow_steering())
- 		error(1, 0, "Failed to reset flow steering\n");
-@@ -284,13 +328,12 @@ int do_server(void)
- 		queues[i].id = start_queue + i;
- 	}
- 
--	if (bind_rx_queue(ifindex, buf, queues, num_queues, &ys))
-+	if (bind_rx_queue(ifindex, mem->fd, queues, num_queues, &ys))
- 		error(1, 0, "Failed to bind\n");
- 
--	buf_mem = mmap(NULL, dmabuf_size, PROT_READ | PROT_WRITE, MAP_SHARED,
--		       buf, 0);
--	if (buf_mem == MAP_FAILED)
--		error(1, 0, "mmap()");
-+	tmp_mem = malloc(mem->size);
-+	if (!tmp_mem)
-+		error(1, ENOMEM, "malloc failed");
- 
- 	server_sin.sin_family = AF_INET;
+@@ -339,33 +339,33 @@ int do_server(struct memory_buffer *mem)
  	server_sin.sin_port = htons(atoi(port));
-@@ -341,7 +384,6 @@ int do_server(void)
- 		struct iovec iov = { .iov_base = iobuf,
- 				     .iov_len = sizeof(iobuf) };
- 		struct dmabuf_cmsg *dmabuf_cmsg = NULL;
--		struct dma_buf_sync sync = { 0 };
- 		struct cmsghdr *cm = NULL;
- 		struct msghdr msg = { 0 };
- 		struct dmabuf_token token;
-@@ -410,22 +452,16 @@ int do_server(void)
- 			else
- 				page_aligned_frags++;
  
--			sync.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_START;
--			ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
-+			provider->memcpy_from_device(tmp_mem, mem,
-+						     dmabuf_cmsg->frag_offset,
-+						     dmabuf_cmsg->frag_size);
+ 	ret = inet_pton(server_sin.sin_family, server_ip, &server_sin.sin_addr);
+-	if (socket < 0)
+-		error(79, 0, "%s: [FAIL, create socket]\n", TEST_PREFIX);
++	if (ret < 0)
++		error(1, errno, "%s: [FAIL, create socket]\n", TEST_PREFIX);
  
- 			if (do_validation)
--				validate_buffer(
--					((unsigned char *)buf_mem) +
--						dmabuf_cmsg->frag_offset,
--					dmabuf_cmsg->frag_size);
-+				validate_buffer(tmp_mem,
-+						dmabuf_cmsg->frag_size);
- 			else
--				print_nonzero_bytes(
--					((unsigned char *)buf_mem) +
--						dmabuf_cmsg->frag_offset,
--					dmabuf_cmsg->frag_size);
--
--			sync.flags = DMA_BUF_SYNC_READ | DMA_BUF_SYNC_END;
--			ioctl(buf, DMA_BUF_IOCTL_SYNC, &sync);
-+				print_nonzero_bytes(tmp_mem,
-+						    dmabuf_cmsg->frag_size);
+ 	socket_fd = socket(server_sin.sin_family, SOCK_STREAM, 0);
+-	if (socket < 0)
+-		error(errno, errno, "%s: [FAIL, create socket]\n", TEST_PREFIX);
++	if (socket_fd < 0)
++		error(1, errno, "%s: [FAIL, create socket]\n", TEST_PREFIX);
  
- 			ret = setsockopt(client_fd, SOL_SOCKET,
- 					 SO_DEVMEM_DONTNEED, &token,
-@@ -450,12 +486,9 @@ int do_server(void)
+ 	ret = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEPORT, &opt,
+ 			 sizeof(opt));
+ 	if (ret)
+-		error(errno, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
++		error(1, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
  
- cleanup:
+ 	ret = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &opt,
+ 			 sizeof(opt));
+ 	if (ret)
+-		error(errno, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
++		error(1, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
  
--	munmap(buf_mem, dmabuf_size);
-+	free(tmp_mem);
- 	close(client_fd);
- 	close(socket_fd);
--	close(buf);
--	close(memfd);
--	close(devfd);
- 	ynl_sock_destroy(ys);
+ 	fprintf(stderr, "binding to address %s:%d\n", server_ip,
+ 		ntohs(server_sin.sin_port));
  
- 	return 0;
-@@ -464,14 +497,11 @@ int do_server(void)
- void run_devmem_tests(void)
- {
- 	struct netdev_queue_id *queues;
--	int devfd, memfd, buf;
-+	struct memory_buffer *mem;
- 	struct ynl_sock *ys;
--	size_t dmabuf_size;
- 	size_t i = 0;
+ 	ret = bind(socket_fd, &server_sin, sizeof(server_sin));
+ 	if (ret)
+-		error(errno, errno, "%s: [FAIL, bind]\n", TEST_PREFIX);
++		error(1, errno, "%s: [FAIL, bind]\n", TEST_PREFIX);
  
--	dmabuf_size = getpagesize() * NUM_PAGES;
--
--	create_udmabuf(&devfd, &memfd, &buf, dmabuf_size);
-+	mem = provider->alloc(getpagesize() * NUM_PAGES);
+ 	ret = listen(socket_fd, 1);
+ 	if (ret)
+-		error(errno, errno, "%s: [FAIL, listen]\n", TEST_PREFIX);
++		error(1, errno, "%s: [FAIL, listen]\n", TEST_PREFIX);
  
- 	/* Configure RSS to divert all traffic from our devmem queues */
- 	if (configure_rss())
-@@ -482,7 +512,7 @@ void run_devmem_tests(void)
- 	if (configure_headersplit(1))
- 		error(1, 0, "Failed to configure header split\n");
+ 	client_addr_len = sizeof(client_addr);
  
--	if (!bind_rx_queue(ifindex, buf, queues, num_queues, &ys))
-+	if (!bind_rx_queue(ifindex, mem->fd, queues, num_queues, &ys))
- 		error(1, 0, "Binding empty queues array should have failed\n");
- 
- 	for (i = 0; i < num_queues; i++) {
-@@ -495,7 +525,7 @@ void run_devmem_tests(void)
- 	if (configure_headersplit(0))
- 		error(1, 0, "Failed to configure header split\n");
- 
--	if (!bind_rx_queue(ifindex, buf, queues, num_queues, &ys))
-+	if (!bind_rx_queue(ifindex, mem->fd, queues, num_queues, &ys))
- 		error(1, 0, "Configure dmabuf with header split off should have failed\n");
- 
- 	if (configure_headersplit(1))
-@@ -508,7 +538,7 @@ void run_devmem_tests(void)
- 		queues[i].id = start_queue + i;
- 	}
- 
--	if (bind_rx_queue(ifindex, buf, queues, num_queues, &ys))
-+	if (bind_rx_queue(ifindex, mem->fd, queues, num_queues, &ys))
- 		error(1, 0, "Failed to bind\n");
- 
- 	/* Deactivating a bound queue should not be legal */
-@@ -517,11 +547,15 @@ void run_devmem_tests(void)
- 
- 	/* Closing the netlink socket does an implicit unbind */
- 	ynl_sock_destroy(ys);
-+
-+	provider->free(mem);
- }
- 
- int main(int argc, char *argv[])
- {
-+	struct memory_buffer *mem;
- 	int is_server = 0, opt;
-+	int ret;
- 
- 	while ((opt = getopt(argc, argv, "ls:c:p:v:q:t:f:")) != -1) {
- 		switch (opt) {
-@@ -562,8 +596,9 @@ int main(int argc, char *argv[])
- 
- 	run_devmem_tests();
- 
--	if (is_server)
--		return do_server();
-+	mem = provider->alloc(getpagesize() * NUM_PAGES);
-+	ret = is_server ? do_server(mem) : 1;
-+	provider->free(mem);
- 
--	return 0;
-+	return ret;
- }
 -- 
 2.47.0
 
