@@ -1,224 +1,377 @@
-Return-Path: <linux-kselftest+bounces-21392-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21391-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66D1F9BBCE0
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 19:09:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34A379BBC3D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 18:44:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A7861C21E62
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 18:09:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E785B28236D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 17:44:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 122001C9EB8;
-	Mon,  4 Nov 2024 18:09:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A0091C7299;
+	Mon,  4 Nov 2024 17:44:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Vr2XwHJ5"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RUIb+xha"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from fhigh-b4-smtp.messagingengine.com (fhigh-b4-smtp.messagingengine.com [202.12.124.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48B82224F0;
-	Mon,  4 Nov 2024 18:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A7B41C4A1F;
+	Mon,  4 Nov 2024 17:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730743772; cv=none; b=sV8hcmy5E6QSXEuS+sx9/ah6m0OYTBvHI55xUpLi5b1DaMujpGD2x3tP7E4/ON12XEPcdj9PsNWfj8cDp1UNibXmRcdrY43n6Hp6upLs6eQRCZ6cgM1qdpGvqby1whdXBDIfFQVQ/hLTrH7evYsuNAY2AQxQB7Ch2PT8n1apVj0=
+	t=1730742277; cv=none; b=omWsK9DlcDN/xeomnJKuIDH5qlENAA6E598K7J06mu1oWkX3XRxQQealXC6AXHapxLoujNyBto1/B65QJRuS99FOS6DeTSQB5q76o6MgRScez/PQGhlHCzue1LUcAV7Y5eGXdm6GaFxBygb++svVCvxHSn8uHbZ847/5q41tdV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730743772; c=relaxed/simple;
-	bh=s9H92zsAkMOcwJ+GffO4YFN2D7ey7rDZ6UDXCRDq4gc=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=df2UuEapeqqfnrJp6tqJRJtIC5sZRE0JSbaNfEGa24I55/VdTW6syr6P1atdxA8m3c3bvEIdSvCtz3SDpRluiPZxszcl7BZBiuqa9NAdXFwqAmiYVmSHH6slpe0ekMdEXHGx967xTI2/M7ylgttu3ExX+h0EVixB6nlgmHF3Zzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Vr2XwHJ5; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A4Hc53b028263;
-	Mon, 4 Nov 2024 18:08:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=w468gW
-	nUBKcn6hvtsmUCHLK0zLOaHwww1ug2caMPJVE=; b=Vr2XwHJ51SOgi3qkNLCQeM
-	009uYlpkYpIMofj19L3JM4V8HLxyIGiMazvXDTRcP00ka4gH1ZmCevoeRJdYlCl2
-	/CegRbEpKH1+AvPbsgB1LWwB0Olsct3do8s6GI/Hsuvwhv4JN59Uq/ih0Xf2080H
-	7lVAO5OYyxpqzOiQvBu0AmP/hs1vPVrbebnqegVJb4tDa3ncMP3ScQbSW0xDWBiv
-	WswWpsUHZwITk8HTAqV+Yp6c6IsE+ae3g4HI5t0FybhwpdcBpTiL6z8AWHtpkG9W
-	kZt2qcXjC3OIofbKe8LLA1KU8QkpR1bIOlKVMtjwIbfl62sFfvCS091wYjeYabdA
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42q2uer77v-13
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 Nov 2024 18:08:45 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4A4GNdLB024235;
-	Mon, 4 Nov 2024 17:36:29 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 42nxsxyhgq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 Nov 2024 17:36:29 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4A4HaRgQ20775284
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 4 Nov 2024 17:36:27 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5920F20043;
-	Mon,  4 Nov 2024 17:36:27 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CCA9520040;
-	Mon,  4 Nov 2024 17:36:24 +0000 (GMT)
-Received: from [9.43.42.65] (unknown [9.43.42.65])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  4 Nov 2024 17:36:24 +0000 (GMT)
-Message-ID: <f7e8243a-a4c8-44ce-ad03-7d232df461ed@linux.ibm.com>
-Date: Mon, 4 Nov 2024 23:06:23 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/ftrace: update kprobe syntax error test for
- ppc64le
-To: Segher Boessenkool <segher@kernel.crashing.org>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu
- <mhiramat@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        "Naveen N. Rao"
- <naveen@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-References: <20241101191925.1550493-1-hbathini@linux.ibm.com>
- <20241101205948.GW29862@gate.crashing.org>
- <1916cb5c-cb3d-427c-bcf0-2c1b905fd6d1@linux.ibm.com>
- <20241104094431.GY29862@gate.crashing.org>
- <245fed6f-5fb4-4925-ba0a-fb2f32e650d0@linux.ibm.com>
- <20241104103615.GZ29862@gate.crashing.org>
-Content-Language: en-US
-From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <20241104103615.GZ29862@gate.crashing.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: lq2A1vmdafXCqy7dc8Y1uUEaoTXCzInZ
-X-Proofpoint-ORIG-GUID: lq2A1vmdafXCqy7dc8Y1uUEaoTXCzInZ
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	s=arc-20240116; t=1730742277; c=relaxed/simple;
+	bh=nFwMZD35ZHDGSw9Mot+P8ViMcWQB0vVKQKFml7+83Ds=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JL4V8eUPaXc4y3PAvf6+UzMExOC6D5wuUkbuTYs6pECKfkvqJ6KhVG8GpU2zMIL+hMx7mCG2YI+xpyua37JKB8wI+8md5R6v+JJ/hEg22IdIJc/CiNaI+FcBmCeLcIxtl2EmNdKuZsmC6xXjTkb7B+kdn2+ICiWXMsPl57TqDVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=idosch.org; spf=none smtp.mailfrom=idosch.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RUIb+xha; arc=none smtp.client-ip=202.12.124.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=idosch.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=idosch.org
+Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id C2DEB2540161;
+	Mon,  4 Nov 2024 12:44:33 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-08.internal (MEProxy); Mon, 04 Nov 2024 12:44:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1730742273; x=1730828673; bh=h3Em+6aJA42FMwSayWFURujGkOQLVd60YfO
+	be9BVCvA=; b=RUIb+xha10s50uVsKiOeLqFSKrt+87FvSLBcAg7VUQoyDm7bzSq
+	IoFHsnkQQdRPsvMCETgPVG3NR4AuCcs6Q1CJCxDMDF3VR8T+mA7g9UnIhpSQZcEA
+	0JB99tpPb2k7uYweoTcX+3Kjr99K7wwq7nGtIsidezG5XuHwIq9Ihbqhvh2l2Sxp
+	UPM6MdV0lT5irP3acOCBYOug4mMiedhtjyZ5+VFkHTWy8gdOnKew4y58emiKKr2i
+	BaES2nCCVsRyFDxM4Bx5nqqA781PG8O+HlhIWGfjQ/jPsBgpljchWbUej8C2FtnV
+	49yWUt5ZyaTc1O4GBNKW8Ayd7w4rQu0+uOA==
+X-ME-Sender: <xms:_wcpZ82s-AxX0GLL7YpbL8BYd106acs15kj975e_ib7e680stdoYhA>
+    <xme:_wcpZ3HdE0zNrDI0FuxdaJhcyMjWVinoDu9_UEvdkSwEwsxonv6q_oI5p3lsMbLlU
+    iZmabnF9-dLQ1E>
+X-ME-Received: <xmr:_wcpZ04n9VbXH2q7EJ1cfu6zxH6fGEXv-ymQk5tKgbc_D4V919IQhqvpmwrH>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdeliedguddtvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecunecujfgurhepfffhvf
+    evuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcuufgthhhimhhmvghl
+    uceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvghrnhephefhtd
+    ejvdeiffefudduvdffgeetieeigeeugfduffdvffdtfeehieejtdfhjeeknecuffhomhgr
+    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehiughoshgthhesihguohhstghhrdhorhhgpdhnsggprhgtphht
+    thhopeduuddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepuggvlhhirhgrnhesvh
+    gvrhguihgtthdrghhgpdhrtghpthhtohepghhnrghulhhtsehrvgguhhgrthdrtghomhdp
+    rhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtth
+    hopegushgrhhgvrhhnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghvvghmsegu
+    rghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvg
+    drtghomhdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgv
+    rhhnvghlrdhorhhgpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtph
+    htthhopehprggsvghnihesrhgvughhrghtrdgtohhm
+X-ME-Proxy: <xmx:_wcpZ108fWxhO70h8joEaO_vvoWUg-jKUa1aa4bLvxu22j3PX-qRjg>
+    <xmx:AAgpZ_EFjj0u-aF7Bz7E3KihJMPezGOMdKkRwcqHilMjKghihySRWQ>
+    <xmx:AAgpZ--p4cfu6ntE0jjOZhOc4aj4OfQvoobNeClTNLLA3h8YpBxUKQ>
+    <xmx:AAgpZ0mmszZk2beHDEwMJOiZBzPgWBSgL7ulkMRUD5yfrNv-6OXAbQ>
+    <xmx:AQgpZ3_2tV5pbhOUEh0bkw5PMro6-0VY0D4WtLVTN3CX-XPY1eV9Xa1H>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 4 Nov 2024 12:44:31 -0500 (EST)
+Date: Mon, 4 Nov 2024 19:44:29 +0200
+From: Ido Schimmel <idosch@idosch.org>
+To: Vladimir Vdovin <deliran@verdict.gg>, gnault@redhat.com
+Cc: netdev@vger.kernel.org, dsahern@kernel.org, davem@davemloft.net,
+	edumazet@google.com, linux-kselftest@vger.kernel.org,
+	kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
+	horms@kernel.org
+Subject: Re: [PATCH net-next v7] net: ipv4: Cache pmtu for all packet paths
+ if multipath enabled
+Message-ID: <ZykH_fdcMBdFgXix@shredder>
+References: <20241104072753.77042-1-deliran@verdict.gg>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 clxscore=1015 adultscore=0 mlxscore=0 phishscore=0
- impostorscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411040149
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241104072753.77042-1-deliran@verdict.gg>
 
-Hi Segher,
++ Guillaume:
+please see comment below about route_get_dst_pmtu_from_exception())
+Original patch:
+https://lore.kernel.org/netdev/20241104072753.77042-1-deliran@verdict.gg/
 
-On 04/11/24 4:06 pm, Segher Boessenkool wrote:
-> Hi!
-> 
-> On Mon, Nov 04, 2024 at 03:40:26PM +0530, Hari Bathini wrote:
->> On 04/11/24 3:14 pm, Segher Boessenkool wrote:
->>> On Mon, Nov 04, 2024 at 02:51:57PM +0530, Hari Bathini wrote:
->>>> On 02/11/24 2:29 am, Segher Boessenkool wrote:
->>>>> On Sat, Nov 02, 2024 at 12:49:25AM +0530, Hari Bathini wrote:
->>>>>> For ppc64le, depending on the kernel configuration used, offset 16
->>>>> >from function start address can also be considered function entry.
->>>>>> Update the test case to accommodate such configurations.
->>>>>
->>>>> (This is true for all ELfv2, not just LE.  For the kernel that is about
->>>>> the same).
->>>>>
->>>>> The LEP and GEP can differ by zero, one, two, four, eight, or sixteen
->>>>> insns (where an insn is four bytes).  Four insns is common, yes, but
->>>>> maybe you can support all?  See the function symbol's st_other field
->>>>> to see what the offset is:
->>>>> 0, 1: zero insns, zero bytes
->>>>> N = 2..6: 1 << (N-2) insns, i.e. 1<<N bytes
->>>>> 7: reserved
->>>>>
->>>>> (This is the top 3 bits of st_other, the other bits have other meanings).
->>>>>
->>>>> Four insns is common, yes, but by no means the only possibility.
->>>>
->>>> Hi Segher,
->>>>
->>>> Querying for function arguments is supported on kprobes only at function
->>>> entry. This is a negative test case where the offset is intentionally
->>>> set beyond function entry while querying for function arguments.
->>>> I guess, simply setting the offset to 20 (vfs_read is anyway
->>>> going to be beyond 5 instructions) instead of 8 for powerpc would
->>>> make all platforms and ABI variants happy?
->>>
->>> I have no idea.  What is this "offset" anyway?
->>
->> offset (in bytes) from function start address..
-> 
-> But what is there?
-> 
->>> This is just the ELFv2 ABI.  No platform can make up its own thing at
->>> all (well, none decided to be gratuitously incompatible, so far).  And
->>> there are no "ABI variants"!
->>
->> The test case applies for ABIv1 & ABIv2. All ppc32 & ppc64 platforms..
-> 
-> Hrm.  So you allow essentially random entry points on other ABIs to
-> work?
-> 
->>> You're just making assumptions here that are based on nothing else but
->>> observations of what is done most of the time.  That might work for a
->>> while -- maybe a long while even! -- but it can easily break down.
->>
->> Hmmm.. I understand that you want the test case to read st_other field
->> but would you rather suggest an offset of 64?
-> 
-> I have no idea what "offset" means here.
-> 
->> Is a GEP of 8/16 instructions going to be true anytime soon or is it
->> true already for some cases? The reason I ask that is some kprobe/ftrace
->> code in the kernel might need a bit of re-look if that is the case.
-> 
-> An entry point has no instructions at all.  Oh, you mean the code at
-> the GEP.
-> 
-> The LEP can already be all the allowed distances after the GEP.  And
-> the .localentry GAS directive already supports all those distances
-> always.  Not a lot of code written in assembler does use that, and
-> certainly GCC does not use a lot of the freedom it has here, but it
-> could (and so could assembler programmers).  Typically people will want
-> to make the code here as short as possible, and there are restrictions
-> on what is *allowed* to be done here anyway (ld, the link editor, can
-> change this code after all!), so it is not too likely you will ever see
-> big code at the GEP often, but times change, etc.
+On Mon, Nov 04, 2024 at 07:27:50AM +0000, Vladimir Vdovin wrote:
+> diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+> index 569bce8b6383..f24c84184c61 100755
+> --- a/tools/testing/selftests/net/pmtu.sh
+> +++ b/tools/testing/selftests/net/pmtu.sh
+> @@ -197,6 +197,12 @@
+>  #
+>  # - pmtu_ipv6_route_change
+>  #	Same as above but with IPv6
+> +#
+> +# - pmtu_ipv4_mp_exceptions
+> +#	Use the same topology as in pmtu_ipv4, but add routeable "dummy"
 
-Seems like a bit of misunderstanding there. Function entry here intends
-to mean the actual start of function code (function prologue) - after
-GEP and function profiling sequence (mflr r0; bl mcount).
+No need for "dummy" as these are regular addresses on the loopback
+device
 
-Function arguments can be accessed with kprobe only while setting a
-probe at an address the kernel treats as function start address.
-Note that the test case pass criteria here is setting probe to fail by
-providing an address (sym+offset) beyond the function start address.
+> +#	addresses on host A and B on lo0 reachable via both routers.
 
-And in this specific test case (with "vfs_read+8", where vfs_read is
-the symbol and '8' is the offset), the test case was failing on powerpc
-because setting the probe at 'sym+8' was succeeding, as anywhere between
-'sym' to 'sym+16' is treated as function start address on powerpc:
+There is no "lo0" device. Only "lo". Run with "-v" and you will see a
+lot of errors
 
-  
-https://github.com/torvalds/linux/blob/master/arch/powerpc/kernel/kprobes.c#L108
+> +#	Host A and B "dummy" addresses have multipath routes to each other.
+> +#	Check that PMTU exceptions are created for both paths.
+>  
+>  source lib.sh
+>  source net_helper.sh
+> @@ -266,7 +272,8 @@ tests="
+>  	list_flush_ipv4_exception	ipv4: list and flush cached exceptions	1
+>  	list_flush_ipv6_exception	ipv6: list and flush cached exceptions	1
+>  	pmtu_ipv4_route_change		ipv4: PMTU exception w/route replace	1
+> -	pmtu_ipv6_route_change		ipv6: PMTU exception w/route replace	1"
+> +	pmtu_ipv6_route_change		ipv6: PMTU exception w/route replace	1
+> +	pmtu_ipv4_mp_exceptions		ipv4: PMTU multipath nh exceptions	1"
+>  
+>  # Addressing and routing for tests with routers: four network segments, with
+>  # index SEGMENT between 1 and 4, a common prefix (PREFIX4 or PREFIX6) and an
+> @@ -343,6 +350,9 @@ tunnel6_a_addr="fd00:2::a"
+>  tunnel6_b_addr="fd00:2::b"
+>  tunnel6_mask="64"
+>  
+> +dummy4_a_addr="192.168.99.99"
+> +dummy4_b_addr="192.168.88.88"
 
+Let's change to "host4_a_addr" and "host4_b_addr" (or similar) as we are
+no longer using a dummy device
 
-So, the fix here essentially is to provide an address that is at least
-an insn or two beyond function start address. As GEP is 8 bytes and
-function profile sequence is 8 bytes, sym+20 is beyond function start
-address on ppc64le. In fact, sym+20 should work for other platforms
-too as sym+20 not treated as function start address on any platform
-on powerpc as of today, and that is all the test case cares about...
+> +
+>  dummy6_0_prefix="fc00:1000::"
+>  dummy6_1_prefix="fc00:1001::"
+>  dummy6_mask="64"
+> @@ -984,6 +994,50 @@ setup_ovs_bridge() {
+>  	run_cmd ip route add ${prefix6}:${b_r1}::1 via ${prefix6}:${a_r1}::2
+>  }
+>  
+> +setup_multipath() {
+> +	if [ "$USE_NH" = "yes" ]; then
+> +		setup_multipath_new
+> +	else
+> +		setup_multipath_old
+> +	fi
 
-Thanks
-Hari
+Please move setup_multipath_{new,old}() before setup_multipath() like
+setup_routing() and related functions
+
+> +
+> +	# Set up routers with routes to dummies
+> +	run_cmd ${ns_r1} ip route add ${dummy4_a_addr} via ${prefix4}.${a_r1}.1
+> +	run_cmd ${ns_r2} ip route add ${dummy4_a_addr} via ${prefix4}.${a_r2}.1
+> +	run_cmd ${ns_r1} ip route add ${dummy4_b_addr} via ${prefix4}.${b_r1}.1
+> +	run_cmd ${ns_r2} ip route add ${dummy4_b_addr} via ${prefix4}.${b_r2}.1
+> +}
+> +
+> +setup_multipath_new() {
+> +	# Set up host A with multipath routes to host B dummy4_b_addr
+> +	run_cmd ${ns_a} ip addr add ${dummy4_a_addr} dev lo0
+
+s/lo0/lo/ same in other places
+
+> +	run_cmd ${ns_a} ip nexthop add id 201 via ${prefix4}.${a_r1}.2 dev veth_A-R1
+> +	run_cmd ${ns_a} ip nexthop add id 202 via ${prefix4}.${a_r2}.2 dev veth_A-R2
+> +	run_cmd ${ns_a} ip nexthop add id 203 group 201/202
+> +	run_cmd ${ns_a} ip route add ${dummy4_b_addr} nhid 203
+
+Maybe number the nexthops 401..403 so that we can later use 601..603 for
+IPv6 like $routes_nh is doing
+
+> +
+> +	# Set up host B with multipath routes to host A dummy4_a_addr
+> +	run_cmd ${ns_b} ip addr add ${dummy4_b_addr} dev lo0
+> +	run_cmd ${ns_b} ip nexthop add id 201 via ${prefix4}.${b_r1}.2 dev veth_A-R1
+
+s/veth_A-R1/veth_B-R1/
+
+> +	run_cmd ${ns_b} ip nexthop add id 202 via ${prefix4}.${b_r2}.2 dev veth_A-R2
+
+s/veth_A-R2/veth_B-R2/
+
+> +	run_cmd ${ns_b} ip nexthop add id 203 group 201/202
+> +	run_cmd ${ns_b} ip route add ${dummy4_a_addr} nhid 203
+> +}
+> +
+> +setup_multipath_old() {
+> +	# Set up host A with multipath routes to host B dummy4_b_addr
+> +	run_cmd ${ns_a} ip addr add ${dummy4_a_addr} dev lo0
+> +	run_cmd ${ns_a} ip route add ${dummy4_b_addr} \
+> +			nexthop via ${prefix4}.${a_r1}.2 weight 1 \
+> +			nexthop via ${prefix4}.${a_r2}.2 weight 1
+> +
+> +	# Set up host B with multipath routes to host A dummy4_a_addr
+> +	run_cmd ${ns_b} ip addr add ${dummy4_b_addr} dev lo0
+> +	run_cmd ${ns_a} ip route add ${dummy4_a_addr} \
+
+s/ns_a/ns_b/
+
+> +			nexthop via ${prefix4}.${a_b1}.2 weight 1 \
+
+s/a_b1/b_r1/
+
+> +			nexthop via ${prefix4}.${a_b2}.2 weight 1
+
+s/a_b2/b_r2/
+
+> +}
+> +
+>  setup() {
+>  	[ "$(id -u)" -ne 0 ] && echo "  need to run as root" && return $ksft_skip
+>  
+> @@ -2329,6 +2383,45 @@ test_pmtu_ipv6_route_change() {
+>  	test_pmtu_ipvX_route_change 6
+>  }
+>  
+> +test_pmtu_ipv4_mp_exceptions() {
+> +	setup namespaces routing multipath || return $ksft_skip
+> +
+> +	trace "${ns_a}"  veth_A-R1    "${ns_r1}" veth_R1-A \
+> +	      "${ns_r1}" veth_R1-B    "${ns_b}"  veth_B-R1 \
+> +	      "${ns_a}"  veth_A-R2    "${ns_r2}" veth_R2-A \
+> +	      "${ns_r2}" veth_R2-B    "${ns_b}"  veth_B-R2
+> +
+> +	# Set up initial MTU values
+> +	mtu "${ns_a}"  veth_A-R1 2000
+> +	mtu "${ns_r1}" veth_R1-A 2000
+> +	mtu "${ns_r1}" veth_R1-B 1400
+> +	mtu "${ns_b}"  veth_B-R1 1400
+> +
+> +	mtu "${ns_a}"  veth_A-R2 2000
+> +	mtu "${ns_r2}" veth_R2-A 2000
+> +	mtu "${ns_r2}" veth_R2-B 1500
+> +	mtu "${ns_b}"  veth_B-R2 1500
+> +
+> +	fail=0
+> +
+> +	# Ping and expect two nexthop exceptions for two routes in nh group
+> +	run_cmd ${ns_a} ping -q -M want -i 0.1 -c 1 -s 1800 "${dummy4_b_addr}"
+> +
+
+I looked more into pmtu.sh and this hunk from here ...
+
+> +	# Do route lookup before checking cached exceptions.
+> +	# The following commands are needed for dst entries to be cached
+> +	# in both paths exceptions and therefore dumped to user space
+> +	run_cmd ${ns_a} ip route get ${dummy4_b_addr} oif veth_A-R1
+> +	run_cmd ${ns_a} ip route get ${dummy4_b_addr} oif veth_A-R2
+> +
+> +	# Check cached exceptions
+> +	if [ "$(${ns_a} ip -oneline route list cache | grep mtu | wc -l)" -ne 2 ]; then
+> +		err "  there are not enough cached exceptions"
+> +		fail=1
+> +	fi
+
+... until here can be replaced by route_get_dst_pmtu_from_exception() and
+check_pmtu_value() like in other test cases. There are two
+prerequisites:
+
+1. We should set the same MTU in both paths as otherwise we don't know
+which MTU will be cached and what to pass to check_pmtu_value() as the
+expected value. I did see that check_pmtu_value() accepts "any", but I
+think it's better to check for a specific value.
+
+2. route_get_dst_pmtu_from_exception() is not very flexible in the
+keywords it accepts for "ip route get" and we need to pass "oif". It can
+be solved by [1] (please test), but Guillaume might have a better idea.
+Then, the above hunk can be replaced by [2].
+
+[1]
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+index 569bce8b6383..6e790d38e5d9 100755
+--- a/tools/testing/selftests/net/pmtu.sh
++++ b/tools/testing/selftests/net/pmtu.sh
+@@ -1076,23 +1076,15 @@ link_get_mtu() {
+ }
+ 
+ route_get_dst_exception() {
+-	ns_cmd="${1}"
+-	dst="${2}"
+-	dsfield="${3}"
+-
+-	if [ -z "${dsfield}" ]; then
+-		dsfield=0
+-	fi
++	ns_cmd="${1}"; shift
+ 
+-	${ns_cmd} ip route get "${dst}" dsfield "${dsfield}"
++	${ns_cmd} ip route get "$@"
+ }
+ 
+ route_get_dst_pmtu_from_exception() {
+-	ns_cmd="${1}"
+-	dst="${2}"
+-	dsfield="${3}"
++	ns_cmd="${1}"; shift
+ 
+-	mtu_parse "$(route_get_dst_exception "${ns_cmd}" "${dst}" "${dsfield}")"
++	mtu_parse "$(route_get_dst_exception "${ns_cmd}" "$@")"
+ }
+ 
+ check_pmtu_value() {
+@@ -1235,10 +1227,10 @@ test_pmtu_ipv4_dscp_icmp_exception() {
+ 	run_cmd "${ns_a}" ping -q -M want -Q "${dsfield}" -c 1 -w 1 -s "${len}" "${dst2}"
+ 
+ 	# Check that exceptions have been created with the correct PMTU
+-	pmtu_1="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst1}" "${policy_mark}")"
++	pmtu_1="$(route_get_dst_pmtu_from_exception "${ns_a}" ${dst1} dsfield ${policy_mark})"
+ 	check_pmtu_value "1400" "${pmtu_1}" "exceeding MTU" || return 1
+ 
+-	pmtu_2="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst2}" "${policy_mark}")"
++	pmtu_2="$(route_get_dst_pmtu_from_exception "${ns_a}" ${dst2} dsfield ${policy_mark})"
+ 	check_pmtu_value "1500" "${pmtu_2}" "exceeding MTU" || return 1
+ }
+ 
+@@ -1285,9 +1277,9 @@ test_pmtu_ipv4_dscp_udp_exception() {
+ 		UDP:"${dst2}":50000,tos="${dsfield}"
+ 
+ 	# Check that exceptions have been created with the correct PMTU
+-	pmtu_1="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst1}" "${policy_mark}")"
++	pmtu_1="$(route_get_dst_pmtu_from_exception "${ns_a}" ${dst1} dsfield ${policy_mark})"
+ 	check_pmtu_value "1400" "${pmtu_1}" "exceeding MTU" || return 1
+-	pmtu_2="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst2}" "${policy_mark}")"
++	pmtu_2="$(route_get_dst_pmtu_from_exception "${ns_a}" ${dst2} dsfield ${policy_mark})"
+ 	check_pmtu_value "1500" "${pmtu_2}" "exceeding MTU" || return 1
+ }
+
+[2]
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+index a3c3f7f99e5b..10b8ac2d7f47 100755
+--- a/tools/testing/selftests/net/pmtu.sh
++++ b/tools/testing/selftests/net/pmtu.sh
+@@ -2399,19 +2399,11 @@ test_pmtu_ipv4_mp_exceptions() {
+ 	# Ping and expect two nexthop exceptions for two routes in nh group
+ 	run_cmd ${ns_a} ping -q -M want -i 0.1 -c 1 -s 1800 "${dummy4_b_addr}"
+ 
+-	# Do route lookup before checking cached exceptions.
+-	# The following commands are needed for dst entries to be cached
+-	# in both paths exceptions and therefore dumped to user space
+-	run_cmd ${ns_a} ip route get ${dummy4_b_addr} oif veth_A-R1
+-	run_cmd ${ns_a} ip route get ${dummy4_b_addr} oif veth_A-R2
+-
+-	# Check cached exceptions
+-	if [ "$(${ns_a} ip -oneline route list cache | grep mtu | wc -l)" -ne 2 ]; then
+-		err "  there are not enough cached exceptions"
+-		fail=1
+-	fi
+-
+-	return ${fail}
++	# Check that exceptions have been created with the correct PMTU
++	pmtu="$(route_get_dst_pmtu_from_exception "${ns_a}" ${dummy4_b_addr} oif veth_A-R1)"
++	check_pmtu_value "1500" "${pmtu}" "exceeding MTU (veth_A-R1)" || return 1
++	pmtu="$(route_get_dst_pmtu_from_exception "${ns_a}" ${dummy4_b_addr} oif veth_A-R2)"
++	check_pmtu_value "1500" "${pmtu}" "exceeding MTU (veth_A-R2)" || return 1
+ }
+ 
+ usage() {
 
