@@ -1,172 +1,162 @@
-Return-Path: <linux-kselftest+bounces-21380-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21381-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03F5D9BB358
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 12:31:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E9859BB390
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 12:37:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10FDB1C2239C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 11:31:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50A701C21988
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 11:37:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C3A81BC07E;
-	Mon,  4 Nov 2024 11:26:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E41441B6D01;
+	Mon,  4 Nov 2024 11:36:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="zvb5TYGP";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WjWFaF3h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PbIsMZt7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from flow-b1-smtp.messagingengine.com (flow-b1-smtp.messagingengine.com [202.12.124.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C20A1AF0A6;
-	Mon,  4 Nov 2024 11:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE561B21BA;
+	Mon,  4 Nov 2024 11:35:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730719611; cv=none; b=tR/azD6pMFRoyXANkdfINl5L3MmGEFyGxc/9gGoDAqkdlnG6WXKKGUwyOAsYdbh9uZVltj8mVR3ulXuBhUlVUvx45Mt0ls61iO5+gXR5JeTBnBWJ+1p6m8UOv2OhJcoKZs90aLh7lNkKW9a4py6pY6/0BuWHAlgJbYJNO9xfWtg=
+	t=1730720161; cv=none; b=bnEg19D7YDHDPaAeFlvVzCZuzTOTaIX8uaDr6KFzDibtNM5u9ACMyJPa1BI0XCIHnjXvWMyNR9moReYiRzlV3V0Mxxbd2Aal1U9FsZYKex8VCThodinV0ttGgF+fnIxqE8FPy/NUQNRaSaJdqOAVe0ZhN3g3SuuTyYe0at2N2YE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730719611; c=relaxed/simple;
-	bh=kAYEPRitsOzAY6hbeb25oEHVLMhVT9X/0ELkJOdJuLk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iRadixvyHVI6BvmQVeG88WG+ui2OAuuQ9pJZvL8rFQ5cOpUXvGsmk93BxI+BAaxgODz7PilGkoP6ykv9PjzS+bF9fCtnc4EFhwn9hT0k4huilEeSWlqAi+MCYHrAtMtpwY28dyLpK87hmUXxOxJ+KYQuSLJwa9EkBdhB5GXvOlk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=zvb5TYGP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WjWFaF3h; arc=none smtp.client-ip=202.12.124.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
-	by mailflow.stl.internal (Postfix) with ESMTP id DE0471D401C1;
-	Mon,  4 Nov 2024 06:26:48 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-03.internal (MEProxy); Mon, 04 Nov 2024 06:26:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1730719608; x=
-	1730723208; bh=Vyghno5J9c7YrXB31VGHCX520h4RHsgzGudOGYt30G8=; b=z
-	vb5TYGPMLV7KHhDY/fNiPfYjDm234CydkuuYe+gzy9kAN3DyzRqamRcM+CyGDBQh
-	cMLM05BQ6ZVNpegl+664Ll3oKyTHlT5mvEnia3M7nGCY6TyjxcR9dLizxgScTxYR
-	zUklS4CjbfwOfifqMHhMNRixQT5QgTK1Ay3GtladkaLH7WauRk21+txvN8Yk4VSA
-	4Y5RyPzRqxi3289LEYb26buDRU5HFDW/eU2snhTfa2nCMlO8G6PhXmWp/gBWoz6S
-	HU3ZHF8JOwLkmm2xazFIo2AaSPOVB/n2IBxSsYqOQkMAv/irvJOSt3OzWZQ3uszm
-	eq/Rw/1KizkKaz9DUB1ng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1730719608; x=1730723208; bh=Vyghno5J9c7YrXB31VGHCX520h4RHsgzGud
-	OGYt30G8=; b=WjWFaF3h55/o8OHp34oaaJVjdmttdYt7/wuWi1eA4zeBcBiFbjG
-	1EYkJVBb1Qt3Ysox0T+qN+k0mg/GoQ9Jrx8kKHvJp8p1hqnHs2yG8aKp10FWZKzI
-	+TsqGhylWaROH2zdC800tTIVXJnqvz2Wu02BGT5zM9pN8VrGp+KoLesSCkjMHLFr
-	9AYBbmIN2vWirEypT8lS10IdUqWGvKRuJeCNez6Ojc14yXHqu4u35IhJe0sS29MM
-	DxAHUbBdSzACXenzSZDg1va10+OL6lAWA2PMVvv8nrk6xP92seHywLmtD0fsz0us
-	87oH7T6IoRaoa6yUzHgzgZ0cik7kynYQ0fA==
-X-ME-Sender: <xms:eK8oZ6TGrv3g1sLJ5lGlXNJA69Y5AgLgzg9W3K4-CeLAYB5SqODpfA>
-    <xme:eK8oZ_wHCKmFhlOg5rp7uROdtMDIPtqqKwl2OroysEw_yOA73PCBgV0lK1keCygha
-    VSKeIhrDcSU_ENVCMc>
-X-ME-Received: <xmr:eK8oZ30mSAsGtHcvqKengwmWFANAyYGxkJGtdtoVWo-LRUmYmoF4OHb2WzVt>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdeliedgvdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtjeen
-    ucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrg
-    hilhdrnhgvtheqnecuggftrfgrthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfek
-    geetheegheeifffguedvuefffefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
-    hrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggp
-    rhgtphhtthhopeduuddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnthhonh
-    hiohesohhpvghnvhhpnhdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhg
-    lhgvrdgtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtth
-    hopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepughonhgrlhgurdhh
-    uhhnthgvrhesghhmrghilhdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehrhigriigrnhhovhdrshdrrgesghhmrghilhdrtghomhdp
-    rhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehnvghtuggvvh
-    esvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:eK8oZ2AdbMYuI8BHolH1pD55qvHE9OZFHExO-_uu_BYlgW8KSYzP4A>
-    <xmx:eK8oZziGMC929EjOnaeC630j8U9QTLgU5Vpnu8_cd21gOXEXPlG3EA>
-    <xmx:eK8oZyoSxny7nP6a8Ah6xxateTxdGpb7DgMOmvcHUNWcs0W8h1irSA>
-    <xmx:eK8oZ2gJ_bG84sLYvdPLicpD7IVPlayDPV_u20O9C17siB0a7tIobw>
-    <xmx:eK8oZ0Wo8fVjCfBj5M0j3_irYxf91wQjIF3P5wKrN2MJ0L5PoREuhfau>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 4 Nov 2024 06:26:48 -0500 (EST)
-Date: Mon, 4 Nov 2024 12:26:46 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
-	Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v11 14/23] ovpn: implement peer lookup logic
-Message-ID: <ZyivdrpZhx4WpMbn@hog>
-References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-14-de4698c73a25@openvpn.net>
+	s=arc-20240116; t=1730720161; c=relaxed/simple;
+	bh=MqirJQHMXIgrfKDB2SAWPcaT1jCCe/5NGNaz+2tKpMA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=SVaPaGzcBA9Bsz+ROjTMfEzDPiquRn2QsjMcDIeDfKE675V7a11tkieP5kLFDXjfx05FxnfVq0KW8nKSu5EOvQFjllQDGeC1oDLsW2L3TXcuke6Rl+LWPsRAcMRiLap185xIq3YoNKRd5oNPrakle1iS6/1Xfw4zm438IR20oDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PbIsMZt7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14A25C4CECE;
+	Mon,  4 Nov 2024 11:35:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730720159;
+	bh=MqirJQHMXIgrfKDB2SAWPcaT1jCCe/5NGNaz+2tKpMA=;
+	h=From:Date:Subject:To:Cc:From;
+	b=PbIsMZt7hKTv3fj2KAiDJGXwOJprKiA42UjoyNkf088vbEDcC8R47RkVHsdvhOqag
+	 pEqAILOH3bldzNhZfDdJij3NKcYqIaBn5LH2WZnopPoNgc+KwhkMqvdc5qZbzNHJk5
+	 KIYJ5dCDBBhhnHd7abTlFdouhAC8AAft46IZ9EcGCo2FCKibGpLo4vP8/N+MhSU80w
+	 OXjhXpVUV4w+kc0YsU/BCaDKCn+XFgAJnt0nVXD8UezgjWjyXoPyTMo7ttIQShajBF
+	 3jYjBZLkS4Hm2SGwvCL+4jb3dH3ChYVSz+2tQairUK2cMH4BFJ4N8ABi7RUOB9mhop
+	 B4A+2mmHuCUXA==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Date: Mon, 04 Nov 2024 12:34:26 +0100
+Subject: [PATCH net-next] selftests: net: include lib/sh/*.sh with lib.sh
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241029-b4-ovpn-v11-14-de4698c73a25@openvpn.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241104-net-next-selftests-lib-sh-deps-v1-1-7c9f7d939fc2@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAEGxKGcC/zWNywqDMBBFf0Vm3YEkPqD9ldKFxhsdkFQyQQLiv
+ xsKXZzFWZx7T1IkgdKrOSnhEJVvrGIfDfl1jAtY5urkjOusNR1H5ErJrNhChmblTSbWlWfsyt6
+ 3/dOP/WBcoDqyJwQpv4M3/Vv6XNcNIqwXwXoAAAA=
+X-Change-ID: 20241104-net-next-selftests-lib-sh-deps-cc359ca5602f
+To: mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, Pablo Neira Ayuso <pablo@netfilter.org>, 
+ Jozsef Kadlecsik <kadlec@netfilter.org>, Petr Machata <petrm@nvidia.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org, 
+ coreteam@netfilter.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2947; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=MqirJQHMXIgrfKDB2SAWPcaT1jCCe/5NGNaz+2tKpMA=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnKLGbZaVJYSzdQbmHRGDBiYAjohF7t43yplQ4R
+ GtiBzByYqeJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZyixmwAKCRD2t4JPQmmg
+ c49jEACcw3RMvJT3kJc7KsxPMp9NRi/Tj0bXnfvpVBNOo/aQc+EZsAaleU7LTj6vbemiS5b1+zO
+ aOBKAi0SG1AgoB7BCp0C/NvCP9eMCulz04ilcqKuiBpwP2gaIx31tJhUAwHdTPvl3sR6gwxHxoo
+ hMWsCuvlxBYjjmpOj7nk2c3t/N22jQBT9QD4ujE8TQiusaIuKocksSLD1APRyL8f4u95kU4/Ss8
+ bZVxyyLXZ7czg7YOIFSR+KRAw9Sk0sn1uPvebLq6qmtWlZJfH7jSuQ5MmihiCLJEmFRtLZ1dVj7
+ 2gYDPfgF2z8vgcJ0GwMn+fRB37W++zhIYGwl2Q2NHiKnnDYax0B6sdOhqm8pzn6utnLJKNVLwEC
+ T5Xv8IyuKApLQ3WcaU/ek9jo2J0/vFdBW1sRE+gltnQABLNALnk5L7Fi7zH+QDuuXKA4kfcf5Py
+ BL4RwJ+T3beRhz6kHethWBGEm3CQwUbldBieEZtjcV66i2c2cl9lkCT8/s1JR0T0X4Ks+4LQK9K
+ EWUDQkmdlkXvo83OBVVk/tcF7QXSLqTR162D9lPB1LfybCHb1vgL0E50Xr5VcxH4HcwubtSlSIK
+ 4kmYFweQ19Qrt2pqFqrJav7rgXp3CSnf5EgOytIjLd+jTkE8rw5zPpLIQn9jiS9UuAoQb+4DLJH
+ uooUrsbDdtmhySQ==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-2024-10-29, 11:47:27 +0100, Antonio Quartulli wrote:
->  struct ovpn_peer *ovpn_peer_get_by_transp_addr(struct ovpn_struct *ovpn,
->  					       struct sk_buff *skb)
->  {
-> -	struct ovpn_peer *peer = NULL;
-> +	struct ovpn_peer *tmp, *peer = NULL;
->  	struct sockaddr_storage ss = { 0 };
-> +	struct hlist_nulls_head *nhead;
-> +	struct hlist_nulls_node *ntmp;
-> +	size_t sa_len;
->  
->  	if (unlikely(!ovpn_peer_skb_to_sockaddr(skb, &ss)))
->  		return NULL;
->  
->  	if (ovpn->mode == OVPN_MODE_P2P)
-> -		peer = ovpn_peer_get_by_transp_addr_p2p(ovpn, &ss);
-> +		return ovpn_peer_get_by_transp_addr_p2p(ovpn, &ss);
-> +
-> +	switch (ss.ss_family) {
-> +	case AF_INET:
-> +		sa_len = sizeof(struct sockaddr_in);
-> +		break;
-> +	case AF_INET6:
-> +		sa_len = sizeof(struct sockaddr_in6);
-> +		break;
-> +	default:
-> +		return NULL;
-> +	}
+Recently, the net/lib.sh file has been modified to include defer.sh from
+net/lib/sh/ directory. The Makefile from net/lib has been modified
+accordingly, but not the ones from the sub-targets using net/lib.sh.
 
-You could get rid of that switch by having ovpn_peer_skb_to_sockaddr
-also set sa_len (or return 0/the size).
+Because of that, the new file is not installed as expected when
+installing the Forwarding, MPTCP, and Netfilter targets, e.g.
 
-> +
-> +	nhead = ovpn_get_hash_head(ovpn->peers->by_transp_addr, &ss, sa_len);
-> +
-> +	rcu_read_lock();
-> +	hlist_nulls_for_each_entry_rcu(tmp, ntmp, nhead,
-> +				       hash_entry_transp_addr) {
+  # make -C tools/testing/selftests TARGETS=net/mptcp install \
+        INSTALL_PATH=/tmp/kself
+  # cd /tmp/kself/
+  # ./run_kselftest.sh -c net/mptcp
+    TAP version 13
+    1..7
+    # timeout set to 1800
+    # selftests: net/mptcp: mptcp_connect.sh
+    # ./../lib.sh: line 5: /tmp/kself/net/lib/sh/defer.sh: No such file
+      or directory
+    # (...)
 
-I think that's missing the retry in case we ended up in the wrong
-bucket due to a peer rehash?
+This can be fixed simply by adding all the .sh files from net/lib/sh
+directory to the TEST_INCLUDES variable in the different Makefile's.
 
-> +		if (!ovpn_peer_transp_match(tmp, &ss))
-> +			continue;
-> +
-> +		if (!ovpn_peer_hold(tmp))
-> +			continue;
-> +
-> +		peer = tmp;
-> +		break;
-> +	}
-> +	rcu_read_unlock();
->  
->  	return peer;
->  }
+Fixes: a6e263f125cd ("selftests: net: lib: Introduce deferred commands")
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+ tools/testing/selftests/net/forwarding/Makefile | 3 ++-
+ tools/testing/selftests/net/mptcp/Makefile      | 2 +-
+ tools/testing/selftests/net/netfilter/Makefile  | 3 ++-
+ 3 files changed, 5 insertions(+), 3 deletions(-)
 
+diff --git a/tools/testing/selftests/net/forwarding/Makefile b/tools/testing/selftests/net/forwarding/Makefile
+index 224346426ef2220470bf2dbef66198eae9331f56..7d885cff8d79bc6882d2341d0a1a59891fc1cb2e 100644
+--- a/tools/testing/selftests/net/forwarding/Makefile
++++ b/tools/testing/selftests/net/forwarding/Makefile
+@@ -126,6 +126,7 @@ TEST_FILES := devlink_lib.sh \
+ 	tc_common.sh
+ 
+ TEST_INCLUDES := \
+-	../lib.sh
++	../lib.sh \
++	$(wildcard ../lib/sh/*.sh)
+ 
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/net/mptcp/Makefile b/tools/testing/selftests/net/mptcp/Makefile
+index 5d796622e73099d0a0331c1bc8a41f09e1d36b4d..8e3fc05a539797c5e0feab72be69db623ef3fa96 100644
+--- a/tools/testing/selftests/net/mptcp/Makefile
++++ b/tools/testing/selftests/net/mptcp/Makefile
+@@ -11,7 +11,7 @@ TEST_GEN_FILES = mptcp_connect pm_nl_ctl mptcp_sockopt mptcp_inq
+ 
+ TEST_FILES := mptcp_lib.sh settings
+ 
+-TEST_INCLUDES := ../lib.sh ../net_helper.sh
++TEST_INCLUDES := ../lib.sh $(wildcard ../lib/sh/*.sh) ../net_helper.sh
+ 
+ EXTRA_CLEAN := *.pcap
+ 
+diff --git a/tools/testing/selftests/net/netfilter/Makefile b/tools/testing/selftests/net/netfilter/Makefile
+index 542f7886a0bc2ac016f41d8b70357a8e0c1d271b..9d009f74cfc2da66428b1e23d5884e2c3bc4a85d 100644
+--- a/tools/testing/selftests/net/netfilter/Makefile
++++ b/tools/testing/selftests/net/netfilter/Makefile
+@@ -55,4 +55,5 @@ TEST_FILES := lib.sh
+ TEST_FILES += packetdrill
+ 
+ TEST_INCLUDES := \
+-	../lib.sh
++	../lib.sh \
++	$(wildcard ../lib/sh/*.sh)
+
+---
+base-commit: ecf99864ea6b1843773589a935bb026951bf12dd
+change-id: 20241104-net-next-selftests-lib-sh-deps-cc359ca5602f
+
+Best regards,
 -- 
-Sabrina
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
 
