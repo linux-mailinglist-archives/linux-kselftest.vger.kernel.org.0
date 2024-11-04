@@ -1,77 +1,81 @@
-Return-Path: <linux-kselftest+bounces-21406-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21407-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B99E9BBEB8
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 21:21:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D36AC9BC016
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 22:31:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D98F61F220D3
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 20:21:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 934C22828AE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2024 21:31:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85B7F1E47B9;
-	Mon,  4 Nov 2024 20:21:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57D041FCC75;
+	Mon,  4 Nov 2024 21:31:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="TTpHFr67"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D2YttPEt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2044.outbound.protection.outlook.com [40.107.237.44])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A111CC178;
-	Mon,  4 Nov 2024 20:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730751674; cv=fail; b=SjlY8XGZCShmqF4M23yNGSDoY0OZ0/FQf2MB9IDIBECZzSskrLiWd+W/wrXr8v9NWlQG/TBjRxBgpxCjktoBDXO4itheLOFYBXc6CoCbkG86cJjBYQSo+dtXNp8j8FBo1a6YWtG01Xra1hokq6P/zAO2IzrpmYGA+WOsk6kUvBc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730751674; c=relaxed/simple;
-	bh=KctQztkk1I/pMJtn2AsF2kv6H1Bo3d8N6MphDh84A10=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=pY1dnA4qWeJ5ZqRxiPSWcSENCUtPRE/4ASta5XwGI+3MDXhN2g7tmNsQwX3nHylgBu6o43/tuizUBjYdD3J4OCVZSzORRYfD/Wfx1pGoeb6Ieydp2KC4COKZrSbxBIstPcBJyrxgLRY8jukDYIFMAaPA0Goc5KpwG88n9bsWg0M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=TTpHFr67; arc=fail smtp.client-ip=40.107.237.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CqVL9/RcIbmf0w2cKV5pHi8TFlsud7oPMZHBqWXz+QBrT4/JFSlb57At6yB10pmBS+ckma9oqHa0iPbBafFxPdbBA8B3D6Zq7rj/9wpBaardlIVtllWGGTOBMijHPGXErbIMvY4Oc+sdl/2Siirw385a0i7KvxhSUTSxMJ/1k/WYcz0nBP7kjxNAJAWsHrtMhYgXwhRKE2gRIWchl8rxsvChem33Fqa8ktfKnXyJFBVK5pqs2VCX62iZ8PbZI/Mawylee/T5ko01Af+yCW0eS4JD3bpyl1wpRFPm9+IXKhHV0ITf/KEPA1JXXG8LEbEYyljHVG70P83QqAKwCwecvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EZfyNmTgA+52VDM070oLcwsQJuEu6OgWpd61Cfs4b8M=;
- b=JtUOYUurBd/FdM5BX7fk5mdTD/PGptQTShr04+aORNnUajTETrRCx5HT6IxpiCD0Dlz0xYNnwS/ljzN1Z5PwkLQ+3b2lpIqy2bEpjfqSxHt/1UNsBFY5LJXMDOz1w2eBqKxQ2841IxHCBYVTwhcDIdEboRCWs3KkPhdHyXuK3uQ8mdQ4cYVki4uCbzzcwzNt1RrcFOmH5zunbmZRlyUQcFQMCkieAcHv+QsRtbanUoR9bSFeMOBu7OB83hGNxS0D3yQiYrLDWtyqX4HxsijXx2/HEI9/V2/4qMjlWpYBu/AGrM6L2W0gP8uqZhBmrt+6cE0UmYM72HNILU4/7IZLqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EZfyNmTgA+52VDM070oLcwsQJuEu6OgWpd61Cfs4b8M=;
- b=TTpHFr679Wrv3tkmfUBkF5yyR+l1kLHdZZXDd1mPnRzvKyC+yoLGhgHERligAcGHuRkyRsZ5kqY9Umc/4NwyjKJfm5YobeQ7Yg55q+QIW2e3YtfIYilOQdjAqoruY55Mu0gmLBIoL2SggN7QrCR2iGjurHXv/cnF1VIWCVlTKQU=
-Received: from MW4PR04CA0298.namprd04.prod.outlook.com (2603:10b6:303:89::33)
- by MN0PR12MB5715.namprd12.prod.outlook.com (2603:10b6:208:372::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.29; Mon, 4 Nov
- 2024 20:21:07 +0000
-Received: from SJ5PEPF000001D7.namprd05.prod.outlook.com
- (2603:10b6:303:89:cafe::76) by MW4PR04CA0298.outlook.office365.com
- (2603:10b6:303:89::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.30 via Frontend
- Transport; Mon, 4 Nov 2024 20:21:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SJ5PEPF000001D7.mail.protection.outlook.com (10.167.242.59) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8137.17 via Frontend Transport; Mon, 4 Nov 2024 20:21:06 +0000
-Received: from [10.236.191.107] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 4 Nov
- 2024 14:21:05 -0600
-Message-ID: <99e64d8e-2d10-41c7-8b7e-cd059c7e7f29@amd.com>
-Date: Mon, 4 Nov 2024 14:21:04 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F732199935
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 Nov 2024 21:31:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730755864; cv=none; b=scIpiY8i9pnI3PeuKHnmpijfHMMXAwvidi4qlkOmKV/Cikcp3AhkVoc8Obxxv8Q9X7ECyi1VjXctA40ODPjyHY6cPBsoFgWtrdn20yr/i/IGg2ioCBmoPdac2qGDLPXL/lc6LCZ2dwPL1GOukQva4Rix5q5JsdiEhrntC54evWs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730755864; c=relaxed/simple;
+	bh=L4YNKSkuZEV/hZj7pOw8iiKxbPrnNSbHsVLEZvSgA0w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dB9c6TAMlFCvirSQNwrGuNdYMC+/2wtS1oFjWdUtuJS/CtnIE1IpMWzUgvnL8zOz19TWhEHrzWW/AJA7YZwrnEfPxdcMF8dn0skNe37tbbC9K0ZW5DSg/xbcdp/JR0G6SkgHy+2xSe/3L5bxmvmtJieHfEpolkXBf6jwDxYQHD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D2YttPEt; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1730755861;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=8gtfMet1sTXUCLzJyNvknJfnL40j6MbNvJoVn8lPrro=;
+	b=D2YttPEtZHRKjYlwGGej9OzOBqWCIhLhHiByXn9EbE5I8jp1cpe6+gKGQst+D0I98GBdEn
+	8BSDh8/Hh6mielGVvSqiMGjGmhf2H1bufwTFkKowK0wsPcHEJcNoBZMp99PDlRFAEFToZx
+	3UygCMJg9SsdY+6P/s29MhwqL2LRdaE=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-272-wCPwmvOwOgeGTvMKj5oMIg-1; Mon, 04 Nov 2024 16:31:00 -0500
+X-MC-Unique: wCPwmvOwOgeGTvMKj5oMIg-1
+Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-539fb5677c9so4700308e87.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 Nov 2024 13:30:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730755858; x=1731360658;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=8gtfMet1sTXUCLzJyNvknJfnL40j6MbNvJoVn8lPrro=;
+        b=Zws0aZxB+vNPJ9KuJ1+HEEifRNrb9VFPBrxhwMUAtTWUFbNTTcSr8o7KENUpX2tIgh
+         L1gss4+zHtC78Pp6pMXWGj7WmAjPt+eqpEi/d6EZaM4DJHStILR5hr+5Bz1MThhcrJ7y
+         6bdRCsmtXhh+rdjq59pARjXEo9e+hqKg4CIBTv/OwuN1362RBGxWLveNYx/iqsRQOn7L
+         H2HlsZDw4zFB7gf1K+RcAHaV1ShfMMZ1gcSkIRKfZhQTByvQ3aZF766QZWqtMvRr69sg
+         Xm3k0BhgvIrJKZ+M6KT9zxRbV+aJ/oGhMvWy8nBhNsLsYaK+KCQaSEEb6+MeuSVjKkNZ
+         Jhug==
+X-Forwarded-Encrypted: i=1; AJvYcCUK4qRl4dmqXHjMVeqm2X5awUzA0AKjp1Q2CxDx76vvKKQDfSWUu+N7lsTu4fzh5RMBbVtjq616Vw8Tv6yJS44=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxr+NdkRnyc1OzocLOyvcmYVElWQqMpuAhaq4ko4+msKlPBjzAO
+	JduOI9gAxtiz3Iw3uL+T/KyzspSWYGG7gLFv5RmJoMYG0bqmpuzlZl8RP/Wufk/c8IKqs5KBJbE
+	6PkN+U7R0KFZL673Wlh4NQbFji6neCki7JTWMdiWnyKFgM7edn5IudM4Nv05ayITSRQ==
+X-Received: by 2002:a05:6512:118a:b0:53b:1526:3a4c with SMTP id 2adb3069b0e04-53b348d894amr16609363e87.26.1730755858338;
+        Mon, 04 Nov 2024 13:30:58 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IH7ORituTFTzp2MdetjVSX333muBt/1oz+5gl2SMZriCSkTuHWz0TGj9Uec44RVhT9sC9SApw==
+X-Received: by 2002:a05:6512:118a:b0:53b:1526:3a4c with SMTP id 2adb3069b0e04-53b348d894amr16609326e87.26.1730755857778;
+        Mon, 04 Nov 2024 13:30:57 -0800 (PST)
+Received: from ?IPV6:2003:cb:c72f:e500:e96a:8043:1211:8e6a? (p200300cbc72fe500e96a804312118e6a.dip0.t-ipconnect.de. [2003:cb:c72f:e500:e96a:8043:1211:8e6a])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381c10e7435sm14249477f8f.52.2024.11.04.13.30.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Nov 2024 13:30:56 -0800 (PST)
+Message-ID: <10e4d078-3cdb-4d1c-a1a3-80e91b247217@redhat.com>
+Date: Mon, 4 Nov 2024 22:30:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,145 +83,224 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/9] KVM: selftests: Add a basic SNP smoke test
-To: Sean Christopherson <seanjc@google.com>
-CC: <kvm@vger.kernel.org>, <pbonzini@redhat.com>, <pgonda@google.com>,
-	<thomas.lendacky@amd.com>, <michael.roth@amd.com>, <shuah@kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20240905124107.6954-1-pratikrajesh.sampat@amd.com>
- <20240905124107.6954-3-pratikrajesh.sampat@amd.com>
- <Zw2fW2AJU-_Yi5U6@google.com> <4984cba7-427a-4065-9fcc-97b9f67163ed@amd.com>
- <Zx_QJJ1iAYewvP-k@google.com> <71f0fb41-d5a7-450b-ba47-ad6c39dce586@amd.com>
- <ZyI4cRLsaTQ3FMk7@google.com> <de2a6758-a906-4dc0-b481-6ce73aba24b9@amd.com>
- <ZyJzcOCPJstrumbE@google.com> <11787a92-66ed-41ef-9623-d6c7220fb861@amd.com>
- <ZyOv5US9u22lAiPU@google.com>
+Subject: Re: [RFC PATCH v3 0/6] Direct Map Removal for guest_memfd
+To: Patrick Roy <roypat@amazon.co.uk>, tabba@google.com,
+ quic_eberman@quicinc.com, seanjc@google.com, pbonzini@redhat.com,
+ jthoughton@google.com, ackerleytng@google.com, vannapurve@google.com,
+ rppt@kernel.org
+Cc: graf@amazon.com, jgowans@amazon.com, derekmn@amazon.com,
+ kalyazin@amazon.com, xmarcalx@amazon.com, linux-mm@kvack.org,
+ corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org,
+ chenhuacai@kernel.org, kernel@xen0n.name, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
+ gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+ svens@linux.ibm.com, gerald.schaefer@linux.ibm.com, tglx@linutronix.de,
+ mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+ hpa@zytor.com, luto@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+ mhiramat@kernel.org, mathieu.desnoyers@efficios.com, shuah@kernel.org,
+ kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20241030134912.515725-1-roypat@amazon.co.uk>
+ <4aa0ccf4-ebbe-4244-bc85-8bc8dcd14e74@redhat.com>
+ <27646c08-f724-49f7-9f45-d03bad500219@amazon.co.uk>
+ <d1a69eb7-85d5-4ffa-88e2-f4841713c1d7@redhat.com>
+ <90c9d8c0-814e-4c86-86ef-439cb5552cb6@amazon.co.uk>
+From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
-From: "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>
-In-Reply-To: <ZyOv5US9u22lAiPU@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <90c9d8c0-814e-4c86-86ef-439cb5552cb6@amazon.co.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001D7:EE_|MN0PR12MB5715:EE_
-X-MS-Office365-Filtering-Correlation-Id: f4c27493-a17f-4f22-ce7b-08dcfd0e3685
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|376014|1800799024|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?bjNWaHlrbXVaNGlnV296eXFPY3JqU25Dcm00WGthZGNyTm9weFpGVTBBTVdh?=
- =?utf-8?B?SWxhMmEvQ3grNXhCSENoQnNiTjlSNXY0RVozM09scFMzV085VWxUMlpTcUFU?=
- =?utf-8?B?UFUwWC9nVlRDN0xLSVVQeFpDUkU4K2tZbXNyZi9zZld0M0VPZ3hKZC9HMms0?=
- =?utf-8?B?NjZ4ZDBlZWNpVlpkRzhkRVhMR1h1OEIxK3NaN2ZtenE2d1VpRjgxeEdHRHFF?=
- =?utf-8?B?cGFReWV5UVcwSzZBTWdHUk43dnhKNVVLS2labjZUeDVOQ0poUlUxMm5Uamts?=
- =?utf-8?B?SnhGNW9UcDNaTkp2Y1VIdy9zY0x4YVdoZHRmOG1NaHpRMFU1NUNpcFZBclpm?=
- =?utf-8?B?S2NUUzJ1djFrRW9vdU5CQitucGZSbXJrRXBSWVFYbDl2akR1RTh5NFlhcVE1?=
- =?utf-8?B?UlFvcGZ4U2tWRGdZREswc3RzZGVNaTBrYWJPbGNkanNQUVc3WFJmRkRmbDVC?=
- =?utf-8?B?UWpNSTB1MlJwSXQ1Zlk2OWJQVFRpQW16L2poUDhrZWlidHZPbE1iaFBWMUhh?=
- =?utf-8?B?T1pmS0FnaGdwMzBkcElTVlVmSkFMVUh5TTNORDB4QXVQLzJUS1RGVEhZczBV?=
- =?utf-8?B?akhDNlRxT1dqTnNPUWo3dkNlK1hIRzdMdzhTbUZYUVo3c1V4R2hMendmR0RR?=
- =?utf-8?B?QW5EVjlhZ01CYTc0elNmUXVCeWFrb05oRFZTQXRTaThyd1lCdUtNNDZYRGFZ?=
- =?utf-8?B?UlRraVdub2NxVmVXVGo0OXRYTXlFNE5VRDFSY3dlU1pvNHVMY0RhL0s2aTM2?=
- =?utf-8?B?RitEWVc3VWVNVVNaemtqODl3WU5kZHNrY1YzY1VxVzdOeDRyOUlqaDd3SHRO?=
- =?utf-8?B?R3J5eVd4eGM1NXQ1ZkZJK3hRZTdzZjJGT1BUTisvbWZiaXdqZHFvVlh2RExa?=
- =?utf-8?B?WkEweHJqNFhRdFl1L1E3L21QZ04rZkp6L3Q5ZEJSVWpvSE5KUkp6MVp0dG85?=
- =?utf-8?B?QWFkRU9ZSlhSMnZkMjhpdGgzYWJEKzJWLzNwemZlZ2NrVm44eWJXQUIrTXJO?=
- =?utf-8?B?TkYxWDZEb1E4QjNJdTFWMzlCUGFvaFVOUWsyVTNVQ0tFRC9jd0FBNHF2Z01X?=
- =?utf-8?B?ZFY1VWFpa2FSVmtkdEtXNlQ0eWhCaWk1enhabmg3NkVuSU9uZTRQanhjN3RR?=
- =?utf-8?B?NzJndVllNE95MXNxRGhNVlFWaGpzZU5pL0NZZHE0enIwVm9icUFTVGdFb0Jq?=
- =?utf-8?B?Q1pMUEg3VDlOQW52YXJvTEZZSUJVYngzc3IxTFkyTWUrS2orZU15M2FKUjBE?=
- =?utf-8?B?d0dCVnZwWVBGYncvYnluS2Y2OGkzdzVtQzJPa0VZQnRUNzhOaTM2Z1lpc3Nw?=
- =?utf-8?B?MktYK05aT1Q5d3ZHbngyckRwWnd4MG9iTGtMeXJkcndDcm1XaEdlV2xIaVEy?=
- =?utf-8?B?VGxCcVpzVlFTYStjUFpGVGZybzRiZTROQnVoQnVJKzh1bit0dmxjZFNtaXR0?=
- =?utf-8?B?c3M5b0kyZFFBN0IwbzB4bERKZ2xTYUNjcFdZbGlpQVNKVEIvbnc3SUF4Z2VK?=
- =?utf-8?B?L1BENFVZSEZBTUhnQ01VNjVQY1pmcUdtSlZ3aUVYRENidnlUUWxaNGh6cWxr?=
- =?utf-8?B?KzRHS2swdWJqMDlEaUtyK1ZGbHBWV1ZWU1BaYkNQZC83azM0QzI2Z1pUeGpS?=
- =?utf-8?B?bW16UU1ncWFFbEJvMHZDRWpKQUVrQkNqMENGcjdLcERTaGk0ZTVZY3JkT0ht?=
- =?utf-8?B?VnhZbzU3d2dwaEVRUXgrZXpNTk5QcDZwQ1pmQ0ZvelczMC9sMlNHVVhqOUI2?=
- =?utf-8?B?YS9memRrT2dyQ29uWTRNZkNwOHY1THIxOXVRR05vQUtrNHQvQmgwYU13Qlh5?=
- =?utf-8?Q?hPmImsnUEIDQeh4MmA3R8MV3Y6YV2X4IL071E=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(1800799024)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2024 20:21:06.4313
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4c27493-a17f-4f22-ce7b-08dcfd0e3685
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001D7.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5715
 
-
-
-On 10/31/2024 11:27 AM, Sean Christopherson wrote:
-> On Thu, Oct 31, 2024, Pratik R. Sampat wrote:
->> Hi Sean,
+>> We talked about shared (faultable) vs. private (unfaultable), and how it
+>> would interact with the directmap patches here.
 >>
->> On 10/30/2024 12:57 PM, Sean Christopherson wrote:
->>> On Wed, Oct 30, 2024, Pratik R. Sampat wrote:
->>>> On 10/30/2024 8:46 AM, Sean Christopherson wrote:
->>>>> +/* Minimum firmware version required for the SEV-SNP support */
->>>>> +#define SNP_FW_REQ_VER_MAJOR   1
->>>>> +#define SNP_FW_REQ_VER_MINOR   51
->>>>>
->>>>> Side topic, why are these hardcoded?  And where did they come from?  If they're
->>>>> arbitrary KVM selftests values, make that super duper clear.
->>>>
->>>> Well, it's not entirely arbitrary. This was the version that SNP GA'd
->>>> with first so that kind of became the minimum required version needed.
->>>>
->>>> I think the only place we've documented this is here -
->>>> https://github.com/AMDESE/AMDSEV/tree/snp-latest?tab=readme-ov-file#upgrade-sev-firmware.
->>>>
->>>> Maybe, I can modify the comment above to say something like -
->>>> Minimum general availability release firmware required for SEV-SNP support.
->>>
->>> Hmm, so if AMD says SNP is only supported for firmware version >= 1.51, why on
->>> earth is that not checked and enforced by the kernel?  Relying on userspace to
->>> not crash the host (or worse) because of unsupported firmware is not a winning
->>> strategy.
+>> As discussed, having private (unfaultable) memory with the direct-map
+>> removed and shared (faultable) memory with the direct-mapping can make
+>> sense for non-TDX/AMD-SEV/... non-CoCo use cases. Not sure about CoCo,
+>> the discussion here seems to indicate that it might currently not be
+>> required.
 >>
->> We do check against the firmware level 1.51 while setting things up
->> first (drivers/crypto/ccp/sev-dev.c:__sev_snp_init_locked()) and we bail
->> out if it's otherwise. From the userspace, calls to KVM_SEV_INIT2 or any
->> other corresponding SNP calls should fail cleanly without any adverse
->> effects to the host.
+>> So one thing we could do is that shared (faultable) will have a direct
+>> mapping and be gup-able and private (unfaultable) memory will not have a
+>> direct mapping and is, by design, not gup-able.>
+>> Maybe it could make sense to not have a direct map for all guest_memfd
+>> memory, making it behave like secretmem (and it would be easy to
+>> implement)? But I'm not sure if that is really desirable in VM context.
 > 
-> And I'm saying, that's not good enough.  If the platform doesn't support SNP,
-> the KVM *must not* advertise support for SNP.
+> This would work for us (in this scenario, the swiotlb areas would be
+> "traditional" memory, e.g. set to shared via mem attributes instead of
+> "shared" inside KVM), it's kinda what I had prototyped in my v1 of this
+> series (well, we'd need to figure out how to get the mappings of gmem
+> back into KVM, since in this setup, short-circuiting it into
+> userspace_addr wouldn't work, unless we banish swiotlb into a different
+> memslot altogether somehow).
+
+Right.
+
+> But I don't think it'd work for pKVM, iirc
+> they need GUP on gmem, and also want direct map removal (... but maybe,
+> the gmem VMA for non-CoCo usecase and the gmem VMA for pKVM could be
+> behave differently?  non-CoCo gets essentially memfd_secret, pKVM gets
+> GUP+no faults of private mem).
+
+Good question. So far my perception was that the directmap removal on 
+"private/unfaultable" would be sufficient.
+
 > 
-
-Sure, fair to expect this. Currently, if the FW check fails, SNP is not
-setup and there is nothing that indicates in the KVM capabilities (apart
-from one dmesg error) that the support does not exist.
-
-One thing I could do (as an independent patch) is to introduce a CC API
-that abstracts the FW version check made by the CCP module. Since sev
-platform status can be gotten before INIT to extract the major and minor
-version numbers, KVM can also call into this API and use that to decide
-if the KVM capabilities for SNP must be set or not.
-
-Thanks!
-Pratik
-
->> From the positive selftest perspective though, we want to make sure it's
->> both supported and enabled, and skip the test if not.
+>> Having a mixture of "has directmap" and "has no directmap" for shared
+>> (faultable) memory should not be done. Similarly, private memory really
+>> should stay "unfaultable".
 > 
-> No, we want the test to assert that KVM reports SNP support if and only if SNP
-> is 100% supported.
+> You've convinced me that having both GUP-able and non GUP-able
+> memory in the same VMA will be tricky. However, I'm less convinced on
+> why private memory should stay unfaultable; only that it shouldn't be
+> faultable into a VMA that also allows GUP. Can we have two VMAs? One
+> that disallows GUP, but allows userspace access to shared and private,
+> and one that allows GUP, but disallows accessing private memory? Maybe
+> via some `PROT_NOGUP` flag to `mmap`? I guess this is a slightly
+> different spin of the above idea.
+
+What we are trying to achieve is making guest_memfd not behave 
+completely different on that level for different "types" of VMs. So one 
+of the goals should be to try to unify it as much as possible.
+
+shared -> faultable: GUP-able
+private -> unfaultable: unGUP-able
+
+
+And it makes sense, because a lot of future work will rely on some 
+important properties: for example, if private memory cannot be faulted 
+in + GUPed, core-MM will never have obtained valid references to such a 
+page. There is no need to split large folios into smaller ones for 
+tracking purposes; there is no need to maintain per-page refcounts and 
+pincounts ...
+
+It doesn't mean that we cannot consider it if really required, but there 
+really has to be a strong case for it, because it will all get really messy.
+
+For example, one issue is that a folio only has a single mapping 
+(folio->mapping), and that is used in the GUP-fast path (no VMA) to 
+determine whether GUP-fast is allowed or not.
+
+So you'd have to force everything through GUP-slow, where you could 
+consider VMA properties :( It sounds quite suboptimal.
+
+I don't think multiple VMAs are what we really want. See below.
+
 > 
->> I believe we can tell if it's supported by the platform using the MSR -
->> MSR_AMD64_SEV_SNP_ENABLED or the X86_FEATURE_SEV_SNP from the KVM
->> capabilities. However, to determine if it's enabled from the kernel, I
->> made this check here. Having said that, I do agree that there should
->> probably be a better way to expose this support to the userspace.
+>> I think one of the points raised during the bi-weekly call was that
+>> using a viommu/swiotlb might be the right call, such that all memory can
+>> be considered private (unfaultable) that is not explicitly
+>> shared/expected to be modified by the hypervisor (-> faultable, ->
+>> GUP-able).
 >>
->> Thanks
->> Pratik
+>> Further, I think Sean had some good points why we should explore that
+>> direction, but I recall that there were some issue to be sorted out
+>> (interpreted instructions requiring direct map when accessing "private"
+>> memory?), not sure if that is already working/can be made working in KVM.
+> 
+> Yeah, the big one is MMIO instruction emulation on x86, which does guest
+> page table walks and instruction fetch (and particularly the latter
+> cannot be known ahead-of-time by the guest, aka cannot be explicitly
+> "shared"). That's what the majority of my v2 series was about. For
+> traditional memslots, KVM handles these via get_user and friends, but if
+> we don't have a VMA that allows faulting all of gmem, then that's
+> impossible, and we're in "temporarily restore direct map" land. Which
+> comes with significantly performance penalties due to TLB flushes.
+
+Agreed.
+
+ > >> What's your opinion after the call and the next step for use cases 
+like
+>> you have in mind (IIRC firecracker, which wants to not have the
+>> direct-map for guest memory where it can be avoided)?
+> 
+> Yea, the usecase is for Firecracker to not have direct map entries for
+> guest memory, unless needed for I/O (-> swiotlb).
+> 
+> As for next steps, let's determine once and for all if we can do the
+> KVM-internal guest memory accesses for MMIO emulation through userspace
+> mappings (although if we can't I'll have some serious soul-searching to
+> do, because all other solutions we talked about so far also have fairly
+> big drawbacks; on-demand direct map reinsertion has terrible
+> performance
+So IIUC, KVM would have to access "unfaultable" guest_memfd memory using 
+fd+offset, and that's problematic because "no-directmap".
+
+So you'd have to map+unmap the directmap repeatedly, and still expose it 
+temporarily in the direct map to others. I see how that is undesirable, 
+even when trying to cache hotspots (partly destroying the purpose of the 
+directmap removal).
+
+
+Would a per-MM kernel mapping of these pages work, so KVM can access them?
+
+It sounds a bit like what is required for clean per-MM allocations [1]: 
+establish a per-MM kernel mapping of (selected?) pages. Not necessarily 
+all of them.
+
+Yes, we'd be avoiding VMAs, GUP, mapcounts, pincounts and everything 
+involved with ordinary user mappings for these private/unfaultable 
+thingies. Just like as discussed in, and similar to [1].
+
+Just throwing it out there, maybe we really want to avoid the directmap 
+(keep it unmapped) and maintain a per-mm mapping for a bunch of folios 
+that can be easily removed when required by guest_memfd (ftruncate, 
+conversion private->shared) on request.
+
+[1] https://lore.kernel.org/all/20240911143421.85612-1-faresx@amazon.de/T/#u
+
+-- 
+Cheers,
+
+David / dhildenb
 
 
