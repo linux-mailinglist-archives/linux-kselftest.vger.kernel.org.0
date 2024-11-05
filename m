@@ -1,165 +1,345 @@
-Return-Path: <linux-kselftest+bounces-21469-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21470-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B58899BD632
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 20:54:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 133779BD67A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 21:05:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 740F7283B5C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 19:54:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37FCA1C22870
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 20:05:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 530D621315C;
-	Tue,  5 Nov 2024 19:54:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DB461FF7B4;
+	Tue,  5 Nov 2024 20:04:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="PVJOwfWH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF818212EF8;
-	Tue,  5 Nov 2024 19:54:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730836489; cv=none; b=C34SfQT1/QIg5ZqTlk+O55iLPykG97C7vATjhHWpA7qw6pZTVlmSK82rGNk7JNOxUWjDKAVXAkiqNAzxl+4QKToKQEqYFIz+GEa5MDkDeSWx/Yti/4KLzDmgvoHKrzXcAPglMLzBYRl/yfcxO/AEqoDnGuXKS1HZudu9ni0auQU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730836489; c=relaxed/simple;
-	bh=VeYfp2hmYu+Muh1vIFhI12FMxTSkf/bdGLtpCElCHTY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QnicxcbKQNjp0vJvZC/vVI35EgcwQiSr3502rw8cSj3/KvyfCN2/PSzWCskixhEoJaqcFUyi1GAQht9B+Viz8nTv7ot58gYYd+odYB/zFWJCNKhL98l5vSGwcBRlSWQSyyE2vmNF9oadLYYHLt2qr3VNvRYl6kARl7gLHWuNX90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 4A5Jq94A022745;
-	Tue, 5 Nov 2024 13:52:09 -0600
-Received: (from segher@localhost)
-	by gate.crashing.org (8.14.1/8.14.1/Submit) id 4A5Jq8Ge022742;
-	Tue, 5 Nov 2024 13:52:08 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Tue, 5 Nov 2024 13:52:08 -0600
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Hari Bathini <hbathini@linux.ibm.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        "Naveen N. Rao" <naveen@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH] selftests/ftrace: update kprobe syntax error test for ppc64le
-Message-ID: <20241105195208.GC29862@gate.crashing.org>
-References: <20241101191925.1550493-1-hbathini@linux.ibm.com> <20241101205948.GW29862@gate.crashing.org> <1916cb5c-cb3d-427c-bcf0-2c1b905fd6d1@linux.ibm.com> <20241104094431.GY29862@gate.crashing.org> <245fed6f-5fb4-4925-ba0a-fb2f32e650d0@linux.ibm.com> <20241104103615.GZ29862@gate.crashing.org> <f7e8243a-a4c8-44ce-ad03-7d232df461ed@linux.ibm.com> <20241105082018.GA29862@gate.crashing.org> <20241105181752.74a3d6fa2f06d0adfdf85322@kernel.org>
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2052.outbound.protection.outlook.com [40.107.244.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361AD20E030;
+	Tue,  5 Nov 2024 20:04:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730837097; cv=fail; b=TO1CojijgkxuuVITyaPF/bC/TcMKNINWwWGHjmYCRRlw5L+jCP7l/Sw9xJIHfpp+ROrD9yNAJygkilAwHWONiUIKsCXnpsCDNKMeqIWk+GJ6sz0YKLK15aJ1epKbmIsGGTnUZ6t1bzUVVuhFLRFuGj0+k8p3izq20nCMDfcm9GY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730837097; c=relaxed/simple;
+	bh=aozNjopQdAVKVZBSQwYElUPgBSgD+kAXfb5Gj/h4KUE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hLVeOFV+g97pK4FnOQGNmLb61wjEzYQVECep+LKNndDd9PQ+UvHZpNUhs0EPFHlHuVvPJ9Oi9Zw/B9Qixg9GnctTTaO/Oomr4NDOH3fEn7Il1jrZsgml7AJ5YOkB7f/8qItSq8uVpHp1UxDDslQQ8BLlPxk25xxr1auQPDei5A0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=PVJOwfWH; arc=fail smtp.client-ip=40.107.244.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=efcOt1Z8Cev7CrTDCHuHLazBf3EtReG/UPINzWhq8LJbxuOIXmkfbbiIB1kB8Pl3bkWzngf1EqU2HyAAG0dtRcYsecW9p5zhLxczHG2gN+Em/kiNqEOyKYxEq1bZYXN3IX3tM9qX2dfaD8NZhnIVDWyDEOvSoSfl4HuZ0IH6yhh9HXDANJ2bl8uSdIqjGYZbRQx75IC3h0p1zSPMDl1sZVqpT5/SfCFhg2K+J5kurAmjM3Zd540k8aJe4vOOrHpmYFjjy5zGv05zIOIO4CF6LIL5og/GoV6zyXvGE5u0DkvPOJT20JcslIUzqNPODjynfUMI80fNW5nKHxmHdknEnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B5g8NE0lp38+tyIg9NVVhn5vE1FBYPVmV6ble4GRXo4=;
+ b=KQ0Hk78QvyqP0hu3P0Lg1mHbyUnkyy3yspHGoTvLPVqMs7PgARn0CghUjobKE1UxH1bqGw2Fax+bVTkMXMHaouqHrIebY8PmNSRZGt78ZawJgfsSOBxubgragQsKr9gyzqONtPV9AECvZ8awZcSiZW9qwEUUAmPs8FXT5Z9oaKxFd883xabbSQTx19XvNfmLgB5Wv7aGrSc2ipAsPwy6CagHlcOGRYSJ7nzbX9RO3nIzjQhyQbLY5V4hzPukRI6Hwn/A+pti6q4krkotAkGow0Hk+dPZF2J5yt90f3L1RbgJL7NIN9UlbwiJ2LoI2zDIJKJ2UwtnzeB1rreuPYMBAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B5g8NE0lp38+tyIg9NVVhn5vE1FBYPVmV6ble4GRXo4=;
+ b=PVJOwfWHnCdo3/YfggzKirXlC9ZH3ZOEfmrT55bvh6XeTWgBrBR4ojcjG9SGG8vheZGt/iymCyq+TP7OtYMFi3G+bVhrz4p0tKbp+uls6tD+2VwPNlB5G+knNKsK0LXgH0XI5sDugOBBDtcjlwIrDj13V5V67j9Al2XYWOQJtkb12pP7E+Z+rcgW8YwW2H35ocGvoW1y9t79mP0RNAiYwEoBb5dUCBBkymMOz2LYDfgLaZYo6mtL8KPMdUTdt6CPxd4BVJS1AH6zKLVQ3Ll6GQRGtQ+f6CyK4xaQMvwSJh5tBI39UFu84rlLdao4xtRPfxhu6EEYcLDTAlSLMiuBHw==
+Received: from MN2PR07CA0003.namprd07.prod.outlook.com (2603:10b6:208:1a0::13)
+ by SA1PR12MB9001.namprd12.prod.outlook.com (2603:10b6:806:387::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.30; Tue, 5 Nov
+ 2024 20:04:51 +0000
+Received: from BL02EPF00029927.namprd02.prod.outlook.com
+ (2603:10b6:208:1a0:cafe::3) by MN2PR07CA0003.outlook.office365.com
+ (2603:10b6:208:1a0::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.18 via Frontend
+ Transport; Tue, 5 Nov 2024 20:04:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BL02EPF00029927.mail.protection.outlook.com (10.167.249.52) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8137.17 via Frontend Transport; Tue, 5 Nov 2024 20:04:51 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 5 Nov 2024
+ 12:04:37 -0800
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 5 Nov 2024
+ 12:04:37 -0800
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
+ Transport; Tue, 5 Nov 2024 12:04:35 -0800
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>
+CC: <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>, <will@kernel.org>,
+	<robin.murphy@arm.com>, <dwmw2@infradead.org>, <shuah@kernel.org>,
+	<iommu@lists.linux.dev>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<baolu.lu@linux.intel.com>, <eric.auger@redhat.com>,
+	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
+	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>,
+	<yi.l.liu@intel.com>, <aik@amd.com>, <zhangfei.gao@linaro.org>,
+	<patches@lists.linux.dev>
+Subject: [PATCH v7 00/13] iommufd: Add vIOMMU infrastructure (Part-1)
+Date: Tue, 5 Nov 2024 12:04:16 -0800
+Message-ID: <cover.1730836219.git.nicolinc@nvidia.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241105181752.74a3d6fa2f06d0adfdf85322@kernel.org>
-User-Agent: Mutt/1.4.2.3i
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF00029927:EE_|SA1PR12MB9001:EE_
+X-MS-Office365-Filtering-Correlation-Id: cba53aa5-16f3-41ea-02e4-08dcfdd51bc0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|82310400026|36860700013|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?XBevg043Wbk6BoTqe+xt8R45MHvZJh1pIUo2XaFgmMPVHnsVRUvVGKbOcFW5?=
+ =?us-ascii?Q?2Dk7noG/DXNjhmmagOjEF5VPX+iieQaYWAvsWKl7JCG/aDu3de9W85XZ8IKi?=
+ =?us-ascii?Q?4+OtEvyo5ewS0iPJh3L0QCpicljZxAdq8iKG+P5S+pAR0xQ7Dlq/dvLvSnia?=
+ =?us-ascii?Q?oEP3bEVreh5xEmC6R6AhgITnEGrW+qSlTy0aB34hn/xG0oEklPL97wlLY/b8?=
+ =?us-ascii?Q?ktl60SRger5C8S2JJAgIFXr8R765tFhHHXPTWYT8af+ZLyPqaEeJ2DTDssHv?=
+ =?us-ascii?Q?/EbSfHr5eX2zsu4B8VCyTlQ5kaFVGBXuf7DhVw4gihcqPQcjf6KSGacT2e7v?=
+ =?us-ascii?Q?WAIAfKUfX5r68zYDTDUhbGq7F4BkfFUwrDarIgMGc/cJG2G1hfmozI66L2Jt?=
+ =?us-ascii?Q?KwWYzicchVtOnFE2T9/XN4QRO1SJN+ETeogX8VqYzJAwbSCzPaSDFLNQ/4Yh?=
+ =?us-ascii?Q?i5QoBzANzG/6v1POuUZGoc171FsBQbX6H8+kEfwOan9Ey6NDpeQ8YZXup712?=
+ =?us-ascii?Q?8gPGf8Pz/fueC/+yvYqV2TOg8UfarIQvrY4W9ZdEOJo2HKw71Vq26rivB8tn?=
+ =?us-ascii?Q?+QDd/RuGdRbm0mgMe7Q23Y5SR70ICIKM9KFfA4Ga+7IU6AyTdFC2ni1p3Mwn?=
+ =?us-ascii?Q?v+86v+2sUb3rRUBqbMN/tPjzIANDpPOheniIG6YwC2Y6kWmLhsXJJPVbcn5+?=
+ =?us-ascii?Q?7lnUpsuYl/O30dYuk3cTf+uv5yXROAjqBY4bvdiJ/ITPSaIMA1iwymTLJCef?=
+ =?us-ascii?Q?UaKax5gq4g/pFeY1f4/m4H0ccUJw2aUsrNrqny5g1AHVrqN7RHicUYiOMto9?=
+ =?us-ascii?Q?sLdrOkJPIkmHycBjQte+KkzvDO0Sg26r60dy1smuPXx9HnG+pabie4qQG4Xw?=
+ =?us-ascii?Q?7G3nluftxNAJW+5WQtoJ2t9nlgrFq4mG0oj/wSDSn2Sd8NSHKcSjE0KqrzhS?=
+ =?us-ascii?Q?mR7X/YU0v340HQMedh6wA/ywj7d25q3LTm1iO4c/Sj2IcZZ+7Du6mmvhQkul?=
+ =?us-ascii?Q?tG1R6Mj58bNLWc+Rb3TnvZTFl9M7uzgrsC0Vd7QdzSSA6mcXb/GhlgOm8eaB?=
+ =?us-ascii?Q?UFbDEyiceFzK8/62slXmbR7Jdf/EZqNJpJ3EeXfuAaBJba9QCSxQpQbK7bcH?=
+ =?us-ascii?Q?V77GHkHKOPLfe3FP4WXMOVPFQDUivl1fvvt96dWiOf2AarLckSDxIRrPd1AR?=
+ =?us-ascii?Q?+5FIAiyha1YiosiucculraPwkLShOuWi2g2f7I484oTaWuMcheTjbXW2bpUu?=
+ =?us-ascii?Q?LfnZ/ck23jKSHW/rFnDt5ogl5oWX9fN9tLxuImTvCMsX0GzJ5y3y1gZ9kvHo?=
+ =?us-ascii?Q?c9kmQxU7y5APuhJZNp3KieexrQokCNvzc/IzQ23ca/CUPSPYKqVkYqDo0Aig?=
+ =?us-ascii?Q?duvt++ZFy9F4B8Iz1B8/ctWCC5inG8QID/1yxa96tL8jROfGAg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(376014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2024 20:04:51.2228
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cba53aa5-16f3-41ea-02e4-08dcfdd51bc0
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF00029927.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB9001
 
-Hi!
+This series introduces a new vIOMMU infrastructure and related ioctls.
 
-On Tue, Nov 05, 2024 at 06:17:51PM +0900, Masami Hiramatsu wrote:
-> On Tue, 5 Nov 2024 02:20:18 -0600
-> Segher Boessenkool <segher@kernel.crashing.org> wrote:
-> > On Mon, Nov 04, 2024 at 11:06:23PM +0530, Hari Bathini wrote:
-> > > Seems like a bit of misunderstanding there. Function entry here intends
-> > > to mean the actual start of function code (function prologue) - after
-> > > GEP and function profiling sequence (mflr r0; bl mcount).
-> > 
-> > What you call "function entry" here simply does not exist.  The compiler
-> > can -- and ***WILL***, ***DOES*** -- mix up all of that.
-> 
-> Here is the "function entry" means the function address.
+IOMMUFD has been using the HWPT infrastructure for all cases, including a
+nested IO page table support. Yet, there're limitations for an HWPT-based
+structure to support some advanced HW-accelerated features, such as CMDQV
+on NVIDIA Grace, and HW-accelerated vIOMMU on AMD. Even for a multi-IOMMU
+environment, it is not straightforward for nested HWPTs to share the same
+parent HWPT (stage-2 IO pagetable), with the HWPT infrastructure alone: a
+parent HWPT typically hold one stage-2 IO pagetable and tag it with only
+one ID in the cache entries. When sharing one large stage-2 IO pagetable
+across physical IOMMU instances, that one ID may not always be available
+across all the IOMMU instances. In other word, it's ideal for SW to have
+a different container for the stage-2 IO pagetable so it can hold another
+ID that's available. And this container will be able to hold some advanced
+feature too.
 
-"Function entry point".  "Function entry" can mean whatever nebulous
-thing done at the start of a function :-)
+For this "different container", add vIOMMU, an additional layer to hold
+extra virtualization information:
+  _______________________________________________________________________
+ |                      iommufd (with vIOMMU)                            |
+ |                        _____________                                  |
+ |                       |             |                                 |
+ |      |----------------|    vIOMMU   |                                 |
+ |      |     ______     |             |     _____________     ________  |
+ |      |    |      |    |             |    |             |   |        | |
+ |      |    | IOAS |<---|(HWPT_PAGING)|<---| HWPT_NESTED |<--| DEVICE | |
+ |      |    |______|    |_____________|    |_____________|   |________| |
+ |      |        |              |                  |               |     |
+ |______|________|______________|__________________|_______________|_____|
+        |        |              |                  |               |
+  ______v_____   |        ______v_____       ______v_____       ___v__
+ |   struct   |  |  PFN  |  (paging)  |     |  (nested)  |     |struct|
+ |iommu_device|  |------>|iommu_domain|<----|iommu_domain|<----|device|
+ |____________|   storage|____________|     |____________|     |______|
 
-You're free to use your own terminology of course, but it help to use
-standard names for standard things!
+The vIOMMU object should be seen as a slice of a physical IOMMU instance
+that is passed to or shared with a VM. That can be some HW/SW resources:
+ - Security namespace for guest owned ID, e.g. guest-controlled cache tags
+ - Non-device-affiliated event reporting, e.g. invalidation queue errors
+ - Access to a sharable nesting parent pagetable across physical IOMMUs
+ - Virtualization of various platforms IDs, e.g. RIDs and others
+ - Delivery of paravirtualized invalidation
+ - Direct assigned invalidation queues
+ - Direct assigned interrupts
 
-> Not the prologue.
+On a multi-IOMMU system, the vIOMMU object must be instanced to the number
+of the physical IOMMUs that have a slice passed to (via device) a guest VM,
+while being able to hold the shareable parent HWPT. Each vIOMMU then just
+needs to allocate its own individual ID to tag its own cache:
+                     ----------------------------
+ ----------------    |         |  paging_hwpt0  |
+ | hwpt_nested0 |--->| viommu0 ------------------
+ ----------------    |         |      IDx       |
+                     ----------------------------
+                     ----------------------------
+ ----------------    |         |  paging_hwpt0  |
+ | hwpt_nested1 |--->| viommu1 ------------------
+ ----------------    |         |      IDy       |
+                     ----------------------------
 
-But that is literally what Hari said, so it confused me.
+As an initial part-1, add IOMMUFD_CMD_VIOMMU_ALLOC ioctl for an allocation
+only.
 
-> On some architecture, we are sure fixed sequences
-> right after the function address for ftrace/security. For example,
-> x86 has an `ENDBR` for security. Thus, even if we tend to put a
-> probe on the "function entry", kprobes shifts the probe point
-> forcibly skipping the `ENDBR`. So from the probe callback, the
-> probed address does not look like the function address (shift
-> the sizeof(ENDBR)).
+More vIOMMU-based structs and ioctls will be introduced in the follow-up
+series to support vDEVICE, vIRQ (vEVENT) and vQUEUE objects. Although we
+repurposed the vIOMMU object from an earlier RFC, just for a referece:
+https://lore.kernel.org/all/cover.1712978212.git.nicolinc@nvidia.com/
 
-On almmost all architectures and ABIs the prologues aren't so very
-fixed, which is a good thing, because typically the compiler can
-make things better in some way (typically faster or smaller code).  Or
-other parts of the toolchain can, the loader or dynamic loader often.
+This series is on Github:
+https://github.com/nicolinc/iommufd/commits/iommufd_viommu_p1-v7
+(QEMU branch for testing will be provided in Jason's nesting series)
 
-> However, the ENDBR does nothing from the program point of view, we
-> can still think of that address as the address of the function.
-> That is the reason why I introduced arch_kprobe_on_func_entry().
+Changelog
+v7
+ * Added "Reviewed-by" from Jason
+ * Dropped "select IOMMUFD_DRIVER_CORE" in Kconfig
+ * Decoupled IOMMUFD_DRIVER from IOMMUFD_DRIVER_CORE
+ * Moved vIOMMU negative tests out of FIXTURE_SETUP to a TEST_F
+ * Dropped the "flags" check in iommufd_viommu_alloc_hwpt_nested
+ * Added the kdoc for "flags" in iommufd_viommu_alloc_hwpt_nested
+v6
+ https://lore.kernel.org/all/cover.1730313237.git.nicolinc@nvidia.com/
+ * Improved comment lines
+ * Added a TEST_F for IO page fault
+ * Fixed indentations in iommufd.rst
+ * Revised kdoc of the viommu_alloc op
+ * Added "Reviewed-by" from Kevin and Jason
+ * Passed in "flags" to ->alloc_domain_nested
+ * Renamed "free" op to "destroy" in viommu_ops
+ * Skipped SMMUv3 driver changes (to post in a separate series)
+ * Fixed "flags" validation in iommufd_viommu_alloc_hwpt_nested
+ * Added CONFIG_IOMMUFD_DRIVER_CORE for sharing between iommufd
+   core and IOMMU dirvers
+ * Replaced iommufd_verify_unfinalized_object with xa_cmpxchg in
+   iommufd_object_finalize/abort functions
+v5
+ https://lore.kernel.org/all/cover.1729897352.git.nicolinc@nvidia.com/
+ * Added "Reviewed-by" from Kevin
+ * Reworked iommufd_viommu_alloc helper
+ * Revised the uAPI kdoc for vIOMMU object
+ * Revised comments for pluggable iommu_dev
+ * Added a couple of cleanup patches for selftest
+ * Renamed domain_alloc_nested op to alloc_domain_nested
+ * Updated a few commit messages to reflect the latest series
+ * Renamed iommufd_hwpt_nested_alloc_for_viommu to
+   iommufd_viommu_alloc_hwpt_nested, and added flag validation
+v4
+ https://lore.kernel.org/all/cover.1729553811.git.nicolinc@nvidia.com/
+ * Added "Reviewed-by" from Jason
+ * Dropped IOMMU_VIOMMU_TYPE_DEFAULT support
+ * Dropped iommufd_object_alloc_elm renamings
+ * Renamed iommufd's viommu_api.c to driver.c
+ * Reworked iommufd_viommu_alloc helper
+ * Added a separate iommufd_hwpt_nested_alloc_for_viommu function for
+   hwpt_nested allocations on a vIOMMU, and added comparison between
+   viommu->iommu_dev->ops and dev_iommu_ops(idev->dev)
+ * Replaced s2_parent with vsmmu in arm_smmu_nested_domain
+ * Replaced domain_alloc_user in iommu_ops with domain_alloc_nested in
+   viommu_ops
+ * Replaced wait_queue_head_t with a completion, to delay the unplug of
+   mock_iommu_dev
+ * Corrected documentation graph that was missing struct iommu_device
+ * Added an iommufd_verify_unfinalized_object helper to verify driver-
+   allocated vIOMMU/vDEVICE objects
+ * Added missing test cases for TEST_LENGTH and fail_nth
+v3
+ https://lore.kernel.org/all/cover.1728491453.git.nicolinc@nvidia.com/
+ * Rebased on top of Jason's nesting v3 series
+   https://lore.kernel.org/all/0-v3-e2e16cd7467f+2a6a1-smmuv3_nesting_jgg@nvidia.com/
+ * Split the series into smaller parts
+ * Added Jason's Reviewed-by
+ * Added back viommu->iommu_dev
+ * Added support for driver-allocated vIOMMU v.s. core-allocated
+ * Dropped arm_smmu_cache_invalidate_user
+ * Added an iommufd_test_wait_for_users() in selftest
+ * Reworked test code to make viommu an individual FIXTURE
+ * Added missing TEST_LENGTH case for the new ioctl command
+v2
+ https://lore.kernel.org/all/cover.1724776335.git.nicolinc@nvidia.com/
+ * Limited vdev_id to one per idev
+ * Added a rw_sem to protect the vdev_id list
+ * Reworked driver-level APIs with proper lockings
+ * Added a new viommu_api file for IOMMUFD_DRIVER config
+ * Dropped useless iommu_dev point from the viommu structure
+ * Added missing index numnbers to new types in the uAPI header
+ * Dropped IOMMU_VIOMMU_INVALIDATE uAPI; Instead, reuse the HWPT one
+ * Reworked mock_viommu_cache_invalidate() using the new iommu helper
+ * Reordered details of set/unset_vdev_id handlers for proper lockings
+v1
+ https://lore.kernel.org/all/cover.1723061377.git.nicolinc@nvidia.com/
 
-Understood.
+Thanks!
+Nicolin
 
-> For the other architecture, it might be misunderstood and
-> could be miss-implemented. In that case, we should fix that.
-> 
-> >  In particular,
-> > "function prologue" does not exist at all (on any architecture worth
-> > its salt, including PowerPC), and all instructions you consider part of
-> > a function prologue might end up anywhere.  The "profiling sequence" is
-> > part of that btw, and that typically ends up *not* the first thing in
-> > the function, not the first thing after the LEP (register saves are
-> > earlier often, they are generated in that order in the first place,
-> > but they can (and will) be moved if that schedules better).
-> > 
-> > > Function arguments can be accessed with kprobe only while setting a
-> > > probe at an address the kernel treats as function start address.
-> > 
-> > That is a silly assumption to make.  There is no guarantee you can
-> > access function arguments *at all*, we're not in 1975 anymore.  You
-> > *need* to look at debug information if you want to deal with anything
-> > about your high-level language program.  Looking at the machine code
-> > can only tell you about the machine state, whatever is in registers
-> > etc.
-> 
-> Yeah, understood. So the `$arg*` here does not guarantee to access
-> arguments, but the best effort to do that. And it fully depends on
+Nicolin Chen (13):
+  iommufd: Move struct iommufd_object to public iommufd header
+  iommufd: Move _iommufd_object_alloc helper to a sharable file
+  iommufd: Introduce IOMMUFD_OBJ_VIOMMU and its related struct
+  iommufd: Verify object in iommufd_object_finalize/abort()
+  iommufd/viommu: Add IOMMU_VIOMMU_ALLOC ioctl
+  iommufd: Add alloc_domain_nested op to iommufd_viommu_ops
+  iommufd: Allow pt_id to carry viommu_id for IOMMU_HWPT_ALLOC
+  iommufd/selftest: Add container_of helpers
+  iommufd/selftest: Prepare for mock_viommu_alloc_domain_nested()
+  iommufd/selftest: Add refcount to mock_iommu_device
+  iommufd/selftest: Add IOMMU_VIOMMU_TYPE_SELFTEST
+  iommufd/selftest: Add IOMMU_VIOMMU_ALLOC test coverage
+  Documentation: userspace-api: iommufd: Update vIOMMU
 
-Is that GDB syntax?  Or what else?
-
-> regs_get_kernel_argument(). Thus `$arg*` works only where the
-> regs_get_kernel_argument() can return most likely function argument
-> value from `pt_regs`. That is where we call "function entry" in
-> this context.
-> 
-> And since it checks the function entry by arch_kprobe_on_func_entry()
-> this test fails on powerpc because it returns true if the offset from
-> the kallsyms symbol address is less than 8/16 bytes.
-> 
-> > > Note that the test case pass criteria here is setting probe to fail by
-> > > providing an address (sym+offset) beyond the function start address.
-> > > 
-> > > And in this specific test case (with "vfs_read+8", where vfs_read is
-> > > the symbol and '8' is the offset), the test case was failing on powerpc
-> > > because setting the probe at 'sym+8' was succeeding, as anywhere between
-> > > 'sym' to 'sym+16' is treated as function start address on powerpc:
-> > 
-> > Yeah, fragile tests sometimes break.  Changing a randomly chosen number
-> > to some other randomly chosen number will not fix the problem (but you
-> > can postpone having to deal with it, sure!)
-> 
-> Yeah, sorry about the test case. Actually `+8` is also not a good number
-> for x86 too since we are not sure whether the address is an instruction
-> boundary or not. In that case it may report another error and failed.
-
-So what is it that the testcase really wants to test for?
-
-Thanks for explaining the context somewhat, I know nothing (except all
-details about ELFv2 and the other PowerPC ABIs :-) ), it helped :-)
+ drivers/iommu/iommufd/Kconfig                 |   4 +
+ drivers/iommu/iommufd/Makefile                |   4 +-
+ drivers/iommu/iommufd/iommufd_private.h       |  33 +--
+ drivers/iommu/iommufd/iommufd_test.h          |   2 +
+ include/linux/iommu.h                         |  14 +
+ include/linux/iommufd.h                       |  86 ++++++
+ include/uapi/linux/iommufd.h                  |  54 +++-
+ tools/testing/selftests/iommu/iommufd_utils.h |  28 ++
+ drivers/iommu/iommufd/driver.c                |  40 +++
+ drivers/iommu/iommufd/hw_pagetable.c          |  73 ++++-
+ drivers/iommu/iommufd/main.c                  |  54 ++--
+ drivers/iommu/iommufd/selftest.c              | 266 +++++++++++++-----
+ drivers/iommu/iommufd/viommu.c                |  81 ++++++
+ tools/testing/selftests/iommu/iommufd.c       | 137 +++++++++
+ .../selftests/iommu/iommufd_fail_nth.c        |  11 +
+ Documentation/userspace-api/iommufd.rst       |  69 ++++-
+ 16 files changed, 804 insertions(+), 152 deletions(-)
+ create mode 100644 drivers/iommu/iommufd/driver.c
+ create mode 100644 drivers/iommu/iommufd/viommu.c
 
 
-Segher
+base-commit: 0bcceb1f51c77f6b98a7aab00847ed340bf36e35
+-- 
+2.43.0
+
 
