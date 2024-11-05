@@ -1,613 +1,264 @@
-Return-Path: <linux-kselftest+bounces-21439-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21440-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5CAD9BC412
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 04:50:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D63E9BC441
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 05:16:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2455FB21638
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 03:50:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF08D282259
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 04:16:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9A4218C35C;
-	Tue,  5 Nov 2024 03:50:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5B2016BE2A;
+	Tue,  5 Nov 2024 04:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cf3oW6EO"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="p3hWkmFr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2062.outbound.protection.outlook.com [40.107.236.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4C2B18595B;
-	Tue,  5 Nov 2024 03:50:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730778625; cv=none; b=htaLwQaxnb1rMJ/vEwP6L+fCHgOV0SP6YNR8Ra7DVC+KXk796XOBQrQnItOK3tnmc5ky7FnuheyekaYxSsBXLwkk3oTySe/FtwemnA2nU+StqMZAPFIAD2rYqIR/DrZa/KgqqeZOcJGIs7sDbTJzXPiLUe/d+uVzxJDa0HM073E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730778625; c=relaxed/simple;
-	bh=83oxUgIvNOfYhm6mJDubN3yBoWHpNQVPW5YEgvfLbuU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jqfYd4IHy837NGRfHoIyTARbma4UZI73BEoSnAkKmPiRqIIq4GxKlOkRtbvmmU7pdokvAHg3LD+2zH62ntkM+ORfUcvKnzMqBIp5KKgLqnMc0LsBNo9fJ81BQ5ryuMKtM6CWhwcE/3sBr3oKRgBBVAjpRZtLGH+AY0eBEUJbMxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cf3oW6EO; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-71e79f73aaeso4260593b3a.3;
-        Mon, 04 Nov 2024 19:50:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730778623; x=1731383423; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hCiJViBu0h+FL35tLk0vzyOdHQeO2ryzM7TncAGhwqI=;
-        b=cf3oW6EOpaN/2sjd/0mNQcdY8u0dbBgRFFspSEDBquqH1BSmiMNmAKqNT/ksJ96JrH
-         lOg4xk1L7NdQtlDNKSbaPrctGzj77MuvJ/QhoeC49PejMRFnGtLzvAg65RVg5yEIUm3n
-         CtiNzf50nY5iVR3OyREC3EW+KJ7sKwMAv/EGUkasp3caa7yVQH93YSb7Opj+OKlMuTCX
-         5trrEjfSnYj0nnSjgWpqL1WNJpZVyoxXF7DONrW3jZBXvBHc3ymu+x78+vd07pBUAWiA
-         ox1DyIOyHbZMykZWvS6lO34dpqafbMniElJJceLMjDzC3UVo40Fw6VbF0UVRkhb3zCpl
-         TsmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730778623; x=1731383423;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hCiJViBu0h+FL35tLk0vzyOdHQeO2ryzM7TncAGhwqI=;
-        b=taf/86hewQ4bD6oCFqXpRA/YYRj25gJg/GxutivU8nSp2aPTVTphMmWh9RSbCRoJI9
-         BjyHtMGQeOqgtct851C01NMhB6XpxZCRdV2Vl2apAxeGEE5R4IXR0bwDAuNYl0k5Ntpt
-         gC0WzyQyVHukeuH++nqjdLXNUj+aSFP3tI7Sp0FaBdG5y6n4u5NjsllUQMGkZYFDmHq0
-         G+oPn/mECY70cmZSeJXj76in5AfzuU8C8eNDkbWkW1wY5W8QbskzFA9UA+jQUbv56GO0
-         I/xkxz8xrnVcnbv4JuwIf72i2QVic6NNeajpa0T0UdDqB0PkXrykbN/xlMtT1ck4QP+b
-         2wPA==
-X-Forwarded-Encrypted: i=1; AJvYcCV8kCRV8jC+CE34C2R9pq1b7lrFk7ckRZvzccffh3uT05/8ykdJb/fK/AsDjRIFqOozpjgGYqxvGW9jIzkowyx4@vger.kernel.org, AJvYcCX15ylc9cuFFIXP2lK/3qZfzwgmnCJD5s2LoWYGso6VQe5QWzQ8GV4dbEThSkYNpJWTr9AqMqtEcYFzjxU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhY4lJsTWedLh5wvPwEdJVyr24mcskD42QmG8zOgbTtIHWaOIb
-	XH8l7PrnZk6NlJTkvY1Rh8V4L3y9CrlxiWFWTc4ZmZhx2FltOT0=
-X-Google-Smtp-Source: AGHT+IF7SBJEiJMuR9fCILLl9OfbS82ng3pSyNG+4RNSHQ+AlLbhzjn4nE493fAzrjEX3VDU0aM+Kg==
-X-Received: by 2002:a05:6a20:361f:b0:1d9:c7df:3b1d with SMTP id adf61e73a8af0-1d9c7df3c73mr30426574637.12.1730778622752;
-        Mon, 04 Nov 2024 19:50:22 -0800 (PST)
-Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ee455a73d2sm8057852a12.46.2024.11.04.19.50.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 19:50:22 -0800 (PST)
-Date: Mon, 4 Nov 2024 19:50:21 -0800
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Joe Damato <jdamato@fastly.com>
-Cc: netdev@vger.kernel.org, corbet@lwn.net, hdanton@sina.com,
-	bagasdotme@gmail.com, pabeni@redhat.com, namangulati@google.com,
-	edumazet@google.com, amritha.nambiar@intel.com,
-	sridhar.samudrala@intel.com, sdf@fomichev.me, peter@typeblog.net,
-	m2shafiei@uwaterloo.ca, bjorn@rivosinc.com, hch@infradead.org,
-	willy@infradead.org, willemdebruijn.kernel@gmail.com,
-	skhawaja@google.com, kuba@kernel.org,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	"David S. Miller" <davem@davemloft.net>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next v6 6/7] selftests: net: Add busy_poll_test
-Message-ID: <ZymV_dgbVKW49595@mini-arch>
-References: <20241104215542.215919-1-jdamato@fastly.com>
- <20241104215542.215919-7-jdamato@fastly.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE6AA2D;
+	Tue,  5 Nov 2024 04:16:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.62
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730780182; cv=fail; b=ZwArZUKjSk0i8O7/uo6sAEG8TOhPa/evMUBY1UDGiJkeTgBlMSvDoatphJs4jPLBjmqDNdKOG9W5ZKrKhpKHq81V5Mp9lg/rUZQXbHRd1eLjTwGgXxb7bxbTyVJTLsIuYR/bhPYZ7O57qfUYQS9EWoIFyYaKfjFSrvq/VZcdpt0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730780182; c=relaxed/simple;
+	bh=q8IhqjYkBfbQDJfkj8r6lJFPRRXJAirDQGY5+vafnzg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=dsGgabIya85uDMfJBgxYhM7oMPgGLg8jih6G3a1uR2PUlj+ZNhGx1xh4C2M1DJFjnFnzMWQKaiCWTzRyAYZ9wsa6/CbizdwIoEV3vaIHoeHjEQGWOmkN+4iTiAUpI7aIDxerCr3J78rvz7BBzUM3bWMAhK/1kChhqwEYM1i5msk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=p3hWkmFr; arc=fail smtp.client-ip=40.107.236.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=FptecqUZNedxjVezOx5VOPVn++hpjdilWDhp4wYkNdrXS+oyGVOcqLuGW855cCZLtTfLmarGo7lD8f+v8KJS7CHUlC/wQeYaJH55UPEHTLC0lh41XyldVAXGptUNlr+KCIanD/opWTi51+S0WQuJGw6XUAiYPZNNCSVmETBlFM50ERzwAUkbr7GQDW0qDAFqNI806E489uJ2a28EoI3eqFk9wXpKHe4RIwDXh9hRe2ISV/RTyvyRwz/jyKcMvU0oQwqRE2kI85d/H4eedru08ND2k7+lSvYE2ML2J1rizD+ch0A6BewRW4+zIEichqSRwiGHzcFlDdLBImqKX023+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OVl40cnr3tvY8cQTuaW2fo3R7UnZBuSG99wWe+gNGus=;
+ b=Lkwl0Qyi680KXd5EARDyStx6ZHeBZbrCNBqVTHlaFe0G+yhzXi1XsFY3G4Qx1CBNv5mTaimlr6ZHXnwon6Sa/CZM+b0JrREOwaQzv8a0hwhZBdGCqc8w+seWusjG+KBGjfyHG/fcPKHCgo2GV7lWjXX/UzIWH8YfAFXFfVoPliNHAODkoQeGEQ4zzcJi8SuaHDmmJOwjlOaFmh7EmzYPSsMYizZ4I1EEgsztqnGDx8Ts37qqakdOlE0oKCG3R9Y9SMKuyyJKAXp5Q5w8+ANjO/kr8/Y1SnPPnU83P40Z5Jjlu6qF4YcCt0sMftTGMa8mrar++IepDgr4qW+g2C79uA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OVl40cnr3tvY8cQTuaW2fo3R7UnZBuSG99wWe+gNGus=;
+ b=p3hWkmFrUE/h5SnTakzyzoGb/EYwu12omwkj+3+R5HCtOH3GsTAxU4MFSWiezeWk7QiAA9NgxPyhfz9Y9+qye/8Uz8r2wQwP7a3Jsztq30BkecyqamibDNtUWEPgoHUugyGI1OScUIMkfhjTCj+RuB25k3F6To1roS+DwJbPK3E=
+Received: from BL1PR13CA0223.namprd13.prod.outlook.com (2603:10b6:208:2bf::18)
+ by IA1PR12MB8238.namprd12.prod.outlook.com (2603:10b6:208:3f9::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.30; Tue, 5 Nov
+ 2024 04:16:15 +0000
+Received: from BL6PEPF00020E61.namprd04.prod.outlook.com
+ (2603:10b6:208:2bf:cafe::4e) by BL1PR13CA0223.outlook.office365.com
+ (2603:10b6:208:2bf::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.17 via Frontend
+ Transport; Tue, 5 Nov 2024 04:16:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL6PEPF00020E61.mail.protection.outlook.com (10.167.249.22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8137.17 via Frontend Transport; Tue, 5 Nov 2024 04:16:15 +0000
+Received: from [172.31.11.224] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 4 Nov
+ 2024 22:15:10 -0600
+Message-ID: <0efe04cf-9b12-4a22-ad76-b7cd1f719f45@amd.com>
+Date: Mon, 4 Nov 2024 22:14:47 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241104215542.215919-7-jdamato@fastly.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/9] KVM: selftests: Add a basic SNP smoke test
+To: Sean Christopherson <seanjc@google.com>
+CC: <kvm@vger.kernel.org>, <pbonzini@redhat.com>, <pgonda@google.com>,
+	<thomas.lendacky@amd.com>, <michael.roth@amd.com>, <shuah@kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <Zw2fW2AJU-_Yi5U6@google.com>
+ <4984cba7-427a-4065-9fcc-97b9f67163ed@amd.com> <Zx_QJJ1iAYewvP-k@google.com>
+ <71f0fb41-d5a7-450b-ba47-ad6c39dce586@amd.com> <ZyI4cRLsaTQ3FMk7@google.com>
+ <de2a6758-a906-4dc0-b481-6ce73aba24b9@amd.com> <ZyJzcOCPJstrumbE@google.com>
+ <11787a92-66ed-41ef-9623-d6c7220fb861@amd.com> <ZyOv5US9u22lAiPU@google.com>
+ <99e64d8e-2d10-41c7-8b7e-cd059c7e7f29@amd.com> <ZyldJ_ociCLg-b9a@google.com>
+Content-Language: en-US
+From: "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>
+In-Reply-To: <ZyldJ_ociCLg-b9a@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF00020E61:EE_|IA1PR12MB8238:EE_
+X-MS-Office365-Filtering-Correlation-Id: bc6217e0-f78f-42d0-a1e9-08dcfd509725
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|36860700013|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TXFObDJLbnViTWt0ZEt5SEU1ajcreW8zRVpqZmg0ZnhCZ0UrV3gxTko3N1hK?=
+ =?utf-8?B?R3ZoTTNlZ3BHcERrRjRWTndEakNTU3JOaS9nVUtDbEQyMmlxZnQ1VVpqQVB4?=
+ =?utf-8?B?MW94dmJ5UURJY3lINDNUMmkvRmh1ZTdyOXYxNzdkTU9NQ0dLeUtQWG9yYTYw?=
+ =?utf-8?B?NlJXcDBiNWlBMDltMHN5eEc2Rno2cmdTRmczYmhYU05nRE5zekJWNHJjTXNo?=
+ =?utf-8?B?NnFlNzg5QnZVcGkrZGlSQ0NDbGFDTzBqWDhOOFBZR1JQaThNNmx0RlUvSHZy?=
+ =?utf-8?B?WXhoUWlEYW01c2lUV29rQWd0YUlhV2FyNnQyRENPcWhSWUV2TG12Q0dSN3Na?=
+ =?utf-8?B?WmxRWGx4bjdIY2pTQVJHbWludVBlV0E0eDdwY3RQUGd4VTZGS0x4clNReWJq?=
+ =?utf-8?B?ekxzQUtXanFrMnUyM0R3WVpPVENnVGx0WEhER0lYZ0V5bXI2N3p0cTVBYlp6?=
+ =?utf-8?B?U2dDUHF5alkyeTVkMG8yNEIyWkROUkYwMG8xOTZZcUQvYUxRUGI2NXpzdlhO?=
+ =?utf-8?B?dXI1VEs1UnN0dlRScmRTSW85Tk1XMXhKWEQrSFRZTHlWcnRSZlprZ0IyK1Zr?=
+ =?utf-8?B?WllHY0k1czRPeDlabUFoYnFINkZBVHZuaVczdWpYeFkrVW1MNnVBelJmYUlD?=
+ =?utf-8?B?aWZ2T1ZEQlh6c01kbDEreS8xVHA1UThDQjBRSDJzcU15VmFnbEdEa3RCb1lJ?=
+ =?utf-8?B?azJla2dIaHZuU3dOSXBGVzhFQWJqMkJvV0NXb2NmcTRKSTRNN0U5cXVaMXRX?=
+ =?utf-8?B?eVVIRDQyYzF3c3FHY3BoTjBtdGFTN0dvSkI5WFhxekpyL0tPK1JMUiszK0tU?=
+ =?utf-8?B?cnV0VUt4bWlTM0Nxd09PdWN0dmp4MGhtOXZhNGZJZ2poWFBkeEd2SXBhRUpz?=
+ =?utf-8?B?UU9tOEVxUHlZUkt6WXhPK2xVV1RKcmZHTzZzMHJCMTd0eG9xcnE1UFo3bDFN?=
+ =?utf-8?B?WHQ4d1dyS1JrZXBESlREVUs0QnRGM0U2TWtOVEc2OFl6QVR5SUk2bHBKa1Vp?=
+ =?utf-8?B?Umo1b1lvRHJEM0tIQmVsOE1wM3MwaW5JOEtKWkQ1RkFpRWtoQmpDRkpJZU53?=
+ =?utf-8?B?WnhJR2IyT2pOcXkrSWRwQW5QWDFDWmZ1Nkp4aDVJZE9COWUwYXFZNTUyYk5Y?=
+ =?utf-8?B?a0dlZlJwcU04TGlSTHVRRUx0NTM4MFc4ODI4bU84Tkd6Mk1lZ2FPME9PV1Rx?=
+ =?utf-8?B?ZmVLQ3dPNFpvZ2R3QUFNN2FweEpnSEE2SkZpaHZ2djZ3YVlkWGswNVBHaVp0?=
+ =?utf-8?B?cUZXNFdXNFFtdkl0OVp5ZCsyZnozZUJlbzMyL0lDdUdUbmh5WWdMak1wenFM?=
+ =?utf-8?B?djVHVHhwSjBKc0hMdkR6NkZKRDZYdGgrUU1FSlkyUkNJQUUwSGdDR0I2aGVY?=
+ =?utf-8?B?RXFDd2dXUGtCbkVtaGI0VUFaMk5KaFFYK3FraUg5NHBtRm9lWStDQW0zRUpF?=
+ =?utf-8?B?aE1qdzFNR3JVdVJOaG44OTU5RkhuL2t2MUNLWkpyZmNFZ0J3bVdZM3QyQmZl?=
+ =?utf-8?B?T3hjeWxGcjloVEd1UVFzSFlobU5SSHQ3ZlZNcGJwUU1hemxQUEFPMnpHVVZ6?=
+ =?utf-8?B?U0U0WlJlQWxQODkzRUNJYzF6VHk0UG1SQkdVVG15QXNFUElRNlk5NUhXVno5?=
+ =?utf-8?B?MDkyNkxJNmo5U2Q0TkZRckViaEN3L2ZWejVnbHBmL2xyY0F1TEZMYlZDOTVt?=
+ =?utf-8?B?OC9zVGZPSHRhRm9kTldMMFdjNk42S1VrR0c5WDhhQlcwSTZHVFMxN3ZsbmxO?=
+ =?utf-8?B?WFg3STQ2UXJJU1dEZkVWa2d2SzI3OUdMbG5oTk1QbXZtdXM4dEdoOFh4c0J1?=
+ =?utf-8?Q?uffIB3M+cHyxZz5BS6o2J9T8O6Msf5ZZ1fM5A=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2024 04:16:15.4179
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc6217e0-f78f-42d0-a1e9-08dcfd509725
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF00020E61.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8238
 
-On 11/04, Joe Damato wrote:
-> Add an epoll busy poll test using netdevsim.
-> 
-> This test is comprised of:
->   - busy_poller (via busy_poller.c)
->   - busy_poll_test.sh which loads netdevsim, sets up network namespaces,
->     and runs busy_poller to receive data and socat to send data.
-> 
-> The selftest tests two different scenarios:
->   - busy poll (the pre-existing version in the kernel)
->   - busy poll with suspend enabled (what this series adds)
-> 
-> The data transmit is a 1MiB temporary file generated from /dev/urandom
-> and the test is considered passing if the md5sum of the input file to
-> socat matches the md5sum of the output file from busy_poller.
-> 
-> netdevsim was chosen instead of veth due to netdevsim's support for
-> netdev-genl.
-> 
-> For now, this test uses the functionality that netdevsim provides. In the
-> future, perhaps netdevsim can be extended to emulate device IRQs to more
-> thoroughly test all pre-existing kernel options (like defer_hard_irqs)
-> and suspend.
-> 
-> Signed-off-by: Joe Damato <jdamato@fastly.com>
-> Co-developed-by: Martin Karsten <mkarsten@uwaterloo.ca>
-> Signed-off-by: Martin Karsten <mkarsten@uwaterloo.ca>
-> ---
->  v5:
->    - Updated commit message to replace netcat with socat and fixed
->      misspelling of netdevsim. No functional/code changes.
-> 
->  v4:
->    - Updated busy_poll_test.sh:
->      - use socat instead of nc
->      - drop cli.py usage from the script
->      - removed check_ynl
->    - Updated busy_poller.c:
->      - use netlink to configure napi parameters
-> 
->  v3:
->    - New in v3
-> 
->  tools/testing/selftests/net/.gitignore        |   1 +
->  tools/testing/selftests/net/Makefile          |   3 +-
->  tools/testing/selftests/net/busy_poll_test.sh | 164 +++++++++
->  tools/testing/selftests/net/busy_poller.c     | 328 ++++++++++++++++++
->  4 files changed, 495 insertions(+), 1 deletion(-)
->  create mode 100755 tools/testing/selftests/net/busy_poll_test.sh
->  create mode 100644 tools/testing/selftests/net/busy_poller.c
-> 
-> diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-> index 217d8b7a7365..85b0c4a2179f 100644
-> --- a/tools/testing/selftests/net/.gitignore
-> +++ b/tools/testing/selftests/net/.gitignore
-> @@ -2,6 +2,7 @@
->  bind_bhash
->  bind_timewait
->  bind_wildcard
-> +busy_poller
->  cmsg_sender
->  diag_uid
->  epoll_busy_poll
-> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-> index 26a4883a65c9..3ccfe454db1a 100644
-> --- a/tools/testing/selftests/net/Makefile
-> +++ b/tools/testing/selftests/net/Makefile
-> @@ -96,9 +96,10 @@ TEST_PROGS += fdb_flush.sh
->  TEST_PROGS += fq_band_pktlimit.sh
->  TEST_PROGS += vlan_hw_filter.sh
->  TEST_PROGS += bpf_offload.py
-> +TEST_PROGS += busy_poll_test.sh
->  
->  # YNL files, must be before "include ..lib.mk"
-> -YNL_GEN_FILES := ncdevmem
-> +YNL_GEN_FILES := ncdevmem busy_poller
->  TEST_GEN_FILES += $(YNL_GEN_FILES)
->  
->  TEST_FILES := settings
-> diff --git a/tools/testing/selftests/net/busy_poll_test.sh b/tools/testing/selftests/net/busy_poll_test.sh
-> new file mode 100755
-> index 000000000000..ffc74bc62e5a
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/busy_poll_test.sh
-> @@ -0,0 +1,164 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +source net_helper.sh
-> +
-> +NSIM_DEV_1_ID=$((256 + RANDOM % 256))
-> +NSIM_DEV_1_SYS=/sys/bus/netdevsim/devices/netdevsim$NSIM_DEV_1_ID
-> +NSIM_DEV_2_ID=$((512 + RANDOM % 256))
-> +NSIM_DEV_2_SYS=/sys/bus/netdevsim/devices/netdevsim$NSIM_DEV_2_ID
-> +
-> +NSIM_DEV_SYS_NEW=/sys/bus/netdevsim/new_device
-> +NSIM_DEV_SYS_DEL=/sys/bus/netdevsim/del_device
-> +NSIM_DEV_SYS_LINK=/sys/bus/netdevsim/link_device
-> +NSIM_DEV_SYS_UNLINK=/sys/bus/netdevsim/unlink_device
-> +
-> +setup_ns()
-> +{
-> +	set -e
-> +	ip netns add nssv
-> +	ip netns add nscl
-> +
-> +	NSIM_DEV_1_NAME=$(find $NSIM_DEV_1_SYS/net -maxdepth 1 -type d ! \
-> +		-path $NSIM_DEV_1_SYS/net -exec basename {} \;)
-> +	NSIM_DEV_2_NAME=$(find $NSIM_DEV_2_SYS/net -maxdepth 1 -type d ! \
-> +		-path $NSIM_DEV_2_SYS/net -exec basename {} \;)
-> +
-> +	# ensure the server has 1 queue
-> +	ethtool -L $NSIM_DEV_1_NAME combined 1 2>/dev/null
-> +
-> +	ip link set $NSIM_DEV_1_NAME netns nssv
-> +	ip link set $NSIM_DEV_2_NAME netns nscl
-> +
-> +	ip netns exec nssv ip addr add '192.168.1.1/24' dev $NSIM_DEV_1_NAME
-> +	ip netns exec nscl ip addr add '192.168.1.2/24' dev $NSIM_DEV_2_NAME
-> +
-> +	ip netns exec nssv ip link set dev $NSIM_DEV_1_NAME up
-> +	ip netns exec nscl ip link set dev $NSIM_DEV_2_NAME up
-> +
-> +	set +e
-> +}
-> +
-> +cleanup_ns()
-> +{
-> +	ip netns del nscl
-> +	ip netns del nssv
-> +}
-> +
-> +test_busypoll()
-> +{
-> +	tmp_file=$(mktemp)
-> +	out_file=$(mktemp)
-> +
-> +	# fill a test file with random data
-> +	dd if=/dev/urandom of=${tmp_file} bs=1M count=1 2> /dev/null
-> +
-> +	timeout -k 1s 30s ip netns exec nssv ./busy_poller -p48675 -b192.168.1.1 -m8 -u0 -P1 -g16 -i${NSIM_DEV_1_IFIDX} -o${out_file}&
-> +
-> +	wait_local_port_listen nssv 48675 tcp
-> +
-> +	ip netns exec nscl socat -u $tmp_file TCP:192.168.1.1:48675
-> +
-> +	wait
-> +
-> +	tmp_file_md5sum=$(md5sum $tmp_file | cut -f1 -d' ')
-> +	out_file_md5sum=$(md5sum $out_file | cut -f1 -d' ')
-> +
-> +	if [ "$tmp_file_md5sum" = "$out_file_md5sum" ]; then
-> +		res=0
-> +	else
-> +		echo "md5sum mismatch"
-> +		echo "input file md5sum: ${tmp_file_md5sum}";
-> +		echo "output file md5sum: ${out_file_md5sum}";
-> +		res=1
-> +	fi
-> +
-> +	rm $out_file $tmp_file
-> +
-> +	return $res
-> +}
-> +
-> +test_busypoll_with_suspend()
-> +{
-> +	tmp_file=$(mktemp)
-> +	out_file=$(mktemp)
-> +
-> +	# fill a test file with random data
-> +	dd if=/dev/urandom of=${tmp_file} bs=1M count=1 2> /dev/null
-> +
-> +	timeout -k 1s 30s ip netns exec nssv ./busy_poller -p48675 -b192.168.1.1 -m8 -u0 -P1 -g16 -d100 -r50000 -s20000000 -i${NSIM_DEV_1_IFIDX} -o${out_file}&
-> +
-> +	wait_local_port_listen nssv 48675 tcp
-> +
-> +	ip netns exec nscl socat -u $tmp_file TCP:192.168.1.1:48675
-> +
-> +	wait
-> +
-> +	tmp_file_md5sum=$(md5sum $tmp_file | cut -f1 -d' ')
-> +	out_file_md5sum=$(md5sum $out_file | cut -f1 -d' ')
-> +
-> +	if [ "$tmp_file_md5sum" = "$out_file_md5sum" ]; then
-> +		res=0
-> +	else
-> +		echo "md5sum mismatch"
-> +		echo "input file md5sum: ${tmp_file_md5sum}";
-> +		echo "output file md5sum: ${out_file_md5sum}";
-> +		res=1
-> +	fi
-> +
-> +	rm $out_file $tmp_file
-> +
-> +	return $res
-> +}
-> +
-> +###
-> +### Code start
-> +###
-> +
-> +modprobe netdevsim
-> +
-> +# linking
-> +
-> +echo $NSIM_DEV_1_ID > $NSIM_DEV_SYS_NEW
-> +echo $NSIM_DEV_2_ID > $NSIM_DEV_SYS_NEW
-> +udevadm settle
-> +
-> +setup_ns
-> +
-> +NSIM_DEV_1_FD=$((256 + RANDOM % 256))
-> +exec {NSIM_DEV_1_FD}</var/run/netns/nssv
-> +NSIM_DEV_1_IFIDX=$(ip netns exec nssv cat /sys/class/net/$NSIM_DEV_1_NAME/ifindex)
-> +
-> +NSIM_DEV_2_FD=$((256 + RANDOM % 256))
-> +exec {NSIM_DEV_2_FD}</var/run/netns/nscl
-> +NSIM_DEV_2_IFIDX=$(ip netns exec nscl cat /sys/class/net/$NSIM_DEV_2_NAME/ifindex)
-> +
-> +echo "$NSIM_DEV_1_FD:$NSIM_DEV_1_IFIDX $NSIM_DEV_2_FD:$NSIM_DEV_2_IFIDX" > $NSIM_DEV_SYS_LINK
-> +if [ $? -ne 0 ]; then
-> +	echo "linking netdevsim1 with netdevsim2 should succeed"
-> +	cleanup_ns
-> +	exit 1
-> +fi
-> +
-> +test_busypoll
-> +if [ $? -ne 0 ]; then
-> +	echo "test_busypoll failed"
-> +	cleanup_ns
-> +	exit 1
-> +fi
-> +
-> +test_busypoll_with_suspend
-> +if [ $? -ne 0 ]; then
-> +	echo "test_busypoll_with_suspend failed"
-> +	cleanup_ns
-> +	exit 1
-> +fi
-> +
-> +echo "$NSIM_DEV_1_FD:$NSIM_DEV_1_IFIDX" > $NSIM_DEV_SYS_UNLINK
-> +
-> +echo $NSIM_DEV_2_ID > $NSIM_DEV_SYS_DEL
-> +
-> +cleanup_ns
-> +
-> +modprobe -r netdevsim
-> +
-> +exit 0
-> diff --git a/tools/testing/selftests/net/busy_poller.c b/tools/testing/selftests/net/busy_poller.c
-> new file mode 100644
-> index 000000000000..8d8aa9e5939a
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/busy_poller.c
-> @@ -0,0 +1,328 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <assert.h>
-> +#include <errno.h>
-> +#include <error.h>
-> +#include <fcntl.h>
-> +#include <inttypes.h>
-> +#include <limits.h>
-> +#include <stdlib.h>
-> +#include <stdio.h>
-> +#include <string.h>
-> +#include <unistd.h>
-> +
-> +#include <arpa/inet.h>
-> +#include <netinet/in.h>
-> +
-> +#include <sys/ioctl.h>
-> +#include <sys/epoll.h>
-> +#include <sys/socket.h>
-> +#include <sys/types.h>
-> +
-> +#include <linux/netlink.h>
-> +#include <linux/genetlink.h>
-> +#include "netdev-user.h"
-> +#include <ynl.h>
-> +
-> +/* if the headers haven't been updated, we need to define some things */
-> +#if !defined(EPOLL_IOC_TYPE)
-> +struct epoll_params {
-> +	uint32_t busy_poll_usecs;
-> +	uint16_t busy_poll_budget;
-> +	uint8_t prefer_busy_poll;
-> +
-> +	/* pad the struct to a multiple of 64bits */
-> +	uint8_t __pad;
-> +};
-> +
-> +#define EPOLL_IOC_TYPE 0x8A
-> +#define EPIOCSPARAMS _IOW(EPOLL_IOC_TYPE, 0x01, struct epoll_params)
-> +#define EPIOCGPARAMS _IOR(EPOLL_IOC_TYPE, 0x02, struct epoll_params)
-> +#endif
-> +
-> +static uint32_t cfg_port = 8000;
-> +static struct in_addr cfg_bind_addr = { .s_addr = INADDR_ANY };
-> +static char *cfg_outfile;
-> +static int cfg_max_events = 8;
-> +static int cfg_ifindex;
-> +
-> +/* busy poll params */
-> +static uint32_t cfg_busy_poll_usecs;
-> +static uint16_t cfg_busy_poll_budget;
-> +static uint8_t cfg_prefer_busy_poll;
-> +
-> +/* IRQ params */
-> +static uint32_t cfg_defer_hard_irqs;
-> +static uint64_t cfg_gro_flush_timeout;
-> +static uint64_t cfg_irq_suspend_timeout;
-> +
-> +static void usage(const char *filepath)
-> +{
-> +	error(1, 0,
-> +	      "Usage: %s -p<port> -b<addr> -m<max_events> -u<busy_poll_usecs> -P<prefer_busy_poll> -g<busy_poll_budget> -o<outfile> -d<defer_hard_irqs> -r<gro_flush_timeout> -s<irq_suspend_timeout> -i<ifindex>",
-> +	      filepath);
-> +}
-> +
-> +static void parse_opts(int argc, char **argv)
-> +{
-> +	int ret;
-> +	int c;
-> +
-> +	if (argc <= 1)
-> +		usage(argv[0]);
-> +
-> +	while ((c = getopt(argc, argv, "p:m:b:u:P:g:o:d:r:s:i:")) != -1) {
-> +		switch (c) {
-> +		case 'u':
-> +			cfg_busy_poll_usecs = strtoul(optarg, NULL, 0);
-> +			if (cfg_busy_poll_usecs == ULONG_MAX ||
-> +			    cfg_busy_poll_usecs > UINT32_MAX)
-> +				error(1, ERANGE, "busy_poll_usecs too large");
-> +			break;
-> +		case 'P':
-> +			cfg_prefer_busy_poll = strtoul(optarg, NULL, 0);
-> +			if (cfg_prefer_busy_poll == ULONG_MAX ||
-> +			    cfg_prefer_busy_poll > 1)
-> +				error(1, ERANGE,
-> +				      "prefer busy poll should be 0 or 1");
-> +			break;
-> +		case 'g':
-> +			cfg_busy_poll_budget = strtoul(optarg, NULL, 0);
-> +			if (cfg_busy_poll_budget == ULONG_MAX ||
-> +			    cfg_busy_poll_budget > UINT16_MAX)
-> +				error(1, ERANGE,
-> +				      "busy poll budget must be [0, UINT16_MAX]");
-> +			break;
-> +		case 'p':
-> +			cfg_port = strtoul(optarg, NULL, 0);
-> +			if (cfg_port > UINT16_MAX)
-> +				error(1, ERANGE, "port must be <= 65535");
-> +			break;
-> +		case 'b':
-> +			ret = inet_aton(optarg, &cfg_bind_addr);
-> +			if (ret == 0)
-> +				error(1, errno,
-> +				      "bind address %s invalid", optarg);
-> +			break;
-> +		case 'o':
-> +			cfg_outfile = strdup(optarg);
-> +			if (!cfg_outfile)
-> +				error(1, 0, "outfile invalid");
-> +			break;
-> +		case 'm':
-> +			cfg_max_events = strtol(optarg, NULL, 0);
-> +
-> +			if (cfg_max_events == LONG_MIN ||
-> +			    cfg_max_events == LONG_MAX ||
-> +			    cfg_max_events <= 0)
-> +				error(1, ERANGE,
-> +				      "max events must be > 0 and < LONG_MAX");
-> +			break;
-> +		case 'd':
-> +			cfg_defer_hard_irqs = strtoul(optarg, NULL, 0);
-> +
-> +			if (cfg_defer_hard_irqs == ULONG_MAX ||
-> +			    cfg_defer_hard_irqs > INT32_MAX)
-> +				error(1, ERANGE,
-> +				      "defer_hard_irqs must be <= INT32_MAX");
-> +			break;
-> +		case 'r':
-> +			cfg_gro_flush_timeout = strtoull(optarg, NULL, 0);
-> +
-> +			if (cfg_gro_flush_timeout == ULLONG_MAX)
-> +				error(1, ERANGE,
-> +				      "gro_flush_timeout must be < ULLONG_MAX");
-> +			break;
-> +		case 's':
-> +			cfg_irq_suspend_timeout = strtoull(optarg, NULL, 0);
-> +
-> +			if (cfg_irq_suspend_timeout == ULLONG_MAX)
-> +				error(1, ERANGE,
-> +				      "irq_suspend_timeout must be < ULLONG_MAX");
-> +			break;
-> +		case 'i':
-> +			cfg_ifindex = strtoul(optarg, NULL, 0);
-> +			if (cfg_ifindex == ULONG_MAX)
-> +				error(1, ERANGE,
-> +				      "ifindex must be < ULONG_MAX");
-> +			break;
-> +		}
-> +	}
-> +
-> +	if (!cfg_ifindex)
-> +		usage(argv[0]);
-> +
-> +	if (optind != argc)
-> +		usage(argv[0]);
-> +}
-> +
-> +static void epoll_ctl_add(int epfd, int fd, uint32_t events)
-> +{
-> +	struct epoll_event ev;
-> +
-> +	ev.events = events;
-> +	ev.data.fd = fd;
-> +	if (epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev) == -1)
-> +		error(1, errno, "epoll_ctl add fd: %d", fd);
-> +}
-> +
-> +static void setnonblock(int sockfd)
-> +{
-> +	int flags;
-> +
-> +	flags = fcntl(sockfd, F_GETFL, 0);
-> +
-> +	if (fcntl(sockfd, F_SETFL, flags | O_NONBLOCK) == -1)
-> +		error(1, errno, "unable to set socket to nonblocking mode");
-> +}
-> +
-> +static void write_chunk(int fd, char *buf, ssize_t buflen)
-> +{
-> +	ssize_t remaining = buflen;
-> +	char *buf_offset = buf;
-> +	ssize_t writelen = 0;
-> +	ssize_t write_result;
-> +
-> +	while (writelen < buflen) {
-> +		write_result = write(fd, buf_offset, remaining);
-> +		if (write_result == -1)
-> +			error(1, errno, "unable to write data to outfile");
-> +
-> +		writelen += write_result;
-> +		remaining -= write_result;
-> +		buf_offset += write_result;
-> +	}
-> +}
-> +
-> +static void setup_queue(void)
-> +{
-> +	struct netdev_napi_get_list *napi_list = NULL;
-> +	struct netdev_napi_get_req_dump *req = NULL;
-> +	struct netdev_napi_set_req *set_req = NULL;
-> +	struct ynl_sock *ys;
-> +	struct ynl_error yerr;
-> +	uint32_t napi_id;
-> +
-> +	ys = ynl_sock_create(&ynl_netdev_family, &yerr);
-> +	if (!ys)
-> +		error(1, 0, "YNL: %s", yerr.msg);
-> +
-> +	req = netdev_napi_get_req_dump_alloc();
-> +	netdev_napi_get_req_dump_set_ifindex(req, cfg_ifindex);
-> +	napi_list = netdev_napi_get_dump(ys, req);
-> +
-> +	/* assume there is 1 NAPI configured and take the first */
-> +	if (napi_list->obj._present.id)
-> +		napi_id = napi_list->obj.id;
-> +	else
-> +		error(1, 0, "napi ID not present?");
-> +
-> +	set_req = netdev_napi_set_req_alloc();
-> +	netdev_napi_set_req_set_id(set_req, napi_id);
-> +	netdev_napi_set_req_set_defer_hard_irqs(set_req, cfg_defer_hard_irqs);
-> +	netdev_napi_set_req_set_gro_flush_timeout(set_req,
-> +						  cfg_gro_flush_timeout);
-> +	netdev_napi_set_req_set_irq_suspend_timeout(set_req,
-> +						    cfg_irq_suspend_timeout);
-> +
-> +	if (netdev_napi_set(ys, set_req))
-> +		error(1, 0, "can't set NAPI params: %s\n", yerr.msg);
-> +
-> +	netdev_napi_get_list_free(napi_list);
-> +	netdev_napi_get_req_dump_free(req);
-> +	netdev_napi_set_req_free(set_req);
-> +	ynl_sock_destroy(ys);
-> +}
-> +
-> +static void run_poller(void)
-> +{
-> +	struct epoll_event events[cfg_max_events];
-> +	struct epoll_params epoll_params = {0};
-> +	struct sockaddr_in server_addr;
-> +	int i, epfd, nfds;
-> +	ssize_t readlen;
-> +	int outfile_fd;
-> +	char buf[1024];
-> +	int sockfd;
-> +	int conn;
-> +	int val;
 
-[..]
 
-> +	outfile_fd = open(cfg_outfile, O_WRONLY | O_CREAT, 0644);
-> +	if (outfile_fd == -1)
-> +		error(1, errno, "unable to open outfile: %s", cfg_outfile);
+On 11/4/2024 5:47 PM, Sean Christopherson wrote:
+> On Mon, Nov 04, 2024, Pratik R. Sampat wrote:
+>>
+>>
+>> On 10/31/2024 11:27 AM, Sean Christopherson wrote:
+>>> On Thu, Oct 31, 2024, Pratik R. Sampat wrote:
+>>>> Hi Sean,
+>>>>
+>>>> On 10/30/2024 12:57 PM, Sean Christopherson wrote:
+>>>>> On Wed, Oct 30, 2024, Pratik R. Sampat wrote:
+>>>>>> On 10/30/2024 8:46 AM, Sean Christopherson wrote:
+>>>>>>> +/* Minimum firmware version required for the SEV-SNP support */
+>>>>>>> +#define SNP_FW_REQ_VER_MAJOR   1
+>>>>>>> +#define SNP_FW_REQ_VER_MINOR   51
+>>>>>>>
+>>>>>>> Side topic, why are these hardcoded?  And where did they come from?  If they're
+>>>>>>> arbitrary KVM selftests values, make that super duper clear.
+>>>>>>
+>>>>>> Well, it's not entirely arbitrary. This was the version that SNP GA'd
+>>>>>> with first so that kind of became the minimum required version needed.
+>>>>>>
+>>>>>> I think the only place we've documented this is here -
+>>>>>> https://github.com/AMDESE/AMDSEV/tree/snp-latest?tab=readme-ov-file#upgrade-sev-firmware.
+>>>>>>
+>>>>>> Maybe, I can modify the comment above to say something like -
+>>>>>> Minimum general availability release firmware required for SEV-SNP support.
+>>>>>
+>>>>> Hmm, so if AMD says SNP is only supported for firmware version >= 1.51, why on
+>>>>> earth is that not checked and enforced by the kernel?  Relying on userspace to
+>>>>> not crash the host (or worse) because of unsupported firmware is not a winning
+>>>>> strategy.
+>>>>
+>>>> We do check against the firmware level 1.51 while setting things up
+>>>> first (drivers/crypto/ccp/sev-dev.c:__sev_snp_init_locked()) and we bail
+>>>> out if it's otherwise. From the userspace, calls to KVM_SEV_INIT2 or any
+>>>> other corresponding SNP calls should fail cleanly without any adverse
+>>>> effects to the host.
+>>>
+>>> And I'm saying, that's not good enough.  If the platform doesn't support SNP,
+>>> the KVM *must not* advertise support for SNP.
+>>>
+>>
+>> Sure, fair to expect this. Currently, if the FW check fails, SNP is not
+>> setup and there is nothing that indicates in the KVM capabilities (apart
+>> from one dmesg error) that the support does not exist.
+>>
+>> One thing I could do (as an independent patch) is to introduce a CC API
+>> that abstracts the FW version check made by the CCP module. Since sev
+>> platform status can be gotten before INIT to extract the major and minor
+>> version numbers, KVM can also call into this API and use that to decide
+>> if the KVM capabilities for SNP must be set or not.
+> 
+> Why is CC_ATTR_HOST_SEV_SNP set if hardware/firmware can't actually support SNP?
+> KVM shouldn't have to care about some arbitrary firmware API version, the whole
+> point of a driver is so that KVM doesn't have to deal with such details.
+> 
+> I'm a-ok with a KVM selftest *asserting* that the kernel isn't broken, but KVM
+> itself shouldn't need to manually check the firmware version.
 
-Any reason you're not printing to stdout? And then redirect it to a file
-in the shell script if needed. Lets you save some code on open/close
-and flag parsing :-p But I guess can keep it since you already have it
-all working.
+Clearing CC_ATTR_HOST_SEV_SNP when the init fails is one approach to go
+about it. Here we could clear it from here and eventually that would
+prevent the the SNP feature being set in KVM capability.
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
++++ b/drivers/crypto/ccp/sev-dev.c
+@@ -1099,6 +1099,7 @@ static int __sev_snp_init_locked(int *error)
+                return 0;
+
+        if (!sev_version_greater_or_equal(SNP_MIN_API_MAJOR, SNP_MIN_API_MINOR)) {
++               cc_platform_clear(CC_ATTR_HOST_SEV_SNP);
+
+A suggestion where we could more directly approach this could be by
+exporting an explicit check from ccp instead?
+
+--- a/drivers/crypto/ccp/sev-dev.c
++++ b/drivers/crypto/ccp/sev-dev.c
+@@ -122,6 +122,12 @@ static inline bool sev_version_greater_or_equal(u8 maj, u8 min)
+        return false;
+ }
+
++bool sev_snp_fw_available(void)
++{
++    return sev_version_greater_or_equal(SNP_MIN_API_MAJOR, SNP_MIN_API_MINOR);
++}
++EXPORT_SYMBOL_GPL(sev_snp_fw_available);
+
+which could be then called on will as follows:
+
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -3050,7 +3050,9 @@ void __init sev_hardware_setup(void)
+        sev_es_asid_count = min_sev_asid - 1;
+        WARN_ON_ONCE(misc_cg_set_capacity(MISC_CG_RES_SEV_ES, sev_es_asid_count));
+        sev_es_supported = true;
+-       sev_snp_supported = sev_snp_enabled && cc_platform_has(CC_ATTR_HOST_SEV_SNP);
++       sev_snp_supported = sev_snp_enabled && cc_platform_has(CC_ATTR_HOST_SEV_SNP) && sev_snp_fw_available();
+
+ out:
+        if (boot_cpu_has(X86_FEATURE_SEV))
+
+This would ensure that we could enable and disable the SNP capability
+even in the case where maybe the firmware can get hotloaded using the
+proposed download_firmware_ex[1] or in cases where the INIT could be
+deferred; all while KVM wouldn't need to be bothered with the API
+details.
+
+[1]: https://lore.kernel.org/lkml/20241029183907.3536683-1-dionnaglaze@google.com/
+
+
 
