@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-21465-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21466-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCD009BD47B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 19:24:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 072159BD47A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 19:24:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47FD1B227D3
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 395541C22298
 	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 18:24:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABDE01E7668;
-	Tue,  5 Nov 2024 18:24:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EDA01E7677;
+	Tue,  5 Nov 2024 18:24:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UHxCPaP4"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CpwZqc0G"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A47C1E7C27
-	for <linux-kselftest@vger.kernel.org>; Tue,  5 Nov 2024 18:24:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E8C1E766D
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 Nov 2024 18:24:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730831050; cv=none; b=Gn5vyktU7K5lLGc1Ks2DG2VYJll6HPksJhajct45mFIx2HqBRZMSIjXoTigH2N95HQTRmgYeg9L/6E0s4R8nv26IUKG3tIW4J4zeSXkwTIGJuxpcmVhOgOvEIqkFweG8u+CKtk7x/a/ENkRntCyHf+khcWVcNqt7H45XhEUf/SM=
+	t=1730831054; cv=none; b=X6qw4q52x1k6U0HD4L6y+1uEcfYX3/ZrJ2p/Cnl0qkAzjhwF/Qgbunu08ID3Bpn3WbunvudwSkJ3hSZJEE5Rj0/nXo9Fx70ylR4M8TBfpioM0/v8ZCQvYXR6K+0L/TcZr3g5lxmdE/PNMK5TIS20ViNcWejE6QBA5E27QWTQfYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730831050; c=relaxed/simple;
-	bh=CEjCyvXvJ/kGyO+gCOIAjc/shcY5Wcat2zi6BAVM/1I=;
+	s=arc-20240116; t=1730831054; c=relaxed/simple;
+	bh=vr3Sv/+c82v6CtX9a+kMIZ6s1FUOVbpF9h0hlQAI8oU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PebuU7AK39AZePDW7VFRDpUdATQ64UWjQLmBZRWnrD0LADCsGllxf8NubnHsJBatNaZflHFr363NROv5cw2PXbgoL932SLdxiMamQtXIP7zXU+UGeXeVGVhJ0L+LBmtgPvTiUIfoMiQlBlmmKxb2YynHwe8XgoAKSO8uLfBdJGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UHxCPaP4; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=VJ8rM4huaVQtWt4DGYA9fVxCOmmR2OUloZu3u7zysWbZRTCPGPlNphLkeHI7781+3RsSwknbUWqDKJ6VjyYx5L0UfJVx7NbpbqjcGmjOLaE9VrsKBD/Igs61IA5IEyZAG0kEp30deskj3rYEaU7kEfERJMfDCKpVgTNtg6quv80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CpwZqc0G; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1730831048;
+	s=mimecast20190719; t=1730831051;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=9nMzFaH7xhvOwU6njzW4m1dY8b7raVf0U5dhvj0ijxw=;
-	b=UHxCPaP498sbndSxwSDDgKYC8M/Uhj2VM7MIHf7AFsra5Mes9vPMu7+z/UDvmMPWFNdGhI
-	TT0tRPe5vL0/QjRwEiEBT/3NJNTrL9Evqm2GerHZLgN7jhpqPRoP5y1v67yB1EFGN1U0Af
-	0mBoAuI2PbBqxwus9T0RrZvolaIRYPQ=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+	bh=zbAjl2Shden4WnBpQYkGv2fcUa8pXm9RHIlYLMS16Qs=;
+	b=CpwZqc0G/07abRZ0gXcKVgaC4Q8p+dkNo0knrr9/cLrS9VPxHjFcvKlkbmcur8yPXALDFH
+	3RLaPSoI1jkgPj1kOi0nGycvlhlrLtpuoVpHB+5A6sBcHiHzBJMlsY59R5a2eEOyfrKFCX
+	R9rgjoKc8xjIaqqDI3FBiNg9wYvG4Pw=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-496-lwjcZruJMu6J3AHgI2rcKg-1; Tue,
- 05 Nov 2024 13:24:05 -0500
-X-MC-Unique: lwjcZruJMu6J3AHgI2rcKg-1
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-590-INp5UxUuMkSxVa2HodlQFw-1; Tue,
+ 05 Nov 2024 13:24:08 -0500
+X-MC-Unique: INp5UxUuMkSxVa2HodlQFw-1
 Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3AE3F195395C;
-	Tue,  5 Nov 2024 18:24:03 +0000 (UTC)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F18FB19560BD;
+	Tue,  5 Nov 2024 18:24:06 +0000 (UTC)
 Received: from gerbillo.redhat.com (unknown [10.45.225.71])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BE59C19560AA;
-	Tue,  5 Nov 2024 18:23:59 +0000 (UTC)
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9658819560AA;
+	Tue,  5 Nov 2024 18:24:03 +0000 (UTC)
 From: Paolo Abeni <pabeni@redhat.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -65,9 +65,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Simon Horman <horms@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 net-next 1/2] ipv6: release nexthop on device removal
-Date: Tue,  5 Nov 2024 19:23:50 +0100
-Message-ID: <604c45c188c609b732286b47ac2a451a40f6cf6d.1730828007.git.pabeni@redhat.com>
+Subject: [PATCH v2 net-next 2/2] selftests: net: really check for bg process completion
+Date: Tue,  5 Nov 2024 19:23:51 +0100
+Message-ID: <0e6f213811f8e93a235307e683af8225cc6277ae.1730828007.git.pabeni@redhat.com>
 In-Reply-To: <cover.1730828007.git.pabeni@redhat.com>
 References: <cover.1730828007.git.pabeni@redhat.com>
 Precedence: bulk
@@ -79,91 +79,33 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-The CI is hitting some aperiodic hangup at device removal time in the
-pmtu.sh self-test:
+A recent refactor transformed the check for process completion
+in a true statement, due to a typo.
 
-unregister_netdevice: waiting for veth_A-R1 to become free. Usage count = 6
-ref_tracker: veth_A-R1@ffff888013df15d8 has 1/5 users at
-	dst_init+0x84/0x4a0
-	dst_alloc+0x97/0x150
-	ip6_dst_alloc+0x23/0x90
-	ip6_rt_pcpu_alloc+0x1e6/0x520
-	ip6_pol_route+0x56f/0x840
-	fib6_rule_lookup+0x334/0x630
-	ip6_route_output_flags+0x259/0x480
-	ip6_dst_lookup_tail.constprop.0+0x5c2/0x940
-	ip6_dst_lookup_flow+0x88/0x190
-	udp_tunnel6_dst_lookup+0x2a7/0x4c0
-	vxlan_xmit_one+0xbde/0x4a50 [vxlan]
-	vxlan_xmit+0x9ad/0xf20 [vxlan]
-	dev_hard_start_xmit+0x10e/0x360
-	__dev_queue_xmit+0xf95/0x18c0
-	arp_solicit+0x4a2/0xe00
-	neigh_probe+0xaa/0xf0
+As a result, the relevant test-case is unable to catch the
+regression it was supposed to detect.
 
-While the first suspect is the dst_cache, explicitly tracking the dst
-owing the last device reference via probes proved such dst is held by
-the nexthop in the originating fib6_info.
+Restore the correct condition.
 
-Similar to commit f5b51fe804ec ("ipv6: route: purge exception on
-removal"), we need to explicitly release the originating fib info when
-disconnecting a to-be-removed device from a live ipv6 dst: move the
-fib6_info cleanup into ip6_dst_ifdown().
-
-Tested running:
-
-./pmtu.sh cleanup_ipv6_exception
-
-in a tight loop for more than 400 iterations with no spat, running an
-unpatched kernel  I observed a splat every ~10 iterations.
-
-Fixes: f88d8ea67fbd ("ipv6: Plumb support for nexthop object in a fib6_info")
+Fixes: 691bb4e49c98 ("selftests: net: avoid just another constant wait")
 Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 ---
-v1 -> v2:
- - dropped unintended whitespace change
----
- net/ipv6/route.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/net/pmtu.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index d7ce5cf2017a..038c1eeef0be 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -374,6 +374,7 @@ static void ip6_dst_ifdown(struct dst_entry *dst, struct net_device *dev)
- {
- 	struct rt6_info *rt = dst_rt6_info(dst);
- 	struct inet6_dev *idev = rt->rt6i_idev;
-+	struct fib6_info *from;
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+index 569bce8b6383..6c651c880fe8 100755
+--- a/tools/testing/selftests/net/pmtu.sh
++++ b/tools/testing/selftests/net/pmtu.sh
+@@ -2056,7 +2056,7 @@ check_running() {
+ 	pid=${1}
+ 	cmd=${2}
  
- 	if (idev && idev->dev != blackhole_netdev) {
- 		struct inet6_dev *blackhole_idev = in6_dev_get(blackhole_netdev);
-@@ -383,6 +384,8 @@ static void ip6_dst_ifdown(struct dst_entry *dst, struct net_device *dev)
- 			in6_dev_put(idev);
- 		}
- 	}
-+	from = unrcu_pointer(xchg(&rt->from, NULL));
-+	fib6_info_release(from);
+-	[ "$(cat /proc/${pid}/cmdline 2>/dev/null | tr -d '\0')" = "{cmd}" ]
++	[ "$(cat /proc/${pid}/cmdline 2>/dev/null | tr -d '\0')" = "${cmd}" ]
  }
  
- static bool __rt6_check_expired(const struct rt6_info *rt)
-@@ -1455,7 +1458,6 @@ static DEFINE_SPINLOCK(rt6_exception_lock);
- static void rt6_remove_exception(struct rt6_exception_bucket *bucket,
- 				 struct rt6_exception *rt6_ex)
- {
--	struct fib6_info *from;
- 	struct net *net;
- 
- 	if (!bucket || !rt6_ex)
-@@ -1467,8 +1469,6 @@ static void rt6_remove_exception(struct rt6_exception_bucket *bucket,
- 	/* purge completely the exception to allow releasing the held resources:
- 	 * some [sk] cache may keep the dst around for unlimited time
- 	 */
--	from = unrcu_pointer(xchg(&rt6_ex->rt6i->from, NULL));
--	fib6_info_release(from);
- 	dst_dev_put(&rt6_ex->rt6i->dst);
- 
- 	hlist_del_rcu(&rt6_ex->hlist);
+ test_cleanup_vxlanX_exception() {
 -- 
 2.45.2
 
