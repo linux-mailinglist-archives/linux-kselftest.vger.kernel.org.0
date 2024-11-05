@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-21422-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21423-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 689849BC1C1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 01:00:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE4DD9BC1C3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 01:01:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 212D91F22758
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 00:00:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C0DA1C21278
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 00:01:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EF881FE0F9;
-	Tue,  5 Nov 2024 00:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 302A279C2;
+	Tue,  5 Nov 2024 00:01:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="clBDYcfC"
+	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="twRx4sHI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBDFF1FE0FB
-	for <linux-kselftest@vger.kernel.org>; Tue,  5 Nov 2024 00:00:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B96ECC
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 Nov 2024 00:01:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730764807; cv=none; b=LwrHRDaLPmVWFBH0UGuv2xRjfkSteC5vCm5ASTyR8NRZcGnojmuufOywyZ/zgDSa3156sN7xPdM8byxn+WWfhBOEf/JfDI8+ip5puFKZ35hrrC2mUEoUVd4NS6WBjYZse8s1X91mcwzF7B2CaKNYuc9hgKBK3Yg/vwwcZ2rDaRU=
+	t=1730764901; cv=none; b=Nrej3KZ4BCcuYufMT5sP1xp1meRQ7gd59zmgzWF0tmjHzCnnjGQRqoJWTREasP+nU5cg4wTNJNefws2Uoecyn6kArmnA3ptcdjiNmh4zJAWmiLk6Y9+1fiqXFa6osr3nNUWW+bh8NI0N7RyMQT2X+enG5Ahqs+Hg6KV2P880aZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730764807; c=relaxed/simple;
-	bh=mAkFgCxWNbgHQQsvcbYxnXkz6l64EKdZMzmY/bptL6E=;
+	s=arc-20240116; t=1730764901; c=relaxed/simple;
+	bh=6yI6UEYCEKxnrx9+/HaTpOpIPo4ib88NscvinntE2CU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FvhbGwii6Ks5mTeWAhJOepkOcT4taejQyBqbKDAlJ7nbLE2hFoj0UNOy8eCYPSUY8ddw2/sxhSqFMImdCCCgusdvFbjmte5pbJemjEKiKmzdJ+sBLl82xshs2IY/bqfNRrDZtZOVd7HIQ46l3At2q/iCAt+7Nj8F4SzMo1JljoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=clBDYcfC; arc=none smtp.client-ip=209.85.214.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=LgyHXHC5ToKQd1t/hl+gQCbadTHd6Svn36T483ANJKWhFDo8z6WFECXtfpoJ9xBUg/RTiIg/VVceOm+myVOEiZXQmEumPTrAhBNDfCHrpqS66QXoy2uLkUckWFKXizY/NLV08H2MaDP7WbMaxdeOLebaXVAXRexLU16aDYD/0Aw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=twRx4sHI; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-20caccadbeeso52610325ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 Nov 2024 16:00:04 -0800 (PST)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-71e7086c231so4194844b3a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 Nov 2024 16:01:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1730764804; x=1731369604; darn=vger.kernel.org;
+        d=fastly.com; s=google; t=1730764899; x=1731369699; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references
          :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ss2wdvpc+S9jF1wGdl+GS9FQpnDeDgZxQImgGWvIwg4=;
-        b=clBDYcfCXnTB9oZXZEbu4vX2HNUAS6m7q74fLhDIIj/BAxewMlekirRF2AlguhM/cj
-         UCnBhE+m4AVaPcz+lKr1HjqgSmdpr/jGg9CRBX19uIikCZY7ZZLVh5ig3IscNeIixc3A
-         HzM4eSfSs7IDKPFbIVkzRgfeoQS5qjrCmVl4o=
+        bh=DiShwGNgjZXzIJw3EmcQvT2xIzvJnyyeh86E3dyA92s=;
+        b=twRx4sHI0wz/woq772mlljvpYstU0YqJFG5KsNBnlET/7nJaLUOIRuKDQj5EPjk0yH
+         22aMFWEJnGwsKYuI4wt11AYiej0byLAqDth0J4uUR0MpIWQxIXX0mAH6zOexcytI19ES
+         j0HujcdW+rtt5/djCCNzP9N6fLNaMUdiNT9fU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730764804; x=1731369604;
+        d=1e100.net; s=20230601; t=1730764899; x=1731369699;
         h=in-reply-to:content-disposition:mime-version:references
          :mail-followup-to:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ss2wdvpc+S9jF1wGdl+GS9FQpnDeDgZxQImgGWvIwg4=;
-        b=i7DEui4zVwKggNmMPGW/Cb5v4tEgTkzvL1tDYCOsVys7UzPNluAeZjOMh4cxo9NMiV
-         sXMrfD+8QjI6Nw/6w9sgWwdAzCrYH+6pfPYbAFM/WSxHHmltgH0gO65zJ+7PXWRv7EIX
-         bfLomwu64lyTir9U4HE2fd2ek3aVSVDTLvOafLHV/SQYTLTgKK9IDW4nHuXFw7Sv7b/n
-         M7ewrUMii+rYhPpiSTkPGVUGKGFxw6JpzTMx4PTpNwvcBFaEuyMXHu6ZEMi6lzTpUpmg
-         L4NlMPxf/uyFDbHBVvRQrSQ9hPNiLRZrmCaIslBscavaauPPZXwKWuqIviFhmVOV9scF
-         l82w==
-X-Forwarded-Encrypted: i=1; AJvYcCXeXDFRgJmtjbvUrChLJiCKWHDKMk1KjmGg3+lAboCeQzSkgpSi+waanzCWs9Wk+RFdI32DZFQHzNEzBbi/v7o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbDxu4oWLcpBovKdRRfZIGFLLWyp5P5LuHZB1czZ3FMvamn/Ya
-	HJnfSPA5QZ7UsizaU+GB7pjyHu0ME5EZ4UjwDHtXyrqhy/oLmOB1w0Tw5zGAWKI=
-X-Google-Smtp-Source: AGHT+IEkbdGvIND5jE3XAsTDbBC7w3dQ7XXuiWp6+dkn4ch0B6RZqBsVaq+6l6hQ27sWvq1RnnEcpw==
-X-Received: by 2002:a17:902:e812:b0:20c:ef90:e4b5 with SMTP id d9443c01a7336-21103ca54e2mr239137785ad.52.1730764804073;
-        Mon, 04 Nov 2024 16:00:04 -0800 (PST)
+        bh=DiShwGNgjZXzIJw3EmcQvT2xIzvJnyyeh86E3dyA92s=;
+        b=mRvxdfDlMQzNesNs2eGkt1IZD4cugJ9eKFCtIJsMBaOMDRPrKfnxy8YCPb1qvEV07H
+         oK8Ql2SjCp1f1dLXSyy+T95ximrpQNM04+4t1cRYUWF40861caJwhaCzjhdkmFJfKXu/
+         HcHS99m4j7FZcwJwdETXMsemIeJU3gFNp8zj1zIoDfVrGVYRxk8umzeIyfyylQ5awa3V
+         26EvfoaZw81L78sJ9QBDiUI+m0NfWIPxA7eKhV9uNagbjwxlQgihaRoxMFIVdle9GNgG
+         pIFFIE8a1zqtiGiawoodWQkxIEHf8ofaEivyqVW2LJRB5a8zmDNFCReUZftnptq8mypf
+         jALQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWJiZ4ncfa046vvsgWHC0U5mNY5HhtBhD0lm2yIQIkZCER+O8k4IAvvpGhdlb4BBSzJDG6Of72yAr9MJi3u8p8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVNk3HHLPHNcsGqtAwkZ/QcaFZfGwycV8o/o4dfolNuJ63CyD2
+	IhOVQnyJqVeHBxOrZg9OOi/r+1qrIwLH66Oyo5CT5tnGA9swRjEFYC/5ulvZQKg=
+X-Google-Smtp-Source: AGHT+IHSdBpjRqV53YfC2PeU2ZEkln+b1qR+XerC9xeK/DFyQku0Yu13uWDphAHW0yUHzqmjnx+C+Q==
+X-Received: by 2002:a05:6a21:1798:b0:1d9:3456:b799 with SMTP id adf61e73a8af0-1d9a8535d0cmr45172446637.46.1730764898939;
+        Mon, 04 Nov 2024 16:01:38 -0800 (PST)
 Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057c0518sm67092635ad.182.2024.11.04.16.00.02
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ee452aa17dsm7698879a12.34.2024.11.04.16.01.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 16:00:03 -0800 (PST)
-Date: Mon, 4 Nov 2024 16:00:00 -0800
+        Mon, 04 Nov 2024 16:01:38 -0800 (PST)
+Date: Mon, 4 Nov 2024 16:01:35 -0800
 From: Joe Damato <jdamato@fastly.com>
 To: Stanislav Fomichev <sdf@fomichev.me>
 Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
@@ -72,9 +72,9 @@ Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
 	linux-kselftest@vger.kernel.org, andrew+netdev@lunn.ch,
 	shuah@kernel.org, horms@kernel.org, almasrymina@google.com,
 	willemb@google.com, petrm@nvidia.com
-Subject: Re: [PATCH net-next v7 08/12] selftests: ncdevmem: Use YNL to enable
- TCP header split
-Message-ID: <ZylgAPuiYuNcEAvk@LQ3V64L9R2>
+Subject: Re: [PATCH net-next v7 09/12] selftests: ncdevmem: Remove hard-coded
+ queue numbers
+Message-ID: <ZylgX5SzV_FExBJl@LQ3V64L9R2>
 Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
 	Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
 	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
@@ -83,7 +83,7 @@ Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
 	shuah@kernel.org, horms@kernel.org, almasrymina@google.com,
 	willemb@google.com, petrm@nvidia.com
 References: <20241104181430.228682-1-sdf@fomichev.me>
- <20241104181430.228682-9-sdf@fomichev.me>
+ <20241104181430.228682-10-sdf@fomichev.me>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,24 +92,16 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241104181430.228682-9-sdf@fomichev.me>
+In-Reply-To: <20241104181430.228682-10-sdf@fomichev.me>
 
-On Mon, Nov 04, 2024 at 10:14:26AM -0800, Stanislav Fomichev wrote:
-> In the next patch the hard-coded queue numbers are gonna be removed.
-> So introduce some initial support for ethtool YNL and use
-> it to enable header split.
-> 
-> Also, tcp-data-split requires latest ethtool which is unlikely
-> to be present in the distros right now.
-> 
-> (ideally, we should not shell out to ethtool at all).
+On Mon, Nov 04, 2024 at 10:14:27AM -0800, Stanislav Fomichev wrote:
+> Use single last queue of the device and probe it dynamically.
 > 
 > Reviewed-by: Mina Almasry <almasrymina@google.com>
 > Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
 > ---
->  tools/testing/selftests/net/Makefile   |  2 +-
->  tools/testing/selftests/net/ncdevmem.c | 57 +++++++++++++++++++++++++-
->  2 files changed, 56 insertions(+), 3 deletions(-)
+>  tools/testing/selftests/net/ncdevmem.c | 40 ++++++++++++++++++++++++--
+>  1 file changed, 38 insertions(+), 2 deletions(-)
 
 Reviewed-by: Joe Damato <jdamato@fastly.com>
 
