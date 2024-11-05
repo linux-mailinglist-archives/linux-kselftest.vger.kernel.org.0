@@ -1,120 +1,140 @@
-Return-Path: <linux-kselftest+bounces-21455-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21456-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9EC79BCCD9
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 13:37:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A25F99BCD98
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 14:14:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14E681C22229
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 12:37:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32CFB1F215E3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 13:14:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 257171D516A;
-	Tue,  5 Nov 2024 12:36:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 859D41D6190;
+	Tue,  5 Nov 2024 13:13:57 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFB141E485;
-	Tue,  5 Nov 2024 12:36:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94821D5ADD
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 Nov 2024 13:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.139.111.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730810217; cv=none; b=cB+Ie1PmL5R2HQgup4v90nqIja0o4P+A5DHgSct2fTMsSSn9Uf5rUGaaBSEPs1kyA+eDRIIRv/BOh5UCPjOM91/xFhOKsNaH1kDekUHQ0DpqCynHdzxCyUAuR2qsa18eSZmApY2o7fJsdYi/NocltmmZ/2GNYGLtm6siYcp6G44=
+	t=1730812437; cv=none; b=hdldJ8QHXBbEsdCagwGMinswiFUy8lnUeLgxDydHc7rT21ObZXn38ffOYal3zN+xLKemvaTfzIi6N2h9D/mhEkroI84m8RNSWfXBAfYIJEmEnr5vgYMw5xeAfMn1JcbcyHDc9ITqA/cnqb24p/HN2+PmMSUJq5wjb39s6OiOuo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730810217; c=relaxed/simple;
-	bh=JI6MB//wtf97/j8tW58PlJtqH71bKmL9KGU9T8eS3/4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WvSo6ZbikzxgE5106WU0Qfzz1iVZeZfuFMUZaWB6lkejFAUSjrG51VSFRg9YN9kPrCoLiTUb7jDnF2fvKi2+xaCnV/J9KhQzBO6S9HWjEp5OpZ/2QnSZELFpoQi/+hvp2pMeOZ6Xq44A5vJvyAACKEy3pCiEezkz9a6WLG8j/Uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D52CFEC;
-	Tue,  5 Nov 2024 04:37:22 -0800 (PST)
-Received: from [10.57.24.229] (unknown [10.57.24.229])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E04A3F6A8;
-	Tue,  5 Nov 2024 04:36:50 -0800 (PST)
-Message-ID: <4e57a6e6-f10c-4a35-88e7-ab4749f7e329@arm.com>
-Date: Tue, 5 Nov 2024 12:36:40 +0000
+	s=arc-20240116; t=1730812437; c=relaxed/simple;
+	bh=cTKw4bucyHaUEfDvFtmmDk1lZHQhrQj0jGdKtcdjaqU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rY18dvQOfDMCjI9Rfg0SrWsgxOoJQQduZ/ftQ5Pgixk5ZR4BwsFas3p4bhiHgI2jCOYJJj4h7gFzBhbHQ5Y9CTG70CFNthQaiVYdUa37zOvCr6UpNpRnilzxcBTQrjn/2s3ZiBEP72bpa8QPVHi0vyI5Ee7N+EBnTRDJOlT6EUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=fail smtp.mailfrom=queasysnail.net; arc=none smtp.client-ip=205.139.111.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=queasysnail.net
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-370-faJWNgejM8q20QJChVO3XQ-1; Tue,
+ 05 Nov 2024 08:12:41 -0500
+X-MC-Unique: faJWNgejM8q20QJChVO3XQ-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 91DA51955F56;
+	Tue,  5 Nov 2024 13:12:39 +0000 (UTC)
+Received: from hog (unknown [10.39.192.7])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 29E92300018D;
+	Tue,  5 Nov 2024 13:12:34 +0000 (UTC)
+Date: Tue, 5 Nov 2024 14:12:32 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v11 06/23] ovpn: introduce the ovpn_peer object
+Message-ID: <ZyoZwIOno_U_yMPF@hog>
+References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-6-de4698c73a25@openvpn.net>
+ <ZyJgs6Vrvzji8qvS@hog>
+ <4df15a91-4bcb-49d8-be78-28c71036ba8a@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] kunit: enable hardware acceleration when available
-To: Tamir Duberstein <tamird@gmail.com>,
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow
- <davidgow@google.com>, Rae Moar <rmoar@google.com>,
- Alyssa Ross <hi@alyssa.is>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
- <thomas@t-8ch.de>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org
-References: <20241102-kunit-qemu-accel-macos-v2-0-9d4579fddd20@gmail.com>
- <20241102-kunit-qemu-accel-macos-v2-2-9d4579fddd20@gmail.com>
-Content-Language: en-US
-From: Kristina Martsenko <kristina.martsenko@arm.com>
-In-Reply-To: <20241102-kunit-qemu-accel-macos-v2-2-9d4579fddd20@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4df15a91-4bcb-49d8-be78-28c71036ba8a@openvpn.net>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On 02/11/2024 12:09, Tamir Duberstein wrote:
-> Use KVM or HVF if supported by the QEMU binary and available on the
-> system.
+2024-10-30, 21:47:58 +0100, Antonio Quartulli wrote:
+> On 30/10/2024 17:37, Sabrina Dubroca wrote:
+> > 2024-10-29, 11:47:19 +0100, Antonio Quartulli wrote:
+> > > +static void ovpn_peer_release(struct ovpn_peer *peer)
+> > > +{
+> > > +	ovpn_bind_reset(peer, NULL);
+> > > +
+> > > +	dst_cache_destroy(&peer->dst_cache);
+> > 
+> > Is it safe to destroy the cache at this time? In the same function, we
+> > use rcu to free the peer, but AFAICT the dst_cache will be freed
+> > immediately:
+> > 
+> > void dst_cache_destroy(struct dst_cache *dst_cache)
+> > {
+> > [...]
+> > 	free_percpu(dst_cache->cache);
+> > }
+> > 
+> > (probably no real issue because ovpn_udp_send_skb gets called while we
+> > hold a reference to the peer?)
 > 
-> This produces a nice improvement on my Apple M3 Pro running macOS 14.7:
-> 
-> Before:
-> ./tools/testing/kunit/kunit.py exec --arch arm64
-> [HH:MM:SS] Elapsed time: 10.145s
-> 
-> After:
-> ./tools/testing/kunit/kunit.py exec --arch arm64
-> [HH:MM:SS] Elapsed time: 1.773s
-> 
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
-> ---
->  tools/testing/kunit/kunit_kernel.py       | 3 +++
->  tools/testing/kunit/qemu_configs/arm64.py | 2 +-
->  2 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index 61931c4926fd6645f2c62dd13f9842a432ec4167..3146acb884ecf0bcff94d5938535aabd4486fe82 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -123,6 +123,9 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
->  				'-append', ' '.join(params + [self._kernel_command_line]),
->  				'-no-reboot',
->  				'-nographic',
-> +				'-accel', 'kvm',
-> +				'-accel', 'hvf',
-> +				'-accel', 'tcg',
->  				'-serial', self._serial] + self._extra_qemu_params
->  		# Note: shlex.join() does what we want, but requires python 3.8+.
->  		print('Running tests with:\n$', ' '.join(shlex.quote(arg) for arg in qemu_command))
-> diff --git a/tools/testing/kunit/qemu_configs/arm64.py b/tools/testing/kunit/qemu_configs/arm64.py
-> index d3ff27024755411441f910799be30399295c9541..5c44d3a87e6dd2cd6b086138186a277a1473585b 100644
-> --- a/tools/testing/kunit/qemu_configs/arm64.py
-> +++ b/tools/testing/kunit/qemu_configs/arm64.py
-> @@ -9,4 +9,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
->  			   qemu_arch='aarch64',
->  			   kernel_path='arch/arm64/boot/Image.gz',
->  			   kernel_command_line='console=ttyAMA0',
-> -			   extra_qemu_params=['-machine', 'virt', '-cpu', 'max,pauth-impdef=on'])
-> +			   extra_qemu_params=['-machine', 'virt', '-cpu', 'max'])
+> Right.
+> That was my assumption: release happens on refcnt = 0 only, therefore no
+> field should be in use anymore.
+> Anything that may still be in use will have its own refcounter.
 
-Would it be possible to keep 'pauth-impdef=on' for TCG emulation? Otherwise
-performance regresses by about 20%.
+My worry is that code changes over time, assumptions are forgotten,
+and we end up with code that was a bit odd but safe not being safe
+anymore.
 
-Before this patch:
-./tools/testing/kunit/kunit.py exec --arch=arm64 --cross_compile=aarch64-linux-
-[11:03:38] Elapsed time: 15.494s
+> > 
+> > > +	netdev_put(peer->ovpn->dev, &peer->ovpn->dev_tracker);
+> > > +	kfree_rcu(peer, rcu);
+> > > +}
+> > 
+> > 
+> > [...]
+> > > +static int ovpn_peer_del_p2p(struct ovpn_peer *peer,
+> > > +			     enum ovpn_del_peer_reason reason)
+> > > +	__must_hold(&peer->ovpn->lock)
+> > > +{
+> > > +	struct ovpn_peer *tmp;
+> > > +
+> > > +	tmp = rcu_dereference_protected(peer->ovpn->peer,
+> > > +					lockdep_is_held(&peer->ovpn->lock));
+> > > +	if (tmp != peer) {
+> > > +		DEBUG_NET_WARN_ON_ONCE(1);
+> > > +		if (tmp)
+> > > +			ovpn_peer_put(tmp);
+> > 
+> > Does peer->ovpn->peer need to be set to NULL here as well? Or is it
+> > going to survive this _put?
+> 
+> First of all consider that this is truly something that we don't expect to
+> happen (hence the WARN_ON).
+> If this is happening it's because we are trying to delete a peer that is not
+> the one we are connected to (unexplainable scenario in p2p mode).
+>
+> Still, should we hit this case (I truly can't see how), I'd say "leave
+> everything as is - maybe this call was just a mistake".
 
-After this patch:
-./tools/testing/kunit/kunit.py exec --arch=arm64 --cross_compile=aarch64-linux-
-[11:10:47] Elapsed time: 19.099s
+Yeah, true, let's leave it. Thanks.
 
-Thanks,
-Kristina
+-- 
+Sabrina
 
 
