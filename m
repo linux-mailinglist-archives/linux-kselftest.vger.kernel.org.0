@@ -1,124 +1,251 @@
-Return-Path: <linux-kselftest+bounces-21450-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E28099BC9E4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 11:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DE0129BCA22
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 11:16:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 744DF1F21CDC
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 10:04:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EBF81F232F0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 10:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 683A71D1E92;
-	Tue,  5 Nov 2024 10:04:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD4951D1E68;
+	Tue,  5 Nov 2024 10:16:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jJfSa/WY"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="SXDMvxNW";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gVbzc6GC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from flow-b1-smtp.messagingengine.com (flow-b1-smtp.messagingengine.com [202.12.124.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99BC1CDA3E
-	for <linux-kselftest@vger.kernel.org>; Tue,  5 Nov 2024 10:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AF3818BC21;
+	Tue,  5 Nov 2024 10:16:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730801044; cv=none; b=s6TCkA/ULqY+2/icjfFf886ld/5/CIDyu3nUSESc5iTVskO1Jxi3XFP64LMJ4Rabtu+WqabnU2rnYY9Hyo1SWnI4FXZcvUTsaBM8udvfXfTcvAIrkcfQ9ffZxRlne8gIZ5SARBxU3EXz+74y7M7Pp3t0nxc6iAB3A9FFrGYRiZ8=
+	t=1730801812; cv=none; b=Egl5o59YltMxSlEskcuwT18LQRBDvjHgzoCzVBoqC9QBfu4ytOlwSVOEmoWPQeKBh8mccm+zpfsOHlYX1NDHnEBYRwo/llOHI3UfduhEMKeRkbbVfpQLTBm5wNctNYNUbj3pAZJ3gP0XUNmmBjdL0K99ntMjFDPUnqVOyKHADRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730801044; c=relaxed/simple;
-	bh=h+lVlv4v4kFhN60Y7uN6+mlTtYtzZfrbtQ0cnBBKEdU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B2pSVrnpZys9f7c4dhKl+RpSe3sJ/9HSW5Vve6C+8vXnbqg6u3T130EuBNohNs59W0ikOCcv/h74egbvvwmyWl2zpn0W/n4vYcQRy2S5d4FWkQ+H1/XMYJhgrTQeBqw+RG0EbFZ+Qpnb36rHIEpm8trSAEbUXyC2MZnal0yb844=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jJfSa/WY; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1730801041;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8fTSKKdEnBx5rNtqdwW2TR8ocPd2sPuXo5XqxbGsjrE=;
-	b=jJfSa/WYQvrE6bpHQNEl3J/5atSGVme+zTLu11uP9PePlGQF2RdT6+pKtFhllLHCdHenHD
-	wbagcRHbg+CstPbNVTma9v5JNtLmPdiaqutNeLoGaQEtFnYlFYOGo4jx+FkziQFWDA889y
-	I5kxZPh6C4sYz0qzzatotNIjnsRavQc=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-528-KW2hEIW4NqSxf6Qjfh5ClQ-1; Tue, 05 Nov 2024 05:03:59 -0500
-X-MC-Unique: KW2hEIW4NqSxf6Qjfh5ClQ-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-37d537292d7so3569356f8f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Nov 2024 02:03:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730801038; x=1731405838;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8fTSKKdEnBx5rNtqdwW2TR8ocPd2sPuXo5XqxbGsjrE=;
-        b=YQxxaSeXcACM2iXEodkcFAZAeph8yLf37rW4jI4Wx13zraPoFIB5w/WWiBHtfbK+2K
-         4ZocLCl7KU4dGTF1RSPQ+pye9LeijVL6WvEVEbPO1MQj2GPbgJgtIyrXqHN9Yme+h6/J
-         c+fJY3u0k7hRtaZz7NNTkfbuWllKI13Z9gDa6qL/C6n758Fhed/BS5ul3n+s5HmpZynY
-         YuCZGca9TBcT04aHHPj9/0CPdh7uoLiibFjj1nqwVLfUUj93Jpabr6pUnZ7Lv7SiQsGl
-         wxXkVrYqLaanJErYYPuEWOSfb8JnOQmE46oBjDdYWSDWqzxFV4H9twTyKqVz0Pg0go1M
-         HFlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW4wexcyk9DcPaoy2zHQzplwOQ+4Flgsc6GMS49RR841emgB6ruUWQnnqo1lIV+rSLYW3yrcguG1oGNtBHAaXA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxD5ttB309GSXYRWp5118FKrssSnW3KXtUSJo3b8MmKjS1Bh9tM
-	WnYg08m7lFkrctXBQLW4a71pUHcS0iJuttq2JWTXVNdvK/nYi/q8NWaLvGsUY+8baJEiLO/J5bd
-	IuYMIWpIp6wAL8FdGCh6PPtzTrtKSkauraBgki+nMyK4rXY0vQCnhQOtkTYYTRbQc7Q==
-X-Received: by 2002:a5d:6d0e:0:b0:37d:612c:5e43 with SMTP id ffacd0b85a97d-381c79737c7mr17614314f8f.0.1730801038373;
-        Tue, 05 Nov 2024 02:03:58 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE5+ZA7Cgp9oNVpemsCU9kPyu7wz//Ai6PjAUKnrwmGHPvQU4tJd+dwYLWosUIaPd5NLGFBIQ==
-X-Received: by 2002:a5d:6d0e:0:b0:37d:612c:5e43 with SMTP id ffacd0b85a97d-381c79737c7mr17614283f8f.0.1730801037971;
-        Tue, 05 Nov 2024 02:03:57 -0800 (PST)
-Received: from [192.168.88.24] (146-241-44-112.dyn.eolo.it. [146.241.44.112])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381c10b7b80sm15833061f8f.10.2024.11.05.02.03.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Nov 2024 02:03:57 -0800 (PST)
-Message-ID: <3664acbd-6468-4ec0-946b-f6d8494e4a75@redhat.com>
-Date: Tue, 5 Nov 2024 11:03:56 +0100
+	s=arc-20240116; t=1730801812; c=relaxed/simple;
+	bh=gZJL5qYt1xTrvOjGX3++AJUT/lFHM04H6Ei8g+IXzes=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jqutSGZODBRnSiJSaXh9CIII4NY5eO9yHqcwHG7vUNY30C0IFMgzNtXnU4fG6p/tgl/2KL0qAvGKpUrtx1unEMtMiu5/K0S+Fs0xqRiFnpgojufQQoYCVk6d+BzGA+raTOBX/T8IJA+Jg6UC15VoF9DfU6CcyjG9bRqtCxxPjUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=SXDMvxNW; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gVbzc6GC; arc=none smtp.client-ip=202.12.124.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
+	by mailflow.stl.internal (Postfix) with ESMTP id A06E11D401E9;
+	Tue,  5 Nov 2024 05:16:47 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Tue, 05 Nov 2024 05:16:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1730801807; x=
+	1730805407; bh=VMl+IW+FdIouLKEuIFSXfbNqh2FBd8YbJVQ1lbm+tG8=; b=S
+	XDMvxNWxAb1qjhxD2uFZpjWyPfCtLNnV/o1YA7mmiTlfoojmuemaK5yTav+CAapE
+	NT/cBahur79oHxZIxcjJJo4l/0xFWWyMV9S9ArQk/QDVZhc/EaawAVyF9ecWcEww
+	bnI8vn57F1MILq5lZQIhu7FgpekEOjMBffI+4qqNGg4KQpSV2zj4qmbOSt/1SvjK
+	p4gBrd4MfHWwZYEE4p12ng9YIcScmidBK339SMASDxzguqkSBG4DmDTRGepAVn3B
+	n9Cnu/ZhS8uLqXMDIlgB3wPc/uk9fudaSwVBZzDwhQ+Z5SsXmrAnY8DJB83HAs82
+	5H1b6uS+b5Pp+0RwlWedA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1730801807; x=1730805407; bh=VMl+IW+FdIouLKEuIFSXfbNqh2FBd8YbJVQ
+	1lbm+tG8=; b=gVbzc6GC7q8l9jxKq8BZjycqsEjByCftlxo+xxbsKOqiEdKiygc
+	p7gkeu3jMuda1qAu2eRMdhcOuEmGJ0A9CblS3zjc77YPz0x3///OdyRLBrXM/74F
+	MQ9P/d0XbV3SZEZLWtntv3UHgAxW+4E/tUxP+VBEh95oXv4vDl76PiAQxoWVmUyz
+	DyeNp3aJCAoT7PYpe5I1fw/PYgJec10xc0OsH3F6TEbm7xvaHLtMpZaiclFq60JQ
+	jKitAz6GjnVYWIhCS4ALR1wZwk6f6pf6bWYsZ+B6CiTNf/Hu9AQkm0xeT9hKCKPq
+	Z/9yBtkSe9oO/P1ZRHRQqsVuIbl3mrQImcw==
+X-ME-Sender: <xms:jvApZxEkTnCPkXVU4lryyBeyr0WpJs7YswF-lHiz11HytyOKMreDZQ>
+    <xme:jvApZ2W9TkuoU8Pk1v6FEWezjSAQ0wLzVw11OXIOVd5LaBzKbxTAQ1_J3OdDhBJwK
+    FwszUzWr7-KIlZVv38>
+X-ME-Received: <xmr:jvApZzK6K_VlxCwRgEEUyl0cg1cFhXYTD1cEJcppShHEHOqGPYqxHoGpxbtu>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdelkedgudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtjeen
+    ucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrg
+    hilhdrnhgvtheqnecuggftrfgrthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfek
+    geetheegheeifffguedvuefffefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggp
+    rhgtphhtthhopeduuddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnthhonh
+    hiohesohhpvghnvhhpnhdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhg
+    lhgvrdgtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtth
+    hopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepughonhgrlhgurdhh
+    uhhnthgvrhesghhmrghilhdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehrhigriigrnhhovhdrshdrrgesghhmrghilhdrtghomhdp
+    rhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehnvghtuggvvh
+    esvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:jvApZ3Gf4vN3EaceYPPgtYNRwRt74FqiVyOOpQuVmpF_Pskr8lJj5A>
+    <xmx:jvApZ3UtLanBcNCy3hau75ZhJv3iljh9X9CIdGK2QjjF1wsLRiFTfw>
+    <xmx:jvApZyMV1n2aZ5yVY2BVuStAZRjV5FWrCek8NoL0FXqwqah1UwTI8A>
+    <xmx:jvApZ20DBjRDguhrIAqevwfuQCwizitOscABNrhih4G6N_iuxyticQ>
+    <xmx:j_ApZzqT5e0t0a3OHmSP0Wr890EFTtRI7pslgmm3ogdfBu5mRSPDFqyf>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 5 Nov 2024 05:16:46 -0500 (EST)
+Date: Tue, 5 Nov 2024 11:16:44 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v11 19/23] ovpn: implement key add/get/del/swap
+ via netlink
+Message-ID: <ZynwjJNz6kLa4p7x@hog>
+References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-19-de4698c73a25@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v6] ipv6: Fix soft lockups in fib6_select_path under
- high next hop churn
-To: David Ahern <dsahern@gmail.com>,
- Omid Ehtemam-Haghighi <omid.ehtemamhaghighi@menlosecurity.com>,
- netdev@vger.kernel.org
-Cc: adrian.oliver@menlosecurity.com, Adrian Oliver <kernel@aoliver.ca>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Ido Schimmel <idosch@idosch.org>,
- Kuniyuki Iwashima <kuniyu@amazon.com>, Simon Horman <horms@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241025073003.2079945-1-omid.ehtemamhaghighi@menlosecurity.com>
- <0dc8c829-23f0-4904-8017-fc98c079f0ab@redhat.com>
- <7ae73a73-fba4-4692-97df-1a88ccc5f576@gmail.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <7ae73a73-fba4-4692-97df-1a88ccc5f576@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241029-b4-ovpn-v11-19-de4698c73a25@openvpn.net>
 
-On 10/31/24 15:10, David Ahern wrote:
-> On 10/31/24 4:13 AM, Paolo Abeni wrote:
->> Given the issue is long-standing, and the fix is somewhat invasive, I
->> suggest steering this patch on net-next.
+2024-10-29, 11:47:32 +0100, Antonio Quartulli wrote:
+> This change introduces the netlink commands needed to add, get, delete
+> and swap keys for a specific peer.
 > 
-> FWIW, I think net-next is best.
+> Userspace is expected to use these commands to create, inspect (non
+> sensible data only), destroy and rotate session keys for a specific
 
-Should I count the above as a formal ack? :-P
+nit: s/sensible/sensitive/
 
-FWIW, I went through the patch as thoroughly as I could and LGTM, but it
-does not apply (anymore?) to net-next.
+> +int ovpn_crypto_config_get(struct ovpn_crypto_state *cs,
+> +			   enum ovpn_key_slot slot,
+> +			   struct ovpn_key_config *keyconf)
+> +{
+[...]
+> +
+> +	rcu_read_lock();
+> +	ks = rcu_dereference(cs->slots[idx]);
+> +	if (!ks || (ks && !ovpn_crypto_key_slot_hold(ks))) {
+> +		rcu_read_unlock();
+> +		return -ENOENT;
+> +	}
+> +	rcu_read_unlock();
 
-@Omid: could you please rebase it on top of net-next and resend (with a
-proper net-next tag)?
+You could stay under rcu_read_lock a little bit longer and avoid
+taking a reference just to release it immediately.
 
-Thanks!
+> +	keyconf->cipher_alg = ovpn_aead_crypto_alg(ks);
+> +	keyconf->key_id = ks->key_id;
+> +
+> +	ovpn_crypto_key_slot_put(ks);
+> +
+> +	return 0;
+> +}
 
-Paolo
 
+[...]
+>  int ovpn_nl_key_get_doit(struct sk_buff *skb, struct genl_info *info)
+>  {
+[...]
+> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_KEYCONF], attrs,
+> +			      OVPN_A_KEYCONF_PEER_ID))
+> +		return -EINVAL;
+> +
+> +	peer_id = nla_get_u32(attrs[OVPN_A_KEYCONF_PEER_ID]);
+> +
+> +	peer = ovpn_peer_get_by_id(ovpn, peer_id);
+> +	if (!peer) {
+> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
+> +				       "cannot find peer with id %u", 0);
+
+                                                                       peer_id?
+
+> +		return -ENOENT;
+> +	}
+> +
+> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_KEYCONF], attrs,
+> +			      OVPN_A_KEYCONF_SLOT))
+> +		return -EINVAL;
+
+Move this check before ovpn_peer_get_by_id? We're leaking a reference
+on the peer.
+
+
+> +
+> +	slot = nla_get_u32(attrs[OVPN_A_KEYCONF_SLOT]);
+> +
+> +	ret = ovpn_crypto_config_get(&peer->crypto, slot, &keyconf);
+> +	if (ret < 0) {
+> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
+> +				       "cannot extract key from slot %u for peer %u",
+> +				       slot, peer_id);
+> +		goto err;
+> +	}
+> +
+> +	msg = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
+> +	if (!msg) {
+> +		ret = -ENOMEM;
+> +		goto err;
+> +	}
+> +
+> +	ret = ovpn_nl_send_key(msg, info, peer->id, slot, &keyconf,
+> +			       info->snd_portid, info->snd_seq, 0);
+
+info->snd_portid and info->snd_seq can be extracted from info directly
+in ovpn_nl_send_key since there's no other caller, and flags=0 can be
+skipped as well.
+
+> +	if (ret < 0) {
+> +		nlmsg_free(msg);
+> +		goto err;
+> +	}
+> +
+> +	ret = genlmsg_reply(msg, info);
+> +err:
+> +	ovpn_peer_put(peer);
+> +	return ret;
+>  }
+
+
+
+[...]
+>  int ovpn_nl_key_del_doit(struct sk_buff *skb, struct genl_info *info)
+>  {
+> -	return -EOPNOTSUPP;
+> +	struct nlattr *attrs[OVPN_A_KEYCONF_MAX + 1];
+> +	struct ovpn_struct *ovpn = info->user_ptr[0];
+> +	enum ovpn_key_slot slot;
+> +	struct ovpn_peer *peer;
+> +	u32 peer_id;
+> +	int ret;
+> +
+> +	if (GENL_REQ_ATTR_CHECK(info, OVPN_A_KEYCONF))
+> +		return -EINVAL;
+> +
+> +	ret = nla_parse_nested(attrs, OVPN_A_KEYCONF_MAX,
+> +			       info->attrs[OVPN_A_KEYCONF],
+> +			       ovpn_keyconf_nl_policy, info->extack);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_KEYCONF], attrs,
+> +			      OVPN_A_KEYCONF_PEER_ID))
+> +		return -EINVAL;
+> +
+> +	if (ret)
+> +		return ret;
+
+leftover?
+
+
+> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_KEYCONF], attrs,
+> +			      OVPN_A_KEYCONF_SLOT))
+> +		return -EINVAL;
+
+-- 
+Sabrina
 
