@@ -1,141 +1,154 @@
-Return-Path: <linux-kselftest+bounces-21446-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21447-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DA829BC817
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 09:36:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18F4F9BC818
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 09:37:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E15A28376A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 08:36:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30FCE1C20F2A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 08:37:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED56A1CCEFD;
-	Tue,  5 Nov 2024 08:36:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83C091925BE;
+	Tue,  5 Nov 2024 08:37:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pDn1eWjA"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JRKkrUXN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5DC18D63C
-	for <linux-kselftest@vger.kernel.org>; Tue,  5 Nov 2024 08:36:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A8013633F
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 Nov 2024 08:37:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730795765; cv=none; b=oD6GLYwntGH3zl/evBTlahxeixbDIid1/ksS2JYhDI0bG4oBqcHW9lMfRyRLu5tS6lXKBpBzFdTdW97MUyp8oaDcav2y0QtNCt++vvSfrWn8N1aFecWkJSIbpQp9LCTrE6oXmJgG5R6XpQ4O+1XDEfoFcItRpEFpYHzgjlyKRAY=
+	t=1730795826; cv=none; b=XU8rfE4nN+AtcPiOe5IP4VHYGpfTpLDzJ6ayMlpYrjXUwc18wv3YBhR0gGCssAp5x/lcFxay2TaqNSJnSXE4g4G9k+1cquP/hLKgdMxM2M5dssDZgpbutxZxIAFdiOcq8qqWhznkdIhcFX2JXfX3F/IfLE2CvfKw2/aWtUjjci4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730795765; c=relaxed/simple;
-	bh=kLSDCodhfVSQSASjRTW65Bpp1HMI50hUpdU0cqQJUYw=;
+	s=arc-20240116; t=1730795826; c=relaxed/simple;
+	bh=AHjiNdmndI9msqAHROYFaxHIpltguMMRdAS78aJGgsE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dXMHDt2G/7A7+NIcDcIBPhhSje52AY3XcJ0U8NpI2MyEXxCixl3QzG4dbiH9PQJlxFjegUegj/FsWtoB1btZDdcsBUkkEHsyEwq1GEWKerV/3yk7pNMa5I3Y4Yeufbi3UeeikitUVFXebpmnMopH6vX7ZYPT1QrCWXHXugYCZ0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pDn1eWjA; arc=none smtp.client-ip=209.85.219.44
+	 To:Cc:Content-Type; b=bjD1jWsJSR9BihlvxJrhJs6BXIKVcyPIyWLOVhWCqzZ7gxSSmZTWZ+cVlfopyk5EIVSra7XPfCUoegTrGDnBUYelQwz5JyPZMx6TaR3ct+jqoURBvHr13f96H1XCZLceHfFkmcXGGffdMmOYWrEwg0rKmcwSpA/uQrSv+Fp4GZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JRKkrUXN; arc=none smtp.client-ip=209.85.222.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6cbf340fccaso41076826d6.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Nov 2024 00:36:02 -0800 (PST)
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-7b157c9ad12so325742485a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Nov 2024 00:37:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730795761; x=1731400561; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1730795824; x=1731400624; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3157/xfurefXzTzQa3JrCE8mI9VFknHeSsDrp9NQlng=;
-        b=pDn1eWjAG/hHh3AOLXY08up5g+TBIuCb70uL81LS0pgcuXhEvqRO9JNCsCZuvA0LhE
-         FanUHi4Ql72foPHbyxldNXCU9qLW087iBW5D4cW8uJ9H8ui9XnVxzhErs6IzaededPPZ
-         Jj4zfwMzV/57nCNZwepdcFXNv6Bqu5QbCnAtcxOiZpbF8ocnx+TSUBmPY4FKMgCLQbnp
-         vxZO7jnqDgNbO3HxAwLN63HQo8op+nF38S5pf2t/fuAHhN2hF0TGrTrjurmaeGM+sFg6
-         x2BpqQzmXE8NNlA5U4gVb/m2Q3xYabn6ynaEBAbXf1PMBV1Tl9Ys8JsmOHm0TtIHLM6X
-         CyQA==
+        bh=dRTErahdoYNQh/0n+LL1YBVx/VK/qm+n1bnPHSlX8+M=;
+        b=JRKkrUXNJR0UUfWsOriL4N6Nv+Ve4mjBnVh+qNch5NeDZ/m+1zeArYZaOOV/9sNqVX
+         GHmKmv1c+Dm5cb68JKh/IAkzlKaEKs7u9Il/RkWntHR5c7KEknFGA9u+/f81awnL4X/C
+         YVyaKQ425KrELyii/D88pU+I3mddtq0A1SRR4RNUk/hHWG4Aqhl/3QBrIQrdwUbQjjSD
+         ZZPtxYaKG9UrHqIBmEGpvIaa5jNNV0wmy7Oh6PGx3iZxW2GP45/5G9PEn94MvckdcOvf
+         B7dGS95hKu2TFbEIj3heoR4j3JclecMwKB4ZOWc4R638v5bpdy5+6S1tYVunx/3Y1kj8
+         OGOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730795761; x=1731400561;
+        d=1e100.net; s=20230601; t=1730795824; x=1731400624;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3157/xfurefXzTzQa3JrCE8mI9VFknHeSsDrp9NQlng=;
-        b=Q1X2REtlu6Nn5Om2/n/g80xFW0T73NuEf2wxsqHJMzLZQxBJ9TFHEuUJ7XIsGpKrnX
-         M51I2VXHnfUJzknLbzR/+Wq5w7zz9Q2OfpXSvce5MMPLjkTOvIMuSCdK0QbrQYBaRLw1
-         XNer0JFUb92RJdufpG8pHO08Tk7ML6qv7LaUd/AE47+G7Qvl6WRP4xlqS+6/X0t7H51I
-         6x119V4i9qF96QgI1x4ieNP7gC/O2bfcj1h1ymjPXUK3rXQehEdHkOA0zohZq6BoDriT
-         MeDWhe2dT1C/dnYUp0IN9lGuwyI6ITwRGKQEp9dgLkI+A+l54+SE3qBq1fasW17CWDQO
-         8UxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXR3B1ty3qwDkrC5X4mZDq5V+O3H3uFBH3OQMjNHDiDlxMk2fnbJ0pqP/UIrugO8L71Xs2MPVkpRzyktdL0Jqc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOTvlCP8bNGMcK4+OAfi/4czZHlGdRbM8GIJXsYam0AvGtardO
-	rL5KiGkgamFQXOJShVOY6njh9v41+YbQUiFJk5IrZVzBa8H/pqCUQC+ixrp7hVlQE620p0l3w/n
-	O3zAPp26uZrQy49vpMsy1TZ0hwPC+/pM8waX7
-X-Google-Smtp-Source: AGHT+IE3mkDTA5Z7i9GH9wrLCRVfpDHJkhqivS1LvAv5V1RMDiu4CD4CN2BVvOUzqUcIHGgFm2ShZJqrq43YODzuqzA=
-X-Received: by 2002:a05:6214:20ca:b0:6cb:9a1c:cfae with SMTP id
- 6a1803df08f44-6d35b8fcc3fmr273141656d6.6.1730795759478; Tue, 05 Nov 2024
- 00:35:59 -0800 (PST)
+        bh=dRTErahdoYNQh/0n+LL1YBVx/VK/qm+n1bnPHSlX8+M=;
+        b=oO2GsWh/AbFl/XRWQjzzxWaCnq4REyisul/C4MpWa1p9gMA/IBUCGVrzCUoTdBsIK7
+         rw+5CEB6Xc3RHpxHFXPmbCOLvMGFFMAUMGVPotnQwgIzFVW1S1xvWepg1E5xM1GkM1F8
+         YP54xFj3W/yMx20C9jsjqDtOw9Thuq4bUAClUgAKIVAiBaQMrq2gQ8HJTA6gGYGT7q8r
+         Jk+0VHt7yXComrVdeS7unV50xbkDKvpKSFmVNvV7zoigql8uEOMBdzkaNN0AtgT2wdiQ
+         oQWTbzKZBbg5/jlzlMh0zBTdbeRq1munhNPYz5K46aahwybk3SG8qWEJHdeDfPp7/P+M
+         OvwA==
+X-Forwarded-Encrypted: i=1; AJvYcCX8Qs1ClNZCWyJwgYfHNpDQ5cXSqhmUgvx/kpLIQsrC5FbFA5KUCr2zU3UkemjSARDWjrDeweXEQrQCW6hy8HQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVRsKiO7rLndCozFqBdJNGOp4fnACZP/dcVlJm5746+nwz3+8l
+	lCI/bQjGe8XsRq1jS3ZUkSKVMQyd2d0wuIamPZ28w857ENwe2G7f/NvFSrhq0K7UIVyjnTDE1kj
+	W3bXwI+Qtn+/fbUi0EDPeC2EluDKTm6QN+WRf
+X-Google-Smtp-Source: AGHT+IFUPXhnq4qtIizBNVFn0r5GMD9v9f2hAnQu5XH6SXd4uR9c3Cfnu+X1rfKNnkX+50J3Zzld+tjex2udVLwnOW4=
+X-Received: by 2002:a05:6214:3d05:b0:6cb:e52c:c8e6 with SMTP id
+ 6a1803df08f44-6d185709c77mr444596386d6.31.1730795823357; Tue, 05 Nov 2024
+ 00:37:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241102-kunit-qemu-accel-macos-v2-0-9d4579fddd20@gmail.com> <20241102-kunit-qemu-accel-macos-v2-1-9d4579fddd20@gmail.com>
-In-Reply-To: <20241102-kunit-qemu-accel-macos-v2-1-9d4579fddd20@gmail.com>
+References: <20241102-kunit-qemu-accel-macos-v2-0-9d4579fddd20@gmail.com> <20241102-kunit-qemu-accel-macos-v2-2-9d4579fddd20@gmail.com>
+In-Reply-To: <20241102-kunit-qemu-accel-macos-v2-2-9d4579fddd20@gmail.com>
 From: David Gow <davidgow@google.com>
-Date: Tue, 5 Nov 2024 16:35:45 +0800
-Message-ID: <CABVgOS==_+DDRYzto6Wn21kCBQCDhAHwhORU8f+AUQ2GDArXHg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] kunit: add fallback for os.sched_getaffinity
+Date: Tue, 5 Nov 2024 16:36:52 +0800
+Message-ID: <CABVgOSmBpDxR_6xQWSqMuBjvtQW=ATkGgrWsSygReKYdov1GJw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] kunit: enable hardware acceleration when available
 To: Tamir Duberstein <tamird@gmail.com>
 Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
 	Alyssa Ross <hi@alyssa.is>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>, 
 	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
 	linux-kernel@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000009227f90626264a33"
+	boundary="0000000000004584aa0626264ef7"
 
---0000000000009227f90626264a33
+--0000000000004584aa0626264ef7
 Content-Type: text/plain; charset="UTF-8"
 
 On Sat, 2 Nov 2024 at 20:10, Tamir Duberstein <tamird@gmail.com> wrote:
 >
-> Python 3.13 added os.process_cpu_count as a cross-platform alternative
-> for the Linux-only os.sched_getaffinity. Use it when it's available and
-> provide a fallback when it's not.
+> Use KVM or HVF if supported by the QEMU binary and available on the
+> system.
 >
-> This allows kunit to run on macOS.
+> This produces a nice improvement on my Apple M3 Pro running macOS 14.7:
+>
+> Before:
+> ./tools/testing/kunit/kunit.py exec --arch arm64
+> [HH:MM:SS] Elapsed time: 10.145s
+>
+> After:
+> ./tools/testing/kunit/kunit.py exec --arch arm64
+> [HH:MM:SS] Elapsed time: 1.773s
 >
 > Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 > ---
 
-Looks plausible enough to me. Thanks very much!
+Thanks a lot.
+
+I finally managed to dig up an arm64 machine and test this, and I can
+reproduce the performance improvement.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  tools/testing/kunit/kunit.py | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
+>  tools/testing/kunit/kunit_kernel.py       | 3 +++
+>  tools/testing/kunit/qemu_configs/arm64.py | 2 +-
+>  2 files changed, 4 insertions(+), 1 deletion(-)
 >
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index bc74088c458aee20b1a21fdeb9f3cb01ab20fec4..3a8cbb868ac559f68d047e38be92f7c64a3314ea 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -303,7 +303,16 @@ def massage_argv(argv: Sequence[str]) -> Sequence[str]:
->         return list(map(massage_arg, argv))
->
->  def get_default_jobs() -> int:
-> -       return len(os.sched_getaffinity(0))
-> +       if sys.version_info >= (3, 13):
-> +               if (ncpu := os.process_cpu_count()) is not None:
-> +                       return ncpu
-> +               raise RuntimeError("os.process_cpu_count() returned None")
-> +        # See https://github.com/python/cpython/blob/b61fece/Lib/os.py#L1175-L1186.
-> +       if sys.platform != "darwin":
-> +               return len(os.sched_getaffinity(0))
-> +       if (ncpu := os.cpu_count()) is not None:
-> +               return ncpu
-> +       raise RuntimeError("os.cpu_count() returned None")
->
->  def add_common_opts(parser: argparse.ArgumentParser) -> None:
->         parser.add_argument('--build_dir',
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index 61931c4926fd6645f2c62dd13f9842a432ec4167..3146acb884ecf0bcff94d5938535aabd4486fe82 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -123,6 +123,9 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+>                                 '-append', ' '.join(params + [self._kernel_command_line]),
+>                                 '-no-reboot',
+>                                 '-nographic',
+> +                               '-accel', 'kvm',
+> +                               '-accel', 'hvf',
+> +                               '-accel', 'tcg',
+>                                 '-serial', self._serial] + self._extra_qemu_params
+>                 # Note: shlex.join() does what we want, but requires python 3.8+.
+>                 print('Running tests with:\n$', ' '.join(shlex.quote(arg) for arg in qemu_command))
+> diff --git a/tools/testing/kunit/qemu_configs/arm64.py b/tools/testing/kunit/qemu_configs/arm64.py
+> index d3ff27024755411441f910799be30399295c9541..5c44d3a87e6dd2cd6b086138186a277a1473585b 100644
+> --- a/tools/testing/kunit/qemu_configs/arm64.py
+> +++ b/tools/testing/kunit/qemu_configs/arm64.py
+> @@ -9,4 +9,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
+>                            qemu_arch='aarch64',
+>                            kernel_path='arch/arm64/boot/Image.gz',
+>                            kernel_command_line='console=ttyAMA0',
+> -                          extra_qemu_params=['-machine', 'virt', '-cpu', 'max,pauth-impdef=on'])
+> +                          extra_qemu_params=['-machine', 'virt', '-cpu', 'max'])
 >
 > --
 > 2.47.0
 >
 
---0000000000009227f90626264a33
+--0000000000004584aa0626264ef7
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -225,14 +238,14 @@ BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
 hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
 AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
-eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgHSPeuWDO80dDtGv0PREaxbF6IbqW
-QKJSfkm2yy9971kwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
-MTA1MDgzNjAxWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgLw9osv+Io9/K7Kaqkdzf8agFO3p1
+J0yGgZdU8S1FOv0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
+MTA1MDgzNzA0WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBAJ4kxek+oKhLawSMidpr2Lemhtb+IpC7wFafI5TxUlNxWGn+
-NRWWdK/akGKQCOcNpI0iI5ftXBN2XAtElbjCMinaNlr6irjwig2phfMp5oCUN13mdPtYJezcnAEy
-smmrLbkZ7ufeI28GEPrqtvozgWLeupy7clRKbiUrXX79sDednhjB2s0GfqXrZXw01lOZhWIuHh40
-x1lH5ZGVbY1ZwJ7ahYgxHwR8QX+awwKZ5q07xjAYqWS+A6W3Wah+9kg8lUGhU2m7y3seD466vzAH
-kpE6WQZnw6uLItzTEbKEfeu2A3YJXA4laEspHh+gjcjTtDIlJtpVoFaCjzEIiwsCPS0=
---0000000000009227f90626264a33--
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAITGJJNgd2FHPOMZlwfdKLH9HZGJMYDgnMWBG3LQ0BUwGLy7
+8uH3GiMxzDfWtbMsmarR23mmq68IgFibZjHotP5m/eaOkgnA8qPAf3A7aA+SVM0xkPocjEpYhu01
+zJ2KR2MUceLoUv5YAHqnheBJnntc2i8P1OTvfRd/nA34X1n5qXFOa2KdnNEc0ksA370cQZo5a802
+iwz372p5/ZVr9+fgNNF+t5/N8ic6gzFXSbq4bzha2MOCfLiQA9on/xD2ub0+eKMt5WfwHfAjWjjY
+kFODh3IdxaNpbh79o7FCb8bhMK1XpnHm5lYBIyG22jPwVWE9AQyuNKENE6pWlxqa9us=
+--0000000000004584aa0626264ef7--
 
