@@ -1,204 +1,146 @@
-Return-Path: <linux-kselftest+bounces-21434-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21435-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 503A09BC323
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 03:23:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 159ED9BC3DE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 04:30:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D47B81F22C2F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 02:23:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7792BB21A3C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 03:30:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93E4B47A5C;
-	Tue,  5 Nov 2024 02:22:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C2B218BC06;
+	Tue,  5 Nov 2024 03:30:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iAKmoQB7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="auM3yz62"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8400C1CD0C
-	for <linux-kselftest@vger.kernel.org>; Tue,  5 Nov 2024 02:22:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4482189F39;
+	Tue,  5 Nov 2024 03:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730773363; cv=none; b=DdIgmSH4m+SwIF2DeV3tHMRv3348XxtLHN6zXmIgSlrRJCP9Qqk6Bzbd6IwdP15DhZcnf/keOCmvSe5HBYOsv9gSYDkUXDX3/nKc3HEvZm9prJS4bqrX9pDtHut2tVkh6lO50GKXM7cpBQ+K6ZXZPOHlKb/IxeSSiscAcX6Nur8=
+	t=1730777400; cv=none; b=ZfVu4g4/mfwZXN6NgEykjEUVwwvMFHYsx8gFSBDusguWP1FXBX+hCsjma/id1O3QgQ8qG8P7bVvDlL/KiJ1LbnhiWEZVGatPfuGuaxRxTy4VnejBVHf5TUMbxtVktLXgoc6Ikid4cdiX3oxjWic63fPHzBaXrtnJCF4E/Im/ZUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730773363; c=relaxed/simple;
-	bh=fASZrlOrGSWP18gmYt8bKLkLXj2wDQ1MzYPz3q9daX0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=UHIMOWXGdh2MIrZVyaY/B/O5yENix14QI0KADIKObdDCOtcXJCo2BC6elcptr5PtZ9qe7IwzXvY6TqhbS3XoXgPO6O18nrRFkorYF/c67r0UYqat/esU8ECG/USaquosA9lA5QbSNqWuD+q7fIJi0ryVPtz5cMMu70ok9fuGST8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iAKmoQB7; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-7edb8c3e743so3357459a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 Nov 2024 18:22:40 -0800 (PST)
+	s=arc-20240116; t=1730777400; c=relaxed/simple;
+	bh=xy8eP0aKp8aFXIatWV6gD6j0hhk+fBHC4dHMl/3z7JA=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ass/xqC12Vp0cv5PMPQlKhAxD+L+tHXYBfF4g6W/zce+n9KJcoTGlyOnTb+XH0YpZKk816OWE2o1nrl/N4jXuYu1f9xH2icPTsmxFtR9lDJ01mZbc87lvP5Dzw1paE61VXeMzq3RGRjHuwiyqKSD71l6kISImLBz6yQQC0O8qo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=auM3yz62; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2e30fb8cb07so3578302a91.3;
+        Mon, 04 Nov 2024 19:29:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730773360; x=1731378160; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rTrj4Vb+gjmZyvOereONM4xaExQ9e1t81Zeg65PUba4=;
-        b=iAKmoQB71pLTav7c9f1jte4hXpXhoLYra/46jA8BKdnxGvHglOC5M81NOxHFyIAovM
-         c6J65z/iZHJO5ta4k+EoRB5e6JsDvkRAZox+K/b7JeaiGcXNT/LeT9yV+MjYEeTuqPd9
-         +Hk1rUmsuBH+ogF9a5u/EAyUIUkd/FedM/oxeuj53T84f6RZ4rRD06vkfMm3S7T4h2ff
-         L22bJoHwqM3viX3/34rIz35z5wqOPR5dfRSkZBlt3w11TdGImoVk7Inp9B+6KnzuGKc3
-         eqb/AZ2jG/KGOWftp40HLfBdO1icyzxMubQrKX1U4qCdH6YMuSagxgA71KqgSGB9ct7q
-         8SwQ==
+        d=gmail.com; s=20230601; t=1730777398; x=1731382198; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZoUg/GO9QPX5GyFZfYPI/Khp9nkGOAdmWMa/084j4c8=;
+        b=auM3yz62W6KsGW//BwoZiw/svpucplbEy7RacKGM8NBmRl0lEr0iVePYHpQW5bvlr9
+         oeLL5Pyc5xK2VocMcX60h3YrsyUbZzJXPRmt5ajJ2Ca7JVpoNn0kTt7FMFNFWqeYp/R/
+         LkBr/FyL2FVf1kvpLA/liHuXarsoirn5nMDgiwWQ+8Ts38D1vjpkBfS2o0iHVIa5Kh3k
+         VT7QjyFus4d9xvcpBSm3GsDWWNopznn20yevIWoEbBMgLkLKosqTExLsCZ5J3QXJ6toF
+         doEV/llNkwzQllj2R83IZSwsDC1EONcHOhuVjhUERUI1B4wzsf/BF9+s0HLZMdRx1j+c
+         cmwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730773360; x=1731378160;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rTrj4Vb+gjmZyvOereONM4xaExQ9e1t81Zeg65PUba4=;
-        b=BjX0ezQwiICjkiJVZki+X5g51zdwwzIMQfdRS6dmR7Tn97dWCdzfv9T8dLad/vEs70
-         wHdiujzTdsLgSc7rZkNLMQHddM+u5vaXNGvONvw9yIjBx5mcZJpwY571senlrc4aGksE
-         oTT9o8Gn5owodksioWHbuB5rgISkGnhz2a5k5qs04I42goXYFNzTJLCHHJEQACG2Mob3
-         qBJZQUtQDDio2fegn8Ca7BDI0Hao6YzrPcKol55R9Al6nvCu22yo560HvErAA7zGf9WE
-         zXkAOLP8+K3ip2DhYpkkJBl6Hr9c0WosdO6IGzTeCzSq4l4mydMlzh8GrasL96RB+wNO
-         H9mg==
-X-Forwarded-Encrypted: i=1; AJvYcCWKVnBf/Nay+5NZk8W0akis+uSI9HWZR691UBC0ZgPAV0bBEBtxMTCFQ9IRqXtYZxS89cnf7J/TUunU+42AxAI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YymwDjAAtpnEOZeSEwQPFJ18DKqFMKWQtypR7Aij/tiSTpks0Cn
-	9SUb6hKGE5Vr6qO8jN6/7vlCnshjwsfnlmtAFPihL0J/Mac7P3lsQjwgk6xQN3aN1NcqXFt4zoN
-	xlg==
-X-Google-Smtp-Source: AGHT+IH0unGMBQfLgioqGmr0yzEMUoopms0yCwfTp21z4CVHah4e9K57FkA7ZEnCFrqk1qMnNAGjr3IC698=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:9d:3983:ac13:c240])
- (user=seanjc job=sendgmr) by 2002:a05:6a02:4d07:b0:7ea:97c3:7a8f with SMTP id
- 41be03b00d2f7-7ee3a90d751mr34651a12.10.1730773359794; Mon, 04 Nov 2024
- 18:22:39 -0800 (PST)
-Date: Mon, 4 Nov 2024 18:22:38 -0800
-In-Reply-To: <74089281-3208-435d-93b3-22f1d794dfae@amd.com>
+        d=1e100.net; s=20230601; t=1730777398; x=1731382198;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZoUg/GO9QPX5GyFZfYPI/Khp9nkGOAdmWMa/084j4c8=;
+        b=FuZ35u/LnudsDgvSemVifIMsPrQ5wEycV1nMvWFUtorvlUFUWsZfLZ+pqmdxeeYJmU
+         b17qrIRrMSkDBzYlKWYW/LjqfngltmWrjItAq3K9hR1Pt9J7L+Mb5w49rJTWO8Ytqpw8
+         d+hcFYuEdcqqjdLy/RrUdXu3JKhonuAk5htZdu8DOIPrQm93OXBoJLmaY4ZvKjV3iUHy
+         Zba0lpW7GdFJB7xr7/ePXzQbrwscaNfYZ0CEINhpecZIuQiLFnmyBxx2GeD+iI/XOVrd
+         0FTzTP9yveIXFAw8qdJy8AI0uFen2t5BErpfFNbcbjpIbgrgqazG5NKNmcmc734RW+zk
+         adQw==
+X-Forwarded-Encrypted: i=1; AJvYcCVJ7td33uHXT2Lug18kO07BmPzygy4RKV2Yh3GpnuyjzFfu29MbjFTW2exb15octKHtx8TwD+xs2VFVhMQG/Bkr@vger.kernel.org, AJvYcCVWdd4UtNNqCtNfr4Zu2gr7vpZ5UmBS6WkEPVvEscpro+l4ewu0BAXETwkRiG5zk8jcFYQw8YRJ@vger.kernel.org, AJvYcCWzoOHh+MKODFFb+uY032LpgwR+TvGPSPbjyNj22RKxZx9VyXSbfED4jl0vx2eWtAJD7dzuZHlcsFvK+gE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEZ5kb4jo108ZiGmEQ735YckGcnbbvEcLToXZKfvNG/kqYs6++
+	oZMU7POA0mhfb6h4lkRFwqaK9nr0r4hBHQQJDhsAhM6MEPaAHWQ=
+X-Google-Smtp-Source: AGHT+IEDBwJ8RzygDgb71vQZ5s/ZeolaoIa38xVDK/i+YXy/ZagMbg8uflAtuCr9mrfn1awDM9kjag==
+X-Received: by 2002:a17:90a:bc87:b0:2d3:da6d:8330 with SMTP id 98e67ed59e1d1-2e92ce32e36mr24870387a91.4.1730777397786;
+        Mon, 04 Nov 2024 19:29:57 -0800 (PST)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e98ca48187sm105107a91.1.2024.11.04.19.29.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Nov 2024 19:29:57 -0800 (PST)
+Date: Mon, 4 Nov 2024 19:29:56 -0800
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Joe Damato <jdamato@fastly.com>, Stanislav Fomichev <sdf@fomichev.me>,
+	netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, andrew+netdev@lunn.ch,
+	shuah@kernel.org, horms@kernel.org, almasrymina@google.com,
+	willemb@google.com, petrm@nvidia.com
+Subject: Re: [PATCH net-next v7 03/12] selftests: ncdevmem: Unify error
+ handling
+Message-ID: <ZymRNJLLDLCqIYyq@mini-arch>
+References: <20241104181430.228682-1-sdf@fomichev.me>
+ <20241104181430.228682-4-sdf@fomichev.me>
+ <Zylc1dKzubaa0yWQ@LQ3V64L9R2>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241004053341.5726-1-manali.shukla@amd.com> <20241004053341.5726-3-manali.shukla@amd.com>
- <Zw6rJ3y_F-10xBcH@google.com> <74089281-3208-435d-93b3-22f1d794dfae@amd.com>
-Message-ID: <ZymBbk829lGCY8dp@google.com>
-Subject: Re: [PATCH v3 2/4] KVM: SVM: Enable Bus lock threshold exit
-From: Sean Christopherson <seanjc@google.com>
-To: Manali Shukla <manali.shukla@amd.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, 
-	shuah@kernel.org, nikunj@amd.com, thomas.lendacky@amd.com, 
-	vkuznets@redhat.com, bp@alien8.de, babu.moger@amd.com, 
-	Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Zylc1dKzubaa0yWQ@LQ3V64L9R2>
 
-On Sun, Nov 03, 2024, Manali Shukla wrote:
-> On 10/15/2024 11:19 PM, Sean Christopherson wrote:
-> > On Fri, Oct 04, 2024, Manali Shukla wrote:
-> ...
-> >>  
-> >> +static int bus_lock_exit(struct kvm_vcpu *vcpu)
-> >> +{
-> >> +	struct vcpu_svm *svm = to_svm(vcpu);
-> >> +
-> >> +	vcpu->run->exit_reason = KVM_EXIT_X86_BUS_LOCK;
-> >> +	vcpu->run->flags |= KVM_RUN_X86_BUS_LOCK;
-> >> +
-> >> +	/*
-> >> +	 * Reload the counter with value greater than '0'.
+On 11/04, Joe Damato wrote:
+> On Mon, Nov 04, 2024 at 10:14:21AM -0800, Stanislav Fomichev wrote:
+> > There is a bunch of places where error() calls look out of place.
+> > Use the same error(1, errno, ...) pattern everywhere.
 > > 
-> > The value quite obviously must be exactly '1', not simply greater than '0.  I also
-> > think this is the wrong place to set the counter.  Rather than set the counter at
-> > the time of exit, KVM should implement a vcpu->arch.complete_userspace_io callback
-> > and set the counter to '1' if and only if RIP (or LIP, but I have no objection to
-> > keeping things simple) is unchanged.  It's a bit of extra complexity, but it will
-> > make it super obvious why KVM is setting the counter to '1'.  And, if userspace
-> > wants to stuff state and move past the instruction, e.g. by emulating the guilty
-> > instruction, then KVM won't unnecessarily allow a bus lock in the guest.
+> > Reviewed-by: Mina Almasry <almasrymina@google.com>
+> > Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
+> > ---
+> >  tools/testing/selftests/net/ncdevmem.c | 16 ++++++++--------
+> >  1 file changed, 8 insertions(+), 8 deletions(-)
 > > 
-> > And then the comment can be:
-> > 
-> > 	/*
-> > 	 * If userspace has NOT change RIP, then KVM's ABI is to let the guest
-> > 	 * execute the bus-locking instruction.  Set the bus lock counter to '1'
-> > 	 * to effectively step past the bus lock.
-> > 	 */
-> > 
+> > diff --git a/tools/testing/selftests/net/ncdevmem.c b/tools/testing/selftests/net/ncdevmem.c
+> > index 3e7ef2eedd60..4733d1a0aab5 100644
+> > --- a/tools/testing/selftests/net/ncdevmem.c
+> > +++ b/tools/testing/selftests/net/ncdevmem.c
+> > @@ -339,33 +339,33 @@ int do_server(struct memory_buffer *mem)
+> >  	server_sin.sin_port = htons(atoi(port));
+> >  
+> >  	ret = inet_pton(server_sin.sin_family, server_ip, &server_sin.sin_addr);
+> > -	if (socket < 0)
+> > -		error(79, 0, "%s: [FAIL, create socket]\n", TEST_PREFIX);
+> > +	if (ret < 0)
+> > +		error(1, errno, "%s: [FAIL, create socket]\n", TEST_PREFIX);
+> >  
+> >  	socket_fd = socket(server_sin.sin_family, SOCK_STREAM, 0);
+> > -	if (socket < 0)
+> > -		error(errno, errno, "%s: [FAIL, create socket]\n", TEST_PREFIX);
+> > +	if (socket_fd < 0)
+> > +		error(1, errno, "%s: [FAIL, create socket]\n", TEST_PREFIX);
+> >  
+> >  	ret = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEPORT, &opt,
+> >  			 sizeof(opt));
+> >  	if (ret)
+> > -		error(errno, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
+> > +		error(1, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
+> >  
+> >  	ret = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &opt,
+> >  			 sizeof(opt));
+> >  	if (ret)
+> > -		error(errno, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
+> > +		error(1, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
 > 
-> The bus lock threshold intercept feature is available for SEV-ES and SEV-SNP
-> guests too. The rip where the bus lock exit occurred, is not available in
-> bus_lock_exit handler for SEV-ES and SEV-SNP guests, so the above-mentioned
-> solution won't work with SEV-ES and SEV-SNP guests.
+> A minor nit (definitely not worth re-sending for this on its own):
+> it might be helpful to add which of the sockopts failed to the error
+> message REUSEADDR or REUSEPORT.
 > 
-> I would propose to add the above-mentioned solution only for normal and SEV guests
-> and unconditionally reloading of bus_lock_counter to 1 in complete_userspace_io
-> for SEV-ES and SEV-SNP guests.
+> Reviewed-by: Joe Damato <jdamato@fastly.com>
 
-Yeah, that works.  Though I would condition the check on guest_state_protected.
-Actually, and this is going to seem really stupid, but everything will Just Work
-if you use kvm_get_linear_rip() and kvm_is_linear_rip(), because kvm_get_linear_rip()
-returns '0' for vCPUs with protected state.  I.e. KVM will do a rather superfluous
-cui() callback, but otherwise it's fine.  Silly, but in many ways preferable to
-special casing ES and SNP guests.
+Thank you for the review!
 
-On a related topic, can you add a refacotring prep patch to move linear_rip out
-of kvm_pio_request and place it next to complete_userspace_io?  There's nothing
-port I/O specific about that field, it just so happens to that port I/O is the
-only case where KVM's ABI is to let userspace stuff state (to emulate RESET)
-without first completing the I/O instruction.
-
-I.e.
-
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 8e8ca6dab2b2..8617b15096a6 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -406,7 +406,6 @@ struct kvm_rmap_head {
- };
- 
- struct kvm_pio_request {
--       unsigned long linear_rip;
-        unsigned long count;
-        int in;
-        int port;
-@@ -884,6 +883,7 @@ struct kvm_vcpu_arch {
-        bool emulate_regs_need_sync_to_vcpu;
-        bool emulate_regs_need_sync_from_vcpu;
-        int (*complete_userspace_io)(struct kvm_vcpu *vcpu);
-+       unsigned long cui_linear_rip;
- 
-        gpa_t time;
-        struct pvclock_vcpu_time_info hv_clock;
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 425a301911a6..7704d3901481 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -9308,7 +9308,7 @@ static int complete_fast_pio_out(struct kvm_vcpu *vcpu)
- {
-        vcpu->arch.pio.count = 0;
- 
--       if (unlikely(!kvm_is_linear_rip(vcpu, vcpu->arch.pio.linear_rip)))
-+       if (unlikely(!kvm_is_linear_rip(vcpu, vcpu->arch.cui_linear_rip)))
-                return 1;
- 
-        return kvm_skip_emulated_instruction(vcpu);
-@@ -9333,7 +9333,7 @@ static int kvm_fast_pio_out(struct kvm_vcpu *vcpu, int size,
-                        complete_fast_pio_out_port_0x7e;
-                kvm_skip_emulated_instruction(vcpu);
-        } else {
--               vcpu->arch.pio.linear_rip = kvm_get_linear_rip(vcpu);
-+               vcpu->arch.cui_linear_rip = kvm_get_linear_rip(vcpu);
-                vcpu->arch.complete_userspace_io = complete_fast_pio_out;
-        }
-        return 0;
-@@ -9346,7 +9346,7 @@ static int complete_fast_pio_in(struct kvm_vcpu *vcpu)
-        /* We should only ever be called with arch.pio.count equal to 1 */
-        BUG_ON(vcpu->arch.pio.count != 1);
- 
--       if (unlikely(!kvm_is_linear_rip(vcpu, vcpu->arch.pio.linear_rip))) {
-+       if (unlikely(!kvm_is_linear_rip(vcpu, vcpu->arch.cui_linear_rip))) {
-                vcpu->arch.pio.count = 0;
-                return 1;
-        }
-@@ -9375,7 +9375,7 @@ static int kvm_fast_pio_in(struct kvm_vcpu *vcpu, int size,
-                return ret;
-        }
- 
--       vcpu->arch.pio.linear_rip = kvm_get_linear_rip(vcpu);
-+       vcpu->arch.cui_linear_rip = kvm_get_linear_rip(vcpu);
-        vcpu->arch.complete_userspace_io = complete_fast_pio_in;
- 
-        return 0;
+I later move these two under enable_reuseaddr and make it even less
+debuggable :-( Let me maybe keep the calls to error() inside the
+enable_reuseaddr.
 
