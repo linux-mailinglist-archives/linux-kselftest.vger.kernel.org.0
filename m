@@ -1,85 +1,84 @@
-Return-Path: <linux-kselftest+bounces-21437-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21438-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5975A9BC3E7
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 04:33:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A6AD9BC3EF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 04:34:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AEEF1B2139A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 03:33:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4A541F21768
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 03:34:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6145B1714B4;
-	Tue,  5 Nov 2024 03:33:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83BF2184523;
+	Tue,  5 Nov 2024 03:34:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C37JvSEY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QUumOkA1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7BB33D9E;
-	Tue,  5 Nov 2024 03:33:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EECA23D9E;
+	Tue,  5 Nov 2024 03:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730777584; cv=none; b=iq+2hdthgz+jJwfZQi3CWwWkvbGI0yG9z0zvFwAwbNu4wc9RFNlbBWd1DT3kF3MILrzTMsNdzzKU2qAYTPwT8zNxqOj3LoMIQDNxTZTtBKAFoBPxnj3iR4Z0UZFgTpmj1ASCbOhzc84Lr04TiUdh4zfynwBQez5i8Qlc6Xfoz0Y=
+	t=1730777673; cv=none; b=KBgcntkSw6DFRVyd24f3q4Jm6JasRjEseeMdjXHL/m15Zab7TsJVhHdrDg+StvapuTRQlcQrdwd6sP6RU+BXWvggljuYUgdKcJbtKW1nkKXaFy+CopA1oEGpIvsfigIZcXhwgnUbfJROQ7wkuCtzhWdEIfwLozZsUv8IZYr2TUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730777584; c=relaxed/simple;
-	bh=cwmqCLPvqMms8KSlwJdV/ZtGMAd9X/rKu8os01b98lE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SixxplrXExtdS9hsggAHIjOyU9l+zJJQQAYQSz+9Dp4whI/90zO2Ub5bKVEsSNchyj6WxR9FfqU2qE0KF0G4I0h3mGfSldNQYEqJcaPQjBK5rVsb4NnHlFb8DsjusmZ9DoSDjUxvDZAncQiR6M0DsPWvK6Od8TYt58QJBljlPA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C37JvSEY; arc=none smtp.client-ip=209.85.214.180
+	s=arc-20240116; t=1730777673; c=relaxed/simple;
+	bh=/zkq0tofzKwv60XMTrmCP+LAJXE7HfavU3QZkSxWQPY=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PzcBivT5/GqDkJrMf5i9cxO6VvPySS8FyPiANdZ98v2q921kivrjHHiP6v8S+hLtcPhm/3y/vFas79D2LrEiw/JdRMIW6HW1VX23wLFkvn5JPE/Ip1xHEn4FErJ/BTtb8ZgcaATebdzoQynt7Q+y4uIDXn8UsRia5QRIQUbdS0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QUumOkA1; arc=none smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2114214c63eso16615415ad.3;
-        Mon, 04 Nov 2024 19:33:02 -0800 (PST)
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7ed9c16f687so3511169a12.0;
+        Mon, 04 Nov 2024 19:34:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730777582; x=1731382382; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QL9Eh+ucA0uGSZL2kYpF7DcVnG0izz1pCsJF9Z1GTXc=;
-        b=C37JvSEYDE/sibtYrjhGDtaiSakvee4eG1hAC1kGXv7lnQhwBGirhF39FS7C+c3QQv
-         1gb23cfbGc3kmf9RrUCht50OZCP0/LKv8GxwuStujGyZZxo7EDQMwlQf1sHqLFxErMhT
-         hJvFBG2flULng8Zvamp1HbZ2dgVyQx+hgnLAJsxGDsnN6fZKmRnVSteFpUt/V3mvHFub
-         +kqgBgSZzS3AfrWJBljJmu0GKNeELrnsDh9rlFJX6U6jmfBeV5RLRDZaig8t9kZ+N7yX
-         FqRFWi76YtucB80k/0hIhIe3KNUOB7WHmHRGh4lbOYpElWGrGmfMm+zetWdGF3my+ZoX
-         9zLQ==
+        d=gmail.com; s=20230601; t=1730777671; x=1731382471; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=X6AIe/dTqMIYfTgiz4qxI4zvtCNJoQcTeXciVnJdiHI=;
+        b=QUumOkA1kJleauelbVXK9FTKBhEfLIoq3VHuB1LSQ5hp1Kl3kpwMphtnrftgjpBG/d
+         gFI89vUwv60UM6NY3lckfCB/FjUaXArit51aYv4gAA+bnbZ+gGnGmu1DgJDHiw6HqWNI
+         iB2Mt7XIU+vF3F96AXynuS8vK2+fpvwRsX35I/LqSrThWjsRhYISqsu55L6+rcMcb1LU
+         oGK/jbrj5z8Mlz9M2W0wfwpt1yKTYg06wU/baDs70rJPbqmSehRkAFBjInJcmgzoNFfp
+         Lb7C7ndJgwGN365IRHUUpM6h+YM0kMwh6/HgcnZJyMUKyJiG5v6fsA2wtnnQUFthqHzi
+         sRwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730777582; x=1731382382;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QL9Eh+ucA0uGSZL2kYpF7DcVnG0izz1pCsJF9Z1GTXc=;
-        b=SIY/82tOEn2n/gNyGppZE/kVd5mjfEo+XwjJ26JjzVX618Cz40NtsTVk77hutpPInZ
-         WnV+TdXx5ovCcyXAiblcj7Tj10+/Hw7AkiONMz2xiK9joPk0PE3jXb98orwKxBySKlK8
-         r0tSxRRTKH+V0dq00sBmOJbLdFTDVOdLXM+/N3p9SFw+NSicMLn/3g7XHB8qgVNhfnj1
-         FcmbTQnOfqA4GKoDrMsCapLGnuumugAqC3U5IazFHg9kG+luOzol49+LCAQYf1GJ+p3p
-         0OHhAvTpaB9qJMbzvMyVLR1ye7wlDf+tNtYsls0Sg7YVk6ghV7ElC5kA9xS269wtQsSC
-         HNKw==
-X-Forwarded-Encrypted: i=1; AJvYcCU8NV0SNF83ydSGUqByvu0tP7M+Av1btwriEixto9v/PNNnGjAie1GIpCBPMBvgKtJL32DGQTx7bXZy090=@vger.kernel.org, AJvYcCUgYKuA/wPgRrQtG1TBPp5FN9Z6CJdR7aTvf3f1WdFMrIQJIcnyy0xrXG95k0B086CZ7VUzXFYm@vger.kernel.org, AJvYcCWK9bcnOKoj/Dl2Ztkzq70RIrKtCbS520hqkTcUXEQHWNe3UQh/CAIzM1vG+kyNNFd42HV0wGnT0F4egjOnfk5b@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyd81wvicTVPyhEAZQ1utkLiacL/VFSzCwWH+r/i9UADcqPoQ9n
-	deD9VZrC1hgMqZ9KCmSibL/T64sLgjNyFbI7BdDJjj+bke5DuGU=
-X-Google-Smtp-Source: AGHT+IFMAVN3OEGCAF/twvoo0A2O/Uil8GAPzOknu/APXznJ/gQDsxQpbbFmqlg2ypGQ95vOBFLLMA==
-X-Received: by 2002:a17:903:40c8:b0:20d:cb6:11e with SMTP id d9443c01a7336-210c68dd576mr480870675ad.26.1730777582007;
-        Mon, 04 Nov 2024 19:33:02 -0800 (PST)
+        d=1e100.net; s=20230601; t=1730777671; x=1731382471;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X6AIe/dTqMIYfTgiz4qxI4zvtCNJoQcTeXciVnJdiHI=;
+        b=c7lI6r/49wX/y4gttF5t1j5Js6nIG2D0XKH1lDUsO2Q2c4LK0h152ZJZSyHxN8aVJQ
+         kwzkmJTYrGA8t8S2lk2OaMdh17qZPOzAdlmYqIGnqT6rOY7DT1DBtmN3Hata4I/bT9LH
+         kgeZ235wA1Uy2EbYfy6VmQMmG6iGhbPTzWQ5GNHp4bZrQ4SHILkm4NAICKyyO2QZ7MEs
+         wGmDJf1REAkp/7zKrCmXrgOacZLMQAT3j6cW/aYip5kpjbMam6unSjmAay0goP46O3ij
+         9hSASE6YOLHzafE5Vr6ACSRVsSg4Yi8mkXPQjPDMHz7JWi3sXxWQ20wezz8uVKpfnRCF
+         usUA==
+X-Forwarded-Encrypted: i=1; AJvYcCUJCZ6ddtuJE7kRaerbT+f9td7iiBSKmcW2MvRlsstvEU6z1SfrC8StXDN1fHktHgCytgy/AWu/@vger.kernel.org, AJvYcCViWidbrEXJJlj6mEaVeYO/i7o6Vx38ZugRkdWcPfOhYHYAhm849JOaqfYWcz6hRYyyFk7l6bjJEZqseyCjSuC3@vger.kernel.org, AJvYcCXT9AIFYRipZkfDc86Rf2ZsiFKPD3hHhUsjTc2OeRc81yfdLcxf5zBUoud/mL7lhZAS6RaQTvmsjgv5JEc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YywTQnsa5Yo7dr24PW+nA6vAlLbdjARVAQ5WzIEansx7c8osdB0
+	ROb6dBhvUs1ZhUZ57QMYhj9qdSN3GP7P2KLZ5b806AyaqNMlmNs=
+X-Google-Smtp-Source: AGHT+IG99VSv7YooZkG+TpE0SxkBFCnr8DMr16i90UPeDqyOBVlUtW5FCSgaEccRwWlwfwR68xj+yQ==
+X-Received: by 2002:a17:90b:2243:b0:2e2:c421:894b with SMTP id 98e67ed59e1d1-2e93c14fd5dmr23051033a91.14.1730777671021;
+        Mon, 04 Nov 2024 19:34:31 -0800 (PST)
 Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211056edc65sm68614285ad.10.2024.11.04.19.33.01
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057bffffsm68835685ad.188.2024.11.04.19.34.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 19:33:01 -0800 (PST)
-Date: Mon, 4 Nov 2024 19:33:00 -0800
+        Mon, 04 Nov 2024 19:34:30 -0800 (PST)
+Date: Mon, 4 Nov 2024 19:34:30 -0800
 From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
-	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	andrew+netdev@lunn.ch, shuah@kernel.org, horms@kernel.org,
-	almasrymina@google.com, willemb@google.com, petrm@nvidia.com
-Subject: Re: [PATCH net-next v7 06/12] selftests: ncdevmem: Switch to AF_INET6
-Message-ID: <ZymR7A3Ws9ZY1jpS@mini-arch>
+To: Joe Damato <jdamato@fastly.com>, Stanislav Fomichev <sdf@fomichev.me>,
+	netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, andrew+netdev@lunn.ch,
+	shuah@kernel.org, horms@kernel.org, almasrymina@google.com,
+	willemb@google.com, petrm@nvidia.com
+Subject: Re: [PATCH net-next v7 12/12] selftests: ncdevmem: Add automated test
+Message-ID: <ZymSRij76y6bvRi9@mini-arch>
 References: <20241104181430.228682-1-sdf@fomichev.me>
- <20241104181430.228682-7-sdf@fomichev.me>
- <20241104175418.0d996608@kernel.org>
+ <20241104181430.228682-13-sdf@fomichev.me>
+ <ZyljjgxP94IBWnI6@LQ3V64L9R2>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,48 +87,97 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241104175418.0d996608@kernel.org>
+In-Reply-To: <ZyljjgxP94IBWnI6@LQ3V64L9R2>
 
-On 11/04, Jakub Kicinski wrote:
-> On Mon,  4 Nov 2024 10:14:24 -0800 Stanislav Fomichev wrote:
-> > -static int configure_flow_steering(void)
-> > +static int configure_flow_steering(struct sockaddr_in6 *server_sin)
-> >  {
-> > -	return run_command("sudo ethtool -N %s flow-type tcp4 %s %s dst-ip %s %s %s dst-port %s queue %d >&2",
-> > +	const char *type = "tcp6";
-> > +	const char *server_addr;
-> > +	char buf[256];
+On 11/04, Joe Damato wrote:
+> On Mon, Nov 04, 2024 at 10:14:30AM -0800, Stanislav Fomichev wrote:
+> > Only RX side for now and small message to test the setup.
+> > In the future, we can extend it to TX side and to testing
+> > both sides with a couple of megs of data.
+> > 
+> >   make \
+> >   	-C tools/testing/selftests \
+> >   	TARGETS="drivers/hw/net" \
+> >   	install INSTALL_PATH=~/tmp/ksft
+> > 
+> >   scp ~/tmp/ksft ${HOST}:
+> >   scp ~/tmp/ksft ${PEER}:
+> > 
+> >   cfg+="NETIF=${DEV}\n"
+> >   cfg+="LOCAL_V6=${HOST_IP}\n"
+> >   cfg+="REMOTE_V6=${PEER_IP}\n"
+> >   cfg+="REMOTE_TYPE=ssh\n"
+> >   cfg+="REMOTE_ARGS=root@${PEER}\n"
+> > 
+> >   echo -e "$cfg" | ssh root@${HOST} "cat > ksft/drivers/net/net.config"
+> >   ssh root@${HOST} "cd ksft && ./run_kselftest.sh -t drivers/net:devmem.py"
+> > 
+> > Reviewed-by: Mina Almasry <almasrymina@google.com>
+> > Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
+> > ---
+> >  .../testing/selftests/drivers/net/hw/Makefile |  1 +
+> >  .../selftests/drivers/net/hw/devmem.py        | 45 +++++++++++++++++++
+> >  2 files changed, 46 insertions(+)
+> >  create mode 100755 tools/testing/selftests/drivers/net/hw/devmem.py
+> > 
+> > diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
+> > index 182348f4bd40..1c6a77480923 100644
+> > --- a/tools/testing/selftests/drivers/net/hw/Makefile
+> > +++ b/tools/testing/selftests/drivers/net/hw/Makefile
+> > @@ -3,6 +3,7 @@
+> >  TEST_PROGS = \
+> >  	csum.py \
+> >  	devlink_port_split.py \
+> > +	devmem.py \
+> >  	ethtool.sh \
+> >  	ethtool_extended_state.sh \
+> >  	ethtool_mm.sh \
+> > diff --git a/tools/testing/selftests/drivers/net/hw/devmem.py b/tools/testing/selftests/drivers/net/hw/devmem.py
+> > new file mode 100755
+> > index 000000000000..1416c31ff81e
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/drivers/net/hw/devmem.py
+> > @@ -0,0 +1,45 @@
+> > +#!/usr/bin/env python3
+> > +# SPDX-License-Identifier: GPL-2.0
 > > +
-> > +	inet_ntop(AF_INET6, &server_sin->sin6_addr, buf, sizeof(buf));
-> > +	server_addr = buf;
+> > +from lib.py import ksft_run, ksft_exit
+> > +from lib.py import ksft_eq, KsftSkipEx
+> > +from lib.py import NetDrvEpEnv
+> > +from lib.py import bkg, cmd, rand_port, wait_port_listen
+> > +from lib.py import ksft_disruptive
 > > +
-> > +	if (IN6_IS_ADDR_V4MAPPED(&server_sin->sin6_addr)) {
-> > +		type = "tcp4";
-> > +		server_addr = strrchr(server_addr, ':') + 1;
-> > +	}
 > > +
-> > +	return run_command("sudo ethtool -N %s flow-type %s %s %s dst-ip %s %s %s dst-port %s queue %d >&2",
-> >  			   ifname,
-> > +			   type,
-> >  			   client_ip ? "src-ip" : "",
-> >  			   client_ip ?: "",
-> > -			   server_ip,
-> > +			   server_addr,
-> >  			   client_ip ? "src-port" : "",
-> >  			   client_ip ? port : "",
-> >  			   port, start_queue);
+> > +def require_devmem(cfg):
+> > +    if not hasattr(cfg, "_devmem_probed"):
+> > +        port = rand_port()
+> > +        probe_command = f"./ncdevmem -f {cfg.ifname}"
+> > +        cfg._devmem_supported = cmd(probe_command, fail=False, shell=True).ret == 0
+> > +        cfg._devmem_probed = True
+> > +
+> > +    if not cfg._devmem_supported:
+> > +        raise KsftSkipEx("Test requires devmem support")
+> > +
+> > +
+> > +@ksft_disruptive
+> > +def check_rx(cfg) -> None:
+> > +    cfg.require_v6()
+> > +    require_devmem(cfg)
+> > +
+> > +    port = rand_port()
+> > +    listen_cmd = f"./ncdevmem -l -f {cfg.ifname} -s {cfg.v6} -p {port}"
+> > +
+> > +    with bkg(listen_cmd) as nc:
+> > +        wait_port_listen(port)
+> > +        cmd(f"echo -e \"hello\\nworld\"| nc {cfg.v6} {port}", host=cfg.remote, shell=True)
 > 
-> nit: I think this generate a truncation warning, not sure if it's easy
-> to fix:
+> FWIW, in the v3 of the series I submit, Jakub asked me to replace nc
+> with socat due to issues with nc [1].
 > 
-> ncdevmem.c:259:28: warning: ‘%s’ directive output may be truncated writing up to 255 bytes into a region of size between 209 and 215 [-Wformat-truncation=]
->   259 |         return run_command("sudo ethtool -N %s flow-type %s %s %s dst-ip %s %s %s dst-port %s queue %d >&2",
->       |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> Your usage of nc seems pretty basic though, so maybe it's fine?
 > 
-> maybe make buf smaller? 🤔️
+> [1]: https://lore.kernel.org/netdev/20241101063426.2e1423a8@kernel.org/
 
-Are you having some extra -W arguments to make it trigger on the build
-bot? Wonder why I don't see the warning locally.. (will try to pass
--Wformat-truncation)
+Since I'm doing a respin anyway will try to move to socat as well to keep it
+uniform, thanks!
 
