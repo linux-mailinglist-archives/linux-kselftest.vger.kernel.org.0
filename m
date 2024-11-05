@@ -1,81 +1,109 @@
-Return-Path: <linux-kselftest+bounces-21429-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21430-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEAC99BC296
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 02:34:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A4269BC2D3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 02:54:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 668EF1F2349A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 01:34:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17662B21023
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 01:54:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A7531804A;
-	Tue,  5 Nov 2024 01:34:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D96D33A8CB;
+	Tue,  5 Nov 2024 01:54:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fVD1DX0a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E4zLScGy"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B9F617BA6;
-	Tue,  5 Nov 2024 01:34:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC19627713;
+	Tue,  5 Nov 2024 01:54:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730770445; cv=none; b=nJAUCTJ3Y2yVdDTPfZiB+tABXjzRKgXoFLfNulG5qB/2lqRK35/wsoSmlHfMseOWJQX0UORTtFwtagfu5I+snwvtOSZLvuF90VHAZhL/RfXQaBXh+OiDL3FqrInGEcM1oU6qlLGnILVEn85HqH/LO2pJvup4J9g03Yc5qjfNU7s=
+	t=1730771660; cv=none; b=Y20mUNmqCeuZPODh4Fk6E691xz587NTG1PvPFLnHw9WRjRB0TpEpkl9fh8NHdSMsVZSTpKcE418tFFUuGbQ4dkeUZak/tqBim4yARt0ZSk6Cw30vODZ0pNQRlGz8M7ZtipYNpZ4nM/6qBbY/R+sDTygQqtX/+u1TN/5CApY4EZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730770445; c=relaxed/simple;
-	bh=7ZY6NfnwmzvnOKiQX/Sgmi2yLhNynfjc4SY4a+muKpI=;
+	s=arc-20240116; t=1730771660; c=relaxed/simple;
+	bh=UAZ11ux6gd0FAH3T+YGg5qMCNONRgpHeVBzPAkpUqZI=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=r7vyygCpPL80yWokmiXaO6q7w3B4ztKudhrkwDIE+x5Mkaoe2Wi9y3ysmOuwTEKEj+L9sDYpZV98wfF+xFsHnE/0mvD8d4zEjgnVRTI/L+ucxcztFF1pZVkTIilhBlhdaUl/W4u2X7qCmw5J/ZqHNXENFyQdseh4U9LCVG8BhG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fVD1DX0a; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55BCDC4CECE;
-	Tue,  5 Nov 2024 01:34:04 +0000 (UTC)
+	 MIME-Version:Content-Type; b=RaAhUbfu9bC7/9akzGBEINBLdl1oKAoSKVodmgmqkMj73BStVi97BFhqvoHRbmVmJ3gHZWjX97Wd5+DrjKhv/rUQUCXelWKj/Dfgxik2W91cv2SRTmeINWQOO5bH0a18yp8c0r0QZwRq45vRarXttJO3EYlrDae7SYFKhUmExs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E4zLScGy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FF95C4CECE;
+	Tue,  5 Nov 2024 01:54:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730770444;
-	bh=7ZY6NfnwmzvnOKiQX/Sgmi2yLhNynfjc4SY4a+muKpI=;
+	s=k20201202; t=1730771660;
+	bh=UAZ11ux6gd0FAH3T+YGg5qMCNONRgpHeVBzPAkpUqZI=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=fVD1DX0aZecIdLPxavn9gwElpEbKB9IWeYpNi5lsv/R6P4BMs+/y2+p7u42KboNMt
-	 Df0WSJ9CUr57FXmXeYGyyFFoWIIAh3pmEsUqMtoWW6R2uthg4zM64SrZRHis5htYUU
-	 9tSgcMD9JEqlqkC0ZChELZPt6LkAkrCKbtylwXNyDYpk/Qq+8cSQGeyVs+gX4GkLAF
-	 yQ+y1s8iowdkLK1k7JQQrCnkqHqch+A/cKRWmkk9ZzywkEeiaYJPbJOfU6f8HSDlXW
-	 I2CaFCpjQOd5QhfudeKP+/54ZqiDkUOulsHZ2OlMJZhq2DU9SqhYaU5+Kz7F7wKBRH
-	 wvUEKGvjEt8OQ==
-Date: Mon, 4 Nov 2024 17:34:03 -0800
+	b=E4zLScGyp8QiXwAO8HzgNG1Ni/y/Q4Ig+F12FCA2PU5rY319u+2CpH7LTWAPtPz2o
+	 rtxsNlE2UFHlupEcFBEGyOz0lr67SV/93ZUr4FESSgNrFU7YySVfHC9M0SVIw4HHTy
+	 VPOsbFbcoArEBnhZATpSxH4N6hFNoJ0wPMpWpDKiOPEXA9Akwz8gYPf83PM0YD/T+b
+	 l7njfcMyefzBYxyK2YU0bRkRyTQzlhI1l3K+54Gw7vCo8KXclLWk3yIsjJw/d/T8RF
+	 cEZmA+WCYLCIkHsMriST7G0FfNOMpPJt6rOjNkvbixSMCLxSdH8Z9Qz56n3T/myQp6
+	 982DXn7fKEvPw==
+Date: Mon, 4 Nov 2024 17:54:18 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Joe Damato <jdamato@fastly.com>
-Cc: Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
- davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- andrew+netdev@lunn.ch, shuah@kernel.org, horms@kernel.org,
- almasrymina@google.com, willemb@google.com, petrm@nvidia.com
-Subject: Re: [PATCH net-next v7 12/12] selftests: ncdevmem: Add automated
- test
-Message-ID: <20241104173403.49322788@kernel.org>
-In-Reply-To: <ZyljjgxP94IBWnI6@LQ3V64L9R2>
+To: Stanislav Fomichev <sdf@fomichev.me>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
+ horms@kernel.org, almasrymina@google.com, willemb@google.com,
+ petrm@nvidia.com
+Subject: Re: [PATCH net-next v7 06/12] selftests: ncdevmem: Switch to
+ AF_INET6
+Message-ID: <20241104175418.0d996608@kernel.org>
+In-Reply-To: <20241104181430.228682-7-sdf@fomichev.me>
 References: <20241104181430.228682-1-sdf@fomichev.me>
-	<20241104181430.228682-13-sdf@fomichev.me>
-	<ZyljjgxP94IBWnI6@LQ3V64L9R2>
+	<20241104181430.228682-7-sdf@fomichev.me>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 4 Nov 2024 16:15:10 -0800 Joe Damato wrote:
-> > +    with bkg(listen_cmd) as nc:
-> > +        wait_port_listen(port)
-> > +        cmd(f"echo -e \"hello\\nworld\"| nc {cfg.v6} {port}", host=cfg.remote, shell=True)  
-> 
-> FWIW, in the v3 of the series I submit, Jakub asked me to replace nc
-> with socat due to issues with nc [1].
-> 
-> Your usage of nc seems pretty basic though, so maybe it's fine?
+On Mon,  4 Nov 2024 10:14:24 -0800 Stanislav Fomichev wrote:
+> -static int configure_flow_steering(void)
+> +static int configure_flow_steering(struct sockaddr_in6 *server_sin)
+>  {
+> -	return run_command("sudo ethtool -N %s flow-type tcp4 %s %s dst-ip %s %=
+s %s dst-port %s queue %d >&2",
+> +	const char *type =3D "tcp6";
+> +	const char *server_addr;
+> +	char buf[256];
+> +
+> +	inet_ntop(AF_INET6, &server_sin->sin6_addr, buf, sizeof(buf));
+> +	server_addr =3D buf;
+> +
+> +	if (IN6_IS_ADDR_V4MAPPED(&server_sin->sin6_addr)) {
+> +		type =3D "tcp4";
+> +		server_addr =3D strrchr(server_addr, ':') + 1;
+> +	}
+> +
+> +	return run_command("sudo ethtool -N %s flow-type %s %s %s dst-ip %s %s =
+%s dst-port %s queue %d >&2",
+>  			   ifname,
+> +			   type,
+>  			   client_ip ? "src-ip" : "",
+>  			   client_ip ?: "",
+> -			   server_ip,
+> +			   server_addr,
+>  			   client_ip ? "src-port" : "",
+>  			   client_ip ? port : "",
+>  			   port, start_queue);
 
-Good catch, let's not use nc. I seem to recall it's also funny about
-address family selection. Also may be useful to add a helper for sending
-simple strings from remote to avoid having this problem again.
+nit: I think this generate a truncation warning, not sure if it's easy
+to fix:
+
+ncdevmem.c:259:28: warning: =E2=80=98%s=E2=80=99 directive output may be tr=
+uncated writing up to 255 bytes into a region of size between 209 and 215 [=
+-Wformat-truncation=3D]
+  259 |         return run_command("sudo ethtool -N %s flow-type %s %s %s d=
+st-ip %s %s %s dst-port %s queue %d >&2",
+      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+maybe make buf smaller? =F0=9F=A4=94=EF=B8=8F
 
