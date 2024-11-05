@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-21435-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21436-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 159ED9BC3DE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 04:30:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F7599BC3E2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 04:32:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7792BB21A3C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 03:30:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FD951C21123
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 03:32:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C2B218BC06;
-	Tue,  5 Nov 2024 03:30:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EC421714B4;
+	Tue,  5 Nov 2024 03:32:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="auM3yz62"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C/unJz1S"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4482189F39;
-	Tue,  5 Nov 2024 03:29:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA5F53D9E;
+	Tue,  5 Nov 2024 03:31:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730777400; cv=none; b=ZfVu4g4/mfwZXN6NgEykjEUVwwvMFHYsx8gFSBDusguWP1FXBX+hCsjma/id1O3QgQ8qG8P7bVvDlL/KiJ1LbnhiWEZVGatPfuGuaxRxTy4VnejBVHf5TUMbxtVktLXgoc6Ikid4cdiX3oxjWic63fPHzBaXrtnJCF4E/Im/ZUk=
+	t=1730777521; cv=none; b=lptTHMBQN6sClpO0ZeXdrEb+eEdimeYb89IlZc+eyGjkqNYH/MbiYbOOTKIm7QUYSnXr8LfT+/IHem6IpCaQeFKRpbi97DxXyq/9PfCJ/vWr77c3H+CT0cw20BiKgfgd4orfoxbQWeBA5iz39NxDpmqaG92SZGS2P0qfjKXSjD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730777400; c=relaxed/simple;
-	bh=xy8eP0aKp8aFXIatWV6gD6j0hhk+fBHC4dHMl/3z7JA=;
+	s=arc-20240116; t=1730777521; c=relaxed/simple;
+	bh=M6q8jWfnoqSJeNKe5Q2MrOE2M617kJff3iOfX1aQV8A=;
 	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ass/xqC12Vp0cv5PMPQlKhAxD+L+tHXYBfF4g6W/zce+n9KJcoTGlyOnTb+XH0YpZKk816OWE2o1nrl/N4jXuYu1f9xH2icPTsmxFtR9lDJ01mZbc87lvP5Dzw1paE61VXeMzq3RGRjHuwiyqKSD71l6kISImLBz6yQQC0O8qo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=auM3yz62; arc=none smtp.client-ip=209.85.216.46
+	 Content-Type:Content-Disposition:In-Reply-To; b=G3x9H6iwt0wouqjFuWSwMuq3wbpuNhDM2z6BlL9YqEsr2YkABNPUrj7JNyesjDdL1mMK3ced929OLSGJBySWWK99/SxyshgX4sciscnk7/oqX7NUk8eBZpURkX/K/qCU9VJ8rC3A+dLELIibktDp8p/mVN4oNGaDd2a4tFPY4tY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C/unJz1S; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2e30fb8cb07so3578302a91.3;
-        Mon, 04 Nov 2024 19:29:58 -0800 (PST)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2113da91b53so15851025ad.3;
+        Mon, 04 Nov 2024 19:31:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730777398; x=1731382198; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730777519; x=1731382319; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZoUg/GO9QPX5GyFZfYPI/Khp9nkGOAdmWMa/084j4c8=;
-        b=auM3yz62W6KsGW//BwoZiw/svpucplbEy7RacKGM8NBmRl0lEr0iVePYHpQW5bvlr9
-         oeLL5Pyc5xK2VocMcX60h3YrsyUbZzJXPRmt5ajJ2Ca7JVpoNn0kTt7FMFNFWqeYp/R/
-         LkBr/FyL2FVf1kvpLA/liHuXarsoirn5nMDgiwWQ+8Ts38D1vjpkBfS2o0iHVIa5Kh3k
-         VT7QjyFus4d9xvcpBSm3GsDWWNopznn20yevIWoEbBMgLkLKosqTExLsCZ5J3QXJ6toF
-         doEV/llNkwzQllj2R83IZSwsDC1EONcHOhuVjhUERUI1B4wzsf/BF9+s0HLZMdRx1j+c
-         cmwQ==
+        bh=Q/BKUeGL7P6699SsUhj9FODeTe7yaB1R3gH0XtlnzNQ=;
+        b=C/unJz1SIoam3eWnAXRo/bb3K5d4WG6Pw14/t7wHQJftMAoPw4cNTda5CmhxDmeQxI
+         k3KMbUkQ2wTYURFVMTCvcvSPR+FOrQPbyqoDDuXoOPfskGWhFXEWr+A++Dq9Is3bvWO0
+         jdNVZpnXgIz0lwarF5bHW8uPnv48RLkM+FCd+TNSrxhGVHO+Kv/wbt0gSTTbhcMVEn2G
+         F9s38RQCytkRkMuV/JBQv6TQ+fwiuKlVYcGj2I8r3sFQYlsG0TtdisYFNC3XvbNR2ZEm
+         Pb3Uo/Cc2HDJpomepXFZvayIuvWkHfVp4onWrLa1ewmVOudTjJ4O6QPWKqpeXLcJRi9z
+         QaOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730777398; x=1731382198;
+        d=1e100.net; s=20230601; t=1730777519; x=1731382319;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZoUg/GO9QPX5GyFZfYPI/Khp9nkGOAdmWMa/084j4c8=;
-        b=FuZ35u/LnudsDgvSemVifIMsPrQ5wEycV1nMvWFUtorvlUFUWsZfLZ+pqmdxeeYJmU
-         b17qrIRrMSkDBzYlKWYW/LjqfngltmWrjItAq3K9hR1Pt9J7L+Mb5w49rJTWO8Ytqpw8
-         d+hcFYuEdcqqjdLy/RrUdXu3JKhonuAk5htZdu8DOIPrQm93OXBoJLmaY4ZvKjV3iUHy
-         Zba0lpW7GdFJB7xr7/ePXzQbrwscaNfYZ0CEINhpecZIuQiLFnmyBxx2GeD+iI/XOVrd
-         0FTzTP9yveIXFAw8qdJy8AI0uFen2t5BErpfFNbcbjpIbgrgqazG5NKNmcmc734RW+zk
-         adQw==
-X-Forwarded-Encrypted: i=1; AJvYcCVJ7td33uHXT2Lug18kO07BmPzygy4RKV2Yh3GpnuyjzFfu29MbjFTW2exb15octKHtx8TwD+xs2VFVhMQG/Bkr@vger.kernel.org, AJvYcCVWdd4UtNNqCtNfr4Zu2gr7vpZ5UmBS6WkEPVvEscpro+l4ewu0BAXETwkRiG5zk8jcFYQw8YRJ@vger.kernel.org, AJvYcCWzoOHh+MKODFFb+uY032LpgwR+TvGPSPbjyNj22RKxZx9VyXSbfED4jl0vx2eWtAJD7dzuZHlcsFvK+gE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEZ5kb4jo108ZiGmEQ735YckGcnbbvEcLToXZKfvNG/kqYs6++
-	oZMU7POA0mhfb6h4lkRFwqaK9nr0r4hBHQQJDhsAhM6MEPaAHWQ=
-X-Google-Smtp-Source: AGHT+IEDBwJ8RzygDgb71vQZ5s/ZeolaoIa38xVDK/i+YXy/ZagMbg8uflAtuCr9mrfn1awDM9kjag==
-X-Received: by 2002:a17:90a:bc87:b0:2d3:da6d:8330 with SMTP id 98e67ed59e1d1-2e92ce32e36mr24870387a91.4.1730777397786;
-        Mon, 04 Nov 2024 19:29:57 -0800 (PST)
+        bh=Q/BKUeGL7P6699SsUhj9FODeTe7yaB1R3gH0XtlnzNQ=;
+        b=c2Xd81idYvKbclIu8zesh6Gihv+ZwV2wy/zr3stbMeG+7UNswfcKhR4hiloj6oCklM
+         FNPJBR8MIchmaQurKF1BLPXe0K87ZzsZQhYikWjOe846ljcgTYjz3UeTVWc93sYvCfcm
+         SK0MA08jvROB/dYY8NBGec06SgTy9/mKEm+u5FfM6/zsSoRB8qOLNknOquGl9/jvz0w/
+         A+uhAMc7BNQl1Xz5KeFihXIreHGi0kyBhpsgocO+WlMg9opti8zB2NT4C1S9/sZw5+rY
+         algoIKMLNTh6oTG0CLAVlNvmIgC6/eTvEyMQwTcVuyu3bBiaw31HILJRTvstgxGc42mf
+         k1vA==
+X-Forwarded-Encrypted: i=1; AJvYcCUDZoJW7trec+1RagcaGoIAu1MFdjs8w9NqMXU3tpnTn8kdSbMx6DbN6HI+RnK1plLcUJ8aRwVi@vger.kernel.org, AJvYcCViURF5EN8UTXMiOl8upQ6UefUHP1XEtIRccj7dQOnTZbEg1PjO7IE/hQl8eChrO6FO8qGt8gvVicrYzLM=@vger.kernel.org, AJvYcCWQFsiH7M+lyK6Yr3DHqLjM0hYEnSyckk8nqF6b9nqJy31x/LnshvBino5wmeMqMM6FmoMDHw5xgf+3yvga9Lv2@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+l8QYNkrjH9HNT+qcIiUm7G6Lg11rEjKht/BCv66R7tzlzmlW
+	NtJB5FAnyDq31yzJmTfvT2tEAnCg2nzzicP8WEr0E7SiRZtHVM8=
+X-Google-Smtp-Source: AGHT+IHmLlosF584MVLHK9OSUZ96/YmbPjIvKtOBXrm4rB8HVaeF8modVB1MzQqd3Do5AJSM20koqg==
+X-Received: by 2002:a17:902:da8d:b0:20c:d76b:a7a0 with SMTP id d9443c01a7336-210c6879efbmr453369225ad.8.1730777519247;
+        Mon, 04 Nov 2024 19:31:59 -0800 (PST)
 Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e98ca48187sm105107a91.1.2024.11.04.19.29.57
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211056ee3d8sm68492995ad.20.2024.11.04.19.31.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 19:29:57 -0800 (PST)
-Date: Mon, 4 Nov 2024 19:29:56 -0800
+        Mon, 04 Nov 2024 19:31:58 -0800 (PST)
+Date: Mon, 4 Nov 2024 19:31:58 -0800
 From: Stanislav Fomichev <stfomichev@gmail.com>
 To: Joe Damato <jdamato@fastly.com>, Stanislav Fomichev <sdf@fomichev.me>,
 	netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
@@ -74,12 +74,12 @@ To: Joe Damato <jdamato@fastly.com>, Stanislav Fomichev <sdf@fomichev.me>,
 	linux-kselftest@vger.kernel.org, andrew+netdev@lunn.ch,
 	shuah@kernel.org, horms@kernel.org, almasrymina@google.com,
 	willemb@google.com, petrm@nvidia.com
-Subject: Re: [PATCH net-next v7 03/12] selftests: ncdevmem: Unify error
- handling
-Message-ID: <ZymRNJLLDLCqIYyq@mini-arch>
+Subject: Re: [PATCH net-next v7 10/12] selftests: ncdevmem: Run selftest when
+ none of the -s or -c has been provided
+Message-ID: <ZymRrhOcrWchdGU7@mini-arch>
 References: <20241104181430.228682-1-sdf@fomichev.me>
- <20241104181430.228682-4-sdf@fomichev.me>
- <Zylc1dKzubaa0yWQ@LQ3V64L9R2>
+ <20241104181430.228682-11-sdf@fomichev.me>
+ <ZyliszeFtcZqfsnm@LQ3V64L9R2>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,59 +88,70 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Zylc1dKzubaa0yWQ@LQ3V64L9R2>
+In-Reply-To: <ZyliszeFtcZqfsnm@LQ3V64L9R2>
 
 On 11/04, Joe Damato wrote:
-> On Mon, Nov 04, 2024 at 10:14:21AM -0800, Stanislav Fomichev wrote:
-> > There is a bunch of places where error() calls look out of place.
-> > Use the same error(1, errno, ...) pattern everywhere.
+> On Mon, Nov 04, 2024 at 10:14:28AM -0800, Stanislav Fomichev wrote:
+> > This will be used as a 'probe' mode in the selftest to check whether
+> > the device supports the devmem or not. Use hard-coded queue layout
+> > (two last queues) and prevent user from passing custom -q and/or -t.
 > > 
 > > Reviewed-by: Mina Almasry <almasrymina@google.com>
 > > Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
 > > ---
-> >  tools/testing/selftests/net/ncdevmem.c | 16 ++++++++--------
-> >  1 file changed, 8 insertions(+), 8 deletions(-)
+> >  tools/testing/selftests/net/ncdevmem.c | 42 ++++++++++++++++++++------
+> >  1 file changed, 32 insertions(+), 10 deletions(-)
 > > 
 > > diff --git a/tools/testing/selftests/net/ncdevmem.c b/tools/testing/selftests/net/ncdevmem.c
-> > index 3e7ef2eedd60..4733d1a0aab5 100644
+> > index 044198ce02a7..270a77206f65 100644
 > > --- a/tools/testing/selftests/net/ncdevmem.c
 > > +++ b/tools/testing/selftests/net/ncdevmem.c
-> > @@ -339,33 +339,33 @@ int do_server(struct memory_buffer *mem)
-> >  	server_sin.sin_port = htons(atoi(port));
+> > @@ -76,7 +76,7 @@ static char *client_ip;
+> >  static char *port;
+> >  static size_t do_validation;
+> >  static int start_queue = -1;
+> > -static int num_queues = 1;
+> > +static int num_queues = -1;
+> >  static char *ifname;
+> >  static unsigned int ifindex;
+> >  static unsigned int dmabuf_id;
+> > @@ -731,19 +731,31 @@ int main(int argc, char *argv[])
+> >  		}
+> >  	}
 > >  
-> >  	ret = inet_pton(server_sin.sin_family, server_ip, &server_sin.sin_addr);
-> > -	if (socket < 0)
-> > -		error(79, 0, "%s: [FAIL, create socket]\n", TEST_PREFIX);
-> > +	if (ret < 0)
-> > +		error(1, errno, "%s: [FAIL, create socket]\n", TEST_PREFIX);
+> > -	if (!server_ip)
+> > -		error(1, 0, "Missing -s argument\n");
+> > -
+> > -	if (!port)
+> > -		error(1, 0, "Missing -p argument\n");
+> > -
+> >  	if (!ifname)
+> >  		error(1, 0, "Missing -f argument\n");
 > >  
-> >  	socket_fd = socket(server_sin.sin_family, SOCK_STREAM, 0);
-> > -	if (socket < 0)
-> > -		error(errno, errno, "%s: [FAIL, create socket]\n", TEST_PREFIX);
-> > +	if (socket_fd < 0)
-> > +		error(1, errno, "%s: [FAIL, create socket]\n", TEST_PREFIX);
+> >  	ifindex = if_nametoindex(ifname);
 > >  
-> >  	ret = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEPORT, &opt,
-> >  			 sizeof(opt));
-> >  	if (ret)
-> > -		error(errno, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
-> > +		error(1, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
-> >  
-> >  	ret = setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &opt,
-> >  			 sizeof(opt));
-> >  	if (ret)
-> > -		error(errno, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
-> > +		error(1, errno, "%s: [FAIL, set sock opt]\n", TEST_PREFIX);
+> > -	if (start_queue < 0) {
+> > -		start_queue = rxq_num(ifindex) - 1;
+> > +	if (!server_ip && !client_ip) {
+> > +		if (start_queue < 0 && num_queues < 0) {
+> > +			num_queues = rxq_num(ifindex);
+> > +			if (num_queues < 0)
+> > +				error(1, 0, "couldn't detect number of queues\n");
+> > +			/* make sure can bind to multiple queues */
+> > +			start_queue = num_queues / 2;
+> > +			num_queues /= 2;
 > 
-> A minor nit (definitely not worth re-sending for this on its own):
-> it might be helpful to add which of the sockopts failed to the error
-> message REUSEADDR or REUSEPORT.
+> Sorry for the beginner question :) -- is it possible that rxq_num
+> ever returns 1 and thus start_queue = 0, num_queues = 0
+>
+> > +		}
+> > +
+> > +		if (start_queue < 0 || num_queues < 0)
+> > +			error(1, 0, "Both -t and -q are required\n");
 > 
-> Reviewed-by: Joe Damato <jdamato@fastly.com>
+> And then isn't caught here because this only checks < 0 (instead of
+> num_queues <= 0) ?
 
-Thank you for the review!
-
-I later move these two under enable_reuseaddr and make it even less
-debuggable :-( Let me maybe keep the calls to error() inside the
-enable_reuseaddr.
+In theory it's possible to configure a netdev with a single queue. I can
+add an extra 'num_queues == 1' check just in case...
 
