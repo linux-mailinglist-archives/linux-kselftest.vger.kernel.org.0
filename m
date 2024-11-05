@@ -1,139 +1,120 @@
-Return-Path: <linux-kselftest+bounces-21454-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21455-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DDE79BCC15
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 12:46:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9EC79BCCD9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 13:37:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED6701F22235
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 11:46:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14E681C22229
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 12:37:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C33EB1D2B2A;
-	Tue,  5 Nov 2024 11:46:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=aosc.io header.i=@aosc.io header.b="XmK/AzQb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 257171D516A;
+	Tue,  5 Nov 2024 12:36:57 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.248.207])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18E0A1C07D9;
-	Tue,  5 Nov 2024 11:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.100.248.207
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFB141E485;
+	Tue,  5 Nov 2024 12:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730807204; cv=none; b=hJFRsiocJLLiw7KEeSWx+Qa/XTVl77Zf5NarsF4R2hsHGDfE9fJUQSEm5LMAyiJO+/kqaGEMA0qoeNcuzzQOd2xeDvLMGjl5dlb5ZRqd43NQ631qAgpH4XdxkGe9nqOGfLQr22+tCK/FaUSL8XzbZfo0N9c61N6F8DHmy6PgW1Q=
+	t=1730810217; cv=none; b=cB+Ie1PmL5R2HQgup4v90nqIja0o4P+A5DHgSct2fTMsSSn9Uf5rUGaaBSEPs1kyA+eDRIIRv/BOh5UCPjOM91/xFhOKsNaH1kDekUHQ0DpqCynHdzxCyUAuR2qsa18eSZmApY2o7fJsdYi/NocltmmZ/2GNYGLtm6siYcp6G44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730807204; c=relaxed/simple;
-	bh=CJiyeokDj6c9VIvYdrBd9CQEjiOeVmC3TfnoQ0s8ow4=;
+	s=arc-20240116; t=1730810217; c=relaxed/simple;
+	bh=JI6MB//wtf97/j8tW58PlJtqH71bKmL9KGU9T8eS3/4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VGFhqKHlkEaVC/PmpLh0hTWXoDHnaspNc/hA02n7/DuK0ZT2zgA7V0SO4svMRLRm12szb27E9RxDLMiVTULWrdGS7EmvqKUv+GV4zUK7m9PUisoZK73jVdImNvcgywt8AVfEmniVXENyfX0D3254Glb0mPA4Frizf6p4oSs1TE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=aosc.io; spf=pass smtp.mailfrom=aosc.io; dkim=pass (1024-bit key) header.d=aosc.io header.i=@aosc.io header.b=XmK/AzQb; arc=none smtp.client-ip=159.100.248.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=aosc.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aosc.io
-Received: from relay1.mymailcheap.com (relay1.mymailcheap.com [144.217.248.102])
-	by relay5.mymailcheap.com (Postfix) with ESMTPS id 44B3F26760;
-	Tue,  5 Nov 2024 11:46:38 +0000 (UTC)
-Received: from nf1.mymailcheap.com (nf1.mymailcheap.com [51.75.14.91])
-	by relay1.mymailcheap.com (Postfix) with ESMTPS id BDCD93E859;
-	Tue,  5 Nov 2024 11:46:29 +0000 (UTC)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-	by nf1.mymailcheap.com (Postfix) with ESMTPSA id F067140078;
-	Tue,  5 Nov 2024 11:46:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
-	t=1730807187; bh=CJiyeokDj6c9VIvYdrBd9CQEjiOeVmC3TfnoQ0s8ow4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XmK/AzQbLW3MPx5gEe4Pzv/y2uk/+okvNMd7CzxkK4V3C00d+9T9oFCs2GsFDG6UP
-	 mJDLoHy/yhq3GqOufIL9dYQ6sh+bqgZ2Wcyz5GkWmspOrzvKdUC2J5iwvGFubrilWl
-	 jrQnth5Eo9G3HIStdGHBua6Lx/dUCnnAMN3vgwuM=
-Received: from [198.18.0.1] (unknown [58.32.43.83])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail20.mymailcheap.com (Postfix) with ESMTPSA id 478E441500;
-	Tue,  5 Nov 2024 11:46:24 +0000 (UTC)
-Message-ID: <48a22231-89ec-460b-913b-54af18166da7@aosc.io>
-Date: Tue, 5 Nov 2024 19:46:21 +0800
+	 In-Reply-To:Content-Type; b=WvSo6ZbikzxgE5106WU0Qfzz1iVZeZfuFMUZaWB6lkejFAUSjrG51VSFRg9YN9kPrCoLiTUb7jDnF2fvKi2+xaCnV/J9KhQzBO6S9HWjEp5OpZ/2QnSZELFpoQi/+hvp2pMeOZ6Xq44A5vJvyAACKEy3pCiEezkz9a6WLG8j/Uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D52CFEC;
+	Tue,  5 Nov 2024 04:37:22 -0800 (PST)
+Received: from [10.57.24.229] (unknown [10.57.24.229])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E04A3F6A8;
+	Tue,  5 Nov 2024 04:36:50 -0800 (PST)
+Message-ID: <4e57a6e6-f10c-4a35-88e7-ab4749f7e329@arm.com>
+Date: Tue, 5 Nov 2024 12:36:40 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Thunderbird Daily
-Subject: Re: [PATCH bpf-next 1/2] libbpf: Add missing per-arch include path
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Mykola Lysenko <mykolal@fb.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
-Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org, Charlie Jenkins <charlie@rivosinc.com>
-References: <20240927131355.350918-1-bjorn@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] kunit: enable hardware acceleration when available
+To: Tamir Duberstein <tamird@gmail.com>,
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow
+ <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+ Alyssa Ross <hi@alyssa.is>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
+ <thomas@t-8ch.de>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org
+References: <20241102-kunit-qemu-accel-macos-v2-0-9d4579fddd20@gmail.com>
+ <20241102-kunit-qemu-accel-macos-v2-2-9d4579fddd20@gmail.com>
 Content-Language: en-US
-From: Kexy Biscuit <kexybiscuit@aosc.io>
-In-Reply-To: <20240927131355.350918-1-bjorn@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: F067140078
-X-Rspamd-Server: nf1.mymailcheap.com
-X-Spamd-Result: default: False [-0.09 / 10.00];
-	MIME_GOOD(-0.10)[text/plain];
-	XM_UA_NO_VERSION(0.01)[];
-	FREEMAIL_TO(0.00)[kernel.org,gmail.com,fb.com,vger.kernel.org];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:16276, ipnet:51.83.0.0/16, country:FR];
-	ARC_NA(0.00)[];
-	RCVD_COUNT_ONE(0.00)[1];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Action: no action
+From: Kristina Martsenko <kristina.martsenko@arm.com>
+In-Reply-To: <20241102-kunit-qemu-accel-macos-v2-2-9d4579fddd20@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 9/27/2024 9:13 PM, Björn Töpel wrote:
-> From: Björn Töpel <bjorn@rivosinc.com>
+On 02/11/2024 12:09, Tamir Duberstein wrote:
+> Use KVM or HVF if supported by the QEMU binary and available on the
+> system.
 > 
-> libbpf does not include the per-arch tools include path, e.g.
-> tools/arch/riscv/include. Some architectures depend those files to
-> build properly.
+> This produces a nice improvement on my Apple M3 Pro running macOS 14.7:
 > 
-> Include tools/arch/$(SUBARCH)/include in the libbpf build.
+> Before:
+> ./tools/testing/kunit/kunit.py exec --arch arm64
+> [HH:MM:SS] Elapsed time: 10.145s
 > 
-> Fixes: 6d74d178fe6e ("tools: Add riscv barrier implementation")
-> Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+> After:
+> ./tools/testing/kunit/kunit.py exec --arch arm64
+> [HH:MM:SS] Elapsed time: 1.773s
+> 
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 > ---
->   tools/lib/bpf/Makefile | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+>  tools/testing/kunit/kunit_kernel.py       | 3 +++
+>  tools/testing/kunit/qemu_configs/arm64.py | 2 +-
+>  2 files changed, 4 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-> index 1b22f0f37288..857a5f7b413d 100644
-> --- a/tools/lib/bpf/Makefile
-> +++ b/tools/lib/bpf/Makefile
-> @@ -61,7 +61,8 @@ ifndef VERBOSE
->   endif
->   
->   INCLUDES = -I$(or $(OUTPUT),.) \
-> -	   -I$(srctree)/tools/include -I$(srctree)/tools/include/uapi
-> +	   -I$(srctree)/tools/include -I$(srctree)/tools/include/uapi \
-> +	   -I$(srctree)/tools/arch/$(SRCARCH)/include
->   
->   export prefix libdir src obj
->   
-> 
-> base-commit: db5ca265e3334b48c4e3fa07eef79e8bc578c430
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index 61931c4926fd6645f2c62dd13f9842a432ec4167..3146acb884ecf0bcff94d5938535aabd4486fe82 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -123,6 +123,9 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+>  				'-append', ' '.join(params + [self._kernel_command_line]),
+>  				'-no-reboot',
+>  				'-nographic',
+> +				'-accel', 'kvm',
+> +				'-accel', 'hvf',
+> +				'-accel', 'tcg',
+>  				'-serial', self._serial] + self._extra_qemu_params
+>  		# Note: shlex.join() does what we want, but requires python 3.8+.
+>  		print('Running tests with:\n$', ' '.join(shlex.quote(arg) for arg in qemu_command))
+> diff --git a/tools/testing/kunit/qemu_configs/arm64.py b/tools/testing/kunit/qemu_configs/arm64.py
+> index d3ff27024755411441f910799be30399295c9541..5c44d3a87e6dd2cd6b086138186a277a1473585b 100644
+> --- a/tools/testing/kunit/qemu_configs/arm64.py
+> +++ b/tools/testing/kunit/qemu_configs/arm64.py
+> @@ -9,4 +9,4 @@ CONFIG_SERIAL_AMBA_PL011_CONSOLE=y''',
+>  			   qemu_arch='aarch64',
+>  			   kernel_path='arch/arm64/boot/Image.gz',
+>  			   kernel_command_line='console=ttyAMA0',
+> -			   extra_qemu_params=['-machine', 'virt', '-cpu', 'max,pauth-impdef=on'])
+> +			   extra_qemu_params=['-machine', 'virt', '-cpu', 'max'])
 
-This fixes building of bpf tools, thanks! You can add the following tags...
+Would it be possible to keep 'pauth-impdef=on' for TCG emulation? Otherwise
+performance regresses by about 20%.
 
-Reported-by: Andreas Schwab <schwab@suse.de>
-Closes: https://lore.kernel.org/all/mvmo74441tr.fsf@suse.de/
-Tested-by: Kexy Biscuit <kexybiscuit@aosc.io>
--- 
-Best Regards,
-Kexy Biscuit
+Before this patch:
+./tools/testing/kunit/kunit.py exec --arch=arm64 --cross_compile=aarch64-linux-
+[11:03:38] Elapsed time: 15.494s
+
+After this patch:
+./tools/testing/kunit/kunit.py exec --arch=arm64 --cross_compile=aarch64-linux-
+[11:10:47] Elapsed time: 19.099s
+
+Thanks,
+Kristina
+
 
