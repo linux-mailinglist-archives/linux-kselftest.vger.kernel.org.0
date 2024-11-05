@@ -1,107 +1,123 @@
-Return-Path: <linux-kselftest+bounces-21423-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21424-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE4DD9BC1C3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 01:01:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FA9D9BC1CB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 01:07:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C0DA1C21278
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 00:01:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57C6B1C2125D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2024 00:07:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 302A279C2;
-	Tue,  5 Nov 2024 00:01:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81A5E817;
+	Tue,  5 Nov 2024 00:07:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="twRx4sHI"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="E9ZjvzUR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B96ECC
-	for <linux-kselftest@vger.kernel.org>; Tue,  5 Nov 2024 00:01:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F37163
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 Nov 2024 00:07:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730764901; cv=none; b=Nrej3KZ4BCcuYufMT5sP1xp1meRQ7gd59zmgzWF0tmjHzCnnjGQRqoJWTREasP+nU5cg4wTNJNefws2Uoecyn6kArmnA3ptcdjiNmh4zJAWmiLk6Y9+1fiqXFa6osr3nNUWW+bh8NI0N7RyMQT2X+enG5Ahqs+Hg6KV2P880aZ4=
+	t=1730765271; cv=none; b=MLccaUYKh74GEVdhygn4T6SwXQasGTj4y77LbMMgc63BcTzpJovJmgejrPKjfNhUevV1ilPuM6r1OS9cJy+wckBxh+2CUJYRNqZ7npkaxZ3GK7x/bd24JaW3K4Lm4P7m8Wwd8WmY56rClUETSEJgQGnKEl+FBNvvaZmkN/XLW+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730764901; c=relaxed/simple;
-	bh=6yI6UEYCEKxnrx9+/HaTpOpIPo4ib88NscvinntE2CU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LgyHXHC5ToKQd1t/hl+gQCbadTHd6Svn36T483ANJKWhFDo8z6WFECXtfpoJ9xBUg/RTiIg/VVceOm+myVOEiZXQmEumPTrAhBNDfCHrpqS66QXoy2uLkUckWFKXizY/NLV08H2MaDP7WbMaxdeOLebaXVAXRexLU16aDYD/0Aw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=twRx4sHI; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-71e7086c231so4194844b3a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 Nov 2024 16:01:39 -0800 (PST)
+	s=arc-20240116; t=1730765271; c=relaxed/simple;
+	bh=+/hby0KJ3mELyIs66mVASGTlrbviMNwAxD79AxO1uTY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qKAO15umgqlmS2VRBnSRhYAlTam6Nec9abxUhYgPQrxShxIMDrcWddzwu6m6fqIE1/bJRGmntys6TonNe6wwZUV//vXyPMlR5aojf4ErUmgRTZySO2w9Wd5THgkgUb3jSxyIIZg4BohzF/zeJVni4HTCPBD2G659FafFI00xytQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=E9ZjvzUR; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-83ab694ebe5so191682139f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 Nov 2024 16:07:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1730764899; x=1731369699; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DiShwGNgjZXzIJw3EmcQvT2xIzvJnyyeh86E3dyA92s=;
-        b=twRx4sHI0wz/woq772mlljvpYstU0YqJFG5KsNBnlET/7nJaLUOIRuKDQj5EPjk0yH
-         22aMFWEJnGwsKYuI4wt11AYiej0byLAqDth0J4uUR0MpIWQxIXX0mAH6zOexcytI19ES
-         j0HujcdW+rtt5/djCCNzP9N6fLNaMUdiNT9fU=
+        d=linuxfoundation.org; s=google; t=1730765269; x=1731370069; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=v4n3zOONA1XG+FeGWTbMwFbRYJOOknBuCqD+89hTy9Y=;
+        b=E9ZjvzURSJozL1AcQjOjJ/j+HeHn4D46joxh2wAmceIZANyLEEhc1n+wVMPILBU9fE
+         KssHfXpVAx8S2PpDX/Yn6HTzkTrpLkvqaaIhJ4CwEhjYvLH/CvXlfEf9nyv6HUoGmjEl
+         pQuPz04PTGmPE9njMuN4fpZYjZCBZnXLO7Qgs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730764899; x=1731369699;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1730765269; x=1731370069;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DiShwGNgjZXzIJw3EmcQvT2xIzvJnyyeh86E3dyA92s=;
-        b=mRvxdfDlMQzNesNs2eGkt1IZD4cugJ9eKFCtIJsMBaOMDRPrKfnxy8YCPb1qvEV07H
-         oK8Ql2SjCp1f1dLXSyy+T95ximrpQNM04+4t1cRYUWF40861caJwhaCzjhdkmFJfKXu/
-         HcHS99m4j7FZcwJwdETXMsemIeJU3gFNp8zj1zIoDfVrGVYRxk8umzeIyfyylQ5awa3V
-         26EvfoaZw81L78sJ9QBDiUI+m0NfWIPxA7eKhV9uNagbjwxlQgihaRoxMFIVdle9GNgG
-         pIFFIE8a1zqtiGiawoodWQkxIEHf8ofaEivyqVW2LJRB5a8zmDNFCReUZftnptq8mypf
-         jALQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWJiZ4ncfa046vvsgWHC0U5mNY5HhtBhD0lm2yIQIkZCER+O8k4IAvvpGhdlb4BBSzJDG6Of72yAr9MJi3u8p8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVNk3HHLPHNcsGqtAwkZ/QcaFZfGwycV8o/o4dfolNuJ63CyD2
-	IhOVQnyJqVeHBxOrZg9OOi/r+1qrIwLH66Oyo5CT5tnGA9swRjEFYC/5ulvZQKg=
-X-Google-Smtp-Source: AGHT+IHSdBpjRqV53YfC2PeU2ZEkln+b1qR+XerC9xeK/DFyQku0Yu13uWDphAHW0yUHzqmjnx+C+Q==
-X-Received: by 2002:a05:6a21:1798:b0:1d9:3456:b799 with SMTP id adf61e73a8af0-1d9a8535d0cmr45172446637.46.1730764898939;
-        Mon, 04 Nov 2024 16:01:38 -0800 (PST)
-Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ee452aa17dsm7698879a12.34.2024.11.04.16.01.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 16:01:38 -0800 (PST)
-Date: Mon, 4 Nov 2024 16:01:35 -0800
-From: Joe Damato <jdamato@fastly.com>
-To: Stanislav Fomichev <sdf@fomichev.me>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, andrew+netdev@lunn.ch,
-	shuah@kernel.org, horms@kernel.org, almasrymina@google.com,
-	willemb@google.com, petrm@nvidia.com
-Subject: Re: [PATCH net-next v7 09/12] selftests: ncdevmem: Remove hard-coded
- queue numbers
-Message-ID: <ZylgX5SzV_FExBJl@LQ3V64L9R2>
-Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, andrew+netdev@lunn.ch,
-	shuah@kernel.org, horms@kernel.org, almasrymina@google.com,
-	willemb@google.com, petrm@nvidia.com
-References: <20241104181430.228682-1-sdf@fomichev.me>
- <20241104181430.228682-10-sdf@fomichev.me>
+        bh=v4n3zOONA1XG+FeGWTbMwFbRYJOOknBuCqD+89hTy9Y=;
+        b=cFgPAguJfcIvEAGSCP0jpdQmel5OTYB8V2LDAIA67FYoYHRFo9rC0weT99namY6I7P
+         I+EO5/BIXgXBqW5ZYH2Ai4NDVI5E0SL70koa9EiHjRlNM6gd/xEAyjLDeaHgL9ZlIZ73
+         KHyomOHwOEpuVOsx8FAnDfiilDpJsQm0NwjyC8fP79fL1PAJokp0ywFFbviol//qrMH2
+         lV9enTO8MqnAmg8h27KKRrcjaQ135I95WiYR5fe9ExVfUvlBSf8Ldt61Li17mNdtviZ9
+         VUuw/J4nrYIE3Hc8vzoPU+iKEHeMFSA/DPxt4iZiBGKc1QYXPTidbTBnZEDDRMMoyLDy
+         4epw==
+X-Forwarded-Encrypted: i=1; AJvYcCXM0xCu/OSm1gjPNWastS1kskDaW76uoLl+dk9rRxW2buK8XR4oHUngxNy3nSHV25j1LHvPfAcEyOUSByBbqtU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5VNZ7nTZy9aZRpoVCEJKRxoNQljK3cRw1n4o5FgYzYSlSoz6I
+	jFlI7i15nntSMG01S37NKmKBGGBYvFu/2ougG/QXFpu+gkg7vIG7rvyIZa+eIZw=
+X-Google-Smtp-Source: AGHT+IGqCTVTX932JUL/uBkEMT98/t8/6DJqYlEVSP6HPj/UjrLQ6NVQLz/bZ5Jija2XbsXkBEeVwQ==
+X-Received: by 2002:a05:6602:3fd1:b0:83a:931a:13a0 with SMTP id ca18e2360f4ac-83b1c41289dmr3764682139f.8.1730765268840;
+        Mon, 04 Nov 2024 16:07:48 -0800 (PST)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4de048be955sm2161087173.50.2024.11.04.16.07.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Nov 2024 16:07:48 -0800 (PST)
+Message-ID: <c69d23f7-0c50-4f8a-b146-c76bc6f4291c@linuxfoundation.org>
+Date: Mon, 4 Nov 2024 17:07:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241104181430.228682-10-sdf@fomichev.me>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V4 00/15] selftests/resctrl: Support diverse platforms
+ with MBM and MBA tests
+To: Reinette Chatre <reinette.chatre@intel.com>, fenghua.yu@intel.com,
+ shuah@kernel.org, tony.luck@intel.com, peternewman@google.com,
+ babu.moger@amd.com, ilpo.jarvinen@linux.intel.com
+Cc: maciej.wieczor-retman@intel.com, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <cover.1729804024.git.reinette.chatre@intel.com>
+ <aa643c9b-8ce5-4cb1-98f6-645224aafdf8@linuxfoundation.org>
+ <5b2b54b8-77fa-4ef9-aa08-549cab91eb32@intel.com>
+ <3ba7cd24-a68b-4996-8b36-dbf3164db8f0@linuxfoundation.org>
+ <10d28348-9946-40ef-9e7d-be0adff3ff14@intel.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <10d28348-9946-40ef-9e7d-be0adff3ff14@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 04, 2024 at 10:14:27AM -0800, Stanislav Fomichev wrote:
-> Use single last queue of the device and probe it dynamically.
+On 11/4/24 16:14, Reinette Chatre wrote:
 > 
-> Reviewed-by: Mina Almasry <almasrymina@google.com>
-> Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
-> ---
->  tools/testing/selftests/net/ncdevmem.c | 40 ++++++++++++++++++++++++--
->  1 file changed, 38 insertions(+), 2 deletions(-)
+> 
+> On 11/4/24 2:28 PM, Shuah Khan wrote:
+>> On 11/4/24 15:16, Reinette Chatre wrote:
+>>> Hi Shuah,
+>>>
+>>> On 10/24/24 3:36 PM, Shuah Khan wrote:
+>>>> On 10/24/24 15:18, Reinette Chatre wrote:
+>>>>
+>>>> Is this patch series ready to be applied?
+>>>>
+>>>
+>>> It is now ready after receiving anticipated tags. Could you please consider it for inclusion?
+>>>
+>>
+>> yes. I will apply the series for the next release.
+>>
+> 
+> Thank you very much Shuah.
+> 
+> Reinette
 
-Reviewed-by: Joe Damato <jdamato@fastly.com>
+Applied to linux-kselftest next for Linux 6.13-rc1.
+
+Tested on my system and worked fine.
+
+thanks,
+-- Shuah
 
