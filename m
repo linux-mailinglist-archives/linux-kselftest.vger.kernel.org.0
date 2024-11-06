@@ -1,70 +1,64 @@
-Return-Path: <linux-kselftest+bounces-21544-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21545-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5210D9BF3D6
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 18:02:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 263DB9BF3DF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 18:04:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 742A51C23125
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 17:02:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D22121F23744
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 17:04:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22DC9205E33;
-	Wed,  6 Nov 2024 17:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75B852064EF;
+	Wed,  6 Nov 2024 17:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Y1Z5JiAh"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="MntEmEzy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00CED200CB7
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Nov 2024 17:02:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01B1205129;
+	Wed,  6 Nov 2024 17:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.217
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730912524; cv=none; b=afg6Jcxn/LV48rVEq0BEih+ro3eQqipd+5ANJf22GrjvLQKm9Rnw3Ba9/Z+DQNYKEPf/B5zf7OYt4KdwDhyXVb5Uq7/inP7O91nd8Wc/OXAtPJwUR3be+tSESrTz7mHbLVZdNVUKm9tgT0kBNMJeBgYlChmnY7fAxMQweoP9XG8=
+	t=1730912679; cv=none; b=iEaIwImkcDkn7WKRZfQOfrrtszIWx0BhRlh1FnMI2GfJhO6LGlxSEANmqtlNgiX5Ggj7Mv836gIPHV1vBnDQWlw3JvIKS1mYP0xycWLuauHEAmkDAwn+MkH0G/BwM/t8D4QNWkNF4WDKOL3KT6TKMLmu0EHW/j8dtnA6BzhIWj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730912524; c=relaxed/simple;
-	bh=q1WeBHGD5h1tHIzQJ3J0B4q74CaQ/9M3+/9g556AVjs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LE6ybMjn9Zws2DyWtvJiAGLlYTujLB8VdSy/JIDITuXNPRgGEupUSKHwr3fRxVIIE7ljJIWM2Wi2CzTXs6cscvkD6FWKjyMU8vVXimHPg8XpW1FyIZtwPVOgztI0k9l8GR8yodMYrQyguuu+J5Xodm1QMJ1wJERgtTM2HNsuYb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Y1Z5JiAh; arc=none smtp.client-ip=209.85.166.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3a394418442so339715ab.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Nov 2024 09:02:01 -0800 (PST)
+	s=arc-20240116; t=1730912679; c=relaxed/simple;
+	bh=45lm7teIJIgBDhR6WrM3tTb7cS3pi+iWOg5nbyI7j9s=;
+	h=Message-ID:Date:MIME-Version:To:CC:References:Subject:From:
+	 In-Reply-To:Content-Type; b=P2OEFf0qVj99/zSGe16l3AyuSQa44eD07dZ4inQQMexq5SEUgEqmvYUFjgiafvqgCH7j5X0eKvWf4lhokwtJYRQT4ijrRtMSnikwFqdGjotLlupaFvH6xnWm6wkGbqj5pkNNW87xBEnmpBdvOSdKNa5YJJu5+TdR+fvZU4g7OAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=MntEmEzy; arc=none smtp.client-ip=99.78.197.217
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1730912521; x=1731517321; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CGwC2Hl3MxKojtjjrNlDFREWkdarOnfG+IIyc3QOx0E=;
-        b=Y1Z5JiAhxUTxhmEZ2RQy+weWn8XXMrhpdctCJMcd5GMVOl0rhEurvIpqIlOv+DDaox
-         ls2t/UaRZ0Vwuez2eJv3MWkgtj4htC4v3T4ky/LqcdCwb7B2Y7SIgNrDs3xRVvPRt77v
-         l8AXsofuhgPVW9oV82cQdi67Fxrnzb5eNqozU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730912521; x=1731517321;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CGwC2Hl3MxKojtjjrNlDFREWkdarOnfG+IIyc3QOx0E=;
-        b=T+C+WODVFbwZaTQTNuBVLzZIn7KzEMtg/0V0pzDeXgaYAW6ZGeDmqbzyoWTU26dEXL
-         RE68IwK0Iew7g+tP7RPdxa93RancR8IGk2+cOzoT+gCPbt3dnyOg6xiF8TbweVCoC+fp
-         MFpOMoSjj1PaBbyhNPi57IvzwKG/n0szRvbqaktom9/Y6Ct8GfSyfJTlCmShgUy52BAK
-         5jkhOIQrYaTzt7Vxgt0kMhjT5htWyz1dnCX3KY2cpptlkC59gSE9yytyCjKMsmwS9wg6
-         GrZkGhVXSRglcVpZtFOuYViiOh4PNfpUCdH2P/VQdTL0H5B8p0Yq7xzTP4ACsVpVkK1h
-         DIsA==
-X-Gm-Message-State: AOJu0YzK2hItlOYswSUsKGDuYeH3s7eowbdYiAhcyug+14ivJO94vIwb
-	SsjhOQJUtp2JPBCdZs3FLv32kPucj7x07CjeXXb3Dq26RVfmSjDH2w2bcSstkd0=
-X-Google-Smtp-Source: AGHT+IGpeyiohwTOy3CiKjinzWrPekKa3XkMj9Vgkkbqp5ZVCiUarzkfx8daEIGTgTOBqI7LMwudKg==
-X-Received: by 2002:a05:6e02:1946:b0:3a3:b527:e809 with SMTP id e9e14a558f8ab-3a6b0327357mr188862495ab.14.1730912520864;
-        Wed, 06 Nov 2024 09:02:00 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a6bd2da409sm26213575ab.57.2024.11.06.09.01.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Nov 2024 09:02:00 -0800 (PST)
-Message-ID: <920c61a8-4c5b-4386-a072-7c4e0f3a48c8@linuxfoundation.org>
-Date: Wed, 6 Nov 2024 10:01:59 -0700
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1730912678; x=1762448678;
+  h=message-id:date:mime-version:to:cc:references:subject:
+   from:in-reply-to:content-transfer-encoding;
+  bh=45lm7teIJIgBDhR6WrM3tTb7cS3pi+iWOg5nbyI7j9s=;
+  b=MntEmEzy4eKV8WMoKuJyil3cfPrevzWF7DEZpYXiDmtvyRiVc3D0lwNW
+   ltL3Lns9qmLFg6rgQLjlCj/B5cFfgGCN9ZF1r7ioMv3dg8jIP3mmlK7KS
+   QWFogHx/Gy/w/k1wiJjArCiCCfT24P0eAjEY0ovMHoIJZNO9D0petJvvj
+   o=;
+X-IronPort-AV: E=Sophos;i="6.11,263,1725321600"; 
+   d="scan'208";a="2538545"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 17:04:38 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [10.0.38.20:42869]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.35.42:2525] with esmtp (Farcaster)
+ id 18efcd76-237c-46fb-afb1-2dbc7d25b1d1; Wed, 6 Nov 2024 17:04:37 +0000 (UTC)
+X-Farcaster-Flow-ID: 18efcd76-237c-46fb-afb1-2dbc7d25b1d1
+Received: from EX19D003UWC002.ant.amazon.com (10.13.138.169) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
+ Wed, 6 Nov 2024 17:04:37 +0000
+Received: from [192.168.12.4] (10.187.171.30) by EX19D003UWC002.ant.amazon.com
+ (10.13.138.169) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.35; Wed, 6 Nov 2024
+ 17:04:34 +0000
+Message-ID: <7ad5d114-3d19-4c33-bb3c-7f8940ad114e@amazon.com>
+Date: Wed, 6 Nov 2024 10:04:27 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,197 +66,45 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] selftests: tmpfs: Add kselftest support to tmpfs
-To: Shivam Chaudhary <cvam0000@gmail.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- shuah@kernel.org
-References: <20241105202639.1977356-1-cvam0000@gmail.com>
- <20241105202639.1977356-3-cvam0000@gmail.com>
+To: <elena.reshetova@intel.com>
+CC: <ackerleytng@google.com>, <agordeev@linux.ibm.com>,
+	<aou@eecs.berkeley.edu>, <borntraeger@linux.ibm.com>, <bp@alien8.de>,
+	<canellac@amazon.at>, <catalin.marinas@arm.com>, <chenhuacai@kernel.org>,
+	<corbet@lwn.net>, <dave.hansen@intel.com>, <dave.hansen@linux.intel.com>,
+	<david@redhat.com>, <derekmn@amazon.com>, <gerald.schaefer@linux.ibm.com>,
+	<gor@linux.ibm.com>, <graf@amazon.com>, <hca@linux.ibm.com>, <hpa@zytor.com>,
+	<jgowans@amazon.com>, <jthoughton@google.com>, <kalyazin@amazon.com>,
+	<kernel@xen0n.name>, <kvm@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
+	<linux-s390@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <luto@kernel.org>,
+	<mathieu.desnoyers@efficios.com>, <mhiramat@kernel.org>, <mingo@redhat.com>,
+	<mlipp@amazon.at>, <palmer@dabbelt.com>, <paul.walmsley@sifive.com>,
+	<pbonzini@redhat.com>, <peterz@infradead.org>, <quic_eberman@quicinc.com>,
+	<rostedt@goodmis.org>, <roypat@amazon.co.uk>, <rppt@kernel.org>,
+	<seanjc@google.com>, <shuah@kernel.org>, <svens@linux.ibm.com>,
+	<tabba@google.com>, <tglx@linutronix.de>, <vannapurve@google.com>,
+	<will@kernel.org>, <x86@kernel.org>, <xmarcalx@amazon.com>
+References: <DM8PR11MB57509ED04CB0730680735AC9E7512@DM8PR11MB5750.namprd11.prod.outlook.com>
+Subject: RE: [RFC PATCH v3 0/6] Direct Map Removal for guest_memfd
 Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241105202639.1977356-3-cvam0000@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: "Manwaring, Derek" <derekmn@amazon.com>
+In-Reply-To: <DM8PR11MB57509ED04CB0730680735AC9E7512@DM8PR11MB5750.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EX19D032UWB002.ant.amazon.com (10.13.139.190) To
+ EX19D003UWC002.ant.amazon.com (10.13.138.169)
 
-On 11/5/24 13:26, Shivam Chaudhary wrote:
-> Replace direct error handling with 'ksft_test_result_*',
-> 'ksft_print_msg' and KSFT_SKIP  macros for better reporting.
-> 
-> Test logs:
-> 
-> Before change:
-> 
-> - Without root
->   error: unshare, errno 1
-> 
-> - With root
->   No, output
-> 
-> After change:
-> 
-> - Without root
->   TAP version 13
->   1..1
->    ok 1 # SKIP This test needs root to run
-> 
-> - With root
->   TAP version 13
-> 1..1
->    unshare(): Creat new mount namespace: Success.
->    mount(): Root filesystem private mount: Success
->    mount(): Mounting tmpfs on /tmp: Success
->    openat(): Open first temporary file: Success
->    linkat(): Linking the temporary file: Success
->    openat(): Opening the second temporary file: Success
+On 2024-11-04 at 08:33+0000, Elena Reshetova wrote:
+> This statement *is* for integrity section. We have a separate TDX guidance
+> on side-channels (including speculative) [3] and some speculative attacks
+> that affect confidentiality (for example spectre v1) are listed as not covered
+> by TDX but remaining SW responsibility (as they are now).
 
-This is too noisy - there is no need to add message in
-every single conditional. Errors make sense, bot don't
-add unnecessary messages.
+Thanks for the additional info, Elena. Given that clarification, I
+definitely see direct map removal and TDX as complementary.
 
->    ok 1 Test : Success
->    Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-> 
-> Signed-off-by: Shivam Chaudhary <cvam0000@gmail.com>
-> ---
-> 
->   .../selftests/tmpfs/bug-link-o-tmpfile.c      | 66 ++++++++++++++-----
->   1 file changed, 49 insertions(+), 17 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c b/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
-> index cdab1e8c0392..f2e6a5b20698 100644
-> --- a/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
-> +++ b/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
-> @@ -42,39 +42,71 @@ int main(void)
->   
->   	if (unshare(CLONE_NEWNS) == -1) {
->   		if (errno == ENOSYS || errno == EPERM) {
-> -			fprintf(stderr, "error: unshare, errno %d\n", errno);
-> -			return 4;
-> +			ksft_print_msg("unshare() error: unshare, errno %d\n", errno);
-> +			exit(KSFT_SKIP);
-
-Same comment - you can simply use approrpiare ksft_exit_*() routine.
-
-> +
-> +		}
-> +		else{
-> +			fprintf(stderr, "unshare() error: unshare, errno %d\n", errno);
-> +			return 1;
-
-Since you are converting the test to use KSFT_ codes,
-why not change this one? Shound't this ksft_exit_fail_msg()
-
-
-> +
->   		}
-> -		fprintf(stderr, "error: unshare, errno %d\n", errno);
-> -		return 1;
-
-Since you are converting the test to use KSFT_ codes,
-why not change this one? Shound't this ksft_exit_fail_msg()
-
-> +	}
-> +	
-> +	else {
-> +		ksft_print_msg("unshare(): Creat new mount namespace: Success.\n");
-
-Spelling - did you tun checkpatch on this?
-
-> +
->   	}
-> -	if (mount(NULL, "/", NULL, MS_PRIVATE|MS_REC, NULL) == -1) {
-> -		fprintf(stderr, "error: mount '/', errno %d\n", errno);
-> -		return 1;
-
-Since you are converting the test to use KSFT_ codes,
-why not change this one? Shound't this ksft_exit_fail_msg()
-
-Same comment on using KSFT_ codes consistently.
-
-> +
-> +
-> +
-> +	if (mount(NULL, "/", NULL, MS_PRIVATE | MS_REC, NULL) == -1) {
-> +		ksft_print_msg("mount() error: Root filesystem private mount: Fail %d\n", errno);
-> +		exit(KSFT_SKIP);
-
-Why is this a skip?
-
-Don't need two calls - ksft_exit_* calls
-
-Since you are converting the test to use KSFT_ codes,
-why not change this one? Shound't this ksft_exit_fail_msg()
-
-> +	} else {
-> +		ksft_print_msg("mount(): Root filesystem private mount: Success\n");
-
-Is this message necessary?
-
->   	}
->   
-> +
->   	/* Our heroes: 1 root inode, 1 O_TMPFILE inode, 1 permanent inode. */
->   	if (mount(NULL, "/tmp", "tmpfs", 0, "nr_inodes=3") == -1) {
-> -		fprintf(stderr, "error: mount tmpfs, errno %d\n", errno);
-> -		return 1;
-> +		ksft_print_msg("mount() error: Mounting tmpfs on /tmp: Fail %d\n", errno);
-> +		exit(KSFT_SKIP);
-> +	} else {
-> +		ksft_print_msg("mount(): Mounting tmpfs on /tmp: Success\n");
->   	}
->   
-> -	fd = openat(AT_FDCWD, "/tmp", O_WRONLY|O_TMPFILE, 0600);
-> +
-> +	fd = openat(AT_FDCWD, "/tmp", O_WRONLY | O_TMPFILE, 0600);
->   	if (fd == -1) {
-> -		fprintf(stderr, "error: open 1, errno %d\n", errno);
-> -		return 1;
-> +		ksft_print_msg("openat() error: Open first temporary file: Fail %d\n", errno);
-> +		exit(KSFT_SKIP);
-> +	} else {
-> +		ksft_print_msg("openat(): Open first temporary file: Success\n");
->   	}
-> +
-> +
->   	if (linkat(fd, "", AT_FDCWD, "/tmp/1", AT_EMPTY_PATH) == -1) {
-> -		fprintf(stderr, "error: linkat, errno %d\n", errno);
-> -		return 1;
-> +		ksft_print_msg("linkat() error: Linking the temporary file: Fail %d\n", errno);
-> +		/* Ensure fd is closed on failure */
-> +		close(fd);
-> +		exit(KSFT_SKIP);
-> +	} else {
-> +		ksft_print_msg("linkat(): Linking the temporary file: Success\n");
->   	}
->   	close(fd);
->   
-> -	fd = openat(AT_FDCWD, "/tmp", O_WRONLY|O_TMPFILE, 0600);
-> +
-> +	fd = openat(AT_FDCWD, "/tmp", O_WRONLY | O_TMPFILE, 0600);
->   	if (fd == -1) {
-> -		fprintf(stderr, "error: open 2, errno %d\n", errno);
-> -		return 1;
-> +		ksft_print_msg("openat() error: Opening the second temporary file: Fail %d\n", errno);
-> +		exit(KSFT_SKIP);
-> +	} else {
-> +		ksft_print_msg("openat(): Opening the second temporary file: Success\n");
->   	}
->   
-> +    ksft_test_result_pass("Test : Success\n");
-
-Why do you need a message additional message here.
-
-> +	ksft_exit_pass();
->   	return 0;
->   }
-> +
-
-
-I didn't call out every single error path. Same comments apply
-to all. Please get rid of unnecessary success path messages.
-
-If the output is too noisy it is hard to read and understand.
-
-thanks,
--- Shuah
+Derek
 
