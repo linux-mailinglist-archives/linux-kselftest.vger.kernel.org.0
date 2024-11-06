@@ -1,141 +1,141 @@
-Return-Path: <linux-kselftest+bounces-21550-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21551-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC8279BF8D5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 23:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C2489BF9BC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 00:14:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A84092843AE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 22:04:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BCEC283D42
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 23:14:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39CD31DFE13;
-	Wed,  6 Nov 2024 22:04:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD66A20CCF8;
+	Wed,  6 Nov 2024 23:13:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MNPSqa5n"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="hoY4B+mx";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kYVLKA0m"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B42621D0E23;
-	Wed,  6 Nov 2024 22:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8883B1D47B3;
+	Wed,  6 Nov 2024 23:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730930656; cv=none; b=YR2zAMSXvwGa7AK+RTELIKpCEaUIl188AKQuAIcRitHL10X+r1OJja/fN8gaiOcdgt6TN61If7vNg1dR55G9Upp/JDN/2fHIKUU8cZjEtEnmhhjp7i+Afb+tFsP/zSa7zpI1tI0FHxhUFJY0gcEmfx8oe4+bmqe3SGXmTfNSPnk=
+	t=1730934838; cv=none; b=Hc1FGMmkUSI0OwVUywQCU5PRrhQtPI/Y4Wml2uJLI36O0R1v7OPFLkKExvOW/v9BAAkY6gdBQ492sCYA/2FJIxocfsVSgMxYe1kqt6NNWVs26q8HJNtMHru5LOeGqNoT4LzsPlyUzuW7fnpU0FYubJnjirwPPx2LrzTB73pFzJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730930656; c=relaxed/simple;
-	bh=XWlE48RqZQ5truz2JBDBGqsYLK+eKE8hxeJQAdnWLKw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B1BwLn8aNqV2xr1a75WhtL68vMjd0appGTPPxjDMFvlD1gCMpvn1cEynW+ErP16SQki03JY6uObJkB1s7ZpHeFXUkcjm5vil1QHiuHZ39L9BbrWw+6KRPEAQxnnDS6Z/2OzqsGhByItbMFqYL/7K/alsk6171Oqc1lWGy7uhhI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MNPSqa5n; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2e2cc469c62so218563a91.2;
-        Wed, 06 Nov 2024 14:04:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730930653; x=1731535453; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PfGNi4Eab08D4rDIFJXSfdEQm138IE7MugUyEGUzqSg=;
-        b=MNPSqa5n7uio5spmm4M5r4BGlaadv+jD90XL8G1DjwCeWuiS0qzkOWDUplXPKwesf5
-         jvplQ5zkvDa+E9GLbAoKGgM6JbxqUKosoVnXp8P2qXINrN8EQzlD0+/FyDIrhk3fBcqt
-         z2JQb1Mcgv7y8/uLRa3CX7hS9ABCzRHr7oVTFwnfo8hH34mtKPkQPQRtAQoJTrkHM+Zm
-         DZpysl9y453gKuUmcAO7Uzc2tHNNTyqYiw1kmS5/YMzch2VgyLC/2HuyV4dr2Az5GPDc
-         eY/Jh46e2icruY4ZhKmK4biU/FHwkO9mFVRWegEXwtHZHGNxuPIO+IfZNDkbjZVh+zSG
-         8VtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730930654; x=1731535454;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PfGNi4Eab08D4rDIFJXSfdEQm138IE7MugUyEGUzqSg=;
-        b=B+/VH5MloSnyyrngddiXckFYi65fdLc0RixQhIN6OIIZi5o82GpVej2Pw4hgyan+J1
-         cvPy3m9NF/yfShWf6mt4LHp5JF5xraVcDu2l//pf0rgUQnd3csHnetECZsJvJCEt2BP+
-         Ry2NrQeoeOO4wall9gel0szWmzQEiOsYLZz8AyRbGwwajaRWC+5gv0vNPF9Ct9eYtiF7
-         SrtXL/jlq9eQ7jn9ao3kbREqkzE2RxIer8RW00v6cmLhE/F6fq0jiXObq6o1AkLVQQXH
-         xRvZCOPH5eCPYzTDTx+5cTx3DyLZbsZ5C6jKtI/n9X6O1efZHpdb8iAByUIU2NJdcz7y
-         uYZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUoHb1z2D4FDIxUIYaIaVxIqXzmyCdBbFPFgrPg+Hfk/VJ/AXAeTvwFIo0CCh+/9PLUuMDlyHUUIKXFqpD3EPO2@vger.kernel.org, AJvYcCVrDZfBya1QPXrRxpeXtU/mGaPqJxSwJ8dJpQAxznNgxp78K2lPrbEdKdHVb9iNTV/hNmQ=@vger.kernel.org, AJvYcCWz3A5bKYnqMoM1JiPeZKVbdeZnlJ9/YZjIwvbuMFZqlU0cGbq7dxBiyQcoXk0xktgtXAWWC8cy@vger.kernel.org, AJvYcCX83aeFlDOFJq/pk595YTtyWRGZV9pXYnpQCFa6Cx/I8jN64mlmevYPGTbl6u8og+D3XN/j+XftPYAmudkZ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxiF16u5DZHjizrTwzM9G+bkkHNGWlghx8PNWQB8NcGrSB76XC
-	6IObvYVlYKMXcp/GbpzfCA45j6vMCyaDjWOZro2L/fuopoyFjjudmZA6TdR4zCIBZP52vhGzUBZ
-	mQJTFeuJWiIIaYrfgaQrgZrST/5I=
-X-Google-Smtp-Source: AGHT+IHiIFN3vV3i+lrEACl/mdE0HQWZtzx800XFbju733sBmVhjjP4bbDv2RZKt8j7XpLWja7xZVa0f8ftoFXrmJPw=
-X-Received: by 2002:a17:90b:4a49:b0:2e2:b64e:f506 with SMTP id
- 98e67ed59e1d1-2e94c2afe78mr30385346a91.13.1730930653594; Wed, 06 Nov 2024
- 14:04:13 -0800 (PST)
+	s=arc-20240116; t=1730934838; c=relaxed/simple;
+	bh=B36VBDltIoRywAGblAfwutVOk3b/rxmBfwD8ZrH1yNo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O4Zbq7//kF3hYN1un5A3N4IzYUEtyG5KInTHVhIQKxdLYsSfunj/E0KBPM7wChnAnPjgyWUnMvqhDnljnnidOCh1YXO5stRaZWXDNUaBjVboFa2H2MPiYQaPxEWffyntDcJ6P9UUbL/fRM1Yy7YtcAnqp7kFVWxHVt1BxrwJvs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=hoY4B+mx; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kYVLKA0m; arc=none smtp.client-ip=202.12.124.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
+	by mailflow.stl.internal (Postfix) with ESMTP id 3A9C21D402D4;
+	Wed,  6 Nov 2024 18:13:54 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-08.internal (MEProxy); Wed, 06 Nov 2024 18:13:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
+	:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to; s=fm1; t=1730934834; x=1730938434; bh=lEBOJhqz1R
+	S/g1V70UKSJGTy20U21lB2YXztTlSE8Vs=; b=hoY4B+mxiKdgfvtl1/AvUAh/Re
+	SqXPyc/3JHoSYk3iq/8eXro5i5BIi3N74qyyKDnn1uCNz0NiYCyXq3JqD7koH7tb
+	0fXRnIAa/CzBPbqLDyt97XeygEEdDQ0axsFvQtOC+kRTwVBNM70mXgRkFK/l4U8i
+	qHyN47s22Z29NvFF0HipTq34zkWLPSIX7AvrhwnKDFwgqFZpg3NOY8Z6FmuTH61R
+	oMvCvtcwiC/elSPRagIXCztgF9oVnww/p1CXkYV+WYCJXhwhO41JwGGDqp589DM/
+	Q+njjx2AteR/i4BVGpPUF2yMso/+2xRUuk6Hq6uJ3g4MDToSZvWT+/gr9JWA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1730934834; x=1730938434; bh=lEBOJhqz1RS/g1V70UKSJGTy20U21lB2YXz
+	tTlSE8Vs=; b=kYVLKA0m1JkPlC4MrJesPXIhAKe+t2xGCOMtT9eRorXzHD+oWgZ
+	Tkfj5r177GAX0SL45QVdzWKujHx8KgUtNoOdrk6cKtIfplsWtpuSaxe2fcyPbFzL
+	C9jyjZ7OVkcZy24d3zzvOdi0mXTTI7HRk5UzedCmZyoGSLUPJnZvoBhbf5SDk+iL
+	xvbdNkc6T/9kG0Id0FtrN7jFYLyQ2ErOsemCLC4vAGDJiWFnmXr7Lj7vxHCeWv5+
+	3d7/0hu4zXVmUuM5mGFFH8O70r8C26xLxIqIFmg6v2zwKyq8fjcAr9CfFj8CxmLx
+	pvbIK4NFl9jON52u/ZfPDSIXeeV6qmLbLxQ==
+X-ME-Sender: <xms:MfgrZ3kZU7xGh23nufvCPqyxwwKSULf1hdgTsAWlg4jgxbJ6k64yGw>
+    <xme:MfgrZ62qxolztG3KWUzn8_PhmXjquWol2boZIKfrKt_toAT7w5oycdFdy8C89EhYN
+    jLJ_QLvys-h44qIYY0>
+X-ME-Received: <xmr:MfgrZ9pxynsMVdp9Q2wIpKN3ix6KuYkneD3ww5d5R11uc34ztvP1K9w-CmHv>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrtdefgddtjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
+    hsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhr
+    ohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnhgrihhlrd
+    hnvghtqeenucggtffrrghtthgvrhhnpeejtdeugfffkeejfeehkeeiiedvjeehvdduffev
+    feetueffheegteetvdfhffevffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghrtghp
+    thhtohephedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepnhgvthguvghvsehvgh
+    gvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshgusehquhgvrghshihsnhgrihhl
+    rdhnvghtpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhope
+    hshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhf
+    thgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:MfgrZ_nBV93zo1Np4N58l2i2hf2yb7xfMVOuHAK0gUWrhtQdizg3KQ>
+    <xmx:MfgrZ10RcxJO2Qw-5bn1YtcRORCrbBkzgloXtnr2pfFa3OTFd-XPcw>
+    <xmx:MfgrZ-uOOmU1Ep9K3bmgznPpUEGKsGC--6tKJ5LhR1-xxXxZDP0H1w>
+    <xmx:MfgrZ5WNl7OLpjCsQH6VVv6JvkoxY7SBezPOevxefGA_PUaAGWLtpg>
+    <xmx:MfgrZzAN2toOIwaFulVSpthJUO-lImBFQPy29H3FKlAWlBm7e6-KdL0u>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 6 Nov 2024 18:13:52 -0500 (EST)
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: netdev@vger.kernel.org
+Cc: Sabrina Dubroca <sd@queasysnail.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next 0/8] macsec: inherit lower device's features and TSO limits when offloading
+Date: Thu,  7 Nov 2024 00:13:26 +0100
+Message-ID: <cover.1730929545.git.sd@queasysnail.net>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240927131355.350918-1-bjorn@kernel.org> <172835823300.66789.3704854116445399222.git-patchwork-notify@kernel.org>
- <87bjyvpa6h.fsf@all.your.base.are.belong.to.us>
-In-Reply-To: <87bjyvpa6h.fsf@all.your.base.are.belong.to.us>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 6 Nov 2024 14:04:01 -0800
-Message-ID: <CAEf4BzZbq9OwSGi4pdb5_q8YkErfFiQFKYXg3g1rjpdejafx+Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] libbpf: Add missing per-arch include path
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: patchwork-bot+netdevbpf@kernel.org, andrii@kernel.org, eddyz87@gmail.com, 
-	mykolal@fb.com, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	bjorn@rivosinc.com, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	charlie@rivosinc.com, Andreas Schwab <schwab@suse.de>, Anand Moon <linux.amoon@gmail.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 4, 2024 at 2:26=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.=
-org> wrote:
->
-> patchwork-bot+netdevbpf@kernel.org writes:
->
-> > Hello:
-> >
-> > This series was applied to bpf/bpf-next.git (master)
-> > by Andrii Nakryiko <andrii@kernel.org>:
-> >
-> > On Fri, 27 Sep 2024 15:13:52 +0200 you wrote:
-> >> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
-> >>
-> >> libbpf does not include the per-arch tools include path, e.g.
-> >> tools/arch/riscv/include. Some architectures depend those files to
-> >> build properly.
-> >>
-> >> Include tools/arch/$(SUBARCH)/include in the libbpf build.
-> >>
-> >> [...]
-> >
-> > Here is the summary with links:
-> >   - [bpf-next,1/2] libbpf: Add missing per-arch include path
-> >     https://git.kernel.org/bpf/bpf-next/c/710fbca820c7
-> >   - [bpf-next,2/2] selftests: bpf: Add missing per-arch include path
-> >     https://git.kernel.org/bpf/bpf-next/c/19090f0306f1
->
-> Andrii, I just noted that this landed into bpf-next, and not bpf
-> (fixes).
+When macsec is offloaded to a NIC, we can take advantage of some of
+its features, mainly TSO and checksumming. This increases performance
+significantly. Some features cannot be inherited, because they require
+additional ops that aren't provided by the macsec netdevice.
 
-Hi Bjorn,
+We also need to inherit TSO limits from the lower device, like
+VLAN/macvlan devices do.
 
-Yes, libbpf and selftests fixes are generally applied through
-bpf-next, unless the issue is pretty bad and immediate.
+This series also moves the existing macsec offload selftest to the
+netdevsim selftests before adding tests for the new features. To allow
+this new selftest to work, netdevsim's hw_features are expanded.
 
-I'm sorry, but unfortunately it's too late now to move those patches
-as it's now been more than a month since they landed. For the future,
-please let us know ASAP if you think patches were misrouted. I think
-we are stuck with the need to do a stable backport for these, sorry.
+Sabrina Dubroca (8):
+  netdevsim: add more hw_features
+  selftests: netdevsim: add a test checking ethtool features
+  macsec: add some of the lower device's features when offloading
+  macsec: clean up local variables in macsec_notify
+  macsec: inherit lower device's TSO limits when offloading
+  selftests: move macsec offload tests from net/rtnetlink to
+    drivers/net/netdvesim
+  selftests: netdevsim: add test toggling macsec offload
+  selftests: netdevsim: add ethtool features to macsec offload tests
 
->
-> RISC-V libbpf/perf needs this fix in 6.12 to properly build. Would it be
-> possible to have it in the bpf tree, and have it land in 6.12-rc7?
->
-> Andreas that has a similar fix [1].
->
->
-> Bj=C3=B6rn
->
-> [1] https://lore.kernel.org/linux-riscv/mvm5xq44bqh.fsf@suse.de/
+ drivers/net/macsec.c                          |  64 +++++++---
+ drivers/net/netdevsim/netdev.c                |   6 +-
+ .../selftests/drivers/net/netdevsim/Makefile  |   2 +
+ .../selftests/drivers/net/netdevsim/config    |   1 +
+ .../drivers/net/netdevsim/ethtool-features.sh |  31 +++++
+ .../drivers/net/netdevsim/macsec-offload.sh   | 117 ++++++++++++++++++
+ tools/testing/selftests/net/rtnetlink.sh      |  68 ----------
+ 7 files changed, 200 insertions(+), 89 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/netdevsim/ethtool-features.sh
+ create mode 100755 tools/testing/selftests/drivers/net/netdevsim/macsec-offload.sh
+
+-- 
+2.47.0
+
 
