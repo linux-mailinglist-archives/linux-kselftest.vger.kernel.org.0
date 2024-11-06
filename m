@@ -1,93 +1,141 @@
-Return-Path: <linux-kselftest+bounces-21549-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21550-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C0159BF861
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 22:17:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC8279BF8D5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 23:04:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5B261F22F13
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 21:17:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A84092843AE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 22:04:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1A1D20C31C;
-	Wed,  6 Nov 2024 21:17:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39CD31DFE13;
+	Wed,  6 Nov 2024 22:04:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="VCtggFHt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MNPSqa5n"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928AE20C02A;
-	Wed,  6 Nov 2024 21:17:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B42621D0E23;
+	Wed,  6 Nov 2024 22:04:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730927840; cv=none; b=nExq2abRLkUUbLLtCjsH6R/KlZUYM8WqBDUxDZaBjJIepoexZ3zeN7FK1smA+fds9Swo/zihFGVaiQdW3sR2HMwrirIjcVGAAhvdS17Os47gDd0djAB4IBF/Kf3TrKv6k6y4mdGqYHCKTrad7SwtMDYGB5SsvTKQobsiTJZvoJU=
+	t=1730930656; cv=none; b=YR2zAMSXvwGa7AK+RTELIKpCEaUIl188AKQuAIcRitHL10X+r1OJja/fN8gaiOcdgt6TN61If7vNg1dR55G9Upp/JDN/2fHIKUU8cZjEtEnmhhjp7i+Afb+tFsP/zSa7zpI1tI0FHxhUFJY0gcEmfx8oe4+bmqe3SGXmTfNSPnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730927840; c=relaxed/simple;
-	bh=UVIVzkxgnorxFMAYc29bFffedWIX/7PJbZ8MAWTGHHk=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=ZNRUqQzAsBLSSl+mvCygYVGBsCvxQheM5ypfkUlG2Ei4tK2Fc3d1Xp2uDXL3b37Zk43/9GyaoJHGfd7DUgRboeaAIFMAlBR7HHA98Ndb7EyZcOCHk6TfLEDRIWAo15KX8gfkErY3kyjxI7fY0BTkGWscsz0Bh5d+UaXHxfaGH2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=VCtggFHt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A2FFC4CED0;
-	Wed,  6 Nov 2024 21:17:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1730927840;
-	bh=UVIVzkxgnorxFMAYc29bFffedWIX/7PJbZ8MAWTGHHk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=VCtggFHtCZJcnKvaL5gL67E9uejc+5iNSlBQMidKQzvPnqyI2/yN4GWvT5JzfsyOK
-	 xA4X+UGM4DLOMeP0V7IEuK+qJX7KAUZBfjP8gApyYN9rxWY/TADf6n9xgqQ/vmbnfr
-	 hW7g+Xfeh9/vGiHCpF1jbztKwOmDkYmug/9uOXnA=
-Date: Wed, 6 Nov 2024 13:17:18 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: David Gow <davidgow@google.com>, Shuah Khan <skhan@linuxfoundation.org>,
- Brendan Higgins <brendanhiggins@google.com>, Rae Moar <rmoar@google.com>,
- Kees Cook <kees@kernel.org>, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, Stephen Rothwell
- <sfr@canb.auug.org.au>, Luis Felipe Hernandez
- <luis.hernandez093@gmail.com>, quic_jjohnson@quicinc.com,
- macro@orcam.me.uk, tpiepho@gmail.com, ricardo@marliere.net,
- linux-kernel-mentees@lists.linuxfoundation.org, Nicolas Pitre
- <npitre@baylibre.com>
-Subject: Re: [PATCH 1/6] lib: math: Move kunit tests into tests/ subdir
-Message-Id: <20241106131718.e0899c324941f63dc931f0fc@linux-foundation.org>
-In-Reply-To: <CAMuHMdVQ-Fmnti80_HoX1+6L8wNUghpuJzqpT_g0SJQG-oq6RQ@mail.gmail.com>
-References: <20241011072509.3068328-2-davidgow@google.com>
-	<20241011072509.3068328-3-davidgow@google.com>
-	<CAMuHMdUdotDYAgSDDrWi-TOj2o=5a53n452DydhD-Q0fjiGhew@mail.gmail.com>
-	<CAMuHMdVQ-Fmnti80_HoX1+6L8wNUghpuJzqpT_g0SJQG-oq6RQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1730930656; c=relaxed/simple;
+	bh=XWlE48RqZQ5truz2JBDBGqsYLK+eKE8hxeJQAdnWLKw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B1BwLn8aNqV2xr1a75WhtL68vMjd0appGTPPxjDMFvlD1gCMpvn1cEynW+ErP16SQki03JY6uObJkB1s7ZpHeFXUkcjm5vil1QHiuHZ39L9BbrWw+6KRPEAQxnnDS6Z/2OzqsGhByItbMFqYL/7K/alsk6171Oqc1lWGy7uhhI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MNPSqa5n; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2e2cc469c62so218563a91.2;
+        Wed, 06 Nov 2024 14:04:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730930653; x=1731535453; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PfGNi4Eab08D4rDIFJXSfdEQm138IE7MugUyEGUzqSg=;
+        b=MNPSqa5n7uio5spmm4M5r4BGlaadv+jD90XL8G1DjwCeWuiS0qzkOWDUplXPKwesf5
+         jvplQ5zkvDa+E9GLbAoKGgM6JbxqUKosoVnXp8P2qXINrN8EQzlD0+/FyDIrhk3fBcqt
+         z2JQb1Mcgv7y8/uLRa3CX7hS9ABCzRHr7oVTFwnfo8hH34mtKPkQPQRtAQoJTrkHM+Zm
+         DZpysl9y453gKuUmcAO7Uzc2tHNNTyqYiw1kmS5/YMzch2VgyLC/2HuyV4dr2Az5GPDc
+         eY/Jh46e2icruY4ZhKmK4biU/FHwkO9mFVRWegEXwtHZHGNxuPIO+IfZNDkbjZVh+zSG
+         8VtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730930654; x=1731535454;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PfGNi4Eab08D4rDIFJXSfdEQm138IE7MugUyEGUzqSg=;
+        b=B+/VH5MloSnyyrngddiXckFYi65fdLc0RixQhIN6OIIZi5o82GpVej2Pw4hgyan+J1
+         cvPy3m9NF/yfShWf6mt4LHp5JF5xraVcDu2l//pf0rgUQnd3csHnetECZsJvJCEt2BP+
+         Ry2NrQeoeOO4wall9gel0szWmzQEiOsYLZz8AyRbGwwajaRWC+5gv0vNPF9Ct9eYtiF7
+         SrtXL/jlq9eQ7jn9ao3kbREqkzE2RxIer8RW00v6cmLhE/F6fq0jiXObq6o1AkLVQQXH
+         xRvZCOPH5eCPYzTDTx+5cTx3DyLZbsZ5C6jKtI/n9X6O1efZHpdb8iAByUIU2NJdcz7y
+         uYZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUoHb1z2D4FDIxUIYaIaVxIqXzmyCdBbFPFgrPg+Hfk/VJ/AXAeTvwFIo0CCh+/9PLUuMDlyHUUIKXFqpD3EPO2@vger.kernel.org, AJvYcCVrDZfBya1QPXrRxpeXtU/mGaPqJxSwJ8dJpQAxznNgxp78K2lPrbEdKdHVb9iNTV/hNmQ=@vger.kernel.org, AJvYcCWz3A5bKYnqMoM1JiPeZKVbdeZnlJ9/YZjIwvbuMFZqlU0cGbq7dxBiyQcoXk0xktgtXAWWC8cy@vger.kernel.org, AJvYcCX83aeFlDOFJq/pk595YTtyWRGZV9pXYnpQCFa6Cx/I8jN64mlmevYPGTbl6u8og+D3XN/j+XftPYAmudkZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxiF16u5DZHjizrTwzM9G+bkkHNGWlghx8PNWQB8NcGrSB76XC
+	6IObvYVlYKMXcp/GbpzfCA45j6vMCyaDjWOZro2L/fuopoyFjjudmZA6TdR4zCIBZP52vhGzUBZ
+	mQJTFeuJWiIIaYrfgaQrgZrST/5I=
+X-Google-Smtp-Source: AGHT+IHiIFN3vV3i+lrEACl/mdE0HQWZtzx800XFbju733sBmVhjjP4bbDv2RZKt8j7XpLWja7xZVa0f8ftoFXrmJPw=
+X-Received: by 2002:a17:90b:4a49:b0:2e2:b64e:f506 with SMTP id
+ 98e67ed59e1d1-2e94c2afe78mr30385346a91.13.1730930653594; Wed, 06 Nov 2024
+ 14:04:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20240927131355.350918-1-bjorn@kernel.org> <172835823300.66789.3704854116445399222.git-patchwork-notify@kernel.org>
+ <87bjyvpa6h.fsf@all.your.base.are.belong.to.us>
+In-Reply-To: <87bjyvpa6h.fsf@all.your.base.are.belong.to.us>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 6 Nov 2024 14:04:01 -0800
+Message-ID: <CAEf4BzZbq9OwSGi4pdb5_q8YkErfFiQFKYXg3g1rjpdejafx+Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] libbpf: Add missing per-arch include path
+To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: patchwork-bot+netdevbpf@kernel.org, andrii@kernel.org, eddyz87@gmail.com, 
+	mykolal@fb.com, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	bjorn@rivosinc.com, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	charlie@rivosinc.com, Andreas Schwab <schwab@suse.de>, Anand Moon <linux.amoon@gmail.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 6 Nov 2024 09:33:55 +0100 Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+On Mon, Nov 4, 2024 at 2:26=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.=
+org> wrote:
+>
+> patchwork-bot+netdevbpf@kernel.org writes:
+>
+> > Hello:
+> >
+> > This series was applied to bpf/bpf-next.git (master)
+> > by Andrii Nakryiko <andrii@kernel.org>:
+> >
+> > On Fri, 27 Sep 2024 15:13:52 +0200 you wrote:
+> >> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+> >>
+> >> libbpf does not include the per-arch tools include path, e.g.
+> >> tools/arch/riscv/include. Some architectures depend those files to
+> >> build properly.
+> >>
+> >> Include tools/arch/$(SUBARCH)/include in the libbpf build.
+> >>
+> >> [...]
+> >
+> > Here is the summary with links:
+> >   - [bpf-next,1/2] libbpf: Add missing per-arch include path
+> >     https://git.kernel.org/bpf/bpf-next/c/710fbca820c7
+> >   - [bpf-next,2/2] selftests: bpf: Add missing per-arch include path
+> >     https://git.kernel.org/bpf/bpf-next/c/19090f0306f1
+>
+> Andrii, I just noted that this landed into bpf-next, and not bpf
+> (fixes).
 
-> Hi all,
-> > This conflicts with "[PATCH] m68k: defconfig: Update defconfigs for
-> > v6.12-rc1"[1].  Of course the proper way forward would be to add
-> > "default KUNIT_ALL_TESTS" to all tests that still lack it, so I can
-> > just never queue that patch ;-)
-> 
-> What's the status of this series? I am asking because I am wondering if
-> I should queue [1] for v6.13, or just drop it, and send a patch to add
-> "default KUNIT_ALL_TESTS" instead.
-> 
-> I saw the email from Andrew stating he applied it to his tree[2],
-> but that seems to have been dropped silently, and never made it into
-> linux-next?
+Hi Bjorn,
 
-Yes, sorry.  Believe it or not, I do try to avoid spraying out too many
-emails.  David will recall better than I, but things got messy. 
-https://lkml.kernel.org/r/20241009162719.0adaea37@canb.auug.org.au was
-perhaps the cause.
+Yes, libbpf and selftests fixes are generally applied through
+bpf-next, unless the issue is pretty bad and immediate.
 
-I'm sure David can being us up to date.
+I'm sorry, but unfortunately it's too late now to move those patches
+as it's now been more than a month since they landed. For the future,
+please let us know ASAP if you think patches were misrouted. I think
+we are stuck with the need to do a stable backport for these, sorry.
 
+>
+> RISC-V libbpf/perf needs this fix in 6.12 to properly build. Would it be
+> possible to have it in the bpf tree, and have it land in 6.12-rc7?
+>
+> Andreas that has a similar fix [1].
+>
+>
+> Bj=C3=B6rn
+>
+> [1] https://lore.kernel.org/linux-riscv/mvm5xq44bqh.fsf@suse.de/
 
