@@ -1,141 +1,175 @@
-Return-Path: <linux-kselftest+bounces-21540-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21541-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF51F9BF1E0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 16:40:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 094439BF1F2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 16:44:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86FBB1F219B9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 15:40:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1F4728573A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 15:44:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24D5A2036ED;
-	Wed,  6 Nov 2024 15:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 386BF202F8A;
+	Wed,  6 Nov 2024 15:44:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="i7q170w1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i+yU+/IB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571D0202F8A
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Nov 2024 15:40:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E65E190075;
+	Wed,  6 Nov 2024 15:44:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730907602; cv=none; b=Uumw6V1FWgdQmbwB+6568Z6gnOUfVpVuA2U2CNu8F4E5pIdIQNYzLpMcOL3m4ZBzatyEIoJei4uC422Y34VJ1BHnCyBsCyk0IIEYbU+jL4BOCfcyPJhKjXsHKYHoSYSOPpfgqNSLvb5hrghPNgJz+uCkfxL2J+Jl+kR9AlLiYmw=
+	t=1730907857; cv=none; b=a7NsTpEYOwhC2W1fguOnrwAsdRcBHpzSVejl4QjGXwPXMHS9XcDQvY7d5c0N9FbarRIMTbiWbpbsr4PuEzWWwtUB+hkTTW7Qq5AvD+m8jt4Y8/jkK+D6U0TWRCQoYREGUJDloxDEOJXekGaT68gScn5HfyvEB5Ucc0YPVZ396rE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730907602; c=relaxed/simple;
-	bh=PLn+HGkBBwpOW7CICc2SyOy0BDrPR4BmKQAFCYmIWqM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sVKgOM3iP5ZlSiC+C1o8E4KVpkYyT4znOOizH6ZU8DMu2+jIGcdylMQ28r73/OmT9LA52hADnedJRrzr04+Syk7CqtdI6kntD/tNleL2M/dhODs3KB2KiJqj5aBOndXkEg/qyKbzjVhHHPKRuquW76uUhMrKXRQMfVGtPtZ5yuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=i7q170w1; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-37ed7eb07a4so4986689f8f.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Nov 2024 07:40:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1730907599; x=1731512399; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=T+lke+kSJ/sHNhBrjG2QR3DbhnvDmE7dM4quD4X0oVI=;
-        b=i7q170w1oBFFo2ijcUpH0lB3v2ORF8xyY6czqMAPtMNiOz+YQ7T9BxfwERp1rZF5Yv
-         tLlEs98O1nQGDewYLnxBxZfbz6bEfavoBMlAoty7XVruSOEWKQYUmdqgF/X4iXfUlmCG
-         jWRUk5gAjZ0ydnut8JrbiGsIMxsnTEI2TMVr/qjX9KDjb8R4Iu1tge4speLCNG+6/ATl
-         ZInyIlapWbtEI/9qPHP1aJUexYoLS4Lbg943F4TUB9q7frR3IB4WkZzaU2O6PgZPOpYu
-         AHzCkKSw5EMOgtYA5fDfrQ0FVlq8xgoeSM9oRWzgF195VIBZcP34OznPUUjpWduRuZYh
-         nZhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730907599; x=1731512399;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T+lke+kSJ/sHNhBrjG2QR3DbhnvDmE7dM4quD4X0oVI=;
-        b=Z61jCx87JqcyU99GbO4Msu+YDR8VKm5uqv2Ai11au/ji73Hx/0U2zm2ut6/Ey+U8ZJ
-         pQLx8hTn8mojJQ2PMjZouOHuyOZurIBGAcme0wKSe/NSPoXtP35nnb9LhCghvVnRym4i
-         jM4z9WFVJp6zHgnSVfTHIC1XHWhgWapSQUEf376nj9aj8J39pLZuImkrPk1n8sB4ErFr
-         3Wo34li1XqpbJkmsPQeukfbf6d0GG6wgm3Ajp1GgvyKwxv3Rw8DUZgTJPFc6mydMtwPH
-         xgdiE+qHmJNGp2h/B+35oeNqAfv9hp6VFSHawdLWjWlCgzKyjd/4AYbkNJpLpcqtowxK
-         wICA==
-X-Forwarded-Encrypted: i=1; AJvYcCWJr0wwPrykiSUzqOzus/EpYkFikYbRSpu+X2dViB42VFqF8hh7AaEUprxuTd5rlfKEj9eT/3oH+gYWXOo+hgM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7ZVFIenL91yCxfHfMPfSK2ZWdEJ9ZEJFlsrUx/g7YMOE3W+Q8
-	PZcAXHFOETDaBonidnV1D1LhKSOXj4MSj+Wh5IR50EtJlpPczQT3dfl5qHgb70c=
-X-Google-Smtp-Source: AGHT+IHaXpKkIZTp98WaTVKW8arf8yLJ6KlxXz0Ga7zfB6YCb98iODL5Q30kaHjC536zM+O/RrwHzA==
-X-Received: by 2002:a05:6000:4711:b0:37c:cc67:8b1f with SMTP id ffacd0b85a97d-381bea0ee17mr17133942f8f.48.1730907598706;
-        Wed, 06 Nov 2024 07:39:58 -0800 (PST)
-Received: from localhost ([193.47.165.251])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381c10b7b32sm19556510f8f.18.2024.11.06.07.39.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Nov 2024 07:39:58 -0800 (PST)
-Date: Wed, 6 Nov 2024 16:39:55 +0100
-From: Jiri Pirko <jiri@resnulli.us>
-To: MD Danish Anwar <danishanwar@ti.com>
-Cc: geliang@kernel.org, liuhangbin@gmail.com, w-kwok2@ti.com,
-	aleksander.lobakin@intel.com, lukma@denx.de, jan.kiszka@siemens.com,
-	diogo.ivo@siemens.com, shuah@kernel.org, horms@kernel.org,
-	pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-	davem@davemloft.net, andrew+netdev@lunn.ch,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	srk@ti.com, Vignesh Raghavendra <vigneshr@ti.com>,
-	Roger Quadros <rogerq@kernel.org>
-Subject: Re: [PATCH net-next v3 0/4] Introduce VLAN support in HSR
-Message-ID: <ZyuNyzu0kv1_pemU@nanopsycho.orion>
-References: <20241106091710.3308519-1-danishanwar@ti.com>
+	s=arc-20240116; t=1730907857; c=relaxed/simple;
+	bh=Bx4JkFHVZSmn8w135/s9Lbbn2e0M+Sl2v/1UF8aZwbs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BXZQ5aKbeR8U22UsVMIHMUZbHe0FSgMAy7VhxCu9o24f3Pkxlg7StTk0RmH1McPrX3xUl2EGp7kfhvtZsqycjcFoIyQ9oxUZtY2T0XeWUoy/txFTSm+PJFhwnRMr4tPqj3Z+wdbMnOFopRvRodC/JSu3n8Eu2vicHsm6gK6gV5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i+yU+/IB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A32BC4CEC6;
+	Wed,  6 Nov 2024 15:44:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730907856;
+	bh=Bx4JkFHVZSmn8w135/s9Lbbn2e0M+Sl2v/1UF8aZwbs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=i+yU+/IBVwPw4XL+Pw0OVFG4Hf1tsRVAvA2R5xoY9JiAjKcKaR0FJDuswKRRLu02N
+	 sB88X7BPQbHC64PDQuMZhoDTvIFZFUlsBzUWB61l/cVmJOM6O8dwHLGG/6k5Raaljf
+	 wK2slo/i69vGaijJ1qb73fSKwPWyo3Fz1MUJbtu+O8iPmJp0L6GgZ8a0vkMUG6tWVG
+	 VT+XKGzyw1SVFjXuxEc4UYGQmBIhfZFYyKcuHhY9Wx1SoYCNvdDsuiN0nF++sT0jN5
+	 YNSGGyO1HbylbdGVIsgOIvCVtmKcVo/05mB4EZkpu8CpdsNO8e2goLRgH4kx2CK3eB
+	 9jNXVoLV/UZuA==
+Message-ID: <843b0fd9-0c71-423e-a1a3-bc10e6f987ec@kernel.org>
+Date: Wed, 6 Nov 2024 08:44:15 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241106091710.3308519-1-danishanwar@ti.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v8] net: ipv4: Cache pmtu for all packet paths if
+ multipath enabled
+Content-Language: en-US
+To: Vladimir Vdovin <deliran@verdict.gg>, netdev@vger.kernel.org,
+ davem@davemloft.net, idosch@idosch.org
+Cc: edumazet@google.com, linux-kselftest@vger.kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, shuah@kernel.org, horms@kernel.org, gnault@redhat.com
+References: <20241106133012.289861-1-deliran@verdict.gg>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <20241106133012.289861-1-deliran@verdict.gg>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Wed, Nov 06, 2024 at 10:17:06AM CET, danishanwar@ti.com wrote:
->This series adds VLAN support to HSR framework.
->This series also adds VLAN support to HSR mode of ICSSG Ethernet driver.
->
->Changes from v2 to v3:
->*) Modified hsr_ndo_vlan_rx_add_vid() to handle arbitrary HSR_PT_SLAVE_A,
->HSR_PT_SLAVE_B order and skip INTERLINK port in patch 2/4 as suggested by
->Paolo Abeni <pabeni@redhat.com>
->*) Removed handling of HSR_PT_MASTER in hsr_ndo_vlan_rx_kill_vid() as MASTER
->and INTERLINK port will be ignored anyway in the default switch case as
->suggested by Paolo Abeni <pabeni@redhat.com>
->*) Modified the selftest in patch 4/4 to use vlan by default. The test will
->check the exposed feature `vlan-challenged` and if vlan is not supported, skip
->the vlan test as suggested by Paolo Abeni <pabeni@redhat.com>. Test logs can be
->found at [1]
->
->Changes from v1 to v2:
->*) Added patch 4/4 to add test script related to VLAN in HSR as asked by
->Lukasz Majewski <lukma@denx.de>
->
->[1] https://gist.githubusercontent.com/danish-ti/d309f92c640134ccc4f2c0c442de5be1/raw/9cfb5f8bd12b374ae591f4bd9ba3e91ae509ed4f/hsr_vlan_logs
->v1 https://lore.kernel.org/all/20241004074715.791191-1-danishanwar@ti.com/
->v2 https://lore.kernel.org/all/20241024103056.3201071-1-danishanwar@ti.com/
->
->MD Danish Anwar (1):
->  selftests: hsr: Add test for VLAN
->
->Murali Karicheri (1):
->  net: hsr: Add VLAN CTAG filter support
->
->Ravi Gunasekaran (1):
->  net: ti: icssg-prueth: Add VLAN support for HSR mode
->
->WingMan Kwok (1):
->  net: hsr: Add VLAN support
->
-> drivers/net/ethernet/ti/icssg/icssg_prueth.c | 45 ++++++++-
-> net/hsr/hsr_device.c                         | 85 +++++++++++++++--
-> net/hsr/hsr_forward.c                        | 19 +++-
-> tools/testing/selftests/net/hsr/config       |  1 +
-> tools/testing/selftests/net/hsr/hsr_ping.sh  | 98 ++++++++++++++++++++
-> 5 files changed, 236 insertions(+), 12 deletions(-)
+On 11/6/24 6:30 AM, Vladimir Vdovin wrote:
+> Check number of paths by fib_info_num_path(),
+> and update_or_create_fnhe() for every path.
+> Problem is that pmtu is cached only for the oif
+> that has received icmp message "need to frag",
+> other oifs will still try to use "default" iface mtu.
+> 
+> An example topology showing the problem:
+> 
+>                     |  host1
+>                 +---------+
+>                 |  dummy0 | 10.179.20.18/32  mtu9000
+>                 +---------+
+>         +-----------+----------------+
+>     +---------+                     +---------+
+>     | ens17f0 |  10.179.2.141/31    | ens17f1 |  10.179.2.13/31
+>     +---------+                     +---------+
+>         |    (all here have mtu 9000)    |
+>     +------+                         +------+
+>     | ro1  |  10.179.2.140/31        | ro2  |  10.179.2.12/31
+>     +------+                         +------+
+>         |                                |
+> ---------+------------+-------------------+------
+>                         |
+>                     +-----+
+>                     | ro3 | 10.10.10.10  mtu1500
+>                     +-----+
+>                         |
+>     ========================================
+>                 some networks
+>     ========================================
+>                         |
+>                     +-----+
+>                     | eth0| 10.10.30.30  mtu9000
+>                     +-----+
+>                         |  host2
+> 
+> host1 have enabled multipath and
+> sysctl net.ipv4.fib_multipath_hash_policy = 1:
+> 
+> default proto static src 10.179.20.18
+>         nexthop via 10.179.2.12 dev ens17f1 weight 1
+>         nexthop via 10.179.2.140 dev ens17f0 weight 1
+> 
+> When host1 tries to do pmtud from 10.179.20.18/32 to host2,
+> host1 receives at ens17f1 iface an icmp packet from ro3 that ro3 mtu=1500.
+> And host1 caches it in nexthop exceptions cache.
+> 
+> Problem is that it is cached only for the iface that has received icmp,
+> and there is no way that ro3 will send icmp msg to host1 via another path.
+> 
+> Host1 now have this routes to host2:
+> 
+> ip r g 10.10.30.30 sport 30000 dport 443
+> 10.10.30.30 via 10.179.2.12 dev ens17f1 src 10.179.20.18 uid 0
+>     cache expires 521sec mtu 1500
+> 
+> ip r g 10.10.30.30 sport 30033 dport 443
+> 10.10.30.30 via 10.179.2.140 dev ens17f0 src 10.179.20.18 uid 0
+>     cache
+> 
+> So when host1 tries again to reach host2 with mtu>1500,
+> if packet flow is lucky enough to be hashed with oif=ens17f1 its ok,
+> if oif=ens17f0 it blackholes and still gets icmp msgs from ro3 to ens17f1,
+> until lucky day when ro3 will send it through another flow to ens17f0.
+> 
+> Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
+> ---
+> V8:
+>   selftests in pmtu.sh:
+>     - Change var names from "dummy" to "host"
+>     - Fix errors caused by incorrect iface arguments pass
+>     - Add src addr to setup_multipath_new
+>     - Change multipath* func order
+>     - Change route_get_dst_exception() && route_get_dst_pmtu_from_exception()
+>       and arguments pass where they are used
+>       as Ido suggested in https://lore.kernel.org/all/ZykH_fdcMBdFgXix@shredder/
+> 
+> V7:
+>   selftest in pmtu.sh:
+>     - add setup_multipath() with old and new nh tests
+>     - add global "dummy_v4" addr variables
+>     - add documentation
+>     - remove dummy netdev usage in mp nh test
+>     - remove useless sysctl opts in mp nh test
+> 
+> V6:
+>   - make commit message cleaner
+> 
+> V5:
+>   - make self test cleaner
+> 
+> V4:
+>   - fix selftest, do route lookup before checking cached exceptions
+> 
+> V3:
+>   - add selftest
+>   - fix compile error
+> 
+> V2:
+>   - fix fib_info_num_path parameter pass
+> ---
+>  net/ipv4/route.c                    |  13 +++
+>  tools/testing/selftests/net/pmtu.sh | 119 ++++++++++++++++++++++++----
+>  2 files changed, 115 insertions(+), 17 deletions(-)
+> 
 
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
-Looks fine to me.
-set-
-Reviewed-by: Jiri Pirko <jiri@nvidia.com>
 
