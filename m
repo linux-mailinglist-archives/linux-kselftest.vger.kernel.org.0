@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-21531-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21532-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ADA49BED55
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 14:10:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DED09BED57
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 14:10:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D98F1F2505F
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 114892859BE
 	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 13:10:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68F091F9426;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A963A1D619E;
 	Wed,  6 Nov 2024 13:05:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="ZbvhujQB"
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="SQL7HMtK"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6301C1E133E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC3E51F9413
 	for <linux-kselftest@vger.kernel.org>; Wed,  6 Nov 2024 13:05:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730898306; cv=none; b=ibCaoHtnaLiafuOmUuzpgr6BJRXuuxV8m5mMHO1rtgD9rfxoh1DBBnVD8aXIhc7JeXg+B3Sh4WdrkxSwzbnVYoRk0bYFc4lUUl/noCi0MJEXrixZb/Kt1MQ1EjfSTlb1MsSPoRfg2di11cp7DVCIASoS8K7+Cl2YohO7hcaenn4=
+	t=1730898306; cv=none; b=Hq2Q0795EQZITBIrz1ySO7x75mC20hBJzmoUQoQE4SFbIJRFuSvPnB9xUqst6c/tmXgTTd6CMiBDht3KgaL9Kc88IfC6xb/iIBGxMuvmNWKoJQtkcagbc7i3o34jnS/gp/P9Dxnb5O8r50EZRZZxT5QorPldzQv9KcQ5pZcqkNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1730898306; c=relaxed/simple;
-	bh=l8Q1vGCIoKfYGSDC1yH7dOX6TeIovQ3Au2Uep97oqDo=;
+	bh=i7MiKgj5PZI5/D7cKMTNOlgDFHng4HO19l7BB3vVgXs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=R1qg2G1Q7cc7bEM7qQUqrGgZNX4UD6DUWh/kDpWqIjoHpxf3mfG3eNhIuvZz6UOkrt6HZhPlv0Ni3e+uKx4umf4FJuuyM4xInwIHPYPqi03351tX6NYhMYNy1eh4PD6K9OVZoFdn4WZqI79T1l2Noiu7uHcNwL9wpAcpYHCYRN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=ZbvhujQB; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version; b=W5aPHzavmz8WO0aN5fSSHZoMxVXmX/xAyMaZlLG/7fhXT7Wg7dQGP0BQKW3kSQMyKJeEMOTzcdIo0QNml/yPDYRy9vpqNv/QDt7HleRGoP99jJygm2zxFG/3B1JZmn5f3842hY+Xx8XsDbqVF+2MdnC7AnF11Sox0gGREkSJD28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=SQL7HMtK; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
 	s=201909; t=1730898300;
-	bh=gWi3uhGcloOwTYgGQh/KqDPknZHDL95CKVUKUmrlZBs=;
+	bh=qW1N95F/0dD6RAC3La/bvo9UN0+AgyqUeekkAk1k6sc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZbvhujQB4eB1WiNH7s6IozVLIgYkcsc6iL3gC5Q5EBcvgpng+ZVtGaNW0pdllbGRG
-	 TLO9yIjsYUaXePmT0nEPbK6RD72GnRhVcvRxHYMNkjRQMTfKc2RE3P82xU9qVs63+P
-	 eA6u/F29xflAqJkoRsQskTJHx5dVir8smRwRHAKOboAJJ0oJ0ui7kjafMvawjJ4sfF
-	 rsc1aer4ol58BN1PwpKuBFEHjw9da7wsXu00LuY8cq+8OF5SR8dqupkKd3BhgudiGA
-	 5iuQ1w9gtKaI+vFcnKM+Pvrz+GJk93nkLiCa5+39sKqxjfJc20Do0CEZGvAmJECiK+
-	 E+01GxxokfjkQ==
+	b=SQL7HMtKB9Hzn2YPrMPHbq0vPs6NsVSht0OT7tdD9x+9gug0bqDOx2Userp1YqU0A
+	 LaITNIBj5YA3tobZeSvf/fXVFfKCSlzKhf6AsEucgkuv4yGEIXZC++LFbPIKEhkOWo
+	 Yv9D/o4f1Eb1zvzlIdtljGnWAuhU/g85s4dx31LInHY0NcYKNIX+QbqDXEStRSIvSF
+	 JyT/H1dDoWLoCt20RshW3skimRp5SCQ0cKNecMoUfrUcynaMxT1T7ykOPnSitDMfhC
+	 5st1y+65BuGhidC/ebn1oASoEX6uQwIoz8pY6xNmUmAZwCs/1Iytw7vU68+m0oBlZZ
+	 T40dKXJADn3Hw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xk55m2JRrz4xR5;
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xk55m5vnLz4xRj;
 	Thu,  7 Nov 2024 00:05:00 +1100 (AEDT)
 From: Michael Ellerman <mpe@ellerman.id.au>
 To: <linuxppc-dev@lists.ozlabs.org>
 Cc: <linux-kselftest@vger.kernel.org>
-Subject: [PATCH 3/5] selftests/powerpc: Fix 32-bit BE build errors on Ubuntu 24.04
-Date: Thu,  7 Nov 2024 00:04:51 +1100
-Message-ID: <20241106130453.1741013-3-mpe@ellerman.id.au>
+Subject: [PATCH 4/5] selftests/powerpc: Return errors from all tests
+Date: Thu,  7 Nov 2024 00:04:52 +1100
+Message-ID: <20241106130453.1741013-4-mpe@ellerman.id.au>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241106130453.1741013-1-mpe@ellerman.id.au>
 References: <20241106130453.1741013-1-mpe@ellerman.id.au>
@@ -64,53 +64,54 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Starting with Ubuntu 24.04, building the selftests with the big endian
-compiler (which defaults to 32-bit) fails with errors:
+Fix some tests which weren't returning an error code from main.
 
-  stack_expansion_ldst.c:178:37: error: format '%lx' expects argument
-  of type 'long unsigned int', but argument 2 has type 'rlim_t' {aka 'long long unsigned int'}
-  subpage_prot.c:214:38: error: format '%lx' expects argument of type
-  'long unsigned int', but argument 3 has type 'off_t' {aka 'long long int'}
-
-Prior to 24.04 rlim_t was long unsigned int, and off_t was long int.
-
-Cast to unsigned long long and long long before passing to printf to
-avoid the errors.
+Although these tests only ever return success, they can still fail if
+they time out and the harness kills them. If that happens they still
+return success to the shell, which is incorrect and confuses the higher
+level error reporting.
 
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
 ---
- tools/testing/selftests/powerpc/mm/stack_expansion_ldst.c | 2 +-
- tools/testing/selftests/powerpc/mm/subpage_prot.c         | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/powerpc/signal/sigfuz.c                | 2 +-
+ .../testing/selftests/powerpc/tm/tm-signal-context-force-tm.c  | 2 +-
+ tools/testing/selftests/powerpc/tm/tm-signal-sigreturn-nt.c    | 3 +--
+ 3 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/powerpc/mm/stack_expansion_ldst.c b/tools/testing/selftests/powerpc/mm/stack_expansion_ldst.c
-index ed9143990888..9c0d343d7137 100644
---- a/tools/testing/selftests/powerpc/mm/stack_expansion_ldst.c
-+++ b/tools/testing/selftests/powerpc/mm/stack_expansion_ldst.c
-@@ -175,7 +175,7 @@ static int test(void)
+diff --git a/tools/testing/selftests/powerpc/signal/sigfuz.c b/tools/testing/selftests/powerpc/signal/sigfuz.c
+index 08f9afe3b95c..c101b1391696 100644
+--- a/tools/testing/selftests/powerpc/signal/sigfuz.c
++++ b/tools/testing/selftests/powerpc/signal/sigfuz.c
+@@ -321,5 +321,5 @@ int main(int argc, char **argv)
+ 	if (!args)
+ 		args = ARG_COMPLETE;
  
- 	page_size = getpagesize();
- 	getrlimit(RLIMIT_STACK, &rlimit);
--	printf("Stack rlimit is 0x%lx\n", rlimit.rlim_cur);
-+	printf("Stack rlimit is 0x%llx\n", (unsigned long long)rlimit.rlim_cur);
+-	test_harness(signal_fuzzer, "signal_fuzzer");
++	return test_harness(signal_fuzzer, "signal_fuzzer");
+ }
+diff --git a/tools/testing/selftests/powerpc/tm/tm-signal-context-force-tm.c b/tools/testing/selftests/powerpc/tm/tm-signal-context-force-tm.c
+index 421cb082f6be..0a4bc479ae39 100644
+--- a/tools/testing/selftests/powerpc/tm/tm-signal-context-force-tm.c
++++ b/tools/testing/selftests/powerpc/tm/tm-signal-context-force-tm.c
+@@ -176,5 +176,5 @@ int tm_signal_context_force_tm(void)
  
- 	printf("Testing loads ...\n");
- 	test_one_type(LOAD, page_size, rlimit.rlim_cur);
-diff --git a/tools/testing/selftests/powerpc/mm/subpage_prot.c b/tools/testing/selftests/powerpc/mm/subpage_prot.c
-index 3ae77ba93208..8cf9fd5fed1c 100644
---- a/tools/testing/selftests/powerpc/mm/subpage_prot.c
-+++ b/tools/testing/selftests/powerpc/mm/subpage_prot.c
-@@ -211,8 +211,8 @@ int test_file(void)
- 		perror("failed to map file");
- 		return 1;
- 	}
--	printf("allocated %s for 0x%lx bytes at %p\n",
--	       file_name, filesize, fileblock);
-+	printf("allocated %s for 0x%llx bytes at %p\n",
-+	       file_name, (long long)filesize, fileblock);
+ int main(int argc, char **argv)
+ {
+-	test_harness(tm_signal_context_force_tm, "tm_signal_context_force_tm");
++	return test_harness(tm_signal_context_force_tm, "tm_signal_context_force_tm");
+ }
+diff --git a/tools/testing/selftests/powerpc/tm/tm-signal-sigreturn-nt.c b/tools/testing/selftests/powerpc/tm/tm-signal-sigreturn-nt.c
+index 06b801906f27..968864b052ec 100644
+--- a/tools/testing/selftests/powerpc/tm/tm-signal-sigreturn-nt.c
++++ b/tools/testing/selftests/powerpc/tm/tm-signal-sigreturn-nt.c
+@@ -46,6 +46,5 @@ int tm_signal_sigreturn_nt(void)
  
- 	printf("testing file map...\n");
- 
+ int main(int argc, char **argv)
+ {
+-	test_harness(tm_signal_sigreturn_nt, "tm_signal_sigreturn_nt");
++	return test_harness(tm_signal_sigreturn_nt, "tm_signal_sigreturn_nt");
+ }
+-
 -- 
 2.47.0
 
