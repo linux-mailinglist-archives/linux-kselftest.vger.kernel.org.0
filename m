@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-21552-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21553-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 805479BF9BD
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 00:14:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A08B9BF9C1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 00:14:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45AEB283E66
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 23:14:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93EAAB21719
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 23:14:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6657320D502;
-	Wed,  6 Nov 2024 23:14:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54AAC20E004;
+	Wed,  6 Nov 2024 23:14:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="n6vga4Zz";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="BkOcVq7S"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="wTG4I3aq";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fnPfu3rC"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D512E20C486;
-	Wed,  6 Nov 2024 23:13:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A3E20D4FE;
+	Wed,  6 Nov 2024 23:13:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730934840; cv=none; b=H1V5iycyjmYbEZ069hBOLc28trSJFY2zx7CFVyMrncBTL/4EO+KudlJGVmWC6m74kMduFFVfnKHsSQL44+BwZ8vCHbEylLQqXCJc3fYuGrP3zkVyFKhdX2whv/4wUgEP88JngN6YVY+uhxUgBnq8DoFR2nR/lqIZc5Xj20gAeC8=
+	t=1730934842; cv=none; b=oecmzKGogm7Oskp2GIId6Bo65BllIy+wAgtIJRou5TSZZNjySf1iTLYhsBMpSe6TpudQwSLQLuI2AMLPqd2RE8YTBqgWGeRiusjDMyJ19pEnEp8Na7HatiawASq7Jj9HuCUup0H0VZlBWgdO2/Xrk23l1e9M/lWcfa7T8t3LIxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730934840; c=relaxed/simple;
-	bh=Jg8DlNLW/4b17xL7jXfLIlYMmo0k6NM4LTyfCHEHfG8=;
+	s=arc-20240116; t=1730934842; c=relaxed/simple;
+	bh=upi6aFSkqDwgeAtG7G2bMl/cX6o5AguCm7pnNdatVBg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jBvV8ogcq2bXEH0lyOuBagElfwYMDi943M+MH5Ktpu5K1LHp/TiU19kIyl6j32MJJxb/V50EHBZIf/gRWkq5L9u16rp5j6LDK0Jh5ETplsXUk8mckQaOIPBh30CB7KcjDTn2yEtWmzgX5NgPCPnr3BM7kzRdsHa0fWX8r/hzij0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=n6vga4Zz; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=BkOcVq7S; arc=none smtp.client-ip=202.12.124.138
+	 MIME-Version; b=CvKtwuLws5+TCiq3GOK5jJvnMhyvqlxRUfbdwGyTH9MBVQZBxeKJUD7/QOVvXSSm2j5LGzEZU5YtzIB6jNs5XlFO7IKVuYQGEFClYxF6FVwJ3XgExuwjTr55imMry/pWSpGlLAjV7HVh4vsZX44+PgUODylqho0OfvGpo3+WMKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=wTG4I3aq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=fnPfu3rC; arc=none smtp.client-ip=202.12.124.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailflow.stl.internal (Postfix) with ESMTP id A5C631D402E2;
-	Wed,  6 Nov 2024 18:13:56 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-08.internal (MEProxy); Wed, 06 Nov 2024 18:13:56 -0500
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailflow.stl.internal (Postfix) with ESMTP id 1BC7C1D402D4;
+	Wed,  6 Nov 2024 18:13:59 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-11.internal (MEProxy); Wed, 06 Nov 2024 18:13:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1730934836; x=
-	1730938436; bh=LGzjYxQ5oSC7YQ/kl9JMaZyCqYUBuAx9f192esgcnHM=; b=n
-	6vga4ZzsIgTlLqwTzrg0X5ZGVL5TZQKd+VZwRGazFSj5rU0S6UPFVha5n9hPXe6e
-	nLeE1rWreLHESffX9ojx3kL995PMYEvRb4VmwqhJxA4DyNQr/f1rSon4Ud1I6Jv6
-	dfjVOk1sdfPoBhfimQBZxg47UfefzBMqO7GbwWqDABBFRvMlxlIX4F/zuH0cRENH
-	8MnnKQcpztAw8hQLquxIFPq+kCSVMLSvf9p60+tpMnEyO4fmbZvhazLpSBf9p3Ae
-	mTDfs0xyLhrGzhIlwHl2rBIye+EH0j3tmUcgWhz9O8s6NUicJWukO9h8AI1iNudU
-	8Iv6f5MhM3EDLx55Ce7zg==
+	:reply-to:subject:subject:to:to; s=fm1; t=1730934838; x=
+	1730938438; bh=ch6ZOFfW93o9T0aJ2TMNc5B4CZ8UlZQsITw9cF+NXZQ=; b=w
+	TG4I3aqFryGVrvAycRsn2NySGOXD6xCHqPnqCkr+909h8/d11dMxFSTtJBJRIhLe
+	TBq0LVDYfLP9kx8pueV3D/+htnEokgSxWxHzDv3KsXnYHfMCmL5EkJDWd5YEDQGZ
+	LjsXIMDsn5bOGRT1tBarXLYjOZiH1FqFp0n9PuCHwTSYvkqSgKh/FROJ/vksgOIf
+	4QXTzrJ7m2e34nYzrvjZZtixOXn1E8XOTLD9A26zwVUzBMtAOXn9ApUXzvlutED+
+	E0BNXq+gVXeHJgrKVHL6t32e6MWdk2CGGRZGZr+lK6Ub8g/KVFDcBeRLU5zi1b79
+	YYLFt6rCdieS7w3E2pthw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1730934836; x=1730938436; bh=L
-	GzjYxQ5oSC7YQ/kl9JMaZyCqYUBuAx9f192esgcnHM=; b=BkOcVq7S1pzjhhEtt
-	KbnxGz3xalA+VqXz2Kp1E9Ohl2wy/W6dqTH/h6gHN1IkIte8wVvltByBYrm0FnOj
-	DGz8Gk03Hy7JjwV1ch/Hfxee1f5S4cxcdGEUTZLZ7/R8hFfY0XxNzGqfWHG49dJx
-	YGrtfwVy39Pd9QdfCh8OlzI7KKYcD7lkoBxinpOTeoHIWrc2YMso9XwcMOmNvHk/
-	k1bxR6pB5kkWTIlZLZR6Jefvue2bfoNSspX9ky9vMBI0cSF0YNj/Nw1aGzW1Mtrq
-	Y3SOiJ3JGqguepiQkhZGtUFXQ5PlidYPdJplRONh7KSLO5H3pUZ/UnupZRcv8nRK
-	6cRdg==
-X-ME-Sender: <xms:NPgrZwZtzVEwVZ48AQWaB987BbbDUKekSPuFH-DmO4HZf_dDr4pPXg>
-    <xme:NPgrZ7br6GHn9sywP08bRGgRk9cB27Z8kirDqaK2bIKdqf81E72_2iWTz5jS9kil3
-    1a22eLyewcpRCVGi44>
-X-ME-Received: <xmr:NPgrZ684GgtGgVKxKhkqls1EgqQEqK0PpsSQH3_1j7ylHOeuhfSF_tQePMOF>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1730934838; x=1730938438; bh=c
+	h6ZOFfW93o9T0aJ2TMNc5B4CZ8UlZQsITw9cF+NXZQ=; b=fnPfu3rCrTB8xwm4r
+	AYD7htOiWzmI+hGbFkCp+wZNI+hznSZn7uDEliAppNTXIpasp5QwZPRfLhF4zQbX
+	tSs2kIDstzA+drXLSY/DOlBdCwh04TTq0D3QeyAqFSZ2DJFWWmY0udaxFmKKSva/
+	vMqOXiL2ml6krVA8XhKWPd6gD/hPxtmBprSRvjcT20nn3ZLLLQI57TLOTyHTU2Es
+	uZKhjMzv/BRG5wmWqhom2q59KYWAQjps5JU2qJ1Tgp7BHYlAgcoeXWo8PvcFdMSB
+	6uldkHnSZOpR1IVijZSUU9hgdZ03X51iPn7mJ5C18fFiVMiPLJMnbjDR0sE0b9MW
+	d1u1w==
+X-ME-Sender: <xms:NvgrZ5wbs-_QGi_KjwfFkgzCsI5stJ40ciCaw63MINi8W9Jv7Kry0w>
+    <xme:NvgrZ5QF1_0ko6xEcjNxW9G1oLCiRpC0RUB-CUh6586ZbqbjEHzti5UCBD8PPaudw
+    Cb1DMlklguuWNqJfgU>
+X-ME-Received: <xmr:NvgrZzWwYLe409mylKTYwITO77IiYwIvfZ6qE5rEIgzKssTwn2GybvlVFyqh>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrtdefgddtjecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
     tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
@@ -78,23 +78,23 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrtdefgddtjecutefuodetggdote
     ihhlrdhnvghtpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtth
     hopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgv
     lhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:NPgrZ6rITpH-p2Wf9uGVquadow1pHqZLKoZNL8MWmL2BhpshO6B5Wg>
-    <xmx:NPgrZ7rwz0sk4qTbW4566oR5ujTLyZSvBm-6HW29McJSrLnGJdYWAw>
-    <xmx:NPgrZ4Q3L9JpIUTh_uAHt7znNuNJfQyvEoK2XBWEa-fLrhji-vq45w>
-    <xmx:NPgrZ7rMSAJhGB-ZQJq-sPfsNpGJO6oIaEhZmrG79nvA8XTV_AwW0g>
-    <xmx:NPgrZy2b_vnXQb84yVRGKu4MqG6N_LHSZsB1svfY1KwrePhDaJLJkUBs>
+X-ME-Proxy: <xmx:NvgrZ7gQOp7EGUcfcvhXfX7ixPGbeWRwXDDRKXH6sUS-4bjXbt-Gew>
+    <xmx:NvgrZ7Ayor_LoZM7KYoJe1MEU0_WY4FXj7h9frN9m3RypyzHZiW61w>
+    <xmx:NvgrZ0JRwCx__yobrQmzXAnwh2TQMy414ztALK5H8t9rTM2DgU2mRg>
+    <xmx:NvgrZ6B2WW5z02Zv8GTMsCiVaHSIaDJ6-CQFCL6_GVz3QCTTTwsKSA>
+    <xmx:NvgrZ-PlntGByC1-RAkP1nLEwOWZgOJzdf7V_DLUxixPfyie-DU_mWcC>
 Feedback-ID: i934648bf:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 6 Nov 2024 18:13:55 -0500 (EST)
+ 6 Nov 2024 18:13:58 -0500 (EST)
 From: Sabrina Dubroca <sd@queasysnail.net>
 To: netdev@vger.kernel.org
 Cc: Sabrina Dubroca <sd@queasysnail.net>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 1/8] netdevsim: add more hw_features
-Date: Thu,  7 Nov 2024 00:13:27 +0100
-Message-ID: <b918dc4dd76410a57f7516a855f66b0a2bd58326.1730929545.git.sd@queasysnail.net>
+Subject: [PATCH net-next 2/8] selftests: netdevsim: add a test checking ethtool features
+Date: Thu,  7 Nov 2024 00:13:28 +0100
+Message-ID: <fff58fa70f8a300440958b5020f6a4eb2e9dad61.1730929545.git.sd@queasysnail.net>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1730929545.git.sd@queasysnail.net>
 References: <cover.1730929545.git.sd@queasysnail.net>
@@ -106,38 +106,65 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-netdevsim currently only set HW_TC in its hw_features, but other
-features should also be present to better reflect the behavior of real
-HW.
-
-In my macsec offload testing, this ends up as HW_CSUM being missing
-from hw_features, so it doesn't stick in wanted_features when offload
-is turned off. Then HW_CSUM (and thus TSO, thanks to
-netdev_fix_features) is not automatically turned back on when offload
-is re-enabled.
+Add a test checking that some features are active by default and
+changeable.
 
 Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
 ---
- drivers/net/netdevsim/netdev.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ .../selftests/drivers/net/netdevsim/Makefile  |  1 +
+ .../drivers/net/netdevsim/ethtool-features.sh | 31 +++++++++++++++++++
+ 2 files changed, 32 insertions(+)
+ create mode 100644 tools/testing/selftests/drivers/net/netdevsim/ethtool-features.sh
 
-diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-index cad85bb0cf54..0be47fed4efc 100644
---- a/drivers/net/netdevsim/netdev.c
-+++ b/drivers/net/netdevsim/netdev.c
-@@ -663,7 +663,11 @@ static void nsim_setup(struct net_device *dev)
- 			 NETIF_F_FRAGLIST |
- 			 NETIF_F_HW_CSUM |
- 			 NETIF_F_TSO;
--	dev->hw_features |= NETIF_F_HW_TC;
-+	dev->hw_features |= NETIF_F_HW_TC |
-+			    NETIF_F_SG |
-+			    NETIF_F_FRAGLIST |
-+			    NETIF_F_HW_CSUM |
-+			    NETIF_F_TSO;
- 	dev->max_mtu = ETH_MAX_MTU;
- 	dev->xdp_features = NETDEV_XDP_ACT_HW_OFFLOAD;
- }
+diff --git a/tools/testing/selftests/drivers/net/netdevsim/Makefile b/tools/testing/selftests/drivers/net/netdevsim/Makefile
+index cc08b220323f..df167c637af9 100644
+--- a/tools/testing/selftests/drivers/net/netdevsim/Makefile
++++ b/tools/testing/selftests/drivers/net/netdevsim/Makefile
+@@ -4,6 +4,7 @@ TEST_PROGS = devlink.sh \
+ 	devlink_in_netns.sh \
+ 	devlink_trap.sh \
+ 	ethtool-coalesce.sh \
++	ethtool-features.sh \
+ 	ethtool-fec.sh \
+ 	ethtool-pause.sh \
+ 	ethtool-ring.sh \
+diff --git a/tools/testing/selftests/drivers/net/netdevsim/ethtool-features.sh b/tools/testing/selftests/drivers/net/netdevsim/ethtool-features.sh
+new file mode 100644
+index 000000000000..bc210dc6ad2d
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/netdevsim/ethtool-features.sh
+@@ -0,0 +1,31 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-only
++
++source ethtool-common.sh
++
++NSIM_NETDEV=$(make_netdev)
++
++set -o pipefail
++
++FEATS="
++  tx-checksum-ip-generic
++  tx-scatter-gather
++  tx-tcp-segmentation
++  generic-segmentation-offload
++  generic-receive-offload"
++
++for feat in $FEATS ; do
++    s=$(ethtool --json -k $NSIM_NETDEV | jq ".[].\"$feat\".active" 2>/dev/null)
++    check $? "$s" true
++
++    s=$(ethtool --json -k $NSIM_NETDEV | jq ".[].\"$feat\".fixed" 2>/dev/null)
++    check $? "$s" false
++done
++
++if [ $num_errors -eq 0 ]; then
++    echo "PASSED all $((num_passes)) checks"
++    exit 0
++else
++    echo "FAILED $num_errors/$((num_errors+num_passes)) checks"
++    exit 1
++fi
 -- 
 2.47.0
 
