@@ -1,157 +1,177 @@
-Return-Path: <linux-kselftest+bounces-21509-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21510-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BA1B9BDE97
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 07:12:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D65719BE107
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 09:34:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 251EFB216B2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 06:12:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 059621C2322F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 08:34:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48F001922D7;
-	Wed,  6 Nov 2024 06:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="W+2cJHzS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F8BC1D3656;
+	Wed,  6 Nov 2024 08:34:11 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A781EA84;
-	Wed,  6 Nov 2024 06:11:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C207F18FC79;
+	Wed,  6 Nov 2024 08:34:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730873518; cv=none; b=sJkHSuehyGMxvlDxrjhVxY9k7XPMCAzV5tOKhUO8MwRetGRtyCFnCjEIL1klLP8cLyNv/ZOSTpqg2i7+EAV5nvSohoXLTjIoTKngub8FXV4iUTD9Vu3yunehJvOF/k6KvPmDn9TBF6rdjhJfbt8sWgVJPSniHFe9Oqr4Jb1AYao=
+	t=1730882051; cv=none; b=B1G6bds+/Wq7JkcyQgCNa3y04xA55uYbVtdowoRsORbYGfCF9hvnshLV2aTPSrXeU0PcceVN1WSE8RPYyoj4kGX/XBYueLi1r38aRNAx0VkhzbPHOs3hEPc9uk1XACpLdEn44gcfGdohKyk1uQbUpuex6VHvu7OZlqZUoGN+i98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730873518; c=relaxed/simple;
-	bh=tJ1rGgan2u7SVhW2GXwWBNCltOtVTaNjavpnt1+lswM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YKySuz6/WwWIq7hHrC6QhUEzCSq61Fty4Ma80UzmBxcr3p91+NPvfHzyoGj9bhc9pa2lZP85UJB+6qaGs5oAkxpy1uuMfojqn2gL9JoXAylBW2gRly7nDO6JftQ2WjOZYWtCQqeexTFSp3/u1szqHgNWgic37olb69LiOW8PeT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=W+2cJHzS; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A65eR0j031806;
-	Wed, 6 Nov 2024 05:54:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=ysSqMG
-	tbwbmFOqT1XRY+kGYi4gISugGgiIjpkXQ26zE=; b=W+2cJHzSxKStqNEMsCJ6oE
-	oo4PRwZMT3VaXlB60G0+ql//qGBpP/dIRa8vvca2UVpU8ceiBC0w2R0YHBPVtqTg
-	AGTK65/PgYIWa8sq+ePofqXUYZUAhH6jo4rZ8m4FFCHMy4NgJRk8HFZCYKpeDEqH
-	Mw0panYRRr2Z3XGJyv2D7rLvMT/PcA9enRq6mwpxZMTrUm2GPRgiSzq3buYCapg1
-	Lpns4YFX2GhurjfD06WorpPEcY5O3Uh9BaSF3bNzFffo+YiC6oD5njQWOSnM12nD
-	+hmB/2mVG8ufb3rhigiHPJ23XVk14KUZVxQ3TP1LgAefH4th/gZK+iqwJ5NG8TXQ
-	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42r2gq0164-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 06 Nov 2024 05:54:39 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4A65WLMT008430;
-	Wed, 6 Nov 2024 05:54:39 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 42nywkqwav-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 06 Nov 2024 05:54:39 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4A65sbAX58655144
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 6 Nov 2024 05:54:37 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 430FE20043;
-	Wed,  6 Nov 2024 05:54:37 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 36E5E20040;
-	Wed,  6 Nov 2024 05:54:35 +0000 (GMT)
-Received: from [9.203.115.143] (unknown [9.203.115.143])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  6 Nov 2024 05:54:35 +0000 (GMT)
-Message-ID: <e6ba6084-e224-44c8-86e6-f3ae408209c1@linux.ibm.com>
-Date: Wed, 6 Nov 2024 11:24:34 +0530
+	s=arc-20240116; t=1730882051; c=relaxed/simple;
+	bh=Mm/jrbaJfFT6wDcI/e6esy2x+HxqFXxXHXIzM9YG/g4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kP400smY9WV/vd8ko0WyDiMr8fm29vfsBD3iLfOTqWcdLhT/Ldj5hOEJk74Q5VJvV1fjzHFZF93jjjBDQZ49g0ifQY5Vl+8xGdRv3J0Ru4nERvtF0Ri/Wj4BxEM3MWsLUs7gjxyrnGFMi4k2bM1TTBGXnZyJsvkdoB3D6c1FLv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6ea7c9226bbso41445887b3.3;
+        Wed, 06 Nov 2024 00:34:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730882048; x=1731486848;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=orR+7ztJ0V4Vm2BaNkmu0xSje1Ay3zhhqlE0AJSTZ6E=;
+        b=K1nM/B4t/fEtQVI3pe/MS/6S6IWSZn9W6EC2goPuLWvAgd+OuzA72j1i5Z2e0fXKPR
+         bPDrx6SrLflN+csPhbzRkvJX1gnZBz7eFjs+KvEo9F+HUSvbFTmKnvvlOZCf5dRCWBo2
+         NmZreLJTaYKMH0unFveKTWMP4eTaGhnfoKofDSKqUC9Ii64x+tbhVP19wHKitIFptSJD
+         M1htcxYWh4NdX8TFleUMbnbAymQJ0FuGaqWzjn3xIlcbeqkxeauE3zhoPhr1+Mh1X5DI
+         kUwvYFI+bNNNt3XFfocKk7nC0epEoRWD+nDrRhYQ0ONh5C99fwa3/rvWESzbuDG2pptM
+         9ozA==
+X-Forwarded-Encrypted: i=1; AJvYcCVEWk7YKB+nvE7G06TuwGLtanp+w9cI6koHuFdDxTVndlB9RKqJ/djOBoMLOUe2TBWo+5HVo08Q8xOPHk8=@vger.kernel.org, AJvYcCWjtF/Ca6oVP/EGQAEDKISZx6itvej9egyiI+TxnPqo7l33pxpS/8vegpiWJc2BeBwKtrTen+v+p8TO+bh+akvQ@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKlImaXMrMKrR6KuenhcgjjRPK95Jdas3WTsDxfxIOrY/T4rKm
+	M6Qd1dk1jGykQliealbvNAl/np2twGqbUZFX5vZXH5NVO5eW6sdddXudPxV5
+X-Google-Smtp-Source: AGHT+IF9Uww1+eJ47OqXcaGIcg+a9LLhWZhTa2eG1GfxgSWKNaKxbkNgYV+JzUqEZ3hj28sLDPTIDw==
+X-Received: by 2002:a05:690c:25c8:b0:6e7:e22b:fb7a with SMTP id 00721157ae682-6ea3b8ad5ccmr274055647b3.18.1730882048421;
+        Wed, 06 Nov 2024 00:34:08 -0800 (PST)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6ea55c893f1sm27258297b3.113.2024.11.06.00.34.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Nov 2024 00:34:07 -0800 (PST)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6ea7c9226bbso41445647b3.3;
+        Wed, 06 Nov 2024 00:34:07 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVsTEFTCVTduvfSX4u9yo5/jyuUOy/tuuE8Q4n1M0x3YDZZMoKJUQbB/q66CZtftlY6n5XzIhvvRjsuZSdmc0sm@vger.kernel.org, AJvYcCXhkJS23BVvlHUB0oFdG9f5sUc755OtCtl2qlsYUnJrDh5I9T279fA12+VY096120cKJjoTXFXEcchF0B8=@vger.kernel.org
+X-Received: by 2002:a05:690c:4b8b:b0:6ea:8109:9d16 with SMTP id
+ 00721157ae682-6ea81099e5cmr137757237b3.7.1730882047612; Wed, 06 Nov 2024
+ 00:34:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/ftrace: update kprobe syntax error test for
- ppc64le
-Content-Language: en-US
-To: Segher Boessenkool <segher@kernel.crashing.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        "Naveen N. Rao"
- <naveen@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-References: <20241101191925.1550493-1-hbathini@linux.ibm.com>
- <20241101205948.GW29862@gate.crashing.org>
- <1916cb5c-cb3d-427c-bcf0-2c1b905fd6d1@linux.ibm.com>
- <20241104094431.GY29862@gate.crashing.org>
- <245fed6f-5fb4-4925-ba0a-fb2f32e650d0@linux.ibm.com>
- <20241104103615.GZ29862@gate.crashing.org>
- <f7e8243a-a4c8-44ce-ad03-7d232df461ed@linux.ibm.com>
- <20241105082018.GA29862@gate.crashing.org>
- <20241105181752.74a3d6fa2f06d0adfdf85322@kernel.org>
- <20241105195208.GC29862@gate.crashing.org>
-From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <20241105195208.GC29862@gate.crashing.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: l3aRu8tgKptju9-xOMLrFcnp-sMl082c
-X-Proofpoint-GUID: l3aRu8tgKptju9-xOMLrFcnp-sMl082c
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 spamscore=0 impostorscore=0 malwarescore=0 phishscore=0
- clxscore=1015 mlxlogscore=841 adultscore=0 bulkscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411060043
+References: <20241011072509.3068328-2-davidgow@google.com> <20241011072509.3068328-3-davidgow@google.com>
+ <CAMuHMdUdotDYAgSDDrWi-TOj2o=5a53n452DydhD-Q0fjiGhew@mail.gmail.com>
+In-Reply-To: <CAMuHMdUdotDYAgSDDrWi-TOj2o=5a53n452DydhD-Q0fjiGhew@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 6 Nov 2024 09:33:55 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVQ-Fmnti80_HoX1+6L8wNUghpuJzqpT_g0SJQG-oq6RQ@mail.gmail.com>
+Message-ID: <CAMuHMdVQ-Fmnti80_HoX1+6L8wNUghpuJzqpT_g0SJQG-oq6RQ@mail.gmail.com>
+Subject: Re: [PATCH 1/6] lib: math: Move kunit tests into tests/ subdir
+To: David Gow <davidgow@google.com>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, Brendan Higgins <brendanhiggins@google.com>, 
+	Rae Moar <rmoar@google.com>, Kees Cook <kees@kernel.org>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, Luis Felipe Hernandez <luis.hernandez093@gmail.com>, 
+	quic_jjohnson@quicinc.com, macro@orcam.me.uk, tpiepho@gmail.com, 
+	ricardo@marliere.net, linux-kernel-mentees@lists.linuxfoundation.org, 
+	Nicolas Pitre <npitre@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
+On Fri, Oct 11, 2024 at 10:59=E2=80=AFAM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+> On Fri, Oct 11, 2024 at 9:31=E2=80=AFAM David Gow <davidgow@google.com> w=
+rote:
+> > From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+> >
+> > This patch is a follow-up task from a discussion stemming from point 3
+> > in a recent patch introducing the int_pow kunit test [1] and
+> > documentation regarding kunit test style and nomenclature [2].
+> >
+> > Colocate all kunit test suites in lib/math/tests/ and
+> > follow recommended naming convention for files <suite>_kunit.c
+> > and kconfig entries CONFIG_<name>_KUNIT_TEST.
+> >
+> > Link: https://lore.kernel.org/all/CABVgOS=3D-vh5TqHFCq_jo=3Dffq8v_nGgr6=
+JsPnOZag3e6+19ysxQ@mail.gmail.com/ [1]
+> > Link: https://docs.kernel.org/dev-tools/kunit/style.html [2]
+> >
+> > Signed-off-by: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+> > Acked-by: Nicolas Pitre <npitre@baylibre.com>
+> > [Rebased on top of mm-nonmm-unstable.]
+> > Signed-off-by: David Gow <davidgow@google.com>
 
-On 06/11/24 1:22 am, Segher Boessenkool wrote:
-> Hi!
-> 
-> On Tue, Nov 05, 2024 at 06:17:51PM +0900, Masami Hiramatsu wrote:
->> On Tue, 5 Nov 2024 02:20:18 -0600
->> Segher Boessenkool <segher@kernel.crashing.org> wrote:
->>> On Mon, Nov 04, 2024 at 11:06:23PM +0530, Hari Bathini wrote:
->>>> Seems like a bit of misunderstanding there. Function entry here intends
->>>> to mean the actual start of function code (function prologue) - after
->>>> GEP and function profiling sequence (mflr r0; bl mcount).
->>>
->>> What you call "function entry" here simply does not exist.  The compiler
->>> can -- and ***WILL***, ***DOES*** -- mix up all of that.
->>
->> Here is the "function entry" means the function address.
-> 
-> "Function entry point".  "Function entry" can mean whatever nebulous
-> thing done at the start of a function :-)
-> 
-> You're free to use your own terminology of course, but it help to use
-> standard names for standard things!
-> 
->> Not the prologue.
-> 
-> But that is literally what Hari said, so it confused me.
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -2296,7 +2296,7 @@ config TEST_SORT
+> >
+> >           If unsure, say N.
+> >
+> > -config TEST_DIV64
+> > +config DIV64_KUNIT_TEST
+> >         tristate "64bit/32bit division and modulo test"
+> >         depends on DEBUG_KERNEL || m
+> >         help
+> > @@ -2306,7 +2306,7 @@ config TEST_DIV64
+> >
+> >           If unsure, say N.
+> >
+> > -config TEST_MULDIV64
+> > +config MULDIV64_KUNIT_TEST
+> >         tristate "mul_u64_u64_div_u64() test"
+> >         depends on DEBUG_KERNEL || m
+> >         help
+>
+> This conflicts with "[PATCH] m68k: defconfig: Update defconfigs for
+> v6.12-rc1"[1].  Of course the proper way forward would be to add
+> "default KUNIT_ALL_TESTS" to all tests that still lack it, so I can
+> just never queue that patch ;-)
 
-Sorry about that. I should have said.. maybe prologue or whatever
-nebulous thing at the start of a function :-)
+What's the status of this series? I am asking because I am wondering if
+I should queue [1] for v6.13, or just drop it, and send a patch to add
+"default KUNIT_ALL_TESTS" instead.
 
-Basically, the address provided to test case can be any insn in the
-function code expect what the kernel considers function entry address..
+I saw the email from Andrew stating he applied it to his tree[2],
+but that seems to have been dropped silently, and never made it into
+linux-next?
 
-Thanks
-Hari
+Thanks!
 
+> > @@ -2993,7 +2993,7 @@ config TEST_OBJPOOL
+> >
+> >           If unsure, say N.
+> >
+> > -config INT_POW_TEST
+> > +config INT_POW_KUNIT_TEST
+> >         tristate "Integer exponentiation (int_pow) test" if !KUNIT_ALL_=
+TESTS
+> >         depends on KUNIT
+> >         default KUNIT_ALL_TESTS
+>
+> [1] https://lore.kernel.org/all/4092672cb64b86ec3f300b4cf0ea0c2db2b52e2e.=
+1727699197.git.geert@linux-m68k.org/
+
+[2] https://lore.kernel.org/all/20241015001409.C4A33C4CEC7@smtp.kernel.org/
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
