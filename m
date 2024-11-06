@@ -1,372 +1,566 @@
-Return-Path: <linux-kselftest+bounces-21542-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21543-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA6589BF395
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 17:49:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4D659BF3D3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 18:01:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDCEE1C22006
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 16:49:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0296D1C235C5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 17:01:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 637C31DFE33;
-	Wed,  6 Nov 2024 16:49:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FBF9205131;
+	Wed,  6 Nov 2024 17:01:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K1UswQFQ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MtgJ1p15"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 034F484039
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Nov 2024 16:49:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB0284039
+	for <linux-kselftest@vger.kernel.org>; Wed,  6 Nov 2024 17:01:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730911773; cv=none; b=pAOQ3VSswKWU7Fy4uXhag599vUwmeDOHPgojYCKrDLjfV/grOhYhBzTlXIgQR6Y6dZOZybwykj7zRiWZOkQ/TDaK3DCbPAW+922kQgNGorDj1JDieZvj966sTFlYtX+AnrAif+9LvTW6alxL1Kk1Tt+aAdfqNFqOGK3dAjHwRu4=
+	t=1730912478; cv=none; b=prJCRnTlqOA+jskbYBPattkuVoBZy6u057XoFq3R3HsMRnmNHJ05O8WhaFkrmXgVSGJY9Gu7MNEFhTtRHEwBfIYkhozgdmvNnYcIFnNDOXVyeNZMfT6DRIBioq2fJB363rZcXgKdYcfMlyy4fqDHL45UpQ4IbDtjq4dYlSAar4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730911773; c=relaxed/simple;
-	bh=yvcdIkegWGzoa6Gq0K+tUK5cc03q7hzx+VzG3zVeUjA=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=b3cySIhZEmyXmdcdAiMKTioM5FVj1/hbwXc/mw3d1jtb4AphQJ3QEHhXMXfy6ZYseFhGfd3TBUSMoR4fTZ5d49Bdi+rkEsnHpbT00AD4VUakYG4mculSeNCIJwnkzE7rpXwjNGk8MzNqC0v6Vl7czYmZvA6qQQ9cgJAhk/mVvbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=K1UswQFQ; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5c941623a5aso1994100a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Nov 2024 08:49:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730911768; x=1731516568; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6S1AUHW6UBpRflThxXAxbKLUbtgUucNTLl+SKy8RQpU=;
-        b=K1UswQFQQXitNSkEOQm7lVDw/LxiHKnuqysWiXHqng6mRPZznY9NaCKpYx6SA3Vmdf
-         VMjWtZg7DBMEsjks0UyMRoynlA/JsFHsis1mNteugUWLGR1jj+qxhRbzWghMgwBQBg7O
-         4XQXypwG+KuRNhUIR9z8l98tzm5kGlcBlqAJzyWF/lNOSt+PmE6bu0dz0PjLcqygPviO
-         aEUs3ThITSCisVASVGR90G6V7rg61xnfpV9qI6MRNovb4YiYDI6vT7X5MYfH1fEbxMXw
-         gJWRxOsdu4JKDA7Sn3WyPXH1InI+kkkZPp715iNgB2yW7mLY6hP2ChtiMb3cccRb3V3Y
-         gxkw==
+	s=arc-20240116; t=1730912478; c=relaxed/simple;
+	bh=q9rihScmhZAOxpPIfbwAduusOgbC5ixRzXvVx3Qn0KU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lDe7m2/Z8RmG6XoWh4kI/yRv64HQ2gg1czfKrLlWYgA3vKKBq194ZMpW2ulaufaxraA9bjyrBL31V0RGdMAmA9BHZ60KHI2FFYpHZYt/eZEUNJ21iK75xb2GYLPfYgReQ4t6opMLu46+3DMvzne0V/H23J+hFDtmjPNOZMaOmSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MtgJ1p15; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1730912474;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=p6njKn4P9YVbv4L+ogmy0dcPnDK4/dU1er1B06b00o0=;
+	b=MtgJ1p15TK2j+qIhXNspX76OhgpLauPMOztKGsmNEg4NJaE9G9Ujg6KAF6KqafJw7OJrIQ
+	uSpTuahnkabcnDJBOBThmhHyM1chbYgw5YuqKDSTibj5O9P+CSwtWM2BL3Zlr8xDy+5Map
+	24PyvXrfuFUVWzXPX/qX3L2upk88tRE=
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
+ [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-520-yHNAd5lqN32Zv3Enb-Mmxg-1; Wed, 06 Nov 2024 12:01:13 -0500
+X-MC-Unique: yHNAd5lqN32Zv3Enb-Mmxg-1
+X-Mimecast-MFC-AGG-ID: yHNAd5lqN32Zv3Enb-Mmxg
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-6ea90b6ee2fso57374517b3.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Nov 2024 09:01:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730911768; x=1731516568;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6S1AUHW6UBpRflThxXAxbKLUbtgUucNTLl+SKy8RQpU=;
-        b=CpDcaNxdN9k0DtCIeb0hLeii8yTEoIfZOzC9XMVaOTm7PNboZrRp3s7v/Rer8i/OEE
-         +PdP3rJfnIemeur89RmlXNsD0ccI2rqEedYOY/w490Dx1EnZYc5ewaieVnJqAUpYDlMp
-         HtlVsQ+qm0gunQoT5YgeMkyBT9dTdVIOyvuSmCGlx+l7YIVzSIFSDJ8MAKzvw7hmVIbH
-         fe1UDG2KUWuPPb8uiMKdtSx0wOb8ZFKZk9wXeX1yOX6GwkRmq5shINik3zANm+0iKtgC
-         G+8+PYBcNSJYh3kOYgsnG3o+DncJwT7R9wAnNNqjLRuCHcHtbB2YItOtLgI/nCgdLuKV
-         ZhZQ==
-X-Gm-Message-State: AOJu0Yw0g0LMB8Dgw4CwI/IDf/8lL9CrHgrZGheLTA7xvVtvfOuCCrVD
-	bAZ2QamMTwQCuflCmwVOoW24Z6pkbYSk75Gg5XmbD8DzwgTCW3P2nzK4TXVCt9vRLPcmSGki5pP
-	5roeQYJRwYU6uPIN7mDFaEJUysj7QkwsXRdMtmmyeMGyAO/euDZg=
-X-Google-Smtp-Source: AGHT+IE9j3bBgrjKdmDnfCkgfLSm2KtizyP25tf5MyWWCZaP206UyG+YjHsS5DoNDDJEAUJxZcW9aUedaFj1NEXIvgE=
-X-Received: by 2002:a17:907:60cf:b0:a9e:82d2:2fe0 with SMTP id
- a640c23a62f3a-a9ec660e513mr347583466b.9.1730911768320; Wed, 06 Nov 2024
- 08:49:28 -0800 (PST)
+        d=1e100.net; s=20230601; t=1730912473; x=1731517273;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p6njKn4P9YVbv4L+ogmy0dcPnDK4/dU1er1B06b00o0=;
+        b=hPovZ6lGnoSMk+jai5g4+MFdPTtkYJFMlMW2IbbDoyU5Inu0qpzReTgVQ8/RY/By+P
+         KoEdvbVqighRYu/ymfPuvBJyOHKfdn6Qskhth03rnRXgpsBXNTFaP+Z6kn0Y91bMXzBf
+         NQFQRTIoqEy8XA2LX5am+AIifetqSyS9kpV6QNcNbmGW/ko7Xmf9DAedrpWb84KyNcDu
+         0aQVc/WRzs2xKs3ZExAE+bZ0sWs2x5GrFKHY8gT/h6YsV+esSdKj+Hipl/cmoQbKV6PR
+         KTUoO1FTz9oYYjHVcPCoP9N3Q8ju+GcRtKwDymqATZvjSAQz4PGyKY8RnBJheak9Fb0g
+         O5ow==
+X-Forwarded-Encrypted: i=1; AJvYcCVxL5pl/5R75ttn2dXAj8uAZ+VOMUpcGEctfCqd75U8u5m3cWb4LinEgfIUzaNPZL1oBxOIsaCnWqTyy+vnNQs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEbGS8gXSoqVHXyv2U1UKsvvPUkg2ivFQDTUUs9LHlgiYqdiWb
+	Y/rsPzDCn1pTfdIsSRowDvI9uVteOyTOFD1nZpBso67DHdD9EQg12/+QheKJaXX62RM2BLIwI4T
+	tRI6Yda4w3USimca/rfgdyyDC7iGDKFl8MufV059YrvfiTA7f5JPZ7OjUFlA35UA3PlzE5UKz9i
+	v+kSsURiTQCLUueWGiEvdjED7Bw+nz1WyVeV4AxaSZ
+X-Received: by 2002:a05:690c:61ca:b0:6e3:252c:408 with SMTP id 00721157ae682-6ea523cb2c8mr254640047b3.20.1730912472501;
+        Wed, 06 Nov 2024 09:01:12 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEcban3KNO2ycX02IVD7OOHSA1xjIU5RZ1dd1XrIqYbEGIFUzC5QcEqb7peE+ox4D6SVXnsW4TIgR9qxz1wytU=
+X-Received: by 2002:a05:690c:61ca:b0:6e3:252c:408 with SMTP id
+ 00721157ae682-6ea523cb2c8mr254639487b3.20.1730912471965; Wed, 06 Nov 2024
+ 09:01:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Konstantin Belov <konstantin.belov@linaro.org>
-Date: Wed, 6 Nov 2024 17:49:17 +0100
-Message-ID: <CAPZ5P5jj6pjZA4e4HMvNY=SFzf7Y0cBXP1kNTqi42WN+XhT7jQ@mail.gmail.com>
-Subject: Some thoughts on Linux benchmarks results & processing
-To: linux-kselftest@vger.kernel.org
+References: <CAK18DXYitS7hL1mA3QsPLmW9-R0q6Kin0C5Uv9fj=uS90WSnxA@mail.gmail.com>
+ <CABVgOSk1ng46scbJc-3qPZUhkn+0KrZsFDe-UYnw0q-XksP_2Q@mail.gmail.com>
+ <CAK18DXZtBdxQdYY06X+Q=vYybnkCLBQBioCLqvSfkYZ21jBSWg@mail.gmail.com> <CABVgOSkBF3fT5JdVCEpBRvO1V8ZgZ-dD7fvxcv7Rxb_XPcFNbg@mail.gmail.com>
+In-Reply-To: <CABVgOSkBF3fT5JdVCEpBRvO1V8ZgZ-dD7fvxcv7Rxb_XPcFNbg@mail.gmail.com>
+From: Donald Zickus <dzickus@redhat.com>
+Date: Wed, 6 Nov 2024 12:01:00 -0500
+Message-ID: <CAK18DXZM7sapjOHcsOUAEn_+Q+bvFUtL-CNjEgq373gpWr7r-w@mail.gmail.com>
+Subject: Re: [RFC] Test catalog template
+To: David Gow <davidgow@google.com>
+Cc: workflows@vger.kernel.org, automated-testing@lists.yoctoproject.org, 
+	linux-kselftest@vger.kernel.org, kernelci <kernelci@lists.linux.dev>, 
+	Nikolai Kondrashov <nkondras@redhat.com>, Gustavo Padovan <gustavo.padovan@collabora.com>, 
+	kernelci-members <kernelci-members@groups.io>, laura.nao@collabora.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hello colleagues,
+Hi,
 
-Following up on Tim Bird's presentation "Adding benchmarks results
-support to KTAP/kselftest", I would like to share some thoughts on
-kernel benchmarking and kernel performance evaluation. Tim suggested
-sharing these comments with the wider kselftest community for
-discussion.
+Thanks for the feedback. I created a more realistic test.yaml file to
+start (we can split it when more tests are added) and a parser.  I was
+going to add patch support as input to mimic get_maintainers.pl
+output, but that might take some time.  For now, you have to manually
+select a subsystem.  I will try to find space on kernelci.org to grow
+this work but you can find a git tree here[0].
 
-The topic of performance evaluation is obviously extremely complex, so
-I=E2=80=99ve organised my comments into several paragraphs, each of which
-focuses on a specific aspect. This should make it easier to follow and
-understand the key points, such as metrics, reference values, results
-data lake, interpretation of contradictory results, system profiles,
-analysis and methodology.
+From the README.md
+"""
+An attempt to map kernel subsystems to kernel tests that should be run
+on patches or code by humans and CI systems.
 
-# Metrics
-A few remarks on benchmark metrics which were called =E2=80=9Cvalues=E2=80=
-=9D in the
-original presentation:
-- Metrics must be accompanied by standardised units. This
-standardisation ensures consistency across different tests and
-environments, simplifying accurate comparisons and analysis.
-- Each metric should be clearly labelled with its nature or kind
-(throughput, speed, latency, etc). This classification is essential
-for proper interpretation of the results and prevents
-misunderstandings that could lead to incorrect conclusions.
-- Presentation contains "May also include allowable variance", but
-variance must be included into the analysis as we deal with
-statistical calculations and multiple randomised values.
-- I would like to note that other statistical parameters are also
-worth including into comparison, like confidence levels, sample size
-and so on.
+Examples:
 
-# Reference Values
-The concept of "reference values" introduced in the slides could be
-significantly enhanced by implementing a collaborative, transparent
-system for data collection and validation. This system could operate
-as follows:
-- Data Collection: Any user could submit benchmark results to a
-centralised and public repository. This would allow for a diverse
-range of hardware configurations and use cases to be represented.
-- Vendor Validation: Hardware vendors would have the opportunity to
-review submitted results pertaining to their products. They could then
-mark certain results as "Vendor Approved," indicating that the results
-align with their own testing and expectations.
-- Community Review: The broader community of users and experts could
-also review and vote on submitted results. Results that receive
-substantial positive feedback could be marked as "Community Approved,"
-providing an additional layer of validation.
-- Automated Validation: Reference values must be checked, validated
-and supported by multiple sources. This can be done only in an
-automatic way as those processes are time consuming and require
-extreme attention to details.
-- Transparency: All submitted results would need to be accompanied by
-detailed information about the testing environment, hardware
-specifications, and methodology used. This would ensure
-reproducibility and allow others to understand the context of each
-result.
-- Trust Building: The combination of vendor and community approval
-would help establish trust in the reference values. It would mitigate
-concerns about marketing bias and provide a more reliable basis for
-performance comparisons.
-- Accessibility: The system would be publicly accessible, allowing
-anyone to reference and utilise this data in their own testing and
-analysis.
+Find test info for a subsystem
 
-Implementation of such a system would require careful consideration of
-governance and funding. A community-driven, non-profit organisation
-sponsored by multiple stakeholders could be an appropriate model. This
-structure would help maintain neutrality and avoid potential conflicts
-of interest.
+./get_tests.py -s 'KUNIT TEST' --info
 
-While the specifics of building and managing such a system would need
-further exploration, this approach could significantly improve the
-reliability and usefulness of reference values in benchmark testing.
-It would foster a more collaborative and transparent environment for
-performance evaluation in the Linux ecosystem as well as attract
-interested vendors to submit and review results.
+Subsystem:    KUNIT TEST
+Maintainer:
+  David Gow <davidgow@google.com>
+Mailing List: None
+Version:      None
+Dependency:   ['python3-mypy']
+Test:
+  smoke:
+    Url: None
+    Working Directory: None
+    Cmd: ./tools/testing/kunit/kunit.py
+    Env: None
+    Param: run --kunitconfig lib/kunit
+Hardware:     arm64, x86_64
 
-I=E2=80=99m not very informed about the current state of the community in t=
-his
-field, but I=E2=80=99m sure you know better how exactly this can be done.
+Find copy-n-pastable tests for a subsystem
 
-# Results Data Lake
-Along with reference values it=E2=80=99s important to collect results on a
-regular basis as the kernel evolves so results must follow this
-evolution as well. To do this cloud-based data lake is needed (a
-self-hosted system will be too expensive from my point of view).
+./get_tests.py -s 'KUNIT TEST'
 
-This data lake should be able to collect and process incoming data as
-well as to serve reference values for users. Data processing flow
-should be quite standard: Collection -> Parsing + Enhancement ->
-Storage -> Analysis -> Serving.
+./tools/testing/kunit/kunit.pyrun --kunitconfig lib/kunit
+"""
 
-Tim proposed to use file names for reference files, I would like to
-note that such approach could fail pretty fast if system will collect
-more and more data and there will rise a need to have more granular
-and detailed features to identify reference results and this can lead
-to very long filenames, which will be hard to use. I propose to use
-UUID4-based identification, which provides very low chances for
-collision. Those IDs will be keys in the database with all information
-required for clear identification of relevant results and
-corresponding details. Moreover this approach can be easily extended
-on the database side if more data is needed.
+Is this aligning with what people were expecting?
 
-Yes, UUID4 is not human-readable, but do we need such an option if we
-have tools, which can provide a better interface?
+Cheers,
+Don
 
-For example, this could be something like:
----
-request: results-cli search -b "Test Suite D" -v "v1.2.3" -o "Ubuntu
-22.04" -t "baseline" -m "response_time>100"
-response:
-[
-{
-     "id": "550e8400-e29b-41d4-a716-446655440005",
-     "benchmark": "Test Suite A",
-     "version": "v1.2.3",
-     "target_os": "Ubuntu 22.04",
-     "metrics": {
-         "cpu_usage": 70.5,
-         "memory_usage": 2048,
-         "response_time": 120
-     },
-     "tags": ["baseline", "v1.0"],
-     "created_at": "2024-10-25T10:00:00Z"
-},
-...
-]
----
-or
-request: results-cli search "<Domain-Specific-Language-Query>"
-response: [ {}, {}, {}...]
----
-or
-request: results-cli get 550e8400-e29b-41d4-a716-446655440005
-response:
-{
-     "id": "550e8400-e29b-41d4-a716-446655440005",
-     "benchmark": "Test Suite A",
-     "version": "v1.2.3",
-     "target_os": "Ubuntu 22.04",
-     "metrics": {
-         "cpu_usage": 70.5,
-         "memory_usage": 2048,
-         "response_time": 120
-     },
-     "tags": ["baseline", "v1.0"],
-     "created_at": "2024-10-25T10:00:00Z"
-}
----
-or
-request: curl -X POST http://api.example.com/references/search \ -d '{
-"query": "benchmark =3D \"Test Suite A\" AND (version >=3D \"v1.2\" OR tag
-IN [\"baseline\", \"regression\"]) AND cpu_usage > 60" }'
-...
----
+[0] - https://github.com/dzickusrh/test-catalog/tree/main
 
-Another point of use DB-based approach is the following: in case when
-a user works with particular hardware and/or would like to use a
-reference he/she does not need a full database with all collected
-reference values, but only a small slice of it. This slice can be
-downloaded from public repo or accessed via API.
+On Sat, Oct 19, 2024 at 2:36=E2=80=AFAM David Gow <davidgow@google.com> wro=
+te:
+>
+> On Sat, 19 Oct 2024 at 04:17, Donald Zickus <dzickus@redhat.com> wrote:
+> >
+> > On Fri, Oct 18, 2024 at 3:22=E2=80=AFAM David Gow <davidgow@google.com>=
+ wrote:
+> > >
+> > > Hi Don,
+> > >
+> > > Thanks for putting this together: the discussion at Plumbers was very=
+ useful.
+> > >
+> > > On Tue, 15 Oct 2024 at 04:33, Donald Zickus <dzickus@redhat.com> wrot=
+e:
+> > > >
+> > > > Hi,
+> > > >
+> > > > At Linux Plumbers, a few dozen of us gathered together to discuss h=
+ow
+> > > > to expose what tests subsystem maintainers would like to run for ev=
+ery
+> > > > patch submitted or when CI runs tests.  We agreed on a mock up of a
+> > > > yaml template to start gathering info.  The yaml file could be
+> > > > temporarily stored on kernelci.org until a more permanent home coul=
+d
+> > > > be found.  Attached is a template to start the conversation.
+> > > >
+> > >
+> > > I think that there are two (maybe three) separate problems here:
+> > > 1. What tests do we want to run (for a given patch/subsystem/environm=
+ent/etc)?
+> >
+> > My thinking is this is maintainer's choice.  What would they like to
+> > see run on a patch to verify its correctness?  I would like to think
+> > most maintainers already have scripts they run before commiting
+> > patches to their -next branch.  All I am trying to do is expose what
+> > is already being done I believe.
+> >
+>
+> Agreed.
+>
+> >
+> > > 2. How do we describe those tests in such a way that running them can
+> > > be automated?
+> >
+> > This is the tricky part.  But I am going to assume that if most
+> > maintainers run tests before committing patches to their -next branch,
+> > then there is a good chance those tests are scripted and command line
+> > driven (this is the kernel community, right :-) ).  So if we could
+> > expose those scripts and make the copy-and-pastable such that
+> > contributors or testers (including CI bots) can just copy and run
+> > them.  Some maintainers have more complex environments and separating
+> > command line driven tests from the environment scripts might be
+> > tricky.
+> >
+> > Does that sound reasonable?
+>
+> Yeah: that's basically what I'd want.
+>
+> >
+> > > 3. (Exactly what constitutes a 'test'? A single 'test', a whole suite
+> > > of tests, a test framework/tool? What about the environment: is, e.g.=
+,
+> > > KUnit on UML different from KUnit on qemu-x86_64 different from KUnit
+> > > on qemu-arm64?)
+> > >
+> > > My gut feeling here is that (1) is technically quite easy: worst-case
+> > > we just make every MAINTAINERS entry link to a document describing
+> > > what tests should be run. Actually getting people to write these
+> > > documents and then run the tests, though, is very difficult.
+> >
+> > Well if I look at kunit or kselftest, really all you are doing as a
+> > subsystem maintainer is asking contributors or testers to run a 'make'
+> > command right?  Everything else is already documented I think.
+> >
+> > >
+> > > (2) is the area where I think this will be most useful. We have some
+> > > arbitrary (probably .yaml) file which describes a series of tests to
+> > > run in enough detail that we can automate it. My ideal outcome here
+> > > would be to have a 'kunit.yaml' file which I can pass to a tool
+> > > (either locally or automatically on some CI system) which will run al=
+l
+> > > of the checks I'd run on an incoming patch. This would include
+> > > everything from checkpatch, to test builds, to running KUnit tests an=
+d
+> > > other test scripts. Ideally, it'd even run these across a bunch of
+> > > different environments (architectures, emulators, hardware, etc) to
+> > > catch issues which only show up on big-endian or 32-bit machines.
+> > >
+> > > If this means I can publish that yaml file somewhere, and not only
+> > > give contributors a way to check that those tests pass on their own
+> > > machine before sending a patch out, but also have CI systems
+> > > automatically run them (so the results are ready waiting before I
+> > > manually review the patch), that'd be ideal.
+> >
+> > Yes, that is exactly the goal of this exercise.  :-) but instead of a
+> > kunit.yaml file, it is more of a test.yaml file with hundreds of
+> > subystems inside it (and probably a corresponding get_tests.pl
+> > script)[think how MAINTAINERS file operates and this is a sister
+> > file].
+> >
+> > Inside the 'KUNIT' section would be a container of tests that would be
+> > expected to run (like you listed).  Each test has its own command line
+> > and params.
+> >
+>
+> Yeah. My hope is we can have a "run_tests" tool which parses that
+> file/files and runs everything.
+>
+> So whether that ends up being:
+> run_tests --subsystem "KUNIT" --subsystem "MM"
+> or
+> run_test --file "kunit.yaml" --file "mm.yaml"
+> or even
+> run_test --patch "my_mm_and_kunit_change.patch"
+>
+> A CI system can just run it against the changed files in patches, a
+> user who wants to double check something specific can override it to
+> force the tests for a subsystem which may be indirectly affected. And
+> if you're working on some new tests, or some private internal ones,
+> you can keep your own yaml file and pass that along too.
+>
+> > >
+> > > > Longer story.
+> > > >
+> > > > The current problem is CI systems are not unanimous about what test=
+s
+> > > > they run on submitted patches or git branches.  This makes it
+> > > > difficult to figure out why a test failed or how to reproduce.
+> > > > Further, it isn't always clear what tests a normal contributor shou=
+ld
+> > > > run before posting patches.
+> > > >
+> > > > It has been long communicated that the tests LTP, xfstest and/or
+> > > > kselftests should be the tests  to run.  However, not all maintaine=
+rs
+> > > > use those tests for their subsystems.  I am hoping to either captur=
+e
+> > > > those tests or find ways to convince them to add their tests to the
+> > > > preferred locations.
+> > > >
+> > > > The goal is for a given subsystem (defined in MAINTAINERS), define =
+a
+> > > > set of tests that should be run for any contributions to that
+> > > > subsystem.  The hope is the collective CI results can be triaged
+> > > > collectively (because they are related) and even have the numerous
+> > > > flakes waived collectively  (same reason) improving the ability to
+> > > > find and debug new test failures.  Because the tests and process ar=
+e
+> > > > known, having a human help debug any failures becomes easier.
+> > > >
+> > > > The plan is to put together a minimal yaml template that gets us go=
+ing
+> > > > (even if it is not optimized yet) and aim for about a dozen or so
+> > > > subsystems.  At that point we should have enough feedback to promot=
+e
+> > > > this more seriously and talk optimizations.
+> > > >
+> > > > Feedback encouraged.
+> > > >
+> > > > Cheers,
+> > > > Don
+> > > >
+> > > > ---
+> > > > # List of tests by subsystem
+> > >
+> > > I think we should split this up into several files, partly to avoid
+> > > merge conflicts, partly to make it easy to maintain custom collection=
+s
+> > > of tests separately.
+> > >
+> > > For example, fs.yaml could contain entries for both xfstests and fs
+> > > KUnit and selftests.
+> >
+> > I am not opposed to the idea.  But I am a fan of the user experience.
+> > So while an fs.yaml might sound good, is it obvious to a contributor
+> > or tester that given a patch, do they know if fs.yaml is the correct
+> > yaml file to parse when running tests?  How do you map a patch to a
+> > yaml file?  I was trying to use subsystems like MAINTAINERS (and
+> > get_maintainers.pl) as my mapping.  Open to better suggestions.
+> >
+>
+> One option would be to have multiple files, which still have the
+> MAINTAINERS subsystems listed within, and worst-case a tool just
+> parses all of the files in that directory until it finds a matching
+> one. Maybe a bit slower than having everything in the one file, but it
+> sidesteps merge conflicts well.
+>
+> But ideally, I'd like (as mentioned below) to have a tool which I can
+> use to run tests locally, and being able to run, e.g.,
+> ./run_tests --all -f fs.yaml
+> If I want to specify the tests I want to run manually, personally I
+> think a filename would be a bit nicer than having to pass through,
+> e.g., subsystem names.
+>
+>
+> > >
+> > > It's also probably going to be necessary to have separate sets of
+> > > tests for different use-cases. For example, there might be a smaller,
+> > > quicker set of tests to run on every patch, and a much longer, more
+> > > expensive set which only runs every other day. So I don't think
+> > > there'll even be a 1:1 mapping between 'test collections' (files) and
+> > > subsystems. But an automated way of running "this collection of tests=
+"
+> > > would be very useful, particularly if it's more user-friendly than
+> > > just writing a shell script (e.g., having nicely formatted output,
+> > > being able to run things in parallel or remotely, etc).
+> >
+> > I don't disagree.  I am trying to start small to get things going and
+> > some momentum.  I proposed a container of tests section.  I would like
+> > to think adding another field in each individual test area like
+> > (short, medium, long OR mandatory, performance, nice-to-have) would be
+> > easy to add to the yaml file overall and attempt to accomplish what
+> > you are suggesting.  Thoughts?
+> >
+>
+> I think that'd be a great idea. Maybe a "stage" field could work, too,
+> where later tests only run if the previous ones pass. For example:
+> Stage 0: checkpatch, does it build
+> Stage 1: KUnit tests, unit tests, single architecture
+> Stage 2: Full boot tests, selftests, etc
+> Stage 3: The above tests on other architectures, allyesconfig, randconfig=
+, etc.
+>
+> Regardless, it'd be useful to be able to name individual tests and/or
+> configurations and manually trigger them and/or filter on them.
+>
+> _Maybe_ it makes sense to split up the "what tests to run" and "how
+> are they run" bits. The obvious split here would be to have the test
+> catalogue just handle the former, and the "how they're run" bit
+> entirely live in shell scripts. But if we're going to support running
+> tests in parallel and nicely displaying results, maybe there'll be a
+> need to have something more data driven than a shell script.
+>
+> > >
+> > > > #
+> > > > # Tests should adhere to KTAP definitions for results
+> > > > #
+> > > > # Description of section entries
+> > > > #
+> > > > #  maintainer:    test maintainer - name <email>
+> > > > #  list:                mailing list for discussion
+> > > > #  version:         stable version of the test
+> > > > #  dependency: necessary distro package for testing
+> > > > #  test:
+> > > > #    path:            internal git path or url to fetch from
+> > > > #    cmd:            command to run; ability to run locally
+> > > > #    param:         additional param necessary to run test
+> > > > #  hardware:      hardware necessary for validation
+> > > > #
+> > > > # Subsystems (alphabetical)
+> > > >
+> > > > KUNIT TEST:
+> > >
+> > > For KUnit, it'll be interesting to draw the distinction between KUnit
+> > > overall and individual KUnit suites.
+> > > I'd lean towards having a separate entry for each subsystem's KUnit
+> > > tests (including one for KUnit's own tests)
+> >
+> > KUNIT may not have been the best 'common' test example due to its
+> > complexities across other subsystems. :-/
+> >
+>
+> Yeah: I think KUnit tests are a good example of the sorts of tests
+> which would be relatively easy to integrate, but KUnit as a subsystem
+> can be a bit confusing as an example because no-one's sure if we're
+> talking about KUnit-the-subsystem or KUnit-the-tests.
+>
+> > >
+> > > >   maintainer:
+> > > >     - name: name1
+> > > >       email: email1
+> > > >     - name: name2
+> > > >       email: email2
+> > > >   list:
+> > >
+> > > How important is it to have these in the case where they're already i=
+n
+> > > the MAINTAINERS file? I can see it being important for tests which
+> > > live elsewhere, though eventually, I'd still prefer the subsystem
+> > > maintainer to take some responsibility for the tests run for their
+> > > subsystems.
+> >
+> > I wasn't sure if all subsystem maintainers actually want to maintain
+> > the tests too or just point someone else at it.  I look at LTP as an
+> > example here.  But I could be wrong.
+> >
+>
+> Fair enough. Maybe we just make this optional, and if empty we
+> "default" to the subsystem maintainer.
+>
+> > >
+> > > >   version:
+> > >
+> > > This field is probably unnecessary for test frameworks which live in
+> > > the kernel tree.
+> >
+> > Possibly.  It was brought up at Plumbers, so I included it for complete=
+ness.
+> >
+>
+> Yeah. Again, good to have, but make it optional.
+>
+> > >
+> > > >   dependency:
+> > > >     - dep1
+> > > >     - dep2
+> > >
+> > > If we want to automate this in any way, we're going to need to work
+> > > out a way of specifying these. Either we'd have to pick a distro's
+> > > package names, or have our own mapping.
+> >
+> > Agreed.  I might lean on what 'perf' outputs.  They do dependency
+> > detection and output suggested missing packages.  Their auto detection
+> > of already included deps is rather complicated though.
+> >
+>
+> Sounds good.
+>
+> > >
+> > > (A part of me really likes the idea of having a small list of "known"
+> > > dependencies: python, docker, etc, and trying to limit tests to using
+> > > those dependencies. Though there are plenty of useful tests with more
+> > > complicated dependencies, so that probably won't fly forever.)
+> >
+> > Hehe.  For Fedora/RHEL at least, python has hundreds of smaller
+> > library packages.  That is tricky.  And further some tests like to
+> > compile, which means a bunch of -devel packages.  Each distro has
+> > different names for their -devel packages. :-/
+> > But a side goal of this effort is to define some community standards.
+> > Perhaps we can influence things here to clean up this problem??
+> >
+>
+> That'd be nice. :-)
+>
+> > >
+> > > >   test:
+> > > >     - path: tools/testing/kunit
+> > > >       cmd:
+> > > >       param:
+> > > >     - path:
+> > > >       cmd:
+> > > >       param:
+> > >
+> > > Is 'path' here supposed to be the path to the test binary, the workin=
+g
+> > > directory, etc?
+> > > Maybe there should be 'working_directory', 'cmd', 'args', and 'env'.
+> >
+> > The thought was the command to copy-n-paste to run the test after
+> > installing it.  I am thinking most tests might be a git-clone or
+> > exploded tarball, leaving the path to be from the install point.  So
+> > maybe working_directory is more descriptive.
+> >
+>
+> Sounds good. In the KUnit case, the tooling currently expects the
+> working directory to be the root of the kernel checkout, and the
+> command to be "./tools/testing/kunit/kunit.py"...
+>
+> > >
+> > > >   hardware: none
+> > >
+> > >
+> > >
+> > > For KUnit, I'd imagine having a kunit.yaml, with something like this,
+> > > including the KUnit tests in the 'kunit' and 'example' suites, and th=
+e
+> > > 'kunit_tool_test.py' test script:
+> > >
+> > > ---
+> > > KUnit:
+> > >   maintainer:
+> > >     - name: David Gow
+> > >       email: davidgow@google.com
+> > >     - name: Brendan Higgins
+> > >       email: brendan.higgins@linux.dev
+> > >   list: kunit-dev@googlegroups.com
+> > >   dependency:
+> > >     - python3
+> > >   test:
+> > >     - path: .
+> > >       cmd: tools/testing/kunit.py
+> > >       param: run kunit
+> > >     - path: .
+> > >       cmd: tools/testing/kunit.py
+> > >       param: run example
+> > >   hardware: none
+> > > KUnit Tool:
+> > >   maintainer:
+> > >     - name: David Gow
+> > >       email: davidgow@google.com
+> > >     - name: Brendan Higgins
+> > >       email: brendan.higgins@linux.dev
+> > >   list: kunit-dev@googlegroups.com
+> > >   dependency:
+> > >     - python3
+> > >   test:
+> > >     - path: .
+> > >       cmd: tools/testing/kunit_tool_test.py
+> > >       param:
+> > >   hardware: none
+> > > ---
+> > >
+> > > Obviously there's still some redundancy there, and I've not actually
+> > > tried implementing something that could run it. It also lacks any
+> > > information about the environment. In practice, I have about 20
+> > > different kunit.py invocations which run the tests with different
+> > > configs and on different architectures. Though that might make sense
+> > > to keep in a separate file to only run if the simpler tests pass. And
+> > > equally, it'd be nice to have a 'common.yaml' file with basic patch
+> > > and build tests which apply to almost everything (checkpatch, make
+> > > defconfig, maybe even make allmodconfig, etc).
+> >
+> > Nice, thanks for the more detailed example.
+> >
+>
+> Thanks,
+> -- David
 
-# Large results dataset
-If we collect a large benchmarks dataset in one place accompanied with
-detailed information about target systems from which this dataset was
-collected, then it will allow us to calculate precise baselines across
-different compositions of parameters, making performance deviations
-easier to detect. Long-term trend analysis can identify small changes
-and correlate them with updates, revealing performance drift.
-
-Another use of such a database - predictive modelling, which can
-provide forecasts of expected results and setting dynamic performance
-thresholds, enabling early issue detection. Anomaly detection becomes
-more effective with context, distinguishing unusual deviations from
-normal behaviour.
-
-# Interpretation of contradictory results
-It=E2=80=99s not clear how to deal with contradictory results to make a
-decision on regression presence. For example, we have a set of 10
-tests, which test more or less the same, for example disk performance.
-It=E2=80=99s unclear what to do when one subset of tests show degradation a=
-nd
-another subset shows neutral status or improvements. Is there a
-regression?
-
-I suppose that the availability of historical data can help to deal
-with such situations as historical data can show behaviour of
-particular tests and allow to assign weights in decision-making
-algorithms, but it=E2=80=99s just my guess.
-
-# System Profiles
-Tim's idea to reduce results to - =E2=80=9Cpass / fail=E2=80=9D and my expe=
-rience with
-various people trying to interpret benchmarking results led me to
-think of =E2=80=9Cprofiles=E2=80=9D - a set of parameters and metrics colle=
-cted from a
-reference system while execution of a particular configuration of a
-particular benchmark.
-
-Profiles can be used for A/B comparison with pass/fail outcomes or
-match/not match, and this approach does not hide/miss the details and
-allows to capture multiple characteristics of the experiment, like
-presence of outliers/errors or skewed distribution form. Interested
-persons (like kernel developers or performance engineers, for example)
-can dig deeper to find a reason for such mismatch and those who are
-interested just in high-level results - pass/fail should be enough.
-
-Here is how I imaging a structure of a profile:
----
-profile_a:
-  system packages:
-   - pkg_1
-   - pkg_2
-   # Additional packages...
-
-settings:
-   - cmdline
-   # Additional settings...
-
-indicators:
-   cpu: null
-   ram: null
-   loadavg: null
-   # Additional indicators...
-
-benchmark:
-settings:
-   param_1: null
-   param_2: null
-   param_x: null
-
-metrics:
-   metric_1: null
-   metric_2: null
-   metric_x: null
----
-
-- System Packages, System Settings: Usually we do not pay much
-attention to this, but I think it=E2=80=99s worth highlighting that base OS=
- is
-an important factor, as there are distribution-specific modifications
-present in the filesystem. Most commonly developers and researchers
-use Ubuntu (as the most popular distro) or Debian (as a cleaner and
-lightweight version of Ubuntu), but distributions apply their own
-patches to the kernel and system libraries, which may impact
-performance. Another kind of base OS - cloud OS images which can be
-modified by cloud providers to add internal packages & services which
-could potentially affect performance as well. While comparing we must
-take into account this aspect to compare apples-to-apples.
-- System Indicators: These are periodic statistics like CPU
-utilisation, RAM consumption, and other params collected before
-benchmarking, while benchmarking and after benchmarking.
-- Benchmark Settings: Benchmarking systems have multiple parameters,
-so it=E2=80=99s important to capture them and use them in analysis.
-- Benchmark Metrics: That=E2=80=99s obviously - benchmark results. It=E2=80=
-=99s not a
-rare case when a benchmark test provides more than a single number.
-
-# Analysis
-Proposed rules-based analysis will work only for highly determined
-environments and systems, where rules can describe all the aspects.
-Rule-based systems are easier to understand and implement than other
-types, but for a small set of rules. However, we deal with the live
-system and it constantly evolves, so rules will deprecate extremely
-fast. It's the same story as with rule-based recommended systems in
-early years of machine learning.
-
-If you want to follow a rules-based approach, it's probably worth
-taking a look at https://www.clipsrules.net as this will allow to
-decouple results from analysis and avoid reinventing the analysis
-engine.
-
-Declaration of those rules will be error-prone due to the nature of
-their origin - they must be declared and maintained by humans. IMHO a
-human-less approach and use modern ML methods instead would be more
-beneficial in the long run.
-
-# Methodology
-Used methodology - another aspect which is not directly related to
-Tim's slides, but it's an important topic for results processing and
-interpretation, probably an idea of automated results interpretation
-can force use of one or another methodology.
-
-# Next steps
-I would be glad to participate in further discussions and share
-experience to improve kernel performance testing automation, analysis
-and interpretation of results. If there is interest, I'm open to
-collaborating on implementing some of these ideas.
---
-Best regards,
-Konstantin Belov
 
