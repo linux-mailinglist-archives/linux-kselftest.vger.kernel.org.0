@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-21555-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21556-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 693C39BF9C5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 00:14:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 240189BF9C6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 00:14:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 647DC283E4B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 23:14:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47F551C21ACE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2024 23:14:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3678720E01D;
-	Wed,  6 Nov 2024 23:14:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E52920E306;
+	Wed,  6 Nov 2024 23:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="AzXCI5i1";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="c3sGc127"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="tUnTnZid";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="M5fk3Reu"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599DB20E007;
-	Wed,  6 Nov 2024 23:14:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B210920E03C;
+	Wed,  6 Nov 2024 23:14:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730934846; cv=none; b=rR2pcINlL6m5uAuP6g6EHk2H4DUbbEir0+hXkO2zGJCnNGdtYzGkZPuVSxCmXvb4dMYhF6ouK+326oRPjiMKZL9caIZSX86FHGZ/SB1ZeLraQX9aDG66aGZUdszCd9Jy6CoZKiXoZyV51Y8zrs/k4spu/0uOH/VPsIVRQXkLzCE=
+	t=1730934848; cv=none; b=ByXPMN+Fgd094FO6fzWlZGIZILCFfylLPp1nWPAsEZLU3Ztq34noyLoUwfX8/vzFibj4Y70uj9M1VHkZtrrH5w1lqQV61hy8PhoIMRLxMfpcPD70Xw29GF8Npxkm282cGPwWSuHtKo2M4E0mdr3rUK2OS08shGjVJ47iMLngASg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730934846; c=relaxed/simple;
-	bh=kKq4KLJjKTmKFq6HrrEGgHDZGi7jDEC/6JfZWh4tvS8=;
+	s=arc-20240116; t=1730934848; c=relaxed/simple;
+	bh=rXCNYxoxJcPmvIxxy0Avj2TITqZEFU2/8cnl/Uh3lWE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=acTRdxg1QrIod+j/FF9YP05+o2E0UMVxzBDupzhQII5tu//OL41f9Iw4Ag5+RRG0nQlMaOx2lrbZ33s5/0DOg+rdQiRIFnomwz/2SqCejwtD8uK9fwqontfv+EZltZ2KMs3Rr+bN3o9BrXE14+qbatZ6xHnP1RtuEMQk1CadTfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=AzXCI5i1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=c3sGc127; arc=none smtp.client-ip=202.12.124.138
+	 MIME-Version; b=VV8tvc5bk+stbCvQ7TBgBVieRXga6E3n2ITfqozxGe0TrEiemGPlfLsRTCKKsITMyUCEmdI8d5h0o6vvDaKkCMnFenLCSvWcmbX6+41d646ekAUIIzZG80GmCJ6zLA35Ce2sbzqSiHthbU4d3NeOZZtnCt49kFdaDUDCw8eqstU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=tUnTnZid; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=M5fk3Reu; arc=none smtp.client-ip=202.12.124.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailflow.stl.internal (Postfix) with ESMTP id 9A6F61D402D4;
-	Wed,  6 Nov 2024 18:14:03 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Wed, 06 Nov 2024 18:14:03 -0500
+Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
+	by mailflow.stl.internal (Postfix) with ESMTP id C36F61D402E4;
+	Wed,  6 Nov 2024 18:14:05 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Wed, 06 Nov 2024 18:14:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1730934843; x=
-	1730938443; bh=KDUuJiuTJX/7KApKXMYIprNbRPvf5XgGpZUgOUcww84=; b=A
-	zXCI5i1npxPgsshAPkdYVHEeUhWdm7Fmj8MX2vpEnpK6rV6xb/ZRWaTmXKP5Zczq
-	GVcsPLPE1XHUl7RkHhYK95r/Pf6Tu7O4+9y942TqoRixfvyjEYF+fn6VA+X1HI9p
-	fB+Q+ZZq3vKWhsKTEe34eJhq+H7TxojZ/kRPZPbpJLThQa9O3KYGNiWkoyuGC2rL
-	cniXCdKqD+SBJ73+qnpoSQ3+t6XoME2o4iEb5UmBIAmC2yDFgzCSSaElu+jaBzfY
-	rmWdKZUUw/s5HfhtaLw8Q8J4cdMBR4+DpRkmUEFRePUH8fFcDMTwvbMjAaFXIAZa
-	Pr3gNRDjRmJzvnMDg/jYg==
+	:reply-to:subject:subject:to:to; s=fm1; t=1730934845; x=
+	1730938445; bh=z2pmxZ1YgDOgUkHR9UX+jDUIkxOfNwEcS4gC3HCEiL8=; b=t
+	UnTnZideGp0ziWREJGhXBWOZJRTRBA7lG3pPaY661cEC5esRS06zFgAVDYOspTTi
+	dD6szKY16MmtBbERqudh4TAzaJVXZslGo+R9m0dlchiDeSjvvD1XTglKYz0M2TlG
+	cx0w6UJleZnc1pYi1nr8CpHwtRDgf7RQeAysWNlXlMgQBuvTV3KIme+nUn9NgCjU
+	7ujiYmQ0yP6YBH7V0TjuD7KB9lkEn12bhFUyQDbaH0vsYF3IUA9EzPd3uF95DWFR
+	IbVtpvKkfRBMqIPbfgJHtC8bWb9v+e4AENoFGxqIAcCyS2DTVZuLix19utop6I+j
+	Zn06ufyUCPpYJF4Qvd0Gw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1730934843; x=1730938443; bh=K
-	DUuJiuTJX/7KApKXMYIprNbRPvf5XgGpZUgOUcww84=; b=c3sGc127FG461wOw+
-	I1LkcvIisXfzLTdzK3v5Eu1ueaMefNsCz+FYsO47j2zd87vzzXgIf/3OyPSiCPCO
-	nWqcll8xqp2iuiVySF5lfP8NGKRZZkVk4929z4cAD3a+jMavmuBXTJIpFOnkUTBj
-	BNeb1ivRgIqeVyWhtIQO3/F7SVOCAQfi5T7YfXO96EULvqYh2KApdJgQdcZvD8uL
-	vFa34u/4INTicj6regASGjZgoFVB8Z6AKZLkLuKmups6Qk3AF7gSxM9FyCpcYuD5
-	ER45uIvclZntzo0z6qCCxuYDUBGGIzRGhTyjRnjTjKnV5+XlFNnSBf7X+CnfRdgZ
-	8slYw==
-X-ME-Sender: <xms:O_grZ1G2WSEon3Udnd35XwCM-InLSsbLQE4N7hmW8UFMkCy3nhHz2A>
-    <xme:O_grZ6WCoWWR0Lbi_eYaPfvfOMcfRK6dq7OQmKEVmQoM7MNgEuvzy1yMwefb31f60
-    4H58nYZ3f5zbskO8YM>
-X-ME-Received: <xmr:O_grZ3I2od7Nid1hplqvxv3gk2jauWz9IgdlLGQwWWh5ODCqIJQzThK8PYLV>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1730934845; x=1730938445; bh=z
+	2pmxZ1YgDOgUkHR9UX+jDUIkxOfNwEcS4gC3HCEiL8=; b=M5fk3ReuR4dU4/7i0
+	orr8x4q/d64xsNei4UTl4IwjhW3FVqzpgwuItE7oJ/xWGycEGmUQ5X/JW/lrmS92
+	XHhk3dap5NIVeqF9JKG99aP57HSXlBO/N9zWgD5D98dIJ3C+US7mZOPUfHmhJWsN
+	zS8BXdTpGi93XUayDFoSY5m+Ws74OUvBNB4ZX91ir4vtieyQluRRbv+oZaFJNxKw
+	GN7ZRku2rG5wCfdSLWfq6cFgLTqtKaCIp3tW2TQB1QAHkUpISHkn9vjntVfjVl3q
+	Ar1LJ/7f1otchlaRLz9uGT5L2o7FUEG7u25r3D7RR8oBYABWSiDf8kL5b4/zQ7tt
+	Q2aUQ==
+X-ME-Sender: <xms:PfgrZ7NRXkCowYK7bQs3Rp_6g8xlqmT3-WmIA1Qh10Xd_IQ1ZwKeog>
+    <xme:PfgrZ1-3ifgzuD80bjkat8qV1FENFudoBuTzUEqnNxnwY9-uxpRD2hwX6e_-bJJOF
+    c6j4gXcPzmwcrwSuek>
+X-ME-Received: <xmr:PfgrZ6TFVvKGinwu16qBK-GoRxkfEEh7u0KGvW2xjrZdYR7tQVjxE8zcJG0B>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrtdefgddtjecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
     tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
@@ -78,23 +78,23 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrtdefgddtjecutefuodetggdote
     ihhlrdhnvghtpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtth
     hopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgv
     lhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:O_grZ7EGivOf9ZK7tFWnbmFba-a2-aEoHIznzunGh6Axn4aNgxixsQ>
-    <xmx:O_grZ7WjN5m2D2ls_HQEYkvfIG0EkMHLoVeYl-LY5xlrN0Khti5-jQ>
-    <xmx:O_grZ2Puh5vkCQ-ZY1iejq5w-jGCahzi8Abn2l3FbkJAsnK9b1hOtQ>
-    <xmx:O_grZ60D72juRqP3K4LVU-FfGUw3sNWj0RNlB1U9J0OOM9lQxGHE4Q>
-    <xmx:O_grZ4iSzR-jDzXgfNima_wMFKQAmqKqMiHJgpAE_rX_yZc5I-i285N2>
+X-ME-Proxy: <xmx:PfgrZ_vqltSHumDuQcNSK9dWoqqY-wRe9qDG_1D6CoVPAsMbPTqa9A>
+    <xmx:PfgrZzdTB6H6O9s5DlPDKXWafWh3j2wZQqysDsA9Babpq9fKVcDtOQ>
+    <xmx:PfgrZ710fA7mola9qVx8ViNQOI9-oVK8EgTXzINQ37oLVFqPVnThAg>
+    <xmx:PfgrZ_8TufK8td_YO96xopH3HmLgEmdhcvUfqURzJN8BZfb0zKNv6w>
+    <xmx:PfgrZ0rwXjsaOoLSHz3naKCFqTmigj1bTz2DB-NPf_7FKhU_U1VlonB3>
 Feedback-ID: i934648bf:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 6 Nov 2024 18:14:02 -0500 (EST)
+ 6 Nov 2024 18:14:05 -0500 (EST)
 From: Sabrina Dubroca <sd@queasysnail.net>
 To: netdev@vger.kernel.org
 Cc: Sabrina Dubroca <sd@queasysnail.net>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 4/8] macsec: clean up local variables in macsec_notify
-Date: Thu,  7 Nov 2024 00:13:30 +0100
-Message-ID: <9b8996af518fbeb3b7d527feb15d5788495e3108.1730929545.git.sd@queasysnail.net>
+Subject: [PATCH net-next 5/8] macsec: inherit lower device's TSO limits when offloading
+Date: Thu,  7 Nov 2024 00:13:31 +0100
+Message-ID: <8240c0181e851f169d815f59658a01fb9dfc5073.1730929545.git.sd@queasysnail.net>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1730929545.git.sd@queasysnail.net>
 References: <cover.1730929545.git.sd@queasysnail.net>
@@ -106,78 +106,70 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-For all events, we need to loop over the list of secys, so let's move
-the common variables out of the switch/case.
+If macsec is offloaded, we need to follow the lower device's
+capabilities, like VLAN devices do.
+
+Leave the limits unchanged when the offload is disabled.
 
 Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
 ---
- drivers/net/macsec.c | 25 +++++++------------------
- 1 file changed, 7 insertions(+), 18 deletions(-)
+ drivers/net/macsec.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
 diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
-index bee1e0f95d2a..e6670e876ff6 100644
+index e6670e876ff6..24c190d9b959 100644
 --- a/drivers/net/macsec.c
 +++ b/drivers/net/macsec.c
-@@ -4441,31 +4441,26 @@ static int macsec_notify(struct notifier_block *this, unsigned long event,
- 			 void *ptr)
- {
- 	struct net_device *real_dev = netdev_notifier_info_to_dev(ptr);
-+	struct macsec_rxh_data *rxd;
-+	struct macsec_dev *m, *n;
- 	LIST_HEAD(head);
+@@ -2621,6 +2621,17 @@ static void macsec_set_head_tail_room(struct net_device *dev)
+ 	dev->needed_tailroom = real_dev->needed_tailroom + needed_tailroom;
+ }
  
- 	if (!is_macsec_master(real_dev))
- 		return NOTIFY_DONE;
- 
-+	rxd = macsec_data_rtnl(real_dev);
++static void macsec_inherit_tso_max(struct net_device *dev)
++{
++	struct macsec_dev *macsec = macsec_priv(dev);
 +
- 	switch (event) {
- 	case NETDEV_DOWN:
- 	case NETDEV_UP:
--	case NETDEV_CHANGE: {
--		struct macsec_dev *m, *n;
--		struct macsec_rxh_data *rxd;
--
--		rxd = macsec_data_rtnl(real_dev);
-+	case NETDEV_CHANGE:
- 		list_for_each_entry_safe(m, n, &rxd->secys, secys) {
- 			struct net_device *dev = m->secy.netdev;
++	/* if macsec is offloaded, we need to follow the lower
++	 * device's capabilities. otherwise, we can ignore them.
++	 */
++	if (macsec_is_offloaded(macsec))
++		netif_inherit_tso_max(dev, macsec->real_dev);
++}
++
+ static int macsec_update_offload(struct net_device *dev, enum macsec_offload offload)
+ {
+ 	enum macsec_offload prev_offload;
+@@ -2666,6 +2677,8 @@ static int macsec_update_offload(struct net_device *dev, enum macsec_offload off
+ 	macsec_set_head_tail_room(dev);
+ 	macsec->insert_tx_tag = macsec_needs_tx_tag(macsec, ops);
  
- 			netif_stacked_transfer_operstate(real_dev, dev);
- 		}
- 		break;
--	}
--	case NETDEV_UNREGISTER: {
--		struct macsec_dev *m, *n;
--		struct macsec_rxh_data *rxd;
--
--		rxd = macsec_data_rtnl(real_dev);
-+	case NETDEV_UNREGISTER:
- 		list_for_each_entry_safe(m, n, &rxd->secys, secys) {
- 			macsec_common_dellink(m->secy.netdev, &head);
- 		}
-@@ -4475,12 +4470,7 @@ static int macsec_notify(struct notifier_block *this, unsigned long event,
++	macsec_inherit_tso_max(dev);
++
+ 	netdev_update_features(dev);
  
- 		unregister_netdevice_many(&head);
- 		break;
--	}
--	case NETDEV_CHANGEMTU: {
--		struct macsec_dev *m;
--		struct macsec_rxh_data *rxd;
--
--		rxd = macsec_data_rtnl(real_dev);
-+	case NETDEV_CHANGEMTU:
- 		list_for_each_entry(m, &rxd->secys, secys) {
- 			struct net_device *dev = m->secy.netdev;
- 			unsigned int mtu = real_dev->mtu - (m->secy.icv_len +
-@@ -4490,7 +4480,6 @@ static int macsec_notify(struct notifier_block *this, unsigned long event,
+ 	return ret;
+@@ -3537,6 +3550,8 @@ static int macsec_dev_init(struct net_device *dev)
+ 	if (err)
+ 		return err;
+ 
++	macsec_inherit_tso_max(dev);
++
+ 	dev->hw_features = real_dev->hw_features & MACSEC_OFFLOAD_FEATURES;
+ 	dev->hw_features |= NETIF_F_GSO_SOFTWARE;
+ 
+@@ -4479,6 +4494,13 @@ static int macsec_notify(struct notifier_block *this, unsigned long event,
+ 			if (dev->mtu > mtu)
  				dev_set_mtu(dev, mtu);
  		}
++		break;
++	case NETDEV_FEAT_CHANGE:
++		list_for_each_entry(m, &rxd->secys, secys) {
++			macsec_inherit_tso_max(m->secy.netdev);
++			netdev_update_features(m->secy.netdev);
++		}
++		break;
  	}
--	}
  
  	return NOTIFY_OK;
- }
 -- 
 2.47.0
 
