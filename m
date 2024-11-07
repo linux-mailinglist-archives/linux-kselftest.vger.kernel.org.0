@@ -1,141 +1,121 @@
-Return-Path: <linux-kselftest+bounces-21623-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21624-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C7309C0BF7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 17:50:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 689339C0C05
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 17:54:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87E811C21AF9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 16:50:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDAE31F22732
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 16:54:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9C46216A2F;
-	Thu,  7 Nov 2024 16:50:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5D3321620A;
+	Thu,  7 Nov 2024 16:54:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BMTzcpwK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="guuUxMAb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4BD021621D
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 Nov 2024 16:50:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002351BD007;
+	Thu,  7 Nov 2024 16:54:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730998224; cv=none; b=RSwHh4aM0MWx4DqJi6mFGa9QzOkyU16IBnQIU8NkxeNl/lC1lXZaHDxWHybaIF7xsNHqOb8N73qt5teizHe75aU+lvtu6rIlDuW9W7+QRXvHBkhQypkIG8BUbyqm01v+ObIlGMdrXMuq5MrAsS3WOMV/lDf+qWPvhIqbXE95d0o=
+	t=1730998473; cv=none; b=mHYJ/q0jpu2ULc+PWJnOEWEwf44kaWdCSoMSUTFgMZOzT7UUVt63En6CPoSMOXAqlbE9gNZo2a2RSTBNNpcoHi9QhKkS8xABHcvtRM58qj1+vq5Hr8McgdnPp45VQju9cfMuxtStXc6vskv2Grdd+dW3rpd6AqgaljOgoIaQnhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730998224; c=relaxed/simple;
-	bh=Go25yxnJIDquQSDueHhlrUidmW7oVvRZY71bnAVo97k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FLDx9+QZ1FIVjHaxhaduDyYGuUYI31zTeZzKnbObWOrhY/Q7LFoQ0D0ZY40xJjegWBtexARaJQ6P9FK6yTrlYjmEh8FLT2ZZWAm2aAi6VPjieYSXaHIvc+OA2duhU7vtsVcEabjJoR+pVxdg1m9/j4ovHz9AwRs7MLW/ne3Om14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BMTzcpwK; arc=none smtp.client-ip=209.85.167.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3e60fca5350so724707b6e.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Nov 2024 08:50:22 -0800 (PST)
+	s=arc-20240116; t=1730998473; c=relaxed/simple;
+	bh=YjR9XgoTaD6j/UmnPPlZ7iV9/VGfZG8Hi/1ZKtVLbcw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ruR6krTRpO+zws58Cnow/vxXNYVqB6m1gthw+4wX2+p9/KTMMLqXvcUcu6ovSFcB1w4IkwSkvudKHosO+dGfajMYUhhMHlIXhL10WgR5w70B9jBQbODuK1uADszSI9ZeOXZwnCloTJSalg+49v2/Tl/BFoe1MmtiyCFU2baujc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=guuUxMAb; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-37d6a2aa748so725073f8f.1;
+        Thu, 07 Nov 2024 08:54:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1730998222; x=1731603022; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nH0O+1ikWMG8QC8IE2A8+a7BT7IU8/OaYlea9rc3Ptc=;
-        b=BMTzcpwKNJWqQTcwjJjb424yYXhNt7woiDldbRvWh9p6ZPKQ4ONVhKTDGlQNnvIkZp
-         2eX7hleNs1CLbpFzBx87hQosRMPhbxBDG9MlAiqzoKshhYZb+yGjGvdbhi/gBsz3LYWP
-         bMJGv2kQzhI69FXbJAKYKr+02SNK0/NmM1VSk=
+        d=gmail.com; s=20230601; t=1730998470; x=1731603270; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YjR9XgoTaD6j/UmnPPlZ7iV9/VGfZG8Hi/1ZKtVLbcw=;
+        b=guuUxMAbZ/fZBhVXjph1XsOVGgPFRLIunKP9beqA0Q9j7CyVvXw60LZYPYn/CtjHTt
+         XB1IjQSzo6eMIsAAF4XYJw07bCv/X+xr2JzmNUlAQ+lNI6EaZckXYouVByP0R0tnwUmI
+         9hYa0q7tovX4Ic03dwckue7oLgObLO1lP5JR7iQhFgn71JS4LNjpG2haFOqHXKM0ZByZ
+         hsfhEKFzguvw6VHwjHjwQA7TdxPpNMzr8K+JwJIrMfYstpj2rfNnbkNBZDg6DOiXxByB
+         wXqvi+vcD2/FZp5VDPOKfUV/jZUz4UFSu6UjCoZStbVixlBEMWeEx9bkS96Ass5iY+MG
+         UdvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730998222; x=1731603022;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nH0O+1ikWMG8QC8IE2A8+a7BT7IU8/OaYlea9rc3Ptc=;
-        b=UEPBdtuYYwAtu+JdE3e98l6/McESIp5kIYDmobNMevjRRwW1nrCWN44yqya7lsKhOV
-         PDHOcp4z7OPFr8cBVxyyT+mZPnEaCvubWqAaxHGvgXUAiXBENk/G4lJdsMkQDjKBIfBa
-         +9iTeeOBs7I4qZ9C9fy7Sccvc4FpfZ94IOYktHUka27zjzPw0NuHVD2kuidE6Fz2HQvs
-         WdQMwn47x7aJ15kRWUP608a9CGrSga98BicvEG1m6T3HNFJUgtad/a2+Fd3QBAjanlFU
-         T3Pe8HYPYtkvPYLwzWrpW5l4DilA/YXzYzd/zpSTuCJPaWysvWaZ8ScseqS2yGd8BVcY
-         P3WQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXhqcocrwhhRXvMRggyvfKyXRoCpf16nfr/cZe56s/7b1RmxKsOtFperJ23OWGNx295bcwCg/qC1WAWU1ZZ204=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNOFf7jo3RXnLkPbtFKaFhHF3FvNsWB9cwLQtYfkjOT4WZ8YW5
-	B9QMJk89ov2YnsWn7iKPjhQzMZ0kvvXBG+4/aKwGk0pXdhhlcG+8pabMo4UF6Cc=
-X-Google-Smtp-Source: AGHT+IFyR0ojR5woZ+2sRiyIAtT6NrnlTxRk6o3IwcKgmMiBK8pN+bSw5rHmGwTuEAWjxtrJMD1uaQ==
-X-Received: by 2002:a05:6808:338b:b0:3e6:2a7c:837f with SMTP id 5614622812f47-3e63849ee59mr41268395b6e.39.1730998221897;
-        Thu, 07 Nov 2024 08:50:21 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4de5f8335d6sm375540173.74.2024.11.07.08.50.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Nov 2024 08:50:21 -0800 (PST)
-Message-ID: <96cc8ce1-1f64-45d5-8567-eb2adba1b47a@linuxfoundation.org>
-Date: Thu, 7 Nov 2024 09:50:20 -0700
+        d=1e100.net; s=20230601; t=1730998470; x=1731603270;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YjR9XgoTaD6j/UmnPPlZ7iV9/VGfZG8Hi/1ZKtVLbcw=;
+        b=Cad2kdeCPciIV7ECDZaaSnp0qDhf3ighY1W23oZnDRtZfO2vu/RztKXIZkgjp5/rwF
+         yfV5FzPpk2qU4QIyu5SfCGJfOrRqRnFnF3M5Y/7D0/kWfMjPhIAnhqxzAeICY2Jw/8qQ
+         EwAery/tihBZnOE5N5geJzEIkxTd3mbQBHCWtHqj24YS9s8ZJMICZu1oO/+kZlk5CUOQ
+         MO1pcObrMm8kBjg8GDZoJnZJ0ak0c9pKxkj2mmJi1YHMDHz70WKHWGcj6Ua22R+yXEQm
+         V0Kni3yL/8zCzJ4ItN7ygG9sjhkwrsapqtIf7W1APjWo5Yt8p4/NFW7INnEERuvWtN3g
+         atwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUFJad/D8yNnhTaehmL0NXT/Jp036K6mXYoyZcLvpJvQ0sIpsQ+w39jPZk66EC9JEUx8tflAbdA+Kf292fKRxQ=@vger.kernel.org, AJvYcCWpiBV1CS/PXrCBlZm0f50KSDQNHW8oNmlnBhTTkP1cXn9W9MpemO4StgzuBkphiokp45m03JL6@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdphoxSuwj9MAiehL2ScjrdYgyWJp0TGFYhsUj/uOcPW833Ri7
+	+akDrwZBcunMz6+0F4Sr19y0mh5++HpAR5h5bjBb1nmbELO+uIg5qjBINbLgZM7s1B2/xTrG5Rm
+	KF4exMg0i72w3drxtZPsznUL9k/0=
+X-Google-Smtp-Source: AGHT+IFbC+Sb2iP0XOwEMN7bNiSSUnyt16wp7V2RLOlj6Qx5ox4TKWGJWhoIHGCKICdvmlbDEjyuTeJwi+2y2XBLp20=
+X-Received: by 2002:a05:6000:1f8e:b0:37d:3301:9891 with SMTP id
+ ffacd0b85a97d-381c7a4c0e6mr17589877f8f.17.1730998470087; Thu, 07 Nov 2024
+ 08:54:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: Define PKEY_UNRESTRICTED for
- pkey_sighandler_tests
-To: Kevin Brodsky <kevin.brodsky@arm.com>,
- linux-arm-kernel@lists.infradead.org
-Cc: catalin.marinas@arm.com, dave.hansen@linux.intel.com,
- yury.khrustalev@arm.com, will@kernel.org, linux-kselftest@vger.kernel.org,
- Aishwarya TCV <aishwarya.tcv@arm.com>, Shuah Khan <skhan@linuxfoundation.org>
-References: <20241107131640.650703-1-kevin.brodsky@arm.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241107131640.650703-1-kevin.brodsky@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20241107133004.7469-1-shaw.leon@gmail.com> <20241107133004.7469-6-shaw.leon@gmail.com>
+ <CANn89iLvC0H+eb1q1c9X6M1Cr296oLTWYyBhqTAyGW_BusHA_A@mail.gmail.com>
+ <CABAhCOS8WUqOsPCzQFcgeJbz-mkEV92OVXaH3E1tFe7=HRiuGg@mail.gmail.com> <20241107075943.78bb160c@kernel.org>
+In-Reply-To: <20241107075943.78bb160c@kernel.org>
+From: Xiao Liang <shaw.leon@gmail.com>
+Date: Fri, 8 Nov 2024 00:53:55 +0800
+Message-ID: <CABAhCOSvhUZE_FE4xFsOimzVBQpQYLNk51uYNLw+46fibzfM2Q@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 5/8] net: ip_gre: Add netns_atomic module parameter
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>, 
+	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Ido Schimmel <idosch@nvidia.com>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, Simon Horman <horms@kernel.org>, 
+	Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Jiri Pirko <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/7/24 06:16, Kevin Brodsky wrote:
-> Commit 6e182dc9f268 ("selftests/mm: Use generic pkey register
-> manipulation") makes use of PKEY_UNRESTRICTED in
-> pkey_sighandler_tests. The macro has been proposed for addition to
-> uapi headers [1], but the patch hasn't landed yet.
-> 
-> Define PKEY_UNRESTRICTED in pkey-helpers.h for the time being to fix
-> the build.
+On Thu, Nov 7, 2024 at 11:59=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
+>
+> On Thu, 7 Nov 2024 22:11:24 +0800 Xiao Liang wrote:
+> > > Instead, add new rtnetlink attributes ?
+> >
+> > It is to control driver behavior at rtnl_ops registration time. I
+> > think rtnetlink
+> > attributes are too late for that, maybe? Can't think of a way other tha=
+n
+> > module parameters or register separate ops. Any suggestions?
+>
+> Step back from the implementation you have a little, forget that there
+> is a boolean in rtnl_link_ops. User makes a request to spawn an
+> interface, surely a flag inside that request can dictate how the netns
+> attrs are interpreted.
 
-What does mean to say "time being" - can this be removed in the
-future. If so please add a FIXME so this define can be removed
-later.
+IMO, this is about driver capability, not about user requests.
+As you've pointed out earlier, probably no one would actually want
+the old behavior whenever the driver supports the new one.
+I added the module parameter just for compatibility, because ip_tunnels
+was not implemented to support src_net properly. Yes it's possible to
+add an extra flag in user request, but I don't think it's a good approach.
 
-> 
-> [1] https://lore.kernel.org/all/20241028090715.509527-2-yury.khrustalev@arm.com/
-> 
-> Fixes: 6e182dc9f268 ("selftests/mm: Use generic pkey register
-> manipulation")
-> Reported-by: Aishwarya TCV <aishwarya.tcv@arm.com>
-> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
-> ---
-> 
-> Based on arm64 for-next/pkey-signal (49f59573e9e0).
-> 
-> ---
->   tools/testing/selftests/mm/pkey-helpers.h | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
-> index 9ab6a3ee153b..319f5b6b7132 100644
-> --- a/tools/testing/selftests/mm/pkey-helpers.h
-> +++ b/tools/testing/selftests/mm/pkey-helpers.h
-> @@ -112,6 +112,10 @@ void record_pkey_malloc(void *ptr, long size, int prot);
->   #define PKEY_MASK	(PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE)
->   #endif
->   
-> +#ifndef PKEY_UNRESTRICTED
-> +#define PKEY_UNRESTRICTED 0x0
-> +#endif
+BTW, I didn't find what's going on with module parameters, is there
+any documentation?
 
-Where would this be defined in the future? I couldn't find it
-in any kernel header files on linux-next.
-
-
-> +
->   #ifndef set_pkey_bits
->   static inline u64 set_pkey_bits(u64 reg, int pkey, u64 flags)
->   {
-
-thanks,
--- Shuah
+Thanks.
 
