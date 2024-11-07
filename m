@@ -1,94 +1,96 @@
-Return-Path: <linux-kselftest+bounces-21600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21601-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 866579C03D8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 12:24:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B43EF9C070E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 14:17:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DA0A1F23501
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 11:24:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AC4D1F22105
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 13:17:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12BF01F4FD7;
-	Thu,  7 Nov 2024 11:24:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jKNcUSyS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2F411EF08E;
+	Thu,  7 Nov 2024 13:17:39 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE371F4FAC;
-	Thu,  7 Nov 2024 11:24:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7507B322E
+	for <linux-kselftest@vger.kernel.org>; Thu,  7 Nov 2024 13:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730978655; cv=none; b=NO+1RvAL6p0w93tCt8VN+nk9uCSSTruvJY6k6IM1xmLBg2DLkqQtcdB8ICCBIAkwg2uiI0r9RUi6vB0C/wvsb3McMzYU3ex9NnI5y0lWVT5cdQeZFIVGuXlm/aoKOnrtC3vLD3yFzIB7y7PS54/u9pxMUovWfO0r6W3F0LWVYUg=
+	t=1730985459; cv=none; b=f2YPCtDATgmK06HhrT1D/9KxRXKUUQCvBl24yyjn2pUbiUURRn8xC0qkqfoYle1Pj4ltg8xUrGc+tAzHsmkSJdjSFipXWUW2Sjnqr1Brjh8TOX83G4fN03y767enlqRw/R+xrP0K0mir+zJTti0TvRXqmHICFi3pO0YcnBqoD4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730978655; c=relaxed/simple;
-	bh=GoNe6/q7REWxoVhFOfRrz2ijnlCfaDTpIKKYt2g7RSc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sHsNwkNiJUNYZCsvTNofhOZvABUjoKcMIrb3OaBN9f9oT1wfqygmT4k2KxHUJYiomi71E8lMSUsA+N4h5OW82RrVkEvs0mL4TF6sneaAOor+kDvrSDzCMUKy+6RzDduTdHjP5vS8jLRaqguVuC36u72xZ2aOFgP/CpNn964ItTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jKNcUSyS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BA30C4CECC;
-	Thu,  7 Nov 2024 11:24:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730978653;
-	bh=GoNe6/q7REWxoVhFOfRrz2ijnlCfaDTpIKKYt2g7RSc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jKNcUSySUY2gcgPgoGjUqf2LVi4NQw+GwGsz/vb7uTNqed46LWPa39tyTR21mrziR
-	 P96LakLbAsrR78ibhRehpVwYT1clA6AIdXbaSgrFLsslyivM8hikKPHLfyunkRmk4S
-	 Z8vJM96Kql1eCqEXQvq78C+n5VptHcW4Hl305AsyKxmBFdRgoltIPOU0ymkkqbterM
-	 E1IoT/bh3l/slCRtP7qYIefMDZrtQv7cW5sX/9z5xzGc/lbflaEKCuwWWsrTcgrXgg
-	 FGFYSVLavAQi5ONUEuzvEKh9rlyTnetwqMhzN0yEGp4+e0UoT4xE/pGR/GOXFcnFWc
-	 UV2jlhU1T4DXg==
-Date: Thu, 7 Nov 2024 11:24:08 +0000
-From: Will Deacon <will@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Shuah Khan <shuah@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] kselftest/arm64: fp-stress signal delivery
- interval improvements
-Message-ID: <20241107112407.GB15424@willie-the-truck>
-References: <20241030-arm64-fp-stress-interval-v2-0-bd3cef48c22c@kernel.org>
+	s=arc-20240116; t=1730985459; c=relaxed/simple;
+	bh=CHZ7QQlwVUkYoN4fFdMyI0YGcgnUYP/RLyTwB7dWOYY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bNx5RxXN5tlN6jHtUKqra1V6B+hGELyGT5yZFOWs2Szsv2emkHYPby4gDa6suS2KyAoeRdQdBISMXGbUoXPsNmEaTb/TxMg7D2LNSszsTEu5oGAYM3CvFcNqP18ka7HXb9/DSUf20pOHPPNssjvGdfuULN0W4oGm7FICz4KwT60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 808B7497;
+	Thu,  7 Nov 2024 05:18:04 -0800 (PST)
+Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 35CED3F66E;
+	Thu,  7 Nov 2024 05:17:33 -0800 (PST)
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+To: linux-arm-kernel@lists.infradead.org
+Cc: catalin.marinas@arm.com,
+	dave.hansen@linux.intel.com,
+	yury.khrustalev@arm.com,
+	will@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Kevin Brodsky <kevin.brodsky@arm.com>,
+	Aishwarya TCV <aishwarya.tcv@arm.com>
+Subject: [PATCH] selftests/mm: Define PKEY_UNRESTRICTED for pkey_sighandler_tests
+Date: Thu,  7 Nov 2024 13:16:40 +0000
+Message-ID: <20241107131640.650703-1-kevin.brodsky@arm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241030-arm64-fp-stress-interval-v2-0-bd3cef48c22c@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 30, 2024 at 12:02:01AM +0000, Mark Brown wrote:
-> One of the things that fp-stress does to stress the floating point
-> context switching is send signals to the test threads it spawns.
-> Currently we do this once per second but as suggested by Mark Rutland if
-> we increase this we can improve the chances of triggering any issues
-> with context switching the signal handling code.  Do a quick change to 
-> increase the rate of signal delivery, trying to avoid excessive impact
-> on emulated platforms, and a further change to mitigate the impact that
-> this creates during startup.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
-> Changes in v2:
-> - Minor clarifications in commit message and log output.
-> - Link to v1: https://lore.kernel.org/r/20241029-arm64-fp-stress-interval-v1-0-db540abf6dd5@kernel.org
-> 
-> ---
-> Mark Brown (2):
->       kselftest/arm64: Increase frequency of signal delivery in fp-stress
->       kselftest/arm64: Poll less often while waiting for fp-stress children
+Commit 6e182dc9f268 ("selftests/mm: Use generic pkey register
+manipulation") makes use of PKEY_UNRESTRICTED in
+pkey_sighandler_tests. The macro has been proposed for addition to
+uapi headers [1], but the patch hasn't landed yet.
 
-With these changes, I was easily able to reproduce the SVCR=0 bug so:
+Define PKEY_UNRESTRICTED in pkey-helpers.h for the time being to fix
+the build.
 
-Acked-by: Will Deacon <will@kernel.org>
+[1] https://lore.kernel.org/all/20241028090715.509527-2-yury.khrustalev@arm.com/
 
-for both.
+Fixes: 6e182dc9f268 ("selftests/mm: Use generic pkey register
+manipulation")
+Reported-by: Aishwarya TCV <aishwarya.tcv@arm.com>
+Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
+---
 
-Will
+Based on arm64 for-next/pkey-signal (49f59573e9e0).
+
+---
+ tools/testing/selftests/mm/pkey-helpers.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
+index 9ab6a3ee153b..319f5b6b7132 100644
+--- a/tools/testing/selftests/mm/pkey-helpers.h
++++ b/tools/testing/selftests/mm/pkey-helpers.h
+@@ -112,6 +112,10 @@ void record_pkey_malloc(void *ptr, long size, int prot);
+ #define PKEY_MASK	(PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE)
+ #endif
+ 
++#ifndef PKEY_UNRESTRICTED
++#define PKEY_UNRESTRICTED 0x0
++#endif
++
+ #ifndef set_pkey_bits
+ static inline u64 set_pkey_bits(u64 reg, int pkey, u64 flags)
+ {
+-- 
+2.43.0
+
 
