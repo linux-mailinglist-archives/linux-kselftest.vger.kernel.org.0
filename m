@@ -1,91 +1,57 @@
-Return-Path: <linux-kselftest+bounces-21599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C190B9C0214
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 11:17:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 866579C03D8
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 12:24:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 558B8B214EB
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 10:17:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DA0A1F23501
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 11:24:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F0141CC8A3;
-	Thu,  7 Nov 2024 10:17:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12BF01F4FD7;
+	Thu,  7 Nov 2024 11:24:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cZo9a6rt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jKNcUSyS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C055618A95A;
-	Thu,  7 Nov 2024 10:17:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE371F4FAC;
+	Thu,  7 Nov 2024 11:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730974626; cv=none; b=CWQImo1fD+FOZLBEOB8YXgpc9FPteSlTEXlDihbeo4QCsCiAn+4CPEOXLctFLDFPwtL3iw/a0Dus7LdNDrTxSxPvDwLCwMe7gMfFxLcxx+0qhyK5GgSZBtCnpDHKbeqFTihRP63heSFcfxHDrhi+hYSmHDTCPpUcA82qexTtLrk=
+	t=1730978655; cv=none; b=NO+1RvAL6p0w93tCt8VN+nk9uCSSTruvJY6k6IM1xmLBg2DLkqQtcdB8ICCBIAkwg2uiI0r9RUi6vB0C/wvsb3McMzYU3ex9NnI5y0lWVT5cdQeZFIVGuXlm/aoKOnrtC3vLD3yFzIB7y7PS54/u9pxMUovWfO0r6W3F0LWVYUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730974626; c=relaxed/simple;
-	bh=HYqpfkxWr8Ow+kzaQlf5o2ZYlR1fWsx2LF3jRjZQ3KY=;
+	s=arc-20240116; t=1730978655; c=relaxed/simple;
+	bh=GoNe6/q7REWxoVhFOfRrz2ijnlCfaDTpIKKYt2g7RSc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fkHYgOtDeL8Jrq4V3Zw1vbyg93+VpIY2CyiUaqgYgrzoJr5QAiNkr4/jMlcQ1hM1qP/XlO0l/3/B3EsjAuxDyYO4pGCpEiLgWfX2bs/sv72IzxqrQPThhwpdEaBzGVRE6TdsWYgwDvsrUwjZEEA8ehNvIujLktM6H0RPWprFJWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=idosch.org; spf=none smtp.mailfrom=idosch.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=cZo9a6rt; arc=none smtp.client-ip=103.168.172.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=idosch.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=idosch.org
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id D80911140169;
-	Thu,  7 Nov 2024 05:17:03 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Thu, 07 Nov 2024 05:17:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1730974623; x=1731061023; bh=KjDtng++x7uyEf8mWVjV7R093gpo4RXOMpk
-	X6BeUddU=; b=cZo9a6rte/z3zCHt3WD2jhdgJdP0TV5GrHZztq0IeOfkKgqmhqB
-	wgX+MY950SPiLqz2mdi4vEBNpCPBrGNtbVch6GU/QA8+wESqsXCkbOondJCcsFYX
-	XJ5sOEnKYziN1xQixdNRl1x5OL0SrYhcjSwXTcvZyn/eIHteK1Fy31JEUy8HwULQ
-	DJCR/cei3Xnn08AyAmtckDyFoBsXxW0FwVwIv4Yu4mb/f+cqXPhZXIYnes6FkWFR
-	BpzJ2UcJ726KvkvwHOevKXu+/MT7VfglHeT/+LLMAH8yLPNa8pjxb9jIA1ZyRr2x
-	cyPVlWoSQtTV9cL1N5rhNmtcPLrn9ftPpkg==
-X-ME-Sender: <xms:n5MsZyTt_CEokYqbBmg3agBFJimaFFqEgbLEwYAa2aA0zVAL83eSug>
-    <xme:n5MsZ3xs5dJDbOESozmvjn4QJLEnbMjaFhWRi-qZrDC9JiHkJj7LbNSTANlNWAj1S
-    oCZ_myU6Hoxxq8>
-X-ME-Received: <xmr:n5MsZ_3w1myQgAJ11Y312oxtfohYMOgsOy3jrlSZ9_3e1BkpEPEVK3CpNlQlEkJ63738P1xeJMYrtzADVLFv2gUbcFc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrtdeggddugecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
-    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuf
-    fkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcuufgthhhimhhmvghluceo
-    ihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvghrnhepvddufeevke
-    ehueegfedtvdevfefgudeifeduieefgfelkeehgeelgeejjeeggefhnecuvehluhhsthgv
-    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihguohhstghhsehiughosh
-    gthhdrohhrghdpnhgspghrtghpthhtohepuddupdhmohguvgepshhmthhpohhuthdprhgt
-    phhtthhopeguvghlihhrrghnsehvvghrughitghtrdhgghdprhgtphhtthhopehnvghtug
-    gvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegushgrhhgvrhhnsehk
-    vghrnhgvlhdrohhrghdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvg
-    htpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthho
-    pehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggsvghnihes
-    rhgvughhrghtrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:n5MsZ-BVJ0jxsWX_L1TDRQucHy6GMvHUjyOMpscGpUWgOT-6aSLRYA>
-    <xmx:n5MsZ7iUqraKpSgab--TjUXS_KfTO5ngSMYQDXwLif-7_mOjXw2jbw>
-    <xmx:n5MsZ6o-xTItRL50HeffFJbRnhySUAmjJN9Fink-N2XLugm0lWdQJA>
-    <xmx:n5MsZ-j7nXeJdV3t8HTZmVAO9Nf4oJ5E5Md2j-VN0-F5sZ9Ljk8Abw>
-    <xmx:n5MsZwbFP6onITfVoGkleazzRe8m8J8l5QtVBs4KIKiTKGvWHYhSIE4G>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 7 Nov 2024 05:17:02 -0500 (EST)
-Date: Thu, 7 Nov 2024 12:16:59 +0200
-From: Ido Schimmel <idosch@idosch.org>
-To: Vladimir Vdovin <deliran@verdict.gg>
-Cc: netdev@vger.kernel.org, dsahern@kernel.org, davem@davemloft.net,
-	edumazet@google.com, linux-kselftest@vger.kernel.org,
-	kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
-	horms@kernel.org, gnault@redhat.com
-Subject: Re: [PATCH net-next v9] net: ipv4: Cache pmtu for all packet paths
- if multipath enabled
-Message-ID: <ZyyTm45HwJvrgnNu@shredder>
-References: <20241107093629.311800-1-deliran@verdict.gg>
+	 Content-Type:Content-Disposition:In-Reply-To; b=sHsNwkNiJUNYZCsvTNofhOZvABUjoKcMIrb3OaBN9f9oT1wfqygmT4k2KxHUJYiomi71E8lMSUsA+N4h5OW82RrVkEvs0mL4TF6sneaAOor+kDvrSDzCMUKy+6RzDduTdHjP5vS8jLRaqguVuC36u72xZ2aOFgP/CpNn964ItTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jKNcUSyS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BA30C4CECC;
+	Thu,  7 Nov 2024 11:24:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730978653;
+	bh=GoNe6/q7REWxoVhFOfRrz2ijnlCfaDTpIKKYt2g7RSc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jKNcUSySUY2gcgPgoGjUqf2LVi4NQw+GwGsz/vb7uTNqed46LWPa39tyTR21mrziR
+	 P96LakLbAsrR78ibhRehpVwYT1clA6AIdXbaSgrFLsslyivM8hikKPHLfyunkRmk4S
+	 Z8vJM96Kql1eCqEXQvq78C+n5VptHcW4Hl305AsyKxmBFdRgoltIPOU0ymkkqbterM
+	 E1IoT/bh3l/slCRtP7qYIefMDZrtQv7cW5sX/9z5xzGc/lbflaEKCuwWWsrTcgrXgg
+	 FGFYSVLavAQi5ONUEuzvEKh9rlyTnetwqMhzN0yEGp4+e0UoT4xE/pGR/GOXFcnFWc
+	 UV2jlhU1T4DXg==
+Date: Thu, 7 Nov 2024 11:24:08 +0000
+From: Will Deacon <will@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Shuah Khan <shuah@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] kselftest/arm64: fp-stress signal delivery
+ interval improvements
+Message-ID: <20241107112407.GB15424@willie-the-truck>
+References: <20241030-arm64-fp-stress-interval-v2-0-bd3cef48c22c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,60 +60,35 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241107093629.311800-1-deliran@verdict.gg>
+In-Reply-To: <20241030-arm64-fp-stress-interval-v2-0-bd3cef48c22c@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Nov 07, 2024 at 09:36:24AM +0000, Vladimir Vdovin wrote:
-> +test_pmtu_ipv4_mp_exceptions() {
-> +	setup namespaces routing multipath || return $ksft_skip
-> +
-> +	trace "${ns_a}"  veth_A-R1    "${ns_r1}" veth_R1-A \
-> +	      "${ns_r1}" veth_R1-B    "${ns_b}"  veth_B-R1 \
-> +	      "${ns_a}"  veth_A-R2    "${ns_r2}" veth_R2-A \
-> +	      "${ns_r2}" veth_R2-B    "${ns_b}"  veth_B-R2
-> +
-> +	# Set up initial MTU values
-> +	mtu "${ns_a}"  veth_A-R1 2000
-> +	mtu "${ns_r1}" veth_R1-A 2000
-> +	mtu "${ns_r1}" veth_R1-B 1500
-> +	mtu "${ns_b}"  veth_B-R1 1500
-> +
-> +	mtu "${ns_a}"  veth_A-R2 2000
-> +	mtu "${ns_r2}" veth_R2-A 2000
-> +	mtu "${ns_r2}" veth_R2-B 1500
-> +	mtu "${ns_b}"  veth_B-R2 1500
-> +
-> +	fail=0
-> +
-> +	# Ping and expect two nexthop exceptions for two routes in nh group
-> +	run_cmd ${ns_a} ping -q -M want -i 0.1 -c 1 -s 1800 "${host4_b_addr}"
-> +
-> +	# Do route lookup before checking cached exceptions.
-> +	# The following commands are needed for dst entries to be cached
-> +	# in both paths exceptions and therefore dumped to user space
-> +	# Check that exceptions have been created with the correct PMTU
-> +	pmtu_a_R1="$(route_get_dst_pmtu_from_exception "${ns_a}" "${host4_b_addr}" oif veth_A-R1)"
-> +	pmtu_a_R2="$(route_get_dst_pmtu_from_exception "${ns_a}" "${host4_b_addr}" oif veth_A-R2)"
-> +
-
-In addition to the removal of 'fail=0' that you already mentioned, also
-need to flip the error messages:
-
-> +	check_pmtu_value "1500" "${pmtu_a_R1}" "exceeding MTU (veth_A-R2)" || return 1
-
-s/veth_A-R2/veth_A-R1/
-
-> +	check_pmtu_value "1500" "${pmtu_a_R2}" "exceeding MTU (veth_A-R1)" || return 1
-
-s/veth_A-R1/veth_A-R2/
-
-> +}
-> +
->  usage() {
->  	echo
->  	echo "$0 [OPTIONS] [TEST]..."
+On Wed, Oct 30, 2024 at 12:02:01AM +0000, Mark Brown wrote:
+> One of the things that fp-stress does to stress the floating point
+> context switching is send signals to the test threads it spawns.
+> Currently we do this once per second but as suggested by Mark Rutland if
+> we increase this we can improve the chances of triggering any issues
+> with context switching the signal handling code.  Do a quick change to 
+> increase the rate of signal delivery, trying to avoid excessive impact
+> on emulated platforms, and a further change to mitigate the impact that
+> this creates during startup.
 > 
-> base-commit: 66600fac7a984dea4ae095411f644770b2561ede
-> -- 
-> 2.43.5
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+> Changes in v2:
+> - Minor clarifications in commit message and log output.
+> - Link to v1: https://lore.kernel.org/r/20241029-arm64-fp-stress-interval-v1-0-db540abf6dd5@kernel.org
 > 
+> ---
+> Mark Brown (2):
+>       kselftest/arm64: Increase frequency of signal delivery in fp-stress
+>       kselftest/arm64: Poll less often while waiting for fp-stress children
+
+With these changes, I was easily able to reproduce the SVCR=0 bug so:
+
+Acked-by: Will Deacon <will@kernel.org>
+
+for both.
+
+Will
 
