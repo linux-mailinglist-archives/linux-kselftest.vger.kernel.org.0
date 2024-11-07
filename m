@@ -1,64 +1,62 @@
-Return-Path: <linux-kselftest+bounces-21620-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21621-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 964049C0AA4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 16:59:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E67B49C0ABC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 17:04:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 20391B224F4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 15:59:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 235A51C22A3A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 16:04:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9D38215017;
-	Thu,  7 Nov 2024 15:59:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F19B22144D6;
+	Thu,  7 Nov 2024 16:04:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WDZenKXU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EWOynBlx"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C1E212D2F;
-	Thu,  7 Nov 2024 15:59:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5832212F14;
+	Thu,  7 Nov 2024 16:04:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730995185; cv=none; b=hbaUAgEtJ3oeXY2gCjZ4pMaHqNUiS+1UBWHzttY1pItjtiADCY38Zr5M3sRFuwQKQKdws42AQpRWadMpY584fvOBcKeH4y7xHmzTmzkfLfhzFD4vWwwDyTWtwdsPO5Y/o5UiaeIRk3Iu8uephlTteF/wkTL7ZvPOwyTQsLI7K3s=
+	t=1730995461; cv=none; b=jSmMDn2t7SdhiZu67zvE7Ieu/ckyVaKnxdXnzziX+NpJxzl/fxJodYhwhEnBjPofCyAnDzjThp62AY+i1BxC2DW+icwnDmFwcIOIys2lRSFZT2f3TokH1LNgp3dEM0EypWUGP6NQJEPrNFIe8/Ca+ZZgqEoBmra77tSDu/cXTkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730995185; c=relaxed/simple;
-	bh=XOKShilNEm9Nnm1tXX9CAaQcYToZT7HxAyXsjNfZlo4=;
+	s=arc-20240116; t=1730995461; c=relaxed/simple;
+	bh=dCNMmr5zBxOA3bfbEXeGxa+VB0gJCMUECIq25V6staE=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=r5Qx71Z+8Rnzv7/aZKNZJTyNIKFC2X0aRBawEWnuctTZ2eZ7BLAXTw3+85jkJZZsNQODTo4vox6aRiaWuxHmQw+ZT9itQ3expb4LO4nuKVrYX2VYxeOxv7AfUu5IkDo+TTDafp24YpjqXq4M0pbH/i8cs/w6XniDfNy/LXKKLzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WDZenKXU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9C2FC4CECC;
-	Thu,  7 Nov 2024 15:59:44 +0000 (UTC)
+	 MIME-Version:Content-Type; b=osoXuz4mFPbdZ3mUCl9k1a16+RxNnfKh3pRU+OJGkVwCw3BekhPq8wa1ajgDMtkw9f4jd/QecTZdVKA22Ks6+tBILG73czepBWvXGT1TioFGXq8Y+g4Agg6YmJzW79a8xfPqMtufo44I+5jVgYZdKmDqtvCUIO+HZJ9sESd598g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EWOynBlx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA8AFC4CECC;
+	Thu,  7 Nov 2024 16:04:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730995185;
-	bh=XOKShilNEm9Nnm1tXX9CAaQcYToZT7HxAyXsjNfZlo4=;
+	s=k20201202; t=1730995461;
+	bh=dCNMmr5zBxOA3bfbEXeGxa+VB0gJCMUECIq25V6staE=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=WDZenKXUeXr7gS0DDjWrAL0m8nrkJYxyirYLZExoi2+lwJ6jfjQI1KMCXKmKOXGoK
-	 n8TEzDgP6Pd1rdz8q3CDKxEtLE+uy/qaU2F4cmbtpagz0Trd0NAFjC2o+06xztyF8D
-	 xb/yud13fgIrCH8YhanFBYmUtAvSsSIgU2cwSP1m9GBb0OeIHNmEHYJlBed6uRYGBD
-	 /ygFoevfgkLQbynA0jz3AC5rPk2F1BjBXCvwv0nOKOk/dCWkdsKo9uVNKaJrIihDHX
-	 sDCn6ihE7vlP39laURtRKIdkmRejTPP8f6MFYhNMZhRb0V7bjQ242+rPZBpdujTp83
-	 LhAnx6aveCqGg==
-Date: Thu, 7 Nov 2024 07:59:43 -0800
+	b=EWOynBlxu+wR96ilgRqOT460rhUM2cuzX4KpTEZBVgDeK5f5a7JjBi4LB8y6PqJwO
+	 V4b7WsvoY3neqxuQYFLDmZHIcAeGNul4nmi7DwQI97e1pN6G7PQ96uB+1dtV1/IePo
+	 V3/PTPTXb/fFdZSpnR/iYwCZsG6uh01rgIyPMHleeDBrjkjsKxqJKm8Q6+9lury0ZI
+	 Hmnx0Mo9m5Cf8dgAoouag3maeZ4VEoKXsMv8BCCwlzz/XPxdU2sQpjefTi1MpTado5
+	 KqbYHicZ+TL33DSz6X1ayyTKwk8ZT/Zdjs+DE6+WzPk8iQSLHLtrzJbLRVDE6VcfGa
+	 D/92fBDzwMFQA==
+Date: Thu, 7 Nov 2024 08:04:20 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Xiao Liang <shaw.leon@gmail.com>
-Cc: Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+To: Donald Hunter <donald.hunter@gmail.com>
+Cc: Xiao Liang <shaw.leon@gmail.com>, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
  "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Ido Schimmel <idosch@nvidia.com>, Andrew
- Lunn <andrew+netdev@lunn.ch>, Simon Horman <horms@kernel.org>, Donald
- Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>, Jiri Pirko
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Ido
+ Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Simon
+ Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jiri Pirko
  <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>
-Subject: Re: [PATCH net-next v2 5/8] net: ip_gre: Add netns_atomic module
- parameter
-Message-ID: <20241107075943.78bb160c@kernel.org>
-In-Reply-To: <CABAhCOS8WUqOsPCzQFcgeJbz-mkEV92OVXaH3E1tFe7=HRiuGg@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 7/8] tools/net/ynl: Add retry limit for
+ async notification
+Message-ID: <20241107080420.6a5a5243@kernel.org>
+In-Reply-To: <20241107133004.7469-8-shaw.leon@gmail.com>
 References: <20241107133004.7469-1-shaw.leon@gmail.com>
-	<20241107133004.7469-6-shaw.leon@gmail.com>
-	<CANn89iLvC0H+eb1q1c9X6M1Cr296oLTWYyBhqTAyGW_BusHA_A@mail.gmail.com>
-	<CABAhCOS8WUqOsPCzQFcgeJbz-mkEV92OVXaH3E1tFe7=HRiuGg@mail.gmail.com>
+	<20241107133004.7469-8-shaw.leon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,16 +66,21 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 7 Nov 2024 22:11:24 +0800 Xiao Liang wrote:
-> > Instead, add new rtnetlink attributes ?  
-> 
-> It is to control driver behavior at rtnl_ops registration time. I
-> think rtnetlink
-> attributes are too late for that, maybe? Can't think of a way other than
-> module parameters or register separate ops. Any suggestions?
+On Thu,  7 Nov 2024 21:30:02 +0800 Xiao Liang wrote:
+> Since commit 1bf70e6c3a53 ("tools/net/ynl: improve async notification
+> handling"), check_ntf() would block indefinitely if there's no messages.
+> In some cases we want to set a limit on waiting time. This patch adds
+> max_reties parameter check_ntf(), and makes it stop when no message is
+> recievied in that number of consecutive retries.
 
-Step back from the implementation you have a little, forget that there
-is a boolean in rtnl_link_ops. User makes a request to spawn an
-interface, surely a flag inside that request can dictate how the netns
-attrs are interpreted.
+Looking at 1bf70e6c3a53 again I wonder if we should revert it, sort of,
+and add its logic back as a new function called poll_nft?
+
+The thing is C YNL has check_ntf too - ynl_ntf_check() and it has the
+old semantics. Would be nice for similarly named functions to behave
+the same across languages.
+
+WDYT Donald? Sorry for not thinking about this earlier.
+
+Xiao, feel free to submit this separately from the series.
 
