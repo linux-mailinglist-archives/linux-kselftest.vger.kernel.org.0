@@ -1,102 +1,184 @@
-Return-Path: <linux-kselftest+bounces-21611-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21616-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EB769C07B8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 14:39:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F7A89C089F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 15:13:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3023B236A2
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 13:39:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C15E5B2269F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 14:13:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7442C212623;
-	Thu,  7 Nov 2024 13:37:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95BB5212EE3;
+	Thu,  7 Nov 2024 14:13:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U2CUzQ6v"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="est/mzpe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB2E18FDAF
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 Nov 2024 13:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDAE6212D15;
+	Thu,  7 Nov 2024 14:13:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730986677; cv=none; b=t9lmEy/gLimU462yHhLVtF9PmityMyNuNkO+TLSiqpZkvXPzrFvXoOrXeIM2oFdBOo1qsJjpFllm7I2OTzWSzNSDwVnLSV6iE5jzdmaI6cwvi4u1Fs/JwDVvEIyeeu/h8jSKyUdrPpwajWHQUQVA1FqpcTvNbiWge0HMn9PWv/k=
+	t=1730988816; cv=none; b=tBFhOjIHw8wMx3vsK7L0ftu/BRU3XjTEGnK5GNyiP5l7gRYNyDDt99b40GFK9ZBNtU2H7pM09ArEgYrfBJ35JHDBHUh8hFOWiTwzDPrnsIHwa6ewWzLZpMG8lTKvVxH6uf9U9uXUlbPeqWcYx5kt/9AKRkqkj/Dg/lk/lqDo4Yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730986677; c=relaxed/simple;
-	bh=bYExxPs/zkT4nkC+V5hBiRXD91uP/lq+MGqhILYYYOU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aD3EAdad8VL4OnL7Qsm+M7BWvr1cJcIbV5yX5dHPOscGFS678XqGzkM/RBRx8PQbQ4vYjsx19gdfMb15YsNCIquU7ILzKZjWFLf7vF3IlLfWKVRgdjTGvLGr22yhNUfvyAUjsSPdVFehxpxd3IsgK47SbwLndV7FrQHcfetdGG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U2CUzQ6v; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5cb15b84544so1253470a12.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Nov 2024 05:37:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730986674; x=1731591474; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bYExxPs/zkT4nkC+V5hBiRXD91uP/lq+MGqhILYYYOU=;
-        b=U2CUzQ6vLI4uvJ4GGL1f0UEHaD2xWW9qkrvQmOw4tRYtb3RLtYt3B+0sVaR1sUUdMJ
-         UAiaZCnH1J7FX/RQonZpVlw4anyDX/FEchTaoYgWhuqaj2p+ansL2BdpJiMpld1ftyWU
-         C9dd+/+PiBZxwsoVDN+Ea3sv3ZIb2ZHpF7QYykFKEgsEkbzj2wfb+Wep7Bzq9RWtplUf
-         lvyFgaORQ1gdNoYTH7pPI7xyHQrMK7jr4PF3uKlU6CNmwh+IuAlkoUXdlRYfy8XGOvAa
-         oG8anTntjYCO+oSGXjGy/QcYvm/Yoi+8udWJc+Smkso3qCNzCoQhzxgxbWozDqaU2+Xr
-         BwFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730986674; x=1731591474;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bYExxPs/zkT4nkC+V5hBiRXD91uP/lq+MGqhILYYYOU=;
-        b=wYBhej7GZ9e0iz1yriid+bdNEeJeeQnN2XmVj93lnOFyjHkFzlHxDDxx2HqdvTWdEG
-         Z7tVqerBSpsA6V3qUxCBmyNtgyVa1Y+T7lvlxrVLKfBmskCCYtiXcOIgLFHTy6Qrdc7I
-         MnPNkfpdgcaSJ/AM/2eRKorHHX5LqemUbDvjp33oHm7v6DFcLyiijc8QADbd73jhw395
-         iq+B58GcN1HTVJlSuWWhQT0Fd6ehIruXn+z/gcQ9nTM4l7JbJlo/XoI909OopcxCWs0y
-         DPuxdDDSENH69Wc7+xUfeUDfaBIkIsp0+G9DD0DwqpWgDuDpHJ7Mvg1UesimgR43/SpS
-         nPWA==
-X-Forwarded-Encrypted: i=1; AJvYcCVKr26WiypMrGB+Fpg4ZnOx1am3rKKJA2Ts3hfbjsekcuH7w/Q1KIIxETLOyFW+3XPE3cab6caEINfcHvgkucA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9LW3aVKwT3A4u1IhgkByyAheTZCfvF+gmDmRCY0HG3QutXMXy
-	DxpOcwEx832ht3b2KXgf9aLUpS7F7BtrCVueYkbflgyho7QMiAV/sfTb1iUTDmDrdIvhrGTMiEj
-	yD1DJDOt4ubGsGQiHjbVf/NMgZXWS5wyZyyGF
-X-Google-Smtp-Source: AGHT+IFj/VoAYPwfj1qMXYn/keZw+BdB8CGX0gxPF/p+Y0NkDxp2Be9I3KxiQ0Bnuhcr/7xhhZgXPrcz0W3Y5Wu0t/0=
-X-Received: by 2002:a05:6402:1d4a:b0:5cb:acdc:b245 with SMTP id
- 4fb4d7f45d1cf-5ceb9282a67mr20397939a12.17.1730986674011; Thu, 07 Nov 2024
- 05:37:54 -0800 (PST)
+	s=arc-20240116; t=1730988816; c=relaxed/simple;
+	bh=iq6DAdQIRaZvWkmzepjntWW5vksSWQLsxCK4eVySb80=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u76G71yz9Gpru7PB1sEmoN48MD2QCRf4RP0aRcdgE/VHYL509W0QCBU7msjEDO9rcyMpT5GJqtHouCSdFxMmMcohavXtesV9kV9wGQfatQJVVHnkTiTXLZ2h6vkBL9LJZsHMBhBtfg0swna+kJZsjNVLAhT1gracOMFUd8ptYQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=est/mzpe; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A7E9uId031248;
+	Thu, 7 Nov 2024 14:10:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=5HgN7AsomUIK+0ZKL8G9kZwooD3hI9sMpOuiPCMTi
+	8E=; b=est/mzpeqSflfJeIJiDWZaQgH10lB2vDufYbqD0BYnrj2Wl/Dyx3KoYz/
+	Y4gk5kFulGgawZdt+AyCCmTOqO0Th13FFQffOXw5M1n/oDEhUgHTkmEiILULo+Dk
+	Kf/ODFjhV0VDPj3bGcsdxswcLwJT1sk2zfkyBcXm//GbXwg12Jj6k7EipXDibJ33
+	Uz+HHEAbIKCbfXakO/KBwPE6pzp6pa3WZp/+n2sQaO2Vjy/aUwVZntDyrBm5LmSy
+	bj/PDTuoyzrM41wzR3no+fPOtVOwFL83UzBMikqR5soUXNxx/v+DoctYjSBDgTmF
+	pg5WlWqcMWtoX3mkF0KY6YkpMnFoQ==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42rxmrr4kq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Nov 2024 14:10:37 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4A7DhvW1019625;
+	Thu, 7 Nov 2024 14:10:36 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 42p0mj87vr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 Nov 2024 14:10:36 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4A7EAXTM35127974
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 7 Nov 2024 14:10:33 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 20B712004B;
+	Thu,  7 Nov 2024 14:10:33 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EFD7920049;
+	Thu,  7 Nov 2024 14:10:32 +0000 (GMT)
+Received: from darkmoore.boeblingen.de.ibm.com (unknown [9.152.222.253])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  7 Nov 2024 14:10:32 +0000 (GMT)
+From: Christoph Schlameuss <schlameuss@linux.ibm.com>
+To: kvm@vger.kernel.org
+Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>, schlameuss@linux.ibm.com
+Subject: [PATCH v7 0/5] selftests: kvm: s390: Add ucontrol memory selftests
+Date: Thu,  7 Nov 2024 15:10:19 +0100
+Message-ID: <20241107141024.238916-1-schlameuss@linux.ibm.com>
+X-Mailer: git-send-email 2.47.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 4y-_h8GtILUojSmEPdJJcAGKbR1BSrPl
+X-Proofpoint-GUID: 4y-_h8GtILUojSmEPdJJcAGKbR1BSrPl
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241107133004.7469-1-shaw.leon@gmail.com> <20241107133004.7469-6-shaw.leon@gmail.com>
-In-Reply-To: <20241107133004.7469-6-shaw.leon@gmail.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Thu, 7 Nov 2024 14:37:42 +0100
-Message-ID: <CANn89iLvC0H+eb1q1c9X6M1Cr296oLTWYyBhqTAyGW_BusHA_A@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 5/8] net: ip_gre: Add netns_atomic module parameter
-To: Xiao Liang <shaw.leon@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Jakub Kicinski <kuba@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Ido Schimmel <idosch@nvidia.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Simon Horman <horms@kernel.org>, 
-	Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Jiri Pirko <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 clxscore=1011 mlxscore=0 mlxlogscore=999 lowpriorityscore=0
+ phishscore=0 impostorscore=0 bulkscore=0 suspectscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411070110
 
-On Thu, Nov 7, 2024 at 2:30=E2=80=AFPM Xiao Liang <shaw.leon@gmail.com> wro=
-te:
->
-> If set to true, create device in target netns (when different from
-> link-netns) without netns change, and use current netns as link-netns
-> if not specified explicitly.
->
+This patch series adds a some not yet picked selftests to the kvm s390x
+selftest suite.
 
-Sorry, module parameters are not going to fly.
+The additional test cases are covering:
+* Assert KVM_EXIT_S390_UCONTROL exit on not mapped memory access
+* Assert functionality of storage keys in ucontrol VM
+* Assert that memory region operations are rejected for ucontrol VMs
 
-Instead, add new rtnetlink attributes ?
+Running the test cases requires sys_admin capabilities to start the
+ucontrol VM.
+This can be achieved by running as root or with a command like:
+
+    sudo setpriv --reuid nobody --inh-caps -all,+sys_admin \
+      --ambient-caps -all,+sys_admin --bounding-set -all,+sys_admin \
+      ./ucontrol_test
+
+---
+
+The patches in this series have been part of the previous patch series.
+The test cases added here do depend on the fixture added in the earlier
+patches.
+From v5 PATCH 7-9 the segment and page table generation has been removed
+and DAT
+has been disabled. Since DAT is not necessary to validate the KVM code.
+
+https://lore.kernel.org/kvm/20240807154512.316936-1-schlameuss@linux.ibm.com/
+
+v7:
+- skip uc_skey test when execution is in vsie
+
+v6:
+- add instruction intercept handling for skey specific instructions
+  (iske, sske, rrbe) in addition to kss intercept to work properly on
+  all machines
+- reorder local variables
+- fixup some method comments
+- add a patch correcting the IP.b value length a debug message
+
+v5:
+- rebased to current upstream master
+- corrected assertion on 0x00 to 0
+- reworded fixup commit so that it can be merged on top of current
+  upstream
+
+v4:
+- fix whitespaces in pointer function arguments (thanks Claudio)
+- fix whitespaces in comments (thanks Janosch)
+
+v3:
+- fix skey assertion (thanks Claudio)
+- introduce a wrapper around UCAS map and unmap ioctls to improve
+  readability (Claudio)
+- add an displacement to accessed memory to assert translation
+  intercepts actually point to segments to the uc_map_unmap test
+- add an misaligned failing mapping try to the uc_map_unmap test
+
+v2:
+- Reenable KSS intercept and handle it within skey test.
+- Modify the checked register between storing (sske) and reading (iske)
+  it within the test program to make sure the.
+- Add an additional state assertion in the end of uc_skey
+- Fix some typos and white spaces.
+
+v1:
+- Remove segment and page table generation and disable DAT. This is not
+  necessary to validate the KVM code.
+
+Christoph Schlameuss (5):
+  selftests: kvm: s390: Add uc_map_unmap VM test case
+  selftests: kvm: s390: Add uc_skey VM test case
+  selftests: kvm: s390: Verify reject memory region operations for
+    ucontrol VMs
+  selftests: kvm: s390: Fix whitespace confusion in ucontrol test
+  selftests: kvm: s390: correct IP.b length in uc_handle_sieic debug
+    output
+
+ .../selftests/kvm/include/s390x/processor.h   |   6 +
+ .../selftests/kvm/s390x/ucontrol_test.c       | 321 +++++++++++++++++-
+ 2 files changed, 319 insertions(+), 8 deletions(-)
+
+-- 
+2.47.0
+
 
