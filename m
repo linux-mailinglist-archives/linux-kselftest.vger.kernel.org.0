@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-21584-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21585-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A958E9BFBDF
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 02:45:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51A059BFBE1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 02:45:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6EF90281FBE
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 01:45:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16E15281FBA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 01:45:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC80E18787F;
-	Thu,  7 Nov 2024 01:44:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82F1E18C939;
+	Thu,  7 Nov 2024 01:44:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jD80AIlz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SNyWj4hX"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94DD9186E58;
-	Thu,  7 Nov 2024 01:44:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B37D18C34B;
+	Thu,  7 Nov 2024 01:44:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730943840; cv=none; b=Xhxvf7DUntVufpPjIqalG4sxwf6rhSzuG0UEJ/ReX3Kf+YCPQSCySZBcF1+i+OXL1dDPUh9oyqD51pkXvipc6jjnHxQYHZAHu9kJ3KpHr2X6X05NSPzbBwoAfVBpN1qCpQlAqR9DW/sH7+iMk7r90PxIa2NlVRQMO0cqFS3MUSQ=
+	t=1730943842; cv=none; b=bYefv7WWQsDLVJ4P4+0nsS+MTujAKIO3BLk5JCzH3qR8xk3b9loacU1h972159uDIgoeB8MpUp99iRIf5y3DE3WfongRDNz2Y4DoxJv9ap/88iEFVPWD/VYANFICsvW1gfAdjrH/gGIU/xqURm7s1oMv0cgxQ4I02f6iyDF4Aok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730943840; c=relaxed/simple;
-	bh=leVU7E1xUyU67WCn5RdQJAXMEOCia4xbUFczyjMgbo0=;
+	s=arc-20240116; t=1730943842; c=relaxed/simple;
+	bh=vmq9jrn8vuSD3VpJFg9vZzUggmSUeit7J7xVMGFrJhg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uIhwES1hF6+lfNftwaE7Ds5GMwgtCeu1jt7C4xxeT39VuzZ0CVhoAa1m7Oc6ekbzzho2Xa0nukGrKj/JriEIoCwUh8MwNe1ywPHBn0hHCFbkTZElYLCXQj7EGYpC4JVTaSpFDI8dHppmZLz3ochD5jYAI3wKSsPH1kesx9fYkMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jD80AIlz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2BB7C4CECC;
-	Thu,  7 Nov 2024 01:43:58 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=uemY8r3dcXKBzHs704MGnOK5UMJ+8JjwDuWJGFCTUXi78K4/X/j3DV1JB7Pqpc83VtEuECjmg2yKC+xh0csfw24m4P5wzjS0EZ/6LCr4o1mRxlZ2E1gt7gXdyX+RgFOxSQG7Ria7NhfO4/O+DVRL8UwetCkQztZBxLk5jLBYkUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SNyWj4hX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACC4BC4CEC6;
+	Thu,  7 Nov 2024 01:44:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730943840;
-	bh=leVU7E1xUyU67WCn5RdQJAXMEOCia4xbUFczyjMgbo0=;
+	s=k20201202; t=1730943842;
+	bh=vmq9jrn8vuSD3VpJFg9vZzUggmSUeit7J7xVMGFrJhg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=jD80AIlzSqU2r/cv9e/ie7Owo+WfjDElCsL6B8UgadlAaRiP+5loHocFvNnVoXa3b
-	 oG8RmynJUtK37v71OIhLcZ69krDJBhOFA0AeuVVW27cAGQZionXdR24/7k0cRDqCk7
-	 iUgTosPk1f5VAvyd9OHB6ztAXzsPufCXXbu9EQKqM8rMrotlyka3xcBKE/zQe7Dm+9
-	 Am0HwME3N8tHhzwS2JxuGME7wRWy4Bdv4SY/M689QhbIdy/rP0KVDWZHhYAwaUSc+O
-	 qGu4/mSb5RC+oydJLjZTYmjZ4HhgbkKe72gq7teGXdHUNvHWNniMIDf6rr69kggRVh
-	 nNhCsTdzDcVqg==
+	b=SNyWj4hXoSwtKFE4Q23qDjAbNQV2HYafmT6nfUhsCGj9bJC1XOa/8scYdkfYM6zdj
+	 4PtEtBF0uPRREIwL7lgIH8w9Rss3EgVdkR/dT+GNsrpHOdr7q9lIX5JS5qKH6oBzLP
+	 g3XgNT2cdhbFuf2e4JcEv7KlSMnuxUPwN5D/E8X9PlX0yjjbweoTHyTjW1nlskRBBd
+	 rIvle74315XTZEpG7Q7owSb+06aLjmK5wVYhfct1/A+rsJ4x5SOg8HXa+HAcv6V/KL
+	 AZx46JsJ2IDBxapUvJgrlXfLsxqNc4syQGUNE8BrDKf1xnOFZ/ZPwadSVTMrmjfX+3
+	 ytP5fOQ0Kn7JA==
 From: Mark Brown <broonie@kernel.org>
-Date: Thu, 07 Nov 2024 01:39:24 +0000
-Subject: [PATCH v2 5/6] kselftest/arm64: Provide a SIGUSR1 handler in the
- kernel mode FP stress test
+Date: Thu, 07 Nov 2024 01:39:25 +0000
+Subject: [PATCH v2 6/6] kselftest/arm64: Test signal handler state
+ modification in fp-stress
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241107-arm64-fp-stress-irritator-v2-5-c4b9622e36ee@kernel.org>
+Message-Id: <20241107-arm64-fp-stress-irritator-v2-6-c4b9622e36ee@kernel.org>
 References: <20241107-arm64-fp-stress-irritator-v2-0-c4b9622e36ee@kernel.org>
 In-Reply-To: <20241107-arm64-fp-stress-irritator-v2-0-c4b9622e36ee@kernel.org>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
@@ -62,46 +62,45 @@ Cc: Mark Rutland <mark.rutland@arm.com>,
  linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-9b746
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1313; i=broonie@kernel.org;
- h=from:subject:message-id; bh=leVU7E1xUyU67WCn5RdQJAXMEOCia4xbUFczyjMgbo0=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnLBtS2FRnGevJn8KdIwsF19SK/BkdiQ/yz1S77N3e
- u1IvERGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZywbUgAKCRAk1otyXVSH0DadB/
- 41K/s/wFQumB72ze1INxlRbvEQrpNju8Mfu7P81epd5uw2x02Ey2Bg9GCyHSCnA6T+2mHk4N5NK+FS
- vPG6XeN9PkdLjANLz/0gx91TrUw/Sf4Cbun9GSYKk7tmLBqHMJrEEAWoeJtfWXVi0aj/UZ78bTikSw
- nA90uLjIeY8Gnr9Sdo0xss5XTV1RjfGNScF7EPgMreb6nGCHmhfq9i1rqauJwqT2oCTJUsGYMxcLi9
- XDVrtAY14aXzBud0yt2s442KvlKVj/EcHfZdnM5cR8ZtRmPbYH3Aj3qb6JQOiIrczBxYLAGuT2TRs/
- EPkj0uwDq0d7TChyA7GwaXUmott0Rf
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1345; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=vmq9jrn8vuSD3VpJFg9vZzUggmSUeit7J7xVMGFrJhg=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnLBtTWoXA4eHd6zfw971HD8lilDRJqnyTNW/1R2WW
+ DSk3ur+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZywbUwAKCRAk1otyXVSH0NxLB/
+ 0QhT6wTv8THELHvP8ObPV5Wls/EzSymSLag6pDrd4ya2LZ50x0Q6/+4Yni77XBfDvIMGDzADqk9d1y
+ pPC6kx+WhBONPXVYzCcG+oeucfATYVRlJem/srypiq84viWGUdETPLB3tyJun/CcptYd37d2PNrhcP
+ cOakCK+6UKQjnTZYU2ERhh1zRPHoavzLs/5eBz54TqQBgsLVd37WPGHVh/gKjlkLLucyFfpNCATfqT
+ /vKAnFfvgVjPegyVyYXKfFpee2BIk+e92YdZTYJHREdL19GhFfMhDfWbMgDI2U0lpW/swoLG0QXSMn
+ aKXv8WLvIqS08/7aj4Zn88rMvcrV7N
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-The other stress test programs provide a SIGUSR1 handler which modifies the
-live register state in order to validate that signal context is being
-restored during signal return. While we can't usefully do this when testing
-kernel mode FP usage provide a handler for SIGUSR1 which just counts the
-number of signals like we do for SIGUSR2, allowing fp-stress to treat all
-the test programs uniformly.
+Currently in fp-stress we test signal delivery to the test threads by
+sending SIGUSR2 which simply counts how many signals are delivered. The
+test programs now also all have a SIGUSR1 handler which for the threads
+doing userspace testing additionally modifies the floating point register
+state in the signal handler, verifying that when we return the saved
+register state is restored from the signal context as expected. Switch over
+to triggering that to validate that we are restoring as expected.
 
 Acked-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/fp/kernel-test.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/arm64/fp/fp-stress.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/arm64/fp/kernel-test.c b/tools/testing/selftests/arm64/fp/kernel-test.c
-index e8da3b4cbd23202c6504ffd8043f8ef351d739f6..859345379044fc287458644309d66cf5f3d8bdf5 100644
---- a/tools/testing/selftests/arm64/fp/kernel-test.c
-+++ b/tools/testing/selftests/arm64/fp/kernel-test.c
-@@ -267,6 +267,10 @@ int main(void)
- 		       strerror(errno), errno);
+diff --git a/tools/testing/selftests/arm64/fp/fp-stress.c b/tools/testing/selftests/arm64/fp/fp-stress.c
+index faac24bdefeb9436e2daf20b7250d0ae25ca23a7..3d477249dee0632b662b48582433d39323d18e18 100644
+--- a/tools/testing/selftests/arm64/fp/fp-stress.c
++++ b/tools/testing/selftests/arm64/fp/fp-stress.c
+@@ -221,7 +221,7 @@ static void child_output(struct child_data *child, uint32_t events,
+ static void child_tickle(struct child_data *child)
+ {
+ 	if (child->output_seen && !child->exited)
+-		kill(child->pid, SIGUSR2);
++		kill(child->pid, SIGUSR1);
+ }
  
- 	sa.sa_sigaction = handle_kick_signal;
-+	ret = sigaction(SIGUSR1, &sa, NULL);
-+	if (ret < 0)
-+		printf("Failed to install SIGUSR1 handler: %s (%d)\n",
-+		       strerror(errno), errno);
- 	ret = sigaction(SIGUSR2, &sa, NULL);
- 	if (ret < 0)
- 		printf("Failed to install SIGUSR2 handler: %s (%d)\n",
+ static void child_stop(struct child_data *child)
 
 -- 
 2.39.2
