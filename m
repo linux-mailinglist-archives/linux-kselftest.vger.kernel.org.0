@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-21607-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21608-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F6FF9C0782
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 14:33:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1BBB9C0785
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 14:33:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2B5F1C229CD
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 13:32:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F9381C22BAD
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 13:33:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77940212631;
-	Thu,  7 Nov 2024 13:30:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57B6C212D28;
+	Thu,  7 Nov 2024 13:30:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c+Gaf29e"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QFxtja6f"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E305F21263B;
-	Thu,  7 Nov 2024 13:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89BC212D0D;
+	Thu,  7 Nov 2024 13:30:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730986249; cv=none; b=W6I9VRg53a8yRwWaAZLTnVITE4YlBKkFoAKPIFJRXlJfU44IKAN853Rm031TWBqfDtWxgEk26scbBN020obu7IEDPEaA6aQ+rRO7d42IzzH14u3HGcRQkCXOqpL4jA5lQKYaNRDc6lPKQO2tawvEuM36EM89ZGAnHeuW/rqH/OA=
+	t=1730986255; cv=none; b=hf6SHUVqA6phABxSTUHLgYzBt4YX3oQYX6UDJxxP6p7vXMkkZSrj2LHwvZLbYX35U6dJ6+NUUeQWD/timYjwqDMtiYp6bvjdaCK+gmnZfXshNQKFaw7BAIINrbJ4YeOcmuqkern+hIEuG5HeUbCwRubG9z7oPlq3xXnwLLXLjCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730986249; c=relaxed/simple;
-	bh=DP+FtCvuMIZd6/BnGy3YHcmGQRT1aA22G7G7QoSQE1o=;
+	s=arc-20240116; t=1730986255; c=relaxed/simple;
+	bh=HP/T98jq8ZVtbRkR8ymskxcaIrygIxP03M2Tey2Ql7c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=W9ZXhBVyh2NyEKl7m2dUaB4gqc5oTKkBUkN3/9CZOoaNCxp4udgXajsxmZerLYG7T1XzcRjjOwOT8Bhhni0bMqikRW/Y/jd0UnZ4ImJv2pkYWHgjZOztEl1dMqd0ePgq1EhF2EMCjK3m8B5eZVwd/XpxP1ppRhzcYN/rC3YqR+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c+Gaf29e; arc=none smtp.client-ip=209.85.160.54
+	 MIME-Version; b=jgt90EMQXGqmZYEbs0snYX4oeRTeXL9zUd2GLdZLi6pDG13MmqYuZD1aosAV5SUlMweSQQ3eJunAMQT4/Pf5wBxDFwQwuzuN99urx852kzBlSS/h1cYn7lCSGx5/8quETvGv2dBLpSR2rFTYXqefJ4HBLvPEU1YSgdo5yQfFfTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QFxtja6f; arc=none smtp.client-ip=209.85.166.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-288661760d3so482439fac.3;
-        Thu, 07 Nov 2024 05:30:47 -0800 (PST)
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3a3b8b34be9so3393125ab.2;
+        Thu, 07 Nov 2024 05:30:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730986247; x=1731591047; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730986252; x=1731591052; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gClAoFe1h5U+0NiA7Nj6o2YtRc1W3/sr4TmNeojvSXo=;
-        b=c+Gaf29ex4ZwF77HWo4rIq9/wJY+94BgG9HyPQTAvRp0vKqYOaIz+0WUnZCircZ8Pm
-         LqFh5D4TCY6Vx3EDbRK5qiwXa2lKYpxBWc55/VBFe8kKJKcTWzMg+0g5RHkvD8GPPuEn
-         qpjtjc3uzS1Y3ScSt6WPqt6aNw2SPkhdrSO5Aweb+GoGY9iGA+uWD1CWtANgkizZsP91
-         BDzJ9++1ye/m2oMMCo1cbynCR59KpPDlJDsCl/a70pxE9GbFd2mPYriwIrLq1kcW7bLu
-         d0iQx6Sgis05OurP3FZMazu3xz5BmV1XM4YnACK2nPww3fX4p8IZiVHm1DGkYauH6MKw
-         LLvQ==
+        bh=QUs9BWOu32L2gGfBENh+erfoCLDyT1PmV3IMsurFVA8=;
+        b=QFxtja6fETJqAP2OjKQNj+8hXAkth/QPZUQ32Gs8MZ49fSuznct77gK6y/69GkerX1
+         37KQmvUL3nIuhHxDSaJwgIP/ZhukLEFQAtzXSGJciXv5u+Wa8/AL37JSy3Fzv0ewAFFD
+         SXUdqlX2EC+ihY+a8g5WTvBw4lUpVzvcfCcSzukKj85j779C5QQXSZYYAqZT0j+Xss6J
+         ESkle3ooDQIqOLQm6253aVioVuHjyCpUinxkapBVky4i+MBe5mgKkGiawZFqdpCgWafF
+         i/pOsog/inU0mzteKveTytQbchqmwgu9+nJmTL7706K8vwS5/cb6dGXkMv2y/ltftV+L
+         q9/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730986247; x=1731591047;
+        d=1e100.net; s=20230601; t=1730986252; x=1731591052;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gClAoFe1h5U+0NiA7Nj6o2YtRc1W3/sr4TmNeojvSXo=;
-        b=MRIhk27TR0V7goyivZjVAV+SFpE/RtPy7vRvgByAKIhKkEjxYhxrW0xsqXDD6f5/TR
-         AU5t7qOMKvYFKf0xdknnxfYztm9NxnPTjDQkCdOIbHIKdG4JrjzPhtOCEg4w9EzfOPsQ
-         vtQXeTBlnW/XsGuw2xMCdPxA/WeuoDLBUo3DGkfaQ+4nMXK0CAroZqe8H30TWftbXQvc
-         legD2O+J+TtLizfynTlwuRZnTr9l6tqeauLY/9w9/7uEa+UE2G9cwlfDeQu+XEKmWzx5
-         hzeA+58ht756DUgIBQ1QYUCCvYenB/n91xehcf9k3XFPqkiiY2oRnN5T5rq8nUliLCjt
-         Bg2A==
-X-Forwarded-Encrypted: i=1; AJvYcCW66S4ctjpIO8RDWo1WeE6nHaqr+tTeh+9G1veIOV5nvanbOyJTavWT5f6G3TcM8CNdydYe6wx4i/QyUogA0E0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkYkQVRM0QOd9uBzG/DULJh5ZSHVBEA9JH/StofkbieGI/EmE+
-	Yl+P3+NHX2DLL64oP6mTGMQ4QXz9H0wsxQnp7JSiunnMtVurgib+0KdBwnJXYRE=
-X-Google-Smtp-Source: AGHT+IG3t8hX31pJw8ubYbA4z3BcyxT+HBjVplQdqc1Kz+fLlnndA1qcsnroO+cgg7mJOqee6zSr5A==
-X-Received: by 2002:a05:6870:3310:b0:255:2e14:3d9d with SMTP id 586e51a60fabf-29051adb328mr38968240fac.5.1730986246492;
-        Thu, 07 Nov 2024 05:30:46 -0800 (PST)
+        bh=QUs9BWOu32L2gGfBENh+erfoCLDyT1PmV3IMsurFVA8=;
+        b=XxfMTE4C2VErTJPaadLmOgzCcnfQ0I10VJY4TlB0pB5Xsu2dk6DlTJqqVWIeb+TCCe
+         XDWps52kcd7wEa2uswdsumtWlKhCPxDlY21muXdwc3zYSc/ceYpJf9lWPrcEBhgGZyIE
+         k7MBvBwYKYNaKThJq+Ra75VD2k1zI5Ena69ylcrpeuAadWM1gK27ueudw0h6CB7qUWPV
+         J5ePHULDzCMu1Scy40ah1ZB77Hh/b+PHxqKdfcb0b8kflLgrf3VrWlMC59Mjrqa59IDn
+         fijPYxu51w2vesDUAN1kClL5I2146RK54aNdvRB0Vqnt1PXZ6Rm8UPzCeHdi4L7JmjDX
+         1HYg==
+X-Forwarded-Encrypted: i=1; AJvYcCXJG0mOgf+dO/6F9xErTY5ORZrDAP2R7rSGGZsVrrcqJXXUKj62xjByxg1tO2Z3k9bMqFRiE2UzR56OG9IiibA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYLh0LRq7Fi+yboNb41QtW+K9Aq0YmgbPiuoIyjLSQbkCL2aNU
+	rZ/e9XEnww+TQc/wfjABFX/JoYYP0ynZwFW0fhVrajFArrl7jng/3qsxiatOz3o=
+X-Google-Smtp-Source: AGHT+IHGKUmmx0POT4xmxjZoMd4NM+GzQvAiR8OFD0CMQp+8DnJsg/ZtDJybFx1AONbQK2LxQ7Js5w==
+X-Received: by 2002:a05:6e02:1a8b:b0:3a4:e8cc:2aa6 with SMTP id e9e14a558f8ab-3a6b02612ffmr271633295ab.8.1730986251843;
+        Thu, 07 Nov 2024 05:30:51 -0800 (PST)
 Received: from nova-ws.. ([103.167.140.11])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7f41f65b5afsm1359303a12.76.2024.11.07.05.30.41
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7f41f65b5afsm1359303a12.76.2024.11.07.05.30.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Nov 2024 05:30:46 -0800 (PST)
+        Thu, 07 Nov 2024 05:30:51 -0800 (PST)
 From: Xiao Liang <shaw.leon@gmail.com>
 To: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
@@ -83,9 +83,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Shuah Khan <shuah@kernel.org>,
 	Jiri Pirko <jiri@resnulli.us>,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net-next v2 5/8] net: ip_gre: Add netns_atomic module parameter
-Date: Thu,  7 Nov 2024 21:30:00 +0800
-Message-ID: <20241107133004.7469-6-shaw.leon@gmail.com>
+Subject: [PATCH net-next v2 6/8] net: dummy: Set netns_atomic in rtnl ops for testing
+Date: Thu,  7 Nov 2024 21:30:01 +0800
+Message-ID: <20241107133004.7469-7-shaw.leon@gmail.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241107133004.7469-1-shaw.leon@gmail.com>
 References: <20241107133004.7469-1-shaw.leon@gmail.com>
@@ -97,75 +97,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-If set to true, create device in target netns (when different from
-link-netns) without netns change, and use current netns as link-netns
-if not specified explicitly.
+Set netns_atomic flag in rtnl ops. For testing purpose only, since
+link-netns is not used for dummy interfaces in practice.
 
 Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
 ---
- net/ipv4/ip_gre.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/net/dummy.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
-index f1f31ebfc793..6ef7e98e4620 100644
---- a/net/ipv4/ip_gre.c
-+++ b/net/ipv4/ip_gre.c
-@@ -107,6 +107,11 @@ static bool log_ecn_error = true;
- module_param(log_ecn_error, bool, 0644);
- MODULE_PARM_DESC(log_ecn_error, "Log packets received with corrupted ECN");
+diff --git a/drivers/net/dummy.c b/drivers/net/dummy.c
+index e9c5e1e11fa0..38d79f543998 100644
+--- a/drivers/net/dummy.c
++++ b/drivers/net/dummy.c
+@@ -138,6 +138,7 @@ static struct rtnl_link_ops dummy_link_ops __read_mostly = {
+ 	.kind		= DRV_NAME,
+ 	.setup		= dummy_setup,
+ 	.validate	= dummy_validate,
++	.netns_atomic	= true,
+ };
  
-+static bool netns_atomic;
-+module_param(netns_atomic, bool, 0444);
-+MODULE_PARM_DESC(netns_atomic,
-+		 "Create tunnel in target net namespace directly and use current net namespace as link-netns by default");
-+
- static struct rtnl_link_ops ipgre_link_ops __read_mostly;
- static const struct header_ops ipgre_header_ops;
- 
-@@ -1393,6 +1398,7 @@ static int ipgre_newlink(struct net *src_net, struct net_device *dev,
- 			 struct nlattr *tb[], struct nlattr *data[],
- 			 struct netlink_ext_ack *extack)
- {
-+	struct net *link_net = netns_atomic ? src_net : dev_net(dev);
- 	struct ip_tunnel_parm_kern p;
- 	__u32 fwmark = 0;
- 	int err;
-@@ -1404,13 +1410,14 @@ static int ipgre_newlink(struct net *src_net, struct net_device *dev,
- 	err = ipgre_netlink_parms(dev, data, tb, &p, &fwmark);
- 	if (err < 0)
- 		return err;
--	return ip_tunnel_newlink(dev, tb, &p, fwmark);
-+	return ip_tunnel_newlink_net(link_net, dev, tb, &p, fwmark);
- }
- 
- static int erspan_newlink(struct net *src_net, struct net_device *dev,
- 			  struct nlattr *tb[], struct nlattr *data[],
- 			  struct netlink_ext_ack *extack)
- {
-+	struct net *link_net = netns_atomic ? src_net : dev_net(dev);
- 	struct ip_tunnel_parm_kern p;
- 	__u32 fwmark = 0;
- 	int err;
-@@ -1422,7 +1429,7 @@ static int erspan_newlink(struct net *src_net, struct net_device *dev,
- 	err = erspan_netlink_parms(dev, data, tb, &p, &fwmark);
- 	if (err)
- 		return err;
--	return ip_tunnel_newlink(dev, tb, &p, fwmark);
-+	return ip_tunnel_newlink_net(link_net, dev, tb, &p, fwmark);
- }
- 
- static int ipgre_changelink(struct net_device *dev, struct nlattr *tb[],
-@@ -1777,6 +1784,10 @@ static int __init ipgre_init(void)
- 
- 	pr_info("GRE over IPv4 tunneling driver\n");
- 
-+	ipgre_link_ops.netns_atomic = netns_atomic;
-+	ipgre_tap_ops.netns_atomic = netns_atomic;
-+	erspan_link_ops.netns_atomic = netns_atomic;
-+
- 	err = register_pernet_device(&ipgre_net_ops);
- 	if (err < 0)
- 		return err;
+ /* Number of dummy devices to be set up by this module. */
 -- 
 2.47.0
 
