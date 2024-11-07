@@ -1,87 +1,161 @@
-Return-Path: <linux-kselftest+bounces-21626-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21627-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DB829C0D68
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 19:00:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C18D9C0D79
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 19:12:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF8961C213BB
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 18:00:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87FEEB215AD
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 18:12:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8CFA20B1E2;
-	Thu,  7 Nov 2024 18:00:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 162262170A3;
+	Thu,  7 Nov 2024 18:12:17 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB5A374CB
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 Nov 2024 18:00:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 160642161E6;
+	Thu,  7 Nov 2024 18:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731002438; cv=none; b=hjJFEHrMOp+7VIvhHezeBfeCNNvqkQYYEUjec7QVErUaol9nPXlKv97YdXLmYhluBk7M0gR79wuNp5OnZqVPaFtsauHFjGNQJDVC4CZrUcK3u51pyHWYfmn6KXCo9sgD4cVHZAE9tgtigVkksRY7xFouGEYeTOIeyQ5kt7EXx5w=
+	t=1731003137; cv=none; b=mg5ofUrpdxDBa0aYQ5NTFxUSbxzhh4DKXrA1K2km1zN0176siV4N3dTbRfIE9QJ0iPk4uJNhHXg+P6Y+vDhMnh65xgj+iEQOw7/kOf5SDTUReFXTEoUkEQhO/w7dr5Uy8kIROtxSwPz2pcbVeYzkJviF1lSTjDe8l7xq0bH9TxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731002438; c=relaxed/simple;
-	bh=6jBTLNeiX11C9EC0GdgiRPR7CvkDdUg30M+pf03qc+8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F4dnfBjNJZN0X3Awxv9OCQrVdQ4gljxvMdqnuF8JmzT2dugPXucr8jQPAj7mHrjT/zPDkqEqZGIkV8cJFCa4q7KyLRvjkfK3/zL2QY+Ot0GuzIQixpX/ff5vQy3LcCQZolZ72EW+ban8the+MJyUL/mjrauSawgCpeVAqX4YlrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF7B4C4CED0;
-	Thu,  7 Nov 2024 18:00:36 +0000 (UTC)
-Date: Thu, 7 Nov 2024 18:00:34 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
-	linux-arm-kernel@lists.infradead.org, dave.hansen@linux.intel.com,
-	yury.khrustalev@arm.com, will@kernel.org,
+	s=arc-20240116; t=1731003137; c=relaxed/simple;
+	bh=QYtEtlkBOrC1Ya90xDLzKFhDn87Z90gjyyAIkP1QK70=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aUA2qMxVHUFzezDOoeRv2SWTUpd1BQ0ugzrQsQLBvrCUHDwwPuiKgUFOQ42JPAqgVZAAyWymto9M5o3II9nVsN0HQW2q7q58TcqKwAyBlDNk8tW6MwhSXE//WJsFr8hkGIpcfk7CqskoFvJgaMl8JPK48Aj8ysHDqNtZxphrVoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-720b2d8bb8dso909959b3a.1;
+        Thu, 07 Nov 2024 10:12:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731003133; x=1731607933;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K5/MXPQVWSfX56FbuibfqKs75bB8Xe6p/3/YF+lSl7s=;
+        b=QRZ9YjHtL2cBjbxSbCuG2SLMc8t9FlDuRS+ZZk0HX2B5MuQgqEUgs2f9l8xwXnQ3pZ
+         /kkSFEfdKyVgEKAVIfH53SgWRmTbd1A4MKW5ObbHRhioaxfukYE3aAYDAdBL+uwrR5XE
+         rhJp8kEHLyY93A7Z02ItlbhMQ+umemv7FQ+pKavEHvow5gLUtlnG/cnyGUc7jyz8WtWg
+         tg/XD7MJJgLmjTy33AF0NK7jAVxfDXSNnsKX96fItY4tRrEGhFiOo5tBGpK33zLQCZ5s
+         2n3uxZZyC9iOvpLY7BYyHx5YW/hgDHgd6loCyUdLmt1PaTdofxuqzxrqi5SWxesIPss9
+         c7YQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWB5wMKlWiota9bG6DEjfOddunvhxwyYwlYyssS1ntl0BgzFZL6Euj6+NmO2PAXKDn+7myN8Ah3jyjGHqDl7yaz@vger.kernel.org, AJvYcCWhSF5fxaeB2PniucXgOekDBHplErbi1zU9ENEZn0eWMF+oXnsgIoE0QOyDxlRd+7tuNbb0FSt7GW3DsGw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxY3TN1kWg8074ghOEJGVLe2jjsVaqxHiZ+jJf66tpbuAu4+dZt
+	4hrs/I9PuNZMmckpotvy3caMPQ6BDHIpIS2moZJglsTJ1pUd6CW7qBpH
+X-Google-Smtp-Source: AGHT+IGdG/ADT//oanKKwvCNg9rKaGItUG2Tvl7gPeqKOty622zfsDSGIPKVY6X4mOOqSnUGaxK00w==
+X-Received: by 2002:a05:6a00:21cc:b0:71e:7a19:7d64 with SMTP id d2e1a72fcca58-72413279ea6mr6087b3a.5.1731003132906;
+        Thu, 07 Nov 2024 10:12:12 -0800 (PST)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72407a18f51sm1874832b3a.155.2024.11.07.10.12.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Nov 2024 10:12:12 -0800 (PST)
+From: Stanislav Fomichev <sdf@fomichev.me>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Aishwarya TCV <aishwarya.tcv@arm.com>
-Subject: Re: [PATCH] selftests/mm: Define PKEY_UNRESTRICTED for
- pkey_sighandler_tests
-Message-ID: <Zy0AQnqIWRM8s9kb@arm.com>
-References: <20241107131640.650703-1-kevin.brodsky@arm.com>
- <96cc8ce1-1f64-45d5-8567-eb2adba1b47a@linuxfoundation.org>
+	andrew+netdev@lunn.ch,
+	shuah@kernel.org,
+	horms@kernel.org,
+	almasrymina@google.com,
+	sdf@fomichev.me,
+	willemb@google.com,
+	petrm@nvidia.com,
+	jdamato@fastly.com
+Subject: [PATCH net-next v8 00/12] selftests: ncdevmem: Add ncdevmem to ksft
+Date: Thu,  7 Nov 2024 10:11:59 -0800
+Message-ID: <20241107181211.3934153-1-sdf@fomichev.me>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <96cc8ce1-1f64-45d5-8567-eb2adba1b47a@linuxfoundation.org>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 07, 2024 at 09:50:20AM -0700, Shuah Khan wrote:
-> On 11/7/24 06:16, Kevin Brodsky wrote:
-> > Commit 6e182dc9f268 ("selftests/mm: Use generic pkey register
-> > manipulation") makes use of PKEY_UNRESTRICTED in
-> > pkey_sighandler_tests. The macro has been proposed for addition to
-> > uapi headers [1], but the patch hasn't landed yet.
-> > 
-> > Define PKEY_UNRESTRICTED in pkey-helpers.h for the time being to fix
-> > the build.
-> 
-> What does mean to say "time being" - can this be removed in the
-> future. If so please add a FIXME so this define can be removed
-> later.
+The goal of the series is to simplify and make it possible to use
+ncdevmem in an automated way from the ksft python wrapper.
 
-There's a dependency on this series:
+ncdevmem is slowly mutated into a state where it uses stdout
+to print the payload and the python wrapper is added to
+make sure the arrived payload matches the expected one.
 
-https://lore.kernel.org/r/20241028090715.509527-2-yury.khrustalev@arm.com/
+v8:
+- move error() calls into enable_reuseaddr() (Joe)
+- bail out when number of queues is 1 (Joe)
+- use socat instead of nc (Joe)
+- fix warning about string truncation buf[256]->buf[40] (Jakub)
 
-Which I did not notice. Typically the uapi patches are picked by Arnd
-but first that series needs to be reposted with the comments addressed.
+v7:
+- fix validation (Mina)
+- add support for working with non ::ffff-prefixed addresses (Mina)
 
-I think for now we either merge this fix from Kevin (happy to add a
-FIXME comment when applying), change the kselftest to use 0 instead of
-PKEY_UNRESTRICTED or revert the top two patches here:
+v6:
+- fix compilation issue in 'Unify error handling' patch (Jakub)
 
-https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/log/?h=for-next/pkey-signal
+v5:
+- properly handle errors from inet_pton() and socket() (Paolo)
+- remove unneeded import from python selftest (Paolo)
 
-I'm fine with all options really, it's not essential that we get the
-kselftest patches above merged in 6.13.
+v4:
+- keep usage example with validation (Mina)
+- fix compilation issue in one patch (s/start_queues/start_queue/)
+
+v3:
+- keep and refine the comment about ncdevmem invocation (Mina)
+- add the comment about not enforcing exit status for ntuple reset (Mina)
+- make configure_headersplit more robust (Mina)
+- use num_queues/2 in selftest and let the users override it (Mina)
+- remove memory_provider.memcpy_to_device (Mina)
+- keep ksft as is (don't use -v validate flags): we are gonna
+  need a --debug-disable flag to make it less chatty; otherwise
+  it times out when sending too much data; so leaving it as
+  a separate follow up
+
+v2:
+- don't remove validation (Mina)
+- keep 5-tuple flow steering but use it only when -c is provided (Mina)
+- remove separate flag for probing (Mina)
+- move ncdevmem under drivers/net/hw, not drivers/net (Jakub)
+
+Cc: Mina Almasry <almasrymina@google.com>
+
+Stanislav Fomichev (12):
+  selftests: ncdevmem: Redirect all non-payload output to stderr
+  selftests: ncdevmem: Separate out dmabuf provider
+  selftests: ncdevmem: Unify error handling
+  selftests: ncdevmem: Make client_ip optional
+  selftests: ncdevmem: Remove default arguments
+  selftests: ncdevmem: Switch to AF_INET6
+  selftests: ncdevmem: Properly reset flow steering
+  selftests: ncdevmem: Use YNL to enable TCP header split
+  selftests: ncdevmem: Remove hard-coded queue numbers
+  selftests: ncdevmem: Run selftest when none of the -s or -c has been
+    provided
+  selftests: ncdevmem: Move ncdevmem under drivers/net/hw
+  selftests: ncdevmem: Add automated test
+
+ .../selftests/drivers/net/hw/.gitignore       |   1 +
+ .../testing/selftests/drivers/net/hw/Makefile |   9 +
+ .../selftests/drivers/net/hw/devmem.py        |  45 +
+ .../selftests/drivers/net/hw/ncdevmem.c       | 789 ++++++++++++++++++
+ tools/testing/selftests/net/.gitignore        |   1 -
+ tools/testing/selftests/net/Makefile          |   8 -
+ tools/testing/selftests/net/ncdevmem.c        | 570 -------------
+ 7 files changed, 844 insertions(+), 579 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/hw/.gitignore
+ create mode 100755 tools/testing/selftests/drivers/net/hw/devmem.py
+ create mode 100644 tools/testing/selftests/drivers/net/hw/ncdevmem.c
+ delete mode 100644 tools/testing/selftests/net/ncdevmem.c
 
 -- 
-Catalin
+2.47.0
+
 
