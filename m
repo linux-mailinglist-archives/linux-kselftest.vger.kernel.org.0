@@ -1,133 +1,149 @@
-Return-Path: <linux-kselftest+bounces-21592-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21593-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1BEC9BFF2E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 08:34:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CC969BFFDE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 09:23:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 088971C241C6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 07:34:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3D59283C30
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 08:23:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41C8E194AD1;
-	Thu,  7 Nov 2024 07:34:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 398AF1D63F1;
+	Thu,  7 Nov 2024 08:23:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=nwl.cc header.i=@nwl.cc header.b="FIcGb/bO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from orbyte.nwl.cc (orbyte.nwl.cc [151.80.46.58])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7FFE14293;
-	Thu,  7 Nov 2024 07:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EAE118754F;
+	Thu,  7 Nov 2024 08:23:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=151.80.46.58
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730964890; cv=none; b=DokUX26/yuRMfhfq8860w2MeIQ/LpZrLRBwCn696ib6b22DGae11PLEntB/h3snSDSAe6wQFDYEj/sWZPKVHgSTucElbwSmOMHyMeQfNVkn34nMrXxvEipIUwKOGaULNL3dzf40YaPHnnLj5LNNdkrqdyYVQ+73OSvEE6EUa9bM=
+	t=1730967792; cv=none; b=ZzytUUwaKCJcIb0Ib3dufAgHy1b6V/DCNhvhwFGD9RfiuZXrlkFl8bhGP4BFVMKft6L7ZsWS28PiaaR9BhdlM7gLqX2pH+ZPvqsWLgu3tO+BCD21WB5r7+YN+LhCStHEbDBTDnciY8EJPSGt7MCbb6cvXcW6fNsCgSOPrtEld10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730964890; c=relaxed/simple;
-	bh=vLjPd2KaGKlKUG1pxusDxEj/Bnk320EojQtkE1tS+M0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f2WQuHnNf/F+8yuIfVREzzQw5vfQXOeiQxoDq0YCGnDW8ya40dQcddyaCPXeIUP4vRFqCqtyBcJcyLi37W/ix5X7z/Fvj/3MGrITBc0pZOKiJiq9EL9UIltOLkZeSFgEgrTasjyw3OQMKKUbk329GUQFou27YPgeNj6NwOH4v70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e2974743675so614826276.1;
-        Wed, 06 Nov 2024 23:34:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730964886; x=1731569686;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jtqGlLXCDYuiMlu8oCZrg2JPREkhfGJubecJS/p7/Ww=;
-        b=kLIc1FtcOADSS7s0EGN48Zp42rK328K7EqbU2NGOJjx6/sCaAm/cSg0UGhZ2G0uRjQ
-         5teq0G+aFwibZqyXkDLegC24mpk28763kmhSUsqjWyyKXwQzg8FIBnSE3scoemIYrJO5
-         udtc7Xoy/F/146uB6f3bbh4VvoADrT/hXS1NSy42pGXBLEJyAtfAwkxfHQCJooJ9F83X
-         /jV2YgYJ8WVF5wp3ewiBGKSLrLL03jTKsr7gInr3y8OH0BkdRWF/z2zIUNUu8+a3eFOd
-         kiMjt8BUB83eo29QSFqu59uBf8T8bezS0VNrSwHyn1ZmzTE9YRVFHcFHibuU31imD/Kv
-         5gkA==
-X-Forwarded-Encrypted: i=1; AJvYcCUV75JWpU+RyidFmo9vIHgnvralA0FbSbLMLya0jzZRZQ2/TixSAEsqIy4lzVDr3X1AhhsyTzXtCpqmkXw=@vger.kernel.org, AJvYcCVBgp2KTMRw9UUaLnN4Fue26PI2h+KaJ5grOZLhY8SdhcyT928uoQsip0yO25vLbtOSuppD5b5oywd7euDVQMwK@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaBmD7nnoP6VaJsVM0vkPR+QMAGHimCt2n3DEW4UT25Wp13eeu
-	elfjZpU92LIY8Qqic7tpfitT8Ridn8v3fYYzhB33E+VAQ+DxL1/WPdBom2Wa
-X-Google-Smtp-Source: AGHT+IE8K8cYvejJms4VfG+ciUVxwqNl8bPWE5UnzciBqTXhfLw+0883IQCHqYNr0YdgUkwK/C/D2A==
-X-Received: by 2002:a05:6902:218b:b0:e33:16fe:ddd0 with SMTP id 3f1490d57ef6-e3377ba8866mr170314276.47.1730964886084;
-        Wed, 06 Nov 2024 23:34:46 -0800 (PST)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e336f1ba68dsm162691276.48.2024.11.06.23.34.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Nov 2024 23:34:45 -0800 (PST)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6ea15a72087so4955247b3.1;
-        Wed, 06 Nov 2024 23:34:44 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVp6Dp8sLJlZx/lABrY28XI32LhJ4ixrKRHNMTJL4Q99+yYHtF4RXLhv1j4x+VmPngrUEWluRSXZTCtHYuKplwI@vger.kernel.org, AJvYcCXVvQF7RM98xK5ILWNEWISGO/puWhfi2XEaHvdwmeeakgmYduisJiC42LCVOW/76tBpoRl4KeLg0IYSD6A=@vger.kernel.org
-X-Received: by 2002:a05:690c:3808:b0:6ea:7e37:8cec with SMTP id
- 00721157ae682-6ead5f4a647mr1652597b3.2.1730964884724; Wed, 06 Nov 2024
- 23:34:44 -0800 (PST)
+	s=arc-20240116; t=1730967792; c=relaxed/simple;
+	bh=Q2GSmVIISTS2anK4abVbSWAkn8WydlilysNNoztLfTA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=edkHSa4D+kGmqOpROpbUzh0WqQ1jmrax9wyXXSxRSZ0fS6x5QuwcVun05RnJ0GEL1651rxt2fJPjArIkgh/2P0QJnvRms28HMbcDE9dxkAuNXSkozgDZW+gEFELgCh5t3bCOs+f/QR3zDTAewCt/Oui/unn/mSh+OnlIuonMsJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nwl.cc; spf=pass smtp.mailfrom=nwl.cc; dkim=pass (2048-bit key) header.d=nwl.cc header.i=@nwl.cc header.b=FIcGb/bO; arc=none smtp.client-ip=151.80.46.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nwl.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nwl.cc
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nwl.cc;
+	s=mail2022; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=M/3rlViT9D+L9ncSWn/0ufpEXuzN61pptP4kPOAdcPw=; b=FIcGb/bOLHOj6ThuUTFYD8+Fqa
+	Vk9oPPYaWZ87+u6pui+N/daP9ZApO6BmSkH6KhvuOZH1++/hMzbVkLi7PM1J4vxOWXTwIEqPyMj8q
+	yJ9LDjIywQ9xEv+PN1cjIcuvwC4c8+Gp717OUrE/hbrNrS0HNgNwM7GNh5TJMpgjG6HAEKxuSOtgW
+	LnOa476D9WYCETQAV19j3Jtwc4UAh3GKIg9t+B2YlFyMpGTvwd+P8DV0qelR59o3S9LRDrsGr0xc1
+	FgOpQsBIbPU9iiXWLBtNjUI+XhLS6qxrrkKL9Avkz3ATLRV2ZyNzMq0v0nUwgMXGUui98qznHnlRJ
+	E3V08nCQ==;
+Received: from n0-1 by orbyte.nwl.cc with local (Exim 4.97.1)
+	(envelope-from <phil@nwl.cc>)
+	id 1t8xnE-000000003Lz-2FDx;
+	Thu, 07 Nov 2024 09:23:04 +0100
+Date: Thu, 7 Nov 2024 09:23:04 +0100
+From: Phil Sutter <phil@nwl.cc>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Florian Westphal <fw@strlen.de>, wireguard@lists.zx2c4.com,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests: wireguards: use nft by default
+Message-ID: <Zyx46O0qLtXAs80X@orbyte.nwl.cc>
+Mail-Followup-To: Phil Sutter <phil@nwl.cc>,
+	Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Florian Westphal <fw@strlen.de>, wireguard@lists.zx2c4.com,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20241107025438.3766-1-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241011072509.3068328-2-davidgow@google.com> <20241011072509.3068328-3-davidgow@google.com>
- <CAMuHMdUdotDYAgSDDrWi-TOj2o=5a53n452DydhD-Q0fjiGhew@mail.gmail.com>
- <CAMuHMdVQ-Fmnti80_HoX1+6L8wNUghpuJzqpT_g0SJQG-oq6RQ@mail.gmail.com> <20241106131718.e0899c324941f63dc931f0fc@linux-foundation.org>
-In-Reply-To: <20241106131718.e0899c324941f63dc931f0fc@linux-foundation.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 7 Nov 2024 08:34:31 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVXkqxyu=+H_bxazxTLT8UBJuaDpctEcChRbTyXATPm1g@mail.gmail.com>
-Message-ID: <CAMuHMdVXkqxyu=+H_bxazxTLT8UBJuaDpctEcChRbTyXATPm1g@mail.gmail.com>
-Subject: Re: [PATCH 1/6] lib: math: Move kunit tests into tests/ subdir
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: David Gow <davidgow@google.com>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Brendan Higgins <brendanhiggins@google.com>, Rae Moar <rmoar@google.com>, 
-	Kees Cook <kees@kernel.org>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, Luis Felipe Hernandez <luis.hernandez093@gmail.com>, 
-	quic_jjohnson@quicinc.com, macro@orcam.me.uk, tpiepho@gmail.com, 
-	ricardo@marliere.net, linux-kernel-mentees@lists.linuxfoundation.org, 
-	Nicolas Pitre <npitre@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241107025438.3766-1-liuhangbin@gmail.com>
 
-Hi Andrew,
+Hi Liu Hangbin,
 
-On Wed, Nov 6, 2024 at 10:17=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
-> On Wed, 6 Nov 2024 09:33:55 +0100 Geert Uytterhoeven <geert@linux-m68k.or=
-g> wrote:
-> > > This conflicts with "[PATCH] m68k: defconfig: Update defconfigs for
-> > > v6.12-rc1"[1].  Of course the proper way forward would be to add
-> > > "default KUNIT_ALL_TESTS" to all tests that still lack it, so I can
-> > > just never queue that patch ;-)
-> >
-> > What's the status of this series? I am asking because I am wondering if
-> > I should queue [1] for v6.13, or just drop it, and send a patch to add
-> > "default KUNIT_ALL_TESTS" instead.
-> >
-> > I saw the email from Andrew stating he applied it to his tree[2],
-> > but that seems to have been dropped silently, and never made it into
-> > linux-next?
->
-> Yes, sorry.  Believe it or not, I do try to avoid spraying out too many
-> emails.  David will recall better than I, but things got messy.
-> https://lkml.kernel.org/r/20241009162719.0adaea37@canb.auug.org.au was
-> perhaps the cause.
+On Thu, Nov 07, 2024 at 02:54:38AM +0000, Hangbin Liu wrote:
+> Use nft by default if it's supported, as nft is the replacement for iptables,
+> which is used by default in some releases. Additionally, iptables is dropped
+> in some releases.
+> 
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> ---
+> CC nft developers to see if there are any easier configurations,
+> as I'm not very familiar with nft commands.
 
-Fair enough.
+Basically looks good, just a few minor remarks:
 
-> I'm sure David can being us up to date.
+> ---
+>  tools/testing/selftests/wireguard/netns.sh | 63 ++++++++++++++++++----
+>  1 file changed, 53 insertions(+), 10 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/wireguard/netns.sh b/tools/testing/selftests/wireguard/netns.sh
+> index 405ff262ca93..4e29c1a7003c 100755
+> --- a/tools/testing/selftests/wireguard/netns.sh
+> +++ b/tools/testing/selftests/wireguard/netns.sh
+> @@ -44,6 +44,7 @@ sleep() { read -t "$1" -N 1 || true; }
+>  waitiperf() { pretty "${1//*-}" "wait for iperf:${3:-5201} pid $2"; while [[ $(ss -N "$1" -tlpH "sport = ${3:-5201}") != *\"iperf3\",pid=$2,fd=* ]]; do sleep 0.1; done; }
+>  waitncatudp() { pretty "${1//*-}" "wait for udp:1111 pid $2"; while [[ $(ss -N "$1" -ulpH 'sport = 1111') != *\"ncat\",pid=$2,fd=* ]]; do sleep 0.1; done; }
+>  waitiface() { pretty "${1//*-}" "wait for $2 to come up"; ip netns exec "$1" bash -c "while [[ \$(< \"/sys/class/net/$2/operstate\") != up ]]; do read -t .1 -N 0 || true; done;"; }
+> +use_nft() { nft --version &> /dev/null; }
+>  
+>  cleanup() {
+>  	set +e
+> @@ -196,13 +197,23 @@ ip1 link set wg0 mtu 1300
+>  ip2 link set wg0 mtu 1300
+>  n1 wg set wg0 peer "$pub2" endpoint 127.0.0.1:2
+>  n2 wg set wg0 peer "$pub1" endpoint 127.0.0.1:1
+> -n0 iptables -A INPUT -m length --length 1360 -j DROP
+> +if use_nft; then
+> +	n0 nft add table inet filter
 
-Probably the best solution is to respin after v6.13-rc1, to be included
-in v6.13-rc2.
+Using inet family captures IPv6 traffic, too. You don't seem to
+explicitly configure it, but the usual auto-config traffic may offset
+rule counters. If you care about such side-effects, you may want to use
+ip family instead.
 
-Gr{oetje,eeting}s,
+Tables are family-specific, but generic otherwise. So you could add a
+table for testing in each netns up front:
 
-                        Geert
+| if use_nft; then
+| 	n0 nft add table ip wgtest
+| 	n1 nft add table ip wgtest
+| 	n2 nft add table ip wgtest
+| fi
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+> +	n0 nft add chain inet filter INPUT { type filter hook input priority filter \; policy accept \; }
+> +	n0 nft add rule inet filter INPUT meta length 1360 counter drop
+> +else
+> +	n0 iptables -A INPUT -m length --length 1360 -j DROP
+> +fi
+>  n1 ip route add 192.168.241.2/32 dev wg0 mtu 1299
+>  n2 ip route add 192.168.241.1/32 dev wg0 mtu 1299
+>  n2 ping -c 1 -W 1 -s 1269 192.168.241.1
+>  n2 ip route delete 192.168.241.1/32 dev wg0 mtu 1299
+>  n1 ip route delete 192.168.241.2/32 dev wg0 mtu 1299
+> -n0 iptables -F INPUT
+> +if use_nft; then
+> +	n0 nft delete table inet filter
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Here just flush the table (drops only the rules):
+
+| n0 nft flush table ip wgtest
+
+Cheers, Phil
 
