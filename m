@@ -1,50 +1,49 @@
-Return-Path: <linux-kselftest+bounces-21582-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21583-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 797789BFBDB
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 02:44:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A12959BFBDD
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 02:44:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94A771C21E85
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 01:44:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 587811F22B01
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 01:44:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D15AB12FF70;
-	Thu,  7 Nov 2024 01:43:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FD2715B0F2;
+	Thu,  7 Nov 2024 01:43:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eOGRyaQB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JoGAVFaM"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98C4126C1E;
-	Thu,  7 Nov 2024 01:43:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67996155398;
+	Thu,  7 Nov 2024 01:43:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730943836; cv=none; b=dlkQ9xFaBA14X/J//C9JCtwO57qbnyAkPtjtubrd8nBgTP9wBDrcvNWWxcsoolIKqw+o8HYDeAx/1H+DbZpnvf8wO2mmWSx6wWYBax2Bi6Mj2vw6O3DxQ48XQOx0v9lTaOiXvuJPs5P1a/Vc01O9cwcJU4AVe4uPbpjz5UXmzjs=
+	t=1730943838; cv=none; b=A5HM0BfzDfHSEvQNsdR3fm3AH5Zw2BiIv8PFsIt9cD55iDWBu5sXjBUM3bvAH24PMRqMx3m10iJ1MDuTcppJnOOZgDPYj2rYourokaWrLBLi6Yd7gFk+1hwPPPYD3asbQ8WZRv9KNyqzjQ/KtXy65d9nk/UMDcX2Qif7VAgq0XQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730943836; c=relaxed/simple;
-	bh=Ntx8WxDk8rLB1Q5ojb39wO8KX0zB/auSEfmEWkUG1Zw=;
+	s=arc-20240116; t=1730943838; c=relaxed/simple;
+	bh=UoJTq/4nL7BvDS6uY/r24/IvWcAW7qJlvfXTsku1iBE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IhYQ7yWPqgymjRXeZISuZ+SHipIRh8RJE6xhImf82hkZYMVHQ8ESVW5u9LcwawcgEJnmG+DAgFvdwHYOlZp1BlPGInn2OMHSWO40eQ7oksT5MaJDKutcVRGObAoaG/L+QNJYZ9eJIaiUhhBdV59lmDqnuhKhzbhuwICbtK+Rz5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eOGRyaQB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBD3AC4CED2;
-	Thu,  7 Nov 2024 01:43:54 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=NLZWYrXl3cLJn20SLKrPXRfo3zwHRQHRFEv8lYRC8ecDkkvMWfIgs6y3K+AJ4Wbs1k1/YtJpAXLZmx+gTka35nvtA9VE6oyEhEOeFpPqNGLFMPnzbRb4zWKL/9JpzszoErgFn2fRWo/wHte334c14r1mD46WdIYdDJYwy+8xs+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JoGAVFaM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7C76C4CED3;
+	Thu,  7 Nov 2024 01:43:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730943836;
-	bh=Ntx8WxDk8rLB1Q5ojb39wO8KX0zB/auSEfmEWkUG1Zw=;
+	s=k20201202; t=1730943838;
+	bh=UoJTq/4nL7BvDS6uY/r24/IvWcAW7qJlvfXTsku1iBE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=eOGRyaQBHLWbThvMfSOe+NdKSSWq47FiT6b0jbREJrCrmCCkKRYzBX+kI8uqf4FGB
-	 8Rv3aIyC0qor9e7OhXBedZ/cj9Of9jgpTWw/ukU8ZRaZzBW1kRxPIXrz7wQ72uT3Go
-	 k3T+rD5Fmj8phhkMIU94o0Mc6vDXwQiq9tz8HUaiJBhUqOzNkve1cErbwnm5NhPshu
-	 AzS2XHxlYB6oBLepZrn7YXVck1C5VRttG7VoARVhv4jOm4klkosh8LV7cTGDr1rCI+
-	 r+4m1zmGwPYFpV3s2XQgqfkehkMXEBiIgUHjIOC0VUa5YYa+5E4YFmg/XikX2smBGe
-	 eVxd6sDElshsA==
+	b=JoGAVFaMtyTqLWfIgNr/IR1H96/1i3JXJuY1GBIIhGy/MSX8l0z2eMmOBuO+vEchH
+	 XW3dC68fRE0dOb9WdFfGmPTbBPCyctuR1/2OiSz+9Ci9bKIVgivsauXlYRbYGvOQQU
+	 t5hgPhXjvQtcFGBj6e+RuRYMSqa4/3Yb0Tj8mNQIyuYDUtu88A8/KWta9+IbHc7HcT
+	 SNsjwZAmaG1xwVEih+yu/ebwYh+SwgiAlANhJ9mLnCP5IQZ4uSm2iCw1NzPcFssxcO
+	 ccoYPDLBaX6GKL7xFL1HRRss4zU8P5K45fnIqAnLdBwBy8usY/7Hpaq3luJUcHieyU
+	 tfemnMhet+hKA==
 From: Mark Brown <broonie@kernel.org>
-Date: Thu, 07 Nov 2024 01:39:22 +0000
-Subject: [PATCH v2 3/6] kselftest/arm64: Corrupt P0 in the irritator when
- testing SSVE
+Date: Thu, 07 Nov 2024 01:39:23 +0000
+Subject: [PATCH v2 4/6] kselftest/arm64: Implement irritators for ZA and ZT
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241107-arm64-fp-stress-irritator-v2-3-c4b9622e36ee@kernel.org>
+Message-Id: <20241107-arm64-fp-stress-irritator-v2-4-c4b9622e36ee@kernel.org>
 References: <20241107-arm64-fp-stress-irritator-v2-0-c4b9622e36ee@kernel.org>
 In-Reply-To: <20241107-arm64-fp-stress-irritator-v2-0-c4b9622e36ee@kernel.org>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
@@ -62,44 +61,89 @@ Cc: Mark Rutland <mark.rutland@arm.com>,
  linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-9b746
-X-Developer-Signature: v=1; a=openpgp-sha256; l=949; i=broonie@kernel.org;
- h=from:subject:message-id; bh=Ntx8WxDk8rLB1Q5ojb39wO8KX0zB/auSEfmEWkUG1Zw=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnLBtRwxb32ApH8TNCcyHne3pvmw/cpBt6AyUptaVN
- CbigTQOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZywbUQAKCRAk1otyXVSH0Ez4B/
- wOuFw0QZXOAEYlFcCsYcnod9CvSTtuMwy5tDEnl0yp9kzzWK0P1Y3U89+XaFPf37gas7ljxNTWD85P
- ep6hgFfDMW3ZUzsQks3C8oSQPvpGEdsaNW7Bb3lCM6k30WJxpcA1AbWsNpgXEG2TAQHqSwLcZUHbr/
- Phe9TzUtRbi2szmDxzDGMzOL/JOz6K/v3AziIWHW3LWds5gA1DfXMFf2Y8tONxzQk/I6JXuX3MWZxV
- PNGhLcDB1GZx1onv67RT3a2zDo5zgAmJvV4dwJbMMvljWihwNE+pv35clsC/22S07uBgQRK8VFpNGU
- J36mxVJYc8xIgrRjhbJxYU2fCZ8E4U
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2558; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=UoJTq/4nL7BvDS6uY/r24/IvWcAW7qJlvfXTsku1iBE=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnLBtSwoIBhD3y9ti90AkhESfq9btN6AviJzAkJBpX
+ JMLOoZCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZywbUgAKCRAk1otyXVSH0PY7B/
+ 4pynI9BeZ8ypvO8mQZDFKRkRl06pvwb0CZjNnHowWK4SQFeZQ69MZ1Bn2LD87oQiKDerIG6YmzQh6L
+ tYGa+qzUGMOxhhVpXX1nEE2AA8/4cOVbjG1gjo0LnDtl53wdeI12qPSO7UOSc17WgfHJLVf7AA8S0q
+ E8C7T6gnyfhtT/RPLB6k6+x7S76ra+U4yvVGGnuO9EjcByDdHdKrIz/7BEg8l7vmWbb+Hv0x8PXvke
+ 0S9JnXkgAeIrTH7X47McaV+BsgXHXI4PEhw40BJI6TKGhIB+gR8rpiLifeHX+mHuhL8dZiQ5YW9fzI
+ V8CA8bt3/idVoZ+zcv6yZe6ckghDjl
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-When building for streaming SVE the irritator for SVE skips updates of both
-P0 and FFR. While FFR is skipped since it might not be present there is no
-reason to skip corrupting P0 so switch to an instruction valid in streaming
-mode and move the ifdef.
+Currently we don't use the irritator signal in our floating point stress
+tests so when we added ZA and ZT stress tests we didn't actually bother
+implementing any actual action in the handlers, we just counted the signal
+deliveries. In preparation for using the irritators let's implement them,
+just trivially SMSTOP and SMSTART to reset all bits in the register to 0.
 
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/arm64/fp/sve-test.S | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/arm64/fp/za-test.S | 12 ++++--------
+ tools/testing/selftests/arm64/fp/zt-test.S | 12 ++++--------
+ 2 files changed, 8 insertions(+), 16 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/fp/sve-test.S b/tools/testing/selftests/arm64/fp/sve-test.S
-index f1fb9745c681786f686f1fafcb7e1154f3c8e1a3..28eb8b5cc2d2e6f51818f29db037e55c9b838a41 100644
---- a/tools/testing/selftests/arm64/fp/sve-test.S
-+++ b/tools/testing/selftests/arm64/fp/sve-test.S
-@@ -302,9 +302,9 @@ function irritator_handler
- 	movi	v0.8b, #1
- 	movi	v9.16b, #2
- 	movi	v31.8b, #3
--#ifndef SSVE
- 	// And P0
--	rdffr	p0.b
-+	ptrue	p0.d
-+#ifndef SSVE
- 	// And FFR
- 	wrffr	p15.b
- #endif
+diff --git a/tools/testing/selftests/arm64/fp/za-test.S b/tools/testing/selftests/arm64/fp/za-test.S
+index 1ee0ec36766d2bef92aff50a002813e76e22963c..f902e6ef9077bfa34fa7f85ce572ce3df4346789 100644
+--- a/tools/testing/selftests/arm64/fp/za-test.S
++++ b/tools/testing/selftests/arm64/fp/za-test.S
+@@ -148,20 +148,16 @@ function check_za
+ 	b	memcmp
+ endfunction
+ 
+-// Any SME register modified here can cause corruption in the main
+-// thread -- but *only* the locations modified here.
++// Modify the live SME register state, signal return will undo our changes
+ function irritator_handler
+ 	// Increment the irritation signal count (x23):
+ 	ldr	x0, [x2, #ucontext_regs + 8 * 23]
+ 	add	x0, x0, #1
+ 	str	x0, [x2, #ucontext_regs + 8 * 23]
+ 
+-	// Corrupt some random ZA data
+-#if 0
+-	movi	v0.8b, #1
+-	movi	v9.16b, #2
+-	movi	v31.8b, #3
+-#endif
++	// This will reset ZA to all bits 0
++	smstop
++	smstart
+ 
+ 	ret
+ endfunction
+diff --git a/tools/testing/selftests/arm64/fp/zt-test.S b/tools/testing/selftests/arm64/fp/zt-test.S
+index ade9c98abcdafc2755ef4796670566d99e919e5c..c96cb7c2ad4b406c54099fe3f73917259bd947e4 100644
+--- a/tools/testing/selftests/arm64/fp/zt-test.S
++++ b/tools/testing/selftests/arm64/fp/zt-test.S
+@@ -117,20 +117,16 @@ function check_zt
+ 	b	memcmp
+ endfunction
+ 
+-// Any SME register modified here can cause corruption in the main
+-// thread -- but *only* the locations modified here.
++// Modify the live SME register state, signal return will undo our changes
+ function irritator_handler
+ 	// Increment the irritation signal count (x23):
+ 	ldr	x0, [x2, #ucontext_regs + 8 * 23]
+ 	add	x0, x0, #1
+ 	str	x0, [x2, #ucontext_regs + 8 * 23]
+ 
+-	// Corrupt some random ZT data
+-#if 0
+-	movi	v0.8b, #1
+-	movi	v9.16b, #2
+-	movi	v31.8b, #3
+-#endif
++	// This will reset ZT to all bits 0
++	smstop
++	smstart
+ 
+ 	ret
+ endfunction
 
 -- 
 2.39.2
