@@ -1,113 +1,90 @@
-Return-Path: <linux-kselftest+bounces-21612-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21619-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0B449C0890
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 15:12:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D824C9C08EE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 15:33:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6B20283B12
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 14:12:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FD8F1F23C25
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 14:33:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93B4A21218E;
-	Thu,  7 Nov 2024 14:12:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C8F6212622;
+	Thu,  7 Nov 2024 14:32:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fk8kwpiP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U4CBsTDQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB1328F1;
-	Thu,  7 Nov 2024 14:12:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA6B1168BD;
+	Thu,  7 Nov 2024 14:32:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730988722; cv=none; b=sDbBDxKtHU5U2Mx2cpgkyz34L2vLGYxtx0OIcualDBLab2Mu3nIuTweJ5nSGdqzYs6lpTAqXpRcWgJ0WxFMkIY/Y6pW18Uwx64T8s0+tkR1dnKSRg3Akm/T2mowhCNaM5zAtTqMQWnKVvVgNSJ2ONekNrkHf2zHxO7AAbvIkXdQ=
+	t=1730989975; cv=none; b=UdlsMG7vX+9ONPatAUcromAR5Lg3/KlaMfUrIR40eBSkK2C98KZgrHoEj2Btz2iXYyqPDpxe86+0xxI5KJqqyb0a8y78QKOU2OiowNioWayEwTr+bSytHvJ/3KSHNF3+m8rV3gje2EUn+hzzrEgytLHlHBnLOqei7de5yEpAG54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730988722; c=relaxed/simple;
-	bh=uhbUtE9i1AyZBoS14bUm/Sz+IXR+OgXGcf4IyZU5vYQ=;
+	s=arc-20240116; t=1730989975; c=relaxed/simple;
+	bh=DvkB/sbaZRLhctzLM3g42ELdV1YVsM1roN6Nkn42Otk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EPElYADhKDj0k87QyUg7OpJeGGvWj2knAaRq/oVtnQO9Z3yuSn1+CbAqPhcMY8Oy0nw1S+QDaDlXDibdY+PpRo933LQwGLFx50+PFMUPCJminrHUxjTRUeqH60fokJfHuxl06vu7zvCy9sw+KpqwniWwZ6yHtcSsUuqG7MImCQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fk8kwpiP; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-37d6a2aa748so620730f8f.1;
-        Thu, 07 Nov 2024 06:12:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730988719; x=1731593519; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uhbUtE9i1AyZBoS14bUm/Sz+IXR+OgXGcf4IyZU5vYQ=;
-        b=Fk8kwpiPC6MAV+tbVWJv8asz0H+lwNWkLRTykVDTTjeMhMHcL5FgaXqZB6CpOquucS
-         9c7a31bKTJra/4nlltt6JZpGSb+a8veIWObuu7kM2fkG8YDEWtYBjQnJ87hQsuBrzS0S
-         FKjA8w0ltff9FqcbxCmN9AfHYqw/jU6JLBfMq/dbp+rUg8Ut8bL3SFIaXRwHEiJmaYsH
-         IJWEcK8iQZDI2PS+5akpEi5+oRraMYeStIXBwZKmL1SzF3OwAYPU+3TIM3J0L4FreeaU
-         s/xArgnD4w4eqKBjtzyOlOyEOP5YHL4QPApr0oCwPWozhSmLa1ngY8fGamKEgEH0jOFr
-         LHxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730988719; x=1731593519;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uhbUtE9i1AyZBoS14bUm/Sz+IXR+OgXGcf4IyZU5vYQ=;
-        b=r8zgNf24RFftqXmVbzUx/ahqPBTuU4S8qZdP3qSeYnlC2DZ280Heuouj/AhMVnNO/c
-         oDE2hbVJLQlwU2Sip0Bkshngk2xwk/9gNmUXntmhXu0pmc/HLEeJ93YIDdh/C7BEljBv
-         Ovvz5+QI4tTo+2KbaShlK2V5V6ldtCjZCRueuyPSwrz+oJ6sB59f1qhyA9nbd4erbrZy
-         S2PQthSEtk/0fl4afGyNwbua4pgohOAGFNMWrDp8oiiGwJhUCTLRBsznskq2dds5vema
-         gEeDY918rSFwCYac3MYdw/Iq0f1EL+QkbX6kyFyzicTVI+cWLEyxLez4HwXb6PFI/eUW
-         sNaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWktucdx5jRJ2aUGZNlOdHGyDMev/ZR186x75+rSkstY4JRlQKWJ/NG+EtT3a+6kOZqRumAF5chxUVrtOAYnvg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTsYIIMlrTZ555nsjq6LnfTYnkl9uaE9/tDPFSLUtY6n+KikIN
-	8pzi/O800utmaOeTHMyn2SaNnUHpyPavoySCNYJmAe0IZF+JadRjVc81ksBke53JBf1gS37marx
-	0PpjYOHf2nQPyF7J5V981nXwHYs4=
-X-Google-Smtp-Source: AGHT+IEXCGr4lM7xLIA8M7+HqoyUFdYEzQ3DCLnst6/U6/FQQrrnZXD3oAiWu1HQXkAPeiRSqXxq/yamqJYBwTeu18w=
-X-Received: by 2002:a5d:64cc:0:b0:374:bd48:fae9 with SMTP id
- ffacd0b85a97d-381c7a4c99bmr19286392f8f.20.1730988719073; Thu, 07 Nov 2024
- 06:11:59 -0800 (PST)
+	 To:Cc:Content-Type; b=CT2J3HmfQfN9boOX03eMFhez5H5Q9AEcFZH1WFhgAO9fpi2GG6ZQCZz2ElZfYcJlIXrtKfDdHJVuAOCpzOVB4j6XLpoBkvbKOzMDnqLWJTrqrWwnA6LZgRnfqU3qEznA6MfzpYW7f3rZpkE7UlICoiFydtJDRmD/ppWFqybwiLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U4CBsTDQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 741A2C4CED0;
+	Thu,  7 Nov 2024 14:32:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730989974;
+	bh=DvkB/sbaZRLhctzLM3g42ELdV1YVsM1roN6Nkn42Otk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=U4CBsTDQ4hYvaI45hMbB3EXSH3dlqUr6xzbauezqLMIv2EjJw2wUIbhj3OxDDleYr
+	 hANQijAsuTpmNiWH6OgW5jL6xMn1sIIGSxnLpBEdkY3dxzZvNjNBomWPqWFTI+wm1y
+	 lVGfbDt9mGsg/gRd3glbvUvFxYiUMWbzPkLZ98Tc6j2IN4qi/FogRRbMFtsetjQkKY
+	 O5RDoiGnWCWbbvfoalTOWLG0oknV/MXE6lMXKBxa6HVXd6bibkTplyCbzJA2xcRea3
+	 jTwCbtezdRkCxiwGbT7KjQFWBfVgX4Le4KMAXouiFJnWo3cGFGmW71fFNmauzMoT7/
+	 m/voWpidyFxnQ==
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6cbcc2bd7fcso6243596d6.1;
+        Thu, 07 Nov 2024 06:32:54 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU2WwE8TvqjMEkBE2KymHyxhnjHg2IqdFXpXLPiuzeCntvs0tCe12k6PHiJvOXvlIJzU3o=@vger.kernel.org, AJvYcCUbAL/fGfNNpfLzNpuJMnvgDXSIQzYSJjhBKV8pg3dBapGNQY3wBYXcT74EXUfQi5JpDpWRuACCaP28omPxWWX2@vger.kernel.org, AJvYcCV+JFfC6b67m61OVK63G0o8unn/H4NctW+q7wNqrpzAdrKeduC1qax6LOyktIGkEvjpCQenrL4FrCqhubN1@vger.kernel.org, AJvYcCVjwANMpRBTJ03sB6q471BtfyENGcHhJRTUhRm1RGN5O2dE3wN23pOFhtJ2vB2mlNN11+JsAZ04@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIQ+fkWgJZQmEoiRjzyDIGayE1v104RltmjHDACzH6xn8OE5bp
+	XpAEdcptU44iPPOBdnTFCG4bGQ3Iuxe0B3YonjyeuNDjVQPel50/eOmRM+RhQIQ/FFHT4Bu+c/o
+	p57gHUSqN1aL4sUSMh0eaWeqIGHU=
+X-Google-Smtp-Source: AGHT+IHUCLtFQ8IuQTRLh1fcgLhAN5eLbq9UIfP6whxl0V14vWJHVvz6l3hhBZU79uygYdnjqGmoYxDIzrGp2K4+w/k=
+X-Received: by 2002:a05:6214:4198:b0:6cb:ef22:6274 with SMTP id
+ 6a1803df08f44-6d39cf9cdcemr1411926d6.3.1730989973620; Thu, 07 Nov 2024
+ 06:32:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241107133004.7469-1-shaw.leon@gmail.com> <20241107133004.7469-6-shaw.leon@gmail.com>
- <CANn89iLvC0H+eb1q1c9X6M1Cr296oLTWYyBhqTAyGW_BusHA_A@mail.gmail.com>
-In-Reply-To: <CANn89iLvC0H+eb1q1c9X6M1Cr296oLTWYyBhqTAyGW_BusHA_A@mail.gmail.com>
-From: Xiao Liang <shaw.leon@gmail.com>
-Date: Thu, 7 Nov 2024 22:11:24 +0800
-Message-ID: <CABAhCOS8WUqOsPCzQFcgeJbz-mkEV92OVXaH3E1tFe7=HRiuGg@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 5/8] net: ip_gre: Add netns_atomic module parameter
-To: Eric Dumazet <edumazet@google.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Jakub Kicinski <kuba@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Ido Schimmel <idosch@nvidia.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Simon Horman <horms@kernel.org>, 
-	Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Jiri Pirko <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>
+References: <20240927131355.350918-1-bjorn@kernel.org> <172835823300.66789.3704854116445399222.git-patchwork-notify@kernel.org>
+ <87bjyvpa6h.fsf@all.your.base.are.belong.to.us> <CAEf4BzZbq9OwSGi4pdb5_q8YkErfFiQFKYXg3g1rjpdejafx+Q@mail.gmail.com>
+In-Reply-To: <CAEf4BzZbq9OwSGi4pdb5_q8YkErfFiQFKYXg3g1rjpdejafx+Q@mail.gmail.com>
+From: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Date: Thu, 7 Nov 2024 15:32:42 +0100
+X-Gmail-Original-Message-ID: <CAJ+HfNjiuhOyw2r9+e=CRMXrq_NjP5Sq4oT1tc_vhTZ_HkY7zQ@mail.gmail.com>
+Message-ID: <CAJ+HfNjiuhOyw2r9+e=CRMXrq_NjP5Sq4oT1tc_vhTZ_HkY7zQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] libbpf: Add missing per-arch include path
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: patchwork-bot+netdevbpf@kernel.org, andrii@kernel.org, eddyz87@gmail.com, 
+	mykolal@fb.com, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	bjorn@rivosinc.com, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	charlie@rivosinc.com, Andreas Schwab <schwab@suse.de>, Anand Moon <linux.amoon@gmail.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 7, 2024 at 9:37=E2=80=AFPM Eric Dumazet <edumazet@google.com> w=
-rote:
->
-> On Thu, Nov 7, 2024 at 2:30=E2=80=AFPM Xiao Liang <shaw.leon@gmail.com> w=
-rote:
-> >
-> > If set to true, create device in target netns (when different from
-> > link-netns) without netns change, and use current netns as link-netns
-> > if not specified explicitly.
-> >
->
-> Sorry, module parameters are not going to fly.
+On Wed, 6 Nov 2024 at 23:04, Andrii Nakryiko <andrii.nakryiko@gmail.com> wr=
+ote:
+> I'm sorry, but unfortunately it's too late now to move those patches
+> as it's now been more than a month since they landed. For the future,
+> please let us know ASAP if you think patches were misrouted. I think
+> we are stuck with the need to do a stable backport for these, sorry.
 
-Sorry, I didn't know that.
+Yeah, realize that it's really late. Thanks for getting back, and
+noted for the future.
 
-> Instead, add new rtnetlink attributes ?
-
-It is to control driver behavior at rtnl_ops registration time. I
-think rtnetlink
-attributes are too late for that, maybe? Can't think of a way other than
-module parameters or register separate ops. Any suggestions?
+Cheers,
+Bj=C3=B6rn
 
