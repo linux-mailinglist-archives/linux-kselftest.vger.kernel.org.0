@@ -1,121 +1,120 @@
-Return-Path: <linux-kselftest+bounces-21624-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21625-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 689339C0C05
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 17:54:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6F349C0CAB
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 18:16:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDAE31F22732
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 16:54:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A6E0283E4D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2024 17:16:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5D3321620A;
-	Thu,  7 Nov 2024 16:54:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B881D126BE6;
+	Thu,  7 Nov 2024 17:16:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="guuUxMAb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ssj7JSI+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002351BD007;
-	Thu,  7 Nov 2024 16:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C3A18DF62;
+	Thu,  7 Nov 2024 17:16:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730998473; cv=none; b=mHYJ/q0jpu2ULc+PWJnOEWEwf44kaWdCSoMSUTFgMZOzT7UUVt63En6CPoSMOXAqlbE9gNZo2a2RSTBNNpcoHi9QhKkS8xABHcvtRM58qj1+vq5Hr8McgdnPp45VQju9cfMuxtStXc6vskv2Grdd+dW3rpd6AqgaljOgoIaQnhQ=
+	t=1730999802; cv=none; b=hRdfbiED6yzIQE7A8huzGqWPyOOsFFSKHihS3ZrymI/bhTnl4+EypZii9cf1htGMrcg9LrI9rD+8kvPLk2B5TZgOUh+uHYrBbsWKj7jCIstmqodmPfEUeNpwdLG9J+wCuv89mpu4bMkFjtrrW3NllElK6gmgqucmSRrNQ5ElOIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730998473; c=relaxed/simple;
-	bh=YjR9XgoTaD6j/UmnPPlZ7iV9/VGfZG8Hi/1ZKtVLbcw=;
+	s=arc-20240116; t=1730999802; c=relaxed/simple;
+	bh=XZbkjuPx0RzD//u+DiwqR938wVtwAzNt9z4kO6M3ASY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ruR6krTRpO+zws58Cnow/vxXNYVqB6m1gthw+4wX2+p9/KTMMLqXvcUcu6ovSFcB1w4IkwSkvudKHosO+dGfajMYUhhMHlIXhL10WgR5w70B9jBQbODuK1uADszSI9ZeOXZwnCloTJSalg+49v2/Tl/BFoe1MmtiyCFU2baujc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=guuUxMAb; arc=none smtp.client-ip=209.85.221.51
+	 To:Cc:Content-Type; b=L5GPtcqu6M5bwNCukzS5jmcHX+HL2Jh8d4IYmGO5ngfF7nyictC4JZtBRMXndwYBIuPAhhN5HQ9OKS19UdaB3u60W6SKplp81CmKS7RtWyi4tr2IoO21kK37Td19I37ny6Ab0wEN8s5tDtpQoaXMDJIshz0d1CzuPid0QYYVgcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ssj7JSI+; arc=none smtp.client-ip=209.85.210.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-37d6a2aa748so725073f8f.1;
-        Thu, 07 Nov 2024 08:54:31 -0800 (PST)
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7181c0730ddso563331a34.2;
+        Thu, 07 Nov 2024 09:16:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730998470; x=1731603270; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YjR9XgoTaD6j/UmnPPlZ7iV9/VGfZG8Hi/1ZKtVLbcw=;
-        b=guuUxMAbZ/fZBhVXjph1XsOVGgPFRLIunKP9beqA0Q9j7CyVvXw60LZYPYn/CtjHTt
-         XB1IjQSzo6eMIsAAF4XYJw07bCv/X+xr2JzmNUlAQ+lNI6EaZckXYouVByP0R0tnwUmI
-         9hYa0q7tovX4Ic03dwckue7oLgObLO1lP5JR7iQhFgn71JS4LNjpG2haFOqHXKM0ZByZ
-         hsfhEKFzguvw6VHwjHjwQA7TdxPpNMzr8K+JwJIrMfYstpj2rfNnbkNBZDg6DOiXxByB
-         wXqvi+vcD2/FZp5VDPOKfUV/jZUz4UFSu6UjCoZStbVixlBEMWeEx9bkS96Ass5iY+MG
-         UdvA==
+        d=gmail.com; s=20230601; t=1730999800; x=1731604600; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BTMKweedjZ75OhcudktNfD43GIulRnBzWZ+fUwSHgKM=;
+        b=Ssj7JSI+tyxBBXva2Z/OcDTXKOIsmzcMRWcXqDSWBb6E2cpOZphP8iP2W2yKXfNzVu
+         PxfNBI3/DN03anN56zsYeuY24Ifnfx3qswxYSkcjziONZR9Es3NzTHSe4ASVZLSofclC
+         C6Yit7fWJtBkODdNCz2BL7pUMNf0p3k2Y64aMhQIvX1+0R2QWvAG7hxEhMSePizjw+4p
+         mcmnHCZ1SkaH5hf52V1RtIP0OOAAU4IYJiTQmDkeFL1jSjQRWnEA7E6sKm6t2l4vAw+X
+         qAzJv1FNm2R7fIsUsEx8+4XbiJp8vwg/v27SW517bpzFOGec3xGeTOsIVq4K/z/gj7xH
+         aTrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730998470; x=1731603270;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YjR9XgoTaD6j/UmnPPlZ7iV9/VGfZG8Hi/1ZKtVLbcw=;
-        b=Cad2kdeCPciIV7ECDZaaSnp0qDhf3ighY1W23oZnDRtZfO2vu/RztKXIZkgjp5/rwF
-         yfV5FzPpk2qU4QIyu5SfCGJfOrRqRnFnF3M5Y/7D0/kWfMjPhIAnhqxzAeICY2Jw/8qQ
-         EwAery/tihBZnOE5N5geJzEIkxTd3mbQBHCWtHqj24YS9s8ZJMICZu1oO/+kZlk5CUOQ
-         MO1pcObrMm8kBjg8GDZoJnZJ0ak0c9pKxkj2mmJi1YHMDHz70WKHWGcj6Ua22R+yXEQm
-         V0Kni3yL/8zCzJ4ItN7ygG9sjhkwrsapqtIf7W1APjWo5Yt8p4/NFW7INnEERuvWtN3g
-         atwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUFJad/D8yNnhTaehmL0NXT/Jp036K6mXYoyZcLvpJvQ0sIpsQ+w39jPZk66EC9JEUx8tflAbdA+Kf292fKRxQ=@vger.kernel.org, AJvYcCWpiBV1CS/PXrCBlZm0f50KSDQNHW8oNmlnBhTTkP1cXn9W9MpemO4StgzuBkphiokp45m03JL6@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdphoxSuwj9MAiehL2ScjrdYgyWJp0TGFYhsUj/uOcPW833Ri7
-	+akDrwZBcunMz6+0F4Sr19y0mh5++HpAR5h5bjBb1nmbELO+uIg5qjBINbLgZM7s1B2/xTrG5Rm
-	KF4exMg0i72w3drxtZPsznUL9k/0=
-X-Google-Smtp-Source: AGHT+IFbC+Sb2iP0XOwEMN7bNiSSUnyt16wp7V2RLOlj6Qx5ox4TKWGJWhoIHGCKICdvmlbDEjyuTeJwi+2y2XBLp20=
-X-Received: by 2002:a05:6000:1f8e:b0:37d:3301:9891 with SMTP id
- ffacd0b85a97d-381c7a4c0e6mr17589877f8f.17.1730998470087; Thu, 07 Nov 2024
- 08:54:30 -0800 (PST)
+        d=1e100.net; s=20230601; t=1730999800; x=1731604600;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BTMKweedjZ75OhcudktNfD43GIulRnBzWZ+fUwSHgKM=;
+        b=n+NQckmetXvC4MGRr/f4DCMBVjGu6OJ/D5J5MHROkEte+JJJiFESJbklheX00PFMbn
+         KpSJzz3zXDwgfpKv4o1XeQnDZiX/O333pdZAEMvoea6RdpkqbgY6a0/DD5G5trdLUBZj
+         J0HTBmjcBYCybpIOnmrXNtOIR2b0kE0XFr9wiHCIMYj/N/K7umsIv0FBaLrMkv/90Ivf
+         BxIjUOO3bVY1SXo5yAvaaadpCbO5n9SfKC0P/eXv7aYsiJvxTrq58MOONDHa6unuatWd
+         vMfwCCrSzBPl50lvfSm175+gSGSNFOV71OX/WKZxaztXWf4K0Mf0ElgXS2XhJG3HpJNy
+         fr0g==
+X-Forwarded-Encrypted: i=1; AJvYcCX5FxdJI9g96l8Xjt3xloTwjpPi4eWrgfSCeunS3iEZE5wu09NShCOgr2+Z4L1FXcF3QjTnkzGnHnz5Y2HVh4w=@vger.kernel.org, AJvYcCXOJIYUF4mZyZUUgN4wt8Y6HSuGXulOzU8xbAbhHHqN9KnmLYhbTL3fbo615FmxmSYeZvvKoXyp@vger.kernel.org
+X-Gm-Message-State: AOJu0Yynt3wWy4iybsoxXjXgMSV7crytmjb8Ss4VYAyeW+wqCz4Ma2hQ
+	IaPYJ6JdnKuYrGhOv9eV2SL2kcvmvLgFHOvX/wY1b9tWfACOYC/nn6wpqodDB8ErvFCTiJIUTuH
+	PXzXfrhZHfyCJLup3rCtrUeIUJME=
+X-Google-Smtp-Source: AGHT+IGtyHeUDDQ8/BFWFeMqSq8NaMTh98hsnESpBxWHLEm8HrqU+pnb2KK/P6JZfEkffd+YtKndmHcCOaM79cUEMR8=
+X-Received: by 2002:a05:6830:6389:b0:718:9ac7:27c4 with SMTP id
+ 46e09a7af769-71a1b3cdf34mr284743a34.5.1730999800048; Thu, 07 Nov 2024
+ 09:16:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241107133004.7469-1-shaw.leon@gmail.com> <20241107133004.7469-6-shaw.leon@gmail.com>
- <CANn89iLvC0H+eb1q1c9X6M1Cr296oLTWYyBhqTAyGW_BusHA_A@mail.gmail.com>
- <CABAhCOS8WUqOsPCzQFcgeJbz-mkEV92OVXaH3E1tFe7=HRiuGg@mail.gmail.com> <20241107075943.78bb160c@kernel.org>
-In-Reply-To: <20241107075943.78bb160c@kernel.org>
-From: Xiao Liang <shaw.leon@gmail.com>
-Date: Fri, 8 Nov 2024 00:53:55 +0800
-Message-ID: <CABAhCOSvhUZE_FE4xFsOimzVBQpQYLNk51uYNLw+46fibzfM2Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 5/8] net: ip_gre: Add netns_atomic module parameter
+References: <20241107133004.7469-1-shaw.leon@gmail.com> <20241107133004.7469-8-shaw.leon@gmail.com>
+ <20241107080420.6a5a5243@kernel.org>
+In-Reply-To: <20241107080420.6a5a5243@kernel.org>
+From: Donald Hunter <donald.hunter@gmail.com>
+Date: Thu, 7 Nov 2024 17:16:28 +0000
+Message-ID: <CAD4GDZwOzLQd+FYd0AHr5AUcANWkf731Jgu6aeyix8EjRGXRag@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 7/8] tools/net/ynl: Add retry limit for async notification
 To: Jakub Kicinski <kuba@kernel.org>
-Cc: Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org, 
+Cc: Xiao Liang <shaw.leon@gmail.com>, netdev@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>, 
 	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Ido Schimmel <idosch@nvidia.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Simon Horman <horms@kernel.org>, 
-	Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Jiri Pirko <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jiri Pirko <jiri@resnulli.us>, 
+	Hangbin Liu <liuhangbin@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 7, 2024 at 11:59=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
+On Thu, 7 Nov 2024 at 16:04, Jakub Kicinski <kuba@kernel.org> wrote:
 >
-> On Thu, 7 Nov 2024 22:11:24 +0800 Xiao Liang wrote:
-> > > Instead, add new rtnetlink attributes ?
-> >
-> > It is to control driver behavior at rtnl_ops registration time. I
-> > think rtnetlink
-> > attributes are too late for that, maybe? Can't think of a way other tha=
-n
-> > module parameters or register separate ops. Any suggestions?
+> On Thu,  7 Nov 2024 21:30:02 +0800 Xiao Liang wrote:
+> > Since commit 1bf70e6c3a53 ("tools/net/ynl: improve async notification
+> > handling"), check_ntf() would block indefinitely if there's no messages.
+> > In some cases we want to set a limit on waiting time. This patch adds
+> > max_reties parameter check_ntf(), and makes it stop when no message is
+> > recievied in that number of consecutive retries.
 >
-> Step back from the implementation you have a little, forget that there
-> is a boolean in rtnl_link_ops. User makes a request to spawn an
-> interface, surely a flag inside that request can dictate how the netns
-> attrs are interpreted.
+> Looking at 1bf70e6c3a53 again I wonder if we should revert it, sort of,
+> and add its logic back as a new function called poll_nft?
+>
+> The thing is C YNL has check_ntf too - ynl_ntf_check() and it has the
+> old semantics. Would be nice for similarly named functions to behave
+> the same across languages.
+>
+> WDYT Donald? Sorry for not thinking about this earlier.
 
-IMO, this is about driver capability, not about user requests.
-As you've pointed out earlier, probably no one would actually want
-the old behavior whenever the driver supports the new one.
-I added the module parameter just for compatibility, because ip_tunnels
-was not implemented to support src_net properly. Yes it's possible to
-add an extra flag in user request, but I don't think it's a good approach.
+Yes, that makes sense. I didn't realise the C lib had an equivalent.
+Adding a poll_ntf() that calls check_ntf() internally will actually be
+a bit cleaner overall.
 
-BTW, I didn't find what's going on with module parameters, is there
-any documentation?
+It's then a question of whether we need the repeat logic in poll_ntf()
+because it's always possible to use check_ntf() in your own repeat
+logic. Either way, I'd prefer not to call the parameter "max_retries"
+because semantically I don't think we are retrying - it is a count of
+how many times to repeat the poll. Thoughts? Should it be a "duration"
+parameter?
 
-Thanks.
+> Xiao, feel free to submit this separately from the series.
 
