@@ -1,116 +1,280 @@
-Return-Path: <linux-kselftest+bounces-21667-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21668-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A96C9C1B13
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 11:50:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74C1C9C1B14
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 11:50:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60746283260
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 10:50:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8D5C1F218C9
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 10:50:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A94C41E4101;
-	Fri,  8 Nov 2024 10:49:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1893A1E3764;
+	Fri,  8 Nov 2024 10:49:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="THjr+TiP"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MYS4ExCf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184091E32C3
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 Nov 2024 10:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6100847F69;
+	Fri,  8 Nov 2024 10:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731062981; cv=none; b=erA+kGOl8BRBeudqWThwxocP4m5YRXH4spUmSybF5iR7DUH4dJGhydfdRyG4bxKM0YLSnNkAIDwqKRsklDXPssnjLYDwMY2UidMireSnBvPM00bTdplj1DMkdfnwatMd55k1fXzPbtC8tSI9npe2pZFJ0zTUSI5MJ5lz27a9cSw=
+	t=1731062991; cv=none; b=X99O/COvP6Agd6ppERTrr3lNSFlHiUU5sLW7hEryPPE3nGcORLzJZ0SDAe5A4BeQnj7AFeKkNrguw/TOsSmJ7tnB26nCMJ7oPmeVRRetHlj53wqkfI34SPYlrbQyHbwhLnmYSkuPeRn2GTg4NXF/FcTlOSYWMe3mkzimViRxYBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731062981; c=relaxed/simple;
-	bh=zLmhsiQtPD1Y5MFv3rZcEySYkDoAeoBkGNVnq4zjeFo=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=nWD2+CArJjbh8jZahzunggQC9qgdiyOYf2XVJFAPPFGlnIxY8GhKWK0hAcVy8eyn0VATEPLaXBDPE4Bq8phbbbLbxS8RF5xhBULrQPkAoDb2jju/dWsdds1RI5Cn5Nr+bBMd9E48hyoy+TkyOVa/QBDklEqjPQGkQqG2yPhXquI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=THjr+TiP; arc=none smtp.client-ip=209.85.166.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3a4e4776f79so152135ab.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Nov 2024 02:49:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731062979; x=1731667779; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zLmhsiQtPD1Y5MFv3rZcEySYkDoAeoBkGNVnq4zjeFo=;
-        b=THjr+TiP2tVCRqsIjIITHudODSjHf2ylph/jocH7yNAEgQMXgc795u3QH9bNUg1U+e
-         RETBMAmz2G2Xw3STiNNo1FIKBzfJS72AM1iE2hX5bxpytaXT16t2EMkLeQcgqUsvK6vW
-         lMYw4aptA9IEyuuH7mrvrOfCfEb9cbUlsCSzDMgm9ciL6zPsKOvhTtWiuyy/PwR/++N/
-         eKDDAcgITbjEoHY0B5b12krmuqiCUt9zrbFUovFqb+YA+N5De68h5NRc0vbBxPp65beA
-         h0UWqakUz13OWSZleVCnt1q31BjFOFutSoc+M/2gXgDshTwza5pvBw/pAk1o10ET4/5B
-         b4xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731062979; x=1731667779;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zLmhsiQtPD1Y5MFv3rZcEySYkDoAeoBkGNVnq4zjeFo=;
-        b=hbjNNNL295FQfOYPyzFkF82vDcqXqBHBnOtrmSXlDPVZVs6NU3SwrlFBrt9Mt6NHc9
-         7QLx71Le9qDxXQYFyFrRmkSGS3VCxu6SB2g1NfKQ3bEAZlMZNn/0PJYMmn1HEZ7Wa93Y
-         UT/LOtCVCeRpOOx+bQtUjlRrxyfzFEtm+0uuON1mk65dys84iXkLRUMTBUhTOYN4M+M6
-         6inGGuK4sCXxrTseojf9a+BXOM8fxr3PZ1fs1JTXUOkYl+KiHtGjAmcG8YHWkXtOWgmZ
-         qZA5cF7COA5YAizM7r6ycpNt808dYGGCFt1dieR4qFGvQoNlfQIm7wFdz+WRVLoQNzzb
-         o4dw==
-X-Forwarded-Encrypted: i=1; AJvYcCU7slZSAzNpZCs5CyUEQaUn7DUdeo9xBEcq0nmbuk7nRzxE82v257oiZcXrdRnCFIWD4Ua0t4YSOV+SjJB7Jrk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIlnFY6NytNjZFXRikw+cVHcCYRm6PuTPgp3jE7ogfLV1cUWCB
-	9Buk33tzfDxsrsvsF2ZFfYycf6wsob4z97FaTz3bKgz+xeKN7KJuUSk0jX7556WKytmv4FW+2hX
-	ojzwOeiRmTZJWk/XH+ckAsjIOgKAomslJ/zKm
-X-Gm-Gg: ASbGncuWUMxz+un3HXWD9q/rnSkDxkEDpVu5Lgm0+E4rjFktTiPhA0qNDIFwrfrZdpB
-	ARtXikkzziVYcgjJp4U3KUVDRrJi3hfYPvtpGcUbqrqmp1Fz1bChDeKGD5defkw==
-X-Google-Smtp-Source: AGHT+IFx+OWLgFqYtmDOmn/uqVcIUKptH9zmcyKnFHbrAhfSumGLLuJB1tfoqwP0zJ0MRIeJMhhnwuaCGhakaSl53yc=
-X-Received: by 2002:a05:6e02:1c06:b0:3a0:a34e:9ab1 with SMTP id
- e9e14a558f8ab-3a6e7a2da81mr9313265ab.8.1731062978627; Fri, 08 Nov 2024
- 02:49:38 -0800 (PST)
+	s=arc-20240116; t=1731062991; c=relaxed/simple;
+	bh=lYKOawxz1Q7nlDLuMR7vnOgcfTC8R84N0Ew8t0dU7Js=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=buKK+o9wSInbS8ODKrGdb4TN362BZgpuTgu4kpjlarOqfj9Gs0GsPPt9yyUfQQDXFHn9sBSO0bBj/L6+E47bbRIeWr2bfQYWS6I/iKDrqo5UxqJ7xvj9U4uGFAd77NcG3YkmwbulD98IpmxJZXOg09a145JjMHCDjxnAX8vtPDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MYS4ExCf; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A8AeXJR031436;
+	Fri, 8 Nov 2024 10:49:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=xHgmF6
+	UU6hfAi+WJL2nBRYQKhfD8a/G2aximWS/8Ces=; b=MYS4ExCf9qDYVg254pakAw
+	sUVZ6X+4/X3D0n7Zs26EFcWI3w9jTf7UOuNCZkckKKgMFQfBWxybxObArv41Ov8w
+	HxPygx2ITzMo0Ze18p4PSTNf2saMRz8iUeDj2CFtiLM3e/RBqRFQVJBl5U6OgQi3
+	M+QK5T/JNtRCRFOSDZu1HclERf1aO+lY0rTiYY1z2uCd31Jwozi9xNQKuxEazRcE
+	tUHsv7DLhfEihPh0HeX3e3cKqq9ZO3UBKCoIIIT2K1A7VtipSpew5tSCTe5cEXNX
+	JD1laYV1sRSK31d6i7XYdCwJ6f5Jumv6Y5gH2/r8sIo8/IJ7yglXwNiGpmy2yuJA
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42sh3br157-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 08 Nov 2024 10:49:38 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4A7NjCXn013158;
+	Fri, 8 Nov 2024 10:49:37 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 42p14120hw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 08 Nov 2024 10:49:37 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4A8Anaxs49742418
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 8 Nov 2024 10:49:36 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 83C0258063;
+	Fri,  8 Nov 2024 10:49:36 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 041E258052;
+	Fri,  8 Nov 2024 10:49:34 +0000 (GMT)
+Received: from [9.179.28.136] (unknown [9.179.28.136])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  8 Nov 2024 10:49:33 +0000 (GMT)
+Message-ID: <13a96176-1bfa-4567-8ce5-a2b75b110afc@linux.ibm.com>
+Date: Fri, 8 Nov 2024 16:19:31 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Brendan Jackman <jackmanb@google.com>
-Date: Fri, 8 Nov 2024 11:49:27 +0100
-Message-ID: <CA+i-1C2-PGPcfSJB4oLqHN3jAE9CDY+iNaW9WCiRB6zF0fgQ3Q@mail.gmail.com>
-Subject: "stty sane" in kunit.py
-To: Daniel Latypov <dlatypov@google.com>
-Cc: Brendan Higgins <brendanhiggins@google.com>, David Gow <davidgow@google.com>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: hugetlb_dio: Check for initial conditions to
+ skip in the start
+From: Donet Tom <donettom@linux.ibm.com>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20241101141557.3159432-1-usama.anjum@collabora.com>
+ <5883b1c0-13c6-4593-9dd5-17f34c1319fe@linux.ibm.com>
+Content-Language: en-US
+In-Reply-To: <5883b1c0-13c6-4593-9dd5-17f34c1319fe@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Xo7lmAb9_QkAWEe77q2eSQoteq00qaQ_
+X-Proofpoint-ORIG-GUID: Xo7lmAb9_QkAWEe77q2eSQoteq00qaQ_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ suspectscore=0 priorityscore=1501 bulkscore=0 malwarescore=0 phishscore=0
+ mlxscore=0 lowpriorityscore=0 spamscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
+ definitions=main-2411080086
 
-Hi all,
 
-Does anyone know what the 'stty sane' invocation in kunit.py is about?
+On 11/8/24 16:05, Donet Tom wrote:
+>
+> On 11/1/24 19:45, Muhammad Usama Anjum wrote:
+>> The test should be skipped if initial conditions aren't fulfilled in
+>> the start instead of failing and outputting non-compliant TAP logs. This
+>> kind of failure pollutes the results. The initial conditions are:
+>> - The test should only execute if /tmp file can be allocated.
+>> - The test should only execute if huge pages are free.
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>> Before:
+>> TAP version 13
+>> 1..4
+>> Bail out! Error opening file
+>> : Read-only file system (30)
+>>   # Planned tests != run tests (4 != 0)
+>>   # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+>>
+>> After:
+>> TAP version 13
+>> 1..0 # SKIP Unable to allocate file: Read-only file system
+>> ---
+>>   tools/testing/selftests/mm/hugetlb_dio.c | 19 ++++++++++++-------
+>>   1 file changed, 12 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/mm/hugetlb_dio.c 
+>> b/tools/testing/selftests/mm/hugetlb_dio.c
+>> index f9ac20c657ec6..60001c142ce99 100644
+>> --- a/tools/testing/selftests/mm/hugetlb_dio.c
+>> +++ b/tools/testing/selftests/mm/hugetlb_dio.c
+>> @@ -44,13 +44,6 @@ void run_dio_using_hugetlb(unsigned int start_off, 
+>> unsigned int end_off)
+>>       if (fd < 0)
+>>           ksft_exit_fail_perror("Error opening file\n");
+>>   -    /* Get the free huge pages before allocation */
+>> -    free_hpage_b = get_free_hugepages();
+>
+> Hi Muhammed Usman Anjum
+>
+> Reading the free pages is required before starting the test. This 
+> value will be compared to the free pages after the test. If they are 
+> not the same, the test will be considered a failure.
+>
+> Since reading the free pages before the test was 
+> removed,|free_hpage_b|  is always 0, causing the test to fail.
+>
+> ./tools/testing/selftests/mm/hugetlb_dio TAP version 13 1..4 # No. 
+> Free pages before allocation : 0 # No. Free pages after munmap : 100 
+> not ok 1 : Huge pages not freed! # No. Free pages before allocation : 
+> 0 # No. Free pages after munmap : 100 not ok 2 : Huge pages not freed! 
+> # No. Free pages before allocation : 0 # No. Free pages after munmap : 
+> 100 not ok 3 : Huge pages not freed! # No. Free pages before 
+> allocation : 0 # No. Free pages after munmap : 100 not ok 4 : Huge 
+> pages not freed! # Totals: pass:0 fail:4 xfail:0 xpass:0 skip:0 
+> error:0 I think below changes are required. --- 
+> a/tools/testing/selftests/mm/hugetlb_dio.c +++ 
+> b/tools/testing/selftests/mm/hugetlb_dio.c @@ -44,6 +44,9 @@ void 
+> run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off) if 
+> (fd < 0) ksft_exit_fail_perror("Error opening file\n"); + /* Get the 
+> free huge pages before allocation */ + free_hpage_b = 
+> get_free_hugepages(); + /* Allocate a hugetlb page */ orig_buffer = 
+> mmap(NULL, h_pagesize, mmap_prot, mmap_flags, -1, 0); if (orig_buffer 
+> == MAP_FAILED) { With this change the tests are passing. 
+> ./tools/testing/selftests/mm/hugetlb_dio TAP version 13 1..4 # No. 
+> Free pages before allocation : 100 # No. Free pages after munmap : 100 
+> ok 1 : Huge pages freed successfully ! # No. Free pages before 
+> allocation : 100 # No. Free pages after munmap : 100 ok 2 : Huge pages 
+> freed successfully ! # No. Free pages before allocation : 100 # No. 
+> Free pages after munmap : 100 ok 3 : Huge pages freed successfully ! # 
+> No. Free pages before allocation : 100 # No. Free pages after munmap : 
+> 100 ok 4 : Huge pages freed successfully ! # Totals: pass:4 fail:0 
+> xfail:0 xpass:0 skip:0 error:0 Thank
+>
+> Donet
+>
+>
+Sorry. Please ignore above mail.
 
-The other day I ran into an issue when running it via watchexec[1]. At
-the time I believed that it was there to clean up after the firmware
-that QEMU runs potentially messed up the terminal.
+Reading the free pages is required before starting the test. This
+value will be compared to the free pages after the test. If they are not the same, the test will be considered a failure.
 
-However, I just realised I'm not sure if that makes sense - stty is
-about setting terminal settings via ioctl. I don't think QEMU or its
-guests are messing up the terminal with ioctls, they're just writing
-funny control characters.
+Since reading the free pages before the test was removed,free_hpage_b is always 0, causing the test to fail.
 
-What's going on here? I guess one of:
+./tools/testing/selftests/mm/hugetlb_dio
+TAP version 13
+1..4
+# No. Free pages before allocation : 0
+# No. Free pages after munmap : 100
+not ok 1 : Huge pages not freed!
+# No. Free pages before allocation : 0
+# No. Free pages after munmap : 100
+not ok 2 : Huge pages not freed!
+# No. Free pages before allocation : 0
+# No. Free pages after munmap : 100
+not ok 3 : Huge pages not freed!
+# No. Free pages before allocation : 0
+# No. Free pages after munmap : 100
+not ok 4 : Huge pages not freed!
+# Totals: pass:0 fail:4 xfail:0 xpass:0 skip:0 error:0
 
-1. Terminal is messed up with ctrl chars but ioctls are the
-easiest/only way to reliably clean it up.
+I think below changes are required.
 
-2. Nobody thought about this unimportant detail so hard before and
-there's no particular rationale in place here.
+iff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
+index 60001c142ce9..4b52106b8124 100644
+--- a/tools/testing/selftests/mm/hugetlb_dio.c
++++ b/tools/testing/selftests/mm/hugetlb_dio.c
+@@ -44,6 +44,9 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
+         if (fd < 0)
+                 ksft_exit_fail_perror("Error opening file\n");
+  
++       /* Get the free huge pages before allocation */
++       free_hpage_b = get_free_hugepages();
++
+         /* Allocate a hugetlb page */
 
-3. I made bad assumptions about why the `stty sane` is there.
+         orig_buffer = mmap(NULL, h_pagesize, mmap_prot, mmap_flags, -1, 0);
 
-If it's 1 or 2 I wonder if there's an alternative way to clean up
-without getting the SIGTTOU issue.
+         if (orig_buffer == MAP_FAILED) {
 
-Or, maybe it doesn't matter and the fact that this was ever a problem
-is just a bug in watchexec (maybe you can tell I haven't actually
-taken the time to research the SIGTTOU thing properly). But thought
-I'd raise it in case this points to issues people might have using
-kunit.py in CI.
+  With this change the tests are passing.
 
-[1] https://github.com/watchexec/watchexec/issues/874
-[2] https://gist.github.com/bjackman/27fd9980d87c5556c20e67a6ed891500
+./tools/testing/selftests/mm/hugetlb_dio
+
+TAP version 131..4
+# No. Free pages before allocation : 100
+# No. Free pages after munmap : 100
+ok 1 : Huge pages freed successfully !
+# No. Free pages before allocation : 100
+# No. Free pages after munmap : 100
+ok 2 : Huge pages freed successfully !
+# No. Free pages before allocation : 100
+# No. Free pages after munmap : 100
+ok 3 : Huge pages freed successfully !
+# No. Free pages before allocation : 100
+# No. Free pages after munmap : 100
+ok 4 : Huge pages freed successfully !
+# Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+Thanks
+Donet
+
+
+>> -    if (free_hpage_b == 0) {
+>> -        close(fd);
+>> -        ksft_exit_skip("No free hugepage, exiting!\n");
+>> -    }
+>> -
+>>       /* Allocate a hugetlb page */
+>>       orig_buffer = mmap(NULL, h_pagesize, mmap_prot, mmap_flags, -1, 
+>> 0);
+>>       if (orig_buffer == MAP_FAILED) {
+>> @@ -94,8 +87,20 @@ void run_dio_using_hugetlb(unsigned int start_off, 
+>> unsigned int end_off)
+>>   int main(void)
+>>   {
+>>       size_t pagesize = 0;
+>> +    int fd;
+>>         ksft_print_header();
+>> +
+>> +    /* Open the file to DIO */
+>> +    fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+>> +    if (fd < 0)
+>> +        ksft_exit_skip("Unable to allocate file: %s\n", 
+>> strerror(errno));
+>> +    close(fd);
+>> +
+>> +    /* Check if huge pages are free */
+>> +    if (!get_free_hugepages())
+>> +        ksft_exit_skip("No free hugepage, exiting\n");
+>> +
+>>       ksft_set_plan(4);
+>>         /* Get base page size */
 
