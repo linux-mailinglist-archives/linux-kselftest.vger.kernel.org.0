@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-21699-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21700-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 988C49C2128
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 16:53:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6257F9C212D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 16:53:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BBD301C20B06
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 15:53:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25EDA281A2A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 15:53:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E81DE21C193;
-	Fri,  8 Nov 2024 15:52:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A819121F4BF;
+	Fri,  8 Nov 2024 15:52:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rPWC2ITA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kAuz11Lm"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1DAC1F1309;
-	Fri,  8 Nov 2024 15:52:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76FC121B452;
+	Fri,  8 Nov 2024 15:52:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731081171; cv=none; b=YsldXK0y5lubwKrOzXW5vMHySTSmlPtmyhDQxZRtpHaAlp/mtWgWWH+eAlfiuVKRzzfDwtmEvujgSBIwYLinOVzvnDob/cfgxeBl5CIn6PAHzc503BhpXZTWYZ156J29gI3cOxskEQ38H1fs93GXMRUsUmHGIuDZt3u+hjavpD4=
+	t=1731081177; cv=none; b=DqQcU3ksKdiZYgDN7bMoT0FGbqu6+if/PybSCqvaU4WXng8sckzNdVsujzdYXN4xgsFubT9Xc86PnoYRRWThd+KZDugg5TGc06YjWNPJYIkM4irlIB8vGDANdDs5FWEZUgkOuh1h/J+cMo8P9xDW3TI23hp8VSWbEOPJfoJKfco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731081171; c=relaxed/simple;
-	bh=5YOsiNLttKWq/Ld5/UcsEwz3pOgckJnPsrplRWCy/8I=;
+	s=arc-20240116; t=1731081177; c=relaxed/simple;
+	bh=RF/R77yecZxwwcV/SQ7kt2sEMgzQozbeyKh2oAd6g0E=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nUlflTQcujVrvF0Cp5MwCO7m0T7NJKCNk4Vm4fk6qVDx9AK47l68EpnouUe//kb/h5E/j8b9+MRaspq4je8V3HJmDGuJGOyrYL7AxEI87sRWpgOjHX0LY/pHbDxCBGfP8KqRYlYhzhlb53j7/EbLwbpbof//pzS8eC7WgIGZHdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rPWC2ITA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0E12C4CECF;
-	Fri,  8 Nov 2024 15:52:45 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=eBEzRf+MasinqUxz5DE27GAoMuzWhmXgjRGuMq2CyDPOnqRcmCxbw9CAPKBmSfexjZeejkvPGkJgdwJPfkF/dRHOZ6mPPNzMa0SH+KyXwfSWuhkxeSZzz5BESKflYLsNyrAC7O//62i25PglItpE9gEWkPHmH+aeXif+LJEe+RU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kAuz11Lm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2C8CC4CED8;
+	Fri,  8 Nov 2024 15:52:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731081171;
-	bh=5YOsiNLttKWq/Ld5/UcsEwz3pOgckJnPsrplRWCy/8I=;
+	s=k20201202; t=1731081177;
+	bh=RF/R77yecZxwwcV/SQ7kt2sEMgzQozbeyKh2oAd6g0E=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=rPWC2ITAror8Lf7cW4cwwjzc0+hKHbNUU5OoXRGWjq4gkn5PS6QcflF53Mn7rFBY1
-	 k4PSz+Mhmaj+0OqnhW0eB0kov8s/8jo3tWCysXk/PZuk3LpqMaKoSJHtMxCaE67IhD
-	 +xpxtdHeIArCMNdobuQI/iCNVBc7bC3D+OiVBH/cVczFJsoPkxKJ/LoO/JUlUPx5RX
-	 eejCXBezecJNxZUGtcEy2etXOe2KHJY/UjwDHAR5VMqV6mBrac3JQbBBXDa9/yPyXH
-	 EWA9KG1q/FiqgGEpxBTwldvgtCp5kMEzFT6OguA6JQDhdV8tf+zNl9I69d/XNvJL5r
-	 yaabMG3r4LtSw==
+	b=kAuz11LmrgIiiq2DyAQGkw9EDrvBnoVrf7/LT+Cev/e3XtRLrB81mDJr3IfIORgRW
+	 I/psYJeBkan5oZ4+hfYdQbmpKJzeKddAYq5kae1mjy6R/OTALQcqE0gvAUfWCL7pAT
+	 bKU2DlMnF1m0KKzNyKPIcXWl9TpY9pLB2MMwiiuh5LW4E4ZfkA2aEduGd8V+NCYh6z
+	 66ND4g7Ym0QFDu5hg+VcTGXq+56bFbR/IhhQMNinYP464LjOHMZFeHIPpF9JR3GU8C
+	 7hpc0Dctpe/9A08T2bXVPVnuA2XKTIAZhs+G6yIzPZhnwhHKYBRFyAI0K6AGdYu2R9
+	 dtCxfVK9EOL8g==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 08 Nov 2024 16:52:31 +0100
-Subject: [PATCH bpf-next/net 2/5] bpf: Add mptcp_subflow bpf_iter
+Date: Fri, 08 Nov 2024 16:52:32 +0100
+Subject: [PATCH bpf-next/net 3/5] bpf: Acquire and release mptcp socket
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241108-bpf-next-net-mptcp-bpf_iter-subflows-v1-2-cf16953035c1@kernel.org>
+Message-Id: <20241108-bpf-next-net-mptcp-bpf_iter-subflows-v1-3-cf16953035c1@kernel.org>
 References: <20241108-bpf-next-net-mptcp-bpf_iter-subflows-v1-0-cf16953035c1@kernel.org>
 In-Reply-To: <20241108-bpf-next-net-mptcp-bpf_iter-subflows-v1-0-cf16953035c1@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -71,135 +71,76 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Martin KaFai Lau <martin.lau@kernel.org>, Geliang Tang <geliang@kernel.org>
+ Geliang Tang <geliang@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4014; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=fOkGqZrxlK74TDATl6N8SPLqzPotdmdaTyOO796PIMA=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnLjPBQpqi3TslQuEySuqdIlV0AeBwFGoYyH1An
- 4OxKAv1vsiJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZy4zwQAKCRD2t4JPQmmg
- c5aSEADuM56/WyZWe95dcwS5CL/3VBCSv+tlShGKbXwQX853Citmxfz+8r8m5YketqCZY745akl
- 8CSB18sWzc7DW0QqBHD3zT8n9hwPelASdxVfxwuLMuWExvwL9G0tVdGqMSNEJ/NeO+KX+GM/F9x
- npMhMjphvz1cggLIl1c3TpXOAtygR1ScmHapKg7Kv/rzWajCHWAwnU9oY/DxJa/jxKBdjHPjMYU
- GAdbiTPav5MEwkFSrSn0KoGaaV5ksi9XpJA+8tv7ys6CKq3kBG6X8+AkSntMyUQCEe3MdnhJxe/
- Km8n1ukCrqt+R1wijKcXsyydNPL9QAJKy5HJ3cbLi/pnZUCnaO/u/OtFjril8bNRR4LEwCGhyrc
- i0RV764XBJgDLNeNGTj9inPaT/5OpXcTfufSxmVPvD8GwbwnSJ7Rx8MF1apViHKPfWzUtKAoJLz
- vIpGz8CgW6UFFjEd7RuV/9dbARWJNYfGByzwj+f1LnC5HpkVMKrmP4ADs9ZZ5ZOmi/DYyzDzXcZ
- pnEUfQnZKJtjwx4tryCPaDOUkqWOU7Nn3MaJVxMaQ4+9YCie/UWDDQQdSGuL/NN/yey6tdKNdvJ
- t49yAZvD+dCDFpZQZY1UO+qkGvYvL0Ta/e3ccka6tTfkBsJUI5ElW+KwGg06UVS9nU8D/cqwq4g
- XSR/KywZ5cGxW9A==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1993; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=Mon90wYreVBu0zG7BWuM4v5dwTWYbUA1gVh0OSEBwMA=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnLjPB9y+Z3Spcbu/1rD0z32/UJ9iKr+fZG4QEk
+ 0AI14lhVoqJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZy4zwQAKCRD2t4JPQmmg
+ c5HeEAC+0D3ACboydhZuejXcW7ZiBI+jPyP8G7/xeVODm3EGzVZhE9jBIhgBnXmkk8H9UfeLu1S
+ /964kUUN8ZftSBqM2fi8Nc8nE07AUdR5BPzh7oaq3YnVfeVtCMn58te7u3piYYlv0Zd3unwdfL7
+ NuOf+wOqSNv2V7eplnsyQiltUK9qcGB1StyqYpREAPAW2xmn0nNkpfbS7wp1VlkNqDy+uOboeva
+ dNNw3xcyNaFmiHcT6PaOtb6asHZgtVfXwReLwnKS+rAEt+LDScBd11D6NwWr7UcPcwvlDBeDiIm
+ ArC9udmdd9gpP4PZGs0nPs5wpJC10O/RrkZzSZemm5eVJfzCw8rnATiscWdPq8KsOAC49E745UM
+ j4ghxzaitE6Ccbf7NiJLX6CQDbxAQeGsg5xTYivNWvF1WQ2xuENmv9IYfo/dE3io+slE8wBOcnp
+ bq0BRV+Tyjgm0EvHAUp01u9y9XeFQichX/AOzV7NG8E0ASmffXEFIMSXu6zUOoOk66F5/djWpQj
+ QV6QDOnAwQ/9kxE78zevW4QFMZx5Z837bZduGnUxZPlhgVbFRkP5RrEMAjhd0nfgBrAGadN+XxT
+ gxaDBsMJJsC1lZcancObtjdN0cTF7dWJh74QmwGez+vBYrPh/R7LmZe6E7+bYjJydpvHdAIKYjl
+ zmrnclEMWYUuBDQ==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-It's necessary to traverse all subflows on the conn_list of an MPTCP
-socket and then call kfunc to modify the fields of each subflow. In
-kernel space, mptcp_for_each_subflow() helper is used for this:
+The KF_TRUSTED_ARGS flag is used for bpf_iter_mptcp_subflow_new, it
+indicates that the all pointer arguments are valid. It's necessary to
+add a KF_ACQUIRE helper to get valid "msk".
 
-	mptcp_for_each_subflow(msk, subflow)
-		kfunc(subflow);
+This patch adds bpf_mptcp_sock_acquire() and bpf_mptcp_sock_release()
+helpers for this. Increase sk->sk_refcnt in _acquire() and decrease it
+in _release(). Register them with KF_ACQUIRE flag and KF_RELEASE flag.
 
-But in the MPTCP BPF program, this has not yet been implemented. As
-Martin suggested recently, this conn_list walking + modify-by-kfunc
-usage fits the bpf_iter use case.
-
-So this patch adds a new bpf_iter type named "mptcp_subflow" to do
-this and implements its helpers bpf_iter_mptcp_subflow_new()/_next()/
-_destroy(). And register these bpf_iter mptcp_subflow into mptcp
-common kfunc set. Then bpf_for_each() for mptcp_subflow can be used
-in BPF program like this:
-
-	bpf_for_each(mptcp_subflow, subflow, msk)
-		kfunc(subflow);
-
-Suggested-by: Martin KaFai Lau <martin.lau@kernel.org>
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Notes:
-A few versions of this single patch have been previously posted to the
-BPF mailing list by Geliang, before continuing to the MPTCP mailing list
-only, with other patches of this series. The version of the whole series
-has been reset to 1, but here is the ChangeLog for this patch here:
- - v2: remove msk->pm.lock in _new() and _destroy() (Martin)
-       drop DEFINE_BPF_ITER_FUNC, change opaque[3] to opaque[2] (Andrii)
- - v3: drop bpf_iter__mptcp_subflow
- - v4: if msk is NULL, initialize kit->msk to NULL in _new() and check
-       it in _next() (Andrii)
- - v5: use list_is_last() instead of list_entry_is_head() add
-       KF_ITER_NEW/NEXT/DESTROY flags add msk_owned_by_me in _new()
- - v6: add KF_TRUSTED_ARGS flag (Andrii, Martin)
----
- net/mptcp/bpf.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ net/mptcp/bpf.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
 diff --git a/net/mptcp/bpf.c b/net/mptcp/bpf.c
-index 6f96a5927fd371f8ea92cbf96c875edef9272b98..d107c2865e97e6ccffb9e0720dfbbd232b63a3b8 100644
+index d107c2865e97e6ccffb9e0720dfbbd232b63a3b8..5bd04548e846b4dc120dbc83725a604821fac772 100644
 --- a/net/mptcp/bpf.c
 +++ b/net/mptcp/bpf.c
-@@ -29,6 +29,15 @@ static const struct btf_kfunc_id_set bpf_mptcp_fmodret_set = {
- 	.set   = &bpf_mptcp_fmodret_ids,
- };
- 
-+struct bpf_iter_mptcp_subflow {
-+	__u64 __opaque[2];
-+} __aligned(8);
-+
-+struct bpf_iter_mptcp_subflow_kern {
-+	struct mptcp_sock *msk;
-+	struct list_head *pos;
-+} __aligned(8);
-+
- __bpf_kfunc_start_defs();
- 
- __bpf_kfunc static struct mptcp_sock *bpf_mptcp_sk(struct sock *sk)
-@@ -48,12 +57,48 @@ bpf_mptcp_subflow_tcp_sock(const struct mptcp_subflow_context *subflow)
- 	return mptcp_subflow_tcp_sock(subflow);
+@@ -90,6 +90,23 @@ bpf_iter_mptcp_subflow_destroy(struct bpf_iter_mptcp_subflow *it)
+ {
  }
  
-+__bpf_kfunc static int
-+bpf_iter_mptcp_subflow_new(struct bpf_iter_mptcp_subflow *it,
-+			   struct mptcp_sock *msk)
++__bpf_kfunc static struct
++mptcp_sock *bpf_mptcp_sock_acquire(struct mptcp_sock *msk)
 +{
-+	struct bpf_iter_mptcp_subflow_kern *kit = (void *)it;
++	struct sock *sk = (struct sock *)msk;
 +
-+	kit->msk = msk;
-+	if (!msk)
-+		return -EINVAL;
-+
-+	msk_owned_by_me(msk);
-+
-+	kit->pos = &msk->conn_list;
-+	return 0;
++	if (sk && refcount_inc_not_zero(&sk->sk_refcnt))
++		return msk;
++	return NULL;
 +}
 +
-+__bpf_kfunc static struct mptcp_subflow_context *
-+bpf_iter_mptcp_subflow_next(struct bpf_iter_mptcp_subflow *it)
++__bpf_kfunc static void bpf_mptcp_sock_release(struct mptcp_sock *msk)
 +{
-+	struct bpf_iter_mptcp_subflow_kern *kit = (void *)it;
++	struct sock *sk = (struct sock *)msk;
 +
-+	if (!kit->msk || list_is_last(kit->pos, &kit->msk->conn_list))
-+		return NULL;
-+
-+	kit->pos = kit->pos->next;
-+	return list_entry(kit->pos, struct mptcp_subflow_context, node);
-+}
-+
-+__bpf_kfunc static void
-+bpf_iter_mptcp_subflow_destroy(struct bpf_iter_mptcp_subflow *it)
-+{
++	WARN_ON_ONCE(!sk || !refcount_dec_not_one(&sk->sk_refcnt));
 +}
 +
  __bpf_kfunc_end_defs();
  
  BTF_KFUNCS_START(bpf_mptcp_common_kfunc_ids)
- BTF_ID_FLAGS(func, bpf_mptcp_sk)
- BTF_ID_FLAGS(func, bpf_mptcp_subflow_ctx)
- BTF_ID_FLAGS(func, bpf_mptcp_subflow_tcp_sock)
-+BTF_ID_FLAGS(func, bpf_iter_mptcp_subflow_new, KF_ITER_NEW | KF_TRUSTED_ARGS)
-+BTF_ID_FLAGS(func, bpf_iter_mptcp_subflow_next, KF_ITER_NEXT | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_iter_mptcp_subflow_destroy, KF_ITER_DESTROY)
+@@ -99,6 +116,8 @@ BTF_ID_FLAGS(func, bpf_mptcp_subflow_tcp_sock)
+ BTF_ID_FLAGS(func, bpf_iter_mptcp_subflow_new, KF_ITER_NEW | KF_TRUSTED_ARGS)
+ BTF_ID_FLAGS(func, bpf_iter_mptcp_subflow_next, KF_ITER_NEXT | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_iter_mptcp_subflow_destroy, KF_ITER_DESTROY)
++BTF_ID_FLAGS(func, bpf_mptcp_sock_acquire, KF_ACQUIRE | KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_mptcp_sock_release, KF_RELEASE)
  BTF_KFUNCS_END(bpf_mptcp_common_kfunc_ids)
  
  static const struct btf_kfunc_id_set bpf_mptcp_common_kfunc_set = {
