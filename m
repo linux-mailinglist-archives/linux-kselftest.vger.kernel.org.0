@@ -1,207 +1,166 @@
-Return-Path: <linux-kselftest+bounces-21709-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21710-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB9ED9C24D2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 19:22:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CE9F9C24FC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 19:44:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EC432832B6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 18:22:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1B071C230BE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 18:44:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E962193418;
-	Fri,  8 Nov 2024 18:22:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F2E51A9B41;
+	Fri,  8 Nov 2024 18:44:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BNJXERGQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZBXnKKbb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AD43233D60;
-	Fri,  8 Nov 2024 18:22:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1130194082;
+	Fri,  8 Nov 2024 18:44:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731090125; cv=none; b=fIQz4q6SX/wBKtMsnp6I5uC/6E9Qu29M/VbhrYNT2on+ZlKoDA7/ai1sBHLEepu6fWM30d2aP/CMk9pV6MrtgkdbAQRMq/zHpHLX9YYQq86j2d3bZBQ80zSv3BzaX9BhiSq/T2g269cgGCFwlp6u9zkWO8zV7RUWG8x1RFp1Ka4=
+	t=1731091449; cv=none; b=OZEpjNItVWaP0EDklj1VMLP1rLrjtIFQwt8MqsaaVIZsF+av1PBnQD5rGyx3k8rGdpNb0WODLqVrYsfw36XeipsfSKX81sMDNUHH9Qs8nu7ugVTt1hj8z4yjvdvDPtNhxW60h9f6MOpF/VMb7Yt04hbmyw1NXb+8fWn1wxZMz38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731090125; c=relaxed/simple;
-	bh=uSbhMMNXHlsMSzCdJptCATaZ8Ww+L2KbwXDPpWyMELc=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=nzFe4JCV18xYH+0EBnK0nO35QuI8tATJ0HI8rMrQhrwgNogS1AH56CVae21UdMfCOr4naclqJ5wYY4zXxvEQBbEk3H7Lp+2Ui8SaaoRveLrmtVEQqYYW8NnWrtlj+yTEfdHlnamQrNUt0GtS2LkQ2QcTyw9Yawm9zmrqgafclVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BNJXERGQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04088C4CECD;
-	Fri,  8 Nov 2024 18:22:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731090124;
-	bh=uSbhMMNXHlsMSzCdJptCATaZ8Ww+L2KbwXDPpWyMELc=;
-	h=Date:To:Cc:From:Subject:From;
-	b=BNJXERGQde9LzwMDtEYyxf4jQdMXY4FLQADYMkmnjpB/woYao/4OInEPnzSDezJxQ
-	 Q1NUbA6L6RVsVEiiQs48N2P9OYJN9oAf6+DZXwDybyvLX6TN6YZ06CJOje8bNfsS1b
-	 LUc7AtFr3JHDxVI3HnDGBuSnuZ/wZXpcf2BR8pHR9/lOhN7vupLtQEqkOBkNWbKd/M
-	 kviLEMcOkF7bY1xwd0litkU7qQe7qfnLB5CYFxNY5cDHHmWm3Q5xiyKfhFka16p2vt
-	 9LkbHeXlCRGMGxhC+CcMuAgOr7TnswGBg6xGLoQ0bNRyhDCuvuYQlMppGQ4KwhpH8h
-	 t4xXzhYeOPE9A==
-Message-ID: <ff870428-6375-4125-83bd-fc960b3c109b@kernel.org>
-Date: Fri, 8 Nov 2024 19:21:59 +0100
+	s=arc-20240116; t=1731091449; c=relaxed/simple;
+	bh=C+hxhapf+iZyc0pcpQdnvxpMDyqwHITK/5KpnubEpVQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GEAF/dqkQB8wNpOF2VzU17FAQzAG/nJMElETYNhNXBpAr6WfdiShfcockgYka+GP91o7mxlNKJgoVnbU/JEXYCDdGOrATRymIAJVgCNYTk0/I1j/smLxnVrqgeMiuuTYyoXBlUgWvTpqq//RDF1xO57Zf11yHj+E6X+HzttYvGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZBXnKKbb; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-7eda47b7343so1761472a12.0;
+        Fri, 08 Nov 2024 10:44:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731091447; x=1731696247; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eoRzY+OGqSnXflEIRU3jjsFUxNnysaUNIoTmFkKC6/I=;
+        b=ZBXnKKbbcMom3ACIPeUYUBOXIb+MbiuXwwxxPthvlDOOBPiWhVZtieXaSmPsely+dJ
+         eZqpCj9nM2vI6MxxLZT9b0ay8bGFAlogGqsCT2IvDCGOAMOj249R1YSO6za6GqACeQvp
+         +T+KGnVzDV/qwy8pDITi0hKKJrj2YoDZWTGVUwPnSCQek5yWudZQUBnnqBkCPfG0G7nB
+         OIIu+IgK+OySUNZKRGXUpU4OSwVU67CzQjgMwH0CwVXUhXyxM7R2vjWEKEWfPuH6NUXn
+         CIhK2uHDT7by/bVE+nQXADyEXgee9EfdZ7MZBqOy741MLBpnh5jdyxLaIq2Q6BG9ZqFE
+         ZV6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731091447; x=1731696247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eoRzY+OGqSnXflEIRU3jjsFUxNnysaUNIoTmFkKC6/I=;
+        b=YlkKE1pQ6D3vFwCVdDp2xCjF0kxW/xC9YH0OOobxaPcvzT1u9O9lwV8HvbYjl1ox40
+         ZZWuyn/bsf1Fb0XDj+OWNAteU6HUaTiBcyrVP7Jg78FpEq72ZXPDt3cq8rBWthkmbi1m
+         5WubSsCsrlxbTJUDAoVdfk1AAmKWAf98ZEFdkdFIqdGBtuOMHnkRtrGHXJ0O0rm0Q9SR
+         QKrmS4fCMxgLer+5iYNS7OUKaOJYIVSjwPRVVE89lW9VMntn8AY96a/4PEm5MeT9KaG1
+         pS7dg4MHedbi0eE6J0kOdufrkiGaK00sh/li6bB+vlJ4HcG/nV2bTH+oyXC7O6jufgLL
+         5W+g==
+X-Forwarded-Encrypted: i=1; AJvYcCU2Tk7w014RfSifyIITuJEiGYtSr9MMeWsoL8b7Me8y+2fUo3oBxabAqZwGftQiVuVb+BgmtyH4NxM8EJo=@vger.kernel.org, AJvYcCVvJORK+UkCKh8j2cz/BwxXsu1kE1ynLAqyWRK3RgLSwtzGwtrxXMzBcgDiK2+swf5y+iKvdagmOT2ukN2Xrc+1@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywcnf6AibK2KGUIPJHqW7/MHVgbm/PpcEzZnC3pZhiotPC4tGKk
+	XH+pYuTpFCH/H457/Wpx36E/YnyyD/VS84+3HpTpm5oUFdoc+P/ylILYmJF4gSN6KYQZxwG7FgV
+	6KXTkZqFyUZAs7kqnUSJ/j61tVd4=
+X-Google-Smtp-Source: AGHT+IGzDtW/S/3ZNx2BdBWgq6UlNpXAogQZJHwXY8381fWN4WHd4BNZtX7ea2q9D3b6aKYQkz+LVuyHgAwqMy2v1R4=
+X-Received: by 2002:a17:90b:1344:b0:2c9:5a85:f8dd with SMTP id
+ 98e67ed59e1d1-2e9b174124cmr5790628a91.18.1731091447156; Fri, 08 Nov 2024
+ 10:44:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Content-Language: en-GB
-To: Linux Kernel Functional Testing <lkft@linaro.org>
-Cc: Greg KH <gregkh@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>,
- Kernel Selftests <linux-kselftest@vger.kernel.org>,
- Netdev <netdev@vger.kernel.org>, Linux Kernel
- <linux-kernel@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>,
- Naresh Kamboju <naresh.kamboju@linaro.org>, Ido Schimmel
- <idosch@nvidia.com>, stable@vger.kernel.org
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
- YBNdx5Xl74NLSgx6y/1NiMQGuKeu+2BmtnkiGxBNanfXcnl4L4Lzz+iXBvvbtCbynnnqDDqU
- c7SPFMpMesgpcu1xFt0F6bcxE+0ojRtSCZ5HDElKlHJNYtD1uwY4UYVGWUGCF/+cY1YLmtfb
- WdNb/SFo+Mp0HItfBC12qtDIXYvbfNUGVnA5jXeWMEyYhSNktLnpDL2gBUCsdbkov5VjiOX7
- CRTkX0UgNWRjyFZwThaZADEvAOo12M5uSBk7h07yJ97gqvBtcx45IsJwfUJE4hy8qZqsA62A
- nTRflBvp647IXAiCcwWsEgE5AXKwA3aL6dcpVR17JXJ6nwHHnslVi8WesiqzUI9sbO/hXeXw
- TDSB+YhErbNOxvHqCzZEnGAAFf6ges26fRVyuU119AzO40sjdLV0l6LE7GshddyazWZf0iac
- nEhX9NKxGnuhMu5SXmo2poIQttJuYAvTVUNwQVEx/0yY5xmiuyqvXa+XT7NKJkOZSiAPlNt6
- VffjgOP62S7M9wDShUghN3F7CPOrrRsOHWO/l6I/qJdUMW+MHSFYPfYiFXoLUZyPvNVCYSgs
- 3oQaFhHapq1f345XBtfG3fOYp1K2wTXd4ThFraTLl8PHxCn4ywARAQABzSRNYXR0aGlldSBC
- YWVydHMgPG1hdHR0YmVAa2VybmVsLm9yZz7CwZEEEwEIADsCGwMFCwkIBwIGFQoJCAsCBBYC
- AwECHgECF4AWIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZUDpDAIZAQAKCRD2t4JPQmmgcz33
- EACjROM3nj9FGclR5AlyPUbAq/txEX7E0EFQCDtdLPrjBcLAoaYJIQUV8IDCcPjZMJy2ADp7
- /zSwYba2rE2C9vRgjXZJNt21mySvKnnkPbNQGkNRl3TZAinO1Ddq3fp2c/GmYaW1NWFSfOmw
- MvB5CJaN0UK5l0/drnaA6Hxsu62V5UnpvxWgexqDuo0wfpEeP1PEqMNzyiVPvJ8bJxgM8qoC
- cpXLp1Rq/jq7pbUycY8GeYw2j+FVZJHlhL0w0Zm9CFHThHxRAm1tsIPc+oTorx7haXP+nN0J
- iqBXVAxLK2KxrHtMygim50xk2QpUotWYfZpRRv8dMygEPIB3f1Vi5JMwP4M47NZNdpqVkHrm
- jvcNuLfDgf/vqUvuXs2eA2/BkIHcOuAAbsvreX1WX1rTHmx5ud3OhsWQQRVL2rt+0p1DpROI
- 3Ob8F78W5rKr4HYvjX2Inpy3WahAm7FzUY184OyfPO/2zadKCqg8n01mWA9PXxs84bFEV2mP
- VzC5j6K8U3RNA6cb9bpE5bzXut6T2gxj6j+7TsgMQFhbyH/tZgpDjWvAiPZHb3sV29t8XaOF
- BwzqiI2AEkiWMySiHwCCMsIH9WUH7r7vpwROko89Tk+InpEbiphPjd7qAkyJ+tNIEWd1+MlX
- ZPtOaFLVHhLQ3PLFLkrU3+Yi3tXqpvLE3gO3LM7BTQRV4/npARAA5+u/Sx1n9anIqcgHpA7l
- 5SUCP1e/qF7n5DK8LiM10gYglgY0XHOBi0S7vHppH8hrtpizx+7t5DBdPJgVtR6SilyK0/mp
- 9nWHDhc9rwU3KmHYgFFsnX58eEmZxz2qsIY8juFor5r7kpcM5dRR9aB+HjlOOJJgyDxcJTwM
- 1ey4L/79P72wuXRhMibN14SX6TZzf+/XIOrM6TsULVJEIv1+NdczQbs6pBTpEK/G2apME7vf
- mjTsZU26Ezn+LDMX16lHTmIJi7Hlh7eifCGGM+g/AlDV6aWKFS+sBbwy+YoS0Zc3Yz8zrdbi
- Kzn3kbKd+99//mysSVsHaekQYyVvO0KD2KPKBs1S/ImrBb6XecqxGy/y/3HWHdngGEY2v2IP
- Qox7mAPznyKyXEfG+0rrVseZSEssKmY01IsgwwbmN9ZcqUKYNhjv67WMX7tNwiVbSrGLZoqf
- Xlgw4aAdnIMQyTW8nE6hH/Iwqay4S2str4HZtWwyWLitk7N+e+vxuK5qto4AxtB7VdimvKUs
- x6kQO5F3YWcC3vCXCgPwyV8133+fIR2L81R1L1q3swaEuh95vWj6iskxeNWSTyFAVKYYVskG
- V+OTtB71P1XCnb6AJCW9cKpC25+zxQqD2Zy0dK3u2RuKErajKBa/YWzuSaKAOkneFxG3LJIv
- Hl7iqPF+JDCjB5sAEQEAAcLBXwQYAQIACQUCVeP56QIbDAAKCRD2t4JPQmmgc5VnD/9YgbCr
- HR1FbMbm7td54UrYvZV/i7m3dIQNXK2e+Cbv5PXf19ce3XluaE+wA8D+vnIW5mbAAiojt3Mb
- 6p0WJS3QzbObzHNgAp3zy/L4lXwc6WW5vnpWAzqXFHP8D9PTpqvBALbXqL06smP47JqbyQxj
- Xf7D2rrPeIqbYmVY9da1KzMOVf3gReazYa89zZSdVkMojfWsbq05zwYU+SCWS3NiyF6QghbW
- voxbFwX1i/0xRwJiX9NNbRj1huVKQuS4W7rbWA87TrVQPXUAdkyd7FRYICNW+0gddysIwPoa
- KrLfx3Ba6Rpx0JznbrVOtXlihjl4KV8mtOPjYDY9u+8x412xXnlGl6AC4HLu2F3ECkamY4G6
- UxejX+E6vW6Xe4n7H+rEX5UFgPRdYkS1TA/X3nMen9bouxNsvIJv7C6adZmMHqu/2azX7S7I
- vrxxySzOw9GxjoVTuzWMKWpDGP8n71IFeOot8JuPZtJ8omz+DZel+WCNZMVdVNLPOd5frqOv
- mpz0VhFAlNTjU1Vy0CnuxX3AM51J8dpdNyG0S8rADh6C8AKCDOfUstpq28/6oTaQv7QZdge0
- JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-Subject: LKFT CI: improving Networking selftests results when validating
- stable kernels
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20241104050007.13812-1-skb99@linux.ibm.com> <20241104050007.13812-3-skb99@linux.ibm.com>
+In-Reply-To: <20241104050007.13812-3-skb99@linux.ibm.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 8 Nov 2024 10:43:54 -0800
+Message-ID: <CAEf4BzZ9Bz8a_hY-jDkqaYg6Phi9bjvoxbBeVZqcgjYXg4a-mA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] libbpf: Remove powerpc prefix from syscall function names
+To: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, ast@kernel.org, hbathini@linux.ibm.com, 
+	andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, 
+	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, mykolal@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello LKFT maintainers, CI operators,
+On Sun, Nov 3, 2024 at 9:00=E2=80=AFPM Saket Kumar Bhaskar <skb99@linux.ibm=
+.com> wrote:
+>
+> Since commit 94746890202cf ("powerpc: Don't add __powerpc_ prefix to
+> syscall entry points") drops _powerpc prefix to syscall entry points,
+> even though powerpc now supports syscall wrapper, so /proc/kallsyms
+> have symbols for syscall entry without powerpc prefix(sys_*).
+>
+> For this reason, arch specific prefix for syscall functions in powerpc
+> is dropped.
+>
+> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+> ---
+>  tools/lib/bpf/libbpf.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 219facd0e66e..3a370fa37d8a 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -11110,9 +11110,7 @@ static const char *arch_specific_syscall_pfx(void=
+)
+>  #elif defined(__riscv)
+>         return "riscv";
+>  #elif defined(__powerpc__)
+> -       return "powerpc";
+> -#elif defined(__powerpc64__)
+> -       return "powerpc64";
+> +       return "";
+>  #else
+>         return NULL;
+>  #endif
+> @@ -11127,7 +11125,11 @@ int probe_kern_syscall_wrapper(int token_fd)
+>         if (!ksys_pfx)
+>                 return 0;
+>
+> +#if defined(__powerpc__)
+> +       snprintf(syscall_name, sizeof(syscall_name), "sys_bpf");
+> +#else
+>         snprintf(syscall_name, sizeof(syscall_name), "__%s_sys_bpf", ksys=
+_pfx);
+> +#endif
 
-First, I would like to say thank you to the people behind the LKFT
-project for validating stable kernels (and more), and including some
-Network selftests in their tests suites.
+The problem is that on older versions of kernel it will have this
+prefix, while on newer ones it won't. So to not break anything on old
+kernels, we'd need to do feature detection and pick whether to use
+prefix or not, right?
 
-A lot of improvements around the networking kselftests have been done
-this year. At the last Netconf [1], we discussed how these tests were
-validated on stable kernels from CIs like the LKFT one, and we have some
-suggestions to improve the situation.
+So it seems like this change needs a bit more work.
 
+pw-bot: cr
 
-KSelftests from the same version
---------------------------------
-
-According to the doc [2], kselftests should support all previous kernel
-versions. The LKFT CI is then using the kselftests from the last stable
-release to validate all stable versions. Even if there are good reasons
-to do that, we would like to ask for an opt-out for this policy for the
-networking tests: this is hard to maintain with the increased
-complexity, hard to validate on all stable kernels before applying
-patches, and hard to put in place in some situations. As a result, many
-tests are failing on older kernels, and it looks like it is a lot of
-work to support older kernels, and to maintain this.
-
-Many networking tests are validating the internal behaviour that is not
-exposed to the userspace. A typical example: some tests look at the raw
-packets being exchanged during a test, and this behaviour can change
-without modifying how the userspace is interacting with the kernel. The
-kernel could expose capabilities, but that's not something that seems
-natural to put in place for internal behaviours that are not exposed to
-end users. Maybe workarounds could be used, e.g. looking at kernel
-symbols, etc. Nut that doesn't always work, increase the complexity, and
-often "false positive" issue will be noticed only after a patch hits
-stable, and will cause a bunch of tests to be ignored.
-
-Regarding fixes, ideally they will come with a new or modified test that
-can also be backported. So the coverage can continue to grow in stable
-versions too.
-
-Do you think that from the kernel v6.12 (or before?), the LKFT CI could
-run the networking kselftests from the version that is being validated,
-and not from a newer one? So validating the selftests from v6.12.1 on a
-v6.12.1, and not the ones from a future v6.16.y on a v6.12.42.
-
-
-Skipped tests
--------------
-
-It looks like many tests are skipped:
-
-- Some have been in a skip file [3] for a while: maybe they can be removed?
-
-- Some are skipped because of missing tools: maybe they can be added?
-e.g. iputils, tshark, ipv6toolkit, etc.
-
-- Some tests are in 'net', but in subdirectories, and hence not tested,
-e.g. forwarding, packetdrill, netfilter, tcp_ao. Could they be tested too?
-
-How can we change this to increase the code coverage using existing tests?
-
-
-KVM
----
-
-It looks like different VMs are being used to execute the different
-tests. Do these VMs benefit from any accelerations like KVM? If not,
-some tests might fail because the environment is too slow.
-
-The KSFT_MACHINE_SLOW=yes env var can be set to increase some
-tolerances, timeout or to skip some parts, but that might not be enough
-for some tests.
-
-
-Notifications
--------------
-
-In case of new regressions, who is being notified? Are the people from
-the MAINTAINERS file, and linked to the corresponding selftests being
-notified or do they need to do the monitoring on their side?
-
-
-Looking forward to improving the networking selftests results when
-validating stable kernels!
-
-
-[1] https://netdev.bots.linux.dev/netconf/2024/
-[2] https://docs.kernel.org/dev-tools/kselftest.html
-[3]
-https://github.com/Linaro/test-definitions/blob/master/automated/linux/kselftest/skipfile-lkft.yaml
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
+>
+>         if (determine_kprobe_perf_type() >=3D 0) {
+>                 int pfd;
+> @@ -11272,8 +11274,12 @@ struct bpf_link *bpf_program__attach_ksyscall(co=
+nst struct bpf_program *prog,
+>                  * compiler does not know that we have an explicit condit=
+ional
+>                  * as well.
+>                  */
+> +#if defined(__powerpc__)
+> +               snprintf(func_name, sizeof(func_name), "sys_%s", syscall_=
+name);
+> +#else
+>                 snprintf(func_name, sizeof(func_name), "__%s_sys_%s",
+>                          arch_specific_syscall_pfx() ? : "", syscall_name=
+);
+> +#endif
+>         } else {
+>                 snprintf(func_name, sizeof(func_name), "__se_sys_%s", sys=
+call_name);
+>         }
+> --
+> 2.43.5
+>
 
