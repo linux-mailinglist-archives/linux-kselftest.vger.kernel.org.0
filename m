@@ -1,99 +1,107 @@
-Return-Path: <linux-kselftest+bounces-21671-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21672-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E563B9C1C88
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 13:00:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CEA59C1DAF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 14:12:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 720CAB22F8D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 12:00:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF1871C20BBC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 13:12:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC7EB1E3771;
-	Fri,  8 Nov 2024 12:00:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fifikJCd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BA6C1EABB2;
+	Fri,  8 Nov 2024 13:12:15 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E8B038DC8;
-	Fri,  8 Nov 2024 12:00:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE3981E491C
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Nov 2024 13:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731067237; cv=none; b=NuWYE/LlSFOttuWMkrstU6vBYRfKXfZzQk/d3MjJx/yJQzVsB1yoPktIq2KwIwHs7pHpfxclN6zDm8EnuRMJgtEjKcievEdV0WPuA2anIxLZ/H/AqVPPWJ4LnFK5JN/I0+t61RcC71/qVA++f8lcc1qe+Q+p3aCjhTc/PutHk9A=
+	t=1731071535; cv=none; b=iROwbY9cGqYsp2ehcvIAgTo3h1DXm0f57pQMTOqk6QwjDS3pVRScmftZ9YA1IjYd9obMUaK6IrOFPcM1dtTQY1PU+FhSMH1znb/BqacjHRl4S3RtojewvayMm9LcOanVG6Sc7HRICknqmqnxn/Y43wucfPvPUhecc39USyKiQr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731067237; c=relaxed/simple;
-	bh=LyRfhF/WSyeR9ZGoUYk/01qxuYXIAkx/uZAveWbdWi0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IOBq/uwq3DcPxOSEqoW12TVituK/00VFA+cr9k0I7pTYkkzBQFzqOfzJIz2MTbyce3aEYT5BqTjrw3jIoeyX3ymVoshut9TbV9Z7d/Do2Urh3ONk8oAPN6ZcfZJ1LE5YSKU1yVj0l+r07KOYY51sNIT44npvjxULjcIKO0NZLIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fifikJCd; arc=none smtp.client-ip=209.85.161.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5ebc0e13d25so848497eaf.1;
-        Fri, 08 Nov 2024 04:00:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731067235; x=1731672035; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LyRfhF/WSyeR9ZGoUYk/01qxuYXIAkx/uZAveWbdWi0=;
-        b=fifikJCddzR3jPkEA0Hmkt5QVvPwkFmhzyrTaPj3FwLWChhFo0/RXVgQXS0qxhVQyp
-         htO1gpAYm7S39g0tMVJjxrFaEuoA06xMy2R7TuAL5mjOXiOJtH1G4SoSKhBX8Sun5XfC
-         X+nNvkp5guGGyl6RKIW6q0qqqcSZwobX2odmOO6Yn3yjc01TRQ2neAQZghuVVyM02tzd
-         dLIGjjp5sPh2m3qGyK28UctYZnXFvyW2Zgxc1JZqP4z7IP7fQ0QglB1HeSi6KIQfJgCZ
-         h8GeNWtaXAF2tvvzmIrBGnv19y/PvHh9VmowRdDVV7JH17c9dGqlmbHaYa4u9DABD3VD
-         2I2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731067235; x=1731672035;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LyRfhF/WSyeR9ZGoUYk/01qxuYXIAkx/uZAveWbdWi0=;
-        b=BHSfzztyymFW3jxsHbYC2E++QponRS6gWXuzipgxVZix6aLE7SDJXWFvXRIdsHmReN
-         BMfTsisLZS8+2EGVgGInd6+Mzrjak7SKdznSDcRMBJ98DhHZ6f2ooLrWMQtfxTmNse8l
-         dyNr4rowfR6j/Si3sEWG4FCchtYVlLEcSFxZE/LTS65du7l7N+DN2gU6jv2ZYH6fdgjx
-         MxlFzLTqHVYued7XTaY7qfIPXZ3chbABL2VXDlgpStf7G+w0ZS62Ig/9Td+AoeBIfBjh
-         YEFFeaYFwKaaos+lDZzzs9bic+30VeVGU4wdzo4fM33PoIH1hMT8FqvonlpU4cbjdb53
-         Cpmw==
-X-Forwarded-Encrypted: i=1; AJvYcCUZvbOJERkP9WjP9W050wVQrKcAf57WODqoipPN2urcb3eCFddWL1dDaWgl7e1CV7xbWgKhWqyQ@vger.kernel.org, AJvYcCVgdkkKeN17dPKS9HrJA/yTo//DEUV9CIrNI0QkURqDX741k2nZ81fq2trrC/vWAn4ZaF/Jlp7kUvqEJM/1zao=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6YdDEy2bvnV1Pp+fumyVwQiH1zz9IpZjOBGVetfNTP1gYYfRk
-	OTxNkTQYad81mAB8ls3VjkhT8Ush69tmv3gBMr3nh4Vi16DSRPqvu9yyKXs+E0pY78Dp8CuHCm1
-	epSLi7YDSJCPDO3fMXMUWyDvhHu0=
-X-Google-Smtp-Source: AGHT+IFQGKytSVO1y2YqYvZP5Kjl73UjnI6ujzlFaVWeeWZ74pwj2bqd3QbQtE50FSvkJRvYYBw1V+CgNBa5TrkA78A=
-X-Received: by 2002:a05:6820:1f08:b0:5ee:74:4d35 with SMTP id
- 006d021491bc7-5ee57bb6560mr2371166eaf.2.1731067234989; Fri, 08 Nov 2024
- 04:00:34 -0800 (PST)
+	s=arc-20240116; t=1731071535; c=relaxed/simple;
+	bh=AgxJUcD0dle+4IaTnMk7AdnrO/1Zt/bfUnzkqPqqH1I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ggEnLdqfEVqTnOWb5y5eUC8Voh487YH62UgqO8fZUVv3qCNMEdyDr4gA/+3jUyeiV+v40u5Z3U5HD09kRR2m6i0wa+G3N2nCma0uuquBpT8AqtjPniEITDHRejLaWXL5Bqv06BJGOp3bQkQKWGI42yLWHWDVsB9fECqHWjwOGzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0DF47497;
+	Fri,  8 Nov 2024 05:12:43 -0800 (PST)
+Received: from [10.57.79.154] (unknown [10.57.79.154])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0B2D13F7D8;
+	Fri,  8 Nov 2024 05:12:11 -0800 (PST)
+Message-ID: <d3db93f4-679f-43f7-93b2-9eb33f53f855@arm.com>
+Date: Fri, 8 Nov 2024 14:12:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241107133004.7469-1-shaw.leon@gmail.com> <20241107133004.7469-8-shaw.leon@gmail.com>
- <20241107080420.6a5a5243@kernel.org> <CAD4GDZwOzLQd+FYd0AHr5AUcANWkf731Jgu6aeyix8EjRGXRag@mail.gmail.com>
- <CABAhCOSvo4OemcevEnNmk3Jny_YEoCb3s9GPC6o217oj-t5FnQ@mail.gmail.com> <CAD4GDZx2hEjJWJknS+x++dwPE_UYGiCTYxj2Ntt6BaS=UGZqyA@mail.gmail.com>
-In-Reply-To: <CAD4GDZx2hEjJWJknS+x++dwPE_UYGiCTYxj2Ntt6BaS=UGZqyA@mail.gmail.com>
-From: Donald Hunter <donald.hunter@gmail.com>
-Date: Fri, 8 Nov 2024 12:00:23 +0000
-Message-ID: <CAD4GDZzjcrMrnxW0BvtarkM08sV=61H52YZwKbY=QgN9Eqcc9g@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 7/8] tools/net/ynl: Add retry limit for async notification
-To: Xiao Liang <shaw.leon@gmail.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>, 
-	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jiri Pirko <jiri@resnulli.us>, 
-	Hangbin Liu <liuhangbin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: Fix unused function warning for
+ aarch64_write_signal_pkey()
+To: Catalin Marinas <catalin.marinas@arm.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org
+Cc: Shuah Khan <skhan@linuxfoundation.org>, Joey Gouly <joey.gouly@arm.com>
+References: <20241108110549.1185923-1-catalin.marinas@arm.com>
+Content-Language: en-GB
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+In-Reply-To: <20241108110549.1185923-1-catalin.marinas@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, 8 Nov 2024 at 10:04, Donald Hunter <donald.hunter@gmail.com> wrote:
+On 08/11/2024 12:05, Catalin Marinas wrote:
+> Since commit 49f59573e9e0 ("selftests/mm: Enable pkey_sighandler_tests
+> on arm64"), pkey_sighandler_tests.c (which includes pkey-arm64.h via
+> pkey-helpers.h) ends up compiled for arm64. Since it doesn't use
+> aarch64_write_signal_pkey(), the compiler warns:
 >
-> Jakub, is it okay to submit this as a single patch, or would you
-> prefer me to actually revert 1bf70e6c3a53? (there's about 5 lines
-> retained from the original patch).
+> In file included from pkey-helpers.h:106,
+>                  from pkey_sighandler_tests.c:31:
+> pkey-arm64.h:130:13: warning: ‘aarch64_write_signal_pkey’ defined but not used [-Wunused-function]
+>   130 | static void aarch64_write_signal_pkey(ucontext_t *uctxt, u64 pkey)
+>       |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> Make the aarch64_write_signal_pkey() a 'static inline void' function to
+> avoid the compiler warning.
+>
+> Fixes: f5b5ea51f78f ("selftests: mm: make protection_keys test work on arm64")
+> Cc: Shuah Khan <skhan@linuxfoundation.org>
+> Cc: Joey Gouly <joey.gouly@arm.com>
+> Cc: Kevin Brodsky <kevin.brodsky@arm.com>
+> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
 
-I'll submit it as a series with a revert and a new patch. The patch is
-much cleaner that way.
+I've got this diff locally, didn't realise it was my patches that
+revealed the issue otherwise I'd have posted it earlier. Either way:
+
+Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
+
+- Kevin
+
+> ---
+>
+> I'll add this on top of the arm64 for-next/pkey-signal branch together with
+> Kevin's other patches.
+>
+>  tools/testing/selftests/mm/pkey-arm64.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/mm/pkey-arm64.h b/tools/testing/selftests/mm/pkey-arm64.h
+> index d57fbeace38f..d9d2100eafc0 100644
+> --- a/tools/testing/selftests/mm/pkey-arm64.h
+> +++ b/tools/testing/selftests/mm/pkey-arm64.h
+> @@ -127,7 +127,7 @@ static inline u64 get_pkey_bits(u64 reg, int pkey)
+>  	return 0;
+>  }
+>  
+> -static void aarch64_write_signal_pkey(ucontext_t *uctxt, u64 pkey)
+> +static inline void aarch64_write_signal_pkey(ucontext_t *uctxt, u64 pkey)
+>  {
+>  	struct _aarch64_ctx *ctx = GET_UC_RESV_HEAD(uctxt);
+>  	struct poe_context *poe_ctx =
+
 
