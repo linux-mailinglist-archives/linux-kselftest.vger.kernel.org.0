@@ -1,86 +1,64 @@
-Return-Path: <linux-kselftest+bounces-21661-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21662-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D3769C18ED
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 10:17:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D04929C1932
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 10:34:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C180E2831B0
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 09:17:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00B081C22E52
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 09:34:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C69FA1E049C;
-	Fri,  8 Nov 2024 09:16:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A1451E1029;
+	Fri,  8 Nov 2024 09:34:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="LvFdkqRf"
+	dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b="pvp+40l5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from qs51p00im-qukt01080102.me.com (qs51p00im-qukt01080102.me.com [17.57.155.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9D21D0B8A;
-	Fri,  8 Nov 2024 09:16:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B7D1D04B9
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Nov 2024 09:34:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.57.155.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731057419; cv=none; b=ODhL1RvHq82+NlnPUTBbKIQzM+d5sf5I/d5Gxl/4tB4mGnwzO9G/qLO/OxplkePQKDYoumycQ3uUs72jTkvadWZeVhpeSgE56V4RNBzAahXNJm//JWABMghOyWTBYqMLSUG0yFgFdHqYrBZsj79J3om6t/Qrb9Gcj7RPT3sEFTQ=
+	t=1731058487; cv=none; b=IFSjI7gktWLvBoGZNBPeO/4iaIVf+rSjW7v2laMolCoDXeGJ77KTU/hGot4YgZGz9japzcj0bBnQckvNZA1xvzH+cMX30zCPJzSTUfgkCDuRjoyiWEUu3GJiJwZ0SmJ1T3VL/gnV6nAHEDfyCXZYdcYsMinYi1xyjwg7D0X3g5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731057419; c=relaxed/simple;
-	bh=fJLEPWOkCvP1z3IZrZstjDvjQxvdBwlSAqrPMvkxiR8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VV8Mwb2g74aXOM6Y/MhOpCZzYdbQRWIxtemDMkLkPSG8YbJTuu7GDElwWhwcnmDcZQx7Rws5NP0l3eGFEJ3YDhePygJ1uLnxiw2bdu7I5LspoRcatcJn7tdf4ExcsPc8gFnTsd5QUhxrbyQN5nVwWEMHrIQ+i5u61KYmALFHEzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=LvFdkqRf; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A889uVO020745;
-	Fri, 8 Nov 2024 09:16:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=BabBlwg3HFRgOZHlb
-	LgtwxjDSS4kHfDhWBZRVYlpFrQ=; b=LvFdkqRf+u8unTuE84rPcGEDs2/z0rUxT
-	D8FS7whpHvI+WPL4Ss0PPSF2zmjyryrBSbJ19CoGNxak3qWPrxbNg7nwF0vOGmBJ
-	KRP1iIBjWdX1kjPVAXU5k6AAvmHGJfA3M3z9A3hG5fu+zx+07TpE2WjH/q4nCPLJ
-	3BsemZig2Bof4uX2YxqBPAmywuGMzErm4uUdNX1SaPTvpNNRrUrCdoFqFN2dwTsG
-	nUoC1Da6N8CH+6d2Vo9233ZZz9Z1Y81+WBrART7E3QFfvFBpwd5LHo1HPQUfRkXb
-	1Zv9Cq8bIemD9qaDWwpcI/AOpUhhzR5rzRBwk1K0fpSZ82Jzv5W0g==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42sew0g7sj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 08 Nov 2024 09:16:52 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4A7NjEIY019625;
-	Fri, 8 Nov 2024 09:16:52 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 42p0mj9upq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 08 Nov 2024 09:16:52 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4A89GmHr33555106
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 8 Nov 2024 09:16:48 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 880472004B;
-	Fri,  8 Nov 2024 09:16:48 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D89CE20049;
-	Fri,  8 Nov 2024 09:16:47 +0000 (GMT)
-Received: from darkmoore.ibmuc.com (unknown [9.179.25.81])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  8 Nov 2024 09:16:47 +0000 (GMT)
-From: Christoph Schlameuss <schlameuss@linux.ibm.com>
-To: kvm@vger.kernel.org
-Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>, schlameuss@linux.ibm.com
-Subject: [PATCH v7 2/5] selftests: kvm: s390: Add uc_skey VM test case
-Date: Fri,  8 Nov 2024 10:16:20 +0100
-Message-ID: <20241108091620.289406-1-schlameuss@linux.ibm.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241107141024.238916-3-schlameuss@linux.ibm.com>
-References: <20241107141024.238916-3-schlameuss@linux.ibm.com>
+	s=arc-20240116; t=1731058487; c=relaxed/simple;
+	bh=+evTzrhycb5ITZR85ZlfMFyqpB689J1xAxbs0jLdgVQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X1GNPMuorvbGMuLctA3+ph99FkXmzcQXahtXG9RzZA5ZtSeLYtvoo/DXzOGlJ1aOFcO6QIUuinU0KjdZBda7uD1fAwbCChD/GtwjXPze6vIEKhVuo9m5KIY27m+flfKWrV3uU7ye1GjbQKrP73/u2GaGp1vib4waK3smSEnXRpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg; spf=pass smtp.mailfrom=verdict.gg; dkim=pass (2048-bit key) header.d=verdict.gg header.i=@verdict.gg header.b=pvp+40l5; arc=none smtp.client-ip=17.57.155.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=verdict.gg
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verdict.gg
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verdict.gg; s=sig1;
+	t=1731058482; bh=vZKX7+dJZUvwKhmJi187sWMCctBe1BNQJwQ7gCP2ym0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme;
+	b=pvp+40l5MofNXNIPbhbexPZ/xHe+BV3NWORjf/+10KLff6OJLuooqKL1LV1HbNTAk
+	 AykpAIhfl6xxKYAwAq4LmnIDuVe3tvs13JILDquw2pR378Rggpk6YDNHR0pN5cXzB2
+	 cDiqLgdpcpmYmpe1IoJEP4MQYcI5xWZoAYcfomUYOFl5mU7+z7baUq+jXqgVmAqDqx
+	 +9/gOw++ScXo2rMasBqol2SiHl9wLvYoeld9Ps+fynQgSuuU3pgZR33M1SdYGJYrdD
+	 FIzG2wtL61fnSYLKRspUb61qGwfT0DRVr300jrU2PzPVVTyWvNBQS5ohuaBWDl4rub
+	 xMxHlEReFZntQ==
+Received: from almalinux-std3-4-4-10gb.novalocal (qs51p00im-dlb-asmtp-mailmevip.me.com [17.57.155.28])
+	by qs51p00im-qukt01080102.me.com (Postfix) with ESMTPSA id D3BF71CC015B;
+	Fri,  8 Nov 2024 09:34:39 +0000 (UTC)
+From: Vladimir Vdovin <deliran@verdict.gg>
+To: netdev@vger.kernel.org,
+	dsahern@kernel.org,
+	davem@davemloft.net,
+	idosch@idosch.org
+Cc: Vladimir Vdovin <deliran@verdict.gg>,
+	edumazet@google.com,
+	linux-kselftest@vger.kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	horms@kernel.org,
+	gnault@redhat.com
+Subject: [PATCH net-next v10] net: ipv4: Cache pmtu for all packet paths if multipath enabled
+Date: Fri,  8 Nov 2024 09:34:24 +0000
+Message-ID: <20241108093427.317942-1-deliran@verdict.gg>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,227 +66,336 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: N723-qSEUFLPuwgD73VD3S4k0pZZ7BVt
-X-Proofpoint-ORIG-GUID: N723-qSEUFLPuwgD73VD3S4k0pZZ7BVt
+X-Proofpoint-GUID: iGlCVYhUm9p5P-dG-Merr_gZvqJ5jFJA
+X-Proofpoint-ORIG-GUID: iGlCVYhUm9p5P-dG-Merr_gZvqJ5jFJA
 X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 mlxscore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0
- mlxlogscore=989 malwarescore=0 phishscore=0 spamscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411080074
+ engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-11-08_07,2024-11-07_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 suspectscore=0
+ spamscore=0 mlxlogscore=999 malwarescore=0 clxscore=1030 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2411080077
 
-Add a test case manipulating s390 storage keys from within the ucontrol
-VM.
+Check number of paths by fib_info_num_path(),
+and update_or_create_fnhe() for every path.
+Problem is that pmtu is cached only for the oif
+that has received icmp message "need to frag",
+other oifs will still try to use "default" iface mtu.
 
-Storage key instruction (ISKE, SSKE and RRBE) intercepts and
-Keyless-subset facility are disabled on first use, where the skeys are
-setup by KVM in non ucontrol VMs.
+An example topology showing the problem:
 
-Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
+                    |  host1
+                +---------+
+                |  dummy0 | 10.179.20.18/32  mtu9000
+                +---------+
+        +-----------+----------------+
+    +---------+                     +---------+
+    | ens17f0 |  10.179.2.141/31    | ens17f1 |  10.179.2.13/31
+    +---------+                     +---------+
+        |    (all here have mtu 9000)    |
+    +------+                         +------+
+    | ro1  |  10.179.2.140/31        | ro2  |  10.179.2.12/31
+    +------+                         +------+
+        |                                |
+---------+------------+-------------------+------
+                        |
+                    +-----+
+                    | ro3 | 10.10.10.10  mtu1500
+                    +-----+
+                        |
+    ========================================
+                some networks
+    ========================================
+                        |
+                    +-----+
+                    | eth0| 10.10.30.30  mtu9000
+                    +-----+
+                        |  host2
+
+host1 have enabled multipath and
+sysctl net.ipv4.fib_multipath_hash_policy = 1:
+
+default proto static src 10.179.20.18
+        nexthop via 10.179.2.12 dev ens17f1 weight 1
+        nexthop via 10.179.2.140 dev ens17f0 weight 1
+
+When host1 tries to do pmtud from 10.179.20.18/32 to host2,
+host1 receives at ens17f1 iface an icmp packet from ro3 that ro3 mtu=1500.
+And host1 caches it in nexthop exceptions cache.
+
+Problem is that it is cached only for the iface that has received icmp,
+and there is no way that ro3 will send icmp msg to host1 via another path.
+
+Host1 now have this routes to host2:
+
+ip r g 10.10.30.30 sport 30000 dport 443
+10.10.30.30 via 10.179.2.12 dev ens17f1 src 10.179.20.18 uid 0
+    cache expires 521sec mtu 1500
+
+ip r g 10.10.30.30 sport 30033 dport 443
+10.10.30.30 via 10.179.2.140 dev ens17f0 src 10.179.20.18 uid 0
+    cache
+
+So when host1 tries again to reach host2 with mtu>1500,
+if packet flow is lucky enough to be hashed with oif=ens17f1 its ok,
+if oif=ens17f0 it blackholes and still gets icmp msgs from ro3 to ens17f1,
+until lucky day when ro3 will send it through another flow to ens17f0.
+
+Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
 ---
+V10:
+  selfttests in pmtu.sh:
+    - remove unused fail var
+    - Flip error messages
+V9:
+  selftests in pmtu.sh:
+    - remove useless return
+    - fix mtu var override
+V8:
+  selftests in pmtu.sh:
+    - Change var names from "dummy" to "host"
+    - Fix errors caused by incorrect iface arguments pass
+    - Add src addr to setup_multipath_new
+    - Change multipath* func order
+    - Change route_get_dst_exception() && route_get_dst_pmtu_from_exception()
+      and arguments pass where they are used
+      as Ido suggested in https://lore.kernel.org/all/ZykH_fdcMBdFgXix@shredder/
 
-Resending this part as I did slightly mess up the rebase.
+V7:
+  selftest in pmtu.sh:
+    - add setup_multipath() with old and new nh tests
+    - add global "dummy_v4" addr variables
+    - add documentation
+    - remove dummy netdev usage in mp nh test
+    - remove useless sysctl opts in mp nh test
 
+V6:
+  - make commit message cleaner
+
+V5:
+  - make self test cleaner
+
+V4:
+  - fix selftest, do route lookup before checking cached exceptions
+
+V3:
+  - add selftest
+  - fix compile error
+
+V2:
+  - fix fib_info_num_path parameter pass
 ---
- .../selftests/kvm/include/s390x/processor.h   |   6 +
- .../selftests/kvm/s390x/ucontrol_test.c       | 145 +++++++++++++++++-
- 2 files changed, 149 insertions(+), 2 deletions(-)
+ net/ipv4/route.c                    |  13 ++++
+ tools/testing/selftests/net/pmtu.sh | 112 +++++++++++++++++++++++-----
+ 2 files changed, 108 insertions(+), 17 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/s390x/processor.h b/tools/testing/selftests/kvm/include/s390x/processor.h
-index 481bd2fd6a32..33fef6fd9617 100644
---- a/tools/testing/selftests/kvm/include/s390x/processor.h
-+++ b/tools/testing/selftests/kvm/include/s390x/processor.h
-@@ -32,4 +32,10 @@ static inline void cpu_relax(void)
- 	barrier();
+diff --git a/net/ipv4/route.c b/net/ipv4/route.c
+index 723ac9181558..652f603d29fe 100644
+--- a/net/ipv4/route.c
++++ b/net/ipv4/route.c
+@@ -1027,6 +1027,19 @@ static void __ip_rt_update_pmtu(struct rtable *rt, struct flowi4 *fl4, u32 mtu)
+ 		struct fib_nh_common *nhc;
+ 
+ 		fib_select_path(net, &res, fl4, NULL);
++#ifdef CONFIG_IP_ROUTE_MULTIPATH
++		if (fib_info_num_path(res.fi) > 1) {
++			int nhsel;
++
++			for (nhsel = 0; nhsel < fib_info_num_path(res.fi); nhsel++) {
++				nhc = fib_info_nhc(res.fi, nhsel);
++				update_or_create_fnhe(nhc, fl4->daddr, 0, mtu, lock,
++						      jiffies + net->ipv4.ip_rt_mtu_expires);
++			}
++			rcu_read_unlock();
++			return;
++		}
++#endif /* CONFIG_IP_ROUTE_MULTIPATH */
+ 		nhc = FIB_RES_NHC(res);
+ 		update_or_create_fnhe(nhc, fl4->daddr, 0, mtu, lock,
+ 				      jiffies + net->ipv4.ip_rt_mtu_expires);
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+index 569bce8b6383..7ca2fbd971ae 100755
+--- a/tools/testing/selftests/net/pmtu.sh
++++ b/tools/testing/selftests/net/pmtu.sh
+@@ -197,6 +197,12 @@
+ #
+ # - pmtu_ipv6_route_change
+ #	Same as above but with IPv6
++#
++# - pmtu_ipv4_mp_exceptions
++#	Use the same topology as in pmtu_ipv4, but add routeable addresses
++#	on host A and B on lo reachable via both routers. Host A and B
++#	addresses have multipath routes to each other, b_r1 mtu = 1500.
++#	Check that PMTU exceptions are created for both paths.
+ 
+ source lib.sh
+ source net_helper.sh
+@@ -266,7 +272,8 @@ tests="
+ 	list_flush_ipv4_exception	ipv4: list and flush cached exceptions	1
+ 	list_flush_ipv6_exception	ipv6: list and flush cached exceptions	1
+ 	pmtu_ipv4_route_change		ipv4: PMTU exception w/route replace	1
+-	pmtu_ipv6_route_change		ipv6: PMTU exception w/route replace	1"
++	pmtu_ipv6_route_change		ipv6: PMTU exception w/route replace	1
++	pmtu_ipv4_mp_exceptions		ipv4: PMTU multipath nh exceptions	1"
+ 
+ # Addressing and routing for tests with routers: four network segments, with
+ # index SEGMENT between 1 and 4, a common prefix (PREFIX4 or PREFIX6) and an
+@@ -343,6 +350,9 @@ tunnel6_a_addr="fd00:2::a"
+ tunnel6_b_addr="fd00:2::b"
+ tunnel6_mask="64"
+ 
++host4_a_addr="192.168.99.99"
++host4_b_addr="192.168.88.88"
++
+ dummy6_0_prefix="fc00:1000::"
+ dummy6_1_prefix="fc00:1001::"
+ dummy6_mask="64"
+@@ -984,6 +994,52 @@ setup_ovs_bridge() {
+ 	run_cmd ip route add ${prefix6}:${b_r1}::1 via ${prefix6}:${a_r1}::2
  }
  
-+/* Get the instruction length */
-+static inline int insn_length(unsigned char code)
-+{
-+	return ((((int)code + 64) >> 7) + 1) << 1;
++setup_multipath_new() {
++	# Set up host A with multipath routes to host B host4_b_addr
++	run_cmd ${ns_a} ip addr add ${host4_a_addr} dev lo
++	run_cmd ${ns_a} ip nexthop add id 401 via ${prefix4}.${a_r1}.2 dev veth_A-R1
++	run_cmd ${ns_a} ip nexthop add id 402 via ${prefix4}.${a_r2}.2 dev veth_A-R2
++	run_cmd ${ns_a} ip nexthop add id 403 group 401/402
++	run_cmd ${ns_a} ip route add ${host4_b_addr} src ${host4_a_addr} nhid 403
++
++	# Set up host B with multipath routes to host A host4_a_addr
++	run_cmd ${ns_b} ip addr add ${host4_b_addr} dev lo
++	run_cmd ${ns_b} ip nexthop add id 401 via ${prefix4}.${b_r1}.2 dev veth_B-R1
++	run_cmd ${ns_b} ip nexthop add id 402 via ${prefix4}.${b_r2}.2 dev veth_B-R2
++	run_cmd ${ns_b} ip nexthop add id 403 group 401/402
++	run_cmd ${ns_b} ip route add ${host4_a_addr} src ${host4_b_addr} nhid 403
 +}
 +
- #endif
-diff --git a/tools/testing/selftests/kvm/s390x/ucontrol_test.c b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
-index 3e649b12a0b9..ad95087cc74c 100644
---- a/tools/testing/selftests/kvm/s390x/ucontrol_test.c
-+++ b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
-@@ -79,6 +79,33 @@ asm("test_mem_asm:\n"
- 	"	j	0b\n"
- );
++setup_multipath_old() {
++	# Set up host A with multipath routes to host B host4_b_addr
++	run_cmd ${ns_a} ip addr add ${host4_a_addr} dev lo
++	run_cmd ${ns_a} ip route add ${host4_b_addr} \
++			src ${host4_a_addr} \
++			nexthop via ${prefix4}.${a_r1}.2 weight 1 \
++			nexthop via ${prefix4}.${a_r2}.2 weight 1
++
++	# Set up host B with multipath routes to host A host4_a_addr
++	run_cmd ${ns_b} ip addr add ${host4_b_addr} dev lo
++	run_cmd ${ns_b} ip route add ${host4_a_addr} \
++			src ${host4_b_addr} \
++			nexthop via ${prefix4}.${b_r1}.2 weight 1 \
++			nexthop via ${prefix4}.${b_r2}.2 weight 1
++}
++
++setup_multipath() {
++	if [ "$USE_NH" = "yes" ]; then
++		setup_multipath_new
++	else
++		setup_multipath_old
++	fi
++
++	# Set up routers with routes to dummies
++	run_cmd ${ns_r1} ip route add ${host4_a_addr} via ${prefix4}.${a_r1}.1
++	run_cmd ${ns_r2} ip route add ${host4_a_addr} via ${prefix4}.${a_r2}.1
++	run_cmd ${ns_r1} ip route add ${host4_b_addr} via ${prefix4}.${b_r1}.1
++	run_cmd ${ns_r2} ip route add ${host4_b_addr} via ${prefix4}.${b_r2}.1
++}
++
+ setup() {
+ 	[ "$(id -u)" -ne 0 ] && echo "  need to run as root" && return $ksft_skip
  
-+/* Test program manipulating storage keys */
-+extern char test_skey_asm[];
-+asm("test_skey_asm:\n"
-+	"xgr	%r0, %r0\n"
-+
-+	"0:\n"
-+	"	ahi	%r0,1\n"
-+	"	st	%r1,0(%r5,%r6)\n"
-+
-+	"	iske	%r1,%r6\n"
-+	"	ahi	%r0,1\n"
-+	"	diag	0,0,0x44\n"
-+
-+	"	sske	%r1,%r6\n"
-+	"	xgr	%r1,%r1\n"
-+	"	iske	%r1,%r6\n"
-+	"	ahi	%r0,1\n"
-+	"	diag	0,0,0x44\n"
-+
-+	"	rrbe	%r1,%r6\n"
-+	"	iske	%r1,%r6\n"
-+	"	ahi	%r0,1\n"
-+	"	diag	0,0,0x44\n"
-+
-+	"	j	0b\n"
-+);
-+
- FIXTURE(uc_kvm)
- {
- 	struct kvm_s390_sie_block *sie_block;
-@@ -298,8 +325,50 @@ static void uc_handle_exit_ucontrol(FIXTURE_DATA(uc_kvm) *self)
- 	}
+@@ -1076,23 +1132,15 @@ link_get_mtu() {
  }
  
--/* verify SIEIC exit
-+/*
-+ * Handle the SIEIC exit
-  * * fail on codes not expected in the test cases
-+ * Returns if interception is handled / execution can be continued
-+ */
-+static void uc_skey_enable(FIXTURE_DATA(uc_kvm) *self)
-+{
-+	struct kvm_s390_sie_block *sie_block = self->sie_block;
-+
-+	/* disable KSS */
-+	sie_block->cpuflags &= ~CPUSTAT_KSS;
-+	/* disable skey inst interception */
-+	sie_block->ictl &= ~(ICTL_ISKE | ICTL_SSKE | ICTL_RRBE);
-+}
-+
-+/*
-+ * Handle the instruction intercept
-+ * Returns if interception is handled / execution can be continued
-+ */
-+static bool uc_handle_insn_ic(FIXTURE_DATA(uc_kvm) *self)
-+{
-+	struct kvm_s390_sie_block *sie_block = self->sie_block;
-+	int ilen = insn_length(sie_block->ipa >> 8);
-+	struct kvm_run *run = self->run;
-+
-+	switch (run->s390_sieic.ipa) {
-+	case 0xB229: /* ISKE */
-+	case 0xB22b: /* SSKE */
-+	case 0xB22a: /* RRBE */
-+		uc_skey_enable(self);
-+
-+		/* rewind to reexecute intercepted instruction */
-+		run->psw_addr = run->psw_addr - ilen;
-+		pr_info("rewind guest addr to 0x%.16llx\n", run->psw_addr);
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+/*
-+ * Handle the SIEIC exit
-+ * * fail on codes not expected in the test cases
-+ * Returns if interception is handled / execution can be continued
-  */
- static bool uc_handle_sieic(FIXTURE_DATA(uc_kvm) * self)
- {
-@@ -315,7 +384,10 @@ static bool uc_handle_sieic(FIXTURE_DATA(uc_kvm) * self)
- 	case ICPT_INST:
- 		/* end execution in caller on intercepted instruction */
- 		pr_info("sie instruction interception\n");
--		return false;
-+		return uc_handle_insn_ic(self);
-+	case ICPT_KSS:
-+		uc_skey_enable(self);
-+		return true;
- 	case ICPT_OPEREXC:
- 		/* operation exception */
- 		TEST_FAIL("sie exception on %.4x%.8x", sie_block->ipa, sie_block->ipb);
-@@ -472,4 +544,73 @@ TEST_F(uc_kvm, uc_gprs)
- 	ASSERT_EQ(1, sync_regs->gprs[0]);
+ route_get_dst_exception() {
+-	ns_cmd="${1}"
+-	dst="${2}"
+-	dsfield="${3}"
++	ns_cmd="${1}"; shift
+ 
+-	if [ -z "${dsfield}" ]; then
+-		dsfield=0
+-	fi
+-
+-	${ns_cmd} ip route get "${dst}" dsfield "${dsfield}"
++	${ns_cmd} ip route get "$@"
  }
  
-+TEST_F(uc_kvm, uc_skey)
-+{
-+	struct kvm_s390_sie_block *sie_block = self->sie_block;
-+	struct kvm_sync_regs *sync_regs = &self->run->s.regs;
-+	u64 test_vaddr = VM_MEM_SIZE - (SZ_1M / 2);
-+	struct kvm_run *run = self->run;
-+	const u8 skeyvalue = 0x34;
+ route_get_dst_pmtu_from_exception() {
+-	ns_cmd="${1}"
+-	dst="${2}"
+-	dsfield="${3}"
++	ns_cmd="${1}"; shift
+ 
+-	mtu_parse "$(route_get_dst_exception "${ns_cmd}" "${dst}" "${dsfield}")"
++	mtu_parse "$(route_get_dst_exception "${ns_cmd}" "$@")"
+ }
+ 
+ check_pmtu_value() {
+@@ -1235,10 +1283,10 @@ test_pmtu_ipv4_dscp_icmp_exception() {
+ 	run_cmd "${ns_a}" ping -q -M want -Q "${dsfield}" -c 1 -w 1 -s "${len}" "${dst2}"
+ 
+ 	# Check that exceptions have been created with the correct PMTU
+-	pmtu_1="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst1}" "${policy_mark}")"
++	pmtu_1="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst1}" dsfield "${policy_mark}")"
+ 	check_pmtu_value "1400" "${pmtu_1}" "exceeding MTU" || return 1
+ 
+-	pmtu_2="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst2}" "${policy_mark}")"
++	pmtu_2="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst2}" dsfield "${policy_mark}")"
+ 	check_pmtu_value "1500" "${pmtu_2}" "exceeding MTU" || return 1
+ }
+ 
+@@ -1285,9 +1333,9 @@ test_pmtu_ipv4_dscp_udp_exception() {
+ 		UDP:"${dst2}":50000,tos="${dsfield}"
+ 
+ 	# Check that exceptions have been created with the correct PMTU
+-	pmtu_1="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst1}" "${policy_mark}")"
++	pmtu_1="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst1}" dsfield "${policy_mark}")"
+ 	check_pmtu_value "1400" "${pmtu_1}" "exceeding MTU" || return 1
+-	pmtu_2="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst2}" "${policy_mark}")"
++	pmtu_2="$(route_get_dst_pmtu_from_exception "${ns_a}" "${dst2}" dsfield "${policy_mark}")"
+ 	check_pmtu_value "1500" "${pmtu_2}" "exceeding MTU" || return 1
+ }
+ 
+@@ -2329,6 +2377,36 @@ test_pmtu_ipv6_route_change() {
+ 	test_pmtu_ipvX_route_change 6
+ }
+ 
++test_pmtu_ipv4_mp_exceptions() {
++	setup namespaces routing multipath || return $ksft_skip
 +
-+	/* copy test_skey_asm to code_hva / code_gpa */
-+	TH_LOG("copy code %p to vm mapped memory %p / %p",
-+	       &test_skey_asm, (void *)self->code_hva, (void *)self->code_gpa);
-+	memcpy((void *)self->code_hva, &test_skey_asm, PAGE_SIZE);
++	trace "${ns_a}"  veth_A-R1    "${ns_r1}" veth_R1-A \
++	      "${ns_r1}" veth_R1-B    "${ns_b}"  veth_B-R1 \
++	      "${ns_a}"  veth_A-R2    "${ns_r2}" veth_R2-A \
++	      "${ns_r2}" veth_R2-B    "${ns_b}"  veth_B-R2
 +
-+	/* set register content for test_skey_asm to access not mapped memory */
-+	sync_regs->gprs[1] = skeyvalue;
-+	sync_regs->gprs[5] = self->base_gpa;
-+	sync_regs->gprs[6] = test_vaddr;
-+	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
++	# Set up initial MTU values
++	mtu "${ns_a}"  veth_A-R1 2000
++	mtu "${ns_r1}" veth_R1-A 2000
++	mtu "${ns_r1}" veth_R1-B 1500
++	mtu "${ns_b}"  veth_B-R1 1500
 +
-+	/* DAT disabled + 64 bit mode */
-+	run->psw_mask = 0x0000000180000000ULL;
-+	run->psw_addr = self->code_gpa;
++	mtu "${ns_a}"  veth_A-R2 2000
++	mtu "${ns_r2}" veth_R2-A 2000
++	mtu "${ns_r2}" veth_R2-B 1500
++	mtu "${ns_b}"  veth_B-R2 1500
 +
-+	ASSERT_EQ(0, uc_run_once(self));
-+	ASSERT_EQ(true, uc_handle_exit(self));
-+	ASSERT_EQ(1, sync_regs->gprs[0]);
++	# Ping and expect two nexthop exceptions for two routes
++	run_cmd ${ns_a} ping -q -M want -i 0.1 -c 1 -s 1800 "${host4_b_addr}"
 +
-+	/* ISKE */
-+	ASSERT_EQ(0, uc_run_once(self));
++	# Check that exceptions have been created with the correct PMTU
++	pmtu_a_R1="$(route_get_dst_pmtu_from_exception "${ns_a}" "${host4_b_addr}" oif veth_A-R1)"
++	pmtu_a_R2="$(route_get_dst_pmtu_from_exception "${ns_a}" "${host4_b_addr}" oif veth_A-R2)"
 +
-+	/*
-+	 * Bail out and skip the test after uc_skey_enable was executed but iske
-+	 * is still intercepted. Instructions are not handled by the kernel.
-+	 * Thus there is no need to test this here.
-+	 */
-+	TEST_ASSERT_EQ(0, sie_block->cpuflags & CPUSTAT_KSS);
-+	TEST_ASSERT_EQ(0, sie_block->ictl & (ICTL_ISKE | ICTL_SSKE | ICTL_RRBE));
-+	TEST_ASSERT_EQ(KVM_EXIT_S390_SIEIC, self->run->exit_reason);
-+	TEST_ASSERT_EQ(ICPT_INST, sie_block->icptcode);
-+	TEST_REQUIRE(sie_block->ipa != 0xb229);
-+
-+	/* ISKE contd. */
-+	ASSERT_EQ(false, uc_handle_exit(self));
-+	ASSERT_EQ(2, sync_regs->gprs[0]);
-+	/* assert initial skey (ACC = 0, R & C = 1) */
-+	ASSERT_EQ(0x06, sync_regs->gprs[1]);
-+	uc_assert_diag44(self);
-+
-+	/* SSKE + ISKE */
-+	sync_regs->gprs[1] = skeyvalue;
-+	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
-+	ASSERT_EQ(0, uc_run_once(self));
-+	ASSERT_EQ(false, uc_handle_exit(self));
-+	ASSERT_EQ(3, sync_regs->gprs[0]);
-+	ASSERT_EQ(skeyvalue, sync_regs->gprs[1]);
-+	uc_assert_diag44(self);
-+
-+	/* RRBE + ISKE */
-+	sync_regs->gprs[1] = skeyvalue;
-+	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
-+	ASSERT_EQ(0, uc_run_once(self));
-+	ASSERT_EQ(false, uc_handle_exit(self));
-+	ASSERT_EQ(4, sync_regs->gprs[0]);
-+	/* assert R reset but rest of skey unchanged */
-+	ASSERT_EQ(skeyvalue & 0xfa, sync_regs->gprs[1]);
-+	ASSERT_EQ(0, sync_regs->gprs[1] & 0x04);
-+	uc_assert_diag44(self);
++	check_pmtu_value "1500" "${pmtu_a_R1}" "exceeding MTU (veth_A-R1)" || return 1
++	check_pmtu_value "1500" "${pmtu_a_R2}" "exceeding MTU (veth_A-R2)" || return 1
 +}
 +
- TEST_HARNESS_MAIN
+ usage() {
+ 	echo
+ 	echo "$0 [OPTIONS] [TEST]..."
+
+base-commit: 66600fac7a984dea4ae095411f644770b2561ede
 -- 
-2.47.0
+2.43.5
 
 
