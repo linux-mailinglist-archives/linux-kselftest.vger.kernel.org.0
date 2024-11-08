@@ -1,495 +1,695 @@
-Return-Path: <linux-kselftest+bounces-21654-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21655-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77B559C153C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 05:12:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C538D9C15AA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 05:54:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07F0C1F23D53
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 04:12:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56EE41F23241
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 04:54:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 147A91D1300;
-	Fri,  8 Nov 2024 04:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D22501CF5F4;
+	Fri,  8 Nov 2024 04:54:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="h41+T+rd"
+	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="HgCq3OXw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx08-001d1705.pphosted.com (mx08-001d1705.pphosted.com [185.183.30.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760B51D0E0E
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 Nov 2024 04:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=185.183.30.70
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731039055; cv=fail; b=kDccQ+YAPrj8DXbSOzkjiPDSNEdJe1KXKvEk7uPGH1woAN3hFKN9ZiM2PJYHPNrFfWQLJ8QAtfQ/BJVlydjLQ7nnJvle8FUBFAMLQH8CGM9tjSpAz8pQEs0Eo8ElLcTe87lWTz+BreWvnKcjCqFHSR/Xk1lQY+ddiVcTQs6HqMY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731039055; c=relaxed/simple;
-	bh=LveSsRrChW3lzNP50HsvSva/egZLgEuO/GQ/4uaOSEc=;
-	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=qruodh08545HX9V+W1ygd28ZbufYqGBRJqKqK4MJx8O9sasql8ON2m18SrRbAG9YN194O97jw7DCz/qRe9Efst7corUgve+JZ66PMfq3j3sxHluPHOy7cq6MxU2QZI3FGpzqM5bRJ6pP0LDify6tA6tydgwKJv9TTG5rBNOSpCk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com; spf=pass smtp.mailfrom=sony.com; dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b=h41+T+rd; arc=fail smtp.client-ip=185.183.30.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sony.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sony.com
-Received: from pps.filterd (m0209320.ppops.net [127.0.0.1])
-	by mx08-001d1705.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A849khR029660;
-	Fri, 8 Nov 2024 04:10:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sony.com; h=
-	content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=S1; bh=LveSsRr
-	ChW3lzNP50HsvSva/egZLgEuO/GQ/4uaOSEc=; b=h41+T+rdwnYedNFJLKC84kh
-	HN7O1LwCR+ZUxGy5wDCdEstSlfsaRxsRp8ZFxT4L/HhuNwuXC6vedMI4o6hVUeLf
-	CMU89ZHXK6urT0nxeeqJ/P8Uju6sk8qIkYstMFZW8L3zkpW/dbV2uwa/Kpvhi/Ld
-	dmisgxJif82RJO9WTGoUVJz1XirZAPe3XiohmOMoiBViFsczpW4wt1Zb/h2ffLH2
-	cnCWr85xYgGqeaaAddIs7RkQS2meGjVLgD4VP02Q1qCvYddt+KsvC21+aV7wBEVL
-	+AXAl8EqWOTV0wLBGH3i3y4xjV9I3//SqRHbPRJl5mhogI7Hgvr2FAC2P+Vt1lQ=
-	=
-Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2041.outbound.protection.outlook.com [104.47.73.41])
-	by mx08-001d1705.pphosted.com (PPS) with ESMTPS id 42s6feg7jr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 08 Nov 2024 04:10:41 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=A73EZSpJy/IHXqhQ1br8s3NDXSLTpmG+ijGqkxzzw0FtH3SMckPNNt0pZThoYnzSwlH4rzyjqZr5qiJxwq0Nyf+pFv8ots0215eoY0YjuqCTeMZl8ghYJuxbDF9758sOP2K/TLQRHOUZGwITe5Lbb12C34N/AMMUdPfx32L+dDuo050XF4DtZoAtZqgnDdjuiIVfcnMwGA9zlRsBOb1Xh2YrAsznuqP1ZzOiA6A3LqLS2VXzdiW6nWEC66NKvbGYPci5oWHy//QsTgESeiXQJzyKhKZLxJfv+ve6Caj5bNHbw/+axBuNh1oA3VPJEAHsr5IlmuwtU1IGC3Qb9S9iZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LveSsRrChW3lzNP50HsvSva/egZLgEuO/GQ/4uaOSEc=;
- b=F3m/UUK9vz4dczDMdWT+70XU/lBK8RSMSMK4fVEiT1lCGoPScjactoHBuD5kDRPkmN9Djrt9La7SeYkRui4aX8IyzPbFPiYjvv/YaDpLNxRmP8sApPs3ENN8QNq0fmgChIuESOP+Dwp/te54KCKPaxlyDxu88UBQ4FB0htgxTZt35mcJR822lGxcHPUBJjCAXEPSfVhJEwUcgsFO15PweqGyk1lUysepAKD2Pva1+pOds/TDR41zj33v9ZHTI+deyZrgOMc233vRcWblwkwIsuMm7fT/9MjsLnwb8PwAWEycHrpxj+afZ4t++gM7aLM/0CAc64S4KDPytAq+G0h3Bw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
- dkim=pass header.d=sony.com; arc=none
-Received: from MW5PR13MB5632.namprd13.prod.outlook.com (2603:10b6:303:197::16)
- by CH3PR13MB7021.namprd13.prod.outlook.com (2603:10b6:610:207::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.20; Fri, 8 Nov
- 2024 04:10:37 +0000
-Received: from MW5PR13MB5632.namprd13.prod.outlook.com
- ([fe80::df7c:a5b9:aa3e:9197]) by MW5PR13MB5632.namprd13.prod.outlook.com
- ([fe80::df7c:a5b9:aa3e:9197%6]) with mapi id 15.20.8137.018; Fri, 8 Nov 2024
- 04:10:37 +0000
-From: "Bird, Tim" <Tim.Bird@sony.com>
-To: Konstantin Belov <konstantin.belov@linaro.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: Some thoughts on Linux benchmarks results & processing
-Thread-Topic: Some thoughts on Linux benchmarks results & processing
-Thread-Index: AQHbMGvjf5tns9YQDE6Zj1lb00M+7LKsvirQ
-Date: Fri, 8 Nov 2024 04:10:37 +0000
-Message-ID:
- <MW5PR13MB5632195083D7B6D2371B45B1FD5D2@MW5PR13MB5632.namprd13.prod.outlook.com>
-References:
- <CAPZ5P5jj6pjZA4e4HMvNY=SFzf7Y0cBXP1kNTqi42WN+XhT7jQ@mail.gmail.com>
-In-Reply-To:
- <CAPZ5P5jj6pjZA4e4HMvNY=SFzf7Y0cBXP1kNTqi42WN+XhT7jQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MW5PR13MB5632:EE_|CH3PR13MB7021:EE_
-x-ms-office365-filtering-correlation-id: 45e3b0b4-2a47-46ae-8ebb-08dcffab4cbf
-x-proofpoint-id: d8690225-876f-412f-87c6-a7cb45557a4c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|1800799024|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?eStsZ0lRcDhUUHIxakdtcmpoOU1jSTF3RjJDM3ZTNnhMc3RWTVBVWGlRL1dn?=
- =?utf-8?B?cXI3aytvVm5qUlptNTVpRDNVTTRybVVlVzhjQkZVVU4vTWRBOTNjaGM0REZH?=
- =?utf-8?B?WVVTQkRkQUsydC8yMFlsc3VHL2E1VXIvcnp6aWZvNDNlRjJwUUs4NDlqd05L?=
- =?utf-8?B?TTZ2ZlViTDUwOWI1c1BhUHYwMkpNSXFpVHFZcnA1ZnpRSkhTdC9zU0xDUkZp?=
- =?utf-8?B?K3dKY09WQVhpcVMwbGw1eHhRODBzTlVEUThjdDBYS004YTNpSEhvTFM4YjNM?=
- =?utf-8?B?dGNFNkVZcGFiZXNmUXlXMExqbnZYczNCd1YzVmRmTUlLVkxTNU9ZNUVKcTlq?=
- =?utf-8?B?TTJJZGE2ZTllanJYbW1QakxySVo0UERZRmRNdE9tVG4wZ0ZSUkw4dWUyMFVx?=
- =?utf-8?B?K3BUS0g5R2JWRUczbzRqU21TbS85WDM5U21kaHg2UTA0Sjl5MUJaRlB0SGQ5?=
- =?utf-8?B?cUVORVpxVUozY0pGVmRVamFrMXEreUd4bXEvQ0tYMnZaSVNqRi9qNEFVRGFw?=
- =?utf-8?B?ZUxlVjRPYmYxQ2xyNW1TMHZvb2NNYldkdHZDY1VCbGlQOVNzZlBHa1VnNUZu?=
- =?utf-8?B?Y09VdWJjTEoyZllLV1JEQ3ByNVhkUnZVaHdaLzRacTN5Yk93TlBTMEV1Y2Mr?=
- =?utf-8?B?NGMzdEtiRzF0eDlYL3V2WllQczlPQ0IwS3RZVVRVS2Z1R0J5SDU1TmxpdVNS?=
- =?utf-8?B?NkdpdGNWNUZjZ0pkYzZ3Ri9icjJWNmFWdFFNTHNqWWo0TzhxWlJFUEQ3aHJR?=
- =?utf-8?B?T3ZpOXNDc2FpQ0ZSQTdQOHFwZFV1c1pla3Fscks1MklGSENReFNuODQ4WG1h?=
- =?utf-8?B?NS9PcW1IdGRuSS9kYlkzdW00Si9sM0pEVlRjamRpSDhyeFE2c0NibmVMdW9r?=
- =?utf-8?B?WjVqcFZUV1pxdGcvZzFGSkhXcmVCWHVKT1MxNkVNUUpOV1NyZERXQ3FDVTlP?=
- =?utf-8?B?RzhqMFc0Wk1leHlvb1dsamwzYmdwemVEU0p5dVdvVWNNRkxxUFNxN2ZlcFda?=
- =?utf-8?B?NkhRRWl3UlRIaVpUTVVqaEpBbHNiT3VjdnVINm5IWmNBdXErOTlZSVFHMWRw?=
- =?utf-8?B?ejhYS1FJeGNDVzdJbmM1blQySFJ1Q082UDR6Rnd6L1JhZ2Q5VmhLZ0tQODF2?=
- =?utf-8?B?SjIxQS9WcVM5eGwrMVI3NVM5S3FtRzVnNFFCQ0ZUZlBWa1dSdDMvQy9qaXd0?=
- =?utf-8?B?ai9NUmFUS2JYaE5YY0NzbHo5RHMrVStkTGpIWWVqUHpoMW90S3E0SWlsTSsv?=
- =?utf-8?B?OXJRM2w3Ni94aVRSL3g5ZXlPNm9rbldmT0VVbEdvR2huVDdvTjlFazFMLzFB?=
- =?utf-8?B?Y3ROSFZFckhYNzNpYmp3RVpmM2taUzNtV1RpQ0E5OEdUa1I3Rm9LZUs4dllw?=
- =?utf-8?B?N2dkOFNya0gzMUlMT2VTdVpPb3pkT3pFbzV6SzdrTS9rcGRCcjk1WkNFUlBH?=
- =?utf-8?B?VTFOK2dpTjlPdVVyUHBTMXI2L1FLTXZ1QzRzN3RPRnRNd3kxLzE5OEtsTDds?=
- =?utf-8?B?MGNoamVTbmJBVUNwY1lIaEd5TTNucEl1ZnFqcUl0VjBMNXgwYlpZcndNMklH?=
- =?utf-8?B?VTZ6alVOakhNTE9HZnovZlV1Ums0TkpoRGd6c0pYRjBOZ0ZjamVWVEFPNVRZ?=
- =?utf-8?B?UmxDM2xpMWUyUndCSTBVakhDWjdWeXNzdkhUSU9sdXMyQ3V6SVFweFJwbEVW?=
- =?utf-8?B?b3F5VXFROTBlUFZ1aWIvZWFkS09uYnlmQ3VYMVdSazRoaUpydWxQNmVLRFpw?=
- =?utf-8?Q?ppW5WuxdGO4hpelDPnf5i6kfra/o641WrbACx+Z?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR13MB5632.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?N0pwenVUdDNmYWVPazh3OG9Za1h5UmxzNitrdnplRlpPcUVCV1F2dEp3ZkhT?=
- =?utf-8?B?K0VjS1dNRGRVYjNBVlliVm81SHpxNC9IOXk3TXRPV3haakpUc3lUVUJLSW5j?=
- =?utf-8?B?OVZUODAwTnQwbmFUMDlscE1OVDdRMUNDQWVUZXJnYmNIeW5GSk4rcFBORGNq?=
- =?utf-8?B?Um9qcE15L3NRcUZTOWpQUXdabmc2SXkxa0tnUlNySm56S3JBSjB5cFFqVkJl?=
- =?utf-8?B?RERxQlphT3p3UStRcHZ1ZGhTR2Z2TUNPYTIrWHRtbmkyWkQrQm1JWDB4aUZH?=
- =?utf-8?B?QVRMSjZ4VFFWRFlXeHhjVDV6OHJaY2lRY2UxSEtVcDA0SHpzY2x5UWMzbUdn?=
- =?utf-8?B?WHBETlFaUlFOdERIdS9yYk9kcjNMQzNySlZpNlNjcldBQUFheDB0a3lEODRi?=
- =?utf-8?B?aGlNcERHNk10bm5HNmpzNXJXSi8xejVHSEk4N2poeGphYjMvUDU3OTdhZnIy?=
- =?utf-8?B?TWZGODMrdDd3MTQ0N1huMHd1VEtLcTQyN3A3VThIMXlwNnhxc3ZXekFpbkpW?=
- =?utf-8?B?anJLUkYvM3E2azcxQ2RpZzFHQmV0VmdqTkEycFovN3JLRklwbW5FaFVoZ29X?=
- =?utf-8?B?UUlTVkx6SUN2c2RkdytMMjhiS0lYcjFyTGpQSlhRUy9jSG5OaUpJS0lha1VC?=
- =?utf-8?B?UDFMRDhSaGhIb1doZXYxaDZkWEtzQncyMGdjellteXM5Rk1va21YaEhyV2dN?=
- =?utf-8?B?a0haYzZOOXYzZXJOdE80MUJ0TVB1VDVGVEx6NFBESHh3VG1NUnlYT3ZtNTlU?=
- =?utf-8?B?TXFGeGFGV2xZcy9laE1pejFiQjNmM0RycUlaZDFVRlkzNDRjK1NKVkpqSlRh?=
- =?utf-8?B?UnRlOW12dk1yekVQaHVQTW9kK2hIQnIvcUxqT1Buckt4TVpjcU02UmZMZXdm?=
- =?utf-8?B?Qlk0NkVqOTJLbDIyTVJzdzY3Q2NzK0RqQnNraTFQRzhBdngrdEhFSzVjOGZE?=
- =?utf-8?B?d2tvcWY3OTFKVW55YXFxYnp5STkwelBlSEgzTThTT3Y3R1FoYm91NWwyQytl?=
- =?utf-8?B?STFRY3N0Y25VRVZ3RHp4SFhTN25GbUxPQm9YKzVjcVNVaTg5WlRPc3FhTk9o?=
- =?utf-8?B?NmhBamhpKzZLenBwTStMNVJENWwxdkM1aisrOC9JS2ZaVUJMSWlxR0hlMXM2?=
- =?utf-8?B?YlI5Q3RFOVQ1ak1GU2k4M2N0a21lSVAyOXJTMXk5SUVZVWR1eUlaRUlnbXhz?=
- =?utf-8?B?Y0ZLUDBZYWdOUzYrcGFQOE9nWkFZenpzMzNEZ3hHNzlpMUVkMEt1cmxYNjg2?=
- =?utf-8?B?dzFhU3Y2TXpPV0RYZEhxUVltcSt0OFloZ0xsOVQrMUQ0c2lVUkJBdUc1Nklh?=
- =?utf-8?B?QkV3U3kvUE8vQjA1bC9kTTl4OWVPYnovaUVJVEt6VmVGRndEQ2owb0FyVlY1?=
- =?utf-8?B?VFFKVUJGT2tOZnJEVEhZUUJBVzJQTnBLOU5jZWp2N3RKVGUyaFR2NUZsYjZ4?=
- =?utf-8?B?bXFJWXIveStHS3FLUlNMNGF0Q3VyV1RiVjg3WmFvVVVqeHA5czRjem9SdDJz?=
- =?utf-8?B?TXBJb3h5VlFSa3JtWVg0S1A5MnFGYjdURkZMVDRuM3hneFNRdDhOaWR0K1FC?=
- =?utf-8?B?YlpTWEhzSUQ5M3ZuL1pkR3dSSmlXdGdTR1BPS29LTDFxWlMyYzd1eHhrdWNw?=
- =?utf-8?B?aTdpQVBlODBRbExPdTlCSzUvdTBQUjI0cDV0cGUvVkZLcTFTNjdCUzI4ZUM0?=
- =?utf-8?B?ZTFaSTRSWWVXVFZrYlVXblBIaEx3ckVmcjN4dlVWcjFzR0EySzRjMC9LdUo1?=
- =?utf-8?B?UWJoQ3dMV0o3ajNzaUZUeGpKQ3M1OWFRMU1vbTlPRU5JRzlrWmhBZU5maHg2?=
- =?utf-8?B?cllYUTVndVFUL0JnendPSkN3OEdmWDh6VHNyelBSWXBTS1dDNHpsTEFVa2NJ?=
- =?utf-8?B?eEpyc1puYTRLTE0zZ29BSm4vVXJwVUFvbVV1VE44Y1VBRmlLdkt0ZlpTOXFv?=
- =?utf-8?B?S1ZHQWdIYWd1MDNNMlFkOXduL3hyVGtXRnRON1FzZGMvVHFBNkp1aEJiajNX?=
- =?utf-8?B?WU4rN2ZnejRtNjJaVnF5aGFMdURiVGY2eElnM2diSk00eXQwK3VtRjNSaERF?=
- =?utf-8?B?bHd6cEovclJUVlJJZkJCd1dENmptV2Z5ZTV3VDB1NmMwRGZMQWtyK21JVzRz?=
- =?utf-8?Q?rP9c=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495571CCB49
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Nov 2024 04:54:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731041667; cv=none; b=D//dyDcuhhysTFcPFl/zmzi6/vqiwZ7lYR6VL9ynM4W75+yiyNo97DILuksuMJpRQQuDH0d4JzXb/Km7HL4gVLHpgGZQa5fP8tkZg21muuYrEvYnHQyCtKhgSHJoESu5jshe93xmcXMb+vKPYFJ9dMZwpEbQVSyQ/IFBYR3qQVs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731041667; c=relaxed/simple;
+	bh=4dfcRQTKy/ZQ08B1LBSQCWNEIXYeYK1yjUmQFPOfCV0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Zw2bUGFrMvepVeDeZOXy3GvHr43xy4zXpHwFIl5MNaeeYOlMDJbCOTYJ/kolSAZEwAT8jeWb2nGCrm+CyoXt+xSWDAiGVNUGB6hgUpn5Unfw0J0FIbB4tG+uRBU4nie+KrYUAnjSCVqhT+TGTuIFEULoPdA7Tt0wTLbeenSUH58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=HgCq3OXw; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-720cb6ac25aso1501981b3a.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Nov 2024 20:54:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fastly.com; s=google; t=1731041663; x=1731646463; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hVnE8KoSWvQrySVoFk+5AaLOc5U+ZVQrUtr7emR0zyQ=;
+        b=HgCq3OXw3udjhxgoruU0nWMqFk60xlMEXmT6dAGeckw44PZfW2lKb+ykhmleDwvi/I
+         eB+utiGfwriXq4Ah8zkxkgppc52lbAUSxrg8H+IWNq+wTLhjov6ix+2dx5NyCSZY4zYp
+         jlsmzuXvd36PBzCblRRBc/tIlLHOYsrwxU4Fg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731041663; x=1731646463;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hVnE8KoSWvQrySVoFk+5AaLOc5U+ZVQrUtr7emR0zyQ=;
+        b=n+iVXg1I/NIud6ZRAEWOMU0V3ZLXXkJPrpZ2pQLe2nGqD+Q3ZQwFhRN2kg/vKUzhUV
+         KhMXKPzlosWICfL5KT8NRfbGB+JqioXH3vNLl9g32KZD4YG0cl5NEfUz2MQ66p3U1LBi
+         GZv+aexPOIOjAXxMsYILslggQV1WeJ7+CCrsWlwvM6/TwrwGpJtWQ6LPb/C+7LHcKSjt
+         P7k4MjNsuQQLJDy2DIOu0XkDYmkRsabm7EHPHvfbAzyhEVm82f6wEsEfjVSt9gaiQvdX
+         E/inK7Qn/GcUnG8n6PRgl4kUEx8qU5SwRBI7zGj02GU8hnl8OptEUuVf7byV42BP+Pm6
+         qoGw==
+X-Forwarded-Encrypted: i=1; AJvYcCXbEvOcXtFiKqGtkR4cMpu6RR+pqCWBfQDkgYoJ5V+mrPx/mfOEKkVq+miJG+wYsocGLgBrNyiPNeslGKJOA8o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwW3WNC5HkTdnpqpEpw6bHNr7egbQPUS4nd5rRrfJ9/u+GhHTpm
+	vJIqMOwV3o5Y/Xc4gkjkwBN2imtJ3BLaBqwrtQTfpUnmDSTcBSuUyBLhEKzfvDI=
+X-Google-Smtp-Source: AGHT+IF6iM/3Bnq14C8i35iPrfwe5VoM2fCabYmrLmSi7fKymsLx30l92X+H6sLekD1Q4j+4rA0rXA==
+X-Received: by 2002:a05:6a00:4610:b0:71e:744a:3fbd with SMTP id d2e1a72fcca58-7241334f8b3mr2200778b3a.20.1731041663338;
+        Thu, 07 Nov 2024 20:54:23 -0800 (PST)
+Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724078a7c76sm2697476b3a.48.2024.11.07.20.54.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Nov 2024 20:54:22 -0800 (PST)
+From: Joe Damato <jdamato@fastly.com>
+To: netdev@vger.kernel.org
+Cc: corbet@lwn.net,
+	hdanton@sina.com,
+	bagasdotme@gmail.com,
+	pabeni@redhat.com,
+	namangulati@google.com,
+	edumazet@google.com,
+	amritha.nambiar@intel.com,
+	sridhar.samudrala@intel.com,
+	sdf@fomichev.me,
+	peter@typeblog.net,
+	m2shafiei@uwaterloo.ca,
+	bjorn@rivosinc.com,
+	hch@infradead.org,
+	willy@infradead.org,
+	willemdebruijn.kernel@gmail.com,
+	skhawaja@google.com,
+	kuba@kernel.org,
+	Joe Damato <jdamato@fastly.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	bpf@vger.kernel.org (open list:BPF [MISC]:Keyword:(?:\b|_)bpf(?:\b|_)),
+	Christian Brauner <brauner@kernel.org>,
+	Daniel Jurgens <danielj@nvidia.com>,
+	David Ahern <dsahern@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jan Kara <jack@suse.cz>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Johannes Berg <johannes.berg@intel.com>,
+	linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+	linux-fsdevel@vger.kernel.org (open list:FILESYSTEMS (VFS and infrastructure)),
+	linux-kernel@vger.kernel.org (open list),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Martin Karsten <mkarsten@uwaterloo.ca>,
+	Mina Almasry <almasrymina@google.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Shuah Khan <shuah@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v8 0/6] Suspend IRQs during application busy periods
+Date: Fri,  8 Nov 2024 04:53:22 +0000
+Message-Id: <20241108045337.292905-1-jdamato@fastly.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	DnrF4FYFL51/KoMM+zHcPuNBsFlj+ReHnn0nbOHnOEcYLwKaJCrp8h1iSTvEOPhYMjtRwmxuqhgif27HEOrVkW8gmMTmFADPX5ysPrT5Da1XZbMtWLGzcAdSk4WMxF1tFseuNpbjk6Hy95uKq8zXb1XC7CSRvYNndEH/9cB4amwJsk9Qm/nro+lqxwd5b+i6yn2q45VPjehKxNVlpyoS7AlvFii9A9kYz7jush8mVkLaM3K085he+hTszFF4i42hqOtJpCfvn9OMAczexpkQZ+qDDB8FgGfLnjNCZa18zKSgs6imPzAqhlPD4r0m4p4xoPT6e7SOq9AWZb1AxubA2lg4BWUEpmRlhNlzW6E4+waPya7nVprtVsQpis44lKI7pPCkII01aXEv9I7np0fMff3Na4QQI3ijub6M5I8uttNGLS88Sj5/T/CA/UXH4xotJ+1PWeYmnHG+HsPAM9lTYaY/2RL0J/mAmWN8TGx2qXvA1tkCM5bg2yLUbe/n8RYytm0jaRvK/Y28dBBxKvGUHpoIUUgRdIqpZ6EoT4f4KXfuXKyexJitSPY+3gx7oGtUO6yzg6GaM/fdpfSjOWeSfQS4sFD1AQtQhSW77ohj+UFQ5eCsvwIQIMMcYL797OQa
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW5PR13MB5632.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 45e3b0b4-2a47-46ae-8ebb-08dcffab4cbf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Nov 2024 04:10:37.1377
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: n9QLp0wILz3fEa/1LnSUWDumMSSqM3rHm5y2GsjR2qyGeX3ViCzGu/tKEg4Nv3gTlm26yGgsXcVxWNm+94pemA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR13MB7021
-X-Proofpoint-ORIG-GUID: w8RElf_aXfbMOgyubSLzX5hhcplmdojt
-X-Proofpoint-GUID: w8RElf_aXfbMOgyubSLzX5hhcplmdojt
-X-Sony-Outbound-GUID: w8RElf_aXfbMOgyubSLzX5hhcplmdojt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-11-08_03,2024-11-07_01,2024-09-30_01
+Content-Transfer-Encoding: 8bit
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS29uc3RhbnRpbiBCZWxv
-diA8a29uc3RhbnRpbi5iZWxvdkBsaW5hcm8ub3JnPg0KPiBIZWxsbyBjb2xsZWFndWVzLA0KPiAN
-Cj4gRm9sbG93aW5nIHVwIG9uIFRpbSBCaXJkJ3MgcHJlc2VudGF0aW9uICJBZGRpbmcgYmVuY2ht
-YXJrcyByZXN1bHRzDQo+IHN1cHBvcnQgdG8gS1RBUC9rc2VsZnRlc3QiLCBJIHdvdWxkIGxpa2Ug
-dG8gc2hhcmUgc29tZSB0aG91Z2h0cyBvbg0KPiBrZXJuZWwgYmVuY2htYXJraW5nIGFuZCBrZXJu
-ZWwgcGVyZm9ybWFuY2UgZXZhbHVhdGlvbi4gVGltIHN1Z2dlc3RlZA0KPiBzaGFyaW5nIHRoZXNl
-IGNvbW1lbnRzIHdpdGggdGhlIHdpZGVyIGtzZWxmdGVzdCBjb21tdW5pdHkgZm9yDQo+IGRpc2N1
-c3Npb24uDQo+IA0KPiBUaGUgdG9waWMgb2YgcGVyZm9ybWFuY2UgZXZhbHVhdGlvbiBpcyBvYnZp
-b3VzbHkgZXh0cmVtZWx5IGNvbXBsZXgsIHNvDQo+IEnigJl2ZSBvcmdhbmlzZWQgbXkgY29tbWVu
-dHMgaW50byBzZXZlcmFsIHBhcmFncmFwaHMsIGVhY2ggb2Ygd2hpY2gNCj4gZm9jdXNlcyBvbiBh
-IHNwZWNpZmljIGFzcGVjdC4gVGhpcyBzaG91bGQgbWFrZSBpdCBlYXNpZXIgdG8gZm9sbG93IGFu
-ZA0KPiB1bmRlcnN0YW5kIHRoZSBrZXkgcG9pbnRzLCBzdWNoIGFzIG1ldHJpY3MsIHJlZmVyZW5j
-ZSB2YWx1ZXMsIHJlc3VsdHMNCj4gZGF0YSBsYWtlLCBpbnRlcnByZXRhdGlvbiBvZiBjb250cmFk
-aWN0b3J5IHJlc3VsdHMsIHN5c3RlbSBwcm9maWxlcywNCj4gYW5hbHlzaXMgYW5kIG1ldGhvZG9s
-b2d5Lg0KPiANCj4gIyBNZXRyaWNzDQo+IEEgZmV3IHJlbWFya3Mgb24gYmVuY2htYXJrIG1ldHJp
-Y3Mgd2hpY2ggd2VyZSBjYWxsZWQg4oCcdmFsdWVz4oCdIGluIHRoZQ0KPiBvcmlnaW5hbCBwcmVz
-ZW50YXRpb246DQo+IC0gTWV0cmljcyBtdXN0IGJlIGFjY29tcGFuaWVkIGJ5IHN0YW5kYXJkaXNl
-ZCB1bml0cy4gVGhpcw0KPiBzdGFuZGFyZGlzYXRpb24gZW5zdXJlcyBjb25zaXN0ZW5jeSBhY3Jv
-c3MgZGlmZmVyZW50IHRlc3RzIGFuZA0KPiBlbnZpcm9ubWVudHMsIHNpbXBsaWZ5aW5nIGFjY3Vy
-YXRlIGNvbXBhcmlzb25zIGFuZCBhbmFseXNpcy4NCkFncmVlZC4gIEkndmUgdXNlZCB0aGUgdGVy
-bSAibWV0cmljcyIgaW4gdGhlIHBhc3QsIGJ1dCB0aGUgd29yZA0KaXMgc29tZXdoYXQgb3Zlcmxv
-YWRlZCBzbyBJIGF2b2lkZWQgaXQgaW4gbXkgcmVjZW50IHByZXNlbnRhdGlvbi4NCk15IHByb3Bv
-c2VkIHN5c3RlbSBpbmNsdWRlcyB1bml0cywgYW5kIHRoZSBwb3NzaWJpbGl0eSBvZiBjb252ZXJz
-aW9uDQpiZXR3ZWVuIHVuaXRzLCB3aGVuIG5lZWRlZC4NCg0KPiAtIEVhY2ggbWV0cmljIHNob3Vs
-ZCBiZSBjbGVhcmx5IGxhYmVsbGVkIHdpdGggaXRzIG5hdHVyZSBvciBraW5kDQo+ICh0aHJvdWdo
-cHV0LCBzcGVlZCwgbGF0ZW5jeSwgZXRjKS4gVGhpcyBjbGFzc2lmaWNhdGlvbiBpcyBlc3NlbnRp
-YWwNCj4gZm9yIHByb3BlciBpbnRlcnByZXRhdGlvbiBvZiB0aGUgcmVzdWx0cyBhbmQgcHJldmVu
-dHMNCj4gbWlzdW5kZXJzdGFuZGluZ3MgdGhhdCBjb3VsZCBsZWFkIHRvIGluY29ycmVjdCBjb25j
-bHVzaW9ucy4NCkknbSBub3Qgc3VyZSBJIGFncmVlIG9uIHRoaXMuDQoNCj4gLSBQcmVzZW50YXRp
-b24gY29udGFpbnMgIk1heSBhbHNvIGluY2x1ZGUgYWxsb3dhYmxlIHZhcmlhbmNlIiwgYnV0DQo+
-IHZhcmlhbmNlIG11c3QgYmUgaW5jbHVkZWQgaW50byB0aGUgYW5hbHlzaXMgYXMgd2UgZGVhbCB3
-aXRoDQo+IHN0YXRpc3RpY2FsIGNhbGN1bGF0aW9ucyBhbmQgbXVsdGlwbGUgcmFuZG9taXNlZCB2
-YWx1ZXMuDQpJbiBteSB0b29sLCBpbmNsdWRpbmcgdmFyaWFuY2UgYWxvbmcgd2l0aCBhIHJlZmVy
-ZW5jZSB2YWx1ZQ0KaXMgb3B0aW9uYWwuICBGb3Igc29tZSB0eXBlcyBvZiB2YWx1ZSB0aHJlc2hv
-bGRzIEkgZG9uJ3QgdGhpbmsgdGhlDQp0aHJlc2hvbGQgbmVjZXNzYXJpbHkgcmVxdWlyZXMgYSB2
-YXJpYW5jZS4NCg0KPiAtIEkgd291bGQgbGlrZSB0byBub3RlIHRoYXQgb3RoZXIgc3RhdGlzdGlj
-YWwgcGFyYW1ldGVycyBhcmUgYWxzbw0KPiB3b3J0aCBpbmNsdWRpbmcgaW50byBjb21wYXJpc29u
-LCBsaWtlIGNvbmZpZGVuY2UgbGV2ZWxzLCBzYW1wbGUgc2l6ZQ0KPiBhbmQgc28gb24uDQo+IA0K
-PiAjIFJlZmVyZW5jZSBWYWx1ZXMNCj4gVGhlIGNvbmNlcHQgb2YgInJlZmVyZW5jZSB2YWx1ZXMi
-IGludHJvZHVjZWQgaW4gdGhlIHNsaWRlcyBjb3VsZCBiZQ0KPiBzaWduaWZpY2FudGx5IGVuaGFu
-Y2VkIGJ5IGltcGxlbWVudGluZyBhIGNvbGxhYm9yYXRpdmUsIHRyYW5zcGFyZW50DQo+IHN5c3Rl
-bSBmb3IgZGF0YSBjb2xsZWN0aW9uIGFuZCB2YWxpZGF0aW9uLiBUaGlzIHN5c3RlbSBjb3VsZCBv
-cGVyYXRlDQo+IGFzIGZvbGxvd3M6DQo+IC0gRGF0YSBDb2xsZWN0aW9uOiBBbnkgdXNlciBjb3Vs
-ZCBzdWJtaXQgYmVuY2htYXJrIHJlc3VsdHMgdG8gYQ0KPiBjZW50cmFsaXNlZCBhbmQgcHVibGlj
-IHJlcG9zaXRvcnkuIFRoaXMgd291bGQgYWxsb3cgZm9yIGEgZGl2ZXJzZQ0KPiByYW5nZSBvZiBo
-YXJkd2FyZSBjb25maWd1cmF0aW9ucyBhbmQgdXNlIGNhc2VzIHRvIGJlIHJlcHJlc2VudGVkLg0K
-SSBhZ3JlZSB0aGVyZSBzaG91bGQgYmUgYSBjZW50cmFsaXplZCByZXBvc2l0b3J5IGZvciByZWZl
-cmVuY2UgdmFsdWVzLg0KSXQgd2lsbCBiZSBlYXNpZXIgdG8gY3JlYXRlIHJlZmVyZW5jZSB2YWx1
-ZXMsIElNSE8gaWYgdGhlcmUgaXMgYWxzbyANCmEgcmVwb3NpdG9yeSBvZiB2YWx1ZSByZXN1bHRz
-IGFzIHdlbGwuDQoNCj4gLSBWZW5kb3IgVmFsaWRhdGlvbjogSGFyZHdhcmUgdmVuZG9ycyB3b3Vs
-ZCBoYXZlIHRoZSBvcHBvcnR1bml0eSB0bw0KPiByZXZpZXcgc3VibWl0dGVkIHJlc3VsdHMgcGVy
-dGFpbmluZyB0byB0aGVpciBwcm9kdWN0cy4gVGhleSBjb3VsZCB0aGVuDQo+IG1hcmsgY2VydGFp
-biByZXN1bHRzIGFzICJWZW5kb3IgQXBwcm92ZWQsIiBpbmRpY2F0aW5nIHRoYXQgdGhlIHJlc3Vs
-dHMNCj4gYWxpZ24gd2l0aCB0aGVpciBvd24gdGVzdGluZyBhbmQgZXhwZWN0YXRpb25zLg0KSXQg
-d291bGQgYmUgbmljZSBpZiBWZW5kb3JzIHByb3ZpZGVkIHJlZmVyZW5jZSB2YWx1ZXMgYWxvbmcg
-d2l0aCB0aGVpcg0KZGlzdHJpYnV0aW9ucyBvZiBMaW51eC4NCg0KPiAtIENvbW11bml0eSBSZXZp
-ZXc6IFRoZSBicm9hZGVyIGNvbW11bml0eSBvZiB1c2VycyBhbmQgZXhwZXJ0cyBjb3VsZA0KPiBh
-bHNvIHJldmlldyBhbmQgdm90ZSBvbiBzdWJtaXR0ZWQgcmVzdWx0cy4gUmVzdWx0cyB0aGF0IHJl
-Y2VpdmUNCj4gc3Vic3RhbnRpYWwgcG9zaXRpdmUgZmVlZGJhY2sgY291bGQgYmUgbWFya2VkIGFz
-ICJDb21tdW5pdHkgQXBwcm92ZWQsIg0KPiBwcm92aWRpbmcgYW4gYWRkaXRpb25hbCBsYXllciBv
-ZiB2YWxpZGF0aW9uLg0KVGhpcyBzb3VuZHMgYSBsaXR0bGUgZm9ybWFsIHRvIG1lLg0KDQo+IC0g
-QXV0b21hdGVkIFZhbGlkYXRpb246IFJlZmVyZW5jZSB2YWx1ZXMgbXVzdCBiZSBjaGVja2VkLCB2
-YWxpZGF0ZWQNCj4gYW5kIHN1cHBvcnRlZCBieSBtdWx0aXBsZSBzb3VyY2VzLiBUaGlzIGNhbiBi
-ZSBkb25lIG9ubHkgaW4gYW4NCj4gYXV0b21hdGljIHdheSBhcyB0aG9zZSBwcm9jZXNzZXMgYXJl
-IHRpbWUgY29uc3VtaW5nIGFuZCByZXF1aXJlDQo+IGV4dHJlbWUgYXR0ZW50aW9uIHRvIGRldGFp
-bHMuDQo+IC0gVHJhbnNwYXJlbmN5OiBBbGwgc3VibWl0dGVkIHJlc3VsdHMgd291bGQgbmVlZCB0
-byBiZSBhY2NvbXBhbmllZCBieQ0KPiBkZXRhaWxlZCBpbmZvcm1hdGlvbiBhYm91dCB0aGUgdGVz
-dGluZyBlbnZpcm9ubWVudCwgaGFyZHdhcmUNCj4gc3BlY2lmaWNhdGlvbnMsIGFuZCBtZXRob2Rv
-bG9neSB1c2VkLiBUaGlzIHdvdWxkIGVuc3VyZQ0KPiByZXByb2R1Y2liaWxpdHkgYW5kIGFsbG93
-IG90aGVycyB0byB1bmRlcnN0YW5kIHRoZSBjb250ZXh0IG9mIGVhY2gNCj4gcmVzdWx0Lg0KSW5k
-ZWVkLCB0aGVyZSB3aWxsIG5lZWQgdG8gYmUgYSBsb3Qgb2YgbWV0YS1kYXRhIGFzc29jaWF0ZWQg
-d2l0aCByZWZlcmVuY2UNCnZhbHVlcywgaW4gb3JkZXIgdG8gbWFrZSBzdXJlIHRoYXQgdGhlIGNv
-cnJlY3Qgc2V0IG9mIHJlZmVyZW5jZSB2YWx1ZXMNCmFyZSB1c2VkIGluIHRlc3Rpbmcgc3BlY2lm
-aWMgbWFjaGluZXMsIGVudmlyb25tZW50cywgYW5kIGtlcm5lbCB2ZXJzaW9ucy4NCg0KPiAtIFRy
-dXN0IEJ1aWxkaW5nOiBUaGUgY29tYmluYXRpb24gb2YgdmVuZG9yIGFuZCBjb21tdW5pdHkgYXBw
-cm92YWwNCj4gd291bGQgaGVscCBlc3RhYmxpc2ggdHJ1c3QgaW4gdGhlIHJlZmVyZW5jZSB2YWx1
-ZXMuIEl0IHdvdWxkIG1pdGlnYXRlDQo+IGNvbmNlcm5zIGFib3V0IG1hcmtldGluZyBiaWFzIGFu
-ZCBwcm92aWRlIGEgbW9yZSByZWxpYWJsZSBiYXNpcyBmb3INCj4gcGVyZm9ybWFuY2UgY29tcGFy
-aXNvbnMuDQo+IC0gQWNjZXNzaWJpbGl0eTogVGhlIHN5c3RlbSB3b3VsZCBiZSBwdWJsaWNseSBh
-Y2Nlc3NpYmxlLCBhbGxvd2luZw0KPiBhbnlvbmUgdG8gcmVmZXJlbmNlIGFuZCB1dGlsaXNlIHRo
-aXMgZGF0YSBpbiB0aGVpciBvd24gdGVzdGluZyBhbmQNCj4gYW5hbHlzaXMuDQpZZXMgYW5kIHll
-cy4NCiANCj4gSW1wbGVtZW50YXRpb24gb2Ygc3VjaCBhIHN5c3RlbSB3b3VsZCByZXF1aXJlIGNh
-cmVmdWwgY29uc2lkZXJhdGlvbiBvZg0KPiBnb3Zlcm5hbmNlIGFuZCBmdW5kaW5nLiBBIGNvbW11
-bml0eS1kcml2ZW4sIG5vbi1wcm9maXQgb3JnYW5pc2F0aW9uDQo+IHNwb25zb3JlZCBieSBtdWx0
-aXBsZSBzdGFrZWhvbGRlcnMgY291bGQgYmUgYW4gYXBwcm9wcmlhdGUgbW9kZWwuIFRoaXMNCj4g
-c3RydWN0dXJlIHdvdWxkIGhlbHAgbWFpbnRhaW4gbmV1dHJhbGl0eSBhbmQgYXZvaWQgcG90ZW50
-aWFsIGNvbmZsaWN0cw0KPiBvZiBpbnRlcmVzdC4NCktlcm5lbENJIHNlZW1zIGxpa2UgYSBnb29k
-IHByb2plY3QgdG8gaG9zdCBzdWNoIGEgcmVwb3NpdG9yeS4gIFBvc3NpYmx5DQppdCBjb3VsZCBi
-ZSBLQ0lkYiwgd2hvIGhhdmUganVzdCBhZGRlZCB2YWx1ZXMgdG8gdGhlaXIgZGF0YWJhc2Ugc2No
-ZW1hLg0KDQo+IA0KPiBXaGlsZSB0aGUgc3BlY2lmaWNzIG9mIGJ1aWxkaW5nIGFuZCBtYW5hZ2lu
-ZyBzdWNoIGEgc3lzdGVtIHdvdWxkIG5lZWQNCj4gZnVydGhlciBleHBsb3JhdGlvbiwgdGhpcyBh
-cHByb2FjaCBjb3VsZCBzaWduaWZpY2FudGx5IGltcHJvdmUgdGhlDQo+IHJlbGlhYmlsaXR5IGFu
-ZCB1c2VmdWxuZXNzIG9mIHJlZmVyZW5jZSB2YWx1ZXMgaW4gYmVuY2htYXJrIHRlc3RpbmcuDQo+
-IEl0IHdvdWxkIGZvc3RlciBhIG1vcmUgY29sbGFib3JhdGl2ZSBhbmQgdHJhbnNwYXJlbnQgZW52
-aXJvbm1lbnQgZm9yDQo+IHBlcmZvcm1hbmNlIGV2YWx1YXRpb24gaW4gdGhlIExpbnV4IGVjb3N5
-c3RlbSBhcyB3ZWxsIGFzIGF0dHJhY3QNCj4gaW50ZXJlc3RlZCB2ZW5kb3JzIHRvIHN1Ym1pdCBh
-bmQgcmV2aWV3IHJlc3VsdHMuDQo+IA0KPiBJ4oCZbSBub3QgdmVyeSBpbmZvcm1lZCBhYm91dCB0
-aGUgY3VycmVudCBzdGF0ZSBvZiB0aGUgY29tbXVuaXR5IGluIHRoaXMNCj4gZmllbGQsIGJ1dCBJ
-4oCZbSBzdXJlIHlvdSBrbm93IGJldHRlciBob3cgZXhhY3RseSB0aGlzIGNhbiBiZSBkb25lLg0K
-PiANCj4gIyBSZXN1bHRzIERhdGEgTGFrZQ0KPiBBbG9uZyB3aXRoIHJlZmVyZW5jZSB2YWx1ZXMg
-aXTigJlzIGltcG9ydGFudCB0byBjb2xsZWN0IHJlc3VsdHMgb24gYQ0KPiByZWd1bGFyIGJhc2lz
-IGFzIHRoZSBrZXJuZWwgZXZvbHZlcyBzbyByZXN1bHRzIG11c3QgZm9sbG93IHRoaXMNCj4gZXZv
-bHV0aW9uIGFzIHdlbGwuIFRvIGRvIHRoaXMgY2xvdWQtYmFzZWQgZGF0YSBsYWtlIGlzIG5lZWRl
-ZCAoYQ0KPiBzZWxmLWhvc3RlZCBzeXN0ZW0gd2lsbCBiZSB0b28gZXhwZW5zaXZlIGZyb20gbXkg
-cG9pbnQgb2YgdmlldykuDQo+IA0KPiBUaGlzIGRhdGEgbGFrZSBzaG91bGQgYmUgYWJsZSB0byBj
-b2xsZWN0IGFuZCBwcm9jZXNzIGluY29taW5nIGRhdGEgYXMNCj4gd2VsbCBhcyB0byBzZXJ2ZSBy
-ZWZlcmVuY2UgdmFsdWVzIGZvciB1c2Vycy4gRGF0YSBwcm9jZXNzaW5nIGZsb3cNCj4gc2hvdWxk
-IGJlIHF1aXRlIHN0YW5kYXJkOiBDb2xsZWN0aW9uIC0+IFBhcnNpbmcgKyBFbmhhbmNlbWVudCAt
-Pg0KPiBTdG9yYWdlIC0+IEFuYWx5c2lzIC0+IFNlcnZpbmcuDQo+IA0KPiBUaW0gcHJvcG9zZWQg
-dG8gdXNlIGZpbGUgbmFtZXMgZm9yIHJlZmVyZW5jZSBmaWxlcywgSSB3b3VsZCBsaWtlIHRvDQo+
-IG5vdGUgdGhhdCBzdWNoIGFwcHJvYWNoIGNvdWxkIGZhaWwgcHJldHR5IGZhc3QgaWYgc3lzdGVt
-IHdpbGwgY29sbGVjdA0KPiBtb3JlIGFuZCBtb3JlIGRhdGEgYW5kIHRoZXJlIHdpbGwgcmlzZSBh
-IG5lZWQgdG8gaGF2ZSBtb3JlIGdyYW51bGFyDQo+IGFuZCBkZXRhaWxlZCBmZWF0dXJlcyB0byBp
-ZGVudGlmeSByZWZlcmVuY2UgcmVzdWx0cyBhbmQgdGhpcyBjYW4gbGVhZA0KPiB0byB2ZXJ5IGxv
-bmcgZmlsZW5hbWVzLCB3aGljaCB3aWxsIGJlIGhhcmQgdG8gdXNlLg0KTm8gYXJndW1lbnQgdGhl
-cmUuICBJIHVzZWQgZmlsZW5hbWVzIGZvciBteSBwcm9vZiBvZiBjb25jZXB0LCBidXQNCmNsZWFy
-bHkgYSBkaWZmZXJlbnQgbWV0YS1kYXRhIG1hdGNoaW5nIHN5c3RlbSB0aGF0IHV0aWxpemVzIG1v
-cmUNCnZhcmlhYmxlcyB3aWxsIG5lZWQgdG8gYmUgdXNlZC4gIEknbSBjdXJyZW50bHkgd29ya2lu
-ZyBvbiBnYXRoZXJpbmcgZGF0YSBmb3INCmEgYm9vdC10aW1lIHRlc3QgdG8gaW5mb3JtIHRoZSBz
-ZXQgb2YgbWV0YS1kYXRhIHRoYXQgYXBwbGllcyB0bw0KYm9vdC10aW1lIHBlcmZvcm1hbmNlIGRh
-dGEuDQoNCj4gSSBwcm9wb3NlIHRvIHVzZQ0KPiBVVUlENC1iYXNlZCBpZGVudGlmaWNhdGlvbiwg
-d2hpY2ggcHJvdmlkZXMgdmVyeSBsb3cgY2hhbmNlcyBmb3INCj4gY29sbGlzaW9uLiBUaG9zZSBJ
-RHMgd2lsbCBiZSBrZXlzIGluIHRoZSBkYXRhYmFzZSB3aXRoIGFsbCBpbmZvcm1hdGlvbg0KPiBy
-ZXF1aXJlZCBmb3IgY2xlYXIgaWRlbnRpZmljYXRpb24gb2YgcmVsZXZhbnQgcmVzdWx0cyBhbmQN
-Cj4gY29ycmVzcG9uZGluZyBkZXRhaWxzLiBNb3Jlb3ZlciB0aGlzIGFwcHJvYWNoIGNhbiBiZSBl
-YXNpbHkgZXh0ZW5kZWQNCj4gb24gdGhlIGRhdGFiYXNlIHNpZGUgaWYgbW9yZSBkYXRhIGlzIG5l
-ZWRlZC4NCkknbSBub3Qgc3VyZSBob3cgdGhpcyBzb2x2ZXMgdGhlIG1hdGNoaW5nIHByb2JsZW0u
-ICBUbyBkZXRlcm1pbmUNCnRlc3Qgb3V0Y29tZXMsIHlvdSBuZWVkIHRvIHVzZSByZWZlcmVuY2Ug
-ZGF0YSB0aGF0IGlzIG1vc3Qgc2ltaWxhcg0KdG8geW91ciBtYWNoaW5lLiAgSGF2aW5nIGEgc2hh
-cmVkIHJlcG9zaXRvcnkgb2YgcmVmZXJlbmNlIHZhbHVlcyB3aWxsDQpiZSB1c2VmdWwgZm9yIHRl
-c3RlcnMgd2l0aCBsaW1pdGVkIGV4cGVyaWVuY2UsIHdobyBhcmUgd29ya2luZyBvbiBjb21tb24N
-CmhhcmR3YXJlLiBIb3dldmVyLCBJIGVudmlzaW9uIHRoYXQgbWFueSB0ZXN0ZXJzIHdpbGwgdXNl
-IHByZXZpb3VzIHJlc3VsdHMNCmZyb20gdGhlaXIgb3duIGJvYXJkLCBmb3IgcmVmZXJlbmNlIHZh
-bHVlcyBmb3IgdGVzdHMgKGFmdGVyIHZhbGlkYXRpbmcgdGhlIG51bWJlcnMNCmFnYWluc3QgdGhl
-aXIgcmVxdWlyZW1lbnRzKS4NCg0KPiANCj4gWWVzLCBVVUlENCBpcyBub3QgaHVtYW4tcmVhZGFi
-bGUsIGJ1dCBkbyB3ZSBuZWVkIHN1Y2ggYW4gb3B0aW9uIGlmIHdlDQo+IGhhdmUgdG9vbHMsIHdo
-aWNoIGNhbiBwcm92aWRlIGEgYmV0dGVyIGludGVyZmFjZT8NCj4gDQo+IEZvciBleGFtcGxlLCB0
-aGlzIGNvdWxkIGJlIHNvbWV0aGluZyBsaWtlOg0KPiAtLS0NCj4gcmVxdWVzdDogcmVzdWx0cy1j
-bGkgc2VhcmNoIC1iICJUZXN0IFN1aXRlIEQiIC12ICJ2MS4yLjMiIC1vICJVYnVudHUNCj4gMjIu
-MDQiIC10ICJiYXNlbGluZSIgLW0gInJlc3BvbnNlX3RpbWU+MTAwIg0KPiByZXNwb25zZToNCj4g
-Ww0KPiB7DQo+ICAgICAgImlkIjogIjU1MGU4NDAwLWUyOWItNDFkNC1hNzE2LTQ0NjY1NTQ0MDAw
-NSIsDQo+ICAgICAgImJlbmNobWFyayI6ICJUZXN0IFN1aXRlIEEiLA0KPiAgICAgICJ2ZXJzaW9u
-IjogInYxLjIuMyIsDQo+ICAgICAgInRhcmdldF9vcyI6ICJVYnVudHUgMjIuMDQiLA0KPiAgICAg
-ICJtZXRyaWNzIjogew0KPiAgICAgICAgICAiY3B1X3VzYWdlIjogNzAuNSwNCj4gICAgICAgICAg
-Im1lbW9yeV91c2FnZSI6IDIwNDgsDQo+ICAgICAgICAgICJyZXNwb25zZV90aW1lIjogMTIwDQo+
-ICAgICAgfSwNCj4gICAgICAidGFncyI6IFsiYmFzZWxpbmUiLCAidjEuMCJdLA0KPiAgICAgICJj
-cmVhdGVkX2F0IjogIjIwMjQtMTAtMjVUMTA6MDA6MDBaIg0KPiB9LA0KPiAuLi4NCj4gXQ0KPiAt
-LS0NCj4gb3INCj4gcmVxdWVzdDogcmVzdWx0cy1jbGkgc2VhcmNoICI8RG9tYWluLVNwZWNpZmlj
-LUxhbmd1YWdlLVF1ZXJ5PiINCj4gcmVzcG9uc2U6IFsge30sIHt9LCB7fS4uLl0NCj4gLS0tDQo+
-IG9yDQo+IHJlcXVlc3Q6IHJlc3VsdHMtY2xpIGdldCA1NTBlODQwMC1lMjliLTQxZDQtYTcxNi00
-NDY2NTU0NDAwMDUNCj4gcmVzcG9uc2U6DQo+IHsNCj4gICAgICAiaWQiOiAiNTUwZTg0MDAtZTI5
-Yi00MWQ0LWE3MTYtNDQ2NjU1NDQwMDA1IiwNCj4gICAgICAiYmVuY2htYXJrIjogIlRlc3QgU3Vp
-dGUgQSIsDQo+ICAgICAgInZlcnNpb24iOiAidjEuMi4zIiwNCj4gICAgICAidGFyZ2V0X29zIjog
-IlVidW50dSAyMi4wNCIsDQo+ICAgICAgIm1ldHJpY3MiOiB7DQo+ICAgICAgICAgICJjcHVfdXNh
-Z2UiOiA3MC41LA0KPiAgICAgICAgICAibWVtb3J5X3VzYWdlIjogMjA0OCwNCj4gICAgICAgICAg
-InJlc3BvbnNlX3RpbWUiOiAxMjANCj4gICAgICB9LA0KPiAgICAgICJ0YWdzIjogWyJiYXNlbGlu
-ZSIsICJ2MS4wIl0sDQo+ICAgICAgImNyZWF0ZWRfYXQiOiAiMjAyNC0xMC0yNVQxMDowMDowMFoi
-DQo+IH0NCj4gLS0tDQo+IG9yDQo+IHJlcXVlc3Q6IGN1cmwgLVggUE9TVCBodHRwOi8vYXBpLmV4
-YW1wbGUuY29tL3JlZmVyZW5jZXMvc2VhcmNoIFwgLWQgJ3sNCj4gInF1ZXJ5IjogImJlbmNobWFy
-ayA9IFwiVGVzdCBTdWl0ZSBBXCIgQU5EICh2ZXJzaW9uID49IFwidjEuMlwiIE9SIHRhZw0KPiBJ
-TiBbXCJiYXNlbGluZVwiLCBcInJlZ3Jlc3Npb25cIl0pIEFORCBjcHVfdXNhZ2UgPiA2MCIgfScN
-Cj4gLi4uDQo+IC0tLQ0KSXQgc291bmRzIGxpa2UgeW91IGhhdmUgYSBkYXRhYmFzZSAgaW1wbGVt
-ZW50YXRpb24gYWxyZWFkeSBpbiBtaW5kLg0KDQo+IA0KPiBBbm90aGVyIHBvaW50IG9mIHVzZSBE
-Qi1iYXNlZCBhcHByb2FjaCBpcyB0aGUgZm9sbG93aW5nOiBpbiBjYXNlIHdoZW4NCj4gYSB1c2Vy
-IHdvcmtzIHdpdGggcGFydGljdWxhciBoYXJkd2FyZSBhbmQvb3Igd291bGQgbGlrZSB0byB1c2Ug
-YQ0KPiByZWZlcmVuY2UgaGUvc2hlIGRvZXMgbm90IG5lZWQgYSBmdWxsIGRhdGFiYXNlIHdpdGgg
-YWxsIGNvbGxlY3RlZA0KPiByZWZlcmVuY2UgdmFsdWVzLCBidXQgb25seSBhIHNtYWxsIHNsaWNl
-IG9mIGl0LiBUaGlzIHNsaWNlIGNhbiBiZQ0KPiBkb3dubG9hZGVkIGZyb20gcHVibGljIHJlcG8g
-b3IgYWNjZXNzZWQgdmlhIEFQSS4NCj4gDQo+ICMgTGFyZ2UgcmVzdWx0cyBkYXRhc2V0DQo+IElm
-IHdlIGNvbGxlY3QgYSBsYXJnZSBiZW5jaG1hcmtzIGRhdGFzZXQgaW4gb25lIHBsYWNlIGFjY29t
-cGFuaWVkIHdpdGgNCj4gZGV0YWlsZWQgaW5mb3JtYXRpb24gYWJvdXQgdGFyZ2V0IHN5c3RlbXMg
-ZnJvbSB3aGljaCB0aGlzIGRhdGFzZXQgd2FzDQo+IGNvbGxlY3RlZCwgdGhlbiBpdCB3aWxsIGFs
-bG93IHVzIHRvIGNhbGN1bGF0ZSBwcmVjaXNlIGJhc2VsaW5lcyBhY3Jvc3MNCj4gZGlmZmVyZW50
-IGNvbXBvc2l0aW9ucyBvZiBwYXJhbWV0ZXJzLCBtYWtpbmcgcGVyZm9ybWFuY2UgZGV2aWF0aW9u
-cw0KPiBlYXNpZXIgdG8gZGV0ZWN0LiBMb25nLXRlcm0gdHJlbmQgYW5hbHlzaXMgY2FuIGlkZW50
-aWZ5IHNtYWxsIGNoYW5nZXMNCj4gYW5kIGNvcnJlbGF0ZSB0aGVtIHdpdGggdXBkYXRlcywgcmV2
-ZWFsaW5nIHBlcmZvcm1hbmNlIGRyaWZ0Lg0KPiANCj4gQW5vdGhlciB1c2Ugb2Ygc3VjaCBhIGRh
-dGFiYXNlIC0gcHJlZGljdGl2ZSBtb2RlbGxpbmcsIHdoaWNoIGNhbg0KPiBwcm92aWRlIGZvcmVj
-YXN0cyBvZiBleHBlY3RlZCByZXN1bHRzIGFuZCBzZXR0aW5nIGR5bmFtaWMgcGVyZm9ybWFuY2UN
-Cj4gdGhyZXNob2xkcywgZW5hYmxpbmcgZWFybHkgaXNzdWUgZGV0ZWN0aW9uLiBBbm9tYWx5IGRl
-dGVjdGlvbiBiZWNvbWVzDQo+IG1vcmUgZWZmZWN0aXZlIHdpdGggY29udGV4dCwgZGlzdGluZ3Vp
-c2hpbmcgdW51c3VhbCBkZXZpYXRpb25zIGZyb20NCj4gbm9ybWFsIGJlaGF2aW91ci4NCj4gDQo+
-ICMgSW50ZXJwcmV0YXRpb24gb2YgY29udHJhZGljdG9yeSByZXN1bHRzDQo+IEl04oCZcyBub3Qg
-Y2xlYXIgaG93IHRvIGRlYWwgd2l0aCBjb250cmFkaWN0b3J5IHJlc3VsdHMgdG8gbWFrZSBhDQo+
-IGRlY2lzaW9uIG9uIHJlZ3Jlc3Npb24gcHJlc2VuY2UuIEZvciBleGFtcGxlLCB3ZSBoYXZlIGEg
-c2V0IG9mIDEwDQo+IHRlc3RzLCB3aGljaCB0ZXN0IG1vcmUgb3IgbGVzcyB0aGUgc2FtZSwgZm9y
-IGV4YW1wbGUgZGlzayBwZXJmb3JtYW5jZS4NCj4gSXTigJlzIHVuY2xlYXIgd2hhdCB0byBkbyB3
-aGVuIG9uZSBzdWJzZXQgb2YgdGVzdHMgc2hvdyBkZWdyYWRhdGlvbiBhbmQNCj4gYW5vdGhlciBz
-dWJzZXQgc2hvd3MgbmV1dHJhbCBzdGF0dXMgb3IgaW1wcm92ZW1lbnRzLiBJcyB0aGVyZSBhDQo+
-IHJlZ3Jlc3Npb24/DQpJZiBhIHRlc3Qgc2hvd3MgYSByZWdyZXNzaW9uLCB0aGVuIGVpdGhlciB0
-aGVyZSBoYXMgYmVlbiBhIHJlZ3Jlc3Npb24gYW5kDQp0aGUgdGVzdCBpcyBhY2N1cmF0ZSwgb3Ig
-dGhlcmUgaGFzIG5vdCBiZWVuIGEgcmVncmVzc2lvbiBhbmQgdGhlIHRlc3QNCm9yIHJlZmVyZW5j
-ZSB2YWx1ZXMgbmVlZCBmaXhpbmcuDQoNCj4gDQo+IEkgc3VwcG9zZSB0aGF0IHRoZSBhdmFpbGFi
-aWxpdHkgb2YgaGlzdG9yaWNhbCBkYXRhIGNhbiBoZWxwIHRvIGRlYWwNCj4gd2l0aCBzdWNoIHNp
-dHVhdGlvbnMgYXMgaGlzdG9yaWNhbCBkYXRhIGNhbiBzaG93IGJlaGF2aW91ciBvZg0KPiBwYXJ0
-aWN1bGFyIHRlc3RzIGFuZCBhbGxvdyB0byBhc3NpZ24gd2VpZ2h0cyBpbiBkZWNpc2lvbi1tYWtp
-bmcNCj4gYWxnb3JpdGhtcywgYnV0IGl04oCZcyBqdXN0IG15IGd1ZXNzLg0KPiANCj4gIyBTeXN0
-ZW0gUHJvZmlsZXMNCj4gVGltJ3MgaWRlYSB0byByZWR1Y2UgcmVzdWx0cyB0byAtIOKAnHBhc3Mg
-LyBmYWls4oCdIGFuZCBteSBleHBlcmllbmNlIHdpdGgNCj4gdmFyaW91cyBwZW9wbGUgdHJ5aW5n
-IHRvIGludGVycHJldCBiZW5jaG1hcmtpbmcgcmVzdWx0cyBsZWQgbWUgdG8NCj4gdGhpbmsgb2Yg
-4oCccHJvZmlsZXPigJ0gLSBhIHNldCBvZiBwYXJhbWV0ZXJzIGFuZCBtZXRyaWNzIGNvbGxlY3Rl
-ZCBmcm9tIGENCj4gcmVmZXJlbmNlIHN5c3RlbSB3aGlsZSBleGVjdXRpb24gb2YgYSBwYXJ0aWN1
-bGFyIGNvbmZpZ3VyYXRpb24gb2YgYQ0KPiBwYXJ0aWN1bGFyIGJlbmNobWFyay4NCg0KTnVtYmVy
-cyBhbG9uZSBoYXZlIG5vIG1lYW5pbmcuIFRoZXkgaGF2ZSB0byBiZSBjb252ZXJ0ZWQgaW50byBz
-b21lDQpzaWduYWwgaW5kaWNhdGluZyB0aGF0IGFjdGlvbiBpcyBuZWVkZWQuICBBdCBQbHVtYmVy
-cyBvbmUgZGV2ZWxvcGVyDQppbmRpY2F0ZWQgdGhhdCBtb3JlIHRoYW4ganVzdCBhIGJpbmFyeSBz
-dGF0ZSB3b3VsZCBiZSBkZXNpcmFibGUuICBUaGUgdGVzdGNhc2UNCm91dGNvbWUgaXMgaW50ZW5k
-ZWQgdG8gaW5kaWNhdGUgdGhhdCBzb21lIGlzc3VlIG5lZWRzIGFkZHJlc3NpbmcsIGFuZA0KdGhl
-cmUgd2lsbCBhbHdheXMgYmUgYSB0aHJlc2hvbGQgbmVlZGVkLg0KPiANCj4gUHJvZmlsZXMgY2Fu
-IGJlIHVzZWQgZm9yIEEvQiBjb21wYXJpc29uIHdpdGggcGFzcy9mYWlsIG91dGNvbWVzIG9yDQo+
-IG1hdGNoL25vdCBtYXRjaCwgYW5kIHRoaXMgYXBwcm9hY2ggZG9lcyBub3QgaGlkZS9taXNzIHRo
-ZSBkZXRhaWxzIGFuZA0KPiBhbGxvd3MgdG8gY2FwdHVyZSBtdWx0aXBsZSBjaGFyYWN0ZXJpc3Rp
-Y3Mgb2YgdGhlIGV4cGVyaW1lbnQsIGxpa2UNCj4gcHJlc2VuY2Ugb2Ygb3V0bGllcnMvZXJyb3Jz
-IG9yIHNrZXdlZCBkaXN0cmlidXRpb24gZm9ybS4gSW50ZXJlc3RlZA0KPiBwZXJzb25zIChsaWtl
-IGtlcm5lbCBkZXZlbG9wZXJzIG9yIHBlcmZvcm1hbmNlIGVuZ2luZWVycywgZm9yIGV4YW1wbGUp
-DQo+IGNhbiBkaWcgZGVlcGVyIHRvIGZpbmQgYSByZWFzb24gZm9yIHN1Y2ggbWlzbWF0Y2ggYW5k
-IHRob3NlIHdobyBhcmUNCj4gaW50ZXJlc3RlZCBqdXN0IGluIGhpZ2gtbGV2ZWwgcmVzdWx0cyAt
-IHBhc3MvZmFpbCBzaG91bGQgYmUgZW5vdWdoLg0KT2YgY291cnNlIHJlc3VsdHMgc2hvdWxkIGJl
-IGF2YWlsYWJsZSB0byBhbGxvdyBkaWFnbm9zaW5nIHRoZSBwcm9ibGVtLg0KQnV0IGZvciBhIENJ
-IHN5c3RlbSB0byBpbmRpY2F0ZSB0aGF0IGFjdGlvbiBpcyBuZWVkZWQsIHRoZXJlIG11c3QgYmUN
-CnNvbWUgbnVtZXJpYyBjb21wYXJpc29uICh3aGV0aGVyIHRoYXQgcmVwcmVzZW50cyBzb21ldGhp
-bmcgbW9yZQ0KZXhwYW5zaXZlIGxpa2UgYSBjdXJ2ZSBzaGFwZSBvciBhbiBhZ2dyZWdhdGlvbiBv
-ZiBkYXRhIHBvaW50cykNCj4gDQo+IEhlcmUgaXMgaG93IEkgaW1hZ2luZyBhIHN0cnVjdHVyZSBv
-ZiBhIHByb2ZpbGU6DQo+IC0tLQ0KPiBwcm9maWxlX2E6DQo+ICAgc3lzdGVtIHBhY2thZ2VzOg0K
-PiAgICAtIHBrZ18xDQo+ICAgIC0gcGtnXzINCj4gICAgIyBBZGRpdGlvbmFsIHBhY2thZ2VzLi4u
-DQo+IA0KPiBzZXR0aW5nczoNCj4gICAgLSBjbWRsaW5lDQo+ICAgICMgQWRkaXRpb25hbCBzZXR0
-aW5ncy4uLg0KPiANCj4gaW5kaWNhdG9yczoNCj4gICAgY3B1OiBudWxsDQo+ICAgIHJhbTogbnVs
-bA0KPiAgICBsb2FkYXZnOiBudWxsDQo+ICAgICMgQWRkaXRpb25hbCBpbmRpY2F0b3JzLi4uDQo+
-IA0KPiBiZW5jaG1hcms6DQo+IHNldHRpbmdzOg0KPiAgICBwYXJhbV8xOiBudWxsDQo+ICAgIHBh
-cmFtXzI6IG51bGwNCj4gICAgcGFyYW1feDogbnVsbA0KPiANCj4gbWV0cmljczoNCj4gICAgbWV0
-cmljXzE6IG51bGwNCj4gICAgbWV0cmljXzI6IG51bGwNCj4gICAgbWV0cmljX3g6IG51bGwNCj4g
-LS0tDQo+IA0KPiAtIFN5c3RlbSBQYWNrYWdlcywgU3lzdGVtIFNldHRpbmdzOiBVc3VhbGx5IHdl
-IGRvIG5vdCBwYXkgbXVjaA0KPiBhdHRlbnRpb24gdG8gdGhpcywgYnV0IEkgdGhpbmsgaXTigJlz
-IHdvcnRoIGhpZ2hsaWdodGluZyB0aGF0IGJhc2UgT1MgaXMNCj4gYW4gaW1wb3J0YW50IGZhY3Rv
-ciwgYXMgdGhlcmUgYXJlIGRpc3RyaWJ1dGlvbi1zcGVjaWZpYyBtb2RpZmljYXRpb25zDQo+IHBy
-ZXNlbnQgaW4gdGhlIGZpbGVzeXN0ZW0uIE1vc3QgY29tbW9ubHkgZGV2ZWxvcGVycyBhbmQgcmVz
-ZWFyY2hlcnMNCj4gdXNlIFVidW50dSAoYXMgdGhlIG1vc3QgcG9wdWxhciBkaXN0cm8pIG9yIERl
-YmlhbiAoYXMgYSBjbGVhbmVyIGFuZA0KPiBsaWdodHdlaWdodCB2ZXJzaW9uIG9mIFVidW50dSks
-IGJ1dCBkaXN0cmlidXRpb25zIGFwcGx5IHRoZWlyIG93bg0KPiBwYXRjaGVzIHRvIHRoZSBrZXJu
-ZWwgYW5kIHN5c3RlbSBsaWJyYXJpZXMsIHdoaWNoIG1heSBpbXBhY3QNCj4gcGVyZm9ybWFuY2Uu
-IEFub3RoZXIga2luZCBvZiBiYXNlIE9TIC0gY2xvdWQgT1MgaW1hZ2VzIHdoaWNoIGNhbiBiZQ0K
-PiBtb2RpZmllZCBieSBjbG91ZCBwcm92aWRlcnMgdG8gYWRkIGludGVybmFsIHBhY2thZ2VzICYg
-c2VydmljZXMgd2hpY2gNCj4gY291bGQgcG90ZW50aWFsbHkgYWZmZWN0IHBlcmZvcm1hbmNlIGFz
-IHdlbGwuIFdoaWxlIGNvbXBhcmluZyB3ZSBtdXN0DQo+IHRha2UgaW50byBhY2NvdW50IHRoaXMg
-YXNwZWN0IHRvIGNvbXBhcmUgYXBwbGVzLXRvLWFwcGxlcy4NCj4gLSBTeXN0ZW0gSW5kaWNhdG9y
-czogVGhlc2UgYXJlIHBlcmlvZGljIHN0YXRpc3RpY3MgbGlrZSBDUFUNCj4gdXRpbGlzYXRpb24s
-IFJBTSBjb25zdW1wdGlvbiwgYW5kIG90aGVyIHBhcmFtcyBjb2xsZWN0ZWQgYmVmb3JlDQo+IGJl
-bmNobWFya2luZywgd2hpbGUgYmVuY2htYXJraW5nIGFuZCBhZnRlciBiZW5jaG1hcmtpbmcuDQo+
-IC0gQmVuY2htYXJrIFNldHRpbmdzOiBCZW5jaG1hcmtpbmcgc3lzdGVtcyBoYXZlIG11bHRpcGxl
-IHBhcmFtZXRlcnMsDQo+IHNvIGl04oCZcyBpbXBvcnRhbnQgdG8gY2FwdHVyZSB0aGVtIGFuZCB1
-c2UgdGhlbSBpbiBhbmFseXNpcy4NCj4gLSBCZW5jaG1hcmsgTWV0cmljczogVGhhdOKAmXMgb2J2
-aW91c2x5IC0gYmVuY2htYXJrIHJlc3VsdHMuIEl04oCZcyBub3QgYQ0KPiByYXJlIGNhc2Ugd2hl
-biBhIGJlbmNobWFyayB0ZXN0IHByb3ZpZGVzIG1vcmUgdGhhbiBhIHNpbmdsZSBudW1iZXIuDQo+
-IA0KPiAjIEFuYWx5c2lzDQo+IFByb3Bvc2VkIHJ1bGVzLWJhc2VkIGFuYWx5c2lzIHdpbGwgd29y
-ayBvbmx5IGZvciBoaWdobHkgZGV0ZXJtaW5lZA0KPiBlbnZpcm9ubWVudHMgYW5kIHN5c3RlbXMs
-IHdoZXJlIHJ1bGVzIGNhbiBkZXNjcmliZSBhbGwgdGhlIGFzcGVjdHMuDQo+IFJ1bGUtYmFzZWQg
-c3lzdGVtcyBhcmUgZWFzaWVyIHRvIHVuZGVyc3RhbmQgYW5kIGltcGxlbWVudCB0aGFuIG90aGVy
-DQo+IHR5cGVzLCBidXQgZm9yIGEgc21hbGwgc2V0IG9mIHJ1bGVzLiBIb3dldmVyLCB3ZSBkZWFs
-IHdpdGggdGhlIGxpdmUNCj4gc3lzdGVtIGFuZCBpdCBjb25zdGFudGx5IGV2b2x2ZXMsIHNvIHJ1
-bGVzIHdpbGwgZGVwcmVjYXRlIGV4dHJlbWVseQ0KPiBmYXN0LiBJdCdzIHRoZSBzYW1lIHN0b3J5
-IGFzIHdpdGggcnVsZS1iYXNlZCByZWNvbW1lbmRlZCBzeXN0ZW1zIGluDQo+IGVhcmx5IHllYXJz
-IG9mIG1hY2hpbmUgbGVhcm5pbmcuDQo+IA0KPiBJZiB5b3Ugd2FudCB0byBmb2xsb3cgYSBydWxl
-cy1iYXNlZCBhcHByb2FjaCwgaXQncyBwcm9iYWJseSB3b3J0aA0KPiB0YWtpbmcgYSBsb29rIGF0
-IGh0dHBzOi8vd3d3LmNsaXBzcnVsZXMubmV0IGFzIHRoaXMgd2lsbCBhbGxvdyB0bw0KPiBkZWNv
-dXBsZSByZXN1bHRzIGZyb20gYW5hbHlzaXMgYW5kIGF2b2lkIHJlaW52ZW50aW5nIHRoZSBhbmFs
-eXNpcw0KPiBlbmdpbmUuDQo+IA0KPiBEZWNsYXJhdGlvbiBvZiB0aG9zZSBydWxlcyB3aWxsIGJl
-IGVycm9yLXByb25lIGR1ZSB0byB0aGUgbmF0dXJlIG9mDQo+IHRoZWlyIG9yaWdpbiAtIHRoZXkg
-bXVzdCBiZSBkZWNsYXJlZCBhbmQgbWFpbnRhaW5lZCBieSBodW1hbnMuIElNSE8gYQ0KPiBodW1h
-bi1sZXNzIGFwcHJvYWNoIGFuZCB1c2UgbW9kZXJuIE1MIG1ldGhvZHMgaW5zdGVhZCB3b3VsZCBi
-ZSBtb3JlDQo+IGJlbmVmaWNpYWwgaW4gdGhlIGxvbmcgcnVuLg0KV2VsbCwgdGhlIHJ1bGVzIEkg
-d2FzIHByb3Bvc2luZyAoY3JpdGVyaWEgcnVsZXMpIHdlcmUgYWJvdXQgdGhlIGNvbnZlcnNpb24g
-DQpmcm9tIG51bWJlcnMgdG8gdGVzdGNhc2Ugb3V0Y29tZXMsIGFuZCBzb21lIHdheSB0byBleHBy
-ZXNzIHRoZQ0KZGlyZWN0aW9uIG9mIG9wZXJhdGlvbiBmb3IgbnVtZXJpYyBjb21wYXJpc29ucy4g
-IE5vdCBtdWNoIG1vcmUgdGhhbiB0aGF0Lg0KVGhlcmUgd2FzIG5vIGludGVsbGlnZW5jZSBpbnRl
-bmRlZCBiZXlvbmQgc2ltcGxlIG51bWVyaWMgY29tcGFyaXNvbnMNCm9mIHJlc3VsdCB2YWx1ZXMg
-d2l0aCByZWZlcmVuY2UgdmFsdWVzLiAgSSdkIHByZWZlciBub3QgdG8gb3ZlcmNvbXBsaWNhdGUN
-CnRoZSBwcm9wb3NhbCB3aXRoIGFuYWx5c2lzIG9mIGRhdGEuICBJdCdzIHF1aXRlIHBvc3NpYmxl
-IHRoYXQgdGhlIHJ1bGVzDQpzaG91bGQgYmUgYmFrZWQgaW50byB0aGUgdGVzdCwgcmF0aGVyIHRo
-YW4gaGF2aW5nIHRoZW0gc2VwYXJhdGUgbGlrZQ0KSSBwcm9wb3NlZC4gIE1vc3QgdGVzdHMgd291
-bGQgaGF2ZSByYXRoZXIgb2J2aW91cyBjb21wYXJpc29uIGRpcmVjdGlvbnMsDQpzbyBoYXZpbmcg
-dGhlIHJ1bGVzIGJlIHNlcGFyYXRlIG1heSBiZSBhbiB1bm5lY2Vzc2FyeSBhYnN0cmFjdGlvbi4N
-CihpZSwgdGhyb3VnaHB1dCBsZXNzIHRoYW4gYSByZWZlcmVuY2UgdmFsdWUgaXMgYSByZWdyZXNz
-aW9uLCBvciBsYXRlbmN5IG1vcmUNCnRoYW4gYSByZWZlcmVuY2UgdmFsdWUgaXMgYSByZWdyZXNz
-aW9uLikNCg0KPiANCj4gIyBNZXRob2RvbG9neQ0KPiBVc2VkIG1ldGhvZG9sb2d5IC0gYW5vdGhl
-ciBhc3BlY3Qgd2hpY2ggaXMgbm90IGRpcmVjdGx5IHJlbGF0ZWQgdG8NCj4gVGltJ3Mgc2xpZGVz
-LCBidXQgaXQncyBhbiBpbXBvcnRhbnQgdG9waWMgZm9yIHJlc3VsdHMgcHJvY2Vzc2luZyBhbmQN
-Cj4gaW50ZXJwcmV0YXRpb24sIHByb2JhYmx5IGFuIGlkZWEgb2YgYXV0b21hdGVkIHJlc3VsdHMg
-aW50ZXJwcmV0YXRpb24NCj4gY2FuIGZvcmNlIHVzZSBvZiBvbmUgb3IgYW5vdGhlciBtZXRob2Rv
-bG9neS4NCj4gDQo+ICMgTmV4dCBzdGVwcw0KPiBJIHdvdWxkIGJlIGdsYWQgdG8gcGFydGljaXBh
-dGUgaW4gZnVydGhlciBkaXNjdXNzaW9ucyBhbmQgc2hhcmUNCj4gZXhwZXJpZW5jZSB0byBpbXBy
-b3ZlIGtlcm5lbCBwZXJmb3JtYW5jZSB0ZXN0aW5nIGF1dG9tYXRpb24sIGFuYWx5c2lzDQo+IGFu
-ZCBpbnRlcnByZXRhdGlvbiBvZiByZXN1bHRzLiBJZiB0aGVyZSBpcyBpbnRlcmVzdCwgSSdtIG9w
-ZW4gdG8NCj4gY29sbGFib3JhdGluZyBvbiBpbXBsZW1lbnRpbmcgc29tZSBvZiB0aGVzZSBpZGVh
-cy4NCg0KU291bmRzIGdvb2QuICBJJ20gdGllZCB1cCB3aXRoIHNvbWUgYm9vdC10aW1lIGluaXRp
-YXRpdmVzIGF0IHRoZSBtb21lbnQsDQpidXQgSSBob3BlIHRvIHdvcmsgb24gbXkgcHJvcG9zYWwg
-c29tZSBtb3JlLCBhbmQgZmluZCBhIGhvbWUgKGllIHB1YmxpYw0KcmVwb3NpdG9yeSkgZm9yIHNv
-bWUga3NlbGZ0ZXN0LXJlbGF0ZWQgcmVmZXJlbmNlIHZhbHVlcywgYmVmb3JlIHRoZSBlbmQgb2YN
-CnRoZSB5ZWFyLiAgSSBwbGFuIHRvIHN1Ym1pdCB0aGUgYWN0dWFsIGNvZGUgZm9yIG15IHByb3Bv
-c2FsLCBhbG9uZyB3aXRoDQpzb21lIHRlc3RzIHRoYXQgdXRpbGl6ZSBpdCB0byB0aGUgbGlzdCwg
-YW5kIHdlIGNhbiBoYXZlIG1vcmUgZGlzY3Vzc2lvbiB3aGVuDQp0aGF0IGhhcHBlbnMuDQoNClRo
-YW5rcyBmb3Igc2hhcmluZyB5b3VyIGlkZWFzLg0KICAgLS0gVGltDQo=
+Greetings:
+
+Welcome to v8, see changelog below.
+
+This revision is a quick follow-up to v7 and only drops the unneeded
+exports in patch 2. No other changes.
+
+This series introduces a new mechanism, IRQ suspension, which allows
+network applications using epoll to mask IRQs during periods of high
+traffic while also reducing tail latency (compared to existing
+mechanisms, see below) during periods of low traffic. In doing so, this
+balances CPU consumption with network processing efficiency.
+
+Martin Karsten (CC'd) and I have been collaborating on this series for
+several months and have appreciated the feedback from the community on
+our RFC [1]. We've updated the cover letter and kernel documentation in
+an attempt to more clearly explain how this mechanism works, how
+applications can use it, and how it compares to existing mechanisms in
+the kernel.
+
+I briefly mentioned this idea at netdev conf 2024 (for those who were
+there) and Martin described this idea in an earlier paper presented at
+Sigmetrics 2024 [2].
+
+~ The short explanation (TL;DR)
+
+We propose adding a new napi config parameter: irq_suspend_timeout to
+help balance CPU usage and network processing efficiency when using IRQ
+deferral and napi busy poll.
+
+If this parameter is set to a non-zero value *and* a user application
+has enabled preferred busy poll on a busy poll context (via the
+EPIOCSPARAMS ioctl introduced in commit 18e2bf0edf4d ("eventpoll: Add
+epoll ioctl for epoll_params")), then application calls to epoll_wait
+for that context will cause device IRQs and softirq processing to be
+suspended as long as epoll_wait successfully retrieves data from the
+NAPI. Each time data is retrieved, the irq_suspend_timeout is deferred.
+
+If/when network traffic subsides and epoll_wait returns no data, IRQ
+suspension is immediately reverted back to the existing
+napi_defer_hard_irqs and gro_flush_timeout mechanism which was
+introduced in commit 6f8b12d661d0 ("net: napi: add hard irqs deferral
+feature")).
+
+The irq_suspend_timeout serves as a safety mechanism. If userland takes
+a long time processing data, irq_suspend_timeout will fire and restart
+normal NAPI processing.
+
+For a more in depth explanation, please continue reading.
+
+~ Comparison with existing mechanisms
+
+Interrupt mitigation can be accomplished in napi software, by setting
+napi_defer_hard_irqs and gro_flush_timeout, or via interrupt coalescing
+in the NIC. This can be quite efficient, but in both cases, a fixed
+timeout (or packet count) needs to be configured. However, a fixed
+timeout cannot effectively support both low- and high-load situations:
+
+At low load, an application typically processes a few requests and then
+waits to receive more input data. In this scenario, a large timeout will
+cause unnecessary latency.
+
+At high load, an application typically processes many requests before
+being ready to receive more input data. In this case, a small timeout
+will likely fire prematurely and trigger irq/softirq processing, which
+interferes with the application's execution. This causes overhead, most
+likely due to cache contention.
+
+While NICs attempt to provide adaptive interrupt coalescing schemes,
+these cannot properly take into account application-level processing.
+
+An alternative packet delivery mechanism is busy-polling, which results
+in perfect alignment of application processing and network polling. It
+delivers optimal performance (throughput and latency), but results in
+100% cpu utilization and is thus inefficient for below-capacity
+workloads.
+
+We propose to add a new packet delivery mode that properly alternates
+between busy polling and interrupt-based delivery depending on busy and
+idle periods of the application. During a busy period, the system
+operates in busy-polling mode, which avoids interference. During an idle
+period, the system falls back to interrupt deferral, but with a small
+timeout to avoid excessive latencies. This delivery mode can also be
+viewed as an extension of basic interrupt deferral, but alternating
+between a small and a very large timeout.
+
+This delivery mode is efficient, because it avoids softirq execution
+interfering with application processing during busy periods. It can be
+used with blocking epoll_wait to conserve cpu cycles during idle
+periods. The effect of alternating between busy and idle periods is that
+performance (throughput and latency) is very close to full busy polling,
+while cpu utilization is lower and very close to interrupt mitigation.
+
+~ Usage details
+
+IRQ suspension is introduced via a per-NAPI configuration parameter that
+controls the maximum time that IRQs can be suspended.
+
+Here's how it is intended to work:
+  - The user application (or system administrator) uses the netdev-genl
+    netlink interface to set the pre-existing napi_defer_hard_irqs and
+    gro_flush_timeout NAPI config parameters to enable IRQ deferral.
+
+  - The user application (or system administrator) sets the proposed
+    irq_suspend_timeout parameter via the netdev-genl netlink interface
+    to a larger value than gro_flush_timeout to enable IRQ suspension.
+
+  - The user application issues the existing epoll ioctl to set the
+    prefer_busy_poll flag on the epoll context.
+
+  - The user application then calls epoll_wait to busy poll for network
+    events, as it normally would.
+
+  - If epoll_wait returns events to userland, IRQs are suspended for the
+    duration of irq_suspend_timeout.
+
+  - If epoll_wait finds no events and the thread is about to go to
+    sleep, IRQ handling using napi_defer_hard_irqs and gro_flush_timeout
+    is resumed.
+
+As long as epoll_wait is retrieving events, IRQs (and softirq
+processing) for the NAPI being polled remain disabled. When network
+traffic reduces, eventually a busy poll loop in the kernel will retrieve
+no data. When this occurs, regular IRQ deferral using gro_flush_timeout
+for the polled NAPI is re-enabled.
+
+Unless IRQ suspension is continued by subsequent calls to epoll_wait, it
+automatically times out after the irq_suspend_timeout timer expires.
+Regular deferral is also immediately re-enabled when the epoll context
+is destroyed.
+
+~ Usage scenario
+
+The target scenario for IRQ suspension as packet delivery mode is a
+system that runs a dominant application with substantial network I/O.
+The target application can be configured to receive input data up to a
+certain batch size (via epoll_wait maxevents parameter) and this batch
+size determines the worst-case latency that application requests might
+experience. Because packet delivery is suspended during the target
+application's processing, the batch size also determines the worst-case
+latency of concurrent applications using the same RX queue(s).
+
+gro_flush_timeout should be set as small as possible, but large enough to
+make sure that a single request is likely not being interfered with.
+
+irq_suspend_timeout is largely a safety mechanism against misbehaving
+applications. It should be set large enough to cover the processing of an
+entire application batch, i.e., the factor between gro_flush_timeout and
+irq_suspend_timeout should roughly correspond to the maximum batch size
+that the target application would process in one go.
+
+~ Important call out in the implementation
+
+  - Enabling per epoll-context preferred busy poll will now effectively
+    lead to a nonblocking iteration through napi_busy_loop, even when
+    busy_poll_usecs is 0. See patch 4.
+
+~ Benchmark configs & descriptions
+
+The changes were benchmarked with memcached [3] using the benchmarking
+tool mutilate [4].
+
+To facilitate benchmarking, a small patch [5] was applied to memcached
+1.6.29 to allow setting per-epoll context preferred busy poll and other
+settings via environment variables. Another small patch [6] was applied
+to libevent to enable full busy-polling.
+
+Multiple scenarios were benchmarked as described below and the scripts
+used for producing these results can be found on github [7] (note: all
+scenarios use NAPI-based traffic splitting via SO_INCOMING_ID by passing
+-N to memcached):
+
+  - base:
+    - no other options enabled
+  - deferX:
+    - set defer_hard_irqs to 100
+    - set gro_flush_timeout to X,000
+  - napibusy:
+    - set defer_hard_irqs to 100
+    - set gro_flush_timeout to 200,000
+    - enable busy poll via the existing ioctl (busy_poll_usecs = 64,
+      busy_poll_budget = 64, prefer_busy_poll = true)
+  - fullbusy:
+    - set defer_hard_irqs to 100
+    - set gro_flush_timeout to 5,000,000
+    - enable busy poll via the existing ioctl (busy_poll_usecs = 1000,
+      busy_poll_budget = 64, prefer_busy_poll = true)
+    - change memcached's nonblocking epoll_wait invocation (via
+      libevent) to using a 1 ms timeout
+  - suspend0:
+    - set defer_hard_irqs to 0
+    - set gro_flush_timeout to 0
+    - set irq_suspend_timeout to 20,000,000
+    - enable busy poll via the existing ioctl (busy_poll_usecs = 0,
+      busy_poll_budget = 64, prefer_busy_poll = true)
+  - suspendX:
+    - set defer_hard_irqs to 100
+    - set gro_flush_timeout to X,000
+    - set irq_suspend_timeout to 20,000,000
+    - enable busy poll via the existing ioctl (busy_poll_usecs = 0,
+      busy_poll_budget = 64, prefer_busy_poll = true)
+
+~ Benchmark results
+
+Tested on:
+
+Single socket AMD EPYC 7662 64-Core Processor
+Hyperthreading disabled
+4 NUMA Zones (NPS=4)
+16 CPUs per NUMA zone (64 cores total)
+2 x Dual port 100gbps Mellanox Technologies ConnectX-5 Ex EN NIC
+
+The test machine is configured such that a single interface has 8 RX
+queues. The queues' IRQs and memcached are pinned to CPUs that are
+NUMA-local to the interface which is under test. The NIC's interrupt
+coalescing configuration is left at boot-time defaults.
+
+Results:
+
+Results are shown below. The mechanism added by this series is
+represented by the 'suspend' cases. Data presented shows a summary over
+nearly 10 runs of each test case [8] using the scripts on github [7].
+For latency, the median is shown. For throughput and CPU utilization,
+the average is shown.
+
+The results also include cycles-per-query (cpq) and
+instruction-per-query (ipq) metrics, following the methodology proposed
+in [2], to augment the CPU utilization numbers, which could be skewed
+due to frequency scaling. We find that this does not appear to be the
+case as CPU utilization and low-level metrics show similar trends.
+
+These results were captured using the scripts on github [7] to
+illustrate how this approach compares with other pre-existing
+mechanisms. This data is not to be interpreted as scientific data
+captured in a fully isolated lab setting, but instead as best effort,
+illustrative information comparing and contrasting tradeoffs.
+
+The absolute QPS results shift between submissions, but the
+relative differences are equivalent. As patches are rebased,
+several factors likely influence overall performance.
+
+Compare:
+- Throughput (MAX) and latencies of base vs suspend.
+- CPU usage of napibusy and fullbusy during lower load (200K, 400K for
+  example) vs suspend.
+- Latency of the defer variants vs suspend as timeout and load
+  increases.
+- suspend0, which sets defer_hard_irqs and gro_flush_timeout to 0, has
+  nearly the same performance as the base case (this is FAQ item #1).
+
+The overall takeaway is that the suspend variants provide a superior
+combination of high throughput, low latency, and low cpu utilization
+compared to all other variants. Each of the suspend variants works very
+well, but some fine-tuning between latency and cpu utilization is still
+possible by tuning the small timeout (gro_flush_timeout).
+
+Note: we've reorganized the results to make comparison among testcases
+with the same load easier.
+
+  testcase  load     qps  avglat  95%lat  99%lat     cpu     cpq     ipq
+      base  200K  199946     112     239     416      26   12973   11343
+   defer10  200K  199971      54     124     142      29   19412   17460
+   defer20  200K  199986      60     130     153      26   15644   14095
+   defer50  200K  200025      79     144     182      23   12122   11632
+  defer200  200K  199999     164     254     309      19    8923    9635
+  fullbusy  200K  199998      46     118     133     100   43658   23133
+  napibusy  200K  199983     100     237     277      56   24840   24716
+  suspend0  200K  200020     105     249     432      30   14264   11796
+ suspend10  200K  199950      53     123     141      32   19518   16903
+ suspend20  200K  200037      58     126     151      30   16426   14736
+ suspend50  200K  199961      73     136     177      26   13310   12633
+suspend200  200K  199998     149     251     306      21    9566   10203
+
+  testcase  load     qps  avglat  95%lat  99%lat     cpu     cpq     ipq
+      base  400K  400014     139     269     707      41    9476    9343
+   defer10  400K  400016      59     133     166      53   13991   12989
+   defer20  400K  399952      67     140     172      47   12063   11644
+   defer50  400K  400007      87     162     198      39    9384    9880
+  defer200  400K  399979     181     274     330      31    7089    8430
+  fullbusy  400K  399987      50     123     156     100   21827   16037
+  napibusy  400K  400014      76     222     272      83   18185   16529
+  suspend0  400K  400015     127     350     776      47   10699    9603
+ suspend10  400K  400023      57     129     164      54   13758   13178
+ suspend20  400K  400043      62     135     169      49   12071   11826
+ suspend50  400K  400071      76     149     186      42   10011   10301
+suspend200  400K  399961     154     269     327      34    7827    8774
+
+  testcase  load     qps  avglat  95%lat  99%lat     cpu     cpq     ipq
+      base  600K  599951     149     266     574      61    9265    8876
+   defer10  600K  600006      71     147     203      76   11866   10936
+   defer20  600K  600123      76     152     203      66   10430   10342
+   defer50  600K  600162      95     172     217      54    8526    9142
+  defer200  600K  599942     200     301     357      46    6977    8212
+  fullbusy  600K  599990      55     127     177     100   14551   13983
+  napibusy  600K  600035      63     160     250      96   13937   14140
+  suspend0  600K  599903     127     320     732      68   10166    8963
+ suspend10  600K  599908      63     137     192      69   10902   11100
+ suspend20  600K  599961      66     141     194      65    9976   10370
+ suspend50  600K  599973      80     159     204      57    8678    9381
+suspend200  600K  600010     157     277     346      48    7133    8381
+
+  testcase  load     qps  avglat  95%lat  99%lat     cpu     cpq     ipq
+      base  800K  800039     181     300     536      87    9585    8304
+   defer10  800K  800038     181     530     939      96   10564    8970
+   defer20  800K  800029     112     225     329      90   10056    8935
+   defer50  800K  799999     120     208     296      82    9234    8562
+  defer200  800K  800066     227     338     401      63    7117    8129
+  fullbusy  800K  800040      61     134     190     100   10913   12608
+  napibusy  800K  799944      64     141     214      99   10828   12588
+  suspend0  800K  799911     126     248     509      85    9346    8498
+ suspend10  800K  800006      69     143     200      83    9410    9845
+ suspend20  800K  800120      74     150     207      78    8786    9454
+ suspend50  800K  799989      87     168     224      71    7946    8833
+suspend200  800K  799987     160     292     357      62    6923    8229
+
+  testcase  load     qps  avglat  95%lat  99%lat     cpu     cpq     ipq
+      base 1000K  906879    4079    5751    6216      98    9496    7904
+   defer10 1000K  860849    3643    6274    6730      99   10040    8676
+   defer20 1000K  896063    3298    5840    6349      98    9620    8237
+   defer50 1000K  919782    2962    5513    5807      97    9284    7951
+  defer200 1000K  970941    3059    5348    5984      95    8593    7959
+  fullbusy 1000K  999950      70     150     207     100    8732   10777
+  napibusy 1000K  999996      78     154     223     100    8722   10656
+  suspend0 1000K  949706    2666    5770    6660      99    9071    8046
+ suspend10 1000K 1000024      80     160     220      92    8137    9035
+ suspend20 1000K 1000059      83     165     226      89    7850    8804
+ suspend50 1000K  999955      95     180     240      84    7411    8459
+suspend200 1000K  999914     163     299     366      77    6833    8078
+
+  testcase  load     qps  avglat  95%lat  99%lat     cpu     cpq     ipq
+      base   MAX 1037654    4184    5453    5810     100    8411    7938
+   defer10   MAX  905607    4840    6151    6380     100    9639    8431
+   defer20   MAX  986463    4455    5594    5796     100    8848    8110
+   defer50   MAX 1077030    4000    5073    5299     100    8104    7920
+  defer200   MAX 1040728    4152    5385    5765     100    8379    7849
+  fullbusy   MAX 1247536    3518    3935    3984     100    6998    7930
+  napibusy   MAX 1136310    3799    7756    9964     100    7670    7877
+  suspend0   MAX 1057509    4132    5724    6185     100    8253    7918
+ suspend10   MAX 1215147    3580    3957    4041     100    7185    7944
+ suspend20   MAX 1216469    3576    3953    3988     100    7175    7950
+ suspend50   MAX 1215871    3577    3961    4075     100    7181    7949
+suspend200   MAX 1216882    3556    3951    3988     100    7175    7955
+
+~ FAQ
+
+  - Why is a new parameter needed? Does irq_suspend_timeout override
+    gro_flush_timeout?
+
+    Using the suspend mechanism causes the system to alternate between
+    polling mode and irq-driven packet delivery. During busy periods,
+    irq_suspend_timeout overrides gro_flush_timeout and keeps the system
+    busy polling, but when epoll finds no events, the setting of
+    gro_flush_timeout and napi_defer_hard_irqs determine the next step.
+
+    There are essentially three possible loops for network processing and
+    packet delivery:
+
+    1) hardirq -> softirq -> napi poll; basic interrupt delivery
+    2) timer -> softirq -> napi poll; deferred irq processing
+    3) epoll -> busy-poll -> napi poll; busy looping
+
+    Loop 2 can take control from Loop 1, if gro_flush_timeout and
+    napi_defer_hard_irqs are set.
+
+    If gro_flush_timeout and napi_defer_hard_irqs are set, Loops 2 and
+    3 "wrestle" with each other for control. During busy periods,
+    irq_suspend_timeout is used as timer in Loop 2, which essentially
+    tilts this in favour of Loop 3.
+
+    If gro_flush_timeout and napi_defer_hard_irqs are not set, Loop 3
+    cannot take control from Loop 1.
+
+    Therefore, setting gro_flush_timeout and napi_defer_hard_irqs is the
+    recommended usage, because otherwise setting irq_suspend_timeout
+    might not have any discernible effect.
+
+    This is shown in the results above: compare suspend0 with the base
+    case. Note that the lack of napi_defer_hard_irqs and
+    gro_flush_timeout produce similar results for both, which encourages
+    the use of napi_defer_hard_irqs and gro_flush_timeout in addition to
+    irq_suspend_timeout.
+
+  - Can the new timeout value be threaded through the new epoll ioctl ?
+
+    It is possible, but presents challenges for userspace. User
+    applications must ensure that the file descriptors added to epoll
+    contexts have the same NAPI ID to support busy polling.
+
+    An epoll context is not permanently tied to any particular NAPI ID.
+    So, a user application could decide to clear the file descriptors
+    from the context and add a new set of file descriptors with a
+    different NAPI ID to the context. Busy polling would work as
+    expected, but the meaning of the suspend timeout becomes ambiguous
+    because IRQs are not inherently associated with epoll contexts, but
+    rather with the NAPI. The user program would need to reissue the
+    ioctl to set the irq_suspend_timeout, but the napi_defer_hard_irqs
+    and gro_flush_timeout settings would come from the NAPI's
+    napi_config (which are set either by sysfs or by netlink). Such an
+    interface seems awkard to use from a user perspective.
+
+    Further, IRQs are related to NAPIs, which is why they are stored in
+    the napi_config space. Putting the irq_suspend_timeout in
+    the epoll context while other IRQ deferral mechanisms remain in the
+    NAPI's napi_config space seems like an odd design choice.
+
+    We've opted to keep all of the IRQ deferral parameters together and
+    place the irq_suspend_timeout in napi_config. This has nice benefits
+    for userspace: if a user app were to remove all file descriptors
+    from an epoll context and add new file descriptors with a new NAPI ID,
+    the correct suspend timeout for that NAPI ID would be used automatically
+    without the user application needing to do anything (like re-issuing an
+    ioctl, for example). All IRQ deferral related parameters are in one
+    place and can all be set the same way: with netlink.
+
+  - Can irq suspend be built by combining NIC coalescing and
+    gro_flush_timeout ?
+
+    No. The problem is that the long timeout must engage if and only if
+    prefer-busy is active.
+
+    When using NIC coalescing for the short timeout (without
+    napi_defer_hard_irqs/gro_flush_timeout), an interrupt after an idle
+    period will trigger softirq, which will run napi polling. At this
+    point, prefer-busy is not active, so NIC interrupts would be
+    re-enabled. Then it is not possible for the longer timeout to
+    interject to switch control back to polling. In other words, only by
+    using the software timer for the short timeout, it is possible to
+    extend the timeout without having to reprogram the NIC timer or
+    reach down directly and disable interrupts.
+
+    Using gro_flush_timeout for the long timeout also has problems, for
+    the same underlying reason. In the current napi implementation,
+    gro_flush_timeout is not tied to prefer-busy. We'd either have to
+    change that and in the process modify the existing deferral
+    mechanism, or introduce a state variable to determine whether
+    gro_flush_timeout is used as long timeout for irq suspend or whether
+    it is used for its default purpose. In an earlier version, we did
+    try something similar to the latter and made it work, but it ends up
+    being a lot more convoluted than our current proposal.
+
+  - Isn't it already possible to combine busy looping with irq deferral?
+
+    Yes, in fact enabling irq deferral via napi_defer_hard_irqs and
+    gro_flush_timeout is a precondition for prefer_busy_poll to have an
+    effect. If the application also uses a tight busy loop with
+    essentially nonblocking epoll_wait (accomplished with a very short
+    timeout parameter), this is the fullbusy case shown in the results.
+    An application using blocking epoll_wait is shown as the napibusy
+    case in the results. It's a hybrid approach that provides limited
+    latency benefits compared to the base case and plain irq deferral,
+    but not as good as fullbusy or suspend.
+
+~ Special thanks
+
+Several people were involved in earlier stages of the development of this
+mechanism whom we'd like to thank:
+
+  - Peter Cai (CC'd), for the initial kernel patch and his contributions
+    to the paper.
+    
+  - Mohammadamin Shafie (CC'd), for testing various versions of the kernel
+    patch and providing helpful feedback.
+
+Thanks,
+Martin and Joe
+
+[1]: https://lore.kernel.org/netdev/20240812125717.413108-1-jdamato@fastly.com/
+[2]: https://doi.org/10.1145/3626780
+[3]: https://github.com/memcached/memcached/blob/master/doc/napi_ids.txt
+[4]: https://github.com/leverich/mutilate
+[5]: https://raw.githubusercontent.com/martinkarsten/irqsuspend/main/patches/memcached.patch
+[6]: https://raw.githubusercontent.com/martinkarsten/irqsuspend/main/patches/libevent.patch
+[7]: https://github.com/martinkarsten/irqsuspend
+[8]: https://github.com/martinkarsten/irqsuspend/tree/main/results
+
+v8:
+  - Update patch 2 to drop the exports, as requested by Jakub.
+
+v7: https://lore.kernel.org/netdev/20241108023912.98416-1-jdamato@fastly.com/
+  - Jakub noted that patch 2 adds unnecessary complexity by checking the
+    suspend timeout in the NAPI loop. This makes the code more
+    complicated and difficult to reason about. He's right; we've dropped
+    patch 2 which simplifies this series.
+  - Updated the cover letter with a full re-run of all test cases.
+  - Updated FAQ #2.
+
+v6: https://lore.kernel.org/netdev/20241104215542.215919-1-jdamato@fastly.com/
+  - Updated the cover letter with a full re-run of all test cases,
+    including a new case suspend0, as requested by Sridhar previously.
+  - Updated the kernel documentation in patch 7 as suggested by Bagas
+    Sanjaya, which improved the htmldoc output.
+
+v5: https://lore.kernel.org/netdev/20241103052421.518856-1-jdamato@fastly.com/
+  - Adjusted patch 5 to only suspend IRQs when ep_send_events returns a
+    positive return value. This issue was pointed out by Hillf Danton.
+  - Updated the commit message of patch 6 which still mentioned netcat,
+    despite the code being updated in v4 to replace it with socat and fixed
+    misspelling of netdevsim.
+  - Fixed a minor typo in patch 7 and removed an unnecessary paragraph.
+  - Added Sridhar Samudrala's Reviewed-by to patch 1-5 and 7.
+
+v4: https://lore.kernel.org/netdev/20241102005214.32443-1-jdamato@fastly.com/
+  - Added a new FAQ item to cover letter.
+  - Updated patch 6 to use socat instead of nc in busy_poll_test.sh and
+    updated busy_poller.c to use netlink directly to configure napi
+    params.
+  - Updated the kernel documentation in patch 7 to include more details.
+  - Dropped Stanislav's Acked-by and Bagas' Reviewed-by from patch 7
+    since the documentation was updated.
+
+v3: https://lore.kernel.org/netdev/20241101004846.32532-1-jdamato@fastly.com/
+  - Added Stanislav Fomichev's Acked-by to every patch except the newly
+    added selftest.
+  - Added Bagas Sanjaya's Reviewed-by to the documentation patch.
+  - Fixed the commit message of patch 2 to remove a reference to the now
+    non-existent sysfs setting.
+  - Added a self test which tests both "regular" busy poll and busy poll
+    with suspend enabled. This was added as patch 6 as requested by
+    Paolo. netdevsim was chosen instead of veth due to netdevsim's
+    pre-existing support for netdev-genl. See the commit message of
+    patch 6 for more details.
+
+v2: https://lore.kernel.org/bpf/20241021015311.95468-1-jdamato@fastly.com/
+  - Cover letter updated, including a re-run of test data.
+  - Patch 1 rewritten to use netdev-genl instead of sysfs.
+  - Patch 3 updated with a comment added to napi_resume_irqs.
+  - Patch 4 rebased to apply now that commit b9ca079dd6b0 ("eventpoll:
+    Annotate data-race of busy_poll_usecs") has been picked up from VFS.
+  - Patch 6 updated the kernel documentation.
+
+rfc -> v1:
+  - Cover letter updated to include more details.
+  - Patch 1 updated to remove the documentation added. This was moved to
+    patch 6 with the rest of the docs (see below).
+  - Patch 5 updated to fix an error uncovered by the kernel build robot.
+    See patch 5's changelog for more details.
+  - Patch 6 added which updates kernel documentation.
+
+
+
+Joe Damato (2):
+  selftests: net: Add busy_poll_test
+  docs: networking: Describe irq suspension
+
+Martin Karsten (4):
+  net: Add napi_struct parameter irq_suspend_timeout
+  net: Add control functions for irq suspension
+  eventpoll: Trigger napi_busy_loop, if prefer_busy_poll is set
+  eventpoll: Control irq suspension for prefer_busy_poll
+
+ Documentation/netlink/specs/netdev.yaml       |   7 +
+ Documentation/networking/napi.rst             | 170 ++++++++-
+ fs/eventpoll.c                                |  36 +-
+ include/linux/netdevice.h                     |   2 +
+ include/net/busy_poll.h                       |   3 +
+ include/uapi/linux/netdev.h                   |   1 +
+ net/core/dev.c                                |  39 +++
+ net/core/dev.h                                |  25 ++
+ net/core/netdev-genl-gen.c                    |   5 +-
+ net/core/netdev-genl.c                        |  12 +
+ tools/include/uapi/linux/netdev.h             |   1 +
+ tools/testing/selftests/net/.gitignore        |   1 +
+ tools/testing/selftests/net/Makefile          |   3 +-
+ tools/testing/selftests/net/busy_poll_test.sh | 164 +++++++++
+ tools/testing/selftests/net/busy_poller.c     | 328 ++++++++++++++++++
+ 15 files changed, 790 insertions(+), 7 deletions(-)
+ create mode 100755 tools/testing/selftests/net/busy_poll_test.sh
+ create mode 100644 tools/testing/selftests/net/busy_poller.c
+
+
+base-commit: dc7c381bb8649e3701ed64f6c3e55316675904d7
+-- 
+2.25.1
+
 
