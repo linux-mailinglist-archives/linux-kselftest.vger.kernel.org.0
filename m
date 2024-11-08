@@ -1,119 +1,204 @@
-Return-Path: <linux-kselftest+bounces-21664-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21666-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A21E9C19C5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 11:05:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17ECB9C1AC3
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 11:38:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5D001F22F31
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 10:05:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3ABFC1C228AC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 10:38:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 437621E130B;
-	Fri,  8 Nov 2024 10:05:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 487271E1A36;
+	Fri,  8 Nov 2024 10:38:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BCOyuUSV"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qkoCKyxZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC27D1DACA1;
-	Fri,  8 Nov 2024 10:05:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE5D197A82;
+	Fri,  8 Nov 2024 10:38:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731060307; cv=none; b=vCN/06NnKWYnJVL3bdXJA7cvvjLOBvh85W0dW6ueK852RYykyjJVjnVmp45RMGUOFTvhaQO82MHkaKynjjzh3tn2fAWujWk0IVdkEClaoMFoBP8Kt9SLPLBpvyX7mGhiEo2ZWGLiA9c2zsw3SGaFIWvYkP9NL2yTAY234TYXwYM=
+	t=1731062290; cv=none; b=Mevbcq1Y3zkN1SURJwTyFL+mPpEb7gS/AawmEKexNxjWkYjPwq1I+//6fMQQwo6PI4nWgNNNCSBF1QP33013MXopUwhRfGIKU94BHozZttWAqV3PE92XOwp/uJRfEyiwKvQUaMhJs0uSqcRlregnRxXU37sIQkiWp7ezz11dUiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731060307; c=relaxed/simple;
-	bh=kOc9yUGznIb1qrqKk3pTDsR2QqT/9CMCrFMGkEQRBMU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QVR7G1LaCls60dD14hKKF3qyivXouttzemcIJ1qdXfh9InhWEhMnd462BPF1qQprXRPt+Hpiwvlvres79atB9ABR5t+kAK4dTMTDndu6/8mdlaBaLpxI78Lw39bhPapDbmBmeMcXHN+LZzQDw/Sso3EUlke1qUdHV4STByf69BI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BCOyuUSV; arc=none smtp.client-ip=209.85.167.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3e602994635so1406286b6e.0;
-        Fri, 08 Nov 2024 02:05:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731060304; x=1731665104; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kOc9yUGznIb1qrqKk3pTDsR2QqT/9CMCrFMGkEQRBMU=;
-        b=BCOyuUSVZ3gaObhrlMfbxZhxwyKasorj1iZApiMOd63whsqrYshbSc7A0v5SQFmaHG
-         7XvTuKPlVzuNvwwXlIo78dvaLercJnkRJQtxwmHk372HR6WNi4M2XvNQI1Q2tMX1Ncxo
-         Hq7UteFkELZ/TtSwF7ifqHPoQR4uT421aWgjWEh/TmHhQXTGpgd0jxMucAD7r2SNgnzb
-         t8QfamMPsiWY9y1Hwdy4oG8YNj2Oq7zZM8QDRThpOyPb+rb+4IBbxzwsynMsWQNQ4cJT
-         SZ3DdGdRvLPI1Izf39EJC0rKsqW/CyMzSZBzF+xD0hKjlnlq4n+PbzqShHP/D7m9k6g8
-         kx7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731060304; x=1731665104;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kOc9yUGznIb1qrqKk3pTDsR2QqT/9CMCrFMGkEQRBMU=;
-        b=HCJVnEBhiXyP4Ze8bOxzq3G8yM73P8TcGhIJWvyqEF++ndVNBblnhNYRVISA0IO5Qz
-         2icysFMOwVm3QIXsXVzvty0KVAG7Z57hSLYz0B+YOIqq6L/5g1lQQ4/97c0lrKWPLB0H
-         +Ngj9B0h64JsAB9aTcaEDYNEnPOFs7MiO62MPKthfV3u6/QsTGQLjeoSSm48NJMMXput
-         qt3gv8im6aGal47qg5KB1FK+HJFsphzkfTvpAq9iC0iPifwx/rR1VhdSmZA/AN/1GuHW
-         v2BKR1ZRpFSX0ouEWfHqrAMAnYcg/3ArZjDYF/Ol+Yfe4MGpMsBTeXHIKghHxeco+GEl
-         NBMg==
-X-Forwarded-Encrypted: i=1; AJvYcCUA6UBh/B8Ovt4ULgBDS8z45inXAzkXwBEyhx513k8X5xN7L17h94VsUkZZmaOKgjDE3C3dJQ/JrnWob9h1EsQ=@vger.kernel.org, AJvYcCXO0Fop2v3Z35hnU0+9/9IDR5CWeKR0fmzLx++DU49xUkD/pZgp2Ykid1LmmI5LMyiYpm34+7nt@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyx72fcagO5Kn2L9sCAxFcQ4v1KA5stfS3YnGTcliHKm4uZqqG0
-	TaQoSYRxT0XF1yG3Nw7Iz4YerXYGtUHXvKjMOz6iKEoRZMx0PfqChit79WU6oPCbzd+pZZPFmmr
-	vn/2gFEM6ASNz1OCTfmNbnK3tn3s=
-X-Google-Smtp-Source: AGHT+IEBMZnlah/bbgec1wFpK6gV3dfc27LhLyONeUc0Upa3yapPbjlADYZoj27FRpdXMdMy2WO90g1EuHcUbutlaNA=
-X-Received: by 2002:a05:6808:23cb:b0:3e6:2620:2000 with SMTP id
- 5614622812f47-3e7946ebccdmr2319155b6e.35.1731060303966; Fri, 08 Nov 2024
- 02:05:03 -0800 (PST)
+	s=arc-20240116; t=1731062290; c=relaxed/simple;
+	bh=hPhMe0l+B4N8QAoWpXk3xvhOtjEsBfoJTSFCSzFcAko=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=E63YcoOuM23Kf+MDsF6TrKiSFTlup4tHM2vTmB80XsgVHGT7OK8r07NUoLjKnbrlB0vZvQaaHxhguHrMgZ8U198XRe4iQAxTG1RbdjwAf0gUOd8E310nvZYHMQUM1lQPmwldRdVsphKgpXDeNylEHnZG3DYUCM7Qvop2+YZgekI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qkoCKyxZ; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A8A9oSL023429;
+	Fri, 8 Nov 2024 10:38:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=YV7dqm
+	1guhPXEd+Ayv5dY9WkStJcSAGbALacM9gpk/I=; b=qkoCKyxZGO8s0i1DthAwRO
+	rDJbviz+tumYreCe8m1xkt08JYEyprlQjPRVEbhpRDdgyBzLTe3nyzxfOzAWXOOl
+	+e0HhaF42qtlEr1DZZvrNzPMMTuCmXex1mzRkgEt4rEBIHo4iwq1aW1pPOAqyoFm
+	3eODm+BlofKzeGhDbHuGO8dOXKxyoe9Gq1MbbI1TLmM+K1v8lWhdwg9UDLHQTy0c
+	3XrelxSEaTm8Mfl3/QbE64tI/xHdpoHEBtp4y7Z++H2l3vnIsUx/qABj8P3xY17V
+	C7jH/hxpIDWUyCV05ELVPFvNDEfJMcyrECwNgCD20AWNXmUsR5FvydRwBPBS4dFQ
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42sgn7835n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 08 Nov 2024 10:38:00 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4A83XgUR023412;
+	Fri, 8 Nov 2024 10:35:13 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 42p1411ysp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 08 Nov 2024 10:35:13 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4A8AZClr21758536
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 8 Nov 2024 10:35:13 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8EC6758067;
+	Fri,  8 Nov 2024 10:35:12 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2844858065;
+	Fri,  8 Nov 2024 10:35:10 +0000 (GMT)
+Received: from [9.179.28.136] (unknown [9.179.28.136])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  8 Nov 2024 10:35:09 +0000 (GMT)
+Message-ID: <5883b1c0-13c6-4593-9dd5-17f34c1319fe@linux.ibm.com>
+Date: Fri, 8 Nov 2024 16:05:08 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241107133004.7469-1-shaw.leon@gmail.com> <20241107133004.7469-8-shaw.leon@gmail.com>
- <20241107080420.6a5a5243@kernel.org> <CAD4GDZwOzLQd+FYd0AHr5AUcANWkf731Jgu6aeyix8EjRGXRag@mail.gmail.com>
- <CABAhCOSvo4OemcevEnNmk3Jny_YEoCb3s9GPC6o217oj-t5FnQ@mail.gmail.com>
-In-Reply-To: <CABAhCOSvo4OemcevEnNmk3Jny_YEoCb3s9GPC6o217oj-t5FnQ@mail.gmail.com>
-From: Donald Hunter <donald.hunter@gmail.com>
-Date: Fri, 8 Nov 2024 10:04:52 +0000
-Message-ID: <CAD4GDZx2hEjJWJknS+x++dwPE_UYGiCTYxj2Ntt6BaS=UGZqyA@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 7/8] tools/net/ynl: Add retry limit for async notification
-To: Xiao Liang <shaw.leon@gmail.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>, 
-	"David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jiri Pirko <jiri@resnulli.us>, 
-	Hangbin Liu <liuhangbin@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: hugetlb_dio: Check for initial conditions to
+ skip in the start
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20241101141557.3159432-1-usama.anjum@collabora.com>
+Content-Language: en-US
+From: Donet Tom <donettom@linux.ibm.com>
+In-Reply-To: <20241101141557.3159432-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: J3MZ_ATCNLJm_HHz-P-dL4bmOnro8wQp
+X-Proofpoint-ORIG-GUID: J3MZ_ATCNLJm_HHz-P-dL4bmOnro8wQp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ malwarescore=0 priorityscore=1501 mlxlogscore=945 phishscore=0
+ suspectscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0
+ clxscore=1011 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411080086
 
-On Fri, 8 Nov 2024 at 08:46, Xiao Liang <shaw.leon@gmail.com> wrote:
+
+On 11/1/24 19:45, Muhammad Usama Anjum wrote:
+> The test should be skipped if initial conditions aren't fulfilled in
+> the start instead of failing and outputting non-compliant TAP logs. This
+> kind of failure pollutes the results. The initial conditions are:
+> - The test should only execute if /tmp file can be allocated.
+> - The test should only execute if huge pages are free.
 >
-> On Fri, Nov 8, 2024 at 1:16=E2=80=AFAM Donald Hunter <donald.hunter@gmail=
-.com> wrote:
-> >
-> > It's then a question of whether we need the repeat logic in poll_ntf()
-> > because it's always possible to use check_ntf() in your own repeat
-> > logic. Either way, I'd prefer not to call the parameter "max_retries"
-> > because semantically I don't think we are retrying - it is a count of
-> > how many times to repeat the poll. Thoughts? Should it be a "duration"
-> > parameter?
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+> Before:
+> TAP version 13
+> 1..4
+> Bail out! Error opening file
+> : Read-only file system (30)
+>   # Planned tests != run tests (4 != 0)
+>   # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
 >
-> Yes, a "duration" is better. The meaning of "retry" or "count" is not cle=
-ar.
-> The original check_ntf() is good enough for the test case in this
-> series. Could you make the change, or do you prefer me to submit
-> another patch?
+> After:
+> TAP version 13
+> 1..0 # SKIP Unable to allocate file: Read-only file system
+> ---
+>   tools/testing/selftests/mm/hugetlb_dio.c | 19 ++++++++++++-------
+>   1 file changed, 12 insertions(+), 7 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
+> index f9ac20c657ec6..60001c142ce99 100644
+> --- a/tools/testing/selftests/mm/hugetlb_dio.c
+> +++ b/tools/testing/selftests/mm/hugetlb_dio.c
+> @@ -44,13 +44,6 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
+>   	if (fd < 0)
+>   		ksft_exit_fail_perror("Error opening file\n");
+>   
+> -	/* Get the free huge pages before allocation */
+> -	free_hpage_b = get_free_hugepages();
 
-I'm happy to make the change.
+Hi Muhammed Usman Anjum
 
-I have prepared a patch which reverts most of 1bf70e6c3a53 and
-introduces poll_ntf(interval, duration).
+Reading the free pages is required before starting the test. This value will be compared to the free pages after the test. If they are not the same, the test will be considered a failure.
 
-Jakub, is it okay to submit this as a single patch, or would you
-prefer me to actually revert 1bf70e6c3a53? (there's about 5 lines
-retained from the original patch).
+Since reading the free pages before the test was removed,|free_hpage_b|  is always 0, causing the test to fail.
+
+./tools/testing/selftests/mm/hugetlb_dio TAP version 13 1..4 # No. Free 
+pages before allocation : 0 # No. Free pages after munmap : 100 not ok 1 
+: Huge pages not freed! # No. Free pages before allocation : 0 # No. 
+Free pages after munmap : 100 not ok 2 : Huge pages not freed! # No. 
+Free pages before allocation : 0 # No. Free pages after munmap : 100 not 
+ok 3 : Huge pages not freed! # No. Free pages before allocation : 0 # 
+No. Free pages after munmap : 100 not ok 4 : Huge pages not freed! # 
+Totals: pass:0 fail:4 xfail:0 xpass:0 skip:0 error:0 I think below 
+changes are required. --- a/tools/testing/selftests/mm/hugetlb_dio.c +++ 
+b/tools/testing/selftests/mm/hugetlb_dio.c @@ -44,6 +44,9 @@ void 
+run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off) if 
+(fd < 0) ksft_exit_fail_perror("Error opening file\n"); + /* Get the 
+free huge pages before allocation */ + free_hpage_b = 
+get_free_hugepages(); + /* Allocate a hugetlb page */ orig_buffer = 
+mmap(NULL, h_pagesize, mmap_prot, mmap_flags, -1, 0); if (orig_buffer == 
+MAP_FAILED) { With this change the tests are passing. 
+./tools/testing/selftests/mm/hugetlb_dio TAP version 13 1..4 # No. Free 
+pages before allocation : 100 # No. Free pages after munmap : 100 ok 1 : 
+Huge pages freed successfully ! # No. Free pages before allocation : 100 
+# No. Free pages after munmap : 100 ok 2 : Huge pages freed successfully 
+! # No. Free pages before allocation : 100 # No. Free pages after munmap 
+: 100 ok 3 : Huge pages freed successfully ! # No. Free pages before 
+allocation : 100 # No. Free pages after munmap : 100 ok 4 : Huge pages 
+freed successfully ! # Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 
+error:0 Thank
+
+Donet
+
+> -	if (free_hpage_b == 0) {
+> -		close(fd);
+> -		ksft_exit_skip("No free hugepage, exiting!\n");
+> -	}
+> -
+>   	/* Allocate a hugetlb page */
+>   	orig_buffer = mmap(NULL, h_pagesize, mmap_prot, mmap_flags, -1, 0);
+>   	if (orig_buffer == MAP_FAILED) {
+> @@ -94,8 +87,20 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
+>   int main(void)
+>   {
+>   	size_t pagesize = 0;
+> +	int fd;
+>   
+>   	ksft_print_header();
+> +
+> +	/* Open the file to DIO */
+> +	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+> +	if (fd < 0)
+> +		ksft_exit_skip("Unable to allocate file: %s\n", strerror(errno));
+> +	close(fd);
+> +
+> +	/* Check if huge pages are free */
+> +	if (!get_free_hugepages())
+> +		ksft_exit_skip("No free hugepage, exiting\n");
+> +
+>   	ksft_set_plan(4);
+>   
+>   	/* Get base page size */
 
