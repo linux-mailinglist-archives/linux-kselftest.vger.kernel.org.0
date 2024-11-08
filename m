@@ -1,693 +1,217 @@
-Return-Path: <linux-kselftest+bounces-21656-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D9F39C15B9
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 05:56:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6830D9C15D8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 06:03:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE8121C22477
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 04:56:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED7E91F214B4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 05:03:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCE891D6195;
-	Fri,  8 Nov 2024 04:54:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0629156F54;
+	Fri,  8 Nov 2024 05:03:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="kerddYwt"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="ejAqgG+S"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B7C1D2B30
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 Nov 2024 04:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C68A21BD9D8
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Nov 2024 05:03:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731041684; cv=none; b=JI8wlaH6vkifTuVwHRG1gmVv00op/PkmlsJRJg6nz3rUuJhELwqMnXb6X+kaIcB1STXaZc49DPe5PiqSn4w551IE/xWBhCpxcY8XAxMR/n8oKdiq5Sai2aozC9zPxw4b2x/lsfRIomfdPF8rLTXXD1wJoyUtaFsL8fmWul4gBjM=
+	t=1731042228; cv=none; b=fYk3Dq5d17Wo7lpuj049GfrDFZ/mnw9BWXPl4F4gZ55OJgRnGfu40evolFJhYy5tplsacXkJOfSoYR/+NZFZKy6YmcgCcr3VNQTcot4BKc8dUM6uzIqcTmsanOCPCU2sWPmBtWM72PoZ7agV0oZ1SW5QGiA9iUsCsgTrbMc23Y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731041684; c=relaxed/simple;
-	bh=sDxd3c2F9ovwobGerKt2QqxX8fs+MFMu/wekNsO1RZs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=egLO7d4LQJU1ZOE3uOmzClam7m/pTQKa/6GLMg5Q762uRvNXZxwnSqtTkIHD8tqSYgiyCUq9w18mhCslIfgW22Jr3DBy1dQggzB6tRpjK42oWr+jc7bmpjQXejFiTfCtuvI+UyN0IeSllWivz1Fo2CSDCTnaTP9/OUTemfDsGbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=kerddYwt; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-720cb6ac25aso1502189b3a.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Nov 2024 20:54:42 -0800 (PST)
+	s=arc-20240116; t=1731042228; c=relaxed/simple;
+	bh=uf+L32/DgNO20OcfZBNfGBo/WqndrTtsLpsVzys+KCQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nxK7WzGB9daPM8OWbhVdhxemGJWoiUoupDuvPv2UeQ6V23d+/MBZHY4+8sRW8M6UVytGXnJGdI98IkuLVRqlh8jznWTPaEcvcoCKqoI157e8lhp0HxfgSGjkjjC+7CggJH5U3YYJ7I9ynOd9VvBQC2i84toeO5o/2b6cAqs2dOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=ejAqgG+S; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e290222fdd0so1829472276.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Nov 2024 21:03:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1731041682; x=1731646482; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=broadcom.com; s=google; t=1731042226; x=1731647026; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JrclrIkE3qyTusw9ns/tUB+TQkHwUHaA1FNuNQ9aRes=;
-        b=kerddYwtcqBXNBafitMG8TGCn80cxsFopc+EvkSI868xn++h+gZzQS+EmhGWJUW3a/
-         yHJ7iTy6lMS9CHt8cet6LxSG4lRZZODnrdHwwEVohqARfbr/uC8P41FKLupeuZUek4qs
-         1DwGongcH24ueh01rY7bIBl4nQggh1jWoV1yQ=
+        bh=WNGdr8+SBlIbzBqb5yEvyPo04wuD7xhCU+afHPhO0gw=;
+        b=ejAqgG+SXERsk7UNaA++paZ25Y2xK3zQaqxsoV2Q6Zj/8Dp90EdlJifDnr8qZHaL7b
+         b4Y2hPHvSkXAHeKmCX2ZsYSHR/QQA/Xttt1Z4ANGTWBOCRB/Y5MP48Xmg/ju3Yg3JiIy
+         uG6WvqyTlEJzxCDpycnNJPL5I6/F+e8HqC0L0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731041682; x=1731646482;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1731042226; x=1731647026;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JrclrIkE3qyTusw9ns/tUB+TQkHwUHaA1FNuNQ9aRes=;
-        b=p+ifo08kdGgK9rpsD3Nrc6Gnookjlc23g2yyUqrJJe3WcYUxXmmjzPnttEjOVItfvt
-         vQ7GIWWbrqlRlk3fPxNGaclKSPuAbj/n3kxG19upZcrIBIXSO+0ipbPyGuwmRHr0FzYV
-         FEAXXMDb//M+I5KHHr+oS/aJKJL1SRcADjNnCiCRSrAm6xLuZEaarv/OvjFxCZVcPbaY
-         wNx8Vaa+gJM2uwzDRyPxjmMyqPgaDU0obtTfDmDgWlGZocmn8YJJOns/rsrGhaf1CpVp
-         CuXpjDZQUhosTS9v7CYA36BNriC2AhuZc/I/A6zlcQhx7NgxOPk4JA3tmKI8ccUOeQ5v
-         r2/A==
-X-Forwarded-Encrypted: i=1; AJvYcCUsKueG5HpMSvpVCpnRLtrhYBtef2s1rnSGqXcUTyXDwwAXo1aWNx2A+qDCHk2A16BDLdwXsToPQJdZotI8atk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWFmoGzKkZCq5vBgE1ROFQBBoMoRXEmsIfo6WltIiUZN+3kELR
-	yj6NXy74IqnBaztmgHKn73/KRhtMdUJIhZ9dsWUG7p4hUWcTIBTfxpWLUP3LPoY=
-X-Google-Smtp-Source: AGHT+IFUWKZu29jeJEEhefRSVYHs5o9ICR65fG1K1Bu0qotcr6DrQE1Gah0mouUn6A2W3niX0NnISg==
-X-Received: by 2002:a05:6a21:398:b0:1d7:ca7:bfce with SMTP id adf61e73a8af0-1dc22b9243fmr1775611637.42.1731041682002;
-        Thu, 07 Nov 2024 20:54:42 -0800 (PST)
-Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724078a7c76sm2697476b3a.48.2024.11.07.20.54.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Nov 2024 20:54:41 -0800 (PST)
-From: Joe Damato <jdamato@fastly.com>
-To: netdev@vger.kernel.org
-Cc: corbet@lwn.net,
-	hdanton@sina.com,
-	bagasdotme@gmail.com,
-	pabeni@redhat.com,
-	namangulati@google.com,
-	edumazet@google.com,
-	amritha.nambiar@intel.com,
-	sridhar.samudrala@intel.com,
-	sdf@fomichev.me,
-	peter@typeblog.net,
-	m2shafiei@uwaterloo.ca,
-	bjorn@rivosinc.com,
-	hch@infradead.org,
-	willy@infradead.org,
-	willemdebruijn.kernel@gmail.com,
-	skhawaja@google.com,
-	kuba@kernel.org,
-	Joe Damato <jdamato@fastly.com>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	"David S. Miller" <davem@davemloft.net>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org (open list),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH net-next v8 5/6] selftests: net: Add busy_poll_test
-Date: Fri,  8 Nov 2024 04:53:27 +0000
-Message-Id: <20241108045337.292905-6-jdamato@fastly.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20241108045337.292905-1-jdamato@fastly.com>
-References: <20241108045337.292905-1-jdamato@fastly.com>
+        bh=WNGdr8+SBlIbzBqb5yEvyPo04wuD7xhCU+afHPhO0gw=;
+        b=KKCOkqc/CnFHCkR83cpVLGnl3uXpPy0SBz4p1OMH1iKE81QkMZUqzfZxwxXulsBYD+
+         o/29dODgw3iLKOam+c5zUp1imOwlQa32dqgV8ciIwgVIB6Sfrs6Ks8bBn5prEkN/mk8m
+         yjmEQComGu2gi6RBSUFZVOdkfDdmVD5GR4mktFpqL1EsfuXA6LIKSaHk+yEcolG0p5mi
+         XqOK6tIbHNDLDE3IQQyQknIfoQ4mmbQEYUopLS3nh/LyXcnfiMMGrRu1CL7d39fXnpwL
+         2W7wBstVsRoAgjubdaVjGH2hJGsJbwwAQBPvDV0dVv9zN900ZFzhXXPPYpuZKz+DVKnR
+         MeKw==
+X-Forwarded-Encrypted: i=1; AJvYcCU8x+qK01zSnnkwspyZoSPvFvQCTsYqEpIhZexdtHlgBF4lLQMHhyD95RbvA5dIskkRP8orsnSsNcgU55/Wp+k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzyg79QkMAXfWFdu0nhROqXJCwNe2NJx9dLJ1OVpQK7Nrh2goUU
+	RxiricQiiOAE+uBaN8IdSwWvpdaS86/D0+8Wu5NeAUHLbGiwfIlcC8PCdm4bwhxEdRD9/rUvONf
+	KDuBQlYCt3UgFxDss9gO5mUYSX8nfjF/QuTsu
+X-Google-Smtp-Source: AGHT+IGoDwbKayxL5xzE6wZajGslwRdrnVXJFWNNltqAroKkGgy5sDfUc56OmQSlt11eQdDI1FCAj0JxG5Xs8SCXiV8=
+X-Received: by 2002:a05:6902:2891:b0:e26:1422:400b with SMTP id
+ 3f1490d57ef6-e337f8dbf9fmr1496961276.53.1731042225686; Thu, 07 Nov 2024
+ 21:03:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241030033514.1728937-1-zack.rusin@broadcom.com>
+ <20241030033514.1728937-3-zack.rusin@broadcom.com> <CABgObfaRP6zKNhrO8_atGDLcHs=uvE0aT8cPKnt_vNHHM+8Nxg@mail.gmail.com>
+ <CABQX2QMR=Nsn23zojFdhemR7tvGUz6_UM8Rgf6WLsxwDqoFtxg@mail.gmail.com> <Zy0__5YB9F5d0eZn@google.com>
+In-Reply-To: <Zy0__5YB9F5d0eZn@google.com>
+From: Zack Rusin <zack.rusin@broadcom.com>
+Date: Fri, 8 Nov 2024 00:03:34 -0500
+Message-ID: <CABQX2QNxFDhH1frsGpSQjSs3AWSdTibkxPrjq1QC7FGZC8Go-Q@mail.gmail.com>
+Subject: Re: [PATCH 2/3] KVM: x86: Add support for VMware guest specific hypercalls
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, 
+	Doug Covelli <doug.covelli@broadcom.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@redhat.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Joel Stanley <joel@jms.id.au>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add an epoll busy poll test using netdevsim.
+On Thu, Nov 7, 2024 at 5:32=E2=80=AFPM Sean Christopherson <seanjc@google.c=
+om> wrote:
+>
+> On Mon, Nov 04, 2024, Zack Rusin wrote:
+> > On Mon, Nov 4, 2024 at 5:13=E2=80=AFPM Paolo Bonzini <pbonzini@redhat.c=
+om> wrote:
+> > >
+> > > On Wed, Oct 30, 2024 at 4:35=E2=80=AFAM Zack Rusin <zack.rusin@broadc=
+om.com> wrote:
+> > > >
+> > > > VMware products handle hypercalls in userspace. Give KVM the abilit=
+y
+> > > > to run VMware guests unmodified by fowarding all hypercalls to the
+> > > > userspace.
+> > > >
+> > > > Enabling of the KVM_CAP_X86_VMWARE_HYPERCALL_ENABLE capability turn=
+s
+> > > > the feature on - it's off by default. This allows vmx's built on to=
+p
+> > > > of KVM to support VMware specific hypercalls.
+> > >
+> > > Hi Zack,
+> >
+> > Hi, Paolo.
+> >
+> > Thank you for looking at this.
+> >
+> > > is there a spec of the hypercalls that are supported by userspace? I
+> > > would like to understand if there's anything that's best handled in
+> > > the kernel.
+> >
+> > There's no spec but we have open headers listing the hypercalls.
+> > There's about a 100 of them (a few were deprecated), the full
+> > list starts here:
+> > https://github.com/vmware/open-vm-tools/blob/739c5a2f4bfd4cdda491e6a6f6=
+869d88c0bd6972/open-vm-tools/lib/include/backdoor_def.h#L97
+> > They're not well documented, but the names are pretty self-explenatory.
+>
+> At a quick glance, this one needs to be handled in KVM:
+>
+>   BDOOR_CMD_VCPU_MMIO_HONORS_PAT
+>
+> and these probably should be in KVM:
+>
+>   BDOOR_CMD_GETTIME
+>   BDOOR_CMD_SIDT
+>   BDOOR_CMD_SGDT
+>   BDOOR_CMD_SLDT_STR
+>   BDOOR_CMD_GETTIMEFULL
+>   BDOOR_CMD_VCPU_LEGACY_X2APIC_OK
+>   BDOOR_CMD_STEALCLOCK
+>
+> and these maybe? (it's not clear what they do, from the name alone)
+>
+>   BDOOR_CMD_GET_VCPU_INFO
+>   BDOOR_CMD_VCPU_RESERVED
 
-This test is comprised of:
-  - busy_poller (via busy_poller.c)
-  - busy_poll_test.sh which loads netdevsim, sets up network namespaces,
-    and runs busy_poller to receive data and socat to send data.
+I'm not sure if there's any value in implementing a few of them. iirc
+there's 101 of them (as I mentioned a lot have been deprecated but
+that's for userspace, on the host we still have to do something for
+old guests using them) and, if out of those 101 we implement 100 in
+the kernel then, as far as this patch is concerned, it's no different
+than if we had 0 out of 101 because we're still going to have to exit
+to userspace to handle that 1 remaining.
 
-The selftest tests two different scenarios:
-  - busy poll (the pre-existing version in the kernel)
-  - busy poll with suspend enabled (what this series adds)
+Unless you're saying that those would be useful to you. In which case
+I'd be glad to implement them for you, but I'd put them behind some
+kind of a cap or a kernel config because we wouldn't be using them -
+besides what Doug mentioned - we already maintain the shared code for
+them that's used on Windows, MacOS, ESX and Linux so even if we had
+them in the Linux kernel it would still make more sense to use the
+code that's shared with the other OSes to lessen the maintenance
+burden (so that changing anything within that code consistently
+changes across all the OSes).
 
-The data transmit is a 1MiB temporary file generated from /dev/urandom
-and the test is considered passing if the md5sum of the input file to
-socat matches the md5sum of the output file from busy_poller.
+> > > If we allow forwarding _all_ hypercalls to userspace, then people wil=
+l
+> > > use it for things other than VMware and there goes all hope of
+> > > accelerating stuff in the kernel in the future.
+>
+> To some extent, that ship has sailed, no?  E.g. do KVM_XEN_HVM_CONFIG wit=
+h
+> KVM_XEN_HVM_CONFIG_INTERCEPT_HCALL set, and userspace can intercept prett=
+y much
+> all hypercalls with very few side effects.
+>
+> > > So even having _some_ checks in the kernel before going out to
+> > > userspace would keep that door open, or at least try.
+> >
+> > Doug just looked at this and I think I might have an idea on how to
+> > limit the scope at least a bit: if you think it would help we could
+> > limit forwarding of hypercalls to userspace only to those that that
+> > come with a BDOOR_MAGIC (which is 0x564D5868) in eax. Would that help?
+>
+> I don't think it addresses Paolo's concern (if I understood Paolo's conce=
+rn
+> correctly), but it would help from the perspective of allowing KVM to sup=
+port
+> VMware hypercalls and Xen/Hyper-V/KVM hypercalls in the same VM.
 
-netdevsim was chosen instead of veth due to netdevsim's support for
-netdev-genl.
+Yea, I just don't think there's any realistic way we could handle all
+of those hypercalls in the kernel so I'm trying to offer some ideas on
+how to lessen the scope to make it as painless as possible. Unless you
+think we could somehow parlay my piercing blue eyes into getting those
+patches in as is, in which case let's do that ;)
 
-For now, this test uses the functionality that netdevsim provides. In the
-future, perhaps netdevsim can be extended to emulate device IRQs to more
-thoroughly test all pre-existing kernel options (like defer_hard_irqs)
-and suspend.
+> I also think we should add CONFIG_KVM_VMWARE from the get-go, and if we'r=
+e feeling
+> lucky, maybe even retroactively bury KVM_CAP_X86_VMWARE_BACKDOOR behind t=
+hat
+> Kconfig.  That would allow limiting the exposure to VMware specific code,=
+ e.g. if
+> KVM does end up handling hypercalls in-kernel.  And it might deter abuse =
+to some
+> extent.
 
-Signed-off-by: Joe Damato <jdamato@fastly.com>
-Co-developed-by: Martin Karsten <mkarsten@uwaterloo.ca>
-Signed-off-by: Martin Karsten <mkarsten@uwaterloo.ca>
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
----
- v5:
-   - Updated commit message to replace netcat with socat and fixed
-     misspelling of netdevsim. No functional/code changes.
+I thought about that too. I was worried that even if we make it on by
+default it will require quite a bit of handholding to make sure all
+the distros include it, or otherwise on desktops Workstation still
+wouldn't work with KVM by default, I also felt a little silly trying
+to add a kernel config for those few lines that would be on pretty
+much everywhere and since we didn't implement the vmware backdoor
+functionality I didn't want to presume and try to shield a feature
+that might be in production by others with a new kernel config.
 
- v4:
-   - Updated busy_poll_test.sh:
-     - use socat instead of nc
-     - drop cli.py usage from the script
-     - removed check_ynl
-   - Updated busy_poller.c:
-     - use netlink to configure napi parameters
-
- v3:
-   - New in v3
-
- tools/testing/selftests/net/.gitignore        |   1 +
- tools/testing/selftests/net/Makefile          |   3 +-
- tools/testing/selftests/net/busy_poll_test.sh | 164 +++++++++
- tools/testing/selftests/net/busy_poller.c     | 328 ++++++++++++++++++
- 4 files changed, 495 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/net/busy_poll_test.sh
- create mode 100644 tools/testing/selftests/net/busy_poller.c
-
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index 217d8b7a7365..85b0c4a2179f 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -2,6 +2,7 @@
- bind_bhash
- bind_timewait
- bind_wildcard
-+busy_poller
- cmsg_sender
- diag_uid
- epoll_busy_poll
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 26a4883a65c9..3ccfe454db1a 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -96,9 +96,10 @@ TEST_PROGS += fdb_flush.sh
- TEST_PROGS += fq_band_pktlimit.sh
- TEST_PROGS += vlan_hw_filter.sh
- TEST_PROGS += bpf_offload.py
-+TEST_PROGS += busy_poll_test.sh
- 
- # YNL files, must be before "include ..lib.mk"
--YNL_GEN_FILES := ncdevmem
-+YNL_GEN_FILES := ncdevmem busy_poller
- TEST_GEN_FILES += $(YNL_GEN_FILES)
- 
- TEST_FILES := settings
-diff --git a/tools/testing/selftests/net/busy_poll_test.sh b/tools/testing/selftests/net/busy_poll_test.sh
-new file mode 100755
-index 000000000000..ffc74bc62e5a
---- /dev/null
-+++ b/tools/testing/selftests/net/busy_poll_test.sh
-@@ -0,0 +1,164 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+source net_helper.sh
-+
-+NSIM_DEV_1_ID=$((256 + RANDOM % 256))
-+NSIM_DEV_1_SYS=/sys/bus/netdevsim/devices/netdevsim$NSIM_DEV_1_ID
-+NSIM_DEV_2_ID=$((512 + RANDOM % 256))
-+NSIM_DEV_2_SYS=/sys/bus/netdevsim/devices/netdevsim$NSIM_DEV_2_ID
-+
-+NSIM_DEV_SYS_NEW=/sys/bus/netdevsim/new_device
-+NSIM_DEV_SYS_DEL=/sys/bus/netdevsim/del_device
-+NSIM_DEV_SYS_LINK=/sys/bus/netdevsim/link_device
-+NSIM_DEV_SYS_UNLINK=/sys/bus/netdevsim/unlink_device
-+
-+setup_ns()
-+{
-+	set -e
-+	ip netns add nssv
-+	ip netns add nscl
-+
-+	NSIM_DEV_1_NAME=$(find $NSIM_DEV_1_SYS/net -maxdepth 1 -type d ! \
-+		-path $NSIM_DEV_1_SYS/net -exec basename {} \;)
-+	NSIM_DEV_2_NAME=$(find $NSIM_DEV_2_SYS/net -maxdepth 1 -type d ! \
-+		-path $NSIM_DEV_2_SYS/net -exec basename {} \;)
-+
-+	# ensure the server has 1 queue
-+	ethtool -L $NSIM_DEV_1_NAME combined 1 2>/dev/null
-+
-+	ip link set $NSIM_DEV_1_NAME netns nssv
-+	ip link set $NSIM_DEV_2_NAME netns nscl
-+
-+	ip netns exec nssv ip addr add '192.168.1.1/24' dev $NSIM_DEV_1_NAME
-+	ip netns exec nscl ip addr add '192.168.1.2/24' dev $NSIM_DEV_2_NAME
-+
-+	ip netns exec nssv ip link set dev $NSIM_DEV_1_NAME up
-+	ip netns exec nscl ip link set dev $NSIM_DEV_2_NAME up
-+
-+	set +e
-+}
-+
-+cleanup_ns()
-+{
-+	ip netns del nscl
-+	ip netns del nssv
-+}
-+
-+test_busypoll()
-+{
-+	tmp_file=$(mktemp)
-+	out_file=$(mktemp)
-+
-+	# fill a test file with random data
-+	dd if=/dev/urandom of=${tmp_file} bs=1M count=1 2> /dev/null
-+
-+	timeout -k 1s 30s ip netns exec nssv ./busy_poller -p48675 -b192.168.1.1 -m8 -u0 -P1 -g16 -i${NSIM_DEV_1_IFIDX} -o${out_file}&
-+
-+	wait_local_port_listen nssv 48675 tcp
-+
-+	ip netns exec nscl socat -u $tmp_file TCP:192.168.1.1:48675
-+
-+	wait
-+
-+	tmp_file_md5sum=$(md5sum $tmp_file | cut -f1 -d' ')
-+	out_file_md5sum=$(md5sum $out_file | cut -f1 -d' ')
-+
-+	if [ "$tmp_file_md5sum" = "$out_file_md5sum" ]; then
-+		res=0
-+	else
-+		echo "md5sum mismatch"
-+		echo "input file md5sum: ${tmp_file_md5sum}";
-+		echo "output file md5sum: ${out_file_md5sum}";
-+		res=1
-+	fi
-+
-+	rm $out_file $tmp_file
-+
-+	return $res
-+}
-+
-+test_busypoll_with_suspend()
-+{
-+	tmp_file=$(mktemp)
-+	out_file=$(mktemp)
-+
-+	# fill a test file with random data
-+	dd if=/dev/urandom of=${tmp_file} bs=1M count=1 2> /dev/null
-+
-+	timeout -k 1s 30s ip netns exec nssv ./busy_poller -p48675 -b192.168.1.1 -m8 -u0 -P1 -g16 -d100 -r50000 -s20000000 -i${NSIM_DEV_1_IFIDX} -o${out_file}&
-+
-+	wait_local_port_listen nssv 48675 tcp
-+
-+	ip netns exec nscl socat -u $tmp_file TCP:192.168.1.1:48675
-+
-+	wait
-+
-+	tmp_file_md5sum=$(md5sum $tmp_file | cut -f1 -d' ')
-+	out_file_md5sum=$(md5sum $out_file | cut -f1 -d' ')
-+
-+	if [ "$tmp_file_md5sum" = "$out_file_md5sum" ]; then
-+		res=0
-+	else
-+		echo "md5sum mismatch"
-+		echo "input file md5sum: ${tmp_file_md5sum}";
-+		echo "output file md5sum: ${out_file_md5sum}";
-+		res=1
-+	fi
-+
-+	rm $out_file $tmp_file
-+
-+	return $res
-+}
-+
-+###
-+### Code start
-+###
-+
-+modprobe netdevsim
-+
-+# linking
-+
-+echo $NSIM_DEV_1_ID > $NSIM_DEV_SYS_NEW
-+echo $NSIM_DEV_2_ID > $NSIM_DEV_SYS_NEW
-+udevadm settle
-+
-+setup_ns
-+
-+NSIM_DEV_1_FD=$((256 + RANDOM % 256))
-+exec {NSIM_DEV_1_FD}</var/run/netns/nssv
-+NSIM_DEV_1_IFIDX=$(ip netns exec nssv cat /sys/class/net/$NSIM_DEV_1_NAME/ifindex)
-+
-+NSIM_DEV_2_FD=$((256 + RANDOM % 256))
-+exec {NSIM_DEV_2_FD}</var/run/netns/nscl
-+NSIM_DEV_2_IFIDX=$(ip netns exec nscl cat /sys/class/net/$NSIM_DEV_2_NAME/ifindex)
-+
-+echo "$NSIM_DEV_1_FD:$NSIM_DEV_1_IFIDX $NSIM_DEV_2_FD:$NSIM_DEV_2_IFIDX" > $NSIM_DEV_SYS_LINK
-+if [ $? -ne 0 ]; then
-+	echo "linking netdevsim1 with netdevsim2 should succeed"
-+	cleanup_ns
-+	exit 1
-+fi
-+
-+test_busypoll
-+if [ $? -ne 0 ]; then
-+	echo "test_busypoll failed"
-+	cleanup_ns
-+	exit 1
-+fi
-+
-+test_busypoll_with_suspend
-+if [ $? -ne 0 ]; then
-+	echo "test_busypoll_with_suspend failed"
-+	cleanup_ns
-+	exit 1
-+fi
-+
-+echo "$NSIM_DEV_1_FD:$NSIM_DEV_1_IFIDX" > $NSIM_DEV_SYS_UNLINK
-+
-+echo $NSIM_DEV_2_ID > $NSIM_DEV_SYS_DEL
-+
-+cleanup_ns
-+
-+modprobe -r netdevsim
-+
-+exit 0
-diff --git a/tools/testing/selftests/net/busy_poller.c b/tools/testing/selftests/net/busy_poller.c
-new file mode 100644
-index 000000000000..8d8aa9e5939a
---- /dev/null
-+++ b/tools/testing/selftests/net/busy_poller.c
-@@ -0,0 +1,328 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <assert.h>
-+#include <errno.h>
-+#include <error.h>
-+#include <fcntl.h>
-+#include <inttypes.h>
-+#include <limits.h>
-+#include <stdlib.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <unistd.h>
-+
-+#include <arpa/inet.h>
-+#include <netinet/in.h>
-+
-+#include <sys/ioctl.h>
-+#include <sys/epoll.h>
-+#include <sys/socket.h>
-+#include <sys/types.h>
-+
-+#include <linux/netlink.h>
-+#include <linux/genetlink.h>
-+#include "netdev-user.h"
-+#include <ynl.h>
-+
-+/* if the headers haven't been updated, we need to define some things */
-+#if !defined(EPOLL_IOC_TYPE)
-+struct epoll_params {
-+	uint32_t busy_poll_usecs;
-+	uint16_t busy_poll_budget;
-+	uint8_t prefer_busy_poll;
-+
-+	/* pad the struct to a multiple of 64bits */
-+	uint8_t __pad;
-+};
-+
-+#define EPOLL_IOC_TYPE 0x8A
-+#define EPIOCSPARAMS _IOW(EPOLL_IOC_TYPE, 0x01, struct epoll_params)
-+#define EPIOCGPARAMS _IOR(EPOLL_IOC_TYPE, 0x02, struct epoll_params)
-+#endif
-+
-+static uint32_t cfg_port = 8000;
-+static struct in_addr cfg_bind_addr = { .s_addr = INADDR_ANY };
-+static char *cfg_outfile;
-+static int cfg_max_events = 8;
-+static int cfg_ifindex;
-+
-+/* busy poll params */
-+static uint32_t cfg_busy_poll_usecs;
-+static uint16_t cfg_busy_poll_budget;
-+static uint8_t cfg_prefer_busy_poll;
-+
-+/* IRQ params */
-+static uint32_t cfg_defer_hard_irqs;
-+static uint64_t cfg_gro_flush_timeout;
-+static uint64_t cfg_irq_suspend_timeout;
-+
-+static void usage(const char *filepath)
-+{
-+	error(1, 0,
-+	      "Usage: %s -p<port> -b<addr> -m<max_events> -u<busy_poll_usecs> -P<prefer_busy_poll> -g<busy_poll_budget> -o<outfile> -d<defer_hard_irqs> -r<gro_flush_timeout> -s<irq_suspend_timeout> -i<ifindex>",
-+	      filepath);
-+}
-+
-+static void parse_opts(int argc, char **argv)
-+{
-+	int ret;
-+	int c;
-+
-+	if (argc <= 1)
-+		usage(argv[0]);
-+
-+	while ((c = getopt(argc, argv, "p:m:b:u:P:g:o:d:r:s:i:")) != -1) {
-+		switch (c) {
-+		case 'u':
-+			cfg_busy_poll_usecs = strtoul(optarg, NULL, 0);
-+			if (cfg_busy_poll_usecs == ULONG_MAX ||
-+			    cfg_busy_poll_usecs > UINT32_MAX)
-+				error(1, ERANGE, "busy_poll_usecs too large");
-+			break;
-+		case 'P':
-+			cfg_prefer_busy_poll = strtoul(optarg, NULL, 0);
-+			if (cfg_prefer_busy_poll == ULONG_MAX ||
-+			    cfg_prefer_busy_poll > 1)
-+				error(1, ERANGE,
-+				      "prefer busy poll should be 0 or 1");
-+			break;
-+		case 'g':
-+			cfg_busy_poll_budget = strtoul(optarg, NULL, 0);
-+			if (cfg_busy_poll_budget == ULONG_MAX ||
-+			    cfg_busy_poll_budget > UINT16_MAX)
-+				error(1, ERANGE,
-+				      "busy poll budget must be [0, UINT16_MAX]");
-+			break;
-+		case 'p':
-+			cfg_port = strtoul(optarg, NULL, 0);
-+			if (cfg_port > UINT16_MAX)
-+				error(1, ERANGE, "port must be <= 65535");
-+			break;
-+		case 'b':
-+			ret = inet_aton(optarg, &cfg_bind_addr);
-+			if (ret == 0)
-+				error(1, errno,
-+				      "bind address %s invalid", optarg);
-+			break;
-+		case 'o':
-+			cfg_outfile = strdup(optarg);
-+			if (!cfg_outfile)
-+				error(1, 0, "outfile invalid");
-+			break;
-+		case 'm':
-+			cfg_max_events = strtol(optarg, NULL, 0);
-+
-+			if (cfg_max_events == LONG_MIN ||
-+			    cfg_max_events == LONG_MAX ||
-+			    cfg_max_events <= 0)
-+				error(1, ERANGE,
-+				      "max events must be > 0 and < LONG_MAX");
-+			break;
-+		case 'd':
-+			cfg_defer_hard_irqs = strtoul(optarg, NULL, 0);
-+
-+			if (cfg_defer_hard_irqs == ULONG_MAX ||
-+			    cfg_defer_hard_irqs > INT32_MAX)
-+				error(1, ERANGE,
-+				      "defer_hard_irqs must be <= INT32_MAX");
-+			break;
-+		case 'r':
-+			cfg_gro_flush_timeout = strtoull(optarg, NULL, 0);
-+
-+			if (cfg_gro_flush_timeout == ULLONG_MAX)
-+				error(1, ERANGE,
-+				      "gro_flush_timeout must be < ULLONG_MAX");
-+			break;
-+		case 's':
-+			cfg_irq_suspend_timeout = strtoull(optarg, NULL, 0);
-+
-+			if (cfg_irq_suspend_timeout == ULLONG_MAX)
-+				error(1, ERANGE,
-+				      "irq_suspend_timeout must be < ULLONG_MAX");
-+			break;
-+		case 'i':
-+			cfg_ifindex = strtoul(optarg, NULL, 0);
-+			if (cfg_ifindex == ULONG_MAX)
-+				error(1, ERANGE,
-+				      "ifindex must be < ULONG_MAX");
-+			break;
-+		}
-+	}
-+
-+	if (!cfg_ifindex)
-+		usage(argv[0]);
-+
-+	if (optind != argc)
-+		usage(argv[0]);
-+}
-+
-+static void epoll_ctl_add(int epfd, int fd, uint32_t events)
-+{
-+	struct epoll_event ev;
-+
-+	ev.events = events;
-+	ev.data.fd = fd;
-+	if (epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &ev) == -1)
-+		error(1, errno, "epoll_ctl add fd: %d", fd);
-+}
-+
-+static void setnonblock(int sockfd)
-+{
-+	int flags;
-+
-+	flags = fcntl(sockfd, F_GETFL, 0);
-+
-+	if (fcntl(sockfd, F_SETFL, flags | O_NONBLOCK) == -1)
-+		error(1, errno, "unable to set socket to nonblocking mode");
-+}
-+
-+static void write_chunk(int fd, char *buf, ssize_t buflen)
-+{
-+	ssize_t remaining = buflen;
-+	char *buf_offset = buf;
-+	ssize_t writelen = 0;
-+	ssize_t write_result;
-+
-+	while (writelen < buflen) {
-+		write_result = write(fd, buf_offset, remaining);
-+		if (write_result == -1)
-+			error(1, errno, "unable to write data to outfile");
-+
-+		writelen += write_result;
-+		remaining -= write_result;
-+		buf_offset += write_result;
-+	}
-+}
-+
-+static void setup_queue(void)
-+{
-+	struct netdev_napi_get_list *napi_list = NULL;
-+	struct netdev_napi_get_req_dump *req = NULL;
-+	struct netdev_napi_set_req *set_req = NULL;
-+	struct ynl_sock *ys;
-+	struct ynl_error yerr;
-+	uint32_t napi_id;
-+
-+	ys = ynl_sock_create(&ynl_netdev_family, &yerr);
-+	if (!ys)
-+		error(1, 0, "YNL: %s", yerr.msg);
-+
-+	req = netdev_napi_get_req_dump_alloc();
-+	netdev_napi_get_req_dump_set_ifindex(req, cfg_ifindex);
-+	napi_list = netdev_napi_get_dump(ys, req);
-+
-+	/* assume there is 1 NAPI configured and take the first */
-+	if (napi_list->obj._present.id)
-+		napi_id = napi_list->obj.id;
-+	else
-+		error(1, 0, "napi ID not present?");
-+
-+	set_req = netdev_napi_set_req_alloc();
-+	netdev_napi_set_req_set_id(set_req, napi_id);
-+	netdev_napi_set_req_set_defer_hard_irqs(set_req, cfg_defer_hard_irqs);
-+	netdev_napi_set_req_set_gro_flush_timeout(set_req,
-+						  cfg_gro_flush_timeout);
-+	netdev_napi_set_req_set_irq_suspend_timeout(set_req,
-+						    cfg_irq_suspend_timeout);
-+
-+	if (netdev_napi_set(ys, set_req))
-+		error(1, 0, "can't set NAPI params: %s\n", yerr.msg);
-+
-+	netdev_napi_get_list_free(napi_list);
-+	netdev_napi_get_req_dump_free(req);
-+	netdev_napi_set_req_free(set_req);
-+	ynl_sock_destroy(ys);
-+}
-+
-+static void run_poller(void)
-+{
-+	struct epoll_event events[cfg_max_events];
-+	struct epoll_params epoll_params = {0};
-+	struct sockaddr_in server_addr;
-+	int i, epfd, nfds;
-+	ssize_t readlen;
-+	int outfile_fd;
-+	char buf[1024];
-+	int sockfd;
-+	int conn;
-+	int val;
-+
-+	outfile_fd = open(cfg_outfile, O_WRONLY | O_CREAT, 0644);
-+	if (outfile_fd == -1)
-+		error(1, errno, "unable to open outfile: %s", cfg_outfile);
-+
-+	sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-+	if (sockfd == -1)
-+		error(1, errno, "unable to create listen socket");
-+
-+	server_addr.sin_family = AF_INET;
-+	server_addr.sin_port = htons(cfg_port);
-+	server_addr.sin_addr = cfg_bind_addr;
-+
-+	epoll_params.busy_poll_usecs = cfg_busy_poll_usecs;
-+	epoll_params.busy_poll_budget = cfg_busy_poll_budget;
-+	epoll_params.prefer_busy_poll = cfg_prefer_busy_poll;
-+	epoll_params.__pad = 0;
-+
-+	val = 1;
-+	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)))
-+		error(1, errno, "poller setsockopt reuseaddr");
-+
-+	setnonblock(sockfd);
-+
-+	if (bind(sockfd, (struct sockaddr *)&server_addr,
-+		 sizeof(struct sockaddr_in)))
-+		error(0, errno, "poller bind to port: %d\n", cfg_port);
-+
-+	if (listen(sockfd, 1))
-+		error(1, errno, "poller listen");
-+
-+	epfd = epoll_create1(0);
-+	if (ioctl(epfd, EPIOCSPARAMS, &epoll_params) == -1)
-+		error(1, errno, "unable to set busy poll params");
-+
-+	epoll_ctl_add(epfd, sockfd, EPOLLIN | EPOLLOUT | EPOLLET);
-+
-+	for (;;) {
-+		nfds = epoll_wait(epfd, events, cfg_max_events, -1);
-+		for (i = 0; i < nfds; i++) {
-+			if (events[i].data.fd == sockfd) {
-+				conn = accept(sockfd, NULL, NULL);
-+				if (conn == -1)
-+					error(1, errno,
-+					      "accepting incoming connection failed");
-+
-+				setnonblock(conn);
-+				epoll_ctl_add(epfd, conn,
-+					      EPOLLIN | EPOLLET | EPOLLRDHUP |
-+					      EPOLLHUP);
-+			} else if (events[i].events & EPOLLIN) {
-+				for (;;) {
-+					readlen = read(events[i].data.fd, buf,
-+						       sizeof(buf));
-+					if (readlen > 0)
-+						write_chunk(outfile_fd, buf,
-+							    readlen);
-+					else
-+						break;
-+				}
-+			} else {
-+				/* spurious event ? */
-+			}
-+			if (events[i].events & (EPOLLRDHUP | EPOLLHUP)) {
-+				epoll_ctl(epfd, EPOLL_CTL_DEL,
-+					  events[i].data.fd, NULL);
-+				close(events[i].data.fd);
-+				close(outfile_fd);
-+				return;
-+			}
-+		}
-+	}
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	parse_opts(argc, argv);
-+	setup_queue();
-+	run_poller();
-+	return 0;
-+}
--- 
-2.25.1
-
+z
 
