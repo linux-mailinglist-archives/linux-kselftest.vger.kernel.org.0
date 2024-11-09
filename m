@@ -1,131 +1,154 @@
-Return-Path: <linux-kselftest+bounces-21722-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21723-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41E209C2B68
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Nov 2024 10:33:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EBCE9C2B70
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Nov 2024 10:40:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 664201C20F78
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Nov 2024 09:33:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C38E81F21BEB
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Nov 2024 09:39:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A00A81487D5;
-	Sat,  9 Nov 2024 09:33:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FC4B14659B;
+	Sat,  9 Nov 2024 09:39:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xLTLDEeq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yUpVc3sn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB14E1465AB
-	for <linux-kselftest@vger.kernel.org>; Sat,  9 Nov 2024 09:33:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83160143725
+	for <linux-kselftest@vger.kernel.org>; Sat,  9 Nov 2024 09:39:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731144800; cv=none; b=dax7NNr3dXulIOnl+abVymcUEuC/+BqZwwik+I4ydVfkt0U/GbWn//ehhkIXeq8BLKyyp4FpW6lvF39eXikAIrqttXk0KHybS3G8Gnk/jo21B/LZCRVDwPBO5P99lFhvhupjxZ7H+yI9fGcBryKvg9oAEKYOaPAR4cJrMtiozCI=
+	t=1731145195; cv=none; b=GFoAJkieMt1ACrZZrIh/gvq8f7A9SbZIp4y4AfQJGT1QL3mdLYUuYPNVgzuxg8LCQeo4rlF2kCi7Dn7nBGN06IY+EJZexv+lHYguqO/F62TvkciCNgCUZZOqSYJihda+Z3IOKNOyrb+8zZ/s6fu+sY+amvHgnUysvjjKo0N7SbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731144800; c=relaxed/simple;
-	bh=8ijAafOwDvkhLTr0CGZB0kkk/tv6bUQ4JRditah2FcA=;
+	s=arc-20240116; t=1731145195; c=relaxed/simple;
+	bh=pWYDIKwMsoQEQdCafj7vHSQNtbyoIY/9lB4P0GU/Uwk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fjJpq/xhxpWGxXqfbRfQaNpmhNWaQExzbu5vARxQIeYjQeP1/bThQujdKCr2vCf+8nELQ10TkKD3N3phalyuYERy2yCql8Ujl1gPprX79kq9o3KxRrza8aCBn/20ojyfAiSK4ARGzT4BxViNrNbRmZueOmhNcEgRauO0PRvBEB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xLTLDEeq; arc=none smtp.client-ip=209.85.222.172
+	 To:Cc:Content-Type; b=UQuhA7Mnf4rKn2czr5eTO6wj5OPb0NURy1mJKsSXtrid4bKcGBDdGitGkfzA2jF6ovuaglAPj7AWNdn5eFxkdO/nCBstqcnU/LMgImS0p1ILtYg/Nk+BJ9suXRkjtWYlv0mkGm45URzrvh35Vxlsn3QRCtsVEc6EqnaNoacmQ4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yUpVc3sn; arc=none smtp.client-ip=209.85.222.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7b15eadee87so198497585a.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 09 Nov 2024 01:33:18 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7b1457ba751so206110885a.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 09 Nov 2024 01:39:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731144798; x=1731749598; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1731145192; x=1731749992; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0udotxvLukvStzHMVxio62M7+6YBFCCtocApgvoWo5k=;
-        b=xLTLDEeqDW06drYI6uV9YkQRCMCNsTHNRcEwWH6kAfP1PgtM2usjecQDPAcz4Y+Nao
-         +Xrj2XWnsMleb/XmC0jOQLijnEnRRQOf2EQy4/tG98rvztCr596Z4SWSaccOAnPSCItx
-         olHkZHrjiQNZlU2bftySkx2D7Dl9akdmjieG0EmI7n09oZM/1GhTbbqE9Vnf55F18GWo
-         IjmUN95p7qcD6etX+lwzs8zAqfAT/djkHGYjMKJZfDWiUMeUPxZQOg8eQVkv9mi8vYke
-         q+wEVc2udnr7a2bCanBhB+2A+kEwdvIckXEeP8lssU1nr79iDWC1TWbVc53aZYY7bbwF
-         mrKg==
+        bh=41KPm21QmRjsrU+KOhLu7eNcJ90797t7U7zPnoakhs0=;
+        b=yUpVc3sn8Jo5SJJJ8VYNZRGlle+rdhL92v6Mme8DAiEz6TzAALsq5oG1RyUukv65ld
+         xsj7sF/AK3uAjziUvaTki2psP/r0DKIiVq2+sa2CmWdIMiGt7cxdy+9s4+MtCHVuH5kF
+         YI9c+KB+BiyM38iv+lpnDU9v2MwGvMvMyb+TqqyX3l85+ZGyzO1R4Dzczixw4pE2zBjg
+         sK4uH4ufpRY+yEk3hLI+XNyZOQNmJzXq5qXRoM/Z4YSudjtbW2IsqVAmwg5zZ6ArJ81a
+         CUCze+vo9+PlklxRW88OVSM5tJTYMNBQx6bPTVVo6dHRZiC15m1PZ/BabILFca/kmYxs
+         6Kzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731144798; x=1731749598;
+        d=1e100.net; s=20230601; t=1731145192; x=1731749992;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0udotxvLukvStzHMVxio62M7+6YBFCCtocApgvoWo5k=;
-        b=qEUW6uyXTmv4S73k0VcqbyqTt74oIVm0GF+d/xVhDNc/MQpLfkDilB7aSO6lHz6xSJ
-         yXK7zYI4sVoyIdxRG6D7O8rZ7OQWPgWuX7BDZbeRF4peeTUolRaelKkaWjaAoxujbHkU
-         I+cRU5VkTk0DQeX3KshuscBe1ZRWmo6C3W/mIAMzPDSbaYzF1o8+SOM403E2k5Ntgx1C
-         2tYlcvAHW88NztHZkQRNA86aaUP8CTpIHtBiudJXE8C9YsTZsqT9tzrH7BdvtSL0z4Pm
-         MJWlYRDSNC4F77LqkMVl5l9J84o+2b/KrcxdVR42tAD4tHZAvIwMQZSsHeaBMkG2BSYl
-         ShOw==
-X-Forwarded-Encrypted: i=1; AJvYcCVgThIDYAqe42d860VGj04lRpOFYVjz+CNNcbF8mH5CTQ2RQhrZEhsnlhS8IevpzPCzbxVK9HSX1Z6lBWEzzNg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMpK8OI9niZQ8GPi8Kl43L0B27ohB6xYPHxKaX6zVeitRqt0O9
-	BoQHHD0ZAexs+dEtasjgb7ap1mgrTEfywrO28fG0BNnkXCkdnNDyZ+VSb8EYRBcDWG54/wqmc0P
-	3r1S+y50LoGH1bHvsB541yZJHLae1tYRDho1I
-X-Google-Smtp-Source: AGHT+IH8M2lwxkeWgw2XSWSzKhcN4tgzNjYCrNwV90jWASd0OZZfMoqeSHAIFroXKkWarhfNh+KBk/0qRRVvLJeeCwE=
-X-Received: by 2002:a05:6214:5c0a:b0:6d3:6863:e7d4 with SMTP id
- 6a1803df08f44-6d39e1b3fcemr82704766d6.32.1731144797612; Sat, 09 Nov 2024
- 01:33:17 -0800 (PST)
+        bh=41KPm21QmRjsrU+KOhLu7eNcJ90797t7U7zPnoakhs0=;
+        b=Pa9EMXDxhZ0zJHg354I2XN5C/UOVYV9l0+RKM+3RFcQ7mTnPY+yWs1bjws31Imjzuy
+         DdJSc401tNuO3QLXlmfbwPFLm+xvEJeTEIE/ljBvDHI/btEWf/tEB6hd2H9CnfVwr8gY
+         bkkqvu1LvBphyDy8Q4zKqeQ+Q+5DM7OtMwg1cxyn0aC2eqvyrGRAsgL9CUu6J2agfOe1
+         NihZ+h7hMsecLQsgJ51b5vc+obBD1lQrs68s9HePBAqr7WU75ztcq/FpvyXkGNm1TB8X
+         Gun6YCcYRdMaEzJELme4QFnui73L3qtdT7WQ+19B/WddPZjlRGG5jQVYrtdnVMuNNBdw
+         oOnw==
+X-Forwarded-Encrypted: i=1; AJvYcCXxJy/eitLTaMXk1Vu3S4w3+Ha6ac3Pbz2KvKt6C1Ec8aYrYmN/zzdqihz8uvomRrvhqlk9K+CRPIFIMqPfl5s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxlNIm387enzAph7YCl5OgZGlJpodELhbbuunfZ8rI8oxJs7Bf9
+	iv0mhgCqsHuRq9ZsY19w42SxKg1oikp+gXU1OKaI6CuAaqwQocJyle8/U2diqloKxzZYxc7+0HT
+	P9l03jO6utNRcU+/mihGsTTlsYaHMEZHd7bIj
+X-Google-Smtp-Source: AGHT+IHn5ykLJhpZoIPhHp0q+NaNBT3ExNp7QlXiUCNIS24r9oaobjnDZTt9T5wiK/uftRc2g4vJMauwb4Pt/NF2trs=
+X-Received: by 2002:a05:6214:4883:b0:6cc:567:d595 with SMTP id
+ 6a1803df08f44-6d39e1078femr85260356d6.7.1731145192215; Sat, 09 Nov 2024
+ 01:39:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <57a8d38a-6299-4d2c-bb2e-c9d1e3bf1c99@stanley.mountain>
-In-Reply-To: <57a8d38a-6299-4d2c-bb2e-c9d1e3bf1c99@stanley.mountain>
+References: <20241011072509.3068328-2-davidgow@google.com> <20241011072509.3068328-3-davidgow@google.com>
+ <CAMuHMdUdotDYAgSDDrWi-TOj2o=5a53n452DydhD-Q0fjiGhew@mail.gmail.com>
+ <CAMuHMdVQ-Fmnti80_HoX1+6L8wNUghpuJzqpT_g0SJQG-oq6RQ@mail.gmail.com>
+ <20241106131718.e0899c324941f63dc931f0fc@linux-foundation.org> <CAMuHMdVXkqxyu=+H_bxazxTLT8UBJuaDpctEcChRbTyXATPm1g@mail.gmail.com>
+In-Reply-To: <CAMuHMdVXkqxyu=+H_bxazxTLT8UBJuaDpctEcChRbTyXATPm1g@mail.gmail.com>
 From: David Gow <davidgow@google.com>
-Date: Sat, 9 Nov 2024 17:33:06 +0800
-Message-ID: <CABVgOS=frTi_VDRrGsoGTg6+wA0A8aReM5OvX+TsCa+ZedCCDw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: skb: use "gfp" variable instead of hardcoding GFP_KERNEL
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Benjamin Berg <benjamin.berg@intel.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
+Date: Sat, 9 Nov 2024 17:39:40 +0800
+Message-ID: <CABVgOSkhD6=5K72oL_n35CUeMhbsiQjZ6ds+EuQmJggBtVTFVg@mail.gmail.com>
+Subject: Re: [PATCH 1/6] lib: math: Move kunit tests into tests/ subdir
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Brendan Higgins <brendanhiggins@google.com>, Rae Moar <rmoar@google.com>, 
+	Kees Cook <kees@kernel.org>, linux-kselftest@vger.kernel.org, 
 	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	kernel-janitors@vger.kernel.org
+	Stephen Rothwell <sfr@canb.auug.org.au>, Luis Felipe Hernandez <luis.hernandez093@gmail.com>, 
+	quic_jjohnson@quicinc.com, macro@orcam.me.uk, tpiepho@gmail.com, 
+	ricardo@marliere.net, linux-kernel-mentees@lists.linuxfoundation.org, 
+	Nicolas Pitre <npitre@baylibre.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000bf51780626778ee5"
+	boundary="000000000000447ac9062677a620"
 
---000000000000bf51780626778ee5
+--000000000000447ac9062677a620
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 5 Nov 2024 at 01:16, Dan Carpenter <dan.carpenter@linaro.org> wrote:
+On Thu, 7 Nov 2024 at 15:34, Geert Uytterhoeven <geert@linux-m68k.org> wrot=
+e:
 >
-> The intent here was clearly to use the gfp variable flags instead of
-> hardcoding GFP_KERNEL.  All the callers pass GFP_KERNEL as the gfp
-> flags so this doesn't affect runtime.
+> Hi Andrew,
 >
-> Fixes: b3231d353a51 ("kunit: add a convenience allocation wrapper for SKBs")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>\
-> ---
+> On Wed, Nov 6, 2024 at 10:17=E2=80=AFPM Andrew Morton <akpm@linux-foundat=
+ion.org> wrote:
+> > On Wed, 6 Nov 2024 09:33:55 +0100 Geert Uytterhoeven <geert@linux-m68k.=
+org> wrote:
+> > > > This conflicts with "[PATCH] m68k: defconfig: Update defconfigs for
+> > > > v6.12-rc1"[1].  Of course the proper way forward would be to add
+> > > > "default KUNIT_ALL_TESTS" to all tests that still lack it, so I can
+> > > > just never queue that patch ;-)
+> > >
+> > > What's the status of this series? I am asking because I am wondering =
+if
+> > > I should queue [1] for v6.13, or just drop it, and send a patch to ad=
+d
+> > > "default KUNIT_ALL_TESTS" instead.
+> > >
+> > > I saw the email from Andrew stating he applied it to his tree[2],
+> > > but that seems to have been dropped silently, and never made it into
+> > > linux-next?
+> >
+> > Yes, sorry.  Believe it or not, I do try to avoid spraying out too many
+> > emails.  David will recall better than I, but things got messy.
+> > https://lkml.kernel.org/r/20241009162719.0adaea37@canb.auug.org.au was
+> > perhaps the cause.
+>
+> Fair enough.
+>
+> > I'm sure David can being us up to date.
+>
+> Probably the best solution is to respin after v6.13-rc1, to be included
+> in v6.13-rc2.
+>
 
-Nice catch, thanks.
+Sorry about the delay, for some reason these were getting caught in my
+spam filter...
 
-Reviewed-by: David Gow <davidgow@google.com>
+Yeah, I think that's probably best. I'll go through and do a new
+version post rc1.
 
-Cheers,
+In general, my preferred option is to use the 'default
+KUNIT_ALL_TESTS' where possible. I'm sure there'll be some tests where
+it makes sense to _not_ enable them by default, but we should where we
+can. Ultimately, it's up to the test maintainer, though.
+
 -- David
 
 
->  include/kunit/skbuff.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/kunit/skbuff.h b/include/kunit/skbuff.h
-> index 44d12370939a..345e1e8f0312 100644
-> --- a/include/kunit/skbuff.h
-> +++ b/include/kunit/skbuff.h
-> @@ -29,7 +29,7 @@ static void kunit_action_kfree_skb(void *p)
->  static inline struct sk_buff *kunit_zalloc_skb(struct kunit *test, int len,
->                                                gfp_t gfp)
->  {
-> -       struct sk_buff *res = alloc_skb(len, GFP_KERNEL);
-> +       struct sk_buff *res = alloc_skb(len, gfp);
->
->         if (!res || skb_pad(res, len))
->                 return NULL;
-> --
-> 2.45.2
->
+-- David
 
---000000000000bf51780626778ee5
+--000000000000447ac9062677a620
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -215,14 +238,14 @@ BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
 hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
 AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
-eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgjJVibb+SPelLFKLr4v14krKu+WyV
-3EAhlWSU1nqizJcwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
-MTA5MDkzMzE4WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgi9tq+Ufe8Yw0muc8O4HJXTVEpaUv
+Naow57B2i75LizMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
+MTA5MDkzOTUyWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBAJtOb89JW7l/3ZrulaQnyIbDgc/3sADD6dMFeze4StzN3TEi
-Msxc3k9GN4oOgRLE0I7KWo0utU7xp/m7JSbklUpitVOtjaL64akuSLJDfo0EYDsN/zdVOLxpnykQ
-icj0Vvlvnq3cyF8Q9wFDYzqQwm03Q1nO0pcB1hulhcSsl/lShfc6lmbOGeAuGloKKT1uUS3EB0u0
-qNHCGcTY5bBbaQOT1SU/gqyBuMPm+Rg0VNouKng0cDG1khYGcZR4AqXFsEocIJGhOi6Bm7+RiE4N
-RJ6oOfQOSw+UjuPSrcQ41VH8YMeXqBtedLysSqoc1cS84HM3aAlXC1PsJYfwV3o6JOI=
---000000000000bf51780626778ee5--
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAKbwpob9DzlhQCIX05SNRp/HwCjXwywi07CDA2abgrdqCnXS
+i1KEdEwbmAsv0r7GxGQMHZbHIe4I1KJIM7xxM1RfrP0rI9m/86Y4PNamXsXY7Kjjhzf7KzAkGNub
+ZGTWuMImXpN9Dxcc2OlP7rlrZX64Dv3zAfemoGeH9/MHJeKJkFlnks52dQB1gcb/vmUr2TRLLZ1W
+IhUHvEM+ezdOjExdtzbzdwzL7w9fdQrGq+kqg7FGboVTds+gn42AbqNdLTCO80ikvD4+j7SCSAK8
++T93afiqRHKl0MQh4khg6c7SYEOByNQE2qvehPgEF2ruEfwnk0CPQMLqWDOPTWGqFT0=
+--000000000000447ac9062677a620--
 
