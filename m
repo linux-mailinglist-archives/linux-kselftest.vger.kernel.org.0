@@ -1,158 +1,246 @@
-Return-Path: <linux-kselftest+bounces-21718-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21719-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DF1F9C2A42
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Nov 2024 06:06:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A86929C2AFC
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Nov 2024 08:18:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B20BC1C21623
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Nov 2024 05:06:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 435F41F21362
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Nov 2024 07:18:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40F4213B5B7;
-	Sat,  9 Nov 2024 05:06:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 188A54D8AD;
+	Sat,  9 Nov 2024 07:18:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="AgCVibdr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DLDh1sxU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4BF11114
-	for <linux-kselftest@vger.kernel.org>; Sat,  9 Nov 2024 05:05:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 647AF233D62
+	for <linux-kselftest@vger.kernel.org>; Sat,  9 Nov 2024 07:18:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731128760; cv=none; b=hbJNpT/NLPKR+iPEFCkTIE1+Im6z2V+kxhoCMW+hgIPyzNefWnK/3Gt6kpMRI8CdeT2aqnK4vBV3XTpEAjx7bitExTG5J0dmXgCPPmuG3PbyZYCgss9GzlcGvobKPQ/JfOq8w92vZ9UzdoMHCYDyLqaPIaRw2N2R4+pInQvUE48=
+	t=1731136711; cv=none; b=KR5QSib9WT93lbLzGx5Vn7x857wmVfAFwf9xqJR9giq3DumK1aZn7tHJI5j3avzFin8HcCb35hc2oAxNbSfHU/mtum9Rw/0xnwmgJlZ//MddNP63PfJjeGRzNEZ6JL+kDbpyt4CzoJHXR1ORpJQsrL6JY+eJpwNNK5T/ViBT/iM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731128760; c=relaxed/simple;
-	bh=5d2luErJ4t2O8IYA7jlZfwk/vLJ8um8i6qUXK3HLdLE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LDcEYBs1iQCjvImqPkixBHWoA2u4o1Xsbg8iWkq+Qf3YwpNv+E45Wi7G7AVdSnkJwLXSmCrwao3nffT3NG+V/xRttFDBvtAJOiCqtJksD+m3BccNE3r6NLefYogn9dGOL60N7OJTzs69QkuRhXVbT8OEMeNEyY/uopUsDVfpO/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=AgCVibdr; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7240d93fffdso2028885b3a.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Nov 2024 21:05:58 -0800 (PST)
+	s=arc-20240116; t=1731136711; c=relaxed/simple;
+	bh=tPn4nRBpT+83Q7JW5+msME2MVpzkTShipYHROt4kmC0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tqBNlxM7zAan6FQ2lBVlhqjxkmmQ/pSRkqyujjuL6Pt0b5lkfAi1+KHTyLAjN6rzd98Vcp1peFpyIemtEJmQNM5igSYZG29BX8nZJXWhGwguxwDKfa4U3aNuEsmh9Jw+ySNoR0i4Ms15kli2/J2as43HHfyOue1wxFf3EO1d8xY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DLDh1sxU; arc=none smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6cbce9e4598so16698116d6.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Nov 2024 23:18:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1731128758; x=1731733558; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZkWm6lu8Vf7YjtBv89buVybDqSSTCm0miO4h7F33T64=;
-        b=AgCVibdrXkjNyR4XcC7vnNdJMEanD6/ewK5+Z/6d89atu2d8zHaGLAwqw9OVH/Qvlc
-         4EbDNGuHIUE98qu0GSnuxfy719A7VgmHEp61CBT5zc+DX5ipLy173eT4sX5M54XMyWnR
-         pFiX0maHdMk7wqFunMhfkz5FuKrWW+rJv4fdo=
+        d=google.com; s=20230601; t=1731136708; x=1731741508; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tPn4nRBpT+83Q7JW5+msME2MVpzkTShipYHROt4kmC0=;
+        b=DLDh1sxUeWlB8XK5hjU7fhU3PDCy9lnp74ld5BOFNqZf4cwgwW8c2EqURj2xC0MEk8
+         DrA6JbIrOrP9icDK9n9Ya966J2hZC2MwmcTdtAcuAd9mgsYY7RCrA+kWn2Ybr2dEkd52
+         Yzk2wKtQuzZw/aumA8SbqBvxxjrB8BMazpcC7u0DSyBrG5fHnqYmgppEjrpBWJxcI8QS
+         2QUnmhBaYVUX9fcbRZSjG08j9dta60dHCPVSGki//KsvdeT8hywk79byc4/KPGfxzkv9
+         W7KbFMeKdx3QtaAfwKYm975TzYCC8QysViJ91HJxvgoCDAEwlcFRzXhQiSs6gx5pLReR
+         9tmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731128758; x=1731733558;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZkWm6lu8Vf7YjtBv89buVybDqSSTCm0miO4h7F33T64=;
-        b=KnPxw9oalKi9hcr4s3JaxppztnSmndq6KUHfzZWunZu2kAPubdUC5cWtMzEghKPeqC
-         k4iaTC9F8w3Qllnt6xjNHBVRlU8ZITgpRghCJFCfBRuo2JIZx98FEYsQZO5IVLdwsscd
-         quQqdTKMgca8r2htLxeSZYn54YqtkfrWyotq4mEQmyLmO5q70TLhiYKg/3oWL2Be7xy9
-         iHU1acBlEBXXM2eXKnktUSEOEqXG2L/3gLNlljiwbGpjuXsOegpQTeWEVILrW36J3fOI
-         mbsKxqak0MRVSFQ4aI5IQnIDmWAe7chohbmrLD5NZbRIZ6qzHh1Hsh/IELtIgYC8Qxa8
-         C66g==
-X-Forwarded-Encrypted: i=1; AJvYcCU95P5hxC/gNoc9AQ6TBjTZqkpnKobIhC6OECItATysnxREq49oeR4HDELV/S8oeXuOnPBS+4L+tQs1RIWT9zs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0koCioIfG6lTLnbJCxBGyLkL1g5DUxgOgh7jLWa0cYW1p9u3I
-	kONRAJvz3A53ncXnF4TZB2SB1DmNv9S9QMyeyUxiXniJAhSvcIMQTlAh+4LzZTY=
-X-Google-Smtp-Source: AGHT+IFWvbmK3ZUE2ROqqMys6VCbYpSt8HcccaDD5Sd5IJ2vW3JieKKtY77lB/QC93xpM9tDHaRh3g==
-X-Received: by 2002:a17:903:191:b0:20c:ecd8:d0af with SMTP id d9443c01a7336-211834e00cemr65937005ad.9.1731128758087;
-        Fri, 08 Nov 2024 21:05:58 -0800 (PST)
-Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177dc835fsm39402525ad.41.2024.11.08.21.05.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Nov 2024 21:05:57 -0800 (PST)
-Date: Fri, 8 Nov 2024 21:05:54 -0800
-From: Joe Damato <jdamato@fastly.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, corbet@lwn.net, hdanton@sina.com,
-	bagasdotme@gmail.com, pabeni@redhat.com, namangulati@google.com,
-	edumazet@google.com, amritha.nambiar@intel.com,
-	sridhar.samudrala@intel.com, sdf@fomichev.me, peter@typeblog.net,
-	m2shafiei@uwaterloo.ca, bjorn@rivosinc.com, hch@infradead.org,
-	willy@infradead.org, skhawaja@google.com, kuba@kernel.org,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	"David S. Miller" <davem@davemloft.net>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next v8 5/6] selftests: net: Add busy_poll_test
-Message-ID: <Zy7tspqY1QimHDfz@LQ3V64L9R2>
-Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	netdev@vger.kernel.org, corbet@lwn.net, hdanton@sina.com,
-	bagasdotme@gmail.com, pabeni@redhat.com, namangulati@google.com,
-	edumazet@google.com, amritha.nambiar@intel.com,
-	sridhar.samudrala@intel.com, sdf@fomichev.me, peter@typeblog.net,
-	m2shafiei@uwaterloo.ca, bjorn@rivosinc.com, hch@infradead.org,
-	willy@infradead.org, skhawaja@google.com, kuba@kernel.org,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	"David S. Miller" <davem@davemloft.net>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <20241108045337.292905-1-jdamato@fastly.com>
- <20241108045337.292905-6-jdamato@fastly.com>
- <672e26ec429be_2a4cd22944c@willemb.c.googlers.com.notmuch>
- <Zy4-GUoYKBo_inRc@LQ3V64L9R2>
- <672e4ea4e979a_2bc2f629490@willemb.c.googlers.com.notmuch>
+        d=1e100.net; s=20230601; t=1731136708; x=1731741508;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tPn4nRBpT+83Q7JW5+msME2MVpzkTShipYHROt4kmC0=;
+        b=BoZKoxr+dJ+JTSMdovhc8Z/7B6FND52FYEIHufAir1Gb5tHdYTC7fv17VaruFPR9FD
+         /Qdlvb5vUdUJLvUgl6CEFF/zuAbJvZoN7lL/7EjQleDKKY60QtweplR493N3d7BQwd6I
+         oO2CsK1LWZqMsXsu+MOipln6g2vhrU38zL9ZyWjjLjKQ75kM0/nx6b9NgmivJ0u3VWdz
+         dJOVZTczCjm73YTO+YL3GudacRauK82MDOzSfHmYzJOeMyDkwKHYwaWwrbGaClxT8RWu
+         WwNhcSVfwHF7+jmDC7mS/WJXSVd1cSv70j9BOURLSzwGaiygt/62OtPQ1E2EwZQjYUFL
+         Nu/g==
+X-Forwarded-Encrypted: i=1; AJvYcCVWhpalyp8UOLtobp2SakkxWT9LIA3H6t7t8HFhQkxSPZcITvA/1pRZVtfks9U580OC8qjwBX6lBdB74aYD3mo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz10VqoD5paEPl59aq8Mt7RyUy8ofe1ddacxPjCISfnRX4DJl7X
+	ix41M60ytj0Ki2SaetNLM3czqGgUF9cf+MFncQsxFkr9mKy7GB9ZIhBXOxpTzOrZsrPbaR7NT+4
+	3IqWzeHdmh61s0AiLQh9qFkV7Iagwxz+t600+
+X-Google-Smtp-Source: AGHT+IHAWSYuBgQKpn1u12KZG5dcUUzULEtiOZ+VskujpPkKap7+8ijG2ds9PNO6eevs22vlhFKwKAZsd+rnicyZyYU=
+X-Received: by 2002:a05:6214:5412:b0:6d3:89d3:c6ea with SMTP id
+ 6a1803df08f44-6d39e101c4bmr85360686d6.7.1731136708085; Fri, 08 Nov 2024
+ 23:18:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <672e4ea4e979a_2bc2f629490@willemb.c.googlers.com.notmuch>
+References: <CA+i-1C2-PGPcfSJB4oLqHN3jAE9CDY+iNaW9WCiRB6zF0fgQ3Q@mail.gmail.com>
+In-Reply-To: <CA+i-1C2-PGPcfSJB4oLqHN3jAE9CDY+iNaW9WCiRB6zF0fgQ3Q@mail.gmail.com>
+From: David Gow <davidgow@google.com>
+Date: Sat, 9 Nov 2024 15:18:14 +0800
+Message-ID: <CABVgOS=hxOxiX361Bz0==YNBCgqedJyHdWUm+-Szq8Bqqx1MxQ@mail.gmail.com>
+Subject: Re: "stty sane" in kunit.py
+To: Brendan Jackman <jackmanb@google.com>
+Cc: Daniel Latypov <dlatypov@google.com>, Brendan Higgins <brendanhiggins@google.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="00000000000092dda8062675ac7f"
 
-On Fri, Nov 08, 2024 at 12:47:16PM -0500, Willem de Bruijn wrote:
-> Joe Damato wrote:
-> > On Fri, Nov 08, 2024 at 09:57:48AM -0500, Willem de Bruijn wrote:
-> > > Joe Damato wrote:
+--00000000000092dda8062675ac7f
+Content-Type: text/plain; charset="UTF-8"
 
-[...]
+On Fri, 8 Nov 2024 at 18:49, Brendan Jackman <jackmanb@google.com> wrote:
+>
+> Hi all,
+>
+> Does anyone know what the 'stty sane' invocation in kunit.py is about?
+>
+> The other day I ran into an issue when running it via watchexec[1]. At
+> the time I believed that it was there to clean up after the firmware
+> that QEMU runs potentially messed up the terminal.
+>
+> However, I just realised I'm not sure if that makes sense - stty is
+> about setting terminal settings via ioctl. I don't think QEMU or its
+> guests are messing up the terminal with ioctls, they're just writing
+> funny control characters.
+>
+> What's going on here? I guess one of:
+>
+> 1. Terminal is messed up with ctrl chars but ioctls are the
+> easiest/only way to reliably clean it up.
+>
+> 2. Nobody thought about this unimportant detail so hard before and
+> there's no particular rationale in place here.
+>
+> 3. I made bad assumptions about why the `stty sane` is there.
+>
+> If it's 1 or 2 I wonder if there's an alternative way to clean up
+> without getting the SIGTTOU issue.
+>
+> Or, maybe it doesn't matter and the fact that this was ever a problem
+> is just a bug in watchexec (maybe you can tell I haven't actually
+> taken the time to research the SIGTTOU thing properly). But thought
+> I'd raise it in case this points to issues people might have using
+> kunit.py in CI.
+>
+> [1] https://github.com/watchexec/watchexec/issues/874
+> [2] https://gist.github.com/bjackman/27fd9980d87c5556c20e67a6ed891500
 
-> > > 
-> > > Nice test.
-> > > 
-> > > Busy polling does not affect data integrity. Is the goal of this test
-> > > mainly to get coverage, maybe observe if the process would stall
-> > > indefinitely?
-> > 
-> > Just to get coverage and make sure data makes it from point A to
-> > point B intact despite suspend being enabled.
-> > 
-> > The last paragraph of the commit message highlights that netdevsim
-> > functionality is limited, so the test uses what is available. It can
-> > be extended in the future, when netdevsim supports more
-> > functionality.
-> > 
-> > Paolo wanted a test and this is the best test we can provide given
-> > the limitations of the testing environment.
-> > 
-> > > > netdevsim was chosen instead of veth due to netdevsim's support for
-> > > > netdev-genl.
-> > > > 
-> > > > For now, this test uses the functionality that netdevsim provides. In the
-> > > > future, perhaps netdevsim can be extended to emulate device IRQs to more
-> > > > thoroughly test all pre-existing kernel options (like defer_hard_irqs)
-> > > > and suspend.
-> > 
-> > [...]
-> > 
-> > The rest of the feedback below seems pretty minor; I don't think
-> > it's worth spinning a v9 and re-sending just for this.
-> > 
-> > If anything this can be handled with a clean up commit in the
-> > future.
-> 
-> FWIW no objections from me.
-> 
-> > Jakub: please let me know if you prefer to see a v9 for this?
 
-Since we passed the 24hr mark and the series hasn't been merged yet,
-I've sent a v9 just now that addresses the feedback you provided.
+If I remember correctly, this was due to UML sometimes messing up the
+terminal (not QEMU, though QEMU definitely does the same thing
+sometimes), possibly just when it terminated uncleanly. It may also
+have been, as Daniel notes, something to do with the --alltests
+option, which used allyesconfig, so could enable some strange
+settings.
+
+We definitely didn't look into things closely enough to determine if
+it was just control codes, or actual IOCTLs. I suspect it's just
+control codes, but UML does have some strange TTY options (though I
+think those don't affect us, as we usually pipe the results though.)
+
+'stty sane' was probably used because it worked, and 'reset' would
+clear the screen, leaving us without the results visible.
+
+If there's another way which doesn't break anything, I'd be happy to
+change it. Maybe outputting '\033c' would do it?
+
+-- David
+
+--00000000000092dda8062675ac7f
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIUqgYJKoZIhvcNAQcCoIIUmzCCFJcCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
+4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
+mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
+KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
+VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
+ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
+vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
+BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
+OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
+1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
+ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
+BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
+18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
+bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
+AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
+BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
+A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
+MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
+jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
+0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
+jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
+jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
+C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
+NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
+zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
+A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
+hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
+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
+erg7AgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
+/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFKFQnbTpSq0q
+cOYnlrbegXJIIvA6MFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
+BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
+MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
+LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
+bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
+FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBR
+nRJBmUP+IpudtmSQ/R55Sv0qv8TO9zHTlIdsIf2Gc/zeCi0SamUQkFWb01d7Q+20kcpxNzwV6M7y
+hDRk5uuVFvtVxOrmbhflCo0uBpD9vz/symtfJYZLNyvSDi1PIVrwGNpyRrD0W6VQJxzzsBTwsO+S
+XWN3+x70+QDf7+zovW7KF0/y8QYD6PIN7Y9LRUXct0HKhatkHmO3w6MSJatnqSvsjffIwpNecUMo
+h10c6Etz17b7tbGdxdxLw8njN+UnfoFp3v4irrafB6jkArRfsR5TscZUUKej0ihl7mXEKUBmClkP
+ndcbXHFxS6WTkpjvl7Jjja8DdWJSJmdEWUnFjnQnDrqLqvYjeVMS/8IBF57eyT6yEPrMzA+Zd+f5
+hnM7HuBSGvVHv+c/rlHVp0S364DBGXj11obl7nKgL9D59QwC5/kNJ1whoKwsATUSepanzALdOTn3
+BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
+0DhqINx2fw0bwhpfFGADOZDe5DVhI7AIW/kEMHuIgAJ/HPgyn1+tldOPWiFLQbTNNBnfGv9sDPz0
+hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
+AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
+BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
+eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgkiNnl/98xuYXyaR8Gi9iWUzvurLc
+1uykTU8y1JIt2pMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
+MTA5MDcxODI4WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAFRVlFflpdraM9Bi+aftqhmSxs7ygnPuNFlHDqkhPlcMnq5Y
+J9tTZwy0uOOPcWj4hrblt321j/KDPKWRKWuuDsEzt/rNZ9OmeCWV7ICqKqj49f/fcHTknQzd76gK
+c9JrQwO4f6bh6I7o3jg7PDEpAjRBkAa/YdnV/3NaD7yDE+HaVB2VeZLYw1k2aLk36espc039Hja3
+jkpmQPSIVE8TJlkE2dLc1RVgGMWd4bge/AH6+J9P7vOIRoMDynm4x6HwSTwpqzq+58tHiygO29HE
+jlq6Ntb2TtYNlADBncr+rjaL89JFv9ufx234pdbjfdw+GtKkyHMMxkpjz7f/sy5hU+M=
+--00000000000092dda8062675ac7f--
 
