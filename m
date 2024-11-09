@@ -1,153 +1,121 @@
-Return-Path: <linux-kselftest+bounces-21712-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21713-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 168899C2820
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Nov 2024 00:31:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 801DE9C28CC
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Nov 2024 01:26:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A6151C21A9A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2024 23:31:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 34BDC1F222A5
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Nov 2024 00:26:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FF4C1A9B5C;
-	Fri,  8 Nov 2024 23:31:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D01234C9A;
+	Sat,  9 Nov 2024 00:26:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WcglRDNL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kbsxxWlz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53BA4610D;
-	Fri,  8 Nov 2024 23:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDFAC23A9;
+	Sat,  9 Nov 2024 00:26:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731108686; cv=none; b=nd5596sQ8xCFXpSrvoylSrn9qUrrodqiOFhdTdNSeigJgi36TAuUCrOKg4tr1VtDAMB0N7gfc2Go3wVj0o+LIjuXQ5B6NTjbPGfm7oVc6B0WXlPScWZpYg/G1R9kd8pPXAhumcNC6/Nr6qWSYRBWAhRsMQTDdaOFDHGL58YE+VQ=
+	t=1731111988; cv=none; b=JAv6cw29l72p6UhoO2RegB3EWnlDkRLl+GoDxVVlsLijsgSDnuDMRfrK1oflZwnEjoIMec7buSZ0Jg3ymJFhr1hHiQSXYqt+qmPqSX0AIUsUfCfOon3aZVOnvexJ8RKWmo7ehwU2xBLvAcY37a1LgBNbT/JnCYH2syej/p1qXKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731108686; c=relaxed/simple;
-	bh=iz0xZ4OrldyN72hxlwwvIedXENVbkH2RVnLuwHEYJIg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rGevyd4/cdsmRF33DHwUImuyJgZ0kCscweFV/YM1JgL9bOyTYk+beyaz4PAUf6HLHtTvAbPlVa8nyf1uGid1S3KBcV69FkqSSls16TjS56ZLZY7WIy/1X1Yag3eMwZub7nxo6kxtdAedSVkVf2ocwPhBmcrnCb+mh93uqe+DBWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WcglRDNL; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4315f24a6bbso21226775e9.1;
-        Fri, 08 Nov 2024 15:31:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731108682; x=1731713482; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CWrDohYO+E65fwPGOZN9UBAmDMASN0TGavNQ90zX+Bo=;
-        b=WcglRDNLkU61TEKCuZI+AHsOW3GjV36VKxK9GA9l745tXJS6nBji6i7F8bbuO8JhzC
-         9LX9qs+7S7eda7jlENtEanXFwkE4bMHkcuzfHczCbt+dzMQ/ynx9DzjEdTrFkP7mQRWP
-         8gDdYYuUgTr9+IhGJngckO2CsH1MmKkrRWpU0Ab9h+GKNQep1WxWHr05GO/hWStw3e4w
-         dDWUFnTi307kb1mcXDNPso+d9rnPVoL3l1gQURPRXkc1/VUIa1zc5h2x5e78XEPDUGkG
-         g7urOi39perIddwGlTr9hFJq53gPHsAzu42Gr7z5CxwZwvinnLrpZ69lnSiPzV/5P8iy
-         bH5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731108682; x=1731713482;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CWrDohYO+E65fwPGOZN9UBAmDMASN0TGavNQ90zX+Bo=;
-        b=hOn0K+n8jO/AfvisGSjue8BxZ07p0flQRUhYoqZdsqnlVgppbD0BTBQANBXj7luvD0
-         8x48jfvUw5MGQp1DADseo62IaQb9XsSXC3usnB7qPeIXkQl5JtwkWluT1qrj7DIQokSz
-         CQRZ/pDw+UWf1MW4L/szATFW++yxQO+xEM4uZz9mj7ag4Ff0MKOu/Ica8CMWe3FxqDEA
-         5+/QIA28DW0rfinxkIXEZYWTwfXKuVU8qJX59YKeHMv/XyL8gV+BjCaPR6pVwuCeNEln
-         Vgg1NP1ObVe1sNFPkIv6+b4ZqROHoxgQPY769Ch2D86gZ36eRGb99Ct0ft+QH/x4MINs
-         HJZg==
-X-Forwarded-Encrypted: i=1; AJvYcCV0DDmSLmXYb3g1yAEaGylNtXQDov+LIYg60rS8qDq39KNkr7gPoHraavLtqB6Y4t2j2eFk1aNEBgftzlZSQOBG@vger.kernel.org, AJvYcCVBRNAh0uZDQ17JQo/UCqPePOMLPAM21ar7/L8OW2E2gxb4eytD6+Jkb2lB+2wOT9bJMrrlj2Ct@vger.kernel.org, AJvYcCVTQTLZySZ+nHOfs8UQhK/Hb8nbJo8xkTBuKWgZyUWGCygWu9JDqSXwBaBRQoYtW2ZlmsGoYItf+9fVi/Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLIr5L28HXq0SbH4uHnBF7tEG1Ts5QAbIvVmwMihkzmgtXWCp9
-	3rSD/OaX/a2aDTMA2XNOxi2SGz1MgQLAhhXFYWe0BAEd1pE+bHY8
-X-Google-Smtp-Source: AGHT+IEq0HpFAdbYoKoNxwFjF5hrl6ar3mEYDoZ/2WaWDU7Y0dC50eiEpClDhBtuHHsfPTK8kXu8kQ==
-X-Received: by 2002:a05:600c:8608:b0:431:4c14:abf4 with SMTP id 5b1f17b1804b1-432b7887154mr37537395e9.14.1731108682324;
-        Fri, 08 Nov 2024 15:31:22 -0800 (PST)
-Received: from [192.168.0.2] ([69.6.8.124])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432bc46751asm9938215e9.0.2024.11.08.15.31.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Nov 2024 15:31:21 -0800 (PST)
-Message-ID: <21c0887b-1c7d-424d-a723-2a8d212cbde1@gmail.com>
-Date: Sat, 9 Nov 2024 01:31:51 +0200
+	s=arc-20240116; t=1731111988; c=relaxed/simple;
+	bh=ZmXu0HwvoenLIZbkHNIAg7KS/uJlYe3PcAhRHRcH9dU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n2YOTqD5VJMraj3PdO7mxwB3adF5lwMa/OlXxUynrEsfFtuqxfsZlrM4iwwQfXhF+NMVZ4AusSwmYfShCMDE1fa3YiaHudbsHxmhRnUqitm8zExTHD02gKCM2dBjB69zEj28UFsL842QE72TOs0CNpFQ91Gg13rS8t+dX0s+cWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kbsxxWlz; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731111986; x=1762647986;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZmXu0HwvoenLIZbkHNIAg7KS/uJlYe3PcAhRHRcH9dU=;
+  b=kbsxxWlzI3h/2duJvl5xTNGffaRFmaKmgfGHBM3aTIWgzOGkgUWUP1d5
+   m7afRmvYf1Xzew0o2/GSy+unhR4yVbIWnyiBYT6fFSTR6B1RESINjaCGt
+   4OxaSNV92oMOuWbpjqkHVj4hX0PlU0F/GNlHzvPWC1WO//yI/QX7iRklT
+   3eaIwJ4GszfPieGN3A5z+xvCnKWJ1DpgDeu3Jo4+NU7EWqrAEpXkTE+uh
+   h21I4GJ8ffGX2zGE9wHM2Zy/Q7APLE8S3yGRxg8NXPR/PWPPWacRMHORd
+   T9eoFVQA5H/QFrIurM6UGSiy8kTClYm+S2KbdUy8AdaHrbOZ3fVZciR+Z
+   A==;
+X-CSE-ConnectionGUID: 6lx2BvEFQqGP3YrJRBaVOw==
+X-CSE-MsgGUID: GcJyGIawTUydBTWMQJv/tg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11250"; a="30892537"
+X-IronPort-AV: E=Sophos;i="6.12,139,1728975600"; 
+   d="scan'208";a="30892537"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 16:26:26 -0800
+X-CSE-ConnectionGUID: IT7/5PGAT5eZlurXLmRbrg==
+X-CSE-MsgGUID: L8OH6U2LTeiBgRJMO6oP5g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,139,1728975600"; 
+   d="scan'208";a="86060092"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 08 Nov 2024 16:26:24 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t9ZIz-000ruo-2f;
+	Sat, 09 Nov 2024 00:26:21 +0000
+Date: Sat, 9 Nov 2024 08:25:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Disseldorp <ddiss@suse.de>, linux-fsdevel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	David Disseldorp <ddiss@suse.de>
+Subject: Re: [PATCH v3 2/9] initramfs_test: kunit tests for initramfs
+ unpacking
+Message-ID: <202411090808.exzPhnlj-lkp@intel.com>
+References: <20241107002044.16477-3-ddiss@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 03/23] ovpn: add basic netlink support
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Shuah Khan <shuah@kernel.org>, sd@queasysnail.net,
- Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-3-de4698c73a25@openvpn.net>
-Content-Language: en-US
-From: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-In-Reply-To: <20241029-b4-ovpn-v11-3-de4698c73a25@openvpn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241107002044.16477-3-ddiss@suse.de>
 
-On 29.10.2024 12:47, Antonio Quartulli wrote:
-> This commit introduces basic netlink support with family
-> registration/unregistration functionalities and stub pre/post-doit.
-> 
-> More importantly it introduces the YAML uAPI description along
-> with its auto-generated files:
-> - include/uapi/linux/ovpn.h
-> - drivers/net/ovpn/netlink-gen.c
-> - drivers/net/ovpn/netlink-gen.h
-> 
-> Cc: donald.hunter@gmail.com
-> Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
+Hi David,
 
-[skipped]
+kernel test robot noticed the following build warnings:
 
-> diff --git a/drivers/net/ovpn/ovpnstruct.h b/drivers/net/ovpn/ovpnstruct.h
-> --- /dev/null
-> +++ b/drivers/net/ovpn/ovpnstruct.h
-> @@ -0,0 +1,25 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*  OpenVPN data channel offload
-> + *
-> + *  Copyright (C) 2019-2024 OpenVPN, Inc.
-> + *
-> + *  Author:	James Yonan <james@openvpn.net>
-> + *		Antonio Quartulli <antonio@openvpn.net>
-> + */
-> +
-> +#ifndef _NET_OVPN_OVPNSTRUCT_H_
-> +#define _NET_OVPN_OVPNSTRUCT_H_
-> +
-> +#include <net/net_trackers.h>
-> +
-> +/**
-> + * struct ovpn_struct - per ovpn interface state
-> + * @dev: the actual netdev representing the tunnel
-> + * @dev_tracker: reference tracker for associated dev
-> + */
-> +struct ovpn_struct {
+[auto build test WARNING on akpm-mm/mm-nonmm-unstable]
+[also build test WARNING on brauner-vfs/vfs.all linus/master v6.12-rc6 next-20241108]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-There is no standard convention how to entitle such structures, so the 
-question is basically of out-of-curiosity class. For me, having a 
-sturcuture with name 'struct' is like having no name. Did you consider 
-to use such names as ovpn_dev or ovpn_iface? Meaning, using a name that 
-gives a clue regarding the scope of the content.
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Disseldorp/init-add-initramfs_internal-h/20241107-083002
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+patch link:    https://lore.kernel.org/r/20241107002044.16477-3-ddiss%40suse.de
+patch subject: [PATCH v3 2/9] initramfs_test: kunit tests for initramfs unpacking
+config: sh-randconfig-r122-20241108 (https://download.01.org/0day-ci/archive/20241109/202411090808.exzPhnlj-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 14.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20241109/202411090808.exzPhnlj-lkp@intel.com/reproduce)
 
-For interface functions, when the pointer assigned in such manner as 
-`ovpn = netdev_priv(dev)`, it is clear what is inside. But for functions 
-like ovpn_peer_get_by_id() it is a bit tricky to quickly realize, what 
-is this for.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411090808.exzPhnlj-lkp@intel.com/
 
-> +	struct net_device *dev;
-> +	netdevice_tracker dev_tracker;
-> +};
-> +
-> +#endif /* _NET_OVPN_OVPNSTRUCT_H_ */
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
---
-Sergey
+>> WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x0 (section: .data) -> set_reset_devices (section: .init.text)
+WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x1c (section: .data) -> set_reset_devices (section: .init.text)
+WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x38 (section: .data) -> set_reset_devices (section: .init.text)
+WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x54 (section: .data) -> set_reset_devices (section: .init.text)
+WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x70 (section: .data) -> set_reset_devices (section: .init.text)
+WARNING: modpost: vmlinux: section mismatch in reference: initramfs_test_cases+0x8c (section: .data) -> set_reset_devices (section: .init.text)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
