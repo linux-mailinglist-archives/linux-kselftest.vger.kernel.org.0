@@ -1,42 +1,43 @@
-Return-Path: <linux-kselftest+bounces-21743-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21742-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F39AF9C3139
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 09:28:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7D229C3136
+	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 09:28:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37C891C20B25
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 08:28:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 24B89B20F85
+	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 08:28:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C1E014D6EB;
-	Sun, 10 Nov 2024 08:28:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE75514E2CF;
+	Sun, 10 Nov 2024 08:28:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="dj8h395J"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ARcykrM5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38DF114B96E;
-	Sun, 10 Nov 2024 08:28:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBC88149DE8;
+	Sun, 10 Nov 2024 08:28:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731227302; cv=none; b=AroEu+kVgqG9oqjDXtDT1qd0JYEsNqCXJEeHprCOxZYpTu7+CUb1EREw/eBJwCLaZaB1v2f7bn2PMIvXxShVeK32imt4zFU+2VkccoSwXgYUK7GjWHwKWez9ObIHwLKhAWZCjohRZmCnFFzt0cTWgGSgofnH3h1a/6fEmuKb2jI=
+	t=1731227287; cv=none; b=sXd7rHyrUeX0AkkCC/GonzFKNMLVzW/5hQSQzZU08VbBFDrh4lwmV3q9pR4q4gEiDLK8Ey1ffqf+JBC1g3GTO5MVoVDJbj4pwLidOGRq3tZ17Gid2sD8U629SoAfpwN+BmVWJwTj7CHOoGQNWAjq5nWlSL2YYJwYCbs/aVMmmMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731227302; c=relaxed/simple;
-	bh=npwNU/+kTkMYOInPRZ5Taty5zOdr26g5+W8368VaIWk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S3ixGlkGhUXIF3qgm5F7fOMOA7zgEkXlQGj0BbR4BYo006zm0kDKPtAenSOstY4vu21NNOHabCkzIjOH86t6IphF/9v63ULM124C94nybxqNSFUY2YEswqMh2rUCHESWBB02ZwB0S79OTqE7SPs4XkzYIdadAOsv452JekBwhu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=dj8h395J; arc=none smtp.client-ip=117.135.210.2
+	s=arc-20240116; t=1731227287; c=relaxed/simple;
+	bh=s/HE862Ebjc4x9QSbLryT2tjzrtXi+x51IAifw3w0tQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=rORzx/T4Xa/NxRVReSlDISLJXU2tmiVpLaiQoKmuKL1Rp4eUicksTRSG4j94BcwZ0JlJkw+VBFIX+J9RHHrW4pDX9fCzuLogvAebIUt9plIvma1tiNym9OF+42M8yImOeX0LkAIoxCF7FaaofpZGdtZ2qvdaWrLn6Bm0ee5bqRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ARcykrM5; arc=none smtp.client-ip=220.197.31.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=Pvdr3
-	PrZmxeneufgxTf3r/s5KDkayI7dD4sj9/OZOUY=; b=dj8h395JuZ0wnssstEkaX
-	DwMVlVXbTFJZNk8Ou8T6lXKQS54pxHWvqbAaiMh15dNUW/8oLKO25CFdYzQsOGSe
-	XH0R0d6WUSCIVecQW8Dym0wxnvnOfkyGscWeOnhlVq6JGSNCEdJLTxjkSiuSD4If
-	FHa2A17jb6IcUZKTu5fvAU=
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=0mQMe
+	EqbIH1W/gwL+X7sQKXQSByBBidMVZJPmvHc5LI=; b=ARcykrM5vVDJAAnqHpFGX
+	SHDrebMAk55e2TQdvZzL5nx7QpYXtE+9HEaBgFkqc0XQO2tCVRF9zR0ZsiW/EsGG
+	y7ZaihYzSVFjlkVpFsoKFjprM2ZocHCeiGsBhr2uKUska6muzLcrN/8R8fqCurQe
+	u6NR9GEUDdQFDKFOKnNZKg=
 Received: from localhost.localdomain (unknown [47.252.33.72])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wD3_zwRbjBnO5BvEQ--.51752S2;
-	Sun, 10 Nov 2024 16:26:02 +0800 (CST)
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wD3_zwRbjBnO5BvEQ--.51752S3;
+	Sun, 10 Nov 2024 16:26:23 +0800 (CST)
 From: Jiayuan Chen <mrpre@163.com>
 To: martin.lau@linux.dev,
 	edumazet@google.com,
@@ -64,11 +65,14 @@ Cc: mykolal@fb.com,
 	andrii@kernel.org,
 	mhal@rbox.co,
 	yonghong.song@linux.dev,
-	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf v3 0/2] bpf: fix recursive lock and add test
-Date: Sun, 10 Nov 2024 16:24:50 +0800
-Message-ID: <20241110082452.40415-1-mrpre@163.com>
+	Jiayuan Chen <mrpre@163.com>,
+	Vincent Whitchurch <vincent.whitchurch@datadoghq.com>
+Subject: [PATCH bpf v3 1/2] bpf: fix recursive lock when verdict program return SK_PASS
+Date: Sun, 10 Nov 2024 16:24:51 +0800
+Message-ID: <20241110082452.40415-2-mrpre@163.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20241110082452.40415-1-mrpre@163.com>
+References: <20241110082452.40415-1-mrpre@163.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,37 +80,63 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3_zwRbjBnO5BvEQ--.51752S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWruw4rWF1fKFyDXr4xZr4DCFg_yoWfuFg_ur
-	Wjq34kJ347JF4YyFyUXan5CFy093y8t348AFyUtr129w47ZrW5XF4kWr9Yy34UXa1xA3y2
-	qF15urZ2vwsrXjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRXXo2UUUUUU==
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiDw6Tp2cwXFTwuwAAsh
+X-CM-TRANSID:_____wD3_zwRbjBnO5BvEQ--.51752S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KrWkAr1DXF4Duw48JF4fKrg_yoW8Aw1Dpa
+	4ku3y5GF9rZr18Z3s3KF97Xr1jgw1vgay2gr1ruw1fZrn0gry5urZ5KFy2vF4YvrsrKF98
+	Zr4jqFsrtw17XaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0z_WrX_UUUUU=
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiDxGTp2cwXFTxvgAAs6
 
-1. fix recursive lock when ebpf prog return SK_PASS.
-2. add selftest to reproduce recursive lock.
+When the stream_verdict program returns SK_PASS, it places the received skb
+into its own receive queue, but a recursive lock eventually occurs, leading
+to an operating system deadlock. This issue has been present since v6.9.
 
-Note that if just the selftest merged without first
-patch, the test case will definitely fail, because the
-issue of deadlock is inevitable.
+'''
+sk_psock_strp_data_ready
+    write_lock_bh(&sk->sk_callback_lock)
+    strp_data_ready
+      strp_read_sock
+        read_sock -> tcp_read_sock
+          strp_recv
+            cb.rcv_msg -> sk_psock_strp_read
+              # now stream_verdict return SK_PASS without peer sock assign
+              __SK_PASS = sk_psock_map_verd(SK_PASS, NULL)
+              sk_psock_verdict_apply
+                sk_psock_skb_ingress_self
+                  sk_psock_skb_ingress_enqueue
+                    sk_psock_data_ready
+                      read_lock_bh(&sk->sk_callback_lock) <= dead lock
 
+'''
+
+This topic has been discussed before, but it has not been fixed.
+Previous discussion:
+https://lore.kernel.org/all/6684a5864ec86_403d20898@john.notmuch
+
+Fixes: 6648e613226e ("bpf, skmsg: Fix NULL pointer dereference in sk_psock_skb_ingress_enqueue")
+Reported-by: Vincent Whitchurch <vincent.whitchurch@datadoghq.com>
+Signed-off-by: Jiayuan Chen <mrpre@163.com>
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 ---
-v2->v3: fix line length reported by patchwork.
-        (max_line_length is set to 80 in patchwork but default is 100 in kernel tree)
-v1->v2: 1.inspired by martin.lau to add selftest to reproduce the issue.
-        2. follow the community rules for patch.
-        v1: https://lore.kernel.org/bpf/55fc6114-7e64-4b65-86d2-92cfd1e9e92f@linux.dev/T/#u
----
+ net/core/skmsg.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Jiayuan Chen (2):
-  bpf: fix recursive lock when verdict program return SK_PASS
-  selftests/bpf: Add some tests with sockmap SK_PASS
-
- net/core/skmsg.c                              |  4 +-
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 54 +++++++++++++++++++
- .../bpf/progs/test_sockmap_pass_prog.c        |  2 +-
- 3 files changed, 57 insertions(+), 3 deletions(-)
-
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index b1dcbd3be89e..e90fbab703b2 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -1117,9 +1117,9 @@ static void sk_psock_strp_data_ready(struct sock *sk)
+ 		if (tls_sw_has_ctx_rx(sk)) {
+ 			psock->saved_data_ready(sk);
+ 		} else {
+-			write_lock_bh(&sk->sk_callback_lock);
++			read_lock_bh(&sk->sk_callback_lock);
+ 			strp_data_ready(&psock->strp);
+-			write_unlock_bh(&sk->sk_callback_lock);
++			read_unlock_bh(&sk->sk_callback_lock);
+ 		}
+ 	}
+ 	rcu_read_unlock();
 -- 
 2.43.5
 
