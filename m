@@ -1,222 +1,168 @@
-Return-Path: <linux-kselftest+bounces-21741-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21744-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 245E79C3131
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 09:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 759079C31CA
+	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 12:28:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8795C1F21542
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 08:27:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF5E11F211DC
+	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 11:28:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 588FE14C5BF;
-	Sun, 10 Nov 2024 08:27:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F0C2155C9E;
+	Sun, 10 Nov 2024 11:28:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="aqb6VfjM"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="f2q4eROq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9358233D62;
-	Sun, 10 Nov 2024 08:27:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4366A13C82E;
+	Sun, 10 Nov 2024 11:28:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731227257; cv=none; b=OmimQr8TN4j3fdjSJMWd2NJ0wv8IUOIude9ZeA8asdYtHlJ+p1e6GmlJfforBSgWNFwj3PmDTRJRgpPdk8VcLrpfMVUxyBQQTi0z3J3S5XPou6FQo1WhRFFGxHN5ILihschWqsUWBXS1cSaeqzxq0xRWWUzlMnC8JXgX35i+23Y=
+	t=1731238130; cv=none; b=c+zhV7g1L+2sDeXqhyb0MtDTyswtyV7QgM3WF/b2HhfX2LNZgfdBW51BIsUJRxBqST5WutnFJZ/GQrmAKDnDilptzl/uYH5ONvR42NLDPIA3iiskkPG7kU5i+WuBROESdJvclhbAoq10KWDtmALDvLf7gec4NjmJixvWgKPROqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731227257; c=relaxed/simple;
-	bh=fuYz6QEPiIuunBaQd6blr7/zCjJie+uj4hPW0knQxU4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Jpk3cdSXeRJXLa8++eLPtV3bSM+4SBH5Ya1x+FbiGLGhESYKUKpMDACgUVw5NOFaR5p/330NcpvodOCUwX4+ssh3YvHu3qOM1bQgkw0bUNHL1uWhuJM9CR+zmrVrjfVL4PK3q5Wxb6S4Vtq0hApc4/MIkWogBY7CpERcnsVHzAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=aqb6VfjM; arc=none smtp.client-ip=117.135.210.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=JoWnt
-	+4TXZWzi2r8+QMEfjr7QwyuLotVATgqkcEaM2U=; b=aqb6VfjM++/Z5Frn2MgDj
-	3XLFwY4bLA8dHD+Ow9sVCJtDRTkmJbEfMmWr1tQgw7V7HgaCjNvWltK0CCRRtirX
-	mWI60wZ6+ybrGqytu5E5EV8HYUz0rsrmoPS742P3X7MzPiLPb2D8J6uOXb30kdtd
-	/2MfV/0CSs72wxKrNLIMXY=
-Received: from localhost.localdomain (unknown [47.252.33.72])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wD3_zwRbjBnO5BvEQ--.51752S4;
-	Sun, 10 Nov 2024 16:26:39 +0800 (CST)
-From: Jiayuan Chen <mrpre@163.com>
-To: martin.lau@linux.dev,
-	edumazet@google.com,
-	jakub@cloudflare.com,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	horms@kernel.org,
-	daniel@iogearbox.net
-Cc: mykolal@fb.com,
-	ast@kernel.org,
-	kpsingh@kernel.org,
-	jolsa@kernel.org,
-	eddyz87@gmail.com,
-	shuah@kernel.org,
-	sdf@fomichev.me,
-	linux-kselftest@vger.kernel.org,
-	haoluo@google.com,
-	song@kernel.org,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	mhal@rbox.co,
-	yonghong.song@linux.dev,
-	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf v3 2/2] selftests/bpf: Add some tests with sockmap SK_PASS
-Date: Sun, 10 Nov 2024 16:24:52 +0800
-Message-ID: <20241110082452.40415-3-mrpre@163.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241110082452.40415-1-mrpre@163.com>
-References: <20241110082452.40415-1-mrpre@163.com>
+	s=arc-20240116; t=1731238130; c=relaxed/simple;
+	bh=2065ZepCc8TmmwTzDyEJlb10FhFkTwoAsEpqw2WZ010=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fEFaaRDEaNNhdkNKkyEmtRa02oCqri+NnTdqHveMKUFUkfRa3lHuQQYCDzsg55wQPAwEmqaUFKMYCnjY71dqf6Z4o5lDYFvLkgvbvgsBB8scS3N+zvCL/gHHOQ2cs1NUlSKdh+wzyakqfB4irnO4j5hcgOorbzVmFCqqPHKHlFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=idosch.org; spf=none smtp.mailfrom=idosch.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=f2q4eROq; arc=none smtp.client-ip=202.12.124.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=idosch.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=idosch.org
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 094092540105;
+	Sun, 10 Nov 2024 06:28:47 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Sun, 10 Nov 2024 06:28:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1731238126; x=1731324526; bh=7taAjRSS2x+xLAe/qHIkb1U6ykRJGqjh1dk
+	T+5MQurM=; b=f2q4eROqBjCEAG3rcap/B6ffM4ntI786WtDxHYS1RTlugh4pDom
+	BY3jr7/U/KX+uf44JhPS6rHI9Lnk1CC28fD8JJsYS9lRfyjIvgVNbr/HMr30NdkW
+	ZX6wdTh9jHRNak4tx8CmNm24lj6Dn+qcOu61Sot11wgCygskUGr/AXFeMmZJXhWN
+	Nx1kJbDLy7THadO/mtgPc6WhkIDYwSevKPRihpujaCuXm35v0B8BGwt+DpTjGE9G
+	uax8NMU9xWZzA/NDCYiEpoppkiCjUlbKOzq4OkjppxIweVb76Jq+zzCckK+ZgjHp
+	MXXXkvGjiNHd49vYeQAVNR5xDdLEXnRkzDw==
+X-ME-Sender: <xms:7ZgwZ1kNQnSEcCrYhmXeJeFfhpAAFfAg7udihNyGnyriqQvDrdz8JA>
+    <xme:7ZgwZw3BH5xJbV7dKiPu5I8HF1Cf1PVErhTTm_qtUr0EFXdxnc63o49VcxEj-lAR-
+    kbxH5ccaUTMyVE>
+X-ME-Received: <xmr:7ZgwZ7o4UzbNxrKE3BCQxC32FlIRIeM41eEHgfIPA_9CnJKdthzz0f9HB5z5>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddruddtgddvjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuf
+    fkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcuufgthhhimhhmvghluceo
+    ihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvghrnhepvddufeevke
+    ehueegfedtvdevfefgudeifeduieefgfelkeehgeelgeejjeeggefhnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihguohhstghhsehiughosh
+    gthhdrohhrghdpnhgspghrtghpthhtohepuddupdhmohguvgepshhmthhpohhuthdprhgt
+    phhtthhopeguvghlihhrrghnsehvvghrughitghtrdhgghdprhgtphhtthhopehnvghtug
+    gvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegushgrhhgvrhhnsehk
+    vghrnhgvlhdrohhrghdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvg
+    htpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthho
+    pehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggsvghnihes
+    rhgvughhrghtrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:7ZgwZ1mvwcL5ck5qwIrjBiDrnDKYurUPQV-Sg8qaOnuloLOjXocO0g>
+    <xmx:7ZgwZz1jUQBztB4CKlIWC8QH-p42Yb0DLY7xIDA9c5oaeRcQCAWehw>
+    <xmx:7ZgwZ0ur8iRzSXK6nqJFxzoUe8TilOUwYViPoKk2LMq0T04Ugqmfcw>
+    <xmx:7ZgwZ3Xi-SZQE1TY06w_w7XvIhjB6IfVQ9lbYp9RYR3qVqbFTAAfbQ>
+    <xmx:7pgwZ8s-ex9ihCvfWApkrZvICBfophayKV_0hI2wR3wtOdnriXGPUE3l>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 10 Nov 2024 06:28:45 -0500 (EST)
+Date: Sun, 10 Nov 2024 13:28:42 +0200
+From: Ido Schimmel <idosch@idosch.org>
+To: Vladimir Vdovin <deliran@verdict.gg>
+Cc: netdev@vger.kernel.org, dsahern@kernel.org, davem@davemloft.net,
+	edumazet@google.com, linux-kselftest@vger.kernel.org,
+	kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
+	horms@kernel.org, gnault@redhat.com
+Subject: Re: [PATCH net-next v10] net: ipv4: Cache pmtu for all packet paths
+ if multipath enabled
+Message-ID: <ZzCY6kD4G2BVDNQs@shredder>
+References: <20241108093427.317942-1-deliran@verdict.gg>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3_zwRbjBnO5BvEQ--.51752S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW3Ww1rGrWfKry3ur13Wr17Jrb_yoW7CF4kpF
-	y8Zw1jgF4kta42qF45Ga4Ikr45GFn3Zw45KF4Fg3sxCrs7ur1fZr4xKayYyr1rJrWIq3W5
-	uw17Way8Jw18CFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziyCJdUUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiDwqTp2cwXFTybwAAsz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241108093427.317942-1-deliran@verdict.gg>
 
-1. Add a new tests in sockmap_basic.c to test SK_PASS for sockmap
-2. The return value of 'sk_skb/stream_parser' is used as a length, but
-   the current eBPF program returns SK_PASS, which is semantically
-   incorrect. This change modifies it to return skb->len. All tests
-   related to this eBPF program have been tested
-   (currently only in sockmap_basic.c).
+On Fri, Nov 08, 2024 at 09:34:24AM +0000, Vladimir Vdovin wrote:
+> Check number of paths by fib_info_num_path(),
+> and update_or_create_fnhe() for every path.
+> Problem is that pmtu is cached only for the oif
+> that has received icmp message "need to frag",
+> other oifs will still try to use "default" iface mtu.
+> 
+> An example topology showing the problem:
+> 
+>                     |  host1
+>                 +---------+
+>                 |  dummy0 | 10.179.20.18/32  mtu9000
+>                 +---------+
+>         +-----------+----------------+
+>     +---------+                     +---------+
+>     | ens17f0 |  10.179.2.141/31    | ens17f1 |  10.179.2.13/31
+>     +---------+                     +---------+
+>         |    (all here have mtu 9000)    |
+>     +------+                         +------+
+>     | ro1  |  10.179.2.140/31        | ro2  |  10.179.2.12/31
+>     +------+                         +------+
+>         |                                |
+> ---------+------------+-------------------+------
+>                         |
+>                     +-----+
+>                     | ro3 | 10.10.10.10  mtu1500
+>                     +-----+
+>                         |
+>     ========================================
+>                 some networks
+>     ========================================
+>                         |
+>                     +-----+
+>                     | eth0| 10.10.30.30  mtu9000
+>                     +-----+
+>                         |  host2
+> 
+> host1 have enabled multipath and
+> sysctl net.ipv4.fib_multipath_hash_policy = 1:
+> 
+> default proto static src 10.179.20.18
+>         nexthop via 10.179.2.12 dev ens17f1 weight 1
+>         nexthop via 10.179.2.140 dev ens17f0 weight 1
+> 
+> When host1 tries to do pmtud from 10.179.20.18/32 to host2,
+> host1 receives at ens17f1 iface an icmp packet from ro3 that ro3 mtu=1500.
+> And host1 caches it in nexthop exceptions cache.
+> 
+> Problem is that it is cached only for the iface that has received icmp,
+> and there is no way that ro3 will send icmp msg to host1 via another path.
+> 
+> Host1 now have this routes to host2:
+> 
+> ip r g 10.10.30.30 sport 30000 dport 443
+> 10.10.30.30 via 10.179.2.12 dev ens17f1 src 10.179.20.18 uid 0
+>     cache expires 521sec mtu 1500
+> 
+> ip r g 10.10.30.30 sport 30033 dport 443
+> 10.10.30.30 via 10.179.2.140 dev ens17f0 src 10.179.20.18 uid 0
+>     cache
+> 
+> So when host1 tries again to reach host2 with mtu>1500,
+> if packet flow is lucky enough to be hashed with oif=ens17f1 its ok,
+> if oif=ens17f0 it blackholes and still gets icmp msgs from ro3 to ens17f1,
+> until lucky day when ro3 will send it through another flow to ens17f0.
+> 
+> Signed-off-by: Vladimir Vdovin <deliran@verdict.gg>
 
-All tests are passed.
-
-Signed-off-by: Jiayuan Chen <mrpre@163.com>
----
-test result
-310/1   sockmap_basic/sockmap create_update_free:OK
-310/2   sockmap_basic/sockhash create_update_free:OK
-310/3   sockmap_basic/sockmap sk_msg load helpers:OK
-310/4   sockmap_basic/sockhash sk_msg load helpers:OK
-310/5   sockmap_basic/sockmap update:OK
-310/6   sockmap_basic/sockhash update:OK
-310/7   sockmap_basic/sockmap update in unsafe context:OK
-310/8   sockmap_basic/sockmap copy:OK
-310/9   sockmap_basic/sockhash copy:OK
-310/10  sockmap_basic/sockmap skb_verdict attach:OK
-310/11  sockmap_basic/sockmap skb_verdict attach_with_link:OK
-310/12  sockmap_basic/sockmap msg_verdict progs query:OK
-310/13  sockmap_basic/sockmap stream_parser progs query:OK
-310/14  sockmap_basic/sockmap stream_verdict progs query:OK
-310/15  sockmap_basic/sockmap skb_verdict progs query:OK
-310/16  sockmap_basic/sockmap skb_verdict shutdown:OK
-310/17  sockmap_basic/sockmap stream_parser and stream_verdict pass:OK
-310/18  sockmap_basic/sockmap skb_verdict fionread:OK
-310/19  sockmap_basic/sockmap skb_verdict fionread on drop:OK
-310/20  sockmap_basic/sockmap skb_verdict msg_f_peek:OK
-310/21  sockmap_basic/sockmap skb_verdict msg_f_peek with link:OK
-310/22  sockmap_basic/sockmap unconnected af_unix:OK
-310/23  sockmap_basic/sockmap one socket to many map entries:OK
-310/24  sockmap_basic/sockmap one socket to many maps:OK
-310/25  sockmap_basic/sockmap same socket replace:OK
-310/26  sockmap_basic/sockmap sk_msg attach sockmap helpers with link:OK
-310/27  sockmap_basic/sockhash sk_msg attach sockhash helpers with link:OK
-310     sockmap_basic:OK
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 54 +++++++++++++++++++
- .../bpf/progs/test_sockmap_pass_prog.c        |  2 +-
- 2 files changed, 55 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 82bfb266741c..59eafd0115df 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -501,6 +501,58 @@ static void test_sockmap_skb_verdict_shutdown(void)
- 	test_sockmap_pass_prog__destroy(skel);
- }
- 
-+static void test_sockmap_stream_pass(void)
-+{
-+	int zero = 0, sent, recvd;
-+	int verdict, parser;
-+	int err, map;
-+	int c = -1, p = -1;
-+	struct test_sockmap_pass_prog *pass = NULL;
-+	char snd[256] = "0123456789";
-+	char rcv[256] = "0";
-+
-+	pass = test_sockmap_pass_prog__open_and_load();
-+	verdict = bpf_program__fd(pass->progs.prog_skb_verdict);
-+	parser = bpf_program__fd(pass->progs.prog_skb_parser);
-+	map = bpf_map__fd(pass->maps.sock_map_rx);
-+
-+	err = bpf_prog_attach(parser, map, BPF_SK_SKB_STREAM_PARSER, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach stream parser"))
-+		goto out;
-+
-+	err = bpf_prog_attach(verdict, map, BPF_SK_SKB_STREAM_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach stream verdict"))
-+		goto out;
-+
-+	err = create_pair(AF_INET, SOCK_STREAM, &c, &p);
-+	if (err)
-+		goto out;
-+
-+	/* sk_data_ready of 'p' will be replaced by strparser handler */
-+	err = bpf_map_update_elem(map, &zero, &p, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(p)"))
-+		goto out_close;
-+
-+	/*
-+	 * as 'prog_skb_parser' return the original skb len and
-+	 * 'prog_skb_verdict' return SK_PASS, the kernel will just
-+	 * pass it through to original socket 'p'
-+	 */
-+	sent = xsend(c, snd, sizeof(snd), 0);
-+	ASSERT_EQ(sent, sizeof(snd), "xsend(c)");
-+
-+	recvd = recv_timeout(p, rcv, sizeof(rcv), SOCK_NONBLOCK,
-+			     IO_TIMEOUT_SEC);
-+	ASSERT_EQ(recvd, sizeof(rcv), "recv_timeout(p)");
-+
-+out_close:
-+	close(c);
-+	close(p);
-+
-+out:
-+	test_sockmap_pass_prog__destroy(pass);
-+}
-+
- static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- {
- 	int err, map, verdict, c0 = -1, c1 = -1, p0 = -1, p1 = -1;
-@@ -923,6 +975,8 @@ void test_sockmap_basic(void)
- 		test_sockmap_progs_query(BPF_SK_SKB_VERDICT);
- 	if (test__start_subtest("sockmap skb_verdict shutdown"))
- 		test_sockmap_skb_verdict_shutdown();
-+	if (test__start_subtest("sockmap stream_parser and stream_verdict pass"))
-+		test_sockmap_stream_pass();
- 	if (test__start_subtest("sockmap skb_verdict fionread"))
- 		test_sockmap_skb_verdict_fionread(true);
- 	if (test__start_subtest("sockmap skb_verdict fionread on drop"))
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-index 69aacc96db36..515a3869e56c 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-@@ -41,7 +41,7 @@ int prog_skb_verdict_clone(struct __sk_buff *skb)
- SEC("sk_skb/stream_parser")
- int prog_skb_parser(struct __sk_buff *skb)
- {
--	return SK_PASS;
-+	return skb->len;
- }
- 
- char _license[] SEC("license") = "GPL";
--- 
-2.43.5
-
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 
