@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-21739-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21740-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A79D9C3116
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 07:52:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F3389C311A
+	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 07:57:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A1821C20B00
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 06:52:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD125281A54
+	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 06:56:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E569C14884D;
-	Sun, 10 Nov 2024 06:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FE4D14A09C;
+	Sun, 10 Nov 2024 06:56:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="iGqnZ/EM"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="RMR97txm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556B4233D62;
-	Sun, 10 Nov 2024 06:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E276C233D62;
+	Sun, 10 Nov 2024 06:56:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731221547; cv=none; b=XL7H1JN6zy/yj46p8sgO+D91rc3Vvm2DqL/TIWUq6as2rTPltonw06DD3MEd9Mj+j7hH1upDJ20FQ0r9fTlG/fRnjuQRiGr8WVdSlcr6zOBWqtFmEUzu53ZxL7DkfUW/xFVEm4KcFrdQ/Vqa+y/q1FM24eXPNY2MzCVWkUg3uhc=
+	t=1731221815; cv=none; b=APR7AKm4nOjZ2PIYf/wrtCZM93G9JgZQRP4XQ2uOZ+PuWIdmEeBoBzbVigIKNgalDtApIhrICC6aoD1zwEY/pNUH5NHyU4DcKCULmXR0fNhZAqi5pMfJsVvYHOeClnqnu+4yQjp6mLZxRJ08RmByo8VLeNK5TEr13tfEL2WDTBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731221547; c=relaxed/simple;
-	bh=od8W5XkEy0ff/2q8B7R8TM67GDL06nnNwQ00rat/Y2s=;
+	s=arc-20240116; t=1731221815; c=relaxed/simple;
+	bh=UA9Tmd0gNaeVpuxU3ELNYYIYThrrxAtZREPsYTGTYOg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gwgMDq9s2nR+A0E5Z8xmSg+SE7KL84w2t6UVvJE9mONTEhumbRlaOZMivN752SgQk9Zg8WWQgkVE+xwTaBHI6Cdv9navvlDHBESSa4+0O599SNvgeXvRhb4MdQ6an15LsOKPppB6xR/PC5HzWIRxft1czl6whyYhBak4E93B0BU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=iGqnZ/EM; arc=none smtp.client-ip=148.163.156.1
+	 In-Reply-To:Content-Type; b=KVXQgwLon9wEfLKAglNtN/gIv5JV5p+QK1Jgj+26oI1oqLys/J6rwHyEYpHoH7MGBGNoQm7xAWBtYuHWOLS68NkPSIOGfZhCcL8ixCPyUlcJk//ZXtbceBFzlNyzpdbUVrNF5C+7XnW9voOyZ8aZDaJlnIHJevb1rSxGx7bhUlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=RMR97txm; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AA6AIgA018846;
-	Sun, 10 Nov 2024 06:52:19 GMT
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AA5iZ9X005330;
+	Sun, 10 Nov 2024 06:56:40 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=RNk79E
-	8usZi4lUq/C0Gd7pk/ijEnLHRf6/yYfKYkH9c=; b=iGqnZ/EMWFpEtPJnwNaBk1
-	WgDIPMFAbpkzZDTta1KeA8kiAPQJDzyTNS4R3L8W0z+EtQCyqq5xD+2y68SMNm8C
-	F+P06LEpeC1LQTQlQC6FK4QClkt2305Slcjjo9nYO4NrLswR8HllWuss+xuCRH69
-	ngIVS7AZiBY65eaRqzyQijYBEzzqCJVIQggoqvkO2WrCEfVW8CNjMoX4iBdNOhC3
-	e/51THIqOkAmVJcz9CU1Qh8BjcnC2sq447zuViqEdQGCXPYcMGcT9vdh8Ai2LNfC
-	v+SBEn31B1Y3Y0wSBk/x+JqxsTUY/ZFoqPvoSVPscvo4X+xHmKWM3tOuOKbPDHsg
+	:message-id:mime-version:references:subject:to; s=pp1; bh=gEnGDq
+	b+zG5GUHMaGP68rcwcqiWBlcYETbX8g4yNnTo=; b=RMR97txmjnP7gyvTI4Tsz5
+	8EUqMAgIJMIU6evD+A/zeYbQzynr1w5nzyEl1IXiu/mdBmzCkp9/CBmxMZiby0pA
+	PE0Ty+Pete8mlYrgsqe5iZMTxa4HfZ6opFxt9/AU/878yfdyZgbmTqWY918ziu6c
+	t4PoA5RLi8Nou5op3V9xV744U7JmvmCPHNfumBulK4o9WKjnpkuRi+FATZQhnPnY
+	Ad2JXgpvE1ZJ1KOHxO39Lv9XLmHKIrr3+a3mOO2HAfctHNIu7HzDcB2ahNB+V2HI
+	Hdz/ToOCoGADBScoR61R8fteqIzhHjLM7Ne/jn2HEO7qbsDBsRlpQDQoZLuvErsQ
 	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42tqasr2sk-1
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42tnjqga3r-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 10 Nov 2024 06:52:19 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4AA0BIlm010514;
-	Sun, 10 Nov 2024 06:52:17 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 42tj2s0eag-1
+	Sun, 10 Nov 2024 06:56:39 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4AA4pvI8008445;
+	Sun, 10 Nov 2024 06:56:39 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 42tjextg26-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 10 Nov 2024 06:52:17 +0000
+	Sun, 10 Nov 2024 06:56:39 +0000
 Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4AA6qG7744892610
+	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4AA6ucX25833362
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 10 Nov 2024 06:52:17 GMT
+	Sun, 10 Nov 2024 06:56:38 GMT
 Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B4BE158052;
-	Sun, 10 Nov 2024 06:52:16 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 6F87258065;
+	Sun, 10 Nov 2024 06:56:38 +0000 (GMT)
 Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2BDD258056;
-	Sun, 10 Nov 2024 06:52:14 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id E03FE58056;
+	Sun, 10 Nov 2024 06:56:35 +0000 (GMT)
 Received: from [9.179.28.57] (unknown [9.179.28.57])
 	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Sun, 10 Nov 2024 06:52:13 +0000 (GMT)
-Message-ID: <433d2870-987d-4d63-a07c-287580e1d6c7@linux.ibm.com>
-Date: Sun, 10 Nov 2024 12:22:12 +0530
+	Sun, 10 Nov 2024 06:56:35 +0000 (GMT)
+Message-ID: <8a1cd578-2dce-4013-a92a-ede437b91593@linux.ibm.com>
+Date: Sun, 10 Nov 2024 12:26:34 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,15 +91,15 @@ In-Reply-To: <20241110064903.23626-1-donettom@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 8urxfQY0GAcF7KjpMAmCAf4QA9LoiSQp
-X-Proofpoint-ORIG-GUID: 8urxfQY0GAcF7KjpMAmCAf4QA9LoiSQp
+X-Proofpoint-ORIG-GUID: m5GBIoX7PwTonTIMmzQzOrlt3w_q_xg1
+X-Proofpoint-GUID: m5GBIoX7PwTonTIMmzQzOrlt3w_q_xg1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 malwarescore=0 lowpriorityscore=0 phishscore=0 bulkscore=0
- clxscore=1015 impostorscore=0 adultscore=0 mlxscore=0 mlxlogscore=822
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=733
+ phishscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 malwarescore=0 suspectscore=0 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2409260000 definitions=main-2411100058
 
 
@@ -137,6 +137,33 @@ On 11/10/24 12:19, Donet Tom wrote:
 >   # Totals: pass:0 fail:4 xfail:0 xpass:0 skip:0 error:0
 >
 > Test results with this patch.
+
+Sorry the test results with this patch is below.
+
+Test results With this patch
+
+/tools/testing/selftests/mm/hugetlb_dio
+TAP version 13
+1..4
+# No. Free pages before allocation : 100
+# No. Free pages after munmap : 100
+ok 1 : Huge pages freed successfully !
+# No. Free pages before allocation : 100
+# No. Free pages after munmap : 100
+ok 2 : Huge pages freed successfully !
+# No. Free pages before allocation : 100
+# No. Free pages after munmap : 100
+ok 3 : Huge pages freed successfully !
+# No. Free pages before allocation : 100
+# No. Free pages after munmap : 100
+ok 4 : Huge pages freed successfully !
+
+# Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+Thank
+
+Donet
+
 >
 > ./tools/testing/selftests/mm/hugetlb_dio
 > TAP version 13
@@ -179,12 +206,4 @@ On 11/10/24 12:19, Donet Tom wrote:
 >   	/* Allocate a hugetlb page */
 >   	orig_buffer = mmap(NULL, h_pagesize, mmap_prot, mmap_flags, -1, 0);
 >   	if (orig_buffer == MAP_FAILED) {
->
->
-Hi Andrew
-Would you prefer I send this fixup patch as a new series, or is it okay as is?
-
-Thanks
-Donet
-
 
