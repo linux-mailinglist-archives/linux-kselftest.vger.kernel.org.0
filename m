@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-21747-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21748-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB0A99C342C
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 19:26:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0DA09C3475
+	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 20:52:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 83286281122
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 18:26:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36F5A1C20C52
+	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 19:52:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58783139579;
-	Sun, 10 Nov 2024 18:26:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 072B913B5B3;
+	Sun, 10 Nov 2024 19:52:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iqiDuSnA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vw9tsbhe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5301817C91;
-	Sun, 10 Nov 2024 18:26:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FBCA15AF6;
+	Sun, 10 Nov 2024 19:52:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731263187; cv=none; b=dxsNLb7PLPmxzs/nW+zW2xlwkr9mzHGHK/dhho9jATao8wYWdPUjQZCpZIwGx8gYu4116ZOOZlbg4dofTmGl7KeYiBnBlMweBMYx9+y5BM2aB0aOSl/wPme72I8PQyi24KHqYBKDvDCCyyUWqAWcJ5x2chNlsXTXFKZ4PFZPL14=
+	t=1731268351; cv=none; b=qD+Ou8K50WHa4u9vAzugxBQUG0g/zkBhoPsw9y/iWvHw8jnxubrWp5jjbXfTpJ+7tjHqR2inQXtL5bWcuePgxtcJnR86uPlsuW8zJP+pgK5mcAGdwp9+qoYlQaiB1CVtyM2noBrlauYlBa8oJPOCDElC4Vy6StO/7hsqdBy4CTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731263187; c=relaxed/simple;
-	bh=p+kZUNpOarFYEh5yR1wrgus0MuK0s0NFERVlmBdAwpc=;
+	s=arc-20240116; t=1731268351; c=relaxed/simple;
+	bh=Qn6ugCRq9iAJiGTlOvQ86KsjWexwsguL5eo8A23wSec=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lmwAvOunXd86R4Lc6xaeOEZFI3MSoEjN2gW+WaAwQ83+SksRRne0Mo7p8TqjTOjPpcqq0wUF3kfh3M3yBj/uqZCWFoOJafUcQgxDXSlwjbISx2+ms0rDGRqc3TFZJPncvNL28Who7AD3osQyaSD3DzmX9y28F4H68FED8v449/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iqiDuSnA; arc=none smtp.client-ip=209.85.128.42
+	 In-Reply-To:Content-Type; b=CIlbyYsME+2BX+EWjsnB5GE9MZEK+q6x0E72gU2yzo1qJg/QV2NFhANddxHe+TsvKf2tnbtwipQfUUpdQJEfQrWAHHXjIAR6mw1Lqz7NlgT14RxfubYAg++dVTjl2QQjTmvj4XHSnwHFk7+uAKb+z6QGMwA8OYln5/BMJtMN7t4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vw9tsbhe; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4315baec69eso33051385e9.2;
-        Sun, 10 Nov 2024 10:26:25 -0800 (PST)
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-37d50fad249so2881915f8f.1;
+        Sun, 10 Nov 2024 11:52:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731263183; x=1731867983; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1731268348; x=1731873148; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=emajkWUcoE3Ns+xrK1PnL3V8KRgd8CuiN/X8WerMwf8=;
-        b=iqiDuSnAesOCRG0lWX2qSfTIdeB+1w/fWfjmiZ/dfmT37pVdM2S/CO+L+7butaS1aY
-         PIUQkbAGBzZR54RVWoWVzjUcyoiEYwkTcLJjh0PtH6ZrsItu8jxNOqJobXRXkdnjbP7v
-         JVjBSqraeuZUz/jBUjD5hk8f6I7Fzqd7AfOBp3A+2Vruc1rpXPeJ+8JmN6mBCJj27/sj
-         LDMa+x13EE3rIEAR2DkyCGiWhtfwS12fvs1w9z1ObV65o4MW5XqCCrXymqTzMPT1N80t
-         581RZxIAt4EyXey+h1q2YDY+PFWoeVITxH73S1XEO75dsjW4zqIeNbDESSM+vY1JnIVw
-         L4Sw==
+        bh=t19D38cHTZDSKKSN0zcjYdbOcIOVMY1UTGFX7Lm29YU=;
+        b=Vw9tsbheavnuD4X4azApoupieNLZyMFj0OF8qTvhV+9u5TeojhnvCYYF0SbqiB28D1
+         1QBmPFiXsNbk5Bq8DoXfPCqRupcT01Ect3EjxacvOVwOe1hgmeVvlJXD1czQUiz1YwBH
+         jjcukB/ehoyyD5CyRuQwua99LL67OHq7uRQGl9cOcbrs/XpkDVpXWNFlwQnZJCgTHVps
+         ux2ntZSXPE9FCs/hkRw5+MZSiI7X6OFGtyf5dmgc6h+3lhhgf/EEBRVCPmTBTmMDkdoc
+         8UhmHjxTOIko5mCxl9vcQ55WNuCMkFWJsnGmKZtUCNwRw8K2kBiVs0vj3QWCQ+aX7g9t
+         L5gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731263183; x=1731867983;
+        d=1e100.net; s=20230601; t=1731268348; x=1731873148;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=emajkWUcoE3Ns+xrK1PnL3V8KRgd8CuiN/X8WerMwf8=;
-        b=e9uCb4CwsiOezOjieffWWsGlmzwVbaB0NQZXvIeaATCE9ghDPjQ6GnuPUfGazZ7yfr
-         vfWHi8lOCvSFzFVXOLWNZlGKbkYpOCblXRRyOe2dY+T7hhltBF5ZyyGX8xdyrcc4PrSH
-         xmVzOyGSEQt8vAtcUr3+Bt+xbNn4Fi6zHBqc6R/pxMQbqLtexLJmPAOypUrtyzlZTiAJ
-         nmKUEVbo3zgxvsNv7V/750b/yGHBZiWWwne4I1qNzujeDu9C/xjkVcYWaHR2dDvj01fD
-         +cy7DghYkgbt7Z2UB7Nv41Bnce7EILBRSl1ch97ghPKCiTpLvLwjT9AyJtACjGjzGyko
-         AXDg==
-X-Forwarded-Encrypted: i=1; AJvYcCUE2N1g3vMtegLlKYx3BJcQVZP5cCaduWNZgenk7xtJSDk9tMjr4FlpU4mGv8KzgiV1AUszCzmR@vger.kernel.org, AJvYcCVHP7u5XQLLOy5DerzU4scmAf6sK88EHo5HtV6rgbuVoEGjxlzhn8+hBcTNEvmVGgwi3KZ91ANviCwnzzk=@vger.kernel.org, AJvYcCXt/1GvpqzlTDAqaibK9At42t50mXp5bmUqUxP+XNZc2BR5VwXMQs4foCUMpVLbTrnQlnUVDWbaMZRv2WCPYYzQ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBRReflinD9ni2CJMMKAq1epZycvlGo2mkNtUX5tOFVAC7rNGx
-	6Mosoe2Ems65WFLvKNzUwbXo6LCBEgwX2plYsKVJI/bG45PWajkK
-X-Google-Smtp-Source: AGHT+IFaWi4p4hvt6FaTwEeCdQhXnxD0sVm7e3abgqNzS9vWA+/X3QRJPWDqqYIqiUH2nxBH/RCaoQ==
-X-Received: by 2002:a05:600c:3ca8:b0:426:616e:db8d with SMTP id 5b1f17b1804b1-432b7509717mr71365405e9.15.1731263183199;
-        Sun, 10 Nov 2024 10:26:23 -0800 (PST)
+        bh=t19D38cHTZDSKKSN0zcjYdbOcIOVMY1UTGFX7Lm29YU=;
+        b=X/3LofIwEUvQUtE9kzipZ4v/jcO8dR34dDWZ1EuDknoUcRVzbpbKciwj9jQv+m33UX
+         IyOATvaKITMigH1R05MnzItskEtjHwdEWKhpB6BmB8XekZXvF5Wtb2AraIj+PERkjyuI
+         9h+AqWmE/fhsLs0DeG5kd7LnmmjEW3mr1JrxRs7edADMfLL3KG4QpvaGPILXr8zW00hT
+         T9EgksasGTj1RR5NvCqDIeq4OeUMO6owgO/GKNk55TA6q0jxBx7Fe42xsfVHs06OhezG
+         ih3XxoDvSC28DXy0ibnAnjUsVdB8ovaxKU7LLk01x34YaLsHSIOQKoH5GaWVLD/tnIbE
+         JHbg==
+X-Forwarded-Encrypted: i=1; AJvYcCX7N9sdFsXeBPkU2rAtREq5eM1iN1iZV+yLjnnb3M2Tg/rxXZYayasmpHEweJZf8c7GBrtD9aBxjVWLW5VW2nYY@vger.kernel.org, AJvYcCXq/O/dsWZsMMvzeqICZsyaL6QFSQ2GGaFoxCe+nEqMZgJzCad7V1G9034HdViFFDaBsgpw3DJBkZMYsdE=@vger.kernel.org, AJvYcCXrMcNh02ryrrPkYCVIBTK81HLCh3BwksAlfdQLh9Tipd/azD9NZfsnEi2h7jYDU2PS4MQ+sdCd@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRv/ihjDR+q7/wrTqAgYyg6sKd6owmEPz7NQ8FTTPZMPU6heDA
+	ICOLZE1UxtI/7+2vx5u0Pl8y+MoEyrH0u870UlcHIipdacoUFMI3DXB0p9QK
+X-Google-Smtp-Source: AGHT+IEsJbE6ntowUKlGvBXLk1/QzHNi3ufUQn43d1AnyZnEoUyF8ivcefnKtaHWTKYxX4BMKmQQZQ==
+X-Received: by 2002:a5d:6487:0:b0:37d:542c:559 with SMTP id ffacd0b85a97d-381f186cc55mr8879896f8f.18.1731268348327;
+        Sun, 10 Nov 2024 11:52:28 -0800 (PST)
 Received: from [192.168.0.2] ([69.6.8.124])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381eda04ceasm10767990f8f.102.2024.11.10.10.26.21
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432b05c18e0sm154130765e9.28.2024.11.10.11.52.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Nov 2024 10:26:22 -0800 (PST)
-Message-ID: <62d382f8-ea45-4157-b54b-8fed7bdafcca@gmail.com>
-Date: Sun, 10 Nov 2024 20:26:52 +0200
+        Sun, 10 Nov 2024 11:52:27 -0800 (PST)
+Message-ID: <03c0f957-c150-47b3-805c-9a1d774af03b@gmail.com>
+Date: Sun, 10 Nov 2024 21:52:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,7 +76,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 07/23] ovpn: introduce the ovpn_socket object
+Subject: Re: [PATCH net-next v11 06/23] ovpn: introduce the ovpn_peer object
 To: Antonio Quartulli <antonio@openvpn.net>
 Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
@@ -84,311 +84,31 @@ Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-7-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-6-de4698c73a25@openvpn.net>
 Content-Language: en-US
 From: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-In-Reply-To: <20241029-b4-ovpn-v11-7-de4698c73a25@openvpn.net>
+In-Reply-To: <20241029-b4-ovpn-v11-6-de4698c73a25@openvpn.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 29.10.2024 12:47, Antonio Quartulli wrote:
-> This specific structure is used in the ovpn kernel module
-> to wrap and carry around a standard kernel socket.
-> 
-> ovpn takes ownership of passed sockets and therefore an ovpn
-> specific objects is attached to them for status tracking
-> purposes.
-> 
-> Initially only UDP support is introduced. TCP will come in a later
-> patch.
-> 
-> Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
 
 [...]
 
-> diff --git a/drivers/net/ovpn/socket.c b/drivers/net/ovpn/socket.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..090a3232ab0ec19702110f1a90f45c7f10889f6f
-> --- /dev/null
-> +++ b/drivers/net/ovpn/socket.c
-> @@ -0,0 +1,120 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*  OpenVPN data channel offload
-> + *
-> + *  Copyright (C) 2020-2024 OpenVPN, Inc.
-> + *
-> + *  Author:	James Yonan <james@openvpn.net>
-> + *		Antonio Quartulli <antonio@openvpn.net>
-> + */
-> +
-> +#include <linux/net.h>
-> +#include <linux/netdevice.h>
-> +
-> +#include "ovpnstruct.h"
-> +#include "main.h"
-> +#include "io.h"
-> +#include "peer.h"
-> +#include "socket.h"
-> +#include "udp.h"
-> +
-> +static void ovpn_socket_detach(struct socket *sock)
+> +static void ovpn_peer_release(struct ovpn_peer *peer)
 > +{
-> +	if (!sock)
-> +		return;
+> +	ovpn_bind_reset(peer, NULL);
 > +
-> +	sockfd_put(sock);
-> +}
-> +
-> +/**
-> + * ovpn_socket_release_kref - kref_put callback
-> + * @kref: the kref object
-> + */
-> +void ovpn_socket_release_kref(struct kref *kref)
-> +{
-> +	struct ovpn_socket *sock = container_of(kref, struct ovpn_socket,
-> +						refcount);
-> +
-> +	ovpn_socket_detach(sock->sock);
-> +	kfree_rcu(sock, rcu);
-> +}
-> +
-> +static bool ovpn_socket_hold(struct ovpn_socket *sock)
-> +{
-> +	return kref_get_unless_zero(&sock->refcount);
 
-Why do we need to wrap this kref acquiring call into the function. Why 
-we cannot simply call kref_get_unless_zero() from ovpn_socket_get()?
+nit: this empty line after ovpn_bind_reset() is removed in the 
+'implement basic TX path (UDP)' patch. What tricks git and it produces a 
+sensless diff with 'ovpn_bind_reset(...)' line beeing removed and then 
+introduced again. If you do not like this empty line then remove it 
+here, please :)
 
-> +}
-> +
-> +static struct ovpn_socket *ovpn_socket_get(struct socket *sock)
-> +{
-> +	struct ovpn_socket *ovpn_sock;
-> +
-> +	rcu_read_lock();
-> +	ovpn_sock = rcu_dereference_sk_user_data(sock->sk);
-> +	if (!ovpn_socket_hold(ovpn_sock)) {
-> +		pr_warn("%s: found ovpn_socket with ref = 0\n", __func__);
-
-Should we be more specific here and print warning with 
-netdev_warn(ovpn_sock->ovpn->dev, ...)?
-
-And, BTW, how we can pick-up a half-destroyed socket?
-
-> +		ovpn_sock = NULL;
-> +	}
-> +	rcu_read_unlock();
-> +
-> +	return ovpn_sock;
-> +}
-> +
-> +static int ovpn_socket_attach(struct socket *sock, struct ovpn_peer *peer)
-> +{
-> +	int ret = -EOPNOTSUPP;
-> +
-> +	if (!sock || !peer)
-> +		return -EINVAL;
-> +
-> +	if (sock->sk->sk_protocol == IPPROTO_UDP)
-> +		ret = ovpn_udp_socket_attach(sock, peer->ovpn);
-> +
-> +	return ret;
-> +}
-> +
-> +/**
-> + * ovpn_socket_new - create a new socket and initialize it
-> + * @sock: the kernel socket to embed
-> + * @peer: the peer reachable via this socket
-> + *
-> + * Return: an openvpn socket on success or a negative error code otherwise
-> + */
-> +struct ovpn_socket *ovpn_socket_new(struct socket *sock, struct ovpn_peer *peer)
-> +{
-> +	struct ovpn_socket *ovpn_sock;
-> +	int ret;
-> +
-> +	ret = ovpn_socket_attach(sock, peer);
-> +	if (ret < 0 && ret != -EALREADY)
-> +		return ERR_PTR(ret);
-> +
-> +	/* if this socket is already owned by this interface, just increase the
-> +	 * refcounter and use it as expected.
-> +	 *
-> +	 * Since UDP sockets can be used to talk to multiple remote endpoints,
-> +	 * openvpn normally instantiates only one socket and shares it among all
-> +	 * its peers. For this reason, when we find out that a socket is already
-> +	 * used for some other peer in *this* instance, we can happily increase
-> +	 * its refcounter and use it normally.
-> +	 */
-> +	if (ret == -EALREADY) {
-> +		/* caller is expected to increase the sock refcounter before
-> +		 * passing it to this function. For this reason we drop it if
-> +		 * not needed, like when this socket is already owned.
-> +		 */
-> +		ovpn_sock = ovpn_socket_get(sock);
-> +		sockfd_put(sock);
-> +		return ovpn_sock;
-> +	}
-> +
-> +	ovpn_sock = kzalloc(sizeof(*ovpn_sock), GFP_KERNEL);
-> +	if (!ovpn_sock)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	ovpn_sock->ovpn = peer->ovpn;
-> +	ovpn_sock->sock = sock;
-> +	kref_init(&ovpn_sock->refcount);
-> +
-> +	rcu_assign_sk_user_data(sock->sk, ovpn_sock);
-> +
-> +	return ovpn_sock;
-> +}
-> diff --git a/drivers/net/ovpn/socket.h b/drivers/net/ovpn/socket.h
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..5ad9c5073b085482da95ee8ebf40acf20bf2e4b3
-> --- /dev/null
-> +++ b/drivers/net/ovpn/socket.h
-> @@ -0,0 +1,48 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*  OpenVPN data channel offload
-> + *
-> + *  Copyright (C) 2020-2024 OpenVPN, Inc.
-> + *
-> + *  Author:	James Yonan <james@openvpn.net>
-> + *		Antonio Quartulli <antonio@openvpn.net>
-> + */
-> +
-> +#ifndef _NET_OVPN_SOCK_H_
-> +#define _NET_OVPN_SOCK_H_
-> +
-> +#include <linux/net.h>
-> +#include <linux/kref.h>
-> +#include <net/sock.h>
-> +
-> +struct ovpn_struct;
-> +struct ovpn_peer;
-> +
-> +/**
-> + * struct ovpn_socket - a kernel socket referenced in the ovpn code
-> + * @ovpn: ovpn instance owning this socket (UDP only)
-> + * @sock: the low level sock object
-> + * @refcount: amount of contexts currently referencing this object
-> + * @rcu: member used to schedule RCU destructor callback
-> + */
-> +struct ovpn_socket {
-> +	struct ovpn_struct *ovpn;
-> +	struct socket *sock;
-> +	struct kref refcount;
-> +	struct rcu_head rcu;
-> +};
-> +
-> +void ovpn_socket_release_kref(struct kref *kref);
-> +
-> +/**
-> + * ovpn_socket_put - decrease reference counter
-> + * @sock: the socket whose reference counter should be decreased
-> + */
-> +static inline void ovpn_socket_put(struct ovpn_socket *sock)
-> +{
-> +	kref_put(&sock->refcount, ovpn_socket_release_kref);
-> +}
-> +
-> +struct ovpn_socket *ovpn_socket_new(struct socket *sock,
-> +				    struct ovpn_peer *peer);
-> +
-> +#endif /* _NET_OVPN_SOCK_H_ */
-> diff --git a/drivers/net/ovpn/udp.c b/drivers/net/ovpn/udp.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..c10474d252e19a0626d17a6f5dd328a5e5811551
-> --- /dev/null
-> +++ b/drivers/net/ovpn/udp.c
-> @@ -0,0 +1,72 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*  OpenVPN data channel offload
-> + *
-> + *  Copyright (C) 2019-2024 OpenVPN, Inc.
-> + *
-> + *  Author:	Antonio Quartulli <antonio@openvpn.net>
-> + */
-> +
-> +#include <linux/netdevice.h>
-> +#include <linux/socket.h>
-> +#include <net/udp.h>
-> +
-> +#include "ovpnstruct.h"
-> +#include "main.h"
-> +#include "socket.h"
-> +#include "udp.h"
-> +
-> +/**
-> + * ovpn_udp_socket_attach - set udp-tunnel CBs on socket and link it to ovpn
-> + * @sock: socket to configure
-> + * @ovpn: the openvp instance to link
-> + *
-> + * After invoking this function, the sock will be controlled by ovpn so that
-> + * any incoming packet may be processed by ovpn first.
-> + *
-> + * Return: 0 on success or a negative error code otherwise
-> + */
-> +int ovpn_udp_socket_attach(struct socket *sock, struct ovpn_struct *ovpn)
-> +{
-> +	struct ovpn_socket *old_data;
-> +	int ret = 0;
-> +
-> +	/* sanity check */
-> +	if (sock->sk->sk_protocol != IPPROTO_UDP) {
-
-The function will be called only for a UDP socket. The caller makes sure 
-this is truth. So, why do we need this check?
-
-> +		DEBUG_NET_WARN_ON_ONCE(1);
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* make sure no pre-existing encapsulation handler exists */
-> +	rcu_read_lock();
-> +	old_data = rcu_dereference_sk_user_data(sock->sk);
-> +	if (!old_data) {
-> +		/* socket is currently unused - we can take it */
-> +		rcu_read_unlock();
-> +		return 0;
-> +	}
-> +
-> +	/* socket is in use. We need to understand if it's owned by this ovpn
-> +	 * instance or by something else.
-> +	 * In the former case, we can increase the refcounter and happily
-> +	 * use it, because the same UDP socket is expected to be shared among
-> +	 * different peers.
-> +	 *
-> +	 * Unlikely TCP, a single UDP socket can be used to talk to many remote
-> +	 * hosts and therefore openvpn instantiates one only for all its peers
-> +	 */
-> +	if ((READ_ONCE(udp_sk(sock->sk)->encap_type) == UDP_ENCAP_OVPNINUDP) &&
-> +	    old_data->ovpn == ovpn) {
-> +		netdev_dbg(ovpn->dev,
-> +			   "%s: provided socket already owned by this interface\n",
-> +			   __func__);
-
-Why do we need the function name being printed here?
-
-> +		ret = -EALREADY;
-> +	} else {
-> +		netdev_err(ovpn->dev,
-> +			   "%s: provided socket already taken by other user\n",
-> +			   __func__);
-
-The same comment regarding the function name printing.
-
-And why 'error' level? There is a few ways to fall into this case and 
-each of them implies a user-space screw up. But why we consider these 
-user-space screw ups our (kernel) problem? I suggesting to reduce level 
-at least to 'warning' or maybe even 'notice'. See level definitions in 
-include/linux/kern_levels.h
-
-> +		ret = -EBUSY;
-> +	}
-> +	rcu_read_unlock();
-> +
-> +	return ret;
+> +	dst_cache_destroy(&peer->dst_cache);
+> +	netdev_put(peer->ovpn->dev, &peer->ovpn->dev_tracker);
+> +	kfree_rcu(peer, rcu);
 > +}
 
 --
