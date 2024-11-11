@@ -1,160 +1,125 @@
-Return-Path: <linux-kselftest+bounces-21766-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21767-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 114959C3BBB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Nov 2024 11:16:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 297BC9C3BD8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Nov 2024 11:28:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCA31282AE8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Nov 2024 10:16:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB8B9282447
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Nov 2024 10:28:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04E9415B554;
-	Mon, 11 Nov 2024 10:16:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 604BB17BB2E;
+	Mon, 11 Nov 2024 10:28:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BeNmjEOz"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="NJlFjfEw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp-fw-80009.amazon.com (smtp-fw-80009.amazon.com [99.78.197.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 689EAE545;
-	Mon, 11 Nov 2024 10:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F8E14600D;
+	Mon, 11 Nov 2024 10:28:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731320169; cv=none; b=up7acSD+4FbRvYu97fg0Uf4TpppVscQMwypjVju7RAM0MzcSD9jU2AEG8u245pw8lnPYv932mpTx6OARwrs9MCwvdXwlTJAp4N9VIZrtTnz/WPOCHRTpUswi+SIYJLpH1Obge42wluwPo2jWeAv3HQbfnSSa4WQ4pzvnHUOIYzk=
+	t=1731320887; cv=none; b=HoW0cWiHkpmKDlgpynax1DmAYa1XZEoKMpUCX6CuoD9iBc/yQ1B1ruGiUOiEunB47yVAEN6IaDQWcch/lnYhY8U3iwkwnbWJZjN6dnfjXt/95wUENkFrCcWEGViztP2qmBx19B7PYTai11/h+HFfLOpL+5KTZ1oa5HKkQLPWPIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731320169; c=relaxed/simple;
-	bh=IV9NYGHIWth3OPYoHQPaWAghuIBaFtDa1I2KcVfbW1M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m/2xTZhZ7aFatdmcfCDYYxzUnKD8rM9wYqvmMZBHqjEACY7x63k6iDY7LWxDA05gZxHl7er2/mk7lnlgne5UfE0qczwSrdgMxviRmKJuJvK+/a2hd1no4efdU8s6dZV6V8RRFx3vY3ksCj6+A1Zc5OwpRVP/iFgwx5jJ+SLpkbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BeNmjEOz; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AB8dtbQ001534;
-	Mon, 11 Nov 2024 10:15:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=HKyicd
-	Xofil/0SMEi6fgY2mH15SyGBkN0Qoxjb017Dw=; b=BeNmjEOzSbBwjK0wiqmV4A
-	EI4OearG2VMlOst+GzZXuxpJMle3/qtUNfN4sNzyapKj1SFf7jxO9GYrq2sdN1zT
-	Vk45XyRFucF4nTZWB91oP83Rf+FWGHRaNxQZe8hf9B61kw/G1ErEWFbQ2fEFeMpA
-	nBl9F969ir1VMGv8K/wZCj+Xf2Uf/BY3vvR1QgRiNNwji3UE56uyDSsHn+UzJLYQ
-	eL/bcRr806kHR45ZzRoripgQKM/6/sl/84j9hp0UCx4P/KBS7n/KZG4c3Ksr+XsC
-	UDTXuRHLYkzry43qyxgOchg/ypXlWEl3+anpz7N0w0g4tdAWWCKa81uDyKpy4D2g
-	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42uem1gb0b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 11 Nov 2024 10:15:55 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4AAMxH6Y027901;
-	Mon, 11 Nov 2024 10:15:55 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 42tj2s25fr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 11 Nov 2024 10:15:54 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4ABAFpKd32047624
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 11 Nov 2024 10:15:51 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 61D4920079;
-	Mon, 11 Nov 2024 10:15:51 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D20DF20078;
-	Mon, 11 Nov 2024 10:15:50 +0000 (GMT)
-Received: from [9.171.52.169] (unknown [9.171.52.169])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 11 Nov 2024 10:15:50 +0000 (GMT)
-Message-ID: <bbee97ef-ba72-4c43-9c97-86fa9ca625d3@linux.ibm.com>
-Date: Mon, 11 Nov 2024 11:15:50 +0100
+	s=arc-20240116; t=1731320887; c=relaxed/simple;
+	bh=cI9q99rlDOxAqO3bS4eVJfx48G3XhrUSNcG3XRTjaLk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Uw1bPJE6RvWcA3OlW3iywDZ4V/dRDV3kBtUBAJYUOMSfU0QbsCnDvPi9lbzvWznmeTFMIxPKjk8vHmfUbbWhFDgK2VEzpLIfnAp2qXVyw+lBiL2NUzTKebPbQgcjAaLmMzp26kek8/ieFL3WGanJol+cOPbYlHrI2nMQZvVPcbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=NJlFjfEw; arc=none smtp.client-ip=99.78.197.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1731320885; x=1762856885;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=PpjRqEBAyVw7Qd4OepFho+pIzvM5vUo5vshUaJauZwQ=;
+  b=NJlFjfEwHxfvPwglq3171qleFbPXMuC9gbJbxiP+AdEZp2IKNRaIX0dW
+   PfFH9oxYms4xIf0jIXVB3eEqQ0a1/DF7EK6FCB0PxbMzfJ/8+laXhE8cy
+   HOiu1Fxzsy9vBleL+Xlo2q/PnX4EXC4bfop0mtMjziUAJne5Uvlrw68t9
+   c=;
+X-IronPort-AV: E=Sophos;i="6.12,144,1728950400"; 
+   d="scan'208";a="146200995"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.25.36.210])
+  by smtp-border-fw-80009.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2024 10:28:02 +0000
+Received: from EX19MTAUEB002.ant.amazon.com [10.0.29.78:20452]
+ by smtpin.naws.us-east-1.prod.farcaster.email.amazon.dev [10.0.51.63:2525] with esmtp (Farcaster)
+ id 63d9a5ec-5156-4eac-8bb3-a9473dc3626f; Mon, 11 Nov 2024 10:28:02 +0000 (UTC)
+X-Farcaster-Flow-ID: 63d9a5ec-5156-4eac-8bb3-a9473dc3626f
+Received: from EX19D008UEA004.ant.amazon.com (10.252.134.191) by
+ EX19MTAUEB002.ant.amazon.com (10.252.135.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
+ Mon, 11 Nov 2024 10:28:01 +0000
+Received: from EX19MTAUEB001.ant.amazon.com (10.252.135.35) by
+ EX19D008UEA004.ant.amazon.com (10.252.134.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
+ Mon, 11 Nov 2024 10:28:01 +0000
+Received: from email-imr-corp-prod-iad-all-1b-3ae3de11.us-east-1.amazon.com
+ (10.124.125.2) by mail-relay.amazon.com (10.252.135.35) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id
+ 15.2.1258.34 via Frontend Transport; Mon, 11 Nov 2024 10:28:01 +0000
+Received: from dev-dsk-iorlov-1b-d2eae488.eu-west-1.amazon.com (dev-dsk-iorlov-1b-d2eae488.eu-west-1.amazon.com [10.253.74.38])
+	by email-imr-corp-prod-iad-all-1b-3ae3de11.us-east-1.amazon.com (Postfix) with ESMTPS id 2E751A0227;
+	Mon, 11 Nov 2024 10:28:00 +0000 (UTC)
+From: Ivan Orlov <iorlov@amazon.com>
+To: <bp@alien8.de>, <dave.hansen@linux.intel.com>, <mingo@redhat.com>,
+	<pbonzini@redhat.com>, <seanjc@google.com>, <shuah@kernel.org>,
+	<tglx@linutronix.de>
+CC: Ivan Orlov <iorlov@amazon.com>, <hpa@zytor.com>, <kvm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<x86@kernel.org>, <pdurrant@amazon.co.uk>, <dwmw@amazon.co.uk>
+Subject: [PATCH v2 0/6] Enhance event delivery error handling
+Date: Mon, 11 Nov 2024 10:27:43 +0000
+Message-ID: <20241111102749.82761-1-iorlov@amazon.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 2/5] selftests: kvm: s390: Add uc_skey VM test case
-To: Christoph Schlameuss <schlameuss@linux.ibm.com>, kvm@vger.kernel.org
-Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>
-References: <20241107141024.238916-3-schlameuss@linux.ibm.com>
- <20241108091620.289406-1-schlameuss@linux.ibm.com>
-Content-Language: en-US
-From: Janosch Frank <frankja@linux.ibm.com>
-Autocrypt: addr=frankja@linux.ibm.com; keydata=
- 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
-In-Reply-To: <20241108091620.289406-1-schlameuss@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Kh9DNuu5FC9VqOa-Uxg5ymfM8ES6hLl6
-X-Proofpoint-GUID: Kh9DNuu5FC9VqOa-Uxg5ymfM8ES6hLl6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
- mlxlogscore=711 bulkscore=0 lowpriorityscore=0 impostorscore=0
- clxscore=1015 adultscore=0 malwarescore=0 phishscore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411110085
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On 11/8/24 10:16 AM, Christoph Schlameuss wrote:
-> Add a test case manipulating s390 storage keys from within the ucontrol
-> VM.
-> 
-> Storage key instruction (ISKE, SSKE and RRBE) intercepts and
-> Keyless-subset facility are disabled on first use, where the skeys are
-> setup by KVM in non ucontrol VMs.
-> 
-> Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
-> ---
+Currently, the situation when guest accesses MMIO during vectoring is
+handled differently on VMX and SVM: on VMX KVM returns internal error,
+when SVM goes into infinite loop trying to deliver an event again and
+again.
 
-Acked-by: Janosch Frank <frankja@linux.ibm.com>
+This patch series eliminates this difference by returning a KVM internal
+error when guest performs MMIO during vectoring for both VMX and SVM.
+
+Also, introduce a selftest test case which covers the error handling
+mentioned above.
+
+V1 -> V2:
+- Make commit messages more brief, avoid using pronouns
+- Extract SVM error handling into a separate commit
+- Introduce a new X86EMUL_ return type and detect the unhandleable
+vectoring error in vendor-specific check_emulate_instruction instead of
+handling it in the common MMU code (which is specific for cached MMIO)
+
+Ivan Orlov (6):
+  KVM: x86: Add function for vectoring error generation
+  KVM: x86: Add emulation status for vectoring during MMIO
+  KVM: VMX: Handle vectoring error in check_emulate_instruction
+  KVM: SVM: Handle MMIO during vectroing error
+  selftests: KVM: extract lidt into helper function
+  selftests: KVM: Add test case for MMIO during vectoring
+
+ arch/x86/include/asm/kvm_host.h               | 12 ++++-
+ arch/x86/kvm/kvm_emulate.h                    |  2 +
+ arch/x86/kvm/svm/svm.c                        |  9 +++-
+ arch/x86/kvm/vmx/vmx.c                        | 33 +++++-------
+ arch/x86/kvm/x86.c                            | 27 ++++++++++
+ .../selftests/kvm/include/x86_64/processor.h  |  7 +++
+ .../selftests/kvm/set_memory_region_test.c    | 53 ++++++++++++++++++-
+ .../selftests/kvm/x86_64/sev_smoke_test.c     |  2 +-
+ 8 files changed, 119 insertions(+), 26 deletions(-)
+
+-- 
+2.43.0
+
 
