@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-21751-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21752-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 279759C354F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Nov 2024 00:54:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D5129C35CA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Nov 2024 02:03:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B211B20AB8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2024 23:54:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 647031C21973
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Nov 2024 01:03:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BF191537C3;
-	Sun, 10 Nov 2024 23:54:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 050AC749A;
+	Mon, 11 Nov 2024 01:03:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fL/7LJI/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dayWE9ri"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 677BC1369AA;
-	Sun, 10 Nov 2024 23:54:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E7E828EC;
+	Mon, 11 Nov 2024 01:03:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731282865; cv=none; b=NH3KQjxPe4h5nqkJDF5GUCdLPNxJxXzzgK5MUlXnFiKGoN5YdI0HHs4vCSwg3D9/2Oi2/VZH5dOk7UNPK73+YVTcwlYfJu2wm6FgWRVddP/qaDqWQSP0GRJIai0qOrSd/PSaUZA+9M4xuNFJp1H8OPkmsCMGLsQuBxkdfCIy+zQ=
+	t=1731287019; cv=none; b=spixLD4NE3d5sLZhr3JAaeeRgQKX2kqyg2/D2VTudCgUahza403U6UiO//z21VHtCU1McjBSjsH/3TkB2kxg7xbgn61kMKi5MZANKkEzQ/6tkuB+BOVFZ1MmFQb62yVJoDZh5wXZbRxPDjaKRPeq7r/vba2vjZ5zmubKL4zZZa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731282865; c=relaxed/simple;
-	bh=19yDs/31GYUWDhn4lID+6CLSRhUWyT2LRtZkzFlK2Nw=;
+	s=arc-20240116; t=1731287019; c=relaxed/simple;
+	bh=QG/zhBWiCy70k/GuKQr3ws1iZtC9IDEjJESgh16/QMk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KU5eyp9zTI63qg3+Fb2rBdpxuG+PL5t8Xz2s1iM+oFHwJAhyhfx5yPncevLkkT1awpaFTRUcfcrFYYwERkhai0caR9YU1WXzdsSWaps8nrlO1bOJ2pTZJcuShfGDtfKH3B8164mHQX8kMKe1jt72a0xFvxn470Hwrvj1Tkt/57c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fL/7LJI/; arc=none smtp.client-ip=209.85.128.45
+	 In-Reply-To:Content-Type; b=IvYZCHYe4GR5QIh17AIAxsaPZVbMr/KRWypBI4dQfmnwY55i3M0yyDECFJI/L5yd6AeomGarFtnujyedFAbuB0vT71QU+0dEeWD4l3657yM3FmsWFHgAjDf5D9l+sAZ2QHNebxrNROoYbRb3vX4O5XVHev0ZMQ/jrim3bFjYvgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dayWE9ri; arc=none smtp.client-ip=209.85.166.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43162cf1eaaso50779585e9.0;
-        Sun, 10 Nov 2024 15:54:23 -0800 (PST)
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-83abe7fc77eso174943139f.0;
+        Sun, 10 Nov 2024 17:03:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731282862; x=1731887662; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20230601; t=1731287017; x=1731891817; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1lZUhLcHVpSjAQwpeA2pvIOp+QE5t1wmk05QqmJ3vbE=;
-        b=fL/7LJI/I8XtBfO0RS9WqZAeCmAeHphPwOsY7O6V4NJoG2gcvGf2UjovtW5cV6KBNT
-         8rsRV/lwgloCPxgwyNIuM9+O0C3w9QvPaUKGDyJdwpfIg36AGfB3UlLUkSIGLARFbQUl
-         TzZl2zZDgYe7+NPeaTgY7j8BGThK1sYJa2fo13vBhPZ24Gn64UHbE2rThrv5tjJ7A7Yf
-         8HyDSamZWp1CQg7if6nqANgKAzcu3G0zvSfWlB/t3y9m52NzL4h+sIqSjJBHvsHH7yM7
-         RtW41wd6Y4nwPFZt452vgnTTUx9B8MbaRNYLMTS43bmiwYP8i2KkyfRFmCI1v2Ve1tdC
-         6zLQ==
+        bh=c6gYKvXLGGIzqVwA6huSqeg9IOgIP9Fx1WH6gy+b/lk=;
+        b=dayWE9riP84LkaTVysy6fMsNEShzgrCZH3MXQ9vQUSq5LKWnVgcIQJajMYjsTLEoEM
+         vAemqsQrvYNRp74QfR0zfNaD3EuSbkX0EtHI4RNm6Ts+kZ8tF5G3D3Ot++DcLnOFS8dV
+         3ypeZ6G5LeO6oSYjZrjEHZwqC36bgC4ezHiLh58id1mVNZ+4vLqkPunTrb1gNQAhEuuM
+         Y1nckE1H6YVKhKJ1HE4s1SuScAjqQAb2s2cjeCWwHYq717+Mqe48FQIJiVj6sqrr2LSt
+         aYe/Nk64tzXukD4bAcZxqvnjHQlCai9a/1kkgEHoiejQ7xi3RQV77lFC8YOGcdAFnKOE
+         MKng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731282862; x=1731887662;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1731287017; x=1731891817;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1lZUhLcHVpSjAQwpeA2pvIOp+QE5t1wmk05QqmJ3vbE=;
-        b=lA2tUD1dWQaZt0GOoJxwkbcUnj4CyUYuHiZfgl/bk2+8JtM8z4r2K0zY1PDHUAyv/J
-         I69ixtkhWMKrM0wClKgOFdffT4m/LPASZwvIe+Fjs2buk/IjuPansHRde2jHOxidEYIE
-         w57VMCZctqavg7EKdSeJKRVYzWWfoEfnK2e16ETmWGinEjEikwobPyR2Nk1wbH15DbD1
-         4odnHFXONWfzTaT4hlIkQUfZ9VSbXGnWV6Gvu9C9lDLHpMRJafEgEpWYMaqzW5CfsLik
-         nkTXl3ZHvX+BXT794o8MJwb3sgaT8qhr3Q0Kcnt1hcHxhu08aQOzfsyJ/rqjYPSNcc45
-         yH3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV7wp1I34IRVBdYWA950vs+fVuxy31BGrpsFs9FxY75EPGoVVU94S1V7tZ0SIBMXJi2zSc3Uv62bpzxLJ8=@vger.kernel.org, AJvYcCXV6w8kyHJJo/12rb6/q4n8KMFu/wW6N2GNKx8dX0ZZNUEEeSOU9XRjrAxcCRGeV1Sfn4k7gEpIH9JXMxPXydpW@vger.kernel.org, AJvYcCXkCjYfhd3iEviJng22keenPglJlgKSrpMogVTrGp5wNyn6+2F1w1By4Pno4JafiCJ2FYnCWYBs@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+okb5aqluA8qPYZbwTQLw+A303wHsx2Twz3RABcMQS1CwUW2E
-	6XzjJmXaiLb7QGNxy4kdj8J3Itp2IG8nqbc2h0StXUfJy5gGU7bb
-X-Google-Smtp-Source: AGHT+IGarWm8oToH3Rwe7AOH7Eh8fDG0bJj/ggB6PhSH/OoGCYJndvQOHrePSmx8gG9gP5Fkr85hRQ==
-X-Received: by 2002:a05:600c:34c8:b0:431:604d:b22 with SMTP id 5b1f17b1804b1-432b750acc4mr114467695e9.16.1731282861508;
-        Sun, 10 Nov 2024 15:54:21 -0800 (PST)
-Received: from [192.168.0.2] ([69.6.8.124])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432aa6c1298sm191399085e9.24.2024.11.10.15.54.20
+        bh=c6gYKvXLGGIzqVwA6huSqeg9IOgIP9Fx1WH6gy+b/lk=;
+        b=dGmUpUYT8IDPmxvfZk7bI561u+7b/gH9Wav6eLyEWKI765NXCzoPv8zyMOLujI/Jl1
+         ewv4OjPmhg3ssP5nneh61w3GhPw4A50nNgJKK0988gcOScmPay8UyV5fLja8M2jVInWx
+         UTtkosGY5wlKhhPZTyHfdpizyvyRex3Fxpa70qDr1mExmY5z4UDBI7GjRtsTC5vw+bme
+         hYrjMf6AZiTptqLQjFH7mPvUSpe11kdJ3Yp8EdvglTC82t6WKlVCJadA4C+Y6RW1aA2L
+         oZObiQe+T6NROqwJmtmdr9QH52XQTMorrS85FDb7ZjY+ecRguwdLfRaDBMmDb9YcReMY
+         ipbw==
+X-Forwarded-Encrypted: i=1; AJvYcCV3+xmv+zuvzf4YIkFbb9XuIFYG8vlN8f7nDzUPWQHBl2FjtNhes5KcuJxHjeHdmlWgE1vb56em@vger.kernel.org, AJvYcCWDe+s+ykZ+RYQ/RcADGUwkJoUyd5sIo5xL2aZsS2Ymtx/sFPfXI0gPxOz4s/b0TnS/KKURRCXvHTY6JuU=@vger.kernel.org, AJvYcCX73odQ7I0xzTq1OwVRN+T+7mQUXjV4FMqnu2TkPJvt//NqCP1Wo2TfAKS9ruAhssel+yqCjxEN3kFnTkc6FxcR@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrETW/V/lZNM7WVU35/4hwYyqPxoC8RVm3SMOSNQCEgRKz4zT1
+	viQhkWmIqAuCF2v4mPq+ovgZ3b8CqiJR0NAcmEf4CvRD3thlPksN
+X-Google-Smtp-Source: AGHT+IH4hwtMhrQkHW25RHvYt4Et6gwTmHLP2pPYPJHbuyHs92iTXlPK+NjmW9lx0g2QOPWnpVvZJg==
+X-Received: by 2002:a05:6602:2c84:b0:837:7e21:1688 with SMTP id ca18e2360f4ac-83e033433d4mr1199214639f.11.1731287017158;
+        Sun, 10 Nov 2024 17:03:37 -0800 (PST)
+Received: from ?IPV6:2601:282:1e02:1040:54c3:8c58:2087:8094? ([2601:282:1e02:1040:54c3:8c58:2087:8094])
+        by smtp.googlemail.com with ESMTPSA id 8926c6da1cb9f-4de787414bbsm1077661173.52.2024.11.10.17.03.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Nov 2024 15:54:21 -0800 (PST)
-Message-ID: <4fe9f0d5-a8ac-4f2e-aee7-00cbeaf2f0aa@gmail.com>
-Date: Mon, 11 Nov 2024 01:54:51 +0200
+        Sun, 10 Nov 2024 17:03:36 -0800 (PST)
+Message-ID: <0729c59e-e495-4668-b486-4362393bd15d@gmail.com>
+Date: Sun, 10 Nov 2024 18:03:35 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,102 +76,178 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 08/23] ovpn: implement basic TX path (UDP)
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Shuah Khan <shuah@kernel.org>, sd@queasysnail.net,
- Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-8-de4698c73a25@openvpn.net>
+Subject: Re: [PATCH net-next v7] ipv6: Fix soft lockups in fib6_select_path
+ under high next hop churn
 Content-Language: en-US
-From: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-In-Reply-To: <20241029-b4-ovpn-v11-8-de4698c73a25@openvpn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: Omid Ehtemam-Haghighi <omid.ehtemamhaghighi@menlosecurity.com>,
+ netdev@vger.kernel.org
+Cc: adrian.oliver@menlosecurity.com, Adrian Oliver <kernel@aoliver.ca>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Ido Schimmel <idosch@idosch.org>, Kuniyuki Iwashima <kuniyu@amazon.com>,
+ Simon Horman <horms@kernel.org>, Omid Ehtemam-Haghighi
+ <oeh.kernel@gmail.com>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20241106010236.1239299-1-omid.ehtemamhaghighi@menlosecurity.com>
+From: David Ahern <dsahern@gmail.com>
+In-Reply-To: <20241106010236.1239299-1-omid.ehtemamhaghighi@menlosecurity.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Another one forgotten question, sorry about this. Please find the 
-question inlined.
+On 11/5/24 6:02 PM, Omid Ehtemam-Haghighi wrote:
+> Soft lockups have been observed on a cluster of Linux-based edge routers
+> located in a highly dynamic environment. Using the `bird` service, these
+> routers continuously update BGP-advertised routes due to frequently
+> changing nexthop destinations, while also managing significant IPv6
+> traffic. The lockups occur during the traversal of the multipath
+> circular linked-list in the `fib6_select_path` function, particularly
+> while iterating through the siblings in the list. The issue typically
+> arises when the nodes of the linked list are unexpectedly deleted
+> concurrently on a different core—indicated by their 'next' and
+> 'previous' elements pointing back to the node itself and their reference
+> count dropping to zero. This results in an infinite loop, leading to a
+> soft lockup that triggers a system panic via the watchdog timer.
+> 
+> Apply RCU primitives in the problematic code sections to resolve the
+> issue. Where necessary, update the references to fib6_siblings to
+> annotate or use the RCU APIs.
+> 
+> Include a test script that reproduces the issue. The script
+> periodically updates the routing table while generating a heavy load
+> of outgoing IPv6 traffic through multiple iperf3 clients. It
+> consistently induces infinite soft lockups within a couple of minutes.
+> 
+> Kernel log:
+> 
+>  0 [ffffbd13003e8d30] machine_kexec at ffffffff8ceaf3eb
+>  1 [ffffbd13003e8d90] __crash_kexec at ffffffff8d0120e3
+>  2 [ffffbd13003e8e58] panic at ffffffff8cef65d4
+>  3 [ffffbd13003e8ed8] watchdog_timer_fn at ffffffff8d05cb03
+>  4 [ffffbd13003e8f08] __hrtimer_run_queues at ffffffff8cfec62f
+>  5 [ffffbd13003e8f70] hrtimer_interrupt at ffffffff8cfed756
+>  6 [ffffbd13003e8fd0] __sysvec_apic_timer_interrupt at ffffffff8cea01af
+>  7 [ffffbd13003e8ff0] sysvec_apic_timer_interrupt at ffffffff8df1b83d
+> -- <IRQ stack> --
+>  8 [ffffbd13003d3708] asm_sysvec_apic_timer_interrupt at ffffffff8e000ecb
+>     [exception RIP: fib6_select_path+299]
+>     RIP: ffffffff8ddafe7b  RSP: ffffbd13003d37b8  RFLAGS: 00000287
+>     RAX: ffff975850b43600  RBX: ffff975850b40200  RCX: 0000000000000000
+>     RDX: 000000003fffffff  RSI: 0000000051d383e4  RDI: ffff975850b43618
+>     RBP: ffffbd13003d3800   R8: 0000000000000000   R9: ffff975850b40200
+>     R10: 0000000000000000  R11: 0000000000000000  R12: ffffbd13003d3830
+>     R13: ffff975850b436a8  R14: ffff975850b43600  R15: 0000000000000007
+>     ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+>  9 [ffffbd13003d3808] ip6_pol_route at ffffffff8ddb030c
+> 10 [ffffbd13003d3888] ip6_pol_route_input at ffffffff8ddb068c
+> 11 [ffffbd13003d3898] fib6_rule_lookup at ffffffff8ddf02b5
+> 12 [ffffbd13003d3928] ip6_route_input at ffffffff8ddb0f47
+> 13 [ffffbd13003d3a18] ip6_rcv_finish_core.constprop.0 at ffffffff8dd950d0
+> 14 [ffffbd13003d3a30] ip6_list_rcv_finish.constprop.0 at ffffffff8dd96274
+> 15 [ffffbd13003d3a98] ip6_sublist_rcv at ffffffff8dd96474
+> 16 [ffffbd13003d3af8] ipv6_list_rcv at ffffffff8dd96615
+> 17 [ffffbd13003d3b60] __netif_receive_skb_list_core at ffffffff8dc16fec
+> 18 [ffffbd13003d3be0] netif_receive_skb_list_internal at ffffffff8dc176b3
+> 19 [ffffbd13003d3c50] napi_gro_receive at ffffffff8dc565b9
+> 20 [ffffbd13003d3c80] ice_receive_skb at ffffffffc087e4f5 [ice]
+> 21 [ffffbd13003d3c90] ice_clean_rx_irq at ffffffffc0881b80 [ice]
+> 22 [ffffbd13003d3d20] ice_napi_poll at ffffffffc088232f [ice]
+> 23 [ffffbd13003d3d80] __napi_poll at ffffffff8dc18000
+> 24 [ffffbd13003d3db8] net_rx_action at ffffffff8dc18581
+> 25 [ffffbd13003d3e40] __do_softirq at ffffffff8df352e9
+> 26 [ffffbd13003d3eb0] run_ksoftirqd at ffffffff8ceffe47
+> 27 [ffffbd13003d3ec0] smpboot_thread_fn at ffffffff8cf36a30
+> 28 [ffffbd13003d3ee8] kthread at ffffffff8cf2b39f
+> 29 [ffffbd13003d3f28] ret_from_fork at ffffffff8ce5fa64
+> 30 [ffffbd13003d3f50] ret_from_fork_asm at ffffffff8ce03cbb
+> 
+> Fixes: 66f5d6ce53e6 ("ipv6: replace rwlock with rcu and spinlock in fib6_table")
+> Reported-by: Adrian Oliver <kernel@aoliver.ca>
+> Signed-off-by: Omid Ehtemam-Haghighi <omid.ehtemamhaghighi@menlosecurity.com>
+> Cc: David S. Miller <davem@davemloft.net>
+> Cc: David Ahern <dsahern@gmail.com>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Ido Schimmel <idosch@idosch.org>
+> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+> Cc: Simon Horman <horms@kernel.org>
+> Cc: Omid Ehtemam-Haghighi <oeh.kernel@gmail.com>
+> Cc: netdev@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+> v6 -> v7: 
+> 	* Rebased on top of 'net-next'
+> 
+> v5 -> v6:
+> 	* Adjust the comment line lengths in the test script to a maximum of
+> 	  80 characters
+> 	* Change memory allocation in inet6_rt_notify from gfp_any() to GFP_ATOMIC for
+> 	  atomic allocation in non-blocking contexts, as suggested by Ido Schimmel
+> 	* NOTE: I have executed the test script on both bare-metal servers and
+> 	  virtualized environments such as QEMU and vng. In the case of bare-metal, it
+> 	  consistently triggers a soft lockup in under a minute on unpatched kernels.
+> 	  For the virtualized environments, an unpatched kernel compiled with the
+> 	  Ubuntu 24.04 configuration also triggers a soft lockup, though it takes
+> 	  longer; however, it did not trigger a soft lockup on kernels compiled with
+> 	  configurations provided in:
+> 
+> 	  https://github.com/linux-netdev/nipa/wiki/How-to-run-netdev-selftests-CI-style
+> 
+> 	  leading to potential false negatives in the test results.
+> 
+> 	  I am curious if this test can be executed on a bare-metal machine within a
+> 	  CI system, if such a setup exists, rather than in a virtualized environment.
+> 	  If that’s not possible, how can I apply a different kernel configuration,
+> 	  such as the one used in Ubuntu 24.04, for this test? Please advise.
+> 
+> v4 -> v5:
+> 	* Addressed review comments from Paolo Abeni.
+> 	* Added additional clarifying comments in the test script.
+> 	* Minor cleanup performed in the test script.
+> 
+> v3 -> v4:
+> 	* Added RCU primitives to rt6_fill_node(). I found that this function is typically
+> 	  called either with a table lock held or within rcu_read_lock/rcu_read_unlock
+> 	  pairs, except in the following call chain, where the protection is unclear:
+> 
+> 		rt_fill_node()
+> 		fib6_info_hw_flags_set()
+> 		mlxsw_sp_fib6_offload_failed_flag_set()
+> 		mlxsw_sp_router_fib6_event_work()
+> 
+> 	  The last function is initialized as a work item in mlxsw_sp_router_fib_event()
+> 	  and scheduled for deferred execution. I am unsure if the execution context of
+> 	  this work item is protected by any table lock or rcu_read_lock/rcu_read_unlock
+> 	  pair, so I have added the protection. Please let me know if this is redundant.
+> 
+> 	* Other review comments addressed
+> 
+> v2 -> v3:
+> 	* Removed redundant rcu_read_lock()/rcu_read_unlock() pairs
+> 	* Revised the test script based on Ido Schimmel's feedback
+> 	* Updated the test script to ensure compatibility with the latest iperf3 version
+> 	* Fixed new warnings generated with 'C=2' in the previous version
+> 	* Other review comments addressed
+> 
+> v1 -> v2:
+> 	* list_del_rcu() is applied exclusively to legacy multipath code
+> 	* All occurrences of fib6_siblings have been modified to utilize RCU
+> 	  APIs for annotation and usage.
+> 	* Additionally, a test script for reproducing the reported
+> 	  issue is included
+> ---
+>  net/ipv6/ip6_fib.c                            |   8 +-
+>  net/ipv6/route.c                              |  45 ++-
+>  tools/testing/selftests/net/Makefile          |   1 +
+>  .../net/ipv6_route_update_soft_lockup.sh      | 262 ++++++++++++++++++
+>  4 files changed, 297 insertions(+), 19 deletions(-)
+>  create mode 100755 tools/testing/selftests/net/ipv6_route_update_soft_lockup.sh
+> 
 
-On 29.10.2024 12:47, Antonio Quartulli wrote:
->   /* Send user data to the network
->    */
->   netdev_tx_t ovpn_net_xmit(struct sk_buff *skb, struct net_device *dev)
->   {
-> +	struct ovpn_struct *ovpn = netdev_priv(dev);
-> +	struct sk_buff *segments, *curr, *next;
-> +	struct sk_buff_head skb_list;
-> +	__be16 proto;
-> +	int ret;
-> +
-> +	/* reset netfilter state */
-> +	nf_reset_ct(skb);
-> +
-> +	/* verify IP header size in network packet */
-> +	proto = ovpn_ip_check_protocol(skb);
-> +	if (unlikely(!proto || skb->protocol != proto)) {
-> +		net_err_ratelimited("%s: dropping malformed payload packet\n",
-> +				    dev->name);
-> +		dev_core_stats_tx_dropped_inc(ovpn->dev);
-> +		goto drop;
-> +	}
 
-The above check implies that kernel can feed a network device with 
-skb->protocol value mismatches actual skb content. Can you share any 
-example of such case?
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
-If you just want to be sure that the user packet is either IPv4 or IPv6 
-then it can be done like this and without error messages:
-
-/* Support only IPv4 or IPv6 traffic transporting */
-if (unlikely(skb->protocol == ETH_P_IP || skb->protocol == ETH_P_IPV6))
-     goto drop;
-
-> +
-> +	if (skb_is_gso(skb)) {
-> +		segments = skb_gso_segment(skb, 0);
-> +		if (IS_ERR(segments)) {
-> +			ret = PTR_ERR(segments);
-> +			net_err_ratelimited("%s: cannot segment packet: %d\n",
-> +					    dev->name, ret);
-> +			dev_core_stats_tx_dropped_inc(ovpn->dev);
-> +			goto drop;
-> +		}
-> +
-> +		consume_skb(skb);
-> +		skb = segments;
-> +	}
-> +
-> +	/* from this moment on, "skb" might be a list */
-> +
-> +	__skb_queue_head_init(&skb_list);
-> +	skb_list_walk_safe(skb, curr, next) {
-> +		skb_mark_not_on_list(curr);
-> +
-> +		curr = skb_share_check(curr, GFP_ATOMIC);
-> +		if (unlikely(!curr)) {
-> +			net_err_ratelimited("%s: skb_share_check failed\n",
-> +					    dev->name);
-> +			dev_core_stats_tx_dropped_inc(ovpn->dev);
-> +			continue;
-> +		}
-> +
-> +		__skb_queue_tail(&skb_list, curr);
-> +	}
-> +	skb_list.prev->next = NULL;
-> +
-> +	ovpn_send(ovpn, skb_list.next, NULL);
-> +
-> +	return NETDEV_TX_OK;
-> +
-> +drop:
->   	skb_tx_error(skb);
-> -	kfree_skb(skb);
-> +	kfree_skb_list(skb);
->   	return NET_XMIT_DROP;
->   }
-
---
-Sergey
 
