@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-21867-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21868-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 835FB9C5A1F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 15:19:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 713909C5A50
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 15:30:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42B402836BE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 14:19:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03CF51F22676
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 14:30:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE4C21FC7F3;
-	Tue, 12 Nov 2024 14:19:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F12971FDF9C;
+	Tue, 12 Nov 2024 14:26:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="Sz9E9+ZA"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="X+2Bshfb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 656A71FCC59
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 14:19:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE6A1FCF55
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 14:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731421170; cv=none; b=kTRyxFTQUMu1oik+ANwLfvd5Bv9C34Icn42l3yoen5LshdQ+K+a3HgVx+u+EhL/XReIQH7GNmZOKRG4EBQyRWWZ/yPsQgjLA0a4R7JEcvI5QVvsuBShoAPiRIMfPVco2zwk8XYUW2434KUZ3ulKzwAT+YPbfRXf1R7LdokhbWSw=
+	t=1731421598; cv=none; b=ftPD1hP8FEe29ncxVb2FnVaxhwfA0KAXSIqgDdG43xjXQd7kq0xalmrTIbuPMSZZeLrTb7TD+X10BvyG7pcfZBtUV8Zwx8hwxrG6NCkDyJxO8wPViLIPayrtOPXcDWHq/QOp89pzVsUg6RN04jDOM6EfOa3Wq5Xpw58QxfP4zt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731421170; c=relaxed/simple;
-	bh=UgWGUxQrgroW2O3xwz7zrSkFTRT1Hzi0vM7s2113muM=;
+	s=arc-20240116; t=1731421598; c=relaxed/simple;
+	bh=f/HvlfkCRjAxJ8giT2huqlXY/k/mQmI42ZzFf5vOQ2k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UX7wqkz5oaIFMvSweGW9iNJ96baGA2nUqW3WW86rHV8+0ngJgLGPnknxlNcqBB/bmpqeb+IfQf0NT0qxWxqmXEvZlECw3zw+qwnPsMTGovzu8e6SDLKThA0oWJdjupaegKyqljnPTkIHV0A7In0R+BFwfANui0TBrqJOkd2+lqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=Sz9E9+ZA; arc=none smtp.client-ip=209.85.128.50
+	 In-Reply-To:Content-Type; b=ZtkcAruRKod1IW+LCjSoNvY7UKBgjk7kd8SRtqtbfVhhgyIxdYAbDpU4PKJe2UzXG1ZjR9lmuEkPvrW50OL3m4/551FkSUbL8HznXfhEyrM37XO6ACUACvqLT2igeyKaL3keJ2SuW08tcaT1Mw6eMqjy3DbHI3cVzFNICJbpBIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=X+2Bshfb; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43162cf1eaaso72217935e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 06:19:28 -0800 (PST)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a9a850270e2so1043921666b.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 06:26:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1731421167; x=1732025967; darn=vger.kernel.org;
+        d=openvpn.net; s=google; t=1731421595; x=1732026395; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ouwpe3U1VNNXY4rrBgXu/Mf/TO0yFXkbYc5of/uzJGU=;
-        b=Sz9E9+ZAg79HitsHUKV5c7XCzGFm04CUdhGPqcFIMHRlAT1z3X0dPC4USZPbBD9ymQ
-         YP9GAJcEAut7qZoy6kcKhynENEXH9MNkgnpzj/y5YbGF+5meYRT9o194swCWhgmv1xkm
-         vMjCZNNDuLTZysDh0kC+Zpfz4vQotHhfS9KkqJRdE6iRKgIDxPHS96uKUkAToNsywbXY
-         fBspIcmi3IOA+m5ijNF/DLBaDToArB7eqY05N3UhZ1xAqEdE9gGPBt9uS8D/RmeNysT4
-         +CRloFgi+k/Kzu+l7Q3mYsIn15ZXwd8hoz5tJ6i1wARu4DR+62kKAZNmJqV6vic20AYk
-         rBAg==
+        bh=Gzu4T+vazNFIi2mWnC9HwDZlKX1lZlU/i0ViDpHIDS8=;
+        b=X+2BshfbeyAga1n09nCKLt1iSa1qCPJa1thTHatNi8S36RufjsiykFk1PG2EHAS7H7
+         e5Z65Bzffz/H9hCbgUHsGCRyd4KfZETUAkiIyRKqswsDoZMuZUyFFJe0CBkt2CwrLbCi
+         kGrmX6QBI2kzZKurnRqSmOFC8xhwvtL7rvV5ZKsn7Bf5wukNl04PAlpDGZKnroU5ENq1
+         0Xz7pdFOAtoOmixOcuR9+2e19GqzAJLCxuF3TfI7bsVmyzcf0+8qDtChqoZjUDKRJgSE
+         lwnZe6nZ0tgKNRniinMYCyENhyGNZYbgYFsIaJE8xP6y50dw8NN5Q123JN0LCPxEpiKN
+         +ORw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731421167; x=1732025967;
+        d=1e100.net; s=20230601; t=1731421595; x=1732026395;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ouwpe3U1VNNXY4rrBgXu/Mf/TO0yFXkbYc5of/uzJGU=;
-        b=e+Cie0VZ6gR/V2Ddp4GR7KZoFTRZMlxY77GH47lp9Be+TYtXwYf0/sMIFK71bjp+Tj
-         vOS3DDopGmds/O/yJUYLqS2GwreqtYYPfMAnToZyCJm7TEpgeUi4TNPRO9f4dNo8nM8b
-         HYKe7nYLNjqGPnuK+XnmDelOQ+wDBLd7zvMUAh3XaOc95eyKqazK185P7mrpVPZYfaj+
-         1EpMMGe3hXMZL/3Dt8iE+W6TCqYem5HhK7gaCAAqVmJxeU/rknlTy/H31bEp1WInBYZh
-         O0tCsn9XTyoXd2wpheTyVvc7wS1sl5lNg4Sv8fdtyVfXrlNEoeQgtrlu5qg2ZxwrkR9/
-         5/pw==
-X-Forwarded-Encrypted: i=1; AJvYcCV77GbxKpuKuJB7gUq4rHhODaGrYVhdAo0rywz1WU/aUDol0+Xi0yK/QrQammrKu/R28fo+CMuKc9RZLwGBR4M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLxS6fjhR2ZahwKtWRdaEHZLr1pRiU4377huxv8NqwBymmUfbg
-	rg5Hy2EOI1XQfepluYbZpWVj6gKEB2Eiufsd7cqSvWwL7fUO/+qRei044babrkI=
-X-Google-Smtp-Source: AGHT+IFcXxQ5/fzYuiypE24Dq1y2dgnucVzcXyurE+jz5OGLSXY1VVEfoMoIbV9WUXIWhEEhUbN6fg==
-X-Received: by 2002:a05:600c:1c9b:b0:431:5c7b:e939 with SMTP id 5b1f17b1804b1-432b750b52amr194451145e9.18.1731421166382;
-        Tue, 12 Nov 2024 06:19:26 -0800 (PST)
+        bh=Gzu4T+vazNFIi2mWnC9HwDZlKX1lZlU/i0ViDpHIDS8=;
+        b=RfBHNza8LEPu1KTnIpvUelllrxSwlUo3kZ6UIadsXUsF3WOoUAg+H1Fq7COZSE7VeR
+         5UeSB4FHgF6iThHCT4PsGhITuPydxeCT17SK3IdG+/mhVGg2awA5yqmAA8NPs0zxd9MQ
+         M79XYppNWQO5bPYartu4XEnZ2fdrVcfTArPBNiS/6K/pyPNqgCfQDaF12+iqdjDTmPiZ
+         QhxpzwssAe/UdCyX5Xsu4MTOqnX3PHYydAOZf5hWWl341euevCNDBO8iBzQLd8bdO/g9
+         UESUpAXdOczKlCe4I8xpeSU6JB4F/XxSKJa2wCUhyEfnRjtxYA99x4lB1+EcbPElhD8L
+         HIYA==
+X-Forwarded-Encrypted: i=1; AJvYcCXSvLUSzbB8J87jRjfYwfycgOQsVGijqIBQw5o7m4CtszcMwNWsxN/bGbJoIgnyy7chZvCcilpD8DMIckPseTM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy26E6sv99f/ECN7PyDFCdHM61Sc31z1koIJj2/IN4qC6RWtgp0
+	CCDpCoDYiHzhALkNsRmSKE5idEjM7ZPsTvYDF37CPimPF/QMaN7IyRVg8cb2jF4=
+X-Google-Smtp-Source: AGHT+IHYbVEJ+TnRc83fkYSLRlczPRBgWnEGR/KYb4k0V61W5RWwzkl7uS4AY/5gY0THviVrGXbk+w==
+X-Received: by 2002:a17:907:a4e:b0:a9d:e1d6:42a1 with SMTP id a640c23a62f3a-a9eeff26af8mr1718384966b.30.1731421595072;
+        Tue, 12 Nov 2024 06:26:35 -0800 (PST)
 Received: from ?IPV6:2001:67c:2fbc:1:e829:c484:5241:93b2? ([2001:67c:2fbc:1:e829:c484:5241:93b2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432b05e5b96sm219599745e9.41.2024.11.12.06.19.25
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0a4c3f5sm730091266b.76.2024.11.12.06.26.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Nov 2024 06:19:25 -0800 (PST)
-Message-ID: <76191b85-6844-4a85-bb9c-ad19aa5110c5@openvpn.net>
-Date: Tue, 12 Nov 2024 15:19:50 +0100
+        Tue, 12 Nov 2024 06:26:34 -0800 (PST)
+Message-ID: <136282ad-77d9-4799-bd2d-f3c3c9df99c0@openvpn.net>
+Date: Tue, 12 Nov 2024 15:26:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -86,7 +86,7 @@ Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-18-de4698c73a25@openvpn.net> <Zyjk781vOqV4kXhJ@hog>
+ <20241029-b4-ovpn-v11-18-de4698c73a25@openvpn.net> <ZzIlxRbic7qLVD4F@hog>
 Content-Language: en-US
 From: Antonio Quartulli <antonio@openvpn.net>
 Autocrypt: addr=antonio@openvpn.net; keydata=
@@ -129,193 +129,181 @@ Autocrypt: addr=antonio@openvpn.net; keydata=
  BnRX9nFx9kPSO42TkFK55Dr5EDeBO3v33recscuB8VVN5xvh0GV57Qre+9sJrEq7Es9W609a
  +M0yRJWJEjFnMa/jsGZ+QyLD5QTL6SGuZ9gKI3W1SfFZOzV7hHsxPTZ6
 Organization: OpenVPN Inc.
-In-Reply-To: <Zyjk781vOqV4kXhJ@hog>
+In-Reply-To: <ZzIlxRbic7qLVD4F@hog>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 04/11/2024 16:14, Sabrina Dubroca wrote:
+On 11/11/2024 16:41, Sabrina Dubroca wrote:
 > 2024-10-29, 11:47:31 +0100, Antonio Quartulli wrote:
->> +static int ovpn_nl_peer_precheck(struct ovpn_struct *ovpn,
->> +				 struct genl_info *info,
->> +				 struct nlattr **attrs)
+>> +static int ovpn_nl_peer_modify(struct ovpn_peer *peer, struct genl_info *info,
+>> +			       struct nlattr **attrs)
 >> +{
->> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_PEER], attrs,
->> +			      OVPN_A_PEER_ID))
->> +		return -EINVAL;
->> +
->> +	if (attrs[OVPN_A_PEER_REMOTE_IPV4] && attrs[OVPN_A_PEER_REMOTE_IPV6]) {
->> +		NL_SET_ERR_MSG_MOD(info->extack,
->> +				   "cannot specify both remote IPv4 or IPv6 address");
->> +		return -EINVAL;
->> +	}
->> +
->> +	if (!attrs[OVPN_A_PEER_REMOTE_IPV4] &&
->> +	    !attrs[OVPN_A_PEER_REMOTE_IPV6] && attrs[OVPN_A_PEER_REMOTE_PORT]) {
->> +		NL_SET_ERR_MSG_MOD(info->extack,
->> +				   "cannot specify remote port without IP address");
->> +		return -EINVAL;
->> +	}
->> +
->> +	if (!attrs[OVPN_A_PEER_REMOTE_IPV4] &&
->> +	    attrs[OVPN_A_PEER_LOCAL_IPV4]) {
->> +		NL_SET_ERR_MSG_MOD(info->extack,
->> +				   "cannot specify local IPv4 address without remote");
->> +		return -EINVAL;
->> +	}
->> +
->> +	if (!attrs[OVPN_A_PEER_REMOTE_IPV6] &&
->> +	    attrs[OVPN_A_PEER_LOCAL_IPV6]) {
-> 
-> I think these consistency checks should account for v4mapped
-> addresses. With remote=v4mapped and local=v6 we'll end up with an
-> incorrect ipv4 "local" address (taken out of the ipv6 address's first
-> 4B by ovpn_peer_reset_sockaddr). With remote=ipv6 and local=v4mapped,
-> we'll pass the last 4B of OVPN_A_PEER_LOCAL_IPV6 to
-> ovpn_peer_reset_sockaddr and try to read 16B (the full ipv6 address)
-> out of that.
-
-Right, a v4mapped address would fool this check.
-How about checking if both or none addresses are v4mapped? This way we 
-should prevent such cases.
-
-
-> 
->> +		NL_SET_ERR_MSG_MOD(info->extack,
->> +				   "cannot specify local IPV6 address without remote");
->> +		return -EINVAL;
->> +	}
-> 
-> 
-> [...]
->>   int ovpn_nl_peer_set_doit(struct sk_buff *skb, struct genl_info *info)
->>   {
-> [...]
->> +	ret = ovpn_nl_peer_modify(peer, info, attrs);
->> +	if (ret < 0) {
->> +		ovpn_peer_put(peer);
->> +		return ret;
->> +	}
->> +
->> +	/* ret == 1 means that VPN IPv4/6 has been modified and rehashing
->> +	 * is required
->> +	 */
->> +	if (ret > 0) {
-> 
-> && mode == MP ?
-> 
-> I don't see ovpn_nl_peer_modify checking that before returning 1, and
-> in P2P mode ovpn->peers will be NULL.
-
-Right.
-I was wondering if it's better to add the check on the return statement 
-of ovpn_nl_peer_modify...but I think it's more functional to add it 
-here, as per your suggestion.
-
-> 
->> +		spin_lock_bh(&ovpn->peers->lock);
->> +		ovpn_peer_hash_vpn_ip(peer);
->> +		spin_unlock_bh(&ovpn->peers->lock);
->> +	}
->> +
->> +	ovpn_peer_put(peer);
->> +
->> +	return 0;
->> +}
-> 
->>   int ovpn_nl_peer_get_dumpit(struct sk_buff *skb, struct netlink_callback *cb)
->>   {
-> [...]
->> +	} else {
->> +		rcu_read_lock();
->> +		hash_for_each_rcu(ovpn->peers->by_id, bkt, peer,
->> +				  hash_entry_id) {
->> +			/* skip already dumped peers that were dumped by
->> +			 * previous invocations
->> +			 */
->> +			if (last_idx > 0) {
->> +				last_idx--;
->> +				continue;
->> +			}
-> 
-> If a peer that was dumped during a previous invocation is removed in
-> between, we'll miss one that's still present in the overall dump. I
-> don't know how much it matters (I guses it depends on how the results
-> of this dump are used by userspace), so I'll let you decide if this
-> needs to be fixed immediately or if it can be ignored for now.
-
-True, this is a risk I assumed.
-Not extremely important if you ask me, but do you have any suggestion 
-how to avoid this in an elegant and lockless way?
-
-IIRC I got inspired by the station dump in the mac80211 code, which 
-probably assumes the same risk.
-
-> 
->> +
->> +			if (ovpn_nl_send_peer(skb, info, peer,
->> +					      NETLINK_CB(cb->skb).portid,
->> +					      cb->nlh->nlmsg_seq,
->> +					      NLM_F_MULTI) < 0)
->> +				break;
->> +
->> +			/* count peers being dumped during this invocation */
->> +			dumped++;
->> +		}
->> +		rcu_read_unlock();
->> +	}
->> +
->> +out:
->> +	netdev_put(ovpn->dev, &ovpn->dev_tracker);
->> +
->> +	/* sum up peers dumped in this message, so that at the next invocation
->> +	 * we can continue from where we left
->> +	 */
->> +	cb->args[1] += dumped;
->> +	return skb->len;
->>   }
->>   
->>   int ovpn_nl_peer_del_doit(struct sk_buff *skb, struct genl_info *info)
->>   {
->> -	return -EOPNOTSUPP;
->> +	struct nlattr *attrs[OVPN_A_PEER_MAX + 1];
->> +	struct ovpn_struct *ovpn = info->user_ptr[0];
->> +	struct ovpn_peer *peer;
->> +	u32 peer_id;
+>> +	struct sockaddr_storage ss = {};
+>> +	u32 sockfd, interv, timeout;
+>> +	struct socket *sock = NULL;
+>> +	u8 *local_ip = NULL;
+>> +	bool rehash = false;
 >> +	int ret;
 >> +
->> +	if (GENL_REQ_ATTR_CHECK(info, OVPN_A_PEER))
->> +		return -EINVAL;
+>> +	if (attrs[OVPN_A_PEER_SOCKET]) {
+>> +		/* lookup the fd in the kernel table and extract the socket
+>> +		 * object
+>> +		 */
+>> +		sockfd = nla_get_u32(attrs[OVPN_A_PEER_SOCKET]);
+>> +		/* sockfd_lookup() increases sock's refcounter */
+>> +		sock = sockfd_lookup(sockfd, &ret);
+>> +		if (!sock) {
+>> +			NL_SET_ERR_MSG_FMT_MOD(info->extack,
+>> +					       "cannot lookup peer socket (fd=%u): %d",
+>> +					       sockfd, ret);
+>> +			return -ENOTSOCK;
+>> +		}
 >> +
->> +	ret = nla_parse_nested(attrs, OVPN_A_PEER_MAX, info->attrs[OVPN_A_PEER],
->> +			       ovpn_peer_nl_policy, info->extack);
->> +	if (ret)
->> +		return ret;
+>> +		/* Only when using UDP as transport protocol the remote endpoint
+>> +		 * can be configured so that ovpn knows where to send packets
+>> +		 * to.
+>> +		 *
+>> +		 * In case of TCP, the socket is connected to the peer and ovpn
+>> +		 * will just send bytes over it, without the need to specify a
+>> +		 * destination.
+>> +		 */
+>> +		if (sock->sk->sk_protocol != IPPROTO_UDP &&
+>> +		    (attrs[OVPN_A_PEER_REMOTE_IPV4] ||
+>> +		     attrs[OVPN_A_PEER_REMOTE_IPV6])) {
+>> +			NL_SET_ERR_MSG_FMT_MOD(info->extack,
+>> +					       "unexpected remote IP address for non UDP socket");
+>> +			sockfd_put(sock);
+>> +			return -EINVAL;
+>> +		}
 >> +
->> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_PEER], attrs,
->> +			      OVPN_A_PEER_ID))
->> +		return -EINVAL;
+>> +		if (peer->sock)
+>> +			ovpn_socket_put(peer->sock);
 >> +
->> +	peer_id = nla_get_u32(attrs[OVPN_A_PEER_ID]);
->> +
->> +	peer = ovpn_peer_get_by_id(ovpn, peer_id);
->> +	if (!peer)
+>> +		peer->sock = ovpn_socket_new(sock, peer);
 > 
-> maybe c/p the extack from ovpn_nl_peer_get_doit?
+> I don't see anything preventing concurrent updates of peer->sock. I
+> think peer->lock should be taken from the start of
+> ovpn_nl_peer_modify. Concurrent changes to peer->vpn_addrs and
+> peer->keepalive_* are also not prevented with the current code.
 
-Yes, will do.
+Yeah, this came up to my mind as well when checking the keepalive worker 
+code.
+
+I'll make sure all updates happen under lock.
+
+> 
+> 
+>> +		if (IS_ERR(peer->sock)) {
+>> +			NL_SET_ERR_MSG_FMT_MOD(info->extack,
+>> +					       "cannot encapsulate socket: %ld",
+>> +					       PTR_ERR(peer->sock));
+>> +			sockfd_put(sock);
+>> +			peer->sock = NULL;
+>> +			return -ENOTSOCK;
+>> +		}
+>> +	}
+>> +
+>> +	if (ovpn_nl_attr_sockaddr_remote(attrs, &ss) != AF_UNSPEC) {
+>> +		/* we carry the local IP in a generic container.
+>> +		 * ovpn_peer_reset_sockaddr() will properly interpret it
+>> +		 * based on ss.ss_family
+>> +		 */
+>> +		local_ip = ovpn_nl_attr_local_ip(attrs);
+>> +
+>> +		spin_lock_bh(&peer->lock);
+>> +		/* set peer sockaddr */
+>> +		ret = ovpn_peer_reset_sockaddr(peer, &ss, local_ip);
+>> +		if (ret < 0) {
+>> +			NL_SET_ERR_MSG_FMT_MOD(info->extack,
+>> +					       "cannot set peer sockaddr: %d",
+>> +					       ret);
+>> +			spin_unlock_bh(&peer->lock);
+>> +			return ret;
+>> +		}
+>> +		spin_unlock_bh(&peer->lock);
+>> +	}
+>> +
+>> +	if (attrs[OVPN_A_PEER_VPN_IPV4]) {
+>> +		rehash = true;
+>> +		peer->vpn_addrs.ipv4.s_addr =
+>> +			nla_get_in_addr(attrs[OVPN_A_PEER_VPN_IPV4]);
+>> +	}
+>> +
+>> +	if (attrs[OVPN_A_PEER_VPN_IPV6]) {
+>> +		rehash = true;
+>> +		peer->vpn_addrs.ipv6 =
+>> +			nla_get_in6_addr(attrs[OVPN_A_PEER_VPN_IPV6]);
+>> +	}
+>> +
+>> +	/* when setting the keepalive, both parameters have to be configured */
+>> +	if (attrs[OVPN_A_PEER_KEEPALIVE_INTERVAL] &&
+>> +	    attrs[OVPN_A_PEER_KEEPALIVE_TIMEOUT]) {
+>> +		interv = nla_get_u32(attrs[OVPN_A_PEER_KEEPALIVE_INTERVAL]);
+>> +		timeout = nla_get_u32(attrs[OVPN_A_PEER_KEEPALIVE_TIMEOUT]);
+>> +		ovpn_peer_keepalive_set(peer, interv, timeout);
+>> +	}
+>> +
+>> +	netdev_dbg(peer->ovpn->dev,
+>> +		   "%s: peer id=%u endpoint=%pIScp/%s VPN-IPv4=%pI4 VPN-IPv6=%pI6c\n",
+>> +		   __func__, peer->id, &ss,
+>> +		   peer->sock->sock->sk->sk_prot_creator->name,
+>> +		   &peer->vpn_addrs.ipv4.s_addr, &peer->vpn_addrs.ipv6);
+>> +
+>> +	return rehash ? 1 : 0;
+>> +}
+>> +
+> 
+> [...]
+>> +void ovpn_peer_hash_vpn_ip(struct ovpn_peer *peer)
+>> +	__must_hold(&peer->ovpn->peers->lock)
+> 
+> Changes to peer->vpn_addrs are not protected by peers->lock, so those
+> could be getting updated while we're rehashing (and taking peer->lock
+> in ovpn_nl_peer_modify as I'm suggesting above also wouldn't prevent
+> that).
+> 
+
+/me screams :-D
+
+Indeed peers->lock is only about protecting the lists, not the content 
+of the listed objects.
+
+How about acquiring the peers->lock before calling ovpn_nl_peer_modify()?
+This way we prevent concurrent updates to interfere with each other, 
+while at the same time we avoid concurrent adds/dels of the peer (the 
+second part should already be protected as of today).
+
+None of them is time critical and the lock should avoid the issue you 
+mentioned.
+
 
 Thanks a lot.
+
 Regards,
 
-> 
->> +		return -ENOENT;
+>> +{
+>> +	struct hlist_nulls_head *nhead;
 >> +
->> +	netdev_dbg(ovpn->dev, "%s: peer id=%u\n", __func__, peer->id);
->> +	ret = ovpn_peer_del(peer, OVPN_DEL_PEER_REASON_USERSPACE);
->> +	ovpn_peer_put(peer);
+>> +	if (peer->vpn_addrs.ipv4.s_addr != htonl(INADDR_ANY)) {
+>> +		/* remove potential old hashing */
+>> +		hlist_nulls_del_init_rcu(&peer->hash_entry_transp_addr);
 >> +
->> +	return ret;
->>   }
+>> +		nhead = ovpn_get_hash_head(peer->ovpn->peers->by_vpn_addr,
+>> +					   &peer->vpn_addrs.ipv4,
+>> +					   sizeof(peer->vpn_addrs.ipv4));
+>> +		hlist_nulls_add_head_rcu(&peer->hash_entry_addr4, nhead);
+>> +	}
+>> +
+>> +	if (!ipv6_addr_any(&peer->vpn_addrs.ipv6)) {
+>> +		/* remove potential old hashing */
+>> +		hlist_nulls_del_init_rcu(&peer->hash_entry_transp_addr);
+>> +
+>> +		nhead = ovpn_get_hash_head(peer->ovpn->peers->by_vpn_addr,
+>> +					   &peer->vpn_addrs.ipv6,
+>> +					   sizeof(peer->vpn_addrs.ipv6));
+>> +		hlist_nulls_add_head_rcu(&peer->hash_entry_addr6, nhead);
+>> +	}
+>> +}
 > 
 
 -- 
