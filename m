@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-21866-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21867-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95F839C59D4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 15:02:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 835FB9C5A1F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 15:19:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21B381F23A87
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 14:02:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42B402836BE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 14:19:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 420961FBF5F;
-	Tue, 12 Nov 2024 14:02:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE4C21FC7F3;
+	Tue, 12 Nov 2024 14:19:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="d0Ut6873"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="Sz9E9+ZA"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E65D11F6677
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 14:02:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 656A71FCC59
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 14:19:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731420161; cv=none; b=Ei3RKqBsAd8LKa+wjAM7Brzsv3JfkrFH3Q+l5DzfcUnDHEOQPTSGsjc/9T1EUrbUnZTqrLdE4pfv8jr7iLMmqDvf8NzWV3oXUBGO/ZWZgec/RQHfFq1jF322rB4kLgpvDfbUkdUKl9leMxbtmBG2B0AnOAjpcJQZrWmgEwsHgWk=
+	t=1731421170; cv=none; b=kTRyxFTQUMu1oik+ANwLfvd5Bv9C34Icn42l3yoen5LshdQ+K+a3HgVx+u+EhL/XReIQH7GNmZOKRG4EBQyRWWZ/yPsQgjLA0a4R7JEcvI5QVvsuBShoAPiRIMfPVco2zwk8XYUW2434KUZ3ulKzwAT+YPbfRXf1R7LdokhbWSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731420161; c=relaxed/simple;
-	bh=nMEVI/2NGTjHdzsBkszc/gnXp2l5saGrRrIu/NhMqLk=;
+	s=arc-20240116; t=1731421170; c=relaxed/simple;
+	bh=UgWGUxQrgroW2O3xwz7zrSkFTRT1Hzi0vM7s2113muM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WaN/wp1xF6vPlxwtS9zNauWxtFLJyTuMz7ACdtiI5nDg7fH/jgWgZYO7uFwuD2q/RtPoDeEuzT9vLArglmjSHA6bdvcWv4b32azYOCyZcS5afbm/GolWik5a7nlXT07bvOhINAtqEed3HTqvuPOn8qaAnrEiIlD3llvzmty7Yzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=d0Ut6873; arc=none smtp.client-ip=209.85.128.50
+	 In-Reply-To:Content-Type; b=UX7wqkz5oaIFMvSweGW9iNJ96baGA2nUqW3WW86rHV8+0ngJgLGPnknxlNcqBB/bmpqeb+IfQf0NT0qxWxqmXEvZlECw3zw+qwnPsMTGovzu8e6SDLKThA0oWJdjupaegKyqljnPTkIHV0A7In0R+BFwfANui0TBrqJOkd2+lqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=Sz9E9+ZA; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4314f38d274so71818565e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 06:02:38 -0800 (PST)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43162cf1eaaso72217935e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 06:19:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1731420157; x=1732024957; darn=vger.kernel.org;
+        d=openvpn.net; s=google; t=1731421167; x=1732025967; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=w9MgzxSfnAckOlGCT28T2HKEGEX2I2woiTYHMo+I8GU=;
-        b=d0Ut68739KCOmRuZJUv0Ee2hfPb7791i1QYf3S6nCj/QADRK6Z746gQSmkqC5qkkNZ
-         HXLClFW+J3IXgprGfyeQf0SYhlC/sC1Jn/rTINw5HfaBG4bGsN0LR6P2fzWNNhj4Ok01
-         S5+nGjd0qRJjmuH9F552+TKKSbxzG+pRsSHyXByVu3Wg2xs0o3Ark/2FVC2XuCh1PV5o
-         4dPLH4l2h5L0XPYoHY3tKp6QdLuUrR+azjJAX4/ZowS2MLpfhBllrvDUZwJF3+1QVWRN
-         iAKLJHjVVwGfQdITUwLFMCpTFtLcr7BER2onb/hJoucgpg/LCXfLba6KInepOay8Dp6x
-         HDrw==
+        bh=Ouwpe3U1VNNXY4rrBgXu/Mf/TO0yFXkbYc5of/uzJGU=;
+        b=Sz9E9+ZAg79HitsHUKV5c7XCzGFm04CUdhGPqcFIMHRlAT1z3X0dPC4USZPbBD9ymQ
+         YP9GAJcEAut7qZoy6kcKhynENEXH9MNkgnpzj/y5YbGF+5meYRT9o194swCWhgmv1xkm
+         vMjCZNNDuLTZysDh0kC+Zpfz4vQotHhfS9KkqJRdE6iRKgIDxPHS96uKUkAToNsywbXY
+         fBspIcmi3IOA+m5ijNF/DLBaDToArB7eqY05N3UhZ1xAqEdE9gGPBt9uS8D/RmeNysT4
+         +CRloFgi+k/Kzu+l7Q3mYsIn15ZXwd8hoz5tJ6i1wARu4DR+62kKAZNmJqV6vic20AYk
+         rBAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731420157; x=1732024957;
+        d=1e100.net; s=20230601; t=1731421167; x=1732025967;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=w9MgzxSfnAckOlGCT28T2HKEGEX2I2woiTYHMo+I8GU=;
-        b=b0zjeXVUt7RYNTq3LAm7APtzx1MNiQKeajqDZrk1SQadAAuYAlqaFFvSSfOPsiV9Dr
-         HK8wkMi/xYkSqG+Bqd2tS9tg9bZRa9opXlBfegNeOF3nEC+omY3gPvGMz8EFxMpytTHM
-         5m/irDfvYSjEO/8YAHK6UseOYi/E2k6yu21vvAaIJCU0bv40gHPchP5sSfmM5URBX5pm
-         bwh2fOnwNCB+yYQ1FFVuf/N5tdj9z/M+MvpekPBYFwfkG+P17VV5uVAv/DjFz4EM/cVk
-         6BJ7aEoDgDSCG+PDoi2tjwiURhsaUGmw3/fAoD3ifV7+uCM2h2Mw1AEF9YLNBH4TM4ho
-         cCbg==
-X-Forwarded-Encrypted: i=1; AJvYcCUs0H6YjYD6P+ENOfe/wrCeODkZsggP8SR4b/UhyOlf2rS1LGQ9vOt2AevPMKYvmawRiV3xkY7y2qknh9GGpQk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yym5uWZBjb5Q4gATNhL95FpPBgVPFcCbghZXNaMkPHsTlOnqNDH
-	EX36Jw5Zoqmp6sfKFTzboZFHzMEU9WdByGghJcQrqi+ONcRbYp63zmLkWHMBt+w=
-X-Google-Smtp-Source: AGHT+IHCPRgv9M9Dduaty+H4R5FyYxKnOSdODxIf4vXyCrDSG2OprcKhqgaK6fmVVKuI8YWK9vHoxQ==
-X-Received: by 2002:a05:600c:5107:b0:431:59b2:f0c4 with SMTP id 5b1f17b1804b1-432b7503e9amr182495555e9.8.1731420156526;
-        Tue, 12 Nov 2024 06:02:36 -0800 (PST)
+        bh=Ouwpe3U1VNNXY4rrBgXu/Mf/TO0yFXkbYc5of/uzJGU=;
+        b=e+Cie0VZ6gR/V2Ddp4GR7KZoFTRZMlxY77GH47lp9Be+TYtXwYf0/sMIFK71bjp+Tj
+         vOS3DDopGmds/O/yJUYLqS2GwreqtYYPfMAnToZyCJm7TEpgeUi4TNPRO9f4dNo8nM8b
+         HYKe7nYLNjqGPnuK+XnmDelOQ+wDBLd7zvMUAh3XaOc95eyKqazK185P7mrpVPZYfaj+
+         1EpMMGe3hXMZL/3Dt8iE+W6TCqYem5HhK7gaCAAqVmJxeU/rknlTy/H31bEp1WInBYZh
+         O0tCsn9XTyoXd2wpheTyVvc7wS1sl5lNg4Sv8fdtyVfXrlNEoeQgtrlu5qg2ZxwrkR9/
+         5/pw==
+X-Forwarded-Encrypted: i=1; AJvYcCV77GbxKpuKuJB7gUq4rHhODaGrYVhdAo0rywz1WU/aUDol0+Xi0yK/QrQammrKu/R28fo+CMuKc9RZLwGBR4M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLxS6fjhR2ZahwKtWRdaEHZLr1pRiU4377huxv8NqwBymmUfbg
+	rg5Hy2EOI1XQfepluYbZpWVj6gKEB2Eiufsd7cqSvWwL7fUO/+qRei044babrkI=
+X-Google-Smtp-Source: AGHT+IFcXxQ5/fzYuiypE24Dq1y2dgnucVzcXyurE+jz5OGLSXY1VVEfoMoIbV9WUXIWhEEhUbN6fg==
+X-Received: by 2002:a05:600c:1c9b:b0:431:5c7b:e939 with SMTP id 5b1f17b1804b1-432b750b52amr194451145e9.18.1731421166382;
+        Tue, 12 Nov 2024 06:19:26 -0800 (PST)
 Received: from ?IPV6:2001:67c:2fbc:1:e829:c484:5241:93b2? ([2001:67c:2fbc:1:e829:c484:5241:93b2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432aa5b5b2dsm243551985e9.1.2024.11.12.06.02.35
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432b05e5b96sm219599745e9.41.2024.11.12.06.19.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Nov 2024 06:02:35 -0800 (PST)
-Message-ID: <955030bd-e230-448c-8a63-1b356590dd15@openvpn.net>
-Date: Tue, 12 Nov 2024 15:03:00 +0100
+        Tue, 12 Nov 2024 06:19:25 -0800 (PST)
+Message-ID: <76191b85-6844-4a85-bb9c-ad19aa5110c5@openvpn.net>
+Date: Tue, 12 Nov 2024 15:19:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,7 +77,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 17/23] ovpn: add support for peer floating
+Subject: Re: [PATCH net-next v11 18/23] ovpn: implement peer
+ add/get/dump/delete via netlink
 To: Sabrina Dubroca <sd@queasysnail.net>
 Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
@@ -85,7 +86,7 @@ Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-17-de4698c73a25@openvpn.net> <ZzM0U81dmvdEWqdF@hog>
+ <20241029-b4-ovpn-v11-18-de4698c73a25@openvpn.net> <Zyjk781vOqV4kXhJ@hog>
 Content-Language: en-US
 From: Antonio Quartulli <antonio@openvpn.net>
 Autocrypt: addr=antonio@openvpn.net; keydata=
@@ -128,112 +129,193 @@ Autocrypt: addr=antonio@openvpn.net; keydata=
  BnRX9nFx9kPSO42TkFK55Dr5EDeBO3v33recscuB8VVN5xvh0GV57Qre+9sJrEq7Es9W609a
  +M0yRJWJEjFnMa/jsGZ+QyLD5QTL6SGuZ9gKI3W1SfFZOzV7hHsxPTZ6
 Organization: OpenVPN Inc.
-In-Reply-To: <ZzM0U81dmvdEWqdF@hog>
+In-Reply-To: <Zyjk781vOqV4kXhJ@hog>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 12/11/2024 11:56, Sabrina Dubroca wrote:
-> 2024-10-29, 11:47:30 +0100, Antonio Quartulli wrote:
->> diff --git a/drivers/net/ovpn/io.c b/drivers/net/ovpn/io.c
->> index 63c140138bf98e5d1df79a2565b666d86513323d..0e8a6f2c76bc7b2ccc287ad1187cf50f033bf261 100644
->> --- a/drivers/net/ovpn/io.c
->> +++ b/drivers/net/ovpn/io.c
->> @@ -135,6 +135,15 @@ void ovpn_decrypt_post(void *data, int ret)
->>   	/* keep track of last received authenticated packet for keepalive */
->>   	peer->last_recv = ktime_get_real_seconds();
->>   
->> +	if (peer->sock->sock->sk->sk_protocol == IPPROTO_UDP) {
-> 
-> What prevents peer->sock from being replaced and released
-> concurrently?
-
-Technically nothing.
-Userspace currently does not even support updating a peer socket at 
-runtime, but I wanted ovpn to be flexible enough from the beginning.
-
-One approach might be to go back to peer->sock being unmutable and 
-forget about this.
-
-OTOH, if we want to keep this flexibility (which I think is nice), I 
-think I should make peer->sock an RCU pointer and access it accordingly.
-Does it make sense?
-
-> 
-> Or possibly reading the error value that ovpn_socket_new can return
-> before peer->sock is reset to NULL, just noticed this in
-> ovpn_nl_peer_modify:
-> 
-> 	if (attrs[OVPN_A_PEER_SOCKET]) {
-> 		// ...
-> 		peer->sock = ovpn_socket_new(sock, peer);
-> 		if (IS_ERR(peer->sock)) {
-> 			// ...
-> 			peer->sock = NULL;
-> 
-> 
-> (ovpn_encrypt_post has a similar check on
-> peer->sock->sock->sk->sk_protocol that I don't think is safe either)
-
-Yap, agreed.
-
-> 
-> 
->> +		/* check if this peer changed it's IP address and update
->> +		 * state
->> +		 */
->> +		ovpn_peer_float(peer, skb);
->> +		/* update source endpoint for this peer */
->> +		ovpn_peer_update_local_endpoint(peer, skb);
-> 
-> Why not do both in the same function? They're not called anywhere else
-> (at least in this version of the series). They both modify peer->bind
-> depending on skb_protocol_to_family(skb), and operate under
-> peer->lock.
-
-I never considered to do so as I just always assumed the two to be two 
-separate features/routines.
-
-I think it's a good idea and I would get rid of a few common 
-instructions (along with acquiring the lock twice). Thanks!
-
-> 
-> 
->> +void ovpn_peer_float(struct ovpn_peer *peer, struct sk_buff *skb)
+On 04/11/2024 16:14, Sabrina Dubroca wrote:
+> 2024-10-29, 11:47:31 +0100, Antonio Quartulli wrote:
+>> +static int ovpn_nl_peer_precheck(struct ovpn_struct *ovpn,
+>> +				 struct genl_info *info,
+>> +				 struct nlattr **attrs)
 >> +{
->> +	struct hlist_nulls_head *nhead;
->> +	struct sockaddr_storage ss;
->> +	const u8 *local_ip = NULL;
->> +	struct sockaddr_in6 *sa6;
->> +	struct sockaddr_in *sa;
->> +	struct ovpn_bind *bind;
->> +	sa_family_t family;
->> +	size_t salen;
+>> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_PEER], attrs,
+>> +			      OVPN_A_PEER_ID))
+>> +		return -EINVAL;
 >> +
->> +	rcu_read_lock();
->> +	bind = rcu_dereference(peer->bind);
->> +	if (unlikely(!bind)) {
->> +		rcu_read_unlock();
->> +		return;
+>> +	if (attrs[OVPN_A_PEER_REMOTE_IPV4] && attrs[OVPN_A_PEER_REMOTE_IPV6]) {
+>> +		NL_SET_ERR_MSG_MOD(info->extack,
+>> +				   "cannot specify both remote IPv4 or IPv6 address");
+>> +		return -EINVAL;
 >> +	}
 >> +
->> +	spin_lock_bh(&peer->lock);
-> 
-> You could take the lock from the start, instead of using rcu_read_lock
-> to get peer->bind. It would guarantee that the bind we got isn't
-> already being replaced just as we wait to update it. And same in
-> ovpn_peer_update_local_endpoint, it would make sure we're updating the
-> local IP for the active bind.
-> 
-> (sorry I didn't think about that last time we discussed this)
-
-no worries :) and I like the idea. will do that, thanks.
-
-> 
->> +	if (likely(ovpn_bind_skb_src_match(bind, skb)))
->> +		goto unlock;
+>> +	if (!attrs[OVPN_A_PEER_REMOTE_IPV4] &&
+>> +	    !attrs[OVPN_A_PEER_REMOTE_IPV6] && attrs[OVPN_A_PEER_REMOTE_PORT]) {
+>> +		NL_SET_ERR_MSG_MOD(info->extack,
+>> +				   "cannot specify remote port without IP address");
+>> +		return -EINVAL;
+>> +	}
 >> +
->> +	family = skb_protocol_to_family(skb);
+>> +	if (!attrs[OVPN_A_PEER_REMOTE_IPV4] &&
+>> +	    attrs[OVPN_A_PEER_LOCAL_IPV4]) {
+>> +		NL_SET_ERR_MSG_MOD(info->extack,
+>> +				   "cannot specify local IPv4 address without remote");
+>> +		return -EINVAL;
+>> +	}
 >> +
+>> +	if (!attrs[OVPN_A_PEER_REMOTE_IPV6] &&
+>> +	    attrs[OVPN_A_PEER_LOCAL_IPV6]) {
+> 
+> I think these consistency checks should account for v4mapped
+> addresses. With remote=v4mapped and local=v6 we'll end up with an
+> incorrect ipv4 "local" address (taken out of the ipv6 address's first
+> 4B by ovpn_peer_reset_sockaddr). With remote=ipv6 and local=v4mapped,
+> we'll pass the last 4B of OVPN_A_PEER_LOCAL_IPV6 to
+> ovpn_peer_reset_sockaddr and try to read 16B (the full ipv6 address)
+> out of that.
+
+Right, a v4mapped address would fool this check.
+How about checking if both or none addresses are v4mapped? This way we 
+should prevent such cases.
+
+
+> 
+>> +		NL_SET_ERR_MSG_MOD(info->extack,
+>> +				   "cannot specify local IPV6 address without remote");
+>> +		return -EINVAL;
+>> +	}
+> 
+> 
+> [...]
+>>   int ovpn_nl_peer_set_doit(struct sk_buff *skb, struct genl_info *info)
+>>   {
+> [...]
+>> +	ret = ovpn_nl_peer_modify(peer, info, attrs);
+>> +	if (ret < 0) {
+>> +		ovpn_peer_put(peer);
+>> +		return ret;
+>> +	}
+>> +
+>> +	/* ret == 1 means that VPN IPv4/6 has been modified and rehashing
+>> +	 * is required
+>> +	 */
+>> +	if (ret > 0) {
+> 
+> && mode == MP ?
+> 
+> I don't see ovpn_nl_peer_modify checking that before returning 1, and
+> in P2P mode ovpn->peers will be NULL.
+
+Right.
+I was wondering if it's better to add the check on the return statement 
+of ovpn_nl_peer_modify...but I think it's more functional to add it 
+here, as per your suggestion.
+
+> 
+>> +		spin_lock_bh(&ovpn->peers->lock);
+>> +		ovpn_peer_hash_vpn_ip(peer);
+>> +		spin_unlock_bh(&ovpn->peers->lock);
+>> +	}
+>> +
+>> +	ovpn_peer_put(peer);
+>> +
+>> +	return 0;
+>> +}
+> 
+>>   int ovpn_nl_peer_get_dumpit(struct sk_buff *skb, struct netlink_callback *cb)
+>>   {
+> [...]
+>> +	} else {
+>> +		rcu_read_lock();
+>> +		hash_for_each_rcu(ovpn->peers->by_id, bkt, peer,
+>> +				  hash_entry_id) {
+>> +			/* skip already dumped peers that were dumped by
+>> +			 * previous invocations
+>> +			 */
+>> +			if (last_idx > 0) {
+>> +				last_idx--;
+>> +				continue;
+>> +			}
+> 
+> If a peer that was dumped during a previous invocation is removed in
+> between, we'll miss one that's still present in the overall dump. I
+> don't know how much it matters (I guses it depends on how the results
+> of this dump are used by userspace), so I'll let you decide if this
+> needs to be fixed immediately or if it can be ignored for now.
+
+True, this is a risk I assumed.
+Not extremely important if you ask me, but do you have any suggestion 
+how to avoid this in an elegant and lockless way?
+
+IIRC I got inspired by the station dump in the mac80211 code, which 
+probably assumes the same risk.
+
+> 
+>> +
+>> +			if (ovpn_nl_send_peer(skb, info, peer,
+>> +					      NETLINK_CB(cb->skb).portid,
+>> +					      cb->nlh->nlmsg_seq,
+>> +					      NLM_F_MULTI) < 0)
+>> +				break;
+>> +
+>> +			/* count peers being dumped during this invocation */
+>> +			dumped++;
+>> +		}
+>> +		rcu_read_unlock();
+>> +	}
+>> +
+>> +out:
+>> +	netdev_put(ovpn->dev, &ovpn->dev_tracker);
+>> +
+>> +	/* sum up peers dumped in this message, so that at the next invocation
+>> +	 * we can continue from where we left
+>> +	 */
+>> +	cb->args[1] += dumped;
+>> +	return skb->len;
+>>   }
+>>   
+>>   int ovpn_nl_peer_del_doit(struct sk_buff *skb, struct genl_info *info)
+>>   {
+>> -	return -EOPNOTSUPP;
+>> +	struct nlattr *attrs[OVPN_A_PEER_MAX + 1];
+>> +	struct ovpn_struct *ovpn = info->user_ptr[0];
+>> +	struct ovpn_peer *peer;
+>> +	u32 peer_id;
+>> +	int ret;
+>> +
+>> +	if (GENL_REQ_ATTR_CHECK(info, OVPN_A_PEER))
+>> +		return -EINVAL;
+>> +
+>> +	ret = nla_parse_nested(attrs, OVPN_A_PEER_MAX, info->attrs[OVPN_A_PEER],
+>> +			       ovpn_peer_nl_policy, info->extack);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_PEER], attrs,
+>> +			      OVPN_A_PEER_ID))
+>> +		return -EINVAL;
+>> +
+>> +	peer_id = nla_get_u32(attrs[OVPN_A_PEER_ID]);
+>> +
+>> +	peer = ovpn_peer_get_by_id(ovpn, peer_id);
+>> +	if (!peer)
+> 
+> maybe c/p the extack from ovpn_nl_peer_get_doit?
+
+Yes, will do.
+
+Thanks a lot.
+Regards,
+
+> 
+>> +		return -ENOENT;
+>> +
+>> +	netdev_dbg(ovpn->dev, "%s: peer id=%u\n", __func__, peer->id);
+>> +	ret = ovpn_peer_del(peer, OVPN_DEL_PEER_REASON_USERSPACE);
+>> +	ovpn_peer_put(peer);
+>> +
+>> +	return ret;
+>>   }
 > 
 
 -- 
