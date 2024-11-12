@@ -1,143 +1,178 @@
-Return-Path: <linux-kselftest+bounces-21869-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21876-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C809F9C5D7E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 17:39:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B350D9C5C2B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 16:44:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 61721B395A3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 14:33:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77E3D282756
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 15:44:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9CFC1FE0E5;
-	Tue, 12 Nov 2024 14:31:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 272102022FD;
+	Tue, 12 Nov 2024 15:43:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gh+7tTro"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="Ps90XVo+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548CF1F9EDE;
-	Tue, 12 Nov 2024 14:31:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 068852022CF
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 15:43:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731421866; cv=none; b=DnXrgfnJenIol/ue90V8PsS0rPCjfRJyN/fBn/8MXYqma2FXkd6k5LZ0Xdb0bWqUqARDcuTmRZVOZNGDj7qh2GhTaoCHKkzG8BTNL+M0KEX78CBbrecsjc/037yIoEoK8MZoFkjxTdf4pdSWtx00dMInsGs/fikmQMHkC+usIUs=
+	t=1731426230; cv=none; b=XlPj36D+etdKVBGSsWQvv2WOiU3s+dZmks5iTYoxE3ofdEA9Wjfy60c+OsReQHE1i45NFamG4oGbD2ymLxU+pI+DRlGjFn6lmam6tQ6zm8LEUVXJvnsZljUX4LQp9zk5xGuPM86yaXiTUqQsiibEoRah/aWgGK228A7DhoLvZR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731421866; c=relaxed/simple;
-	bh=FKxrtq5k01R8nrZHRpsGFJKA8KdWuOOgePCCOjWHNR0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UE61NSM46pcc6I8ORrBYCSKPq9osSHA+mfdRihvfox8mbIcqI/NzYYCYaHfq0s0jCJPbRlSlE6lgARVWv5Us92Lf9VdnZPqeAuykh0mV+udH3riBK1BpE3/+unozTFjRw3D/wcjpUmS46cJeMabQx9L16KZno4T+WmnB2kDyh+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gh+7tTro; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-20c714cd9c8so58324575ad.0;
-        Tue, 12 Nov 2024 06:31:05 -0800 (PST)
+	s=arc-20240116; t=1731426230; c=relaxed/simple;
+	bh=sugKUR1x6AisW4skOVA3ZjQCFFcMRgfFJpnbc5pgqRc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QG6UbKuSh82DUvwAdlDrVJBnUdnsjB6IAczNJKA11GHQ8U/RLoynYnIWy0K0cJjTu3qJIcyJDkZZnUL9iZqIzuPM3V/mfRZu7oBn7fJPO8IN/2dfy1yqeI1R7ItW+tlY7hs1GfwiNl42cFv50MtnxGuq0owJq47O0tckqkZ3lZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=Ps90XVo+; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5c937b5169cso2494418a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 07:43:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731421864; x=1732026664; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=j4CG0+cc8Un34sMUc5JJuUPk6GZzogDzO5VJIh69+F8=;
-        b=Gh+7tTroTqlkdkh6vIA8lAIftVF+xmY7K4HbgkkCx9xzTQ3oFsg7PKg8kvGK90qoKE
-         su0HzSo6VUCxcROzEm1BVJGF3TtsdNDO2PL+G4k4gTG59hqz+EpAJEAnoEVJ2q3QnPeO
-         O6lZ3B9s1hPb0RJU4Vya2Che85g3AjsOkd2JAmEILruCJ28kKExmvM9vsnw8q4C2fTgT
-         YuwSE1k/KLLJYHqeUIS3cW0ADf34QHceVstTtIj9hKQZaMrU+fbscbKFafW0euwZZNYo
-         x8eY+Kg5dxUaZeuKQBzTJXVo7J4Jpu/4U7z6+DsJeFWTZ++uJ1kJmHahWRB2LDZBCmai
-         mkqg==
+        d=openvpn.net; s=google; t=1731426226; x=1732031026; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=8FjR/IXLb5vtI7LPCkZUeh9a8brNlsLs1nKW+B8ZeXc=;
+        b=Ps90XVo+t2KmLOgFV/0jzOWxEm52L2OZgBoSUGhE6MJkngQClGvA1ApBfqL8mIAExG
+         y7GueizeTt5kAaNOEgwjB3uvprtzW3fwYDpcH/ms5uozhL2MzOqcDdJ5QKe6hSuDM/ty
+         PSm3D9casrO98JpJNhuGLDYu1JGEoJ1E8T0slayxLIVqeJP+HxiBFy0zMUFwGm0+W1PN
+         cCHBKrxNMZ7xcKsnimDu2gtFyPLsERKU/y2DhX8W31mo5tPlw8ocFDfgM7tcQ6rl4tQu
+         ye8JGhA8iKDY91JsH8O2IYsgXpRPP38EyGxVACGVcCFJaDpUqZa5lOkaaBRDN609EB13
+         GbEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731421864; x=1732026664;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j4CG0+cc8Un34sMUc5JJuUPk6GZzogDzO5VJIh69+F8=;
-        b=VkM/bitNvT82RoK5m30S6oh2YT32mubsr007mgMlam7tK4T3TpgGFHPMdRLYirPT+0
-         sz92HvqHOFphrwtsJGuRt33OBSUcwrwK5D0JVIYV3gNTRD8rq9gNBs5mtapjIB8Dq1s6
-         /yC2OmH+tt+BRzkML4UfhJmhelH9ypGLdGyA2shudViDHIs/oxwXXJZbPATC6wL+hqmX
-         tcHePPiABQ2s+J7hdHqes19feNOCgc3kgV9MGLA+xvC2UaYh4FtIiuqpjPrKFHP2iyPv
-         NlD7+/gVg133hHUG+auBlT3GF6mTwkjM8HpNbZeD9aqVdC2BxKLB9CdE7fFbjeyK7p+2
-         PoOw==
-X-Forwarded-Encrypted: i=1; AJvYcCVqFYGeIEWdSqzyg7el7C5PqF5oN7HqdJIcz3P711ZpbTwTYPbm0s46H2xnSbdAo6I8j79h+pw1gkQLd6c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8xjP7uTAJXTvKlAfaYvsncVf7c98oKiL+U1EoYuYovGj6YBNV
-	TR8VqjzsY2toTnroQfDT7m7zQ6rLXkyYZ9uoyXXPMOR5XEuLPCks
-X-Google-Smtp-Source: AGHT+IGTrGp+94KmdGoTL5rsvNAu++M+zYZRXjb9tO+a96OGTTtiwrtcNyrm8cl91N0YcC/QN0n7yQ==
-X-Received: by 2002:a17:903:230a:b0:20b:b75d:e8c1 with SMTP id d9443c01a7336-21183d10969mr225364985ad.4.1731421864519;
-        Tue, 12 Nov 2024 06:31:04 -0800 (PST)
-Received: from localhost.localdomain ([27.7.112.193])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177dde2e1sm93396515ad.76.2024.11.12.06.31.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2024 06:31:04 -0800 (PST)
-From: Shivam Chaudhary <cvam0000@gmail.com>
-To: shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Shivam Chaudhary <cvam0000@gmail.com>
-Subject: [PATCH v5 0/2] kselftest: tmpfs: Add ksft macros and skip if no root
-Date: Tue, 12 Nov 2024 20:00:54 +0530
-Message-ID: <20241112143056.565122-1-cvam0000@gmail.com>
-X-Mailer: git-send-email 2.45.2
+        d=1e100.net; s=20230601; t=1731426226; x=1732031026;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8FjR/IXLb5vtI7LPCkZUeh9a8brNlsLs1nKW+B8ZeXc=;
+        b=QjOyd6yBGUPeEReNIAnkiX5JVoyUCm4Ia5Eo7FqijPeMOVdpaY5WzAMe6XuUkeb8wE
+         cKi7tzm8EsrQ6+5FtfcVHJYe0H+O4OKQf6ykZZzKkKGfToiwx/I2gPKcPkDobJDIeakg
+         Lc6XwHMZxNhbjAEz4pme2GMalc4xobmxGKCL0Rlu3qma/Y02Vs00A8TOieqq5nzVlDg6
+         Djt84I86SODt2NjDi8Drf5oO3Ym2rehl/GszJQbNNyMASxRlBaeSh9pcsJ/FarFr5/Sf
+         Dd59A8/GgrUWx7hsqMDq15Uw7j4izZ3rnVRcrAPd6ZZEAaf/uvRP2V11fDFst/PI5RoO
+         nXcA==
+X-Forwarded-Encrypted: i=1; AJvYcCXTEtbLliheLzsvrxDUgg43aqr+cvEnrf5YmiSGK7XkMOlfDjyS16rJxnjnGK7C/zSTldwjEUE37Y10wYN3jvs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeKwa9fS6dsbZzaTmK1cQ3OLmXxlyo7VFgQiPNOvypfcGJfazZ
+	H4WHfov/6s2ehprAbkytjTcrLccaC19NOrKYQOjgVu0FmmVJ1azEs5ZAU2DAhLY=
+X-Google-Smtp-Source: AGHT+IGQPjVckld30sw712EyVfRtKY34CfCHYQtIVY+84TH6Fted4MlGcMFRQCkafp+/3JEJyW1jbw==
+X-Received: by 2002:a05:6402:27c7:b0:5ce:df98:ea7d with SMTP id 4fb4d7f45d1cf-5cf096f5c1amr17884562a12.8.1731426226420;
+        Tue, 12 Nov 2024 07:43:46 -0800 (PST)
+Received: from ?IPV6:2001:67c:2fbc:1:e829:c484:5241:93b2? ([2001:67c:2fbc:1:e829:c484:5241:93b2])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cf03c4ec9fsm6129828a12.61.2024.11.12.07.43.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Nov 2024 07:43:45 -0800 (PST)
+Message-ID: <816d8b43-8c19-4a4c-9e37-98a3415848b5@openvpn.net>
+Date: Tue, 12 Nov 2024 16:44:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v11 20/23] ovpn: kill key and notify userspace in
+ case of IV exhaustion
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+ Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-20-de4698c73a25@openvpn.net> <Zyn0aYyPVaaQJg3r@hog>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <Zyn0aYyPVaaQJg3r@hog>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-This version 5 patch series replace direct error handling methods with ksft
-macros, which provide better reporting.Currently, when the tmpfs test runs,
-it does not display any output if it passes,and if it fails
-(particularly when not run as root),it simply exits without any warning or
-message.
+On 05/11/2024 11:33, Sabrina Dubroca wrote:
+> 2024-10-29, 11:47:33 +0100, Antonio Quartulli wrote:
+>> +int ovpn_nl_key_swap_notify(struct ovpn_peer *peer, u8 key_id)
+>> +{
+> [...]
+>> +
+>> +	nla_nest_end(msg, k_attr);
+>> +	genlmsg_end(msg, hdr);
+>> +
+>> +	genlmsg_multicast_netns(&ovpn_nl_family, dev_net(peer->ovpn->dev), msg,
+>> +				0, OVPN_NLGRP_PEERS, GFP_ATOMIC);
+>> +
+> 
+> Is openvpn meant to support moving the device to a different netns? In
+> that case I'm not sure the netns the ovpn netdevice is in is the right
+> one, the userspace client will be in the encap socket's netns instead
+> of the netdevice's?
+> 
+> (same thing in the next patch)
 
-This series of patch adds:
+Well, moving between netns's may not be among the most common use cases, 
+but I can see people doing all kind of weird things, if not forbidden.
 
-1. Add 'ksft_print_header()' and 'ksft_set_plan()'
-   to structure test outputs more effectively.
+Hence, I would not assume the netdevice to always stay in the same netns 
+all time long.
 
-2. Error if not run as root.
+This said, what you say assumes that the userspace process won't change 
+netns after having added the peer.
+I think we can live with that.
 
-3. Replace direct error handling with 'ksft_test_result_*',
-   'ksft_exit_fail_msg' macros for better reporting.
+I will change this call to use the sock's netns then.
 
-v4->v5:
-         - Remove unnecessary pass messages.
-         - Remove unnecessary use of KSFT_SKIP.
-         - Add appropriate use of ksft_exit_fail_msg.
+Thanks a lot!
 
-v4 1/2: https://lore.kernel.org/all/20241105202639.1977356-2-cvam0000@gmail.com/
-v4 2/2: https://lore.kernel.org/all/20241105202639.1977356-3-cvam0000@gmail.com/
+Regards,
 
-v3->v4:
-         - Start a patchset
-         - Split patch into smaller patches to make it easy to review.
-  Patch1 Replace  'ksft_test_result_skip' with 'KSFT_SKIP' during root run check.
-  Patch2 Replace  'ksft_test_result_fail' with 'KSFT_SKIP' where fail does not make sense,
-         or failure could be due to not unsupported APIs with appropriate warnings.
-
-
-v3: https://lore.kernel.org/all/20241028185756.111832-1-cvam0000@gmail.com/
-
-v2->v3:
-        - Remove extra ksft_set_plan()
-        - Remove function for unshare()
-        - Fix the comment style
-v2: https://lore.kernel.org/all/20241026191621.2860376-1-cvam0000@gmail.com/
-
-v1->v2:
-        - Make the commit message more clear.
-v1: https://lore.kernel.org/all/20241024200228.1075840-1-cvam0000@gmail.com/T/#u
-
-
-thanks
-Shivam
-
-Shivam Chaudhary (2):
-  selftests: tmpfs: Add Test-fail if not run as root
-  selftests: tmpfs: Add kselftest support to tmpfs
-
- .../selftests/tmpfs/bug-link-o-tmpfile.c      | 60 ++++++++++++-------
- 1 file changed, 37 insertions(+), 23 deletions(-)
+> 
 
 -- 
-2.45.2
+Antonio Quartulli
+OpenVPN Inc.
 
 
