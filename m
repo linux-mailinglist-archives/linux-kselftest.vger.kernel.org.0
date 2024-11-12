@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-21842-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21843-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70A629C4CF2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 04:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B5DA9C4D68
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 04:40:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 261751F22679
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 03:00:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B58C1F2387B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 03:40:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F7AB20495C;
-	Tue, 12 Nov 2024 03:00:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF879208223;
+	Tue, 12 Nov 2024 03:40:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YfG2EWvN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nh1oay6a"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B5C7E574;
-	Tue, 12 Nov 2024 03:00:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C8B208220;
+	Tue, 12 Nov 2024 03:40:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731380423; cv=none; b=XXukFjrp0MJXcY2pgNinDlMhof8bDDdgLgE9PDg7Vruln4xlU8WOu16Zhv9K6BJ267hNTVDtXAGNmvULOWvZ3P09EF1eR3Jyx7CL9PsfIh1wE8nd6VRlGyqwlvg0oR3I3pA4Xzq5kgF3LmNumB8SCHefV8vBCdz8uNTtgcMC6WM=
+	t=1731382825; cv=none; b=njLJvXZ1p0+2aSwyagn3mSBTolfvJMkLcX17PmyFhrTcpzCWYh8SF+3kDs1CdRzj5N0DBrl4TnPGZ7mRgfYBY1bIoBilNy/6DwTT1Aor015FpOWIg1O92Xm5nnTYpFMxlVaGx5UZn78zWXeKRFSFwZloQSUr/Bqs4kByjmbtKxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731380423; c=relaxed/simple;
-	bh=5wk4mK60EoHVsMCvX1Li3jR8LsNWik4rErnD/bTn/LU=;
+	s=arc-20240116; t=1731382825; c=relaxed/simple;
+	bh=JtmczOi8pvJiKpG31qVAYrUOVOu5b2F3sEl1LBsri/0=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Fw65HqTs5NoLcbrxug0Va0oXtthMAH36tPV5uzUaQ228OfFuEDq1R7+UgAbvtohRbHZtxT3pRrTaVOvqM0+O7b0mmUCPy/M90klbj0cr2nCtwcKbSlxTL4fMXnGpGcAb8bJYB3wYL/P4Sq0C7s8tSiWOXZ9e3pm97RcWPP4/PpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YfG2EWvN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5ADFC4CECF;
-	Tue, 12 Nov 2024 03:00:22 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=FDK0CAuUjYQkjq5xNyphrdSFP7Yp2CwcA5muvBqMQVY1N9ybGOC3Uo0BVhnonvdvCyEyPSOenRDiT3ufcNQVc4V7M/vS2jDsuAPBdhLSlzRk0dA7ftpgEldtMocRdQX1x2C1Il99Lou4CoOyvv/nPfEUOUl+9INFqrHnLQ/fgdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nh1oay6a; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D7A1C4CECD;
+	Tue, 12 Nov 2024 03:40:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731380422;
-	bh=5wk4mK60EoHVsMCvX1Li3jR8LsNWik4rErnD/bTn/LU=;
+	s=k20201202; t=1731382825;
+	bh=JtmczOi8pvJiKpG31qVAYrUOVOu5b2F3sEl1LBsri/0=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=YfG2EWvNsFWWKrvzuehWMvYVI5NSsA9yfl9Mmw1poL3yT1T5Z98T/1UsZAvy88Q87
-	 mgmweCLkvt/0tZLID1W4dZgyH+F8qxriU+QyzTMAH/4dJmOG7+12zuWLPd6OuL56vV
-	 TaMP3XYWjwh3gRTQQnBqIqz5MvceYGUAOIUZ25ZxQ1h31GkR7+LejDQNZvl5hQZFlS
-	 Xd/mXG1lMIa9fVZRu3grLBYy+GbB/SLa/dkHAf2bLWhJTe/VBJCvoWbXFh08kC/qqe
-	 2BH/5qk0diSp/Qj6tUdjEl8UTui+udO52HKcUDVFMZx6ZFeH5aGBueoj7vN2PFshnn
-	 yt1zAzaPPFMsQ==
+	b=Nh1oay6ayEQ7wglDqD/umqe6cVG+DN5YXId19rPSlI0R95ZbEMUhEQ/m1LVKTQYTg
+	 2SJGZqAkZ1yTSCkl8guy902I9fZk7OuE42gzZAa8D4W0vcR6t0MmZMtEBKJvJeAjTg
+	 6u9PR7eC/EUpF/ZiTSahJodtGI5NgJ1st3FJdrHIXe6GqGp4igoO1sFkrsR69MrKcI
+	 hb2MwQ2QhMTYHX/TW1Dv2vbBKKq7Stcl8PpHYcxrLQIDyU3EJpwIubaG7axGgRuJCj
+	 uTZm4Pa8tG79F4Wch4sHvmAmOnEswHLylndaFngWeI7jR1CFqw1Ff8L8jgptyK4pV+
+	 4a7yT6Nzv//tQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAE563809A80;
-	Tue, 12 Nov 2024 03:00:33 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB0903809A80;
+	Tue, 12 Nov 2024 03:40:36 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -52,59 +52,39 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v9 0/6] Suspend IRQs during application busy periods
+Subject: Re: [PATCH net-next] net: netconsole: selftests: Check if netdevsim is
+ available
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <173138043276.62607.2860647577086593902.git-patchwork-notify@kernel.org>
-Date: Tue, 12 Nov 2024 03:00:32 +0000
-References: <20241109050245.191288-1-jdamato@fastly.com>
-In-Reply-To: <20241109050245.191288-1-jdamato@fastly.com>
-To: Joe Damato <jdamato@fastly.com>
-Cc: netdev@vger.kernel.org, corbet@lwn.net, hdanton@sina.com,
- bagasdotme@gmail.com, pabeni@redhat.com, namangulati@google.com,
- edumazet@google.com, amritha.nambiar@intel.com, sridhar.samudrala@intel.com,
- sdf@fomichev.me, peter@typeblog.net, m2shafiei@uwaterloo.ca,
- bjorn@rivosinc.com, hch@infradead.org, willy@infradead.org,
- willemdebruijn.kernel@gmail.com, skhawaja@google.com, kuba@kernel.org,
- aleksander.lobakin@intel.com, viro@zeniv.linux.org.uk, andrew+netdev@lunn.ch,
- bpf@vger.kernel.org, brauner@kernel.org, danielj@nvidia.com,
- dsahern@kernel.org, davem@davemloft.net, donald.hunter@gmail.com,
- jack@suse.cz, hawk@kernel.org, jiri@resnulli.us, johannes.berg@intel.com,
- linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- lorenzo@kernel.org, mkarsten@uwaterloo.ca, almasrymina@google.com,
- bigeasy@linutronix.de, shuah@kernel.org, horms@kernel.org,
- xuanzhuo@linux.alibaba.com
+ <173138283550.71105.1842004842601301984.git-patchwork-notify@kernel.org>
+Date: Tue, 12 Nov 2024 03:40:35 +0000
+References: <20241108-netcon_selftest_deps-v1-1-1789cbf3adcd@debian.org>
+In-Reply-To: <20241108-netcon_selftest_deps-v1-1-1789cbf3adcd@debian.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 
 Hello:
 
-This series was applied to netdev/net-next.git (main)
+This patch was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Sat,  9 Nov 2024 05:02:30 +0000 you wrote:
-> Greetings:
+On Fri, 08 Nov 2024 06:59:25 -0800 you wrote:
+> The netconsole selftest relies on the availability of the netdevsim module.
+> To ensure the test can run correctly, we need to check if the netdevsim
+> module is either loaded or built-in before proceeding.
 > 
-> Welcome to v9, see changelog below.
-> 
-> This revision addresses feedback Willem gave on the selftests. No
-> functional or code changes to the implementation were made and
-> performance tests were not re-run.
+> Update the netconsole selftest to check for the existence of
+> the /sys/bus/netdevsim/new_device file before running the test. If the
+> file is not found, the test is skipped with an explanation that the
+> CONFIG_NETDEVSIM kernel config option may not be enabled.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next,v9,1/6] net: Add napi_struct parameter irq_suspend_timeout
-    https://git.kernel.org/netdev/net-next/c/5dc51ec86df6
-  - [net-next,v9,2/6] net: Add control functions for irq suspension
-    https://git.kernel.org/netdev/net-next/c/3fcbecbdeb04
-  - [net-next,v9,3/6] eventpoll: Trigger napi_busy_loop, if prefer_busy_poll is set
-    https://git.kernel.org/netdev/net-next/c/ab5b28b007a7
-  - [net-next,v9,4/6] eventpoll: Control irq suspension for prefer_busy_poll
-    https://git.kernel.org/netdev/net-next/c/8a6de2627fd3
-  - [net-next,v9,5/6] selftests: net: Add busy_poll_test
-    (no matching commit)
-  - [net-next,v9,6/6] docs: networking: Describe irq suspension
-    https://git.kernel.org/netdev/net-next/c/a90a91e24b48
+  - [net-next] net: netconsole: selftests: Check if netdevsim is available
+    https://git.kernel.org/netdev/net-next/c/43271bb5bf67
 
 You are awesome, thank you!
 -- 
