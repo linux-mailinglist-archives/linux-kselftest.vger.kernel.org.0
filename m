@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-21836-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21837-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 207929C4B6D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 02:01:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FAEF9C4B89
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 02:10:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA1301F236AC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 01:01:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1AB4B20C81
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 01:10:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F392D204940;
-	Tue, 12 Nov 2024 01:00:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C08E91F7564;
+	Tue, 12 Nov 2024 01:10:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h6/rJx87"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ldKFr+7m"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4F9E204933;
-	Tue, 12 Nov 2024 01:00:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D2E5234;
+	Tue, 12 Nov 2024 01:10:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731373224; cv=none; b=DiCfknQW1qp6tX6+gY4SkSQ5jguWy2/Ick6iQsrb75Rk0hyuuGQLWpmvkU8nDdhFAA8VvjTZgFOaWne0rM4HL8PeSN3NCqcd7HjDKlxifH57OTLHhL8RKG8UlXiasTsyXhnXBzLV8XRgan0fPgzPjAozPpikIoEfESAZjbDtN+M=
+	t=1731373822; cv=none; b=muco9LA+v0V7X8HwcTA3SGCMrQSty3tyuuS6lptglJKH4V1ZE1ADFGzqSHoilgj72haZohWAqW8SVQgTHkRjP9LOpGbboMpU71LiZBLS5JgFQdPRm0lk3GiCRHFMxIRhDKE3o2rnKKb4GZxCLlM/zerBGKDYrzz6Fywt/Vt4U9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731373224; c=relaxed/simple;
-	bh=f6WJXrTRDikhQIj250Wnzzvx7X2r/wsegb+H7jPT+kI=;
+	s=arc-20240116; t=1731373822; c=relaxed/simple;
+	bh=6iXWIIYzs6Fz0/pkTPNNDbrXf39SPg/gliWgmM5jfNY=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=OYD6mIivpk8dlC9VHOVrw2L9YibwrUi48LoK7oNEy/zPMfmwKBRG3k8oClg2qT64AIzKmoMiqAsf9lYkBDxDCQ3WDJ51q91SXIx6VMeiFu/MVpov3Ac05hGvTWKF99hO+VFy33TFOwrLuyxAsxHHFp0BOx/sYeKY3b8V11oMlBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h6/rJx87; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2983BC4CECF;
-	Tue, 12 Nov 2024 01:00:24 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=QBFqkHSME2UNFeWEzea6wtqPVNxpWV1dZ8m+oEYb+Ov3/z9HZ6SkdDMiqVtQX031qzkMLPP6r8lN7+D275Ir+7kwB15Lh6IlkjszD5ueUMzA33PE/uZ+GWTpFeEjSp3Pyj2F2sjGwRTF/uKVEbbhqe1UgKSMPgp0In+z04nNV3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ldKFr+7m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EB62C4CECF;
+	Tue, 12 Nov 2024 01:10:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731373224;
-	bh=f6WJXrTRDikhQIj250Wnzzvx7X2r/wsegb+H7jPT+kI=;
+	s=k20201202; t=1731373822;
+	bh=6iXWIIYzs6Fz0/pkTPNNDbrXf39SPg/gliWgmM5jfNY=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=h6/rJx871zpDPJ/Ca+zhF31lB5gWaSHsaGBByy/qf9lBzMVz/FA54LKkzkyQaJzAA
-	 /WVvk2D3IVfWM3SxynRcoJE76y/cmj05JlJOKdSb4g6aJVKJTyF6kx7jUFrSXmJ6Xj
-	 f2Sn7mBMusNAIx5bkndiAOcbe0ppwU2FA+NN/AHisv+0FcTeM3XdFSPcY7TCwb/QWD
-	 6SrlUl/zhqqW8lrliuzaaDNeW/9s95UQHj2CeB7oakRaDVUx5kh42Zpaql3QWJ0GO0
-	 C9LaOGiNlkgzDumvtaaNjrPy6rUTojDbeUGuCGzG2Xq8+n3bDL+VNpM6HAIsmLEAvK
-	 sLKRGur/fWJgw==
+	b=ldKFr+7mn6+9pfbea/baC0+HmKUyUu6Fqjtgiwyd2XTSRMxQ19EtGcw8ucFsMdEd2
+	 il1S0SznFiFzKa0MHWzeRPW+EPDO+c7NA9DPiTaUxQPQfa0Cb84h29LFLh5/SJv1fS
+	 RXJdUVnyuMdK1Ta406YST4lvSBKqiGE0eBBfUKSX5DwQkLjmTOdHJuPr/P8RIrO3ne
+	 r7dvv4Y2a6aO8+PS94szVtEwQP1Mvk6lW0mY5ZP3mimRb/nNKgkI6By6DugtM0Nx5y
+	 DuLgxfMda/Q1lDtxtS+TelF2FbAiJ+/eIfxmKYEHxm/41uXwXQYG3uB2Glwmoo81V0
+	 B/GQ1hvXIWJ/A==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 713313809A80;
-	Tue, 12 Nov 2024 01:00:35 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 714583809A80;
+	Tue, 12 Nov 2024 01:10:33 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -52,55 +52,60 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 0/4] Introduce VLAN support in HSR
+Subject: Re: [PATCH net-next v8 00/12] selftests: ncdevmem: Add ncdevmem to ksft
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <173137323399.33228.10298561607881644376.git-patchwork-notify@kernel.org>
-Date: Tue, 12 Nov 2024 01:00:33 +0000
-References: <20241106091710.3308519-1-danishanwar@ti.com>
-In-Reply-To: <20241106091710.3308519-1-danishanwar@ti.com>
-To: MD Danish Anwar <danishanwar@ti.com>
-Cc: geliang@kernel.org, liuhangbin@gmail.com, jiri@resnulli.us,
- w-kwok2@ti.com, aleksander.lobakin@intel.com, lukma@denx.de,
- jan.kiszka@siemens.com, diogo.ivo@siemens.com, shuah@kernel.org,
- horms@kernel.org, pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
- davem@davemloft.net, andrew+netdev@lunn.ch, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, srk@ti.com, vigneshr@ti.com,
- rogerq@kernel.org
+ <173137383227.35889.14781733163627286738.git-patchwork-notify@kernel.org>
+Date: Tue, 12 Nov 2024 01:10:32 +0000
+References: <20241107181211.3934153-1-sdf@fomichev.me>
+In-Reply-To: <20241107181211.3934153-1-sdf@fomichev.me>
+To: Stanislav Fomichev <sdf@fomichev.me>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
+ horms@kernel.org, almasrymina@google.com, willemb@google.com,
+ petrm@nvidia.com, jdamato@fastly.com
 
 Hello:
 
 This series was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Wed, 6 Nov 2024 14:47:06 +0530 you wrote:
-> This series adds VLAN support to HSR framework.
-> This series also adds VLAN support to HSR mode of ICSSG Ethernet driver.
+On Thu,  7 Nov 2024 10:11:59 -0800 you wrote:
+> The goal of the series is to simplify and make it possible to use
+> ncdevmem in an automated way from the ksft python wrapper.
 > 
-> Changes from v2 to v3:
-> *) Modified hsr_ndo_vlan_rx_add_vid() to handle arbitrary HSR_PT_SLAVE_A,
-> HSR_PT_SLAVE_B order and skip INTERLINK port in patch 2/4 as suggested by
-> Paolo Abeni <pabeni@redhat.com>
-> *) Removed handling of HSR_PT_MASTER in hsr_ndo_vlan_rx_kill_vid() as MASTER
-> and INTERLINK port will be ignored anyway in the default switch case as
-> suggested by Paolo Abeni <pabeni@redhat.com>
-> *) Modified the selftest in patch 4/4 to use vlan by default. The test will
-> check the exposed feature `vlan-challenged` and if vlan is not supported, skip
-> the vlan test as suggested by Paolo Abeni <pabeni@redhat.com>. Test logs can be
-> found at [1]
+> ncdevmem is slowly mutated into a state where it uses stdout
+> to print the payload and the python wrapper is added to
+> make sure the arrived payload matches the expected one.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next,v3,1/4] net: hsr: Add VLAN support
-    https://git.kernel.org/netdev/net-next/c/d977d7eb09fe
-  - [net-next,v3,2/4] net: hsr: Add VLAN CTAG filter support
-    https://git.kernel.org/netdev/net-next/c/1a8a63a5305e
-  - [net-next,v3,3/4] net: ti: icssg-prueth: Add VLAN support for HSR mode
-    https://git.kernel.org/netdev/net-next/c/e6bf1f7aea4d
-  - [net-next,v3,4/4] selftests: hsr: Add test for VLAN
-    https://git.kernel.org/netdev/net-next/c/75e3f12fa51b
+  - [net-next,v8,01/12] selftests: ncdevmem: Redirect all non-payload output to stderr
+    https://git.kernel.org/netdev/net-next/c/6891f0b523e1
+  - [net-next,v8,02/12] selftests: ncdevmem: Separate out dmabuf provider
+    https://git.kernel.org/netdev/net-next/c/8b9049af8066
+  - [net-next,v8,03/12] selftests: ncdevmem: Unify error handling
+    https://git.kernel.org/netdev/net-next/c/bfccbaac1b45
+  - [net-next,v8,04/12] selftests: ncdevmem: Make client_ip optional
+    https://git.kernel.org/netdev/net-next/c/0ebd75f5f239
+  - [net-next,v8,05/12] selftests: ncdevmem: Remove default arguments
+    https://git.kernel.org/netdev/net-next/c/d3ca35c64d48
+  - [net-next,v8,06/12] selftests: ncdevmem: Switch to AF_INET6
+    https://git.kernel.org/netdev/net-next/c/933056357a8c
+  - [net-next,v8,07/12] selftests: ncdevmem: Properly reset flow steering
+    https://git.kernel.org/netdev/net-next/c/e3c09623a53b
+  - [net-next,v8,08/12] selftests: ncdevmem: Use YNL to enable TCP header split
+    https://git.kernel.org/netdev/net-next/c/798d822e5d34
+  - [net-next,v8,09/12] selftests: ncdevmem: Remove hard-coded queue numbers
+    https://git.kernel.org/netdev/net-next/c/d4ef05d21131
+  - [net-next,v8,10/12] selftests: ncdevmem: Run selftest when none of the -s or -c has been provided
+    https://git.kernel.org/netdev/net-next/c/77f870a00016
+  - [net-next,v8,11/12] selftests: ncdevmem: Move ncdevmem under drivers/net/hw
+    (no matching commit)
+  - [net-next,v8,12/12] selftests: ncdevmem: Add automated test
+    https://git.kernel.org/netdev/net-next/c/80230864b7b0
 
 You are awesome, thank you!
 -- 
