@@ -1,128 +1,137 @@
-Return-Path: <linux-kselftest+bounces-21892-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21894-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 994C89C636C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 22:28:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91D689C622A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 21:08:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3889B87AEA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 18:28:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 571A4281007
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2024 20:08:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C89AD216454;
-	Tue, 12 Nov 2024 18:28:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99C03219C8D;
+	Tue, 12 Nov 2024 20:08:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mZBUXlNi"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R6Jsvxhs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5977E215C62;
-	Tue, 12 Nov 2024 18:28:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0908E20ADEC
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 20:08:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731436110; cv=none; b=rMWI3ui2pEZHLrRgyevF+iJPgBuf/hoELVgi+tvdiNPsJReH6dP8t91uY/xs4M5KW9pKMJbHdLWW9wg3bB/LXAe2JoVqSC7Rj+o9r2nQJzhzoX08BdPaWaZMeciumEu0m0FcM0PvYeBI8xO2ZNNFmbzjhR8mFDkW1mM1/Ded0L8=
+	t=1731442085; cv=none; b=VbM2QUv4VRcmzYY8PJcorYZenLhzzu7ES6wV0+At+Eb13pe412CqZfbddctqSoeD7bzdxvEK3VhRfbnMPeXMohKDVL92foXx3Z0eflHtS/TYmjEkXlh8QDV+gr3yphmOGI4+PFHCrgjWHW3wwgmR6KekXt3whqEVGbr9khkEcOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731436110; c=relaxed/simple;
-	bh=dZbDMAUdLbxNNQpgzzFwvZxHCF4K+0N0LYW0Z3+EY0s=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=V29F/a8cQZxEv2mgwYlh7fxMVniid6AupbbcBbx2dp8ZoaUDX8Ypb7U4DKBVSVmyyfPWRsPfXzf87vvUze9uIclmt1iTuV1XlmSp2t8OUEu+bhnyxNUCQk5O2mfnOD3LobWQ5WbLBxJVBkoF6YCEFz8yuXVVvFgJJQrGWO3yY9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mZBUXlNi; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-20cbcd71012so70323285ad.3;
-        Tue, 12 Nov 2024 10:28:29 -0800 (PST)
+	s=arc-20240116; t=1731442085; c=relaxed/simple;
+	bh=RHZ3bzWQ32ir8dvykH3nttL8q/pnHAH4dgFUQF3xSZc=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=W5fjudWoTsyX0ZPKJtLmp0yKR9vKQsLbWgbNP3c69f2KaKkzc2tCicBT1cAKQFPvl3sB/XclQLJ9/vSdf4KCO2pAKe6iJMYqCcf/Zbffp2Of+5M+3r8AGHqHf5FLRFpkMCPmqYYBq9wmSlUwkOfJqhJ7yMfD2dBL6Ot3jgy7Q8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rmoar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=R6Jsvxhs; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rmoar.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e2b9f2c6559so8763716276.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2024 12:08:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731436109; x=1732040909; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xG9BoyCsOgxLRKpKuSPK8dWttGY6kTRBEqiurMHDglI=;
-        b=mZBUXlNiXG9VAyShu8T4KJKSDJ0GbgNl2Cgn7lXugS4vOTh5/DwHgQLSsf0v7qDKVg
-         zlRroOVun1522qoRgt3vRhAaJkhc86vFeXGBzsQARH8NLNDjPupbrN8Y1ng73gGIMyDM
-         attsVvbaoEP0l+CX/apuGKsSaQL0cR5JaCZD7JvbqHppYxMBYAV2vjRZ4Zo6YmHqcWKv
-         6WTpcEwALHJ9lmsFH7w61NQlUX8L8Io2cfuHRrXAzN1MsfRO0DJ1WD0zggD6FxmYsrlT
-         QUScJWC5pRgQf8+/+7EQc2dhx+NQToUW4woncKargqSfWVR8vwWgLfgK2TdLYzYtgDod
-         T7bQ==
+        d=google.com; s=20230601; t=1731442083; x=1732046883; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=TNJMf/dEdEXGOQzVC+DsIsgZe/E51V+ULiXsqRjRICw=;
+        b=R6Jsvxhs4K7870mi+/AOrewXYL5We9lpDjFQYs1fUicKEGk9ReOwxhnAJxgd1BgEOS
+         PNkV2JzLsJm+IbMrFbKL9XJ9VMd2g8SahE1Qec5NYM4dW/BBkVXiT/yF71twc3ldOOye
+         lS6aKRrHW0JXE+d3NgS1dHQLvALI7v+2zjMz/7eWJf6biIxC6PROPEIrsteycmOTXdbc
+         gb+Fx36wKGlTNpEiiYe/otl3Ra/F457Y4S0IaVd0XeW4UVIp2HhrZyUSKjYxlKWTJ9zg
+         /Hzy0BBoIzNS2qv1Ol8m3W3rXeSbgfTS+WtGXOwVIPW3E/K5ygsu444yTxlRq3FmhEEV
+         QmRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731436109; x=1732040909;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xG9BoyCsOgxLRKpKuSPK8dWttGY6kTRBEqiurMHDglI=;
-        b=WhGkYch9PujtkycaC1l5XvCJ39NoSNjRHrQ2bP+Gmf9gISphG39whs/eTMXjgXIsaq
-         oK5cUHh6LqaIdToAQYJJo7KDegitxrphpbQCjVhbk4htphdQ2xpkzYwXUwY6S9mxd4ol
-         aULsw3IQswmBJJ7j6WG3JpuC00WcnUNJRz6hyyPHd2F2DdQRyr8EZqArSFrIBrO0Zozt
-         wltZZ87RJBu1OFkqcHq289v6rPDxMhuDiSF1lFy4Q40YwOmjsjhL9vtlgwI96FxnSq7c
-         BtEIdnz8Ptwx/y9TDz6DB4ipdW0HZn1jk10T4PCYXUZL7+gxT0bKsJaIDRW7Wyw726aQ
-         /JHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUnkmEWRzX1WXAm5F5QA/rSc9x070YYp7hkaWGOxs2VieiIdhCWJO3o+70e9co6m4eCb2bCrHehKaYN1pAgRn2KlxoIYhT7@vger.kernel.org, AJvYcCVGqpirpiFpaEvDr/q8N/GEqEo/4g/L54znbNLOqfaohjssRzSj0iCX2wzGOIm2WMIknPhP0ZRf5tzWjTI=@vger.kernel.org, AJvYcCXeHHpe0X9sDm47tVTGKyAOGe3E5QzisR2AqngNB4XwgHIq7Yj99uMOhk5odfqlaIqLaC1fgHJXxrs1/B27MSUr@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywa/IVPszVRnPBbMv4xImT2nUbuUy74+foV6QgAY11GR48sbr3a
-	vuxlGsEru8Yx4OVeVMz5grFRTYvVHdMd8sV4PCLodqI+bW+6N8lQx6fMtj5F
-X-Google-Smtp-Source: AGHT+IFuSJadtnFgM9MFW1vjwXlMMm8dIwqjw4ui+YdL0RTBFsiyLLHYGSeNc9iQfcZUC+POAvX7qA==
-X-Received: by 2002:a17:902:f686:b0:206:c486:4c4c with SMTP id d9443c01a7336-211835c16b1mr192400855ad.57.1731436108568;
-        Tue, 12 Nov 2024 10:28:28 -0800 (PST)
-Received: from localhost.localdomain ([2409:40c1:5f:8acf:74ef:bde5:4fe9:96c6])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177ddf7e1sm97092525ad.106.2024.11.12.10.28.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2024 10:28:28 -0800 (PST)
-From: Amit Vadhavana <av2082000@gmail.com>
-To: paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com,
-	casey@schaufler-ca.com,
-	shuah@kernel.org
-Cc: ricardo@marliere.net,
-	av2082000@gmail.com,
-	skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linux.dev,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: lsm: Refactor `flags_overset_lsm_set_self_attr` test
-Date: Tue, 12 Nov 2024 23:58:10 +0530
-Message-Id: <20241112182810.24761-1-av2082000@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20230601; t=1731442083; x=1732046883;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TNJMf/dEdEXGOQzVC+DsIsgZe/E51V+ULiXsqRjRICw=;
+        b=onKfUZb3AW1eUgyB0Ln8+mea+/jEeiu6b/8PYEya+H9LkHIl6qpCn2nCud8zrbAiXf
+         niakOmB+/kNMgcCiSn+A+x9T033rxwwfmx3veqXMBfanKWQ+TuNIO/rEZDVpgtQZDFdJ
+         UC1IepUJ/usul8id1pOM8l2NTlcwDgzepCYGJEK0LLpkmY4E4Rnbbk7dDcSOGYjz4Y/Y
+         EZodrbLfhhPOTdkvTVPWZ9Ph+nqTupJkiQgM0gYRnm+3aGjXYKwjmUVlBJnVnwAoxptM
+         mqLD19TwT2SvknGI3AjzshvwLa8JwLtG8P2qDkftxGW4Y7vheV5xnShbtcROQIFUMEL/
+         4A7g==
+X-Forwarded-Encrypted: i=1; AJvYcCWCdhlrIRyEVpscJWV7z9XN+qy8Lw328B+eNn4yiyConwZlJuEExd+2nAkbHVKkRtQNMQ+z2ld0V5EDa5QKPqE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmL50ywF3b48iTeHIHYfAyNBuNO8KN9ARvfcq7Tw/eNVBv42UM
+	0THHA/RJ+V36OyQg+YYx2npeT346zSB4EqqmZ0mUHbXeJHko9B7qrto+17kwretvbDaUSt7/jw=
+	=
+X-Google-Smtp-Source: AGHT+IGWbxSkKKXBUo0jXvLY76zHqclSM/Sk5GYrZs492hudc1yUtPuCSAnoXDL51XUAfvEFlt5QUI6Nfw==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:d3:4d64:ac12:6a5d])
+ (user=rmoar job=sendgmr) by 2002:a25:ef03:0:b0:e30:be64:f7e6 with SMTP id
+ 3f1490d57ef6-e35ecdea920mr175276.3.1731442082279; Tue, 12 Nov 2024 12:08:02
+ -0800 (PST)
+Date: Tue, 12 Nov 2024 20:07:43 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.47.0.277.g8800431eea-goog
+Message-ID: <20241112200748.791828-1-rmoar@google.com>
+Subject: [PATCH 0/5] release of KTAP version 2
+From: Rae Moar <rmoar@google.com>
+To: frowand.list@gmail.com, davidgow@google.com, keescook@chromium.org, 
+	Tim.Bird@sony.com, shuah@kernel.org, brendanhiggins@google.com
+Cc: tytso@google.com, gustavo.padovan@collabora.com, 
+	ricardo.canuelo@collabora.com, corbet@lwn.net, kernelci@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Rae Moar <rmoar@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-- Remove unnecessary `tctx` variable, use `ctx` directly.
-- Simplified code with no functional changes.
+This patch series represents the final release of KTAP version 2.
 
-Signed-off-by: Amit Vadhavana <av2082000@gmail.com>
----
- tools/testing/selftests/lsm/lsm_set_self_attr_test.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+There have been having open discussions on version 2 for just over 2
+years. This patch series marks the end of KTAP version 2 development
+and beginning of the KTAP version 3 development.
 
-diff --git a/tools/testing/selftests/lsm/lsm_set_self_attr_test.c b/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
-index 66dec47e3ca3..732e89fe99c0 100644
---- a/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
-+++ b/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
-@@ -56,16 +56,15 @@ TEST(flags_zero_lsm_set_self_attr)
- TEST(flags_overset_lsm_set_self_attr)
- {
- 	const long page_size = sysconf(_SC_PAGESIZE);
--	char *ctx = calloc(page_size, 1);
-+	struct lsm_ctx *ctx = calloc(page_size, 1);
- 	__u32 size = page_size;
--	struct lsm_ctx *tctx = (struct lsm_ctx *)ctx;
- 
- 	ASSERT_NE(NULL, ctx);
- 	if (attr_lsm_count()) {
--		ASSERT_LE(1, lsm_get_self_attr(LSM_ATTR_CURRENT, tctx, &size,
-+		ASSERT_LE(1, lsm_get_self_attr(LSM_ATTR_CURRENT, ctx, &size,
- 					       0));
- 	}
--	ASSERT_EQ(-1, lsm_set_self_attr(LSM_ATTR_CURRENT | LSM_ATTR_PREV, tctx,
-+	ASSERT_EQ(-1, lsm_set_self_attr(LSM_ATTR_CURRENT | LSM_ATTR_PREV, ctx,
- 					size, 0));
- 
- 	free(ctx);
+The largest component of KTAP version 2 release is the addition of test
+metadata to the specification. KTAP metadata could include any test
+information that is pertinent for user interaction before or after the
+running of the test. For example, the test file path or the test speed.
+
+Example of KTAP Metadata:
+
+ KTAP version 2
+ #:ktap_test: main
+ #:ktap_arch: uml
+ 1..1
+     KTAP version 2
+     #:ktap_test: suite_1
+     #:ktap_subsystem: example
+     #:ktap_test_file: lib/test.c
+     1..2
+     ok 1 test_1
+     #:ktap_test: test_2
+     #:ktap_speed: very_slow
+     # test_2 has begun
+     #:custom_is_flaky: true
+     ok 2 test_2
+ # suite_1 has passed
+ ok 1 suite_1
+
+The release also includes some formatting fixes and changes to update
+the specification to version 2.
+
+Frank Rowand (2):
+  ktap_v2: change version to 2-rc in KTAP specification
+  ktap_v2: change "version 1" to "version 2" in examples
+
+Rae Moar (3):
+  ktap_v2: add test metadata
+  ktap_v2: formatting fixes to ktap spec
+  ktap_v2: change version to 2 in KTAP specification
+
+ Documentation/dev-tools/ktap.rst | 276 +++++++++++++++++++++++++++++--
+ 1 file changed, 260 insertions(+), 16 deletions(-)
+
+
+base-commit: 2d5404caa8c7bb5c4e0435f94b28834ae5456623
 -- 
-2.25.1
+2.47.0.277.g8800431eea-goog
 
 
