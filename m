@@ -1,139 +1,116 @@
-Return-Path: <linux-kselftest+bounces-21954-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21956-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 222859C799A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 18:08:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D9EAA9C79FB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 18:32:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8FD11F21087
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 17:08:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91A3A1F24F24
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 17:32:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C3482003DF;
-	Wed, 13 Nov 2024 17:08:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B67020125C;
+	Wed, 13 Nov 2024 17:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QfrnQqoI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AczsdmsQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFDE01E0E13
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 Nov 2024 17:08:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBC87E111;
+	Wed, 13 Nov 2024 17:32:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731517700; cv=none; b=MtaGBp/OWSJC/2Stj1zllG+LwRz6lkGMQvj/mZ1u/GXzO+3owDOPG/7wd1EjaZnSEpyJD946UPppt2foyXyF+FONFx9DGftH9cCZnRRBe5wu3g9qDPpaQpf9p6tzA9PfeCi9GBHA6StEpiEMd6NFdifIQ1S0gw3vZrrl+O9GQLI=
+	t=1731519170; cv=none; b=aEx/CG3yUgrJ0XFcKRw+cMVdFslp6MpmP/HYnoF9Nxb+MukaB1mwVFY0/dvthdY54MB0WXGLxU0htoYjKNMa0IE410rvSFid7TrKJFQALdGkfdTRAA6kL5V/NgLKFhkho+TJPU+KgwPyCMTvBvqnHCq+c7VuIAuVn6sl/mHYJTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731517700; c=relaxed/simple;
-	bh=MwTDjeCUUuvtEqRz3jfVu5/q3d7xdDWCUuJsQkbpCU4=;
+	s=arc-20240116; t=1731519170; c=relaxed/simple;
+	bh=ImFnpaT3fWX+jbI6AoZKXrHFpBNoXUfag1kP5kmZeG0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V0BOeKPBB/++qRNYwvAOZsAiqcR/pGKuwaB/7Bz9ZiCtz8WfckSSGUrREPjqQudFw0TsyFDoUl0Jwc6IlToH1kinb4jxgTjnBHM3ynq5OGXrX7PTPhOREoSlAddsQuBf7v7Vw+u0Y4ZaCZ0Ym20my2T2DemJ+d3vCw8ZddmnqXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QfrnQqoI; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-aa1e51ce601so352298666b.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Nov 2024 09:08:18 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=gSBSjNK05MzIkxMHLUDfaluiXM+grN6cwDgITu0p1mZJLHy0uBNHtIsfwzRM2ZMiMiqLV96mYTZFa5RXWLSyR3wGQSkkeBlwMP2SAmY/INKjef74Ik8I584A5ooORc+QGj5i+V1GQ2U0bEEf+wouUNOPTUSaHqkFbIJl2Tc5PD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AczsdmsQ; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-20ca1b6a80aso78635285ad.2;
+        Wed, 13 Nov 2024 09:32:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731517697; x=1732122497; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=o9rL7o/PvlGWFQw5XVVoTFVbdNmHL9RGbywRCyJvRDw=;
-        b=QfrnQqoInwCYfsdcua1c8ggRL0Dg37DcQy5iHDfHfFk7yamWnxoUiywrhe3mwj3d+q
-         hkH1yN2DZdS0GvnOlC/GvWW0+lI3iTkajVrFNGhpbYhUVmLt/wxC9UNRq6D7GYdRZwmg
-         8JYIbQj/f8OuRlu+m7NMwmPG2Vn1BGfL3WWmJfSsnh9P6KNJanIVE4Nf/Ze/NcJyGNHN
-         XpcvCpaDl9tA5NMjxrq0RtAJ4bpOETW/n7G69edtOjNKqQ7AmYN2WKyy/7xnXsQweoqM
-         TtkcjhcVmX6sL6DZnc9IYNe+j+VC+m96bF8h82M1uXgNhoRGWI70T1U16APTsoyKcC6d
-         hQoQ==
+        d=gmail.com; s=20230601; t=1731519168; x=1732123968; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=NyIy0y+LWo1AomMNgNueEzGS37WFUxrwnWKqwan2aiw=;
+        b=AczsdmsQeQOb8wqc/avfsQvlh7sTbjvDPEWqkd7dR7JXXX9Jll1aKKnhteu4ehvP9M
+         wwgyi/uDDOdwJNwEB3mQhffdqXNCP2lpOU4BS0yeeRRPwTEYdaPxKpjp4mIaGXDHXn2z
+         a81HOqP1F12Xu8xeokYsgly7xkX11L/Wkd5HcdQwRWjeOvht2O/nk+HtJP6mBJUr2IlX
+         26CiIDTUE8OwptnLjlVl+IKEJlf8pywzwS6h1S77EwS+VKHHngcvYIK56OccdUH/VaPG
+         LHj3pAay6qSb1UouZ0M/yeq86larsFa2bT4jd2EAQQHuHMQSGEeJGEYsjDQO58vbiITA
+         Uz7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731517697; x=1732122497;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o9rL7o/PvlGWFQw5XVVoTFVbdNmHL9RGbywRCyJvRDw=;
-        b=s7vF+7JTmleJwOMmTc25BW2Xpf612GkS86r+WEvp/gbZ61ZtxsmjX3XHeNNFR06eL0
-         s0NhxYbcAAcUZ9oq0wb5aHad7AuzTLLNM2Q6hl1EAr243og6CwvQ73suaDwPsaUIYEYG
-         Qvs/zzVA3i5VIlhqZ6Se8PQGnCnv+1WAN2qcuMzFAwFVsEJ9Q4AE0pRJJApPzT1c3Q1a
-         S75wN4vabBCXOwWtljeoS4qPlnKD9HB7zR7Sf7BTJLoav8piElc/kke9+H0LznUusngH
-         vVaMPf2BHsmqpe5rdpsg7EV/m/IwGsC55hKFp5cH8qvUTdnD0AfNLszei0swAFLkGlDd
-         LxyA==
-X-Forwarded-Encrypted: i=1; AJvYcCUmCiEGqyrL+c/FrsLliMSLsbMjztPEHDD/G3S3QVzt1Oq07xoGwjSSqbXSO7kQ94iaLc8Pl5GmsvE3i7tTKi0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzp3jZHv5AtWRiy8QEp01IgNKWZqh/2JJsmN9TeGagBnh3dGIn+
-	St3JcsxmnHm1ra77Q5kBLSuXG8SMBjdTnqydfVpcnq0BRbtnzE/qjDB3TCSoyv8=
-X-Google-Smtp-Source: AGHT+IFHDCrNqllb0ktO340z3QbZiHkoWYqo0nZOFt2gofDRgTZmVfkFehiSYjXNelnICUHjddaKaw==
-X-Received: by 2002:a17:906:3406:b0:aa1:dd58:aeb6 with SMTP id a640c23a62f3a-aa1dd58b0damr578341566b.57.1731517696816;
-        Wed, 13 Nov 2024 09:08:16 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0a4c3f5sm895702066b.76.2024.11.13.09.08.15
+        d=1e100.net; s=20230601; t=1731519168; x=1732123968;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NyIy0y+LWo1AomMNgNueEzGS37WFUxrwnWKqwan2aiw=;
+        b=j+DJ+EOgnXDVK6BgLyMqjo0inUFfNNIS/GrvHMpQjIQmk1tsJrUnYfTAsFYOm+LkgD
+         +zcsK/DNq1Y+ts9121cN2BSxUsZSqYeHGIJfaMTWMgCp0OKhu+C0MVsnmTClmoCXzW+M
+         JdgQ6QWPH+Y9fUEythBmcuCLBgBZcXKJE7ph9J+EJ2mGtU4nrTimP/g6om5l8cPAVc6f
+         CA3TWyCvj+RmLFUqmvGji9dwSRrhjJXaivhYgohhcl0KbDLBEQ/QYFM+XpayUJnEri9j
+         vcAFaVG9Z9OOkmOubz49k4I/fqYFMYekv5nSKPUS5nA5fY1fUYFYTsMBfKSdDzINqrzm
+         ME3A==
+X-Forwarded-Encrypted: i=1; AJvYcCU2CFs7Quui1HxiF07/3UhTVccbuba2I6AksxidwBOTr8pPLUhb9Z/dvmoLRwcOjD+Q/JPg0AV+X2ZUv4Tp@vger.kernel.org, AJvYcCWNM8ZM0jFzttM6oUViWqMcQ65GIvcT0z5aAAz8y7RHO9+XdPG+MUb0ufHK/Z1ryUBbvrVh1DoaENGyPL/vkft+@vger.kernel.org, AJvYcCXT4eErHGSrKf0+FbJeU67hAfDKDmKig7bttx5fO3uc02zTyIQq+kIrCjcx1hmAAMTl6SE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWBhfpWPlAiwVA3x7xtGbssz2zUq3dBtdHWt3eI6DzU0cUf1WM
+	kloRe8CRbxp851CwOhEqj1HEA+qOs8F/kURBlCGFcjp0AdjgeJ8=
+X-Google-Smtp-Source: AGHT+IGbl3E0Lz/dc2uP2mflsGmCThFPUgYryuGzgVE8RCm2pt4+oWW9BYbK7r3zcep78AzgjxCJcA==
+X-Received: by 2002:a17:902:e803:b0:20b:920e:8fd3 with SMTP id d9443c01a7336-21183d5532amr288529055ad.35.1731519167912;
+        Wed, 13 Nov 2024 09:32:47 -0800 (PST)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177e83eb4sm111708745ad.269.2024.11.13.09.32.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Nov 2024 09:08:16 -0800 (PST)
-Date: Wed, 13 Nov 2024 20:08:12 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Matthieu Baerts <matttbe@kernel.org>,
-	Greg KH <gregkh@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: Linux Kernel Functional Testing <lkft@linaro.org>,
-	Kernel Selftests <linux-kselftest@vger.kernel.org>,
-	Netdev <netdev@vger.kernel.org>,
-	Linux Kernel <linux-kernel@vger.kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Ido Schimmel <idosch@nvidia.com>, stable@vger.kernel.org
-Subject: Re: LKFT CI: improving Networking selftests results when validating
- stable kernels
-Message-ID: <1bda012e-817a-45be-82e2-03ac78c58034@stanley.mountain>
-References: <ff870428-6375-4125-83bd-fc960b3c109b@kernel.org>
+        Wed, 13 Nov 2024 09:32:47 -0800 (PST)
+Date: Wed, 13 Nov 2024 09:32:46 -0800
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Alexis =?utf-8?Q?Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, ebpf@linuxfoundation.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Bastien Curutchet <bastien.curutchet@bootlin.com>,
+	Petar Penkov <ppenkov@google.com>, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 02/10] selftests/bpf: use ASSERT_MEMEQ to
+ compare bpf flow keys
+Message-ID: <ZzTivljZIKEHwlHG@mini-arch>
+References: <20241113-flow_dissector-v1-0-27c4df0592dc@bootlin.com>
+ <20241113-flow_dissector-v1-2-27c4df0592dc@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ff870428-6375-4125-83bd-fc960b3c109b@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241113-flow_dissector-v1-2-27c4df0592dc@bootlin.com>
 
-On Fri, Nov 08, 2024 at 07:21:59PM +0100, Matthieu Baerts wrote:
-> KSelftests from the same version
-> --------------------------------
+On 11/13, Alexis Lothoré (eBPF Foundation) wrote:
+> The flow_dissector program currently compares flow keys returned by bpf
+> program with the expected one thanks to a custom macro using memcmp.
 > 
-> According to the doc [2], kselftests should support all previous kernel
-> versions. The LKFT CI is then using the kselftests from the last stable
-> release to validate all stable versions. Even if there are good reasons
-> to do that, we would like to ask for an opt-out for this policy for the
-> networking tests: this is hard to maintain with the increased
-> complexity, hard to validate on all stable kernels before applying
-> patches, and hard to put in place in some situations. As a result, many
-> tests are failing on older kernels, and it looks like it is a lot of
-> work to support older kernels, and to maintain this.
+> Use the new ASSERT_MEMEQ macro to perform this comparision. This update
+> also allows to get rid of the unused bpf_test_run_opts variable in
+> run_tests_skb_less (it was only used by the CHECK macro for its duration
+> field)
 > 
-> Many networking tests are validating the internal behaviour that is not
-> exposed to the userspace. A typical example: some tests look at the raw
-> packets being exchanged during a test, and this behaviour can change
-> without modifying how the userspace is interacting with the kernel. The
-> kernel could expose capabilities, but that's not something that seems
-> natural to put in place for internal behaviours that are not exposed to
-> end users. Maybe workarounds could be used, e.g. looking at kernel
-> symbols, etc. Nut that doesn't always work, increase the complexity, and
-> often "false positive" issue will be noticed only after a patch hits
-> stable, and will cause a bunch of tests to be ignored.
-> 
-> Regarding fixes, ideally they will come with a new or modified test that
-> can also be backported. So the coverage can continue to grow in stable
-> versions too.
-> 
-> Do you think that from the kernel v6.12 (or before?), the LKFT CI could
-> run the networking kselftests from the version that is being validated,
-> and not from a newer one? So validating the selftests from v6.12.1 on a
-> v6.12.1, and not the ones from a future v6.16.y on a v6.12.42.
-> 
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 
-These kinds of decisions are something that Greg and Shuah need to decide on.
-
-You would still need some way to automatically detect that kselftest is running
-on an old kernel and disable the networking checks.  Otherwise when random
-people on the internet try to run selftests they would run into issues.
-
-regards,
-dan carpenter
-
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 
