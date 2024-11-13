@@ -1,160 +1,184 @@
-Return-Path: <linux-kselftest+bounces-21950-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21951-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAF329C7828
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 17:04:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 288569C78BE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 17:23:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A55D28180C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 16:04:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E9A4B2275F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 16:13:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9B91158A31;
-	Wed, 13 Nov 2024 16:04:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BA9516088F;
+	Wed, 13 Nov 2024 16:13:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hy6CW1m7"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="jCyVMMJR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08E2156C5F
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 Nov 2024 16:04:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CEEF158D93
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 Nov 2024 16:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731513863; cv=none; b=rwI/rMJz7nWBWHniCoq1yf0aBaQAN0kuPRJMv6Kpe2D6orQ2PAAGE0DhWT0pvYMgVBdvKdRzycfXe9iSk4N4CPH6tfh4hlwn9td1sQYPLYx1/Ns5v0zUB1cQFgXZlWzWOcfEr3X2oqo7JAhhh6Vv9GN7AlzD3zYF1Jj1xoa71N0=
+	t=1731514432; cv=none; b=plMjxM4H37LRqiiXCCJy91jICK7d+NBF4w2DACoP+jJJh9CAme/aqsYHCOEvKWQO/MWfMX2/yX5xVbFY9dsvnL0PhELuI5hfQ5+mvvDSqEMLDYJOTIfhq0e0P4HkoHI7N9iZVRnwcV2+ublueM58YeG66dm80PQDrnNY1E6Wjdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731513863; c=relaxed/simple;
-	bh=j+4l/wSQVmSpBciFADL4nWG86AbM4y+yt7ey2EHURFM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=bPUjTMXA56dk6eOkL8rmZ0eGWmpP92PYTtKWgUpKZ+ITkrTQNtB2C8WTvrYSdIRx0S0US5GUkt9XEWdGzYcHS8pm955uRodMwJ4XwdzKpv+QkEWULoWjRiIHnEb5OdQz37OkYzBeD2slGgNXDM9/yDAa2hcR+zT2g3J2nZBf7d4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hy6CW1m7; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e380bf11daeso160662276.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Nov 2024 08:04:21 -0800 (PST)
+	s=arc-20240116; t=1731514432; c=relaxed/simple;
+	bh=7HWQ/VqZgyhSHZd91HoF8yCdwP+of9WeF4Yh1KQV7BE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BIMg6GG8zqvBe3u9WYvLfS1IDj9nC+1BU1yOzTfgqus0pMSxrIk72XkEceHNPUh4bMIZUHVIvQ4ZU7Rv5BXAMm7CGvxMPbwLhlvmRMe/JMaKRHN0H4k5D6Z07N+fEMU+X+yvRU+Y5Rbag+rKcZfhbJsAInKqa29CI6SwQhnwnlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=jCyVMMJR; arc=none smtp.client-ip=209.85.161.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5eb70a779baso3560141eaf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Nov 2024 08:13:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731513861; x=1732118661; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=urWC9EqU/pYYrOCfPVIx7GG8orSXBZXreTHU0chNMKY=;
-        b=hy6CW1m7cpfs/U36fCQzvLlKG4+sc8QibT3eQYJKnGDM/akS1WgEfI3Ul0v8oDarNt
-         Mff971EFsYU4i/fVdSU9yTwVOPTQDX74wj8Zn9h8D5PMVQiNYT8C5RT5K5vLSCoT7qs2
-         j7upp7Hkl9eVOcewX4Z0eXvbiY7csae0qVTCjO5YI9XJ7Jl09lyMshaQAfpN24B988oa
-         Vcu0Wc1AhOgqlRHpss2BhL0gAETbXEPEC9awfb3fQZRUTdVuBywaPeQjIr+6eEe52riy
-         IazwACA+nH4bw48+YJJ0D1NKAykPI+oPiCE908nmyF1B7z5ExnKKdix6bwAorBM4m3hK
-         KJ5g==
+        d=sifive.com; s=google; t=1731514429; x=1732119229; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b4CnOM9V0G25evq0IkfWx5gKqtwex3+JBvT1EkxAWJE=;
+        b=jCyVMMJRZOft92rmgjFsP3jK3JLbWqZcaGXyMz40qYrjgttc8yEJhY7jqrB/gqK/+y
+         D+SOZId9qjrrJnGW6X/8heTjD372K9LsGgC4UEfHPQxjal+LF2O538+U6Hv0vntjjMl3
+         80hXhVeRNixVT6HGJ1HWhZVBwNbQFtgcFFRtKo12KNHP0baM+vriLZDpTpaPCIU/Ftld
+         G0uD/fq4As/pD77wGfseFLWCBZGm7lAhe3sen+uAvRSVbGMOXUJMG5Am/9W1TFZ0cv+I
+         dOmfpvAumQU6rqEv6oKwookaF4hT5Mde01ublxW8YgpR+5DjCfj7CSff+k+Vh1fLL0Qu
+         0R+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731513861; x=1732118661;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=urWC9EqU/pYYrOCfPVIx7GG8orSXBZXreTHU0chNMKY=;
-        b=UQyaTbee/TS2o1Vm5RkfRAwP5yI2nDNL/ofT5ZM9Tt0HxztOmt4oi2moD5KxMPU9WQ
-         0SenNdlZoEJTYQcEDVI2KoI+Jg+tK8e1lYVL/v5bYHVgWGDiUj9HQm/ux4vyObpFU6QN
-         DZ5p2L4HzU/D1xW27bzkr0wyZGkTonLhHABJWEZV6VTQuFud3vDsUnSv+jeFisu1CDVE
-         a4FAtg23YR8C6DreZmOObZ4apj1bSFjLQb2342FEmbZBGbm4M58C5z1g+KwKcHIFXuSF
-         swPh3nA0MgHlJbjSaI8juFCB9DWY+w/erPJchip+1LQ5mXULGkrjx8rmtAb8MR330dmp
-         4Xrw==
-X-Forwarded-Encrypted: i=1; AJvYcCVtbQwR6u0IJILouMfks30/5hLDuSPXZ781rTd4fnExm4YmaYYpud0C1BfUgkVE5CYD9JpEntRXFc+mnX3tkLc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhShAdAGXFF7Yf/mX1jl2J0BKDZdYPQp9rAvnhgoG0iKArgC7X
-	dAAgNvUOQRmc/6RPwk8ziRQ+dp7SdMzBgmNlzCw9EQ0HgN5LXPCoJAOq9/l8tX1PBC1n9+wAG7I
-	QnQ==
-X-Google-Smtp-Source: AGHT+IGzsdMn9C2xm1NmHAMcXNshY/uEnHFAAvhfE/3YFglv4xHLxzOI2+wtc1WBfcA5ldcyGwFVBcfmrhY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:9d:3983:ac13:c240])
- (user=seanjc job=sendgmr) by 2002:a25:e0d3:0:b0:e28:ec75:75ed with SMTP id
- 3f1490d57ef6-e337f7798b7mr41395276.0.1731513860606; Wed, 13 Nov 2024 08:04:20
- -0800 (PST)
-Date: Wed, 13 Nov 2024 16:04:19 +0000
-In-Reply-To: <CABgObfZrTyft-3vqMz5w0ZiAhp-v6c32brgftynZGJO8OafrdA@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1731514429; x=1732119229;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b4CnOM9V0G25evq0IkfWx5gKqtwex3+JBvT1EkxAWJE=;
+        b=B2RNuJT7/01MHNcxRtxN+lAecQ0Y9hdyBZH59mwo1EOOg+ZltdP3xkCY3E2FU5GGQ1
+         +ayQYkdLK7pdgbQLVrI03su/D9aVZrDwK/kI8AU/dA1tQ8nrNLpQvY94Cci0o26xbXuA
+         Lod/ZlNDzv+LnHzqmV/wPot+3CxOS/mpzqt8EvKIOkSeM6KnLvdoDeE4EDsN5ewOYPs3
+         lculSG3eSRQBQTMj9ZuR8Zgn6A0FAbOui4yIrQHoeHcOue0qQv8ADXCgB215ApTt0eqB
+         5DJb+PMlOVEp6j21EplGNUh61ZRYs6N2d4rRF90pRGJS9oERxcu7XgJ6DZrImS9F6TnL
+         wKUw==
+X-Forwarded-Encrypted: i=1; AJvYcCVJufpUybKRY3OBz8Vt26jY3gEUme0B58l78e9MaNkMmRloWa6SaejgckwNM02XAYE0NG3QP4OtwODEVcIvkB0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKRZvGS5gTlUt5qz3Rl1Pj/D4ReL4Q+dRY+84zD0VWtJ9n4zUR
+	If9vfz6nndwXugVCg3s9rO0licozATUd50mQc8woemh6gbT4K4QbDtU9HMvtnvdjLhkzw+I9IMl
+	tbUSCcvyWumgl3nFpjlvvDCv8qKWwIG9bMqkhHQ==
+X-Google-Smtp-Source: AGHT+IGDFpRJff+OKPz21HLMWXvGQyDkqQzC8F4K0hofednOGXa7SW/5Crlgs/h6Bl5IR8Aw+zrRHhGFgVmxSg02ZdY=
+X-Received: by 2002:a05:6820:1805:b0:5eb:c72e:e29c with SMTP id
+ 006d021491bc7-5ee86a500a2mr5293321eaf.8.1731514429462; Wed, 13 Nov 2024
+ 08:13:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <CABQX2QMR=Nsn23zojFdhemR7tvGUz6_UM8Rgf6WLsxwDqoFtxg@mail.gmail.com>
- <Zy0__5YB9F5d0eZn@google.com> <CABQX2QNxFDhH1frsGpSQjSs3AWSdTibkxPrjq1QC7FGZC8Go-Q@mail.gmail.com>
- <e3f943a7-a40a-45cb-b0d9-e3ed58344d8b@redhat.com> <CADH9ctD1uf_yBA3NXNQu7TJa_TPhLRN=0YZ3j2gGhgmaFRdCFg@mail.gmail.com>
- <c3026876-8061-4ab2-9321-97cc05bad510@redhat.com> <CADH9ctBivnvP1tNcatLKzd8EDz8Oo6X65660j8ccxYzk3aFzCA@mail.gmail.com>
- <CABgObfZEyCQMiq6CKBOE7pAVzUDkWjqT2cgfbwjW-RseH8VkLw@mail.gmail.com>
- <CADH9ctA_C1dAOus1K+wOH_SOKTb=-X1sVawt5R=dkH1iGt8QUg@mail.gmail.com> <CABgObfZrTyft-3vqMz5w0ZiAhp-v6c32brgftynZGJO8OafrdA@mail.gmail.com>
-Message-ID: <ZzTNk4G0sOd8_hn-@google.com>
-Subject: Re: [PATCH 2/3] KVM: x86: Add support for VMware guest specific hypercalls
-From: Sean Christopherson <seanjc@google.com>
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Doug Covelli <doug.covelli@broadcom.com>, Zack Rusin <zack.rusin@broadcom.com>, 
-	kvm <kvm@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+MIME-Version: 1.0
+References: <20241111-v5_user_cfi_series-v8-0-dce14aa30207@rivosinc.com> <20241111-v5_user_cfi_series-v8-24-dce14aa30207@rivosinc.com>
+In-Reply-To: <20241111-v5_user_cfi_series-v8-24-dce14aa30207@rivosinc.com>
+From: Nick Hu <nick.hu@sifive.com>
+Date: Thu, 14 Nov 2024 00:13:38 +0800
+Message-ID: <CAKddAkCCVjNHUinPWtOiK8Ki_ZkdoUCawfv1-+0B69J_1aJv5Q@mail.gmail.com>
+Subject: Re: [PATCH v8 24/29] riscv: enable kernel access to shadow stack
+ memory via FWFT sbi call
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
 	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@redhat.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Joel Stanley <joel@jms.id.au>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
+	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
+	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
+	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
+	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
+	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 13, 2024, Paolo Bonzini wrote:
-> Il mar 12 nov 2024, 21:44 Doug Covelli <doug.covelli@broadcom.com> ha
-> scritto:
-> 
-> > > Split irqchip should be the best tradeoff. Without it, moves from cr8
-> > > stay in the kernel, but moves to cr8 always go to userspace with a
-> > > KVM_EXIT_SET_TPR exit. You also won't be able to use Intel
-> > > flexpriority (in-processor accelerated TPR) because KVM does not know
-> > > which bits are set in IRR. So it will be *really* every move to cr8
-> > > that goes to userspace.
-> >
-> > Sorry to hijack this thread but is there a technical reason not to allow
-> > CR8 based accesses to the TPR (not MMIO accesses) when the in-kernel local
-> > APIC is not in use?
-> 
-> No worries, you're not hijacking :) The only reason is that it would be
-> more code for a seldom used feature and anyway with worse performance. (To
-> be clear, CR8 based accesses are allowed, but stores cause an exit in order
-> to check the new TPR against IRR. That's because KVM's API does not have an
-> equivalent of the TPR threshold as you point out below).
-> 
-> > Also I could not find these documented anywhere but with MSFT's APIC our
-> > monitor relies on extensions for trapping certain events such as INIT/SIPI
-> > plus LINT0 and SVR writes:
-> >
-> > UINT64 X64ApicInitSipiExitTrap    : 1; //
-> > WHvRunVpExitReasonX64ApicInitSipiTrap
-> > UINT64 X64ApicWriteLint0ExitTrap  : 1; //
-> > WHvRunVpExitReasonX64ApicWriteTrap
-> > UINT64 X64ApicWriteLint1ExitTrap  : 1; //
-> > WHvRunVpExitReasonX64ApicWriteTrap
-> > UINT64 X64ApicWriteSvrExitTrap    : 1; //
-> > WHvRunVpExitReasonX64ApicWriteTrap
-> >
-> 
-> There's no need for this in KVM's in-kernel APIC model. INIT and SIPI are
-> handled in the hypervisor and you can get the current state of APs via
-> KVM_GET_MPSTATE. LINT0 and LINT1 are injected with KVM_INTERRUPT and
-> KVM_NMI respectively, and they obey IF/PPR and NMI blocking respectively,
-> plus the interrupt shadow; so there's no need for userspace to know when
-> LINT0/LINT1 themselves change. The spurious interrupt vector register is
-> also handled completely in kernel.
-> 
-> > I did not see any similar functionality for KVM.  Does anything like that
-> > exist?  In any case we would be happy to add support for handling CR8
-> > accesses w/o exiting w/o the in-kernel APIC along with some sort of a way
-> > to configure the TPR threshold if folks are not opposed to that.
-> 
-> As far I know everybody who's using KVM (whether proprietary or open
-> source) has had no need for that, so I don't think it's a good idea to make
-> the API more complex. 
+Hi Deepak
 
-+1
+On Tue, Nov 12, 2024 at 5:08=E2=80=AFAM Deepak Gupta <debug@rivosinc.com> w=
+rote:
+>
+> Kernel will have to perform shadow stack operations on user shadow stack.
+> Like during signal delivery and sigreturn, shadow stack token must be
+> created and validated respectively. Thus shadow stack access for kernel
+> must be enabled.
+>
+> In future when kernel shadow stacks are enabled for linux kernel, it must
+> be enabled as early as possible for better coverage and prevent imbalance
+> between regular stack and shadow stack. After `relocate_enable_mmu` has
+> been done, this is as early as possible it can enabled.
+>
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> ---
+>  arch/riscv/kernel/asm-offsets.c |  4 ++++
+>  arch/riscv/kernel/head.S        | 12 ++++++++++++
+>  2 files changed, 16 insertions(+)
+>
+> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offs=
+ets.c
+> index 766bd33f10cb..a22ab8a41672 100644
+> --- a/arch/riscv/kernel/asm-offsets.c
+> +++ b/arch/riscv/kernel/asm-offsets.c
+> @@ -517,4 +517,8 @@ void asm_offsets(void)
+>         DEFINE(FREGS_A6,            offsetof(struct ftrace_regs, a6));
+>         DEFINE(FREGS_A7,            offsetof(struct ftrace_regs, a7));
+>  #endif
+> +       DEFINE(SBI_EXT_FWFT, SBI_EXT_FWFT);
+> +       DEFINE(SBI_EXT_FWFT_SET, SBI_EXT_FWFT_SET);
+> +       DEFINE(SBI_FWFT_SHADOW_STACK, SBI_FWFT_SHADOW_STACK);
+> +       DEFINE(SBI_FWFT_SET_FLAG_LOCK, SBI_FWFT_SET_FLAG_LOCK);
+>  }
+> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+> index 356d5397b2a2..6244408ca917 100644
+> --- a/arch/riscv/kernel/head.S
+> +++ b/arch/riscv/kernel/head.S
+> @@ -164,6 +164,12 @@ secondary_start_sbi:
+>         call relocate_enable_mmu
+>  #endif
+>         call .Lsetup_trap_vector
+> +       li a7, SBI_EXT_FWFT
+> +       li a6, SBI_EXT_FWFT_SET
+> +       li a0, SBI_FWFT_SHADOW_STACK
+> +       li a1, 1 /* enable supervisor to access shadow stack access */
+> +       li a2, SBI_FWFT_SET_FLAG_LOCK
+> +       ecall
+>         scs_load_current
+>         call smp_callin
+>  #endif /* CONFIG_SMP */
+> @@ -320,6 +326,12 @@ SYM_CODE_START(_start_kernel)
+>         la tp, init_task
+>         la sp, init_thread_union + THREAD_SIZE
+>         addi sp, sp, -PT_SIZE_ON_STACK
+> +       li a7, SBI_EXT_FWFT
+> +       li a6, SBI_EXT_FWFT_SET
+> +       li a0, SBI_FWFT_SHADOW_STACK
+> +       li a1, 1 /* enable supervisor to access shadow stack access */
+> +       li a2, SBI_FWFT_SET_FLAG_LOCK
+> +       ecall
+>         scs_load_current
+>
+>  #ifdef CONFIG_KASAN
+>
+> --
+> 2.45.0
+>
+Should we clear the SBI_FWFT_SET_FLAG_LOCK before the cpu hotplug
+otherwise the menvcfg.sse won't be set by the fwft set sbi call when
+the hotplug cpu back to kernel?
 
-> Performance of Windows guests is going to be bad anyway with userspace APIC.
-
-Heh, on modern hardware, performance of any guest is going to suck with a userspace
-APIC, compared to what is possible with an in-kernel APIC.
-
-More importantly, I really, really don't want to encourage non-trivial usage of
-a local APIC in userspace.  KVM's support for a userspace local APIC is very
-poorly tested these days.   I have zero desire to spend any amount of time reviewing
-and fixing issues that are unique to emulating the local APIC in userspace.  And
-long term, I would love to force an in-kernel local APIC, though I don't know if
-that's entirely feasible.
+Regards,
+Nick
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
