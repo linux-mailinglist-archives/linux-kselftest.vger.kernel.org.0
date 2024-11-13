@@ -1,91 +1,101 @@
-Return-Path: <linux-kselftest+bounces-21924-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21925-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DA2C9C6FCB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 13:54:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5365A9C6FDA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 13:57:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EF13288BA8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 12:54:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13BD128A417
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 12:57:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76F792038CC;
-	Wed, 13 Nov 2024 12:52:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA5941DF267;
+	Wed, 13 Nov 2024 12:57:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WZORVkgE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UjzSmDnp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9A9A203715;
-	Wed, 13 Nov 2024 12:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EC8C1DEFF6;
+	Wed, 13 Nov 2024 12:57:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731502332; cv=none; b=PdzIDZcOFhVxZICRdU39GvbkY1PspNn5UlemP999G+xruSCUdtmlZ03Is8Cbo/he41qACRIK1dwLdyvIeqIKe7p0rbPrs2eNm81+wSgCH4DUrfG6lx3KGPyXiqqcpdZNuhTNFCFUixfcMsdbnExG7LuqoYyD37ejmdGq/oE9GxU=
+	t=1731502659; cv=none; b=AMl85MASIoWbZguwvOhIQwJN33wpUg9XrCKoaQZ8RSNnFP+0u8Owe20HPfd6XJzCHxlHEHo9zfqR10eyh3tObksJesYWS3DO+h6sFzbblig+bupqxzZYXPO4PK5piHxVKYHh789LrZZTr9/moF7dbDPlHOk/AKjUGkeX93E4AyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731502332; c=relaxed/simple;
-	bh=7EK9WdjCqkV7Na+zQG7xEtIJkamZHlr1piJWfXSpWwg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QfgwfrU+f8OrFBrcbvtLiBJpX56neYO85ZnLUCvkyGXSRIkhwrmeA61CoJsPcLtyHQ4V7Eu1eYYEBOL6u2Nth7Q+s3i1RwI96+GOw09qT4gHG/ChzKKzLkagR17AIwSOsd+ff/4e2/qmxK/qnor7GXJpchx1AxdaLZtp+BOwSak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WZORVkgE; arc=none smtp.client-ip=209.85.214.173
+	s=arc-20240116; t=1731502659; c=relaxed/simple;
+	bh=LGhloGeZIC0Mz+li19UMoWZ/7zMlCQSy38g2HbfQ70Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gxF2iVQSO92x5lhc1E8XdrYNxU2w7JgUNuvdvwev+I0eYtED3lm+XK65v1iXRuRmvXm1C2smKLMNym6bYQ6Ogfr0dzYO38J7rzn7VuQ20qz98zmvWtWfzuobFanUJzEHLxRSeMVNAAkGRt63DVo3CkQqTDfEQKhwwcOQaN08CdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UjzSmDnp; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21145812538so63067945ad.0;
-        Wed, 13 Nov 2024 04:52:10 -0800 (PST)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-72458c0e0d5so566514b3a.1;
+        Wed, 13 Nov 2024 04:57:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731502330; x=1732107130; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vmw2aGbUmIbympiMA9t+9QUm6FY7MHOvDDMcOvECtkw=;
-        b=WZORVkgE8nbP/5d7hGl1Pw9IOklNSte7jMXLL90KuRBZvzsEdz+fE4Bqzb0brD6XP/
-         tKJ5x7nrc5WM/5aSv3lhRDMHenVNaRMaH+CYkhnVZ59Ssith1PCagd3efNdqKeNq4OiU
-         IU3ugusrD6urC42xp709q6MQRhyG92KJCaenysgmNXDPZ+lN1/xDbx5/Z2vtSAJeSZSA
-         71qN1TFch2OKtdsqgpPU7WNf6HWODeD5CCeXsAQ1+9V4ayn+AFMQaAd5nangX8gN8HnE
-         T2JWcTFQa6x+xunQF10+PnNlUrOs7ZKz03GHXckYYukbvr6GhIUa/xs+eCW5KywTLcyP
-         4qSw==
+        d=gmail.com; s=20230601; t=1731502656; x=1732107456; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=16RIG7XtmkaIMsGLfFdWcl8EYTUAA5lDQMgC+uoAVXA=;
+        b=UjzSmDnpwXE41Xd2KIqsEuxJDaBCwJPB9vw19B/xyRF6xOFcSqSaKAJp40KW7kh5R7
+         cGviJWk0qqKbUm0I1JGgUbJNjIMLyorki6ahqU/wECMF+wA/Hw2iAQiCty8MdXW63ZvS
+         QUErb1N4VqXPkPPzwAIbYy9NhIYCCAT226CCmD7lw87FB6ttik9CLKfu+Ya/4mIKyl9u
+         7H0QD/iXMAr7Qwcs75ue/lx6CKTAfmXa53YRwrd3dk3ByN763O54z3WFQxoEwwWysKMp
+         dlLpcO7Fr/OgdUC6ngzwTu/VYst2KAO2QWHNfmQNMstQ7fo7TAKMDWlcEJox9+nHJ5b1
+         UStQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731502330; x=1732107130;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vmw2aGbUmIbympiMA9t+9QUm6FY7MHOvDDMcOvECtkw=;
-        b=iYHGLqEeUIYLQB358iwF04Frmq0lJbSsU7heJs+K41lcoOdOZmcciXMfr0bRKDr1jL
-         WsNtuP3+9aocv8Vq0nU1p0hyTwSWKj9yC3g4zBCVUSrDGFFqy7gitMEoEpvXZukL9+7F
-         KEmGw0fuj//p9dJ7AM0lLs8nWV/Ivwkw/7qMOQTLoEYDAC7YH2uzjYQUrorhuSnx+g+f
-         kRT4ovsG9plAShCR7Ywatv69Qd0YBvgTG32fD5vphsEA5XW4qcntQaRdY8OxxiiGR98v
-         aZUSPuv9TQhXfBajRtsIxvep9CXq7RDoK6Uoh7GoJxQ5Q9fh96rh4XewQ+X/ARXA6mhP
-         CckA==
-X-Forwarded-Encrypted: i=1; AJvYcCWr2DDArZsb+eSn9gM3QNZ/YiUhZzKwiIZ+LPSLPing3bbnqN6JglF40jLdqP9Y4Hukg+o5ijCO8K0LByIFoqCX@vger.kernel.org, AJvYcCXtAeop7IE1xbaBd6To7JMstnARMm460zFMv6uh8i9FRrkMH2k+FS5VcN1R6NLZcRx77+6wmqsic/sdJng=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyz9m01neFyTqFKAchb1zwOXlXDrVH/DIBUyd18nW9rpTHOWKiz
-	tKyqVLlkGvDqrr3ZJSHXyivf1GD6M4AyEsDf7tqMWpwwVQAItbBf/fjmQk15D5+nkA==
-X-Google-Smtp-Source: AGHT+IF8bzWzZtwJ9Fp6GZBrHamBcZ5ADKAHqPgxdoKDpPxBrHsoI2HWrXBgoN0bekPl039O+BVBfQ==
-X-Received: by 2002:a17:902:d4c1:b0:20c:95d9:25e6 with SMTP id d9443c01a7336-21183d2659bmr289071655ad.34.1731502329822;
-        Wed, 13 Nov 2024 04:52:09 -0800 (PST)
-Received: from fedora.dns.podman ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177cfb0ecsm109276345ad.0.2024.11.13.04.52.06
+        d=1e100.net; s=20230601; t=1731502656; x=1732107456;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=16RIG7XtmkaIMsGLfFdWcl8EYTUAA5lDQMgC+uoAVXA=;
+        b=bDgfXcmBMoAjJg0urwLHbRFCu/fmt4JVWQwwOpBLS5/uV8AJWzQfon5348Gr6ApSo4
+         098/kU2uYLwDzuh8r8hlssKaA0A9d5AS0+ZS+JnMNhsSyI3nijTv9n20kX3D/29KMyF+
+         Ran/ERc8bXhTY3WGG+RJSELhgAuhPye+i8Uw7uB+2Bkf0q02DpFCpctYASd4XIbEHJ2f
+         UlwDApbqoN71dTEDt3/pZzJAZUTad/+/lzVFmOmMjnPT/TvnQdogB3+tjRQAH3CIeKkP
+         N8StZBrKvyJMFuErurzkuO9ZjNvALiFwevTABFKYxR8snFNtmsefiNx8FExgGCk37Ix6
+         zQNA==
+X-Forwarded-Encrypted: i=1; AJvYcCUGQ8GGbcYOKciM5No/nu6396j6Zsw6JVa1Bj/3k9HQPkMFPK2E5yC1ZOJeZaRHNS7X9Stl4dQ2Dh9LLw==@vger.kernel.org, AJvYcCULqAlWGm82M/N6dBaKZ07eJmp+AhJLgJqYPATY2qJNQEKKT3EB7iwo5ZqOTH/Px/kvZ/Yi/LHANaAM@vger.kernel.org, AJvYcCUoN2RkJt0kQ+ehTQPL+/I1FL8NmRqpPW4VfNVTjLLI6ACjFArx+g0kjXicFzzDKCgw5ZOOp5VWtyuP@vger.kernel.org, AJvYcCUxYmhqf5CGSkZLK5vQxP/zPLK4RDvusawvYt+f5Dhpmgh54LSOB/3SLafBwWxpOxQdJJz5mhcgWN8ZvOHa@vger.kernel.org, AJvYcCVDXeCuiF+Gux+afvyA8i3sfM7ImP5BcZQDR6r3POy404dSCe870SuNaaLOzY98d4I42r56qTih2f4AyaTQ1UNF@vger.kernel.org, AJvYcCVQW5iRhmrkqJtrIfG2U+ehBmrB/SUFZLtJX/La/cPiDWWF9s3vXKDEL41vo42Xqf2SFILZk8Bio3heGCN91gU=@vger.kernel.org, AJvYcCWA8D1JhXYu1/ghOT+HCbrjS6zo09k5NGwm6sC4mfRrHTIKrusWe02MgJo35x63SplZA442zU3dO8z1Xw==@vger.kernel.org, AJvYcCXHXe1n08eySLKK4QSTqCEbJNUKmxJ1cjuohBUWP/YaTomsWxtsbwrgKSMR3rkdb7NVExA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQFaTOpeCygy+0DYLXCXJ83USyAXqce9F7kLGdDCwaGOD1cmTK
+	iYurcismgEpBx7TOV9mKhtA27ugK7BKKz9TWDhQX66MofB8ttKKTFMED+Ct/VLg=
+X-Google-Smtp-Source: AGHT+IG1llNssb9d3itpdlPx9GEqMX+Zp38UcErZg9PjxNGttUHCL6O3wsgZQ/zCnjJA57EpkRZP1g==
+X-Received: by 2002:a17:90b:2789:b0:2e2:bb32:73e7 with SMTP id 98e67ed59e1d1-2e9b1f844damr30704968a91.15.1731502656393;
+        Wed, 13 Nov 2024 04:57:36 -0800 (PST)
+Received: from nova-ws.. ([103.167.140.11])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e9f3f8ed0esm1398632a91.40.2024.11.13.04.57.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Nov 2024 04:52:09 -0800 (PST)
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: netdev@vger.kernel.org
+        Wed, 13 Nov 2024 04:57:35 -0800 (PST)
+From: Xiao Liang <shaw.leon@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>
 Cc: "David S. Miller" <davem@davemloft.net>,
 	David Ahern <dsahern@kernel.org>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
 	Simon Horman <horms@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Sam Edwards <cfsworks@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net 2/2] selftests/rtnetlink.sh: add mngtempaddr test
-Date: Wed, 13 Nov 2024 12:51:52 +0000
-Message-ID: <20241113125152.752778-3-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20241113125152.752778-1-liuhangbin@gmail.com>
-References: <20241113125152.752778-1-liuhangbin@gmail.com>
+	Jiri Pirko <jiri@resnulli.us>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	linux-rdma@vger.kernel.org,
+	linux-can@vger.kernel.org,
+	osmocom-net-gprs@lists.osmocom.org,
+	bpf@vger.kernel.org,
+	linux-ppp@vger.kernel.org,
+	wireguard@lists.zx2c4.com,
+	linux-wireless@vger.kernel.org,
+	b.a.t.m.a.n@lists.open-mesh.org,
+	bridge@lists.linux.dev,
+	linux-wpan@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v3 0/6] net: Improve netns handling in RTNL and ip_tunnel
+Date: Wed, 13 Nov 2024 20:57:09 +0800
+Message-ID: <20241113125715.150201-1-shaw.leon@gmail.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,130 +104,106 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a test to check the temporary address could be added/removed
-correctly when mngtempaddr is set or removed/unmanaged.
+This patch series includes some netns-related improvements and fixes for
+RTNL and ip_tunnel, to make link creation more intuitive:
 
-Suggested-by: Sam Edwards <cfsworks@gmail.com>
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+ - Creating link in another net namespace doesn't conflict with link names
+   in current one.
+ - Refector rtnetlink link creation. Create link in target namespace
+   directly. Pass both source and link netns to drivers via newlink()
+   callback.
+
+So that
+
+  # ip link add netns ns1 link-netns ns2 tun0 type gre ...
+
+will create tun0 in ns1, rather than create it in ns2 and move to ns1.
+And don't conflict with another interface named "tun0" in current netns.
+
+Patch 1 from Donald is included just as a dependency.
+
 ---
- tools/testing/selftests/net/rtnetlink.sh | 89 ++++++++++++++++++++++++
- 1 file changed, 89 insertions(+)
 
-diff --git a/tools/testing/selftests/net/rtnetlink.sh b/tools/testing/selftests/net/rtnetlink.sh
-index bdf6f10d0558..f25a363d55bd 100755
---- a/tools/testing/selftests/net/rtnetlink.sh
-+++ b/tools/testing/selftests/net/rtnetlink.sh
-@@ -29,6 +29,7 @@ ALL_TESTS="
- 	kci_test_bridge_parent_id
- 	kci_test_address_proto
- 	kci_test_enslave_bonding
-+	kci_test_mngtmpaddr
- "
- 
- devdummy="test-dummy0"
-@@ -44,6 +45,7 @@ check_err()
- 	if [ $ret -eq 0 ]; then
- 		ret=$1
- 	fi
-+	[ -n "$2" ] && echo "$2"
- }
- 
- # same but inverted -- used when command must fail for test to pass
-@@ -1267,6 +1269,93 @@ kci_test_enslave_bonding()
- 	ip netns del "$testns"
- }
- 
-+# If the mngtmpaddr or tempaddr missing, return 0 and stop waiting
-+check_tempaddr_exists()
-+{
-+	local start=${1-"1"}
-+	addr_list=$(ip -j -n $testns addr show dev ${devdummy})
-+	for i in $(seq $start 4); do
-+		if ! echo ${addr_list} | \
-+		     jq -r '.[].addr_info[] | select(.mngtmpaddr == true) | .local' | \
-+		     grep -q "200${i}"; then
-+			check_err $? "No mngtmpaddr 200${i}:db8::1"
-+			return 0
-+		fi
-+
-+		if ! echo ${addr_list} | \
-+		     jq -r '.[].addr_info[] | select(.temporary == true) | .local' | \
-+		     grep -q "200${i}"; then
-+			check_err $? "No tempaddr for 200${i}:db8::1"
-+			return 0
-+		fi
-+	done
-+	return 1
-+}
-+
-+kci_test_mngtmpaddr()
-+{
-+	local ret=0
-+
-+	setup_ns testns
-+	if [ $? -ne 0 ]; then
-+		end_test "SKIP mngtmpaddr tests: cannot add net namespace $testns"
-+		return $ksft_skip
-+	fi
-+
-+	# 1. Create a dummy Ethernet interface
-+	run_cmd ip -n $testns link add ${devdummy} type dummy
-+	run_cmd ip -n $testns link set ${devdummy} up
-+	run_cmd ip netns exec $testns sysctl -w net.ipv6.conf.${devdummy}.use_tempaddr=1
-+	# 2. Create several (3-4) mngtmpaddr addresses on that interface.
-+	# with temp_*_lft configured to be pretty short (10 and 35 seconds
-+	# for prefer/valid respectively)
-+	for i in $(seq 1 4); do
-+		run_cmd ip -n $testns addr add 200${i}:db8::1/64 dev ${devdummy} mngtmpaddr
-+		tempaddr=$(ip -j -n $testns addr show dev ${devdummy} | \
-+			   jq -r '.[].addr_info[] | select(.temporary == true) | .local' | \
-+			   grep 200${i})
-+		#3. Confirm that temporary addresses are created immediately.
-+		if [ -z $tempaddr ]; then
-+			check_err 1 "no tempaddr created for 200${i}:db8::1"
-+		else
-+			run_cmd ip -n $testns addr change $tempaddr dev ${devdummy} \
-+				preferred_lft 10 valid_lft 35
-+		fi
-+	done
-+
-+	#4. Confirm that a preferred temporary address exists for each mngtmpaddr
-+	#   address at all times, polling once per second for at least 5 minutes.
-+	slowwait 300 check_tempaddr_exists
-+
-+	#5. Delete each mngtmpaddr address, one at a time (alternating between
-+	#   deleting and merely un-mngtmpaddr-ing), and confirm that the other
-+	#   mngtmpaddr addresses still have preferred temporaries.
-+	for i in $(seq 1 4); do
-+		if (( $i % 2 == 1 )); then
-+			run_cmd ip -n $testns addr del 200${i}:db8::1/64 dev ${devdummy}
-+		else
-+			run_cmd ip -n $testns addr change 200${i}:db8::1/64 dev ${devdummy}
-+		fi
-+		# the temp addr should be deleted
-+		if ip -j -n $testns addr show dev ${devdummy} | \
-+		   jq -r '.[].addr_info[] | select(.temporary == true) | .local' | \
-+		   grep -q "200${i}"; then
-+			check_err 1 "tempaddr not deleted for 200${i}:db8::1"
-+		fi
-+		# Check other addresses are still exist
-+		check_tempaddr_exists $((i + 1))
-+	done
-+
-+	if [ $ret -ne 0 ]; then
-+		end_test "FAIL: mngtmpaddr add/remove incorrect"
-+		ip netns del "$testns"
-+		return 1
-+	fi
-+
-+	end_test "PASS: mngtmpaddr add/remove correctly"
-+	ip netns del "$testns"
-+}
-+
- kci_test_rtnl()
- {
- 	local current_test
+v3:
+ - Drop "netns_atomic" flag and module parameter. Add netns parameter to
+   newlink() instead, and convert drivers accordingly.
+ - Move python NetNSEnter helper to net selftest lib.
+
+v2:
+ link: https://lore.kernel.org/all/20241107133004.7469-1-shaw.leon@gmail.com/
+ - Check NLM_F_EXCL to ensure only link creation is affected.
+ - Add self tests for link name/ifindex conflict and notifications
+   in different netns.
+ - Changes in dummy driver and ynl in order to add the test case.
+
+v1:
+ link: https://lore.kernel.org/all/20241023023146.372653-1-shaw.leon@gmail.com/
+
+
+Donald Hunter (1):
+  Revert "tools/net/ynl: improve async notification handling"
+
+Xiao Liang (5):
+  net: ip_tunnel: Build flow in underlay net namespace
+  rtnetlink: Lookup device in target netns when creating link
+  rtnetlink: Decouple net namespaces in rtnl_newlink_create()
+  selftests: net: Add python context manager for netns entering
+  selftests: net: Add two test cases for link netns
+
+ drivers/infiniband/ulp/ipoib/ipoib_netlink.c  |  6 ++-
+ drivers/net/amt.c                             |  6 +--
+ drivers/net/bareudp.c                         |  4 +-
+ drivers/net/bonding/bond_netlink.c            |  3 +-
+ drivers/net/can/dev/netlink.c                 |  2 +-
+ drivers/net/can/vxcan.c                       |  4 +-
+ .../ethernet/qualcomm/rmnet/rmnet_config.c    |  5 +-
+ drivers/net/geneve.c                          |  4 +-
+ drivers/net/gtp.c                             |  4 +-
+ drivers/net/ipvlan/ipvlan.h                   |  2 +-
+ drivers/net/ipvlan/ipvlan_main.c              |  5 +-
+ drivers/net/ipvlan/ipvtap.c                   |  4 +-
+ drivers/net/macsec.c                          |  5 +-
+ drivers/net/macvlan.c                         |  5 +-
+ drivers/net/macvtap.c                         |  5 +-
+ drivers/net/netkit.c                          |  4 +-
+ drivers/net/pfcp.c                            |  4 +-
+ drivers/net/ppp/ppp_generic.c                 |  4 +-
+ drivers/net/team/team_core.c                  |  2 +-
+ drivers/net/veth.c                            |  4 +-
+ drivers/net/vrf.c                             |  2 +-
+ drivers/net/vxlan/vxlan_core.c                |  4 +-
+ drivers/net/wireguard/device.c                |  4 +-
+ drivers/net/wireless/virtual/virt_wifi.c      |  5 +-
+ drivers/net/wwan/wwan_core.c                  |  6 ++-
+ include/net/ip_tunnels.h                      |  5 +-
+ include/net/rtnetlink.h                       | 22 ++++++++-
+ net/8021q/vlan_netlink.c                      |  5 +-
+ net/batman-adv/soft-interface.c               |  5 +-
+ net/bridge/br_netlink.c                       |  2 +-
+ net/caif/chnl_net.c                           |  2 +-
+ net/core/rtnetlink.c                          | 25 ++++++----
+ net/hsr/hsr_netlink.c                         |  8 +--
+ net/ieee802154/6lowpan/core.c                 |  5 +-
+ net/ipv4/ip_gre.c                             | 13 +++--
+ net/ipv4/ip_tunnel.c                          | 16 +++---
+ net/ipv4/ip_vti.c                             |  5 +-
+ net/ipv4/ipip.c                               |  5 +-
+ net/ipv6/ip6_gre.c                            | 17 ++++---
+ net/ipv6/ip6_tunnel.c                         | 11 ++---
+ net/ipv6/ip6_vti.c                            | 11 ++---
+ net/ipv6/sit.c                                | 11 ++---
+ net/xfrm/xfrm_interface_core.c                | 13 +++--
+ tools/net/ynl/cli.py                          | 10 ++--
+ tools/net/ynl/lib/ynl.py                      | 49 ++++++++-----------
+ tools/testing/selftests/net/Makefile          |  1 +
+ .../testing/selftests/net/lib/py/__init__.py  |  2 +-
+ tools/testing/selftests/net/lib/py/netns.py   | 18 +++++++
+ tools/testing/selftests/net/netns-name.sh     | 10 ++++
+ tools/testing/selftests/net/netns_atomic.py   | 38 ++++++++++++++
+ 50 files changed, 255 insertions(+), 157 deletions(-)
+ create mode 100755 tools/testing/selftests/net/netns_atomic.py
+
 -- 
-2.46.0
+2.47.0
 
 
