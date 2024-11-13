@@ -1,204 +1,132 @@
-Return-Path: <linux-kselftest+bounces-21931-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21933-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C7159C7016
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 14:02:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA17C9C7174
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 14:54:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25C5B1F263F4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 13:02:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B4422827C4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 13:54:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82F72206047;
-	Wed, 13 Nov 2024 12:58:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADC161F1301;
+	Wed, 13 Nov 2024 13:53:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AuKpQGr+"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kMTIZ52r"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E56AF200BAB;
-	Wed, 13 Nov 2024 12:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4EF17C68;
+	Wed, 13 Nov 2024 13:53:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731502710; cv=none; b=FlZdVhA33/D/hlMYNpgwBqWpnnxN4M9yDr6QwMp7Jyq3OcTKpGDUQmvnIKw2yOPSPl1TZTzqYf1IP6nPDfuw/z+cdKSj0bPm3woFtx1faXwcd6ZS03LgumXUW4lwyc84c2L/YSrwcb5qMN8MkWWw3iTxsirvYJTZEvtYGyNzF4M=
+	t=1731506039; cv=none; b=WBhwbRk8q0jYCPHNDroyfJU+Ymo2maq3wrLhOZlid8oUQGwzYvkJGXsRURa3/wkZlDuHR4tJS+r8oV/RFQGcEsj6sFFjFR+TWRuFcUVZAs+lU822VhD/YvMrapqtZkxSx01GoIeIiYlOycO4I9MSQeh0JuzpF9wcYuFmXk3qfvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731502710; c=relaxed/simple;
-	bh=MiIGFE7JQmeCulMCTNzU+03Zvl9uvgozGAxqw8x+eUI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q3NPV58sgxYS3noyIQ25rRmrBl55BwWccZFal7b5yMGAm/urLbiMr5i4/YAB3JC01Nq7Dpl5KfDUNJdU85favmjSXi7uru2tVZns84rg26YuYZ0MontgRjV9p0N5iuLZcq8kTk9a932hNjR0CqkFH8UpRxO/w+RA+Gm2ZsZ7AvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AuKpQGr+; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2e9b55b83d2so4231647a91.3;
-        Wed, 13 Nov 2024 04:58:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731502707; x=1732107507; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tqrrLk6+C692qIcVQOp9KatlJAZHjGryjisTBrwbzoI=;
-        b=AuKpQGr+TdF2ChIJohhWsFdVKp4kAXgRA6k+SK4b1DUiyvHUATwQUViv9lsaVf9t5v
-         vuxbV74pusxqjqorQfGH0Jg86vVbOPzvd/s4gFDCyPQyDXAXHBHZL9oy9wHxv06C5h6x
-         L2wSA/vgpy4gKuwZE7CRc+pOoYKBEEzWmefGVS0Rz99HX7fUCIYTax0cxmBHQgRuypRV
-         uBn+LlJmWBHnRx4Jr+D9SRx19t9OX+W3i7k9mBCT/CDlHzSW7SMdSn2DDHaXZNq768KV
-         bVV1osooSxE/32U3Aboe1m205SjNGOv9ZXrZaFBy8gBDecXuxzyfXk6FYCre3kyFOgOU
-         vD3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731502707; x=1732107507;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tqrrLk6+C692qIcVQOp9KatlJAZHjGryjisTBrwbzoI=;
-        b=AMzYyX8uYwpKwENZ0IWCg7FUOnXhrD5N3+qA+3locZ1wrd0UMpOkKw6zUX1LwP97rA
-         NXul85JTsBfU0sFY+g5yW5cjYc2a9ywp9pvWETc1WZVebkPIGfTBZoLiIEIiEzaYXw8t
-         hgxxo8oZQ503HJxrYsA4uiH+WL/8guPjMKFVPqeb0xvD8P0cwa7rWg0ujLsRH5vsvKJG
-         I3zhk7CER1V15O8+cqPPWk8YnLcxlLedCD3R8yXT3/EQQRa0qzZFPbYXYJPWWDo7xgOU
-         gPxEXm4PiZFzmDCP/KhpXPm+GxmIlg8RU99FUPtTSvTxe1rUxl1neLHlaaY77omTL4yP
-         saVg==
-X-Forwarded-Encrypted: i=1; AJvYcCULsCtWFGahO/3fn7PwjJZbiC7SOZqPwWGg7yu+S82iKiHEW276pRd8UosYdAvdTrscdlBg7VGCGlIjtT6NwrU=@vger.kernel.org, AJvYcCVFUpZnCvRgG48vMQRVzLwmk0QWt/TQiM4tkHupx2B0OkSzA9wYIYk50D8TunnGESvaq8BZfcEnucxrOQ==@vger.kernel.org, AJvYcCVOIRpbZuqSeBGkXU7PDL7wwi+3RAGwRlBpAn+jAOeDEZGs1QW2wGjx8Lzmvv64sJFBKtyI+Nvb1yKE/g==@vger.kernel.org, AJvYcCVTStIh8Bwzq/vYTeoGXNwdgeuIxjjf4GXTW1a4uo5aUWuqmyihF/E5euhPcymkKkKH5Z8tzDaWg4Jl@vger.kernel.org, AJvYcCVjMX/MVXuce6ym31Z3DHeDh9DEFi7qGD9iQ5tQXAKeYrhRgrbY6DPpFOyNrquDN5yDJUHV0i2ay3GBl6yUvrm3@vger.kernel.org, AJvYcCVvUUPVH8lthRGVUr74f6GW/glOQiKgeSfQfhPBN1afYlGLd/hmmKJ++KAI9v9aE9AjG3A=@vger.kernel.org, AJvYcCX/guAv7i9DWMk+S+nJIOtmEzMmrMIA/GDP9KEnQEaux3WGKTebEwbA5hbGF7l56Xl7hw5oo6Of/ZK2@vger.kernel.org, AJvYcCXhfOgdk4KDgDJm8+3EgJjhjX4DVRiyE3A0i3nTl5QXFODlmZ5V5KCCkZRm1+2Nffp8RZUSJNrRD8WbN1Wy@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2gpZaroi1T1BGtN0s4SWlL4zHzjEUjpTWxcup1pUzyDRuh65b
-	ec5prC8vTpQHvfyNOyucRF+ED+Mgo2EadYGK5AganDcN1bByWLI8MahgRBr7WAc=
-X-Google-Smtp-Source: AGHT+IE/vtXg73mPc9UwMocIh3JnpJ4Nx9KNFh/J++F7E0J+l3pL2CaZbF6bhZwKtLiUviIv9q/4Rw==
-X-Received: by 2002:a17:90b:3c12:b0:2e2:b2ce:e41e with SMTP id 98e67ed59e1d1-2e9f2c78421mr3106773a91.13.1731502707231;
-        Wed, 13 Nov 2024 04:58:27 -0800 (PST)
-Received: from nova-ws.. ([103.167.140.11])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e9f3f8ed0esm1398632a91.40.2024.11.13.04.58.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Nov 2024 04:58:26 -0800 (PST)
-From: Xiao Liang <shaw.leon@gmail.com>
-To: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Kuniyuki Iwashima <kuniyu@amazon.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	linux-rdma@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	osmocom-net-gprs@lists.osmocom.org,
-	bpf@vger.kernel.org,
-	linux-ppp@vger.kernel.org,
-	wireguard@lists.zx2c4.com,
-	linux-wireless@vger.kernel.org,
-	b.a.t.m.a.n@lists.open-mesh.org,
-	bridge@lists.linux.dev,
-	linux-wpan@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v3 6/6] selftests: net: Add two test cases for link netns
-Date: Wed, 13 Nov 2024 20:57:15 +0800
-Message-ID: <20241113125715.150201-7-shaw.leon@gmail.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241113125715.150201-1-shaw.leon@gmail.com>
-References: <20241113125715.150201-1-shaw.leon@gmail.com>
+	s=arc-20240116; t=1731506039; c=relaxed/simple;
+	bh=rpNgvwkUMNlgtsz7MLV0G9313l5cccxzMRdAkh6mXVM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=PvTNVGgJAsHRNBvWopBgvxcI2GuH+Facvjfi5GsJEll0iJomOoyexekIARVHoBnZwudtguB6kNmmQhj622NGdrLJGue7Xy6zYINeQqp41T43VQ7+5EU8SPtmywLc5FrF5cNdLoDr+4FWTmLJFIr8MVwdXQf8V/m8yvIkS1Ivc2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kMTIZ52r; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 45F372000D;
+	Wed, 13 Nov 2024 13:53:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1731506028;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=fN6Hxl4DEN2NRiCEypIuKC3K47Ano+rFiafHb3D4OZY=;
+	b=kMTIZ52rug+wMUoUY8ITfzIcvkOZL1cNxYOxCh5IBNgCX0j97ha2yTQD/pDIRirUDJGQAZ
+	UYdA5CmkugQ0JI9/lDat303YyglTD1XaksMm7rce3laBZ3m1dfG/Wg2kKkzDSHwtL1K5+n
+	el0X83G+Lq4dUphnaDyKHQTLRMagOLPHbVOIhOwDFD8uvBK73pyrtmTRvPfbSc+8RENuJf
+	fvL5u7iphhsC2WVvfFEaT8florHu3g6DH+0ViGKA3y12UdJQYD888piWyKdcU4yACvqv8R
+	Ux1ADU0uNfThjFPZyq8ggXtl+xKeeapp2RnxqM9zWc4/0MBjepWyf3c5rlXQrg==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Subject: [PATCH bpf-next 00/10] selftests/bpf: migrate
+ test_flow_dissector.sh to test_progs
+Date: Wed, 13 Nov 2024 14:53:23 +0100
+Message-Id: <20241113-flow_dissector-v1-0-27c4df0592dc@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAFSvNGcC/x3M3wpAMBSA8VfRubbaHxGvIontjFPatCOUvLvl8
+ nfxfQ8wJkKGrngg4UlMMWSosgC7TmFBQS4btNSVkqoVfovX6IgZ7RGTMDhLKxtvVW0gR3tCT/c
+ /7GHevQh4HzC87weMDExgagAAAA==
+X-Change-ID: 20241019-flow_dissector-3eb0c07fc163
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Petar Penkov <ppenkov@google.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-Sasl: alexis.lothore@bootlin.com
 
- - Add test for creating link in another netns when a link of the same
-   name and ifindex exists in current netns.
- - Add test for link netns atomicity - create link directly in target
-   netns, and no notifications should be generated in current netns.
+Hello,
+this new series aims to migrate test_flow_dissector.sh into test_progs.
+There are 2 "main" parts in test_flow_dissector.sh:
+- a set of tests checking flow_dissector programs attachment to either
+  root namespace or non-root namespace
+- dissection test
 
-Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
+The first set is integrated in flow_dissector.c, which already contains
+some existing tests for flow_dissector programs. This series uses the
+opportunity to update a bit this file (use new assert, re-split tests,
+etc)
+The second part is migrated into a new file under test_progs,
+flow_dissector_classification.c. It uses the same eBPF programs as
+flow_dissector.c, but the difference is rather about how those program
+are executed:
+- flow_dissector.c manually runs programs with BPF_PROG_RUN
+- flow_dissector_classification.c sends real packets to be dissected, and
+  so it also executes kernel code related to eBPF flow dissector (eg:
+__skb_flow_bpf_to_target)
+
 ---
- tools/testing/selftests/net/Makefile        |  1 +
- tools/testing/selftests/net/netns-name.sh   | 10 ++++++
- tools/testing/selftests/net/netns_atomic.py | 38 +++++++++++++++++++++
- 3 files changed, 49 insertions(+)
- create mode 100755 tools/testing/selftests/net/netns_atomic.py
+Alexis Lothoré (eBPF Foundation) (10):
+      selftests/bpf: add a macro to compare raw memory
+      selftests/bpf: use ASSERT_MEMEQ to compare bpf flow keys
+      selftests/bpf: replace CHECK calls with ASSERT macros in flow_dissector test
+      selftests/bpf: re-split main function into dedicated tests
+      selftests/bpf: expose all subtests from flow_dissector
+      selftests/bpf: add gre packets testing to flow_dissector
+      selftests/bpf: migrate flow_dissector namespace exclusivity test
+      selftests/bpf: Enable generic tc actions in selftests config
+      selftests/bpf: migrate bpf flow dissectors tests to test_progs
+      selftests/bpf: remove test_flow_dissector.sh
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 2b2a5ec7fa6a..4c15a115c251 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -34,6 +34,7 @@ TEST_PROGS += gre_gso.sh
- TEST_PROGS += cmsg_so_mark.sh
- TEST_PROGS += cmsg_time.sh cmsg_ipv6.sh
- TEST_PROGS += netns-name.sh
-+TEST_PROGS += netns_atomic.py
- TEST_PROGS += nl_netdev.py
- TEST_PROGS += srv6_end_dt46_l3vpn_test.sh
- TEST_PROGS += srv6_end_dt4_l3vpn_test.sh
-diff --git a/tools/testing/selftests/net/netns-name.sh b/tools/testing/selftests/net/netns-name.sh
-index 6974474c26f3..0be1905d1f2f 100755
---- a/tools/testing/selftests/net/netns-name.sh
-+++ b/tools/testing/selftests/net/netns-name.sh
-@@ -78,6 +78,16 @@ ip -netns $NS link show dev $ALT_NAME 2> /dev/null &&
-     fail "Can still find alt-name after move"
- ip -netns $test_ns link del $DEV || fail
- 
-+#
-+# Test no conflict of the same name/ifindex in different netns
-+#
-+ip -netns $NS link add name $DEV index 100 type dummy || fail
-+ip -netns $NS link add netns $test_ns name $DEV index 100 type dummy ||
-+    fail "Can create in netns without moving"
-+ip -netns $test_ns link show dev $DEV >> /dev/null || fail "Device not found"
-+ip -netns $NS link del $DEV || fail
-+ip -netns $test_ns link del $DEV || fail
-+
- echo -ne "$(basename $0) \t\t\t\t"
- if [ $RET_CODE -eq 0 ]; then
-     echo "[  OK  ]"
-diff --git a/tools/testing/selftests/net/netns_atomic.py b/tools/testing/selftests/net/netns_atomic.py
-new file mode 100755
-index 000000000000..e6c4147ef75e
---- /dev/null
-+++ b/tools/testing/selftests/net/netns_atomic.py
-@@ -0,0 +1,38 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+import time
-+
-+from lib.py import ksft_run, ksft_exit, ksft_true
-+from lib.py import ip
-+from lib.py import NetNS, NetNSEnter
-+from lib.py import RtnlFamily
-+
-+
-+def test_event(ns1, ns2) -> None:
-+    with NetNSEnter(str(ns1)):
-+        rtnl = RtnlFamily()
-+
-+    rtnl.ntf_subscribe("rtnlgrp-link")
-+
-+    ip(f"netns set {ns1} 0", ns=str(ns2))
-+
-+    ip(f"link add netns {ns2} link-netnsid 0 dummy1 type dummy")
-+    ip(f"link add netns {ns2} dummy2 type dummy", ns=str(ns1))
-+
-+    ip("link del dummy1", ns=str(ns2))
-+    ip("link del dummy2", ns=str(ns2))
-+
-+    time.sleep(1)
-+    rtnl.check_ntf()
-+    ksft_true(not rtnl.async_msg_queue, "Received unexpected link notification")
-+
-+
-+def main() -> None:
-+    with NetNS() as ns1, NetNS() as ns2:
-+        ksft_run([test_event], args=(ns1, ns2))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
+ tools/testing/selftests/bpf/.gitignore             |   1 -
+ tools/testing/selftests/bpf/Makefile               |   3 +-
+ tools/testing/selftests/bpf/config                 |   1 +
+ .../selftests/bpf/prog_tests/flow_dissector.c      | 307 ++++++--
+ .../bpf/prog_tests/flow_dissector_classification.c | 851 +++++++++++++++++++++
+ tools/testing/selftests/bpf/test_flow_dissector.c  | 780 -------------------
+ tools/testing/selftests/bpf/test_flow_dissector.sh | 178 -----
+ tools/testing/selftests/bpf/test_progs.h           |  25 +
+ 8 files changed, 1107 insertions(+), 1039 deletions(-)
+---
+base-commit: 16e1d1c377aa4c56223701a31f3bfa88505e7e4f
+change-id: 20241019-flow_dissector-3eb0c07fc163
+
+Best regards,
 -- 
-2.47.0
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
