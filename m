@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-21955-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21961-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F6069C7A6A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 18:57:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4E159C7A44
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 18:50:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 75282B2BFD3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 17:31:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C82AC1F23180
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 17:50:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A367C20101B;
-	Wed, 13 Nov 2024 17:31:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AAA92022D9;
+	Wed, 13 Nov 2024 17:50:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j1ULK3OI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UduD5eqB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D6E1F80C8;
-	Wed, 13 Nov 2024 17:31:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AC4C1494DD;
+	Wed, 13 Nov 2024 17:50:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731519067; cv=none; b=bUkYhxA94VgXKS5ajPPNPXvciObCy8r16OxlJs7hnzxk+I4b0Mm01ob6Gbx+ySxSfuF8LKmwsknnDonctYw5Ync49X4fb8L0PNf7aN3n9NGZrx4+UlwyrZou9PZyy4KR0P7Y+rLFm1EwWZu9XT8CjW2hmXe0VZVlUkEQ1muHBTY=
+	t=1731520244; cv=none; b=bw8BMOXP50JbkbKUmvOMuTHEq58MznlspaZwyETybnYzaBAkhVM8vCUviyHYWxbxyxbT9k08phlvqGNZPPsM6bTw5KQhaL3aH//QKBei31nmeffAzAam1VHeZY+JNDPhYXM4g93M7bpUH6VpuTWN7+k/supLSiPXpVBKv5QgbpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731519067; c=relaxed/simple;
-	bh=wM2LIeZuwho5MTyajMgsnq+6TqtS6xgt18ptAgYsbK4=;
+	s=arc-20240116; t=1731520244; c=relaxed/simple;
+	bh=uiKubqfzMx2s2ufqjwwokbGZLNA7OAammJ1+n+A7QOU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oDpbV4EzaAdZP5jWvrvMAMlwnCPd/6zIO/Z70nHQOJX4hlMvIV9mOBckbcgdfI49cEUQfTVHfaaINujeFPQU6cCUvPqL1ruXNOK+8jnWsmNCnjC59f08K31cfcRzhoZ3wojydjqy9VCizQ2QZCiQEela0s7MQbnQhkT4xkjl4UI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j1ULK3OI; arc=none smtp.client-ip=209.85.215.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=S4wEheLwopjldi5SVqvweDTOA9fRoG9l/m/i6kjyt7MiA9cGUy0MAgm1lJDi4o0PBd+lkJ6iC1WkWuUu6/ogqg0UywRVySWQKGujKH6F3IXZMv2brEYiFCuiCIziWLlC1J3jeNvrpQbupr1enwM/96xDgv+epsqlEyFf+Up2Kng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UduD5eqB; arc=none smtp.client-ip=209.85.160.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-7eae96e6624so4995675a12.2;
-        Wed, 13 Nov 2024 09:31:05 -0800 (PST)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-27b7a1480bdso3045797fac.2;
+        Wed, 13 Nov 2024 09:50:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731519065; x=1732123865; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1731520242; x=1732125042; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=2SnJeBCneJsNVP3wKudY4HbBDGuh/E7PxPQpfhhhdww=;
-        b=j1ULK3OIEIztYmlek6g1rr9STWSI+Wm1dZnWpmo1aNinNK9kvQ5S3TymP5MUVaMEeY
-         n4DkR24sJ2s5vmbUWefGB3XzGM32vDdgwtMyuxv0iY4JVsf323m+YcXJZ1+ePX8vWYKp
-         kryKX62rQXULCZu2bH2JeshSa8PpponEdZsii1AbRmddPEYEcnQQCsUaLfOl2PJQFNF2
-         rGaYk6zIGZprLn3X/wGFgPpTDjVPabsXF2z3XfpYJbwKUj9yXV0JyJP1nNdZvHcKtJqN
-         iNi2fHrZluIhj9xKd6XSvY0c3oiAvzNht2Ib0WBgFBADnQSMkgoCy+nn1Qvg7Kp0ejcw
-         A9XQ==
+        bh=YASkwPLR6DW5p2wms4wC0dIzAVnPt7gYAm9iZK3s/7I=;
+        b=UduD5eqBeJ+6baCuhkC8BRTmJNiyyE+qomPUYNFGxR4zeKQXFVedoumV58k+Lijex5
+         qJeRdlkO/MEbxZ3EfXcVjIX4c83jSVGZ0rwbc3cfzSEOTgZIeYFHBpby5UDNh4zbIee+
+         rmH5Esn87gYOVmD9OYWNORakKCr7/1xk8KR9FTnAvAWayOCmbY0lSBp9gX9Jp3HVhnBn
+         XNKgiE6zuzxHcMh0j5Wl6rUt4QXbY0s5JHUlKkTuB2ssmSo5OWNZo5fNLmca0n0KexR3
+         i+Tk5JOOwkuHME0DzRv8y9xKqzdtXnYqP0g4e67hnETrGLxw7XGxiBKIv+D9BI5PL4Ty
+         THVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731519065; x=1732123865;
+        d=1e100.net; s=20230601; t=1731520242; x=1732125042;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2SnJeBCneJsNVP3wKudY4HbBDGuh/E7PxPQpfhhhdww=;
-        b=Czs4Gkx3XYnM5SS8KnfEEet+o2Wv1O2fc/Tt1Xc29SGDc36X5g8ko6AVP1yMBwfCBZ
-         ph/ou5hwNtYWvo2l6UTFxfnov4jRTowva4HvSTMt6nvi2baVQkwr0f56cycqiCYJMKDl
-         DRFeJEnrFeorGoMrGQW8dDREyjMMLHNzUck42XW4rZEAVb3gBS9WUmzQ3SJaLBpAEDIp
-         Pxm62L+peM3XdZXY1xGipYT4U6xyZsFF7vmNvEaU3s3MZ4zxQDbu0naGywW7dGMzt3XU
-         KWBjEexA0xR1c6hgFjrFP4VLaFr77IJg1AqujzyNRofHmrWk3shdwXU+vn7acc/twLMX
-         YvJA==
-X-Forwarded-Encrypted: i=1; AJvYcCWzvK8uJKMM8YsLttSgtBt4qGvjmp6ImfKm4W5frvjpifv0iDvAGsRMzgMG1KmLbl5SBJM=@vger.kernel.org, AJvYcCXTI9NMjicnJXJUSmA74n8TWfg/KLS5nxzqUe0+0s37rYMjZYMmyvsZhcN3VbPX8HuvCDiwOVUbauTLkO52Juje@vger.kernel.org, AJvYcCXx3Tc3mapMg7h5L3gb5zBEtuJDgOek+bbnRWtYV/75T4uc2xzo8+B38rZCZlGcKIfLxJkAXttfwYEXe56I@vger.kernel.org
-X-Gm-Message-State: AOJu0YzD1oOBXZ8oopGfi7g5lpTZS27qe/GEDBbdIV82H0nmpiQz0y5m
-	okw/QqrbL0xODa2zo5F8F9rYWALYipE9fNe9sAxu4qGhuROlSNU=
-X-Google-Smtp-Source: AGHT+IG9PteFS9WiKoGXgKwgDAw8HaSTb1BxroQtjfOr0tK6g0cn2Yzke9177Wjn0cpTZ7sCdN3xng==
-X-Received: by 2002:a05:6a21:7886:b0:1dc:5e5:ea65 with SMTP id adf61e73a8af0-1dc22b60950mr30420141637.34.1731519065222;
-        Wed, 13 Nov 2024 09:31:05 -0800 (PST)
+        bh=YASkwPLR6DW5p2wms4wC0dIzAVnPt7gYAm9iZK3s/7I=;
+        b=q3CSWkRvNxtRh88sZkWkh4Uf1wquFpPTTkPqT0Y+M/gXN9KXiKm1hk4hbY8PEcQkVe
+         UtGXrmdCbKUgFfEx5Gg+A6574klHQF6/S8fdNLOYqLulQfypAowwflaAU9cuFbGGBpWt
+         juZOoTySA+iieviFI53opu2b+uESVUqBcysl+xNMo1+juea2K8PDkte1tf6KBoA0SeM3
+         tgr0gLH94dMsE+VBi0TiMH3oztF6js79jr7jGvv+HlWG3L15JYc5r7q2i0F6n84PwJ0i
+         64JNtrH+2ZtICuF85+uk7U+MHDMY5uk6F7sw2Prh/FZBE93RfBWTd8bYzpL3yWf/Vwzu
+         w8LQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUNiYowKewwyL+vX2tZGE/xHRFpO+DxHOfhArtuZWj0LsQmU7lNQFsKQwP0loj9A261vm4=@vger.kernel.org, AJvYcCUhqj53Yc8m2dOoW7+j+r5XwGMN4Y/NHP2J5NsUDLbJWUmYgp4pjtCwBmQo3xaAyG5NRCD4D90ztVHszXxnPtZk@vger.kernel.org, AJvYcCWQ5JikswZMc/a8//Q/E/AjEszvkhEv5BXGsnlUT0qC81rUmged1znq+AyMoINxhZZocf3p86UYFGFlfcf6@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywsj/wBJpw0dX58ZLPUtHtmMYvU/dqNTzxHM0gq9OdtF7fqORnm
+	iuepqe5OKFWiqfazx+3Fg375OVI/T4wMxNpZ0pyJlHQOKvkWE5g=
+X-Google-Smtp-Source: AGHT+IEF01O6Epfp5F3V8NpoD+BiSaq7bs1bUg4f5F/1e1isXwK/aJccWC+w6jieFf72m8LLen0VTA==
+X-Received: by 2002:a05:6870:3310:b0:287:32f7:ef42 with SMTP id 586e51a60fabf-295e8d51845mr3982170fac.16.1731520240475;
+        Wed, 13 Nov 2024 09:50:40 -0800 (PST)
 Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7f41f5df334sm12738452a12.34.2024.11.13.09.31.04
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7f41f643e9asm12674863a12.59.2024.11.13.09.50.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Nov 2024 09:31:04 -0800 (PST)
-Date: Wed, 13 Nov 2024 09:31:04 -0800
+        Wed, 13 Nov 2024 09:50:40 -0800 (PST)
+Date: Wed, 13 Nov 2024 09:50:39 -0800
 From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Alexis =?utf-8?Q?Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+To: Alexis =?utf-8?Q?Lothor=C3=A9?= <alexis.lothore@bootlin.com>
 Cc: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Mykola Lysenko <mykolal@fb.com>,
@@ -85,11 +85,12 @@ Cc: Andrii Nakryiko <andrii@kernel.org>,
 	Bastien Curutchet <bastien.curutchet@bootlin.com>,
 	Petar Penkov <ppenkov@google.com>, bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 01/10] selftests/bpf: add a macro to compare raw
- memory
-Message-ID: <ZzTiWBLaUDex4ieA@mini-arch>
+Subject: Re: [PATCH bpf-next 07/10] selftests/bpf: migrate flow_dissector
+ namespace exclusivity test
+Message-ID: <ZzTm7wKsOLuI5w20@mini-arch>
 References: <20241113-flow_dissector-v1-0-27c4df0592dc@bootlin.com>
- <20241113-flow_dissector-v1-1-27c4df0592dc@bootlin.com>
+ <20241113-flow_dissector-v1-7-27c4df0592dc@bootlin.com>
+ <4f68d104-b96d-4726-a94d-1123765393c6@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -99,49 +100,28 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241113-flow_dissector-v1-1-27c4df0592dc@bootlin.com>
+In-Reply-To: <4f68d104-b96d-4726-a94d-1123765393c6@bootlin.com>
 
-On 11/13, Alexis Lothoré (eBPF Foundation) wrote:
-> We sometimes need to compare whole structures in an assert. It is
-> possible to use the existing macros on each field, but when the whole
-> structure has to be checked, it is more convenient to simply compare the
-> whole structure memory
+On 11/13, Alexis Lothoré wrote:
+> On 11/13/24 14:53, Alexis Lothoré (eBPF Foundation) wrote:
 > 
-> Add a dedicated assert macro, ASSERT_MEMEQ, to allow bare memory
-> comparision
+> [...]
 > 
-> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> ---
->  tools/testing/selftests/bpf/test_progs.h | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
+> > +	ns = open_netns(TEST_NS);
+> > +	bpf_prog_detach2(prog_fd, 0, BPF_FLOW_DISSECTOR);
+> > +	close_netns(ns);
 > 
-> diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-> index 74de33ae37e56c90646cd1e0bb58ed7e3f345ec0..bdde741543836991398daacfe5423e6af8ef9151 100644
-> --- a/tools/testing/selftests/bpf/test_progs.h
-> +++ b/tools/testing/selftests/bpf/test_progs.h
-> @@ -186,6 +186,19 @@ void test__skip(void);
->  void test__fail(void);
->  int test__join_cgroup(const char *path);
+> I would like to mention that I initially planned to directly delete the
+> namespace to perform the test cleanup, assuming it would be enough to consider
+> any non-root namespace flow_dissector to be removed. However I observed that it
+> made other tests dealing with flow_dissector starting to fail with -EEXIST,
+> despite all those tests being marked as "serial". I started examining this,
+> suspecting a real issue (a race between namespace deletion and flow dissector
+> attachment check, or a ns refcount issue) but before going further: is my
+> assumption right ? Should a mere namespace deletion be indeed enough to remove
+> the corresponding bpf flow dissector ? Or am I missing something ? If so I'll
+> keep examining this.
 
-[..]
- 
-> +#define DUMP_BUFFER(name, buf, len)						\
-> +	({									\
-> +		fprintf(stdout, "%s:\n", name);					\
-> +		for (int i = 0; i < len; i++) {					\
-> +			if (i && !(i % 16))					\
-> +				fprintf(stdout, "\n");				\
-> +			if (i && !(i % 8) && (i % 16))				\
-> +				fprintf(stdout, "\t");				\
-> +			fprintf(stdout, "%02X ", ((uint8_t *)(buf))[i]);	\
-> +		}								\
-> +		fprintf(stdout, "\n");						\
-> +	})
-
-nit: should we rewrite this as a real function?
-
-void hexdump(const char *prefix, void *buf, size_t len)
-{
-..
-}
+Don't think that's expected. Removing a namespace with an attached
+dissector program should (in theory) clearly detach it.
 
