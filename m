@@ -1,164 +1,160 @@
-Return-Path: <linux-kselftest+bounces-21949-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21950-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2EF39C75B9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 16:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AAF329C7828
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 17:04:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E491A285EBC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 15:13:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A55D28180C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 16:04:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBD79201262;
-	Wed, 13 Nov 2024 15:11:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9B91158A31;
+	Wed, 13 Nov 2024 16:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hy6CW1m7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CFF201036;
-	Wed, 13 Nov 2024 15:11:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08E2156C5F
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 Nov 2024 16:04:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731510685; cv=none; b=YHy8NbPOkPGMn2ixNivEZHrVHqO+ucM368DesHX62OoqT1uQP/NyFXMwOiAqBmvPYoxyB3ibyY9250S4jUtymjpJu0a8ccD/30AH0TTdDuYK7SZufJyQ+aoeQGDUufxQ9tsDDboPK3leg4aOFL8nx3sF/9yJvIfHmtWAq9lzvW0=
+	t=1731513863; cv=none; b=rwI/rMJz7nWBWHniCoq1yf0aBaQAN0kuPRJMv6Kpe2D6orQ2PAAGE0DhWT0pvYMgVBdvKdRzycfXe9iSk4N4CPH6tfh4hlwn9td1sQYPLYx1/Ns5v0zUB1cQFgXZlWzWOcfEr3X2oqo7JAhhh6Vv9GN7AlzD3zYF1Jj1xoa71N0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731510685; c=relaxed/simple;
-	bh=7wSSxIUiXUM5F3CnS/GS0ih6ZK6ssmZ3fx3f8y0jNi0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZzaqvfRx/jb+XDM15ZkPQDWC7maU9jqMnfDLNFuVnxw99MWJCBrnuJRZOa768nenrH7jLmda5fwXN0YuxYvyVhYP2Rkd0Y4o59cECHgKSsJtcPVLHLHY+v2tWQO9ph2pFdmHwuTf+lk3kJK4Mz7IoSqY00B2P3dampf2oMTikHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-aa1f1f2d508so185377566b.2;
-        Wed, 13 Nov 2024 07:11:23 -0800 (PST)
+	s=arc-20240116; t=1731513863; c=relaxed/simple;
+	bh=j+4l/wSQVmSpBciFADL4nWG86AbM4y+yt7ey2EHURFM=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=bPUjTMXA56dk6eOkL8rmZ0eGWmpP92PYTtKWgUpKZ+ITkrTQNtB2C8WTvrYSdIRx0S0US5GUkt9XEWdGzYcHS8pm955uRodMwJ4XwdzKpv+QkEWULoWjRiIHnEb5OdQz37OkYzBeD2slGgNXDM9/yDAa2hcR+zT2g3J2nZBf7d4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hy6CW1m7; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e380bf11daeso160662276.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Nov 2024 08:04:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1731513861; x=1732118661; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=urWC9EqU/pYYrOCfPVIx7GG8orSXBZXreTHU0chNMKY=;
+        b=hy6CW1m7cpfs/U36fCQzvLlKG4+sc8QibT3eQYJKnGDM/akS1WgEfI3Ul0v8oDarNt
+         Mff971EFsYU4i/fVdSU9yTwVOPTQDX74wj8Zn9h8D5PMVQiNYT8C5RT5K5vLSCoT7qs2
+         j7upp7Hkl9eVOcewX4Z0eXvbiY7csae0qVTCjO5YI9XJ7Jl09lyMshaQAfpN24B988oa
+         Vcu0Wc1AhOgqlRHpss2BhL0gAETbXEPEC9awfb3fQZRUTdVuBywaPeQjIr+6eEe52riy
+         IazwACA+nH4bw48+YJJ0D1NKAykPI+oPiCE908nmyF1B7z5ExnKKdix6bwAorBM4m3hK
+         KJ5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731510682; x=1732115482;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zxJL6/w7ib7tor6B/awKjwacI8QkLWn7spqQywUygr4=;
-        b=T7hIDV4+icgtau/zZ/DMVhNWSUcjXpD6yNKrrTyCQh1JuIifz/GgBVwh4Ohmi/7Uaz
-         15E5Ni34rDzseG9DxuRLxlFUBJFuqpwO+j5DwpUVx+GiJdT80q2EAT33+5SnTTXwPW6q
-         EdKWsfF20FTZaQ11V2PoplhxL9a7W2+AkAN7jlRYLKG++e6lyVB2MPJH1PaTPr4jlUEC
-         45/ZRpZmZaQc2F3V+TEyhYU68/BbXC4CmjiFpNUnv29kHMjVDpcHdHozG/7MBjt71zjw
-         iJQGJnQ56zVT50NMfWxOit1T4TogWn/vFwQV81gjWtDnP/v6yLENpvdjtUBmF+Bv2G57
-         bPwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUYEoqF8+0qwDEI4DL8KKPobYd2DOebmCbE2wxd/mHsVGr6KmR0uN+ir3hN7LbX0kOx8nOEM2yTwlAckGdRuMbs@vger.kernel.org, AJvYcCVkFUgNHgMu0zF0uEXKbQzR0C647JqglOBtl+5Cb/Hh7NoqXVZSmnf8twdM9gJUOwZIbNl4LrHnUmX3s+CH@vger.kernel.org, AJvYcCWdolYDYnLssxrwbHPFhCIhKCcC0Nx4e3NegcjJguwGLTQNsRLD3kImSIHI7SvkOCh+mXdeGhOi0f0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCxHhrpWiqxZaBoQCC7U8NWBM2JoWy4BUyu1jPT/z8ooPzhszL
-	fjZWGlB3E9f0rMnxf3eb8FrE6WIHYaQs54u+zCj2S30Xhrlm6Qvb
-X-Google-Smtp-Source: AGHT+IEoLyfigi2UbiHSBtCcn9AV7B2W8zEBzkfRzr2dXQX1hG/gGL44SEj+d1F3HrwKO/03w2g9Ag==
-X-Received: by 2002:a17:907:944c:b0:a9a:8a4:e079 with SMTP id a640c23a62f3a-a9eeff44660mr2145146866b.31.1731510681944;
-        Wed, 13 Nov 2024 07:11:21 -0800 (PST)
-Received: from localhost (fwdproxy-lla-002.fbsv.net. [2a03:2880:30ff:2::face:b00c])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cf03c7cabbsm7293671a12.79.2024.11.13.07.11.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Nov 2024 07:11:21 -0800 (PST)
-From: Breno Leitao <leitao@debian.org>
-Date: Wed, 13 Nov 2024 07:10:55 -0800
-Subject: [PATCH net-next 4/4] netconsole: selftest: Validate CPU number
- auto-population in userdata
+        d=1e100.net; s=20230601; t=1731513861; x=1732118661;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=urWC9EqU/pYYrOCfPVIx7GG8orSXBZXreTHU0chNMKY=;
+        b=UQyaTbee/TS2o1Vm5RkfRAwP5yI2nDNL/ofT5ZM9Tt0HxztOmt4oi2moD5KxMPU9WQ
+         0SenNdlZoEJTYQcEDVI2KoI+Jg+tK8e1lYVL/v5bYHVgWGDiUj9HQm/ux4vyObpFU6QN
+         DZ5p2L4HzU/D1xW27bzkr0wyZGkTonLhHABJWEZV6VTQuFud3vDsUnSv+jeFisu1CDVE
+         a4FAtg23YR8C6DreZmOObZ4apj1bSFjLQb2342FEmbZBGbm4M58C5z1g+KwKcHIFXuSF
+         swPh3nA0MgHlJbjSaI8juFCB9DWY+w/erPJchip+1LQ5mXULGkrjx8rmtAb8MR330dmp
+         4Xrw==
+X-Forwarded-Encrypted: i=1; AJvYcCVtbQwR6u0IJILouMfks30/5hLDuSPXZ781rTd4fnExm4YmaYYpud0C1BfUgkVE5CYD9JpEntRXFc+mnX3tkLc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhShAdAGXFF7Yf/mX1jl2J0BKDZdYPQp9rAvnhgoG0iKArgC7X
+	dAAgNvUOQRmc/6RPwk8ziRQ+dp7SdMzBgmNlzCw9EQ0HgN5LXPCoJAOq9/l8tX1PBC1n9+wAG7I
+	QnQ==
+X-Google-Smtp-Source: AGHT+IGzsdMn9C2xm1NmHAMcXNshY/uEnHFAAvhfE/3YFglv4xHLxzOI2+wtc1WBfcA5ldcyGwFVBcfmrhY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:9d:3983:ac13:c240])
+ (user=seanjc job=sendgmr) by 2002:a25:e0d3:0:b0:e28:ec75:75ed with SMTP id
+ 3f1490d57ef6-e337f7798b7mr41395276.0.1731513860606; Wed, 13 Nov 2024 08:04:20
+ -0800 (PST)
+Date: Wed, 13 Nov 2024 16:04:19 +0000
+In-Reply-To: <CABgObfZrTyft-3vqMz5w0ZiAhp-v6c32brgftynZGJO8OafrdA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241113-netcon_cpu-v1-4-d187bf7c0321@debian.org>
-References: <20241113-netcon_cpu-v1-0-d187bf7c0321@debian.org>
-In-Reply-To: <20241113-netcon_cpu-v1-0-d187bf7c0321@debian.org>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Breno Leitao <leitao@debian.org>, max@kutsevol.com, thepacketgeek@gmail.com, 
- vlad.wing@gmail.com, davej@codemonkey.org.uk
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2328; i=leitao@debian.org;
- h=from:subject:message-id; bh=7wSSxIUiXUM5F3CnS/GS0ih6ZK6ssmZ3fx3f8y0jNi0=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnNMGOZOdLZzudSzkfczgpbLOO/6uj8tFPcG7Of
- HLb1ouaDDGJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZzTBjgAKCRA1o5Of/Hh3
- belgD/9MXc6rZacHAL5a6Pw8kYf5u9hon846XtxERP1sNGQjSjmWiMP2V0KfSMLk5ZvHoFKKcQR
- bpP9ExABuvB3TKLEPd5Foldv7UOybHnj+255l5mHYh8zBBsDDlj2r0KSkegI0+dRyJnom7L87+e
- B7QJGapMQOZiXWoVeuFPb4dlp/ls0f/ZMyIynfJC4VV/G/mnAIPjdQYE9XiQK9b5ISbxGL1EYds
- zLZA9vmS9sw75WXjIGrXBX86UFxtK1pZ1vDqDYxA61YFjucv8fYw/gQrGZQ7DJMFLljNuur1Qcs
- KhEqfNOMCSLJ1/zQbFlCDrB3dvJJREFS02hY+q7bWnygKouaOsZVTY2l9qiZsiSg+FIKuJ3ilWI
- 3EXX3o163FxKuWTJOqRXv5/N9Pe5jEKYfhoQ6O12eYuDJoUKLj2pmx1GpxeG2zUdrJB+0GqFDWk
- U4m+hcSpOwcCXP3CLGfAC7DgmsIhYA5jmtXBQc8wpNt6UC/mZCQg/z1pqTF4sw/W71I4du91WO2
- cZCFn76yqO+5ZgSSqnWM/JelQE0IYWjCGFVPDL+vBZi+jceioXYMZLl4S1tBGo+/FIwFNA1Z+9I
- x+5FnBSn27Hb8LXecNdZiaMt+bXo+8LpZFsxZmfYte/n3jIbvbww6kFfhbEJdSRE3fRyOdWzgVR
- 0gtaa+bvWxbtz2w==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+Mime-Version: 1.0
+References: <CABQX2QMR=Nsn23zojFdhemR7tvGUz6_UM8Rgf6WLsxwDqoFtxg@mail.gmail.com>
+ <Zy0__5YB9F5d0eZn@google.com> <CABQX2QNxFDhH1frsGpSQjSs3AWSdTibkxPrjq1QC7FGZC8Go-Q@mail.gmail.com>
+ <e3f943a7-a40a-45cb-b0d9-e3ed58344d8b@redhat.com> <CADH9ctD1uf_yBA3NXNQu7TJa_TPhLRN=0YZ3j2gGhgmaFRdCFg@mail.gmail.com>
+ <c3026876-8061-4ab2-9321-97cc05bad510@redhat.com> <CADH9ctBivnvP1tNcatLKzd8EDz8Oo6X65660j8ccxYzk3aFzCA@mail.gmail.com>
+ <CABgObfZEyCQMiq6CKBOE7pAVzUDkWjqT2cgfbwjW-RseH8VkLw@mail.gmail.com>
+ <CADH9ctA_C1dAOus1K+wOH_SOKTb=-X1sVawt5R=dkH1iGt8QUg@mail.gmail.com> <CABgObfZrTyft-3vqMz5w0ZiAhp-v6c32brgftynZGJO8OafrdA@mail.gmail.com>
+Message-ID: <ZzTNk4G0sOd8_hn-@google.com>
+Subject: Re: [PATCH 2/3] KVM: x86: Add support for VMware guest specific hypercalls
+From: Sean Christopherson <seanjc@google.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Doug Covelli <doug.covelli@broadcom.com>, Zack Rusin <zack.rusin@broadcom.com>, 
+	kvm <kvm@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@redhat.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Joel Stanley <joel@jms.id.au>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 
-Expand the existing netconsole selftest to verify the functionality of
-the recently added CPU number auto-population feature in the netconsole
-userdata.
+On Wed, Nov 13, 2024, Paolo Bonzini wrote:
+> Il mar 12 nov 2024, 21:44 Doug Covelli <doug.covelli@broadcom.com> ha
+> scritto:
+> 
+> > > Split irqchip should be the best tradeoff. Without it, moves from cr8
+> > > stay in the kernel, but moves to cr8 always go to userspace with a
+> > > KVM_EXIT_SET_TPR exit. You also won't be able to use Intel
+> > > flexpriority (in-processor accelerated TPR) because KVM does not know
+> > > which bits are set in IRR. So it will be *really* every move to cr8
+> > > that goes to userspace.
+> >
+> > Sorry to hijack this thread but is there a technical reason not to allow
+> > CR8 based accesses to the TPR (not MMIO accesses) when the in-kernel local
+> > APIC is not in use?
+> 
+> No worries, you're not hijacking :) The only reason is that it would be
+> more code for a seldom used feature and anyway with worse performance. (To
+> be clear, CR8 based accesses are allowed, but stores cause an exit in order
+> to check the new TPR against IRR. That's because KVM's API does not have an
+> equivalent of the TPR threshold as you point out below).
+> 
+> > Also I could not find these documented anywhere but with MSFT's APIC our
+> > monitor relies on extensions for trapping certain events such as INIT/SIPI
+> > plus LINT0 and SVR writes:
+> >
+> > UINT64 X64ApicInitSipiExitTrap    : 1; //
+> > WHvRunVpExitReasonX64ApicInitSipiTrap
+> > UINT64 X64ApicWriteLint0ExitTrap  : 1; //
+> > WHvRunVpExitReasonX64ApicWriteTrap
+> > UINT64 X64ApicWriteLint1ExitTrap  : 1; //
+> > WHvRunVpExitReasonX64ApicWriteTrap
+> > UINT64 X64ApicWriteSvrExitTrap    : 1; //
+> > WHvRunVpExitReasonX64ApicWriteTrap
+> >
+> 
+> There's no need for this in KVM's in-kernel APIC model. INIT and SIPI are
+> handled in the hypervisor and you can get the current state of APs via
+> KVM_GET_MPSTATE. LINT0 and LINT1 are injected with KVM_INTERRUPT and
+> KVM_NMI respectively, and they obey IF/PPR and NMI blocking respectively,
+> plus the interrupt shadow; so there's no need for userspace to know when
+> LINT0/LINT1 themselves change. The spurious interrupt vector register is
+> also handled completely in kernel.
+> 
+> > I did not see any similar functionality for KVM.  Does anything like that
+> > exist?  In any case we would be happy to add support for handling CR8
+> > accesses w/o exiting w/o the in-kernel APIC along with some sort of a way
+> > to configure the TPR threshold if folks are not opposed to that.
+> 
+> As far I know everybody who's using KVM (whether proprietary or open
+> source) has had no need for that, so I don't think it's a good idea to make
+> the API more complex. 
 
-The changes include enabling the "populate_cpu_nr" option on the
-netconsole target before sending the test data, and validating that the
-received data on the listener side contains a "cpu=" entry in the
-userdata, indicating that the CPU number was successfully
-auto-populated.
++1
 
-This addition to the netconsole selftest ensures that the new CPU number
-auto-population feature works as expected and helps catch any
-regressions in this functionality.
+> Performance of Windows guests is going to be bad anyway with userspace APIC.
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- tools/testing/selftests/drivers/net/netcons_basic.sh | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+Heh, on modern hardware, performance of any guest is going to suck with a userspace
+APIC, compared to what is possible with an in-kernel APIC.
 
-diff --git a/tools/testing/selftests/drivers/net/netcons_basic.sh b/tools/testing/selftests/drivers/net/netcons_basic.sh
-index b175f4d966e5056ddb62e335f212c03e55f50fb0..92538a188f0696b3e54071d1d32c7b2e523db839 100755
---- a/tools/testing/selftests/drivers/net/netcons_basic.sh
-+++ b/tools/testing/selftests/drivers/net/netcons_basic.sh
-@@ -153,6 +153,16 @@ function set_user_data() {
- 	echo "${USERDATA_VALUE}" > "${VALUE_PATH}"
- }
- 
-+function set_cpu_nr() {
-+	if [[ ! -f "${NETCONS_PATH}""/userdata/populate_cpu_nr" ]]
-+	then
-+		echo "Populate CPU configfs path not available in ${NETCONS_PATH}/userdata/populate_cpu_nr" >&2
-+		exit "${ksft_skip}"
-+	fi
-+
-+	echo 1 > "${NETCONS_PATH}""/userdata/populate_cpu_nr"
-+}
-+
- function listen_port_and_save_to() {
- 	local OUTPUT=${1}
- 	# Just wait for 2 seconds
-@@ -185,6 +195,12 @@ function validate_result() {
- 		exit "${ksft_fail}"
- 	fi
- 
-+	if ! grep -q "cpu=[0-9]\+" "${TMPFILENAME}"; then
-+		echo "FAIL: 'cpu=' not found in ${TMPFILENAME}" >&2
-+		cat "${TMPFILENAME}" >&2
-+		exit "${ksft_fail}"
-+	fi
-+
- 	# Delete the file once it is validated, otherwise keep it
- 	# for debugging purposes
- 	rm "${TMPFILENAME}"
-@@ -254,6 +270,8 @@ set_network
- create_dynamic_target
- # Set userdata "key" with the "value" value
- set_user_data
-+# Auto populate CPU number
-+set_cpu_nr
- # Listed for netconsole port inside the namespace and destination interface
- listen_port_and_save_to "${OUTPUT_FILE}" &
- # Wait for socat to start and listen to the port.
-
--- 
-2.43.5
-
+More importantly, I really, really don't want to encourage non-trivial usage of
+a local APIC in userspace.  KVM's support for a userspace local APIC is very
+poorly tested these days.   I have zero desire to spend any amount of time reviewing
+and fixing issues that are unique to emulating the local APIC in userspace.  And
+long term, I would love to force an in-kernel local APIC, though I don't know if
+that's entirely feasible.
 
