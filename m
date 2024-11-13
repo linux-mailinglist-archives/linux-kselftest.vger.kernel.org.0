@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-21939-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21940-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13B649C7184
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 14:56:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BD799C7187
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 14:56:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF5651F222E6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 13:56:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4DD628844C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 13:56:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5DDD204031;
-	Wed, 13 Nov 2024 13:54:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84EA4204931;
+	Wed, 13 Nov 2024 13:54:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="o/+rx23Z"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ndcO+nxu"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 291462038B1;
-	Wed, 13 Nov 2024 13:54:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85B5B204027;
+	Wed, 13 Nov 2024 13:54:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731506052; cv=none; b=diArKrJetKBFMJ6GdjOV7efrevRIKX3Dtg7v+CXKlACyRGokZhu2IHcoFHeCiC92p3rxURNkx6/Im38+jb45b9sYarecHko4G9jKfjXpRM4anIPWy17JGiwf1iZ9kZq9AKv6ME2HnVoF17Kvsw7nc79HChW+WVxI9afcNM4Dv0k=
+	t=1731506054; cv=none; b=eXyAAuvkijNdURtN07nP8v+Nilh+f3l2NVwy1RQMEWdNa+iyt2OpdDajZ6rsrkA/lKKN2sLtpnGR4PC7AUuT/9DkuX0WuNiuf/fQOCxUCBD2FICCxp86Q4tk+tOwpBVdKJcXDT5u/IpWZOHWtr8aqS7/SeUaSG3CpVxcg/2dMr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731506052; c=relaxed/simple;
-	bh=zC0BkYMv5dWS9NNUKOzI1WQT9YI5CaMfNg47aVjXiWM=;
+	s=arc-20240116; t=1731506054; c=relaxed/simple;
+	bh=mAO07X+covGLJLGKAAcX5Ah/uyyAbdxtjCTFS0+RRac=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Pk1z8sqsW8QO5b/Jv/Bb1UioHCpY4WPxEXkD405m3zR7yQy/Ea/0CRHbMwHsGaEqVxmvEZB9hh5G7cVNiuTMSLi6LYIcdUxjgYI1arRezDNKy6R5qTL+DVrDcywlAjvMfJFzjAmAJbbjrUBRUiSJF9MeBN5r7IYvlLPNrVM/HJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=o/+rx23Z; arc=none smtp.client-ip=217.70.183.200
+	 In-Reply-To:To:Cc; b=PnkO4v1oJVO8D49vaVQGypPMkR5InaUUIn6OIicmNzYqMZhV4D26ug6hp59ZdO548TQ6oZ79FQREV3OBgRAhNhH28osZr6iPcgjzRIQ5ZrdAc29AlA2pzFv0xToaK45zPRICqaX/Rr4FTUYph+4t65LA/am8fsXrnQVab5t0YDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ndcO+nxu; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D351E2000B;
-	Wed, 13 Nov 2024 13:54:06 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CDD0520012;
+	Wed, 13 Nov 2024 13:54:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1731506048;
+	t=1731506051;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=gh3KgQeocVU3LhWpCb9FrWrxjJcX8AjuQG6H8QqII3Y=;
-	b=o/+rx23Z9tEaa5SaD27Yy5GuP/AQIhobfdiGr/GQnklXSv5XLxVAXANFHLfTzq8Hp9JHak
-	WpHwR7bADNLzC+x/YMzu6C3cnSh9ZEfzBVswlXko4iAibCKNICWWC51uBvnhSm8sUpKMGH
-	F1y+lkzkJ9099qoa49crfXp4hn6TUPG6CzofAXGXYMmyHPBSyDBcrEzE+/zQJL6WlMsZ+h
-	LfrpeCuFc/yqYgq3QRBeXMlvzMtKmS2cuK3Vvp8ryiTTdib5LGTOFSyUUFMkYkUIpXuBbK
-	loqhxbnjFA7nTeKJoqBHqWImLztxVW6bFpAv+F2DJ4GpAgkOFmJWWoMGaR3vkg==
+	bh=SpGhBhHZ7VLh+hxah2PHVC8IPwB2ITRf9W8F5JgyEMk=;
+	b=ndcO+nxulFsGegfeISwdXsLKEURv9P0bDjGIAnjNZbuU7dT4WjOEtHZ/pTIrBmh8EMPdK1
+	zfvVgah8SyPfKF70EtQOVL5XIS1rXBvQZdqR30v6N28Hr557oHOqV6tibZ0wx9yvpJwXpt
+	EJCJAvWqksoF4TV4zqBsyv+jXhgZDQ2erpUmx3cP05MSX9/ea6hGaGWnnu3s4Iwns3vJAv
+	ELr0L7BMtKLk1Vv/fa79F8m0M/P1wsuUt5fDfVN3dobdJn9dH/ImuiCWI/7ivUEdu242Az
+	FgStzM1OD5qXPc4aaUn8Qb4yi8dsmUDVj8MLj1tt312MpjwGu28SuYIRYycqGg==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Wed, 13 Nov 2024 14:53:30 +0100
-Subject: [PATCH bpf-next 07/10] selftests/bpf: migrate flow_dissector
- namespace exclusivity test
+Date: Wed, 13 Nov 2024 14:53:31 +0100
+Subject: [PATCH bpf-next 08/10] selftests/bpf: Enable generic tc actions in
+ selftests config
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241113-flow_dissector-v1-7-27c4df0592dc@bootlin.com>
+Message-Id: <20241113-flow_dissector-v1-8-27c4df0592dc@bootlin.com>
 References: <20241113-flow_dissector-v1-0-27c4df0592dc@bootlin.com>
 In-Reply-To: <20241113-flow_dissector-v1-0-27c4df0592dc@bootlin.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
@@ -77,106 +77,27 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: alexis.lothore@bootlin.com
 
-Commit a11c397c43d5 ("bpf/flow_dissector: add mode to enforce global BPF
-flow dissector") is currently tested in test_flow_dissector.sh, which is
-not part of test_progs. Add the corresponding test to flow_dissector.c,
-which is part of test_progs. The new test reproduces the behavior
-implemented in its shell script counterpart:
-- attach a  flow dissector program to the root net namespace, ensure
-  that we can not attach another flow dissector in any non-root net
-  namespace
-- attach a flow dissector program to a non-root net namespace, ensure
-  that we can not attach another flow dissector in root namespace
-
-Since the new test is performing operations in the root net namespace,
-make sure to set it as a "serial" test to make sure not to conflict with
-any other test.
+Enable CONFIG_NET_ACT_GACT to allow adding simple actions with tc
+filters. This is for example needed to migrate test_flow_dissector into
+the automated testing performed in CI.
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
- .../selftests/bpf/prog_tests/flow_dissector.c      | 62 ++++++++++++++++++++++
- 1 file changed, 62 insertions(+)
+ tools/testing/selftests/bpf/config | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-index 05f3953c6266efdedeb74a81969ccfdabf009ccd..216f89070144f5fd19d602d0691f0aa6eed10a8e 100644
---- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-+++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-@@ -7,6 +7,7 @@
- 
- #include "bpf_flow.skel.h"
- 
-+#define TEST_NS	"flow_dissector_ns"
- #define FLOW_CONTINUE_SADDR 0x7f00007f /* 127.0.0.127 */
- #define TEST_NAME_MAX_LEN	64
- 
-@@ -495,6 +496,67 @@ struct test tests[] = {
- 	},
- };
- 
-+void serial_test_flow_dissector_namespace(void)
-+{
-+	struct bpf_flow *skel;
-+	struct nstoken *ns;
-+	int err, prog_fd;
-+
-+	skel = bpf_flow__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open/load skeleton"))
-+		return;
-+
-+	prog_fd = bpf_program__fd(skel->progs._dissect);
-+	if (!ASSERT_OK_FD(prog_fd, "get dissector fd"))
-+		goto out_destroy_skel;
-+
-+	/* We must be able to attach a flow dissector to root namespace */
-+	err = bpf_prog_attach(prog_fd, 0, BPF_FLOW_DISSECTOR, 0);
-+	if (!ASSERT_OK(err, "attach on root namespace ok"))
-+		goto out_destroy_skel;
-+
-+	err = make_netns(TEST_NS);
-+	if (!ASSERT_OK(err, "create non-root net namespace"))
-+		goto out_destroy_skel;
-+
-+	/* We must not be able to additionally attach a flow dissector to a
-+	 * non-root net namespace
-+	 */
-+	ns = open_netns(TEST_NS);
-+	if (!ASSERT_OK_PTR(ns, "enter non-root net namespace"))
-+		goto out_clean_ns;
-+
-+	err = bpf_prog_attach(prog_fd, 0, BPF_FLOW_DISSECTOR, 0);
-+	close_netns(ns);
-+	ASSERT_ERR(err, "refuse new flow dissector in non-root net namespace");
-+	ASSERT_EQ(errno, EEXIST, "refused because of already attached prog");
-+
-+	/* If no flow dissector is attached to the root namespace, we must
-+	 * be able to attach one to a non-root net namespace
-+	 */
-+	bpf_prog_detach2(prog_fd, 0, BPF_FLOW_DISSECTOR);
-+	ns = open_netns(TEST_NS);
-+	ASSERT_OK_PTR(ns, "enter non-root net namespace");
-+	err = bpf_prog_attach(prog_fd, 0, BPF_FLOW_DISSECTOR, 0);
-+	close_netns(ns);
-+	ASSERT_OK(err, "accept new flow dissector in non-root net namespace");
-+
-+	/* If a flow dissector is attached to non-root net namespace, attaching
-+	 * a flow dissector to root namespace must fail
-+	 */
-+	err = bpf_prog_attach(prog_fd, 0, BPF_FLOW_DISSECTOR, 0);
-+	ASSERT_ERR(err, "refuse new flow dissector on root namespace");
-+	ASSERT_EQ(errno, EEXIST, "refused because of already attached prog");
-+
-+	ns = open_netns(TEST_NS);
-+	bpf_prog_detach2(prog_fd, 0, BPF_FLOW_DISSECTOR);
-+	close_netns(ns);
-+out_clean_ns:
-+	remove_netns(TEST_NS);
-+out_destroy_skel:
-+	bpf_flow__destroy(skel);
-+}
-+
- static int create_tap(const char *ifname)
- {
- 	struct ifreq ifr = {
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 4ca84c8d9116a48b1ebf04488ebf7ebfcb633282..c378d5d07e029109061fcd433cec223280a525a4 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -58,6 +58,7 @@ CONFIG_MPLS=y
+ CONFIG_MPLS_IPTUNNEL=y
+ CONFIG_MPLS_ROUTING=y
+ CONFIG_MPTCP=y
++CONFIG_NET_ACT_GACT=y
+ CONFIG_NET_ACT_SKBMOD=y
+ CONFIG_NET_CLS=y
+ CONFIG_NET_CLS_ACT=y
 
 -- 
 2.47.0
