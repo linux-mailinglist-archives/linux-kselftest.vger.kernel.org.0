@@ -1,323 +1,222 @@
-Return-Path: <linux-kselftest+bounces-22034-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22035-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ADC29C8EB9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 16:52:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9F1C9C8F24
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 17:05:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A08F287D63
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 15:52:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EA752B434C2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 15:57:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0F551925A8;
-	Thu, 14 Nov 2024 15:45:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C951617E8F7;
+	Thu, 14 Nov 2024 15:50:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="FF4cVJKH"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="JPFbtK8n"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71D6192592
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 15:45:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 176D217BB25
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 15:50:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731599144; cv=none; b=iCuPMfEpNvbi144dEc4GD5WfildN2oluZtfyOQpzhFqeXSi4oUwWuOip2cQzSZuZJiS/w+USnDFLTYlzGOiGf6hKuok5qY7wuC7PgQ40QsIJU6+sEB7h9i8QPOg+xNIVvM23g8M4crxbaHfFg68Ogbo4u4GbOMhkZ7wjUfDvt6k=
+	t=1731599451; cv=none; b=AeubZ+sjF4C+wp2zZ3TuwRRvGSsD3eAhjF5Rt1Jj/hfhLPVb20WZRHHt6x9N21TgrVPdb/TNOuN4OA/XYbAp4EHMkQmI2t1ebAo1FJZ+++ZAROcJ+5CIlrfn2CYcQgHmLQFGCWhkuBrRyE1rJaOOR8UAmTJr5xyEz3DKTh8eBvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731599144; c=relaxed/simple;
-	bh=C+NJkcPv7s9qGuiJ2I1jqbMGVje+MrpjNFUlGrq1fv4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NDWVFJubmPXmq9cGphApiLcaxD1aSDQTDZ9UGr9Bs+0YJJYzdl1FUJxK/A/pU3krhtwneh4BhbF3lh0d4GKAARa6zVxm4c3SriLlwXFyrswBT18JND/ETYd8rBwUbLavaLutmkelH8c2nSNfoWha4o1xxg7kNztUnLDsAFCEG0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=FF4cVJKH; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a9a0ec0a94fso115017466b.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 07:45:42 -0800 (PST)
+	s=arc-20240116; t=1731599451; c=relaxed/simple;
+	bh=I4+lQoZDoE5obNmbEbXZVyNC16ObpAZr7xb70Tlb8u4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IrkI9xaFDZ2O+v8wiP+gqftETt7Q1poBSddX2kRrEyrHWgQ0gZyOMM5iN/RwJBvSYjzYEE4OTjiaTmkI1ZaGEa9PQs6ANhiRPMSrl23QAONZ0y9rS6x6UJxq29tpJ5rXZyFSguUF+gccGNaLQJAj6mbTB/gjaetHTYu5YsVfyHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=JPFbtK8n; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-20cf3e36a76so8959315ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 07:50:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1731599141; x=1732203941; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nKhWvCprXhPOjYwjhQw1HJAKTwxj5xU1ykGVF5JlDIo=;
-        b=FF4cVJKH0Pu+jY9+EOPBcL9wipK1GLPEgtedQ6nN/edCQKJTRH8Dd8yAygDgSYCFru
-         NL65jOYPy+5eDTcM8d6qfyNO2b+5AZDaucpHb/tS5OAUaQz/Xee+fKasIXOVsSVtgPyD
-         ejFdpDPZ63wwLxU1+20hiJD8pCF0nkFtZM18M=
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1731599449; x=1732204249; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=AuaBMTy+AeJsJU9fm4AZ56hQq3E5HBpfOKLhTwWZNeQ=;
+        b=JPFbtK8n7vK10qMiAGMkQV5oP3XPC9tk5kf0Yp9MIPs17610Qb1uCn89HsVtQzaU22
+         h9zEtSMYEtG1Elkl3rFfMQ97UWJmk5oSH3FZPP3s89GSMpOu74Bu0oUycIlyW2fLSdz/
+         f1eYv/zgXfwUg6yhxLhAbuNjA9EkECLHJ7v2+n98V9COIfVH8BP2HxSQbHLTHIZf+na9
+         0+S7dj7kMIpeq0kaxAg9apWL7qk2BLtbryl3e1Ps1/fy9NBbGGAxoF8MEStP+BEtfPGC
+         SUQgQuDW3t3ryMxvZf2sZ6pB9jM+/r6DA4NexLQ337PtsDdSrJttdx4iSkQ/mn7xasny
+         RVbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731599141; x=1732203941;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nKhWvCprXhPOjYwjhQw1HJAKTwxj5xU1ykGVF5JlDIo=;
-        b=pDGPhcDscWBLZsJBujSfUGW4Ik/RXO0A16vBw4TUM+wGn1db9xb9HItJ4xFzUr2mY1
-         +8ZYgVuE1wW4i8ynYayYfIftQtvF4q/JOI6LsS4ldjbUAPHruNXWAIwT24DqLmxdonBx
-         yQYAiqSK2X6ukY1Ka7ZXe+fcJL7gLP8MFgW8xCmRhInSMbCbdmE6IEkZTBIRWFzFx1tS
-         elRb8y4SIe9KWTM89MO6oYTX64g/ewsHjG9vmwmAZP6w25JNceELrS1MDalbHyNRarSk
-         AU28CwEyo8Lme9ftHsWDlGZ3Q1o9w9gh+QnGzMMqmCiGvhnvg1Mh/6Y3hHwxgEl+xDMa
-         C19g==
-X-Forwarded-Encrypted: i=1; AJvYcCW8dzvI9LnS8uXB3T3iWS7Hba1GV5KshsRf2/IOmrIgd5kZPPeidny78rzek2q+5gqTqFDFuuaRVDMQ3Sv+eYE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQqvHRsRC2zvaKfoLecnL2Kn+TsrNsc9kznNAA5pGF3aAvk0bf
-	LpP5UOU+yvAq73I/9de9cJ0JEb42+ZF7GhedURLESss1gE8wyYcESmg5cRuqZDIbc4rxb7FGxnY
-	G3N1ve7gZ1aEEjVNmxadR4s7ZpuaLU4xtOKc9XwDyz6Kc6FtIZSPQjZzhGKxeHyE9AW5F7k/SRw
-	UUzJrftX5kMuEvjZUhAkdu11/5/3PUNA==
-X-Google-Smtp-Source: AGHT+IGd29LWPGgR9UGCBpZLeV1KN1xw7zia+tlGYRvOw3VgRosrdVlpnWlGMcVf2f8cgT32vDKorJyyGy8zpUnCyzE=
-X-Received: by 2002:a17:907:6ea5:b0:a8d:4631:83b0 with SMTP id
- a640c23a62f3a-a9eefe9bb4fmr2392506366b.5.1731599141117; Thu, 14 Nov 2024
- 07:45:41 -0800 (PST)
+        d=1e100.net; s=20230601; t=1731599449; x=1732204249;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AuaBMTy+AeJsJU9fm4AZ56hQq3E5HBpfOKLhTwWZNeQ=;
+        b=ILk0FslPyXlSdenNxjNqb1Li76swc9RsuHn/4SNwKa81sbgaKZWFNqmduLgjq5tgpc
+         i6yBuheKe9WcYP3EArFSbqOZtpWNTqzVHEIJTNj+pIuPv9WtCTaHkObUB/5xBJIFGFdc
+         gy0kwonN3E/bn+ieOChxWfSJYptIikwSX7naFiar0rXZXKdUX1kj7LddGpJQX46YQvPl
+         IsgAWCMaMGDnPMRL/Sw0hs04ueBae+s3QhWgTmWPkMGdXfSWN6f3K6sRdGBCrnBtNszg
+         RiQ498/sM07KUe6dK6DHc4EVKZHJ7/wtrv/Vn0fUUygQrLWpxdqP3wsJ+szZX7q+ICKb
+         513A==
+X-Forwarded-Encrypted: i=1; AJvYcCUImMCJbpZVcTwLN5k8xGJjWkI6mkHvu2w8ycHK+/Mw86+eiEA5SjKh13bJWjva+OaIsTt85mTmv5annawiEaQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxwmmA7s5H+twnFIY9T5S2iHNBLXdfJqoJwLjsUctJJJmbaGoe
+	5h6mlv4kaPISg33XgbF7ok8SykkChoNXlTgPmOZaGXiM+kcG66gSbcIQ1pMf+9s=
+X-Google-Smtp-Source: AGHT+IHTSbLYPW9H6IMMv3J9GeiSG052ik1ZNbE+SJ7zga3eJUIE3+gCfX95oRz+I+/KI8Ko3d5rzw==
+X-Received: by 2002:a17:902:cec7:b0:20c:7d4c:64db with SMTP id d9443c01a7336-211b5d542aemr85459765ad.49.1731599449294;
+        Thu, 14 Nov 2024 07:50:49 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211c7d377ecsm12256145ad.265.2024.11.14.07.50.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Nov 2024 07:50:48 -0800 (PST)
+Date: Thu, 14 Nov 2024 07:50:45 -0800
+From: Deepak Gupta <debug@rivosinc.com>
+To: Nick Hu <nick.hu@sifive.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	alistair.francis@wdc.com, richard.henderson@linaro.org,
+	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
+	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
+	cleger@rivosinc.com, alexghiti@rivosinc.com,
+	samitolvanen@google.com, broonie@kernel.org,
+	rick.p.edgecombe@intel.com
+Subject: Re: [PATCH v8 24/29] riscv: enable kernel access to shadow stack
+ memory via FWFT sbi call
+Message-ID: <ZzYcVW/4M0jab1T4@debug.ba.rivosinc.com>
+References: <20241111-v5_user_cfi_series-v8-0-dce14aa30207@rivosinc.com>
+ <20241111-v5_user_cfi_series-v8-24-dce14aa30207@rivosinc.com>
+ <CAKddAkCCVjNHUinPWtOiK8Ki_ZkdoUCawfv1-+0B69J_1aJv5Q@mail.gmail.com>
+ <ZzVNKvCu4MOs7O5z@debug.ba.rivosinc.com>
+ <CAKddAkDbGYeONaksq6fzLzx47BHZo3Ar7Sog3MOgf7Y+Birovw@mail.gmail.com>
+ <ZzVRbCZP9N4Os8Bj@debug.ba.rivosinc.com>
+ <CAKddAkBCByf570PXfz798FtBbeGQWe2LJpdzxkE+jv3Zd3ZV1w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241030033514.1728937-1-zack.rusin@broadcom.com>
- <20241030033514.1728937-3-zack.rusin@broadcom.com> <CABgObfaRP6zKNhrO8_atGDLcHs=uvE0aT8cPKnt_vNHHM+8Nxg@mail.gmail.com>
- <CABQX2QMR=Nsn23zojFdhemR7tvGUz6_UM8Rgf6WLsxwDqoFtxg@mail.gmail.com>
- <Zy0__5YB9F5d0eZn@google.com> <CABQX2QNxFDhH1frsGpSQjSs3AWSdTibkxPrjq1QC7FGZC8Go-Q@mail.gmail.com>
- <e3f943a7-a40a-45cb-b0d9-e3ed58344d8b@redhat.com> <CADH9ctD1uf_yBA3NXNQu7TJa_TPhLRN=0YZ3j2gGhgmaFRdCFg@mail.gmail.com>
- <c3026876-8061-4ab2-9321-97cc05bad510@redhat.com> <CADH9ctBivnvP1tNcatLKzd8EDz8Oo6X65660j8ccxYzk3aFzCA@mail.gmail.com>
- <CABgObfZEyCQMiq6CKBOE7pAVzUDkWjqT2cgfbwjW-RseH8VkLw@mail.gmail.com>
- <CADH9ctA_C1dAOus1K+wOH_SOKTb=-X1sVawt5R=dkH1iGt8QUg@mail.gmail.com>
- <CABgObfZrTyft-3vqMz5w0ZiAhp-v6c32brgftynZGJO8OafrdA@mail.gmail.com>
- <CADH9ctBYp-LMbW4hm3+QwNoXvAc5ryVeB0L1jLY0uDWSe3vbag@mail.gmail.com> <b1ddb439-9e28-4a58-ba86-0395bfc081e0@redhat.com>
-In-Reply-To: <b1ddb439-9e28-4a58-ba86-0395bfc081e0@redhat.com>
-From: Doug Covelli <doug.covelli@broadcom.com>
-Date: Thu, 14 Nov 2024 10:45:30 -0500
-Message-ID: <CADH9ctCFYtNfhn3SSp2jp0fzxu6s_X1A+wBNnzvHZVb8qXPk=g@mail.gmail.com>
-Subject: Re: [PATCH 2/3] KVM: x86: Add support for VMware guest specific hypercalls
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Zack Rusin <zack.rusin@broadcom.com>, Sean Christopherson <seanjc@google.com>, 
-	kvm <kvm@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "the arch/x86 maintainers" <x86@kernel.org>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@redhat.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Joel Stanley <joel@jms.id.au>, Linux Doc Mailing List <linux-doc@vger.kernel.org>, 
-	"Kernel Mailing List, Linux" <linux-kernel@vger.kernel.org>, 
-	linux-kselftest <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKddAkBCByf570PXfz798FtBbeGQWe2LJpdzxkE+jv3Zd3ZV1w@mail.gmail.com>
 
-On Wed, Nov 13, 2024 at 12:59=E2=80=AFPM Paolo Bonzini <pbonzini@redhat.com=
-> wrote:
->
-> On 11/13/24 17:24, Doug Covelli wrote:
-> >> No worries, you're not hijacking :) The only reason is that it would
-> >> be more code for a seldom used feature and anyway with worse performan=
-ce.
-> >> (To be clear, CR8 based accesses are allowed, but stores cause an exit
-> >> in order to check the new TPR against IRR. That's because KVM's API
-> >> does not have an equivalent of the TPR threshold as you point out belo=
-w).
-> >
-> > I have not really looked at the code but it seems like it could also
-> > simplify things as CR8 would be handled more uniformly regardless of
-> > who is virtualizing the local APIC.
->
-> Not much because CR8 basically does not exist at all (it's just a byte
-> in memory) with userspace APIC.  So it's not easy to make it simpler, eve=
-n
-> though it's less uniform.
->
-> That said, there is an optimization: you only get KVM_EXIT_SET_TPR if
-> CR8 decreases.
->
-> >>> Also I could not find these documented anywhere but with MSFT's APIC =
-our monitor
-> >>> relies on extensions for trapping certain events such as INIT/SIPI pl=
-us LINT0
-> >>> and SVR writes:
-> >>>
-> >>> UINT64 X64ApicInitSipiExitTrap    : 1; // WHvRunVpExitReasonX64ApicIn=
-itSipiTrap
-> >>> UINT64 X64ApicWriteLint0ExitTrap  : 1; // WHvRunVpExitReasonX64ApicWr=
-iteTrap
-> >>> UINT64 X64ApicWriteLint1ExitTrap  : 1; // WHvRunVpExitReasonX64ApicWr=
-iteTrap
-> >>> UINT64 X64ApicWriteSvrExitTrap    : 1; // WHvRunVpExitReasonX64ApicWr=
-iteTrap
-> >>
-> >> There's no need for this in KVM's in-kernel APIC model. INIT and
-> >> SIPI are handled in the hypervisor and you can get the current
-> >> state of APs via KVM_GET_MPSTATE. LINT0 and LINT1 are injected
-> >> with KVM_INTERRUPT and KVM_NMI respectively, and they obey IF/PPR
-> >> and NMI blocking respectively, plus the interrupt shadow; so
-> >> there's no need for userspace to know when LINT0/LINT1 themselves
-> >> change. The spurious interrupt vector register is also handled
-> >> completely in kernel.
-> >
-> > I realize that KVM can handle LINT0/SVR updates themselves but our
-> > interrupt subsystem relies on knowing the current values of these
-> > registers even when not virtualizing the local APIC.  I suppose we
-> > could use KVM_GET_LAPIC to sync things up on demand but that seems
-> > like it might nor be great from a performance point of view.
->
-> Ah no, you're right---you want to track the CPU that has ExtINT enabled
-> and send KVM_INTERRUPT to that one, I guess?  And you need the spurious
-> vector registers because writes can set the mask bit in LINTx, but
-> essentially you want to trap LINT0 changes.
->
-> Something like this (missing the KVM_ENABLE_CAP and KVM_CHECK_EXTENSION
-> code) is good, feel free to include it in your v2 (Co-developed-by
-> and Signed-off-by me):
->
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_h=
-ost.h
-> index 5fb29ca3263b..b7dd89c99613 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -122,6 +122,7 @@
->   #define KVM_REQ_HV_TLB_FLUSH \
->         KVM_ARCH_REQ_FLAGS(32, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
->   #define KVM_REQ_UPDATE_PROTECTED_GUEST_STATE  KVM_ARCH_REQ(34)
-> +#define KVM_REQ_REPORT_LINT0_ACCESS    KVM_ARCH_REQ(35)
->
->   #define CR0_RESERVED_BITS                                              =
- \
->         (~(unsigned long)(X86_CR0_PE | X86_CR0_MP | X86_CR0_EM | X86_CR0_=
-TS \
-> @@ -775,6 +776,7 @@ struct kvm_vcpu_arch {
->         u64 smi_count;
->         bool at_instruction_boundary;
->         bool tpr_access_reporting;
-> +       bool lint0_access_reporting;
->         bool xfd_no_write_intercept;
->         u64 ia32_xss;
->         u64 microcode_version;
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 88dc43660d23..0e070f447aa2 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -1561,6 +1561,21 @@ static u32 apic_get_tmcct(struct kvm_lapic *apic)
->                               apic->divide_count));
->   }
->
-> +static void __report_lint0_access(struct kvm_lapic *apic, u32 value)
-> +{
-> +       struct kvm_vcpu *vcpu =3D apic->vcpu;
-> +       struct kvm_run *run =3D vcpu->run;
-> +
-> +       kvm_make_request(KVM_REQ_REPORT_LINT0_ACCESS, vcpu);
-> +       run->lint0_access.value =3D value;
-> +}
-> +
-> +static inline void report_lint0_access(struct kvm_lapic *apic, u32 value=
-)
-> +{
-> +       if (apic->vcpu->arch.lint0_access_reporting)
-> +               __report_lint0_access(apic, value);
-> +}
-> +
->   static void __report_tpr_access(struct kvm_lapic *apic, bool write)
->   {
->         struct kvm_vcpu *vcpu =3D apic->vcpu;
-> @@ -2312,8 +2327,10 @@ static int kvm_lapic_reg_write(struct kvm_lapic *a=
-pic, u32 reg, u32 val)
->                         int i;
->
->                         for (i =3D 0; i < apic->nr_lvt_entries; i++) {
-> -                               kvm_lapic_set_reg(apic, APIC_LVTx(i),
-> -                                       kvm_lapic_get_reg(apic, APIC_LVTx=
-(i)) | APIC_LVT_MASKED);
-> +                               u32 old =3D kvm_lapic_get_reg(apic, APIC_=
-LVTx(i));
-> +                               kvm_lapic_set_reg(apic, APIC_LVTx(i), old=
- | APIC_LVT_MASKED);
-> +                               if (i =3D=3D 0 && !(old & APIC_LVT_MASKED=
-))
-> +                                       report_lint0_access(apic, old | A=
-PIC_LVT_MASKED);
->                         }
->                         apic_update_lvtt(apic);
->                         atomic_set(&apic->lapic_timer.pending, 0);
-> @@ -2352,6 +2369,8 @@ static int kvm_lapic_reg_write(struct kvm_lapic *ap=
-ic, u32 reg, u32 val)
->                 if (!kvm_apic_sw_enabled(apic))
->                         val |=3D APIC_LVT_MASKED;
->                 val &=3D apic_lvt_mask[index];
-> +               if (index =3D=3D 0 && val !=3D kvm_lapic_get_reg(apic, re=
-g))
-> +                       report_lint0_access(apic, val);
->                 kvm_lapic_set_reg(apic, reg, val);
->                 break;
->         }
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index d0d3dc3b7ef6..2b039b372c3f 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -10879,6 +10879,11 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcp=
-u)
->                         kvm_vcpu_flush_tlb_guest(vcpu);
->   #endif
->
-> +               if (kvm_check_request(KVM_REQ_REPORT_LINT0_ACCESS, vcpu))=
- {
-> +                       vcpu->run->exit_reason =3D KVM_EXIT_LINT0_ACCESS;
-> +                       r =3D 0;
-> +                       goto out;
-> +               }
->                 if (kvm_check_request(KVM_REQ_REPORT_TPR_ACCESS, vcpu)) {
->                         vcpu->run->exit_reason =3D KVM_EXIT_TPR_ACCESS;
->                         r =3D 0;
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 637efc055145..ec97727f9de4 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -178,6 +178,7 @@ struct kvm_xen_exit {
->   #define KVM_EXIT_NOTIFY           37
->   #define KVM_EXIT_LOONGARCH_IOCSR  38
->   #define KVM_EXIT_MEMORY_FAULT     39
-> +#define KVM_EXIT_LINT0_ACCESS     40
->
->   /* For KVM_EXIT_INTERNAL_ERROR */
->   /* Emulate instruction failed. */
-> @@ -283,6 +284,10 @@ struct kvm_run {
->                                 __u64 flags;
->                         };
->                 } hypercall;
-> +               /* KVM_EXIT_LINT0_ACCESS */
-> +               struct {
-> +                       __u32 value;
-> +               } lint0_access;
->                 /* KVM_EXIT_TPR_ACCESS */
->                 struct {
->                         __u64 rip;
->
->
-> For LINT1, it should be less performance critical; if it's possible
-> to just go through all vCPUs, and do KVM_GET_LAPIC to check who you
-> should send a KVM_NMI to, then I'd do that.  I'd also accept a patch
-> that adds a VM-wide KVM_NMI ioctl that does the same in the hypervisor
-> if it's useful for you.
 
-Thanks for the patch - I'll get it a try but it might not be right away.
+Hi Nick,
 
-> And since I've been proven wrong already, what do you need INIT/SIPI for?
+Thanks for reviewing and helping.
 
-I don't think this one is as critical.  I believe the reason it was
-added was so that we can synchronize startup of the APs with execution
-of the BSP for guests that do not do a good job of that (Windows).
-
-Doug
-
-> Paolo
+On Thu, Nov 14, 2024 at 02:17:30PM +0800, Nick Hu wrote:
+>Hi Deepak
 >
+>On Thu, Nov 14, 2024 at 9:25 AM Deepak Gupta <debug@rivosinc.com> wrote:
+>>
+>> On Thu, Nov 14, 2024 at 09:20:14AM +0800, Nick Hu wrote:
+>> >Hi Deepak
+>> >
+>> >On Thu, Nov 14, 2024 at 9:06 AM Deepak Gupta <debug@rivosinc.com> wrote:
+>> >> >> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+>> >> >> index 356d5397b2a2..6244408ca917 100644
+>> >> >> --- a/arch/riscv/kernel/head.S
+>> >> >> +++ b/arch/riscv/kernel/head.S
+>> >> >> @@ -164,6 +164,12 @@ secondary_start_sbi:
+>> >> >>         call relocate_enable_mmu
+>> >> >>  #endif
+>> >> >>         call .Lsetup_trap_vector
+>> >> >> +       li a7, SBI_EXT_FWFT
+>> >> >> +       li a6, SBI_EXT_FWFT_SET
+>> >> >> +       li a0, SBI_FWFT_SHADOW_STACK
+>> >> >> +       li a1, 1 /* enable supervisor to access shadow stack access */
+>> >> >> +       li a2, SBI_FWFT_SET_FLAG_LOCK
+>> >> >> +       ecall
+>> >> >>         scs_load_current
+>> >> >>         call smp_callin
+>> >> >>  #endif /* CONFIG_SMP */
+>> >> >> @@ -320,6 +326,12 @@ SYM_CODE_START(_start_kernel)
+>> >> >>         la tp, init_task
+>> >> >>         la sp, init_thread_union + THREAD_SIZE
+>> >> >>         addi sp, sp, -PT_SIZE_ON_STACK
+>> >> >> +       li a7, SBI_EXT_FWFT
+>> >> >> +       li a6, SBI_EXT_FWFT_SET
+>> >> >> +       li a0, SBI_FWFT_SHADOW_STACK
+>> >> >> +       li a1, 1 /* enable supervisor to access shadow stack access */
+>> >> >> +       li a2, SBI_FWFT_SET_FLAG_LOCK
+>> >> >> +       ecall
+>> >> >>         scs_load_current
+>> >> >>
+>> >> >>  #ifdef CONFIG_KASAN
+>> >> >>
+>> >> >> --
+>> >> >> 2.45.0
+>> >> >>
+>> >> >Should we clear the SBI_FWFT_SET_FLAG_LOCK before the cpu hotplug
+>> >> >otherwise the menvcfg.sse won't be set by the fwft set sbi call when
+>> >> >the hotplug cpu back to kernel?
+>> >>
+>> >> Hmm...
+>> >>
+>> >> An incoming hotplug CPU has no features setup on it.
+>> >> I see that `sbi_cpu_start` will supply `secondary_start_sbi` as start
+>> >> up code for incoming CPU. `secondary_start_sbi` is in head.S which converges
+>> >> in `.Lsecondary_start_common`. And thus hotplugged CPU should be
+>> >> issuing shadow stack set FWFT sbi as well.
+>> >>
+>> >> Am I missing something ?
+>> >>
+>> >This is the correct flow. However the opensbi will deny it due to the
+>> >SBI_FWFT_SET_FLAG_LOCK already being set.
+>> >So the menvcfg.sse will not set by this flow.
+>> >
+>> >if (conf->flags & SBI_FWFT_SET_FLAG_LOCK)
+>> >                return SBI_EDENIED;
+>> >
+>>
+>> hmm... Why?
+>>
+>> `conf` is pointing to per-hart state in firmware.
+>>
+>> On this incoming cpu, opensbi (or equivalent) firmware must have
+>> ensured that this per-hart state doesn't have lock set.
+>>
+>> Am I missing something?
+>>
+>Current OpenSBI doesn't clear the lock in the warm init of the hotplug path.
+>It seems like we need a patch to address it.
 
---=20
-This electronic communication and the information and any files transmitted=
-=20
-with it, or attached to it, are confidential and are intended solely for=20
-the use of the individual or entity to whom it is addressed and may contain=
-=20
-information that is confidential, legally privileged, protected by privacy=
-=20
-laws, or otherwise restricted from disclosure to anyone else. If you are=20
-not the intended recipient or the person responsible for delivering the=20
-e-mail to the intended recipient, you are hereby notified that any use,=20
-copying, distributing, dissemination, forwarding, printing, or copying of=
-=20
-this e-mail is strictly prohibited. If you received this e-mail in error,=
-=20
-please return the e-mail to the sender, delete it from your computer, and=
-=20
-destroy any printed copy of it.
+Got it thanks.
+Since you already know what's the problem, can you send a patch to opensbi.
+If you want rather have me do it, let me know. Thanks.
+
+>
+>Regards,
+>Nick
+>> >Regards,
+>> >Nick
+>> >> >
+>> >> >Regards,
+>> >> >Nick
+>> >> >>
+>> >> >> _______________________________________________
+>> >> >> linux-riscv mailing list
+>> >> >> linux-riscv@lists.infradead.org
+>> >> >> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
