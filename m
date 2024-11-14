@@ -1,352 +1,247 @@
-Return-Path: <linux-kselftest+bounces-22003-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70B6A9C82D8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 06:58:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7759A9C82FE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 07:17:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA3F71F22DD7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 05:58:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08D51B23EA9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 06:17:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9F0B17C9E8;
-	Thu, 14 Nov 2024 05:58:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F381E9060;
+	Thu, 14 Nov 2024 06:17:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rSxsdYII"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="GcWv0q7f"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14B7F54723
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 05:58:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21D131AF0DC
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 06:17:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731563905; cv=none; b=o1evIZeegAngAcllo+iDeJ3+CTbHVdou+b5K+Mb9PY+NxPODcbS3HlTQIo+FoTDiuYscB23YcIlKskXCZcKLdcY1fCs7BV+slIPwKrHFsjGYtkdeL9ScUgwmJkGGQ/LYOD1V/dqVGKLDfhRt5mWDpmZFh1mZmrDRFhM5e83Zihw=
+	t=1731565063; cv=none; b=SMFIIaUyj3t6cHRtkpetI4blcnvIDDR1z+lAJDObT8dg69BetuNI7YqLGyz+bp/lKxktwRB2w/HvYUuWlPSuk0KiusYOmxPqijflxxc9IIEtEGMdvon08XvjaYacxL3mgP0oTHq9B4krTb0cHxrJffa5RhR3yv0nmKFlFziLX2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731563905; c=relaxed/simple;
-	bh=IxILAW1PlEstYLuebV+hwv/XC8qK0VIDDiY4s6kOtwI=;
+	s=arc-20240116; t=1731565063; c=relaxed/simple;
+	bh=yT3HAwpbW2e+ksrn/pbgGpcjS/F2Jj86TpPZr9FE/9c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P2AfIhNgrq6hRUVKzmcRuyKXzgxcsuuFVtnYSNCbIVimjo3HgMpZqUx7ibluDx1yQVYlDHmEgvDYZC+kAECUiv0rwY4Y7iT6N3lGefDhuIlltZt3JUIuUzX/XzNIkt+Xl+53rWYKXcHoM/9mMMGCYFj4Dd75yHanNDCBSMz9E90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rSxsdYII; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6cbe53a68b5so1545486d6.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Nov 2024 21:58:23 -0800 (PST)
+	 To:Cc:Content-Type; b=SsCibfbBETftOzETmK/9ApiWaFjWCdSH8Zn/9DXnqZhZfO4GMM3YWz47yYzCVwTPS2YEpMmlfIxeN4vQ07O5QBUnKLkvLPDv51s5HeCmfybFv5olh6IYp/aXq2dD1/fewhs3m4YgZSmRtqs6KEA0XSObjIl2o/Ge0GlsfGr8ELU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=GcWv0q7f; arc=none smtp.client-ip=209.85.161.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5ee1c3dbeb9so99173eaf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Nov 2024 22:17:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731563903; x=1732168703; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=y3X1WWDQwXMo8DX2+2xjUJWoHroF646lOHnV2F+dC4k=;
-        b=rSxsdYII3sU5E1bd8fKQYMRKATNnx/hIz83FJZ4o4fWUezPUZ/iwktXs2N58eV5JRb
-         Nl13MR/raq1Gw2aBosdWIY5ztny8XAKjY6u500JohBR3zxKeJCvSP+ASW21CZ+9b8s82
-         +XzgCv1q92nG+AoEs/lpGqKvR9jTrSJG5lSx/eqq4TEfC1eOw1aBtT5MRw+L2WlFdLAo
-         fwQAO+aeuF6cVhD+U5OnAbiZSHuaA09woA+Tb4tzsVJOW5t77jKiKCyoLPqOrXyyxpW9
-         tRXnkvzGzjHvru2MgVu7c8zvW3raRHWSqGoI4N9KajAqe4YKjG2bp7c/VwJvsQ8QiK1+
-         y1Gg==
+        d=sifive.com; s=google; t=1731565061; x=1732169861; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bAHw3+SJRl1ztp43mDkxoKRsjkMTu01styDys5QSXWg=;
+        b=GcWv0q7fSQWejIRetXLUp9FNAz28caqKR35ZgqtPgw/26vLkEqoj+QPNKxefs3Cbk4
+         BGXOUJUUid7MZssMuFL5AscHBvR3rbZKiPb3utTXza4/PGjjTsKDd3bEsGLknCkmI1Eb
+         +7rvTwtxP4olZ1PTNVeBOVxOG20R9BLwXiwk7THY/Rj1yAnyFb7BzMmHlUK1pPlPPW6j
+         6y4nKFD/tJNt61bTfur4Th3CGiLkoe25vfXy8CqKL81tDYaPIEPCPFGbhSEwCS6Yw9vp
+         uEdzu+ZmnRE9rYPzdU3jPvkQUmmPdEK01KhA+obgttiPdMARZq1BfgEWZb3P70IEa7vd
+         4z+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731563903; x=1732168703;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y3X1WWDQwXMo8DX2+2xjUJWoHroF646lOHnV2F+dC4k=;
-        b=WPme5i3iXhIV5DxzzK0Ozm0wqqLLsgtd8FUES8JDfcGahDm0gJByiHct6LEqHLq5gY
-         24nkZ18er9qczRVHF1JVBX2Iwtd3WLN86dDslvv+scxlGs9eoYCARXgJhyWufeMk/I6e
-         JfK2T8YsSDAfINApPaVnD/g5bqoppsOJsjLLSvh0PrfVYsk84tDjjs3EJRVZRC2WTIFn
-         8G3WLC/SD3A2Byae53iS+VXT/q8Ganjm99t60dpUjcuHH3vYl9OXz0PPizwWbnX5Ks3Q
-         VIIuHdPamb9v59K+49KDK+ohuCxmdK8Rk7aoC5FB9wh114Lsz2Dl6miX6uTvauzSV6tG
-         pIKA==
-X-Forwarded-Encrypted: i=1; AJvYcCX+grUb7m+5Y6NQt9bDs828DXVeieD2NP7qsGKI5bilCWD2phIxFk/KCmUG3UQSfdPf432cvhQo+PBT7xnZ5t0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLxbQtt0scu7E8p2RCYBsZHZtQmZfCJF1E1gEkPxV3qQFkXpG2
-	oSiIw1+CnrPuOjFK7ZpA9E+v0uKpWb3LJ4NSAA9g42BWBKmIB6wQeOxnSdbgWY9rwEXvIhU0Y3r
-	j7dVJdaMUVk6v0JrYtUo0uokuymswjYca2vGf
-X-Google-Smtp-Source: AGHT+IEfey9oF8K5xHF9nUo0l11MxR68eHDdtR8GA/wmBq8Gvo3N05OdpW2NxEMJSLxLdPr3L/FslS2nvxqdUC64CZk=
-X-Received: by 2002:a05:6214:4521:b0:6d3:45cb:40eb with SMTP id
- 6a1803df08f44-6d3d008e9f8mr136419496d6.10.1731563902801; Wed, 13 Nov 2024
- 21:58:22 -0800 (PST)
+        d=1e100.net; s=20230601; t=1731565061; x=1732169861;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bAHw3+SJRl1ztp43mDkxoKRsjkMTu01styDys5QSXWg=;
+        b=ZgCSgvLwaco176TQh/t7PiGgpL5tLb6zpi3tw19gwDQdD1N5QqkE35psdL5KyFB8uF
+         4JsyYINV0/tLGK54psU02iXvt9355DxOQ3E4EakyAkHKBj/9UvL/vtSRm5YETPg8Grmc
+         PY8JTKyInabKoknq77GVhFa3Af0V1m0Y0pGPM/MwOdZjD23dfIPCsH1tBi0Y8wd0f/Q3
+         PPocH7COZSZrhARBwmyHxN7+kSZP31N7j5M17xTwItQ/YxXgfIckKIPONJLamBfN6mKY
+         oGvrdltNRllrQYM9Rt3D8zFthP3IPfrqUN7HVJi5G0S3Q3E9dTHx8QSWNiRGQeMEgu4F
+         gCgA==
+X-Forwarded-Encrypted: i=1; AJvYcCXVdFcLtNFKMkdkwwotMvQaHj4trmCHoRRmDZF3gk4I9zc2nOYoJ9k6Ak9MzcdIXK+2rspwUfa1SItJukDmZ+o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVxzTulONPMs7mw/yZEj91arsSaVBBqUO4Tja0tBQxTlwEgUoS
+	G9SdtwC/Lkp1mwIuDXkuSW34DAsISJ+xlqtD2yvkC1db0uUiqFQMKX4lZ6NzmtQXw6XoSPCbFxB
+	yH1DDCsJVjEhfS5/XOXkYoPE3Wd+/gWn567H0xQ==
+X-Google-Smtp-Source: AGHT+IF/SorbAbjXbn/nrCDj1xlGQZyh9Tb/1BFx5yZDCatQmC6DlRJonI//aGPXQYjj5gUcvfUUQConp4xKP57Wh80=
+X-Received: by 2002:a05:6871:8a5:b0:296:14ae:8b7d with SMTP id
+ 586e51a60fabf-29614aed449mr409087fac.10.1731565060984; Wed, 13 Nov 2024
+ 22:17:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241113222406.1590372-1-rmoar@google.com> <20241113222406.1590372-2-rmoar@google.com>
-In-Reply-To: <20241113222406.1590372-2-rmoar@google.com>
-From: David Gow <davidgow@google.com>
-Date: Thu, 14 Nov 2024 13:58:07 +0800
-Message-ID: <CABVgOSm6Zya0KeutZppYkwuBW47TWgb-XBWGhnNw89y2bkHb_A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] kunit: tool: print failed tests only
-To: Rae Moar <rmoar@google.com>
-Cc: shuah@kernel.org, brendanhiggins@google.com, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000005d28dc0626d923b4"
-
---0000000000005d28dc0626d923b4
+References: <20241111-v5_user_cfi_series-v8-0-dce14aa30207@rivosinc.com>
+ <20241111-v5_user_cfi_series-v8-24-dce14aa30207@rivosinc.com>
+ <CAKddAkCCVjNHUinPWtOiK8Ki_ZkdoUCawfv1-+0B69J_1aJv5Q@mail.gmail.com>
+ <ZzVNKvCu4MOs7O5z@debug.ba.rivosinc.com> <CAKddAkDbGYeONaksq6fzLzx47BHZo3Ar7Sog3MOgf7Y+Birovw@mail.gmail.com>
+ <ZzVRbCZP9N4Os8Bj@debug.ba.rivosinc.com>
+In-Reply-To: <ZzVRbCZP9N4Os8Bj@debug.ba.rivosinc.com>
+From: Nick Hu <nick.hu@sifive.com>
+Date: Thu, 14 Nov 2024 14:17:30 +0800
+Message-ID: <CAKddAkBCByf570PXfz798FtBbeGQWe2LJpdzxkE+jv3Zd3ZV1w@mail.gmail.com>
+Subject: Re: [PATCH v8 24/29] riscv: enable kernel access to shadow stack
+ memory via FWFT sbi call
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
+	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
+	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
+	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
+	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 14 Nov 2024 at 06:24, Rae Moar <rmoar@google.com> wrote:
->
-> Add flag --failed to kunit.py to print only failed tests. This printing
-> is done after running is over.
->
-> This patch also adds the method print_test() that will also print your
-> Test object. Before, all printing of tests occurred during parsing. This
-> method could be useful in the future when converting to/from KTAP to this
-> pretty-print output.
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> ---
+Hi Deepak
 
-Thanks very much. This series looks good to me, now.
+On Thu, Nov 14, 2024 at 9:25=E2=80=AFAM Deepak Gupta <debug@rivosinc.com> w=
+rote:
+>
+> On Thu, Nov 14, 2024 at 09:20:14AM +0800, Nick Hu wrote:
+> >Hi Deepak
+> >
+> >On Thu, Nov 14, 2024 at 9:06=E2=80=AFAM Deepak Gupta <debug@rivosinc.com=
+> wrote:
+> >>
+> >> On Thu, Nov 14, 2024 at 12:13:38AM +0800, Nick Hu wrote:
+> >> >Hi Deepak
+> >> >
+> >> >On Tue, Nov 12, 2024 at 5:08=E2=80=AFAM Deepak Gupta <debug@rivosinc.=
+com> wrote:
+> >> >>
+> >> >> Kernel will have to perform shadow stack operations on user shadow =
+stack.
+> >> >> Like during signal delivery and sigreturn, shadow stack token must =
+be
+> >> >> created and validated respectively. Thus shadow stack access for ke=
+rnel
+> >> >> must be enabled.
+> >> >>
+> >> >> In future when kernel shadow stacks are enabled for linux kernel, i=
+t must
+> >> >> be enabled as early as possible for better coverage and prevent imb=
+alance
+> >> >> between regular stack and shadow stack. After `relocate_enable_mmu`=
+ has
+> >> >> been done, this is as early as possible it can enabled.
+> >> >>
+> >> >> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> >> >> ---
+> >> >>  arch/riscv/kernel/asm-offsets.c |  4 ++++
+> >> >>  arch/riscv/kernel/head.S        | 12 ++++++++++++
+> >> >>  2 files changed, 16 insertions(+)
+> >> >>
+> >> >> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/as=
+m-offsets.c
+> >> >> index 766bd33f10cb..a22ab8a41672 100644
+> >> >> --- a/arch/riscv/kernel/asm-offsets.c
+> >> >> +++ b/arch/riscv/kernel/asm-offsets.c
+> >> >> @@ -517,4 +517,8 @@ void asm_offsets(void)
+> >> >>         DEFINE(FREGS_A6,            offsetof(struct ftrace_regs, a6=
+));
+> >> >>         DEFINE(FREGS_A7,            offsetof(struct ftrace_regs, a7=
+));
+> >> >>  #endif
+> >> >> +       DEFINE(SBI_EXT_FWFT, SBI_EXT_FWFT);
+> >> >> +       DEFINE(SBI_EXT_FWFT_SET, SBI_EXT_FWFT_SET);
+> >> >> +       DEFINE(SBI_FWFT_SHADOW_STACK, SBI_FWFT_SHADOW_STACK);
+> >> >> +       DEFINE(SBI_FWFT_SET_FLAG_LOCK, SBI_FWFT_SET_FLAG_LOCK);
+> >> >>  }
+> >> >> diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
+> >> >> index 356d5397b2a2..6244408ca917 100644
+> >> >> --- a/arch/riscv/kernel/head.S
+> >> >> +++ b/arch/riscv/kernel/head.S
+> >> >> @@ -164,6 +164,12 @@ secondary_start_sbi:
+> >> >>         call relocate_enable_mmu
+> >> >>  #endif
+> >> >>         call .Lsetup_trap_vector
+> >> >> +       li a7, SBI_EXT_FWFT
+> >> >> +       li a6, SBI_EXT_FWFT_SET
+> >> >> +       li a0, SBI_FWFT_SHADOW_STACK
+> >> >> +       li a1, 1 /* enable supervisor to access shadow stack access=
+ */
+> >> >> +       li a2, SBI_FWFT_SET_FLAG_LOCK
+> >> >> +       ecall
+> >> >>         scs_load_current
+> >> >>         call smp_callin
+> >> >>  #endif /* CONFIG_SMP */
+> >> >> @@ -320,6 +326,12 @@ SYM_CODE_START(_start_kernel)
+> >> >>         la tp, init_task
+> >> >>         la sp, init_thread_union + THREAD_SIZE
+> >> >>         addi sp, sp, -PT_SIZE_ON_STACK
+> >> >> +       li a7, SBI_EXT_FWFT
+> >> >> +       li a6, SBI_EXT_FWFT_SET
+> >> >> +       li a0, SBI_FWFT_SHADOW_STACK
+> >> >> +       li a1, 1 /* enable supervisor to access shadow stack access=
+ */
+> >> >> +       li a2, SBI_FWFT_SET_FLAG_LOCK
+> >> >> +       ecall
+> >> >>         scs_load_current
+> >> >>
+> >> >>  #ifdef CONFIG_KASAN
+> >> >>
+> >> >> --
+> >> >> 2.45.0
+> >> >>
+> >> >Should we clear the SBI_FWFT_SET_FLAG_LOCK before the cpu hotplug
+> >> >otherwise the menvcfg.sse won't be set by the fwft set sbi call when
+> >> >the hotplug cpu back to kernel?
+> >>
+> >> Hmm...
+> >>
+> >> An incoming hotplug CPU has no features setup on it.
+> >> I see that `sbi_cpu_start` will supply `secondary_start_sbi` as start
+> >> up code for incoming CPU. `secondary_start_sbi` is in head.S which con=
+verges
+> >> in `.Lsecondary_start_common`. And thus hotplugged CPU should be
+> >> issuing shadow stack set FWFT sbi as well.
+> >>
+> >> Am I missing something ?
+> >>
+> >This is the correct flow. However the opensbi will deny it due to the
+> >SBI_FWFT_SET_FLAG_LOCK already being set.
+> >So the menvcfg.sse will not set by this flow.
+> >
+> >if (conf->flags & SBI_FWFT_SET_FLAG_LOCK)
+> >                return SBI_EDENIED;
+> >
+>
+> hmm... Why?
+>
+> `conf` is pointing to per-hart state in firmware.
+>
+> On this incoming cpu, opensbi (or equivalent) firmware must have
+> ensured that this per-hart state doesn't have lock set.
+>
+> Am I missing something?
+>
+Current OpenSBI doesn't clear the lock in the warm init of the hotplug path=
+.
+It seems like we need a patch to address it.
 
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
-
->  tools/testing/kunit/kunit.py           | 14 ++++++++++++--
->  tools/testing/kunit/kunit_parser.py    | 25 +++++++++++++++++++++++++
->  tools/testing/kunit/kunit_tool_test.py |  6 +++---
->  3 files changed, 40 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 27c55a7fc1a0..676fa99a8b19 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -50,6 +50,7 @@ class KunitParseRequest:
->         raw_output: Optional[str]
->         json: Optional[str]
->         summary: bool
-> +       failed: bool
->
->  @dataclass
->  class KunitExecRequest(KunitParseRequest):
-> @@ -237,13 +238,15 @@ def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input
->                 return KunitResult(KunitStatus.SUCCESS, parse_time), fake_test
->
->         default_printer = stdout
-> -       if request.summary:
-> +       if request.summary or request.failed:
->                 default_printer = null_printer
->
->         # Actually parse the test results.
->         test = kunit_parser.parse_run_tests(input_data, default_printer)
->         parse_time = time.time() - parse_start
->
-> +       if request.failed:
-> +               kunit_parser.print_test(test, request.failed, stdout)
->         kunit_parser.print_summary_line(test, stdout)
->
->         if request.json:
-> @@ -423,6 +426,10 @@ def add_parse_opts(parser: argparse.ArgumentParser) -> None:
->                             help='Prints only the summary line for parsed test results.'
->                                 'Does nothing if --raw_output is set.',
->                             action='store_true')
-> +       parser.add_argument('--failed',
-> +                           help='Prints only the failed parsed test results and summary line.'
-> +                               'Does nothing if --raw_output is set.',
-> +                           action='store_true')
->
->
->  def tree_from_args(cli_args: argparse.Namespace) -> kunit_kernel.LinuxSourceTree:
-> @@ -459,6 +466,7 @@ def run_handler(cli_args: argparse.Namespace) -> None:
->                                         raw_output=cli_args.raw_output,
->                                         json=cli_args.json,
->                                         summary=cli_args.summary,
-> +                                       failed=cli_args.failed,
->                                         timeout=cli_args.timeout,
->                                         filter_glob=cli_args.filter_glob,
->                                         filter=cli_args.filter,
-> @@ -507,6 +515,7 @@ def exec_handler(cli_args: argparse.Namespace) -> None:
->                                         build_dir=cli_args.build_dir,
->                                         json=cli_args.json,
->                                         summary=cli_args.summary,
-> +                                       failed=cli_args.failed,
->                                         timeout=cli_args.timeout,
->                                         filter_glob=cli_args.filter_glob,
->                                         filter=cli_args.filter,
-> @@ -532,7 +541,8 @@ def parse_handler(cli_args: argparse.Namespace) -> None:
->         # We know nothing about how the result was created!
->         metadata = kunit_json.Metadata()
->         request = KunitParseRequest(raw_output=cli_args.raw_output,
-> -                                       json=cli_args.json, summary=cli_args.summary)
-> +                                       json=cli_args.json, summary=cli_args.summary,
-> +                                       failed=cli_args.failed)
->         result, _ = parse_tests(request, metadata, kunit_output)
->         if result.status != KunitStatus.SUCCESS:
->                 sys.exit(1)
-> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> index 732f448263de..29fc27e8949b 100644
-> --- a/tools/testing/kunit/kunit_parser.py
-> +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -574,7 +574,32 @@ def print_test_footer(test: Test, printer: Printer) -> None:
->         printer.print_with_timestamp(format_test_divider(message,
->                 len(message) - printer.color_len()))
->
-> +def print_test(test: Test, failed_only: bool, printer: Printer) -> None:
-> +       """
-> +       Prints Test object to given printer. For a child test, the result line is
-> +       printed. For a parent test, the test header, all child test results, and
-> +       the test footer are all printed. If failed_only is true, only failed/crashed
-> +       tests will be printed.
->
-> +       Parameters:
-> +       test - Test object to print
-> +       failed_only - True if only failed/crashed tests should be printed.
-> +       printer - Printer object to output results
-> +       """
-> +       if test.name == "main":
-> +               printer.print_with_timestamp(DIVIDER)
-> +               for subtest in test.subtests:
-> +                       print_test(subtest, failed_only, printer)
-> +               printer.print_with_timestamp(DIVIDER)
-> +       elif test.subtests != []:
-> +               if not failed_only or not test.ok_status():
-> +                       print_test_header(test, printer)
-> +                       for subtest in test.subtests:
-> +                               print_test(subtest, failed_only, printer)
-> +                       print_test_footer(test, printer)
-> +       else:
-> +               if not failed_only or not test.ok_status():
-> +                       print_test_result(test, printer)
->
->  def _summarize_failed_tests(test: Test) -> str:
->         """Tries to summarize all the failing subtests in `test`."""
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index 02aa296d8850..0bcb0cc002f8 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -811,7 +811,7 @@ class KUnitMainTest(unittest.TestCase):
->                 self.linux_source_mock.run_kernel.return_value = ['TAP version 14', 'init: random output'] + want
->
->                 got = kunit._list_tests(self.linux_source_mock,
-> -                                    kunit.KunitExecRequest(None, None, False, '.kunit', 300, 'suite*', '', None, None, 'suite', False, False))
-> +                                    kunit.KunitExecRequest(None, None, False, False, '.kunit', 300, 'suite*', '', None, None, 'suite', False, False))
->                 self.assertEqual(got, want)
->                 # Should respect the user's filter glob when listing tests.
->                 self.linux_source_mock.run_kernel.assert_called_once_with(
-> @@ -824,7 +824,7 @@ class KUnitMainTest(unittest.TestCase):
->
->                 # Should respect the user's filter glob when listing tests.
->                 mock_tests.assert_called_once_with(mock.ANY,
-> -                                    kunit.KunitExecRequest(None, None, False, '.kunit', 300, 'suite*.test*', '', None, None, 'suite', False, False))
-> +                                    kunit.KunitExecRequest(None, None, False, False, '.kunit', 300, 'suite*.test*', '', None, None, 'suite', False, False))
->                 self.linux_source_mock.run_kernel.assert_has_calls([
->                         mock.call(args=None, build_dir='.kunit', filter_glob='suite.test*', filter='', filter_action=None, timeout=300),
->                         mock.call(args=None, build_dir='.kunit', filter_glob='suite2.test*', filter='', filter_action=None, timeout=300),
-> @@ -837,7 +837,7 @@ class KUnitMainTest(unittest.TestCase):
->
->                 # Should respect the user's filter glob when listing tests.
->                 mock_tests.assert_called_once_with(mock.ANY,
-> -                                    kunit.KunitExecRequest(None, None, False, '.kunit', 300, 'suite*', '', None, None, 'test', False, False))
-> +                                    kunit.KunitExecRequest(None, None, False, False, '.kunit', 300, 'suite*', '', None, None, 'test', False, False))
->                 self.linux_source_mock.run_kernel.assert_has_calls([
->                         mock.call(args=None, build_dir='.kunit', filter_glob='suite.test1', filter='', filter_action=None, timeout=300),
->                         mock.call(args=None, build_dir='.kunit', filter_glob='suite.test2', filter='', filter_action=None, timeout=300),
-> --
-> 2.47.0.277.g8800431eea-goog
->
-
---0000000000005d28dc0626d923b4
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIUqgYJKoZIhvcNAQcCoIIUmzCCFJcCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
-4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
-mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
-KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
-VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
-ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
-vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
-BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
-OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
-1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
-ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
-BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
-18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
-bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
-AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
-BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
-A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
-MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
-jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
-0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
-jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
-jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
-C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
-NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
-zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
-A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
-hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
-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
-erg7AgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
-/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFKFQnbTpSq0q
-cOYnlrbegXJIIvA6MFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
-BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
-MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
-LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
-bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
-FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBR
-nRJBmUP+IpudtmSQ/R55Sv0qv8TO9zHTlIdsIf2Gc/zeCi0SamUQkFWb01d7Q+20kcpxNzwV6M7y
-hDRk5uuVFvtVxOrmbhflCo0uBpD9vz/symtfJYZLNyvSDi1PIVrwGNpyRrD0W6VQJxzzsBTwsO+S
-XWN3+x70+QDf7+zovW7KF0/y8QYD6PIN7Y9LRUXct0HKhatkHmO3w6MSJatnqSvsjffIwpNecUMo
-h10c6Etz17b7tbGdxdxLw8njN+UnfoFp3v4irrafB6jkArRfsR5TscZUUKej0ihl7mXEKUBmClkP
-ndcbXHFxS6WTkpjvl7Jjja8DdWJSJmdEWUnFjnQnDrqLqvYjeVMS/8IBF57eyT6yEPrMzA+Zd+f5
-hnM7HuBSGvVHv+c/rlHVp0S364DBGXj11obl7nKgL9D59QwC5/kNJ1whoKwsATUSepanzALdOTn3
-BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
-0DhqINx2fw0bwhpfFGADOZDe5DVhI7AIW/kEMHuIgAJ/HPgyn1+tldOPWiFLQbTNNBnfGv9sDPz0
-hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
-AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
-BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
-eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQghPH4eRMBH4qcrhOeGtpSLzinMC7V
-mwi7OvC2h0bl81UwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
-MTE0MDU1ODIzWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
-YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBAGrHuapXuKBdExfBXNledjprI5I18R9uOrSXHZMzW2YdrpIW
-HSDKrYCENbMvzAFWOFUY7HPH43eVQjSOsTyBmTRjeEEW27ifOYIS2yqzoyp/vNvAVslhiyAXuGok
-T6a5n0QlihbltjPY+b9IIp1KHVt2bOyATSLmXHvf4StvpzX1cQbSpRPzLjBGTrZyxZUYy21HhEAq
-hlrSAe/Y3GNAxQ+Ukp5O6PQnQZxUZY8v81fnBHmOGWVr5qIhQdw6Ozto4VfoS6+xVeDnnqbFmxwt
-hygUpKV0zrIgqbYq1DuB89yKpxPBbAKxw3pzwujevVpBxZugEhOxxDWrM7SitdlwRUU=
---0000000000005d28dc0626d923b4--
+Regards,
+Nick
+> >Regards,
+> >Nick
+> >> >
+> >> >Regards,
+> >> >Nick
+> >> >>
+> >> >> _______________________________________________
+> >> >> linux-riscv mailing list
+> >> >> linux-riscv@lists.infradead.org
+> >> >> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
