@@ -1,170 +1,150 @@
-Return-Path: <linux-kselftest+bounces-22047-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22049-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FBDE9C9165
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 19:08:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54A3B9C94AF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 22:51:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 26BADB2B21D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 17:05:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B11328311B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 21:51:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4571717BED0;
-	Thu, 14 Nov 2024 17:05:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A08F31AF0AB;
+	Thu, 14 Nov 2024 21:51:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="BcqPXj06"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RMedzhgu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sonic308-15.consmr.mail.ne1.yahoo.com (sonic308-15.consmr.mail.ne1.yahoo.com [66.163.187.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE78D4317C
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 17:05:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53FBD76026;
+	Thu, 14 Nov 2024 21:51:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731603926; cv=none; b=tIcpUBOljBdh00cPkV+DQaFYu4KlnekltBZku5l+Wfixs88MkhwPgIF8iAzxw9R1H+DZ5yY2RIEbHY3949SmT+OBIeRi8zNw29JuXkb7sGfDG1qjsH4l+MVdjGIiUJTKgDocTuEj4BZx1DcTKqDFvAknj9cCz+OX9GPNjnibDxQ=
+	t=1731621075; cv=none; b=hC3PTjFM4W78uZq867umISczP4EKQQlMtLxXWbnYM3vMyOv3VVZhw9216L4WfM4WbGXOY3VajHjxCEC1kF4dX6y2UHOTIO+e+0fWj8MkyTr4XmMwRJgRBxWyoQM6gRmtVgWHOL1wtSYYy1uYbL+VopzTx5kUTbKjXoml0J6eEzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731603926; c=relaxed/simple;
-	bh=225Xg3lGtzU2suqnuMm7mLYtTLLYNlKBn9V7o6ahfHY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dLbsYOYyULC1umGn8RjqsIhZqvAEV+VXcagp4Oqhzq8g1vZ20UoiAv4ebHbgeWfPJbf8cbD8IOTY4rKqRy+/XLi39Dm3538sxrRSu8k4UH5OJJ4a1rxz+7lM0tdqKoiglCvADGOVguV+vUltJaASmbOhFu0TK8k7X8ekLIQZExc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=BcqPXj06; arc=none smtp.client-ip=66.163.187.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1731603922; bh=225Xg3lGtzU2suqnuMm7mLYtTLLYNlKBn9V7o6ahfHY=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=BcqPXj06B1y28vUv7pgDxXxNkz7G0QSweFLqHmF6ul1AxtxVQ2QJcAABrQyGb64V7fROnbCv495aTi302d/CznKXyWaWliqxz0717Yg4eTLSPRUVnJj0NfOZ+3LgjFijKAFtR4SIkJsVC2usqVkRWR0qZ7/dq7c5ToRZp6CO3b9Aij2SR5OfdcAlaQ5tdWnRM+7qoK7WVa2muyzwOPBZsx2V4bTzeWjf+jCPMouIKHeAWE15kgjZQ3eXEU2VK9vZ9/dH/UCGs5yXc4x5bp2rTGPkSxYYls4s0SDc7TtlPS4/zf7EgUcKHSYNGBN62BiIzI5ldtvAqzaSjamHmtFIZw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1731603922; bh=verVmHtOBrFYnVJuS+g4VZ4XEV5eU4OV01hQKso0uaj=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=E50Nk5fCQ/8UWEUimsJxw6Tea2+kVUz5scIEBj4FKY0sl5s/9tv69SvG6Mcx/+Rw6LIg7/ZuZeu6Rk0eEpysPpVJL4Mbep45/Xcn+/45RU2j5HYe/LjQ7AgRJ/+Odxqb1QBZ4UbmDLCM3z0ZI3Vi08C2qYuiJXpAlxDBePiq1L9A/FHDWK1Da3va+OQSdu2fSjeDwU4LpsEyYEwpn6Av5fIdxftaPCuikpHWVFKAIN5ah480iSMKWkx6jpLvk5PSW14FFb++Hx6jRUB9/4KUzySCiTAfWBDNrHyThDr+ctOy7DDjjo6WwmXYVG2uvt5zZpl+nFM4Vr+Qgv2fHTPWDQ==
-X-YMail-OSG: F_SLC2sVM1mL8EeQF2d1knzo_cGXLETriYy.ZIgaCj.i4h2Fc..ajxb8d81yZt5
- ohHogactWDk0NJ6sMVmlgvRhq6Nnt.H_gUiqOF_ga2Gm.gPjk0BXZTV.LFRGF8K0NdrPvpadV8LP
- RvHjE3c7AM3COGDw._RmZj6YtiXZvxXsUfF3gJeU2vHx0uvAytZAdCdHEWaDeeCerosUgA0u.M9t
- D7jLRPeNYTAouzOM7hhHA0pmGAGqIVSisjjjhM1_41srcy84KFIiKzYsFcK1BYyYzLf7GpbkPWTk
- zhxgpkyIHtG9nCQm_knKdbXNNmEuTikTz02vtZpSk_BRghC2b.6e4QDxRbQBKM51JBM8MzDaGWG3
- MJeEzO7lgDfrcgXJD1AU2fiPnkG4smwMtEC13PH2Rz2ZVNtv6hPjF2LKTmiaKO0Qh_nu9FPHH95o
- MCLkv1gxyHVKJ1cfENcZ6dABrpZdrHpG8RO9ZPM2.mfftTNCdqC4LiNavrLm7zPV7.faheXnsCQW
- pXgY7dLpbesNrpreD4ekHZJaEmi8K1aqsMeCxcrJwdLxhObvqLvgtRDxmJtQZnnc9nYefistTpG6
- i.NN49pRZNaoNa0FT8fVGErJtn_4DSa.aUXAuSOIZZ4KDtj0Opm2rNZt2ga8Ub.sXUZhwVdDB_C5
- tOu38aNfTSsitIgVRaLvBFwxF.Fl8IcyZZa692AIylgTJaSIXRD7DMEJgzU1e3rtTkZ9jQhoaa4M
- jnP68V.iNEgkPhlkBj7MkpLRdxrl7C1J5SQ6gy7FEVrQZgyMagMoKudLj9ppctdXkoRPd6LZnqGZ
- LCNZA.l53tOlu.6zfZNkUKrMPiHYNk8CfjvUCkLu8s8YYBN9Vk6EgCxCi4EYIzldRQYWzV7Ui7c.
- cYJfb4QOgdRGeF1rTs52PCuqm86f0.UYBM_nXqMLsmGC5jtGxK8EpS4LZjD0HQQhegJrpjbAkR4A
- 6sI3hKm.7I2wHQ.3nRfOX1QGDFLQDd3l7LuptR90n7DN8c91BqNqPnSub7YeboYFS3e5VkaTK6oP
- DpRE8CG3vBpyImW35lmCirjeXUFXALovT9E3nUcg7quN440G_pc3.XZZDiDPFs7_UmtefjBGlj10
- sZa9CPQCFO0wHVvofP0HpfMG3cid1BhAcKMEN55ZeFUA_gdj8nJcvsKY.gpC0aydlCnwBH8j2yck
- 2BnfZsqfu5CrTIf1.YM03MsC7.QVtXtPhRKRef5TI3OnGtqwFJvnm2u0nzuRRXcSTksD6BL9iU9D
- EUjAxEDo3hyD6LUBw2gynhAKhXX7pVN1k5xV9.Zr8cekcNVHEWM9D0KqXaSe04FTIW1nK2C6BfTf
- jCFNbQCb9VySqRqTQuJMygVu6CozU3PctL1Gfu_6xcu8Nr1pAe9wKeZI.6DlxJk1g9fYiwafon2n
- 5zB4tGkB10aYGJ0TywzminM7qTVgtpbM15exNXSvXf_NIRstXpeaO8Gih0GoZevCmDJq1nZr_VR2
- 43pZe69p8WW0Zf9OMVpMYG67QaT84c9nPeDVkBeJl20dme1nUNM7MDosoh2kA.Rjm9fKA6vQsLs4
- nVgap7p8jlWR5RzRoXC7NfgHLpyg8lOIF8NQl9u6g2cXqMiR74SzosU1uKoLPx4S7umOqt1joRF.
- YdChiQHNfrbSqkQTyACEzL3UIQ9MtR1qBcJMFa.XIJinpZUTJp8LwaIh5_1_6lLiZJCUxp_g5RHP
- XYPdUr3lZ5SrK.fR7.fpB1HUbQXnY7pEPixduS0ZJdqWuq0O3g57CnN0BIMSXfUw4qW2wU5JIMVp
- 2JhUfrN6i1eUAlweQ9TOxKdqrXzCjyJGHT_suK.fnhnzKPrhKXRy_aykDvcC8WQCvR2ifwy0Te9B
- hBzXPDmrIx6HWArhWAZYSmDA2e.0wJdwn1mJdVZ8p_zK8yWqQNIDoQoE64gWQ_sXvjlfiEJhxsna
- f9IGn1izZP6vXTli0AGKAjYcPz1B23SK7sryUa4ixp.A7ogyEn.CadaBAV3iwml6OlQPMuYlWvjb
- i99vOPO.zLJrG2QW5xYCRdYavNTratonmPINnoGKa52nI7_EXy7Q.k2jjeSmIGcTjKzRFQKqhEwB
- lYw_p7wg7yVjJ53VI4DPVd3QBvqEcgNhTgyWBuQoizOQJ1GtlHKZpuMJmum2vkhTGGsY.DCDuFVo
- KpdBOt7yUS6c9UoDoHROt1ocweYcmoV_U9YGWiTcceNbVKSENmWvBPrG4NENvEoDaP7beXRhl6DU
- EJTdeKicNyLDQ59TF6tyq3f0yhkASC8P_kJ9r9FlZUmtqYw--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: dc530b32-4640-4104-a80a-76b3cc4eac0a
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Thu, 14 Nov 2024 17:05:22 +0000
-Received: by hermes--production-gq1-5dd4b47f46-mb2l9 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 62a3195ceac711131de6021a88b7222d;
-          Thu, 14 Nov 2024 16:55:09 +0000 (UTC)
-Message-ID: <c16b7517-e490-48d9-a2b6-f0077cbb0eba@schaufler-ca.com>
-Date: Thu, 14 Nov 2024 08:55:08 -0800
+	s=arc-20240116; t=1731621075; c=relaxed/simple;
+	bh=WjZXsL/Ggv5UxmzL0W2lHjr1qDI30J7jiFurXL1yZN4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=lB3oMVBSl1u27WxJBgWY4ISbNiYn2UgSpIyJq/9C+oi1lyP/1XJglkmVkUQJjKqbXvrHgLqh7eeShoGlXLwIZOzS//tSjFtef0F7XyivPgBeEHgXu7VL6Kf+myrCcE4eywDRtBK6RpPaxEoljvzhSlqd3kTtBM5TGXd6SYHrzS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RMedzhgu; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8D6A520003;
+	Thu, 14 Nov 2024 21:51:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1731621070;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=n3bfEiuXzWiyxNpW5BbZa2NuPMpbT/vYsRPGYQ4Ljww=;
+	b=RMedzhgu3sJZurlFt3wTLbZwSnVLYQLfXU1TtNlvI3EPOzi6cUGJQe1vaNUvJXmeZT65Bw
+	22kGKeMLw2ZOC+PBhzMwrB+pgIsLONZSoUdTd4MJaHGUd/kl0K/XCHFundwPNnOrqqTq4T
+	YgzTBGhsZaJNApguYsSLZ+0Uh1s9+mADWj5K0lj4a4QHw33ZjC8a1n4mSWR3TLGXtMrW0r
+	jW2MPdAe79+zeP5+fQNR7D4/UCbyVAVSg4PJWWqbEO5Y4z+jzJysnqWawRDMOi5IhRjs+K
+	r7Mz5niUKboLJ//BXEvts+YofQwKF5bxZBvWhQKYBLa4oHBPyWNPX/I1uG53hw==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Subject: [PATCH bpf-next v2 00/13] selftests/bpf: migrate
+ test_flow_dissector.sh to test_progs
+Date: Thu, 14 Nov 2024 22:50:31 +0100
+Message-Id: <20241114-flow_dissector-v2-0-ee4a3be3de65@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: lsm: Refactor
- `flags_overset_lsm_set_self_attr` test
-To: Shuah Khan <skhan@linuxfoundation.org>,
- Amit Vadhavana <av2082000@gmail.com>, paul@paul-moore.com,
- jmorris@namei.org, serge@hallyn.com, shuah@kernel.org
-Cc: ricardo@marliere.net, linux-kernel-mentees@lists.linux.dev,
- linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>
-References: <20241112182810.24761-1-av2082000@gmail.com>
- <52cc8e51-9e85-465b-8ee3-63a7a0a42951@linuxfoundation.org>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <52cc8e51-9e85-465b-8ee3-63a7a0a42951@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.22876 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-B4-Tracking: v=1; b=H4sIAKdwNmcC/12NQQrCMBBFryKzNpJJq6WuvIcUsZOJHahJSUqtl
+ N7dkKXLx+e9v0HiKJzgetgg8iJJgs9gjgeg4elfrMRmBqNNjRpb5cbweVhJiWkOUVXca9KNI7x
+ UkKUpspO1BO/QT055Xmfo8jJIysK3PC1Y9hJFrP6jCyqtTEO1dfrcGku3PoR5FH+i8IZu3/cfu
+ Z1tlbgAAAA=
+X-Change-ID: 20241019-flow_dissector-3eb0c07fc163
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-Sasl: alexis.lothore@bootlin.com
 
+Hello,
+this new series aims to migrate test_flow_dissector.sh into test_progs.
+There are 2 "main" parts in test_flow_dissector.sh:
+- a set of tests checking flow_dissector programs attachment to either
+  root namespace or non-root namespace
+- dissection test
 
-On 11/14/2024 8:25 AM, Shuah Khan wrote:
-> On 11/12/24 11:28, Amit Vadhavana wrote:
->> - Remove unnecessary `tctx` variable, use `ctx` directly.
->> - Simplified code with no functional changes.
->>
->
-> I would rephrase the short to simply say Remove unused variable,
-> as refactor implies more extensive changes than what this patch
-> is actually doing.
->
-> Please write complete sentences instead of bullet points in the
-> change log.
->
-> How did you find this problem? Do include the details on how
-> in the change log.
->
->> Signed-off-by: Amit Vadhavana <av2082000@gmail.com>
->> ---
->>   tools/testing/selftests/lsm/lsm_set_self_attr_test.c | 7 +++----
->>   1 file changed, 3 insertions(+), 4 deletions(-)
->>
->> diff --git a/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
->> b/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
->> index 66dec47e3ca3..732e89fe99c0 100644
->> --- a/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
->> +++ b/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
->> @@ -56,16 +56,15 @@ TEST(flags_zero_lsm_set_self_attr)
->>   TEST(flags_overset_lsm_set_self_attr)
->>   {
->>       const long page_size = sysconf(_SC_PAGESIZE);
->> -    char *ctx = calloc(page_size, 1);
->> +    struct lsm_ctx *ctx = calloc(page_size, 1);
->
-> Why not name this tctx and avoid changes to the ASSERT_EQs
-> below?
+The first set is integrated in flow_dissector.c, which already contains
+some existing tests for flow_dissector programs. This series uses the
+opportunity to update a bit this file (use new assert, re-split tests,
+etc)
+The second part is migrated into a new file under test_progs,
+flow_dissector_classification.c. It uses the same eBPF programs as
+flow_dissector.c, but the difference is rather about how those program
+are executed:
+- flow_dissector.c manually runs programs with BPF_PROG_RUN
+- flow_dissector_classification.c sends real packets to be dissected, and
+  so it also executes kernel code related to eBPF flow dissector (eg:
+__skb_flow_bpf_to_target)
 
-In the realm of linux security modules ctx is short for "context".
-I used tctx here because I was lazy. It would be much better to
-drop tctx, even if it means a tiny bit more change.
+---
+Changes in v2:
+- allow tests to run in parallel
+- move some generic helpers to network_helpers.h
+- define proper function for ASSERT_MEMEQ
+- fetch acked-by tags
+- Link to v1: https://lore.kernel.org/r/20241113-flow_dissector-v1-0-27c4df0592dc@bootlin.com
 
->
->>       __u32 size = page_size;
->> -    struct lsm_ctx *tctx = (struct lsm_ctx *)ctx;
->>         ASSERT_NE(NULL, ctx);
->>       if (attr_lsm_count()) {
->> -        ASSERT_LE(1, lsm_get_self_attr(LSM_ATTR_CURRENT, tctx, &size,
->> +        ASSERT_LE(1, lsm_get_self_attr(LSM_ATTR_CURRENT, ctx, &size,
->>                              0));
->>       }
->> -    ASSERT_EQ(-1, lsm_set_self_attr(LSM_ATTR_CURRENT |
->> LSM_ATTR_PREV, tctx,
->> +    ASSERT_EQ(-1, lsm_set_self_attr(LSM_ATTR_CURRENT |
->> LSM_ATTR_PREV, ctx,
->>                       size, 0));
->>         free(ctx);
->
-> You have to change this tctx for sure.
->
-> With these changes:
->
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
->
-> Paul, James,
->
-> Please do let me know if you would me to take this through
-> kselftest tree.
->
-> thanks,
-> -- Shuah
->
->
+---
+Alexis Lothoré (eBPF Foundation) (13):
+      selftests/bpf: add a macro to compare raw memory
+      selftests/bpf: use ASSERT_MEMEQ to compare bpf flow keys
+      selftests/bpf: replace CHECK calls with ASSERT macros in flow_dissector test
+      selftests/bpf: re-split main function into dedicated tests
+      selftests/bpf: expose all subtests from flow_dissector
+      selftests/bpf: add gre packets testing to flow_dissector
+      selftests/bpf: migrate flow_dissector namespace exclusivity test
+      selftests/bpf: Enable generic tc actions in selftests config
+      selftests/bpf: move ip checksum helper to network helpers
+      selftests/bpf: rename pseudo headers checksum computation
+      selftests/bpf: add network helpers to generate udp checksums
+      selftests/bpf: migrate bpf flow dissectors tests to test_progs
+      selftests/bpf: remove test_flow_dissector.sh
+
+ tools/testing/selftests/bpf/.gitignore             |   1 -
+ tools/testing/selftests/bpf/Makefile               |   3 +-
+ tools/testing/selftests/bpf/config                 |   1 +
+ tools/testing/selftests/bpf/network_helpers.h      |  64 +-
+ .../selftests/bpf/prog_tests/flow_dissector.c      | 323 +++++++--
+ .../bpf/prog_tests/flow_dissector_classification.c | 807 +++++++++++++++++++++
+ .../selftests/bpf/prog_tests/xdp_metadata.c        |  24 +-
+ tools/testing/selftests/bpf/test_flow_dissector.c  | 780 --------------------
+ tools/testing/selftests/bpf/test_flow_dissector.sh | 178 -----
+ tools/testing/selftests/bpf/test_progs.c           |  15 +
+ tools/testing/selftests/bpf/test_progs.h           |  15 +
+ tools/testing/selftests/bpf/xdp_hw_metadata.c      |  12 +-
+ 12 files changed, 1153 insertions(+), 1070 deletions(-)
+---
+base-commit: 9e71d50d3befb93a6394b0979f8ebd0dc9bd8d0f
+change-id: 20241019-flow_dissector-3eb0c07fc163
+
+Best regards,
+-- 
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
