@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-22032-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22033-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5C299C8DE3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 16:25:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8E399C8E6F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 16:41:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6671282DB1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 15:25:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 796BD2886C3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 15:41:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A8971632EF;
-	Thu, 14 Nov 2024 15:25:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91FDD18C907;
+	Thu, 14 Nov 2024 15:32:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="CH6HU9S8"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="IPR/Lk2u"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8B11420A8
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 15:25:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4218E2AEF1
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 15:32:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731597936; cv=none; b=ozIr5BPe1QlkNVmlB60CDEWYO8NhaxEx6sVqX0GZPQ2G0ZfmvJMQUsDkJo7Rs48w/HsTLWs6MP/fwT2I3cd4v0X7Q1z65yLY7gR8J63U+UYelDWbPFyUIqthfi+Sxdi/REga5wEjzHWdhJwXQGMhcDpvypt6Xmxle1IFyks1PTw=
+	t=1731598360; cv=none; b=PjvPNpGJGel9iKJMdCJ+GvHo4DYVM+7M76RHCdnIeFcFvrJxKxhkubx/N5v/ziS29Wyp33JdZ5sTFoV8Mn83btHEmafHibE8PwDiNhusBD+A82HIeRELQmJ04vSVgS7NP6gOwgIsybtH2YGaCEfuqn4Nt5Ds9nODGjfkceI0kdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731597936; c=relaxed/simple;
-	bh=mRZeQuL4XRfisNey/RHHYIr9augB4IqqB8Uzbvdxpe8=;
+	s=arc-20240116; t=1731598360; c=relaxed/simple;
+	bh=K+3Th5Q++5HUxSp1hVDWsLMIxmGiK0HaUFgVbSqlY/Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V/6t2M9A6hlUtJM07PyVzdk5ip/t3HQniEn6kVp7bJDoee4ImTVR2pE3CvD4uXGbzxv8cUIwb6i4E6eKYUe+YyCbzdc/1LkRSlJga8zr+9sQoSKvDAafvJNY0XyvWwPKV4oaWtirG2WoBPXYa70mUUYERnw/OfSbQQZpcqt+tn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=CH6HU9S8; arc=none smtp.client-ip=209.85.128.54
+	 In-Reply-To:Content-Type; b=u+rDiRXRSp7eo9p4j8OLQM2lputnEG270CMJUeawUkC2NrTM2BsF3d7kRHuAtxcD4Smn1I6Yrgj+123xIKzLGnr2DIyvEhzGfv/MpchgI7UI/97IlohkjBG1E/oYq3+4JhWHfWxdE4t9aHfXQDvLZx72qHcaZKTXqic5dJJFEcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=IPR/Lk2u; arc=none smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4315c1c7392so7240405e9.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 07:25:33 -0800 (PST)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5cf872ecce7so315691a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 07:32:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1731597931; x=1732202731; darn=vger.kernel.org;
+        d=openvpn.net; s=google; t=1731598357; x=1732203157; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=RftQrf6wG+QOdh77tzk6PbMNJeRphHKH6IPCz+WPl5E=;
-        b=CH6HU9S8abRmLzGx/JgpyjmDN4lM93/n7Zr2BKL1yi6Cb39kCd+ekoKsb9k6VSgzZV
-         y2tn9WJtF8BZqEOAAghkWHSxa5eYgU9VnqDJBqL9qb/K+Ffm1Ylq7RYnIOxhMFSTGhha
-         KweCvF8ZYDXTWWRPZXB2nDF1FV9V14nrcqSAq8eWRcdXgljuBxy6ddXEvT+sjSkLaa/7
-         UjQ9DVtfutr+RfvoLIccDwZoVCSrEauoRKU+RQjoosGwHZAzdB2c9mMw0/ZSJ8X+Ur7r
-         koZcsQavHGB/dsLUEglnWb8H0wI4yN+q6qkMRvn+66Sgpuj01TQcfcQyDRyRKWbKoAPp
-         e5IQ==
+        bh=lhlNxLWWoabmlExNDUzh7LDAJ1jX1Gjtz/aG2arQZrc=;
+        b=IPR/Lk2uNcCPzZr/g2x7cab3Gy7jI2gQycd1Iw9eSuGOah0nqq0gayf2HBfEPcAHuI
+         SSQ9fAx07GWeeNioXYAMUfOBtPmxauY0CQO0I537HtqRl9d/w3+D4sMwcea2zW9Pdcpe
+         wTJP8Z8IW5fy4UwPF4nQIPXzD5rGtJzuZw97dnIHXBitBTphGWAix/u63q/48XHoa/7a
+         bj4NGP3cfDSKwkGuL/oNzBEJ15TnCGGZi8EpRJmEvFVz/JbRa/+QI2a1aur9wGfY+4qc
+         a+7W46MWfEaKikpQee2P83ix/+LrScM/m/s+pkvgID3ahdOxk8wGKirplsg5Ia/FsIKa
+         QuxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731597931; x=1732202731;
+        d=1e100.net; s=20230601; t=1731598357; x=1732203157;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RftQrf6wG+QOdh77tzk6PbMNJeRphHKH6IPCz+WPl5E=;
-        b=qsPn/sB3ajdTALLan7JHpqOWq7qSBO+kvjrAkaLqnTV3Ge3xiOiMuju39b9tjk7nSM
-         iiDnfNctsUE4YeAoYmB6txFYIhYPtQsh+wJ3pntx1UwYU9yhyoFcKZnFKwxCcgqAznZ+
-         j6Ybg9pzlhSlHAqV1JLjG/DHlcLTRbnDZZebJdPozHwuROEJEErDLTY/oZ/Nsq1mw9QD
-         rj2khJDQxH5dOnhiMvZbegrUhkOWfiSM9iTYWt1IIfACt6STgO7O+B7VItQipxjFLG/P
-         R7Z3T1bRiotllJHdaYc/KABFkjf/Jz9iEgdkNh1S8mihKNG4AJRhI5v935iceLoLZw15
-         TfSg==
-X-Forwarded-Encrypted: i=1; AJvYcCXOQxeCR4Zr+U9i5GD5tBjW/C3QXl8X8udxXrxFovWhU1fyqfuhaaow0oSIr7ipc6wGZU7DN575zuDh35WAZOg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxO4fZoohBtw72lAMoUcaaU9iAmUbjiy7NXyiVFnov+C3kimRwb
-	e/eBv7oFw8sgqqEgS2FDz5WKREtIyTdSg1jnALbFWwPOjt28SH4Ou24miZvV0w8=
-X-Google-Smtp-Source: AGHT+IFTEiRcthhWkVevUSVFjA91cV/GXKHMEq/kYqqKfQKNAm01BeMHYie21i7C8OWu47OP88k8CQ==
-X-Received: by 2002:a05:600c:4fd5:b0:431:5e3c:2ff0 with SMTP id 5b1f17b1804b1-432da77e9f3mr23882855e9.8.1731597931584;
-        Thu, 14 Nov 2024 07:25:31 -0800 (PST)
+        bh=lhlNxLWWoabmlExNDUzh7LDAJ1jX1Gjtz/aG2arQZrc=;
+        b=fnR0LHTFHmR2EpSMrrVPOb2G4CSlTfGs/o39qQHCI/fHqVJDRlCnFgyhmxZStYUa1f
+         a7gsFrMyhCFrQwgW2vPQ3q7j/RdxAbvZqO/5bsgamZO7nftzVyp0KITKmFtuy/Q1tX26
+         E4OKGfTCocq5h1Od5t2gACp2LFV8Aj3/0zZp3aBG3hUvsjNPMgLrzdl+y/hYkGOKiUJ8
+         +xXs5A3rN4zblfIXGTMWQXh6jt9KFUKzLMYJjeBWpDAot88yTuyH8HNtSKmCtSu6v/je
+         fHYpXOxQOoo2UNRepUaQ1LSoyz8NrHJKDYdCpuQTlAoWV9kp86Waq4gUt0x2mlNEC6hC
+         VoDg==
+X-Forwarded-Encrypted: i=1; AJvYcCXhWsgMsP2PQCcDoaNdb9yWHubBDF5v1HPHEn7PA+H+VrcU3KkvAy6aOblWi0/h/R+CXXBePolraxyiYk77Uac=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJkwA7v+yfHnTsYAv8abVi1CQ7TVMH10CHF7bM3rxh7/O0whSZ
+	mMmprz95dPqQXBsmrEBaEMp0FgtFNM/RK5nETDeGiZ2OvvtMw5tK4cK/9NvH3js=
+X-Google-Smtp-Source: AGHT+IFa2gi/aEPlmVRGMZ2KFCSySjruI6gTHEROD6baMQ+UQbzs2SVZxO3Khbd+XB8BOWUYsgYYsQ==
+X-Received: by 2002:a17:907:80e:b0:a9e:b5d0:e5c with SMTP id a640c23a62f3a-a9ef003347amr2146391466b.61.1731598356513;
+        Thu, 14 Nov 2024 07:32:36 -0800 (PST)
 Received: from ?IPV6:2001:67c:2fbc:1:e7c9:910b:dd41:da18? ([2001:67c:2fbc:1:e7c9:910b:dd41:da18])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432da265c9asm27133775e9.16.2024.11.14.07.25.30
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa20e0452a0sm74302666b.148.2024.11.14.07.32.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Nov 2024 07:25:31 -0800 (PST)
-Message-ID: <7b7f8808-9e4a-4302-9266-9a051c2ff27b@openvpn.net>
-Date: Thu, 14 Nov 2024 16:25:56 +0100
+        Thu, 14 Nov 2024 07:32:36 -0800 (PST)
+Message-ID: <a7009e7e-a1f9-4aa5-ad41-2befc64b5d3e@openvpn.net>
+Date: Thu, 14 Nov 2024 16:33:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,16 +77,18 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 08/23] ovpn: implement basic TX path (UDP)
+Subject: Re: [PATCH net-next v11 00/23] Introducing OpenVPN Data Channel
+ Offload
 To: Sergey Ryazanov <ryazanov.s.a@gmail.com>
 Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
  Shuah Khan <shuah@kernel.org>, sd@queasysnail.net,
  Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ steffen.klassert@secunet.com, antony.antony@secunet.com,
+ Shuah Khan <skhan@linuxfoundation.org>
 References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-8-de4698c73a25@openvpn.net>
- <85858c63-4dc5-468e-8335-6ac77f314e33@gmail.com>
+ <2828411f-f2e5-4dfc-80ff-577eb5fd359a@gmail.com>
 Content-Language: en-US
 From: Antonio Quartulli <antonio@openvpn.net>
 Autocrypt: addr=antonio@openvpn.net; keydata=
@@ -129,233 +131,162 @@ Autocrypt: addr=antonio@openvpn.net; keydata=
  BnRX9nFx9kPSO42TkFK55Dr5EDeBO3v33recscuB8VVN5xvh0GV57Qre+9sJrEq7Es9W609a
  +M0yRJWJEjFnMa/jsGZ+QyLD5QTL6SGuZ9gKI3W1SfFZOzV7hHsxPTZ6
 Organization: OpenVPN Inc.
-In-Reply-To: <85858c63-4dc5-468e-8335-6ac77f314e33@gmail.com>
+In-Reply-To: <2828411f-f2e5-4dfc-80ff-577eb5fd359a@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 10/11/2024 23:32, Sergey Ryazanov wrote:
-[...]
->> +/* send skb to connected peer, if any */
->> +static void ovpn_send(struct ovpn_struct *ovpn, struct sk_buff *skb,
->> +              struct ovpn_peer *peer)
->> +{
->> +    struct sk_buff *curr, *next;
->> +
->> +    if (likely(!peer))
->> +        /* retrieve peer serving the destination IP of this packet */
->> +        peer = ovpn_peer_get_by_dst(ovpn, skb);
->> +    if (unlikely(!peer)) {
->> +        net_dbg_ratelimited("%s: no peer to send data to\n",
->> +                    ovpn->dev->name);
->> +        dev_core_stats_tx_dropped_inc(ovpn->dev);
->> +        goto drop;
->> +    }
+On 06/11/2024 02:18, Sergey Ryazanov wrote:
+> Hi Antonio,
 > 
-> The function is called only from ovpn_xmit_special() and from 
-> ovpn_net_xmit(). The keepalive always provides a peer object, while 
-> ovpn_net_xmit() never do it. If we move the peer lookup call into 
-> ovpn_net_xmit() then we can eliminate all the above peer checks.
-
-yeah, I think that's a good idea! See below..
-
+> On 29.10.2024 12:47, Antonio Quartulli wrote:
+>> Notable changes from v10:
+>> * extended commit message of 23/23 with brief description of the output
+>> * Link to v10: https://lore.kernel.org/r/20241025-b4-ovpn-v10-0- 
+>> b87530777be7@openvpn.net
+>>
+>> Please note that some patches were already reviewed by Andre Lunn,
+>> Donald Hunter and Shuah Khan. They have retained the Reviewed-by tag
+>> since no major code modification has happened since the review.
+>>
+>> The latest code can also be found at:
+>>
+>> https://github.com/OpenVPN/linux-kernel-ovpn
 > 
->> +
->> +    /* this might be a GSO-segmented skb list: process each skb
->> +     * independently
->> +     */
->> +    skb_list_walk_safe(skb, curr, next)
->> +        if (unlikely(!ovpn_encrypt_one(peer, curr))) {
->> +            dev_core_stats_tx_dropped_inc(ovpn->dev);
->> +            kfree_skb(curr);
->> +        }
->> +
->> +    /* skb passed over, no need to free */
->> +    skb = NULL;
->> +drop:
->> +    if (likely(peer))
->> +        ovpn_peer_put(peer);
->> +    kfree_skb_list(skb);
->> +}
+> As I promised many months ago I am starting publishing some nit picks 
+> regarding the series. 
 
-..because this error path disappears as well.
+Thanks and welcome back!
 
-And I can move the stats increment to ovpn_net_xmit() in order to avoid 
-counting keepalive packets as vpn data.
-
->>   /* Send user data to the network
->>    */
->>   netdev_tx_t ovpn_net_xmit(struct sk_buff *skb, struct net_device *dev)
->>   {
->> +    struct ovpn_struct *ovpn = netdev_priv(dev);
->> +    struct sk_buff *segments, *curr, *next;
->> +    struct sk_buff_head skb_list;
->> +    __be16 proto;
->> +    int ret;
->> +
->> +    /* reset netfilter state */
->> +    nf_reset_ct(skb);
->> +
->> +    /* verify IP header size in network packet */
->> +    proto = ovpn_ip_check_protocol(skb);
->> +    if (unlikely(!proto || skb->protocol != proto)) {
->> +        net_err_ratelimited("%s: dropping malformed payload packet\n",
->> +                    dev->name);
->> +        dev_core_stats_tx_dropped_inc(ovpn->dev);
->> +        goto drop;
->> +    }
->> +
->> +    if (skb_is_gso(skb)) {
->> +        segments = skb_gso_segment(skb, 0);
->> +        if (IS_ERR(segments)) {
->> +            ret = PTR_ERR(segments);
->> +            net_err_ratelimited("%s: cannot segment packet: %d\n",
->> +                        dev->name, ret);
->> +            dev_core_stats_tx_dropped_inc(ovpn->dev);
->> +            goto drop;
->> +        }
->> +
->> +        consume_skb(skb);
->> +        skb = segments;
->> +    }
->> +
->> +    /* from this moment on, "skb" might be a list */
->> +
->> +    __skb_queue_head_init(&skb_list);
->> +    skb_list_walk_safe(skb, curr, next) {
->> +        skb_mark_not_on_list(curr);
->> +
->> +        curr = skb_share_check(curr, GFP_ATOMIC);
->> +        if (unlikely(!curr)) {
->> +            net_err_ratelimited("%s: skb_share_check failed\n",
->> +                        dev->name);
->> +            dev_core_stats_tx_dropped_inc(ovpn->dev);
->> +            continue;
->> +        }
->> +
->> +        __skb_queue_tail(&skb_list, curr);
->> +    }
->> +    skb_list.prev->next = NULL;
->> +
+> The review was started when series was V3 
+> "rebasing" the review to every next version to publish it at once. But I 
+> lost this race to the new version releasing velocity :) So, I am going 
+> to publish it patch-by-patch.
 > 
-> I belive, the peer lookup should be done here to call ovpn_send() with 
-> proper peer object and simplify it.
+> Anyway you and all participants have done a great progress toward making 
+> accelerator part of the kernel. Most of considerable things already 
+> resolved so do not wait me please to finish picking every nit.
 
-ACK
+I'll go through them all and judge what's meaningful to add to v12 and 
+what can be postponed for later improvements.
 
 > 
->> +    ovpn_send(ovpn, skb_list.next, NULL);
->> +
->> +    return NETDEV_TX_OK;
->> +
->> +drop:
->>       skb_tx_error(skb);
->> -    kfree_skb(skb);
->> +    kfree_skb_list(skb);
->>       return NET_XMIT_DROP;
->>   }
+> Regarding "big" topics I have only two concerns: link creation using 
+> RTNL and a switch statement usage. In the corresponding thread, I asked 
+> Jiri to clarify that "should" regarding .newlink implementation. Hope he 
+> will have a chance to find a time to reply.
 
-[...]
+True, but to be honest at this point I am fine with sticking to RTNL, 
+also because we will soon introduce the ability to create 'persistent' 
+ifaces, which a user should be able to create before starting openvpn.
 
->> +/**
->> + * ovpn_udp_send_skb - prepare skb and send it over via UDP
->> + * @ovpn: the openvpn instance
->> + * @peer: the destination peer
->> + * @skb: the packet to send
->> + */
->> +void ovpn_udp_send_skb(struct ovpn_struct *ovpn, struct ovpn_peer *peer,
->> +               struct sk_buff *skb)
->> +{
->> +    struct ovpn_bind *bind;
->> +    unsigned int pkt_len;
->> +    struct socket *sock;
->> +    int ret = -1;
->> +
->> +    skb->dev = ovpn->dev;
->> +    /* no checksum performed at this layer */
->> +    skb->ip_summed = CHECKSUM_NONE;
->> +
->> +    /* get socket info */
->> +    sock = peer->sock->sock;
->> +    if (unlikely(!sock)) {
->> +        net_warn_ratelimited("%s: no sock for remote peer\n", __func__);
-> 
-> If we do not have netdev_{err,warn,etc}_ratelimited() helper functions, 
-> can we at least emulate it like this:
-> 
-> net_warn_ratelimited("%s: no UDP sock for remote peer #%u\n",
->                       netdev_name(ovpn->dev), peer->id);
-
-that's what I try to do, but some prints have escaped my axe.
-Will fix that, thanks!
+Going through RTNL for this is the best choice IMHO, therefore we have 
+an extra use case in favour of this approach (next to what Jiri already 
+mentioned).
 
 > 
-> or just use netdev_warn_once(...) since the condition looks more 
-> speculative than expected.
+> For the 'switch' statement, I see a repeating pattern of handling mode- 
+> or family-specific cases like this:
 > 
-> Peer id and interface name are more informative than just a function name.
-
-Yeah, I use the function name in some debug messages, although not 
-extremely useful.
-
-Will make sure the iface name is always printed (there are similar 
-occurrences like this)
-
+> int ovpn_peer_add(struct ovpn_struct *ovpn, struct ovpn_peer *peer)
+> {
+>    switch (ovpn->mode) {
+>    case OVPN_MODE_MP:
+>      return ovpn_peer_add_mp(ovpn, peer);
+>    case OVPN_MODE_P2P:
+>      return ovpn_peer_add_p2p(ovpn, peer);
+>    default:
+>      return -EOPNOTSUPP;
+>    }
+> }
 > 
->> +        goto out;
->> +    }
->> +
->> +    rcu_read_lock();
->> +    /* get binding */
->> +    bind = rcu_dereference(peer->bind);
->> +    if (unlikely(!bind)) {
->> +        net_warn_ratelimited("%s: no bind for remote peer\n", __func__);
+> or
 > 
-> Ditto
+> void ovpn_encrypt_post(void *data, int ret)
+> {
+>    ...
+>    switch (peer->sock->sock->sk->sk_protocol) {
+>    case IPPROTO_UDP:
+>      ovpn_udp_send_skb(peer->ovpn, peer, skb);
+>      break;
+>    case IPPROTO_TCP:
+>      ovpn_tcp_send_skb(peer, skb);
+>      break;
+>    default:
+>      /* no transport configured yet */
+>      goto err;
+>    }
+>    ...
+> }
 > 
->> +        goto out_unlock;
->> +    }
->> +
->> +    /* crypto layer -> transport (UDP) */
->> +    pkt_len = skb->len;
->> +    ret = ovpn_udp_output(ovpn, bind, &peer->dst_cache, sock->sk, skb);
->> +
->> +out_unlock:
->> +    rcu_read_unlock();
->> +out:
->> +    if (unlikely(ret < 0)) {
->> +        dev_core_stats_tx_dropped_inc(ovpn->dev);
->> +        kfree_skb(skb);
->> +        return;
->> +    }
->> +
->> +    dev_sw_netstats_tx_add(ovpn->dev, 1, pkt_len);
->> +}
->> +
->>   /**
->>    * ovpn_udp_socket_attach - set udp-tunnel CBs on socket and link it 
->> to ovpn
->>    * @sock: socket to configure
->> diff --git a/drivers/net/ovpn/udp.h b/drivers/net/ovpn/udp.h
->> index 
->> f2507f8f2c71ea9d5e5ac5446801e2d56f86700f..e60f8cd2b4ac8f910aabcf8ed546af59d6ca4be4 100644
->> --- a/drivers/net/ovpn/udp.h
->> +++ b/drivers/net/ovpn/udp.h
->> @@ -9,9 +9,17 @@
->>   #ifndef _NET_OVPN_UDP_H_
->>   #define _NET_OVPN_UDP_H_
->> +#include <linux/skbuff.h>
->> +#include <net/sock.h>
->> +
->> +struct ovpn_peer;
->>   struct ovpn_struct;
->> +struct sk_buff;
+> or
 > 
-> This declaration looks odd since we already have skbuff.h included above.
+> void ovpn_peer_keepalive_work(...)
+> {
+>    ...
+>    switch (ovpn->mode) {
+>    case OVPN_MODE_MP:
+>      next_run = ovpn_peer_keepalive_work_mp(ovpn, now);
+>      break;
+>    case OVPN_MODE_P2P:
+>      next_run = ovpn_peer_keepalive_work_p2p(ovpn, now);
+>      break;
+>    }
+>    ...
+> }
+> 
+> Did you consider to implement mode specific operations as a set of 
+> operations like this:
+> 
+> ovpn_ops {
+>    int (*peer_add)(struct ovpn_struct *ovpn, struct ovpn_peer *peer);
+>    int (*peer_del)(struct ovpn_peer *peer, enum ovpn_del_peer_reason 
+> reason);
+>    void (*send_skb)(struct ovpn_peer *peer, struct sk_buff *skb);
+>    time64_t (*keepalive_work)(...);
+> };
+> 
+> Initialize them during the interface creation and invoke these 
+> operations indirectly. E.g.
+> 
+> int ovpn_peer_add(struct ovpn_struct *ovpn, struct ovpn_peer *peer)
+> {
+>    return ovpn->ops->peer_add(ovpn, peer);
+> }
+> 
+> void ovpn_encrypt_post(void *data, int ret)
+> {
+>    ...
+>    ovpn->ops->send_skb(peer, skb);
+>    ...
+> }
+> 
+> void ovpn_peer_keepalive_work(...)
+> {
+>    ...
+>    next_run = ovpn->ops->keepalive_work(ovpn, now);
+>    ...
+> }
+> 
+> Anyway the module has all these option values in advance during the 
+> network interface creation phase and I believe replacing 'switch' 
+> statements with indirect calls can make code easy to read.
 
-I believe originally there was no include, then I need to add that.
-Will double check,
+I see this was already discussed with Sabrina under another patch and I 
+have the same opinion.
 
-Thanks a lot!
+To me the switch/case approach looks cleaner and I truly like it, 
+especially when enums are involved.
+
+ops/callbacks are fine when they can be redefined at runtime (i.e. a 
+proto that can be registered by another module), but this is not the 
+case here.
+I also feel that with ops it's not easy to understand what call is truly 
+being made by just looking at the caller context and reading can be harder.
+
+So I truly prefer to stick to this schema.
+
+Thanks a lot for sharing your point though.
+
 Regards,
 
 -- 
