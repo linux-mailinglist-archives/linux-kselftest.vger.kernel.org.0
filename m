@@ -1,202 +1,262 @@
-Return-Path: <linux-kselftest+bounces-22014-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22015-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C46AC9C84CD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 09:26:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91D999C8526
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 09:48:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 379F3B25364
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 08:25:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5195A281C02
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 08:48:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AF341F708B;
-	Thu, 14 Nov 2024 08:25:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C49D1F81A4;
+	Thu, 14 Nov 2024 08:46:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="YeQcY/vb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XtUCf4CU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0850E1F754E
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 08:25:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDDA21C303E;
+	Thu, 14 Nov 2024 08:46:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731572746; cv=none; b=nOZHL2qU9O8279MmDgOOBpTeoj0DrOIat9S0agXnjDLHwxH2il+m+Q9savsg6dJt7ZyoEBgvVZMbtpjt+1ENyjr8UgoYDjNMPNfR+ra4BKb0YbmBnGqC44QKdpQU/r9pwbQWfPd96Qjni7ZX9zbVGW+7S3XAurf0uyNno5Y3/eU=
+	t=1731574003; cv=none; b=YoXEo/ZRSRy2IdD6fxpbydby4Jm+Mzbv5ZvUaIRu6l2o72U4x1PnbZx6X32IJkc290F5kCuFMVOMjHslwbDUpT4mNVUqlq08WivbKF5IkuNTG6oZlPZ8jT/obV1Ji4hNSeM8cT4fimN5oGC+vIc9ad05laRSlu6MXF1wZ9b+/34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731572746; c=relaxed/simple;
-	bh=6Vee8QcL7yV8USCPdLdRXuF+gIl9+D5vlFvwmciO328=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PFpfRgDfkQw/cXWsgeAthei5IBlrkTVrUBUfp5RYdita568v+E1qiu4SWt0QlMAMPSJXFNsgUqqxu5ot0+H0IeX93tkN9MHbGnzMAzOjkbTlIj1dwe+PhcTGwTRrGm6MN8WOawUOShL0V8bbSjY+M2h2bZbzUUMge65pSDrL7/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=YeQcY/vb; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a9e8522c10bso41947966b.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 00:25:43 -0800 (PST)
+	s=arc-20240116; t=1731574003; c=relaxed/simple;
+	bh=01gRTn9fiNLg1hmzyThgU+LHjR43FRnaYWfPSkS8JQU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t4i+XmO9LORbPxVVeyCVbHUKCZ7RwcL7PcE9VpUEq5KdtlbJAQpmw0BqfbLqQgt2egVEKGyD4GNHA+np+x0SeCyPK5iqcqJQvH8fUK9EjuSx8YA7100ks/h8vMkLdJlo91/XpXWzd67dyfa3hWg5x//Vvq/8qGfcJ8uXTPtRbqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XtUCf4CU; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-7ea9739647bso235722a12.0;
+        Thu, 14 Nov 2024 00:46:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1731572742; x=1732177542; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=MUG53R1M4hAynYYPEtM8N64WD9TAg8ll+ij6nAnaJEw=;
-        b=YeQcY/vbqKqONyYJik+BXADHQGPWAVOpVSSOCsf4qvRDXU6zl2aXRg2TDFLrV8GDtY
-         aeTLcH6KsIp5X1wzTcNmWo5DfV8n6QYdjwRi6BSDJdCb5uhffwHA57pEZFSe09Djr7Yp
-         Dt7D7mSlu0OikyOux5hSutycKLGLH/YBBbID5qyz/oWFtF1f7ijzzfccRu9DkG2b22aI
-         ykJPvsd/2OnlQrkW3TOxIaxMuUH7xlLwRcPuSXAyvueAOi/HJkZ5NqWGU8mB7tlnqyTE
-         YNY82CCaAhqtcy5Q6CQByVCzJHERsl//rgGDEDhf/aKqqCqw9I39KIOiJwZew+CQPU7k
-         300w==
+        d=gmail.com; s=20230601; t=1731574001; x=1732178801; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bnhYZjIX+OB3WvtAgUJqUgdzGomZn2VvERIAOaUixdo=;
+        b=XtUCf4CUWUO98EOLxSA1q/X9XD8k4q8ZUPh78xMQU3WX+kbIGoAS017aYygGL9A1XR
+         zaCruz4LeV2IPd/2xFaLtajshCOJQGrQhPHzkQ9G6fvn8zF+yiZmy4PEKAyGobEpic/3
+         BilnEQMWkL+fekWIZAQIymrWDmslWWLyBRzKBF9Md57YTWHVFrwRSqJ09VucIdMwt10n
+         7oARtFCDKIGskuXC6AKoL112bhry16GI4p9tbbdqduVQBZhbsMYj6yk3NN+y4MgT8Qw5
+         2WjO7BXgDXHdl4ljHs5LUFEucY5Q9fQ3GnhmzazyZpbEGt55AjCMeyFsn4vAtox31anJ
+         RDzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731572742; x=1732177542;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1731574001; x=1732178801;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MUG53R1M4hAynYYPEtM8N64WD9TAg8ll+ij6nAnaJEw=;
-        b=H4pqZytnCMw1foi+H5u3rVmGVggkfXKoQogYbmRNWv2fE11rtjSs5UQ4T5WXYKH+Kt
-         h7/c8+nSBw1EPgMEl00fqdWO1VM1VE/9ruj459IeDkBwXRjeoETQblGABOE3qnPRt4YU
-         nKWN7dJ+JRqixsWtjgBlqyQa2pyF4HEAE6fxAJel2UGaYB4bX/g/pz36w981NGvfDSLg
-         yC/egF/gtgb4XvfFg8APh6A41Dw8J17lGizbuWqG2vPSJjB8wzSPjyLFSSjW5s38AQOc
-         /o0EW+nmBCxI/R4ai4kTkDX3o7nGVLOxgpWYeeA7TjmxsGyeoVkRrKuHmYm4q6rFgMtj
-         czkg==
-X-Forwarded-Encrypted: i=1; AJvYcCVzt/fj+w+mbaazbNUMtwVEsJxbkctAgIpCI3nss+2fl29/FSPTgHeZtgOd/pKoqMJe88woLOatARbqxwSkmFw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnoeVbpXOUwcD7Kapf77Gu2ZE3wkjjLDnznZ+yjanYzOZ7Wn9c
-	M6c80cXqe3IizknwhMnloTPncwKoOpLtqtsnZSZr2lrDPYe56/6kCiiZZH7QhM4=
-X-Google-Smtp-Source: AGHT+IHMBCARloQHWsBRhGBPdkFXRS+gu6h3BOv+wWntUo40Ek+a45U5+NJuK23CznPRgSIVLswVew==
-X-Received: by 2002:a17:907:78e:b0:a99:5f45:cb69 with SMTP id a640c23a62f3a-aa207680129mr283686066b.4.1731572742262;
-        Thu, 14 Nov 2024 00:25:42 -0800 (PST)
-Received: from ?IPV6:2001:67c:2fbc:1:3779:22d5:a322:7c13? ([2001:67c:2fbc:1:3779:22d5:a322:7c13])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa20e080a90sm34629066b.174.2024.11.14.00.25.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Nov 2024 00:25:41 -0800 (PST)
-Message-ID: <aa9ec51d-6842-42e3-932e-1e1bd3cde42f@openvpn.net>
-Date: Thu, 14 Nov 2024 09:26:07 +0100
+        bh=bnhYZjIX+OB3WvtAgUJqUgdzGomZn2VvERIAOaUixdo=;
+        b=b63YAwi1J9cfHsXx9Y7cNdHQ2CuV3pfkVFBh4IsKS2/YfUaPhel+Q2Aux6WRlDPDsq
+         G2BTSNU+pHUId35NIYEEzKXlOg0P9Uw+dVfcxa+GBsT2A4sKkK8/6LMhZ3PBIrPzsouX
+         YxK+gzzWGiQqVx+nQ9i8l4sRZLziUCTz8kDqgnYx7YfwiYtn1pJg+plLAYIuYTzdD/d5
+         IHJ2fP48nbzy56NNlYN+hTfaTbI48nAtJ8c4MZK28fOf3BlyeTN1cSfhv8Q2Eq+q5jsa
+         F9hfbtEmU0yzZzTE1PEabSBSGq/jYMN1m46h4eZ8BG36uNpO1IeOOWFGK+AccrtwHfmj
+         zYqg==
+X-Forwarded-Encrypted: i=1; AJvYcCW829JRAeFhgjuUmgIDnIF+UNIy2g8FnLIYEz6Tzzs46PY6n/xnKHq45+2jpixOWd+2LcEISPoVBcv/QiOXTANR@vger.kernel.org, AJvYcCWKaTLgJXizC/XhVxFRa3l16RCS7rqy+9lA1cHqqsG5w7zAKyHap167AnQunpYoK7ClYHlQPlaurHHCo1Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJuv7XTRtPy2O7W+qhxAcg4aBeoBOrepWJyU+izM0Zuo+uhMkr
+	RF1QYfVZjEqLvw/E8ytfVAQ/LEcmlXcZi6QdCOYW1CkC7BiPmD9fm1DZKf58QDI=
+X-Google-Smtp-Source: AGHT+IHE7bQEixh43pnqUrgfsA4EdNzypvVOpSy8Z39EpybK+orYgYK9g9iH/pYyoM6GdSWHLNlgdg==
+X-Received: by 2002:a05:6a21:205:b0:1db:f7dc:f10c with SMTP id adf61e73a8af0-1dc22b150f4mr18532111637.28.1731574000995;
+        Thu, 14 Nov 2024 00:46:40 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ea06e0654esm703365a91.0.2024.11.14.00.46.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Nov 2024 00:46:40 -0800 (PST)
+Date: Thu, 14 Nov 2024 08:46:33 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Sam Edwards <cfsworks@gmail.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net 2/2] selftests/rtnetlink.sh: add mngtempaddr test
+Message-ID: <ZzW46QZf5rzj4tMp@fedora>
+References: <20241113125152.752778-1-liuhangbin@gmail.com>
+ <20241113125152.752778-3-liuhangbin@gmail.com>
+ <CAH5Ym4iVP0XYrb1=7QhDqhEO54vpSJGFGHaBnuM1qpua1p5-tg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 17/23] ovpn: add support for peer floating
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
- Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-17-de4698c73a25@openvpn.net> <ZzM0U81dmvdEWqdF@hog>
- <955030bd-e230-448c-8a63-1b356590dd15@openvpn.net> <ZzSMrgFmbxX9NtIp@hog>
-Content-Language: en-US
-From: Antonio Quartulli <antonio@openvpn.net>
-Autocrypt: addr=antonio@openvpn.net; keydata=
- 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
-Organization: OpenVPN Inc.
-In-Reply-To: <ZzSMrgFmbxX9NtIp@hog>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAH5Ym4iVP0XYrb1=7QhDqhEO54vpSJGFGHaBnuM1qpua1p5-tg@mail.gmail.com>
 
-On 13/11/2024 12:25, Sabrina Dubroca wrote:
-> 2024-11-12, 15:03:00 +0100, Antonio Quartulli wrote:
->> On 12/11/2024 11:56, Sabrina Dubroca wrote:
->>> 2024-10-29, 11:47:30 +0100, Antonio Quartulli wrote:
->>>> diff --git a/drivers/net/ovpn/io.c b/drivers/net/ovpn/io.c
->>>> index 63c140138bf98e5d1df79a2565b666d86513323d..0e8a6f2c76bc7b2ccc287ad1187cf50f033bf261 100644
->>>> --- a/drivers/net/ovpn/io.c
->>>> +++ b/drivers/net/ovpn/io.c
->>>> @@ -135,6 +135,15 @@ void ovpn_decrypt_post(void *data, int ret)
->>>>    	/* keep track of last received authenticated packet for keepalive */
->>>>    	peer->last_recv = ktime_get_real_seconds();
->>>> +	if (peer->sock->sock->sk->sk_protocol == IPPROTO_UDP) {
->>>
->>> What prevents peer->sock from being replaced and released
->>> concurrently?
->>
->> Technically nothing.
->> Userspace currently does not even support updating a peer socket at runtime,
->> but I wanted ovpn to be flexible enough from the beginning.
+Hi Sam,
+
+On Wed, Nov 13, 2024 at 12:43:00PM -0800, Sam Edwards wrote:
+> > +# If the mngtmpaddr or tempaddr missing, return 0 and stop waiting
+> > +check_tempaddr_exists()
+> > +{
+> > +       local start=${1-"1"}
+> > +       addr_list=$(ip -j -n $testns addr show dev ${devdummy})
+> > +       for i in $(seq $start 4); do
+> > +               if ! echo ${addr_list} | \
+> > +                    jq -r '.[].addr_info[] | select(.mngtmpaddr == true) | .local' | \
+> > +                    grep -q "200${i}"; then
+> > +                       check_err $? "No mngtmpaddr 200${i}:db8::1"
+> > +                       return 0
+> > +               fi
+> > +
+> > +               if ! echo ${addr_list} | \
+> > +                    jq -r '.[].addr_info[] | select(.temporary == true) | .local' | \
+> > +                    grep -q "200${i}"; then
+> > +                       check_err $? "No tempaddr for 200${i}:db8::1"
+> > +                       return 0
+> > +               fi
+> > +       done
+> > +       return 1
+> > +}
 > 
-> Is there a reason to do that? With TCP the peer would have to
-> reconnect, and I guess fully restart the whole process (become a new
-> peer with a new ID etc). With UDP, do you need to replace the socket?
+> The variant of this function that I implemented is a lot less "fixed"
+> and gathers all IPv6 prefixes (by /64) into one of 3 sets:
+> 1. mngtmpaddr
+> 2. temporary, not deprecated
+> 3. temporary (whether deprecated or not)
+> 
+> It then ensures that set 3 is a subset of set 1, and set 1 is a subset
+> of set 2. (And if it's easy: it should also ensure that no 'temporary'
+> has a *_lft in excess of its parent's.)
 
-At the moment userspace won't try to do that, but I can foresee some 
-future use cases: i.e. a peer that switches to a different interface and 
-needs to open a new socket to keep sending data.
+I'm not totally get your explanation here. e.g. with preferred_lft 10,
+valid_lft 30. I got the following result.
 
-Moreover, in userspace we're currently working on multisocket support 
-(theoretically server side only), therefore I can imagine a peer 
-floating from one socket to the other while keeping the session alive.
+# ip addr show dummy0
+3: dummy0: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 2e:f7:df:87:44:64 brd ff:ff:ff:ff:ff:ff
+    inet6 2001::743:ec1e:5c19:404f/64 scope global temporary dynamic
+       valid_lft 25sec preferred_lft 5sec
+    inet6 2001::938f:432:f32d:602f/64 scope global temporary dynamic
+       valid_lft 19sec preferred_lft 0sec
+    inet6 2001::5b65:c0a3:cd8c:edf8/64 scope global temporary deprecated dynamic
+       valid_lft 3sec preferred_lft 0sec
+    inet6 2001::8a7e:6e8d:83f1:9ea0/64 scope global temporary deprecated dynamic
+       valid_lft 0sec preferred_lft 0sec
+    inet6 2001::1/64 scope global mngtmpaddr
+       valid_lft forever preferred_lft forever
 
-This is all work in progress, but not that far in the future.
+So there are 1 mngtmpaddr, 2 temporary address (not deprecated). 4 total
+temporary address. Based on your rule. It should be set 1 is a subset of
+set 2. Set 2 is a subset of 3.
 
-For TCP, you're right, although at some point we may even implement 
-transport reconnections without losing the VPN state (this is not even 
-planned, just a brain dump).
+And how do we ensure that no 'temporary' has a *_lft in excess of its parent's.
+
+> Doing it this way allows the test case to create, modify, and delete
+> mngtmpaddrs according to the needs of the test, and the check()
+> function only ensures that the rules are being obeyed, it doesn't make
+> assumptions about the expected state of the addresses.
+
+I'm not sure if this is totally enough. What if there are 3 mngtmpaddrs
+and 4 temporary address. But actually 1 mngtmpaddrs doesn't have temporary
+address. Maybe check() needs to check only 1 prefix each time.
+ 
+> > +
+> > +kci_test_mngtmpaddr()
+> > +{
+> > +       local ret=0
+> > +
+> > +       setup_ns testns
+> > +       if [ $? -ne 0 ]; then
+> > +               end_test "SKIP mngtmpaddr tests: cannot add net namespace $testns"
+> > +               return $ksft_skip
+> > +       fi
+> > +
+> > +       # 1. Create a dummy Ethernet interface
+> > +       run_cmd ip -n $testns link add ${devdummy} type dummy
+> > +       run_cmd ip -n $testns link set ${devdummy} up
+> > +       run_cmd ip netns exec $testns sysctl -w net.ipv6.conf.${devdummy}.use_tempaddr=1
+> 
+> Test should also set .temp_prefered_lft and .temp_valid_lft here.
+> 
+> I also set .max_desync_factor=0 because this is a dummy interface that
+> doesn't have any latency, which allows the prefer lifetime to be
+> pretty short. (See below.)
+
+Thanks, I will fix the test.
+> 
+> > +       # 2. Create several (3-4) mngtmpaddr addresses on that interface.
+> > +       # with temp_*_lft configured to be pretty short (10 and 35 seconds
+> > +       # for prefer/valid respectively)
+> > +       for i in $(seq 1 4); do
+> > +               run_cmd ip -n $testns addr add 200${i}:db8::1/64 dev ${devdummy} mngtmpaddr
+> 
+> I don't really like using 200X:db8::1 as the test addresses.
+> 2001:db8::/32 is the IANA designated prefix for examples/documentation
+> (and, by extension, unit tests) so we should really try to remain
+> inside that.
+> 
+> Personally, I tend to use 2001:db8:7e57:X::/64 ("test" in leetspeak)
+> just to minimize the chances of conflicting with something else in the
+> system. Though, with the test happening in its own netns, *that* level
+> of caution may not be necessary.
+> 
+> Still, 2001:db8::/32 is what IPv6 folks expect, so I'd want to stay in there.
+
+OK, I will use 2001:db8::/32 for testing.
 
 > 
->> One approach might be to go back to peer->sock being unmutable and forget
->> about this.
->>
->> OTOH, if we want to keep this flexibility (which I think is nice), I think I
->> should make peer->sock an RCU pointer and access it accordingly.
+> > +               tempaddr=$(ip -j -n $testns addr show dev ${devdummy} | \
+> > +                          jq -r '.[].addr_info[] | select(.temporary == true) | .local' | \
+> > +                          grep 200${i})
+> > +               #3. Confirm that temporary addresses are created immediately.
 > 
-> You already use kfree_rcu for ovpn_socket, so the only difference
-> would be the __rcu annotation and helpers? (+ rcu_read_lock/unlock in
-> a few places)
+> This could simply be a call to the above genericized check() function.
 > 
-> Adding rcu_read_lock for peer->sock in ovpn_tcp_tx_work looks
-> painful... (another place that I missed where things could go bad if
-> the socket was updated in the current implementation, btw)
+> > +               if [ -z $tempaddr ]; then
+> > +                       check_err 1 "no tempaddr created for 200${i}:db8::1"
+> > +               else
+> > +                       run_cmd ip -n $testns addr change $tempaddr dev ${devdummy} \
+> > +                               preferred_lft 10 valid_lft 35
 > 
-> Maybe save that for later since you don't have a use case for it yet?
+> While Linux is (apparently) happy to let userspace modify the
+> tempaddr's remaining lifetime like this, I don't think this is a
+> common or recommended practice. Rather, the test should be letting
+> Linux manage the tempaddr lifetimes and rotate the addresses itself.
 
-I agree with you. I'll make the socket unmutable again and I'll work on 
-this later on.
+OK
 
-Thanks a lot for digging with me into this.
+> 
+> > +               fi
+> > +       done
+> 
+> Here is a good place to create an address that *isn't* mngtmpaddr,
+> confirm there is no temporary (via call to check() function), then add
+> the `mngtmpaddr` flag after the fact.
 
-Regards,
+OK, I will
+> 
+> > +
+> > +       #4. Confirm that a preferred temporary address exists for each mngtmpaddr
+> > +       #   address at all times, polling once per second for at least 5 minutes.
+> > +       slowwait 300 check_tempaddr_exists
+> 
+> So I previously said "wait 5 minutes" but I later saw in the
+> documentation for the selftest suite that maintainers really don't
+> like it when a test takes more than ~45 seconds to run. We might want
+> to drop this wait to 30 by default and accelerate the timetable on
+> prefer/valid lifetimes to something like 10/25.
 
--- 
-Antonio Quartulli
-OpenVPN Inc.
+Yes, 5m is too long for a single test.
 
+> > +
+> > +       end_test "PASS: mngtmpaddr add/remove correctly"
+> > +       ip netns del "$testns"
+> 
+> Do we need to make sure the netns gets cleaned up via `trap ... EXIT`
+> so that it doesn't leak if the user interrupts the test? Or does the
+> greater test fixture take care of that for us?
+
+No, rtnetlink.sh doesn't have a trap function. I plan to add the trap
+function separately.
+
+Thanks
+Hangbin
 
