@@ -1,154 +1,128 @@
-Return-Path: <linux-kselftest+bounces-22045-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22046-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2E6C9C8FB1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 17:27:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 572F59C904A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 17:58:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A34F328330A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 16:27:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 015781F2175A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 16:58:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B47FD18A931;
-	Thu, 14 Nov 2024 16:25:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E3518756A;
+	Thu, 14 Nov 2024 16:56:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BfElo0y8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ei+SQWwi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2B1181334
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 16:25:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50FF0126C03;
+	Thu, 14 Nov 2024 16:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731601514; cv=none; b=EjjEN5BtX1TH/H5pNtM04rKblYkRwV3UxDxJRWKsH6fP4X/C0Pl5XYJ47J6HQ7syW938y37M18mG/MlmAFPKNehZ5GKmvVIXTnD3rBng37K1t8GAX5ycW55b5sJ8DxHfR8mLekWcltvM+gfyOfUOAd2kxwlIR9PP3TKOudqMa2g=
+	t=1731603366; cv=none; b=cHdTr7Mv4ahlv/QAC9WKEp6bLptstV1vLDdju/7FDAu8OFbdW/vhWdeRyw/b5DLtW/+rG/g2D7POeEyHfqguQJvycFNvzIpH7iyj/KKmF+8iH6c1ZTKC2sRH/YDNpuzSzcyAIAeHblFK3udbgSjnJJZVOGerAgdpofL5gRWt4Uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731601514; c=relaxed/simple;
-	bh=6Ha7uxNaK+n9PEyKhZrLgUrNGlLriEL3O6jXb4Jz4qo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dy8q4zMedMnGShoXuQG/klArfZYMWzgPY81hegSEN60cpgPI15hejXm6MI1cbfukT6froIKxhgRytzrxLydd/HdP3SM25OHqbUivBsGc+k2+lnQvIFWRCvPibcNhmgnJUepEUs7kpiHjAWF7VdxwNWOzG6Yv5BXmBdIS50e+C5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BfElo0y8; arc=none smtp.client-ip=209.85.166.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-83ab00438acso22510239f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 08:25:11 -0800 (PST)
+	s=arc-20240116; t=1731603366; c=relaxed/simple;
+	bh=bW24Y2zDBss5OiBEfJp2RH9+LgpRreFMxa7QcBNtfEw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=X1vnkkTvAy1i8q8hDIfZpwf97bXuNZV679tBUKeRmu+RF5NbjMLqFupw1vLDikaTVZem6ZMlpdPFMrQB1poRK8jnDzhIgI8flfcWqkol0MUIHyaNnBWQoXH9s+fQbgcAIem3eu/zIPXeMi7dtZcxnAGyuliRHv635IiK/lD9Pms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ei+SQWwi; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-720c2db824eso803050b3a.0;
+        Thu, 14 Nov 2024 08:56:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1731601511; x=1732206311; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=buo6iWrbAJctceKC3COg5WA7QA2TRFr7kULc06jQepM=;
-        b=BfElo0y8QDoUpmv5PbgtCf6jFIemt56fdsjMi1o2v0wjzYvOgLkeDKyjYBtWVadIoY
-         TtFcp1yVlnzsS/z2kLR61vRxDFHiPiTv3QFo0JWXHst/VBTPqWplAwmTV+0ONZ6F7QIQ
-         VgbObEp4oLG2iGEFswRSwLEmhJyt3GghD1Yec=
+        d=gmail.com; s=20230601; t=1731603364; x=1732208164; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dN6nOwa9jinNjS2kCCmOR1Y32+iqmTVvvvUdfcXy0mo=;
+        b=ei+SQWwi7MqhYteep8nZfs3FmnmarZdBkuSQK0idHZ5l7r1Z5Dh1H66DzaqhhT1bC9
+         X4gA7pm33GX2RIolQYYk2QTjx8/ULTdepM1lwsF2lWIFNbZebCU4QvSukYsSQdHV5UH3
+         HPPUlC5SwNOFcgAFRk7+wsLFrvyicT5Wc9IPggXrl36uEUnDDZjmuQpPKmvYpTzvee/Q
+         kSFiDzjRvbAHSwqmBn/esq8zLRpgptsvZ5QehIBvUkhagUgqdVM5zf3ThS0G7wQLSrH6
+         VrE2I0WaSwrbwNHxUrd6/wszwBnJhi1u5f6cVdkoBV/rXYO9rEhl23OCqNNDguQl4JxL
+         WTcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731601511; x=1732206311;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=buo6iWrbAJctceKC3COg5WA7QA2TRFr7kULc06jQepM=;
-        b=tWc++L8bNVVpUblDXcWv5nkIVDw8uhn69Sggytt68f+LXBAT0aAaw4iML1bMi5eb9B
-         M61+a+8OB+EMDMiKSOeiYoud+e+mmbQx1OzoxQdL+eM6vTaJ0GAj9zTU1nhxvLS+z2De
-         y0DDhWFnWrj80ieDEYLT1z6ylwi7E3a24+4apj2L84LfekfuSo/PbGkKiBwpMzcxGLvn
-         dx8KVHlEXrvBUZcj3veq+ByRxWRXcqT+YKukS+uUK0ZnWfstNCCnqT5uHEgPGAd0/DWy
-         ZRBlizxGcGT5sgCU5nMAA+CuGL8MpRo3QkVFO1vMjhsTi7Kst7L+2GXYJ2aq+l+7fimn
-         AQWg==
-X-Forwarded-Encrypted: i=1; AJvYcCX0/miItupZNZlkcNWMQharbUF9pLEa6NzvleBXZ3JhsxQfbDpPmDupyaax6zwzRlXtsWeOR9/XatXGxlJJ+PM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwX2Jb4wsVGxmPTVGgEEqLGkX50S8GE1sRwck4I0cTz7Z21b1FX
-	1PURWJPMYpotVlUbk2Xdr7x0b2kPBO8K9Vz5MC0BvXIBl2N3nZI6R87X2xBKxGo=
-X-Google-Smtp-Source: AGHT+IGrmfnV9irE2RmqR2nu682ZNoHCBmmsGPW80Shl2133F6qXCefXE/lr40u4emN9zp5hCGdmsA==
-X-Received: by 2002:a05:6602:2cd2:b0:83b:5306:d24d with SMTP id ca18e2360f4ac-83e5cd3f503mr373740939f.6.1731601510897;
-        Thu, 14 Nov 2024 08:25:10 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-83e6064446esm33821439f.48.2024.11.14.08.25.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Nov 2024 08:25:10 -0800 (PST)
-Message-ID: <52cc8e51-9e85-465b-8ee3-63a7a0a42951@linuxfoundation.org>
-Date: Thu, 14 Nov 2024 09:25:09 -0700
+        d=1e100.net; s=20230601; t=1731603364; x=1732208164;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dN6nOwa9jinNjS2kCCmOR1Y32+iqmTVvvvUdfcXy0mo=;
+        b=ct5hcvjlT4bAS6UUvV/CpP1ly8Alpgzf1TArh3xJu8qqt/Shsniu1Ag4Mmkw05MPt6
+         X/Y8A4Dr/N4zHuPHjJYnc12ilxHD1VvhJETd0zjmT2uMMGj7AU9T0wBUIMiUDIN6Ba1V
+         xy2zaloJ6EIhTwZkzsdjpNvTUO+9tPAj5Sq8oVsR0DZtlukeCkE/VTPl4CJUlMDrFJlT
+         mZ1FZfpMPKy7VaTNoIa+oOGZ0STSQCuSRXGFf1VKiMZq7Uax23M0B9SzaQ2IvQjFc9sd
+         GXDt08cAFfgsMQOWpPgzgIxFBhef2eDIwlaUS1rwdc1ufDFUgusUhG63CuDxsURD5zZb
+         aCsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUhUXaEr8OR4L48/UoQny2JzyIs20Ynm4JzZ2XXPGRM1A5NQOClfnREuoXqOf0r5w19uo6OUCPGMQfH6sqrSNnx@vger.kernel.org, AJvYcCWGVOtLwiw/UV4UjouInajOVnRypREICN9J1iQeJ8XP5eJnG2g6sGz71LhhMqFah/cHo6UGkOIu34yxgkM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfT901uvBsfIe6yCwea6/Fc9q+/XDwc6yIFzBccQLABwMhocrc
+	QMNKBOp+8IjOjp+xQoZ8DIwTbt9RqUcKJ7O1aDq6OYMvOgvKSfAac73Zug==
+X-Google-Smtp-Source: AGHT+IErdRALs2OdOjsTFhmubjjx7yNbQ/ModPzFAI5VavhfJZjOxy4H/qdb3hT8L+66zJBeHcKpaw==
+X-Received: by 2002:a17:90a:d444:b0:2e2:c40c:6e8e with SMTP id 98e67ed59e1d1-2e9b178eff2mr30608288a91.34.1731603364460;
+        Thu, 14 Nov 2024 08:56:04 -0800 (PST)
+Received: from visitorckw-System-Product-Name.. ([140.113.216.168])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e9f207d65csm2166102a91.1.2024.11.14.08.56.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Nov 2024 08:56:03 -0800 (PST)
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: brendanhiggins@google.com,
+	davidgow@google.com
+Cc: rmoar@google.com,
+	ruanjinjie@huawei.com,
+	jserv@ccns.ncku.edu.tw,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	Kuan-Wei Chiu <visitorckw@gmail.com>
+Subject: [PATCH] kunit: debugfs: Use IS_ERR() for alloc_string_stream() error check
+Date: Fri, 15 Nov 2024 00:55:58 +0800
+Message-Id: <20241114165558.49043-1-visitorckw@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: lsm: Refactor
- `flags_overset_lsm_set_self_attr` test
-To: Amit Vadhavana <av2082000@gmail.com>, paul@paul-moore.com,
- jmorris@namei.org, serge@hallyn.com, casey@schaufler-ca.com, shuah@kernel.org
-Cc: ricardo@marliere.net, linux-kernel-mentees@lists.linux.dev,
- linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20241112182810.24761-1-av2082000@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241112182810.24761-1-av2082000@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/12/24 11:28, Amit Vadhavana wrote:
-> - Remove unnecessary `tctx` variable, use `ctx` directly.
-> - Simplified code with no functional changes.
-> 
+The alloc_string_stream() function only returns ERR_PTR(-ENOMEM) on
+failure and never returns NULL. Therefore, switching the error check in
+the caller from IS_ERR_OR_NULL to IS_ERR improves clarity, indicating
+that this function will return an error pointer (not NULL) when an
+error occurs. This change avoids any ambiguity regarding the function's
+return behavior.
 
-I would rephrase the short to simply say Remove unused variable,
-as refactor implies more extensive changes than what this patch
-is actually doing.
+Link: https://lore.kernel.org/lkml/Zy9deU5VK3YR+r9N@visitorckw-System-Product-Name
+Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+---
+ lib/kunit/debugfs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Please write complete sentences instead of bullet points in the
-change log.
-
-How did you find this problem? Do include the details on how
-in the change log.
-
-> Signed-off-by: Amit Vadhavana <av2082000@gmail.com>
-> ---
->   tools/testing/selftests/lsm/lsm_set_self_attr_test.c | 7 +++----
->   1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/lsm/lsm_set_self_attr_test.c b/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
-> index 66dec47e3ca3..732e89fe99c0 100644
-> --- a/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
-> +++ b/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
-> @@ -56,16 +56,15 @@ TEST(flags_zero_lsm_set_self_attr)
->   TEST(flags_overset_lsm_set_self_attr)
->   {
->   	const long page_size = sysconf(_SC_PAGESIZE);
-> -	char *ctx = calloc(page_size, 1);
-> +	struct lsm_ctx *ctx = calloc(page_size, 1);
-
-Why not name this tctx and avoid changes to the ASSERT_EQs
-below?
-
->   	__u32 size = page_size;
-> -	struct lsm_ctx *tctx = (struct lsm_ctx *)ctx;
->   
->   	ASSERT_NE(NULL, ctx);
->   	if (attr_lsm_count()) {
-> -		ASSERT_LE(1, lsm_get_self_attr(LSM_ATTR_CURRENT, tctx, &size,
-> +		ASSERT_LE(1, lsm_get_self_attr(LSM_ATTR_CURRENT, ctx, &size,
->   					       0));
->   	}
-> -	ASSERT_EQ(-1, lsm_set_self_attr(LSM_ATTR_CURRENT | LSM_ATTR_PREV, tctx,
-> +	ASSERT_EQ(-1, lsm_set_self_attr(LSM_ATTR_CURRENT | LSM_ATTR_PREV, ctx,
->   					size, 0));
->   
->   	free(ctx);
-
-You have to change this tctx for sure.
-
-With these changes:
-
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-
-Paul, James,
-
-Please do let me know if you would me to take this through
-kselftest tree.
-
-thanks,
--- Shuah
-
+diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
+index d548750a325a..6273fa9652df 100644
+--- a/lib/kunit/debugfs.c
++++ b/lib/kunit/debugfs.c
+@@ -181,7 +181,7 @@ void kunit_debugfs_create_suite(struct kunit_suite *suite)
+ 	 * successfully.
+ 	 */
+ 	stream = alloc_string_stream(GFP_KERNEL);
+-	if (IS_ERR_OR_NULL(stream))
++	if (IS_ERR(stream))
+ 		return;
+ 
+ 	string_stream_set_append_newlines(stream, true);
+@@ -189,7 +189,7 @@ void kunit_debugfs_create_suite(struct kunit_suite *suite)
+ 
+ 	kunit_suite_for_each_test_case(suite, test_case) {
+ 		stream = alloc_string_stream(GFP_KERNEL);
+-		if (IS_ERR_OR_NULL(stream))
++		if (IS_ERR(stream))
+ 			goto err;
+ 
+ 		string_stream_set_append_newlines(stream, true);
+-- 
+2.34.1
 
 
