@@ -1,176 +1,201 @@
-Return-Path: <linux-kselftest+bounces-22021-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22022-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F7329C869A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 10:57:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F2409C8817
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 11:51:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2A731F24287
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 09:57:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C0A0B358DA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 10:35:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90A4F1F757C;
-	Thu, 14 Nov 2024 09:54:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41CE01F9438;
+	Thu, 14 Nov 2024 10:32:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JeBPxPZS"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="MBQFC/GF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FE841F583E;
-	Thu, 14 Nov 2024 09:54:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0708A18A6B5
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 10:32:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731578098; cv=none; b=oeA8R/72lAaSjeaxMmvKMxPj44U6ErVw5n30WMl2qJdwshd4oi7EugEHZYRfR8MCYNXBDw38W92lnZtMFk12/WnWVkFmrMy+b8JiE6n3gX2/S4v0cH9CVX/Lmx8SAtEmN1pw2yCDbU4aZ3eJAOhSm74Jku6DoyZO14Cwbo9GHhU=
+	t=1731580335; cv=none; b=GkRoWhPXFqThBpswVs7ZABMXLcQhAPPs1tW//85QKj7IsQFxPQdTahlXmAJnDjo/Y1EQSXPPw9XQIn73bA9f/wCzqjSaxgmhoWM/Riz5tSYE19weYutpxMgKTIesRKl93W31D6mqTCL8R5ECbU585aylvKEwL/gZc9ubnDemUD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731578098; c=relaxed/simple;
-	bh=Z3muD82mHVVsYQwb7TJOHXqfE63qLbx25wYI/Jovb+A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ATmNRlCOEEzRfdppzwh/HHxmknIVyKDc7mVNDP2OH83VPpmAioRZ48CefY6KKCeAoT8Mk+51tElyKU3X2tCa6uaEn4/85g9zcHlUrbMnIdrH9ZUZhnFr06Ta3iimtEfDL80YGcXTH+dCZMg+8B6AZFTDj8YEGRt3e4ULM7VHqBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JeBPxPZS; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4315df7b43fso4069465e9.0;
-        Thu, 14 Nov 2024 01:54:56 -0800 (PST)
+	s=arc-20240116; t=1731580335; c=relaxed/simple;
+	bh=DTeHUQizHgGM0F2W5Jcw8OsYgIMucRypUAcng0CuKAc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r9x86OIde2IwyccMOmGqOt0gnBstAbyL931PNfhdJrEK8DdFA2nEojD3k/LJ2YUoJGfXDF7m+2dcbTeqIJC9Y3Tb5PfyFoYH6bEN02GYIAJUIdQiB5nIdlz7Sz0+JC1TfHv2UsA/WDTOJqdWqTDdJXi6mTbOGfrV6KpbzXywqNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=MBQFC/GF; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-53b13ea6b78so637046e87.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 02:32:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731578094; x=1732182894; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=En8mtDH0VYwSMajBOxcQPHpg1q90WQUYmbPWHTexEKQ=;
-        b=JeBPxPZSIC8mP5x6R2hfbv7QtyQy5EMUWUtuO7ZadrzlS0XYp6Mh1GZoLxVnen/ELV
-         oZUcaQTS86Qt66yBgoXjmEToVtBA+oh9uVAnL6X34yseU2TbUi7X8aghbCNjhLrlcBMM
-         0Hw3gPue9AmIUp/9xAxofawBexGWnoYD2XTCfwUb+qJwKOFuoLRsdCAGV8zCMAc4G8Oj
-         4tGXbVv8UVGFMHQlAIVEdd6mwqoMDSMkNeZIOSS+l661zuDvFMnmSaKCZW9p0YGnWIkv
-         JvwjX5U9mLlYUQOrZWO9iREW2K6jFsELMUca46RrtPxUoWqB7ZGAQ/xZg/qqPPVOyMvE
-         A9Dg==
+        d=openvpn.net; s=google; t=1731580331; x=1732185131; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=a0d1qrLF27Vwr69NZjn0r/8jpEAVBzVx/HFYFyUQblQ=;
+        b=MBQFC/GFVIH0ZourwRmIFWGPAg5BgmrNQK74vIPy6WMfuSCvDgR/Zr5aZEGc9JJcjV
+         57BH4RJLiZzuZ6n0BzJxRAcyDwcN5kL+/9Tfwk0XzQ7luPBapfEfd+DoFOLU0EDNldKy
+         oowtcCfIzsjLAP3m7C0fhcCXzBMfe8jKfUNRrotxUj2rStPQZVHB2Vzjy3T28tphxL5x
+         47XoK3rUt0JQibNEMVko/CGigM3VDg+49xfKQK2UkuFpvb3wyrtWWzxD5MKe7NyMRS5s
+         W7TLVzizhSj1K9sxgRqHNtstdg5mI4YTSC0xiLwPdapL1MtGvNLmBrLsBgnARrWUgcCX
+         Tt6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731578094; x=1732182894;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=En8mtDH0VYwSMajBOxcQPHpg1q90WQUYmbPWHTexEKQ=;
-        b=J0/goXy+SZhhvxL8D+wHdY8cydAneJEaePVUbX+cljxqJN8xF/FfShO2seaYRyDItl
-         b+GMcmqni4ImVcPDXgX4AeC42iHsiTt1eFhjqYj5VyxBzbv2rq8i8kdz3kFjNDhSZFiy
-         Yq52ulD/0EIoOLq2Z9DJGBmvYRmaCacAgBdhzca5NpjRHA/waKgge2tg385RIMhtHCZJ
-         KUkvpR8041RKMXuqEhxsZ+DFC7Rv0UBJtpVmBwWY28kUL4Eo/QnD2B8Lb7uxaMmxt+TW
-         G+/wt/MgjUxCTPDaZAJ8yz8LwhXCVh8FUOWerLRNeTb+FGSsgDyHmmi6FkNcMXjWJahZ
-         9yOw==
-X-Forwarded-Encrypted: i=1; AJvYcCUJlo2vGUU7XDaR/Xqm0RFpDlPRqsE4G+JslfpP0cUhH164YWV48dHYOrvoYDOHGCHBQULhINiq@vger.kernel.org, AJvYcCXy+w4MMHn1X/xmV3HtRuWOyvE4XQhDi62k18hxLcaTQoHq/Sj69fOPnTy8RR2pcnTpymjFgqF0td2pIim3DyQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMw70lSsYmOap/eefDMnrsfekVZ/At0a6/5bx97n8NHEuEIgab
-	tG1bGw5ycRQAcGacAGc7/+NW0UIBSAEwRLDBI4Woq9CIV+SY/7+v
-X-Google-Smtp-Source: AGHT+IGdONrOeY5x4NfMnxD3n+379++JNuQwIM+S6L5Y6jlJGamTCRtIa92K5yRXTfpiJjWx+qE62w==
-X-Received: by 2002:a05:600c:8715:b0:426:602d:a246 with SMTP id 5b1f17b1804b1-432b75199famr181054945e9.32.1731578094356;
-        Thu, 14 Nov 2024 01:54:54 -0800 (PST)
-Received: from localhost ([81.168.73.77])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432da265e0bsm17580135e9.15.2024.11.14.01.54.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Nov 2024 01:54:53 -0800 (PST)
-Date: Thu, 14 Nov 2024 09:54:49 +0000
-From: Martin Habets <habetsm.xilinx@gmail.com>
-To: edward.cree@amd.com
-Cc: davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
-	pabeni@redhat.com, Edward Cree <ecree.xilinx@gmail.com>,
-	netdev@vger.kernel.org, linux-net-drivers@amd.com, horms@kernel.org,
-	andrew+netdev@lunn.ch, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 3/5] selftest: include dst-ip in ethtool ntuple
- rules
-Message-ID: <20241114095449.GA667167@gmail.com>
-Mail-Followup-To: edward.cree@amd.com, davem@davemloft.net, kuba@kernel.org,
-	edumazet@google.com, pabeni@redhat.com,
-	Edward Cree <ecree.xilinx@gmail.com>, netdev@vger.kernel.org,
-	linux-net-drivers@amd.com, horms@kernel.org, andrew+netdev@lunn.ch,
-	shuah@kernel.org, linux-kselftest@vger.kernel.org
-References: <cover.1731499021.git.ecree.xilinx@gmail.com>
- <8e5d23c8f21310c23c080cc7bcd31b76f8fd3096.1731499022.git.ecree.xilinx@gmail.com>
+        d=1e100.net; s=20230601; t=1731580331; x=1732185131;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a0d1qrLF27Vwr69NZjn0r/8jpEAVBzVx/HFYFyUQblQ=;
+        b=XVSaWUk2Xrw6DT0F1EASFtP+l+JHZ0yNzWDjHMV/56q9s6jLP3HCh6Y8u3/O68yzCb
+         XbpxEZtuH4w3Kld10QzyI4HECNR30B6UpwneEzbeGU+Bnds8s4qpKh2Yjk4QlnnxBWMs
+         61z7/OqGW4zyde8TcuEZSgYkAesLkH54A/Q75LrUD7wyv1vdwEwUhm7pIkG6nrUTvePj
+         JeNrlTjhWLiaRGXMYLzMmxxFthZ9qCP5eAuKZeNCwNI/X3H8eZEM83Oyp+0B/UOB/V/E
+         TURWZu0N8wMqAvIy8dlno7QOOQ2OZieQcZahIkH7nH/P6KX2Tq+I3WujN4ASBWUWl/T4
+         2m9w==
+X-Forwarded-Encrypted: i=1; AJvYcCXJ3BY+QJhdqsNoJdw4q+mVd6ID8ULPg0hdVibdc9Q01R9/3bQRFvPncrdM5zRnSgvEihXkeeCf6Bu+ZWbII78=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYahFn7908of11Ewe9A2J/TSTneLadpBFFHtEPPvfsJYLG9Iye
+	69vma3+lgxpNuybiG+5QM8WYCGC+kWGuEE3xsVgrDUtFj1aMDr9KSqmsPQQ4bqI=
+X-Google-Smtp-Source: AGHT+IHd3oX3ni8cKLi44zCwkXhxdVFX9wScw/eOu0QOo7ZH+CwIThCw+6H/EIMe9KjR6h1HuTbOxw==
+X-Received: by 2002:a05:6512:3b82:b0:539:936c:9845 with SMTP id 2adb3069b0e04-53da5c7b691mr1371068e87.37.1731580331106;
+        Thu, 14 Nov 2024 02:32:11 -0800 (PST)
+Received: from ?IPV6:2001:67c:2fbc:1:3779:22d5:a322:7c13? ([2001:67c:2fbc:1:3779:22d5:a322:7c13])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa20df51632sm47447466b.49.2024.11.14.02.32.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Nov 2024 02:32:10 -0800 (PST)
+Message-ID: <5ae6f624-5196-42f7-a0b8-85e2847b3fdf@openvpn.net>
+Date: Thu, 14 Nov 2024 11:32:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8e5d23c8f21310c23c080cc7bcd31b76f8fd3096.1731499022.git.ecree.xilinx@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v11 18/23] ovpn: implement peer
+ add/get/dump/delete via netlink
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+ Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-18-de4698c73a25@openvpn.net> <ZzIlxRbic7qLVD4F@hog>
+ <136282ad-77d9-4799-bd2d-f3c3c9df99c0@openvpn.net> <ZzSH-Ke4wuJcis0q@hog>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <ZzSH-Ke4wuJcis0q@hog>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 13, 2024 at 12:13:11PM +0000, edward.cree@amd.com wrote:
+On 13/11/2024 12:05, Sabrina Dubroca wrote:
+> 2024-11-12, 15:26:59 +0100, Antonio Quartulli wrote:
+>> On 11/11/2024 16:41, Sabrina Dubroca wrote:
+>>> 2024-10-29, 11:47:31 +0100, Antonio Quartulli wrote:
+>>>> +void ovpn_peer_hash_vpn_ip(struct ovpn_peer *peer)
+>>>> +	__must_hold(&peer->ovpn->peers->lock)
+>>>
+>>> Changes to peer->vpn_addrs are not protected by peers->lock, so those
+>>> could be getting updated while we're rehashing (and taking peer->lock
+>>> in ovpn_nl_peer_modify as I'm suggesting above also wouldn't prevent
+>>> that).
+>>>
+>>
+>> /me screams :-D
 > 
-> From: Edward Cree <ecree.xilinx@gmail.com>
+> Sorry :)
 > 
-> sfc hardware does not support filters with only ipproto + dst-port;
->  adding dst-ip to the flow spec allows the rss_ctx test to be run on
->  these devices.
+>> Indeed peers->lock is only about protecting the lists, not the content of
+>> the listed objects.
+>>
+>> How about acquiring the peers->lock before calling ovpn_nl_peer_modify()?
 > 
-> Signed-off-by: Edward Cree <ecree.xilinx@gmail.com>
+> It seems like it would work. Maybe a bit weird to have conditional
+> locking (MP mode only), but ok. You already have this lock ordering
+> (hold peers->lock before taking peer->lock) in
+> ovpn_peer_keepalive_work_mp, so there should be no deadlock from doing
+> the same thing in the netlink code.
 
-Reviewed-by: Martin Habets <habetsm.xilinx@gmail.com>
+Yeah.
 
-> ---
-> I'm not sure if this change will break the test for other drivers that
-> perhaps support the old filter but not the new one.  If so we might
-> need to add an option to cfg to control this choice.
 > 
->  tools/testing/selftests/drivers/net/hw/rss_ctx.py | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+> Then I would also do that in ovpn_peer_float to protect that rehash.
+
+I am not extremely comfortable with this, because it means acquiring 
+peers->lock on every packet (right now we do so only on peer->lock) and 
+it may defeat the advantage of the RCU locking on the hashtables.
+Wouldn't you agree?
+
+An alternative would be to hold peer->lock for the entire function, but 
+this will lead to dead locks...no go either.
+
 > 
-> diff --git a/tools/testing/selftests/drivers/net/hw/rss_ctx.py b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-> index 29995586993c..fb61dae20fd8 100755
-> --- a/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-> +++ b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-> @@ -215,7 +215,7 @@ def test_rss_queue_reconfigure(cfg, main_ctx=True):
->          defer(ethtool, f"-X {cfg.ifname} default")
->      else:
->          other_key = 'noise'
-> -        flow = f"flow-type tcp{cfg.addr_ipver} dst-port {port} context {ctx_id}"
-> +        flow = f"flow-type tcp{cfg.addr_ipver} dst-ip {cfg.addr} dst-port {port} context {ctx_id}"
->          ntuple = ethtool_create(cfg, "-N", flow)
->          defer(ethtool, f"-N {cfg.ifname} delete {ntuple}")
->  
-> @@ -429,7 +429,7 @@ def test_rss_context(cfg, ctx_cnt=1, create_with_cfg=None):
->          ksft_eq(max(data['rss-indirection-table']), 2 + i * 2 + 1, "Unexpected context cfg: " + str(data))
->  
->          ports.append(rand_port())
-> -        flow = f"flow-type tcp{cfg.addr_ipver} dst-port {ports[i]} context {ctx_id}"
-> +        flow = f"flow-type tcp{cfg.addr_ipver} dst-ip {cfg.addr} dst-port {ports[i]} context {ctx_id}"
->          ntuple = ethtool_create(cfg, "-N", flow)
->          defer(ethtool, f"-N {cfg.ifname} delete {ntuple}")
->  
-> @@ -516,7 +516,7 @@ def test_rss_context_out_of_order(cfg, ctx_cnt=4):
->          ctx.append(defer(ethtool, f"-X {cfg.ifname} context {ctx_id} delete"))
->  
->          ports.append(rand_port())
-> -        flow = f"flow-type tcp{cfg.addr_ipver} dst-port {ports[i]} context {ctx_id}"
-> +        flow = f"flow-type tcp{cfg.addr_ipver} dst-ip {cfg.addr} dst-port {ports[i]} context {ctx_id}"
->          ntuple_id = ethtool_create(cfg, "-N", flow)
->          ntuple.append(defer(ethtool, f"-N {cfg.ifname} delete {ntuple_id}"))
->  
-> @@ -569,7 +569,7 @@ def test_rss_context_overlap(cfg, other_ctx=0):
->  
->      port = rand_port()
->      if other_ctx:
-> -        flow = f"flow-type tcp{cfg.addr_ipver} dst-port {port} context {other_ctx}"
-> +        flow = f"flow-type tcp{cfg.addr_ipver} dst-ip {cfg.addr} dst-port {port} context {other_ctx}"
->          ntuple_id = ethtool_create(cfg, "-N", flow)
->          ntuple = defer(ethtool, f"-N {cfg.ifname} delete {ntuple_id}")
->  
-> @@ -587,7 +587,7 @@ def test_rss_context_overlap(cfg, other_ctx=0):
->      # Now create a rule for context 1 and make sure traffic goes to a subset
->      if other_ctx:
->          ntuple.exec()
-> -    flow = f"flow-type tcp{cfg.addr_ipver} dst-port {port} context {ctx_id}"
-> +    flow = f"flow-type tcp{cfg.addr_ipver} dst-ip {cfg.addr} dst-port {port} context {ctx_id}"
->      ntuple_id = ethtool_create(cfg, "-N", flow)
->      defer(ethtool, f"-N {cfg.ifname} delete {ntuple_id}")
->  
-> @@ -620,7 +620,7 @@ def test_delete_rss_context_busy(cfg):
->  
->      # utilize context from ntuple filter
->      port = rand_port()
-> -    flow = f"flow-type tcp{cfg.addr_ipver} dst-port {port} context {ctx_id}"
-> +    flow = f"flow-type tcp{cfg.addr_ipver} dst-ip {cfg.addr} dst-port {port} context {ctx_id}"
->      ntuple_id = ethtool_create(cfg, "-N", flow)
->      defer(ethtool, f"-N {cfg.ifname} delete {ntuple_id}")
->  
+> It feels like peers->lock is turning into a duplicate of
+> ovpn->lock. ovpn->lock used for P2P mode, peers->lock used
+> equivalently for MP mode. You might consider merging them (but I
+> wouldn't see it as necessary for merging the series unless there's a
+> locking issue with the current proposal).
+
+I agree: ovpn->lock was introduced to protect ovpn's fields, but 
+actually the only one e protect is peer.
+
+They are truly the same and I could therefore get rid of 
+ovpn->peers->lock and always use ovpn->lock.
+
+Will see how invasive this is and decide whether to commit it to v12 or not.
+
+Thanks!
+
+Regards,
+
+-- 
+Antonio Quartulli
+OpenVPN Inc.
+
 
