@@ -1,236 +1,181 @@
-Return-Path: <linux-kselftest+bounces-21972-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-21973-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3F579C7E33
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 23:24:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87D889C7F49
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 01:20:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93517284405
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2024 22:24:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4854F282DFB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 00:20:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B4DE18C021;
-	Wed, 13 Nov 2024 22:24:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC748F9DF;
+	Thu, 14 Nov 2024 00:19:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IZ+GDTU6"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="tyIKgADQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2042.outbound.protection.outlook.com [40.107.223.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADD1B18BC32
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 Nov 2024 22:24:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731536655; cv=none; b=o4BZRdAVSAo79hQD7MgUKOM4ANqLsDY58cHVPKykjYY4SijHqIOZGTfwaTiIyxgCkjqSjdn4vaYlPkN95hcMfMCOFnMbYINOA7zFZZPyVbDBF2F7MGvNVScAUHiGNY+LVk9N+GjGaQ75x4R5xlyQk+CQvKtFkIcf5xYD5JupRSk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731536655; c=relaxed/simple;
-	bh=7BBPu5YPI5uYqi+h1NIWs2JoXwo0gWg8+pzcU33Hwos=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=KiwHE1bH2eCset0UQsEHdicrj3yGLjPF/px0GaDLAG+JU3X0yXLqYoFxY/Ot0blZh1QV2HqrkKzjl4CxoY6S5sk8TqCjAbP3Q7LP/i+SOlocCtgDsE7VETvoH1E7h9I5SM9LRBS4KWsK/EHoVNWE+cARBQsf6qFXMF6JLaMJls0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rmoar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IZ+GDTU6; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rmoar.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6eaae8b12bfso120905467b3.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Nov 2024 14:24:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731536653; x=1732141453; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Yfp7aCvoug/un052SP7CzehFhCHbkzTBAFLwsUORaA=;
-        b=IZ+GDTU6dwNf5oxJB+f05Gqt3gy2xLnnIddn+BxLdoP6C4uZwkybbEOPuMmkt5IqcO
-         C95WdVQJp79WNeKg6tIDx+ImIQzC/32q0gTHTwTDBu/qX9psFCOMqebe8KadA24uvymp
-         QR9BTCD0qEfHUNhGv6BwlPtMfOX3Ys1PEyNXCjqm+cMi+BXn6xdqV21lddjuq8kNRXcg
-         nIJbXMRV4DKnBuwWy7xHPQtH1YcYyha+VXU5OVDKt5Y2R1ojGKa/PMwaQBTKtpeQMEzF
-         czkQTmYxtF9mOR0J357dnMI6fOs1W0Ig9lejvSMCjX18+lpZxsOTeYhtp4in5KjXSDbu
-         wvEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731536653; x=1732141453;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Yfp7aCvoug/un052SP7CzehFhCHbkzTBAFLwsUORaA=;
-        b=xJW9w/5BaBmOHSyt9xPbX9SDl6QCenJSEGLe5gDevNq+SG3NY/4EEQY93mi3EDmgzr
-         6WE1zkmNRSETuY5yt4IFn8vYEh+dPchASfsrf7Ay9V8dsk2oB8ZXID+eL0TChsCt0igq
-         lFJwF0ZCdO+jFLFfm+iao9wXk4qDIKVO3972VYtUX/hmqtMIHZpYhpjdaGUJUiq/tPrn
-         Vng6pBQoK/BmHxeKXAXmvLmiNVHOPTCxbgtg5REf/S51IMyPFlfw3tROYzG6aZCrGMsM
-         zZiFdb/Qx3uKt52z+CIUetRQfzLSxEWpwE87WicqN1iQcDUeRnL6EgJCGMi6JUgJkzPF
-         GjuQ==
-X-Gm-Message-State: AOJu0YyNsjvolq8A9VHxUPMayTlWCGzl6l8TRjczmajJSgSoguTKdaiw
-	GFi6+6i9mPuTWOH0+pJMVLhbHjSuQbchUKfA9jVPC2ygmypR0sxQL47ssrd+X+dKonBr8kPOoA=
-	=
-X-Google-Smtp-Source: AGHT+IGkhEknrlGV8Bwr2fK8Tz4vMOY4D+DVWs+Swb6eT/ViG76mmnhczzYS0nXfCIN+iaRDZRnkBS7t5Q==
-X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:d3:4d64:ac12:6a5d])
- (user=rmoar job=sendgmr) by 2002:a05:6902:1342:b0:e2b:da82:f695 with SMTP id
- 3f1490d57ef6-e35ed2520d6mr3852276.6.1731536652330; Wed, 13 Nov 2024 14:24:12
- -0800 (PST)
-Date: Wed, 13 Nov 2024 22:24:06 +0000
-In-Reply-To: <20241113222406.1590372-1-rmoar@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32CB11799B;
+	Thu, 14 Nov 2024 00:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731543552; cv=fail; b=it0MgJERj8gIuKrYvs71iQSWGcYqbmfzfKUHYikBmck1cu1Dlxutoz/5tyWid9Uz88qL7UqY8zJ96g6kMrsLCXVnYJw8x6PlsJlIXusdTMI/BB7P0cpbSYCAiAyJdFq63CabIziv56ubwlJlV1GPjzob5f/uT2xF4DAmuQy74HU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731543552; c=relaxed/simple;
+	bh=lgwc3P7HtsYYLOmU8NGXUH4ItZ8R2/Pf7maJpIPjxiM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f4me9kv8jgiae1gYUVylKjSBE6B8jxuR/mxzFw7TSgn2DijqOSWqNWwW/0sNmBaVOfmgey88eGbB7zpOsb8AEkc9XAcZD12CXTEoA2Ejho22uuFUhPDj/8f1ZTZS+JK8Oo8z+HJIXoTjEqH+gFsuUNVayNp7na+3z76g5DApM/M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=tyIKgADQ; arc=fail smtp.client-ip=40.107.223.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=FQKVknVr3WrGIA+mlES2wD0XQI6bnJK0diqbd6areQvfS/qasudXdzvMSjVqS/nasTZEH/HLxzJsjzY0yq+BPDdhCSCKwJ7hsqn0FB655znk6am1r7oQGeNPW3+nDKK+EKbfOncl+iabc5J4MAp/+iYltYxE4m1iemmhEuE2fkSaejH95sUvcZXjhcDZhpHXwcsD5JsM/Pzhr7BF8ho7rEoY04ycweH94ObqK8HLqxzFUBnOGBROGNsvRSlDwwsSfirQGEbgeEoCCyJUTRIqBX6a7h+h5H/A3vguYE0ak2xwlcBaCXaZKBYhWz+yFYICI1ZVvm3/yxqMBgTt0pEPdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dExGh8cOnMXtY8SKMGXZZfSo74w6NHsY15goafFjvB8=;
+ b=Es5nVLsA6A46GYMFXxujOFT0PQb0Uft0UHB5lj9yfHtQBJAF8IdNTAjS30Rph6hOoVmzzJiO0mYxwe+MA0RXLhvI3M496u62ii4WJc5sxrnnlj0RrgIvO7gkmQBPS1fqLbdS8sNBbzGKHzDUr4vzRzDvWYQq5H7cWbVDfW7LXwwzu8uZIGcRehDf631IqcNsWghROSipEhs2s4/uc4QCKhirRhIyENW7hCbSseQnFfXb/NIziq4WmiALFSs4geoqU7V+iAfitMU6xY0Da1iy3mve+mkLxgVyJo9YOVC9ACeRe1geumQKA2ZbzwsANBMYg0AthgVVS0W7O9HK/3kK1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dExGh8cOnMXtY8SKMGXZZfSo74w6NHsY15goafFjvB8=;
+ b=tyIKgADQFRq0kw2Fj2DfpjV2hS9wghMRrizz1vFvcvJCeRq5fCzSQ1UcYShSc2HWlhNQFfHt3mq3XX3ybFy8QCoQv1m/L7eCTZwJDuleRDSwrWqNATSFVBiQCw+7Knw1ZZSnJINHFeF9iLaxsJZLmZTn768CmDfpKuHhiCVM7svr7qplbOkNbtGeXMUnoR3ej4Q3zoPYKM0niPPwVegyG5DyeAMx1uvGgnFI1rtPdim2LOREm9ShXVsucBJPLDhYOzlEjCwxtJPTlV58pM0sQ1kZnBEKAEpXnWeZ5kTpWCZkMMw6vEh6obdAcbOXCBBpX5eP0j9ID22ry8ioXZbbtw==
+Received: from SJ0PR13CA0106.namprd13.prod.outlook.com (2603:10b6:a03:2c5::21)
+ by CY5PR12MB6384.namprd12.prod.outlook.com (2603:10b6:930:3c::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.29; Thu, 14 Nov
+ 2024 00:19:08 +0000
+Received: from SJ5PEPF000001EF.namprd05.prod.outlook.com
+ (2603:10b6:a03:2c5:cafe::43) by SJ0PR13CA0106.outlook.office365.com
+ (2603:10b6:a03:2c5::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.15 via Frontend
+ Transport; Thu, 14 Nov 2024 00:19:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SJ5PEPF000001EF.mail.protection.outlook.com (10.167.242.203) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8158.14 via Frontend Transport; Thu, 14 Nov 2024 00:19:07 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 13 Nov
+ 2024 16:18:56 -0800
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 13 Nov
+ 2024 16:18:56 -0800
+Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
+ Transport; Wed, 13 Nov 2024 16:18:54 -0800
+Date: Wed, 13 Nov 2024 16:18:52 -0800
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Yi Liu <yi.l.liu@intel.com>
+CC: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
+	<joro@8bytes.org>, <suravee.suthikulpanit@amd.com>, <will@kernel.org>,
+	<robin.murphy@arm.com>, <dwmw2@infradead.org>, <shuah@kernel.org>,
+	<iommu@lists.linux.dev>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<baolu.lu@linux.intel.com>, <eric.auger@redhat.com>,
+	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
+	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>, <aik@amd.com>,
+	<zhangfei.gao@linaro.org>, <patches@lists.linux.dev>
+Subject: Re: [PATCH v7 13/13] Documentation: userspace-api: iommufd: Update
+ vIOMMU
+Message-ID: <ZzVB7Fun48rGztuV@Asurada-Nvidia>
+References: <cover.1730836219.git.nicolinc@nvidia.com>
+ <7e4302064e0d02137c1b1e139342affc0485ed3f.1730836219.git.nicolinc@nvidia.com>
+ <f0c45d5b-b8cd-4f75-a9d7-21808f18583d@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241113222406.1590372-1-rmoar@google.com>
-X-Mailer: git-send-email 2.47.0.277.g8800431eea-goog
-Message-ID: <20241113222406.1590372-2-rmoar@google.com>
-Subject: [PATCH v2 2/2] kunit: tool: print failed tests only
-From: Rae Moar <rmoar@google.com>
-To: shuah@kernel.org, davidgow@google.com, brendanhiggins@google.com
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, Rae Moar <rmoar@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <f0c45d5b-b8cd-4f75-a9d7-21808f18583d@intel.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001EF:EE_|CY5PR12MB6384:EE_
+X-MS-Office365-Filtering-Correlation-Id: 359a2546-aa95-4d21-9bad-08dd0441f480
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|82310400026|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?7MvYgh4ek0g/Hn+//HNO8olkYKB6+BcNiMtwKHvVM9lep4RTX7qe8c+lZtAp?=
+ =?us-ascii?Q?LZWL1sXQQPW1GjXW8nBOm0hHmYVDniLPfihTMHFDwToFPYzkMxT/5ZlyXnjs?=
+ =?us-ascii?Q?cfLHI7OlE2j3gJAkPvyyA0mjMVMoEVpvGLmnQXTyhoMWasEeyArSta41zMLe?=
+ =?us-ascii?Q?e3r/uDUKM5l5uG05waGHixHLvOXexbXpDpkznQZomxGs4eq8cghXrgskOEO4?=
+ =?us-ascii?Q?GlFGuhLqKoiqpfh1o75HBgBfoWh4Rd2clRJ853uRsHhDzf4PlVugfB8TXuV6?=
+ =?us-ascii?Q?leHrTpikhFUfJXqyUSAqr+eaWKIGq+bMtqZjANywxlwPI2D8qOPy5hleI+Ct?=
+ =?us-ascii?Q?rNlWik/SDXNROU5I+qPbsZb+dOR50Xv34pnF7ZEzzfqn2iz8uMojR9lwThvu?=
+ =?us-ascii?Q?bHq/J1USrTiXCLMw+/Q+Q3uWagCHBQKQvWqhI7XkKLykNz9JbquZB1UQ9xHZ?=
+ =?us-ascii?Q?LCe/nzbAneGQYmeUv3Bv8VJV2rhYoh99ZAIx9GRLDBW+zgmJ8F1pl4RwaQSS?=
+ =?us-ascii?Q?DmzFv5/4nK2u1OrBdXOHqsk22126wlLqwQoB0Ri5yFL6IqSRk9g2ccpgGCIt?=
+ =?us-ascii?Q?jsQsP6uq9GczJXbjjg2cADwwz98+2Tzh3BYtOintXkIUlqzTJhQtz2zsQyrQ?=
+ =?us-ascii?Q?4WhMTbYWTYpvUaKq5xRfHYAvU6FYoKaJgW4UVJcZx6Xyh+2eGrdiQZcj9Ts9?=
+ =?us-ascii?Q?xSt0my3h0f0YfmvOfnDafcANGo9u7Xf2Kqk4uHwfJ4Xhx9OQ/foChURF1HAh?=
+ =?us-ascii?Q?6Rq0e5sPUyug9GxEgQuSjNJUFh7SxDLx0zWgGzUyNtkMJ2+G5PNag/bHd7PQ?=
+ =?us-ascii?Q?3wDylDvdOx2DFvMOzHdlAsdXZYPm07SdQCLPUzM5zsHh1q4RT8Ak/vyqH6Oj?=
+ =?us-ascii?Q?7K76oCHOrv4FXx0Atu0IOGvYblIOiGn8hXSOMs+T3U10sV4Ac/gB0XLWOB/l?=
+ =?us-ascii?Q?UEMxLHoLFaWi3zy9AdIMAmJ2vj1eAogW/dLU/rta6MHsvkLgFTg71OIJnq5I?=
+ =?us-ascii?Q?BMw4Kecc37/DoGmSooTRffl+AgoCptyJmEhXk2ZYRhW0zfgJ2RwpdkWQ4+Gc?=
+ =?us-ascii?Q?US16xey9cSQdC9MG0tUoSg3wzFL1P5nLrAObB4CvRvObmFMae689hWCKYiVk?=
+ =?us-ascii?Q?BoEuRBoNdG6RJc8VYThpSzIaKH/4eD5zgHnIG9pmQyTJrcjrhMzE8860dyIf?=
+ =?us-ascii?Q?NSh25wfRaI7fIfMxl4jQPJsynihg5AwSBSslN0OnCGZkKiAGsU9mFm/7shYc?=
+ =?us-ascii?Q?I/bEzq0qeHg0BPWvtq+EAIiO2Fuqzk3ZouCW66XqYINiB+grRcDugOUkhku/?=
+ =?us-ascii?Q?1bo5ypy8Llk25hty3e6j7JIJpx+9DBFLg/b83EvRazc6/8ymr8GlZCPhwQ9U?=
+ =?us-ascii?Q?usiLQqAwLSQSqxmElv22jaZicURfKxzYcEXbWb79RtU39Q/cuQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(82310400026)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2024 00:19:07.7620
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 359a2546-aa95-4d21-9bad-08dd0441f480
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ5PEPF000001EF.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6384
 
-Add flag --failed to kunit.py to print only failed tests. This printing
-is done after running is over.
+On Tue, Nov 12, 2024 at 09:15:02PM +0800, Yi Liu wrote:
+> On 2024/11/6 04:04, Nicolin Chen wrote:
+> > +5. IOMMUFD_OBJ_VIOMMU can be only manually created via the IOMMU_VIOMMU_ALLOC
+> > +   uAPI, provided a dev_id (for the device's physical IOMMU to back the vIOMMU)
+> > +   and an hwpt_id (to associate the vIOMMU to a nesting parent HWPT_PAGING). The
+> > +   iommufd core will link the vIOMMU object to the struct iommu_device that the
+> > +   struct device is behind.
+> 
+> It looks to be reasonable to share the viommu_obj between devices behind
+> the same physical IOMMU. This design seems no enforcement for it. So it's
+> all up to userspace from what I got. :)
 
-This patch also adds the method print_test() that will also print your
-Test object. Before, all printing of tests occurred during parsing. This
-method could be useful in the future when converting to/from KTAP to this
-pretty-print output.
+It enforces at the vDEVICE allocation:
+	if (viommu->iommu_dev != __iommu_get_iommu_dev(idev->dev)) {
+		return -EINVAL;
 
-Signed-off-by: Rae Moar <rmoar@google.com>
----
- tools/testing/kunit/kunit.py           | 14 ++++++++++++--
- tools/testing/kunit/kunit_parser.py    | 25 +++++++++++++++++++++++++
- tools/testing/kunit/kunit_tool_test.py |  6 +++---
- 3 files changed, 40 insertions(+), 5 deletions(-)
+Yet, assuming you are referring to creating two vIOMMUs per VM for
+two devices behind the same IOMMU (?), there is no enforcement..
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 27c55a7fc1a0..676fa99a8b19 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -50,6 +50,7 @@ class KunitParseRequest:
- 	raw_output: Optional[str]
- 	json: Optional[str]
- 	summary: bool
-+	failed: bool
- 
- @dataclass
- class KunitExecRequest(KunitParseRequest):
-@@ -237,13 +238,15 @@ def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input
- 		return KunitResult(KunitStatus.SUCCESS, parse_time), fake_test
- 
- 	default_printer = stdout
--	if request.summary:
-+	if request.summary or request.failed:
- 		default_printer = null_printer
- 
- 	# Actually parse the test results.
- 	test = kunit_parser.parse_run_tests(input_data, default_printer)
- 	parse_time = time.time() - parse_start
- 
-+	if request.failed:
-+		kunit_parser.print_test(test, request.failed, stdout)
- 	kunit_parser.print_summary_line(test, stdout)
- 
- 	if request.json:
-@@ -423,6 +426,10 @@ def add_parse_opts(parser: argparse.ArgumentParser) -> None:
- 			    help='Prints only the summary line for parsed test results.'
- 				'Does nothing if --raw_output is set.',
- 			    action='store_true')
-+	parser.add_argument('--failed',
-+			    help='Prints only the failed parsed test results and summary line.'
-+				'Does nothing if --raw_output is set.',
-+			    action='store_true')
- 
- 
- def tree_from_args(cli_args: argparse.Namespace) -> kunit_kernel.LinuxSourceTree:
-@@ -459,6 +466,7 @@ def run_handler(cli_args: argparse.Namespace) -> None:
- 					raw_output=cli_args.raw_output,
- 					json=cli_args.json,
- 					summary=cli_args.summary,
-+					failed=cli_args.failed,
- 					timeout=cli_args.timeout,
- 					filter_glob=cli_args.filter_glob,
- 					filter=cli_args.filter,
-@@ -507,6 +515,7 @@ def exec_handler(cli_args: argparse.Namespace) -> None:
- 					build_dir=cli_args.build_dir,
- 					json=cli_args.json,
- 					summary=cli_args.summary,
-+					failed=cli_args.failed,
- 					timeout=cli_args.timeout,
- 					filter_glob=cli_args.filter_glob,
- 					filter=cli_args.filter,
-@@ -532,7 +541,8 @@ def parse_handler(cli_args: argparse.Namespace) -> None:
- 	# We know nothing about how the result was created!
- 	metadata = kunit_json.Metadata()
- 	request = KunitParseRequest(raw_output=cli_args.raw_output,
--					json=cli_args.json, summary=cli_args.summary)
-+					json=cli_args.json, summary=cli_args.summary,
-+					failed=cli_args.failed)
- 	result, _ = parse_tests(request, metadata, kunit_output)
- 	if result.status != KunitStatus.SUCCESS:
- 		sys.exit(1)
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 732f448263de..29fc27e8949b 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -574,7 +574,32 @@ def print_test_footer(test: Test, printer: Printer) -> None:
- 	printer.print_with_timestamp(format_test_divider(message,
- 		len(message) - printer.color_len()))
- 
-+def print_test(test: Test, failed_only: bool, printer: Printer) -> None:
-+	"""
-+	Prints Test object to given printer. For a child test, the result line is
-+	printed. For a parent test, the test header, all child test results, and
-+	the test footer are all printed. If failed_only is true, only failed/crashed
-+	tests will be printed.
- 
-+	Parameters:
-+	test - Test object to print
-+	failed_only - True if only failed/crashed tests should be printed.
-+	printer - Printer object to output results
-+	"""
-+	if test.name == "main":
-+		printer.print_with_timestamp(DIVIDER)
-+		for subtest in test.subtests:
-+			print_test(subtest, failed_only, printer)
-+		printer.print_with_timestamp(DIVIDER)
-+	elif test.subtests != []:
-+		if not failed_only or not test.ok_status():
-+			print_test_header(test, printer)
-+			for subtest in test.subtests:
-+				print_test(subtest, failed_only, printer)
-+			print_test_footer(test, printer)
-+	else:
-+		if not failed_only or not test.ok_status():
-+			print_test_result(test, printer)
- 
- def _summarize_failed_tests(test: Test) -> str:
- 	"""Tries to summarize all the failing subtests in `test`."""
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 02aa296d8850..0bcb0cc002f8 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -811,7 +811,7 @@ class KUnitMainTest(unittest.TestCase):
- 		self.linux_source_mock.run_kernel.return_value = ['TAP version 14', 'init: random output'] + want
- 
- 		got = kunit._list_tests(self.linux_source_mock,
--				     kunit.KunitExecRequest(None, None, False, '.kunit', 300, 'suite*', '', None, None, 'suite', False, False))
-+				     kunit.KunitExecRequest(None, None, False, False, '.kunit', 300, 'suite*', '', None, None, 'suite', False, False))
- 		self.assertEqual(got, want)
- 		# Should respect the user's filter glob when listing tests.
- 		self.linux_source_mock.run_kernel.assert_called_once_with(
-@@ -824,7 +824,7 @@ class KUnitMainTest(unittest.TestCase):
- 
- 		# Should respect the user's filter glob when listing tests.
- 		mock_tests.assert_called_once_with(mock.ANY,
--				     kunit.KunitExecRequest(None, None, False, '.kunit', 300, 'suite*.test*', '', None, None, 'suite', False, False))
-+				     kunit.KunitExecRequest(None, None, False, False, '.kunit', 300, 'suite*.test*', '', None, None, 'suite', False, False))
- 		self.linux_source_mock.run_kernel.assert_has_calls([
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite.test*', filter='', filter_action=None, timeout=300),
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite2.test*', filter='', filter_action=None, timeout=300),
-@@ -837,7 +837,7 @@ class KUnitMainTest(unittest.TestCase):
- 
- 		# Should respect the user's filter glob when listing tests.
- 		mock_tests.assert_called_once_with(mock.ANY,
--				     kunit.KunitExecRequest(None, None, False, '.kunit', 300, 'suite*', '', None, None, 'test', False, False))
-+				     kunit.KunitExecRequest(None, None, False, False, '.kunit', 300, 'suite*', '', None, None, 'test', False, False))
- 		self.linux_source_mock.run_kernel.assert_has_calls([
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite.test1', filter='', filter_action=None, timeout=300),
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite.test2', filter='', filter_action=None, timeout=300),
--- 
-2.47.0.277.g8800431eea-goog
+The suggested way for VMM, just like two devices sharing the same
+s2 parent hwpt, is to share the vIOMMU object.
 
+Thanks
+Nic
 
