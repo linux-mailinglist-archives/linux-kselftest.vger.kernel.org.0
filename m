@@ -1,128 +1,144 @@
-Return-Path: <linux-kselftest+bounces-22046-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22048-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 572F59C904A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 17:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C6CE9C908A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 18:08:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 015781F2175A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 16:58:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCA2E1F22495
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 17:08:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E3518756A;
-	Thu, 14 Nov 2024 16:56:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93C2F188713;
+	Thu, 14 Nov 2024 17:08:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ei+SQWwi"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="go291JaB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50FF0126C03;
-	Thu, 14 Nov 2024 16:56:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F27FD6F307
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 17:08:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731603366; cv=none; b=cHdTr7Mv4ahlv/QAC9WKEp6bLptstV1vLDdju/7FDAu8OFbdW/vhWdeRyw/b5DLtW/+rG/g2D7POeEyHfqguQJvycFNvzIpH7iyj/KKmF+8iH6c1ZTKC2sRH/YDNpuzSzcyAIAeHblFK3udbgSjnJJZVOGerAgdpofL5gRWt4Uo=
+	t=1731604120; cv=none; b=UJl1Uw5p32xpVc6MR5OVKLiCUHfqgqFyF73tCSagBHFxx1Yc7OVe2bYA4eA/S6TnzfrVavSyY/aK4DAzwBlT5S+o/oC6FueJGSxf1m2T33+Sfd3cSd0ioGRIBFD7kat3nGlLt+0YI1733fOeJmmOjfnzwUfUPVQ2ds1IavjvG4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731603366; c=relaxed/simple;
-	bh=bW24Y2zDBss5OiBEfJp2RH9+LgpRreFMxa7QcBNtfEw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=X1vnkkTvAy1i8q8hDIfZpwf97bXuNZV679tBUKeRmu+RF5NbjMLqFupw1vLDikaTVZem6ZMlpdPFMrQB1poRK8jnDzhIgI8flfcWqkol0MUIHyaNnBWQoXH9s+fQbgcAIem3eu/zIPXeMi7dtZcxnAGyuliRHv635IiK/lD9Pms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ei+SQWwi; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-720c2db824eso803050b3a.0;
-        Thu, 14 Nov 2024 08:56:05 -0800 (PST)
+	s=arc-20240116; t=1731604120; c=relaxed/simple;
+	bh=yHELOSQhvvHp71OtVk5swb+nNSN0zFC0SuN+AIziXeQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pZ4DncFIfikQPK+HLET6Khvh+x9A4Jau8g7C5WRPIKl8fTJQIamR4RHFuY9ukg4XpI9b3R0OSl194VQ4++/0BG903gZAmbpVCiSnKjzOUjAySRb63uODsb7aeZut9jhLYJgtAcwmUonypVwKjdxyFZmmJJzbT76s+9yJkmk/25o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=go291JaB; arc=none smtp.client-ip=209.85.166.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-83b430a4cfdso29673039f.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 09:08:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731603364; x=1732208164; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dN6nOwa9jinNjS2kCCmOR1Y32+iqmTVvvvUdfcXy0mo=;
-        b=ei+SQWwi7MqhYteep8nZfs3FmnmarZdBkuSQK0idHZ5l7r1Z5Dh1H66DzaqhhT1bC9
-         X4gA7pm33GX2RIolQYYk2QTjx8/ULTdepM1lwsF2lWIFNbZebCU4QvSukYsSQdHV5UH3
-         HPPUlC5SwNOFcgAFRk7+wsLFrvyicT5Wc9IPggXrl36uEUnDDZjmuQpPKmvYpTzvee/Q
-         kSFiDzjRvbAHSwqmBn/esq8zLRpgptsvZ5QehIBvUkhagUgqdVM5zf3ThS0G7wQLSrH6
-         VrE2I0WaSwrbwNHxUrd6/wszwBnJhi1u5f6cVdkoBV/rXYO9rEhl23OCqNNDguQl4JxL
-         WTcQ==
+        d=linuxfoundation.org; s=google; t=1731604117; x=1732208917; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ytkqD9XI/BHqVrDHS/oEUwpMJruMLfeh9lCP9HUJDm8=;
+        b=go291JaBO/0KbNcbkIzVP4uTa0mUQhOk+u1vrgy/NE0lKA6gWHxUgmemXtUWLDNad0
+         5WVxlnM/K/yGCl/0J6aA05Nd07/7b1XIMSgGhaX+DSS/7TzGVM1QEggAZ6cK6gByaWV8
+         Emv/0+Et+bX9IblN3MhKr3roRMACRMjZr6J80=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731603364; x=1732208164;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dN6nOwa9jinNjS2kCCmOR1Y32+iqmTVvvvUdfcXy0mo=;
-        b=ct5hcvjlT4bAS6UUvV/CpP1ly8Alpgzf1TArh3xJu8qqt/Shsniu1Ag4Mmkw05MPt6
-         X/Y8A4Dr/N4zHuPHjJYnc12ilxHD1VvhJETd0zjmT2uMMGj7AU9T0wBUIMiUDIN6Ba1V
-         xy2zaloJ6EIhTwZkzsdjpNvTUO+9tPAj5Sq8oVsR0DZtlukeCkE/VTPl4CJUlMDrFJlT
-         mZ1FZfpMPKy7VaTNoIa+oOGZ0STSQCuSRXGFf1VKiMZq7Uax23M0B9SzaQ2IvQjFc9sd
-         GXDt08cAFfgsMQOWpPgzgIxFBhef2eDIwlaUS1rwdc1ufDFUgusUhG63CuDxsURD5zZb
-         aCsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUhUXaEr8OR4L48/UoQny2JzyIs20Ynm4JzZ2XXPGRM1A5NQOClfnREuoXqOf0r5w19uo6OUCPGMQfH6sqrSNnx@vger.kernel.org, AJvYcCWGVOtLwiw/UV4UjouInajOVnRypREICN9J1iQeJ8XP5eJnG2g6sGz71LhhMqFah/cHo6UGkOIu34yxgkM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfT901uvBsfIe6yCwea6/Fc9q+/XDwc6yIFzBccQLABwMhocrc
-	QMNKBOp+8IjOjp+xQoZ8DIwTbt9RqUcKJ7O1aDq6OYMvOgvKSfAac73Zug==
-X-Google-Smtp-Source: AGHT+IErdRALs2OdOjsTFhmubjjx7yNbQ/ModPzFAI5VavhfJZjOxy4H/qdb3hT8L+66zJBeHcKpaw==
-X-Received: by 2002:a17:90a:d444:b0:2e2:c40c:6e8e with SMTP id 98e67ed59e1d1-2e9b178eff2mr30608288a91.34.1731603364460;
-        Thu, 14 Nov 2024 08:56:04 -0800 (PST)
-Received: from visitorckw-System-Product-Name.. ([140.113.216.168])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e9f207d65csm2166102a91.1.2024.11.14.08.56.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Nov 2024 08:56:03 -0800 (PST)
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: brendanhiggins@google.com,
-	davidgow@google.com
-Cc: rmoar@google.com,
-	ruanjinjie@huawei.com,
-	jserv@ccns.ncku.edu.tw,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	Kuan-Wei Chiu <visitorckw@gmail.com>
-Subject: [PATCH] kunit: debugfs: Use IS_ERR() for alloc_string_stream() error check
-Date: Fri, 15 Nov 2024 00:55:58 +0800
-Message-Id: <20241114165558.49043-1-visitorckw@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1731604117; x=1732208917;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ytkqD9XI/BHqVrDHS/oEUwpMJruMLfeh9lCP9HUJDm8=;
+        b=I57sSY6hzQd+IWB2Z8ahyLiDyuLyfkh5QVVXVr125RcoBTLq4cxA/TFncaT6ABR0Yv
+         ZZIrivU/ykADo2ALPkjyulzY1yGOjXlBAGz2q5ghCnrb87kuCzMvT0ocbj90ktRn2ozs
+         aVR0sKBDL1snKeoKOqSZSX0sFDX/jFaz9VOWh84D+YLcIuj2ddUk8Igj4edlNB9XKv+W
+         MuVIctSuNZ88k3GTteJLbVb9++9nZU468Nl20wN3HBAAAuESjgHKr4xgWQ5mrxWBQyEm
+         VOSBX5VoGZuvMatY95IlSzq4MfNbDn5OBJuwm+qIzN1vSSI/72HpXB8qzFluD+EuwiY9
+         j7sw==
+X-Forwarded-Encrypted: i=1; AJvYcCXRr7Okg+0pgKqIbKUrs88m1bcKx33HbmRGq09y+8cO5Swi0T+TPRoUNSE/oERpAkUvv8lbOdMX9HwzQJsbS/g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/tlBldQQ983fi8PslKYjD9O+iz8vfCp+UXtE9lSqpcE0T5Qmv
+	9yeAaxwkGiLW2bYaae954MPjATm8xjr/nq2vF4RIzToNsXb4SpCrJ4IlknJR/40=
+X-Google-Smtp-Source: AGHT+IGUZJKnYN5ymfXEvQzdJKzRh/hKLacsxIQ6Yl6xQ9sfR7oYN33P5rDErUzL/+6dybCL0+GDgA==
+X-Received: by 2002:a05:6602:641d:b0:83a:931a:13a0 with SMTP id ca18e2360f4ac-83e032e0050mr2741669239f.8.1731604117015;
+        Thu, 14 Nov 2024 09:08:37 -0800 (PST)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-83e6064901bsm35300239f.45.2024.11.14.09.08.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Nov 2024 09:08:35 -0800 (PST)
+Message-ID: <196eaffe-c90b-4f44-a748-b786b46fd506@linuxfoundation.org>
+Date: Thu, 14 Nov 2024 10:08:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: lsm: Refactor
+ `flags_overset_lsm_set_self_attr` test
+To: Casey Schaufler <casey@schaufler-ca.com>,
+ Amit Vadhavana <av2082000@gmail.com>, paul@paul-moore.com,
+ jmorris@namei.org, serge@hallyn.com, shuah@kernel.org
+Cc: ricardo@marliere.net, linux-kernel-mentees@lists.linux.dev,
+ linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20241112182810.24761-1-av2082000@gmail.com>
+ <52cc8e51-9e85-465b-8ee3-63a7a0a42951@linuxfoundation.org>
+ <c16b7517-e490-48d9-a2b6-f0077cbb0eba@schaufler-ca.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <c16b7517-e490-48d9-a2b6-f0077cbb0eba@schaufler-ca.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-The alloc_string_stream() function only returns ERR_PTR(-ENOMEM) on
-failure and never returns NULL. Therefore, switching the error check in
-the caller from IS_ERR_OR_NULL to IS_ERR improves clarity, indicating
-that this function will return an error pointer (not NULL) when an
-error occurs. This change avoids any ambiguity regarding the function's
-return behavior.
+On 11/14/24 09:55, Casey Schaufler wrote:
+> 
+> On 11/14/2024 8:25 AM, Shuah Khan wrote:
+>> On 11/12/24 11:28, Amit Vadhavana wrote:
+>>> - Remove unnecessary `tctx` variable, use `ctx` directly.
+>>> - Simplified code with no functional changes.
+>>>
+>>
+>> I would rephrase the short to simply say Remove unused variable,
+>> as refactor implies more extensive changes than what this patch
+>> is actually doing.
+>>
+>> Please write complete sentences instead of bullet points in the
+>> change log.
+>>
+>> How did you find this problem? Do include the details on how
+>> in the change log.
+>>
+>>> Signed-off-by: Amit Vadhavana <av2082000@gmail.com>
+>>> ---
+>>>    tools/testing/selftests/lsm/lsm_set_self_attr_test.c | 7 +++----
+>>>    1 file changed, 3 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
+>>> b/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
+>>> index 66dec47e3ca3..732e89fe99c0 100644
+>>> --- a/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
+>>> +++ b/tools/testing/selftests/lsm/lsm_set_self_attr_test.c
+>>> @@ -56,16 +56,15 @@ TEST(flags_zero_lsm_set_self_attr)
+>>>    TEST(flags_overset_lsm_set_self_attr)
+>>>    {
+>>>        const long page_size = sysconf(_SC_PAGESIZE);
+>>> -    char *ctx = calloc(page_size, 1);
+>>> +    struct lsm_ctx *ctx = calloc(page_size, 1);
+>>
+>> Why not name this tctx and avoid changes to the ASSERT_EQs
+>> below?
+> 
+> In the realm of linux security modules ctx is short for "context".
+> I used tctx here because I was lazy. It would be much better to
+> drop tctx, even if it means a tiny bit more change.
+> 
 
-Link: https://lore.kernel.org/lkml/Zy9deU5VK3YR+r9N@visitorckw-System-Product-Name
-Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
----
- lib/kunit/debugfs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Makes sense.
 
-diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-index d548750a325a..6273fa9652df 100644
---- a/lib/kunit/debugfs.c
-+++ b/lib/kunit/debugfs.c
-@@ -181,7 +181,7 @@ void kunit_debugfs_create_suite(struct kunit_suite *suite)
- 	 * successfully.
- 	 */
- 	stream = alloc_string_stream(GFP_KERNEL);
--	if (IS_ERR_OR_NULL(stream))
-+	if (IS_ERR(stream))
- 		return;
- 
- 	string_stream_set_append_newlines(stream, true);
-@@ -189,7 +189,7 @@ void kunit_debugfs_create_suite(struct kunit_suite *suite)
- 
- 	kunit_suite_for_each_test_case(suite, test_case) {
- 		stream = alloc_string_stream(GFP_KERNEL);
--		if (IS_ERR_OR_NULL(stream))
-+		if (IS_ERR(stream))
- 			goto err;
- 
- 		string_stream_set_append_newlines(stream, true);
--- 
-2.34.1
+Amit, you can ignore this comment about tctx and ctx. Please do fix
+others about the change log and short log.
+
+thanks,
+-- Shuah
 
 
