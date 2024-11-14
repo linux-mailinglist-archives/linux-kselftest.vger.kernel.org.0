@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-22039-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22040-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D84FA9C8EE3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 16:58:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B89A69C8EE7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 16:58:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98A04288C7C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 15:58:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DB371F230A7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 15:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7CDE1AED3F;
-	Thu, 14 Nov 2024 15:51:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF07A1AF0B5;
+	Thu, 14 Nov 2024 15:51:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="B887D/6l";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Rd9VErAa"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="UYWfvp5A";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="av5enSUK"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from flow-b1-smtp.messagingengine.com (flow-b1-smtp.messagingengine.com [202.12.124.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044411AE00E;
-	Thu, 14 Nov 2024 15:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C38231AF0AB;
+	Thu, 14 Nov 2024 15:51:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731599484; cv=none; b=KcyVHmMJ3eyLlkUBxPL4QeayCD3ifibO0PnQMD85hFTtC9M6YvtIVWtHQb5eoKCV02wavVa3o5T2fpd3h+rbrkHBB0q04KZmbFDqdZljmtP36//MCZflU5V8y+BljYPgx+SrW6ypU9Cp9vwcnyIiqbjm7+wNvuvXbOPbG6kI5ZQ=
+	t=1731599487; cv=none; b=IoJD0HjUsvL5yFlnybu16oD9Ff7k0PraNdxoEF8xbxXtUh+2LfAHtsG7txu1EePkQfSCo1D7UHi/FqdoZBkwkDHG21VEybhfcFV6vWI1RVTDWOIF+ZDSiJtsOep/He25LepkEb8laWlLnxMC2TsthzdqejSfw0VJ0N/MFuiGE5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731599484; c=relaxed/simple;
-	bh=qKdQM8FeF+A3Tnlxcv2K8QFuoAvxRzOFJ/DMk2TKJCM=;
+	s=arc-20240116; t=1731599487; c=relaxed/simple;
+	bh=30wy1Z/spB0lDwPBePbo84QECXK23WetMqA2PARD/oQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TcHbw3qkeda9ERQCKcAi6UqFGfjRfPtiau2m6dxeCchB7PAGlcO+Szq6j6sdgiEjLae8QxFA+TQ0ZOnT3sZuK3TPe6/tLs9Fb+B7WCH4FDNJuN1VpGlhQ1klMhJlL7E0Tm6juilwCzhUDnSBU8YN22sWBL2P/OaapDCFZoeUrOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=B887D/6l; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Rd9VErAa; arc=none smtp.client-ip=202.12.124.136
+	 MIME-Version; b=J8MSpd7kxlT6G08uBv0s020M40507IHqP5AP6rPjDQEmHlNyqsj1+teYMSFf7iNvNLqV64+F6MQHDUprUUeXAdDVyKQzKNp6dzQEC6Z/5Ta4S6uYJ8nddsFKtFicUGrKFscwmcvuW1RrVHPQfFF5rQXd58jgw3yD3dS3/ZuN/8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=UYWfvp5A; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=av5enSUK; arc=none smtp.client-ip=202.12.124.136
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailflow.stl.internal (Postfix) with ESMTP id CF3A41D406CA;
-	Thu, 14 Nov 2024 10:51:21 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-08.internal (MEProxy); Thu, 14 Nov 2024 10:51:22 -0500
+Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
+	by mailflow.stl.internal (Postfix) with ESMTP id 941F61D40729;
+	Thu, 14 Nov 2024 10:51:24 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Thu, 14 Nov 2024 10:51:24 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1731599481; x=
-	1731603081; bh=cBeja80XPGADhlBgSU4qc0hgXpVWcNJ9Htq3slTuA5c=; b=B
-	887D/6lXhe+nSYfLyTGJKDrlVjqp4XjLM8DSi5KZ3Ow5lVxXPeXwtMdPEcWZTOf6
-	KLb9R3rJpar75pLpPzc3IMJbZUxSuPhdvH/uK9wzpHdWcuNt9qm4ZGsNvlCW87LV
-	oebkPlm379riy44jY0fnDz3x1YB1CmvTwuc7WwHceh9i23WNrgz++I09xKXbunCB
-	lDuplltbD+A6sXxY5uani+BbUR62rRJgVM9mTLu6VfuYg6u8cXvBygjHtnfsEd0q
-	et3FV37v1Lqdh5PeXgp2/7Jn2X4c8Hu6JZeQ57kVpyW8b0zNmNkh8HzuWj0u0fjS
-	Yuc0LYexWY/1MARcDx2UA==
+	:reply-to:subject:subject:to:to; s=fm1; t=1731599484; x=
+	1731603084; bh=PJFJaTCYaCgnYeYgp2KXQVQEnYzvS8ukYY8+k8Qw6AU=; b=U
+	YWfvp5AJ0zcbJMWdx/01gkSXSwA/LyjkTTeV+2l+gSOhC2ab1xZRSrpX8yenXkVm
+	Ooqa21c0QyFBX0+ipD0JgBxfzWOMrOUsAeitb85ffm+cdlq3HIN4W5ZJidwcZUy/
+	otsHQqFRmB+O4gfMW6GHcU4YqTQGBoa04eumubgHbwV1btkY4Rqt32D5qykG6Dqs
+	YWrzrRwsnfq0F1od1XQ5gxyO1mzk/5CbMGn0J16hE4Q+Ts4N2zs7Sl95+aOSLT3o
+	BuYwidkNBlkp7zIgHQonKAE1Hk/1Z0u3I8efoHsSDXOcXwIfZax+JvVjgx50s4R1
+	9RjsK/Tk4aaw+T/VFViwA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1731599481; x=1731603081; bh=c
-	Beja80XPGADhlBgSU4qc0hgXpVWcNJ9Htq3slTuA5c=; b=Rd9VErAaOiJgH+b25
-	CGRBO6Q6y8r+q2wAr3b0SyR4vKcHNre3fxsCKLwlrmcDO/ooNiMw12zbeLSkzWxy
-	/bjt1tKStzNBbS6IPTAQ8dcK5MUgFHZ1riv8soHOQWl19RlO5s7XJMVWX7/MYETi
-	4icgaaNjMa7TEYZp2NT4AJxHDYXAF2ArmQfSZPzN2QMkFYAIB30zkffSHGHITfuF
-	j5l9R5Xh0rCMQuZAHtaVMAJ+P9B5v78SdU1AsChz3dpbPA5GiYeaseWaVvWumxGM
-	s0U6mOJwhjeOIX/yvznUq/ZhpA/8gODjq6hr+pgrW7yz5JkZ9gsTyoXdBmEVLwsi
-	nUoVg==
-X-ME-Sender: <xms:eRw2Z8a9uOlQZJSzDjUpiQfV1S4QmCnyqTCvR1l4Kz8gwU2Q2fkscA>
-    <xme:eRw2Z3bNpmwB2BgHoxT9KKDoMfwXJ8Ontj8KW42utzRMVF6Ml0O6NyySaiNfDrh6D
-    sE6W6YBtrnhf7RhhSg>
-X-ME-Received: <xmr:eRw2Z2_XxdMZzoarHk3tfoZQ-FAb1FY6bzyK8QCm0dwRzvIi2gPQQl8EYoxg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrvddvgdektdcutefuodetggdotefrodftvf
+	:x-me-sender:x-sasl-enc; s=fm3; t=1731599484; x=1731603084; bh=P
+	JFJaTCYaCgnYeYgp2KXQVQEnYzvS8ukYY8+k8Qw6AU=; b=av5enSUK5/08qHueb
+	NpmPtlroAbvLSsSu17O5VFr451Nv8PMoHMxacqSdc2C2M/7dtHeNw/IfQcPkGjAp
+	2PZ9cUjqZA8mkb4lNtoOGrIk/+rGOvi1fqBP6E/zfhW+PlaeRGzz5I939qxuFCvV
+	nz+P2bw3nP7FiUvDQcvlmkiLLfF9jSrd9T8SrpwbLkY0Q7d68n/5HYe8Wzn7Iqx8
+	ZRcRHjlzyW2R5EJ8/ogEtD+tTZVeFusP16t8a8jy2xazb9TwB89I9D2RYnI2FAga
+	gHhUDR/ezDG5Yz6cciP7HMuzCxPq2i5LmT/OWgvq9zLVV0zPYNOfvngtBH2BsBUk
+	dNcrw==
+X-ME-Sender: <xms:fBw2Z_bAOuJkerSjfpI4v5vBw6RnSJFE3sOp6zHuL-iUpkn9c8EOAg>
+    <xme:fBw2Z-ZIH5vjqv_sbwwu_SjWtAZOeYcK17hfgiyUsUsRAlMI6jPYQmXNKgFh-4g-P
+    Qr9sqpNrhktxpWw-CY>
+X-ME-Received: <xmr:fBw2Zx8GOcc7WjpxpK5uh7WtItnVEOC1rMEisQVIwJYGhU9tL8nNzciVU25e>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrvddvgdekudcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
     tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
     hsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecu
@@ -81,14 +81,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrvddvgdektdcutefuodetggdote
     drtghomhdprhgtphhtthhopegrphhoohhrvhhkohesrghmrgiiohhnrdgtohhmpdhrtghp
     thhtohepsghorhhishhpsehnvhhiughirgdrtghomhdprhgtphhtthhopehjohhhnhdrfh
     grshhtrggsvghnugesghhmrghilhdrtghomh
-X-ME-Proxy: <xmx:eRw2Z2rgAQwUIq-x7pptGy0JwaS6ZbTrc1LUw_J2X3O3pIs6rNirQQ>
-    <xmx:eRw2Z3qNZ9Y8OEZYCuwIJlC4bqdqlbbbxZNlgqCN8_8rOcxWTxrBNQ>
-    <xmx:eRw2Z0R1kQySp8MtcVpqfKJzNAxjTlmOruXGRJAed4JB1UR9MLgpbA>
-    <xmx:eRw2Z3qXl452Ny1s0NXS5ePxJlxR691ei0-1VhBThbBGr2J0P_ci6w>
-    <xmx:eRw2ZwRhPzWwWY8n7Avh1XAaiXM-u67rdhYgYBNzay2o7uxvCEq8-tb2>
+X-ME-Proxy: <xmx:fBw2Z1rhPtqc12FeWjlpl1wsYZLLbVTCZAeHhf_pnu8nPqKGvCRR8Q>
+    <xmx:fBw2Z6qTeHKgf642cd8EQAVEU3ZOptPNpWhmnyrk2jHIX9oy5OoKgg>
+    <xmx:fBw2Z7Q3oB8PcykA5dVayNW62nTyclItUntZE2DNmU4OdKJiZfXAPQ>
+    <xmx:fBw2ZyoB0U1UarbGMkjUZa0F8gikGJpKlsRn-R4NTYP45PuKYzDeeg>
+    <xmx:fBw2Z3SfQ0RKhlZWuZ8DhB3jIqNoFhhtTttE7eAFrt_z3Gx8G4ZBBfIa>
 Feedback-ID: i934648bf:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 14 Nov 2024 10:51:20 -0500 (EST)
+ 14 Nov 2024 10:51:23 -0500 (EST)
 From: Sabrina Dubroca <sd@queasysnail.net>
 To: netdev@vger.kernel.org
 Cc: Sabrina Dubroca <sd@queasysnail.net>,
@@ -104,9 +104,9 @@ Cc: Sabrina Dubroca <sd@queasysnail.net>,
 	Gal Pressman <gal@nvidia.com>,
 	Marcel Holtmann <marcel@holtmann.org>,
 	Simon Horman <horms@kernel.org>
-Subject: [PATCH net-next v4 3/6] tls: add counters for rekey
-Date: Thu, 14 Nov 2024 16:50:50 +0100
-Message-ID: <2f5b01548afb3795fb5f6aace6c2182ab98b9076.1731597571.git.sd@queasysnail.net>
+Subject: [PATCH net-next v4 4/6] docs: tls: document TLS1.3 key updates
+Date: Thu, 14 Nov 2024 16:50:51 +0100
+Message-ID: <6baaaaf467845c56d7ec47250aaa2138de948003.1731597571.git.sd@queasysnail.net>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1731597571.git.sd@queasysnail.net>
 References: <cover.1731597571.git.sd@queasysnail.net>
@@ -118,109 +118,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This introduces 4 counters to keep track of key updates:
-Tls{Rx,Tx}Rekey{Ok,Error}.
+v3: added following Jakub's comment on the cover letter
+v4: add the new counters
 
-v4: new patch
-
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
 ---
- include/uapi/linux/snmp.h |  4 ++++
- net/tls/tls_main.c        | 27 ++++++++++++++++++++++-----
- net/tls/tls_proc.c        |  4 ++++
- 3 files changed, 30 insertions(+), 5 deletions(-)
+ Documentation/networking/tls.rst | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/include/uapi/linux/snmp.h b/include/uapi/linux/snmp.h
-index adf5fd78dd50..b0e6f922e72f 100644
---- a/include/uapi/linux/snmp.h
-+++ b/include/uapi/linux/snmp.h
-@@ -358,6 +358,10 @@ enum
- 	LINUX_MIB_TLSRXDEVICERESYNC,		/* TlsRxDeviceResync */
- 	LINUX_MIB_TLSDECRYPTRETRY,		/* TlsDecryptRetry */
- 	LINUX_MIB_TLSRXNOPADVIOL,		/* TlsRxNoPadViolation */
-+	LINUX_MIB_TLSRXREKEYOK,			/* TlsRxRekeyOk */
-+	LINUX_MIB_TLSRXREKEYERROR,		/* TlsRxRekeyError */
-+	LINUX_MIB_TLSTXREKEYOK,			/* TlsTxRekeyOk */
-+	LINUX_MIB_TLSTXREKEYERROR,		/* TlsTxRekeyError */
- 	__LINUX_MIB_TLSMAX
- };
+diff --git a/Documentation/networking/tls.rst b/Documentation/networking/tls.rst
+index 658ed3a71e1b..dfce109fe2ca 100644
+--- a/Documentation/networking/tls.rst
++++ b/Documentation/networking/tls.rst
+@@ -200,6 +200,31 @@ received without a cmsg buffer set.
  
-diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
-index 68b5735dafc1..9ee5a83c5b40 100644
---- a/net/tls/tls_main.c
-+++ b/net/tls/tls_main.c
-@@ -640,8 +640,11 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
- 		/* Currently we only support setting crypto info more
- 		 * than one time for TLS 1.3
- 		 */
--		if (crypto_info->version != TLS_1_3_VERSION)
-+		if (crypto_info->version != TLS_1_3_VERSION) {
-+			TLS_INC_STATS(sock_net(sk), tx ? LINUX_MIB_TLSTXREKEYERROR
-+						       : LINUX_MIB_TLSRXREKEYERROR);
- 			return -EBUSY;
-+		}
+ recv will never return data from mixed types of TLS records.
  
- 		update = true;
- 		old_crypto_info = crypto_info;
-@@ -696,8 +699,13 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
- 						update ? crypto_info : NULL);
- 			if (rc)
- 				goto err_crypto_info;
--			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSTXSW);
--			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSCURRTXSW);
++TLS 1.3 Key Updates
++-------------------
 +
-+			if (update) {
-+				TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSTXREKEYOK);
-+			} else {
-+				TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSTXSW);
-+				TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSCURRTXSW);
-+			}
- 			conf = TLS_SW;
- 		}
- 	} else {
-@@ -711,8 +719,13 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
- 						update ? crypto_info : NULL);
- 			if (rc)
- 				goto err_crypto_info;
--			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXSW);
--			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSCURRRXSW);
++In TLS 1.3, KeyUpdate handshake messages signal that the sender is
++updating its TX key. Any message sent after a KeyUpdate will be
++encrypted using the new key. The userspace library can pass the new
++key to the kernel using the TLS_TX and TLS_RX socket options, as for
++the initial keys. TLS version and cipher cannot be changed.
 +
-+			if (update) {
-+				TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXREKEYOK);
-+			} else {
-+				TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXSW);
-+				TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSCURRRXSW);
-+			}
- 			conf = TLS_SW;
- 		}
- 		if (!update)
-@@ -735,6 +748,10 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
- 	return 0;
++To prevent attempting to decrypt incoming records using the wrong key,
++decryption will be paused when a KeyUpdate message is received by the
++kernel, until the new key has been provided using the TLS_RX socket
++option. Any read occurring after the KeyUpdate has been read and
++before the new key is provided will fail with EKEYEXPIRED. Poll()'ing
++the socket will also sleep until the new key is provided. There is no
++pausing on the transmit side.
++
++Userspace should make sure that the crypto_info provided has been set
++properly. In particular, the kernel will not check for key/nonce
++reuse.
++
++The number of successful and failed key updates is tracked in the
++``TlsTxRekeyOk``, ``TlsRxRekeyOk``, ``TlsTxRekeyError``,
++``TlsRxRekeyError`` statistics.
++
+ Integrating in to userspace TLS library
+ ---------------------------------------
  
- err_crypto_info:
-+	if (update) {
-+		TLS_INC_STATS(sock_net(sk), tx ? LINUX_MIB_TLSTXREKEYERROR
-+					       : LINUX_MIB_TLSRXREKEYERROR);
-+	}
- 	memzero_explicit(crypto_ctx, sizeof(*crypto_ctx));
- 	return rc;
- }
-diff --git a/net/tls/tls_proc.c b/net/tls/tls_proc.c
-index 68982728f620..44ccdc90095c 100644
---- a/net/tls/tls_proc.c
-+++ b/net/tls/tls_proc.c
-@@ -22,6 +22,10 @@ static const struct snmp_mib tls_mib_list[] = {
- 	SNMP_MIB_ITEM("TlsRxDeviceResync", LINUX_MIB_TLSRXDEVICERESYNC),
- 	SNMP_MIB_ITEM("TlsDecryptRetry", LINUX_MIB_TLSDECRYPTRETRY),
- 	SNMP_MIB_ITEM("TlsRxNoPadViolation", LINUX_MIB_TLSRXNOPADVIOL),
-+	SNMP_MIB_ITEM("TlsRxRekeyOk", LINUX_MIB_TLSRXREKEYOK),
-+	SNMP_MIB_ITEM("TlsRxRekeyError", LINUX_MIB_TLSRXREKEYERROR),
-+	SNMP_MIB_ITEM("TlsTxRekeyOk", LINUX_MIB_TLSTXREKEYOK),
-+	SNMP_MIB_ITEM("TlsTxRekeyError", LINUX_MIB_TLSTXREKEYERROR),
- 	SNMP_MIB_SENTINEL
- };
- 
+@@ -286,3 +311,9 @@ TLS implementation exposes the following per-namespace statistics
+ - ``TlsRxNoPadViolation`` -
+   number of data RX records which had to be re-decrypted due to
+   ``TLS_RX_EXPECT_NO_PAD`` mis-prediction.
++
++- ``TlsTxRekeyOk``, ``TlsRxRekeyOk`` -
++  number of successful rekeys on existing sessions for TX and RX
++
++- ``TlsTxRekeyError``, ``TlsRxRekeyError`` -
++  number of failed rekeys on existing sessions for TX and RX
 -- 
 2.47.0
 
