@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-22011-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22012-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 738E79C848F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 09:06:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC17E9C84A7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 09:12:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7F481F22082
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 08:06:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A290528517A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 08:12:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D3451F585B;
-	Thu, 14 Nov 2024 08:06:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B28EF1F7550;
+	Thu, 14 Nov 2024 08:11:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="aah1VsOg"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="Jkz0aoep"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7111F4FDA
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 08:06:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD7A1F7077
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 08:11:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731571610; cv=none; b=fhiVLW/YuCnUiITJWxl1XSwkjB+zplU6uIyXRsKMdUbkZcTopHT7GfiDNnRAr/2lOCjiSgP3X4Ll48PuGyzK4/Uu+vz4vWJUrcL56UaGBBFtH13aJ2laqTirHAiT+9uo0GwlQFKFGqh+vyrd3c/L+G3xR0yJ6LXPNu2Uqjflwyw=
+	t=1731571899; cv=none; b=h7Viw1VzQFZCPAjn2zeRmxAaEKB90wn3BmwuSxAlsjQ9YUxWocN4cHdBFwXUGhi+7X5Z5vOsr2OvhDONKEWb5igrPVvWPCGBddksKbK7Y352Ohx7CK4KKV5TTN5otaQTfz0CHPedBD539Eize4t7Sj2V6hzusFpmhSvE0RTdsBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731571610; c=relaxed/simple;
-	bh=R03XO8IOSVVFaYkaL0RmhVKl4tkSEqMsBWjmeYOwy/0=;
+	s=arc-20240116; t=1731571899; c=relaxed/simple;
+	bh=dbIbz3t0cEpW3r7Wy8SR6AhtdgpUROKxXtAsVLqqPLY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mdx4Ubk3Q0FQgu3LSrm44jD+GkdAohqhMw60P3rRjlsOtKjF3MrOXr6DoA4D+BtjbWNcscZVAjpOQ8G/RftMF+I84Z8zOJTR9a96jqCL2ECUdjkmvCKwQToOUSgeY2tQd+2TlzSWhJvK/J6PhuUHuyMjk8UHrHKNreL8reCsC4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=aah1VsOg; arc=none smtp.client-ip=209.85.208.53
+	 In-Reply-To:Content-Type; b=MGuxj6nHNDD5tC4G7exfZ2rJsP3tc3AWGiPHRUkRb/rJAOs+3sDQPLh60pJWXHuyyu2Y+29L0rGmeTzqNf10lUou1ET7Yi6ObdKaIISUgxMhg4/O3AYfaZybGIRQ4QJ0OZNb1knqnQUaFbsVVH3Bmp8n5eY6XBn6UG78uTSzkLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=Jkz0aoep; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5c9693dc739so449737a12.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 00:06:47 -0800 (PST)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a9a6b4ca29bso41981366b.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2024 00:11:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1731571606; x=1732176406; darn=vger.kernel.org;
+        d=openvpn.net; s=google; t=1731571896; x=1732176696; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/3rQZK0KKioCoimnvVntQO3wq97Z15vn67PdFpRtyDU=;
-        b=aah1VsOgW8Cs/ANlGusXecPhf+3IMyMg7X6f54d3x0XYFRB0BqFBhNrwVik/7KbNZU
-         8p0A9AbME5s/T3Jk7jyDoS98cVxiGkOLSpHlluiTFD2kDkvaC2Jr43tx+jzjE2o9M9S0
-         Flpxx6QneGsaS4qljYB3MaadRceRpF7J8QdTxwkmZ9O2V8YoU2YK0ERkakHLoMCy1ZgL
-         CQbVgUrekk2n0RJdWyoc4Aln/0TF0ZnaUWDFWPm7sZZkGuQOsuPDTOgALZwc6hc8IFT0
-         V8IJkJYb+YwPe//j5vjgOR/527lIqT/ZnTzWzCfop8Uu7WKiLwjBEd68jyWTNzthnUYJ
-         u+iQ==
+        bh=Lhi2XcdyoNb77R//XCSb7tUnf+SSZyDwvqz+0gWmS2A=;
+        b=Jkz0aoepK2Sj+XF2zGM3m4zzdxjKczXv2SqcpKrUswJOjeurexlOFdeH5NR4KlHAcb
+         GEJ6Xwy+p4KTeD2in8Fo+ro2f/ICS8+knYwWmHXtoNkV9+8GMoe3kAVytnyaODvc15Gn
+         AVAC0183dhrLUGC7ndFvef3TXmTJ609i/ch4ddgne4Dmhtm82X+SLy+fQ6jpkcnXrIns
+         qGmCs9Vi2E6mTcBBDv9qdc1gEH4u+m//q+wNT1zeAH3WFG4MNEDxA1zNFOUooWNRn7xE
+         rKyZv1YMkhtIyeWL4AhGkqNYc9gAJl5uzTIAKuBZJ/7omyCv3WqHiFKxtQK3mbM/J3zL
+         sceA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731571606; x=1732176406;
+        d=1e100.net; s=20230601; t=1731571896; x=1732176696;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/3rQZK0KKioCoimnvVntQO3wq97Z15vn67PdFpRtyDU=;
-        b=vXX5fTSQTZEBCsj+ZA1keqDSnbsEzdGy2dZlSwh3NEf6nwncEq8TB3cF20Hmwl8FXg
-         Nk7TVlxPF8GoHlWnlxU10GYZZm8GIK9QzpElUxosyunhn1wpZGGz79i/NTgodvcnA5wi
-         zlXO1MWYEIkI85/sXb6xbMkStpxzOh/AQzzermExXZkNlUiqdUhVWewFW+qhlLbu+2Jz
-         ICm0r/96srbiPuJRSOt8YEnNWZoB+ZauKhmxduV7XeiZXs0c2taJg7/FDTxMMjKa/K9r
-         OOcd12ityZqp8U7hmIiapMzoJbXesYQ5u4e7cP8gfmcnxARxOIEBZBlLzFQtOTwh1Hb9
-         XJ6w==
-X-Forwarded-Encrypted: i=1; AJvYcCXgr5VWdaoyyt/KGoYQeQBzOoYyGTuZ0jz3T0XEl0eJESflq1mXzrM7ZTIY4ggdMTPcdy9RyjhysxycMeudTOA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBRF2D/0EN9Rj/561Wc4yeTOKteWvVi2rTz3M++EoZYlv3TvBW
-	N0iF0eMMZgi2r2noj/26hJwkhccKz3qELA04KrIycxd3+GsPfiOKJz6D70dP9oc=
-X-Google-Smtp-Source: AGHT+IH2TiT81RziNLKAvCJL/Hw8KEXJesHLo/N+/7ZhKpkSfKqH35uYBSfv5Pru+cDJiL35jpRCPQ==
-X-Received: by 2002:a17:907:3d88:b0:a99:ef5d:443e with SMTP id a640c23a62f3a-aa20cd0aa94mr105945666b.13.1731571605894;
-        Thu, 14 Nov 2024 00:06:45 -0800 (PST)
+        bh=Lhi2XcdyoNb77R//XCSb7tUnf+SSZyDwvqz+0gWmS2A=;
+        b=Rjd3/ATBcoMC53aQPkrwlqdDgrp3AChxKqb5X4nFNCQq6lsN4Hhnw6p6R4jfTt1sVT
+         CFY+brruJFSKsfyZNSCkZImNXch5QolAxQE2xJ5eUdH2pTFcvbpEUkeR35CQ8g6vs+tI
+         5KvgAPpdxIysdomyTa+0XeOIg+VuTteNIC3c0M3ivnqcZiE1gZpX4OsLpVCeQOSYf0Ww
+         Ktx49cFJgSW05Wa8eybfa5rCtXKtP5bBntmqYFHYnKlmcBoa4BUXEoWsSbZ9LiiKKlrN
+         GgeT4KkcKprpBJWV6S1Zrl0dZQIl9wnb0fEmmkjgY8gGhdSKY3bz/UOdVYaWjySv0OwU
+         0t8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUH/7rtSwsQ2EmSym77MwtoMaW4GzBOBXb8Sk6bC0CReQAaPP/lIS+3kveKWBvkE+2+aK6bnu3W1a7utsLZPBM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxivd3PqEQ7E8r9OvTP8CtGF+dHJXWkboKLQIb3r9Gyk4q7I3ac
+	RtOImmL6LiKOGVkKG2pk1E93n+H/VBljh3cH9MDnQzoSQUy6x/6PocJanFOzJCo=
+X-Google-Smtp-Source: AGHT+IHn8GzlUpFSwlHPxZF4Bet/aeH5Llo7f+cI3x6kBTlWSqRynAOg9Usx4t4FBNGnpyRoDEnKxA==
+X-Received: by 2002:a17:907:5cb:b0:a9a:1792:f1a with SMTP id a640c23a62f3a-aa1f8043f6amr520374466b.7.1731571895602;
+        Thu, 14 Nov 2024 00:11:35 -0800 (PST)
 Received: from ?IPV6:2001:67c:2fbc:1:3779:22d5:a322:7c13? ([2001:67c:2fbc:1:3779:22d5:a322:7c13])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa20e043b84sm32671266b.137.2024.11.14.00.06.44
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa20dffd782sm33977466b.129.2024.11.14.00.11.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Nov 2024 00:06:45 -0800 (PST)
-Message-ID: <3da3a4a6-f88d-4b60-be99-42860e1b8b2d@openvpn.net>
-Date: Thu, 14 Nov 2024 09:07:11 +0100
+        Thu, 14 Nov 2024 00:11:35 -0800 (PST)
+Message-ID: <2a90f702-3061-46b6-aafa-cf8c1ba3d0de@openvpn.net>
+Date: Thu, 14 Nov 2024 09:12:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,18 +77,16 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 04/23] ovpn: add basic interface
- creation/destruction/management routines
-To: Sabrina Dubroca <sd@queasysnail.net>,
- Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Subject: Re: [PATCH net-next v11 15/23] ovpn: implement keepalive mechanism
+To: Sabrina Dubroca <sd@queasysnail.net>
 Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+ Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+ Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-4-de4698c73a25@openvpn.net>
- <2fd3dc9c-9d6a-494c-a4d8-a45221bf250d@gmail.com> <ZzOGqP9AAGSN2E7y@hog>
+ <20241029-b4-ovpn-v11-15-de4698c73a25@openvpn.net> <ZypfnyfToF1b6YAZ@hog>
+ <189dbeea-127a-47e8-84f8-c8cf1cc03536@openvpn.net> <ZzSBG-RPUlpgVFhA@hog>
 Content-Language: en-US
 From: Antonio Quartulli <antonio@openvpn.net>
 Autocrypt: addr=antonio@openvpn.net; keydata=
@@ -131,94 +129,124 @@ Autocrypt: addr=antonio@openvpn.net; keydata=
  BnRX9nFx9kPSO42TkFK55Dr5EDeBO3v33recscuB8VVN5xvh0GV57Qre+9sJrEq7Es9W609a
  +M0yRJWJEjFnMa/jsGZ+QyLD5QTL6SGuZ9gKI3W1SfFZOzV7hHsxPTZ6
 Organization: OpenVPN Inc.
-In-Reply-To: <ZzOGqP9AAGSN2E7y@hog>
+In-Reply-To: <ZzSBG-RPUlpgVFhA@hog>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 12/11/2024 17:47, Sabrina Dubroca wrote:
-> 2024-11-09, 03:01:21 +0200, Sergey Ryazanov wrote:
->> On 29.10.2024 12:47, Antonio Quartulli wrote:
->>> +/* When the OpenVPN protocol is ran in AEAD mode, use
->>> + * the OpenVPN packet ID as the AEAD nonce:
->>> + *
->>> + *    00000005 521c3b01 4308c041
->>> + *    [seq # ] [  nonce_tail   ]
->>> + *    [     12-byte full IV    ] -> NONCE_SIZE
->>> + *    [4-bytes                   -> NONCE_WIRE_SIZE
->>> + *    on wire]
->>> + */
+On 13/11/2024 11:36, Sabrina Dubroca wrote:
+> 2024-11-12, 14:20:45 +0100, Antonio Quartulli wrote:
+>> On 05/11/2024 19:10, Sabrina Dubroca wrote:
+>>> 2024-10-29, 11:47:28 +0100, Antonio Quartulli wrote:
+>>>> @@ -105,6 +132,9 @@ void ovpn_decrypt_post(void *data, int ret)
+>>>>    		goto drop;
+>>>>    	}
+>>>> +	/* keep track of last received authenticated packet for keepalive */
+>>>> +	peer->last_recv = ktime_get_real_seconds();
+>>>
+>>> It doesn't look like we're locking the peer here so that should be a
+>>> WRITE_ONCE() (and READ_ONCE(peer->last_recv) for all reads).
 >>
->> Nice diagram! Can we go futher and define the OpenVPN packet header as a
->> stucture? Referencing the structure instead of using magic sizes and offsets
->> can greatly improve the code readability. Especially when it comes to header
->> construction/parsing in the encryption/decryption code.
+>> Is that because last_recv is 64 bit long (and might be more than one word on
+>> certain architectures)?
 >>
->> E.g. define a structures like this:
->>
->> struct ovpn_pkt_hdr {
->>    __be32 op;
->>    __be32 pktid;
->>    u8 auth[];
->> } __attribute__((packed));
->>
->> struct ovpn_aead_iv {
->>    __be32 pktid;
->>    u8 nonce[OVPN_NONCE_TAIL_SIZE];
->> } __attribute__((packed));
+>> I don't remember having to do so for reading/writing 32 bit long integers.
 > 
-> __attribute__((packed)) should not be needed here as the fields in
-> both structs look properly aligned, and IIRC using packed can cause
-> the compiler to generate worse code.
+> AFAIK it's not just that. The compiler is free to do the read/write in
+> any way it wants when you don't specify _ONCE. On the read side, it
+> could read from memory a single time or multiple times (getting
+> possibly different values each time), or maybe split the load
+> (possibly reading chunks from different values being written in
+> parallel).
 
-Agreed. Using packed will make certain architecture read every field 
-byte by byte (I remember David M. biting us on this in batman-adv :))
-
-This said, I like the idea of using a struct, but I don't feel confident 
-enough to change the code now that we are hitting v12.
-This kind of change will be better implemented later and tested 
-carefully. (and patches are always welcome! :))
+Ok, thanks. Will switch to WRITE/READ_ONE then.
 
 > 
+>> I presume we need a WRITE_ONCE also upon initialization in
+>> ovpn_peer_keepalive_set() right?
+>> We still want to coordinate that with other reads/writes.
 > 
->>> diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
->>> index 8516c1ccd57a7c7634a538fe3ac16c858f647420..84d294aab20b79b8e9cb9b736a074105c99338f3 100644
->>> --- a/include/uapi/linux/if_link.h
->>> +++ b/include/uapi/linux/if_link.h
->>> @@ -1975,4 +1975,19 @@ enum {
->>>    #define IFLA_DSA_MAX	(__IFLA_DSA_MAX - 1)
->>> +/* OVPN section */
->>> +
->>> +enum ovpn_mode {
->>> +	OVPN_MODE_P2P,
->>> +	OVPN_MODE_MP,
->>> +};
->>
->> Mode min/max values can be defined here and the netlink policy can reference
->> these values:
->>
->> enum ovpn_mode {
->>    OVPN_MODE_P2P,
->>    OVPN_MODE_MP,
->>    __OVPN_MODE_MAX
->> };
->>
->> #define OVPN_MODE_MIN OVPN_MODE_P2P
->> #define OVPN_MODE_MAX (__OVPN_MODE_MAX - 1)
->>
->> ... = NLA_POLICY_RANGE(NLA_U8, OVPN_MODE_MIN, OVPN_MODE_MAX)
+> I think it makes sense, yes.
+
+ACK
+
+[...]
 > 
-> I don't think there's much benefit to that, other than making the diff
-> smaller on a (very unlikely) patch that would add a new mode in the
-> future. It even looks more inconvenient to me when reading the code
-> ("ok what are _MIN and _MAX?  the code is using _P2P and _MP, do they
-> match?").
+>>>> +	/* check for peer timeout */
+>>>> +	expired = false;
+>>>> +	timeout = peer->keepalive_timeout;
+>>>> +	delta = now - peer->last_recv;
+>>>
+>>> I'm not sure that's always > 0 if we finish decrypting a packet just
+>>> as the workqueue starts:
+>>>
+>>>     ovpn_peer_keepalive_work
+>>>       now = ...
+>>>
+>>>                                          ovpn_decrypt_post
+>>>                                            peer->last_recv = ...
+>>>
+>>>     ovpn_peer_keepalive_work_single
+>>>       delta: now < peer->last_recv
+>>>
+>>
+>> Yeah, there is nothing preventing this from happening...but is this truly a
+>> problem? The math should still work, no?
+> 
+> We'll fail "delta < timeout" (which we shouldn't), so we'll end up
+> either in the "expired = true" case, or not updating
+> keepalive_recv_exp. Both of these seem not ideal.
 
-I agree with Sabrina here.
-I also initially thought about having MIN/MAX, but it wouldn't make 
-things simpler for the ovpn_mode.
+delta is signed, so it'll end up being a negative value and "delta < 
+timeout" should not fail then. Unless I am missing something.
 
+Anyway, this was just an exercise to understand what was going on.
+I already changed the code as per your suggestion (the fact that we are 
+still discussing this chunk proves that it needed to be simplified :))
+
+> 
+>>
+>> However:
+>>
+>>>
+>>>
+>>>> +	if (delta < timeout) {
+>>>> +		peer->keepalive_recv_exp = now + timeout - delta;
+>>>
+>>> I'd shorten that to
+>>>
+>>>       peer->keepalive_recv_exp = peer->last_recv + timeout;
+>>>
+>>> it's a bit more readable to my eyes and avoids risks of wrapping
+>>> values.
+>>>
+>>> So I'd probably get rid of delta and go with:
+>>>
+>>>       last_recv = READ_ONCE(peer->last_recv)
+>>>       if (now < last_recv + timeout) {
+>>>       	peer->keepalive_recv_exp = last_recv + timeout;
+>>>       	next_run1 = peer->keepalive_recv_exp;
+>>>       } else if ...
+>>>
+>>>> +		next_run1 = peer->keepalive_recv_exp;
+>>>> +	} else if (peer->keepalive_recv_exp > now) {
+>>>> +		next_run1 = peer->keepalive_recv_exp;
+>>>> +	} else {
+>>>> +		expired = true;
+>>>> +	}
+>>
+>> I agree this is simpler to read and gets rid of some extra operations.
+>>
+>> [note: I took inspiration from nat_keepalive_work_single() - it could be
+>> simplified as well I guess]
+> 
+> Ah, ok. I wanted to review this code when it was posted but didn't
+> have time :(
+
+It can still be fixed ;)
+
+
+Thanks.
 Regards,
-
 
 -- 
 Antonio Quartulli
