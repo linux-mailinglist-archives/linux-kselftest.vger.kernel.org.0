@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-22104-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22105-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 742BE9CEFA2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 16:24:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1372C9CEFC7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 16:25:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2137CB26CA3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 15:05:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BCABFB383E1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 15:09:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16CA41D432D;
-	Fri, 15 Nov 2024 15:04:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15DFF1D514F;
+	Fri, 15 Nov 2024 15:08:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="J8u15Ls3"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="Rmf2rj4f"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A80D1CDA1A
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2024 15:04:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E360C1D47AE
+	for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2024 15:08:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731683098; cv=none; b=qXZk7ywcF/ExDqgecYTJtjDEpEryEeNhvuL6J4UMcIuJryU3s8hzE2GFo7+QTK/rRwpf34i0ilLB0CaYoABKZTH4Jy4am22y5ErBovNyZD5bLCEsGwO4ZSc3TjUwVEzt29nAwxIUQHhqa1FCf8g6ltajLmmj0oXENn5LHZTUCZs=
+	t=1731683293; cv=none; b=uNFMn1LtRT8a4Uf9yVqnRG3KBCDt0wm5H/3W2AsClzJ6LaTD7I07aZ1y7xgNoqwhVzekeZBzhYSCDu6ePiWAFwo+GtrAEm/cXuJl85AfiXY9M9AhQFq3vfkBlO5WCbS4yjnQKF/MHAxLWR/YXFqgd1ng99Ypr1Oe1jeTbQM7Ivg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731683098; c=relaxed/simple;
-	bh=M/zjC2v8MMt9fpVVQXPTVsxDsQ+WB9x9h0E3nl9Mlxw=;
+	s=arc-20240116; t=1731683293; c=relaxed/simple;
+	bh=XQjM1GvvHQ1WSi2kENKiDh1XY79HfJbCf+GuZF6GAAk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SvyVnLvSxJ6yUTUpl4RFOF59dxVexvC8evERLK2Hb8anAUYsuSPBFbysJifbLqHMHeLbMNUoIHUjVepPaVoxIMayv67U2MiHzeFKXcgOC4iA2+AMh+qzH0TQmRAuev7W9HTim1GdmmD8+RWVpFGMUKgFECFHrj2b4CcixOlEkfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=J8u15Ls3; arc=none smtp.client-ip=209.85.221.48
+	 In-Reply-To:Content-Type; b=HkCVh7bsIaRIwntk+mzRXRqC/+LGVj/jSRgjH4fkxXS8Mp6zqICqA2Vhg0cYQbAjvMOLH51hu0KTlQKDlE1GTYAu8kSqYTsbj1RYMULbNp61Shrix86ucN5PlOjgBUYNqSYzIIreP0+pCYvQ7Y3f5M5YOrMBhXJp/a3MFiYVSQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=Rmf2rj4f; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-382219ceaacso924163f8f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2024 07:04:55 -0800 (PST)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4315839a7c9so16530645e9.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2024 07:08:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1731683094; x=1732287894; darn=vger.kernel.org;
+        d=openvpn.net; s=google; t=1731683290; x=1732288090; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ywXNL2Wg3yXwb5/5rIZiURVE80M8ljEd7LOq9ImH8YI=;
-        b=J8u15Ls3gA2z23XJVk2WPvC8Ksm6CK7zneyopY5MbtCUExk1ve69BpFMsaWjktnZ1b
-         uiXnNKLA4nVKBt7pCJWFdE8LkxF4FQfo4D1Cf7Ax0OoboaCzkiEfeNWhcA5oiV6H7+6z
-         c6ib2mLFYJhAuyHyEg6mkvEHv0PRNP/EUJq07HEFl1KJ9yDmfZEIuv5pomVLwE9i4zsB
-         abbbrbl34jJlBlxQQSIiEu8p9bRC41oKsylEBa9ODjk/e9+CajT91aGW4t82X4LfxCYH
-         F8EfiJWwKngjO+imrBhcLWxh4oGql7q7LAPfaNgXvafgBoUjarfXeV0pVWqyW8kM4VtJ
-         035A==
+        bh=l1eVJ+u5gvoiBy0Qi5z7Q2cwYJUTwhtsNR7M5+MGpjw=;
+        b=Rmf2rj4fe3bQ/ngifZqZO8qjcqsQjo1OTDwkbdibHPku+yMS+bADmTAW8lj5RSMAPx
+         qBT/2m/i3QytW5M28V3GVckj7VGEndceUwW3uyiSATl3k2c4XSXe+2abMNYlWakWTIoJ
+         5XaEx4xUL31oJDs7cQuWCNeXFR945Fl2GGloShPO24N82You7zOClNsx2+MwMhJIxAg7
+         XqiddMy+ic7J3lrrsA4Kptc/477m5Ck5oy3dsFjkiPe/75EgF4bFU1YIieRqX77JcEFA
+         T7GqZ10O1IyebkQt5qbIf9JU9lKylkBfkwF3Zh1yCZera3+gCFydK+X0TTQ6Mt02c+LW
+         SVXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731683094; x=1732287894;
+        d=1e100.net; s=20230601; t=1731683290; x=1732288090;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ywXNL2Wg3yXwb5/5rIZiURVE80M8ljEd7LOq9ImH8YI=;
-        b=ZTygJD7bPzWYYe93A4lkQRAcRDQWwbEMM2j5HRsOe0IdCfHqWH1+9NAnUQZC4vIvje
-         kcsHOtFWCmmkYy6hOrZx/Rng9qFFyNQ2FbzWZ6lbVI40SR6lPMmNOnU5M02veivHPDF6
-         QDj4zMhqdkMIfVhZ/bexKB0+Xd5IV8ncSimqAsAOecYe7pn9Mk0YzEeCGwagqu9cyefs
-         d8PxIk1/RyCcFkrfvbdOPuaaD/WhqyHl0n8XgxMCuk3LuroO5xhmkfpV6rS1etXZ8Xda
-         cJFmbCQfBPdRP7Q8swlbfO5KmgwL9NNEwHBuKLZAu11tCoU+u0xk9cKPmxn2ydSLcfA1
-         HhdA==
-X-Forwarded-Encrypted: i=1; AJvYcCVXCcsEJTUgGRlqTVicggJRE85D8Uf801o4TLvj6bzrlMJIvxTpcdIk1mic8lLKSZxOTHvF1iVAYTWdR3zvNnk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzM/2GKI6p1igQQkWxj9i0iJaokiXyprkswvTg8i9Xa7yPZ02Hw
-	+IdiXi6BkjQ92A7jV2IZTQT51x3bPjc4ASEDfM4Hha4yce01AvoCr+90c0iXDKo=
-X-Google-Smtp-Source: AGHT+IG+yblpOh4glEcmxospiPIgobJqIdgUH4aBe41gxx/doUSx7ZsBf33MSe8gDNmrTGtANEMVvw==
-X-Received: by 2002:a5d:648a:0:b0:37d:3eec:6214 with SMTP id ffacd0b85a97d-38225aa625emr2050642f8f.50.1731683093596;
-        Fri, 15 Nov 2024 07:04:53 -0800 (PST)
+        bh=l1eVJ+u5gvoiBy0Qi5z7Q2cwYJUTwhtsNR7M5+MGpjw=;
+        b=pnBGPGjX11iaDYeNokaBnsgMAfkUHIkGa7jxP4ZWbf40e0QOtVGt61Zs0OyodKWtVX
+         19VSidnw7EPDX4wWgnNMk0TQ0+TG3vGzYvAL/XNsNqAA9BjPsv4xOWUu4cMrak6xpETl
+         U4Mf9i4ic03wLa+8DvIHFmtPCjEIyBRx0Y9oBKs67tZ/ksYg5gW2Yimcvnj2VMEK3oH4
+         BQhOi376PQMWH7GuWbYpwoztT1LzaM9MV5YX+kL6uioOiPWyDGTGSHATkfz8kaQaZvN3
+         pB3xyFZgUqj7gDGVvmfD6+ipETtTOPaB+ZQ45URZaPwcD5p0H02IC1DGIlvKMeWax2gw
+         vzJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUPkp29FuzL/91GRvIgdhu7t8SFlff5ssGMh95CWZ/92RgbxmkdUlGWRb99Okk0iY4rPptcblCoCMy+Ni8cSXA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJDO4KvgktOXG0eYN4vDx2+U9+qK3hu0fMye39BJzOQnvzqd3E
+	bvBLlOyyoocrFoSdDBOdsTKDVWcaH+lEyYTO1ER0VNf6xSrbKEvEGVvCub1dAaw=
+X-Google-Smtp-Source: AGHT+IHy0UggFmJRQLPotM9I2PDLoXOFlnbr1NHeixCcWpBtFZ0X+Q7HyQTellfVyQE46O8++56qZw==
+X-Received: by 2002:a05:600c:1907:b0:430:52ec:1e2b with SMTP id 5b1f17b1804b1-432df791b70mr23882875e9.29.1731683290161;
+        Fri, 15 Nov 2024 07:08:10 -0800 (PST)
 Received: from ?IPV6:2001:67c:2fbc:1:59f4:10be:886a:27eb? ([2001:67c:2fbc:1:59f4:10be:886a:27eb])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-382224253f6sm3267149f8f.111.2024.11.15.07.04.52
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432dac1f94asm56070725e9.39.2024.11.15.07.08.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Nov 2024 07:04:52 -0800 (PST)
-Message-ID: <0afdd7a2-328a-4a14-9f18-f47416041dc2@openvpn.net>
-Date: Fri, 15 Nov 2024 16:05:18 +0100
+        Fri, 15 Nov 2024 07:08:09 -0800 (PST)
+Message-ID: <5fe43b6a-4f16-4a98-b586-51d2964777c0@openvpn.net>
+Date: Fri, 15 Nov 2024 16:08:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,16 +77,20 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 09/23] ovpn: implement basic RX path (UDP)
+Subject: Re: [PATCH net-next v11 00/23] Introducing OpenVPN Data Channel
+ Offload
 To: Sergey Ryazanov <ryazanov.s.a@gmail.com>
 Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
  Shuah Khan <shuah@kernel.org>, sd@queasysnail.net,
  Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ steffen.klassert@secunet.com, antony.antony@secunet.com,
+ Shuah Khan <skhan@linuxfoundation.org>
 References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-9-de4698c73a25@openvpn.net>
- <3bfdd5c2-2564-4122-9e44-36ce944cba21@gmail.com>
+ <2828411f-f2e5-4dfc-80ff-577eb5fd359a@gmail.com>
+ <a7009e7e-a1f9-4aa5-ad41-2befc64b5d3e@openvpn.net>
+ <4fa316ce-c6f7-41d8-bb47-00c15f76faba@gmail.com>
 Content-Language: en-US
 From: Antonio Quartulli <antonio@openvpn.net>
 Autocrypt: addr=antonio@openvpn.net; keydata=
@@ -129,64 +133,55 @@ Autocrypt: addr=antonio@openvpn.net; keydata=
  BnRX9nFx9kPSO42TkFK55Dr5EDeBO3v33recscuB8VVN5xvh0GV57Qre+9sJrEq7Es9W609a
  +M0yRJWJEjFnMa/jsGZ+QyLD5QTL6SGuZ9gKI3W1SfFZOzV7hHsxPTZ6
 Organization: OpenVPN Inc.
-In-Reply-To: <3bfdd5c2-2564-4122-9e44-36ce944cba21@gmail.com>
+In-Reply-To: <4fa316ce-c6f7-41d8-bb47-00c15f76faba@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 12/11/2024 01:16, Sergey Ryazanov wrote:
-> On 29.10.2024 12:47, Antonio Quartulli wrote:
->> +static void ovpn_netdev_write(struct ovpn_peer *peer, struct sk_buff 
->> *skb)
->> +{
->> +    unsigned int pkt_len;
->> +
->> +    /* we can't guarantee the packet wasn't corrupted before entering 
->> the
->> +     * VPN, therefore we give other layers a chance to check that
->> +     */
->> +    skb->ip_summed = CHECKSUM_NONE;
->> +
->> +    /* skb hash for transport packet no longer valid after 
->> decapsulation */
->> +    skb_clear_hash(skb);
->> +
->> +    /* post-decrypt scrub -- prepare to inject encapsulated packet 
->> onto the
->> +     * interface, based on __skb_tunnel_rx() in dst.h
->> +     */
->> +    skb->dev = peer->ovpn->dev;
->> +    skb_set_queue_mapping(skb, 0);
->> +    skb_scrub_packet(skb, true);
->> +
->> +    skb_reset_network_header(skb);
->> +    skb_reset_transport_header(skb);
->> +    skb_probe_transport_header(skb);
->> +    skb_reset_inner_headers(skb);
->> +
->> +    memset(skb->cb, 0, sizeof(skb->cb));
->> +
->> +    /* cause packet to be "received" by the interface */
->> +    pkt_len = skb->len;
->> +    if (likely(gro_cells_receive(&peer->ovpn->gro_cells,
->> +                     skb) == NET_RX_SUCCESS))
+On 14/11/2024 23:10, Sergey Ryazanov wrote:
+> On 14.11.2024 17:33, Antonio Quartulli wrote:
+>> On 06/11/2024 02:18, Sergey Ryazanov wrote:
+>>> Regarding "big" topics I have only two concerns: link creation using 
+>>> RTNL and a switch statement usage. In the corresponding thread, I 
+>>> asked Jiri to clarify that "should" regarding .newlink 
+>>> implementation. Hope he will have a chance to find a time to reply.
+>>
+>> True, but to be honest at this point I am fine with sticking to RTNL, 
+>> also because we will soon introduce the ability to create 'persistent' 
+>> ifaces, which a user should be able to create before starting openvpn.
 > 
-> nit: to improve readability, the packet delivery call can be composed 
-> like this:
-> 
->        pkt_len = skb->len;
->        res = gro_cells_receive(&peer->ovpn->gro_cells, skb);
->        if (likely(res == NET_RX_SUCCESS))
-> 
+> Could you share the use case for this functionality?
 
-hm, you don't like calls on two lines? :-)
+This is better asked to the users mailing list, but, for example, we 
+recently had a discussion about this with the VyOS guys, where they want 
+to create the interface and have it fit the various 
+firewall/routing/chachacha logic, before any daemon is started.
 
-ok, will change it.
+In OpenVPN userspace we already support the --mktun directive to help 
+with this specific use case, so it's a long existing use case.
+
+> 
+>> Going through RTNL for this is the best choice IMHO, therefore we have 
+>> an extra use case in favour of this approach (next to what Jiri 
+>> already mentioned).
+> 
+> In absence of arguments it's hard to understand, what's the "best" 
+> meaning. 
+
+well, that's why I added "IMHO" :)
+
+> So, I'm still not sure is it worth to split uAPI between two 
+> interfaces. Anyway, it's up to maintainers to decide is it mergeable in 
+> this form or not. I just shared some arguments for the full management 
+> interface in GENL.
+
+well, doing it differently from all other virtual drivers also requires 
+some important reason IMHO.
+
+Anyway, I like the idea that iproute2 can be used to create interfaces, 
+without the need to have another userspace tool for that.
 
 Regards,
 
->> +        /* update RX stats with the size of decrypted packet */
->> +        dev_sw_netstats_rx_add(peer->ovpn->dev, pkt_len);
->> +}
 
 -- 
 Antonio Quartulli
