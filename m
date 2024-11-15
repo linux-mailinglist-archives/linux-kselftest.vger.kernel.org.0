@@ -1,236 +1,249 @@
-Return-Path: <linux-kselftest+bounces-22073-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22074-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D9459C9656
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 00:45:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73A269CCD1E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 01:32:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C366C1F2162F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2024 23:45:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2FE082821B3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 00:32:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 067111B85EB;
-	Thu, 14 Nov 2024 23:42:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 390EB1E53A;
+	Fri, 15 Nov 2024 00:31:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="BarHwoIF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nXwOrYMg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2086.outbound.protection.outlook.com [40.107.244.86])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E6461B3925;
-	Thu, 14 Nov 2024 23:42:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.86
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731627776; cv=fail; b=Y52RbZKhKednnAvO50ot18uABYzBOb8pMfBWRl8gJ7LuckIJsCfWQba1FfKP0+chNuMSfCy18MA4L/9YRxwClo81mPyf9EhhDcX0QqUshBnzVDaMLO3eL4VM4byQccg65JYhfQULPPYXpXJLG7bYLl6kIpQOyeIU1M/3uObz7iA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731627776; c=relaxed/simple;
-	bh=U2yetTn7xna0in3cj+HERP67FskIv+YXqO8+GlPaNrs=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mBN02zqB2V3vDJK+AdCaKVTOPnRRND+NnAS7+eWDfxUcU21Io1JyjCjUOjwkS5/5B+oyC5/MeEz+IXlJe48CPhiQ1zIFH1VUcGlgcM9XI3quHRrxGX6H7SdCiILeYQGKjFC7XXGc7k/Hkxr/6Z/88Y6KCfE6UQkgmOXlMh+kRPA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=BarHwoIF; arc=fail smtp.client-ip=40.107.244.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UuBJsIeX5GeG4jCzxx7LqJIZadhyTtLQcLltJBJF8GOTAuCsjUwOOpCChMGYYeWRBesGk9+446c5rhPVkLKHAHxscFNH9cuEcvzr5LDglGTBBREriOJDW6yDDnToD+RbRnFH5f6HKVEn4tP3dcCRztDJ/URbJ5zqiGzMJVmb7/FiXUGqMwwzYYN4xcCOJ+rla4hs4xO93Ih0VMjT0pKawp0itWw+UvLHuy4nAcLDoy6ag8jbIulrGPWQMj4yFRkDBpyjShFMGwXOWd8PXR8ZsAgT6jAgKZmG8BDV/ewbT6FoJF0ejR2feej9TMfdulusOHgYB5Zw7cLpFgKD+DWuZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RocJK05lm5JfsZ6M9FwgHiIIPV/JxGNnH4PzFecApYA=;
- b=TUYzcWXZkawB1GaK2LF6ANzffXEHMLsHU0bdpfc9BaX2v/S/kuHZV479M5/G5DwuGt3zT/b6z5c2ot3bkrExJ2i6SqnH0CI+QGqEhYf8M7/lcEUPwzxvb1ab6WW1MMl5/cfZC0IGQHmlQPfyK5MAT+cAWfg4NqzQDQ7+mPwU7DJjPqVObzJWUtonT7KPGEASCFGoxQu26t9FCW581zFZcVRnDNUrGf4lk92gXDLZ48BdlE2PC+h5JbmToBnDyQgGlJYMSy486oEjxKxbmQsytBueBQRwchgwjFPZ7SeIcMIxDJlF3vf/ugXuwdhDNULjyYXaEbdS9msfYlTVL9vr6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RocJK05lm5JfsZ6M9FwgHiIIPV/JxGNnH4PzFecApYA=;
- b=BarHwoIFlKB8mlqfS3OW6Z1MQUsnMbpMUf6RWQPp/Rv/Ekno99+HhQH+myzx1Hi5WX2jsad+N1SsbowmYsgqS+f3Etz5o4mY2Q5/3kSr8C23lyjlwabRJ6d+ySKe0/PwFQ7Ns5F/rCwqjuG7bItp1icJP/NPi9DPmPUm6c5bRjg=
-Received: from MW4PR04CA0098.namprd04.prod.outlook.com (2603:10b6:303:83::13)
- by PH7PR12MB7163.namprd12.prod.outlook.com (2603:10b6:510:202::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.28; Thu, 14 Nov
- 2024 23:42:50 +0000
-Received: from CO1PEPF000044EE.namprd05.prod.outlook.com
- (2603:10b6:303:83:cafe::ce) by MW4PR04CA0098.outlook.office365.com
- (2603:10b6:303:83::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.16 via Frontend
- Transport; Thu, 14 Nov 2024 23:42:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000044EE.mail.protection.outlook.com (10.167.241.68) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8158.14 via Frontend Transport; Thu, 14 Nov 2024 23:42:49 +0000
-Received: from AUSPRSAMPAT.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 14 Nov
- 2024 17:42:48 -0600
-From: "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>
-To: <kvm@vger.kernel.org>
-CC: <seanjc@google.com>, <pbonzini@redhat.com>, <pgonda@google.com>,
-	<thomas.lendacky@amd.com>, <michael.roth@amd.com>, <shuah@kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<sos-linux-ext-patches@mailman-svr.amd.com>, <pratikrajesh.sampat@amd.com>
-Subject: [PATCH v4 8/8] KVM: selftests: Add a basic SEV-SNP smoke test
-Date: Thu, 14 Nov 2024 17:41:04 -0600
-Message-ID: <20241114234104.128532-9-pratikrajesh.sampat@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241114234104.128532-1-pratikrajesh.sampat@amd.com>
-References: <20241114234104.128532-1-pratikrajesh.sampat@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2661E49F;
+	Fri, 15 Nov 2024 00:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731630715; cv=none; b=O1fNZuEwJojsGSTU1o3m7ksRTKb9aCCZikF5M5Vg8chrl0eM5CbjAbx8qCHeVuyEUzj/dhMSKKTCnAx4Bz/ZC5bGol3jVCI6LQkhiqLCOoIGsBnyO3l7MxRf6UDf7g1Kw3lP/VFifADKbiFYnRyhmJaiJVn1g4It+T18I2ocEPk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731630715; c=relaxed/simple;
+	bh=LdyZfhGLcAffeQWdZ9vyCIw4OGV0nYZirm1HjPWiJ4c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bU+hVQn5i6kv+FDG47pTzVwWuPDyAwjXoJSTfg3FBJmp0au70ag4tCdc5/hlBYZc+AbASRDs5onBkL0BW1ZbWz8XMbqY9KkrE0BJ5h2lu/+2JKY61cr4XVmT/uKSJNc2JiwIX9k+hBKSEc2nbHshxrRNQFV9uHtzXgcIp29PIrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nXwOrYMg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CED8C4CED4;
+	Fri, 15 Nov 2024 00:31:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731630714;
+	bh=LdyZfhGLcAffeQWdZ9vyCIw4OGV0nYZirm1HjPWiJ4c=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=nXwOrYMgGmyxfYqfFsUZXEUGR0kZH5McM15cOenYsvWgCzwWIyqst8hJYGSbEEfXI
+	 IcxiFRB9gAvOgZzAOFIh2IsQ0Kdj/FQBtQzDX5c78qwJU1op3siUY+H83HH4v105yU
+	 4CttpV+2lgbYc1CJAv2+WPP+PMicar1U+Md6pZBN+DCWMEyqLHlskMFgXMeEJxMYFo
+	 XQrxFx0dWo2Ftq3+XYg1tcAuIe4526kUAkYmabUSVe4qMOfFf8C9f+QYdJtGa5B9AX
+	 oJOvYr0Zn1uDbVz5zeH1yEaqtQMZMMsXnGQL808PXmTBBFRr1PLh2g3rQHYepmfYqL
+	 XPoeKbekSewSA==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	Jakub Kicinski <kuba@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net 2/2] selftests: net: test extacks in netlink dumps
+Date: Thu, 14 Nov 2024 16:31:50 -0800
+Message-ID: <20241115003150.733141-2-kuba@kernel.org>
+X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20241115003150.733141-1-kuba@kernel.org>
+References: <20241115003150.733141-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044EE:EE_|PH7PR12MB7163:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9f74f144-34c1-4a09-861e-08dd05060cd0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|376014|82310400026|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Ig7O1uZFI5JEWl/2IEwnKzSWAEOsL4cUWUdCRnFIBp+oNAY7R0aym2y/UKI+?=
- =?us-ascii?Q?L+NTzwYUWGXvZyhvM5g+fPcGnM52bvP583AsrrTl5V0kuAgUH4KCCmqUTfry?=
- =?us-ascii?Q?vu8z1qeFhI00k71wAUGvijWcu5SsgyP/dkyt6uMtJwhFTq5xg8V6GbOvb4v8?=
- =?us-ascii?Q?eo4EIMJ+A1rCkwtnYQGEAhYUW8cf7BI5W2sS0NJk0vLqF7wi9yfDqkwOl8MU?=
- =?us-ascii?Q?OtEnBjaqMNF9Wfj988unHpihQOPzX4n2l2W0Cs55R+e4XRaFd+eMnVJlnQnP?=
- =?us-ascii?Q?k9787lH+VxiCmuK8Wn7cPcm37OucNdCFJWh0dQt4kUtV7JX9OfDBah9IATN4?=
- =?us-ascii?Q?I1PuJcKFd0IjqiXTxX9YwKhugjkrGqj2H5wbu1WdNGaPbn3NrylFdDLJUA2F?=
- =?us-ascii?Q?s9JaaY7Sa6nAYc92PWUow3FnDY7iGCuNSr8n/BZ6EnTap3xxtpgpskYOTnke?=
- =?us-ascii?Q?qEHY/0gexvTBvdWwPxt7/v9Fs9mBu5TT1kBZXrT2V41XEzoz/laJfQrPb5dY?=
- =?us-ascii?Q?zfPjcfCszMZOTKAyh7AauxJd46RgeQDM8Tm/WyaeUrejyoGSAx3enQR2Pum7?=
- =?us-ascii?Q?UVRqr4l1nNVmfI+bZvSOFXQNcLi1h17/S2eYiR/iY/AdhoVOoBagYm4myOgo?=
- =?us-ascii?Q?WPeh1Kunb7jqR78bDVM6MqkPJeDcN+T8W1hHNBAEWZ8gAcX7C8IhW7kEbzKf?=
- =?us-ascii?Q?EZOwyAZv65JCms7GYxwimVuvrVBXu+efEXXDCA9sg5JEishjNkloIPk5NRf1?=
- =?us-ascii?Q?Tb7X6BTlscoMxdvHeiV4iCsUW0//pPRWVOu/Ej6o2T9VGlpIwjUEgEKSo+Vc?=
- =?us-ascii?Q?xgh9n/Qo13eWsKiLal2mp4ORUNoNILvXCGlS0sfYfKttI5dM/n/BdEJeVQII?=
- =?us-ascii?Q?Qa/MbIZtCRorzlFYXgv3mL6qdZcotMJjFXefHSkSvG/JrGcgw342CnvmhAz1?=
- =?us-ascii?Q?mmF19m9mIhv/ZzN/BWGPvY9nkzMQONJUDePEZRqoTcdpu6CbPr8NPgarhcEr?=
- =?us-ascii?Q?rhLK+r2cskc5Alhfef+YRNmc1XeaXpzCfr9KdWuy/lWmz3yQkVqtklifxKas?=
- =?us-ascii?Q?rnEPiNSlNthct0lTKutKwnkGfM48z6YA6+gblk1PIEwlB4ioZd6ajKhZNbj7?=
- =?us-ascii?Q?Oqdm4Kto+WTtyQ/vjBwlZIZew23ACi5VnQhGJaIL40oW6fwFlExbJO8y9biY?=
- =?us-ascii?Q?P2wUteJ2L04op038KuX6EdL0Ob6xo0MvoO/njLM0aiDn0brC7lZNlariOFjh?=
- =?us-ascii?Q?PgQ2VhPY/zWeTM/26YAW74iPLPFU8HmBIVXGYfXOVRSH5Xw1kglys/w3Zk10?=
- =?us-ascii?Q?FEfRFQG1ahlPfbJ/8B3a6fdh+kAYKO0mmd2YDpvTC6nYqCoQOLDlNWogkSui?=
- =?us-ascii?Q?sJaxC47IUDc/qYp29xZp6TkdwwiPKmYl1dCc+JjQhP+CIJKvFg=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2024 23:42:49.7850
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f74f144-34c1-4a09-861e-08dd05060cd0
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000044EE.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7163
+Content-Transfer-Encoding: 8bit
 
-Extend sev_smoke_test to also run a minimal SEV-SNP smoke test that
-initializes and sets up private memory regions required to run a simple
-SEV-SNP guest.
+Test that extacks in dumps work. The test fills up the receive buffer
+to test both the inline dump (as part of sendmsg()) and delayed one
+(run during recvmsg()).
 
-Similar to its SEV-ES smoke test counterpart, this also does not
-support GHCB and ucall yet and uses the GHCB MSR protocol to trigger an
-exit of the type KVM_EXIT_SYSTEM_EVENT.
+Use YNL helpers to parse the messages. We need to add the test to YNL
+file to make sure the right include path are used.
 
-Signed-off-by: Pratik R. Sampat <pratikrajesh.sampat@amd.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- .../selftests/kvm/x86_64/sev_smoke_test.c     | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
+CC: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/net/Makefile        |   3 +-
+ tools/testing/selftests/net/netlink-dumps.c | 129 ++++++++++++++++++++
+ 2 files changed, 130 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/sev_smoke_test.c b/tools/testing/selftests/kvm/x86_64/sev_smoke_test.c
-index af1beabbbf8e..ff508d67377d 100644
---- a/tools/testing/selftests/kvm/x86_64/sev_smoke_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/sev_smoke_test.c
-@@ -16,6 +16,18 @@
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 5e86f7a51b43..c427ee32b193 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -78,7 +78,6 @@ TEST_PROGS += test_vxlan_vnifiltering.sh
+ TEST_GEN_FILES += io_uring_zerocopy_tx
+ TEST_PROGS += io_uring_zerocopy_tx.sh
+ TEST_GEN_FILES += bind_bhash
+-TEST_GEN_PROGS += netlink-dumps
+ TEST_GEN_PROGS += sk_bind_sendto_listen
+ TEST_GEN_PROGS += sk_connect_zero_addr
+ TEST_GEN_PROGS += sk_so_peek_off
+@@ -100,7 +99,7 @@ TEST_PROGS += bpf_offload.py
  
- #define XFEATURE_MASK_X87_AVX (XFEATURE_MASK_FP | XFEATURE_MASK_SSE | XFEATURE_MASK_YMM)
+ # YNL files, must be before "include ..lib.mk"
+ EXTRA_CLEAN += $(OUTPUT)/libynl.a
+-YNL_GEN_FILES := ncdevmem
++YNL_GEN_FILES := ncdevmem netlink-dumps
+ TEST_GEN_FILES += $(YNL_GEN_FILES)
  
-+static void guest_snp_code(void)
+ TEST_FILES := settings
+diff --git a/tools/testing/selftests/net/netlink-dumps.c b/tools/testing/selftests/net/netlink-dumps.c
+index 7ee6dcd334df..195febbf6a61 100644
+--- a/tools/testing/selftests/net/netlink-dumps.c
++++ b/tools/testing/selftests/net/netlink-dumps.c
+@@ -12,11 +12,140 @@
+ #include <unistd.h>
+ 
+ #include <linux/genetlink.h>
++#include <linux/neighbour.h>
++#include <linux/netdevice.h>
+ #include <linux/netlink.h>
+ #include <linux/mqueue.h>
++#include <linux/rtnetlink.h>
+ 
+ #include "../kselftest_harness.h"
+ 
++#include <ynl.h>
++
++struct ext_ack {
++	int err;
++
++	__u32 attr_offs;
++	__u32 miss_type;
++	__u32 miss_nest;
++	const char *str;
++};
++
++/* 0: no done, 1: done found, 2: extack found, -1: error */
++static int nl_get_extack(char *buf, size_t n, struct ext_ack *ea)
 +{
-+	uint64_t sev_msr = rdmsr(MSR_AMD64_SEV);
++	const struct nlmsghdr *nlh;
++	const struct nlattr *attr;
++	ssize_t rem;
 +
-+	GUEST_ASSERT(sev_msr & MSR_AMD64_SEV_ENABLED);
-+	GUEST_ASSERT(sev_msr & MSR_AMD64_SEV_ES_ENABLED);
-+	GUEST_ASSERT(sev_msr & MSR_AMD64_SEV_SNP_ENABLED);
++	for (rem = n; rem > 0; NLMSG_NEXT(nlh, rem)) {
++		nlh = (struct nlmsghdr *)&buf[n - rem];
++		if (!NLMSG_OK(nlh, rem))
++			return -1;
 +
-+	wrmsr(MSR_AMD64_SEV_ES_GHCB, GHCB_MSR_TERM_REQ);
-+	VMGEXIT();
-+}
++		if (nlh->nlmsg_type != NLMSG_DONE)
++			continue;
 +
- static void guest_sev_es_code(void)
- {
- 	/* TODO: Check CPUID after GHCB-based hypercall support is added. */
-@@ -157,11 +169,21 @@ static void test_sev_es(uint64_t policy)
- 	__test_sev(guest_sev_es_code, KVM_X86_SEV_ES_VM, policy);
- }
- 
-+static void test_snp(uint64_t policy)
-+{
-+	__test_sev(guest_snp_code, KVM_X86_SNP_VM, policy);
-+}
++		ea->err = -*(int *)NLMSG_DATA(nlh);
 +
- static void test_sync_vmsa_sev_es(uint64_t policy)
- {
- 	__test_sync_vmsa(KVM_X86_SEV_ES_VM, policy);
- }
- 
-+static void test_sync_vmsa_snp(uint64_t policy)
-+{
-+	__test_sync_vmsa(KVM_X86_SNP_VM, policy);
-+}
++		if (!(nlh->nlmsg_flags & NLM_F_ACK_TLVS))
++			return 1;
 +
- static void guest_shutdown_code(void)
- {
- 	struct desc_ptr idt;
-@@ -195,6 +217,11 @@ static void test_sev_es_shutdown(uint64_t policy)
- 	__test_sev_shutdown(KVM_X86_SEV_ES_VM, SEV_POLICY_ES);
- }
- 
-+static void test_snp_shutdown(uint64_t policy)
-+{
-+	__test_sev_shutdown(KVM_X86_SNP_VM, policy);
-+}
++		ynl_attr_for_each(attr, nlh, sizeof(int)) {
++			switch (ynl_attr_type(attr)) {
++			case NLMSGERR_ATTR_OFFS:
++				ea->attr_offs = ynl_attr_get_u32(attr);
++				break;
++			case NLMSGERR_ATTR_MISS_TYPE:
++				ea->miss_type = ynl_attr_get_u32(attr);
++				break;
++			case NLMSGERR_ATTR_MISS_NEST:
++				ea->miss_nest = ynl_attr_get_u32(attr);
++				break;
++			case NLMSGERR_ATTR_MSG:
++				ea->str = ynl_attr_get_str(attr);
++				break;
++			}
++		}
 +
- int main(int argc, char *argv[])
- {
- 	const u64 xf_mask = XFEATURE_MASK_X87_AVX;
-@@ -217,5 +244,20 @@ int main(int argc, char *argv[])
- 		}
- 	}
- 
-+	if (kvm_cpu_has(X86_FEATURE_SNP)) {
-+		uint64_t snp_policy = snp_default_policy();
-+
-+		test_snp(snp_policy);
-+		/* Test minimum firmware level */
-+		test_snp(snp_policy | SNP_FW_VER_MAJOR(SNP_MIN_API_MAJOR) |
-+			SNP_FW_VER_MINOR(SNP_MIN_API_MINOR));
-+
-+		test_snp_shutdown(snp_policy);
-+
-+		if (kvm_has_cap(KVM_CAP_XCRS) &&
-+		    (xgetbv(0) & kvm_cpu_supported_xcr0() & xf_mask) == xf_mask)
-+			test_sync_vmsa_snp(snp_policy);
++		return 2;
 +	}
 +
- 	return 0;
- }
++	return 0;
++}
++
++static const struct {
++	struct nlmsghdr nlhdr;
++	struct ndmsg ndm;
++	struct nlattr ahdr;
++	__u32 val;
++} dump_neigh_bad = {
++	.nlhdr = {
++		.nlmsg_len	= sizeof(dump_neigh_bad),
++		.nlmsg_type	= RTM_GETNEIGH,
++		.nlmsg_flags	= NLM_F_REQUEST | NLM_F_ACK | NLM_F_DUMP,
++		.nlmsg_seq	= 1,
++	},
++	.ndm = {
++		.ndm_family	= 123,
++	},
++	.ahdr = {
++		.nla_len	= 4 + 4,
++		.nla_type	= NDA_FLAGS_EXT,
++	},
++	.val = -1, // should fail MASK validation
++};
++
++TEST(dump_extack)
++{
++	int netlink_sock;
++	char buf[8192];
++	int one = 1;
++	int i, cnt;
++	ssize_t n;
++
++	netlink_sock = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
++	ASSERT_GE(netlink_sock, 0);
++
++	n = setsockopt(netlink_sock, SOL_NETLINK, NETLINK_CAP_ACK,
++		       &one, sizeof(one));
++	ASSERT_EQ(n, 0);
++	n = setsockopt(netlink_sock, SOL_NETLINK, NETLINK_EXT_ACK,
++		       &one, sizeof(one));
++	ASSERT_EQ(n, 0);
++	n = setsockopt(netlink_sock, SOL_NETLINK, NETLINK_GET_STRICT_CHK,
++		       &one, sizeof(one));
++	ASSERT_EQ(n, 0);
++
++	/* Dump so many times we fill up the buffer */
++	cnt = 64;
++	for (i = 0; i < cnt; i++) {
++		n = send(netlink_sock, &dump_neigh_bad,
++			 sizeof(dump_neigh_bad), 0);
++		ASSERT_EQ(n, sizeof(dump_neigh_bad));
++	}
++
++	/* Read out the ENOBUFS */
++	n = recv(netlink_sock, buf, sizeof(buf), MSG_DONTWAIT);
++	EXPECT_EQ(n, -1);
++	EXPECT_EQ(errno, ENOBUFS);
++
++	for (i = 0; i < cnt; i++) {
++		struct ext_ack ea = {};
++
++		n = recv(netlink_sock, buf, sizeof(buf), MSG_DONTWAIT);
++		if (n < 0) {
++			ASSERT_GE(i, 10);
++			break;
++		}
++		ASSERT_GE(n, (ssize_t)sizeof(struct nlmsghdr));
++
++		EXPECT_EQ(nl_get_extack(buf, n, &ea), 2);
++		EXPECT_EQ(ea.attr_offs,
++			  sizeof(struct nlmsghdr) + sizeof(struct ndmsg));
++	}
++}
++
+ static const struct {
+ 	struct nlmsghdr nlhdr;
+ 	struct genlmsghdr genlhdr;
 -- 
-2.43.0
+2.47.0
 
 
