@@ -1,308 +1,381 @@
-Return-Path: <linux-kselftest+bounces-22092-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22093-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEBF09CDE8D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 13:44:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 614D19CDEC8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 14:00:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 443401F2353D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 12:44:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 217F4283AFC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 13:00:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 470531BC066;
-	Fri, 15 Nov 2024 12:43:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 999761BDAA1;
+	Fri, 15 Nov 2024 13:00:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SkSS+rHH"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="F9NLg249"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C361BBBF1;
-	Fri, 15 Nov 2024 12:43:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38FF1BDA8F
+	for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2024 13:00:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731674639; cv=none; b=Zm3HBCt+wm6jagwwI+BN//81GJgLy2veErmUtnkBgOSfamCvZR3NzkZb7rHaCjtBLAHXsWDGCetuzpVJvakZpYaH2XUD1wLqLh7Pc5X0Ib4fUekQD3hnrcS32kwzFeR+NgWOkuryYk2AiPtJ+0lWY9bZ8GDF3P89hGFOnqzRyTU=
+	t=1731675611; cv=none; b=E9i0nv5I15Vz7uCV8kNa3CElh486GRibOmYXSIShQFsY7NpKZSrE7iDcqIKS1iES9GiKfqBX5ttC9IdP6bnHml3LI9PiP6w6cc+BC5yCVn9fB91A3Oe4c3VMSuYm31npiWWhNok37Oi3EGBUMYCuyLRtuSeNNsRueNSexZ9IzL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731674639; c=relaxed/simple;
-	bh=cYX7GXi9ImnHfIdIrQUSC8K+782uWUdGRo7f+QzT8X0=;
+	s=arc-20240116; t=1731675611; c=relaxed/simple;
+	bh=zqkdSLDk0bO2OpkEvLkCF2ppLSkpejyNpAvWaPjh6vQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nJcECCz4tRzKE9ZMH3CVtf+2Fa1oFKrjBzztRvAf/lyEnTlS+cSfj6+tFwsZa0Q5wMQ2yDd19pWcUY//C54he+8dNayNifaaydyjqLfjMpTROmVc1hYMmQtYdRcGKlQAQ5Z3DV8k/IbU4Pwlxj4RkjLOFly3JUbmCEgTl1jmB8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SkSS+rHH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0476C4CECF;
-	Fri, 15 Nov 2024 12:43:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731674638;
-	bh=cYX7GXi9ImnHfIdIrQUSC8K+782uWUdGRo7f+QzT8X0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SkSS+rHHWRMRwKmmZqyaAXSH44JgPqdeQXHGYJ23UB5wLpwBtLNu6E560HL0Ez/JG
-	 pb6l24FkBQBZqDF+2W6mN4QL3ldG3wTIgCExRlyIoVDcAGYXOn6Seuo27a6DRtxvUo
-	 mxO9bQyJcbVkvzUZDMCRwK2tPPsh2+KGTpLVUUsSt7wJ7/D1fktiqSX5iadNoVd43G
-	 Up+OXD/us/Vq+hNtFHrDguTUqiAI8YPKC0jCTsTG65JQU27kNplWYRd6gWpJ3o6QPJ
-	 HqDL+CUrlKhAqck5YXE8kWny4UOAxisC4dPyiOUG0cl88Xbsdel7dkUEdOQAF81URu
-	 PpDIc1hF5EnFg==
-Message-ID: <cd23ae9d-83a4-469a-b560-edcd0e94a008@kernel.org>
-Date: Fri, 15 Nov 2024 13:43:29 +0100
+	 In-Reply-To:Content-Type; b=axDii66Xz19CGjn//0LH90HsWd0tpdX31inQbg7MlLlbuSpUfwEik+Sqk7jw0coWqVglm9nFUu4kHIXHsSSOCQx6jClEVS33vC7swZ/nnqiiSjhNdLVeieu24Ta1Fyok1HkVTbDoipe5pzxEBvwfqyzXKPjPtQ69NLtRgTivVT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=F9NLg249; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-38207c86695so1285840f8f.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2024 05:00:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvpn.net; s=google; t=1731675606; x=1732280406; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=VLNEslv9HCHacJ55c059nrmW06RatWGHFhpMRHITDeo=;
+        b=F9NLg249LsBOefY4nDVygEXfMXWvy9LbcCFdNlF/e5sNP1VXbhbGB0K9Ml885CEzB4
+         ypf67Tc+3trI1GSnQSHo3MbgMv6QBeoB7HfTFZ1iAoJhrCetxip1A2h9cjmpmt7hN6ix
+         UiP1f0DsDwVRo7P2bSyVGFXpfNsAVH631nSMXH51AdKwM2ZP2oVG8bcNREWeMel2Eswg
+         ouzEMoCUFUOt/O7MZqbJrZxpD+2E/seQbS54GPHT21Ej3m+oogSlUFal6eTO/Sbfc8t2
+         4e3L++kLrnKMvs9n3QC9TNYx0MwUN592X+SsFd9Ro/c3xtC0P6T8EGHYJrxCu4Y7tR9N
+         4rpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731675606; x=1732280406;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VLNEslv9HCHacJ55c059nrmW06RatWGHFhpMRHITDeo=;
+        b=jNnlBMnccBqjvHbVxhkm3OkGGP0NOoKHz0uynA8OICMwia6AeyMIQMPt7USGl8rVhK
+         k7P7h+e8r2zM1MnHYNUH/uLO18kjXj1thj2Khm6PYo2EXgw7M/olCI8BCnoyk654Rl02
+         wXPhYih+oSUbPArbyyb+8shUwAbj/VdMcQULRxOsJn/z4ThAb3GyhJSEnk7q06dIXsPI
+         sGZX1OUBc7FZKchf6ihP6GaI8olvBuwO6QzUQj7pt+t1YznCBc1Z3ZkEkp+qa9NiJSD0
+         O/TZHW0a/Uowqxqx2kB5HNsZDAfrXZ3Mg4v2NrykK7YH99FTZgRnt+XBkMqE0IFDMcja
+         ueFw==
+X-Forwarded-Encrypted: i=1; AJvYcCU52CymbYMNIz9JkUYTjwVdZ4+VixDbOEgkLugcnJQhZq/t0/Ter4UsmLtfmV/mqhfzg4KAMj2JxaJpZfY/VOs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaXTeS+0eQ70aSkDeoLBuHmRnrcjJxep0Tzjcs4xQO15Hx0LkQ
+	qJK1R6CHOVkrucz2zr+KseHQ15fqLhuNXE/eUeyG5u56Zc3yJ0aPXwORPhoF7HgYqE7OBpD5Ccq
+	P
+X-Google-Smtp-Source: AGHT+IG5g2doyh75robqU7KPhJCKq/9B/W2SYrwmzB29tOhOc+RzA2hEaEBv6O6kV4WhhqamoelBYw==
+X-Received: by 2002:a05:6000:1543:b0:382:228b:4c34 with SMTP id ffacd0b85a97d-382258f0863mr1996435f8f.2.1731675606229;
+        Fri, 15 Nov 2024 05:00:06 -0800 (PST)
+Received: from ?IPV6:2001:67c:2fbc:1:59f4:10be:886a:27eb? ([2001:67c:2fbc:1:59f4:10be:886a:27eb])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3821adad945sm4266176f8f.29.2024.11.15.05.00.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Nov 2024 05:00:05 -0800 (PST)
+Message-ID: <cfd45410-a7b2-4304-a376-1d7a3b443a13@openvpn.net>
+Date: Fri, 15 Nov 2024 14:00:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: LKFT CI: improving Networking selftests results when validating
- stable kernels
-Content-Language: en-GB
-To: Shuah Khan <skhan@linuxfoundation.org>,
- Greg KH <gregkh@linuxfoundation.org>
-Cc: Linux Kernel Functional Testing <lkft@linaro.org>,
- Shuah Khan <shuah@kernel.org>,
- Kernel Selftests <linux-kselftest@vger.kernel.org>,
- Netdev <netdev@vger.kernel.org>, Linux Kernel
- <linux-kernel@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>,
- Naresh Kamboju <naresh.kamboju@linaro.org>, Ido Schimmel
- <idosch@nvidia.com>, stable@vger.kernel.org,
- Dan Carpenter <dan.carpenter@linaro.org>
-References: <ff870428-6375-4125-83bd-fc960b3c109b@kernel.org>
- <eb4b9c05-66a2-4a14-b59b-37149beba3b2@linuxfoundation.org>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <eb4b9c05-66a2-4a14-b59b-37149beba3b2@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v11 04/23] ovpn: add basic interface
+ creation/destruction/management routines
+To: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ sd@queasysnail.net, Andrew Lunn <andrew@lunn.ch>
+References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-4-de4698c73a25@openvpn.net>
+ <2fd3dc9c-9d6a-494c-a4d8-a45221bf250d@gmail.com>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <2fd3dc9c-9d6a-494c-a4d8-a45221bf250d@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Shuah, Greg,
-
-Thank you for your reply!
-
-On 13/11/2024 19:33, Shuah Khan wrote:
-> On 11/8/24 11:21, Matthieu Baerts wrote:
->> Hello LKFT maintainers, CI operators,
+On 09/11/2024 02:01, Sergey Ryazanov wrote:
+> On 29.10.2024 12:47, Antonio Quartulli wrote:
+>> Add basic infrastructure for handling ovpn interfaces.
 >>
->> First, I would like to say thank you to the people behind the LKFT
->> project for validating stable kernels (and more), and including some
->> Network selftests in their tests suites.
+>> Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
+>> ---
+>>   drivers/net/ovpn/main.c       | 115 ++++++++++++++++++++++++++++++++ 
+>> ++++++++--
+>>   drivers/net/ovpn/main.h       |   7 +++
+>>   drivers/net/ovpn/ovpnstruct.h |   8 +++
+>>   drivers/net/ovpn/packet.h     |  40 +++++++++++++++
+>>   include/uapi/linux/if_link.h  |  15 ++++++
+>>   5 files changed, 180 insertions(+), 5 deletions(-)
 >>
->> A lot of improvements around the networking kselftests have been done
->> this year. At the last Netconf [1], we discussed how these tests were
->> validated on stable kernels from CIs like the LKFT one, and we have some
->> suggestions to improve the situation.
->>
->>
->> KSelftests from the same version
->> --------------------------------
->>
->> According to the doc [2], kselftests should support all previous kernel
->> versions. The LKFT CI is then using the kselftests from the last stable
->> release to validate all stable versions. Even if there are good reasons
->> to do that, we would like to ask for an opt-out for this policy for the
->> networking tests: this is hard to maintain with the increased
->> complexity, hard to validate on all stable kernels before applying
->> patches, and hard to put in place in some situations. As a result, many
->> tests are failing on older kernels, and it looks like it is a lot of
->> work to support older kernels, and to maintain this.
->>
+>> diff --git a/drivers/net/ovpn/main.c b/drivers/net/ovpn/main.c
+>> index 
+>> d5bdb0055f4dd3a6e32dc6e792bed1e7fd59e101..eead7677b8239eb3c48bb26ca95492d88512b8d4 100644
+>> --- a/drivers/net/ovpn/main.c
+>> +++ b/drivers/net/ovpn/main.c
+>> @@ -10,18 +10,52 @@
+>>   #include <linux/genetlink.h>
+>>   #include <linux/module.h>
+>>   #include <linux/netdevice.h>
+>> +#include <linux/inetdevice.h>
+>> +#include <net/ip.h>
+>>   #include <net/rtnetlink.h>
+>> -#include <uapi/linux/ovpn.h>
+>> +#include <uapi/linux/if_arp.h>
+>>   #include "ovpnstruct.h"
+>>   #include "main.h"
+>>   #include "netlink.h"
+>>   #include "io.h"
+>> +#include "packet.h"
+>>   /* Driver info */
+>>   #define DRV_DESCRIPTION    "OpenVPN data channel offload (ovpn)"
+>>   #define DRV_COPYRIGHT    "(C) 2020-2024 OpenVPN, Inc."
+>> +static void ovpn_struct_free(struct net_device *net)
+>> +{
+>> +}
 > 
-> This is from the Documentation/dev-tools/kselftest.rst:
-> ----
-> Kselftest from mainline can be run on older stable kernels. Running tests
-> from mainline offers the best coverage. Several test rings run mainline
-> kselftest suite on stable releases. The reason is that when a new test
-> gets added to test existing code to regression test a bug, we should be
-> able to run that test on an older kernel. Hence, it is important to keep
-> code that can still test an older kernel and make sure it skips the test
-> gracefully on newer releases.
-> ----
+> nit: since this handler is not mandatory, its introduction can be moved 
+> to the later patch, which actually fills it with meaningful operations.
+
+
+ehmm sure I will move it
+
+
+
 > 
-> As it states, running tests from mainline increases the coverage when new
-> tests are added to regression test an existing kernel feature in a stable
-> release.
+>> +static int ovpn_net_open(struct net_device *dev)
+>> +{
+>> +    netif_tx_start_all_queues(dev);
+>> +    return 0;
+>> +}
+>> +
+>> +static int ovpn_net_stop(struct net_device *dev)
+>> +{
+>> +    netif_tx_stop_all_queues(dev);
+>> +    return 0;
+>> +}
+>> +
+>> +static const struct net_device_ops ovpn_netdev_ops = {
+>> +    .ndo_open        = ovpn_net_open,
+>> +    .ndo_stop        = ovpn_net_stop,
+>> +    .ndo_start_xmit        = ovpn_net_xmit,
+>> +};
+>> +
+>> +static const struct device_type ovpn_type = {
+>> +    .name = OVPN_FAMILY_NAME,
 > 
-> It also says that when mainline tests are running on an older kernel, the
-> test should detect missing features and report skips.
+> nit: same question here regarding name deriviation. Are you sure that 
+> the device type name is the same as the GENL family name?
+
+Like I said in the previous patch, I want all representative strings to 
+be "ovpn", that is already the netlink family name.
+But I can create another constant to document this explicitly.
+
+
 > 
-> The above paragraph addresses test developers and users. I would say the
-> policy regarding the test development will not change. We want to keep
-> it the same, continuing to take measures to skip tests when a feature
-> isn't supported in the kernel the tests are running on. This addresses
-> not just a kernel and test revision mismatch, but also when a feature
-> isn't enabled when kernel and test revisions match.
+>> +};
+>> +
+>> +static const struct nla_policy ovpn_policy[IFLA_OVPN_MAX + 1] = {
+>> +    [IFLA_OVPN_MODE] = NLA_POLICY_RANGE(NLA_U8, OVPN_MODE_P2P,
+>> +                        OVPN_MODE_MP),
+>> +};
+>> +
+>>   /**
+>>    * ovpn_dev_is_valid - check if the netdevice is of type 'ovpn'
+>>    * @dev: the interface to check
+>> @@ -33,16 +67,76 @@ bool ovpn_dev_is_valid(const struct net_device *dev)
+>>       return dev->netdev_ops->ndo_start_xmit == ovpn_net_xmit;
+>>   }
+>> +static void ovpn_setup(struct net_device *dev)
+>> +{
+>> +    /* compute the overhead considering AEAD encryption */
+>> +    const int overhead = sizeof(u32) + NONCE_WIRE_SIZE + 16 +
 > 
-> This policy helps us find bugs in the tests failing when they should
-> skip. If test rings move to a new policy, our ability to find bugs
-> like this goes down.
+> Where are these magic sizeof(u32) and '16' came from?
+
+It's in the "nice diagram" you commented later in this patch :-)
+But I can extend the comment.
+
+[...]
+
+
+>> @@ -51,26 +145,37 @@ static int ovpn_netdev_notifier_call(struct 
+>> notifier_block *nb,
+>>                        unsigned long state, void *ptr)
+>>   {
+>>       struct net_device *dev = netdev_notifier_info_to_dev(ptr);
+>> +    struct ovpn_struct *ovpn;
+>>       if (!ovpn_dev_is_valid(dev))
+>>           return NOTIFY_DONE;
+>> +    ovpn = netdev_priv(dev);
 > 
-> As per users and test ring maintainers, they need to be aware of the
-> reduced coverage if they revision match kernel and tests.
-> Revision matching example: 6.11.8 tests on 6.11.8 stable
+> nit: netdev_priv() returns only a pointer, it is safe to fetch the 
+> pointer in advance, but do not dereference it until we are sure that an 
+> event references the desired interface type. Takin this into 
+> consideration, the assignment of private data pointer can be moved above 
+> to the variable declaration. Just to make code couple of lines shorter.
+
+I do it here because it seems more "logically correct" to retrieve the 
+priv pointer after having confirmed that this is a ovpn interface with 
+ovpn_dev_is_valid().
+
+Moving it above kinda says "I already know there is a ovpn object here", 
+but this is not the case until after the valid() check. So I prefer to 
+keep it here.
+
+[...]
+
+>> --- a/drivers/net/ovpn/main.h
+>> +++ b/drivers/net/ovpn/main.h
+>> @@ -12,4 +12,11 @@
+>>   bool ovpn_dev_is_valid(const struct net_device *dev);
+>> +#define SKB_HEADER_LEN                                       \
+>> +    (max(sizeof(struct iphdr), sizeof(struct ipv6hdr)) + \
+>> +     sizeof(struct udphdr) + NET_SKB_PAD)
+>> +
+>> +#define OVPN_HEAD_ROOM ALIGN(16 + SKB_HEADER_LEN, 4)
 > 
-> Greg KH and other stable maintainers can weigh in on whether they would
-> like LKFT to go from running mainline tests on stable releases to
-> revision matching.
+> Where is this magic '16' came from?
 
+should be the same 16 af the over head above (it's the auth tag len)
+Will make this more explicit with a comment.
 
-I appreciate these explanations. When we discussed this subject at
-Netconf, we looked at the documentation, and we understood the
-advantages of running newer kselftests on older kernels. But the issue
-we have is to "detect missing features and report skips": that's hard to
-maintain, because it increases the code complexity, and it is hard to
-validate before applying patches.
-
-One of the reasons is that many networking selftests are validating
-internal behaviours that are not exposed to the userspace. That makes it
-hard to detect what behaviour to expect, and checking the kernel version
-doesn't seem to be the right thing to do here. Or does it mean that
-these essential tests should not validate the internal behaviours, e.g.
-checking that the packets sent on the wire are formatted correctly?
-
-A compromise could be to mark the tests checking internal behaviours,
-and warn testers that they should be executed on the same version. Or
-even run all the tests twice: once with the kselftests from the same
-version, and once using the kselftests from the latest stable version. WDYT?
-
-
-The main problem we saw when using kselftests from a newer version is
-that the code coverage of many 'net' tests might even decrease over
-time. In this subsystem, it is common to have "big" selftests running
-many subtests. When a new feature is added, a new subtest might be added
-in an existing selftest. When one subtest fails -- e.g. because the test
-is not skipped on older kernels -- the whole selftest is marked as
-failed. In a situation where a selftest is always failing due to one
-subtest, it means people stop looking at regressions with the other
-subtests. If we cannot easily predict which internal behaviour is
-expected, a workaround not to reduce the code coverage is to parse
-subtests, but not all selftests formats the results in an inner TAP 13
-format. Both predicting the kernel behaviour, and changing the output
-format look like quite a lot of work as there are hundreds of existing
-selftests, with thousands of subtests.
-
-
->> Many networking tests are validating the internal behaviour that is not
->> exposed to the userspace. A typical example: some tests look at the raw
->> packets being exchanged during a test, and this behaviour can change
->> without modifying how the userspace is interacting with the kernel. The
->> kernel could expose capabilities, but that's not something that seems
->> natural to put in place for internal behaviours that are not exposed to
->> end users. Maybe workarounds could be used, e.g. looking at kernel
->> symbols, etc. Nut that doesn't always work, increase the complexity, and
->> often "false positive" issue will be noticed only after a patch hits
->> stable, and will cause a bunch of tests to be ignored.
->>
->> Regarding fixes, ideally they will come with a new or modified test that
->> can also be backported. So the coverage can continue to grow in stable
->> versions too.
->>
 > 
-> The assumption that new tests can be backported is incorrect. It goes
-> against the stable rules. We backport fixes and not new features and
-> new tests.
-
-
-I'm sorry, I don't think I clearly explained what I wanted to say here:
-tests validating new features are obviously not backported. On the other
-hand, fixes regularly come with a regression test, and often, they are
-even part of the same commit. So both the fix, and the modified / added
-test are backported. It is useful to quickly validate a fix on a stable
-version. Is it something that should not be done?
-
-
-> Running kselftests from the same release will reduce coverage when a new
-> test is added to regression test a 6.11 feature. This happens more often
-> than not.
-> Revision matching example: 6.11.8 tests on 6.11.8 stable
-
-
-I see, then does that mean tests attached to a fix cannot be backported?
-If they can, and assuming new tests are validating new features, not old
-ones, then the impact should be limited, no?
-
-
->> Do you think that from the kernel v6.12 (or before?), the LKFT CI could
->> run the networking kselftests from the version that is being validated,
->> and not from a newer one? So validating the selftests from v6.12.1 on a
->> v6.12.1, and not the ones from a future v6.16.y on a v6.12.42.
->>
+>> +#define OVPN_MAX_PADDING 16
+>> +
+>>   #endif /* _NET_OVPN_MAIN_H_ */
+>> diff --git a/drivers/net/ovpn/ovpnstruct.h b/drivers/net/ovpn/ 
+>> ovpnstruct.h
+>> index 
+>> e3e4df6418b081436378fc51d98db5bd7b5d1fbe..211df871538d34fdff90d182f21a0b0fb11b28ad 100644
+>> --- a/drivers/net/ovpn/ovpnstruct.h
+>> +++ b/drivers/net/ovpn/ovpnstruct.h
+>> @@ -11,15 +11,23 @@
+>>   #define _NET_OVPN_OVPNSTRUCT_H_
+>>   #include <net/net_trackers.h>
+>> +#include <uapi/linux/if_link.h>
+>> +#include <uapi/linux/ovpn.h>
+>>   /**
+>>    * struct ovpn_struct - per ovpn interface state
+>>    * @dev: the actual netdev representing the tunnel
+>>    * @dev_tracker: reference tracker for associated dev
+>> + * @registered: whether dev is still registered with netdev or not
+>> + * @mode: device operation mode (i.e. p2p, mp, ..)
+>> + * @dev_list: entry for the module wide device list
+>>    */
+>>   struct ovpn_struct {
+>>       struct net_device *dev;
+>>       netdevice_tracker dev_tracker;
+>> +    bool registered;
+>> +    enum ovpn_mode mode;
+>> +    struct list_head dev_list;
 > 
-> It is expected that there will be more skipped tests as you run tests
-> from mainline on stable releases. You will see more skips on older
-> stables.
+> dev_list is no more used and should be deleted.
+
+ACK
+
+[...]
+
+>> +
+>> +/* OpenVPN nonce size */
+>> +#define NONCE_SIZE 12
+> 
+> nit: is using the common 'OVPN_' prefix here and for other constants any 
+> good idea? E.g. OVPN_NONCE_SIZE. It can give some hints where it comes 
+> from for a code reader.
+
+ACK
+
+> 
+> And another one question. Could you clarify in the comment to this 
+> constant where it came from? AFAIU, these 12 bytes is the expectation of 
+> the nonce size of AEAD crypto protocol, rigth?
+
+Correct: 12bytes/96bits. Will extend the comment.
+
+> 
+>> +
+>> +/* OpenVPN nonce size reduced by 8-byte nonce tail -- this is the
+>> + * size of the AEAD Associated Data (AD) sent over the wire
+>> + * and is normally the head of the IV
+>> + */
+>> +#define NONCE_WIRE_SIZE (NONCE_SIZE - sizeof(struct ovpn_nonce_tail))
+> 
+> If the headers and IV are defined as structures, we no more need this 
+> constant since the header construction will be done by a compiler 
+> according to the structure layout.
+
+yap yap. Will do this later as explained in the other email.
+
+> 
+>> +/* Last 8 bytes of AEAD nonce
+>> + * Provided by userspace and usually derived from
+>> + * key material generated during TLS handshake
+>> + */
+>> +struct ovpn_nonce_tail {
+>> +    u8 u8[OVPN_NONCE_TAIL_SIZE];
+>> +};
+> 
+> Why do you need a dadicated structure for this array? Can we declare the 
+> corresponding fields like this:
+> 
+> u8 nonce_tail_xmit[OVPN_NONCE_TAIL_SIZE];
+> u8 nonce_tail_recv[OVPN_NONCE_TAIL_SIZE];
+> 
+
+I think the original reason was to have something to pass to sizeof() 
+without making it harder for the reader.
+
+At some point I also wanted to get rid of the struct,but something 
+stopped me. Not sure what was though. Will give it a try.
 
 
-Indeed, if it is possible to detect when the test should be skipped or
-adapted on older kernel versions. Some tests cannot be easily adapted to
-run on older kernel versions. It means they would need to be skipped
-when running on older versions after having been adapted to support an
-internal behaviour change, e.g. a packet being formatted differently.
-That would reduce the code coverage on older kernels then.
+Thanks a lot.
+Regards,
 
-
-> An alternative would be to revision match for older stables. New tests
-> could be written for 6.12 which should be run on 6.11 and maybe not on
-> 6.1 depending on missed coverage.
-
-
-That could be an alternative indeed. When looking at the results of the
-5.10 kernel for example, we can see a very high number of failures --
-1/3 for the basic net tests, 2/3 in some net sub-systems -- and not many
-skips. This doesn't look good.
-
-
-> Before changing the current approach, it is important to understand that
-> running mainline tests on stable releases increases test coverage and that
-> newer tests will not be backported and that the coverage gap will increase
-> overtime.
-
-Understood.
-
-Again, thank you for your reply!
-
-Cheers,
-Matt
 -- 
-Sponsored by the NGI0 Core fund.
+Antonio Quartulli
+OpenVPN Inc.
 
 
