@@ -1,224 +1,148 @@
-Return-Path: <linux-kselftest+bounces-22088-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22089-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 951229CDC1C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 11:05:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A49C49CDC39
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 11:13:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D07CFB266B9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 10:05:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6ACAA283094
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 10:13:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 078A61B393C;
-	Fri, 15 Nov 2024 10:05:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9846E1B21B5;
+	Fri, 15 Nov 2024 10:13:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="A7RtfOW9"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="X3dWkFpq";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qR6LsGMN";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="VcHcjCHG";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="fGMorJSa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67CE61B219E
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2024 10:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9819F17E44A;
+	Fri, 15 Nov 2024 10:13:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731665105; cv=none; b=KH72QkfL367mFwPqf9zSG23qXtP2VC3FMAEeXAarViuPNYylGBzWZzidZUKq49FMHqQJpsFIYtl95E1WfStlXa5cp8rEGmog0Bf1NcZrAXY0Y1V+i/rCfsarxeqjkmFzj8+Ll878WAC0rrsqtnrO6bTWr5ETaFlTNHHMokwLmlU=
+	t=1731665619; cv=none; b=SfI5bJtCuW1XczmzOIU4wogG6g6IfJd6L6u5yH7Jbc5rGdDkI+s7a/qBvz6O+b6mtWC4ZueiSW8F/GNfIfs5JMxMfu18zqMB8mY+qgoFfL+78BdwDeoyNu7IuPJlVNIf/BeWKOxYH3IiVVK/ln+m5oIezeLOfOPARRFTWB9DfSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731665105; c=relaxed/simple;
-	bh=9UFteILIQ/ik06XzpgKEWpar7ygm5tTdXzZSrIpyuGQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YIqupTxBcJ9odIDZKaD12sTdX6+Cf++BNqE7u9xv4AhY9es6nr8GNto8DQd7XDU/Uy2PSPzma6Wdv+VYoZHttY/v+afx/6KTWRB/6YmGTeaZrmPFfjDvQ6kvn8bwebPKdnIhEn4+Vfis4smk5/lKtoY/3BBGhD+Xs4fPgewH2Ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=A7RtfOW9; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5cacb76e924so2457598a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2024 02:05:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1731665101; x=1732269901; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=s4OiUEPXpIXkFmw5cnFtFbT/tcT2f3NjsbEMHrFWlh0=;
-        b=A7RtfOW9qlapuVlN4N10E0Zm2SfFLDgaJ555GYxQAxl+dpNQIDqutAXvNtgO9QbnRE
-         gNUCz+oS8xgEy3LnZSgUqmGVkYUCz79z7VKNGR6vZ5Tvl2AUqaO+r/X4HrVjgSHarpSL
-         nDO0yQiR6jRziBDI2NKYybPNthX2SJWc7x9JV3vya8vmdYUlqLz9DDAZNGY/H4KXJyR5
-         8ummD7i0IQ/V+SD1ltcxNC8exbJ8JP7wItXxjI6OahL+0Hwh0ik5R9TQrTb2j6/ryxab
-         2InZOKZdBiSUHpTyB0WKC/Bk6jvySGcfzshPi0Y1RpD7O+xXMaPF0IiBCPMbtAi6WlVl
-         K0gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731665101; x=1732269901;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s4OiUEPXpIXkFmw5cnFtFbT/tcT2f3NjsbEMHrFWlh0=;
-        b=S5kYm0tpWydOH4/c8TOKI4D+pTZ6hhmfbVXerJ7M6roMyqmjTDLPhfLaqFqRG5KRxs
-         IE9XLgxwBeOw+oJ1yAon/UClgsjiKYhnAlceQzh090gztbEeTSCryMj/NSKdj3L9CfUx
-         htrNuC+KQVycgOJxbIPgCMDTYbRT8kekiJEbnX4UbrdW9C/kqDvN6IYjUHCEX8FSrxMy
-         Nk9qQ9UviAPIZeegTGa9/ZOn8BrkouisD00xayy8zDSszYpEulsido1Tk6p0NAhNznhY
-         CeQyQt+9b460HX4GZzWVF7dse3iGpYUxOOUtKA61iFelaCZ+1ibaojroGmGysNXlVXC4
-         XmgA==
-X-Forwarded-Encrypted: i=1; AJvYcCWsgXL8bvtkitrEXEj+RVPP90UzyNELf56J+V0LGMe7bWsWlkC9cwhVIZDj9c1X2z/eOkz5sxMYi6sNvydhEJ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw33j3VMiV0eik0XGTHvJGIqxTMQQqGtvGcn3HBb9hY16/c7TGa
-	Fj65l4v2pOjJcEPztXqe8pM8dhO5x/znm4K1eABRKNnV224Y9pkmjEgrWiaKLrs=
-X-Google-Smtp-Source: AGHT+IEp/xxelHfn3FkGS4W98jXXPoUegJ3cpzn/2IJRmvvo3KBb1RfaEkuNJ/akU0KifsYqg7tpLw==
-X-Received: by 2002:a05:6402:34cc:b0:5cf:7473:3318 with SMTP id 4fb4d7f45d1cf-5cf8fc315f9mr1617693a12.13.1731665100646;
-        Fri, 15 Nov 2024 02:05:00 -0800 (PST)
-Received: from ?IPV6:2001:67c:2fbc:1:59f4:10be:886a:27eb? ([2001:67c:2fbc:1:59f4:10be:886a:27eb])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cf79b8a4d4sm1423472a12.4.2024.11.15.02.04.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Nov 2024 02:04:59 -0800 (PST)
-Message-ID: <a8f3a9ca-698d-4b4e-ab4b-7d8aa651dddc@openvpn.net>
-Date: Fri, 15 Nov 2024 11:05:24 +0100
+	s=arc-20240116; t=1731665619; c=relaxed/simple;
+	bh=dllOzNYBZCycekP+E/MGT4e9VWkyWh/yT0kAE4dCQFw=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=hVP9wkcj7BDBvzI5thY3NFh0bL++5ikCjmQwtRlOxh9QGMmEznP30434uFHvIhmS4gpqp/DqfJDBtHpNbFqQ8Py1etV2KrZFOwqnpLRYaTl4oj4a+ugPUzrk0jAq91uweyc2OnUXyt180pUwQpLG+7MCbkXg+8EX/7gdxhojoZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=X3dWkFpq; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qR6LsGMN; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=VcHcjCHG; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=fGMorJSa; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from pobox.suse.cz (unknown [10.100.2.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 8912E21264;
+	Fri, 15 Nov 2024 10:13:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1731665615; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NF8NPKAP944NqrTfLoKuxMXQJTChdjIevG2xbsMT28k=;
+	b=X3dWkFpqissXEX0/tk/C+3fApBuFaJMHKT/oLA7Yx04fPj89AbanRp8kH0JwsghTICmgDu
+	sPJH4AFl6yIIhB4aGwSjaxJj3W6AvbDitpksfD/rQKlT3AeZjWCCQ2V5H8H+6n53avj/aC
+	n3GX/lKUMzo8Jw6xGcx46eUJiwKdI28=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1731665615;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NF8NPKAP944NqrTfLoKuxMXQJTChdjIevG2xbsMT28k=;
+	b=qR6LsGMNCDBV/LQf9WONK9wXinvk7IDkYWuZur59nEPfs1xGF5MIpOrtiNzDzTyoAgZ7qJ
+	rrmVDYk2uK0iHqBA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1731665614; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NF8NPKAP944NqrTfLoKuxMXQJTChdjIevG2xbsMT28k=;
+	b=VcHcjCHG5uqNQRQKIGzmRVVEVv9LPBdMWjB723GBrmrBmURQforIjFXZXXTOkn+RQLYnC2
+	sTiz+CCpUa+dxBP2rYsy6xzTcwHGvQoSjLpfxnSBNJz6sYY3YYYKjzjCm85TyoOMDUR1lh
+	Ijr96X4fOeMg/+8Da873ZYt5cDolpQw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1731665614;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NF8NPKAP944NqrTfLoKuxMXQJTChdjIevG2xbsMT28k=;
+	b=fGMorJSalk4gRP42ukuriysS434dzUJSNf8rZPQU2DXnlj1XstffwB4aZmUcgA4qJRWskj
+	hA118j+uHTnTt6CQ==
+Date: Fri, 15 Nov 2024 11:13:34 +0100 (CET)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Siddharth Menon <simeddon@gmail.com>
+cc: shuah@kernel.org, jpoimboe@kernel.org, jikos@kernel.org, pmladek@suse.com, 
+    Shuah Khan <skhan@linuxfoundation.org>, live-patching@vger.kernel.org, 
+    linux-kselftest@vger.kernel.org, mpdesouza@suse.com
+Subject: Re: [PATCH] selftests/livepatch: Check if CONFIG_LIVEPATCH is
+ enabled
+In-Reply-To: <20241106174120.5602-1-simeddon@gmail.com>
+Message-ID: <alpine.LSU.2.21.2411151104500.5135@pobox.suse.cz>
+References: <20241106174120.5602-1-simeddon@gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 03/23] ovpn: add basic netlink support
-To: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Shuah Khan <shuah@kernel.org>, sd@queasysnail.net,
- Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-3-de4698c73a25@openvpn.net>
- <52a2f654-29e5-4567-b5f8-8362fa55c1e1@gmail.com>
-Content-Language: en-US
-From: Antonio Quartulli <antonio@openvpn.net>
-Autocrypt: addr=antonio@openvpn.net; keydata=
- xsFNBFN3k+ABEADEvXdJZVUfqxGOKByfkExNpKzFzAwHYjhOb3MTlzSLlVKLRIHxe/Etj13I
- X6tcViNYiIiJxmeHAH7FUj/yAISW56lynAEt7OdkGpZf3HGXRQz1Xi0PWuUINa4QW+ipaKmv
- voR4b1wZQ9cZ787KLmu10VF1duHW/IewDx9GUQIzChqQVI3lSHRCo90Z/NQ75ZL/rbR3UHB+
- EWLIh8Lz1cdE47VaVyX6f0yr3Itx0ZuyIWPrctlHwV5bUdA4JnyY3QvJh4yJPYh9I69HZWsj
- qplU2WxEfM6+OlaM9iKOUhVxjpkFXheD57EGdVkuG0YhizVF4p9MKGB42D70pfS3EiYdTaKf
- WzbiFUunOHLJ4hyAi75d4ugxU02DsUjw/0t0kfHtj2V0x1169Hp/NTW1jkqgPWtIsjn+dkde
- dG9mXk5QrvbpihgpcmNbtloSdkRZ02lsxkUzpG8U64X8WK6LuRz7BZ7p5t/WzaR/hCdOiQCG
- RNup2UTNDrZpWxpwadXMnJsyJcVX4BAKaWGsm5IQyXXBUdguHVa7To/JIBlhjlKackKWoBnI
- Ojl8VQhVLcD551iJ61w4aQH6bHxdTjz65MT2OrW/mFZbtIwWSeif6axrYpVCyERIDEKrX5AV
- rOmGEaUGsCd16FueoaM2Hf96BH3SI3/q2w+g058RedLOZVZtyQARAQABzSdBbnRvbmlvIFF1
- YXJ0dWxsaSA8YW50b25pb0BvcGVudnBuLm5ldD7Cwa0EEwEIAFcCGwMFCwkIBwMFFQoJCAsF
- FgIDAQACHgECF4AFCRWQ2TIWIQTKvaEoIBfCZyGYhcdI8My2j1nRTAUCYRUquBgYaGtwczov
- L2tleXMub3BlbnBncC5vcmcACgkQSPDMto9Z0UzmcxAAjzLeD47We0R4A/14oDKlZxXO0mKL
- fCzaWFsdhQCDhZkgxoHkYRektK2cEOh4Vd+CnfDcPs/iZ1i2+Zl+va79s4fcUhRReuwi7VCg
- 7nHiYSNC7qZo84Wzjz3RoGYyJ6MKLRn3zqAxUtFECoS074/JX1sLG0Z3hi19MBmJ/teM84GY
- IbSvRwZu+VkJgIvZonFZjbwF7XyoSIiEJWQC+AKvwtEBNoVOMuH0tZsgqcgMqGs6lLn66RK4
- tMV1aNeX6R+dGSiu11i+9pm7sw8tAmsfu3kQpyk4SB3AJ0jtXrQRESFa1+iemJtt+RaSE5LK
- 5sGLAO+oN+DlE0mRNDQowS6q/GBhPCjjbTMcMfRoWPCpHZZfKpv5iefXnZ/xVj7ugYdV2T7z
- r6VL2BRPNvvkgbLZgIlkWyfxRnGh683h4vTqRqTb1wka5pmyBNAv7vCgqrwfvaV1m7J9O4B5
- PuRjYRelmCygQBTXFeJAVJvuh2efFknMh41R01PP2ulXAQuVYEztq3t3Ycw6+HeqjbeqTF8C
- DboqYeIM18HgkOqRrn3VuwnKFNdzyBmgYh/zZx/dJ3yWQi/kfhR6TawAwz6GdbQGiu5fsx5t
- u14WBxmzNf9tXK7hnXcI24Z1z6e5jG6U2Swtmi8sGSh6fqV4dBKmhobEoS7Xl496JN2NKuaX
- jeWsF2rOwE0EZmhJFwEIAOAWiIj1EYkbikxXSSP3AazkI+Y/ICzdFDmiXXrYnf/mYEzORB0K
- vqNRQOdLyjbLKPQwSjYEt1uqwKaD1LRLbA7FpktAShDK4yIljkxhvDI8semfQ5WE/1Jj/I/Q
- U+4VXhkd6UvvpyQt/LiWvyAfvExPEvhiMnsg2zkQbBQ/M4Ns7ck0zQ4BTAVzW/GqoT2z03mg
- p1FhxkfzHMKPQ6ImEpuY5cZTQwrBUgWif6HzCtQJL7Ipa2fFnDaIHQeiJG0RXl/g9x3YlwWG
- sxOFrpWWsh6GI0Mo2W2nkinEIts48+wNDBCMcMlOaMYpyAI7fT5ziDuG2CBA060ZT7qqdl6b
- aXUAEQEAAcLBfAQYAQgAJhYhBMq9oSggF8JnIZiFx0jwzLaPWdFMBQJmaEkXAhsMBQkB4TOA
- AAoJEEjwzLaPWdFMbRUP/0t5FrjF8KY6uCU4Tx029NYKDN9zJr0CVwSGsNfC8WWonKs66QE1
- pd6xBVoBzu5InFRWa2ed6d6vBw2BaJHC0aMg3iwwBbEgPn4Jx89QfczFMJvFm+MNc2DLDrqN
- zaQSqBzQ5SvUjxh8lQ+iqAhi0MPv4e2YbXD0ROyO+ITRgQVZBVXoPm4IJGYWgmVmxP34oUQh
- BM7ipfCVbcOFU5OPhd9/jn1BCHzir+/i0fY2Z/aexMYHwXUMha/itvsBHGcIEYKk7PL9FEfs
- wlbq+vWoCtUTUc0AjDgB76AcUVxxJtxxpyvES9aFxWD7Qc+dnGJnfxVJI0zbN2b37fX138Bf
- 27NuKpokv0sBnNEtsD7TY4gBz4QhvRNSBli0E5bGUbkM31rh4Iz21Qk0cCwR9D/vwQVsgPvG
- ioRqhvFWtLsEt/xKolOmUWA/jP0p8wnQ+3jY6a/DJ+o5LnVFzFqbK3fSojKbfr3bY33iZTSj
- DX9A4BcohRyqhnpNYyHL36gaOnNnOc+uXFCdoQkI531hXjzIsVs2OlfRufuDrWwAv+em2uOT
- BnRX9nFx9kPSO42TkFK55Dr5EDeBO3v33recscuB8VVN5xvh0GV57Qre+9sJrEq7Es9W609a
- +M0yRJWJEjFnMa/jsGZ+QyLD5QTL6SGuZ9gKI3W1SfFZOzV7hHsxPTZ6
-Organization: OpenVPN Inc.
-In-Reply-To: <52a2f654-29e5-4567-b5f8-8362fa55c1e1@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Score: -4.29
+X-Spamd-Result: default: False [-4.29 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-0.999];
+	NEURAL_HAM_SHORT(-0.19)[-0.952];
+	MIME_GOOD(-0.10)[text/plain];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_ZERO(0.00)[0];
+	ARC_NA(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[pobox.suse.cz:mid,pobox.suse.cz:helo,linuxfoundation.org:email]
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-On 09/11/2024 00:15, Sergey Ryazanov wrote:
-> On 29.10.2024 12:47, Antonio Quartulli wrote:
->> This commit introduces basic netlink support with family
->> registration/unregistration functionalities and stub pre/post-doit.
->>
->> More importantly it introduces the YAML uAPI description along
->> with its auto-generated files:
->> - include/uapi/linux/ovpn.h
->> - drivers/net/ovpn/netlink-gen.c
->> - drivers/net/ovpn/netlink-gen.h
->>
->> Cc: donald.hunter@gmail.com
->> Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
-> 
-> [skipped]
-> 
->> diff --git a/Documentation/netlink/specs/ovpn.yaml b/Documentation/ 
->> netlink/specs/ovpn.yaml
-> 
-> [skipped]
-> 
->> +attribute-sets:
->> +  -
->> +    name: peer
->> +    attributes:
->> +      -
->> +        name: id
->> +        type: u32
->> +        doc: |
->> +          The unique ID of the peer. To be used to identify peers during
->> +          operations
-> 
-> nit: could you specify the scope of uniqueness? I believe it is not 
-> globally uniq, it is just interface uniq, right?
+Hi,
 
-Yeah it's per interface/instance.
-Will make it more clear, also for other IDs.
+On Wed, 6 Nov 2024, Siddharth Menon wrote:
 
+> When CONFIG_LIVEPATCH is disabled, compilation fails due to the
+> required structs from the livepatch header file being undefined.
+> This checks for CONFIG_LIVEPATCH in order to verify that
+> it is enabled before compiling livepatch self-tests.
 > 
->> +        checks:
->> +          max: 0xFFFFFF
-> 
-> [skipped]
-> 
->> diff --git a/drivers/net/ovpn/main.c b/drivers/net/ovpn/main.c
->> index 
->> 369a5a2b2fc1a497c8444e59f9b058eb40e49524..d5bdb0055f4dd3a6e32dc6e792bed1e7fd59e101 100644
->> --- a/drivers/net/ovpn/main.c
->> +++ b/drivers/net/ovpn/main.c
->> @@ -7,11 +7,15 @@
->>    *        James Yonan <james@openvpn.net>
->>    */
->> +#include <linux/genetlink.h>
->>   #include <linux/module.h>
->>   #include <linux/netdevice.h>
->>   #include <net/rtnetlink.h>
->> +#include <uapi/linux/ovpn.h>
->> +#include "ovpnstruct.h"
->>   #include "main.h"
->> +#include "netlink.h"
->>   #include "io.h"
->>   /* Driver info */
->> @@ -37,7 +41,7 @@ static int ovpn_newlink(struct net *src_net, struct 
->> net_device *dev,
->>   }
->>   static struct rtnl_link_ops ovpn_link_ops = {
->> -    .kind = "ovpn",
->> +    .kind = OVPN_FAMILY_NAME,
-> 
-> nit: are you sure that the link kind is the same as the GENL family? I 
-> mean, they are both deriviated from the protocol name that is common for 
-> both entities, but is it making RTNL kind a derivative of GENL family?
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> Signed-off-by: Siddharth Menon <simeddon@gmail.com>
+> ---
+>  tools/testing/selftests/livepatch/test_modules/Makefile | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 
-I just want to use the same name everywhere and I thought it doesn't 
-make sense to create a separate define (they can be decoupled later 
-should see any need for that).
-But I can add:
+thank you for the patch.
 
-#define OVPN_RTNL_LINK_KIND OVPN_FAMILY_NAME
+tools/testing/selftests/livepatch/config contains
 
-to make this relationship explicit?
+CONFIG_LIVEPATCH=y
+CONFIG_DYNAMIC_DEBUG=y
+
+I assumed that these prerequisites are respected but apparently not for 
+building the test modules if I understand it correctly.
+
+Is it possible to fix it in the way that the config file is respected? Or 
+how do kselftests work with that?
 
 Regards,
-
--- 
-Antonio Quartulli
-OpenVPN Inc.
-
+Miroslav
 
