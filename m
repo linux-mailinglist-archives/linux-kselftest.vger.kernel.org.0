@@ -1,196 +1,181 @@
-Return-Path: <linux-kselftest+bounces-22090-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22091-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1CD19CDC59
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 11:19:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A36139CDE89
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 13:44:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2CB0285B17
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 10:19:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F1C25B21C0A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 12:44:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1CB41B393F;
-	Fri, 15 Nov 2024 10:19:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00E811BD4E2;
+	Fri, 15 Nov 2024 12:43:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="dQQXSmFb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GVQ8SQrv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0396E1B2195
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2024 10:18:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6681B6D00;
+	Fri, 15 Nov 2024 12:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731665941; cv=none; b=LJC30KsMFp23FrumsLpXGC1ogSZpqIaQNioIRpIBHCqYTe8PNlVFsjgKfi1FhRFz7Xyj1CLA7ScF7MPXv7R9+2a7iE+uA3tlFCRTg5fOczIQsVvsqp9TIEjDIeptxmNq6pxZo9o/J9YpICh6yvoJVYunBoMABLl2n9q3gcf23rk=
+	t=1731674599; cv=none; b=E5Ma3YbPWVle1jlTGvfonN8QQGu06UW3Tpzl6FYIqQmwN0wU3UKENv2jMGsduUvknDIW6OHlr2S/ouorTAwZ3ForTRJoIpJfdBLbOZCcXBPg6O1DNbvyOsAzxHWqaORhfUyM/kRj9azpfN+DrYS0DWE28I/CGDoXJ4ZgcLo4yt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731665941; c=relaxed/simple;
-	bh=X5D0h9UNJl13Pe4z8gullnSJc8fhH65Kg8B35uclJ0c=;
+	s=arc-20240116; t=1731674599; c=relaxed/simple;
+	bh=cAkLHe4RY0JpdHowzxJaxi9VHTzPVJ7Osy0OD4ferBk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nJ6qe2jHoEZZpNiH2brzpOwY3L4duOi0WHb5KjADgHjNCfkG/OjXJnYaAQNQrBfJgFGdyEHMkyBiO5935n82tiKzz3yHOIBBr56DmwsoiABCrLWXn/3fbKMw4rENqtFd+NdURJvN2SrVBHTg+gxL8fwOxUurlvY/pADIPv7dQVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=dQQXSmFb; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4316f3d3c21so13278855e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2024 02:18:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1731665937; x=1732270737; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=moBXfLDVX5c6Ljj6/t/WvvrljNE0SqwxGCewjZjiArM=;
-        b=dQQXSmFb01ocaTBhm7x0t/GB9tAv2BAD49D7Zfa9OIuN1Lbmjg/1hps1qR3e6uzCVr
-         UpcbVCCYN7xcg+3WN1Hlu9SnEwInSJaD6dSI8tl75RRDOrA6mG/MS7efDcOduz+pyGi1
-         BZ4gUOtUSnmXALrh7ljqACp4oRbEVoTxu1PDKEgCAbLvPc0JWZfXTTp6NOHf1uCrMPb2
-         RolgXh8pgOu/BlhTGdbOh0T7rB+/ul5zVDO3O3tOJJEVRP89rdBpo1zfBBXalggcBfgZ
-         SYllH5RmpquIl7+E8b67P6ZLBR/TcYodzh5TA5KKIeS4Cbfh9qQQYtjr3Lyecb4sMj0N
-         Eubw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731665937; x=1732270737;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=moBXfLDVX5c6Ljj6/t/WvvrljNE0SqwxGCewjZjiArM=;
-        b=C8uZGKiQJ/FNRKLHxAzjHbEaY4Lzi5b5likjoqelnXMdRoH7Qy5l9fRuVkATiCfjnw
-         h2RwrKZwxPac55PafeLT/Br3bJ4axYQcj0kWZwF0rYc7Z4xIryBB7W81hV9tzh0pVtZM
-         aHY+CYBcI//9fJ5jK/pLYMiAmASsJZ+HHTy68E5IOXGh6NAL95FZRloqbniOwdEzGUKI
-         QUGfSkl1Iop7vFQ87DJaN6Rdc3PnUZun0/ijPVxM3tESXiAhBTrTw8RS4/LATgDooiLE
-         VrS7Mz+NxHfhOF4R9kOX5B0ISNR58bvW6bkAH0Z0374cEX3jlG+iH+mDRTdPb4EEI6jS
-         f/VA==
-X-Forwarded-Encrypted: i=1; AJvYcCU62VVgYuGrVS3WvygVXxcpFoYm0ReCOkRv1SimrO40phP2J7WNUbfuB4bL6no7xfZdRwkgtoPeeUUCmqv4yNs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuHBx+W8aw7L8qj2sExlKPYhp1jhxIovzriL3ESY5cAam1MTrz
-	//+mXqnhFJct/OZAqsAivlbblzjrCrt95BI+L0yiTat347m4JtqGwbB4W347QtU=
-X-Google-Smtp-Source: AGHT+IGn9S7JhSYSeHgbVmQ2BSBxvX0GWYaTGrCbot1ed9O8BPB4IeK8ajzzLD6HoKiGPR6iN1/CKA==
-X-Received: by 2002:a05:600c:3513:b0:42c:b16e:7a22 with SMTP id 5b1f17b1804b1-432df72c555mr18504095e9.12.1731665937243;
-        Fri, 15 Nov 2024 02:18:57 -0800 (PST)
-Received: from ?IPV6:2001:67c:2fbc:1:59f4:10be:886a:27eb? ([2001:67c:2fbc:1:59f4:10be:886a:27eb])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432dab78783sm49172485e9.12.2024.11.15.02.18.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Nov 2024 02:18:56 -0800 (PST)
-Message-ID: <dc63a3cb-7ace-4aca-9b67-f3c50297b2d2@openvpn.net>
-Date: Fri, 15 Nov 2024 11:19:20 +0100
+	 In-Reply-To:Content-Type; b=Jm8e37Pdy6jF1mhWh7SvZ7TPxSjf4iK0tTVVrIjpPKaANcdQhYtPIw6WCXa19KQc2QIZPJKGMJG0gDI/bs048D31PUjrUgDchi/yBL//GU6D3zT2QgGdZlsfp6YPyUSxJ8ipDIV7RZHy+Z0ejJlI0/ne56F/z8qSPeBlelCvyhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GVQ8SQrv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF28AC4CECF;
+	Fri, 15 Nov 2024 12:43:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731674599;
+	bh=cAkLHe4RY0JpdHowzxJaxi9VHTzPVJ7Osy0OD4ferBk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=GVQ8SQrvVj72cdpJeOoGzWXlh+DY4Z/+uGd6A5bhDdum8DdUP+uC0M/zx/dpaWXnS
+	 d0WRuwNyWe6xeNi5nfmozdFug9lwRVxFwYJP0EWgLDdspKOQ0DyeBL9I7XMhxVo3Q9
+	 saTnrZr2ChI/+QjhCPUKOotZ6gn5d0SLGu5oekWvehJyEcGWbn/QsLhlcCTss2fKt2
+	 f0HPjY3XdMegNf7A5ocfYuyysfF9VM5igVzTsB5b4NUcWvXtiz8JuwMxsW1pn+3tSD
+	 h/I9bOvrCAPNLmJf/RverYTCJzJosY3WgKNiYrGubePV2R+EAbNHLFIpTiHnnlVFFh
+	 Bji2MxHwX88xA==
+Message-ID: <c4ed1f88-e43b-4b12-bffc-faf27879042c@kernel.org>
+Date: Fri, 15 Nov 2024 13:43:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 03/23] ovpn: add basic netlink support
-To: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Shuah Khan <shuah@kernel.org>, sd@queasysnail.net,
- Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-3-de4698c73a25@openvpn.net>
- <21c0887b-1c7d-424d-a723-2a8d212cbde1@gmail.com>
-Content-Language: en-US
-From: Antonio Quartulli <antonio@openvpn.net>
-Autocrypt: addr=antonio@openvpn.net; keydata=
- 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
-Organization: OpenVPN Inc.
-In-Reply-To: <21c0887b-1c7d-424d-a723-2a8d212cbde1@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: LKFT CI: improving Networking selftests results when validating
+ stable kernels
+Content-Language: en-GB
+To: Dan Carpenter <dan.carpenter@linaro.org>,
+ Greg KH <gregkh@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: Linux Kernel Functional Testing <lkft@linaro.org>,
+ Kernel Selftests <linux-kselftest@vger.kernel.org>,
+ Netdev <netdev@vger.kernel.org>, Linux Kernel
+ <linux-kernel@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>,
+ Naresh Kamboju <naresh.kamboju@linaro.org>, Ido Schimmel
+ <idosch@nvidia.com>, stable@vger.kernel.org
+References: <ff870428-6375-4125-83bd-fc960b3c109b@kernel.org>
+ <1bda012e-817a-45be-82e2-03ac78c58034@stanley.mountain>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <1bda012e-817a-45be-82e2-03ac78c58034@stanley.mountain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 09/11/2024 00:31, Sergey Ryazanov wrote:
-> On 29.10.2024 12:47, Antonio Quartulli wrote:
->> This commit introduces basic netlink support with family
->> registration/unregistration functionalities and stub pre/post-doit.
+Hi Dan,
+
+Thank you for your reply!
+
+On 13/11/2024 18:08, Dan Carpenter wrote:
+> On Fri, Nov 08, 2024 at 07:21:59PM +0100, Matthieu Baerts wrote:
+>> KSelftests from the same version
+>> --------------------------------
 >>
->> More importantly it introduces the YAML uAPI description along
->> with its auto-generated files:
->> - include/uapi/linux/ovpn.h
->> - drivers/net/ovpn/netlink-gen.c
->> - drivers/net/ovpn/netlink-gen.h
+>> According to the doc [2], kselftests should support all previous kernel
+>> versions. The LKFT CI is then using the kselftests from the last stable
+>> release to validate all stable versions. Even if there are good reasons
+>> to do that, we would like to ask for an opt-out for this policy for the
+>> networking tests: this is hard to maintain with the increased
+>> complexity, hard to validate on all stable kernels before applying
+>> patches, and hard to put in place in some situations. As a result, many
+>> tests are failing on older kernels, and it looks like it is a lot of
+>> work to support older kernels, and to maintain this.
 >>
->> Cc: donald.hunter@gmail.com
->> Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
+>> Many networking tests are validating the internal behaviour that is not
+>> exposed to the userspace. A typical example: some tests look at the raw
+>> packets being exchanged during a test, and this behaviour can change
+>> without modifying how the userspace is interacting with the kernel. The
+>> kernel could expose capabilities, but that's not something that seems
+>> natural to put in place for internal behaviours that are not exposed to
+>> end users. Maybe workarounds could be used, e.g. looking at kernel
+>> symbols, etc. Nut that doesn't always work, increase the complexity, and
+>> often "false positive" issue will be noticed only after a patch hits
+>> stable, and will cause a bunch of tests to be ignored.
+>>
+>> Regarding fixes, ideally they will come with a new or modified test that
+>> can also be backported. So the coverage can continue to grow in stable
+>> versions too.
+>>
+>> Do you think that from the kernel v6.12 (or before?), the LKFT CI could
+>> run the networking kselftests from the version that is being validated,
+>> and not from a newer one? So validating the selftests from v6.12.1 on a
+>> v6.12.1, and not the ones from a future v6.16.y on a v6.12.42.
+>>
 > 
-> [skipped]
-> 
->> diff --git a/drivers/net/ovpn/ovpnstruct.h b/drivers/net/ovpn/ 
->> ovpnstruct.h
->> --- /dev/null
->> +++ b/drivers/net/ovpn/ovpnstruct.h
->> @@ -0,0 +1,25 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
->> +/*  OpenVPN data channel offload
->> + *
->> + *  Copyright (C) 2019-2024 OpenVPN, Inc.
->> + *
->> + *  Author:    James Yonan <james@openvpn.net>
->> + *        Antonio Quartulli <antonio@openvpn.net>
->> + */
->> +
->> +#ifndef _NET_OVPN_OVPNSTRUCT_H_
->> +#define _NET_OVPN_OVPNSTRUCT_H_
->> +
->> +#include <net/net_trackers.h>
->> +
->> +/**
->> + * struct ovpn_struct - per ovpn interface state
->> + * @dev: the actual netdev representing the tunnel
->> + * @dev_tracker: reference tracker for associated dev
->> + */
->> +struct ovpn_struct {
-> 
-> There is no standard convention how to entitle such structures, so the 
-> question is basically of out-of-curiosity class. For me, having a 
-> sturcuture with name 'struct' is like having no name. Did you consider 
-> to use such names as ovpn_dev or ovpn_iface? Meaning, using a name that 
-> gives a clue regarding the scope of the content.
+> These kinds of decisions are something that Greg and Shuah need to decide on.
 
-Yes, I wanted to switch to ovpn_priv, but  did not care much for the 
-time being :)
+Thank you, it makes sense.
 
-I can still do it now in v12.
+> You would still need some way to automatically detect that kselftest is running
+> on an old kernel and disable the networking checks.  Otherwise when random
+> people on the internet try to run selftests they would run into issues.
 
-Thanks!
-Regards,
 
+Indeed. I guess we can always add a warning when the kernel and
+selftests versions are different. I suppose the selftests are built
+using the same kernel version, then executed on older versions: we could
+then compare the kernel versions at build time and run time, no?
+
+
+Regarding the other questions from my previous email -- skipped tests
+(e.g. I think Netfilter tests are no longer validated), KVM,
+notifications -- do you know who at Linaro could eventually look at them?
+
+
+Cheers,
+Matt
 -- 
-Antonio Quartulli
-OpenVPN Inc.
+Sponsored by the NGI0 Core fund.
 
 
