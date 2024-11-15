@@ -1,119 +1,94 @@
-Return-Path: <linux-kselftest+bounces-22127-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22128-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A105B9CFAC6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2024 00:03:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D45539CFB38
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2024 00:35:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37D5AB27A7D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 22:51:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F8D0B22A84
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 23:35:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32C991917EE;
-	Fri, 15 Nov 2024 22:51:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA5A819645C;
+	Fri, 15 Nov 2024 23:35:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PCFkBbW4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SWd4Fyxc"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0283014F9D9;
-	Fri, 15 Nov 2024 22:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC5216631C;
+	Fri, 15 Nov 2024 23:35:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731711076; cv=none; b=dJQTwY8wj9sBvF2PoC0Yze5eMY/wlMFElkyeLYKL0+549Oj/BKLgMvbf979LSxZ6w2Ajken3m/3CM5pACuL9DhQHHkTjureBSBFSHu0p0zubyeG5fmAf96Cqz2sqF+IT9Biqu8IO4XnPeJ10KXLAfYGFkSUWsQ5Yi6SuK8oS5zQ=
+	t=1731713728; cv=none; b=BOv/nfrJNV5J0AB0LdLgzQ9y8Sau2Kuey+i55pi+Xm9GIRRDEI8aBlpqearghPLCezsISwccNrcFhO5VFsAIKw7OQaR6G+FNbev+CP8gQOEDf626oJidpD+msQUMqf37lL4fNVq7d3IkyBbRljd9KP1o4V6viWjbKmPmC3o7HfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731711076; c=relaxed/simple;
-	bh=Jht/2wZpROGtsN14r3YcP1e9epsnJMyCctqGZl0f40s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZLtQRV7eRGaDc6Q4ZchczF7aFL3vnDIwxQrg7XW9FKVF5s3AM9Kn5+MwF/VXZ/R+/PapectXGRLCbRUkv5gb6krUEDZLyY1CLEv8J9oAWpVUvODOXSKNLCz46ptB+5eJm7p1xYSt8mHFLVAjGTRmFyrnTnhY4H3zYHT/Lh2PE48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PCFkBbW4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14001C4CECF;
-	Fri, 15 Nov 2024 22:51:15 +0000 (UTC)
+	s=arc-20240116; t=1731713728; c=relaxed/simple;
+	bh=+0nSqXJMNPJie6Agi0DCflpUksVQqJLNIcznPm67J68=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pzWJtHq4vv1JbdBbp338G1ATWPxqT0zYhS6MQQ4nBW+a/ydVEA9MP3/VTKSYZdcc8+inR/P3q6DWGf6KtTB4OerM4ajRPMUUzczEFZEQKCcT4h6WyuAAwwuUcJphUvZPdxme75H0BwZKTO4JvJCpePHYHIS2Xi4c4f0qQ1c9+r0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SWd4Fyxc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 018E7C4CECF;
+	Fri, 15 Nov 2024 23:35:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731711075;
-	bh=Jht/2wZpROGtsN14r3YcP1e9epsnJMyCctqGZl0f40s=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PCFkBbW4KMxzIiNilnx1D+38dZUl9xMatxEwTnxieesvyQaDMebt0p8A1S5AD0XwX
-	 6xS7Dsp8BRDyGdbMKli/DgLMzyCJ5yOP8HIShiKmA/wQX+CRKDIPrUvlXP8GjrKemD
-	 nXAL97JH746uehmvPZsiFshb860GinB8Ny7ro1xGR1ym232+5LwAvZIVbxRl7lEx5X
-	 F0ca/qbe42fil5LCSfhCYj/pMtLSFuJDb994762noA21eA+CF8rSv/k0dZ98CwSIAx
-	 f3cT5ZJnrmxQNrNoCLiykc1+bUGUwRWSfmKJu9KZHtFhQlDvMFmvUWF5361B93lzTN
-	 TKguxkPtB2TSQ==
-Message-ID: <80785a22-26de-4466-af44-5aee85a056fe@kernel.org>
-Date: Fri, 15 Nov 2024 14:51:14 -0800
+	s=k20201202; t=1731713727;
+	bh=+0nSqXJMNPJie6Agi0DCflpUksVQqJLNIcznPm67J68=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=SWd4Fyxcy6vkPAs/DoAyKv+eu9nnqiy9VDr1E7w6DAOPjGk3sTNyu3CQVJ1ftQ1Vl
+	 KQx7V76ZwBrflcMdU07dZ08pvCiVuMniy4GhDYMkJ/3vahjg0pawSvaX+3JhHfGywU
+	 5B5tE+7wI6tq8XfAriVL28lj/YBhGHcMmGeFVzCIrjSd9YzsgSS8omaH0MLx3DWaMn
+	 /8V/Hup5AfF5QtyTL3sde4ia3ZIuFa+PC0Cl0GrtcqcB8u0C+PbGN/aNnGXfwN1oRZ
+	 wKyFrTPI/2pLhWCxOGsAbPXDBSZL+32gxSUIudNzbcxe8lV0SDX6LcluNtG1LiyPmb
+	 wMVTTXTFPHQrg==
+Date: Fri, 15 Nov 2024 15:35:26 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Xiao Liang <shaw.leon@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, Kuniyuki
+ Iwashima <kuniyu@amazon.com>, Donald Hunter <donald.hunter@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Ido
+ Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Simon
+ Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jiri Pirko
+ <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>,
+ linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
+ osmocom-net-gprs@lists.osmocom.org, bpf@vger.kernel.org,
+ linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+ linux-wireless@vger.kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
+ bridge@lists.linux.dev, linux-wpan@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3 4/6] rtnetlink: Decouple net namespaces in
+ rtnl_newlink_create()
+Message-ID: <20241115153526.3582ebcd@kernel.org>
+In-Reply-To: <20241113125715.150201-5-shaw.leon@gmail.com>
+References: <20241113125715.150201-1-shaw.leon@gmail.com>
+	<20241113125715.150201-5-shaw.leon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 1/2] net/ipv6: delete temporary address if mngtmpaddr
- is removed or un-mngtmpaddr
-Content-Language: en-US
-To: Sam Edwards <cfsworks@gmail.com>, Hangbin Liu <liuhangbin@gmail.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, =?UTF-8?Q?Maciej_=C5=BBenczykowski?=
- <maze@google.com>, Xiao Ma <xiaom@google.com>
-References: <20241113125152.752778-1-liuhangbin@gmail.com>
- <20241113125152.752778-2-liuhangbin@gmail.com>
- <CAH5Ym4jjVFofG5J7QW=EsD00siDXtNWKt4ZDNbbUmP+Y4Jb-DQ@mail.gmail.com>
- <ZzWo5fJcraaDDLm_@fedora>
- <CAH5Ym4hcguhXvJvVuANns7Q9VTOWR-SxHSdD55rR5BWhWeg2Ow@mail.gmail.com>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <CAH5Ym4hcguhXvJvVuANns7Q9VTOWR-SxHSdD55rR5BWhWeg2Ow@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 11/15/24 1:46 PM, Sam Edwards wrote:
-> Hi Hangbin,
-> 
-> It took me a while to grasp but the problem seems to be a confusion
-> about what it means to set a temporary's lifetimes to 0/0:
-> 1) "The mngtmpaddrs has gone away; this temporary is slated for
-> deletion by addrconf_verify_rtnl()"
-> 2) "This temporary address itself shall no longer be used, regenerate
-> it immediately."
-> 
-> The existing behavior makes sense for the #2 case, but not for the #1
-> case. It seems sensible to me to keep the #2 behavior as-is, because
-> userspace might be setting a 0/0 lifetime to forcibly rotate the
-> temporary.
-> 
-> So it sounds like (at least) one of three fixes is in order:
-> a) Make ipv6_create_tempaddr() verify that the `ifp` is (still)
-> alive+mngtmpaddrs, returning with an error code if not.
-> b) Look at the 3 callsites for ipv6_create_tempaddr() and add the
-> above verifications before calling.
-> c) Add a function that calls ipv6_del_addr(temp) for every temporary
-> with a specified ifpub, and use it instead of manage_tempaddrs(..., 0,
-> 0, false, ...) when deleting/unflagging a mngtmpaddrs.
-> 
-> Personally I like option C the best. What are your thoughts?
-> 
-> Cheers,
+On Wed, 13 Nov 2024 20:57:13 +0800 Xiao Liang wrote:
+> +/**
+> + *	struct rtnl_link_nets - net namespace context of newlink.
+> + *
+> + *	@src_net: Source netns of rtnetlink socket
+> + *	@link_net: Link netns by IFLA_LINK_NETNSID, NULL if not specified.
+> + */
+> +struct rtnl_link_nets {
+> +	struct net *src_net;
+> +	struct net *link_net;
+> +};
 
-Off the top of my head regarding recent changes, please include Maciej:
+Let's not limit ourselves to passing just netns via this struct.
+Let's call it rtnl_newlink_args or params.
 
-commit 69172f0bcb6a09110c5d2a6d792627f5095a9018
-Author: Maciej Żenczykowski <maze@google.com>
-Date:   Thu Jul 20 09:00:22 2023 -0700
-
-    ipv6 addrconf: fix bug where deleting a mngtmpaddr can create a new
-temporary address
-
-
-
-and Alex in discussions around changes to temp addresses
-
-commit f4bcbf360ac8dc424dc4d2b384b528e69b6f34d9
-Author: Alex Henrie <alexhenrie24@gmail.com>
-Date:   Tue Feb 13 23:26:32 2024 -0700
-
-    net: ipv6/addrconf: clamp preferred_lft to the minimum required
+The first patch of the series got merged independently so you'll
+need to respin.
+-- 
+pw-bot: cr
 
