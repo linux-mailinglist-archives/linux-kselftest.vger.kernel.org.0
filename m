@@ -1,308 +1,352 @@
-Return-Path: <linux-kselftest+bounces-22120-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22121-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 094369CF657
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 21:46:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD8B69CF66E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 21:59:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A62921F22719
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 20:46:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 786CA286E61
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 20:59:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3124F1E1049;
-	Fri, 15 Nov 2024 20:46:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 315241D63C6;
+	Fri, 15 Nov 2024 20:59:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="afyWifYD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VHfXbI5H"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3232D13FD72;
-	Fri, 15 Nov 2024 20:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27B831DA23;
+	Fri, 15 Nov 2024 20:59:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731703602; cv=none; b=IS9U1eJL7GywoxvIXL1hH3dfn+M6BOJwkAkfbUf/OmZnWW3mL8FOy/XJxvWWMZwRu8LamMd8NNTbOrSQ9a84o/vY17e1QrArStCyfxVkgtrfsfR1WGP9P1l7UVZkrCUtZP+O+tvRoLiCGPsxpcbWeJDqMmnI/OL+UnBxvoLmBlY=
+	t=1731704382; cv=none; b=anyCVCIxsLea0yEt4LZkU3zhtYqUmO0PoiBk6+yT8yqsyR3PDYMesC9VGjjCcOmFTFFkz6N0N+sHpmPWb5hWe6CHp6ZQY/+ftO00Oi4B0d1iDBRP3GHRo/tWtxkoLPlQk+LVbcHZKOd8X/+Hjh8DLKeTgWzRrQo+BauAYJRaoW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731703602; c=relaxed/simple;
-	bh=SB6sRlYQPJX2cnmx7fApoRfkpOkQyL+KPr2/h03YT7c=;
+	s=arc-20240116; t=1731704382; c=relaxed/simple;
+	bh=gzTtMk1ML+JI0EwvRjkOCOAvIT+mG6ZE5JdrNjk2SMI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XFixUy4wBSBjc36zRPysCHwL0DY5doC+Y+GFQSIjowJMpkfWZsDsEpzA0GVeShs/2ygc74W33V+DAuPebHchUWdzXitH4UrouBa1bcrGhlL3DoOPFsCZKXT/XvYXWkwKjcPpK34qWy4Eit7t7PTCz6O0wjaub/VvGj/bjqn+yTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=afyWifYD; arc=none smtp.client-ip=209.85.218.51
+	 To:Cc:Content-Type; b=sH1/Vi4wX1u5qNuTRNZ14945xmHlGaq0GNSWj4pFpC7OVkL1w9zGtFON42UBh7OJOHSHUYzQDJo6fDy4b/rYIqeZyGzj6BxED4eEhIIL/Kz2j/7FVRwxGwnaBGXivePwJyPbs8nA3MuiA7ZjCNE5OTpldNX16Chshln9e4KzTVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VHfXbI5H; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a9a850270e2so4494666b.0;
-        Fri, 15 Nov 2024 12:46:39 -0800 (PST)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a9ed7d8d4e0so5676166b.1;
+        Fri, 15 Nov 2024 12:59:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731703598; x=1732308398; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1731704378; x=1732309178; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9yq6wiZr07zyT2tdDH94tcWOKQWvPr647j2FSkk0F3Q=;
-        b=afyWifYDw3xNyXhNjggqMNqjRDMS8naUtXKEpV0aEz94nW4liOZqL3E/9Iu0w/biPX
-         jQ+/q0GPqZthFFPy8o4GwHElOzqedJf1RIct1x6gmpd67uDcrtSPUIL+GHIZFymSTreJ
-         S0Dd8iwG18xT5+6R85YCmqogtjCw1cd5YlPHUmbeXJlmWJJU/RQU9ZTXHM37yUklmebZ
-         aU9B5Yg4QcK5LzAtBgfOHA69uRlaiZlWozsHiS9in8QCSvdjzCcwzdojHtNT59ou1AmC
-         Vb6EAKuecHqjCUcrkfYxGmvSrC0fe0maWglgwNXGA9vMSOKIi1FxfVZPNI7C/tvnNRkv
-         WWEQ==
+        bh=35Rh2Z7j4Xk8doE9J6Yu6lTzfUmpkTnJhhzbKF7lAFo=;
+        b=VHfXbI5HYXdYbfnrzroobL3zVeXjf/BXLVhwEnbeIX7iqytMaX7qywVJxzYFnlnWP8
+         TbizJweppcYqjQ3qcIZ62kWJnYhUyOeohQLwPHaI6Jyt7evNQ3ZuycdzhXuESHbAKplE
+         uA0EZD9/sWXnESuk+mRqHAVZ6InbDX79eIxMkzaCd+VRB44PW/X9edE0qqIddQixxcch
+         /jtHvaST3Hvun1cMFRcqHl+PSVJ3qsy0BwnUDcqZ/oMbOZ8b0TfjuwTVIlImZEgByEFB
+         pcUne4bz4lM6pt7869kzs30mAPqWaUiD2UBQMvapDlnPUNvMp5BBDVFaa1GmEGmRWM1H
+         rygA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731703598; x=1732308398;
+        d=1e100.net; s=20230601; t=1731704378; x=1732309178;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9yq6wiZr07zyT2tdDH94tcWOKQWvPr647j2FSkk0F3Q=;
-        b=Nn6bl2vXy6K+ov8D5D6/kAl0jy4FS8m8kOZkSXkT7ruWvxJqBwDbC8d69PYwtcBp8G
-         9zrF19rC/nP6seCEifECRSZMDHeN7KXk87vOJrlGUrHdnzFPoJeM0h4EL32O3neKPjXU
-         WLptN7H9dsYKUFpi5CgO7eJtzCY53afch0aTBeTwOlKvtwrL6oLBIP6qOnwjTcFA/QeA
-         XKMq3gTQDRQugT4NMDAY/iQZc7oX0De+EBNsKC/tdFYuD+P5hTWzNRo3OeGTDelJT5T0
-         +V8L0PfkZRILGsKPEflbavo2oqokuK292lG3wiVxCIbno9mqixemT+Q/+fuCHRLWhCgn
-         UUhw==
-X-Forwarded-Encrypted: i=1; AJvYcCVL0zMNc1Sg0+Zx4BEac3Kj7EqgZnalpk3HU/HQbZBT8kYKO4fCgPkT9sNNcIQM3DsArzOH497jsvvaj0b2yv4X@vger.kernel.org, AJvYcCWt6BHGNhNaAzHuhCpDRGgzSmSTTArTjwlW1VSsDV24ZXxSoYmvmz2YNLXNyWkfQa7Ei5MQfcTwVr4R8Fk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJbOr120HknBc5njNp+ertVe8LJfjSEKbkDa/YZkz0DRnzgldE
-	0HP3CJQ2yD3Kd/qyIGlM6HwxcJ9kf5x1sxWyAglw7fBVKxcrwnzxeQDT1jeZShERQyxJeLqVwhA
-	t1gJxgG04AIip0MunvqDys+ilSbA=
-X-Google-Smtp-Source: AGHT+IGAiWLeBjumpw7p+afqPXYyXtvqY+8Qj9zPwMiWZbrBct0RWUM5Td4x4JWHFESzzhseikcfzEyMow/meHeScdg=
-X-Received: by 2002:a17:907:608a:b0:a99:6791:5449 with SMTP id
- a640c23a62f3a-aa483553e12mr348295266b.52.1731703598185; Fri, 15 Nov 2024
- 12:46:38 -0800 (PST)
+        bh=35Rh2Z7j4Xk8doE9J6Yu6lTzfUmpkTnJhhzbKF7lAFo=;
+        b=FPJ8CbdDmvvr+FMz8l93y8pmLa0ovIEoIXD/ilQuYNqc7HLjQzYxQPgNgzvNEtC6Lc
+         sUe1gOtCodt8lW+Lv5+Q05KfOHr7oPKa3VL5AA2fsz0mXBOJOGoRcuZh8IqiXRUnp56N
+         NIb7ry9OUOqPKxD6SLPEsSPvlfaTt+Bx9wAHbsDL60cu3vWULabKFJCSoz6ECGYBGQry
+         X658WqskHXKJW7/drPOW/V8MNZBN0mfF0mdDP37lKc22hr+NejqjoGEhmdW3PN3kmVRV
+         HRIfv77XkQcoQ6N5MC2X9bmACcsRDBlIW496aZYgPYIsJOwh7hrZc2F3fMx+JGoARTzH
+         lzDA==
+X-Forwarded-Encrypted: i=1; AJvYcCU0z+10kpvRHdeswvI2s6G3wxihfWiVR/WL70EH8R7M8F3GVxK2zWVY8FoVyByFbusx5StTVnaeuNtB54o8hCsO@vger.kernel.org, AJvYcCX/5LIM1BttfQ5SQsXB/mEE931Z4TVGmBVFz8MU4wybwOHOe25FwkSOc/BsZVTVZUnkz++iqFHKFzYUHLk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSlRGKIU/8TcTyyI8wN91YSRlQu0xvSOQGsA/o3Lo/uQHkiPpf
+	ZBEZwppGzH6pZwDLt95h3yGy8oc7fjZfE7kxDarygPVsYG6QfoudiIC02N+OiLa/HO2R8nhHvp0
+	XpJZPvj36seW3ljDXEED3NX7sCWI=
+X-Google-Smtp-Source: AGHT+IGC0Ep+noZ03XssDwwvH9cbtNmkJj/VB574ndOGvFgcvaCDv2F8qbzWv6QVNPjuUpg9aWDeVlUD0PmG1jKxoZ8=
+X-Received: by 2002:a17:907:31c2:b0:a99:4e35:9a25 with SMTP id
+ a640c23a62f3a-aa483525e93mr321833466b.44.1731704378259; Fri, 15 Nov 2024
+ 12:59:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241113125152.752778-1-liuhangbin@gmail.com> <20241113125152.752778-2-liuhangbin@gmail.com>
- <CAH5Ym4jjVFofG5J7QW=EsD00siDXtNWKt4ZDNbbUmP+Y4Jb-DQ@mail.gmail.com> <ZzWo5fJcraaDDLm_@fedora>
-In-Reply-To: <ZzWo5fJcraaDDLm_@fedora>
+References: <20241113125152.752778-1-liuhangbin@gmail.com> <20241113125152.752778-3-liuhangbin@gmail.com>
+ <CAH5Ym4iVP0XYrb1=7QhDqhEO54vpSJGFGHaBnuM1qpua1p5-tg@mail.gmail.com> <ZzW46QZf5rzj4tMp@fedora>
+In-Reply-To: <ZzW46QZf5rzj4tMp@fedora>
 From: Sam Edwards <cfsworks@gmail.com>
-Date: Fri, 15 Nov 2024 12:46:27 -0800
-Message-ID: <CAH5Ym4hcguhXvJvVuANns7Q9VTOWR-SxHSdD55rR5BWhWeg2Ow@mail.gmail.com>
-Subject: Re: [PATCH net 1/2] net/ipv6: delete temporary address if mngtmpaddr
- is removed or un-mngtmpaddr
+Date: Fri, 15 Nov 2024 12:59:27 -0800
+Message-ID: <CAH5Ym4jGZou27-bwGqxHAf2AHWXpT0=wOa0XNNuqtG9OOhi8EQ@mail.gmail.com>
+Subject: Re: [PATCH net 2/2] selftests/rtnetlink.sh: add mngtempaddr test
 To: Hangbin Liu <liuhangbin@gmail.com>
 Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
 	David Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, 
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
 	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>, 
-	Xiao Ma <xiaom@google.com>
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 13, 2024 at 11:38=E2=80=AFPM Hangbin Liu <liuhangbin@gmail.com>=
+On Thu, Nov 14, 2024 at 12:46=E2=80=AFAM Hangbin Liu <liuhangbin@gmail.com>=
  wrote:
 >
-> On Wed, Nov 13, 2024 at 01:03:13PM -0800, Sam Edwards wrote:
-> > On Wed, Nov 13, 2024 at 4:52=E2=80=AFAM Hangbin Liu <liuhangbin@gmail.c=
-om> wrote:
-> > >
-> > > RFC8981 section 3.4 says that existing temporary addresses must have =
-their
-> > > lifetimes adjusted so that no temporary addresses should ever remain =
-"valid"
-> > > or "preferred" longer than the incoming SLAAC Prefix Information. Thi=
-s would
-> > > strongly imply in Linux's case that if the "mngtmpaddr" address is de=
-leted or
-> > > un-flagged as such, its corresponding temporary addresses must be cle=
-ared out
-> > > right away.
-> > >
-> > > But now the temporary address is renewed even after =E2=80=98mngtmpad=
-dr=E2=80=99 is removed
-> > > or becomes unmanaged. Fix this by deleting the temporary address with=
- this
-> > > situation.
-> >
-> > Hi Hangbin,
-> >
-> > Is it actually a new temporary, or is it just failing to purge the old
-> > temporaries? While trying to understand this bug on my own, I learned
+> Hi Sam,
 >
-> 1. If delete the mngtmpaddr with the mngtmpaddr flag. e.g.
-> `ip addr del 2001::1/64 mngtmpaddr dev dummy0`. The following code in
-> inet6_addr_del()
->
->     if (!(ifp->flags & IFA_F_TEMPORARY) &&
->         (ifa_flags & IFA_F_MANAGETEMPADDR))
->             manage_tempaddrs(idev, ifp, 0, 0, false,
->                              jiffies);
->
-> will be called and the valid_lft/prefered_lft of tempaddres will be set t=
-o 0.
->
-> 2. If we using cmd `ip addr change 2001::1/64 dev dummy0`, the following =
-code in
-> inet6_addr_modify():
->
->     if (was_managetempaddr || ifp->flags & IFA_F_MANAGETEMPADDR) {
->             if (was_managetempaddr &&
->                 !(ifp->flags & IFA_F_MANAGETEMPADDR)) {
->                     cfg->valid_lft =3D 0;
->                     cfg->preferred_lft =3D 0;
->             }
->             manage_tempaddrs(ifp->idev, ifp, cfg->valid_lft,
->                              cfg->preferred_lft, !was_managetempaddr,
->                              jiffies);
->     }
-> will be called and valid_lft/prefered_lft of tempaddres will be set to 0.
->
-> But these 2 setting actually not work as in addrconf_verify_rtnl():
->
->     if ((ifp->flags&IFA_F_TEMPORARY) &&
->         !(ifp->flags&IFA_F_TENTATIVE) &&
->         ifp->prefered_lft !=3D INFINITY_LIFE_TIME &&
->         !ifp->regen_count && ifp->ifpub) {
->             /* This is a non-regenerated temporary addr. */
->
->             unsigned long regen_advance =3D ipv6_get_regen_advance(ifp->i=
-dev);
->
->             if (age + regen_advance >=3D ifp->prefered_lft) {
->
->                  ^^ this will always true since prefered_lft is 0
->
-> So later we will call ipv6_create_tempaddr(ifpub, true) to create a new
-> tempaddr.
->
-> 3. If we delete the mngtmpaddr without the mngtmpaddr flag. e.g.
-> `ip addr del 2001::1/64 dev dummy0` The following code in inet6_addr_del(=
-)
->
->     if (!(ifp->flags & IFA_F_TEMPORARY) &&
->         (ifa_flags & IFA_F_MANAGETEMPADDR))
->             manage_tempaddrs(idev, ifp, 0, 0, false,
->                              jiffies);
->
-> Will *not* be called as ifa_flags doesn't have IFA_F_MANAGETEMPADDR.
-> So in addrconf_verify_rtnl(), the (age + regen_advance >=3D ifp->prefered=
-_lft)
-> checking will be false, no new tempaddr will be created. But the later
-> (ifp->valid_lft !=3D INFINITY_LIFE_TIME && age >=3D ifp->valid_lft) check=
-ing is
-> also false unless the valid_lft is just timeout. So the tempaddr will be =
-keep
-> until it's life timeout.
->
-> > about a commit [1] that tried to address the former problem, and it's
-> > possible that the approach in that commit needs to be tightened up
-> > instead.
-> >
-> > [1]: 69172f0bcb6a09 ("ipv6 addrconf: fix bug where deleting a
-> > mngtmpaddr can create a new temporary address")
->
-> The situation in this patch is that the user removed the temporary addres=
-s
-> first. The temporary address is not in the addr list anymore and
-> addrconf_verify_rtnl() won't create a new one. But later when delete the
-> mngtmpaddr, the manage_tempaddrs() is called again (because the mngtmpadd=
-r
-> flag in delete cmd) and a new tempaddr is created.
->
-> >
-> > >
-> > > Fixes: 778964f2fdf0 ("ipv6/addrconf: fix timing bug in tempaddr regen=
-")
-> > > Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-> > > ---
-> > >  net/ipv6/addrconf.c | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > >
-> > > diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-> > > index 94dceac52884..6852dbce5a7d 100644
-> > > --- a/net/ipv6/addrconf.c
-> > > +++ b/net/ipv6/addrconf.c
-> > > @@ -4644,6 +4644,10 @@ static void addrconf_verify_rtnl(struct net *n=
-et)
-> > >                             !ifp->regen_count && ifp->ifpub) {
-> > >                                 /* This is a non-regenerated temporar=
-y addr. */
-> > >
-> > > +                               if ((!ifp->valid_lft && !ifp->prefere=
-d_lft) ||
-> > > +                                   ifp->ifpub->state =3D=3D INET6_IF=
-ADDR_STATE_DEAD)
-> > > +                                       goto delete_ifp;
+> On Wed, Nov 13, 2024 at 12:43:00PM -0800, Sam Edwards wrote:
+> > > +# If the mngtmpaddr or tempaddr missing, return 0 and stop waiting
+> > > +check_tempaddr_exists()
+> > > +{
+> > > +       local start=3D${1-"1"}
+> > > +       addr_list=3D$(ip -j -n $testns addr show dev ${devdummy})
+> > > +       for i in $(seq $start 4); do
+> > > +               if ! echo ${addr_list} | \
+> > > +                    jq -r '.[].addr_info[] | select(.mngtmpaddr =3D=
+=3D true) | .local' | \
+> > > +                    grep -q "200${i}"; then
+> > > +                       check_err $? "No mngtmpaddr 200${i}:db8::1"
+> > > +                       return 0
+> > > +               fi
 > > > +
+> > > +               if ! echo ${addr_list} | \
+> > > +                    jq -r '.[].addr_info[] | select(.temporary =3D=
+=3D true) | .local' | \
+> > > +                    grep -q "200${i}"; then
+> > > +                       check_err $? "No tempaddr for 200${i}:db8::1"
+> > > +                       return 0
+> > > +               fi
+> > > +       done
+> > > +       return 1
+> > > +}
 > >
-> > My understanding is that the kernel already calls
-> > `manage_tempaddrs(dev, ifp, 0, 0, false, now);` when some `ifp` needs
-> > its temporaries flushed out. That zeroes out the lifetimes of every
-> > temporary, which allows the "destructive" if/elseif/elseif/... block
-> > below to delete it. I believe fixing this bug properly will involve
-> > first understanding why *that* mechanism isn't working as designed.
->
-> Please see the up comment.
->
+> > The variant of this function that I implemented is a lot less "fixed"
+> > and gathers all IPv6 prefixes (by /64) into one of 3 sets:
+> > 1. mngtmpaddr
+> > 2. temporary, not deprecated
+> > 3. temporary (whether deprecated or not)
 > >
-> > In any case, this 'if' block is for temporary addresses /which haven't
-> > yet begun their regeneration process/, so this won't work to purge out
-> > addresses that have already started trying to create their
-> > replacement. That'll be a rare and frustrating race for someone in the
-> > future to debug indeed. As well, I broke this 'if' out from the below
-> > if/elseif/elseif/... to establish a clear separation between the
-> > "constructive" parts of an address's lifecycle (currently, only
-> > temporary addresses needing to regenerate) and the "destructive" parts
-> > (the address gradually becoming less prominent as its lifetime runs
-> > out), so destructive/delete logic doesn't belong up here anyway.
+> > It then ensures that set 3 is a subset of set 1, and set 1 is a subset
+> > of set 2. (And if it's easy: it should also ensure that no 'temporary'
+> > has a *_lft in excess of its parent's.)
 >
-> Currently my fix is checking the tempaddr valid_lft and ifp->ifpub->state=
-.
-> Maybe we can delete the tempaddr direcly in ipv6_del_addr() and
-> inet6_addr_modify()?
+> I'm not totally get your explanation here. e.g. with preferred_lft 10,
+> valid_lft 30. I got the following result.
+>
+> # ip addr show dummy0
+> 3: dummy0: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN group default=
+ qlen 1000
+>     link/ether 2e:f7:df:87:44:64 brd ff:ff:ff:ff:ff:ff
+>     inet6 2001::743:ec1e:5c19:404f/64 scope global temporary dynamic
+>        valid_lft 25sec preferred_lft 5sec
+>     inet6 2001::938f:432:f32d:602f/64 scope global temporary dynamic
+>        valid_lft 19sec preferred_lft 0sec
+>     inet6 2001::5b65:c0a3:cd8c:edf8/64 scope global temporary deprecated =
+dynamic
+>        valid_lft 3sec preferred_lft 0sec
+>     inet6 2001::8a7e:6e8d:83f1:9ea0/64 scope global temporary deprecated =
+dynamic
+>        valid_lft 0sec preferred_lft 0sec
+>     inet6 2001::1/64 scope global mngtmpaddr
+>        valid_lft forever preferred_lft forever
+>
+> So there are 1 mngtmpaddr, 2 temporary address (not deprecated). 4 total
+> temporary address. Based on your rule. It should be set 1 is a subset of
+> set 2. Set 2 is a subset of 3.
+>
+> And how do we ensure that no 'temporary' has a *_lft in excess of its par=
+ent's.
+>
+> > Doing it this way allows the test case to create, modify, and delete
+> > mngtmpaddrs according to the needs of the test, and the check()
+> > function only ensures that the rules are being obeyed, it doesn't make
+> > assumptions about the expected state of the addresses.
+>
+> I'm not sure if this is totally enough. What if there are 3 mngtmpaddrs
+> and 4 temporary address. But actually 1 mngtmpaddrs doesn't have temporar=
+y
+> address. Maybe check() needs to check only 1 prefix each time.
 
 Hi Hangbin,
 
-It took me a while to grasp but the problem seems to be a confusion
-about what it means to set a temporary's lifetimes to 0/0:
-1) "The mngtmpaddrs has gone away; this temporary is slated for
-deletion by addrconf_verify_rtnl()"
-2) "This temporary address itself shall no longer be used, regenerate
-it immediately."
+My apologies, I should have shared my version of the check function
+before. Here it is:
 
-The existing behavior makes sense for the #2 case, but not for the #1
-case. It seems sensible to me to keep the #2 behavior as-is, because
-userspace might be setting a 0/0 lifetime to forcibly rotate the
-temporary.
+```bash
+# Called to validate the addresses on $IFNAME:
+#
+# 1. Every `temporary` address must have a matching `mngtmpaddr`
+# 2. Every `mngtmpaddr` address must have some un`deprecated` `temporary`
+#
+# Fails the whole test script if a problem is detected, else returns silent=
+ly.
+validate()
+{
+    mng_prefixes=3D()
+    undep_prefixes=3D()
+    temp_addrs=3D()
 
-So it sounds like (at least) one of three fixes is in order:
-a) Make ipv6_create_tempaddr() verify that the `ifp` is (still)
-alive+mngtmpaddrs, returning with an error code if not.
-b) Look at the 3 callsites for ipv6_create_tempaddr() and add the
-above verifications before calling.
-c) Add a function that calls ipv6_del_addr(temp) for every temporary
-with a specified ifpub, and use it instead of manage_tempaddrs(..., 0,
-0, false, ...) when deleting/unflagging a mngtmpaddrs.
+    while read -r line; do
+        line_array=3D($line)
+        address=3D"${line_array[1]}"
+        prefix=3D"$(echo "$address" | cut -d: -f1-4)::/64"
+        if echo "$line" | grep -q mngtmpaddr; then
+            mng_prefixes+=3D("$prefix")
+        elif echo "$line" | grep -q temporary; then
+            temp_addrs+=3D("$address")
+            if echo "$line" | grep -qv deprecated; then
+                undep_prefixes+=3D("$prefix")
+            fi
+        fi
+    done < <(ip -6 addr show dev $IFNAME | grep '^\s*inet6')
 
-Personally I like option C the best. What are your thoughts?
+    # 1. All temporary addresses (temp and dep) must have a matching mngtmp=
+addr
+    for address in ${temp_addrs[@]}; do
+        prefix=3D"$(echo "$address" | cut -d: -f1-4)::/64"
+        if [[ ! " ${mng_prefixes[*]} " =3D~ " $prefix " ]]; then
+            echo "FAIL: Temporary $address with no matching mngtmpaddr!";
+            exit 1
+        fi
+    done
 
-Cheers,
+    # 2. All mngtmpaddr addresses must have a temporary address (not dep)
+    for prefix in ${mng_prefixes[@]}; do
+        if [[ ! " ${undep_prefixes[*]} " =3D~ " $prefix " ]]; then
+            echo "FAIL: No undeprecated temporary in $prefix!";
+            exit 1
+        fi
+    done
+}
+```
+
+Of course this is using awful text parsing and not JSON output. But
+the idea is that it groups addresses by their /64 prefix, to confirm
+that every /64 containing a mngtmpaddrs address also contains an
+undeprecated temporary, and that every /64 containing a temporary
+(deprecated or not) contains a mngtmpaddrs.
+
+This can be extended for the lifetime checking: when we build the set
+of mngtmpaddrs /64s, we also note the valid/preferred_life_time values
+for each mngtmpaddr. Then later when we confirm rule 1 (all temporary
+addresses must have a matching mngtmpaddr) we also confirm that each
+temporary does not outlive the mngtmpaddr in the same /64.
+
+Happy Friday,
 Sam
 
 >
+> > > +
+> > > +kci_test_mngtmpaddr()
+> > > +{
+> > > +       local ret=3D0
+> > > +
+> > > +       setup_ns testns
+> > > +       if [ $? -ne 0 ]; then
+> > > +               end_test "SKIP mngtmpaddr tests: cannot add net names=
+pace $testns"
+> > > +               return $ksft_skip
+> > > +       fi
+> > > +
+> > > +       # 1. Create a dummy Ethernet interface
+> > > +       run_cmd ip -n $testns link add ${devdummy} type dummy
+> > > +       run_cmd ip -n $testns link set ${devdummy} up
+> > > +       run_cmd ip netns exec $testns sysctl -w net.ipv6.conf.${devdu=
+mmy}.use_tempaddr=3D1
+> >
+> > Test should also set .temp_prefered_lft and .temp_valid_lft here.
+> >
+> > I also set .max_desync_factor=3D0 because this is a dummy interface tha=
+t
+> > doesn't have any latency, which allows the prefer lifetime to be
+> > pretty short. (See below.)
+>
+> Thanks, I will fix the test.
+> >
+> > > +       # 2. Create several (3-4) mngtmpaddr addresses on that interf=
+ace.
+> > > +       # with temp_*_lft configured to be pretty short (10 and 35 se=
+conds
+> > > +       # for prefer/valid respectively)
+> > > +       for i in $(seq 1 4); do
+> > > +               run_cmd ip -n $testns addr add 200${i}:db8::1/64 dev =
+${devdummy} mngtmpaddr
+> >
+> > I don't really like using 200X:db8::1 as the test addresses.
+> > 2001:db8::/32 is the IANA designated prefix for examples/documentation
+> > (and, by extension, unit tests) so we should really try to remain
+> > inside that.
+> >
+> > Personally, I tend to use 2001:db8:7e57:X::/64 ("test" in leetspeak)
+> > just to minimize the chances of conflicting with something else in the
+> > system. Though, with the test happening in its own netns, *that* level
+> > of caution may not be necessary.
+> >
+> > Still, 2001:db8::/32 is what IPv6 folks expect, so I'd want to stay in =
+there.
+>
+> OK, I will use 2001:db8::/32 for testing.
+>
+> >
+> > > +               tempaddr=3D$(ip -j -n $testns addr show dev ${devdumm=
+y} | \
+> > > +                          jq -r '.[].addr_info[] | select(.temporary=
+ =3D=3D true) | .local' | \
+> > > +                          grep 200${i})
+> > > +               #3. Confirm that temporary addresses are created imme=
+diately.
+> >
+> > This could simply be a call to the above genericized check() function.
+> >
+> > > +               if [ -z $tempaddr ]; then
+> > > +                       check_err 1 "no tempaddr created for 200${i}:=
+db8::1"
+> > > +               else
+> > > +                       run_cmd ip -n $testns addr change $tempaddr d=
+ev ${devdummy} \
+> > > +                               preferred_lft 10 valid_lft 35
+> >
+> > While Linux is (apparently) happy to let userspace modify the
+> > tempaddr's remaining lifetime like this, I don't think this is a
+> > common or recommended practice. Rather, the test should be letting
+> > Linux manage the tempaddr lifetimes and rotate the addresses itself.
+>
+> OK
+>
+> >
+> > > +               fi
+> > > +       done
+> >
+> > Here is a good place to create an address that *isn't* mngtmpaddr,
+> > confirm there is no temporary (via call to check() function), then add
+> > the `mngtmpaddr` flag after the fact.
+>
+> OK, I will
+> >
+> > > +
+> > > +       #4. Confirm that a preferred temporary address exists for eac=
+h mngtmpaddr
+> > > +       #   address at all times, polling once per second for at leas=
+t 5 minutes.
+> > > +       slowwait 300 check_tempaddr_exists
+> >
+> > So I previously said "wait 5 minutes" but I later saw in the
+> > documentation for the selftest suite that maintainers really don't
+> > like it when a test takes more than ~45 seconds to run. We might want
+> > to drop this wait to 30 by default and accelerate the timetable on
+> > prefer/valid lifetimes to something like 10/25.
+>
+> Yes, 5m is too long for a single test.
+>
+> > > +
+> > > +       end_test "PASS: mngtmpaddr add/remove correctly"
+> > > +       ip netns del "$testns"
+> >
+> > Do we need to make sure the netns gets cleaned up via `trap ... EXIT`
+> > so that it doesn't leak if the user interrupts the test? Or does the
+> > greater test fixture take care of that for us?
+>
+> No, rtnetlink.sh doesn't have a trap function. I plan to add the trap
+> function separately.
+>
 > Thanks
 > Hangbin
-> >
-> > What are your thoughts?
-> >
-> > Happy Wednesday,
-> > Sam
-> >
-> > >                                 unsigned long regen_advance =3D ipv6_=
-get_regen_advance(ifp->idev);
-> > >
-> > >                                 if (age + regen_advance >=3D ifp->pre=
-fered_lft) {
-> > > @@ -4671,6 +4675,7 @@ static void addrconf_verify_rtnl(struct net *ne=
-t)
-> > >
-> > >                         if (ifp->valid_lft !=3D INFINITY_LIFE_TIME &&
-> > >                             age >=3D ifp->valid_lft) {
-> > > +delete_ifp:
-> > >                                 spin_unlock(&ifp->lock);
-> > >                                 in6_ifa_hold(ifp);
-> > >                                 rcu_read_unlock_bh();
-> > > --
-> > > 2.46.0
-> > >
 
