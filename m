@@ -1,136 +1,136 @@
-Return-Path: <linux-kselftest+bounces-22122-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22123-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85B5A9CF697
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 22:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E52C9CF6F0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 22:22:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28542281115
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 21:07:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1F97283BE1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2024 21:22:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BC821D47A0;
-	Fri, 15 Nov 2024 21:07:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2BA918B484;
+	Fri, 15 Nov 2024 21:22:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HZw7ukH9"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AZfvDTWQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A47F187876
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2024 21:07:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4375D174EE4
+	for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2024 21:22:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731704854; cv=none; b=OC3HTqlFoqGLFolmzqT1KGGrXt2Opza5DD2lEW3qCY8lNybKtpDEkdoT6+lSzKWWVM7VHsm8s9D1N2HqRSbfNGgwe/0gZ+rT+aMxncojFMIeORN7DUsf6G+Siaby4+0n+RA3lU8MKHcJJyzvCPsWdcU+o77URDf8so2+0utjV5U=
+	t=1731705745; cv=none; b=Nwyhl/aExQKkTzQElMfKzK/aONiLSIs0EusNddPKt0Ri2BNlPElVIgJvTTVdLt4mAJJ0uns4oGIe6UblIISVaHwyx7b2T2s6NIylVtKJksxup+XSskMat2lxE1YiIeIin7SL/hewWUyUOPk0fkQFUHL6aTRYq6gVh35N4aHG0g8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731704854; c=relaxed/simple;
-	bh=rPQiZg7BpBMkZRhbb4r8JAY7FytQUwxEQCyPDwGt4Ns=;
+	s=arc-20240116; t=1731705745; c=relaxed/simple;
+	bh=0dBAjNiUHwdsL5NOACZj6k/3SlDeBXMP7ecV4IbPqco=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qQirlhWKck6saY/pchS909ZTLeusY9Xa+ROdmHURBGxdNHvZfvNiE+pwrafwr9qHbKT/QPrfB4SXT8zokiWvYiDJEdNaT4mTr8plXGnUhqbSM7fUSGfBzuFyuHYQgfvQevEYVgl6QUBCvU9Z+DLJOBluBsh/llop5ndVfe/HV24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HZw7ukH9; arc=none smtp.client-ip=209.85.219.52
+	 To:Cc:Content-Type; b=hdg5Za22XZSNklKoOARVqTedavCt+RDDFDFwdPEoatPO++OgPC7r614JPGvCPCeP0MHszOB5kshQ9cbmOqLhBcKjEar+UhPuHA4j5x3YHqu31z5RloSSf0+hOU981T1CW2cOn4FxVlyKz08BmjO3mml/4Fwttsf9uvhhIoirJ8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AZfvDTWQ; arc=none smtp.client-ip=209.85.222.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6d3f3925f52so7833846d6.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2024 13:07:32 -0800 (PST)
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7b150dc7bc0so517985a.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2024 13:22:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731704851; x=1732309651; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1731705743; x=1732310543; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=P/THR0Mf4/AoEDWHqsf8XWLqqueyDJON9x90ckCLJ/g=;
-        b=HZw7ukH9Mis+MzFogfyCAss1GUuBtvxelEMg0HoBgpSQBndWX+Ml6X4NW3cTlQvqgd
-         hhOLR5W3okHu7yJCgTTYeETPBMlvfSSJfOIA6TrZTx9A3FJkv0lEU2KLIOt21YjP+rwE
-         D0TRu1A93PqznOEBST7rFlwD2N/9dZXbZMQb17Unyqfj378XRwGkfB4EKCwG9tABbiGj
-         lUpL0TsmDW9FXJbiDryjNI/1RIerMM6Y3IfD/Nxc3eeuamJ0084+usFmpw8RSMUqDNvO
-         /+Xe3qxu9Qk4260OT97n4M7JXvC0pVwoU0PUlj6lk4Is5MvTpnPGOopznpo4o1z2VECO
-         68aw==
+        bh=abrnS58vK0kxTgflIatR87CeM9d+X+Ju8tW8F3+1XXY=;
+        b=AZfvDTWQjNXNSadQRzwRMqY3f09Edp8F1uQ9izDqq5PxTl45mkbkXqNYJSIdA+gOEc
+         KR1MMuwDVsLtHPP/XCtB2DfgHrj3OLSLGcCrTz2E/bytyVXpUa9P3I/n5S3dZgwseztu
+         JEkbsvJOInYacqKq+v0kTfroOytZlTxq2VltwbaJgZUkQ3NVWWaq3xDWRHzetvEE7waA
+         mw7PmB8OcwWqsM/AQ1H9fpNZly0sDM6bYAZlU8hyyiZ/NuwOVYGXfkwz6ORgNcA5nQNR
+         OSoFwlGw/BUcFlXlAwyqJmrUIjiQSgkcCPF4rHC4evCgL3fl9N0zrawktxU0jvZ41T6J
+         l3pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731704851; x=1732309651;
+        d=1e100.net; s=20230601; t=1731705743; x=1732310543;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=P/THR0Mf4/AoEDWHqsf8XWLqqueyDJON9x90ckCLJ/g=;
-        b=pw0pTClootN0uDOIfOdFi3+fr383Da6VlNbboRqv7j9McwCb+sscccfrS5uLgCOB1c
-         ytlZUmNg72L/Jy+llCwUD0G+wj+GksXFJ7WqrgLX6Ka+TO6FiGmJDeqXltm9Ds7IBzWA
-         ILrkkbLKxUAIbT7+4TcDjFtyaoxocwEv0cE81J86T7ALmbeykb2HjgCEuM2zcLCJeSfL
-         lSkorkUb/gkx2++Kl1qsaPNBIhyGH89TQpzx3Y7mnWCh5+6OjqzbhH96eIEG495NUxac
-         oW+ZhIhNlEM+TjohmwzFVra/42yOhfTSoGHejkADoNaMp5KKNC0ACuNbQwBMgLyjDYFT
-         9zxA==
-X-Forwarded-Encrypted: i=1; AJvYcCVJDgaFUEhYOH0ti/taDKIeB0Iq3a/UArLDLTqMIdKR4kv0J5cOjfwQY1+UYzew0kz9GDEVldiT48q/o21B03c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4OKmvSGCg/1KagWASshMkVpuMEW/+czndR9CKx64mDxJAoBFH
-	0h86Me8EZHeD1dlsBioZwLuBDElY65BFbTsGAlg0PgZQ8rgXH+wSxaYk6a8OzwO9RTYnyZ6sXev
-	R4wExHKoLbvaEWS/9q4VN14MaLzICVtk78HHV
-X-Google-Smtp-Source: AGHT+IEiZDJmTd66i69moP5HwhYbMFSTj0UR/zTeTp4c3B26QehMSA/rMQj/bm8+CoN/kV+ciP+ygbZFMG24MYJd/RA=
-X-Received: by 2002:a05:6214:319e:b0:6d1:9f29:2e3b with SMTP id
- 6a1803df08f44-6d3fb7c6d18mr45248726d6.13.1731704851199; Fri, 15 Nov 2024
- 13:07:31 -0800 (PST)
+        bh=abrnS58vK0kxTgflIatR87CeM9d+X+Ju8tW8F3+1XXY=;
+        b=kEGaJZsx+Vu8ChPQ0Whc8Am7iyuqRWKbDUELdsRbI6bXFPmB3znySve2g1JVa5Y88M
+         551WBd1+2OOjsw82Xg30yIUkqyKd0Io1YJ83Lome1j2Lt3uZWBeE90CVtnWUxU+A0dQR
+         0B8fYqx+hbsxcbTHvWToLB/ebgrpLdYATIuq/s2Ji7v7zqqhEoAeeWSU/F/++iErUvxB
+         T/2WXc74MshZ5oHMV3zL9rLFo+5xzIqARePBe0WLxEmIWIBUEHWCcEq7Kjq/Xchhs7tM
+         2d4+qn4iyeIKyIhRwq1OH842gaOfX3I6ndOo8r7yIh5TdCrx52XNnySHjtOnl33w+DmZ
+         ak1w==
+X-Forwarded-Encrypted: i=1; AJvYcCX6g9DHGMeUq9KsNPJNraZKeoki/QEzJo5sN1mNr+nZuYiWxed1u2L5Lbuki4Yjg1yOjftPaoaPwm5mxuZBl+4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFCRrszxn5N7LH+bEP4ZHwz5RKrgXCsMQ4IHedgFUDHPR2uIeI
+	sOLlr9RN/I4vSc9ux1wfABi9QSXRUUUPeL4REg/rtMh2bFsVgeZoB6TpzKUd9I8IM9zV5kY52by
+	696GSqu2Rj1lbYLVIWq55mchpyOJEezGAO5nw
+X-Google-Smtp-Source: AGHT+IG/cZ4pEeQ5N0RQjdEDhVQnRBzgu3k9mpRkUGKNKCdCZpjTN2CjFipwQiWJU+7rkSdx31WmRKxPXJvd6mSDRjM=
+X-Received: by 2002:a05:6214:4884:b0:6cc:51f:6c31 with SMTP id
+ 6a1803df08f44-6d3fb73cce2mr61676376d6.5.1731705743021; Fri, 15 Nov 2024
+ 13:22:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241115050510.56569-1-brendanhiggins@google.com>
-In-Reply-To: <20241115050510.56569-1-brendanhiggins@google.com>
+References: <20241115054335.21673-1-zichenxie0106@gmail.com>
+In-Reply-To: <20241115054335.21673-1-zichenxie0106@gmail.com>
 From: David Gow <davidgow@google.com>
-Date: Sat, 16 Nov 2024 05:07:18 +0800
-Message-ID: <CABVgOSmMjk5CBqvz_s_HacSyE9qTkeW_DNh=PTkjrxSVEmb3Og@mail.gmail.com>
-Subject: Re: [PATCH v1] MAINTAINERS: Update KUnit email address for Brendan Higgins
-To: Brendan Higgins <brendanhiggins@google.com>
-Cc: rmoar@google.com, shuah@kernel.org, kunit-dev@googlegroups.com, 
-	linux-kselftest@vger.kernel.org, brendan.higgins@linux.dev
+Date: Sat, 16 Nov 2024 05:22:11 +0800
+Message-ID: <CABVgOSm2EqY3pWyPrnbT7gDMiT0HyRZHpFGeyCJ+sD-_uJeLTQ@mail.gmail.com>
+Subject: Re: [PATCH v2] kunit: Fix potential null dereference in kunit_device_driver_test()
+To: Gax-c <zichenxie0106@gmail.com>
+Cc: brendan.higgins@linux.dev, rmoar@google.com, mripard@kernel.org, 
+	mazziesaccount@gmail.com, gregkh@linuxfoundation.org, 
+	skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, chenyuan0y@gmail.com, zzjas98@gmail.com, 
+	stable@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000008a86280626f9f44d"
+	boundary="000000000000b2fabd0626fa29a9"
 
---0000000000008a86280626f9f44d
+--000000000000b2fabd0626fa29a9
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 15 Nov 2024 at 13:05, Brendan Higgins <brendanhiggins@google.com> wrote:
+On Fri, 15 Nov 2024 at 13:43, Gax-c <zichenxie0106@gmail.com> wrote:
 >
-> Update Brendan's email address for the KUnit entry.
+> From: Zichen Xie <zichenxie0106@gmail.com>
 >
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> kunit_kzalloc() may return a NULL pointer, dereferencing it without
+> NULL check may lead to NULL dereference.
+> Add a NULL check for test_state.
+>
+> Fixes: d03c720e03bd ("kunit: Add APIs for managing devices")
+> Signed-off-by: Zichen Xie <zichenxie0106@gmail.com>
+> Cc: stable@vger.kernel.org
 > ---
-> I am leaving Google and am going through and cleaning up my @google.com
-> address in the relevant places. This patch updates my email address for
-> the KUnit entry. I am removing myself from the ASPEED I2C entry in a
-> separate patch.
->
-> Do note that Friday, November 15 2024 is my last day at Google after
-> which I will lose access to this email account so any future updates or
-> comments after Friday will come from my @linux.dev account.
+> v2: Add Cc tag.
 > ---
 
-Thanks, Brendan. We'll miss you at Google!
+Nice catch. This looks good to me.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  lib/kunit/kunit-test.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b878ddc99f94e..d077a3deeb386 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12405,7 +12405,7 @@ F:      fs/smb/common/
->  F:     fs/smb/server/
+> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+> index 37e02be1e710..d9c781c859fd 100644
+> --- a/lib/kunit/kunit-test.c
+> +++ b/lib/kunit/kunit-test.c
+> @@ -805,6 +805,8 @@ static void kunit_device_driver_test(struct kunit *test)
+>         struct device *test_device;
+>         struct driver_test_state *test_state = kunit_kzalloc(test, sizeof(*test_state), GFP_KERNEL);
 >
->  KERNEL UNIT TESTING FRAMEWORK (KUnit)
-> -M:     Brendan Higgins <brendanhiggins@google.com>
-> +M:     Brendan Higgins <brendan.higgins@linux.dev>
->  M:     David Gow <davidgow@google.com>
->  R:     Rae Moar <rmoar@google.com>
->  L:     linux-kselftest@vger.kernel.org
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_state);
+> +
+>         test->priv = test_state;
+>         test_driver = kunit_driver_create(test, "my_driver");
 >
-> base-commit: cfaaa7d010d1fc58f9717fcc8591201e741d2d49
 > --
-> 2.47.0.338.g60cca15819-goog
+> 2.34.1
 >
 
---0000000000008a86280626f9f44d
+--000000000000b2fabd0626fa29a9
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -220,14 +220,14 @@ BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
 hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
 AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
-eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgXp8n88KpMaAxDrl74M8oRwIsXRka
-TE56X6oiDE7uLCkwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
-MTE1MjEwNzMxWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQg0Wi0iQl1yQ+TJKXX3Tj9kXjCSFmo
+0EQhoZcKiC0dEwwwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
+MTE1MjEyMjIzWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBAFtvuzvS85kaMHSp07DF13Xvj89O22/CyLimuahknJpY2+OX
-bL8hDGK2peJNQiOewQ6LE+A8GKnYK7u2IKui9O4iThPqd5XI9sj0JukXoaAbfS6YazpIrf/gHJz1
-m3F/iCiyWR/bR+bHY255wiNN29t3JENxtj8mHlMQZf2a5y2ICs9/a1Dof7KWSX0ikpLiIOQ4pnmm
-RXuAsSElRr7Rd13GKvgnWOBvvxGsxqEgKIkkip1rylxUBMB0+Y7ydZCg35r2gqhRmT8rb+ukXZmo
-rQVN69puuLheV8ckKn6HH9qVWF6SaEkRN6MtBZ9NQtKneKmImne+WTodPPmB/waV0ow=
---0000000000008a86280626f9f44d--
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAKGaKJeF7UgjG9ws3fGukwIyvWjBW9KMcC+4vByVrGmPxyO/
+ucP2gNB31Q5i4PnvrymSRShAxl0vxJUCK6vkRSEIyiaDpSGFp01Ay9mFRfQzYfvHduGk/5m3i/+e
+APHuR1zPhm3BM6XPsw1ZulrT5r5ZnZHfvGoGpmIGDQc5CWCTA0aO1zVrMrEWIOqSrySAyyqAgGG0
+hPnZbjpfgJJyP5X4fTlW6z8qkYQSc3kYnrZVqCI6QljaQGgb0s+mKM/sy1PaxwBHlOQtwd5YYdSd
+uTtdsS2c9vu80kvv8FgfxVUdqAOqLHr9bztHCDih21FXd5Bcj8JPYwTXFwSI4qkGhCE=
+--000000000000b2fabd0626fa29a9--
 
