@@ -1,447 +1,215 @@
-Return-Path: <linux-kselftest+bounces-22129-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22130-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE4629CFBB6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2024 01:33:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5659F9CFBBB
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2024 01:34:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AF8C1F22D0A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2024 00:33:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 173EA285FF3
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2024 00:34:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BB965C96;
-	Sat, 16 Nov 2024 00:33:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D9CF2F22;
+	Sat, 16 Nov 2024 00:34:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="OiFp/XMo"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CvEUR1mI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2078.outbound.protection.outlook.com [40.107.212.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC0A2EAC7
-	for <linux-kselftest@vger.kernel.org>; Sat, 16 Nov 2024 00:33:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731717200; cv=none; b=eSR6Ap1ZxgHDYGb4KpoVaytXWJQOSNv4hn3tuvcoJesqtBVBfLoMn6Lik/lwpipsY2FxwDfUp9/FNfS0itgdHWWlHMBNzkYosgmDjHbohDB8ma9wwc/riwLb/l5FqyUG5SHwzPghucmKylEcvaLYoeAlLA5qyVqkV8goh8op/Io=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731717200; c=relaxed/simple;
-	bh=qUu9sVzzzGkIY391MboEYpeWwreEvz1oIijd49NMTCI=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=GRAtrdNNj/EAJqg8IlfuMJOBjOB9ErZDDYfhnjSohhElUUQ31TcU/XBEcP/fQ1EDH9tLdUttEDuxmO2ePLJP60m3xhEX0dM9UDN4UgCk5d7M0BBu4CHGUOSEZTHJVNIiP+cgwK+hJF0nmKs/sGdR87MsY3evUzq7IdBGZjyMznA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=OiFp/XMo; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4316f3d3c21so19442575e9.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2024 16:33:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1731717196; x=1732321996; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1MMSOuAOZWrhFJo3QIAoCyBUwAMAzd91sdYRX8Vb8ZU=;
-        b=OiFp/XMoqkWQ6DKbWMtodkb22Er9rsAIGdzOrILCoATNttQwO0YjPmOKPRrSX7O1gP
-         eE/GuAPrHHwH49Kz1GsFabggGUf9lnrSZh/UFON+XvYjdeSJZJQfcoeZVyPzHg5hEJJw
-         HjjRzi1MSgNkKjTYLpkRdkzzGMQ0eWyYih2rsnekU6tfkzHpeJ6EICWdDDwhiQOiM0Xm
-         +8b9ji/FsiDiij15XuhWUtA3NTBPdckqYChp7//KK5TEh0ETNLxR3EvMKndlIww4wMGD
-         32uvvk0xTkgVpCjhaxDIXQ6pZD0zohTTHLIZvkvItWFtEI+uhHF+r4hGTpxqq5g/kUas
-         +sLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731717196; x=1732321996;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=1MMSOuAOZWrhFJo3QIAoCyBUwAMAzd91sdYRX8Vb8ZU=;
-        b=lCo/A7KRY4jL9JHJJyMpcQjYJi6BRYAISB5fNxBam9BBfOobntQAdgtVt5qLBvEPIQ
-         fdzDqIEpV3TmkTpqlI33wT8r/ST2yHsjOwQN3MUwU4pVKWCD6PHiKhcWcmRq4/vsIetm
-         swTBeIIY8e/K2FhLm7eA4IQLBiJNDiEfi5HkRRCxlFZovvDqM3+0ynfE9MwgPEfNhSvW
-         Bi7JEaFUk1Y6aInVhDJGBhMcHWB0r3FycIQMI6LU+KxfHEIcNVus3ucypIfIO7A+z3LZ
-         aHrwLlaj02BdDQtYp6VcPKVP0Gbd+2lVJzXM1eFpAowchrCAogKsmO3cARzJJVeMxscb
-         Jhkw==
-X-Forwarded-Encrypted: i=1; AJvYcCUOUbGaJ1Th7pgy7vOCtHfMm+w9cVXPPhF2u0QBZC9Vks+OmMn7ByQSAFMs6Fv3qQOx2+tv8tNf+K+VdEXej5o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMCav4PIdyFlyhyKYdpgbRlwlQ8FfX+kez+PQM9YYPbgyX9EaZ
-	4f3uEbs0hiQGFiQIFVSEDPsUlHq2M234gd9hbcuPSU48qX12mTxzSLzrebt1MFU=
-X-Google-Smtp-Source: AGHT+IG2WaN+2xrRNPGNLPFeaYiOFW8CtqSRppLS+TuR/8KubpUiew+qnrBtrCuyzGyegdR/wusbXQ==
-X-Received: by 2002:a05:6000:4022:b0:37d:4657:ea78 with SMTP id ffacd0b85a97d-38225aa6479mr3296371f8f.54.1731717196164;
-        Fri, 15 Nov 2024 16:33:16 -0800 (PST)
-Received: from ?IPV6:2001:67c:2fbc:1:1b94:c354:f504:96f9? ([2001:67c:2fbc:1:1b94:c354:f504:96f9])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-382371a5646sm184855f8f.0.2024.11.15.16.33.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Nov 2024 16:33:14 -0800 (PST)
-Message-ID: <3df02a8f-72c7-4db9-bb46-a6529082b328@openvpn.net>
-Date: Sat, 16 Nov 2024 01:33:40 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E074A1A;
+	Sat, 16 Nov 2024 00:34:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.78
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731717291; cv=fail; b=Dca22XNqQOUVfd058ZlIQ4i+9bOlqHbCgU/IJVhYn/tpqVf0EcsgjM4Ad+uv5yU0dJgehXIz8Qdyb6GL37YApuMvRKtz0kwTVc9cB8Oed2GtpEs8fnmhaASjO75jGsTokDRabjr/7hMt4baauk/nZ7o9mqV0wi12IWaR2DGrul8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731717291; c=relaxed/simple;
+	bh=v/4KT7qb2V0SH7BFvDqmS297OlxUQ9dHsWUriQW6p9Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=VeosKb3YwTFlTirHlnzX6kheUzMubnyY//YQfF6K2S6wmJ3zrOtqt92M+JgBukhzRodyB8TegYwk79aEnMvYRcAduFO5j0cxJKD4uxgNCzbCYjvRCjz0mjNVS5lyk09EYszjmJJrG6kYcaSqxDMlS0R6hwGKzdBEd2PIzMrlP8E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=CvEUR1mI; arc=fail smtp.client-ip=40.107.212.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UdtDIfz+T9uTKYHyW2E0pwU+GGmOsLaeN1sV96fE7lWUak5pIJ5nyps4hd+LhDuR+EX5kLDq/EYX4u4mkje7/tfEjGZIbMYYzNW5E6Xzx6+pnSYIom7B1LMb+goFITmE4ffpNnZvQ8jV68VtdO8XukUsd7Ki3UunoPVka5y4n2h1yIc3uoEdtb5w7zuKmNoYddvip1jMUMeI8garX4bo42p8y2lPd8sijwSKe6UfOgM96/ys4+AJ4BiIp52BbsRfKEult5c5D/wyg1egFYkjB+1kkcf45IMeb0svkYWCo1NG8LkkmEnOlvIEMahnSfhdv5ms/Wz9plgS7k2osCjIbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=D6PLva+zgpCMfgD2pZWa9BG5tEjmT+rQIaB2spTPo9Q=;
+ b=GNTx47aMSZf3NFIKQLg3w3LgTXz5g2W/K/+aZVRoarUJLBvBoNSpnh39/v442T4A9lAdgpGiwfFMrwOpP400hlXxfxJm/TIEIgV/eXQ6zcMkgGtn8a4hBcQ2QupRAIJ7xsc48UDHajMZmRUkAbbHoU4ntrRE5sgNHFWCrjPBjTUvCwM/5lm2+fObdyAk0VVdVFVaZXeABzGwdbXJq6f8i4neg6pcDgN0yz3WgItk5LTBzPcSPqA5Rxa4fxGuZHbw4TOlES+9LgDp/0a5TeIs/WnNqlpzwQDcbeLlx/q7KutyfM73la9U3rcETrTaRwihVqXnUduhlThMLodEfeMMcA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=D6PLva+zgpCMfgD2pZWa9BG5tEjmT+rQIaB2spTPo9Q=;
+ b=CvEUR1mIqPAOK1Y89Qg+rDNJAX/QBQ3tWlu+7EJpl5yZROwUuF/Grv6WDjotsrZWdl5leV/1P9wmXLVROPW0yWEjWRhbfvsqpUhOVCQUi9uXPkRWF5xm+HLVYiPrUDz/6u8W2TLnWbrs4SVUkE6Bw+52rTtQJBz6LSV2h2mcx8hzlgUcqGDmNFG51VZEFBy5WvM2XGFv8UB0xE9wV7aZKGnvIYN/Jh+r1afSV05yNC0LT2nawHpSwJDqRGAUbCGbwAc8oISRV6H721WlCQPzoTcgZk1D/JycD7kmT5+iKRGp68QxIAjNh3/eWK55k3abtcY5t+3Ntbr8O8CrFFET+g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
+ by MW4PR12MB5666.namprd12.prod.outlook.com (2603:10b6:303:188::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.29; Sat, 16 Nov
+ 2024 00:34:44 +0000
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.8137.027; Sat, 16 Nov 2024
+ 00:34:44 +0000
+Date: Fri, 15 Nov 2024 20:34:43 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: Yi Liu <yi.l.liu@intel.com>, kevin.tian@intel.com, corbet@lwn.net,
+	joro@8bytes.org, suravee.suthikulpanit@amd.com, will@kernel.org,
+	robin.murphy@arm.com, dwmw2@infradead.org, shuah@kernel.org,
+	iommu@lists.linux.dev, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	baolu.lu@linux.intel.com, eric.auger@redhat.com,
+	jean-philippe@linaro.org, mdf@kernel.org, mshavit@google.com,
+	shameerali.kolothum.thodi@huawei.com, smostafa@google.com,
+	aik@amd.com, zhangfei.gao@linaro.org, patches@lists.linux.dev
+Subject: Re: [PATCH v7 13/13] Documentation: userspace-api: iommufd: Update
+ vIOMMU
+Message-ID: <20241116003443.GB35230@nvidia.com>
+References: <cover.1730836219.git.nicolinc@nvidia.com>
+ <7e4302064e0d02137c1b1e139342affc0485ed3f.1730836219.git.nicolinc@nvidia.com>
+ <f0c45d5b-b8cd-4f75-a9d7-21808f18583d@intel.com>
+ <ZzVB7Fun48rGztuV@Asurada-Nvidia>
+ <8f6cdd11-3bd3-4c4c-9424-c0d52eaa6f93@intel.com>
+ <ZzVsEmzc1UyDdi//@Asurada-Nvidia>
+ <20241114162010.GP35230@nvidia.com>
+ <ZzfGLdgykZ0M3jy5@Asurada-Nvidia>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZzfGLdgykZ0M3jy5@Asurada-Nvidia>
+X-ClientProxiedBy: BN9PR03CA0537.namprd03.prod.outlook.com
+ (2603:10b6:408:131::32) To CH3PR12MB8659.namprd12.prod.outlook.com
+ (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Antonio Quartulli <antonio@openvpn.net>
-Subject: Re: [PATCH net-next v11 12/23] ovpn: implement TCP transport
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
- Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-12-de4698c73a25@openvpn.net> <ZyOhe3yKTiqCF2TH@hog>
-Content-Language: en-US
-Autocrypt: addr=antonio@openvpn.net; keydata=
- xsFNBFN3k+ABEADEvXdJZVUfqxGOKByfkExNpKzFzAwHYjhOb3MTlzSLlVKLRIHxe/Etj13I
- X6tcViNYiIiJxmeHAH7FUj/yAISW56lynAEt7OdkGpZf3HGXRQz1Xi0PWuUINa4QW+ipaKmv
- voR4b1wZQ9cZ787KLmu10VF1duHW/IewDx9GUQIzChqQVI3lSHRCo90Z/NQ75ZL/rbR3UHB+
- EWLIh8Lz1cdE47VaVyX6f0yr3Itx0ZuyIWPrctlHwV5bUdA4JnyY3QvJh4yJPYh9I69HZWsj
- qplU2WxEfM6+OlaM9iKOUhVxjpkFXheD57EGdVkuG0YhizVF4p9MKGB42D70pfS3EiYdTaKf
- WzbiFUunOHLJ4hyAi75d4ugxU02DsUjw/0t0kfHtj2V0x1169Hp/NTW1jkqgPWtIsjn+dkde
- dG9mXk5QrvbpihgpcmNbtloSdkRZ02lsxkUzpG8U64X8WK6LuRz7BZ7p5t/WzaR/hCdOiQCG
- RNup2UTNDrZpWxpwadXMnJsyJcVX4BAKaWGsm5IQyXXBUdguHVa7To/JIBlhjlKackKWoBnI
- Ojl8VQhVLcD551iJ61w4aQH6bHxdTjz65MT2OrW/mFZbtIwWSeif6axrYpVCyERIDEKrX5AV
- rOmGEaUGsCd16FueoaM2Hf96BH3SI3/q2w+g058RedLOZVZtyQARAQABzSdBbnRvbmlvIFF1
- YXJ0dWxsaSA8YW50b25pb0BvcGVudnBuLm5ldD7Cwa0EEwEIAFcCGwMFCwkIBwMFFQoJCAsF
- FgIDAQACHgECF4AFCRWQ2TIWIQTKvaEoIBfCZyGYhcdI8My2j1nRTAUCYRUquBgYaGtwczov
- L2tleXMub3BlbnBncC5vcmcACgkQSPDMto9Z0UzmcxAAjzLeD47We0R4A/14oDKlZxXO0mKL
- fCzaWFsdhQCDhZkgxoHkYRektK2cEOh4Vd+CnfDcPs/iZ1i2+Zl+va79s4fcUhRReuwi7VCg
- 7nHiYSNC7qZo84Wzjz3RoGYyJ6MKLRn3zqAxUtFECoS074/JX1sLG0Z3hi19MBmJ/teM84GY
- IbSvRwZu+VkJgIvZonFZjbwF7XyoSIiEJWQC+AKvwtEBNoVOMuH0tZsgqcgMqGs6lLn66RK4
- tMV1aNeX6R+dGSiu11i+9pm7sw8tAmsfu3kQpyk4SB3AJ0jtXrQRESFa1+iemJtt+RaSE5LK
- 5sGLAO+oN+DlE0mRNDQowS6q/GBhPCjjbTMcMfRoWPCpHZZfKpv5iefXnZ/xVj7ugYdV2T7z
- r6VL2BRPNvvkgbLZgIlkWyfxRnGh683h4vTqRqTb1wka5pmyBNAv7vCgqrwfvaV1m7J9O4B5
- PuRjYRelmCygQBTXFeJAVJvuh2efFknMh41R01PP2ulXAQuVYEztq3t3Ycw6+HeqjbeqTF8C
- DboqYeIM18HgkOqRrn3VuwnKFNdzyBmgYh/zZx/dJ3yWQi/kfhR6TawAwz6GdbQGiu5fsx5t
- u14WBxmzNf9tXK7hnXcI24Z1z6e5jG6U2Swtmi8sGSh6fqV4dBKmhobEoS7Xl496JN2NKuaX
- jeWsF2rOwE0EZmhJFwEIAOAWiIj1EYkbikxXSSP3AazkI+Y/ICzdFDmiXXrYnf/mYEzORB0K
- vqNRQOdLyjbLKPQwSjYEt1uqwKaD1LRLbA7FpktAShDK4yIljkxhvDI8semfQ5WE/1Jj/I/Q
- U+4VXhkd6UvvpyQt/LiWvyAfvExPEvhiMnsg2zkQbBQ/M4Ns7ck0zQ4BTAVzW/GqoT2z03mg
- p1FhxkfzHMKPQ6ImEpuY5cZTQwrBUgWif6HzCtQJL7Ipa2fFnDaIHQeiJG0RXl/g9x3YlwWG
- sxOFrpWWsh6GI0Mo2W2nkinEIts48+wNDBCMcMlOaMYpyAI7fT5ziDuG2CBA060ZT7qqdl6b
- aXUAEQEAAcLBfAQYAQgAJhYhBMq9oSggF8JnIZiFx0jwzLaPWdFMBQJmaEkXAhsMBQkB4TOA
- AAoJEEjwzLaPWdFMbRUP/0t5FrjF8KY6uCU4Tx029NYKDN9zJr0CVwSGsNfC8WWonKs66QE1
- pd6xBVoBzu5InFRWa2ed6d6vBw2BaJHC0aMg3iwwBbEgPn4Jx89QfczFMJvFm+MNc2DLDrqN
- zaQSqBzQ5SvUjxh8lQ+iqAhi0MPv4e2YbXD0ROyO+ITRgQVZBVXoPm4IJGYWgmVmxP34oUQh
- BM7ipfCVbcOFU5OPhd9/jn1BCHzir+/i0fY2Z/aexMYHwXUMha/itvsBHGcIEYKk7PL9FEfs
- wlbq+vWoCtUTUc0AjDgB76AcUVxxJtxxpyvES9aFxWD7Qc+dnGJnfxVJI0zbN2b37fX138Bf
- 27NuKpokv0sBnNEtsD7TY4gBz4QhvRNSBli0E5bGUbkM31rh4Iz21Qk0cCwR9D/vwQVsgPvG
- ioRqhvFWtLsEt/xKolOmUWA/jP0p8wnQ+3jY6a/DJ+o5LnVFzFqbK3fSojKbfr3bY33iZTSj
- DX9A4BcohRyqhnpNYyHL36gaOnNnOc+uXFCdoQkI531hXjzIsVs2OlfRufuDrWwAv+em2uOT
- BnRX9nFx9kPSO42TkFK55Dr5EDeBO3v33recscuB8VVN5xvh0GV57Qre+9sJrEq7Es9W609a
- +M0yRJWJEjFnMa/jsGZ+QyLD5QTL6SGuZ9gKI3W1SfFZOzV7hHsxPTZ6
-Organization: OpenVPN Inc.
-In-Reply-To: <ZyOhe3yKTiqCF2TH@hog>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|MW4PR12MB5666:EE_
+X-MS-Office365-Filtering-Correlation-Id: 71e077bd-5589-4d5f-704c-08dd05d6777c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?en9hJERrMUWPu2M5wTSYbYi0NZIukMtBoV+WS3PJoXYCFVcyKHBS5+ui8m+g?=
+ =?us-ascii?Q?xD6/2devJXmICIKu9xf30E35pC3edzyU0S8gsLZp63LgTrJDsFcC/Jj3ZScc?=
+ =?us-ascii?Q?XSsh8DUwTqFGBpFac9beuCKdpUjVRH+HmjTAVk0KI7ewYsEDMuUEgcvmu9a+?=
+ =?us-ascii?Q?JrjJF/1u4osqCF6NHhnbQSJUgwyHpCMvVKZj/vLPYI/EvuTXX3YUVPy2L1sm?=
+ =?us-ascii?Q?oiZGRa9vY7qsb1I1sV+AKV9pjbMpQnN6Wg1+zlds74hAzJBOZ/abiUATKF/Q?=
+ =?us-ascii?Q?mRRany443zIU+0aNWGxGFgVCxFk/wU0E2GvKpyAmkyJ8qb9xGpiZ/ZkhrsSn?=
+ =?us-ascii?Q?g4NtAr53E5vEdych+Cfz0AftWa+gHqE6CGpMt4cpj4udqNa+aSNGoSdxeZkP?=
+ =?us-ascii?Q?DH3qdXjjbUNdtQzvddTMVJgAQjrPKMkh1ZzoRjPDsbAuvFPfzvRaGsHmPjk/?=
+ =?us-ascii?Q?GtN5ypLgEjNzO4FavFJQQKY2LTcEvE457SHGoq8Rq5rwMQQxh1Y3VLUZ6Ycp?=
+ =?us-ascii?Q?pdQ2/p0S8tg/kUKAXA1QhqXEuJnmGBJdh5UiCUaz8rVdlYWAkAGaJN0n/Hi3?=
+ =?us-ascii?Q?y2tld5r2GBw+edGgaILHtd8JMNSDoGOr2PYP5JPpODUvPOuJhaXH1BqR4BqJ?=
+ =?us-ascii?Q?kt7SB4r+vW+Hcr8OqfICrASZD01IWJWGqOB36egg7jcNFVVuR73zPHUSFARz?=
+ =?us-ascii?Q?7XALNsMbvT6Na+UE1Htfia3EczKlWsxF067sPZ11h3cMsv6R/nCVc2kczMiB?=
+ =?us-ascii?Q?AfG/jf+TMdjSKj+fk5rWc/W1Y9RqU1JeXn230CFXgHDYY+WEG7vbFEIqhHoL?=
+ =?us-ascii?Q?17JBNUskckU90qW4MxFopV0MBTR4JSYo59icn20AjiN9VFNFTJR39lE4vVFu?=
+ =?us-ascii?Q?h6v5ieQpI4z6ji3KDbMkUbGDs2hDSuwNBE8Zp4uKaW7SVowX9uyH8KrgK2XZ?=
+ =?us-ascii?Q?aQz5Wmn3hN6afLCYGy+FW1RVShL99ZTj++dDtsthcoEhy+N7Q9Jov7yJ7xAe?=
+ =?us-ascii?Q?mghsE6BtVcHUxgaEiUFzcML42zT1VNucBaDS0411wwQC364Ov0hKQB95H9N/?=
+ =?us-ascii?Q?j8hvZ7TfgyzcSGhjsiSh0kqy8H72RkRLhtwvcRo9Xzg2reh9lCUS8aROKTus?=
+ =?us-ascii?Q?tQrTU9nFOeBvSG1afHMR5MKVY0akzn7ke5PyqVkGYPY9XL93yDU9yKfw/Fc1?=
+ =?us-ascii?Q?/sU08pw7lYVe8aTFAIPt22bbt2aXEQeAJKiDOiMQO0kSiTZ8O4NkOsU37VFp?=
+ =?us-ascii?Q?7OVVLEbmbSmjz1UYt83y6smos4bKI2pA1IeeccMi8LS56u9Ptb+wZD8wtfOA?=
+ =?us-ascii?Q?WSO1Hrsp8c/dy0XxwSkhI14F?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?yu4nMlNb/Cwb52ZnIEeNdjQqwilMcUve37e7ZHWXlYaTtASkWzP5R2dizjb0?=
+ =?us-ascii?Q?xsWPXGkUn+ZQseUilxleX6WPvBtNXEak+5CItpixeGHvaTU+szzT6E3Wt/UT?=
+ =?us-ascii?Q?Ggu/WI/OMnsmjm0GihgtYu8kCUhhRavTj71ll5iWAoZSCW+oPA0XOZXaNX65?=
+ =?us-ascii?Q?mX4DbDD3h2LCQqNuRaxa/OACv2K1E6qj4+WiAm8sSUTIXxPu0+DcbzY5NFe6?=
+ =?us-ascii?Q?s1CMZJnNwx/pynDPfW8TmAWJoQb/SgEmKWBlF7SQA5JyxFTVtM6RP0nqut95?=
+ =?us-ascii?Q?FQpCoYlpgkfSRNMm/+C8GfTnKhDUbp3bfxCyIVAnucUsIKKrz3lQsgEDByRY?=
+ =?us-ascii?Q?nmmhifLG7aQVHh+GgAC8tBC2QXqT1XoU9YitTdLTC2HnZ+gYTedxv5orCKWh?=
+ =?us-ascii?Q?gR5Cl9rJoI6e3y87vSgzi8L+670DhKhjx7qFhJO7vbJVoKDATi7ysQrMStjr?=
+ =?us-ascii?Q?d2Zhw//xF96mFfVObcbqYU22kmHcIfLbzhD7WWsGpej8PRsighTEB5bmIoW6?=
+ =?us-ascii?Q?9Md7QVhBW/fRFWhZR5CMIr/r6ndr87WXJoSIZ3pEkexsDsGHrUK3FEoIXuo9?=
+ =?us-ascii?Q?7rXQn7/P0zLv3LJftkDgcGxh5osmOCPqQbVwHJiR46ZGb5Li1jgnQq0AvvbB?=
+ =?us-ascii?Q?acJdnxvVCgImp6p128ifS610ZDgWH2vuRlbY2sByXSHyrKQb4BFnkzN8qXZg?=
+ =?us-ascii?Q?7wgQpiXOedjKMB23prmmkrZBtEJNl96bhnHjdyc/ZrTHTzyWC5H/xx49ywAN?=
+ =?us-ascii?Q?sccZyMd2Zx3QDZX6qEu2IaZljXM/DY0/nroSfDpjSRvMhdr+XBo9qw9Y937N?=
+ =?us-ascii?Q?QZrC7aVV4zOcr50x2dQ1eabRwAv+Li49JCJ4DXXSKWprK3mhg5qIpPofKVqP?=
+ =?us-ascii?Q?xHxBWCR3gCAqALxTfbqt3JUq3u8aNN0WVNAXpuNvPHi2ssr/NxIl6ikipf+W?=
+ =?us-ascii?Q?XO0Xt8gEpUOn/TlikN3NOf/5HobQ1dAbvNmNYdSq0tKfgp5MUcJNzCooroMl?=
+ =?us-ascii?Q?opyqUiLABCNZmTzE4wV6PDioQb9HrUMJrlLfLrtiAltt8DkX3Zj9vG5SZJwL?=
+ =?us-ascii?Q?fjO2n91Aw0Tb7NNSVE//TKjifilmXFguuNomfploTZEr9D+CT1kqE0uIrtD2?=
+ =?us-ascii?Q?SqQkcitXhC8LaapP+SI+SzmDt4we1DD+FUGHEq0Pfnu6eGBBOLwkp03SBsSE?=
+ =?us-ascii?Q?a2izDxQeXVU2rma8cqDyoJ7Rc/YR7dPX9JFFAG6Nx90tSxLS9+yDcNRYU9s6?=
+ =?us-ascii?Q?b9IPag+5czCD8F9xJJ+RLCJNcoe4lsdMG26hGzk4RYLGpl3VQWJXM/Ov/jbT?=
+ =?us-ascii?Q?m+v6ildJ+R358TXQenwhvjkbgJEIgvX6sd18WxeWoNBpOvsmIz8D2pu8RWRj?=
+ =?us-ascii?Q?XNxCXSt7OjzdIbZT2KsMlp9ar1WeOWklB4xMoj0Jvjs+NcUUB9I7axmyJpUq?=
+ =?us-ascii?Q?lYcteaFsNTDElE4TTFDizvz0Ks50HhlM3W6rezKk9PwVsG4WHe+rsrqXd1IC?=
+ =?us-ascii?Q?dUWxBa//E/s1OmBjfgxlQ5fIIixkmMLBFRyl0HxCu+nzfU0Za5cTTUkLBGF+?=
+ =?us-ascii?Q?ioqGsMoa7YsPJ1Iyrkk=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 71e077bd-5589-4d5f-704c-08dd05d6777c
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2024 00:34:44.4408
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OYAlgQepD3sdIa39f5/HtE2tWvmYlTJcVCXtHQX1u25BqE1kXGA1NBzwL4MF7mK8
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5666
 
-On 31/10/2024 16:25, Sabrina Dubroca wrote:
-> 2024-10-29, 11:47:25 +0100, Antonio Quartulli wrote:
->> +static void ovpn_socket_release_work(struct work_struct *work)
->> +{
->> +	struct ovpn_socket *sock = container_of(work, struct ovpn_socket, work);
->> +
->> +	ovpn_socket_detach(sock->sock);
->> +	kfree_rcu(sock, rcu);
->> +}
->> +
->> +static void ovpn_socket_schedule_release(struct ovpn_socket *sock)
->> +{
->> +	INIT_WORK(&sock->work, ovpn_socket_release_work);
->> +	schedule_work(&sock->work);
+On Fri, Nov 15, 2024 at 02:07:41PM -0800, Nicolin Chen wrote:
+> On Thu, Nov 14, 2024 at 12:20:10PM -0400, Jason Gunthorpe wrote:
+> > On Wed, Nov 13, 2024 at 07:18:42PM -0800, Nicolin Chen wrote:
+> > > > so the user would try to create vDevices with a given viommu_obj until
+> > > > failure, then it would allocate another viommu_obj for the failed device.
+> > > > is it? sounds reasonable.
+> > > 
+> > > Yes. It is the same as previously dealing with a nesting parent:
+> > > test and allocate if fails. The virtual IOMMU driver in VMM can
+> > > keep a list of the vIOMMU objects for each device to test.
+> > 
+> > The viommu object should be tied to the VMM's vIOMMU vHW object that
+> > it is paravirtualizing toward the VM.
+> > 
+> > So we shouldn't be creating viommu objects on demand, it should be
+> > created when the vIOMMU is created, and the presumably the qemu
+> > command line will describe how to link vPCI/VFIO functions to vIOMMU
+> > instances. If they kernel won't allow the user's configuration then it
+> > should fail, IMHO.
 > 
-> How does module unloading know that it has to wait for this work to
-> complete? Will ovpn_cleanup get stuck until some refcount gets
-> released by this work?
+> Intel's virtual IOMMU in QEMU has one instance but could create
+> two vIOMMU objects for devices behind two different pIOMMUs. So,
+> in this case, it does the on-demand (or try-and-fail) approach?
 
-No, we have no such mechanism.
-Any idea how other modules do?
+I suspect Intel does need viommu at all, and if it ever does it will
+not be able to have one instance..
 
-Actually this makes me wonder how module unloading coordinates with the 
-code being executed. Unload may happen at any time - how do we prevent 
-killing the code in the middle of something (regardless of scheduled 
-workers)?
+> One corner case that Yi reminded me of was that VMM having two
+> virtual IOMMUs for two devices that are behind the same pIOMMU,
+> then these two virtual IOMMUs don't necessarily share the same
+> vIOMMU object, i.e. VMM is allowed to allocate two vIOMMU objs?
 
+Yes this is allowed
+ 
+> > Some try-and-fail might be interesting to auto-provision vIOMMU's and
+> > provision vPCI functions. Though I suspect we will be providing
+> > information in other ioctls so something like libvirt can construct
+> > the correct configuration directly.
 > 
-> 
-> [...]
->> +static void ovpn_tcp_rcv(struct strparser *strp, struct sk_buff *skb)
->> +{
->> +	struct ovpn_peer *peer = container_of(strp, struct ovpn_peer, tcp.strp);
->> +	struct strp_msg *msg = strp_msg(skb);
->> +	size_t pkt_len = msg->full_len - 2;
->> +	size_t off = msg->offset + 2;
->> +
->> +	/* ensure skb->data points to the beginning of the openvpn packet */
->> +	if (!pskb_pull(skb, off)) {
->> +		net_warn_ratelimited("%s: packet too small\n",
->> +				     peer->ovpn->dev->name);
->> +		goto err;
->> +	}
->> +
->> +	/* strparser does not trim the skb for us, therefore we do it now */
->> +	if (pskb_trim(skb, pkt_len) != 0) {
->> +		net_warn_ratelimited("%s: trimming skb failed\n",
->> +				     peer->ovpn->dev->name);
->> +		goto err;
->> +	}
->> +
->> +	/* we need the first byte of data to be accessible
->> +	 * to extract the opcode and the key ID later on
->> +	 */
->> +	if (!pskb_may_pull(skb, 1)) {
->> +		net_warn_ratelimited("%s: packet too small to fetch opcode\n",
->> +				     peer->ovpn->dev->name);
->> +		goto err;
->> +	}
->> +
->> +	/* DATA_V2 packets are handled in kernel, the rest goes to user space */
->> +	if (likely(ovpn_opcode_from_skb(skb, 0) == OVPN_DATA_V2)) {
->> +		/* hold reference to peer as required by ovpn_recv().
->> +		 *
->> +		 * NOTE: in this context we should already be holding a
->> +		 * reference to this peer, therefore ovpn_peer_hold() is
->> +		 * not expected to fail
->> +		 */
->> +		if (WARN_ON(!ovpn_peer_hold(peer)))
->> +			goto err;
->> +
->> +		ovpn_recv(peer, skb);
->> +	} else {
->> +		/* The packet size header must be there when sending the packet
->> +		 * to userspace, therefore we put it back
->> +		 */
->> +		skb_push(skb, 2);
->> +		ovpn_tcp_to_userspace(peer, strp->sk, skb);
->> +	}
->> +
->> +	return;
->> +err:
->> +	netdev_err(peer->ovpn->dev,
->> +		   "cannot process incoming TCP data for peer %u\n", peer->id);
-> 
-> This should also be ratelimited, and maybe just combined with the
-> net_warn_ratelimited just before each goto.
+> By "auto-provision", you mean libvirt assigning devices to the
+> correct virtual IOMMUs corresponding to the physical instances?
+> If so, we can just match the "iommu" sysfs node of devices with
+> the iommu node(s) under /sys/class/iommu/, right?
 
-ACK.
+Yes
 
-> 
->> +	dev_core_stats_rx_dropped_inc(peer->ovpn->dev);
->> +	kfree_skb(skb);
->> +	ovpn_peer_del(peer, OVPN_DEL_PEER_REASON_TRANSPORT_ERROR);
->> +}
-> 
-> [...]
->> +void ovpn_tcp_socket_detach(struct socket *sock)
->> +{
-> [...]
->> +	/* restore CBs that were saved in ovpn_sock_set_tcp_cb() */
->> +	sock->sk->sk_data_ready = peer->tcp.sk_cb.sk_data_ready;
->> +	sock->sk->sk_write_space = peer->tcp.sk_cb.sk_write_space;
->> +	sock->sk->sk_prot = peer->tcp.sk_cb.prot;
->> +	sock->sk->sk_socket->ops = peer->tcp.sk_cb.ops;
->> +	rcu_assign_sk_user_data(sock->sk, NULL);
->> +
->> +	rcu_read_unlock();
->> +
->> +	/* cancel any ongoing work. Done after removing the CBs so that these
->> +	 * workers cannot be re-armed
->> +	 */
-> 
-> I'm not sure whether a barrier is needed to prevent compiler/CPU
-> reordering here.
-
-I see ipsec has one in espintcp.c. I think it makes sense to add it 
-right here.
-
-> 
->> +	cancel_work_sync(&peer->tcp.tx_work);
->> +	strp_done(&peer->tcp.strp);
->> +}
->> +
->> +static void ovpn_tcp_send_sock(struct ovpn_peer *peer)
->> +{
->> +	struct sk_buff *skb = peer->tcp.out_msg.skb;
->> +
->> +	if (!skb)
->> +		return;
->> +
->> +	if (peer->tcp.tx_in_progress)
->> +		return;
->> +
->> +	peer->tcp.tx_in_progress = true;
-> 
-> Sorry, I never answered your question about my concerns in a previous
-> review here.
-> 
-> We can reach ovpn_tcp_send_sock in two different contexts:
->   - lock_sock (either from ovpn_tcp_sendmsg or ovpn_tcp_tx_work)
->   - bh_lock_sock (from ovpn_tcp_send_skb, ie "data path")
-> 
-> These are not fully mutually exclusive. lock_sock grabs bh_lock_sock
-> (a spinlock) for a brief period to mark the (sleeping/mutex) lock as
-> taken, and then releases it.
-> 
-> So when bh_lock_sock is held, it's not possible to grab lock_sock. But
-> when lock_sock is taken, it's still possible to grab bh_lock_sock.
-> 
-> 
-> The buggy scenario would be:
-> 
->    (data path encrypt)                       (sendmsg)
->    ovpn_tcp_send_skb                         lock_sock
->                                                bh_lock_sock + owned=1 + bh_unlock_sock
->    bh_lock_sock
->    ovpn_tcp_send_sock_skb                      ovpn_tcp_send_sock_skb
->      !peer->tcp.out_msg.skb                      !peer->tcp.out_msg.skb
->      peer->tcp.out_msg.skb = ...                 peer->tcp.out_msg.skb = ...
->      ovpn_tcp_send_sock                          ovpn_tcp_send_sock
->        !peer->tcp.tx_in_progress                   !peer->tcp.tx_in_progress
->        peer->tcp.tx_in_progress = true             peer->tcp.tx_in_progress = true
->        // proceed                                  // proceed
-> 
-> 
-> That's 2 similar races, one on out_msg.skb and one on tx_in_progress.
-> It's a bit unlikely (but not impossible) that we'll have 2 cpus trying
-> to call skb_send_sock_locked at the same time, but if they just
-> overwrite each other's skb/len it's already pretty bad. The end of
-> ovpn_tcp_send_sock might also reset peer->tcp.out_msg.* just as
-> ovpn_tcp_send_skb -> ovpn_tcp_send_sock_skb starts setting it up
-> (peer->tcp.out_msg.skb gets cleared, ovpn_tcp_send_sock_skb proceeds
-> and sets skb+len, then maybe len gets reset to 0 by
-> ovpn_tcp_send_sock).
-> 
-> 
-> To avoid this problem, esp_output_tcp_finish (net/ipv4/esp4.c) does:
-> 
-> 	bh_lock_sock(sk);
-> 	if (sock_owned_by_user(sk))
-> 		err = espintcp_queue_out(sk, skb);
-> 	else
-> 		err = espintcp_push_skb(sk, skb);
-> 	bh_unlock_sock(sk);
-> 
-> 
-> (espintcp_push_skb is roughly equivalent to ovpn_tcp_send_sock_skb)
-
-mh I see...so basically while sendmsg is running we should stash all 
-packets and send them out in one go upon lock release (via release_cb).
-
-Will get that done in v12! Thanks!
-
-> 
-> 
->> +	do {
->> +		int ret = skb_send_sock_locked(peer->sock->sock->sk, skb,
->> +					       peer->tcp.out_msg.offset,
->> +					       peer->tcp.out_msg.len);
->> +		if (unlikely(ret < 0)) {
->> +			if (ret == -EAGAIN)
->> +				goto out;
->> +
->> +			net_warn_ratelimited("%s: TCP error to peer %u: %d\n",
->> +					     peer->ovpn->dev->name, peer->id,
->> +					     ret);
->> +
->> +			/* in case of TCP error we can't recover the VPN
->> +			 * stream therefore we abort the connection
->> +			 */
->> +			ovpn_peer_del(peer,
->> +				      OVPN_DEL_PEER_REASON_TRANSPORT_ERROR);
->> +			break;
->> +		}
->> +
->> +		peer->tcp.out_msg.len -= ret;
->> +		peer->tcp.out_msg.offset += ret;
->> +	} while (peer->tcp.out_msg.len > 0);
->> +
->> +	if (!peer->tcp.out_msg.len)
->> +		dev_sw_netstats_tx_add(peer->ovpn->dev, 1, skb->len);
->> +
->> +	kfree_skb(peer->tcp.out_msg.skb);
->> +	peer->tcp.out_msg.skb = NULL;
->> +	peer->tcp.out_msg.len = 0;
->> +	peer->tcp.out_msg.offset = 0;
->> +
->> +out:
->> +	peer->tcp.tx_in_progress = false;
->> +}
->> +
->> +static void ovpn_tcp_tx_work(struct work_struct *work)
->> +{
->> +	struct ovpn_peer *peer;
->> +
->> +	peer = container_of(work, struct ovpn_peer, tcp.tx_work);
->> +
->> +	lock_sock(peer->sock->sock->sk);
->> +	ovpn_tcp_send_sock(peer);
->> +	release_sock(peer->sock->sock->sk);
->> +}
->> +
->> +void ovpn_tcp_send_sock_skb(struct ovpn_peer *peer, struct sk_buff *skb)
->> +{
->> +	if (peer->tcp.out_msg.skb)
->> +		return;
-> 
-> That's leaking the skb? (and not counting the drop)
-
-we should not lose this packet..[continues below]
-
-> 
->> +
->> +	peer->tcp.out_msg.skb = skb;
->> +	peer->tcp.out_msg.len = skb->len;
->> +	peer->tcp.out_msg.offset = 0;
->> +
->> +	ovpn_tcp_send_sock(peer);
->> +}
->> +
->> +static int ovpn_tcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
->> +{
-> [...]
->> +	ret = skb_copy_datagram_from_iter(skb, 0, &msg->msg_iter, size);
->> +	if (ret) {
->> +		kfree_skb(skb);
->> +		net_err_ratelimited("%s: skb copy from iter failed: %d\n",
->> +				    sock->peer->ovpn->dev->name, ret);
->> +		goto unlock;
->> +	}
->> +
->> +	ovpn_tcp_send_sock_skb(sock->peer, skb);
-> 
-> If we didn't send the packet (because one was already queued/in
-> progress), we should either stash it, or tell userspace that it wasn't
-> sent and it should retry later.
-
-In the part you omitted we have the following (while holding lock_sock):
-
-320         if (peer->tcp.out_msg.skb) {
-321                 ret = -EAGAIN;
-322                 goto unlock;
-323         }
-
-Therefore ovpn_tcp_send_sock_skb() should never drop the packet if this 
-condition was already evaluated false.
-
-But if I understood all your notes correctly, the data path may still 
-overlap here because it never holds the lock_sock and thus fill .skb 
-after ovpn_tcp_sendmsg() has checked it. Am I right?
-
-However, this race should not be possible anymore once I implement the 
-sock_owned_by_user() check you suggested above.
-Because ovpn_tcp_sendmsg() will be invoked with owned=1 which will 
-prevent the data path from attempting to send more packets.
-
-Do you agree?
-
-Thanks a lot for pointing this out!
-The inner mechanisms of TCP socks are still a bit obscure to me.
-
-
-Regards,
-
-
--- 
-Antonio Quartulli
-OpenVPN Inc.
-
-
+Jason
 
