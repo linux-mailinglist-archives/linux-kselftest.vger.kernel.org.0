@@ -1,78 +1,87 @@
-Return-Path: <linux-kselftest+bounces-22132-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22133-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B36E9CFBF0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2024 02:10:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55C049CFCA8
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2024 05:23:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F24AF284406
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2024 01:10:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3EA13B27AA1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2024 04:23:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 107EC74421;
-	Sat, 16 Nov 2024 01:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 164541547C3;
+	Sat, 16 Nov 2024 04:23:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="pK2LrKLI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lB7923GG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f195.google.com (mail-pf1-f195.google.com [209.85.210.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 104F345003;
-	Sat, 16 Nov 2024 01:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.190.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80CE763D;
+	Sat, 16 Nov 2024 04:23:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731719454; cv=none; b=I10LSz2SWR+GwApwO/8dNohiDBEuy38+3j/TqkOzDoH+gyv4tA1f4lHWnJb0YotLACb5cFXeVUDw1wgM2nPAeBDsYIsMaP5kcs5fZ8fCNLl22XyuR8fpdErRAEpRaeusgeWDPWVzZRBEDQeUTV/cmJPbR+flnQyoPXGpMWE9XvQ=
+	t=1731731007; cv=none; b=ehmoryhe9VnOWib1UNhiowIRATAe+NQrGfyx1/V5/qAfiQVcQ8E+2SM/jjFIPne/MH/42gu6agnBkwt8cS/y7a3JobGi0jRRvQuQ4+8wrDwx6ta0uSDbYVoe/8tbDpqKY2Xca/tLuVJkaMVfSX28D0UT+H23cZIMICXPEZ1SXgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731719454; c=relaxed/simple;
-	bh=s8FsK55RfNkPVlqWqVt25Ac+d5jXBqfa1XLJHTT7q7s=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=n4n9nAyR3gT3iFep1xkRa8LPA4uzYilgXdOx7AxF0cV40+cqvrjBjChtE91Sr8rRNJwWGvNenrycaHNwIcCuAY2DYbXAiwd/OmHmuUgvc1+PjZr7joGxV+4I7mslMWjmp4vzrtShPo9qBTYwSe/qEiwk2RZpiwIo5gstVAtbfFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=pK2LrKLI; arc=none smtp.client-ip=207.171.190.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+	s=arc-20240116; t=1731731007; c=relaxed/simple;
+	bh=7akGrFdoTBszm7z6Sgnh3qmpKCzmsjEGYVpGlkRszXI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=LDccBxynpro1SbCq8lSrUY8Px6A8LvwaACFL2qv/RxPxXneHB+bZKsq4Bmt3hRHtGq+qLnDvAzqzYyFRhTUyyIcUnHQN2qXbU0/VimMkZGTTFXnXZ+g0NeMkjs4rlSuSQw7ruj8Hrv4B/1mHy341qPURElevwLtBjMi5OzeL528=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lB7923GG; arc=none smtp.client-ip=209.85.210.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f195.google.com with SMTP id d2e1a72fcca58-720d01caa66so1298126b3a.2;
+        Fri, 15 Nov 2024 20:23:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1731719452; x=1763255452;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=oZf83NcSi94ctWC30Z+k813YHX+uNN8Tlt2tor25DCQ=;
-  b=pK2LrKLI/rP8W41eJ4XYq9+NPW2lhkn912GGcP01MvVBqYdMOsHhl4pv
-   r6LOsbE8gPyn+dS9103YTgpeYRWCPurnKGSa/OKV/ThRJD6YvvXudvLTA
-   vrOuJinO0Q7nKbJw00gOMuiZ0V2928mCotD653eH+d4/5Uz9s20IUloFg
-   0=;
-X-IronPort-AV: E=Sophos;i="6.12,158,1728950400"; 
-   d="scan'208";a="385827814"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 01:10:46 +0000
-Received: from EX19MTAUWC002.ant.amazon.com [10.0.21.151:7363]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.14.147:2525] with esmtp (Farcaster)
- id 98dd0642-8156-4c38-bcef-9c8974a3a191; Sat, 16 Nov 2024 01:10:46 +0000 (UTC)
-X-Farcaster-Flow-ID: 98dd0642-8156-4c38-bcef-9c8974a3a191
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Sat, 16 Nov 2024 01:10:45 +0000
-Received: from 6c7e67c6786f.amazon.com (10.187.170.14) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.35;
- Sat, 16 Nov 2024 01:10:41 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <stsp2@yandex.ru>
-CC: <almasrymina@google.com>, <asml.silence@gmail.com>, <axboe@kernel.dk>,
-	<brauner@kernel.org>, <cyphar@cyphar.com>, <davem@davemloft.net>,
-	<edumazet@google.com>, <gouhao@uniontech.com>, <horms@kernel.org>,
-	<kees@kernel.org>, <krisman@suse.de>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<mhal@rbox.co>, <netdev@vger.kernel.org>, <oleg@redhat.com>,
-	<pabeni@redhat.com>, <quic_abchauha@quicinc.com>, <shuah@kernel.org>,
-	<tandersen@netflix.com>, <viro@zeniv.linux.org.uk>, <willemb@google.com>
-Subject: Re: [PATCH v2] net/unix: pass pidfd flags via SCM_PIDFD cmsg
-Date: Fri, 15 Nov 2024 17:10:38 -0800
-Message-ID: <20241116011038.94912-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20241114091909.3552288-1-stsp2@yandex.ru>
-References: <20241114091909.3552288-1-stsp2@yandex.ru>
+        d=gmail.com; s=20230601; t=1731731005; x=1732335805; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0tlot2yyxrWqW9V2Ak2ioTy4DOmvr1gmx7I7YMSC6PA=;
+        b=lB7923GGUtMU41RYocfNam38x5rN+yf73//9FMbzXpMOnswWMZP2sRl6xsiiH6qQsB
+         JKtzUKWNo8KSFnU76LBKJr8rkzjGFN8UYJHRmos5Wvuft3oGCih345VC/26k0618ht2Q
+         VxEKzENDd6uZW5a2jYkwNMSqGszYPj2EQcic1/iZ9rslu4WVxSiHx1UTg6LN0yUVNdI5
+         sO4kQq8pDJtpN+PZIgkAkTT0l7hz/BsTBeftJNxF+8NcaID2cavkyznsW2OAad5aGlds
+         xa6J07jbD+MZWrNhqpFMJQ5tYSOclhLoaxchzKq0uvRC+w4VlIWGTGxk6wv604D2H6Jy
+         8Ijg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731731005; x=1732335805;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0tlot2yyxrWqW9V2Ak2ioTy4DOmvr1gmx7I7YMSC6PA=;
+        b=dnG+agM2JiyQI5OgljZDqa8FXx3f1jmnn4qNTKAwjppsIwrEBzUksW1vKJrPRQkr2B
+         2Tq8+XaeDAF4Zmr0AlfiApQyqfLYFmfoOAeNceamtrcKRuPgJ8h/km7RrziBjeyruOBW
+         6SMY/w26xiTLKAGxmRSOH2e5GDZvUzP5L3wj+R8rJ+OZtn4hdlpiwzaG6y9wvqH7fEmq
+         vybxrOtNf7HXqmh8995tMk7IXyA2vhSlOspULEEKOZZDwC4odyGBJfNav6Qk9MseM9LV
+         Zct/uG+xmWDTkanziQW3wrJIM1qEABgHPU3O+IwHL1SCcPdy/xnER9fMMbQEmDLFfe58
+         Q9bw==
+X-Forwarded-Encrypted: i=1; AJvYcCV7v+bYPPXro9M8EMV5D2BzMU8u5nHK68354OMJfEQt1XhWUqaWHgDgT/MI3uFQrqj1d+R4GDUuzKw5ZNw=@vger.kernel.org, AJvYcCXgZG10c3MbYqeP4Nx6c0FDW08HkjcZTEoDq6oDHk9jd+/+pdPkVHaenw3E33j8uvXDw1doF6A7KfCL9NZre8vQ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDxD15FWjOQ5PfpJhYdmUw0+MCH9dmEtlXDOhv9Jk3I+WDV1AJ
+	cdW3lDwRTZqfZdFdAy4gIwjzyajpvl/Hw1rcdbi2wBiQc5sA20Uk
+X-Google-Smtp-Source: AGHT+IFqmHhJ4EFwbN79Fl4Ln4i3wfDKo61jt/nCvg3uspSgZWP+RUb2V1i0kq5UvFV7azfzpJRs0Q==
+X-Received: by 2002:a05:6a00:140f:b0:71e:795f:92f0 with SMTP id d2e1a72fcca58-72476b672dfmr6851952b3a.3.1731731004607;
+        Fri, 15 Nov 2024 20:23:24 -0800 (PST)
+Received: from yunshenglin-MS-7549.. ([2409:8a55:301b:e120:69f1:c187:3b69:acf9])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724770eefe7sm2175394b3a.31.2024.11.15.20.23.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Nov 2024 20:23:24 -0800 (PST)
+From: Yunsheng Lin <yunshenglin0825@gmail.com>
+To: davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Cc: linyunsheng@huawei.com,
+	Yunsheng Lin <yunshenglin0825@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Alexander Duyck <alexanderduyck@fb.com>,
+	Linux-MM <linux-mm@kvack.org>,
+	Mark Brown <broonie@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] mm: page_frag: fix a compile error when kernel is not compiled
+Date: Sat, 16 Nov 2024 12:23:13 +0800
+Message-Id: <20241116042314.100400-1-yunshenglin0825@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,254 +89,76 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D031UWC002.ant.amazon.com (10.13.139.212) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
-> [PATCH v2] net/unix: pass pidfd flags via SCM_PIDFD cmsg
+page_frag test module is an out of tree module, but built
+using KDIR as the main kernel tree, the mm test suite is
+just getting skipped if newly added page_frag test module
+fails to compile due to kernel not yet compiled.
 
-Please specify the target tree; net for fixes, net-next for others.
-https://www.kernel.org/doc/html/v6.11/process/maintainer-netdev.html
+Fix the above problem by ensuring both kernel is built first
+and a newer kernel which has page_frag_cache.h is used.
 
-  [PATCH net-next v3] af_unix: pass ...
+CC: Andrew Morton <akpm@linux-foundation.org>
+CC: Alexander Duyck <alexanderduyck@fb.com>
+CC: Linux-MM <linux-mm@kvack.org>
+Fixes: 7fef0dec415c ("mm: page_frag: add a test module for page_frag")
+Fixes: 65941f10caf2 ("mm: move the page fragment allocator from page_alloc into its own file")
+Reported-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Yunsheng Lin <yunshenglin0825@gmail.com>
+---
+Mote, page_frag test module is only in the net-next tree for now,
+so target the net-next tree.
+---
+ tools/testing/selftests/mm/Makefile           | 18 ++++++++++++++++++
+ tools/testing/selftests/mm/page_frag/Makefile |  2 +-
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index acec529baaca..04e04733fc8a 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -36,7 +36,16 @@ MAKEFLAGS += --no-builtin-rules
+ CFLAGS = -Wall -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
+ LDLIBS = -lrt -lpthread -lm
+ 
++KDIR ?= /lib/modules/$(shell uname -r)/build
++ifneq (,$(wildcard $(KDIR)/Module.symvers))
++ifneq (,$(wildcard $(KDIR)/include/linux/page_frag_cache.h))
+ TEST_GEN_MODS_DIR := page_frag
++else
++PAGE_FRAG_WARNING = "missing page_frag_cache.h, please use a newer kernel"
++endif
++else
++PAGE_FRAG_WARNING = "missing Module.symvers, please have the kernel built first"
++endif
+ 
+ TEST_GEN_FILES = cow
+ TEST_GEN_FILES += compaction_test
+@@ -214,3 +223,12 @@ warn_missing_liburing:
+ 	echo "Warning: missing liburing support. Some tests will be skipped." ; \
+ 	echo
+ endif
++
++ifneq ($(PAGE_FRAG_WARNING),)
++all: warn_missing_page_frag
++
++warn_missing_page_frag:
++	@echo ; \
++	echo "Warning: $(PAGE_FRAG_WARNING). page_frag test will be skipped." ; \
++	echo
++endif
+diff --git a/tools/testing/selftests/mm/page_frag/Makefile b/tools/testing/selftests/mm/page_frag/Makefile
+index 58dda74d50a3..8c8bb39ffa28 100644
+--- a/tools/testing/selftests/mm/page_frag/Makefile
++++ b/tools/testing/selftests/mm/page_frag/Makefile
+@@ -1,5 +1,5 @@
+ PAGE_FRAG_TEST_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
+-KDIR ?= $(abspath $(PAGE_FRAG_TEST_DIR)/../../../../..)
++KDIR ?= /lib/modules/$(shell uname -r)/build
+ 
+ ifeq ($(V),1)
+ Q =
+-- 
+2.34.1
 
-From: Stas Sergeev <stsp2@yandex.ru>
-Date: Thu, 14 Nov 2024 12:19:09 +0300
-> Currently SCM_PIDFD cmsg cannot be sent via unix socket
-> (returns -EINVAL) and SO_PASSPIDFD doesn't support flags.
-> The created pidfd always has flags set to 0.
-> 
-> This patch implements SCM_PIDFD cmsg in AF_UNIX socket, which
-> can be used to send flags to SO_PASSPIDFD-enabled recipient.
-> 
-> Self-test is added for the propagation of PIDFD_NONBLOCK flag.
-> 
-> This is mainly needed for the future extensions, like eg this one:
-> https://lore.kernel.org/lkml/8288a08e-448b-43c2-82dc-59f87d0d9072@yandex.ru/T/#me1237e46deba8574b77834b7704e63559ffef9cb
-> where it was suggested to try solving the supplementary groups
-> problem with pidfd.
-> 
-> Changes in v2: remove flags validation in scm_pidfd_recv(), as
->   suggested by Kuniyuki Iwashima <kuniyu@amazon.com>
-
-You can put this changelog and the following CC: under '---' so
-that they will disappear during merge.
-
-> 
-> Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
-> 
-> CC: "David S. Miller" <davem@davemloft.net>
-> CC: Eric Dumazet <edumazet@google.com>
-> CC: Jakub Kicinski <kuba@kernel.org>
-> CC: Paolo Abeni <pabeni@redhat.com>
-> CC: Simon Horman <horms@kernel.org>
-> CC: Shuah Khan <shuah@kernel.org>
-> CC: Christian Brauner <brauner@kernel.org>
-> CC: Jens Axboe <axboe@kernel.dk>
-> CC: Willem de Bruijn <willemb@google.com>
-> CC: Pavel Begunkov <asml.silence@gmail.com>
-> CC: Gabriel Krisman Bertazi <krisman@suse.de>
-> CC: Mina Almasry <almasrymina@google.com>
-> CC: Oleg Nesterov <oleg@redhat.com>
-> CC: Tycho Andersen <tandersen@netflix.com>
-> CC: Al Viro <viro@zeniv.linux.org.uk>
-> CC: Kuniyuki Iwashima <kuniyu@amazon.com>
-> CC: Gou Hao <gouhao@uniontech.com>
-> CC: Abhishek Chauhan <quic_abchauha@quicinc.com>
-> CC: Michal Luczaj <mhal@rbox.co>
-> CC: Kees Cook <kees@kernel.org>
-> CC: Aleksa Sarai <cyphar@cyphar.com>
-> CC: linux-kernel@vger.kernel.org
-> CC: netdev@vger.kernel.org
-> CC: linux-kselftest@vger.kernel.org
-> ---
-
-^^^ Here
-
-
->  include/linux/pidfs.h                         |  9 +++
->  include/linux/socket.h                        |  2 +-
->  include/net/af_unix.h                         |  1 +
->  include/net/scm.h                             |  3 +-
->  kernel/pid.c                                  |  6 +-
->  net/core/scm.c                                | 14 ++++
->  net/core/sock.c                               |  1 +
->  net/unix/af_unix.c                            |  3 +
->  .../testing/selftests/net/af_unix/scm_pidfd.c | 70 +++++++++++++++++--
->  9 files changed, 99 insertions(+), 10 deletions(-)
-> 
-> diff --git a/include/linux/pidfs.h b/include/linux/pidfs.h
-> index 75bdf9807802..c4c5c1a0c2ad 100644
-> --- a/include/linux/pidfs.h
-> +++ b/include/linux/pidfs.h
-> @@ -2,7 +2,16 @@
->  #ifndef _LINUX_PID_FS_H
->  #define _LINUX_PID_FS_H
->  
-> +#include <uapi/linux/pidfd.h>
-> +
->  struct file *pidfs_alloc_file(struct pid *pid, unsigned int flags);
->  void __init pidfs_init(void);
->  
-> +static inline int pidfd_validate_flags(unsigned int flags)
-> +{
-> +	if (flags & ~(PIDFD_NONBLOCK | PIDFD_THREAD))
-> +		return -EINVAL;
-> +	return 0;
-> +}
-> +
->  #endif /* _LINUX_PID_FS_H */
-> diff --git a/include/linux/socket.h b/include/linux/socket.h
-> index d18cc47e89bd..ee27d391e5aa 100644
-> --- a/include/linux/socket.h
-> +++ b/include/linux/socket.h
-> @@ -178,7 +178,7 @@ static inline size_t msg_data_left(struct msghdr *msg)
->  #define	SCM_RIGHTS	0x01		/* rw: access rights (array of int) */
->  #define SCM_CREDENTIALS 0x02		/* rw: struct ucred		*/
->  #define SCM_SECURITY	0x03		/* rw: security label		*/
-> -#define SCM_PIDFD	0x04		/* ro: pidfd (int)		*/
-> +#define SCM_PIDFD	0x04		/* r: pidfd, w: pidfd_flags (int) */
->  
->  struct ucred {
->  	__u32	pid;
-> diff --git a/include/net/af_unix.h b/include/net/af_unix.h
-> index 63129c79b8cb..4bc197548c2f 100644
-> --- a/include/net/af_unix.h
-> +++ b/include/net/af_unix.h
-> @@ -62,6 +62,7 @@ struct unix_skb_parms {
->  #ifdef CONFIG_SECURITY_NETWORK
->  	u32			secid;		/* Security ID		*/
->  #endif
-> +	u32			pidfd_flags;
->  	u32			consumed;
->  } __randomize_layout;
->  
-> diff --git a/include/net/scm.h b/include/net/scm.h
-> index 0d35c7c77a74..1326edcacacb 100644
-> --- a/include/net/scm.h
-> +++ b/include/net/scm.h
-> @@ -48,6 +48,7 @@ struct scm_cookie {
->  #ifdef CONFIG_SECURITY_NETWORK
->  	u32			secid;		/* Passed security ID 	*/
->  #endif
-> +	u32			pidfd_flags;
-
-Now we consume 40 byes of cb[48].
-
-If we need more storage in the future, we may want to save
-converted flags in __scm_send() and restore that in
-scm_pidfd_recv().
-
-No need to do so now, just a note.
-
-
->  };
->  
->  void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm);
-> @@ -154,7 +155,7 @@ static __inline__ void scm_pidfd_recv(struct msghdr *msg, struct scm_cookie *scm
->  	if (!scm->pid)
->  		return;
->  
-> -	pidfd = pidfd_prepare(scm->pid, 0, &pidfd_file);
-> +	pidfd = pidfd_prepare(scm->pid, scm->pidfd_flags, &pidfd_file);
->  
->  	if (put_cmsg(msg, SOL_SOCKET, SCM_PIDFD, sizeof(int), &pidfd)) {
->  		if (pidfd_file) {
-> diff --git a/kernel/pid.c b/kernel/pid.c
-> index 2715afb77eab..b1100ae8ea63 100644
-> --- a/kernel/pid.c
-> +++ b/kernel/pid.c
-> @@ -629,10 +629,12 @@ static int pidfd_create(struct pid *pid, unsigned int flags)
->  SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
->  {
->  	int fd;
-> +	int err;
->  	struct pid *p;
->  
-> -	if (flags & ~(PIDFD_NONBLOCK | PIDFD_THREAD))
-> -		return -EINVAL;
-> +	err = pidfd_validate_flags(flags);
-> +	if (err)
-> +		return err;
->  
->  	if (pid <= 0)
->  		return -EINVAL;
-> diff --git a/net/core/scm.c b/net/core/scm.c
-> index 4f6a14babe5a..3bcdecdacd7e 100644
-> --- a/net/core/scm.c
-> +++ b/net/core/scm.c
-> @@ -23,6 +23,7 @@
->  #include <linux/security.h>
->  #include <linux/pid_namespace.h>
->  #include <linux/pid.h>
-> +#include <linux/pidfs.h>
->  #include <linux/nsproxy.h>
->  #include <linux/slab.h>
->  #include <linux/errqueue.h>
-> @@ -210,6 +211,19 @@ int __scm_send(struct socket *sock, struct msghdr *msg, struct scm_cookie *p)
->  			p->creds.gid = gid;
->  			break;
->  		}
-> +		case SCM_PIDFD:
-> +		{
-> +			unsigned int flags;
-> +
-> +			if (cmsg->cmsg_len != CMSG_LEN(sizeof(flags)))
-> +				goto error;
-> +			memcpy(&flags, CMSG_DATA(cmsg), sizeof(flags));
-> +			err = pidfd_validate_flags(flags);
-> +			if (err)
-> +				goto error;
-> +			p->pidfd_flags = flags;
-> +			break;
-> +		}
-
-Now this allows sending pidfd without SO_PASSPIDFD, so you need to
-add a validation for "if (!msg->msg_control)" in __scm_recv_common().
-
-
->  		default:
->  			goto error;
->  		}
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index 039be95c40cf..d1fce437c035 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -2930,6 +2930,7 @@ int __sock_cmsg_send(struct sock *sk, struct cmsghdr *cmsg,
->  	/* SCM_RIGHTS and SCM_CREDENTIALS are semantically in SOL_UNIX. */
->  	case SCM_RIGHTS:
->  	case SCM_CREDENTIALS:
-> +	case SCM_PIDFD:
->  		break;
->  	default:
->  		return -EINVAL;
-> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-> index 001ccc55ef0f..8b19dfec0221 100644
-> --- a/net/unix/af_unix.c
-> +++ b/net/unix/af_unix.c
-> @@ -1892,6 +1892,7 @@ static int unix_scm_to_skb(struct scm_cookie *scm, struct sk_buff *skb, bool sen
->  	UNIXCB(skb).uid = scm->creds.uid;
->  	UNIXCB(skb).gid = scm->creds.gid;
->  	UNIXCB(skb).fp = NULL;
-> +	UNIXCB(skb).pidfd_flags = scm->pidfd_flags;
->  	unix_get_secdata(scm, skb);
->  	if (scm->fp && send_fds)
->  		err = unix_attach_fds(scm, skb);
-> @@ -2486,6 +2487,7 @@ int __unix_dgram_recvmsg(struct sock *sk, struct msghdr *msg, size_t size,
->  	memset(&scm, 0, sizeof(scm));
->  
->  	scm_set_cred(&scm, UNIXCB(skb).pid, UNIXCB(skb).uid, UNIXCB(skb).gid);
-> +	scm.pidfd_flags = UNIXCB(skb).pidfd_flags;
->  	unix_set_secdata(&scm, skb);
->  
->  	if (!(flags & MSG_PEEK)) {
-> @@ -2873,6 +2875,7 @@ static int unix_stream_read_generic(struct unix_stream_read_state *state,
->  			   test_bit(SOCK_PASSPIDFD, &sock->flags)) {
->  			/* Copy credentials */
->  			scm_set_cred(&scm, UNIXCB(skb).pid, UNIXCB(skb).uid, UNIXCB(skb).gid);
-> +			scm.pidfd_flags = UNIXCB(skb).pidfd_flags;
->  			unix_set_secdata(&scm, skb);
->  			check_creds = true;
->  		}
 
