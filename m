@@ -1,77 +1,78 @@
-Return-Path: <linux-kselftest+bounces-22131-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22132-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52EE19CFBD4
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2024 01:51:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B36E9CFBF0
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2024 02:10:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 157E4B257A1
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2024 00:51:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F24AF284406
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2024 01:10:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA314A2D;
-	Sat, 16 Nov 2024 00:51:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 107EC74421;
+	Sat, 16 Nov 2024 01:10:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="R4j8JudF"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="pK2LrKLI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4806F10E6
-	for <linux-kselftest@vger.kernel.org>; Sat, 16 Nov 2024 00:51:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 104F345003;
+	Sat, 16 Nov 2024 01:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.190.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731718263; cv=none; b=gb4nJVytu0DcUh4XLlqkA3A2UI5UXVJdFFc2PtwRMPxqF2DuiqnkQ43TUywNdqaMJogHOO1x/RrVRwvrPlDOJsUuBq5aFZB02yxN7tUZiS5Q1FkW3/ric/ULfGmzWiQu+s1cG1FHzG3nttnSglhQedH3K1SHhbXdavJJKly6x4Q=
+	t=1731719454; cv=none; b=I10LSz2SWR+GwApwO/8dNohiDBEuy38+3j/TqkOzDoH+gyv4tA1f4lHWnJb0YotLACb5cFXeVUDw1wgM2nPAeBDsYIsMaP5kcs5fZ8fCNLl22XyuR8fpdErRAEpRaeusgeWDPWVzZRBEDQeUTV/cmJPbR+flnQyoPXGpMWE9XvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731718263; c=relaxed/simple;
-	bh=MdHwW6XaTHg49BNo0eZKU/Fd58QGJzfP4e3gtbCFu8w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nZ0FI2q+Z9+qN0XEYjOH296drMIoR8JU+FNzMnIZNdS9NQrv3U3IKQntGZ4PU4s0Uj0iCTN+6ioTBfaT0Rl4wVEsrezFr3x6Yb2TLqfrLfLCdh6R8Qp6Tbt34VqEPnJ3cwl7OVSVIZmQnkbr/rotomx+8Sk8A/ovf6Idun0QqPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=R4j8JudF; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7247888f092so43104b3a.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2024 16:51:02 -0800 (PST)
+	s=arc-20240116; t=1731719454; c=relaxed/simple;
+	bh=s8FsK55RfNkPVlqWqVt25Ac+d5jXBqfa1XLJHTT7q7s=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=n4n9nAyR3gT3iFep1xkRa8LPA4uzYilgXdOx7AxF0cV40+cqvrjBjChtE91Sr8rRNJwWGvNenrycaHNwIcCuAY2DYbXAiwd/OmHmuUgvc1+PjZr7joGxV+4I7mslMWjmp4vzrtShPo9qBTYwSe/qEiwk2RZpiwIo5gstVAtbfFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=pK2LrKLI; arc=none smtp.client-ip=207.171.190.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1731718262; x=1732323062; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8OTklPY0QALxtPYDVAKnfGC6P1pEseSuX9K+uwN76nU=;
-        b=R4j8JudFqrdCt/3Hs4YMCqq+q3Xt4jMX9IXqlzmch2mdNek+Fx0asVGOKMt9omJIPt
-         /qMW3IloWaWkcDfgEN16YPFzZc02sbEDaTta8RtFYClLIyhyX6mVo/GeJB545Dk+IDz1
-         VHoAjiCGdQYQMAn6lPw5cnagtYvl7MetFwZos=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731718262; x=1732323062;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8OTklPY0QALxtPYDVAKnfGC6P1pEseSuX9K+uwN76nU=;
-        b=O5yTSICWR9mGpAyGKndqteCPMAmaWWk/X12qd1wdQL/8p4t9KUV0zBnXFxt2pbbq6z
-         QFbBvEesfTYPUId9DcfAJE+gyVd0WZlxEzKKucpUyNwEWdH7KPl4jefQe/28SC0peVCv
-         5rHKbs407xjmhMdPzodZf2+7uiyc28mG3LGZOBM03igA8n0GjI8Dr+3oxxI9BR4hxCB2
-         RYSlg16e2VqdebNpa3IuG3v5oAONEBS/NVtPwtyw2WnF4NDbPO5TX3cdhLeOMhbF3vs4
-         nDIErVhNhBsfa+2je75YiGlIUYZyK3AKydCY6yWK0uy6gQsWofDsvb0GzSbUZIKO9C1i
-         iJtw==
-X-Forwarded-Encrypted: i=1; AJvYcCU7PiuGdgR64F+L013/XkJDuDtMEHPRlDeKbDAd+JrXYceJ9hfxPUOJpicNm97y7xOp98Sy/f23Z4AEVd18DVc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2QX2GHRmhqwb8ptO7IUeA3AOfaPzw0IU9Lj4MFpdSJ6Dpu/yJ
-	tfQ+fPTGgLlGLbBjlGWlEu0cz2ntoiMbUBG+/71e24BfFlfg4/k5EACg198T/g==
-X-Google-Smtp-Source: AGHT+IHCFGFxXTdc5NmJ9A5WfB9TAKESidMsf663Up34gRIwCYJ4a4J9fqZkmA9zxB6fNDrOQFC97w==
-X-Received: by 2002:a05:6a00:21d4:b0:71e:4bda:71ec with SMTP id d2e1a72fcca58-72476d42f3dmr2444731b3a.4.1731718261613;
-        Fri, 15 Nov 2024 16:51:01 -0800 (PST)
-Received: from localhost (238.76.127.34.bc.googleusercontent.com. [34.127.76.238])
-        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-724771c0d29sm2063055b3a.122.2024.11.15.16.51.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Nov 2024 16:51:01 -0800 (PST)
-From: jeffxu@chromium.org
-To: akpm@linux-foundation.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	Jeff Xu <jeffxu@chromium.org>
-Subject: [PATCH v1] selftest/mm: remove seal_elf
-Date: Sat, 16 Nov 2024 00:50:58 +0000
-Message-ID: <20241116005058.69091-1-jeffxu@chromium.org>
-X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1731719452; x=1763255452;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=oZf83NcSi94ctWC30Z+k813YHX+uNN8Tlt2tor25DCQ=;
+  b=pK2LrKLI/rP8W41eJ4XYq9+NPW2lhkn912GGcP01MvVBqYdMOsHhl4pv
+   r6LOsbE8gPyn+dS9103YTgpeYRWCPurnKGSa/OKV/ThRJD6YvvXudvLTA
+   vrOuJinO0Q7nKbJw00gOMuiZ0V2928mCotD653eH+d4/5Uz9s20IUloFg
+   0=;
+X-IronPort-AV: E=Sophos;i="6.12,158,1728950400"; 
+   d="scan'208";a="385827814"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 01:10:46 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [10.0.21.151:7363]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.14.147:2525] with esmtp (Farcaster)
+ id 98dd0642-8156-4c38-bcef-9c8974a3a191; Sat, 16 Nov 2024 01:10:46 +0000 (UTC)
+X-Farcaster-Flow-ID: 98dd0642-8156-4c38-bcef-9c8974a3a191
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
+ Sat, 16 Nov 2024 01:10:45 +0000
+Received: from 6c7e67c6786f.amazon.com (10.187.170.14) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.35;
+ Sat, 16 Nov 2024 01:10:41 +0000
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
+To: <stsp2@yandex.ru>
+CC: <almasrymina@google.com>, <asml.silence@gmail.com>, <axboe@kernel.dk>,
+	<brauner@kernel.org>, <cyphar@cyphar.com>, <davem@davemloft.net>,
+	<edumazet@google.com>, <gouhao@uniontech.com>, <horms@kernel.org>,
+	<kees@kernel.org>, <krisman@suse.de>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<mhal@rbox.co>, <netdev@vger.kernel.org>, <oleg@redhat.com>,
+	<pabeni@redhat.com>, <quic_abchauha@quicinc.com>, <shuah@kernel.org>,
+	<tandersen@netflix.com>, <viro@zeniv.linux.org.uk>, <willemb@google.com>
+Subject: Re: [PATCH v2] net/unix: pass pidfd flags via SCM_PIDFD cmsg
+Date: Fri, 15 Nov 2024 17:10:38 -0800
+Message-ID: <20241116011038.94912-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20241114091909.3552288-1-stsp2@yandex.ru>
+References: <20241114091909.3552288-1-stsp2@yandex.ru>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,188 +80,254 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D031UWC002.ant.amazon.com (10.13.139.212) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
-From: Jeff Xu <jeffxu@chromium.org>
+> [PATCH v2] net/unix: pass pidfd flags via SCM_PIDFD cmsg
 
-Remove seal_elf, which is a demo of mseal, we
-no longer need this.
+Please specify the target tree; net for fixes, net-next for others.
+https://www.kernel.org/doc/html/v6.11/process/maintainer-netdev.html
 
-Signed-off-by: Jeff Xu <jeffxu@chromium.org>
----
- tools/testing/selftests/mm/.gitignore |   1 -
- tools/testing/selftests/mm/Makefile   |   1 -
- tools/testing/selftests/mm/seal_elf.c | 137 --------------------------
- 3 files changed, 139 deletions(-)
- delete mode 100644 tools/testing/selftests/mm/seal_elf.c
+  [PATCH net-next v3] af_unix: pass ...
 
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index 8f01f4da1c0d..6a273bdbc70b 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -49,7 +49,6 @@ va_high_addr_switch
- hugetlb_fault_after_madv
- hugetlb_madv_vs_map
- mseal_test
--seal_elf
- droppable
- hugetlb_dio
- pkey_sighandler_tests_32
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 72ec4403032d..869b6a40f290 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -64,7 +64,6 @@ TEST_GEN_FILES += mrelease_test
- TEST_GEN_FILES += mremap_dontunmap
- TEST_GEN_FILES += mremap_test
- TEST_GEN_FILES += mseal_test
--TEST_GEN_FILES += seal_elf
- TEST_GEN_FILES += on-fault-limit
- TEST_GEN_FILES += pagemap_ioctl
- TEST_GEN_FILES += thuge-gen
-diff --git a/tools/testing/selftests/mm/seal_elf.c b/tools/testing/selftests/mm/seal_elf.c
-deleted file mode 100644
-index d9f8ba8d5050..000000000000
---- a/tools/testing/selftests/mm/seal_elf.c
-+++ /dev/null
-@@ -1,137 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#define _GNU_SOURCE
--#include <sys/mman.h>
--#include <stdint.h>
--#include <asm-generic/unistd.h>
--#include <string.h>
--#include <sys/time.h>
--#include <sys/resource.h>
--#include <stdbool.h>
--#include "../kselftest.h"
--#include <syscall.h>
--#include <errno.h>
--#include <stdio.h>
--#include <stdlib.h>
--#include <fcntl.h>
--#include <sys/ioctl.h>
--#include <sys/vfs.h>
--#include <sys/stat.h>
--#include "mseal_helpers.h"
--
--/*
-- * define sys_xyx to call syscall directly.
-- */
--static int sys_mseal(void *start, size_t len)
--{
--	int sret;
--
--	errno = 0;
--	sret = syscall(__NR_mseal, start, len, 0);
--	return sret;
--}
--
--static inline int sys_mprotect(void *ptr, size_t size, unsigned long prot)
--{
--	int sret;
--
--	errno = 0;
--	sret = syscall(__NR_mprotect, ptr, size, prot);
--	return sret;
--}
--
--static bool seal_support(void)
--{
--	int ret;
--	void *ptr;
--	unsigned long page_size = getpagesize();
--
--	ptr = mmap(NULL, page_size, PROT_READ, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
--	if (ptr == (void *) -1)
--		return false;
--
--	ret = sys_mseal(ptr, page_size);
--	if (ret < 0)
--		return false;
--
--	return true;
--}
--
--const char somestr[4096] = {"READONLY"};
--
--static void test_seal_elf(void)
--{
--	int ret;
--	FILE *maps;
--	char line[512];
--	uintptr_t  addr_start, addr_end;
--	char prot[5];
--	char filename[256];
--	unsigned long page_size = getpagesize();
--	unsigned long long ptr = (unsigned long long) somestr;
--	char *somestr2 = (char *)somestr;
--
--	/*
--	 * Modify the protection of readonly somestr
--	 */
--	if (((unsigned long long)ptr % page_size) != 0)
--		ptr = (unsigned long long)ptr & ~(page_size - 1);
--
--	ksft_print_msg("somestr = %s\n", somestr);
--	ksft_print_msg("change protection to rw\n");
--	ret = sys_mprotect((void *)ptr, page_size, PROT_READ|PROT_WRITE);
--	FAIL_TEST_IF_FALSE(!ret);
--	*somestr2 = 'A';
--	ksft_print_msg("somestr is modified to: %s\n", somestr);
--	ret = sys_mprotect((void *)ptr, page_size, PROT_READ);
--	FAIL_TEST_IF_FALSE(!ret);
--
--	maps = fopen("/proc/self/maps", "r");
--	FAIL_TEST_IF_FALSE(maps);
--
--	/*
--	 * apply sealing to elf binary
--	 */
--	while (fgets(line, sizeof(line), maps)) {
--		if (sscanf(line, "%lx-%lx %4s %*x %*x:%*x %*u %255[^\n]",
--			&addr_start, &addr_end, prot, filename) == 4) {
--			if (strlen(filename)) {
--				/*
--				 * seal the mapping if read only.
--				 */
--				if (strstr(prot, "r-")) {
--					ret = sys_mseal((void *)addr_start, addr_end - addr_start);
--					FAIL_TEST_IF_FALSE(!ret);
--					ksft_print_msg("sealed: %lx-%lx %s %s\n",
--						addr_start, addr_end, prot, filename);
--					if ((uintptr_t) somestr >= addr_start &&
--						(uintptr_t) somestr <= addr_end)
--						ksft_print_msg("mapping for somestr found\n");
--				}
--			}
--		}
--	}
--	fclose(maps);
--
--	ret = sys_mprotect((void *)ptr, page_size, PROT_READ | PROT_WRITE);
--	FAIL_TEST_IF_FALSE(ret < 0);
--	ksft_print_msg("somestr is sealed, mprotect is rejected\n");
--
--	REPORT_TEST_PASS();
--}
--
--int main(int argc, char **argv)
--{
--	bool test_seal = seal_support();
--
--	ksft_print_header();
--	ksft_print_msg("pid=%d\n", getpid());
--
--	if (!test_seal)
--		ksft_exit_skip("sealing not supported, check CONFIG_64BIT\n");
--
--	ksft_set_plan(1);
--
--	test_seal_elf();
--
--	ksft_finished();
--}
--- 
-2.47.0.338.g60cca15819-goog
 
+From: Stas Sergeev <stsp2@yandex.ru>
+Date: Thu, 14 Nov 2024 12:19:09 +0300
+> Currently SCM_PIDFD cmsg cannot be sent via unix socket
+> (returns -EINVAL) and SO_PASSPIDFD doesn't support flags.
+> The created pidfd always has flags set to 0.
+> 
+> This patch implements SCM_PIDFD cmsg in AF_UNIX socket, which
+> can be used to send flags to SO_PASSPIDFD-enabled recipient.
+> 
+> Self-test is added for the propagation of PIDFD_NONBLOCK flag.
+> 
+> This is mainly needed for the future extensions, like eg this one:
+> https://lore.kernel.org/lkml/8288a08e-448b-43c2-82dc-59f87d0d9072@yandex.ru/T/#me1237e46deba8574b77834b7704e63559ffef9cb
+> where it was suggested to try solving the supplementary groups
+> problem with pidfd.
+> 
+> Changes in v2: remove flags validation in scm_pidfd_recv(), as
+>   suggested by Kuniyuki Iwashima <kuniyu@amazon.com>
+
+You can put this changelog and the following CC: under '---' so
+that they will disappear during merge.
+
+> 
+> Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
+> 
+> CC: "David S. Miller" <davem@davemloft.net>
+> CC: Eric Dumazet <edumazet@google.com>
+> CC: Jakub Kicinski <kuba@kernel.org>
+> CC: Paolo Abeni <pabeni@redhat.com>
+> CC: Simon Horman <horms@kernel.org>
+> CC: Shuah Khan <shuah@kernel.org>
+> CC: Christian Brauner <brauner@kernel.org>
+> CC: Jens Axboe <axboe@kernel.dk>
+> CC: Willem de Bruijn <willemb@google.com>
+> CC: Pavel Begunkov <asml.silence@gmail.com>
+> CC: Gabriel Krisman Bertazi <krisman@suse.de>
+> CC: Mina Almasry <almasrymina@google.com>
+> CC: Oleg Nesterov <oleg@redhat.com>
+> CC: Tycho Andersen <tandersen@netflix.com>
+> CC: Al Viro <viro@zeniv.linux.org.uk>
+> CC: Kuniyuki Iwashima <kuniyu@amazon.com>
+> CC: Gou Hao <gouhao@uniontech.com>
+> CC: Abhishek Chauhan <quic_abchauha@quicinc.com>
+> CC: Michal Luczaj <mhal@rbox.co>
+> CC: Kees Cook <kees@kernel.org>
+> CC: Aleksa Sarai <cyphar@cyphar.com>
+> CC: linux-kernel@vger.kernel.org
+> CC: netdev@vger.kernel.org
+> CC: linux-kselftest@vger.kernel.org
+> ---
+
+^^^ Here
+
+
+>  include/linux/pidfs.h                         |  9 +++
+>  include/linux/socket.h                        |  2 +-
+>  include/net/af_unix.h                         |  1 +
+>  include/net/scm.h                             |  3 +-
+>  kernel/pid.c                                  |  6 +-
+>  net/core/scm.c                                | 14 ++++
+>  net/core/sock.c                               |  1 +
+>  net/unix/af_unix.c                            |  3 +
+>  .../testing/selftests/net/af_unix/scm_pidfd.c | 70 +++++++++++++++++--
+>  9 files changed, 99 insertions(+), 10 deletions(-)
+> 
+> diff --git a/include/linux/pidfs.h b/include/linux/pidfs.h
+> index 75bdf9807802..c4c5c1a0c2ad 100644
+> --- a/include/linux/pidfs.h
+> +++ b/include/linux/pidfs.h
+> @@ -2,7 +2,16 @@
+>  #ifndef _LINUX_PID_FS_H
+>  #define _LINUX_PID_FS_H
+>  
+> +#include <uapi/linux/pidfd.h>
+> +
+>  struct file *pidfs_alloc_file(struct pid *pid, unsigned int flags);
+>  void __init pidfs_init(void);
+>  
+> +static inline int pidfd_validate_flags(unsigned int flags)
+> +{
+> +	if (flags & ~(PIDFD_NONBLOCK | PIDFD_THREAD))
+> +		return -EINVAL;
+> +	return 0;
+> +}
+> +
+>  #endif /* _LINUX_PID_FS_H */
+> diff --git a/include/linux/socket.h b/include/linux/socket.h
+> index d18cc47e89bd..ee27d391e5aa 100644
+> --- a/include/linux/socket.h
+> +++ b/include/linux/socket.h
+> @@ -178,7 +178,7 @@ static inline size_t msg_data_left(struct msghdr *msg)
+>  #define	SCM_RIGHTS	0x01		/* rw: access rights (array of int) */
+>  #define SCM_CREDENTIALS 0x02		/* rw: struct ucred		*/
+>  #define SCM_SECURITY	0x03		/* rw: security label		*/
+> -#define SCM_PIDFD	0x04		/* ro: pidfd (int)		*/
+> +#define SCM_PIDFD	0x04		/* r: pidfd, w: pidfd_flags (int) */
+>  
+>  struct ucred {
+>  	__u32	pid;
+> diff --git a/include/net/af_unix.h b/include/net/af_unix.h
+> index 63129c79b8cb..4bc197548c2f 100644
+> --- a/include/net/af_unix.h
+> +++ b/include/net/af_unix.h
+> @@ -62,6 +62,7 @@ struct unix_skb_parms {
+>  #ifdef CONFIG_SECURITY_NETWORK
+>  	u32			secid;		/* Security ID		*/
+>  #endif
+> +	u32			pidfd_flags;
+>  	u32			consumed;
+>  } __randomize_layout;
+>  
+> diff --git a/include/net/scm.h b/include/net/scm.h
+> index 0d35c7c77a74..1326edcacacb 100644
+> --- a/include/net/scm.h
+> +++ b/include/net/scm.h
+> @@ -48,6 +48,7 @@ struct scm_cookie {
+>  #ifdef CONFIG_SECURITY_NETWORK
+>  	u32			secid;		/* Passed security ID 	*/
+>  #endif
+> +	u32			pidfd_flags;
+
+Now we consume 40 byes of cb[48].
+
+If we need more storage in the future, we may want to save
+converted flags in __scm_send() and restore that in
+scm_pidfd_recv().
+
+No need to do so now, just a note.
+
+
+>  };
+>  
+>  void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm);
+> @@ -154,7 +155,7 @@ static __inline__ void scm_pidfd_recv(struct msghdr *msg, struct scm_cookie *scm
+>  	if (!scm->pid)
+>  		return;
+>  
+> -	pidfd = pidfd_prepare(scm->pid, 0, &pidfd_file);
+> +	pidfd = pidfd_prepare(scm->pid, scm->pidfd_flags, &pidfd_file);
+>  
+>  	if (put_cmsg(msg, SOL_SOCKET, SCM_PIDFD, sizeof(int), &pidfd)) {
+>  		if (pidfd_file) {
+> diff --git a/kernel/pid.c b/kernel/pid.c
+> index 2715afb77eab..b1100ae8ea63 100644
+> --- a/kernel/pid.c
+> +++ b/kernel/pid.c
+> @@ -629,10 +629,12 @@ static int pidfd_create(struct pid *pid, unsigned int flags)
+>  SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
+>  {
+>  	int fd;
+> +	int err;
+>  	struct pid *p;
+>  
+> -	if (flags & ~(PIDFD_NONBLOCK | PIDFD_THREAD))
+> -		return -EINVAL;
+> +	err = pidfd_validate_flags(flags);
+> +	if (err)
+> +		return err;
+>  
+>  	if (pid <= 0)
+>  		return -EINVAL;
+> diff --git a/net/core/scm.c b/net/core/scm.c
+> index 4f6a14babe5a..3bcdecdacd7e 100644
+> --- a/net/core/scm.c
+> +++ b/net/core/scm.c
+> @@ -23,6 +23,7 @@
+>  #include <linux/security.h>
+>  #include <linux/pid_namespace.h>
+>  #include <linux/pid.h>
+> +#include <linux/pidfs.h>
+>  #include <linux/nsproxy.h>
+>  #include <linux/slab.h>
+>  #include <linux/errqueue.h>
+> @@ -210,6 +211,19 @@ int __scm_send(struct socket *sock, struct msghdr *msg, struct scm_cookie *p)
+>  			p->creds.gid = gid;
+>  			break;
+>  		}
+> +		case SCM_PIDFD:
+> +		{
+> +			unsigned int flags;
+> +
+> +			if (cmsg->cmsg_len != CMSG_LEN(sizeof(flags)))
+> +				goto error;
+> +			memcpy(&flags, CMSG_DATA(cmsg), sizeof(flags));
+> +			err = pidfd_validate_flags(flags);
+> +			if (err)
+> +				goto error;
+> +			p->pidfd_flags = flags;
+> +			break;
+> +		}
+
+Now this allows sending pidfd without SO_PASSPIDFD, so you need to
+add a validation for "if (!msg->msg_control)" in __scm_recv_common().
+
+
+>  		default:
+>  			goto error;
+>  		}
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 039be95c40cf..d1fce437c035 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -2930,6 +2930,7 @@ int __sock_cmsg_send(struct sock *sk, struct cmsghdr *cmsg,
+>  	/* SCM_RIGHTS and SCM_CREDENTIALS are semantically in SOL_UNIX. */
+>  	case SCM_RIGHTS:
+>  	case SCM_CREDENTIALS:
+> +	case SCM_PIDFD:
+>  		break;
+>  	default:
+>  		return -EINVAL;
+> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+> index 001ccc55ef0f..8b19dfec0221 100644
+> --- a/net/unix/af_unix.c
+> +++ b/net/unix/af_unix.c
+> @@ -1892,6 +1892,7 @@ static int unix_scm_to_skb(struct scm_cookie *scm, struct sk_buff *skb, bool sen
+>  	UNIXCB(skb).uid = scm->creds.uid;
+>  	UNIXCB(skb).gid = scm->creds.gid;
+>  	UNIXCB(skb).fp = NULL;
+> +	UNIXCB(skb).pidfd_flags = scm->pidfd_flags;
+>  	unix_get_secdata(scm, skb);
+>  	if (scm->fp && send_fds)
+>  		err = unix_attach_fds(scm, skb);
+> @@ -2486,6 +2487,7 @@ int __unix_dgram_recvmsg(struct sock *sk, struct msghdr *msg, size_t size,
+>  	memset(&scm, 0, sizeof(scm));
+>  
+>  	scm_set_cred(&scm, UNIXCB(skb).pid, UNIXCB(skb).uid, UNIXCB(skb).gid);
+> +	scm.pidfd_flags = UNIXCB(skb).pidfd_flags;
+>  	unix_set_secdata(&scm, skb);
+>  
+>  	if (!(flags & MSG_PEEK)) {
+> @@ -2873,6 +2875,7 @@ static int unix_stream_read_generic(struct unix_stream_read_state *state,
+>  			   test_bit(SOCK_PASSPIDFD, &sock->flags)) {
+>  			/* Copy credentials */
+>  			scm_set_cred(&scm, UNIXCB(skb).pid, UNIXCB(skb).uid, UNIXCB(skb).gid);
+> +			scm.pidfd_flags = UNIXCB(skb).pidfd_flags;
+>  			unix_set_secdata(&scm, skb);
+>  			check_creds = true;
+>  		}
 
