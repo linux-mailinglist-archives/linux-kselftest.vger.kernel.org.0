@@ -1,114 +1,116 @@
-Return-Path: <linux-kselftest+bounces-22151-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22234-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1687E9D0238
-	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Nov 2024 07:26:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E340B9D2046
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 07:35:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5D834B244E1
-	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Nov 2024 06:26:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8BB0281AF5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 06:35:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3764229CE8;
-	Sun, 17 Nov 2024 06:26:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="QvmqafI0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC263155756;
+	Tue, 19 Nov 2024 06:35:46 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20BDF33E1;
-	Sun, 17 Nov 2024 06:26:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731824794; cv=pass; b=BUQkoZfvN8QplMH6GkLl5CbKNCVrDeI2j+iBdnUButS5Hjgr7WHhxVUhNqJyap89GihuFWQfsseDmQkXosqGRxFGvoChEZh/TnHpByocybe89XXb62nbK+01iV+GEiiuORLQ7L6MGPRNPFg+1z59Ph1gOYyAfnPlv8X6Y9zdRi0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731824794; c=relaxed/simple;
-	bh=YMPx2AXDqKjUxOi+5jt+Q+U8XxjW1e4C/lY32y+3znw=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=AfIYccXoE5WPE7ewvJH8THSHFCkuRUe5Fg6GDhhU899H56uwh86pM7aE357FjFPztpiKcyOJtmYmDbZhhLN7qkquKxsZoTD6NZEA6jHr3u6eXcQ5bXjfh0fxxaSMikIMmEGYGJinIdzZpxBHzwMjXVeHsZenxcMpclQE3kVR4EE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=QvmqafI0; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1731824731; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=D4Aq/DVwh/E3mUk0AG0S5Rkccm2R3LfyRqCNmZHkrj0S2rjwM2OjXq44H+KuqulSX/LziacyOF5ZL64p2FStQbwkvTL5r4cZSsDNojeOW5WAG7qU0KV9StgNmRjHI7wwy3m2QZM5CbVvsF3uwdbKFSAkPGNTwdrVGwI4aIp3/4o=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1731824731; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=eNkA+jOGDoBF1DzR74xP3oYFLSKLz/pv/89Q3x7ZaZI=; 
-	b=GW6kKq2tzjR8S0/4u4ILXKTcaxwWNzh6CLdEPIbc0vrXOjYmZfV7OFDr/Kl0xCLRYhAIQKLDyQX61f9iXTtOha2ABKyPKG59YYQgHQmlf/QgHMWOzLpEpcRgR3X9KhqZefdV39iZNnOwYug7fojg1OlGAOx9s0ZSOX5Oq60BzUk=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
-	dmarc=pass header.from=<Usama.Anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1731824731;
-	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=eNkA+jOGDoBF1DzR74xP3oYFLSKLz/pv/89Q3x7ZaZI=;
-	b=QvmqafI0vODLG/AZyo9Iogi0eBuzYZ8EM7yRdBOgl/S0MMA50m9aTBr2XfjOmhAW
-	WeJhKDIQAiptxJiyQc28GcLpkpxBIOGMgiL7lPelj9yzTw2EV1LNM+dTXJy9E9dursR
-	b2bEtyISmG6frMJ8xpzhCn1NlPPWmEzhGzvB7TSg=
-Received: by mx.zohomail.com with SMTPS id 1731824729720682.8589924584546;
-	Sat, 16 Nov 2024 22:25:29 -0800 (PST)
-Message-ID: <9868242c-ce91-421c-8f55-1185a66657ce@collabora.com>
-Date: Sun, 17 Nov 2024 11:25:13 +0500
+Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8702E1465A1;
+	Tue, 19 Nov 2024 06:35:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.135
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731998146; cv=none; b=Z7KfTzpc3suho25243kjEAN+LQECT5Nqx6tjfPOLCW3vee2Px9WYvRKZL5v5UHeZ+6oCn9Au/rZg71ynxYYDMlGfadJeuIHshkiZgfraS7HsOYPyjgEafBQABV+86r2HU+iRYt2viD5NI2yU+qIy8/yeWKpb8X+x572Ak/hw/h8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731998146; c=relaxed/simple;
+	bh=uJUdakRXNd76Rk31Mr00dtt0z76XAJn5mC7iL6LiIC0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=g4hNB+I0nUN6LY7pp88bPNkrtuC5m9krW1YM7tpIEq9lMPaAXzOJXJ0SST7XF0O5240uUnDo2vtJaKmK6e4gYNuAtfyPRlGm0QFFq1J6ashLZcxzeK2RjZEomeYOf53IaVmuVmUA+/1ElpV5qnfSiaBSEimdKRUkG9SaB4PbJ8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee7673c31b56f4-48711;
+	Tue, 19 Nov 2024 14:35:33 +0800 (CST)
+X-RM-TRANSID:2ee7673c31b56f4-48711
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from localhost.localdomain (unknown[223.108.79.101])
+	by rmsmtp-syy-appsvr09-12009 (RichMail) with SMTP id 2ee9673c31a7f21-10a1a;
+	Tue, 19 Nov 2024 14:35:33 +0800 (CST)
+X-RM-TRANSID:2ee9673c31a7f21-10a1a
+From: guanjing <guanjing@cmss.chinamobile.com>
+To: akpm@linux-foundation.org,
+	shuah@kernel.org,
+	usama.anjum@collabora.com
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	guanjing <guanjing@cmss.chinamobile.com>
+Subject: [PATCH v1] selftests: mm: Fix conversion specifiers in transact_test()
+Date: Sun, 17 Nov 2024 15:12:31 +0800
+Message-Id: <20241117071231.177864-1-guanjing@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Usama.Anjum@collabora.com
-Subject: Re: [RFCv1 6/6] selftests/page_detective: Introduce self tests for
- Page Detective
-To: Pasha Tatashin <pasha.tatashin@soleen.com>, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, linux-doc@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, akpm@linux-foundation.org, corbet@lwn.net,
- derek.kiernan@amd.com, dragan.cvetic@amd.com, arnd@arndb.de,
- gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk, brauner@kernel.org,
- jack@suse.cz, tj@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
- roman.gushchin@linux.dev, shakeel.butt@linux.dev, muchun.song@linux.dev,
- Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, vbabka@suse.cz,
- jannh@google.com, shuah@kernel.org, vegard.nossum@oracle.com,
- vattunuru@marvell.com, schalla@marvell.com, david@redhat.com,
- willy@infradead.org, osalvador@suse.de, andrii@kernel.org,
- ryan.roberts@arm.com, peterx@redhat.com, oleg@redhat.com,
- tandersen@netflix.com, rientjes@google.com, gthelen@google.com
-References: <20241116175922.3265872-1-pasha.tatashin@soleen.com>
- <20241116175922.3265872-7-pasha.tatashin@soleen.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
-In-Reply-To: <20241116175922.3265872-7-pasha.tatashin@soleen.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
 
-On 11/16/24 10:59 PM, Pasha Tatashin wrote:
-> Add self tests for Page Detective, it contains testing of several memory
-> types, and also some negative/bad input tests.
-> 
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> ---
->  MAINTAINERS                                   |   1 +
->  tools/testing/selftests/Makefile              |   1 +
->  .../selftests/page_detective/.gitignore       |   1 +
-No need to add a new directory. Please just add the tests in 
-selftests/mm/ directory.
+Lots of incorrect conversion specifiers. Fix them.
 
->  .../testing/selftests/page_detective/Makefile |   7 +
->  tools/testing/selftests/page_detective/config |   4 +
->  .../page_detective/page_detective_test.c      | 727 ++++++++++++++++++
->  6 files changed, 741 insertions(+)
->  create mode 100644 tools/testing/selftests/page_detective/.gitignore
->  create mode 100644 tools/testing/selftests/page_detective/Makefile
->  create mode 100644 tools/testing/selftests/page_detective/config
->  create mode 100644 tools/testing/selftests/page_detective/page_detective_test.c
+Fixes: 46fd75d4a3c9 ("selftests: mm: add pagemap ioctl tests")
+Signed-off-by: guanjing <guanjing@cmss.chinamobile.com>
+---
+ tools/testing/selftests/mm/pagemap_ioctl.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
+index bcc73b4e805c..fdafce0654e9 100644
+--- a/tools/testing/selftests/mm/pagemap_ioctl.c
++++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+@@ -1405,9 +1405,9 @@ static void transact_test(int page_size)
+ 	memset(mem, 0, 0x1000 * nthreads * pages_per_thread);
+ 
+ 	count = get_dirty_pages_reset(mem, nthreads * pages_per_thread, 1, page_size);
+-	ksft_test_result(count > 0, "%s count %d\n", __func__, count);
++	ksft_test_result(count > 0, "%s count %u\n", __func__, count);
+ 	count = get_dirty_pages_reset(mem, nthreads * pages_per_thread, 1, page_size);
+-	ksft_test_result(count == 0, "%s count %d\n", __func__, count);
++	ksft_test_result(count == 0, "%s count %u\n", __func__, count);
+ 
+ 	finish = 0;
+ 	for (i = 0; i < nthreads; ++i)
+@@ -1429,7 +1429,7 @@ static void transact_test(int page_size)
+ 			ksft_exit_fail_msg("pthread_barrier_wait\n");
+ 
+ 		if (count > nthreads * access_per_thread)
+-			ksft_exit_fail_msg("Too big count %d expected %d, iter %d\n",
++			ksft_exit_fail_msg("Too big count %u expected %u, iter %u\n",
+ 					   count, nthreads * access_per_thread, i);
+ 
+ 		c = get_dirty_pages_reset(mem, nthreads * pages_per_thread, 1, page_size);
+@@ -1454,7 +1454,7 @@ static void transact_test(int page_size)
+ 			 * access and application gets page fault again for the same write.
+ 			 */
+ 			if (count < nthreads * access_per_thread) {
+-				ksft_test_result_fail("Lost update, iter %d, %d vs %d.\n", i, count,
++				ksft_test_result_fail("Lost update, iter %u, %u vs %u.\n", i, count,
+ 						      nthreads * access_per_thread);
+ 				return;
+ 			}
+@@ -1467,7 +1467,7 @@ static void transact_test(int page_size)
+ 	finish = 1;
+ 	pthread_barrier_wait(&end_barrier);
+ 
+-	ksft_test_result_pass("%s Extra pages %u (%.1lf%%), extra thread faults %d.\n", __func__,
++	ksft_test_result_pass("%s Extra pages %u (%.1lf%%), extra thread faults %u.\n", __func__,
+ 			      extra_pages,
+ 			      100.0 * extra_pages / (iter_count * nthreads * access_per_thread),
+ 			      extra_thread_faults);
 -- 
-BR,
-Muhammad Usama Anjum
+2.33.0
+
+
 
 
