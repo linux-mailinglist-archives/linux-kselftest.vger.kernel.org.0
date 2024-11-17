@@ -1,108 +1,110 @@
-Return-Path: <linux-kselftest+bounces-22150-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22224-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44FE29D013A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2024 23:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CD48D9D1E65
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 03:47:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00A5A2848F6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2024 22:20:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9126A282557
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 02:47:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12CFD1A0BD8;
-	Sat, 16 Nov 2024 22:20:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="YXg7K+7D"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23B2113213E;
+	Tue, 19 Nov 2024 02:47:05 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A0D19004A;
-	Sat, 16 Nov 2024 22:20:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+Received: from cmccmta2.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 278AD33F7;
+	Tue, 19 Nov 2024 02:47:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731795627; cv=none; b=MBMNSnIJ0x3P5C5pempr0IZiRts2A0YiXqLhKMRPXdLvd0vuZmdSVed5b1VOzZ6aeoM7DuJTLDIf1skTF8LdWSf5TgKNNreRx0DmrBJhwRGsgCQvUqAfXT3je+Ls6asR28ielnHIyMHSOnzv8P2yGtUpAMheQDYND3Pjf+ifSWQ=
+	t=1731984425; cv=none; b=VX9zzWeib73T2h5HjCF33asUwru7VxlG9xVLfZznwikTfKQ/MuFi91MlX0tS7cA4M+UKSbrk7gtM6MhNWqQPd1AOw1BoHyCnNsIUgfk6YbYlFVtRopKir0F1LFWXEBziIuYIAKvJIleqtwfxVh/9zRAmA8KFY0T54I9JnjXdndg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731795627; c=relaxed/simple;
-	bh=zG3lsvkchGGddMCV5F5tTsLTAmiTZzRvR7QUvDg8d8k=;
-	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Mic/bQOoNaNjsaYjV+FBNAlX9brL6zmnhtAF2GAiUfjEgE++OxarKZJv7V0wuL9gJaOVuswtTwxu5KiwjTcI6trE6p2eikPNtJAF2bujMxd+iyVpQMlrii/7xVFrV7W4RSNnFGC9D4lLX4SoUQwZiyCvIdJWrFYalnIon7ptJkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=YXg7K+7D; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net B33FC403E5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1731795616; bh=rnLOFZZDEy+qyRI0xpVNtGzIX3qjRaGSTJ7RXKfL49w=;
-	h=From:To:Subject:In-Reply-To:References:Date:From;
-	b=YXg7K+7Dg2WW9s8rfxbke9ShI3MTXLbJgwgFGQ0ixdkgISr5G6wmLhBLpp4gnnDRl
-	 snWsKiwKEIpdUwQx3j7bQOxFCg9O6nGdYOpRChB4wuHYXwNfd7hFCPIf8GJiJWCU5E
-	 a7ADoN90g4dF0sJ3RGaCZOepnzfbPtrz/qmB7TZmvTwOXYx9EvxXS5wSMXVrvGOTTh
-	 NprtpKcOtYKJlkrgsojbACxTrYsDbHHLpNyqKR+QUZmxLaOodWx0kN6x516Tz6k5TU
-	 z2VNLpsc53uhCPyHbFlAzBJxmCH9qpP65iclUbYVTba+ouCIWOEY/xn257LjhU8KTs
-	 VhUHSQ4i9BHWA==
-Received: from localhost (unknown [IPv6:2601:280:5e00:625::1fe])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id B33FC403E5;
-	Sat, 16 Nov 2024 22:20:16 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>, pasha.tatashin@soleen.com,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
- akpm@linux-foundation.org, derek.kiernan@amd.com, dragan.cvetic@amd.com,
- arnd@arndb.de, gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk,
- brauner@kernel.org, jack@suse.cz, tj@kernel.org, hannes@cmpxchg.org,
- mhocko@kernel.org, roman.gushchin@linux.dev, shakeel.butt@linux.dev,
- muchun.song@linux.dev, Liam.Howlett@oracle.com,
- lorenzo.stoakes@oracle.com, vbabka@suse.cz, jannh@google.com,
- shuah@kernel.org, vegard.nossum@oracle.com, vattunuru@marvell.com,
- schalla@marvell.com, david@redhat.com, willy@infradead.org,
- osalvador@suse.de, usama.anjum@collabora.com, andrii@kernel.org,
- ryan.roberts@arm.com, peterx@redhat.com, oleg@redhat.com,
- tandersen@netflix.com, rientjes@google.com, gthelen@google.com
-Subject: Re: [RFCv1 4/6] misc/page_detective: Introduce Page Detective
-In-Reply-To: <20241116175922.3265872-5-pasha.tatashin@soleen.com>
-References: <20241116175922.3265872-1-pasha.tatashin@soleen.com>
- <20241116175922.3265872-5-pasha.tatashin@soleen.com>
-Date: Sat, 16 Nov 2024 15:20:15 -0700
-Message-ID: <87cyiukehs.fsf@trenco.lwn.net>
+	s=arc-20240116; t=1731984425; c=relaxed/simple;
+	bh=l7EGQCVzS8e+Cm9uLnOIk+DQliZX4oyPru3AsAUlqBU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mZyATknYAylfGvaMhqKh6KTpdqlTykxbMwnYEoM0akTGgPx+m75DhktF2pRBb+1JDRjYyx8sAdELNS06ICzKzWvcEFPuA9pENpzeHExEEHQ/KTw9DrKjJASsKxlqdwNk7Fcy+M0oPuOBWShZmAnPFvP7BVpxfjsI7hPO5U+Mdio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app08-12008 (RichMail) with SMTP id 2ee8673bfc2197e-819c9;
+	Tue, 19 Nov 2024 10:46:59 +0800 (CST)
+X-RM-TRANSID:2ee8673bfc2197e-819c9
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from localhost.localdomain (unknown[223.108.79.101])
+	by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee6673bfc163b6-0b1a5;
+	Tue, 19 Nov 2024 10:46:59 +0800 (CST)
+X-RM-TRANSID:2ee6673bfc163b6-0b1a5
+From: guanjing <guanjing@cmss.chinamobile.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	mykolal@fb.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	dxu@dxuuu.xyz,
+	antony.antony@secunet.com,
+	cupertino.miranda@oracle.com,
+	asavkov@redhat.com
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	guanjing <guanjing@cmss.chinamobile.com>
+Subject: [PATCH v1] selftests/bpf: fix application of sizeof to pointer
+Date: Sun, 17 Nov 2024 11:18:38 +0800
+Message-Id: <20241117031838.161576-1-guanjing@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-Pasha Tatashin <pasha.tatashin@soleen.com> writes:
+sizeof when applied to a pointer typed expression gives the size of
+the pointer.
 
-> Page Detective is a kernel debugging tool that provides detailed
-> information about the usage and mapping of physical memory pages.
->
-> It operates through the Linux debugfs interface, providing access
-> to both virtual and physical address inquiries. The output, presented
-> via kernel log messages (accessible with dmesg), will help
-> administrators and developers understand how specific pages are
-> utilized by the system.
->
-> This tool can be used to investigate various memory-related issues,
-> such as checksum failures during live migration, filesystem journal
-> failures, general segfaults, or other corruptions.
->
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> ---
->  Documentation/misc-devices/index.rst          |   1 +
->  Documentation/misc-devices/page_detective.rst |  78 ++
+tools/testing/selftests/bpf/progs/test_tunnel_kern.c:678:41-47: ERROR: application of sizeof to pointer
 
-This seems like a strange place to bury this document - who will look
-for it here?  Even if it is truly implemented as a misc device (I didn't
-look), the documentation would belong either in the admin guide or with
-the MM docs, it seems to me...?
+The proper fix in this particular case is to code sizeof(*gopt)
+instead of sizeof(gopt).
 
-Thanks,
+This issue was detected with the help of Coccinelle.
 
-jon
+Fixes: 5ddafcc377f9 ("selftests/bpf: Fix a few tests for GCC related warnings.")
+Signed-off-by: guanjing <guanjing@cmss.chinamobile.com>
+---
+ tools/testing/selftests/bpf/progs/test_tunnel_kern.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+index 32127f1cd687..3a437cdc5c15 100644
+--- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+@@ -675,7 +675,7 @@ int ip6geneve_set_tunnel(struct __sk_buff *skb)
+ 	gopt->length = 2; /* 4-byte multiple */
+ 	*(int *) &gopt->opt_data = bpf_htonl(0xfeedbeef);
+ 
+-	ret = bpf_skb_set_tunnel_opt(skb, gopt, sizeof(gopt));
++	ret = bpf_skb_set_tunnel_opt(skb, gopt, sizeof(*gopt));
+ 	if (ret < 0) {
+ 		log_err(ret);
+ 		return TC_ACT_SHOT;
+-- 
+2.33.0
+
+
+
 
