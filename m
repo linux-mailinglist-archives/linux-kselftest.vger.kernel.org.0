@@ -1,103 +1,117 @@
-Return-Path: <linux-kselftest+bounces-22193-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22194-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 457C29D17C0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 19:12:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FC779D18AE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 20:11:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 007B41F2222E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 18:12:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDF10282C9B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 19:11:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB3C81DED52;
-	Mon, 18 Nov 2024 18:12:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EB891E2838;
+	Mon, 18 Nov 2024 19:11:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tq/vcwfl"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AYrP8LJZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D7319DF4A;
-	Mon, 18 Nov 2024 18:12:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 638611E25E4
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 Nov 2024 19:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731953570; cv=none; b=urTxlLjZrq9JJdq8cetkgl/0QV77LSONDdxjtHyjTp+oC0TVR8lTD5xY/5Ad/0CtGJ1JhEsvYBpgLn7AgpmUJ+c5+VjFKn8WvhRQgK+PcPC9+oHpcxVAaGXCjG+0ydCvs4mje2m68iGweY13efNxtMF+T1XCozBs4Y17JnnbaTU=
+	t=1731957082; cv=none; b=rWw1r8ac1GM72yVyq2VfCgOShP8AX/pcHF33131PI4Vf1MwdaKhHinaxBF65rg5quwoawdK+s6vsSBPOPbJwDMikBMLILos7jjHRnm1rGU3bfdW0+29RkcPUKenD7y29psXLZh27pGZYX4xIDc01kRjgpsrdxjkTBq6CD4BuHwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731953570; c=relaxed/simple;
-	bh=YwZjBB6hgO/g9UA0GSo0eqjMxLvqj//2HoPj9LGIuMs=;
+	s=arc-20240116; t=1731957082; c=relaxed/simple;
+	bh=rnXfYxw96o9uGMVvCmLOhoWSMw2XpArfsXz+kgsdKfw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZlgohCMkOewT1wOMagsJO1+XO7mP+WdwZBk/W504uQtDUmTPEe9UbVvndzh1km6MzmGBnv9DV/5eUiRLVWcdc968I58b7MwAQnn/mp6V6ci2p+wS5xDlLg3Ftxgh1ven7f2ntMh9vV4Vl1xN0HuQ5eNJSn37Ep8+giyUiy9cv/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tq/vcwfl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4EEDC4CECC;
-	Mon, 18 Nov 2024 18:12:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731953570;
-	bh=YwZjBB6hgO/g9UA0GSo0eqjMxLvqj//2HoPj9LGIuMs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tq/vcwflmqImOGUZmEW9UM2uYdEbX4QKT+2zvTkCSQL7S3aQoPihoKL4uTCG7Fva3
-	 CpBCn3ekbkvAeZw+3sYi5/4LPYYEre5LEIac+R2gKoECrmVLML/C2K/lDNxlRwhNIj
-	 8OEb6KMT0GclJFfmiYAIXI+dTH5SLRv1xG36Panx6m4gplAbvhL92Lwk/DIniLT2G3
-	 oro9AhKJMi08nPnf9TZ6MeHmbYR7nrQw26DTDHUPBnbh8GOnJ1YFjZu/rBxusUTm1d
-	 /DUN3Q3eQfpYb7F2G7DElVKRJcmqvDbNg4zKDQq3sqFZXaa3j2sgTiZJvqH9q2jGXN
-	 4IMB6bkylZgnw==
-Date: Mon, 18 Nov 2024 18:12:45 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Yunsheng Lin <yunshenglin0825@gmail.com>
-Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-	linyunsheng@huawei.com, Andrew Morton <akpm@linux-foundation.org>,
-	Alexander Duyck <alexanderduyck@fb.com>,
-	Linux-MM <linux-mm@kvack.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] mm: page_frag: fix a compile error when kernel
- is not compiled
-Message-ID: <91e7e9c3-fbf9-40c7-9a7e-52fc800fe6a7@sirena.org.uk>
-References: <20241116042314.100400-1-yunshenglin0825@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=oz1KLFZDERZRCTVgwIlSSFZdYjGL8kq6VkNgouosQXwOC4UHsrWmY0rzc2M2OXSRF5tQQqvpNasl7ojq8TORD5VUPx5q2N4fmxUhKNkO/c4xvY5/7MERtN5AcjPwzD0rAiRHiMKmoisZMIPgrHbcbnL9j8FhJ2zz7CnxHTsWb6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AYrP8LJZ; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Mon, 18 Nov 2024 19:11:05 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1731957075;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=J9bdmC8O0mZuSc1d3ov6kK3zAXL6Ki/uwfsmjx15YrI=;
+	b=AYrP8LJZV2AGKUOMf90n+zfu8+d1nAItkyc8LsvyQowiseGlvnGU+zD0Dt3EY5ONppo0Xe
+	7EQ2qFFx9REbsv7WMGmtRD9WY6WsnDyciUXEOiytFTesKekvLLsR6l9Zigv/WrtKF4v9QS
+	EpMbWvpMZO6tUGBRzZI402Evm3OZ0oc=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Roman Gushchin <roman.gushchin@linux.dev>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	akpm@linux-foundation.org, corbet@lwn.net, derek.kiernan@amd.com,
+	dragan.cvetic@amd.com, arnd@arndb.de, gregkh@linuxfoundation.org,
+	viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
+	tj@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
+	shakeel.butt@linux.dev, muchun.song@linux.dev,
+	Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, vbabka@suse.cz,
+	jannh@google.com, shuah@kernel.org, vegard.nossum@oracle.com,
+	vattunuru@marvell.com, schalla@marvell.com, david@redhat.com,
+	willy@infradead.org, osalvador@suse.de, usama.anjum@collabora.com,
+	andrii@kernel.org, ryan.roberts@arm.com, peterx@redhat.com,
+	oleg@redhat.com, tandersen@netflix.com, rientjes@google.com,
+	gthelen@google.com
+Subject: Re: [RFCv1 0/6] Page Detective
+Message-ID: <ZzuRSZc8HX9Zu0dE@google.com>
+References: <20241116175922.3265872-1-pasha.tatashin@soleen.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="IaKl+DyrWtyGOQED"
-Content-Disposition: inline
-In-Reply-To: <20241116042314.100400-1-yunshenglin0825@gmail.com>
-X-Cookie: Used staples are good with SOY SAUCE!
-
-
---IaKl+DyrWtyGOQED
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241116175922.3265872-1-pasha.tatashin@soleen.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Sat, Nov 16, 2024 at 12:23:13PM +0800, Yunsheng Lin wrote:
-> page_frag test module is an out of tree module, but built
-> using KDIR as the main kernel tree, the mm test suite is
-> just getting skipped if newly added page_frag test module
-> fails to compile due to kernel not yet compiled.
->=20
-> Fix the above problem by ensuring both kernel is built first
-> and a newer kernel which has page_frag_cache.h is used.
+On Sat, Nov 16, 2024 at 05:59:16PM +0000, Pasha Tatashin wrote:
+> Page Detective is a new kernel debugging tool that provides detailed
+> information about the usage and mapping of physical memory pages.
+> 
+> It is often known that a particular page is corrupted, but it is hard to
+> extract more information about such a page from live system. Examples
+> are:
+> 
+> - Checksum failure during live migration
+> - Filesystem journal failure
+> - dump_page warnings on the console log
+> - Unexcpected segfaults
+> 
+> Page Detective helps to extract more information from the kernel, so it
+> can be used by developers to root cause the associated problem.
+> 
+> It operates through the Linux debugfs interface, with two files: "virt"
+> and "phys".
+> 
+> The "virt" file takes a virtual address and PID and outputs information
+> about the corresponding page.
+> 
+> The "phys" file takes a physical address and outputs information about
+> that page.
+> 
+> The output is presented via kernel log messages (can be accessed with
+> dmesg), and includes information such as the page's reference count,
+> mapping, flags, and memory cgroup. It also shows whether the page is
+> mapped in the kernel page table, and if so, how many times.
 
-Tested-by: Mark Brown <broonie@kernel.org>
+This looks questionable both from the security and convenience points of view.
+Given the request-response nature of the interface, the output can be
+provided using a "normal" seq-based pseudo-file.
 
-(for the case where we skip the build.)
+But I have a more generic question:
+doesn't it make sense to implement it as a set of drgn scripts instead
+of kernel code? This provides more flexibility, is safer (even if it's buggy,
+you won't crash the host) and should be at least in theory equally
+powerful.
 
---IaKl+DyrWtyGOQED
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmc7g5wACgkQJNaLcl1U
-h9DsvAf/bePfZQEkqvzyO5YOYn9KTkYZndX0ym/FzYdhPQwrMfr++Hrv8SgujAiE
-IYM0Fxi/AVXCMFZCjfrdLdK4XGPuSMepPRSmu/EM+Yp0dwSksMHLReoUit23qAKK
-zgeprOGfU0LYC2c4yWo7Ia5RnX+kbsGJg/7H0GGH80wlzzEwGPEnADZORpxymiln
-KbLqOfg0jyPbuVR4Q1RDFzasY+1n347g9Umuj/g966D6HJeOsBWj8L3LOYH9IcOr
-SsVqNhNUM4EKvn4N0rzcpiRqxCidlY5FWwzLF8Qn7JLG6D0kipTLzkx9j+tIKLSt
-VYn/BdrtF97+2OeYiRgqm1sAkc4jqQ==
-=M4um
------END PGP SIGNATURE-----
-
---IaKl+DyrWtyGOQED--
+Thanks!
 
