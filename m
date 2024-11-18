@@ -1,60 +1,60 @@
-Return-Path: <linux-kselftest+bounces-22206-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22208-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF9369D1A10
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 22:05:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F7FF9D1A17
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 22:06:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D4D4B22CA1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 21:05:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 251442822B7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 21:06:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D7EA1E766D;
-	Mon, 18 Nov 2024 21:05:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81B3B1E908E;
+	Mon, 18 Nov 2024 21:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="qrB0wB8g"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="YWsSij6p"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C322A150981
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 Nov 2024 21:05:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F4E21E882B;
+	Mon, 18 Nov 2024 21:05:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731963933; cv=none; b=HTR0OLP1Y/2iR6YiAt8ART0rMXN1l6CCOn4CY3sGRTJ9eh8FDlZZmHOR++0FKiqehfvf9GSPHEQLxEg5kaDNCuHtyJDIJUFHY9cT2cFJ9rCq5IQiEhMXwuTSi6uALab/l4AFSWg20ajQZYsOwF9ZpR7ntx9WRjMcivU01oIksu4=
+	t=1731963937; cv=none; b=cBPtS+5S9N5FzCkijLjznW+ISh+5n6XCM9PsyanKao77O9vow/XiujPoguTtXeybLcepuDIqbHbFdJB5RBYrzXlvFdGoDJJLDInPJ40p3F949sKEeUK/TqAdhuYjmkyEQf/PAtTApkjza4S5vXF0Aucpncj8gvCo5tk/ygh0rKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731963933; c=relaxed/simple;
-	bh=yxgSfg68f3OHumg7gYdyISrFvbP1dKO8ppUKrFr+3rw=;
+	s=arc-20240116; t=1731963937; c=relaxed/simple;
+	bh=AODplrguRoUyocjLNeUBfKkcS8/o/AnGAqHJ2z43hRU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qrPmSUdQs4mCE+VkYIFEJRYZd0r541Nl2X8vdVUa34gGnu6bnR9VprNxktCjopsHaiI7LBFTlpuGtIwfGLaTE8zBA1x+Kvz+/WSboFtLMFKKIByVy2lg1+5VGXdce7tdLszIee/u2gMmBCywr6eKo7Ddrvt49l9PvhCkbWRyspk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=qrB0wB8g; arc=none smtp.client-ip=185.226.149.37
+	 In-Reply-To:To:Cc; b=ogLGp7WKycltNAsaD9SlxZi0fsK3ROGFD6n2Ni0iS9DtN/mz+Qwz1If0i1wObqFZ6uRhSp5742fOYg2ExyUNAOfYAoCPWQ1vPnl1crYW/lC91IEplfsLPT1oeCQ0myyKtaQ6ZPmRrqEYuRVa5ga6T0TKmNMxzL67vrutfx2ODtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=YWsSij6p; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
 	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1tD8vr-00HaW6-Jr; Mon, 18 Nov 2024 22:05:15 +0100
+	id 1tD8vu-00HaWN-Ef; Mon, 18 Nov 2024 22:05:18 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=v8a/IYagFmlBSqn1ewjBjt5G7sUJDzk9cHncBbjifAU=; b=qrB0wB8gkOs7/xpmeXJ+R/+w4u
-	WuRlm+VFEShffrDV7tzrVxJp3UvIOW7NRthD+adZQX/dsowACyTK+LdZSeSFTkPvqaxt0HGf0LsLq
-	QuDjCkI8hs6T8o1GWJaDMMbfaI0hu2GT/i/Z5OofdzGOh0BTg3xKacoLNIcQ8s1I9QbtiyuLPwl6N
-	fhG9py2NDi9AMwZlNJBWA39Z8d8g8pXbTa3pQETLk4g2+i9DaZ6F5enHMMo59HemK7HxSynYYhDcf
-	Fp8B9l/3aCKrRP9g8zSSYensN86G5K3x2N0G88IPU9Ply6uRtoRXOBaaJ9qGi4QnxMWFIZb3YS+tW
-	x2V+efRA==;
+	bh=XaGj7bjiHFIFr0AkWU6B2NFpeWMUiB4pxn4b3JeRD3w=; b=YWsSij6pZgTNu+dEf6dtGDEvvO
+	WB/SBOosxjuVtv5FB5cr52TNyP6Qo0xw/Wg9q4ZSYRDmdZwG/1M2ksAr8NQUtu82rSz006oaiFkbv
+	DGoe4kk006y4ag1e4m4biPr5oTQioeMFrZ9t60mbvOKwnkQ/eRcTdHXVYToyk/B5m8uMpMcx2whcN
+	TDbmvmI+5naCueHpredki5VqSwaswTrUh0s/wWRGEnbIHeh1amhn8Y9049BUU4RRCFngin+SoytSY
+	B0Doo5sFIJvHMo9JQLPmgQiBv++0VJKV7ZXuJKrlpomIRhf6JaKSJDhEe4+pDaX/DSJsDsz3cRmw3
+	ifguEV7g==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1tD8vr-0007dA-3J; Mon, 18 Nov 2024 22:05:15 +0100
+	id 1tD8vt-0004o7-TD; Mon, 18 Nov 2024 22:05:18 +0100
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1tD8vf-00DME4-0r; Mon, 18 Nov 2024 22:05:03 +0100
+	id 1tD8vg-00DME4-3w; Mon, 18 Nov 2024 22:05:04 +0100
 From: Michal Luczaj <mhal@rbox.co>
-Date: Mon, 18 Nov 2024 22:03:41 +0100
-Subject: [PATCH bpf 1/4] bpf, vsock: Fix poll() missing a queue
+Date: Mon, 18 Nov 2024 22:03:42 +0100
+Subject: [PATCH bpf 2/4] selftest/bpf: Add test for af_vsock poll()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241118-vsock-bpf-poll-close-v1-1-f1b9669cacdc@rbox.co>
+Message-Id: <20241118-vsock-bpf-poll-close-v1-2-f1b9669cacdc@rbox.co>
 References: <20241118-vsock-bpf-poll-close-v1-0-f1b9669cacdc@rbox.co>
 In-Reply-To: <20241118-vsock-bpf-poll-close-v1-0-f1b9669cacdc@rbox.co>
 To: Stefano Garzarella <sgarzare@redhat.com>, 
@@ -84,29 +84,75 @@ Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.14.2
 
-When a verdict program simply passes a packet without redirection, sk_msg
-is enqueued on sk_psock::ingress_msg. Add a missing check to poll().
+Verify that vsock's poll() notices when sk_psock::ingress_msg isn't empty.
 
-Fixes: 634f1a7110b4 ("vsock: support sockmap")
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- net/vmw_vsock/af_vsock.c | 3 +++
- 1 file changed, 3 insertions(+)
+ .../selftests/bpf/prog_tests/sockmap_basic.c       | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-index dfd29160fe11c4675f872c1ee123d65b2da0dae6..919da8edd03c838cbcdbf1618425da6c5ec2df1a 100644
---- a/net/vmw_vsock/af_vsock.c
-+++ b/net/vmw_vsock/af_vsock.c
-@@ -1054,6 +1054,9 @@ static __poll_t vsock_poll(struct file *file, struct socket *sock,
- 		mask |= EPOLLRDHUP;
- 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 82bfb266741cfaceafa2a407cd2ccc937708c613..21d1e2e2308433e7475952dcab034e92f2f6101a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -885,6 +885,50 @@ static void test_sockmap_same_sock(void)
+ 	test_sockmap_pass_prog__destroy(skel);
+ }
  
-+	if (sk_is_readable(sk))
-+		mask |= EPOLLIN | EPOLLRDNORM;
++static void test_sockmap_skb_verdict_vsock_poll(void)
++{
++	struct test_sockmap_pass_prog *skel;
++	int err, map, conn, peer;
++	struct bpf_program *prog;
++	struct bpf_link *link;
++	char buf = 'x';
++	int zero = 0;
 +
- 	if (sock->type == SOCK_DGRAM) {
- 		/* For datagram sockets we can read if there is something in
- 		 * the queue and write as long as the socket isn't shutdown for
++	skel = test_sockmap_pass_prog__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	if (create_pair(AF_VSOCK, SOCK_STREAM, &conn, &peer))
++		goto destroy;
++
++	prog = skel->progs.prog_skb_verdict;
++	map = bpf_map__fd(skel->maps.sock_map_rx);
++	link = bpf_program__attach_sockmap(prog, map);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_sockmap"))
++		goto close;
++
++	err = bpf_map_update_elem(map, &zero, &conn, BPF_ANY);
++	if (!ASSERT_OK(err, "bpf_map_update_elem"))
++		goto detach;
++
++	if (xsend(peer, &buf, 1, 0) != 1)
++		goto detach;
++
++	err = poll_read(conn, IO_TIMEOUT_SEC);
++	if (!ASSERT_OK(err, "poll"))
++		goto detach;
++
++	if (xrecv_nonblock(conn, &buf, 1, 0) != 1)
++		FAIL("xrecv_nonblock");
++detach:
++	bpf_link__detach(link);
++close:
++	xclose(conn);
++	xclose(peer);
++destroy:
++	test_sockmap_pass_prog__destroy(skel);
++}
++
+ void test_sockmap_basic(void)
+ {
+ 	if (test__start_subtest("sockmap create_update_free"))
+@@ -943,4 +987,6 @@ void test_sockmap_basic(void)
+ 		test_skmsg_helpers_with_link(BPF_MAP_TYPE_SOCKMAP);
+ 	if (test__start_subtest("sockhash sk_msg attach sockhash helpers with link"))
+ 		test_skmsg_helpers_with_link(BPF_MAP_TYPE_SOCKHASH);
++	if (test__start_subtest("sockmap skb_verdict vsock poll"))
++		test_sockmap_skb_verdict_vsock_poll();
+ }
 
 -- 
 2.46.2
