@@ -1,179 +1,143 @@
-Return-Path: <linux-kselftest+bounces-22177-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22178-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 381B79D1102
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 13:54:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 109639D12B4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 15:11:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED458283027
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 12:54:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2447B252FB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 14:07:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC3B19884B;
-	Mon, 18 Nov 2024 12:54:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7776919C54B;
+	Mon, 18 Nov 2024 14:07:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TdOZWBTK"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="CZAEuHg6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05DB8199239
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 Nov 2024 12:54:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59BD3196C67;
+	Mon, 18 Nov 2024 14:07:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731934468; cv=none; b=r7dtq52TWx8WveBEaCxvayGSjFejMusEQRRbIYd262UCUbmQkt1pBa4wNmOtFxzQ2sATNRbcUL9UJPxvjJ0cKjKHNoqR2V7dd/3MOrf7eqDa/o8XUhH9Ld/sHNXvulPt3LHHDhagOfFUFosIoU6xShx0CBvdhD3Cnl7mEycS0nQ=
+	t=1731938839; cv=none; b=MpklfGCSbhOS2SMKd0IQ+DbxveeaOtZKRNrWnHyiZuaXKWyLfouXZPhXf/LbNTD4zg7ng/Z1cbszu9cIiKsQ1cnjsTZHxTQ6FhSCMoeWJSC4Xr8GOIQAuWourPqGt5Uq7Y0qRQRSdRjVHEsXIY4WCRDvJ9+kWgPhk5zzxB+tZMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731934468; c=relaxed/simple;
-	bh=RFZav5imPpDajhAmqlY2eOGgnED4NjQI6+JJoDQ71N0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gGOHa1tYGcaXMn6Q7mD2NIfMiKICWkFOOn011r7RFh5EjqK4H+k9Hd6euV1BkxPB46ayClKiwW0WFjCGAIIV1PU4rv4mSZ/VxVneUQo4bhR68V0su5CzRfscn+VFlnR0nY6nOD9YoRp6Qr3iR85hQoyNFILtU4OIdh6nfQ6HxSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TdOZWBTK; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5cfc18d5259so6172a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Nov 2024 04:54:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731934464; x=1732539264; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RFZav5imPpDajhAmqlY2eOGgnED4NjQI6+JJoDQ71N0=;
-        b=TdOZWBTKFiS5gRjdYjk9+2Hyj9TFvL1/Qx0tNNCB2IgLrmjW5yvKKbk73asRnnQBli
-         ilMGAV7y2yDGvQNZE4bFat/WU6KH4cC/dc0wRFGOrpcHzRy15FzIvt0K8feDzGZJXunG
-         JYao2hKg+OdPml5zil28vesqetiCcX7hhKuAYxEZ+Fzik8EvCKFEDUAJdkZcs6rvXfbj
-         t6zhTNj3KN/XtS2f/MLyfUKyacNLOcTiKc7K76Rjg/ZSmqpatC2ogaamGL89Knax+y7J
-         QV5IMcL/ymSOWYEtHO1ALD2b7i+Hxc4oHAOFMVyRSkPQq4awbdZZrXAFRiSEvY1Q0em9
-         rRlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731934464; x=1732539264;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RFZav5imPpDajhAmqlY2eOGgnED4NjQI6+JJoDQ71N0=;
-        b=GMFnozHZjQPqwbRiAfOfN0YQEuUfsu97ksaSo+13yE6Ih/W+kGH6OcHy4HyJhEp+cK
-         fa3k23cgkxb/GOl6sL4NNQ+WRBxhkuEuuoUJumE1Rmmr2BoUHJ/7fs8OIXpaxc71k/NK
-         vfVCXeAduVbahQ8oG2FA9myWKiLHpzDuLhz2V1T0AX+Bji/7W3JkJV8OguxB60eCk+fa
-         UErH+s+7oucO17aFMJg+7oTaBhzx/zcIcaJaRN4n0aZhu7hVC6YPglW0xhhK+u2PVo82
-         zIW+7MQqbb/9FVjBmWMJU8fdpqr0gfHn95YRywy5AtXShJ+WqQfVzjI0YyyJOq/FFfoV
-         jBWw==
-X-Forwarded-Encrypted: i=1; AJvYcCUIA8a9u48Wv79b55D5KbpDLiWYUMEpQECujf+tW8kJ1B8+jX1PplRZhIoulT1YrWRIzZj7aNxEk8cB6agIwfs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFzRGHLOAC1j2pAjbOql4w0VRwX316Ek46KKyU/iCELqreP9cz
-	XhAcoT7DjCvbg1hpnTSVRfTp57U6EEcI7d2Uz2MKUUoALXC/p+iuAht98fdMqls8nagnJJ71WA0
-	uf5JGWwOB5ZJh4b1Xxp5/j0my5OYQzyo4HpJ4
-X-Gm-Gg: ASbGncup4aadJqBq9IDsknxVTjQ+v1Bv9VrUXievAUT4Ke3EMC4X9ZWIhjjySKdgZXd
-	OTaYf3uPhemXKED4QrFhleOLk92PuT5ifpVVST28YnkmHI1rUmXjunLKQ4Gg=
-X-Google-Smtp-Source: AGHT+IFWl9n8jfw906nl94a7cbMwHIP9Gd4TNcFZWOOm8Tvrj69mcd0XEdLXVwoqv6yIo+K1feYbwLqCVdza/E5/6V8=
-X-Received: by 2002:aa7:de84:0:b0:5cf:6f4d:c29c with SMTP id
- 4fb4d7f45d1cf-5cfa298afd6mr136645a12.4.1731934463854; Mon, 18 Nov 2024
- 04:54:23 -0800 (PST)
+	s=arc-20240116; t=1731938839; c=relaxed/simple;
+	bh=x6vfhzdgog0R2D4+u+nvAJH8rjr4e04bhFPsdcpjJes=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Pk901zD4e+bCrQScvMG87Ag9u0hKFmDZ5OvyAPsucXHDVj36g/cTLlgox19MKOFEsV1a8gXr5+Bq+doAGm0W2GkqZRBLL7FGSpjVzorUQaGXizfFjw0HG5BLHkI9srYpZJMbhL9I8agQMFxhJj3DwpODmO5xNVyX5cMjCMhhhYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=CZAEuHg6; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=/HM2i
+	Hvf97NP3FjbIWxYEj7KCm2FhZwT0bdFWr+gBXM=; b=CZAEuHg6h5CSgjZJour9Y
+	0/lqNyj6NTL0t2n3wxRYgbO/MoTXAzZF/0NLDb168RuRVTTUCdX6XoJ7DTRL6Mcl
+	eQ1uFFPgDs8We8QiF22WNp3BDtkCpYZHnQDJxk7wtccZtOxjYUyclAbUCTIOOG2+
+	QU6Vy14R6THb48miR9Kino=
+Received: from localhost.localdomain (unknown [47.252.33.72])
+	by gzsmtp1 (Coremail) with SMTP id PCgvCgD3_+X0STtnMoCsDw--.3348S2;
+	Mon, 18 Nov 2024 22:06:50 +0800 (CST)
+From: Jiayuan Chen <mrpre@163.com>
+To: skhan@linuxfoundation.org,
+	linux-kselftest@vger.kernel.org
+Cc: song@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	martin.lau@linux.dev,
+	andrii@kernel.org,
+	ast@kernel.org,
+	kpsingh@kernel.org,
+	jolsa@kernel.org,
+	Jiayuan Chen <mrpre@163.com>
+Subject: [PATCH kselftest] fix single bpf test
+Date: Mon, 18 Nov 2024 22:06:08 +0800
+Message-ID: <20241118140608.53524-1-mrpre@163.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241116175922.3265872-1-pasha.tatashin@soleen.com> <a0372f7f-9a85-4d3e-ba20-b5911a8189e3@lucifer.local>
-In-Reply-To: <a0372f7f-9a85-4d3e-ba20-b5911a8189e3@lucifer.local>
-From: Jann Horn <jannh@google.com>
-Date: Mon, 18 Nov 2024 13:53:46 +0100
-Message-ID: <CAG48ez2vG0tr=H8csGes7HN_5HPQAh4WZU8U1G945K1GKfABPg@mail.gmail.com>
-Subject: Re: [RFCv1 0/6] Page Detective
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	akpm@linux-foundation.org, corbet@lwn.net, derek.kiernan@amd.com, 
-	dragan.cvetic@amd.com, arnd@arndb.de, gregkh@linuxfoundation.org, 
-	viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, tj@kernel.org, 
-	hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev, 
-	shakeel.butt@linux.dev, muchun.song@linux.dev, Liam.Howlett@oracle.com, 
-	vbabka@suse.cz, shuah@kernel.org, vegard.nossum@oracle.com, 
-	vattunuru@marvell.com, schalla@marvell.com, david@redhat.com, 
-	willy@infradead.org, osalvador@suse.de, usama.anjum@collabora.com, 
-	andrii@kernel.org, ryan.roberts@arm.com, peterx@redhat.com, oleg@redhat.com, 
-	tandersen@netflix.com, rientjes@google.com, gthelen@google.com, 
-	linux-hardening@vger.kernel.org, 
-	Kernel Hardening <kernel-hardening@lists.openwall.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PCgvCgD3_+X0STtnMoCsDw--.3348S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZF4rtr4rGF4rZr4DGw1Dtrb_yoW5WFykpa
+	48Jwn8Kr1kKFWUtryrJ3WUXry8Wr4v9392vF18ZrWUZw15JFZ7Xw4IkFZ5Aa47WrZ5Z3y5
+	Za4IgF17ua9rAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piX_-PUUUUU=
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiWxmbp2c7QysO+wABs+
 
-On Mon, Nov 18, 2024 at 12:17=E2=80=AFPM Lorenzo Stoakes
-<lorenzo.stoakes@oracle.com> wrote:
-> On Sat, Nov 16, 2024 at 05:59:16PM +0000, Pasha Tatashin wrote:
-> > It operates through the Linux debugfs interface, with two files: "virt"
-> > and "phys".
-> >
-> > The "virt" file takes a virtual address and PID and outputs information
-> > about the corresponding page.
-> >
-> > The "phys" file takes a physical address and outputs information about
-> > that page.
-> >
-> > The output is presented via kernel log messages (can be accessed with
-> > dmesg), and includes information such as the page's reference count,
-> > mapping, flags, and memory cgroup. It also shows whether the page is
-> > mapped in the kernel page table, and if so, how many times.
->
-> I mean, even though I'm not a huge fan of kernel pointer hashing etc. thi=
-s
-> is obviously leaking as much information as you might want about kernel
-> internal state to the point of maybe making the whole kernel pointer
-> hashing thing moot.
->
-> I know this requires CAP_SYS_ADMIN, but there are things that also requir=
-e
-> that which _still_ obscure kernel pointers.
->
-> And you're outputting it all to dmesg.
->
-> So yeah, a security person (Jann?) would be better placed to comment on
-> this than me, but are we sure we want to do this when not in a
-> CONFIG_DEBUG_VM* kernel?
+Currently, when testing a certain target in selftests, executing the
+command 'make TARGETS=XX -C tools/testing/selftests' succeeds for non-BPF,
+but a similar command fails for BPF:
+'''
+make TARGETS=bpf -C tools/testing/selftests
 
-I guess there are two parts to this - what root is allowed to do, and
-what information we're fine with exposing to dmesg.
+make: Entering directory '/linux-kselftest/tools/testing/selftests'
+make: *** [Makefile:197: all] Error 1
+make: Leaving directory '/linux-kselftest/tools/testing/selftests'
+'''
 
-If the lockdown LSM is not set to LOCKDOWN_CONFIDENTIALITY_MAX, the
-kernel allows root to read kernel memory through some interfaces - in
-particular, BPF allows reading arbitrary kernel memory, and perf
-allows reading at least some stuff (like kernel register states). With
-lockdown in the most restrictive mode, the kernel tries to prevent
-root from reading arbitrary kernel memory, but we don't really change
-how much information goes into dmesg. (And I imagine you could
-probably still get kernel pointers out of BPF somehow even in the most
-restrictive lockdown mode, but that's probably not relevant.)
+The reason is that the previous commit:
+commit 7a6eb7c34a78 ("selftests: Skip BPF seftests by default")
+led to the default filtering of bpf in TARGETS which make TARGETS empty.
+That commit also mentioned that building BPF tests requires external
+commands to run. This caused target like 'bpf' or 'sched_ext' defined
+in SKIP_TARGETS to need an additional specification of SKIP_TARGETS as
+empty to avoid skipping it, for example:
+'''
+make TARGETS=bpf SKIP_TARGETS="" -C tools/testing/selftests
+'''
 
-The main issue with dmesg is that some systems make its contents
-available to code that is not running with root privileges; and I
-think it is also sometimes stored persistently in unencrypted form
-(like in EFI pstore) even when everything else on the system is
-encrypted.
-So on one hand, we definitely shouldn't print the contents of random
-chunks of memory into dmesg without a good reason; on the other hand,
-for example we do already print kernel register state on WARN() (which
-often includes kernel pointers and could theoretically include more
-sensitive data too).
+If special steps are required to execute certain test, it is extremely
+unfair. We need a fairer way to treat different test targets.
 
-So I think showing page metadata to root when requested is probably
-okay as a tradeoff? And dumping that data into dmesg is maybe not
-great, but acceptable as long as only root can actually trigger this?
+This commit provider a way: If a user has specified a single TARGETS,
+it indicates an expectation to run the specified target, and thus the
+object should not be skipped.
 
-I don't really have a strong opinion on this...
+Another way is to change TARGETS to DEFAULT_TARGETS in the Makefile and
+then check if the user specified TARGETS and decide whether filter or not,
+though this approach requires too many modifications.
+Signed-off-by: Jiayuan Chen <mrpre@163.com>
+---
+ tools/testing/selftests/Makefile | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 363d031a16f7..d76c1781ec09 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -116,7 +116,7 @@ TARGETS += vDSO
+ TARGETS += mm
+ TARGETS += x86
+ TARGETS += zram
+-#Please keep the TARGETS list alphabetically sorted
++# Please keep the TARGETS list alphabetically sorted
+ # Run "make quicktest=1 run_tests" or
+ # "make quicktest=1 kselftest" from top level Makefile
+ 
+@@ -132,12 +132,15 @@ endif
+ 
+ # User can optionally provide a TARGETS skiplist. By default we skip
+ # targets using BPF since it has cutting edge build time dependencies
+-# which require more effort to install.
++# If user provide custom TARGETS, we just ignore SKIP_TARGETS so that
++# user can easy to test single target which defined in SKIP_TARGETS
+ SKIP_TARGETS ?= bpf sched_ext
+ ifneq ($(SKIP_TARGETS),)
++ifneq ($(words $(TARGETS)), 1)
+ 	TMP := $(filter-out $(SKIP_TARGETS), $(TARGETS))
+ 	override TARGETS := $(TMP)
+ endif
++endif
+ 
+ # User can set FORCE_TARGETS to 1 to require all targets to be successfully
+ # built; make will fail if any of the targets cannot be built. If
 
-To me, a bigger issue is that dump_page() looks like it might be racy,
-which is maybe not terrible in debugging code that only runs when
-something has already gone wrong, but bad if it is in code that root
-can trigger on demand? __dump_page() copies the given page with
-memcpy(), which I don't think guarantees enough atomicity with
-concurrent updates of page->mapping or such, so dump_mapping() could
-probably run on a bogus pointer. Even without torn pointers, I think
-there could be a UAF if the page's mapping is destroyed while we're
-going through dump_page(), since the page might not be locked. And in
-dump_mapping(), the strncpy_from_kernel_nofault() also doesn't guard
-against concurrent renaming of the dentry, which I think again would
-probably result in UAF.
-So I think dump_page() in its current form is not something we should
-expose to a userspace-reachable API.
+base-commit: 67b6d342fb6d5abfbeb71e0f23141b9b96cf7bb1
+-- 
+2.43.5
+
 
