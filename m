@@ -1,77 +1,54 @@
-Return-Path: <linux-kselftest+bounces-22164-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22165-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0FD99D081B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 04:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E8B69D0821
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 04:15:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43CED1F21E1B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 03:11:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 06B5D1F21CBB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 03:15:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E66174438B;
-	Mon, 18 Nov 2024 03:11:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="QmA5W5u8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB7C8282E1;
+	Mon, 18 Nov 2024 03:15:35 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AFA53BBF2;
-	Mon, 18 Nov 2024 03:11:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+Received: from cmccmta1.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1452C81E;
+	Mon, 18 Nov 2024 03:15:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731899466; cv=none; b=ikXYNdK7YcHWVdcq4GIQD+lJZGdXDhxfeCFP27HsIrluSa8MKp3vH+aMUiaNrV/D3GQ38PICO//wE1BBNovgnBcpOttIxXOEQtKNL3Kwnkn5hXrItDBSAnL+KYoOdrtNhyFFAZ1T2S53yAozaXudDQaxzHzVNm3OtYxRWdhW5oU=
+	t=1731899735; cv=none; b=tN5sQlbQ5InE0mjjzuz8Kn8YQEZg5sPJdidHZ8XpYooWV2pyANw+SWRx0Imr89VaDSPKdnZDn+LfonfiJ9Nb3GyQg4734dg0HqCEytZUE84JzScrTMerB5RcwVS+Ieuvb+mHRp+EyvD/wj809kK8I1piIXFeXPRMeST0emOZJJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731899466; c=relaxed/simple;
-	bh=m1Bf8pTAXZVAmctcbTeIv1DRTTkwBXvgdiGG7t0IUt0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TnehGfQ1xQWRInq2jULFam4Ek4fv0pkY2vIUqC4MMt99gYqepldKS+PT+Qpz7vkpQSWPigOkSn9eH/hmtlaaO01X+qqHTLrVA+nQCI2EdNNvqgK3JApKEHoTn+Ng8sWYWdz5SGe38cNXQYlsW1js4Hkf/6AEqsCTwYLos+nObCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=QmA5W5u8; arc=none smtp.client-ip=117.135.210.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=DvEpP
-	j+D0VN2cgQ0y1KaqjfX8SObfBeJKjuhl+zvTNM=; b=QmA5W5u8bkbfqnKWVBzpK
-	Kivjt5RN9meZxvr3xcC7q6k636mcuDwSKmxCBNGN/JRoyv7FN9d/4HpnlwgYjVy0
-	+O6wvbBbV5Mly9YyKKaTUW5yRtyS2Kb82rF0hgZMWWs39Dwvt8LWUgOh683STZTm
-	PAV9kwhkkBKwXTztHgKbGw=
-Received: from localhost.localdomain (unknown [47.252.33.72])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wDnTyXirzpnA_TwCQ--.780S4;
-	Mon, 18 Nov 2024 11:10:01 +0800 (CST)
-From: Jiayuan Chen <mrpre@163.com>
-To: martin.lau@linux.dev,
-	edumazet@google.com,
-	jakub@cloudflare.com,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	horms@kernel.org,
-	daniel@iogearbox.net
-Cc: mykolal@fb.com,
-	ast@kernel.org,
-	kpsingh@kernel.org,
-	jolsa@kernel.org,
-	eddyz87@gmail.com,
-	shuah@kernel.org,
-	sdf@fomichev.me,
+	s=arc-20240116; t=1731899735; c=relaxed/simple;
+	bh=w1qxhsXl8XNFjekIRAAEivDUwiyXVGbnjK+lzNbasi8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=D2+nuEpjbcjbc+R4LzuWz1zGrju1/YZh6j9MTG+/+L4H2315/XnVGWApKSLaITD75GFT3ymbu/NoFQE0W3pbwQM4icaRIq9psQtt918WB+ZV4pd/tVHxpmdZ42qS+QizxLr8DZtlkY6UQpG2saPl+YyF3F5Dc7hEK2ZYUncQMIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee4673ab14ad20-0d629;
+	Mon, 18 Nov 2024 11:15:22 +0800 (CST)
+X-RM-TRANSID:2ee4673ab14ad20-0d629
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from localhost.localdomain (unknown[223.108.79.101])
+	by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee3673ab13cc84-ad126;
+	Mon, 18 Nov 2024 11:15:22 +0800 (CST)
+X-RM-TRANSID:2ee3673ab13cc84-ad126
+From: Ba Jing <bajing@cmss.chinamobile.com>
+To: pbonzini@redhat.com
+Cc: shuah@kernel.org,
+	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	haoluo@google.com,
-	song@kernel.org,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	mhal@rbox.co,
-	yonghong.song@linux.dev,
-	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf v4 2/2] selftests/bpf: Add some tests with sockmap SK_PASS
-Date: Mon, 18 Nov 2024 11:09:10 +0800
-Message-ID: <20241118030910.36230-3-mrpre@163.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241118030910.36230-1-mrpre@163.com>
-References: <20241118030910.36230-1-mrpre@163.com>
+	linux-kernel@vger.kernel.org,
+	Ba Jing <bajing@cmss.chinamobile.com>
+Subject: [PATCH] kvm: hardware_disable_test: remove unused macro
+Date: Mon, 18 Nov 2024 11:15:02 +0800
+Message-Id: <20241118031502.2102-1-bajing@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,93 +56,30 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnTyXirzpnA_TwCQ--.780S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGr4DJrWkXFyDJr4rAr47Arb_yoW5WFW5pa
-	4kC34YkFs3Aa42qrs8Gw1I9Fy5WF4rZ3y5KF4jg345CrnrWr1fur1xKayYyr1fGrZaq3W8
-	uw13uayfG34UJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziyrWrUUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiDwibp2c6rMNqYAAAsD
 
-Add a new tests in sockmap_basic.c to test SK_PASS for sockmap
+After reviewing the code, it was found that the macro GUEST_CODE_PIO_PORT
+is never referenced in the code. Just remove it.
 
-Signed-off-by: Jiayuan Chen <mrpre@163.com>
+Signed-off-by: Ba Jing <bajing@cmss.chinamobile.com>
 ---
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 54 +++++++++++++++++++
- 1 file changed, 54 insertions(+)
+ tools/testing/selftests/kvm/hardware_disable_test.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 82bfb266741c..a2041f8e32eb 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -501,6 +501,58 @@ static void test_sockmap_skb_verdict_shutdown(void)
- 	test_sockmap_pass_prog__destroy(skel);
- }
+diff --git a/tools/testing/selftests/kvm/hardware_disable_test.c b/tools/testing/selftests/kvm/hardware_disable_test.c
+index bce73bcb973c..94bd6ed24cf3 100644
+--- a/tools/testing/selftests/kvm/hardware_disable_test.c
++++ b/tools/testing/selftests/kvm/hardware_disable_test.c
+@@ -20,7 +20,6 @@
+ #define SLEEPING_THREAD_NUM (1 << 4)
+ #define FORK_NUM (1ULL << 9)
+ #define DELAY_US_MAX 2000
+-#define GUEST_CODE_PIO_PORT 4
  
-+static void test_sockmap_stream_pass(void)
-+{
-+	int zero = 0, sent, recvd;
-+	int verdict, parser;
-+	int err, map;
-+	int c = -1, p = -1;
-+	struct test_sockmap_pass_prog *pass = NULL;
-+	char snd[256] = "0123456789";
-+	char rcv[256] = "0";
-+
-+	pass = test_sockmap_pass_prog__open_and_load();
-+	verdict = bpf_program__fd(pass->progs.prog_skb_verdict);
-+	parser = bpf_program__fd(pass->progs.prog_skb_parser);
-+	map = bpf_map__fd(pass->maps.sock_map_rx);
-+
-+	err = bpf_prog_attach(parser, map, BPF_SK_SKB_STREAM_PARSER, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach stream parser"))
-+		goto out;
-+
-+	err = bpf_prog_attach(verdict, map, BPF_SK_SKB_STREAM_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach stream verdict"))
-+		goto out;
-+
-+	err = create_pair(AF_INET, SOCK_STREAM, &c, &p);
-+	if (err)
-+		goto out;
-+
-+	/* sk_data_ready of 'p' will be replaced by strparser handler */
-+	err = bpf_map_update_elem(map, &zero, &p, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(p)"))
-+		goto out_close;
-+
-+	/*
-+	 * as 'prog_skb_parser' return the original skb len and
-+	 * 'prog_skb_verdict' return SK_PASS, the kernel will just
-+	 * pass it through to original socket 'p'
-+	 */
-+	sent = xsend(c, snd, sizeof(snd), 0);
-+	ASSERT_EQ(sent, sizeof(snd), "xsend(c)");
-+
-+	recvd = recv_timeout(p, rcv, sizeof(rcv), SOCK_NONBLOCK,
-+			     IO_TIMEOUT_SEC);
-+	ASSERT_EQ(recvd, sizeof(rcv), "recv_timeout(p)");
-+
-+out_close:
-+	close(c);
-+	close(p);
-+
-+out:
-+	test_sockmap_pass_prog__destroy(pass);
-+}
-+
- static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- {
- 	int err, map, verdict, c0 = -1, c1 = -1, p0 = -1, p1 = -1;
-@@ -923,6 +975,8 @@ void test_sockmap_basic(void)
- 		test_sockmap_progs_query(BPF_SK_SKB_VERDICT);
- 	if (test__start_subtest("sockmap skb_verdict shutdown"))
- 		test_sockmap_skb_verdict_shutdown();
-+	if (test__start_subtest("sockmap stream parser and verdict pass"))
-+		test_sockmap_stream_pass();
- 	if (test__start_subtest("sockmap skb_verdict fionread"))
- 		test_sockmap_skb_verdict_fionread(true);
- 	if (test__start_subtest("sockmap skb_verdict fionread on drop"))
+ sem_t *sem;
+ 
 -- 
-2.43.5
+2.33.0
+
+
 
 
