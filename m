@@ -1,170 +1,205 @@
-Return-Path: <linux-kselftest+bounces-22212-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22213-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A13559D1AE7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 23:09:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13C489D1B10
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 23:24:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F18D1F216DD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 22:09:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36E66B214A6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 22:24:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 077121E6329;
-	Mon, 18 Nov 2024 22:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65C2E1E7C39;
+	Mon, 18 Nov 2024 22:24:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b="Gb6Yp+hb"
+	dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b="FASkpsrj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3351E1925A2
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 Nov 2024 22:09:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 763961E7643
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 Nov 2024 22:24:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731967761; cv=none; b=G/qwTGjApB73uSZGJwYFpy2O2DQCdISylnNZcSeR62BzQPdKHljelRtxp5nEk7/yqtJQDMM9cFVh/wTEQE4AJuDCaMECARzQnd65BbSl9jwbwaRT5wV+hOTjmmE98UqMhJdjod0AfXvGFrBMFMFEIo8Ezlu6U676cTd/z34bKYQ=
+	t=1731968682; cv=none; b=cIMF5axvWs9FAxqLhMV85fFd+3xVCB7+hbi1Q2rLMbeieK2O4NK7Ke8Uf/ly3WtOkNpxWDgmixnOQ2rzVSg6uxN6qhf7k2nstSZ+ctS6dawxLhGZ+FCKu9Js7EehJluWnmt1tD0J9xi8pbFZJvyKKAxnVi+R5UhkaZ7JsPNCTNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731967761; c=relaxed/simple;
-	bh=I8MIscQQe9cVfzpDABcS2/+GpjCcV2Zx/6rrV6Zgl5M=;
+	s=arc-20240116; t=1731968682; c=relaxed/simple;
+	bh=mr6iDGZX6WZlOIa/AqtWy4H1dbsMF9ugeMcnS6HxJNE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZRpSXOjFODr0aClO6wR9UYvcO8YCnVAeCvg5jGibzIzhYPzOApslP0kYQiaRj1B54U3PcpSnNblX4Gq9nY7iuFPiXHtCCCILciBrZnlYSVscXSP0hmP35+8am+yVXRHyZEIvE9+PW6raq1ylZocf10AgWqvRxJUgSBtMoPIh4xA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b=Gb6Yp+hb; arc=none smtp.client-ip=209.85.160.174
+	 To:Cc:Content-Type; b=DkfNdci4X5US0YzjjtbvIFr2toTmD66OVIlnJ/Yr/iNG5oCki8fPQfKWdnEC6kHpnBeGSV8NAwIWG59KB9yDZO+ZsWvoS0dpwxXpuRXUnuCzVMTlQGAcaJo21WinGTVjtmQAD1Oj8Y++3FdMWlpEpfcBAJTJpi6FmK6wVguoBDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b=FASkpsrj; arc=none smtp.client-ip=209.85.160.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-460a415633fso27249751cf.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Nov 2024 14:09:20 -0800 (PST)
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-46097806aaeso19437071cf.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Nov 2024 14:24:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen-com.20230601.gappssmtp.com; s=20230601; t=1731967759; x=1732572559; darn=vger.kernel.org;
+        d=soleen-com.20230601.gappssmtp.com; s=20230601; t=1731968679; x=1732573479; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=I8MIscQQe9cVfzpDABcS2/+GpjCcV2Zx/6rrV6Zgl5M=;
-        b=Gb6Yp+hb3LS2S3zgzu9xXG4v1kmiTe9wY1PbV3QgOWMQHSmHWOWT1xI8dU7iO68kBV
-         4Ojo3PWXytSFdernv3ZGsb9YFfVbwDrZd5mI/0vNDx9a1+Q/WWeCJ3GevOlUWT/SqRy4
-         Gy05r3/i+oZu1i3SopG02MLYAPG24QJUhTP/gryTdmzcfiNnp2l3x1v7JdQqq6aM2mR9
-         vfETuXNlo83U6lSzYagXrpZbraIsauv0elkttf3q65wCPujazJlhFsgWbv1NLU2UjZjj
-         VAIK7E0RbqfZVOV7eBQtKfINmP2xPdFxtDvH6O6VPmZrYP75MyniX6+BzzI7rtGsZoi+
-         MBYQ==
+        bh=mr6iDGZX6WZlOIa/AqtWy4H1dbsMF9ugeMcnS6HxJNE=;
+        b=FASkpsrjoGaamnWrNHj3IJ7LmrVMskP3FHdBcUEZrPq0ROkT0wa2q39WszDCA3pTtt
+         KXo0YU1awi84gbfNj1SOJtJ3m3zXvfvsLPlk96vY00XY8IWYgW7QNRsq/6mAWB618SsJ
+         HbmNCRv4rx7YyflaUhTZ7Q0nmAEo4HTxJlffte36/nfNiZWeS8tjOJlCSgFOpfGl0mij
+         QEm309m0hARE5w7s4HdYnzo/OVPaTqYaOzDbAgNxAIX+r+v7MFVZf11yA+aB6BR3MG17
+         VyHcrgx2tUhI0t3pNh72BTxRiQ0JsYwD5mDYhaQ0r6dIJqhn9Wv/hFG6SiYwSgMa1Vnz
+         4PwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731967759; x=1732572559;
+        d=1e100.net; s=20230601; t=1731968679; x=1732573479;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=I8MIscQQe9cVfzpDABcS2/+GpjCcV2Zx/6rrV6Zgl5M=;
-        b=Ipbn8OF+3Cd6uERXazDC7ed9Y2ZhDRWfb2q7uUSTc5aEhcT2eN+rleuv/nRLZLAhD7
-         5uMvBRfph5w0BIK5Glrb/lKZkDK1aJS2+TgaUZqr/ERb3x0i+vlVm7c1a0CgHCp1fH1f
-         j/vykpDJMxhfbq1kk4scBLAufFsxv/p8DWTAcK46EUHwR3cvOukave1/B06KKU+EGCN+
-         pFO6elkMeTyfb4XQAKRSeryGeRoyZnogtQndQ6j87bLcFC1yyb+VIAzI4DvTOCBK6/EZ
-         ME36/TTYpoMR7atBXS4ApfnA7OWvnruyXilg3wrpxt8VAfZDMSnrvYUP1H+jc9d9KFR9
-         Kx+w==
-X-Forwarded-Encrypted: i=1; AJvYcCWSUYJg7yiWxKp9dn3FQvDwyZWUAZUdCbzlnZ7y6veQbdME6Z5vEDzUztgoxXm2rVtUB7RwmU27SPHxMtyp/3k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQkM+ne4L4z5tMQ4WyFJGNV0T0WMKjgZRnJSQp+Y+WyoED30Sw
-	8S+ZYgsOkvLf9cUbhW0zAVRO4snrMjRa0nEzubh+cWjTgk3tQpWUjVVEGuCdpz1PsH5YOSLZbQA
-	VGGaiy1KTjQwQkZGa4lc5XiTj3TtUj3MaXWGCgQ==
-X-Google-Smtp-Source: AGHT+IGuHkyDbKbXTopolKHlpXUuh5hPb8odsFN1/bRhiOBmnf88AGPczox19phVHKQRb/h9sm7V4erFguZn2MVlnKk=
-X-Received: by 2002:ac8:5946:0:b0:458:2764:37d5 with SMTP id
- d75a77b69052e-46363de80famr188224651cf.6.1731967759219; Mon, 18 Nov 2024
- 14:09:19 -0800 (PST)
+        bh=mr6iDGZX6WZlOIa/AqtWy4H1dbsMF9ugeMcnS6HxJNE=;
+        b=r2zXtg3wFNICcO9mVToIOlpAldCWuKPcG0GFG1tWNoXn3E840g/sw6Wxd/rT5Yy8Xq
+         M+J2lgQN8yvcLKtzKnQsirFrgqawR2LvdFtPUUC9SE2VIlFtfc7m+1FHcZ3Zu59GX+Pt
+         8Pl3dEs88KZBqmcBTvddR2IVgxeOSCMW79W814QYAR+iXaQZaZU2jhYiuypaoECwUW5i
+         Kfu2ompHpBrMTC+R+NGyKyNp8rwGcwnHjsmZDuO+/EV5yzWlyLpPxl+rz6fkhqsHx3uZ
+         oyPEJZ5qTAZ/oNV8Lyvkip3KL/dYwFLlW1n6ydvM/r2Rm/5tagqD9eWrG/x++cvNPGIQ
+         VxBA==
+X-Forwarded-Encrypted: i=1; AJvYcCU/aA7TALWyME/BblirgQgGE5a+q5jl7VqGJ4SCXhTqS2De9jSNoNTLh0Lgbgk7ZRnh/Uv1wWNe/9tt/+FH+SQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdTYbI2jfDxwYPX06Xlf6kuhlZCxJUioxoQRgfM1dMVEkyHBMy
+	oraoarIlWHSS5CsQs26o0f+dNfWj/4ONdoeGFbGwK3DzLEmPX17W8w7yhXvX2UWtUX50wCZkQO8
+	oq83S4vSSpwsqG2LLtdPnBAjh1NoAFnlWvWQTdQ==
+X-Google-Smtp-Source: AGHT+IFJn12BEIzoEKgSqnP8cIUM9l+AVMCmmrovlugeE4ncddPOm9spXZtngGYQPZw7li3y2om6vXnU1SKoOL9vTX0=
+X-Received: by 2002:ac8:45c8:0:b0:463:788e:7912 with SMTP id
+ d75a77b69052e-463788e81b9mr128943351cf.56.1731968679432; Mon, 18 Nov 2024
+ 14:24:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241116175922.3265872-1-pasha.tatashin@soleen.com> <ZzuRSZc8HX9Zu0dE@google.com>
-In-Reply-To: <ZzuRSZc8HX9Zu0dE@google.com>
+References: <20241116175922.3265872-1-pasha.tatashin@soleen.com>
+ <a0372f7f-9a85-4d3e-ba20-b5911a8189e3@lucifer.local> <CAG48ez2vG0tr=H8csGes7HN_5HPQAh4WZU8U1G945K1GKfABPg@mail.gmail.com>
+In-Reply-To: <CAG48ez2vG0tr=H8csGes7HN_5HPQAh4WZU8U1G945K1GKfABPg@mail.gmail.com>
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Mon, 18 Nov 2024 17:08:42 -0500
-Message-ID: <CA+CK2bAAigxUv=HGpxoV-PruN_AhisKW675SxuG_yVi+vNmfSQ@mail.gmail.com>
+Date: Mon, 18 Nov 2024 17:24:02 -0500
+Message-ID: <CA+CK2bB0w=i1z78AJbr2gZE9ybYki4Vz_s53=8URrxwyPvvB+A@mail.gmail.com>
 Subject: Re: [RFCv1 0/6] Page Detective
-To: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+To: Jann Horn <jannh@google.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
 	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	akpm@linux-foundation.org, corbet@lwn.net, derek.kiernan@amd.com, 
 	dragan.cvetic@amd.com, arnd@arndb.de, gregkh@linuxfoundation.org, 
 	viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, tj@kernel.org, 
-	hannes@cmpxchg.org, mhocko@kernel.org, shakeel.butt@linux.dev, 
-	muchun.song@linux.dev, Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, 
-	vbabka@suse.cz, jannh@google.com, shuah@kernel.org, vegard.nossum@oracle.com, 
+	hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev, 
+	shakeel.butt@linux.dev, muchun.song@linux.dev, Liam.Howlett@oracle.com, 
+	vbabka@suse.cz, shuah@kernel.org, vegard.nossum@oracle.com, 
 	vattunuru@marvell.com, schalla@marvell.com, david@redhat.com, 
 	willy@infradead.org, osalvador@suse.de, usama.anjum@collabora.com, 
 	andrii@kernel.org, ryan.roberts@arm.com, peterx@redhat.com, oleg@redhat.com, 
-	tandersen@netflix.com, rientjes@google.com, gthelen@google.com
+	tandersen@netflix.com, rientjes@google.com, gthelen@google.com, 
+	linux-hardening@vger.kernel.org, 
+	Kernel Hardening <kernel-hardening@lists.openwall.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 18, 2024 at 2:11=E2=80=AFPM Roman Gushchin <roman.gushchin@linu=
-x.dev> wrote:
+On Mon, Nov 18, 2024 at 7:54=E2=80=AFAM Jann Horn <jannh@google.com> wrote:
 >
-> On Sat, Nov 16, 2024 at 05:59:16PM +0000, Pasha Tatashin wrote:
-> > Page Detective is a new kernel debugging tool that provides detailed
-> > information about the usage and mapping of physical memory pages.
+> On Mon, Nov 18, 2024 at 12:17=E2=80=AFPM Lorenzo Stoakes
+> <lorenzo.stoakes@oracle.com> wrote:
+> > On Sat, Nov 16, 2024 at 05:59:16PM +0000, Pasha Tatashin wrote:
+> > > It operates through the Linux debugfs interface, with two files: "vir=
+t"
+> > > and "phys".
+> > >
+> > > The "virt" file takes a virtual address and PID and outputs informati=
+on
+> > > about the corresponding page.
+> > >
+> > > The "phys" file takes a physical address and outputs information abou=
+t
+> > > that page.
+> > >
+> > > The output is presented via kernel log messages (can be accessed with
+> > > dmesg), and includes information such as the page's reference count,
+> > > mapping, flags, and memory cgroup. It also shows whether the page is
+> > > mapped in the kernel page table, and if so, how many times.
 > >
-> > It is often known that a particular page is corrupted, but it is hard t=
-o
-> > extract more information about such a page from live system. Examples
-> > are:
+> > I mean, even though I'm not a huge fan of kernel pointer hashing etc. t=
+his
+> > is obviously leaking as much information as you might want about kernel
+> > internal state to the point of maybe making the whole kernel pointer
+> > hashing thing moot.
 > >
-> > - Checksum failure during live migration
-> > - Filesystem journal failure
-> > - dump_page warnings on the console log
-> > - Unexcpected segfaults
+> > I know this requires CAP_SYS_ADMIN, but there are things that also requ=
+ire
+> > that which _still_ obscure kernel pointers.
 > >
-> > Page Detective helps to extract more information from the kernel, so it
-> > can be used by developers to root cause the associated problem.
+> > And you're outputting it all to dmesg.
 > >
-> > It operates through the Linux debugfs interface, with two files: "virt"
-> > and "phys".
-> >
-> > The "virt" file takes a virtual address and PID and outputs information
-> > about the corresponding page.
-> >
-> > The "phys" file takes a physical address and outputs information about
-> > that page.
-> >
-> > The output is presented via kernel log messages (can be accessed with
-> > dmesg), and includes information such as the page's reference count,
-> > mapping, flags, and memory cgroup. It also shows whether the page is
-> > mapped in the kernel page table, and if so, how many times.
+> > So yeah, a security person (Jann?) would be better placed to comment on
+> > this than me, but are we sure we want to do this when not in a
+> > CONFIG_DEBUG_VM* kernel?
 >
-> This looks questionable both from the security and convenience points of =
-view.
-> Given the request-response nature of the interface, the output can be
-> provided using a "normal" seq-based pseudo-file.
+> I guess there are two parts to this - what root is allowed to do, and
+> what information we're fine with exposing to dmesg.
+>
+> If the lockdown LSM is not set to LOCKDOWN_CONFIDENTIALITY_MAX, the
+> kernel allows root to read kernel memory through some interfaces - in
+> particular, BPF allows reading arbitrary kernel memory, and perf
+> allows reading at least some stuff (like kernel register states). With
+> lockdown in the most restrictive mode, the kernel tries to prevent
+> root from reading arbitrary kernel memory, but we don't really change
+> how much information goes into dmesg. (And I imagine you could
+> probably still get kernel pointers out of BPF somehow even in the most
+> restrictive lockdown mode, but that's probably not relevant.)
+>
+> The main issue with dmesg is that some systems make its contents
+> available to code that is not running with root privileges; and I
+> think it is also sometimes stored persistently in unencrypted form
+> (like in EFI pstore) even when everything else on the system is
+> encrypted.
+> So on one hand, we definitely shouldn't print the contents of random
+> chunks of memory into dmesg without a good reason; on the other hand,
+> for example we do already print kernel register state on WARN() (which
+> often includes kernel pointers and could theoretically include more
+> sensitive data too).
+>
+> So I think showing page metadata to root when requested is probably
+> okay as a tradeoff? And dumping that data into dmesg is maybe not
+> great, but acceptable as long as only root can actually trigger this?
+>
+> I don't really have a strong opinion on this...
+>
+>
+> To me, a bigger issue is that dump_page() looks like it might be racy,
+> which is maybe not terrible in debugging code that only runs when
+> something has already gone wrong, but bad if it is in code that root
+> can trigger on demand?
 
-We opted to use dmesg for output because it's the standard method for
-capturing kernel information and is commonly included in bug reports.
-Introducing a new file would require modifying existing data
-collection scripts used for reporting, so this approach minimizes
-disruption to existing workflows.
+Hi Jann, thank you for reviewing this proposal.
 
-> But I have a more generic question:
-> doesn't it make sense to implement it as a set of drgn scripts instead
-> of kernel code? This provides more flexibility, is safer (even if it's bu=
-ggy,
-> you won't crash the host) and should be at least in theory equally
-> powerful.
+Presumably, the interface should be used only when something has gone
+wrong but has not been noticed by the kernel. That something is
+usually checksums failures that are outside of the kernel: i.e. during
+live migration, snapshotting, filesystem journaling, etc. We already
+have interfaces that provide data from the live kernel that could be
+racy, i.e. crash utility.
 
-Regarding your suggestion, our plan is to perform reverse lookups in
-all page tables: kernel, user, IOMMU, and KVM. Currently, we only
-traverse the kernel and user page tables, but we intend to extend this
-functionality to IOMMU and KVM tables in future updates, I am not sure
-if drgn can provide this level of details within a reasonable amount
-of time.
+> __dump_page() copies the given page with
+> memcpy(), which I don't think guarantees enough atomicity with
+> concurrent updates of page->mapping or such, so dump_mapping() could
+> probably run on a bogus pointer. Even without torn pointers, I think
+> there could be a UAF if the page's mapping is destroyed while we're
+> going through dump_page(), since the page might not be locked. And in
+> dump_mapping(), the strncpy_from_kernel_nofault() also doesn't guard
+> against concurrent renaming of the dentry, which I think again would
+> probably result in UAF.
 
-This approach will be helpful for debugging memory corruption
-scenarios. Often, external mechanisms detect corruption but require
-kernel-level information for root cause analysis. In our experience,
-invalid mappings persist in page tables for a period after corruption,
-providing a window to identify other users of the corrupted page via
-timely reverse lookup.
+Since we are holding a reference on the page at the time of
+dump_page(), the identity of the page should not really change, but
+dentry can be renamed.
 
-Additionally, using crash/drgn is not feasible for us at this time, it
-requires keeping external tools on our hosts, also it requires
-approval and a security review for each script before deployment in
-our fleet.
+> So I think dump_page() in its current form is not something we should
+> expose to a userspace-reachable API.
 
-Thanks,
-Pasha
+We use dump_page() all over WARN_ONs in MM code where pages might not
+be locked, but this is a good point, that while even the existing
+usage might be racy, providing a user-reachable API potentially makes
+it worse. I will see if I could add some locking before dump_page(),
+or make a dump_page variant that does not do dump_mapping().
 
