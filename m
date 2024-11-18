@@ -1,121 +1,109 @@
-Return-Path: <linux-kselftest+bounces-22203-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22204-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 071A39D1A03
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 22:02:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 560519D1A0B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 22:05:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8877DB22133
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 21:02:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D06B1F223B7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 21:05:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 796DF1BE852;
-	Mon, 18 Nov 2024 21:02:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0C861E7C0A;
+	Mon, 18 Nov 2024 21:05:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DBwnCjhc"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="ZhFZjeFb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C6C17BA3
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 Nov 2024 21:02:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F12D1E5730
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 Nov 2024 21:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731963753; cv=none; b=BacBJFOwgetN9Tm596uwr0S7NvhYE9tsC23CbnreopHJMPJXwgvkzvEsrj3khOaPU/mS5dp2qrSemljP8HHY5XZxonPTbVFbNFdGukPc/ZjHePXcFINxqvWSnkgYsb46Vn570pecPR79L8/yjCjOEj98mFLKUjr9PSACh0flbf4=
+	t=1731963932; cv=none; b=Y/EsBvmKJsa1zafO1jKzNv5Pwsi4kqz9cWgWoX+B+bxWXuT7/DtdJy0ZmvuXyiFZbeH8w+o/L5bN8+XgY5Agtp0TL9MxVvnZ62YG4M2SYvZy3t30b4bNa5fSXYlEN/2dTM2sJ1qXVAdWzmjennCXKdWZ8NEkIhj9eqWyFVKJryI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731963753; c=relaxed/simple;
-	bh=le42+9rIC7jVhHk3YIfqZ0r8CFuKznluHsTDmmkohNU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tGKNCKOcS3eRFVrFUnq1UCtk9933Ee9WBoTaF7wuK8ydl+yNufQJTz9FCHBCFhrTqseVYNHvgeLq8gw5gx45br0sAm9/Zs4F1KhPTXH5BbXyPICxzs+MEhz5RdvUIqbcOznmwymDE3CfSfCgkjuMy88iCkCTJwHH0Cm3bziWtv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DBwnCjhc; arc=none smtp.client-ip=209.85.166.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-83aad99d6bfso129686239f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Nov 2024 13:02:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1731963751; x=1732568551; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PPakNa8rDNXMFXl7df49PWizHvmHvh2swC8PsPfcVic=;
-        b=DBwnCjhc17xGMj9PjORY0doTpnuoauMa+tnagCTF/TvEGEaR8dZUxjqzVWgUrV/AXO
-         wOPaqN9N+LQup8E0+nFv8356OaNqj6UwRcD+fU8I/85KpQrqqyfrp8KeSkRy9vbjNId0
-         kjoTi+1/HLNkl/5ldPzNf/rMHfF4ZKa8GFUYo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731963751; x=1732568551;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PPakNa8rDNXMFXl7df49PWizHvmHvh2swC8PsPfcVic=;
-        b=MeixEugMR9bF2euFPO8jLb6UyFJjYd/NMg89fL+CyO3qr3wFvctfxLvd9YJWhuFHh1
-         XZlDFCe7tFLKEAnwr9gYT+HR0y8XRaSRDvILotCykLx7Yrn96U23bkQ6bvTEpKMi96Wi
-         G2ZHITroTa2IrCTXsy4s6dGdPv5M9HaO2yCtBNoNGqKIMDxnVtPONIjH5SDA8JIkIliA
-         CyhBe0f/h8vDZcLBwldGlvmnz1+F7pvrtfstOrbgCxU95C0Fq+l41/602qbeHDkQP5Ta
-         MF0dhH6KdLN5pCQVnawsr8XZ7SlP7xtPuctakFk5d5pjEzImFJFc+PTbb3CiRP1oJE72
-         3kuw==
-X-Forwarded-Encrypted: i=1; AJvYcCUcl6UFTUNhkYJ9HtxhSIBTGHiD1Gi/ickD27xY6MbPzSi5vkS4oF33f4FZsygQZh3/o8fPQvJtO7e+ZRRoD/c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaY0iTzVoza+sqWelOcKSXx8Sh0/YEBxeN1luXuPmSJ/Ibg8VM
-	IjFK7EnoX7SxSQxE0Y4IAdXldzECZxxdaIWIBc3THYmsuj8Y32QvxxISxdEyZfwRniiZsEoshls
-	W
-X-Google-Smtp-Source: AGHT+IF+sCKjlMGjaxiRWqQqQ08wQz1xdtaU0837PJltssoRgIjIr8COb5aZYtInwwUQd92ByUOmlg==
-X-Received: by 2002:a05:6602:1406:b0:837:7f8e:dfe2 with SMTP id ca18e2360f4ac-83e6c09e713mr1462530639f.2.1731963750734;
-        Mon, 18 Nov 2024 13:02:30 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e06d6ea1c1sm2415897173.21.2024.11.18.13.02.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Nov 2024 13:02:30 -0800 (PST)
-Message-ID: <8192e307-b2b9-4c48-87e2-31073c084218@linuxfoundation.org>
-Date: Mon, 18 Nov 2024 14:02:29 -0700
+	s=arc-20240116; t=1731963932; c=relaxed/simple;
+	bh=cCmISK6BnKASPnPfisyoQZpkhJsYpv3tV4Awm1tVG+s=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=lUcFbWNWR0TfnW6cvFH0R0KUCNi8iRxxvTXMheWrUKbm22jx5UO5qi61Hvl3qLudKb2kKkxvc/RDe3rSkzfWvH9r9p//ZaRbtGGM5Wqoz/HAQ91dntdusgoY7IPq0Z3AosKzDLOs/ehook3qodh8sab6ZTX+EtCVIhmU8DT8h/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=ZhFZjeFb; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1tD8vv-00007i-SK; Mon, 18 Nov 2024 22:05:19 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector2; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From; bh=SZ4ULW7QA2NHTeEfsW9RD+SClsi51owWe7zBsnnPzcM=
+	; b=ZhFZjeFbAKKEVzE5Snnwy+OMXz+pUH37PvMQDtjQiKIPcF86lH3EfniXju3sGD6nj1F94p5nt
+	IczTht1X+yzrxM5jyuIWiHhh49GqXFt9N0bRzyZypVe+IuBRe+gzNraOtU+8W/drsm/cISeKlVpwY
+	t2zstNtLTfZnByxadbEK6dSFwPHUoCIH2FLMOZdAinRpxqB+8KEkFg8AmTZr6ewVHTPE2ws6BrVFG
+	CgceAfD1WlmjDyPn4+UWLsH81+8FOetwDJSfnB5sDHVtcy34Jt286B5d4F/ZUpqNO9/n4BlnSs+Mv
+	mn+Ozp2R20ZfOvlIMyQ6uPa6n3VXtBWV+U9eCw==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1tD8vv-0007dS-E1; Mon, 18 Nov 2024 22:05:19 +0100
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1tD8vd-00DME4-Tz; Mon, 18 Nov 2024 22:05:02 +0100
+From: Michal Luczaj <mhal@rbox.co>
+Subject: [PATCH bpf 0/4] bpf, vsock: Fix poll() and close()
+Date: Mon, 18 Nov 2024 22:03:40 +0100
+Message-Id: <20241118-vsock-bpf-poll-close-v1-0-f1b9669cacdc@rbox.co>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC v2] MAINTAINERS: split kselftest entry into 'framework' and
- 'all'
-To: Jakub Kicinski <kuba@kernel.org>, shuah@kernel.org
-Cc: Tim.Bird@sony.com, linux-kselftest@vger.kernel.org,
- workflows@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20241115200912.1009680-1-kuba@kernel.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241115200912.1009680-1-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKyrO2cC/x2MQQqAIBAAvxJ7biFNJPpKdChba0lSXIhA+nvSc
+ WBmCghlJoGxKZDpZuF4VVBtA+5Yrp2Qt8qgO22UUgPeEt2Ja/KYYgjoQhRCa7zpNdlBk4Oapky
+ en387QXVhft8Pku03EmsAAAA=
+X-Change-ID: 20241118-vsock-bpf-poll-close-64f432e682ec
+To: Stefano Garzarella <sgarzare@redhat.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Bobby Eshleman <bobby.eshleman@bytedance.com>, 
+ "Michael S. Tsirkin" <mst@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
+X-Mailer: b4 0.14.2
 
-On 11/15/24 13:09, Jakub Kicinski wrote:
-> The testing effort is increasing throughout the community.
-> The tests are generally merged into the subsystem trees,
-> and are of relatively narrow interest. The patch volume on
-> linux-kselftest@vger.kernel.org makes it hard to follow
-> the changes to the framework, and discuss proposals.
-> 
-> Create a new ML focused on the framework of kselftests,
-> which will hopefully be similarly low volume to the workflows@
-> mailing list.
-> 
->  From the responses to v1 I gather that the preference is to
-> keep the existing list for all (or create an alias to it);
-> the framework-only section should be the one to have a new
-> list created.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> Sorry for the delay, the responses to v1 weren't super positive
-> but I keep thinking this would be very useful :) Or at the very
-> least I find workflows@ very useful and informative as a maintainer.
-> 
-> Posting as an RFC because we need to create the new ML.
-I have to repeat the same thing I said when you sent RFC v1
-It is going to add the confusion - people don't cc the one mailing list
-we have now.
+Two small fixes for vsock: poll() missing a queue check, and close() not
+invoking sockmap cleanup.
 
-I am going to have to say no. Sorry.
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
+---
+Michal Luczaj (4):
+      bpf, vsock: Fix poll() missing a queue
+      selftest/bpf: Add test for af_vsock poll()
+      bpf, vsock: Invoke proto::close on close()
+      selftest/bpf: Add test for vsock removal from sockmap on close()
 
-thanks,
--- Shuah
+ net/vmw_vsock/af_vsock.c                           | 70 ++++++++++++--------
+ .../selftests/bpf/prog_tests/sockmap_basic.c       | 77 ++++++++++++++++++++++
+ 2 files changed, 120 insertions(+), 27 deletions(-)
+---
+base-commit: 6c4139b0f19b7397286897caee379f8321e78272
+change-id: 20241118-vsock-bpf-poll-close-64f432e682ec
+
+Best regards,
+-- 
+Michal Luczaj <mhal@rbox.co>
 
 
