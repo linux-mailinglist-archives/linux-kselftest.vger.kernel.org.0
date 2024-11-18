@@ -1,205 +1,189 @@
-Return-Path: <linux-kselftest+bounces-22184-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22185-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D31FF9D1346
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 15:39:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73BDB9D13E1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 16:04:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A53C7B2B0D6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 14:38:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3527A283BE5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Nov 2024 15:03:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29DC61C3301;
-	Mon, 18 Nov 2024 14:34:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5455D1B0F24;
+	Mon, 18 Nov 2024 15:02:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CL4T9EAm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="idRq2uAO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21C41C243A;
-	Mon, 18 Nov 2024 14:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A2E1AF0D9;
+	Mon, 18 Nov 2024 15:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731940441; cv=none; b=UMLYJg5BTnFFEVT6EkxkgAuMD4n4BNlQHJS/G8W9Hbbjpr8IIeLHiPGcKPJ6JoZyFw6B9W2XrNG1cRAJUFqXnH8yd9p60bifdIppyyRgsUWfQV1kUNdcWvOzauMOvubpeXsFYRUHIKyt0P3m0zFdpOrgekEFTuDFg2vJO7PG/7g=
+	t=1731942139; cv=none; b=HfOOGcd1d25oswXPjDcI63LghRS34JpSbcRSuduPGXMnrVtQTam3OENiA1gYck4s6dormiIafDWY0d5phaz5Ewz+JXDolUhnvxSGnb271aX3zbTyp7UmVrU2VTc+tKCeMp/E1PkFhWe+QLnqqaVnM0AeSolsepV9T44jKp5R5tA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731940441; c=relaxed/simple;
-	bh=EMm8SpRFSVdgOejildAdC2w3jXC1qx7tovAMGbdzoWw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RzoVPmVavIxMNPgaQX+8jSC4+iP1NyYELlyG1WltSrbvz7nGiEWcOoEtrdq+ns/0qHsQlRUwxn/7NIPyeHl6uylUyUPQK1omQUgmk8b8ye6pfiqUT9xqBhEKY3TPaYV++M2Rq2Q5h5timhIwfPp2ogld+4MgElKnsjcF0dZL1UQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CL4T9EAm; arc=none smtp.client-ip=209.85.210.170
+	s=arc-20240116; t=1731942139; c=relaxed/simple;
+	bh=0w2OynbYO+nrOmy4rb//EdFOurhjemtoUWrgafapEz4=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=k2+XVAlWkY5Qtebtpzavo9RnwhVI8p+vSqgq1zrtuN4a3cY0hd3yOEjFz4fqJezlO9HRp7IAal7UiP4vY/gn9m6wumspz1V9ZcpLmVpoUPd0HUPo+sfR08wpU7S5NJVcFsZbEU/NeR1cBOZ9ka7xvVfCimImqPf7jvGj5EYyGB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=idRq2uAO; arc=none smtp.client-ip=209.85.219.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7240fa50694so2573017b3a.1;
-        Mon, 18 Nov 2024 06:33:58 -0800 (PST)
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6cc250bbc9eso25635076d6.2;
+        Mon, 18 Nov 2024 07:02:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731940438; x=1732545238; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1731942136; x=1732546936; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Mad+mOcno2P0CIpC5U9uxqbBM+RxeN4q/RBh6+yxx1g=;
-        b=CL4T9EAmet4oWj3D2aUczQ5Wy6j++1B1BMz+q0T1SnUYhEwh0UmnGmbx6yMFd/Yo/f
-         V6M6oitwQY+pCqyfNlQmhhOKLVKRxRGDqPRpAm1697TmGXcFrCS0F9FC6Vk2FkIjiOUX
-         uZwuWMiFyYK1VL2DO6fJNQrDFuomj+704nOcJ0O227+IqDuP2+9t/doT8em7PeFdaJ9Z
-         5QaTkBXhkyJYQ8jqNd4ZbmXzwCwG97RHuvTojNPdaVUPU2B5hgal09LPPzCq6kqqwNyz
-         F3mce2Bhn7Hk7xdlVmUHP4bpCWmzlfX3rU27yw3AykBjJeTB8hsMhAFxwhrlE/A+3CUH
-         ASNw==
+        bh=SRQSc3PSOGIXJkJ+LkMmHz+FFKZo/2EmDTEVlbJ4y0s=;
+        b=idRq2uAO7PNs9lq3RKfKw6AwD1ZJQ8hf7zQLvdpRo3RybOaCqRN0SaAXjWsnXEazKy
+         7RCCPUrX7KC1dvBEZUUz/l7v4wOZPdlHrGNPX+Ku94fLuJO34aRx4aD2e2PMrUEKc2mJ
+         rUVQk+4cCUm88O+fD8GydNEJZw9S0pwoxCwM7ZJh5SilMaoL8KpqpWBIwIBY8Ay9gSWo
+         COFKm52Hxcv9alOCfjJxdMx2j4IFMd57Azkozczj3FKA3wdVZu0yk/1f6/IPAJSdJzT8
+         G2egannsbUmT2k/UTfXBCYpUW90VTs2PG7Edb0Z+O/lPdSzaEtDQupF5jjBdAXpjV/lY
+         p3oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731940438; x=1732545238;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Mad+mOcno2P0CIpC5U9uxqbBM+RxeN4q/RBh6+yxx1g=;
-        b=mkcbTXOihPDoEF3kRJk7Z6KyTj8F8vetx6QL3VvAoIKk9J2ZfgSQfQ4sBl7kQ0Aspr
-         AptqKMjGTdCX1X4YgVHjlVSQUH2vUUOMvPcsfzES1rkxChhx/bFHOf89tsRQ8J8o6ihT
-         Nt8ADeL1UndOCkBA3N+nNoCuPX6pzo9nr9Lc1EmP3gd1Wy5/Fl5NBZ+F11W8TXg+f+W3
-         9eUnpXfysihiKr/x/FwKe/SxKT+760P/V2i1q5GjLiFMTNGFzq0DQRw1EDRXDSkOcRTr
-         ugyVf0eqffXPdotF98KYsHlIVLdi7G5gU2wlkAzpkyjkjmmsxvKdjDgS5fCBU5yHF6Nw
-         1BcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU4SqadZdzqBEM9eAGz8dPy8VyZ1N5qk6Ie2Mx4UucckIrB+1zRx2mlS+V3rPK8stP/S+Jx8T5sVwAqdQ==@vger.kernel.org, AJvYcCUkN84qgFYcXc0oTc3w1x10SERt/eR6PPXQDCnwZ/ohYn79c3bLEmvLl6dgw84L4yd7M1swezaAecYVpg==@vger.kernel.org, AJvYcCUn5OtIt1UrKk7YJEGol7JVUdHwDFUhm582scEMTsJ8TlwxBZ10uYLZJbELrcDlPYq41Qw=@vger.kernel.org, AJvYcCVjwnYxNcv+F2+D3fRpEZ8dw7RXfV0qecUZyEq3K6tZkm0MsTPuEtO7RSz2uQg43gc8tgwBnXNOd7G6yQUzhyU=@vger.kernel.org, AJvYcCVmWoubgTLk9VnhftPID3s+QQazA1I6ffijBTT90DMwIkQcIJVMANqxO6TRuhn6omi73bNqjessqMS5@vger.kernel.org, AJvYcCVvCtv7vs2Wm6XhDnqsZxAs4k2bTAm4E6Se7ypFRWSWJKqPWzRScdJxHwlI+QFudWg4p0EbEmpya0BL@vger.kernel.org, AJvYcCXOrhWF1YOhNgnJOfalKZhiE3Md1cX1CwCizoub9DVqH4exInnUXKvp/S5FFhuUT5DXy3PTBi+57HGdQlro@vger.kernel.org, AJvYcCXU7QP3tJIm2Wnv9wrwaV81935zbg9uQGRmlGIhLVnfXP0HPRGxe8a5KQ2hxR0h4N1uVuyP5zdT2wwadBmA8p6i@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxrr4Ja8m+mt2ByCjOsC3lrP+pyUhmA/kuxO/CqXRQev8c2sM29
-	CHd3g27ggyEIgcUwzbd+6Sa6Ads0ctmLLxeFOJ9ZctSA8oT6FJ6DqZv92e6DPXs=
-X-Google-Smtp-Source: AGHT+IF3SrGnsKmrF4jvHwe9jv6er3cYNAFkQ6BmUOZb81V3DDpEwoq4AchAw0/egZEddY1NEy8bEw==
-X-Received: by 2002:a17:90b:3887:b0:2ea:98f1:c172 with SMTP id 98e67ed59e1d1-2ea98f1c2a5mr1425759a91.7.1731940436264;
-        Mon, 18 Nov 2024 06:33:56 -0800 (PST)
-Received: from nova-ws.. ([103.167.140.11])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ea81b0e2fasm1616926a91.52.2024.11.18.06.33.48
+        d=1e100.net; s=20230601; t=1731942136; x=1732546936;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SRQSc3PSOGIXJkJ+LkMmHz+FFKZo/2EmDTEVlbJ4y0s=;
+        b=GzK37Gewi/iwteskFn35tQo2L+4UkQ56CU2m162CNQS3yfxISaeCJP9lqCBHpDyVJ2
+         HKbmSCGfKz7x+l9NgKz7AwMoO2BzevTSNBrGSZkhvuI/XFtttstnfIRsUSu1TVjDCuM8
+         Fss8vjU0rAyOOhL2aUnlKdvPg6siG9RvZwrsle0bGj/ZPi8+fUlywnHxNtJ03YXJXHAl
+         3hZkxtGXeWpZA3LTunxgbjJgtSjBVwU6g5hlmpRDk1W2uQo6rf5A0F3w068i1PcnDGVz
+         AvBCCPWqKDMwayZcX7MmScyWVpY3nHammjELWcZj4U/Iq9zyidJNCmpay9ryp/nhvPK8
+         4tSA==
+X-Forwarded-Encrypted: i=1; AJvYcCUhhnl4Xg8PgFzLxXDzN/xi31ZB9NofghZCYW9GZbCXmRN4ZqA9eyFU/Bbing2I4U7QOtZrUsXQ@vger.kernel.org, AJvYcCVOrgMLH52g5zaLCKvsqH02DN+UgH0m/ybnOXBbAS8/PbqgoxgjfKyXJVh5nW22DyumjB4P/n4uTblISyc=@vger.kernel.org, AJvYcCXuE3PsUxeGJzHNbomn6+C26D6OSEIeLXjA4+hf9G25ZNvTYev/VyiV/ZKKEMUcSGduevAxGFZfur29sfcaUdO2@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzZFptc6DavZE6m7aq2V6kuhy5kz2GPN2hH/EDZjbUDMbY2ABS
+	65qvukhqnC3Q1+Me+fYNQEU3yR4r0nwxluUrGxi1Td2qhHADq78K
+X-Google-Smtp-Source: AGHT+IGhgA/dHGCFIDyrq3rPlb1Z9bnrCzNhZrK1350dn5qjCRp6cQgukK65MSUGUxo/DnEb27XNUg==
+X-Received: by 2002:a05:6214:2f85:b0:6cb:d4e6:2507 with SMTP id 6a1803df08f44-6d3fb802d51mr166801986d6.22.1731942136360;
+        Mon, 18 Nov 2024 07:02:16 -0800 (PST)
+Received: from localhost (250.4.48.34.bc.googleusercontent.com. [34.48.4.250])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d40dd205c6sm36585216d6.89.2024.11.18.07.02.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Nov 2024 06:33:55 -0800 (PST)
-From: Xiao Liang <shaw.leon@gmail.com>
-To: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Kuniyuki Iwashima <kuniyu@amazon.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	linux-rdma@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	osmocom-net-gprs@lists.osmocom.org,
-	bpf@vger.kernel.org,
-	linux-ppp@vger.kernel.org,
-	wireguard@lists.zx2c4.com,
-	linux-wireless@vger.kernel.org,
-	b.a.t.m.a.n@lists.open-mesh.org,
-	bridge@lists.linux.dev,
-	linux-wpan@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v4 5/5] selftests: net: Add two test cases for link netns
-Date: Mon, 18 Nov 2024 22:32:44 +0800
-Message-ID: <20241118143244.1773-6-shaw.leon@gmail.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241118143244.1773-1-shaw.leon@gmail.com>
-References: <20241118143244.1773-1-shaw.leon@gmail.com>
+        Mon, 18 Nov 2024 07:02:15 -0800 (PST)
+Date: Mon, 18 Nov 2024 10:02:15 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Leo Stone <leocstone@gmail.com>, 
+ davem@davemloft.net, 
+ edumazet@google.com, 
+ kuba@kernel.org, 
+ pabeni@redhat.com, 
+ horms@kernel.org, 
+ shuah@kernel.org
+Cc: Leo Stone <leocstone@gmail.com>, 
+ netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ linux-kernel-mentees@lists.linuxfoundation.org
+Message-ID: <673b56f7768fc_1ced1f294fa@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20241117225950.138968-1-leocstone@gmail.com>
+References: <20241117225950.138968-1-leocstone@gmail.com>
+Subject: Re: [PATCH net-next] selftests: net/psock_lib: Handle EINTR and
+ EAGAIN
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
- - Add test for creating link in another netns when a link of the same
-   name and ifindex exists in current netns.
- - Add test for link netns atomicity - create link directly in target
-   netns, and no notifications should be generated in current netns.
+Leo Stone wrote:
+> Make pair_udp_send_char handle EAGAIN, EINTR, and partial reads or
+> writes.
+> 
+> Signed-off-by: Leo Stone <leocstone@gmail.com>
 
-Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
----
- tools/testing/selftests/net/Makefile        |  1 +
- tools/testing/selftests/net/netns-name.sh   | 10 ++++++
- tools/testing/selftests/net/netns_atomic.py | 39 +++++++++++++++++++++
- 3 files changed, 50 insertions(+)
- create mode 100755 tools/testing/selftests/net/netns_atomic.py
+Did you observe actual issues or is this based on the comment in the
+existing code ("Should really handle EINTR and EAGAIN").
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 3d487b03c4a0..3aaa7950b0f0 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -34,6 +34,7 @@ TEST_PROGS += gre_gso.sh
- TEST_PROGS += cmsg_so_mark.sh
- TEST_PROGS += cmsg_time.sh cmsg_ipv6.sh
- TEST_PROGS += netns-name.sh
-+TEST_PROGS += netns_atomic.py
- TEST_PROGS += nl_netdev.py
- TEST_PROGS += srv6_end_dt46_l3vpn_test.sh
- TEST_PROGS += srv6_end_dt4_l3vpn_test.sh
-diff --git a/tools/testing/selftests/net/netns-name.sh b/tools/testing/selftests/net/netns-name.sh
-index 6974474c26f3..0be1905d1f2f 100755
---- a/tools/testing/selftests/net/netns-name.sh
-+++ b/tools/testing/selftests/net/netns-name.sh
-@@ -78,6 +78,16 @@ ip -netns $NS link show dev $ALT_NAME 2> /dev/null &&
-     fail "Can still find alt-name after move"
- ip -netns $test_ns link del $DEV || fail
- 
-+#
-+# Test no conflict of the same name/ifindex in different netns
-+#
-+ip -netns $NS link add name $DEV index 100 type dummy || fail
-+ip -netns $NS link add netns $test_ns name $DEV index 100 type dummy ||
-+    fail "Can create in netns without moving"
-+ip -netns $test_ns link show dev $DEV >> /dev/null || fail "Device not found"
-+ip -netns $NS link del $DEV || fail
-+ip -netns $test_ns link del $DEV || fail
-+
- echo -ne "$(basename $0) \t\t\t\t"
- if [ $RET_CODE -eq 0 ]; then
-     echo "[  OK  ]"
-diff --git a/tools/testing/selftests/net/netns_atomic.py b/tools/testing/selftests/net/netns_atomic.py
-new file mode 100755
-index 000000000000..d350a3fc0a91
---- /dev/null
-+++ b/tools/testing/selftests/net/netns_atomic.py
-@@ -0,0 +1,39 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+import time
-+
-+from lib.py import ksft_run, ksft_exit, ksft_true
-+from lib.py import ip
-+from lib.py import NetNS, NetNSEnter
-+from lib.py import RtnlFamily
-+
-+
-+def test_event(ns1, ns2) -> None:
-+    with NetNSEnter(str(ns1)):
-+        rtnl = RtnlFamily()
-+
-+    rtnl.ntf_subscribe("rtnlgrp-link")
-+
-+    ip(f"netns set {ns1} 0", ns=str(ns2))
-+
-+    ip(f"link add netns {ns2} link-netnsid 0 dummy1 type dummy")
-+    ip(f"link add netns {ns2} dummy2 type dummy", ns=str(ns1))
-+
-+    ip("link del dummy1", ns=str(ns2))
-+    ip("link del dummy2", ns=str(ns2))
-+
-+    time.sleep(1)
-+    rtnl.check_ntf()
-+    ksft_true(rtnl.async_msg_queue.empty(),
-+              "Received unexpected link notification")
-+
-+
-+def main() -> None:
-+    with NetNS() as ns1, NetNS() as ns2:
-+        ksft_run([test_event], args=(ns1, ns2))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
--- 
-2.47.0
+AFAIK all the users of psock_lib use default blocking IO, so should
+not see EAGAIN.
+
+A simpler approach to dealing with EINTR is to ask glibc to restart
+with sigaction or siginterrupt.
+
+> ---
+>  tools/testing/selftests/net/psock_lib.h | 39 +++++++++++++++++++------
+>  1 file changed, 30 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/net/psock_lib.h b/tools/testing/selftests/net/psock_lib.h
+> index 6e4fef560873..e28bff95c8e2 100644
+> --- a/tools/testing/selftests/net/psock_lib.h
+> +++ b/tools/testing/selftests/net/psock_lib.h
+> @@ -13,6 +13,7 @@
+>  #include <string.h>
+>  #include <arpa/inet.h>
+>  #include <unistd.h>
+> +#include <stdbool.h>
+>  
+>  #include "kselftest.h"
+>  
+> @@ -110,21 +111,41 @@ static __maybe_unused void pair_udp_open(int fds[], uint16_t port)
+>  	}
+>  }
+>  
+> +static void read_write_checked(int fd, char *buf, size_t sz, bool is_write)
+> +{
+> +	int bytes_processed = 0;
+> +	int ret;
+> +
+> +	do {
+> +		if (is_write)
+> +			ret = write(fd, buf + bytes_processed,
+> +				    sz - bytes_processed);
+> +		else
+> +			ret = read(fd, buf + bytes_processed,
+> +				   sz - bytes_processed);
+> +		if (ret == -1) {
+> +			if (errno == EAGAIN || errno == EINTR) {
+> +				continue;
+
+Instead of busy looping, on return with EAGAIN should probably block.
+
+> +			} else {
+> +				fprintf(stderr, "ERROR: %s failed, bytes left=%lu\n",
+> +					is_write ? "send" : "recv",
+> +					sz - bytes_processed);
+> +				exit(1);
+> +			}
+> +		}
+> +		bytes_processed += ret;
+> +	} while (bytes_processed < sz);
+> +}
+> +
+>  static __maybe_unused void pair_udp_send_char(int fds[], int num, char payload)
+>  {
+>  	char buf[DATA_LEN], rbuf[DATA_LEN];
+>  
+>  	memset(buf, payload, sizeof(buf));
+>  	while (num--) {
+> -		/* Should really handle EINTR and EAGAIN */
+> -		if (write(fds[0], buf, sizeof(buf)) != sizeof(buf)) {
+> -			fprintf(stderr, "ERROR: send failed left=%d\n", num);
+> -			exit(1);
+> -		}
+> -		if (read(fds[1], rbuf, sizeof(rbuf)) != sizeof(rbuf)) {
+> -			fprintf(stderr, "ERROR: recv failed left=%d\n", num);
+> -			exit(1);
+> -		}
+> +		read_write_checked(fds[0], buf, sizeof(buf), true);
+> +		read_write_checked(fds[1], rbuf, sizeof(rbuf), false);
+> +
+>  		if (memcmp(buf, rbuf, sizeof(buf))) {
+>  			fprintf(stderr, "ERROR: data failed left=%d\n", num);
+>  			exit(1);
+> -- 
+> 2.39.5
+> 
+
 
 
