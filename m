@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-22293-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22294-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 624859D2A60
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 17:01:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E7249D2A89
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 17:11:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E3D7B342BC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 15:44:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 083D2B2FDDA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 15:44:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D0221D1726;
-	Tue, 19 Nov 2024 15:39:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE47D1D1E6C;
+	Tue, 19 Nov 2024 15:39:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZJovQOz/"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="V0UoDJj+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B63BB1D0B9C
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 15:39:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357D51D175F
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 15:39:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732030758; cv=none; b=s6QYdMsav6zhKZoq6LvYNUFG7SMJAbj6DLvlqXgiqkThb5GUVi/T7T+Lwpc6T7SIBNLZm7EdHbnD8dDzzgbBG2eSyX2XWguNy0uBSTwNeXktE8vd29pKG8CQrmRCbT8K41ma/l5hrFqyP87IT/wvpUYS/gpeBLcvP8YxVzQfF+g=
+	t=1732030771; cv=none; b=aOui87zRExo8GOnBRib72PEXEM8Ye0mT6jWKw2P7vH/ol0SYm1NRPDHMoiSilGxI8VhBvFf+IeRKwnpPixadxBxKIru0JkSx3BwHo0LQL0HRYOoer6K9Wco2NlZqVsaE2gi4uzgwaz80AWXuTmNhpNAAPFmWxyKPQyTAtRTFfLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732030758; c=relaxed/simple;
-	bh=cXoNA/ZSNgL3xQCJGLUfOCoVbT9uZZp4m09FWAiotH8=;
+	s=arc-20240116; t=1732030771; c=relaxed/simple;
+	bh=qZYlteLvCxXOvYUuzfcxn7fFpUiypvGlWfQxkKpgHw8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O+bBgKxEhm9kv8pyLC6iAeA5C2Ah7w0mFv0NN7UJuX++MwgBy1cFsdCvSUBAiz3pN9V5dmjLlzfEIEr6EsVkvKLJ/L2PfSbobqpSgXkC+T+62WDu8XSr29EZPMD1GaxUz3/dWVvz3VXmIamKjuBMiVGFL2HY+9QEz//HiyfK9zY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZJovQOz/; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=jqJy1dQxBPok9WYh/FVx0qV3qdWDXjoQ9NlxkHgYZlya+qNISZAdAEv5LphLltE2YsNOk+CrSMWvSgxHWgKGLieKFLSSawz4vvq3kCH/XSyikAa5rUDPkgDVm617ACIrlxeWosKAVFt6hxb5XNF/YtJMmf0a+kiB2SLM9Asef4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=V0UoDJj+; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732030755;
+	s=mimecast20190719; t=1732030769;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=gHLzoO2lla+YiGjlL3mjjdCwCDcrDiVLGjLeux29GIU=;
-	b=ZJovQOz/9dzf4VIxh9Q3noIPFwY43WnEdImzZxZ4VpQgkFEAjOUjbfGViUXRhdW/ExoX1Z
-	Gi5WW+j1sV60GaWRKO70BwURFzRmZbPJe1nOiN64kyr9enykqzHLhXZM0EL0Hw8IZ6V/Gm
-	8o8mD7Mwoa2H8BSyYBfW7rFdsTDbJxI=
+	bh=XZhR8LJzRJ/NA3355q22R2um1DqV6KheeHOnZlXN8BQ=;
+	b=V0UoDJj+mrLCzIuqd0TVI6rtcQMmNtLBqG7yksCmePkzi3Sy5tJgYeU27r+6MRHmgV/FZt
+	B3r0mBHzyMzBYWwaOoyAEGMIhXACLHmGMB8Fyg7HJ6562o9ha1V5cUYPxXzpSc9AsukeWA
+	DgJ84bicFE6Nxb0rlGAzlFnvhHwZKa8=
 Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-467-Mc4eVWE3PlutRNpeiXlJfw-1; Tue,
- 19 Nov 2024 10:39:11 -0500
-X-MC-Unique: Mc4eVWE3PlutRNpeiXlJfw-1
-X-Mimecast-MFC-AGG-ID: Mc4eVWE3PlutRNpeiXlJfw
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-620-EyVM_Q77Oy2qLzT--XqbYw-1; Tue,
+ 19 Nov 2024 10:39:27 -0500
+X-MC-Unique: EyVM_Q77Oy2qLzT--XqbYw-1
+X-Mimecast-MFC-AGG-ID: EyVM_Q77Oy2qLzT--XqbYw
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0E26E1955EA3;
-	Tue, 19 Nov 2024 15:39:06 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 209A21955F2C;
+	Tue, 19 Nov 2024 15:39:22 +0000 (UTC)
 Received: from vschneid-thinkpadt14sgen2i.remote.csb (unknown [10.39.194.94])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B578D3003B7E;
-	Tue, 19 Nov 2024 15:38:49 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7E38F30001A0;
+	Tue, 19 Nov 2024 15:39:06 +0000 (UTC)
 From: Valentin Schneider <vschneid@redhat.com>
 To: linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org,
@@ -66,9 +66,7 @@ To: linux-kernel@vger.kernel.org,
 	x86@kernel.org,
 	rcu@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
+Cc: Steven Rostedt <rostedt@goodmis.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
 	Jonathan Corbet <corbet@lwn.net>,
 	Thomas Gleixner <tglx@linutronix.de>,
@@ -80,6 +78,7 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	Wanpeng Li <wanpengli@tencent.com>,
 	Vitaly Kuznetsov <vkuznets@redhat.com>,
 	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
 	Frederic Weisbecker <frederic@kernel.org>,
 	"Paul E. McKenney" <paulmck@kernel.org>,
 	Neeraj Upadhyay <quic_neeraju@quicinc.com>,
@@ -118,9 +117,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	Yair Podemsky <ypodemsk@redhat.com>,
 	Daniel Wagner <dwagner@suse.de>,
 	Petr Tesarik <ptesarik@suse.com>
-Subject: [RFC PATCH v3 12/15] context_tracking,x86: Defer kernel text patching IPIs
-Date: Tue, 19 Nov 2024 16:34:59 +0100
-Message-ID: <20241119153502.41361-13-vschneid@redhat.com>
+Subject: [RFC PATCH v3 13/15] context_tracking,x86: Add infrastructure to defer kernel TLBI
+Date: Tue, 19 Nov 2024 16:35:00 +0100
+Message-ID: <20241119153502.41361-14-vschneid@redhat.com>
 In-Reply-To: <20241119153502.41361-1-vschneid@redhat.com>
 References: <20241119153502.41361-1-vschneid@redhat.com>
 Precedence: bulk
@@ -132,239 +131,198 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-text_poke_bp_batch() sends IPIs to all online CPUs to synchronize
-them vs the newly patched instruction. CPUs that are executing in userspace
-do not need this synchronization to happen immediately, and this is
-actually harmful interference for NOHZ_FULL CPUs.
+Kernel TLB invalidation IPIs are a common source of interference on
+NOHZ_FULL CPUs. Given NOHZ_FULL CPUs executing in userspace are not
+accessing any kernel addresses, these invalidations do not need to happen
+immediately, and can be deferred until the next user->kernel transition.
 
-As the synchronization IPIs are sent using a blocking call, returning from
-text_poke_bp_batch() implies all CPUs will observe the patched
-instruction(s), and this should be preserved even if the IPI is deferred.
-In other words, to safely defer this synchronization, any kernel
-instruction leading to the execution of the deferred instruction
-sync (ct_work_flush()) must *not* be mutable (patchable) at runtime.
+Add a minimal, noinstr-compliant variant of __flush_tlb_all() that doesn't
+try to leverage INVPCID. To achieve this:
+o Add a noinstr variant of native_write_cr4(), keeping native_write_cr4() as
+  "only" __no_profile.
+o Make invalidate_user_asid() __always_inline
 
-This means we must pay attention to mutable instructions in the early entry
-code:
-- alternatives
-- static keys
-- all sorts of probes (kprobes/ftrace/bpf/???)
+XXX: what about paravirt? Should these be instead new operations made
+available through pv_ops.mmu.*? x86_64_start_kernel() uses
+__native_tlb_flush_global() regardless of paravirt, so I'm thinking the
+paravirt variants are more optimizations than hard requirements?
 
-The early entry code leading to ct_work_flush() is noinstr, which gets rid
-of the probes.
-
-Alternatives are safe, because it's boot-time patching (before SMP is
-even brought up) which is before any IPI deferral can happen.
-
-This leaves us with static keys. Any static key used in early entry code
-should be only forever-enabled at boot time, IOW __ro_after_init (pretty
-much like alternatives). Exceptions are marked as forceful and will always
-generate an IPI when flipped. Objtool is now able to point at static keys
-that don't respect this, and all static keys used in early entry code have
-now been verified as behaving like so.
-
-Leverage the new context_tracking infrastructure to defer sync_core() IPIs
-to a target CPU's next kernel entry.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
- arch/x86/include/asm/context_tracking_work.h |  6 ++--
- arch/x86/include/asm/text-patching.h         |  1 +
- arch/x86/kernel/alternative.c                | 33 +++++++++++++++++---
- arch/x86/kernel/kprobes/core.c               |  4 +--
- arch/x86/kernel/kprobes/opt.c                |  4 +--
- arch/x86/kernel/module.c                     |  2 +-
- include/linux/context_tracking_work.h        |  4 +--
- 7 files changed, 41 insertions(+), 13 deletions(-)
+ arch/x86/include/asm/context_tracking_work.h |  4 +++
+ arch/x86/include/asm/special_insns.h         |  1 +
+ arch/x86/include/asm/tlbflush.h              | 16 ++++++++++--
+ arch/x86/kernel/cpu/common.c                 |  6 ++++-
+ arch/x86/mm/tlb.c                            | 26 ++++++++++++++++++--
+ include/linux/context_tracking_work.h        |  2 ++
+ 6 files changed, 50 insertions(+), 5 deletions(-)
 
 diff --git a/arch/x86/include/asm/context_tracking_work.h b/arch/x86/include/asm/context_tracking_work.h
-index 5bc29e6b2ed38..2c66687ce00e2 100644
+index 2c66687ce00e2..9d4f021b5a45b 100644
 --- a/arch/x86/include/asm/context_tracking_work.h
 +++ b/arch/x86/include/asm/context_tracking_work.h
-@@ -2,11 +2,13 @@
- #ifndef _ASM_X86_CONTEXT_TRACKING_WORK_H
+@@ -3,6 +3,7 @@
  #define _ASM_X86_CONTEXT_TRACKING_WORK_H
  
-+#include <asm/sync_core.h>
-+
+ #include <asm/sync_core.h>
++#include <asm/tlbflush.h>
+ 
  static __always_inline void arch_context_tracking_work(int work)
  {
- 	switch (work) {
--	case CONTEXT_WORK_n:
--		// Do work...
-+	case CONTEXT_WORK_SYNC:
-+		sync_core();
+@@ -10,6 +11,9 @@ static __always_inline void arch_context_tracking_work(int work)
+ 	case CONTEXT_WORK_SYNC:
+ 		sync_core();
  		break;
++	case CONTEXT_WORK_TLBI:
++		__flush_tlb_all_noinstr();
++		break;
  	}
  }
-diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
-index e34de36cab61e..37344e95f738f 100644
---- a/arch/x86/include/asm/text-patching.h
-+++ b/arch/x86/include/asm/text-patching.h
-@@ -33,6 +33,7 @@ extern void apply_relocation(u8 *buf, const u8 * const instr, size_t instrlen, u
-  */
- extern void *text_poke(void *addr, const void *opcode, size_t len);
- extern void text_poke_sync(void);
-+extern void text_poke_sync_deferrable(void);
- extern void *text_poke_kgdb(void *addr, const void *opcode, size_t len);
- extern void *text_poke_copy(void *addr, const void *opcode, size_t len);
- extern void *text_poke_copy_locked(void *addr, const void *opcode, size_t len, bool core_ok);
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 954c4c0f7fc58..4ce224d927b03 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
+ 
+diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
+index aec6e2d3aa1d5..b97157a69d48e 100644
+--- a/arch/x86/include/asm/special_insns.h
++++ b/arch/x86/include/asm/special_insns.h
+@@ -74,6 +74,7 @@ static inline unsigned long native_read_cr4(void)
+ 	return val;
+ }
+ 
++void native_write_cr4_noinstr(unsigned long val);
+ void native_write_cr4(unsigned long val);
+ 
+ #ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
+diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
+index 69e79fff41b80..a653b5f47f0e6 100644
+--- a/arch/x86/include/asm/tlbflush.h
++++ b/arch/x86/include/asm/tlbflush.h
 @@ -18,6 +18,7 @@
- #include <linux/mmu_context.h>
- #include <linux/bsearch.h>
- #include <linux/sync_core.h>
-+#include <linux/context_tracking.h>
- #include <asm/text-patching.h>
- #include <asm/alternative.h>
- #include <asm/sections.h>
-@@ -2080,9 +2081,24 @@ static void do_sync_core(void *info)
- 	sync_core();
- }
+ DECLARE_PER_CPU(u64, tlbstate_untag_mask);
  
-+static bool do_sync_core_defer_cond(int cpu, void *info)
-+{
-+	return !ct_set_cpu_work(cpu, CONTEXT_WORK_SYNC);
-+}
+ void __flush_tlb_all(void);
++void noinstr __flush_tlb_all_noinstr(void);
+ 
+ #define TLB_FLUSH_ALL	-1UL
+ #define TLB_GENERATION_INVALID	0
+@@ -418,9 +419,20 @@ static inline void cpu_tlbstate_update_lam(unsigned long lam, u64 untag_mask)
+ #endif
+ #endif /* !MODULE */
+ 
++#define __NATIVE_TLB_FLUSH_GLOBAL(suffix, cr4)		\
++	native_write_cr4##suffix(cr4 ^ X86_CR4_PGE);	\
++	native_write_cr4##suffix(cr4)
++#define NATIVE_TLB_FLUSH_GLOBAL(cr4)         __NATIVE_TLB_FLUSH_GLOBAL(, cr4)
++#define NATIVE_TLB_FLUSH_GLOBAL_NOINSTR(cr4) __NATIVE_TLB_FLUSH_GLOBAL(_noinstr, cr4)
 +
-+static void __text_poke_sync(smp_cond_func_t cond_func)
-+{
-+	on_each_cpu_cond(cond_func, do_sync_core, NULL, 1);
-+}
-+
- void text_poke_sync(void)
+ static inline void __native_tlb_flush_global(unsigned long cr4)
  {
--	on_each_cpu(do_sync_core, NULL, 1);
-+	__text_poke_sync(NULL);
+-	native_write_cr4(cr4 ^ X86_CR4_PGE);
+-	native_write_cr4(cr4);
++	NATIVE_TLB_FLUSH_GLOBAL(cr4);
+ }
++
++static inline void __native_tlb_flush_global_noinstr(unsigned long cr4)
++{
++	NATIVE_TLB_FLUSH_GLOBAL_NOINSTR(cr4);
 +}
 +
-+void text_poke_sync_deferrable(void)
-+{
-+	__text_poke_sync(do_sync_core_defer_cond);
+ #endif /* _ASM_X86_TLBFLUSH_H */
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index a5f221ea56888..a84bb8511650b 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -424,7 +424,7 @@ void native_write_cr0(unsigned long val)
  }
+ EXPORT_SYMBOL(native_write_cr0);
  
+-void __no_profile native_write_cr4(unsigned long val)
++noinstr void native_write_cr4_noinstr(unsigned long val)
+ {
+ 	unsigned long bits_changed = 0;
+ 
+@@ -442,6 +442,10 @@ void __no_profile native_write_cr4(unsigned long val)
+ 			  bits_changed);
+ 	}
+ }
++void native_write_cr4(unsigned long val)
++{
++	native_write_cr4_noinstr(val);
++}
+ #if IS_MODULE(CONFIG_LKDTM)
+ EXPORT_SYMBOL_GPL(native_write_cr4);
+ #endif
+diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+index 86593d1b787d8..973a4ab3f53b3 100644
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -256,7 +256,7 @@ static void choose_new_asid(struct mm_struct *next, u64 next_tlb_gen,
+  *
+  * See SWITCH_TO_USER_CR3.
+  */
+-static inline void invalidate_user_asid(u16 asid)
++static __always_inline void invalidate_user_asid(u16 asid)
+ {
+ 	/* There is no user ASID if address space separation is off */
+ 	if (!IS_ENABLED(CONFIG_MITIGATION_PAGE_TABLE_ISOLATION))
+@@ -1198,7 +1198,7 @@ STATIC_NOPV void native_flush_tlb_global(void)
  /*
-@@ -2257,6 +2273,8 @@ static int tp_vec_nr;
- static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries)
+  * Flush the entire current user mapping
+  */
+-STATIC_NOPV void native_flush_tlb_local(void)
++static noinstr void native_flush_tlb_local_noinstr(void)
  {
- 	unsigned char int3 = INT3_INSN_OPCODE;
-+	bool force_ipi = false;
-+	void (*sync_fn)(void);
- 	unsigned int i;
- 	int do_sync;
+ 	/*
+ 	 * Preemption or interrupts must be disabled to protect the access
+@@ -1213,6 +1213,11 @@ STATIC_NOPV void native_flush_tlb_local(void)
+ 	native_write_cr3(__native_read_cr3());
+ }
  
-@@ -2291,11 +2309,18 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 	 * First step: add a int3 trap to the address that will be patched.
- 	 */
- 	for (i = 0; i < nr_entries; i++) {
-+		/*
-+		 * Record that we need to send the IPI if at least one location
-+		 * in the batch requires it.
-+		 */
-+		force_ipi |= tp[i].force_ipi;
- 		tp[i].old = *(u8 *)text_poke_addr(&tp[i]);
- 		text_poke(text_poke_addr(&tp[i]), &int3, INT3_INSN_SIZE);
- 	}
- 
--	text_poke_sync();
-+	sync_fn = force_ipi ? text_poke_sync : text_poke_sync_deferrable;
++STATIC_NOPV void native_flush_tlb_local(void)
++{
++	native_flush_tlb_local_noinstr();
++}
 +
-+	sync_fn();
- 
- 	/*
- 	 * Second step: update all but the first byte of the patched range.
-@@ -2357,7 +2382,7 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 		 * not necessary and we'd be safe even without it. But
- 		 * better safe than sorry (plus there's not only Intel).
- 		 */
--		text_poke_sync();
-+		sync_fn();
- 	}
- 
- 	/*
-@@ -2378,7 +2403,7 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 	}
- 
- 	if (do_sync)
--		text_poke_sync();
-+		sync_fn();
- 
- 	/*
- 	 * Remove and wait for refs to be zero.
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 72e6a45e7ec24..c2fd2578fd5fc 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -817,7 +817,7 @@ void arch_arm_kprobe(struct kprobe *p)
- 	u8 int3 = INT3_INSN_OPCODE;
- 
- 	text_poke(p->addr, &int3, 1);
--	text_poke_sync();
-+	text_poke_sync_deferrable();
- 	perf_event_text_poke(p->addr, &p->opcode, 1, &int3, 1);
+ void flush_tlb_local(void)
+ {
+ 	__flush_tlb_local();
+@@ -1240,6 +1245,23 @@ void __flush_tlb_all(void)
  }
+ EXPORT_SYMBOL_GPL(__flush_tlb_all);
  
-@@ -827,7 +827,7 @@ void arch_disarm_kprobe(struct kprobe *p)
- 
- 	perf_event_text_poke(p->addr, &int3, 1, &p->opcode, 1);
- 	text_poke(p->addr, &p->opcode, 1);
--	text_poke_sync();
-+	text_poke_sync_deferrable();
- }
- 
- void arch_remove_kprobe(struct kprobe *p)
-diff --git a/arch/x86/kernel/kprobes/opt.c b/arch/x86/kernel/kprobes/opt.c
-index 36d6809c6c9e1..b2ce4d9c3ba56 100644
---- a/arch/x86/kernel/kprobes/opt.c
-+++ b/arch/x86/kernel/kprobes/opt.c
-@@ -513,11 +513,11 @@ void arch_unoptimize_kprobe(struct optimized_kprobe *op)
- 	       JMP32_INSN_SIZE - INT3_INSN_SIZE);
- 
- 	text_poke(addr, new, INT3_INSN_SIZE);
--	text_poke_sync();
-+	text_poke_sync_deferrable();
- 	text_poke(addr + INT3_INSN_SIZE,
- 		  new + INT3_INSN_SIZE,
- 		  JMP32_INSN_SIZE - INT3_INSN_SIZE);
--	text_poke_sync();
-+	text_poke_sync_deferrable();
- 
- 	perf_event_text_poke(op->kp.addr, old, JMP32_INSN_SIZE, new, JMP32_INSN_SIZE);
- }
-diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-index 837450b6e882f..00e71ad30c01d 100644
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -191,7 +191,7 @@ static int write_relocate_add(Elf64_Shdr *sechdrs,
- 				   write, apply);
- 
- 	if (!early) {
--		text_poke_sync();
-+		text_poke_sync_deferrable();
- 		mutex_unlock(&text_mutex);
- 	}
- 
++void noinstr __flush_tlb_all_noinstr(void)
++{
++	/*
++	 * This is for invocation in early entry code that cannot be
++	 * instrumented. A RMW to CR4 works for most cases, but relies on
++	 * being able to flip either of the PGE or PCIDE bits. Flipping CR4.PCID
++	 * would require also resetting CR3.PCID, so just try with CR4.PGE, else
++	 * do the CR3 write.
++	 *
++	 * XXX: this gives paravirt the finger.
++	 */
++	if (cpu_feature_enabled(X86_FEATURE_PGE))
++		__native_tlb_flush_global_noinstr(this_cpu_read(cpu_tlbstate.cr4));
++	else
++		native_flush_tlb_local_noinstr();
++}
++
+ void arch_tlbbatch_flush(struct arch_tlbflush_unmap_batch *batch)
+ {
+ 	struct flush_tlb_info *info;
 diff --git a/include/linux/context_tracking_work.h b/include/linux/context_tracking_work.h
-index fb74db8876dd2..13fc97b395030 100644
+index 13fc97b395030..47d5ced39a43a 100644
 --- a/include/linux/context_tracking_work.h
 +++ b/include/linux/context_tracking_work.h
-@@ -5,12 +5,12 @@
- #include <linux/bitops.h>
+@@ -6,11 +6,13 @@
  
  enum {
--	CONTEXT_WORK_n_OFFSET,
-+	CONTEXT_WORK_SYNC_OFFSET,
+ 	CONTEXT_WORK_SYNC_OFFSET,
++	CONTEXT_WORK_TLBI_OFFSET,
  	CONTEXT_WORK_MAX_OFFSET
  };
  
  enum ct_work {
--	CONTEXT_WORK_n        = BIT(CONTEXT_WORK_n_OFFSET),
-+	CONTEXT_WORK_SYNC     = BIT(CONTEXT_WORK_SYNC_OFFSET),
+ 	CONTEXT_WORK_SYNC     = BIT(CONTEXT_WORK_SYNC_OFFSET),
++	CONTEXT_WORK_TLBI     = BIT(CONTEXT_WORK_TLBI_OFFSET),
  	CONTEXT_WORK_MAX      = BIT(CONTEXT_WORK_MAX_OFFSET)
  };
  
