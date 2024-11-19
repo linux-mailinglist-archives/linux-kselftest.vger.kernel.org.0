@@ -1,100 +1,107 @@
-Return-Path: <linux-kselftest+bounces-22299-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22300-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ED339D2BAC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 17:51:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F5EC9D2C53
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 18:18:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 139A6284FFC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 16:51:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 91D99B36711
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 16:53:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D11C21D45F3;
-	Tue, 19 Nov 2024 16:45:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAA571D88A6;
+	Tue, 19 Nov 2024 16:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="O+E3gYjx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A382C1D4328;
-	Tue, 19 Nov 2024 16:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4571D86C6;
+	Tue, 19 Nov 2024 16:47:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732034729; cv=none; b=jgPerMrPqzESNSsWPP4GYCky722UDvuSO6ikFI2EHU8sC7tpzXBEUDotdeuPvNVOqtRYRTzJFfUmRahgZUxOnWkFMUCL1QsDL+EqhH6pY8dDAhvBUdD/CNXWlNJs6uCsaE97IX2u3S2+1e9meMuRAf09sJpYKbOI7PG12JdN/ko=
+	t=1732034829; cv=none; b=eKFtQT2r3ElW6SY4OBxB5gqtrPUvw+V1WZCoCgo/+lRJZNwWQN949xpYSvCDyNkXUk4XfMo2AzQURz5suyoXjsUJMu8Dfi+pnQJgM5YRyjkqR6a0SuGd0MH3+vF37H3Hm3eoaB/aTf/FxxKcy353Z3YRLYKuOW9BHypHo+yQwbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732034729; c=relaxed/simple;
-	bh=Q/BSK4ar/SbHR2TxWlzS2iHmY3WRpuywNmlNZgy7vbc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IcqRZOK+P/TpqxctruE+3Fw0/FXm+T7NJuwbctP1RfbVIsz8hdktUKN9+dbGLjB6v2TWiVMgF3IbjvuGOD7lirUjJxs+fzWGo8TsjCPtOKtexirGSo/XqrvnXdDC15TnnxGyS00f4ByBkLbFr/4hFMDY5j309FfKSoGZKVP1n6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA3A1C4CECF;
-	Tue, 19 Nov 2024 16:45:22 +0000 (UTC)
-Date: Tue, 19 Nov 2024 11:45:56 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
- x86@kernel.org, rcu@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Masami Hiramatsu <mhiramat@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Paolo Bonzini <pbonzini@redhat.com>,
- Wanpeng Li <wanpengli@tencent.com>, Vitaly Kuznetsov <vkuznets@redhat.com>,
- Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Frederic Weisbecker <frederic@kernel.org>, "Paul E. McKenney"
- <paulmck@kernel.org>, Neeraj Upadhyay <quic_neeraju@quicinc.com>, Joel
- Fernandes <joel@joelfernandes.org>, Josh Triplett <josh@joshtriplett.org>,
- Boqun Feng <boqun.feng@gmail.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
- Zqiang <qiang.zhang1211@gmail.com>, Andrew Morton
- <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>, Christoph
- Hellwig <hch@infradead.org>, Lorenzo Stoakes <lstoakes@gmail.com>, Josh
- Poimboeuf <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>, Kees Cook
- <keescook@chromium.org>, Sami Tolvanen <samitolvanen@google.com>, Ard
- Biesheuvel <ardb@kernel.org>, Nicholas Piggin <npiggin@gmail.com>, Juerg
- Haefliger <juerg.haefliger@canonical.com>, Nicolas Saenz Julienne
- <nsaenz@kernel.org>, "Kirill A. Shutemov"
- <kirill.shutemov@linux.intel.com>, Nadav Amit <namit@vmware.com>, Dan
- Carpenter <error27@gmail.com>, Chuang Wang <nashuiliang@gmail.com>, Yang
- Jihong <yangjihong1@huawei.com>, Petr Mladek <pmladek@suse.com>, "Jason A.
- Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>, Julian Pidancet
- <julian.pidancet@oracle.com>, Tom Lendacky <thomas.lendacky@amd.com>,
- Dionna Glaze <dionnaglaze@google.com>, Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?=
- <linux@weissschuh.net>, Juri Lelli <juri.lelli@redhat.com>, Marcelo Tosatti
- <mtosatti@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>, Daniel Wagner
- <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
-Subject: Re: [RFC PATCH v3 00/15] context_tracking,x86: Defer some IPIs
- until a user->kernel transition
-Message-ID: <20241119114556.0949b562@gandalf.local.home>
-In-Reply-To: <20241119153502.41361-1-vschneid@redhat.com>
-References: <20241119153502.41361-1-vschneid@redhat.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1732034829; c=relaxed/simple;
+	bh=hbYPm9XsuKyIbmWlphbpd1znuk0eRhzgeiaJBSGeF2k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=K5624FhwR74WHNy/4cKt8m7iUUIpVsOU78UJIO56WzS7VLp0REV5cbU4Ec7k2K0mcg0gxLQO7wWa2Y+yHWIMarmpzklDNjeojJqSKNuO3RWrIXKxZMnWNs9jo+Iu+4N0LshXo9jXSaMmDdtSWEoBSKLsVOjO6KxQlSNPY1BX65g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=O+E3gYjx; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=j5HkeQ7LapR4JelfU34fBoWz02L4bp7WV6Brj5s7Vzw=; b=O+E3gYjxUOEg+XxfLfoyz3Zf4l
+	hukz49f9FjVRjzqd3YNlvnNh9gkWpa4FfxRr2YVzJlLJNY/8NU8khP0KVysEHteyaWy/lTan8HO3p
+	8UYsk74aD1Ly5522kLb2KiaHUi1e18xoJb+lJeJAsGPaAauMVgS65MwnJrhkxFpxNDPyzTV3lBZWF
+	EQCKxZJoXhdX7EHN1gRkpurfE6iiqIFqW3cTsfFzunWAJGlURXd3s5BOTwXJdVEWE6rqlkMC5ualM
+	tO2dD0IGuA+b0sWxv2XPKISOWWpMLooC49NT4C/+EdUVPkaKlMTIucQo5/RUhO6ssLJOPmHlc770+
+	LBA870bw==;
+Received: from [50.53.2.24] (helo=[192.168.254.17])
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tDRNF-00000004JIr-2DOw;
+	Tue, 19 Nov 2024 16:46:47 +0000
+Message-ID: <c6a7b5eb-d2ec-45e5-8a9b-a91f9c0cec78@infradead.org>
+Date: Tue, 19 Nov 2024 08:46:35 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 07/15] digest_cache: Allow registration of digest list
+ parsers
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
+ dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, corbet@lwn.net,
+ mcgrof@kernel.org, petr.pavlu@suse.com, samitolvanen@google.com,
+ da.gomez@samsung.com, akpm@linux-foundation.org, paul@paul-moore.com,
+ jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com
+Cc: linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, wufan@linux.microsoft.com,
+ pbrobinson@gmail.com, zbyszek@in.waw.pl, hch@lst.de, mjg59@srcf.ucam.org,
+ pmatilai@redhat.com, jannh@google.com, dhowells@redhat.com,
+ jikos@kernel.org, mkoutny@suse.com, ppavlu@suse.com, petr.vorel@gmail.com,
+ mzerqung@0pointer.de, kgold@linux.ibm.com,
+ Roberto Sassu <roberto.sassu@huawei.com>
+References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
+ <20241119104922.2772571-8-roberto.sassu@huaweicloud.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20241119104922.2772571-8-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Tue, 19 Nov 2024 16:34:47 +0100
-Valentin Schneider <vschneid@redhat.com> wrote:
+Hi--
 
-> Context
-> =======
-> 
-> We've observed within Red Hat that isolated, NOHZ_FULL CPUs running a
-> pure-userspace application get regularly interrupted by IPIs sent from
-> housekeeping CPUs. Those IPIs are caused by activity on the housekeeping CPUs
-> leading to various on_each_cpu() calls, e.g.:
+On 11/19/24 2:49 AM, Roberto Sassu wrote:
+> +/**
+> + * struct parser - Structure to store a function pointer to parse digest list
+> + * @list: Linked list
+> + * @owner: Kernel module owning the parser
+> + * @name: Parser name (must match the format in the digest list file name)
+> + * @func: Function pointer for parsing
+> + *
+> + * This structure stores a function pointer to parse a digest list.
+> + */
+> +struct parser {
+> +	struct list_head list;
+> +	struct module *owner;
+> +	const char name[NAME_MAX + 1];
+> +	parser_func func;
+> +};
 
-FYI,
+I would make the struct name not so generic -- maybe digest_parser ...
 
-Sending a patch series at the start of the merge window is likely going to
-get ignored.
+thanks.
+-- 
+~Randy
 
-Care to resend after rc1 is released? Or at least ping about it.
-
--- Steve
 
