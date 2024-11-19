@@ -1,119 +1,124 @@
-Return-Path: <linux-kselftest+bounces-22273-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22274-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 883769D285F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 15:42:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D3DF9D285E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 15:42:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E782B305B5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 14:34:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 178CAB2B4D9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 14:37:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE1911CDFD1;
-	Tue, 19 Nov 2024 14:34:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 416E01CCEFC;
+	Tue, 19 Nov 2024 14:37:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=nwl.cc header.i=@nwl.cc header.b="ea30Z+f/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from orbyte.nwl.cc (orbyte.nwl.cc [151.80.46.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6235E57D;
-	Tue, 19 Nov 2024 14:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B34AAE57D;
+	Tue, 19 Nov 2024 14:37:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=151.80.46.58
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732026879; cv=none; b=GkfWxbu74wIJscQpr5Oa+WIUrqMFSHkI092TZA/snWxUs6MpT+4N1OzNcMiJ7m0HG9DpchJcLdvgVwt1M9H8z2gX+im+sUcIebtes82d1akSn8PuOqMJXvpbB9zEaYkhgc0jOEPWs8SZtE/L278cuTIwGh9hvythkRXkpkoBgAE=
+	t=1732027051; cv=none; b=APrUCw4EHSzk4/kmt84HN89uFew9hYNUvwzUptTitE3kjrRG58PM5YYdWYPwsVpqqO3DszWFIj9+YZzo0hvvdcn91ym/mHS+fQyHTYE5VlSkYlEhIJvBxu3RoluY/3xfyBkwHrRE8Q/EzkhkTk68GaYCbtnYQ3BAcBPGtQIUW1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732026879; c=relaxed/simple;
-	bh=+Rr/qgOwv8XKND57Q6pl0RBBNPuJNtWXBoNgEYFCPJs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iyQYwrjHmbJrxUeJTU4tnTxKBgl9gQ5RIPoNuXl34A5D4hWYjdwv580ou27IgLwN1dN2JuYNZh/3yy1BqhGpFHG1XtPcXQdhx9bPyY/ustAy1btsM43tPqKv8j1uuHnhYbY2+ab+Ybqca3OBd9SQoJ4A0oQVCkE2dk0FXlqC7x0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Xt5sk0RK3z9v7Jm;
-	Tue, 19 Nov 2024 22:07:22 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 90AC01407FE;
-	Tue, 19 Nov 2024 22:34:23 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwCnGjvQoTxnjr3pAQ--.40220S2;
-	Tue, 19 Nov 2024 15:34:22 +0100 (CET)
-Message-ID: <58fbc60fccf6d6c9504301adeebf33a46766d507.camel@huaweicloud.com>
-Subject: Re: [PATCH v6 02/15] module: Introduce ksys_finit_module()
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Christoph Hellwig <hch@lst.de>
-Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
- eric.snowberg@oracle.com,  corbet@lwn.net, mcgrof@kernel.org,
- petr.pavlu@suse.com, samitolvanen@google.com,  da.gomez@samsung.com,
- akpm@linux-foundation.org, paul@paul-moore.com,  jmorris@namei.org,
- serge@hallyn.com, shuah@kernel.org, mcoquelin.stm32@gmail.com, 
- alexandre.torgue@foss.st.com, linux-integrity@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-api@vger.kernel.org, linux-modules@vger.kernel.org, 
- linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- wufan@linux.microsoft.com, pbrobinson@gmail.com, zbyszek@in.waw.pl, 
- mjg59@srcf.ucam.org, pmatilai@redhat.com, jannh@google.com,
- dhowells@redhat.com,  jikos@kernel.org, mkoutny@suse.com, ppavlu@suse.com,
- petr.vorel@gmail.com,  mzerqung@0pointer.de, kgold@linux.ibm.com, Roberto
- Sassu <roberto.sassu@huawei.com>
-Date: Tue, 19 Nov 2024 15:33:49 +0100
-In-Reply-To: <20241119121402.GA28228@lst.de>
-References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
-	 <20241119104922.2772571-3-roberto.sassu@huaweicloud.com>
-	 <20241119121402.GA28228@lst.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1732027051; c=relaxed/simple;
+	bh=eFlAIRQOqdtMQ86+sZD38hKpZm2bIwb7xLJUaTtTn94=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dAUbqmZ3isnkpgvLC6TxlwG19janbkfwjbYYroygG0YNQbGpWO4ma/1zWkHYdLFtNQq6JjpiJixApGxdmxzLB3nt2Tio7ITHj6O3x8tbWi89Z6NjUegT4lTfwj4pUrnxCaZ2Y7JjYk9AGLw8emP+nI54o2QHNTzZJTAJvp9V2YU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nwl.cc; spf=pass smtp.mailfrom=nwl.cc; dkim=pass (2048-bit key) header.d=nwl.cc header.i=@nwl.cc header.b=ea30Z+f/; arc=none smtp.client-ip=151.80.46.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nwl.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nwl.cc
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nwl.cc;
+	s=mail2022; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=D9+QT/PGS7TNywt2V5GvWPp0z/RDdp7emmM5ESDUzdg=; b=ea30Z+f/yyDdDbUYNySDZ+u9gt
+	DhDZP1ZwNTOKp91YVMeM06M7lliHi/hSiMDLj7Qykf7LjXucE+eNwapyPxHDsuHeQq+FIxX1ieh2S
+	oynuuq7thdxh9lFkFu4d2vtwoA4oFahrr2I6cAnXDAXjPcVdCF8RkU2bUREDWqInwtx7wqAQv17kh
+	EiPO5N+YwVK4Caso1gJKQ27e1OZWw9Q0HBQ6H888jT8ZLV5FbuPFq+8ZpKfMVX9Uw9e7E+OmbMciF
+	NeQPyGzAjj0Hbi4V82PH4nNUqQyrGRNI5BuC9jd2XpD0TQj31dUril7ZmGu8e0ThNX4r46IHeL7lk
+	JBHC8CYw==;
+Received: from n0-1 by orbyte.nwl.cc with local (Exim 4.97.1)
+	(envelope-from <phil@nwl.cc>)
+	id 1tDPM3-000000002ZO-15PU;
+	Tue, 19 Nov 2024 15:37:23 +0100
+Date: Tue, 19 Nov 2024 15:37:23 +0100
+From: Phil Sutter <phil@nwl.cc>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>, netdev@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Florian Westphal <fw@strlen.de>, wireguard@lists.zx2c4.com,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 net-next] selftests: wireguards: use nft by default
+Message-ID: <Zzyio98xh1GN08wN@orbyte.nwl.cc>
+Mail-Followup-To: Phil Sutter <phil@nwl.cc>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>, netdev@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Florian Westphal <fw@strlen.de>, wireguard@lists.zx2c4.com,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20241111041902.25814-1-liuhangbin@gmail.com>
+ <ZzpNXM17NX3nVzMl@zx2c4.com>
+ <Zzw8rb202R6FWVHs@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwCnGjvQoTxnjr3pAQ--.40220S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jw4rZr1fXF1UuFWfuw45Jrb_yoWkWFc_uF
-	97WryqywsxJw4DZrW7tF1SgFWSgayDJrykZ3yUJFW2q345Gw17KFs5GFyFqF18ta1ktr1k
-	WryUXr40vw1IgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbxxYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-	67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-	AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-	kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AK
-	xVWrXVW3AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Wrv_Gr1U
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8
-	JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26F4UJVW0obIYCTnIWIevJa73UjIFyTuYvjxUVZ
-	2-UUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBGc797QGbwAAs-
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zzw8rb202R6FWVHs@fedora>
 
-On Tue, 2024-11-19 at 13:14 +0100, Christoph Hellwig wrote:
-> On Tue, Nov 19, 2024 at 11:49:09AM +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> >=20
-> > Introduce ksys_finit_module() to let kernel components request a kernel
-> > module without requiring running modprobe.
->=20
-> That does sound more than sketchy, even more so because the commit log
-> completely fails to explain why you'd need to do that.
+Hangbin,
 
-With my solution, the kernel grants access to a file in user space
-depending on whether or not its calculated (or fsverity) digest is
-found in an application manifest provided by the software vendor.
+On Tue, Nov 19, 2024 at 07:22:21AM +0000, Hangbin Liu wrote:
+> On Sun, Nov 17, 2024 at 09:09:00PM +0100, Jason A. Donenfeld wrote:
+> > On Mon, Nov 11, 2024 at 04:19:02AM +0000, Hangbin Liu wrote:
+> > > Use nft by default if it's supported, as nft is the replacement for iptables,
+> > > which is used by default in some releases. Additionally, iptables is dropped
+> > > in some releases.
+> >  
+> > Rather than having this optionality, I'd rather just do everything in
+> > one way or the other. So if you're adamant that we need to use nft, just
+> > convert the whole thing. And then subsequently, make sure that the qemu
+> > test harness supports it. That should probably be a series.
+> 
+> Hmm, try build nft but got error
+> 
+> # make -C tools/testing/selftests/wireguard/qemu/
+> make: Entering directory '/home/net/tools/testing/selftests/wireguard/qemu'
+> Building for x86_64-linux-musl using x86_64-redhat-linux
+> cd /home/net/tools/testing/selftests/wireguard/qemu/build/x86_64/nftables-1.0.9 && ./configure --prefix=/ --build=x86_64-redhat-linux --host=x86_64-linux-musl --enable-static --disable-shared
+> checking for a BSD-compatible install... /usr/bin/install -c
+> checking whether build environment is sane... yes
+> ...
+> checking for pkg-config... /usr/bin/pkg-config
+> configure: WARNING: using cross tools not prefixed with host triplet
+> checking pkg-config is at least version 0.9.0... yes
+> checking for libmnl >= 1.0.4... yes
+> checking for libnftnl >= 1.2.6... yes
+> checking for __gmpz_init in -lgmp... no
+> configure: error: No suitable version of libgmp found
 
-However, what it happens is that in the early boot phase the parser is
-not loaded yet, and the kernel cannot extract the reference digests
-from the application manifest.
+You may find proper details about the failure in config.log. My guess is
+the cross build prevents host libraries from being used. (No idea why
+your manual call works, though.)
 
-Thus, calling request_module() and consequently executing modprobe will
-fail, since the kernel does not have its reference digest yet.
+> But I can config it manually like: ./configure --prefix=/ --build=x86_64-redhat-linux --host=x86_64-linux-musl --enable-static
+> --disable-shared correctly
+> 
+> Do you have any idea?
 
-Instead, loading the kernel module from the kernel itself works,
-because only the kernel module needs to be verified, and that can be
-done through its appended signature.
+You may just pass '--with-mini-gmp' to nftables' configure call to avoid
+the external dependency.
 
-Roberto
-
+Cheers, Phil
 
