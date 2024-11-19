@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-22255-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22256-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61D049D23F3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 11:52:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8D219D23FE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 11:53:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0A731F22FA9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 10:52:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 61EC0B2454B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 10:53:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EA8B1C4A0F;
-	Tue, 19 Nov 2024 10:51:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D9E71C4A05;
+	Tue, 19 Nov 2024 10:52:18 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A81F71C3F0B;
-	Tue, 19 Nov 2024 10:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F721C4603;
+	Tue, 19 Nov 2024 10:52:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732013513; cv=none; b=U2PXxKYD3d2x0GFF5qbGN85DfHVXTSHjmXssekRN604dlhBJ93+LxHZs4zFyJzU0Wz6vGkVZvM+v7bt7H/FoNrb6XnLIoLQgybnElj05d9iLJWx/jNc9CaxgHXOT80g65RGwBe+i0u0JSn6ncwqVUnX5tqL/Psa+/9XwrA2uXIQ=
+	t=1732013538; cv=none; b=PfK8UHO2yyWqqcqbH2a8lUbdXCLcvjKlPMXIzuhxHb2IV4xyX56mcrYnEAz6SkPKsfH+ym3H2nAdaMopZN0BN1pmQAKJ7aXSOyvd4Ki/NxzEKMUeSbL7JfnFg0uuoc/oCGImHCgQZ26X2L7N9gq4hFpO75ONYUbmMubckAdmg4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732013513; c=relaxed/simple;
-	bh=gzyjz9aXL9JdhHZ6liJcTpjENCVWqUFNFclFGNdLwUo=;
+	s=arc-20240116; t=1732013538; c=relaxed/simple;
+	bh=ZrX049mDSgS7H89v/ZFuQqp5qnhFIb1/04t5hFEmaH4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fV8acflJzaf6haUVPEzj/7ClXJPIKA9PaB1vN3ZabJf3pcly6nlGoEecJwC8zw/YPvokKLDxiwMky59I+r7Tc1L4Rnx3qei8Y7rYaYgEC+0qPM+42ew4v8uUVW+IksW8YPcAgVjQx9udQL2rRtCgbWOI0D9kI2n8pApnURX97No=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+	 MIME-Version; b=sQMuNng5tZrj5MGUVTf0an70kyO7bfzpoQcxjZV5ZTbFmPFelaQhSotfnaDcK4/0a9jIL0CMV46miLVy1NM1bFa2yDwvd9b+ZAcqyfEhIXqDxSqyesr8oi+S/8Ye321uzdCIip280yFUPKBw5lo9nDqfQCj4dbKVbPv8hj/lcDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Xt13x6c3Pz9v7JC;
-	Tue, 19 Nov 2024 18:30:53 +0800 (CST)
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Xt0xB3qDhz9v7JM;
+	Tue, 19 Nov 2024 18:25:02 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id B402F140119;
-	Tue, 19 Nov 2024 18:51:47 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id B0F441407FE;
+	Tue, 19 Nov 2024 18:52:03 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwA3nn1LbTxnNp7pAQ--.49675S8;
-	Tue, 19 Nov 2024 11:51:46 +0100 (CET)
+	by APP2 (Coremail) with SMTP id GxC2BwA3nn1LbTxnNp7pAQ--.49675S9;
+	Tue, 19 Nov 2024 11:52:03 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: zohar@linux.ibm.com,
 	dmitry.kasatkin@gmail.com,
@@ -76,9 +76,9 @@ Cc: linux-integrity@vger.kernel.org,
 	mzerqung@0pointer.de,
 	kgold@linux.ibm.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v6 06/15] digest_cache: Add hash tables and operations
-Date: Tue, 19 Nov 2024 11:49:13 +0100
-Message-ID: <20241119104922.2772571-7-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v6 07/15] digest_cache: Allow registration of digest list parsers
+Date: Tue, 19 Nov 2024 11:49:14 +0100
+Message-ID: <20241119104922.2772571-8-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.47.0.118.gfd3785337b
 In-Reply-To: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
 References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
@@ -89,10 +89,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:GxC2BwA3nn1LbTxnNp7pAQ--.49675S8
-X-Coremail-Antispam: 1UD129KBjvAXoW3tF4fCFW8Xw4xuFW8ZF1UWrg_yoW8XFWDJo
-	ZIkF45Jw48WFy3uw4DCF17Z3WUW34rt34xAr4kXrWDX3Z2qryUJ3ZFkFn8Jry3Xr18GrZ7
-	Aw1kJ3yUJF48tr93n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+X-CM-TRANSID:GxC2BwA3nn1LbTxnNp7pAQ--.49675S9
+X-Coremail-Antispam: 1UD129KBjvAXoWfGr4xWryrCFy5JrW7GF1xXwb_yoW8JFW5Wo
+	ZIvF4UGw18ua47uF4kCF1xAayxu39Yqw1rAr93WrW5Z3WIyry5J3ZrGa1UJFWUJr4rGrZr
+	Aw18Xw4UJayrtr93n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
 	AaLaJ3UjIYCTnIWjp_UUUOr7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
 	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF
 	0E3s1l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
@@ -107,476 +107,414 @@ X-Coremail-Antispam: 1UD129KBjvAXoW3tF4fCFW8Xw4xuFW8ZF1UWrg_yoW8XFWDJo
 	cVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87
 	Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI
 	43ZEXa7IU0l4iUUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAMBGc79-IEiAAAsf
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAMBGc79-IEiAADsc
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Add a linked list of hash tables to the digest cache, one per algorithm,
-containing the digests extracted from digest lists.
+Allow kernel modules to register/deregister new digest list parsers,
+respectively through digest_cache_register_parser() and
+digest_cache_unregister_parser().
 
-The number of hash table slots is determined by dividing the number of
-digests to add to the average depth of the collision list defined with
-CONFIG_DIGEST_CACHE_HTABLE_DEPTH (currently set to 30). It can be changed
-in the kernel configuration.
+Those functions pass the new parser structure holding the linked list
+pointers and a parsing function with the new type parser_func.
 
-Add digest_cache_htable_init(), digest_cache_htable_add() and
-digest_cache_htable_lookup() to the Parser API, so that digest list parsers
-can allocate the hash tables and add/lookup extracted digests.
+Introduce digest_cache_parse_digest_list(), which determines the desired
+parser from the file name, looks up the parser among the registered ones
+with lookup_get_parser(), calls the parser-specific function along with the
+digest list data read by the kernel, and finally releases the kernel module
+reference with put_parser().
 
-Add digest_cache_htable_free(), to let the Integrity Digest Cache free the
-hash tables at the time a digest cache is freed.
+The expected digest list file name format is:
 
-Add digest_cache_lookup() to the Client API, to let users of the Integrity
-Digest Cache search a digest in a digest cache and, in a subsequent patch,
-to search it in the digest caches for each directory entry.
+[<seq num>-]<digest list format>-<digest list name>
 
-digest_cache_lookup() returns a digest cache reference that must be
-released by calling digest_cache_put().
+<seq-num>- is an optional prefix to impose in which order digest lists in
+a directory should be parsed.
 
-Finally, introduce digest_cache_hash_key() to compute the hash table key
-from the first two bytes of the digest (modulo the number of slots).
+Introduce load_parser() to load a kernel module containing a
+parser for the requested digest list format (compressed kernel modules are
+supported). Kernel modules are searched in the
+/lib/modules/<kernel ver>/security/integrity/digest_cache directory.
+
+load_parser() calls ksys_finit_module() to load a kernel module directly
+from the kernel. request_module() cannot be used at this point, since the
+reference digests of modprobe and the linked libraries (required for IMA
+appraisal) might not be yet available, resulting in modprobe execution
+being denied.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- include/linux/digest_cache.h               |  39 ++++
- security/integrity/digest_cache/Kconfig    |  11 +
- security/integrity/digest_cache/Makefile   |   2 +-
- security/integrity/digest_cache/htable.c   | 251 +++++++++++++++++++++
- security/integrity/digest_cache/internal.h |  36 +++
- security/integrity/digest_cache/main.c     |   3 +
- 6 files changed, 341 insertions(+), 1 deletion(-)
- create mode 100644 security/integrity/digest_cache/htable.c
+ include/linux/digest_cache.h               |  38 +++
+ security/integrity/digest_cache/Kconfig    |   1 +
+ security/integrity/digest_cache/Makefile   |   4 +-
+ security/integrity/digest_cache/internal.h |   5 +
+ security/integrity/digest_cache/parsers.c  | 257 +++++++++++++++++++++
+ 5 files changed, 304 insertions(+), 1 deletion(-)
+ create mode 100644 security/integrity/digest_cache/parsers.c
 
 diff --git a/include/linux/digest_cache.h b/include/linux/digest_cache.h
-index 1f88b61fb7cd..59a42c04cbb8 100644
+index 59a42c04cbb8..a9d731990b7c 100644
 --- a/include/linux/digest_cache.h
 +++ b/include/linux/digest_cache.h
-@@ -11,12 +11,25 @@
- #define _LINUX_DIGEST_CACHE_H
- 
+@@ -13,6 +13,32 @@
  #include <linux/fs.h>
-+#include <crypto/hash_info.h>
+ #include <crypto/hash_info.h>
  
++struct digest_cache;
++
++/**
++ * typedef parser_func - Function to parse digest lists
++ *
++ * Define a function type to parse digest lists.
++ */
++typedef int (*parser_func)(struct digest_cache *digest_cache, const u8 *data,
++			   size_t data_len);
++
++/**
++ * struct parser - Structure to store a function pointer to parse digest list
++ * @list: Linked list
++ * @owner: Kernel module owning the parser
++ * @name: Parser name (must match the format in the digest list file name)
++ * @func: Function pointer for parsing
++ *
++ * This structure stores a function pointer to parse a digest list.
++ */
++struct parser {
++	struct list_head list;
++	struct module *owner;
++	const char name[NAME_MAX + 1];
++	parser_func func;
++};
++
  #ifdef CONFIG_INTEGRITY_DIGEST_CACHE
  /* Client API */
  struct digest_cache *digest_cache_get(struct file *file);
- void digest_cache_put(struct digest_cache *digest_cache);
- bool digest_cache_opened_fd(struct file *file);
-+struct digest_cache *digest_cache_lookup(struct dentry *dentry,
-+					 struct digest_cache *digest_cache,
-+					 u8 *digest, enum hash_algo algo);
-+
-+/* Parser API */
-+int digest_cache_htable_init(struct digest_cache *digest_cache, u64 num_digests,
-+			     enum hash_algo algo);
-+int digest_cache_htable_add(struct digest_cache *digest_cache, u8 *digest,
-+			    enum hash_algo algo);
-+int digest_cache_htable_lookup(struct dentry *dentry,
-+			       struct digest_cache *digest_cache, u8 *digest,
-+			       enum hash_algo algo);
+@@ -30,6 +56,8 @@ int digest_cache_htable_add(struct digest_cache *digest_cache, u8 *digest,
+ int digest_cache_htable_lookup(struct dentry *dentry,
+ 			       struct digest_cache *digest_cache, u8 *digest,
+ 			       enum hash_algo algo);
++int digest_cache_register_parser(struct parser *parser);
++void digest_cache_unregister_parser(struct parser *parser);
  
  #else
  static inline struct digest_cache *digest_cache_get(struct file *file)
-@@ -33,5 +46,31 @@ static inline bool digest_cache_opened_fd(struct file *file)
- 	return false;
+@@ -72,5 +100,15 @@ static inline int digest_cache_htable_lookup(struct dentry *dentry,
+ 	return -EOPNOTSUPP;
  }
  
-+static inline struct digest_cache *
-+digest_cache_lookup(struct dentry *dentry, struct digest_cache *digest_cache,
-+		    u8 *digest, enum hash_algo algo)
-+{
-+	return NULL;
-+}
-+
-+static inline int digest_cache_htable_init(struct digest_cache *digest_cache,
-+					   u64 num_digests, enum hash_algo algo)
++static inline int digest_cache_register_parser(const char *name,
++					       parser_func func)
 +{
 +	return -EOPNOTSUPP;
 +}
 +
-+static inline int digest_cache_htable_add(struct digest_cache *digest_cache,
-+					  u8 *digest, enum hash_algo algo)
++static inline void digest_cache_unregister_parser(const char *name)
 +{
-+	return -EOPNOTSUPP;
-+}
-+
-+static inline int digest_cache_htable_lookup(struct dentry *dentry,
-+					     struct digest_cache *digest_cache,
-+					     u8 *digest, enum hash_algo algo)
-+{
-+	return -EOPNOTSUPP;
 +}
 +
  #endif /* CONFIG_INTEGRITY_DIGEST_CACHE */
  #endif /* _LINUX_DIGEST_CACHE_H */
 diff --git a/security/integrity/digest_cache/Kconfig b/security/integrity/digest_cache/Kconfig
-index a4bfa8287b8d..419011fb52c9 100644
+index 419011fb52c9..65c07110911b 100644
 --- a/security/integrity/digest_cache/Kconfig
 +++ b/security/integrity/digest_cache/Kconfig
-@@ -21,3 +21,14 @@ config DIGEST_LIST_DEFAULT_PATH
- 	  It can be changed at run-time, by writing the new path to the
- 	  securityfs interface. Digest caches created with the old path are
- 	  not affected by the change.
-+
-+config DIGEST_CACHE_HTABLE_DEPTH
-+	int
-+	default 30
-+	help
-+	  Desired average depth of the collision list in the digest cache
-+	  hash tables.
-+
-+	  A smaller number will increase the amount of hash table slots, and
-+	  make the search faster. A bigger number will decrease the number of
-+	  hash table slots, but make the search slower.
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ config INTEGRITY_DIGEST_CACHE
+ 	bool "Integrity Digest Cache"
++	select MODULE_DECOMPRESS if MODULE_COMPRESS
+ 	default n
+ 	help
+ 	  This option enables a cache of reference digests (e.g. of file
 diff --git a/security/integrity/digest_cache/Makefile b/security/integrity/digest_cache/Makefile
-index c351186d4e1e..0092c913979d 100644
+index 0092c913979d..d68cae690241 100644
 --- a/security/integrity/digest_cache/Makefile
 +++ b/security/integrity/digest_cache/Makefile
-@@ -4,4 +4,4 @@
+@@ -4,4 +4,6 @@
  
  obj-$(CONFIG_INTEGRITY_DIGEST_CACHE) += digest_cache.o
  
--digest_cache-y := main.o secfs.o
-+digest_cache-y := main.o secfs.o htable.o
-diff --git a/security/integrity/digest_cache/htable.c b/security/integrity/digest_cache/htable.c
+-digest_cache-y := main.o secfs.o htable.o
++digest_cache-y := main.o secfs.o htable.o parsers.o
++
++CFLAGS_parsers.o += -DPARSERS_DIR=\"$(MODLIB)/kernel/security/integrity/digest_cache/parsers\"
+diff --git a/security/integrity/digest_cache/internal.h b/security/integrity/digest_cache/internal.h
+index e14343e96caa..e178549f9ff9 100644
+--- a/security/integrity/digest_cache/internal.h
++++ b/security/integrity/digest_cache/internal.h
+@@ -161,4 +161,9 @@ int __init digest_cache_secfs_init(struct dentry *dir);
+ /* htable.c */
+ void digest_cache_htable_free(struct digest_cache *digest_cache);
+ 
++/* parsers.c */
++int digest_cache_parse_digest_list(struct dentry *dentry,
++				   struct digest_cache *digest_cache,
++				   char *path_str, void *data, size_t data_len);
++
+ #endif /* _DIGEST_CACHE_INTERNAL_H */
+diff --git a/security/integrity/digest_cache/parsers.c b/security/integrity/digest_cache/parsers.c
 new file mode 100644
-index 000000000000..8aa6d50a0cb5
+index 000000000000..744c9742a44e
 --- /dev/null
-+++ b/security/integrity/digest_cache/htable.c
-@@ -0,0 +1,251 @@
++++ b/security/integrity/digest_cache/parsers.c
+@@ -0,0 +1,257 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
++ * Copyright (C) 2024 Huawei Technologies Duesseldorf GmbH
 + *
 + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 + *
-+ * Implement hash table operations for the digest cache.
++ * Implement the code to register digest list parsers.
 + */
 +
 +#define pr_fmt(fmt) "digest_cache: "fmt
++#include <linux/init_task.h>
++#include <linux/namei.h>
++#include <uapi/linux/module.h>
++#include <linux/syscalls.h>
++#include <linux/vmalloc.h>
++
 +#include "internal.h"
 +
-+/**
-+ * digest_cache_hash_key - Compute hash key
-+ * @digest: Digest cache
-+ * @num_slots: Number of slots in the hash table
-+ *
-+ * This function computes a hash key based on the first two bytes of the
-+ * digest and the number of slots of the hash table.
-+ *
-+ * Return: Hash key.
-+ */
-+static inline unsigned int digest_cache_hash_key(u8 *digest,
-+						 unsigned int num_slots)
-+{
-+	/* Same as ima_hash_key() but parametrized. */
-+	return (digest[0] | digest[1] << 8) % num_slots;
-+}
++static DEFINE_MUTEX(parsers_mutex);
++static LIST_HEAD(parsers);
 +
 +/**
-+ * lookup_htable - Lookup a hash table
++ * load_parser - Load kernel module containing a parser
++ * @dentry: Dentry of the inode for which the digest cache will be used
 + * @digest_cache: Digest cache
-+ * @algo: Algorithm of the desired hash table
++ * @name: Name of the parser to load
 + *
-+ * This function searches the hash table for a given algorithm in the digest
-+ * cache.
++ * This function opens a kernel module file in
++ * /lib/modules/<kernel ver>/security/integrity/digest_cache, and executes
++ * ksys_finit_module() to load the kernel module. After kernel module
++ * initialization, the parser should be found in the linked list of parsers.
 + *
-+ * Return: A hash table if found, NULL otherwise.
++ * Return: Zero if kernel module is loaded, a POSIX error code otherwise.
 + */
-+static struct htable *lookup_htable(struct digest_cache *digest_cache,
-+				    enum hash_algo algo)
++static int load_parser(struct dentry *dentry, struct digest_cache *digest_cache,
++		       const char *name)
 +{
-+	struct htable *h;
++	char *compress_suffix = "";
++	char *parser_path;
++	struct file *file;
++	struct path path;
++	int ret = 0, flags = 0;
 +
-+	list_for_each_entry(h, &digest_cache->htables, next)
-+		if (h->algo == algo)
-+			return h;
++	/* Must be kept in sync with kernel/module/Kconfig. */
++	if (IS_ENABLED(CONFIG_MODULE_COMPRESS_GZIP))
++		compress_suffix = ".gz";
++	else if (IS_ENABLED(CONFIG_MODULE_COMPRESS_XZ))
++		compress_suffix = ".xz";
++	else if (IS_ENABLED(CONFIG_MODULE_COMPRESS_ZSTD))
++		compress_suffix = ".zst";
 +
-+	return NULL;
-+}
++	if (strlen(compress_suffix))
++		flags |= MODULE_INIT_COMPRESSED_FILE;
 +
-+/**
-+ * digest_cache_htable_init - Allocate and initialize the hash table
-+ * @digest_cache: Digest cache
-+ * @num_digests: Number of digests to add to the hash table
-+ * @algo: Algorithm of the digests
-+ *
-+ * This function allocates and initializes the hash table for a given algorithm.
-+ * The number of slots depends on the number of digests to add to the digest
-+ * cache, and the constant CONFIG_DIGEST_CACHE_HTABLE_DEPTH stating the desired
-+ * average depth of the collision list.
-+ *
-+ * Return: Zero on success, a POSIX error code otherwise.
-+ */
-+int digest_cache_htable_init(struct digest_cache *digest_cache, u64 num_digests,
-+			     enum hash_algo algo)
-+{
-+	struct htable *h;
-+	unsigned int i;
-+
-+	if (!num_digests)
-+		return -EINVAL;
-+
-+	h = lookup_htable(digest_cache, algo);
-+	if (h)
-+		return 0;
-+
-+	h = kmalloc(sizeof(*h), GFP_KERNEL);
-+	if (!h)
++	parser_path = kasprintf(GFP_KERNEL, "%s/%s.ko%s", PARSERS_DIR, name,
++				compress_suffix);
++	if (!parser_path)
 +		return -ENOMEM;
 +
-+	h->num_slots = DIV_ROUND_UP(num_digests,
-+				    CONFIG_DIGEST_CACHE_HTABLE_DEPTH);
-+	h->slots = kmalloc_array(h->num_slots, sizeof(*h->slots), GFP_KERNEL);
-+	if (!h->slots) {
-+		kfree(h);
-+		return -ENOMEM;
-+	}
-+
-+	for (i = 0; i < h->num_slots; i++)
-+		INIT_HLIST_HEAD(&h->slots[i]);
-+
-+	h->num_digests = 0;
-+	h->algo = algo;
-+
-+	list_add_tail(&h->next, &digest_cache->htables);
-+
-+	pr_debug("Initialized hash table for digest list %s, digests: %llu, slots: %u, algo: %s\n",
-+		 digest_cache->path_str, num_digests, h->num_slots,
-+		 hash_algo_name[algo]);
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(digest_cache_htable_init);
-+
-+/**
-+ * digest_cache_htable_add - Add a new digest to the digest cache
-+ * @digest_cache: Digest cache
-+ * @digest: Digest to add
-+ * @algo: Algorithm of the digest
-+ *
-+ * This function adds a digest extracted from a digest list to the digest cache.
-+ *
-+ * Return: Zero on success, a POSIX error code otherwise.
-+ */
-+int digest_cache_htable_add(struct digest_cache *digest_cache, u8 *digest,
-+			    enum hash_algo algo)
-+{
-+	struct htable *h;
-+	struct digest_cache_entry *entry;
-+	unsigned int key;
-+	int digest_len;
-+
-+	h = lookup_htable(digest_cache, algo);
-+	if (!h) {
-+		pr_debug("No hash table for algorithm %s was found in digest cache %s, initialize one\n",
-+			 hash_algo_name[algo], digest_cache->path_str);
-+		return -ENOENT;
-+	}
-+
-+	digest_len = hash_digest_size[algo];
-+
-+	entry = kmalloc(sizeof(*entry) + digest_len, GFP_KERNEL);
-+	if (!entry)
-+		return -ENOMEM;
-+
-+	memcpy(entry->digest, digest, digest_len);
-+
-+	key = digest_cache_hash_key(digest, h->num_slots);
-+	hlist_add_head(&entry->hnext, &h->slots[key]);
-+	h->num_digests++;
-+	pr_debug("Added digest %s:%*phN to digest cache %s, num of %s digests: %llu\n",
-+		 hash_algo_name[algo], digest_len, digest,
-+		 digest_cache->path_str, hash_algo_name[algo], h->num_digests);
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(digest_cache_htable_add);
-+
-+/**
-+ * digest_cache_htable_lookup - Search a digest in the digest cache
-+ * @dentry: Dentry of the file whose digest is looked up
-+ * @digest_cache: Digest cache
-+ * @digest: Digest to search
-+ * @algo: Algorithm of the digest to search
-+ *
-+ * This function searches the passed digest and algorithm in the digest cache.
-+ *
-+ * Return: Zero if the digest is found, a POSIX error code otherwise.
-+ */
-+int digest_cache_htable_lookup(struct dentry *dentry,
-+			       struct digest_cache *digest_cache, u8 *digest,
-+			       enum hash_algo algo)
-+{
-+	struct digest_cache_entry *entry;
-+	struct htable *h;
-+	unsigned int key;
-+	int digest_len = hash_digest_size[algo];
-+	int search_depth = 0, ret = -ENOENT;
-+
-+	h = lookup_htable(digest_cache, algo);
-+	if (!h)
++	ret = kern_path(parser_path, 0, &path);
++	if (ret < 0) {
++		pr_debug("Cannot find path %s\n", parser_path);
 +		goto out;
-+
-+	key = digest_cache_hash_key(digest, h->num_slots);
-+
-+	hlist_for_each_entry(entry, &h->slots[key], hnext) {
-+		if (!memcmp(entry->digest, digest, digest_len)) {
-+			pr_debug("Cache hit at depth %d for file %s, digest %s:%*phN in digest cache %s\n",
-+				 search_depth, dentry->d_name.name,
-+				 hash_algo_name[algo], digest_len, digest,
-+				 digest_cache->path_str);
-+
-+			return 0;
-+		}
-+
-+		search_depth++;
 +	}
++
++	/* Cannot request a digest cache for the kernel module inode. */
++	if (d_backing_inode(dentry) == d_backing_inode(path.dentry)) {
++		pr_debug("Cannot request a digest cache for kernel module %s\n",
++			 dentry->d_name.name);
++		ret = -EBUSY;
++		goto out;
++	}
++
++	file = kernel_file_open(&path, O_RDONLY, &init_cred);
++	if (IS_ERR(file)) {
++		pr_debug("Cannot open %s\n", parser_path);
++		ret = PTR_ERR(file);
++		goto out_path;
++	}
++
++	/* Mark the file descriptor as ours. */
++	digest_cache_to_file_sec(file, digest_cache);
++
++	ret = ksys_finit_module(file, "", flags);
++	if (ret < 0)
++		pr_debug("Cannot load module %s\n", parser_path);
++
++	fput(file);
++out_path:
++	path_put(&path);
 +out:
-+	pr_debug("Cache miss for file %s, digest %s:%*phN not in digest cache %s\n",
-+		 dentry->d_name.name, hash_algo_name[algo], digest_len, digest,
-+		 digest_cache->path_str);
++	kfree(parser_path);
 +	return ret;
 +}
-+EXPORT_SYMBOL_GPL(digest_cache_htable_lookup);
 +
 +/**
-+ * digest_cache_lookup - Search a digest in the digest cache
-+ * @dentry: Dentry of the file whose digest is looked up
-+ * @digest_cache: Digest cache
-+ * @digest: Digest to search
-+ * @algo: Algorithm of the digest to search
++ * lookup_get_parser - Lookup and get parser among registered ones
++ * @name: Name of the parser to search
 + *
-+ * This function calls digest_cache_htable_lookup() to search a digest in the
-+ * passed digest cache, obtained with digest_cache_get().
++ * This function searches a parser among the registered ones, and returns it
++ * to the caller, after incrementing the kernel module reference count.
 + *
-+ * Return: A digest cache reference the digest is found, NULL if not.
++ * Must be called with parser_mutex held.
++ *
++ * Return: A parser structure if parser is found and available, NULL otherwise.
 + */
-+struct digest_cache *digest_cache_lookup(struct dentry *dentry,
-+					 struct digest_cache *digest_cache,
-+					 u8 *digest, enum hash_algo algo)
++static struct parser *lookup_get_parser(const char *name)
 +{
-+	int ret;
++	struct parser *entry, *found = NULL;
 +
-+	ret = digest_cache_htable_lookup(dentry, digest_cache, digest, algo);
-+	if (ret < 0)
-+		return NULL;
-+
-+	return digest_cache_ref(digest_cache);
-+}
-+EXPORT_SYMBOL_GPL(digest_cache_lookup);
-+
-+/**
-+ * digest_cache_htable_free - Free the hash tables
-+ * @digest_cache: Digest cache
-+ *
-+ * This function removes all digests from all hash tables in the digest cache,
-+ * and frees the memory.
-+ */
-+void digest_cache_htable_free(struct digest_cache *digest_cache)
-+{
-+	struct htable *h, *h_tmp;
-+	struct digest_cache_entry *p;
-+	struct hlist_node *q;
-+	unsigned int i;
-+
-+	list_for_each_entry_safe(h, h_tmp, &digest_cache->htables, next) {
-+		for (i = 0; i < h->num_slots; i++) {
-+			hlist_for_each_entry_safe(p, q, &h->slots[i], hnext) {
-+				hlist_del(&p->hnext);
-+				pr_debug("Removed digest %s:%*phN from digest cache %s\n",
-+					 hash_algo_name[h->algo],
-+					 hash_digest_size[h->algo], p->digest,
-+					 digest_cache->path_str);
-+				kfree(p);
-+			}
++	list_for_each_entry(entry, &parsers, list) {
++		if (!strcmp(entry->name, name) &&
++		    try_module_get(entry->owner)) {
++			found = entry;
++			break;
 +		}
-+
-+		list_del(&h->next);
-+		kfree(h->slots);
-+		kfree(h);
 +	}
++
++	return found;
 +}
-diff --git a/security/integrity/digest_cache/internal.h b/security/integrity/digest_cache/internal.h
-index 82d9c894c8fc..e14343e96caa 100644
---- a/security/integrity/digest_cache/internal.h
-+++ b/security/integrity/digest_cache/internal.h
-@@ -18,8 +18,40 @@
- #define INIT_STARTED		1	/* Digest cache init started. */
- #define INVALID			2	/* Digest cache marked as invalid. */
- 
-+/**
-+ * struct digest_cache_entry - Entry of a digest cache hash table
-+ * @hnext: Pointer to the next element in the collision list
-+ * @digest: Stored digest
-+ *
-+ * This structure represents an entry of a digest cache hash table, storing a
-+ * digest.
-+ */
-+struct digest_cache_entry {
-+	struct hlist_node hnext;
-+	u8 digest[];
-+};
 +
 +/**
-+ * struct htable - Hash table
-+ * @next: Next hash table in the linked list
-+ * @slots: Hash table slots
-+ * @num_slots: Number of slots
-+ * @num_digests: Number of digests stored in the hash table
-+ * @algo: Algorithm of the digests
++ * put_parser - Put parser
++ * @parser: Parser to put
 + *
-+ * This structure is a hash table storing digests of file data or metadata.
++ * This function decreases the kernel module reference count.
 + */
-+struct htable {
-+	struct list_head next;
-+	struct hlist_head *slots;
-+	unsigned int num_slots;
-+	u64 num_digests;
-+	enum hash_algo algo;
-+};
++static void put_parser(struct parser *parser)
++{
++	module_put(parser->owner);
++}
 +
- /**
-  * struct digest_cache - Digest cache
-+ * @htables: Hash tables (one per algorithm)
-  * @ref_count: Number of references to the digest cache
-  * @path_str: Path of the digest list the digest cache was created from
-  * @flags: Control flags
-@@ -27,6 +59,7 @@
-  * This structure represents a cache of digests extracted from a digest list.
-  */
- struct digest_cache {
-+	struct list_head htables;
- 	atomic_t ref_count;
- 	char *path_str;
- 	unsigned long flags;
-@@ -125,4 +158,7 @@ int __init digest_cache_do_init(const struct lsm_id *lsm_id,
- /* secfs.c */
- int __init digest_cache_secfs_init(struct dentry *dir);
- 
-+/* htable.c */
-+void digest_cache_htable_free(struct digest_cache *digest_cache);
++/**
++ * digest_cache_parse_digest_list - Parse a digest list
++ * @dentry: Dentry of the inode for which the digest cache will be used
++ * @digest_cache: Digest cache
++ * @path_str: Path string of the digest list
++ * @data: Data to parse
++ * @data_len: Length of @data
++ *
++ * This function selects a parser for a digest list depending on its file name,
++ * and calls the appropriate parsing function. It expects the file name to be
++ * in the format: [<seq num>-]<digest list format>-<digest list name>.
++ * <seq num>- is optional.
++ *
++ * Return: Zero on success, a POSIX error code otherwise.
++ */
++int digest_cache_parse_digest_list(struct dentry *dentry,
++				   struct digest_cache *digest_cache,
++				   char *path_str, void *data, size_t data_len)
++{
++	char *filename, *format, *next_sep;
++	struct parser *parser;
++	char format_buf[sizeof(parser->name)];
++	int ret = -EINVAL;
 +
- #endif /* _DIGEST_CACHE_INTERNAL_H */
-diff --git a/security/integrity/digest_cache/main.c b/security/integrity/digest_cache/main.c
-index 6724471914da..ebc5dc09a62b 100644
---- a/security/integrity/digest_cache/main.c
-+++ b/security/integrity/digest_cache/main.c
-@@ -51,6 +51,7 @@ static struct digest_cache *digest_cache_alloc_init(char *path_str,
- 
- 	atomic_set(&digest_cache->ref_count, 1);
- 	digest_cache->flags = 0UL;
-+	INIT_LIST_HEAD(&digest_cache->htables);
- 
- 	pr_debug("New digest cache %s (ref count: %d)\n",
- 		 digest_cache->path_str, atomic_read(&digest_cache->ref_count));
-@@ -66,6 +67,8 @@ static struct digest_cache *digest_cache_alloc_init(char *path_str,
-  */
- static void digest_cache_free(struct digest_cache *digest_cache)
- {
-+	digest_cache_htable_free(digest_cache);
++	filename = strrchr(path_str, '/');
++	if (!filename)
++		return ret;
 +
- 	pr_debug("Freed digest cache %s\n", digest_cache->path_str);
- 	kfree(digest_cache->path_str);
- 	kmem_cache_free(digest_cache_cache, digest_cache);
++	filename++;
++	format = filename;
++
++	/*
++	 * Since we expect that all files start with a digest list format, this
++	 * check is reliable to detect <seq num>.
++	 */
++	if (filename[0] >= '0' && filename[0] <= '9') {
++		format = strchr(filename, '-');
++		if (!format)
++			return ret;
++
++		format++;
++	}
++
++	next_sep = strchr(format, '-');
++	if (!next_sep || next_sep - format >= sizeof(format_buf))
++		return ret;
++
++	snprintf(format_buf, sizeof(format_buf), "%.*s",
++		 (int)(next_sep - format), format);
++
++	pr_debug("Parsing %s, format: %s, size: %ld\n", path_str, format_buf,
++		 data_len);
++
++	mutex_lock(&parsers_mutex);
++	parser = lookup_get_parser(format_buf);
++	mutex_unlock(&parsers_mutex);
++
++	if (!parser) {
++		load_parser(dentry, digest_cache, format_buf);
++
++		mutex_lock(&parsers_mutex);
++		parser = lookup_get_parser(format_buf);
++		mutex_unlock(&parsers_mutex);
++
++		if (!parser) {
++			pr_debug("Digest list parser %s not found\n",
++				 format_buf);
++			return -ENOENT;
++		}
++	}
++
++	ret = parser->func(digest_cache, data, data_len);
++	put_parser(parser);
++
++	return ret;
++}
++
++/**
++ * digest_cache_register_parser - Register new parser
++ * @parser: Parser structure to register
++ *
++ * This function searches the parser name among the registered ones and, if not
++ * found, appends the parser to the linked list of parsers.
++ *
++ * Return: Zero on success, -EEXIST if a parser with the same name exists.
++ */
++int digest_cache_register_parser(struct parser *parser)
++{
++	struct parser *p;
++	int ret = 0;
++
++	mutex_lock(&parsers_mutex);
++	p = lookup_get_parser(parser->name);
++	if (p) {
++		put_parser(p);
++		ret = -EEXIST;
++		goto out;
++	}
++
++	list_add_tail(&parser->list, &parsers);
++out:
++	pr_debug("Digest list parser \'%s\' %s registered\n", parser->name,
++		 (ret < 0) ? "cannot be" : "successfully");
++
++	mutex_unlock(&parsers_mutex);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(digest_cache_register_parser);
++
++/**
++ * digest_cache_unregister_parser - Unregister parser
++ * @parser: Parser structure to unregister
++ *
++ * This function removes the passed parser from the linked list of parsers.
++ */
++void digest_cache_unregister_parser(struct parser *parser)
++{
++	mutex_lock(&parsers_mutex);
++	list_del(&parser->list);
++	mutex_unlock(&parsers_mutex);
++
++	pr_debug("Digest list parser \'%s\' successfully unregistered\n",
++		 parser->name);
++}
++EXPORT_SYMBOL_GPL(digest_cache_unregister_parser);
 -- 
 2.47.0.118.gfd3785337b
 
