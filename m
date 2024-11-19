@@ -1,184 +1,173 @@
-Return-Path: <linux-kselftest+bounces-22284-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B421E9D29CF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 16:38:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BA389D2A59
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 17:00:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75CEC28119D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 15:38:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 30D42B2B1C3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 15:54:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F13DE1D12E0;
-	Tue, 19 Nov 2024 15:36:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FFDF1CFEB0;
+	Tue, 19 Nov 2024 15:53:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AavyAmE4"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oeA1y6+1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E03C1D04B9
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 15:36:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE8F1CDFC3
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 15:53:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732030618; cv=none; b=BAfiMOp4QuSgylS3b+FNBGfbMhVyEAyWZDlq6I2Xkz0OyI4owC408iL7tgfM4Ol9qE8mYEW57AqYW1AeHQco0p0rAfdh3DhTFk1JKrNr0O9iql69QsxyrCY/B+/Sg/xqzFbKmg/4E5t1QCMIGwxXvJuqq789LNshEBOQy09t+tQ=
+	t=1732031631; cv=none; b=iwLq0PhaGQD/WEra/GZSBkFnYANULsJ/BclyvSQnGWWvHAN+tChxKSXnL8sc67GTFUw4IrFbkmbwWG/leGMnPXlCbqlwFkB5dDCixx6F7ArCz1spj7nwxZw29fGRDFox1rPa3mD9itAaMKkgbXa2P+n0r+SJyFO7WqVlpFUHO1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732030618; c=relaxed/simple;
-	bh=K9vebJQz2YUwsc3MlNv4Uh8s8GbHzdib/lumO19eM5o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KcUVdS40wjeSdIS7TAVU/z3MFQy7fOKKZH2aAWm3bBT1Z+LniZ+Bxs42FxRUT30vXsvUse614ZoxszrJPuoE0XX1Fs+gdPNQaFZSLlRQzICrRaEp5f1JuCH2UUTN0Xn0EkHXtUCqeMt3DT0kDWNk9nCfMn5tAE5/fZM8Fe03zc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AavyAmE4; arc=none smtp.client-ip=209.85.166.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3a76fd74099so4144245ab.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 07:36:55 -0800 (PST)
+	s=arc-20240116; t=1732031631; c=relaxed/simple;
+	bh=oZBz6My2fl2cEQ/H4m7spItLuifNL3YkZ0yddOy41YQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SkUN9z4ESrEP6IuEukVLFVHi1UsDSCGqa7AYC0IaUJnnmXJG5HHCRag53XyXt8vWflO6AT/MSJNJ/LbAtyAnSBO5JH8bK+Vvde8f1CPTAfKo+AKY71lNMN/oOcdD0xUCgtXvWpE6mdlD6bMTggdrchgp/dmA4T22XcA6Qu4A0t8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oeA1y6+1; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5cfc18d5259so9010a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 07:53:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1732030615; x=1732635415; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bASOjfd+3IMg9ai8XUpmf9zDNUW1MPcgjDnaB/+DdHA=;
-        b=AavyAmE4tgv+i5AcWrFHyumZt4DCiZqX+3Mop7ANTmhH6ZsOImCHqWLzeLTfhA/y+t
-         V+9bkI09bCFLT7jWZwzQwm8zmeHBoSL+ksKiSurWk5HKInHVYRma1juazyIa/4RXVgmw
-         D//A/EM2vGJvoH4RsKz2oogqRdB72Uj3cJOOE=
+        d=google.com; s=20230601; t=1732031627; x=1732636427; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oZBz6My2fl2cEQ/H4m7spItLuifNL3YkZ0yddOy41YQ=;
+        b=oeA1y6+1eIa+KuXOu9qX7nu6h0bMz7NENQrNnJI47zwqpW6+yDIEi9QRdmjSgnaIlF
+         k/RYgwEKxtf6zHr6my7/5bGrZq3tgO7I+ucxLpTd8W5zSJn3Li/1SXONWmkZlkDCQ+kP
+         u6S6gbOFJLE3Yh2GTLsTZl5A06hCVjr5W5QMbMd0aYChC3jhaZuyHjCvmsgyZUx9uyUX
+         b3SE0BGt53TC5G9A2i25OLm5rBsDdSCt+5r7JV8s4+ApK57hz38jpa/6CBXvr1zyP4nS
+         uXNeMGxAn5LjJ+oaoSJ02f9gnaKTPk0kkRfForcsHfNuf2h/4jX9e/H1czJNFFLxMzBt
+         NrGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732030615; x=1732635415;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bASOjfd+3IMg9ai8XUpmf9zDNUW1MPcgjDnaB/+DdHA=;
-        b=D0w6u5qtMXkmVp6ebVLm+xlldZ8CtU3+Zn4bEogIVST76iYvje9RFd9m8BTwl5qlAt
-         aex3q5bc8P4XsXslcI/TXxbN+VoznctealIuyNqUPDp0KGd8EtPqvqzle++d1w0vxHwz
-         ZQDEcmYmUxWKPDleAO3I1p1CpXXtg9BBtl6WHQmrsy47k60WNnet/z4yXp+Xtze2XrGt
-         2uDN3+hCucwVnSpW8OdX9oifMWycxhlLFSTu+MfoApyA4O++COHnt+HVD3DudlB0PeYf
-         y5wmTUmjKiPcvKROoJehFWA3ps1EuL5RV2llKs7mNGjhc05dzkrIb3vWVd5z6cwhofhD
-         8e3w==
-X-Forwarded-Encrypted: i=1; AJvYcCU/vjM/ASj64UY+Z85SBPHwk8tMpioQmKhJ2q6Jgcb1gepsGW1EFd2h89uBImJeIxB5rJemTnDyWi/jIBfgEWo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzqha0QPddF+O/jeybwRomxBNnOOmay4uboMRLrZ8soj2otii1G
-	axvuQ8/gjDhFqTDnNGHf9Uoy8cSntESV+dIzyZiGc6nnyiJA5W2tbH2TlAEXWVI=
-X-Google-Smtp-Source: AGHT+IHAN7wQzV37tcwUMlZ8r82+eSQ1ur4oGMRmuNc7Oy1d4b50PR5o1Q2myqNlp07Q9SDtCB6ivA==
-X-Received: by 2002:a05:6e02:1a44:b0:3a7:44d9:c7dd with SMTP id e9e14a558f8ab-3a74800e6admr197277675ab.6.1732030615241;
-        Tue, 19 Nov 2024 07:36:55 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a74807d6cdsm26165835ab.19.2024.11.19.07.36.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Nov 2024 07:36:54 -0800 (PST)
-Message-ID: <ce995a53-7fbd-43a3-be4d-70fc57b07212@linuxfoundation.org>
-Date: Tue, 19 Nov 2024 08:36:53 -0700
+        d=1e100.net; s=20230601; t=1732031627; x=1732636427;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oZBz6My2fl2cEQ/H4m7spItLuifNL3YkZ0yddOy41YQ=;
+        b=XtiZVTcNP8bGSIPxTEeJYBMyr42AKmU/6EEhNybCuIzAiUxd+V9I3O+S/oDdSG0tR2
+         pnQg0kITw4G2eAZj5vn0OfRhXhHrkHKaYlVtdB/V9Zw6YJxkXPF8CyyEcHZxwDiL5Kpb
+         +FgRxbZZ+rvxBsB0yh4jU2+sevsVpRpPm5X0OK0Nhn/QxMVsbwtvOaZ+3wsScp0tYC9+
+         8a5+K93BUJBmKME0HlD48L9N30wNe1T99s5oQqxJH1NbCGQ1M6ECWUKy8voyJe+L6YjG
+         joTLGEYtiLfLnddD8/QQkpcyD2b8CobqRbMqFJyua2/LRa/zdy/KFhIQIIemFugV2akU
+         bdGA==
+X-Forwarded-Encrypted: i=1; AJvYcCVB8+yf1U+5ZH03GS7y9gvOZWzv9zY24Lq2YtEt56FIobdQ5RY1tsFzePxH4RdSc2Hacfe4tCfQAyF2k+HZIxE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZamci3AqaX+lMQNsMUFDAiXr9eVP4Ir+tV9HHwOmXj0KcP4Pm
+	zHoAsYuVxzX8KcPslwfaifmwy8HcebpoPkb90ox529bb8pmgLo1FiSkUyC0DQ14vfdWhZ6Z2DD1
+	tK34Y9Lr/PAu/EAcxi0umWjw2DILMd1iI/J/N
+X-Gm-Gg: ASbGncuRKwQPHMbaVcUEl6Wst73sALqKZcJninE2cFCRvRmzogH1TizV3fM0rqRDToQ
+	NVfl43YPSGGXEVh24aCV6S9mK4afzcqENwvyKiTvM3Pl9qnxQHycvwYQ9SRI=
+X-Google-Smtp-Source: AGHT+IGNsuMEPDGgLQcJBGgUTcQNAXs25llr0/NFfx7zpUAdIJ2qG87STQ6ogH4Jn3C0zEhl2cmBRbcH53+WD7m9EI4=
+X-Received: by 2002:aa7:c251:0:b0:5cf:f20c:bdf0 with SMTP id
+ 4fb4d7f45d1cf-5cff20cbec4mr2276a12.4.1732031626961; Tue, 19 Nov 2024 07:53:46
+ -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] KUnit update for Linux 6.13-rc1
-To: Kuan-Wei Chiu <visitorckw@gmail.com>, David Gow <davidgow@google.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, shuah <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Brendan Higgins <brendan.higgins@linux.dev>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <589ea100-ee1b-4a37-8f18-a25d86fdb082@linuxfoundation.org>
- <ZzvwEUIVs0M+/3Yu@visitorckw-System-Product-Name>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <ZzvwEUIVs0M+/3Yu@visitorckw-System-Product-Name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20241116175922.3265872-1-pasha.tatashin@soleen.com>
+ <a0372f7f-9a85-4d3e-ba20-b5911a8189e3@lucifer.local> <CAG48ez2vG0tr=H8csGes7HN_5HPQAh4WZU8U1G945K1GKfABPg@mail.gmail.com>
+ <CA+CK2bB0w=i1z78AJbr2gZE9ybYki4Vz_s53=8URrxwyPvvB+A@mail.gmail.com>
+ <CAG48ez1KFFXzy5qcYVZLnUEztaZxDGY2+4GvwYq7Hb=Y=3FBxQ@mail.gmail.com>
+ <CA+CK2bCBwZFomepG-Pp6oiAwHQiKdsTLe3rYtE3hFSQ5spEDww@mail.gmail.com>
+ <CAG48ez0NzMbwnbvMO7KbUROZq5ne7fhiau49v7oyxwPrYL=P6Q@mail.gmail.com> <CA+CK2bByXtm8sLyFzDDzm5xC6xb=DEutaRUeujGJdwf-kmK1gA@mail.gmail.com>
+In-Reply-To: <CA+CK2bByXtm8sLyFzDDzm5xC6xb=DEutaRUeujGJdwf-kmK1gA@mail.gmail.com>
+From: Jann Horn <jannh@google.com>
+Date: Tue, 19 Nov 2024 16:53:10 +0100
+Message-ID: <CAG48ez3zNWJY=3EcuS1n1cFyujUO7CXAYe7=H48Ja_WmdL_PYw@mail.gmail.com>
+Subject: Re: [RFCv1 0/6] Page Detective
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	akpm@linux-foundation.org, corbet@lwn.net, derek.kiernan@amd.com, 
+	dragan.cvetic@amd.com, arnd@arndb.de, gregkh@linuxfoundation.org, 
+	viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, tj@kernel.org, 
+	hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev, 
+	shakeel.butt@linux.dev, muchun.song@linux.dev, Liam.Howlett@oracle.com, 
+	vbabka@suse.cz, shuah@kernel.org, vegard.nossum@oracle.com, 
+	vattunuru@marvell.com, schalla@marvell.com, david@redhat.com, 
+	willy@infradead.org, osalvador@suse.de, usama.anjum@collabora.com, 
+	andrii@kernel.org, ryan.roberts@arm.com, peterx@redhat.com, oleg@redhat.com, 
+	tandersen@netflix.com, rientjes@google.com, gthelen@google.com, 
+	linux-hardening@vger.kernel.org, 
+	Kernel Hardening <kernel-hardening@lists.openwall.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/18/24 18:55, Kuan-Wei Chiu wrote:
-> Hi Shuah,
-> 
-> On Mon, Nov 18, 2024 at 12:19:50PM -0700, Shuah Khan wrote:
->> Hi Linus,
->>
->> Please pull the following kunit update for Linux 6.13-rc1.
->>
->> kunit update for Linux 6.13-rc1
->>
->> -- fixes user-after-free (UAF) bug in kunit_init_suite()
->>
->> -- adds option to kunit tool to print just the summary of test results
->>
->> -- adds option to kunit tool to print just the failed test results
->>
->> -- fixes kunit_zalloc_skb() to use user passed in gfp value instead of
->>     hardcoding GFP_KERNEL
->>
->> -- fixes kunit_zalloc_skb() kernel doc to include allocation flags variable
->>
->> diff is attached.
->>
->> Tests passed on my kunit repo:
->>
->> - Build make allmodconfig
->>
->> ./tools/testing/kunit/kunit.py run
->> ./tools/testing/kunit/kunit.py run --alltests
->>
->> ./tools/testing/kunit/kunit.py run --arch x86_64
->> ./tools/testing/kunit/kunit.py run --alltests --arch x86_64
->>
->> thanks,
->> -- Shuah
->>
->> ----------------------------------------------------------------
->> The following changes since commit 2d5404caa8c7bb5c4e0435f94b28834ae5456623:
->>
->>    Linux 6.12-rc7 (2024-11-10 14:19:35 -0800)
->>
->> are available in the Git repository at:
->>
->>    git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-kunit-6.13-rc1
->>
->> for you to fetch changes up to 67b6d342fb6d5abfbeb71e0f23141b9b96cf7bb1:
->>
->>    kunit: tool: print failed tests only (2024-11-14 09:38:19 -0700)
->>
->> ----------------------------------------------------------------
->> linux_kselftest-kunit-6.13-rc1
->>
->> kunit update for Linux 6.13-rc1
->>
->> -- fixes user-after-free (UAF) bug in kunit_init_suite()
->>
->> -- adds option to kunit tool to print just the summary of test results
->>
->> -- adds option to kunit tool to print just the failed test results
->>
->> -- fixes kunit_zalloc_skb() to use user passed in gfp value instead of
->>     hardcoding GFP_KERNEL
->>
->> -- fixes kunit_zalloc_skb() kernel doc to include allocation flags variable
->>
->> ----------------------------------------------------------------
->> Dan Carpenter (2):
->>        kunit: skb: use "gfp" variable instead of hardcoding GFP_KERNEL
->>        kunit: skb: add gfp to kernel doc for kunit_zalloc_skb()
->>
->> David Gow (1):
->>        kunit: tool: Only print the summary
->>
->> Jinjie Ruan (1):
->>        kunit: string-stream: Fix a UAF bug in kunit_init_suite()
->>
-> The patch [1] intended to address the UAF issue in kunit_init_suite()
-> is not correct and does not actually fix the problem. A v2 patch [2]
-> with the proper fix has been sent.
-> 
+On Tue, Nov 19, 2024 at 4:14=E2=80=AFPM Pasha Tatashin
+<pasha.tatashin@soleen.com> wrote:
+> On Tue, Nov 19, 2024 at 7:52=E2=80=AFAM Jann Horn <jannh@google.com> wrot=
+e:
+> > On Tue, Nov 19, 2024 at 2:30=E2=80=AFAM Pasha Tatashin
+> > <pasha.tatashin@soleen.com> wrote:
+> > > > Can you point me to where a refcounted reference to the page comes
+> > > > from when page_detective_metadata() calls dump_page_lvl()?
+> > >
+> > > I am sorry, I remembered incorrectly, we are getting reference right
+> > > after dump_page_lvl() in page_detective_memcg() -> folio_try_get(); I
+> > > will move the folio_try_get() to before dump_page_lvl().
+> > >
+> > > > > > So I think dump_page() in its current form is not something we =
+should
+> > > > > > expose to a userspace-reachable API.
+> > > > >
+> > > > > We use dump_page() all over WARN_ONs in MM code where pages might=
+ not
+> > > > > be locked, but this is a good point, that while even the existing
+> > > > > usage might be racy, providing a user-reachable API potentially m=
+akes
+> > > > > it worse. I will see if I could add some locking before dump_page=
+(),
+> > > > > or make a dump_page variant that does not do dump_mapping().
+> > > >
+> > > > To be clear, I am not that strongly opposed to racily reading data
+> > > > such that the data may not be internally consistent or such; but th=
+is
+> > > > is a case of racy use-after-free reads that might end up dumping
+> > > > entirely unrelated memory contents into dmesg. I think we should
+> > > > properly protect against that in an API that userspace can invoke.
+> > > > Otherwise, if we race, we might end up writing random memory conten=
+ts
+> > > > into dmesg; and if we are particularly unlucky, those random memory
+> > > > contents could be PII or authentication tokens or such.
+> > > >
+> > > > I'm not entirely sure what the right approach is here; I guess it
+> > > > makes sense that when the kernel internally detects corruption,
+> > > > dump_page doesn't take references on pages it accesses to avoid
+> > > > corrupting things further. If you are looking at a page based on a
+> > > > userspace request, I guess you could access the page with the
+> > > > necessary locking to access its properties under the normal locking
+> > > > rules?
+> > >
+> > > I will take reference, as we already do that for memcg purpose, but
+> > > have not included dump_page().
+> >
+> > Note that taking a reference on the page does not make all of
+> > dump_page() fine; in particular, my understanding is that
+> > folio_mapping() requires that the page is locked in order to return a
+> > stable pointer, and some of the code in dump_mapping() would probably
+> > also require some other locks - probably at least on the inode and
+> > maybe also on the dentry, I think? Otherwise the inode's dentry list
+> > can probably change concurrently, and the dentry's name pointer can
+> > change too.
+>
+> Agreed, once reference is taken, the page identity cannot change (i.e.
+> if it is a named page it will stay a named page), but dentry can be
+> renamed. I will look into what can be done to guarantee consistency in
+> the next version. There is also a fallback if locking cannot be
+> reliably resolved (i.e. for performance reasons) where we can make
+> dump_mapping() optionally disabled from dump_page_lvl() with a new
+> argument flag.
 
-Hmm. I picked this up because David reviewed it and added his
-Reviewed-by. I would like David's feedback on which patch we
-should be taking.
-
-> 
-> [1]: https://lore.kernel.org/lkml/20241024094303.1531810-1-ruanjinjie@huawei.com
-> [2]: https://lore.kernel.org/linux-kselftest/20241112080314.407966-1-ruanjinjie@huawei.com
-
-David, Can you take you let me know. I don't mind redoing the PR
-for Linus. I just have to know which patch to take.
-
-thanks,
--- Shuah
+Yeah, I think if you don't need the details that dump_mapping() shows,
+skipping that for user-requested dumps might be a reasonable option.
 
