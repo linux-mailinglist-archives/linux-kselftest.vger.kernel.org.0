@@ -1,179 +1,192 @@
-Return-Path: <linux-kselftest+bounces-22240-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22241-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1928C9D2182
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 09:23:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCD689D21C8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 09:45:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD21D282856
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 08:23:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D24E9B22BEA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 08:45:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1096196C7C;
-	Tue, 19 Nov 2024 08:23:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D70D1197A7A;
+	Tue, 19 Nov 2024 08:45:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fdd1dbvb"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="NZFt2fWu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ABCD1A28C;
-	Tue, 19 Nov 2024 08:23:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9ABD146D53
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 08:45:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732004599; cv=none; b=AwNlLxXsXL6AAmyZrwZ8auPeE8CPCffB0EGGYDv9vWDW7IdSYvXLgk8IUN+FYoxi9ByprREtbEapTeikKnjrIGIEicxuTFyxJXurqAgKqNjlwJcHCFsqGfJHSzKyRpT2K8d8oVFLbiEfgEv+5nGcSrndVo1pxx88YWWwp6VmnWU=
+	t=1732005927; cv=none; b=S8v9W/lhb/vzcexOfEO1k17WUOAodINX8bV2CG5yle8Gdoaah9T8AtFb38eEaMz9OH/NkKvEtNKX4s5t7tcjw3/PQSZtsEFbcdYafTuPtYdXHwygIf0NQkJV5MLXLgtiv3LOweOpxwYQlEKdx3J6PAGqka2Rj08nZLPCGslqFIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732004599; c=relaxed/simple;
-	bh=N/n/9VQwKxWlOdS9qxgmUQkfy4uKNtrkw5TJvWo/e2k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s66OLIdUVm3O85/AQk/PmpV/ab/4/HaQLqO0oIXVy5RHCPkT2cQShiWDoxtBEz+tTX9L0ibPmq7U7XRPqVNLd/q/qEOU0g2h5069wpYRB5+3Xo/63rXUsQ61Btp+XPCmw/rFl1g9MQLrZiantJ16//6L2cTDaV/FG3RTvAULV0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fdd1dbvb; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-71e52582cf8so2035451b3a.2;
-        Tue, 19 Nov 2024 00:23:17 -0800 (PST)
+	s=arc-20240116; t=1732005927; c=relaxed/simple;
+	bh=S+U+AjJRasPBDpiweR/FNZIR/50o66YkmWzkir4ZW2k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=A8dZ5SeKq3CWVB0r3Hau6NPfPOQS5AItmn3Lwj4S7zJje7E9CnW34t8OA3wuIOo5gcORzsYfCLlpn39HnolxLsxDxyEvjLO0seqyKC3R4OC3wOfjJQB1MTQ5CqSwYfSlHux1HkFLSgxyxStpZjjMhl+cANa2WgrdsEDePUhuoFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=NZFt2fWu; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5cfcf4df87aso2238770a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 00:45:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732004597; x=1732609397; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3y11cVWLnbMeLUtsLIN+/hTQ1x168DrE/MVNBKdLI7U=;
-        b=fdd1dbvbijfX8hUHS/v6rPE9ySyfXzzae81GiaSVhIOZVpPYWBxye79hsZw46E5z2D
-         WscvPER0DroNVCvgSvttDCX5PGL1RF+nrNpRRw1eCIP7EQC2GyJYS+/zJ4jUJ2fPeZi/
-         TMSgtygbtQfP0vJPEP47GOeP/ZVJJFf3t5fEla1nwl/AJVls8254CYxpsxluUJhfJdOO
-         kpgLi77YLYiKvJE74Qw4ErCEBD4CjrQe2sDesFpBAosOk1Zs+8FLfBPw5ChLB1v9BHEy
-         TxPF2xI0a5vMsxSwIR1jfTKtrvMp7P+/L/e8rqVk2flNEwyL2JieU5RyarwCdfel1Gw/
-         ME2g==
+        d=openvpn.net; s=google; t=1732005924; x=1732610724; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=8fuT97yI4Tuoujm6UUjQklceuyk/9Xj1w4bHDEeWvaU=;
+        b=NZFt2fWu8dOjBBBmYCqenDv3ennpH6FbIcESjm/hstKFJns5mBjpG1DO5JFh1FlLHB
+         dX3RYgUxDWzzrCE76ZQJUCXVcvWPssKbjP/Rz0cpH3w1SBzy5aNkcAPKkFV8RjTImcvU
+         rEBq5oX3J73S533c6A8gEIsy+vSeAxjGRzAxm3r/TzZrjRQEnCkr5s00WlFcGq3B8nMU
+         Wy30IYOdMFLKLO1wfgOulROSYXhUfxqc/ZVmPAY+pjmyt3NY45GoaHWp7P4wtzX+IBuk
+         GCNf4/abP9q9L9qxBVPMHm8sTTzFh8oSNR6QICf8eoyJGYUxGdOPpT23D8bpjEWH9tVq
+         5OUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732004597; x=1732609397;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1732005924; x=1732610724;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3y11cVWLnbMeLUtsLIN+/hTQ1x168DrE/MVNBKdLI7U=;
-        b=r/+YW/4b1l/KBh/06iOAhTnksF36YvNG+nvkt3Ws3J5SDa3gNFs6DhpKpSfJAcbOlX
-         L87XBE32UOndVDnCaYp09MoamVAq8e/M5RppwboBPSLVrwfXzbjxQ8ffZQLTvqGAhl/K
-         wPwAa11StpYFqOtV0tWj78fzeA9NcSByIFzywWf5tECsb/wCyb4pItrZzbjgNA8mYqsm
-         ObjIDi+OFRq4NL3cFFeNbRtB/Brg9QIfthl7VXVxnVqByso4KVmrTR6J9st3E1mzHO77
-         Iv/ePGS0Bp/81J2Q3NWycvoPcOD2BEP+CTs5DF1KsUVdq8Th0vO1jV8mdc0PUcjZKh4+
-         J/4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWG+ZXyvCpXsFJKf4krQVc47BZb5MstjQG7IbgY1TsP0KKhsccW9sOrHyYHj6mNZ7VCK3XN/FJPrKxes7w=@vger.kernel.org, AJvYcCWv9XmHp2uTbYNRpxUCl+tOSz9Dbc9xOj25oRo+V96N5C+VwsVwalkFF7F0WGmqcsey68hv5UrWIaSz9jli/lTj@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy52ZL17y33Ltwhk0L0GqG+yo+quut+RFmC/5Hv/hXXqVwCDGKy
-	vrwBpvdj24qdvDf6QUtsnn+JofMeiu8JUn7IkVN/NZ6IFjywTsbY
-X-Google-Smtp-Source: AGHT+IHUzfXK4t/vY90yoGZGr9Ob6wWwgcqt4R3WqvOLtnjNgbBrO2rhbG8JW9p6ym2zjueK1suoLw==
-X-Received: by 2002:a05:6a00:21cf:b0:71e:6eb:786e with SMTP id d2e1a72fcca58-72476bb87b0mr23612285b3a.13.1732004597303;
-        Tue, 19 Nov 2024 00:23:17 -0800 (PST)
-Received: from fedora ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7247711ce30sm7459121b3a.54.2024.11.19.00.23.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Nov 2024 00:23:16 -0800 (PST)
-Date: Tue, 19 Nov 2024 08:23:10 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Sam Edwards <cfsworks@gmail.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 2/2] selftests/rtnetlink.sh: add mngtempaddr test
-Message-ID: <ZzxK7hZSF7nPfuOj@fedora>
-References: <20241113125152.752778-1-liuhangbin@gmail.com>
- <20241113125152.752778-3-liuhangbin@gmail.com>
- <CAH5Ym4iVP0XYrb1=7QhDqhEO54vpSJGFGHaBnuM1qpua1p5-tg@mail.gmail.com>
- <ZzW46QZf5rzj4tMp@fedora>
- <CAH5Ym4jGZou27-bwGqxHAf2AHWXpT0=wOa0XNNuqtG9OOhi8EQ@mail.gmail.com>
+        bh=8fuT97yI4Tuoujm6UUjQklceuyk/9Xj1w4bHDEeWvaU=;
+        b=WRmlC38+PauxfF0WcMbCdTG6wHXq11DiR484CUpGcJh/5y/QwKA8O2pc7lIS4R6fTo
+         KpGESxf8yGhzGWvLvIpq6QLHqnn5zHWZTBpWZXDlNMRFmudqulK0aCODZO3W5QTH0CV7
+         EOGQ/fpmwtoOVKV3KUx+g9trmCiUVmLGR/MaMkWC5D0VuGRKVrJHR+pSDu8499zaLXec
+         9Eb4vXA8Ix92IM8w1iS1KnZbj3S0XA0O1gaURdtSadWsSy5r8Na010ECShEoFXBJon/6
+         bfqXnU6eaqH0wsPpq8r/czMv0coKPtTPNrES3PI2UvovbCsxx00lsO2xyIZOFD13REGW
+         BjBA==
+X-Forwarded-Encrypted: i=1; AJvYcCWSqNklRxWHtsRV+PgQ1JvvHqLfw22SKBYuBg3sLWRQ8y2J1hL+Lzyhd11z7FbT34/EYHnTtjd2lmu+67t5AwM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPiaPD4KJH6112d89Ydr/MGe6daMMyqS6GxvxA/RS/c4qnoXtg
+	399pxkw0NtPnS8K4PpRjpFeLeLahW+5rGP0C4Jgwuwzv6EqkchF+8Hq/tfaqZr4=
+X-Google-Smtp-Source: AGHT+IGWgWvrU3iW9fpLyl65j2i8nKGQqJjCyR6GPI7QRQB3gyIMeqWk8joXLkagDKieL4IvEbilPA==
+X-Received: by 2002:a05:6402:2794:b0:5c9:6f20:4cf1 with SMTP id 4fb4d7f45d1cf-5cf8fd04bf8mr13901074a12.27.1732005924036;
+        Tue, 19 Nov 2024 00:45:24 -0800 (PST)
+Received: from ?IPV6:2001:67c:2fbc:1:a2be:8cd5:8845:cfce? ([2001:67c:2fbc:1:a2be:8cd5:8845:cfce])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cfaca26fdesm3336525a12.47.2024.11.19.00.45.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Nov 2024 00:45:23 -0800 (PST)
+Message-ID: <855e6fee-5f0a-439d-a6c5-6829db4ecbfa@openvpn.net>
+Date: Tue, 19 Nov 2024 09:45:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAH5Ym4jGZou27-bwGqxHAf2AHWXpT0=wOa0XNNuqtG9OOhi8EQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v11 04/23] ovpn: add basic interface
+ creation/destruction/management routines
+To: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, sd@queasysnail.net,
+ Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-4-de4698c73a25@openvpn.net>
+ <4b6f2e30-5e94-475d-97ec-d59e59f0bf6b@gmail.com>
+ <0f19828c-9808-427f-b620-fd3bc9f2e5db@openvpn.net>
+ <709d415d-859d-4342-80b7-908c04b28621@gmail.com>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ xsFNBFN3k+ABEADEvXdJZVUfqxGOKByfkExNpKzFzAwHYjhOb3MTlzSLlVKLRIHxe/Etj13I
+ X6tcViNYiIiJxmeHAH7FUj/yAISW56lynAEt7OdkGpZf3HGXRQz1Xi0PWuUINa4QW+ipaKmv
+ voR4b1wZQ9cZ787KLmu10VF1duHW/IewDx9GUQIzChqQVI3lSHRCo90Z/NQ75ZL/rbR3UHB+
+ EWLIh8Lz1cdE47VaVyX6f0yr3Itx0ZuyIWPrctlHwV5bUdA4JnyY3QvJh4yJPYh9I69HZWsj
+ qplU2WxEfM6+OlaM9iKOUhVxjpkFXheD57EGdVkuG0YhizVF4p9MKGB42D70pfS3EiYdTaKf
+ WzbiFUunOHLJ4hyAi75d4ugxU02DsUjw/0t0kfHtj2V0x1169Hp/NTW1jkqgPWtIsjn+dkde
+ dG9mXk5QrvbpihgpcmNbtloSdkRZ02lsxkUzpG8U64X8WK6LuRz7BZ7p5t/WzaR/hCdOiQCG
+ RNup2UTNDrZpWxpwadXMnJsyJcVX4BAKaWGsm5IQyXXBUdguHVa7To/JIBlhjlKackKWoBnI
+ Ojl8VQhVLcD551iJ61w4aQH6bHxdTjz65MT2OrW/mFZbtIwWSeif6axrYpVCyERIDEKrX5AV
+ rOmGEaUGsCd16FueoaM2Hf96BH3SI3/q2w+g058RedLOZVZtyQARAQABzSdBbnRvbmlvIFF1
+ YXJ0dWxsaSA8YW50b25pb0BvcGVudnBuLm5ldD7Cwa0EEwEIAFcCGwMFCwkIBwMFFQoJCAsF
+ FgIDAQACHgECF4AFCRWQ2TIWIQTKvaEoIBfCZyGYhcdI8My2j1nRTAUCYRUquBgYaGtwczov
+ L2tleXMub3BlbnBncC5vcmcACgkQSPDMto9Z0UzmcxAAjzLeD47We0R4A/14oDKlZxXO0mKL
+ fCzaWFsdhQCDhZkgxoHkYRektK2cEOh4Vd+CnfDcPs/iZ1i2+Zl+va79s4fcUhRReuwi7VCg
+ 7nHiYSNC7qZo84Wzjz3RoGYyJ6MKLRn3zqAxUtFECoS074/JX1sLG0Z3hi19MBmJ/teM84GY
+ IbSvRwZu+VkJgIvZonFZjbwF7XyoSIiEJWQC+AKvwtEBNoVOMuH0tZsgqcgMqGs6lLn66RK4
+ tMV1aNeX6R+dGSiu11i+9pm7sw8tAmsfu3kQpyk4SB3AJ0jtXrQRESFa1+iemJtt+RaSE5LK
+ 5sGLAO+oN+DlE0mRNDQowS6q/GBhPCjjbTMcMfRoWPCpHZZfKpv5iefXnZ/xVj7ugYdV2T7z
+ r6VL2BRPNvvkgbLZgIlkWyfxRnGh683h4vTqRqTb1wka5pmyBNAv7vCgqrwfvaV1m7J9O4B5
+ PuRjYRelmCygQBTXFeJAVJvuh2efFknMh41R01PP2ulXAQuVYEztq3t3Ycw6+HeqjbeqTF8C
+ DboqYeIM18HgkOqRrn3VuwnKFNdzyBmgYh/zZx/dJ3yWQi/kfhR6TawAwz6GdbQGiu5fsx5t
+ u14WBxmzNf9tXK7hnXcI24Z1z6e5jG6U2Swtmi8sGSh6fqV4dBKmhobEoS7Xl496JN2NKuaX
+ jeWsF2rOwE0EZmhJFwEIAOAWiIj1EYkbikxXSSP3AazkI+Y/ICzdFDmiXXrYnf/mYEzORB0K
+ vqNRQOdLyjbLKPQwSjYEt1uqwKaD1LRLbA7FpktAShDK4yIljkxhvDI8semfQ5WE/1Jj/I/Q
+ U+4VXhkd6UvvpyQt/LiWvyAfvExPEvhiMnsg2zkQbBQ/M4Ns7ck0zQ4BTAVzW/GqoT2z03mg
+ p1FhxkfzHMKPQ6ImEpuY5cZTQwrBUgWif6HzCtQJL7Ipa2fFnDaIHQeiJG0RXl/g9x3YlwWG
+ sxOFrpWWsh6GI0Mo2W2nkinEIts48+wNDBCMcMlOaMYpyAI7fT5ziDuG2CBA060ZT7qqdl6b
+ aXUAEQEAAcLBfAQYAQgAJhYhBMq9oSggF8JnIZiFx0jwzLaPWdFMBQJmaEkXAhsMBQkB4TOA
+ AAoJEEjwzLaPWdFMbRUP/0t5FrjF8KY6uCU4Tx029NYKDN9zJr0CVwSGsNfC8WWonKs66QE1
+ pd6xBVoBzu5InFRWa2ed6d6vBw2BaJHC0aMg3iwwBbEgPn4Jx89QfczFMJvFm+MNc2DLDrqN
+ zaQSqBzQ5SvUjxh8lQ+iqAhi0MPv4e2YbXD0ROyO+ITRgQVZBVXoPm4IJGYWgmVmxP34oUQh
+ BM7ipfCVbcOFU5OPhd9/jn1BCHzir+/i0fY2Z/aexMYHwXUMha/itvsBHGcIEYKk7PL9FEfs
+ wlbq+vWoCtUTUc0AjDgB76AcUVxxJtxxpyvES9aFxWD7Qc+dnGJnfxVJI0zbN2b37fX138Bf
+ 27NuKpokv0sBnNEtsD7TY4gBz4QhvRNSBli0E5bGUbkM31rh4Iz21Qk0cCwR9D/vwQVsgPvG
+ ioRqhvFWtLsEt/xKolOmUWA/jP0p8wnQ+3jY6a/DJ+o5LnVFzFqbK3fSojKbfr3bY33iZTSj
+ DX9A4BcohRyqhnpNYyHL36gaOnNnOc+uXFCdoQkI531hXjzIsVs2OlfRufuDrWwAv+em2uOT
+ BnRX9nFx9kPSO42TkFK55Dr5EDeBO3v33recscuB8VVN5xvh0GV57Qre+9sJrEq7Es9W609a
+ +M0yRJWJEjFnMa/jsGZ+QyLD5QTL6SGuZ9gKI3W1SfFZOzV7hHsxPTZ6
+Organization: OpenVPN Inc.
+In-Reply-To: <709d415d-859d-4342-80b7-908c04b28621@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 15, 2024 at 12:59:27PM -0800, Sam Edwards wrote:
-> Hi Hangbin,
+On 19/11/2024 04:08, Sergey Ryazanov wrote:
+> On 15.11.2024 16:03, Antonio Quartulli wrote:
+>> On 10/11/2024 21:42, Sergey Ryazanov wrote:
+>>> Missed the most essential note regarding this patch :)
+>>>
+>>> On 29.10.2024 12:47, Antonio Quartulli wrote:
+>>>> +static int ovpn_net_open(struct net_device *dev)
+>>>> +{
+>>>> +    netif_tx_start_all_queues(dev);
+>>>> +    return 0;
+>>>> +}
+>>>> +
+>>>> +static int ovpn_net_stop(struct net_device *dev)
+>>>> +{
+>>>> +    netif_tx_stop_all_queues(dev);
+>>>
+>>> Here we stop a user generated traffic in downlink. Shall we take care 
+>>> about other kinds of traffic: keepalive, uplink?
+>>
+>> Keepalive is "metadata" and should continue to flow, regardless of 
+>> whether the user interface is brought down.
+>>
+>> Uplink traffic directed to *this* device should just be dropped at 
+>> delivery time.
+>>
+>> Incoming traffic directed to other peers will continue to work.
 > 
-> My apologies, I should have shared my version of the check function
-> before. Here it is:
-> 
-> ```bash
-> # Called to validate the addresses on $IFNAME:
-> #
-> # 1. Every `temporary` address must have a matching `mngtmpaddr`
-> # 2. Every `mngtmpaddr` address must have some un`deprecated` `temporary`
+> How it's possible? AFAIU, the module uses the kernel IP routing 
+> subsystem. Putting the interface down will effectively block a client- 
+> to-client packet to reenter the interface.
 
-Thanks, this is much clear.
+True.
+At least part of the traffic is stopped (traffic directed to the VPN IP 
+of a peer will still flow as it does not require a routing table lookup).
 
-> #
-> # Fails the whole test script if a problem is detected, else returns silently.
-> validate()
-> {
->     mng_prefixes=()
->     undep_prefixes=()
->     temp_addrs=()
-> 
->     while read -r line; do
->         line_array=($line)
->         address="${line_array[1]}"
->         prefix="$(echo "$address" | cut -d: -f1-4)::/64"
->         if echo "$line" | grep -q mngtmpaddr; then
->             mng_prefixes+=("$prefix")
->         elif echo "$line" | grep -q temporary; then
->             temp_addrs+=("$address")
->             if echo "$line" | grep -qv deprecated; then
->                 undep_prefixes+=("$prefix")
->             fi
->         fi
->     done < <(ip -6 addr show dev $IFNAME | grep '^\s*inet6')
-> 
->     # 1. All temporary addresses (temp and dep) must have a matching mngtmpaddr
->     for address in ${temp_addrs[@]}; do
->         prefix="$(echo "$address" | cut -d: -f1-4)::/64"
->         if [[ ! " ${mng_prefixes[*]} " =~ " $prefix " ]]; then
->             echo "FAIL: Temporary $address with no matching mngtmpaddr!";
->             exit 1
->         fi
->     done
-> 
->     # 2. All mngtmpaddr addresses must have a temporary address (not dep)
->     for prefix in ${mng_prefixes[@]}; do
->         if [[ ! " ${undep_prefixes[*]} " =~ " $prefix " ]]; then
->             echo "FAIL: No undeprecated temporary in $prefix!";
->             exit 1
->         fi
->     done
-> }
-> ```
-> 
-> Of course this is using awful text parsing and not JSON output. But
-> the idea is that it groups addresses by their /64 prefix, to confirm
-> that every /64 containing a mngtmpaddrs address also contains an
-> undeprecated temporary, and that every /64 containing a temporary
-> (deprecated or not) contains a mngtmpaddrs.
+I circled this discussion through the other devs to see what perspective 
+they would bring and we also agree that if something is stopping, better 
+stop the entire infra.
 
-And I will modify and use your checking version.
+Also, if a user is fumbling with the link state, they are probably 
+trying to bring the VPN down.
 
-> 
-> This can be extended for the lifetime checking: when we build the set
-> of mngtmpaddrs /64s, we also note the valid/preferred_life_time values
-> for each mngtmpaddr. Then later when we confirm rule 1 (all temporary
-> addresses must have a matching mngtmpaddr) we also confirm that each
-> temporary does not outlive the mngtmpaddr in the same /64.
+I will go that way and basically perform the same cleanup as if the 
+interface is being deleted.
 
-Since we add all mngtmpaddrs manually, which valid/preferred_life_time
-will be forever. So we only need to check the temporary addresses'
-valid/preferred_life_time, right? And on the other hand, the preferred_lft
-maybe 0 in my example.
+"the party is over"[cit.] :)
 
-    inet6 2001::743:ec1e:5c19:404f/64 scope global temporary dynamic
-       valid_lft 25sec preferred_lft 5sec
-    inet6 2001::938f:432:f32d:602f/64 scope global temporary dynamic
-       valid_lft 19sec preferred_lft 0sec
+Regards,
 
-It looks we only need to check the valid_lft. Am I miss anything?
+-- 
+Antonio Quartulli
+OpenVPN Inc.
 
-Thanks
-Hangbin
 
