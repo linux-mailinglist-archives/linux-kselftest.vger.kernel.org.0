@@ -1,82 +1,83 @@
-Return-Path: <linux-kselftest+bounces-22233-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22235-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B53A49D1FA7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 06:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 110BA9D20B0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 08:23:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AF181F21A39
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 05:44:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B60581F243CE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 07:23:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15F6B149C57;
-	Tue, 19 Nov 2024 05:44:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9153D14F9E7;
+	Tue, 19 Nov 2024 07:22:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aho+kv7R"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YwOO4Dwq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8BA2563;
-	Tue, 19 Nov 2024 05:44:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0EF8F64;
+	Tue, 19 Nov 2024 07:22:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731995083; cv=none; b=T4OSWRSBIbzHpy+lpRZ01jdy0E3MmuBkjXnGg88+5+m08Vi9NfwPZkzXOwz7NdDwUj4nHoapevYkOt68o+Qcgwpx5XvqEOpSG8+x+CA1kifbdpG56hEJI++fYHIZjqr91dSxXp3Al4LBrRfTT4r/If3KpAtz0MYYiaT67cRIAkY=
+	t=1732000951; cv=none; b=lUDMMnrq4DrRK9+RmgTeHHmRyljlyTZT4kczRQMBfEZuGBlYlFQJU2dmjRi8FJD0epjAfOdRVXOD2uVUdEY7JW9lvC9fDt2kduVA4eYp+mZ9GvO2+N+IjhJCZqbk8lmBWShYsLUcG1TDmjmKPaPA7kTa71pK0Dr59i6f98Ljc4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731995083; c=relaxed/simple;
-	bh=WOIpDyTBFer6NRdvEdnfKceDSEcFOLTveWh00ai72E4=;
+	s=arc-20240116; t=1732000951; c=relaxed/simple;
+	bh=jYlYgZzrV8+PMmnVm6Kn+6PH4Ajo+OUPHV/oleWSmSY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jBnmxX0JL14crt+BTJX4vsUPhL5FU1fTfcUO/tub3yNQm4WmyHwu9VmkH2agCIew55xPPHxuolBI4k+pAmHSjhVhZjg9v73UlAzjlKwl86yjvT75cODVyO/1SAsIscyyXHHwXM6HkLh8PifN29LTqB63v+L2TYZPqim0LaQk28s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aho+kv7R; arc=none smtp.client-ip=209.85.214.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=jnn0YDJENHUUutuVQsPNsM5kHP6rkdd6a66S/kO9Hbcld7BICX6Iam2xOUw6e3lZM5uG2Qv0Mg9TkoNVbDMtZ+emmOIiwT0tH33X1Y0H14DzxtDMWlspNShTKHJrzb2q/X6q+58PDFeLY3CtohbAK9Peq6MnLFvjSPDvVlf82r4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YwOO4Dwq; arc=none smtp.client-ip=209.85.215.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-20c9978a221so4803455ad.1;
-        Mon, 18 Nov 2024 21:44:41 -0800 (PST)
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-7ed9c16f687so3244973a12.0;
+        Mon, 18 Nov 2024 23:22:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731995081; x=1732599881; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732000949; x=1732605749; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=S31o8lGUzpvnXYeIe9E0q96l4NFr1QYtgA045hjQDUg=;
-        b=aho+kv7RcuKmaIpAtZrJE/4t/bB6kkWF91WTU8qGt5WBOAw4dhH2Ycv1RwdBXerXrR
-         fCztIVg97KKKPZZifEbDB0awIhCW3oZrVcSSUP5gliWevmldR9GXgYe3+f4GK3JG0lVC
-         YB40HkMjqlMDrgDJxdJRP6hJLI1zB+HYJ3ZHf039nL2+bgA1tX1RqA7UvqYLWuvrnabs
-         rs8lS442h543otPrLjvSXaGHKAYjfDtu9sV/fo0G5b++wf0R8faGEKhOMvxDS8xCPlTc
-         0x3AAxLoQqnXOict373PFX0/JYQkxr1Pw8ZVHSTQEaZYL6k9XFrR3JYWJoSusLWYVvAh
-         +s+Q==
+        bh=R2hYIOgm2Uff4u1jweT3m4e9LzzXMUoAloHgshXGR88=;
+        b=YwOO4Dwqg0SA2JWmX/uqbvUYao4GW3lz8HFniW3Mc6vUxtaS+ogDE74jKJKUEn5nda
+         RONpVQMLWkeq7fep4cBDG/4IgVkiH88meL0aZ8M5thciMFMe3H0ddBUpZT/7yZvULoBI
+         1H8rz0SHF5Vta+pKyHaYjyO/b28CY0SZ5yleiwhTeCBmVAfB77kfAVUVqToQb+hNO3YP
+         nS+dResOAo6fgOCzAZ55MtdNZMtSr8rhnShCaDZYlzzgXDOOcrlBqNR5s+BLC5E3JFio
+         1oLf66waINGNLKGMmSLsefcBLztQ320YpIJL517OxOGAL1zhQPWmtf+J6DpzWjsxFYKN
+         VZdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731995081; x=1732599881;
+        d=1e100.net; s=20230601; t=1732000949; x=1732605749;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=S31o8lGUzpvnXYeIe9E0q96l4NFr1QYtgA045hjQDUg=;
-        b=Q8/S3ISf7lQua515QCvmuNQ9fxBRrDbhiYyvGkIMhvAKS+ECWw8m3mSBIAu4CwtW1K
-         FmYD0wdTnMRZFwi9TD8injrAnIWXMMVRLAizWIea8WbTvy8Pva+RkzZ2hS0oo5oJ+8VM
-         rLhM8iLOzgLPmfWrJm5/w1GmpTgtvk/ROW3jHpBcnuBaEOzXTYIALQHhBoYv/2n+zyxQ
-         HwIyXNuquF5Fv0gq8IOsqEZmL6bfmUtNBdX8nuxA9zMgQ3BC1cq0G2KvfiQ/UOfWuI0l
-         LyC+yMsoHG7YfWLz8an21KVLlX4zzaeuM7i8HpFxRROUuj9ReDf2MskcfxbGC+l3MMOZ
-         weEw==
-X-Forwarded-Encrypted: i=1; AJvYcCVQRMi/KOjy4OMGNCNe6zCgM/pb9XCTRLv622/ZN1o+zRoagBk/7I9pik0aEwX9TQ9HjTD1IFdcvp0oDAxLWVmX@vger.kernel.org, AJvYcCVfJKtmaKeTKS0iVXp0XsnAWPPEYMx1+gT0zfrKASo6vNC6sxCieZFubegRpyn5QKMGPV3YTF4BJUf0z+Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOn7tScojTmOpWpZuJgrthxbLBecYiw4t/nqM7LjnRU8TN0Exb
-	NpCIK6L2dkILFoHyxYHNsdgrhWkOfrGGCnbKs7yQC7UGLlD1M0NE
-X-Google-Smtp-Source: AGHT+IHQek7r5Gt5WDLPMJII/24+21dEy/S/cq7SVa28dbdCeBPjRQtwgXKcgwbXWYXRU7S94MXmfg==
-X-Received: by 2002:a17:902:ec84:b0:212:514:b31f with SMTP id d9443c01a7336-2120514b620mr106282375ad.18.1731995080664;
-        Mon, 18 Nov 2024 21:44:40 -0800 (PST)
-Received: from visitorckw-System-Product-Name ([140.113.216.168])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211d0f344cfsm64399785ad.120.2024.11.18.21.44.38
+        bh=R2hYIOgm2Uff4u1jweT3m4e9LzzXMUoAloHgshXGR88=;
+        b=K66lQym8RkvkoPTZTno7PKYTpnijow6Dr3SyBVOP4fIUb+h+mXsjwEYOy1DKiGmu6Y
+         mEu0SWxifv10RSEKgbe0T9dN7aWyH+A6yakS6/HTovZR8+DXB1mZyw2kQEV3nbECIJjW
+         Pk/QS5y/NAfBpOMRIvsZdqf3PkE4NyzD1djE6Mv35SuoscLB0aHD6ZMZVjgmv956WZi1
+         Yq/berQDY7NNG7mBISCVDJNghs5tVrsQ4oZJTS1jN61Ib9iSRDS6mAWHt72qoXOJkXQM
+         yRpMwd25nVwnnLm2f8LdHfasZ7LNoWRT2euP1TSbxRsjozJ/dei1w0CUuoByj5ZeU6ax
+         GltQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXIxp3w/8EBgC2TZCcFg3OwXh+cXVa8+jDCcomP/z3AMDlfCXD1XwfYYyUtEKFDlRchq8+jHadjl9MXl6E=@vger.kernel.org, AJvYcCXzQBAUshSS6MAKQ69eFZ33CCBticgKTaq+WdE3XmD1FP+l4bA5mrMIMQ/W8IYAdkp1hgUYu5+3/2Od3Zuo7z57@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAu9ETkA/5iphe3Xt+eheBz3+NQ8u2mxqCeSs9BF5fSYAnKhT6
+	tsLmaakdpb6Z2KmNj3Kqu7Nu+QpajRqLSbFSlZDI9Ng0IiW7m9Yd4e5Z9Rd/Sg4=
+X-Google-Smtp-Source: AGHT+IHpjvOJ/TXR1vPPwp8b3+0f5TCsPpSfNMW9tcKmYwoCx3JQ4QjniS/QesuBZjjSmzoHklC+3A==
+X-Received: by 2002:a05:6a20:918b:b0:1dc:c19a:3a08 with SMTP id adf61e73a8af0-1dcc19a3e8emr2133510637.17.1732000949359;
+        Mon, 18 Nov 2024 23:22:29 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ea28300b26sm6257086a91.16.2024.11.18.23.22.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Nov 2024 21:44:40 -0800 (PST)
-Date: Tue, 19 Nov 2024 13:44:36 +0800
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: Jinjie Ruan <ruanjinjie@huawei.com>
-Cc: brendan.higgins@linux.dev, davidgow@google.com, rmoar@google.com,
-	skhan@linuxfoundation.org, rf@opensource.cirrus.com,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Mon, 18 Nov 2024 23:22:28 -0800 (PST)
+Date: Tue, 19 Nov 2024 07:22:21 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: netdev@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>,
+	wireguard@lists.zx2c4.com, linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] kunit: string-stream: Fix a UAF bug in
- kunit_init_suite()
-Message-ID: <ZzwlxMbDH64S6geV@visitorckw-System-Product-Name>
-References: <20241112080314.407966-1-ruanjinjie@huawei.com>
+Subject: Re: [PATCHv2 net-next] selftests: wireguards: use nft by default
+Message-ID: <Zzw8rb202R6FWVHs@fedora>
+References: <20241111041902.25814-1-liuhangbin@gmail.com>
+ <ZzpNXM17NX3nVzMl@zx2c4.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,109 +86,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241112080314.407966-1-ruanjinjie@huawei.com>
+In-Reply-To: <ZzpNXM17NX3nVzMl@zx2c4.com>
 
-On Tue, Nov 12, 2024 at 04:03:14PM +0800, Jinjie Ruan wrote:
-> In kunit_debugfs_create_suite(), if alloc_string_stream() fails in the
-> kunit_suite_for_each_test_case() loop, the "suite->log = stream"
-> has assigned before, and the error path only free the suite->log's stream
-> memory but not set it to NULL, so the later string_stream_clear() of
-> suite->log in kunit_init_suite() will cause below UAF bug.
-> 
-> Set stream pointer to NULL after free to fix it.
-
-I just noticed that since v2, we no longer set the stream pointer to
-NULL but instead set suite->log to NULL. This description needs a
-slight adjustment.
-
-Regards,
-Kuan-Wei
-
-> 	Unable to handle kernel paging request at virtual address 006440150000030d
-> 	Mem abort info:
-> 	  ESR = 0x0000000096000004
-> 	  EC = 0x25: DABT (current EL), IL = 32 bits
-> 	  SET = 0, FnV = 0
-> 	  EA = 0, S1PTW = 0
-> 	  FSC = 0x04: level 0 translation fault
-> 	Data abort info:
-> 	  ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-> 	  CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-> 	  GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-> 	[006440150000030d] address between user and kernel address ranges
-> 	Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-> 	Dumping ftrace buffer:
-> 	   (ftrace buffer empty)
-> 	Modules linked in: iio_test_gts industrialio_gts_helper cfg80211 rfkill ipv6 [last unloaded: iio_test_gts]
-> 	CPU: 5 UID: 0 PID: 6253 Comm: modprobe Tainted: G    B   W        N 6.12.0-rc4+ #458
-> 	Tainted: [B]=BAD_PAGE, [W]=WARN, [N]=TEST
-> 	Hardware name: linux,dummy-virt (DT)
-> 	pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> 	pc : string_stream_clear+0x54/0x1ac
-> 	lr : string_stream_clear+0x1a8/0x1ac
-> 	sp : ffffffc080b47410
-> 	x29: ffffffc080b47410 x28: 006440550000030d x27: ffffff80c96b5e98
-> 	x26: ffffff80c96b5e80 x25: ffffffe461b3f6c0 x24: 0000000000000003
-> 	x23: ffffff80c96b5e88 x22: 1ffffff019cdf4fc x21: dfffffc000000000
-> 	x20: ffffff80ce6fa7e0 x19: 032202a80000186d x18: 0000000000001840
-> 	x17: 0000000000000000 x16: 0000000000000000 x15: ffffffe45c355cb4
-> 	x14: ffffffe45c35589c x13: ffffffe45c03da78 x12: ffffffb810168e75
-> 	x11: 1ffffff810168e74 x10: ffffffb810168e74 x9 : dfffffc000000000
-> 	x8 : 0000000000000004 x7 : 0000000000000003 x6 : 0000000000000001
-> 	x5 : ffffffc080b473a0 x4 : 0000000000000000 x3 : 0000000000000000
-> 	x2 : 0000000000000001 x1 : ffffffe462fbf620 x0 : dfffffc000000000
-> 	Call trace:
-> 	 string_stream_clear+0x54/0x1ac
-> 	 __kunit_test_suites_init+0x108/0x1d8
-> 	 kunit_exec_run_tests+0xb8/0x100
-> 	 kunit_module_notify+0x400/0x55c
-> 	 notifier_call_chain+0xfc/0x3b4
-> 	 blocking_notifier_call_chain+0x68/0x9c
-> 	 do_init_module+0x24c/0x5c8
-> 	 load_module+0x4acc/0x4e90
-> 	 init_module_from_file+0xd4/0x128
-> 	 idempotent_init_module+0x2d4/0x57c
-> 	 __arm64_sys_finit_module+0xac/0x100
-> 	 invoke_syscall+0x6c/0x258
-> 	 el0_svc_common.constprop.0+0x160/0x22c
-> 	 do_el0_svc+0x44/0x5c
-> 	 el0_svc+0x48/0xb8
-> 	 el0t_64_sync_handler+0x13c/0x158
-> 	 el0t_64_sync+0x190/0x194
-> 	Code: f9400753 d2dff800 f2fbffe0 d343fe7c (38e06b80)
-> 	---[ end trace 0000000000000000 ]---
-> 	Kernel panic - not syncing: Oops: Fatal exception
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: a3fdf784780c ("kunit: string-stream: Decouple string_stream from kunit")
-> Suggested-by: Kuan-Wei Chiu <visitorckw@gmail.com>
-> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
-> ---
-> v2:
-> - Correct the fix way.
-> - Add Suggested-by.
-> ---
->  lib/kunit/debugfs.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-> index d548750a325a..b25d214b93e1 100644
-> --- a/lib/kunit/debugfs.c
-> +++ b/lib/kunit/debugfs.c
-> @@ -212,8 +212,11 @@ void kunit_debugfs_create_suite(struct kunit_suite *suite)
+On Sun, Nov 17, 2024 at 09:09:00PM +0100, Jason A. Donenfeld wrote:
+> On Mon, Nov 11, 2024 at 04:19:02AM +0000, Hangbin Liu wrote:
+> > Use nft by default if it's supported, as nft is the replacement for iptables,
+> > which is used by default in some releases. Additionally, iptables is dropped
+> > in some releases.
 >  
->  err:
->  	string_stream_destroy(suite->log);
-> -	kunit_suite_for_each_test_case(suite, test_case)
-> +	suite->log = NULL;
-> +	kunit_suite_for_each_test_case(suite, test_case) {
->  		string_stream_destroy(test_case->log);
-> +		test_case->log = NULL;
-> +	}
->  }
->  
->  void kunit_debugfs_destroy_suite(struct kunit_suite *suite)
-> -- 
-> 2.34.1
-> 
+> Rather than having this optionality, I'd rather just do everything in
+> one way or the other. So if you're adamant that we need to use nft, just
+> convert the whole thing. And then subsequently, make sure that the qemu
+> test harness supports it. That should probably be a series.
+
+Hmm, try build nft but got error
+
+# make -C tools/testing/selftests/wireguard/qemu/
+make: Entering directory '/home/net/tools/testing/selftests/wireguard/qemu'
+Building for x86_64-linux-musl using x86_64-redhat-linux
+cd /home/net/tools/testing/selftests/wireguard/qemu/build/x86_64/nftables-1.0.9 && ./configure --prefix=/ --build=x86_64-redhat-linux --host=x86_64-linux-musl --enable-static --disable-shared
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+...
+checking for pkg-config... /usr/bin/pkg-config
+configure: WARNING: using cross tools not prefixed with host triplet
+checking pkg-config is at least version 0.9.0... yes
+checking for libmnl >= 1.0.4... yes
+checking for libnftnl >= 1.2.6... yes
+checking for __gmpz_init in -lgmp... no
+configure: error: No suitable version of libgmp found
+
+But I can config it manually like: ./configure --prefix=/ --build=x86_64-redhat-linux --host=x86_64-linux-musl --enable-static
+--disable-shared correctly
+
+Do you have any idea?
+
+Thanks
+Hangbin
 
