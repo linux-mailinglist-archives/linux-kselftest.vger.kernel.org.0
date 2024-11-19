@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-22238-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22239-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 960339D215A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 09:12:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C677B9D2167
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 09:15:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 560AF282021
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 08:12:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 509581F2228C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 08:15:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5987E199FAB;
-	Tue, 19 Nov 2024 08:12:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70B38158531;
+	Tue, 19 Nov 2024 08:15:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="Vyd5bfff"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="Ro01NaRU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE78115D5B7
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 08:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C60A1EA90
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 08:15:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732003923; cv=none; b=Zk7iWwg5Z3PU2nmkZr4h8IDhmwCUiwdgbwM20ebudlB+mgf4w+/Z+kpfvzD/qHLUCJudQ8Uppl3jBaFxZ7CPAo/kHQO+fPFrOaPeQMiiF0kTN0XyZuYyPM+x71sGpUZTZT0cwJ9ZIBi0YikCkzLpLVISUQazJ2ZzKemB5hQtVQE=
+	t=1732004147; cv=none; b=I2np9S+3xo7mmVuHfKm3xicxdJD2vovU8iVThPIm1QgYnbQh+ViewT17tPwgC0Tl2EINhwVZJj91ArsTTRluvT0ull/b8KAP/FuBJXCf4wDRdmAZFiQnSqKpeSCTTkyW7DNlM0IahiV9EapWECFs5xLqFWBXM2LE+PWsSfgb7+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732003923; c=relaxed/simple;
-	bh=mZSOgAIJ9NQlBbnjGuNL9GCAEtQvEwE5gZPj8ZsPTmw=;
+	s=arc-20240116; t=1732004147; c=relaxed/simple;
+	bh=nh3qg+dpw6wJugS2b0ETXcerIj6+agTQV21HgtF5r0Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R7WieKgF53YHvYEmBndWgfz/lbKAew74DGfNtkahlGV58o+YuXZ7AVqpUaMA5zIuBXvePlwRh6n2m4jxJESrOmx35L8lmNBFvWEzdTrwpQpQ4L537sBHo7lRU8VstfIn6uSTBBv3QNa42YHAZ7jd0Wjyd9jD+/YgTnIp3mb3HXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=Vyd5bfff; arc=none smtp.client-ip=209.85.208.43
+	 In-Reply-To:Content-Type; b=EvBoJnxjk+A3TwJq02bG8YmNe7OrgvQxDKazb13cLbP/7ThSgLchETP/O52odI48+LgcH/s9uI5IkBl1+Xtvrd9sh/G3Tq5XFNo6cNYYhwzMS2kITQc9bwjdcrpls/yrsBf0esSMBbND2p38L88uqWRWh9SFLlkZWyz6DgZYGWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=Ro01NaRU; arc=none smtp.client-ip=209.85.218.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5ceb03aadb1so5290254a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 00:11:59 -0800 (PST)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a9e8522445dso486016466b.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 00:15:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1732003918; x=1732608718; darn=vger.kernel.org;
+        d=openvpn.net; s=google; t=1732004143; x=1732608943; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=S7sp6JKldxsMXdVOcOzkydJkQRdJp3pYKuEh/Kb4tLA=;
-        b=Vyd5bfffGxvxUQ/zNOGmBelb9TMd+YmTN1gnCFpJ9MyRM5jKoFzt/7W4kn4JNvwYOz
-         jeV3EidnG9rxywNPM/K4azhHzkpm52hiDCIbORqlSeGA6vCWkcZQ9O2d2SAU/Zdwm0ys
-         ZbeIJPjj82kfvkIwUHsVRy5/O12BvOb8/Hzka0MeNSyk99nlmnUDUaWCffHPYvMwEqUm
-         xJ2sRMNmFRygJgpQwhqdTbO2jtcWBY7CZqqJbxQ/6IfA79F9IXAD3m+FlYk35tasFxKO
-         0OiJ35WsyfmsHRivlNWtp0Nrnjt3OlqublsE5gULzH973KCADOCmXFismbDHaALClJVg
-         Q7WQ==
+        bh=Dlb3+qv9gg1JV6Cl4CDNWBpSyFp7lVILgVs8ILCA4eA=;
+        b=Ro01NaRUbn91xcHQ78cM0iBrNZ9ea/UBCjrf/vNfO5qLF5Yl28iYAkw9kb0Awln3xx
+         XpdRLEza4+gqgeqP1sK1LmBVYgRlzuFE3Jh+/X1A4Yncdoem4g414dGjJRwQrKV1mIpR
+         zzl5iPlVUhzIkNDMI6aD+d4kc1qMTJQgkvU2qKmFEWXvQ/OAczitTJb02Hvi0JibgyyD
+         pRQRHHqLpyjRx6Upd8p2q6OCQA/Xw5juFo/Err7XvQP0ykbeTYiD3KcfkYAjha3BF8Di
+         MVmpVgPmQpUMyxtN+5ucZoYiPJEtr6F45dk/+CK6QFrIQ2A7oLUM2EHXZ2ay2H0OG7LA
+         R5lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732003918; x=1732608718;
+        d=1e100.net; s=20230601; t=1732004143; x=1732608943;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=S7sp6JKldxsMXdVOcOzkydJkQRdJp3pYKuEh/Kb4tLA=;
-        b=J0TBCGbZuMIDzGI4ZoRc7YD7PB0x71mG9GvMo8kVSp1njiX/m27meP5N/+5Yp5V3ab
-         D58SMas+7KX4LMtpKnw5U9a2KZpyI2Yd23v37VrPNZJWO5sHFrRVBjB2U8vMMwNvXKH0
-         AY6NSOQX0iJgtOI7P3l55mNEJUxrDhhBT3JX/6Y/hl864Q+jZObrM3oez4jWL6sA4tyV
-         QMceT8sxZ+AU+m6qFKSczJ6Lv+hfe+xOef1eXDO7GQ+nAAxVX21ggGb7h5WbOPEKX6GI
-         CwS4jQkrhldX8bk9LobokLa+MXr9BmbiDanYnncevatbJgfO5oRCFWgXCt/xNuBS8SIV
-         52MQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU/23Ig/J+k3q9nsh2HvCcYtAFY4ZF03TTQCB53LDSNTDTOfreaySu3C0FrSMC7+se9MkaCRcP2x0fcNebnENQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyz6zYgFKMomFNCuU/aB0rT63zhJRClZLTaH7UFLNXWBaLkyql8
-	UuFHouEU83K+bT+z5JI5FbxXRj6KDPvx0s0l35xMzRQisr9KyJsF176RO6TpU9Y=
-X-Google-Smtp-Source: AGHT+IG020h4UTtFNYY64dTTB51Gnob4K6UqrXp/mnQSuAaHkXnUhr1wcyWGiHeDd682Pnk7dK4/jQ==
-X-Received: by 2002:a05:6402:5108:b0:5cf:c303:c598 with SMTP id 4fb4d7f45d1cf-5cfc303c7edmr5890132a12.11.1732003918227;
-        Tue, 19 Nov 2024 00:11:58 -0800 (PST)
+        bh=Dlb3+qv9gg1JV6Cl4CDNWBpSyFp7lVILgVs8ILCA4eA=;
+        b=CIGsEfE7s6gSDIN6ONTw6XfrsNDHVBdrxYgSQTeBW5YvmbvZZldm5TDMYzPxZL2Zqi
+         9TbP01OvtfLXrp2BdIHCbom8w3OF8XwjI9qpZ1NGiv7hL1NkOZ9cSRPn27uTApOxGOnq
+         rQ23Y+kBOp60iJTKny+G1hW1+XcoVygDRR738cusSJSQMQki7oSx0PT/bNTkFfo0c0tF
+         Lr76FncR/Msoo6P6i51cAZdTPeyFz6LKNNj08nnX6Xe3qen8GoLXd0rTretqkDcDr2hZ
+         B8dWaXctTYY4u37a6rT6mNchjI4/I7mwnVWcmO3AZPQCnNHJE1ZZnBF3uZRSp1y4PuBs
+         gn2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXAxs9hal87+xNhXIUNk7MJABdDlXluLMFNn7ZrSVFD+UJPQh0NRl+bJKvgGGYpdNztBWDplDJcDcp4AsxLeV8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXCqRK2IM32mEpxpyK8mYwO9rhtTLitsqTP9FLIjr7fTApLNR3
+	bnKA9KxiblgNi9V1gvzqkBVDx1Z9vEd1UtYLMsLNLZzquEt/a3Qu6MlLHDnVgUc=
+X-Google-Smtp-Source: AGHT+IH1oPLqiWB9nvjMfiow2lsNMatAoaYTZq+VpYZVjDfmiH/yzZPdZ9PNMrDF2+D834C4i02E5A==
+X-Received: by 2002:a17:906:6a20:b0:a9e:c267:78c5 with SMTP id a640c23a62f3a-aa483553e28mr1404043466b.55.1732004143604;
+        Tue, 19 Nov 2024 00:15:43 -0800 (PST)
 Received: from ?IPV6:2001:67c:2fbc:1:a2be:8cd5:8845:cfce? ([2001:67c:2fbc:1:a2be:8cd5:8845:cfce])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cfbddf326esm2461317a12.82.2024.11.19.00.11.57
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa20dffaa0fsm628382066b.106.2024.11.19.00.15.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Nov 2024 00:11:57 -0800 (PST)
-Message-ID: <a374cd1d-b395-42d6-b7e8-083bd2d2f5dd@openvpn.net>
-Date: Tue, 19 Nov 2024 09:12:25 +0100
+        Tue, 19 Nov 2024 00:15:43 -0800 (PST)
+Message-ID: <22d63b13-2c20-4ee7-9783-7b061bd6d942@openvpn.net>
+Date: Tue, 19 Nov 2024 09:16:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -86,9 +86,9 @@ Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
  <20241029-b4-ovpn-v11-3-de4698c73a25@openvpn.net>
- <52a2f654-29e5-4567-b5f8-8362fa55c1e1@gmail.com>
- <a8f3a9ca-698d-4b4e-ab4b-7d8aa651dddc@openvpn.net>
- <a125f933-b985-441e-9fac-49002bc5933a@gmail.com>
+ <21c0887b-1c7d-424d-a723-2a8d212cbde1@gmail.com>
+ <dc63a3cb-7ace-4aca-9b67-f3c50297b2d2@openvpn.net>
+ <b624293b-5143-4602-bf50-f4a14ff83d3a@gmail.com>
 Content-Language: en-US
 From: Antonio Quartulli <antonio@openvpn.net>
 Autocrypt: addr=antonio@openvpn.net; keydata=
@@ -131,51 +131,53 @@ Autocrypt: addr=antonio@openvpn.net; keydata=
  BnRX9nFx9kPSO42TkFK55Dr5EDeBO3v33recscuB8VVN5xvh0GV57Qre+9sJrEq7Es9W609a
  +M0yRJWJEjFnMa/jsGZ+QyLD5QTL6SGuZ9gKI3W1SfFZOzV7hHsxPTZ6
 Organization: OpenVPN Inc.
-In-Reply-To: <a125f933-b985-441e-9fac-49002bc5933a@gmail.com>
+In-Reply-To: <b624293b-5143-4602-bf50-f4a14ff83d3a@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 19/11/2024 03:05, Sergey Ryazanov wrote:
-> On 15.11.2024 12:05, Antonio Quartulli wrote:
->> On 09/11/2024 00:15, Sergey Ryazanov wrote:
+
+
+On 19/11/2024 03:23, Sergey Ryazanov wrote:
+> On 15.11.2024 12:19, Antonio Quartulli wrote:
+>> On 09/11/2024 00:31, Sergey Ryazanov wrote:
 >>> On 29.10.2024 12:47, Antonio Quartulli wrote:
->>>> @@ -37,7 +41,7 @@ static int ovpn_newlink(struct net *src_net, 
->>>> struct net_device *dev,
->>>>   }
->>>>   static struct rtnl_link_ops ovpn_link_ops = {
->>>> -    .kind = "ovpn",
->>>> +    .kind = OVPN_FAMILY_NAME,
+>>>> +/**
+>>>> + * struct ovpn_struct - per ovpn interface state
+>>>> + * @dev: the actual netdev representing the tunnel
+>>>> + * @dev_tracker: reference tracker for associated dev
+>>>> + */
+>>>> +struct ovpn_struct {
 >>>
->>> nit: are you sure that the link kind is the same as the GENL family? 
->>> I mean, they are both deriviated from the protocol name that is 
->>> common for both entities, but is it making RTNL kind a derivative of 
->>> GENL family?
+>>> There is no standard convention how to entitle such structures, so 
+>>> the question is basically of out-of-curiosity class. For me, having a 
+>>> sturcuture with name 'struct' is like having no name. Did you 
+>>> consider to use such names as ovpn_dev or ovpn_iface? Meaning, using 
+>>> a name that gives a clue regarding the scope of the content.
 >>
->> I just want to use the same name everywhere and I thought it doesn't 
->> make sense to create a separate define (they can be decoupled later 
->> should see any need for that).
->> But I can add:
+>> Yes, I wanted to switch to ovpn_priv, but  did not care much for the 
+>> time being :)
 >>
->> #define OVPN_RTNL_LINK_KIND OVPN_FAMILY_NAME
->>
->> to make this relationship explicit?
+>> I can still do it now in v12.
 > 
-> Can we just leave it as literal? This string is going to be a part of 
-> ABI and there will be no chance to change it in the future. So, what the 
-> purpose to define it using a macro if it's self-descriptive?
-
-I don't truly have a strong opinion, but the netlink family name is also 
-expected to not change anytime soon.
-
-Anyway, I see that using the literal is pretty common across all other 
-drivers, therefore I'll go for it as well.
-
+> This topic caused me the biggest doubts. I don't want to ask to rename 
+> everything on the final lap. Just want to share an outside perspective 
+> on the structure name. And let you decide is it worth or not.
 > 
-> People also like to define a macro with a generic name like DRV_NAME and 
-> use it everywhere. What also looks reasonable.
+> And if you ask me, ovpn_priv does not give a clue either. The module is 
+> too complex for a vague structure name, even after your great work on 
+> clearing its design.
 
-Yeah, that's exactly how I am using OVPN_FAMILY_NAME.
-Anyway, I am switching to literal.
+Well, the word "priv" to me resembles the "netdev_priv()" call, so it's 
+kinda easier to grasp what this is about.
+In batman-adv we used the same suffix and it was well received.
+Also, if you grep for "_priv " in drivers/net you will see that this is 
+a common pattern.
+
+Since I already had in mind to change this struct name, I moved on and 
+renamed it to ovpn_priv throughput the patchset (git rebase --exec is my 
+friend ;)).
+
+Thanks
 
 Regards,
 
