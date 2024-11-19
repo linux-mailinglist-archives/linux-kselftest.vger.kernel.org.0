@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-22259-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22260-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62EF19D2411
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 11:54:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2ABF9D241B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 11:54:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ECC6A1F22D7F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 10:54:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 09F3DB24F85
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 10:54:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 356E01C4608;
-	Tue, 19 Nov 2024 10:54:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DB991C4622;
+	Tue, 19 Nov 2024 10:54:45 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D9719C553;
-	Tue, 19 Nov 2024 10:54:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C43D53363;
+	Tue, 19 Nov 2024 10:54:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732013669; cv=none; b=iKN8JqQPzzk8UYrdyFWeHpqrnMFo/cWp3mXEGIxTYf1DSwYVOJ9ZEg1WLM2zX1V7ccmiDnkLmnQT1+7oiKgI8PAc8byneLQFfwePAyrhNFMKqj9OravsueNHglk9TO6D++BWqh1W+ERIZ6piA2NALGLwE17j1QE+hJtWRp5LJ8o=
+	t=1732013685; cv=none; b=KtgNfimn4pGn99/bQ/txKxgzUwZCYo/EcNg+i/YXdtSoEt+sr+njEdN7ZfdPJgroiKmqcEJVSt7Vpwsr6l8q4RUe1fWpIV8cq7wA661+f9alYSz+b42MfxCXPPV2Ii7RcXCW4MUr3ch7RbsVuhsKZ2CNf0pl0DHYbNI/eJ6OPI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732013669; c=relaxed/simple;
-	bh=y6p5Z7O9gV4y2W4jbw8MsZjbIEern3boBWypsYiDbLk=;
+	s=arc-20240116; t=1732013685; c=relaxed/simple;
+	bh=CaHmjj/FuJZ+1+zKR86YqAOLydCWLwia8MEyKW2O6Ao=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kVhqMh9Nv7JrYxL0+9IYQkGZTNb03NhZrq3UwS29IHlnzN1aZxeHiL2VYNPH8QLZboOLN7MCd33GH+ZCR6U7NNqbBihqxesRKUT4nsCog3cjk7eif3KyiVyqUjUQDbH5+XDVJ8Mo7vufpIPGN1mkuUxU1w+qD3DASsH7bABfpKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+	 MIME-Version; b=NHkbXQe/dLuepXSMqLhZ4KWRajWWAfznCB6zWUXEBj/NXrXaNMLobNqqcfJPPS425TOA4u81y3ZhUbdw/QjzNXI6xYe40NIqtMLg7OkpYhXOr4lMQy2oUjN0+kZdgBeHGzIL+dZOO663GpjWoifjoZJ73KUwT6xdue/A1bewm/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Xt16y2HnVz9v7NH;
-	Tue, 19 Nov 2024 18:33:30 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Xt17J6k5Yz9v7NV;
+	Tue, 19 Nov 2024 18:33:48 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 79ED114093B;
-	Tue, 19 Nov 2024 18:54:14 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id AB837140AC0;
+	Tue, 19 Nov 2024 18:54:30 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwAHsyNDbjxnj1znAQ--.1193S2;
-	Tue, 19 Nov 2024 11:54:13 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwAHsyNDbjxnj1znAQ--.1193S3;
+	Tue, 19 Nov 2024 11:54:29 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: zohar@linux.ibm.com,
 	dmitry.kasatkin@gmail.com,
@@ -76,9 +76,9 @@ Cc: linux-integrity@vger.kernel.org,
 	mzerqung@0pointer.de,
 	kgold@linux.ibm.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v6 10/15] digest_cache: Add management of verification data
-Date: Tue, 19 Nov 2024 11:49:17 +0100
-Message-ID: <20241119104922.2772571-11-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v6 11/15] digest_cache: Add support for directories
+Date: Tue, 19 Nov 2024 11:49:18 +0100
+Message-ID: <20241119104922.2772571-12-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.47.0.118.gfd3785337b
 In-Reply-To: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
 References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
@@ -89,327 +89,493 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwAHsyNDbjxnj1znAQ--.1193S2
-X-Coremail-Antispam: 1UD129KBjvJXoWfGr1rKrWDtF4UAFWfGryxGrg_yoWkJw47p3
-	s29F1DKr4rZr1fCwnrAF129r1rKFZ5tF47Jw48ur15ZF45Xr1jv3W8A34UuryrJrW8Wa17
-	tr42gw1Uur4DXaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvmb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x
-	0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02
-	F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4I
-	kC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7Cj
-	xVAaw2AFwI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
-	IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-	6rWY6r4UJwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI
-	8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
-	87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnU
-	UI43ZEXa7IU0uMKtUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAMBGc79-IEkAAAsH
+X-CM-TRANSID:LxC2BwAHsyNDbjxnj1znAQ--.1193S3
+X-Coremail-Antispam: 1UD129KBjvAXoW3uFyDuFyfJw43GFWrJF1UZFb_yoW8WFy8Jo
+	ZayF4DAw18WFyUZr4DCF17A3WUW3yFq34xAr4kXFWDX3WxZFWUJasrCF1UJFy5Xr18JFZ7
+	Awn7Jw4DJFy8tr97n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUOY7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
+	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr
+	4l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+	xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
+	AFwI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r
+	4UJwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY
+	1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
+	AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZE
+	Xa7IU0t5r7UUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBGc797QEggAAsQ
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-The Integrity Digest Cache can support other LSMs in their decisions of
-granting access to file data and metadata.
+In the environments where xattrs are not available (e.g. in the initial ram
+disk), the Integrity Digest Cache cannot precisely determine which digest
+list in a directory contains the desired reference digest. However,
+although slower, it would be desirable to search the digest in all digest
+lists of that directory.
 
-However, the information alone about whether a digest was found in a digest
-cache might not be sufficient, because for example those LSMs wouldn't know
-about the integrity of the digest list digests were extracted from.
+This done in three steps. First, a directory digest cache is created like
+the other digest caches. The only differences are that this digest cache
+has the IS_DIR bit set, to distinguish it from those created from regular
+files and, consequently, that it stores a list of directory entries file
+names instead of hash tables for digests.
 
-Introduce digest_cache_verif_set() to let the same LSMs (or a chosen
-integrity provider) evaluate the digest list being read during the creation
-of the digest cache, by implementing the kernel_post_read_file LSM hook,
-and let them attach their verification data to that digest cache.
+Second, the directory digest cache is populated with current directory
+entries, by calling digest_cache_dir_add_entries().
 
-digest_cache_verif_set() receives as argument a file descriptor and calls
-digest_cache_from_file_sec() to obtain back the digest cache being created
-from that file descriptor. The digest cache being created was associated to
-the file descriptor by digest_cache_populate(), before reading the digest
-list from the kernel, by calling digest_cache_to_file_sec().
+Finally, digest_cache_dir_lookup_digest() is called with the directory
+digest cache passed as argument, to iteratively search on each digest cache
+for each directory entry.
 
-Multiple providers are supported, in the event there are multiple
-integrity LSMs active. Each provider should also provide a unique verifier
-ID as an argument to digest_cache_verif_set(), so that verification data
-can be distinguished. Concurrent set are protected by the verif_data_lock
-spinlock.
+The function first calls digest_cache_dir_create() to create/obtain the
+current directory digest cache for the directory. If the latter returns
+a different one than the one passed, digest_cache_dir_lookup_digest()
+returns ERR_PTR(-EAGAIN) to let the caller of digest_cache_lookup() know
+that the directory digest cache changed, and make the caller perform
+another digest_cache_get() to get a fresh directory digest cache.
 
-A caller of digest_cache_get() can retrieve back the verification data by
-calling digest_cache_verif_get() and passing a digest cache pointer and the
-desired verifier ID.
+If the passed and the current directory digest caches match,
+digest_cache_dir_lookup_digest() starts the lookup and iteratively searches
+the passed digest in each directory entry. If there is no digest cache
+associated to the current directory entry, digest_cache_dir_lookup_digest()
+creates/obtains one by calling digest_cache_create(). It also keeps a
+digest cache reference, so that it is available for next searches. The
+iteration stops when the digest is found.
 
-Since directory digest caches are not populated themselves, LSMs have to do
-a lookup first to get the digest cache containing the digest, and pass the
-returned digest cache reference to digest_cache_verif_get().
+Finally, digest_cache_dir_free() releases the digest cache references
+stored in the list of directory entries, and frees the list itself.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- include/linux/digest_cache.h               |  17 +++
- security/integrity/digest_cache/Makefile   |   3 +-
- security/integrity/digest_cache/internal.h |  22 ++++
- security/integrity/digest_cache/main.c     |   3 +
- security/integrity/digest_cache/verif.c    | 131 +++++++++++++++++++++
- 5 files changed, 175 insertions(+), 1 deletion(-)
- create mode 100644 security/integrity/digest_cache/verif.c
+ security/integrity/digest_cache/Makefile   |   2 +-
+ security/integrity/digest_cache/dir.c      | 263 +++++++++++++++++++++
+ security/integrity/digest_cache/htable.c   |   7 +-
+ security/integrity/digest_cache/internal.h |  44 ++++
+ security/integrity/digest_cache/main.c     |  13 +
+ 5 files changed, 327 insertions(+), 2 deletions(-)
+ create mode 100644 security/integrity/digest_cache/dir.c
 
-diff --git a/include/linux/digest_cache.h b/include/linux/digest_cache.h
-index a9d731990b7c..d2483fe588be 100644
---- a/include/linux/digest_cache.h
-+++ b/include/linux/digest_cache.h
-@@ -47,6 +47,10 @@ bool digest_cache_opened_fd(struct file *file);
- struct digest_cache *digest_cache_lookup(struct dentry *dentry,
- 					 struct digest_cache *digest_cache,
- 					 u8 *digest, enum hash_algo algo);
-+int digest_cache_verif_set(struct file *file, const char *verif_id, void *data,
-+			   size_t size);
-+void *digest_cache_verif_get(struct digest_cache *digest_cache,
-+			     const char *verif_id);
- 
- /* Parser API */
- int digest_cache_htable_init(struct digest_cache *digest_cache, u64 num_digests,
-@@ -81,6 +85,19 @@ digest_cache_lookup(struct dentry *dentry, struct digest_cache *digest_cache,
- 	return NULL;
- }
- 
-+static inline int digest_cache_verif_set(struct file *file,
-+					 const char *verif_id, void *data,
-+					 size_t size)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static inline void *digest_cache_verif_get(struct digest_cache *digest_cache,
-+					   const char *verif_id)
-+{
-+	return NULL;
-+}
-+
- static inline int digest_cache_htable_init(struct digest_cache *digest_cache,
- 					   u64 num_digests, enum hash_algo algo)
- {
 diff --git a/security/integrity/digest_cache/Makefile b/security/integrity/digest_cache/Makefile
-index 3b81edea065b..2a0f2500e227 100644
+index 2a0f2500e227..d07ac2483504 100644
 --- a/security/integrity/digest_cache/Makefile
 +++ b/security/integrity/digest_cache/Makefile
-@@ -5,6 +5,7 @@
- obj-$(CONFIG_INTEGRITY_DIGEST_CACHE) += digest_cache.o
+@@ -6,6 +6,6 @@ obj-$(CONFIG_INTEGRITY_DIGEST_CACHE) += digest_cache.o
  obj-$(CONFIG_DIGEST_CACHE_TLV_PARSER) += parsers/tlv.o
  
--digest_cache-y := main.o secfs.o htable.o parsers.o populate.o modsig.o
-+digest_cache-y := main.o secfs.o htable.o parsers.o populate.o modsig.o \
-+		  verif.o
+ digest_cache-y := main.o secfs.o htable.o parsers.o populate.o modsig.o \
+-		  verif.o
++		  verif.o dir.o
  
  CFLAGS_parsers.o += -DPARSERS_DIR=\"$(MODLIB)/kernel/security/integrity/digest_cache/parsers\"
-diff --git a/security/integrity/digest_cache/internal.h b/security/integrity/digest_cache/internal.h
-index 2171ea8423ff..c64e91b75a47 100644
---- a/security/integrity/digest_cache/internal.h
-+++ b/security/integrity/digest_cache/internal.h
-@@ -18,6 +18,21 @@
- #define INIT_STARTED		1	/* Digest cache init started. */
- #define INVALID			2	/* Digest cache marked as invalid. */
- 
-+/**
-+ * struct digest_cache_verif
-+ * @list: Linked list
-+ * @verif_id: Identifier of who verified the digest list
-+ * @data: Opaque data set by the digest list verifier
-+ *
-+ * This structure contains opaque data containing the result of verification
-+ * of the digest list by a verifier.
-+ */
-+struct digest_cache_verif {
-+	struct list_head list;
-+	char *verif_id;
-+	void *data;
-+};
-+
- /**
-  * struct read_work - Structure to schedule reading a digest list
-  * @work: Work structure
-@@ -72,6 +87,8 @@ struct htable {
-  * @ref_count: Number of references to the digest cache
-  * @path_str: Path of the digest list the digest cache was created from
-  * @flags: Control flags
-+ * @verif_data: Verification data regarding the digest list
-+ * @verif_data_lock: Protects verification data modifications
-  *
-  * This structure represents a cache of digests extracted from a digest list.
-  */
-@@ -80,6 +97,8 @@ struct digest_cache {
- 	atomic_t ref_count;
- 	char *path_str;
- 	unsigned long flags;
-+	struct list_head verif_data;
-+	spinlock_t verif_data_lock;
- };
- 
- /**
-@@ -191,4 +210,7 @@ int digest_cache_populate(struct dentry *dentry,
- /* modsig.c */
- size_t digest_cache_strip_modsig(__u8 *data, size_t data_len);
- 
-+/* verif.c */
-+void digest_cache_verif_free(struct digest_cache *digest_cache);
-+
- #endif /* _DIGEST_CACHE_INTERNAL_H */
-diff --git a/security/integrity/digest_cache/main.c b/security/integrity/digest_cache/main.c
-index ad0f34c7ef9b..11a0445592f0 100644
---- a/security/integrity/digest_cache/main.c
-+++ b/security/integrity/digest_cache/main.c
-@@ -52,6 +52,8 @@ static struct digest_cache *digest_cache_alloc_init(char *path_str,
- 	atomic_set(&digest_cache->ref_count, 1);
- 	digest_cache->flags = 0UL;
- 	INIT_LIST_HEAD(&digest_cache->htables);
-+	INIT_LIST_HEAD(&digest_cache->verif_data);
-+	spin_lock_init(&digest_cache->verif_data_lock);
- 
- 	pr_debug("New digest cache %s (ref count: %d)\n",
- 		 digest_cache->path_str, atomic_read(&digest_cache->ref_count));
-@@ -68,6 +70,7 @@ static struct digest_cache *digest_cache_alloc_init(char *path_str,
- static void digest_cache_free(struct digest_cache *digest_cache)
- {
- 	digest_cache_htable_free(digest_cache);
-+	digest_cache_verif_free(digest_cache);
- 
- 	pr_debug("Freed digest cache %s\n", digest_cache->path_str);
- 	kfree(digest_cache->path_str);
-diff --git a/security/integrity/digest_cache/verif.c b/security/integrity/digest_cache/verif.c
+diff --git a/security/integrity/digest_cache/dir.c b/security/integrity/digest_cache/dir.c
 new file mode 100644
-index 000000000000..03ebf0de764b
+index 000000000000..8f9e550c365f
 --- /dev/null
-+++ b/security/integrity/digest_cache/verif.c
-@@ -0,0 +1,131 @@
++++ b/security/integrity/digest_cache/dir.c
+@@ -0,0 +1,263 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
 + *
 + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 + *
-+ * Manage verification data regarding digest lists.
++ * Manage digest caches from directories.
 + */
 +
 +#define pr_fmt(fmt) "digest_cache: "fmt
++#include <linux/init_task.h>
++#include <linux/namei.h>
++
 +#include "internal.h"
 +
 +/**
-+ * free_verif - Free a digest_cache_verif structure
-+ * @verif: digest_cache_verif structure
++ * digest_cache_dir_iter - Digest cache directory iterator
++ * @__ctx: iterate_dir() context
++ * @name: Name of file in the accessed directory
++ * @namelen: String length of @name
++ * @offset: Current position in the directory stream (see man readdir)
++ * @ino: Inode number
++ * @d_type: File type
 + *
-+ * Free the space allocated for a digest_cache_verif structure.
++ * This function stores the names of the files in the containing directory in
++ * a linked list. If they are in the format
++ * <seq num>-<digest list format>-<digest list name>, this function orders them
++ * by seq num, so that digest lists are processed in the desired order.
++ * Otherwise, if <seq num>- is not included, it adds the name at the end of
++ * the list.
++ *
++ * Return: True to continue processing, false to stop.
 + */
-+static void free_verif(struct digest_cache_verif *verif)
++static bool digest_cache_dir_iter(struct dir_context *__ctx, const char *name,
++				  int namelen, loff_t offset, u64 ino,
++				  unsigned int d_type)
 +{
-+	kfree(verif->data);
-+	kfree(verif->verif_id);
-+	kfree(verif);
++	struct readdir_callback *ctx = container_of(__ctx, typeof(*ctx), ctx);
++	struct dir_entry *new_entry, *p;
++	unsigned int seq_num;
++	char *separator;
++	int ret;
++
++	if (!strcmp(name, ".") || !strcmp(name, ".."))
++		return true;
++
++	if (d_type != DT_REG)
++		return true;
++
++	new_entry = kmalloc(sizeof(*new_entry) + namelen + 1, GFP_KERNEL);
++	if (!new_entry)
++		return false;
++
++	memcpy(new_entry->name, name, namelen);
++	new_entry->name[namelen] = '\0';
++	new_entry->seq_num = UINT_MAX;
++	new_entry->digest_cache = NULL;
++	mutex_init(&new_entry->digest_cache_mutex);
++
++	if (new_entry->name[0] < '0' || new_entry->name[0] > '9')
++		goto out;
++
++	separator = strchr(new_entry->name, '-');
++	if (!separator)
++		goto out;
++
++	*separator = '\0';
++	ret = kstrtouint(new_entry->name, 10, &seq_num);
++	*separator = '-';
++	if (ret < 0)
++		goto out;
++
++	new_entry->seq_num = seq_num;
++
++	list_for_each_entry(p, ctx->head, list) {
++		if (seq_num <= p->seq_num) {
++			list_add(&new_entry->list, p->list.prev);
++			pr_debug("Added %s before %s in dir list\n",
++				 new_entry->name, p->name);
++			return true;
++		}
++	}
++out:
++	list_add_tail(&new_entry->list, ctx->head);
++	pr_debug("Added %s to tail of dir list\n", new_entry->name);
++	return true;
 +}
 +
 +/**
-+ * digest_cache_verif_set - Set digest cache verification data
-+ * @file: File descriptor of the digest list being read to populate digest cache
-+ * @verif_id: Verifier ID
-+ * @data: Verification data (opaque)
-+ * @size: Size of @data
++ * digest_cache_dir_add_entries - Add dir entries to a dir digest cache
++ * @digest_cache: Dir digest cache
++ * @digest_list_path: Path structure of the digest list directory
 + *
-+ * This function lets a verifier supply verification data about a digest list
-+ * being read to populate the digest cache. Verifier ID must be unique.
++ * This function iterates over the entries of a directory, and creates a linked
++ * list of file names from that directory.
 + *
 + * Return: Zero on success, a POSIX error code otherwise.
 + */
-+int digest_cache_verif_set(struct file *file, const char *verif_id, void *data,
-+			   size_t size)
++int digest_cache_dir_add_entries(struct digest_cache *digest_cache,
++				 struct path *digest_list_path)
 +{
-+	struct digest_cache *digest_cache = digest_cache_from_file_sec(file);
-+	struct digest_cache_verif *new_verif, *verif;
-+	/* All allocations done by kprobe must be atomic (non-sleepable). */
-+	gfp_t flags = !strncmp(verif_id, "kprobe", 6) ? GFP_ATOMIC : GFP_KERNEL;
-+	int ret = 0;
++	struct file *dir_file;
++	struct readdir_callback buf = {
++		.ctx.actor = digest_cache_dir_iter,
++		.ctx.pos = 0,
++		.head = &digest_cache->dir_entries,
++	};
++	int ret;
 +
-+	/*
-+	 * Zero the data, so that we can always call free_verif() to free a
-+	 * partially filled structure (if a pointer is NULL, will not be freed).
-+	 */
-+	new_verif = kzalloc(sizeof(*new_verif), flags);
-+	if (!new_verif)
-+		return -ENOMEM;
-+
-+	new_verif->verif_id = kstrdup(verif_id, flags);
-+	if (!new_verif->verif_id) {
-+		free_verif(new_verif);
-+		return -ENOMEM;
++	dir_file = kernel_file_open(digest_list_path, O_RDONLY, &init_cred);
++	if (IS_ERR(dir_file)) {
++		pr_debug("Cannot access %s, ret: %ld\n", digest_cache->path_str,
++			 PTR_ERR(dir_file));
++		return PTR_ERR(dir_file);
 +	}
 +
-+	new_verif->data = kmemdup(data, size, flags);
-+	if (!new_verif->data) {
-+		free_verif(new_verif);
-+		return -ENOMEM;
-+	}
-+
-+	spin_lock(&digest_cache->verif_data_lock);
-+	list_for_each_entry(verif, &digest_cache->verif_data, list) {
-+		if (!strcmp(verif->verif_id, verif_id)) {
-+			ret = -EEXIST;
-+			goto out;
-+		}
-+	}
-+
-+	list_add_tail_rcu(&new_verif->list, &digest_cache->verif_data);
-+out:
-+	spin_unlock(&digest_cache->verif_data_lock);
-+
++	ret = iterate_dir(dir_file, &buf.ctx);
 +	if (ret < 0)
-+		free_verif(new_verif);
++		pr_debug("Failed to iterate directory %s\n",
++			 digest_cache->path_str);
 +
++	fput(dir_file);
 +	return ret;
 +}
-+EXPORT_SYMBOL_GPL(digest_cache_verif_set);
 +
 +/**
-+ * digest_cache_verif_get - Get digest cache verification data
-+ * @digest_cache: Digest cache
-+ * @verif_id: Verifier ID
++ * digest_cache_dir_create - Create and initialize a directory digest cache
++ * @dentry: Dentry of the file whose digest is looked up
++ * @dir_path: Path structure of the digest list directory (updated)
++ * @path_str: Path string of the digest list directory
 + *
-+ * This function returns the verification data previously set by a verifier
-+ * with digest_cache_verif_set().
++ * This function creates and initializes (or obtains if it already exists) a
++ * directory digest cache. It updates the path that digest cache was
++ * created/obtained from, so that the caller can use it to perform lookup
++ * operations.
 + *
-+ * Return: Verification data if found, NULL otherwise.
++ * Return: A directory digest cache on success, NULL otherwise.
 + */
-+void *digest_cache_verif_get(struct digest_cache *digest_cache,
-+			     const char *verif_id)
++static struct digest_cache *digest_cache_dir_create(struct dentry *dentry,
++						    struct path *dir_path,
++						    char *path_str)
 +{
-+	struct digest_cache_verif *verif;
-+	void *verif_data = NULL;
++	struct digest_cache *digest_cache;
++	struct path _dir_path;
++	int ret;
 +
-+	rcu_read_lock();
-+	list_for_each_entry_rcu(verif, &digest_cache->verif_data, list) {
-+		if (!strcmp(verif->verif_id, verif_id)) {
-+			verif_data = verif->data;
++	ret = kern_path(path_str, 0, &_dir_path);
++	if (ret < 0) {
++		pr_debug("Cannot find path %s\n", path_str);
++		return NULL;
++	}
++
++	digest_cache = digest_cache_create(dentry, &_dir_path, dir_path,
++					   path_str, "");
++	if (digest_cache)
++		digest_cache = digest_cache_init(dentry, dir_path,
++						 digest_cache);
++
++	path_put(&_dir_path);
++	return digest_cache;
++}
++
++/**
++ * digest_cache_dir_lookup_digest - Lookup a digest
++ * @dentry: Dentry of the file whose digest is looked up
++ * @digest_cache: Dir digest cache
++ * @digest: Digest to search
++ * @algo: Algorithm of the digest to search
++ *
++ * This function iterates over the linked list created by
++ * digest_cache_dir_add_entries() and looks up the digest in the digest cache
++ * of each entry.
++ *
++ * Return: A digest cache reference if the digest is found, NULL if not, an
++ *         error pointer if dir digest cache changed since last get.
++ */
++struct digest_cache *
++digest_cache_dir_lookup_digest(struct dentry *dentry,
++			       struct digest_cache *digest_cache, u8 *digest,
++			       enum hash_algo algo)
++{
++	struct dir_entry *dir_entry;
++	struct digest_cache *dir_cache, *cache, *found = NULL;
++	struct path dir_path = { .dentry = NULL, .mnt = NULL };
++	struct path digest_list_path;
++	int ret;
++
++	/* Try to reacquire the dir digest cache, and check if changed. */
++	dir_cache = digest_cache_dir_create(dentry, &dir_path,
++					    digest_cache->path_str);
++	if (dir_cache != digest_cache) {
++		if (dir_cache)
++			found = ERR_PTR(-EAGAIN);
++
++		goto out;
++	}
++
++	list_for_each_entry(dir_entry, &dir_cache->dir_entries, list) {
++		mutex_lock(&dir_entry->digest_cache_mutex);
++		if (!dir_entry->digest_cache) {
++			digest_list_path.dentry = NULL;
++			digest_list_path.mnt = NULL;
++
++			cache = digest_cache_create(dentry, &dir_path,
++						    &digest_list_path,
++						    dir_cache->path_str,
++						    dir_entry->name);
++			if (cache)
++				cache = digest_cache_init(dentry,
++							  &digest_list_path,
++							  cache);
++
++			if (digest_list_path.dentry)
++				path_put(&digest_list_path);
++
++			/* Ignore digest caches that cannot be instantiated. */
++			if (!cache) {
++				mutex_unlock(&dir_entry->digest_cache_mutex);
++				continue;
++			}
++
++			/* Consume extra ref. from digest_cache_create(). */
++			dir_entry->digest_cache = cache;
++		}
++		mutex_unlock(&dir_entry->digest_cache_mutex);
++
++		ret = digest_cache_htable_lookup(dentry,
++						 dir_entry->digest_cache,
++						 digest, algo);
++		if (!ret) {
++			found = digest_cache_ref(dir_entry->digest_cache);
 +			break;
 +		}
 +	}
-+	rcu_read_unlock();
++out:
++	if (dir_cache)
++		digest_cache_put(dir_cache);
++	if (dir_path.dentry)
++		path_put(&dir_path);
 +
-+	return verif_data;
++	return found;
 +}
-+EXPORT_SYMBOL_GPL(digest_cache_verif_get);
 +
 +/**
-+ * digest_cache_verif_free - Free all digest_cache_verif structures
-+ * @digest_cache: Digest cache
++ * digest_cache_dir_free - Free the stored file list and put digest caches
++ * @digest_cache: Dir digest cache
 + *
-+ * This function frees the space allocated for all digest_cache_verif
-+ * structures in the digest cache.
++ * This function frees the file list created by digest_cache_dir_add_entries(),
++ * and puts the digest cache of each directory entry, if a reference exists.
 + */
-+void digest_cache_verif_free(struct digest_cache *digest_cache)
++void digest_cache_dir_free(struct digest_cache *digest_cache)
 +{
-+	struct digest_cache_verif *p, *q;
++	struct dir_entry *p, *q;
 +
-+	/* No need to lock, called when nobody else has a digest cache ref. */
-+	list_for_each_entry_safe(p, q, &digest_cache->verif_data, list) {
++	list_for_each_entry_safe(p, q, &digest_cache->dir_entries, list) {
++		if (p->digest_cache)
++			digest_cache_put(p->digest_cache);
++
 +		list_del(&p->list);
-+		free_verif(p);
++		mutex_destroy(&p->digest_cache_mutex);
++		kfree(p);
 +	}
 +}
+diff --git a/security/integrity/digest_cache/htable.c b/security/integrity/digest_cache/htable.c
+index 8aa6d50a0cb5..a01e24d7f198 100644
+--- a/security/integrity/digest_cache/htable.c
++++ b/security/integrity/digest_cache/htable.c
+@@ -202,7 +202,8 @@ EXPORT_SYMBOL_GPL(digest_cache_htable_lookup);
+  * This function calls digest_cache_htable_lookup() to search a digest in the
+  * passed digest cache, obtained with digest_cache_get().
+  *
+- * Return: A digest cache reference the digest is found, NULL if not.
++ * Return: A digest cache reference if the digest is found, NULL if not, an
++ *         error pointer if dir digest cache changed since last get.
+  */
+ struct digest_cache *digest_cache_lookup(struct dentry *dentry,
+ 					 struct digest_cache *digest_cache,
+@@ -210,6 +211,10 @@ struct digest_cache *digest_cache_lookup(struct dentry *dentry,
+ {
+ 	int ret;
+ 
++	if (test_bit(IS_DIR, &digest_cache->flags))
++		return digest_cache_dir_lookup_digest(dentry, digest_cache,
++						      digest, algo);
++
+ 	ret = digest_cache_htable_lookup(dentry, digest_cache, digest, algo);
+ 	if (ret < 0)
+ 		return NULL;
+diff --git a/security/integrity/digest_cache/internal.h b/security/integrity/digest_cache/internal.h
+index c64e91b75a47..f849afe5e47b 100644
+--- a/security/integrity/digest_cache/internal.h
++++ b/security/integrity/digest_cache/internal.h
+@@ -17,6 +17,39 @@
+ #define INIT_IN_PROGRESS	0	/* Digest cache being initialized. */
+ #define INIT_STARTED		1	/* Digest cache init started. */
+ #define INVALID			2	/* Digest cache marked as invalid. */
++#define IS_DIR			3	/* Digest cache created from dir. */
++
++/**
++ * struct readdir_callback - Structure to store information for dir iteration
++ * @ctx: Context structure
++ * @head: Head of linked list of directory entries
++ *
++ * This structure stores information to be passed from the iterate_dir() caller
++ * to the directory iterator.
++ */
++struct readdir_callback {
++	struct dir_context ctx;
++	struct list_head *head;
++};
++
++/**
++ * struct dir_entry - Directory entry
++ * @list: Linked list of directory entries
++ * @digest_cache: Digest cache associated to the directory entry
++ * @digest_cache_mutex: Protects @digest_cache
++ * @seq_num: Sequence number of the directory entry from file name
++ * @name: File name of the directory entry
++ *
++ * This structure represents a directory entry with a digest cache created
++ * from that entry.
++ */
++struct dir_entry {
++	struct list_head list;
++	struct digest_cache *digest_cache;
++	struct mutex digest_cache_mutex;
++	unsigned int seq_num;
++	char name[];
++};
+ 
+ /**
+  * struct digest_cache_verif
+@@ -84,6 +117,7 @@ struct htable {
+ /**
+  * struct digest_cache - Digest cache
+  * @htables: Hash tables (one per algorithm)
++ * @dir_entries: List of files in a directory and the digest cache
+  * @ref_count: Number of references to the digest cache
+  * @path_str: Path of the digest list the digest cache was created from
+  * @flags: Control flags
+@@ -94,6 +128,7 @@ struct htable {
+  */
+ struct digest_cache {
+ 	struct list_head htables;
++	struct list_head dir_entries;
+ 	atomic_t ref_count;
+ 	char *path_str;
+ 	unsigned long flags;
+@@ -213,4 +248,13 @@ size_t digest_cache_strip_modsig(__u8 *data, size_t data_len);
+ /* verif.c */
+ void digest_cache_verif_free(struct digest_cache *digest_cache);
+ 
++/* dir.c */
++int digest_cache_dir_add_entries(struct digest_cache *digest_cache,
++				 struct path *digest_cache_path);
++struct digest_cache *
++digest_cache_dir_lookup_digest(struct dentry *dentry,
++			       struct digest_cache *digest_cache, u8 *digest,
++			       enum hash_algo algo);
++void digest_cache_dir_free(struct digest_cache *digest_cache);
++
+ #endif /* _DIGEST_CACHE_INTERNAL_H */
+diff --git a/security/integrity/digest_cache/main.c b/security/integrity/digest_cache/main.c
+index 11a0445592f0..9df819c323c7 100644
+--- a/security/integrity/digest_cache/main.c
++++ b/security/integrity/digest_cache/main.c
+@@ -54,6 +54,7 @@ static struct digest_cache *digest_cache_alloc_init(char *path_str,
+ 	INIT_LIST_HEAD(&digest_cache->htables);
+ 	INIT_LIST_HEAD(&digest_cache->verif_data);
+ 	spin_lock_init(&digest_cache->verif_data_lock);
++	INIT_LIST_HEAD(&digest_cache->dir_entries);
+ 
+ 	pr_debug("New digest cache %s (ref count: %d)\n",
+ 		 digest_cache->path_str, atomic_read(&digest_cache->ref_count));
+@@ -71,6 +72,7 @@ static void digest_cache_free(struct digest_cache *digest_cache)
+ {
+ 	digest_cache_htable_free(digest_cache);
+ 	digest_cache_verif_free(digest_cache);
++	digest_cache_dir_free(digest_cache);
+ 
+ 	pr_debug("Freed digest cache %s\n", digest_cache->path_str);
+ 	kfree(digest_cache->path_str);
+@@ -292,6 +294,17 @@ struct digest_cache *digest_cache_init(struct dentry *dentry,
+ 			/* Prevent usage of partially-populated digest cache. */
+ 			set_bit(INVALID, &digest_cache->flags);
+ 		}
++	} else if (S_ISDIR(inode->i_mode)) {
++		set_bit(IS_DIR, &digest_cache->flags);
++
++		ret = digest_cache_dir_add_entries(digest_cache,
++						   digest_list_path);
++		if (ret < 0) {
++			pr_debug("Failed to add dir entries to dir digest cache, ret: %d (keep digest cache)\n",
++				 ret);
++			/* Prevent usage of partially-populated digest cache. */
++			set_bit(INVALID, &digest_cache->flags);
++		}
+ 	}
+ 
+ 	/* Notify initialization complete. */
 -- 
 2.47.0.118.gfd3785337b
 
