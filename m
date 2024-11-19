@@ -1,51 +1,81 @@
-Return-Path: <linux-kselftest+bounces-22266-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22268-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D3509D248D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 12:05:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CA9E9D250E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 12:41:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23832287061
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 11:05:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47BB31F25544
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 11:41:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ABCA1C3302;
-	Tue, 19 Nov 2024 11:04:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E3A91CACD9;
+	Tue, 19 Nov 2024 11:41:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="el/LTpl8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DP0YiKqT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from forward502d.mail.yandex.net (forward502d.mail.yandex.net [178.154.239.210])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF44B1A9B24;
-	Tue, 19 Nov 2024 11:04:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1ADE1C8773
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 11:41:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732014295; cv=none; b=gV1FbCZd3+nHEw4V2LVO1CJkIuMWgFSsPHnkvi3VK02MojtlJif22NNaXOut3nb7DJnKyWRLWMDnwpBZ6SNo1oGVjKHiOFRAhrw9jjHQBjiRM3Wo1F4/IywKfiv0RXMatjV9zH9U6CD/VZV6cWmBRuLInGQoNSgGL3N/tagoEWY=
+	t=1732016469; cv=none; b=JahQcjs/id6cEO7qSvL8N/LMCNQp9gvsYUz4Bx17wvk26TOqA+nDfwQyrNjxwCFCl5RnQLkN7Ngqw8reMXKCCue3Z7ZLlLj0bMx5wqCXzqUUB7dcmQXMFaI2c7/5+HPkWeEHX4o3nwfj5qIRtbDBUO1tcgEen2RVi/D+WWsqEXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732014295; c=relaxed/simple;
-	bh=/SYL9YbS6GATrA0PjR2LaEJi7M8ZYPBqjDcB5/e5lWA=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=P3tMYqS9Z5KUywQxiM02Qkjvn5Yb7YnUgVTJ9t5ybillYR/50A7KO0jfu3mmVTooaZWwpp4J1+GvIeqBrc41SjMrusl4oNBlHuKGgfixgqDkL37qE8mmWm2Otg77iJKlAHdYsv33oCymKemuLQyLonAo5CznVmAQM5ue+9943Kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=el/LTpl8; arc=none smtp.client-ip=178.154.239.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
-Received: from mail-nwsmtp-smtp-production-main-95.klg.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-95.klg.yp-c.yandex.net [IPv6:2a02:6b8:c42:874b:0:640:bc97:0])
-	by forward502d.mail.yandex.net (Yandex) with ESMTPS id B8F48611D7;
-	Tue, 19 Nov 2024 14:04:44 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-95.klg.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id f4PlBZmOjuQ0-1kWMGczu;
-	Tue, 19 Nov 2024 14:04:43 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
-	t=1732014283; bh=PlfJvw3vZ0B7dANA7HsxSHEs+NvmIVeH1x4Q/ETIw7U=;
-	h=In-Reply-To:Cc:Date:References:To:Subject:From:Message-ID;
-	b=el/LTpl8wCPFL0hrUZ3zY/XZ6fFV6uX+PX7JM080sImHuiOFQ79BD7EuvIN24KheS
-	 SvWskZgwfOLIatlCQvOxwZIaxSoY4ixUjbZv7W8rzkHlqF7kPMHNUgoESF9fUjeCcF
-	 n09RfKn8xAVSG6thQpo23Y1/aQ9u8bcsB0UXk3sA=
-Authentication-Results: mail-nwsmtp-smtp-production-main-95.klg.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Message-ID: <67638eaf-3d94-450a-8280-df4f7dc66ce7@yandex.ru>
-Date: Tue, 19 Nov 2024 14:04:41 +0300
+	s=arc-20240116; t=1732016469; c=relaxed/simple;
+	bh=B6tGFGc/acnVM3Qye2kgK47gJP4agRKP+KzyCFDdH6g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W9cC3HmqVP59zoNbytlByk8WQPueQCB4fQ81p5E8ocbIlFQwS82Dbo8Rc0uvYsfJKYe2iFoLvIbByuBkeB9zhiQTDOBWuteFk5XJ/m7iGgyHrDGc8e0lRE90lK1/+Qm0YcZfoOsxxJXDmzdaL6q0YOJTavRO3M/JYJkYUSUkePo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DP0YiKqT; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1732016466;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iSO7rRgJI8m9saV4ky7Ejp+AThjtq//l80mNHJPVY1A=;
+	b=DP0YiKqT9vOn2Ki/CuDdBcI4vNLQlYyC0HhEchXXBRlcCPRqFXY902rOpQo5uhSt38PBkI
+	fplbK59WdPawl/nCv63BVYWc8W+jV39WYO61MzoAovthhO7TnRzzfIy9BFj83Ufhpl5SM0
+	SUPTZ8V2mcJXcihng9jAwRdCsRuj8GM=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-335-BwJzkUqEMJOwDBXtkOFb3A-1; Tue, 19 Nov 2024 06:41:05 -0500
+X-MC-Unique: BwJzkUqEMJOwDBXtkOFb3A-1
+X-Mimecast-MFC-AGG-ID: BwJzkUqEMJOwDBXtkOFb3A
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6d41f4c5866so11402786d6.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 03:41:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732016464; x=1732621264;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iSO7rRgJI8m9saV4ky7Ejp+AThjtq//l80mNHJPVY1A=;
+        b=tTEIW8DMQPTNcoQ9eHb7lAk1O7rvHec8m9/N0Z3CPW3mtppt+3Zln7ZgFt3W0ndtqs
+         i0s5t1/gawczOWi2ki2EKn9cQ0U85pM8peS+HaHm4a+Y71RV8mocgvvZMtS74w499aRC
+         quDHDeDvyOB/YOLCjEJNLXw9RKKCbYGaB1TEdRsEKeRTUoDoQMRqo4eVYwIdl/KWdMvB
+         JcdS86MvvK++/LgbXdYP91anQQ7oiAMJbWVJDOrYyTbm66cdgwdOBZjdn5nvyuDtrYD3
+         OjjAAQSCF79himR1KfRQH4C5aZcVCDga4Kyeo6e66U2Pp3aCnMBZxRRzxJkSE28hLTtO
+         gwHw==
+X-Forwarded-Encrypted: i=1; AJvYcCW9uUPuub00nSQSfrSL0lHvKk6iRrbLaDwmbgyUEngQqFmnPD8Pfcth5kaSeBgXPQKtqoSMOK+UGoXHDmwSs1I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrWpluBcQghrG7StOa/7i5G3FEb6Y3Bx4eyLtf8to88BGOUnvU
+	b36jIQharJpnhwoYWp/sDIjHdxFE4J9gl9ipIyTi21HLKB8wsPMxxGbOxsqjLL9l1VL1v1NUn/l
+	I8y7/fJT2WEz6oTc33lJKMm48ZilPBm2HPg+SG+t0D54lERSAEpcTVvo+4kxlosvQXA==
+X-Received: by 2002:a05:6214:c65:b0:6d4:ab3:e19b with SMTP id 6a1803df08f44-6d40ab3e1abmr192732306d6.42.1732016464387;
+        Tue, 19 Nov 2024 03:41:04 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHSL+CvUXEPORupLRfcZC0IPSOYYNVWZYJtS4mmscYBrBcgg3M5ByxsUOZ5P6MeA/A9Dqar/A==
+X-Received: by 2002:a05:6214:c65:b0:6d4:ab3:e19b with SMTP id 6a1803df08f44-6d40ab3e1abmr192732066d6.42.1732016464058;
+        Tue, 19 Nov 2024 03:41:04 -0800 (PST)
+Received: from [192.168.1.14] (host-79-55-200-170.retail.telecomitalia.it. [79.55.200.170])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d40dc7ada9sm47266936d6.69.2024.11.19.03.41.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Nov 2024 03:41:03 -0800 (PST)
+Message-ID: <06940878-8a7c-441c-958b-7cd7e7408beb@redhat.com>
+Date: Tue, 19 Nov 2024 12:40:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,55 +83,45 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: stsp <stsp2@yandex.ru>
-Subject: Re: [PATCH v2] net/unix: pass pidfd flags via SCM_PIDFD cmsg
-To: Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc: almasrymina@google.com, asml.silence@gmail.com, axboe@kernel.dk,
- brauner@kernel.org, cyphar@cyphar.com, davem@davemloft.net,
- edumazet@google.com, gouhao@uniontech.com, horms@kernel.org,
- kees@kernel.org, krisman@suse.de, kuba@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, mhal@rbox.co,
- netdev@vger.kernel.org, oleg@redhat.com, pabeni@redhat.com,
- quic_abchauha@quicinc.com, shuah@kernel.org, tandersen@netflix.com,
- viro@zeniv.linux.org.uk, willemb@google.com
-References: <20241114091909.3552288-1-stsp2@yandex.ru>
- <20241116011038.94912-1-kuniyu@amazon.com>
+Subject: Re: [PATCH net-next v2] mm: page_frag: fix a compile error when
+ kernel is not compiled
+To: Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+ kuba@kernel.org
+Cc: netdev@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+ Alexander Duyck <alexanderduyck@fb.com>, Linux-MM <linux-mm@kvack.org>,
+ Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20241119033012.257525-1-linyunsheng@huawei.com>
 Content-Language: en-US
-In-Reply-To: <20241116011038.94912-1-kuniyu@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20241119033012.257525-1-linyunsheng@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-16.11.2024 04:10, Kuniyuki Iwashima пишет:
-> Now this allows sending pidfd without SO_PASSPIDFD, so you need to
-> add a validation for "if (!msg->msg_control)" in __scm_recv_common().
-Will do, thanks.
-Btw don't we need MSG_CTRUNC in
-such case even if "msg_control"exists?
-Or the established practice is to just drop cmsg silently?
-I mean, something like the below:
+On 11/19/24 04:30, Yunsheng Lin wrote:
+> page_frag test module is an out of tree module, but built
+> using KDIR as the main kernel tree, the mm test suite is
+> just getting skipped if newly added page_frag test module
+> fails to compile due to kernel not yet compiled.
+> 
+> Fix the above problem by ensuring both kernel is built first
+> and a newer kernel which has page_frag_cache.h is used.
+> 
+> CC: Andrew Morton <akpm@linux-foundation.org>
+> CC: Alexander Duyck <alexanderduyck@fb.com>
+> CC: Linux-MM <linux-mm@kvack.org>
+> Fixes: 7fef0dec415c ("mm: page_frag: add a test module for page_frag")
+> Fixes: 65941f10caf2 ("mm: move the page fragment allocator from page_alloc into its own file")
+> Reported-by: Mark Brown <broonie@kernel.org>
+> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+> Tested-by: Mark Brown <broonie@kernel.org>
 
---- a/include/net/scm.h
-+++ b/include/net/scm.h
-@@ -176,12 +176,19 @@ static inline bool __scm_recv_common(struct socket 
-*sock, struct msghdr *msg,
-         if (!msg->msg_control) {
-                 if (test_bit(SOCK_PASSCRED, &sock->flags) ||
-                     test_bit(SOCK_PASSPIDFD, &sock->flags) ||
--                   scm->fp || scm_has_secdata(sock))
-+                   scm->fp || scm_has_secdata(sock) ||
-+                   scm->pidfd_flags)
-                         msg->msg_flags |= MSG_CTRUNC;
-                 scm_destroy(scm);
-                 return false;
-         }
+I'm closing the net-next PR right now, and we must either apply this
+patch even on short notice or reverting the blamed series.
 
-+       if (!test_bit(SOCK_PASSPIDFD, &sock->flags) && scm->pidfd_flags) {
-+               msg->msg_flags |= MSG_CTRUNC;
-+               scm_destroy(scm);
-+               return false;
-+       }
-+
-         if (test_bit(SOCK_PASSCRED, &sock->flags)) {
-                 struct user_namespace *current_ns = current_user_ns();
-                 struct ucred ucreds = {
+As this fix should not cause any more conflict than the original series,
+looks reasonable to me and has been tested by Mark, I'm going to apply it.
+
+/P
+
 
