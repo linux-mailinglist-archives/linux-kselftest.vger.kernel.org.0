@@ -1,127 +1,145 @@
-Return-Path: <linux-kselftest+bounces-22221-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22222-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFF9F9D1E28
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 03:25:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6D739D1E50
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 03:33:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 481C6B219EB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 02:25:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F28FB237C5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 02:33:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50B731C2457;
-	Tue, 19 Nov 2024 02:23:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBC2378C76;
+	Tue, 19 Nov 2024 02:33:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FRYYOOQX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qh9HNbUc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E80619DF99;
-	Tue, 19 Nov 2024 02:23:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 970EC27735;
+	Tue, 19 Nov 2024 02:33:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731983010; cv=none; b=d07uu3qqp26kMAmFVnQdauQFe18MY0rWZAnoiRoHupRavRR6JvcPdxigMRIsbW6u3PBpvxKpcGrj7s7SoXWH60DKy17tgNsY2L2/28Y9UHwhe0pPtAMQSLxbrH5TX54aiY1YlxK6lEPcw5deC+YQ8O+p6Bn4Wis/Ce6blTKrQF4=
+	t=1731983618; cv=none; b=j5CSnHIlqqoSUY/ZMgjBwd/v5Zox6QTpKTCY3t6i8urijjL7R5pG7ointQYz0RRm345M5TWGcTziglWJDJJT3KGBM00hEs/QZonqN0i/wtfWbU2HISruVzWR+dxL888Mib0Mm6RgS2jAj0uvU+WcgIPTVWFvgeFWJj2/e0y+hTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731983010; c=relaxed/simple;
-	bh=xALmY+lCPEAtOiRMHBY/m6zqKknN8Gv/XVXDxT0bg2I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZPOJDmFV3F76C7yTl7Hin8APwIr8ie15MMrJjGerOETioYq7iyRzEztL6I2E3LXEhaqvvT8bhjwRhIlCsF8ghjhAuheU5ygoBMQoAfU6ojz7oqE5/RYJvKc7G5cNTzmNW5nqx3pPhXi0FwWaNQFFgZzzA93gUmJiUm2wXOPxFmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FRYYOOQX; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4316f3d3c21so40711615e9.3;
-        Mon, 18 Nov 2024 18:23:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731983007; x=1732587807; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lu3pfmR1B/kSq7BCHQq5N3lGZnqWhXJp4vpHEb/re8k=;
-        b=FRYYOOQX0bhwexcnNj4VrkIC3t/M9YaiaurBbLpCga6cuqyfutjO/3al2VBPSBrk2b
-         QIn8chRx3OQh6WyKxDd149GQ8No/L2N2/JPoLNkXuwUACN60v2KOEd5h0HQuoQ+mV2Bj
-         yBc2SrY+eyPncrS6r5pzijl0YywCoUw0e4QvGRW5FI2oOn4nddRJVBQ1fj5iqJ6HrJSW
-         lT6htxDW3nt6zEtkER7BH63OaALY6yptPm7kdccQ7ZmJNKdK9GMBBaGur+r+1RkOCV3B
-         WdSJ80unBwJYYszUOcAM7rIN1b8EOjjqI2LXgWjbrP3oN01sUtfTid09eDwNIj2jC+dR
-         k+Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731983007; x=1732587807;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lu3pfmR1B/kSq7BCHQq5N3lGZnqWhXJp4vpHEb/re8k=;
-        b=o8I8s2lamoM6smCEzxT2FL5YzKlfFaRMhlBhp3Df/G631fBdfWd/WH1BR/eFypOZDC
-         iaM4RFtPteZN+dFLW65IrFwHXOC0TT0xtCYnu9fAxX/668eNNE35nJfZi24INXxVNrX1
-         vVuUS+PHSfowPusuJiJHlTuoga41R7qjc/1ENnTLT0Wn0Ar+sT7OkFfRgaqUpZWJQPTb
-         sTcORx996AwGGyVWeLX82+8PegZbHi2UEFWbYZuTEMAxHiAjbDQHTTmCYZx/iwGJ1snv
-         Y8YvMJ1XtRJYnA22QWIF5ktb8gGnQpj1u6BqxQNkDlTcnvgMeJxeHIDDIlBRaeY2n4QZ
-         zbBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU3Fa9gd6tQFpNFEFhALVLAKmxEJhtw1/mRkP7YQ+GqHAcHw3BqCmb6GCwYzsBtcPYx9D8qDmhgE4DLBBI=@vger.kernel.org, AJvYcCUBlEmgBV0G0ZkQtK5kcY9zdRx5gRBjMlW6MTC2CoAa7la7mzzeQR6uBukdEwPRzu1hUbLQBD3YjtcyV+6dPEJ2@vger.kernel.org, AJvYcCW0ues8w0Q5eMH9XZGpMHSZHbH8SoUoC3Va17yMfZACP3wfMADYQ5n2Wbaojf3oJqntBouYN725@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZCllDWufgOvV0qmElVVA3BJkfmMp8d+YyMMXSVE2jz2JbJOk9
-	g85UqzSw0wNNvqkxVBM9bKID4NYoo3cFlZ3v4YcBxssI5SVtg4Y/
-X-Google-Smtp-Source: AGHT+IF8GV1ncAa+PagbncMoA5qLhI1IT5IdzEeidM/65gKW+kGO/UVPaV/FBj4gWpTvIk+nvF09PA==
-X-Received: by 2002:a5d:6dae:0:b0:382:41ad:d8dc with SMTP id ffacd0b85a97d-38241addb71mr6371352f8f.36.1731983006653;
-        Mon, 18 Nov 2024 18:23:26 -0800 (PST)
-Received: from [192.168.0.2] ([69.6.8.124])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-382465e915csm5038534f8f.108.2024.11.18.18.23.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Nov 2024 18:23:25 -0800 (PST)
-Message-ID: <b624293b-5143-4602-bf50-f4a14ff83d3a@gmail.com>
-Date: Tue, 19 Nov 2024 04:23:58 +0200
+	s=arc-20240116; t=1731983618; c=relaxed/simple;
+	bh=kzehaPiccsw15px7PPl9C3XDFhEo1QI2seSrggxszCQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RNsSoBOxiAxZgKStmIbz77XR4oysNFcDOAjN1gJdYwrgYPwOFzfayuxdgqrtX7pNOC1ohUfYfL6fEQfLo2GfgjIongtvkXeJw1EE38AfMFGAagKatAQdg/rxlFS0KqXUZUzIs1tBZmL+VFiaIY6E58q05zZEvEJb7906nLn6BOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qh9HNbUc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ADB0C4CECC;
+	Tue, 19 Nov 2024 02:33:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731983618;
+	bh=kzehaPiccsw15px7PPl9C3XDFhEo1QI2seSrggxszCQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=qh9HNbUcw9AwZL9kqkcf6F2dPF7vmHpBNWJKznT0J3Ky5XYbl+NCqf6hp7j2cAbeV
+	 1Yk5i/5XoDngwiz7G7WYcmnFqU9P3iEvaxwImwSHL2ccIvw27KIx+boXsFjH9T8eeR
+	 AjwwF1epXj1s8rIXeEUWBrf33Qe5c3QQ5W0+Ft6o3XE5a3vJsCXqNUKx2xRCJbZQhA
+	 qPoPIsCa+qdqd2IhQ8whlKP6tw/m7qcwiWLUFknVcOC0LnX1tpmcki1ix/IL1WwjHa
+	 HWgaikmaMrX8jxsFXdY+BdsIPCCqnkF6FFI6DtiPDofyvS9IpQalyxWlqBHMCY5M08
+	 z/WlCqMZ8Dqxg==
+Date: Mon, 18 Nov 2024 18:33:36 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, max@kutsevol.com, thepacketgeek@gmail.com,
+ vlad.wing@gmail.com, davej@codemonkey.org.uk
+Subject: Re: [PATCH net-next 2/4] netconsole: Add option to auto-populate
+ CPU number in userdata
+Message-ID: <20241118183336.34e42b01@kernel.org>
+In-Reply-To: <20241113-netcon_cpu-v1-2-d187bf7c0321@debian.org>
+References: <20241113-netcon_cpu-v1-0-d187bf7c0321@debian.org>
+	<20241113-netcon_cpu-v1-2-d187bf7c0321@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 03/23] ovpn: add basic netlink support
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Shuah Khan <shuah@kernel.org>, sd@queasysnail.net,
- Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-3-de4698c73a25@openvpn.net>
- <21c0887b-1c7d-424d-a723-2a8d212cbde1@gmail.com>
- <dc63a3cb-7ace-4aca-9b67-f3c50297b2d2@openvpn.net>
-Content-Language: en-US
-From: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-In-Reply-To: <dc63a3cb-7ace-4aca-9b67-f3c50297b2d2@openvpn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 15.11.2024 12:19, Antonio Quartulli wrote:
-> On 09/11/2024 00:31, Sergey Ryazanov wrote:
->> On 29.10.2024 12:47, Antonio Quartulli wrote:
->>> +/**
->>> + * struct ovpn_struct - per ovpn interface state
->>> + * @dev: the actual netdev representing the tunnel
->>> + * @dev_tracker: reference tracker for associated dev
->>> + */
->>> +struct ovpn_struct {
->>
->> There is no standard convention how to entitle such structures, so the 
->> question is basically of out-of-curiosity class. For me, having a 
->> sturcuture with name 'struct' is like having no name. Did you consider 
->> to use such names as ovpn_dev or ovpn_iface? Meaning, using a name 
->> that gives a clue regarding the scope of the content.
-> 
-> Yes, I wanted to switch to ovpn_priv, but  did not care much for the 
-> time being :)
-> 
-> I can still do it now in v12.
+Sorry for the late review, I think this will miss v6.13 :(
 
-This topic caused me the biggest doubts. I don't want to ask to rename 
-everything on the final lap. Just want to share an outside perspective 
-on the structure name. And let you decide is it worth or not.
+On Wed, 13 Nov 2024 07:10:53 -0800 Breno Leitao wrote:
+>  /**
+>   * struct netconsole_target - Represents a configured netconsole target.
+>   * @list:	Links this target into the target_list.
+> @@ -97,6 +105,7 @@ static struct console netconsole_ext;
+>   * @userdata_group:	Links to the userdata configfs hierarchy
+>   * @userdata_complete:	Cached, formatted string of append
+>   * @userdata_length:	String length of userdata_complete
+> + * @userdata_auto:	Kernel auto-populated bitwise fields in userdata.
+>   * @enabled:	On / off knob to enable / disable target.
+>   *		Visible from userspace (read-write).
+>   *		We maintain a strict 1:1 correspondence between this and
+> @@ -123,6 +132,7 @@ struct netconsole_target {
+>  	struct config_group	userdata_group;
+>  	char userdata_complete[MAX_USERDATA_ENTRY_LENGTH * MAX_USERDATA_ITEMS];
+>  	size_t			userdata_length;
+> +	enum userdata_auto	userdata_auto;
 
-And if you ask me, ovpn_priv does not give a clue either. The module is 
-too complex for a vague structure name, even after your great work on 
-clearing its design.
+If you want to set multiple bits here type should probably be unsigned
+long. Otherwise the enum will contain combination of its values, which
+are in themselves not valid enum values ... if that makes sense.
 
---
-Sergey
+>  #endif
+>  	bool			enabled;
+>  	bool			extended;
+
+> +	/* Check if CPU NR should be populated, and append it to the user
+> +	 * dictionary.
+> +	 */
+> +	if (child_count < MAX_USERDATA_ITEMS && nt->userdata_auto & AUTO_CPU_NR)
+> +		scnprintf(&nt->userdata_complete[complete_idx],
+> +			  MAX_USERDATA_ENTRY_LENGTH, " cpu=%u\n",
+> +			  raw_smp_processor_id());
+
+I guess it may be tricky for backward compat, but shouldn't we return
+an error rather than silently skip?
+
+>  	nt->userdata_length = strnlen(nt->userdata_complete,
+>  				      sizeof(nt->userdata_complete));
+>  }
+> @@ -757,7 +788,36 @@ static ssize_t userdatum_value_store(struct config_item *item, const char *buf,
+>  	return ret;
+>  }
+>  
+> +static ssize_t populate_cpu_nr_store(struct config_item *item, const char *buf,
+> +				     size_t count)
+> +{
+> +	struct netconsole_target *nt = to_target(item->ci_parent);
+> +	bool cpu_nr_enabled;
+> +	ssize_t ret;
+> +
+> +	if (!nt)
+> +		return -EINVAL;
+
+Can this happen? Only if function gets called with a NULL @item
+which would be pretty nutty.
+
+> +	mutex_lock(&dynamic_netconsole_mutex);
+> +	ret = kstrtobool(buf, &cpu_nr_enabled);
+> +	if (ret)
+> +		goto out_unlock;
+> +
+> +	if (cpu_nr_enabled)
+> +		nt->userdata_auto |= AUTO_CPU_NR;
+> +	else
+> +		nt->userdata_auto &= ~AUTO_CPU_NR;
+> +
+> +	update_userdata(nt);
+> +
+> +	ret = strnlen(buf, count);
+> +out_unlock:
+> +	mutex_unlock(&dynamic_netconsole_mutex);
+> +	return ret;
+> +}
 
