@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-22290-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22291-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D6B29D29E6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 16:42:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FD5B9D2A0A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 16:47:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1151E1F21DE0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 15:42:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36BD0B27B02
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 15:43:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A28E71D0F68;
-	Tue, 19 Nov 2024 15:38:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE6831D319C;
+	Tue, 19 Nov 2024 15:38:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SiEN/RzP"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YhBkDsO3"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0DBE1D04A0
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 15:38:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BE21CEAA6
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 15:38:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732030708; cv=none; b=AS7xJ3BhxOJb5lXHbwo0c55ccXJs3pkitcC7jZz+hKZ9usr8HFa8ZQDsbMZq2cUBV+FWeA5ViP+c+0TxZx4e5/JFthWC4BU8MC8Y/KTVTbOZzDrfPknLm/ZkT3H9F2wc+FHfy1EyGGBekpxcWW0S65htAeE76+5MBo1PB9oH1JI=
+	t=1732030729; cv=none; b=O1zmie0wVluAKsNZ4vmaXkLWcAmNX3GptQTyDE7Ng4TLuEplspoQWkp+T0BS29OaK4M1nHbA+WeOJFjVIAPtks3J2mZHrEWyWrV+wIysY93krQKf4qrwESQwkNzNUfQhIKwnzu0jKItS8GfdYgfGPKjrQFPb2NP3GXlB8hVsihw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732030708; c=relaxed/simple;
-	bh=HfgzzhQB9Z8CbP30UBBQFA/8juWm49GyqBubPeAUIoY=;
+	s=arc-20240116; t=1732030729; c=relaxed/simple;
+	bh=soZGZa5eZvVq13Yv3+buGnph0yEGo0cZoyN46yk11Tc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rECtgW5gRsI+gMUGOeQaB9Bs4IEBJ0bFejbQK/LCmtScNqA5XLg4EA2D0TvQqtniNoSfQyW0P1qKFhPVOL233wVuK4I4QZY79unkk49+Toa7BfHoHYI85+YPkz6wyJpBwIKyOHxkAApLt9P5CySXCRrA3q9im0UN1TQDvQB5wSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SiEN/RzP; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=u2PN5ZWKt5+GcOX5uKuivUF58EJwSwmf+aMhfbRAVsqbHQgnBqn7Oy3zIrcKWK8OAGqmXnOKaaP8A95VIK3wJUeSMaoaEOW+simCZcRGSG/m3C3+n07XR05ral7grQ5vZx96pKi9cWiKsWd8z2UV164HzDqQlTIYoSNXXnF/12o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YhBkDsO3; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732030706;
+	s=mimecast20190719; t=1732030727;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=bbbl+TXDo+t5kIfzQ14qJGOWt1RDAARb2PWsvxSVw1o=;
-	b=SiEN/RzPBhaoePshtzNHAh7ZrXyujP/oIVqa2WZS2hNgRGZQIOyTMtrWCrxZHSui1bDXy8
-	ZHsGxuES9OsCEaAVXrZ7ob/xiFwyLAi0bE0fGkD9ylVpFdtMLf3guBRrTKB4H72W4tZU+e
-	YGJH7CEuzo2sJeIIXHof6940alkcdEI=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+	bh=URgg3URVd8Hv8WB8p504Oe6mTtzB0H+jxnfnYfZO9Vc=;
+	b=YhBkDsO3/SN+8BlGXacmr+Y4ALqQvU2OQwxh+bUPL4x+yhl+HBvrIXZ1yB7LsDwGKPkhOP
+	gGPtWCy++4AHTBrV5edTA+HUiz8OSoVuHQkrzjCn7RI9/47ZUUUseCzlkOwu90Qj8B9p2l
+	gYMvvJsi26xFzjeH3r/1FOUM9t974fs=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-593-1WZ3p9jrPQW6G0U5yxmRQQ-1; Tue,
- 19 Nov 2024 10:38:24 -0500
-X-MC-Unique: 1WZ3p9jrPQW6G0U5yxmRQQ-1
-X-Mimecast-MFC-AGG-ID: 1WZ3p9jrPQW6G0U5yxmRQQ
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-99-3C0haj_PPdCTmZEKdqoqww-1; Tue,
+ 19 Nov 2024 10:38:43 -0500
+X-MC-Unique: 3C0haj_PPdCTmZEKdqoqww-1
+X-Mimecast-MFC-AGG-ID: 3C0haj_PPdCTmZEKdqoqww
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E53F01952D05;
-	Tue, 19 Nov 2024 15:38:14 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DC0AB193EF53;
+	Tue, 19 Nov 2024 15:38:32 +0000 (UTC)
 Received: from vschneid-thinkpadt14sgen2i.remote.csb (unknown [10.39.194.94])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DDE233003B71;
-	Tue, 19 Nov 2024 15:37:59 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 613EB30001A2;
+	Tue, 19 Nov 2024 15:38:15 +0000 (UTC)
 From: Valentin Schneider <vschneid@redhat.com>
 To: linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org,
@@ -66,8 +66,7 @@ To: linux-kernel@vger.kernel.org,
 	x86@kernel.org,
 	rcu@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
+Cc: Steven Rostedt <rostedt@goodmis.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
 	Jonathan Corbet <corbet@lwn.net>,
 	Thomas Gleixner <tglx@linutronix.de>,
@@ -118,9 +117,9 @@ Cc: Josh Poimboeuf <jpoimboe@redhat.com>,
 	Yair Podemsky <ypodemsk@redhat.com>,
 	Daniel Wagner <dwagner@suse.de>,
 	Petr Tesarik <ptesarik@suse.com>
-Subject: [RFC PATCH v3 09/15] objtool: Warn about non __ro_after_init static key usage in .noinstr
-Date: Tue, 19 Nov 2024 16:34:56 +0100
-Message-ID: <20241119153502.41361-10-vschneid@redhat.com>
+Subject: [RFC PATCH v3 10/15] x86/alternatives: Record text_poke's of JUMP_TYPE_FORCEFUL labels
+Date: Tue, 19 Nov 2024 16:34:57 +0100
+Message-ID: <20241119153502.41361-11-vschneid@redhat.com>
 In-Reply-To: <20241119153502.41361-1-vschneid@redhat.com>
 References: <20241119153502.41361-1-vschneid@redhat.com>
 Precedence: bulk
@@ -132,157 +131,133 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Later commits will disallow runtime-mutable text in .noinstr sections in
-order to safely defer instruction patching IPIs.
+Forceful static keys are used in early entry code where it is unsafe to
+defer the sync_core() IPIs, and flagged as such via their ->type field.
 
-All static keys used in .noinstr sections have now been checked as being
-either flagged as __ro_after_init, or as forceful static keys. Any
-occurrence of this new warning would be the result of a code change that
-will need looking at.
+Record that information when creating a text_poke_loc. The
+text_poke_loc.old field is written to when first iterating a text_poke()
+entry, and as such can be (ab)used to store this information at the start
+of text_poke_bp_batch().
 
-Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com>
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 ---
-offset_of(static_key.type) and JUMP_TYPE_FORCEFUL would need to be shoved
-into a somewhat standalone header file that could be included by objtool
-itself.
----
- tools/objtool/Documentation/objtool.txt | 13 ++++++++
- tools/objtool/check.c                   | 41 +++++++++++++++++++++++++
- tools/objtool/include/objtool/check.h   |  1 +
- tools/objtool/include/objtool/special.h |  2 ++
- tools/objtool/special.c                 |  3 ++
- 5 files changed, 60 insertions(+)
+ arch/x86/include/asm/text-patching.h | 12 ++++++++++--
+ arch/x86/kernel/alternative.c        | 16 ++++++++++------
+ arch/x86/kernel/jump_label.c         |  7 ++++---
+ 3 files changed, 24 insertions(+), 11 deletions(-)
 
-diff --git a/tools/objtool/Documentation/objtool.txt b/tools/objtool/Documentation/objtool.txt
-index 7c3ee959b63c7..06fa285873387 100644
---- a/tools/objtool/Documentation/objtool.txt
-+++ b/tools/objtool/Documentation/objtool.txt
-@@ -447,6 +447,19 @@ the objtool maintainers.
-    names and does not use module_init() / module_exit() macros to create
-    them.
+diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
+index 6259f1937fe77..e34de36cab61e 100644
+--- a/arch/x86/include/asm/text-patching.h
++++ b/arch/x86/include/asm/text-patching.h
+@@ -38,9 +38,17 @@ extern void *text_poke_copy(void *addr, const void *opcode, size_t len);
+ extern void *text_poke_copy_locked(void *addr, const void *opcode, size_t len, bool core_ok);
+ extern void *text_poke_set(void *addr, int c, size_t len);
+ extern int poke_int3_handler(struct pt_regs *regs);
+-extern void text_poke_bp(void *addr, const void *opcode, size_t len, const void *emulate);
++extern void __text_poke_bp(void *addr, const void *opcode, size_t len, const void *emulate, bool force_ipi);
++static inline void text_poke_bp(void *addr, const void *opcode, size_t len, const void *emulate)
++{
++	__text_poke_bp(addr, opcode, len, emulate, false);
++}
  
-+13. file.o: warning: func()+0x2a: non __ro_after_init static key "key" in .noinstr section
-+
-+  This means that the noinstr function func() uses a static key that can be
-+  modified at runtime. This is not allowed as noinstr functions rely on
-+  containing stable instructions after init.
-+
-+  Check whether the static key in question can really be modified at runtime,
-+  and if it is only enabled during init then mark it as __ro_after_init. If it
-+  genuinely needs to be modified at runtime:
-+
-+  1) Directly rely on the underlying atomic count of they key in the noinstr
-+     functions.
-+  2) Mark the static key as forceful.
+-extern void text_poke_queue(void *addr, const void *opcode, size_t len, const void *emulate);
++extern void __text_poke_queue(void *addr, const void *opcode, size_t len, const void *emulate, bool force_ipi);
++static inline void text_poke_queue(void *addr, const void *opcode, size_t len, const void *emulate)
++{
++	__text_poke_queue(addr, opcode, len, emulate, false);
++}
+ extern void text_poke_finish(void);
  
- If the error doesn't seem to make sense, it could be a bug in objtool.
- Feel free to ask the objtool maintainer for help.
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 00e25492f5065..c1fb02c326839 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -2056,6 +2056,9 @@ static int add_special_section_alts(struct objtool_file *file)
- 		alt->next = orig_insn->alts;
- 		orig_insn->alts = alt;
+ #define INT3_INSN_SIZE		1
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index d17518ca19b8b..954c4c0f7fc58 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -2098,7 +2098,10 @@ struct text_poke_loc {
+ 	u8 opcode;
+ 	const u8 text[POKE_MAX_OPCODE_SIZE];
+ 	/* see text_poke_bp_batch() */
+-	u8 old;
++	union {
++		u8 old;
++		u8 force_ipi;
++	};
+ };
  
-+		if (special_alt->key_sym)
-+			orig_insn->key_sym = special_alt->key_sym;
-+
- 		list_del(&special_alt->list);
- 		free(special_alt);
- 	}
-@@ -3605,6 +3608,41 @@ static int validate_return(struct symbol *func, struct instruction *insn, struct
- 	return 0;
+ struct bp_patching_desc {
+@@ -2385,7 +2388,7 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
  }
  
-+static bool static_key_is_forceful(struct symbol *key)
-+{
-+	if (!strcmp(key->sec->name, ".data")) {
-+		unsigned long data_offset = key->sec->data->d_off;
-+		unsigned long key_offset = key->sym.st_value;
-+		char* data = key->sec->data->d_buf;
-+
-+		/*
-+		 * offset_of(static_key.type)
-+		 *                        v
-+		 *                        v            JUMP_TYPE_FORCEFUL
-+		 *                        v                    v
-+		 */
-+		return data[(key_offset + 8) - data_offset] & 0x4;
-+	}
-+
-+	return false;
-+}
-+
-+static int validate_static_key(struct instruction *insn, struct insn_state *state)
-+{
-+	if (state->noinstr && state->instr <= 0) {
-+		if (static_key_is_forceful(insn->key_sym))
-+			return 0;
-+
-+		if ((strcmp(insn->key_sym->sec->name, ".data..ro_after_init"))) {
-+			WARN_INSN(insn, "non __ro_after_init static key \"%s\" in .noinstr section",
-+				  insn->key_sym->name);
-+			return 1;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static struct instruction *next_insn_to_validate(struct objtool_file *file,
- 						 struct instruction *insn)
+ static void text_poke_loc_init(struct text_poke_loc *tp, void *addr,
+-			       const void *opcode, size_t len, const void *emulate)
++			       const void *opcode, size_t len, const void *emulate, bool force_ipi)
  {
-@@ -3766,6 +3804,9 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
- 		if (handle_insn_ops(insn, next_insn, &state))
- 			return 1;
+ 	struct insn insn;
+ 	int ret, i = 0;
+@@ -2402,6 +2405,7 @@ static void text_poke_loc_init(struct text_poke_loc *tp, void *addr,
+ 	tp->rel_addr = addr - (void *)_stext;
+ 	tp->len = len;
+ 	tp->opcode = insn.opcode.bytes[0];
++	tp->force_ipi = force_ipi;
  
-+		if (insn->key_sym)
-+			validate_static_key(insn, &state);
-+
- 		switch (insn->type) {
+ 	if (is_jcc32(&insn)) {
+ 		/*
+@@ -2493,14 +2497,14 @@ void text_poke_finish(void)
+ 	text_poke_flush(NULL);
+ }
  
- 		case INSN_RETURN:
-diff --git a/tools/objtool/include/objtool/check.h b/tools/objtool/include/objtool/check.h
-index daa46f1f0965a..35dd21f8f41e1 100644
---- a/tools/objtool/include/objtool/check.h
-+++ b/tools/objtool/include/objtool/check.h
-@@ -77,6 +77,7 @@ struct instruction {
- 	struct symbol *sym;
- 	struct stack_op *stack_ops;
- 	struct cfi_state *cfi;
-+	struct symbol *key_sym;
- };
+-void __ref text_poke_queue(void *addr, const void *opcode, size_t len, const void *emulate)
++void __ref __text_poke_queue(void *addr, const void *opcode, size_t len, const void *emulate, bool force_ipi)
+ {
+ 	struct text_poke_loc *tp;
  
- static inline struct symbol *insn_func(struct instruction *insn)
-diff --git a/tools/objtool/include/objtool/special.h b/tools/objtool/include/objtool/special.h
-index 86d4af9c5aa9d..0e61f34fe3a28 100644
---- a/tools/objtool/include/objtool/special.h
-+++ b/tools/objtool/include/objtool/special.h
-@@ -27,6 +27,8 @@ struct special_alt {
- 	struct section *new_sec;
- 	unsigned long new_off;
+ 	text_poke_flush(addr);
  
-+	struct symbol *key_sym;
-+
- 	unsigned int orig_len, new_len; /* group only */
- };
+ 	tp = &tp_vec[tp_vec_nr++];
+-	text_poke_loc_init(tp, addr, opcode, len, emulate);
++	text_poke_loc_init(tp, addr, opcode, len, emulate, force_ipi);
+ }
  
-diff --git a/tools/objtool/special.c b/tools/objtool/special.c
-index 097a69db82a0e..fefab2b471bf8 100644
---- a/tools/objtool/special.c
-+++ b/tools/objtool/special.c
-@@ -127,6 +127,9 @@ static int get_alt_entry(struct elf *elf, const struct special_entry *entry,
- 			return -1;
- 		}
- 		alt->key_addend = reloc_addend(key_reloc);
-+
-+		reloc_to_sec_off(key_reloc, &sec, &offset);
-+		alt->key_sym = find_symbol_by_offset(sec, offset & ~3);
+ /**
+@@ -2514,10 +2518,10 @@ void __ref text_poke_queue(void *addr, const void *opcode, size_t len, const voi
+  * dynamically allocated memory. This function should be used when it is
+  * not possible to allocate memory.
+  */
+-void __ref text_poke_bp(void *addr, const void *opcode, size_t len, const void *emulate)
++void __ref __text_poke_bp(void *addr, const void *opcode, size_t len, const void *emulate, bool force_ipi)
+ {
+ 	struct text_poke_loc tp;
+ 
+-	text_poke_loc_init(&tp, addr, opcode, len, emulate);
++	text_poke_loc_init(&tp, addr, opcode, len, emulate, force_ipi);
+ 	text_poke_bp_batch(&tp, 1);
+ }
+diff --git a/arch/x86/kernel/jump_label.c b/arch/x86/kernel/jump_label.c
+index f5b8ef02d172c..e03a4f56b30fd 100644
+--- a/arch/x86/kernel/jump_label.c
++++ b/arch/x86/kernel/jump_label.c
+@@ -101,8 +101,8 @@ __jump_label_transform(struct jump_entry *entry,
+ 		text_poke_early((void *)jump_entry_code(entry), jlp.code, jlp.size);
+ 		return;
  	}
+-
+-	text_poke_bp((void *)jump_entry_code(entry), jlp.code, jlp.size, NULL);
++	__text_poke_bp((void *)jump_entry_code(entry), jlp.code, jlp.size, NULL,
++		     jump_entry_key(entry)->type & JUMP_TYPE_FORCEFUL);
+ }
  
- 	return 0;
+ static void __ref jump_label_transform(struct jump_entry *entry,
+@@ -135,7 +135,8 @@ bool arch_jump_label_transform_queue(struct jump_entry *entry,
+ 
+ 	mutex_lock(&text_mutex);
+ 	jlp = __jump_label_patch(entry, type);
+-	text_poke_queue((void *)jump_entry_code(entry), jlp.code, jlp.size, NULL);
++	__text_poke_queue((void *)jump_entry_code(entry), jlp.code, jlp.size, NULL,
++			jump_entry_key(entry)->type & JUMP_TYPE_FORCEFUL);
+ 	mutex_unlock(&text_mutex);
+ 	return true;
+ }
 -- 
 2.43.0
 
