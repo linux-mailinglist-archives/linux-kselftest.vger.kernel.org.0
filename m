@@ -1,166 +1,119 @@
-Return-Path: <linux-kselftest+bounces-22272-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22273-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C02A9D2734
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 14:44:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 883769D285F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 15:42:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E891283CF0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 13:44:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E782B305B5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 14:34:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C05A61CC8A7;
-	Tue, 19 Nov 2024 13:44:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="gSwFGzia"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE1911CDFD1;
+	Tue, 19 Nov 2024 14:34:39 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A844B1CC88F
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 13:44:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6235E57D;
+	Tue, 19 Nov 2024 14:34:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732023867; cv=none; b=ZgAbW5towWEaAUTaVP7Ek4331SDonfqJgfbzH9XgpccClfts6xzqkDBzVDoEkSqOnNahojKgDOlFa7EGa/D9gU3wEYw8b62SqFbVaHaYjPqW1oPYWZoUkBiFm45UbrxLrgVYnxs5fiBz6ARHndbAeSX708snmJISrGeijiRHriI=
+	t=1732026879; cv=none; b=GkfWxbu74wIJscQpr5Oa+WIUrqMFSHkI092TZA/snWxUs6MpT+4N1OzNcMiJ7m0HG9DpchJcLdvgVwt1M9H8z2gX+im+sUcIebtes82d1akSn8PuOqMJXvpbB9zEaYkhgc0jOEPWs8SZtE/L278cuTIwGh9hvythkRXkpkoBgAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732023867; c=relaxed/simple;
-	bh=OFTRm7LRQZAyUSigbQ6nRqpQqAPv47FT7sIHM6gDwyw=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=YJP1i4n7As0okRwzNTAPPZm45EZ1UEOeTpw9ZdUEa847fbdvp/S9WH+RstQQZcxjtcHKvMaTbiuz+uD1hVN+QAMIbjo8UDnlORT3gnH5FNFBEtf7h/tr2jeJtF9QemZjCw09NV+cWgwUEIbh+No3Dj70qe9SWdewXgkcEmCpv8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=gSwFGzia; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aa20944ce8cso974606766b.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2024 05:44:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1732023864; x=1732628664; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:from:subject:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=48VrpXY2mkWzYGck/cWClRiF6WW35MKwTazRhdBRft0=;
-        b=gSwFGziahw1ewxPfo2qXf96qgmrS5ylk3ZiRt26n2IkuIksNdSDcSYgNOvu2PNuabW
-         QZbfX/y0K/ou1DR311nnPx9ulRexn4RS8smofNm92MpfKTgaE7KDlkM2MszHGpK1hN+H
-         xsfjkf5j2vp5NhH8N+ElBUbL8SN4J4OmjHMrJ8dyeAQ7wKVBJl2SyVTQ0h0H/tgYRlKh
-         TfgNbCokKKV2mOIBaluXzvmYwJuUy9XpISnaL08Ge9RD7KV19AWl/oPGvWYo91EqECM0
-         0+sA6XOwJcS+vlCn1o0KFB2gAR8DYGij+jeyq/swy6bHL/8VS1l1BNcRvSZkmGYKXa5k
-         WjPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732023864; x=1732628664;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:from:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=48VrpXY2mkWzYGck/cWClRiF6WW35MKwTazRhdBRft0=;
-        b=KGTdTHAhOcl6S2qYkAqb21/0wbY9JlpMbOJwQnkJl/nM70P+gxU2D/1JZ/5cb9tzJD
-         qdPJRbzD+3povmrEp/YMvoA0O/8fsvv91P3F8PUVCgpPQ9aOLzoGw3VwXoW150fLQk/k
-         dTqpSYYBzmQVeqgAW/9cC0oS1dlrV1QJD8Ie7wndzlYOBV1lVvVONDXUYGC9FUOdEn+N
-         MGK3K7yPLuMs7uLf5AjqDljOB7FaXKoJz1MRKed4nAPJ2RebgPyKlsYC4JGCEykTr9bT
-         VM5Lviab36ne0Q/IQ34urMHFajQt8r3jNXYfAYoWrA88SnM2ERx6YUHJwEq1VrG7JpBW
-         7WjA==
-X-Forwarded-Encrypted: i=1; AJvYcCVm0yCYNP7KxPwLSXo2PyP/OW0xxOkNzeyge+ikiZSY9Zru1R1S6++BUbHDxp3mchnyAX0nZ8zOmXz9WIE73aU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkYdEA5E+FbNfTuFbT1bXJeH1jyuXzYltGEPqOIhOAnHBAYZTP
-	F1oy/YK+avLQHjcYlgMFO76hn2t/O3wARZyRHbp2ij64WDT+q/auv7oBxLeXKqQ=
-X-Google-Smtp-Source: AGHT+IEKsrovWVogNEbGLCwrR7XMXtJ3TzAzN2ee3eiRBEyCmTdZ8Wriy4SSzUcbTJQaitV5neejvg==
-X-Received: by 2002:a17:907:9281:b0:a9a:662f:ff4a with SMTP id a640c23a62f3a-aa4c7c28b5cmr334506366b.0.1732023864047;
-        Tue, 19 Nov 2024 05:44:24 -0800 (PST)
-Received: from ?IPV6:2001:67c:2fbc:1:a2be:8cd5:8845:cfce? ([2001:67c:2fbc:1:a2be:8cd5:8845:cfce])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cf79b9faf4sm5456537a12.33.2024.11.19.05.44.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Nov 2024 05:44:23 -0800 (PST)
-Message-ID: <b8612694-c5b7-4b62-8b9d-783aaec1439f@openvpn.net>
-Date: Tue, 19 Nov 2024 14:44:51 +0100
+	s=arc-20240116; t=1732026879; c=relaxed/simple;
+	bh=+Rr/qgOwv8XKND57Q6pl0RBBNPuJNtWXBoNgEYFCPJs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=iyQYwrjHmbJrxUeJTU4tnTxKBgl9gQ5RIPoNuXl34A5D4hWYjdwv580ou27IgLwN1dN2JuYNZh/3yy1BqhGpFHG1XtPcXQdhx9bPyY/ustAy1btsM43tPqKv8j1uuHnhYbY2+ab+Ybqca3OBd9SQoJ4A0oQVCkE2dk0FXlqC7x0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Xt5sk0RK3z9v7Jm;
+	Tue, 19 Nov 2024 22:07:22 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 90AC01407FE;
+	Tue, 19 Nov 2024 22:34:23 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwCnGjvQoTxnjr3pAQ--.40220S2;
+	Tue, 19 Nov 2024 15:34:22 +0100 (CET)
+Message-ID: <58fbc60fccf6d6c9504301adeebf33a46766d507.camel@huaweicloud.com>
+Subject: Re: [PATCH v6 02/15] module: Introduce ksys_finit_module()
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Christoph Hellwig <hch@lst.de>
+Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+ eric.snowberg@oracle.com,  corbet@lwn.net, mcgrof@kernel.org,
+ petr.pavlu@suse.com, samitolvanen@google.com,  da.gomez@samsung.com,
+ akpm@linux-foundation.org, paul@paul-moore.com,  jmorris@namei.org,
+ serge@hallyn.com, shuah@kernel.org, mcoquelin.stm32@gmail.com, 
+ alexandre.torgue@foss.st.com, linux-integrity@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-api@vger.kernel.org, linux-modules@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ wufan@linux.microsoft.com, pbrobinson@gmail.com, zbyszek@in.waw.pl, 
+ mjg59@srcf.ucam.org, pmatilai@redhat.com, jannh@google.com,
+ dhowells@redhat.com,  jikos@kernel.org, mkoutny@suse.com, ppavlu@suse.com,
+ petr.vorel@gmail.com,  mzerqung@0pointer.de, kgold@linux.ibm.com, Roberto
+ Sassu <roberto.sassu@huawei.com>
+Date: Tue, 19 Nov 2024 15:33:49 +0100
+In-Reply-To: <20241119121402.GA28228@lst.de>
+References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
+	 <20241119104922.2772571-3-roberto.sassu@huaweicloud.com>
+	 <20241119121402.GA28228@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 07/23] ovpn: introduce the ovpn_socket object
-From: Antonio Quartulli <antonio@openvpn.net>
-To: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Shuah Khan <shuah@kernel.org>, sd@queasysnail.net,
- Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-7-de4698c73a25@openvpn.net>
- <62d382f8-ea45-4157-b54b-8fed7bdafcca@gmail.com>
- <1dffb833-1688-4572-bbf8-c6524cd84402@openvpn.net>
-Content-Language: en-US
-Autocrypt: addr=antonio@openvpn.net; keydata=
- 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
-Organization: OpenVPN Inc.
-In-Reply-To: <1dffb833-1688-4572-bbf8-c6524cd84402@openvpn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:LxC2BwCnGjvQoTxnjr3pAQ--.40220S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jw4rZr1fXF1UuFWfuw45Jrb_yoWkWFc_uF
+	97WryqywsxJw4DZrW7tF1SgFWSgayDJrykZ3yUJFW2q345Gw17KFs5GFyFqF18ta1ktr1k
+	WryUXr40vw1IgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbxxYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+	67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
+	AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+	kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AK
+	xVWrXVW3AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Wrv_Gr1U
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8
+	JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26F4UJVW0obIYCTnIWIevJa73UjIFyTuYvjxUVZ
+	2-UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBGc797QGbwAAs-
 
-On 15/11/2024 15:28, Antonio Quartulli wrote:
-[...]
->>> +}
->>> +
->>> +static struct ovpn_socket *ovpn_socket_get(struct socket *sock)
->>> +{
->>> +    struct ovpn_socket *ovpn_sock;
->>> +
->>> +    rcu_read_lock();
->>> +    ovpn_sock = rcu_dereference_sk_user_data(sock->sk);
->>> +    if (!ovpn_socket_hold(ovpn_sock)) {
->>> +        pr_warn("%s: found ovpn_socket with ref = 0\n", __func__);
->>
->> Should we be more specific here and print warning with 
->> netdev_warn(ovpn_sock->ovpn->dev, ...)?
-> 
-> ACK must be an unnoticed leftover
+On Tue, 2024-11-19 at 13:14 +0100, Christoph Hellwig wrote:
+> On Tue, Nov 19, 2024 at 11:49:09AM +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> >=20
+> > Introduce ksys_finit_module() to let kernel components request a kernel
+> > module without requiring running modprobe.
+>=20
+> That does sound more than sketchy, even more so because the commit log
+> completely fails to explain why you'd need to do that.
 
-I take this back.
-If refcounter is zero, I'd avoid accessing any field of the ovpn_sock 
-object, thus the pr_warn() without any reference to the device.
+With my solution, the kernel grants access to a file in user space
+depending on whether or not its calculated (or fsverity) digest is
+found in an application manifest provided by the software vendor.
 
-Regards,
+However, what it happens is that in the early boot phase the parser is
+not loaded yet, and the kernel cannot extract the reference digests
+from the application manifest.
 
--- 
-Antonio Quartulli
-OpenVPN Inc.
+Thus, calling request_module() and consequently executing modprobe will
+fail, since the kernel does not have its reference digest yet.
+
+Instead, loading the kernel module from the kernel itself works,
+because only the kernel module needs to be verified, and that can be
+done through its appended signature.
+
+Roberto
 
 
