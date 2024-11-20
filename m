@@ -1,160 +1,184 @@
-Return-Path: <linux-kselftest+bounces-22367-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22368-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 660CC9D4026
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 17:34:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0175B9D4045
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 17:41:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 246AB2819A1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 16:34:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A9272840D4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 16:41:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FA0914C5B3;
-	Wed, 20 Nov 2024 16:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 983E6155335;
+	Wed, 20 Nov 2024 16:40:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JJJgIYDb"
+	dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b="JTrwn96T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2C113BC12
-	for <linux-kselftest@vger.kernel.org>; Wed, 20 Nov 2024 16:34:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2AB415531A
+	for <linux-kselftest@vger.kernel.org>; Wed, 20 Nov 2024 16:40:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732120486; cv=none; b=X/e+NN9PSdQ86ND9pWrKL2DFtz8+T2Q/Ux+um3m3xh6F//uhpbemp0fZpsbpnhVhPrpzbtBCNmMGh+KO6v8ZT86rIP3ENS6X+h+mq3wN1eh0H993zrsXPar7eqpsvVF9Uuj0Db6R8i2bM2Ar1w1OUyFW2/wy8nJNaMxXP9Jy1OM=
+	t=1732120855; cv=none; b=dPzGarvrTGIGeRLW30iOifGMi2G9ErV2yPB8sDvNXxRWTbm4Sw7oLvg+8LVCZcCGykPT2VqfEvFus4j2NilWVbjAWIwjhVwkuJ+UG11EKyDaBfCvbZInf281OK0slhtrO8OjZqF/BeOO795V7TqYvD2ZMcZ9N+c/4pleyTu9Q/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732120486; c=relaxed/simple;
-	bh=CnsBTMGWcf5M8NoeZ38IEeXK/Z4PUSA9a8D7eN7JuxA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=WAlSbm/1gp4T0xkhWy3VwVMekeldFOeh0U/KQBuRU8rLYqI/W65kXw/4H0Cd0fVoQQLUvw0+UYBbDhdPe6X5p0WHrvoUUGq9QcPQucX7knsPUKm0G5R6SobEsoWLTqLczd/emouU8UdLebi3kc/NQxuSDJ//Q10nWHjMULD2JYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JJJgIYDb; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732120484;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=B86g3yeGl3bc8HkRs4Pts1DK7V5+9VBe3Itq07US390=;
-	b=JJJgIYDbOaI7MKCBKKLsQzDN2al4/ppOnnVwBpVksALYQLHL0XMKuPon+NsWcGtg3Qr86O
-	/VzRqnyzZAr7KtUuIeUX8DHToozMs0orAgosSDhfx/xUemXKKhREmkbY/nSrIo1MUH8BEl
-	2SWAdChtfkA0KLnAqQEx7Qg+QVRK0bw=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-198-ONT_MSoFOs2pCD7g1UJ4IA-1; Wed, 20 Nov 2024 11:34:42 -0500
-X-MC-Unique: ONT_MSoFOs2pCD7g1UJ4IA-1
-X-Mimecast-MFC-AGG-ID: ONT_MSoFOs2pCD7g1UJ4IA
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7b14cb9f6f5so353520685a.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Nov 2024 08:34:42 -0800 (PST)
+	s=arc-20240116; t=1732120855; c=relaxed/simple;
+	bh=qFK5EvqBZ+FjmE22hL4UUAySxH2UgWn1OIf3kinQ/4M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nxaSuuJzYvJxzoOILpNdy3fXRn3WMnC391qZiwJ0fazFYLADsKm5tJd8/7e3pBiMf1Nz1A22Aqq2rE8HtzInE2ngJ+3ApVvv+VQz2Qgv9wSrcEJdp3avcRiSqVGPn9N0D2FiY3dL06PX/U1WicCoxIWjU1C3JfcbNeqi0iNjUIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b=JTrwn96T; arc=none smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-46096aadaf0so43278131cf.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Nov 2024 08:40:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen-com.20230601.gappssmtp.com; s=20230601; t=1732120853; x=1732725653; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qFK5EvqBZ+FjmE22hL4UUAySxH2UgWn1OIf3kinQ/4M=;
+        b=JTrwn96Ttky/UoBX+bQss/opbVOE+0VBNtYL4bVIeXW+wg8JYOmBiPNo9gEK2/ZQy4
+         QuRqprRu+sLYER/ohrktYDHWPUGiptJlWDJYvptSr/o0Bqji5LAqFyJ1O6A4M3FX4tXZ
+         wNiJltpw/yKf+bwS2YqY4jMAZ9KBykaAvU494brqAhXl1ach53sq/HAPysVm7MvjZi2p
+         KKYvg0zzJwIXh7W+56f5OHo9Hi4Wf7k24gDq0uZyPTZX1WUwrFJbM58O3xIi7q5efido
+         ukigsILg7vq01mp4uxGAWMBxjNX9AoPY9I11fwRYK/HBqTQQCzhrWTl0AbktuXRTuUeV
+         b7sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732120482; x=1732725282;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B86g3yeGl3bc8HkRs4Pts1DK7V5+9VBe3Itq07US390=;
-        b=ZAXvApVhZ34VUpZwLl/Ffb0TNHtj0JfocQzYZZKvcTN2WscW+psVzJLsakztztM8Oj
-         Aqxuj+oUpZEKrdZaxSKXfOI6FL5+N7EPex/3XHqbB9yFPTJ5AtHSpzw/x1P+TcD+dPvP
-         aA4JxSqZQzZs6/fLb6tnTnhBjrjhZCWQPBwpmroTy0OIYJs9OStPt2c9QjH8OCLTsK0p
-         9ox9Wt2112SB5qLj66dbch8aS3hf2k3tlwhGMfhLZyNX/EDHXOek0HMVswvjmjXNnaME
-         c744OF2DfhhlrqbHp0hLOmVI7hK20voBD9HBkiXSqyqJZI2mVIwY7DSsYCqkrReW8EHi
-         vhvg==
-X-Forwarded-Encrypted: i=1; AJvYcCVJHhtGZAJzpujMuhPTWiFqUP4jb98Ro1n8S2NyPCi/jsUtRcdlnDfkV0dmSUfWllNcaYDDJhrzf7NM/p4PzAI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUrQe1hVzh5FBu+ncAHuH1d4I4iLNxjg+VgvnwivMuY+N0nlM4
-	cMqXSwRRPXVZZfY4RJ52eiu2JzzyeUd9hXzuywivcYv7n6qIKk6q0tC21+PFNsjdzjenIchjUhM
-	uzZuU9NmVd4ckN7vYCTjY+w11vE9xmUjqVwincQYuMt2+OVmNSox5hhM9fww12nKuXA==
-X-Gm-Gg: ASbGncvsf49Xf4DMImp6JLBQux5cJtnlDLEuVkM2U9PvAqRhk0x2hVy/Pd+kJhGMrfV
-	aL72Jjw0ktiXLVeSWPs6oYpfFixL3hiUf/SxL9/Jy/M1jJLSjpt9OUcl/cfBOXVkz6dgPG0neMV
-	UNP+V97LqgwqFuwZUTiediTFw3Qi7Ou13svDS2Z20/h7YMecqF+WYQ3XIx8U5hIOcybWoF1fT6m
-	IpswaRvOwijgiTisptNFe/mJf3oy4hpNeFv6WCy2v/TJKnOLKTEDJqpHo1CMO1f2gNhDIgRVmZ5
-	Stck2jwb3VfLKWRniJ/U6miu2YpQGbCvp0A=
-X-Received: by 2002:a05:620a:1a90:b0:7b3:7e5e:8708 with SMTP id af79cd13be357-7b43bed4bd7mr355531985a.59.1732120482239;
-        Wed, 20 Nov 2024 08:34:42 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHW1sR9A/+saR1lpfmvKEOVIZYurnawvss8FWysYqEx/qwbDy9sFoGDQpoH7d4xuTE1Ki3dPQ==
-X-Received: by 2002:a05:620a:1a90:b0:7b3:7e5e:8708 with SMTP id af79cd13be357-7b43bed4bd7mr355524385a.59.1732120481951;
-        Wed, 20 Nov 2024 08:34:41 -0800 (PST)
-Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b48523f72bsm112716485a.104.2024.11.20.08.34.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Nov 2024 08:34:41 -0800 (PST)
-From: Valentin Schneider <vschneid@redhat.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
- x86@kernel.org, rcu@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter
- Anvin" <hpa@zytor.com>, Paolo Bonzini <pbonzini@redhat.com>, Wanpeng Li
- <wanpengli@tencent.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Andy
- Lutomirski <luto@kernel.org>, Frederic Weisbecker <frederic@kernel.org>,
- "Paul E. McKenney" <paulmck@kernel.org>, Neeraj Upadhyay
- <quic_neeraju@quicinc.com>, Joel Fernandes <joel@joelfernandes.org>, Josh
- Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan
- <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, Andrew
- Morton <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>,
- Christoph Hellwig <hch@infradead.org>, Lorenzo Stoakes
- <lstoakes@gmail.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron
- <jbaron@akamai.com>, Kees Cook <keescook@chromium.org>, Sami Tolvanen
- <samitolvanen@google.com>, Ard Biesheuvel <ardb@kernel.org>, Nicholas
- Piggin <npiggin@gmail.com>, Juerg Haefliger
- <juerg.haefliger@canonical.com>, Nicolas Saenz Julienne
- <nsaenz@kernel.org>, "Kirill A. Shutemov"
- <kirill.shutemov@linux.intel.com>, Nadav Amit <namit@vmware.com>, Dan
- Carpenter <error27@gmail.com>, Chuang Wang <nashuiliang@gmail.com>, Yang
- Jihong <yangjihong1@huawei.com>, Petr Mladek <pmladek@suse.com>, "Jason A.
- Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>, Julian Pidancet
- <julian.pidancet@oracle.com>, Tom Lendacky <thomas.lendacky@amd.com>,
- Dionna Glaze <dionnaglaze@google.com>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?=
- <linux@weissschuh.net>, Juri Lelli <juri.lelli@redhat.com>, Marcelo
- Tosatti <mtosatti@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>, Daniel
- Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
-Subject: Re: [RFC PATCH v3 08/15] sched/clock, x86: Make
- __sched_clock_stable forceful
-In-Reply-To: <20241120145904.GK19989@noisy.programming.kicks-ass.net>
-References: <20241119153502.41361-1-vschneid@redhat.com>
- <20241119153502.41361-9-vschneid@redhat.com>
- <20241120145904.GK19989@noisy.programming.kicks-ass.net>
-Date: Wed, 20 Nov 2024 17:34:32 +0100
-Message-ID: <xhsmhv7whhnjb.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+        d=1e100.net; s=20230601; t=1732120853; x=1732725653;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qFK5EvqBZ+FjmE22hL4UUAySxH2UgWn1OIf3kinQ/4M=;
+        b=G5PYKxKwODk7y9hreDhjojKbLHqSQTwjJQThiTepCQzA5/+da+UmuzkPVic/WzSXA8
+         uMMe+I1f91WqQdNBqte0BPbqlDMjRdnttaDGLXIok0b6z6V9M/cABsZmtQcBuhZpAxoO
+         AX8BsmwZPWFMU/rjnOKF/RHxQd/1tGhJKrVn5lJxYcjxJktCWktuJONvQLqa3tyqXfhW
+         66ADY1f2dnixzOmmcAzu1+WfdPiZKp3rch/jhF8fflBEGwRy5y+idsCq3S3vOO4QkG8d
+         UojjPIMJ51IqahGtmwfQU5HZSntMUYmVhTSHxnQt7vMLQiGme7bMW9sm0hB6YfxYDM/L
+         vbCw==
+X-Forwarded-Encrypted: i=1; AJvYcCVttd8p4imW5cNHbUMl6VXn1YFXbykg0KOm/r/adyMvgbQsBS0QqQ7cWkvF4qEmfKIhJVQRXFX4nr329KyTeSI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzxz8RoV5qkHoZhYeRixa3YaMujpKtWOtPqtRSMTSZybtWQWKmv
+	/5/0n/njAZLa98Z6oMTLwmzXFaQnWe8xCPSudLxGpAO/0+8jDv33/6RB6TicK9UtUpll/CrM6uw
+	JRDT8l8FL8Fw8k8L2s9N19rj5tz1/xXGsnqL89w==
+X-Google-Smtp-Source: AGHT+IGVXXSe3/jOn7/F0+v6GfoX8kW0XiYKv4M7VEKR+QzShMxf6KNfCHMwiuPpKZqaaCv3T5XpK+zCdLzMyTPmntk=
+X-Received: by 2002:a05:622a:5496:b0:464:b81c:316e with SMTP id
+ d75a77b69052e-464b82b74c4mr29186591cf.6.1732120852696; Wed, 20 Nov 2024
+ 08:40:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20241116175922.3265872-1-pasha.tatashin@soleen.com> <87wmgxvs81.fsf@linux.intel.com>
+In-Reply-To: <87wmgxvs81.fsf@linux.intel.com>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Wed, 20 Nov 2024 11:40:15 -0500
+Message-ID: <CA+CK2bDTKXuTHq7EOvErWFRe9XRGq9UF5L-LmzX3jhWd40_KbQ@mail.gmail.com>
+Subject: Re: [RFCv1 0/6] Page Detective
+To: Andi Kleen <ak@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	akpm@linux-foundation.org, corbet@lwn.net, derek.kiernan@amd.com, 
+	dragan.cvetic@amd.com, arnd@arndb.de, gregkh@linuxfoundation.org, 
+	viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, tj@kernel.org, 
+	hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev, 
+	shakeel.butt@linux.dev, muchun.song@linux.dev, Liam.Howlett@oracle.com, 
+	lorenzo.stoakes@oracle.com, vbabka@suse.cz, jannh@google.com, 
+	shuah@kernel.org, vegard.nossum@oracle.com, vattunuru@marvell.com, 
+	schalla@marvell.com, david@redhat.com, willy@infradead.org, osalvador@suse.de, 
+	usama.anjum@collabora.com, andrii@kernel.org, ryan.roberts@arm.com, 
+	peterx@redhat.com, oleg@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 20/11/24 15:59, Peter Zijlstra wrote:
-> On Tue, Nov 19, 2024 at 04:34:55PM +0100, Valentin Schneider wrote:
->> Later commits will cause objtool to warn about non __ro_after_init static
->> keys being used in .noinstr sections in order to safely defer instruction
->> patching IPIs targeted at NOHZ_FULL CPUs.
->> 
->> __sched_clock_stable is used in .noinstr code, and can be modified at
->> runtime (e.g. KVM module loading). Suppressing the text_poke_sync() IPI has
+On Wed, Nov 20, 2024 at 10:29=E2=80=AFAM Andi Kleen <ak@linux.intel.com> wr=
+ote:
 >
-> Wait, what !? loading KVM causes the TSC to be marked unstable?
+> Pasha Tatashin <pasha.tatashin@soleen.com> writes:
+>
+> > Page Detective is a new kernel debugging tool that provides detailed
+> > information about the usage and mapping of physical memory pages.
+> >
+> > It is often known that a particular page is corrupted, but it is hard t=
+o
+> > extract more information about such a page from live system. Examples
+> > are:
+> >
+> > - Checksum failure during live migration
+> > - Filesystem journal failure
+> > - dump_page warnings on the console log
+> > - Unexcpected segfaults
+> >
+> > Page Detective helps to extract more information from the kernel, so it
+> > can be used by developers to root cause the associated problem.
+> >
+> > It operates through the Linux debugfs interface, with two files: "virt"
+> > and "phys".
+> >
+> > The "virt" file takes a virtual address and PID and outputs information
+> > about the corresponding page.
+> >
+> > The "phys" file takes a physical address and outputs information about
+> > that page.
+> >
+> > The output is presented via kernel log messages (can be accessed with
+> > dmesg), and includes information such as the page's reference count,
+> > mapping, flags, and memory cgroup. It also shows whether the page is
+> > mapped in the kernel page table, and if so, how many times.
+>
+> A lot of all that is already covered in /proc/kpage{flags,cgroup,count)
+> Also we already have /proc/pid/pagemap to resolve virtual addresses.
+>
+> At a minimum you need to discuss why these existing mechanisms are not
+> suitable for you and how your new one is better.
 
-Ah, maybe not, I saw the below but that's actually the x86 specific stuff
-and IIUC can only be builtin:
+Hi Andi,
 
-  kvm_init_platform()
-  `\
-    kvmclock_init()
-    `\
-      kvm_sched_clock_init()
-      `\
-        clear_sched_clock_stable()
+Thanks for your feedback! I will extend the cover letter in the next
+version to address your comment about comparing with the existing
+methods.
 
-There is however this:
+We periodically receive rare reports of page corruptions detected
+through various methods (journaling, live migrations, crashes, etc.)
+from userland. To effectively root cause these corruptions, we need to
+automatically and quickly gather comprehensive data about the affected
+pages from the kernel.
 
-  kvm_arch_vcpu_load()
-  `\
-    mark_tsc_unstable()
+This includes:
 
-So plugging a VCPU might do that.
+- Obtain all metadata associated with a page.
+- Quickly identify all user processes mapping a given page.
+- Determine if and where the kernel maps the page, which is also
+important given the opportunity to remove guest memory from the kernel
+direct map (as discussed at LPC'24).
 
+We also plan to extend this functionality to include KVM and IOMMU
+page tables in the future.
+<pagemap> provides an interface to traversing through user page
+tables, but the other information cannot be extracted using the
+existing interfaces.
+
+To ensure data integrity, even when dealing with potential memory
+corruptions, Page Detective minimizes reliance on kernel data
+structures. Instead, it leverages direct access to hardware structures
+like page tables, providing a more reliable view of page mappings.
+
+> If something particular is missing perhaps the existing mechanisms
+> can be extended?
+> Outputting in the dmesg seems rather clumpsy for a production mechanism.
+
+I am going to change the output to a file in the next version.
+
+> I personally would just use live crash or live gdb on /proc/kcore to get
+> extra information, although I can see that might have races.
+
+For security reasons crash is currently not available on our
+production fleet machines as it potentially provides access to all
+kernel memory.
+
+Thank you,
+Pasha
 
