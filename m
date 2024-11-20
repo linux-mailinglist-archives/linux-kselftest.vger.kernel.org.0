@@ -1,170 +1,150 @@
-Return-Path: <linux-kselftest+bounces-22364-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22365-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 008E19D40A1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 17:56:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 252BD9D3FD9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 17:16:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B5CDB38AD7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 16:14:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A473B1F21A78
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 16:16:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5149B145A07;
-	Wed, 20 Nov 2024 16:14:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16B8E1547D2;
+	Wed, 20 Nov 2024 16:15:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b="cdtUej7x"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G1uz6jPL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92368137930
-	for <linux-kselftest@vger.kernel.org>; Wed, 20 Nov 2024 16:14:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E8C213BC39
+	for <linux-kselftest@vger.kernel.org>; Wed, 20 Nov 2024 16:15:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732119258; cv=none; b=mS71J7KhE3iqX3azT8oyH3buZTX1omFrTJonsIaWtQwwfT8sbwz5+OhESqoI5imQT8p4awwhWb/3b8HiZpawXRfVRe1mHeEjjTkwMBvtPmtEeydEA1tOQ0+zGaPKMH4eAysNcdBmyYsrO13SUk5d+7h+EQv3xYVaoIDl9V15IP8=
+	t=1732119339; cv=none; b=QrITFDpWez/WJlJJbIC2mx522lq0zBa3J2mAlTpoozbmvHBMA7e/Qcmyci8OpA1qXyWeZPiG+KAATotoNUuyCZACjBw+x9xQy25T1eDp4YXAFfiC79vgX8j+6F52Ta5sWCf8HNow5iLolzMOlVO/URmCIqb6TU5+cFiow3QvFeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732119258; c=relaxed/simple;
-	bh=g7QfRcSQn+gmJxBWhXW/TDF3sI8DjgoFIAHLcTGc4so=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XUSugQTlvVAlYLmH5o4hCrekyTkLnwD9jb0c85I4IJc3WoSD7gMbjX6Y+bCa3qLHh5EVHSh23MLYmZzQdB9mDcrw0hFv8CDW2oHUVuzp8vGMGY9VbYKXVjwdPBwnRc1FSQYUg8sefrjY4qHTozTSO7JC/9XieEdZkAH6gxHXMZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b=cdtUej7x; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7b158542592so304683385a.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Nov 2024 08:14:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen-com.20230601.gappssmtp.com; s=20230601; t=1732119255; x=1732724055; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=36mHAHuOoczvUZMevzRpdY4PbCa8tx9CNRg6h+RZgJg=;
-        b=cdtUej7x3IYT7y9XJ5WDfNS9BQ4CEugaJF8mLkReIuZbp5SQ/cK64/1lRDqsOpxXJh
-         Y8Ff8MiwLAO1wHoXCjkhaDeld6ozrWthThzAp+so1nL2OdjduAekmqw8OsIqhh41Jzai
-         ibnhz7uY0+tDvht+9a/2BttZjOLFPQ1avZApk899yvcXXedUBE3p7pVbDOtCsw6s/+Iz
-         duWxuy8NdbUiBfYvGo0HhnYCvH6vB9vyAu4HLJ7JbfePlXAaf+09m/GzcmXv7mXA9nLi
-         b03CrcZYUWBWHkCZr04GHkHYIfBBzxX0kbGb1aANjN16nwSLG/eN6ARZF9GZaeL/hVlY
-         SLnw==
+	s=arc-20240116; t=1732119339; c=relaxed/simple;
+	bh=VNWYPyllDhn6wyHA8vHCBZcrdTpypW9KdBxrUGgTSiU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ASSf6V66TlpxjKMP5BROhf0XXPdYf9/1a7C7kpUXcS4VLmOHGGeKl7uXYNhCfndYAtlyF5VGBdqtOmQ8aw6XGw5Y/REkj1HeI3hWCyZFR7H4andhF4Lv3dV8BO3mwUQUICce2/dSma8yvkuidgrnt6OjD7Tl8pjRDIBKb/F5r04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G1uz6jPL; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1732119334;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=s9neiNV5Ecw1Rm63FFkLc6Zp+LPvspTbTCjcardEBqA=;
+	b=G1uz6jPLbm+WxV/Bc/TO1dGFl1/vH/4Gq5Cak83jnxAo5uKcVe+ZRSQyqtm9aFV/YgNZ5i
+	jxrsAwRjFox1c3aoHLM0+w6tCQLBVwSHptoLD6lLc/yXQPSXA+kYIlRCEj97kDuj489p9p
+	Hud7K6vFOzUitKjnC2z1RH/yitCJKYk=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-606--_SYUfT0Pz20HkSEZDolWg-1; Wed, 20 Nov 2024 11:15:28 -0500
+X-MC-Unique: -_SYUfT0Pz20HkSEZDolWg-1
+X-Mimecast-MFC-AGG-ID: -_SYUfT0Pz20HkSEZDolWg
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6d4189482d8so32440416d6.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Nov 2024 08:15:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732119255; x=1732724055;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=36mHAHuOoczvUZMevzRpdY4PbCa8tx9CNRg6h+RZgJg=;
-        b=DybceZXo4MMR/whHbqvMNR/ZR9p/BsSSc0H5A2NFasBwNjI7AfaBZGCbndi+ywM5JT
-         Ep5P0pLIZaF/xEcYhipXeUncQBNXRccDGZi9zo40dplaWQezXFIyJEOsjPLFyKYaMwBW
-         i7L3rIJOiMhlZdg4zdU81I3J+eaZjcOP0YA0lN1HlBXp8k/0hsuu+yACRffEgFliY7v9
-         YL3P64OMio3Hew0YRK+ukYbK2iZlKbiNGBecUC7N3TMRe6DHH15gK2yDn+SHWEV0HjzO
-         H3eU+O9Qc0j9guZfVZPzL1UZLACzRbnco4V3xz3mD31Pn+mbgxD3zCL4/ydupQ5CsaZe
-         4KXw==
-X-Forwarded-Encrypted: i=1; AJvYcCWY+IxS+ebQ0OO2WTKBvnY9JMeFAM2RAGB/RbWA/qHxtiShTgEB0xDTzly719oD9KbEU4t4wvmGfCF4wlXMgSk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxgq9CShCKIsctTqyOm3E7m/6gpPaOkKHILLSKxtduWTZuiyC3w
-	r2ZKAQ5/aJOKMAd8lXq4PIi5vpgcfoT+T0cQTAL6AuAZBi6VZgcnwbs9rGnNx+pmEAuugIsoasF
-	T4gKDVaZeDVCVstg8yAkAHBRRD+ZEufQHlT2uZg==
-X-Google-Smtp-Source: AGHT+IFt7Yq3qdxAOZPq5rfspDx9bBIP2Xc48nqDhvTlFobjMOD2awIarz0pB2lJFk6Gsup7XNJxHXCOtbCvhDGq3MA=
-X-Received: by 2002:a05:622a:14d2:b0:458:5ed8:628 with SMTP id
- d75a77b69052e-464777e2232mr41870841cf.2.1732119255280; Wed, 20 Nov 2024
- 08:14:15 -0800 (PST)
+        d=1e100.net; s=20230601; t=1732119324; x=1732724124;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s9neiNV5Ecw1Rm63FFkLc6Zp+LPvspTbTCjcardEBqA=;
+        b=hQ1ll2rXa1pD66MMn4v30aTCvUXlruVdShYHg4rNT4IrClWytDsMsxwP26pAbb9/Mn
+         qUChyesDBSdHBCDVoTtOHEqY0Wq8At1Lx6y9w0vB4zSzmQNAJfPRVe/pKlxAcpm+cU1T
+         ZmUpfnlDSgPN/m7Jd3DYEJyL1ETTzm2dd3/FUjvHGZyRPqjuyPIs7cM//+aPrOcJsRwk
+         TNxQC82Ns21R/uccw6oFzMHAC2ShtJmE/drOsCZuM2fgWjuhawJ10c5BetCCaJodQqWZ
+         am9Wkc/pBhMdA1uUZ6JYVKPgOsVU6zyk3kIWVFC2qn4xh9ui/T4NluKoiGZCkmK7G3xG
+         twzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUgjfgP+oAck0DwFfQO4XN8V0kqCaPmTDxJHd/HG/A8zi1VZ7G7p52L/aDcmKt70vOgPEMNs3xrN1EnIeMaibE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnG9jbtfplgGPbdd+e48owg9lRfXCfUdqrUMtHUxaRjJII/wSX
+	5F5QYzl9Ilx60FNvYIoOBz84xg9VyWUjui1vsrkNv7eBSsmstU7QBJOUPoVeV6v8arffmBEJdnM
+	YK2X9Eg8Wocu1CzeWZn5/MBWLqXTINbFpyJkf4XLkw9Eb3TsOpTZugqE1WWcyt/RisA==
+X-Gm-Gg: ASbGnctZ/DfhA9EMyKruMMp8Zz0IZhaN0GlX4j/yujU1vTfSg1jtCIR01jR+8wwJ+XO
+	MCNB90zOnzOqscuDa/H4oku3eGg7fd7gPgRDNps1qsM3s9XVmtI4uRjrGxBntAUntROJYSIimAB
+	tPqwwCRJhdHE2XiC2skgZpV7vUBo9QiMF7jZzjRzoAk9qlr3IoUREjCEm/MazO/zyN9cJYXxN+z
+	YNO4ocVPbmu8cw8j6R+AAByw0dzmmgSB7dFxmn5q0FYkZXAkaWtwLfcyMcyNB+BXC7LlO0uw72a
+	p4ypot0Rzx5YoiidS8X+1nnXng82NKPWLLM=
+X-Received: by 2002:a05:6214:2aa7:b0:6d4:1f86:b1f2 with SMTP id 6a1803df08f44-6d4377bd8bcmr43340486d6.11.1732119324041;
+        Wed, 20 Nov 2024 08:15:24 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IErytLY/ydBtG/c68cV9sB/Rs0q2MHssCkf2mLl/ZoHSY4DaUVm1Hfo6p7yhhfkcknSTmK2WQ==
+X-Received: by 2002:a05:6214:2aa7:b0:6d4:1f86:b1f2 with SMTP id 6a1803df08f44-6d4377bd8bcmr43339716d6.11.1732119323729;
+        Wed, 20 Nov 2024 08:15:23 -0800 (PST)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d43812ab67sm12352206d6.88.2024.11.20.08.15.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Nov 2024 08:15:22 -0800 (PST)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
+ x86@kernel.org, rcu@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ "Paul E . McKenney" <paulmck@kernel.org>, Steven Rostedt
+ <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, Jonathan
+ Corbet <corbet@lwn.net>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, Paolo
+ Bonzini <pbonzini@redhat.com>, Wanpeng Li <wanpengli@tencent.com>, Vitaly
+ Kuznetsov <vkuznets@redhat.com>, Andy Lutomirski <luto@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay
+ <quic_neeraju@quicinc.com>, Joel Fernandes <joel@joelfernandes.org>, Josh
+ Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan
+ <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, Andrew
+ Morton <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>,
+ Christoph Hellwig <hch@infradead.org>, Lorenzo Stoakes
+ <lstoakes@gmail.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron
+ <jbaron@akamai.com>, Kees Cook <keescook@chromium.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Ard Biesheuvel <ardb@kernel.org>, Nicholas
+ Piggin <npiggin@gmail.com>, Juerg Haefliger
+ <juerg.haefliger@canonical.com>, Nicolas Saenz Julienne
+ <nsaenz@kernel.org>, "Kirill A. Shutemov"
+ <kirill.shutemov@linux.intel.com>, Nadav Amit <namit@vmware.com>, Dan
+ Carpenter <error27@gmail.com>, Chuang Wang <nashuiliang@gmail.com>, Yang
+ Jihong <yangjihong1@huawei.com>, Petr Mladek <pmladek@suse.com>, "Jason A.
+ Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>, Julian Pidancet
+ <julian.pidancet@oracle.com>, Tom Lendacky <thomas.lendacky@amd.com>,
+ Dionna Glaze <dionnaglaze@google.com>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?=
+ <linux@weissschuh.net>, Juri Lelli <juri.lelli@redhat.com>, Marcelo
+ Tosatti <mtosatti@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>, Daniel
+ Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
+Subject: Re: [RFC PATCH v3 04/15] rcu: Add a small-width RCU watching
+ counter debug option
+In-Reply-To: <20241120145049.GI19989@noisy.programming.kicks-ass.net>
+References: <20241119153502.41361-1-vschneid@redhat.com>
+ <20241119153502.41361-5-vschneid@redhat.com>
+ <20241120145049.GI19989@noisy.programming.kicks-ass.net>
+Date: Wed, 20 Nov 2024 17:15:14 +0100
+Message-ID: <xhsmh1pz5j2zx.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241116175922.3265872-1-pasha.tatashin@soleen.com>
- <ZzuRSZc8HX9Zu0dE@google.com> <CA+CK2bAAigxUv=HGpxoV-PruN_AhisKW675SxuG_yVi+vNmfSQ@mail.gmail.com>
- <2024111938-anointer-kooky-d4f9@gregkh> <CA+CK2bD88y4wmmvzMCC5Zkp4DX5ZrxL+XEOX2v4UhBxet6nwSA@mail.gmail.com>
- <ZzzXqXGRlAwk-H2m@google.com> <CA+CK2bD4zcXVATVhcUHBsA7Adtmh9LzCStWRDQyo_DsXxTOahA@mail.gmail.com>
- <CAJD7tkZDSZ4QjLhkWQ3RV_vEwzTfCMtFcWX_Fx8mj-q0Zg2cOw@mail.gmail.com>
-In-Reply-To: <CAJD7tkZDSZ4QjLhkWQ3RV_vEwzTfCMtFcWX_Fx8mj-q0Zg2cOw@mail.gmail.com>
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Wed, 20 Nov 2024 11:13:37 -0500
-Message-ID: <CA+CK2bC-jNxUgp9JB=H9GsMu1FrxyqXxCe_v1G-43A1-eed0VA@mail.gmail.com>
-Subject: Re: [RFCv1 0/6] Page Detective
-To: Yosry Ahmed <yosryahmed@google.com>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>, Greg KH <gregkh@linuxfoundation.org>, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-doc@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, akpm@linux-foundation.org, corbet@lwn.net, 
-	derek.kiernan@amd.com, dragan.cvetic@amd.com, arnd@arndb.de, 
-	viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, tj@kernel.org, 
-	hannes@cmpxchg.org, mhocko@kernel.org, shakeel.butt@linux.dev, 
-	muchun.song@linux.dev, Liam.Howlett@oracle.com, lorenzo.stoakes@oracle.com, 
-	vbabka@suse.cz, jannh@google.com, shuah@kernel.org, vegard.nossum@oracle.com, 
-	vattunuru@marvell.com, schalla@marvell.com, david@redhat.com, 
-	willy@infradead.org, osalvador@suse.de, usama.anjum@collabora.com, 
-	andrii@kernel.org, ryan.roberts@arm.com, peterx@redhat.com, oleg@redhat.com, 
-	tandersen@netflix.com, rientjes@google.com, gthelen@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Tue, Nov 19, 2024 at 2:36=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com>=
- wrote:
+On 20/11/24 15:50, Peter Zijlstra wrote:
+> On Tue, Nov 19, 2024 at 04:34:51PM +0100, Valentin Schneider wrote:
+>> A later commit will reduce the size of the RCU watching counter to free up
+>> some bits for another purpose. Paul suggested adding a config option to
+>> test the extreme case where the counter is reduced to its minimum usable
+>> width for rcutorture to poke at, so do that.
+>> 
+>> Make it only configurable under RCU_EXPERT. While at it, add a comment to
+>> explain the layout of context_tracking->state.
 >
-> On Tue, Nov 19, 2024 at 11:30=E2=80=AFAM Pasha Tatashin
-> <pasha.tatashin@soleen.com> wrote:
-> >
-> > On Tue, Nov 19, 2024 at 1:23=E2=80=AFPM Roman Gushchin <roman.gushchin@=
-linux.dev> wrote:
-> > >
-> > > On Tue, Nov 19, 2024 at 10:08:36AM -0500, Pasha Tatashin wrote:
-> > > > On Mon, Nov 18, 2024 at 8:09=E2=80=AFPM Greg KH <gregkh@linuxfounda=
-tion.org> wrote:
-> > > > >
-> > > > > On Mon, Nov 18, 2024 at 05:08:42PM -0500, Pasha Tatashin wrote:
-> > > > > > Additionally, using crash/drgn is not feasible for us at this t=
-ime, it
-> > > > > > requires keeping external tools on our hosts, also it requires
-> > > > > > approval and a security review for each script before deploymen=
-t in
-> > > > > > our fleet.
-> > > > >
-> > > > > So it's ok to add a totally insecure kernel feature to your fleet
-> > > > > instead?  You might want to reconsider that policy decision :)
-> > > >
-> > > > Hi Greg,
-> > > >
-> > > > While some risk is inherent, we believe the potential for abuse her=
-e
-> > > > is limited, especially given the existing  CAP_SYS_ADMIN requiremen=
-t.
-> > > > But, even with root access compromised, this tool presents a smalle=
-r
-> > > > attack surface than alternatives like crash/drgn. It exposes less
-> > > > sensitive information, unlike crash/drgn, which could potentially
-> > > > allow reading all of kernel memory.
-> > >
-> > > The problem here is with using dmesg for output. No security-sensitiv=
-e
-> > > information should go there. Even exposing raw kernel pointers is not
-> > > considered safe.
-> >
-> > I am OK in writing the output to a debugfs file in the next version,
-> > the only concern I have is that implies that dump_page() would need to
-> > be basically duplicated, as it now outputs everything via printk's.
+> Note that this means it will get selected by allyesconfig and the like,
+> is that desired?
 >
-> Perhaps you can refactor the code in dump_page() to use a seq_buf,
-> then have dump_page() printk that seq_buf using seq_buf_do_printk(),
-> and have page detective output that seq_buf to the debugfs file?
 
-Good idea, I will look into modifying it this way.
+I would say no
 
-> We do something very similar with memory_stat_format(). We use the
+> If no, depends on !COMPILE_TEST can help here.
 
-void mem_cgroup_print_oom_meminfo(struct mem_cgroup *memcg)
-{
-        /* Use static buffer, for the caller is holding oom_lock. */
-        static char buf[PAGE_SIZE];
-        ....
-        seq_buf_init(&s, buf, sizeof(buf));
-        memory_stat_format(memcg, &s);
-        seq_buf_do_printk(&s, KERN_INFO);
-}
+Noted, thank you!
 
-This is a callosal stack allocation, given that our fleet only has 8K
-stacks. :-)
-
-> same function to generate the memcg stats in a seq_buf, then we use
-> that seq_buf to output the stats to memory.stat as well as the OOM
-> log.
 
