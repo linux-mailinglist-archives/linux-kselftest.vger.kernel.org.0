@@ -1,119 +1,264 @@
-Return-Path: <linux-kselftest+bounces-22342-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22343-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47E219D38D8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 11:57:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC4579D3941
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 12:16:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBBE3B289B9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 10:57:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EFC82B2E190
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 11:12:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A9511A01BE;
-	Wed, 20 Nov 2024 10:56:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D89719EED6;
+	Wed, 20 Nov 2024 11:12:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1/Wx7Flr"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="Y/rDaiDe";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="e5y1mmt8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-b1-smtp.messagingengine.com (flow-b1-smtp.messagingengine.com [202.12.124.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACC2719E99B
-	for <linux-kselftest@vger.kernel.org>; Wed, 20 Nov 2024 10:56:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064EB18660C;
+	Wed, 20 Nov 2024 11:12:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732100211; cv=none; b=Ky6PA3bBHAsnlqk5fh02EIwwUsA5pm1IrVK6sQQOwgSyhEwLIhrO6PzubyiOYVWHJRfUeq6+bEd/hefvtNND7HWqusoVAOqo65XOjIsSEDTcexKKtA4MHBczXJm0yeDmtKZHJxUQYhsXys1uJ8v1cPCupUaPwaIrYm1SpwpU3FQ=
+	t=1732101147; cv=none; b=p5KC9Ph+fENcIXA23zMvFHgnI5idE4MCLsaIZ735eYb5V9ZvCO5N9dSK+4Eptbvd+dq93OHFiSL19dNasNZeKUkBaTOycp0yIUyt8QfT/hHnTONc3UqKOkv/aQtWlpq0hsVGOMxMOthprruwH9uiMXCrVw0Erfxsr4395Xz6oCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732100211; c=relaxed/simple;
-	bh=R5Sd6loj5EJcii2NLPGZvmbISqB4vmDy06J8WmMBhj8=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Na4OJoKghks1fVUuOIeoLjuAVqIfz+ULRXawR1mcaKWD0BhwttaKeceFRs3cQaIrD0UwIUGLL1Bv7CLsCECj0TDONEbihNzYk/zKaCmPoDHb0dBvoQnk7lNUKFO7eqMMT16aHn8dMOKvlPgzciNABlbxB4AxvEWIs+BA6xw9aFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1/Wx7Flr; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4608dddaa35so708081cf.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Nov 2024 02:56:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1732100208; x=1732705008; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=R5Sd6loj5EJcii2NLPGZvmbISqB4vmDy06J8WmMBhj8=;
-        b=1/Wx7FlrzBz3ykAzb9HIjs8WJFlJbuvZxAwph3YI355bkufo142GpIZYPLnyxfa98c
-         EJ1q6jRBh7oPtdRJD8o5GnqeqR8RF9erLzPrPUV1qXsQyEvLhFZ/OjMVOc71k4gy/U/D
-         Df/1OeGFoz2YR7v4z9DeF63cyqULRABG5J/4iMFZjBX2MnTaVqZv05j4XZklTIyRvVLh
-         mbUSiC6K6EiOHLxnpbcfYKBlgphO5tXyJnutUBcRqqXqPgnE97WCvoTNQI1PSieSOKvx
-         8W+gusskOmBAKd0RsM4zwPY9faMvQsmfcywqOzQxNSXN01lpA8E9VpYjB88wO5V/Xz1F
-         c4pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732100208; x=1732705008;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R5Sd6loj5EJcii2NLPGZvmbISqB4vmDy06J8WmMBhj8=;
-        b=Mz1PubgW7zpnq60xd0PeD5gqfvx6/7sIcvgGYqNK7qfb55NSR06KWwj7LahoKE/tUD
-         jdhFI0ympyyYZTobRTc+ps4ooDWKpT2jC6yIPR5NmCsWMy26vFPIwKMuXJyZ9rX+EXnL
-         0oAVk1FHA1crRLijrzYUpKD3InBFRkbFw8vAkT6TNlcQL63T+qeFFhf7XmVHtER/ZRLK
-         jMF+xQvSsKcp8ADVOkxG05YBgV7wpQFtgwArTCSFpnALNP2EkK4NQA52Vksv2Z8X5TZd
-         8whjYZ6F65/0MEXzXzXiBG7aI4yAEgTd5ygvDwwIQlCp1msOuvSnd5PerglkXQ1/iLa8
-         ucVw==
-X-Forwarded-Encrypted: i=1; AJvYcCWLp4rRnHCiuKl/rWieiRPUPEN0l/H9lGSTkUxrUgk2K9mTsmYMHrpyEizeUcM9d+wBqpp/0Vs6UEoPWENb0nw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrvakKah1hvYDHOssqKULpKjAEyWVzR5GDC8BBg8j8HZxBD+D+
-	qGV4WmNlDrEtKnd2zemvojEalEBKV2MMCSU9UopNFnXJ5th1I6TNVnpEgMMxKjdizCvi4gp5Bud
-	6nQvEsY0OXZD4/kpynB2qUm6q4Mz1VLiy9fXt
-X-Gm-Gg: ASbGncvCKQQQW/G3spICptLyiELMxbUpUqJH+zUYPAorGnjKDqKepi2lb4KbU5Y4yHu
-	aIlBLixbX+uS/KuUOuKPfW1K4ACANJWj8yDdpV3oTgw8zAgJ78u6TUE0lOVTo
-X-Google-Smtp-Source: AGHT+IHOei8nFMFF4TTbyZshOJG5RNeCMFKpJQk1wMiqpk7eZsHz/J//8k+nRa9rsxbTP9Mz2H0m1Rxg4oT8A/Ho4Kw=
-X-Received: by 2002:a05:622a:1c0b:b0:460:f093:f259 with SMTP id
- d75a77b69052e-46426a0e5e9mr3212521cf.22.1732100208367; Wed, 20 Nov 2024
- 02:56:48 -0800 (PST)
+	s=arc-20240116; t=1732101147; c=relaxed/simple;
+	bh=3KHS//OY/HIA0qzFt0DX5aKhWCemKs4JD8VNmLjn0dU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KNMczLpIxget6dYHgS/n3X6gDFx4OIaS2oTFGayHSmdi6/jp8SubT2DCXTo8a0WPKIW2aDJX2/7hLeYkNk7hufI6AZzZiZqUYnhhfUvPO1/41p2x3f87QiXMH5cQK2DmnpdkB0hvemNvSJMHdmBXGUseQQtxUBY3NQNur5k75ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=Y/rDaiDe; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=e5y1mmt8; arc=none smtp.client-ip=202.12.124.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
+	by mailflow.stl.internal (Postfix) with ESMTP id 80E3D1D40620;
+	Wed, 20 Nov 2024 06:12:21 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Wed, 20 Nov 2024 06:12:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1732101141; x=
+	1732104741; bh=DApLaSVM4QKDiwTBCrt3VEL8I5Jx9sguAKIR2PFbkXM=; b=Y
+	/rDaiDeTo2O35FAoBXtaVBVgN3CqBWhJk5nNgdscdvP2wBzK+Zjhxunb9H8M1WqG
+	6H3NAI+LuvSSyFBtwXtDkg28qZA1rEe6mAPnYuFQQviApqOzXKFEMBzrVnGmOakV
+	BJNgIgOG79nzJ+KOJpluAUiEgLYGtzBQ6EwhAFtkItkkpN+g9SWcbIAqI1bGOkGY
+	tEtzoua8F3/ymO4kW/Qt593V72MiTB361aTr1zDzdkjjAFyjo+AVoWlHhGzgK2L0
+	KuWe/5KVaEZxRgNZ4tBcigoFlOnUpX547RBoGoiY7Jz2abcZfee50LMwIPlSYyhA
+	7H8uoSbwXDbc+g+RidUbw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1732101141; x=1732104741; bh=DApLaSVM4QKDiwTBCrt3VEL8I5Jx9sguAKI
+	R2PFbkXM=; b=e5y1mmt8GPoXZDT7wyG7K/THb4GUrfZBRFUUBA0cTjGLqnnkuqD
+	aGzRksZWx2UPjZmke4VlGpB7RQ95ZIRasdJ3JOSv4kXSaOiz7XomSrPyc8qg7n1N
+	Civ4rl4rcBtQiqWb9Vd/VKc7smNurBnzp2ugMKklkKUmcjLZ47Wbf19UGTQq6UWC
+	2MqUoyvdPqCb/vtW9eNDODGz8QMw1k/2YT5ohT2b8Btw+O2A4tji5e99JnN6ZclO
+	IbMXxMow2IziocvSwcaFfRX45ot0jK+VsHxSAJdy2B6up4zTlqrZNP8JLtZtRncd
+	77L3PjSdnypw/0pzgp4olh43EXkmOcvue0A==
+X-ME-Sender: <xms:FMQ9Z7-FHYqPpFYtlwonyv-0bgiAmsa7Yc9jaB_tVNiC3c5FbMbeZA>
+    <xme:FMQ9Z3uoxYp9LYEpclXlUDsWiC7MvPKad__Yqw76NYLRdDdknKSqbofYfeV_D4-TY
+    hq_PGS9BoUZJJj1Epw>
+X-ME-Received: <xmr:FMQ9Z5CWS54YWriSKekgp5s9Z5lWD432JECdi0r9LiJqAtXI6Gi2s5BwucNM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrfeeggddvhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
+    hsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecu
+    hfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnhgrih
+    hlrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefhkeeg
+    teehgeehieffgfeuvdeuffefgfduffenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghr
+    tghpthhtohepuddupdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhhtohhnih
+    hosehophgvnhhvphhnrdhnvghtpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhl
+    vgdrtghomhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
+    epphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopeguohhnrghlugdrhhhu
+    nhhtvghrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrd
+    horhhgpdhrtghpthhtoheprhihrgiirghnohhvrdhsrdgrsehgmhgrihhlrdgtohhmpdhr
+    tghpthhtoheprghnughrvgifsehluhhnnhdrtghhpdhrtghpthhtohepnhgvthguvghvse
+    hvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:FMQ9Z3fnF0GSKWCy84ti6WMJ7SuzmLHa9h_Pgint9-8q9SLKshRLCw>
+    <xmx:FMQ9ZwM8GgFoJ_pXG5bSUfVJpmD4ogWix2tC-ms6LjUrv7ELxaYe0Q>
+    <xmx:FMQ9Z5nbwHc9UMZIt_ojAQxxdPgbKtAz8hOdwLlEGfDVj8MdxGTPBQ>
+    <xmx:FMQ9Z6uHEtSKXCJEP5lghMrDxWALdp59v9FMx88Noj7kHShwU9zmTA>
+    <xmx:FcQ9ZxhDTTlmdZVuhbE0ROmxnI57lViz85ghqBTaQTnGUxqp5Vf5LLRb>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 20 Nov 2024 06:12:20 -0500 (EST)
+Date: Wed, 20 Nov 2024 12:12:18 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v11 18/23] ovpn: implement peer
+ add/get/dump/delete via netlink
+Message-ID: <Zz3EEl0diYofGkIC@hog>
+References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-18-de4698c73a25@openvpn.net>
+ <Zyjk781vOqV4kXhJ@hog>
+ <76191b85-6844-4a85-bb9c-ad19aa5110c5@openvpn.net>
+ <ZzTaRNeZjo48ArsR@hog>
+ <e11c5f81-cbc8-43a3-b275-7004efdcb358@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Brendan Jackman <jackmanb@google.com>
-Date: Wed, 20 Nov 2024 11:56:37 +0100
-Message-ID: <CA+i-1C1hggn+uhYAb1uNtma3T8N7n8T4KJ+z3eKb041u5X7SPA@mail.gmail.com>
-Subject: KUnit expectations in atomic context
-To: kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
-Cc: David Gow <davidgow@google.com>, Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e11c5f81-cbc8-43a3-b275-7004efdcb358@openvpn.net>
 
-Hi all,
+2024-11-14, 10:21:18 +0100, Antonio Quartulli wrote:
+> On 13/11/2024 17:56, Sabrina Dubroca wrote:
+> > 2024-11-12, 15:19:50 +0100, Antonio Quartulli wrote:
+> > > On 04/11/2024 16:14, Sabrina Dubroca wrote:
+> > > > 2024-10-29, 11:47:31 +0100, Antonio Quartulli wrote:
+> > > > > +static int ovpn_nl_peer_precheck(struct ovpn_struct *ovpn,
+> > > > > +				 struct genl_info *info,
+> > > > > +				 struct nlattr **attrs)
+> > > > > +{
+> > > > > +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_PEER], attrs,
+> > > > > +			      OVPN_A_PEER_ID))
+> > > > > +		return -EINVAL;
+> > > > > +
+> > > > > +	if (attrs[OVPN_A_PEER_REMOTE_IPV4] && attrs[OVPN_A_PEER_REMOTE_IPV6]) {
+> > > > > +		NL_SET_ERR_MSG_MOD(info->extack,
+> > > > > +				   "cannot specify both remote IPv4 or IPv6 address");
+> > > > > +		return -EINVAL;
+> > > > > +	}
+> > > > > +
+> > > > > +	if (!attrs[OVPN_A_PEER_REMOTE_IPV4] &&
+> > > > > +	    !attrs[OVPN_A_PEER_REMOTE_IPV6] && attrs[OVPN_A_PEER_REMOTE_PORT]) {
+> > > > > +		NL_SET_ERR_MSG_MOD(info->extack,
+> > > > > +				   "cannot specify remote port without IP address");
+> > > > > +		return -EINVAL;
+> > > > > +	}
+> > > > > +
+> > > > > +	if (!attrs[OVPN_A_PEER_REMOTE_IPV4] &&
+> > > > > +	    attrs[OVPN_A_PEER_LOCAL_IPV4]) {
+> > > > > +		NL_SET_ERR_MSG_MOD(info->extack,
+> > > > > +				   "cannot specify local IPv4 address without remote");
+> > > > > +		return -EINVAL;
+> > > > > +	}
+> > > > > +
+> > > > > +	if (!attrs[OVPN_A_PEER_REMOTE_IPV6] &&
+> > > > > +	    attrs[OVPN_A_PEER_LOCAL_IPV6]) {
+> > > > 
+> > > > I think these consistency checks should account for v4mapped
+> > > > addresses. With remote=v4mapped and local=v6 we'll end up with an
+> > > > incorrect ipv4 "local" address (taken out of the ipv6 address's first
+> > > > 4B by ovpn_peer_reset_sockaddr). With remote=ipv6 and local=v4mapped,
+> > > > we'll pass the last 4B of OVPN_A_PEER_LOCAL_IPV6 to
+> > > > ovpn_peer_reset_sockaddr and try to read 16B (the full ipv6 address)
+> > > > out of that.
+> > > 
+> > > Right, a v4mapped address would fool this check.
+> > > How about checking if both or none addresses are v4mapped? This way we
+> > > should prevent such cases.
+> > 
+> > I don't know when userspace would use v4mapped addresses,
+> 
+> It happens when listening on [::] with a v6 socket that has no "IPV6_V6ONLY"
+> set to true (you can check ipv6(7) for more details).
+> This socket can receive IPv4 connections, which are implemented using
+> v4mapped addresses. In this case both remote and local are going to be
+> v4mapped.
 
-Another rather vague question from me - does anyone know any reasons
-why we couldn't support KUNIT_EXPECT in atomic contexts?
+I'm familiar with v4mapped addresses, but I wasn't sure the userspace
+part would actually passed them as peer. But I guess it would when the
+peer connects over ipv4 on an ipv6 socket.
 
-For Address Space Isolation we have some tests that want to disable
-preemption. I guess this is not a totally insane thing to want to do -
-am I missing anything there?
+So the combination of PEER_IPV4 with LOCAL_IPV6(v4mapped) should never
+happen? In that case I guess we just need to check that we got 2
+attributes of the same type (both _IPV4 or both _IPV6) and if we got
+_IPV6, that they're either both v4mapped or both not. Might be a tiny
+bit simpler than what I was suggesting below.
 
-You can see some examples here:
-https://github.com/googleprodkernel/linux-kvm/blob/asi-lpc-24/arch/x86/mm/asi_test.c
+> However, the sanity check should make sure nobody can inject bogus
+> combinations.
+>
+> > but treating
+> > a v4mapped address as a "proper" ipv4 address should work with the
+> > rest of the code, since you already have the conversion in
+> > ovpn_nl_attr_local_ip and ovpn_nl_attr_sockaddr_remote. So maybe you
+> > could do something like (rough idea and completely untested):
+> > 
+> >      static int get_family(attr_v4, attr_v6)
+> >      {
+> >         if (attr_v4)
+> >             return AF_INET;
+> >         if (attr_v6) {
+> >             if (ipv6_addr_v4mapped(attr_v6)
+> >                 return AF_INET;
+> >             return AF_INET6;
+> >         }
+> >         return AF_UNSPEC;
+> >      }
+> > 
+> > 
+> >      // in _precheck:
+> >      // keep the   attrs[OVPN_A_PEER_REMOTE_IPV4] && attrs[OVPN_A_PEER_REMOTE_IPV6]  check
+> >      // maybe add a similar one for   LOCAL_IPV4 && LOCAL_IPV6
+> 
+> the latter is already covered by:
+> 
+>  192         if (!attrs[OVPN_A_PEER_REMOTE_IPV4] &&
+>  193             attrs[OVPN_A_PEER_LOCAL_IPV4]) {
+>  194                 NL_SET_ERR_MSG_MOD(info->extack,
+>  195                                    "cannot specify local IPv4 address
+> without remote");
+>  196                 return -EINVAL;
+>  197         }
+>  198
+>  199         if (!attrs[OVPN_A_PEER_REMOTE_IPV6] &&
+>  200             attrs[OVPN_A_PEER_LOCAL_IPV6]) {
+>  201                 NL_SET_ERR_MSG_MOD(info->extack,
+>  202                                    "cannot specify local IPV6 address
+> without remote");
+>  203                 return -EINVAL;
+>  204         }
 
-(Actually, looks like in that code we just started doing KUNIT_EXPECT
-in preempt-disabled regions anyway, and I never suffered any
-consequences until recently. Probably we just never had those
-assertions fail under DEBUG_ATOMIC_SLEEP).
+LOCAL_IPV4 combined with REMOTE_IPV6 should be fine if the remote is
+v4mapped. And conversely, LOCAL_IPV6 combined with REMOTE_IPV6 isn't
+ok if remote is v4mapped. So those checks should go away and be
+replaced with the "get_family" thing, but that requires at most one of
+the _IPV4/_IPV6 attributes to be present to behave consistently.
 
-From a very quick look, it seems like the only reason you can't
-KUNIT_EXPECT from atomic right now is the GFP_KERNEL allocations.
-So... what if we just made them GFP_ATOMIC? In general I think that's
-a pretty ropey approach, but maybe fine in the context of unit tests?
-Or, we could have variants of the assertions, or a test attribute, to
-just use GFP_ATOMIC in the cases where it's needed.
 
-Is there anything else missing that would need to be done?
+> > 
+> >      remote_family = get_family(attrs[OVPN_A_PEER_REMOTE_IPV4], attrs[OVPN_A_PEER_REMOTE_IPV6]);
+> >      local_family = get_family(attrs[OVPN_A_PEER_LOCAL_IPV4], attrs[OVPN_A_PEER_LOCAL_IPV6]);
+> >      if (remote_family != local_family) {
+> >          extack "incompatible address families";
+> >          return -EINVAL;
+> >      }
+> > 
+> > That would mirror the conversion that
+> > ovpn_nl_attr_local_ip/ovpn_nl_attr_sockaddr_remote do.
+> 
+> Yeah, pretty much what I was suggested, but in a more explicit manner.
+> I like it.
 
-Alternatively, we could expose the whole context concern to the user
-in such a way that KUNIT_ASSERT can be used too, something like:
+Cool.
 
-struct kunit_defer defer = KUNIT_INIT_DEFER(test);
-preempt_disable();
-KUNIT_EXPECT_DEFERRED_TRUE(&defer, ...);
-KUNIT_ASSERT_DEFERRED_EQ(&defer, ...);
-preempt_enable();
-// Prints failures from above, aborts if the ASSERT failed:
-kunit_defer_finish(&defer);
+BTW, I guess scope_id should only be used when it's not a v4mapped address?
+So the "cannot specify scope id without remote IPv6 address" check
+should probably use:
 
-I hope that wouldn't be necessary though, it seems like a lot of API surface.
+    if (remote_family != AF_INET6)
+
+(or split it into !attrs[OVPN_A_PEER_REMOTE_IPV6] and remote_family !=
+AF_INET6 to have a fully specific extack message, but maybe that's
+overkill)
+
+-- 
+Sabrina
 
