@@ -1,59 +1,60 @@
-Return-Path: <linux-kselftest+bounces-22354-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22355-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DC339D3EA3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 16:11:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9CC29D3ECD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 16:17:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1271F281C5B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 15:11:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3FE3285282
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 15:17:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 272261DB943;
-	Wed, 20 Nov 2024 14:59:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3DA41AA1C3;
+	Wed, 20 Nov 2024 15:13:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ew7HvsRk"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="hHQQtivy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F66B1C75E4;
-	Wed, 20 Nov 2024 14:59:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DF282B9A9;
+	Wed, 20 Nov 2024 15:13:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732114750; cv=none; b=GQrwG1rtKtaU8zoIVYpr7kRpp3H3M1gGh79MRZlsysnfew6OmFG5hb6j3MR1xdrZwfit+GoTczjU9s8qowCuiLCig2QO2i1BrUZtuaD6B+otOx45W4xgLKzLUtNQ9gu4XAbiVcLAraxP5Fl7Cvjc04s8ojVyj0zVxe54mtXF6FA=
+	t=1732115591; cv=none; b=UH3WbdAjnYxTqVUnnHtZq0/lZ823HjRoM3aiVj4bznls3oCjxBqIJaapKOfB8owTsXiD1c1AwF4ZoL33UJZW0HVD8TqkzVmYgEil3QJdQtu8wreHL/crqfWnuIslHW22R9k1YojXuUuwsLnZffLj1T9B+8pQ1GtsB1yiDUHTOU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732114750; c=relaxed/simple;
-	bh=mgj4bvZ/X9lF9Afs6hkeLwqdCb98lX1871WUaw0D2YA=;
+	s=arc-20240116; t=1732115591; c=relaxed/simple;
+	bh=/ICbzWM/m9Ey+tjFGLTbiKkd6MhG4IyhhGiknGWoNjg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lR9z8/eFuwg1UW2ePQRwhG0ltELJBe8h+TRmGaRTlARm5oVwT7vZT2ehMRj9Il+mwlkke8UP42tBVAMjqKe4wP7s1GhKdE3pxEtv9DXDbzbY0qpISnA8Cc7EtzfrtKw3h+G0wwD4VUsZwiJ+qsXsmt3VhJDKrIS0KJUUvAGz/ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ew7HvsRk; arc=none smtp.client-ip=90.155.92.199
+	 Content-Type:Content-Disposition:In-Reply-To; b=RkOVkuNFbApEuRRvETfjTSw6AiJMFFfS6nUXLxon/6ZbOuKxcILVdNAjMEitzzgzshs6OS7GIiwZ7Bl9SxYPw2gOpmVPhA1ygFrNYWnJ97PonlOOiohIW17yr+y7j6l8zcxWthyQiVFS4ONFSjRfj8Y9/bDYnmOItUyMCeI464k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=hHQQtivy; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=RkowXip/85xKsOA9eS4V3TnfVFLeWlFM6e9qis0TUFo=; b=ew7HvsRkHFTom5sTnUqzSG0oAO
-	ph2CPqO/ygxJ/UPM1WUb+pYR0aHrsOxLuya8BpPk6cbQe7m4o8R6UyxrT56fisaJpI/vFiYU6Bxds
-	9kG361m6Pt6bVUEHKciM9MNv6n0DeDnr3UoPQ1HATq0bL/rvVgpKHO/CPebxjZHz2SGumyNYakGU8
-	gLKwJSCZ55FiCvjyNICyvPDS/wqrke6fPTkuii22vWFlAQRkd2AK+ZRfhifvacNWLsUjG2bXsE/p7
-	Wwtsy0LReGjbKYrASQ0vbBFba1zyTDzJKYiUZiSs1m4+1RHu4gw19DuBmdh21X/FztxkFnivc9Z6I
-	zfyYJrNA==;
+	bh=AAZRDzlSytBcEeYbJd2bXyGg47+8MrAXJx0XsTo+ZCk=; b=hHQQtivypT3ptz/3Ng1DE0HYYc
+	ui45zM/vkkkWmkIkMIkjF8WnrBlzDbQ/bMF/zf4Sy2NSFsZu+/jaZ2HccJy8QPhMdwzOD7xB2vxP0
+	SP/Xhg12scFjjWG65KN1giIEGj498w3S1FHEULPi6tzNACfQ0apQ2otQK9ArVd9G1++V8UvkKGXUF
+	O4wb+v87ZdqqKtS9Vmj/jKu2YxhRA7hp4E/eKutXXMDhBsjK2RyWf3kYuoQ+xcd4Pyh4tzfoZelFT
+	53b8s43+VeviRTcjem3wSYAvSX+Kad1JoN35MMtbbawjNxeDNPSx06aRS0jG1T0WRY6aZf5eloTsl
+	F6cXyBwA==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tDmAb-00000000TrW-1QgA;
-	Wed, 20 Nov 2024 14:59:05 +0000
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tDmOB-00000005NpY-0kTk;
+	Wed, 20 Nov 2024 15:13:08 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 025EF3006AB; Wed, 20 Nov 2024 15:59:05 +0100 (CET)
-Date: Wed, 20 Nov 2024 15:59:04 +0100
+	id 0D62E300446; Wed, 20 Nov 2024 16:13:08 +0100 (CET)
+Date: Wed, 20 Nov 2024 16:13:08 +0100
 From: Peter Zijlstra <peterz@infradead.org>
 To: Valentin Schneider <vschneid@redhat.com>
 Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
 	kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
 	x86@kernel.org, rcu@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
+	Nicolas Saenz Julienne <nsaenzju@redhat.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -99,11 +100,11 @@ Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
 	Marcelo Tosatti <mtosatti@redhat.com>,
 	Yair Podemsky <ypodemsk@redhat.com>,
 	Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
-Subject: Re: [RFC PATCH v3 08/15] sched/clock, x86: Make __sched_clock_stable
- forceful
-Message-ID: <20241120145904.GK19989@noisy.programming.kicks-ass.net>
+Subject: Re: [RFC PATCH v3 12/15] context_tracking,x86: Defer kernel text
+ patching IPIs
+Message-ID: <20241120151308.GL19989@noisy.programming.kicks-ass.net>
 References: <20241119153502.41361-1-vschneid@redhat.com>
- <20241119153502.41361-9-vschneid@redhat.com>
+ <20241119153502.41361-13-vschneid@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -112,15 +113,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241119153502.41361-9-vschneid@redhat.com>
+In-Reply-To: <20241119153502.41361-13-vschneid@redhat.com>
 
-On Tue, Nov 19, 2024 at 04:34:55PM +0100, Valentin Schneider wrote:
-> Later commits will cause objtool to warn about non __ro_after_init static
-> keys being used in .noinstr sections in order to safely defer instruction
-> patching IPIs targeted at NOHZ_FULL CPUs.
-> 
-> __sched_clock_stable is used in .noinstr code, and can be modified at
-> runtime (e.g. KVM module loading). Suppressing the text_poke_sync() IPI has
+On Tue, Nov 19, 2024 at 04:34:59PM +0100, Valentin Schneider wrote:
 
-Wait, what !? loading KVM causes the TSC to be marked unstable?
+> +static void __text_poke_sync(smp_cond_func_t cond_func)
+> +{
+> +	on_each_cpu_cond(cond_func, do_sync_core, NULL, 1);
+> +}
+> +
+>  void text_poke_sync(void)
+>  {
+> -	on_each_cpu(do_sync_core, NULL, 1);
+> +	__text_poke_sync(NULL);
+> +}
+> +
+> +void text_poke_sync_deferrable(void)
+> +{
+> +	__text_poke_sync(do_sync_core_defer_cond);
+>  }
+
+How about we unwrap some of that like so:
+
+>  /*
+> @@ -2257,6 +2273,8 @@ static int tp_vec_nr;
+>  static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries)
+>  {
+>  	unsigned char int3 = INT3_INSN_OPCODE;
+> +	bool force_ipi = false;
+> +	void (*sync_fn)(void);
+
+	smp_cond_func_t cond = do_sync_core_defer_cond;
+
+>  	unsigned int i;
+>  	int do_sync;
+>  
+> @@ -2291,11 +2309,18 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
+>  	 * First step: add a int3 trap to the address that will be patched.
+>  	 */
+>  	for (i = 0; i < nr_entries; i++) {
+> +		/*
+> +		 * Record that we need to send the IPI if at least one location
+> +		 * in the batch requires it.
+> +		 */
+> +		force_ipi |= tp[i].force_ipi;
+
+		if (tp[i].force_ipi)
+			cond = NULL;
+
+>  		tp[i].old = *(u8 *)text_poke_addr(&tp[i]);
+>  		text_poke(text_poke_addr(&tp[i]), &int3, INT3_INSN_SIZE);
+>  	}
+>  
+> -	text_poke_sync();
+> +	sync_fn = force_ipi ? text_poke_sync : text_poke_sync_deferrable;
+> +
+> +	sync_fn();
+
+	__text_poke_sync(cond);
 
