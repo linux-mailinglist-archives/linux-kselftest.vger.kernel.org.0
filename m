@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-22345-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22346-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD5BE9D39CF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 12:46:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00BD79D3A8B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 13:18:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 735342833D5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 11:46:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C8E2B275C6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 11:57:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 967D01A2860;
-	Wed, 20 Nov 2024 11:46:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFB9D19F41C;
+	Wed, 20 Nov 2024 11:56:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="ZFaiRStr";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="a/5nVvYP"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="UVHT/tL8";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IGj11eCc"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from flow-b2-smtp.messagingengine.com (flow-b2-smtp.messagingengine.com [202.12.124.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB31C1A3056;
-	Wed, 20 Nov 2024 11:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377D319F114;
+	Wed, 20 Nov 2024 11:56:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732103161; cv=none; b=kIpS+9KleU/Vu+ylEMmj8dSCN91yZJhvAtxkITMam1P53xF6mZeE7+PvhUgeSKeOn6v2Xk2UsTKKOiTfeFPaP7Qn5EbnnX72p7ygdKISwRU7/2fYSJlkLSz+h+B9r9dRgjSqmL3OhnVev3uRVDKa4ah9963+fdFbpU154lEIk+k=
+	t=1732103818; cv=none; b=ifSzzNcuvcMYMShBQVRt9xqpeYjJU3MXTktpADH4nTyELbiVVIJSxz5jjwsoRTTTRnaYToiwmySt57BUTs1PedFVDQQF/nghLbujZ7TUXUwD16U06GhTSK5IYwgYqC5t9gNpEKwM8oeuh+ofZND3QCUieNfksLBX7qwpLo/1wGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732103161; c=relaxed/simple;
-	bh=B6OeqtqWBo0PfpnDBhofjSJ7RM6SDlx6t4i5j2tXE7Q=;
+	s=arc-20240116; t=1732103818; c=relaxed/simple;
+	bh=nXn8VLayjc9h1QTOCTp3FpY6WR+H7Ywm1uuWtcTXJsk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KIbsbGTDRDII5EebVDzagD1y+rYWocCyOt6uFOIKAj6czv7PkFA0xXIWo0OiwrS9tXB7dz2NNwsVBVxJvctn2ddLyRC7wuyN5mWhVF6n3zgb5Y3JtWWnPJ0OZhzf11DLgfJex64GxKOoJolZnVQ2vjPAMuCYBNd6PNrQfkCSg1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=ZFaiRStr; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=a/5nVvYP; arc=none smtp.client-ip=202.12.124.137
+	 Content-Type:Content-Disposition:In-Reply-To; b=XYqlH7ak5hnRPgbCb+0cdrZzhsD0Sjox8mfLtX6N32bDcYXKCY/dNuPtmr4ugzA3irUDholNieKvxnYiRlYuDoOiSKlUMpiiape1dTK2k5vz8rebUzna47dyJCkszuqMaEtk8XNasuLQh2fmwHDTv1LSfU02LzBS6HxXgWYFQxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=UVHT/tL8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IGj11eCc; arc=none smtp.client-ip=202.12.124.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
-	by mailflow.stl.internal (Postfix) with ESMTP id 873891D405F2;
-	Wed, 20 Nov 2024 06:45:37 -0500 (EST)
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailflow.stl.internal (Postfix) with ESMTP id EDECE1D406A4;
+	Wed, 20 Nov 2024 06:56:54 -0500 (EST)
 Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-03.internal (MEProxy); Wed, 20 Nov 2024 06:45:37 -0500
+  by phl-compute-11.internal (MEProxy); Wed, 20 Nov 2024 06:56:55 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
 	 h=cc:cc:content-type:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1732103137; x=
-	1732106737; bh=r/1fPo+FOJmczrt6BitCLunrDP1g1sSdibRAZT07RXE=; b=Z
-	FaiRStrIE7AXybC8Yqv6Xk98aF5qzCE8e+1H9e4Kqn/kACgySb+c0Wtl2QEjY2I9
-	mFLNqPuSlzpKWq9QVldY3RIcon1p7nYsLhD+8qSGHc6fukduV+Pjwux5JkK7Dp+r
-	7wzPPKxJT92WtMdSmeF5CcRTh2DnzQuUHPF6N6AG+ZfuGpyLeseziCjjVxH5B5uF
-	YtnfMTmHhWJziWmH9409Y71Mu/r69TIdOXnbSyCbiGYSjt0EJjTK13OlzQG1M/F5
-	8CNBxFcrglbe1t7OFUZ3b4al0xG5i15d3uQd04yKS5k/U0f/x6z3t8VhYaRRdm8T
-	RmxLs3DuTVyzQx9vWwsKg==
+	:reply-to:subject:subject:to:to; s=fm2; t=1732103814; x=
+	1732107414; bh=3wzTO1++4Ztyr65JdrAwE0ye/gOHnqzkIkXETjXcGRw=; b=U
+	VHT/tL8MEtdmKD525NAXltOXH6qRK+PqpVQ3g0+zNoeXcFXwbCXibJl2r3B3qvCi
+	bXe/HRvFSjfbsASrpumZlwRUffPke+3gGeqwUnfWZbh/rwnZSE+EkFIBsblhYIKR
+	P4bjKqtj4CM0nIWWYDdXXpQU6GbENwLMUwugXevUmwMdrmNu/kMhIXi16MV0mUb2
+	bdcr8U8JkMvz8tTTOiqruU+z1YPChpXFs6oSnV4zYJNhV3SOrTFy1KuhqFpY/vLK
+	m7pd7/kEe5yYa9dr3U6/LCPCIg0UPkwp83EvO/CA//8gqq6sezAgEn6X2g1UDyTT
+	FlACyFpney0bsPd6npDYg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:subject:subject:to
 	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1732103137; x=1732106737; bh=r/1fPo+FOJmczrt6BitCLunrDP1g1sSdibR
-	AZT07RXE=; b=a/5nVvYPgmNnFFL46DWAGeSpTEW5a1PrrwgTnLPLtha3ZOO+Jcw
-	7aSbxeyqjchMdd/ojS0bmG1n1ldnUjryZLwopm3gNZjz7OioBhSgM6KgBw2S+4MH
-	Aws7QJv7XFvugcTezaAKA0zpxKJ4370I7v9V153vJLiRIAAx9O0PEC/45t95cTXV
-	xnEHTCBb9xacnxT2EJbV/wi7F3Qksil8RYR2FQY3ksovkVojTg2J305tJMn7NHn8
-	E6Zqv+w66zkLEKrbEXEGg4Z4YFctni0X2+YpiEDZQnPkt9eLaMw06Rjb6EZ/7+i6
-	A1/3rne+dj6CJJcLmIu/4rudnBPDKMYPJww==
-X-ME-Sender: <xms:4Ms9Z5hIQvSWD9YdKEBwndjC6YWJrUkppyMX6a4T823adK6DY61O6A>
-    <xme:4Ms9Z-CUh5FGwpgz8tvggd781VsyMmQHUZEQ3dJAXYOHDY-oehHZOxKgFqo8sQatF
-    XbBSBJ50y3tADtJpVw>
-X-ME-Received: <xmr:4Ms9Z5H7WzxX2n3IyYr-0p9kgGNQUYJstnpAxSkKmBwCtjf32j5uW1n-RtO2>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrfeeggdefudcutefuodetggdotefrodftvf
+	1732103814; x=1732107414; bh=3wzTO1++4Ztyr65JdrAwE0ye/gOHnqzkIkX
+	ETjXcGRw=; b=IGj11eCcS/0X/9SjB3VSzwLtMKQVUi4O2jkSUH8dwH28mwpudES
+	kKtqbRXZP3M/qeWqgDkzbafBFUa09DT3peZW1cBosxWDHZve8pB1mMwDUz/47oq4
+	KCLt1h8lhXGzEAGyWFUHs1vvVzaxnZdaGtluta0QMxe10gy6/614UaP5ETXidTT9
+	/l50IC+fSxqBbFfJkY6tea/HAZLRyqla+feqt4KZzYa1yIp3ckXdJil5g0lhzoz5
+	7Rsq+Z8F5TS+oyTowG4UPewXWeEtdw8fCE/KprSJ9KFJEUzHBmUErvGVI0Re6nq5
+	TOtT1tjKbuJUxRpOU5Tv5/M5oLVBfdpQGFw==
+X-ME-Sender: <xms:hs49Z1_O7mXIu3NEOKfSuEuGlIGSJm3AkPJCIEJ29KjcQ704SS65fg>
+    <xme:hs49Z5tUod3xVeKRnO_jNRJDSVO7b-jDK6TYFbt1r2P93wrojwd2TFAI089NvN977
+    McswUY7ipGO8_sQy3Y>
+X-ME-Received: <xmr:hs49ZzCg-K-JkFxLnoeML0X1Z1-DQDuiG1WqszTPg91ybH1GOQHK620fI2oh>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrfeeggdeffecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
     tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
     hsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecu
@@ -80,15 +80,15 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrfeeggdefudcutefuodetggdote
     horhhgpdhrtghpthhtoheprhihrgiirghnohhvrdhsrdgrsehgmhgrihhlrdgtohhmpdhr
     tghpthhtoheprghnughrvgifsehluhhnnhdrtghhpdhrtghpthhtohepnhgvthguvghvse
     hvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:4Ms9Z-TOvUMySf7QtRXc-5w5vA8UuMPmLa85H4WJkMXna7d4R1n2Gw>
-    <xmx:4Ms9Z2yzJQ5FC0PH0Pyot-j5qntIFyeylk8MWCD3NrQDG53EUi574g>
-    <xmx:4Ms9Z04Jt3XaFcN2kSZ6N7FOkgzlUyJ7BNq0kEDsT05w8iOzK8OS8A>
-    <xmx:4Ms9Z7yb0Due1OONB-44nDgvxu6nEdRoKyfT9hntBbgfZohLk4GBjA>
-    <xmx:4cs9Z1nqtKAI5OOKA2rMpS2nL8Phgx6I6GUNiccKJmekbwJZyr1zzfpr>
+X-ME-Proxy: <xmx:hs49Z5fA6t1LheRrUpB90eWvwt8RgUtTtmkT4tRONpBQGSUI5oNwPw>
+    <xmx:hs49Z6Nucx_ZfYgxu1nYYWY3gMBamT7cwEMrTqElS9_tnxFw_prjtg>
+    <xmx:hs49Z7kpt_LiirtzBcu5VQrTb-JXnm1wg8pZfD4DNZBj_90UO-vS5w>
+    <xmx:hs49Z0uLoj5hRFI0XQWQ8ddx7bFK5KhJNtCgHVOMUm4A_uGAtXArJQ>
+    <xmx:hs49Z7j0z2y8ebToUc98ly-j8ji8BIbBu9aC-7QejHGqWiFiwSCf11uO>
 Feedback-ID: i934648bf:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 20 Nov 2024 06:45:36 -0500 (EST)
-Date: Wed, 20 Nov 2024 12:45:34 +0100
+ 20 Nov 2024 06:56:53 -0500 (EST)
+Date: Wed, 20 Nov 2024 12:56:52 +0100
 From: Sabrina Dubroca <sd@queasysnail.net>
 To: Antonio Quartulli <antonio@openvpn.net>
 Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
@@ -97,10 +97,10 @@ Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
 	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
 	Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v11 08/23] ovpn: implement basic TX path (UDP)
-Message-ID: <Zz3L3lnmcgbdQDqn@hog>
+Subject: Re: [PATCH net-next v11 06/23] ovpn: introduce the ovpn_peer object
+Message-ID: <Zz3OhFzo2ve6cKAr@hog>
 References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-8-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-6-de4698c73a25@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -109,40 +109,29 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241029-b4-ovpn-v11-8-de4698c73a25@openvpn.net>
+In-Reply-To: <20241029-b4-ovpn-v11-6-de4698c73a25@openvpn.net>
 
-2024-10-29, 11:47:21 +0100, Antonio Quartulli wrote:
-> +static int ovpn_udp4_output(struct ovpn_struct *ovpn, struct ovpn_bind *bind,
-> +			    struct dst_cache *cache, struct sock *sk,
-> +			    struct sk_buff *skb)
-> +{
-[...]
-> +	if (unlikely(!inet_confirm_addr(sock_net(sk), NULL, 0, fl.saddr,
-> +					RT_SCOPE_HOST))) {
-> +		/* we may end up here when the cached address is not usable
-> +		 * anymore. In this case we reset address/cache and perform a
-> +		 * new look up
-> +		 */
-> +		fl.saddr = 0;
-> +		bind->local.ipv4.s_addr = 0;
+2024-10-29, 11:47:19 +0100, Antonio Quartulli wrote:
+> +/**
+> + * struct ovpn_peer - the main remote peer object
+> + * @ovpn: main openvpn instance this peer belongs to
+> + * @id: unique identifier
+> + * @vpn_addrs: IP addresses assigned over the tunnel
+> + * @vpn_addrs.ipv4: IPv4 assigned to peer on the tunnel
+> + * @vpn_addrs.ipv6: IPv6 assigned to peer on the tunnel
+> + * @dst_cache: cache for dst_entry used to send to peer
+> + * @bind: remote peer binding
+> + * @halt: true if ovpn_peer_mark_delete was called
 
-Here we're updating bind->local without holding peer->lock, that's
-inconsistent with ovpn_peer_update_local_endpoint.
+nit: It's initialized to false in ovpn_peer_new, but then never set to
+true nor read. Drop it?
 
-> +static int ovpn_udp6_output(struct ovpn_struct *ovpn, struct ovpn_bind *bind,
-> +			    struct dst_cache *cache, struct sock *sk,
-> +			    struct sk_buff *skb)
-> +{
-[...]
-> +	if (unlikely(!ipv6_chk_addr(sock_net(sk), &fl.saddr, NULL, 0))) {
-> +		/* we may end up here when the cached address is not usable
-> +		 * anymore. In this case we reset address/cache and perform a
-> +		 * new look up
-> +		 */
-> +		fl.saddr = in6addr_any;
-> +		bind->local.ipv6 = in6addr_any;
+> + * @delete_reason: why peer was deleted (i.e. timeout, transport error, ..)
+> + * @lock: protects binding to peer (bind)
 
-And here as well.
+nit: as well as the keepalive values that are introduced later?
+(I guess the comment should be fixed up in patch 15 when the keepalive
+mechanism is added)
 
 -- 
 Sabrina
