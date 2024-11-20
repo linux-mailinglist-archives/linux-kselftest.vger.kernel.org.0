@@ -1,60 +1,59 @@
-Return-Path: <linux-kselftest+bounces-22355-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22356-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9CC29D3ECD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 16:17:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 800F29D3EE5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 16:22:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3FE3285282
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 15:17:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B01B1F25327
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 15:22:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3DA41AA1C3;
-	Wed, 20 Nov 2024 15:13:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 115CD5588F;
+	Wed, 20 Nov 2024 15:22:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="hHQQtivy"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Q5p8dJVp"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DF282B9A9;
-	Wed, 20 Nov 2024 15:13:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35697AD58;
+	Wed, 20 Nov 2024 15:22:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732115591; cv=none; b=UH3WbdAjnYxTqVUnnHtZq0/lZ823HjRoM3aiVj4bznls3oCjxBqIJaapKOfB8owTsXiD1c1AwF4ZoL33UJZW0HVD8TqkzVmYgEil3QJdQtu8wreHL/crqfWnuIslHW22R9k1YojXuUuwsLnZffLj1T9B+8pQ1GtsB1yiDUHTOU4=
+	t=1732116142; cv=none; b=puu8i7+UZIEd4QfXX5+OWKY+yOWk1vuxSy8oH1O2mdQVaxLe7C/WUp+kdPpDWUYHeMbB529e2XQX/0knfomorbLC+SexA/m7rj6R2m7bY16Sx8/3k8nPWDSU+yjpUcL4/mTMzTddVJyea0hAFmomtbng5BJVmFZxsWn7EqtQE3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732115591; c=relaxed/simple;
-	bh=/ICbzWM/m9Ey+tjFGLTbiKkd6MhG4IyhhGiknGWoNjg=;
+	s=arc-20240116; t=1732116142; c=relaxed/simple;
+	bh=WbvCYI5FQOAQYXBCr2RLO2b6uAXeaNOyafQmb6z/s/U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RkOVkuNFbApEuRRvETfjTSw6AiJMFFfS6nUXLxon/6ZbOuKxcILVdNAjMEitzzgzshs6OS7GIiwZ7Bl9SxYPw2gOpmVPhA1ygFrNYWnJ97PonlOOiohIW17yr+y7j6l8zcxWthyQiVFS4ONFSjRfj8Y9/bDYnmOItUyMCeI464k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=hHQQtivy; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:Content-Disposition:In-Reply-To; b=MlrjNvjpY4ohkFcVzRZF+N83moPY7M4LB6y5SH6GS79QYjUIyv2f4Bo+MRbvC1eh0Tj5pCsf1yMANFnsdKAZ1wjSES+UPrA0QA5BizucsU2JP/cjPoK2IqJBQuHTr9oBCjkPkWrfVemkX5MzP6C//BHhRmwAveQE/FEXH6U4upE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Q5p8dJVp; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=AAZRDzlSytBcEeYbJd2bXyGg47+8MrAXJx0XsTo+ZCk=; b=hHQQtivypT3ptz/3Ng1DE0HYYc
-	ui45zM/vkkkWmkIkMIkjF8WnrBlzDbQ/bMF/zf4Sy2NSFsZu+/jaZ2HccJy8QPhMdwzOD7xB2vxP0
-	SP/Xhg12scFjjWG65KN1giIEGj498w3S1FHEULPi6tzNACfQ0apQ2otQK9ArVd9G1++V8UvkKGXUF
-	O4wb+v87ZdqqKtS9Vmj/jKu2YxhRA7hp4E/eKutXXMDhBsjK2RyWf3kYuoQ+xcd4Pyh4tzfoZelFT
-	53b8s43+VeviRTcjem3wSYAvSX+Kad1JoN35MMtbbawjNxeDNPSx06aRS0jG1T0WRY6aZf5eloTsl
-	F6cXyBwA==;
+	bh=MlJHDcSjdk0fhBS8nKpdUNl5QedDLuvNa80aSphcDYs=; b=Q5p8dJVp1KwwHDiejvBYhLvkf5
+	6ue7MbFQitMoSVB4a1MYU4+rrx18IbFL14GYmi846BSWMz59zvGewA8OVZ15KcoHIaTwcr4Wy+2qp
+	xic0MF2qpRf1I0tNDzB154ZAgtXA+TkusWwJdxXKlphQ41qPn1Mxg+hG8DqVFiuI3yZdnM6rrA+of
+	QCxM5tgnJBfFuUH/E4I57SEF2Ihfh6QtFjAGsq0weG1vLY0InzJ/Wqvp3WCWWKs2ODbWjHUB2jAzy
+	Wawv484kPn4bewWwdKBoRLNHtmXGT6iYlrzevGQgODUfp1aGCnJo0cQwL+h+TvFsLdyBd8ELWroPB
+	FcugpBOg==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tDmOB-00000005NpY-0kTk;
-	Wed, 20 Nov 2024 15:13:08 +0000
+	id 1tDmX2-00000005OFm-1ZBt;
+	Wed, 20 Nov 2024 15:22:17 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 0D62E300446; Wed, 20 Nov 2024 16:13:08 +0100 (CET)
-Date: Wed, 20 Nov 2024 16:13:08 +0100
+	id E5E3F300446; Wed, 20 Nov 2024 16:22:16 +0100 (CET)
+Date: Wed, 20 Nov 2024 16:22:16 +0100
 From: Peter Zijlstra <peterz@infradead.org>
 To: Valentin Schneider <vschneid@redhat.com>
 Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
 	kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
 	x86@kernel.org, rcu@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Nicolas Saenz Julienne <nsaenzju@redhat.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -100,11 +99,11 @@ Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
 	Marcelo Tosatti <mtosatti@redhat.com>,
 	Yair Podemsky <ypodemsk@redhat.com>,
 	Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
-Subject: Re: [RFC PATCH v3 12/15] context_tracking,x86: Defer kernel text
- patching IPIs
-Message-ID: <20241120151308.GL19989@noisy.programming.kicks-ass.net>
+Subject: Re: [RFC PATCH v3 13/15] context_tracking,x86: Add infrastructure to
+ defer kernel TLBI
+Message-ID: <20241120152216.GM19989@noisy.programming.kicks-ass.net>
 References: <20241119153502.41361-1-vschneid@redhat.com>
- <20241119153502.41361-13-vschneid@redhat.com>
+ <20241119153502.41361-14-vschneid@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -113,62 +112,32 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241119153502.41361-13-vschneid@redhat.com>
+In-Reply-To: <20241119153502.41361-14-vschneid@redhat.com>
 
-On Tue, Nov 19, 2024 at 04:34:59PM +0100, Valentin Schneider wrote:
+On Tue, Nov 19, 2024 at 04:35:00PM +0100, Valentin Schneider wrote:
 
-> +static void __text_poke_sync(smp_cond_func_t cond_func)
+> +void noinstr __flush_tlb_all_noinstr(void)
 > +{
-> +	on_each_cpu_cond(cond_func, do_sync_core, NULL, 1);
+> +	/*
+> +	 * This is for invocation in early entry code that cannot be
+> +	 * instrumented. A RMW to CR4 works for most cases, but relies on
+> +	 * being able to flip either of the PGE or PCIDE bits. Flipping CR4.PCID
+> +	 * would require also resetting CR3.PCID, so just try with CR4.PGE, else
+> +	 * do the CR3 write.
+> +	 *
+> +	 * XXX: this gives paravirt the finger.
+> +	 */
+> +	if (cpu_feature_enabled(X86_FEATURE_PGE))
+> +		__native_tlb_flush_global_noinstr(this_cpu_read(cpu_tlbstate.cr4));
+> +	else
+> +		native_flush_tlb_local_noinstr();
 > +}
-> +
->  void text_poke_sync(void)
->  {
-> -	on_each_cpu(do_sync_core, NULL, 1);
-> +	__text_poke_sync(NULL);
-> +}
-> +
-> +void text_poke_sync_deferrable(void)
-> +{
-> +	__text_poke_sync(do_sync_core_defer_cond);
->  }
 
-How about we unwrap some of that like so:
+Urgh, so that's a lot of ugleh, and cr4 has that pinning stuff and gah.
 
->  /*
-> @@ -2257,6 +2273,8 @@ static int tp_vec_nr;
->  static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries)
->  {
->  	unsigned char int3 = INT3_INSN_OPCODE;
-> +	bool force_ipi = false;
-> +	void (*sync_fn)(void);
+Why not always just do the CR3 write and call it a day? That should also
+work for paravirt, no? Just make the whole write_cr3 thing noinstr and
+voila.
 
-	smp_cond_func_t cond = do_sync_core_defer_cond;
 
->  	unsigned int i;
->  	int do_sync;
->  
-> @@ -2291,11 +2309,18 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
->  	 * First step: add a int3 trap to the address that will be patched.
->  	 */
->  	for (i = 0; i < nr_entries; i++) {
-> +		/*
-> +		 * Record that we need to send the IPI if at least one location
-> +		 * in the batch requires it.
-> +		 */
-> +		force_ipi |= tp[i].force_ipi;
-
-		if (tp[i].force_ipi)
-			cond = NULL;
-
->  		tp[i].old = *(u8 *)text_poke_addr(&tp[i]);
->  		text_poke(text_poke_addr(&tp[i]), &int3, INT3_INSN_SIZE);
->  	}
->  
-> -	text_poke_sync();
-> +	sync_fn = force_ipi ? text_poke_sync : text_poke_sync_deferrable;
-> +
-> +	sync_fn();
-
-	__text_poke_sync(cond);
 
