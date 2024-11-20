@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-22316-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22317-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7F819D30FF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 00:39:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C1CC9D3148
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 01:05:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 73E50B218BD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2024 23:39:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A122BB23C2D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 00:05:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82B2B1D2F64;
-	Tue, 19 Nov 2024 23:39:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086A9136A;
+	Wed, 20 Nov 2024 00:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VVwSwoDN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eksPcppY"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446FD1BD9F3;
-	Tue, 19 Nov 2024 23:39:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC15F193;
+	Wed, 20 Nov 2024 00:05:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732059546; cv=none; b=MFr0GCZX8vp5744bM1mFd3BweJesG8WboEqgBnKqWScwkmOM7vZGWjlRMudL+CQ7ytnq5zq/EqmdQJAKCoC1XPp64AHegUdIWcgN0rmyoxVVhovX/A3ju9MNIbwM7ottApPbSoFGNeHGF1upX1iLNe99qdYVgsNis0M2J6Q5mLk=
+	t=1732061136; cv=none; b=F7kX5P7NQAnkk/Nb8fs5/PVJzf1aHedSQE+gJRlNUf0HDXnbsaGXuk3HO01GcvQXWgZt6GAnkDle6ZDxh0rguadKNSs8Qryt+Ikp9cNmLbO/Ud8gTPp8pW3mGGHH7eMSc2yfMqUDWRK2BVcS9ZX6XwOwJD1iMFbX/i3C4jf0vfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732059546; c=relaxed/simple;
-	bh=MJi3Fv2/1QvfWr/LiwMdd8vo0kHoZwkP7YNG7EQREfw=;
+	s=arc-20240116; t=1732061136; c=relaxed/simple;
+	bh=NMnFX7XK6VdRPzGtpSRTKyvI+/r1fqrGrX48X5BBDWA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hoig5TnPxVlZh6uu3DCTcpWYZESUUUy2LC+rtDstKR3/KsE9uoL4koFpJKip7wDYo4md4bSKuQwydwYC979hAybvUSMKrHYevHtXYf5FETuTW6gUY3rKKkGXrYtCVB5AIVatJsmSBkJkjfKgP4WqlqckyD49hGZnnFzjPcPnhFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VVwSwoDN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB9B3C4CECF;
-	Tue, 19 Nov 2024 23:39:03 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=H3mjApGchXntPaTsiTun9YAMNpumBS37zjZbuy1gasVvNZcszphDac8Vce2dDoI5/6AoTrXWSwrcjfFt6XmC9QZtj2rXO7rrf6J6NBGMYd9S33A90Ma9C8QFMRaGGzP0wz0InFDoZzMm2+Whwp9ofP1fMertercYWT8znrmLmFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eksPcppY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 492F7C4CECF;
+	Wed, 20 Nov 2024 00:05:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732059545;
-	bh=MJi3Fv2/1QvfWr/LiwMdd8vo0kHoZwkP7YNG7EQREfw=;
+	s=k20201202; t=1732061136;
+	bh=NMnFX7XK6VdRPzGtpSRTKyvI+/r1fqrGrX48X5BBDWA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VVwSwoDNu1TqMFW15ochzl8vEFTrIMSh2sexLA6XSHJ6qClpYzQmx/p8q0+V/ICdK
-	 QcTGJLa+7qQQT24Pg/o/ujB9zzGyzPLCSBycIpzaqRQmmnJgp8Bmm/Asv7c/PmvwiR
-	 hos+7CVCbsa55k1mc7GHNj+kA8fGiX99G6or+53fRDs2TtOHAVH3KebnDSKX5Yyt/J
-	 L+g+8gDhlLq8+G9Zy9kb7DEd1lIcrJQYolbFdsAW5Kbk4+ktaecXpi0xWOSpdFxTtO
-	 qI8NUGX2AHe6987zz7E0iSHgJlM8A9RAr5kj/WxICexja0uizSdnkHYiGVUCbPB9TB
-	 izDxUiUHmBDCA==
-Date: Tue, 19 Nov 2024 15:39:02 -0800
+	b=eksPcppYzPeSt6INt9TwqRvZ4lhbHTxdkTT3HfOrf73uMrdgSEcCiaBLbjbuEr7KW
+	 KTtf0X/Xm113UupXPcdgtWqsbZTElfC3SS6AjmXWs7Njc7ceshzOwUlnMhh2jsa5hH
+	 5OHCR/v0n3tWuWAQrg1DkVk8tW7PRGoTeRmRwkCdgz5FoLEnCrEjA+x4MkVxOrYs9g
+	 tX6BNjcLJDxuXETMH5s7gDSEqB5HHNJFSx81pxD01l1XlEm7xGdkg4yKrWRdZOitj5
+	 tSMfXDjRII5KS06JqDQP80Djvc0pHpcI447DDFOp/8729SCiqKnXDMrLwR5jZhA/7C
+	 VKL7upp0zVLyg==
+Date: Tue, 19 Nov 2024 16:05:32 -0800
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: Valentin Schneider <vschneid@redhat.com>
 Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
@@ -94,7 +94,7 @@ Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
 	Yair Podemsky <ypodemsk@redhat.com>,
 	Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
 Subject: Re: [RFC PATCH v3 06/15] jump_label: Add forceful jump label type
-Message-ID: <20241119233902.kierxzg2aywpevqx@jpoimboe>
+Message-ID: <20241120000532.maqzgsn7m34lti6u@jpoimboe>
 References: <20241119153502.41361-1-vschneid@redhat.com>
  <20241119153502.41361-7-vschneid@redhat.com>
 Precedence: bulk
@@ -108,25 +108,6 @@ Content-Disposition: inline
 In-Reply-To: <20241119153502.41361-7-vschneid@redhat.com>
 
 On Tue, Nov 19, 2024 at 04:34:53PM +0100, Valentin Schneider wrote:
-> Later commits will cause objtool to warn about non __ro_after_init static
-> keys being used in .noinstr sections in order to safely defer instruction
-> patching IPIs targeted at NOHZ_FULL CPUs.
-
-Don't we need similar checking for static calls?
-
-> Two such keys currently exist: mds_idle_clear and __sched_clock_stable,
-> which can both be modified at runtime.
-
-Not sure if feasible, but it sure would be a lot simpler to just make
-"no noinstr patching" a hard rule and then convert the above keys (or at
-least their noinstr-specific usage) to regular branches.
-
-Then "no noinstr patching" could be unilaterally enforced in
-text_poke_bp().
-
-> diff --git a/include/linux/jump_label.h b/include/linux/jump_label.h
-> index f5a2727ca4a9a..93e729545b941 100644
-> --- a/include/linux/jump_label.h
 > +++ b/include/linux/jump_label.h
 > @@ -200,7 +200,8 @@ struct module;
 >  #define JUMP_TYPE_FALSE		0UL
@@ -134,8 +115,10 @@ text_poke_bp().
 >  #define JUMP_TYPE_LINKED	2UL
 > -#define JUMP_TYPE_MASK		3UL
 > +#define JUMP_TYPE_FORCEFUL      4UL
+> +#define JUMP_TYPE_MASK		7UL
 
-JUMP_TYPE_NOINSTR_ALLOWED ?
+Hm, I don't think we can (ab)use this pointer bit on 32-bit arches, as
+the address could be 4 byte aligned?
 
 -- 
 Josh
