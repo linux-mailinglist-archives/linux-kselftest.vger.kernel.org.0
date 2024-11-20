@@ -1,140 +1,148 @@
-Return-Path: <linux-kselftest+bounces-22357-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22358-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 517E79D3F05
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 16:29:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F0909D3F19
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 16:32:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12C05281A5E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 15:29:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0449D28223F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 15:32:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83A641ABEC5;
-	Wed, 20 Nov 2024 15:29:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9494C74C08;
+	Wed, 20 Nov 2024 15:32:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FB60EKDD"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="FgaVkoEG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5FD1156F39;
-	Wed, 20 Nov 2024 15:29:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E1583B1A2;
+	Wed, 20 Nov 2024 15:32:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732116578; cv=none; b=ASwBJjPalQIps6kYYyFnxQAuVHxcWKJZ9bdRiym9kvV9kQRC3rwDbyT1yEFIDI4V26b4upeSrKWCMDWp6iEubVo7TBHKayDfaQZ1JAcvxw0sMztAvWWf0cX+eStP/A6vAZt8B8geKpninU3flMHauot5hoyrEf8koGa1Drwi+AM=
+	t=1732116745; cv=none; b=p62xVBrjUGa3zZ7eHnwcGGKmM0qQKQOC/FfqVsAPT0ND3Xb1+6e5y1nGY130ua760HuvkPTVoInyJ2bkYubzbf2YNT5Bgxr/M1PCsy4CG7O0pwY2uOPZblqL7x4d6TTn/8HRvj2Nc6Va/KdYS7INoQYsZJjzzYUCa4oeh7dCviY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732116578; c=relaxed/simple;
-	bh=GMJRSIN/jwN1mEeXDPhC5UQ+MYY/wdAISwzlBog0b14=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ZgH2xvaIENCtMoxTSDThkex3u8pfzFGuFpplYh/h/gxPNzGjUyRTRJwUtSZnWd2W8F+K0URQ8nZ7iZ+E3CwD8qFV4WBr46rsYfc5OtleK8z8Ui6Kjd5KFkP8R5HnBVVjRcyEjNBMQB9HDXS7zT1mWVcsbtil0fBSDM2m1QxRPJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FB60EKDD; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732116577; x=1763652577;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=GMJRSIN/jwN1mEeXDPhC5UQ+MYY/wdAISwzlBog0b14=;
-  b=FB60EKDD8Uq6AkLoz0qzIidGVOBPGXv72SQL0hFB1F0epi5aeCe7CKOr
-   S+Ig+Z4c711LcptxkuQLid1FjZmK3828IRE/2XMV7F+DMvIiN9aib3gIK
-   YDUblHFFU1n1wl5/7S4x8bblVYsNh8RlLRW8289EVHYzMTQSrG2KTxJIX
-   +hpgAN0pNoGUpPHEC7mOy3Q1k/gIunhLSsvbD83JLIqUY1ppIalGqb4L6
-   Z/gMC3q+BuXdYq28zV5UMgbQ8DtZoi8Zcefv22LAt8+pyoxEeUxt2T4Vo
-   fe4/JBtoqdwvYlbHpFrW1sGRa+PgT38SCkcdVh/x2Q/dXNZTy51R4DatP
-   w==;
-X-CSE-ConnectionGUID: 6jH+taCjT8unZgVUUKRdQg==
-X-CSE-MsgGUID: HCYBXT2mRky1SBYXQ3ecXg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11262"; a="35856478"
-X-IronPort-AV: E=Sophos;i="6.12,170,1728975600"; 
-   d="scan'208";a="35856478"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2024 07:29:36 -0800
-X-CSE-ConnectionGUID: JioBrdkvQk2Y5jNMYdMdmw==
-X-CSE-MsgGUID: ev1M0HImQeKcY4srIRu0nQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,170,1728975600"; 
-   d="scan'208";a="89533919"
-Received: from tassilo.jf.intel.com (HELO tassilo.localdomain) ([10.54.38.190])
-  by fmviesa006.fm.intel.com with ESMTP; 20 Nov 2024 07:29:35 -0800
-Received: by tassilo.localdomain (Postfix, from userid 1000)
-	id C65E8301B9F; Wed, 20 Nov 2024 07:29:34 -0800 (PST)
-From: Andi Kleen <ak@linux.intel.com>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: linux-kernel@vger.kernel.org,  linux-mm@kvack.org,
-  linux-doc@vger.kernel.org,  linux-fsdevel@vger.kernel.org,
-  cgroups@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-  akpm@linux-foundation.org,  corbet@lwn.net,  derek.kiernan@amd.com,
-  dragan.cvetic@amd.com,  arnd@arndb.de,  gregkh@linuxfoundation.org,
-  viro@zeniv.linux.org.uk,  brauner@kernel.org,  jack@suse.cz,
-  tj@kernel.org,  hannes@cmpxchg.org,  mhocko@kernel.org,
-  roman.gushchin@linux.dev,  shakeel.butt@linux.dev,
-  muchun.song@linux.dev,  Liam.Howlett@oracle.com,
-  lorenzo.stoakes@oracle.com,  vbabka@suse.cz,  jannh@google.com,
-  shuah@kernel.org,  vegard.nossum@oracle.com,  vattunuru@marvell.com,
-  schalla@marvell.com,  david@redhat.com,  willy@infradead.org,
-  osalvador@suse.de,  usama.anjum@collabora.com,  andrii@kernel.org,
-  ryan.roberts@arm.com,  peterx@redhat.com,  oleg@redhat.com,  tandersen@
-Subject: Re: [RFCv1 0/6] Page Detective
-In-Reply-To: <20241116175922.3265872-1-pasha.tatashin@soleen.com> (Pasha
-	Tatashin's message of "Sat, 16 Nov 2024 17:59:16 +0000")
-References: <20241116175922.3265872-1-pasha.tatashin@soleen.com>
-Date: Wed, 20 Nov 2024 07:29:34 -0800
-Message-ID: <87wmgxvs81.fsf@linux.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1732116745; c=relaxed/simple;
+	bh=Eryi4OYXCbHpDEV284F8kC8uQ7m7+bl5Uw0oCZKqmXk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZaOXR2VS/wc6C2NeIEEOlaaj2Vtm+XFuO+famPsPcqNO4FP1gzYCjpgwJVdjLbZIl6kFaPcp3TsWIsVuOR5jJmGft7XhiKLY286AnPzMvb5198OL8+Fm5iJv7r2p4Lp+eemFv5/xtG4E1eBbSUFCsOuDMzvzNYGvtu3qPk0ywCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=FgaVkoEG; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=tcTMY8ya7ymb7xaXseOqMs9+4oRXdKR5XJcZuGIQGZ4=; b=FgaVkoEG00IplUMFhm2q9bJDcn
+	f6lPIFe1mjGu/mzL0QDHreJek22LGkhbkX5aNB+qoQoIiolzWlB1o1Ar51QCtm/bbtkdagk50nH3y
+	WiTSE9pgIau4cnAnW/HSBZPgC8VowGKtyI6rMugABbcUVqm00Qf2G39vFqnu3hPJhWqhyGmH/6Hvn
+	16Q88vjI7HzOKfej71txLNGyXjGPPRvkuWPEd6mq0x1yM93Q8prU08tfjSrjyHNmBJUG4Aj6nXnHE
+	nwFv4JzxtdPHumBy8wrQx8vNyTDlDUvdVQO2sGNjcUu6kpr7uiOs553P3EE+P3n3wld+ZY47zcNu+
+	0tmqHdKQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tDmgn-00000000U1t-2qD3;
+	Wed, 20 Nov 2024 15:32:21 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 4B01A300446; Wed, 20 Nov 2024 16:32:21 +0100 (CET)
+Date: Wed, 20 Nov 2024 16:32:21 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Valentin Schneider <vschneid@redhat.com>
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
+	x86@kernel.org, rcu@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Wanpeng Li <wanpengli@tencent.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang1211@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Lorenzo Stoakes <lstoakes@gmail.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jason Baron <jbaron@akamai.com>, Kees Cook <keescook@chromium.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Juerg Haefliger <juerg.haefliger@canonical.com>,
+	Nicolas Saenz Julienne <nsaenz@kernel.org>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Nadav Amit <namit@vmware.com>, Dan Carpenter <error27@gmail.com>,
+	Chuang Wang <nashuiliang@gmail.com>,
+	Yang Jihong <yangjihong1@huawei.com>,
+	Petr Mladek <pmladek@suse.com>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
+	Julian Pidancet <julian.pidancet@oracle.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Dionna Glaze <dionnaglaze@google.com>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Marcelo Tosatti <mtosatti@redhat.com>,
+	Yair Podemsky <ypodemsk@redhat.com>,
+	Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
+Subject: Re: [RFC PATCH v3 13/15] context_tracking,x86: Add infrastructure to
+ defer kernel TLBI
+Message-ID: <20241120153221.GM38972@noisy.programming.kicks-ass.net>
+References: <20241119153502.41361-1-vschneid@redhat.com>
+ <20241119153502.41361-14-vschneid@redhat.com>
+ <20241120152216.GM19989@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241120152216.GM19989@noisy.programming.kicks-ass.net>
 
-Pasha Tatashin <pasha.tatashin@soleen.com> writes:
+On Wed, Nov 20, 2024 at 04:22:16PM +0100, Peter Zijlstra wrote:
+> On Tue, Nov 19, 2024 at 04:35:00PM +0100, Valentin Schneider wrote:
+> 
+> > +void noinstr __flush_tlb_all_noinstr(void)
+> > +{
+> > +	/*
+> > +	 * This is for invocation in early entry code that cannot be
+> > +	 * instrumented. A RMW to CR4 works for most cases, but relies on
+> > +	 * being able to flip either of the PGE or PCIDE bits. Flipping CR4.PCID
+> > +	 * would require also resetting CR3.PCID, so just try with CR4.PGE, else
+> > +	 * do the CR3 write.
+> > +	 *
+> > +	 * XXX: this gives paravirt the finger.
+> > +	 */
+> > +	if (cpu_feature_enabled(X86_FEATURE_PGE))
+> > +		__native_tlb_flush_global_noinstr(this_cpu_read(cpu_tlbstate.cr4));
+> > +	else
+> > +		native_flush_tlb_local_noinstr();
+> > +}
+> 
+> Urgh, so that's a lot of ugleh, and cr4 has that pinning stuff and gah.
+> 
+> Why not always just do the CR3 write and call it a day? That should also
+> work for paravirt, no? Just make the whole write_cr3 thing noinstr and
+> voila.
 
-> Page Detective is a new kernel debugging tool that provides detailed
-> information about the usage and mapping of physical memory pages.
->
-> It is often known that a particular page is corrupted, but it is hard to
-> extract more information about such a page from live system. Examples
-> are:
->
-> - Checksum failure during live migration
-> - Filesystem journal failure
-> - dump_page warnings on the console log
-> - Unexcpected segfaults
->
-> Page Detective helps to extract more information from the kernel, so it
-> can be used by developers to root cause the associated problem.
->
-> It operates through the Linux debugfs interface, with two files: "virt"
-> and "phys".
->
-> The "virt" file takes a virtual address and PID and outputs information
-> about the corresponding page.
->
-> The "phys" file takes a physical address and outputs information about
-> that page.
->
-> The output is presented via kernel log messages (can be accessed with
-> dmesg), and includes information such as the page's reference count,
-> mapping, flags, and memory cgroup. It also shows whether the page is
-> mapped in the kernel page table, and if so, how many times.
+Oh gawd, just having looked at xen_write_cr3() this might not be
+entirely trivial to mark noinstr :/
 
-A lot of all that is already covered in /proc/kpage{flags,cgroup,count)
-Also we already have /proc/pid/pagemap to resolve virtual addresses.
 
-At a minimum you need to discuss why these existing mechanisms are not
-suitable for you and how your new one is better.
-
-If something particular is missing perhaps the existing mechanisms
-can be extended?
-
-Outputting in the dmesg seems rather clumpsy for a production mechanism.
-
-I personally would just use live crash or live gdb on /proc/kcore to get
-extra information, although I can see that might have races.
-
--Andi
 
