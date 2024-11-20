@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-22327-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22328-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 543809D3490
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 08:47:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B25E89D3494
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 08:47:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD7BEB23985
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 07:47:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77BCF286BBD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 07:47:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CBE919F406;
-	Wed, 20 Nov 2024 07:43:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E4281A00ED;
+	Wed, 20 Nov 2024 07:43:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bNadP4C4"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eyD5cAII"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8FAC19D063;
-	Wed, 20 Nov 2024 07:43:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC45619DFA7;
+	Wed, 20 Nov 2024 07:43:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732088622; cv=none; b=CfeOIKuQx3MIAuM7qG9VKjb7A1WRClgU+5kbbBEjNwlsjdwwzHoSm0Kolb7tFu2Fhc+EMuWsyILvvl1ztSExgkqX8KQDeAJxsOjLfDNlocXpkINwHXHeXHzhZcKDEhpjoWlOZVsURvPuqfJjZqTefSCiSRCgyifexNe5S5X6jeA=
+	t=1732088623; cv=none; b=rPk0wL6BC7f7TuLeMjjl9k1Tcfu/ULQg6a9z8s/OjJoCc5ffezpiCm7YWdYZ4Jh0kDicJz71EhskwlloUKoFEBjUFFGfaJZ+ktmP0rVjF+ciXyWTVZzOe/8zfK3Xm3mR5hLR7wS/nj9Z47ULlnIgvaCEqoqAaWhEH4g0HrarDBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732088622; c=relaxed/simple;
-	bh=a1Z4gClvuTUo5OkZJM3UqV+hEuNmuixd0dpk6Mu7XkI=;
+	s=arc-20240116; t=1732088623; c=relaxed/simple;
+	bh=4X4eEn8xrnT9XC/jIUQrtNekfi2jE8KN7byNdLLgl5M=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=u+D6yzdgQ2UJsKVg6qEEgZVUsldOP8m+v9dOM41kuvBtKpLoP7wE4kf6C7XNoWaZV6uLKbdH/wgYgWUEwgUVZ3tJ2Wq89HUJfgnwu5HzWJl4hPclMJhbz6v3ddwnWo5O24hEIGEIl4+0conzMmY3MnWThh9+YKbOE/c6ckCRLn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=bNadP4C4; arc=none smtp.client-ip=217.70.183.193
+	 In-Reply-To:To:Cc; b=DJzh7YDVQZF5OBKit3mV0PsZ39b686j+cSdoA8I3WAEpHmrNdMyct0L8PT7PD+h3MeSZlONpHckzb0fYSiIB6ShWxK8BBxuWsXgxOdDld2LoxyL4Vr4KRFZdfzuwjzTXBDoa1fnWI7xRpN3DXJSjm1yj9glvBfMczNtixeGp1WM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eyD5cAII; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1B76C24000C;
-	Wed, 20 Nov 2024 07:43:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 61684240004;
+	Wed, 20 Nov 2024 07:43:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1732088618;
+	t=1732088619;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=SeQXTSX3AXLNP8f+9FXvOzULwKf0ACJOa6kClw7gPRA=;
-	b=bNadP4C48wgNVaFwXzsKwPM614SoH//3Wzkufx6Ob9lH5Zs4397OObX6Gp7cBQryzeeHd0
-	fIt0GYUMbx1z/dJA8Vkavj0ElbeHX6huyMRLhtCECGYMzjLCyAs2QM9HnSsHJuk40jK/Bc
-	9aoZrttkBgK+zzv6ZJXCOQkvn1aBxiI05jRzBtqXI3MbUNGvBmtzLxa8cmy1E3M32RbOfZ
-	UA92m7b5ZLNoQrjOhn2Nt+9ndCAp6gG65NkRE9ahd6FYaZQl0IOjSELdp9D4T0dXVBYxHR
-	5lOM3UuBA7VJbPLp4jXB94/t0wlpcI9BckO395bprtQWt7nLPhU4JZz9tcwLVg==
+	bh=3D+5CGYU5e/Rb+CQ7gbOD7+RcgF0KKqtZUpNrfXlIPY=;
+	b=eyD5cAII2NSQP8eCR3emPdF5rcnFKOCOikdGVavKG1p21s+elxBGq1YmSUQsgY+uwMm+Ds
+	FOtesdbNJfJdEmLO96VG40fU9ccN750DMYFWHYv41dVnImYf2hNbfgVIV9sLhfjZHAewQq
+	yAPzTRXymIQHMh73VrdY3w7gX7D+cNcjMRu/G4GnAbPMV2lXhabWh454VmqYxsOc8d/3WU
+	hAL0QhCCn2A2dwe8UJZNQ3doW2aTihdAP4vjUI5u6uaXD+FiNN470aF045Alk52uk87hWo
+	Y5olDvLa3M87ctwhBMK2I4ClNAWGg3AtQLa6cmt7SKVEh2Q4jZrOGAXu2f06bA==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Wed, 20 Nov 2024 08:43:19 +0100
-Subject: [PATCH bpf-next v3 09/14] selftests/bpf: move ip checksum helper
- to network helpers
+Date: Wed, 20 Nov 2024 08:43:20 +0100
+Subject: [PATCH bpf-next v3 10/14] selftests/bpf: document pseudo-header
+ checksum helpers
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241120-flow_dissector-v3-9-45b46494f937@bootlin.com>
+Message-Id: <20241120-flow_dissector-v3-10-45b46494f937@bootlin.com>
 References: <20241120-flow_dissector-v3-0-45b46494f937@bootlin.com>
 In-Reply-To: <20241120-flow_dissector-v3-0-45b46494f937@bootlin.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
@@ -79,97 +79,72 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: alexis.lothore@bootlin.com
 
-xdp_metadata test has a small helper computing ipv4 checksums to allow
-manually building packets.
+network_helpers.h provides helpers to compute checksum for pseudo
+headers but no helpers to compute the global checksums.
 
-Move this helper to network_helpers to share it with other tests.
+Before adding those, clarify csum_tcpudp_magic and csum_ipv6_magic
+purpose by adding some documentation.
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
 Changes in v3:
-- use csum_partial for intermediate helper name to keep sync with the
-  corresponding kernel helper
-- provide byte count instead of half-word count to csum_partial
+- instead of renaming the helpers, keep the original name (which is in
+  sync with kernel helpers), and rather add documentation
 
 Changes in v2:
 - new patch
 ---
- tools/testing/selftests/bpf/network_helpers.h      | 24 ++++++++++++++++++++++
- .../selftests/bpf/prog_tests/xdp_metadata.c        | 19 +----------------
- 2 files changed, 25 insertions(+), 18 deletions(-)
+ tools/testing/selftests/bpf/network_helpers.h | 30 +++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index c72c16e1aff825439896b38e59962ffafe92dc71..5ef909f766eb9ac2dd5be67b99245b4676ce4f5f 100644
+index 5ef909f766eb9ac2dd5be67b99245b4676ce4f5f..6ca636643ea2b77fb5cc459b03bf7f8c4f749377 100644
 --- a/tools/testing/selftests/bpf/network_helpers.h
 +++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -104,6 +104,30 @@ static __u16 csum_fold(__u32 csum)
- 	return (__u16)~csum;
+@@ -128,6 +128,21 @@ static inline __sum16 build_ip_csum(struct iphdr *iph)
+ 	return csum_fold(sum);
  }
  
-+static __wsum csum_partial(const void *buf, int len, __wsum sum)
-+{
-+	__u16 *p = (__u16 *)buf;
-+	int num_u16 = len >> 1;
-+	int i;
-+
-+	for (i = 0; i < num_u16; i++)
-+		sum += p[i];
-+
-+	return sum;
-+}
-+
-+static inline __sum16 build_ip_csum(struct iphdr *iph)
-+{
-+	__u32 sum = 0;
-+	__u16 *p;
-+
-+	iph->check = 0;
-+	p = (void *)iph;
-+	sum = csum_partial(p, iph->ihl << 2, 0);
-+
-+	return csum_fold(sum);
-+}
-+
++/**
++ * csum_tcpudp_magic - compute IP pseudo-header checksum
++ *
++ * Compute the IPv4 pseudo header checksum. The helper can take a
++ * accumulated sum from the transport layer to accumulate it and directly
++ * return the transport layer
++ *
++ * @saddr: IP source address
++ * @daddr: IP dest address
++ * @len: IP data size
++ * @proto: transport layer protocol
++ * @csum: The accumulated partial sum to add to the computation
++ *
++ * Returns the folded sum
++ */
  static inline __sum16 csum_tcpudp_magic(__be32 saddr, __be32 daddr,
  					__u32 len, __u8 proto,
  					__wsum csum)
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-index c87ee2bf558c1a7fb726cae0aa7b3d3735fb1aac..7f8e161655336127e5bd7a573d1a09db85a92f53 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-@@ -133,23 +133,6 @@ static void close_xsk(struct xsk *xsk)
- 	munmap(xsk->umem_area, UMEM_SIZE);
+@@ -143,6 +158,21 @@ static inline __sum16 csum_tcpudp_magic(__be32 saddr, __be32 daddr,
+ 	return csum_fold((__u32)s);
  }
  
--static void ip_csum(struct iphdr *iph)
--{
--	__u32 sum = 0;
--	__u16 *p;
--	int i;
--
--	iph->check = 0;
--	p = (void *)iph;
--	for (i = 0; i < sizeof(*iph) / sizeof(*p); i++)
--		sum += p[i];
--
--	while (sum >> 16)
--		sum = (sum & 0xffff) + (sum >> 16);
--
--	iph->check = ~sum;
--}
--
- static int generate_packet(struct xsk *xsk, __u16 dst_port)
- {
- 	struct xsk_tx_metadata *meta;
-@@ -192,7 +175,7 @@ static int generate_packet(struct xsk *xsk, __u16 dst_port)
- 	iph->protocol = IPPROTO_UDP;
- 	ASSERT_EQ(inet_pton(FAMILY, TX_ADDR, &iph->saddr), 1, "inet_pton(TX_ADDR)");
- 	ASSERT_EQ(inet_pton(FAMILY, RX_ADDR, &iph->daddr), 1, "inet_pton(RX_ADDR)");
--	ip_csum(iph);
-+	iph->check = build_ip_csum(iph);
- 
- 	udph->source = htons(UDP_SOURCE_PORT);
- 	udph->dest = htons(dst_port);
++/**
++ * csum_ipv6_magic - compute IPv6 pseudo-header checksum
++ *
++ * Compute the ipv6 pseudo header checksum. The helper can take a
++ * accumulated sum from the transport layer to accumulate it and directly
++ * return the transport layer
++ *
++ * @saddr: IPv6 source address
++ * @daddr: IPv6 dest address
++ * @len: IPv6 data size
++ * @proto: transport layer protocol
++ * @csum: The accumulated partial sum to add to the computation
++ *
++ * Returns the folded sum
++ */
+ static inline __sum16 csum_ipv6_magic(const struct in6_addr *saddr,
+ 				      const struct in6_addr *daddr,
+ 					__u32 len, __u8 proto,
 
 -- 
 2.47.0
