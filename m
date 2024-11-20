@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-22382-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22383-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE0089D448F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 00:34:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 456BE9D44BC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 00:58:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AB751F22000
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 23:34:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90F27B2392B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 23:58:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BABDB1B5ED2;
-	Wed, 20 Nov 2024 23:33:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F3541C1F0B;
+	Wed, 20 Nov 2024 23:58:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D/XvMaE7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QEn78HrR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14760146593;
-	Wed, 20 Nov 2024 23:33:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABBB1B5808;
+	Wed, 20 Nov 2024 23:58:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732145637; cv=none; b=mDUgHFMTzSvABV2xkcQdmSEHo/wAZbQhv5d4i7ppoeu/bdMEZio7r1NjC0V6LrlxB1oE9dNgv87O8cIQ15XsxfMPwhj0T3X/yx+tR3qkDNyY90hXEryfY00XI4/HwYgrOMpVR/IwH+c5koEY8DgmcrZEgFKHqST0wJYDHE833mw=
+	t=1732147109; cv=none; b=u80uOu8q7sAg4GX7CEZW+UJTmwAWNvqlnrvpkJ9YON6ff8+UloIEGzX5zMHLbwkQI11jyYKy5wFVkAo2Ep8gOQg+ReOfFdtgRQw5HvI6lzGdGN2/O/tA+kdE/vcEyMTNcyKBD3UdDSfGFtH5ofzlxXumXGBNCn1rkY5XZUpEjqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732145637; c=relaxed/simple;
-	bh=6J7xR11ORo3RIfap9ywU3d0t+DfN7EdMpAulAvdmJCY=;
+	s=arc-20240116; t=1732147109; c=relaxed/simple;
+	bh=FT7KpVo1Xw4Wyhveq0TEe3D8LUUQtpfN6cDbNDoyYko=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ncyGs8YTrB3m49S8wh4ITxJkQnsU5QK/BTpzV/jEpWyK+Z3Lx4ert10n+BX2roU8wtr/HEBryXx2DskQTWq44VMten7MzjKN54utuRBy6YesuASZXfWnM1QUAjSK1uHrn0bKt+x44UBpAug/qhnTdMDFYgIe3wxNKzHlmFieWxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D/XvMaE7; arc=none smtp.client-ip=209.85.128.50
+	 In-Reply-To:Content-Type; b=o4vgMsKFMun2OtZQRreoVhHNp8aApcF52laRFh7dk/0+o1sFfTWbvrS1/bHHdxGZbeYeq8iEliJ2qqaj9QtsoWUAGnK1l36Yd8OGzeDsUDo2xE8Injgh+V1+U8iWNFyNhQ9Znar2btbrajyYKedJdlFQxODLGWEsrRLy+U7svx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QEn78HrR; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43163667f0eso2307245e9.0;
-        Wed, 20 Nov 2024 15:33:55 -0800 (PST)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4316cce103dso3136285e9.3;
+        Wed, 20 Nov 2024 15:58:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732145634; x=1732750434; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732147105; x=1732751905; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KA1UH+wyjBnkz15ZnSLPILDTGoXb7OXqR690RmvAP8E=;
-        b=D/XvMaE7zx3sl6V+tNdu8GarjQOzDmgK8NE2yAYCpbDv6+egcaW7MZjfSOfmQnskSg
-         UywOxGSZNLIcihI2alQWpf0lhn+jrRUayPg4BwhOqXaap6ovnbb8bek+jdZAX93OxSVL
-         uW4hVRUHhNucE8KSbJ8OvJdJ8Ul9wUFpHos9t5T6FXIz5vBRRRp9e4bUUelPmy5upCA9
-         nXRzCkyJrtbPqrXR4lrSjuxkqddKFcFBEVxIOZKVrjkA6bVuWxnHa3yZj0Bzx10lJq9T
-         HWwnBQc1yPCOJk6jtmf2qHcZhwBeMC3cClDGVHDtPc8C7zIQMrrTdZf4/9/zVw4oe1uW
-         aYcQ==
+        bh=QSzf26MMooOvVsUekTM/2oVfGFV2k4kNZ8E/KxyEwzk=;
+        b=QEn78HrRdLw0uN9Wq5KrBurVbW4lEQbGWSq+8GG4+p3EetgMRJOr6Hi7Fb/5vWbPTc
+         ic/YQV2U+BSAbiMTHNNQBhKxp9W5SjfyH+YAK4DJC8hE7d1rj31aiQmDu1OM0Cu9x2vb
+         ff1fjqSoiECadbrc4iIAYPQhxpF6KwtjtMfoB0Y8zW5FAzUM5lXm583jkgXwKvEi9fTu
+         Q/mnDL/ItUtYb6scUt2wGdpmqLieIdNQubE/suwALwsGya35OaY5o9sFxZv+6Eq6pJ6c
+         UmlmB+VkaV3g21iYoK6EwSX8ZRoYPtAYeBW18uce1dNlbN0V8Pv0qdB9TOJ3yEhu4w0W
+         44CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732145634; x=1732750434;
+        d=1e100.net; s=20230601; t=1732147105; x=1732751905;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KA1UH+wyjBnkz15ZnSLPILDTGoXb7OXqR690RmvAP8E=;
-        b=utne24VMLPZEc1GSF5vC0NNC40y+PJD/6mrYHP3KREAsAfMbRO1oi0n8z+c4nXwm6B
-         tYv6BOmfOAdJYA6ZnGzjf/OVSOHGbTWZky0GVxmb64YJ2bOe0vSCppRZ/7s4yRzB3UEu
-         JUwNKFSaV3L6r/uL5s7fpKGK1487y3nEOX3eRihhTAuQ5PVFIEQ+5xir53JboasopehY
-         Yf5LXlnpq7GFpeI4CdCjamJEbVAL99gzq4zNmti+TXUXo0BVC1Q6P4aSdH9reSckIM7l
-         LLoFsTI9wlvbHsNiWsjCugINuot50IvAQAoSsElas+DBskgAooVa/SpEy86ZOYFDlV+D
-         Wf4w==
-X-Forwarded-Encrypted: i=1; AJvYcCV0OSjtS/qoEhtMsdV7durFL5XTEJIEtNPeJq4qJa1TuySZcUD1TWho4h7PQzbxgP8RFfsEBcn++UqQaoPbmCPA@vger.kernel.org, AJvYcCVXMP5gLx+xZ+WBlqA7LzUeRPT7ZgRyNClxoI8hNDAWRs2zjqZ6OVLofsdhY/rGCvOWohF4+hc9@vger.kernel.org, AJvYcCWwu6mBg5mtOjIcF0bnKWX2pMmOHqEzj7x5ObGO3N/1v/6D/ANdD4ZxgBWB4fYAQ+ldce+jebL0VA704d8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+TDPPShyyIcZCWtWU0WiFMXUHb0jn13K7rMkxETYrdLIVBBow
-	ZUjEwJM1nVooZl/r6U+WTc/uazcrzTwjIUS4EKJcfEeIKf+iY9oD
-X-Google-Smtp-Source: AGHT+IE+SQIsEimpHXJsKKmHX3ZxLKNCRpYFvsqLzYug5ritHNDbcVB7wT5lLQWpGSN3e76BizHlYg==
-X-Received: by 2002:a5d:5f8f:0:b0:381:f5c2:97c9 with SMTP id ffacd0b85a97d-38254af996emr3437272f8f.25.1732145634043;
-        Wed, 20 Nov 2024 15:33:54 -0800 (PST)
+        bh=QSzf26MMooOvVsUekTM/2oVfGFV2k4kNZ8E/KxyEwzk=;
+        b=GZn+nKiGmA5NNr8IwC6xhV+6lODKcDOv5968y9iMVcM85N7M4X8GM/ZrySqCCMc7/+
+         jrMiK3UQRtfP1A75aWGqSwjijY/bs/io5iXU8lJKgNjTCnlTVR74gd/agOiVspSvrhDV
+         We2pcZeLCQlLxJaNRGvq3eax3xLD0kQmpslOVRKM8uwa0W+FTyXAcPzeM56y6CzpF5LX
+         oVtevkim60V8PaswWkvCjKkEQE1kOUTjPXlSWAOXzXfX+qKbkY/RIRhUlqdFnzrT6WCT
+         D9X13aRP9KxO1Fs+r7qlfabvL/GgFaJQHWh0DRrHeVIOHyeJH+7GZ9aR0JYaXhYu2mpK
+         rTvA==
+X-Forwarded-Encrypted: i=1; AJvYcCU44bpNCyPwpONvthLucvIR2ohMlV1mHDk7rmozPBmu/MdOHSPWB3SHOKN9ee6mgS1CsI59TEVuXRo4Wvo=@vger.kernel.org, AJvYcCUQ1+lMzm63buBGKZjRZ9H2bpmmnDPBPpzsccwo9KL/hESCqEiLDgq7LokF7xOvhW4HQgMR9eGYLh4FTTTDSTYh@vger.kernel.org, AJvYcCVnkofUZ9oqBUurVyUeDoPunTSQsr411p5/pE1EOohkd6vhtJ+RYl8PoMzGVgCM4ZcpqkgleNdG@vger.kernel.org
+X-Gm-Message-State: AOJu0YywkfGy5w1RWM1bV5RK+s3T/w1Y7diYS6jNh6CJYOHV5pjErkoE
+	tTu0tByzYEi0jB9ozfjNd3MNyIGfaipJCGWj522o9/J2n1lRoUoX
+X-Google-Smtp-Source: AGHT+IFdnLy7rwqiIZErl4q76RFF8iGIEXJOmR4TkGveY0gnQTd5KyXsvE+Qee4CVFMz1SkWoxU2LA==
+X-Received: by 2002:a05:600c:4f46:b0:42f:8229:a09e with SMTP id 5b1f17b1804b1-4334f01d75bmr44748645e9.29.1732147105431;
+        Wed, 20 Nov 2024 15:58:25 -0800 (PST)
 Received: from [192.168.0.2] ([69.6.8.124])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3825a6bbe80sm476375f8f.35.2024.11.20.15.33.50
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-433b01e1046sm36572785e9.4.2024.11.20.15.58.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Nov 2024 15:33:52 -0800 (PST)
-Message-ID: <68214df3-23b6-4da4-9ad9-b10e8878a4da@gmail.com>
-Date: Thu, 21 Nov 2024 01:34:27 +0200
+        Wed, 20 Nov 2024 15:58:24 -0800 (PST)
+Message-ID: <ca5c4c4b-bd9b-4ccc-9258-e78ec7684a85@gmail.com>
+Date: Thu, 21 Nov 2024 01:58:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -87,42 +87,74 @@ References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
  <20241029-b4-ovpn-v11-7-de4698c73a25@openvpn.net>
  <62d382f8-ea45-4157-b54b-8fed7bdafcca@gmail.com>
  <1dffb833-1688-4572-bbf8-c6524cd84402@openvpn.net>
- <b8612694-c5b7-4b62-8b9d-783aaec1439f@openvpn.net>
 Content-Language: en-US
 From: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-In-Reply-To: <b8612694-c5b7-4b62-8b9d-783aaec1439f@openvpn.net>
+In-Reply-To: <1dffb833-1688-4572-bbf8-c6524cd84402@openvpn.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 19.11.2024 15:44, Antonio Quartulli wrote:
-> On 15/11/2024 15:28, Antonio Quartulli wrote:
-> [...]
->>>> +}
->>>> +
->>>> +static struct ovpn_socket *ovpn_socket_get(struct socket *sock)
->>>> +{
->>>> +    struct ovpn_socket *ovpn_sock;
->>>> +
->>>> +    rcu_read_lock();
->>>> +    ovpn_sock = rcu_dereference_sk_user_data(sock->sk);
->>>> +    if (!ovpn_socket_hold(ovpn_sock)) {
->>>> +        pr_warn("%s: found ovpn_socket with ref = 0\n", __func__);
->>>
->>> Should we be more specific here and print warning with 
->>> netdev_warn(ovpn_sock->ovpn->dev, ...)?
+On 15.11.2024 16:28, Antonio Quartulli wrote:
+> On 10/11/2024 19:26, Sergey Ryazanov wrote:
+>> On 29.10.2024 12:47, Antonio Quartulli wrote:
+
+[...]
+
+>>> +static bool ovpn_socket_hold(struct ovpn_socket *sock)
+>>> +{
+>>> +    return kref_get_unless_zero(&sock->refcount);
 >>
->> ACK must be an unnoticed leftover
+>> Why do we need to wrap this kref acquiring call into the function. Why 
+>> we cannot simply call kref_get_unless_zero() from ovpn_socket_get()?
 > 
-> I take this back.
-> If refcounter is zero, I'd avoid accessing any field of the ovpn_sock 
-> object, thus the pr_warn() without any reference to the device.
+> Generally I prefer to keep the API among objects consistent.
+> In this specific case, it means having hold() and put() helpers in order 
+> to avoid calling kref_* functions directly in the code.
+> 
+> This is a pretty simple case because hold() is called only once, but I 
+> still like to be consistent.
 
-If it's such unlikely scenario, then should it be:
+Make sense. The counterpart ovpn_socket_hold() function declared in the 
+header file. Probably that's why I missed it. Shall we move the holding 
+routine there as well?
 
-if (WARN_ON(!ovpn_socket_hold(ovpn_sock)))
-     ovpn_sock = NULL;
+[...]
 
-?
+>>> +int ovpn_udp_socket_attach(struct socket *sock, struct ovpn_struct 
+>>> *ovpn)
+>>> +{
+>>> +    struct ovpn_socket *old_data;
+>>> +    int ret = 0;
+>>> +
+>>> +    /* sanity check */
+>>> +    if (sock->sk->sk_protocol != IPPROTO_UDP) {
+>>
+>> The function will be called only for a UDP socket. The caller makes 
+>> sure this is truth. So, why do we need this check?
+> 
+> To avoid this function being copied/called somewhere else in the future 
+> and we forget about this critical assumption.
+
+Shall we do the same for all other functions in this file? E.g. 
+ovpn_udp_socket_detach/ovpn_udp_send_skb? And who is giving guarantee 
+that the code will be copied together with the check?
+
+> Indeed it's a just sanity check.
+
+Shall we check for pointers validity before dereferencing them?
+
+if (!ovpn || !sock || !sock->sk || !sock->sk->sk_protocol != IPPROTO_UDP) {
+
+With the above questions I would like to show that it's endless number 
+of possible mistakes. And no matter how much do we check, a creative 
+engineer will find a way to ruin the kernel.
+
+So, is it worth to spend code lines for checking socket for being UDP 
+inside a function that has '_udp_' in its name and is called only inside 
+the module?
+
+>>> +        DEBUG_NET_WARN_ON_ONCE(1);
+>>> +        return -EINVAL;
+>>> +    }
 
 --
 Sergey
