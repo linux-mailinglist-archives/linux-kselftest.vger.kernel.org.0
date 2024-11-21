@@ -1,143 +1,502 @@
-Return-Path: <linux-kselftest+bounces-22396-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22397-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 912CD9D4B32
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 12:02:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF64B9D4B4C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 12:12:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 045ACB2406A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 11:02:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31DCD1F2367F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 11:12:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 666041D0B8A;
-	Thu, 21 Nov 2024 11:02:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1C551D0E2F;
+	Thu, 21 Nov 2024 11:12:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="XPKb8Vow"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lkr0OnMc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCDE41C9B95;
-	Thu, 21 Nov 2024 11:02:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2FC374068
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 11:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732186967; cv=none; b=HWQxonSkSvcCTNeEKydw6C7YKftxOsb+VOsQF2ivGc7sYbNuTiZ6mGonqoMtDltoQGEl6qmIkOu4au2j/+4nBn9pSyHUV1O+XcL0xH/OMsftOJ1QK7lbapbYiGcVozfJcp5uLFhdSSwfKAUN7++ktsviWorccCMjX6CDi1xrnZc=
+	t=1732187542; cv=none; b=ev581GW/8S2axUtY13CiMvNQufQA5ZcD78j7UeRRV89yfAW4se6RNOWpSuMfmP8HXGVC5ZlaL9rafvRWnjaes8Irz5ROXk9P2LSalP6MeecLfqxjXkLoNBEZv3frZQqlpWz3LjyLhGPxWnD3/HEmCZn7dR3P0DSdUYiuAi9FhWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732186967; c=relaxed/simple;
-	bh=28IJcyn5WF2tiP+O72CcHDbeluIq7DCiPoYbU4oOZgo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BT1aZkByWJmiuBYO8GkwOo+Q41AmK7z1BztPbk7im5nvd1CGY1lnFkvQ6eRdZaIR5LR717TlG37fFFy7KmHkyUIjZeM8qCLjyPWxOJSra9Cq8mktRfFB2IwkcottMPb9QsCnFoPHPtej1tlmyMzWeYP+eg8gbIzM9RVwGIFltTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=XPKb8Vow; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=zNXZoyeqqFWas/9jC0n8iQIDDwWz6V7tiZVs/eKT/uQ=; b=XPKb8Vow8F3xBJs12GZw/rt+Ow
-	VF/GyUTUxJh9qI63kQJho8d0o5b4u5E8hDxO9ShcsfeRFVp/4rkAW3WVDH3KYv4FBUs5QeL3bDFNr
-	M2aCUSxGPm77wao4+XcolTgelx3/vUfJRC9ZTa1qpwqLhckqrIoLQCwPBFII/z+3NvmeOaejchepE
-	O9kLSIfVQIw8d8FkRpeeViXPOameNIBniXeZmlVNv54ia4JTaw8U/tDSVrqpUmahogiKcjW06qsaB
-	7ZnXXj6OLHYDFY3PL0Ifx3GW+EpiJvB3xWocbtKENr0hYiPfi1fSS6O/0nTMqHDkVAYuqiGmwuOiS
-	qgVENELw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tE4xN-00000006IWH-3lMe;
-	Thu, 21 Nov 2024 11:02:43 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id B8FEF30068B; Thu, 21 Nov 2024 12:02:42 +0100 (CET)
-Date: Thu, 21 Nov 2024 12:02:42 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
-	x86@kernel.org, rcu@vger.kernel.org,
+	s=arc-20240116; t=1732187542; c=relaxed/simple;
+	bh=0RoZ1k0MIgJtAZZxA/cydZniSVik3az1/fVvoPV/yVY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KH9u/pAZxp5SClhlssHn08rMaEv411YIjVgudOm5W7atCY69gJ1cbVa53zDn+uFMrTI0VDzKMJwBP3e3B9VH6PXS7LbdLO/WsBtlDWELro5KifpVmRV+D9SXEfSCI8Pwl5GeBNmuoIh7HCuE7R1LLo6heQ1Evkde7IqWTtDQ6m0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lkr0OnMc; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1732187536;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=QC2F/Cd3ACvzMp5vlB3mOJU9ZI9rcfOM57+5Z/lBLds=;
+	b=lkr0OnMc/EuTVAPMOcLvk0SbwXKHIPI2zqoChck/Hp4gumMm+pD0uTYiJWu6OuO1YJ/Ssg
+	vLobk25mOBjyuGIQavvaRncaYx3vQaU6lh1OZSNj1w/Up/vyok29z11bmOcNhA50CqtX9y
+	uqspN0hhX8Qqw8+el8/wAiPkWiRnDSc=
+From: George Guo <dongtai.guo@linux.dev>
+To: jpoimboe@kernel.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	joe.lawrence@redhat.com,
+	shuah@kernel.org
+Cc: live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Wanpeng Li <wanpengli@tencent.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Lorenzo Stoakes <lstoakes@gmail.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jason Baron <jbaron@akamai.com>, Kees Cook <keescook@chromium.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Juerg Haefliger <juerg.haefliger@canonical.com>,
-	Nicolas Saenz Julienne <nsaenz@kernel.org>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Nadav Amit <namit@vmware.com>, Dan Carpenter <error27@gmail.com>,
-	Chuang Wang <nashuiliang@gmail.com>,
-	Yang Jihong <yangjihong1@huawei.com>,
-	Petr Mladek <pmladek@suse.com>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-	Julian Pidancet <julian.pidancet@oracle.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	Yair Podemsky <ypodemsk@redhat.com>,
-	Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
-Subject: Re: [RFC PATCH v3 08/15] sched/clock, x86: Make __sched_clock_stable
- forceful
-Message-ID: <20241121110242.GD24774@noisy.programming.kicks-ass.net>
-References: <20241119153502.41361-1-vschneid@redhat.com>
- <20241119153502.41361-9-vschneid@redhat.com>
- <20241120145904.GK19989@noisy.programming.kicks-ass.net>
- <xhsmhv7whhnjb.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+	linux-kernel@vger.kernel.org,
+	George Guo <guodongtai@kylinos.cn>
+Subject: [PATCH livepatch/master v1 1/6] selftests/livepatch: fix test-callbacks.sh execution error
+Date: Thu, 21 Nov 2024 19:11:30 +0800
+Message-Id: <20241121111135.2125391-1-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmhv7whhnjb.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Nov 20, 2024 at 05:34:32PM +0100, Valentin Schneider wrote:
-> On 20/11/24 15:59, Peter Zijlstra wrote:
-> > On Tue, Nov 19, 2024 at 04:34:55PM +0100, Valentin Schneider wrote:
-> >> Later commits will cause objtool to warn about non __ro_after_init static
-> >> keys being used in .noinstr sections in order to safely defer instruction
-> >> patching IPIs targeted at NOHZ_FULL CPUs.
-> >> 
-> >> __sched_clock_stable is used in .noinstr code, and can be modified at
-> >> runtime (e.g. KVM module loading). Suppressing the text_poke_sync() IPI has
-> >
-> > Wait, what !? loading KVM causes the TSC to be marked unstable?
-> 
+From: George Guo <guodongtai@kylinos.cn>
 
-> There is however this:
-> 
->   kvm_arch_vcpu_load()
->   `\
->     mark_tsc_unstable()
-> 
-> So plugging a VCPU might do that.
+The script test-callbacks.sh fails with the following error:
+$ sudo ./test-callbacks.sh
+TEST: target module before livepatch ... not ok
 
-Right, but that only happens if it observes the TSC doing dodgy, so
-that's deserved and shouldn't happen on hardware from this decade, and
-possibly the one before that.
+- expected
++ result
+ test_klp_callbacks_mod: test_klp_callbacks_mod_init
+ % insmod test_modules/test_klp_callbacks_demo.ko
+ livepatch: enabling patch 'test_klp_callbacks_demo'
+-livepatch: 'test_klp_callbacks_demo': initializing patching transition
++transition: 'test_klp_callbacks_demo': initializing patching transition
+ test_klp_callbacks_demo: pre_patch_callback: vmlinux
+ test_klp_callbacks_demo: pre_patch_callback: test_klp_callbacks_mod -> [MODULE_STATE_LIVE] Normal state
+-livepatch: 'test_klp_callbacks_demo': starting patching transition
+-livepatch: 'test_klp_callbacks_demo': completing patching transition
++transition: 'test_klp_callbacks_demo': starting patching transition
++transition: 'test_klp_callbacks_demo': completing patching transition
+ test_klp_callbacks_demo: post_patch_callback: vmlinux
+ test_klp_callbacks_demo: post_patch_callback: test_klp_callbacks_mod -> [MODULE_STATE_LIVE] Normal state
+-livepatch: 'test_klp_callbacks_demo': patching complete
++transition: 'test_klp_callbacks_demo': patching complete
+ % echo 0 > /sys/kernel/livepatch/test_klp_callbacks_demo/enabled
+-livepatch: 'test_klp_callbacks_demo': initializing unpatching transition
++transition: 'test_klp_callbacks_demo': initializing unpatching transition
+ test_klp_callbacks_demo: pre_unpatch_callback: vmlinux
+ test_klp_callbacks_demo: pre_unpatch_callback: test_klp_callbacks_mod -> [MODULE_STATE_LIVE] Normal state
+-livepatch: 'test_klp_callbacks_demo': starting unpatching transition
+-livepatch: 'test_klp_callbacks_demo': completing unpatching transition
++transition: 'test_klp_callbacks_demo': starting unpatching transition
++transition: 'test_klp_callbacks_demo': completing unpatching transition
+ test_klp_callbacks_demo: post_unpatch_callback: vmlinux
+ test_klp_callbacks_demo: post_unpatch_callback: test_klp_callbacks_mod -> [MODULE_STATE_LIVE] Normal state
+-livepatch: 'test_klp_callbacks_demo': unpatching complete
++transition: 'test_klp_callbacks_demo': unpatching complete
+ % rmmod test_klp_callbacks_demo
+ % rmmod test_klp_callbacks_mod
+ test_klp_callbacks_mod: test_klp_callbacks_mod_exit
+
+ERROR: livepatch kselftest(s) failed
+
+The issue arises due to a mismatch in expected log output during livepatch
+transition. Specifically, the logs previously contained "livepatch:" but have
+now been updated to "transition:". This results in test failures when comparing
+the output with the expected values.
+
+This patch updates the expected test output to reflect the new log format.
+
+Signed-off-by: George Guo <guodongtai@kylinos.cn>
+---
+ .../selftests/livepatch/test-callbacks.sh     | 188 +++++++++---------
+ 1 file changed, 94 insertions(+), 94 deletions(-)
+
+diff --git a/tools/testing/selftests/livepatch/test-callbacks.sh b/tools/testing/selftests/livepatch/test-callbacks.sh
+index 32b150e25b10..08a33c15bb29 100755
+--- a/tools/testing/selftests/livepatch/test-callbacks.sh
++++ b/tools/testing/selftests/livepatch/test-callbacks.sh
+@@ -38,23 +38,23 @@ check_result "% insmod test_modules/$MOD_TARGET.ko
+ $MOD_TARGET: ${MOD_TARGET}_init
+ % insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
++transition: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+ $MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
+-livepatch: '$MOD_LIVEPATCH': starting patching transition
+-livepatch: '$MOD_LIVEPATCH': completing patching transition
++transition: '$MOD_LIVEPATCH': starting patching transition
++transition: '$MOD_LIVEPATCH': completing patching transition
+ $MOD_LIVEPATCH: post_patch_callback: vmlinux
+ $MOD_LIVEPATCH: post_patch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
+-livepatch: '$MOD_LIVEPATCH': patching complete
++transition: '$MOD_LIVEPATCH': patching complete
+ % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
+-livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
++transition: '$MOD_LIVEPATCH': initializing unpatching transition
+ $MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
+ $MOD_LIVEPATCH: pre_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
+-livepatch: '$MOD_LIVEPATCH': starting unpatching transition
+-livepatch: '$MOD_LIVEPATCH': completing unpatching transition
++transition: '$MOD_LIVEPATCH': starting unpatching transition
++transition: '$MOD_LIVEPATCH': completing unpatching transition
+ $MOD_LIVEPATCH: post_unpatch_callback: vmlinux
+ $MOD_LIVEPATCH: post_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
+-livepatch: '$MOD_LIVEPATCH': unpatching complete
++transition: '$MOD_LIVEPATCH': unpatching complete
+ % rmmod $MOD_LIVEPATCH
+ % rmmod $MOD_TARGET
+ $MOD_TARGET: ${MOD_TARGET}_exit"
+@@ -83,26 +83,26 @@ unload_mod $MOD_TARGET
+ 
+ check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
++transition: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': starting patching transition
+-livepatch: '$MOD_LIVEPATCH': completing patching transition
++transition: '$MOD_LIVEPATCH': starting patching transition
++transition: '$MOD_LIVEPATCH': completing patching transition
+ $MOD_LIVEPATCH: post_patch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': patching complete
++transition: '$MOD_LIVEPATCH': patching complete
+ % insmod test_modules/$MOD_TARGET.ko
+ livepatch: applying patch '$MOD_LIVEPATCH' to loading module '$MOD_TARGET'
+ $MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
+ $MOD_LIVEPATCH: post_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
+ $MOD_TARGET: ${MOD_TARGET}_init
+ % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
+-livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
++transition: '$MOD_LIVEPATCH': initializing unpatching transition
+ $MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
+ $MOD_LIVEPATCH: pre_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
+-livepatch: '$MOD_LIVEPATCH': starting unpatching transition
+-livepatch: '$MOD_LIVEPATCH': completing unpatching transition
++transition: '$MOD_LIVEPATCH': starting unpatching transition
++transition: '$MOD_LIVEPATCH': completing unpatching transition
+ $MOD_LIVEPATCH: post_unpatch_callback: vmlinux
+ $MOD_LIVEPATCH: post_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
+-livepatch: '$MOD_LIVEPATCH': unpatching complete
++transition: '$MOD_LIVEPATCH': unpatching complete
+ % rmmod $MOD_LIVEPATCH
+ % rmmod $MOD_TARGET
+ $MOD_TARGET: ${MOD_TARGET}_exit"
+@@ -133,26 +133,26 @@ check_result "% insmod test_modules/$MOD_TARGET.ko
+ $MOD_TARGET: ${MOD_TARGET}_init
+ % insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
++transition: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+ $MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
+-livepatch: '$MOD_LIVEPATCH': starting patching transition
+-livepatch: '$MOD_LIVEPATCH': completing patching transition
++transition: '$MOD_LIVEPATCH': starting patching transition
++transition: '$MOD_LIVEPATCH': completing patching transition
+ $MOD_LIVEPATCH: post_patch_callback: vmlinux
+ $MOD_LIVEPATCH: post_patch_callback: $MOD_TARGET -> [MODULE_STATE_LIVE] Normal state
+-livepatch: '$MOD_LIVEPATCH': patching complete
++transition: '$MOD_LIVEPATCH': patching complete
+ % rmmod $MOD_TARGET
+ $MOD_TARGET: ${MOD_TARGET}_exit
+ $MOD_LIVEPATCH: pre_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_GOING] Going away
+ livepatch: reverting patch '$MOD_LIVEPATCH' on unloading module '$MOD_TARGET'
+ $MOD_LIVEPATCH: post_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_GOING] Going away
+ % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
+-livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
++transition: '$MOD_LIVEPATCH': initializing unpatching transition
+ $MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': starting unpatching transition
+-livepatch: '$MOD_LIVEPATCH': completing unpatching transition
++transition: '$MOD_LIVEPATCH': starting unpatching transition
++transition: '$MOD_LIVEPATCH': completing unpatching transition
+ $MOD_LIVEPATCH: post_unpatch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': unpatching complete
++transition: '$MOD_LIVEPATCH': unpatching complete
+ % rmmod $MOD_LIVEPATCH"
+ 
+ 
+@@ -179,12 +179,12 @@ unload_lp $MOD_LIVEPATCH
+ 
+ check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
++transition: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': starting patching transition
+-livepatch: '$MOD_LIVEPATCH': completing patching transition
++transition: '$MOD_LIVEPATCH': starting patching transition
++transition: '$MOD_LIVEPATCH': completing patching transition
+ $MOD_LIVEPATCH: post_patch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': patching complete
++transition: '$MOD_LIVEPATCH': patching complete
+ % insmod test_modules/$MOD_TARGET.ko
+ livepatch: applying patch '$MOD_LIVEPATCH' to loading module '$MOD_TARGET'
+ $MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
+@@ -196,12 +196,12 @@ $MOD_LIVEPATCH: pre_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_GOING] Going
+ livepatch: reverting patch '$MOD_LIVEPATCH' on unloading module '$MOD_TARGET'
+ $MOD_LIVEPATCH: post_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_GOING] Going away
+ % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
+-livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
++transition: '$MOD_LIVEPATCH': initializing unpatching transition
+ $MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': starting unpatching transition
+-livepatch: '$MOD_LIVEPATCH': completing unpatching transition
++transition: '$MOD_LIVEPATCH': starting unpatching transition
++transition: '$MOD_LIVEPATCH': completing unpatching transition
+ $MOD_LIVEPATCH: post_unpatch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': unpatching complete
++transition: '$MOD_LIVEPATCH': unpatching complete
+ % rmmod $MOD_LIVEPATCH"
+ 
+ 
+@@ -221,19 +221,19 @@ unload_lp $MOD_LIVEPATCH
+ 
+ check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
++transition: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': starting patching transition
+-livepatch: '$MOD_LIVEPATCH': completing patching transition
++transition: '$MOD_LIVEPATCH': starting patching transition
++transition: '$MOD_LIVEPATCH': completing patching transition
+ $MOD_LIVEPATCH: post_patch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': patching complete
++transition: '$MOD_LIVEPATCH': patching complete
+ % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
+-livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
++transition: '$MOD_LIVEPATCH': initializing unpatching transition
+ $MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': starting unpatching transition
+-livepatch: '$MOD_LIVEPATCH': completing unpatching transition
++transition: '$MOD_LIVEPATCH': starting unpatching transition
++transition: '$MOD_LIVEPATCH': completing unpatching transition
+ $MOD_LIVEPATCH: post_unpatch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': unpatching complete
++transition: '$MOD_LIVEPATCH': unpatching complete
+ % rmmod $MOD_LIVEPATCH"
+ 
+ 
+@@ -258,13 +258,13 @@ check_result "% insmod test_modules/$MOD_TARGET.ko
+ $MOD_TARGET: ${MOD_TARGET}_init
+ % insmod test_modules/$MOD_LIVEPATCH.ko pre_patch_ret=-19
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
++transition: '$MOD_LIVEPATCH': initializing patching transition
+ test_klp_callbacks_demo: pre_patch_callback: vmlinux
+ livepatch: pre-patch callback failed for object 'vmlinux'
+ livepatch: failed to enable patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': canceling patching transition, going to unpatch
+-livepatch: '$MOD_LIVEPATCH': completing unpatching transition
+-livepatch: '$MOD_LIVEPATCH': unpatching complete
++transition: '$MOD_LIVEPATCH': canceling patching transition, going to unpatch
++transition: '$MOD_LIVEPATCH': completing unpatching transition
++transition: '$MOD_LIVEPATCH': unpatching complete
+ insmod: ERROR: could not insert module test_modules/$MOD_LIVEPATCH.ko: No such device
+ % rmmod $MOD_TARGET
+ $MOD_TARGET: ${MOD_TARGET}_exit"
+@@ -297,12 +297,12 @@ unload_lp $MOD_LIVEPATCH
+ 
+ check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
++transition: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': starting patching transition
+-livepatch: '$MOD_LIVEPATCH': completing patching transition
++transition: '$MOD_LIVEPATCH': starting patching transition
++transition: '$MOD_LIVEPATCH': completing patching transition
+ $MOD_LIVEPATCH: post_patch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': patching complete
++transition: '$MOD_LIVEPATCH': patching complete
+ % echo -19 > /sys/module/$MOD_LIVEPATCH/parameters/pre_patch_ret
+ % insmod test_modules/$MOD_TARGET.ko
+ livepatch: applying patch '$MOD_LIVEPATCH' to loading module '$MOD_TARGET'
+@@ -311,12 +311,12 @@ livepatch: pre-patch callback failed for object '$MOD_TARGET'
+ livepatch: patch '$MOD_LIVEPATCH' failed for module '$MOD_TARGET', refusing to load module '$MOD_TARGET'
+ insmod: ERROR: could not insert module test_modules/$MOD_TARGET.ko: No such device
+ % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
+-livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
++transition: '$MOD_LIVEPATCH': initializing unpatching transition
+ $MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': starting unpatching transition
+-livepatch: '$MOD_LIVEPATCH': completing unpatching transition
++transition: '$MOD_LIVEPATCH': starting unpatching transition
++transition: '$MOD_LIVEPATCH': completing unpatching transition
+ $MOD_LIVEPATCH: post_unpatch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': unpatching complete
++transition: '$MOD_LIVEPATCH': unpatching complete
+ % rmmod $MOD_LIVEPATCH"
+ 
+ 
+@@ -346,14 +346,14 @@ $MOD_TARGET_BUSY: busymod_work_func enter
+ $MOD_TARGET_BUSY: busymod_work_func exit
+ % insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
++transition: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+ $MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET_BUSY -> [MODULE_STATE_LIVE] Normal state
+-livepatch: '$MOD_LIVEPATCH': starting patching transition
+-livepatch: '$MOD_LIVEPATCH': completing patching transition
++transition: '$MOD_LIVEPATCH': starting patching transition
++transition: '$MOD_LIVEPATCH': completing patching transition
+ $MOD_LIVEPATCH: post_patch_callback: vmlinux
+ $MOD_LIVEPATCH: post_patch_callback: $MOD_TARGET_BUSY -> [MODULE_STATE_LIVE] Normal state
+-livepatch: '$MOD_LIVEPATCH': patching complete
++transition: '$MOD_LIVEPATCH': patching complete
+ % insmod test_modules/$MOD_TARGET.ko
+ livepatch: applying patch '$MOD_LIVEPATCH' to loading module '$MOD_TARGET'
+ $MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
+@@ -365,14 +365,14 @@ $MOD_LIVEPATCH: pre_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_GOING] Going
+ livepatch: reverting patch '$MOD_LIVEPATCH' on unloading module '$MOD_TARGET'
+ $MOD_LIVEPATCH: post_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_GOING] Going away
+ % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
+-livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
++transition: '$MOD_LIVEPATCH': initializing unpatching transition
+ $MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
+ $MOD_LIVEPATCH: pre_unpatch_callback: $MOD_TARGET_BUSY -> [MODULE_STATE_LIVE] Normal state
+-livepatch: '$MOD_LIVEPATCH': starting unpatching transition
+-livepatch: '$MOD_LIVEPATCH': completing unpatching transition
++transition: '$MOD_LIVEPATCH': starting unpatching transition
++transition: '$MOD_LIVEPATCH': completing unpatching transition
+ $MOD_LIVEPATCH: post_unpatch_callback: vmlinux
+ $MOD_LIVEPATCH: post_unpatch_callback: $MOD_TARGET_BUSY -> [MODULE_STATE_LIVE] Normal state
+-livepatch: '$MOD_LIVEPATCH': unpatching complete
++transition: '$MOD_LIVEPATCH': unpatching complete
+ % rmmod $MOD_LIVEPATCH
+ % rmmod $MOD_TARGET_BUSY
+ $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
+@@ -426,10 +426,10 @@ $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_init
+ $MOD_TARGET_BUSY: busymod_work_func enter
+ % insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
++transition: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+ $MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET_BUSY -> [MODULE_STATE_LIVE] Normal state
+-livepatch: '$MOD_LIVEPATCH': starting patching transition
++transition: '$MOD_LIVEPATCH': starting patching transition
+ % insmod test_modules/$MOD_TARGET.ko
+ livepatch: applying patch '$MOD_LIVEPATCH' to loading module '$MOD_TARGET'
+ $MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
+@@ -439,12 +439,12 @@ $MOD_TARGET: ${MOD_TARGET}_exit
+ livepatch: reverting patch '$MOD_LIVEPATCH' on unloading module '$MOD_TARGET'
+ $MOD_LIVEPATCH: post_unpatch_callback: $MOD_TARGET -> [MODULE_STATE_GOING] Going away
+ % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
+-livepatch: '$MOD_LIVEPATCH': reversing transition from patching to unpatching
+-livepatch: '$MOD_LIVEPATCH': starting unpatching transition
+-livepatch: '$MOD_LIVEPATCH': completing unpatching transition
++transition: '$MOD_LIVEPATCH': reversing transition from patching to unpatching
++transition: '$MOD_LIVEPATCH': starting unpatching transition
++transition: '$MOD_LIVEPATCH': completing unpatching transition
+ $MOD_LIVEPATCH: post_unpatch_callback: vmlinux
+ $MOD_LIVEPATCH: post_unpatch_callback: $MOD_TARGET_BUSY -> [MODULE_STATE_LIVE] Normal state
+-livepatch: '$MOD_LIVEPATCH': unpatching complete
++transition: '$MOD_LIVEPATCH': unpatching complete
+ % rmmod $MOD_LIVEPATCH
+ % rmmod $MOD_TARGET_BUSY
+ $MOD_TARGET_BUSY: busymod_work_func exit
+@@ -469,34 +469,34 @@ unload_lp $MOD_LIVEPATCH
+ 
+ check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
++transition: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': starting patching transition
+-livepatch: '$MOD_LIVEPATCH': completing patching transition
++transition: '$MOD_LIVEPATCH': starting patching transition
++transition: '$MOD_LIVEPATCH': completing patching transition
+ $MOD_LIVEPATCH: post_patch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': patching complete
++transition: '$MOD_LIVEPATCH': patching complete
+ % insmod test_modules/$MOD_LIVEPATCH2.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH2'
+-livepatch: '$MOD_LIVEPATCH2': initializing patching transition
++transition: '$MOD_LIVEPATCH2': initializing patching transition
+ $MOD_LIVEPATCH2: pre_patch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH2': starting patching transition
+-livepatch: '$MOD_LIVEPATCH2': completing patching transition
++transition: '$MOD_LIVEPATCH2': starting patching transition
++transition: '$MOD_LIVEPATCH2': completing patching transition
+ $MOD_LIVEPATCH2: post_patch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH2': patching complete
++transition: '$MOD_LIVEPATCH2': patching complete
+ % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH2/enabled
+-livepatch: '$MOD_LIVEPATCH2': initializing unpatching transition
++transition: '$MOD_LIVEPATCH2': initializing unpatching transition
+ $MOD_LIVEPATCH2: pre_unpatch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH2': starting unpatching transition
+-livepatch: '$MOD_LIVEPATCH2': completing unpatching transition
++transition: '$MOD_LIVEPATCH2': starting unpatching transition
++transition: '$MOD_LIVEPATCH2': completing unpatching transition
+ $MOD_LIVEPATCH2: post_unpatch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH2': unpatching complete
++transition: '$MOD_LIVEPATCH2': unpatching complete
+ % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
+-livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
++transition: '$MOD_LIVEPATCH': initializing unpatching transition
+ $MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': starting unpatching transition
+-livepatch: '$MOD_LIVEPATCH': completing unpatching transition
++transition: '$MOD_LIVEPATCH': starting unpatching transition
++transition: '$MOD_LIVEPATCH': completing unpatching transition
+ $MOD_LIVEPATCH: post_unpatch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': unpatching complete
++transition: '$MOD_LIVEPATCH': unpatching complete
+ % rmmod $MOD_LIVEPATCH2
+ % rmmod $MOD_LIVEPATCH"
+ 
+@@ -525,27 +525,27 @@ unload_lp $MOD_LIVEPATCH
+ 
+ check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+-livepatch: '$MOD_LIVEPATCH': initializing patching transition
++transition: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': starting patching transition
+-livepatch: '$MOD_LIVEPATCH': completing patching transition
++transition: '$MOD_LIVEPATCH': starting patching transition
++transition: '$MOD_LIVEPATCH': completing patching transition
+ $MOD_LIVEPATCH: post_patch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH': patching complete
++transition: '$MOD_LIVEPATCH': patching complete
+ % insmod test_modules/$MOD_LIVEPATCH2.ko replace=1
+ livepatch: enabling patch '$MOD_LIVEPATCH2'
+-livepatch: '$MOD_LIVEPATCH2': initializing patching transition
++transition: '$MOD_LIVEPATCH2': initializing patching transition
+ $MOD_LIVEPATCH2: pre_patch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH2': starting patching transition
+-livepatch: '$MOD_LIVEPATCH2': completing patching transition
++transition: '$MOD_LIVEPATCH2': starting patching transition
++transition: '$MOD_LIVEPATCH2': completing patching transition
+ $MOD_LIVEPATCH2: post_patch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH2': patching complete
++transition: '$MOD_LIVEPATCH2': patching complete
+ % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH2/enabled
+-livepatch: '$MOD_LIVEPATCH2': initializing unpatching transition
++transition: '$MOD_LIVEPATCH2': initializing unpatching transition
+ $MOD_LIVEPATCH2: pre_unpatch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH2': starting unpatching transition
+-livepatch: '$MOD_LIVEPATCH2': completing unpatching transition
++transition: '$MOD_LIVEPATCH2': starting unpatching transition
++transition: '$MOD_LIVEPATCH2': completing unpatching transition
+ $MOD_LIVEPATCH2: post_unpatch_callback: vmlinux
+-livepatch: '$MOD_LIVEPATCH2': unpatching complete
++transition: '$MOD_LIVEPATCH2': unpatching complete
+ % rmmod $MOD_LIVEPATCH2
+ % rmmod $MOD_LIVEPATCH"
+ 
+-- 
+2.39.2
+
 
