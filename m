@@ -1,125 +1,144 @@
-Return-Path: <linux-kselftest+bounces-22385-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22386-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 474CF9D4541
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 02:25:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A71089D47A6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 07:38:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6570282572
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 01:25:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DAB01F21A62
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 06:38:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B6E92FC52;
-	Thu, 21 Nov 2024 01:25:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D171C9B67;
+	Thu, 21 Nov 2024 06:38:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l9eODPBC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tup/CgMr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38EAB2F2A;
-	Thu, 21 Nov 2024 01:25:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA521C4A3C;
+	Thu, 21 Nov 2024 06:38:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732152346; cv=none; b=CgCBb8KLxF9tS00bFoT48RpSlnNBtaSCkF8vbaTk1tCUf932egHbodyW1ZrUgiTBICHiTISEhzx1CW7Lmm9UWkHwl1st8VMoavQ0la10pUj2vaEs2A3YtX1k45tzjcJWjAzUFsz0yET745Q6majFpREsbf1A2yePVbY8BjdzvrM=
+	t=1732171108; cv=none; b=nN16fpdGftgSAs7bhlzVbQW+zfAdzQ5GRvbS2E6Ot7kuYlAELnDaVhFmIcgahk3UCdhmbxxHuMuhFn3VbyNhZGh3vD3II+OBrMtKbDcgE6cWmWnT71Q7hUjgmOUyP2TGzRjj0FUVC5UBGwgLTJHVJsBysmz7pcZEiY5zoZ/eVyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732152346; c=relaxed/simple;
-	bh=xvJHuxN9St/qqGCISU3aK6X3sWr74wOx7oQOb+QgKEQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=huP4Zhz69bB1pLNejW93G1rnBweKxZlKG7t8RjFunaj8qknTe8rR6LBM1+OvrBAqaZnvpsofFUkG0DTFnYIJvkGZE+RdILsG6oZAeSA/WM9OJYEHzVPqdpU7TBoA7O65apteRyRFQf6xG/uDMxftfQxBUv+p6YWGZaJvkzIv0G0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l9eODPBC; arc=none smtp.client-ip=209.85.216.46
+	s=arc-20240116; t=1732171108; c=relaxed/simple;
+	bh=u8feEyqexppjlae/GbKD9ygY4w89F+NohiFM3+a3grw=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=hHLiyyOIE7T3+xB3mXh0xus4YlarAU+Z718wieaK0irJXQ5Kq97wkpkYVhpguhjv7GQ1b3YaWZjNpN1CmJyHTCIgyQp/XWF/rE9EyZ/3osxXBheIxZZKod1PQzm1w7QIGRAwAQ77KdC9L3L5KXgxUVfqcjhm3zs/zbW941elpmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tup/CgMr; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2ea45dac86eso354184a91.3;
-        Wed, 20 Nov 2024 17:25:45 -0800 (PST)
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-724d23df764so93843b3a.1;
+        Wed, 20 Nov 2024 22:38:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732152344; x=1732757144; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jcl32RV9k1qduJDWQ/zWpkC8NvRU5+ci+GcHLWbrsSo=;
-        b=l9eODPBCxGMp1bB2jpLjPmlvvOq/hWErpD9NmBPiprbVGtLtTEQHnI/aSOJO73+sB9
-         rcI1JvETeEfxFosi964MGi0lgLqwC2+uKU//OUstwJ46gGrW5gT6aNdvptKkgO+jNYXj
-         Nza/biBlLn3MYhesGp3Dqmi7Im50evxIC22CphqdXgn096CGCJob3nSHezhJGWlaxees
-         PDMw0Rp0KA0vTWbKhzbLwojlAhUuCY4RjmkXNSLwVcNe3sGaDaWOJjDXi8eBhymLVvbi
-         kwOPLrW9r2QPdAqF+NcV5lCxEs0MTtBPQ8ucXzuJCHqcT7PT0GN4D1cnTZLqRqTKiK58
-         8gIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732152344; x=1732757144;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1732171106; x=1732775906; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jcl32RV9k1qduJDWQ/zWpkC8NvRU5+ci+GcHLWbrsSo=;
-        b=odP1ldkTxSN3hXTM2yVoBpcoK1C0mEjLHfxUelur4veQNLKcC8XZDH7aA9SodZPaic
-         slf6b7zH7vjMMwqY4xWjKohDHj/9dNoODPXNU2+DNIUFMplJoB79+sMo38kV7wG+vxRK
-         7Rzc+klD0jJ4o6WIXKc8fO99mTlr3urNc5HCvoibJCE3w4N65Lzl+aEm1mDkTvkqLEi7
-         h7pFOMBLxmfD0+5ugE6QtJ86SdXZ0yOczfEb2wh5xqt6lrG9+8g7TKmv/gnkXJF9G/us
-         ZmjqxQI2rFNKyT8U9ox5pgpQ8FRVaPzdQhpsLngZrO5QpIMFiOjz/ykHgkCgGgm64RR4
-         TNMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUNrvH0iqVCxz9g2gCr4OxQOPc+8YArTdtb4LpbRcW2JDPiq7lnJijWQVf4g50BwS1q2lQtc6eZ@vger.kernel.org, AJvYcCUYNWZiLfUadPql75tLU0MLsRBpfZlMrlaWvSmHOaF//qawzL+wKWRMNNccRN+xigjrdcXZcKyRz25jOFrs2Bd5@vger.kernel.org, AJvYcCX21xSypJRKZHTHMNtyH6f7bS/FyoSS+Tq8Yt7wtpgNnml1PHlVzkdU0kNWuwUn3bm57Dare1v3E36r8xo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznaNpdp/C1SiawIlvvJ5Q5lmN0fvfe+LOiLU4sMAGLkZ9fqsRP
-	GPllY8PTGnDMDKV6V/gtrfQ2jLLQuZI4G7zbhiIeOGUbCsCEZw6g
-X-Gm-Gg: ASbGnctpCudgj7WhwVXu3FRM85x5Yps6CJqscDbNPOxB0BwDWwB9uXz+vTUxwM+c7+0
-	6n0sLjj4wh7F5zW2vQbFY9JpW3MvGy0X3aRaS+AS0uGBYf2G+iYYmjE1ITJ0a+Jj2sFJjt33vQ9
-	pHF8lTA/BAazGPTXYehyMMxrBDE8rmAVREDDCc5Ab1e3JxOnFOby9xEQC2Y5TGvcl0jo7SNW3LP
-	YPrM49y6m/XybgDKiDMkjVCHU9JclUseQe2WO8=
-X-Google-Smtp-Source: AGHT+IHbxtSpOLCCWBe4aYm8HR4213iEzQzO3CI0mFE6HhbnopUM+RjkBNnbR/mj5cQsegw1jHA2tA==
-X-Received: by 2002:a17:90a:fa11:b0:2ea:b564:4b31 with SMTP id 98e67ed59e1d1-2eaca72c6c7mr5726973a91.19.1732152344460;
-        Wed, 20 Nov 2024 17:25:44 -0800 (PST)
-Received: from tc ([2601:1c2:c104:170:aeb7:1d21:ff22:f729])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-212883d3489sm1917395ad.207.2024.11.20.17.25.42
+        bh=yVhGB+uhK4i7clXBCrnAFu8xplWivYQ5CRd7LNvitZE=;
+        b=Tup/CgMrZtx6Zvij04D9KFNYopjZYdH3nAvROmQeVgQ92QgYEco1/UN/uZy342c9zx
+         x0FviRz7oEIzZLnMekPKTOSC5YNgmWFGkw3xwrzqnFD30zYFfhZnJMWhkYWrvjeWXKao
+         74Pgyspa1Iga7HJ4RVAI2ijzKJ6C89+hmu25O6I097b1XL/wsWiDw1oCiVdIqC2xwVix
+         04o5QlUV0NkKSunNRjPQjlAWX1mZC3OItgUm6ahoxAJr7MSI46w6ldbNw9odJ2s2r/VB
+         tQvKorldB8Zh+EXlKfXTVSG57LCIpIO+ffwqfIcZaLke8ys0h6WyAdk4/SmFa4NMDNa8
+         WdXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732171106; x=1732775906;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yVhGB+uhK4i7clXBCrnAFu8xplWivYQ5CRd7LNvitZE=;
+        b=bt9KhZlgX9+ZB8dTs0SX0xO9yBKhmKuxhxwmIM8701QqFl6rW11Udj5pu3DOtGNdpX
+         B9fZ4+5enkx7VZ1IhTBuhysophwiGzT+X4b4IOlvaBwXyhu5Fd23cm3bxkd+XrISbDxu
+         y2rZsQEYpjylBp6jrUn/ey1N+Tm581Yf23sJ79ZSGuvqnvSm52uTRgM04IkrQBx6p3Zw
+         kK+KEa2vpwIr8rCHgu8TlnLTDBUHC3bNdmDSpgSvJectM3ovmdCQIoISpgHeYBMZqSP1
+         wnCim+JjG/v/hQUhvfnYidTMD9oMwqjFPOvBtcoFQ14nNPAU1BfK+VbRWJtT+WMyPyvX
+         hQFg==
+X-Forwarded-Encrypted: i=1; AJvYcCVnj/rbbrbUcv7sN+tV8Rn4gSWAOoKsdIqjiJZqiD5l1TckBfnUX92HQtzdex8KKwWJF4z18mwMAk+UCDk=@vger.kernel.org, AJvYcCWXSbgPISgp1hVDjLd/kAFYAPIMjcG43E7WOZWqDRKaZdugAIBpXx1ydflRORGCD09vZlybTtcdcyV7yQ//H41t@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw14pm9O7pNxbbJE9KJDbuVQBs5wcyMkcQYKF3gZI3SuZKNnkAR
+	8pN5VxUvVFofev9HiRZFAL1KVtl26g/UCqjm+4He1m0ALC6JmfYKAxIVOw==
+X-Gm-Gg: ASbGncuHW1RChy8H7EVy/kWQ/cYdrJRzq6ygYMQmP1i2oJlX8yyA1VvzHbCQswpankV
+	vQnVQuG4PD93oEe/ARvehsgpvgx61CPq/qLqqGjSvpnLyP4TbmtTI/XP58accvqu4JWlrmT7p6z
+	sln3Y6LdSWwtH8oGk8+iGwAfUK3WWDR/WXY1sXtPZD3kqG8GYG4kCVZHTgmI4VCTbiBuMVoxH3Q
+	VmnV45CtgkRmysROBzXCmwGdGbeHyzbS/ySOGbLwKA/KfRta/Q=
+X-Google-Smtp-Source: AGHT+IFY90NoJv1XxElOiRWRnX47j8HegmgYtWeza+AkhFrK3qwrcxG1yRoT1C9s1mGFMNPvmL/n5g==
+X-Received: by 2002:a05:6a00:acf:b0:720:2e44:8781 with SMTP id d2e1a72fcca58-724becb775bmr6019934b3a.11.1732171105841;
+        Wed, 20 Nov 2024 22:38:25 -0800 (PST)
+Received: from localhost ([98.97.39.253])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724bef8da5csm2812081b3a.130.2024.11.20.22.38.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Nov 2024 17:25:43 -0800 (PST)
-Date: Wed, 20 Nov 2024 17:25:40 -0800
-From: Leo Stone <leocstone@gmail.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH net-next] selftests: net/psock_lib: Handle EINTR and
- EAGAIN
-Message-ID: <42gn3eaqfcs7qaei7qf3nrtvcp3kztuex5ttcaahfntzx6hw6v@afsmwqb4xhmj>
-References: <20241117225950.138968-1-leocstone@gmail.com>
- <673b56f7768fc_1ced1f294fa@willemb.c.googlers.com.notmuch>
+        Wed, 20 Nov 2024 22:38:25 -0800 (PST)
+Date: Wed, 20 Nov 2024 22:38:24 -0800
+From: John Fastabend <john.fastabend@gmail.com>
+To: guanjing <guanjing@cmss.chinamobile.com>, 
+ andrii@kernel.org, 
+ eddyz87@gmail.com, 
+ mykolal@fb.com, 
+ ast@kernel.org, 
+ daniel@iogearbox.net, 
+ martin.lau@linux.dev, 
+ song@kernel.org, 
+ yonghong.song@linux.dev, 
+ john.fastabend@gmail.com, 
+ kpsingh@kernel.org, 
+ sdf@fomichev.me, 
+ haoluo@google.com, 
+ jolsa@kernel.org, 
+ shuah@kernel.org
+Cc: bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ guanjing <guanjing@cmss.chinamobile.com>
+Message-ID: <673ed56061103_157a208bc@john.notmuch>
+In-Reply-To: <20241117102857.198803-1-guanjing@cmss.chinamobile.com>
+References: <20241117102857.198803-1-guanjing@cmss.chinamobile.com>
+Subject: RE: [PATCH v1] selftests/bpf: Fix unnecessary conversion to bool in
+ 'run_subtest'
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <673b56f7768fc_1ced1f294fa@willemb.c.googlers.com.notmuch>
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Willem de Bruijn wrote:
-> Did you observe actual issues or is this based on the comment in the
-> existing code ("Should really handle EINTR and EAGAIN").
+guanjing wrote:
+> Fixes the following coccicheck:
+> 
+> tools/testing/selftests/bpf/test_loader.c:1033:64-69: WARNING: conversion to bool not needed here
+> 
+> Fixes: 80a4129fcf20 ("selftests/bpf: Add unit tests for bpf_arena_alloc/free_pages")
+> Signed-off-by: guanjing <guanjing@cmss.chinamobile.com>
+> ---
 
-No, this patch was based purely off of the comment, and the examples of
-similar code in other selftests, e.g. tools/testing/selftests/bpf/xsk.c:
+I'll argue this is bpf-next and no need for a fixes tag here.
 
-> static int netlink_recvmsg(int sock, struct msghdr *mhdr, int flags)
-> {
->       int len;
->
->       do {
->               len = recvmsg(sock, mhdr, flags);
->       } while (len < 0 && (errno == EINTR || errno == EAGAIN));
->
->       if (len < 0)
->               return -errno;
->       return len;
-> }
-
-> A simpler approach to dealing with EINTR is to ask glibc to restart
-> with sigaction or siginterrupt.
+>  tools/testing/selftests/bpf/test_loader.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
+> index 3e9b009580d4..400f56f81272 100644
+> --- a/tools/testing/selftests/bpf/test_loader.c
+> +++ b/tools/testing/selftests/bpf/test_loader.c
+> @@ -1030,7 +1030,7 @@ void run_subtest(struct test_loader *tester,
+>  		}
+>  
+>  		do_prog_test_run(bpf_program__fd(tprog), &retval,
+> -				 bpf_program__type(tprog) == BPF_PROG_TYPE_SYSCALL ? true : false);
+> +				 bpf_program__type(tprog) == BPF_PROG_TYPE_SYSCALL);
+>  		if (retval != subspec->retval && subspec->retval != POINTER_VALUE) {
+>  			PRINT_FAIL("Unexpected retval: %d != %d\n", retval, subspec->retval);
+>  			goto tobj_cleanup;
+> -- 
+> 2.33.0
+> 
+> 
 > 
 
-If we want to handle it that way, this patch is probably not necessary,
-since there is no specific signal I would want to install a handler for.
-
-Thanks for your feedback,
-Leo
 
 
