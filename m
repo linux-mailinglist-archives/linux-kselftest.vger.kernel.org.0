@@ -1,169 +1,153 @@
-Return-Path: <linux-kselftest+bounces-22412-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22413-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 421449D501D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 16:51:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB0DF9D505B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 17:04:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B39C283899
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 15:51:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90188B221C4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 16:02:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF2E317C210;
-	Thu, 21 Nov 2024 15:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0686C19E7D1;
+	Thu, 21 Nov 2024 16:02:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g4SSYZ8R"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="TWPDTvVP";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JsoRE5mx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from flow-a5-smtp.messagingengine.com (flow-a5-smtp.messagingengine.com [103.168.172.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C9B16DEAA
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 15:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE6B158A33;
+	Thu, 21 Nov 2024 16:02:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732204283; cv=none; b=Qnu5p3c9wJeyybxp2A+fEVOpQT6vPbPqgixd/3rCbHPK1oZxpm7oYni7MQDzUTa3QzYr23aANH832L/iVKR03x5YMzHk84zcYLyAEzxzrVp074RKTshJcYt7mv8t+lY1eU/zz/PEtd9/dHwv0njNa3AXDosxJST0vTMhHZbMteI=
+	t=1732204943; cv=none; b=ar9CknIm75CXPGKB5nLmdtryM0gsHZwCv9RODjgYvuoZ2TI816c1RtFzs5wF60NNCo/azM4hBIfXjzKQWeRSfq5l+wDlRiLE5QzpmHwakEVwvL4LQd4PAnCdTgQx/j9mnEmZj2kET9InO9keTCGkGsAfELZ8VA496+Ybk/EDNnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732204283; c=relaxed/simple;
-	bh=wqwT6sLOKw3cQNoRLXKYtXYhu38OXiMdpn/8NdnhM30=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Eb1S402yUo3KVDaNvQL09JnB/PC9885R3+k27flfxzaUgyiV8HXXErXWBhrghITS/HqlC5NSuvVDfjMT1DhlZ5/jCaJm3a95HmOGRViZYSJIIbwnjSSismdg+/xtDLiuwNnl3HVbNS5wDlbs2b7R7aYqzO0Fc5Lh/7vgepxjLxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g4SSYZ8R; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732204281;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wqwT6sLOKw3cQNoRLXKYtXYhu38OXiMdpn/8NdnhM30=;
-	b=g4SSYZ8RPW3XHuknO3Zn3A5mDDKlGH9JTZLz+0TD9XLedn0oySxuE7qrqJxr7Zl0HBzwqJ
-	G9bLz57WgCKOiaiqn38MNqK8DFlRhUnPLbwc0zRlkKlQCr8NEWVAhFwwKTLKSzyrjuXsJB
-	iZ3joCCbETAl44D3ARVsbnFia/IYZFU=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-654-W1oKt18IMxO4DQjiWvdsqQ-1; Thu, 21 Nov 2024 10:51:19 -0500
-X-MC-Unique: W1oKt18IMxO4DQjiWvdsqQ-1
-X-Mimecast-MFC-AGG-ID: W1oKt18IMxO4DQjiWvdsqQ
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-460ec6fd8a3so17866681cf.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 07:51:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732204279; x=1732809079;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wqwT6sLOKw3cQNoRLXKYtXYhu38OXiMdpn/8NdnhM30=;
-        b=YSf4IqkzxLnH9MWmt+t2vfUlaSqS1kP/wx73GfsIbwAJK9OwO+SygFZ5ZRQMl3XeWU
-         Xc8/SaLi67YgdV4W8fS9pEhiJuMWLItYAnacKwM67Odb57rYkMn2F4QOrUwz5WZSChIs
-         RDAeuVOEuBrewjPudrFuofLa8JACoY1fgH8pja86649FpFR5ftTA30MzH3ybI2V3Esgz
-         e0ePp8xWugT5PjTorl61wikLI6SftTuXi+FYPIDqloCg3M+QrUDy/hB64th8x6NP7RLG
-         Cn6jd2NUz0z/rsHezdRjnXsVeRcXtiLo0FRC8BCVQOqV/aNJBANCZWJCDD4nkopY7GHa
-         xLAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVFCT562VHCEcsbN/6e1kvWxCWvc4R0lIgtF0IFYa/30MtykS0Eec3nlytP/FfvmbRaY4RmCpT/SLKxLMbwuuE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxw7SB61XT7c7FLUPH3nzGbSOtJuP6S6wIiSv3d1cuTTanpWs4j
-	OW1Wiy7+BkYTL60J9dckF6nh1Bv93UtN3q320tZKC84UE4IIAqlWNyUw0aoogvN9FNXboLAJXMP
-	wA02HdySULdvzGGqYKg2g0Au8pphgD28lRzHApI4WjPbM+hOkdXFiaR3zDkkzTWoz0w==
-X-Gm-Gg: ASbGnctxLyrh2XG9Q3cWBTyg6UF4SpnIxO2mHRC57Q3mqyuCtn4H8G9igCIlAvze//7
-	9pFFqp72EVoD155fOUWCRYQTMHVtJbg0N7+vIW/8rXagkdWkJpbE3nyeNp9ssKsJVuDk1ZlmcPh
-	6B4EYnUqsaoOKsIzmPpaCOT7jGtlZfFFAePeQ3Q7k1DWEU5kanKlMewnLDoE4UDubhjJYf3cMj2
-	Jn8Jqzas/uCpzkmmym4HaMLIHSX0ULR/GYp5SLeyz3pbxL3vm/45GStFUwJuckyJH8wg+W4RA0C
-	1POFM2DPdYn5O5uvZMMgwfYxWQGTuf9PfeM=
-X-Received: by 2002:ac8:7c4b:0:b0:461:4372:f2b6 with SMTP id d75a77b69052e-4647965fae7mr111015051cf.39.1732204279368;
-        Thu, 21 Nov 2024 07:51:19 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFhhGvXxNF9YG7Wn8RkZZVe3HUI8vO3AoWFe5rp5bueN6AbTjXI6+VbxkAuh2ulevplAsAH7Q==
-X-Received: by 2002:ac8:7c4b:0:b0:461:4372:f2b6 with SMTP id d75a77b69052e-4647965fae7mr111014101cf.39.1732204278637;
-        Thu, 21 Nov 2024 07:51:18 -0800 (PST)
-Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4646ab21371sm23699431cf.76.2024.11.21.07.51.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Nov 2024 07:51:17 -0800 (PST)
-From: Valentin Schneider <vschneid@redhat.com>
-To: Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
- x86@kernel.org, rcu@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter
- Anvin" <hpa@zytor.com>, Paolo Bonzini <pbonzini@redhat.com>, Wanpeng Li
- <wanpengli@tencent.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Andy
- Lutomirski <luto@kernel.org>, Frederic Weisbecker <frederic@kernel.org>,
- "Paul E. McKenney" <paulmck@kernel.org>, Neeraj Upadhyay
- <quic_neeraju@quicinc.com>, Joel Fernandes <joel@joelfernandes.org>, Josh
- Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan
- <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, Andrew
- Morton <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>,
- Christoph Hellwig <hch@infradead.org>, Lorenzo Stoakes
- <lstoakes@gmail.com>, Jason Baron <jbaron@akamai.com>, Kees Cook
- <keescook@chromium.org>, Sami Tolvanen <samitolvanen@google.com>, Ard
- Biesheuvel <ardb@kernel.org>, Nicholas Piggin <npiggin@gmail.com>, Juerg
- Haefliger <juerg.haefliger@canonical.com>, Nicolas Saenz Julienne
- <nsaenz@kernel.org>, "Kirill A. Shutemov"
- <kirill.shutemov@linux.intel.com>, Nadav Amit <namit@vmware.com>, Dan
- Carpenter <error27@gmail.com>, Chuang Wang <nashuiliang@gmail.com>, Yang
- Jihong <yangjihong1@huawei.com>, Petr Mladek <pmladek@suse.com>, "Jason A.
- Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>, Julian Pidancet
- <julian.pidancet@oracle.com>, Tom Lendacky <thomas.lendacky@amd.com>,
- Dionna Glaze <dionnaglaze@google.com>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?=
- <linux@weissschuh.net>, Juri Lelli <juri.lelli@redhat.com>, Marcelo
- Tosatti <mtosatti@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>, Daniel
- Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
-Subject: Re: [RFC PATCH v3 06/15] jump_label: Add forceful jump label type
-In-Reply-To: <20241121110020.GC24774@noisy.programming.kicks-ass.net>
-References: <20241119153502.41361-1-vschneid@redhat.com>
- <20241119153502.41361-7-vschneid@redhat.com>
- <20241119233902.kierxzg2aywpevqx@jpoimboe>
- <20241120145649.GJ19989@noisy.programming.kicks-ass.net>
- <20241120145746.GL38972@noisy.programming.kicks-ass.net>
- <20241120165515.qx4qyenlb5guvmfe@jpoimboe>
- <20241121110020.GC24774@noisy.programming.kicks-ass.net>
-Date: Thu, 21 Nov 2024 16:51:09 +0100
-Message-ID: <xhsmhcyioa8lu.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+	s=arc-20240116; t=1732204943; c=relaxed/simple;
+	bh=dBHlf6+aZ1hAOrvQPwSccNRc472d+mPq6Pqy8pnvfqM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HTez54ssCs/Dd/tEl0s04ydXTsWl+D6l74I5yeKaa6eX2qC+vFs5zydd89O7DC8cQyxxzc0VU9yAZbOKofdK+hHhm62hkFL/P97SXrGzkNHaJu3c7FUP0+qq4Oj8m6SRk0pHr9AECkAuoT6tmmuI7bZeIZr9zPuEs/j+YIl0J3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=TWPDTvVP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JsoRE5mx; arc=none smtp.client-ip=103.168.172.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailflow.phl.internal (Postfix) with ESMTP id EEB67200637;
+	Thu, 21 Nov 2024 11:02:18 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-11.internal (MEProxy); Thu, 21 Nov 2024 11:02:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1732204938; x=
+	1732208538; bh=pO3PALF2awA+eBkc4VARw2inhjxAJiO5t86BEffGEBw=; b=T
+	WPDTvVPJ6FmJbTIVJ9cjEwSdbk+CQXtbYOIod/ngJcXW4TWzv8qJlZTYYFak6mGn
+	KGTsig9Hs8eAtEMHVLfaTIcH3qdySAKtLCXx1ukd+ikhGODWIlgkebyY5vQnkp2b
+	qPdIRjyy4rtk5lGMgQLTnOcxcIC8MietnDM9xfW6Q5iFjgzuPN4lw/GpeCS5RvFl
+	/zfIgRwIos7ZmN3/WD13n8g3G24l0bk3rxfvk5Efkd85iWkyy1Jrku24hx6A+afQ
+	NA4nMTRAPSneMcclwaU6ZCcIin80Bq8bWFIY3e1S92rizQBHcaXSyFbdBspvdEIE
+	IWXze/N0lWC4d+Mp7nq1w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1732204938; x=1732208538; bh=pO3PALF2awA+eBkc4VARw2inhjxAJiO5t86
+	BEffGEBw=; b=JsoRE5mxhUvnoibuHggM8f9j0HS3wCPZT3oK+JNDED+a5Io456B
+	2P41QTC3Xz3PJQovzdxpoc6bYbT22dWh1BKU9fSIinuMJ+Z1eyTaBmBcyOxSdVvt
+	PWM2JrzWS3mqaPBERNu1j3lORoSLcCI7MIHzXo0DStbrChajPHuhFkG7rh41zIf5
+	BhAfmtA6a7/+zETJB48Vo4KkcDWKyXd2mrXbaCEBVtWQ62AYVuarA7hFE/NKCD4q
+	an68PAZqGQ6BzmyYWfzdIOWlyp+73kPJIqtYP2cEmSvM1MKW6rq0iICIB0XYsgQp
+	KAi0izO2lzizHWr7hauK10svFfeBmZqy6/A==
+X-ME-Sender: <xms:ilk_Zzo0kvxi0-8n6fCkCA24K5CkyUYcMk7atmcZrkPozFaxQ1PxuQ>
+    <xme:ilk_Z9p0mp4zrGaZJT-kz2gf6XsTOJET8TTJ-n63m-De-WQuC-E5SkE-LPh5_WrDJ
+    1h5a4joHZP4Xn7d84U>
+X-ME-Received: <xmr:ilk_ZwP1FwnkqlDMWvWy2roaQHiqTRmSZ2ZxwVOHe-hqE8ALy9_E5eQqj4XS>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrfeeigdekvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
+    hsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecu
+    hfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnhgrih
+    hlrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefhkeeg
+    teehgeehieffgfeuvdeuffefgfduffenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghr
+    tghpthhtohepuddupdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhhtohhnih
+    hosehophgvnhhvphhnrdhnvghtpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhl
+    vgdrtghomhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
+    epphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopeguohhnrghlugdrhhhu
+    nhhtvghrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrd
+    horhhgpdhrtghpthhtoheprhihrgiirghnohhvrdhsrdgrsehgmhgrihhlrdgtohhmpdhr
+    tghpthhtoheprghnughrvgifsehluhhnnhdrtghhpdhrtghpthhtohepnhgvthguvghvse
+    hvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:ilk_Z25w-yK-e58Q3JfDsVJIFxeV6ELe7jvji-q9k3hnHgEwnTMLUQ>
+    <xmx:ilk_Zy53vRHhMrOHg3FZEcQfMJxA_EVBqx2w2OqKgL01p7XiBkBfHA>
+    <xmx:ilk_Z-iuDQpl-psr7P3DlL8Eqj9AmNeM8NUqs-UuRNwIxN5dpVe6Kg>
+    <xmx:ilk_Z056dXOzePiJl8WqbSw9XDqPJrSJ4mRxQP5aunuXly-DHtXOgg>
+    <xmx:ilk_Z0skCtz4O2b9xjq7tt7lay1y8a72X5c38yerGPvt4f4IhyScrpsS>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 21 Nov 2024 11:02:17 -0500 (EST)
+Date: Thu, 21 Nov 2024 17:02:15 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v11 18/23] ovpn: implement peer
+ add/get/dump/delete via netlink
+Message-ID: <Zz9Zh-5hZrbal5Ww@hog>
+References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-18-de4698c73a25@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241029-b4-ovpn-v11-18-de4698c73a25@openvpn.net>
 
-On 21/11/24 12:00, Peter Zijlstra wrote:
-> On Wed, Nov 20, 2024 at 08:55:15AM -0800, Josh Poimboeuf wrote:
->> On Wed, Nov 20, 2024 at 03:57:46PM +0100, Peter Zijlstra wrote:
->> > On Wed, Nov 20, 2024 at 03:56:49PM +0100, Peter Zijlstra wrote:
->> >
->> > > But I think we can make the fall-back safer, we can simply force the IPI
->> > > when we poke at noinstr code -- then NOHZ_FULL gets to keep the pieces,
->> > > but at least we don't violate any correctness constraints.
->> >
->> > I should have read more; that's what is being proposed.
->>
->> Hm, now I'm wondering what you read, as I only see the text poke IPIs
->> being forced when the caller sets force_ipi, rather than the text poke
->> code itself detecting a write to .noinstr.
->
-> Right, so I had much confusion and my initial thought was that it would
-> do something dangerous. Then upon reading more I see it forces the IPI
-> for these special keys -- with that force_ipi thing.
->
-> Now, there's only two keys marked special, and both have a noinstr
-> presence -- the entire reason they get marked.
->
-> So effectively we force the IPI when patching noinstr, no?
->
-> But yeah, this is not quite the same as not marking anything and simply
-> forcing the IPI when the target address is noinstr.
->
-> And having written all that; perhaps that is the better solution, it
-> sticks the logic in text_poke and ensure it automagically work for all
-> its users, obviating the need for special marking.
->
+[I'm still thinking about the locking problems for ovpn_peer_float,
+but just noticed this while staring at the rehash code]
 
-Okay so forcing the IPI for .noinstr patching lets us get rid of all the
-force_ipi faff; however I would still want the special marking to tell
-objtool "yep we're okay with this one", and still get warnings when a new
-.noinstr key gets added so we double think about it.
+2024-10-29, 11:47:31 +0100, Antonio Quartulli wrote:
+> +void ovpn_peer_hash_vpn_ip(struct ovpn_peer *peer)
+> +	__must_hold(&peer->ovpn->peers->lock)
+> +{
+> +	struct hlist_nulls_head *nhead;
+> +
+> +	if (peer->vpn_addrs.ipv4.s_addr != htonl(INADDR_ANY)) {
+> +		/* remove potential old hashing */
+> +		hlist_nulls_del_init_rcu(&peer->hash_entry_transp_addr);
 
+s/hash_entry_transp_addr/hash_entry_addr4/ ?
+
+
+> +		nhead = ovpn_get_hash_head(peer->ovpn->peers->by_vpn_addr,
+> +					   &peer->vpn_addrs.ipv4,
+> +					   sizeof(peer->vpn_addrs.ipv4));
+> +		hlist_nulls_add_head_rcu(&peer->hash_entry_addr4, nhead);
+> +	}
+> +
+> +	if (!ipv6_addr_any(&peer->vpn_addrs.ipv6)) {
+> +		/* remove potential old hashing */
+> +		hlist_nulls_del_init_rcu(&peer->hash_entry_transp_addr);
+
+s/hash_entry_transp_addr/hash_entry_addr6/ ?
+
+
+> +		nhead = ovpn_get_hash_head(peer->ovpn->peers->by_vpn_addr,
+> +					   &peer->vpn_addrs.ipv6,
+> +					   sizeof(peer->vpn_addrs.ipv6));
+> +		hlist_nulls_add_head_rcu(&peer->hash_entry_addr6, nhead);
+> +	}
+> +}
+
+-- 
+Sabrina
 
