@@ -1,163 +1,125 @@
-Return-Path: <linux-kselftest+bounces-22384-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22385-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AC059D44E5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 01:29:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 474CF9D4541
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 02:25:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3AFE1F219BC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 00:29:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6570282572
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 01:25:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBBFE2309B3;
-	Thu, 21 Nov 2024 00:29:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B6E92FC52;
+	Thu, 21 Nov 2024 01:25:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l8bXj084"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l9eODPBC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF9023098E;
-	Thu, 21 Nov 2024 00:29:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38EAB2F2A;
+	Thu, 21 Nov 2024 01:25:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732148948; cv=none; b=aZwrkJgYsLmywYI5/dijys+nl8x9fmHKXEskqY3yfzRJlFdxsMZYtgv+/9B7bH5zNl4ctTynHNkwiJ6QJBzSAi6yC6Kre4BKizlZrwQec9TTnfvT28wnwVqo/5WOI6KphPo+9PpwvWPIGCDEpBhhFM7GbGKezzTyRFY0QPMoOFI=
+	t=1732152346; cv=none; b=CgCBb8KLxF9tS00bFoT48RpSlnNBtaSCkF8vbaTk1tCUf932egHbodyW1ZrUgiTBICHiTISEhzx1CW7Lmm9UWkHwl1st8VMoavQ0la10pUj2vaEs2A3YtX1k45tzjcJWjAzUFsz0yET745Q6majFpREsbf1A2yePVbY8BjdzvrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732148948; c=relaxed/simple;
-	bh=ADwrhXPHxiG/lWbdGMI7aKDtnfo7BJH5nHp+YJOCkes=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aNUau9sqgzZj7VkksjMBD9qf3fNYuO/ti2nVUrtZztDqL9m0OyyH7JkO9wKz7MdRHyIN4/ZsdMhukP+NAZCOI0/rImUKNXUoor59YrEtFOeBZvOfCze6YGLAJdbvD8+5BYNCA02d8u1I4CPUVJAjXkAr9oOxD1o4dis22PBJymc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l8bXj084; arc=none smtp.client-ip=209.85.221.47
+	s=arc-20240116; t=1732152346; c=relaxed/simple;
+	bh=xvJHuxN9St/qqGCISU3aK6X3sWr74wOx7oQOb+QgKEQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=huP4Zhz69bB1pLNejW93G1rnBweKxZlKG7t8RjFunaj8qknTe8rR6LBM1+OvrBAqaZnvpsofFUkG0DTFnYIJvkGZE+RdILsG6oZAeSA/WM9OJYEHzVPqdpU7TBoA7O65apteRyRFQf6xG/uDMxftfQxBUv+p6YWGZaJvkzIv0G0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l9eODPBC; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-381ee2e10dfso168092f8f.0;
-        Wed, 20 Nov 2024 16:29:06 -0800 (PST)
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2ea45dac86eso354184a91.3;
+        Wed, 20 Nov 2024 17:25:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732148945; x=1732753745; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nNFqJNwdtTIM52uDabF+RixwG4yWSl0dwHZ/Bz5L1s8=;
-        b=l8bXj084l7s47amLmgoHrCjH9QRA1jbSInl6eUlxNarVb1z5TOpDKrRfIi/C97fRl9
-         plIrtiq5VfUDTB9TMaujpNumE4U8G7M67fr2yhzenykps0HB+R/QCsOgoE1Jxiu8UITI
-         COpZP20jmPn29Px0c4wB9tJbQuDjl30/p4o/olIyBhcoy65BdF92/1A9QRsk0TvbcU1P
-         k/JLTAYGQ/tX0tB+FHTuQPt64Ym/C1Lot1zVsCHbwOejJqpVSMZCkHYCypEyxjMjr1o6
-         4zpI/sW98rod8zhaJW1SbsVZNYs+SR7sNFfYaW0LyH9UcOjSxh/V8K5ixFtplWMmzZGL
-         mraA==
+        d=gmail.com; s=20230601; t=1732152344; x=1732757144; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jcl32RV9k1qduJDWQ/zWpkC8NvRU5+ci+GcHLWbrsSo=;
+        b=l9eODPBCxGMp1bB2jpLjPmlvvOq/hWErpD9NmBPiprbVGtLtTEQHnI/aSOJO73+sB9
+         rcI1JvETeEfxFosi964MGi0lgLqwC2+uKU//OUstwJ46gGrW5gT6aNdvptKkgO+jNYXj
+         Nza/biBlLn3MYhesGp3Dqmi7Im50evxIC22CphqdXgn096CGCJob3nSHezhJGWlaxees
+         PDMw0Rp0KA0vTWbKhzbLwojlAhUuCY4RjmkXNSLwVcNe3sGaDaWOJjDXi8eBhymLVvbi
+         kwOPLrW9r2QPdAqF+NcV5lCxEs0MTtBPQ8ucXzuJCHqcT7PT0GN4D1cnTZLqRqTKiK58
+         8gIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732148945; x=1732753745;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nNFqJNwdtTIM52uDabF+RixwG4yWSl0dwHZ/Bz5L1s8=;
-        b=St3gqnxLvT5xt5KOKYlkI6C+jCRr87wfl9qsnOwAJ3wp2RkJDCrqESAjgdoPTfo6tz
-         7aHqTcNOEFBpvfqI3mrKO8TCRzUt8AHJ8LrFyBVLXAiacJsk+w0Ps5KA4+2r5jzdzBKt
-         UuJZtSwCiD9ng55E7vzYAwUsUnSwJkbp+tzepmAWpHozKs685eWJTC+m6M59WLl9PZe8
-         R2J4kZ8HTk9Z06xpU4+UL3BH42q15n8PgYPeWvFf8C5FBIpA33AyydEY/9vxn4YagsXL
-         LucRP3KO+1tfY5TiOk3ywpVwTqSx7500VaYVHlLF7KdKVz1h6+92NjBZzalS7ZQf6Mex
-         7hvg==
-X-Forwarded-Encrypted: i=1; AJvYcCUQE10yCbgoGh6uRTexi6u482rLM6PKY8fTtTnDIGWgR/2/uZcXqBKyNWxFghm7XV54j11Z8JoK@vger.kernel.org, AJvYcCUwxZn8/iiQYniNm/it1k2zMPKzINKJuhve3SpaAiRjEoUX/p7RRN1LGsoJ61Xj8VgjSn5g03wEeGWccfD19TWN@vger.kernel.org, AJvYcCXPYJRXg8OwkEoStl0v52/c3krvHXRMwsyty7Xev5brhSL55qAepty5789cF30R4bI5z/4OHW1PZl0z6a0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXKvDkghOYSRQCcb0n4ArWBDa1M+xBC4+DQx+rMmuIWTVtgXeb
-	Bp+HpwPw3YBGTYrrftLB5vrFFgn+0bZzme5HdTNQgDaWsGeeD5kN
-X-Google-Smtp-Source: AGHT+IHwrxS7Q3wPuiO3CIM8LKgPUIos8L4eyZFj2A2FlBmlQwt9D7cuEebrGVqCQWqGXFrooaiQqQ==
-X-Received: by 2002:a5d:6c63:0:b0:382:43ee:9f70 with SMTP id ffacd0b85a97d-38254ae44a7mr3730200f8f.22.1732148945289;
-        Wed, 20 Nov 2024 16:29:05 -0800 (PST)
-Received: from [192.168.0.2] ([69.6.8.124])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3825493ee59sm3343620f8f.103.2024.11.20.16.29.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Nov 2024 16:29:03 -0800 (PST)
-Message-ID: <7d221595-bd57-4b8d-9c2a-007ad1e33ba1@gmail.com>
-Date: Thu, 21 Nov 2024 02:29:37 +0200
+        d=1e100.net; s=20230601; t=1732152344; x=1732757144;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jcl32RV9k1qduJDWQ/zWpkC8NvRU5+ci+GcHLWbrsSo=;
+        b=odP1ldkTxSN3hXTM2yVoBpcoK1C0mEjLHfxUelur4veQNLKcC8XZDH7aA9SodZPaic
+         slf6b7zH7vjMMwqY4xWjKohDHj/9dNoODPXNU2+DNIUFMplJoB79+sMo38kV7wG+vxRK
+         7Rzc+klD0jJ4o6WIXKc8fO99mTlr3urNc5HCvoibJCE3w4N65Lzl+aEm1mDkTvkqLEi7
+         h7pFOMBLxmfD0+5ugE6QtJ86SdXZ0yOczfEb2wh5xqt6lrG9+8g7TKmv/gnkXJF9G/us
+         ZmjqxQI2rFNKyT8U9ox5pgpQ8FRVaPzdQhpsLngZrO5QpIMFiOjz/ykHgkCgGgm64RR4
+         TNMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUNrvH0iqVCxz9g2gCr4OxQOPc+8YArTdtb4LpbRcW2JDPiq7lnJijWQVf4g50BwS1q2lQtc6eZ@vger.kernel.org, AJvYcCUYNWZiLfUadPql75tLU0MLsRBpfZlMrlaWvSmHOaF//qawzL+wKWRMNNccRN+xigjrdcXZcKyRz25jOFrs2Bd5@vger.kernel.org, AJvYcCX21xSypJRKZHTHMNtyH6f7bS/FyoSS+Tq8Yt7wtpgNnml1PHlVzkdU0kNWuwUn3bm57Dare1v3E36r8xo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YznaNpdp/C1SiawIlvvJ5Q5lmN0fvfe+LOiLU4sMAGLkZ9fqsRP
+	GPllY8PTGnDMDKV6V/gtrfQ2jLLQuZI4G7zbhiIeOGUbCsCEZw6g
+X-Gm-Gg: ASbGnctpCudgj7WhwVXu3FRM85x5Yps6CJqscDbNPOxB0BwDWwB9uXz+vTUxwM+c7+0
+	6n0sLjj4wh7F5zW2vQbFY9JpW3MvGy0X3aRaS+AS0uGBYf2G+iYYmjE1ITJ0a+Jj2sFJjt33vQ9
+	pHF8lTA/BAazGPTXYehyMMxrBDE8rmAVREDDCc5Ab1e3JxOnFOby9xEQC2Y5TGvcl0jo7SNW3LP
+	YPrM49y6m/XybgDKiDMkjVCHU9JclUseQe2WO8=
+X-Google-Smtp-Source: AGHT+IHbxtSpOLCCWBe4aYm8HR4213iEzQzO3CI0mFE6HhbnopUM+RjkBNnbR/mj5cQsegw1jHA2tA==
+X-Received: by 2002:a17:90a:fa11:b0:2ea:b564:4b31 with SMTP id 98e67ed59e1d1-2eaca72c6c7mr5726973a91.19.1732152344460;
+        Wed, 20 Nov 2024 17:25:44 -0800 (PST)
+Received: from tc ([2601:1c2:c104:170:aeb7:1d21:ff22:f729])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-212883d3489sm1917395ad.207.2024.11.20.17.25.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Nov 2024 17:25:43 -0800 (PST)
+Date: Wed, 20 Nov 2024 17:25:40 -0800
+From: Leo Stone <leocstone@gmail.com>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH net-next] selftests: net/psock_lib: Handle EINTR and
+ EAGAIN
+Message-ID: <42gn3eaqfcs7qaei7qf3nrtvcp3kztuex5ttcaahfntzx6hw6v@afsmwqb4xhmj>
+References: <20241117225950.138968-1-leocstone@gmail.com>
+ <673b56f7768fc_1ced1f294fa@willemb.c.googlers.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 08/23] ovpn: implement basic TX path (UDP)
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Shuah Khan <shuah@kernel.org>, sd@queasysnail.net,
- Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-8-de4698c73a25@openvpn.net>
- <4fe9f0d5-a8ac-4f2e-aee7-00cbeaf2f0aa@gmail.com>
- <387d3fc5-9ff6-4a8e-b766-5e30d0aef4a4@openvpn.net>
-Content-Language: en-US
-From: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-In-Reply-To: <387d3fc5-9ff6-4a8e-b766-5e30d0aef4a4@openvpn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <673b56f7768fc_1ced1f294fa@willemb.c.googlers.com.notmuch>
 
-On 15.11.2024 16:39, Antonio Quartulli wrote:
-> On 11/11/2024 00:54, Sergey Ryazanov wrote:
->> Another one forgotten question, sorry about this. Please find the 
->> question inlined.
->>
->> On 29.10.2024 12:47, Antonio Quartulli wrote:
->>>   /* Send user data to the network
->>>    */
->>>   netdev_tx_t ovpn_net_xmit(struct sk_buff *skb, struct net_device *dev)
->>>   {
->>> +    struct ovpn_struct *ovpn = netdev_priv(dev);
->>> +    struct sk_buff *segments, *curr, *next;
->>> +    struct sk_buff_head skb_list;
->>> +    __be16 proto;
->>> +    int ret;
->>> +
->>> +    /* reset netfilter state */
->>> +    nf_reset_ct(skb);
->>> +
->>> +    /* verify IP header size in network packet */
->>> +    proto = ovpn_ip_check_protocol(skb);
->>> +    if (unlikely(!proto || skb->protocol != proto)) {
->>> +        net_err_ratelimited("%s: dropping malformed payload packet\n",
->>> +                    dev->name);
->>> +        dev_core_stats_tx_dropped_inc(ovpn->dev);
->>> +        goto drop;
->>> +    }
->>
->> The above check implies that kernel can feed a network device with 
->> skb-  >protocol value mismatches actual skb content. Can you share any 
->> example of such case?
->>
->> If you just want to be sure that the user packet is either IPv4 or 
->> IPv6 then it can be done like this and without error messages:
->>
->> /* Support only IPv4 or IPv6 traffic transporting */
->> if (unlikely(skb->protocol == ETH_P_IP || skb->protocol == ETH_P_IPV6))
->>      goto drop;
+Willem de Bruijn wrote:
+> Did you observe actual issues or is this based on the comment in the
+> existing code ("Should really handle EINTR and EAGAIN").
+
+No, this patch was based purely off of the comment, and the examples of
+similar code in other selftests, e.g. tools/testing/selftests/bpf/xsk.c:
+
+> static int netlink_recvmsg(int sock, struct msghdr *mhdr, int flags)
+> {
+>       int len;
+>
+>       do {
+>               len = recvmsg(sock, mhdr, flags);
+>       } while (len < 0 && (errno == EINTR || errno == EAGAIN));
+>
+>       if (len < 0)
+>               return -errno;
+>       return len;
+> }
+
+> A simpler approach to dealing with EINTR is to ask glibc to restart
+> with sigaction or siginterrupt.
 > 
-> It look good, but I will still increase the drop counter, because 
-> something entered the interface and we are trashing it.
 
-Sure. I just shared a minimalistic example and don't mind if the case 
-will be counted. Just a small hint, the counter can be moved to the 
-'drop:' label below.
+If we want to handle it that way, this patch is probably not necessary,
+since there is no specific signal I would want to install a handler for.
 
+Thanks for your feedback,
+Leo
 
-And sorry for misguiding, the '->protocol' field value has network 
-endians, so constants should be wrapped in htons():
-
-if (unlikely(skb->protocol == htons(ETH_P_IP) ||
-              skb->protocol == htons(ETH_P_IPV6)))
-     goto drop;
-
-> Why not printing a message? The interface is not Ethernet based, so I 
-> think we should not expect anything else other than v4 or v6, no?
-
-Non-Ethernet encapsulation doesn't give any guaranty that packets will 
-be IPv4/IPv6 only. There are 65k possible 'protocols' and this is an 
-interface function, which technically can be called with any protocol type.
-
-With this given, nobody wants to flood the log with messages for every 
-MPLS/LLDP/etc packet. Especially with messages saying that the packet is 
-malformed and giving no clue, why the packet was considered wrong.
-
---
-Sergey
 
