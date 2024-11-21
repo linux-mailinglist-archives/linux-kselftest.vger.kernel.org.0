@@ -1,337 +1,227 @@
-Return-Path: <linux-kselftest+bounces-22414-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22415-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B907B9D50AA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 17:26:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5698A9D53A8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 20:55:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 787EE280FEC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 16:26:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B4B94B21063
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 19:54:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA02017C210;
-	Thu, 21 Nov 2024 16:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B17671C82E2;
+	Thu, 21 Nov 2024 19:54:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="VOP1mjd0"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="ao8ygTmu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BF32309B4;
-	Thu, 21 Nov 2024 16:26:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B619B1C7B69
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 19:54:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732206376; cv=none; b=Fstn80xdrgqGVK6dkUq7kkWFanUJca/tHCdMJAxyyXddzo2G1pqgEK7rs/AoVKqse2/gvCaGUk4JDYrrRibWjEphEqekSP99Xm2ene2qtkXLGZDCYpHeB90WKaeFbkAET+t/tu5ztIlKeTMp6+nSUou1vOvRysfwChQjlK401Uw=
+	t=1732218892; cv=none; b=kLYsl8LdDXEbBgDc1MTz2wkB3aA6SDvpgRAl8pTxuykhYQeo5nAdD2hPL3iP8FY9YXPI4hg8Y/xmpQmfl0FYXGIHbpfdSFMou/Ec3QtrO2GtnGLQKY/YU8qRmw5KZXVEp1bcD/67HpDacwpX6Vm6SHqe1ARufZclK0xn1CgBWbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732206376; c=relaxed/simple;
-	bh=2KjqvOMr22iESXG26FlZ/rGx86WXrxEf2zGELliCazA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lOG/prLidhy+mC+cyVrSz/IYG5SFhpyVeapRlBpcMWUO4CFtol4ZXgGdHMHStTUabeGx9a20YI9ZeBy+rMo2PVWWMPVvEaN6QSftWrl3KSfzUdFzhGJfTXkLwRt75VRbQfN0pqC2D2kI0WUgwtScaLXpasRxBC8nJQR6g/sw3Kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=VOP1mjd0; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Tuw6u61XVKgJzrI+RtEbzlt5dJzkuA15z61icpJOg2Y=; b=VOP1mjd0n9h7RsYZs0Q5ZkeARh
-	64Dxb1fCHluTUer5pycoxBMwlPq3sVsjV874CwaAx38wYIMDpIvkHeFWd9HsDmgvK/KbxK9OeviIn
-	Jp4y7YwfdrXzLLVcCdIjTGtm5OdS1gIHpdDLqXEuJAsZPcAhvcJH3oI0v5Yls3X3XFEqCZGPK2q4p
-	N3PTXsNIhlA1jtjZ9veHX/fqUeszwhWX+ijSVInuGupwCioCAnk+RkAOi1j3rZP02aiTgtdWSeKin
-	FjQsDlflSJbwUF/xPs6pzoeDLcwufwdGAJnkcj+mXt2Ojs9QKOAVrDikRzL0hg4Zi2Yu23wOsdOgA
-	u2DiSygA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tEA0Q-00000006ZOb-3m1D;
-	Thu, 21 Nov 2024 16:26:12 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 9C68430068B; Thu, 21 Nov 2024 17:26:09 +0100 (CET)
-Date: Thu, 21 Nov 2024 17:26:09 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
-	x86@kernel.org, rcu@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Wanpeng Li <wanpengli@tencent.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Lorenzo Stoakes <lstoakes@gmail.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jason Baron <jbaron@akamai.com>, Kees Cook <keescook@chromium.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Juerg Haefliger <juerg.haefliger@canonical.com>,
-	Nicolas Saenz Julienne <nsaenz@kernel.org>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Nadav Amit <namit@vmware.com>, Dan Carpenter <error27@gmail.com>,
-	Chuang Wang <nashuiliang@gmail.com>,
-	Yang Jihong <yangjihong1@huawei.com>,
-	Petr Mladek <pmladek@suse.com>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-	Julian Pidancet <julian.pidancet@oracle.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	Yair Podemsky <ypodemsk@redhat.com>,
-	Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
-Subject: Re: [RFC PATCH v3 13/15] context_tracking,x86: Add infrastructure to
- defer kernel TLBI
-Message-ID: <20241121162609.GM24774@noisy.programming.kicks-ass.net>
-References: <20241119153502.41361-1-vschneid@redhat.com>
- <20241119153502.41361-14-vschneid@redhat.com>
+	s=arc-20240116; t=1732218892; c=relaxed/simple;
+	bh=cCkp6T/5ut6jxWfa0q3B3JwltBL8bFyvsA59iU+TBn0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YJwKUR8cw25E507286eG5R0s+FjipX8vhvXcXUoLPDdfkx+jZLkE9PoCYVR8gfVAXTthUdlP+PcGg+rVFcpHzZ7utrUVgLO0N9s/fWQhW7oKD7He2T1II3VJJ3MvzTF+pxmpjw9O9GKPhRyQjA8MfPpHk5LsQLe5O7WitB2o8Y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=ao8ygTmu; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1tEDG1-009Hs7-1H; Thu, 21 Nov 2024 20:54:29 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=v/OvbCX67fiKfDPsOSvPlJ92i6d6HdXD7QxhiNZ5o1A=; b=ao8ygTmuqcjWbO3II1En1aQBkC
+	2gZyAB+jNnFyLPsepBk4un1gldp7aG6CfL4pxq2OODmYGqMne6gmf7q8ZYbMTaSI27tGUJXjoWj9D
+	aXnyjlmqOZ1CGFb0km8lGUqDVXthOZviHuCjjnwfICdp6N1hghhDMZLmc45R6ocXxQDMoAZcfAKZv
+	A26udFzPYIwx5KWeJCUILYLMag1qqTYdTVdi2XYE1LQvxnWXObyQE7a5gCOgAqGcaS12HrYW7OZ/q
+	K6tz3II2oHo7kIuIqR2ZBbmGLHyfMpp1rlOy01MwhbhTnk8U7b90aLZxI/TxaG8XLZHpc+xjD3Eat
+	C5G3fgbA==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1tEDFz-0006kb-KT; Thu, 21 Nov 2024 20:54:27 +0100
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1tEDFs-00CqIR-VC; Thu, 21 Nov 2024 20:54:21 +0100
+Message-ID: <350e3a3f-7ebd-471e-95fa-05225d786f1c@rbox.co>
+Date: Thu, 21 Nov 2024 20:54:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241119153502.41361-14-vschneid@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf 3/4] bpf, vsock: Invoke proto::close on close()
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Bobby Eshleman <bobby.eshleman@bytedance.com>,
+ "Michael S. Tsirkin" <mst@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20241118-vsock-bpf-poll-close-v1-0-f1b9669cacdc@rbox.co>
+ <20241118-vsock-bpf-poll-close-v1-3-f1b9669cacdc@rbox.co>
+ <7wufhaaytdjp3m3xv7jrdadqjg75is5eirv4bzmjzmezc7v7ls@p52fm6y537di>
+From: Michal Luczaj <mhal@rbox.co>
+Content-Language: pl-PL, en-GB
+In-Reply-To: <7wufhaaytdjp3m3xv7jrdadqjg75is5eirv4bzmjzmezc7v7ls@p52fm6y537di>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 19, 2024 at 04:35:00PM +0100, Valentin Schneider wrote:
+On 11/21/24 10:22, Stefano Garzarella wrote:
+> On Mon, Nov 18, 2024 at 10:03:43PM +0100, Michal Luczaj wrote:
+>> vsock defines a BPF callback to be invoked when close() is called. However,
+>> this callback is never actually executed. As a result, a closed vsock
+>> socket is not automatically removed from the sockmap/sockhash.
+>>
+>> Introduce a dummy vsock_close() and make vsock_release() call proto::close.
+>>
+>> Note: changes in __vsock_release() look messy, but it's only due to indent
+>> level reduction and variables xmas tree reorder.
+>>
+>> Fixes: 634f1a7110b4 ("vsock: support sockmap")
+>> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+>> ---
+>> net/vmw_vsock/af_vsock.c | 67 +++++++++++++++++++++++++++++-------------------
+>> 1 file changed, 40 insertions(+), 27 deletions(-)
+>>
+>> diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>> index 919da8edd03c838cbcdbf1618425da6c5ec2df1a..b52b798aa4c2926c3f233aad6cd31b4056f6fee2 100644
+>> --- a/net/vmw_vsock/af_vsock.c
+>> +++ b/net/vmw_vsock/af_vsock.c
+>> @@ -117,12 +117,14 @@
+>> static int __vsock_bind(struct sock *sk, struct sockaddr_vm *addr);
+>> static void vsock_sk_destruct(struct sock *sk);
+>> static int vsock_queue_rcv_skb(struct sock *sk, struct sk_buff *skb);
+>> +static void vsock_close(struct sock *sk, long timeout);
+>>
+>> /* Protocol family. */
+>> struct proto vsock_proto = {
+>> 	.name = "AF_VSOCK",
+>> 	.owner = THIS_MODULE,
+>> 	.obj_size = sizeof(struct vsock_sock),
+>> +	.close = vsock_close,
+>> #ifdef CONFIG_BPF_SYSCALL
+>> 	.psock_update_sk_prot = vsock_bpf_update_proto,
+>> #endif
+>> @@ -797,39 +799,37 @@ static bool sock_type_connectible(u16 type)
+>>
+>> static void __vsock_release(struct sock *sk, int level)
+>> {
+>> -	if (sk) {
+>> -		struct sock *pending;
+>> -		struct vsock_sock *vsk;
+>> -
+>> -		vsk = vsock_sk(sk);
+>> -		pending = NULL;	/* Compiler warning. */
+>> +	struct vsock_sock *vsk;
+>> +	struct sock *pending;
+>>
+>> -		/* When "level" is SINGLE_DEPTH_NESTING, use the nested
+>> -		 * version to avoid the warning "possible recursive locking
+>> -		 * detected". When "level" is 0, lock_sock_nested(sk, level)
+>> -		 * is the same as lock_sock(sk).
+>> -		 */
+>> -		lock_sock_nested(sk, level);
+>> +	vsk = vsock_sk(sk);
+>> +	pending = NULL;	/* Compiler warning. */
+>>
+>> -		if (vsk->transport)
+>> -			vsk->transport->release(vsk);
+>> -		else if (sock_type_connectible(sk->sk_type))
+>> -			vsock_remove_sock(vsk);
+>> +	/* When "level" is SINGLE_DEPTH_NESTING, use the nested
+>> +	 * version to avoid the warning "possible recursive locking
+>> +	 * detected". When "level" is 0, lock_sock_nested(sk, level)
+>> +	 * is the same as lock_sock(sk).
+>> +	 */
+>> +	lock_sock_nested(sk, level);
+>>
+>> -		sock_orphan(sk);
+>> -		sk->sk_shutdown = SHUTDOWN_MASK;
+>> +	if (vsk->transport)
+>> +		vsk->transport->release(vsk);
+>> +	else if (sock_type_connectible(sk->sk_type))
+>> +		vsock_remove_sock(vsk);
+>>
+>> -		skb_queue_purge(&sk->sk_receive_queue);
+>> +	sock_orphan(sk);
+>> +	sk->sk_shutdown = SHUTDOWN_MASK;
+>>
+>> -		/* Clean up any sockets that never were accepted. */
+>> -		while ((pending = vsock_dequeue_accept(sk)) != NULL) {
+>> -			__vsock_release(pending, SINGLE_DEPTH_NESTING);
+>> -			sock_put(pending);
+>> -		}
+>> +	skb_queue_purge(&sk->sk_receive_queue);
+>>
+>> -		release_sock(sk);
+>> -		sock_put(sk);
+>> +	/* Clean up any sockets that never were accepted. */
+>> +	while ((pending = vsock_dequeue_accept(sk)) != NULL) {
+>> +		__vsock_release(pending, SINGLE_DEPTH_NESTING);
+>> +		sock_put(pending);
+>> 	}
+>> +
+>> +	release_sock(sk);
+>> +	sock_put(sk);
+>> }
+>>
+>> static void vsock_sk_destruct(struct sock *sk)
+>> @@ -901,9 +901,22 @@ void vsock_data_ready(struct sock *sk)
+>> }
+>> EXPORT_SYMBOL_GPL(vsock_data_ready);
+>>
+>> +/* Dummy callback required by sockmap.
+>> + * See unconditional call of saved_close() in sock_map_close().
+>> + */
+>> +static void vsock_close(struct sock *sk, long timeout)
+>> +{
+>> +}
+>> +
+>> static int vsock_release(struct socket *sock)
+>> {
+>> -	__vsock_release(sock->sk, 0);
+>> +	struct sock *sk = sock->sk;
+>> +
+>> +	if (!sk)
+>> +		return 0;
+> 
+> Compared with before, now we return earlier and so we don't set SS_FREE, 
+> could it be risky?
+>
+> I think no, because in theory we have already set it in a previous call, 
+> right?
 
-> @@ -418,9 +419,20 @@ static inline void cpu_tlbstate_update_lam(unsigned long lam, u64 untag_mask)
->  #endif
->  #endif /* !MODULE */
->  
-> +#define __NATIVE_TLB_FLUSH_GLOBAL(suffix, cr4)		\
-> +	native_write_cr4##suffix(cr4 ^ X86_CR4_PGE);	\
-> +	native_write_cr4##suffix(cr4)
-> +#define NATIVE_TLB_FLUSH_GLOBAL(cr4)         __NATIVE_TLB_FLUSH_GLOBAL(, cr4)
-> +#define NATIVE_TLB_FLUSH_GLOBAL_NOINSTR(cr4) __NATIVE_TLB_FLUSH_GLOBAL(_noinstr, cr4)
-> +
->  static inline void __native_tlb_flush_global(unsigned long cr4)
->  {
-> -	native_write_cr4(cr4 ^ X86_CR4_PGE);
-> -	native_write_cr4(cr4);
-> +	NATIVE_TLB_FLUSH_GLOBAL(cr4);
->  }
-> +
-> +static inline void __native_tlb_flush_global_noinstr(unsigned long cr4)
-> +{
-> +	NATIVE_TLB_FLUSH_GLOBAL_NOINSTR(cr4);
-> +}
+Yeah, and is there actually a way to call vsock_release() for a second
+time? The only caller I see is __sock_release(), which won't allow that.
 
-How about something like this instead? I've only compile tested the
-tlb.c bit, but it should get __flush_tlb_global() to be noinstr I think,
-including the Xen bit (unless I missed something but then objtool should
-complain).
+As for the sockets that never had ->sk assigned, I assume it doesn't matter.
 
----
-diff --git a/arch/x86/include/asm/invpcid.h b/arch/x86/include/asm/invpcid.h
-index 734482afbf81..ff26136fcd9c 100644
---- a/arch/x86/include/asm/invpcid.h
-+++ b/arch/x86/include/asm/invpcid.h
-@@ -2,7 +2,7 @@
- #ifndef _ASM_X86_INVPCID
- #define _ASM_X86_INVPCID
- 
--static inline void __invpcid(unsigned long pcid, unsigned long addr,
-+static __always_inline void __invpcid(unsigned long pcid, unsigned long addr,
- 			     unsigned long type)
- {
- 	struct { u64 d[2]; } desc = { { pcid, addr } };
-@@ -13,7 +13,7 @@ static inline void __invpcid(unsigned long pcid, unsigned long addr,
- 	 * mappings, we don't want the compiler to reorder any subsequent
- 	 * memory accesses before the TLB flush.
- 	 */
--	asm volatile("invpcid %[desc], %[type]"
-+	asm_inline volatile("invpcid %[desc], %[type]"
- 		     :: [desc] "m" (desc), [type] "r" (type) : "memory");
- }
- 
-@@ -23,26 +23,25 @@ static inline void __invpcid(unsigned long pcid, unsigned long addr,
- #define INVPCID_TYPE_ALL_NON_GLOBAL	3
- 
- /* Flush all mappings for a given pcid and addr, not including globals. */
--static inline void invpcid_flush_one(unsigned long pcid,
--				     unsigned long addr)
-+static __always_inline void invpcid_flush_one(unsigned long pcid, unsigned long addr)
- {
- 	__invpcid(pcid, addr, INVPCID_TYPE_INDIV_ADDR);
- }
- 
- /* Flush all mappings for a given PCID, not including globals. */
--static inline void invpcid_flush_single_context(unsigned long pcid)
-+static __always_inline void invpcid_flush_single_context(unsigned long pcid)
- {
- 	__invpcid(pcid, 0, INVPCID_TYPE_SINGLE_CTXT);
- }
- 
- /* Flush all mappings, including globals, for all PCIDs. */
--static inline void invpcid_flush_all(void)
-+static __always_inline void invpcid_flush_all(void)
- {
- 	__invpcid(0, 0, INVPCID_TYPE_ALL_INCL_GLOBAL);
- }
- 
- /* Flush all mappings for all PCIDs except globals. */
--static inline void invpcid_flush_all_nonglobals(void)
-+static __always_inline void invpcid_flush_all_nonglobals(void)
- {
- 	__invpcid(0, 0, INVPCID_TYPE_ALL_NON_GLOBAL);
- }
-diff --git a/arch/x86/include/asm/paravirt.h b/arch/x86/include/asm/paravirt.h
-index d4eb9e1d61b8..b3daee3d4667 100644
---- a/arch/x86/include/asm/paravirt.h
-+++ b/arch/x86/include/asm/paravirt.h
-@@ -75,7 +75,7 @@ static inline void __flush_tlb_local(void)
- 	PVOP_VCALL0(mmu.flush_tlb_user);
- }
- 
--static inline void __flush_tlb_global(void)
-+static __always_inline void __flush_tlb_global(void)
- {
- 	PVOP_VCALL0(mmu.flush_tlb_kernel);
- }
-diff --git a/arch/x86/include/asm/xen/hypercall.h b/arch/x86/include/asm/xen/hypercall.h
-index a2dd24947eb8..b4c635b20538 100644
---- a/arch/x86/include/asm/xen/hypercall.h
-+++ b/arch/x86/include/asm/xen/hypercall.h
-@@ -357,8 +357,8 @@ MULTI_mmu_update(struct multicall_entry *mcl, struct mmu_update *req,
- 	trace_xen_mc_entry(mcl, 4);
- }
- 
--static inline void
--MULTI_mmuext_op(struct multicall_entry *mcl, struct mmuext_op *op, int count,
-+static __always_inline void
-+__MULTI_mmuext_op(struct multicall_entry *mcl, struct mmuext_op *op, int count,
- 		int *success_count, domid_t domid)
- {
- 	mcl->op = __HYPERVISOR_mmuext_op;
-@@ -366,6 +366,13 @@ MULTI_mmuext_op(struct multicall_entry *mcl, struct mmuext_op *op, int count,
- 	mcl->args[1] = count;
- 	mcl->args[2] = (unsigned long)success_count;
- 	mcl->args[3] = domid;
-+}
-+
-+static inline void
-+MULTI_mmuext_op(struct multicall_entry *mcl, struct mmuext_op *op, int count,
-+		int *success_count, domid_t domid)
-+{
-+	__MULTI_mmuext_op(mcl, op, count, success_count, domid);
- 
- 	trace_xen_mc_entry(mcl, 4);
- }
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index b0d5a644fc84..0cfc00a34b7e 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -1168,9 +1168,10 @@ void flush_tlb_one_user(unsigned long addr)
- /*
-  * Flush everything
-  */
--STATIC_NOPV void native_flush_tlb_global(void)
-+STATIC_NOPV noinstr void native_flush_tlb_global(void)
- {
- 	unsigned long flags;
-+	unsigned long cr4;
- 
- 	if (static_cpu_has(X86_FEATURE_INVPCID)) {
- 		/*
-@@ -1189,9 +1190,15 @@ STATIC_NOPV void native_flush_tlb_global(void)
- 	 * be called from deep inside debugging code.)
- 	 */
- 	raw_local_irq_save(flags);
--
--	__native_tlb_flush_global(this_cpu_read(cpu_tlbstate.cr4));
--
-+	cr4 = this_cpu_read(cpu_tlbstate.cr4);
-+	asm volatile("mov %0,%%cr4": : "r" (cr4 ^ X86_CR4_PGE) : "memory");
-+	asm volatile("mov %0,%%cr4": : "r" (cr4) : "memory");
-+	/*
-+	 * In lieu of not having the pinning crap, hard fail if CR4 doesn't
-+	 * match the expected value. This ensures that anybody doing dodgy gets
-+	 * the fallthrough check.
-+	 */
-+	BUG_ON(cr4 != this_cpu_read(cpu_tlbstate.cr4));
- 	raw_local_irq_restore(flags);
- }
- 
-diff --git a/arch/x86/xen/mmu_pv.c b/arch/x86/xen/mmu_pv.c
-index 55a4996d0c04..4eb265eb867a 100644
---- a/arch/x86/xen/mmu_pv.c
-+++ b/arch/x86/xen/mmu_pv.c
-@@ -1231,22 +1231,22 @@ static noinstr void xen_write_cr2(unsigned long cr2)
- 	this_cpu_read(xen_vcpu)->arch.cr2 = cr2;
- }
- 
--static noinline void xen_flush_tlb(void)
-+static noinline noinstr void xen_flush_tlb(void)
- {
- 	struct mmuext_op *op;
- 	struct multicall_space mcs;
- 
--	preempt_disable();
-+	preempt_disable_notrace();
- 
- 	mcs = xen_mc_entry(sizeof(*op));
- 
- 	op = mcs.args;
- 	op->cmd = MMUEXT_TLB_FLUSH_LOCAL;
--	MULTI_mmuext_op(mcs.mc, op, 1, NULL, DOMID_SELF);
-+	__MULTI_mmuext_op(mcs.mc, op, 1, NULL, DOMID_SELF);
- 
--	xen_mc_issue(XEN_LAZY_MMU);
-+	__xen_mc_issue(XEN_LAZY_MMU);
- 
--	preempt_enable();
-+	preempt_enable_notrace();
- }
- 
- static void xen_flush_tlb_one_user(unsigned long addr)
-diff --git a/arch/x86/xen/xen-ops.h b/arch/x86/xen/xen-ops.h
-index e1b782e823e6..31eddca45c27 100644
---- a/arch/x86/xen/xen-ops.h
-+++ b/arch/x86/xen/xen-ops.h
-@@ -235,15 +235,19 @@ static inline struct multicall_space xen_mc_entry(size_t args)
- void xen_mc_flush(void);
- 
- /* Issue a multicall if we're not in a lazy mode */
--static inline void xen_mc_issue(unsigned mode)
-+static __always_inline void __xen_mc_issue(unsigned mode)
- {
--	trace_xen_mc_issue(mode);
--
- 	if ((xen_get_lazy_mode() & mode) == 0)
- 		xen_mc_flush();
- 
- 	/* restore flags saved in xen_mc_batch */
--	local_irq_restore(this_cpu_read(xen_mc_irq_flags));
-+	raw_local_irq_restore(this_cpu_read(xen_mc_irq_flags));
-+}
-+
-+static inline void xen_mc_issue(unsigned mode)
-+{
-+	trace_xen_mc_issue(mode);
-+	__xen_mc_issue(mode);
- }
- 
- /* Set up a callback to be called when the current batch is flushed */
+> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+> 
+>> +
+>> +	sk->sk_prot->close(sk, 0);
+>> +	__vsock_release(sk, 0);
+>> 	sock->sk = NULL;
+>> 	sock->state = SS_FREE;
+
 
