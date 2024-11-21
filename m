@@ -1,131 +1,140 @@
-Return-Path: <linux-kselftest+bounces-22390-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22391-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47D1B9D49B7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 10:15:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18A959D49D0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 10:20:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D2B9281059
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 09:15:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C44231F2155A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 09:20:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D141CB31C;
-	Thu, 21 Nov 2024 09:14:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 077C91CB9F0;
+	Thu, 21 Nov 2024 09:20:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i5jhTxvP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cmccmta1.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 056E44206E;
-	Thu, 21 Nov 2024 09:14:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.135
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74DA3158D79
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 09:20:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732180499; cv=none; b=oGPrxh8eBAN7A2pDCkOKqeSKldVbrBeFPD3IhFrepSn2ucAbm4gDPOtf9uunKDDxPWfeP9d8EHseqrp6Xuk4sOW6klpRwQbdXZoI3yvIGu+P79kMIZCetkTTa0z+L4OBdRJ7x9PPK6Aa4Sh4BYxDBoLGjaNLZiz9vmoTyiiB4WU=
+	t=1732180849; cv=none; b=KxPFbl+ldbuHpZvBj1guTk6DxZIPXFoG9sJViQIUt0O0aYeMRbv/5f6dfdqeR6TFt03nS51Cinjh7u/9xytDEg7mpCyyNEK5Gohp5QffI4IFARiy6Xsaizctc+zshQHVw/rN0+RDm1LIoieGJ7GaPjOmqd4061wfIoZ/WcuKK2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732180499; c=relaxed/simple;
-	bh=HC+FClx8+FFEcf2S1sO5cNwBgI+xwZmAbAIZHTFgOfA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=exK/mlrHQLgsYiMTsw89eyLFslWwBzQhOINdDTfDmQjQuoDHDiN4HfgVSh5FeO+aF62QpzsK298pmvHlE1TfDyymwtZlrDSzgaVAvQoVVLwkiFl7lchoejtETzEnynmrq6BcZ7WGErw4kM4J8JseQFGpGZpgRCHibZQtofsg9v8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.135
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app03-12003 (RichMail) with SMTP id 2ee3673efa0ed88-2c5b0;
-	Thu, 21 Nov 2024 17:14:54 +0800 (CST)
-X-RM-TRANSID:2ee3673efa0ed88-2c5b0
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from [172.20.230.59] (unknown[223.108.79.101])
-	by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee6673efa0d35c-d5849;
-	Thu, 21 Nov 2024 17:14:54 +0800 (CST)
-X-RM-TRANSID:2ee6673efa0d35c-d5849
-Message-ID: <291c5d58-9681-49bc-b5c4-3ee4555d68bd@cmss.chinamobile.com>
-Date: Thu, 21 Nov 2024 17:14:53 +0800
+	s=arc-20240116; t=1732180849; c=relaxed/simple;
+	bh=z3IzFqz6CGkWpS7Db68UfSWXKU8RdvRO9o8tJ0fBkns=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=vBLjHOtuzv9wFTWxA6X4XFLrDeMBFMqdNxL8dV5z7UdT5SZmm9AraZlW9u6ZPZRc+lB8coU+p0fHQvgKDwjC9mEkAPQifBIw4JQZhOtRXErRtsiJlg/4dgUiUCas6osJXDxriqaEpeheO563BL00qlxiUYLg/7rUTzxFymA79Ac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i5jhTxvP; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1732180844;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Pe+KersGjDEJYz4W2aLOhFHR+iyviK6f7r1oEzw1+cc=;
+	b=i5jhTxvPpQa348kAnP6f6fiGpQdb6rv4FjRueEIbP2sOMZRzHa070j0wDCjcm5bp0t1FMW
+	3kNwGBDbK3udBC/o6LUqFAIjHngzHvub8lWWMoMGsH6AoAtvZOz42ErrrKwWDZrt0VoiI7
+	6KKq/CDLV2L5xyw9WtU7fdkMAbbTPac=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-152-lppsjVHCN2SHrx7jKaZF7g-1; Thu, 21 Nov 2024 04:20:42 -0500
+X-MC-Unique: lppsjVHCN2SHrx7jKaZF7g-1
+X-Mimecast-MFC-AGG-ID: lppsjVHCN2SHrx7jKaZF7g
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-aa209443786so182088166b.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 01:20:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732180838; x=1732785638;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pe+KersGjDEJYz4W2aLOhFHR+iyviK6f7r1oEzw1+cc=;
+        b=juw5xqoZ/ayYPfWYA8TApIy7yElcjxqYqprnQoz7x8S52F368OJmQeKe8n3/xYiB5A
+         IX94WZAg7UB0sNGMou8maMVV1BsTKE7OgLvFUmaJMkyInARhhRy53EuvPlMInQCllCzY
+         8tzgzxcorjTNjJIo1Nw//4O4ye77VG6cPBb4zw/2ZyI6uAkioKrCRXdOTRzaACOxdxDt
+         MVJoUuzURLA9PulnzWq03sPtLjT1Y86NrHQ1xOlGH/hC5W8oA7GlMkIAwM1WcF1T2lvp
+         31nj2vGjeOqQyTipmFwvZRcrr6d30SPAKqFfBHGT6A8xFHtVb0IhQZ6b8QXWFGv5xX74
+         sP8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUClzncKWE5d4CiQtehi1h4a8W2q8ddBDRG5xzRnbdbr7AUidlnf27txU/MzhamFBcyNRbNCJOXvEuxvqU+ul8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfNah33jvzEtld59vusFh38HJOJBaEcyYRdv6fnx/qNKzu3lIV
+	+USXVgNwh3UfoxSCfhgtoGhv8dfGWscx5XfRZTZ4LxL6fmQvM2vXzi+lpXJDmnNlPZQV2prqsjb
+	ER0nGYyg1yiBsliuAa/Lxdh9DxLnS3iNcdnbRDuArnqw3laTvIBPcbKcchgKUkz4k+w==
+X-Received: by 2002:a17:907:2d91:b0:a9a:b818:521d with SMTP id a640c23a62f3a-aa4efb8cd32mr245017266b.18.1732180838238;
+        Thu, 21 Nov 2024 01:20:38 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFR9VubEFl+IO+AiFGGZg/eRdEemUzuJZ7gugoLasmFePLIWVWdepkm95op+xuk3Bl3LojEEA==
+X-Received: by 2002:a17:907:2d91:b0:a9a:b818:521d with SMTP id a640c23a62f3a-aa4efb8cd32mr245013366b.18.1732180837663;
+        Thu, 21 Nov 2024 01:20:37 -0800 (PST)
+Received: from sgarzare-redhat (host-79-46-200-129.retail.telecomitalia.it. [79.46.200.129])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa4f4380c16sm56352166b.202.2024.11.21.01.20.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Nov 2024 01:20:37 -0800 (PST)
+Date: Thu, 21 Nov 2024 10:20:34 +0100
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Michal Luczaj <mhal@rbox.co>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Bobby Eshleman <bobby.eshleman@bytedance.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf 1/4] bpf, vsock: Fix poll() missing a queue
+Message-ID: <rkuislntcknwmj65mghggj3k7jzzp5s5pbs36zacijjhcoag64@p5srullnpbqu>
+References: <20241118-vsock-bpf-poll-close-v1-0-f1b9669cacdc@rbox.co>
+ <20241118-vsock-bpf-poll-close-v1-1-f1b9669cacdc@rbox.co>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] selftests: mm: Fix conversion specifiers
- intransact_test()
-To: Muhammad Usama Anjum <Usama.Anjum@collabora.com>,
- akpm@linux-foundation.org, shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241117071231.177864-1-guanjing@cmss.chinamobile.com>
- <a2b65507-90dd-4586-9881-4ce5b310c2a8@collabora.com>
-From: guanjing <guanjing@cmss.chinamobile.com>
-In-Reply-To: <a2b65507-90dd-4586-9881-4ce5b310c2a8@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20241118-vsock-bpf-poll-close-v1-1-f1b9669cacdc@rbox.co>
 
-I found it when reading the code. So far, I haven't found any tools that 
-can be used for scanning yet. :)
-
-Thank you for your review.
-
-
-On 2024/11/19 15:33, Muhammad Usama Anjum wrote:
-> Thanks for the patch.
+On Mon, Nov 18, 2024 at 10:03:41PM +0100, Michal Luczaj wrote:
+>When a verdict program simply passes a packet without redirection, sk_msg
+>is enqueued on sk_psock::ingress_msg. Add a missing check to poll().
 >
->
-> On 11/17/24 12:12 PM, guanjing wrote:
->> Lots of incorrect conversion specifiers. Fix them.
-> Not sure why I'd not got warnings. Just curious, how were you able
-> to notice these warnings?
->
->> Fixes: 46fd75d4a3c9 ("selftests: mm: add pagemap ioctl tests")
->> Signed-off-by: guanjing <guanjing@cmss.chinamobile.com>
-> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->
->> ---
->>   tools/testing/selftests/mm/pagemap_ioctl.c | 10 +++++-----
->>   1 file changed, 5 insertions(+), 5 deletions(-)
->>
->> diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
->> index bcc73b4e805c..fdafce0654e9 100644
->> --- a/tools/testing/selftests/mm/pagemap_ioctl.c
->> +++ b/tools/testing/selftests/mm/pagemap_ioctl.c
->> @@ -1405,9 +1405,9 @@ static void transact_test(int page_size)
->>   	memset(mem, 0, 0x1000 * nthreads * pages_per_thread);
->>   
->>   	count = get_dirty_pages_reset(mem, nthreads * pages_per_thread, 1, page_size);
->> -	ksft_test_result(count > 0, "%s count %d\n", __func__, count);
->> +	ksft_test_result(count > 0, "%s count %u\n", __func__, count);
->>   	count = get_dirty_pages_reset(mem, nthreads * pages_per_thread, 1, page_size);
->> -	ksft_test_result(count == 0, "%s count %d\n", __func__, count);
->> +	ksft_test_result(count == 0, "%s count %u\n", __func__, count);
->>   
->>   	finish = 0;
->>   	for (i = 0; i < nthreads; ++i)
->> @@ -1429,7 +1429,7 @@ static void transact_test(int page_size)
->>   			ksft_exit_fail_msg("pthread_barrier_wait\n");
->>   
->>   		if (count > nthreads * access_per_thread)
->> -			ksft_exit_fail_msg("Too big count %d expected %d, iter %d\n",
->> +			ksft_exit_fail_msg("Too big count %u expected %u, iter %u\n",
->>   					   count, nthreads * access_per_thread, i);
->>   
->>   		c = get_dirty_pages_reset(mem, nthreads * pages_per_thread, 1, page_size);
->> @@ -1454,7 +1454,7 @@ static void transact_test(int page_size)
->>   			 * access and application gets page fault again for the same write.
->>   			 */
->>   			if (count < nthreads * access_per_thread) {
->> -				ksft_test_result_fail("Lost update, iter %d, %d vs %d.\n", i, count,
->> +				ksft_test_result_fail("Lost update, iter %u, %u vs %u.\n", i, count,
->>   						      nthreads * access_per_thread);
->>   				return;
->>   			}
->> @@ -1467,7 +1467,7 @@ static void transact_test(int page_size)
->>   	finish = 1;
->>   	pthread_barrier_wait(&end_barrier);
->>   
->> -	ksft_test_result_pass("%s Extra pages %u (%.1lf%%), extra thread faults %d.\n", __func__,
->> +	ksft_test_result_pass("%s Extra pages %u (%.1lf%%), extra thread faults %u.\n", __func__,
->>   			      extra_pages,
->>   			      100.0 * extra_pages / (iter_count * nthreads * access_per_thread),
->>   			      extra_thread_faults);
+>Fixes: 634f1a7110b4 ("vsock: support sockmap")
+>Signed-off-by: Michal Luczaj <mhal@rbox.co>
+>---
+> net/vmw_vsock/af_vsock.c | 3 +++
+> 1 file changed, 3 insertions(+)
 
+Yep, in vsock_bpf.c we set `prot->sock_is_readable = sk_msg_is_readable`,
+so it LGTM!
+
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+
+>
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index dfd29160fe11c4675f872c1ee123d65b2da0dae6..919da8edd03c838cbcdbf1618425da6c5ec2df1a 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -1054,6 +1054,9 @@ static __poll_t vsock_poll(struct file *file, struct socket *sock,
+> 		mask |= EPOLLRDHUP;
+> 	}
+>
+>+	if (sk_is_readable(sk))
+>+		mask |= EPOLLIN | EPOLLRDNORM;
+>+
+> 	if (sock->type == SOCK_DGRAM) {
+> 		/* For datagram sockets we can read if there is something in
+> 		 * the queue and write as long as the socket isn't shutdown for
+>
+>-- 
+>2.46.2
+>
 
 
