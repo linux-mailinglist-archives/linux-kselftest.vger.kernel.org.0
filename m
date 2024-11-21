@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-22383-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22384-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 456BE9D44BC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 00:58:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AC059D44E5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 01:29:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90F27B2392B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2024 23:58:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3AFE1F219BC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 00:29:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F3541C1F0B;
-	Wed, 20 Nov 2024 23:58:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBBFE2309B3;
+	Thu, 21 Nov 2024 00:29:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QEn78HrR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l8bXj084"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABBB1B5808;
-	Wed, 20 Nov 2024 23:58:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF9023098E;
+	Thu, 21 Nov 2024 00:29:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732147109; cv=none; b=u80uOu8q7sAg4GX7CEZW+UJTmwAWNvqlnrvpkJ9YON6ff8+UloIEGzX5zMHLbwkQI11jyYKy5wFVkAo2Ep8gOQg+ReOfFdtgRQw5HvI6lzGdGN2/O/tA+kdE/vcEyMTNcyKBD3UdDSfGFtH5ofzlxXumXGBNCn1rkY5XZUpEjqE=
+	t=1732148948; cv=none; b=aZwrkJgYsLmywYI5/dijys+nl8x9fmHKXEskqY3yfzRJlFdxsMZYtgv+/9B7bH5zNl4ctTynHNkwiJ6QJBzSAi6yC6Kre4BKizlZrwQec9TTnfvT28wnwVqo/5WOI6KphPo+9PpwvWPIGCDEpBhhFM7GbGKezzTyRFY0QPMoOFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732147109; c=relaxed/simple;
-	bh=FT7KpVo1Xw4Wyhveq0TEe3D8LUUQtpfN6cDbNDoyYko=;
+	s=arc-20240116; t=1732148948; c=relaxed/simple;
+	bh=ADwrhXPHxiG/lWbdGMI7aKDtnfo7BJH5nHp+YJOCkes=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o4vgMsKFMun2OtZQRreoVhHNp8aApcF52laRFh7dk/0+o1sFfTWbvrS1/bHHdxGZbeYeq8iEliJ2qqaj9QtsoWUAGnK1l36Yd8OGzeDsUDo2xE8Injgh+V1+U8iWNFyNhQ9Znar2btbrajyYKedJdlFQxODLGWEsrRLy+U7svx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QEn78HrR; arc=none smtp.client-ip=209.85.128.46
+	 In-Reply-To:Content-Type; b=aNUau9sqgzZj7VkksjMBD9qf3fNYuO/ti2nVUrtZztDqL9m0OyyH7JkO9wKz7MdRHyIN4/ZsdMhukP+NAZCOI0/rImUKNXUoor59YrEtFOeBZvOfCze6YGLAJdbvD8+5BYNCA02d8u1I4CPUVJAjXkAr9oOxD1o4dis22PBJymc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l8bXj084; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4316cce103dso3136285e9.3;
-        Wed, 20 Nov 2024 15:58:26 -0800 (PST)
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-381ee2e10dfso168092f8f.0;
+        Wed, 20 Nov 2024 16:29:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732147105; x=1732751905; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732148945; x=1732753745; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QSzf26MMooOvVsUekTM/2oVfGFV2k4kNZ8E/KxyEwzk=;
-        b=QEn78HrRdLw0uN9Wq5KrBurVbW4lEQbGWSq+8GG4+p3EetgMRJOr6Hi7Fb/5vWbPTc
-         ic/YQV2U+BSAbiMTHNNQBhKxp9W5SjfyH+YAK4DJC8hE7d1rj31aiQmDu1OM0Cu9x2vb
-         ff1fjqSoiECadbrc4iIAYPQhxpF6KwtjtMfoB0Y8zW5FAzUM5lXm583jkgXwKvEi9fTu
-         Q/mnDL/ItUtYb6scUt2wGdpmqLieIdNQubE/suwALwsGya35OaY5o9sFxZv+6Eq6pJ6c
-         UmlmB+VkaV3g21iYoK6EwSX8ZRoYPtAYeBW18uce1dNlbN0V8Pv0qdB9TOJ3yEhu4w0W
-         44CA==
+        bh=nNFqJNwdtTIM52uDabF+RixwG4yWSl0dwHZ/Bz5L1s8=;
+        b=l8bXj084l7s47amLmgoHrCjH9QRA1jbSInl6eUlxNarVb1z5TOpDKrRfIi/C97fRl9
+         plIrtiq5VfUDTB9TMaujpNumE4U8G7M67fr2yhzenykps0HB+R/QCsOgoE1Jxiu8UITI
+         COpZP20jmPn29Px0c4wB9tJbQuDjl30/p4o/olIyBhcoy65BdF92/1A9QRsk0TvbcU1P
+         k/JLTAYGQ/tX0tB+FHTuQPt64Ym/C1Lot1zVsCHbwOejJqpVSMZCkHYCypEyxjMjr1o6
+         4zpI/sW98rod8zhaJW1SbsVZNYs+SR7sNFfYaW0LyH9UcOjSxh/V8K5ixFtplWMmzZGL
+         mraA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732147105; x=1732751905;
+        d=1e100.net; s=20230601; t=1732148945; x=1732753745;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QSzf26MMooOvVsUekTM/2oVfGFV2k4kNZ8E/KxyEwzk=;
-        b=GZn+nKiGmA5NNr8IwC6xhV+6lODKcDOv5968y9iMVcM85N7M4X8GM/ZrySqCCMc7/+
-         jrMiK3UQRtfP1A75aWGqSwjijY/bs/io5iXU8lJKgNjTCnlTVR74gd/agOiVspSvrhDV
-         We2pcZeLCQlLxJaNRGvq3eax3xLD0kQmpslOVRKM8uwa0W+FTyXAcPzeM56y6CzpF5LX
-         oVtevkim60V8PaswWkvCjKkEQE1kOUTjPXlSWAOXzXfX+qKbkY/RIRhUlqdFnzrT6WCT
-         D9X13aRP9KxO1Fs+r7qlfabvL/GgFaJQHWh0DRrHeVIOHyeJH+7GZ9aR0JYaXhYu2mpK
-         rTvA==
-X-Forwarded-Encrypted: i=1; AJvYcCU44bpNCyPwpONvthLucvIR2ohMlV1mHDk7rmozPBmu/MdOHSPWB3SHOKN9ee6mgS1CsI59TEVuXRo4Wvo=@vger.kernel.org, AJvYcCUQ1+lMzm63buBGKZjRZ9H2bpmmnDPBPpzsccwo9KL/hESCqEiLDgq7LokF7xOvhW4HQgMR9eGYLh4FTTTDSTYh@vger.kernel.org, AJvYcCVnkofUZ9oqBUurVyUeDoPunTSQsr411p5/pE1EOohkd6vhtJ+RYl8PoMzGVgCM4ZcpqkgleNdG@vger.kernel.org
-X-Gm-Message-State: AOJu0YywkfGy5w1RWM1bV5RK+s3T/w1Y7diYS6jNh6CJYOHV5pjErkoE
-	tTu0tByzYEi0jB9ozfjNd3MNyIGfaipJCGWj522o9/J2n1lRoUoX
-X-Google-Smtp-Source: AGHT+IFdnLy7rwqiIZErl4q76RFF8iGIEXJOmR4TkGveY0gnQTd5KyXsvE+Qee4CVFMz1SkWoxU2LA==
-X-Received: by 2002:a05:600c:4f46:b0:42f:8229:a09e with SMTP id 5b1f17b1804b1-4334f01d75bmr44748645e9.29.1732147105431;
-        Wed, 20 Nov 2024 15:58:25 -0800 (PST)
+        bh=nNFqJNwdtTIM52uDabF+RixwG4yWSl0dwHZ/Bz5L1s8=;
+        b=St3gqnxLvT5xt5KOKYlkI6C+jCRr87wfl9qsnOwAJ3wp2RkJDCrqESAjgdoPTfo6tz
+         7aHqTcNOEFBpvfqI3mrKO8TCRzUt8AHJ8LrFyBVLXAiacJsk+w0Ps5KA4+2r5jzdzBKt
+         UuJZtSwCiD9ng55E7vzYAwUsUnSwJkbp+tzepmAWpHozKs685eWJTC+m6M59WLl9PZe8
+         R2J4kZ8HTk9Z06xpU4+UL3BH42q15n8PgYPeWvFf8C5FBIpA33AyydEY/9vxn4YagsXL
+         LucRP3KO+1tfY5TiOk3ywpVwTqSx7500VaYVHlLF7KdKVz1h6+92NjBZzalS7ZQf6Mex
+         7hvg==
+X-Forwarded-Encrypted: i=1; AJvYcCUQE10yCbgoGh6uRTexi6u482rLM6PKY8fTtTnDIGWgR/2/uZcXqBKyNWxFghm7XV54j11Z8JoK@vger.kernel.org, AJvYcCUwxZn8/iiQYniNm/it1k2zMPKzINKJuhve3SpaAiRjEoUX/p7RRN1LGsoJ61Xj8VgjSn5g03wEeGWccfD19TWN@vger.kernel.org, AJvYcCXPYJRXg8OwkEoStl0v52/c3krvHXRMwsyty7Xev5brhSL55qAepty5789cF30R4bI5z/4OHW1PZl0z6a0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXKvDkghOYSRQCcb0n4ArWBDa1M+xBC4+DQx+rMmuIWTVtgXeb
+	Bp+HpwPw3YBGTYrrftLB5vrFFgn+0bZzme5HdTNQgDaWsGeeD5kN
+X-Google-Smtp-Source: AGHT+IHwrxS7Q3wPuiO3CIM8LKgPUIos8L4eyZFj2A2FlBmlQwt9D7cuEebrGVqCQWqGXFrooaiQqQ==
+X-Received: by 2002:a5d:6c63:0:b0:382:43ee:9f70 with SMTP id ffacd0b85a97d-38254ae44a7mr3730200f8f.22.1732148945289;
+        Wed, 20 Nov 2024 16:29:05 -0800 (PST)
 Received: from [192.168.0.2] ([69.6.8.124])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-433b01e1046sm36572785e9.4.2024.11.20.15.58.22
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3825493ee59sm3343620f8f.103.2024.11.20.16.29.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Nov 2024 15:58:24 -0800 (PST)
-Message-ID: <ca5c4c4b-bd9b-4ccc-9258-e78ec7684a85@gmail.com>
-Date: Thu, 21 Nov 2024 01:58:58 +0200
+        Wed, 20 Nov 2024 16:29:03 -0800 (PST)
+Message-ID: <7d221595-bd57-4b8d-9c2a-007ad1e33ba1@gmail.com>
+Date: Thu, 21 Nov 2024 02:29:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,7 +76,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 07/23] ovpn: introduce the ovpn_socket object
+Subject: Re: [PATCH net-next v11 08/23] ovpn: implement basic TX path (UDP)
 To: Antonio Quartulli <antonio@openvpn.net>
 Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
@@ -84,77 +84,79 @@ Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-7-de4698c73a25@openvpn.net>
- <62d382f8-ea45-4157-b54b-8fed7bdafcca@gmail.com>
- <1dffb833-1688-4572-bbf8-c6524cd84402@openvpn.net>
+ <20241029-b4-ovpn-v11-8-de4698c73a25@openvpn.net>
+ <4fe9f0d5-a8ac-4f2e-aee7-00cbeaf2f0aa@gmail.com>
+ <387d3fc5-9ff6-4a8e-b766-5e30d0aef4a4@openvpn.net>
 Content-Language: en-US
 From: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-In-Reply-To: <1dffb833-1688-4572-bbf8-c6524cd84402@openvpn.net>
+In-Reply-To: <387d3fc5-9ff6-4a8e-b766-5e30d0aef4a4@openvpn.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 15.11.2024 16:28, Antonio Quartulli wrote:
-> On 10/11/2024 19:26, Sergey Ryazanov wrote:
+On 15.11.2024 16:39, Antonio Quartulli wrote:
+> On 11/11/2024 00:54, Sergey Ryazanov wrote:
+>> Another one forgotten question, sorry about this. Please find the 
+>> question inlined.
+>>
 >> On 29.10.2024 12:47, Antonio Quartulli wrote:
-
-[...]
-
->>> +static bool ovpn_socket_hold(struct ovpn_socket *sock)
->>> +{
->>> +    return kref_get_unless_zero(&sock->refcount);
->>
->> Why do we need to wrap this kref acquiring call into the function. Why 
->> we cannot simply call kref_get_unless_zero() from ovpn_socket_get()?
-> 
-> Generally I prefer to keep the API among objects consistent.
-> In this specific case, it means having hold() and put() helpers in order 
-> to avoid calling kref_* functions directly in the code.
-> 
-> This is a pretty simple case because hold() is called only once, but I 
-> still like to be consistent.
-
-Make sense. The counterpart ovpn_socket_hold() function declared in the 
-header file. Probably that's why I missed it. Shall we move the holding 
-routine there as well?
-
-[...]
-
->>> +int ovpn_udp_socket_attach(struct socket *sock, struct ovpn_struct 
->>> *ovpn)
->>> +{
->>> +    struct ovpn_socket *old_data;
->>> +    int ret = 0;
+>>>   /* Send user data to the network
+>>>    */
+>>>   netdev_tx_t ovpn_net_xmit(struct sk_buff *skb, struct net_device *dev)
+>>>   {
+>>> +    struct ovpn_struct *ovpn = netdev_priv(dev);
+>>> +    struct sk_buff *segments, *curr, *next;
+>>> +    struct sk_buff_head skb_list;
+>>> +    __be16 proto;
+>>> +    int ret;
 >>> +
->>> +    /* sanity check */
->>> +    if (sock->sk->sk_protocol != IPPROTO_UDP) {
->>
->> The function will be called only for a UDP socket. The caller makes 
->> sure this is truth. So, why do we need this check?
-> 
-> To avoid this function being copied/called somewhere else in the future 
-> and we forget about this critical assumption.
-
-Shall we do the same for all other functions in this file? E.g. 
-ovpn_udp_socket_detach/ovpn_udp_send_skb? And who is giving guarantee 
-that the code will be copied together with the check?
-
-> Indeed it's a just sanity check.
-
-Shall we check for pointers validity before dereferencing them?
-
-if (!ovpn || !sock || !sock->sk || !sock->sk->sk_protocol != IPPROTO_UDP) {
-
-With the above questions I would like to show that it's endless number 
-of possible mistakes. And no matter how much do we check, a creative 
-engineer will find a way to ruin the kernel.
-
-So, is it worth to spend code lines for checking socket for being UDP 
-inside a function that has '_udp_' in its name and is called only inside 
-the module?
-
->>> +        DEBUG_NET_WARN_ON_ONCE(1);
->>> +        return -EINVAL;
+>>> +    /* reset netfilter state */
+>>> +    nf_reset_ct(skb);
+>>> +
+>>> +    /* verify IP header size in network packet */
+>>> +    proto = ovpn_ip_check_protocol(skb);
+>>> +    if (unlikely(!proto || skb->protocol != proto)) {
+>>> +        net_err_ratelimited("%s: dropping malformed payload packet\n",
+>>> +                    dev->name);
+>>> +        dev_core_stats_tx_dropped_inc(ovpn->dev);
+>>> +        goto drop;
 >>> +    }
+>>
+>> The above check implies that kernel can feed a network device with 
+>> skb-  >protocol value mismatches actual skb content. Can you share any 
+>> example of such case?
+>>
+>> If you just want to be sure that the user packet is either IPv4 or 
+>> IPv6 then it can be done like this and without error messages:
+>>
+>> /* Support only IPv4 or IPv6 traffic transporting */
+>> if (unlikely(skb->protocol == ETH_P_IP || skb->protocol == ETH_P_IPV6))
+>>      goto drop;
+> 
+> It look good, but I will still increase the drop counter, because 
+> something entered the interface and we are trashing it.
+
+Sure. I just shared a minimalistic example and don't mind if the case 
+will be counted. Just a small hint, the counter can be moved to the 
+'drop:' label below.
+
+
+And sorry for misguiding, the '->protocol' field value has network 
+endians, so constants should be wrapped in htons():
+
+if (unlikely(skb->protocol == htons(ETH_P_IP) ||
+              skb->protocol == htons(ETH_P_IPV6)))
+     goto drop;
+
+> Why not printing a message? The interface is not Ethernet based, so I 
+> think we should not expect anything else other than v4 or v6, no?
+
+Non-Ethernet encapsulation doesn't give any guaranty that packets will 
+be IPv4/IPv6 only. There are 65k possible 'protocols' and this is an 
+interface function, which technically can be called with any protocol type.
+
+With this given, nobody wants to flood the log with messages for every 
+MPLS/LLDP/etc packet. Especially with messages saying that the packet is 
+malformed and giving no clue, why the packet was considered wrong.
 
 --
 Sergey
