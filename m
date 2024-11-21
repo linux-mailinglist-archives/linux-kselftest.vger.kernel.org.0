@@ -1,143 +1,280 @@
-Return-Path: <linux-kselftest+bounces-22398-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22404-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77A6A9D4B4F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 12:12:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1CAF9D4D6C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 14:04:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DCFBFB23CA7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 11:12:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2A32281062
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 13:04:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A9F61D172C;
-	Thu, 21 Nov 2024 11:12:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8243F1D6DB3;
+	Thu, 21 Nov 2024 13:04:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZnnDDvKB"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="U7z2Eg56"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09F11D12F9;
-	Thu, 21 Nov 2024 11:12:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A1F81CDA18
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 13:04:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732187545; cv=none; b=fy6YIfi87JWiwPnbY4Ausizuw5mb/9iTbVpm8LXfeP+I756jVyJg/U+PU54SHV5yxSJamSRuR5Fsie3lG3bkreIMRtHm026b74iVpngQXbxDBcVqNo+PjvqJn4zDqcYfxI91wWEpN4km9m8CCoJLM5PqoTakbgEgYIXZg7nA+Nc=
+	t=1732194247; cv=none; b=Ek9ONYEZvmnfQnQcRXLmyuLknBrEk1uMLw7nvHmK5z9yriD/1W9wcQyf2qbySx9StsC4Eak6oZWqyKLX86AycrF3O4aXua3yCf+kKAngEzf33yyYcMfsoctvP2hn8xFsLBn5ggCMTZGhyx52V9xILgBB6pIuDoqqGTTcyxY5V8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732187545; c=relaxed/simple;
-	bh=46rZ8pT6LBDo++XU0X4+ubvk4/TsYvCXkojRMgrCm2I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FURfCPbmDZFgieMSS7iDo1dmSjHpuAfrLPC7iH8YTI3SOVlspiwFOmZj/z8Xoq4XmuavEo143DHWsQjJtFnnA5NXO/3fKUFevl9GaAJ1TDwD8jjpbLgFY7MOZBWFsZBOHIUJej9Jj9+6vUu65CnjgyAXp7G1UAZULLBL7PYGKyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ZnnDDvKB; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=7u6hZNi/XuzFou5ujdfwghsus0DK9jsxshgCxjL09s4=; b=ZnnDDvKBvItXFztIL1wgf8XTMK
-	ewcwZjNRWSYrjZH+rZT6o49FOe/kRo9OZGytGd+voz+HNGUcuH+PP2GaYPZHs4m/S9nn234JQU+s0
-	jcVN8NhToLe9FCA+qM5KpNzoUaPZLKtrF3vHdq2UtRbclGSqWbGDeyTL/5pPoGHMpsaTGnJ6Ar+wJ
-	2CDFUxa1pB5WeOoE/5nHHErJ8ykxvkEDM06/dAOiCtOt+bGYezuZWGNQI8o2HOKhnZqVGCA34MRgT
-	P2M6Z3Vn21k+nDAjOFXWjNQOUddBYU3AChzpcJxfmgAg0CxIN4kwolN9vrfeY3nk6x7i3pwoH4jPE
-	4WMvU03g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tE56i-00000006J1a-2zVQ;
-	Thu, 21 Nov 2024 11:12:22 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 8D85C30068B; Thu, 21 Nov 2024 12:12:21 +0100 (CET)
-Date: Thu, 21 Nov 2024 12:12:21 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
-	x86@kernel.org, rcu@vger.kernel.org,
+	s=arc-20240116; t=1732194247; c=relaxed/simple;
+	bh=NGrZcFdcWSOdG64B42aeCuurKwAqveVQiGFal6pomAI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nfbywEMAZR8Jfe+Mn/vQRB6EdiSDEbR6ObH5LOOshUIrRxUL7eYBCRhXuOQMVOTBqZNVGzRV2zeU96JpGtchmiOd4U+k8p+uT83vVcXBj0rxbFXMjDUjaKveA+YnLek11NtuA6hOMVASbqCA23EInUR2Y1I3iAfH/+e5cKcJyLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=U7z2Eg56; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 03A073F6C3
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 12:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1732193882;
+	bh=NkMGboeB4JllcdtLoKopzE3i3ZmHlvAh51JdixnLmTg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version;
+	b=U7z2Eg56vt55EYasFbCUKsjufz45oT6Pypt4GLZMaOoNmIsq0dcSkMSx11ffSO8VP
+	 4GcQMDyYzk9IgWS71LkNTTfmGP9HQaCjDAHhtCC5hREA8VjRjh9C3Z2iyhWlxNVwnB
+	 v0FBh9dJ8BtxuRgR2T5Kva68DtL9GF71pjea55mSi+Gqd6eUaKyCKfB0eR3+cAvPSH
+	 vrYqeYoehYcIBQGKnPqVlJrNRISqe4JkUGyqp6vIKJiQcrC575IW4msMtkC/1PKn9t
+	 JZ1YjwRQnxuqLyeG8xL/hF0q1G8YKWwMZI/l9eTP2HQ3u8B+6cDklsBL/Gyzhw2eWX
+	 jzM16tdpWMUpw==
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-aa1f962cb42so58428966b.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 04:58:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732193881; x=1732798681;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NkMGboeB4JllcdtLoKopzE3i3ZmHlvAh51JdixnLmTg=;
+        b=Mn4TjFrXkit9ma5iAVNXSvH7iq1UMd0Opq7BDrdVxH1I16qdGdBNt8inE0AZHIRn5p
+         81/R7MYznaxpJq+fK08YySdvijCzShW/xUNRBc4v799FkO8f2iU6nreut9dLpV5UqUKh
+         0tHEr1YGoRCgD6eCS+3b7BlTCCzaiJmqeGOGx3cCzi2pLTJdUMUxq3D5L7/sm4hR+gqd
+         zQiis3GSvJ04ML/tZy6D/htlGnr1jm7jWBHDNy2R+ALDP8rsTDvbGYqXrlF9AJcnQ3sg
+         yWItxrWMH1VM8DeGknT4OY/LVJ3r8/U13B3SPVXQlTS/jTNfBtQS18/WqoieVYSTYjQQ
+         +46w==
+X-Forwarded-Encrypted: i=1; AJvYcCUPHwWDoVLT11dgv8LFyDWg1WjT0JwViOTyemkAiz5wrzR8SPmyBA8TgUpMcE9aNr4MPWWoBNBMw0dLw/ck7NQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGg4v2KpPk4ajAJ+0tNMGCMMFmfmoGGT45M8dHm7IsBGdQmYYB
+	qhSQYgegBR7EcUVSy5e8AOTLGoWKzlO0LXSbMgxJAU9ZNf3J5d3ZfuejqPAM8dxXoKbs0jw2APK
+	H444vd/AkUcZlQSN2LREeNe0LFHv7f6oVv0vvVxEjakMkh+Uz0R5xT/kfyoGYvGhvEBZmItB9Nk
+	i/djacFA==
+X-Gm-Gg: ASbGnctHpfku1SwIk5w/2QRVQnAHUzTRg220Fi92M31iCgdGXQd2njYjTUPtE1kY+1O
+	XSg8cBQc4aQYAcyRHlwCGumzO5WtZCfoHr6ukgPk/xia7uiYWdySBf0qJ9oHsbO0PdrAtyXlBmt
+	zzXSz57l3o1KK+6oUe3WuOxRT0ALROUvjUkqAZLCM/4ZaxAXv9JTWYOb1EzDsk8pwnDnrhSiQ9Z
+	r68tG3UEaKjKZ8xPPEAQZ2Rcky51OX1hRXO62Po6tc1MDYA3xulh3kJhcnPYlPaDePS7Jmikg6P
+	og==
+X-Received: by 2002:a17:907:9720:b0:a9a:55dd:bc23 with SMTP id a640c23a62f3a-aa4dd50a642mr542206566b.8.1732193880861;
+        Thu, 21 Nov 2024 04:58:00 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFG6g7C3BDAlHohQX+vhiU+W2yyBeHXfdlriO8FaVjmCQHY0iBTKt6Ed0Pjpw0u8D6j+3lBRA==
+X-Received: by 2002:a17:907:9720:b0:a9a:55dd:bc23 with SMTP id a640c23a62f3a-aa4dd50a642mr542204066b.8.1732193880498;
+        Thu, 21 Nov 2024 04:58:00 -0800 (PST)
+Received: from amikhalitsyn.lan ([188.192.113.77])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa4f42d3109sm78221766b.132.2024.11.21.04.57.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Nov 2024 04:57:59 -0800 (PST)
+From: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+To: stsp2@yandex.ru
+Cc: almasrymina@google.com,
+	asml.silence@gmail.com,
+	axboe@kernel.dk,
+	brauner@kernel.org,
+	cyphar@cyphar.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	gouhao@uniontech.com,
+	horms@kernel.org,
+	kees@kernel.org,
+	krisman@suse.de,
+	kuba@kernel.org,
+	kuniyu@amazon.com,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Wanpeng Li <wanpengli@tencent.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Lorenzo Stoakes <lstoakes@gmail.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jason Baron <jbaron@akamai.com>, Kees Cook <keescook@chromium.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Juerg Haefliger <juerg.haefliger@canonical.com>,
-	Nicolas Saenz Julienne <nsaenz@kernel.org>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Nadav Amit <namit@vmware.com>, Dan Carpenter <error27@gmail.com>,
-	Chuang Wang <nashuiliang@gmail.com>,
-	Yang Jihong <yangjihong1@huawei.com>,
-	Petr Mladek <pmladek@suse.com>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-	Julian Pidancet <julian.pidancet@oracle.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	Yair Podemsky <ypodemsk@redhat.com>,
-	Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>,
-	Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [RFC PATCH v3 13/15] context_tracking,x86: Add infrastructure to
- defer kernel TLBI
-Message-ID: <20241121111221.GE24774@noisy.programming.kicks-ass.net>
-References: <20241119153502.41361-1-vschneid@redhat.com>
- <20241119153502.41361-14-vschneid@redhat.com>
- <20241120152216.GM19989@noisy.programming.kicks-ass.net>
- <20241120153221.GM38972@noisy.programming.kicks-ass.net>
- <xhsmhldxdhl7b.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+	mhal@rbox.co,
+	netdev@vger.kernel.org,
+	oleg@redhat.com,
+	pabeni@redhat.com,
+	quic_abchauha@quicinc.com,
+	shuah@kernel.org,
+	tandersen@netflix.com,
+	viro@zeniv.linux.org.uk,
+	willemb@google.com,
+	Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Subject: Re: [PATCH net-next v3] af_unix: pass pidfd flags via SCM_PIDFD cmsg
+Date: Thu, 21 Nov 2024 13:57:32 +0100
+Message-ID: <20241121125732.88044-1-aleksandr.mikhalitsyn@canonical.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241116101120.323174-1-stsp2@yandex.ru>
+References: <20241116101120.323174-1-stsp2@yandex.ru>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmhldxdhl7b.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 20, 2024 at 06:24:56PM +0100, Valentin Schneider wrote:
+>Currently SCM_PIDFD cmsg cannot be sent via unix socket
+>(returns -EINVAL) and SO_PASSPIDFD doesn't support flags.
+>The created pidfd always has flags set to 0.
+>
+>This patch implements SCM_PIDFD cmsg in AF_UNIX socket, which
+>can be used to send flags to SO_PASSPIDFD-enabled recipient.
+>
+>Self-test is added for the propagation of PIDFD_NONBLOCK flag.
 
-> > Oh gawd, just having looked at xen_write_cr3() this might not be
-> > entirely trivial to mark noinstr :/
+>This is mainly needed for the future extensions, like eg this one:
+>https://lore.kernel.org/lkml/8288a08e-448b-43c2-82dc-59f87d0d9072@yandex.ru/T/#me1237e46deba8574b77834b7704e63559ffef9cb
+>where it was suggested to try solving the supplementary groups
+>problem with pidfd.
+>
+>Changes in v3: specify target tree in patch subject
+>Changes in v2: remove flags validation in scm_pidfd_recv(), as
+>  suggested by Kuniyuki Iwashima <kuniyu@amazon.com>
+>
+>Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
+
+...
+
+>diff --git a/include/linux/pidfs.h b/include/linux/pidfs.h
+>index 75bdf9807802..c4c5c1a0c2ad 100644
+>--- a/include/linux/pidfs.h
+>+++ b/include/linux/pidfs.h
+>@@ -2,7 +2,16 @@
+> #ifndef _LINUX_PID_FS_H
+> #define _LINUX_PID_FS_H
 > 
-> ... I hadn't even seen that.
+>+#include <uapi/linux/pidfd.h>
+>+
+> struct file *pidfs_alloc_file(struct pid *pid, unsigned int flags);
+> void __init pidfs_init(void);
 > 
-> AIUI the CR3 RMW is not "enough" if we have PGE enabled, because then
-> global pages aren't flushed.
+>+static inline int pidfd_validate_flags(unsigned int flags)
+>+{
+>+	if (flags & ~(PIDFD_NONBLOCK | PIDFD_THREAD))
+>+		return -EINVAL;
+>+	return 0;
+>+}
+>+
+> #endif /* _LINUX_PID_FS_H */
+>diff --git a/include/linux/socket.h b/include/linux/socket.h
+>index d18cc47e89bd..ee27d391e5aa 100644
+>--- a/include/linux/socket.h
+>+++ b/include/linux/socket.h
+>@@ -178,7 +178,7 @@ static inline size_t msg_data_left(struct msghdr *msg)
+> #define	SCM_RIGHTS	0x01		/* rw: access rights (array of int) */
+> #define SCM_CREDENTIALS 0x02		/* rw: struct ucred		*/
+> #define SCM_SECURITY	0x03		/* rw: security label		*/
+>-#define SCM_PIDFD	0x04		/* ro: pidfd (int)		*/
+>+#define SCM_PIDFD	0x04		/* r: pidfd, w: pidfd_flags (int) */
 > 
-> The question becomes: what is held in global pages and do we care about
-> that when it comes to vmalloc()? I'm starting to think no, but this is x86,
-> I don't know what surprises are waiting for me.
+> struct ucred {
+> 	__u32	pid;
+>diff --git a/include/net/af_unix.h b/include/net/af_unix.h
+>index 63129c79b8cb..4bc197548c2f 100644
+>--- a/include/net/af_unix.h
+>+++ b/include/net/af_unix.h
+>@@ -62,6 +62,7 @@ struct unix_skb_parms {
+> #ifdef CONFIG_SECURITY_NETWORK
+> 	u32			secid;		/* Security ID		*/
+> #endif
+>+	u32			pidfd_flags;
+> 	u32			consumed;
+> } __randomize_layout;
 > 
-> I see e.g. ds_clear_cea() clears PTEs that can have the _PAGE_GLOBAL flag,
-> and it correctly uses the non-deferrable flush_tlb_kernel_range().
+>diff --git a/include/net/scm.h b/include/net/scm.h
+>index 0d35c7c77a74..1326edcacacb 100644
+>--- a/include/net/scm.h
+>+++ b/include/net/scm.h
+>@@ -48,6 +48,7 @@ struct scm_cookie {
+> #ifdef CONFIG_SECURITY_NETWORK
+> 	u32			secid;		/* Passed security ID 	*/
+> #endif
+>+	u32			pidfd_flags;
+> };
+> 
+> void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm);
+>@@ -154,7 +155,7 @@ static __inline__ void scm_pidfd_recv(struct msghdr *msg, struct scm_cookie *scm
+> 	if (!scm->pid)
+> 		return;
+> 
+>-	pidfd = pidfd_prepare(scm->pid, 0, &pidfd_file);
+>+	pidfd = pidfd_prepare(scm->pid, scm->pidfd_flags, &pidfd_file);
+> 
+> 	if (put_cmsg(msg, SOL_SOCKET, SCM_PIDFD, sizeof(int), &pidfd)) {
+> 		if (pidfd_file) {
+>diff --git a/kernel/pid.c b/kernel/pid.c
+>index 2715afb77eab..b1100ae8ea63 100644
+>--- a/kernel/pid.c
+>+++ b/kernel/pid.c
+>@@ -629,10 +629,12 @@ static int pidfd_create(struct pid *pid, unsigned int flags)
+> SYSCALL_DEFINE2(pidfd_open, pid_t, pid, unsigned int, flags)
+> {
+> 	int fd;
+>+	int err;
+> 	struct pid *p;
+> 
+>-	if (flags & ~(PIDFD_NONBLOCK | PIDFD_THREAD))
+>-		return -EINVAL;
+>+	err = pidfd_validate_flags(flags);
+>+	if (err)
+>+		return err;
+> 
+> 	if (pid <= 0)
+> 		return -EINVAL;
+>diff --git a/net/core/scm.c b/net/core/scm.c
+>index 4f6a14babe5a..3bcdecdacd7e 100644
+>--- a/net/core/scm.c
+>+++ b/net/core/scm.c
+>@@ -23,6 +23,7 @@
+> #include <linux/security.h>
+> #include <linux/pid_namespace.h>
+> #include <linux/pid.h>
+>+#include <linux/pidfs.h>
+> #include <linux/nsproxy.h>
+> #include <linux/slab.h>
+> #include <linux/errqueue.h>
+>@@ -210,6 +211,19 @@ int __scm_send(struct socket *sock, struct msghdr *msg, struct scm_cookie *p)
+> 			p->creds.gid = gid;
+> 			break;
+> 		}
+>+		case SCM_PIDFD:
+>+		{
+>+			unsigned int flags;
+>+
+>+			if (cmsg->cmsg_len != CMSG_LEN(sizeof(flags)))
+>
 
+Hi Stas!
 
-I always forget what we use global pages for, dhansen might know, but
-let me try and have a look.
+Hmm, it is a bit unusual that SCM_PIDFD message format is different in case
+when you send it and when you read it.
 
-I *think* we only have GLOBAL on kernel text, and that only sometimes.
+I mean that when you read it (on the receiver side) you get pidfd file descriptor number,
+while when you write it (on the sender side) you are only allowed to send one integer and this time it's
+a pidfd file descriptor flags. I personally have nothing strictly against that but just found this
+a bit unusual and probably confusing for userspace programmers.
+
+Compare it with SCM_CREDENTIALS, for instance, where we read/write the same structure struct ucred.
+
+>+				goto error;
+>+			memcpy(&flags, CMSG_DATA(cmsg), sizeof(flags));
+>+			err = pidfd_validate_flags(flags);
+
+pidfd_validate_flags allows PIDFD_THREAD, but what's the idea behind this if
+scm->pid is always a thread-group leader? (see maybe_add_creds() function).
+
+Sorry if I misunderstand something just want to ensure that we are on the same page.
+
+Kind regards,
+Alex
+
 
