@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-22418-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22419-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47EA79D5494
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 22:17:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 902AC9D54AA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 22:23:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 92A39B21997
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 21:16:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C8E528247B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 21:23:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 405CC1D14E4;
-	Thu, 21 Nov 2024 21:16:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9A851CB331;
+	Thu, 21 Nov 2024 21:23:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="Pq8MKWNY"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="UOloufYV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9A641C79
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 21:16:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D51B1C242D
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 21:23:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732223806; cv=none; b=muVKqDkzYRaNVpxHyisluXOvWakjiIlvCJPwyfXGQ2q9QSHMIB8eUnHtveCLI8KlJIR06iaodreJEw8ZKqaIrXMdAYqdRwJOMUyyh5T1fYdOEhv4Q75/fFqnlClqtdOQxu8Qe7pIhJVB9s3yV4s1B9B0vnwQw7xob58UBpUDix0=
+	t=1732224192; cv=none; b=tFRNugmw2oA1ffiIucrM5DDuRJAmqQCtqCUZhz57THg1/8RE2sFt+RspQyJXQfr0mFWnx9NaTjOWUIC85T+7r50cmgWVp7qhLUqRsuS4OGloa7lMAS9jYdkNLsE7fmZmoKoRFwCVNzDH9sZPdeK5wuYrOF2KDZaR4EsenvSUmaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732223806; c=relaxed/simple;
-	bh=Vkpe9SiYwYEfwd2jAqagSpsgL2Q7SeaVN0WSbS/uiV8=;
+	s=arc-20240116; t=1732224192; c=relaxed/simple;
+	bh=qywTFtD+0BzuPwD45lQta1Z8qCtNKrwLzH2n/AAZxJw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P5ZdIGZ0klCTCIALsqmrzOvWKe5kYcBknfJ8YyeH9SO0tOvXXdvtTdZK2phDFRk1Q4524K+prnZQUxKjNnjqryyQpdkNVk9BjD8BKxVnDQDuwKp71ZQaYlNv3ktKYn8qN4jbK2YnICtnwQn7leiIBSieGdf2Cbhde4xjImhRkjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=Pq8MKWNY; arc=none smtp.client-ip=209.85.208.44
+	 In-Reply-To:Content-Type; b=SwNLCAB2OkKDHcJVjoU7gtNbu9753xj2nbngkdivhRoQGv1igu3eRzjY6CdMnPsrQ1kBvPU/xXCSfn7G5SWsyWtZHloFh7bC7YEnbnQedOWJVU0RCI60uLaNe8+pKEk+q07M/YKiNz7tUy5SPnjge9eYIF4U4vNUs4I4nbqTCt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=UOloufYV; arc=none smtp.client-ip=209.85.208.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5cfc035649bso1900715a12.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 13:16:42 -0800 (PST)
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2fb51e00c05so26103691fa.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 13:23:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1732223801; x=1732828601; darn=vger.kernel.org;
+        d=openvpn.net; s=google; t=1732224188; x=1732828988; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ADSLCsVi1Tznb0EIsL+X0OVrkFRGd+TpY9WIHeu9ve0=;
-        b=Pq8MKWNYvdQIhqxYq8pOKtjBytNGMdPekxWhE/C/nAwknp9eYlFcRJ9HeguJbd01yo
-         5OmcXtjk4xoU7rHUwoCybr1b17C48RzsXli4LlhpeJrKh792FzkeTVHEqaFvensmHGJb
-         vj+nyVFJnYvP35KGhkhzqNM3WAQuiKnls07WfECsQFNzgyFGTeatO4BOlbZfbyOQI2HY
-         luXTP4NRrBrDNwEG5oX8f6E9pBhyZPtKTbRfXYUPsZFbhfvUTGviBb/wi2SgQuQDJek4
-         lzsa8BYUW5am0ZtgoL4wrTEXZo+fWvtyU7AfQL00wmem2yDKNg0+JFJj1RT6kIXnw3xf
-         lbrw==
+        bh=QuEuA2H3TWnIAf5kbxkDhfjOrhOItH/ikPCn+mNuBSA=;
+        b=UOloufYVlw1TfRWIE6x1SbjxXnWauPoymuReaet4eIZrLNO9XN5Gnb9Jjh3yJ41dSt
+         7cNiB0Esg/3fCXz3XVJK6Q7NTiFjMaoSFKeejEvEpJeJmK3dcd2Umws5lJxOHI5BNGN7
+         cOlSlrikbaHhNfw5H+E6Okpmz4SAlFWxanu7FMYHhiWe9lHUH26b07dzhBVzs4CrQDZS
+         vvSMurCU+B2lU+8aKARvhOKUGohEV81O+Trd/CDkONTtkdXLsa9ATDGKAOzrhL6N5nwZ
+         1rfge98Bt9BbAfm9SuqtkBtV4O6qsCKdktVbXxC0bqRnl3ad20C3nSWNmAllKfUsQJWI
+         g9QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732223801; x=1732828601;
+        d=1e100.net; s=20230601; t=1732224188; x=1732828988;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ADSLCsVi1Tznb0EIsL+X0OVrkFRGd+TpY9WIHeu9ve0=;
-        b=IXK/jdv4/E/TxHYsLWcqm0grawDtHtwA8Wa8QLuGOOTz4zOcVoN5ksMnTxhjXMw4GU
-         FvXctpAnu+jVYdis/Wh/bHEbsAqUzbal4lO91obnCbpF/KzZT4LN2sjvkcrSVMxSTEk2
-         fXz6UpVNq7HSBnsDquCtf1NhgjkWL+3Xtghv9ObMxZwPLHPTrihoWOrwCuMhniHtujdG
-         hSUrZWSP+zaoCu+GTBiAyXwzwokRMP87K97Y1b/SecLkQw/ktX9EU+rpRGzD5jiXffBJ
-         a5Il7+Ci2OZ6bY3WKqOibrNz8YwRIu9u5/3DZ8JgmsGosgvPpN5gXO4G5AEh4gBDRi27
-         0gmA==
-X-Forwarded-Encrypted: i=1; AJvYcCWsRAxEOtcA3PpRwyHlfw1BMFpqV9HDQfloNKJgtYEfu814i0E30UqvZe7GGGfelPPXXydeUXK+YdsDA7yOrx0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0ordC24VWOfMMD3/8qkUbLS3ovOWdue5nj/RSZPOyNlxEgD4a
-	00s1bInCNL3DiV8NRqmADxPfR5EBi30w4ngIu6g17RuwymohDWuPqp4P21lBHX8=
-X-Gm-Gg: ASbGncveXn/l42692aJjLRr74y8QOv4of3H8hTLugylxUQQFzr8uwq5+aNBwGhopQ5O
-	j7FI+NplOxZXlttjdtdp/1uwZQZdGp4uYeEhmkILZ+PjWWo44tNy2+exeNwCsyIrUE1UhMaZBKc
-	FQ6+0R6B55KEwww3UaCM2OUyq1NUdC9P26q42tbGamdHKARSa/Q9McPjZOk+Lt9Swnjpy3h2n70
-	WKbdwSvQx1bVODT2jXcqEEpVyoTG4y2OnQgA9VTJqZBJ830yfFO6oVoTTuykqFtO3ilVbPZ30Qc
-	8h88mboFTw==
-X-Google-Smtp-Source: AGHT+IFYIEgIv1nc2MpvgqvQW89q6p0R6+ss6JlPvxYa0sC6IXhy8g7BLk1uIpGhOW4wVc3nHcwe/w==
-X-Received: by 2002:a17:907:84c2:b0:a99:f675:b672 with SMTP id a640c23a62f3a-aa50997f07amr43234166b.29.1732223801292;
-        Thu, 21 Nov 2024 13:16:41 -0800 (PST)
+        bh=QuEuA2H3TWnIAf5kbxkDhfjOrhOItH/ikPCn+mNuBSA=;
+        b=Nc8keAG33Fau43WbQ975DnpwF6N6vlmiXXwIRUs9oD/88B2SwMxE9BP4nkeeANdhfn
+         pYuArGd7j2kRW+FrrgDWpSl2HqoC3wSecdYCjotkyDa2Qn/D9aP1+2nz1mrLDiuMeWyV
+         DiLjMkpsikL9+8wU4ozjW01xyPKTu2bVU4WQVws1TftZIFNEq/5wUVejuPkkdShkwDbC
+         Ar9U/SKczfYgg+lIpqJ9o5nBPaSxput4w0ffkDo6B87TjEaRssjp6NW+VuigYpvARuf2
+         STz8fN/iDwDqeZQhVcXKYW5s97zET5bMDiYG+ABuDQ+RNC845bo8CAFFksFVqzDYwH6p
+         tvrw==
+X-Forwarded-Encrypted: i=1; AJvYcCUjRR9SAbNCUuGzdvB89HJaMKq1+hCk5JZpoHzGvnjDbqr9toNmucOJpw6CTxDI3pb0gzl4ze10rYjfDousCts=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYSZ4DvklNi/JPYEM2fSnvnL+zJ/NMO0bHhEaLeU2j+3h34LRv
+	A1P0g1MQTfIsn6PuckR6Jafc2tXfVOdUh3nqTJcEDLLSvbZToKPHeqSkffI5brM=
+X-Gm-Gg: ASbGncvOGhgNkJt/n2K6VD4hbSjYvW/52MVJkVaKSmtoo23lm2q+KbbR9TYZYRJZ/9U
+	br7jQcVn8M84Rn8gIfrBUgGzl4pUwdr6tNMN6tQ4iz3a/mL85Nsc926wsa6WPzg/izKwezqhJIb
+	PGpUqHBlEyWLiTfCw5A6VAAmZs61WMzHGk+HTJ9eJ3H+sn9lSYhTYR73oWfhu9HCMpwX27n2WT/
+	j8cwkiiJttm6Ush9RTAVsFFPjU/gfuqrMU928oCVch1oihHMDJ108vIya9FuubSfR6i1EQcfDNr
+	cHe4/tvj3g==
+X-Google-Smtp-Source: AGHT+IFxBGMOFADHnq6mp//A/vFyhDz1w54VlnkH3inEJ0BvqI+GY5tV6VrB71LNvlVlewsvGohUcQ==
+X-Received: by 2002:a2e:bc16:0:b0:2fa:d604:e519 with SMTP id 38308e7fff4ca-2ffa7106413mr1944051fa.11.1732224188433;
+        Thu, 21 Nov 2024 13:23:08 -0800 (PST)
 Received: from ?IPV6:2001:67c:2fbc:1:f55:fe70:5486:7392? ([2001:67c:2fbc:1:f55:fe70:5486:7392])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa50b5b842csm14640866b.194.2024.11.21.13.16.40
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa50b52fb6asm15223466b.92.2024.11.21.13.23.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Nov 2024 13:16:40 -0800 (PST)
-Message-ID: <c933e2bf-b19c-4f8b-b2c0-44de50eb4141@openvpn.net>
-Date: Thu, 21 Nov 2024 22:17:09 +0100
+        Thu, 21 Nov 2024 13:23:07 -0800 (PST)
+Message-ID: <52661fed-f521-4cdc-b9e1-b4f3fa292e78@openvpn.net>
+Date: Thu, 21 Nov 2024 22:23:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,17 +82,19 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 05/23] ovpn: keep carrier always on
-To: Sergey Ryazanov <ryazanov.s.a@gmail.com>, Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [PATCH net-next v11 06/23] ovpn: introduce the ovpn_peer object
+To: Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+ Sabrina Dubroca <sd@queasysnail.net>
 Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Shuah Khan <shuah@kernel.org>, sd@queasysnail.net, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+ Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-5-de4698c73a25@openvpn.net>
- <6a171cc9-a052-452e-8b3d-273e5b46dae5@gmail.com>
- <89ae26a2-0a09-4758-989e-8f45a707a41b@openvpn.net>
- <e2caab8a-343e-4728-b5a7-b167f05c9bb9@gmail.com>
+ <20241029-b4-ovpn-v11-6-de4698c73a25@openvpn.net>
+ <b7d3ec11-afe4-409c-970e-8bc647364a08@gmail.com> <ZzORATd5hG614dta@hog>
+ <e543a3de-44f1-4a2d-90ef-1786e222f0d8@gmail.com> <ZzR5i9sO-xwoJcDB@hog>
+ <dc1b37b2-389a-466d-8559-14c496cc9583@gmail.com>
 Content-Language: en-US
 From: Antonio Quartulli <antonio@openvpn.net>
 Autocrypt: addr=antonio@openvpn.net; keydata=
@@ -135,105 +137,125 @@ Autocrypt: addr=antonio@openvpn.net; keydata=
  BnRX9nFx9kPSO42TkFK55Dr5EDeBO3v33recscuB8VVN5xvh0GV57Qre+9sJrEq7Es9W609a
  +M0yRJWJEjFnMa/jsGZ+QyLD5QTL6SGuZ9gKI3W1SfFZOzV7hHsxPTZ6
 Organization: OpenVPN Inc.
-In-Reply-To: <e2caab8a-343e-4728-b5a7-b167f05c9bb9@gmail.com>
+In-Reply-To: <dc1b37b2-389a-466d-8559-14c496cc9583@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 20/11/2024 23:56, Sergey Ryazanov wrote:
-> On 15.11.2024 16:13, Antonio Quartulli wrote:
->> On 09/11/2024 02:11, Sergey Ryazanov wrote:
->>> On 29.10.2024 12:47, Antonio Quartulli wrote:
->>>> An ovpn interface will keep carrier always on and let the user
->>>> decide when an interface should be considered disconnected.
+On 21/11/2024 00:22, Sergey Ryazanov wrote:
+> On 13.11.2024 12:03, Sabrina Dubroca wrote:
+>> 2024-11-13, 03:37:13 +0200, Sergey Ryazanov wrote:
+>>> On 12.11.2024 19:31, Sabrina Dubroca wrote:
+>>>> 2024-11-10, 15:38:27 +0200, Sergey Ryazanov wrote:
+>>>>> On 29.10.2024 12:47, Antonio Quartulli wrote:
+>>>>>> An ovpn_peer object holds the whole status of a remote peer
+>>>>>> (regardless whether it is a server or a client).
+>>>>>>
+>>>>>> This includes status for crypto, tx/rx buffers, napi, etc.
+>>>>>>
+>>>>>> Only support for one peer is introduced (P2P mode).
+>>>>>> Multi peer support is introduced with a later patch.
+>>>>>
+>>>>> Reviewing the peer creation/destroying code I came to a generic 
+>>>>> question.
+>>>>> Did you consider keeping a single P2P peer in the peers table as well?
+>>>>>
+>>>>> Looks like such approach can greatly simply the code by dropping 
+>>>>> all these
+>>>>> 'switch (ovpn->mode)' checks and implementing a unified peer 
+>>>>> management. The
+>>>>> 'peer' field in the main private data structure can be kept to 
+>>>>> accelerate
+>>>>> lookups, still using peers table for management tasks like removing 
+>>>>> all the
+>>>>> peers on the interface teardown.
 >>>>
->>>> This way, even if an ovpn interface is not connected to any peer,
->>>> it can still retain all IPs and routes and thus prevent any data
->>>> leak.
->>>>
->>>> Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
->>>> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
->>>> ---
->>>>   drivers/net/ovpn/main.c | 7 +++++++
->>>>   1 file changed, 7 insertions(+)
->>>>
->>>> diff --git a/drivers/net/ovpn/main.c b/drivers/net/ovpn/main.c
->>>> index 
->>>> eead7677b8239eb3c48bb26ca95492d88512b8d4..eaa83a8662e4ac2c758201008268f9633643c0b6 100644
->>>> --- a/drivers/net/ovpn/main.c
->>>> +++ b/drivers/net/ovpn/main.c
->>>> @@ -31,6 +31,13 @@ static void ovpn_struct_free(struct net_device *net)
->>>>   static int ovpn_net_open(struct net_device *dev)
->>>>   {
->>>> +    /* ovpn keeps the carrier always on to avoid losing IP or route
->>>> +     * configuration upon disconnection. This way it can prevent leaks
->>>> +     * of traffic outside of the VPN tunnel.
->>>> +     * The user may override this behaviour by tearing down the 
->>>> interface
->>>> +     * manually.
->>>> +     */
->>>> +    netif_carrier_on(dev);
+>>>> It would save a few 'switch(mode)', but force every client to allocate
+>>>> the hashtable for no reason at all. That tradeoff doesn't look very
+>>>> beneficial to me, the P2P-specific code is really simple. And if you
+>>>> keep ovpn->peer to make lookups faster, you're not removing that many
+>>>> 'switch(mode)'.
 >>>
->>> If a user cares about the traffic leaking, then he can create a 
->>> blackhole route with huge metric:
+>>> Looking at the done review, I can retrospectively conclude that I 
+>>> personally
+>>> do not like short 'switch' statements and special handlers :)
 >>>
->>> # ip route add blackhole default metric 10000
->>>
->>> Why the network interface should implicitly provide this 
->>> functionality? And on another hand, how a routing daemon can learn a 
->>> topology change without indication from the interface?
+>>> Seriously, this module has a highest density of switches per KLOC 
+>>> from what
+>>> I have seen before and a major part of it dedicated to handle the 
+>>> special
+>>> case of P2P connection.
 >>
->> This was discussed loooong ago with Andrew. Here my last response:
+>> I think it's fine. Either way there will be two implementations of
+>> whatever mode-dependent operation needs to be done. switch doesn't
+>> make it more complex than an ops structure.
 >>
->> https://lore.kernel.org/all/d896bbd8-2709-4834-a637- 
->> f982fc51fc57@openvpn.net/
+>> If you're reading the current version and find ovpn_peer_add, you see
+>> directly that it'll do either ovpn_peer_add_mp or
+>> ovpn_peer_add_p2p. With an ops structure, you'd have a call to
+>> ovpn->ops->peer_add, and you'd have to look up all possible ops
+>> structures to know that it can be either ovpn_peer_add_mp or
+>> ovpn_peer_add_p2p. If there's an undefined number of implementations
+>> living in different modules (like net_device_ops, or L4 protocols),
+>> you don't have a choice.
+>>
+>> xfrm went the opposite way to what you're proposing a few years ago
+>> (see commit 0c620e97b349 ("xfrm: remove output indirection from
+>> xfrm_mode") and others), and it made the code simpler.
 > 
-> Thank you for sharing the link to the beginning of the conversation. 
-> Till the moment we have 3 topics regarding the operational state 
-> indication:
-> 1. possible absence of a conception of running state,
-> 2. influence on routing protocol implementations,
-> 3. traffic leaking.
+> I checked this. Florian did a nice rework. And the way of implementation 
+> looks reasonable since there are more than two encapsulation modes and 
+> handling is more complex than just selecting a function to call.
 > 
-> As for conception of the running state, it should exists for tunneling 
-> protocols with a state tracking. In this specific case, we can assume 
-> interface running when it has configured peer with keys. The protocol 
-> even has nice feature for the connection monitoring - keepalive.
+> What I don't like about switches, that it requires extra lines of code 
+> and pushes an author to introduce a default case with error handling. It 
+> was mentioned that the module unlikely going to support more than two 
+> modes. In this context shall we consider ternary operator usage. E.g.:
 
-What about a device in MP mode? It doesn't make sense to turn the 
-carrier off when the MP node has no peers connected.
-At the same time I don't like having P2P and MP devices behaving 
-differently in this regard.
-Therefore keeping the carrier on seemed the most logical way forward (at 
-least for now - we can still come back to this once we have something 
-smarter to implement).
+the default case can actually be dropped. That way we can have the 
+compiler warn when one of the enum values is not handled in the switch 
+(should there be a new one at some point).
+However, the default is just a sanity check against future code changes 
+which may introduce a bug.
 
 > 
-> Routing protocols on one hand could benefit from the operational state 
-> indication. On another hand, hello/hold timer values mentioned in the 
-> documentation are comparable with default routing protocols timers. So, 
-> actual improvement is debatable.
-> 
-> Regarding the traffic leading, as I mentioned before, the blackhole 
-> route or a firewall rule works better then implicit blackholing with a 
-> non-running interface.
-> 
-> Long story short, I agree that we might not need a real operational 
-> state indication now. Still protecting from a traffic leaking is not 
-> good enough justification.
+> next_run = ovpn->mode == OVPN_MODE_P2P ?
+>             ovpn_peer_keepalive_work_p2p(...) :
+>             ovpn_peer_keepalive_work_mp(...);
 
-Well, it's the so called "persistent interface" concept in VPNs: leave 
-everything as is, even if the connection is lost.
-I know it can be implemented in many other different ways..but I don't 
-see a real problem with keeping this way.
+I find this ugly to read :-)
+The switch is much more elegant and straightforward.
 
-A blackhole/firewall can still be added if the user prefers (and not use 
-the persistent interface).
+Do you agree this is getting more into a bike shed coloring discussion? :-D
+
+Since there is not much gain in changing approach, I think it is better 
+if the maintainer picks a style that he finds more suitable (or simply 
+likes more). no?
+
+> 
+>>> And back to the hashtable(s) size for the MP mode. 8k-bins table looks a
+>>> good choice for a normal server with 1-2Gb uplink serving up to 1k
+>>> connections. But it sill unclear, how this choice can affect 
+>>> installations
+>>> with a bigger number of connections? Or is this module applicable for
+>>> embedded solutions? E.g. running a couple of VPN servers on a home 
+>>> router
+>>> with a few actual connections looks like a waste of RAM. I was about to
+>>> suggest to use rhashtable due to its dynamic sizing feature, but the 
+>>> module
+>>> needs three tables. Any better idea?
+>>
+>> For this initial implementation I think it's fine. Sure, converting to
+>> rhashtable (or some other type of dynamically-sized hashtable, if
+>> rhashtable doesn't fit) in the future would make sense. But I don't
+>> think it's necessary to get the patches into net-next.
+
+Agreed. It's in the pipe (along with other features that I have already 
+implemented), but it will come later.
 
 Regards,
 
 > 
-> Andrew, what do you think? Is the traffic leaking prevention any good 
-> justification or it needs to be updated?
+> Make sense. Thanks for sharing these thoughts.
 > 
 > -- 
 > Sergey
