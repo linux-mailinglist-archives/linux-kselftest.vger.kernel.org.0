@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-22421-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22422-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5AF79D54B6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 22:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D13B59D54CB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 22:36:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D57C1F22883
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 21:29:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 604451F2311E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2024 21:36:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAADB1D9A62;
-	Thu, 21 Nov 2024 21:29:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E71421D79BE;
+	Thu, 21 Nov 2024 21:35:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="cav3IMHw"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="PrNP4eLK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91ED41C9B84
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 21:29:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92EA412FB1B
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 21:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732224563; cv=none; b=DVb3h/Zo54AU9wI1UVFdXBNoyhXuwxuigXX0CXs/VMSvQnS9LDQtcyiDmZBbmrgI9kSS4ikZxrnyE91oqfls8AAspYeBUajHT+5R5thC8uqsaMNfOqA6svj7dCW55IKduR8etkx6LIaAP8avsUhvAWa9EVuJcb/7xtlcrXC2678=
+	t=1732224954; cv=none; b=XSqCocErUU7A7KHYrAVzIZrK+m9NTdE9HRR+RKPk5KP9dG0Mx+reH97IgjW2SBWS2x1WkvSMSD0virTEFiW0SQQVctNgYq9f37nvdbmmAiIxB8m8AWIHfLWQ+otEy3P7tQq1P96KPkrq42+UuthwONDQFe6f0Q/xqs4ng77Yd+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732224563; c=relaxed/simple;
-	bh=Z2ginHOMoysZ5Jwcvr2L9W1ayc//+kUlmYsa7C982os=;
+	s=arc-20240116; t=1732224954; c=relaxed/simple;
+	bh=vc2QHq+XPJAyik3NBvz8UxJoTwJdxefiF569McE2BTg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OhRJtC4WhKXOlFAP95VlMrSGatkxU3zApC39K3mOX3UUIJRXXJbYZkbyiiw92tdjS/5GBvWDciFEN8gfGJzFHSvdBaOAstYJWChxCETQKQH3sqPbO7MLaXsvRmSqjyHefBes9UhIDn65AO9YWSGy0AUGoXA5JpnZn/UmL8gaeN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=cav3IMHw; arc=none smtp.client-ip=209.85.208.172
+	 In-Reply-To:Content-Type; b=SLqlB0nhDlV6zEdkhmHyUcEGPewrTtLgvwvanQFM0ktpSPj9QqwxEf9eta83NiB5hPHvUbDU12dIr5UzNL4czOOtYtmD3ESJo2bIRMuJvDJNgHohv4IFOv3HdMOk5/MZ1jaWMdXZsVx4CR722ulA4aR2GhA74AWpIvvvcLigF10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=PrNP4eLK; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2fb3da341c9so15727561fa.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 13:29:20 -0800 (PST)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a9ec267b879so233179966b.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2024 13:35:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1732224559; x=1732829359; darn=vger.kernel.org;
+        d=openvpn.net; s=google; t=1732224951; x=1732829751; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=yIePKKh7sBLlKyNSJlNNZDT4AyzR8TxY/kJvznDhEdA=;
-        b=cav3IMHw3g3QXO8Cvamz2ENqUJu0RGhF+1Yk/tyP8f0o42GADSrtjgdEMlmsDQNIaS
-         73oUbpUMKyXklffl8/+ZKYFn+DBoWe7R0PEWKThxvlpcfxc7hhTPtz/oo5p3vZCL/dIu
-         yOkzsuQSdCjh/4pCfZ+3QUcgqRbomMN+BTBUwQsVEw7W0HKzMfmhjSZKL+0pfyl+4MnF
-         aksMwYnq8hxpTUvjqFch7IifcWwbiN/tA3z9iX6sLLPMkoOcd3uSUgpM+I/JKQ9a/t3E
-         1eOYMkueHdYOzh/D8fmVrq8IhiZ0t4REoFw6Y/oP8GTi2X2TQktEoX7LV7fpwdHyCGdp
-         PjHA==
+        bh=Wzvrme6xhrc1FPoSTNfgVzNymiF3jz2i05A93yDIUck=;
+        b=PrNP4eLKXOdLuKxwWCwpE7kO532cgHPDrtW8WJnWjI6w/y3pvFyWSBgoSWXyDKkfQ7
+         QDwR8lcNjnoOLsi8Ea7eeEaAsg18Lk1HZg6pSQrmjXC2ZiH1q+F4ej7GpUCZ0EyfZY6L
+         eenOgBeOmafZzbmzy0wFaZBX+h5zO3X/zg4uqaaOur7QlYDPYHnrRPhZdI3RQYZxoGNF
+         jJ8KoJ5XTOvDL6VH2rc//lt/Vi+FfeTTfWU9W0f5+9BWDc4IyJJpHfgMP6D4YrXOzw0L
+         B1hRuT+M9JuQL4o22qVLFEqIobxCK1iPDlkth6Hbwj9y1CNobdTkGXhTvbZEWeTzSH3B
+         wAPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732224559; x=1732829359;
+        d=1e100.net; s=20230601; t=1732224951; x=1732829751;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yIePKKh7sBLlKyNSJlNNZDT4AyzR8TxY/kJvznDhEdA=;
-        b=GQclfWgiCBkf2SYEbWYcMx9t8ydV3vnvpYouY50xnJl/Jg9jn/nKMoqFchq9Fyb/CX
-         q3bRu40dhfEvj0oN7hwYXmv+OYtGJRnEzpHrcUnaEpllQusVpdfrt30qayW9uuPQUqCd
-         Urqu5tYtIeWkuyZEekxa2avpxCtYteF9zviN2OFT6FsXmq4hlNnEUoG+mfe+VE3PhADx
-         MmD+12OJYkbujWti7t6WP8oN5O0RF9Gus4TQxabrSCwEs5rfLFTsgnMmDuMPAA7u0HIU
-         mlRgMRXh8Cdz7sn6kM+8EgMg0Wz4jYewFN/epI34rm5uZ/jwxJ2r1ijQ1+2qMjEATGZu
-         Vaeg==
-X-Forwarded-Encrypted: i=1; AJvYcCXONAJOV3HRiQiQYdsutsaf8BFUfMw386xxNdYA4MfFBZ/nwDDddQ4KGoIjHHU7Ur//kWiUkZ2IQFXE9P3AKxA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOM7RQeDK+OW2ox71xyatZomQCYMPMn0Rk5zkeU+905y5fZNcf
-	5UDgq4vmkAsyLN3Xng5u36vDS88FPxrLk67WiRSET+gLo0q9xWnoCk479CRLs5I=
-X-Gm-Gg: ASbGnculX3JbTfkRLWNVdhaPFknTI52nDW5YpITPDDJbPF4Qlxx1yhtCv+3/6t2OEqa
-	ivRI1k8YkdkutcpQ1Z83WgtL8E3y3+PEiNT5Cgw2tSlsL1JvVyb79MWErM6sQOZhlAC+5tROwPE
-	NnZ6h2zt9EkBvTopdrofBR5k3kiJvg09E2xWsaGF8X5VSiiIziitiv0myCvpQ5zr7TmFAnZmXvq
-	1ks+tQh+fIHjm3qlQEEH9GOSxWPoPbvmr/S5I1sgHcWuoshnQa3xWpte+Laq/UAFH/k2w3UNTSk
-	D4bTyTQ37w==
-X-Google-Smtp-Source: AGHT+IFhKsMdjaWcHT5oFT99C+YjQHxqLkqwCxHmU06KQ0PZXYX2Bl6XTAjc2loHpJbQs+qWtj6gbg==
-X-Received: by 2002:a05:651c:b0f:b0:2fb:65c8:b4ae with SMTP id 38308e7fff4ca-2ffa71a7b98mr1267121fa.31.1732224558718;
-        Thu, 21 Nov 2024 13:29:18 -0800 (PST)
+        bh=Wzvrme6xhrc1FPoSTNfgVzNymiF3jz2i05A93yDIUck=;
+        b=igRpm8icqidzH02RaWxH7+Ij0ll8pwQmfrwjlnO8IjfUT8gf6SA8Ma/o/IuBBVzI9X
+         OT3WYInJNHDszG8Ef6KK50TPyCZ3mndbVognsH7k5p2VuMHIeReVZMlXnFOc9ftdFliM
+         jZcT27GP1REZHyZqcslLriDEaAVM5jg3MmmtgbdqjtN5IEheAjoE97xhMW1fKh1kNjLy
+         mM8VAGWcMKDUnXXJYzD0LCd0erISTOGQgDjojqfbYeTEicCqLGLHrm6AAntmG2JJhbif
+         xLz2W0MesZmYnQ2N1XoTwID4kehpcyIa2TFKqVsInQo4r1oVZnvhJLglXzhtYvNhqDwH
+         z02w==
+X-Forwarded-Encrypted: i=1; AJvYcCVrwmF9QMjFIiosOO9vrCDKz1DQLeIly3/Uj7ZNuh/h3jGdlqIE3jwlXq3BXTSEIssS++MgeNC0igXvbo2j95A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDQcaaO/jPAWGWHnwmnSnZGgNX3SkejVMvzP6tfBMl1enq3gDr
+	bYRoNFnSCIp2/GLahAG3EX1VNTLyClEgPhbUEgFjczqZE4xjb5io5FzdmTbCH1A=
+X-Gm-Gg: ASbGncup+MCEfIypRrXRW6i2Cp5hackWAvRACEVGgF55VgYdcN4qLOIiGDMsp7aWDL+
+	zqpcVqBGXslV3TG1EZi0W6jmW7UWBR0W8kHu9R8F9+P0xMPGjZbxpCR6Mmep6afvFvPjZN7NVm1
+	du2R2atWCoriRC13unGwMvjqB9xYRFmNR6VO4ZG9000bDt39SPRPZxi6abay3QtrgywPLz83CFP
+	jV1r3REDuZY4yeoGnQwC5DBqaCZJEEkreaa4HUOhdyVz1p30o/BhRyZrpw4/TWnC426vZj2ONMe
+	cSlJFzJHIQ==
+X-Google-Smtp-Source: AGHT+IH0M3y2eiUipInPQ7W2Vnd3e9JU+0FyNA5ACy/5oapwX05Afv158ZLgMCPczHyBX4vOP1e9nA==
+X-Received: by 2002:a17:907:8297:b0:aa4:e18e:1ca1 with SMTP id a640c23a62f3a-aa509e95066mr43168166b.60.1732224950895;
+        Thu, 21 Nov 2024 13:35:50 -0800 (PST)
 Received: from ?IPV6:2001:67c:2fbc:1:f55:fe70:5486:7392? ([2001:67c:2fbc:1:f55:fe70:5486:7392])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d01d3c0376sm189384a12.46.2024.11.21.13.29.16
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa50b2f0899sm16627766b.61.2024.11.21.13.35.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Nov 2024 13:29:17 -0800 (PST)
-Message-ID: <587e8015-a511-4e8e-af74-337d6383fd57@openvpn.net>
-Date: Thu, 21 Nov 2024 22:29:45 +0100
+        Thu, 21 Nov 2024 13:35:50 -0800 (PST)
+Message-ID: <ece57745-183f-49cb-bfd5-76688f51f68b@openvpn.net>
+Date: Thu, 21 Nov 2024 22:36:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -93,8 +93,7 @@ References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
  <20241029-b4-ovpn-v11-7-de4698c73a25@openvpn.net>
  <62d382f8-ea45-4157-b54b-8fed7bdafcca@gmail.com>
  <1dffb833-1688-4572-bbf8-c6524cd84402@openvpn.net>
- <b8612694-c5b7-4b62-8b9d-783aaec1439f@openvpn.net>
- <68214df3-23b6-4da4-9ad9-b10e8878a4da@gmail.com>
+ <ca5c4c4b-bd9b-4ccc-9258-e78ec7684a85@gmail.com>
 Content-Language: en-US
 From: Antonio Quartulli <antonio@openvpn.net>
 Autocrypt: addr=antonio@openvpn.net; keydata=
@@ -137,45 +136,101 @@ Autocrypt: addr=antonio@openvpn.net; keydata=
  BnRX9nFx9kPSO42TkFK55Dr5EDeBO3v33recscuB8VVN5xvh0GV57Qre+9sJrEq7Es9W609a
  +M0yRJWJEjFnMa/jsGZ+QyLD5QTL6SGuZ9gKI3W1SfFZOzV7hHsxPTZ6
 Organization: OpenVPN Inc.
-In-Reply-To: <68214df3-23b6-4da4-9ad9-b10e8878a4da@gmail.com>
+In-Reply-To: <ca5c4c4b-bd9b-4ccc-9258-e78ec7684a85@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 21/11/2024 00:34, Sergey Ryazanov wrote:
-> On 19.11.2024 15:44, Antonio Quartulli wrote:
->> On 15/11/2024 15:28, Antonio Quartulli wrote:
->> [...]
->>>>> +}
->>>>> +
->>>>> +static struct ovpn_socket *ovpn_socket_get(struct socket *sock)
->>>>> +{
->>>>> +    struct ovpn_socket *ovpn_sock;
->>>>> +
->>>>> +    rcu_read_lock();
->>>>> +    ovpn_sock = rcu_dereference_sk_user_data(sock->sk);
->>>>> +    if (!ovpn_socket_hold(ovpn_sock)) {
->>>>> +        pr_warn("%s: found ovpn_socket with ref = 0\n", __func__);
->>>>
->>>> Should we be more specific here and print warning with 
->>>> netdev_warn(ovpn_sock->ovpn->dev, ...)?
+On 21/11/2024 00:58, Sergey Ryazanov wrote:
+> On 15.11.2024 16:28, Antonio Quartulli wrote:
+>> On 10/11/2024 19:26, Sergey Ryazanov wrote:
+>>> On 29.10.2024 12:47, Antonio Quartulli wrote:
+> 
+> [...]
+> 
+>>>> +static bool ovpn_socket_hold(struct ovpn_socket *sock)
+>>>> +{
+>>>> +    return kref_get_unless_zero(&sock->refcount);
 >>>
->>> ACK must be an unnoticed leftover
+>>> Why do we need to wrap this kref acquiring call into the function. 
+>>> Why we cannot simply call kref_get_unless_zero() from ovpn_socket_get()?
 >>
->> I take this back.
->> If refcounter is zero, I'd avoid accessing any field of the ovpn_sock 
->> object, thus the pr_warn() without any reference to the device.
+>> Generally I prefer to keep the API among objects consistent.
+>> In this specific case, it means having hold() and put() helpers in 
+>> order to avoid calling kref_* functions directly in the code.
+>>
+>> This is a pretty simple case because hold() is called only once, but I 
+>> still like to be consistent.
 > 
-> If it's such unlikely scenario, then should it be:
+> Make sense. The counterpart ovpn_socket_hold() function declared in the 
+> header file. Probably that's why I missed it. Shall we move the holding 
+> routine there as well?
+
+I prefer not to, because that function is used only in socket.c. 
+Moving/declaring it in socket.h would export a symbols that is not used 
+anywhere else.
+
+The _put() variant is instead use in peer.c, thus it is exported.
+
 > 
-> if (WARN_ON(!ovpn_socket_hold(ovpn_sock)))
->      ovpn_sock = NULL;
+> [...]
 > 
-> ?
+>>>> +int ovpn_udp_socket_attach(struct socket *sock, struct ovpn_struct 
+>>>> *ovpn)
+>>>> +{
+>>>> +    struct ovpn_socket *old_data;
+>>>> +    int ret = 0;
+>>>> +
+>>>> +    /* sanity check */
+>>>> +    if (sock->sk->sk_protocol != IPPROTO_UDP) {
+>>>
+>>> The function will be called only for a UDP socket. The caller makes 
+>>> sure this is truth. So, why do we need this check?
+>>
+>> To avoid this function being copied/called somewhere else in the 
+>> future and we forget about this critical assumption.
+> 
+> Shall we do the same for all other functions in this file? E.g. 
+> ovpn_udp_socket_detach/ovpn_udp_send_skb?
 
-Yeah, makes sense.
+Those functions work on a socket that is already owned, thus it already 
+passed this precheck, while _attach() is the one seeing the new socket 
+for the first time.
 
-Thanks!
+If this check is triggered it would only be due to a bug.
+Hence the DEBUG_NET_WARN_ON_ONCE().
 
+> And who is giving guarantee 
+> that the code will be copied together with the check?
+
+No guarantee is given :)
+
+> 
+>> Indeed it's a just sanity check.
+> 
+> Shall we check for pointers validity before dereferencing them?
+> 
+> if (!ovpn || !sock || !sock->sk || !sock->sk->sk_protocol != IPPROTO_UDP) {
+> 
+> With the above questions I would like to show that it's endless number 
+> of possible mistakes. And no matter how much do we check, a creative 
+> engineer will find a way to ruin the kernel.
+> 
+> So, is it worth to spend code lines for checking socket for being UDP 
+> inside a function that has '_udp_' in its name and is called only inside 
+> the module?
+
+Are you suggesting we should drop any kind of check for functions called 
+only within the module? I am not sure I follow..
+
+Anyway, I am dropping the check at the beginning in the function.
+
+Regards,
+
+
+> 
+>>>> +        DEBUG_NET_WARN_ON_ONCE(1);
+>>>> +        return -EINVAL;
+>>>> +    }
 > 
 > -- 
 > Sergey
