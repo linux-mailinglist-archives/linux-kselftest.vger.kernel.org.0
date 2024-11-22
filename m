@@ -1,139 +1,160 @@
-Return-Path: <linux-kselftest+bounces-22456-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22457-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B73709D619A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Nov 2024 16:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F297B9D61F7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Nov 2024 17:19:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42924160504
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Nov 2024 15:55:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05076161106
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Nov 2024 16:18:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74C201DE2CB;
-	Fri, 22 Nov 2024 15:55:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1CCE1DEFD4;
+	Fri, 22 Nov 2024 16:18:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=laura.nao@collabora.com header.b="BTyJIPyt"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="pW+7vYAx";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="h6nOjx4T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from flow-a4-smtp.messagingengine.com (flow-a4-smtp.messagingengine.com [103.168.172.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A33201DE2BD;
-	Fri, 22 Nov 2024 15:55:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732290953; cv=pass; b=ApKOnYNbCSHBhWvq8q2fADlBSKw0pRpQFkmQDndM6yVfvOSREvepeih4lqvCfaUin91+ZrwkbE0SADqBFLgpYBFFjq+7JE59Smj69vobaue+zN3tpQ1UuvSj4Kvb6E0tXJ7pflbmXqAYA5Ox3x+E+Tv4UBF5RFAFyMmEpg+7nZo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732290953; c=relaxed/simple;
-	bh=HSelt8aSaX3YoLZqFlscpVdWRA+Af8AxL1yTwR40tu4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MkXjbAAPbrFY6AjnjGOo0H2EyT34HI+vDkZcgC95f7cTsExuPMjNQrg5FyYEs+Z4A7kpnrwfokIO2syuNXaUWiI1v4Cx8n1o2fybOCNom/JM9fiGG2HvjDrCpr/oDBBtQ+YOdYEYMRk738Zp0bM0BHq1qsPHEBIomsNF/TAJ0Kg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=laura.nao@collabora.com header.b=BTyJIPyt; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1732290938; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=VyKSHiwSl/dsFKvrdoS5PwBZ2uM945hktUdNPAWLS3AU9UbLwR8s1h8Ax1MQhrL8Isi1H3QdX5m5ppnkYiV+oJRBv7K4VOOsST4PXI3XdmudyNp9+WeuxsPdjfcdvaHjx1Bi+rZroLaNbiU4OXEZ0Ee1Bhy++z1sqr426xaxgoM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1732290938; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=CN5iYkj+rU7UVfSUIvfDcYnj0TR51dCXC7MGEbhtuiE=; 
-	b=ltRenQUeZW7yBlB2/66YMcyawW4tKBuoR4yGuEqns4aP/lWbByr6DG67iH87Bp2GaD6CADITETV3lGw4OzJLR3CyBE5DWzi9ppFp5BOpxnWpr8sg7CLRpE+g82zKnUF2G9KWbku2NZR6BtZHXp7KAfCk/+XsscowNSXqY4yzIbE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=laura.nao@collabora.com;
-	dmarc=pass header.from=<laura.nao@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1732290938;
-	s=zohomail; d=collabora.com; i=laura.nao@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=CN5iYkj+rU7UVfSUIvfDcYnj0TR51dCXC7MGEbhtuiE=;
-	b=BTyJIPytr+N4i5ZgFSCgkriwCxNR4W4ogng6MStFM1hWgbJdJ2ShUpss4F4qSDY5
-	gGuolceFxM8ujyJ6kw5UHhkHCs6L/DrN07B752ZSJldNdOatkb/akkrYUkFL6ltSglP
-	0PKBbxHDMDL3MhtVIqj7uZeKSAIaKjEYeZ8SkBbU=
-Received: by mx.zohomail.com with SMTPS id 1732290936077450.0847135949839;
-	Fri, 22 Nov 2024 07:55:36 -0800 (PST)
-From: Laura Nao <laura.nao@collabora.com>
-To: shuah@kernel.org
-Cc: gregkh@linuxfoundation.org,
-	nfraprado@collabora.com,
-	usama.anjum@collabora.com,
-	robh@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel@collabora.com,
-	Laura Nao <laura.nao@collabora.com>
-Subject: [PATCH] selftests: Warn about skipped tests in result summary
-Date: Fri, 22 Nov 2024 16:55:48 +0100
-Message-Id: <20241122155548.55495-1-laura.nao@collabora.com>
-X-Mailer: git-send-email 2.30.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABFC13B58C;
+	Fri, 22 Nov 2024 16:18:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732292293; cv=none; b=MQbrxvyKZWH3x1pGXutORjSKHwXHJpFiE8OdwVq3vUnn0MJMvhINvR7ANC1nmgLh3OGZrLvmr5slsehHiSTKJa+n0OphyM8kDeKuyFe7v8TYa7/YSpb3cAnQ1E1pb+pSund5Nm1lgkdKbd8KJDanA+UuFgD4Mc84C07w88iFUV4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732292293; c=relaxed/simple;
+	bh=no21xQCcRKk7Kdw5IG63yislTkKktUX5bASibhmwctM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b+gbnn5NzXlUOIJjuEezsBeMvaeC2bKhEy4nq4s4LAI4TDRP8+HsLpt8c6hzAn1FFGVVqqFEz2yex5Hk7QLLbOmb3ubYvhN9yNTLgCX6lyDuq1yjhF5iVwOQWJTy5nBaJPnrFyUQPkCKByOqtRlNfiHkOUwb3UNpM1wY7A06C4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=pW+7vYAx; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=h6nOjx4T; arc=none smtp.client-ip=103.168.172.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
+	by mailflow.phl.internal (Postfix) with ESMTP id 4297D200629;
+	Fri, 22 Nov 2024 11:18:08 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-08.internal (MEProxy); Fri, 22 Nov 2024 11:18:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm2;
+	 t=1732292288; x=1732295888; bh=7MiFj9DQfkB0qD8w4IFwQBW5mbSAECz1
+	magA6LgRv3Y=; b=pW+7vYAxDEVrg8ZGCam7IHEA/Pdj6g703iK4WFDWrNT0e0CZ
+	LgKtBGb3j8S+1NGMnXWxKGtUCkxJUg3Rj4q/+O4D645sB0vinkArfZmT8kg4mM+l
+	qq8APzCUMb7XpU5LIweIq+aZNQX3Wcu5kMt4/Ae+4kwql6Wj9pXJWzip0KPcjIhy
+	Cre+AQYpV2kSEzPKGOM1iv74W7Y+tzMrYuRuRzBG+pgSwJhUE35IYzYP8JbbofnL
+	V1rR+CLu9zpJJvsHxXTkR2rY6rhdzIvgQ0LylZXWuxSPy2d0gFC86jbYep42IUih
+	lpDC9+oB9sX3fLp2oeWIb0KMeCOL1M8z/p5qZg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1732292288; x=
+	1732295888; bh=7MiFj9DQfkB0qD8w4IFwQBW5mbSAECz1magA6LgRv3Y=; b=h
+	6nOjx4Teqc4jkdxqjROVQEfbgZonEbsr3jiDm2SNBNkKbQ0U8muG05l6ziYAz3GP
+	DOHqlP5G3oo73cclUfmu6OLv49d+emgF1yKKSdKJz83QCI76ATqEbS6FCJ+Lzrhl
+	zBH8xjOSOUt7A1eZeJRVR8TtF3ylN8QjtCshDfvnI0h13H0Kuo3MTWBqu3VJYIH8
+	QHGc+ANz4AYros8U1JOe4z1tMyAcO5PLDi3VLpEwKifY9hGdlR1Iu4G7d94Tm2NY
+	tnWxl1EDF/lloQnZ6PETiNQxz8L6pUPlMXwgpfMqsNWMUeOruuyOWkjBRtIyV27G
+	+sw1z9faC9Ihi6NF8ApaA==
+X-ME-Sender: <xms:v65AZ1BbhHvZc-idTCQPgKoGHOgoLcs7qrCZ9_CLg3nFjEY3CxIb2Q>
+    <xme:v65AZzjdGlfhgStRjbG6CgrtZF8H6s2H8z4md8EyI70a_9jQp07GMe9XXqXKll-sk
+    ww9P5LRIM_r2LM95uI>
+X-ME-Received: <xmr:v65AZwnZMLCJofYhxLl26pYYsOL40PycM_ZH0clMGNcC8EKdN3CKxkdF_nd->
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrfeelgdeivdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
+    hsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeen
+    ucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrg
+    hilhdrnhgvtheqnecuggftrfgrthhtvghrnhepgfdvgeeitefffedvgfdutdelgeeihfeg
+    ueehteevveegveejudelfeffieehledvnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggp
+    rhgtphhtthhopeduuddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnthhonh
+    hiohesohhpvghnvhhpnhdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhg
+    lhgvrdgtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtth
+    hopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepughonhgrlhgurdhh
+    uhhnthgvrhesghhmrghilhdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehrhigriigrnhhovhdrshdrrgesghhmrghilhdrtghomhdp
+    rhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehnvghtuggvvh
+    esvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:v65AZ_zq-Q45cwsX2RTau0_TKAv559Fjnfxshhpgr5ZZuw2eDKM_IA>
+    <xmx:v65AZ6Q5G07WKCKpcHW-UuQLrOjgiQSrYsODfkQZFyZ4mJlETWu4-g>
+    <xmx:v65AZyZ_d5PFogG-t4BAjS2DMuFAmlqlS2r2pbHFIGhyWl8VEGcGvw>
+    <xmx:v65AZ7TYwsO0QizIX4GnWUvf2ETVLYizmoa60IQ8pVVki65Qrv9nPg>
+    <xmx:wK5AZ9EV3A2-rrahA0z-nxuoyoxiF6E86ePyeAIiJRY4KwNofeTNKo1X>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 22 Nov 2024 11:18:07 -0500 (EST)
+Date: Fri, 22 Nov 2024 17:18:05 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v11 15/23] ovpn: implement keepalive mechanism
+Message-ID: <Z0CuvYH_ZZMYtDcW@hog>
+References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-15-de4698c73a25@openvpn.net>
+ <ZypfnyfToF1b6YAZ@hog>
+ <189dbeea-127a-47e8-84f8-c8cf1cc03536@openvpn.net>
+ <5eaf74fb-ad13-4371-95b8-7a5f1f3a9cda@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+In-Reply-To: <5eaf74fb-ad13-4371-95b8-7a5f1f3a9cda@openvpn.net>
 
-Update the functions that print the test totals at the end of a selftest
-to include a warning message when skipped tests are detected. The
-message advises users that skipped tests may indicate missing
-configuration options and suggests enabling them to improve coverage.
+2024-11-22, 10:41:26 +0100, Antonio Quartulli wrote:
+> On 12/11/2024 14:20, Antonio Quartulli wrote:
+> [...]
+> > > > +static int ovpn_peer_del_nolock(struct ovpn_peer *peer,
+> > > > +                enum ovpn_del_peer_reason reason)
+> > > > +{
+> > > > +    switch (peer->ovpn->mode) {
+> > > > +    case OVPN_MODE_MP:
+> > > 
+> > > I think it would be nice to add
+> > > 
+> > >      lockdep_assert_held(&peer->ovpn->peers->lock);
+> 
+> Sabrina, in other places I have used the sparse notation __must_hold()
+> instead.
+> Is there any preference in regards to lockdep vs sparse?
+> 
+> I could switch them all to lockdep_assert_held if needed.
 
-Signed-off-by: Laura Nao <laura.nao@collabora.com>
----
-This patch follows up on a previous discussion[1] and aims to highlight
-skipped tests for the user's attention.
+__must_hold has the advantage of being checked at compile time (though
+I'm not sure it's that reliable [1]), so you don't need to run a test
+that actually hits that particular code path.
 
-[1] https://lore.kernel.org/lkml/2bb2d338-cd00-4ac2-b8bd-5579eae82637@linuxfoundation.org/
----
- tools/testing/selftests/kselftest.h               | 4 ++++
- tools/testing/selftests/kselftest/ksft.py         | 3 +++
- tools/testing/selftests/kselftest/ktap_helpers.sh | 4 ++++
- 3 files changed, 11 insertions(+)
+In this case I see lockdep_assert_held as mainly documenting that the
+locking that makes ovpn_peer_del_nolock safe (as safe as
+ovpn_peer_del) is provided by its caller. The splat for incorrect use
+on debug kernels is a bonus. Sprinkling lockdep_assert_held all over
+ovpn might be bloating the code too much, but I'm not opposed to
+adding them if it helps.
 
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index 29fedf609611..d3f64b333acd 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -147,6 +147,10 @@ static inline void ksft_set_plan(unsigned int plan)
- 
- static inline void ksft_print_cnts(void)
- {
-+	if (ksft_cnt.ksft_xskip > 0)
-+		printf(
-+			"# Skipped tests detected. Consider enabling relevant config options to improve coverage.\n"
-+		);
- 	if (ksft_plan != ksft_test_num())
- 		printf("# Planned tests != run tests (%u != %u)\n",
- 			ksft_plan, ksft_test_num());
-diff --git a/tools/testing/selftests/kselftest/ksft.py b/tools/testing/selftests/kselftest/ksft.py
-index bf215790a89d..7675a15a1264 100644
---- a/tools/testing/selftests/kselftest/ksft.py
-+++ b/tools/testing/selftests/kselftest/ksft.py
-@@ -27,6 +27,9 @@ def set_plan(num_tests):
- 
- 
- def print_cnts():
-+    if ksft_cnt['skip'] > 0:
-+        print("# Skipped tests detected. Consider enabling relevant config options to improve coverage.")
-+
-     print(
-         f"# Totals: pass:{ksft_cnt['pass']} fail:{ksft_cnt['fail']} xfail:0 xpass:0 skip:{ksft_cnt['skip']} error:0"
-     )
-diff --git a/tools/testing/selftests/kselftest/ktap_helpers.sh b/tools/testing/selftests/kselftest/ktap_helpers.sh
-index 79a125eb24c2..a4211221ccd6 100644
---- a/tools/testing/selftests/kselftest/ktap_helpers.sh
-+++ b/tools/testing/selftests/kselftest/ktap_helpers.sh
-@@ -107,5 +107,9 @@ ktap_finished() {
- }
- 
- ktap_print_totals() {
-+	if [ "$KTAP_CNT_SKIP" -gt 0 ]; then
-+		echo "# Skipped tests detected. " \
-+			"Consider enabling relevant config options to improve coverage."
-+	fi
- 	echo "# Totals: pass:$KTAP_CNT_PASS fail:$KTAP_CNT_FAIL xfail:0 xpass:0 skip:$KTAP_CNT_SKIP error:0"
- }
+[1] I ran sparse on drivers/net/ovpn/peer.c before/after removing the
+locking from ovpn_peer_del and didn't get any warnings. sparse is good
+to detect imbalances (function that locks without unlocking), but
+maybe don't trust __must_hold for more than documenting expectations.
+
+[note: if you end up merging ovpn->peers->lock with ovpn->lock as
+we've discussed somewhere else, the locking around keepalive and
+ovpn_peer_del becomes a bit less hairy]
+
 -- 
-2.30.2
-
+Sabrina
 
