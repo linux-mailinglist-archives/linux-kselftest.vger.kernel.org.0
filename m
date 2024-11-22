@@ -1,93 +1,158 @@
-Return-Path: <linux-kselftest+bounces-22460-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22461-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 206949D6312
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Nov 2024 18:29:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C8CD9D639A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Nov 2024 18:55:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95214B215CB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Nov 2024 17:29:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41DC2282755
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Nov 2024 17:54:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6714D1DED7F;
-	Fri, 22 Nov 2024 17:29:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF7731DF974;
+	Fri, 22 Nov 2024 17:54:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VEV7aYQs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N3EUfFrz"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7B018AEA;
-	Fri, 22 Nov 2024 17:29:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE3FF224CC;
+	Fri, 22 Nov 2024 17:54:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732296579; cv=none; b=iAr/RlFhg2TTEYns5vZuZbnUt/7HQM0zjqGbCI8La+eZvCj8+GmC98c24mdYvAYzBLFDpmWiQTeuxNkPmWs3/nWj9lYVuWjMjZtyF+wXfnwuqSTW/WUBcjVQaebANp4i0koMzBc0HmGDXry1ljeIDHfxGJKWtsGs/DfD91QlBaw=
+	t=1732298091; cv=none; b=g1MRJ83qbiP1VT+2sXHBu5DjvVkwJ/0PLSQ9cg/Kmq8Erb7yYgUlwhbXvFQQZc6ZXNVdk+3YCr8AVWuwwN/wojSlrYzO8vPzrWM35iB+WxiyPMCgZF1KvoFoxH0aLW0SMHtDRvYiUWtjVapory5Ecz4KkRm7KADrDk7stI2+uYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732296579; c=relaxed/simple;
-	bh=KQkPFztCcDV7zdWXKgZKGZBN8iACqDcgshPTqQ6/mtM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bBJMAf2kQWVzIpxMlEoYmKTZg2sVWlYgGWKSV6cuKIKSlmdthu7r6wV3xIVdS8/aO/j+jtTQCCOcQRna5v2WiyeyIZbyHiXMXGe4VtHMPNE/izqDzi7NF3aXKisEA7mvMBsNBIH3UKkW61X1r4rzhWM1P9eAhKqAdtLJiWPXDsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VEV7aYQs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5892C4CECE;
-	Fri, 22 Nov 2024 17:29:38 +0000 (UTC)
+	s=arc-20240116; t=1732298091; c=relaxed/simple;
+	bh=sP8GnPMMnf3sjQ7ceImITYA+fvSSpdmMigpOF5UCgrY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=FFk7uHkBl/KhlGmCAaDpkwipO80IntMfirrFYuCOHF7Y+zb9l2Tomt4gzp9kQgUNo41K5hNKE5Xzbkfev41fqmJAlqsoXzHnH9bcqBOU75sL4yaK3owIu6odctD7dfjRO2XQOGPH6gtSas4hgCQ13svBHrPC+rukz0MTiItTFEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N3EUfFrz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FDDEC4CECE;
+	Fri, 22 Nov 2024 17:54:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732296578;
-	bh=KQkPFztCcDV7zdWXKgZKGZBN8iACqDcgshPTqQ6/mtM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=VEV7aYQsjkdF7yNiLEGZTq8gM+OuaHI3MaiW3+Uh6B/pxUAbSEPp9PkS4gB7KgXzw
-	 ae80qO17LuJPdMtL9vqGj3pWlH+AYyGpH0qV2p61DPKWlPBtSHKIwRs//8Lrm2Luv6
-	 mcN0GpzhK0SYnHzqtGg8B+lASd19mDUIES2j3IilHHElzL9vEsJoYxGi+HZtBjT87A
-	 kmziBNwfQQmCo341Td6v3Iguy01GA5ASUFq9l4qv9TlurswPLB0EkZEOrz3z+sDysP
-	 utUvrTrBdaVcTYRpgjI+K/CU6GDSQ6hn1A3/H52k2RRY58iGM0d6LCIXeQXBbq8Vlx
-	 H1/5jJydzC8OA==
-Date: Fri, 22 Nov 2024 09:29:37 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Shuah <shuah@kernel.org>
-Cc: Tim.Bird@sony.com, linux-kselftest@vger.kernel.org,
- workflows@vger.kernel.org
-Subject: Re: [RFC v2] MAINTAINERS: split kselftest entry into 'framework'
- and 'all'
-Message-ID: <20241122092937.6e63d488@kernel.org>
-In-Reply-To: <cb5d1253-6b52-4c77-9022-7f4e6e50377c@kernel.org>
-References: <20241115200912.1009680-1-kuba@kernel.org>
-	<8192e307-b2b9-4c48-87e2-31073c084218@linuxfoundation.org>
-	<20241118132324.3248c97d@kernel.org>
-	<cb5d1253-6b52-4c77-9022-7f4e6e50377c@kernel.org>
+	s=k20201202; t=1732298091;
+	bh=sP8GnPMMnf3sjQ7ceImITYA+fvSSpdmMigpOF5UCgrY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=N3EUfFrzeDpzvD9ErDAIiuO4dbSRbtRl3q2wnf004bJLuwK9lMQsixxey2kwvIMZf
+	 rEWI9C5EX+9guwLZKyhhovd/+1ymk37d34UoXHeFxoTe2tZuEAul1W7NiuYzqshxsm
+	 eMdGeDNIrV8eFdw5Ez90f/B4zHySnRZryHGnP0GbHUpib/yhujEDaqGC1lsymy8rqH
+	 QKjHUbIQzoBPce3Rx32XZuIeFPJwLRtgjor6sgSnMSfy3naciiEB6yOfX79RU4x+Fp
+	 ZifpaDCt/0acv+vaexz0B0UiSVydDT/7PSZeL9++/8a3Uiqrrgk8nRxu06JhbTsw6p
+	 ZldeUHH+buSvw==
+Date: Fri, 22 Nov 2024 11:54:49 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Joseph Jang <jjang@nvidia.com>
+Cc: shuah@kernel.org, tglx@linutronix.de, mochs@nvidia.com,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] selftest: drivers: Add support to check duplicate hwirq
+Message-ID: <20241122175449.GA2433467@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dec53919-034b-4f0e-b415-1bc1de9b0916@nvidia.com>
 
-On Fri, 22 Nov 2024 07:56:25 -0700 Shuah wrote:
-> > To me the dissonance between your admission that people don't CC the
-> > current list (IOW status quo isn't great) and the resistance to change
-> > is fairly apparent. But it is obviously your call.  
-> My thinking is that people don't seem to CC the one mailing list
-> we have and adding one more would add to the problem.
+On Mon, Nov 11, 2024 at 03:21:36PM +0800, Joseph Jang wrote:
+> On 2024/10/19 3:34 AM, Bjorn Helgaas wrote:
+> > On Tue, Sep 03, 2024 at 06:44:26PM -0700, Joseph Jang wrote:
+> > > Validate there are no duplicate hwirq from the irq debug
+> > > file system /sys/kernel/debug/irq/irqs/* per chip name.
+> > > 
+> > > One example log show 2 duplicated hwirq in the irq debug
+> > > file system.
+> > > 
+> > > $ sudo cat /sys/kernel/debug/irq/irqs/163
+> > > handler:  handle_fasteoi_irq
+> > > device:   0019:00:00.0
+> > >       <SNIP>
+> > > node:     1
+> > > affinity: 72-143
+> > > effectiv: 76
+> > > domain:  irqchip@0x0000100022040000-3
+> > >   hwirq:   0xc8000000
+> > >   chip:    ITS-MSI
+> > >    flags:   0x20
+> > > 
+> > > $ sudo cat /sys/kernel/debug/irq/irqs/174
+> > > handler:  handle_fasteoi_irq
+> > > device:   0039:00:00.0
+> > >      <SNIP>
+> > > node:     3
+> > > affinity: 216-287
+> > > effectiv: 221
+> > > domain:  irqchip@0x0000300022040000-3
+> > >   hwirq:   0xc8000000
+> > >   chip:    ITS-MSI
+> > >    flags:   0x20
+> > > 
+> > > The irq-check.sh can help to collect hwirq and chip name from
+> > > /sys/kernel/debug/irq/irqs/* and print error log when find duplicate
+> > > hwirq per chip name.
+> > > 
+> > > Kernel patch ("PCI/MSI: Fix MSI hwirq truncation") [1] fix above issue.
+> > > [1]: https://lore.kernel.org/all/20240115135649.708536-1-vidyas@nvidia.com/
+> > 
+> > I don't know enough about this issue to understand the details.  It
+> > seems like you look for duplicate hwirqs in chips with the same name,
+> > e.g., "ITS-MSI" in this case?  That name seems too generic to me
+> > (might there be several instances of "ITS-MSI" in a system?)
 > 
-> Are there other ways to solve the problem by using prefix like
-> we do now for subsystem tests: selftests:framework?
+> As I know, each PCIe device typically has only one ITS-MSI controller.
+> Having multiple ITS-MSI instances for the same device would lead to
+> confusion and potential conflicts in interrupt routing.
+> 
+> > Also, the name may come from chip->irq_print_chip(), so it apparently
+> > relies on irqchip drivers to make the names unique if there are
+> > multiple instances?
+> > 
+> > I would have expected looking for duplicates inside something more
+> > specific, like "irqchip@0x0000300022040000-3".  But again, I don't
+> > know enough about the problem to speak confidently here.
+> 
+> In our case, If we look for duplicates by different irq domains like
+> "irqchip@0x0000100022040000-3" and "irqchip@0x0000300022040000-3" as
+> following example.
+> 
+>     $ sudo cat /sys/kernel/debug/irq/irqs/163
+>     handler:  handle_fasteoi_irq
+>     device:   0019:00:00.0
+>          <SNIP>
+>     node:     1
+>     affinity: 72-143
+>     effectiv: 76
+>     domain:  irqchip@0x0000100022040000-3
+>      hwirq:   0xc8000000
+>      chip:    ITS-MSI
+>       flags:   0x20
+>     $ sudo cat /sys/kernel/debug/irq/irqs/174
+>     handler:  handle_fasteoi_irq
+>     device:   0039:00:00.0
+>         <SNIP>
+>     node:     3
+>     affinity: 216-287
+>     effectiv: 221
+>     domain:  irqchip@0x0000300022040000-3
+>      hwirq:   0xc8000000
+>      chip:    ITS-MSI
+>       flags:   0x20
+> 
+> We could not detect the duplicated hwirq number (0xc8000000) in this
+> case.
 
-I think the ideal solution would be to let people subscribe to code
-paths rather the deal with mailing lists in the first place :(
-That way we can fix this on the "mailing list backend" rather than
-expecting people who submit code to do the right thing.
+Again, this is really out of my area, but based on
+Documentation/core-api/irq/irq-domain.rst, I assumed the point of
+hwirq was that hwirq numbers were local to an interrupt controller,
+i.e., to an irq_domain.
 
-Konstantin did some work on auto-CC based on get_maintainer output,
-whether vger would just fill in the missing CCs, but AFAIR he got stuck
-on the need to modify headers which would break DKIM.
+If that's the case, it should not be a problem if hwirq number
+0xc8000000 is used in two separate irq_domains.
 
-I should mention that lore/lei does support filtering / subscribing 
-to paths etc, but from experience bringing folks into upstream
-reviews - running lore/lei doesn't work for everyone. I also don't 
-use it because it doesn't support the mbox format of my MUA :(
-
-At the current state of affairs, since we can't fix the "receiver" side
-easily, we have to shift the responsibility on the "sender" side.
-Hope people run get_maintainer, and have well defined lists..
+Bjorn
 
