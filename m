@@ -1,201 +1,139 @@
-Return-Path: <linux-kselftest+bounces-22455-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22456-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 533D89D612C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Nov 2024 16:15:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B73709D619A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Nov 2024 16:55:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9118516030D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Nov 2024 15:15:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42924160504
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Nov 2024 15:55:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6982A1DE89E;
-	Fri, 22 Nov 2024 15:15:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74C201DE2CB;
+	Fri, 22 Nov 2024 15:55:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="d0sl82Qh"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=laura.nao@collabora.com header.b="BTyJIPyt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E7F2148FE8
-	for <linux-kselftest@vger.kernel.org>; Fri, 22 Nov 2024 15:15:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732288505; cv=none; b=kB5g2JmrjEK+kw3EzoUL4NB7ORaN8rt5CvtCgF4+LSUFtvDrmfBFG6mZ64fSlik5mKgx9n3coFLOKfPH81nOPNdVvisFtUKSYs2iE7rA8sQMVwxLl7p2OtC0PHTG9QF72AsxPa9DzFppeIdnf1A0uFkrRg9WgFJYF7dyCDXLl3s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732288505; c=relaxed/simple;
-	bh=G4ZWYFmDGGCQIedY71/8GZGdAfKcnsuVFa5JVn99a40=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qo5Fy17fNNuLh1if2cWvgtXjqhnsg+H6Y+Vvr4JynL4eIgFHj6HlzIPYMKaNJWn3Ta8Mb4RMspxsJ9YeOq/pLg9BGmJxkz7OtqMkJc0B/efgqmTqyQmn2DuV6A/E41luUrr/5DaHhMQ21jShfLc/fFOJphIyE9n8mSd74u4+agw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=d0sl82Qh; arc=none smtp.client-ip=209.85.166.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-83eafef523bso71413139f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Nov 2024 07:15:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1732288500; x=1732893300; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rmBxC4X0qWTi2jB3Mdi9nSIUH+PS6n9GSNvglpxej84=;
-        b=d0sl82QhPnq84etKN05j5uIcVQ0fDAtllmUo3ENl6LHqc/FE29FuxkudCbEzHXaOLM
-         SqfYgvVMwCmhCihB1tE4trzsr/522vvpr77e+qPZ7YYl4Eob17aV7Ea/Pa0+BFB126J3
-         ZEan1Yo/R3EMd1RW3CYQAHlHwdDD8oCmh8aJY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732288500; x=1732893300;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rmBxC4X0qWTi2jB3Mdi9nSIUH+PS6n9GSNvglpxej84=;
-        b=LGQ6D2iX6luvIKSU17ebtlda49iJ3OgyhMzng9PJ53IsatOxEYrv8nJt0O/jOjXrs0
-         2Nv7IrlByawrF9DCE4bzSRRbOIQgcY2d633LxKH3OjO1tFU6GB1ZBkOQkSZab0Hm0FoS
-         uxio055IIRCNS9JjleT6vGdNnC+mNtwe01aOpqD0rNUNMaja79BJ1OoSzfdWE9SWQ/Ah
-         nBaDRdhtY5ZAb5VgK4fyb6KaLSvZO15ToyNNuXbKGTpgsMFN1jw+ZwC/YPTz8NrFzJbi
-         3BocsSGJ1rPYzWmCIFV1/LP57cjLfhGIsl1S1AQOl7VBedp0aEgSURE1fdgPZmSZ4N2r
-         a3xQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX1d3ZNFS5l1K0R4RIHKy7/fI08R8FXMvpMqN8EI3stNVaX7Puf0ZcYIaTSzjxTc2to0NC61dCywxPddHxw/rw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHrIu7vSCYwENmu++cmpzhI4ykW5CeldvLqF9Jy83qCEZahLKu
-	iARJP4Lawk5micKPkwTNpwQwS6jO70w5cM4HR85LxTYQV2dOntUkv1p4UNcIBTg=
-X-Gm-Gg: ASbGncs06repb/5CEmLcH2/VlLZPUbER909djLVqw4PiXJoig4qbMxVHfGWasbgs1cc
-	e/67B3EKNQsZPwlnpL9rOeo53Zq5XM8Aqx1kZq0yUHERdEUzQ4DWDf650iE7zmsjQN/sBNh47Gy
-	hoZOX1USrqi204zH6vNs9V0B3Z2uOKcXJQVIRLu0L4rwz5puoxvKE7ZNuq9JMKMs4TougZty0zN
-	EupKH8se4jgxbFv3qK2a8p1vi+xk2FdWh1HnYF7zMjBjAF7kUU3BcOy9Mzs1g==
-X-Google-Smtp-Source: AGHT+IHy5Cwa3AA3W2fNjldnU0Ki3uW2K71uWzdXCbgAWsASPCmhOBROw7+r3q6xtya9E03fAwzWCw==
-X-Received: by 2002:a05:6602:3c6:b0:83b:47:8d5 with SMTP id ca18e2360f4ac-83ecdc538d9mr370017639f.3.1732288500377;
-        Fri, 22 Nov 2024 07:15:00 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e1cfe1a0e2sm640295173.7.2024.11.22.07.14.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Nov 2024 07:14:59 -0800 (PST)
-Message-ID: <93d96c99-4712-4054-a36f-3c65c80ab3f8@linuxfoundation.org>
-Date: Fri, 22 Nov 2024 08:14:58 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A33201DE2BD;
+	Fri, 22 Nov 2024 15:55:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732290953; cv=pass; b=ApKOnYNbCSHBhWvq8q2fADlBSKw0pRpQFkmQDndM6yVfvOSREvepeih4lqvCfaUin91+ZrwkbE0SADqBFLgpYBFFjq+7JE59Smj69vobaue+zN3tpQ1UuvSj4Kvb6E0tXJ7pflbmXqAYA5Ox3x+E+Tv4UBF5RFAFyMmEpg+7nZo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732290953; c=relaxed/simple;
+	bh=HSelt8aSaX3YoLZqFlscpVdWRA+Af8AxL1yTwR40tu4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MkXjbAAPbrFY6AjnjGOo0H2EyT34HI+vDkZcgC95f7cTsExuPMjNQrg5FyYEs+Z4A7kpnrwfokIO2syuNXaUWiI1v4Cx8n1o2fybOCNom/JM9fiGG2HvjDrCpr/oDBBtQ+YOdYEYMRk738Zp0bM0BHq1qsPHEBIomsNF/TAJ0Kg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=laura.nao@collabora.com header.b=BTyJIPyt; arc=pass smtp.client-ip=136.143.188.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1732290938; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=VyKSHiwSl/dsFKvrdoS5PwBZ2uM945hktUdNPAWLS3AU9UbLwR8s1h8Ax1MQhrL8Isi1H3QdX5m5ppnkYiV+oJRBv7K4VOOsST4PXI3XdmudyNp9+WeuxsPdjfcdvaHjx1Bi+rZroLaNbiU4OXEZ0Ee1Bhy++z1sqr426xaxgoM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1732290938; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=CN5iYkj+rU7UVfSUIvfDcYnj0TR51dCXC7MGEbhtuiE=; 
+	b=ltRenQUeZW7yBlB2/66YMcyawW4tKBuoR4yGuEqns4aP/lWbByr6DG67iH87Bp2GaD6CADITETV3lGw4OzJLR3CyBE5DWzi9ppFp5BOpxnWpr8sg7CLRpE+g82zKnUF2G9KWbku2NZR6BtZHXp7KAfCk/+XsscowNSXqY4yzIbE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=laura.nao@collabora.com;
+	dmarc=pass header.from=<laura.nao@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1732290938;
+	s=zohomail; d=collabora.com; i=laura.nao@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+	bh=CN5iYkj+rU7UVfSUIvfDcYnj0TR51dCXC7MGEbhtuiE=;
+	b=BTyJIPytr+N4i5ZgFSCgkriwCxNR4W4ogng6MStFM1hWgbJdJ2ShUpss4F4qSDY5
+	gGuolceFxM8ujyJ6kw5UHhkHCs6L/DrN07B752ZSJldNdOatkb/akkrYUkFL6ltSglP
+	0PKBbxHDMDL3MhtVIqj7uZeKSAIaKjEYeZ8SkBbU=
+Received: by mx.zohomail.com with SMTPS id 1732290936077450.0847135949839;
+	Fri, 22 Nov 2024 07:55:36 -0800 (PST)
+From: Laura Nao <laura.nao@collabora.com>
+To: shuah@kernel.org
+Cc: gregkh@linuxfoundation.org,
+	nfraprado@collabora.com,
+	usama.anjum@collabora.com,
+	robh@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel@collabora.com,
+	Laura Nao <laura.nao@collabora.com>
+Subject: [PATCH] selftests: Warn about skipped tests in result summary
+Date: Fri, 22 Nov 2024 16:55:48 +0100
+Message-Id: <20241122155548.55495-1-laura.nao@collabora.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH kselftest] fix single bpf test
-To: Jiayuan Chen <mrpre@163.com>, linux-kselftest@vger.kernel.org,
- Mark Brown <broonie@kernel.org>
-Cc: song@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, martin.lau@linux.dev, andrii@kernel.org,
- ast@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20241118140608.53524-1-mrpre@163.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241118140608.53524-1-mrpre@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-On 11/18/24 07:06, Jiayuan Chen wrote:
-> Currently, when testing a certain target in selftests, executing the
-> command 'make TARGETS=XX -C tools/testing/selftests' succeeds for non-BPF,
-> but a similar command fails for BPF:
-> '''
-> make TARGETS=bpf -C tools/testing/selftests
-> 
-> make: Entering directory '/linux-kselftest/tools/testing/selftests'
-> make: *** [Makefile:197: all] Error 1
-> make: Leaving directory '/linux-kselftest/tools/testing/selftests'
-> '''
-> 
-> The reason is that the previous commit:
-> commit 7a6eb7c34a78 ("selftests: Skip BPF seftests by default")
-> led to the default filtering of bpf in TARGETS which make TARGETS empty.
-> That commit also mentioned that building BPF tests requires external
-> commands to run. This caused target like 'bpf' or 'sched_ext' defined
-> in SKIP_TARGETS to need an additional specification of SKIP_TARGETS as
-> empty to avoid skipping it, for example:
-> '''
-> make TARGETS=bpf SKIP_TARGETS="" -C tools/testing/selftests
-> '''
-> 
-> If special steps are required to execute certain test, it is extremely
-> unfair. We need a fairer way to treat different test targets.
-> 
+Update the functions that print the test totals at the end of a selftest
+to include a warning message when skipped tests are detected. The
+message advises users that skipped tests may indicate missing
+configuration options and suggests enabling them to improve coverage.
 
-Note: Adding Mark, author for commit 7a6eb7c34a78 to the thread
+Signed-off-by: Laura Nao <laura.nao@collabora.com>
+---
+This patch follows up on a previous discussion[1] and aims to highlight
+skipped tests for the user's attention.
 
-The reason we did this was bpf test depends on newer versions
-of LLVM tool chain.
+[1] https://lore.kernel.org/lkml/2bb2d338-cd00-4ac2-b8bd-5579eae82637@linuxfoundation.org/
+---
+ tools/testing/selftests/kselftest.h               | 4 ++++
+ tools/testing/selftests/kselftest/ksft.py         | 3 +++
+ tools/testing/selftests/kselftest/ktap_helpers.sh | 4 ++++
+ 3 files changed, 11 insertions(+)
 
-A better solution would be to check for compile time dependencies in
-bpf Makefile and check run-time dependencies from bpf test or a wrapper
-script invoked from run_tests to the skip the test if test can't run.
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index 29fedf609611..d3f64b333acd 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -147,6 +147,10 @@ static inline void ksft_set_plan(unsigned int plan)
+ 
+ static inline void ksft_print_cnts(void)
+ {
++	if (ksft_cnt.ksft_xskip > 0)
++		printf(
++			"# Skipped tests detected. Consider enabling relevant config options to improve coverage.\n"
++		);
+ 	if (ksft_plan != ksft_test_num())
+ 		printf("# Planned tests != run tests (%u != %u)\n",
+ 			ksft_plan, ksft_test_num());
+diff --git a/tools/testing/selftests/kselftest/ksft.py b/tools/testing/selftests/kselftest/ksft.py
+index bf215790a89d..7675a15a1264 100644
+--- a/tools/testing/selftests/kselftest/ksft.py
++++ b/tools/testing/selftests/kselftest/ksft.py
+@@ -27,6 +27,9 @@ def set_plan(num_tests):
+ 
+ 
+ def print_cnts():
++    if ksft_cnt['skip'] > 0:
++        print("# Skipped tests detected. Consider enabling relevant config options to improve coverage.")
++
+     print(
+         f"# Totals: pass:{ksft_cnt['pass']} fail:{ksft_cnt['fail']} xfail:0 xpass:0 skip:{ksft_cnt['skip']} error:0"
+     )
+diff --git a/tools/testing/selftests/kselftest/ktap_helpers.sh b/tools/testing/selftests/kselftest/ktap_helpers.sh
+index 79a125eb24c2..a4211221ccd6 100644
+--- a/tools/testing/selftests/kselftest/ktap_helpers.sh
++++ b/tools/testing/selftests/kselftest/ktap_helpers.sh
+@@ -107,5 +107,9 @@ ktap_finished() {
+ }
+ 
+ ktap_print_totals() {
++	if [ "$KTAP_CNT_SKIP" -gt 0 ]; then
++		echo "# Skipped tests detected. " \
++			"Consider enabling relevant config options to improve coverage."
++	fi
+ 	echo "# Totals: pass:$KTAP_CNT_PASS fail:$KTAP_CNT_FAIL xfail:0 xpass:0 skip:$KTAP_CNT_SKIP error:0"
+ }
+-- 
+2.30.2
 
-I would like to see us go that route over addressing this problem
-with SKIP_TARGETS solution.
-
-The commit 7a6eb7c34a78 went in 4 years ago? DO we have a better
-story for the LLVM tool chain to get rid of skipping bpf and sched_ext?
-
-Running make -C tools/testing/selftests/bpf/ gave me the following error.
-Does this mean we still can't include bpf in default run?
-
-make -C tools/testing/selftests/bpf/
-make: Entering directory '/linux/linux_6.12/tools/testing/selftests/bpf'
-
-Auto-detecting system features:
-...                                    llvm: [ OFF ]
-
-
-   GEN     /linux/linux_6.12/tools/testing/selftests/bpf/tools/build/bpftool/vmlinux.h
-libbpf: failed to find '.BTF' ELF section in /linux/linux_6.12/vmlinux
-Error: failed to load BTF from /linux/linux_6.12/vmlinux: No data available
-make[1]: *** [Makefile:209: /linux/linux_6.12/tools/testing/selftests/bpf/tools/build/bpftool/vmlinux.h] Error 195
-make[1]: *** Deleting file '/linux/linux_6.12/tools/testing/selftests/bpf/tools/build/bpftool/vmlinux.h'
-make: *** [Makefile:369: /linux/linux_6.12/tools/testing/selftests/bpf/tools/sbin/bpftool] Error 2
-make: Leaving directory '/linux/linux_6.12/tools/testing/selftests/bpf'
-
-> This commit provider a way: If a user has specified a single TARGETS,
-> it indicates an expectation to run the specified target, and thus the
-> object should not be skipped.
-> 
-> Another way is to change TARGETS to DEFAULT_TARGETS in the Makefile and
-> then check if the user specified TARGETS and decide whether filter or not,
-> though this approach requires too many modifications.
-> Signed-off-by: Jiayuan Chen <mrpre@163.com>
-> ---
->   tools/testing/selftests/Makefile | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 363d031a16f7..d76c1781ec09 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -116,7 +116,7 @@ TARGETS += vDSO
->   TARGETS += mm
->   TARGETS += x86
->   TARGETS += zram
-> -#Please keep the TARGETS list alphabetically sorted
-> +# Please keep the TARGETS list alphabetically sorted
->   # Run "make quicktest=1 run_tests" or
->   # "make quicktest=1 kselftest" from top level Makefile
->   
-> @@ -132,12 +132,15 @@ endif
->   
->   # User can optionally provide a TARGETS skiplist. By default we skip
->   # targets using BPF since it has cutting edge build time dependencies
-> -# which require more effort to install.
-> +# If user provide custom TARGETS, we just ignore SKIP_TARGETS so that
-> +# user can easy to test single target which defined in SKIP_TARGETS
->   SKIP_TARGETS ?= bpf sched_ext
->   ifneq ($(SKIP_TARGETS),)
-> +ifneq ($(words $(TARGETS)), 1)
->   	TMP := $(filter-out $(SKIP_TARGETS), $(TARGETS))
->   	override TARGETS := $(TMP)
->   endif
-> +endif
->   
->   # User can set FORCE_TARGETS to 1 to require all targets to be successfully
->   # built; make will fail if any of the targets cannot be built. If
-> 
-> base-commit: 67b6d342fb6d5abfbeb71e0f23141b9b96cf7bb1
-
-thanks,
--- Shuah
 
