@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-22490-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22491-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 869019D6FFF
-	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Nov 2024 14:24:23 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D93D9D6FA0
+	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Nov 2024 14:15:24 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACF27B2F6CB
-	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Nov 2024 13:09:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C892161F4F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Nov 2024 13:15:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FFAC1EBA1C;
-	Sun, 24 Nov 2024 12:50:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 196141F709A;
+	Sun, 24 Nov 2024 12:52:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gL7Dq8XB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bad/w3Bx"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 006A31EBA18;
-	Sun, 24 Nov 2024 12:50:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E12EF1F7094;
+	Sun, 24 Nov 2024 12:52:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732452645; cv=none; b=uPma16JVNqu1fqr1YYit7tcQBlhjYaKcIBEXrzPc5yQ9Yul1tXEvhsQCDkvhZkVmyidNCYC4rnhPibW1zxLeugs5twIEhOd/ivvTNjI9abSjxwukkEJvdWOYBGLoqRU6bCZDzTTwwAU+RnxAf2QO+Nnn4DhpafTD+8ceYMhu0+g=
+	t=1732452751; cv=none; b=TjIoNALpSDeUJO9fcZPJCM5YE4G9h2MDJtgjkbfPkcYfvCkKGbgC1F6QSiJ4Mrg0LbYbR08bfuT8QA/YudtGOSLERTFzeGgrtSc3W/ocUUj2j6r+rWY+xShE7AegBcrnzxuD0VGLSsWeAi3dQ90RirvTUnzAOZPE9wilg42B80k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732452645; c=relaxed/simple;
+	s=arc-20240116; t=1732452751; c=relaxed/simple;
 	bh=kCm1YCI6V48RKknhFTwB8m8Gp1l72xVFaMsZCoH7Bus=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lDAvkdB3tje6tDZq9E78dnAVBqczBNyD7+2ADGbUVRFZVK+QCc/HKtoqKXZB6Q5mNXSlTuYzcaBlU9umB2CNcN0xcO5kJ2ZZd1I0+V/xQFFS8hmzdl5uCWRZ4BREcAq2rAErbpKZewMJF4sJ4y4SZTs2GOF/P7cFis7p9WPVd5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gL7Dq8XB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9BF3C4CED3;
-	Sun, 24 Nov 2024 12:50:43 +0000 (UTC)
+	 MIME-Version:Content-Type; b=cxAN2A/LjpaZtdBrGDzzmidO9ymRBr0OIVT01Ph+wgSRyGINeQovodwy3Nqajyu510IFf1b+MVqKLtVPsZvFYHV2YBb/HU+TtoaIqdI/75MairnXRTO/unx3n46H923zrGVySNAjIKe34InHLeelfjQjCe+bQguvgokGdS8hPP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bad/w3Bx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9A70C4CED3;
+	Sun, 24 Nov 2024 12:52:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732452644;
+	s=k20201202; t=1732452750;
 	bh=kCm1YCI6V48RKknhFTwB8m8Gp1l72xVFaMsZCoH7Bus=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gL7Dq8XBB553xeNqFZH87O2ol0R7c7zUE4SwmMRlYy7gL4p8JBqjL5JC2kpzh2hIS
-	 h3g0lXVRcnAhjbfPrmdlUFjeF9MDa0HfHUDPMAb1hiMwiXjHeM6ZxrHOWgoZUhyB5p
-	 RLw1qTLudMchO8J2ytzNCQte0urwGH8mNJeBJhEaak2b7W/gkO9/lk+Pf4x1NePJxu
-	 koGNCEztVDyIPiuCq0xdTXsH/pUrg1fiIJSRqYN9NeNqMawK3uOwINW7BJGEPASDyn
-	 Q1bnmRAIzKnWOO02zoFImMN7/cvVvdAAzyTLe0GKWjtBEwp183jnRY7WBefkYVMRzN
-	 8qKeG1BPTRKHw==
+	b=Bad/w3Bxr0tTJ6iwTIe1f2iAB5K3uOJOM2cDYzp8SSnhKjVJJBpheEv7V7lk3JQ8/
+	 M/wvudGgr01AX03eA5ZEW4Cg1pXzN34/7hgntQ11bsfYhxvjNNb5oLoV7esE9pTNNF
+	 iqljnXA8pbbbJ4yd0GzA6oSx6hs+sLSH6auTgQhI4ZBjkFviZ0td0CzmEQbsoqmYPm
+	 xB0t9Kebh1sPSFWtUTcgOLmRzCzWwEmgPR9ChsHYg7Tnj9+jAB8laSaA5VZatiLkiX
+	 mkpT70xcR04pC6wrtmKc1lnw5nalbtS/ZcvQ/pcHfW2JBGFQI90psAheGYZo/YOieG
+	 2HwsXQ1uRaHhw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -51,12 +51,12 @@ Cc: Reinette Chatre <reinette.chatre@intel.com>,
 	fenghua.yu@intel.com,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 20/23] selftests/resctrl: Protect against array overflow when reading strings
-Date: Sun, 24 Nov 2024 07:48:31 -0500
-Message-ID: <20241124124919.3338752-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.11 18/20] selftests/resctrl: Protect against array overflow when reading strings
+Date: Sun, 24 Nov 2024 07:50:48 -0500
+Message-ID: <20241124125124.3339648-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241124124919.3338752-1-sashal@kernel.org>
-References: <20241124124919.3338752-1-sashal@kernel.org>
+In-Reply-To: <20241124125124.3339648-1-sashal@kernel.org>
+References: <20241124125124.3339648-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -66,7 +66,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.1
+X-stable-base: Linux 6.11.10
 Content-Transfer-Encoding: 8bit
 
 From: Reinette Chatre <reinette.chatre@intel.com>
