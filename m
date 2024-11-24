@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-22471-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 280CB9D6BE1
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Nov 2024 23:52:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39F8C9D6C54
+	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Nov 2024 01:27:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CAB52817B1
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Nov 2024 22:52:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B66DB21593
+	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Nov 2024 00:27:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 080F61A2658;
-	Sat, 23 Nov 2024 22:52:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDA202F37;
+	Sun, 24 Nov 2024 00:27:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="GOhaNMa2"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="EXlr9kgU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77130199384
-	for <linux-kselftest@vger.kernel.org>; Sat, 23 Nov 2024 22:52:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B070F646
+	for <linux-kselftest@vger.kernel.org>; Sun, 24 Nov 2024 00:27:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732402349; cv=none; b=iGvwD/UoE8cvJrDHAM3CDS0bBpGg+WPkzUpl2L/fzQHVohdp1o76HL75lBkufZS4mwaM6HCaRbkxLBuQSleW2NKzCecG/cGKXPtoQL1oXf94YFaoRqYEUk2isASF3orVwcb/87OC7MVVZVJpUpeY5/WbZoI8s9gW7GrAup7yC6g=
+	t=1732408062; cv=none; b=MKMZLgyQB/HdnV3O22MH65ydDiSiDDQKgjNUQxEJk9DxZhDN4CuiCwZLzZqtITWc4N6uqZkdvQwf4UnJY3K7LJwWF1Et5tCCJcwARG4YMuzUE/qP6iDKt15OSQ2lt0keEQrC9EhYQ0iYjrbv8pdWnH2xtBbb67SOPzhNlw7WqzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732402349; c=relaxed/simple;
-	bh=p7MNL6jHpcuyZWGLrv3Z1MDrEieaZfIQ46HRxJh697w=;
+	s=arc-20240116; t=1732408062; c=relaxed/simple;
+	bh=UceutF7DoxVjBYZ3e0gxKdLIfbkjFGf1TbIBku99vLU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mo1NzdD9gxVehWbHigC3oylvxRIYeBzNu5oyvegRLciON3RjqA3RUAGkJJE4Go9HK7ZQNDJx/ozwgoGVBEreSREQ8BH1bLbkrY/6rO+jeeHeLHh74NH0V4+obsG4IMbyKtCZoVFI2VXi4IKH0kmXzeV1nZmzFGNdrRaEXplQVKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=GOhaNMa2; arc=none smtp.client-ip=209.85.128.43
+	 In-Reply-To:Content-Type; b=q4WOhm+RRJvjVk/KboGbOW+Nee9RGSloH8Ti2K2h7IDqdL+Opkkwrioty/VEGt1sXoc+l1tb9evX9wBOH36N2rlr5LLgPSBvzkToPoMATQSTixcSfc5W7+QXbS3XfOo2BRUed93er8jhrZE8qYgn6GxKnTnTIc7pWyef62pXS+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=EXlr9kgU; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-431616c23b5so18099025e9.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 23 Nov 2024 14:52:27 -0800 (PST)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-432d866f70fso30274005e9.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 23 Nov 2024 16:27:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1732402346; x=1733007146; darn=vger.kernel.org;
+        d=openvpn.net; s=google; t=1732408059; x=1733012859; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=WvDNxvRaOiW7T1LuR+Csr/bQz5Vx+iz53NLwjHy84wI=;
-        b=GOhaNMa2vOUOBM4cEJBM4QxQlCr/5TLvmZOXj8oBAbjk2gxp6ld2bZ0TVztK36uNJ9
-         t1KU2UkEVmic5+BaSDElcyAFMTjrUVSYRP34AdO6U3gfm5+Pm/BLv7ZEeqVkENk7Qm6Q
-         rfyVAWjnIb8T+rt1GwJBF1e8w3URCYLXwajihRMK4Hxt6rxCbVYAL3+30n3FC41AK2AF
-         w1+NGpG2gG/YMORtsR9swtJb9cMccPnx5bdKD9UURmt6EdXd4S1pCrqxJOHSofaXdugE
-         7Y+uiWUqaM6mtT5ZLqV8Oo0FJGFijd2x34Vir6sf2tUQykwnheDx6GoAjnnuQ7R2kPKA
-         Y4iw==
+        bh=p874L0yJna1yTwg+JzSlBIKXzs4oBM24PhE71VIgogo=;
+        b=EXlr9kgUwOemJYzBcKo8jYN3R91UkXWGRXJ8aXYXp8nTpAxHM06ojGC4ICKjyLIil+
+         SVyJmE1JP6GTC+FGly2IgFTXZ7t73TobTmJnprZFZxZHbEVi9IBYGsCUB8Xn+GyROOQk
+         xvjvyN1xiNJ+LM6jJf2432VBrKBiwBH15nfWY9qjwqglE4hHmSRQMcf9CznRqTAk+l4Y
+         nAiz6rpqY5seHxNOEXaZ0emIT/Ag8JizmR5F7ikr5bqmnYB6K8vMB0H7Wkuay46XkjFw
+         /ERsNC57d0QH25cPb2TdbWalMpkd6bxl9oOs9d4r6nCO97Rfu+A9dOTdIfBs+Zo58M6c
+         zNiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732402346; x=1733007146;
+        d=1e100.net; s=20230601; t=1732408059; x=1733012859;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WvDNxvRaOiW7T1LuR+Csr/bQz5Vx+iz53NLwjHy84wI=;
-        b=qAjwgtJfpuUHDEFDYhbHHZ8R1u9DhK6P1+mCApOdabs0zXAhf8pr5nQYIczmK5DjnM
-         r84GzO0zSdmBjDsrrTorFdzUfWPJNDn8e4rOBIjDwGjOQX4cz0mTpAI8HMQrSPbnq0cJ
-         QaM0W8LLrN2yrVLwcB2/an9/I3/ogTwmpf8fSHtyRr5f659MgbJRbX55iBddAAjwJJrR
-         6wOiMUbYXXPyPOjJAX/vZUpXXcPwq2Lou0xMo3Pvvm9m15o6HdB/Sxzn9P2Lfv3rSSGI
-         7grOHu+XhL7w8H7HAbgSRPfZj9cXHLyiLt7hoYyULiEDNArsQb2zhBXTQtP103dPgU3n
-         kNWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWCC4a4sjxdc4RGD1Vmwb3R2E1H/wEWET5dWIvDyvYa2HIjRzlTHYGdqZFyiZJ5rXGmpn8MjaPHIUHEWpOGKwA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxvGCXyUF8Npu46d7xMplXx2HGY2r0bgMS34CXNzc6ZwJQL+LU
-	pWoPMbGMNgv1/tAmq3zb4HCpNyP681iGltU8Lx1rcJ82mG97FV90EoLvUqV5d0E=
-X-Gm-Gg: ASbGnct2UcrfHfqdxmtQbUrzouZbAsKKWIm8pDSWyXyZs85pAG6FFNrPTk1aNQ1X3Ct
-	5jTlQgecv4h5dfAk+Cv1rz1SW1a//DAVTeEDtog3FcGNKBITCuhO9M3jD5Bpc+pjN8jisKHpVGG
-	u/05irsbd73S8fZXzREDajgAhP3f4AiDFlyS2LphlssN99wOIQQupBKf86IWpH/v697GRQ+2Fzi
-	NEXDWiQSPvXTLYGMr2BLfI+gFTi7PhtPHhx56CfLJIBP5bJCCMQxCQ7ZKj2jrOkzvd3oGfZaf2W
-	34cgcxZbHXAY
-X-Google-Smtp-Source: AGHT+IHZhT3iHQCXJ0WEd9bgGVULidIeHpvRqU589plXhJqUJCgaEmukWn+aX9MlMeLK3iTsbr0cvw==
-X-Received: by 2002:a7b:cb4e:0:b0:431:416e:2603 with SMTP id 5b1f17b1804b1-433c5c8895amr104872065e9.3.1732402345751;
-        Sat, 23 Nov 2024 14:52:25 -0800 (PST)
+        bh=p874L0yJna1yTwg+JzSlBIKXzs4oBM24PhE71VIgogo=;
+        b=jL1fFQiS6R34ZWKPPZeTsKFfryG1jq6FjJWZgMENqZVPdqz3/OjChNpLY+mFnb5rxX
+         vehLAmcvO9YOXiPfcJEcmaGg794GMRJICpyJL3zWXusU2YJ3ta8ZLr4stCjvQoaKwmEb
+         u3N5dK7m8u7uJopCisFOU/DRLMLpZWOpH3v36qPBi2USrWLcgH/jD6ZnWE9yhdnIaZZF
+         NmKpvJKeX68oOjG2HiTgNPSfbMEn7cLsD2kPxLy5in+8UcQqhc7jphScov7neTAQphTf
+         wGP7kxExVXvrjb6jiW/qz/3yvztbK0/N63+DkJoaPzOUgifT/prV7n8R0FeJMozn1K9c
+         dZng==
+X-Forwarded-Encrypted: i=1; AJvYcCVnqt4ovHIr3Ks5mJoL5OtfpR4660BWErwtYKIM1/nNFLsEbdJPuThgb0hSROSVu/WtmWUg0TFlZl0L4xNMx0E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz17Vuyz71V92p3kqrkGX2E37WWihgXL/Tis5wKjnTAGqM/QhcU
+	97BNii0slpo7otLoOERCzIWyXIG2Et4JGN+xZ7uAfV7MTkYezjLO5l2H1b6eugg=
+X-Gm-Gg: ASbGncsuI9fqJud4VGwjNU0Z0fwns/dOOjySm67WpmqpJfJTTMVLZMV92RsoYf/yMpS
+	M9aOqDQsuhzJ+R6zutZyj3xCRshzgja5MzRER0T0SymZcYTig3gNHjNkpWRwGijvnfrFllXOVFa
+	dATOdScrmWSuaJrr+942V6nMAr7DU22NnJ/1F+I32EnX5K47jBtR3ZbAzmpLP38EXs03nxOfjNl
+	2E8uiMLlZTNkYFwfxWwLpcbgbWixgkwfzzKuZmKax/aJt/fxsGku7Qcl9QFffxOodR2F0DRtUxy
+	dljNZqX/VZes
+X-Google-Smtp-Source: AGHT+IE7wRuuRmej8hhyu+zKEcDBltvxR/ENpI81tucKM6kppqP1lK7UzFy4zWjDIy3hqW9iB5GiZA==
+X-Received: by 2002:a05:6000:1541:b0:382:4145:d3a9 with SMTP id ffacd0b85a97d-38260b69577mr5767591f8f.25.1732408058879;
+        Sat, 23 Nov 2024 16:27:38 -0800 (PST)
 Received: from ?IPV6:2001:67c:2fbc:1:bc8e:433b:87c2:d22e? ([2001:67c:2fbc:1:bc8e:433b:87c2:d22e])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-433cde9800fsm73761805e9.40.2024.11.23.14.52.22
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3825fafe207sm6493996f8f.36.2024.11.23.16.27.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Nov 2024 14:52:24 -0800 (PST)
-Message-ID: <c9185b5b-942d-4927-8171-f3460619aed1@openvpn.net>
-Date: Sat, 23 Nov 2024 23:52:54 +0100
+        Sat, 23 Nov 2024 16:27:37 -0800 (PST)
+Message-ID: <df0e2597-1f7b-4a72-b607-ab2cbd03c79b@openvpn.net>
+Date: Sun, 24 Nov 2024 01:28:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,20 +82,17 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 05/23] ovpn: keep carrier always on
-To: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
- sd@queasysnail.net, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v11 15/23] ovpn: implement keepalive mechanism
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+ Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
- <20241029-b4-ovpn-v11-5-de4698c73a25@openvpn.net>
- <6a171cc9-a052-452e-8b3d-273e5b46dae5@gmail.com>
- <89ae26a2-0a09-4758-989e-8f45a707a41b@openvpn.net>
- <e2caab8a-343e-4728-b5a7-b167f05c9bb9@gmail.com>
- <c933e2bf-b19c-4f8b-b2c0-44de50eb4141@openvpn.net>
- <1cf97615-a38d-48c3-9e23-4ba82012b32d@gmail.com>
+ <20241029-b4-ovpn-v11-15-de4698c73a25@openvpn.net> <ZypfnyfToF1b6YAZ@hog>
+ <189dbeea-127a-47e8-84f8-c8cf1cc03536@openvpn.net>
+ <5eaf74fb-ad13-4371-95b8-7a5f1f3a9cda@openvpn.net> <Z0CuvYH_ZZMYtDcW@hog>
 Content-Language: en-US
 From: Antonio Quartulli <antonio@openvpn.net>
 Autocrypt: addr=antonio@openvpn.net; keydata=
@@ -138,188 +135,62 @@ Autocrypt: addr=antonio@openvpn.net; keydata=
  BnRX9nFx9kPSO42TkFK55Dr5EDeBO3v33recscuB8VVN5xvh0GV57Qre+9sJrEq7Es9W609a
  +M0yRJWJEjFnMa/jsGZ+QyLD5QTL6SGuZ9gKI3W1SfFZOzV7hHsxPTZ6
 Organization: OpenVPN Inc.
-In-Reply-To: <1cf97615-a38d-48c3-9e23-4ba82012b32d@gmail.com>
+In-Reply-To: <Z0CuvYH_ZZMYtDcW@hog>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 23/11/2024 23:25, Sergey Ryazanov wrote:
-> On 21.11.2024 23:17, Antonio Quartulli wrote:
->> On 20/11/2024 23:56, Sergey Ryazanov wrote:
->>> On 15.11.2024 16:13, Antonio Quartulli wrote:
->>>> On 09/11/2024 02:11, Sergey Ryazanov wrote:
->>>>> On 29.10.2024 12:47, Antonio Quartulli wrote:
->>>>>> An ovpn interface will keep carrier always on and let the user
->>>>>> decide when an interface should be considered disconnected.
->>>>>>
->>>>>> This way, even if an ovpn interface is not connected to any peer,
->>>>>> it can still retain all IPs and routes and thus prevent any data
->>>>>> leak.
->>>>>>
->>>>>> Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
->>>>>> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
->>>>>> ---
->>>>>>   drivers/net/ovpn/main.c | 7 +++++++
->>>>>>   1 file changed, 7 insertions(+)
->>>>>>
->>>>>> diff --git a/drivers/net/ovpn/main.c b/drivers/net/ovpn/main.c
->>>>>> index 
->>>>>> eead7677b8239eb3c48bb26ca95492d88512b8d4..eaa83a8662e4ac2c758201008268f9633643c0b6 100644
->>>>>> --- a/drivers/net/ovpn/main.c
->>>>>> +++ b/drivers/net/ovpn/main.c
->>>>>> @@ -31,6 +31,13 @@ static void ovpn_struct_free(struct net_device 
->>>>>> *net)
->>>>>>   static int ovpn_net_open(struct net_device *dev)
->>>>>>   {
->>>>>> +    /* ovpn keeps the carrier always on to avoid losing IP or route
->>>>>> +     * configuration upon disconnection. This way it can prevent 
->>>>>> leaks
->>>>>> +     * of traffic outside of the VPN tunnel.
->>>>>> +     * The user may override this behaviour by tearing down the 
->>>>>> interface
->>>>>> +     * manually.
->>>>>> +     */
->>>>>> +    netif_carrier_on(dev);
->>>>>
->>>>> If a user cares about the traffic leaking, then he can create a 
->>>>> blackhole route with huge metric:
->>>>>
->>>>> # ip route add blackhole default metric 10000
->>>>>
->>>>> Why the network interface should implicitly provide this 
->>>>> functionality? And on another hand, how a routing daemon can learn 
->>>>> a topology change without indication from the interface?
+On 22/11/2024 17:18, Sabrina Dubroca wrote:
+> 2024-11-22, 10:41:26 +0100, Antonio Quartulli wrote:
+>> On 12/11/2024 14:20, Antonio Quartulli wrote:
+>> [...]
+>>>>> +static int ovpn_peer_del_nolock(struct ovpn_peer *peer,
+>>>>> +                enum ovpn_del_peer_reason reason)
+>>>>> +{
+>>>>> +    switch (peer->ovpn->mode) {
+>>>>> +    case OVPN_MODE_MP:
 >>>>
->>>> This was discussed loooong ago with Andrew. Here my last response:
+>>>> I think it would be nice to add
 >>>>
->>>> https://lore.kernel.org/all/d896bbd8-2709-4834-a637- 
->>>> f982fc51fc57@openvpn.net/
->>>
->>> Thank you for sharing the link to the beginning of the conversation. 
->>> Till the moment we have 3 topics regarding the operational state 
->>> indication:
->>> 1. possible absence of a conception of running state,
->>> 2. influence on routing protocol implementations,
->>> 3. traffic leaking.
->>>
->>> As for conception of the running state, it should exists for 
->>> tunneling protocols with a state tracking. In this specific case, we 
->>> can assume interface running when it has configured peer with keys. 
->>> The protocol even has nice feature for the connection monitoring - 
->>> keepalive.
+>>>>       lockdep_assert_held(&peer->ovpn->peers->lock);
 >>
->> What about a device in MP mode? It doesn't make sense to turn the 
->> carrier off when the MP node has no peers connected.
->> At the same time I don't like having P2P and MP devices behaving 
->> differently in this regard.
-> 
-> MP with a single network interface is an endless headache. Indeed. On 
-> the other hand, penalizing P2P users just because protocol support MP 
-> doesn't look like a solution either.
-
-On the upper side, with "iroutes" implemented using the system routing 
-table, routing protocols will be able to detect new routes only when the 
-related client has connected. (The same for the disconnection)
-
-But this is a bit orthogonal compared to the oper state.
-
-> 
->> Therefore keeping the carrier on seemed the most logical way forward 
->> (at least for now - we can still come back to this once we have 
->> something smarter to implement).
-> 
-> It was shown above how to distinguish between running and non-running 
-> cases.
-> 
-> If an author doesn't want to implement operational state indication now, 
-> then I'm Ok with it. Not a big deal now. I just don't like the idea to 
-> promote the abuse of the running state indicator. Please see below.
-> 
->>> Routing protocols on one hand could benefit from the operational 
->>> state indication. On another hand, hello/hold timer values mentioned 
->>> in the documentation are comparable with default routing protocols 
->>> timers. So, actual improvement is debatable.
->>>
->>> Regarding the traffic leading, as I mentioned before, the blackhole 
->>> route or a firewall rule works better then implicit blackholing with 
->>> a non-running interface.
->>>
->>> Long story short, I agree that we might not need a real operational 
->>> state indication now. Still protecting from a traffic leaking is not 
->>> good enough justification.
+>> Sabrina, in other places I have used the sparse notation __must_hold()
+>> instead.
+>> Is there any preference in regards to lockdep vs sparse?
 >>
->> Well, it's the so called "persistent interface" concept in VPNs: leave 
->> everything as is, even if the connection is lost.
+>> I could switch them all to lockdep_assert_held if needed.
 > 
-> It's called routing framework abuse. The IP router will choose the route 
-> and the egress interface not because this route is a good option to 
-> deliver a packet, but because someone trick it.
-
-This is what the user wants.
-OpenVPN (userspace) will tear down the P2P interface upon disconnection, 
-assuming the --persist-tun option was not specified by the user.
-
-So the interface is gone in any case.
-
-By keeping the netcarrier on we are just ensuring that, if the user 
-wanted persist-tun, the iface is not actually making decisions on its own.
-
-With a tun interface this can be done, now you want to basically drop 
-this feature that existed for long time and break existing setups.
-
+> __must_hold has the advantage of being checked at compile time (though
+> I'm not sure it's that reliable [1]), so you don't need to run a test
+> that actually hits that particular code path.
 > 
-> At some circumstance, e.g. Android app, it could be the only way to 
-> prevent traffic leaking. But these special circumstances do not make 
-> solution generic and eligible for inclusion into the mainline code.
+> In this case I see lockdep_assert_held as mainly documenting that the
+> locking that makes ovpn_peer_del_nolock safe (as safe as
+> ovpn_peer_del) is provided by its caller. The splat for incorrect use
+> on debug kernels is a bonus. Sprinkling lockdep_assert_held all over
+> ovpn might be bloating the code too much, but I'm not opposed to
+> adding them if it helps.
+> 
+> [1] I ran sparse on drivers/net/ovpn/peer.c before/after removing the
+> locking from ovpn_peer_del and didn't get any warnings. sparse is good
+> to detect imbalances (function that locks without unlocking), but
+> maybe don't trust __must_hold for more than documenting expectations.
 
-Why not? We are not changing the general rule, but just defining a 
-specific behaviour for a specific driver.
-
-For example, I don't think a tun interface goes down when there is no 
-socket attached to it, still packets are just going to be blackhole'd in 
-that case. No?
+Same here. I didn't expect that.
+Then I think it's better to rely on lockdep_assert_held() for this kind 
+of assumptions.
 
 > 
->> I know it can be implemented in many other different ways..but I don't 
->> see a real problem with keeping this way.
-> 
-> At least routing protocols and network monitoring software will not be 
-> happy to see a dead interface pretending that it's still running. 
+> [note: if you end up merging ovpn->peers->lock with ovpn->lock as
+> we've discussed somewhere else, the locking around keepalive and
+> ovpn_peer_del becomes a bit less hairy]
 
-They won't know that the interface is disconnected, they will possibly 
-just see traffic being dropped.
+Yeah, this is happening.
 
-> Generally speaking, saying that interface is running, when module knows 
-> for sure that a packet can not be delivered is a user misguiding.
+Thanks a lot!
 
-Or a feature, wanted by the user.
+Regards,
 
 > 
->> A blackhole/firewall can still be added if the user prefers (and not 
->> use the persistent interface).
-> 
-> The solution with false-indication is not so reliable as it might look. 
-> Interface shutdown, inability of a user-space application to start, 
-> user-space application crash, user-space application restart, each of 
-> them will void the trick. Ergo, blackhole/firewall must be employed by a 
-> security concerned user. What makes the proposed feature odd.
-
-Yeah, this is what other VPN clients call "kill switch".
-Persist-tun is just one piece of the puzzle, yet important.
-
-> 
-> To summaries, I'm Ok if this change will be merged with a comment like 
-> "For future study" or "To be done" or "To be implemented". But a comment 
-> like "to prevent traffic leaking" or any other comment implying a 
-> "breakthrough security feature" will have a big NACK from my side.
-
-What if the comment redirects the user to --persist-tun option in order 
-to clarify the context and the wanted behaviour?
-
-Would that help?
-
-> 
-> -- 
-> Sergey
 
 -- 
 Antonio Quartulli
