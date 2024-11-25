@@ -1,78 +1,83 @@
-Return-Path: <linux-kselftest+bounces-22495-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22496-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83AC89D7B61
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 06:58:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD4739D7B9B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 07:41:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1131C1627FA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 05:58:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C66E1629DD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 06:41:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76B6912EBEA;
-	Mon, 25 Nov 2024 05:58:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D09B4155398;
+	Mon, 25 Nov 2024 06:41:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RWOa61CU"
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="kwXZUS22"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA71F376;
-	Mon, 25 Nov 2024 05:58:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EAC32500DE;
+	Mon, 25 Nov 2024 06:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.36.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732514294; cv=none; b=gtcjVm8UtSEVV6C4npXe+W12OxlKjRHr+qCVUMhPu+4IwqIQ365uXK8icsf++BIlcoGRqinCxVa/lVVEmaX1U9l2o0U2do89R95dckxU/Eewfw6gSCo06jeBU4mTXzczRgo+jwMxs1sNyYZJaNULapKoIKUAUqwUD95Mkr95exQ=
+	t=1732516864; cv=none; b=iqaldl7N6xjIdOnc4ehEE9fTqgVoiMRXrp8eX70OLeOr0XgbuzT40g74vrBKUuJaeneeNU9vPArViRmr7HwHl6sIw0AaJTneUiaQjYAAsr+md7cT+zqN8qP/81I6gZFr35zy8+kJPVeP2Oh/KjKMebNkU/XjTERtAlVNQ0tq7aE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732514294; c=relaxed/simple;
-	bh=Fuk7F5EN1TIxoq7wyjhMmvw7/e0hDH5BfzC2Yk/onvA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mCbbW6deiNlWaK4ZKzDMFBZmxLXtzjJWwXNE8qH40kGQf0Q7fyqjQC7oaHOBhPCh4Jjxgsl5hdwjqfyKFvU/otIPqcNlqX8TTSwQ7dix08R/DEKE4As6kukYYA2F3mQD2zdMTxd3x2bdRtN9sutnMbSDBvz+RZUOAKVRfb+n/kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RWOa61CU; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732514293; x=1764050293;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Fuk7F5EN1TIxoq7wyjhMmvw7/e0hDH5BfzC2Yk/onvA=;
-  b=RWOa61CUxz17sCpgdEaLYSl+bZPjpEAcBY854OwOqeJ6lwd7NLQ53Dxk
-   v3oo7QIl2f7M6yHIUn7oZ0t4Zgve6s0z3Jf80IzkD46X20+6l0qp7/4aw
-   5rzusEIVjkz+kXR3EPDu2uhL5CF8a0pOYoRIPe43+NDBAr5oixFUeYByN
-   CtIRKZ59+i60SMS05Ti8Xcil58zNDbpEF2aCfuL7ncX6bS8MOqp+TRulp
-   EGTdPXXUOXRPxUrFQWvF22qV+0YyfiRqYxjdz2l3X+NzhWlECut+T2/Km
-   9Whr642DlcpPgQRI+v8HRM9Wuxx9/NAQQzi5NCLoMq7cYqrf5lnGT+Bd+
-   A==;
-X-CSE-ConnectionGUID: 6c2PsIc5Tk6ycaVzI4QfBg==
-X-CSE-MsgGUID: QpyqrbCjTse68DQJHDSnUg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11266"; a="32543697"
-X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
-   d="scan'208";a="32543697"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2024 21:58:12 -0800
-X-CSE-ConnectionGUID: FdzviD5tSn6kysloyZ4QsA==
-X-CSE-MsgGUID: /svRNchCSzmU+nyrbUUfJQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
-   d="scan'208";a="91286439"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 24 Nov 2024 21:58:10 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tFS6p-0005vx-2c;
-	Mon, 25 Nov 2024 05:58:07 +0000
-Date: Mon, 25 Nov 2024 13:57:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Li Zhijian <lizhijian@fujitsu.com>, linux-kselftest@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, shuah@kernel.org,
-	linux-kernel@vger.kernel.org, Li Zhijian <lizhijian@fujitsu.com>,
+	s=arc-20240116; t=1732516864; c=relaxed/simple;
+	bh=R+Yrl/CXUyWG0r/M1xNa06uDoWkLDm2g2c0kpQJpGbM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=DvoYPpviVhYQfVWL2qd4DV5Ni9n4eIfJzPezUKOeuqH+TqE1yNwBF/nAOxN8DBr4fRAFxcU0by9/jnOmBBg39kAxMCGfzvgyfYXcyseRgDQDApJ9hziSQhC0EhVM7S0GvPlk6FzhYjtBpt1Wll4X20mFxZq0edlaKzep+4w06zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=kwXZUS22; arc=none smtp.client-ip=139.138.36.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
+  t=1732516862; x=1764052862;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=R+Yrl/CXUyWG0r/M1xNa06uDoWkLDm2g2c0kpQJpGbM=;
+  b=kwXZUS224cLkj9iK+n8tUFzpwz4z9gAMDGzK9iypAlraeyIfa43+g7FJ
+   FvcXtwNxttYGo5nUP2k33iNgnTgKPOf+KIa0DOwfnOZSvvcDJV7uoKg9I
+   2jEKqSq/+IvdVupIM6s68zVhZCBtaukCISRo5SlnWBjtGlIvd/iY7efbq
+   PKjQ6TG7reyWVglACFMMdB6DjHsl5thi6sBDksuMD3GG0zbT077wOTHGK
+   8k2tx/WoVOlUizBLdwq03xNAOsZg2ZYOax9Lwunzm7PG5ooq55Y5eZw+4
+   3m65gf1aZfPpDPihpD/KsA09sGQRX2knX579DWMp0gtiu+8UUwCCqnUWd
+   g==;
+X-CSE-ConnectionGUID: 62zT3ZINSAO/ng8aQdkjsg==
+X-CSE-MsgGUID: +sdIroXhQ/OGlMX/+iOz6w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11266"; a="169897267"
+X-IronPort-AV: E=Sophos;i="6.12,182,1728918000"; 
+   d="scan'208";a="169897267"
+Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
+  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 15:39:50 +0900
+Received: from oym-m3.gw.nic.fujitsu.com (oym-nat-oym-m3.gw.nic.fujitsu.com [192.168.87.60])
+	by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 8F63FD480B;
+	Mon, 25 Nov 2024 15:39:48 +0900 (JST)
+Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
+	by oym-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 1CF9FD5610;
+	Mon, 25 Nov 2024 15:39:48 +0900 (JST)
+Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
+	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id 87D952007CDDF;
+	Mon, 25 Nov 2024 15:39:47 +0900 (JST)
+Received: from iaas-rdma.. (unknown [10.167.135.44])
+	by edo.cn.fujitsu.com (Postfix) with ESMTP id 30A721A006C;
+	Mon, 25 Nov 2024 14:39:46 +0800 (CST)
+From: Li Zhijian <lizhijian@fujitsu.com>
+To: shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Li Zhijian <lizhijian@fujitsu.com>,
 	Donet Tom <donettom@linux.ibm.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH for-next v3] selftests/mm: Add a few missing gitignore
- files
-Message-ID: <202411251308.Vjm5MzVC-lkp@intel.com>
+	John Hubbard <jhubbard@nvidia.com>,
+	linux-mm@kvack.org,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH for-next v4] selftests/mm: Add a few missing gitignore files
+Date: Mon, 25 Nov 2024 14:40:36 +0800
+Message-ID: <20241125064036.413536-1-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20241122074612.1582161-1-lizhijian@fujitsu.com>
 References: <20241122074612.1582161-1-lizhijian@fujitsu.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -80,41 +85,74 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241122074612.1582161-1-lizhijian@fujitsu.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28818.005
+X-TM-AS-User-Approved-Sender: Yes
+X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28818.005
+X-TMASE-Result: 10--9.531200-10.000000
+X-TMASE-MatchedRID: HRm6PbbemxchiKpapiFQUqoXHZz/dXlxTJDl9FKHbrk/gf7afIrQU36y
+	x7OFE28Qe+eZU8eiw0ZakcaN0kYenAtnIcpCCGR9zfqlpbtmcWgrtx/8GWh5m1c/CedjlcvkLHN
+	FiwmJRq8xepHN1Gb+gpD1bY6uTBHE77IR1AIYrusqy6shOlK/42Iw13TP8dlT2vch1fMqmI8muo
+	4pNDIMvtvWTR/WiMl9HBunSHImBEL9rLNrEHKk3k7nLUqYrlslmOb/jZZZ8UIGWfDd0b0zMaPFj
+	JEFr+olwXCBO/GKkVqOhzOa6g8KrW0MLeV6pd59t5Zx1OwHJens0JYSBlfWTr5ameoPLbalQvt6
+	QaxTfxs=
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
-Hi Li,
+Compiled binary files should be added to .gitignore
+'git status' complains:
+   Untracked files:
+   (use "git add <file>..." to include in what will be committed)
+         mm/hugetlb_dio
+         mm/pkey_sighandler_tests_32
+         mm/pkey_sighandler_tests_64
 
-kernel test robot noticed the following build warnings:
+Cc: Donet Tom <donettom@linux.ibm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+---
+Cc: linux-mm@kvack.org
+---
 
-[auto build test WARNING on v6.12]
-[cannot apply to akpm-mm/mm-everything linus/master next-20241122]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Hey John,
+I added your Reviewed-by tag in this revision which have a minor
+updates. Feel free to let me know if you feel this is unsuitable.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Li-Zhijian/selftests-mm-Add-a-few-missing-gitignore-files/20241125-095645
-base:   v6.12
-patch link:    https://lore.kernel.org/r/20241122074612.1582161-1-lizhijian%40fujitsu.com
-patch subject: [PATCH for-next v3] selftests/mm: Add a few missing gitignore files
-config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20241125/202411251308.Vjm5MzVC-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241125/202411251308.Vjm5MzVC-lkp@intel.com/reproduce)
+Hello,
+Cover letter is here.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411251308.Vjm5MzVC-lkp@intel.com/
+This patch set aims to make 'git status' clear after 'make' and 'make
+run_tests' for kselftests.
+---
+V4:
 
-All warnings (new ones prefixed by >>):
+  Use the exact filename to fix warning reported by lkp@intel.com
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202411251308.Vjm5MzVC-lkp@intel.com/
+V3:
+   nothing change, just resend it
+   (This .gitignore have not sorted, so I appended new files to the end)
+V2:
+  split as seperate patch from a small one [0]
+  [0] https://lore.kernel.org/linux-kselftest/20241015010817.453539-1-lizhijian@fujitsu.com/
+---
+ tools/testing/selftests/mm/.gitignore | 3 +++
+ 1 file changed, 3 insertions(+)
 
-   tools/testing/selftests/arm64/tags/.gitignore: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/arm64/tags/Makefile: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/arm64/tags/tags_test.c: warning: ignored by one of the .gitignore files
->> tools/testing/selftests/mm/pkey_sighandler_tests.c: warning: ignored by one of the .gitignore files
-
+diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
+index da030b43e43b..689bbd520296 100644
+--- a/tools/testing/selftests/mm/.gitignore
++++ b/tools/testing/selftests/mm/.gitignore
+@@ -51,3 +51,6 @@ hugetlb_madv_vs_map
+ mseal_test
+ seal_elf
+ droppable
++hugetlb_dio
++pkey_sighandler_tests_32
++pkey_sighandler_tests_64
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.44.0
+
 
