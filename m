@@ -1,238 +1,342 @@
-Return-Path: <linux-kselftest+bounces-22512-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22513-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FE5C9D8D79
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 21:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 78A1B9D8E08
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 22:31:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9267B16A916
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 20:38:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E107161684
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 21:31:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DEE31C1F12;
-	Mon, 25 Nov 2024 20:38:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3648B190678;
+	Mon, 25 Nov 2024 21:31:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="LZ88t0Do"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NZ2pstJC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2043.outbound.protection.outlook.com [40.107.243.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95BE6F06D;
-	Mon, 25 Nov 2024 20:38:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732567138; cv=fail; b=fkJ6U+iYn885VoZOCW7WD+V7lmb6xn2hOby/fNMaOo39SENFHk/htVFhs8whCEk0Q6ssIcf2ksUDYz/ZFZaN3NnhuYp/KT5piOdUSEZb+MxoifEdoCOJftlQfCbwgE/fn6mCX/2yojEp+UysFwECXwTtiUJEXya3ZYYl2oCgvUM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732567138; c=relaxed/simple;
-	bh=QKsvRS16dyf4BmIX0z0GYVMAnCjNwwRdIwjMl7x6MYQ=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=XHzzBIqi84M2wsrmQb5z7H6o1FzxV6NWU8x6pPN8iwDE9p29XhWDuP2iF9N+6vjTJvkk9LeVJCv33r/in8N2QXAxBFtfAyC9w2X3J0VjWkfHa5NepEqdwcm1W9DrtmjAaOyMxYPn4htVGnW+3LjNXWykRxyjgI7q1kbN1WUyXj8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=LZ88t0Do; arc=fail smtp.client-ip=40.107.243.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AyrZJotIEEDYpofqh28vLP42pFZ5dGSJ8VhhEi0TqjgVFY6gLJ4nsbS3dRealoS6ALZhSeEVyqjq8w3wXeAE13ewoPzs4rnYOkDgZxOaq8TAQzrUOACRTyCpbiAH1MbmcwQ6OIdKFOm41bmko74bd/jVoEU9/yMaBSI8Kf+9EYWNRXVRnUR+qnhVuA0Dczyo9TT0iYid7W6kwN0Cehjjn16V/pwtSrLW2n1pN66QAtJu4cgkVfSCac3ygLtlsHhKiwIdwdXWSGM0JHkN6JkA4HGoJBiCPygcfKFU3inElVlzXA+2rIMjESOWKnYaPLJZz4ZdBzqeN1/uXkhfk0/www==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hPgVx+084s7jSN9Wu+ApNvxZht9keamQd8VuLwMr1u0=;
- b=W4Oll8VCPTAri2anHK6CMdmOf02oJLPc+qzTaOTCFdrYiaz4ziCnIT17YStsV/vd+s7wlvYm32ymh55uZPYjPkbnVNuoOZH0icWYR+KkmB8KTpH6ij41BC1xZzHTM3ByXtHDtioSbV9n+Ktc8PY8JQxHe2onnt/wCE6i865XqrBTvIgKr99SpcMkBfBN5UmdB3Biu+LNURroxZjI3kPu659sdmCMxkKHSplq2XQg+QOeM6RnIUdIDa0OSL1gPNBJzAOIqGeFj4NnYLK9Z4tlLVy1+uRi5qVIgBu8T/rSA6Qmubj1ryge8dlvz5XCaM5sv0AS/RC005/EG+RAbB8NAw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hPgVx+084s7jSN9Wu+ApNvxZht9keamQd8VuLwMr1u0=;
- b=LZ88t0DobrgDodMzpsF9DiQdhY5QJiNk7i6cMZVCtCvogMrfxUOAA2pCZS3RbBvI7xtUz/BY67IWgvTFz+IX0nCilV+Ut5i9Xtj84YI5Pz5mo2KW5vePZqebrw1Zy+n6VU8A5nAFwSL00LWTSOphpA1VubaU7qaIxq62t4GjcQq0sKxt4skIPQafIlE6PFqT48htC19pLT4OIwb8h0bpP1+Z6ymRDZmJg/+dutBYdW2NBkNBv25kkjcwV4YH9f+3v0+oG/Pj6LbHw3lWOlFYq1G9IGiHNKTxjt+3fg8mx21hlTXcwFQeYYnE7yqWLHllUBrqklyOKo/e2kA3RPeOWg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SJ0PR12MB5469.namprd12.prod.outlook.com (2603:10b6:a03:37f::16)
- by DS7PR12MB6120.namprd12.prod.outlook.com (2603:10b6:8:98::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8182.20; Mon, 25 Nov 2024 20:38:50 +0000
-Received: from SJ0PR12MB5469.namprd12.prod.outlook.com
- ([fe80::ff21:d180:55f2:d0c0]) by SJ0PR12MB5469.namprd12.prod.outlook.com
- ([fe80::ff21:d180:55f2:d0c0%4]) with mapi id 15.20.8182.019; Mon, 25 Nov 2024
- 20:38:50 +0000
-Message-ID: <c737c8f8-5fd5-4acd-aba9-787009a8497c@nvidia.com>
-Date: Mon, 25 Nov 2024 12:38:49 -0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH for-next v4] selftests/mm: Add a few missing gitignore
- files
-To: Li Zhijian <lizhijian@fujitsu.com>, shuah@kernel.org,
- linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Donet Tom <donettom@linux.ibm.com>,
- Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
- kernel test robot <lkp@intel.com>
-References: <20241122074612.1582161-1-lizhijian@fujitsu.com>
- <20241125064036.413536-1-lizhijian@fujitsu.com>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20241125064036.413536-1-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR21CA0001.namprd21.prod.outlook.com
- (2603:10b6:a03:114::11) To SJ0PR12MB5469.namprd12.prod.outlook.com
- (2603:10b6:a03:37f::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADDFE188010;
+	Mon, 25 Nov 2024 21:31:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732570315; cv=none; b=orX4L6I0nYRpho7HlidaWem6L/tYrw2P2jFGWWRB4WTYF6J0d11y2YFIm9cAVDSuFT/1G0ZBWyAxihdKPwJKkNxRme0DVCrdIohQnq4MuPRhnuhoqoEZDE6fFSncHWcMqRbx1cIkSve/bWRG6jfsq92vvKju50JGJZ08W7vyyAc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732570315; c=relaxed/simple;
+	bh=im0QVT5ebvZOgOgFSGqUaGkJZeIzbfRlXAkN6QuHGxk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=O45sv3t5DFGZE4yFYcUyQBc/j2dIPuflz8bUDszZDhpOP7PVay9z5bTTKoN5I3n8cejy+SJpAfmqzsewUwsAFkbeDDPXeehrYC97tPRxUHn+098Fmy5hvLP6zJXNkO3wxsyYw0D3tRzwMAhOChT7hi6YGm/sffFnGSXwa4hYKJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NZ2pstJC; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-434a14d6bf4so9391685e9.1;
+        Mon, 25 Nov 2024 13:31:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732570308; x=1733175108; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gRmlTWuB/Al0wVwcWOcHFHSlcDl4F/Z5c99lepHjy/s=;
+        b=NZ2pstJCYVxjD8S43pnIrmy5rnIUoHEGfTWVtIaAwIK5Fs5uHBDFjXlz86AOaOAiG2
+         Uabi2RmCVacMeVp52oya8Eav9SwhYbdHeVxNU8S/oTdz+s7SqCNVA7Y9L9mpY0S3QxKI
+         Jkgg/g76AaMxZ9sHc/WlHXfqb4x+e2QVIACrs/4pL+5jWAqzWrvmB03jrmCBXk5EnPoJ
+         ULsHUpP1uXYdkZfKXgC3GwEtBh0wytS7a2Ik20jg8/lqZSc3cug+f0weyH4Ym7j2UXsO
+         6+vRsa7DZflyHKH2QHcajMTwQkXiO0hrjIBLI8usRRrlquj+SwzjMAeQGfOXwd3k9XdK
+         xy7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732570308; x=1733175108;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gRmlTWuB/Al0wVwcWOcHFHSlcDl4F/Z5c99lepHjy/s=;
+        b=qpWvr2bFG6EcYLFSJid2x/aByXh3XNTyvQNUilpTlHYcX+dteB0sdhyeaoz+3u70Th
+         qfVYGvJI/8RliKZydCeASZZ4RZILlNmFyM/EhlRUAWKOsFOM9qZUfDl8KdoB8z9UUXFn
+         0Ldh26ePpC+ZCUXOBAWyDmELeEGBzHd0cfjJQHSkqhmg+PvEDqVpBQFNqgzX+rty/JHs
+         /8YEMrM25u9qzxy2ZF/1BsAwdfr3Ov6ueATdK+9sbH5wCoNitvi6Aool5paAo8+cE8nS
+         mUJyr0XCvfAbro8+OsW978OV1iWFIv1yxXJBMbp0uSAvORPfx2f4ybqiKHQ/RSLRJkpL
+         +oPA==
+X-Forwarded-Encrypted: i=1; AJvYcCUTegyn6ywKpQlOrUBFqNA4DrlbBtLcwJE+G2n8Y1+WKKd1fyanszIHGqRK5UGrt800zulQGBCO@vger.kernel.org, AJvYcCUbvQqn/D7P7q9NvCDzT3RztREqq36Kk1geh8KJMtugRVrjmWpfwSC5bkliTHligafjzoLoqxovnKknFM0=@vger.kernel.org, AJvYcCUusOA1nEQ+DT7d4BV11215RimKCTYHNEZDlIuhJKEJh/Uq4hYwo15nG7zr9syQphc3SYEhqwdfQq4owKJiHUEk@vger.kernel.org
+X-Gm-Message-State: AOJu0YxlagOkrkasZjrjNkHRNNFKjtCmM7qezjONtz538FBRmS7DWoaX
+	XSfmR5aDR6Kms2GAxCtFf8n4FjmwiEVyxUfUVoZaqV3wgZMMRsxn
+X-Gm-Gg: ASbGncsuM+Zzz1E36LT1k8g0kdYUXBa+Ibaavqs6hvz14/iwMZ+n7iIabx3f7Unjef/
+	tpU2g2qcmzisW/q6Yyh+qE2rozwJ6T5KU/3DMVhWRaEkmh+wzxD4y3Qbyij0i3dg5GzNqkE2uk7
+	Ny2DbbPPIdD6ozyaH4N0+aXcuZqCKjguaWu85VecNn8z2Wb89bM6Cx7BRdShGgbVjoRF5RbtLQM
+	AX+G2lvujJ61iec/vzKcVVtttosZHMLodO39/jHDUsdixR67RI=
+X-Google-Smtp-Source: AGHT+IHIiT9/SGX/p32Re3pjTKXS16tvO7Vh4Jouuynpdb/7loXil7Frj9p3eb9BZ+YUz6OBqDDFxg==
+X-Received: by 2002:a05:600c:5254:b0:434:a169:6ff7 with SMTP id 5b1f17b1804b1-434a16972f7mr32204765e9.9.1732570307370;
+        Mon, 25 Nov 2024 13:31:47 -0800 (PST)
+Received: from [192.168.0.2] ([69.6.8.124])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3825fb2685csm11745568f8f.46.2024.11.25.13.31.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Nov 2024 13:31:46 -0800 (PST)
+Message-ID: <debdfbda-36f8-4c83-bb54-3b48af77e7bd@gmail.com>
+Date: Mon, 25 Nov 2024 23:32:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR12MB5469:EE_|DS7PR12MB6120:EE_
-X-MS-Office365-Filtering-Correlation-Id: 04fea983-adaa-446a-9aa4-08dd0d912b0d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|10070799003|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?aFpVVHlOTjF1aFVpRFBHSlZwQWFXUGNHK2lZa09rdFFBeGhzdFFhL1huV3dO?=
- =?utf-8?B?ZDhpWjhIRkNWSjVqakpYeGhERjhXZGJURFVEc1hUYTVHT0h1YmdaamxNeEJ3?=
- =?utf-8?B?V3h2eGZqbStTQXJKTmdqam5lYVVGVHRqc3I4T01kNjg2RXdKaC9telZJNmtn?=
- =?utf-8?B?a040RHljYk9ZTFp0V0wrZDVpSGZnUWdiRjBOa0hXbDRQSTFCTTljRHR0eEJB?=
- =?utf-8?B?bkkzb09EZ0JWQlR6VzNDYUlJT0h4NXY2Skt1bHh6ZC93TFNaVVhFMXdwM3Rn?=
- =?utf-8?B?Sks4MDdjV0dUQWdtcklockZFQ21qK2JVWjZKMFpNNmM2SVp5MDFGTUUwbGxG?=
- =?utf-8?B?WlZmT3RWWXFQVDZjRmdZc1lmR1dlZDFGaERtNDE2NTY3MlFpb0VxTWRiRHpK?=
- =?utf-8?B?djFabW1aVlA4RFZyTUJFa2lObmNaY0xMN1I4NnladERiRkVaa0M4YlpQdVlq?=
- =?utf-8?B?WHF4bjc2TFZDN2tuQ2hQNk41cHJ3cmQzNGJjL2pUOGJoQ01HWlpLWlNkSjdE?=
- =?utf-8?B?b1BLbGkyYjhGZmkvOVhjQ2FnejRmaGpMb0w4bTdySCtiWkhtTDd6WnhpK3FN?=
- =?utf-8?B?T0tnbGk0VmV4NEZLRWhXK3l0ZUw5VVEyem4rcnZlc1I5TzkrMGVzZExGWkJz?=
- =?utf-8?B?VDBkWTZjdnNtMGF0UFRrZnJJMFhZc29Gb1lqL3hycmMxdm5OcDBxenJaU0h3?=
- =?utf-8?B?QUZKbXNoVEE4VE8waWhFZE10U0J2aWxoVUNCK2VjSm9LUlFwSVpSOWhNdGcx?=
- =?utf-8?B?R1U4dFVXSXFqZU5wdlFLTTREVzNwRjJTK3dYVUczT1BBOVNDdWY1bHNGQzBz?=
- =?utf-8?B?L3M0VE5WREJBNDVjRFN5UTl2L3l6ZS95MFBzcUNjVlY3OWlRcnFON1FMQXlN?=
- =?utf-8?B?Q1J3K0tPUG9YVDByKzVZaTcwc2RXV090K0tXcThYOUE1RVMyQkJIamZrMnJH?=
- =?utf-8?B?TS9lcytjSWhwTHpQKzhrRVZsVEZCd0gvbHZnNnhKKzVWclFrN21sUEJabGkv?=
- =?utf-8?B?UEJUbUlMS0FmeFJHclZhbFBLR3NrSHgyMC85MFNNMXVvTVhzOWhoOFBWWExY?=
- =?utf-8?B?YTM3ZGJmaHBZR0czN2I3aXVHTm5sbHBLWFppQlladWt6MGVWQ2FCUlFER0F5?=
- =?utf-8?B?VkV2VDRQNEg3OGxnbFdxVTJpV0xMY3pFMUFCbFZqRi91ODBGWjVNQlZiUmNL?=
- =?utf-8?B?cGtmMlU3WVVyMkFORjNaYml6TUhyTXI5UllBNUJ1ZWlhUHEyLzRWdit1YWUx?=
- =?utf-8?B?QWRyQUZRQm5ieGZQY3JDM1N3WDJhS093WEJZT1BYajFCZkd3MEs1NUJldyt6?=
- =?utf-8?B?M29uMG5YQ1ZxN0tQc0dYNjkvcDY5UC9rWXZpbThIOWErU1pHQml2bkc3emVl?=
- =?utf-8?B?dHVlcWJXUnVHWlozaGdlNlhMcE41UE9ubVd5MkVya21kS3hTWXhCMjlTb2M3?=
- =?utf-8?B?bnhWMmRKUTQyRmlGYXhFQVVSejlXcGJEWHp5N0hjdmFxL0JpR1NKRmFVRmEx?=
- =?utf-8?B?OTVjQ0UwN08wSHhoYlRJS1NIYmgyUnNGaWd3cGtCcXJjM3A5c01rK3hBNWNL?=
- =?utf-8?B?MUhTcm0yMTN4alNTRlpFcVprNklRdDRON1BscDNaejJFNzhGQlpVUTFyWnV2?=
- =?utf-8?B?eHk4NjVjbzZtcTFSYlBxbFk5TVBPT2F6Z0g2dlFzK1NEd0h2QlZXUlN5YkNi?=
- =?utf-8?B?VlRMaUxHNEkzRmhsNkRzYjdOMzIxRXcvNjRYeW00ay92Q09pemRLK3BnQmxH?=
- =?utf-8?B?anF3bTBmbWdWN2kxdU5OeEFYbUsvZWl3Nnp4aHFsaTlMbWtvVGo3S2tjbEcy?=
- =?utf-8?Q?111ZWryB1kmKACaurNKZ3/Abw0xB29YEc4YP4=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR12MB5469.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(10070799003)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?M3N4Q2NidTJIc3VyVlhEbTVUenpLVEMzd2lBMmt1WllzaFk4MWhOakhhM0lI?=
- =?utf-8?B?cnFteTBNZnhQY0lDSmEvSXd2dzF1TDI0MS90eUFwNkZ0VnQ3UGx1VzVGMFBI?=
- =?utf-8?B?eTZlK2FLYnU2Mno4VXRnV09DUUNWM25wWWQwZnVWaTdwWVNmQ1RNaWl3a0hj?=
- =?utf-8?B?cnRVNDJyM1dDSFFaa3dISStaSDdSZTBCNk9RRkVyaVFUNHdkOTN6SGhLNzAx?=
- =?utf-8?B?ajgrZzVPaFdYRlhmNlVCZ2FtODVaNXJCWEl1VkYydlpqbmJXVWFlOXp6a0la?=
- =?utf-8?B?d0JkZ0hEZm5ObGtEZUhBdlIreVZFZW1zMkZlK1dOSVg2bkE3a2NObU85c1ZW?=
- =?utf-8?B?b3NPZnBXMHdKTmZ1WHlBRVZ3R1QzeUh6U1FhY0RIdFVWbkRpbmdqbGk3V2lD?=
- =?utf-8?B?ZUlvSmVXNlZkM0hRcGtUV1ZaMjhidFNWNXJUQXF4QU1NK0JFa0wxS0NqQ2RL?=
- =?utf-8?B?VjFaSStob0oreFRyL01BWFd5dmdEeXJhajVhR0NGSkUzUnhzKzRzR3RHUUdC?=
- =?utf-8?B?eERRcEh5QXdIR2Z5dVhhWlF6WklveXZGVk5sTldvSkViMFl1d2E0L05mT3BR?=
- =?utf-8?B?YlBRRklrMDAwSnN4VjVPYWV3L0VVaCtHVkVOYlF5Qjd2b1BqZVlMbFJwV3pV?=
- =?utf-8?B?OHJFeXFZdHNPZEZFRENaWENQVjJBcXhjUEpQM3lUMGV3R1RzTUxTU2FNQU5y?=
- =?utf-8?B?N1pzbm9ocEpsNEc0RVZHSlJTNlhtdjhsUGUvdTIyY3NOK0hmeUpXVmY0SHFW?=
- =?utf-8?B?VkNpaFJnZlNZOEhoWDg0eUd2RVNLdERGd2xrbW1yL0h6eG5nUmJwbXZxUXJu?=
- =?utf-8?B?ajMrMWovbUN5RlFCaGFJbTI5cHlpSFRMcndQdFBYa2RDY0laeUlXZHNtL2ts?=
- =?utf-8?B?b3U4MnFyM2J6eEJrNmJNZndOQ2Y2cjlYRHVYd0pGRFZWU2l3NHR3cWhaWUo3?=
- =?utf-8?B?TUQ3djkwTGNmaWluNE5TRkVhQkttZDhwbHA4d0RyQ01SK1AvTXljVzN5UDFQ?=
- =?utf-8?B?cFVyWkY1TEYwendZejF2MW02UVpiejJsVnZhaUEzSU96TE1ZMTdZeE95OEdW?=
- =?utf-8?B?S2RQWGZrS3RlVzNJVVJmOEVsMEgyRTJ2TE5aYjBja2hCWlRUWkNJUlRRZmlY?=
- =?utf-8?B?dG1CajZ6RVBSR1VXUmRuMEVML21yWVJqeGVuTCtHSTE2YzJhNm9TSFhoM0lK?=
- =?utf-8?B?RVdCeG4zZEQzZWl2RlF1Yi9GdCtSN3p0NUQ5YnR4NFd5Nm9SaWp3K1ZDb05E?=
- =?utf-8?B?S3F2c1NaN2tENFkxV1djNzVPZXBHY2N5SjBhTVE3NEhKd1NSVkd6YVdvOU1m?=
- =?utf-8?B?ZHMzVjVycDJPZEpmNHMwVU5ndUxMdVhPQlZNZWI3aWw5V2VDaWFINllLT1o4?=
- =?utf-8?B?Zy83YjY4NU1UOThHSU9FYlMxUzlMY1p3UlBrQlFtbjNJZEkrYjFnd2tPWnhY?=
- =?utf-8?B?Qm9UYXJsNjQvM0p4NWhLT0pyakZJNnhFVy8zYlc1alpBTk44aUx3bG94eVJN?=
- =?utf-8?B?cmdXTytyQU16akxYSUVCWVJJcDhmTHlFa2hBa2NKaVNRd0tuNlI4VjNIYTI2?=
- =?utf-8?B?cXVUekwzSHZTcDNJd2lIMFVxdE42VndGLzNmNW5iQ2xmYy90TlpMT3R2S2s4?=
- =?utf-8?B?STN2cWl0NHgzY0k2MUkzc0tVcExPbEFPd1NIdHRBSk1DbjBScGdZbmJpTWFj?=
- =?utf-8?B?VDFBaUFDT1YvY3VpRHhNTEdBbkFXRnhhc2VmUTFYRzBQczRaNXpJY1VBdHFB?=
- =?utf-8?B?ZGhhc1E2bjdvUTN1Z2tqS284aTFhMTdmSFZ0aTNKL2orL3poclp3QzU3UWJP?=
- =?utf-8?B?WFVNU0RBNEdjK3RabXRyaFlVQkR4SlBNN1JBMmdkOWxOSVhDblRscjdqdUtU?=
- =?utf-8?B?OXpQeUlna3JYTUtxRWZoM0lpcCttVGR2dHdyc250alc1YU9uNmRNdFdDeGpQ?=
- =?utf-8?B?SmsxK1pBVnFUN3hJVnRzRXBVZFFhdmlkU3pkZml1M2xoZ082eEhoTm1pVGFK?=
- =?utf-8?B?WFliMlVNQkxuWlFSaE1iRUx1aFdrNU43ZUMxekgrMXFtK2pJR2ZRakxtVkti?=
- =?utf-8?B?cjBrYjRHNGNmUVNrSFNldk5aa09OeC9PSHoyTTZGTExCUWltWlQ1Q1pyekk3?=
- =?utf-8?B?b2JQblpzWWlmaGJDZ0VreDB6bDJMa2FFa2tLbEx0SitrdnpRQW1Ba0hEUzB6?=
- =?utf-8?B?WXc9PQ==?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04fea983-adaa-446a-9aa4-08dd0d912b0d
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR12MB5469.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2024 20:38:50.1323
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IkOK+8vwOFs8582790p8zvET7P3jN/PCD2HSnueb1UWy4koDPg9w/SrQ4xDErpKpgzvfhbq6uu7++iEv3N1ucg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6120
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v11 05/23] ovpn: keep carrier always on
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: Andrew Lunn <andrew@lunn.ch>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ sd@queasysnail.net, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-5-de4698c73a25@openvpn.net>
+ <6a171cc9-a052-452e-8b3d-273e5b46dae5@gmail.com>
+ <89ae26a2-0a09-4758-989e-8f45a707a41b@openvpn.net>
+ <e2caab8a-343e-4728-b5a7-b167f05c9bb9@gmail.com>
+ <c933e2bf-b19c-4f8b-b2c0-44de50eb4141@openvpn.net>
+ <1cf97615-a38d-48c3-9e23-4ba82012b32d@gmail.com>
+ <c9185b5b-942d-4927-8171-f3460619aed1@openvpn.net>
+ <c62208a4-5396-4116-add1-4ffbc254a09d@gmail.com>
+ <cdbeecb8-e468-4925-9ab4-c77accf806b9@openvpn.net>
+Content-Language: en-US
+From: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+In-Reply-To: <cdbeecb8-e468-4925-9ab4-c77accf806b9@openvpn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 11/24/24 10:40 PM, Li Zhijian wrote:
-> Compiled binary files should be added to .gitignore
-> 'git status' complains:
->     Untracked files:
->     (use "git add <file>..." to include in what will be committed)
->           mm/hugetlb_dio
->           mm/pkey_sighandler_tests_32
->           mm/pkey_sighandler_tests_64
+On 25.11.2024 15:07, Antonio Quartulli wrote:
+> On 25/11/2024 03:26, Sergey Ryazanov wrote:
+>>> OpenVPN (userspace) will tear down the P2P interface upon 
+>>> disconnection, assuming the --persist-tun option was not specified by 
+>>> the user.
+>>>
+>>> So the interface is gone in any case.
+>>>
+>>> By keeping the netcarrier on we are just ensuring that, if the user 
+>>> wanted persist-tun, the iface is not actually making decisions on its 
+>>> own.
+>>
+>> Regarding a decision on its own. Ethernet interface going to the not- 
+>> running state upon lost of carrier from a switch. It's hardly could be 
+>> considered a decision of the interface. It's an indication of the fact.
+>>
+>> Similarly, beeping of UPS is not its decision to make user's life 
+>> miserable, it's the indication of the power line failure. I hope, at 
+>> least we are both agree on that a UPS should indicate the line failure.
 > 
-> Cc: Donet Tom <donettom@linux.ibm.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-> ---
-> Cc: linux-mm@kvack.org
-> ---
+> The answer is always "it depends".
 > 
-> Hey John,
-> I added your Reviewed-by tag in this revision which have a minor
-> updates. Feel free to let me know if you feel this is unsuitable.
+>> Back to the 'persist-tun' option. I checked the openvpn(8) man page. 
+>> It gives a reasonable hints to use this option to avoid negative 
+>> outcomes on internal openvpn process restart. E.g. in case of 
+>> privilege dropping. It servers the same purpose as 'persist-key'. And 
+>> there is no word regarding traffic leaking.
 > 
-> Hello,
-> Cover letter is here.
+> FTR, here is the text in the manpage:
 > 
-> This patch set aims to make 'git status' clear after 'make' and 'make
-> run_tests' for kselftests.
-> ---
-> V4:
+>         --persist-tun
+>                Don't close and reopen TUN/TAP device or run up/down 
+> scripts across SIGUSR1 or --ping-restart restarts.
 > 
->    Use the exact filename to fix warning reported by lkp@intel.com
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202411251308.Vjm5MzVC-lkp@intel.com/
-> V3:
->     nothing change, just resend it
->     (This .gitignore have not sorted, so I appended new files to the end)
-> V2:
->    split as seperate patch from a small one [0]
->    [0] https://lore.kernel.org/linux-kselftest/20241015010817.453539-1-lizhijian@fujitsu.com/
-> ---
->   tools/testing/selftests/mm/.gitignore | 3 +++
->   1 file changed, 3 insertions(+)
+>                SIGUSR1 is a restart signal similar to SIGHUP, but which 
+> offers finer-grained control over reset options.
 > 
-> diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-> index da030b43e43b..689bbd520296 100644
-> --- a/tools/testing/selftests/mm/.gitignore
-> +++ b/tools/testing/selftests/mm/.gitignore
-> @@ -51,3 +51,6 @@ hugetlb_madv_vs_map
->   mseal_test
->   seal_elf
->   droppable
-> +hugetlb_dio
-> +pkey_sighandler_tests_32
-> +pkey_sighandler_tests_64
+> 
+> SIGUSR1 is a session reconnection, not a process restart.
+> The manpage just indicates what happens at the low level when this 
+> option is provided.
 
-Makes sense. Yes, this still looks good.
+Still no mentions of the traffic leaking prevention. Is it?
 
-thanks,
--- 
-John Hubbard
+> The next question is: what is this useful for? Many things, among those 
+> there is the fact the interface will retain its configuration (i.e. IPs, 
+> routes, etc).
 
+This is unrelated to the correct operational state indication. Addresses 
+and routes are not reset in case of interface going to non-running state.
+
+>> If somebody have decided that this option gives the funny side-effect 
+>> and allows to cut the corners, then I cannot say anything but sorry.
+> 
+> Well, OpenVPN is more than 20 years old.
+
+More than 20 years of misguiding users has been duly noted :)
+
+Should I mention that RFC 1066 containing ifOperStatus definition was 
+issues 12 years before OpenVPN? And than it was updated with multiple 
+clarifications.
+
+> If a given API allows a specific user behaviour and had done so for 
+> those many years, changing it is still a user breakage. Not much we can do.
+> 
+>>> With a tun interface this can be done, now you want to basically drop 
+>>> this feature that existed for long time and break existing setups.
+>>
+>> Amicus Plato, sed magis amica veritas
+>>
+>> Yes, I don't want to see this interface misbehaviour advertised as a 
+>> security feature. I hope the previous email gives a detailed 
+>> explanation why.
+> 
+> Let's forget about the traffic leak mention and the "security feature". 
+> That comment was probably written in the middle of the night and I agree 
+> it gives a false sense or what is happening.
+> 
+>> If it's going to break existing setup, then end-users can be supported 
+>> with a changelog notice explaining how to properly address the risk of 
+>> the traffic leaking.
+> 
+> Nope, we can't just break existing user setups.
+> 
+>>>> At some circumstance, e.g. Android app, it could be the only way to 
+>>>> prevent traffic leaking. But these special circumstances do not make 
+>>>> solution generic and eligible for inclusion into the mainline code.
+>>>
+>>> Why not? We are not changing the general rule, but just defining a 
+>>> specific behaviour for a specific driver.
+>>
+>> Yeah. This patch is not changing the general rule. The patch breaks it 
+>> and the comment in the code makes proud of it. Looks like an old joke 
+>> that documented bug become a feature.
+> 
+> Like I said above, let's make the comment meaningful for the expected 
+> goal: implement persist-tun while leaving userspace the chance to decide 
+> what to do.
+> 
+>>
+>>  From a system administrator or a firmware developer perspective, the 
+>> proposed behaviour will look like inconsistency comparing to other 
+>> interface types. And this inconsistency requires to be addressed with 
+>> special configuration or a dedicated script in a worst case. And I 
+>> cannot see justified reason to make their life harder.
+> 
+> You can configure openvpn to bring the interface down when the 
+> connection is lost. Why do you say it requires extra scripting and such?
+
+Being administratively down and being operationally down are different 
+states.
+
+>>> For example, I don't think a tun interface goes down when there is no 
+>>> socket attached to it, still packets are just going to be blackhole'd 
+>>> in that case. No?
+>>
+>> Nope. Tun interface indeed will go into the non-running state on the 
+>> detach event. Moreover, the tun module supports running/non-running 
+>> indication change upon a command from userspace. But not every 
+>> userspace application feel a desire to implement it.
+> 
+> With 'ovpn' we basically want a similar effect: let userspace decide 
+> what to do depending on the configuration.
+> 
+>>
+>>>>> I know it can be implemented in many other different ways..but I 
+>>>>> don't see a real problem with keeping this way.
+>>>>
+>>>> At least routing protocols and network monitoring software will not 
+>>>> be happy to see a dead interface pretending that it's still running. 
+>>>
+>>> They won't know that the interface is disconnected, they will 
+>>> possibly just see traffic being dropped.
+>>
+>> Packet loss detection is quite complex operation. So yes, they are 
+>> indeed monitoring the interface operational state to warn operator as 
+>> soon as possible and take some automatic actions if we are talking 
+>> about routing protocols. Some sophisticated monitoring systems even 
+>> capable to generate events like 'link unstable' with higher severity 
+>> if they see interface operational state flapping in a short period of 
+>> time.
+>>
+>> So yeah, for these kinds of systems, proper operational state 
+>> indication is essential.
+> 
+> Again, if the user has not explicitly allowed the persistent behaviour, 
+> the interface will be brought down when a disconnection happens.
+> But if the user/administrator *wants* to avoid that, he has needs a 
+> chance to do that.
+> 
+> Otherwise people that needs this behaviour will just have to stick to 
+> using tun and the full userspace implementation.
+> 
+>>
+>>>> Generally speaking, saying that interface is running, when module 
+>>>> knows for sure that a packet can not be delivered is a user misguiding.
+>>>
+>>> Or a feature, wanted by the user.
+>>>
+>>>>> A blackhole/firewall can still be added if the user prefers (and 
+>>>>> not use the persistent interface).
+>>>>
+>>>> The solution with false-indication is not so reliable as it might 
+>>>> look. Interface shutdown, inability of a user-space application to 
+>>>> start, user-space application crash, user-space application restart, 
+>>>> each of them will void the trick. Ergo, blackhole/firewall must be 
+>>>> employed by a security concerned user. What makes the proposed 
+>>>> feature odd.
+>>>
+>>> Yeah, this is what other VPN clients call "kill switch".
+>>> Persist-tun is just one piece of the puzzle, yet important.
+>>>
+>>>>
+>>>> To summaries, I'm Ok if this change will be merged with a comment 
+>>>> like "For future study" or "To be done" or "To be implemented". But 
+>>>> a comment like "to prevent traffic leaking" or any other comment 
+>>>> implying a "breakthrough security feature" will have a big NACK from 
+>>>> my side.
+>>>
+>>> What if the comment redirects the user to --persist-tun option in 
+>>> order to clarify the context and the wanted behaviour?
+>>>
+>>> Would that help?
+>>
+>> Nope. As it was mentioned above, the are no indication that 'persist- 
+>> tun' is a 'security' feature even in the current openvpn documentation.
+>>
+> 
+> Like I mentioned above, I agree we should get rid of that sentence.
+> The security feature must be implemented by means of extra tools, just 
+> the interface staying up is not enough.
+> 
+>> If the openvpn developers want to keep implementation bug-to-bug 
+>> compatible, then feel free to configure the blackhole route on behalf 
+>> of end-user by means of the userspace daemon. Nobody will mind.
+> 
+> bug-to-bug compatible? What do you mean?
+
+http://www.jargon.net/jargonfile/b/bug-compatible.html
+
+With that difference, the local operational state indication does not 
+break compatibility between hosts.
+
+> Having userspace configure a blackhole route is something that can be 
+> considered by whoeever decides to implement the "kill switch" feature.
+> 
+> OpenVPN does not. It just implements --persist-tun.
+> 
+> So all in all, the conclusion is that in this case it's usersapce to 
+> decide when the interface should go up and down, depending on the 
+> configuration. I'd like to keep it as it is to avoid the ovpn interface 
+> to make decisions on its own.
+> 
+> I can spell this out in the comment (I think it definitely makes sense), 
+> to clarify that the netcarrier is expected to be driven by userspace 
+> (where the control plane is) rather than having the device make 
+> decisions without having the full picture.
+> 
+> What do you think?
+
+It wasn't suggested to destroy the interface in case of interface 
+becoming non-operational. I apologize if something I wrote earlier 
+sounded like that. The interface existence stays unquestionable. It's 
+going to be solid persistent.
+
+Back to the proposed rephrasing. If the 'full picture' means forcing the 
+running state indication even when the netdev is not capable to deliver 
+packets, then it looks like an attempt to hide the control knob of the 
+misguiding feature somewhere else.
+
+And since the concept of on-purpose false indication is still here, many 
+words regarding the control plane and a full picture do not sound good 
+either.
+
+--
+Sergey
 
