@@ -1,109 +1,95 @@
-Return-Path: <linux-kselftest+bounces-22499-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22500-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F8389D83D8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 11:52:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B6CA9D84A9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 12:43:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4546628A086
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 10:52:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F309B446C2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 11:28:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0386194AC7;
-	Mon, 25 Nov 2024 10:52:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD57199FB0;
+	Mon, 25 Nov 2024 11:28:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b="gtFtymY9"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="i77TUixI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from server02.seltendoof.de (server02.seltendoof.de [168.119.48.163])
+Received: from out-176.mta0.migadu.com (out-176.mta0.migadu.com [91.218.175.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35397192B90;
-	Mon, 25 Nov 2024 10:52:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.48.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48CC1199237
+	for <linux-kselftest@vger.kernel.org>; Mon, 25 Nov 2024 11:28:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732531967; cv=none; b=YS6o3cnJqhi/fFFIvYZfYxniTvdqnPtU7KJD0Ty6qAnslaSHs/wA2DOfH/8FGGW35Xw42dHWhkhj2lB640dS6rHeq4c7ox6jfEBql7X9cUeJZQda5tqKNP94QlwpdAZIinsGZswzshoMInoAD0MyCKvZXrj5zaVxhWCMynYRswo=
+	t=1732534108; cv=none; b=nxdJ2JEjZQ3p2QKA+qH56NRsjS87AMzYskOzDCX4wVGp5xYJwIjDczoXQFivgQLkoJ9kEgFtuQxWyTGqd0rPj3ay3UAdfuwOkkub0Rh1R5tbn317IX+dECJK7+oy8OXm9KFBrswepN29xsEiotWLRO9r5EFcdL9TjLSv3LtxW0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732531967; c=relaxed/simple;
-	bh=JpGjeBjmwwj4tAr/NvIpAh2+TZXeSq9SG3rXs+foLRg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cbCi9nul2IlmKLRC1ukyMc5dzfKPBqXDsAHVJRv9wkhfSvjU6OjgPu43EHdodYyb9hlT3yFiLD1LEtJaF2kgCZcZRYC6/w7PUPRu7vtYdsr/+/tzX9A2aLygKGqi1axCssy37xqCk0XgRyEy2sVHBEMTelba/qwQ4sihEEaMKSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de; spf=pass smtp.mailfrom=seltendoof.de; dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b=gtFtymY9; arc=none smtp.client-ip=168.119.48.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seltendoof.de
-From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seltendoof.de;
-	s=2023072701; t=1732531964;
-	h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-	bh=Bk64MtqGkER1ZMPO0RH9GpVeWujqZYsCThNqF69MyRo=;
-	b=gtFtymY9JwUJFkpAL/kSf+Ma/1ghajXUrJ5yxsHGl8kT4QAt4TJkESBUOH573AEerDUtFC
-	z5/OInOsdB3Z8GCO+0hzJyWNRIYFq9K58bJ+D4bscwCdlyseZbzE6dpsXE3kbikgzBKKu1
-	JNwAgUyM1T1RyphrFdbh3rcY0SSBCMhcEY9GYTrHaJCtsPmjnDPGai7tZWw4X6DdXGUfgz
-	TWRDkp82HzI37siSO+cOpuqPB9mCab6S2h+CNEBg+Ejc6DCuyStLVq5GA/e6s1m1ReXKim
-	R0NyE/1qMexlD3AhdsLS3cI3GlEAzOSsMal/wFkhE8SoFKmNjPLXIt4j0SVkxQ==
-To: 
-Cc: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	Rae Moar <rmoar@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
+	s=arc-20240116; t=1732534108; c=relaxed/simple;
+	bh=+VuaVobFp5Zisv4ECgsSim05t9k6TMIk+ZPhiGNsSlI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DJyBYjEmPh83FA5Q7KBGj6bR5Leg2CueEZPrW9LDTTY9d+ru01JpznxH/NDYvySD4nzFzZrV6vCgNY3gbKOGu5e6clK4C5EN5bwfKsV+eHLsowOwMz4TOWviagjYEWB55w3kma+Dc7kHnDayRXP6XlMwZi7MZIT9jRQqu8lczrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=i77TUixI; arc=none smtp.client-ip=91.218.175.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1732534103;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8VQ+ccQMha4i1JocKsS0xwAjEvTSkx+heZNfF1J0jX4=;
+	b=i77TUixIr00q05uDs475DK8ORDEg7j214HQKMUu8SJHoI1X1BOHrvXxfoH1+aJVugZ9uxy
+	Vdgl2H+qTL2UsirtSXejU/zt/FmTxzDE8eII6TaZKYXii7d5E0r9zFv1AmwdUkYs/NWAcJ
+	0reSh6FUEH6n6Or+cZTacUy+KJ0IQN8=
+From: George Guo <dongtai.guo@linux.dev>
+To: jpoimboe@kernel.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	joe.lawrence@redhat.com,
+	shuah@kernel.org
+Cc: live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] kunit: constify return of string literals
-Date: Mon, 25 Nov 2024 11:52:39 +0100
-Message-ID: <20241125105240.44219-1-cgoettsche@seltendoof.de>
-Reply-To: cgzones@googlemail.com
+	George Guo <guodongtai@kylinos.cn>
+Subject: [PATCH livepatch/master v1 1/2] selftests/livepatch: Replace hardcoded path with variable in test-syscall.sh
+Date: Mon, 25 Nov 2024 19:28:11 +0800
+Message-Id: <20241125112812.281018-1-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-From: Christian Göttsche <cgzones@googlemail.com>
+From: George Guo <guodongtai@kylinos.cn>
 
-The function kunit_status_to_ok_not_ok() returns string literals, thus
-declare the return value as such.
+Updated test-syscall.sh to replace the path 
+/sys/kernel/test_klp_syscall/npids with a variable $MOD_SYSCALL.
 
-Reported by clang:
-
-    ./include/kunit/test.h:143:10: warning: returning 'const char[3]' from a function with result type 'char *' discards qualifiers [-Wincompatible-pointer-types-discards-qualifiers]
-      143 |                 return "ok";
-          |                        ^~~~
-    ./include/kunit/test.h:145:10: warning: returning 'const char[7]' from a function with result type 'char *' discards qualifiers [-Wincompatible-pointer-types-discards-qualifiers]
-      145 |                 return "not ok";
-          |                        ^~~~~~~~
-    ./include/kunit/test.h:147:9: warning: returning 'const char[8]' from a function with result type 'char *' discards qualifiers [-Wincompatible-pointer-types-discards-qualifiers]
-      147 |         return "invalid";
-          |                ^~~~~~~~~
-
-Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- include/kunit/test.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/livepatch/test-syscall.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 34b71e42fb10..ae1b57578476 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -135,7 +135,7 @@ struct kunit_case {
- 	struct string_stream *log;
- };
+diff --git a/tools/testing/selftests/livepatch/test-syscall.sh b/tools/testing/selftests/livepatch/test-syscall.sh
+index b76a881d4..9cfa17b6b 100755
+--- a/tools/testing/selftests/livepatch/test-syscall.sh
++++ b/tools/testing/selftests/livepatch/test-syscall.sh
+@@ -24,9 +24,9 @@ pid_list=$(echo ${pids[@]} | tr ' ' ',')
+ load_lp $MOD_SYSCALL klp_pids=$pid_list
  
--static inline char *kunit_status_to_ok_not_ok(enum kunit_status status)
-+static inline const char *kunit_status_to_ok_not_ok(enum kunit_status status)
- {
- 	switch (status) {
- 	case KUNIT_SKIPPED:
+ # wait for all tasks to transition to patched state
+-loop_until 'grep -q '^0$' /sys/kernel/test_klp_syscall/npids'
++loop_until 'grep -q '^0$' /sys/kernel/$MOD_SYSCALL/npids'
+ 
+-pending_pids=$(cat /sys/kernel/test_klp_syscall/npids)
++pending_pids=$(cat /sys/kernel/$MOD_SYSCALL/npids)
+ log "$MOD_SYSCALL: Remaining not livepatched processes: $pending_pids"
+ 
+ for pid in ${pids[@]}; do
 -- 
-2.45.2
+2.43.0
 
 
