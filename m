@@ -1,132 +1,143 @@
-Return-Path: <linux-kselftest+bounces-22504-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22505-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A9579D8604
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 14:11:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 764219D8746
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 15:03:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D54C4284BDC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 13:11:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48B4AB42249
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 13:23:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F205B1A9B4F;
-	Mon, 25 Nov 2024 13:11:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E60751ADFF1;
+	Mon, 25 Nov 2024 13:21:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TZ0q2qoJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OwUW4cRI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA72618D625;
-	Mon, 25 Nov 2024 13:11:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210601AB6D4;
+	Mon, 25 Nov 2024 13:21:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732540312; cv=none; b=ZNQgJrfEEjoUmyhnZGVpk8doDfNy6Pr2QfCnneNtTr7AeBEMT/nlmSR5NH+HSDwmbPiDEiwvczvqiKnUx0LKkv14EDAne+d4aRECBUjsr+wzLHkixLjkKrWUj6u//8N00plJ/sMy+lRPmPxmj2f9wSUDamvzLeiTCfFuq+DSfyc=
+	t=1732540895; cv=none; b=rM8Ue9hljSugoitgmsy4Zew0c0sLEPf07K9Lo+xwMvpMixKZmP1uzCDd6bjTLHJ/Kw+0lInAVQOt9tjbHep7m+ZN9i5osEIKeoIczNcbhS4HM9dCYWeuZIzjImqP3T8JbxqGP5MDsjqhMTJTseRc/5L+qUhTi1JY1hfG0QvU+8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732540312; c=relaxed/simple;
-	bh=77n7xr3tbx600Y8k4lOBNTIIJ0RxEAQqaxW7kBUCqsc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n23zlh4f4rIWJJsla2HnBAZXDUjkYX/GAxDZ58L+pYJK1JJRFK82uSGh2A9m2G0CSfBs9O/lYjjWBWP5BAC8hlUYHU4XChq1c8NX7gYl03cfgrNyWIs7zBxTAnJ7LNHRFO2Kzl6WJiyEXCqCbhZbJWgS+Y8YXdZMT2wve+BJBWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TZ0q2qoJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B03B5C4CECE;
-	Mon, 25 Nov 2024 13:11:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732540312;
-	bh=77n7xr3tbx600Y8k4lOBNTIIJ0RxEAQqaxW7kBUCqsc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TZ0q2qoJo9jRKJO+I3SfmVlTttF0p1AgwxhCf1SlgooF56vf8YeaxCg2ghEyOMMmT
-	 +U7xBi9FzIrrBUfze98Jj55U6IzZq5w8e0Rnl2uA0d/Wem1MTj8AcPUloaJ9clj+Vm
-	 LkqPO7I/TGGaYwsvne1Oijp1UcPVl35UdTSrURNNG+tpvzgHU0DQhErnywaP7OeCAM
-	 ijMXtrvbSAEWck9so/iL0W+VlDZ9L9b3Dxc06pZE5Tsv3w/UvxXhsfzeSUirmtUCrj
-	 YcviGFpRiI0GDFOLRG984vhhUZ0xBKkBlJ19QWTqkx49xrsM7aIUNyDxdstM2LuKk+
-	 GPo61Tm+Wo5yw==
-Date: Mon, 25 Nov 2024 13:11:46 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Jiayuan Chen <mrpre@163.com>, linux-kselftest@vger.kernel.org,
-	song@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, martin.lau@linux.dev, andrii@kernel.org,
-	ast@kernel.org, kpsingh@kernel.org, jolsa@kernel.org
-Subject: Re: [PATCH kselftest] fix single bpf test
-Message-ID: <c685c171-0d2d-4ef1-82ca-386c3a2e3df6@sirena.org.uk>
-References: <20241118140608.53524-1-mrpre@163.com>
- <93d96c99-4712-4054-a36f-3c65c80ab3f8@linuxfoundation.org>
+	s=arc-20240116; t=1732540895; c=relaxed/simple;
+	bh=0SOZQeyrNKlS9tHFmzi8ORnOWl29Sf5sPDo1Ych8PFk=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=VQJelUiJAXUFGDkxf3LHxH0lKhPphusJVOu8MQLZAdUlrPictOgV4s/OJpAxJuFM4uGK9FgQswsMBS9O6tJ+HnZzIWpxDmSf7dlxairduxwp+NWBvmVmS7p0WfK7dBO9ZpMOqqpH8R+/1CChdIFwZFkd6F6CJcrUg/+Ymc5iLLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OwUW4cRI; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43163667f0eso39735805e9.0;
+        Mon, 25 Nov 2024 05:21:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732540892; x=1733145692; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Oa0cn0wwc4zMYLeRwlkxFR8F0f3kJ7kjZT+G9vlnpOU=;
+        b=OwUW4cRIjk9AIYYRL1S4mmjMm7KOyJop4V27XGRo2naaE/4dd7tanabU/IPrGOqj3B
+         NlXnb/PdFm7wLDY8IOUyTs1GAKPoCj7m3VKw5fgELY/L+wksdhL58eMDVME5jQcCwTxI
+         frBWWH8eZtJ2HVy1fjAcdQ3VU3lyFgNUGGNK620/Nwf1ve7Xi+IDSgjBJPITA66HcSYW
+         Qs1NmRACdocQrP6ihhf0+PvBHVexfnJIWU+9BXMBtGovjYqpVfYtAAqsp1Y8Bs6l9ThR
+         dpQuh1zneMZXgfZXFSqleXt5jZ0i6YFDBijcmBx1N0px/4pm08FhmLV5hmvlfSA81+7z
+         eKTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732540892; x=1733145692;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oa0cn0wwc4zMYLeRwlkxFR8F0f3kJ7kjZT+G9vlnpOU=;
+        b=LFP3I5YpcCgjJT8gqdJGYKqss+VqufrDYckGLqzoMPYrJA4NTTyoJP5usNNmxtJ4Jk
+         DIErOozLrhR2jHKgoY2jyoVIZSdxsezOhk0hud1l56TAd7IYu5EfLAAAhFD2L8PrGGXs
+         1T24kZjtPnHxeZPNcWUd2VyUIXrvPJZRH7wlXcBLtRM6AAQVWkLV17Lk8TjrMFhvbhmC
+         71ocZcYNhe7f3rb9AE1GMGDarmeNBaVUAymn1trbxeWzmEGwcGXNr32N8qXtCB3a80Oi
+         9tevccMU9Bzalp4ichyQOTGMdI1PR0vqCd6wAXGRHPA9hts1lD3vq05bOhbRxrUC2uET
+         WNQw==
+X-Forwarded-Encrypted: i=1; AJvYcCWIKJmRtemAiChherKYwo/dwFEC4zp2asmYf1D6rAUuP5xy4TCqNv5HoFhdEEEk1XK/gfuFGhxJ7DvmK/8zrZA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzjq62V9koS0Ueq5yirL0F7y2YsMJ8tOV1H8lvZQrdSaGssLSbQ
+	KDxUR7B8mCC7HwRV4Enm39voHRJqQA5QIktikpzKLRTHF5EcXA7l9G3Dqg==
+X-Gm-Gg: ASbGncvOyhlAYIaZDuJRe9k1DUImnuil77qFMgoZTQQnyEe565kYxVLKY2mykorfweY
+	HBxrbF+WSLY/93RVSpD5eW4G/MpINuskZT7bHxuDGHC0NFRFALoLXR/jY2Fzw8u0dPVAwavFiDV
+	WdodXgmUcVY2f80/Cxivh6HTwXHuCYlwdrPznrjtprOKJmDK+P8e6Fxv3ErmJOA+3Hqg7gT7ZKL
+	yyqtPHmaXdCcKRCDzLOjIlSZj8ax9jTT5tXd4KSamMvL+N8QK2r8XFK5KxZ/P2oz3ATYQYDVC5u
+	VOEbKypi+hLPWfgTkA6P1VLBYmZuOIhEKMVXgA==
+X-Google-Smtp-Source: AGHT+IGNH4hQ3aM3rD6cvvYYRgYauN4jMf9b0IL6JeWRXy+7Fq2BjtXzWPiFdK1A1L3Bf6RZcrenxQ==
+X-Received: by 2002:a5d:47c6:0:b0:382:4485:2d96 with SMTP id ffacd0b85a97d-38260be5323mr7197223f8f.50.1732540892164;
+        Mon, 25 Nov 2024 05:21:32 -0800 (PST)
+Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3825fad6255sm10678389f8f.5.2024.11.25.05.21.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Nov 2024 05:21:31 -0800 (PST)
+Subject: Re: [PATCH net-next 1/5] net: ethtool: only allow set_rxnfc with rss
+ + ring_cookie if driver opts in
+To: Gal Pressman <gal@nvidia.com>, edward.cree@amd.com, davem@davemloft.net,
+ kuba@kernel.org, edumazet@google.com, pabeni@redhat.com,
+ Ahmed Zaki <ahmed.zaki@intel.com>
+Cc: netdev@vger.kernel.org, habetsm.xilinx@gmail.com,
+ linux-net-drivers@amd.com, horms@kernel.org, andrew+netdev@lunn.ch,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org
+References: <cover.1731499021.git.ecree.xilinx@gmail.com>
+ <cc3da0844083b0e301a33092a6299e4042b65221.1731499022.git.ecree.xilinx@gmail.com>
+ <871a9ecf-1e14-40dd-bbd7-e90c92f89d47@nvidia.com>
+From: Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <b0f84914-c4bf-9071-b72d-cc2cc4a517f9@gmail.com>
+Date: Mon, 25 Nov 2024 13:21:30 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6obR2W6oqGidcei7"
-Content-Disposition: inline
-In-Reply-To: <93d96c99-4712-4054-a36f-3c65c80ab3f8@linuxfoundation.org>
-X-Cookie: This bag is recyclable.
+In-Reply-To: <871a9ecf-1e14-40dd-bbd7-e90c92f89d47@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 
+On 25/11/2024 07:11, Gal Pressman wrote:
+> On 13/11/2024 14:13, edward.cree@amd.com wrote:
+>> Ethtool ntuple filters with FLOW_RSS were originally defined as adding
+>>  the base queue ID (ring_cookie) to the value from the indirection table,
+>>  so that the same table could distribute over more than one set of queues
+>>  when used by different filters.
+> 
+> TBH, I'm not sure I understand the difference? Perhaps you can share an
+> example?
 
---6obR2W6oqGidcei7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Something like this:
 
-On Fri, Nov 22, 2024 at 08:14:58AM -0700, Shuah Khan wrote:
+ethtool -X $intf context new equal 2
+# creates context ID 1, table filled with 0s and 1s
+ethtool -N $intf <match fields...> context 1
+# filter distributes traffic to queues 0 and 1
+ethtool -N $intf <match fields...> context 1 action 2
+# filter distributes traffic to queues 2 and 3
 
-> The commit 7a6eb7c34a78 went in 4 years ago? DO we have a better
-> story for the LLVM tool chain to get rid of skipping bpf and sched_ext?
+See the selftest in patch 4 for a concrete example of this.
+Some NICs were apparently sending the traffic from both filters to
+ queues 0 and 1, and ignoring the 'action 2' on the second filter.
 
-> Running make -C tools/testing/selftests/bpf/ gave me the following error.
-> Does this mean we still can't include bpf in default run?
+>> @@ -992,6 +992,11 @@ static noinline_for_stack int ethtool_set_rxnfc(struct net_device *dev,
+>>  	if (rc)
+>>  		return rc;
+>>  
+>> +	/* Nonzero ring with RSS only makes sense if NIC adds them together */
+>> +	if (info.flow_type & FLOW_RSS && !ops->cap_rss_rxnfc_adds &&
+>> +	    ethtool_get_flow_spec_ring(info.fs.ring_cookie))
+>> +		return -EINVAL;
+> 
+> I believe this check shouldn't happen when we do ETHTOOL_SRXCLSRLDEL as
+> flow_type is garbage, WDYT?
 
-> make -C tools/testing/selftests/bpf/
-> make: Entering directory '/linux/linux_6.12/tools/testing/selftests/bpf'
->=20
-> Auto-detecting system features:
-> ...                                    llvm: [ OFF ]
+Agreed; this check should only apply to ETHTOOL_SRXCLSRLINS.  Do you want
+ to send the fix or shall I?
 
-The toolchain is in a better place now and we can run with released LLVM
-versions.  The detection above is still needed since the LLVM version
-needed is a bit newer than the version needed for the kernel itself,
-it's LLVM 18 for BPF, and not everyone has LLVM.
-
->   GEN     /linux/linux_6.12/tools/testing/selftests/bpf/tools/build/bpfto=
-ol/vmlinux.h
-> libbpf: failed to find '.BTF' ELF section in /linux/linux_6.12/vmlinux
-> Error: failed to load BTF from /linux/linux_6.12/vmlinux: No data availab=
-le
-> make[1]: *** [Makefile:209: /linux/linux_6.12/tools/testing/selftests/bpf=
-/tools/build/bpftool/vmlinux.h] Error 195
-> make[1]: *** Deleting file '/linux/linux_6.12/tools/testing/selftests/bpf=
-/tools/build/bpftool/vmlinux.h'
-> make: *** [Makefile:369: /linux/linux_6.12/tools/testing/selftests/bpf/to=
-ols/sbin/bpftool] Error 2
-> make: Leaving directory '/linux/linux_6.12/tools/testing/selftests/bpf'
-
-This bit still needs some attention - the build needs a kernel binary
-with BTF information built in via CONFIG_DEBUG_INFO_BTF.  That is
-enabled by the config fragment for BTF tests but it's not compatible
-with the arm64 defconfig since that sets CONFIG_DEBUG_INFO_REDUCED which
-isn't compatible with _BTF, and in general having it missing should be
-handled a bit more gracefully.  I believe some of the tests would run
-happily without the BTF information. =20
-
-TBH I'm a bit surprised we even tried to do this bit with LLVM not
-available...
-
---6obR2W6oqGidcei7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdEd5IACgkQJNaLcl1U
-h9BZMQf9F1MFajh28PQz3CmjPPNAkdxl8CF86T29XnOhxrfCPKuLpZNkem5jspwO
-Dg7Eu5rM36gAZyAsh+vUj+w6rsNf0XQ8cEVnXouJ98mCjjzuFZp1GKVfl3VdNEJ2
-aOGpQMtck3w1ZY/pZUU++kDcXSV9p/TnOCAjOt8HBc7V2FuQtJqvyfz2H++92CVA
-4HD3wrqqVtRDCd3APgApyRYm14eh37O8LUyMM4zcYDByC/orxJzq2dmuAxMdhqiM
-r3bwx6MIsC2GnqsrhZ+21SFN2vMUmXdt7MRZASBq7xmE3RALj2aIe0NzCG/53nV5
-6GaD8ns0JcFmbAn3gzPmJnJFd2Oj9w==
-=Afir
------END PGP SIGNATURE-----
-
---6obR2W6oqGidcei7--
+Also, the check below it, dealing with sym-xor, looks like it's only
+ relevant to ETHTOOL_SRXFH, since info.data is garbage for other commands.
+ Ahmed, is my understanding correct there?
 
