@@ -1,158 +1,221 @@
-Return-Path: <linux-kselftest+bounces-22496-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22497-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD4739D7B9B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 07:41:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1BA79D7BDA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 08:11:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C66E1629DD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 06:41:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6661F162DF1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2024 07:11:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D09B4155398;
-	Mon, 25 Nov 2024 06:41:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC16149C53;
+	Mon, 25 Nov 2024 07:11:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="kwXZUS22"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HPLGUhkV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2087.outbound.protection.outlook.com [40.107.243.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EAC32500DE;
-	Mon, 25 Nov 2024 06:41:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.36.223
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732516864; cv=none; b=iqaldl7N6xjIdOnc4ehEE9fTqgVoiMRXrp8eX70OLeOr0XgbuzT40g74vrBKUuJaeneeNU9vPArViRmr7HwHl6sIw0AaJTneUiaQjYAAsr+md7cT+zqN8qP/81I6gZFr35zy8+kJPVeP2Oh/KjKMebNkU/XjTERtAlVNQ0tq7aE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732516864; c=relaxed/simple;
-	bh=R+Yrl/CXUyWG0r/M1xNa06uDoWkLDm2g2c0kpQJpGbM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DvoYPpviVhYQfVWL2qd4DV5Ni9n4eIfJzPezUKOeuqH+TqE1yNwBF/nAOxN8DBr4fRAFxcU0by9/jnOmBBg39kAxMCGfzvgyfYXcyseRgDQDApJ9hziSQhC0EhVM7S0GvPlk6FzhYjtBpt1Wll4X20mFxZq0edlaKzep+4w06zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=kwXZUS22; arc=none smtp.client-ip=139.138.36.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1732516862; x=1764052862;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=R+Yrl/CXUyWG0r/M1xNa06uDoWkLDm2g2c0kpQJpGbM=;
-  b=kwXZUS224cLkj9iK+n8tUFzpwz4z9gAMDGzK9iypAlraeyIfa43+g7FJ
-   FvcXtwNxttYGo5nUP2k33iNgnTgKPOf+KIa0DOwfnOZSvvcDJV7uoKg9I
-   2jEKqSq/+IvdVupIM6s68zVhZCBtaukCISRo5SlnWBjtGlIvd/iY7efbq
-   PKjQ6TG7reyWVglACFMMdB6DjHsl5thi6sBDksuMD3GG0zbT077wOTHGK
-   8k2tx/WoVOlUizBLdwq03xNAOsZg2ZYOax9Lwunzm7PG5ooq55Y5eZw+4
-   3m65gf1aZfPpDPihpD/KsA09sGQRX2knX579DWMp0gtiu+8UUwCCqnUWd
-   g==;
-X-CSE-ConnectionGUID: 62zT3ZINSAO/ng8aQdkjsg==
-X-CSE-MsgGUID: +sdIroXhQ/OGlMX/+iOz6w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11266"; a="169897267"
-X-IronPort-AV: E=Sophos;i="6.12,182,1728918000"; 
-   d="scan'208";a="169897267"
-Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
-  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 15:39:50 +0900
-Received: from oym-m3.gw.nic.fujitsu.com (oym-nat-oym-m3.gw.nic.fujitsu.com [192.168.87.60])
-	by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 8F63FD480B;
-	Mon, 25 Nov 2024 15:39:48 +0900 (JST)
-Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
-	by oym-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id 1CF9FD5610;
-	Mon, 25 Nov 2024 15:39:48 +0900 (JST)
-Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id 87D952007CDDF;
-	Mon, 25 Nov 2024 15:39:47 +0900 (JST)
-Received: from iaas-rdma.. (unknown [10.167.135.44])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id 30A721A006C;
-	Mon, 25 Nov 2024 14:39:46 +0800 (CST)
-From: Li Zhijian <lizhijian@fujitsu.com>
-To: shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Li Zhijian <lizhijian@fujitsu.com>,
-	Donet Tom <donettom@linux.ibm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	John Hubbard <jhubbard@nvidia.com>,
-	linux-mm@kvack.org,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH for-next v4] selftests/mm: Add a few missing gitignore files
-Date: Mon, 25 Nov 2024 14:40:36 +0800
-Message-ID: <20241125064036.413536-1-lizhijian@fujitsu.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20241122074612.1582161-1-lizhijian@fujitsu.com>
-References: <20241122074612.1582161-1-lizhijian@fujitsu.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0316D45003;
+	Mon, 25 Nov 2024 07:11:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.87
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732518709; cv=fail; b=mn/Ol7v3MuUDhdBqea2tEIpHQDWKxUpSo5Zu2WulmK2el8xOSWYr9ivCczu/xybTxkF0kPtD+AEy2b1uZau33dVJgq7/Dbm4lFLCFwawzazJUvMT0bqKCZja0KGH3oND7gi73a1M6DcB0jpGL6AraGs0/lJYaQLH5CZGY6tyTIo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732518709; c=relaxed/simple;
+	bh=XkPTIgN7XToWeR9a5X4fBEG3Wi4VLDC6aI6fSliPDV4=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=UUp41xHBRPcVrFQna1SPf7KsffqKhvUH3CtJPafNDOPJ5xn8I+OxIz/PiJJBzwxKOqNhCwKlF1Fi8jgEXNyx2mZWQEnI85Gt4S22+llaDM7yh4DQqdQGaI9Epyub7b5W69ImMoC8weBmkOnD6aBZ1IcgoNSWT4bwCWSQyqWDSnY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=HPLGUhkV; arc=fail smtp.client-ip=40.107.243.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lfWMqhwW8TjtevPxAWsJb2T1bfhEMp+betzAo9yWKlKPTbbK0y5JmwkCeQj9ZLvuTu6iH8+V15ZiMnOnp+XrJRzAZnOEvRzX5hi31ryaqxbiIG7DIcuRtsrbyDGxUcmIeCWLY4hYb1nwLXCAYx+GkyWBpgIUqFaRlKIbbx9otT9YPf4LU+V/o21Hz4nEjsOyQNylrQbKknqwtrjEOqkIZ0ubFVQygk1hGlQ1qs/ihFqNx1QSVO8Pz7rYVTaCa3AX3gg2A/Gp6hADLHyAhl2HJyyR0OzHA9duN9SVjN1Fgq2DRVStQIV3FymDdg3nqaZVl1tz18ZYBAVd2dNUcL5gNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GTFhhhhOkpZdlfp+bVldQXI0bYZNTDLJDRfjIIrBgLU=;
+ b=BIE7nHAJxfawpOYeXi544Tapr/kYVbLGmPWW69fZ4JWkj/7nY4Gi5QYA8CwakeOEy3T+sa6QskSRD9ahUdWZMxBsKvZ3cgK77Jys9W4oHxf+MRY7zkftrwlZsLALG868zUe5uK/1fk4D27yL8X1Mc5H3zV/mXAG+0Du7N2cM7z1mlrq0JvLivSCzk3aM57lqiD+4FYsxy/rRozXsQCB+EiSG+fwUjwaMgPVZKH6q/aJDW88YLsQop196cUv2AWhar4z4E+BO2iYOFGsN7LwNG3Mywivt4vpewoq4IbU80jkOstjbsBTBrt6GiUbtBzLX/PCup2ANQIvCSY0KSBKAwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GTFhhhhOkpZdlfp+bVldQXI0bYZNTDLJDRfjIIrBgLU=;
+ b=HPLGUhkVoXjQh35LoTogNh219+L8Cv9/QMoJd1u5FrpGITQmtQlegpsbYeC02w1NVCkLzvU/ZH1g2TtudZWGn3XEpIPsOup3N7/EmcqtMLiH7FbjCcFeFqCm67aMt4NUCw0t2INz7nLpJY3EC/3FrHM0NuEZGts4medgksQg8o6IYD+GZVqUAQhxAlBYncM6Qf44uWHvZVyKdvOAuj6L3unkGoDsjRNQDEUdaeim3i3F1s689ZNw2AEH/qPQToLjfTMmCBooxfV6wGeozVDv9hMJb+NaC3W79UZHOzUuKkpgwT1tede2sNo3Ek+phkJSHxWDhXtT1cFRdFK2+z5CPg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB7500.namprd12.prod.outlook.com (2603:10b6:610:148::17)
+ by SJ2PR12MB9114.namprd12.prod.outlook.com (2603:10b6:a03:567::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.27; Mon, 25 Nov
+ 2024 07:11:44 +0000
+Received: from CH3PR12MB7500.namprd12.prod.outlook.com
+ ([fe80::7470:5626:d269:2bf2]) by CH3PR12MB7500.namprd12.prod.outlook.com
+ ([fe80::7470:5626:d269:2bf2%5]) with mapi id 15.20.8182.019; Mon, 25 Nov 2024
+ 07:11:44 +0000
+Message-ID: <871a9ecf-1e14-40dd-bbd7-e90c92f89d47@nvidia.com>
+Date: Mon, 25 Nov 2024 09:11:37 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 1/5] net: ethtool: only allow set_rxnfc with rss
+ + ring_cookie if driver opts in
+To: edward.cree@amd.com, davem@davemloft.net, kuba@kernel.org,
+ edumazet@google.com, pabeni@redhat.com
+Cc: Edward Cree <ecree.xilinx@gmail.com>, netdev@vger.kernel.org,
+ habetsm.xilinx@gmail.com, linux-net-drivers@amd.com, horms@kernel.org,
+ andrew+netdev@lunn.ch, shuah@kernel.org, linux-kselftest@vger.kernel.org
+References: <cover.1731499021.git.ecree.xilinx@gmail.com>
+ <cc3da0844083b0e301a33092a6299e4042b65221.1731499022.git.ecree.xilinx@gmail.com>
+From: Gal Pressman <gal@nvidia.com>
+Content-Language: en-US
+In-Reply-To: <cc3da0844083b0e301a33092a6299e4042b65221.1731499022.git.ecree.xilinx@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: GV3P280CA0006.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:b::6)
+ To CH3PR12MB7500.namprd12.prod.outlook.com (2603:10b6:610:148::17)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28818.005
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28818.005
-X-TMASE-Result: 10--9.531200-10.000000
-X-TMASE-MatchedRID: HRm6PbbemxchiKpapiFQUqoXHZz/dXlxTJDl9FKHbrk/gf7afIrQU36y
-	x7OFE28Qe+eZU8eiw0ZakcaN0kYenAtnIcpCCGR9zfqlpbtmcWgrtx/8GWh5m1c/CedjlcvkLHN
-	FiwmJRq8xepHN1Gb+gpD1bY6uTBHE77IR1AIYrusqy6shOlK/42Iw13TP8dlT2vch1fMqmI8muo
-	4pNDIMvtvWTR/WiMl9HBunSHImBEL9rLNrEHKk3k7nLUqYrlslmOb/jZZZ8UIGWfDd0b0zMaPFj
-	JEFr+olwXCBO/GKkVqOhzOa6g8KrW0MLeV6pd59t5Zx1OwHJens0JYSBlfWTr5ameoPLbalQvt6
-	QaxTfxs=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB7500:EE_|SJ2PR12MB9114:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4094394a-6094-4a47-ddb3-08dd0d206ae7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?WWJVTUdSZ3lXeXo4STVnNGNad1JtLzRBMWtsRUlGQWxFOG9sV0czNGVhNE9Y?=
+ =?utf-8?B?cUIvMFlKTTdHV0kxSUwxN2FaTmNsdktqMFdaNEpJT1UrVDk1SFVUbTgvK3pS?=
+ =?utf-8?B?TTNqRWcyTWE3TFVObXJRWDhLMG5CdjlBWkI0TmVWRjZRTElYcXB1bmNnRm5H?=
+ =?utf-8?B?WWZjTEJmQUxmS1dZVG9iYkNOejdKSCs1YWk1a0N4L2F2bGFUUTc5VnlCTHIx?=
+ =?utf-8?B?QUhrbm40ZlN0Vi9rTGVUTlBYWmtCT2ZLYjRqQXZJS2hxMVMrQnFZK2trN2h6?=
+ =?utf-8?B?bGwzTlpCUHcycmNjcHFTT0NTTXFnWlhzSTJhSDR0L25tcXMvNVQwczQ0d0ZP?=
+ =?utf-8?B?ejJpMHN6TlNZby9zcVZZZWZ3OU94dEJIZjJ5cnpYOTNqMnhoalNIOTc5dWc1?=
+ =?utf-8?B?UVNpN0l3alJGSXNIMVBYazJQa2NtSnZCUlU5dUcyclRHNWRGK3NWU2V1QjAw?=
+ =?utf-8?B?NkIzL2hadTQ1bklvU3Bncm9jK1FiaDIxL0pQN3BnM255V3lOMW12UzBzeSsv?=
+ =?utf-8?B?M3JHWUtVd05tMmZ0cXBremRSOEx3QmpLRGVCVklMRWhpa2k3WktkdmtDWXJ6?=
+ =?utf-8?B?Njl6TkpUck9sM0NTZmczdVd0bDAvZm5ZV1cyRjZacEtmejJ6eVRsSG1BU2hV?=
+ =?utf-8?B?UGhLcmdsVWhRRXRENVYzV0QwRTFLRlNQL0FndzZFNSs4SW82bkZKRHpmV1Fw?=
+ =?utf-8?B?YTdSSUNZdTdLV0NObGJ5RFNPeitoY3c2eWxFcXBGTWwzOXl5bFJVRGNKZlZB?=
+ =?utf-8?B?RDZWTmI3cTNUeTF4VndHSFNlY2VUazhNZnFkY1NPN1hFY3h5LzdHV2VWUW9p?=
+ =?utf-8?B?OVB5cFZ3N1RmZEFpbWUweFM4S0ZqVjgzbnB3TEsvdXhKL1ljVVBVbHV2eERD?=
+ =?utf-8?B?c2lQbkNCT2FSUFlQaDNPei9jK3pDUFhIUjFRV25wcWJKb0FHYms0VTgvdnRv?=
+ =?utf-8?B?OTJHNkJrMHhNNllkUlhRVlZVNWFVVitjMWtlOXhjMVJVVnRjWHdTNUdEN1FB?=
+ =?utf-8?B?bmxpeUM4UitaSXp3eFBzMG1KbGtSZGpleEhGVHU1bW53RGpXa0hGbDU2bjZk?=
+ =?utf-8?B?L05hYlFqQyt6MHhSRXhmSGRkSkNQcWdLSVZhdHorRDZUaEZFM2I1aTIvM1hD?=
+ =?utf-8?B?N01NUDl3L0lVNzgyYUJKRkdBQW4vTXVXNlE1T2liaU9JalVINHFxa2NwaEtK?=
+ =?utf-8?B?QTJJT2wrblU4QVNLQ3lSa3VmSnowK1Z5RXZUUHh3ZWhDOUpOSkpuMm5oM1dE?=
+ =?utf-8?B?SmRzMVlrcTRCcTFzcnQ4NENEc1EzblEraVFRWjdKNCtVanQrdlJtWktuN000?=
+ =?utf-8?B?VmFZRzVZZjE3UTk4MFNMY2VpcGp4emREZ2hDUWxTNnJaTmpSRXJabXN2Wmkx?=
+ =?utf-8?B?YUVoUk95emRCY3NHT2FLc2VmaHBhb2FnUFRyRFE5RWhIR05HWGR3SHM2aVdD?=
+ =?utf-8?B?c1VFR1RuVDFvOVA5Vk1qcWMvVU50RVNFeUZ3OHc3R2dzQThDeGE0ZzZIYUNh?=
+ =?utf-8?B?dGpiNy8vckJ3WUhwb2hsUWRlVE8rUkppNDRhQ25FaUNLM2I3aVJVQndSenVl?=
+ =?utf-8?B?Zml1dC9VOVRMVGpiZit0Qk5ER3lLdVBaT1prQWVOajc2VzI2bGRKSzhZa0dJ?=
+ =?utf-8?B?Njc2UmFpdmU0bWQ5MnJVaU5zZlo5MWVhaHNYMGJxcENjV3o2SCtzVitvMVRv?=
+ =?utf-8?B?UUxxWkx1ckdOSFgrZlpBK3hkRnNNcGh3MG9UZ0RlSEJxOW1VRitoT2p6VWxG?=
+ =?utf-8?B?dEw2aUhrZWxsZHBBMnRRSnJHTEJneVB4NG9BUzYvejlYUFNCL2NKa2pjeXZ4?=
+ =?utf-8?B?VkVlNjZsSHJvVjRwL2pWZz09?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB7500.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Zi8xS3VTS25ESjdJSGtBVmg4eHBmazlHUm9abWVPQ1IxZG5Odkd3dlRVZkFx?=
+ =?utf-8?B?QlQ5eTdIOGVSWGVUUmMvbWhuUW1ERmloZEQrSGNHRUZwK0llcXRvMlR2alhC?=
+ =?utf-8?B?czBmYUlPNUtEZDlZbkpDdjNjeDlRK0hkSnZQRFFieWVWZWhsQTZJOVg1ZGxv?=
+ =?utf-8?B?NGVKdVd3SThwazIrOW5KUnMwdkhXRXlYOFpDNlJKbUh2Q0N6SllVN1hVbUZn?=
+ =?utf-8?B?RE9HNEJiaXROaGNwSnNoTkJYNjBNckVyamMvaStOd1lxdkpUZjE1elA0WG9M?=
+ =?utf-8?B?aWpOcWQwcU42VDJndjJzeEtnRHlVV29zbGRJcTljYVhEeFdjbDlNaVU3WkJK?=
+ =?utf-8?B?bGpyaGU2UDZsK3laR1VlSE5GSWVhdm42YlI5dzQrUGRmS0l1SUFMWmEySDdN?=
+ =?utf-8?B?V1lMK0tPUzNnSzFQdEVJbzlDM2d3SmdFZFBXNDAwcFJ1Rnc3cDExcE9FNXZw?=
+ =?utf-8?B?eGxtblhTSVhtQTdQS3U2SEVFQ2hSR0Z6c3hJTkpFQUpxU0lGTFpGSVBpcEZD?=
+ =?utf-8?B?TTltR2xadS93alBmdlM5WGxNUGVDZzFHNExLZUsxeUlTcVJ4N09jMnBVWTUz?=
+ =?utf-8?B?Vk9YOGEyZDhubWRiU013YmdEWXE1dldTUjVVSmNLTDRWSTRNUmlLYmFMV0lK?=
+ =?utf-8?B?WjFlOHc1R2pSc2w3UjNEV0gxSkVBRUFyZGtqdWhPc29oUUM1UmFOM3MzRURn?=
+ =?utf-8?B?ZUZYL2xuS1JwYkZHUlJUY2k2aGtkWGZzbzl1Z2dhaDRvQkhUY0tORHI0Q0dt?=
+ =?utf-8?B?OHU2QVN5U3lhV0VQYllpVG1ka2NWYUFhMm1FaHVCaHNMUmpsZ3NKdStOSG1z?=
+ =?utf-8?B?cU15b0dlN3g4MkFMdVd5N0x1aVhlMFMxZlI2Ukw0bHc1b3NHcUZKTDJRdFhN?=
+ =?utf-8?B?RHZqZWZnd2tZZy9QbUNvbXZCL2dmS0hpeUVyYVhha2pabndZbVE3NDBDeW9V?=
+ =?utf-8?B?QjMwTXY3T2dIaEp3R3lRVGhYOStrdHZOQUhvditvNlRLcFE1cDU5aTFLREl6?=
+ =?utf-8?B?c0traGRpMWprRy9aRTdXQno3Ni9WUnpPYlZGZ0Q2NmlFR2R4RFgvU0dTY0k0?=
+ =?utf-8?B?SzZ6djI4cjhyMTZrdllzUlJzRW1zZ2dXd0RsVVZrL1RlSnFGRTdJbHBwMlMw?=
+ =?utf-8?B?Q2I0WWMzQ0h5bTQxSzNKOFZKaXRDcDdYS0VEQ2ZodjJnN2N4akg4WVZJV25C?=
+ =?utf-8?B?THlPeWhnTHEvUEltM0ljTUxKQlhJaVBoWEwzb1FsV242ZzZTWW9rdjV2Mmda?=
+ =?utf-8?B?dkhVbGpXR1NZTEl6Rm1XKzN0OWJCNk1aaDdZVUh3djU4UnplaXRzQjNOWENm?=
+ =?utf-8?B?RCs2K2RRQndUQ1lBUkQvZldwQlBEL25pc1JpYlI4RE43SEdhRU9DbUtJMnk1?=
+ =?utf-8?B?dmsyZnN4UDQ3WjloenMwU01ObFdBbDRZMldveGc5K3FPNHpqWFExQnBNWEZP?=
+ =?utf-8?B?cUpCbWNUaHdGRjBOeG9RemNSYjJXNUdEMFdMNGtiNlBScFlNak4rQXpJYVF4?=
+ =?utf-8?B?cjk0Z0hpb3Q1ZnhzSEx3bzJSK05LQTYxL2Jya1JQaXREMEpMVWFhTUZneUhU?=
+ =?utf-8?B?ck41MVpJVisyS2NnT1pRdGliS1Y4Tkt1SDh0bW9XUG1pMVpuY0pXM29BeUl3?=
+ =?utf-8?B?Mk1EM3R0Uys0NVl1ZE9nbktIOG5XdXVRa09OTHcvWENaV2xPVU1oT3FzY2ZQ?=
+ =?utf-8?B?NFBWNDZZdUxrUkpiUzFXdTNiSFprdXdIekRNVXlKeGtlVFNWVzJKMEpGemp1?=
+ =?utf-8?B?bzJtUWROdFZPMG1jdkgvQUpzWmgzaXAxZHdrOXNYZHpXdnAxNGJsRG4yNnNi?=
+ =?utf-8?B?Mm1CckVCdXpwUDI0bWtxNGRoWkhZUGRtMnQySUw3YWhEQmc1YzNrUU9uQVoy?=
+ =?utf-8?B?VzhNeTk3VUxUUmRGeGhtMmQ5bjY5YlQyOTdHMmFYcysranBCK1Q4TU1DUHhz?=
+ =?utf-8?B?MmFCM0RZWkpSYk4vbEJJT0hqTXVXMUdzbVlSYTlxTlFvR2Y0S21NT25tTnI2?=
+ =?utf-8?B?a0RYbG5GU0xkVjVtdVBzd2t5UFBhZXFjV2JNTU0yd1BIQnBZT1Y5SWQ0T1hU?=
+ =?utf-8?B?S1hrN0tEb0JlRldxZE1wZ1QrZGt2ZURHVEIrcUFxeEczbTBNT20xODlQWXA2?=
+ =?utf-8?Q?b7UY=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4094394a-6094-4a47-ddb3-08dd0d206ae7
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB7500.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2024 07:11:44.3288
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IAIj/ArKH47eEgbd6klSUJ0b7E2WnBWpGIuD7rElFjikKt/cuiZudz1gmpKN86eq
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9114
 
-Compiled binary files should be added to .gitignore
-'git status' complains:
-   Untracked files:
-   (use "git add <file>..." to include in what will be committed)
-         mm/hugetlb_dio
-         mm/pkey_sighandler_tests_32
-         mm/pkey_sighandler_tests_64
+Hi Edward,
 
-Cc: Donet Tom <donettom@linux.ibm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
----
-Cc: linux-mm@kvack.org
----
+On 13/11/2024 14:13, edward.cree@amd.com wrote:
+> From: Edward Cree <ecree.xilinx@gmail.com>
+> 
+> Ethtool ntuple filters with FLOW_RSS were originally defined as adding
+>  the base queue ID (ring_cookie) to the value from the indirection table,
+>  so that the same table could distribute over more than one set of queues
+>  when used by different filters.
 
-Hey John,
-I added your Reviewed-by tag in this revision which have a minor
-updates. Feel free to let me know if you feel this is unsuitable.
+TBH, I'm not sure I understand the difference? Perhaps you can share an
+example?
 
-Hello,
-Cover letter is here.
+> However, some drivers / hardware ignore the ring_cookie, and simply use
+>  the indirection table entries as queue IDs directly.  Thus, for drivers
+>  which have not opted in by setting ethtool_ops.cap_rss_rxnfc_adds to
+>  declare that they support the original (addition) semantics, reject in
+>  ethtool_set_rxnfc any filter which combines FLOW_RSS and a nonzero ring.
+> (For a ring_cookie of zero, both behaviours are equivalent.)
+> Set the cap bit in sfc, as it is known to support this feature.
+> 
+> Signed-off-by: Edward Cree <ecree.xilinx@gmail.com>
+> ---
+> diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
+> index 7da94e26ced6..d86399bcf223 100644
+> --- a/net/ethtool/ioctl.c
+> +++ b/net/ethtool/ioctl.c
+> @@ -992,6 +992,11 @@ static noinline_for_stack int ethtool_set_rxnfc(struct net_device *dev,
+>  	if (rc)
+>  		return rc;
+>  
+> +	/* Nonzero ring with RSS only makes sense if NIC adds them together */
+> +	if (info.flow_type & FLOW_RSS && !ops->cap_rss_rxnfc_adds &&
+> +	    ethtool_get_flow_spec_ring(info.fs.ring_cookie))
+> +		return -EINVAL;
 
-This patch set aims to make 'git status' clear after 'make' and 'make
-run_tests' for kselftests.
----
-V4:
+I believe this check shouldn't happen when we do ETHTOOL_SRXCLSRLDEL as
+flow_type is garbage, WDYT?
 
-  Use the exact filename to fix warning reported by lkp@intel.com
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202411251308.Vjm5MzVC-lkp@intel.com/
-V3:
-   nothing change, just resend it
-   (This .gitignore have not sorted, so I appended new files to the end)
-V2:
-  split as seperate patch from a small one [0]
-  [0] https://lore.kernel.org/linux-kselftest/20241015010817.453539-1-lizhijian@fujitsu.com/
----
- tools/testing/selftests/mm/.gitignore | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index da030b43e43b..689bbd520296 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -51,3 +51,6 @@ hugetlb_madv_vs_map
- mseal_test
- seal_elf
- droppable
-+hugetlb_dio
-+pkey_sighandler_tests_32
-+pkey_sighandler_tests_64
--- 
-2.44.0
+> +
+>  	if (ops->get_rxfh) {
+>  		struct ethtool_rxfh_param rxfh = {};
+>  
+> 
 
 
