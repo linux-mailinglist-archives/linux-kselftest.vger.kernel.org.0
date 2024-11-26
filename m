@@ -1,69 +1,50 @@
-Return-Path: <linux-kselftest+bounces-22527-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22528-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB01C9D94A6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Nov 2024 10:37:22 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 625DE1674DC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Nov 2024 09:37:19 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B8D71BBBF4;
-	Tue, 26 Nov 2024 09:37:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=laura.nao@collabora.com header.b="OajecJN8"
-X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4CFA9D94DB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Nov 2024 10:47:57 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29BFD1B87DC;
-	Tue, 26 Nov 2024 09:37:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732613839; cv=pass; b=CE6VYryAEDwm2kfCHVj3xC9nJRBtDH/0riF+osJ7Y0EHOJUgJRe1hZ36ie0m4gjz/9iccujUSCEQeYMBppehQ5lOT4eM8nAo2dlkNdx3d9gQfW7tANXSgD65Bvq+qctFkTDl6q3PvgPBYu0LPEzh9JcwrdogAwUQHmXVawthOUg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732613839; c=relaxed/simple;
-	bh=pGQjsV8WADMN/kZ8lRycL16QOgiWUNXsq+WaovEeYJs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=n4Zvs5cmmoWHS+ALzVmWxdq8QKJOKO3c5l1wUKrHwSjgUwfDjqBNpuQ37pZh9ktfcNz83v/QkOy5yjBMBIX6+ZNWljqCO0bHFKAvpffKq31XwTCQeKEA23VaR7GsUlz6zZaERMeM40lLfyNSyGik0Fs7I/jys8BtNqw7rUw9ZPc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=laura.nao@collabora.com header.b=OajecJN8; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1732613827; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=hc/ygFitAkhiv1Aur1pQXmK/+uIrRGUuJek7sfDU3cNAnk8Mj+YdzcXLHAkG3Dn06Crk8JtDDa4tcyzNUM98rw5jgWPBMj/SQhGVhHwotkbbq8D5GZxCNCRo0Sdrmid0S7zGztolYIu/1hqn+5LK1tJiN5XSgSAQi0JijT7LOCE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1732613827; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=Ltz32nFo4k/W7uTNqDzuEM+nhwt2vahueCheGlbCoog=; 
-	b=RhwTKbJpY8VbfzTEBBxZS8DEvExQTUm5aPTofOwy40t+JH/bgy8v94x11/MRmnnXWiBR53DQfAHQI4EJy1FymFsADWvKnDf6WX8+ExMhsPqNjROpznOIdqVq1cyaia6lveJQa7lWjf/drWJNGk4zXs4ulQ+7mWNqoeUc6ZeL2aY=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=laura.nao@collabora.com;
-	dmarc=pass header.from=<laura.nao@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1732613827;
-	s=zohomail; d=collabora.com; i=laura.nao@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=Ltz32nFo4k/W7uTNqDzuEM+nhwt2vahueCheGlbCoog=;
-	b=OajecJN8uUJ7Yvgkgozvqvh2FQ2/86iDZNthPxwiT9BhuGQhsRcwi9APmvASQA+0
-	YLGXzkXYJdw/9z4sgOmpwcxg//iMiBdaqI3RnxKXDTwSk9CuJhMg6q8FWkVS5a3tJVW
-	2kXFNz1zZLifzyw/eykXd4zaqiRdDjiApRsR9Fgc=
-Received: by mx.zohomail.com with SMTPS id 1732613796296967.0355782356701;
-	Tue, 26 Nov 2024 01:36:36 -0800 (PST)
-From: Laura Nao <laura.nao@collabora.com>
-To: shuah@kernel.org
-Cc: gregkh@linuxfoundation.org,
-	nfraprado@collabora.com,
-	usama.anjum@collabora.com,
-	robh@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel@collabora.com,
-	Laura Nao <laura.nao@collabora.com>
-Subject: [PATCH v2] selftests: Warn about skipped tests in result summary
-Date: Tue, 26 Nov 2024 10:37:10 +0100
-Message-Id: <20241126093710.13314-1-laura.nao@collabora.com>
-X-Mailer: git-send-email 2.30.2
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9175AB2F56E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Nov 2024 09:40:22 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2257B1BC9EE;
+	Tue, 26 Nov 2024 09:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kuuMsnd4"
+X-Original-To: linux-kselftest@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80DB1B86F6;
+	Tue, 26 Nov 2024 09:40:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732614020; cv=none; b=Lea1B1ShO/seFJhehLEQpj2mFvMMG3G22HFmEfLsowQqAwY9z67E3D/RpKf3qxWWYwihTgbJpgGx5xwCkUV2ht4G4Nch7ydHmrKdB2UD5zh/YrkbjzFafDCzn2iQEkE42Mf2NYqfSslQ4KZUimHe6DYij9zPH+zHaeJ9QHhX9AI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732614020; c=relaxed/simple;
+	bh=DlQ3FEcvM/iB8RpvmO6gR2ljj0rmS9p+1Mhd1/bfHuE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Ag5cANiAg8EtEJ8w8m8a+0vhP+FCXdMqPo5v1XBWZwh+eqbDqp8X3UJ82vk2ySY1AFZKTFWs5isBuuLEl0+5OtUV0ys5j3RAaKxibRop17uP7zDQijhax39RzSd5VBGBIhLnZ1/MaZHTRkvXjVhqu9Hvr6aRcFkJ46E06posdEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kuuMsnd4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71FB6C4CECF;
+	Tue, 26 Nov 2024 09:40:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732614019;
+	bh=DlQ3FEcvM/iB8RpvmO6gR2ljj0rmS9p+1Mhd1/bfHuE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=kuuMsnd4JijKLmd8is5O6ChPEQJjL0Q9RSXr5NlMtgTq2lZjRThNiL1whh2woU4/6
+	 TP1+G+3AwgDyoTLPaCsTjYQh8sm+jntr4ACaTCBV9LtmUMBpG3wqxFXeqT5LA3RFRn
+	 aUClGFkKQ9tTo5j6Y5AanGYL4g6zz5o4tgUo3C3+JZTg9Vy7HVlAyi1/5zl7ktBV0S
+	 YiUwJdMMZ59YxY8t8O4iLXLBD30PiDU/0iTYcoeDWLVSFSY3miDVcQj2odGBah915A
+	 1Apo+DpdMR2JmX38x2RzAR5TVaeBk1S1QRzkwnNnIWEoRtB8vF+v05vVCsHlwdfIxw
+	 OmAxOhNsKa7LA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70F5D3809A00;
+	Tue, 26 Nov 2024 09:40:33 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,68 +52,46 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Subject: Re: [PATCHv2 net 0/2] ipv6: fix temporary address not removed correctly
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <173261403225.326777.3409947795275004988.git-patchwork-notify@kernel.org>
+Date: Tue, 26 Nov 2024 09:40:32 +0000
+References: <20241120095108.199779-1-liuhangbin@gmail.com>
+In-Reply-To: <20241120095108.199779-1-liuhangbin@gmail.com>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, dsahern@kernel.org,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ shuah@kernel.org, cfsworks@gmail.com, maze@google.com,
+ alexhenrie24@gmail.com, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
-Update the functions that print the test totals at the end of a selftest
-to include a warning message when skipped tests are detected. The
-message advises users that skipped tests may indicate missing
-configuration options and suggests enabling them to improve coverage.
+Hello:
 
-Signed-off-by: Laura Nao <laura.nao@collabora.com>
----
-Changes in v2:
-- Included count of skipped tests in the warning message
----
- tools/testing/selftests/kselftest.h               | 5 +++++
- tools/testing/selftests/kselftest/ksft.py         | 3 +++
- tools/testing/selftests/kselftest/ktap_helpers.sh | 4 ++++
- 3 files changed, 12 insertions(+)
+This series was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index 29fedf609611..249201664bcb 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -147,6 +147,11 @@ static inline void ksft_set_plan(unsigned int plan)
- 
- static inline void ksft_print_cnts(void)
- {
-+	if (ksft_cnt.ksft_xskip > 0)
-+		printf(
-+			"# %u skipped test(s) detected. Consider enabling relevant config options to improve coverage.\n",
-+			ksft_cnt.ksft_xskip
-+		);
- 	if (ksft_plan != ksft_test_num())
- 		printf("# Planned tests != run tests (%u != %u)\n",
- 			ksft_plan, ksft_test_num());
-diff --git a/tools/testing/selftests/kselftest/ksft.py b/tools/testing/selftests/kselftest/ksft.py
-index bf215790a89d..0e030837fc17 100644
---- a/tools/testing/selftests/kselftest/ksft.py
-+++ b/tools/testing/selftests/kselftest/ksft.py
-@@ -27,6 +27,9 @@ def set_plan(num_tests):
- 
- 
- def print_cnts():
-+    if ksft_cnt['skip'] > 0:
-+        print(f"# {ksft_cnt['skip']} skipped test(s) detected. Consider enabling relevant config options to improve coverage.")
-+
-     print(
-         f"# Totals: pass:{ksft_cnt['pass']} fail:{ksft_cnt['fail']} xfail:0 xpass:0 skip:{ksft_cnt['skip']} error:0"
-     )
-diff --git a/tools/testing/selftests/kselftest/ktap_helpers.sh b/tools/testing/selftests/kselftest/ktap_helpers.sh
-index 79a125eb24c2..531094d81f03 100644
---- a/tools/testing/selftests/kselftest/ktap_helpers.sh
-+++ b/tools/testing/selftests/kselftest/ktap_helpers.sh
-@@ -107,5 +107,9 @@ ktap_finished() {
- }
- 
- ktap_print_totals() {
-+	if [ "$KTAP_CNT_SKIP" -gt 0 ]; then
-+		echo "# $KTAP_CNT_SKIP skipped test(s) detected. " \
-+			"Consider enabling relevant config options to improve coverage."
-+	fi
- 	echo "# Totals: pass:$KTAP_CNT_PASS fail:$KTAP_CNT_FAIL xfail:0 xpass:0 skip:$KTAP_CNT_SKIP error:0"
- }
+On Wed, 20 Nov 2024 09:51:06 +0000 you wrote:
+> Currently the temporary address is not removed when mngtmpaddr is deleted
+> or becomes unmanaged. The patch set fixed this issue and add a related
+> test.
+> 
+> v2:
+> 1) delete the tempaddrs directly instead of remove them in  addrconf_verify_rtnl(Sam Edwards)
+> 2) Update the test case by checking the address including, add Sam in SOB (Sam Edwards)
+> 
+> [...]
+
+Here is the summary with links:
+  - [PATCHv2,net,1/2] net/ipv6: delete temporary address if mngtmpaddr is removed or unmanaged
+    https://git.kernel.org/netdev/net/c/00b5b7aab9e4
+  - [PATCHv2,net,2/2] selftests/rtnetlink.sh: add mngtempaddr test
+    https://git.kernel.org/netdev/net/c/f6e1dcd64444
+
+You are awesome, thank you!
 -- 
-2.30.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
