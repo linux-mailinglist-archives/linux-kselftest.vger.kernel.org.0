@@ -1,282 +1,259 @@
-Return-Path: <linux-kselftest+bounces-22560-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22561-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 098229DA30A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 08:26:24 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49A4F9DA383
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 09:04:49 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDDA3283C4F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 07:26:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 273EC166397
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 08:04:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9793014D71A;
-	Wed, 27 Nov 2024 07:26:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b="c8JE9lF0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59972176FB0;
+	Wed, 27 Nov 2024 08:04:46 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E55149E1A
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 Nov 2024 07:26:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFB71272A6;
+	Wed, 27 Nov 2024 08:04:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732692379; cv=none; b=W5lyUqQtqrnRrvK9f9glEMBPael2HaT7/lbyOpSfMw6rNrqVRFnxs5xVK7S4kSZ0J4DW3gvyRedoCu13NP753YU0+Kx5TVdw9ZjciUfdbN7pv4CHaaT4boBdblXTd006gASqLb4dsHlmFummcY8r39b6G22/twZjaiAJiiRnPmU=
+	t=1732694686; cv=none; b=XCcwXBs998O0TNVm2Qts8zjpWeiEo1FOKkwsGmekvUiVFbjG46Hhfubi3RwkplLc2LcXcoRupsf5hRhspO4qYRCSDxHZmE5vE3uw0ak+GmiDj/l7KcxfqKRwgVjaq8rwDqJTxW/JgtUACfqretQG/ZVd9mvSVn0+71dz77Y58Wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732692379; c=relaxed/simple;
-	bh=LaCgO/1I3Ht7VzxrqJNIKq5AGQ9WB0sRXb58RNW5hlw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o0epsFt+rNfr634gWQosbruYmGaJwKg1xzifolXjbhCge89vjDLrwh9r+PVOWrMF2DoyqRFoYas5uSczIkNaTezZhIjbz6LqwkzsWYLrYmmL/pz9OH6FYZdUDPSCUVFjMVFltlLkVAm2FiKYEi65iSNmjg4mvWyrOjFuHb4Ufbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org; spf=pass smtp.mailfrom=cmpxchg.org; dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b=c8JE9lF0; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmpxchg.org
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4669eecd88dso17932891cf.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Nov 2024 23:26:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20230601.gappssmtp.com; s=20230601; t=1732692375; x=1733297175; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Oki+SLMP3RV96wUZX5TvrU7XbLUfwG8p5rgWcxa7qog=;
-        b=c8JE9lF0M2SJGsQUqFEkjxAJBTkoJo3zqr9I6bI5vvYl0hoh/s4Dprwa7Uj7YdG+V1
-         lz3tHUPxIrsk0wDbomc/bFM72SB5QDSG3iZJ0nRR82IZn2tWBjOC2ERyMdt+8Tbf7cpR
-         3PqiobwJiUyncnENpJuYh48JBaeLu82f7FXJnPdPuWnRUw5Jlbx7Gbjw+bOS2bONfScj
-         aaZ8fUunewONGvfnX9FTHFa8hVJkzhzfb156PgkYOQ5/4q++jo31AabxZ72ZvzrmQel4
-         sVbTWMbwA2w6j0dC5M7il/dtDhtJqUwgB2UJaGZNCHrjO5ian5qfDtDpyfYqla49xwTQ
-         yEZw==
+	s=arc-20240116; t=1732694686; c=relaxed/simple;
+	bh=SXMUsolydLhLlh0RYa90/Fp6yYGJOG2VlShDRyUu/0Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WcJ/MIOEZ34py2+alGlMyqeB0vbkQNljzZwIvdRCori58LUL+3K7YW8SdC8gIe3aD5XyGab0hQEkKyIEVOsTcrQ2F+fNwUIkVlvYFM63wA/b/4X1b0EFeldclRnHhuXTXngf3Tq8HXW879w5SJRe09gSaMiVRBu8P44UzcFT02E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-aa53a971480so503452866b.1;
+        Wed, 27 Nov 2024 00:04:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732692375; x=1733297175;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Oki+SLMP3RV96wUZX5TvrU7XbLUfwG8p5rgWcxa7qog=;
-        b=VkK1zzVioTygW6q84pAy3mLKX8YgxHUvJr8snOuyisJuQvQyACJqnMu/eeF5U8CEx+
-         dtNyxfGcgJkRMONQKWzWnv/8eblOILibLX0R0ZU92DHBPZgxW1VMtr4dnrGMQNbLqhKE
-         nRoCUvAxWuw4Uzio2UNtvPvLWqSbcE5nzf+6g+2bxVn7GrjALwwTA/LtByZAdahNKviF
-         m0Z7tvv4ujF0RMkrkTda7Jd1iaIdpNTQjeapplM2l6OqvkwKFzsZddBpY8UueNiAXGzn
-         0Bc29/4ImBsi6LHAFw7a6E175FChQxSbPzwWHYJe8sU5Ju+niAEtpLKaSJfkydRhG+eV
-         OT3A==
-X-Forwarded-Encrypted: i=1; AJvYcCW+BfD0ItDaYHuL2iUOx+ocrmUb8mPeGRm6bxdRP9ZpZv3tAehPk/XjAu7reRCPh9ApcimUrA+jI143OOEN/ok=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyslYoOEMWM6fdq+H0VElGg4Sm/HLvv2fl9Oly72tZxh9uCGf8B
-	ab843a3t9sofV2zhQB5MeF+1CHYj6UiqMVML9v+CPGCKZnF7dqHwOYmqTs9pGAI=
-X-Gm-Gg: ASbGncvMbLPVbshNyu9z2ySN7v+zT7E3b+1UeYJqS36jO3S/egmYhSE5RQ+TwyU6mfw
-	6PuiKUllTCiqHeMxXsrMY8lRVCB+5n7VVyr0XGBj81ISljD+LYHa6tQFWTTgfYoa061MUoS6I8g
-	ygrfgBiqUU+bguEKFqNY4/AezMw/2ZpNxpImWwGPNEZPnQPr2BXrdD9I0984IlK6ulyLvsdh24m
-	vpBzLiXX8Dpfwp5JlQDXrTYhnMaWB1XxNblkAXJ7OS6nmFy
-X-Google-Smtp-Source: AGHT+IFJX0yoGf3rx43xtnjD4i0P7b6zQwuz1COBccsUFDJEwvH0o2DEs2dB0wnhyvUHM+XIFAHoZg==
-X-Received: by 2002:a05:622a:19a2:b0:460:aa51:840a with SMTP id d75a77b69052e-466b366240emr26501991cf.45.1732692375403;
-        Tue, 26 Nov 2024 23:26:15 -0800 (PST)
-Received: from localhost ([2603:7000:c01:2716:da5e:d3ff:fee7:26e7])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b666fd9999sm324018785a.23.2024.11.26.23.26.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Nov 2024 23:26:13 -0800 (PST)
-Date: Wed, 27 Nov 2024 02:26:04 -0500
-From: Johannes Weiner <hannes@cmpxchg.org>
-To: Yuanchu Xie <yuanchu@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@redhat.com>,
-	"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-	Khalid Aziz <khalid.aziz@oracle.com>,
-	Henry Huang <henry.hj@antgroup.com>, Yu Zhao <yuzhao@google.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Gregory Price <gregory.price@memverge.com>,
-	Huang Ying <ying.huang@intel.com>, Lance Yang <ioworker0@gmail.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Tejun Heo <tj@kernel.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Mike Rapoport <rppt@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Daniel Watson <ozzloy@each.do>, cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: Re: [PATCH v4 0/9] mm: workingset reporting
-Message-ID: <20241127072604.GA2501036@cmpxchg.org>
-References: <20241127025728.3689245-1-yuanchu@google.com>
+        d=1e100.net; s=20230601; t=1732694677; x=1733299477;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aJwxTYx2memGrlAcayO/d+D9wemFJ5kB8ER25ZwyFGQ=;
+        b=Fds54gQniJ4zFdwoD17IfiB5HeAV57PosFt12TKoJBM2SwgS3yJiWw4WDvKLzTAln/
+         ANs7T6jSbYlxRDw0gbCRBPoxWO0fjBRT2/A8qN+//kxuG08UFu9Tq2OqQxScEGsndBqB
+         r4jbgudanKmy6vSLY/zGsFvqas+ybPdEkLAthvv4wX3U/J1+UfT9vIe2JLYy8rHall8O
+         lfR55U5XWUx15/PSULr39AvCQrZtjObNPJNaZsJuAobl6a7bsSUnXoVP4gZ8cNdCbr3d
+         tsYzQRCkJFHeI9+yzdcar+okV7S17Xbj7a+P8uLUot0586e4gRWbyW+GRi7zEbiOzryE
+         3p4A==
+X-Forwarded-Encrypted: i=1; AJvYcCVLOWCEWY0b6S9VhvZpKalKmBB48ySO6QhKz1KeVwZ8kyMQkBRVE8jinY/1Y9g/bFR2pkUI628uYFhZwl5yd9s9dw==@vger.kernel.org, AJvYcCVvf9vOxzciEvh+X+IoTf43w7oFp2nI8t4Yvb+J6WAkQML0Brg8NIt+sfn5XB+pBXFffhCHzXxdzh9R@vger.kernel.org, AJvYcCVzPUzjClScKS29FypXvX3rERH88cDbLkwLpBHc2OlrHLGGCQucjBwwduI6QwRRO3i6gzhQjStMyYwmuIPK@vger.kernel.org, AJvYcCWZ5Bm0Vrztz/LNq4qoACPLT8nRYKThw7hKcrpSRMKh20+LtAUJvMoiwk5s0IpSoZHMguai5CNydAoYr14pFwmI@vger.kernel.org, AJvYcCWropiGdYISxAhwZJekx+qYKW20Iz6rIosM2lyz1bbhj3xgVGk135PydUjBy9VI45adpkrCyAn+f1MO/dE=@vger.kernel.org, AJvYcCXE2BAZLOwnVYKr+ZRSiH67xJE+RgixyhRTjahxisWzeQQh3/7POL5eUEtr2bgSQrhEXyoHZQPMoJaexDyAQKo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNM8Fy3c98QfADlBDO1OQP2AVpLj6olJE42rrkLmu2fLzO7g6U
+	pzHvKtQH8VYj8OOObMz7wo1ZCrNht8BxUfyWOSirrk0pPTTn/n7KRBuJGZiE3ViFMA==
+X-Gm-Gg: ASbGncuT31G6ie8xVUktNfHvS8W7eThC+medP1hb+lu6+kUhiHGEOkKXLajR9vi7+VG
+	lzg2y1fRefrZzXKGbT5BXAkQq5iGx1//N0wvIm7enX7awiWONxYEPrJOImbtpEjRKjDcaV/rx4I
+	lM6I1JEI5NmKoa7lwYMa3d6phwmNqYr/uCbtRsph8eB1bWf9eYFvQMogBuhQBbhwoxpxBGsQqDl
+	ta4UUjFDWaP6nKA6Pi57gNchrIAkkF+KBfINi0l1gJyQBpdtpqce2QR2yR2MTKZeTdtgEZyEgLY
+	RiLrtBlueaW9
+X-Google-Smtp-Source: AGHT+IH2ZFMUlwY9rPJbuBy7o4FAsS8SFcpcqgchzIerRi1sDz13OFZDxvtNt56KWdfEGWhFi5Mhww==
+X-Received: by 2002:a17:907:784d:b0:aa5:2575:e76a with SMTP id a640c23a62f3a-aa580f2bc6cmr123462866b.13.1732694676729;
+        Wed, 27 Nov 2024 00:04:36 -0800 (PST)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa50b3460d8sm675818566b.91.2024.11.27.00.04.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Nov 2024 00:04:34 -0800 (PST)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-aa549d9dffdso493993066b.2;
+        Wed, 27 Nov 2024 00:04:34 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU8rpD4sSnl/IJXl0iILhGx4aLY7OWomRTxETFj3WMr6vqVvc2wNSIvk5NqayI2GojJcwNgAjPhjj1re4e3847wWQ==@vger.kernel.org, AJvYcCVgjqSgmy00mgBqAXldFIT21W8+QCLHJIjRaxGANE1TYjysN7EHgBS7XdKm1MYLJcGrFeKDotiOjQvVcKxCBIXy@vger.kernel.org, AJvYcCVw58QsomuFFXVAg9aDDd8/JFzYOJmvopYac4kK/wzyP81Etk03ZeHO9KLYqwkyEqDMPQs7Ce3zhYGOPM7FEqo=@vger.kernel.org, AJvYcCWtEk/oYoMtUysECeCO7Ad3q+CD1oPmIBjlHmVQ1Sp05iIhMMCrtGhJ7DrdrEgB9HvKhoIBDAhNJ4sF@vger.kernel.org, AJvYcCXPXwBjUCITIYIu3AdfrKM4EKE8BWdc4Qw8U2TMq3hJnbmJTSs1aGU9dhj7n6cuDZP44+JkVGu0UwkY7Zc=@vger.kernel.org, AJvYcCXlHa/yMv8pcPq49oY8eNGUAzwcaYwwAQXyTz6VCHj3+yYG9jIZ16t1ZPH0Fz8mKwNd8o0puqDPHhmHyfSs@vger.kernel.org
+X-Received: by 2002:a17:906:5a6b:b0:a99:fc3d:7c76 with SMTP id
+ a640c23a62f3a-aa581057f64mr101384466b.37.1732694673930; Wed, 27 Nov 2024
+ 00:04:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241127025728.3689245-1-yuanchu@google.com>
+References: <20241020040200.939973-1-visitorckw@gmail.com> <20241020040200.939973-2-visitorckw@gmail.com>
+ <CAMuHMdVO5DPuD9HYWBFqKDHphx7+0BEhreUxtVC40A=8p6VAhQ@mail.gmail.com> <Z0aLFidHu/msXbXq@visitorckw-System-Product-Name>
+In-Reply-To: <Z0aLFidHu/msXbXq@visitorckw-System-Product-Name>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 27 Nov 2024 09:04:19 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUVfQvA_d+ERuqRbd_aRVabUX4N=kKd+gc7RK+EArwi+w@mail.gmail.com>
+Message-ID: <CAMuHMdUVfQvA_d+ERuqRbd_aRVabUX4N=kKd+gc7RK+EArwi+w@mail.gmail.com>
+Subject: Re: [PATCH v2 01/10] lib/min_heap: Introduce non-inline versions of
+ min heap API functions
+To: Kuan-Wei Chiu <visitorckw@gmail.com>
+Cc: colyli@suse.de, kent.overstreet@linux.dev, msakai@redhat.com, 
+	corbet@lwn.net, peterz@infradead.org, mingo@redhat.com, acme@kernel.org, 
+	namhyung@kernel.org, akpm@linux-foundation.org, mark.rutland@arm.com, 
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, 
+	adrian.hunter@intel.com, kan.liang@linux.intel.com, willy@infradead.org, 
+	jserv@ccns.ncku.edu.tw, linux-kernel@vger.kernel.org, 
+	linux-bcache@vger.kernel.org, dm-devel@lists.linux.dev, 
+	linux-bcachefs@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-doc@vger.kernel.org, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 26, 2024 at 06:57:19PM -0800, Yuanchu Xie wrote:
-> This patch series provides workingset reporting of user pages in
-> lruvecs, of which coldness can be tracked by accessed bits and fd
-> references. However, the concept of workingset applies generically to
-> all types of memory, which could be kernel slab caches, discardable
-> userspace caches (databases), or CXL.mem. Therefore, data sources might
-> come from slab shrinkers, device drivers, or the userspace.
-> Another interesting idea might be hugepage workingset, so that we can
-> measure the proportion of hugepages backing cold memory. However, with
-> architectures like arm, there may be too many hugepage sizes leading to
-> a combinatorial explosion when exporting stats to the userspace.
-> Nonetheless, the kernel should provide a set of workingset interfaces
-> that is generic enough to accommodate the various use cases, and extensible
-> to potential future use cases.
+Hi Kuan-Wei,
 
-Doesn't DAMON already provide this information?
-
-CCing SJ.
-
-> Use cases
-> ==========
-> Job scheduling
-> On overcommitted hosts, workingset information improves efficiency and
-> reliability by allowing the job scheduler to have better stats on the
-> exact memory requirements of each job. This can manifest in efficiency by
-> landing more jobs on the same host or NUMA node. On the other hand, the
-> job scheduler can also ensure each node has a sufficient amount of memory
-> and does not enter direct reclaim or the kernel OOM path. With workingset
-> information and job priority, the userspace OOM killing or proactive
-> reclaim policy can kick in before the system is under memory pressure.
-> If the job shape is very different from the machine shape, knowing the
-> workingset per-node can also help inform page allocation policies.
-> 
-> Proactive reclaim
-> Workingset information allows the a container manager to proactively
-> reclaim memory while not impacting a job's performance. While PSI may
-> provide a reactive measure of when a proactive reclaim has reclaimed too
-> much, workingset reporting allows the policy to be more accurate and
-> flexible.
-
-I'm not sure about more accurate.
-
-Access frequency is only half the picture. Whether you need to keep
-memory with a given frequency resident depends on the speed of the
-backing device.
-
-There is memory compression; there is swap on flash; swap on crappy
-flash; swapfiles that share IOPS with co-located filesystems. There is
-zswap+writeback, where avg refault speed can vary dramatically.
-
-You can of course offload much more to a fast zswap backend than to a
-swapfile on a struggling flashdrive, with comparable app performance.
-
-So I think you'd be hard pressed to achieve a high level of accuracy
-in the usecases you list without taking the (often highly dynamic)
-cost of paging / memory transfer into account.
-
-There is a more detailed discussion of this in a paper we wrote on
-proactive reclaim/offloading - in 2.5 Hardware Heterogeneity:
-
-https://www.cs.cmu.edu/~dskarlat/publications/tmo_asplos22.pdf
-
-> Ballooning (similar to proactive reclaim)
-> The last patch of the series extends the virtio-balloon device to report
-> the guest workingset.
-> Balloon policies benefit from workingset to more precisely determine the
-> size of the memory balloon. On end-user devices where memory is scarce and
-> overcommitted, the balloon sizing in multiple VMs running on the same
-> device can be orchestrated with workingset reports from each one.
-> On the server side, workingset reporting allows the balloon controller to
-> inflate the balloon without causing too much file cache to be reclaimed in
-> the guest.
-> 
-> Promotion/Demotion
-> If different mechanisms are used for promition and demotion, workingset
-> information can help connect the two and avoid pages being migrated back
-> and forth.
-> For example, given a promotion hot page threshold defined in reaccess
-> distance of N seconds (promote pages accessed more often than every N
-> seconds). The threshold N should be set so that ~80% (e.g.) of pages on
-> the fast memory node passes the threshold. This calculation can be done
-> with workingset reports.
-> To be directly useful for promotion policies, the workingset report
-> interfaces need to be extended to report hotness and gather hotness
-> information from the devices[1].
-> 
-> [1]
-> https://www.opencompute.org/documents/ocp-cms-hotness-tracking-requirements-white-paper-pdf-1
+On Wed, Nov 27, 2024 at 3:59=E2=80=AFAM Kuan-Wei Chiu <visitorckw@gmail.com=
+> wrote:
+> On Tue, Nov 26, 2024 at 02:27:09PM +0100, Geert Uytterhoeven wrote:
+> > On Sun, Oct 20, 2024 at 6:02=E2=80=AFAM Kuan-Wei Chiu <visitorckw@gmail=
+.com> wrote:
+> > > All current min heap API functions are marked with '__always_inline'.
+> > > However, as the number of users increases, inlining these functions
+> > > everywhere leads to a increase in kernel size.
+> > >
+> > > In performance-critical paths, such as when perf events are enabled a=
+nd
+> > > min heap functions are called on every context switch, it is importan=
+t
+> > > to retain the inline versions for optimal performance. To balance thi=
+s,
+> > > the original inline functions are kept, and additional non-inline
+> > > versions of the functions have been added in lib/min_heap.c.
+> > >
+> > > Link: https://lore.kernel.org/20240522161048.8d8bbc7b153b4ecd92c50666=
+@linux-foundation.org
+> > > Suggested-by: Andrew Morton <akpm@linux-foundation.org>
+> > > Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+> >
+> > Thanks for your patch, which is now commit 92a8b224b833e82d
+> > ("lib/min_heap: introduce non-inline versions of min heap API
+> > functions") upstream.
+> >
+> > > --- a/include/linux/min_heap.h
+> > > +++ b/include/linux/min_heap.h
+> >
+> > > @@ -50,33 +50,33 @@ void __min_heap_init(min_heap_char *heap, void *d=
+ata, int size)
+> > >                 heap->data =3D heap->preallocated;
+> > >  }
+> > >
+> > > -#define min_heap_init(_heap, _data, _size)     \
+> > > -       __min_heap_init((min_heap_char *)_heap, _data, _size)
+> > > +#define min_heap_init_inline(_heap, _data, _size)      \
+> > > +       __min_heap_init_inline((min_heap_char *)_heap, _data, _size)
+> >
+> > Casting macro parameters without any further checks prevents the
+> > compiler from detecting silly mistakes.  Would it be possible to
+> > add safety-nets here and below, using e.g. container_of() or typeof()
+> > checks?
 >
-> Sysfs and Cgroup Interfaces
-> ==========
-> The interfaces are detailed in the patches that introduce them. The main
-> idea here is we break down the workingset per-node per-memcg into time
-> intervals (ms), e.g.
-> 
-> 1000 anon=137368 file=24530
-> 20000 anon=34342 file=0
-> 30000 anon=353232 file=333608
-> 40000 anon=407198 file=206052
-> 9223372036854775807 anon=4925624 file=892892
+> IIUC, the concern is that passing a pointer that is not of type
+> min_heap might lead to compiler errors being missed. To address this,
+
+Exactly.
+
+> one possible solution could be to expand the members of struct min_heap
+> into individual parameters for the function.
 >
-> Implementation
-> ==========
-> The reporting of user pages is based off of MGLRU, and therefore requires
-> CONFIG_LRU_GEN=y. We would benefit from more MGLRU generations for a more
-> fine-grained workingset report, but we can already gather a lot of data
-> with just four generations. The workingset reporting mechanism is gated
-> behind CONFIG_WORKINGSET_REPORT, and the aging thread is behind
-> CONFIG_WORKINGSET_REPORT_AGING.
-> 
-> Benchmarks
-> ==========
-> Ghait Ouled Amar Ben Cheikh has implemented a simple policy and ran Linux
-> compile and redis benchmarks from openbenchmarking.org. The policy and
-> runner is referred to as WMO (Workload Memory Optimization).
-> The results were based on v3 of the series, but v4 doesn't change the core
-> of the working set reporting and just adds the ballooning counterpart.
-> 
-> The timed Linux kernel compilation benchmark shows improvements in peak
-> memory usage with a policy of "swap out all bytes colder than 10 seconds
-> every 40 seconds". A swapfile is configured on SSD.
-> --------------------------------------------
-> peak memory usage (with WMO): 4982.61328 MiB
-> peak memory usage (control): 9569.1367 MiB
-> peak memory reduction: 47.9%
-> --------------------------------------------
-> Benchmark                                           | Experimental     |Control         | Experimental_Std_Dev | Control_Std_Dev
-> Timed Linux Kernel Compilation - allmodconfig (sec) | 708.486 (95.91%) | 679.499 (100%) | 0.6%                 | 0.1%
-> --------------------------------------------
-> Seconds, fewer is better
+> diff --git a/include/linux/min_heap.h b/include/linux/min_heap.h
+> index e781727c8916..ebd577003f0b 100644
+> --- a/include/linux/min_heap.h
+> +++ b/include/linux/min_heap.h
+> @@ -207,18 +207,20 @@ static size_t parent(size_t i, unsigned int lsbit, =
+size_t size)
+>
+>  /* Initialize a min-heap. */
+>  static __always_inline
+> -void __min_heap_init_inline(min_heap_char *heap, void *data, int size)
+> +void __min_heap_init_inline(int *heap_nr, int *heap_size, void **heap_da=
+ta,
+> +                           void *heap_preallocated, void *data, int size=
+)
+>  {
 
-You can do this with a recent (>2018) upstream kernel and ~100 lines
-of python [1]. It also works on both LRU implementations.
+Which means all functions and users must be updated now, and possibly
+again in the future (when there is ever a need to change the struct).
 
-[1] https://github.com/facebookincubator/senpai
+> Alternatively, we could use container_of() for type safety.
+>
+> diff --git a/include/linux/min_heap.h b/include/linux/min_heap.h
+> index e781727c8916..fb96b1b82fb0 100644
+> --- a/include/linux/min_heap.h
+> +++ b/include/linux/min_heap.h
+> @@ -218,7 +218,7 @@ void __min_heap_init_inline(min_heap_char *heap, void=
+ *data, int size)
+>  }
+>
+>  #define min_heap_init_inline(_heap, _data, _size)      \
+> -       __min_heap_init_inline((min_heap_char *)_heap, _data, _size)
+> +       __min_heap_init_inline(container_of(&(_heap)->nr, min_heap_char, =
+nr), _data, _size)
+>
+>  /* Get the minimum element from the heap. */
+>  static __always_inline
+>
+> The first approach has better readability, while the second minimizes
+> the changes needed. Please let me know your thoughts.
 
-We use this approach in virtually the entire Meta fleet, to offload
-unneeded memory, estimate available capacity for job scheduling, plan
-future capacity needs, and provide accurate memory usage feedback to
-application developers.
+container_of() is a well-known idiom in the Linux kernel, so I would go
+for this solution, for min_heap_init_inline() and all other functions
+currently using such a cast.
 
-It works over a wide variety of CPU and storage configurations with no
-specific tuning.
+> > > --- a/lib/Kconfig
+> > > +++ b/lib/Kconfig
+> > > @@ -777,3 +777,6 @@ config POLYNOMIAL
+> > >
+> > >  config FIRMWARE_TABLE
+> > >         bool
+> > > +
+> > > +config MIN_HEAP
+> > > +       bool
+> >
+> > Perhaps tristate? See also below.
+> >
+> > > --- a/lib/Kconfig.debug
+> > > +++ b/lib/Kconfig.debug
+> > > @@ -2279,6 +2279,7 @@ config TEST_LIST_SORT
+> > >  config TEST_MIN_HEAP
+> > >         tristate "Min heap test"
+> > >         depends on DEBUG_KERNEL || m
+> > > +       select MIN_HEAP
+> >
+> > Ideally, tests should not select functionality, to prevent increasing t=
+he
+> > attack vector by merely enabling (modular) tests.
+> >
+> Makes sense. Thanks for catching this.
+>
+> > In this particular case, just using "depends on MIN_HEAP" is not an
+> > option, as MIN_HEAP is not user-visible, and thus cannot be enabled
+> > by the user on its own.  However, making MIN_HEAP tristate could be
+> > a first step for the modular case.
+> >
+> > The builtin case is harder to fix, as e.g.
+> >
+> >         depends on MIN_HEAP || COMPILE_TEST
+> >         select MIN_HEAP if COMPILE_TEST
+> >
+> > would still trigger a recursive dependency error.
+> >
+> > Alternatively, the test could just keep on using the inline variants,
+> > unless CONFIG_MIN_HEAP=3Dy? Or event test both for the latter?
+> >
+> I think that having min_heap_test continue using the inline variants
+> might be the simplest solution?
 
-The paper I referenced above provides a detailed breakdown of how it
-all works together.
+As lib/min_heap.c contains just wrappers around the inline functions,
+that would be fine for me.  If/when lib/min_heap.c gains more
+functionality, tests for that can be added to lib/test_min_heap.c
+inside an #ifdef CONFIG_MIN_HEAP/#endif block.
 
-I would be curious to see a more in-depth comparison to the prior art
-in this space. At first glance, your proposal seems more complex and
-less robust/versatile, at least for offloading and capacity gauging.
+Thanks!
 
-It does provide more detailed insight into userspace memory behavior,
-which could be helpful when trying to make sense of applications that
-sit on a rich layer of libraries and complicated runtimes. But here a
-comparison to DAMON would be helpful.
+Gr{oetje,eeting}s,
 
->  25 files changed, 2482 insertions(+), 9 deletions(-)
->  create mode 100644 Documentation/admin-guide/mm/workingset_report.rst
->  create mode 100644 include/linux/workingset_report.h
->  create mode 100644 mm/workingset_report.c
->  create mode 100644 mm/workingset_report_aging.c
->  create mode 100644 tools/testing/selftests/mm/workingset_report.c
->  create mode 100644 tools/testing/selftests/mm/workingset_report.h
->  create mode 100644 tools/testing/selftests/mm/workingset_report_test.c
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
