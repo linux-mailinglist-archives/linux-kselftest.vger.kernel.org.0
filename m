@@ -1,194 +1,178 @@
-Return-Path: <linux-kselftest+bounces-22588-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22589-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3C9A9DAFC5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 00:15:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3988C9DAFCF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 00:21:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BE312819A8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 23:15:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B3237B215D9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 23:21:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E965192D76;
-	Wed, 27 Nov 2024 23:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B2B0193432;
+	Wed, 27 Nov 2024 23:21:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FuVotEQd"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GKZ0ZkkV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE793433C8
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 Nov 2024 23:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B8F433C8
+	for <linux-kselftest@vger.kernel.org>; Wed, 27 Nov 2024 23:21:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732749323; cv=none; b=A2z6i/6Q+s0abifpio97QL34g5+1tRDwAdO8wLq2Q0zPiyRepkiuWELVMeYbV6so4i7UcVwmopwqKv3cC3uqihCFdnS+jeEmZK0rHLmgIrtaazaqT35Nm+ZIWPww80RaRJCZoteXAHc5fn5d/IlaUC4FhdN27mt1m/WdzdMuLOo=
+	t=1732749701; cv=none; b=XuSOBeg4x7yCxayA2tgl8RskMoYvaxado2kQE0H6Qn47BjmyGsJ7CKDUxBjOb1gYfZh7TUdpQba+ugpenwR6iJhaUKtz/4UFLLVMtlnefuBv9pZ2DIuHVaSrBelk6hWLBUn7P7CcwlAAiyDdroDPNPbGPxJxKn0xeUBs/3csah0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732749323; c=relaxed/simple;
-	bh=+jPnjmSkIWnfw1ypNxPAHk3jExZky9QC/KYnqBebpVY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hUbiyAZD+lXJ5UTBlGBDcx6mWSERY9cZQqZD5m96mTMEixPCtlHdIYrrFA1y6kPAHjkmDB8iQA3gObcA/nmLnEaghDkB1EU4Z0FYPmc39JJxcIeb39TqoKO1qlrNpYQkxfOjlXHQj2E9UipPoHiUeLJgLsyEd7RwLg9xNxNfRSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=FuVotEQd; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-724e1d0a52dso40365b3a.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Nov 2024 15:15:21 -0800 (PST)
+	s=arc-20240116; t=1732749701; c=relaxed/simple;
+	bh=Vi/SX3JTjpjmfswC3/FbkGdskaDiBdboG6X7+DY1cbk=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=ceQ9XGAxh6nJpg9YKyat5xq17/u2REprv5qEChyFEJb6Dgld/yrFaL0E391cWAJ23Ew1h0ekBskInRZIKoe6pYnSYGaKjeeWuefbASFxVbo3Ox2AVSG00wvRyuDcA5D5bvvgrovzd4AfuLydS7HpeRdBBBpi6rufDa7ed/PZScc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GKZ0ZkkV; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7250da8a2a5so234617b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Nov 2024 15:21:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1732749321; x=1733354121; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GYut6aU/zn0xLVmf0unpLL5mLReSDppc7n+P3njEiRE=;
-        b=FuVotEQdl/FB+TAFPewoIiIaBsvRSMEPXS88ETAb32BINXuhOwMk20qi83g4OeGfUf
-         5cjSZBPaeZ7hoo0SJWnuhTO1IWDZBUlFiCocTNJ1guGJcAge7jyhRsX5VxzdGM9BISxh
-         Iompgt+tyXqkEJ1oWUgMso9sxZ+RAFRSChaIM=
+        d=google.com; s=20230601; t=1732749699; x=1733354499; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u20pll8VeOEmkG4npMdzaZzjnGDg+tlkbbf8/K18yaA=;
+        b=GKZ0ZkkVxAoj2CUa7myJbwDl33CmYl+D4MJ7bYGNXQtaih9NvSwdm4aCzrNoSksyuN
+         YBqvCBKq8CTrOOVIBq2glISCIiE7lAhGTx9nLZ+oE0aBLRH38pbsf1kPNcVVahgas7Ul
+         jXLzJyxjjx30ni+5gRAUmkicn6H3Wmlwu10W7lu63Kt+pN4sIYRRs/KPIaGzTVS5xKRA
+         5Wvbfi332DkSynfrTXajbxxlQFKUvV6f9gFpKamYGBp7erS94vDZqiiQPyEeS9mLhuNK
+         qqy55QiCCOKpxKFVizHScF5dcbQCpyaVIhZuNlnHmUqKOeduXcurdQxEEB7rhOmRYfaB
+         GP4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732749321; x=1733354121;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GYut6aU/zn0xLVmf0unpLL5mLReSDppc7n+P3njEiRE=;
-        b=S8FC1xECLGhz1TUWuHDMxeDBCyHE9gXsCkLivhk6IVJ7ASuSjsfQ9LlPY/5dkgDZgE
-         ZsHWL71cjSBTlSZnA6jQVFfWPR3V3S7vFT3rTDL1JSihB8LMNH7eKGnGi9NBEbbdaZkM
-         LgkbNhfa/rqMAC6c085KxkhF7lABUXxpiJ15Wd5/X/XYtImjlKP5OQvIuZ2cbNw1g/Yl
-         aDiuH338dCnv4mEKwBXA/Z274pIClsbemYWz8vWPNDGP0MpWg/cHRTyeTBizPYuMyd9i
-         sLChamqRtyGvF2iE9/2LdBxjA6jav3oRSx52wYJtz500nTbLc1AH0NMWSEuJOYPaBfTC
-         kyaw==
-X-Forwarded-Encrypted: i=1; AJvYcCVFPAixSVYTPvsFvJsfq3/0JgtdN71tBTrszbj7SqEobR+4sox1jRhTEtc7L2658T6ZyJzLkWnouYpe9O3ysUI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLAG3oMQK7iyMlQH5Iw9lBdvKOaob6/cGqyDWVlLh3Q4ZJM7j1
-	Ngzf47d6OtUfSJrdg8JM7uhQlXujjj8sLKvbM7zxeQfHQUdbHcgQRR/ellyid4WrSWOnrLI4THb
-	GnmU8
-X-Gm-Gg: ASbGncs49Lw/tJVHNpiPKLNXBj2JffHbqSvUapQUNM8n3dBhAh9x6zSFFnaYca5/UHw
-	T8gQfuzU/szW0GS56qVu7YVyahZxHm/LADweKiDPiKKXN815mf4pLAc+SXHM2CBjzTOyL42PY4P
-	25MidyMzarY5JRP8zRfuDev8bsLyQiPG5bDLzrMuoNz3nwcdTHQtlu+OLt0ljA/ayds1I57MZ4k
-	ALNt/CFUuwHAjI79s33Qt8W5Ucc11GNJSouzJugL2KIjZEaZCZd3W5Ghy2+mPng6V9O/R6ES20N
-	cCnl6srZR/pwr6MiUA==
-X-Google-Smtp-Source: AGHT+IFswN8l6vK2RwOVMMTXDgpcYWZui5Cw8IO7Up5gdjZnl+vmRWSTOlfFn3YmwMR4zc5kOkOTLg==
-X-Received: by 2002:a17:903:41d2:b0:212:3f36:cee1 with SMTP id d9443c01a7336-21501855eb2mr23821995ad.8.1732749320918;
-        Wed, 27 Nov 2024 15:15:20 -0800 (PST)
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com. [209.85.214.176])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72541761309sm116455b3a.5.2024.11.27.15.15.18
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Nov 2024 15:15:20 -0800 (PST)
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-212776d6449so2044705ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Nov 2024 15:15:18 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXLe4wARDSDGcQ+iD+qoiZdLy6gjJ01kR8/fYMXLURITsw1k0sJ20nX9KzQTYM1SScqRrwP+CbAv9taRwD/obs=@vger.kernel.org
-X-Received: by 2002:a17:902:f382:b0:212:655c:caf with SMTP id
- d9443c01a7336-21501e5af92mr39560115ad.55.1732749318060; Wed, 27 Nov 2024
- 15:15:18 -0800 (PST)
+        d=1e100.net; s=20230601; t=1732749699; x=1733354499;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u20pll8VeOEmkG4npMdzaZzjnGDg+tlkbbf8/K18yaA=;
+        b=hliiPodjoTBdXlbKAQvsbHy0+ePrbq7k2IDZQBBrek/OQcMgkbeT4+z8Xg1ffZGd6G
+         JOBbOQSUXE8+TxI2L/xOYZMQhwIH/AxhQT3G8XQncjQu1fk0j4Tt2stgTGGNejsnpPNA
+         Y02v/wUit7uxdbSl9vikpvaLrkI2H+e654JshY6YgjbvaBHaSRC0LUSimpvlt2F8l0cy
+         DpNT3Dzm2aYsMG9r07mSHxv/92jwnysPUduQSYRpBPbFYu9L9HH9PBXtXbASrMoEHNGd
+         WjYcvOG2iRm8eKcaYa8gXs7cfEJHsJPAL6R3AqttdCa3Qyum2OFslZUK1n3yNhRETaG0
+         HOFg==
+X-Forwarded-Encrypted: i=1; AJvYcCVaxXHlGcO4vdUP5dsRV/6E19MAFp42+fF1tyMy1fdPayuVnawlAZoTjiUkL+CTeFHsCki9VxK4yyrPSs7wXbg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7NPQSssjah+dXJfMqMI4/vmHSCJU+MOVoMacs44ya7PSCW+WS
+	NsNU6b/g3DPpu/iKIIVR4Gx65pDHC8oJCe6wmQhxJ98xL5tK7owa+zV3KKQGrE6/szLBxSNARg=
+	=
+X-Google-Smtp-Source: AGHT+IGdqHAFyXe8UNth15Wha1d0C9WQ0r4xWcwWi3yujdz0WVs368myT4JyWIp7ZAc2PFuEv/H+Lq7cYA==
+X-Received: from pfbdw21.prod.google.com ([2002:a05:6a00:3695:b0:724:f1f4:cc72])
+ (user=jrife job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:b81:b0:724:fac6:35f2
+ with SMTP id d2e1a72fcca58-725300107f4mr5451899b3a.9.1732749698863; Wed, 27
+ Nov 2024 15:21:38 -0800 (PST)
+Date: Wed, 27 Nov 2024 23:21:33 +0000
+In-Reply-To: <CADKFtnTThMBDKCXufNaeci5uCeddOgLvXmqszyJoT6N=6xtWug@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241127025728.3689245-1-yuanchu@google.com> <20241127025728.3689245-10-yuanchu@google.com>
-In-Reply-To: <20241127025728.3689245-10-yuanchu@google.com>
-From: Daniel Verkamp <dverkamp@chromium.org>
-Date: Wed, 27 Nov 2024 15:14:52 -0800
-X-Gmail-Original-Message-ID: <CABVzXAnbSeUezF_dqk2=6HGTCd09T4rd6AssP7-dbCgZSkZgiw@mail.gmail.com>
-Message-ID: <CABVzXAnbSeUezF_dqk2=6HGTCd09T4rd6AssP7-dbCgZSkZgiw@mail.gmail.com>
-Subject: Re: [PATCH v4 9/9] virtio-balloon: add workingset reporting
-To: Yuanchu Xie <yuanchu@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@redhat.com>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>, Khalid Aziz <khalid.aziz@oracle.com>, 
-	Henry Huang <henry.hj@antgroup.com>, Yu Zhao <yuzhao@google.com>, 
-	Dan Williams <dan.j.williams@intel.com>, Gregory Price <gregory.price@memverge.com>, 
-	Huang Ying <ying.huang@intel.com>, Lance Yang <ioworker0@gmail.com>, 
-	Randy Dunlap <rdunlap@infradead.org>, Muhammad Usama Anjum <usama.anjum@collabora.com>, 
-	Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
-	Mike Rapoport <rppt@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Christian Brauner <brauner@kernel.org>, Daniel Watson <ozzloy@each.do>, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	virtualization@lists.linux.dev, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+References: <CADKFtnTThMBDKCXufNaeci5uCeddOgLvXmqszyJoT6N=6xtWug@mail.gmail.com>
+X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
+Message-ID: <20241127232133.3928793-1-jrife@google.com>
+Subject: Re: [PATCH v2 net-next] wireguard: allowedips: Add
+ WGALLOWEDIP_F_REMOVE_ME flag
+From: Jordan Rife <jrife@google.com>
+To: jrife@google.com
+Cc: Jason@zx2c4.com, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
+	shuah@kernel.org, wireguard@lists.zx2c4.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 26, 2024 at 7:00=E2=80=AFPM Yuanchu Xie <yuanchu@google.com> wr=
-ote:
-[...]
-> diff --git a/include/linux/workingset_report.h b/include/linux/workingset=
-_report.h
-> index f6bbde2a04c3..1074b89035e9 100644
-> --- a/include/linux/workingset_report.h
-> +++ b/include/linux/workingset_report.h
-[...]
-> diff --git a/include/uapi/linux/virtio_balloon.h b/include/uapi/linux/vir=
-tio_balloon.h
-> index ee35a372805d..668eaa39c85b 100644
-> --- a/include/uapi/linux/virtio_balloon.h
-> +++ b/include/uapi/linux/virtio_balloon.h
-> @@ -25,6 +25,7 @@
->   * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY=
- WAY
->   * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY O=
-F
->   * SUCH DAMAGE. */
-> +#include "linux/workingset_report.h"
->  #include <linux/types.h>
->  #include <linux/virtio_types.h>
->  #include <linux/virtio_ids.h>
+> I think the challenge with WGALLOWEDIP_A_FLAGS in particular is that
+> because it didn't exist since the beginning like WGPEER_A_FLAGS, there
+> are kernels out there that have no knowledge of it and wouldn't have
+> this check in place. While I think it's a good idea to replicate this
+> check for WGALLOWEDIP_A_FLAGS as well for future compatibility, we
+> still need some way for clients to probe whether or not this feature
+> is supported in case they're running on an older kernel. If we want to
+> keep the version number as-is, I see a few alternatives:
 
-This seems to be including a non-uapi header
-(include/linux/workingset_report.h) from a uapi header
-(include/uapi/linux/virtio_balloon.h), which won't compile outside the
-kernel. Does anything in the uapi actually need declarations from
-workingset_report.h?
+Forget about all of this actually. I was under the mistaken impression
+that an unrecognized attribute would be silently ignored by an older
+kernel, but it seems that validation is strict.
 
-> @@ -37,6 +38,7 @@
->  #define VIRTIO_BALLOON_F_FREE_PAGE_HINT        3 /* VQ to report free pa=
-ges */
->  #define VIRTIO_BALLOON_F_PAGE_POISON   4 /* Guest is using page poisonin=
-g */
->  #define VIRTIO_BALLOON_F_REPORTING     5 /* Page reporting virtqueue */
-> +#define VIRTIO_BALLOON_F_WS_REPORTING  6 /* Working Set Size reporting *=
-/
->
->  /* Size of a PFN in the balloon interface. */
->  #define VIRTIO_BALLOON_PFN_SHIFT 12
-> @@ -128,4 +130,32 @@ struct virtio_balloon_stat {
->         __virtio64 val;
->  } __attribute__((packed));
->
-> +/* Operations from the device */
-> +#define VIRTIO_BALLOON_WS_OP_REQUEST 1
-> +#define VIRTIO_BALLOON_WS_OP_CONFIG 2
-> +
-> +struct virtio_balloon_working_set_notify {
-> +       /* REQUEST or CONFIG */
-> +       __le16 op;
-> +       __le16 node_id;
-> +       /* the following fields valid iff op=3DCONFIG */
-> +       __le32 report_threshold;
-> +       __le32 refresh_interval;
-> +       __le32 idle_age[WORKINGSET_REPORT_MAX_NR_BINS];
-> +};
-> +
-> +struct virtio_balloon_working_set_report_bin {
-> +       __le64 idle_age;
-> +       /* bytes in this bucket for anon and file */
-> +       __le64 anon_bytes;
-> +       __le64 file_bytes;
-> +};
-> +
-> +struct virtio_balloon_working_set_report {
-> +       __le32 error;
-> +       __le32 node_id;
-> +       struct virtio_balloon_working_set_report_bin
-> +               bins[WORKINGSET_REPORT_MAX_NR_BINS];
-> +};
-> +
->  #endif /* _LINUX_VIRTIO_BALLOON_H */
+	if (attrs[WGPEER_A_ALLOWEDIPS]) {
+		struct nlattr *attr, *allowedip[WGALLOWEDIP_A_MAX + 1];
+		int rem;
 
-Have the spec changes been discussed in the virtio TC?
+		nla_for_each_nested(attr, attrs[WGPEER_A_ALLOWEDIPS], rem) {
+			ret = nla_parse_nested(allowedip, WGALLOWEDIP_A_MAX,
+					       attr, allowedip_policy, NULL);
+			if (ret < 0)
+				goto out;
+			ret = set_allowedip(peer, allowedip);
+			if (ret < 0)
+				goto out;
+		}
+	}
 
-Thanks,
--- Daniel
+nla_parse_nested() uses NL_VALIDATE_STRICT which sets
+NL_VALIDATE_MAXTYPE, causing __nla_validate_parse() in this case to
+check that no attribute types are greater than WGALLOWEDIP_A_MAX.
+
+The WG_CMD_SET_DEVICE operation simply returns EINVAL if you try to use
+WGALLOWEDIP_A_FLAGS on a kernel that doesn't support it. I tested this
+using a patched version of wg that sets the WGALLOWEDIP_F_REMOVE_ME
+attribute when using an argument I added called "allowed-ips-patch".
+
+Kernel With WGALLOWEDIP_A_FLAGS
+==================================
+jordan@t14:~/code/wireguard-tools/src$ sudo ./wg set wg0 peer xK7O/YnTb8W/fgPA4dwAshEV06rMPMqqmy3zZN0NPS4= allowed-ips-patch 192.168.0.3/32
+jordan@t14:~/code/wireguard-tools/src$ sudo ./wg
+interface: wg0
+
+peer: xK7O/YnTb8W/fgPA4dwAshEV06rMPMqqmy3zZN0NPS4=
+  allowed ips: 192.168.0.3/32
+jordan@t14:~/code/wireguard-tools/src$ sudo ./wg set wg0 peer xK7O/YnTb8W/fgPA4dwAshEV06rMPMqqmy3zZN0NPS4= allowed-ips-patch -192.168.0.3/32
+jordan@t14:~/code/wireguard-tools/src$ sudo ./wg
+interface: wg0
+
+peer: xK7O/YnTb8W/fgPA4dwAshEV06rMPMqqmy3zZN0NPS4=
+  allowed ips: (none)
+jordan@t14:~/code/wireguard-tools/src$ 
+
+Kernel Without WGALLOWEDIP_A_FLAGS
+==================================
+jordan@t14:~/code/wireguard-tools/src$ sudo ./wg set wg0 peer xK7O/YnTb8W/fgPA4dwAshEV06rMPMqqmy3zZN0NPS4= allowed-ips-patch 192.168.0.3/32
+jordan@t14:~/code/wireguard-tools/src$ sudo ./wg
+interface: wg0
+
+peer: xK7O/YnTb8W/fgPA4dwAshEV06rMPMqqmy3zZN0NPS4=
+  allowed ips: 192.168.0.3/32
+jordan@t14:~/code/wireguard-tools/src$ sudo ./wg set wg0 peer xK7O/YnTb8W/fgPA4dwAshEV06rMPMqqmy3zZN0NPS4= allowed-ips-patch -192.168.0.3/32
+Unable to modify interface: Invalid argument
+jordan@t14:~/code/wireguard-tools/src$ 
+
+The second command fails with "Invalid argument" (EINVAL) on the
+unpatched kernel. This simplifies things, as there's no need for
+clients to explicitly probe to see if this attribute is supported. I
+will do the following:
+
+1. Revert WG_GENL_VERSION back to 1.
+2. Add a check for new flags similar to the one you mentioned for
+   WGPEER_A_FLAGS.
+
+        if (attrs[WGPEER_A_FLAGS])
+                flags = nla_get_u32(attrs[WGPEER_A_FLAGS]);
+        ret = -EOPNOTSUPP;
+        if (flags & ~__WGPEER_F_ALL)
+                goto out;
+
+This should be sufficient. We might want to consider how best to bubble
+this error up to users. In the case of wg, "Invalid argument" may not be
+very helpful in determining where you went wrong. We could always detect
+when EINVAL is returned in response to an operation that sets
+WGALLOWEDIP_A_FLAGS and print something more helpful like "Operation not
+supported on this kernel". However, these are details that can be worked
+out.
+
+Sorry for the confusion!
+
+-Jordan
 
