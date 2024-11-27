@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-22578-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22579-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBC779DAC8F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 18:36:12 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F04D89DAC91
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 18:36:22 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FA2C165755
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 17:36:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90C48281EEB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 17:36:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D9120103D;
-	Wed, 27 Nov 2024 17:36:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75EF6201028;
+	Wed, 27 Nov 2024 17:36:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Om+wtm7U"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UzbK3ut0"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B6E4201028;
-	Wed, 27 Nov 2024 17:36:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3A7E2010EC;
+	Wed, 27 Nov 2024 17:36:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732728962; cv=none; b=dJy5IP/Fg428vASROXaD4KTZn8az5JA2odMxFHkg48I0aPa7XoByu6CmSCkb20MdhdAaWp/4TeDFKZMp2TJO2TzMqyIPGCavc1ox7+w2WXb+qOS+USqpKFNWKImDmuQ0sqiwaDldq79lRMHVjO8Bb+u+B7+F4q+XKs+pIa2p4wU=
+	t=1732728965; cv=none; b=NPAp+JXwV6g6iPizb5CdJCh7C/x85o3a8dRtwqSPQSZ2PJ+l9VunZVWwwyD1Ev8WVXjSSQU/ww3/5J3C2PhTknvuqt7Du7P1lk9lLZtsIGYB5tSHSmwzJV2UAgfQxlSVBijo2lhwLqpuBkeI8PQtrSMBlWO1cLDAamfIxQHnfIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732728962; c=relaxed/simple;
-	bh=Sbl14Xzfp6nN0p/UKfe6EiU0QQWGiojbB1fSn6/9LWs=;
+	s=arc-20240116; t=1732728965; c=relaxed/simple;
+	bh=RF4rG7dZqGqAjCmjHOsGfY+CZsIm6V7+eg4OHintPpk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fwTlmfhZCjrtPldRZdmMqmUqB1rx26drQI4eGlyKAlGo4+Brf/XzHVTIXZN5MGYUmsFy2D75PfgQR+++fkfaWQozhDJbtqhyGRIhfXH6Oqn0NLaxp8ah6pcfObN9Izk5W4VNeU9kJaM60Uy2YB1Bk9+gEmVNm/Xm//DQpT0f10s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Om+wtm7U; arc=none smtp.client-ip=192.198.163.9
+	 MIME-Version; b=NM+28MzC2N61lB3YqbDQqwU8QrMdRfYlP2fR58/BQgxqfQapwUUuGRhOqImCtrNmmtGYNt3em/54LH6V0Y849iL4jDfr4iO/3FNoNRFXI2N8H3KID6SksGUh0ku1qn0/shHLtp0Y4/gulnf0bUdu4M600NBydyiyBMq6DGBX+Gc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UzbK3ut0; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732728961; x=1764264961;
+  t=1732728964; x=1764264964;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Sbl14Xzfp6nN0p/UKfe6EiU0QQWGiojbB1fSn6/9LWs=;
-  b=Om+wtm7UsjdK8Bpc9NddPhTzPlZIXDgvkM30e85XTeMqofwwtosfWgCt
-   KrL+Dq7bkM+XoKsCJdO91nWiQ1+QeNnn0VGLQsgdjFFW4FgvoowpOdTSo
-   zf/oAKBshRdzFmyAMJLK7wno3FKhfufzsgA/Rwzqk3eLK80N974e8U1uE
-   lw/suzdt1Dl9klZIP3QJle03I8+YFdn11SkZCH7lBGlgPDYDylQ+co3HS
-   2t9/7YoK1PdlqGYxfT5P6SzAvPop8eoKQFBZbSXPWAvfJYxv87/lk/qlj
-   HJ7n4spO9I/fdhLKRqkaLt0jlfJQ6rNq39ZX0pdTAmKyRhUIq4p75kIY7
-   Q==;
-X-CSE-ConnectionGUID: 3eak5DefSoyzQWgjyvrsKg==
-X-CSE-MsgGUID: bZgGk8RuRQ+TnkUEgVArig==
-X-IronPort-AV: E=McAfee;i="6700,10204,11269"; a="43607496"
+  bh=RF4rG7dZqGqAjCmjHOsGfY+CZsIm6V7+eg4OHintPpk=;
+  b=UzbK3ut03d+J7CArNZBuHyvQwxbvEyCF4s4ClWHVZ+bmio9gtI0c5KJd
+   GTuWxVkhNWJtH7Nc7nNGOWoS8c+NiMY8Y3aruHkGCc1N5ts7LV33tgak5
+   QctmCgv6isJsxMnWeAD2ekXjwViPeF68matYBwRwF/qz36mvkksuJlaDn
+   PZIe7UiAJS/0EYcWeCrEomJd9ZXCjwUDkdaEYamP/g/Gxtr6OXtjrvWuE
+   w/+p9MltmSWJ0sUSHZyDDYyDHCKDumRR2AxCjDL54fytR+uxOZQtUtPGB
+   FQgKYwq5IF+pI8HU6xx/EyBye/x61/v3uZYstMctOxCB87OyI1IVo+EGr
+   g==;
+X-CSE-ConnectionGUID: 6MnxV0NpS6aDegdbOtCtzw==
+X-CSE-MsgGUID: f/w3AxoKSdCp3GJ1TN4NcQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11269"; a="43607515"
 X-IronPort-AV: E=Sophos;i="6.12,189,1728975600"; 
-   d="scan'208";a="43607496"
+   d="scan'208";a="43607515"
 Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2024 09:36:00 -0800
-X-CSE-ConnectionGUID: Y1klalnhTLydkm4reomGLA==
-X-CSE-MsgGUID: /d3WfWRmTCqU6/Osh454iw==
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2024 09:36:04 -0800
+X-CSE-ConnectionGUID: 59gh4jNbTsinhWC6nKmM7A==
+X-CSE-MsgGUID: KULZOYFgThuRaUNs5a802Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,189,1728975600"; 
-   d="scan'208";a="91626331"
+   d="scan'208";a="91626348"
 Received: from pgcooper-mobl3.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.244.193])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2024 09:35:57 -0800
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2024 09:36:00 -0800
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 To: shuah@kernel.org,
 	hpa@zytor.com,
@@ -72,9 +72,9 @@ Cc: linux-kernel@vger.kernel.org,
 	maciej.wieczor-retman@intel.com,
 	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
 	Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v5 1/3] selftests/lam: Move cpu_has_la57() to use cpuinfo flag
-Date: Wed, 27 Nov 2024 18:35:29 +0100
-Message-ID: <63f8fa8ac016f9f294230657e9069a616bce6141.1732728879.git.maciej.wieczor-retman@intel.com>
+Subject: [PATCH v5 2/3] selftests/lam: Skip test if LAM is disabled
+Date: Wed, 27 Nov 2024 18:35:30 +0100
+Message-ID: <09e6958c424a5da763f2331745cfe145962b0a83.1732728879.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <cover.1732728879.git.maciej.wieczor-retman@intel.com>
 References: <cover.1732728879.git.maciej.wieczor-retman@intel.com>
@@ -86,50 +86,57 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In current form cpu_has_la57() reports platform's support for LA57
-through reading the output of cpuid. A much more useful information is
-whether 5-level paging is actually enabled on the running system.
+Until LASS is merged into the kernel [1], LAM is left disabled in the
+config file. Running the LAM selftest with disabled LAM only results in
+unhelpful output.
 
-Presence of the la57 flag in /proc/cpuinfo signifies that 5-level paging
-was compiled into the kernel, is supported by the platform and wasn't
-disabled by kernel command line argument.
+Use one of LAM syscalls() to determine whether the kernel was compiled
+with LAM support (CONFIG_ADDRESS_MASKING) or not. Skip running the tests
+in the latter case.
 
-Use system() with cat and grep to figure out if la57 is enabled on the
-running system.
+[1] https://lore.kernel.org/all/20241028160917.1380714-1-alexander.shishkin@linux.intel.com/
 
 Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
-Changelog v5:
-- Remove "cat" from system() call and use only "grep".
-
 Changelog v4:
 - Add this patch to the series.
 
- tools/testing/selftests/x86/lam.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ tools/testing/selftests/x86/lam.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
-index 0ea4f6813930..93f2f762d6b5 100644
+index 93f2f762d6b5..4ec37a4be007 100644
 --- a/tools/testing/selftests/x86/lam.c
 +++ b/tools/testing/selftests/x86/lam.c
-@@ -124,14 +124,9 @@ static inline int cpu_has_lam(void)
+@@ -124,6 +124,14 @@ static inline int cpu_has_lam(void)
  	return (cpuinfo[0] & (1 << 26));
  }
  
--/* Check 5-level page table feature in CPUID.(EAX=07H, ECX=00H):ECX.[bit 16] */
++static inline int kernel_has_lam(void)
++{
++	unsigned long bits;
++
++	syscall(SYS_arch_prctl, ARCH_GET_MAX_TAG_BITS, &bits);
++	return !!bits;
++}
++
  static inline int cpu_has_la57(void)
  {
--	unsigned int cpuinfo[4];
--
--	__cpuid_count(0x7, 0, cpuinfo[0], cpuinfo[1], cpuinfo[2], cpuinfo[3]);
--
--	return (cpuinfo[2] & (1 << 16));
-+	return !system("grep -wq la57 /proc/cpuinfo");
- }
+ 	return !system("grep -wq la57 /proc/cpuinfo");
+@@ -1181,6 +1189,11 @@ int main(int argc, char **argv)
+ 		return KSFT_SKIP;
+ 	}
  
- /*
++	if (!kernel_has_lam()) {
++		ksft_print_msg("LAM is disabled in the kernel!\n");
++		return KSFT_SKIP;
++	}
++
+ 	while ((c = getopt(argc, argv, "ht:")) != -1) {
+ 		switch (c) {
+ 		case 't':
 -- 
 2.47.1
 
