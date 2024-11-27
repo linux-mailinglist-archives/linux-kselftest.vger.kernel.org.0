@@ -1,106 +1,100 @@
-Return-Path: <linux-kselftest+bounces-22571-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22572-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E5DE9DAA4F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 16:03:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A089A9DAB56
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 17:04:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C41CC281105
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 15:03:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C805282006
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 16:04:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 150771442E8;
-	Wed, 27 Nov 2024 15:03:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44216200B99;
+	Wed, 27 Nov 2024 16:04:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QFJO2paA"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="kYHq6Ita"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [45.157.188.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67CC224EA;
-	Wed, 27 Nov 2024 15:03:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E084820013B
+	for <linux-kselftest@vger.kernel.org>; Wed, 27 Nov 2024 16:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732719825; cv=none; b=bX7yl/edLTThPAK+G6ywadwJWOt8duSP9MF9+xM4mV+EIHyYvEVWe+Q3wreyKoMU5Pp8sRGS3oRBktvkJ8LMRz3myk2tynuNwdPv+b8tWRsdfX472Az9oFi3z4JA67mETqJ7UBuSKuMfZMrWJSIrkJ+121PTQhRXh928UOqX4WU=
+	t=1732723442; cv=none; b=E+zblADbzB+r504Ufwwvwc9PpC4qiRQuegmbTkwscOWG1fbFSBt2enDVUn6A93idBDNytpovD3veXmkqrtXBlO/nSHg/bn/unIgMkn0hiaQtVzEJnXj0TyyTLkCvYepH8X4x+5fwWtAl49vCqKAXgsZLc79urdw2WYHprH8FG68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732719825; c=relaxed/simple;
-	bh=1rK7OBY79LRZDZ22Pu9M6okisI2o6HZdzNlnIFfdU/c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p4mKFLNZ90SY63uC8Ql5jmJ0g3J7CI8jVDAH5tm+VuB6YZRVBE4LYePMWYzWUz+osFLuenCEC0T20AIfOXYW0EJ8ubgvc44+PzAflDVNnbnf+AgclmZyEeXIJ5uJLCWHFY17p99UstB7z7hj6AK2xLWI/Lo/ShkB4nhyYewb8jY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QFJO2paA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C020C4CED2;
-	Wed, 27 Nov 2024 15:03:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732719824;
-	bh=1rK7OBY79LRZDZ22Pu9M6okisI2o6HZdzNlnIFfdU/c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QFJO2paAaS0/3AXYchToU+3ntex6+l+F4A/LL8k+hgyFsS4+LgUHcddvgU59YYfzN
-	 BgRSmlAOaKeJtNNWUacQPv1vVMptR6hdHJ4Sf67ZMQSnnrxJ6VS4H1vlZ/4Ke0dd9H
-	 C2TcNvO7ZaZvQmznZXn+jhHXEaJzpRYAeDBALUHbwEvPgVeqwUupQX7+9ZOVKVWVTW
-	 6AeRkkmji0XTryTTuf15yUy/az93cFwGnJIVUIE8+bLDBUidef/vm89hoSSS8wrHuA
-	 9uvletBnIBYC3DjYVd+Oh8vaqjWCFh7OamSqbTEwxzEeVLfdk1ocee+D2YS4sd3Zwh
-	 PfLE+L3ypkLWA==
-Date: Wed, 27 Nov 2024 15:03:38 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Tycho Andersen <tycho@tycho.pizza>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
-	Aleksa Sarai <cyphar@cyphar.com>, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1732723442; c=relaxed/simple;
+	bh=hBFtJ6s2jOqV2rXG7eIIWHv7Ge6GEyLU7TIqXyReM9U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=h7jf/looIoN3Vpnsojday8PelnnOrYk/L+FTv7pOXRzwylG5BIbY87lpPPv4+kx8nvdRiyEXamCeUirl2i9RLpRBLl37nP6WyxA6vpwMeEAqpQisHkjXka3LgnRjZSQ5Ddk/sWwlV7MlcnjdAoFVUa7khsmt9FTzpS6raFlu3Ck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=kYHq6Ita; arc=none smtp.client-ip=45.157.188.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Xz44Q6W3vzN2L;
+	Wed, 27 Nov 2024 17:03:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1732723430;
+	bh=W6hzVPG//NzKaEDwe3OCRcoZxhvanii6b6apGJF7EoA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=kYHq6Itaao1g8uVRz9HxfhYc7KPh2gVv4htwOEF1q2dqx9roDEaGCViGJ42M+R+3o
+	 9r5kftxFTCuIjLHEd7BwE+wuzHLAUVuFmH8zxA+VJ/B2KMb65k7igSb4G7nDC8O+fw
+	 aM3kvkypLHVRYjE2ojzwqm1cTynpiW2zUAFsq75s=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4Xz44Q0jPdzwFB;
+	Wed, 27 Nov 2024 17:03:49 +0100 (CET)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	linux-kselftest@vger.kernel.org,
-	Tycho Andersen <tandersen@netflix.com>
-Subject: Re: [PATCH 2/2] selftests/exec: add a test for execveat()'s comm
-Message-ID: <41cc66b3-e4be-4bfb-8846-811887a475a5@sirena.org.uk>
-References: <20241030203732.248767-1-tycho@tycho.pizza>
- <20241030203732.248767-2-tycho@tycho.pizza>
- <6c68dddb-84f3-4b73-987c-8334b2301d9b@sirena.org.uk>
- <Z0cz/Dhrw118WPiE@tycho.pizza>
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Kees Cook <kees@kernel.org>,
+	=?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= <nfraprado@collabora.com>
+Subject: [PATCH v1] selftests: ktap_helpers: Fix uninitialized variable
+Date: Wed, 27 Nov 2024 17:03:40 +0100
+Message-ID: <20241127160342.31472-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="26psQPxcYjFEUVU0"
-Content-Disposition: inline
-In-Reply-To: <Z0cz/Dhrw118WPiE@tycho.pizza>
-X-Cookie: Every path has its puddle.
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
 
+__ktap_test() may be called without the optional third argument which is
+an issue for scripts using `set -u` to detect uninitialized variables
+and potential bugs.
 
---26psQPxcYjFEUVU0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Fix this optional "directive" argument by either using the third
+argument or an empty string.
 
-On Wed, Nov 27, 2024 at 08:00:12AM -0700, Tycho Andersen wrote:
-> On Wed, Nov 27, 2024 at 02:25:29PM +0000, Mark Brown wrote:
+This was discovered while developing tests for script control execution:
+https://lore.kernel.org/r/20241112191858.162021-7-mic@digikod.net
 
-> > This test doesn't pass in my CI, running on an i.MX8MP Verdin board.
-> > This is an arm64 system and I'm running the tests on NFS.
+Cc: Kees Cook <kees@kernel.org>
+Cc: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
+---
+ tools/testing/selftests/kselftest/ktap_helpers.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Strange... but this series has been rejected by Linus anyway, so
-> probably not worth investigating further.
+diff --git a/tools/testing/selftests/kselftest/ktap_helpers.sh b/tools/testing/selftests/kselftest/ktap_helpers.sh
+index 79a125eb24c2..14e7f3ec3f84 100644
+--- a/tools/testing/selftests/kselftest/ktap_helpers.sh
++++ b/tools/testing/selftests/kselftest/ktap_helpers.sh
+@@ -40,7 +40,7 @@ ktap_skip_all() {
+ __ktap_test() {
+ 	result="$1"
+ 	description="$2"
+-	directive="$3" # optional
++	directive="${3:-}" # optional
+ 
+ 	local directive_str=
+ 	[ ! -z "$directive" ] && directive_str="# $directive"
+-- 
+2.47.1
 
-Ah, OK - it's still in -next and causing the overall suite to fail.
-
---26psQPxcYjFEUVU0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdHNMkACgkQJNaLcl1U
-h9BaRQf+JG/TCcQ28dk4xr71DM74rOC5E944iDxKEDwCxwzrSo/odHcWNlSCXfeG
-2eoEkWi16lIczUIRULIHFfhdT/PIr95AZvjs480Owx80GtYnB8EqIbH1QKiG+x2O
-jU1e6Z6lJFJUeAFDFjpBZ7D3V7eHAUD35gwP/Tig39XFdJ3ORHpqBN0KQE1pLsJF
-B9fhhDI5bEf9zxK+IEOKz+oWedQ+OAz0YnXl6+tSveXqx3Di2kpDEN7IEGkdca4n
-QAMGQ5xAQwKjv6lVShOX4UrYuzfOfb8DDB2Fx1FtZHwUp0QIMyo1SCgxs9EsUfh3
-LSOsm+PO8FuH+/z4O19irmGcLeo++A==
-=YkBl
------END PGP SIGNATURE-----
-
---26psQPxcYjFEUVU0--
 
