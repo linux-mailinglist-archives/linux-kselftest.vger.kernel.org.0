@@ -1,112 +1,145 @@
-Return-Path: <linux-kselftest+bounces-22575-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22576-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8E5E9DAC31
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 18:04:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5947C9DAC7E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 18:32:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 498FBB22502
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 17:04:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CDC4DB21C3D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 17:32:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F4179200BB4;
-	Wed, 27 Nov 2024 17:04:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YvaknC7e"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9308B1FF7C6;
+	Wed, 27 Nov 2024 17:32:25 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1BEB1F8F1A;
-	Wed, 27 Nov 2024 17:04:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17583A41;
+	Wed, 27 Nov 2024 17:32:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=76.10.64.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732727051; cv=none; b=NG/cGhxjh2IN71WUHGn6ep3lE5rSZ8MBGhMW35ww721/kkAjt5gxBopaVzFcS2cBgDvyhlyQRkV67qM5yPN3N9p/fOurUqxI4eW0NKK4ccHb2ohW6nfJzWOrilvecOreqPwM1qOb+nFzFnRlXkFuWvWF0IW9Kw1JR+Nr8o1jzvI=
+	t=1732728745; cv=none; b=AAuoRrx7IjFQaLFTsgEn54sKbAgilpsPrl6OI9atmP7YqW9St9pMvvTG55nyt5ymprDWWwTjG2U0bXN+mhghtIZaWBfzAaSahf/DifvpkPCyutwl07v5Z9X2PVHpc5DcAFBiUC/5NKWy1Ow6Ikub6D1UZ8btYsT/YiVC6alcXoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732727051; c=relaxed/simple;
-	bh=5HRBVytr5GUFSIGmJD7/dGSkmSv8GWKUHwmGpMyEXys=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pdYJWniXTPsIvwFPrBsO8I+sMOomHTHFj1HzO3mmEq+EqVPsKRDi/rk3nZeqW2EauajakICxZx468PtE+eg3o5nPpmmbBLmYUlXOxvAp5BxnIJdLi1nbswJymai7uBgeOwNDKQyxL5GNtJW3JiB362Uv1iIlFm9LdqZqgg0w9Fo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YvaknC7e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22BFBC4CECC;
-	Wed, 27 Nov 2024 17:04:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732727051;
-	bh=5HRBVytr5GUFSIGmJD7/dGSkmSv8GWKUHwmGpMyEXys=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YvaknC7egerwU0wTAMT56+snNiguf+QPNUBbcMHW3PPtw20N60ss+DgBPNrYLv1MY
-	 Jn4xJL2ZWjCE1cO9yrH+LnKDqOc7cm/JNVET4NSyX9BFk7yQT9Xml4uP4fM/WPTzJb
-	 rd7hCpnRsAayL+3YQ+aQAneAGoTqng+trBp2eKxYsjwVyxoMbuWf+gmc9NatWUKtE4
-	 /9UAmPQaSl7FsrvpWzDTVhOz6iLsRidYhhBOAtpRl+kgS2GGRFa+vXf0cDiawcuqC+
-	 VbwSqQaLm7rhrGMdtxVysKqCdpgnnGqwKTyay6Vm+IcxKmfoG4b92ZBaoxNOgqZDIl
-	 LCghrdgcfDrFQ==
-From: SeongJae Park <sj@kernel.org>
-To: Maximilian Heyne <mheyne@amazon.de>
-Cc: SeongJae Park <sj@kernel.org>,
-	"Shuah Khan" <shuah@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/damon: Add _damon_sysfs.py to TEST_FILES
-Date: Wed, 27 Nov 2024 09:04:07 -0800
-Message-Id: <20241127170407.82602-1-sj@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20241127-picks-visitor-7416685b-mheyne@amazon.de>
-References: 
+	s=arc-20240116; t=1732728745; c=relaxed/simple;
+	bh=2UqC7ofISMc/ShaD/y+NPwjn/miRNC6CwUla/sbT3xE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FgNUAVrDuM65UfODP1WYxZUOZiaZgoxTa7DwMGYEXYgpVwl3p8VY0TitANvgyWGyZwXNMABh44n6lrB4dNB0vTnVRE194ord5OegRDSSrAuPsgQztVeXnXRj8fGovCJ1cs3mOSGqtE0cbR2eBw1BTN+Zhw43FrFzkPSfm3K0l4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=wind.enjellic.com; arc=none smtp.client-ip=76.10.64.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wind.enjellic.com
+Received: from wind.enjellic.com (localhost [127.0.0.1])
+	by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 4ARHUrYb001848;
+	Wed, 27 Nov 2024 11:30:53 -0600
+Received: (from greg@localhost)
+	by wind.enjellic.com (8.15.2/8.15.2/Submit) id 4ARHUgi2001842;
+	Wed, 27 Nov 2024 11:30:42 -0600
+Date: Wed, 27 Nov 2024 11:30:42 -0600
+From: "Dr. Greg" <greg@enjellic.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+        corbet@lwn.net, mcgrof@kernel.org, petr.pavlu@suse.com,
+        samitolvanen@google.com, da.gomez@samsung.com,
+        akpm@linux-foundation.org, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, linux-integrity@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        wufan@linux.microsoft.com, pbrobinson@gmail.com, zbyszek@in.waw.pl,
+        hch@lst.de, mjg59@srcf.ucam.org, pmatilai@redhat.com, jannh@google.com,
+        dhowells@redhat.com, jikos@kernel.org, mkoutny@suse.com,
+        ppavlu@suse.com, petr.vorel@gmail.com, mzerqung@0pointer.de,
+        kgold@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH v6 00/15] integrity: Introduce the Integrity Digest Cache
+Message-ID: <20241127173042.GA1649@wind.enjellic.com>
+Reply-To: "Dr. Greg" <greg@enjellic.com>
+References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
+User-Agent: Mutt/1.4i
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Wed, 27 Nov 2024 11:30:53 -0600 (CST)
 
-On Wed, 27 Nov 2024 12:08:53 +0000 Maximilian Heyne <mheyne@amazon.de> wrote:
+On Tue, Nov 19, 2024 at 11:49:07AM +0100, Roberto Sassu wrote:
 
-> When running selftests I encountered the following error message with
-> some damon tests:
+Hi Roberto, I hope the week is going well for you.
+
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
->  # Traceback (most recent call last):
->  #   File "[...]/damon/./damos_quota.py", line 7, in <module>
->  #     import _damon_sysfs
->  # ModuleNotFoundError: No module named '_damon_sysfs'
+> Integrity detection and protection has long been a desirable feature, to
+> reach a large user base and mitigate the risk of flaws in the software
+> and attacks.
 > 
-> Fix this by adding the _damon_sysfs.py file to TEST_FILES so that it
-> will be available when running the respective damon selftests.
-
-Thank you for finding and fixing this issue, Max!
-
+> However, while solutions exist, they struggle to reach a large user base,
+> due to requiring higher than desired constraints on performance,
+> flexibility and configurability, that only security conscious people are
+> willing to accept.
 > 
-> Fixes: 306abb63a8ca ("selftests/damon: implement a python module for test-purpose DAMON sysfs controls")
-> Signed-off-by: Maximilian Heyne <mheyne@amazon.de>
-
-Reviewed-by: SeongJae Park <sj@kernel.org>
-
-
-Thanks,
-SJ
-
-> ---
->  tools/testing/selftests/damon/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> For example, IMA measurement requires the target platform to collect
+> integrity measurements, and to protect them with the TPM, which introduces
+> a noticeable overhead (up to 10x slower in a microbenchmark) on frequently
+> used system calls, like the open().
 > 
-> diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
-> index 5b2a6a5dd1af7..812f656260fba 100644
-> --- a/tools/testing/selftests/damon/Makefile
-> +++ b/tools/testing/selftests/damon/Makefile
-> @@ -6,7 +6,7 @@ TEST_GEN_FILES += debugfs_target_ids_read_before_terminate_race
->  TEST_GEN_FILES += debugfs_target_ids_pid_leak
->  TEST_GEN_FILES += access_memory access_memory_even
->  
-> -TEST_FILES = _chk_dependency.sh _debugfs_common.sh
-> +TEST_FILES = _chk_dependency.sh _debugfs_common.sh _damon_sysfs.py
->  
->  # functionality tests
->  TEST_PROGS = debugfs_attrs.sh debugfs_schemes.sh debugfs_target_ids.sh
-> -- 
-> 2.40.1
-[...]
+> IMA Appraisal currently requires individual files to be signed and
+> verified, and Linux distributions to rebuild all packages to include file
+> signatures (this approach has been adopted from Fedora 39+). Like a TPM,
+> also signature verification introduces a significant overhead, especially
+> if it is used to check the integrity of many files.
+> 
+> This is where the new Integrity Digest Cache comes into play, it offers
+> additional support for new and existing integrity solutions, to make
+> them faster and easier to deploy.
+> 
+> The Integrity Digest Cache can help IMA to reduce the number of TPM
+> operations and to make them happen in a deterministic way. If IMA knows
+> that a file comes from a Linux distribution, it can measure files in a
+> different way: measure the list of digests coming from the distribution
+> (e.g. RPM package headers), and subsequently measure a file if it is not
+> found in that list.
+> 
+> The performance improvement comes at the cost of IMA not reporting which
+> files from installed packages were accessed, and in which temporal
+> sequence. This approach might not be suitable for all use cases.
+> 
+> The Integrity Digest Cache can also help IMA for appraisal. IMA can simply
+> lookup the calculated digest of an accessed file in the list of digests
+> extracted from package headers, after verifying the header signature. It is
+> sufficient to verify only one signature for all files in the package, as
+> opposed to verifying a signature for each file.
+
+Roberto, a big picture question for you, our apologies if we
+completely misunderstand your patch series.
+
+The performance benefit comes from the fact that the kernel doesn't
+have to read a file and calculate the cryptographic digest when the
+file is accessed.  The 'trusted' digest value comes from a signed list
+of digests that a packaging entity provides and the kernel validates.
+So there is an integrity guarantee that the supplied digests were the
+same as when the package was built.
+
+Is there a guarantee implemented, that we missed, that the on-disk
+file actually has the digest value that was initially generated by the
+packaging entity when the file is accessed operationally?
+
+Secondly, and in a related issue, what happens in a container
+environment when a pathname is accessed that is actually a different
+file but with the same effective pathname as a file that is in the
+vendor validated digest list?
+
+Once again, apologies, if we completely misinterpret the issues
+involved.
+
+Have a good remainder of the week.
+
+As always,
+Dr. Greg
+
+The Quixote Project - Flailing at the Travails of Cybersecurity
+              https://github.com/Quixote-Project
 
