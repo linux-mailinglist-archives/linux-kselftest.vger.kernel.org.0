@@ -1,131 +1,165 @@
-Return-Path: <linux-kselftest+bounces-22565-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22566-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61E8C9DA79B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 13:18:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B16179DA779
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 13:12:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1767B2B6F5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 12:09:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C7732827F3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2024 12:12:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10B511FAC52;
-	Wed, 27 Nov 2024 12:09:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB5C71FBC8A;
+	Wed, 27 Nov 2024 12:11:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.de header.i=@amazon.de header.b="mNUZMkBd"
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="r92Kl2md";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="5Ok6EUPv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-52002.amazon.com (smtp-fw-52002.amazon.com [52.119.213.150])
+Received: from fhigh-b4-smtp.messagingengine.com (fhigh-b4-smtp.messagingengine.com [202.12.124.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DCC1FA270;
-	Wed, 27 Nov 2024 12:09:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024851FBCA7;
+	Wed, 27 Nov 2024 12:11:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732709358; cv=none; b=MYnKWqHbvqRrzz2Wr7fzB+ftzf2lKBrlKamM2gX2uX/Jca5KeHpYehZ9wTWLxCQX6mN3oMHbN2dRiynR15dHA1a2AzFAY4yhqPDSL0BHxu3PJ4Mwn7JzHSnKlMQYYLI1wNa2ZnN15vD1o5ZqCkF1k9vf97pnbucty9PFbhsxr20=
+	t=1732709511; cv=none; b=q8Jj2pC42biXTjsxqvzHp3e/Y6zJrUG729AqHojD9oLKWbkYx/2vGW36bbHmqB//84GPWqYN3AepaHDuaAFuF6/ctZZrIQSvd2fA1OYzx9Zyoro/FwiEsdq2IO/iDNL2eyYMFWSBUkupK6/aIzgzhFOJZ7rzfscAhplIKWbXU68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732709358; c=relaxed/simple;
-	bh=Q/dXYurK0EJ5vp1EIci5u/hmGbtY2myVy1kxDXW9XI0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LJD0gPdj+BjpEbz9+CwHOm2ZOGXQXAlafrfolYSC3bPYAKjR9TNAxi6ggvyNBKZuBkNKW6Y/4BqaS0p+j4VFQsB3ppIl6jDqizHCPWaNXcOOxyV6Ju4kgq9mZ75wpQV0AtQoFUtf4+9SOVG8cKJ0oY2WkLizovOxAVi8uA7Xo4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (1024-bit key) header.d=amazon.de header.i=@amazon.de header.b=mNUZMkBd; arc=none smtp.client-ip=52.119.213.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1732709356; x=1764245356;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7U+yTr2d7RwRRaM5HvKRT7wsyxGZ2Fy6IJZvrr/C3zo=;
-  b=mNUZMkBd3BreptclaiHDKkjew+dK7d6a7uSHsbkHjHsdgIZ6uJ+xTSgG
-   1bBX0Gh5eOhWF/CiSj/kQaxlg8nFsepYyYk7czeckBgpDJ2tZJitqIvp8
-   +SvXEQelrZZlsQ1YPTwD2o5WM5j1Ng3o2OpUmRhUrid/cekIz1uy+ZML/
-   o=;
-X-IronPort-AV: E=Sophos;i="6.12,189,1728950400"; 
-   d="scan'208";a="677134088"
-Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.124.125.6])
-  by smtp-border-fw-52002.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2024 12:09:12 +0000
-Received: from EX19MTAEUB002.ant.amazon.com [10.0.10.100:28394]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.34.163:2525] with esmtp (Farcaster)
- id 8af6d9b3-8276-40da-89f5-2af5a6b7ed7d; Wed, 27 Nov 2024 12:09:11 +0000 (UTC)
-X-Farcaster-Flow-ID: 8af6d9b3-8276-40da-89f5-2af5a6b7ed7d
-Received: from EX19D008EUA003.ant.amazon.com (10.252.50.155) by
- EX19MTAEUB002.ant.amazon.com (10.252.51.79) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Wed, 27 Nov 2024 12:09:11 +0000
-Received: from EX19MTAUWA001.ant.amazon.com (10.250.64.204) by
- EX19D008EUA003.ant.amazon.com (10.252.50.155) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.35;
- Wed, 27 Nov 2024 12:09:10 +0000
-Received: from email-imr-corp-prod-pdx-1box-2b-ecca39fb.us-west-2.amazon.com
- (10.25.36.214) by mail-relay.amazon.com (10.250.64.204) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id
- 15.2.1258.34 via Frontend Transport; Wed, 27 Nov 2024 12:09:10 +0000
-Received: from dev-dsk-mheyne-1b-55676e6a.eu-west-1.amazon.com (dev-dsk-mheyne-1b-55676e6a.eu-west-1.amazon.com [10.253.68.42])
-	by email-imr-corp-prod-pdx-1box-2b-ecca39fb.us-west-2.amazon.com (Postfix) with ESMTP id 79DD880411;
-	Wed, 27 Nov 2024 12:09:10 +0000 (UTC)
-Received: by dev-dsk-mheyne-1b-55676e6a.eu-west-1.amazon.com (Postfix, from userid 5466572)
-	id 0E730B899; Wed, 27 Nov 2024 12:09:10 +0000 (UTC)
-From: Maximilian Heyne <mheyne@amazon.de>
-To: 
-CC: Maximilian Heyne <mheyne@amazon.de>, SeongJae Park <sj@kernel.org>, "Shuah
- Khan" <shuah@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
-	<damon@lists.linux.dev>, <linux-mm@kvack.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] selftests/damon: Add _damon_sysfs.py to TEST_FILES
-Date: Wed, 27 Nov 2024 12:08:53 +0000
-Message-ID: <20241127-picks-visitor-7416685b-mheyne@amazon.de>
-X-Mailer: git-send-email 2.40.1
+	s=arc-20240116; t=1732709511; c=relaxed/simple;
+	bh=jzXiWxyCibDahW4FWBCnt++CATpAWgnwTob3s6EhX1M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BFF0n2dcRw0ZmD1PRo5vESBwz+u7OSMp1ppE4mqazNmrgowM5YT2YiV15rGNo2LHE3IgyrMYbWS4vCOqmGul65H28CG39oaw58Ho4uk1NfS1nS2C/Q2v4aJTwnOuvnTNSCwLBfnQdzndCaucV5NH3kzagbqLcY3XvpR7l4NrYZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=r92Kl2md; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=5Ok6EUPv; arc=none smtp.client-ip=202.12.124.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id B8CEC2540072;
+	Wed, 27 Nov 2024 07:11:47 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Wed, 27 Nov 2024 07:11:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1732709507; x=
+	1732795907; bh=3blg7EFfpE4vkXvFpR4yFVjJmH1gJFZZGLgmEe/FrLQ=; b=r
+	92Kl2mdbB7MQSS/OYx2J7FaxG7RGB+rJ2opdgVWsrauQUxP1R9UKURWGMk4Sgy6D
+	Hy3VvCwDrLbV9WLbwyW3XS5K3MPISolYAP8FE34TDHpJBZWfyMxPLVoqjJ0oQohx
+	zDKPSps3kySeOow5tTSe0bdc5c77MaHrTfkchpJo9go6McjucCcupA5o9JWj6e8d
+	akcuhRUdsDoGwu3TnjsC8ksZ0FF1vht46iatKiKEryuyTGocRzVSXPzfnwpLVWzK
+	wsWD+ao/JEJsoLzDj+KF6ECUkLSpxZCPEwHEIDmepro3cQkEd5n2YmmK1ggyCLlm
+	5TNMFnz2qj8p7ttqNJQgQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1732709507; x=1732795907; bh=3blg7EFfpE4vkXvFpR4yFVjJmH1gJFZZGLg
+	mEe/FrLQ=; b=5Ok6EUPv4W3E+86ly6MTj646iphZE5wh39OT0XlnGD6zMifZVX6
+	61CuLvas9D4P6QiKBTyIiLwOiwHeIpoh58j3qdKLcsrIJScu+0ZWJRlY1KU/aRGV
+	VXOYwFYkcMClK6qTK4HTHy5LZ+5bA6AyxUiwGICmFJ5qm/vNCQrgQYTZTky2G4/F
+	OlMN7jI7nx/kZTYx29ejyx/k8oZAIVgxneAlg+JQIIxPzygY8x3zjO8OJOkuUys5
+	dU0iP/oH1w5KhznOnJU5KZU1+fdJOVPxI3Bu9m38rSEhfLxUUc7axOvVTKixBhn5
+	B5bbFnXxL9bkELzwTx870ZETQBvY+4C2oeg==
+X-ME-Sender: <xms:gQxHZ9cPIQMhvlrfw7ukEFjBWQCjXbfbLKPtibs0SrsODWSDs5dOFw>
+    <xme:gQxHZ7MEeV3tnUAe2LWbNFbmbnGnFQldhs8dO4nA3P3AL-V4w0nlxwETYIqrcu1_F
+    y4l6_EKtkCITlVm92k>
+X-ME-Received: <xmr:gQxHZ2gqJA0ewDdKrhMGszWxK3eagRdUMT6rcgRfJKQzm3jFG8FrSBzvg6T9BVWGEPyUIw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrgeelgdefgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
+    hsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdfstddttddvnecu
+    hfhrohhmpedfmfhirhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhessh
+    hhuhhtvghmohhvrdhnrghmvgeqnecuggftrfgrthhtvghrnheptddvkeduhfeggeduheef
+    hedtffefudfghefgfeevveelueeufffhvdelueevvedvnecuffhomhgrihhnpehsvghrih
+    gvshdrthhoohhlshenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
+    fhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvgdpnhgspghrtghpthhtoh
+    epuddtpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehmrggtihgvjhdrfihivggt
+    iihorhdqrhgvthhmrghnsehinhhtvghlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskh
+    gvrhhnvghlrdhorhhgpdhrtghpthhtohephhhprgesiiihthhorhdrtghomhdprhgtphht
+    thhopeigkeeisehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghvvgdrhhgrnhhsvg
+    hnsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepsghpsegrlhhivghnkedr
+    uggvpdhrtghpthhtohepmhhinhhgohesrhgvughhrghtrdgtohhmpdhrtghpthhtohepth
+    hglhigsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtoheplhhinhhugidqkhgvrhhn
+    vghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:gQxHZ2_qQqMhvC_1J1mvY9t39ia2LDjDXuWPu3DNT0RYNo_2h9BhIQ>
+    <xmx:gQxHZ5tPtT6jUvhgPxhOeJHNiNLZSNNn-HcbpUqx2GT5Xbgz9OtkMQ>
+    <xmx:gQxHZ1HDguZcTK93FA8Teeiu_jijpBJ7ucFFRjr1PWq04xprqX4XhA>
+    <xmx:gQxHZwOBcWCc3MdI5faqvzBW9U3YO09WngXRnwrlrbYlLC0u7t2ShA>
+    <xmx:gwxHZ6n-ShnUolqwu1bI3ur7mUmXxaqEchFUXJ4a5NfYgw5fxTzPOKf1>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 27 Nov 2024 07:11:42 -0500 (EST)
+Date: Wed, 27 Nov 2024 14:11:38 +0200
+From: "Kirill A. Shutemov" <kirill@shutemov.name>
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Cc: shuah@kernel.org, hpa@zytor.com, x86@kernel.org, 
+	dave.hansen@linux.intel.com, bp@alien8.de, mingo@redhat.com, tglx@linutronix.de, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] selftests/lam: Move cpu_has_la57() to use cpuinfo
+ flag
+Message-ID: <6kfafs7wio7ruth3p54pezqwcultxqqpnjvehjzaz7hlba4rp3@6kb5zdqfglsl>
+References: <cover.1732627541.git.maciej.wieczor-retman@intel.com>
+ <4979b3de7021f34cbef22d44799e28c914f993ca.1732627541.git.maciej.wieczor-retman@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4979b3de7021f34cbef22d44799e28c914f993ca.1732627541.git.maciej.wieczor-retman@intel.com>
 
-When running selftests I encountered the following error message with
-some damon tests:
+On Tue, Nov 26, 2024 at 02:34:48PM +0100, Maciej Wieczor-Retman wrote:
+> In current form cpu_has_la57() reports platform's support for LA57
+> through reading the output of cpuid. A much more useful information is
+> whether 5-level paging is actually enabled on the running system.
+> 
+> Presence of the la57 flag in /proc/cpuinfo signifies that 5-level paging
+> was compiled into the kernel, is supported by the platform and wasn't
+> disabled by kernel command line argument.
+> 
+> Use system() with cat and grep to figure out if la57 is enabled on the
+> running system.
+> 
+> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+> ---
+> Changelog v4:
+> - Add this patch to the series.
+> 
+>  tools/testing/selftests/x86/lam.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
+> index 0ea4f6813930..0ac805125ab2 100644
+> --- a/tools/testing/selftests/x86/lam.c
+> +++ b/tools/testing/selftests/x86/lam.c
+> @@ -124,14 +124,11 @@ static inline int cpu_has_lam(void)
+>  	return (cpuinfo[0] & (1 << 26));
+>  }
+>  
+> -/* Check 5-level page table feature in CPUID.(EAX=07H, ECX=00H):ECX.[bit 16] */
+>  static inline int cpu_has_la57(void)
+>  {
+> -	unsigned int cpuinfo[4];
+> -
+> -	__cpuid_count(0x7, 0, cpuinfo[0], cpuinfo[1], cpuinfo[2], cpuinfo[3]);
+> +	int ret = !!system("cat /proc/cpuinfo | grep -wq la57\n");
 
- # Traceback (most recent call last):
- #   File "[...]/damon/./damos_quota.py", line 7, in <module>
- #     import _damon_sysfs
- # ModuleNotFoundError: No module named '_damon_sysfs'
+Heh. grep can read files on its own :P
 
-Fix this by adding the _damon_sysfs.py file to TEST_FILES so that it
-will be available when running the respective damon selftests.
+	return !system("grep -wq la57 /proc/cpuinfo");
 
-Fixes: 306abb63a8ca ("selftests/damon: implement a python module for test-purpose DAMON sysfs controls")
-Signed-off-by: Maximilian Heyne <mheyne@amazon.de>
----
- tools/testing/selftests/damon/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>  
+> -	return (cpuinfo[2] & (1 << 16));
+> +	return !ret;
+>  }
+>  
+>  /*
+> -- 
+> 2.47.1
+> 
 
-diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
-index 5b2a6a5dd1af7..812f656260fba 100644
---- a/tools/testing/selftests/damon/Makefile
-+++ b/tools/testing/selftests/damon/Makefile
-@@ -6,7 +6,7 @@ TEST_GEN_FILES += debugfs_target_ids_read_before_terminate_race
- TEST_GEN_FILES += debugfs_target_ids_pid_leak
- TEST_GEN_FILES += access_memory access_memory_even
- 
--TEST_FILES = _chk_dependency.sh _debugfs_common.sh
-+TEST_FILES = _chk_dependency.sh _debugfs_common.sh _damon_sysfs.py
- 
- # functionality tests
- TEST_PROGS = debugfs_attrs.sh debugfs_schemes.sh debugfs_target_ids.sh
 -- 
-2.40.1
-
-
-
-
-Amazon Web Services Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 257764 B
-Sitz: Berlin
-Ust-ID: DE 365 538 597
-
+  Kiryl Shutsemau / Kirill A. Shutemov
 
