@@ -1,162 +1,94 @@
-Return-Path: <linux-kselftest+bounces-22601-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22602-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 024F79DB892
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 14:27:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 121869DB95E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 15:14:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACCDA16419C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 13:27:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B733164006
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 14:14:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0682D1A9B30;
-	Thu, 28 Nov 2024 13:27:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W4x8dQLJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCA931ADFF5;
+	Thu, 28 Nov 2024 14:13:48 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cantor.telenet-ops.be (cantor.telenet-ops.be [195.130.132.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C66DA1A3BC0;
-	Thu, 28 Nov 2024 13:27:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7BE21AA1FE
+	for <linux-kselftest@vger.kernel.org>; Thu, 28 Nov 2024 14:13:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732800442; cv=none; b=lfmB9qSxWrYicUCpG0mP4aJn/Z8f+0JQ7ykIw4zW7YvZ4BcEUeDA8jYYTMvBh0qPetDTuk1wQMZrYmoKrRlzg8+vDcAdSrzjgF0VZOHzJRwYyyJgThah0q/z3y5iGnXLWtM9UniKgE6MTi6yWIY3iHi5PXRfS8ivxFHZkP1SXg8=
+	t=1732803228; cv=none; b=h7QbVHF41a2QJrtXS1eoNuw1Mw/v3StwSWT8zY9CoNhW7QwPFyUe0gyX1xJf9u/wywxgt3nbuMfpbdSWkr+EN3/bE15AgjZ3K2GZhNEp3UsSB96aHNGyq/DgN4b3hjGTlHCdgS7lV/tZl3DShUufewjQSr6Mv1PO/Hw0V4B+KcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732800442; c=relaxed/simple;
-	bh=s7ntmLyoK0Ige0yP54n7nzwN2qCmpmvx316Vpb4inks=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=CXxoh26umEpvjPbSABpoEANAQ6Bkx0PoejZFN7QuSVZoCTpTf5sIQzJzemRpy/6QxPjYd/ze88J+jmVDgwneuCOVvObO+vCdO2uEhb1UNGaHYjMrkoPyMMDznSajBU4KrYFQ0L3pnKzW8BvGYlf7fGuo2AO8gXgWl9Ljk3N/aWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W4x8dQLJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1117BC4CED3;
-	Thu, 28 Nov 2024 13:27:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732800442;
-	bh=s7ntmLyoK0Ige0yP54n7nzwN2qCmpmvx316Vpb4inks=;
-	h=From:Date:Subject:To:Cc:From;
-	b=W4x8dQLJLyeKbmnDT2QjsgZfRNMP4shFyIT/3c8z4rXM1Q/HOOYiYE34+B0dse2ok
-	 1+ykhOG408CCgxPWHbaO+oPmaBISGvzv+9xC5qywv17Kn84nzFjhejrE3LevibFyiz
-	 GO8cD4fznOGsQyuRrH4UVUylijcfaxocejNrCdD/mA692bOAE2lI0Agnth1vGEFLSb
-	 pot7E1hZkYLaZuKVPp8IHfmFYxO/vpeP8tznGvRIUecQzi2j2/IHFLdozbuA1/SVK7
-	 bzziZ6k3yNig+NLDXsg1lTAIxAGJfGIl3R6wzsedWNepAfakRrLu1QkVr6Sgl0TbKZ
-	 PslcPSFNW+O7A==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Thu, 28 Nov 2024 14:27:16 +0100
-Subject: [PATCH HID] selftests/hid: fix kfunc inclusions with newer bpftool
+	s=arc-20240116; t=1732803228; c=relaxed/simple;
+	bh=QW4ksDLjGIh3OgycdixnUdgjbLHk/UIqPtxkl+d9+00=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jtOSlRFFLfw2CMpKRa4djjLvYaIdlX69Kt5QrXM5aW82BndxC/eL0ZqHjbzXjI+Hl2myiuvhUhjZ/nEZEPU5MR9gw2JWRXcXzDILBIqMnDoXD8lmJzkwoIJQRrPdYITXhCKK4wPDbalt4fcq3bfXMausWQPAi0AqqiiD1GxMzaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+	by cantor.telenet-ops.be (Postfix) with ESMTPS id 4XzdNr55TGz4x3Pl
+	for <linux-kselftest@vger.kernel.org>; Thu, 28 Nov 2024 15:05:00 +0100 (CET)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:c27a:bd9d:13ba:8a2e])
+	by baptiste.telenet-ops.be with cmsmtp
+	id iE4t2D00F04Zieg01E4tGe; Thu, 28 Nov 2024 15:04:53 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tGf8V-000bLz-3d;
+	Thu, 28 Nov 2024 15:04:53 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tGf8X-00DNa4-4w;
+	Thu, 28 Nov 2024 15:04:53 +0100
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH] selftests: find_symbol: Actually use load_mod() parameter
+Date: Thu, 28 Nov 2024 15:04:52 +0100
+Message-Id: <a7f10d132c36f0e0c80a6bf377721e17732e120a.1732802636.git.geert@linux-m68k.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241128-fix-new-bpftool-v1-1-c9abdf94a719@kernel.org>
-X-B4-Tracking: v=1; b=H4sIALNvSGcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxNDQyML3bTMCt281HLdpIK0kvz8HF1jw0TLNBPjxMS0pCQloK6ColSgErC
- J0Uoeni5KsbW1ADG4jtxmAAAA
-X-Change-ID: 20241128-fix-new-bpftool-31a9f43aafbb
-To: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1732800440; l=3659;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=s7ntmLyoK0Ige0yP54n7nzwN2qCmpmvx316Vpb4inks=;
- b=PREaqb+BXRq/tIkrsTWycjKGYBT+dINU4VsCFZL2/q0/YXm/vlTEaUZriVdHDTZk7HtnLrfUL
- /Lrw153FIwxDPxv8iyaIJ2+xt8XzW80dC/LigpAPfgDnrsD++kjCNvz
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+Content-Transfer-Encoding: 8bit
 
-bpftool now embeds the kfuncs definitions directly in the generated
-vmlinux.h
+The parameter passed to load_mod() is stored in $MOD, but never used.
+Obviously it was intended to be used instead of the hardcoded
+"test_kallsyms_b" module name.
 
-This is great, but because the selftests dir might be compiled with
-HID_BPF disabled, we have no guarantees to be able to compile the
-sources with the generated kfuncs.
-
-If we have the kfuncs, because we have the `__not_used` hack, the newly
-defined kfuncs do not match the ones from vmlinux.h and things go wrong.
-
-Prevent vmlinux.h to define its kfuncs and also add the missing `__weak`
-symbols for our custom kfuncs definitions
-
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+Fixes: 84b4a51fce4ccc66 ("selftests: add new kallsyms selftests")
+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 ---
-This was noticed while bumping the CI to fedora 41 which has an update
-of bpftool.
+ tools/testing/selftests/module/find_symbol.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I'll probably take this in for-6.13/upstream-fixes tomorrow if no bots
-comes back at me.
-
-Cheers,
-Benjamin
----
- tools/testing/selftests/hid/progs/hid_bpf_helpers.h | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
-
-diff --git a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
-index e5db897586bbfe010d8799f6f52fc5c418344e6b..531228b849daebcf40d994abb8bf35e760b3cc4e 100644
---- a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
-+++ b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
-@@ -22,6 +22,9 @@
- #define HID_REQ_SET_IDLE         HID_REQ_SET_IDLE___not_used
- #define HID_REQ_SET_PROTOCOL     HID_REQ_SET_PROTOCOL___not_used
- 
-+/* do not define kfunc through vmlinux.h as this messes up our custom hack */
-+#define BPF_NO_KFUNC_PROTOTYPES
-+
- #include "vmlinux.h"
- 
- #undef hid_bpf_ctx
-@@ -91,31 +94,31 @@ struct hid_bpf_ops {
- /* following are kfuncs exported by HID for HID-BPF */
- extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
- 			      unsigned int offset,
--			      const size_t __sz) __ksym;
--extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __ksym;
--extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __ksym;
-+			      const size_t __sz) __weak __ksym;
-+extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __weak __ksym;
-+extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __weak __ksym;
- extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
- 			      __u8 *data,
- 			      size_t buf__sz,
- 			      enum hid_report_type type,
--			      enum hid_class_request reqtype) __ksym;
-+			      enum hid_class_request reqtype) __weak __ksym;
- extern int hid_bpf_hw_output_report(struct hid_bpf_ctx *ctx,
--				    __u8 *buf, size_t buf__sz) __ksym;
-+				    __u8 *buf, size_t buf__sz) __weak __ksym;
- extern int hid_bpf_input_report(struct hid_bpf_ctx *ctx,
- 				enum hid_report_type type,
- 				__u8 *data,
--				size_t buf__sz) __ksym;
-+				size_t buf__sz) __weak __ksym;
- extern int hid_bpf_try_input_report(struct hid_bpf_ctx *ctx,
- 				    enum hid_report_type type,
- 				    __u8 *data,
--				    size_t buf__sz) __ksym;
-+				    size_t buf__sz) __weak __ksym;
- 
- /* bpf_wq implementation */
- extern int bpf_wq_init(struct bpf_wq *wq, void *p__map, unsigned int flags) __weak __ksym;
- extern int bpf_wq_start(struct bpf_wq *wq, unsigned int flags) __weak __ksym;
- extern int bpf_wq_set_callback_impl(struct bpf_wq *wq,
- 		int (callback_fn)(void *map, int *key, void *wq),
--		unsigned int flags__k, void *aux__ign) __ksym;
-+		unsigned int flags__k, void *aux__ign) __weak __ksym;
- #define bpf_wq_set_callback(timer, cb, flags) \
- 	bpf_wq_set_callback_impl(timer, cb, flags, NULL)
- 
-
----
-base-commit: 919464deeca24e5bf13b6c8efd0b1d25cc43866f
-change-id: 20241128-fix-new-bpftool-31a9f43aafbb
-
-Best regards,
+diff --git a/tools/testing/selftests/module/find_symbol.sh b/tools/testing/selftests/module/find_symbol.sh
+index 140364d3c49fc912..2c56805c9b6e6ea0 100755
+--- a/tools/testing/selftests/module/find_symbol.sh
++++ b/tools/testing/selftests/module/find_symbol.sh
+@@ -44,10 +44,10 @@ load_mod()
+ 	local ARCH="$(uname -m)"
+ 	case "${ARCH}" in
+ 	x86_64)
+-		perf stat $STATS $MODPROBE test_kallsyms_b
++		perf stat $STATS $MODPROBE $MOD
+ 		;;
+ 	*)
+-		time $MODPROBE test_kallsyms_b
++		time $MODPROBE $MOD
+ 		exit 1
+ 		;;
+ 	esac
 -- 
-Benjamin Tissoires <bentiss@kernel.org>
+2.34.1
 
 
