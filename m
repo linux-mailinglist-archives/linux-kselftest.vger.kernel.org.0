@@ -1,111 +1,135 @@
-Return-Path: <linux-kselftest+bounces-22599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0B549DB7DE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 13:44:54 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E0139DB82B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 13:59:52 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 72263B20A96
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 12:44:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C727016323D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 12:59:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 309A519F11B;
-	Thu, 28 Nov 2024 12:44:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90FD41A0B04;
+	Thu, 28 Nov 2024 12:58:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WX6cRumk"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="C8Bumpu+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0926B19DF75;
-	Thu, 28 Nov 2024 12:44:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8704154BEC;
+	Thu, 28 Nov 2024 12:58:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732797884; cv=none; b=NPDr/asoklJLGDuug8vwsC0rFF2UUh2Y6Sxe1RMSTAmurobTCicj4zoU9oRnb66aoJlwEmAxqfdPhPVNq6F/QLThzqpZKgps609IkPBtugipO+u5saVxQFQc2h3/n6N8vZWH27HdXEL1Zxw5fxfXdrLvm6stxBCE9e5QmwOwGRs=
+	t=1732798727; cv=none; b=j3uI1Ziviov8Wo79Itfe6ER5VpwJZcQWdi8Bbklssv1QkDPefcm/hns7ChIn72ivtDxcAPqzygjAqebiPPl+8gg3ouiUKQQyFad59xVKiCEQ3IiMXoMFXFUVGXp5gOk/sCcGOVlxP+HRdo+CP+gIdO+C3PLy3D5ZFZBAivlI86U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732797884; c=relaxed/simple;
-	bh=j/RUrsTokEv/goAQcc7EU9RZkjPgdJBbW2tnd6jjncY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=btnTrL4SFaTilJ4ai0ipUSHBP1MIapTyO7YJBGPnukq56GUytnT0Batm85lr6B8vPN8+FgM3SwN+e9TF/M4PuvAPuCU7BuuIJFwWeP4L/QMKmz1orb+8LO1aLrCwa2ujbBFSUQ3elR/LTomZnOBHpwJ6fgqJ5RIezwInGUCq1Y0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WX6cRumk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCC08C4CECE;
-	Thu, 28 Nov 2024 12:44:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732797883;
-	bh=j/RUrsTokEv/goAQcc7EU9RZkjPgdJBbW2tnd6jjncY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WX6cRumkYoKwiF5XINtX56jxKqES0NXeJlxRQVFQktDVZ2U+Gbv3UzDTzkvJ6jhG5
-	 7lP93ZzbFrGBDYpwY94IL5V3X/JlmAMFyHs/I1W+4y4hWk5TT0vavVJbvsfjw8YFln
-	 kC0huIQuuBgYOtWnpYU/lVCrGu1xRMcpaqpQmBBzlCPvkGsEgHCkmCxj2zAwLw+cSz
-	 Yi/LcbGYGICj8bbTnz30rIQMSCZcd3RiFwB5Aafljiuakm8K5Ow28lrxh0737sL4H9
-	 LhcZ5OVaeyPsAE7q/R9fAcME2q/y622Sm1ax0kb+RbIZg2ubxNf9PYMtMMwbLnB5pW
-	 ICX5NHE3DyuLw==
-Date: Thu, 28 Nov 2024 12:44:38 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Donet Tom <donettom@linux.ibm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	"Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftest: hugetlb_dio: Fix test naming
-Message-ID: <ed5c2cd6-9090-444e-9da1-9d8c7376a6e2@sirena.org.uk>
-References: <20241127-kselftest-mm-hugetlb-dio-names-v1-1-22aab01bf550@kernel.org>
- <8174031c-b9b1-4e32-806e-28f1b2c1dee0@linux.ibm.com>
+	s=arc-20240116; t=1732798727; c=relaxed/simple;
+	bh=p7c/rBF1cnsqrfwvU+YW/YI8oedRL6OskFnoO6vdTYI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=u/EfV+u3f552CNOBXYVuwk5KdW4MZ8UfwMAySaDHUs5CyL3oXOWp3UAzPwNkrbIOTvhAFMjjJ+/8SlrHVe/LfS2B5TsfavHX9bO7D8fKfBlIp5S+x+ubVUgc2JEoeCyB+LS3V+zO3JDswu0enrDSk1UtqCQ9Os4Or27zPGMQU6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=C8Bumpu+; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AS7WIG2019105;
+	Thu, 28 Nov 2024 12:58:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=+vP4jR
+	IW/scQLgDo6yiVzbWB+2Xrjyu4I+pVdj7iaCo=; b=C8Bumpu+gZ/j08L6sz/4m0
+	IFvAYUueFJjZjQTDfbvugLiwXrvb55lgCUsKU+XbmpUiob8Y/UTYqP/8sbQaCmHF
+	O5V0eu6qSpcJ4F6KSyVzeFsjkZJAjK8ObyofFUIxx5pRuMzu+Cb37oIJKK+C8glp
+	qoakBDVlhkN8fdD8iQjYZoqGYL/D7yw+probTmEPeDtftaVXfkkrYXyvqYWBR4fB
+	QCiTu3KtI3sLhK/xYkKiKh7fxYo0p+vyblg9scNuILBe/vG7KxKBqY0WCYrMsp6l
+	IHIEKK3pVXCFx5sJ+PTqndiJqClKTTyAErMsQ4OYH/SplhMylheYzuwKXSP9gxfw
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4366ywn181-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 28 Nov 2024 12:58:37 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4ASClQhN014163;
+	Thu, 28 Nov 2024 12:58:37 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4366ywn17q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 28 Nov 2024 12:58:36 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4ASCopvo002445;
+	Thu, 28 Nov 2024 12:58:36 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 43672ghrnu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 28 Nov 2024 12:58:36 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4ASCwZVd25690712
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 28 Nov 2024 12:58:35 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5235258043;
+	Thu, 28 Nov 2024 12:58:35 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CFC5858053;
+	Thu, 28 Nov 2024 12:58:31 +0000 (GMT)
+Received: from [9.171.2.153] (unknown [9.171.2.153])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 28 Nov 2024 12:58:31 +0000 (GMT)
+Message-ID: <0290e481-48b2-48c5-acd1-66b80af66575@linux.ibm.com>
+Date: Thu, 28 Nov 2024 18:28:29 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="z/cBFCxrNXEw7+kf"
-Content-Disposition: inline
-In-Reply-To: <8174031c-b9b1-4e32-806e-28f1b2c1dee0@linux.ibm.com>
-X-Cookie: Close cover before striking.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftest: hugetlb_dio: Fix test naming
+To: Mark Brown <broonie@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20241127-kselftest-mm-hugetlb-dio-names-v1-1-22aab01bf550@kernel.org>
+ <8174031c-b9b1-4e32-806e-28f1b2c1dee0@linux.ibm.com>
+ <ed5c2cd6-9090-444e-9da1-9d8c7376a6e2@sirena.org.uk>
+Content-Language: en-US
+From: Donet Tom <donettom@linux.ibm.com>
+In-Reply-To: <ed5c2cd6-9090-444e-9da1-9d8c7376a6e2@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: _U24e7_TUcdr63VY5czgIxE2DkFXuqEG
+X-Proofpoint-ORIG-GUID: kJVN5rkCMhHjMS5aSPhzuXziSrldDySe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ suspectscore=0 mlxlogscore=679 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 bulkscore=0 mlxscore=0 phishscore=0 adultscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2411280098
 
 
---z/cBFCxrNXEw7+kf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 11/28/24 18:14, Mark Brown wrote:
+> On Thu, Nov 28, 2024 at 10:46:56AM +0530, Donet Tom wrote:
+>> On 11/27/24 21:44, Mark Brown wrote:
+>>> +	ksft_test_result(free_hpage_a == free_hpage_b,
+>>> +			 "free huge pages from %u-%u\n", start_off, end_off);
+>> This test allocates a hugetlb buffer and adjusts the start and end offsets of the buffer based
+>> on|start_off|  and|end_off|. The adjusted buffer is then used for Direct I/O (DIO). If I understand
+>> correctly,|start_off|  and|end_off|  are not free huge pages but rather DIO buffer offsets. Should we
+>> change this message to "Hugetlb DIO buffer offset"?
+> Sure, so long as the message is consistent it doesn't really matter what
+> it is from the point of view of the tooling.  I also noticed while doing
+> this that the test doesn't verify that a huge page is actually used at
+> any point, I was thinking about doing an incremental change for that
+> too.
 
-On Thu, Nov 28, 2024 at 10:46:56AM +0530, Donet Tom wrote:
-> On 11/27/24 21:44, Mark Brown wrote:
+Sure. Thank you.
 
-> > +	ksft_test_result(free_hpage_a == free_hpage_b,
-> > +			 "free huge pages from %u-%u\n", start_off, end_off);
-
-> This test allocates a hugetlb buffer and adjusts the start and end offsets of the buffer based
-> on|start_off|  and|end_off|. The adjusted buffer is then used for Direct I/O (DIO). If I understand
-> correctly,|start_off|  and|end_off|  are not free huge pages but rather DIO buffer offsets. Should we
-> change this message to "Hugetlb DIO buffer offset"?
-
-Sure, so long as the message is consistent it doesn't really matter what
-it is from the point of view of the tooling.  I also noticed while doing
-this that the test doesn't verify that a huge page is actually used at
-any point, I was thinking about doing an incremental change for that
-too.
-
-Please fix your mail client to word wrap within paragraphs at something
-substantially less than 80 columns.  Doing this makes your messages much
-easier to read and reply to.
-
---z/cBFCxrNXEw7+kf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdIZbYACgkQJNaLcl1U
-h9C08Qf/QR6MqwPfTrV/mEHoacgG9N00oq7AcUOZ6Xsnu7fnyMDrIWHYCFotfqoi
-LrxdsOgSfgTNNbvnurxKAN3/mg93DIyg2Nc+J2jzU13U2uAHwhtlWXmUm8Jd7enS
-eN/AKMHNcewMjqjYY/O2arjwNaaJ08w7f78b6EuuaLezvUV6wsSBkqOTt0RWRBeV
-0OMo8kDYGBfvKpYPTRWv1qzkQ4YxDfZ8gsGAyfsFUWWrczatbew07JezuOIcdtlX
-hb1a5hOd2PnvKDTkpo6U8rCrJvOwSlGPG0uj80lk2m6cmp3XGgMH/BIllXkynuAV
-pRwWm544pzgNMD+bvbqHr0+yMWTXDQ==
-=BFDj
------END PGP SIGNATURE-----
-
---z/cBFCxrNXEw7+kf--
+>
+> Please fix your mail client to word wrap within paragraphs at something
+> substantially less than 80 columns.  Doing this makes your messages much
+> easier to read and reply to.
 
