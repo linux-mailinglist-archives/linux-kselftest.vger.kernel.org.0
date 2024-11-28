@@ -1,138 +1,156 @@
-Return-Path: <linux-kselftest+bounces-22596-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22597-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE9449DB30E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 08:14:46 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 07C2B166716
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 07:14:42 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C90D146A60;
-	Thu, 28 Nov 2024 07:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="h2tCvLvv"
-X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 893739DB3AE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 09:24:54 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13ACF1465BB;
-	Thu, 28 Nov 2024 07:14:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732778078; cv=pass; b=Irzwhkpdv2N0vgRTQn1sZsj0jSTm+mQwkNYWbQ4ZmTfX55FiBWzywC3rQWRGhJ7ta42KTUSTN54zMVuS4pNBVm1kARur8SKVwwb8oa5RJCdwC8aFFiNC6AzQF+Ljm4PHXypdKgvEMJ8qM1qf8qyKio8fIpedHTYp5RF6MToBBIU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732778078; c=relaxed/simple;
-	bh=tmL/BbDrXII/jiOGN6m1fqalqJu2FmoPKTninfp85CY=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=IW+KDB+KQ2cKRXP8TgZqlx2P5tbyvz3Tll95KkF7xg7KYgxvTcwmnCfCj/eDd7bfEv6+km1KvtxAh/JUUONXGgl9WAofbzaHO7hJWEisXlHhJji86g/be9pyKaj1llQP0Fu9/paRkX9+84rHBmoDvWlCUQ80sokxIwSPWhZmZUM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=h2tCvLvv; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1732778064; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=ZdCZMsy0tphLYcOFhAnywRwl8maHptzuVv7YqX7lZswAeQD1ZE3dSfOFeaFX7F44dn4524W/uQ4yCjziQjqUqDVXodaLZc2F1DU11MWI4ahvPlT2KSWgbgTiJ2QXqN/vxf6b9gz3hggua7leuvH1qpm9nFELjzNtBO+9/sWMxtc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1732778064; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=TPFccF9v6m/sBu17V4GdTfoK4Rdz5Lz6IOiEO6hyXnk=; 
-	b=Egn1nxgtae8jwHanulcCPaWS4NVBmGZI3QoSchaJ8c4BxsW5aZ8vIqWxAa2DI1UMD3Xa2C+3LL3gXdSME4T3yWWVyVi9LLhZ8JDGBwKGyiR2cKonLhdEZS6m8EWGa4ls6LX/vY6m5hAqcSDqKGg5kv70mZSn1vAvpOrZ37PQCGI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
-	dmarc=pass header.from=<Usama.Anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1732778064;
-	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=TPFccF9v6m/sBu17V4GdTfoK4Rdz5Lz6IOiEO6hyXnk=;
-	b=h2tCvLvv12Us8V/VkyXdFQPoa4XlDhFUYcXq1dvqOCZv8krA4UdiZewCFQ9sdrPV
-	vLHRAjzXQ3PRtmtfBQ9L8Y9mwE6yYrrmSKz+YrIFTUJHLMFcJWR/bqLAQ3K8rRGZfBS
-	RIQDgJCTEnSTBEDa54MuLgvNYnirOyA436m55C7A=
-Received: by mx.zohomail.com with SMTPS id 173277806331396.08722934617299;
-	Wed, 27 Nov 2024 23:14:23 -0800 (PST)
-Message-ID: <af74c8db-31d0-4d19-ac8b-3cd255620d78@collabora.com>
-Date: Thu, 28 Nov 2024 12:14:23 +0500
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F049281CE5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 08:24:53 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2C1C14A4EB;
+	Thu, 28 Nov 2024 08:24:48 +0000 (UTC)
+X-Original-To: linux-kselftest@vger.kernel.org
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AC5613FD86;
+	Thu, 28 Nov 2024 08:24:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732782288; cv=none; b=KYonWhBE5ajGRGs5fAmmmI1e/z03O1UcZEvpUekBjpVM016HcfEbw+V7yHsGJSKSGPm+ULFYZYuMITJmB3ghSHERiHoVKMt/2pjivqPSRbbicogdcy+Yb1jKnvmxJ6QdtUwxFYyp9EIDLgGgjPdQcivLC8GpjG5zcrzsPwQjXr8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732782288; c=relaxed/simple;
+	bh=SCu+ISsKCCcd6qkQaEWA3jNZcsdZonCDPyLTB8O/kyY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=D+yO0gep3hvj7B3tQbmkJ4egKyv2UO4E5toEDOON7QGkcDoEqL6BEE4KGCMmVw+sD1b8tGGm0oZBBuuFRoH5FVlnm2GMs5tKYAEsxxkntMsLgALKvILt7wuJ4rSEL+OHd1fX0KvDdkLABEmBcuuL57WE/3YWM9Fz1r5oSTm8Iqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4XzTDQ0Gx6z9v7JN;
+	Thu, 28 Nov 2024 15:57:10 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id B8230140762;
+	Thu, 28 Nov 2024 16:24:23 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwDXNXWhKEhn28ZyAg--.30519S2;
+	Thu, 28 Nov 2024 09:24:22 +0100 (CET)
+Message-ID: <10c8fd4b53f946c2d7e933a35c6eb36557e8c592.camel@huaweicloud.com>
+Subject: Re: [PATCH v6 07/15] digest_cache: Allow registration of digest
+ list parsers
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+ eric.snowberg@oracle.com,  corbet@lwn.net, petr.pavlu@suse.com,
+ samitolvanen@google.com, da.gomez@samsung.com,  akpm@linux-foundation.org,
+ paul@paul-moore.com, jmorris@namei.org,  serge@hallyn.com,
+ shuah@kernel.org, mcoquelin.stm32@gmail.com,  alexandre.torgue@foss.st.com,
+ linux-integrity@vger.kernel.org,  linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-api@vger.kernel.org,
+ linux-modules@vger.kernel.org,  linux-security-module@vger.kernel.org,
+ linux-kselftest@vger.kernel.org,  wufan@linux.microsoft.com,
+ pbrobinson@gmail.com, zbyszek@in.waw.pl, hch@lst.de,  mjg59@srcf.ucam.org,
+ pmatilai@redhat.com, jannh@google.com, dhowells@redhat.com, 
+ jikos@kernel.org, mkoutny@suse.com, ppavlu@suse.com, petr.vorel@gmail.com, 
+ mzerqung@0pointer.de, kgold@linux.ibm.com, Roberto Sassu
+ <roberto.sassu@huawei.com>
+Date: Thu, 28 Nov 2024 09:23:57 +0100
+In-Reply-To: <Z0d4vXuCqjTo_QW1@bombadil.infradead.org>
+References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
+	 <20241119104922.2772571-8-roberto.sassu@huaweicloud.com>
+	 <Z0UN9ub0iztWvgLi@bombadil.infradead.org>
+	 <d428a5d926d695ebec170e98463f7501a1b00793.camel@huaweicloud.com>
+	 <Z0Ybvzy7ianR-Sx9@bombadil.infradead.org>
+	 <3dc25195b0362b3e5b6d6964df021ff4e7e1b226.camel@huaweicloud.com>
+	 <Z0d4vXuCqjTo_QW1@bombadil.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Usama.Anjum@collabora.com, "Ritesh Harjani (IBM)"
- <ritesh.list@gmail.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftest: hugetlb_dio: Fix test naming
-To: Mark Brown <broonie@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Donet Tom <donettom@linux.ibm.com>
-References: <20241127-kselftest-mm-hugetlb-dio-names-v1-1-22aab01bf550@kernel.org>
-Content-Language: en-US
-From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
-In-Reply-To: <20241127-kselftest-mm-hugetlb-dio-names-v1-1-22aab01bf550@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+X-CM-TRANSID:GxC2BwDXNXWhKEhn28ZyAg--.30519S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw15XFyUGry5CF48Zr1DWrg_yoW8uF4xpF
+	WfK3ZIkr4kt3Wqkw4vyw47uFW0k393GrW5G3Z3Gr9ayr15KFya9FyIgw43WFZrKr4vgw4a
+	qr1rZ3sIvw1kZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4U
+	JwCIccxYrVCFb41lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+	IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+	x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+	DU0xZFpf9x07bhb18UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQABBGdH1TUBdQAAsw
 
-On 11/27/24 9:14 PM, Mark Brown wrote:
-> The string logged when a test passes or fails is used by the selftest
-> framework to identify which test is being reported. The hugetlb_dio test
-> not only uses the same strings for every test that is run but it also uses
-> different strings for test passes and failures which means that test
-> automation is unable to follow what the test is doing at all.
-> 
-> Pull the existing duplicated logging of the number of free huge pages
-> before and after the test out of the conditional and replace that and the
-> logging of the result with a single ksft_print_result() which incorporates
-> the parameters passed into the test into the output.
-> 
-> Fixes: fae1980347bf ("selftests: hugetlb_dio: fixup check for initial conditions to skip in the start")
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+On Wed, 2024-11-27 at 11:53 -0800, Luis Chamberlain wrote:
+> On Wed, Nov 27, 2024 at 10:51:11AM +0100, Roberto Sassu wrote:
+> > For eBPF programs we are also in a need for a better way to
+> > measure/appraise them.
+>=20
+> I am confused now, I was under the impression this "Integrity Digest
+> Cache" is just a special thing for LSMs, and so I was under the
+> impression that kernel_read_file() lsm hook already would take care
+> of eBPF programs.
 
-> ---
->  tools/testing/selftests/mm/hugetlb_dio.c | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
-> index 432d5af15e66b7d6cac0273fb244d6696d7c9ddc..db63abe5ee5e85ff7795d3ea176c3ac47184bf4f 100644
-> --- a/tools/testing/selftests/mm/hugetlb_dio.c
-> +++ b/tools/testing/selftests/mm/hugetlb_dio.c
-> @@ -76,19 +76,15 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
->  	/* Get the free huge pages after unmap*/
->  	free_hpage_a = get_free_hugepages();
->  
-> +	ksft_print_msg("No. Free pages before allocation : %d\n", free_hpage_b);
-> +	ksft_print_msg("No. Free pages after munmap : %d\n", free_hpage_a);
-> +
->  	/*
->  	 * If the no. of free hugepages before allocation and after unmap does
->  	 * not match - that means there could still be a page which is pinned.
->  	 */
-> -	if (free_hpage_a != free_hpage_b) {
-> -		ksft_print_msg("No. Free pages before allocation : %d\n", free_hpage_b);
-> -		ksft_print_msg("No. Free pages after munmap : %d\n", free_hpage_a);
-> -		ksft_test_result_fail(": Huge pages not freed!\n");
-> -	} else {
-> -		ksft_print_msg("No. Free pages before allocation : %d\n", free_hpage_b);
-> -		ksft_print_msg("No. Free pages after munmap : %d\n", free_hpage_a);
-> -		ksft_test_result_pass(": Huge pages freed successfully !\n");
-> -	}
-> +	ksft_test_result(free_hpage_a == free_hpage_b,
-> +			 "free huge pages from %u-%u\n", start_off, end_off);
->  }
->  
->  int main(void)
-> 
-> ---
-> base-commit: 6f3d2b5299b0a8bcb8a9405a8d3fceb24f79c4f0
-> change-id: 20241127-kselftest-mm-hugetlb-dio-names-1ebccbe8183d
-> 
-> Best regards,
+Yes, the problem is that eBPF programs are transformed in user space
+before they are sent to the kernel:
 
+https://lwn.net/Articles/977394/
 
--- 
-BR,
-Muhammad Usama Anjum
+The Integrity Digest Cache can be used for the measurement/appraisal of
+the initial eBPF ELF file, when they are accessed from the filesystem,
+but the resulting blob sent to the kernel will be different.
+
+> > Now, I'm trying to follow you on the additional kernel_read_file()
+> > calls. I agree with you, if a parser tries to open again the file that
+> > is being verified it would cause a deadlock in IMA (since the inode
+> > mutex is already locked for verifying the original file).
+>=20
+> Just document this on the parser as a requirement.
+
+Ok, will do.
+
+> > > > Supporting kernel modules opened the road for new deadlocks, since =
+one
+> > > > can ask a digest list to verify a kernel module, but that digest li=
+st
+> > > > requires the same kernel module. That is why the in-kernel mechanis=
+m is
+> > > > 100% reliable,
+> > >=20
+> > > Are users of this infrastructure really in need of modules for these
+> > > parsers?
+> >=20
+> > I planned to postpone this to later, and introduced two parsers built-
+> > in (TLV and RPM). However, due to Linus's concern regarding the RPM
+> > parser, I moved it out in a kernel module.
+>=20
+> OK this should be part of the commit log, ie that it is not desirable to
+> have an rpm parser in-kernel for some users.
+
+I understand. Will add in the commit log.
+
+Just to clarify, we are not talking about the full blown librpm in the
+kernel, but a 243 LOC that I rewrote to obtain only the information I
+need. I also formally verified it with pseudo/totally random data with
+Frama-C:
+
+https://github.com/robertosassu/rpm-formal/blob/main/validate_rpm.c
+
+Thanks
+
+Roberto
+
 
