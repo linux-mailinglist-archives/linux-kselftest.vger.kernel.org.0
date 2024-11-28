@@ -1,78 +1,74 @@
-Return-Path: <linux-kselftest+bounces-22606-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22607-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5F939DBABD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 16:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 72CAE9DBC7B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 20:27:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7F4C0B224EF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 15:41:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1862B20DDB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 19:27:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACAE21BDAA0;
-	Thu, 28 Nov 2024 15:40:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 423831C1F1E;
+	Thu, 28 Nov 2024 19:27:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EJOyQ3Op"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ptjbx+xY"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8176E1BD9FD;
-	Thu, 28 Nov 2024 15:40:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17FA619882B;
+	Thu, 28 Nov 2024 19:27:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732808450; cv=none; b=dGnwgCj1KJfB9a9buv7Q1JZtCstrfzyWZinL4Hu2P1BjAhZGJ6nB9T57Z9XNoHWqtfOj8d+z1DKKXkUWRp8UUm6Hf+XaSnmU4HVE6EQf1HZdVi7UORtwLH5b7TInkNlwNNejVcxDI5B11CKPjLADoq1DKnNPBwNljdFxw3lSkMY=
+	t=1732822067; cv=none; b=Ypr3BLSzOOaUJbpv3D79a7C2E8BmQhciRv/xMFGlb/oQdW3yEZgYPE7jYZgJaBb3AOpGbFWAHiOHXEBiK3IXsUQudI7O9KN1+WmnCkGGBRflZpOSZqRFV/tHn3ccI2ZiLcpuyjwf+SOjwVwdQVuvi5YA73qBkOVgVxhrflUlmD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732808450; c=relaxed/simple;
-	bh=3Ju+mG6AbalUNchHrJWsVy32D/Z6BPG2SJDSfMowx30=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Ejs6bYq/a1M29YWhvO6HfU+eomS5lLlQOF9orC/T3A4HuPPZ8HLTSd8zznGe7mz5v0OlWEM95NAuxzIF/8N4I/pMTsqs9RNCIDCMIfJbhx7IPI5LgBfhDNqkQIShTI9Wqs/cdgT6/qGyp7DQJR6ONW0yAyWdoFOpPhpvr+Kgjyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EJOyQ3Op; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A437C4CED7;
-	Thu, 28 Nov 2024 15:40:48 +0000 (UTC)
+	s=arc-20240116; t=1732822067; c=relaxed/simple;
+	bh=Z4rRwWkzTWkeE89toBz8PfBiyMDM5wnQziMZm/GdS4k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lGnlze3RBjsmjuAFVdRaik3OsZgoMSKwqVgZN8W5BuZGTT/3YxNpk7nM/P5VDcvJksq48DBAY6LcC76LLNo8FDY2eOlFqQChP4lMg0oeyzOyup8/yWvJ83xvJbpm+iQs2Coa+WblgXdnZi8m4WuvKmErTi+GBCyPtamKE1U2U34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ptjbx+xY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D051FC4CECE;
+	Thu, 28 Nov 2024 19:27:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732808450;
-	bh=3Ju+mG6AbalUNchHrJWsVy32D/Z6BPG2SJDSfMowx30=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=EJOyQ3OpVU47MkFzzvsp6T9VbJGl/asF+rmCSB91WjrvoKYeTVNMHyaykj5AYlsiq
-	 FSw5FPzV3nt7dLbeRWmSYmMg1PSHc8Voj86e9Tg2XBVuMYwP0M+AL/DzYNWVMZOANt
-	 ucY2Z5v+oeKPhU7D18oDFD9GzQe0y5fp0tLuBrjIcPt6WVN4euYM/Ns5Ndh7MktAWM
-	 kx+/mfsefJ9vjH25cS/tKQ7P48yWq47e5Hal/SnRc7Z+FdqZwXPnVOfA1jVuMetuTb
-	 kdk4JMQoi0YtKb68B0yAdB4cNPI2RbKhzJ0daBqKSRwFDunmJCN7kTpmx/DrAPnAhr
-	 HU2kigZT24iag==
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Maximilian Heyne <mheyne@amazon.de>
-Cc: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Peter Hutterer <peter.hutterer@who-t.net>, linux-input@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20241126135850.76493-1-mheyne@amazon.de>
-References: <20241126135850.76493-1-mheyne@amazon.de>
-Subject: Re: [PATCH] selftests: hid: fix typo and exit code
-Message-Id: <173280844877.2348538.8632624571122500583.b4-ty@kernel.org>
-Date: Thu, 28 Nov 2024 16:40:48 +0100
+	s=k20201202; t=1732822066;
+	bh=Z4rRwWkzTWkeE89toBz8PfBiyMDM5wnQziMZm/GdS4k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ptjbx+xYnoUDC1/iPv6PCNuxqTr6lhiB1osfUuvZbR/6ZPX2H9xAT6z0gBL6O11bA
+	 Qz2jxsivuHnovkQLm3mBXSRjbW5OcA8i3cRraOhCU2zBxqto2V4LYCvMN5K4shbX//
+	 sxuwVbKiKJieeDFeZP/UaHrOeHsLjhYb3pdKiu9xCYGPr5PaMp+YfrPw/93vuuhUhB
+	 NVfB8dXWYpmY1VXghUWa5lcwn7Z5mqyLG4kOychSwkD0KaXbJNHZkNsUjg98b9Olsp
+	 8+9yfGKtF6yO8G1vsfbMiEl9udScJI0VP37EvvXBSL6L3pi2bOSCoOXcLxdvtmF/Wj
+	 EHOu5KBExvlHw==
+Date: Thu, 28 Nov 2024 11:27:45 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: find_symbol: Actually use load_mod() parameter
+Message-ID: <Z0jEMdis_1pyc1YK@bombadil.infradead.org>
+References: <a7f10d132c36f0e0c80a6bf377721e17732e120a.1732802636.git.geert@linux-m68k.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a7f10d132c36f0e0c80a6bf377721e17732e120a.1732802636.git.geert@linux-m68k.org>
 
-On Tue, 26 Nov 2024 13:58:50 +0000, Maximilian Heyne wrote:
-> The correct exit code to mark a test as skipped is 4.
+On Thu, Nov 28, 2024 at 03:04:52PM +0100, Geert Uytterhoeven wrote:
+> The parameter passed to load_mod() is stored in $MOD, but never used.
+> Obviously it was intended to be used instead of the hardcoded
+> "test_kallsyms_b" module name.
 > 
-> 
+> Fixes: 84b4a51fce4ccc66 ("selftests: add new kallsyms selftests")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Applied to hid/hid.git (for-6.13/upstream-fixes), thanks!
+Thanks, I queued this up and already sent it as part of a pull request
+to Linus as I head two other minor fixes as well.
 
-[1/1] selftests: hid: fix typo and exit code
-      https://git.kernel.org/hid/hid/c/e8f34747bdde
-
-Cheers,
--- 
-Benjamin Tissoires <bentiss@kernel.org>
-
+  Luis
 
