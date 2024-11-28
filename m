@@ -1,135 +1,162 @@
-Return-Path: <linux-kselftest+bounces-22600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22601-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E0139DB82B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 13:59:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 024F79DB892
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 14:27:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C727016323D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 12:59:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACCDA16419C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Nov 2024 13:27:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90FD41A0B04;
-	Thu, 28 Nov 2024 12:58:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0682D1A9B30;
+	Thu, 28 Nov 2024 13:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="C8Bumpu+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W4x8dQLJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8704154BEC;
-	Thu, 28 Nov 2024 12:58:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C66DA1A3BC0;
+	Thu, 28 Nov 2024 13:27:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732798727; cv=none; b=j3uI1Ziviov8Wo79Itfe6ER5VpwJZcQWdi8Bbklssv1QkDPefcm/hns7ChIn72ivtDxcAPqzygjAqebiPPl+8gg3ouiUKQQyFad59xVKiCEQ3IiMXoMFXFUVGXp5gOk/sCcGOVlxP+HRdo+CP+gIdO+C3PLy3D5ZFZBAivlI86U=
+	t=1732800442; cv=none; b=lfmB9qSxWrYicUCpG0mP4aJn/Z8f+0JQ7ykIw4zW7YvZ4BcEUeDA8jYYTMvBh0qPetDTuk1wQMZrYmoKrRlzg8+vDcAdSrzjgF0VZOHzJRwYyyJgThah0q/z3y5iGnXLWtM9UniKgE6MTi6yWIY3iHi5PXRfS8ivxFHZkP1SXg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732798727; c=relaxed/simple;
-	bh=p7c/rBF1cnsqrfwvU+YW/YI8oedRL6OskFnoO6vdTYI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u/EfV+u3f552CNOBXYVuwk5KdW4MZ8UfwMAySaDHUs5CyL3oXOWp3UAzPwNkrbIOTvhAFMjjJ+/8SlrHVe/LfS2B5TsfavHX9bO7D8fKfBlIp5S+x+ubVUgc2JEoeCyB+LS3V+zO3JDswu0enrDSk1UtqCQ9Os4Or27zPGMQU6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=C8Bumpu+; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AS7WIG2019105;
-	Thu, 28 Nov 2024 12:58:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=+vP4jR
-	IW/scQLgDo6yiVzbWB+2Xrjyu4I+pVdj7iaCo=; b=C8Bumpu+gZ/j08L6sz/4m0
-	IFvAYUueFJjZjQTDfbvugLiwXrvb55lgCUsKU+XbmpUiob8Y/UTYqP/8sbQaCmHF
-	O5V0eu6qSpcJ4F6KSyVzeFsjkZJAjK8ObyofFUIxx5pRuMzu+Cb37oIJKK+C8glp
-	qoakBDVlhkN8fdD8iQjYZoqGYL/D7yw+probTmEPeDtftaVXfkkrYXyvqYWBR4fB
-	QCiTu3KtI3sLhK/xYkKiKh7fxYo0p+vyblg9scNuILBe/vG7KxKBqY0WCYrMsp6l
-	IHIEKK3pVXCFx5sJ+PTqndiJqClKTTyAErMsQ4OYH/SplhMylheYzuwKXSP9gxfw
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4366ywn181-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 Nov 2024 12:58:37 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4ASClQhN014163;
-	Thu, 28 Nov 2024 12:58:37 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4366ywn17q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 Nov 2024 12:58:36 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4ASCopvo002445;
-	Thu, 28 Nov 2024 12:58:36 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 43672ghrnu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 Nov 2024 12:58:36 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4ASCwZVd25690712
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 28 Nov 2024 12:58:35 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5235258043;
-	Thu, 28 Nov 2024 12:58:35 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CFC5858053;
-	Thu, 28 Nov 2024 12:58:31 +0000 (GMT)
-Received: from [9.171.2.153] (unknown [9.171.2.153])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 28 Nov 2024 12:58:31 +0000 (GMT)
-Message-ID: <0290e481-48b2-48c5-acd1-66b80af66575@linux.ibm.com>
-Date: Thu, 28 Nov 2024 18:28:29 +0530
+	s=arc-20240116; t=1732800442; c=relaxed/simple;
+	bh=s7ntmLyoK0Ige0yP54n7nzwN2qCmpmvx316Vpb4inks=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=CXxoh26umEpvjPbSABpoEANAQ6Bkx0PoejZFN7QuSVZoCTpTf5sIQzJzemRpy/6QxPjYd/ze88J+jmVDgwneuCOVvObO+vCdO2uEhb1UNGaHYjMrkoPyMMDznSajBU4KrYFQ0L3pnKzW8BvGYlf7fGuo2AO8gXgWl9Ljk3N/aWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W4x8dQLJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1117BC4CED3;
+	Thu, 28 Nov 2024 13:27:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732800442;
+	bh=s7ntmLyoK0Ige0yP54n7nzwN2qCmpmvx316Vpb4inks=;
+	h=From:Date:Subject:To:Cc:From;
+	b=W4x8dQLJLyeKbmnDT2QjsgZfRNMP4shFyIT/3c8z4rXM1Q/HOOYiYE34+B0dse2ok
+	 1+ykhOG408CCgxPWHbaO+oPmaBISGvzv+9xC5qywv17Kn84nzFjhejrE3LevibFyiz
+	 GO8cD4fznOGsQyuRrH4UVUylijcfaxocejNrCdD/mA692bOAE2lI0Agnth1vGEFLSb
+	 pot7E1hZkYLaZuKVPp8IHfmFYxO/vpeP8tznGvRIUecQzi2j2/IHFLdozbuA1/SVK7
+	 bzziZ6k3yNig+NLDXsg1lTAIxAGJfGIl3R6wzsedWNepAfakRrLu1QkVr6Sgl0TbKZ
+	 PslcPSFNW+O7A==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Date: Thu, 28 Nov 2024 14:27:16 +0100
+Subject: [PATCH HID] selftests/hid: fix kfunc inclusions with newer bpftool
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftest: hugetlb_dio: Fix test naming
-To: Mark Brown <broonie@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
-        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241127-kselftest-mm-hugetlb-dio-names-v1-1-22aab01bf550@kernel.org>
- <8174031c-b9b1-4e32-806e-28f1b2c1dee0@linux.ibm.com>
- <ed5c2cd6-9090-444e-9da1-9d8c7376a6e2@sirena.org.uk>
-Content-Language: en-US
-From: Donet Tom <donettom@linux.ibm.com>
-In-Reply-To: <ed5c2cd6-9090-444e-9da1-9d8c7376a6e2@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: _U24e7_TUcdr63VY5czgIxE2DkFXuqEG
-X-Proofpoint-ORIG-GUID: kJVN5rkCMhHjMS5aSPhzuXziSrldDySe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- suspectscore=0 mlxlogscore=679 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 bulkscore=0 mlxscore=0 phishscore=0 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2411280098
+Message-Id: <20241128-fix-new-bpftool-v1-1-c9abdf94a719@kernel.org>
+X-B4-Tracking: v=1; b=H4sIALNvSGcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxNDQyML3bTMCt281HLdpIK0kvz8HF1jw0TLNBPjxMS0pCQloK6ColSgErC
+ J0Uoeni5KsbW1ADG4jtxmAAAA
+X-Change-ID: 20241128-fix-new-bpftool-31a9f43aafbb
+To: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ Benjamin Tissoires <bentiss@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1732800440; l=3659;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=s7ntmLyoK0Ige0yP54n7nzwN2qCmpmvx316Vpb4inks=;
+ b=PREaqb+BXRq/tIkrsTWycjKGYBT+dINU4VsCFZL2/q0/YXm/vlTEaUZriVdHDTZk7HtnLrfUL
+ /Lrw153FIwxDPxv8iyaIJ2+xt8XzW80dC/LigpAPfgDnrsD++kjCNvz
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
+bpftool now embeds the kfuncs definitions directly in the generated
+vmlinux.h
 
-On 11/28/24 18:14, Mark Brown wrote:
-> On Thu, Nov 28, 2024 at 10:46:56AM +0530, Donet Tom wrote:
->> On 11/27/24 21:44, Mark Brown wrote:
->>> +	ksft_test_result(free_hpage_a == free_hpage_b,
->>> +			 "free huge pages from %u-%u\n", start_off, end_off);
->> This test allocates a hugetlb buffer and adjusts the start and end offsets of the buffer based
->> on|start_off|  and|end_off|. The adjusted buffer is then used for Direct I/O (DIO). If I understand
->> correctly,|start_off|  and|end_off|  are not free huge pages but rather DIO buffer offsets. Should we
->> change this message to "Hugetlb DIO buffer offset"?
-> Sure, so long as the message is consistent it doesn't really matter what
-> it is from the point of view of the tooling.  I also noticed while doing
-> this that the test doesn't verify that a huge page is actually used at
-> any point, I was thinking about doing an incremental change for that
-> too.
+This is great, but because the selftests dir might be compiled with
+HID_BPF disabled, we have no guarantees to be able to compile the
+sources with the generated kfuncs.
 
-Sure. Thank you.
+If we have the kfuncs, because we have the `__not_used` hack, the newly
+defined kfuncs do not match the ones from vmlinux.h and things go wrong.
 
->
-> Please fix your mail client to word wrap within paragraphs at something
-> substantially less than 80 columns.  Doing this makes your messages much
-> easier to read and reply to.
+Prevent vmlinux.h to define its kfuncs and also add the missing `__weak`
+symbols for our custom kfuncs definitions
+
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+---
+This was noticed while bumping the CI to fedora 41 which has an update
+of bpftool.
+
+I'll probably take this in for-6.13/upstream-fixes tomorrow if no bots
+comes back at me.
+
+Cheers,
+Benjamin
+---
+ tools/testing/selftests/hid/progs/hid_bpf_helpers.h | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+index e5db897586bbfe010d8799f6f52fc5c418344e6b..531228b849daebcf40d994abb8bf35e760b3cc4e 100644
+--- a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
++++ b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+@@ -22,6 +22,9 @@
+ #define HID_REQ_SET_IDLE         HID_REQ_SET_IDLE___not_used
+ #define HID_REQ_SET_PROTOCOL     HID_REQ_SET_PROTOCOL___not_used
+ 
++/* do not define kfunc through vmlinux.h as this messes up our custom hack */
++#define BPF_NO_KFUNC_PROTOTYPES
++
+ #include "vmlinux.h"
+ 
+ #undef hid_bpf_ctx
+@@ -91,31 +94,31 @@ struct hid_bpf_ops {
+ /* following are kfuncs exported by HID for HID-BPF */
+ extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
+ 			      unsigned int offset,
+-			      const size_t __sz) __ksym;
+-extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __ksym;
+-extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __ksym;
++			      const size_t __sz) __weak __ksym;
++extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __weak __ksym;
++extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __weak __ksym;
+ extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
+ 			      __u8 *data,
+ 			      size_t buf__sz,
+ 			      enum hid_report_type type,
+-			      enum hid_class_request reqtype) __ksym;
++			      enum hid_class_request reqtype) __weak __ksym;
+ extern int hid_bpf_hw_output_report(struct hid_bpf_ctx *ctx,
+-				    __u8 *buf, size_t buf__sz) __ksym;
++				    __u8 *buf, size_t buf__sz) __weak __ksym;
+ extern int hid_bpf_input_report(struct hid_bpf_ctx *ctx,
+ 				enum hid_report_type type,
+ 				__u8 *data,
+-				size_t buf__sz) __ksym;
++				size_t buf__sz) __weak __ksym;
+ extern int hid_bpf_try_input_report(struct hid_bpf_ctx *ctx,
+ 				    enum hid_report_type type,
+ 				    __u8 *data,
+-				    size_t buf__sz) __ksym;
++				    size_t buf__sz) __weak __ksym;
+ 
+ /* bpf_wq implementation */
+ extern int bpf_wq_init(struct bpf_wq *wq, void *p__map, unsigned int flags) __weak __ksym;
+ extern int bpf_wq_start(struct bpf_wq *wq, unsigned int flags) __weak __ksym;
+ extern int bpf_wq_set_callback_impl(struct bpf_wq *wq,
+ 		int (callback_fn)(void *map, int *key, void *wq),
+-		unsigned int flags__k, void *aux__ign) __ksym;
++		unsigned int flags__k, void *aux__ign) __weak __ksym;
+ #define bpf_wq_set_callback(timer, cb, flags) \
+ 	bpf_wq_set_callback_impl(timer, cb, flags, NULL)
+ 
+
+---
+base-commit: 919464deeca24e5bf13b6c8efd0b1d25cc43866f
+change-id: 20241128-fix-new-bpftool-31a9f43aafbb
+
+Best regards,
+-- 
+Benjamin Tissoires <bentiss@kernel.org>
+
 
