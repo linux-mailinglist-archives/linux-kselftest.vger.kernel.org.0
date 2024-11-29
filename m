@@ -1,211 +1,226 @@
-Return-Path: <linux-kselftest+bounces-22619-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22620-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6235E9DE696
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Nov 2024 13:40:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69B649DE725
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Nov 2024 14:20:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2330528121C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Nov 2024 12:40:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D9A8B20757
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Nov 2024 13:20:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A99CE19D06D;
-	Fri, 29 Nov 2024 12:40:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B77119D083;
+	Fri, 29 Nov 2024 13:20:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="a2XTX5kb"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="fej70535";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ctI3S9Eo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+Received: from flow-b4-smtp.messagingengine.com (flow-b4-smtp.messagingengine.com [202.12.124.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9469119AA68;
-	Fri, 29 Nov 2024 12:40:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.95.48.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB2B11991AA;
+	Fri, 29 Nov 2024 13:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732884008; cv=none; b=eo72ngOBkKUZujtmxCUKNH9NgaFnjKcO49vlItdupXeYAF3mraGJstX3BCM/To0YLZapujRg4BqVfNwLUBmU+bRbpyvSRsfPKIuxQ9Whos6Nb4FXUgEDphdDKQ8N9mhLoIRswIMh68HoqFyJiTmphcb6c8pqndeCRnKHKELwhJM=
+	t=1732886430; cv=none; b=bcSYRoRu6uevk6tP8kbUZHtu60GPigT1WyQmUr0gpGDxCigGOg61w86YkvrOcsmv91wYtbt2NHr7dGGew7PvOiQfr50R6qNruXyZ2XHuo/rbH6PxsSD1oqAUIXViXhQWTpu+VZuyJEfgVjY2jzHcroLN2J2dREJOVoXLc7oXI7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732884008; c=relaxed/simple;
-	bh=4vPipVyS9DaWT9LKbSFhyJUObq0C5SL88ge4vwdZdCA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nU1R/mvutg5aaJU1+V4Vk03tlufBEFRUZS7bBWfbWqDtONcv38nyfryuZO2pU+NGbDtGCPkPEMBoWx2Ivl0Vq10FRIPQgHHUK2ZIuRslamKMiOAJL9OfT0ufNlqL9E8xpeuXOaYCGeqGQhd9mnOGDguZpuq6mJ8Cv5LkEjRjlgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=a2XTX5kb; arc=none smtp.client-ip=52.95.48.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1732884007; x=1764420007;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5pUJY8dTjFf+Uw5/C4D+44Y0A859zY36PuFsL3IHnPw=;
-  b=a2XTX5kbJrZnlPalsn0tTuMXMjiRzGepiPlPGKea+k0xKSPy3jfPYn6t
-   3AUfYEVztdvnufnvOoB2Owrg4iakNrU3MXS0NMyL0wUlMHFHRNIR9YGR6
-   DyvVRh5eFstp9nDzuwneKAC4wtEOBGy5gsqPD1Vvk/AzkrfBOCrr7l+vU
-   A=;
-X-IronPort-AV: E=Sophos;i="6.12,195,1728950400"; 
-   d="scan'208";a="441805293"
-Received: from iad6-co-svc-p1-lb1-vlan2.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.124.125.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2024 12:40:04 +0000
-Received: from EX19MTAEUB002.ant.amazon.com [10.0.43.254:12475]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.23.253:2525] with esmtp (Farcaster)
- id 4a00d189-7d5b-47bc-ae41-4835ef36fc4b; Fri, 29 Nov 2024 12:40:03 +0000 (UTC)
-X-Farcaster-Flow-ID: 4a00d189-7d5b-47bc-ae41-4835ef36fc4b
-Received: from EX19D004EUC001.ant.amazon.com (10.252.51.190) by
- EX19MTAEUB002.ant.amazon.com (10.252.51.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Fri, 29 Nov 2024 12:40:02 +0000
-Received: from EX19MTAUEB002.ant.amazon.com (10.252.135.47) by
- EX19D004EUC001.ant.amazon.com (10.252.51.190) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Fri, 29 Nov 2024 12:40:01 +0000
-Received: from email-imr-corp-prod-pdx-1box-2b-8c2c6aed.us-west-2.amazon.com
- (10.124.125.2) by mail-relay.amazon.com (10.252.135.97) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id
- 15.2.1258.34 via Frontend Transport; Fri, 29 Nov 2024 12:40:01 +0000
-Received: from dev-dsk-kalyazin-1a-a12e27e2.eu-west-1.amazon.com (dev-dsk-kalyazin-1a-a12e27e2.eu-west-1.amazon.com [172.19.103.116])
-	by email-imr-corp-prod-pdx-1box-2b-8c2c6aed.us-west-2.amazon.com (Postfix) with ESMTPS id 6C72CA0379;
-	Fri, 29 Nov 2024 12:39:58 +0000 (UTC)
-From: Nikita Kalyazin <kalyazin@amazon.com>
-To: <pbonzini@redhat.com>, <shuah@kernel.org>, <kvm@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: <linux-mm@kvack.org>, <michael.day@amd.com>, <david@redhat.com>,
-	<quic_eberman@quicinc.com>, <jthoughton@google.com>, <brijesh.singh@amd.com>,
-	<michael.roth@amd.com>, <graf@amazon.de>, <jgowans@amazon.com>,
-	<roypat@amazon.co.uk>, <derekmn@amazon.com>, <nsaenz@amazon.es>,
-	<xmarcalx@amazon.com>, <kalyazin@amazon.com>
-Subject: [RFC PATCH v2 2/2] KVM: selftests: update guest_memfd write tests
-Date: Fri, 29 Nov 2024 12:39:29 +0000
-Message-ID: <20241129123929.64790-3-kalyazin@amazon.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20241129123929.64790-1-kalyazin@amazon.com>
-References: <20241129123929.64790-1-kalyazin@amazon.com>
+	s=arc-20240116; t=1732886430; c=relaxed/simple;
+	bh=iTbx20FnA7mezjqwLAY+/IuoW3ith2+9M0JvvXtPX0c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VtDOhdmV1IA/M9NGScNHH/U37HUeTYJA9rcRzzoscbj4YD+AqO85HMfynKxg86zCOzO7nshKC8tVyz83XVO+GkJN+dsJJD9M8pbRajgJlS1XpC8JH5el9lgdqxA3e7gEaP8zbIgR2CcYqMolauMiTE+87DgKU+Q3oqRlUcCl1vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=fej70535; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ctI3S9Eo; arc=none smtp.client-ip=202.12.124.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailflow.stl.internal (Postfix) with ESMTP id 7329F1D40683;
+	Fri, 29 Nov 2024 08:20:24 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-09.internal (MEProxy); Fri, 29 Nov 2024 08:20:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm2;
+	 t=1732886424; x=1732890024; bh=EPOGgKgGObNAQHsXiiSQb3xlJnijbFXb
+	QhOX2B+lx+o=; b=fej70535UCBmHVKcXNhfAhlR/jhGtidVpo5pJLtCAeKk4Ajg
+	YSZ7/lJ6dq8iH8Z5TaizYpMLp8+FXg3R12gu2riF+hEIJcYqW0/qYwUDkel1W343
+	AUQEAgISgADcpT9Y4aAHJ1Hc9YS5ad52QaURVDkMt++gVPdZIZSWB4i6DAVRfcMy
+	9P//AMmZbgfnhymgQU1lSAICeuTt/mvhLvKB0oow8Yr6bcjvLeUTY6foeO9HvtLY
+	AnNnpXTyTglYBpVctpzbI58ri/y4CehM/c5ap4I5o7CeCrRyDw6ITXWdpTO/JfpN
+	Ata/Ac5X0zzhMRmEN9IgO4+QT0kQHPT2iMzR7A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1732886424; x=
+	1732890024; bh=EPOGgKgGObNAQHsXiiSQb3xlJnijbFXbQhOX2B+lx+o=; b=c
+	tI3S9EoPo5o6+rdHq3rlUq5B+Q9EdRJakWYdd7Xvgn4XAN3+yuTBpARoQgqoG1TC
+	I2Bp7NM28MRrI7/smYkv3c+5FvcSY5tRoxk5O4IJBcQWh1JSeA6Eses1WVHRVZze
+	5cAgZNSfaYoIpS5oqAlMr0/u2egGZf3z091/c0OoD7JO+gn6TLTBCF8oTGUtG4Kk
+	vdM/xeymOBZoxE3Ihsx3pTUkZSU0OH12SAZ1Lbi15+X3Lht5fnAUSynoSAOS/Wi1
+	/puTtTqNpJTP6nJN5SaWD6xOyGOWgj16ygoEKTu0lwAvvX7mgaKQFjHD7w5uccKu
+	L3Xrtn2a9auBDT2ien31g==
+X-ME-Sender: <xms:l79JZ3bjareX1OoILt0RdP2mC7HxbqBSkD64le-FJi_TPEkx18lPXw>
+    <xme:l79JZ2b5nG08rsza_SKqyUXClt7O7KXaxi3Y5o7tnRrnjEQ2iUWg4CfhTXX0u0MbT
+    qO2vG5JOB4gdjQHSyo>
+X-ME-Received: <xmr:l79JZ58sUAn_4Nb5tvvakj0FcfkMK2nw9EvUXYLEO0otawtgEXr7ELpn2kNc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrheefgdehtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
+    hsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeen
+    ucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrg
+    hilhdrnhgvtheqnecuggftrfgrthhtvghrnhepgfdvgeeitefffedvgfdutdelgeeihfeg
+    ueehteevveegveejudelfeffieehledvnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggp
+    rhgtphhtthhopeduuddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnthhonh
+    hiohesohhpvghnvhhpnhdrnhgvthdprhgtphhtthhopehrhigriigrnhhovhdrshdrrges
+    ghhmrghilhdrtghomhdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtoh
+    hmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggs
+    vghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepughonhgrlhgurdhhuhhnthgvrh
+    esghhmrghilhdrtghomhdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgt
+    phhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhope
+    hlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:l79JZ9pFsUgccpZ76qwWHD8PMyfPmurXvaGJBnGVQuTsKjYplic9ZA>
+    <xmx:l79JZypeeOU6SnqpYwAuLEmeUhAf9qAyKu7iMltcqN3UETcHD-tZQQ>
+    <xmx:l79JZzRweJSzXH-AekE8R-D2QOevQfEneS-aIHZ_FGSzPZagLJjUJw>
+    <xmx:l79JZ6oPpGYxnV1ZyaIrER1XaUhMrsdmofa8rCDFfg8Gm6u4UnLWHA>
+    <xmx:l79JZ-d6bw3TTaAxKu9jFa9BgSuSuxp3uIRgxLTqFt7VjByWLt7LnJ9J>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 29 Nov 2024 08:20:23 -0500 (EST)
+Date: Fri, 29 Nov 2024 14:20:20 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH net-next v11 09/23] ovpn: implement basic RX path (UDP)
+Message-ID: <Z0m_lNTOAV7yL9wo@hog>
+References: <20241029-b4-ovpn-v11-0-de4698c73a25@openvpn.net>
+ <20241029-b4-ovpn-v11-9-de4698c73a25@openvpn.net>
+ <eabe28f9-d6a4-4bdc-a988-418e5137f3cb@gmail.com>
+ <288f68cd-533a-4253-85c4-951cc4a9c862@openvpn.net>
+ <aac209cc-589c-4b8a-9123-e44df9e794e4@gmail.com>
+ <4c24d8ba-35d0-4aff-b207-9eca6eeda1fc@openvpn.net>
+ <a4a537df-900b-43e6-bcc2-5049036b1ca2@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a4a537df-900b-43e6-bcc2-5049036b1ca2@openvpn.net>
 
-This is to reflect that the write syscall is now implemented for
-guest_memfd.
+2024-11-27, 02:40:02 +0100, Antonio Quartulli wrote:
+> On 26/11/2024 09:49, Antonio Quartulli wrote:
+> [...]
+> > > 
+> > > The potential issue is tricky since we create it patch-by-patch.
+> > > 
+> > > Up to this patch the socket releasing procedure looks solid and
+> > > reliable. E.g. the P2P netdev destroying:
+> > > 
+> > >    ovpn_netdev_notifier_call(NETDEV_UNREGISTER)
+> > >      ovpn_peer_release_p2p
+> > >        ovpn_peer_del_p2p
+> > >          ovpn_peer_put
+> > >            ovpn_peer_release_kref
+> > >              ovpn_peer_release
+> > >                ovpn_socket_put
+> > >                  ovpn_socket_release_kref
+> > >                    ovpn_socket_detach
+> > >                      ovpn_udp_socket_detach
+> > >                        setup_udp_tunnel_sock
+> > >    netdev_run_todo
+> > >      rcu_barrier  <- no running ovpn_udp_encap_recv after this point
+> > >      free_netdev
+> > > 
+> > > After the setup_udp_tunnel_sock() call no new ovpn_udp_encap_recv()
+> > > will be spawned. And after the rcu_barrier() all running
+> > > ovpn_udp_encap_recv() will be done. All good.
+> > > 
+> > 
+> > ok
+> > 
+> > > Then, the following patch 'ovpn: implement TCP transport' disjoin
+> > > ovpn_socket_release_kref() and ovpn_socket_detach() by scheduling
+> > > the socket detach function call:
+> > > 
+> > >    ovpn_socket_release_kref
+> > >      ovpn_socket_schedule_release
+> > >        schedule_work(&sock->work)
+> > > 
+> > > And long time after the socket will be actually detached:
+> > > 
+> > >    ovpn_socket_release_work
+> > >      ovpn_socket_detach
+> > >        ovpn_udp_socket_detach
+> > >          setup_udp_tunnel_sock
+> > > 
+> > > And until this detaching will take a place, UDP handler can call
+> > > ovpn_udp_encap_recv() whatever number of times.
+> > > 
+> > > So, we can end up with this scenario:
+> > > 
+> > >    ovpn_netdev_notifier_call(NETDEV_UNREGISTER)
+> > >      ovpn_peer_release_p2p
+> > >        ovpn_peer_del_p2p
+> > >          ovpn_peer_put
+> > >            ovpn_peer_release_kref
+> > >              ovpn_peer_release
+> > >                ovpn_socket_put
+> > >                  ovpn_socket_release_kref
+> > >                    ovpn_socket_schedule_release
+> > >                      schedule_work(&sock->work)
+> > >    netdev_run_todo
+> > >      rcu_barrier
+> > >      free_netdev
+> > > 
+> > >    ovpn_udp_encap_recv  <- called for an incoming UDP packet
+> > >      ovpn_from_udp_sock <- returns pointer to freed memory
+> > >      // Any access to ovpn pointer is the use-after-free
+> > > 
+> > >    ovpn_socket_release_work  <- kernel finally ivoke the work
+> > >      ovpn_socket_detach
+> > >        ovpn_udp_socket_detach
+> > >          setup_udp_tunnel_sock
+> > > 
+> > > To address the issue, I see two possible solutions:
+> > > 1. flush the workqueue somewhere before the netdev release
+> > 
+> > yes! This is what I was missing. This will also solve the "how can the
+> > module wait for all workers to be done before unloading?"
+> > 
+> 
+> Actually there might be even a simpler solution: each ovpn_socket will hold
+> a reference to an ovpn_peer (TCP) or to an ovpn_priv (UDP).
+> I can simply increase the refcounter those objects while they are referenced
+> by the socket and decrease it when the socket is fully released (in the
+> detach() function called by the worker).
+> 
+> This way the netdev cannot be released until all socket (and all peers) are
+> gone.
+> 
+> This approach doesn't require any local workqueue or any other special
+> coordination as we'll just force the whole cleanup to happen in a specific
+> order.
+> 
+> Does it make sense?
 
-Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
----
- .../testing/selftests/kvm/guest_memfd_test.c  | 85 +++++++++++++++++--
- 1 file changed, 79 insertions(+), 6 deletions(-)
+This dependency between refcounts worries me. I'm already having a
+hard time remembering how all objects interact together.
 
-diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-index ce687f8d248f..e10d0f51da93 100644
---- a/tools/testing/selftests/kvm/guest_memfd_test.c
-+++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-@@ -20,18 +20,90 @@
- #include "kvm_util.h"
- #include "test_util.h"
- 
--static void test_file_read_write(int fd)
-+static void test_file_read(int fd)
- {
- 	char buf[64];
- 
- 	TEST_ASSERT(read(fd, buf, sizeof(buf)) < 0,
- 		    "read on a guest_mem fd should fail");
--	TEST_ASSERT(write(fd, buf, sizeof(buf)) < 0,
--		    "write on a guest_mem fd should fail");
- 	TEST_ASSERT(pread(fd, buf, sizeof(buf), 0) < 0,
- 		    "pread on a guest_mem fd should fail");
--	TEST_ASSERT(pwrite(fd, buf, sizeof(buf), 0) < 0,
--		    "pwrite on a guest_mem fd should fail");
-+}
-+
-+static void test_file_write(int fd, size_t total_size)
-+{
-+	size_t page_size = getpagesize();
-+	void *buf = NULL;
-+	int ret;
-+
-+	ret = posix_memalign(&buf, page_size, total_size);
-+	TEST_ASSERT_EQ(ret, 0);
-+
-+	/* Check arguments correctness checks work as expected */
-+
-+	ret = pwrite(fd, buf, page_size - 1, 0);
-+	TEST_ASSERT(ret == -1, "write unaligned count on a guest_mem fd should fail");
-+	TEST_ASSERT_EQ(errno, EINVAL);
-+
-+	ret = pwrite(fd, buf, page_size, 1);
-+	TEST_ASSERT(ret == -1, "write unaligned offset on a guest_mem fd should fail");
-+	TEST_ASSERT_EQ(errno, EINVAL);
-+
-+	ret = pwrite(fd, buf, page_size, total_size);
-+	TEST_ASSERT(ret == -1, "writing past the file size on a guest_mem fd should fail");
-+	TEST_ASSERT_EQ(errno, EINVAL);
-+
-+	ret = pwrite(fd, NULL, page_size, 0);
-+	TEST_ASSERT(ret == -1, "supplying a NULL buffer when writing a guest_mem fd should fail");
-+	TEST_ASSERT_EQ(errno, EINVAL);
-+
-+	/* Check double population is not allowed */
-+
-+	ret = pwrite(fd, buf, page_size, 0);
-+	TEST_ASSERT(ret == page_size, "page-aligned write on a guest_mem fd should succeed");
-+
-+	ret = pwrite(fd, buf, page_size, 0);
-+	TEST_ASSERT(ret == -1, "write on already populated guest_mem fd should fail");
-+	TEST_ASSERT_EQ(errno, ENOSPC);
-+
-+	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE, 0, page_size);
-+	TEST_ASSERT(!ret, "fallocate(PUNCH_HOLE) should succeed");
-+
-+	/* Check population is allowed again after punching a hole */
-+
-+	ret = pwrite(fd, buf, page_size, 0);
-+	TEST_ASSERT(ret == page_size, "page-aligned write on a punched guest_mem fd should succeed");
-+
-+	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE, 0, page_size);
-+	TEST_ASSERT(!ret, "fallocate(PUNCH_HOLE) should succeed");
-+
-+	/* Check population of already allocated memory is allowed */
-+
-+	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE, 0, page_size);
-+	TEST_ASSERT(!ret, "fallocate with aligned offset and size should succeed");
-+
-+	ret = pwrite(fd, buf, page_size, 0);
-+	TEST_ASSERT(ret == page_size, "write on a preallocated guest_mem fd should succeed");
-+
-+	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE, 0, page_size);
-+	TEST_ASSERT(!ret, "fallocate(PUNCH_HOLE) should succeed");
-+
-+	/* Check population works until an already populated page is encountered */
-+
-+	ret = pwrite(fd, buf, total_size, 0);
-+	TEST_ASSERT(ret == total_size, "page-aligned write on a guest_mem fd should succeed");
-+
-+	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE, 0, page_size);
-+	TEST_ASSERT(!ret, "fallocate(PUNCH_HOLE) should succeed");
-+
-+	ret = pwrite(fd, buf, total_size, 0);
-+	TEST_ASSERT(ret == page_size, "write on a guest_mem fd should not overwrite data");
-+
-+	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE, 0, total_size);
-+	TEST_ASSERT(!ret, "fallocate(PUNCH_HOLE) should succeed");
-+
-+
-+	free(buf);
- }
- 
- static void test_mmap(int fd, size_t page_size)
-@@ -189,7 +261,8 @@ int main(int argc, char *argv[])
- 
- 	fd = vm_create_guest_memfd(vm, total_size, 0);
- 
--	test_file_read_write(fd);
-+	test_file_read(fd);
-+	test_file_write(fd, total_size);
- 	test_mmap(fd, page_size);
- 	test_file_size(fd, page_size, total_size);
- 	test_fallocate(fd, page_size, total_size);
+And since ovpn_peer_release already calls ovpn_socket_put, you'd get a
+refcount loop if ovpn_socket now also has a ref on the peer, no?
+
 -- 
-2.40.1
-
+Sabrina
 
