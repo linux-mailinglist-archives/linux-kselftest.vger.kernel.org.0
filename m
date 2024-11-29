@@ -1,91 +1,131 @@
-Return-Path: <linux-kselftest+bounces-22627-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22628-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BD039DEB1F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Nov 2024 17:36:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21D1A9DEB37
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Nov 2024 17:40:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F41B82810E0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Nov 2024 16:36:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86150B21D1E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Nov 2024 16:40:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A6C5189BAD;
-	Fri, 29 Nov 2024 16:36:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E52E319C54D;
+	Fri, 29 Nov 2024 16:40:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IPC2Vp6t"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CW+ahnrC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2D714A098
-	for <linux-kselftest@vger.kernel.org>; Fri, 29 Nov 2024 16:36:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9AE14F9F9
+	for <linux-kselftest@vger.kernel.org>; Fri, 29 Nov 2024 16:40:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732898167; cv=none; b=ju5dFHLsovikyufbppY1VMR90T8jNH+/u/mm7QBtYrO3cjmQubtJLNZebCllAM08rs2c4S4ENQND1EKA4OQLRIFo1Emt4Kt+y0PAXrgWtfJQ0ofZvO4rb+B2ZT9/Sej6Vb98Ne6LwY6fHebYlRONAhvBVCmrd8O25mYaXB8p5Ss=
+	t=1732898446; cv=none; b=iUZ87Mi3aqT9Sz/DfZJ3CVjO054IVX4v5lbPFRCMcl2WIAjm0BPt2eoDnEjBrBfbTL6CfjsO7t++87Bm+6bQa4DHz/DqyRdeSJuSuS5carNz9vpbTLYCb1W6goLS49T2lU858GLzpGmi4o6S0NQBG3YLzrJNoRQHkJex2T9aPiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732898167; c=relaxed/simple;
-	bh=InsIgXgLx7YQgnFJY31nsgNKsFevoHh8zNHdDTTAP4E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tuWvnj0H50XOFQsAHCAm+P2E8yGgrZeK+As8ow9B0CMQvc6K/CslW5o/Y7APhx0TfCRGpXk5PIz2acheTNGtMU/aMMfBAcR01c3dkrRiuQYjgnzhIz3asfWKX5zKLz/hIebpCa8TzB3QBkCLoUMFkHd+SlIBeZGgYIl9EA5ZmKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IPC2Vp6t; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7250c199602so1743646b3a.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Nov 2024 08:36:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1732898165; x=1733502965; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KAS4qmfhKfQCTxA5dEKDiEOUQ8ijX4qkasD6tbLsLDY=;
-        b=IPC2Vp6tUBD6IckBjhM4xhIBQtW6h2a6Vb+KKST/25Ev1SZT96/UDRqWq+nd0KZ5ui
-         xRiQVgQxuyNr6tFpO+Q21r/SwNqJ+aRmmeFqv8rhSeRgCe1Os1Ar4OzNJgFVwkwPczr/
-         MLubFE5MMUtxzTbYbZ1KYTePxz8vaz2plXYks2F2eSIIhhxSF6lxpe/DU8rcQ3to44k3
-         6ZTOH9SgvrJgleMjTcvxuzw2J2oIJQ5tXzJdr0FExIbZ+O2tdZhY++KEBH0WrEswuIK4
-         AYJjUi6uEkpSINUBb66kQkHLMH47Z+N+WmmC/dAuTJXjoKCfYeAlSwxJG0XGcwwOJthd
-         7hdg==
+	s=arc-20240116; t=1732898446; c=relaxed/simple;
+	bh=az39fDf+MhRZMw9gFTdPNqw5XUR3nQ20B8N3wHXK3SY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ub2B9/fUim6y7TZDsoCT/Fkxmf4XRdqaIf+AEhlI+hh2do9Y5ptubN+RFwQG8VX60HVAj8S0ikxtLgC8elWx2/UwC9uHRkQWIJo8i9iaV9dBWVAZWjcNPzFuDGK0HIEjslES+Mq2sabTbx1M8dxR8RyLGmkti+dz/fKfF7wse5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CW+ahnrC; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1732898444;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2oxQ2EopQjYunks2eIxH2qb+BPEjEvokj+yvCZveiP0=;
+	b=CW+ahnrCAP1VXBDXfF+loYw85lg6810DMjTZLTWUcwY+xKhYWMCHVsmBj4unxIt8I5aC2P
+	obTSPlO9Y/MkDGfYBcxm/JsrmgHVrWh5NUnVV9KGIFwGivze4ZmhO0IAp5OPh7/57JFFSu
+	XV2hS3d4oDBkXXfQgxInabIMA0gu5xI=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-590-iJXojYNpP4i5TxVVZCIhhw-1; Fri, 29 Nov 2024 11:40:42 -0500
+X-MC-Unique: iJXojYNpP4i5TxVVZCIhhw-1
+X-Mimecast-MFC-AGG-ID: iJXojYNpP4i5TxVVZCIhhw
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6d3729a555dso28321596d6.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Nov 2024 08:40:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732898165; x=1733502965;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KAS4qmfhKfQCTxA5dEKDiEOUQ8ijX4qkasD6tbLsLDY=;
-        b=WNhhJy6UyjP0DbgK06PbGLMbzqR/HkdWzSIFw5YBoCNR8dOd9sZYjzKx/Q2XoAbY87
-         Y1PGGqMQoa8TXqPS/7WElArzVUigZYU4CprQ8zvksCZu8DYDVgjbbg6D9E0Lvp9Xinvt
-         CHQz52Wr6KCgWvvYPW5iFPr7OIJrbU9hkv7M0FLb+fkbcY7WzbBeS0v+RDBBXeu/ijSV
-         DMnWPbBCq3vvVLKdRrtXiGUSbYiiXdP1p95H7tgRiw7VB6dDzWv2dAdSYA+5zRz0jrF3
-         0NJYbNtC2mEDAThotUcjDxdpbTVw8tiTOcNR0zxfBlRvWuScTyIJYBYa37RFYT4xoEuX
-         +yFw==
-X-Forwarded-Encrypted: i=1; AJvYcCXnaCH7Y7JmIJfoJCbHdiqP2zAKD8d3Nd21IdXG1pdzTRfduOc4Aw+UfPTRiJzRSFkj5GCAwLpsCBnWMGQtgGo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGPEe/+qAMORSsa29jgsVC+kV7s/05Y2pgvpQGCNQefCjmiZc8
-	Sx6LVVJ0Hp0hG/tOYl3GWBd90vaRMHj3OxoZ5tg1hMCuf7mNKuKSI/+uzJS1Zg==
-X-Gm-Gg: ASbGncvi2Ad4JCy5bbb9/ID3LlkMIBBCgsYZmHbDBoPCTS3cmfUxG61Yl2g+902dQiC
-	dfNuWYCTcikJ/424r4oMQT9oGfHQ+SW+yRTmKKpNNt199ztSKCOLdw78yQtkOK3SGB8uRi+unNt
-	jm7x1YhW2DMNGIRLGmzZed04GhgvZWy2rDx+sUjEfLD/vm1yTVoAvKQIREfSyiP8iS5UNeYgAT+
-	6mnCmmQJy4pVWe+hzlNhPbml9l4Fdod2e+wAEyGuvOHgLstdAwI74z43N6F
-X-Google-Smtp-Source: AGHT+IFsGXl/IU7bXt5NrZfPNWz7fsWHGMuIQFgh7MSCJkj2+YOoJBdoGnq61lBkrYp/j8HLEMymlA==
-X-Received: by 2002:a17:902:d491:b0:215:4e40:e4b0 with SMTP id d9443c01a7336-2154e40e808mr23212585ad.9.1732898165186;
-        Fri, 29 Nov 2024 08:36:05 -0800 (PST)
-Received: from thinkpad ([120.60.57.102])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215219c31a0sm32731185ad.249.2024.11.29.08.36.00
+        d=1e100.net; s=20230601; t=1732898442; x=1733503242;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2oxQ2EopQjYunks2eIxH2qb+BPEjEvokj+yvCZveiP0=;
+        b=r56X3beoVXD69HRVGj2R5VcHQctgJcxE5aJW0zp8Cum1D0/yESMY1AntnjTVbKefoZ
+         sHKHEs/oadqMNrc3kGkCSrZu4F6vTjHOfEEj6oqYd7j3Uuaz5ZEgy4dsFyS3QnxDV5zF
+         sfHwxrXPd7iaRSsY77M5Jyo6ukDkKTILhghm+X43alJR8bdooedddjgb87eWrCUj4Tfb
+         W5hkzJcKgtMQB0a13BOOFkQqChiC5rcJDcyIQEhPYi/VOoHnB0zssDzcvtu7RPt5GFOj
+         brFpgZTRbCVwofTj+fOl/7265YmdxFewPOFC7Mjtt0q5Tc++5THyUvg476rnA4byIdHp
+         ZGbg==
+X-Forwarded-Encrypted: i=1; AJvYcCVTQMuY9xVRzyyzqm2sUZ/jWDbqLdqK/5tIwZp+gc5MtAUDytATPlHHRQ0mA9HOpTNHgiVbclbpiGQBkCUg4ks=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRUTM1jGZNfsTGpSkgV1r7el6PlLRDNgdFVui7RLQjjqrfjsLa
+	4w7jvbWrN0mF/z6/XTIgehOoXrcJxwF7sBm1AomAaP+K98pxMW6/ZyRJCVrY0BdFhR1GG0SsmUG
+	WcgYdSmQ+1sijs68egdQ0/m8X0zPa65bQH+PA+Xp/HhA9R09RQXRQw7izLZy9pxpfAw==
+X-Gm-Gg: ASbGncvH0njKVk+CpdAs+pPD/2wv8mHW5jNZet85d+KOqZM6bgArbKjQRRMzxMbXFZu
+	lXzUo8YDCkkPIgmcIjv2hhp07YCsyh77WNjGXhn9mvACzmgOXwxVyrWy5OQwyRaUoADuNdlXK7k
+	lkMOfQYEBu7P7i/pf01Gjfo1g0R53M96YLVttAQIq5Y8ONDZ3QetAErTG0B3BACisDjJxaOrTft
+	7OMjxzGnhWNg4y2tSXeOmtqDcfX+bJguh5v5Wqjn4vyHiu0ezMjlSDVGs9bsEzdk6gelJGPW34A
+	27OtGGVABG/grd4pkmWwvHbymkUpiKe2ogg=
+X-Received: by 2002:a05:6214:c62:b0:6d4:1a99:427b with SMTP id 6a1803df08f44-6d864d8e4famr151983726d6.30.1732898442038;
+        Fri, 29 Nov 2024 08:40:42 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IG9RcRtBRvnIDfzr2/iRL96o9fRk4J92A47PIoCtseLUfNoii93tfgZQ/3Nm/m06TGA/XDcKA==
+X-Received: by 2002:a05:6214:c62:b0:6d4:1a99:427b with SMTP id 6a1803df08f44-6d864d8e4famr151982836d6.30.1732898441562;
+        Fri, 29 Nov 2024 08:40:41 -0800 (PST)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d8752064besm18111326d6.71.2024.11.29.08.40.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Nov 2024 08:36:04 -0800 (PST)
-Date: Fri, 29 Nov 2024 22:05:55 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: Niklas Cassel <cassel@kernel.org>
-Cc: kw@linux.com, gregkh@linuxfoundation.org, arnd@arndb.de,
-	lpieralisi@kernel.org, shuah@kernel.org, kishon@kernel.org,
-	aman1.gupta@samsung.com, p.rajanbabu@samsung.com,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bhelgaas@google.com, linux-arm-msm@vger.kernel.org, robh@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] selftests: pci_endpoint: Migrate to Kselftest
- framework
-Message-ID: <20241129163555.apf35xa6x5joscha@thinkpad>
-References: <20241129092415.29437-1-manivannan.sadhasivam@linaro.org>
- <20241129092415.29437-5-manivannan.sadhasivam@linaro.org>
- <Z0nG3oAx66plv4qI@ryzen>
+        Fri, 29 Nov 2024 08:40:40 -0800 (PST)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
+ x86@kernel.org, rcu@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Nicolas Saenz Julienne <nsaenzju@redhat.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, Jonathan
+ Corbet <corbet@lwn.net>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, Paolo
+ Bonzini <pbonzini@redhat.com>, Wanpeng Li <wanpengli@tencent.com>, Vitaly
+ Kuznetsov <vkuznets@redhat.com>, Andy Lutomirski <luto@kernel.org>, Peter
+ Zijlstra <peterz@infradead.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Neeraj Upadhyay <quic_neeraju@quicinc.com>, Joel Fernandes
+ <joel@joelfernandes.org>, Josh Triplett <josh@joshtriplett.org>, Boqun
+ Feng <boqun.feng@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang1211@gmail.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>,
+ Christoph Hellwig <hch@infradead.org>, Lorenzo Stoakes
+ <lstoakes@gmail.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron
+ <jbaron@akamai.com>, Kees Cook <keescook@chromium.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Ard Biesheuvel <ardb@kernel.org>, Nicholas
+ Piggin <npiggin@gmail.com>, Juerg Haefliger
+ <juerg.haefliger@canonical.com>, Nicolas Saenz Julienne
+ <nsaenz@kernel.org>, "Kirill A. Shutemov"
+ <kirill.shutemov@linux.intel.com>, Nadav Amit <namit@vmware.com>, Dan
+ Carpenter <error27@gmail.com>, Chuang Wang <nashuiliang@gmail.com>, Yang
+ Jihong <yangjihong1@huawei.com>, Petr Mladek <pmladek@suse.com>, "Jason A.
+ Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>, Julian Pidancet
+ <julian.pidancet@oracle.com>, Tom Lendacky <thomas.lendacky@amd.com>,
+ Dionna Glaze <dionnaglaze@google.com>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?=
+ <linux@weissschuh.net>, Juri Lelli <juri.lelli@redhat.com>, Marcelo
+ Tosatti <mtosatti@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>, Daniel
+ Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
+Subject: Re: [RFC PATCH v3 11/15] context-tracking: Introduce work deferral
+ infrastructure
+In-Reply-To: <Z0Oeme2yhxF_ArX0@pavilion.home>
+References: <20241119153502.41361-1-vschneid@redhat.com>
+ <20241119153502.41361-12-vschneid@redhat.com>
+ <Zz2_7MbxvfjKsz08@pavilion.home> <Zz3w0o_3wZDgJn0K@localhost.localdomain>
+ <xhsmho729hlv0.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <Zz4cqfVfyb1enxql@localhost.localdomain>
+ <xhsmh1pz39v0k.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <Z0Oeme2yhxF_ArX0@pavilion.home>
+Date: Fri, 29 Nov 2024 17:40:29 +0100
+Message-ID: <xhsmhttbqm1s2.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -93,48 +133,102 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z0nG3oAx66plv4qI@ryzen>
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 29, 2024 at 02:51:26PM +0100, Niklas Cassel wrote:
-> Hello Mani,
-> 
-> On Fri, Nov 29, 2024 at 02:54:15PM +0530, Manivannan Sadhasivam wrote:
-> > Migrate the PCI endpoint test to Kselftest framework. All the tests that
-> > were part of the previous pcitest.sh file were migrated.
-> > 
-> > Below is the exclusive list of tests:
-> > 
-> > 1. BAR Tests (BAR0 to BAR5)
-> > 2. Legacy IRQ Tests
-> > 3. MSI Interrupt Tests (MSI1 to MSI32)
-> > 4. MSI-X Interrupt Tests (MSI-X1 to MSI-X2048)
-> > 5. Read Tests - MEMCPY (For 1, 1024, 1025, 1024000, 1024001 Bytes)
-> > 6. Write Tests - MEMCPY (For 1, 1024, 1025, 1024000, 1024001 Bytes)
-> > 7. Copy Tests - MEMCPY (For 1, 1024, 1025, 1024000, 1024001 Bytes)
-> > 8. Read Tests - DMA (For 1, 1024, 1025, 1024000, 1024001 Bytes)
-> > 9. Write Tests - DMA (For 1, 1024, 1025, 1024000, 1024001 Bytes)
-> > 10. Copy Tests - DMA (For 1, 1024, 1025, 1024000, 1024001 Bytes)
-> 
-> I'm not sure if it is a great idea to add test case number 10.
-> 
-> While it will work if you use the "dummy memcpy" DMA channel which uses
-> MMIO under the hood, if you actually enable a real DMA controller (which
-> often sets the DMA_PRIVATE cap in the DMA controller driver (e.g. if you
-> are using a DWC based PCIe EP controller and select CONFIG_DW_EDMA=y)),
-> pci_epf_test_copy() will fail with:
-> [   93.779444] pci_epf_test pci_epf_test.0: Cannot transfer data using DMA
-> 
+On 24/11/24 22:46, Frederic Weisbecker wrote:
+> Le Fri, Nov 22, 2024 at 03:56:59PM +0100, Valentin Schneider a =C3=A9crit=
+ :
+>> On 20/11/24 18:30, Frederic Weisbecker wrote:
+>> > Le Wed, Nov 20, 2024 at 06:10:43PM +0100, Valentin Schneider a =C3=A9c=
+rit :
+>> >> On 20/11/24 15:23, Frederic Weisbecker wrote:
+>> >>
+>> >> > Ah but there is CT_STATE_GUEST and I see the last patch also applie=
+s that to
+>> >> > CT_STATE_IDLE.
+>> >> >
+>> >> > So that could be:
+>> >> >
+>> >> > bool ct_set_cpu_work(unsigned int cpu, unsigned int work)
+>> >> > {
+>> >> >    struct context_tracking *ct =3D per_cpu_ptr(&context_tracking, c=
+pu);
+>> >> >    unsigned int old;
+>> >> >    bool ret =3D false;
+>> >> >
+>> >> >    preempt_disable();
+>> >> >
+>> >> >    old =3D atomic_read(&ct->state);
+>> >> >
+>> >> >    /* CT_STATE_IDLE can be added to last patch here */
+>> >> >    if (!(old & (CT_STATE_USER | CT_STATE_GUEST))) {
+>> >> >            old &=3D ~CT_STATE_MASK;
+>> >> >            old |=3D CT_STATE_USER;
+>> >> >    }
+>> >>
+>> >> Hmph, so that lets us leverage the cmpxchg for a !CT_STATE_KERNEL che=
+ck,
+>> >> but we get an extra loop if the target CPU exits kernelspace not to
+>> >> userspace (e.g. vcpu or idle) in the meantime - not great, not terrib=
+le.
+>> >
+>> > The thing is, what you read with atomic_read() should be close to real=
+ity.
+>> > If it already is !=3D CT_STATE_KERNEL then you're good (minus racy cha=
+nges).
+>> > If it is CT_STATE_KERNEL then you still must do a failing cmpxchg() in=
+ any case,
+>> > at least to make sure you didn't miss a context tracking change. So th=
+e best
+>> > you can do is a bet.
+>> >
+>> >>
+>> >> At the cost of one extra bit for the CT_STATE area, with CT_STATE_KER=
+NEL=3D1
+>> >> we could do:
+>> >>
+>> >>   old =3D atomic_read(&ct->state);
+>> >>   old &=3D ~CT_STATE_KERNEL;
+>> >
+>> > And perhaps also old |=3D CT_STATE_IDLE (I'm seeing the last patch now=
+),
+>> > so you at least get a chance of making it right (only ~CT_STATE_KERNEL
+>> > will always fail) and CPUs usually spend most of their time idle.
+>> >
+>>=20
+>> I'm thinking with:
+>>=20
+>>         CT_STATE_IDLE		=3D 0,
+>>         CT_STATE_USER		=3D 1,
+>>         CT_STATE_GUEST		=3D 2,
+>>         CT_STATE_KERNEL		=3D 4, /* Keep that as a standalone bit */
+>
+> Right!
+>
+>>=20
+>> we can stick with old &=3D ~CT_STATE_KERNEL; and that'll let the cmpxchg
+>> succeed for any of IDLE/USER/GUEST.
+>
+> Sure but if (old & CT_STATE_KERNEL), cmpxchg() will consistently fail.
+> But you can make a bet that it has switched to CT_STATE_IDLE between
+> the atomic_read() and the first atomic_cmpxchg(). This way you still have
+> a tiny chance to succeed.
+>
+> That is:
+>
+>    old =3D atomic_read(&ct->state);
+>    if (old & CT_STATE_KERNEl)
+>       old |=3D CT_STATE_IDLE;
+>    old &=3D ~CT_STATE_KERNEL;
+>
+>
+>    do {
+>       atomic_try_cmpxchg(...)
+>
+> Hmm?
 
-So the idea is to exercise all the options provided by the epf-test driver. In
-that sense, we need to have the DMA COPY test. However, I do agree that the
-common DMA controllers will fail this case. So how about just simulating the DMA
-COPY for controllers implementing DMA_PRIVATE cap? I don't think it hurts to
-have this feature in test driver.
+But it could equally be CT_STATE_{USER, GUEST}, right? That is, if we have
+all of this enabled them we assume the isolated CPUs spend the least amount
+of time in the kernel, if they don't we get to blame the user.
 
-- Mani
-
--- 
-மணிவண்ணன் சதாசிவம்
 
