@@ -1,151 +1,257 @@
-Return-Path: <linux-kselftest+bounces-22609-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22610-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4003A9DC084
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Nov 2024 09:31:43 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E393D16489C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Nov 2024 08:31:39 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7303158DD8;
-	Fri, 29 Nov 2024 08:31:37 +0000 (UTC)
-X-Original-To: linux-kselftest@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 186759DC09C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Nov 2024 09:39:23 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A9314B088;
-	Fri, 29 Nov 2024 08:31:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D6ABB212EE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Nov 2024 08:39:20 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7667165F16;
+	Fri, 29 Nov 2024 08:39:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="akR4EM/h"
+X-Original-To: linux-kselftest@vger.kernel.org
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C66B15A87C;
+	Fri, 29 Nov 2024 08:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732869097; cv=none; b=uGpi5T0WkdJh4fwc0nQV4pUc2f1LQmo9mtxTd0s/v4U0KvkQUreRSLjleBy5kTkdQpjIqXbq5zDW3zDJpYDcH3NN59QJjELuqafaff4XL3ixAzjyjLR/yuUarmMJAQCnAc/vxBKFY5wGbmUny4saIIEOap2kV3b8UssPfckbIsQ=
+	t=1732869555; cv=none; b=YtJbjuji4zMDBjtoLCctBfJECYnnNTj9NZr65TllcY05OXVCk+l+xQyBLcnYNLU8ssda/vptOe7FRH9LMRR7dQCKZdL3yYAsyfMImc8ud6jMMfZ2SgVPoCaJsh+5z1JaYOPLngJU4CddjY7oUFjSULTqPT2OCg5KGxF2mQfaQJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732869097; c=relaxed/simple;
-	bh=wp3UfZMfbn7EeJtbLpA0FbA0vGdnG3AkBrdTYstEirE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cLOJUfpzWpLBy+VOB//m2WuciYJpOLXRv6A7ZmOjx1SmsvhEkahwpJPLeHARya+07MyHZV4uQqmoqgPi+TVA3FP3xICKx+YO57OWdBb7h3kTXV+5592c5dqBf0xqiTOUj0RoovtgGWH/Cf/OwzH+ZDpMQEdn+uhfyN7jzodSbcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Y05TF2lVTz9v7Vd;
-	Fri, 29 Nov 2024 16:10:25 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 12FBD1407B1;
-	Fri, 29 Nov 2024 16:31:19 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwDHLn69e0lnwkiCAg--.19693S2;
-	Fri, 29 Nov 2024 09:31:15 +0100 (CET)
-Message-ID: <57f07e0048ff15fd1ebfb58054e93abdbf8f029c.camel@huaweicloud.com>
-Subject: Re: [PATCH v6 07/15] digest_cache: Allow registration of digest
- list parsers
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Luis Chamberlain <mcgrof@kernel.org>, mmaurer@google.com, 
-	samitolvanen@google.com, KP Singh <kpsingh@kernel.org>
-Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
- eric.snowberg@oracle.com,  corbet@lwn.net, petr.pavlu@suse.com,
- da.gomez@samsung.com,  akpm@linux-foundation.org, paul@paul-moore.com,
- jmorris@namei.org,  serge@hallyn.com, shuah@kernel.org,
- mcoquelin.stm32@gmail.com,  alexandre.torgue@foss.st.com,
- linux-integrity@vger.kernel.org,  linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org,  linux-api@vger.kernel.org,
- linux-modules@vger.kernel.org,  linux-security-module@vger.kernel.org,
- linux-kselftest@vger.kernel.org,  wufan@linux.microsoft.com,
- pbrobinson@gmail.com, zbyszek@in.waw.pl, hch@lst.de,  mjg59@srcf.ucam.org,
- pmatilai@redhat.com, jannh@google.com, dhowells@redhat.com, 
- jikos@kernel.org, mkoutny@suse.com, ppavlu@suse.com, petr.vorel@gmail.com, 
- mzerqung@0pointer.de, kgold@linux.ibm.com, Roberto Sassu
- <roberto.sassu@huawei.com>
-Date: Fri, 29 Nov 2024 09:30:49 +0100
-In-Reply-To: <Z0jVQ8Q7AT_9NodI@bombadil.infradead.org>
-References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
-	 <20241119104922.2772571-8-roberto.sassu@huaweicloud.com>
-	 <Z0UN9ub0iztWvgLi@bombadil.infradead.org>
-	 <d428a5d926d695ebec170e98463f7501a1b00793.camel@huaweicloud.com>
-	 <Z0Ybvzy7ianR-Sx9@bombadil.infradead.org>
-	 <3dc25195b0362b3e5b6d6964df021ff4e7e1b226.camel@huaweicloud.com>
-	 <Z0d4vXuCqjTo_QW1@bombadil.infradead.org>
-	 <10c8fd4b53f946c2d7e933a35c6eb36557e8c592.camel@huaweicloud.com>
-	 <Z0jVQ8Q7AT_9NodI@bombadil.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1732869555; c=relaxed/simple;
+	bh=Ymeak364HqFk5cSk+zepi3oPCgN1yqHX9/SR9bkJGVk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qw3sBCB+jVKtl6zPc34jTzB6iCb6f0Ft2AkHIHnf8BrulZF8UBPPPNdam1e9yDRhoU43m2NogT2lsjLzFQOS2irxPtZ9PLJ7AwdRPpCjR0FMHi2G6IV9K31ZQjAtC936npk3zlDNHHG9YQM30Y2EFKcDrf46wIXTfUn0qhqSw90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=akR4EM/h; arc=none smtp.client-ip=67.231.156.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+Received: from pps.filterd (m0431383.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AT0elD7006143;
+	Fri, 29 Nov 2024 00:38:51 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pfpt0220; bh=uXaTNcizPFtrjfJCKxSTpBX
+	DXP7TU5grf9fdjWdXyTQ=; b=akR4EM/hAjhYqghMPgwENZjraaFNJIXHN/cG0dU
+	oKfvZa4BdkM9UKLXMSeKIf1JuQ0yZllX/2PHxEOJSlTAMEXMp3eCcF3F0LFoe1C3
+	JisSEQTPYvuyQBFBNIVXa6Wbh1lQ8mRfr/j8f5FlZH6B8y3v2h3fu/H8VhRUsZSo
+	HDJpswaDP2OVzo+1VulkKAlylMNJdih3XuWJWJbl0mZCGp457iV208qLWjQn1Lg6
+	1DPr5+zhUhrDgmWMuXO6XEp+ZVyXo9cX0e8afGLNJ2MY4yIQHAowo2KNb02DQN58
+	CGYCiFynz/pXtKOSQhNByI7dJN9Zg5Wcmv3qNCVm/P1ck/Q==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4373908pem-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 29 Nov 2024 00:38:50 -0800 (PST)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Fri, 29 Nov 2024 00:38:49 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
+ Transport; Fri, 29 Nov 2024 00:38:49 -0800
+Received: from virtx40.. (unknown [10.28.34.196])
+	by maili.marvell.com (Postfix) with ESMTP id 550025C68E3;
+	Fri, 29 Nov 2024 00:38:46 -0800 (PST)
+From: Linu Cherian <lcherian@marvell.com>
+To: <suzuki.poulose@arm.com>, <mike.leach@linaro.org>, <james.clark@arm.com>
+CC: <linux-arm-kernel@lists.infradead.org>, <coresight@lists.linaro.org>,
+        <linux-kernel@vger.kernel.org>, <shuah@kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <sgoutham@marvell.com>,
+        <gcherian@marvell.com>, Linu Cherian <lcherian@marvell.com>
+Subject: [PATCH] selftests: arm coresight: sysfsmode testing
+Date: Fri, 29 Nov 2024 14:08:13 +0530
+Message-ID: <20241129083813.3056909-1-lcherian@marvell.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwDHLn69e0lnwkiCAg--.19693S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cry5Jr1kKw47uFy3JF17GFg_yoW8CFyrpF
-	WFqa4IkFWktr1UCrs29w4UZrW0krsaqry7Gwn8Gr9IvrW3KFy2vryFgF45uFZrKr1xW347
-	tw4Fv3sxWws5Za7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4U
-	JwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	EksDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQACBGdJJrUBzwABs1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: fLBNjfFICIZSKiPtWRJvfwUFkCU59geJ
+X-Proofpoint-ORIG-GUID: fLBNjfFICIZSKiPtWRJvfwUFkCU59geJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.687,Hydra:6.0.235,FMLib:17.0.607.475
+ definitions=2020-10-13_15,2020-10-13_02,2020-04-07_01
 
-On Thu, 2024-11-28 at 12:40 -0800, Luis Chamberlain wrote:
-> On Thu, Nov 28, 2024 at 09:23:57AM +0100, Roberto Sassu wrote:
-> > On Wed, 2024-11-27 at 11:53 -0800, Luis Chamberlain wrote:
-> > > On Wed, Nov 27, 2024 at 10:51:11AM +0100, Roberto Sassu wrote:
-> > > > For eBPF programs we are also in a need for a better way to
-> > > > measure/appraise them.
-> > >=20
-> > > I am confused now, I was under the impression this "Integrity Digest
-> > > Cache" is just a special thing for LSMs, and so I was under the
-> > > impression that kernel_read_file() lsm hook already would take care
-> > > of eBPF programs.
-> >=20
-> > Yes, the problem is that eBPF programs are transformed in user space
-> > before they are sent to the kernel:
-> >=20
-> > https://lwn.net/Articles/977394/
->=20
-> That issue seems to be orthogonal to your eandeavor though, which just
-> supplements LSMS, right?
+Add sysfs mode selftest for ARM Coresight hardware tracer.
 
-Yes, correct, the Integrity Digest Cache would be used to search
-whatever digest was calculated by LSMs.
+Signed-off-by: Linu Cherian <lcherian@marvell.com>
+---
+ .../drivers/hwtracing/coresight/Makefile      |   5 +
+ .../hwtracing/coresight/sysfs_test_trace.sh   | 144 ++++++++++++++++++
+ 2 files changed, 149 insertions(+)
+ create mode 100644 tools/testing/selftests/drivers/hwtracing/coresight/Makefile
+ create mode 100755 tools/testing/selftests/drivers/hwtracing/coresight/sysfs_test_trace.sh
 
-Thanks
-
-Roberto
-
-> Anyway, in case this helps:
->=20
-> The Rust folks faced some slighty related challenges with our CRC
-> validations for symbols, our CRC are slapped on with genksyms but this
-> relies on the source code and with Rust the compiler may do final
-> touches to data. And so DWARF is being used [1].
->=20
-> Although I am not sure of the state of eBPF DWARF support, there is also
-> BTF support [0] and most distros are relying on it to make live introspec=
-tion=20
-> easier, and the output is much smaller. So could DWARF or BTF information
-> from eBPF programs be used by the verifier in similar way to verify eBPF
-> programs?
->=20
-> Note that to support BTF implicates DWARF and the leap of faith for Rust
-> modversions support is that most distros will support DWARF, and so BTF
-> can become the norm [2].
->=20
-> [0] https://www.kernel.org/doc/html/latest/bpf/btf.html
-> [1] https://lwn.net/Articles/986892/
-> [2] https://lwn.net/Articles/991719/
->=20
->   Luis
+diff --git a/tools/testing/selftests/drivers/hwtracing/coresight/Makefile b/tools/testing/selftests/drivers/hwtracing/coresight/Makefile
+new file mode 100644
+index 000000000000..7dc68ae1c0a9
+--- /dev/null
++++ b/tools/testing/selftests/drivers/hwtracing/coresight/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++
++TEST_PROGS = sysfs_test_trace.sh
++
++include ../../../lib.mk
+diff --git a/tools/testing/selftests/drivers/hwtracing/coresight/sysfs_test_trace.sh b/tools/testing/selftests/drivers/hwtracing/coresight/sysfs_test_trace.sh
+new file mode 100755
+index 000000000000..0d6307fff1d2
+--- /dev/null
++++ b/tools/testing/selftests/drivers/hwtracing/coresight/sysfs_test_trace.sh
+@@ -0,0 +1,144 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (C) 2024 Marvell.
++
++# Test Arm CoreSight trace capture in sysfs mode
++# Based on tools/perf/tests/shell/test_arm_coresight.sh
++
++glb_err=0
++
++arm_cs_report() {
++	if [ $2 != 0 ]; then
++		echo "$1: FAIL"
++		glb_err=$2
++	else
++		echo "$1: PASS"
++	fi
++}
++
++is_device_sink() {
++	# If the node of "enable_sink" is existed under the device path, this
++	# means the device is a sink device.
++
++	if [ -e "$1/enable_sink" ]; then
++
++		return 0
++	else
++		return 1
++	fi
++}
++
++# Configure sink for buffer mode
++cfg_sink_buf_mode() {
++	sink_dev=$1
++	mode=$2
++	# Set buffer mode if supported
++	if [ -e "$sink_dev/buf_modes_available" ]; then
++		cat $sink_dev/buf_modes_available | grep -E -q $mode
++		if [ $? -eq 0 ]; then
++			echo $mode > $sink_dev/buf_mode_preferred
++			return 0
++		fi
++	fi
++
++	return 1
++}
++
++run_app() {
++
++	taskset -c $1 dd if=/dev/urandom  of=/dev/null bs=1M count=64
++}
++
++sysfs_trace() {
++	src_dev=$1
++	sink_dev=$2
++	cpu=$3
++
++	# Enable sink device
++	echo 1 > $sink_dev/enable_sink
++	# Enable source device
++	echo 1 > $src_dev/enable_source
++
++	# Run app to be traced
++	run_app $cpu
++
++	# Read back trace data
++	dd if=/dev/$sink_dev_name of=/tmp/tracedata
++
++	# Verify if read is successful
++	err=$?
++
++	# Disable source device
++	echo 0 > $src_dev/enable_source
++
++	# Diskable sink device
++	echo 0 > $sink_dev/enable_sink
++
++	arm_cs_report "CoreSight path testing (CPU$cpu -> $sink_dev_name)" $err
++}
++
++try_sysfs_trace_resrv_buf() {
++	src_dev=$1
++	sink_dev=$2
++	cpu=$3
++
++	# Configure the resrved buffer mode if available
++	cfg_sink_buf_mode $sink_dev "resrv"
++	if [ $? -eq 0 ]; then
++		echo "Running sysfs trace with resrv buf mode"
++		sysfs_trace $src_dev $sink_dev $cpu
++		# Restore buffer mode
++		cfg_sink_buf_mode $sink_dev "auto"
++		if [ $? -eq 1 ]; then
++			echo "Failed to restore default buf mode"
++		fi
++	fi
++}
++
++arm_cs_iterate_devices() {
++	src_dev=$1
++	cpu=$3
++	for cdev in $2/connections/out\:*; do
++
++		# Skip testing if it's not a directory
++		! [ -d $cdev ] && continue;
++
++		# Read out its symbol link file name
++		sink_dev=`readlink -f $cdev`
++
++		# Extract device name from path, e.g.
++		#   sink_dev = '/sys/devices/platform/20010000.etf/tmc_etf0'
++		#     `> sink_dev_name = 'tmc_etf0'
++		sink_dev_name=$(basename $sink_dev)
++
++		if is_device_sink $sink_dev; then
++			# Run trace with resrv buf mode (if available)
++			try_sysfs_trace_resrv_buf $src_dev $sink_dev $cpu
++
++			# Run the default mode
++			echo "Running sysfs trace with default settings"
++			sysfs_trace $src_dev $sink_dev $cpu
++		fi
++
++		arm_cs_iterate_devices $src_dev $cdev $cpu
++
++	done
++}
++
++arm_cs_etm_traverse_path_test() {
++	# Iterate for every ETM device
++	for dev in /sys/bus/event_source/devices/cs_etm/cpu*; do
++		# Canonicalize the path
++		dev=`readlink -f $dev`
++
++		# Find the ETM device belonging to which CPU
++		cpu=`cat $dev/cpu`
++
++		# Use depth-first search (DFS) to iterate outputs
++		arm_cs_iterate_devices $dev $dev $cpu
++	done
++}
++
++arm_cs_etm_traverse_path_test
++
++exit $glb_err
+-- 
+2.34.1
 
 
