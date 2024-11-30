@@ -1,211 +1,149 @@
-Return-Path: <linux-kselftest+bounces-22637-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22638-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05DB49DED39
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Nov 2024 23:20:00 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32A029DF01E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Nov 2024 12:33:51 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA09F28218C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Nov 2024 22:19:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E16FC163851
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Nov 2024 11:33:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC6A81A08AB;
-	Fri, 29 Nov 2024 22:19:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A1F6188717;
+	Sat, 30 Nov 2024 11:33:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o5p0Hl5t"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B6d/Ghp7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3B454279;
-	Fri, 29 Nov 2024 22:19:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A42141987;
+	Sat, 30 Nov 2024 11:33:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732918794; cv=none; b=ElKjYT6ihijsR7xeFMNgBKlX6N+4LnxQ7V463x0N21dtiag40lu2YUTnMC0cZd0kp82lgjocDhfqlv/lpAUt7Cyt2PJ63H/FKeCCv5dEjE8xClywL1AQcpyE24NIfB4064JaYiaW8vWVPYW9M+KXRHRx5+JOXdjy94Zk/iCWLYc=
+	t=1732966427; cv=none; b=F/UuYxzj6c/HT1j037OFJCVhgVndbLy0ujLNcoktTZqUKwCUGEhJ9gZAMcCH43MtTuj+2V6lrB0LtVBALWY5O4z2GQMeOriLCk3AzVdoWI74qOxbmy5029RZuVAm+KYlltY16spMKqrCemb856NhF6I//kATxxCTXvVyH1O61wY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732918794; c=relaxed/simple;
-	bh=OJvU5bLoYGZXh8qACQ/T6IEV8oDjNatqYL+CeW3HsJg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i6J+y4trG6gaP981SbMfKlABk0A+efDzgh2pSzsX4f2H5OVWBI+A+eLx/O0G9lnsKR0kdOK4WeFSIDRs5Iy7DE32Hy3TwL9zQxTf6mmSqqtklFQRdGDL7weOpHUjJzfdf5YN9hI+7nEYJ7PLJV4SkVAOHiijyaZUHriuaHgpkrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o5p0Hl5t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C894C4CECF;
-	Fri, 29 Nov 2024 22:19:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732918794;
-	bh=OJvU5bLoYGZXh8qACQ/T6IEV8oDjNatqYL+CeW3HsJg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=o5p0Hl5t68sOGrNrYENKMovE5NztdhOpEAFABibzPZGUoqz1AXXaCH53QUmqJu9yj
-	 4Ymv5lTSZbEsDt+NPkbGOI0BMOSI/hhFnrmJFW+/qqVN7darYuDK67nomYfyn1WTZW
-	 BFRJMR/Fl9FeauFwTeTH3phw520rl/KLfJopadlpHQUp+IZrgAicwA5DrSA19U8kSy
-	 DpTFETeRTKi33P/1gcVkoaLTCtVby2dZtM0i0fCZSI8+UVXXGJuKWkaLG6dG9bq/8l
-	 w9ueF6Q3rudD7ZWIlpxFt0GwISNHkjcxLh8drdyWqw8+a9ohium7+Z6XshqrmZWZxx
-	 DWCgNchAqIpvQ==
-Date: Fri, 29 Nov 2024 23:19:51 +0100
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Valentin Schneider <vschneid@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
-	x86@kernel.org, rcu@vger.kernel.org,
+	s=arc-20240116; t=1732966427; c=relaxed/simple;
+	bh=N7UEnsfZfi3Yu71lo0rhgQTRf0xBgW1a2d9UEsE38T4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EqQdxTXYkw5swRaWKYNypV7IESUcSxU1/hpGMdJFISdP84pTWYP+G0+v6lT8XTH8+Tm+CN2ycA13LMK+avY33aGkeBAjR3bYW0AMuDKC5ge4rjCKaJBSGCHTVNd0B6c9JhkELLApCcR7je3FgXidAtiwSLCfZUVV5Whz/TsKc14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B6d/Ghp7; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-434a1639637so24900835e9.1;
+        Sat, 30 Nov 2024 03:33:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732966424; x=1733571224; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EL6KVlYMiRPfIoR2qBsCEcQAjqvcPLAovHyHcOnwcNA=;
+        b=B6d/Ghp75tNuB3E3Nmm5c/PNfURR5O566ey27C70G8CXCjpVAxN9LZT/ILePhk5ic/
+         oIoxvJMC+vB2p0ZeYC3CMe+xCU60QnBit/3zWEJ1elJzKopE5fWRZpeQNHbttsjtI9MR
+         DeJdT3c2CI99dzlTRPchSA9etKCZtQlNP+tFgOtoyrgLlJSs27vh+0TbekjuNredH1+J
+         kTF6FC1sEMRD3zzUlQYrJbfGx2t38hXTBNIo8owK3g4SJOlj4ekDWzALGLadkTPB+x9D
+         9a1ORugbaxm0V363QIN9DhmDfIPTU3poWbs9PyUUpLclDiyXFRV0KiBCQOAu7fKCRp/e
+         uFlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732966424; x=1733571224;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EL6KVlYMiRPfIoR2qBsCEcQAjqvcPLAovHyHcOnwcNA=;
+        b=ayIRKcaZNUgszYIN++Q3NnhBm7tmITczbpNMQe4kwY/RIEHoh9Lvbn8PBlX35rvEyJ
+         PE+SzgiDWfi0bEW6zTBlMNvkWpXVKfJ4rUzYsDp8HdJDZZWjW/ravPdKDn0hA+x3YZ1i
+         5eYQfiUUxmDNKOEuIuskkCj6HKhXeL5kWh6RI+zEIA61Y4KIILnp4icQJdzPcRHV7HP/
+         y0kr5k8uIpdYyaEIdZW1ueRHCDvsp/1PBN7odR4N5CRHDA38QpZGt3RzbtViFxBSCpls
+         g/RhrQo6fHnio9etvCz59CEtpwsSNYEwX7aeWHLjeGe9FzzIZg9It6S65NEXVWxmIlDE
+         SUkw==
+X-Forwarded-Encrypted: i=1; AJvYcCVzZ3x5xoUOHujKhRj4LTdvmKt85iX5O5HJu6xnyDuZYkDv0XvmQimDEcBnkZvBFYrqJ8WPn2jN@vger.kernel.org, AJvYcCWEZYkgLAybjitfs3KWSFHQDUft+s+jWw5fIBe4UA5TI7QCXKNVY1btj8v4n5YiJcJVYvpufH5vjD+pa6zsHQ5c@vger.kernel.org, AJvYcCXxN0YeIJXhK7lbfZi61qWpuzGJM2FJPZ+5ZH6uaog9YnqsiH/lK9IDGaSLba1I+9drHCcxddAFZfILd/s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDR6DnxdWBAB1n+ICINrHUhIQaTxJzl12OUtodZs/+3xEDjWZB
+	MA0Md+JtT/5gyVO3TD/Hf3eymfTdGODYS+sp0bDZVkx2Aqa8JJcr
+X-Gm-Gg: ASbGncuCTACsh2ywS2I9JtIOJZR1hSqjgZfamr37HieDe/5QDbM+mT74mfO2EjwUT+4
+	FRyiRc0Mx2swHd9y9X+LOPy1LQwLOs8pzW5OykmVSr4uUjhh3IdvPRBBFvj71KfswcFpaOIFrFr
+	xYqNW3f2Kx6y9ekVo0ykiQY8uUhvZtCuqFchctZm9DNURgSSJ8uyW3aeomsaLWWu4QPxeF4Srd1
+	7W42yINEMvXgXq3amy+X+kHlV/EiDj5uUAdiICHsaWnzaXiCY8UL5ibKZoXCY6q1nUg98w6+C7F
+	srWOi2CjdVGoGaHdylQ=
+X-Google-Smtp-Source: AGHT+IGEquHdV3LyyYusIywiVJxdZDtQStlBx5Sfx3l8/f6Wc0aQaQOyrRPA3gbJCwQZizot/vfuTQ==
+X-Received: by 2002:a05:6000:1448:b0:382:41ad:d8f0 with SMTP id ffacd0b85a97d-385c6ec0e2emr13276066f8f.34.1732966423881;
+        Sat, 30 Nov 2024 03:33:43 -0800 (PST)
+Received: from localhost.localdomain (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-434aa77ffb0sm113506365e9.20.2024.11.30.03.33.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Nov 2024 03:33:43 -0800 (PST)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Petr Machata <petrm@nvidia.com>,
+	Benjamin Poirier <bpoirier@nvidia.com>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Wanpeng Li <wanpengli@tencent.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Lorenzo Stoakes <lstoakes@gmail.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jason Baron <jbaron@akamai.com>, Kees Cook <keescook@chromium.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Juerg Haefliger <juerg.haefliger@canonical.com>,
-	Nicolas Saenz Julienne <nsaenz@kernel.org>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Nadav Amit <namit@vmware.com>, Dan Carpenter <error27@gmail.com>,
-	Chuang Wang <nashuiliang@gmail.com>,
-	Yang Jihong <yangjihong1@huawei.com>,
-	Petr Mladek <pmladek@suse.com>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
-	Julian Pidancet <julian.pidancet@oracle.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	Yair Podemsky <ypodemsk@redhat.com>,
-	Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
-Subject: Re: [RFC PATCH v3 11/15] context-tracking: Introduce work deferral
- infrastructure
-Message-ID: <Z0o-B1ONq4wL1RHc@pavilion.home>
-References: <20241119153502.41361-1-vschneid@redhat.com>
- <20241119153502.41361-12-vschneid@redhat.com>
- <Zz2_7MbxvfjKsz08@pavilion.home>
- <Zz3w0o_3wZDgJn0K@localhost.localdomain>
- <xhsmho729hlv0.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <Zz4cqfVfyb1enxql@localhost.localdomain>
- <xhsmh1pz39v0k.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
- <Z0Oeme2yhxF_ArX0@pavilion.home>
- <xhsmhttbqm1s2.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+	linux-kernel@vger.kernel.org
+Cc: stable@vger.kernel.org
+Subject: [net PATCH 1/2] selftests: net: lib: fix broken ping with coreutils ping util
+Date: Sat, 30 Nov 2024 12:33:09 +0100
+Message-ID: <20241130113314.6488-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <xhsmhttbqm1s2.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 
-Le Fri, Nov 29, 2024 at 05:40:29PM +0100, Valentin Schneider a écrit :
-> On 24/11/24 22:46, Frederic Weisbecker wrote:
-> > Le Fri, Nov 22, 2024 at 03:56:59PM +0100, Valentin Schneider a écrit :
-> >> On 20/11/24 18:30, Frederic Weisbecker wrote:
-> >> > Le Wed, Nov 20, 2024 at 06:10:43PM +0100, Valentin Schneider a écrit :
-> >> >> On 20/11/24 15:23, Frederic Weisbecker wrote:
-> >> >>
-> >> >> > Ah but there is CT_STATE_GUEST and I see the last patch also applies that to
-> >> >> > CT_STATE_IDLE.
-> >> >> >
-> >> >> > So that could be:
-> >> >> >
-> >> >> > bool ct_set_cpu_work(unsigned int cpu, unsigned int work)
-> >> >> > {
-> >> >> >    struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
-> >> >> >    unsigned int old;
-> >> >> >    bool ret = false;
-> >> >> >
-> >> >> >    preempt_disable();
-> >> >> >
-> >> >> >    old = atomic_read(&ct->state);
-> >> >> >
-> >> >> >    /* CT_STATE_IDLE can be added to last patch here */
-> >> >> >    if (!(old & (CT_STATE_USER | CT_STATE_GUEST))) {
-> >> >> >            old &= ~CT_STATE_MASK;
-> >> >> >            old |= CT_STATE_USER;
-> >> >> >    }
-> >> >>
-> >> >> Hmph, so that lets us leverage the cmpxchg for a !CT_STATE_KERNEL check,
-> >> >> but we get an extra loop if the target CPU exits kernelspace not to
-> >> >> userspace (e.g. vcpu or idle) in the meantime - not great, not terrible.
-> >> >
-> >> > The thing is, what you read with atomic_read() should be close to reality.
-> >> > If it already is != CT_STATE_KERNEL then you're good (minus racy changes).
-> >> > If it is CT_STATE_KERNEL then you still must do a failing cmpxchg() in any case,
-> >> > at least to make sure you didn't miss a context tracking change. So the best
-> >> > you can do is a bet.
-> >> >
-> >> >>
-> >> >> At the cost of one extra bit for the CT_STATE area, with CT_STATE_KERNEL=1
-> >> >> we could do:
-> >> >>
-> >> >>   old = atomic_read(&ct->state);
-> >> >>   old &= ~CT_STATE_KERNEL;
-> >> >
-> >> > And perhaps also old |= CT_STATE_IDLE (I'm seeing the last patch now),
-> >> > so you at least get a chance of making it right (only ~CT_STATE_KERNEL
-> >> > will always fail) and CPUs usually spend most of their time idle.
-> >> >
-> >> 
-> >> I'm thinking with:
-> >> 
-> >>         CT_STATE_IDLE		= 0,
-> >>         CT_STATE_USER		= 1,
-> >>         CT_STATE_GUEST		= 2,
-> >>         CT_STATE_KERNEL		= 4, /* Keep that as a standalone bit */
-> >
-> > Right!
-> >
-> >> 
-> >> we can stick with old &= ~CT_STATE_KERNEL; and that'll let the cmpxchg
-> >> succeed for any of IDLE/USER/GUEST.
-> >
-> > Sure but if (old & CT_STATE_KERNEL), cmpxchg() will consistently fail.
-> > But you can make a bet that it has switched to CT_STATE_IDLE between
-> > the atomic_read() and the first atomic_cmpxchg(). This way you still have
-> > a tiny chance to succeed.
-> >
-> > That is:
-> >
-> >    old = atomic_read(&ct->state);
-> >    if (old & CT_STATE_KERNEl)
-> >       old |= CT_STATE_IDLE;
-> >    old &= ~CT_STATE_KERNEL;
-> >
-> >
-> >    do {
-> >       atomic_try_cmpxchg(...)
-> >
-> > Hmm?
-> 
-> But it could equally be CT_STATE_{USER, GUEST}, right? That is, if we have
-> all of this enabled them we assume the isolated CPUs spend the least amount
-> of time in the kernel, if they don't we get to blame the user.
+If the coreutils variant of ping is used instead of the busybox one, the
+ping_do() command is broken. This comes by the fact that for coreutils
+ping, the ping IP needs to be the very last elements.
 
-Unless CONTEXT_TRACKING_WORK_IDLE=y yes.
+To handle this, reorder the ping args and make $dip last element.
 
-Anyway that's just a detail that can be refined in the future. I'm fine with
-just clearing CT_STATE_KERNEL and go with that.
+The use of coreutils ping might be useful for case where busybox is not
+compiled with float interval support and ping command doesn't support
+0.1 interval. (in such case a dedicated ping utility is installed
+instead)
 
-Thanks.
+Cc: stable@vger.kernel.org
+Fixes: 73bae6736b6b ("selftests: forwarding: Add initial testing framework")
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ tools/testing/selftests/net/forwarding/lib.sh | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index c992e385159c..2060f95d5c62 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -1473,8 +1473,8 @@ ping_do()
+ 
+ 	vrf_name=$(master_name_get $if_name)
+ 	ip vrf exec $vrf_name \
+-		$PING $args $dip -c $PING_COUNT -i 0.1 \
+-		-w $PING_TIMEOUT &> /dev/null
++		$PING $args -c $PING_COUNT -i 0.1 \
++		-w $PING_TIMEOUT $dip &> /dev/null
+ }
+ 
+ ping_test()
+@@ -1504,8 +1504,8 @@ ping6_do()
+ 
+ 	vrf_name=$(master_name_get $if_name)
+ 	ip vrf exec $vrf_name \
+-		$PING6 $args $dip -c $PING_COUNT -i 0.1 \
+-		-w $PING_TIMEOUT &> /dev/null
++		$PING6 $args -c $PING_COUNT -i 0.1 \
++		-w $PING_TIMEOUT $dip &> /dev/null
+ }
+ 
+ ping6_test()
+-- 
+2.45.2
+
 
