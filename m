@@ -1,84 +1,84 @@
-Return-Path: <linux-kselftest+bounces-22648-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22649-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7B8A9DF6D7
-	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Dec 2024 18:55:52 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10FA79DF6E2
+	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Dec 2024 18:59:45 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B242B22CEE
-	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Dec 2024 17:55:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC120162B60
+	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Dec 2024 17:59:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8923B1D7E41;
-	Sun,  1 Dec 2024 17:55:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C175B1D7E5F;
+	Sun,  1 Dec 2024 17:59:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XxYV8dg3"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VGWhUhDD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CAA42B9A2
-	for <linux-kselftest@vger.kernel.org>; Sun,  1 Dec 2024 17:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2651BC094
+	for <linux-kselftest@vger.kernel.org>; Sun,  1 Dec 2024 17:59:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733075746; cv=none; b=WXUcnsKFca57pG0EXMRdvCI67avJ/+3xuEK1qRCX+6hX+WQHvin5c6qBLUeyGG9G6L4h4pqDQm+YhVHdQ8SfQ0hbsMeBzDibO7ZOr8JrPX3SKHMWdCeq4IbtfOafRQpCdxnmVx9jD06m6kzIg05hH1nk6iUGyT37MWS2E0OyTZc=
+	t=1733075981; cv=none; b=aj2rZ+3VF51JJZEZj1mWNYkezfeNtK2Xo/7MOSLf/9mHjm2ey7N+RMefgjlpq4uo/6nAaC7BG5OmB8YFEDs0gHpJ2S75tdRFzMxlykYIR4nYSXJq/0Chy90IFfpS1PUzTnNBBNTO1Y0kNgdOglb0z/DqcepXoUZ00lmLrS5ewNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733075746; c=relaxed/simple;
-	bh=pDh3sxIXjSiOmi/2YmBJfp6Dv4l2bH2RMTYOFvdjOCw=;
+	s=arc-20240116; t=1733075981; c=relaxed/simple;
+	bh=aCcFCSZJUXI54+bKPh/05TzVJL4t5c3nMnUzxLQ+3Kk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SkJ7s1ZXE7yPauXfpy73n9qAgaCyqlRAzscjlSgHD67ujDMobjvm7lX2byAP18stEOlwXy15ZPhvYdyWIRoKgMgz7gwXvU2wIUynl+WIP+Ak+etC+BY38palFgNWhqZSMQPVcG5fsCsKpsTwE0KYKp6XShmJKrNzovSdYoPiduA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XxYV8dg3; arc=none smtp.client-ip=170.10.129.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=JQ0dJeXjH2oalrIfbKppABRFulailM961pNlVKKUs36LS9KwnLGducJFKkO9t1PjokHYyJKkdPgfe9xuE9T1UsthKDsWx0D8dEWt9lpFOI88s8aLYVQf0Q6pX5hHJakw2Q2gTkXydEdBirHsZ02nw/GZqd5AIGr8ErmkicmThx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VGWhUhDD; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1733075743;
+	s=mimecast20190719; t=1733075979;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Bj/FRfspWv/DskWdu4ezgBxsZYrptmYDnGDs7cuKhHc=;
-	b=XxYV8dg3yjgCkLiuu/0iTorsX3EAXWBI6ufO6OEhhqnH8bWsZ1N4nIF2/B8XJ02lkfdjoC
-	NVbbK8mKV24xaCqpvfwCawdC9KuTjFvZNFhXXeuq+KAy2D1DcRDOv7ipFIkQrpSRocE/Ag
-	1LyTadmgxFoF0SgdG003DV7jCyFbgKY=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=0A+hdS0S9TZs4FCHTCUNfBMXeoZLW6DBQh4uakYhdW8=;
+	b=VGWhUhDDE6m+b2rIaDPxKgBtziQo68vTQzjnol33SUi5a7WqBSAxX3J8dbcFrfOmSUwi4l
+	PMReeGzgyXw9S4COcKUsPozB5lUbftasOmkYhrKSUW3pxS0iEJQ8XDFsCOkie2R4LY2MDs
+	UmWTclP2zOs1LOwyZhdE3FGltIQEBBk=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-321-0RRJ0OIxOAObthx7iL9fMA-1; Sun, 01 Dec 2024 12:55:42 -0500
-X-MC-Unique: 0RRJ0OIxOAObthx7iL9fMA-1
-X-Mimecast-MFC-AGG-ID: 0RRJ0OIxOAObthx7iL9fMA
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-84181157edbso262518839f.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 01 Dec 2024 09:55:42 -0800 (PST)
+ us-mta-652-cRX3z_XTPJS5aoDbQSZypA-1; Sun, 01 Dec 2024 12:59:38 -0500
+X-MC-Unique: cRX3z_XTPJS5aoDbQSZypA-1
+X-Mimecast-MFC-AGG-ID: cRX3z_XTPJS5aoDbQSZypA
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3a778ce76fbso36613395ab.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Dec 2024 09:59:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733075742; x=1733680542;
+        d=1e100.net; s=20230601; t=1733075977; x=1733680777;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Bj/FRfspWv/DskWdu4ezgBxsZYrptmYDnGDs7cuKhHc=;
-        b=jbbKb+9ygNMIJVo3P+odjlb5Z5BI2mqpBnHnHgBQ2A8dGAQH3gRtPDh/KKCZMzbXKE
-         ydDBQL/FRFFC5muvVVseSmC2J6200Y2wFmSMCBtV2dqazoWPdWZZCFfDrnMdQxrNGJlX
-         uAxUUCx9tIPzwNv1HnW9/wMP7mb4NklRueP/30D7J7QcVE2kn6bBRTvURnOiqJ2XXS81
-         BqFAbaU//80ZDVMI9dSWOOQ4c4IBogmq2Uj99es771iHvmoRh/MVS7wVkPLuO0sUP8LJ
-         YhPN2QiVnfl+czFdSkOnx0hDm9zhSM/e6gmao9N2cHl1HoIwpPzdTiXs2tfaHyA7Atay
-         dw2w==
-X-Forwarded-Encrypted: i=1; AJvYcCVq3n2Ljai4OpPALbWWcb9JGbysVfV78vQa3oHwITEC3/1N/KO2YVzOqDUSLhiwACIqcXuUjez/iDiFTSYkwzk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxI/AvNPok45TMHPoPDWRW+La5m2yJQr8Sf3IccQP8Oj2Hyo8H
-	bmJW0AYFGkrzsGKejaEADdGBjd3tuXZvoa4Pt+XTHEKliCwiwKJYaFLihtMpwx46HDqoMVRDRCL
-	pl8zSfvAcKE82zFD4bIzIC6Wtw1wZAB5sF4kBXwxAxEI/VkDne9ngTZbAdGesLMTsow==
-X-Gm-Gg: ASbGnctcnT6UOFbFfR2ESReIig0Ib5fiKIVmoNM/u059aJ28x0OJ/CO6kVt/6N6hBLM
-	q8gBDoXG1qPQLRTU0zRYG4qetvWgF7WT5REWjp4TXXj7MCSjwjgBwmWvCBRgvuVCmsoruQcmNxe
-	9blY4ZGqs8DP2AOYaAMuZiSREv0BLCCtJIC05uImMTOxecSunocdAl9n2desVZogAT6SfQ3BN1t
-	UiuG1SiabACRTfwuGrHYLkuwNLHBL5R5ctbcPrADkV0k/ptwah1gShqQycdpGXpbe9hPpEg5YLH
-	BhgoPlQt7G8=
-X-Received: by 2002:a05:6602:1485:b0:83a:bd82:78e with SMTP id ca18e2360f4ac-843ed0d5db1mr1823654339f.13.1733075741825;
-        Sun, 01 Dec 2024 09:55:41 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE/C29sEt8k4hWcQ9UZmsHjRNvozdtx0q9RcLM88/BVqTagSmnFuAl4NtUM6pK3J/5zeSzg2A==
-X-Received: by 2002:a05:6602:1485:b0:83a:bd82:78e with SMTP id ca18e2360f4ac-843ed0d5db1mr1823651239f.13.1733075741502;
-        Sun, 01 Dec 2024 09:55:41 -0800 (PST)
+        bh=0A+hdS0S9TZs4FCHTCUNfBMXeoZLW6DBQh4uakYhdW8=;
+        b=TUPQ86WOAfNYWvGdzhJhVcQUdpp6Xmfgyy5IRL5+aNoQ01VybEV6N7arBhRIZ78n96
+         HAPGkW8tiiXi3cln9pFRY3eQjEU1H6aK7y4pXiEZioKV3SrPl74CImzVj7EujtrYGNRy
+         s/yx+Hq9eKl9+9em1Z5FkRXfT7UXe6YwcLAIOxSk2RXH5rI2TfU2FV/BcVyAr6D8exKR
+         5y4jNO597GlPHiMVZsIZHB/VhjvVyon/P2AM990ZzuKp9VCryZ2L8uaMB5lE2MNv387E
+         Xi5r+hthm7rTLch1NvB1hhbohiW2g2JfAfd4m4PVnaxqtopIEK3/Dj4s65OiGxX7h9AS
+         7XIw==
+X-Forwarded-Encrypted: i=1; AJvYcCX7Q/njN0xQWH90T3v3R72D7jZ6LNpJXhY8DELlFINwHOb+C2S7S8/APUZIxkjebPIlMiPK8q5NNEesXdPMBH0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZRjuSy1W137kp4DhszFv4Xpzq4whR/2CDzmYbTceWxDr/Kxni
+	wIN71pUvj8+WM1Kn1k5ar/XBFusrdwYJDdfp1PaeQ/tktdCjTlS2tlDOYFFoHSBh6mMjqJ4x5nu
+	XkKB/GRTBz5f2YEVXH0LoZ+PEJ2kOsW35es+h1H9NzV8PlrrG0Iotq5Ho59A5gpkOWg==
+X-Gm-Gg: ASbGnctOkqnGw13FZhOcR1FIOh4FrNoMrpWT/7G+3UKr4AJ15uJAbLFb8nLkFCjq67W
+	58kM/spcFZN9UUgf2ZdH9cUh+x2piIZULd+b+9bCrka677tUpmyHvLitzKgmqonWjYD9bleJKxQ
+	D1NRFcT1sQUj69bO6RFz6r9ukz5b2ncJ6PxOu1hirP9Puc+qdg78JU8LXsZYHgoFSP0dqBjTuUT
+	9WcMc/GM5LXSzUqnT4tyOlrg+wEbq9eF/V57wS/B5q8k7E8WEbltlnQ5BgGIvf7WQjr10/t+CbB
+	r0z97EVfsCc=
+X-Received: by 2002:a05:6e02:2192:b0:3a7:dd45:bca1 with SMTP id e9e14a558f8ab-3a7dd45c5e2mr85506355ab.17.1733075977433;
+        Sun, 01 Dec 2024 09:59:37 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHry52UnkIwNHPlxMfjuNJbz0kuNzIn+XivMrF6Q+kiRWIeU+o9LVgyCqSYZICKYohcFcyI2w==
+X-Received: by 2002:a05:6e02:2192:b0:3a7:dd45:bca1 with SMTP id e9e14a558f8ab-3a7dd45c5e2mr85506025ab.17.1733075977146;
+        Sun, 01 Dec 2024 09:59:37 -0800 (PST)
 Received: from x1n (pool-99-254-114-190.cpe.net.cable.rogers.com. [99.254.114.190])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-84405faf14fsm171115139f.42.2024.12.01.09.55.38
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a7ccc0b987sm18690775ab.34.2024.12.01.09.59.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Dec 2024 09:55:40 -0800 (PST)
-Date: Sun, 1 Dec 2024 12:55:36 -0500
+        Sun, 01 Dec 2024 09:59:36 -0800 (PST)
+Date: Sun, 1 Dec 2024 12:59:33 -0500
 From: Peter Xu <peterx@redhat.com>
 To: Ackerley Tng <ackerleytng@google.com>
 Cc: tabba@google.com, quic_eberman@quicinc.com, roypat@amazon.co.uk,
@@ -96,11 +96,11 @@ Cc: tabba@google.com, quic_eberman@quicinc.com, roypat@amazon.co.uk,
 	oliver.upton@linux.dev, linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org, kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-fsdevel@kvack.org
-Subject: Re: [RFC PATCH 15/39] KVM: guest_memfd: hugetlb: allocate and
- truncate from hugetlb
-Message-ID: <Z0yjGA25b8TfLMnd@x1n>
+Subject: Re: [RFC PATCH 14/39] KVM: guest_memfd: hugetlb: initialization and
+ cleanup
+Message-ID: <Z0ykBZAOZUdf8GbB@x1n>
 References: <cover.1726009989.git.ackerleytng@google.com>
- <768488c67540aa18c200d7ee16e75a3a087022d4.1726009989.git.ackerleytng@google.com>
+ <3fec11d8a007505405eadcf2b3e10ec9051cf6bf.1726009989.git.ackerleytng@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -109,82 +109,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <768488c67540aa18c200d7ee16e75a3a087022d4.1726009989.git.ackerleytng@google.com>
+In-Reply-To: <3fec11d8a007505405eadcf2b3e10ec9051cf6bf.1726009989.git.ackerleytng@google.com>
 
-On Tue, Sep 10, 2024 at 11:43:46PM +0000, Ackerley Tng wrote:
-> +static struct folio *kvm_gmem_hugetlb_alloc_folio(struct hstate *h,
-> +						  struct hugepage_subpool *spool)
+On Tue, Sep 10, 2024 at 11:43:45PM +0000, Ackerley Tng wrote:
+> +/**
+> + * Removes folios in range [@lstart, @lend) from page cache of inode, updates
+> + * inode metadata and hugetlb reservations.
+> + */
+> +static void kvm_gmem_hugetlb_truncate_folios_range(struct inode *inode,
+> +						   loff_t lstart, loff_t lend)
 > +{
-> +	bool memcg_charge_was_prepared;
-> +	struct mem_cgroup *memcg;
-> +	struct mempolicy *mpol;
-> +	nodemask_t *nodemask;
-> +	struct folio *folio;
-> +	gfp_t gfp_mask;
-> +	int ret;
-> +	int nid;
+> +	struct kvm_gmem_hugetlb *hgmem;
+> +	struct hstate *h;
+> +	int gbl_reserve;
+> +	int num_freed;
 > +
-> +	gfp_mask = htlb_alloc_mask(h);
+> +	hgmem = kvm_gmem_hgmem(inode);
+> +	h = hgmem->h;
 > +
-> +	memcg = get_mem_cgroup_from_current();
-> +	ret = mem_cgroup_hugetlb_try_charge(memcg,
-> +					    gfp_mask | __GFP_RETRY_MAYFAIL,
-> +					    pages_per_huge_page(h));
-> +	if (ret == -ENOMEM)
-> +		goto err;
+> +	num_freed = kvm_gmem_hugetlb_filemap_remove_folios(inode->i_mapping,
+> +							   h, lstart, lend);
 > +
-> +	memcg_charge_was_prepared = ret != -EOPNOTSUPP;
-> +
-> +	/* Pages are only to be taken from guest_memfd subpool and nowhere else. */
-> +	if (hugepage_subpool_get_pages(spool, 1))
-> +		goto err_cancel_charge;
-> +
-> +	nid = kvm_gmem_get_mpol_node_nodemask(htlb_alloc_mask(h), &mpol,
-> +					      &nodemask);
-> +	/*
-> +	 * charge_cgroup_reservation is false because we didn't make any cgroup
-> +	 * reservations when creating the guest_memfd subpool.
+> +	gbl_reserve = hugepage_subpool_put_pages(hgmem->spool, num_freed);
+> +	hugetlb_acct_memory(h, -gbl_reserve);
 
-Hmm.. isn't this the exact reason to set charge_cgroup_reservation==true
-instead?
+I wonder whether this is needed, and whether hugetlb_acct_memory() needs to
+be exported in the other patch.
 
-IIUC gmem hugetlb pages should participate in the hugetlb cgroup resv
-charge as well.  It is already involved in the rest cgroup charges, and I
-wonder whether it's intended that the patch treated the resv accounting
-specially.
+IIUC subpools manages the global reservation on its own when min_pages is
+set (which should be gmem's case, where both max/min set to gmem size).
+That's in hugepage_put_subpool() -> unlock_or_release_subpool().
 
-Thanks,
-
-> +	 *
-> +	 * use_hstate_resv is true because we reserved from global hstate when
-> +	 * creating the guest_memfd subpool.
-> +	 */
-> +	folio = hugetlb_alloc_folio(h, mpol, nid, nodemask, false, true);
-> +	mpol_cond_put(mpol);
 > +
-> +	if (!folio)
-> +		goto err_put_pages;
-> +
-> +	hugetlb_set_folio_subpool(folio, spool);
-> +
-> +	if (memcg_charge_was_prepared)
-> +		mem_cgroup_commit_charge(folio, memcg);
-> +
-> +out:
-> +	mem_cgroup_put(memcg);
-> +
-> +	return folio;
-> +
-> +err_put_pages:
-> +	hugepage_subpool_put_pages(spool, 1);
-> +
-> +err_cancel_charge:
-> +	if (memcg_charge_was_prepared)
-> +		mem_cgroup_cancel_charge(memcg, pages_per_huge_page(h));
-> +
-> +err:
-> +	folio = ERR_PTR(-ENOMEM);
-> +	goto out;
+> +	spin_lock(&inode->i_lock);
+> +	inode->i_blocks -= blocks_per_huge_page(h) * num_freed;
+> +	spin_unlock(&inode->i_lock);
 > +}
 
 -- 
