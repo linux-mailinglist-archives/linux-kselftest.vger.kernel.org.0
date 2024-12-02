@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-22661-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22662-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3BCA9DFB80
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 08:56:49 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67DBB9DFB86
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 08:57:26 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9093281D9A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 07:56:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F30216376F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 07:57:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B088D1FA142;
-	Mon,  2 Dec 2024 07:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CEB71FA245;
+	Mon,  2 Dec 2024 07:56:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VMm62Uhx"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zDRqynqi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-oi1-f202.google.com (mail-oi1-f202.google.com [209.85.167.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC4B1F9F67
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Dec 2024 07:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 968A61FA14D
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Dec 2024 07:56:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733126173; cv=none; b=EZZnyAPX76r44v2umA56t+ReQUgalv4KZ7TmEc2OVJWm5Xo237v6V7vBx4E+KmVk4DWt3kBpFOil4VtW11BSGmcCbQrFc2oWfBCCuWx+o4NizYW+zfjba1LICkU17z8uSxN0MLZJCivlPyBMqJRWOoR8xcLDN495H26Ciyb2cIs=
+	t=1733126178; cv=none; b=KvkkQtcxU/Ll5MrpZ6WKnHKp9N3WJ6CRg6ltsX/OczfLsJEPIGBiK2pc7vbT73Zlma2unaAqTwI9BBpZeVQG07lbIIozReAymZSpiOrGlipEFKqofRbpGfrIxPm1z2+fBNwM4QquhZKOQheargiFPGyLKd9YsEgKiin9UzwokBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733126173; c=relaxed/simple;
-	bh=Jt+d7n57NGebk0I59uq9yI2X6UgA6r9S6uq4IT9yFLo=;
+	s=arc-20240116; t=1733126178; c=relaxed/simple;
+	bh=X2z1f0sAHqGegyT+sOhSfCIw8EwDqHE3HD8Hl7jRbmw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=m2vC7/nYrMKlp+s7dyLFMyBumjnUK1SbTcZgqtwT5Rwa+fAcegueUtjlWtEU65WATiW/r5BExESWh8hBY5ngsiK4WPaRDyksq4ORQbfXOt+ub6cSvKZiYqz2+QSts75YajS+Ao+rRdzhyyTNP/mBavdUqJeOhjKsoRlRryRYhbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VMm62Uhx; arc=none smtp.client-ip=209.85.214.202
+	 To:Cc:Content-Type; b=C7K2BfiH0i4ER8CpXanORiS+zDNVnNgN/rtool1ePm3QXXUbFO6RhqBOluQnzo62cZhwxwM95+2H4p38F/qVswI6G9V/+vZLddSS6maNht8HWQHHluiUHbBfp5YG92pXKS84KgrQRf/RvRt/MimECLqShD66z8GNINqt5ozM74o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zDRqynqi; arc=none smtp.client-ip=209.85.167.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2154e57189cso22094405ad.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 01 Dec 2024 23:56:11 -0800 (PST)
+Received: by mail-oi1-f202.google.com with SMTP id 5614622812f47-3ea4ab005daso2671413b6e.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Dec 2024 23:56:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1733126171; x=1733730971; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1733126176; x=1733730976; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pDhlosYfyrccC/tr5/HdB27e44y22hAH/rYm7JsJWfI=;
-        b=VMm62Uhxcq+IpFwQ7wJ52dumUkj+/+eiFcIDi2+MRKv7mkAWcpt+VwgwgFCqf6FUhh
-         liLVuEHvCzJ9fkYKlprIZzsqdLOysyRkx5rvMYUvi5t388cL1J1ZoQly1wxmKNhnpcPj
-         mta6HQlteQgBsVpi7qhycpiJMvmB5v2CCwOTmZpo8HWJwD3Tf6F1+HoFzibQThG4uXHB
-         jBMl/FNMUe8W4kp2PTn0CHRdYpW+4h8WNiFoTQEeeJF2raGyrjRLRJu+xaGtgVS3kVD+
-         vDLMygthgngOr5POXNcBc6B/y+92u1Bpz5uLJtXXSMCtaQEGm0q7I6GjKI1cOWXNGid8
-         RUwg==
+        bh=hCHuCWl6FQYdAHHoa+W8WoG3+FHC82MhYNcazj5rwRo=;
+        b=zDRqynqiDB2ERCj7A2/x4gMmPwX48xKxGTeY3dcuDKx9QdjQWp5KFVnZoHe5kU5QUG
+         VVlvg1nT5Fhh4U5ErR89RarHxnGEIroTy8i9ESKir+1qQtsQ82dbBgn0MUcxQFruhDU5
+         0nYbiX1yLf5jBQEXHjRtP1plzg5fnhN5E/14k7raDuTgWxvS0ODHEhb8ju+Cj5AUOI8U
+         S3Q8P5Ra8bC+54XOt5/Yb3fQ172+8Sg+l7SUHISwKqq2m+QA8a0Z7yZHhVAzSjS0pQ5i
+         b8nYpSuYo9IROTXBrWljkHAeKpLhpb61UNMq+J2HqnjYI3XdtY+NyhLgKTgLdksc48rT
+         VG7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733126171; x=1733730971;
+        d=1e100.net; s=20230601; t=1733126176; x=1733730976;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pDhlosYfyrccC/tr5/HdB27e44y22hAH/rYm7JsJWfI=;
-        b=uFsNsCilVpMDIHDjVT0mruZX8hCTLnhFsoOwCfkx8+/FVK7Qh5DYGHTWuuMjNFFUQe
-         OsR6MMFiRyrhfywkQhn/eFY8Gr6vO16+fULVYFKQuH4gO66wKBrCrUXTZ/XNDHZ3SHN0
-         BWe+bZJbVl1TQPpE880emwKope4dgXyvi8b57QKygMo5njErG6+FFONYBmgE+7ql12cv
-         UHGqORmBkUpNVxd3DYk30F4CrN7eeHg+Idco/GvKXlprLO4ZIY7x1jIsXAj0euLJPi+1
-         PU7c/StjTdIw7VYFO+2fS/j+azdUl/V6FVlWr9YlWN6RzvEDziYZXbgLlEGC4Wi0gPtY
-         toFg==
-X-Forwarded-Encrypted: i=1; AJvYcCVGjZ3Tdv8YOU4od3Sij+SiWfh7rmyqIzGx2ZiLbwp0AIgg4crNcvjUf7twuRGfNKJeUUY57wmtKXeVheuNHYI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEqx50dC16W2vShnWQSL6QXszwV6wUFLv4+EgYcpPCL7FXG2SP
-	iYHYCF/rksnQUws30njgsmCRAfMqsizgwF9qdCGY0rv2rSYB1QlJQpRcnHzWzKKO8tGbbrvdrg9
-	AXn1cjU1Z6Q==
-X-Google-Smtp-Source: AGHT+IHCrrtVK1G8Su8f/4p14UuYSnP45OLsJguyMHeQ4fuwQtsxSnbtnu3grfxkzKL1r/cnjFv9nejxcE0tMg==
-X-Received: from plge12.prod.google.com ([2002:a17:902:cf4c:b0:215:44af:311e])
+        bh=hCHuCWl6FQYdAHHoa+W8WoG3+FHC82MhYNcazj5rwRo=;
+        b=Syh3mxUyflunwd3I6+Ncvwea6Me0GOZzTJpAoqsQ54Y5tHs77dST63Kl7OMonJ8fQH
+         XNLXbVn5GszU7qXkNU9NkSuUvLq9UzX8IIwLBwS+0kcehQnQWOmMJGywm3ZepBmTwtb1
+         R6T/QGfBTv0gnR4ZWuUb2OVucPCq6DSELSmYCN18CrWhzY73EZWez62wJNW1FEimFyKd
+         mnqU5rrVYHDoapmnlQ5kGp1BB2QZYLsLnil8kpW+B/IAlgF/DDiD6BJ3BN08UVnnm1kE
+         TgnxcEfhBImZ9YrY53SasGAzsJjST4zocS9bEBIlr5gvIpYJzY/Y4HFd0inSy43cNJXf
+         +LQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVRvG3ZeQ5g6/z4d/DFp1zACJIRzsrhfTfuLCPi0LGe9nZU5XH/SAKEYkSwS4iyU/ZWR65LmrNAchH+LKSatNQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMSVsSWymhcr+vxs8t+0ttZ7p5nLWh9RkKPko/Kl/eYBDXk0V+
+	Sd4Tq4ipl/DNEzASNE3Kqfk+o8V4jkUkWWArPlap/0QKSB5Jw+cd2z4DCHbiBwhNL/gLtLW86jZ
+	mSFI10S6mEQ==
+X-Google-Smtp-Source: AGHT+IGZJ1wGhvA1+Yj7lk7qWxVg4KwKq8/ipRlHpGygo6v/PQu1oTbDr4mRHKzQxU+FmbMhWMCAS76oknmg6g==
+X-Received: from pfbbw14.prod.google.com ([2002:a05:6a00:408e:b0:720:426b:45fb])
  (user=davidgow job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:e801:b0:20c:9936:f0ab with SMTP id d9443c01a7336-21501d57906mr314833595ad.47.1733126171412;
- Sun, 01 Dec 2024 23:56:11 -0800 (PST)
-Date: Mon,  2 Dec 2024 15:55:41 +0800
+ 2002:a05:6808:1801:b0:3e6:1a1b:e4dc with SMTP id 5614622812f47-3ea6dbc9d95mr12251176b6e.18.1733126175869;
+ Sun, 01 Dec 2024 23:56:15 -0800 (PST)
+Date: Mon,  2 Dec 2024 15:55:42 +0800
 In-Reply-To: <20241202075545.3648096-1-davidgow@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,310 +74,352 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20241202075545.3648096-1-davidgow@google.com>
 X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
-Message-ID: <20241202075545.3648096-5-davidgow@google.com>
-Subject: [PATCH v2 4/6] lib/tests/kfifo_kunit.c: add tests for the kfifo structure
+Message-ID: <20241202075545.3648096-6-davidgow@google.com>
+Subject: [PATCH v2 5/6] unicode: kunit: refactor selftest to kunit tests
 From: David Gow <davidgow@google.com>
 To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <skhan@linuxfoundation.org>, 
 	Rae Moar <rmoar@google.com>, Kees Cook <kees@kernel.org>, 
 	Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Diego Vieira <diego.daniel.professional@gmail.com>, linux-kselftest@vger.kernel.org, 
+Cc: Gabriela Bittencourt <gbittencourt@lkcamp.dev>, linux-kselftest@vger.kernel.org, 
 	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
 	Stephen Rothwell <sfr@canb.auug.org.au>, Andy Shevchenko <andy@kernel.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>
+	Brendan Higgins <brendan.higgins@linux.dev>, Pedro Orlando <porlando@lkcamp.dev>, 
+	Danilo Pereira <dpereira@lkcamp.dev>, David Gow <davidgow@google.com>, 
+	Gabriel Krisman Bertazi <krisman@suse.de>
 Content-Type: text/plain; charset="UTF-8"
 
-From: Diego Vieira <diego.daniel.professional@gmail.com>
+From: Gabriela Bittencourt <gbittencourt@lkcamp.dev>
 
-Add KUnit tests for the kfifo data structure.
-They test the vast majority of macros defined in the kfifo
-header (include/linux/kfifo.h).
+Refactoring 'test' functions into kunit tests, to test utf-8 support in
+unicode subsystem.
 
-These are inspired by the existing tests for the doubly
-linked list in lib/tests/list-test.c (previously at lib/list-test.c) [1].
+This allows the utf8 tests to be run alongside the KUnit test suite
+using kunit-tool, quickly compiling and running all desired tests as
+part of the KUnit test suite, instead of compiling the selftest module
+and loading it.
 
-Note that this patch depends on the patch that moves the KUnit tests on
-lib/ into lib/tests/ [2].
+The refactoring kept the original testing logic intact, while adopting a
+testing pattern across different kernel modules and leveraging KUnit's
+benefits.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/list-test.c?h=v6.11-rc6
-[2] https://lore.kernel.org/all/20240720181025.work.002-kees@kernel.org/
-
-Signed-off-by: Diego Vieira <diego.daniel.professional@gmail.com>
+Co-developed-by: Pedro Orlando <porlando@lkcamp.dev>
+Signed-off-by: Pedro Orlando <porlando@lkcamp.dev>
+Co-developed-by: Danilo Pereira <dpereira@lkcamp.dev>
+Signed-off-by: Danilo Pereira <dpereira@lkcamp.dev>
+Signed-off-by: Gabriela Bittencourt <gbittencourt@lkcamp.dev>
 Reviewed-by: David Gow <davidgow@google.com>
+Acked-by: Gabriel Krisman Bertazi <krisman@suse.de>
+[rebased on top of 6.13-rc1]
 Signed-off-by: David Gow <davidgow@google.com>
 ---
- lib/Kconfig.debug       |  14 +++
- lib/tests/Makefile      |   1 +
- lib/tests/kfifo_kunit.c | 224 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 239 insertions(+)
- create mode 100644 lib/tests/kfifo_kunit.c
+ fs/unicode/.kunitconfig    |   3 +
+ fs/unicode/Kconfig         |   5 +-
+ fs/unicode/Makefile        |   2 +-
+ fs/unicode/utf8-norm.c     |   2 +-
+ fs/unicode/utf8-selftest.c | 149 +++++++++++++++++--------------------
+ 5 files changed, 77 insertions(+), 84 deletions(-)
+ create mode 100644 fs/unicode/.kunitconfig
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 8cc8bca6386d..960c4534dab7 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2681,6 +2681,20 @@ config SYSCTL_KUNIT_TEST
- 
- 	  If unsure, say N.
- 
-+config KFIFO_KUNIT_TEST
-+	tristate "KUnit Test for the generic kernel FIFO implementation" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This builds the generic FIFO implementation KUnit test suite.
-+	  It tests that the API and basic functionality of the kfifo type
-+	  and associated macros.
-+
-+	  For more information on KUnit and unit tests in general please refer
-+	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-+
-+	  If unsure, say N.
-+
- config LIST_KUNIT_TEST
- 	tristate "KUnit Test for Kernel Linked-list structures" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
-diff --git a/lib/tests/Makefile b/lib/tests/Makefile
-index 03bf5a884984..3cda13c77551 100644
---- a/lib/tests/Makefile
-+++ b/lib/tests/Makefile
-@@ -23,6 +23,7 @@ obj-$(CONFIG_TEST_IOV_ITER) += kunit_iov_iter.o
- obj-$(CONFIG_IS_SIGNED_TYPE_KUNIT_TEST) += is_signed_type_kunit.o
- obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
- obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
-+obj-$(CONFIG_KFIFO_KUNIT_TEST) += kfifo_kunit.o
- obj-$(CONFIG_TEST_LIST_SORT) += test_list_sort.o
- obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
- obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
-diff --git a/lib/tests/kfifo_kunit.c b/lib/tests/kfifo_kunit.c
+diff --git a/fs/unicode/.kunitconfig b/fs/unicode/.kunitconfig
 new file mode 100644
-index 000000000000..a85eedc3195a
+index 000000000000..62dd5c171f9c
 --- /dev/null
-+++ b/lib/tests/kfifo_kunit.c
-@@ -0,0 +1,224 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit test for the generic kernel FIFO implementation.
-+ *
-+ * Copyright (C) 2024 Diego Vieira <diego.daniel.professional@gmail.com>
-+ */
++++ b/fs/unicode/.kunitconfig
+@@ -0,0 +1,3 @@
++CONFIG_KUNIT=y
++CONFIG_UNICODE=y
++CONFIG_UNICODE_NORMALIZATION_KUNIT_TEST=y
+diff --git a/fs/unicode/Kconfig b/fs/unicode/Kconfig
+index da786a687fdc..4ad2c36550f1 100644
+--- a/fs/unicode/Kconfig
++++ b/fs/unicode/Kconfig
+@@ -10,6 +10,7 @@ config UNICODE
+ 	  be a separate loadable module that gets requested only when a file
+ 	  system actually use it.
+ 
+-config UNICODE_NORMALIZATION_SELFTEST
++config UNICODE_NORMALIZATION_KUNIT_TEST
+ 	tristate "Test UTF-8 normalization support"
+-	depends on UNICODE
++	depends on UNICODE && KUNIT
++	default KUNIT_ALL_TESTS
+diff --git a/fs/unicode/Makefile b/fs/unicode/Makefile
+index e309afe2b2bb..37bbcbc628a1 100644
+--- a/fs/unicode/Makefile
++++ b/fs/unicode/Makefile
+@@ -4,7 +4,7 @@ ifneq ($(CONFIG_UNICODE),)
+ obj-y			+= unicode.o
+ endif
+ obj-$(CONFIG_UNICODE)	+= utf8data.o
+-obj-$(CONFIG_UNICODE_NORMALIZATION_SELFTEST) += utf8-selftest.o
++obj-$(CONFIG_UNICODE_NORMALIZATION_KUNIT_TEST) += utf8-selftest.o
+ 
+ unicode-y := utf8-norm.o utf8-core.o
+ 
+diff --git a/fs/unicode/utf8-norm.c b/fs/unicode/utf8-norm.c
+index 768f8ab448b8..7b998c99c88d 100644
+--- a/fs/unicode/utf8-norm.c
++++ b/fs/unicode/utf8-norm.c
+@@ -586,7 +586,7 @@ int utf8byte(struct utf8cursor *u8c)
+ 	}
+ }
+ 
+-#ifdef CONFIG_UNICODE_NORMALIZATION_SELFTEST_MODULE
++#if IS_MODULE(CONFIG_UNICODE_NORMALIZATION_KUNIT_TEST)
+ EXPORT_SYMBOL_GPL(utf8version_is_supported);
+ EXPORT_SYMBOL_GPL(utf8nlen);
+ EXPORT_SYMBOL_GPL(utf8ncursor);
+diff --git a/fs/unicode/utf8-selftest.c b/fs/unicode/utf8-selftest.c
+index 5ddaf27b21a6..9476ab012baa 100644
+--- a/fs/unicode/utf8-selftest.c
++++ b/fs/unicode/utf8-selftest.c
+@@ -1,35 +1,15 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+- * Kernel module for testing utf-8 support.
++ * KUnit tests for utf-8 support.
+  *
+  * Copyright 2017 Collabora Ltd.
+  */
+ 
+-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+-
+-#include <linux/module.h>
+-#include <linux/printk.h>
+ #include <linux/unicode.h>
+-#include <linux/dcache.h>
 +#include <kunit/test.h>
+ 
+ #include "utf8n.h"
+ 
+-static unsigned int failed_tests;
+-static unsigned int total_tests;
+-
+-#define _test(cond, func, line, fmt, ...) do {				\
+-		total_tests++;						\
+-		if (!cond) {						\
+-			failed_tests++;					\
+-			pr_err("test %s:%d Failed: %s%s",		\
+-			       func, line, #cond, (fmt?":":"."));	\
+-			if (fmt)					\
+-				pr_err(fmt, ##__VA_ARGS__);		\
+-		}							\
+-	} while (0)
+-#define test_f(cond, fmt, ...) _test(cond, __func__, __LINE__, fmt, ##__VA_ARGS__)
+-#define test(cond) _test(cond, __func__, __LINE__, "")
+-
+ static const struct {
+ 	/* UTF-8 strings in this vector _must_ be NULL-terminated. */
+ 	unsigned char str[10];
+@@ -167,69 +147,74 @@ static int utf8cursor(struct utf8cursor *u8c, const struct unicode_map *um,
+ 	return utf8ncursor(u8c, um, n, s, (unsigned int)-1);
+ }
+ 
+-static void check_utf8_nfdi(struct unicode_map *um)
++static void check_utf8_nfdi(struct kunit *test)
+ {
+ 	int i;
+ 	struct utf8cursor u8c;
++	struct unicode_map *um = test->priv;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(nfdi_test_data); i++) {
+ 		int len = strlen(nfdi_test_data[i].str);
+ 		int nlen = strlen(nfdi_test_data[i].dec);
+ 		int j = 0;
+ 		unsigned char c;
++		int ret;
 +
-+#include <linux/kfifo.h>
-+
-+#define KFIFO_SIZE 32
-+#define N_ELEMENTS 5
-+
-+static void kfifo_test_reset_should_clear_the_fifo(struct kunit *test)
-+{
-+	DEFINE_KFIFO(my_fifo, u8, KFIFO_SIZE);
-+
-+	kfifo_put(&my_fifo, 1);
-+	kfifo_put(&my_fifo, 2);
-+	kfifo_put(&my_fifo, 3);
-+	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), 3);
-+
-+	kfifo_reset(&my_fifo);
-+
-+	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), 0);
-+	KUNIT_EXPECT_TRUE(test, kfifo_is_empty(&my_fifo));
-+}
-+
-+static void kfifo_test_define_should_define_an_empty_fifo(struct kunit *test)
-+{
-+	DEFINE_KFIFO(my_fifo, u8, KFIFO_SIZE);
-+
-+	KUNIT_EXPECT_TRUE(test, kfifo_initialized(&my_fifo));
-+	KUNIT_EXPECT_TRUE(test, kfifo_is_empty(&my_fifo));
-+	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), 0);
-+}
-+
-+static void kfifo_test_len_should_ret_n_of_stored_elements(struct kunit *test)
-+{
-+	u8 buffer1[N_ELEMENTS];
-+
-+	for (int i = 0; i < N_ELEMENTS; i++)
-+		buffer1[i] = i + 1;
-+
-+	DEFINE_KFIFO(my_fifo, u8, KFIFO_SIZE);
-+
-+	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), 0);
-+
-+	kfifo_in(&my_fifo, buffer1, N_ELEMENTS);
-+	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), N_ELEMENTS);
-+
-+	kfifo_in(&my_fifo, buffer1, N_ELEMENTS);
-+	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), N_ELEMENTS * 2);
-+
-+	kfifo_reset(&my_fifo);
-+	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), 0);
-+}
-+
-+static void kfifo_test_put_should_insert_and_get_should_pop(struct kunit *test)
-+{
-+	u8 out_data = 0;
-+	int processed_elements;
-+	u8 elements[] = { 3, 5, 11 };
-+
-+	DEFINE_KFIFO(my_fifo, u8, KFIFO_SIZE);
-+
-+	// If the fifo is empty, get returns 0
-+	processed_elements = kfifo_get(&my_fifo, &out_data);
-+	KUNIT_EXPECT_EQ(test, processed_elements, 0);
-+	KUNIT_EXPECT_EQ(test, out_data, 0);
-+
-+	for (int i = 0; i < 3; i++)
-+		kfifo_put(&my_fifo, elements[i]);
-+
-+	for (int i = 0; i < 3; i++) {
-+		processed_elements = kfifo_get(&my_fifo, &out_data);
-+		KUNIT_EXPECT_EQ(test, processed_elements, 1);
-+		KUNIT_EXPECT_EQ(test, out_data, elements[i]);
-+	}
-+}
-+
-+static void kfifo_test_in_should_insert_multiple_elements(struct kunit *test)
-+{
-+	u8 in_buffer[] = { 11, 25, 65 };
-+	u8 out_data;
-+	int processed_elements;
-+
-+	DEFINE_KFIFO(my_fifo, u8, KFIFO_SIZE);
-+
-+	kfifo_in(&my_fifo, in_buffer, 3);
-+
-+	for (int i = 0; i < 3; i++) {
-+		processed_elements = kfifo_get(&my_fifo, &out_data);
-+		KUNIT_EXPECT_EQ(test, processed_elements, 1);
-+		KUNIT_EXPECT_EQ(test, out_data, in_buffer[i]);
-+	}
-+}
-+
-+static void kfifo_test_out_should_pop_multiple_elements(struct kunit *test)
-+{
-+	u8 in_buffer[] = { 11, 25, 65 };
-+	u8 out_buffer[3];
-+	int copied_elements;
-+
-+	DEFINE_KFIFO(my_fifo, u8, KFIFO_SIZE);
-+
-+	for (int i = 0; i < 3; i++)
-+		kfifo_put(&my_fifo, in_buffer[i]);
-+
-+	copied_elements = kfifo_out(&my_fifo, out_buffer, 3);
-+	KUNIT_EXPECT_EQ(test, copied_elements, 3);
-+
-+	for (int i = 0; i < 3; i++)
-+		KUNIT_EXPECT_EQ(test, out_buffer[i], in_buffer[i]);
-+	KUNIT_EXPECT_TRUE(test, kfifo_is_empty(&my_fifo));
-+}
-+
-+static void kfifo_test_dec_init_should_define_an_empty_fifo(struct kunit *test)
-+{
-+	DECLARE_KFIFO(my_fifo, u8, KFIFO_SIZE);
-+
-+	INIT_KFIFO(my_fifo);
-+
-+	// my_fifo is a struct with an inplace buffer
-+	KUNIT_EXPECT_FALSE(test, __is_kfifo_ptr(&my_fifo));
-+
-+	KUNIT_EXPECT_TRUE(test, kfifo_initialized(&my_fifo));
-+}
-+
-+static void kfifo_test_define_should_equal_declare_init(struct kunit *test)
-+{
-+	// declare a variable my_fifo of type struct kfifo of u8
-+	DECLARE_KFIFO(my_fifo1, u8, KFIFO_SIZE);
-+	// initialize the my_fifo variable
-+	INIT_KFIFO(my_fifo1);
-+
-+	// DEFINE_KFIFO declares the variable with the initial value
-+	// essentially the same as calling DECLARE_KFIFO and INIT_KFIFO
-+	DEFINE_KFIFO(my_fifo2, u8, KFIFO_SIZE);
-+
-+	// my_fifo1 and my_fifo2 have the same size
-+	KUNIT_EXPECT_EQ(test, sizeof(my_fifo1), sizeof(my_fifo2));
-+	KUNIT_EXPECT_EQ(test, kfifo_initialized(&my_fifo1),
-+			kfifo_initialized(&my_fifo2));
-+	KUNIT_EXPECT_EQ(test, kfifo_is_empty(&my_fifo1),
-+			kfifo_is_empty(&my_fifo2));
-+}
-+
-+static void kfifo_test_alloc_should_initiliaze_a_ptr_fifo(struct kunit *test)
-+{
-+	int ret;
-+	DECLARE_KFIFO_PTR(my_fifo, u8);
-+
-+	INIT_KFIFO(my_fifo);
-+
-+	// kfifo_initialized returns false signaling the buffer pointer is NULL
-+	KUNIT_EXPECT_FALSE(test, kfifo_initialized(&my_fifo));
-+
-+	// kfifo_alloc allocates the buffer
-+	ret = kfifo_alloc(&my_fifo, KFIFO_SIZE, GFP_KERNEL);
-+	KUNIT_EXPECT_EQ_MSG(test, ret, 0, "Memory allocation should succeed");
-+	KUNIT_EXPECT_TRUE(test, kfifo_initialized(&my_fifo));
-+
-+	// kfifo_free frees the buffer
-+	kfifo_free(&my_fifo);
-+}
-+
-+static void kfifo_test_peek_should_not_remove_elements(struct kunit *test)
-+{
-+	u8 out_data;
-+	int processed_elements;
-+
-+	DEFINE_KFIFO(my_fifo, u8, KFIFO_SIZE);
-+
-+	// If the fifo is empty, peek returns 0
-+	processed_elements = kfifo_peek(&my_fifo, &out_data);
-+	KUNIT_EXPECT_EQ(test, processed_elements, 0);
-+
-+	kfifo_put(&my_fifo, 3);
-+	kfifo_put(&my_fifo, 5);
-+	kfifo_put(&my_fifo, 11);
-+
-+	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), 3);
-+
-+	processed_elements = kfifo_peek(&my_fifo, &out_data);
-+	KUNIT_EXPECT_EQ(test, processed_elements, 1);
-+	KUNIT_EXPECT_EQ(test, out_data, 3);
-+
-+	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), 3);
-+
-+	// Using peek doesn't remove the element
-+	// so the read element and the fifo length
-+	// remains the same
-+	processed_elements = kfifo_peek(&my_fifo, &out_data);
-+	KUNIT_EXPECT_EQ(test, processed_elements, 1);
-+	KUNIT_EXPECT_EQ(test, out_data, 3);
-+
-+	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), 3);
-+}
-+
-+static struct kunit_case kfifo_test_cases[] = {
-+	KUNIT_CASE(kfifo_test_reset_should_clear_the_fifo),
-+	KUNIT_CASE(kfifo_test_define_should_define_an_empty_fifo),
-+	KUNIT_CASE(kfifo_test_len_should_ret_n_of_stored_elements),
-+	KUNIT_CASE(kfifo_test_put_should_insert_and_get_should_pop),
-+	KUNIT_CASE(kfifo_test_in_should_insert_multiple_elements),
-+	KUNIT_CASE(kfifo_test_out_should_pop_multiple_elements),
-+	KUNIT_CASE(kfifo_test_dec_init_should_define_an_empty_fifo),
-+	KUNIT_CASE(kfifo_test_define_should_equal_declare_init),
-+	KUNIT_CASE(kfifo_test_alloc_should_initiliaze_a_ptr_fifo),
-+	KUNIT_CASE(kfifo_test_peek_should_not_remove_elements),
-+	{},
++		KUNIT_EXPECT_EQ(test, utf8len(um, UTF8_NFDI, nfdi_test_data[i].str), nlen);
++		KUNIT_EXPECT_EQ(test, utf8nlen(um, UTF8_NFDI, nfdi_test_data[i].str, len),
++				nlen);
+ 
+-		test((utf8len(um, UTF8_NFDI, nfdi_test_data[i].str) == nlen));
+-		test((utf8nlen(um, UTF8_NFDI, nfdi_test_data[i].str, len) ==
+-			nlen));
+ 
+-		if (utf8cursor(&u8c, um, UTF8_NFDI, nfdi_test_data[i].str) < 0)
+-			pr_err("can't create cursor\n");
++		ret = utf8cursor(&u8c, um, UTF8_NFDI, nfdi_test_data[i].str);
++		KUNIT_EXPECT_TRUE_MSG(test, ret >= 0, "Can't create cursor\n");
+ 
+ 		while ((c = utf8byte(&u8c)) > 0) {
+-			test_f((c == nfdi_test_data[i].dec[j]),
+-			       "Unexpected byte 0x%x should be 0x%x\n",
+-			       c, nfdi_test_data[i].dec[j]);
++			KUNIT_EXPECT_EQ_MSG(test, c, nfdi_test_data[i].dec[j],
++					    "Unexpected byte 0x%x should be 0x%x\n",
++					    c, nfdi_test_data[i].dec[j]);
+ 			j++;
+ 		}
+ 
+-		test((j == nlen));
++		KUNIT_EXPECT_EQ(test, j, nlen);
+ 	}
+ }
+ 
+-static void check_utf8_nfdicf(struct unicode_map *um)
++static void check_utf8_nfdicf(struct kunit *test)
+ {
+ 	int i;
+ 	struct utf8cursor u8c;
++	struct unicode_map *um = test->priv;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(nfdicf_test_data); i++) {
+ 		int len = strlen(nfdicf_test_data[i].str);
+ 		int nlen = strlen(nfdicf_test_data[i].ncf);
+ 		int j = 0;
++		int ret;
+ 		unsigned char c;
+ 
+-		test((utf8len(um, UTF8_NFDICF, nfdicf_test_data[i].str) ==
+-				nlen));
+-		test((utf8nlen(um, UTF8_NFDICF, nfdicf_test_data[i].str, len) ==
+-				nlen));
++		KUNIT_EXPECT_EQ(test, utf8len(um, UTF8_NFDICF, nfdicf_test_data[i].str),
++				nlen);
++		KUNIT_EXPECT_EQ(test, utf8nlen(um, UTF8_NFDICF, nfdicf_test_data[i].str, len),
++				nlen);
+ 
+-		if (utf8cursor(&u8c, um, UTF8_NFDICF,
+-				nfdicf_test_data[i].str) < 0)
+-			pr_err("can't create cursor\n");
++		ret = utf8cursor(&u8c, um, UTF8_NFDICF, nfdicf_test_data[i].str);
++		KUNIT_EXPECT_TRUE_MSG(test, ret >= 0, "Can't create cursor\n");
+ 
+ 		while ((c = utf8byte(&u8c)) > 0) {
+-			test_f((c == nfdicf_test_data[i].ncf[j]),
+-			       "Unexpected byte 0x%x should be 0x%x\n",
+-			       c, nfdicf_test_data[i].ncf[j]);
++			KUNIT_EXPECT_EQ_MSG(test, c, nfdicf_test_data[i].ncf[j],
++					    "Unexpected byte 0x%x should be 0x%x\n",
++					    c, nfdicf_test_data[i].ncf[j]);
+ 			j++;
+ 		}
+ 
+-		test((j == nlen));
++		KUNIT_EXPECT_EQ(test, j, nlen);
+ 	}
+ }
+ 
+-static void check_utf8_comparisons(struct unicode_map *table)
++static void check_utf8_comparisons(struct kunit *test)
+ {
+ 	int i;
++	struct unicode_map *um = test->priv;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(nfdi_test_data); i++) {
+ 		const struct qstr s1 = {.name = nfdi_test_data[i].str,
+@@ -237,8 +222,9 @@ static void check_utf8_comparisons(struct unicode_map *table)
+ 		const struct qstr s2 = {.name = nfdi_test_data[i].dec,
+ 					.len = sizeof(nfdi_test_data[i].dec)};
+ 
+-		test_f(!utf8_strncmp(table, &s1, &s2),
+-		       "%s %s comparison mismatch\n", s1.name, s2.name);
++		/* strncmp returns 0 when strings are equal */
++		KUNIT_EXPECT_TRUE_MSG(test, utf8_strncmp(um, &s1, &s2) == 0,
++				    "%s %s comparison mismatch\n", s1.name, s2.name);
+ 	}
+ 
+ 	for (i = 0; i < ARRAY_SIZE(nfdicf_test_data); i++) {
+@@ -247,62 +233,65 @@ static void check_utf8_comparisons(struct unicode_map *table)
+ 		const struct qstr s2 = {.name = nfdicf_test_data[i].ncf,
+ 					.len = sizeof(nfdicf_test_data[i].ncf)};
+ 
+-		test_f(!utf8_strncasecmp(table, &s1, &s2),
+-		       "%s %s comparison mismatch\n", s1.name, s2.name);
++		/* strncasecmp returns 0 when strings are equal */
++		KUNIT_EXPECT_TRUE_MSG(test, utf8_strncasecmp(um, &s1, &s2) == 0,
++				    "%s %s comparison mismatch\n", s1.name, s2.name);
+ 	}
+ }
+ 
+-static void check_supported_versions(struct unicode_map *um)
++static void check_supported_versions(struct kunit *test)
+ {
++	struct unicode_map *um = test->priv;
+ 	/* Unicode 7.0.0 should be supported. */
+-	test(utf8version_is_supported(um, UNICODE_AGE(7, 0, 0)));
++	KUNIT_EXPECT_TRUE(test, utf8version_is_supported(um, UNICODE_AGE(7, 0, 0)));
+ 
+ 	/* Unicode 9.0.0 should be supported. */
+-	test(utf8version_is_supported(um, UNICODE_AGE(9, 0, 0)));
++	KUNIT_EXPECT_TRUE(test, utf8version_is_supported(um, UNICODE_AGE(9, 0, 0)));
+ 
+ 	/* Unicode 1x.0.0 (the latest version) should be supported. */
+-	test(utf8version_is_supported(um, UTF8_LATEST));
++	KUNIT_EXPECT_TRUE(test, utf8version_is_supported(um, UTF8_LATEST));
+ 
+ 	/* Next versions don't exist. */
+-	test(!utf8version_is_supported(um, UNICODE_AGE(13, 0, 0)));
+-	test(!utf8version_is_supported(um, UNICODE_AGE(0, 0, 0)));
+-	test(!utf8version_is_supported(um, UNICODE_AGE(-1, -1, -1)));
++	KUNIT_EXPECT_FALSE(test, utf8version_is_supported(um, UNICODE_AGE(13, 0, 0)));
++	KUNIT_EXPECT_FALSE(test, utf8version_is_supported(um, UNICODE_AGE(0, 0, 0)));
++	KUNIT_EXPECT_FALSE(test, utf8version_is_supported(um, UNICODE_AGE(-1, -1, -1)));
+ }
+ 
+-static int __init init_test_ucd(void)
++static struct kunit_case unicode_normalization_test_cases[] = {
++	KUNIT_CASE(check_supported_versions),
++	KUNIT_CASE(check_utf8_comparisons),
++	KUNIT_CASE(check_utf8_nfdicf),
++	KUNIT_CASE(check_utf8_nfdi),
++	{}
 +};
 +
-+static struct kunit_suite kfifo_test_module = {
-+	.name = "kfifo",
-+	.test_cases = kfifo_test_cases,
++static int init_test_ucd(struct kunit *test)
+ {
+-	struct unicode_map *um;
++	struct unicode_map *um = utf8_load(UTF8_LATEST);
+ 
+-	failed_tests = 0;
+-	total_tests = 0;
++	test->priv = um;
+ 
+-	um = utf8_load(UTF8_LATEST);
+-	if (IS_ERR(um)) {
+-		pr_err("%s: Unable to load utf8 table.\n", __func__);
+-		return PTR_ERR(um);
+-	}
++	KUNIT_EXPECT_EQ_MSG(test, IS_ERR(um), 0,
++			    "%s: Unable to load utf8 table.\n", __func__);
+ 
+-	check_supported_versions(um);
+-	check_utf8_nfdi(um);
+-	check_utf8_nfdicf(um);
+-	check_utf8_comparisons(um);
+-
+-	if (!failed_tests)
+-		pr_info("All %u tests passed\n", total_tests);
+-	else
+-		pr_err("%u out of %u tests failed\n", failed_tests,
+-		       total_tests);
+-	utf8_unload(um);
+ 	return 0;
+ }
+ 
+-static void __exit exit_test_ucd(void)
++static void exit_test_ucd(struct kunit *test)
+ {
++	utf8_unload(test->priv);
+ }
+ 
+-module_init(init_test_ucd);
+-module_exit(exit_test_ucd);
++static struct kunit_suite unicode_normalization_test_suite = {
++	.name = "unicode_normalization",
++	.test_cases = unicode_normalization_test_cases,
++	.init = init_test_ucd,
++	.exit = exit_test_ucd,
 +};
 +
-+kunit_test_suites(&kfifo_test_module);
++kunit_test_suite(unicode_normalization_test_suite);
 +
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Diego Vieira <diego.daniel.professional@gmail.com>");
-+MODULE_DESCRIPTION("KUnit test for the kernel FIFO");
+ 
+ MODULE_AUTHOR("Gabriel Krisman Bertazi <krisman@collabora.co.uk>");
+-MODULE_DESCRIPTION("Kernel module for testing utf-8 support");
++MODULE_DESCRIPTION("KUnit tests for utf-8 support.");
+ MODULE_LICENSE("GPL");
 -- 
 2.47.0.338.g60cca15819-goog
 
