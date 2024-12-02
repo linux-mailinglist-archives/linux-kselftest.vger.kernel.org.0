@@ -1,197 +1,159 @@
-Return-Path: <linux-kselftest+bounces-22657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22658-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 100989DFB75
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 08:56:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 507099DFB78
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 08:56:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6D892B2159A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 07:55:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 118C3281D76
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 07:56:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A54D1F941C;
-	Mon,  2 Dec 2024 07:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7334B1F9EB6;
+	Mon,  2 Dec 2024 07:56:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="11577U3J"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kEQM101d"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-il1-f201.google.com (mail-il1-f201.google.com [209.85.166.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15661F8EF0
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Dec 2024 07:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4F931F8AEA
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Dec 2024 07:55:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733126155; cv=none; b=BVqvgO3ZjNszSbb1Ub6/LYOdijTAIFEJuV4nT6keMcYscT1xHxdEoRkCfHnnZ+iNVQ5s8/BfT/YTHP9LD8gXbXZ5o0VHMASoo8X0z9FETqdqW8kLst96OW+5kH42KcGjBTJpojOhotdG5nHkf76bu3my/w1RP9HibhdYL9ySQPI=
+	t=1733126161; cv=none; b=BpUQvXjDriGeIp953w80EwdsbqHwi/QKHXLtIUWbbpXpNVn0OSHxZfaBkHRG3mKArFhQCYoX7NiNF2PKGC7rw1KaPuge7WdRhR1p23bsHNaqETK+4VPyM1S40MMgHvfvT9plCgap1qAFeEslVCPcc+5TDsodi08RImUcdxBO45A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733126155; c=relaxed/simple;
-	bh=aTiHyTGNRnn9fKQksjqazR5FDe9KhkQaj8DcU2ZtoQA=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=LgD3CuNFBiZknFsRXkXXdIthsc3Aqa2L5393g9wk2BFoj+DDbxyun67tWCilbIN6RTyVyQJZMcIoQZaBKFbCeg4+F4rzbAD5OjQCad2RdmmQYN/B1b4XxqJE2lOXwq7Y1QV4s/mvg4IyUIXHN+fNvcXj3M/L066uIulAtX05fk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=11577U3J; arc=none smtp.client-ip=209.85.214.201
+	s=arc-20240116; t=1733126161; c=relaxed/simple;
+	bh=CcwBr1pdX1hbhnO2lIC3mhYlJa/UfgyYzruDoRr12f4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=hSc+cN/fzVCLltqci3rTvWxvmmfDKiUHTxz+yno6U3sdnhEW+hiZ+d7QklzpXXbH4uClShUIIWBDGB2+PFDWXDyHGv29AD73bO9MEocEupnn82UJigkV1E7UW8uqMwOfDtbuuAZmtwhu89L2RR1+QxeWSDWAofDYbCFbcdRu7BU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kEQM101d; arc=none smtp.client-ip=209.85.166.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2157b83f656so15119345ad.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 01 Dec 2024 23:55:53 -0800 (PST)
+Received: by mail-il1-f201.google.com with SMTP id e9e14a558f8ab-3a7e4bfae54so19848325ab.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Dec 2024 23:55:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1733126153; x=1733730953; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=X5I1xtc0fgXB6XkdcM9boYYvRZD6i0JLsMvJN9yMsjQ=;
-        b=11577U3JNLuD9OSrZ96SW6cxCs0+seqNRKdG3w6BGRSjt7C+tkBCPb8e9C1dYanOAc
-         iAKJPe3t6GBnuRcfGakPaB+2S0eoyobavz8z0+KkmL9SM2leyxbcC9sACHA5eeYQzG7s
-         7tWE/3uAB3Y7iIOjTqVlKwck1+RM5Jg3y1FcEOpF1/hElPQfHLnwfM2EWkcDj5890VpJ
-         2NNBhT4/3bk7lTL2rfLvvHHoPupXubWHoDj3XEmiA+PSAqEQmIgL+qCZ3GZfkJCIDWX9
-         3/0lWQrO5ejcXp82rJHESt/7q0HeClsTAFBFf21Gu+73GlB8EO9cyOBYkdKVbYvHgWxW
-         mrQQ==
+        d=google.com; s=20230601; t=1733126158; x=1733730958; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=94n4MHfZago95H2Ehby0lfepfNkVyiA7XUKBvPRgGq8=;
+        b=kEQM101dV0bvz4Mhj3ghpczFChLIvm8u7YC5oBc1I229FCC0jVf09JWt8i/85x/ktV
+         sDMgGO1DK6T5Qa7kohOpiye6+B6C6HNWpchj59cSsrrDw6UiQSDzt/2OR84A69HQAn50
+         McYnGcHVaTZ90e6IuzZH6iKRxyk4a9Mgafo9so88PAqNW3KXMHCz4N8ht1FLEUXINPHF
+         MLVdhp5G4Rnpco7uSWZ3LKud9GmMuyymP1lmuZS5eJby4K+0rKSrntlp+ld0CB6fxt+X
+         f0HIwES0OPx0Zpin/GHc/DcU9trDe+QRXpC6aj+ToBM0oHjKvpJDMRT+PbEvVjkCqxW+
+         XaTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733126153; x=1733730953;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X5I1xtc0fgXB6XkdcM9boYYvRZD6i0JLsMvJN9yMsjQ=;
-        b=TvtIdGdxhC2T5b9HfhplRna0Lv/XbkiBRGUf1Nj75sHynqJh/HYuLj8Dk7DrsOr+Ok
-         Rn6QkZRTJ4uFubcoKLTKUTSXUiks8KBNxBPaaCJK77C6qpR8fjtbnwrOXYtm/6CSyLfT
-         clMc31fzj06w+mWnvJKq4vfkaxtHm4j/KM1xNW5p6H5IwahTrLHdRQUA+vpp4NJFblj7
-         mQdTWWaWdkRZKP6K7kv5ERdjEVMacCS7JRI6d7Eo06ps8dmZgEImQeHd0nMHwuj4kQ5u
-         2//6ov1MdT2OSqYnw50BoZ/pbH+AFK8XqTUcPq2YPlbqqf1tuCL/2BGIl5JJqdbkg9G8
-         1/jw==
-X-Forwarded-Encrypted: i=1; AJvYcCVPFIwl5xBmCLfMtSB4ueCmvZqssMRH7m6aYrGlweHotE+T3a/VYGFfyMfTAQjFYMN+kHTnsZNwh8x207yXE90=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9t6eau2ZA+7vOVrBcQWTCpY85/eeXLLMHtdPlSe46U1zGZkqA
-	HW8T/1ceHLKvseWIvc7+D6X+UHSmHec3JynCKC+yZl04h2X94yreFL8kgrCRhwMP7vumAZ3Dnni
-	GJ00dD5qdMg==
-X-Google-Smtp-Source: AGHT+IGmDgW5uv9K7xfh8ZOARl6qX/eyD5maBkO485zr6D3D0+8rjVENNz5dhdZZ6GSTGc+LBUpkbW0z8hTk6A==
-X-Received: from pldt6.prod.google.com ([2002:a17:903:40c6:b0:215:7433:45b1])
+        d=1e100.net; s=20230601; t=1733126158; x=1733730958;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=94n4MHfZago95H2Ehby0lfepfNkVyiA7XUKBvPRgGq8=;
+        b=Y/h1Vvsb7sWyTascB38z86rpKeqW48BKj3S4krhuVSn49Q8ylnbVof5srys7D/1Nge
+         5TcElbX43D9X9R81MfSvH3uEHjFfR1OlQLpE07xxF2pz89N1o8951Z37577DU19FVHSO
+         s04jwVYDQrk87W6ojSMbv3U9OlwPJvN7gIq1IN+wTV3GTHXrmr2y7xXk24MjKaotDGcZ
+         LXXmFYGN6oDqkkxYyWcYnRAI2dCoCfW1ZWF6zilhT2w1R2VED/ClFaxKidnBGbaBODQj
+         rghzfnAxB++jEJCri4zN+GG+OcIr7aPG4ofEUWtFi+lyDwk57esIOH/Ew2TANwXTFanl
+         x7JA==
+X-Forwarded-Encrypted: i=1; AJvYcCVPrQUC4ihIJ5tOxBDz9oQE+LRY9B7RhaGcZyc2U3UviLNzOqNLKEzzBsQINXE69TXVPngmcgaUNnTIsGtaIU0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz71NDwROQXnZnyhX/6edBdbPmImF+RSPwkJChEm5l7KOgqV5Km
+	i5BJsm22Nh6qhILKFgwRAS8cAtQWgEZaytMSoVo95XCRms+X+11ic1tGgUJG9Ko1f06zCfMOE1v
+	tzrUyd1MnJQ==
+X-Google-Smtp-Source: AGHT+IHuIFBcyPiV7QsjE3NU9vB7h2NpBJQm7Zferw0a07aEtyytICdGZvKQpzCBq7/XmaJK0mzFFVq/BDqupQ==
+X-Received: from pgcv26.prod.google.com ([2002:a05:6a02:531a:b0:7fb:d8e8:ded3])
  (user=davidgow job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:e843:b0:215:5f17:42b2 with SMTP id d9443c01a7336-2155f1743bfmr123356895ad.43.1733126153305;
- Sun, 01 Dec 2024 23:55:53 -0800 (PST)
-Date: Mon,  2 Dec 2024 15:55:37 +0800
+ 2002:a05:6e02:194b:b0:3a7:9533:c3ac with SMTP id e9e14a558f8ab-3a7c55259cfmr190932205ab.4.1733126158041;
+ Sun, 01 Dec 2024 23:55:58 -0800 (PST)
+Date: Mon,  2 Dec 2024 15:55:38 +0800
+In-Reply-To: <20241202075545.3648096-1-davidgow@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20241202075545.3648096-1-davidgow@google.com>
 X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
-Message-ID: <20241202075545.3648096-1-davidgow@google.com>
-Subject: [PATCH v2 0/6] [PATCH 0/6] KUnit test moves / renames
+Message-ID: <20241202075545.3648096-2-davidgow@google.com>
+Subject: [PATCH v2 1/6] lib: math: Move kunit tests into tests/ subdir
 From: David Gow <davidgow@google.com>
 To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <skhan@linuxfoundation.org>, 
 	Rae Moar <rmoar@google.com>, Kees Cook <kees@kernel.org>, 
 	Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org, 
+Cc: Luis Felipe Hernandez <luis.hernandez093@gmail.com>, linux-kselftest@vger.kernel.org, 
 	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
 	Stephen Rothwell <sfr@canb.auug.org.au>, Andy Shevchenko <andy@kernel.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>
+	Brendan Higgins <brendan.higgins@linux.dev>, Nicolas Pitre <npitre@baylibre.com>, 
+	David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-As discussed in [1], the KUnit test naming scheme has changed to avoid
-name conflicts (and tab-completion woes) with the files being tested.
-These renames and moves have caused a nasty set of merge conflicts, so
-this series collates and rebases them all on top of v6.13-rc1, to be
-applied minimising any further conflicts. [2,3]
+From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
 
-Thanks to everyone whose patches appear here, and everyone who reviewed
-on the original series. I hope I didn't break them too much during the
-rebase!
+This patch is a follow-up task from a discussion stemming from point 3
+in a recent patch introducing the int_pow kunit test [1] and
+documentation regarding kunit test style and nomenclature [2].
 
-Link: https://lore.kernel.org/lkml/20240720165441.it.320-kees@kernel.org/ [=
-1]
-Link: https://lore.kernel.org/lkml/CABVgOSmbSzcGUi=3DE4piSojh3A4_0GjE0fAYbq=
-KjtYGbE9beYRQ@mail.gmail.com/ [2]
-Link: https://lore.kernel.org/linux-kselftest/CABVgOSkhD6=3D5K72oL_n35CUeMh=
-bsiQjZ6ds+EuQmJggBtVTFVg@mail.gmail.com/ [3]
+Colocate all kunit test suites in lib/math/tests/ and
+follow recommended naming convention for files <suite>_kunit.c
+and kconfig entries CONFIG_<name>_KUNIT_TEST.
 
-Bruno Sobreira Fran=C3=A7a (1):
-  lib/math: Add int_log test suite
+Link: https://lore.kernel.org/all/CABVgOS=-vh5TqHFCq_jo=ffq8v_nGgr6JsPnOZag3e6+19ysxQ@mail.gmail.com/ [1]
+Link: https://docs.kernel.org/dev-tools/kunit/style.html [2]
 
-Diego Vieira (1):
-  lib/tests/kfifo_kunit.c: add tests for the kfifo structure
+Signed-off-by: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+Acked-by: Nicolas Pitre <npitre@baylibre.com>
+[Rebased on top of v6.13-rc1, removed non-kunit tests]
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ lib/Kconfig.debug                                    | 2 +-
+ lib/math/Makefile                                    | 4 ++--
+ lib/math/tests/Makefile                              | 3 ++-
+ lib/math/{rational-test.c => tests/rational_kunit.c} | 0
+ 4 files changed, 5 insertions(+), 4 deletions(-)
+ rename lib/math/{rational-test.c => tests/rational_kunit.c} (100%)
 
-Gabriela Bittencourt (2):
-  unicode: kunit: refactor selftest to kunit tests
-  unicode: kunit: change tests filename and path
-
-Kees Cook (1):
-  lib: Move KUnit tests into tests/ subdirectory
-
-Luis Felipe Hernandez (1):
-  lib: math: Move kunit tests into tests/ subdir
-
- MAINTAINERS                                   |  19 +-
- fs/unicode/Kconfig                            |   5 +-
- fs/unicode/Makefile                           |   2 +-
- fs/unicode/tests/.kunitconfig                 |   3 +
- .../{utf8-selftest.c =3D> tests/utf8_kunit.c}   | 149 ++++++------
- fs/unicode/utf8-norm.c                        |   2 +-
- lib/Kconfig.debug                             |  27 ++-
- lib/Makefile                                  |  39 +--
- lib/math/Makefile                             |   4 +-
- lib/math/tests/Makefile                       |   4 +-
- lib/math/tests/int_log_kunit.c                |  75 ++++++
- .../rational_kunit.c}                         |   0
- lib/tests/Makefile                            |  41 ++++
- lib/{ =3D> tests}/bitfield_kunit.c              |   0
- lib/{ =3D> tests}/checksum_kunit.c              |   0
- lib/{ =3D> tests}/cmdline_kunit.c               |   0
- lib/{ =3D> tests}/cpumask_kunit.c               |   0
- lib/{ =3D> tests}/crc16_kunit.c                 |   0
- lib/{ =3D> tests}/fortify_kunit.c               |   0
- lib/{ =3D> tests}/hashtable_test.c              |   0
- lib/{ =3D> tests}/is_signed_type_kunit.c        |   0
- lib/tests/kfifo_kunit.c                       | 224 ++++++++++++++++++
- lib/{ =3D> tests}/kunit_iov_iter.c              |   0
- lib/{ =3D> tests}/list-test.c                   |   0
- lib/{ =3D> tests}/memcpy_kunit.c                |   0
- lib/{ =3D> tests}/overflow_kunit.c              |   0
- lib/{ =3D> tests}/siphash_kunit.c               |   0
- lib/{ =3D> tests}/slub_kunit.c                  |   0
- lib/{ =3D> tests}/stackinit_kunit.c             |   0
- lib/{ =3D> tests}/string_helpers_kunit.c        |   0
- lib/{ =3D> tests}/string_kunit.c                |   0
- lib/{ =3D> tests}/test_bits.c                   |   0
- lib/{ =3D> tests}/test_fprobe.c                 |   0
- lib/{ =3D> tests}/test_hash.c                   |   0
- lib/{ =3D> tests}/test_kprobes.c                |   0
- lib/{ =3D> tests}/test_linear_ranges.c          |   0
- lib/{ =3D> tests}/test_list_sort.c              |   0
- lib/{ =3D> tests}/test_sort.c                   |   0
- lib/{ =3D> tests}/usercopy_kunit.c              |   0
- lib/{ =3D> tests}/util_macros_kunit.c           |   0
- 40 files changed, 459 insertions(+), 135 deletions(-)
- create mode 100644 fs/unicode/tests/.kunitconfig
- rename fs/unicode/{utf8-selftest.c =3D> tests/utf8_kunit.c} (64%)
- create mode 100644 lib/math/tests/int_log_kunit.c
- rename lib/math/{rational-test.c =3D> tests/rational_kunit.c} (100%)
- rename lib/{ =3D> tests}/bitfield_kunit.c (100%)
- rename lib/{ =3D> tests}/checksum_kunit.c (100%)
- rename lib/{ =3D> tests}/cmdline_kunit.c (100%)
- rename lib/{ =3D> tests}/cpumask_kunit.c (100%)
- rename lib/{ =3D> tests}/crc16_kunit.c (100%)
- rename lib/{ =3D> tests}/fortify_kunit.c (100%)
- rename lib/{ =3D> tests}/hashtable_test.c (100%)
- rename lib/{ =3D> tests}/is_signed_type_kunit.c (100%)
- create mode 100644 lib/tests/kfifo_kunit.c
- rename lib/{ =3D> tests}/kunit_iov_iter.c (100%)
- rename lib/{ =3D> tests}/list-test.c (100%)
- rename lib/{ =3D> tests}/memcpy_kunit.c (100%)
- rename lib/{ =3D> tests}/overflow_kunit.c (100%)
- rename lib/{ =3D> tests}/siphash_kunit.c (100%)
- rename lib/{ =3D> tests}/slub_kunit.c (100%)
- rename lib/{ =3D> tests}/stackinit_kunit.c (100%)
- rename lib/{ =3D> tests}/string_helpers_kunit.c (100%)
- rename lib/{ =3D> tests}/string_kunit.c (100%)
- rename lib/{ =3D> tests}/test_bits.c (100%)
- rename lib/{ =3D> tests}/test_fprobe.c (100%)
- rename lib/{ =3D> tests}/test_hash.c (100%)
- rename lib/{ =3D> tests}/test_kprobes.c (100%)
- rename lib/{ =3D> tests}/test_linear_ranges.c (100%)
- rename lib/{ =3D> tests}/test_list_sort.c (100%)
- rename lib/{ =3D> tests}/test_sort.c (100%)
- rename lib/{ =3D> tests}/usercopy_kunit.c (100%)
- rename lib/{ =3D> tests}/util_macros_kunit.c (100%)
-
---=20
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index f3d723705879..7b90948666bf 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -3145,7 +3145,7 @@ config TEST_OBJPOOL
+ 
+ 	  If unsure, say N.
+ 
+-config INT_POW_TEST
++config INT_POW_KUNIT_TEST
+ 	tristate "Integer exponentiation (int_pow) test" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
+ 	default KUNIT_ALL_TESTS
+diff --git a/lib/math/Makefile b/lib/math/Makefile
+index 3ef11305f8d2..d1caba23baa0 100644
+--- a/lib/math/Makefile
++++ b/lib/math/Makefile
+@@ -5,7 +5,7 @@ obj-$(CONFIG_CORDIC)		+= cordic.o
+ obj-$(CONFIG_PRIME_NUMBERS)	+= prime_numbers.o
+ obj-$(CONFIG_RATIONAL)		+= rational.o
+ 
+-obj-$(CONFIG_INT_POW_TEST)  += tests/int_pow_kunit.o
+ obj-$(CONFIG_TEST_DIV64)	+= test_div64.o
+ obj-$(CONFIG_TEST_MULDIV64)	+= test_mul_u64_u64_div_u64.o
+-obj-$(CONFIG_RATIONAL_KUNIT_TEST) += rational-test.o
++
++obj-y += tests/
+diff --git a/lib/math/tests/Makefile b/lib/math/tests/Makefile
+index 6a169123320a..8ce8040e00c5 100644
+--- a/lib/math/tests/Makefile
++++ b/lib/math/tests/Makefile
+@@ -1,3 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ 
+-obj-$(CONFIG_INT_POW_TEST) += int_pow_kunit.o
++obj-$(CONFIG_INT_POW_KUNIT_TEST)  += int_pow_kunit.o
++obj-$(CONFIG_RATIONAL_KUNIT_TEST) += rational_kunit.o
+diff --git a/lib/math/rational-test.c b/lib/math/tests/rational_kunit.c
+similarity index 100%
+rename from lib/math/rational-test.c
+rename to lib/math/tests/rational_kunit.c
+-- 
 2.47.0.338.g60cca15819-goog
 
 
