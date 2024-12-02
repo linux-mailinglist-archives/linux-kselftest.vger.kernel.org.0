@@ -1,69 +1,70 @@
-Return-Path: <linux-kselftest+bounces-22660-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22661-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E7079DFB7C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 08:56:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3BCA9DFB80
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 08:56:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CBEB6B23182
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 07:56:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9093281D9A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 07:56:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3900A1F9F4B;
-	Mon,  2 Dec 2024 07:56:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B088D1FA142;
+	Mon,  2 Dec 2024 07:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kl/LlEgv"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VMm62Uhx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f74.google.com (mail-ot1-f74.google.com [209.85.210.74])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C501F9F45
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Dec 2024 07:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC4B1F9F67
+	for <linux-kselftest@vger.kernel.org>; Mon,  2 Dec 2024 07:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733126171; cv=none; b=SC2dRoGxSjml770JlwjPCZOA1F6bQ6iQT41efL1YEz4JtG1Q7CCcpiZ8KpaS8fIuPn7ogLJ5gpru8fdqkJ/HtRjjHsEBHemhVxXpSl9Y9XkUZm7oN80YaWVx/0C8sGnVeLk8LFryh35W1S4FQzg6KXD7OR4acBhMyp1lHba3wfw=
+	t=1733126173; cv=none; b=EZZnyAPX76r44v2umA56t+ReQUgalv4KZ7TmEc2OVJWm5Xo237v6V7vBx4E+KmVk4DWt3kBpFOil4VtW11BSGmcCbQrFc2oWfBCCuWx+o4NizYW+zfjba1LICkU17z8uSxN0MLZJCivlPyBMqJRWOoR8xcLDN495H26Ciyb2cIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733126171; c=relaxed/simple;
-	bh=PTwZG+xeW4r6TGRZabeBQgiUfqSbeBJL0Rc7EatVp7g=;
+	s=arc-20240116; t=1733126173; c=relaxed/simple;
+	bh=Jt+d7n57NGebk0I59uq9yI2X6UgA6r9S6uq4IT9yFLo=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=RwO2trrHc/3whGmTBjfSeU2+2zNObOmB3MgPU0sPp7vyY2Yz78vouFHtHRXHWE0nNPX7tethFKpyhg/MyZL5lPpW2ZjWUOkiw40OvzM2rl6i4rLJIS4snFhVoO1HHNy+8ARzf5FojIXDIJ3cqXBGmWVdFg7JWUR3CHFBqC3tQ0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kl/LlEgv; arc=none smtp.client-ip=209.85.210.74
+	 To:Cc:Content-Type; b=m2vC7/nYrMKlp+s7dyLFMyBumjnUK1SbTcZgqtwT5Rwa+fAcegueUtjlWtEU65WATiW/r5BExESWh8hBY5ngsiK4WPaRDyksq4ORQbfXOt+ub6cSvKZiYqz2+QSts75YajS+Ao+rRdzhyyTNP/mBavdUqJeOhjKsoRlRryRYhbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VMm62Uhx; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
-Received: by mail-ot1-f74.google.com with SMTP id 46e09a7af769-71d408ed723so2240036a34.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 01 Dec 2024 23:56:07 -0800 (PST)
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2154e57189cso22094405ad.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 01 Dec 2024 23:56:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1733126167; x=1733730967; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1733126171; x=1733730971; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9jM/9b5jx9DMRfGm5JMb8cVSoHQiHXfvZ3cw4a/aiN8=;
-        b=kl/LlEgvROYQQrghJv4bWwzKd9Ulk2DKld/5+dsgFmMu1ekfdSaG+j0QxX9vcFmEWj
-         6hYXGByk4vL3ARL3YTYKU26NHT36MDqxOPgHJoX6qqsQDI6ybnEK0rxqencON2MJAZHE
-         dHQSNQZvq/naULRCWowIjflDZpOjpgRkrp/8TJEZoudfVo/PILuoZTFjqfmE7wTjmDP/
-         NtYV9KWasZNYu62PM24uHgtVbLzPhd5tCpPim2jIteS58J2nNItZpFw5fpxJsuxkcRaR
-         Uw8JgtY2ipLeb+QM+Io7TlFuwtJOdbQiur9F1zGL9PKJHkAUYmLjxxWBWdyMXwY8OZEq
-         do/g==
+        bh=pDhlosYfyrccC/tr5/HdB27e44y22hAH/rYm7JsJWfI=;
+        b=VMm62Uhxcq+IpFwQ7wJ52dumUkj+/+eiFcIDi2+MRKv7mkAWcpt+VwgwgFCqf6FUhh
+         liLVuEHvCzJ9fkYKlprIZzsqdLOysyRkx5rvMYUvi5t388cL1J1ZoQly1wxmKNhnpcPj
+         mta6HQlteQgBsVpi7qhycpiJMvmB5v2CCwOTmZpo8HWJwD3Tf6F1+HoFzibQThG4uXHB
+         jBMl/FNMUe8W4kp2PTn0CHRdYpW+4h8WNiFoTQEeeJF2raGyrjRLRJu+xaGtgVS3kVD+
+         vDLMygthgngOr5POXNcBc6B/y+92u1Bpz5uLJtXXSMCtaQEGm0q7I6GjKI1cOWXNGid8
+         RUwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733126167; x=1733730967;
+        d=1e100.net; s=20230601; t=1733126171; x=1733730971;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9jM/9b5jx9DMRfGm5JMb8cVSoHQiHXfvZ3cw4a/aiN8=;
-        b=Q/ZWuL7pWGMiqzBU3k+aWSLULJdpmeoFwFGw0iplb+0BsNZB2/bqKquYAAIf8Oe41M
-         Pjvh5AFFWTrP0vFirgqriojJNjVNliJUNkTYxHZD/it//Gy41soiNuMnBm9fiOFgLL4z
-         w8uqbyMn9663xcT0OKK5HIKlQwD3pivIWSpqpXnjC3UgiEFvOs+yY08QtSP9OnP2wdCQ
-         7bXgrg0rgGPEDSImmygdLqw311Pe/mRAcplHc0kkCP5Wqn37v/6bCpBg7Euom2zfUY8c
-         EVTnT9Qpe4DlY4KgLMJCV274GWKjby+h4seWDMt1ReX4qO3UjMQYgdnxfAUwVBhOW6tT
-         QSNg==
-X-Gm-Message-State: AOJu0YzB2v+kM/uUPHYmQxx/i/6WL2G24bGYRBW015CLu0GTtz0ePX7q
-	BIzzH59hsFuDccA/1mEYkSQDzIDkIugmRczIXaxU4QQYqRX338jhufWcySL97QKFFnKVcLBzP12
-	V1Jm/kwnSaw==
-X-Google-Smtp-Source: AGHT+IELB2c5ZfJpNRGUZy9vdSpjB/iCYlrbq6NGv7iDk6gjohS448uqDwSM8kx+wKR/U7gS9yci46f4T4pKiA==
-X-Received: from pgah11.prod.google.com ([2002:a05:6a02:4e8b:b0:7fc:2b57:38f5])
+        bh=pDhlosYfyrccC/tr5/HdB27e44y22hAH/rYm7JsJWfI=;
+        b=uFsNsCilVpMDIHDjVT0mruZX8hCTLnhFsoOwCfkx8+/FVK7Qh5DYGHTWuuMjNFFUQe
+         OsR6MMFiRyrhfywkQhn/eFY8Gr6vO16+fULVYFKQuH4gO66wKBrCrUXTZ/XNDHZ3SHN0
+         BWe+bZJbVl1TQPpE880emwKope4dgXyvi8b57QKygMo5njErG6+FFONYBmgE+7ql12cv
+         UHGqORmBkUpNVxd3DYk30F4CrN7eeHg+Idco/GvKXlprLO4ZIY7x1jIsXAj0euLJPi+1
+         PU7c/StjTdIw7VYFO+2fS/j+azdUl/V6FVlWr9YlWN6RzvEDziYZXbgLlEGC4Wi0gPtY
+         toFg==
+X-Forwarded-Encrypted: i=1; AJvYcCVGjZ3Tdv8YOU4od3Sij+SiWfh7rmyqIzGx2ZiLbwp0AIgg4crNcvjUf7twuRGfNKJeUUY57wmtKXeVheuNHYI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEqx50dC16W2vShnWQSL6QXszwV6wUFLv4+EgYcpPCL7FXG2SP
+	iYHYCF/rksnQUws30njgsmCRAfMqsizgwF9qdCGY0rv2rSYB1QlJQpRcnHzWzKKO8tGbbrvdrg9
+	AXn1cjU1Z6Q==
+X-Google-Smtp-Source: AGHT+IHCrrtVK1G8Su8f/4p14UuYSnP45OLsJguyMHeQ4fuwQtsxSnbtnu3grfxkzKL1r/cnjFv9nejxcE0tMg==
+X-Received: from plge12.prod.google.com ([2002:a17:902:cf4c:b0:215:44af:311e])
  (user=davidgow job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6830:44a5:b0:71d:3e91:31b0 with SMTP id 46e09a7af769-71d65c78435mr14160469a34.4.1733126166976;
- Sun, 01 Dec 2024 23:56:06 -0800 (PST)
-Date: Mon,  2 Dec 2024 15:55:40 +0800
+ 2002:a17:902:e801:b0:20c:9936:f0ab with SMTP id d9443c01a7336-21501d57906mr314833595ad.47.1733126171412;
+ Sun, 01 Dec 2024 23:56:11 -0800 (PST)
+Date: Mon,  2 Dec 2024 15:55:41 +0800
 In-Reply-To: <20241202075545.3648096-1-davidgow@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -73,417 +74,310 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20241202075545.3648096-1-davidgow@google.com>
 X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
-Message-ID: <20241202075545.3648096-4-davidgow@google.com>
-Subject: [PATCH v2 3/6] lib: Move KUnit tests into tests/ subdirectory
+Message-ID: <20241202075545.3648096-5-davidgow@google.com>
+Subject: [PATCH v2 4/6] lib/tests/kfifo_kunit.c: add tests for the kfifo structure
 From: David Gow <davidgow@google.com>
 To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <skhan@linuxfoundation.org>, 
 	Rae Moar <rmoar@google.com>, Kees Cook <kees@kernel.org>, 
 	Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Andy Shevchenko <andy@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>, Jakub Kicinski <kuba@kernel.org>, 
-	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, David Gow <davidgow@google.com>, 
-	Vlastimil Babka <vbabka@suse.cz>
+Cc: Diego Vieira <diego.daniel.professional@gmail.com>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, Andy Shevchenko <andy@kernel.org>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-From: Kees Cook <kees@kernel.org>
+From: Diego Vieira <diego.daniel.professional@gmail.com>
 
-Following from the recent KUnit file naming discussion[1], move all
-KUnit tests in lib/ into lib/tests/.
+Add KUnit tests for the kfifo data structure.
+They test the vast majority of macros defined in the kfifo
+header (include/linux/kfifo.h).
 
-Link: https://lore.kernel.org/lkml/20240720165441.it.320-kees@kernel.org/ [1]
-Signed-off-by: Kees Cook <kees@kernel.org>
-Acked-by: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Acked-by: Jakub Kicinski <kuba@kernel.org>
-Acked-by: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+These are inspired by the existing tests for the doubly
+linked list in lib/tests/list-test.c (previously at lib/list-test.c) [1].
+
+Note that this patch depends on the patch that moves the KUnit tests on
+lib/ into lib/tests/ [2].
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/list-test.c?h=v6.11-rc6
+[2] https://lore.kernel.org/all/20240720181025.work.002-kees@kernel.org/
+
+Signed-off-by: Diego Vieira <diego.daniel.professional@gmail.com>
 Reviewed-by: David Gow <davidgow@google.com>
-Acked-by: Vlastimil Babka <vbabka@suse.cz> #slab
-[Rebased onto v6.13-rc1, moved crc16,usercopy,util-macros tests]
 Signed-off-by: David Gow <davidgow@google.com>
 ---
- MAINTAINERS                            | 19 ++++++------
- lib/Makefile                           | 39 +------------------------
- lib/tests/Makefile                     | 40 ++++++++++++++++++++++++++
- lib/{ => tests}/bitfield_kunit.c       |  0
- lib/{ => tests}/checksum_kunit.c       |  0
- lib/{ => tests}/cmdline_kunit.c        |  0
- lib/{ => tests}/cpumask_kunit.c        |  0
- lib/{ => tests}/crc16_kunit.c          |  0
- lib/{ => tests}/fortify_kunit.c        |  0
- lib/{ => tests}/hashtable_test.c       |  0
- lib/{ => tests}/is_signed_type_kunit.c |  0
- lib/{ => tests}/kunit_iov_iter.c       |  0
- lib/{ => tests}/list-test.c            |  0
- lib/{ => tests}/memcpy_kunit.c         |  0
- lib/{ => tests}/overflow_kunit.c       |  0
- lib/{ => tests}/siphash_kunit.c        |  0
- lib/{ => tests}/slub_kunit.c           |  0
- lib/{ => tests}/stackinit_kunit.c      |  0
- lib/{ => tests}/string_helpers_kunit.c |  0
- lib/{ => tests}/string_kunit.c         |  0
- lib/{ => tests}/test_bits.c            |  0
- lib/{ => tests}/test_fprobe.c          |  0
- lib/{ => tests}/test_hash.c            |  0
- lib/{ => tests}/test_kprobes.c         |  0
- lib/{ => tests}/test_linear_ranges.c   |  0
- lib/{ => tests}/test_list_sort.c       |  0
- lib/{ => tests}/test_sort.c            |  0
- lib/{ => tests}/usercopy_kunit.c       |  0
- lib/{ => tests}/util_macros_kunit.c    |  0
- 29 files changed, 51 insertions(+), 47 deletions(-)
- rename lib/{ => tests}/bitfield_kunit.c (100%)
- rename lib/{ => tests}/checksum_kunit.c (100%)
- rename lib/{ => tests}/cmdline_kunit.c (100%)
- rename lib/{ => tests}/cpumask_kunit.c (100%)
- rename lib/{ => tests}/crc16_kunit.c (100%)
- rename lib/{ => tests}/fortify_kunit.c (100%)
- rename lib/{ => tests}/hashtable_test.c (100%)
- rename lib/{ => tests}/is_signed_type_kunit.c (100%)
- rename lib/{ => tests}/kunit_iov_iter.c (100%)
- rename lib/{ => tests}/list-test.c (100%)
- rename lib/{ => tests}/memcpy_kunit.c (100%)
- rename lib/{ => tests}/overflow_kunit.c (100%)
- rename lib/{ => tests}/siphash_kunit.c (100%)
- rename lib/{ => tests}/slub_kunit.c (100%)
- rename lib/{ => tests}/stackinit_kunit.c (100%)
- rename lib/{ => tests}/string_helpers_kunit.c (100%)
- rename lib/{ => tests}/string_kunit.c (100%)
- rename lib/{ => tests}/test_bits.c (100%)
- rename lib/{ => tests}/test_fprobe.c (100%)
- rename lib/{ => tests}/test_hash.c (100%)
- rename lib/{ => tests}/test_kprobes.c (100%)
- rename lib/{ => tests}/test_linear_ranges.c (100%)
- rename lib/{ => tests}/test_list_sort.c (100%)
- rename lib/{ => tests}/test_sort.c (100%)
- rename lib/{ => tests}/usercopy_kunit.c (100%)
- rename lib/{ => tests}/util_macros_kunit.c (100%)
+ lib/Kconfig.debug       |  14 +++
+ lib/tests/Makefile      |   1 +
+ lib/tests/kfifo_kunit.c | 224 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 239 insertions(+)
+ create mode 100644 lib/tests/kfifo_kunit.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1e930c7a58b1..9c35902ffccf 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3966,10 +3966,10 @@ F:	include/vdso/bits.h
- F:	lib/bitmap-str.c
- F:	lib/bitmap.c
- F:	lib/cpumask.c
--F:	lib/cpumask_kunit.c
- F:	lib/find_bit.c
- F:	lib/find_bit_benchmark.c
- F:	lib/test_bitmap.c
-+F:	lib/tests/cpumask_kunit.c
- F:	tools/include/linux/bitfield.h
- F:	tools/include/linux/bitmap.h
- F:	tools/include/linux/bits.h
-@@ -8972,9 +8972,10 @@ L:	linux-hardening@vger.kernel.org
- S:	Supported
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
- F:	include/linux/fortify-string.h
--F:	lib/fortify_kunit.c
--F:	lib/memcpy_kunit.c
- F:	lib/test_fortify/*
-+F:	lib/tests/fortify_kunit.c
-+F:	lib/tests/memcpy_kunit.c
-+F:	scripts/test_fortify.sh
- K:	\bunsafe_memcpy\b
- K:	\b__NO_FORTIFY\b
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 8cc8bca6386d..960c4534dab7 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2681,6 +2681,20 @@ config SYSCTL_KUNIT_TEST
  
-@@ -9655,9 +9656,9 @@ F:	include/linux/string.h
- F:	include/linux/string_choices.h
- F:	include/linux/string_helpers.h
- F:	lib/string.c
--F:	lib/string_kunit.c
- F:	lib/string_helpers.c
--F:	lib/string_helpers_kunit.c
-+F:	lib/tests/string_helpers_kunit.c
-+F:	lib/tests/string_kunit.c
- F:	scripts/coccinelle/api/string_choices.cocci
+ 	  If unsure, say N.
  
- GENERIC UIO DRIVER FOR PCI DEVICES
-@@ -12868,7 +12869,7 @@ F:	Documentation/trace/kprobes.rst
- F:	include/asm-generic/kprobes.h
- F:	include/linux/kprobes.h
- F:	kernel/kprobes.c
--F:	lib/test_kprobes.c
-+F:	lib/tests/test_kprobes.c
- F:	samples/kprobes
- 
- KS0108 LCD CONTROLLER DRIVER
-@@ -13198,7 +13199,7 @@ M:	Mark Brown <broonie@kernel.org>
- R:	Matti Vaittinen <mazziesaccount@gmail.com>
- F:	include/linux/linear_range.h
- F:	lib/linear_ranges.c
--F:	lib/test_linear_ranges.c
-+F:	lib/tests/test_linear_ranges.c
- 
- LINUX FOR POWER MACINTOSH
- L:	linuxppc-dev@lists.ozlabs.org
-@@ -13326,7 +13327,7 @@ M:	David Gow <davidgow@google.com>
- L:	linux-kselftest@vger.kernel.org
- L:	kunit-dev@googlegroups.com
- S:	Maintained
--F:	lib/list-test.c
-+F:	lib/tests/list-test.c
- 
- LITEX PLATFORM
- M:	Karol Gugala <kgugala@antmicro.com>
-@@ -21490,7 +21491,7 @@ M:	Jason A. Donenfeld <Jason@zx2c4.com>
- S:	Maintained
- F:	include/linux/siphash.h
- F:	lib/siphash.c
--F:	lib/siphash_kunit.c
-+F:	lib/tests/siphash_kunit.c
- 
- SIS 190 ETHERNET DRIVER
- M:	Francois Romieu <romieu@fr.zoreil.com>
-diff --git a/lib/Makefile b/lib/Makefile
-index a8155c972f02..3fa31c4c1e57 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -52,9 +52,7 @@ obj-y += bcd.o sort.o parser.o debug_locks.o random32.o \
- 	 percpu-refcount.o rhashtable.o base64.o \
- 	 once.o refcount.o rcuref.o usercopy.o errseq.o bucket_locks.o \
- 	 generic-radix-tree.o bitmap-str.o
--obj-$(CONFIG_STRING_KUNIT_TEST) += string_kunit.o
- obj-y += string_helpers.o
--obj-$(CONFIG_STRING_HELPERS_KUNIT_TEST) += string_helpers_kunit.o
- obj-y += hexdump.o
- obj-$(CONFIG_TEST_HEXDUMP) += test_hexdump.o
- obj-y += kstrtox.o
-@@ -65,22 +63,17 @@ obj-$(CONFIG_TEST_DHRY) += test_dhry.o
- obj-$(CONFIG_TEST_FIRMWARE) += test_firmware.o
- obj-$(CONFIG_TEST_BITOPS) += test_bitops.o
- CFLAGS_test_bitops.o += -Werror
--obj-$(CONFIG_CPUMASK_KUNIT_TEST) += cpumask_kunit.o
- obj-$(CONFIG_TEST_SYSCTL) += test_sysctl.o
--obj-$(CONFIG_TEST_IOV_ITER) += kunit_iov_iter.o
--obj-$(CONFIG_HASH_KUNIT_TEST) += test_hash.o
- obj-$(CONFIG_TEST_IDA) += test_ida.o
- obj-$(CONFIG_TEST_UBSAN) += test_ubsan.o
- CFLAGS_test_ubsan.o += $(call cc-disable-warning, vla)
- CFLAGS_test_ubsan.o += $(call cc-disable-warning, unused-but-set-variable)
- UBSAN_SANITIZE_test_ubsan.o := y
- obj-$(CONFIG_TEST_KSTRTOX) += test-kstrtox.o
--obj-$(CONFIG_TEST_LIST_SORT) += test_list_sort.o
- obj-$(CONFIG_TEST_MIN_HEAP) += test_min_heap.o
- obj-$(CONFIG_TEST_LKM) += test_module.o
- obj-$(CONFIG_TEST_VMALLOC) += test_vmalloc.o
- obj-$(CONFIG_TEST_RHASHTABLE) += test_rhashtable.o
--obj-$(CONFIG_TEST_SORT) += test_sort.o
- obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_keys.o
- obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_key_base.o
- obj-$(CONFIG_TEST_DYNAMIC_DEBUG) += test_dynamic_debug.o
-@@ -98,7 +91,6 @@ obj-$(CONFIG_TEST_XARRAY) += test_xarray.o
- obj-$(CONFIG_TEST_MAPLE_TREE) += test_maple_tree.o
- obj-$(CONFIG_TEST_PARMAN) += test_parman.o
- obj-$(CONFIG_TEST_KMOD) += test_kmod.o
--obj-$(CONFIG_TEST_RUNTIME) += tests/
- obj-$(CONFIG_TEST_DEBUG_VIRTUAL) += test_debug_virtual.o
- obj-$(CONFIG_TEST_MEMCAT_P) += test_memcat_p.o
- obj-$(CONFIG_TEST_OBJAGG) += test_objagg.o
-@@ -107,10 +99,7 @@ obj-$(CONFIG_TEST_MEMINIT) += test_meminit.o
- obj-$(CONFIG_TEST_LOCKUP) += test_lockup.o
- obj-$(CONFIG_TEST_HMM) += test_hmm.o
- obj-$(CONFIG_TEST_FREE_PAGES) += test_free_pages.o
--obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
- obj-$(CONFIG_TEST_REF_TRACKER) += test_ref_tracker.o
--CFLAGS_test_fprobe.o += $(CC_FLAGS_FTRACE)
--obj-$(CONFIG_FPROBE_SANITY_TEST) += test_fprobe.o
- obj-$(CONFIG_TEST_OBJPOOL) += test_objpool.o
- 
- obj-$(CONFIG_TEST_FPU) += test_fpu.o
-@@ -132,7 +121,7 @@ endif
- obj-$(CONFIG_DEBUG_INFO_REDUCED) += debug_info.o
- CFLAGS_debug_info.o += $(call cc-option, -femit-struct-debug-detailed=any)
- 
--obj-y += math/ crypto/
-+obj-y += math/ crypto/ tests/
- 
- obj-$(CONFIG_GENERIC_IOMAP) += iomap.o
- obj-$(CONFIG_HAS_IOMEM) += iomap_copy.o devres.o
-@@ -370,32 +359,6 @@ obj-$(CONFIG_OBJAGG) += objagg.o
- # pldmfw library
- obj-$(CONFIG_PLDMFW) += pldmfw/
- 
--# KUnit tests
--CFLAGS_bitfield_kunit.o := $(DISABLE_STRUCTLEAK_PLUGIN)
--obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
--obj-$(CONFIG_CHECKSUM_KUNIT) += checksum_kunit.o
--obj-$(CONFIG_UTIL_MACROS_KUNIT) += util_macros_kunit.o
--obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
--obj-$(CONFIG_HASHTABLE_KUNIT_TEST) += hashtable_test.o
--obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
--obj-$(CONFIG_BITS_TEST) += test_bits.o
--obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
--obj-$(CONFIG_SLUB_KUNIT_TEST) += slub_kunit.o
--obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
--obj-$(CONFIG_IS_SIGNED_TYPE_KUNIT_TEST) += is_signed_type_kunit.o
--CFLAGS_overflow_kunit.o = $(call cc-disable-warning, tautological-constant-out-of-range-compare)
--obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
--CFLAGS_stackinit_kunit.o += $(call cc-disable-warning, switch-unreachable)
--obj-$(CONFIG_STACKINIT_KUNIT_TEST) += stackinit_kunit.o
--CFLAGS_fortify_kunit.o += $(call cc-disable-warning, unsequenced)
--CFLAGS_fortify_kunit.o += $(call cc-disable-warning, stringop-overread)
--CFLAGS_fortify_kunit.o += $(call cc-disable-warning, stringop-truncation)
--CFLAGS_fortify_kunit.o += $(DISABLE_STRUCTLEAK_PLUGIN)
--obj-$(CONFIG_FORTIFY_KUNIT_TEST) += fortify_kunit.o
--obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
--obj-$(CONFIG_USERCOPY_KUNIT_TEST) += usercopy_kunit.o
--obj-$(CONFIG_CRC16_KUNIT_TEST) += crc16_kunit.o
--
- obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
- 
- obj-$(CONFIG_FIRMWARE_TABLE) += fw_table.o
++config KFIFO_KUNIT_TEST
++	tristate "KUnit Test for the generic kernel FIFO implementation" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  This builds the generic FIFO implementation KUnit test suite.
++	  It tests that the API and basic functionality of the kfifo type
++	  and associated macros.
++
++	  For more information on KUnit and unit tests in general please refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit/.
++
++	  If unsure, say N.
++
+ config LIST_KUNIT_TEST
+ 	tristate "KUnit Test for Kernel Linked-list structures" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
 diff --git a/lib/tests/Makefile b/lib/tests/Makefile
-index 8e4f42cb9c54..03bf5a884984 100644
+index 03bf5a884984..3cda13c77551 100644
 --- a/lib/tests/Makefile
 +++ b/lib/tests/Makefile
-@@ -1 +1,41 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Makefile for tests of kernel library functions.
+@@ -23,6 +23,7 @@ obj-$(CONFIG_TEST_IOV_ITER) += kunit_iov_iter.o
+ obj-$(CONFIG_IS_SIGNED_TYPE_KUNIT_TEST) += is_signed_type_kunit.o
+ obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
+ obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
++obj-$(CONFIG_KFIFO_KUNIT_TEST) += kfifo_kunit.o
+ obj-$(CONFIG_TEST_LIST_SORT) += test_list_sort.o
+ obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
+ obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
+diff --git a/lib/tests/kfifo_kunit.c b/lib/tests/kfifo_kunit.c
+new file mode 100644
+index 000000000000..a85eedc3195a
+--- /dev/null
++++ b/lib/tests/kfifo_kunit.c
+@@ -0,0 +1,224 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit test for the generic kernel FIFO implementation.
++ *
++ * Copyright (C) 2024 Diego Vieira <diego.daniel.professional@gmail.com>
++ */
++#include <kunit/test.h>
 +
-+# KUnit tests
-+CFLAGS_bitfield_kunit.o := $(DISABLE_STRUCTLEAK_PLUGIN)
-+obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
-+obj-$(CONFIG_BITS_TEST) += test_bits.o
-+obj-$(CONFIG_CHECKSUM_KUNIT) += checksum_kunit.o
-+obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
-+obj-$(CONFIG_CPUMASK_KUNIT_TEST) += cpumask_kunit.o
-+obj-$(CONFIG_CRC16_KUNIT_TEST) += crc16_kunit.o
-+CFLAGS_fortify_kunit.o += $(call cc-disable-warning, unsequenced)
-+CFLAGS_fortify_kunit.o += $(call cc-disable-warning, stringop-overread)
-+CFLAGS_fortify_kunit.o += $(call cc-disable-warning, stringop-truncation)
-+CFLAGS_fortify_kunit.o += $(DISABLE_STRUCTLEAK_PLUGIN)
-+obj-$(CONFIG_FORTIFY_KUNIT_TEST) += fortify_kunit.o
-+CFLAGS_test_fprobe.o += $(CC_FLAGS_FTRACE)
-+obj-$(CONFIG_FPROBE_SANITY_TEST) += test_fprobe.o
-+obj-$(CONFIG_HASHTABLE_KUNIT_TEST) += hashtable_test.o
-+obj-$(CONFIG_HASH_KUNIT_TEST) += test_hash.o
-+obj-$(CONFIG_TEST_IOV_ITER) += kunit_iov_iter.o
-+obj-$(CONFIG_IS_SIGNED_TYPE_KUNIT_TEST) += is_signed_type_kunit.o
-+obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
-+obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
-+obj-$(CONFIG_TEST_LIST_SORT) += test_list_sort.o
-+obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
-+obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
-+CFLAGS_overflow_kunit.o = $(call cc-disable-warning, tautological-constant-out-of-range-compare)
-+obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
-+obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
-+obj-$(CONFIG_SLUB_KUNIT_TEST) += slub_kunit.o
-+obj-$(CONFIG_TEST_SORT) += test_sort.o
-+CFLAGS_stackinit_kunit.o += $(call cc-disable-warning, switch-unreachable)
-+obj-$(CONFIG_STACKINIT_KUNIT_TEST) += stackinit_kunit.o
-+obj-$(CONFIG_STRING_KUNIT_TEST) += string_kunit.o
-+obj-$(CONFIG_STRING_HELPERS_KUNIT_TEST) += string_helpers_kunit.o
-+obj-$(CONFIG_USERCOPY_KUNIT_TEST) += usercopy_kunit.o
-+obj-$(CONFIG_UTIL_MACROS_KUNIT) += util_macros_kunit.o
++#include <linux/kfifo.h>
 +
- obj-$(CONFIG_TEST_RUNTIME_MODULE)		+= module/
-diff --git a/lib/bitfield_kunit.c b/lib/tests/bitfield_kunit.c
-similarity index 100%
-rename from lib/bitfield_kunit.c
-rename to lib/tests/bitfield_kunit.c
-diff --git a/lib/checksum_kunit.c b/lib/tests/checksum_kunit.c
-similarity index 100%
-rename from lib/checksum_kunit.c
-rename to lib/tests/checksum_kunit.c
-diff --git a/lib/cmdline_kunit.c b/lib/tests/cmdline_kunit.c
-similarity index 100%
-rename from lib/cmdline_kunit.c
-rename to lib/tests/cmdline_kunit.c
-diff --git a/lib/cpumask_kunit.c b/lib/tests/cpumask_kunit.c
-similarity index 100%
-rename from lib/cpumask_kunit.c
-rename to lib/tests/cpumask_kunit.c
-diff --git a/lib/crc16_kunit.c b/lib/tests/crc16_kunit.c
-similarity index 100%
-rename from lib/crc16_kunit.c
-rename to lib/tests/crc16_kunit.c
-diff --git a/lib/fortify_kunit.c b/lib/tests/fortify_kunit.c
-similarity index 100%
-rename from lib/fortify_kunit.c
-rename to lib/tests/fortify_kunit.c
-diff --git a/lib/hashtable_test.c b/lib/tests/hashtable_test.c
-similarity index 100%
-rename from lib/hashtable_test.c
-rename to lib/tests/hashtable_test.c
-diff --git a/lib/is_signed_type_kunit.c b/lib/tests/is_signed_type_kunit.c
-similarity index 100%
-rename from lib/is_signed_type_kunit.c
-rename to lib/tests/is_signed_type_kunit.c
-diff --git a/lib/kunit_iov_iter.c b/lib/tests/kunit_iov_iter.c
-similarity index 100%
-rename from lib/kunit_iov_iter.c
-rename to lib/tests/kunit_iov_iter.c
-diff --git a/lib/list-test.c b/lib/tests/list-test.c
-similarity index 100%
-rename from lib/list-test.c
-rename to lib/tests/list-test.c
-diff --git a/lib/memcpy_kunit.c b/lib/tests/memcpy_kunit.c
-similarity index 100%
-rename from lib/memcpy_kunit.c
-rename to lib/tests/memcpy_kunit.c
-diff --git a/lib/overflow_kunit.c b/lib/tests/overflow_kunit.c
-similarity index 100%
-rename from lib/overflow_kunit.c
-rename to lib/tests/overflow_kunit.c
-diff --git a/lib/siphash_kunit.c b/lib/tests/siphash_kunit.c
-similarity index 100%
-rename from lib/siphash_kunit.c
-rename to lib/tests/siphash_kunit.c
-diff --git a/lib/slub_kunit.c b/lib/tests/slub_kunit.c
-similarity index 100%
-rename from lib/slub_kunit.c
-rename to lib/tests/slub_kunit.c
-diff --git a/lib/stackinit_kunit.c b/lib/tests/stackinit_kunit.c
-similarity index 100%
-rename from lib/stackinit_kunit.c
-rename to lib/tests/stackinit_kunit.c
-diff --git a/lib/string_helpers_kunit.c b/lib/tests/string_helpers_kunit.c
-similarity index 100%
-rename from lib/string_helpers_kunit.c
-rename to lib/tests/string_helpers_kunit.c
-diff --git a/lib/string_kunit.c b/lib/tests/string_kunit.c
-similarity index 100%
-rename from lib/string_kunit.c
-rename to lib/tests/string_kunit.c
-diff --git a/lib/test_bits.c b/lib/tests/test_bits.c
-similarity index 100%
-rename from lib/test_bits.c
-rename to lib/tests/test_bits.c
-diff --git a/lib/test_fprobe.c b/lib/tests/test_fprobe.c
-similarity index 100%
-rename from lib/test_fprobe.c
-rename to lib/tests/test_fprobe.c
-diff --git a/lib/test_hash.c b/lib/tests/test_hash.c
-similarity index 100%
-rename from lib/test_hash.c
-rename to lib/tests/test_hash.c
-diff --git a/lib/test_kprobes.c b/lib/tests/test_kprobes.c
-similarity index 100%
-rename from lib/test_kprobes.c
-rename to lib/tests/test_kprobes.c
-diff --git a/lib/test_linear_ranges.c b/lib/tests/test_linear_ranges.c
-similarity index 100%
-rename from lib/test_linear_ranges.c
-rename to lib/tests/test_linear_ranges.c
-diff --git a/lib/test_list_sort.c b/lib/tests/test_list_sort.c
-similarity index 100%
-rename from lib/test_list_sort.c
-rename to lib/tests/test_list_sort.c
-diff --git a/lib/test_sort.c b/lib/tests/test_sort.c
-similarity index 100%
-rename from lib/test_sort.c
-rename to lib/tests/test_sort.c
-diff --git a/lib/usercopy_kunit.c b/lib/tests/usercopy_kunit.c
-similarity index 100%
-rename from lib/usercopy_kunit.c
-rename to lib/tests/usercopy_kunit.c
-diff --git a/lib/util_macros_kunit.c b/lib/tests/util_macros_kunit.c
-similarity index 100%
-rename from lib/util_macros_kunit.c
-rename to lib/tests/util_macros_kunit.c
++#define KFIFO_SIZE 32
++#define N_ELEMENTS 5
++
++static void kfifo_test_reset_should_clear_the_fifo(struct kunit *test)
++{
++	DEFINE_KFIFO(my_fifo, u8, KFIFO_SIZE);
++
++	kfifo_put(&my_fifo, 1);
++	kfifo_put(&my_fifo, 2);
++	kfifo_put(&my_fifo, 3);
++	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), 3);
++
++	kfifo_reset(&my_fifo);
++
++	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), 0);
++	KUNIT_EXPECT_TRUE(test, kfifo_is_empty(&my_fifo));
++}
++
++static void kfifo_test_define_should_define_an_empty_fifo(struct kunit *test)
++{
++	DEFINE_KFIFO(my_fifo, u8, KFIFO_SIZE);
++
++	KUNIT_EXPECT_TRUE(test, kfifo_initialized(&my_fifo));
++	KUNIT_EXPECT_TRUE(test, kfifo_is_empty(&my_fifo));
++	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), 0);
++}
++
++static void kfifo_test_len_should_ret_n_of_stored_elements(struct kunit *test)
++{
++	u8 buffer1[N_ELEMENTS];
++
++	for (int i = 0; i < N_ELEMENTS; i++)
++		buffer1[i] = i + 1;
++
++	DEFINE_KFIFO(my_fifo, u8, KFIFO_SIZE);
++
++	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), 0);
++
++	kfifo_in(&my_fifo, buffer1, N_ELEMENTS);
++	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), N_ELEMENTS);
++
++	kfifo_in(&my_fifo, buffer1, N_ELEMENTS);
++	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), N_ELEMENTS * 2);
++
++	kfifo_reset(&my_fifo);
++	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), 0);
++}
++
++static void kfifo_test_put_should_insert_and_get_should_pop(struct kunit *test)
++{
++	u8 out_data = 0;
++	int processed_elements;
++	u8 elements[] = { 3, 5, 11 };
++
++	DEFINE_KFIFO(my_fifo, u8, KFIFO_SIZE);
++
++	// If the fifo is empty, get returns 0
++	processed_elements = kfifo_get(&my_fifo, &out_data);
++	KUNIT_EXPECT_EQ(test, processed_elements, 0);
++	KUNIT_EXPECT_EQ(test, out_data, 0);
++
++	for (int i = 0; i < 3; i++)
++		kfifo_put(&my_fifo, elements[i]);
++
++	for (int i = 0; i < 3; i++) {
++		processed_elements = kfifo_get(&my_fifo, &out_data);
++		KUNIT_EXPECT_EQ(test, processed_elements, 1);
++		KUNIT_EXPECT_EQ(test, out_data, elements[i]);
++	}
++}
++
++static void kfifo_test_in_should_insert_multiple_elements(struct kunit *test)
++{
++	u8 in_buffer[] = { 11, 25, 65 };
++	u8 out_data;
++	int processed_elements;
++
++	DEFINE_KFIFO(my_fifo, u8, KFIFO_SIZE);
++
++	kfifo_in(&my_fifo, in_buffer, 3);
++
++	for (int i = 0; i < 3; i++) {
++		processed_elements = kfifo_get(&my_fifo, &out_data);
++		KUNIT_EXPECT_EQ(test, processed_elements, 1);
++		KUNIT_EXPECT_EQ(test, out_data, in_buffer[i]);
++	}
++}
++
++static void kfifo_test_out_should_pop_multiple_elements(struct kunit *test)
++{
++	u8 in_buffer[] = { 11, 25, 65 };
++	u8 out_buffer[3];
++	int copied_elements;
++
++	DEFINE_KFIFO(my_fifo, u8, KFIFO_SIZE);
++
++	for (int i = 0; i < 3; i++)
++		kfifo_put(&my_fifo, in_buffer[i]);
++
++	copied_elements = kfifo_out(&my_fifo, out_buffer, 3);
++	KUNIT_EXPECT_EQ(test, copied_elements, 3);
++
++	for (int i = 0; i < 3; i++)
++		KUNIT_EXPECT_EQ(test, out_buffer[i], in_buffer[i]);
++	KUNIT_EXPECT_TRUE(test, kfifo_is_empty(&my_fifo));
++}
++
++static void kfifo_test_dec_init_should_define_an_empty_fifo(struct kunit *test)
++{
++	DECLARE_KFIFO(my_fifo, u8, KFIFO_SIZE);
++
++	INIT_KFIFO(my_fifo);
++
++	// my_fifo is a struct with an inplace buffer
++	KUNIT_EXPECT_FALSE(test, __is_kfifo_ptr(&my_fifo));
++
++	KUNIT_EXPECT_TRUE(test, kfifo_initialized(&my_fifo));
++}
++
++static void kfifo_test_define_should_equal_declare_init(struct kunit *test)
++{
++	// declare a variable my_fifo of type struct kfifo of u8
++	DECLARE_KFIFO(my_fifo1, u8, KFIFO_SIZE);
++	// initialize the my_fifo variable
++	INIT_KFIFO(my_fifo1);
++
++	// DEFINE_KFIFO declares the variable with the initial value
++	// essentially the same as calling DECLARE_KFIFO and INIT_KFIFO
++	DEFINE_KFIFO(my_fifo2, u8, KFIFO_SIZE);
++
++	// my_fifo1 and my_fifo2 have the same size
++	KUNIT_EXPECT_EQ(test, sizeof(my_fifo1), sizeof(my_fifo2));
++	KUNIT_EXPECT_EQ(test, kfifo_initialized(&my_fifo1),
++			kfifo_initialized(&my_fifo2));
++	KUNIT_EXPECT_EQ(test, kfifo_is_empty(&my_fifo1),
++			kfifo_is_empty(&my_fifo2));
++}
++
++static void kfifo_test_alloc_should_initiliaze_a_ptr_fifo(struct kunit *test)
++{
++	int ret;
++	DECLARE_KFIFO_PTR(my_fifo, u8);
++
++	INIT_KFIFO(my_fifo);
++
++	// kfifo_initialized returns false signaling the buffer pointer is NULL
++	KUNIT_EXPECT_FALSE(test, kfifo_initialized(&my_fifo));
++
++	// kfifo_alloc allocates the buffer
++	ret = kfifo_alloc(&my_fifo, KFIFO_SIZE, GFP_KERNEL);
++	KUNIT_EXPECT_EQ_MSG(test, ret, 0, "Memory allocation should succeed");
++	KUNIT_EXPECT_TRUE(test, kfifo_initialized(&my_fifo));
++
++	// kfifo_free frees the buffer
++	kfifo_free(&my_fifo);
++}
++
++static void kfifo_test_peek_should_not_remove_elements(struct kunit *test)
++{
++	u8 out_data;
++	int processed_elements;
++
++	DEFINE_KFIFO(my_fifo, u8, KFIFO_SIZE);
++
++	// If the fifo is empty, peek returns 0
++	processed_elements = kfifo_peek(&my_fifo, &out_data);
++	KUNIT_EXPECT_EQ(test, processed_elements, 0);
++
++	kfifo_put(&my_fifo, 3);
++	kfifo_put(&my_fifo, 5);
++	kfifo_put(&my_fifo, 11);
++
++	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), 3);
++
++	processed_elements = kfifo_peek(&my_fifo, &out_data);
++	KUNIT_EXPECT_EQ(test, processed_elements, 1);
++	KUNIT_EXPECT_EQ(test, out_data, 3);
++
++	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), 3);
++
++	// Using peek doesn't remove the element
++	// so the read element and the fifo length
++	// remains the same
++	processed_elements = kfifo_peek(&my_fifo, &out_data);
++	KUNIT_EXPECT_EQ(test, processed_elements, 1);
++	KUNIT_EXPECT_EQ(test, out_data, 3);
++
++	KUNIT_EXPECT_EQ(test, kfifo_len(&my_fifo), 3);
++}
++
++static struct kunit_case kfifo_test_cases[] = {
++	KUNIT_CASE(kfifo_test_reset_should_clear_the_fifo),
++	KUNIT_CASE(kfifo_test_define_should_define_an_empty_fifo),
++	KUNIT_CASE(kfifo_test_len_should_ret_n_of_stored_elements),
++	KUNIT_CASE(kfifo_test_put_should_insert_and_get_should_pop),
++	KUNIT_CASE(kfifo_test_in_should_insert_multiple_elements),
++	KUNIT_CASE(kfifo_test_out_should_pop_multiple_elements),
++	KUNIT_CASE(kfifo_test_dec_init_should_define_an_empty_fifo),
++	KUNIT_CASE(kfifo_test_define_should_equal_declare_init),
++	KUNIT_CASE(kfifo_test_alloc_should_initiliaze_a_ptr_fifo),
++	KUNIT_CASE(kfifo_test_peek_should_not_remove_elements),
++	{},
++};
++
++static struct kunit_suite kfifo_test_module = {
++	.name = "kfifo",
++	.test_cases = kfifo_test_cases,
++};
++
++kunit_test_suites(&kfifo_test_module);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Diego Vieira <diego.daniel.professional@gmail.com>");
++MODULE_DESCRIPTION("KUnit test for the kernel FIFO");
 -- 
 2.47.0.338.g60cca15819-goog
 
