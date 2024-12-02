@@ -1,134 +1,150 @@
-Return-Path: <linux-kselftest+bounces-22671-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22677-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38DDF9E02F7
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 14:12:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B5D39E04E1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 15:28:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 594D6B221E1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 11:57:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C6702B61998
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 13:56:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E52D41FE463;
-	Mon,  2 Dec 2024 11:57:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="iMTR94ZQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92D6C2036FE;
+	Mon,  2 Dec 2024 13:56:01 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ACBB1FE44D;
-	Mon,  2 Dec 2024 11:57:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F226A202F95;
+	Mon,  2 Dec 2024 13:55:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733140664; cv=none; b=nW2J3ro4AArrPsz4iNWKMB2Z8cgvtfbI74SnWe4+XlHmyLRiy21MCW3fIPXDQ8kwVRYftg8aw1gXkAdDkRqyp+NHGE13BnwP/Ur6fLfnbV+nWHAimrBVwwvKfGgiAEQ2500CpEDakNkRHwVp6ChIqQ/qke6PlHd66QD8YfHqfh4=
+	t=1733147761; cv=none; b=ZMUHdiMwl+5oat33mL3RsiYEFfWPfb2hjU2z9YHQtn1xYbeXiQCDdM+qPTPOm1AjlsSep4rErJ5eK3bdpK+FZ7T0wdb/iPL4sFUpXZfZGoJPAFqXk4JiZC6nXBX17ZS2J/NQ0L5swR14Yqwn0c/Ne8Tr8vLR+GwNVm0lD4IeSeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733140664; c=relaxed/simple;
-	bh=Qp54G1wDVlff83pTPgjxhEijVs1GRnWXj9GeuRHDTV0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ALn9hhBQjlDCoKUvS30CS/FCrpMpnDhYJPeg+9tcpWVjsvzBTlViwJsBc2iZ3AMe67RB61KGP6EuDjBc01u6IPjzNkhOzCmA6BhwH/Rs5D9I9diaOHzJHpM9hJmE2YQRhgBqNPTTMUi4c5YKQ4BC+Ld0apdwN7jzp8Gl1MqdxFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=iMTR94ZQ; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1tI4dI-008GeO-0E; Mon, 02 Dec 2024 12:30:28 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=N4MXPX46bSsTiOsfmmAde5fJTpY4yHbLGYMqDMKBx3k=; b=iMTR94ZQetOTqTZUdkPxJlPB8j
-	5IZ6+mI8Gm4riCySLodBQZ69uaqupzIq4z/sCQh/tCS4C3ru4A4DQOLewIIeE1kPTEZ6vh8nrHIDT
-	JjCi3fycfPdhzeOBd6lZDEKxWXkUMk9mEdHsTdut8yuEKuHOIjQoA9YnRczjZkY8HowSg11qrUo9P
-	zDeVoYzps7hTG2m+q8mRbKIk24cEGKZubqcbn4E8qmmPhkLp3Js1l4Qn/njLPG2RQlkrP480fmw85
-	yfNMEN+n7GZ2oSgzZTEJKq5/WvxW4ORNjCBtiLPn+Ch6SN3FVw8ms74otQGslwWp2dkXmkSGoiyGu
-	eMmyrBTA==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1tI4dH-0005dz-Bz; Mon, 02 Dec 2024 12:30:27 +0100
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1tI4d3-007H5a-5a; Mon, 02 Dec 2024 12:30:13 +0100
-From: Michal Luczaj <mhal@rbox.co>
-Date: Mon, 02 Dec 2024 12:29:23 +0100
-Subject: [PATCH bpf 1/3] bpf, sockmap: Fix update element with same
+	s=arc-20240116; t=1733147761; c=relaxed/simple;
+	bh=E53zZjd6flzuqs7YV+RgWw0eJj3bkXNqsocCztsJtfA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UNaC0ONyJEVuxRRWQe/+S7EbHfmRt+PeDCD52VXsb8rDkSfKlTFDbSe3QZX5O6brm161qJn0pAIKfK417T4ATgGv4LXpUB7s+6AxRTXPjEmSlmDk0iliBoZxWhfq5k/wiHF75bNebrDxo604CFwcfcc25+poKEfBvqWxWJSi2pQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Y24yh36hqz21mLK;
+	Mon,  2 Dec 2024 21:54:20 +0800 (CST)
+Received: from kwepemd200014.china.huawei.com (unknown [7.221.188.8])
+	by mail.maildlp.com (Postfix) with ESMTPS id ADF711A0188;
+	Mon,  2 Dec 2024 21:55:55 +0800 (CST)
+Received: from localhost.localdomain (10.50.165.33) by
+ kwepemd200014.china.huawei.com (7.221.188.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.34; Mon, 2 Dec 2024 21:55:54 +0800
+From: Yicong Yang <yangyicong@huawei.com>
+To: <catalin.marinas@arm.com>, <will@kernel.org>, <maz@kernel.org>,
+	<oliver.upton@linux.dev>, <corbet@lwn.net>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>
+CC: <joey.gouly@arm.com>, <suzuki.poulose@arm.com>, <yuzenghui@huawei.com>,
+	<shuah@kernel.org>, <jonathan.cameron@huawei.com>,
+	<shameerali.kolothum.thodi@huawei.com>, <linuxarm@huawei.com>,
+	<prime.zeng@hisilicon.com>, <xuwei5@huawei.com>, <yangyicong@hisilicon.com>
+Subject: [PATCH 0/5] Add support for FEAT_{LS64, LS64_V, LS64_ACCDATA} and related tests
+Date: Mon, 2 Dec 2024 21:54:59 +0800
+Message-ID: <20241202135504.14252-1-yangyicong@huawei.com>
+X-Mailer: git-send-email 2.31.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241202-sockmap-replace-v1-1-1e88579e7bd5@rbox.co>
-References: <20241202-sockmap-replace-v1-0-1e88579e7bd5@rbox.co>
-In-Reply-To: <20241202-sockmap-replace-v1-0-1e88579e7bd5@rbox.co>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Jakub Sitnicki <jakub@cloudflare.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- netdev@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
-X-Mailer: b4 0.14.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemd200014.china.huawei.com (7.221.188.8)
 
-Consider a sockmap entry being updated with the same socket:
+From: Yicong Yang <yangyicong@hisilicon.com>
 
-	osk = stab->sks[idx];
-	sock_map_add_link(psock, link, map, &stab->sks[idx]);
-	stab->sks[idx] = sk;
-	if (osk)
-		sock_map_unref(osk, &stab->sks[idx]);
+Armv8.7 introduces single-copy atomic 64-byte loads and stores
+instructions and its variants named under FEAT_{LS64, LS64_V,
+LS64_ACCDATA}. Add support for Armv8.7 FEAT_{LS64, LS64_V, LS64_ACCDATA}:
+- Add identifying and enabling in the cpufeature list
+- Expose the support of these features to userspace through HWCAP3
+  and cpuinfo
+- Add related hwcap test
+- Handle the trap of unsupported memory (normal/uncacheable) access in a VM
 
-Due to sock_map_unref(), which invokes sock_map_del_link(), all the psock's
-links for stab->sks[idx] are torn:
+A real scenario for this feature is that the userspace driver can make use of
+this to implement direct WQE (workqueue entry) - a mechanism to fill WQE
+directly into the hardware.
 
-	list_for_each_entry_safe(link, tmp, &psock->link, list) {
-		if (link->link_raw == link_raw) {
-			...
-			list_del(&link->list);
-			sk_psock_free_link(link);
-		}
-	}
+This patchset also depends on Marc's patchset[1] for enabling related
+features in a VM, HCRX trap handling, etc.
 
-And that includes the new link sock_map_add_link() added just before the
-unref.
+[1] https://lore.kernel.org/linux-arm-kernel/20240815125959.2097734-1-maz@kernel.org/
 
-This results in a sockmap holding a socket, but without the respective
-link. This in turn means that close(sock) won't trigger the cleanup, i.e. a
-closed socket will not be automatically removed from the sockmap.
+Tested with updated hwcap test:
+On host:
+root@localhost:/# dmesg | grep "All CPU(s) started"
+[    1.600263] CPU: All CPU(s) started at EL2
+root@localhost:/# ./hwcap
+[snip...]
+# LS64 present          
+ok 169 cpuinfo_match_LS64
+ok 170 sigill_LS64
+ok 171 # SKIP sigbus_LS64
+# LS64_V present
+ok 172 cpuinfo_match_LS64_V
+ok 173 sigill_LS64_V
+ok 174 # SKIP sigbus_LS64_V
+# LS64_ACCDATA present
+ok 175 cpuinfo_match_LS64_ACCDATA
+ok 176 sigill_LS64_ACCDATA
+ok 177 # SKIP sigbus_LS64_ACCDATA
+# Totals: pass:92 fail:0 xfail:0 xpass:0 skip:85 error:0
 
-Stop tearing the links when a matching link_raw is found.
+On guest:
+root@localhost:/# dmesg | grep "All CPU(s) started"
+[    1.375272] CPU: All CPU(s) started at EL1 
+root@localhost:/# ./hwcap
+[snip...]
+# LS64 present
+ok 169 cpuinfo_match_LS64
+ok 170 sigill_LS64
+ok 171 # SKIP sigbus_LS64
+# LS64_V present
+ok 172 cpuinfo_match_LS64_V
+ok 173 sigill_LS64_V
+ok 174 # SKIP sigbus_LS64_V
+# LS64_ACCDATA present
+ok 175 cpuinfo_match_LS64_ACCDATA
+ok 176 sigill_LS64_ACCDATA
+ok 177 # SKIP sigbus_LS64_ACCDATA
+# Totals: pass:92 fail:0 xfail:0 xpass:0 skip:85 error:0
 
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
----
- net/core/sock_map.c | 1 +
- 1 file changed, 1 insertion(+)
+Yicong Yang (5):
+  arm64: Provide basic EL2 setup for FEAT_{LS64, LS64_V, LS64_ACCDATA}
+    usage at EL0/1
+  arm64: Add support for FEAT_{LS64, LS64_V, LS64_ACCDATA}
+  kselftest/arm64: Add HWCAP test for FEAT_{LS64, LS64_V, LS64_ACCDATA}
+  arm64: Add ESR.DFSC definition of unsupported exclusive or atomic
+    access
+  KVM: arm64: Handle DABT caused by LS64* instructions on unsupported
+    memory
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 78347d7d25ef31525f8ec0a755a18e5793ad92c0..20b348b1964a10a1b0bfbe1a90a4a4cd99715b81 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -159,6 +159,7 @@ static void sock_map_del_link(struct sock *sk,
- 				verdict_stop = true;
- 			list_del(&link->list);
- 			sk_psock_free_link(link);
-+			break;
- 		}
- 	}
- 	spin_unlock_bh(&psock->link_lock);
+ Documentation/arch/arm64/booting.rst      |  28 +++++
+ Documentation/arch/arm64/elf_hwcaps.rst   |   9 ++
+ arch/arm64/include/asm/el2_setup.h        |  26 ++++-
+ arch/arm64/include/asm/esr.h              |   8 ++
+ arch/arm64/include/asm/hwcap.h            |   3 +
+ arch/arm64/include/uapi/asm/hwcap.h       |   3 +
+ arch/arm64/kernel/cpufeature.c            |  70 +++++++++++-
+ arch/arm64/kernel/cpuinfo.c               |   3 +
+ arch/arm64/kvm/mmu.c                      |  14 +++
+ arch/arm64/tools/cpucaps                  |   3 +
+ tools/testing/selftests/arm64/abi/hwcap.c | 127 ++++++++++++++++++++++
+ 11 files changed, 291 insertions(+), 3 deletions(-)
 
 -- 
-2.46.2
+2.24.0
 
 
