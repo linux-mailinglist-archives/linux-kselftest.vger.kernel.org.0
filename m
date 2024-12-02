@@ -1,328 +1,194 @@
-Return-Path: <linux-kselftest+bounces-22673-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22670-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E743B9E01CE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 13:15:02 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78F0D9E00F3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 12:52:45 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6F65285174
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 12:15:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35709160875
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2024 11:52:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F4E11FECC7;
-	Mon,  2 Dec 2024 12:05:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D86FA1FE457;
+	Mon,  2 Dec 2024 11:52:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="Jed/pMdz"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="HJ2xGDX5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2045.outbound.protection.outlook.com [40.107.22.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE041FECA6
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Dec 2024 12:05:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733141137; cv=none; b=ZxnaJmTOGZixGGwmG4ITUbpNjuCId8eX0kIMGkiAacfvFziosMpV2BLbuanOPH56wP2yUAkVzYEFu9x0HSNPo58aNmnj0Jy+Iw/TjDbCEyTjYWFPNeEafPwRDAj92kEUcJUJNzxXj5e/5VHwgbfhqTKeeT99BwdWcx6NnAXso8Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733141137; c=relaxed/simple;
-	bh=R3raTy+TsyNhkfIZ0aBPxt6o5618wybYnhAizrUINhk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QIQkuIGcEm20ec5f14aiokOdBOiLCHbLtJmXd99yejANRy1wXrOknmiJ+68JSl7je9nGisROprALvRvvrQtwd0TOAJAvyKud3ySe2MeTnu2RWAK8KVTojLvXmme3ZsbsdoRmDdizLFVL0zsqgy/v6zDVDKFViU8wFQplnGKEnNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=Jed/pMdz; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1tI4dM-008Gew-SA; Mon, 02 Dec 2024 12:30:32 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=uNFEdS5uGm6Njo4yZYOGUhFLFGeSEmwBt49zd9lx61Q=; b=Jed/pMdzlOGtkIN4p5WMj0koWh
-	Jr4Dz7IjcTqcFFGqvHBDjfWaWgEHpnA8778fzJetjpItXtKThzhErt2R4SD0mINszmbnRV4JLRZCp
-	deEnWeotcGQ+pcFU9WF9vcVusI72hwjIhRBAXN/s//tDKw9OvUt9Ly0lrnwsBZykHDA0jyP4m3Jd4
-	lLm5mdRwLLUD9ZqSmctfhL4UyWpvSxWLYIXIlLyyJJP9AtTSJzsMNwPuoqu4UJ9v0SQYiqQnz1z++
-	uq0TuHMsQKvvMvRQ+nV7IJMLt97uG7InrYLBbfj0wytbQaqeyhjeKzdLtjMKecuL5GH17MNQ6NelK
-	wnO8NXdQ==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1tI4dK-0005e5-Ul; Mon, 02 Dec 2024 12:30:32 +0100
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1tI4d5-007H5a-3p; Mon, 02 Dec 2024 12:30:15 +0100
-From: Michal Luczaj <mhal@rbox.co>
-Date: Mon, 02 Dec 2024 12:29:25 +0100
-Subject: [PATCH bpf 3/3] bpf, sockmap: Fix race between element replace and
- close()
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B731FE44D;
+	Mon,  2 Dec 2024 11:52:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733140361; cv=fail; b=hB/kApt2Oyxjw9JFmAFoSlNiDWtFdUv6iWeKxUEViLIqfpfadK34BebW8ZxWRzXu8Pbh/gdWiVGYqIgPrl8ldgWTY6EE3jMt8c8JlPHmf28LiA/ljWqP/9e10k6/TxlYQG83jRaPcKHfhqKRTTHXVsFW+SfCS9sKarAIX6Mgcxg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733140361; c=relaxed/simple;
+	bh=aTdGSf/0h0+qenmPR+C2rfrL4m25Lnql2eZkh3EcEdk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=qNzU+g4OFFlL5TlN2CUypy19LCYpyDpRI1dEfyBzpXsLjPW2vq1pThxGmX86q+wSQsQK4HGUcNBpqCbrmQeJcfYd1skhacwRfrp75nIsZO6ikYvUZ7AwTyGS9JySjh14XjytUHc6NP+6oWgdAtO0PKLRQXdl2UZXy8yMnZiBVAQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=HJ2xGDX5; arc=fail smtp.client-ip=40.107.22.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=voFIewuP5Yr3wzYNZB0PeWNZx3ofcy0RB9XMKqfmwcX1XMgACfn63ckNp8jqgLMayIowZmcHfgS8MrZgTm2ifONR8ZcwI936SZD2+LMP7Pwd5AnagODtJI5S9CQCvXpY0rxoaQPuhA3QQzhfku/3FONMF//JkQvOIIrxsd4686ixy0MY0Hf6ksBmhnQ8zcLXnmxKHZgg7U3NxqIjk4RM1MF0xrd59G0zub8zv2k32nKpI36FqZy4rxW3KSAhCbJdYjesepxMIDbi2q8yV3H+pD7uQ6YVPs/u+L7VraAY7wIbJRz5fWTJncLkXhSVSpWSB0eLr9g5Y2uHHdg4FKAJ9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uU/r13TB6cBCa3BJ+JLp8oM4REbQvqe6mlsotDZwEDc=;
+ b=xO3Z+l5d3i6F+EBw8T0Hkgy43EUMF/1jF1qRYUUU3nxyAO3Kq4a/Hl4KVcCxltrtTi+wOIwjQtFC4vQ7Ru09ybLIBGclT1d0l7zd+/n5Fjnlato0LLb8T5u8tKSmklp1MhrgRlugEA9JFgHzvwJeAI61JU4JXDXBltIpw1LjA22F61LonfpW7tSqghiGH7Np10qXHmRFTGvdC+VYr/8WQNuk6mW29bawexuYgw/l89Ax6j8s2vksta0uWq0hm7hVQFrkJw1xtAo24k0IUCwgMj4qgc7n/ng0UujRtJgD2BfJ9qQIcWJ6j6kHcFsxoaTO1nUExjR8wd8631VNC87Ukg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uU/r13TB6cBCa3BJ+JLp8oM4REbQvqe6mlsotDZwEDc=;
+ b=HJ2xGDX5cjJyvpYcSOdzpmCUqZ0dkaq98107SqSjZDtwS4hCCdmxJrtiQeRNQYClKt9/tTTafx1cr7zrskMnOWUEfBVjtJ+xbMkVZ9oGRMiBpU8xRB9UTG+Kwu3VcEMid1a1O0ThTmXgcDKSTRU746t1C1knN3+oytfftKdeiQ1LDHQAzNMz2YqX5g7x39TN4utB1BYgRs/43eOaehqsLJTwN6+XvSHc80oVn3YCdtc2g3V/TJUec0G3yGIs6EAC21JDGR24rfBN6zZ1nAw0lVt7zxV6EfqZVEorYhMV5RLKN0SkDJ1Q47Z65C3UKF1pdn5QvAcrmbD0KNoWc/jF5Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM8PR04MB7779.eurprd04.prod.outlook.com (2603:10a6:20b:24b::14)
+ by AM0PR04MB7027.eurprd04.prod.outlook.com (2603:10a6:208:191::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.18; Mon, 2 Dec
+ 2024 11:52:36 +0000
+Received: from AM8PR04MB7779.eurprd04.prod.outlook.com
+ ([fe80::7417:d17f:8d97:44d2]) by AM8PR04MB7779.eurprd04.prod.outlook.com
+ ([fe80::7417:d17f:8d97:44d2%6]) with mapi id 15.20.8207.017; Mon, 2 Dec 2024
+ 11:52:36 +0000
+Date: Mon, 2 Dec 2024 13:52:33 +0200
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
+	Benjamin Poirier <bpoirier@nvidia.com>,
+	Hangbin Liu <liuhangbin@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
+	Ido Schimmel <idosch@nvidia.com>, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [net PATCH 2/2] selftests: forwarding: local_termination: sleep
+ before starting tests
+Message-ID: <20241202115233.quxeapcw6g3uyj2x@skbuf>
+References: <20241130113314.6488-1-ansuelsmth@gmail.com>
+ <20241130113314.6488-2-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241130113314.6488-2-ansuelsmth@gmail.com>
+X-ClientProxiedBy: VI1PR10CA0110.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:803:28::39) To AM8PR04MB7779.eurprd04.prod.outlook.com
+ (2603:10a6:20b:24b::14)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241202-sockmap-replace-v1-3-1e88579e7bd5@rbox.co>
-References: <20241202-sockmap-replace-v1-0-1e88579e7bd5@rbox.co>
-In-Reply-To: <20241202-sockmap-replace-v1-0-1e88579e7bd5@rbox.co>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Jakub Sitnicki <jakub@cloudflare.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- netdev@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
-X-Mailer: b4 0.14.2
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM8PR04MB7779:EE_|AM0PR04MB7027:EE_
+X-MS-Office365-Filtering-Correlation-Id: 41cf4673-a371-4489-b7af-08dd12c7d098
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?BglYl7rpzkQfQ3IIfnuvYWOdo6MWTeNT17xzIILAW7ruqpok1tWd+5KF0tES?=
+ =?us-ascii?Q?aXDQg6pDnKisxT5jmqKZYjbmIikBa2kG8OvySBRrHEaqSnG8yqlnVjmQj27R?=
+ =?us-ascii?Q?6W9boSiMNOVJcfFh1dWR9DTYeNLAm6OWPNIVXOZHOM6rhM/hyPKO4Avfe56p?=
+ =?us-ascii?Q?kUtQ6nY9uv6fk4cTh2KqW+WrAo+S5+iL5PZSfZScoWz+3PQFWG9HyzlKghVB?=
+ =?us-ascii?Q?LiMPop2BzmLNEijjiryfQOASxdqjl2R4LPHmBa1QftbRbU0aVv54nLpxFr4/?=
+ =?us-ascii?Q?JW1H3Ezn9XBCjKE21H2JRHVsPCFcEpUcMXuh1MK1yftq4Z6pKnUtjvodO+NT?=
+ =?us-ascii?Q?p610g+MGhi9h8r6FguXRtWKJgq0AzuGPjkB0v06dGBkI+wSvUPXDrIAjrB+4?=
+ =?us-ascii?Q?S9H6DWxMGCcywyBTSrkJ68OuklFFP0O7uWXyk8JMWmjAWNosoG7623Fd2UxA?=
+ =?us-ascii?Q?XgXYTcKsMgFwpleaXA0czccxC1mdjzg5cT4JdJN/n9jeAQj2r1lI5SlamnxM?=
+ =?us-ascii?Q?5J/u0uTownq3DTnICJtkKJW9R9pJUuFCZ89SPb9wwqMF4pkvhfUhSTIVKJhJ?=
+ =?us-ascii?Q?WNN1nUcDBBhI0krq+TUBL/GfV2KrYJoHty8k3P8xF2Uz4znXMBi75qPQbNAQ?=
+ =?us-ascii?Q?KELQIeS4Bb8y5fDnoImfrvSYky6NjypbxNVW7eFpee8ATPryD/AreD7A+QpU?=
+ =?us-ascii?Q?EH7CdCBCyHooDoLs4MzVsClGcVIgf2hShkvR+bi54uyQdHOSKoRFsnzEo8z6?=
+ =?us-ascii?Q?jrpTMjMmyvtsL/a13M+gw+WGqiACAECYm2nIPqC8a8jL1U8qL8NeDDUEFkr6?=
+ =?us-ascii?Q?U/SxGqRoh6YfS9T3Zcj+CmOO6wjocfJpdltaseMuqqiMvr3mx/tWmc5etMY7?=
+ =?us-ascii?Q?4/hYanPR7eUy9wy7AmheeptVE11XimyH2k2ycTj+6d8ectQzzCgFBuB1hnh4?=
+ =?us-ascii?Q?o5BL2qAQyI/8Pwh3o0vF7I0e3EBuKQO8OYHcfuZRakMQ2HhLqhuNtimsr+Yy?=
+ =?us-ascii?Q?VOWNz5eVugLxrSaaXznF6rFWTQ5RTMCFHNZ25ZCGQ7c/tGJfuhX5qr9X9s9N?=
+ =?us-ascii?Q?ZRm+Y7XCpynQsSoCbmPOMFOWgNxqEPHIjU+sGtD8SX+AZk55rJMpFsyHVieZ?=
+ =?us-ascii?Q?MFcYaHPlhH0hxNVXQ8gUBI0y+efT8Gx9n13mni7xxFOMDTNt/JLjq5Tppxu8?=
+ =?us-ascii?Q?CcxdP59PSfgQR9IF455HlYQu8Ift67pOW4okYdul5VCkZKVlD3kmCFHrLoz/?=
+ =?us-ascii?Q?yzrLURbJxopy8fVmdYEtf94UFWs2nMNGTnQMAy7JeIpVwIAc45kBseMdTygj?=
+ =?us-ascii?Q?bXLwACNyKDa6us7a5hoLdz6Ny61l15TvFqbGTxQ8hkqrPA=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7779.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?1Det040grnyDfnlZUKpyoQJz/L8TYwONEUiW0Xew8MxbkR+BmpcEnysXbUmu?=
+ =?us-ascii?Q?fQwyOKcH7j3drHyZ5VLRAXUebtByoacyhyKoLHqxgGyWQbnvINfMyPB+IfHL?=
+ =?us-ascii?Q?g+NZG3rqiv118NRzx6Z+TOKa85iYfTN6MsFe06axCe9LetRAxjiALXNKjDiC?=
+ =?us-ascii?Q?BxVRzip6dfI4AqfI2cE6tn35VyaXShG/c4KSABwTfgdwwCRGCGcgQ+qqjCe9?=
+ =?us-ascii?Q?HrorvIyjQI4XDM7qBdeidUxfREdPwiHI8I+8xy9X5/IQh1+rdzDw7E5O1oW8?=
+ =?us-ascii?Q?JAX6YziKHy9HrS7KKJ7e6xjcDj9iUDS5ElklcLs2mYQ0kJAS2kb9QvJueF6p?=
+ =?us-ascii?Q?G3oMWVUVnNW3bn4WiqPi1idZBNCt+0J0ty8iGauycdvIReAErHv3EAn/716M?=
+ =?us-ascii?Q?MlizpLi1x9hSjKZk38XjE87BTTuUGpy0Z96dpxXL4DN4EC3Nn7XF9vg/XSqB?=
+ =?us-ascii?Q?fTKCt8CnzqU5t2u0EupjiGOzGfBaqVxB5lU6Cybe4udZfN8UuifAr2sfXIWx?=
+ =?us-ascii?Q?XKM3l9aguW/2uCd/3Gqj+3rGN9kefj8/1N+b4l6eNdbXtW8UbtrvwVkGa1im?=
+ =?us-ascii?Q?0CtLN23g4n5QzYGY2p3KyROqy3Gx9UsEngZpg0YFgbUiz9J4TQnft0jcvtcc?=
+ =?us-ascii?Q?oxRyJDA0Uj8noWj+qkSGlOCWaiGi/4jcgraCVM+iT4HXP+0cd9NShVTp/P2W?=
+ =?us-ascii?Q?vrzLpqFYfiIqZLJc+tAtspDBGPXSqxxySvCHb9DGD9T9yl+oa5Qye7m3+VeB?=
+ =?us-ascii?Q?KwjnPgtAEh6pzuvnry9Qe1qWlPRDz7WdPF7DHHxr7u8uEI085s4XSBSpSMZo?=
+ =?us-ascii?Q?3zVP5ts8epw4MldvxHGiUDyw5DxwfFzEGPdSJLRnRhdWum0Wb4qnPHbqdItm?=
+ =?us-ascii?Q?OMF0LQxsR06mgD1NEF7SoyED7AWxMJv3UkW6kcJRYCrKXHQir2/DUYrxg7JU?=
+ =?us-ascii?Q?eUPPeRfIB1eVxPH8dQ9vm0g/XmQ/iZwuxThhxgyfLN28T+dstNZm/PG8vVeO?=
+ =?us-ascii?Q?AwF7hD+c6pCL7j+RKm2jBKG/6cwdCeOjIxFHenQHT7kp9JFdaRimx4wD/Rl2?=
+ =?us-ascii?Q?4yJfRDLee+204f+FzZ27yTvNWnCzZJX1Fpw3naq1dgEqzPyMIuWqlnrFZBLB?=
+ =?us-ascii?Q?wtAbnSQzhtoNH+L7c/VqWd7dkFN7kyz5gOIkWdEGNeQq2vNkfUMyD29wmoGX?=
+ =?us-ascii?Q?Qzu35c7QQmuac2C4syNgM4SlhnIZ/Sdwa/OESY+HIahgC9qiI8O14tVB3CXY?=
+ =?us-ascii?Q?79cQeGFVjKiTaiF96mclB8fGKiZOFg0n5zG1jz9oLLoq/T7l174k28Qvrwpv?=
+ =?us-ascii?Q?mkKooUs28gIYia040pUAREe1XgCJxWJsw+8Sb8Ol7jzKLizOr6yEYzmRuNis?=
+ =?us-ascii?Q?Mx1Wr0RKMxzXjH03Dq31RvOaWXlHkPtwULbgwlWybLpvgAyBHrSZtH//nU/w?=
+ =?us-ascii?Q?v2HNPAoz/w563Lk7Bi2a+LCACyxpTb+GJp4sVIBEjp07/waGBqKUI72BaiNx?=
+ =?us-ascii?Q?loi+kk2qcSDYFDG8caTzQUYEtclx9iqG5GLhfG5GKgLleuoJju8txupjVpHH?=
+ =?us-ascii?Q?WobOhO6en87L8JuhEGxix3hwuaOPbj7HDbleO0k1hjpCK1rIUqfV3rAEHHtq?=
+ =?us-ascii?Q?Vw=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41cf4673-a371-4489-b7af-08dd12c7d098
+X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7779.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2024 11:52:36.5527
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lfTpUCVLPD9R3ZoItyhijJhFntCpOVxAyxlu4V+2FuqdQ7acYfl7NAqWdjsWiQCoK1j2VX3YFV0wxbMdE39Smw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7027
 
-Element replace (with a socket different from the one stored) may race with
-socket's close() link popping & unlinking. __sock_map_delete()
-unconditionally unrefs the (wrong) element:
+On Sat, Nov 30, 2024 at 12:33:10PM +0100, Christian Marangi wrote:
+> It seems real hardware requires some time to stabilize and actually
+> works after an 'ip link up'. This is not the case for veth as everything
+> is simulated but this is a requirement for real hardware to permit
+> receiving packet.
+> 
+> Without this the very fist test for unicast always fails on real
+> hardware. With the introduced sleep of one second after mc_route_prepare,
+> the test corretly pass as the packet can correctly be delivered.
 
-// set map[0] = s0
-map_update_elem(map, 0, s0)
+I think the analysis is not very convincing for the following reason.
 
-// drop fd of s0
-close(s0)
-  sock_map_close()
-    lock_sock(sk)               (s0!)
-    sock_map_remove_links(sk)
-      link = sk_psock_link_pop()
-      sock_map_unlink(sk, link)
-        sock_map_delete_from_link
-                                        // replace map[0] with s1
-                                        map_update_elem(map, 0, s1)
-                                          sock_map_update_elem
-                                (s1!)       lock_sock(sk)
-                                            sock_map_update_common
-                                              psock = sk_psock(sk)
-                                              spin_lock(&stab->lock)
-                                              osk = stab->sks[idx]
-                                              sock_map_add_link(..., &stab->sks[idx])
-                                              sock_map_unref(osk, &stab->sks[idx])
-                                                psock = sk_psock(osk)
-                                                sk_psock_put(sk, psock)
-                                                  if (refcount_dec_and_test(&psock))
-                                                    sk_psock_drop(sk, psock)
-                                              spin_unlock(&stab->lock)
-                                            unlock_sock(sk)
-          __sock_map_delete
-            spin_lock(&stab->lock)
-            sk = *psk                        // s1 replaced s0; sk == s1
-            if (!sk_test || sk_test == sk)   // sk_test (s0) != sk (s1); no branch
-              sk = xchg(psk, NULL)
-            if (sk)
-              sock_map_unref(sk, psk)        // unref s1; sks[idx] will dangle
-                psock = sk_psock(sk)
-                sk_psock_put(sk, psock)
-                  if (refcount_dec_and_test())
-                    sk_psock_drop(sk, psock)
-            spin_unlock(&stab->lock)
-    release_sock(sk)
+To wait after "ip link up", setup_wait() calls setup_wait_dev_with_timeout()
+which waits until "ip link show dev $dev up" reports 'state UP'.
+This comes from IFLA_OPERSTATE, set by linkwatch.
 
-Then close(map) enqueues bpf_map_free_deferred, which finally calls
-sock_map_free(). This results in some refcount_t warnings along with a
-KASAN splat[1].
+I remember having this conversation with Danielle Ratson a few years ago:
+https://lore.kernel.org/netdev/20210624151515.794224-1-danieller@nvidia.com/
+but the bottom line should be that, since commit facd15dfd691 ("net:
+core: synchronize link-watch when carrier is queried") AFAIU, an operstate
+of UP really means that the net device is ready of passing traffic. Failure
+to do so should be a device-side problem.
 
-Fix __sock_map_delete(), do not allow sock_map_unref() on elements that may
-have been replaced.
+Then I thought that maybe tcpdump needs some time to set up its filters
+on the receving net device. But tcpdump_start() already has "sleep 1" in it.
+I admit, that was purely empirical and there's no guarantee that tcpdump
+has finished setting up even after 1 second. If you increase it to 2,
+does it also solve your problem?
 
-[1]:
-BUG: KASAN: slab-use-after-free in sock_map_free+0x10e/0x330
-Write of size 4 at addr ffff88811f5b9100 by task kworker/u64:12/1063
-
-CPU: 14 UID: 0 PID: 1063 Comm: kworker/u64:12 Not tainted 6.12.0+ #125
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Arch Linux 1.16.3-1-1 04/01/2014
-Workqueue: events_unbound bpf_map_free_deferred
-Call Trace:
- <TASK>
- dump_stack_lvl+0x68/0x90
- print_report+0x174/0x4f6
- kasan_report+0xb9/0x190
- kasan_check_range+0x10f/0x1e0
- sock_map_free+0x10e/0x330
- bpf_map_free_deferred+0x173/0x320
- process_one_work+0x846/0x1420
- worker_thread+0x5b3/0xf80
- kthread+0x29e/0x360
- ret_from_fork+0x2d/0x70
- ret_from_fork_asm+0x1a/0x30
- </TASK>
-
-Allocated by task 1202:
- kasan_save_stack+0x1e/0x40
- kasan_save_track+0x10/0x30
- __kasan_slab_alloc+0x85/0x90
- kmem_cache_alloc_noprof+0x131/0x450
- sk_prot_alloc+0x5b/0x220
- sk_alloc+0x2c/0x870
- unix_create1+0x88/0x8a0
- unix_create+0xc5/0x180
- __sock_create+0x241/0x650
- __sys_socketpair+0x1ce/0x420
- __x64_sys_socketpair+0x92/0x100
- do_syscall_64+0x93/0x180
- entry_SYSCALL_64_after_hwframe+0x76/0x7e
-
-Freed by task 46:
- kasan_save_stack+0x1e/0x40
- kasan_save_track+0x10/0x30
- kasan_save_free_info+0x37/0x60
- __kasan_slab_free+0x4b/0x70
- kmem_cache_free+0x1a1/0x590
- __sk_destruct+0x388/0x5a0
- sk_psock_destroy+0x73e/0xa50
- process_one_work+0x846/0x1420
- worker_thread+0x5b3/0xf80
- kthread+0x29e/0x360
- ret_from_fork+0x2d/0x70
- ret_from_fork_asm+0x1a/0x30
-
-The buggy address belongs to the object at ffff88811f5b9080
- which belongs to the cache UNIX-STREAM of size 1984
-The buggy address is located 128 bytes inside of
- freed 1984-byte region [ffff88811f5b9080, ffff88811f5b9840)
-
-The buggy address belongs to the physical page:
-page: refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x11f5b8
-head: order:3 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-memcg:ffff888127d49401
-flags: 0x17ffffc0000040(head|node=0|zone=2|lastcpupid=0x1fffff)
-page_type: f5(slab)
-raw: 0017ffffc0000040 ffff8881042e4500 dead000000000122 0000000000000000
-raw: 0000000000000000 00000000800f000f 00000001f5000000 ffff888127d49401
-head: 0017ffffc0000040 ffff8881042e4500 dead000000000122 0000000000000000
-head: 0000000000000000 00000000800f000f 00000001f5000000 ffff888127d49401
-head: 0017ffffc0000003 ffffea00047d6e01 ffffffffffffffff 0000000000000000
-head: 0000000000000008 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff88811f5b9000: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88811f5b9080: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88811f5b9100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                   ^
- ffff88811f5b9180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88811f5b9200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-Disabling lock debugging due to kernel taint
-
-refcount_t: addition on 0; use-after-free.
-WARNING: CPU: 14 PID: 1063 at lib/refcount.c:25 refcount_warn_saturate+0xce/0x150
-CPU: 14 UID: 0 PID: 1063 Comm: kworker/u64:12 Tainted: G    B              6.12.0+ #125
-Tainted: [B]=BAD_PAGE
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Arch Linux 1.16.3-1-1 04/01/2014
-Workqueue: events_unbound bpf_map_free_deferred
-RIP: 0010:refcount_warn_saturate+0xce/0x150
-Code: 34 73 eb 03 01 e8 82 53 ad fe 0f 0b eb b1 80 3d 27 73 eb 03 00 75 a8 48 c7 c7 80 bd 95 84 c6 05 17 73 eb 03 01 e8 62 53 ad fe <0f> 0b eb 91 80 3d 06 73 eb 03 00 75 88 48 c7 c7 e0 bd 95 84 c6 05
-RSP: 0018:ffff88815c49fc70 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff88811f5b9100 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000001
-RBP: 0000000000000002 R08: 0000000000000001 R09: ffffed10bcde6349
-R10: ffff8885e6f31a4b R11: 0000000000000000 R12: ffff88813be0b000
-R13: ffff88811f5b9100 R14: ffff88811f5b9080 R15: ffff88813be0b024
-FS:  0000000000000000(0000) GS:ffff8885e6f00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055dda99b0250 CR3: 000000015dbac000 CR4: 0000000000752ef0
-PKRU: 55555554
-Call Trace:
- <TASK>
- ? __warn.cold+0x5f/0x1ff
- ? refcount_warn_saturate+0xce/0x150
- ? report_bug+0x1ec/0x390
- ? handle_bug+0x58/0x90
- ? exc_invalid_op+0x13/0x40
- ? asm_exc_invalid_op+0x16/0x20
- ? refcount_warn_saturate+0xce/0x150
- sock_map_free+0x2e5/0x330
- bpf_map_free_deferred+0x173/0x320
- process_one_work+0x846/0x1420
- worker_thread+0x5b3/0xf80
- kthread+0x29e/0x360
- ret_from_fork+0x2d/0x70
- ret_from_fork_asm+0x1a/0x30
- </TASK>
-irq event stamp: 10741
-hardirqs last  enabled at (10741): [<ffffffff84400ec6>] asm_sysvec_apic_timer_interrupt+0x16/0x20
-hardirqs last disabled at (10740): [<ffffffff811e532d>] handle_softirqs+0x60d/0x770
-softirqs last  enabled at (10506): [<ffffffff811e55a9>] __irq_exit_rcu+0x109/0x210
-softirqs last disabled at (10301): [<ffffffff811e55a9>] __irq_exit_rcu+0x109/0x210
-
-refcount_t: underflow; use-after-free.
-WARNING: CPU: 14 PID: 1063 at lib/refcount.c:28 refcount_warn_saturate+0xee/0x150
-CPU: 14 UID: 0 PID: 1063 Comm: kworker/u64:12 Tainted: G    B   W          6.12.0+ #125
-Tainted: [B]=BAD_PAGE, [W]=WARN
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Arch Linux 1.16.3-1-1 04/01/2014
-Workqueue: events_unbound bpf_map_free_deferred
-RIP: 0010:refcount_warn_saturate+0xee/0x150
-Code: 17 73 eb 03 01 e8 62 53 ad fe 0f 0b eb 91 80 3d 06 73 eb 03 00 75 88 48 c7 c7 e0 bd 95 84 c6 05 f6 72 eb 03 01 e8 42 53 ad fe <0f> 0b e9 6e ff ff ff 80 3d e6 72 eb 03 00 0f 85 61 ff ff ff 48 c7
-RSP: 0018:ffff88815c49fc70 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff88811f5b9100 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000001
-RBP: 0000000000000003 R08: 0000000000000001 R09: ffffed10bcde6349
-R10: ffff8885e6f31a4b R11: 0000000000000000 R12: ffff88813be0b000
-R13: ffff88811f5b9100 R14: ffff88811f5b9080 R15: ffff88813be0b024
-FS:  0000000000000000(0000) GS:ffff8885e6f00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055dda99b0250 CR3: 000000015dbac000 CR4: 0000000000752ef0
-PKRU: 55555554
-Call Trace:
- <TASK>
- ? __warn.cold+0x5f/0x1ff
- ? refcount_warn_saturate+0xee/0x150
- ? report_bug+0x1ec/0x390
- ? handle_bug+0x58/0x90
- ? exc_invalid_op+0x13/0x40
- ? asm_exc_invalid_op+0x16/0x20
- ? refcount_warn_saturate+0xee/0x150
- sock_map_free+0x2d3/0x330
- bpf_map_free_deferred+0x173/0x320
- process_one_work+0x846/0x1420
- worker_thread+0x5b3/0xf80
- kthread+0x29e/0x360
- ret_from_fork+0x2d/0x70
- ret_from_fork_asm+0x1a/0x30
- </TASK>
-irq event stamp: 10741
-hardirqs last  enabled at (10741): [<ffffffff84400ec6>] asm_sysvec_apic_timer_interrupt+0x16/0x20
-hardirqs last disabled at (10740): [<ffffffff811e532d>] handle_softirqs+0x60d/0x770
-softirqs last  enabled at (10506): [<ffffffff811e55a9>] __irq_exit_rcu+0x109/0x210
-softirqs last disabled at (10301): [<ffffffff811e55a9>] __irq_exit_rcu+0x109/0x210
-
-Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
----
- net/core/sock_map.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 20b348b1964a10a1b0bfbe1a90a4a4cd99715b81..f1b9b3958792cd599efcb591742874e9b3f4a76b 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -412,12 +412,11 @@ static void *sock_map_lookup_sys(struct bpf_map *map, void *key)
- static int __sock_map_delete(struct bpf_stab *stab, struct sock *sk_test,
- 			     struct sock **psk)
- {
--	struct sock *sk;
-+	struct sock *sk = NULL;
- 	int err = 0;
- 
- 	spin_lock_bh(&stab->lock);
--	sk = *psk;
--	if (!sk_test || sk_test == sk)
-+	if (!sk_test || sk_test == *psk)
- 		sk = xchg(psk, NULL);
- 
- 	if (likely(sk))
-
--- 
-2.46.2
-
+Or do you really have to place the sleep call after the mc_route_prepare() calls,
+and any earlier won't help? In that case, it isolates the sleeping
+requirement to the multicast routes themselves?
 
