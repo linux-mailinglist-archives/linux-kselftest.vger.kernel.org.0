@@ -1,112 +1,119 @@
-Return-Path: <linux-kselftest+bounces-22764-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22765-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 166769E28BF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 18:09:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01BEB9E2A71
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 19:10:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEBA9284068
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 17:09:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F4194B2A63E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 17:24:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E42A1FA177;
-	Tue,  3 Dec 2024 17:09:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 878B41FA240;
+	Tue,  3 Dec 2024 17:24:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rs/LjBkc"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zSahc4ZK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF8D1F76CF;
-	Tue,  3 Dec 2024 17:09:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0862E1F8AD2
+	for <linux-kselftest@vger.kernel.org>; Tue,  3 Dec 2024 17:24:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733245764; cv=none; b=BO5PDySbEkMtUfTkbzQJQBr1R1Y74jr6yCH/cSqcEG7uCrrWw64g+uF5dKQKjPUJav5eUKTm/P7hmJWKDJMCPdt3XnlIEb6qgvBEgchc02s9vMN+eUmGJGGVC3WipeGnOXvxvAzTTW+PyZsN3x6sGhGHZ+bu3SiaYjIMoIojGso=
+	t=1733246661; cv=none; b=Hdjx314xUMo7KtIGwjWjyeXlIaG3TmmX/gvBFHdc0XILHF4+xOAJVGfFJMacxeAd62I9tamEl54CR125yES3dXbc68UuknZy9xXsoekTuB1Y64LhD8Owwc2ToDatRps+IItehr54grpjHlxuJm7GIBHuIYacTM5PEiNrNpBP72w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733245764; c=relaxed/simple;
-	bh=m1AFTk+2y4ye/cKZJ8VyNtBFMtplF4PAovqBsExuifg=;
+	s=arc-20240116; t=1733246661; c=relaxed/simple;
+	bh=uHhOCluAWImlIGsIXn1ThfxKnnC7/xPE7QIUhoZLgQk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fDuToTHgVB5MdW3wiGlMlr0DZfc75r/HqXu9cUlsRit/IuNDBh8ORvCyqB8ogGSYQo2+fGJq6MrA3a3huo5+/Q1u55uMKxav5YGjTsExA6SFbEEEOvJFXv+T4gGEU+TtAPAvGmhIo/dVnqgmCNYBhPlqrA7JrMhgP+87O4s+f5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rs/LjBkc; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2ffa974b2b0so58712611fa.3;
-        Tue, 03 Dec 2024 09:09:22 -0800 (PST)
+	 To:Cc:Content-Type; b=sJIgGnxZ//jJHjXJgIDg3CLI9EJ1icC8DYYNIX2/qRUSO5VveE7c4BJE6Xkd8lvBIWypGMvVCQg958gF4ac44wQmyA3k+akxp+R2NVeuL0oG4J8VychuabsKfS3tAQzqsTSAJGe01kCa0hwgkYxJsaCPXAewLrzem5wiMhDJebA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zSahc4ZK; arc=none smtp.client-ip=209.85.221.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-515c79715bbso271804e0c.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Dec 2024 09:24:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733245761; x=1733850561; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1733246659; x=1733851459; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=m1AFTk+2y4ye/cKZJ8VyNtBFMtplF4PAovqBsExuifg=;
-        b=Rs/LjBkcjEOEwy2A/qhRbjTpQ/FrCQXnSYtyXXkMHuOfl/1MeVlTPJV5qXm9f2Faes
-         FguadlALJ2qt4Uc+Usr2snYewtPuFi+r6Ia/s/OaluS5CsrDD4WjinAQERedx3muMBXR
-         nmQmb5niBGa++LRhuGhsVIXAEUHKlBBW0k6W9OHdLKwcJrygRXsa0Bn6Oi78IMyJMwNz
-         BmlwUdHht+Mzzp60heSEWOHcgISqXiqOWpu46TugM5EwmOkMkbgFLiHyQeeviw6xruQ6
-         r5pN/3AAkX3DaHTz3GkE6iPJuBXC2xVhYhq23qjw29zH5nvDj3DZEKqjEqBo7Zu433uc
-         2ehQ==
+        bh=uHhOCluAWImlIGsIXn1ThfxKnnC7/xPE7QIUhoZLgQk=;
+        b=zSahc4ZKmWqVMYt4+SUPdW82xrAOdrsaiVA07OWXcieX9HbYS4pJQdfQ3lLuVjqErp
+         8IJFDNRnfo8zcIeASMsDzj/n8GVa/lCSkWDIsiynqXZcU78GjRpTTFVy+SFiR+iKbjtH
+         XfGtD0wkMlVM1PELvkXGpnUXarepCXyIYL/cg25VwKjkv28ALx4hqWO2wp67k+1M1Hx/
+         gHnq5zTUr0ucIt0ajYBUxstdb/zXg+sF0bn1Zlzmo7Jr1PIbZjW75S1dbiEPL9FLN+d3
+         +jRPc9NPOrUQ81JIoOGcp2NH9GuKG4BWAEWL+NXnjCjTMGmT75Aw5CHC8M/qhoqom5gq
+         18ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733245761; x=1733850561;
+        d=1e100.net; s=20230601; t=1733246659; x=1733851459;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=m1AFTk+2y4ye/cKZJ8VyNtBFMtplF4PAovqBsExuifg=;
-        b=LVV+EfHezzOWoKaaXm/QE2jJVSgswxYposqU+x7TUT3GsM2Z1pSh6SrcHQTJvRIiNF
-         gqeso2l90wdJ7eqoyX95T7zd6Pm+XpJE05Tw/aJSiEs2Mh38gq/l2yqGbgLbFttlRib0
-         8XSgAii4BMl5EbibfitYcC3V5RoHnzhUjbeod68Oi92nxBI8Q8152UtPThXNvoFSSVrr
-         vgSIG48ed2gKZ5VxjYCARdpIlGHmK3r19++VG26NoF3f4O4dya0bEFtR4Kbwa8N2maAl
-         nsrTTvMml0wwU/yW2cuvmPek/EupenoZPMWft9TVhDb2gEJjglWJsDMkrDqiDD62KjPj
-         vlfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUZJV5m5epxVZ5Dbeuc3nibv5W15ExrwyJZkeyIqHKlkKfTqK21NYpj5Xc4Bt4dVrhmSXc17pIq8N7P6FQ=@vger.kernel.org, AJvYcCXwHd339oqmLBqNuKdTl8lBfmpC7OyApRPqq2C42NpKR/vJXt8nzdVU8VTdWmXy1AIrYiAC02KrNrlbryVeUvsz@vger.kernel.org
-X-Gm-Message-State: AOJu0Yznw3l4oSjP8by7DB27ko7A91DhJCmZkWnqJviPkrtrL7r+edNH
-	t44vihupws/ymJvHTeJbTboseztxegQS0TV6bIJwSGTCqjCIs9Lg00WXLhe+39wPR9qUoKb8NIL
-	T27CeURo5yRIF7eOgfroFpViBE+k=
-X-Gm-Gg: ASbGnctKVtCBLbOssePaRy8GZfwPQX/xWBqmNynxDdHfsWIn5vIr+bhGozaz2U9h8Bh
-	/wua+LzO79EP3qL4+vzM3mrPCavnVK1kwoPd7a3KsVHLCieE=
-X-Google-Smtp-Source: AGHT+IEH4Iaouq4+dAnOhajlW/R/3YVdFVDZxit2HYfn9KIbYSg6cxVjypd9qHd/NsEzinpP15f9mru5X3fszcSg5EM=
-X-Received: by 2002:a2e:bd12:0:b0:2ff:a7c1:8c31 with SMTP id
- 38308e7fff4ca-30009c6e485mr26925511fa.26.1733245760541; Tue, 03 Dec 2024
- 09:09:20 -0800 (PST)
+        bh=uHhOCluAWImlIGsIXn1ThfxKnnC7/xPE7QIUhoZLgQk=;
+        b=k5RUdhEFR4AsqJQY8OQIaVpGxUIpYAMkzeSkqdQ1r73YUS6P0+1VMUh8mBaEhcH+AK
+         3gU936IwcRXdDpJ9Sljh6jKy1NZy84iKpcEaeK22dvRJ9vxO5VUF0W/oMB4DzM1hJ3M2
+         cAintRvN6gKPyPeoSHTp6M6hwFrd5Z250V2XnjrJUj3xg7n19d/yzZcNjji0DtV1zZwC
+         /SgP2rAvLR8vwbwrWRtIuSWDfxGwY4GWfEJqD0sZKUIeY6AZ6pYhNO6hikbPihFunYHa
+         hv5LyusyifkSMxBad/kAz5YpJB1hbkHIv/lvTUkz/PocszENNxDHzIyVLV4lZlOoLuI6
+         9sCA==
+X-Forwarded-Encrypted: i=1; AJvYcCX25qkUy6rNp/GwBHmmHm2NuJF8imVcYl7v3qyrf6eSVydXCmnIwHlCnNbNM72853Y81q8tCMKa+7rmTmjMa0M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdM8jzraniRNeqt9TIk3kd2Bj6Wetw+pSAUphs8dg/D9RguWu+
+	CdjScWtQPl8bLsyJq7l2hS2Cua9JWBE6wgSi0rR11jPRbaCRdsGL+zd/n6GvCkEejf3At3qRxAJ
+	OmkwQ4q1KeF9hA4ELNNO5YgOQFIOwhHTnDDH9
+X-Gm-Gg: ASbGncuHSbUXlB3ZqP4+vNxFXengpC7MqYmBKX4y1moHBkHXyfQiUIdX9lCXlVxmZ7Q
+	pVwXrkdsGsOEBQBd4yoGHutEXMd9Z1FGY
+X-Google-Smtp-Source: AGHT+IHYXYoqonmkZPTMlbc42ImybA+UEjnRdgYrQbkXonBRpfG03UbuA+XwLsr71xscM4WaS2Sc80eQ5GXkKX6c0HE=
+X-Received: by 2002:a05:6122:6593:b0:515:3bfb:d422 with SMTP id
+ 71dfb90a1353d-515bf5c0701mr4617322e0c.12.1733246658855; Tue, 03 Dec 2024
+ 09:24:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241102-kunit-qemu-accel-macos-v2-0-9d4579fddd20@gmail.com>
- <20241102-kunit-qemu-accel-macos-v2-2-9d4579fddd20@gmail.com>
- <4e57a6e6-f10c-4a35-88e7-ab4749f7e329@arm.com> <CAJ-ks9kEM2NkS4i9D+R=gsqSRpQSWSPFwFsVuzfQ+6CaX2LJNg@mail.gmail.com>
-In-Reply-To: <CAJ-ks9kEM2NkS4i9D+R=gsqSRpQSWSPFwFsVuzfQ+6CaX2LJNg@mail.gmail.com>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Tue, 3 Dec 2024 12:08:44 -0500
-Message-ID: <CAJ-ks9nwP5SPzGVFEk0W=6WCn=gnpRofdB+-NYvC1r5G8KLNFw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] kunit: enable hardware acceleration when available
-To: Kristina Martsenko <kristina.martsenko@arm.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <rmoar@google.com>, Alyssa Ross <hi@alyssa.is>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+References: <20241202204530.1143448-1-leogrande@google.com> <Z05NhvyagBbHs8Gq@mini-arch>
+In-Reply-To: <Z05NhvyagBbHs8Gq@mini-arch>
+From: Marco Leogrande <leogrande@google.com>
+Date: Tue, 3 Dec 2024 09:23:51 -0800
+Message-ID: <CAD1qLz0UwaFsk3ZnQ9e5RG1XvJ2i=7FJhtf_9AB6KVZ1fbEh3w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] tools/testing/selftests/bpf/test_tc_tunnel.sh:
+ Fix wait for server bind
+To: Stanislav Fomichev <stfomichev@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	"Alessandro Carminati (Red Hat)" <alessandro.carminati@gmail.com>, willemb@google.com, zhuyifei@google.com, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 5, 2024 at 2:51=E2=80=AFPM Tamir Duberstein <tamird@gmail.com> =
-wrote:
->
-> This behavior is at least somewhat intentional[0]. I have filed a bug
-> with qemu[1]. If someone can conceive of a way to achieve this, I'd be
-> delighted to send a v3.
->
-> [cut]
->
-> Link: https://gitlab.com/qemu-project/qemu/-/issues/2656 [1]
+On Mon, Dec 2, 2024 at 4:15=E2=80=AFPM Stanislav Fomichev <stfomichev@gmail=
+.com> wrote:
+> Do you see this failing in your CI or in the BPF CI?
 
-There hasn't been movement on this matter here or on the upstream bug.
-We can either proceed with this patch as-is or restore the manual
-feature detection that was present in v1
-(https://lore.kernel.org/all/20241025-kunit-qemu-accel-macos-v1-2-2f30c2619=
-2d4@gmail.com/)
-in order to retain `pauth-impdef` for TCG. Could I get some guidance
-from maintainers please?
+I see this failing in our internal CI, in around 1% to 2% of the CI runs.
 
-Tamir
+> It seems ok
+> to add wait_for_port here, but the likelihood of the issue seems
+> minuscule. There is a bunch of ip/tc/etc calls between this
+> server_listen and the next client_connect (and I'd be surprised to hear
+> that netcat is still not listening by the time we reach next
+> client_connect).
+
+I'm surprised as well, and I've not found a good correlation with the
+root cause of the delayed server start, besides generic "slowness".
+
+You also make a good point - by calling wait_for_port this early we
+"waste" the opportunity to run the other ip commands in parallel in
+the meantime.
+I had considered moving this wait down, just before the next
+client_connect, but I concluded it might be less readable since it
+would be so distant from the server_listen it pairs with. But I can
+make that change if it seems better.
 
