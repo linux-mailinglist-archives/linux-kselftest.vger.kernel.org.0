@@ -1,166 +1,138 @@
-Return-Path: <linux-kselftest+bounces-22729-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22733-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD25F9E1A6C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 12:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E22E99E1BF9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 13:20:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D57ABB26122
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 09:39:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C63EB3CC94
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 11:35:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 861101DFE3D;
-	Tue,  3 Dec 2024 09:38:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89D901E3DE7;
+	Tue,  3 Dec 2024 11:35:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QhPYIwpx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hHI3kOxC"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0DE1DFE28;
-	Tue,  3 Dec 2024 09:38:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3561E3772;
+	Tue,  3 Dec 2024 11:35:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733218694; cv=none; b=oHsjS6QB2R8bJEWg7ywho2LRLu9wWBveO/Uszz9HTWtTln52o+dk6IazjWH26PkXvgPrBjJQsWLY10tQr/bX4j4fQ4YcBHJ6sCct8VBhyKLBvP+9/ifN5TXCbjhxYrjf5Z9AZn3hSAEGHLvOk/wcLWkp9cLLhLEck0t4RhJK8yY=
+	t=1733225711; cv=none; b=B2S2yAL2s/h+aUZUKIOY7mDlL4ea0JKc5qtASePqELwrkNy8BzJzJZcreMNY9jg0pCwlccleAahvjUtmAZevfDkWkNE4UKoGd75H/OY+IAg1Ky2f/nqz5HTyqkYB4gQ+PTfxPgOxvJjj/xl6XKgn0VKfJUjSTpYBDbJWazVabwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733218694; c=relaxed/simple;
-	bh=rQ5TW4rFrG6qYjejx5fpKqPKvSS6CRZZUK/Q5K0MDv8=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=P1P/Xbi5HKXB/oOTvvCdzrcCNI2WnHoOOuTTdcLz1VZxG2euxkDkjk6/mPRr9HkSBdokq2nGi4leg8WP9lWDIoIiOCow05Qo0/tO3fWxymSLi3N/XZ6RMJqcv2QUj+JJwvICkS0O9n8YpSd2Xc+PP+Nw3pXny2JjCBtzL9Z2mQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QhPYIwpx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D89C7C4CECF;
-	Tue,  3 Dec 2024 09:38:13 +0000 (UTC)
+	s=arc-20240116; t=1733225711; c=relaxed/simple;
+	bh=3MWjk85NmWlbYMWabiD2fBNYO8K3kUK/Onp9ETA+5Y4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=IcHBbB0rq4Q3MNAW869ly13Bap1GzXoQ69zBOrQdv5vqGLKGIfveqVqMVTW00us4u0thtyg6xyDgZBoDNFXHQ2wa4AOFruDbLOUe8nrS7cQfbN3dEsLXEEDMZxgH9+4vfbk3S7nqPS0cmfHiwQlcriNGMVLWs0NTEIhLIsHK3/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hHI3kOxC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EC7EC4CECF;
+	Tue,  3 Dec 2024 11:35:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733218693;
-	bh=rQ5TW4rFrG6qYjejx5fpKqPKvSS6CRZZUK/Q5K0MDv8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QhPYIwpxwd9nqFAUL5d17x0oJaAJ+KTmcr+RxiiZhe3ME0ryYuMY//UynJsU0GB6D
-	 hxLOAvCOnBzjkcD3Mc+UJiDfPpka9fca8mlnhXLtodkl4ED5DLfSip5kdAfIIsrQrR
-	 mvtxRTtAwIw8V/oMNSJKNSwCNB3dmVmwV/TAdeJjmcIOQhv8YD9UxrUsn6XaZaGKqt
-	 B9rPZRV1WG/n+eAhQAg01eLy01SWr0lvFKDtrkakCq717t2Zcs2UP4XLP0M+tbFJq/
-	 U+8Uu3IDFinEXfTbYXzEL+kkOMaJENVi8zKYdSHJqAB5XgLnqJRuNoWTQHmoicG/h6
-	 Hz4/dFHcadjLw==
-Received: from [104.132.45.111] (helo=wait-a-minute.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1tIPMB-0002K5-Bc;
-	Tue, 03 Dec 2024 09:38:11 +0000
-Date: Tue, 03 Dec 2024 09:38:10 +0000
-Message-ID: <87o71trtrx.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Yicong Yang <yangyicong@huawei.com>
-Cc: <catalin.marinas@arm.com>,
-	<will@kernel.org>,
-	<oliver.upton@linux.dev>,
-	<corbet@lwn.net>,
-	<linux-arm-kernel@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>,
-	<linux-kselftest@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>,
-	<joey.gouly@arm.com>,
-	<suzuki.poulose@arm.com>,
-	<yuzenghui@huawei.com>,
-	<shuah@kernel.org>,
-	<jonathan.cameron@huawei.com>,
-	<shameerali.kolothum.thodi@huawei.com>,
-	<linuxarm@huawei.com>,
-	<prime.zeng@hisilicon.com>,
-	<xuwei5@huawei.com>,
-	<yangyicong@hisilicon.com>
-Subject: Re: [PATCH 5/5] KVM: arm64: Handle DABT caused by LS64* instructions on unsupported memory
-In-Reply-To: <20241202135504.14252-6-yangyicong@huawei.com>
-References: <20241202135504.14252-1-yangyicong@huawei.com>
-	<20241202135504.14252-6-yangyicong@huawei.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=k20201202; t=1733225710;
+	bh=3MWjk85NmWlbYMWabiD2fBNYO8K3kUK/Onp9ETA+5Y4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=hHI3kOxCigtxutre/XbKF8THCbBA15kF2UzeEXnrSamiyaEFqVM4H3c+96TIZ2v3I
+	 HpVLl0bl7MdznOYha2Hc7OVvTbjLuiVZMzAqTxx+ERgiEdIkVs/pCTEQkvtMRCQyLe
+	 H0mf7yKzj8unWbqRt7i0h7nFlGz4JXTX754TN7l4wpS8dqXRMW9jffGxoM5SjQRdh6
+	 Zv01tQD3eXXzbR8kSvH8wD+zrSXGo5LIQHFCi4NwGDjs8BFDAK66oRovKf3ry8z2bo
+	 zpV+LoHnrso1bIivSeWZJBBQIdTGVKZrArvCYv36KO5jZfoKUYZRjAIY42MCc40VXh
+	 wUqFRvWrHkh1w==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Celeste Liu <uwu@coelacanthus.name>, Oleg Nesterov <oleg@redhat.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Eric Biederman
+ <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, Shuah Khan
+ <shuah@kernel.org>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, "Dmitry V. Levin" <ldv@strace.io>,
+ Andrea Bolognani <abologna@redhat.com>, Thomas Gleixner
+ <tglx@linutronix.de>, Ron Economos <re@w6rz.net>, Charlie Jenkins
+ <charlie@rivosinc.com>, Quan Zhou <zhouquan@iscas.ac.cn>, Felix Yan
+ <felixonmars@archlinux.org>, Ruizhe Pan <c141028@gmail.com>, Shiqi Zhang
+ <shiqi@isrc.iscas.ac.cn>, Guo Ren <guoren@kernel.org>, Yao Zi
+ <ziyao@disroot.org>, Han Gao <gaohan@iscas.ac.cn>,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, stable@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Celeste Liu <uwu@coelacanthus.name>
+Subject: Re: [PATCH v2 1/2] riscv/ptrace: add new regset to access original
+ a0 register
+In-Reply-To: <20241203-riscv-new-regset-v2-1-d37da8c0cba6@coelacanthus.name>
+References: <20241203-riscv-new-regset-v2-0-d37da8c0cba6@coelacanthus.name>
+ <20241203-riscv-new-regset-v2-1-d37da8c0cba6@coelacanthus.name>
+Date: Tue, 03 Dec 2024 12:35:07 +0100
+Message-ID: <87ed2pdmok.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 104.132.45.111
-X-SA-Exim-Rcpt-To: yangyicong@huawei.com, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, corbet@lwn.net, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, shuah@kernel.org, jonathan.cameron@huawei.com, shameerali.kolothum.thodi@huawei.com, linuxarm@huawei.com, prime.zeng@hisilicon.com, xuwei5@huawei.com, yangyicong@hisilicon.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 02 Dec 2024 13:55:04 +0000,
-Yicong Yang <yangyicong@huawei.com> wrote:
-> 
-> From: Yicong Yang <yangyicong@hisilicon.com>
-> 
-> FEAT_LS64* instructions only support to access Device/Uncacheable
-> memory, otherwise a data abort for unsupported Exclusive or atomic
+Celeste Liu <uwu@coelacanthus.name> writes:
 
-Not quite. FEAT_LS64WB explicitly supports Write-Back mappings.
-
-> access (0x35) is generated per spec. It's implementation defined
-> whether the target exception level is routed and is possible to
-> implemented as route to EL2 on a VHE VM. Per DDI0487K.a Section
-> C3.2.12.2 Single-copy atomic 64-byte load/store:
-> 
->   The check is performed against the resulting memory type after all
->   enabled stages of translation. In this case the fault is reported
->   at the final enabled stage of translation.
-> 
-> If it's implemented as generate the DABT to the final enabled stage
-> (stage-2), inject a DABT to the guest to handle it.
-> 
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> The orig_a0 is missing in struct user_regs_struct of riscv, and there is
+> no way to add it without breaking UAPI. (See Link tag below)
+>
+> Like NT_ARM_SYSTEM_CALL do, we add a new regset name NT_RISCV_ORIG_A0 to
+> access original a0 register from userspace via ptrace API.
+>
+> Link: https://lore.kernel.org/all/59505464-c84a-403d-972f-d4b2055eeaac@gm=
+ail.com/
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
 > ---
->  arch/arm64/kvm/mmu.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index c9d46ad57e52..b7e6f0a27537 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -1787,6 +1787,20 @@ int kvm_handle_guest_abort(struct kvm_vcpu *vcpu)
->  		return 1;
->  	}
->  
-> +	/*
-> +	 * If instructions of FEAT_{LS64, LS64_V, LS64_ACCDATA} operated on
-> +	 * unsupported memory regions, a DABT for unsupported Exclusive or
-> +	 * atomic access is generated. It's implementation defined whether
-> +	 * the exception will be taken to, a stage-1 DABT or the final enabled
-> +	 * stage of translation (stage-2 in this case as we hit here). Inject
-> +	 * a DABT to the guest to handle it if it's implemented as a stage-2
-> +	 * DABT.
-> +	 */
-> +	if (esr_fsc_is_excl_atomic_fault(esr)) {
-> +		kvm_inject_dabt(vcpu, kvm_vcpu_get_hfar(vcpu));
-> +		return 1;
-> +	}
+>  arch/riscv/kernel/ptrace.c | 32 ++++++++++++++++++++++++++++++++
+>  include/uapi/linux/elf.h   |  1 +
+>  2 files changed, 33 insertions(+)
+>
+> diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
+> index ea67e9fb7a583683b922fe2c017ea61f3bc848db..18ce07ffb27bb1180667769ee=
+d800f6fdf96c083 100644
+> --- a/arch/riscv/kernel/ptrace.c
+> +++ b/arch/riscv/kernel/ptrace.c
+> @@ -31,6 +31,7 @@ enum riscv_regset {
+>  #ifdef CONFIG_RISCV_ISA_SUPM
+>  	REGSET_TAGGED_ADDR_CTRL,
+>  #endif
+> +	REGSET_ORIG_A0,
+>  };
+>=20=20
+>  static int riscv_gpr_get(struct task_struct *target,
+> @@ -184,6 +185,29 @@ static int tagged_addr_ctrl_set(struct task_struct *=
+target,
+>  }
+>  #endif
+>=20=20
+> +static int riscv_orig_a0_get(struct task_struct *target,
+> +			     const struct user_regset *regset,
+> +			     struct membuf to)
+> +{
+> +	return membuf_store(&to, task_pt_regs(target)->orig_a0);
+> +}
+> +
+> +static int riscv_orig_a0_set(struct task_struct *target,
+> +			     const struct user_regset *regset,
+> +			     unsigned int pos, unsigned int count,
+> +			     const void *kbuf, const void __user *ubuf)
+> +{
+> +	unsigned long orig_a0 =3D task_pt_regs(target)->orig_a0;
+> +	int ret;
+> +
+> +	ret =3D user_regset_copyin(&pos, &count, &kbuf, &ubuf, &orig_a0, 0, -1);
+> +	if (ret)
+> +		return ret;
+> +
+> +	task_pt_regs(target)->orig_a0 =3D orig_a0;
+> +	return ret;
 
-This doesn't seem quite right. This is injecting an *External* Data
-Abort, which is not what the spec says happens, as you are emulating
-the *first* acceptable behaviour:
+Nit: Could be return 0, for readability.
 
-  "The check is performed at each enabled stage of translation, and
-   the fault is reported for the first stage of translation that
-   provides an inappropriate memory type. In this case, the value of
-   the HCR_EL2.DC bit does not cause accesses generated by the
-   instructions to generate a stage 1 Data abort,"
+Regardless,
+Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
 
-So while the exception is reported at a different EL, the fault should
-still be an "unsupported Exclusive or atomic access". But that's also
-assuming that S2 has a device mapping, and it is EL1 that did
-something wrong. Surely you should check the IPA against its memory
-type?
-
-Further questions: what happens when a L2 guest triggers such fault?
-I don't think you can't arbitrarily route it back to L2 without
-looking at why it faulted.
-
-Thanks,
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
 
