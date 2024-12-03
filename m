@@ -1,142 +1,128 @@
-Return-Path: <linux-kselftest+bounces-22721-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22722-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 038A29E1101
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 03:00:36 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DC1E9E12D0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 06:15:09 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF7E9164413
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 02:00:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8101AB21B33
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 05:15:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C0BC4F218;
-	Tue,  3 Dec 2024 02:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE6C2166F25;
+	Tue,  3 Dec 2024 05:15:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HxMTZ6GI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="do+0H8dL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFAF414A82;
-	Tue,  3 Dec 2024 02:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73FA8817;
+	Tue,  3 Dec 2024 05:15:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733191230; cv=none; b=eAbUU5NttPoi2yXzW/Egr8QDH3Hme5n1IoQsQGys+3aGFdyhSnlErF1pG9IcnaScfIJ5E3eZQzxDMPKWWkcuXnkvnv6ob6G1pbCjYXh86WtPhm4cP7ePszVB0Sm6vEy8+LTcYpUqkbe/ppNicM5E1NeheKMsmMc/EWkTurBsKJo=
+	t=1733202901; cv=none; b=kSnzObOUAxY0qjLJfydt0MqiBkcSl4c+A7nIGK4aVdKbQmTSrsBifqYDH3PFko2A07qOJgdr1j2AItAjuyv0UvfqSqlbi6o+a9+AIlI1sU6NLgSdtszQci0KsL3z6Tuec39rZ77NrFwxH1ZHNl9q6jbq4QRQoFBW/C+6psex12g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733191230; c=relaxed/simple;
-	bh=EAkYqHxwoA0R0dcqG7W4lfpOriiOfn2sTkhuAvg1mYg=;
+	s=arc-20240116; t=1733202901; c=relaxed/simple;
+	bh=xIaJa+NSbdE2QEly+jxjzNZXQhp1uMHwhx7F7u4wmrM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UW4xV4EJckC4a2a/8wiWz6J/N9f7IlT1jFY2YdX849nFc2M51yz2Z8QDcfrWjSXD/Dc7uWG3rddzfHuC2J6CEoWUJQJXar0wQKW37IvpWvW2HsN+5KC+M1PvKq1cvsW98SjGkdaSHijenwEmhxwwYUyNVy7GQ7zIStyUOAYn/is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HxMTZ6GI; arc=none smtp.client-ip=209.85.216.46
+	 Content-Type:Content-Disposition:In-Reply-To; b=hYiST5tP23VW18C7+gs7n2dQuFhxkwPAYOcQa6piSRsl5fWRrlXWlLq3izUfZ/c92y48E4K+2MqeN3JD0hccxi97Sdxk/ZokruaBIztYsBeEHOhy1J7nvM9E4OX4Fz5GeGVndD2PdKvm7n7LcvPWUJ9qtBq4hpCdkxtCGZVKkRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=do+0H8dL; arc=none smtp.client-ip=209.85.215.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2e56750bb0dso3605037a91.0;
-        Mon, 02 Dec 2024 18:00:28 -0800 (PST)
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-7fc8f0598cdso4295020a12.1;
+        Mon, 02 Dec 2024 21:15:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733191228; x=1733796028; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1733202900; x=1733807700; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ifhyXCPwj2ZS4FThasjY1J6PG/17ZdtDu1I6YUbkxr0=;
-        b=HxMTZ6GImJQWlkN17o/Pknr2ONcCHIl13tPF+JErwWPinscJXZSiT4UE+1debDm0s3
-         zMsgtLr89brCFfXtKs4ixCBO0yGynZZTnt6DsJ3rN0Ysi5AnDpCoo0qq06F26WciYMyF
-         f3y/ZmM4yEEUYLhUTOBqPrSl57QUZOiN6tBwz1mSO2uoeQ8iy1zv/iLDpDEqqJzqcgXE
-         WakD/XJlP+Dv/rkh2S8dF5dgLUu5vq4uQ8TPCKhEul09HZHcQRMbvxBmbSR+ik5F32n8
-         eLFGiqf1D1Tg1OVjt1POeYPVmxotq4lTJOAB7dSBa1g6Dy5lFPCiL3GSqj4fNCqqzgwD
-         dNsQ==
+        bh=OplFaKW8tTlpx6QNBTj6KxzPZVnj+b3RXvlOwwHvJEI=;
+        b=do+0H8dLTeUnWtLOvW/X8/hV/D+SCLsy6X0l813Z1G32Hd7JwIixpxeZgDlD5sGnMN
+         OjHjGZ++0ZbObw+UvGpiZuJZPF2WQrRQ8Sb3S14QdrPeZ9CwXNDam+30ETvtu/W9hWhH
+         r7GgoEF6aJ+Fo4iQMQzWwSYY/rIkodZqQ9lua2ZlJ3LNWYolo/p5NFkxBNJ7VfPehA6+
+         /OCPF1lA46DOiWzVkI5SUKYMI+p90UkkBfgfM79dQChaqBWUPvQvwmijDnjP8wCWMcAg
+         98wyeGxO0RJCdxRjeWk5xX0PR2SLbLRREM2CUZ1UvfWH7XowmqjLpFpjYLpuyIartwjC
+         ghRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733191228; x=1733796028;
+        d=1e100.net; s=20230601; t=1733202900; x=1733807700;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ifhyXCPwj2ZS4FThasjY1J6PG/17ZdtDu1I6YUbkxr0=;
-        b=Y0OOt3R81xQ/n/Op5oB/2KvI2ftW+8u6XG2j16UiLsf5vn/QdjoWykGohg5xTLqfbB
-         0rv4AXZtOuRUlPIedl3IF1bNWZ55n3zmDzniPHuJRLB6HuMvdltAhijGateX/GquK/8m
-         8Tpv50XPVnDW081k+owv8g0t+mvjbsvYs+vO/MFJ9fGCmzLQ8CF7ymR0P74vkuwlFLem
-         wz1vC0fTTO/0ynqHVNPS4y3yz2MW0NsQtAqMzJh6zHtrRU1Pvomm191K+6XbG8AeKvR6
-         r7RdS2iMKkvkREmkq5+k0MOPUoKQUOxHkwa/ioj7EbO+0T2zE1BW1DClmENlrkdA1pSV
-         3CVw==
-X-Forwarded-Encrypted: i=1; AJvYcCUGR2qqhs+Bte2DAyXw1Ak0JsF8wriwEC5Hj3vArL7w83YmMl+mm30Y+0bCxM0Y8A5jle2rjT/L@vger.kernel.org, AJvYcCV6KT9jPsd0kH5F4sqigXpGYmHtBOrtmKvBs7P6IMsOB/iiIIGF/k8Jg+uU2stEWZlsdkV3+PVGRp9WU7EB@vger.kernel.org, AJvYcCWIyaFM3SasmJrEIL4foueWymvsPFix1TR/PG4yPqgV8OBbpOMZ1yJYmlHSRt9/JFxVcC5yugjxFYQgZDyNCYA1@vger.kernel.org, AJvYcCXIvJuHiKyvc0XdGdkWiyKCA1rcoaKDEwYo39smPbDMfRX/d8cdQEaVx6ZU10Sa05ZiHQg0DbD5eS+Y@vger.kernel.org, AJvYcCXXWjvuGxKjrJv1N+02NUpGCOs1zl5LOEJgJHSQAiwRAl0wSzjxrWPk2vgHgL481tGkS/8P7zelWRo5yzwL4+Bl@vger.kernel.org
-X-Gm-Message-State: AOJu0Yze7xsShEqvIxePgf+CKLn8VI68ZIHFZuE+LLKzXN/mnhE2O0mT
-	aLHVeN+fQvDa/RqqPrBhSZ8tNN6IO2WEcMuSTcoO3+M+ncXu/CPV
-X-Gm-Gg: ASbGncspduNW0rWQApz1evZZzs5JHq9OD/+CRShGWnn1gMbnMGc2QOFp29l6xGD0Q7i
-	2+OwqHEZBsX8K+aTF+d+1dlz2eCfeS+I7m1RcxBFaMya9TInj4GBHOpeUxCpDW+n1cY/A/xie6E
-	/snZvnl+T7e4gHxkO3Lk95GofIO2a2UEOr5PbIE8wgRF2kArbXLHCvnKMzyJSv++VgCHk8tIYwf
-	ME/Pz4I+j2ZSXVBeo2zNNCSkxb6L7ty7gHr7Tt+q/EPfns4qtrJnzc=
-X-Google-Smtp-Source: AGHT+IEe0uogUo+ebVsZ0JC4jhKeRE4kCvwTmE8uI2YOgw7JxmzvRPXAWvNj+Oa2WPogiVf++p7dKQ==
-X-Received: by 2002:a17:90b:1b52:b0:2ee:7a4f:9265 with SMTP id 98e67ed59e1d1-2ef012019a9mr1313043a91.15.1733191228010;
-        Mon, 02 Dec 2024 18:00:28 -0800 (PST)
-Received: from fedora ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2eee1591fbdsm1908976a91.35.2024.12.02.18.00.18
+        bh=OplFaKW8tTlpx6QNBTj6KxzPZVnj+b3RXvlOwwHvJEI=;
+        b=AdVosX5Bt0wT7ll9AYPZg1387P1UUimof8Um6MtRI6EhcyJ3+OkdDWypj4vDbC78zE
+         LMh6v8eK55vDn49dBd2yIf0jqO10XBl5qNCECCS1ZyLI32WR32oAf+nQQr6LR8vLNa0Q
+         VmCuiBvBIrB+SxAU9Ufi+wjuVKEFb+jU9tW3ikSx2eDixICsn17+64FpvoUQkc0sn3w8
+         JHdr99AkrwbLbrKRo29+d76b1Xv9ci7hSpfhT809ZHHaYA/UoHWwVd/ImY3VDFcCn4tI
+         QImcWR7d4izlY825bnZ0Z/YRKEsuMkjSbwWUr5pPo7d7NyXhA7Mwd6tBELfgpgh4pnzr
+         0+bA==
+X-Forwarded-Encrypted: i=1; AJvYcCUY0pWXoy++LWIaNg0SCHSLNlsE3JYfKMCX0Zk/jqarSBulBN6Idxi+dXTdMuv36m2skEzFafYk26lKE4c=@vger.kernel.org, AJvYcCWUHDm8jfvg751ispxqQvs149RIbxh/dDFqfovvmpTMFPr8ZgIbi9iSfAhHbZ+4KCmA4GqYNNUCUgjyeggHvK1y@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVg+zVH5KZgEZzaDwfdHC2rXMpo+9dHw3IHDesC/7bO/J5zT6M
+	fvf+dwEXgBdDe5/l7GxHd31LXRFIWWWcdH0fTuB6FqUyUZd5vGc=
+X-Gm-Gg: ASbGncsq5Sr6a+/EMJEMMe2Ea6gIs7BelOBUigqWTs54NhReCElgI1+wXANXPOnikVH
+	43hIARogZHZUTuj9g6R24F9FGvlotgJkH/uPnEioJs0dSk6fBz7WtScNfcRVhiGyJ7ufuLSAavp
+	ZUuyPa/isfW8prQW7SeZ+U4imUBiSV5U5HznWK9EFWhSgd5C7ccxsoeSjrgw5eIkf0CUmwr4dbk
+	NFZQeW//qqmn+aKUubmGauvg7TEuw43fmJojKheLXk/ZjQ76Q==
+X-Google-Smtp-Source: AGHT+IE8SPLOiZpehFcsI6ZUD/w0ZxU5jUM5kP/XXZGKiuAIC2vpPfqTldbVHT7F4YhHODI05c2wMA==
+X-Received: by 2002:a05:6a20:2583:b0:1d9:3747:fb51 with SMTP id adf61e73a8af0-1e0ec800265mr31292059637.8.1733202899598;
+        Mon, 02 Dec 2024 21:14:59 -0800 (PST)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fc9c38585csm8825146a12.61.2024.12.02.21.14.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Dec 2024 18:00:27 -0800 (PST)
-Date: Tue, 3 Dec 2024 02:00:15 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Kenjiro Nakayama <nakayamakenjiro@gmail.com>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>,
-	Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Mon, 02 Dec 2024 21:14:59 -0800 (PST)
+Date: Mon, 2 Dec 2024 21:14:58 -0800
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Joe Damato <jdamato@fastly.com>
+Cc: netdev@vger.kernel.org, pabeni@redhat.com, edumazet@google.com,
+	kuba@kernel.org, mkarsten@uwaterloo.ca,
 	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Shuah Khan <shuah@kernel.org>, netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-arch@vger.kernel.org,
-	lkmm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/net: call sendmmsg via udpgso_bench.sh
-Message-ID: <Z05mL1WQHBLRkIw1@fedora>
-References: <20241202232129.7139-1-nakayamakenjiro@gmail.com>
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next] selftests: net: cleanup busy_poller.c
+Message-ID: <Z06T0uZ6422arNue@mini-arch>
+References: <20241203012838.182522-1-jdamato@fastly.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241202232129.7139-1-nakayamakenjiro@gmail.com>
+In-Reply-To: <20241203012838.182522-1-jdamato@fastly.com>
 
-On Tue, Dec 03, 2024 at 08:21:29AM +0900, Kenjiro Nakayama wrote:
-> Currently, sendmmsg is implemented in udpgso_bench_tx.c,
-> but it is not called by any test script.
+On 12/03, Joe Damato wrote:
+> Fix various integer type conversions by using strtoull and a temporary
+> variable which is bounds checked before being casted into the
+> appropriate cfg_* variable for use by the test program.
 > 
-> This patch adds a test for sendmmsg in udpgso_bench.sh.
-> This allows for basic API testing and benchmarking
-> comparisons with GSO.
-> ---
->  tools/testing/selftests/net/udpgso_bench.sh | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testing/selftests/net/udpgso_bench.sh
-> index 640bc43452fa..88fa1d53ba2b 100755
-> --- a/tools/testing/selftests/net/udpgso_bench.sh
-> +++ b/tools/testing/selftests/net/udpgso_bench.sh
-> @@ -92,6 +92,9 @@ run_udp() {
->  	echo "udp"
->  	run_in_netns ${args}
->  
-> +	echo "udp sendmmsg"
-> +	run_in_netns ${args} -m
-> +
->  	echo "udp gso"
->  	run_in_netns ${args} -S 0
->  
-> -- 
-> 2.39.3 (Apple Git-146)
-> 
+> While here, free the strdup'd cfg string for overall hygenie.
 
-Reviewed-by: Hangbin Liu <liuhangbin@gmail.com>
+Thank you for fixing this! I also saw them this morning after a net-next
+pull and was about to post... I also see the following (LLVM=1):
+
+busy_poller.c:237:6: warning: variable 'napi_id' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+  237 |         if (napi_list->obj._present.id)
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+busy_poller.c:243:38: note: uninitialized use occurs here
+  243 |         netdev_napi_set_req_set_id(set_req, napi_id);
+      |                                             ^~~~~~~
+busy_poller.c:237:2: note: remove the 'if' if its condition is always true
+  237 |         if (napi_list->obj._present.id)
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  238 |                 napi_id = napi_list->obj.id;
+      |                                            ~
+  239 |         else
+      |         ~~~~
+  240 |                 error(1, 0, "napi ID not present?");
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+busy_poller.c:226:18: note: initialize the variable 'napi_id' to silence this warning
+  226 |         uint32_t napi_id;
+      |                         ^
+      |                          = 0
+1 warning generated.
+
+Presumably the compiler can't connect that fact that (!preset.id) ->
+error. So maybe initialize napi_id to 0 to suppress it as well?
 
