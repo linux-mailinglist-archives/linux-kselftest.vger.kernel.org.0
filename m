@@ -1,93 +1,121 @@
-Return-Path: <linux-kselftest+bounces-22734-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22738-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54B9B9E1B23
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 12:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EC9A19E1C97
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 13:47:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AE142845B2
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 11:38:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF8F02831B9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 12:47:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C43A1E3DFF;
-	Tue,  3 Dec 2024 11:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BC571F7559;
+	Tue,  3 Dec 2024 12:43:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kRq2xUlV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S1vFpBrE"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0BE1E009A;
-	Tue,  3 Dec 2024 11:38:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01B291F708D;
+	Tue,  3 Dec 2024 12:43:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733225890; cv=none; b=qDBJFmbdcqwSpI47Qcl/M891eD2nR5TUWJGXRf3nVDr1v4N+yGIgDLdxP8ujRnMaU2WSDjBXgY19JyA2Qyh9SZ0Uw8h2Inl2XJVSSM2em5LL8sGyL6AkokBSaJJTl2n6Rbodli0uIf9Y/sgz/iMq7EVHZcrGVFfhySKp/e93+XM=
+	t=1733229829; cv=none; b=GNpPAkZ2V5kWI/JkFwY1J7TgtD5ETSK6yOcWLz051HV8EvF/5QI9tRFQxFzZGWaa7HGMeocOnrGdn9+eNHTHxWt2g/OpC3sAeYQZ9hTKCGdnjzC7KcEdpZ6I4mFtLT1r1NF6t7m+UwtMI9ePespLHECkh9NelVcU+bAUE9JLj8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733225890; c=relaxed/simple;
-	bh=SOpDD/j8v1BW+RzStopfvCSMdaQOSrVLeT5dQ5ZfMis=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Buv2munsAzDv/2CaR3/CbvTbxHLKw6vZ65KlUf1XX8qUrmACxRgIAODI6G18gAx0lf31rn5Qh6ZuqiOlH5PnMGguchfUFKv/JxI5PuV9hGmBJYqWXxzmv2QeXId2rIqnvWNpJzhDmWR2ye3qe2d1B6vVHBW30Wxw7rENB6vKuwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kRq2xUlV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AA00C4CED6;
-	Tue,  3 Dec 2024 11:38:09 +0000 (UTC)
+	s=arc-20240116; t=1733229829; c=relaxed/simple;
+	bh=/R3T2dCUOvRsYvV0jA+tDFl+fxMd64EFAAAyTy0FGKE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Bu91rtCT9Ao7HpEDqV/3Gj6DqBhqOySjsbvxkjDfv8e/8sDK2j+C0BZLcYka+Sc3FL31JE4eYps/EYq+XTdjq1QC+CJOzjigt7sEly6hbxUG7t3brgCIXaZmIWSc3FN4BRAYyDuTielrAK5+2JORSwdu25Hu9Hi5/U2H5wXlZs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S1vFpBrE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED3D1C4CED9;
+	Tue,  3 Dec 2024 12:43:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733225889;
-	bh=SOpDD/j8v1BW+RzStopfvCSMdaQOSrVLeT5dQ5ZfMis=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=kRq2xUlVOdU0klRsEqazpye3CHkPfgh2LXRrkUWPFB3qkELHGfIs5bVkdvpey1Ghd
-	 +s3wf03Bgx2ShWfjygtnPTlLMWbCFz+8d93V2QT6HjyuodUl77fftQqZqkt8O95L7D
-	 FTP33H0gy0q9/1bAEvOyeTaVZaeMQJyZh/FjmcsKnW+eU0bRR8Um69qYjGbySKD9bO
-	 A/ojSCiWlKTXmXWjW0INs2UcKSaQ8Cl3brhqFJj4mFJ7c0x8olSECuhhoXfRFvE3pf
-	 TgRJ75P5xW//l2rh5hXsoJAlep0r00PPruwKIs6g1PE+FfDCMyqv9Sh6+IUQ6ozKJV
-	 s6b38R6PoUcOQ==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Celeste Liu <uwu@coelacanthus.name>, Oleg Nesterov <oleg@redhat.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Eric Biederman
- <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, Shuah Khan
- <shuah@kernel.org>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, "Dmitry V. Levin" <ldv@strace.io>,
- Andrea Bolognani <abologna@redhat.com>, Thomas Gleixner
- <tglx@linutronix.de>, Ron Economos <re@w6rz.net>, Charlie Jenkins
- <charlie@rivosinc.com>, Quan Zhou <zhouquan@iscas.ac.cn>, Felix Yan
- <felixonmars@archlinux.org>, Ruizhe Pan <c141028@gmail.com>, Shiqi Zhang
- <shiqi@isrc.iscas.ac.cn>, Guo Ren <guoren@kernel.org>, Yao Zi
- <ziyao@disroot.org>, Han Gao <gaohan@iscas.ac.cn>,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, stable@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Celeste Liu <uwu@coelacanthus.name>
-Subject: Re: [PATCH v2 2/2] riscv: selftests: Add a ptrace test to verify
- syscall parameter modification
-In-Reply-To: <20241203-riscv-new-regset-v2-2-d37da8c0cba6@coelacanthus.name>
-References: <20241203-riscv-new-regset-v2-0-d37da8c0cba6@coelacanthus.name>
- <20241203-riscv-new-regset-v2-2-d37da8c0cba6@coelacanthus.name>
-Date: Tue, 03 Dec 2024 12:38:06 +0100
-Message-ID: <878qsxdmjl.fsf@all.your.base.are.belong.to.us>
+	s=k20201202; t=1733229828;
+	bh=/R3T2dCUOvRsYvV0jA+tDFl+fxMd64EFAAAyTy0FGKE=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=S1vFpBrE+KOjDQhX9btmNlDoQ7n2hTH1UMCBPiTEZu5fJndDDozTJeMOcWSu9viyz
+	 Rck/tX7VRhK7HcZHVuzRL7BF4ypcbHrAZgL3VCosPx0EzKQBeGGZDgVzqNi2DauqZG
+	 YnRKDwdjfxKG/x0QZ68vZuERobCN7rhX+blJmKvgSZp2oIH2wr+sgL+UUhUleZvBej
+	 zezd5vvQpohWyUsvzkhwsMfFp1A+Tue0iVe29fDxSZHuFZnRYgldYWMTXvexLjB39K
+	 3y0hWhh+HhmHogJCk2Z2CBw7tw//w3aOsSHHkojHDrJcnuCPslDAkixcVDS8Hdwob1
+	 uNxmXg4YqrMNQ==
+From: Mark Brown <broonie@kernel.org>
+Date: Tue, 03 Dec 2024 12:39:21 +0000
+Subject: [PATCH v3 2/9] arm64/sysreg: Update ID_AA64ISAR3_EL1 to DDI0601
+ 2024-09
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241203-arm64-2024-dpisa-v3-2-a6c78b1aa297@kernel.org>
+References: <20241203-arm64-2024-dpisa-v3-0-a6c78b1aa297@kernel.org>
+In-Reply-To: <20241203-arm64-2024-dpisa-v3-0-a6c78b1aa297@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+ Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, 
+ linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-9b746
+X-Developer-Signature: v=1; a=openpgp-sha256; l=944; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=/R3T2dCUOvRsYvV0jA+tDFl+fxMd64EFAAAyTy0FGKE=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnTvz1m8jaBl4lRtzxxJijmwJtl0qRMO2NKOfX07of
+ PveHS9+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ0789QAKCRAk1otyXVSH0BK7B/
+ 4jbxft2DQuYdbfgTfcFjX9jH+XzlOieTzA/ksj8rFkCcphq/fO/RAaGhLDT5tcDNBWQakCvBJ5vFIq
+ iX4SqEGf7NtgaSsjV5tFnKLg8Y2MRpCWuZ6tFgVdooRFxsoRbuyx4sfR9EbL0GFthB+8wm7WFtcMJB
+ odzwdRAkRXLvzphBAsoZMNkCVicDDdv/J5FCbGO6IwqvTQZ37gYeFhaTzsSqss/oPLWj507smCyfg5
+ Id19FyEr+bsySDaTPyKlr9rS/5vNUOiYGlyBnwYlI7zkqgcPICMrhfclEBr9p0UnN7PTp0PkZfmcOz
+ OaDXOFVJyFdNczMl5uC4W4PyYEeQIf
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Celeste Liu <uwu@coelacanthus.name> writes:
+DDI0601 2024-09 defines several new feature flags in ID_AA64ISAR3_EL1,
+update our description in sysreg to reflect these.
 
-> From: Charlie Jenkins <charlie@rivosinc.com>
->
-> This test checks that orig_a0 allows a syscall argument to be modified,
-> and that changing a0 does not change the syscall argument.
->
-> Cc: stable@vger.kernel.org
-> Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> Co-developed-by: Celeste Liu <uwu@coelacanthus.name>
-> Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ arch/arm64/tools/sysreg | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-Nice with a selftest! (Don't think the Cc: stable applies... ;-))
+diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
+index 911f16c82ebd3ee98ffed965b02a5c6b153bc50c..c5af604eda6a721cedf5c9c68d6f7038156de651 100644
+--- a/arch/arm64/tools/sysreg
++++ b/arch/arm64/tools/sysreg
+@@ -1566,7 +1566,23 @@ EndEnum
+ EndSysreg
+ 
+ Sysreg	ID_AA64ISAR3_EL1	3	0	0	6	3
+-Res0	63:16
++Res0	63:32
++UnsignedEnum	31:28	FPRCVT
++	0b0000	NI
++	0b0010	IMP
++EndEnum
++UnsignedEnum	27:24	LSUI
++	0b0000	NI
++	0b0010	IMP
++EndEnum
++UnsignedEnum	23:20	OCCMO
++	0b0000	NI
++	0b0010	IMP
++EndEnum
++UnsignedEnum	19:16	LSFE
++	0b0000	NI
++	0b0010	IMP
++EndEnum
+ UnsignedEnum	15:12	PACM
+ 	0b0000	NI
+ 	0b0001	TRIVIAL_IMP
 
-Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+-- 
+2.39.5
+
 
