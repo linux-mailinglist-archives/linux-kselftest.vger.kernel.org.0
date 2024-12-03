@@ -1,180 +1,251 @@
-Return-Path: <linux-kselftest+bounces-22766-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22767-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D39489E29D6
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 18:47:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17CBB9E2B2F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 19:43:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A1EE165626
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 17:47:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3160168054
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2024 18:43:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A85E1FBE88;
-	Tue,  3 Dec 2024 17:46:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07EB11FCFF5;
+	Tue,  3 Dec 2024 18:43:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F/fTAeIu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BJLc4Upq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A16AD1F8AD2
-	for <linux-kselftest@vger.kernel.org>; Tue,  3 Dec 2024 17:46:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF1A1632F3;
+	Tue,  3 Dec 2024 18:43:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733248011; cv=none; b=D0YUmy8v7qSvZYBGdBiAI9d2PiCVrT47uw4faq5YgCO0Pp6zDZUDocjnIKfDsCRsLBxG0Gj7tGWZ+bx0PkRxxMAxtcsYVt31hvKZqlXKnuTkxdp8geMUKIla3kk1k5jz+kLAG6YpTL2E17Tm7W3QVlXbWUpVq3GVZh6yj1rqih4=
+	t=1733251435; cv=none; b=pqGSH13CAaDMYOktvkWCo3OXr3+IMEjHXOFORB0H/eE/HFmV2Q2Ryqb9fv/i+XanbZ0A7abfrP11wXsCEft7hy1uPUX+OHTBLO3SYKIepoiTuApKzpKmuf1wZuombhkGtvyOSykEKRo/jR4dm9wO2fBHh/IzUuMswam/GB25RhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733248011; c=relaxed/simple;
-	bh=50YYxZWRrgFvV7RWzGZagJmm/MIRxY3i13DlmK0l2CQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ctDvgibSr431LuriShOZmEIkESC989KQM+uKPzlrkdCFPYCRkrvjv6MwCTz9M5kxzLewQYzbtq7fHwGedzx5NBWJfu3iAWSE2NVJ72XHte3VN1oHY6QGObOnQXHH3a6bv2CeuMKtX9NfDORcbfHDAjRaxXP5kFH0Xuqc11wN2BU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=F/fTAeIu; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1733248008;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rSpS4mkww3n7ZfxdPyPAe92ZnrZDWXRdAxdhxgPhie0=;
-	b=F/fTAeIu9y15Fvw+vZZe/j2+i3YH8I6hivYSqIVbIz6kUZrH6w5zyTsf80EH+zfccMFGgD
-	0rMTomLkrtXjvUC4S/OZ8GX/5iLjEQTiM3f874zAgDZpHRMZinVT870KVb0709x9eHyJd0
-	tOO5X/xhJNcINH8yKhHzUGITr7fsLv8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-94-ZjrHsph-PH660Am54NZFkw-1; Tue, 03 Dec 2024 12:46:47 -0500
-X-MC-Unique: ZjrHsph-PH660Am54NZFkw-1
-X-Mimecast-MFC-AGG-ID: ZjrHsph-PH660Am54NZFkw
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-434a0d30c06so99685e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Dec 2024 09:46:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733248006; x=1733852806;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rSpS4mkww3n7ZfxdPyPAe92ZnrZDWXRdAxdhxgPhie0=;
-        b=RWKqbRuxhxLsj7SHVAj5SNhiXCACWJG4J0UWA6uwI3OpRIADjCRWL4gaWWCNiv7exK
-         X2kVtziFIawy+xfRKEcWzU41BANtksfzqxKiqxiox7m4C3GQgl0cSqXx1JZd17j1cYYT
-         OpJJ80BaldINTty9HmtDIscerMPRzYXY+54NPb78a/UN3rzZaZzniwmkcxvziXLLeUEx
-         vZo8vnvw61QbCaKDU5eQ4uK7gwrzn9mgEw3qTc1tz6fJrZLsLNAeXaPUl2Wk0HpVK9yC
-         here3L0uvOkFdOKsgZK+KwnQjf9tuNhP5IjtGvLiZE7wItAlCF+JV2MEIwk15ROSQnDL
-         LRnw==
-X-Forwarded-Encrypted: i=1; AJvYcCUyww09xzyZAHDloik5EspJnUSk6/mRD6r9aYbgYc7XsuwgOU7JMcvxn0xP17JNMvFj3pFhj0fvtNSqyC8wz20=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+32+sJkL/6BNcZHQmjZ/QSIJPnTAVUhXz1hfKEfFFO1LvaLb+
-	Tff7dX+vVhFRVGxTaMnAW25rU7KjWa+j+PYaG5aiLpwSMVhbnGY2cB9Y2xo98yF2bU3arrV17w2
-	EraDL/oEL9bOpRto8jGlL+2SVgiGLcquOXA4S3vIkArax4B2yh4CzvHdc3rrhYs4msA==
-X-Gm-Gg: ASbGncv4MYlapwU8aJRtx8KEcymV2MPrASLs0OgTzrhbgTIKnib0gfBverk+xgQ1D43
-	W50usUyKyp0wzhDboUdSnHjliKu5Bl+O/hO62qfvyXFUlArHHpcjS2p2BA0C9LnlSZP4kvivEGO
-	GX0jfQN0QFXSmizw+ZJeMWttDg93H7W8AgqfSOehcqGJJGF92xwjyOStgeoSzetZMciKjTVBYUJ
-	NPjIq2aZdPA9CD6mjOv+o/VXRI4xjMwOF13ApGYygYAGvA5WOBGy48LBsQG6/8d3OT1ycWdbsnn
-X-Received: by 2002:a05:600c:4e86:b0:434:9f90:2583 with SMTP id 5b1f17b1804b1-434afc1d39amr204882535e9.11.1733248006249;
-        Tue, 03 Dec 2024 09:46:46 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IETgA2pFZtAPaTKpdbTBMQYjJVZRs89hmZMU86qmFTgXb6S51/atTKr2YYGr045N/IDGnqPBA==
-X-Received: by 2002:a05:600c:4e86:b0:434:9f90:2583 with SMTP id 5b1f17b1804b1-434afc1d39amr204882335e9.11.1733248005853;
-        Tue, 03 Dec 2024 09:46:45 -0800 (PST)
-Received: from [192.168.88.24] (146-241-38-31.dyn.eolo.it. [146.241.38.31])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-385e19104a0sm11552257f8f.32.2024.12.03.09.46.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Dec 2024 09:46:45 -0800 (PST)
-Message-ID: <c6ec324f-dcfe-46c0-8bfb-1af77c03cb59@redhat.com>
-Date: Tue, 3 Dec 2024 18:46:43 +0100
+	s=arc-20240116; t=1733251435; c=relaxed/simple;
+	bh=qMyvWLOMEYcXsb7codEeSmahMIrsZFObgjZPEP95daQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=uXuxqu2La15+l8cGSIByDbPJ84S0NEMAYDKsTSMTTuAhbpZfdkUMNfKRFCjKxNtyzn8BYmAmKKBQa6c3mbRQDgCy12tuxoz8sS5Tx0M3KQnMdRtFumnTQISWmpaIj84vT/RF1Mrr4GtYbz3ZLIDrvaXaoU9nbzmOVnYu+cAjPR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BJLc4Upq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9F77C4CECF;
+	Tue,  3 Dec 2024 18:43:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733251435;
+	bh=qMyvWLOMEYcXsb7codEeSmahMIrsZFObgjZPEP95daQ=;
+	h=From:Subject:Date:To:Cc:From;
+	b=BJLc4UpqPSYFc2ysDjcNqjir97j0+fFGgn3vQTd5+oTMXtSxqK+425xstL8MzxtXk
+	 ptOKtZZb8f0tR+hnPLNr3qnuVn2Voe8lt6a7/mulTeRH5TQ4nXttMfK+KxK5Fp4488
+	 2mPdDe5Ekx2xLXBcfrQj0HGX4iePGb0HDe5PfUVab4Cl4ML6sX4AwK2wUgzzNRywsZ
+	 RglAuaKZcOG61/P2c2ojExDyqAKto+RPIjPKHZXE/roj30BHC6bX8HOSPKB4G/9gIQ
+	 8C/vzicF7vI3e84+UckFpju4dleB+UORglBJUCJFDOPAxA9Xsr0PNN1eSd62bxZHx2
+	 mMxWuk0pngSCw==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH RFT v13 0/8] fork: Support shadow stacks in clone3()
+Date: Tue, 03 Dec 2024 18:43:34 +0000
+Message-Id: <20241203-clone3-shadow-stack-v13-0-93b89a81a5ed@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v12 17/22] ovpn: implement peer
- add/get/dump/delete via netlink
-To: Antonio Quartulli <antonio@openvpn.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
- sd@queasysnail.net, ryazanov.s.a@gmail.com, Andrew Lunn <andrew@lunn.ch>
-Cc: Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20241202-b4-ovpn-v12-0-239ff733bf97@openvpn.net>
- <20241202-b4-ovpn-v12-17-239ff733bf97@openvpn.net>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20241202-b4-ovpn-v12-17-239ff733bf97@openvpn.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFZRT2cC/3XSTU7DMBAF4KtUXhPkGf+zYsUBEDvEwo7HbdQqQ
+ UkVQFXvjhMEDXKytC1/9jy9Cxuob2hgD7sL62lshqZr8wLE3Y7VB9/uqWpi3mDIUQAHV9WnriV
+ RDQcfu49qOPv6WIGKkkcMSQnN8s33nlLzObOv7Pnphb3lzUMznLv+a35qhPnoB0Wxio5Q8Spab
+ SIP2Y/88Uh9S6f7rt/P4Ig3BECuI5iRoEEkqy2AUgUiFgjydURkxJtgKQpCX9cFIpeIXUdkRmx
+ AmxLJpI0uEPWLSI58IxOVEYFYa6ecJRkKRN8QvRWszogjMsaKACm4AjE3xAhYR8yUiVMCiUIKE
+ AvE3hDLNzKxGeG+TsLUPoEsg3ULZKN8o5vG0RiNTM5JLQsE+ELBjXmAT3/RZI0zwUlZNgX+Siu
+ Bc7XBTK1Frz2GqKNWUDK4YLbSham3BqygYAMRmH/M9Xr9BmbmC3y6AwAA
+X-Change-ID: 20231019-clone3-shadow-stack-15d40d2bf536
+To: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
+ Deepak Gupta <debug@rivosinc.com>, Szabolcs Nagy <Szabolcs.Nagy@arm.com>, 
+ "H.J. Lu" <hjl.tools@gmail.com>, Florian Weimer <fweimer@redhat.com>, 
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+ Vincent Guittot <vincent.guittot@linaro.org>, 
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
+ Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, jannh@google.com, bsegall@google.com, 
+ Yury Khrustalev <yury.khrustalev@arm.com>, 
+ Wilco Dijkstra <wilco.dijkstra@arm.com>, linux-kselftest@vger.kernel.org, 
+ linux-api@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
+ Kees Cook <kees@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Shuah Khan <skhan@linuxfoundation.org>
+X-Mailer: b4 0.15-dev-9b746
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7498; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=qMyvWLOMEYcXsb7codEeSmahMIrsZFObgjZPEP95daQ=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnT1Fe8J3zqap41wMLj5MppVFw6YmUje+1n+UxE2+S
+ o0xLhmeJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ09RXgAKCRAk1otyXVSH0Be7B/
+ 93D3P81HJ10uBRoTb/Docn0nkvZ/zPWamPs5r0Y7urJ+tNnV1L81JJLzSn9W9Gg6LsU/z9/ogq/d51
+ jslDXsKG0zEM30uD8vpOGk2L9AVyVDFhRJCeEHdNVJ+ceM5ibT7RqVZ9gLGiyeoBw7GLue2TaOmihz
+ d26MxtGZbcYQVqHpXWMNK+f9XH0DlsZ2DMX4drBUPyRfoMihxwSDDy/HKzJ9LRzsI4H0MZwsuJyo0c
+ 8dDQYPPEFjgOIghv9TsGb8moVfkM4cPQe4/qAeineY84X2/sje6pp3E8P7584l3uXqsVoNI4Orklzb
+ kB2D5gSXjNCPZ2gy5Tb9aTM5TTMScu
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On 12/2/24 16:07, Antonio Quartulli wrote:
-> +/**
-> + * ovpn_nl_peer_modify - modify the peer attributes according to the incoming msg
-> + * @peer: the peer to modify
-> + * @info: generic netlink info from the user request
-> + * @attrs: the attributes from the user request
-> + *
-> + * Return: a negative error code in case of failure, 0 on success or 1 on
-> + *	   success and the VPN IPs have been modified (requires rehashing in MP
-> + *	   mode)
-> + */
-> +static int ovpn_nl_peer_modify(struct ovpn_peer *peer, struct genl_info *info,
-> +			       struct nlattr **attrs)
-> +{
-> +	struct sockaddr_storage ss = {};
-> +	u32 sockfd, interv, timeout;
-> +	struct socket *sock = NULL;
-> +	u8 *local_ip = NULL;
-> +	bool rehash = false;
-> +	int ret;
-> +
-> +	if (attrs[OVPN_A_PEER_SOCKET]) {
-> +		if (peer->sock) {
-> +			NL_SET_ERR_MSG_FMT_MOD(info->extack,
-> +					       "peer socket can't be modified");
-> +			return -EINVAL;
-> +		}
-> +
-> +		/* lookup the fd in the kernel table and extract the socket
-> +		 * object
-> +		 */
-> +		sockfd = nla_get_u32(attrs[OVPN_A_PEER_SOCKET]);
-> +		/* sockfd_lookup() increases sock's refcounter */
-> +		sock = sockfd_lookup(sockfd, &ret);
-> +		if (!sock) {
-> +			NL_SET_ERR_MSG_FMT_MOD(info->extack,
-> +					       "cannot lookup peer socket (fd=%u): %d",
-> +					       sockfd, ret);
-> +			return -ENOTSOCK;
-> +		}
-> +
-> +		/* Only when using UDP as transport protocol the remote endpoint
-> +		 * can be configured so that ovpn knows where to send packets
-> +		 * to.
-> +		 *
-> +		 * In case of TCP, the socket is connected to the peer and ovpn
-> +		 * will just send bytes over it, without the need to specify a
-> +		 * destination.
-> +		 */
-> +		if (sock->sk->sk_protocol != IPPROTO_UDP &&
-> +		    (attrs[OVPN_A_PEER_REMOTE_IPV4] ||
-> +		     attrs[OVPN_A_PEER_REMOTE_IPV6])) {
-> +			NL_SET_ERR_MSG_FMT_MOD(info->extack,
-> +					       "unexpected remote IP address for non UDP socket");
-> +			sockfd_put(sock);
-> +			return -EINVAL;
-> +		}
-> +
-> +		peer->sock = ovpn_socket_new(sock, peer);
-> +		if (IS_ERR(peer->sock)) {
-> +			NL_SET_ERR_MSG_FMT_MOD(info->extack,
-> +					       "cannot encapsulate socket: %ld",
-> +					       PTR_ERR(peer->sock));
-> +			sockfd_put(sock);
-> +			peer->sock = NULL;
+The kernel has recently added support for shadow stacks, currently
+x86 only using their CET feature but both arm64 and RISC-V have
+equivalent features (GCS and Zicfiss respectively), I am actively
+working on GCS[1].  With shadow stacks the hardware maintains an
+additional stack containing only the return addresses for branch
+instructions which is not generally writeable by userspace and ensures
+that any returns are to the recorded addresses.  This provides some
+protection against ROP attacks and making it easier to collect call
+stacks.  These shadow stacks are allocated in the address space of the
+userspace process.
 
-This looks race-prone. If any other CPU can do concurrent read access to
-peer->sock it could observe an invalid pointer
-Even if such race does not exist, it would be cleaner store
-ovpn_socket_new() return value in a local variable and set peer->sock
-only on successful creation.
+Our API for shadow stacks does not currently offer userspace any
+flexiblity for managing the allocation of shadow stacks for newly
+created threads, instead the kernel allocates a new shadow stack with
+the same size as the normal stack whenever a thread is created with the
+feature enabled.  The stacks allocated in this way are freed by the
+kernel when the thread exits or shadow stacks are disabled for the
+thread.  This lack of flexibility and control isn't ideal, in the vast
+majority of cases the shadow stack will be over allocated and the
+implicit allocation and deallocation is not consistent with other
+interfaces.  As far as I can tell the interface is done in this manner
+mainly because the shadow stack patches were in development since before
+clone3() was implemented.
 
-/P
+Since clone3() is readily extensible let's add support for specifying a
+shadow stack when creating a new thread or process, keeping the current
+implicit allocation behaviour if one is not specified either with
+clone3() or through the use of clone().  The user must provide a shadow
+stack pointer, this must point to memory mapped for use as a shadow
+stackby map_shadow_stack() with an architecture specified shadow stack
+token at the top of the stack.
+
+Please note that the x86 portions of this code are build tested only, I
+don't appear to have a system that can run CET available to me.
+
+[1] https://lore.kernel.org/linux-arm-kernel/20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org/T/#mc58f97f27461749ccf400ebabf6f9f937116a86b
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v13:
+- Rebase onto v6.13-rc1.
+- Link to v12: https://lore.kernel.org/r/20241031-clone3-shadow-stack-v12-0-7183eb8bee17@kernel.org
+
+Changes in v12:
+- Add the regular prctl() to the userspace API document since arm64
+  support is queued in -next.
+- Link to v11: https://lore.kernel.org/r/20241005-clone3-shadow-stack-v11-0-2a6a2bd6d651@kernel.org
+
+Changes in v11:
+- Rebase onto arm64 for-next/gcs, which is based on v6.12-rc1, and
+  integrate arm64 support.
+- Rework the interface to specify a shadow stack pointer rather than a
+  base and size like we do for the regular stack.
+- Link to v10: https://lore.kernel.org/r/20240821-clone3-shadow-stack-v10-0-06e8797b9445@kernel.org
+
+Changes in v10:
+- Integrate fixes & improvements for the x86 implementation from Rick
+  Edgecombe.
+- Require that the shadow stack be VM_WRITE.
+- Require that the shadow stack base and size be sizeof(void *) aligned.
+- Clean up trailing newline.
+- Link to v9: https://lore.kernel.org/r/20240819-clone3-shadow-stack-v9-0-962d74f99464@kernel.org
+
+Changes in v9:
+- Pull token validation earlier and report problems with an error return
+  to parent rather than signal delivery to the child.
+- Verify that the top of the supplied shadow stack is VM_SHADOW_STACK.
+- Rework token validation to only do the page mapping once.
+- Drop no longer needed support for testing for signals in selftest.
+- Fix typo in comments.
+- Link to v8: https://lore.kernel.org/r/20240808-clone3-shadow-stack-v8-0-0acf37caf14c@kernel.org
+
+Changes in v8:
+- Fix token verification with user specified shadow stack.
+- Don't track user managed shadow stacks for child processes.
+- Link to v7: https://lore.kernel.org/r/20240731-clone3-shadow-stack-v7-0-a9532eebfb1d@kernel.org
+
+Changes in v7:
+- Rebase onto v6.11-rc1.
+- Typo fixes.
+- Link to v6: https://lore.kernel.org/r/20240623-clone3-shadow-stack-v6-0-9ee7783b1fb9@kernel.org
+
+Changes in v6:
+- Rebase onto v6.10-rc3.
+- Ensure we don't try to free the parent shadow stack in error paths of
+  x86 arch code.
+- Spelling fixes in userspace API document.
+- Additional cleanups and improvements to the clone3() tests to support
+  the shadow stack tests.
+- Link to v5: https://lore.kernel.org/r/20240203-clone3-shadow-stack-v5-0-322c69598e4b@kernel.org
+
+Changes in v5:
+- Rebase onto v6.8-rc2.
+- Rework ABI to have the user allocate the shadow stack memory with
+  map_shadow_stack() and a token.
+- Force inlining of the x86 shadow stack enablement.
+- Move shadow stack enablement out into a shared header for reuse by
+  other tests.
+- Link to v4: https://lore.kernel.org/r/20231128-clone3-shadow-stack-v4-0-8b28ffe4f676@kernel.org
+
+Changes in v4:
+- Formatting changes.
+- Use a define for minimum shadow stack size and move some basic
+  validation to fork.c.
+- Link to v3: https://lore.kernel.org/r/20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org
+
+Changes in v3:
+- Rebase onto v6.7-rc2.
+- Remove stale shadow_stack in internal kargs.
+- If a shadow stack is specified unconditionally use it regardless of
+  CLONE_ parameters.
+- Force enable shadow stacks in the selftest.
+- Update changelogs for RISC-V feature rename.
+- Link to v2: https://lore.kernel.org/r/20231114-clone3-shadow-stack-v2-0-b613f8681155@kernel.org
+
+Changes in v2:
+- Rebase onto v6.7-rc1.
+- Remove ability to provide preallocated shadow stack, just specify the
+  desired size.
+- Link to v1: https://lore.kernel.org/r/20231023-clone3-shadow-stack-v1-0-d867d0b5d4d0@kernel.org
+
+---
+Mark Brown (8):
+      arm64/gcs: Return a success value from gcs_alloc_thread_stack()
+      Documentation: userspace-api: Add shadow stack API documentation
+      selftests: Provide helper header for shadow stack testing
+      fork: Add shadow stack support to clone3()
+      selftests/clone3: Remove redundant flushes of output streams
+      selftests/clone3: Factor more of main loop into test_clone3()
+      selftests/clone3: Allow tests to flag if -E2BIG is a valid error code
+      selftests/clone3: Test shadow stack support
+
+ Documentation/userspace-api/index.rst             |   1 +
+ Documentation/userspace-api/shadow_stack.rst      |  42 ++++
+ arch/arm64/include/asm/gcs.h                      |   8 +-
+ arch/arm64/kernel/process.c                       |   8 +-
+ arch/arm64/mm/gcs.c                               |  62 +++++-
+ arch/x86/include/asm/shstk.h                      |  11 +-
+ arch/x86/kernel/process.c                         |   2 +-
+ arch/x86/kernel/shstk.c                           |  57 +++++-
+ include/asm-generic/cacheflush.h                  |  11 ++
+ include/linux/sched/task.h                        |  17 ++
+ include/uapi/linux/sched.h                        |  10 +-
+ kernel/fork.c                                     |  96 +++++++--
+ tools/testing/selftests/clone3/clone3.c           | 226 ++++++++++++++++++----
+ tools/testing/selftests/clone3/clone3_selftests.h |  65 ++++++-
+ tools/testing/selftests/ksft_shstk.h              |  98 ++++++++++
+ 15 files changed, 633 insertions(+), 81 deletions(-)
+---
+base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
+change-id: 20231019-clone3-shadow-stack-15d40d2bf536
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
 
