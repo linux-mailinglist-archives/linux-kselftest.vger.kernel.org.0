@@ -1,87 +1,86 @@
-Return-Path: <linux-kselftest+bounces-22812-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22813-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D2BE9E328B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 05:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A82469E34FC
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 09:08:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A27EB21D39
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 04:02:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D9927B356E8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 08:03:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F54738385;
-	Wed,  4 Dec 2024 04:02:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QHJTdnRw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97F1918FDDB;
+	Wed,  4 Dec 2024 07:58:08 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E77910F9;
-	Wed,  4 Dec 2024 04:02:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from cmccmta1.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E822218D643;
+	Wed,  4 Dec 2024 07:58:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733284927; cv=none; b=WV02z3Kpg0KI0u27ZGUprzSS2qExWVucWeiVf571TWn02wVXZsjibqgVNYRpRro0afxkZIiZg0kKyJZa4jdHs6IU2wsH2qWLWwnAOSTcdvuhEvtYHG4MKE+VDDMXxVsRhqNUn81cBV3vFPGUiOwI/MahhcAEMynOqI846Tcy5h8=
+	t=1733299088; cv=none; b=GeSEEWm+RORXqQBRFXclFajbaKHDKeADkBt1Q2dAu37NXJCdFuGtWv6hz1h53/cOa5o09EUw7iNYgSjKZ1/v6fN13tIwffRwkr4BFbYkbn94zuWxBhWZieTFmuOdayF7UKJ+gWUH68ktXB18X6tFYyDcjRuc054H4UEfoX6kosY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733284927; c=relaxed/simple;
-	bh=XnVqyQ/RDtm7lOWqAE3EHHmylutiPD6YqZEE0BGz9a4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JmictIHJW153/38QoOqoi9XLADOP1Jy/HnbT6GD9MIKWFAPcynmQNJhwBjkbpViorLOb1+mpX5lYkVJ3h7Jx5UEAX16lemn3SpfhpkoUpN3S/bNGRSDsKdf1JRbzl+JR8zWX44Be4C22Zb3SHlFkvXHKNOQmj+rVlCm3xH7uYeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QHJTdnRw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CB14C4CED2;
-	Wed,  4 Dec 2024 04:02:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733284926;
-	bh=XnVqyQ/RDtm7lOWqAE3EHHmylutiPD6YqZEE0BGz9a4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QHJTdnRwOMsO83Qnh1GmOzuVSQpvufDgBR+4kcnLEm5C3iIpwrMdouLlVl5QbtmzM
-	 IDjVgyjUk2XKiA3/zgFiY/cd0BOdhy83bB1lmJJIEfU7Nt2nuD7uSQuCM98b6vww9u
-	 5pMhfnoONNcnBrFZF0ZanI/utqnva5HgzbKSsQ1Whgw1KGCP9qUVBe174YW4FbHOY7
-	 Ima7Bm2TQViHGFV48ZK/Y5XgsmZTNdrP3+6g103MQmwAw4RF3171qOgz8csawldHv4
-	 lU5iUlZ5nmC6ZsWWjgzpS5TB/N8vdxB2Fwrdsh0S468bD0so6mQFVUgpssEYzAyro5
-	 36EbjkV+sFZcQ==
-Date: Tue, 3 Dec 2024 20:02:05 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: netdev@vger.kernel.org, Vadim Fedorenko <vfedorenko@novek.ru>, Frantisek
- Krenzelok <fkrenzel@redhat.com>, Kuniyuki Iwashima <kuniyu@amazon.com>,
- Apoorv Kothari <apoorvko@amazon.com>, Boris Pismenny <borisp@nvidia.com>,
- John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, Gal Pressman <gal@nvidia.com>, Marcel
- Holtmann <marcel@holtmann.org>, Simon Horman <horms@kernel.org>
-Subject: Re: [PATCH net-next v4 0/6] tls: implement key updates for TLS1.3
-Message-ID: <20241203200205.24396e28@kernel.org>
-In-Reply-To: <Z08u9FoNOeEbWSM_@hog>
-References: <cover.1731597571.git.sd@queasysnail.net>
-	<20241118194158.493e11ec@kernel.org>
-	<Z08u9FoNOeEbWSM_@hog>
+	s=arc-20240116; t=1733299088; c=relaxed/simple;
+	bh=u9UZqRvVKWEC/pg2GFoXW2vJ2O5nN2XcCDWIEaob9S8=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=p1AOW5pbgC+GopSnt4K/8aZMmF5mjy6Joz4T4f1uCfkZG0RaVRR3RshssObSMGYc7YMbwkv5+0jk4Zm5Pc2UA5KGOWlv1wuNTrMtc187PV3tvTjpaUCroGs5dsRnUIsuYYWcmV1EUtDB7lEzcazzOkp2jwmmIv7907dgkN1pfdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee267500b871c6-011e6;
+	Wed, 04 Dec 2024 15:57:59 +0800 (CST)
+X-RM-TRANSID:2ee267500b871c6-011e6
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from ubuntu.localdomain (unknown[10.55.1.70])
+	by rmsmtp-syy-appsvr01-12001 (RichMail) with SMTP id 2ee167500b861a4-5f465;
+	Wed, 04 Dec 2024 15:57:59 +0800 (CST)
+X-RM-TRANSID:2ee167500b861a4-5f465
+From: Zhu Jun <zhujun2@cmss.chinamobile.com>
+To: davem@davemloft.net
+Cc: edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	zhujun2@cmss.chinamobile.com
+Subject: [PATCH] selftests: net: Fix typo in psock_tpacket.c
+Date: Tue,  3 Dec 2024 23:57:56 -0800
+Message-Id: <20241204075756.11561-1-zhujun2@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Tue, 3 Dec 2024 17:16:52 +0100 Sabrina Dubroca wrote:
-> 2024-11-18, 19:41:58 -0800, Jakub Kicinski wrote:
-> > On Thu, 14 Nov 2024 16:50:47 +0100 Sabrina Dubroca wrote:  
-> > > This adds support for receiving KeyUpdate messages (RFC 8446, 4.6.3
-> > > [1]). A sender transmits a KeyUpdate message and then changes its TX
-> > > key. The receiver should react by updating its RX key before
-> > > processing the next message.  
-> > 
-> > Will review tomorrow/Wednesday but I haven't gotten to this in time 
-> > for 6.13, sorry :(  
-> 
-> Is this still on your todo list, or do you want me to resend?
-> No problem either way.
+The word 'accross' is wrong, so fix it.
 
-Sorry for the delay :( I had a nice plan to get this reviewed and
-then corporate life did its thing.
+Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
+---
+ tools/testing/selftests/net/psock_tpacket.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I left a few comments, hopefully some of them make sense, if not
-feel free to repost as non-RFC to avoid further delays.
+diff --git a/tools/testing/selftests/net/psock_tpacket.c b/tools/testing/selftests/net/psock_tpacket.c
+index 404a2ce75..221270cee 100644
+--- a/tools/testing/selftests/net/psock_tpacket.c
++++ b/tools/testing/selftests/net/psock_tpacket.c
+@@ -12,7 +12,7 @@
+  *
+  * Datapath:
+  *   Open a pair of packet sockets and send resp. receive an a priori known
+- *   packet pattern accross the sockets and check if it was received resp.
++ *   packet pattern across the sockets and check if it was received resp.
+  *   sent correctly. Fanout in combination with RX_RING is currently not
+  *   tested here.
+  *
+-- 
+2.17.1
+
+
+
 
