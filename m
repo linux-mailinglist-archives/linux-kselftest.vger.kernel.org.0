@@ -1,205 +1,297 @@
-Return-Path: <linux-kselftest+bounces-22836-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22831-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93E549E3FE6
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 17:42:18 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6FB79E422A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 18:46:06 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5D60164FD7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 16:42:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8B9CB3D418
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 16:33:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 115B420E032;
-	Wed,  4 Dec 2024 16:41:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72E7120CCD7;
+	Wed,  4 Dec 2024 16:32:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="c63XBgaF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED91020D508;
-	Wed,  4 Dec 2024 16:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E9820B80D
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Dec 2024 16:32:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733330466; cv=none; b=pBwZGrZl5aBhkuR4OXpEI0RdgQBYJTnOOG2fh6CYqNrDuy7IqR5Yj5IFAYVb95tUoPn+efocdYmlm7fiC7GERbB5yShDj0560pueDwiuc1rHKKKaGPzhpbw9VCnfhGglwiXPuK8o7Rt4Vo+CMxffvWQoQxUKvr1+XKV4AxNltmM=
+	t=1733329975; cv=none; b=TNEhH7nNLFVpVqBoOomUi/eScPxHlLS345CYPSJ2B9yniDwMwDoeC3aviZDed3tsFpwWxs8O2PQ1kYAPr+aebs5MYREafynXQKLXj+QbRllITzuFOMdKOO1PNzGWgtaxoOm6i8Z0p8wiBpe5sexKxnu1ZLMmxdu7rz7rR/TwfIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733330466; c=relaxed/simple;
-	bh=YomcDZLsGkHJ93XYiHcO82QDo1w9Pr3neNOGqdenPeA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aAC/qx6hqoA7pEAx/sCw4cosuyhadaUhZ7wz4GeBthlW2Y9BLx5iwh4f96iM0GTD4hTc/Fk97m1MSQYwUK4dLugS9cOVYi0Fu5qOvcZXH4xYtdsNGji5IY3MyJQN8Sa+BVEmXMWmCtd1v67rBzqNBF/tGtqEWc9aUDKR5ZeeUaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-aa55da18f89so1044166566b.0;
-        Wed, 04 Dec 2024 08:41:03 -0800 (PST)
+	s=arc-20240116; t=1733329975; c=relaxed/simple;
+	bh=Z0dYTEMwvs7EPeBramaT98wi9z6hwRDhzo523x4GzXQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HiAgPMItMX2l6b4x2tzd3kWlTUjvT7HfRNwCSE60Pel25RHUJO7i0yi9NPExHSYJ8fTh2nhHPrVSV2CMcD52Mehv1MWwML7Mp/61/ZLvUqY4IjLraQA5MZkXsUf6v3G4tfBdqJ6HMHRO6lKJ3Sjh3wCaydD4fMXQe1j6Vws3dqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=c63XBgaF; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-7fc93152edcso19553a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Dec 2024 08:32:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fastly.com; s=google; t=1733329972; x=1733934772; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B9F2gbv4yEGv6FWimwcogNz/DAberMpNHKWgDCnbd2w=;
+        b=c63XBgaFWVjjICt1zdzR96hDRI7LWCGhDji9iAEFLGpRvbo87nWUc0Vy9k16wczuCQ
+         B0jbr3o8laT/pdzxHbyEfz1m2zIZJS1N6UedFrvcF2LV6kAVMLJWoSRh8z94/VVPsaVo
+         VgJQYpxtapRHZhbhROqd4/4oorsuR032rEuB0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733330462; x=1733935262;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cp5LZ1kxAlRspYk7ziqigDfPMTtHysD3G76P4O98mfc=;
-        b=PCg2it7Dy+DB+dUV3p/njBpA4e/D3QDvI+2anX49f44whHDsrPGwNrzbo4gUhwZf9Q
-         gvRltYJvX7zGEzpSRQsQ9r7cF7EvHHHcQJgqJng3q2/5OxP04hhEvznNg5maIpgP8qyK
-         EpBwxPdTUBqZrZ1vtwm2/PXu5wj+0ZnE8fj6Ukij0Pan8KzVuTo+vE95rsLOBwsdZv6E
-         9ezBGbIB8bEDXS805oTLj89OtVtOR2mpFoYbyC+PYkXwi8YF7kzE2B6K8gWzH56QaFh/
-         1SoWnNx7hLFbahT74tRivPlmdKiDO/dyzHVadoRQ6fHqMPPgeUvafxpC1Jacv9vFDNcV
-         6aTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUKtaGkjHvq1uEOi1X8kjCamcFd+ZS3SAKoh8bX83Fp1OvQDwSZqaxaZn8inWM7FTYn0Ta589nEW4wrcXmxRvEe@vger.kernel.org, AJvYcCViXz/fMTtCLi7q+MKOVMQBu32gPE2f50/Umya6LRkAGvsHESo8gCumwm5vzitDaFLqTYfdtcJrtlkJyEk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/CJJUkLgqqfnmx7BZ1sTgh3v64AZWLbK5v2UZlIEeKOkOmw+w
-	7U+TPvxjf1RbYAX38/D+8LiGkp0ThTHXmA2lgPoH0zQU0UYtS16j
-X-Gm-Gg: ASbGncv8Aqf1mY1UCxn4FjgzLq7HvcT49n4cdtle/BewoXMy4eEArst3mV893eZVilO
-	jpmWsoStmWaMsQzbWhpVPSY9TbZRI3egW7VfOGiU34IkFddrpymuK9ZKBiIk5k15ByLeGXNYvCQ
-	76zRl9WGJl1JX/2IiUdiU7c4oExjd0V9txaKjCIUlxIjHPwpON6I71MBwTltl3LN+0GI3550v0n
-	RD1dBUA39K3IIWAtS4uvHTrQ1hm2T2qzvjwUDYDU7C8V7DyLBxRvd+85J37LCSprw1yi5jnWQjh
-	lQ==
-X-Google-Smtp-Source: AGHT+IHO0yNu3MoObM3YmZd7Bqm+/kY4WR82IcRqXNzewqckpka6AEx2/xT8dMOgvIORsma2yOwlbg==
-X-Received: by 2002:a17:906:cc9:b0:a99:e939:d69e with SMTP id a640c23a62f3a-aa5f7f35a67mr507569266b.51.1733330462155;
-        Wed, 04 Dec 2024 08:41:02 -0800 (PST)
-Received: from localhost (fwdproxy-lla-001.fbsv.net. [2a03:2880:30ff:1::face:b00c])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa5998e6a1asm750102766b.98.2024.12.04.08.41.01
+        d=1e100.net; s=20230601; t=1733329972; x=1733934772;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B9F2gbv4yEGv6FWimwcogNz/DAberMpNHKWgDCnbd2w=;
+        b=I166/FqlGI8zGfqlrYxzN42nOzhtFTQZXMKLvXpiKMBQrLER0EyqDcT5/QPCHVcDxg
+         Gqx3p6ew9hGwLbgbsCDvPpHOy6aDTY+2Kafc14jF6reH+7qO57AdUz6W3BSSN/jIM0Z5
+         cNX25UXEyV7nRC/1NO416G9yejHUFuW+Eu3ahMXipS+fgeNbMcceNDcEIsw3xmSKnmEQ
+         Klhck+HjzlifBKGgfTP/Y16UnXaxNoFn6Rqdsu96d3TW4YMEp+x7GTTeTZqDlDTvJS4D
+         JgftkwqpM7mcUQEbRw9xrtXpsg3VZVDluwBhst2JKeG9TBge2XYf8AP/FAgc1blBHaH7
+         +exg==
+X-Forwarded-Encrypted: i=1; AJvYcCXt8jXe/yIow5DBImabe2NDkTIQFHgIyvoGenPBaKPNs21t4JW/4gOTDLoWqYEGGd4QS6KE400L+hbmp/XYcUU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfaY2pALd1sNOR1lodlWxsGh/+v10FGi38EUJ6c8pXniZN9b3M
+	3tPaTdJJbcJIRIzkAyQTBrrlqJSsQ4k4y25V7jaTZpIlivcArygf9dZzPcd2Zdc=
+X-Gm-Gg: ASbGnctBWytTa6nGANT8x+fs6f02MTu4ixnvaXQXA30PZtmxov8qEwdbE0nvoyEEMpD
+	wJCeMQEp/nadyYN5+4BI1UcrMxeEmFiPAoJ2VmZbYmmmGi8iwq2JmNBXswD7BNCwoxGGZypwaRu
+	UsIzHMbFuDv9mwJk9JqYj0mrmL7yDeh2rf8FdE1TZl8lf6yxo8w3VeISJrVX4MkTC4k5lZX70H+
+	i3Up0NXKXX35zucKyTOrg1aR7ax0UkyUMx+gSTxemhODA85iT2SDn+BiA==
+X-Google-Smtp-Source: AGHT+IH+E1gXaxMcRBNlIPPX1i+yJ6kT0s/1DKSFVWFhZ1hgmYUfBlH8N4Ve1euLnBgvSAii6npH/w==
+X-Received: by 2002:a17:902:f64d:b0:215:8fd3:d1b6 with SMTP id d9443c01a7336-215be6fca4fmr115273835ad.23.1733329970689;
+        Wed, 04 Dec 2024 08:32:50 -0800 (PST)
+Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215884744e6sm60591775ad.174.2024.12.04.08.32.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2024 08:41:01 -0800 (PST)
-From: Breno Leitao <leitao@debian.org>
-Date: Wed, 04 Dec 2024 08:40:45 -0800
-Subject: [PATCH net-next 4/4] netconsole: selftest: verify userdata entry
- limit
+        Wed, 04 Dec 2024 08:32:49 -0800 (PST)
+From: Joe Damato <jdamato@fastly.com>
+To: netdev@vger.kernel.org
+Cc: pabeni@redhat.com,
+	edumazet@google.com,
+	kuba@kernel.org,
+	mkarsten@uwaterloo.ca,
+	stfomichev@gmail.com,
+	Joe Damato <jdamato@fastly.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCH net-next v2] selftests: net: cleanup busy_poller.c
+Date: Wed,  4 Dec 2024 16:32:39 +0000
+Message-Id: <20241204163239.294123-1-jdamato@fastly.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241204-netcons_overflow_test-v1-4-a85a8d0ace21@debian.org>
-References: <20241204-netcons_overflow_test-v1-0-a85a8d0ace21@debian.org>
-In-Reply-To: <20241204-netcons_overflow_test-v1-0-a85a8d0ace21@debian.org>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3502; i=leitao@debian.org;
- h=from:subject:message-id; bh=YomcDZLsGkHJ93XYiHcO82QDo1w9Pr3neNOGqdenPeA=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnUIYVHQTBNZj7dFIHe4XblV2VV/QByfF5NQGkt
- ioydQXukr6JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ1CGFQAKCRA1o5Of/Hh3
- bXPUEACn4DPPvEGE3XTGBPu/ibwdBM9YYUMy4lUVQ76eZv7QVfrRDLG7AbwUbLHhndQVsvqoPG8
- bmykl0uRhspf0MNB+ugX9BfaQM8BvVnAxGhj/DbFvYdxs+gVAdJfujiXEG7axVPhsN4maoOsijw
- Vu51P9JfcO2jp84IO2Oj3noIqJQ9dzIXPQYHo9mBqZqzm+tRdUOF6yCVz7ZxRGerasSnpvMszML
- O6qCCQOXjlKd3ZxqtnuF1wbmvfMFizzAqX5ITp7/ZSMAuyua3AZ9GTjw3TLhEzlAzRhsdEH8Eni
- mIbqLz+aRCP5proEVnkc1AlHLZhr1ZLpEgLuguwEg67jdjpaq/U8ALZvpt+b1b5E9is6ck/YYI1
- arL9sEeLn/xZdwOk8c9/NlZDbkjKJ7UCnvydjgOtQhvqtlq++ToEgfWkgRsQ01LhmKmX9NQTJEC
- 0eJ+zV1CU6tDSXTzJm8qtYnbbaW5UbsEnZYirIx6glEdGsECFP3PCU0fms0CsbHwecHFF4HzUU9
- ceR05gJsUk0KFSiMuAPW2EyFxeM5ilQS2HBqguiAVR1C8Z9GiQIRUmjaL83gDIjukGWG4oPy8YB
- ZGv5ODoPSQj2qRxvhYVRu1k2/lpxvMk30b7pvin2nViDOE8yTPtsHSHendgFLDiykYQXSodG1TP
- aFbCj1R8O7Xpv5w==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+Content-Transfer-Encoding: 8bit
 
-Add a new selftest for netconsole that tests the userdata entry limit
-functionality. The test performs two key verifications:
+Fix various integer type conversions by using strtoull and a temporary
+variable which is bounds checked before being casted into the
+appropriate cfg_* variable for use by the test program.
 
-1. Create MAX_USERDATA_ITEMS (16) userdata entries successfully
-2. Confirm that attempting to create an additional userdata entry fails
+While here:
+  - free the strdup'd cfg string for overall hygenie.
+  - initialize napi_id = 0 in setup_queue to avoid warnings on some
+    compilers.
 
-The selftest script uses the netcons library and checks the behavior
-by attempting to create entries beyond the maximum allowed limit.
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
+Signed-off-by: Joe Damato <jdamato@fastly.com>
 ---
- MAINTAINERS                                        |  2 +-
- .../selftests/drivers/net/netcons_overflow.sh      | 67 ++++++++++++++++++++++
- 2 files changed, 68 insertions(+), 1 deletion(-)
+ v2:
+   - initialize napi_id to 0 in setup_queue to avoid clang warning as
+     suggested by Stanislav. Tested with clang 10.0.0 and 18.1.8
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8af5c9a28e68c4b6a785e2e6b82db20b3cf59822..62192db4641a4056d1eab911f5c141fb37eaed36 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16092,7 +16092,7 @@ S:	Maintained
- F:	Documentation/networking/netconsole.rst
- F:	drivers/net/netconsole.c
- F:	tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
--F:	tools/testing/selftests/drivers/net/netcons_basic.sh
-+F:	tools/testing/selftests/drivers/net/netcons\*
+ tools/testing/selftests/net/busy_poller.c | 88 +++++++++++++----------
+ 1 file changed, 50 insertions(+), 38 deletions(-)
+
+diff --git a/tools/testing/selftests/net/busy_poller.c b/tools/testing/selftests/net/busy_poller.c
+index 99b0e8c17fca..04c7ff577bb8 100644
+--- a/tools/testing/selftests/net/busy_poller.c
++++ b/tools/testing/selftests/net/busy_poller.c
+@@ -54,16 +54,16 @@ struct epoll_params {
+ #define EPIOCGPARAMS _IOR(EPOLL_IOC_TYPE, 0x02, struct epoll_params)
+ #endif
  
- NETDEVSIM
- M:	Jakub Kicinski <kuba@kernel.org>
-diff --git a/tools/testing/selftests/drivers/net/netcons_overflow.sh b/tools/testing/selftests/drivers/net/netcons_overflow.sh
-new file mode 100755
-index 0000000000000000000000000000000000000000..a19f613553578dc185b7332a827463d9b0c6685f
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/netcons_overflow.sh
-@@ -0,0 +1,67 @@
-+#!/usr/bin/env bash
-+# SPDX-License-Identifier: GPL-2.0
+-static uint32_t cfg_port = 8000;
++static uint16_t cfg_port = 8000;
+ static struct in_addr cfg_bind_addr = { .s_addr = INADDR_ANY };
+ static char *cfg_outfile;
+ static int cfg_max_events = 8;
+-static int cfg_ifindex;
++static uint32_t cfg_ifindex;
+ 
+ /* busy poll params */
+ static uint32_t cfg_busy_poll_usecs;
+-static uint32_t cfg_busy_poll_budget;
+-static uint32_t cfg_prefer_busy_poll;
++static uint16_t cfg_busy_poll_budget;
++static uint8_t cfg_prefer_busy_poll;
+ 
+ /* IRQ params */
+ static uint32_t cfg_defer_hard_irqs;
+@@ -79,6 +79,7 @@ static void usage(const char *filepath)
+ 
+ static void parse_opts(int argc, char **argv)
+ {
++	unsigned long long tmp;
+ 	int ret;
+ 	int c;
+ 
+@@ -86,31 +87,40 @@ static void parse_opts(int argc, char **argv)
+ 		usage(argv[0]);
+ 
+ 	while ((c = getopt(argc, argv, "p:m:b:u:P:g:o:d:r:s:i:")) != -1) {
++		/* most options take integer values, except o and b, so reduce
++		 * code duplication a bit for the common case by calling
++		 * strtoull here and leave bounds checking and casting per
++		 * option below.
++		 */
++		if (c != 'o' && c != 'b')
++			tmp = strtoull(optarg, NULL, 0);
 +
-+#  This test verifies that users can successfully create up to
-+#  MAX_USERDATA_ITEMS userdata entries without encountering any failures.
-+#
-+#  Additionally, it tests for expected failure when attempting to exceed this
-+#  maximum limit.
-+#
-+# Author: Breno Leitao <leitao@debian.org>
+ 		switch (c) {
+ 		case 'u':
+-			cfg_busy_poll_usecs = strtoul(optarg, NULL, 0);
+-			if (cfg_busy_poll_usecs == ULONG_MAX ||
+-			    cfg_busy_poll_usecs > UINT32_MAX)
++			if (tmp == ULLONG_MAX || tmp > UINT32_MAX)
+ 				error(1, ERANGE, "busy_poll_usecs too large");
 +
-+set -euo pipefail
++			cfg_busy_poll_usecs = (uint32_t)tmp;
+ 			break;
+ 		case 'P':
+-			cfg_prefer_busy_poll = strtoul(optarg, NULL, 0);
+-			if (cfg_prefer_busy_poll == ULONG_MAX ||
+-			    cfg_prefer_busy_poll > 1)
++			if (tmp == ULLONG_MAX || tmp > 1)
+ 				error(1, ERANGE,
+ 				      "prefer busy poll should be 0 or 1");
 +
-+SCRIPTDIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
++			cfg_prefer_busy_poll = (uint8_t)tmp;
+ 			break;
+ 		case 'g':
+-			cfg_busy_poll_budget = strtoul(optarg, NULL, 0);
+-			if (cfg_busy_poll_budget == ULONG_MAX ||
+-			    cfg_busy_poll_budget > UINT16_MAX)
++			if (tmp == ULLONG_MAX || tmp > UINT16_MAX)
+ 				error(1, ERANGE,
+ 				      "busy poll budget must be [0, UINT16_MAX]");
 +
-+source "${SCRIPTDIR}"/lib/sh/lib_netcons.sh
-+# This is coming from netconsole code. Check for it in drivers/net/netconsole.c
-+MAX_USERDATA_ITEMS=16
++			cfg_busy_poll_budget = (uint16_t)tmp;
+ 			break;
+ 		case 'p':
+-			cfg_port = strtoul(optarg, NULL, 0);
+-			if (cfg_port > UINT16_MAX)
++			if (tmp == ULLONG_MAX || tmp > UINT16_MAX)
+ 				error(1, ERANGE, "port must be <= 65535");
 +
-+# Function to create userdata entries
-+function create_userdata_max_entries() {
-+	# All these keys should be created without any error
-+	for i in $(seq $MAX_USERDATA_ITEMS)
-+	do
-+		# USERDATA_KEY is used by set_user_data
-+		USERDATA_KEY="key"${i}
-+		set_user_data
-+	done
-+}
++			cfg_port = (uint16_t)tmp;
+ 			break;
+ 		case 'b':
+ 			ret = inet_aton(optarg, &cfg_bind_addr);
+@@ -124,41 +134,39 @@ static void parse_opts(int argc, char **argv)
+ 				error(1, 0, "outfile invalid");
+ 			break;
+ 		case 'm':
+-			cfg_max_events = strtol(optarg, NULL, 0);
+-
+-			if (cfg_max_events == LONG_MIN ||
+-			    cfg_max_events == LONG_MAX ||
+-			    cfg_max_events <= 0)
++			if (tmp == ULLONG_MAX || tmp > INT_MAX)
+ 				error(1, ERANGE,
+-				      "max events must be > 0 and < LONG_MAX");
++				      "max events must be > 0 and <= INT_MAX");
 +
-+# Function to verify the entry limit
-+function verify_entry_limit() {
-+	# Allowing the test to fail without exiting, since the next command
-+	# will fail
-+	set +e
-+	mkdir "${NETCONS_PATH}/userdata/key_that_will_fail" 2> /dev/null
-+	ret="$?"
-+	set -e
-+	if [ "$ret" -eq 0 ];
-+	then
-+		echo "Adding more than ${MAX_USERDATA_ITEMS} entries in userdata should fail, but it didn't" >&2
-+		ls "${NETCONS_PATH}/userdata/" >&2
-+		exit "${ksft_fail}"
-+	fi
-+}
++			cfg_max_events = (int)tmp;
+ 			break;
+ 		case 'd':
+-			cfg_defer_hard_irqs = strtoul(optarg, NULL, 0);
+-
+-			if (cfg_defer_hard_irqs == ULONG_MAX ||
+-			    cfg_defer_hard_irqs > INT32_MAX)
++			if (tmp == ULLONG_MAX || tmp > INT32_MAX)
+ 				error(1, ERANGE,
+ 				      "defer_hard_irqs must be <= INT32_MAX");
 +
-+# ========== #
-+# Start here #
-+# ========== #
++			cfg_defer_hard_irqs = (uint32_t)tmp;
+ 			break;
+ 		case 'r':
+-			cfg_gro_flush_timeout = strtoull(optarg, NULL, 0);
+-
+-			if (cfg_gro_flush_timeout == ULLONG_MAX)
++			if (tmp == ULLONG_MAX || tmp > UINT64_MAX)
+ 				error(1, ERANGE,
+-				      "gro_flush_timeout must be < ULLONG_MAX");
++				      "gro_flush_timeout must be < UINT64_MAX");
 +
-+modprobe netdevsim 2> /dev/null || true
-+modprobe netconsole 2> /dev/null || true
++			cfg_gro_flush_timeout = (uint64_t)tmp;
+ 			break;
+ 		case 's':
+-			cfg_irq_suspend_timeout = strtoull(optarg, NULL, 0);
+-
+-			if (cfg_irq_suspend_timeout == ULLONG_MAX)
++			if (tmp == ULLONG_MAX || tmp > UINT64_MAX)
+ 				error(1, ERANGE,
+ 				      "irq_suspend_timeout must be < ULLONG_MAX");
 +
-+# Check for basic system dependency and exit if not found
-+check_for_dependencies
++			cfg_irq_suspend_timeout = (uint64_t)tmp;
+ 			break;
+ 		case 'i':
+-			cfg_ifindex = strtoul(optarg, NULL, 0);
+-			if (cfg_ifindex == ULONG_MAX)
++			if (tmp == ULLONG_MAX || tmp > INT_MAX)
+ 				error(1, ERANGE,
+-				      "ifindex must be < ULONG_MAX");
++				      "ifindex must be <= INT_MAX");
 +
-+# Remove the namespace, interfaces and netconsole target on exit
-+trap cleanup EXIT
-+# Create one namespace and two interfaces
-+set_network
-+# Create a dynamic target for netconsole
-+create_dynamic_target
-+# populate the maximum number of supported keys in userdata
-+create_userdata_max_entries
-+# Verify an additional entry is not allowed
-+verify_entry_limit
-+exit "${ksft_pass}"
++			cfg_ifindex = (int)tmp;
+ 			break;
+ 		}
+ 	}
+@@ -215,7 +223,7 @@ static void setup_queue(void)
+ 	struct netdev_napi_set_req *set_req = NULL;
+ 	struct ynl_sock *ys;
+ 	struct ynl_error yerr;
+-	uint32_t napi_id;
++	uint32_t napi_id = 0;
+ 
+ 	ys = ynl_sock_create(&ynl_netdev_family, &yerr);
+ 	if (!ys)
+@@ -277,8 +285,8 @@ static void run_poller(void)
+ 	 * here
+ 	 */
+ 	epoll_params.busy_poll_usecs = cfg_busy_poll_usecs;
+-	epoll_params.busy_poll_budget = (uint16_t)cfg_busy_poll_budget;
+-	epoll_params.prefer_busy_poll = (uint8_t)cfg_prefer_busy_poll;
++	epoll_params.busy_poll_budget = cfg_busy_poll_budget;
++	epoll_params.prefer_busy_poll = cfg_prefer_busy_poll;
+ 	epoll_params.__pad = 0;
+ 
+ 	val = 1;
+@@ -342,5 +350,9 @@ int main(int argc, char *argv[])
+ 	parse_opts(argc, argv);
+ 	setup_queue();
+ 	run_poller();
++
++	if (cfg_outfile)
++		free(cfg_outfile);
++
+ 	return 0;
+ }
 
+base-commit: e8e7be7d212dc2bc83b8151e51088666a6c42092
 -- 
-2.43.5
+2.25.1
 
 
