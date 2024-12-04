@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-22799-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22800-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBDD79E303C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 01:06:06 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13D309E3058
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 01:24:05 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 235FEB26D8F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 00:05:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D30B4164387
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 00:24:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E732B621;
-	Wed,  4 Dec 2024 00:05:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 126767F9;
+	Wed,  4 Dec 2024 00:24:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="g0wGDd2n"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KYvaEiHX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1F8184
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Dec 2024 00:05:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C4FD1372
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Dec 2024 00:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733270703; cv=none; b=oCMrKNJbqVID8HRZYv6ANEWmGYaeugpfon5NBRu626GCPfShfAwRI+PfsLMVoERaY+0ie1i0FYF18WceMNH2hh972pPwJ83M8eFyN086XJ5YmODUxfpTw48zHP43opQjl8PQwp8NWrjqp3o9SELDISkgzmgop9+6/G4TBtzRHgo=
+	t=1733271842; cv=none; b=D9BSHWMQ4k2u4TQKDTa7YRZKdKJcuMDbtnnglVgEAR3Q3vxp2/yAeDa5WG1/NacLXjJ84CSpppNl0KSZgBC3iIIjqTjHWX2exHeIAKzn4wi+j9LFMnUbQDIQBEMtVPTNCcxSCejY6bnRR//hYTyms3GM6+Uf539Y9+MmVjwdhUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733270703; c=relaxed/simple;
-	bh=MJz5Q6WP36oLbDCYEDo9s9YkT5LQztLrq5XVv/x2PuM=;
+	s=arc-20240116; t=1733271842; c=relaxed/simple;
+	bh=1a67SnFU13qE4J5y3Rgj7WQorDdDgbyoqJnmWeb0Gj8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mdKN+x8QOJFfZ79WfXxXFCfhn4XGoxfXzJ2SLeMNliwV8ntB+701PjQD1eS233A/+Q6TY8NS1oHDbzRFRXGit3fOvAaYYUZUG+y0Fy4eg2OlGx734+5iWuRfi96vdd3TvrpQjjlbbGoAYYoe8/d/VlwCMqJ/EAvk7tDXZsOk3/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=g0wGDd2n; arc=none smtp.client-ip=209.85.166.46
+	 In-Reply-To:Content-Type; b=PI+LmUvZgdQ/Jmwy8U4vgjIuNKOdf0Bl4LfMPPrhDMiLXLvDWb0NElIvyTj4s6RzHfYL90eBLORey3Jfrzar5Jn401mxuh3mkP6QrLCAlnW4uH/UQXT5cL+CaDKqkPHl08TTblXaLIy+mmc7S/mifEmxXdRB1j7o591tCxP/Ero=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KYvaEiHX; arc=none smtp.client-ip=209.85.166.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-841a9366b08so200017339f.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Dec 2024 16:05:01 -0800 (PST)
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3a74d9aeb38so21677055ab.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Dec 2024 16:23:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1733270701; x=1733875501; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1733271839; x=1733876639; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=YcQiqQOQOLDzcbxMsNRL6FHp793XZtkKmMGhhmXaiEQ=;
-        b=g0wGDd2nq7ATini0lk/TOpiZ00R7XW7bGj47kvOPgT12qTYsiMMUN92WDE/8U4SBv9
-         F3zvyJPGKnEeXulPxG58kUB5WPZZfWkLogEV1DY/YKH62DiDJGQfIRB4xmNu3DsGmXX/
-         4neE7GVS26cwzGSPE5DKsCVQT9l65pdSdn9UM=
+        bh=f9FbCJ3x5IuqiKm/j7Dkcx5/WgXv4GorOvwEXGeUN44=;
+        b=KYvaEiHXHaUqmeS/YeFapQIzT3dI5Bq7Es/YLXHVoIw0e/XQlXucw8K8mAZPW4BrRf
+         /IHxzTZitQ1MgWKnU6U31GIQGB2I5TQDgRLcNhfQZBgoP0LsNoXJllxCAZZFlgWpmSs+
+         kNNIJ94CPiCcZfkQF38Jf4Pj0ifOcLhXdEtbM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733270701; x=1733875501;
+        d=1e100.net; s=20230601; t=1733271839; x=1733876639;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YcQiqQOQOLDzcbxMsNRL6FHp793XZtkKmMGhhmXaiEQ=;
-        b=kZcAHv77CI9gv50sd6uOVCMEzfgETtdgquWgT8tAiQkRKVIDDu9K6eY8exUnq2o7l2
-         VRZMQOlC7RlEo5rYns3tueqUzIN2gFMRTtY6dWtdoqkX5tAa+i9GEvHU+n1g03/2WuYl
-         IoHtATP+p1XcQbpZ8f/Y9RNyu31wY8lrRPVyMHan+vDr+QvDsLnqSbbtD6EWvFnDs26x
-         ZpCluw+apCU2y5k42r8h2NXVLf0Qipij6vaelbQOQa17EibZIIH6zCJeVSkwXEbMZCyI
-         JVYgwuqklI893Km4Ea2VMym2+3gKx1ds3tveAAu8LFWz3i/XugB7L1Be2M5tvXGpK07u
-         mwkg==
-X-Forwarded-Encrypted: i=1; AJvYcCWw9tieEzk6j10E0gDQpIifYFPjtEyJh543B6IofdM4yK9RmEsBrt2XVZ0CmGW/a//ALO1ZDEfE8PdTcuiOHNY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzdWEcXKejzJGDwZQfERiHWFWjahzFYpREXpQdSPB/9Zes50F59
-	skRuzyfsnmgtOAWTxQNs0wkDW7tA1DaaGCEGXEeVSnGo4hbk5pYCnZ31IFqsEGY=
-X-Gm-Gg: ASbGncsSaqruwvNqE4Iz7ltAuB5Fq+oQDMF/lAlcYLpw1wkuPDpnBdEUieNEjtTgmNc
-	lYhxtgVSpsVdMzbWlyW++m6vsgn3v+ur1Y0JPWtU10ogKRD03/x8Qn3jPWi0Ltc2ZkX7cIdC4Ra
-	DOH7Rlo20/AJeLGbaI74BKJUxR323pYTa/ztbZWr4qiC62URHE1Sxz+bqD/+3f3mUq54CReWodg
-	+l8DbLnl6zX3RL582F1qlDSDvZUEQkeUPLza7XEyRvAUYD1ybvh2hv3wPX3dA==
-X-Google-Smtp-Source: AGHT+IEuBsfvLAIn0B2ch1wXp59X/LnGAMGWoWpDRa905GI3J8nxVMtFYz9+kA6MT1Q5jhAPDjlNzw==
-X-Received: by 2002:a05:6602:15d0:b0:83b:5221:2a9b with SMTP id ca18e2360f4ac-8445b444229mr637981039f.0.1733270701238;
-        Tue, 03 Dec 2024 16:05:01 -0800 (PST)
+        bh=f9FbCJ3x5IuqiKm/j7Dkcx5/WgXv4GorOvwEXGeUN44=;
+        b=BjYmk70y3xuOz9xZgYBmM+eFgdBmdNS458pGaIcpS1lrB/s2mWcB9C4wMkg1yiXKZa
+         uSd3UBI+SHidRXp2pOQaaur7EwmD+q+hNRKT4UC8QP1YjJ0cWStunjV9I+/aO/H5lHOY
+         wJm+qqB6i1gmBiJgHKHGTkQAGnMDPJbZzN+dMhCHetSpaIPsm3OfNaWJ7KGBW8nlnQbD
+         MAvN5RV9fAHjvKRbDY/7zxdXfATLc4dtnln9sJEsW6okgAZR5cQEfFm/d7XlOIIRXX9g
+         g6lH94f/D2ugF23qCiLWvtu6f/1paOkG6TYkOliNtT7G5ZzJqxb3fP4/rbyRTH5A+Wic
+         ps8g==
+X-Forwarded-Encrypted: i=1; AJvYcCUKUU5o6JG6OS6obLXbJ0rVBFy7hmMNZ/hb/0Q1c91Px6tz/p7tsjFtc6xs1p+FlAmpF75m4JTEOtwUX87kwU8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHgMXGqHMffS5oyoejOlHmHLtpXjUTDtF/M0JFRDt5ZSJClNK9
+	zpKLo4XnA1vXiJSis6f7S2tFyEF3Xehax3/69pSzf4jfl7gITUsajKUaIRYxpZY=
+X-Gm-Gg: ASbGncsAjQpNZUdFuJD1kxVFrFrnGIqXySKYN59idWMEFnp2ZmUORDZq/vMG8Ecl8pg
+	nAR2Osl4BmvvIpql3Qw3sNKapVvkChktxMDwZcUcIILph43hS4FHekGZKl7xo+uA3vcJRX5VF0Q
+	bxyMMLgWueJQ0jYlqgoHwAoUFzMt0squHT4brwXLKtIOgFzdNErnAPMe/iLDIhCe67eEVzeB1mr
+	CAs6E6zH05/8huRA5pohWwnEHQc39MEIkFiSPg5xvnPpTLIAI6Ut6RwGxkD3A==
+X-Google-Smtp-Source: AGHT+IFFmMu7amT4tAHwLTX5LZYeNDtyDgTZPdJhuoc5E5+fNYPSbpXnhLVmJnXlu2dY0WS4xaa5Ow==
+X-Received: by 2002:a05:6e02:19c8:b0:3a7:c5b1:a55c with SMTP id e9e14a558f8ab-3a7f99baa4fmr55303285ab.0.1733271839042;
+        Tue, 03 Dec 2024 16:23:59 -0800 (PST)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e230dcc3fesm2851291173.61.2024.12.03.16.05.00
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e230e9064esm2736966173.156.2024.12.03.16.23.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Dec 2024 16:05:00 -0800 (PST)
-Message-ID: <b2723ccd-bf0a-4d9b-a545-f9e3dc336539@linuxfoundation.org>
-Date: Tue, 3 Dec 2024 17:04:59 -0700
+        Tue, 03 Dec 2024 16:23:58 -0800 (PST)
+Message-ID: <115bb206-8401-4475-977d-7dd98a2b872c@linuxfoundation.org>
+Date: Tue, 3 Dec 2024 17:23:56 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,45 +77,199 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/vDSO: support DT_GNU_HASH
-To: Xi Ruoyao <xry111@xry111.site>, Fangrui Song <i@maskray.me>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240915064944.2044066-1-maskray@google.com>
- <f229fbad-731c-4dd4-8c66-ff8829c2c958@linuxfoundation.org>
- <c828b254fb93bd136b36d3a06ab1d9d29ce13d88.camel@xry111.site>
+Subject: Re: [PATCH] selftests: arm coresight: sysfsmode testing
+To: Linu Cherian <lcherian@marvell.com>, suzuki.poulose@arm.com,
+ mike.leach@linaro.org, james.clark@arm.com
+Cc: linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+ linux-kernel@vger.kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, sgoutham@marvell.com, gcherian@marvell.com,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20241129083813.3056909-1-lcherian@marvell.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <c828b254fb93bd136b36d3a06ab1d9d29ce13d88.camel@xry111.site>
+In-Reply-To: <20241129083813.3056909-1-lcherian@marvell.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 11/27/24 04:44, Xi Ruoyao wrote:
-> On Thu, 2024-09-19 at 09:37 -0600, Shuah Khan wrote:
->> On 9/15/24 00:49, Fangrui Song wrote:
->>> glibc added support for DT_GNU_HASH in 2006 and DT_HASH has been
->>> obsoleted for more than one decade in many Linux distributions.
->>>
->>> Many vDSOs support DT_GNU_HASH. This patch adds selftests support.
->>>
->>> Signed-off-by: Fangrui Song <maskray@google.com>
->>> Tested-by: Xi Ruoyao <xry111@xry111.site>
->>> --
->>> Changes from v1:
->>> * fix style of a multi-line comment. ignore false positive suggestions from checkpath.pl: `ELF(Word) *`
->>> ---
->>>    tools/testing/selftests/vDSO/parse_vdso.c | 105 ++++++++++++++++------
->>>    1 file changed, 79 insertions(+), 26 deletions(-)
->>>
->>
->> Quick note that this will be picked up after the merge window closes.
-> 
-> Hi Shuah,
-> 
-> The patch seems forgotten.
-> 
+On 11/29/24 01:38, Linu Cherian wrote:
+> Add sysfs mode selftest for ARM Coresight hardware tracer.
 
-Thank for the reminder. I will pick this up now.
+Please add details on what this test does in here. Include
+the output from the test?
+
+Does this test have dependencies on config? If it does, does
+this test detect and skip if config isn't enabled?
+
+> 
+> Signed-off-by: Linu Cherian <lcherian@marvell.com>
+> ---
+>   .../drivers/hwtracing/coresight/Makefile      |   5 +
+>   .../hwtracing/coresight/sysfs_test_trace.sh   | 144 ++++++++++++++++++
+>   2 files changed, 149 insertions(+)
+>   create mode 100644 tools/testing/selftests/drivers/hwtracing/coresight/Makefile
+>   create mode 100755 tools/testing/selftests/drivers/hwtracing/coresight/sysfs_test_trace.sh
+> 
+> diff --git a/tools/testing/selftests/drivers/hwtracing/coresight/Makefile b/tools/testing/selftests/drivers/hwtracing/coresight/Makefile
+> new file mode 100644
+> index 000000000000..7dc68ae1c0a9
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/hwtracing/coresight/Makefile
+> @@ -0,0 +1,5 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +TEST_PROGS = sysfs_test_trace.sh
+> +
+> +include ../../../lib.mk
+> diff --git a/tools/testing/selftests/drivers/hwtracing/coresight/sysfs_test_trace.sh b/tools/testing/selftests/drivers/hwtracing/coresight/sysfs_test_trace.sh
+> new file mode 100755
+> index 000000000000..0d6307fff1d2
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/hwtracing/coresight/sysfs_test_trace.sh
+> @@ -0,0 +1,144 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Copyright (C) 2024 Marvell.
+> +
+> +# Test Arm CoreSight trace capture in sysfs mode
+> +# Based on tools/perf/tests/shell/test_arm_coresight.sh
+> +
+> +glb_err=0
+> +
+> +arm_cs_report() {
+> +	if [ $2 != 0 ]; then
+> +		echo "$1: FAIL"
+> +		glb_err=$2
+> +	else
+> +		echo "$1: PASS"
+> +	fi
+> +}
+> +
+> +is_device_sink() {
+> +	# If the node of "enable_sink" is existed under the device path, this
+> +	# means the device is a sink device.
+> +
+> +	if [ -e "$1/enable_sink" ]; then
+> +
+> +		return 0
+> +	else
+> +		return 1
+> +	fi
+> +}
+> +
+> +# Configure sink for buffer mode
+> +cfg_sink_buf_mode() {
+> +	sink_dev=$1
+> +	mode=$2
+> +	# Set buffer mode if supported
+> +	if [ -e "$sink_dev/buf_modes_available" ]; then
+> +		cat $sink_dev/buf_modes_available | grep -E -q $mode
+> +		if [ $? -eq 0 ]; then
+> +			echo $mode > $sink_dev/buf_mode_preferred
+> +			return 0
+> +		fi
+> +	fi
+> +
+> +	return 1
+> +}
+> +
+> +run_app() {
+> +
+> +	taskset -c $1 dd if=/dev/urandom  of=/dev/null bs=1M count=64
+> +}
+> +
+> +sysfs_trace() {
+> +	src_dev=$1
+> +	sink_dev=$2
+> +	cpu=$3
+> +
+> +	# Enable sink device
+> +	echo 1 > $sink_dev/enable_sink
+> +	# Enable source device
+> +	echo 1 > $src_dev/enable_source
+> +
+> +	# Run app to be traced
+> +	run_app $cpu
+> +
+> +	# Read back trace data
+> +	dd if=/dev/$sink_dev_name of=/tmp/tracedata
+> +
+> +	# Verify if read is successful
+> +	err=$?
+> +
+> +	# Disable source device
+> +	echo 0 > $src_dev/enable_source
+> +
+> +	# Diskable sink device
+> +	echo 0 > $sink_dev/enable_sink
+> +
+> +	arm_cs_report "CoreSight path testing (CPU$cpu -> $sink_dev_name)" $err
+> +}
+> +
+> +try_sysfs_trace_resrv_buf() {
+> +	src_dev=$1
+> +	sink_dev=$2
+> +	cpu=$3
+> +
+> +	# Configure the resrved buffer mode if available
+> +	cfg_sink_buf_mode $sink_dev "resrv"
+> +	if [ $? -eq 0 ]; then
+> +		echo "Running sysfs trace with resrv buf mode"
+> +		sysfs_trace $src_dev $sink_dev $cpu
+> +		# Restore buffer mode
+> +		cfg_sink_buf_mode $sink_dev "auto"
+> +		if [ $? -eq 1 ]; then
+> +			echo "Failed to restore default buf mode"
+> +		fi
+> +	fi
+> +}
+> +
+> +arm_cs_iterate_devices() {
+> +	src_dev=$1
+> +	cpu=$3
+> +	for cdev in $2/connections/out\:*; do
+> +
+> +		# Skip testing if it's not a directory
+> +		! [ -d $cdev ] && continue;
+> +
+> +		# Read out its symbol link file name
+> +		sink_dev=`readlink -f $cdev`
+> +
+> +		# Extract device name from path, e.g.
+> +		#   sink_dev = '/sys/devices/platform/20010000.etf/tmc_etf0'
+> +		#     `> sink_dev_name = 'tmc_etf0'
+> +		sink_dev_name=$(basename $sink_dev)
+> +
+> +		if is_device_sink $sink_dev; then
+> +			# Run trace with resrv buf mode (if available)
+> +			try_sysfs_trace_resrv_buf $src_dev $sink_dev $cpu
+> +
+> +			# Run the default mode
+> +			echo "Running sysfs trace with default settings"
+> +			sysfs_trace $src_dev $sink_dev $cpu
+> +		fi
+> +
+> +		arm_cs_iterate_devices $src_dev $cdev $cpu
+> +
+> +	done
+> +}
+> +
+> +arm_cs_etm_traverse_path_test() {
+> +	# Iterate for every ETM device
+> +	for dev in /sys/bus/event_source/devices/cs_etm/cpu*; do
+> +		# Canonicalize the path
+> +		dev=`readlink -f $dev`
+> +
+> +		# Find the ETM device belonging to which CPU
+> +		cpu=`cat $dev/cpu`
+> +
+> +		# Use depth-first search (DFS) to iterate outputs
+> +		arm_cs_iterate_devices $dev $dev $cpu
+> +	done
+> +}
+> +
+> +arm_cs_etm_traverse_path_test
+> +
+> +exit $glb_err
 
 thanks,
 -- Shuah
