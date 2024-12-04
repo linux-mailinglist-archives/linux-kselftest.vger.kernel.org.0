@@ -1,125 +1,131 @@
-Return-Path: <linux-kselftest+bounces-22830-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22833-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 599509E3F35
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 17:08:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E4299E3FDF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 17:41:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6DB0B3DB7B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 15:48:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 488EC280DB8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 16:41:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00F9C20C47E;
-	Wed,  4 Dec 2024 15:48:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BwNLZIxE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAC6620D4F8;
+	Wed,  4 Dec 2024 16:41:00 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B46A209F5B;
-	Wed,  4 Dec 2024 15:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE461B85EC;
+	Wed,  4 Dec 2024 16:40:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733327318; cv=none; b=ncjWabkNtzCiMrN3bWxL/SX6gS5N//VktWathDBcpFC5JwhIaE1L+0YqA6+V+XU/6zwStHGoi7JO+oEDQ/tIFDxMHCdL8fA4dr1BG+81UBljcyvqOCoMu2GBnxXrONMlwHTy32S7pTiIcN4JXncYPQiI9zSEIxf3QhzZ+Cdz7kU=
+	t=1733330460; cv=none; b=npKHh7GulsNgiGr1KWgQwY2lyiWGjhtWxYsrZniUS3qgHdOmsEz53fUmgiAVlVFXHIW4xsL5FPNWzf8n+IEKa6UEC1PiBK1z+AhxBL5G5E2u8Rhen/rll3urMOqHfNP2rjeRsWMwgJyhWbWKOSe3xcx5b8GdLRT7/7QSSWv5uyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733327318; c=relaxed/simple;
-	bh=ddIIs2MMrdU+TTF+qZ8Me6qlDgdA32VPibL4i1IWt/g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DEILv22rGXcMWtdvqGfcisz8CUcdrBQod74bfm6rl/CSzQQHtJJh9mCv3oOA+aUXadUMXKvG0JEzi+h6R+/913gJX7DxDwxjSJhcwj0JCjBomwgT/8ntZh5DigmMhAvnOgmPWj4tfIZRkvkJ5Pk5riUyB4nIoEjT8ZmW66VhZwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BwNLZIxE; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1733330460; c=relaxed/simple;
+	bh=ovxjdhKZTZJF3bNoyUUKDjDyDyhf1uuMTZmUa6QGS+4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=gEIreUO5PUxX+7vjrln1MK0M5PNnAtteg3EacB0LQz7s7kTH19uqJB3JJb4xXLhsETzQTAw8IPzpeZER0jOaida6O66rJizPvhxOVRgxxaGzFD90LaodZoZHo8Pu+yJqO2mef4CzRABZ/xhlk8G9r3rvbNfADR8y6QFur8WbLVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2155157c58cso36160945ad.0;
-        Wed, 04 Dec 2024 07:48:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733327316; x=1733932116; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JnCHEz4Gh7akoOewhOyufWncAXhN1SKzUf/9Phjsxl0=;
-        b=BwNLZIxEspc/7LjDcmz+JY5wTMG1X4mOvUFJWOS3Jw0u/S2+/F8MHdGUSI3swLyEXd
-         C7Q0HtXgBKlTqEhik2+acYakI7skSHQPXWwiyifv8Ch4sCLC9m2z98OeMYN+q0KPDB7o
-         MdEvBoET8ePEiG6ZEOMhwUzaIE/Cwp+5If529wYu48W2JXQtLQbpYJntJmw6ddJAUXXl
-         Mt31Q0MmwfWX1U2I60dslvz9ffeZ9raJiERBB/Fu4uBHIyp1BL/1WytcqTEvcsNWcNQN
-         VJqCTOV0xFBx93cnAMvJn56rqnL6MqWYsBwJJo8RoRBhmFnRz2JnJXsAm6dyEgHUbisj
-         V3NQ==
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-aa55da18f89so1044156766b.0;
+        Wed, 04 Dec 2024 08:40:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733327316; x=1733932116;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JnCHEz4Gh7akoOewhOyufWncAXhN1SKzUf/9Phjsxl0=;
-        b=uJsDPKbcXNTm1ONO8NMXbWMb56CtA8BzG6Uy8p3NqHxyKfoI35hB3LbWnbCsOR5/sH
-         /W7zrgWZ553vOsiBmwBbvBeYrVbeAddgfeeuCrkxLaZWcOeFwK7WkLozOrZcexOm4h4Z
-         7AlklYKtzMlRi1G2T3z+IoQXaYqlX6GDbGoGUVVAJt9LV+JKf7Aymm7HPQJjFeVgis9O
-         xP4TsU2/tMTBWl4jsCprKLT5D2vQRvP5ZEw1CNKlxl1y7MogqGSQ5i3eepd2cAAgm7L6
-         YqXhocYhyCKLUl6rmn7WPyJiBnFctI/cu88/sbB5foMkpuZZ70h39B5GjfR2alaH7xCT
-         eqiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVwk8IHXMzKHYFsZmMYvSmlgzfyvZh0HhXeWPfgtOKeiRWON/etLYNMe9XbUANlqlwb06c=@vger.kernel.org, AJvYcCVyBIk4WBJ8zXW/jXAoESykUCmNyMsOfa/bIzlc2ppxj0rbDAhEaaeRqGo536t87hX6I+8Sj/kKV2Nl8k9g1OSN@vger.kernel.org, AJvYcCX6bnOXyG+T8VbaPBCiFaxpaGiNQ7o77dJbEVmcJADAEPLWArRAG2Gm3k6afYGK7qscFMtZE58yqDEAn6tT@vger.kernel.org, AJvYcCXbFCO6RDXIgMcmjxM2jgvQtPBwGSiNt7G35V6EdFE4vbyD7IH2wU5PrTexgKxEWa9LQi2t/Yi6@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjzBVHYGe/amdSY9FlqMDRFysmJ9OYUOMlDacFfNqU0NqL5or8
-	8iVGWvxOmSj0SVKbPp5DbeFZGTD57JgSkZFWrc/KI1ImlWyxAGA=
-X-Gm-Gg: ASbGncu3mrHGznIvC2HQXSXgoHRmYLcnu/F+1W08J2Q/C5tUPi5lQzju1YyiiScg0zI
-	35oDgK3DeopezMFRduug6GiPRRP6HGkJo8GyAsCzSlXsWAcbiDrq/TFD8ABfkvwHwONHi4RCepu
-	xNN4gnuTwWYByfIgJLB84EK+DLmPCzYx+SI7ylf3e+LsGANrwQboP2lkgkbWIrvJGo6Cc/zd/nL
-	TCulBqhEv5I4bOHdbM7lbsSaSlGc3/VJf/NcMsef9Q00InP0g==
-X-Google-Smtp-Source: AGHT+IEP1xSLasVS7/Eh+0BFE6F4XD6Q3rr3wy2zzlq0Xnmtaud9x1YoV3SSGm2oWHby4PT3mFPSWw==
-X-Received: by 2002:a17:902:cf0c:b0:215:4fbf:11da with SMTP id d9443c01a7336-215bd0f10c1mr85383305ad.21.1733327316519;
-        Wed, 04 Dec 2024 07:48:36 -0800 (PST)
-Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21521904caasm113537035ad.60.2024.12.04.07.48.35
+        d=1e100.net; s=20230601; t=1733330457; x=1733935257;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eGKhXWb7HtZIOVQHIFExLTvViIJYYv0F3Lwy/m15R3M=;
+        b=wH/Fu6IDYtAyrWkG+ILgRtwer3VElxH7sW9jg2N+2stFXVdDL/aWrfZiUD5GCkPbW9
+         HZnmxXXZxpJSHTZ4NBeJ7bnpbcRBe+l7ONeK3L6QUk0Rn38u3wZ3o6k0HkA2FXDdnlHR
+         D5UqjsXtWzE6LFrgCWIoDghPYn84PLOeWf7UkB5ysYOinwd8vXrKFMJEtnItFHchof+n
+         ci3HOsJp2pfYZDN4sadwdHQgYuYL8+xZiqyQ7dB2UD63G62+097+3MiKvkFBD5TQ2imX
+         hRqW8axvcVsDF0udUCPlolFlIZxYlklM+Wwlh7Q5FdWZe0hKKRs+bnHAYhpfmaShrQKG
+         qPxA==
+X-Forwarded-Encrypted: i=1; AJvYcCUUiuoFXE41ud84AJCUmWPkE3I4MQKBG0Y7CGC5Z0oX0ALNesDyWHVYmsk9UU2gwlkGvYjxyam363m4FHlMK/JK@vger.kernel.org, AJvYcCV26EGSOPS5dl3WThzoQQNFYq/hYhY1imVsO76XawHQ86aLqDoijNyIwVTQ+7eosswLOQFJ7jalzQtiiPw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqNhO/npUKkaljiTYAlzeUUN4mewYNAqJlegaUtMdetTj2Fx4R
+	qo1lgPziXLkrDITVvLocZN2z6kAlmVXfmwkLTu4xFK9qLG7zb/PnVz3/cQ==
+X-Gm-Gg: ASbGnctUU+2FDlLnFM7ldrJ4RSmTBoh2WSSb5wCCSMhE/Vzwew2SkgfOFV/MVp/HJ4R
+	m5zr65vUP1jEcMyC4Sip6zelGHXSKQYFgbOOHKYeuxWZYaLh5eMd1BrAmCsd088sZMofh89AGyS
+	1HZeNmilmBkPCOHKzvD13WaeZoqWufmmXbykI7T61YFQAXkDondNQ8BrOPWCYwmHp17v/JdfiPj
+	fF7bgYaGmLafqK+42CqUMjxZfOmt95+lElSZahF/l8YwW7Giz0Gwhokr843HsQqx6PTEUiIyIvo
+	CA==
+X-Google-Smtp-Source: AGHT+IGoMCilSf/5FCw7ftvtOv25fdXS12WGiCb7ddKIIZZQguO8hPB3cVK/S6ZqT15PetPGh7lhtA==
+X-Received: by 2002:a17:907:780d:b0:a9a:1585:dd3b with SMTP id a640c23a62f3a-aa5f7d4d219mr570414066b.21.1733330457195;
+        Wed, 04 Dec 2024 08:40:57 -0800 (PST)
+Received: from localhost (fwdproxy-lla-009.fbsv.net. [2a03:2880:30ff:9::face:b00c])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa5996c2c44sm762955666b.29.2024.12.04.08.40.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2024 07:48:36 -0800 (PST)
-Date: Wed, 4 Dec 2024 07:48:35 -0800
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Song Yoong Siang <yoong.siang.song@intel.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 1/1] selftests/bpf: Enable Tx hwtstamp in
- xdp_hw_metadata
-Message-ID: <Z1B50w1jzHFt-LuA@mini-arch>
-References: <20241204115715.3148412-1-yoong.siang.song@intel.com>
+        Wed, 04 Dec 2024 08:40:56 -0800 (PST)
+From: Breno Leitao <leitao@debian.org>
+Date: Wed, 04 Dec 2024 08:40:42 -0800
+Subject: [PATCH net-next 1/4] netconsole: Warn if MAX_USERDATA_ITEMS limit
+ is exceeded
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241204115715.3148412-1-yoong.siang.song@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241204-netcons_overflow_test-v1-1-a85a8d0ace21@debian.org>
+References: <20241204-netcons_overflow_test-v1-0-a85a8d0ace21@debian.org>
+In-Reply-To: <20241204-netcons_overflow_test-v1-0-a85a8d0ace21@debian.org>
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=987; i=leitao@debian.org;
+ h=from:subject:message-id; bh=ovxjdhKZTZJF3bNoyUUKDjDyDyhf1uuMTZmUa6QGS+4=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnUIYVs0kjByuqSoxAk0AiC4ZBu+mV7D9Kr2Y9q
+ 7JqHzAbaQ2JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ1CGFQAKCRA1o5Of/Hh3
+ bUkAEAClfKd1/z37QRE3JG+vQupkR9Vd1UrGnL9LaUSIA3qsKw3iFb5WWQelksTT62587/NQt0V
+ N1am6K0jlfl0ux9Vs0nGk/sxsyfgiWZG359/87I6NLH+M2iccbCcE8s24M831Imkhb98jhtYvHH
+ e4oeFgi1g6WXVdYtA4z0SsCb0+d28AI8jME0h3Cn2BwD/wzZLasFTTqd1ybQMexS5Nv9Ww58gCC
+ ryMqs7bvoCecBheWtHro0qqwdwJ2m3562vufIGJGg1rD4yL7vBawlLfspfq7ulYRGzrYqcZH8D/
+ m4IgoJksgEMz4uLr/m0GE7/4Uzk+lsifvxJjdessPKC2SWtbJo01OsDrv+wWMvDtSJMZQ2wnvuk
+ wTwUhvtVg8JutXgkAkzLRqSZ7mOP77YWNgXrj0vs5cdpmvwavDCziDiGiN1PvIVtVlG4Skzv65T
+ iUH6V735PiKWe7NXi3VCDyx0PWRINTcg51GEXr3oNZ71Gngr9DdCWpeouy2x+TY7e6K2SOX0pZw
+ mmwcM/B4cL/yHgzWACkUmRWdU5QPJ4bLG0yuvd4CFu5wdcPQFAT9HR6c1kx4OM5rT8hliH17UOP
+ qSRh7InGo3Z4YGA3sUL/YORURv23GDMoh+zW/BrHLq7xTIqSwvzMKQhp8kfHVOSZGYOOInu99cQ
+ mZYZpftASXUQJiA==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-On 12/04, Song Yoong Siang wrote:
-> Set tx_type to HWTSTAMP_TX_ON to enable hardware timestamping for all
-> outgoing packets.
-> 
-> Besides, set XDP_UMEM_TX_METADATA_LEN flag to reserve tx_metadata_len bytes
-> of per-chunk metadata.
+netconsole configfs helpers doesn't allow the creation of more than
+MAX_USERDATA_ITEMS items.
 
-XDP_UMEM_TX_METADATA_LEN is missing after d5e726d9143c ("xsk: Require
-XDP_UMEM_TX_METADATA_LEN to actuate tx_metadata_len"), so that make
-sense. Maybe add a fixes tag?
+Add a warning when netconsole userdata update function attempts sees
+more than MAX_USERDATA_ITEMS entries.
 
-And I don't see mlx5 looking at HWTSTAMP_TX anywhere in the drivers,
-so I'm assuming that's why I didn't need HWTSTAMP_TX_ON during my tests..
-Which device are you testing against? I do see some hwts_tx_en
-checks in the stfmmac at least... Can you add these details to the
-commit message and respin?
+Replace silent ignore mechanism with WARN_ON_ONCE() to highlight
+potential misuse during development and debugging.
 
-With the above addressed:
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ drivers/net/netconsole.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+index 4ea44a2f48f7b1f9059d275f0f0edc40cc1997f0..8b9dd4842f3e516c7eaa08205a45092e64417440 100644
+--- a/drivers/net/netconsole.c
++++ b/drivers/net/netconsole.c
+@@ -705,7 +705,7 @@ static void update_userdata(struct netconsole_target *nt)
+ 		struct userdatum *udm_item;
+ 		struct config_item *item;
+ 
+-		if (child_count >= MAX_USERDATA_ITEMS)
++		if (WARN_ON_ONCE(child_count >= MAX_USERDATA_ITEMS))
+ 			break;
+ 		child_count++;
+ 
+
+-- 
+2.43.5
+
 
