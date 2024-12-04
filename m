@@ -1,105 +1,114 @@
-Return-Path: <linux-kselftest+bounces-22807-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22808-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E77C9E323A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 04:45:43 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EE329E3245
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 04:47:08 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58B651648AF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 03:45:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E776B293F0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2024 03:47:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9119B14D6F9;
-	Wed,  4 Dec 2024 03:45:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 239906F06D;
+	Wed,  4 Dec 2024 03:47:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="YqOz8u5T"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jiZUFoaj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09A4522071
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Dec 2024 03:45:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE59F17BA1;
+	Wed,  4 Dec 2024 03:47:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733283939; cv=none; b=dOP89siYfZR/JUQHNU5bPHViqy7DhCdjn6wPrIhYAQdnpHtaILni07ueK8ZH6a041sL1KCM0tVWp0luBQdf3H/88tXt6UDrHPCqGgXimhJvC4SV310vVvaNDfSm0c16Y5O2ohs34VZIbIy/M23AuYDaVRjJs0019suEqiGnY27E=
+	t=1733284023; cv=none; b=gc6B3CqIIG1B+Xex/OT2E78vz0TN+ntWoH6LlBi2el3VZ7NwY700K6tqN6a3bOi8IvHEu+byC8a0eFCBIrOGKjJjdphcc1S4wKrZrDhKdmcKFF/da908hZ5tYBZ2E2oSedQIVGDIgHoVnFQ0bOKT2nCvjcQx6ipeA8PHJIFEAcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733283939; c=relaxed/simple;
-	bh=z1XbbGsUJBtc2zHLxA0NJaY+IxjwSMN+nIlUbS9g7z0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cBFzvMEIwMbko4gnq0TbKMJXkBiezG67aBVOdKW6TC7ESDAaR/ZFJgpONSM33NEZjlblzxO85KwrSGlNHt67fw+rcsY/EHiOP2qDSwRVT+jZ+TI5XsTYUaSPCpwtei/L/df+C1++/Gi6/69apQwChFRFHKm8vI17cW4EAOB92fo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=YqOz8u5T; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e38938a55e7so5332401276.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Dec 2024 19:45:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1733283937; x=1733888737; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z1XbbGsUJBtc2zHLxA0NJaY+IxjwSMN+nIlUbS9g7z0=;
-        b=YqOz8u5TnRcqvD2j2R+fJYo5RYCCQmSjn6XkK5dm2c384gnHP9I0Qj8skbh1mjFbSZ
-         sHFW8IOZezK9ANBVt8WDiuNmFhrTZXaH4kyPiCFQLqwPk7xIuSZqUiWIY2hijrI377er
-         YvoHUL6Ig+2k44oxYur1LQFNvQ3XdkCQb8qPbB4w55gfHsXEvwdmN8esI+vN7DM4V2Ts
-         cl8ZEPrm06ZDSnFvhcoUwNUi202XpbAwgQ5HdECrT02xw11znyq3pLZzjruog+KqIZm1
-         8E6oti+kxHQUj7YhcOXHys861gjAUTwaNrD4pWfdABlKQLNHwXdmQcPQKSKggNoBJQCn
-         gHsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733283937; x=1733888737;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z1XbbGsUJBtc2zHLxA0NJaY+IxjwSMN+nIlUbS9g7z0=;
-        b=Zwy1b6AYkk2gmS/VQXTbKMZvWCLYB71bNgyer0BpqFM5O4uSo4tpNT0HMa/zkZMMr2
-         9y4PhM3Ss41F51xVSisJ7ne6c2xrYZXTwvD+3GkNiCc/D1doMB09xuLul3VBNjpux7fP
-         6YX9dOBVqA3ugt0rrzsYNp6GkPqo02cupcC3uiQTybfwD21kvVPFBOXCnP60drzlHcx8
-         XqV7L9z73mMiPs0aTdSi1HaSRkUfas+phE0ZRp3ye/7XcOKQNb44oaFk8RrHJ/bIMUqp
-         Qz7VyjLf1EfwJpNzpDScmEfoAbY3rsuw6jaM3h8fC1kuVBXKaBP5wigedSXFErxqXm8Z
-         Torw==
-X-Forwarded-Encrypted: i=1; AJvYcCVRYGaH8lUAEEj6LC3FDxxAEyIBmIODRUNR7m5FeDy9gmWJMkBjTasKaJWjSI2Jua37XHIR+KvJEYUy9FHPNEQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzddU8dhd+DXQpgC8CZlS8d4glS/t7LNrHUW0jh0FDCZeeou/+c
-	+chNGXt09H0jxkT1o1BiLydG2audDJnwoCZfSJzhsC9PW6e0K45dvVUGulUXk5kUxYoxUU0DK9T
-	z8v3LMC/CF3vsvNXhDXtJADGsRLaFgQYO7ixI
-X-Gm-Gg: ASbGncucSo3i+cNbiYBrdGVzbvirts6pPS6Uhxo914sZEQzxndHaZi9ljcN4hAi6pXG
-	G76Yd3o1WZkuq8xl3o2Y9/KJrvy7kGw==
-X-Google-Smtp-Source: AGHT+IEnXWo1p3qjR3U8AU/4Sw7qLma2QQ0LRrci3nJqI5tWuNU5cRLLQ8tXAXSK+umt83Aaiyni6AwdQeANpibv2VY=
-X-Received: by 2002:a05:6902:340a:b0:e39:6c6a:f2de with SMTP id
- 3f1490d57ef6-e39d438d9bbmr4803300276.47.1733283937166; Tue, 03 Dec 2024
- 19:45:37 -0800 (PST)
+	s=arc-20240116; t=1733284023; c=relaxed/simple;
+	bh=rV2kU3EXJi1nCePhMpNyNdzmMfRJXruCC3USeEGD31I=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tJK6H/lnDJZ9cutIXV21cemDeoqQ+z4yyDERRa4WJC4S8O10fENER/lZLC0cNqcV5ljnIGVOfp4WJcyAz2pH2sr9NGtcoaGZp7IjFGe1kkOc+roo0hAqPFlQnF9sIKTo+8Wyzzq9CIQzBJDo5ec71ibSzkeQqgA3xCqecUCLySE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jiZUFoaj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F5FCC4CED1;
+	Wed,  4 Dec 2024 03:47:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733284022;
+	bh=rV2kU3EXJi1nCePhMpNyNdzmMfRJXruCC3USeEGD31I=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=jiZUFoajZ1VdviSWCV/zCWDPWG/1oOFQDpiDcFsI1RCBRxLCvQEwK9hOn7koG0Dq3
+	 mKMlCNOjDcZb25GXAy+rw0uZKwmMAq+f9tmk6BlKeyA58LAlWyDC3yfi8D7F/VAkSW
+	 uJuKMkl9GPHZuAXfcA8mzAfisM5tKXCTJn795gtBZmAdsRTnZ8mQ0e/WNagXd0tvD1
+	 IDn3XMWRIHn7EWwO6tzr9lZYSbDVhL3AASR0NBnxQTh9Az7L65/vfgIxmbqQr7Tufq
+	 KSTR37Mdg1CbprUX7jYXDGEXHkUEW6r5aHSfeW6uZPjcFnQM0c7+mrD+COjAj9nEtA
+	 /JNNsENNecjbA==
+Date: Tue, 3 Dec 2024 19:47:01 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: netdev@vger.kernel.org, Vadim Fedorenko <vfedorenko@novek.ru>, Frantisek
+ Krenzelok <fkrenzel@redhat.com>, Kuniyuki Iwashima <kuniyu@amazon.com>,
+ Apoorv Kothari <apoorvko@amazon.com>, Boris Pismenny <borisp@nvidia.com>,
+ John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, Gal Pressman <gal@nvidia.com>, Marcel
+ Holtmann <marcel@holtmann.org>, Simon Horman <horms@kernel.org>
+Subject: Re: [PATCH net-next v4 1/6] tls: block decryption when a rekey is
+ pending
+Message-ID: <20241203194701.48e74c8e@kernel.org>
+In-Reply-To: <327cb575d15fa5c5379f9c38a5132d78953fb648.1731597571.git.sd@queasysnail.net>
+References: <cover.1731597571.git.sd@queasysnail.net>
+	<327cb575d15fa5c5379f9c38a5132d78953fb648.1731597571.git.sd@queasysnail.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241112182810.24761-1-av2082000@gmail.com> <52cc8e51-9e85-465b-8ee3-63a7a0a42951@linuxfoundation.org>
- <CAHC9VhTJERn54qNDDOwNrJ09VWrmq5Qn+sPQV__LyeEUgSi5pw@mail.gmail.com> <e8e6824c-61d4-48f9-8547-628bbbd3063a@linuxfoundation.org>
-In-Reply-To: <e8e6824c-61d4-48f9-8547-628bbbd3063a@linuxfoundation.org>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 3 Dec 2024 22:45:26 -0500
-Message-ID: <CAHC9VhR5NVHOz84RBzi9L+h=kqpe3RfaEXDa+87BCLPAt+Qskg@mail.gmail.com>
-Subject: Re: [PATCH] selftests: lsm: Refactor `flags_overset_lsm_set_self_attr`
- test
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Amit Vadhavana <av2082000@gmail.com>, jmorris@namei.org, serge@hallyn.com, 
-	casey@schaufler-ca.com, shuah@kernel.org, ricardo@marliere.net, 
-	linux-kernel-mentees@lists.linux.dev, linux-security-module@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Dec 3, 2024 at 7:00=E2=80=AFPM Shuah Khan <skhan@linuxfoundation.or=
-g> wrote:
->
-> kselftest patches usually go through subsystem trees because of the
-> merge problems you mentioned. I take them through kselftest tree
-> if subsystem maintainers want me to. Some do and I pick them up.
->
-> I pick up patches if I don't see response from subsystem maintainers.
+On Thu, 14 Nov 2024 16:50:48 +0100 Sabrina Dubroca wrote:
+> +static int tls_check_pending_rekey(struct tls_context *ctx, struct sk_buff *skb)
+> +{
+> +	const struct tls_msg *tlm = tls_msg(skb);
+> +	const struct strp_msg *rxm = strp_msg(skb);
+> +	char hs_type;
+> +	int err;
+> +
+> +	if (likely(tlm->control != TLS_RECORD_TYPE_HANDSHAKE))
+> +		return 0;
+> +
+> +	if (rxm->full_len < 1)
+> +		return -EINVAL;
+> +
+> +	err = skb_copy_bits(skb, rxm->offset, &hs_type, 1);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	if (hs_type == TLS_HANDSHAKE_KEYUPDATE) {
+> +		struct tls_sw_context_rx *rx_ctx = ctx->priv_ctx_rx;
+> +
+> +		WRITE_ONCE(rx_ctx->key_update_pending, true);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int tls_rx_one_record(struct sock *sk, struct msghdr *msg,
+>  			     struct tls_decrypt_arg *darg)
+>  {
+> @@ -1739,6 +1769,10 @@ static int tls_rx_one_record(struct sock *sk, struct msghdr *msg,
+>  	rxm->full_len -= prot->overhead_size;
+>  	tls_advance_record_sn(sk, prot, &tls_ctx->rx);
+>  
+> +	err = tls_check_pending_rekey(tls_ctx, darg->skb);
+> +	if (err < 0)
+> +		return err;
 
-Thanks for the clarification.
+Sorry if I already asked this, is this 100% safe to error out from here
+after we decrypted the record? Normally once we successfully decrypted
+and pulled the message header / trailer we always call tls_rx_rec_done()
 
---=20
-paul-moore.com
+The only reason the check_pending_rekey() can fail is if the message is
+mis-formatted, I wonder if we are better off ignoring mis-formatted
+rekeys? User space will see them and break the connection, anyway.
+Alternatively - we could add a selftest for this.
 
