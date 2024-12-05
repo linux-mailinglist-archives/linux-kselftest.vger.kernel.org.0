@@ -1,200 +1,166 @@
-Return-Path: <linux-kselftest+bounces-22889-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22890-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98EFD9E5F2F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 20:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A4B69E5F30
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 20:54:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E2F9285D66
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 19:51:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF845285D50
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 19:54:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79B5B22E401;
-	Thu,  5 Dec 2024 19:51:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37CF722D4FA;
+	Thu,  5 Dec 2024 19:54:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HO0hwPvL"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QoJLV9Jg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B297419ABC6
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Dec 2024 19:51:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6778722D4E2
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Dec 2024 19:54:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733428292; cv=none; b=knoB/DeWZqsaUMJ/yJXqn9TZAybwoq7ny9Fe8nJDFMmZs30GXESFKhyN1Pk9cyhZQldxy612Vgo8AIGI9c6p1eOTE6TnGS0cP3ntPZ5YD9ZejWQVV9L94tSAUZF7oGQrhHqTMJsl2cYX4wKfZlkF0qaQezc8Gok3ebyW/lTnLlc=
+	t=1733428478; cv=none; b=XXhCtnsFqsOWUgrNGM3fX7mZ1Ik9VNuBfWgw/Ukf0Rl8p0Qp5XqDJINh7EhY/fZsqSrvTgryatqGqHpLdwUtnRsQWwNhlKvtUy8hCFDMrhYM8561xA8nvvS1AawDv7JSPF4UsQeuQonCv1QyMvfK/gG+Fc3vg4ojAXbxut9W5MY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733428292; c=relaxed/simple;
-	bh=aj/TDHD0CAOq7FGfGfcEU3eaakPg3oCuSNECP9NsCEw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RfjQ8ptIDX8RlHAitTgGAh4NyJQnDoyYXG3OUXzbizhsNQD4/e6ujW6nBPGoDQuXcsVw7RVZO89S9Rg3OnlPuZOL/lWS9zW6vZM/E1VC+aA/WmmR1XkcI+cxCySEOBgx5HnCCBB2fuoRrwoQqGu2tvG/u58ePlH1hLx11dvcTaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HO0hwPvL; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1733428289;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=TGMa02p59Vq5W9KNHvnbrbM6563qeJi/DcjgzffieMg=;
-	b=HO0hwPvLP4AqauUayICQweIqcbo2ZtWvOvGS9yVZDd2iV2j6wWq86PUqUVA3E49kUc5ofx
-	Xk1aPeSsaTm4qs/VMfnxsgOS7r2EESyw00FobpXdqOAv4IgpXyHlGn0mrCI2KKU7suOY4b
-	14yv/UgmphyKhaHtL7zO1lD3KTCkoBY=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-161-HLV9w-mZOrajCjc8HTNz6A-1; Thu,
- 05 Dec 2024 14:51:23 -0500
-X-MC-Unique: HLV9w-mZOrajCjc8HTNz6A-1
-X-Mimecast-MFC-AGG-ID: HLV9w-mZOrajCjc8HTNz6A
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 657F41956046;
-	Thu,  5 Dec 2024 19:51:22 +0000 (UTC)
-Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.90.143])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9E95E19560AD;
-	Thu,  5 Dec 2024 19:51:20 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH] cgroup/cpuset: Prevent leakage of isolated CPUs into sched domains
-Date: Thu,  5 Dec 2024 14:51:01 -0500
-Message-ID: <20241205195101.31108-1-longman@redhat.com>
+	s=arc-20240116; t=1733428478; c=relaxed/simple;
+	bh=vhbbHz1yBMg1oLY8i08EsGZhgnjN0h92EmEVlCnFACY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E2uo1NIXD0F1oTJZF6ilEBAg2zgS6zpxAIsBMH6YCFTJu6SO5CSae+8Bo7aRZCPIrHp1smo3lf+gj50fKSJRr84ygACVcHuFdXO9K4enqMPtONGg6Gz02NHTMRt2QK8zkSblEDB6B5ESGy3ixAcxT+GEKQdBpL5EpfqBtmj559Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QoJLV9Jg; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4349ea54db7so9855e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Dec 2024 11:54:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1733428475; x=1734033275; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YV1GOShnKkFf0HLahvzq1w+GJ+Yzlm4X88Ky6h9+fMA=;
+        b=QoJLV9JgDl34C7Ugqfm9XdnfyPQLc4Lm5yKF+NeashYgx195kbauZjmrx5UP3zT77I
+         MdaKFvpzkMBSPBnwJ0274q8b1280iAjuwwu9WdBxR8UX+HcgBwwmDGS2Udjl3+ScHzDl
+         oPhxNHzqhCee4nX1r5ToPNn/D88EklYAVlMbvCf52wwCzj4a//HTHo/c49JMm39lKl17
+         bFYFYGWsbyIx+MyywsV+Vi+HKWVz0WkL9lh8mRsyu7mqgu/b/6MedyPTsN8Tgy/7iEsf
+         IRAmwR3/NuK8IW5t4qId2sXvmwZJKjBWFKlLGDLsm3gLKTNRbRD/6jOv+ZkJlgeNzWf1
+         t0BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733428475; x=1734033275;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YV1GOShnKkFf0HLahvzq1w+GJ+Yzlm4X88Ky6h9+fMA=;
+        b=JuRKPZeEbA92/rFozqSgbh3nNWandoGe7y+jFtH4zSSoTXbMB7fpmHDiW+jlEMucDM
+         mr/P8M/m3WS6HpK7Q7At60RLNkwrHASBXaeAtdn9VKAIEMMOA5CHGzMJMtIBwSS47pvj
+         CADIz1DEi7d7FR79gf3MW1AfZRDAZKk4FQdAa3Hr7yFqkpuVY20JBJY3+H1yXGJwBtnm
+         lx234rgk1Fi/8dNMchbv9STj6ck73jCf620CIsPv8v+TcjCB06jwTJLx7aLjFjIZhB5L
+         NdW2Bk+IGe2Qv+v2A7tc2kSIkxXeQBFv6nUH81NS9USkzQeMcc0hUyCewA3e4h4L4aPX
+         uv7A==
+X-Forwarded-Encrypted: i=1; AJvYcCV1qAICKd54jSsnZW0rTVqKH8kPH20KmE4vK/MsPV8TjXhVY1WMCrDwZTJhVDUxkjNUIFVMEEUZxUB1rQUru7k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtcPAQDLnq9v2VG8Ek1Jg64kKye5UgCdNsEWoK68QEzluYteEG
+	uW2/P07u59yswI34rf+w5Htn0kn9q1Imz0g7T7PndTtLLQhEcKeid0da1l7SKLU77OFIdrNy2yX
+	hTpv9D8L/DiNsmJ/0ECktcHZefpLakpdEw+hj
+X-Gm-Gg: ASbGncvAGFkB9dCKuX8pbTTRckxI7JVUJ75UZrsZ+DF8kEzd8Is8zx0ZVByH60w2DQM
+	H72oJcB5PycQnU2noXKIlaoLDuSeTKUD/8RQF4W9iI3ZLDukpnfzYdgtCvERc
+X-Google-Smtp-Source: AGHT+IEg8jS6R8nzvvgqFY4eAzSsGGb0NyqX/at7eAZ/z8kw1IzlpGFkHWMNC7b2JnZaKud2fJhzbW1s/D33iVi8sr0=
+X-Received: by 2002:a05:600c:5846:b0:434:9e1d:44ef with SMTP id
+ 5b1f17b1804b1-434de647452mr97705e9.7.1733428474682; Thu, 05 Dec 2024 11:54:34
+ -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+References: <20241205192943.3228757-1-isaacmanjarres@google.com>
+In-Reply-To: <20241205192943.3228757-1-isaacmanjarres@google.com>
+From: Jeff Xu <jeffxu@google.com>
+Date: Thu, 5 Dec 2024 11:53:57 -0800
+Message-ID: <CALmYWFvGZj5Bc8LfveMCc=3ZAgd-Lqr=186K4swpnTc=2a-JkQ@mail.gmail.com>
+Subject: Re: [PATCH v1] selftests/memfd: Run sysctl tests when PID namespace
+ support is enabled
+To: "Isaac J. Manjarres" <isaacmanjarres@google.com>
+Cc: Shuah Khan <shuah@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Daniel Verkamp <dverkamp@chromium.org>, Kees Cook <kees@kernel.org>, stable@vger.kernel.org, 
+	Suren Baghdasaryan <surenb@google.com>, Kalesh Singh <kaleshsingh@google.com>, kernel-team@android.com, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Isolated CPUs are not allowed to be used in a non-isolated partition.
-The only exception is the top cpuset which is allowed to contain boot
-time isolated CPUs.
+On Thu, Dec 5, 2024 at 11:29=E2=80=AFAM Isaac J. Manjarres
+<isaacmanjarres@google.com> wrote:
+>
+> The sysctl tests for vm.memfd_noexec rely on the kernel to support PID
+> namespaces (i.e. the kernel is built with CONFIG_PID_NS=3Dy). If the
+> kernel the test runs on does not support PID namespaces, the first
+> sysctl test will fail when attempting to spawn a new thread in a new
+> PID namespace, abort the test, preventing the remaining tests from
+> being run.
+>
+> This is not desirable, as not all kernels need PID namespaces, but can
+> still use the other features provided by memfd. Therefore, only run the
+> sysctl tests if the kernel supports PID namespaces. Otherwise, skip
+> those tests and emit an informative message to let the user know why
+> the sysctl tests are not being run.
+>
+Thanks for fixing this.
 
-Commit ccac8e8de99c ("cgroup/cpuset: Fix remote root partition creation
-problem") introduces a simplified scheme of including only partition
-roots in sched domain generation. However, it does not properly account
-for this exception case. This can result in leakage of isolated CPUs
-into a sched domain.
-
-Fix it by making sure that isolated CPUs are excluded from the top
-cpuset before generating sched domains.
-
-Also update the way the boot time isolated CPUs are handled in
-test_cpuset_prs.sh to make sure that those isolated CPUs are really
-isolated instead of just skipping them in the tests.
-
-Fixes: ccac8e8de99c ("cgroup/cpuset: Fix remote root partition creation problem")
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/cgroup/cpuset.c                        | 10 +++++-
- .../selftests/cgroup/test_cpuset_prs.sh       | 33 +++++++++++--------
- 2 files changed, 28 insertions(+), 15 deletions(-)
-
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index f321ed515f3a..33b264c3e258 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -890,7 +890,15 @@ static int generate_sched_domains(cpumask_var_t **domains,
- 	 */
- 	if (cgrpv2) {
- 		for (i = 0; i < ndoms; i++) {
--			cpumask_copy(doms[i], csa[i]->effective_cpus);
-+			/*
-+			 * The top cpuset may contain some boot time isolated
-+			 * CPUs that need to be excluded from the sched domain.
-+			 */
-+			if (csa[i] == &top_cpuset)
-+				cpumask_and(doms[i], csa[i]->effective_cpus,
-+					    housekeeping_cpumask(HK_TYPE_DOMAIN));
-+			else
-+				cpumask_copy(doms[i], csa[i]->effective_cpus);
- 			if (dattr)
- 				dattr[i] = SD_ATTR_INIT;
- 		}
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index 03c1bdaed2c3..400a696a0d21 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -86,15 +86,15 @@ echo "" > test/cpuset.cpus
- 
- #
- # If isolated CPUs have been reserved at boot time (as shown in
--# cpuset.cpus.isolated), these isolated CPUs should be outside of CPUs 0-7
-+# cpuset.cpus.isolated), these isolated CPUs should be outside of CPUs 0-8
- # that will be used by this script for testing purpose. If not, some of
--# the tests may fail incorrectly. These isolated CPUs will also be removed
--# before being compared with the expected results.
-+# the tests may fail incorrectly. These pre-isolated CPUs should stay in
-+# an isolated state throughout the testing process for now.
- #
- BOOT_ISOLCPUS=$(cat $CGROUP2/cpuset.cpus.isolated)
- if [[ -n "$BOOT_ISOLCPUS" ]]
- then
--	[[ $(echo $BOOT_ISOLCPUS | sed -e "s/[,-].*//") -le 7 ]] &&
-+	[[ $(echo $BOOT_ISOLCPUS | sed -e "s/[,-].*//") -le 8 ]] &&
- 		skip_test "Pre-isolated CPUs ($BOOT_ISOLCPUS) overlap CPUs to be tested"
- 	echo "Pre-isolated CPUs: $BOOT_ISOLCPUS"
- fi
-@@ -683,15 +683,19 @@ check_isolcpus()
- 		EXPECT_VAL2=$EXPECT_VAL
- 	fi
- 
-+	#
-+	# Appending pre-isolated CPUs
-+	# Even though CPU #8 isn't used for testing, it can't be pre-isolated
-+	# to make appending those CPUs easier.
-+	#
-+	[[ -n "$BOOT_ISOLCPUS" ]] && {
-+		EXPECT_VAL=${EXPECT_VAL:+${EXPECT_VAL},}${BOOT_ISOLCPUS}
-+		EXPECT_VAL2=${EXPECT_VAL2:+${EXPECT_VAL2},}${BOOT_ISOLCPUS}
-+	}
-+
- 	#
- 	# Check cpuset.cpus.isolated cpumask
- 	#
--	if [[ -z "$BOOT_ISOLCPUS" ]]
--	then
--		ISOLCPUS=$(cat $ISCPUS)
--	else
--		ISOLCPUS=$(cat $ISCPUS | sed -e "s/,*$BOOT_ISOLCPUS//")
--	fi
- 	[[ "$EXPECT_VAL2" != "$ISOLCPUS" ]] && {
- 		# Take a 50ms pause and try again
- 		pause 0.05
-@@ -731,8 +735,6 @@ check_isolcpus()
- 		fi
- 	done
- 	[[ "$ISOLCPUS" = *- ]] && ISOLCPUS=${ISOLCPUS}$LASTISOLCPU
--	[[ -n "BOOT_ISOLCPUS" ]] &&
--		ISOLCPUS=$(echo $ISOLCPUS | sed -e "s/,*$BOOT_ISOLCPUS//")
- 
- 	[[ "$EXPECT_VAL" = "$ISOLCPUS" ]]
- }
-@@ -836,8 +838,11 @@ run_state_test()
- 		# if available
- 		[[ -n "$ICPUS" ]] && {
- 			check_isolcpus $ICPUS
--			[[ $? -ne 0 ]] && test_fail $I "isolated CPU" \
--				"Expect $ICPUS, get $ISOLCPUS instead"
-+			[[ $? -ne 0 ]] && {
-+				[[ -n "$BOOT_ISOLCPUS" ]] && ICPUS=${ICPUS},${BOOT_ISOLCPUS}
-+				test_fail $I "isolated CPU" \
-+					"Expect $ICPUS, get $ISOLCPUS instead"
-+			}
- 		}
- 		reset_cgroup_states
- 		#
--- 
-2.47.1
-
+> Fixes: 11f75a01448f ("selftests/memfd: add tests for MFD_NOEXEC_SEAL MFD_=
+EXEC")
+> Cc: stable@vger.kernel.org # v6.6+
+> Cc: Jeff Xu <jeffxu@google.com>
+> Cc: Suren Baghdasaryan <surenb@google.com>
+> Cc: Kalesh Singh <kaleshsingh@google.com>
+> Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+> ---
+>  tools/testing/selftests/memfd/memfd_test.c | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/s=
+elftests/memfd/memfd_test.c
+> index 95af2d78fd31..0a0b55516028 100644
+> --- a/tools/testing/selftests/memfd/memfd_test.c
+> +++ b/tools/testing/selftests/memfd/memfd_test.c
+> @@ -9,6 +9,7 @@
+>  #include <fcntl.h>
+>  #include <linux/memfd.h>
+>  #include <sched.h>
+> +#include <stdbool.h>
+>  #include <stdio.h>
+>  #include <stdlib.h>
+>  #include <signal.h>
+> @@ -1557,6 +1558,11 @@ static void test_share_fork(char *banner, char *b_=
+suffix)
+>         close(fd);
+>  }
+>
+> +static bool pid_ns_supported(void)
+> +{
+> +       return access("/proc/self/ns/pid", F_OK) =3D=3D 0;
+> +}
+> +
+>  int main(int argc, char **argv)
+>  {
+>         pid_t pid;
+> @@ -1591,8 +1597,12 @@ int main(int argc, char **argv)
+>         test_seal_grow();
+>         test_seal_resize();
+>
+> -       test_sysctl_simple();
+> -       test_sysctl_nested();
+> +       if (pid_ns_supported()) {
+> +               test_sysctl_simple();
+> +               test_sysctl_nested();
+> +       } else {
+> +               printf("PID namespaces are not supported; skipping sysctl=
+ tests\n");
+> +       }
+>
+>         test_share_dup("SHARE-DUP", "");
+>         test_share_mmap("SHARE-MMAP", "");
+> --
+> 2.47.0.338.g60cca15819-goog
+>
+Reviewed-by: Jeff Xu <jeffxu@google.com>
 
