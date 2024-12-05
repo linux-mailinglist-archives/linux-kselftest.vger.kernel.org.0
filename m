@@ -1,153 +1,170 @@
-Return-Path: <linux-kselftest+bounces-22860-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22861-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC8E29E5355
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 12:06:53 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BF861881DC1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 11:06:53 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA7231DDA20;
-	Thu,  5 Dec 2024 11:06:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="VzRF0sfd";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ERU7VtQR"
-X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37ED29E537C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 12:15:29 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8AC31D89E9;
-	Thu,  5 Dec 2024 11:06:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B430128249A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 11:15:27 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 056AE1DDC16;
+	Thu,  5 Dec 2024 11:15:25 +0000 (UTC)
+X-Original-To: linux-kselftest@vger.kernel.org
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 463161DF73C;
+	Thu,  5 Dec 2024 11:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733396806; cv=none; b=ePKP5Ua/uxdsuDOynwkcgBexBKVpGv6+V3dF50t3mcoHyPuNxmeKq0I3AzTnFmddgjx4+utjGNAZWUYUgJzdCWNmNz53XaoVY70xAnBnM7NkQOeve44Qa3S9uNHP94BZE4RSksaFSRerl+ZhUW211iRGcLc3K6E+sYRFsXZOO8E=
+	t=1733397324; cv=none; b=pAEwx4FNFjD7GdWTM/3OZO+Go/e9i9E0WHWKc54Tv5oXhvtf5k6AT3knUWu+0bx3uA4wlShLg58w+p7a/8p313EYv33cTssa0TNpS1rqTHunxhDO7+pquXRyeG0W8pB592DX2iTAHx6aKwsVscMNWY4sTs+0T5rI9TWX3s9T5rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733396806; c=relaxed/simple;
-	bh=ktlFxxr9tgG6IXtx8PkYv3KGn8bo719VqDm2lM/J6pg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e7UGr6TNYjILrRpFmR+0LpE7jc38nPEBZvlo0pyXb4+W2WJII0XENgrVk15VejsWRSMVLrolfUSMVnGPjH94VYZZINdvocz1oivxUYT+XPRTAqK6zvu4K4vkTyQsBThAhqllGepMgF4QeNgK6LNN0j/DRNiHakBMiZ9dd6GZH5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=VzRF0sfd; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ERU7VtQR; arc=none smtp.client-ip=202.12.124.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
-	by mailfout.stl.internal (Postfix) with ESMTP id 55D22114023C;
-	Thu,  5 Dec 2024 06:06:41 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-11.internal (MEProxy); Thu, 05 Dec 2024 06:06:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1733396801; x=
-	1733483201; bh=SKHY22/a1FrbM5ccTkJMU55h4ZUMLTrDJL+VybDLaeM=; b=V
-	zRF0sfdFuqDJGzSEUKPhuJDKjARPq2DAkExCVmT15DryJcnBmGab4Wu/8jVmRxwp
-	5+kxcDDQ6GG3vMUVUttqcBPWYpo8tgPaVdvtDuYy+M3mf2Sb4UC8R9eJOid39AFS
-	447AyrceVb3sVjagrG9Et/2OA94/efBrQu3XlOeC2d/O/RxkEXjBfdQyQ1EbjEW6
-	I5fV/K7FBv6gljn2Us1GwWn/s8JkbdKJ+2aQXq/IslefE6C8wb7k65OYHeScJ0Kq
-	TLB50jHiOGD0SkenlSSOTcaE8KRRtF+WvK636ad3ZrOp8mEcXH81BtgcS2VrSojh
-	/R9nNorxwnFKlS7uYNNkQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1733396801; x=1733483201; bh=SKHY22/a1FrbM5ccTkJMU55h4ZUMLTrDJL+
-	VybDLaeM=; b=ERU7VtQRZUKpmqhT9gqPsWq+x31oRdxpL8JCEmvmLt8MPj9Zg6/
-	/a1qXaLLCqMJKD6gx9sXD51l2Yq2gk4gmkk5x8xc2nKmV1Yd6024eWyhVQqgYBaQ
-	SbvJTHCXwx3KAiZh31YnpCwSpqOX9tAwN/TAZ+w0dU6DADOIchJIk9dU/UX+LZaB
-	v0+sxR3BNoGx4d+UZEahyXRhCgiB+f9r0WVejd+FHWGQM1g5cF+7sQmhZtzIaF/G
-	DMv37KpzOZjWPhGtTQPbd9PePNJuIThQkA7tyzMB5Ymt0HN4pFvYb3Jr6G1NkwGi
-	O50OdOzCNFGlIt/ZwX5hM/LiKmOk3vGL1og==
-X-ME-Sender: <xms:QIlRZ5QkKnm5_gh0uXTaauHUjomUblaoB7yeWZCcGKHXB7UB7Juzcg>
-    <xme:QIlRZyynNMzFDtCTGcN20TX486acnIZRIGPNbrZU26xDMX6MH7SI8MSvTilBtRR3p
-    OYBjhB1-OObhAQtJ-g>
-X-ME-Received: <xmr:QIlRZ-0NjXwOJH-mQP5aScbcBlRXEYWOVrbGNn82tvSp4rnA_6g8QHtx6iKe>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrieejgddvvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
-    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
-    hsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecu
-    hfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnhgrih
-    hlrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefhkeeg
-    teehgeehieffgfeuvdeuffefgfduffenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghr
-    tghpthhtohepudefpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehkuhgsrgeskh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghl
-    rdhorhhgpdhrtghpthhtohepvhhfvgguohhrvghnkhhosehnohhvvghkrdhruhdprhgtph
-    htthhopehfkhhrvghniigvlhesrhgvughhrghtrdgtohhmpdhrtghpthhtohepkhhunhhi
-    hihusegrmhgriihonhdrtghomhdprhgtphhtthhopegrphhoohhrvhhkohesrghmrgiioh
-    hnrdgtohhmpdhrtghpthhtohepsghorhhishhpsehnvhhiughirgdrtghomhdprhgtphht
-    thhopehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhope
-    hshhhurghhsehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:QIlRZxBI8WMEUCi8kM9oLS1EJLL77XW1_88zzMuVIe-5EI0KNUYOPQ>
-    <xmx:QIlRZyjTfd-Ln2Fjc5EXmB1BJ-44HgQlKxaTpSvIHZP4wt4ddF5Xsg>
-    <xmx:QIlRZ1p0Dw47OJkGGrF2JitvXfMaPTcSAPTfMRQK1oEWEPC0FU3eTg>
-    <xmx:QIlRZ9j3sqBTyCkDUEE5Gq4UqJbvaCBOGh6vIHzUFqAJS5HE1qALGg>
-    <xmx:QYlRZ5RcDa5kEMyg7iVw7jMQURqY9WRbqPo0SrJnLR4X83uhe4ywEKFN>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 5 Dec 2024 06:06:40 -0500 (EST)
-Date: Thu, 5 Dec 2024 12:06:37 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, Vadim Fedorenko <vfedorenko@novek.ru>,
-	Frantisek Krenzelok <fkrenzel@redhat.com>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>,
-	Apoorv Kothari <apoorvko@amazon.com>,
-	Boris Pismenny <borisp@nvidia.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	Gal Pressman <gal@nvidia.com>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Simon Horman <horms@kernel.org>
-Subject: Re: [PATCH net-next v4 4/6] docs: tls: document TLS1.3 key updates
-Message-ID: <Z1GJPUUR-wllqX3w@hog>
-References: <cover.1731597571.git.sd@queasysnail.net>
- <6baaaaf467845c56d7ec47250aaa2138de948003.1731597571.git.sd@queasysnail.net>
- <20241203195129.25e07e53@kernel.org>
+	s=arc-20240116; t=1733397324; c=relaxed/simple;
+	bh=+FUIs1dS99YtogPXZFeKo+hgoWg7ip7CinhqcEF1Ee4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y8fi3vtBxzCN4V5/Be3xkuEysb9B45M4Ed+rEheMy56SpTAvp14LvGQIu6GGqqXJncDkEqgf/vijDb1KU9i25c0otBw9MY6EnyBCnd1nUZvKD8y5cJ7lKrdIuqcAkEoCMvp23yKCuZOSBP+45YDtjZt4cxRVxmB/eoo9TkLI/mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 29852FF80C;
+	Thu,  5 Dec 2024 11:15:16 +0000 (UTC)
+Message-ID: <14125726-bb00-4de4-87f6-6655b0ffae58@ghiti.fr>
+Date: Thu, 5 Dec 2024 12:15:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241203195129.25e07e53@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] riscv: selftests: Fix warnings pointer masking test
+Content-Language: en-US
+To: Andrew Jones <ajones@ventanamicro.com>,
+ Charlie Jenkins <charlie@rivosinc.com>
+Cc: Shuah Khan <shuah@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Samuel Holland <samuel.holland@sifive.com>, linux-kselftest@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ Palmer Dabbelt <palmer@rivosinc.com>
+References: <20241204-fix_warnings_pointer_masking_tests-v2-1-1bf0c5095f58@rivosinc.com>
+ <20241205-45c00adab2636bf26ce05f70@orel>
+From: Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <20241205-45c00adab2636bf26ce05f70@orel>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: alex@ghiti.fr
 
-2024-12-03, 19:51:29 -0800, Jakub Kicinski wrote:
-> On Thu, 14 Nov 2024 16:50:51 +0100 Sabrina Dubroca wrote:
-> > +To prevent attempting to decrypt incoming records using the wrong key,
-> > +decryption will be paused when a KeyUpdate message is received by the
-> > +kernel, until the new key has been provided using the TLS_RX socket
-> > +option. Any read occurring after the KeyUpdate has been read and
-> > +before the new key is provided will fail with EKEYEXPIRED. Poll()'ing
-> > +the socket will also sleep until the new key is provided. There is no
-> > +pausing on the transmit side.
-> 
-> Thanks for the doc update, very useful. I'm not a socket expert so dunno
-> if suppressing POLLIN is the right thing to do.
+Hi Drew,
 
-Not an expert either. I picked that because there's no data to be
-read, which is what POLLIN should mean.
+On 05/12/2024 09:04, Andrew Jones wrote:
+> On Wed, Dec 04, 2024 at 06:57:10PM -0800, Charlie Jenkins wrote:
+>> When compiling the pointer masking tests with -Wall this warning
+>> is present:
+>>
+>> pointer_masking.c: In function ‘test_tagged_addr_abi_sysctl’:
+>> pointer_masking.c:203:9: warning: ignoring return value of ‘pwrite’
+>> declared with attribute ‘warn_unused_result’ [-Wunused-result]
+>>    203 |         pwrite(fd, &value, 1, 0); |
+>>        ^~~~~~~~~~~~~~~~~~~~~~~~ pointer_masking.c:208:9: warning:
+>> ignoring return value of ‘pwrite’ declared with attribute
+>> ‘warn_unused_result’ [-Wunused-result]
+>>    208 |         pwrite(fd, &value, 1, 0);
+>>
+>> I came across this on riscv64-linux-gnu-gcc (Ubuntu
+>> 11.4.0-1ubuntu1~22.04).
+>>
+>> Fix this by checking that the number of bytes written equal the expected
+>> number of bytes written.
+>>
+>> Fixes: 7470b5afd150 ("riscv: selftests: Add a pointer masking test")
+>> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+>> ---
+>> Changes in v2:
+>> - I had ret != 2 for testing, I changed it to be ret != 1.
+>> - Link to v1: https://lore.kernel.org/r/20241204-fix_warnings_pointer_masking_tests-v1-1-ea1e9665ce7a@rivosinc.com
+>> ---
+>>   tools/testing/selftests/riscv/abi/pointer_masking.c | 19 +++++++++++++++----
+>>   1 file changed, 15 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/riscv/abi/pointer_masking.c b/tools/testing/selftests/riscv/abi/pointer_masking.c
+>> index dee41b7ee3e3..229d85ccff50 100644
+>> --- a/tools/testing/selftests/riscv/abi/pointer_masking.c
+>> +++ b/tools/testing/selftests/riscv/abi/pointer_masking.c
+>> @@ -189,6 +189,7 @@ static void test_tagged_addr_abi_sysctl(void)
+>>   {
+>>   	char value;
+>>   	int fd;
+>> +	int ret;
+>>   
+>>   	ksft_print_msg("Testing tagged address ABI sysctl\n");
+>>   
+>> @@ -200,14 +201,24 @@ static void test_tagged_addr_abi_sysctl(void)
+>>   	}
+>>   
+>>   	value = '1';
+>> -	pwrite(fd, &value, 1, 0);
+>> +	ret = pwrite(fd, &value, 1, 0);
+>> +	if (ret != 1) {
+>> +		ksft_test_result_fail("Write to /proc/sys/abi/tagged_addr_disabled failed.\n");
+>> +		return;
+>> +	}
+>> +
+>>   	ksft_test_result(set_tagged_addr_ctrl(min_pmlen, true) == -EINVAL,
+>>   			 "sysctl disabled\n");
+>>   
+>>   	value = '0';
+>> -	pwrite(fd, &value, 1, 0);
+>> -	ksft_test_result(set_tagged_addr_ctrl(min_pmlen, true) == 0,
+>> -			 "sysctl enabled\n");
+>> +	ret = pwrite(fd, &value, 1, 0);
+>> +	if (ret != 1) {
+>> +		ksft_test_result_fail("Write to /proc/sys/abi/tagged_addr_disabled failed.\n");
+>> +		return;
+>> +	}
+> Could make a wrapper function for pwrite() to avoid duplicating the ret
+> value check.
+>
+>> +
+>> +	ksft_test_result(set_tagged_addr_ctrl(min_pmlen, true) == -EINVAL,
+>> +			 "sysctl disabled\n");
+> Why is this changed from expecting 0 for the return and being the
+> "sysctrl enabled" test? We still write '0' to tagged_addr_disabled here.
+>
+>>   
+>>   	set_tagged_addr_ctrl(0, false);
+>>   
+>>
+>> ---
+>> base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
+>> change-id: 20241204-fix_warnings_pointer_masking_tests-3860e4f35429
+>> -- 
+>> - Charlie
+>>
+> Not part of this patch, but now that I looked at
+> test_tagged_addr_abi_sysctl() I see that
+> ksft_test_result_skip() is duplicated.
+>
+> Thanks,
+> drew
 
-man 2 poll:
-       POLLIN There is data to read.
 
-man 3 poll:
-       POLLIN      Data other than high-priority data may be read
-                   without blocking.
+Your mails often end up in my junk folder, am I the only one? Any idea 
+what could be wrong?
 
-Based on this, reporting POLLIN seems wrong to me.
+Thanks,
 
-> But a nit on the
-> phrasing - I'd say "poll() will not report any events from the socket
-> until.." ? Could be just me but sleep is a second order effect.
+Alex
 
-Agree, thanks for the suggestion. Maybe actually "will not report read
-events"? Other events are unaffected by a pending rekey.
 
--- 
-Sabrina
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
