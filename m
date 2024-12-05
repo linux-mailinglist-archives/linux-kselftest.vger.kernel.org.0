@@ -1,171 +1,153 @@
-Return-Path: <linux-kselftest+bounces-22859-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22860-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92BDF9E525A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 11:32:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC8E29E5355
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 12:06:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CF1718827AA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 10:32:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BF861881DC1
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 11:06:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF3F11D63E8;
-	Thu,  5 Dec 2024 10:32:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA7231DDA20;
+	Thu,  5 Dec 2024 11:06:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="DEMz7EMD"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="VzRF0sfd";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ERU7VtQR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 826AF194C6E
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Dec 2024 10:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8AC31D89E9;
+	Thu,  5 Dec 2024 11:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733394769; cv=none; b=EP+/ZWEcFWJ5V/Y0Eq9pCcBYDs3ay/KUKNQFEUCAVarB+fDBYWPE62inKbKHDAX4bqPpkc4ALMCrvFYQidx/nXz3/qpXf8lu/jIriQMgEZhJx0HGP0CSaNgEwHsyIiG1G4o/9PhP86qjtlDLdtAwWsHOlbepJVSAZk+HMrdGXx8=
+	t=1733396806; cv=none; b=ePKP5Ua/uxdsuDOynwkcgBexBKVpGv6+V3dF50t3mcoHyPuNxmeKq0I3AzTnFmddgjx4+utjGNAZWUYUgJzdCWNmNz53XaoVY70xAnBnM7NkQOeve44Qa3S9uNHP94BZE4RSksaFSRerl+ZhUW211iRGcLc3K6E+sYRFsXZOO8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733394769; c=relaxed/simple;
-	bh=6HXvG45Hm2D9fZF+QkrLxx70E0nDTnn2Xg6zS5lv34o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lPc0MIj+5Q6pE4O1WFA4WJftBKP7oLy53EZphcB/C8bo1ry9HJ9DczJmnVGNqdY7ewDEVNON2K1Z+poS0ZRs+PeqkEIS6JY2a3ldQ91SkAFdUPNWfa1jw1e/dRQHTwoDf3Ke6blQKSP4T6YvIbI6PWVanfnUg7cBKlIP1QkDflg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=DEMz7EMD; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-aa539d2b4b2so154992066b.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Dec 2024 02:32:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1733394765; x=1733999565; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=6254BSEchNSxDD6z0s1P5zHDiBBHSGfn7mtMA8hj/I0=;
-        b=DEMz7EMDWcng0vE1CaUa8uX2OHQTM9/A/YtD9/7bE2B2BLQm9dmYZSqFeHH/P/umpk
-         PFKy2OgH3DOtdwDEM39103QxKxiYOZPk1FrP+E9mbCtX4MyScIwstmytnTrlVmteFShE
-         eW9DanfXEgKH2N4LPuuJVN+4v13R0FPHCKpLgndUTffjSb9AQwJAocHsPa9Zq7YmYRQO
-         3as9WyAD4yCdWzdYxZ03NA07v3u5Zo2ApJjJfjfIOjdpQI446rlSUQEWrXic1HNW5yTi
-         12maK8dBtutqWo3t59CskmP0YN4rCqATdpSOTCABcU61FgXp1fwMGY5/CDClUc+CbIm9
-         FHrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733394765; x=1733999565;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6254BSEchNSxDD6z0s1P5zHDiBBHSGfn7mtMA8hj/I0=;
-        b=TPlzYDIvSY4gUJFQJ57k4b1K1JnQtaT4TJmM/T+D9Mgg6X2qacXhytOsvd4qpbLZ5l
-         C0LOz+eQkVOR+KQb2IZ0s14ZOmo7soWDbKz26zhqVsDF8GMm62VG6tIDeS2Q/dlBZHCi
-         4U3Msk8kSosF+Y6KVVeHy69LZ8QNwRlIl3rwoGDZkIitd3YDlj8NHqvrkEFZmx7qHccC
-         RDOEIrsA/W0mZyMJ8jfnz+ZmQr6nPAcdAgRFG2Ka3XXm6mIpIruLJlJAFKYJ6IZ9Hdje
-         UwBTvxjVbzpeP4O3+RIHC417SVIXxTcPNDKzPKeuw72OHFQtbWVUUESnKJXHGXvVUNmQ
-         SPiw==
-X-Forwarded-Encrypted: i=1; AJvYcCWzJTuj5bRKG1WWIhaezxvtHuT0j0f0Bt4W0UzW4Rofd4wHVGMBgBmjiHK3bjnvVRS3Y7Ke4sNai/XmIIBaACo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9NRNRnntPmZ3hkQiU3THwYJ0FuarJhG0JM9F7kexIKS95afKi
-	T6I5LYmELPkN3KMzTAYPfjBG36J45t7YniycHLKOB7ES3rgJHLE+ohgiBjDnqCc=
-X-Gm-Gg: ASbGncsn7rHQzb4WTm58BdJT8rk3M/yMpJ1Kgn9dFrNAxoLGuADJWR8jHwCHrNLRte9
-	YxBFfzdOJsoMx3grS5ibfbyGyaIotKvLqx1KC6cyFN28i4NhrNenqb6mZWMEYUrJ/vNQpVM7W+d
-	B5EUEy2BwxQBzYg4w9ojh4pEHJmmhlyCQSzBw9pQor7yR132Ihgyna8YGysEaeQvvdQeY+qWc8i
-	bO0SjEvXpKA6KxnauZ91+GdCkAt60bVOvvLEVyKzO+SsLpAUvUV6eHvXngUbTyrYJWRxwZNXlxI
-	ks5Xsdt9SceK
-X-Google-Smtp-Source: AGHT+IGqXGgjq1viA+Ko95j9nf8/Z5FYvGx+gNGiTdXEKmEmL+dVtR7qeWsz4gPUaY4Jl7LzSWijDw==
-X-Received: by 2002:a17:907:7759:b0:a99:5f45:cb69 with SMTP id a640c23a62f3a-aa6202f3295mr279549266b.4.1733394765188;
-        Thu, 05 Dec 2024 02:32:45 -0800 (PST)
-Received: from ?IPV6:2001:67c:2fbc:1:57d3:efd0:a801:687e? ([2001:67c:2fbc:1:57d3:efd0:a801:687e])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa62601b3f9sm71324366b.110.2024.12.05.02.32.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Dec 2024 02:32:44 -0800 (PST)
-Message-ID: <364f199c-8d8d-4228-bdd7-13ab81d10e39@openvpn.net>
-Date: Thu, 5 Dec 2024 11:33:25 +0100
+	s=arc-20240116; t=1733396806; c=relaxed/simple;
+	bh=ktlFxxr9tgG6IXtx8PkYv3KGn8bo719VqDm2lM/J6pg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e7UGr6TNYjILrRpFmR+0LpE7jc38nPEBZvlo0pyXb4+W2WJII0XENgrVk15VejsWRSMVLrolfUSMVnGPjH94VYZZINdvocz1oivxUYT+XPRTAqK6zvu4K4vkTyQsBThAhqllGepMgF4QeNgK6LNN0j/DRNiHakBMiZ9dd6GZH5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=VzRF0sfd; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ERU7VtQR; arc=none smtp.client-ip=202.12.124.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailfout.stl.internal (Postfix) with ESMTP id 55D22114023C;
+	Thu,  5 Dec 2024 06:06:41 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-11.internal (MEProxy); Thu, 05 Dec 2024 06:06:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1733396801; x=
+	1733483201; bh=SKHY22/a1FrbM5ccTkJMU55h4ZUMLTrDJL+VybDLaeM=; b=V
+	zRF0sfdFuqDJGzSEUKPhuJDKjARPq2DAkExCVmT15DryJcnBmGab4Wu/8jVmRxwp
+	5+kxcDDQ6GG3vMUVUttqcBPWYpo8tgPaVdvtDuYy+M3mf2Sb4UC8R9eJOid39AFS
+	447AyrceVb3sVjagrG9Et/2OA94/efBrQu3XlOeC2d/O/RxkEXjBfdQyQ1EbjEW6
+	I5fV/K7FBv6gljn2Us1GwWn/s8JkbdKJ+2aQXq/IslefE6C8wb7k65OYHeScJ0Kq
+	TLB50jHiOGD0SkenlSSOTcaE8KRRtF+WvK636ad3ZrOp8mEcXH81BtgcS2VrSojh
+	/R9nNorxwnFKlS7uYNNkQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1733396801; x=1733483201; bh=SKHY22/a1FrbM5ccTkJMU55h4ZUMLTrDJL+
+	VybDLaeM=; b=ERU7VtQRZUKpmqhT9gqPsWq+x31oRdxpL8JCEmvmLt8MPj9Zg6/
+	/a1qXaLLCqMJKD6gx9sXD51l2Yq2gk4gmkk5x8xc2nKmV1Yd6024eWyhVQqgYBaQ
+	SbvJTHCXwx3KAiZh31YnpCwSpqOX9tAwN/TAZ+w0dU6DADOIchJIk9dU/UX+LZaB
+	v0+sxR3BNoGx4d+UZEahyXRhCgiB+f9r0WVejd+FHWGQM1g5cF+7sQmhZtzIaF/G
+	DMv37KpzOZjWPhGtTQPbd9PePNJuIThQkA7tyzMB5Ymt0HN4pFvYb3Jr6G1NkwGi
+	O50OdOzCNFGlIt/ZwX5hM/LiKmOk3vGL1og==
+X-ME-Sender: <xms:QIlRZ5QkKnm5_gh0uXTaauHUjomUblaoB7yeWZCcGKHXB7UB7Juzcg>
+    <xme:QIlRZyynNMzFDtCTGcN20TX486acnIZRIGPNbrZU26xDMX6MH7SI8MSvTilBtRR3p
+    OYBjhB1-OObhAQtJ-g>
+X-ME-Received: <xmr:QIlRZ-0NjXwOJH-mQP5aScbcBlRXEYWOVrbGNn82tvSp4rnA_6g8QHtx6iKe>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrieejgddvvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
+    hsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecu
+    hfhrohhmpefurggsrhhinhgrucffuhgsrhhotggruceoshgusehquhgvrghshihsnhgrih
+    hlrdhnvghtqeenucggtffrrghtthgvrhhnpeeuhffhfffgfffhfeeuiedugedtfefhkeeg
+    teehgeehieffgfeuvdeuffefgfduffenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdrnhgvthdpnhgspghr
+    tghpthhtohepudefpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehkuhgsrgeskh
+    gvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghl
+    rdhorhhgpdhrtghpthhtohepvhhfvgguohhrvghnkhhosehnohhvvghkrdhruhdprhgtph
+    htthhopehfkhhrvghniigvlhesrhgvughhrghtrdgtohhmpdhrtghpthhtohepkhhunhhi
+    hihusegrmhgriihonhdrtghomhdprhgtphhtthhopegrphhoohhrvhhkohesrghmrgiioh
+    hnrdgtohhmpdhrtghpthhtohepsghorhhishhpsehnvhhiughirgdrtghomhdprhgtphht
+    thhopehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhope
+    hshhhurghhsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:QIlRZxBI8WMEUCi8kM9oLS1EJLL77XW1_88zzMuVIe-5EI0KNUYOPQ>
+    <xmx:QIlRZyjTfd-Ln2Fjc5EXmB1BJ-44HgQlKxaTpSvIHZP4wt4ddF5Xsg>
+    <xmx:QIlRZ1p0Dw47OJkGGrF2JitvXfMaPTcSAPTfMRQK1oEWEPC0FU3eTg>
+    <xmx:QIlRZ9j3sqBTyCkDUEE5Gq4UqJbvaCBOGh6vIHzUFqAJS5HE1qALGg>
+    <xmx:QYlRZ5RcDa5kEMyg7iVw7jMQURqY9WRbqPo0SrJnLR4X83uhe4ywEKFN>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 5 Dec 2024 06:06:40 -0500 (EST)
+Date: Thu, 5 Dec 2024 12:06:37 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, Vadim Fedorenko <vfedorenko@novek.ru>,
+	Frantisek Krenzelok <fkrenzel@redhat.com>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Apoorv Kothari <apoorvko@amazon.com>,
+	Boris Pismenny <borisp@nvidia.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	Gal Pressman <gal@nvidia.com>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Simon Horman <horms@kernel.org>
+Subject: Re: [PATCH net-next v4 4/6] docs: tls: document TLS1.3 key updates
+Message-ID: <Z1GJPUUR-wllqX3w@hog>
+References: <cover.1731597571.git.sd@queasysnail.net>
+ <6baaaaf467845c56d7ec47250aaa2138de948003.1731597571.git.sd@queasysnail.net>
+ <20241203195129.25e07e53@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v12 12/22] ovpn: implement multi-peer support
-To: netdev@vger.kernel.org
-Cc: Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
- sd@queasysnail.net, ryazanov.s.a@gmail.com, Andrew Lunn <andrew@lunn.ch>
-References: <20241202-b4-ovpn-v12-0-239ff733bf97@openvpn.net>
- <20241202-b4-ovpn-v12-12-239ff733bf97@openvpn.net>
-Content-Language: en-US
-From: Antonio Quartulli <antonio@openvpn.net>
-Autocrypt: addr=antonio@openvpn.net; keydata=
- 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
-Organization: OpenVPN Inc.
-In-Reply-To: <20241202-b4-ovpn-v12-12-239ff733bf97@openvpn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241203195129.25e07e53@kernel.org>
 
-On 02/12/2024 16:07, Antonio Quartulli wrote:
-[...]
-> +
-> +/**
-> + * ovpn_peer_unhash - remove peer reference from all hashtables
-> + * @peer: the peer to remove
-> + * @reason: the delete reason to attach to the peer
-> + */
-> +static void ovpn_peer_unhash(struct ovpn_peer *peer,
-> +			     enum ovpn_del_peer_reason reason)
-> +{
-> +	lockdep_assert_held(&peer->ovpn->lock);
-> +
-> +	hlist_del_init_rcu(&peer->hash_entry_id);
-> +
-> +	hlist_nulls_del_init_rcu(&peer->hash_entry_addr4);
-> +	hlist_nulls_del_init_rcu(&peer->hash_entry_addr6);
-> +	hlist_nulls_del_init_rcu(&peer->hash_entry_transp_addr);
-> +
-> +	ovpn_peer_put(peer);
+2024-12-03, 19:51:29 -0800, Jakub Kicinski wrote:
+> On Thu, 14 Nov 2024 16:50:51 +0100 Sabrina Dubroca wrote:
+> > +To prevent attempting to decrypt incoming records using the wrong key,
+> > +decryption will be paused when a KeyUpdate message is received by the
+> > +kernel, until the new key has been provided using the TLS_RX socket
+> > +option. Any read occurring after the KeyUpdate has been read and
+> > +before the new key is provided will fail with EKEYEXPIRED. Poll()'ing
+> > +the socket will also sleep until the new key is provided. There is no
+> > +pausing on the transmit side.
+> 
+> Thanks for the doc update, very useful. I'm not a socket expert so dunno
+> if suppressing POLLIN is the right thing to do.
 
-This put() should be dropped as we now call it in ovpn_peer_remove().
-Will be fixed in v13.
+Not an expert either. I picked that because there's no data to be
+read, which is what POLLIN should mean.
 
+man 2 poll:
+       POLLIN There is data to read.
 
-Regards,
+man 3 poll:
+       POLLIN      Data other than high-priority data may be read
+                   without blocking.
+
+Based on this, reporting POLLIN seems wrong to me.
+
+> But a nit on the
+> phrasing - I'd say "poll() will not report any events from the socket
+> until.." ? Could be just me but sleep is a second order effect.
+
+Agree, thanks for the suggestion. Maybe actually "will not report read
+events"? Other events are unaffected by a pending rekey.
 
 -- 
-Antonio Quartulli
-OpenVPN Inc.
-
+Sabrina
 
