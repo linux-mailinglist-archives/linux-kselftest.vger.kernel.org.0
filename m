@@ -1,122 +1,215 @@
-Return-Path: <linux-kselftest+bounces-22869-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22870-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93BE89E59E2
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 16:39:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82DBA9E5A20
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 16:47:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A97D188791F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 15:38:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A3DA716CB03
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 15:46:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4EFD21D592;
-	Thu,  5 Dec 2024 15:35:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D8E224AF9;
+	Thu,  5 Dec 2024 15:44:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UYYHT+uH"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HEMeELrg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2061.outbound.protection.outlook.com [40.107.100.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FCE0218E99
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Dec 2024 15:35:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733412918; cv=none; b=KDQ+Ek4KyGxHNzXSsCR8R/nzMi46jqeSy/a0Z3/kjNukb0c2gvl3Zo4puinTpTEv/zZ4bN9C9NluzVPxQ48k+3IrvgUpYCicNSGaNk2G2bj/4iCoPIRNcM9LLiXLC/ZPzWWZ5bThnNyxJS1tkHH4jzZvsY0MLMghnlhtseJZ8+0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733412918; c=relaxed/simple;
-	bh=QAn9V2yuHxWuZKu/2W05MmXDqxTNJ3evsGgiq4zaEjI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nd1TnYD6+6VlL4oUz9w0D6qUs4k4aIY9+B4uoRRfws8FWdmeojAm/JngOQg8EihDopHBPW3eqz3Y8H2Ax9d1CLzFhrxIgdy0oB7wAgb2e0fHF/4iKptqn9rz4IFrOj1AzTnrF6cTMYKOM3C+lcZ052+nGe8omnbaYbbLsSSukV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UYYHT+uH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3282C4CEDC;
-	Thu,  5 Dec 2024 15:35:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733412918;
-	bh=QAn9V2yuHxWuZKu/2W05MmXDqxTNJ3evsGgiq4zaEjI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UYYHT+uHfWLWVdmGgHQUQkaO2doOyhEX/aZRREhpRE8xfBJXPw/FoUtKW/AXQO11K
-	 HBuASn+Ab8OKesIiu4BpIrKcg6NxsEWLqYWMfZXapLBuU8nbVd8qnT05xJuHDVzzg4
-	 pXp3uhM9EYnM9sXM9AnCYMbET9E2TCclaQ/WvIX32HHwZ8WpgZNS998mYmVCPXgJxC
-	 Ltz9KhuvzE9Ogo5yeaEA6HotE2jkbyldlpSxzCVO52hkR85ZeXs3HDHH5rWOded2cm
-	 PRxqT6dp55hxKKZcrbaST6UDDb7QVmfpffrKEezHjicgW3mWdmOLna4v/rq6FAG/Yp
-	 a6u0YPHDDDkDQ==
-Date: Thu, 5 Dec 2024 15:35:13 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Siddharth Menon <simeddon@gmail.com>
-Cc: shuah@kernel.org, mbenes@suse.cz, Petr Mladek <pmladek@suse.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/3] selftests/lib.mk: Introduce check to validate
- required configs
-Message-ID: <6564cc2e-745d-49df-900d-263177c1ea19@sirena.org.uk>
-References: <20241205114757.5916-1-simeddon@gmail.com>
- <20241205114757.5916-3-simeddon@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4246E222586;
+	Thu,  5 Dec 2024 15:44:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.61
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733413489; cv=fail; b=JRkHVbNi9TJJWHgDyHhJrLVoSydK1RMKQG5rkOjeeVhF7lOYa01YG/KUaJrkav/VzWODHwQICYz9v0T1G9mMo5eCtN96mm1ZVlWTTzGv/yOgUMjGVbruaY7WrcKdxvQRwjo4OYakIcRiz3zBe/mpisZnKDOR0lJxwjhO+bR0svQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733413489; c=relaxed/simple;
+	bh=cVfKjVqLaxBjvU8xsYDqwvrVmkq7fEKbZK6IxdezcGo=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=J/l1/N6YLzpAAjdA/9Bjp5VnqJu1k1HHuOiFdW4IcdVlrzBY/VgLwfQDiMj1MPJbGFge1CaZQc2OT5KV9H6Wj5+LoQO/1x2c62lQ1TmeLCR1JOfv0WD/QMI7ppMaV9bOpBEUgt2a38OtmKJvDC2X6IJTOFoE3b8iF9trP0U+ylM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=HEMeELrg; arc=fail smtp.client-ip=40.107.100.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Z0TsGgm9/QeaUVOnh02sm/4ebxRE6jVEzMk7yZDpmuBSYU5674G0zbmGrEz+mcWtdZUUOaN1ntNtd7EtowT8RYRL4+zscnVmgBoXxGN5ID/jyGh7ZnZ1J8ci7fyC+2uYQwTCcAoJi+p8vGI6xx9CMIZP7Cec5gdwNLsBF71GiVcTGVWzvmTZljKjr01Q7cIbB37GTHN8JNnZ/szXtebGfxFsFXwHEWPe0UENU75RZd7HHs5EHVJhYHNnkWwXtvxd2VcypfIJOr8shMsUSaOsIo1dgiTV5XfHXogavwSxT3X/gRCo2LhkhId+HwzflzTcN43fp0VLn38XJSSe2qYtEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DVqdvTshHxNki3bZ3TKLjG68UTcnAHsRVq2A6Gcb6kI=;
+ b=owimIt3fbL2Tbr6k8qr7p/OQTLNrfLtZwbOST1YYkNeEs5NchydMmJJrkYOq9z+prxZrseVD102XCYSjlSQbOBTKRbBU7SNRDgxMXeI1W00EZ3LzwwnFATg48CDR1wi4dZ697ZdHYSYuW79w8cMml9BZrROVG5Oca5YxYG4rNMYbXCVucs7cj71OdGnwDTNeMETnT7dJhJzGzS+s5Yl7/PWPCb/K4ftSKej4njf+He+Zj7/49FTaqvmxFnpvtFfSHscHQflfqyTmMOJeIM7fMm+SrDvt/Sqmrojv00kQ34LRDpux483sHbwCSin1rh8ZXB+dMLzI9kYNlY6EcU6/Lw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DVqdvTshHxNki3bZ3TKLjG68UTcnAHsRVq2A6Gcb6kI=;
+ b=HEMeELrgI/TXrgRTP7tlmzAyeINPJeoa77pDpwEUg6+VZPAx6A73qC4JjTKaiUp8DW6jCclyKFIyigVPECp6onDgMIIuIk2AvxjDdkDjPhhGtRgwqaL3eiMGENPitwCB1MihZKQirhicM37ETa75UbKHBCGXkWPx+NbkYAdYsXSfnITLWj7hCSpJ7E0zeH5S2TG8yJGI9VN0Lq8S3VzQcwU3/Th5UT2UEUDvTcZ3ZZSZJgWoWSFn3IOL+Kms7AFkhsCQsIXffOjPN/5C2qRcfjjlvQom1qTgYbwi3+wC+ZK4Ji3HFow4K0WvscwAXjIdQiaSZTM+cTJ3y9pEY9fOKg==
+Received: from DM6PR21CA0027.namprd21.prod.outlook.com (2603:10b6:5:174::37)
+ by DM4PR12MB6010.namprd12.prod.outlook.com (2603:10b6:8:6a::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8207.19; Thu, 5 Dec 2024 15:44:36 +0000
+Received: from DS1PEPF00017093.namprd03.prod.outlook.com
+ (2603:10b6:5:174:cafe::93) by DM6PR21CA0027.outlook.office365.com
+ (2603:10b6:5:174::37) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8230.8 via Frontend Transport; Thu, 5
+ Dec 2024 15:44:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DS1PEPF00017093.mail.protection.outlook.com (10.167.17.136) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8230.7 via Frontend Transport; Thu, 5 Dec 2024 15:44:36 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 5 Dec 2024
+ 07:44:20 -0800
+Received: from localhost.localdomain (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 5 Dec 2024
+ 07:44:14 -0800
+From: Petr Machata <petrm@nvidia.com>
+To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	<netdev@vger.kernel.org>
+CC: Simon Horman <horms@kernel.org>, Ido Schimmel <idosch@nvidia.com>, "Petr
+ Machata" <petrm@nvidia.com>, <mlxsw@nvidia.com>, Shuah Khan
+	<shuah@kernel.org>, Benjamin Poirier <bpoirier@nvidia.com>, Hangbin Liu
+	<liuhangbin@gmail.com>, Vladimir Oltean <vladimir.oltean@nxp.com>,
+	<linux-kselftest@vger.kernel.org>
+Subject: [PATCH net-next v2 09/11] selftests: net: lib: Rename ip_link_master() to ip_link_set_master()
+Date: Thu, 5 Dec 2024 16:40:58 +0100
+Message-ID: <fbf7c53a429b340b9cff5831280ea8c305a224f9.1733412063.git.petrm@nvidia.com>
+X-Mailer: git-send-email 2.47.0
+In-Reply-To: <cover.1733412063.git.petrm@nvidia.com>
+References: <cover.1733412063.git.petrm@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="aCw7c7lh6ArWI5u6"
-Content-Disposition: inline
-In-Reply-To: <20241205114757.5916-3-simeddon@gmail.com>
-X-Cookie: Many a family tree needs trimming.
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF00017093:EE_|DM4PR12MB6010:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2781b555-79ea-4949-2554-08dd1543b8e2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?sKoBhp2z+QS72fEPO4d60fb7IvrJm+cZ5je4cvqsypN40xWOrkisqrjwg/aR?=
+ =?us-ascii?Q?cJv27YBJFSH20Fss8SFwFkrybY/jU8osGQYttOz6HfXcdavvSg3oO5EyizOK?=
+ =?us-ascii?Q?FmcgwwLnk+xFZsDlq5hGzEWfsIbUv1I9PgxuxvJB3jJL4/I6w4vryPpoTYnA?=
+ =?us-ascii?Q?vgIqUaE8tXEXJHhDw31FtARA/SQFdes1C66Qul06qpM6NVdVwz/R84Ij4A2u?=
+ =?us-ascii?Q?tIRQqCQ/Mw2B+uP9eL5YIxXzSn/Owp1cUIsm8ceHPGHkhG6+OF7Z+Fq8DcIx?=
+ =?us-ascii?Q?yGhV9IBU+EdVrFy2auHx0P77mxeq5MGEJpiwkv/RVISaEj48u5DgweRd5DG5?=
+ =?us-ascii?Q?nbzX9jxx7VeLpyt4BpSDgGIwqwqGthIWvVCWCv6LV+LrZ5XrVriBd9lYLWQV?=
+ =?us-ascii?Q?iS/V36OTEC8n0CfYx6TMtoO4vCEmPbbH4sR04i5FPVKBC9xBQEFi2z9cJ/js?=
+ =?us-ascii?Q?zG8eMr7K0vidEokzLB+8SPlxnxP+4Lv/nG+RBd/0mcfYM8+f6/jKMXFM04ab?=
+ =?us-ascii?Q?f+oQq2yTyZd3UFDLpmrUBl3hB+ABeKQhDEsBjBHQauvKAlgolaPnCvPltTq7?=
+ =?us-ascii?Q?zc2vDT+ZJJL3pftskj2uIsCIHxvCYxediVl+I3Sp6an2JAJ6nglE0piow/Yq?=
+ =?us-ascii?Q?kvXOEDcydr65eOHDwY2pU0Jk47LEhHAzh3uneCyBEhgcKW0hCG7C0zTByLfD?=
+ =?us-ascii?Q?yNNlvpDNuw1ifP8qN3HZNNl88DJWlqG3LbVuo29dekO9HUiwjNefSr0DyIb0?=
+ =?us-ascii?Q?6NbeKn0qUASDV2bniTYqDgXJQELQ6yTV576LwASOdC8aBu+2Uo0qPhV5pjPY?=
+ =?us-ascii?Q?7Jeom5KjwAtUVPdZpjZgs64jYc7mdJisiidL1ZpOMfuYqZZ2Rl9SEhRQfb2O?=
+ =?us-ascii?Q?cp0IDH+B7ZGKG0KxN571VGtJqU6+opPT877QqIsbWBq8suQzesmhATVEoyTm?=
+ =?us-ascii?Q?DlArQnicElioej+sw1CdMAx1OjZR2m7pWkgg2w/Le3IPRU1coelYEWz/M6Pt?=
+ =?us-ascii?Q?DaAPVTtNByTg1LrAP1QnKE/VZMI8izv6DPNkhwwpgHq/McwRJk3SeODIPZ8e?=
+ =?us-ascii?Q?eEpgkeRyxVcQeFwrMUw3AekAvPQG4S9H3rfHFdxXkvOJqGINusNZ1mlw0rtI?=
+ =?us-ascii?Q?paDHjTxbPYrpJk2kVBobaFev3NnWi/kI7TB+ZfqF5wFBj/Srq8C9aWSzHryD?=
+ =?us-ascii?Q?2sToeDkjY6SKnWY+5a78mUXmY/SbvkWOeD9vXsy9bqnRr6dIhjZVinpQYy5x?=
+ =?us-ascii?Q?1SGgFumhncZ3ZdzIUKztiXmtvQXotuDWGJP8vlIzkWWUtJ2c7kZjomZvLCiT?=
+ =?us-ascii?Q?Ts489TK4hm0r9u0EaAmEJNApJEdYoARwqGURG+46nGp3Ou9ZWFzlemAN3x0C?=
+ =?us-ascii?Q?aSB09Pae7Ke0vRTk8twLoEZdVfxigGdp3W4fyKG1+vqrYlX3SrzSl52LyWJT?=
+ =?us-ascii?Q?mMdvhV4XCOdXt7dSYHZSoBdQ82O24d6f?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(7416014)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2024 15:44:36.3736
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2781b555-79ea-4949-2554-08dd1543b8e2
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS1PEPF00017093.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6010
 
+Let's have a verb in that function name to make it clearer what's going on.
 
---aCw7c7lh6ArWI5u6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+---
 
-On Thu, Dec 05, 2024 at 05:17:56PM +0530, Siddharth Menon wrote:
+Notes:
+CC: Shuah Khan <shuah@kernel.org>
+CC: Benjamin Poirier <bpoirier@nvidia.com>
+CC: Hangbin Liu <liuhangbin@gmail.com>
+CC: Vladimir Oltean <vladimir.oltean@nxp.com>
+CC: linux-kselftest@vger.kernel.org
 
-> Currently, kselftests does not have a generalised mechanism to skip compilation
-> and run tests when required kernel configuration flags are missing.
+ tools/testing/selftests/net/fdb_notify.sh | 6 +++---
+ tools/testing/selftests/net/lib.sh        | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Should this be a build dependency or only a runtime dependency, or
-should these be separate options for cases where the selftest builds a
-module?  If people are building the selftests once and then using them
-with a bunch of kernel builds it might be surprising if some of the
-binaries vanish.
+diff --git a/tools/testing/selftests/net/fdb_notify.sh b/tools/testing/selftests/net/fdb_notify.sh
+index c03151e7791c..c159230c9b62 100755
+--- a/tools/testing/selftests/net/fdb_notify.sh
++++ b/tools/testing/selftests/net/fdb_notify.sh
+@@ -49,7 +49,7 @@ test_dup_vxlan_self()
+ {
+ 	ip_link_add br up type bridge vlan_filtering 1
+ 	ip_link_add vx up type vxlan id 2000 dstport 4789
+-	ip_link_master vx br
++	ip_link_set_master vx br
+ 
+ 	do_test_dup add "vxlan" dev vx self dst 192.0.2.1
+ 	do_test_dup del "vxlan" dev vx self dst 192.0.2.1
+@@ -59,7 +59,7 @@ test_dup_vxlan_master()
+ {
+ 	ip_link_add br up type bridge vlan_filtering 1
+ 	ip_link_add vx up type vxlan id 2000 dstport 4789
+-	ip_link_master vx br
++	ip_link_set_master vx br
+ 
+ 	do_test_dup add "vxlan master" dev vx master
+ 	do_test_dup del "vxlan master" dev vx master
+@@ -79,7 +79,7 @@ test_dup_macvlan_master()
+ 	ip_link_add br up type bridge vlan_filtering 1
+ 	ip_link_add dd up type dummy
+ 	ip_link_add mv up link dd type macvlan mode passthru
+-	ip_link_master mv br
++	ip_link_set_master mv br
+ 
+ 	do_test_dup add "macvlan master" dev mv self
+ 	do_test_dup del "macvlan master" dev mv self
+diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
+index 8994fec1c38f..5ea6537acd2b 100644
+--- a/tools/testing/selftests/net/lib.sh
++++ b/tools/testing/selftests/net/lib.sh
+@@ -451,7 +451,7 @@ ip_link_add()
+ 	defer ip link del dev "$name"
+ }
+ 
+-ip_link_master()
++ip_link_set_master()
+ {
+ 	local member=$1; shift
+ 	local master=$1; shift
+-- 
+2.47.0
 
-> -all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) \
-> +KDIR ?= /lib/modules/$(shell uname -r)/build
-> +
-
-Shouldn't we try the current kernel tree, and for runtime checks
-/proc/config.gz would be good to check when it's enabled?
-
-> +define CHECK_CONFIG_DEPS
-> +    $(if $(wildcard $(KDIR)/scripts/config),
-> +        $(eval MISSING_FLAGS := $(filter-out 1,$(foreach cfg,$(TEST_CONFIG_DEPS),\
-> +            $(shell cd $(KDIR) && scripts/config --state $(cfg) | grep -q '^\(y\|m\)$$' && echo 1 || echo $(cfg))))),
-> +        $(info Skipping CHECK_GEN_REQ: $(KDIR)/scripts/config not found)
-> +    )
-> +    $(if $(MISSING_FLAGS),$(error Missing required config flags: $(MISSING_FLAGS)))
-> +endef
-
-This is going to use a separate set of config options to those listed in
-the config file in the selftest directory which is perhaps a bit
-surprising.  OTOH we do have a lot of the selftests directories where
-not every test needs all the options so that's probably a good choice
-unless we make things finer grained which might be more trouble than
-it's worth.
-
---aCw7c7lh6ArWI5u6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdRyDEACgkQJNaLcl1U
-h9AUeQf8Cve9zVidBux1yRhPZn8yxHs/WQzckHgyFDEk6qu8SNPp/iP27hsuwUi6
-WIsX8Igg4vcjxWfuRzFh0fV+te/MCrMErc0UaIP4chdmoAFVY8h4l6piBtrI6rRO
-gYxtbhGu12s/yPFS8qOZV5kQ5/TJ1EOuby2LXQe57nKrB/r5x5mT9E2rlcyFhXa1
-816pgaDcfzZm9Rj33jg/PefRMUEvnsTFzuq3yADkwJjQC8l72wf9mTlwYcEpK+U8
-Eqm19kG23ydAWT2MKCbMs9kgcrV3H7HO4Hy5RKgIJ9ldW9W3pvgapLV65r5J8Qoh
-Ao77eRELV52/UaIG4RJlkj16UP3ejQ==
-=F49b
------END PGP SIGNATURE-----
-
---aCw7c7lh6ArWI5u6--
 
