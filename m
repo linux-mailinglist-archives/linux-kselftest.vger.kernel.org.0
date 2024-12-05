@@ -1,87 +1,86 @@
-Return-Path: <linux-kselftest+bounces-22864-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22865-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFB779E5488
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 12:49:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2FBE9E5489
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 12:49:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F085280AB3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 11:49:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D99E280E61
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2024 11:49:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27A16211708;
-	Thu,  5 Dec 2024 11:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46E892116FE;
+	Thu,  5 Dec 2024 11:49:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dKseGfJe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="imxTa0fi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93EBB33997;
-	Thu,  5 Dec 2024 11:49:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7677F212B08
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Dec 2024 11:49:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733399380; cv=none; b=PnfO7ChCCGtS11nDXaZ3vbN5uCvpTULndOl7F3FQAsAu/JB9SZqX2XmG6njxqtW+Tamq7v56Cua8Cw+AuivO5+1+XiKIasgRC/Bppzrz/1dra7dB5tik7S/qIYJXQp5hKdexBB2BSlhZEg0Ot54LqrHlDryvX3GE3jyCF0CHFDY=
+	t=1733399385; cv=none; b=OCSlipcbgV5LwzhvbMlf+Gf8pHHVGW3OoC1nyCvMeNPEXofT6Wn+SNPSXwpaSwkCsFNE4VA3eYgG8S7AFKhY21IDoZvW+JiYWhxWvG34HLOmvTxgHla24O90VSi+5NC0qcKN9c0wvYLCqeKniYhkwAhgmhx+/yyk7wELKpHKhb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733399380; c=relaxed/simple;
-	bh=ANoOfkEq9siRl1UYE3y6K707AQeoCp3gbZJa2JeC834=;
+	s=arc-20240116; t=1733399385; c=relaxed/simple;
+	bh=BFt+sq+G2C98wzeuVl5J1IwNYozlprQOZ8qoDPvG2bE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tYh/XJtyDpjmChvjQUsLY4/3jlcwv5gRXSTUG/sQhca03ce7ly68avaEBZ0xjfqB3MXKR8iiUm4uQp8imlooJvglYxD5o6DN6pJDwcA4kx/R9JxT/iqgUdebi2mdWl7eKkYEgkYbB2kMsYJpPJT2KuGqpcZik74xaBzkp0bYuh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dKseGfJe; arc=none smtp.client-ip=209.85.214.175
+	 MIME-Version; b=iJYbU4RyF20oW4Bc4EhmIl1NSu63UnIS6yCvAWEYFcI/OO8altjOlLUYt8TFwTyic3ZFSltuXu0CBnzQbartIYc8ryRiBX6XjdeLoKsYpPlogZ+jz4qgiDrtcZcGRjQ0aRq7ydz9jyLa44pv7LPsKv9qICt2h9KWibQLT9+Y6Yc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=imxTa0fi; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-215b45a40d8so6507775ad.1;
-        Thu, 05 Dec 2024 03:49:38 -0800 (PST)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-215b0582aaeso5915315ad.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Dec 2024 03:49:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733399378; x=1734004178; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1733399383; x=1734004183; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gSb55hgaIF6sPbuy7Sr7FEE6i7EQgiEZMQZaE58gR1s=;
-        b=dKseGfJeOXiouJtwUnCfdLSkD2ROrJv6+CeGPGFApFqYe+Har+Bk6C6s/l4cyihrrQ
-         JjUe64JEYs6dZ+gVrH/rMWeu+U9WwsvBPw3bmB3AGYRZJqBEzqOtcRXiHhhtIThutSXn
-         hlQFYDTfP527Vb8LIwDeA355qnAur6fqFcAvar3MOa2XpMju5DwO48SKxxF6I+pMOIhl
-         g+bP46g9J9CGiZ9Q7OfVFOnJDJw3XxYJUNZQ2lIo8YNVXLaZIZiYcFVMOFH88RFqu0px
-         X31uUqisq/sHq8d02wf8yM36r9QOf07QDtTHQHhjJxOiUAKhGIehfZAmUIJvRNWrfeo/
-         ioUQ==
+        bh=lMSioP6xaqJTxr5Vp63iZPRRfxSTWw68PJiHrNfwOOY=;
+        b=imxTa0fi89OYXx+NG3D3S7VqYniqEAi+7q3XGhMuKFqgoFbhdWNpH9hB4hYBRy4Fb1
+         OySjAcX1+tjfikfJufrP91i19YuVUvpLUOKqRJl7wEBOBWtmPtUFbX7aodXVg7jceoJi
+         XEUiRAcotWhW7T9tEta5KmCVs4HmI2P4O3LluSflJYveoyxE/md00Zv30UVoiHFCcQIa
+         fF+73J+T5yaUDdD9/Mv8xgpK6XivftauRDp+RrkT4MJwePrs544RwmEnZH/He3Zlf5I+
+         pxcSz20l1Zqy2eltBpAnTB2YkNaWQllQKeldqUI+3kN/uce4BN+AMO780YCRO9I0rp2d
+         Og+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733399378; x=1734004178;
+        d=1e100.net; s=20230601; t=1733399383; x=1734004183;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gSb55hgaIF6sPbuy7Sr7FEE6i7EQgiEZMQZaE58gR1s=;
-        b=iheM0248sv88M5FuzWKiS0ZMkBtYN+jfbY/aSq2Zd+EGQF3HErZ1iQEsUs8brYOIM+
-         QPEujxpooSopy7kCKLs+YWkg0oSaKzBn+Jftkh8B9aQbA/KANki1/8ZqSZNb3df88PWL
-         fE6OCCJh/bgtcwJLljDC/kOcx8NOD2lHEo9ruOJYKtvgbOMrwnXvCFIcvlnRCmFa9xEV
-         os06+VcTwqKoxdqjPceJDvyzZj+IZW5CTKmDy6rE8DOTpuwsl2YTVTADn5aLyQ2JrKMU
-         4X3L85xeB+Xia76PsF9O7juWO+MfDz0XDz6JrCZ92ml1Dk2qtJ5ddRMM0oakdeEMtWx+
-         zA8A==
-X-Forwarded-Encrypted: i=1; AJvYcCVG6lS5HmApArq4fYq3ty40FD1ySVcc0TFTcTg6GHLsdN5VhUMV1OZEepEA31knrqCqTwKoadQ/0II=@vger.kernel.org, AJvYcCVLRZ+Gxub0R30dAHJQhRvgWTtJouWMcL5Pu8NmuGyJpaW0Mj9yogaVzo0k+8u5855W5uL2tPAkR984@vger.kernel.org, AJvYcCWMSJLhqcfnn55OQkDsx4lDvRv3bmdNeRpAK5NUeQLGfvmD+RGJ4HBWHexdqXxxfA1ZUQtKWWDOn9kzhEdvpUs0@vger.kernel.org
-X-Gm-Message-State: AOJu0YyvZENEOx2Uc08VkywEZ5UvTX8pSm6H/bvnMWULlg+FTSCkb73q
-	BFrqSyrnlvNh4B2wQ8zOmfpdIpOFq/97AwapTPhP6uENNRdQOZj5
-X-Gm-Gg: ASbGncu52K0DbP2cqJz3w4yETAciYJ/ZVX9paIdb0eDls6e8TEKjFBV6j9BFI4LlRwY
-	2ya1GM5V9MWx24JV3gkNxc9sKjP9SuAz9lsaAPs7+Gb1lcx6saUQrrW697ECx9K9CCl4NShFS6T
-	NDN9Cgw3wCjAV0sbnx+qutq8Arb+dB17CcDWCT/4bWXohCigbHWDj+rGDGcHDZx/O+XQ/D2tf5L
-	OpjpgbuVVsvYR7PHlP1dEd79bzw5DPw/+Met08n+mJsjgYUhZGTMqtq1Jainh+yLXB/VLXOALM=
-X-Google-Smtp-Source: AGHT+IFi3AxSklvusir1J2r+A5L//3GqGHVOGLBLMA10fIfD5qPloXXEdzaJ5qgUCzqR2EorPo2/sA==
-X-Received: by 2002:a17:903:98f:b0:215:8c36:9ce with SMTP id d9443c01a7336-215bd0f6349mr128165095ad.30.1733399377846;
-        Thu, 05 Dec 2024 03:49:37 -0800 (PST)
+        bh=lMSioP6xaqJTxr5Vp63iZPRRfxSTWw68PJiHrNfwOOY=;
+        b=Pqu6ApSxwj7kZzeEG32SyJ4wjENSHLDHxMyCPNt0E2SDzeHDLpkwSf9e1C/N+6FGqh
+         l1aIKCaDr6sb/Q5zfddl3sPR6qsNFxu5WgHAYqJStVfy8FwbzukcNmjGNEokInMrtxoc
+         WlWFiY25UoKoVTehU5MNPyzUwGgnvGeJ6oUVdzxDMBxQcEmmqQoVW1jm2nxIzp4Y9A+h
+         MAdHSf0xODlKMdG/JbmDR0vlEE150qFkG1hh5IICcoD0Fvlg1eKXsx03aEhNn1Pd71xN
+         eaOETANZuWXPsemtA6pNoGJvk3IGVwwEN2GB7ggI6mICBJ7H6Q/wzO+B07RyteVpdTnG
+         zlPg==
+X-Forwarded-Encrypted: i=1; AJvYcCUibGe76ODqp+MetzAwW1EwoRRNjUok7SPtbX0pswM0Pe9xokIYwUExjHrTk2YPWgfE5GnTAubkwr+HoY8Jhig=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwoVTpLnajbspz3oMD+AT3srhTLWmsfUNHWKYBqqRLPVMCbcq8v
+	a4jKYWemeyXhWhIQQFDMbeKFPBH1DQUwgR4j8oqiEvpHHzCpT+n8
+X-Gm-Gg: ASbGnctB36eUHyTAwJcPnQREHsDavmzi+h6A55yRsXxQgX6gkSH9hmQ6nvg4giYhfR2
+	QYgYB39cOQ5C4HOy3C0Is9WAyf4RyqkRHZbfq2A0qcBHQJqT31udDk0biCtr+COP9b1SNfYgx8q
+	Y2vmw4ErnaW15rUIXWK98VIb8OD+wXRD4wfnrWqWoCM8a15CASWZlnCbAJm5kDpJSqvpZ0iIbWt
+	RHvVCb94yQZ0cxBWyYbH6qclmWg9dc5rW9Fo1lhzDJIYvX8+4Hbj90OmhztuPtWSr757wYeLHg=
+X-Google-Smtp-Source: AGHT+IGr/MnVCHhfQWAuxpnTKfibfERfWYxYywuFez1iF2qY2audco67Zv8tH8apTmwgtkYy42mLMw==
+X-Received: by 2002:a17:902:e54d:b0:215:6fcd:6cd1 with SMTP id d9443c01a7336-215bcfbcde4mr125603515ad.7.1733399382697;
+        Thu, 05 Dec 2024 03:49:42 -0800 (PST)
 Received: from BiscuitBobby.am.students.amrita.edu ([123.63.2.2])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215f8e41e52sm10965545ad.3.2024.12.05.03.49.35
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215f8e41e52sm10965545ad.3.2024.12.05.03.49.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Dec 2024 03:49:37 -0800 (PST)
+        Thu, 05 Dec 2024 03:49:42 -0800 (PST)
 From: Siddharth Menon <simeddon@gmail.com>
 To: simeddon@gmail.com,
-	shuah@kernel.org,
-	corbet@lwn.net
+	shuah@kernel.org
 Cc: mbenes@suse.cz,
-	linux-kselftest@vger.kernel.org,
-	workflows@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: [PATCH 1/3] docs/kselftests: Explain the usage of TEST_CONFIG_DEPS
-Date: Thu,  5 Dec 2024 17:17:55 +0530
-Message-Id: <20241205114757.5916-2-simeddon@gmail.com>
+	Petr Mladek <pmladek@suse.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 2/3] selftests/lib.mk: Introduce check to validate required configs
+Date: Thu,  5 Dec 2024 17:17:56 +0530
+Message-Id: <20241205114757.5916-3-simeddon@gmail.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20241205114757.5916-1-simeddon@gmail.com>
 References: <20241205114757.5916-1-simeddon@gmail.com>
@@ -93,29 +92,61 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Update documentation to explain the TEST_CONFIG_DEPS flag in lib.mk.
-TEST_CONFIG_DEPS is used to validate the presence of required config flags
-specified in the selftest makefile before compiling or running a test.
+Currently, kselftests does not have a generalised mechanism to skip compilation
+and run tests when required kernel configuration flags are missing.
 
+This patch introduces a check to validate the presence of required config flags
+specified in the selftest makefile. In case scripts/config is not found,
+this check is skipped.
+
+Use TEST_CONFIG_DEPS to check for specific config options before compiling,
+example usage:
+```
+TEST_CONFIG_DEPS := CONFIG_LIVEPATCH CONFIG_DYNAMIC_DEBUG
+```
+Here it checks whether CONFIG_LIVEPATCH and CONFIG_DYNAMIC_DEBUG are enabled.
+
+Suggested-by: Petr Mladek <pmladek@suse.com>
+Suggested-by: Miroslav Benes <mbenes@suse.cz>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Siddharth Menon <simeddon@gmail.com>
 ---
- Documentation/dev-tools/kselftest.rst | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/lib.mk | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index fdb1df86783a..e816b282363f 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -301,6 +301,9 @@ Contributing new tests (details)
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index d6edcfcb5be8..7ca713237bf7 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -97,7 +97,21 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
+ TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
+ TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
  
-    e.g: tools/testing/selftests/android/config
- 
-+ * Use TEST_CONFIG_DEPS to specify required config options to be enabled 
-+   before a test is allowed to run or compile.
+-all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) \
++KDIR ?= /lib/modules/$(shell uname -r)/build
 +
-  * Create a .gitignore file inside test directory and add all generated objects
-    in it.
++define CHECK_CONFIG_DEPS
++    $(if $(wildcard $(KDIR)/scripts/config),
++        $(eval MISSING_FLAGS := $(filter-out 1,$(foreach cfg,$(TEST_CONFIG_DEPS),\
++            $(shell cd $(KDIR) && scripts/config --state $(cfg) | grep -q '^\(y\|m\)$$' && echo 1 || echo $(cfg))))),
++        $(info Skipping CHECK_GEN_REQ: $(KDIR)/scripts/config not found)
++    )
++    $(if $(MISSING_FLAGS),$(error Missing required config flags: $(MISSING_FLAGS)))
++endef
++
++check_config_deps:
++	$(call CHECK_CONFIG_DEPS)
++
++all: check_config_deps $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) \
+ 	$(if $(TEST_GEN_MODS_DIR),gen_mods_dir)
  
+ define RUN_TESTS
+@@ -228,4 +242,4 @@ $(OUTPUT)/%:%.S
+ 	$(LINK.S) $^ $(LDLIBS) -o $@
+ endif
+ 
+-.PHONY: run_tests all clean install emit_tests gen_mods_dir clean_mods_dir
++.PHONY: run_tests all clean install emit_tests gen_mods_dir clean_mods_dir check_config_deps
 -- 
 2.39.5
 
