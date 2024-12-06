@@ -1,256 +1,108 @@
-Return-Path: <linux-kselftest+bounces-22913-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22914-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 467A59E6EFD
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 14:12:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA2849E7280
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 16:10:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C568163F46
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 13:08:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07F051888245
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 15:09:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 687CC1FF7D9;
-	Fri,  6 Dec 2024 13:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 573D5207650;
+	Fri,  6 Dec 2024 15:09:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="E7JWWcnG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tM3ik0DT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E7C1C1F19;
-	Fri,  6 Dec 2024 13:08:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2601953A7;
+	Fri,  6 Dec 2024 15:09:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733490484; cv=none; b=l5MWu9URYgBMUhdYUm8Ts8xYGFEWZu34DcZd850yLXyEcV9WIeU8yTygR9x3IDMUYoNU7keGJjf8Zbe+FyHye8BK8W7pvyLg5HFh3uTmX66nI2YUZ8+O2tjN+l0x8ohiP6HAc8zhXJ0fvNx0/aEZFz/H92iBkIJt85VYvuMzfNQ=
+	t=1733497763; cv=none; b=YKvtvZxSQr7/g9O6zC2Nft0EHn3PNBoXmOkNZC3yD6JRzGsnO0dlxxmK5elP/EVkLCC3SOzmTNeV1Dwk2v9VrWPx+xTcmZVt9MVT+NiDouyRHzCFOibShLKyMsk5lCsLsrXb1q3JpO1O0ag883S9+xGh2LaS4GmNeBCFG3HutBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733490484; c=relaxed/simple;
-	bh=1ixYuV9vn+tvWWMjI9qcrLzeMtCAsGWYRbir1E1avq8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=s+eHmZG0oyRzO9E6fyf2PjZSp0hStPyh1eYjXpoe6AkQqCvilAMzElZv4R405NX4OmiH/p17nelMD+kS75XjStoc3SGHm14S7+Pxsn74qxNDH87VAc2baLRNqqgsroadzNeorq4tlZJZe7memahRX81bSjV6wYUDH8dV+NguPRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=E7JWWcnG; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
-	s=default; t=1733490481;
-	bh=XnKm59ylPYPwoM2DkN4Cx3zBQck18EMZi4AXKvhtbWo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=E7JWWcnG1+tJLydCqLAwS1NH5On7Gx6kfN9sRI2Ava1ePlhNZ1oVGZUUMpr2Mfb3x
-	 T+PMUlh7kW9ltKamp7Ssg+cSNOukT1ZHR04gyTjbj+BIeRycG2ti5+on178Di/xb7n
-	 7DnQSmJU5jRYDj9mk4pGWk0QPUy60JrD/h+AoKDU=
-Received: from stargazer.. (unknown [113.200.174.114])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id 14E6C6748E;
-	Fri,  6 Dec 2024 08:07:59 -0500 (EST)
-From: Xi Ruoyao <xry111@xry111.site>
-To: Shuah Khan <shuah@kernel.org>,
-	Fangrui Song <i@maskray.me>,
-	linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Xi Ruoyao <xry111@xry111.site>
-Subject: [PATCH v3] selftests/vDSO: support DT_GNU_HASH
-Date: Fri,  6 Dec 2024 21:07:25 +0800
-Message-ID: <20241206130724.7944-2-xry111@xry111.site>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <297cfe11-0418-4633-8c15-4ffc7d290a3d@linuxfoundation.org>
-References: <297cfe11-0418-4633-8c15-4ffc7d290a3d@linuxfoundation.org>
+	s=arc-20240116; t=1733497763; c=relaxed/simple;
+	bh=AcySnufDoHnAqbhwmrqCRJ6hJFOvsfgvt4sBL8BqwlU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aK8h3umE8PjyFX63n7/sDQfF8LqzcezY0s0oa64O4cmog6cuBwz/yXc4bmgvdRy93XzHVwZFTyyuoeaEW6K5dFrtKtk2GfKpQPoczVRmDDlgXvMMoDLXW2j3cDikaoSJz8HXIQfGtn5l+YmIvTbbXPOB0Qi4o2OF3K+PunU7cTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tM3ik0DT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E32A2C4CEDC;
+	Fri,  6 Dec 2024 15:09:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733497762;
+	bh=AcySnufDoHnAqbhwmrqCRJ6hJFOvsfgvt4sBL8BqwlU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tM3ik0DTD6q1rL1rCHPC4mjmqbC8dIlwD9EbO4t87+XHTvD/DePJ1nwbz06rzKHtx
+	 KbN6g2+ED++WM2cQQSxvhEYNw6irQZ7ANI9Nw+mWsEn9UG62k3wiaFCEDEoSZb7vFs
+	 kuFuhdw3sXsNrsdCgIdigf22NO0ydYdn9xWbHDb6Lsm2D7SZSgL2PD/RGVDZfj8R07
+	 y3ddk3j7hULCnNIGSLmPsEpozWjvFaMsaWLXWVNEfG2WVJIguZtfp9RsrXSpIoL1Vh
+	 w1N1SexxMdFBj5KK68a8mEMrHyYdvERZhNf7eAicV8ovPs3Ss9N10LiC7nBzEWTBuT
+	 i3Tf5+vLk/fSQ==
+Date: Fri, 6 Dec 2024 15:09:18 +0000
+From: Simon Horman <horms@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 4/4] netconsole: selftest: verify userdata entry
+ limit
+Message-ID: <20241206150918.GU2581@kernel.org>
+References: <20241204-netcons_overflow_test-v1-0-a85a8d0ace21@debian.org>
+ <20241204-netcons_overflow_test-v1-4-a85a8d0ace21@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241204-netcons_overflow_test-v1-4-a85a8d0ace21@debian.org>
 
-From: Fangrui Song <i@maskray.me>
+On Wed, Dec 04, 2024 at 08:40:45AM -0800, Breno Leitao wrote:
+> Add a new selftest for netconsole that tests the userdata entry limit
+> functionality. The test performs two key verifications:
+> 
+> 1. Create MAX_USERDATA_ITEMS (16) userdata entries successfully
+> 2. Confirm that attempting to create an additional userdata entry fails
+> 
+> The selftest script uses the netcons library and checks the behavior
+> by attempting to create entries beyond the maximum allowed limit.
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  MAINTAINERS                                        |  2 +-
+>  .../selftests/drivers/net/netcons_overflow.sh      | 67 ++++++++++++++++++++++
+>  2 files changed, 68 insertions(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8af5c9a28e68c4b6a785e2e6b82db20b3cf59822..62192db4641a4056d1eab911f5c141fb37eaed36 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16092,7 +16092,7 @@ S:	Maintained
+>  F:	Documentation/networking/netconsole.rst
+>  F:	drivers/net/netconsole.c
+>  F:	tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+> -F:	tools/testing/selftests/drivers/net/netcons_basic.sh
+> +F:	tools/testing/selftests/drivers/net/netcons\*
+>  
+>  NETDEVSIM
+>  M:	Jakub Kicinski <kuba@kernel.org>
+> diff --git a/tools/testing/selftests/drivers/net/netcons_overflow.sh b/tools/testing/selftests/drivers/net/netcons_overflow.sh
 
-glibc added support for DT_GNU_HASH in 2006 and DT_HASH has been
-obsoleted for more than one decade in many Linux distributions.
+Nit: I think you need to add netcons_overflow.sh to
+     tools/testing/selftests/drivers/net/Makefile
 
-Many vDSOs support DT_GNU_HASH. This patch adds selftests support.
+Other than that, this looks good to me.
 
-Signed-off-by: Fangrui Song <i@maskray.me>
-Tested-by: Xi Ruoyao <xry111@xry111.site>
-Signed-off-by: Xi Ruoyao <xry111@xry111.site> # rebase
----
- tools/testing/selftests/vDSO/parse_vdso.c | 110 ++++++++++++++++------
- 1 file changed, 82 insertions(+), 28 deletions(-)
+Tested-by: Simon Horman <horms@kernel.org>
+Reviewed-by: Simon Horman <horms@kernel.org>
 
-diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
-index 28f35620c499..2fe5e983cb22 100644
---- a/tools/testing/selftests/vDSO/parse_vdso.c
-+++ b/tools/testing/selftests/vDSO/parse_vdso.c
-@@ -53,6 +53,7 @@ static struct vdso_info
- 	/* Symbol table */
- 	ELF(Sym) *symtab;
- 	const char *symstrings;
-+	ELF(Word) *gnu_hash;
- 	ELF_HASH_ENTRY *bucket, *chain;
- 	ELF_HASH_ENTRY nbucket, nchain;
- 
-@@ -81,6 +82,16 @@ static unsigned long elf_hash(const char *name)
- 	return h;
- }
- 
-+static uint32_t gnu_hash(const char *name)
-+{
-+	const unsigned char *s = (void *)name;
-+	uint32_t h = 5381;
-+
-+	for (; *s; s++)
-+		h += h * 32 + *s;
-+	return h;
-+}
-+
- void vdso_init_from_sysinfo_ehdr(uintptr_t base)
- {
- 	size_t i;
-@@ -123,6 +134,7 @@ void vdso_init_from_sysinfo_ehdr(uintptr_t base)
- 	 */
- 	ELF_HASH_ENTRY *hash = 0;
- 	vdso_info.symstrings = 0;
-+	vdso_info.gnu_hash = 0;
- 	vdso_info.symtab = 0;
- 	vdso_info.versym = 0;
- 	vdso_info.verdef = 0;
-@@ -143,6 +155,11 @@ void vdso_init_from_sysinfo_ehdr(uintptr_t base)
- 				((uintptr_t)dyn[i].d_un.d_ptr
- 				 + vdso_info.load_offset);
- 			break;
-+		case DT_GNU_HASH:
-+			vdso_info.gnu_hash =
-+				(ELF(Word) *)((uintptr_t)dyn[i].d_un.d_ptr +
-+					      vdso_info.load_offset);
-+			break;
- 		case DT_VERSYM:
- 			vdso_info.versym = (ELF(Versym) *)
- 				((uintptr_t)dyn[i].d_un.d_ptr
-@@ -155,17 +172,27 @@ void vdso_init_from_sysinfo_ehdr(uintptr_t base)
- 			break;
- 		}
- 	}
--	if (!vdso_info.symstrings || !vdso_info.symtab || !hash)
-+	if (!vdso_info.symstrings || !vdso_info.symtab ||
-+	    (!hash && !vdso_info.gnu_hash))
- 		return;  /* Failed */
- 
- 	if (!vdso_info.verdef)
- 		vdso_info.versym = 0;
- 
- 	/* Parse the hash table header. */
--	vdso_info.nbucket = hash[0];
--	vdso_info.nchain = hash[1];
--	vdso_info.bucket = &hash[2];
--	vdso_info.chain = &hash[vdso_info.nbucket + 2];
-+	if (vdso_info.gnu_hash) {
-+		vdso_info.nbucket = vdso_info.gnu_hash[0];
-+		/* The bucket array is located after the header (4 uint32) and the bloom
-+		 * filter (size_t array of gnu_hash[2] elements).
-+		 */
-+		vdso_info.bucket = vdso_info.gnu_hash + 4 +
-+				   sizeof(size_t) / 4 * vdso_info.gnu_hash[2];
-+	} else {
-+		vdso_info.nbucket = hash[0];
-+		vdso_info.nchain = hash[1];
-+		vdso_info.bucket = &hash[2];
-+		vdso_info.chain = &hash[vdso_info.nbucket + 2];
-+	}
- 
- 	/* That's all we need. */
- 	vdso_info.valid = true;
-@@ -209,6 +236,26 @@ static bool vdso_match_version(ELF(Versym) ver,
- 		&& !strcmp(name, vdso_info.symstrings + aux->vda_name);
- }
- 
-+static bool check_sym(ELF(Sym) *sym, ELF(Word) i, const char *name,
-+		      const char *version, unsigned long ver_hash)
-+{
-+	/* Check for a defined global or weak function w/ right name. */
-+	if (ELF64_ST_TYPE(sym->st_info) != STT_FUNC)
-+		return false;
-+	if (ELF64_ST_BIND(sym->st_info) != STB_GLOBAL &&
-+	    ELF64_ST_BIND(sym->st_info) != STB_WEAK)
-+		return false;
-+	if (strcmp(name, vdso_info.symstrings + sym->st_name))
-+		return false;
-+
-+	/* Check symbol version. */
-+	if (vdso_info.versym &&
-+	    !vdso_match_version(vdso_info.versym[i], version, ver_hash))
-+		return false;
-+
-+	return true;
-+}
-+
- void *vdso_sym(const char *version, const char *name)
- {
- 	unsigned long ver_hash;
-@@ -216,29 +263,36 @@ void *vdso_sym(const char *version, const char *name)
- 		return 0;
- 
- 	ver_hash = elf_hash(version);
--	ELF(Word) chain = vdso_info.bucket[elf_hash(name) % vdso_info.nbucket];
--
--	for (; chain != STN_UNDEF; chain = vdso_info.chain[chain]) {
--		ELF(Sym) *sym = &vdso_info.symtab[chain];
--
--		/* Check for a defined global or weak function w/ right name. */
--		if (ELF64_ST_TYPE(sym->st_info) != STT_FUNC)
--			continue;
--		if (ELF64_ST_BIND(sym->st_info) != STB_GLOBAL &&
--		    ELF64_ST_BIND(sym->st_info) != STB_WEAK)
--			continue;
--		if (sym->st_shndx == SHN_UNDEF)
--			continue;
--		if (strcmp(name, vdso_info.symstrings + sym->st_name))
--			continue;
--
--		/* Check symbol version. */
--		if (vdso_info.versym
--		    && !vdso_match_version(vdso_info.versym[chain],
--					   version, ver_hash))
--			continue;
--
--		return (void *)(vdso_info.load_offset + sym->st_value);
-+	ELF(Word) i;
-+
-+	if (vdso_info.gnu_hash) {
-+		uint32_t h1 = gnu_hash(name), h2, *hashval;
-+
-+		i = vdso_info.bucket[h1 % vdso_info.nbucket];
-+		if (i == 0)
-+			return 0;
-+		h1 |= 1;
-+		hashval = vdso_info.bucket + vdso_info.nbucket +
-+			  (i - vdso_info.gnu_hash[1]);
-+		for (;; i++) {
-+			ELF(Sym) *sym = &vdso_info.symtab[i];
-+			h2 = *hashval++;
-+			if (h1 == (h2 | 1) &&
-+			    check_sym(sym, i, name, version, ver_hash))
-+				return (void *)(vdso_info.load_offset +
-+						sym->st_value);
-+			if (h2 & 1)
-+				break;
-+		}
-+	} else {
-+		i = vdso_info.bucket[elf_hash(name) % vdso_info.nbucket];
-+		for (; i; i = vdso_info.chain[i]) {
-+			ELF(Sym) *sym = &vdso_info.symtab[i];
-+			if (sym->st_shndx != SHN_UNDEF &&
-+			    check_sym(sym, i, name, version, ver_hash))
-+				return (void *)(vdso_info.load_offset +
-+						sym->st_value);
-+		}
- 	}
- 
- 	return 0;
-
-base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
--- 
-2.47.1
-
+...
 
