@@ -1,278 +1,222 @@
-Return-Path: <linux-kselftest+bounces-22905-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22906-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 794CE9E6893
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 09:13:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8AAF9E69E4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 10:15:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2D5F1885FAC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 08:13:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 924FC165B64
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 09:15:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E75131E009D;
-	Fri,  6 Dec 2024 08:12:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E601F03D5;
+	Fri,  6 Dec 2024 09:15:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gCTbTHkL"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="Nqxj1jIs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B175D1DDA0F;
-	Fri,  6 Dec 2024 08:12:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A36791EC017
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Dec 2024 09:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733472769; cv=none; b=tKeF24/mu0WT5+LAHiCTGskikkFDktEW8+ZWql7++DhmEVeM6UC3gNhm5M+HRiuA1hDye8EvGzMUjCEcDaVEWxbcMxi1J8sk9mafx2UTpZaq1feQ99ZIYoPlzgE4FlpxGMZyDib634BMEP1XeaCFB1VYN/dbByLsObUFk0/ZoTk=
+	t=1733476523; cv=none; b=b6Eq2xjWpFcuCd7Ye9BqXiaRUGsQo6HofgJ2PG0hICkXhOrkqBhH8Q8eYWv7qwLacRBC10v1ewOb5A8egSdzwergPPjE839aUNEdv7j5EEW3wwSGCEh5VsAGAjeIj4jedmVTfHXXC6cxObHC2uZmbZxg4l7z7xMVnPsPXAsegjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733472769; c=relaxed/simple;
-	bh=4zp8xIEIY6gFij/l6U5xJS8txUvJpjK5nVV4VMaXCrw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Yts3XwNGChuILt75wfKLzc4fTWmEJJMUOtK2o9Q8v5/Z4fUUhxw5JkQC5dw9cNC4rAZLE59zSiqz3MKTJFmc3/pc+WYZO1N05tK24df79vvK33jcCaqBVHr/GN/W1Q5W9Q6OPzzbChtMS2fA9ga6HIGv5IBk6cvlO5lc9fOnDAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gCTbTHkL; arc=none smtp.client-ip=217.70.183.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C696B4000A;
-	Fri,  6 Dec 2024 08:12:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1733472758;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iHhOnwJ3Hdk8LZG7baZNdrSouCArkr9q3HbqfhV8XLY=;
-	b=gCTbTHkLLTPpOxcvA9A31VR8jwCkpXpC3iAoLWp94qnCsu3GfdT4GEcSD7TKmoIobncWAy
-	6sydiiSyjOsg0KePH7zmp6f1PEi9gc5FeO1GEpfMR5sPjcrLb20L9cyM20UwbnZweCLRH7
-	M99/SaKFRN38x8aJuFW35la1e1H1FOVjqF3fx1Ijyka+JPMX60FugPj1O3UTKi6u6QDkm5
-	hOjUqoc4QYGmvjr+qIqkOxX13d0ELRB431S5zY3f8J1tOARWExdaN66azmO3Q+ckYnefzE
-	Ulbdx0jbopDoVFm+rCNgStB/aYb+xiB10boLTZSN9Gl1SJhPYNQfX+XtXF5yEQ==
-From: Bastien Curutchet <bastien.curutchet@bootlin.com>
-Date: Fri, 06 Dec 2024 09:12:14 +0100
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Migrate test_xdp_meta.sh into
- xdp_context_test_run.c
+	s=arc-20240116; t=1733476523; c=relaxed/simple;
+	bh=RrqHduFztXI6fuif9Bgtzy4NkPFE/d96UM4y21IBc68=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lYL4argi9LXaTSiIwxTsnm9F/n5eroG2nhHs+G28SmcIPQkhgRiG9knzJnJcSIe6Z+ljfXRbmJnbfYOs/Dc6YrkKe/XKcvwjMAMFaGL52GeqVo57CT46l2VJJJklEfr7aPbDJQyFbUdkZJgH4hrFCwJ11yLwIrPBPy1KYnoohvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=Nqxj1jIs; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5d3bbb0f09dso893040a12.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Dec 2024 01:15:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1733476519; x=1734081319; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Au0c93U93rO97NhYFvNIJEuWkXGIUe8cMu7IX3WeSgo=;
+        b=Nqxj1jIsMMapPlHMQiLh7Hash3G7y/iWoSzeYt04IV42fw47ayGJ3emTbEvPjkTlFe
+         mP8sy9/5g2eS8epp0DhEwGlBYhMDGSIj6QKsA3HE+gzUXlSWhC8IMPrcF6B8foRYgM4O
+         00EZ2yM/TNI/RoohseuZxG0430zYowv4iG5SOlTL14iUwHBPi0SDQVvoG4AX05e2lBuG
+         vsWxcZl1uss1uaV0pfOPYNp2vEwKOyTcN8jXYLo1auZURvwqkf1DuUh1a3UOz7j90rzC
+         iw3Dkn7PHcBzsi6pJcD309PxkO+FlK5hNiHL/sbf1da0AuB5CisBzhj7LfJ308Up8MfI
+         orRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733476519; x=1734081319;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Au0c93U93rO97NhYFvNIJEuWkXGIUe8cMu7IX3WeSgo=;
+        b=nHQevwGeWbeEw3bYCJQ3kolSfyJNnm1Srucz1RsU30et40LR/wZoKlQ7yAG2epCn2L
+         segDuoLIK5worihB+eTBTDXhrAYJCxHyvTxrcrPbYNHu5UqfbGf6pZviopCq7+0tOZJQ
+         VIhhoVCm5XRiB9n49ongn3Hc/dz9ukrSuRanzzUbxGrVzRHPCUB7J8IRVXm4/GreiIrK
+         trRMNFjcp7mxhGggxDzE03S9HWCqODoXi8l5BBGQzBB+jrjvLvDnzIzjGd2DAOsqVrUg
+         LUW5xkdUh1u/V/YI9kI3YOXq3vxUcBZQ/TjYec2pwpWwFwa2eZR6bhiiB4pqhcdVsxn6
+         Bkcw==
+X-Forwarded-Encrypted: i=1; AJvYcCUlaMKrbrtlfdbtw3Dfkwb+MZkoREkI7YLVO6yCPIdbzZiE+QatEyPZxVS9xb/IUaHeg2sJNm+IlCEIM9EluN4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEWeCbr4oFSFWIs1ezjTSjnldAYDZ2TgrBQl0a7eaW70k4WV7N
+	yGo7UzRkThkJns9ec+4dswUZR0rmOampQhQqcA4TxJe5fNWE1LeiOabUKzhyb4Q=
+X-Gm-Gg: ASbGncuCID6Q8MQFqdG5FyGKCy2XxmGNl8LeQkfDlAIA1T5M4KE73ZaU4Z6EzTUH7dO
+	5x3MlZK1sKxRJXN0wyz2GxV/DDGB1OMKy4eC2415shkcwT+pCJ1ilQ2kuJvo9yXZ94PHWC0qUdU
+	dth9ywei6wGHGyEGSU6ctYCz/trL+D0ASM1DYXqjehen9WnbrCQeCyOdc63Q6ewfhvQWRHneRqX
+	XSFN+Q6/Q/MT8fmWB3PwiKbYXFkw5BXh75xwgm2sfTbw6A0JFTZtVJwkBNBXUlBOEIPZeEPyBF6
+	8RROWkVAkj289CxufZ+u5fW7NsLn2GR945I=
+X-Google-Smtp-Source: AGHT+IGFa1Atr4OTSCsAzRpYaF67QB8hLiL347alXT2Z9V7fGxdy2SCFDKjMEc++Bsu1YVhVj4AyXw==
+X-Received: by 2002:a17:907:760c:b0:aa6:4114:8d89 with SMTP id a640c23a62f3a-aa641149194mr63819466b.53.1733476518826;
+        Fri, 06 Dec 2024 01:15:18 -0800 (PST)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa625e5c764sm211634566b.20.2024.12.06.01.15.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Dec 2024 01:15:18 -0800 (PST)
+Date: Fri, 6 Dec 2024 10:15:17 +0100
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Shuah Khan <shuah@kernel.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Samuel Holland <samuel.holland@sifive.com>, Alexandre Ghiti <alex@ghiti.fr>, linux-kselftest@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: [PATCH v4] riscv: selftests: Fix warnings pointer masking test
+Message-ID: <20241206-6f0aafe057dc10df9a9e02a5@orel>
+References: <20241205-fix_warnings_pointer_masking_tests-v4-1-0c77eb725486@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241206-xdp_meta-v1-2-5c150618f6e9@bootlin.com>
-References: <20241206-xdp_meta-v1-0-5c150618f6e9@bootlin.com>
-In-Reply-To: <20241206-xdp_meta-v1-0-5c150618f6e9@bootlin.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: Alexis Lothore <alexis.lothore@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, netdev@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Bastien Curutchet <bastien.curutchet@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-Sasl: bastien.curutchet@bootlin.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241205-fix_warnings_pointer_masking_tests-v4-1-0c77eb725486@rivosinc.com>
 
-test_xdp_meta.sh can't be used by the BPF CI.
+On Thu, Dec 05, 2024 at 01:49:31PM -0800, Charlie Jenkins wrote:
+> When compiling the pointer masking tests with -Wall this warning
+> is present:
+> 
+> pointer_masking.c: In function ‘test_tagged_addr_abi_sysctl’:
+> pointer_masking.c:203:9: warning: ignoring return value of ‘pwrite’
+> declared with attribute ‘warn_unused_result’ [-Wunused-result]
+>   203 |         pwrite(fd, &value, 1, 0); |
+>       ^~~~~~~~~~~~~~~~~~~~~~~~ pointer_masking.c:208:9: warning:
+> ignoring return value of ‘pwrite’ declared with attribute
+> ‘warn_unused_result’ [-Wunused-result]
+>   208 |         pwrite(fd, &value, 1, 0);
+> 
+> I came across this on riscv64-linux-gnu-gcc (Ubuntu
+> 11.4.0-1ubuntu1~22.04).
+> 
+> Fix this by checking that the number of bytes written equal the expected
+> number of bytes written.
+> 
+> Fixes: 7470b5afd150 ("riscv: selftests: Add a pointer masking test")
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+> Changes in v4:
+> - Skip sysctl_enabled test if first pwrite failed
+> - Link to v3: https://lore.kernel.org/r/20241205-fix_warnings_pointer_masking_tests-v3-1-5c28b0f9640d@rivosinc.com
+> 
+> Changes in v3:
+> - Fix sysctl enabled test case (Drew/Alex)
+> - Move pwrite err condition into goto (Drew)
+> - Link to v2: https://lore.kernel.org/r/20241204-fix_warnings_pointer_masking_tests-v2-1-1bf0c5095f58@rivosinc.com
+> 
+> Changes in v2:
+> - I had ret != 2 for testing, I changed it to be ret != 1.
+> - Link to v1: https://lore.kernel.org/r/20241204-fix_warnings_pointer_masking_tests-v1-1-ea1e9665ce7a@rivosinc.com
+> ---
+>  tools/testing/selftests/riscv/abi/pointer_masking.c | 20 ++++++++++++++++++--
+>  1 file changed, 18 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/riscv/abi/pointer_masking.c b/tools/testing/selftests/riscv/abi/pointer_masking.c
+> index dee41b7ee3e3..759445d5f265 100644
+> --- a/tools/testing/selftests/riscv/abi/pointer_masking.c
+> +++ b/tools/testing/selftests/riscv/abi/pointer_masking.c
+> @@ -189,6 +189,8 @@ static void test_tagged_addr_abi_sysctl(void)
+>  {
+>  	char value;
+>  	int fd;
+> +	int ret;
+> +	char *err_pwrite_msg = "failed to write to /proc/sys/abi/tagged_addr_disabled\n";
+>  
+>  	ksft_print_msg("Testing tagged address ABI sysctl\n");
+>  
+> @@ -200,18 +202,32 @@ static void test_tagged_addr_abi_sysctl(void)
+>  	}
+>  
+>  	value = '1';
+> -	pwrite(fd, &value, 1, 0);
+> +	ret = pwrite(fd, &value, 1, 0);
+> +	if (ret != 1) {
+> +		ksft_test_result_skip(err_pwrite_msg);
 
-Migrate test_xdp_meta.sh in a new test case in xdp_context_test_run.c.
-It uses the same BPF programs located in progs/test_xdp_meta.c and the
-same network topology.
-Remove test_xdp_meta.sh and its Makefile entry.
+It seems like we should have a better way to keep the count balanced than
+to require a ksft_test_result_skip() call for each test on each error
+path. Every time we add a test we'll have to go add skips everywhere else.
 
-Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
----
- tools/testing/selftests/bpf/Makefile               |  1 -
- .../bpf/prog_tests/xdp_context_test_run.c          | 86 ++++++++++++++++++++++
- tools/testing/selftests/bpf/test_xdp_meta.sh       | 58 ---------------
- 3 files changed, 86 insertions(+), 59 deletions(-)
+> +		goto err_pwrite;
+> +	}
+> +
+>  	ksft_test_result(set_tagged_addr_ctrl(min_pmlen, true) == -EINVAL,
+>  			 "sysctl disabled\n");
+>  
+>  	value = '0';
+> -	pwrite(fd, &value, 1, 0);
+> +	ret = pwrite(fd, &value, 1, 0);
+> +	if (ret != 1)
+> +		goto err_pwrite;
+> +
+>  	ksft_test_result(set_tagged_addr_ctrl(min_pmlen, true) == 0,
+>  			 "sysctl enabled\n");
+>  
+>  	set_tagged_addr_ctrl(0, false);
+>  
+>  	close(fd);
+> +
+> +	return;
+> +
+> +err_pwrite:
+> +	close(fd);
+> +	ksft_test_result_fail(err_pwrite_msg);
+>  }
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index a1964d40a60ea5b195e6e75bde5796eea63179bb..af03527bb13ad7a0ee121d3fc00599449e1a396c 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -129,7 +129,6 @@ TEST_FILES = xsk_prereqs.sh $(wildcard progs/btf_dump_test_case_*.c)
- TEST_PROGS := test_kmod.sh \
- 	test_xdp_redirect.sh \
- 	test_xdp_redirect_multi.sh \
--	test_xdp_meta.sh \
- 	test_tunnel.sh \
- 	test_lwt_seg6local.sh \
- 	test_lirc_mode2.sh \
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-index e6a783c7f5db9c818bd354027bae7393ee3c166b..1d4d9c9edb7dffa6d60865497c0b9d40a92278ba 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-@@ -2,6 +2,14 @@
- #include <test_progs.h>
- #include <network_helpers.h>
- #include "test_xdp_context_test_run.skel.h"
-+#include "test_xdp_meta.skel.h"
-+
-+#define TX_ADDR "10.0.0.1"
-+#define RX_ADDR "10.0.0.2"
-+#define RX_NAME "veth0"
-+#define TX_NAME "veth1"
-+#define TX_NETNS "xdp_context_tx"
-+#define RX_NETNS "xdp_context_rx"
- 
- void test_xdp_context_error(int prog_fd, struct bpf_test_run_opts opts,
- 			    __u32 data_meta, __u32 data, __u32 data_end,
-@@ -103,3 +111,81 @@ void test_xdp_context_test_run(void)
- 
- 	test_xdp_context_test_run__destroy(skel);
+I don't think the goto reduces much code or improves readability much. A
+wrapper function should do better. I was thinking something like
+
+ static bool pwrite_wrapper(int fd, void *buf, size_t count, const char *msg)
+ {
+   int ret = pwrite(fd, buf, count, 0);
+   if (ret != count) {
+      ksft_perror(msg);
+      return false;
+   }
+   return true;
  }
-+
-+void test_xdp_context_functional(void)
-+{
-+	LIBBPF_OPTS(bpf_tc_hook, tc_hook, .attach_point = BPF_TC_INGRESS);
-+	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1);
-+	struct bpf_program *tc_prog, *xdp_prog;
-+	struct netns_obj *rx_ns, *tx_ns;
-+	struct test_xdp_meta *skel;
-+	struct nstoken *nstoken;
-+	int rx_ifindex;
-+	int ret;
-+
-+	tx_ns = netns_new(TX_NETNS, false);
-+	if (!ASSERT_OK_PTR(tx_ns, "create tx_ns"))
-+		return;
-+
-+	rx_ns = netns_new(RX_NETNS, false);
-+	if (!ASSERT_OK_PTR(rx_ns, "create rx_ns"))
-+		goto free_txns;
-+
-+	SYS(free_rxns, "ip link add " RX_NAME " netns " RX_NETNS
-+	    " type veth peer name " TX_NAME " netns " TX_NETNS);
-+
-+	nstoken = open_netns(RX_NETNS);
-+	if (!ASSERT_OK_PTR(nstoken, "setns rx_ns"))
-+		goto free_rxns;
-+
-+	SYS(free_rxns, "ip addr add " RX_ADDR "/24 dev " RX_NAME);
-+	SYS(free_rxns, "ip link set dev " RX_NAME " up");
-+
-+	skel = test_xdp_meta__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open and load skeleton"))
-+		goto free_rxns;
-+
-+	rx_ifindex = if_nametoindex(RX_NAME);
-+	if (!ASSERT_GE(rx_ifindex, 0, "if_nametoindex rx"))
-+		goto destroy_skel;
-+
-+	tc_hook.ifindex = rx_ifindex;
-+	ret = bpf_tc_hook_create(&tc_hook);
-+	if (!ASSERT_OK(ret, "bpf_tc_hook_create"))
-+		goto destroy_skel;
-+
-+	tc_prog = bpf_object__find_program_by_name(skel->obj, "ing_cls");
-+	if (!ASSERT_OK_PTR(tc_prog, "open ing_cls prog"))
-+		goto destroy_skel;
-+
-+	tc_opts.prog_fd = bpf_program__fd(tc_prog);
-+	ret = bpf_tc_attach(&tc_hook, &tc_opts);
-+	if (!ASSERT_OK(ret, "bpf_tc_attach"))
-+		goto destroy_skel;
-+
-+	xdp_prog = bpf_object__find_program_by_name(skel->obj, "ing_xdp");
-+	if (!ASSERT_OK_PTR(xdp_prog, "open ing_xdp prog"))
-+		goto destroy_skel;
-+
-+	ret = bpf_xdp_attach(rx_ifindex,
-+			     bpf_program__fd(xdp_prog),
-+			     0, NULL);
-+	if (!ASSERT_GE(ret, 0, "bpf_xdp_attach"))
-+		goto destroy_skel;
-+
-+	nstoken = open_netns(TX_NETNS);
-+	if (!ASSERT_OK_PTR(nstoken, "setns tx_ns"))
-+		goto destroy_skel;
-+
-+	SYS(destroy_skel, "ip addr add " TX_ADDR "/24 dev " TX_NAME);
-+	SYS(destroy_skel, "ip link set dev " TX_NAME " up");
-+	SYS(destroy_skel, "ping -c 1 " RX_ADDR);
-+
-+destroy_skel:
-+	test_xdp_meta__destroy(skel);
-+free_rxns:
-+	netns_free(rx_ns);
-+free_txns:
-+	netns_free(tx_ns);
-+}
-+
-diff --git a/tools/testing/selftests/bpf/test_xdp_meta.sh b/tools/testing/selftests/bpf/test_xdp_meta.sh
-deleted file mode 100755
-index 6039b92f10949d48cd9d703d6981ae8a9388e8df..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/bpf/test_xdp_meta.sh
-+++ /dev/null
-@@ -1,58 +0,0 @@
--#!/bin/sh
--
--BPF_FILE="test_xdp_meta.bpf.o"
--# Kselftest framework requirement - SKIP code is 4.
--readonly KSFT_SKIP=4
--readonly NS1="ns1-$(mktemp -u XXXXXX)"
--readonly NS2="ns2-$(mktemp -u XXXXXX)"
--
--cleanup()
--{
--	if [ "$?" = "0" ]; then
--		echo "selftests: test_xdp_meta [PASS]";
--	else
--		echo "selftests: test_xdp_meta [FAILED]";
--	fi
--
--	set +e
--	ip link del veth1 2> /dev/null
--	ip netns del ${NS1} 2> /dev/null
--	ip netns del ${NS2} 2> /dev/null
--}
--
--ip link set dev lo xdp off 2>/dev/null > /dev/null
--if [ $? -ne 0 ];then
--	echo "selftests: [SKIP] Could not run test without the ip xdp support"
--	exit $KSFT_SKIP
--fi
--set -e
--
--ip netns add ${NS1}
--ip netns add ${NS2}
--
--trap cleanup 0 2 3 6 9
--
--ip link add veth1 type veth peer name veth2
--
--ip link set veth1 netns ${NS1}
--ip link set veth2 netns ${NS2}
--
--ip netns exec ${NS1} ip addr add 10.1.1.11/24 dev veth1
--ip netns exec ${NS2} ip addr add 10.1.1.22/24 dev veth2
--
--ip netns exec ${NS1} tc qdisc add dev veth1 clsact
--ip netns exec ${NS2} tc qdisc add dev veth2 clsact
--
--ip netns exec ${NS1} tc filter add dev veth1 ingress bpf da obj ${BPF_FILE} sec tc
--ip netns exec ${NS2} tc filter add dev veth2 ingress bpf da obj ${BPF_FILE} sec tc
--
--ip netns exec ${NS1} ip link set dev veth1 xdp obj ${BPF_FILE} sec xdp
--ip netns exec ${NS2} ip link set dev veth2 xdp obj ${BPF_FILE} sec xdp
--
--ip netns exec ${NS1} ip link set dev veth1 up
--ip netns exec ${NS2} ip link set dev veth2 up
--
--ip netns exec ${NS1} ping -c 1 10.1.1.22
--ip netns exec ${NS2} ping -c 1 10.1.1.11
--
--exit 0
 
--- 
-2.47.0
 
+ value = '1';
+ if (!pwrite_wrapper(fd, &value, 1, "write '1'"))
+    ksft_test_result_fail(...);
+
+ value = '0';
+ if (!pwrite_wrapper(fd, &value, 1, "write '0'"))
+    ksft_test_result_fail(...);
+
+
+>  
+>  static void test_tagged_addr_abi_pmlen(int pmlen)
+> 
+> ---
+> base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
+> change-id: 20241204-fix_warnings_pointer_masking_tests-3860e4f35429
+> -- 
+> - Charlie
+> 
+
+Thanks,
+drew
 
