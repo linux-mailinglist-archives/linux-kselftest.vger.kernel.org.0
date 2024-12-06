@@ -1,222 +1,118 @@
-Return-Path: <linux-kselftest+bounces-22906-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22907-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8AAF9E69E4
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 10:15:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2060E9E6B04
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 10:48:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 924FC165B64
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 09:15:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 084F116A5FF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 09:48:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E601F03D5;
-	Fri,  6 Dec 2024 09:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E92E1E3796;
+	Fri,  6 Dec 2024 09:48:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="Nqxj1jIs"
+	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="QNTB9AJc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A36791EC017
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Dec 2024 09:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2FA1DDA3A
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Dec 2024 09:48:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733476523; cv=none; b=b6Eq2xjWpFcuCd7Ye9BqXiaRUGsQo6HofgJ2PG0hICkXhOrkqBhH8Q8eYWv7qwLacRBC10v1ewOb5A8egSdzwergPPjE839aUNEdv7j5EEW3wwSGCEh5VsAGAjeIj4jedmVTfHXXC6cxObHC2uZmbZxg4l7z7xMVnPsPXAsegjc=
+	t=1733478503; cv=none; b=l5uptkALLLQGoe5NElxxbkZOl7ZsdnU3F3Mn2ZQyap1NRmtdFiv/2Kn1kO+nzawVBQ+ANiYYPexwSKKz0DzDEe6xuAUZI2JuHaFZxi7iveEydnv9f+rXEsXTzs/yWEii9ujrJEr8v11n1qxV30bdmwargMH5jGkGqf4NqYeBrfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733476523; c=relaxed/simple;
-	bh=RrqHduFztXI6fuif9Bgtzy4NkPFE/d96UM4y21IBc68=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lYL4argi9LXaTSiIwxTsnm9F/n5eroG2nhHs+G28SmcIPQkhgRiG9knzJnJcSIe6Z+ljfXRbmJnbfYOs/Dc6YrkKe/XKcvwjMAMFaGL52GeqVo57CT46l2VJJJklEfr7aPbDJQyFbUdkZJgH4hrFCwJ11yLwIrPBPy1KYnoohvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=Nqxj1jIs; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5d3bbb0f09dso893040a12.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Dec 2024 01:15:20 -0800 (PST)
+	s=arc-20240116; t=1733478503; c=relaxed/simple;
+	bh=brgGX1BuWe3lqaf45JUJIczDTf7KDAUrYh5IdUvWP+U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ql8zsFn6KBOVieNt3RUaBhSxqJAOAfDbxs/4h2MzYZxYO8zO5UG3YR3hBfSvQW8Maj6wzqdmtHeDrW4da02sRk9+W+HJKAhwqWLmmrx/WW0x8j1QPkbAPY6vn3E8glur3RejydAmSKymceiLpxC/fluIGRgLfQUoeDN+In9kw2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=QNTB9AJc; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5cece886771so3466523a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Dec 2024 01:48:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1733476519; x=1734081319; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Au0c93U93rO97NhYFvNIJEuWkXGIUe8cMu7IX3WeSgo=;
-        b=Nqxj1jIsMMapPlHMQiLh7Hash3G7y/iWoSzeYt04IV42fw47ayGJ3emTbEvPjkTlFe
-         mP8sy9/5g2eS8epp0DhEwGlBYhMDGSIj6QKsA3HE+gzUXlSWhC8IMPrcF6B8foRYgM4O
-         00EZ2yM/TNI/RoohseuZxG0430zYowv4iG5SOlTL14iUwHBPi0SDQVvoG4AX05e2lBuG
-         vsWxcZl1uss1uaV0pfOPYNp2vEwKOyTcN8jXYLo1auZURvwqkf1DuUh1a3UOz7j90rzC
-         iw3Dkn7PHcBzsi6pJcD309PxkO+FlK5hNiHL/sbf1da0AuB5CisBzhj7LfJ308Up8MfI
-         orRw==
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1733478500; x=1734083300; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Obt8KdMKwLDDpGg61ROoQFb35qCdC/z2o3ucvA6vnEo=;
+        b=QNTB9AJctyrwqxNLCknPvF8Q62fURMViKXv/CrbyLkrfkooMGQLpuen+W4EKf04LcZ
+         3sr42Mz6su3pNpsu0alyHvJjFm8j5TdJFQqKCOPu+ySz/ytHG6Xbyu2eAAmF12b2xJr8
+         W9ZEKUMp86d4FFs8pnr1+YCR1lY+HVC7Xeh9CntiyFYbiFtbWYuUD/Sc4CX3duVgXk2E
+         5Av5+B9rknqcQtKKmecuby1hXkI34PvihbmJhUSc9JbwvOtPoHuAAOWjPJ6Vnf4F2nJf
+         2YAs8Xwu6bmBdkn1x7mthB+MeS0VWWMTiOY9iFeqsBVHFeBMJmoUgAcVO/HZyql0z3q5
+         hS1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733476519; x=1734081319;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1733478500; x=1734083300;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Au0c93U93rO97NhYFvNIJEuWkXGIUe8cMu7IX3WeSgo=;
-        b=nHQevwGeWbeEw3bYCJQ3kolSfyJNnm1Srucz1RsU30et40LR/wZoKlQ7yAG2epCn2L
-         segDuoLIK5worihB+eTBTDXhrAYJCxHyvTxrcrPbYNHu5UqfbGf6pZviopCq7+0tOZJQ
-         VIhhoVCm5XRiB9n49ongn3Hc/dz9ukrSuRanzzUbxGrVzRHPCUB7J8IRVXm4/GreiIrK
-         trRMNFjcp7mxhGggxDzE03S9HWCqODoXi8l5BBGQzBB+jrjvLvDnzIzjGd2DAOsqVrUg
-         LUW5xkdUh1u/V/YI9kI3YOXq3vxUcBZQ/TjYec2pwpWwFwa2eZR6bhiiB4pqhcdVsxn6
-         Bkcw==
-X-Forwarded-Encrypted: i=1; AJvYcCUlaMKrbrtlfdbtw3Dfkwb+MZkoREkI7YLVO6yCPIdbzZiE+QatEyPZxVS9xb/IUaHeg2sJNm+IlCEIM9EluN4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEWeCbr4oFSFWIs1ezjTSjnldAYDZ2TgrBQl0a7eaW70k4WV7N
-	yGo7UzRkThkJns9ec+4dswUZR0rmOampQhQqcA4TxJe5fNWE1LeiOabUKzhyb4Q=
-X-Gm-Gg: ASbGncuCID6Q8MQFqdG5FyGKCy2XxmGNl8LeQkfDlAIA1T5M4KE73ZaU4Z6EzTUH7dO
-	5x3MlZK1sKxRJXN0wyz2GxV/DDGB1OMKy4eC2415shkcwT+pCJ1ilQ2kuJvo9yXZ94PHWC0qUdU
-	dth9ywei6wGHGyEGSU6ctYCz/trL+D0ASM1DYXqjehen9WnbrCQeCyOdc63Q6ewfhvQWRHneRqX
-	XSFN+Q6/Q/MT8fmWB3PwiKbYXFkw5BXh75xwgm2sfTbw6A0JFTZtVJwkBNBXUlBOEIPZeEPyBF6
-	8RROWkVAkj289CxufZ+u5fW7NsLn2GR945I=
-X-Google-Smtp-Source: AGHT+IGFa1Atr4OTSCsAzRpYaF67QB8hLiL347alXT2Z9V7fGxdy2SCFDKjMEc++Bsu1YVhVj4AyXw==
-X-Received: by 2002:a17:907:760c:b0:aa6:4114:8d89 with SMTP id a640c23a62f3a-aa641149194mr63819466b.53.1733476518826;
-        Fri, 06 Dec 2024 01:15:18 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa625e5c764sm211634566b.20.2024.12.06.01.15.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Dec 2024 01:15:18 -0800 (PST)
-Date: Fri, 6 Dec 2024 10:15:17 +0100
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Shuah Khan <shuah@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Samuel Holland <samuel.holland@sifive.com>, Alexandre Ghiti <alex@ghiti.fr>, linux-kselftest@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v4] riscv: selftests: Fix warnings pointer masking test
-Message-ID: <20241206-6f0aafe057dc10df9a9e02a5@orel>
-References: <20241205-fix_warnings_pointer_masking_tests-v4-1-0c77eb725486@rivosinc.com>
+        bh=Obt8KdMKwLDDpGg61ROoQFb35qCdC/z2o3ucvA6vnEo=;
+        b=eerxn8oXYk1yivsYH2WXd4D20vHFVLv39yev4c7s94zWK4rrz1UsCjc3inSM947EtF
+         y1V46AnWLbrwhAOyfdPmQIBKLcNsdNTKCF9blZrBtgOzKDOsPXL1jjTfxzUe9+tTReeC
+         2OlDpvIJJI+Sa1Qf6bY7IFDu0MKCSmDwNL7vRA/YbN88l5Vlqj/zaFXg3mz6d7HRVaLT
+         oXlzSgf+sqDT/yg1T0EQk3vGIHvy2hXm6fNTkKUG5AC4+KC3Ym58mRag6bnriTFuIVxL
+         vZQ0uNE875I+5zKfM04v9TrfbflJW1xtrBSORDzvuaab7HmJJcuDtrJ9TaIyzxIId032
+         kz8A==
+X-Forwarded-Encrypted: i=1; AJvYcCXIgE70FbEGdOfaORxJ1ZnNueLRyOPp02+VKRTC0d2DpCR5bfjE8Z8nlFJkWx/400y797mpeFslC6JHohc+yUw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yztn0pFQfhaQiSYhCq1PNOMSQr1iIW3lwpAzZlltLEXt+mBoYR7
+	i1IWJ2FO69kua0ExjXQvDdsNhYtjhg+8yvCrLAUxHBVYqlw3TYWd+FYP1oqaOJw=
+X-Gm-Gg: ASbGnctXqvpUJPcxGSH/OLOv9EmGMbHOWqq0r5V/QJ1lXCjp7FCULvRC9pMHdk0VFi/
+	NR+R/xb2FhiYhOd6qo4zCUXNxv5nNno4g7Upbs4syJqsiW7qiYTxySQTQJ4iTrRomV8SWCGrMMc
+	y3W+ybmrKdlfnzPuH7ZfhLFBmSAm4oWEPCt+zol6mpA1C9leGIcB93iFz4+mI8M7ImZ/+di6fkW
+	2Yo7v+1F1AS3bC8pcK5w5521TDJa63U0GFPq4iFKCBxxRS1cV2K
+X-Google-Smtp-Source: AGHT+IGvXCkxVXqr3xX3rbpqTVSG5Ho2Px9XJbc7OSX6tbgT2BbW3PJ966NWRXbd5JYUODY+S7wL6w==
+X-Received: by 2002:a05:6402:2084:b0:5d0:ece3:158a with SMTP id 4fb4d7f45d1cf-5d12478421fmr6148766a12.3.1733478500373;
+        Fri, 06 Dec 2024 01:48:20 -0800 (PST)
+Received: from [192.168.0.123] ([62.73.69.208])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d14c799affsm1903727a12.54.2024.12.06.01.48.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Dec 2024 01:48:19 -0800 (PST)
+Message-ID: <e13f753a-b62c-43d3-a1c5-7343c87612e0@blackwall.org>
+Date: Fri, 6 Dec 2024 11:48:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241205-fix_warnings_pointer_masking_tests-v4-1-0c77eb725486@rivosinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 09/11] selftests: net: lib: Rename
+ ip_link_master() to ip_link_set_master()
+To: Petr Machata <petrm@nvidia.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ netdev@vger.kernel.org
+Cc: Simon Horman <horms@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
+ mlxsw@nvidia.com, Shuah Khan <shuah@kernel.org>,
+ Benjamin Poirier <bpoirier@nvidia.com>, Hangbin Liu <liuhangbin@gmail.com>,
+ Vladimir Oltean <vladimir.oltean@nxp.com>, linux-kselftest@vger.kernel.org
+References: <cover.1733412063.git.petrm@nvidia.com>
+ <fbf7c53a429b340b9cff5831280ea8c305a224f9.1733412063.git.petrm@nvidia.com>
+Content-Language: en-US
+From: Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <fbf7c53a429b340b9cff5831280ea8c305a224f9.1733412063.git.petrm@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Dec 05, 2024 at 01:49:31PM -0800, Charlie Jenkins wrote:
-> When compiling the pointer masking tests with -Wall this warning
-> is present:
+On 12/5/24 17:40, Petr Machata wrote:
+> Let's have a verb in that function name to make it clearer what's going on.
 > 
-> pointer_masking.c: In function ‘test_tagged_addr_abi_sysctl’:
-> pointer_masking.c:203:9: warning: ignoring return value of ‘pwrite’
-> declared with attribute ‘warn_unused_result’ [-Wunused-result]
->   203 |         pwrite(fd, &value, 1, 0); |
->       ^~~~~~~~~~~~~~~~~~~~~~~~ pointer_masking.c:208:9: warning:
-> ignoring return value of ‘pwrite’ declared with attribute
-> ‘warn_unused_result’ [-Wunused-result]
->   208 |         pwrite(fd, &value, 1, 0);
-> 
-> I came across this on riscv64-linux-gnu-gcc (Ubuntu
-> 11.4.0-1ubuntu1~22.04).
-> 
-> Fix this by checking that the number of bytes written equal the expected
-> number of bytes written.
-> 
-> Fixes: 7470b5afd150 ("riscv: selftests: Add a pointer masking test")
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> Signed-off-by: Petr Machata <petrm@nvidia.com>
+> Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 > ---
-> Changes in v4:
-> - Skip sysctl_enabled test if first pwrite failed
-> - Link to v3: https://lore.kernel.org/r/20241205-fix_warnings_pointer_masking_tests-v3-1-5c28b0f9640d@rivosinc.com
 > 
-> Changes in v3:
-> - Fix sysctl enabled test case (Drew/Alex)
-> - Move pwrite err condition into goto (Drew)
-> - Link to v2: https://lore.kernel.org/r/20241204-fix_warnings_pointer_masking_tests-v2-1-1bf0c5095f58@rivosinc.com
-> 
-> Changes in v2:
-> - I had ret != 2 for testing, I changed it to be ret != 1.
-> - Link to v1: https://lore.kernel.org/r/20241204-fix_warnings_pointer_masking_tests-v1-1-ea1e9665ce7a@rivosinc.com
-> ---
->  tools/testing/selftests/riscv/abi/pointer_masking.c | 20 ++++++++++++++++++--
->  1 file changed, 18 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/riscv/abi/pointer_masking.c b/tools/testing/selftests/riscv/abi/pointer_masking.c
-> index dee41b7ee3e3..759445d5f265 100644
-> --- a/tools/testing/selftests/riscv/abi/pointer_masking.c
-> +++ b/tools/testing/selftests/riscv/abi/pointer_masking.c
-> @@ -189,6 +189,8 @@ static void test_tagged_addr_abi_sysctl(void)
->  {
->  	char value;
->  	int fd;
-> +	int ret;
-> +	char *err_pwrite_msg = "failed to write to /proc/sys/abi/tagged_addr_disabled\n";
->  
->  	ksft_print_msg("Testing tagged address ABI sysctl\n");
->  
-> @@ -200,18 +202,32 @@ static void test_tagged_addr_abi_sysctl(void)
->  	}
->  
->  	value = '1';
-> -	pwrite(fd, &value, 1, 0);
-> +	ret = pwrite(fd, &value, 1, 0);
-> +	if (ret != 1) {
-> +		ksft_test_result_skip(err_pwrite_msg);
-
-It seems like we should have a better way to keep the count balanced than
-to require a ksft_test_result_skip() call for each test on each error
-path. Every time we add a test we'll have to go add skips everywhere else.
-
-> +		goto err_pwrite;
-> +	}
-> +
->  	ksft_test_result(set_tagged_addr_ctrl(min_pmlen, true) == -EINVAL,
->  			 "sysctl disabled\n");
->  
->  	value = '0';
-> -	pwrite(fd, &value, 1, 0);
-> +	ret = pwrite(fd, &value, 1, 0);
-> +	if (ret != 1)
-> +		goto err_pwrite;
-> +
->  	ksft_test_result(set_tagged_addr_ctrl(min_pmlen, true) == 0,
->  			 "sysctl enabled\n");
->  
->  	set_tagged_addr_ctrl(0, false);
->  
->  	close(fd);
-> +
-> +	return;
-> +
-> +err_pwrite:
-> +	close(fd);
-> +	ksft_test_result_fail(err_pwrite_msg);
->  }
-
-I don't think the goto reduces much code or improves readability much. A
-wrapper function should do better. I was thinking something like
-
- static bool pwrite_wrapper(int fd, void *buf, size_t count, const char *msg)
- {
-   int ret = pwrite(fd, buf, count, 0);
-   if (ret != count) {
-      ksft_perror(msg);
-      return false;
-   }
-   return true;
- }
-
-
- value = '1';
- if (!pwrite_wrapper(fd, &value, 1, "write '1'"))
-    ksft_test_result_fail(...);
-
- value = '0';
- if (!pwrite_wrapper(fd, &value, 1, "write '0'"))
-    ksft_test_result_fail(...);
-
-
->  
->  static void test_tagged_addr_abi_pmlen(int pmlen)
-> 
-> ---
-> base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
-> change-id: 20241204-fix_warnings_pointer_masking_tests-3860e4f35429
-> -- 
-> - Charlie
+> Notes:
+> CC: Shuah Khan <shuah@kernel.org>
+> CC: Benjamin Poirier <bpoirier@nvidia.com>
+> CC: Hangbin Liu <liuhangbin@gmail.com>
+> CC: Vladimir Oltean <vladimir.oltean@nxp.com>
+> CC: linux-kselftest@vger.kernel.org
 > 
 
-Thanks,
-drew
+Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+
 
