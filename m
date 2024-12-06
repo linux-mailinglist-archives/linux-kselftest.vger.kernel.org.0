@@ -1,78 +1,78 @@
-Return-Path: <linux-kselftest+bounces-22908-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22909-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 982159E6B05
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 10:48:44 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52BF39E6B0A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 10:49:49 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EA0A286ACF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 09:48:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 170221883109
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 09:49:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9B991EC01F;
-	Fri,  6 Dec 2024 09:48:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43FDE1EF0B7;
+	Fri,  6 Dec 2024 09:49:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="MkXaibff"
+	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="2lIHgRTJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442691DA0E3
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Dec 2024 09:48:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1C118C932
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Dec 2024 09:49:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733478520; cv=none; b=bmi+kDSRaHbCztgAPx1UbuPjeevioSri/PCT5Vwj2d+DpLPnxMn8DpPJ8Y/FQ4OWRckJ7pwAV/UseMOIJYEfQ2nLvO8TMZ3SoQ4G1RRerYTfvFDPefK4doIPwJIJ9xS48T+uK0fY7DBCZ8EMN4MmMqnpSNSCaZggxGbQriplpT0=
+	t=1733478585; cv=none; b=QuwN4jfSJUZmm0slItjzqxGXQydDYIGoetKuMl6dSDIZtWIkT+9WkviWT/iQ8uefAsX3Nv+So3jiB6+r/PvjB7tLTr6Yv0Ym+Nfc0GAY5XrrU3bGWLkOIaAq8pp8yqeyTwN5GT4MyeSSbf6os0OWzT+O/teBIggxflWHePOr1QU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733478520; c=relaxed/simple;
-	bh=2r8pylXs/Twu58JrlVG7EteCTVgvGwN9RIoZuY7VaOQ=;
+	s=arc-20240116; t=1733478585; c=relaxed/simple;
+	bh=PnDB/sYV9slXqwjdQ+adiYJ8G9BZKP3IlyhMW03My5Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KOtBABSl+uPR/+1em+4D00TA8ZKzGZqL6FQWM6Q36GQfyvvzmfbhUr5+VNG2Utq01hRZgOb+DDNZzrOLC19r9m4c/Pu8m5k2RQbQDR7cD1qxxzJgqk65H9yka/s9I9oTkTZC5/D/lUhTjsgD3BpF4z6LWjjro2glRlfnFixJp2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=MkXaibff; arc=none smtp.client-ip=209.85.208.52
+	 In-Reply-To:Content-Type; b=DKQdUGUgM3vofCwwyzChK0Rqvl9Tp7qsQIxNLl6MraApKgBX5Rie4AbBPtZk9Noheg4J10lLagP/wHT4l8WD1fve8gZddV3mxhHyQm+in+jtArHUH0ebqyIEB2eWr9UhREhcCHeL5QuOp991WM8So0J7GzRmHkzQCxo+owZhyHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=2lIHgRTJ; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5d122cf8dd1so2976465a12.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Dec 2024 01:48:39 -0800 (PST)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-aa51bf95ce1so342417066b.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Dec 2024 01:49:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1733478518; x=1734083318; darn=vger.kernel.org;
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1733478582; x=1734083382; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=sMK56cZTycgI4vfKzSxxk0iKhdhNGddOzETc8Y9Cd34=;
-        b=MkXaibffEDMgMnfXyWZCfH/EKS73ppzD7oJdKgBauiwylAyRYSutS7zslV2KrmjWVY
-         5F5HpElHnJWkK22SWb6dR69MN871+AKKrebXVWCGsx1yRd13a62e/mR8logTBTnpmisB
-         zTdPDe6NgbF0vYzGWORiaz96gYGH/oHgdBBCGBpRZ68KZ9/ybrZ7Hl+b0Ju7Pf7dOaDa
-         XPhnZIivmqO7g58FV3FQPJCAiyhQARdZuuQzKqOfWuDVjdmLDHy0feT3ex0ekQzSI9yK
-         KA8DcuIA7tYerte1Ae0gEEejaNLImIXD1/dGw+nQKFOZEFCCGhRnMBXO44oNiCLjJirF
-         14iA==
+        bh=AuGUFOb/iBY8RJKzowVsntGQmfZkIN8i8d+6WuovufA=;
+        b=2lIHgRTJUVgPiu0QpHE+4HXOrfauynhMdie+Me5alzQIz1fcn1cN2iENiFkYbeFhWb
+         m4gD/XVsHWz49+kem84b/hMyLqctvhisb6wwH9SHtiVHf60Yl8Au4roiDZiE8utlHPE/
+         69zyEWuINXGF9nMEPzJHt7qtLXxFCi9+9ZniHfepNrVTaVcqszJKF1RrdnMchsX6/bjD
+         oSAssq1/4/Y3g5ZTI/PWld9ZaYUktjQsZ+vQ7p99nRL6Le12SnZdHQ2pqxZMYIROvWnf
+         L/JwqEcwMGXx9HtX5k4VQISG9AbgD0QTWSDnkmjayc4XMmQbRmxH+F03mMpkc0QYtvO5
+         LyGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733478518; x=1734083318;
+        d=1e100.net; s=20230601; t=1733478582; x=1734083382;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sMK56cZTycgI4vfKzSxxk0iKhdhNGddOzETc8Y9Cd34=;
-        b=OpmGHpM4qr7tRptrGu7NkwBez9BN8DsWkPEgL2WvMR450pt24l1N6AdC0TNOiBeTDK
-         cCLrAvoFGEvxR+IfbBN83LshXBtEljqgbm/zJ+jTaneh8k5sjOs1UHEOqrr696ZW0wGN
-         klBw3KWSabSOcHmmw9/OXd12x/3CgLCRyVEw1a8EpB1fBLI51rr5DwKCD4ml+qc4d9sm
-         CsjW0H3n4mjbJgXN5MOWdLij2KAxxv0KIpBCTlEJXhYf3saeFMY0UIMe5H8rfOGFSIcL
-         DERN9gVcsv+aT+K2k7W1aH1C3oKPOYPeyO2BKBifE3iZd0bQQpuq+Bpg5hxji5hbtP1g
-         xSFA==
-X-Forwarded-Encrypted: i=1; AJvYcCVRA4GGLT7zBNaoUE/af0t/7a63glnuCkg9aj4MmecwVnA7Agvwe+kjfYwbgjISGXGXBkEv2ZQ4m8E6DCZIceM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz37qjEQiAJ9ETh3aS5Dt4bY/4ApvXEWCU5mv0dvxA+8J2sgO9s
-	9JASZOXuGYzS/v8R0MVuauS7FTu4UJfmfIYA8j9JUqhWiR21FfJu+8gqjJyB/yE=
-X-Gm-Gg: ASbGnct60I8MjeCeIwhiArsP1EkJxAkf3a+i7eTRb4x87iAVlsAjnap6tt/seo1VyJq
-	4gEH+4zGAvR5/XkKehCkfhgQmJRT3pUI6sVXHjn89gs1uY9HCdUX+H9sm2kkxkcgzQvU7L+UJwu
-	iByXPPiNnbL1Qcp/+5RqHUnndE1HffEXLF0W5iIcJ1//IkRrHeUOBToiWH+ztvYeQ5OfhxMMAmF
-	XC0Mwwc8E9GYKA1DbWHjO/uX1rEpTCnMS0dQSfWBICByeuflpvp6iCk
-X-Google-Smtp-Source: AGHT+IEQGz4ncGLxW+djEWICPN1ZiR6AxySVCJxhG8ZLE1Sap5DiS8K+atDERjr+4pNjgY4Se81ejA==
-X-Received: by 2002:aa7:dac9:0:b0:5d3:cff2:71a9 with SMTP id 4fb4d7f45d1cf-5d3cff28725mr666973a12.33.1733478517702;
-        Fri, 06 Dec 2024 01:48:37 -0800 (PST)
+        bh=AuGUFOb/iBY8RJKzowVsntGQmfZkIN8i8d+6WuovufA=;
+        b=toafYhwGjce1mSrklNhVnc70eCqVpQxcvU8WDae5tfYB264W7nDHrx8H+cSauGw3iW
+         imuC4v0IHIQdvRMuHfSxH3e/LAAWOtkNKIuKxGAtdSyNasmCbzkpVoZVbCGSsWlCl/Yn
+         PFqqJhmqHNsYm0AHesR7+x33SCCz5rjThgR/grzbmyg0qOY4wl4BvCKdZ4mIl8EHfiM3
+         /Hl6/7PLMCGyVOGGx4+ASnEowKBaxTnZD2Bw4naWnD7cyYYodiYyBmgJtqW5Uk0ha3S1
+         PBhaOba7P6+Nd6buThtyXdr659SIa2QUyLTNQo7GHpy8W35xjqPPffNjIjdrz92g32dk
+         5KwA==
+X-Forwarded-Encrypted: i=1; AJvYcCVtBP0DQPK/wEcH1A9NhqFkBDGXEMXIT8zYnZumw80GtMU0B1sEmWl2OVVAx+lPZ/joTBkpqnIBHDCGZDHchvY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJvPasaYmXqplSo2DllvDtzYCIUuObTyWY3vjcM9oP8n4OjoaU
+	YvoHABETZz6bxbuN5YGwGyObwmU4Hk9NwSFCHkBzKCOIv/xP83wDTQKCQy0PVRI=
+X-Gm-Gg: ASbGncunW4GXj8TWHC/YeIoyDMKmVoBo+kMtQ9jfjTAqCXJ9hcEXu8fw9JjybId6bZD
+	kpUt3adivMWV6h5ZBHqWb+J2I9ss07SPwiVJNHezeeJ2LO0e00dfl7bEpeVjt3vxaGaiCA6AMhY
+	lbM0JUTY6zyBcNCwT455ZH2Qe78v4pFcCjWSsRcOUUL7DZILlqU0hGxBe2w2m19RpjJqAZumdhh
+	0dpeIQB4y8r5vyGKeLvx5aY7waFoEVKYEZDRXTq06D85dPtptmt
+X-Google-Smtp-Source: AGHT+IGlZGYFgwmwFeNFQJwgjuah6WRFJxdm3tfG1ry4p/ogHPRA4+guYXrGWdGdYUv9BzFp83k3/A==
+X-Received: by 2002:a17:907:9145:b0:aa5:630d:7de0 with SMTP id a640c23a62f3a-aa63a26a7c0mr170543066b.44.1733478581999;
+        Fri, 06 Dec 2024 01:49:41 -0800 (PST)
 Received: from [192.168.0.123] ([62.73.69.208])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d14c7aa441sm1893564a12.72.2024.12.06.01.48.36
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa625e4dc8asm213942166b.35.2024.12.06.01.49.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Dec 2024 01:48:37 -0800 (PST)
-Message-ID: <2d546228-e290-4161-a7cf-227732ab8e73@blackwall.org>
-Date: Fri, 6 Dec 2024 11:48:35 +0200
+        Fri, 06 Dec 2024 01:49:41 -0800 (PST)
+Message-ID: <e7cb6b0b-afce-459e-a781-f78ed0af241a@blackwall.org>
+Date: Fri, 6 Dec 2024 11:49:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,8 +80,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 10/11] selftests: net: lib: Add several
- autodefer helpers
+Subject: Re: [PATCH net-next v2 11/11] selftests: forwarding: Add a selftest
+ for the new reserved_bits UAPI
 To: Petr Machata <petrm@nvidia.com>, "David S. Miller" <davem@davemloft.net>,
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -91,26 +91,26 @@ Cc: Simon Horman <horms@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
  Benjamin Poirier <bpoirier@nvidia.com>, Hangbin Liu <liuhangbin@gmail.com>,
  Vladimir Oltean <vladimir.oltean@nxp.com>, linux-kselftest@vger.kernel.org
 References: <cover.1733412063.git.petrm@nvidia.com>
- <add6bcbe30828fd01363266df20c338cf13aaf25.1733412063.git.petrm@nvidia.com>
+ <388bef3c30ebc887d4e64cd86a362e2df2f2d2e1.1733412063.git.petrm@nvidia.com>
 Content-Language: en-US
 From: Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <add6bcbe30828fd01363266df20c338cf13aaf25.1733412063.git.petrm@nvidia.com>
+In-Reply-To: <388bef3c30ebc887d4e64cd86a362e2df2f2d2e1.1733412063.git.petrm@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 12/5/24 17:40, Petr Machata wrote:
-> Add ip_link_set_addr(), ip_link_set_up(), ip_addr_add() and ip_route_add()
-> to the suite of helpers that automatically schedule a corresponding
-> cleanup.
-> 
-> When setting a new MAC, one needs to remember the old address first. Move
-> mac_get() from forwarding/ to that end.
+On 12/5/24 17:41, Petr Machata wrote:
+> Run VXLAN packets through a gateway. Flip individual bits of the packet
+> and/or reserved bits of the gateway, and check that the gateway treats the
+> packets as expected.
 > 
 > Signed-off-by: Petr Machata <petrm@nvidia.com>
 > Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 > ---
 > 
 > Notes:
+>     v2:
+>     - Add the new test to Makefile
+>     
 > CC: Shuah Khan <shuah@kernel.org>
 > CC: Benjamin Poirier <bpoirier@nvidia.com>
 > CC: Hangbin Liu <liuhangbin@gmail.com>
