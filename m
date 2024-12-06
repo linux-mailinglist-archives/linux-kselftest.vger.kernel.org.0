@@ -1,143 +1,127 @@
-Return-Path: <linux-kselftest+bounces-22924-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22925-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D4D29E77C2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 18:59:22 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E02789E77CF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 19:05:19 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CCA3283879
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 17:59:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0FFF1888023
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2024 18:05:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CDF21FD7BF;
-	Fri,  6 Dec 2024 17:59:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFC6C1FECC6;
+	Fri,  6 Dec 2024 18:05:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="OfuALeJw"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="hLHz4X1A"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CFB71CD213
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Dec 2024 17:59:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 322F91F63F6
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Dec 2024 18:05:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733507959; cv=none; b=jUbLnUfzi7Wm0heEoVUMZ3MQq0OcpJACOncSKURnfyea05I+94rgUWtH9DW1u96IZG6LHmpR5pBuD0qEonjjqPLnnyldSjhi6lj9PVCyLFZYgYPqlBtKpHTxplNA8CzB3daydAefsaKL8zt4UhD4q/y6m07kE1wqIIwLPdCnOwg=
+	t=1733508315; cv=none; b=bHvrJ/jgQ6LdmLiBbOYlN2f5hfrMfF/YnCQ2/Mtqjy1B/kkso7gXxuQfx3xe/3tsTnH6hdNUX9lUtdxqKDk4shojRy8k1rxbK6rPVADQj3ZUX92gnX0qTcXu/OTBQMYXxjdLC5QbBURWYYOnxqu5zA55pRb8ZBlIVtC63W0fZJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733507959; c=relaxed/simple;
-	bh=C7/IjrZPAe7jrd6+Hvq7qkkD7bICDlJFHdbE7CmOEAE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rmFmi11OQWoZ1NTgtibLBmtKlQQ+aJJnOWXsbLshMjlciB439szC/UxDetAPw0gci5M++lm2+noXxUuyCaMFD3h+PDkSHLV2OOrQgSK8x84BtZzxQs1mgwtYK5hq1GsUStLLYUY5/F2vZULWMfQQr4CCui9DEMGWPTbzuj7bSAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=OfuALeJw; arc=none smtp.client-ip=209.85.210.171
+	s=arc-20240116; t=1733508315; c=relaxed/simple;
+	bh=mUrDS2bhGOV+ED2691ewuzgAYk3tK8Jmo2Es0NnHTY8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=UH8HRPPby3mFBvQEURYIt2NYSB3NDMfA6Hp6MaOMNDdRU3AqxARAgnxDi4CJy7uuYnaI309k47kOFsPJgst3+D5/KY2vPohfJCiUdzTjQaF51SBf+tcHLzZ8bOhHOmwODzhh8VO5vKDx5mwpjpC2knhdLnZ64rD6XMf/Jk+aW4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=hLHz4X1A; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-72599fc764bso1950886b3a.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Dec 2024 09:59:17 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2156e078563so18525935ad.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Dec 2024 10:05:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1733507956; x=1734112756; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KXWTnS4ACRG69KERwtrtjSEjtFzKArian+QB5LBEOK0=;
-        b=OfuALeJwEBFahJQqD6+JikVEowM5iKse4P5UTho6ywR5DQhoR6FYDDvFCcvSsWxB4+
-         Etvt39nLzLVrsoEU7p+jCZn48LJB8Q7b3ctVV2Z2d/br4bz6DaofuLC28MZRr0hOrLlW
-         Q5md3+NdEhM/nmdEHtGj4YR3PNLpHSjaJecdcswCzb+t0CErbqj4O7mHEK+FH72IwO0v
-         BXbqzR6Uf9HvxymXMAniW7/16xb+YZdGgegV31J6cO0Qx6Re143ZgpJY9Z/aTu/oinkV
-         wPAP99bkEYhcCIqHw9FI4bZsEsq9FtbMrdH1zQ64CALN4mYPERu0AHOfYUnJU8aqdEYX
-         oe4A==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1733508313; x=1734113113; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cNSXOHpFVDvVo7qfkOEInwMhPxiBtaZSe1qpxd+NZEo=;
+        b=hLHz4X1AeNnHiFdLcWEZDj/HWW4eS0aaVEiu2O8suERNrIud/iDCqVXS/P0urStCeh
+         t3fRJQLVK4yMVsZcnXfoYKe1+ZmEQpGrrYbv6Pl/wIMShXL9+G3A8CjOBsit233sVbYr
+         7hHwf6XCFHgEHMaI5pT/dvIQFk9fu1IG5vgkBG2knrEhHLF73zci/x7IBQhojjXibZs2
+         zDR/sbYmCB3+vb2RX0BclB/snVpGfnmXmAcdPlcbWhbAo89vuloEQ4487hrc9Fvv5ySP
+         BRdlGcgMgsugnosWuFPjbFZmdOhO/nxHx6i9EfnBW2ed0c1gtn+kIOKqYbELFxLqoS/Q
+         YNpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733507956; x=1734112756;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KXWTnS4ACRG69KERwtrtjSEjtFzKArian+QB5LBEOK0=;
-        b=mbvUnWdaGiM0Wn9FOmVRE6ybBtjaFxth4Jivma0+lr0Bmn0JTHVA+x8/k1qE8MAYZe
-         4R8E6qySZT4xyahURsi/AqpIkieroO+BB6BAS+ju9xDlzOPKmjbm+EevFOoYQnspm6Uv
-         VPv3vG3LzoGRTBMrdRn4u+fGPyM4Wg+tq1Uti/nLJd3+R8o9PrSq0y/bctCqtbYspLzb
-         SU27zdJ4c/F3XGqvR1QyvMgTvBCI7/0MGif/NUp4XiUHzffnYCIMOeaQVn9/gczJD34L
-         KVt7jGiia7Iu/RoFfFwwQrSak1zDUzWg/Vm9R0iiVAaHyPPO7w+hA9Wn9994hFxeQI5P
-         Toiw==
-X-Gm-Message-State: AOJu0YwtG8qwy7REzrg30GmLfhFabX7LKg8DnRGpTobRRZwS9Sb7xWoc
-	FWhBsePFgNyvoDGIj1RSuHc+G9JXJFdyjY5yQzBJ/l0lsKSQMpBxXTKPFGlubOE=
-X-Gm-Gg: ASbGncv/2WFiGhyU54x1zJ9/0uX0LXCO62abT0+4S5fbYX9fEr8gW/fibGJn1+xe0wV
-	B3zdYxCEI7OA2Dggk+Fl5FDXxi0icagkVmJFyCnkPFoz0sLSloWx1uSKgSM1MxNMr1zThWf5EGz
-	UhJ6TOglnz2rSeNCt7JnjZYmY3RZqJIh1LWivaKskIXLs+Y5mCotrLPI7sJVSlPE5rbMxE+7FiD
-	vlpN6L4/xmr7viVZVdmZSYZFQnZzhv5L3Q1UN3H20INVw==
-X-Google-Smtp-Source: AGHT+IE8qx0uEW+Lby99GPzuztrI/Tze8sHzsHxtrWCEM5K3xCHJB/gtU8TFHEdMyknysnx83WZqKQ==
-X-Received: by 2002:a17:903:2b08:b0:215:6c5f:d142 with SMTP id d9443c01a7336-21611afca0amr56824085ad.20.1733507956637;
-        Fri, 06 Dec 2024 09:59:16 -0800 (PST)
-Received: from ghost ([2600:1010:b0ba:197a:c0e9:4a0e:e502:edf9])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215f8efc906sm31536465ad.166.2024.12.06.09.59.15
+        d=1e100.net; s=20230601; t=1733508313; x=1734113113;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cNSXOHpFVDvVo7qfkOEInwMhPxiBtaZSe1qpxd+NZEo=;
+        b=QoczGRrV0nEOjZURPjU2gI5nYBoxpuiG8eAlwS5bguSdzgtKH3bLl+2f8lLUr8m7mh
+         /pEV9saqFW9lkVI4vlGlx/e6FvCIPx5NtHZzAy5KOUEjpbI7L+1kMp0Qc8uWipOse/lz
+         RCFOAWcdhVtxUwN3Gt/WNQuSPvzclVxFdzYcfCmxQRH3gbguqNONJ5Kz9CQoW5P5teoi
+         SamfZes9upIDJ8PjSvT4Mu249yZ0wjjs3fqn6amG0N4FHy2mqjWCD5Wj/UXb/pRIHExS
+         UA5N3STcTRwfZIM49DnE6R0OF6AAg9M8sd5fr4VPpDTylKFqTs9Bru7MV5weDPfMDEsD
+         XtVg==
+X-Forwarded-Encrypted: i=1; AJvYcCUnEvyePZKyl9Rohs2Lzc/OKO3ItlFKkXtZUV7l9AYbgYSHiQUoY9J0uX2ORtxQ9HTkINixYJvaO2x1KAqaqds=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxg4KF/kezrASIgU3mnismuKiWuPGKXN8Ud6xCGvR2F54j81KtB
+	5Y8SjnG8fQVm+Ql/sy/gSiadb+mZ0FfmF9gn7smoqRBfEZ5/KDCrWYZzBjA4R84=
+X-Gm-Gg: ASbGncvqWD2nlZ0rGsoYDfqBKyBLl/F17zcutX+pr1bmY6uOaUNjlR1+3Xlg68FhNWs
+	SHh7QorIIb/o2+IyFXur9llh4u3UfFZQ/hlrh6ibW0VGJ3Ae0Mb2Z0rQxtnuu6uoLMWc9BxpqOt
+	3uHOV1tlp2qHW2PyvVQCQNcN7N70RrO0mQlFizpS+ndokqQaom1h/ykb8ryjaVC5+bpWDRgeviW
+	x1JYMXSuH17pdxvtuuZNJ68CypMGsTwROUtnb6794JcKRgI1YybMVG7zKpnll3LYg==
+X-Google-Smtp-Source: AGHT+IH6K3vxjoHAACo1uwn/G9I0Nj6IP5ZDAZwjsVYIfZAvGf/tBjJZAN9zL2L3pU94t4FY59unIQ==
+X-Received: by 2002:a17:902:d4c5:b0:215:5437:e9b4 with SMTP id d9443c01a7336-21614db9f54mr41598485ad.54.1733508313507;
+        Fri, 06 Dec 2024 10:05:13 -0800 (PST)
+Received: from charlie.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2161e6d1042sm10977125ad.2.2024.12.06.10.05.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Dec 2024 09:59:16 -0800 (PST)
-Date: Fri, 6 Dec 2024 09:59:13 -0800
+        Fri, 06 Dec 2024 10:05:12 -0800 (PST)
 From: Charlie Jenkins <charlie@rivosinc.com>
-To: Li Zhijian <lizhijian@fujitsu.com>
-Cc: linux-kselftest@vger.kernel.org, shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	Christian Brauner <brauner@kernel.org>,
-	Miklos Szeredi <mszeredi@redhat.com>,
-	Josef Bacik <josef@toxicpanda.com>
-Subject: Re: [PATCH for-next v3] selftests/filesystems: Add missing gitignore
- file
-Message-ID: <Z1M7cUPhV6D6yXlX@ghost>
-References: <20241122073725.1531483-1-lizhijian@fujitsu.com>
+Date: Fri, 06 Dec 2024 10:05:06 -0800
+Subject: [PATCH] selftests/hid: Add host-tools to .gitignore
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241122073725.1531483-1-lizhijian@fujitsu.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241206-host_tools_gitignore-v1-1-e75e963456dc@rivosinc.com>
+X-B4-Tracking: v=1; b=H4sIANE8U2cC/x3MQQqAIBBA0avErBNUIqyrRITUZAPhhCMRSHdPW
+ r7F/wUEE6HA2BRIeJMQxwrTNrAePgZUtFWD1bYzVvfqYMlLZj5lCZQpRE6onHfD7pzVvjdQ0yv
+ hTs+/neb3/QC+B72vZgAAAA==
+To: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Charlie Jenkins <charlie@rivosinc.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=726; i=charlie@rivosinc.com;
+ h=from:subject:message-id; bh=mUrDS2bhGOV+ED2691ewuzgAYk3tK8Jmo2Es0NnHTY8=;
+ b=owGbwMvMwCHWx5hUnlvL8Y3xtFoSQ3qwzSXB2zyn6rQaTi5VrXHfFvuq7V926Zfu13cZVNfIs
+ wXW8Md3lLIwiHEwyIopsvBca2BuvaNfdlS0bALMHFYmkCEMXJwCMJHM2Qz/vdW9+Y3dw0z+nXWf
+ U6sy9XxEoahRvN/uzD/nxbcs8nb/x8jwt5WJ69mbDTkH16almv99v32agHTW45khS70stJfp2nx
+ nBgA=
+X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
+ fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
 
-On Fri, Nov 22, 2024 at 03:37:25PM +0800, Li Zhijian wrote:
-> Compiled binary files should be added to .gitignore
-> 
-> 'git status' complains:
-> Untracked files:
-> (use "git add <file>..." to include in what will be committed)
->      filesystems/statmount/statmount_test_ns
-> 
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Miklos Szeredi <mszeredi@redhat.com>
-> Cc: Josef Bacik <josef@toxicpanda.com>
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> ---
-> Hello,
-> Cover letter is here.
-> 
-> This patch set aims to make 'git status' clear after 'make' and 'make
-> run_tests' for kselftests.
-> ---
-> V3:
->   sorted the ignored files
-> V2:
->    split as a separate patch from a small one [0]
->    [0] https://lore.kernel.org/linux-kselftest/20241015010817.453539-1-lizhijian@fujitsu.com/
-> 
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> ---
->  tools/testing/selftests/filesystems/statmount/.gitignore | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/filesystems/statmount/.gitignore b/tools/testing/selftests/filesystems/statmount/.gitignore
-> index 82a4846cbc4b..973363ad66a2 100644
-> --- a/tools/testing/selftests/filesystems/statmount/.gitignore
-> +++ b/tools/testing/selftests/filesystems/statmount/.gitignore
-> @@ -1,2 +1,3 @@
->  # SPDX-License-Identifier: GPL-2.0-only
-> +statmount_test_ns
+When compiling these selftests the host-tools directory is generated.
+Add it to the .gitignore so git doesn't see these files as trackable.
 
-Thank you! This is still an issue in 6.13-rc1.
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+---
+ tools/testing/selftests/hid/.gitignore | 1 +
+ 1 file changed, 1 insertion(+)
 
-Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
-Tested-by: Charlie Jenkins <charlie@rivosinc.com>
+diff --git a/tools/testing/selftests/hid/.gitignore b/tools/testing/selftests/hid/.gitignore
+index 746c62361f77..933f483815b2 100644
+--- a/tools/testing/selftests/hid/.gitignore
++++ b/tools/testing/selftests/hid/.gitignore
+@@ -1,5 +1,6 @@
+ bpftool
+ *.skel.h
++/host-tools
+ /tools
+ hid_bpf
+ hidraw
 
->  /*_test
-> -- 
-> 2.44.0
-> 
-> 
+---
+base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
+change-id: 20241206-host_tools_gitignore-8a89f8820a61
+-- 
+- Charlie
+
 
