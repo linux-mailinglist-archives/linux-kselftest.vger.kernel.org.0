@@ -1,192 +1,160 @@
-Return-Path: <linux-kselftest+bounces-23028-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23029-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 918DD9E9271
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 12:33:03 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4969C9E9292
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 12:36:48 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D3A0285158
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 11:33:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EF22161D52
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 11:36:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47862221DA9;
-	Mon,  9 Dec 2024 11:31:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5109721E0A0;
+	Mon,  9 Dec 2024 11:36:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Il5HO0Ht"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PD+xs/7l"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A442221D9C;
-	Mon,  9 Dec 2024 11:31:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A09A721B8E9;
+	Mon,  9 Dec 2024 11:36:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733743882; cv=none; b=clZXvw4HlUxR81I0iHct48hDg4GEWSzik3jgEOBch1FSwZNAn1Ww9c/A1fNfVAMohYlDuhvZ0JB0KYgyNNIDzHFHL4/3CZhdhqCiUMkokoPAOmUpJX0PcXX4AjC9jZHUPrvqxh1IQWR7flY/FcayDTrV+JeUKBPYW+Fu1cn5sq4=
+	t=1733744199; cv=none; b=f9BVbImmcNqoRFNBxiNH8reuerfp4O5+/Oh0yWof10GdHXSZuB8cZc76TT5mo9S0tQUHTv9nEkd0aQpmELf5CPzGhMkHXIGxY7CLOxZrTAkhgMIGJPIzBKGPTjsgpum/SIuBvL6qLzh2+lLYUnmbls4cPO86aqP6Wz4752UoqaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733743882; c=relaxed/simple;
-	bh=CA75l2omv+hK19oiqlXUTMHS50WFKnElsFJ9xaWE/dA=;
+	s=arc-20240116; t=1733744199; c=relaxed/simple;
+	bh=y4Xn/PNV7F3ZUE54mvAj8QBV1AkBKq5X3EYYW79GHS0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tFBCkFkxNyJbNjaNTdjJhgyfT6pTwx1kAdhWldSjouTApB3JQHGT2gZ6k27OS/a/x8tIU6sXNkFOqlGjQZgbWe33DPGggInGB9yDN/N2bboq6hCNF3X5ZLTy/SuPCo6IW42yAaw9JsuWLWq4W9XlyZJ2bB8LEtlFd3LC/Eo6TT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Il5HO0Ht; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 959E1C4CED1;
-	Mon,  9 Dec 2024 11:31:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733743881;
-	bh=CA75l2omv+hK19oiqlXUTMHS50WFKnElsFJ9xaWE/dA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Il5HO0Ht79wZ5JbJj/es6EjYbi5nxsS/1Xm0SR3Fxc6P2EWXNi6hNhTAqi/w6EsgY
-	 TNOjJZ3B9dhFmpzx3hzRgRjJ+yLohCXsVOcuVEJr5fFn4bHXrI/V3AYdcYSk4MGeRK
-	 kWfP53FRVZ6OGlUALxdQwQ9gxym/aDoOlCu2vcwElnba/BM1TutggSrM2EzO7WP2Cz
-	 PqydGlGL5Az3K+HuHGISyGBxSmNvvNJkTwQmQfVoVxowUlpFYbg0oKzZHz9LfsKbyH
-	 MdQowUSuyUio6l8PVbymyVwAxqChy9IadF3CxOfCMhefDWuBOoWpHhWlLWzE22EONz
-	 2ySMyxe9HH/2Q==
-Message-ID: <c34748e0-44ad-4775-abd5-52034c4f5fdc@kernel.org>
-Date: Mon, 9 Dec 2024 12:31:15 +0100
+	 In-Reply-To:Content-Type; b=Ey1Jy+UDREi1KjCwycU32jDRYkpDlJPBZZtyvNZ/9HqI4oz7+bQGt6rRZU8FFGVmPvRwJX2j9fUFZCD9Rlrgs3Nojy86GMn1pWQA1SjUbZXxyT7xPzqQHjpV1oDhTPGB6NksnGK3m7Rj7kkTuDa8e5VMBTbg2vsg1pfWmZ+GBt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PD+xs/7l; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B95QNeG024778;
+	Mon, 9 Dec 2024 11:36:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=UwON24
+	P/JxHeczfZQMdZLIUqRCyXdehsHwKyzK1PS0g=; b=PD+xs/7lj8QGtCzebo/F86
+	jSabTsw1lhdowWqliYhjMm3wm9qGDbFzBATK5mlIDpEdsDAFAB5snuz2KWRHMRFT
+	8eTKRQ028kZGbFZD7zNC3eI6LVIpsHz32GcWuE5YzBg9fAB+g+wuc7MXA40uUu2+
+	YIRpMAWx/W/3tezXWUhveInFHaTFYUL92zcBltwDeZSfrRL9ban+2LGkCd4IfyE/
+	jLa5ss8J8ZkiHz/cj1OT+XZ8OLt0DGK+eunSfJClMSJo4Cv2j6ME/5AS0GRtIFB0
+	eCAAmSQeeSF4vLmYFl8nYDc8azF6yZ9RIHhGHKxDFBGpjrt4l3YIufI1omn1N83A
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43ccsj87qh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Dec 2024 11:36:32 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4B97SqSL023039;
+	Mon, 9 Dec 2024 11:36:32 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 43d2wjp48n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Dec 2024 11:36:32 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4B9BaSHu25756248
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 9 Dec 2024 11:36:28 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5ECCB20043;
+	Mon,  9 Dec 2024 11:36:28 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1CD2A20040;
+	Mon,  9 Dec 2024 11:36:28 +0000 (GMT)
+Received: from [9.155.198.95] (unknown [9.155.198.95])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  9 Dec 2024 11:36:28 +0000 (GMT)
+Message-ID: <0162282d-a2bb-4c9f-8c7f-2f065a08f6f1@linux.ibm.com>
+Date: Mon, 9 Dec 2024 12:36:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next v12 11/22] ovpn: implement TCP transport
-Content-Language: en-GB
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
- Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Donald Hunter <donald.hunter@gmail.com>,
- Shuah Khan <shuah@kernel.org>, sd@queasysnail.net, ryazanov.s.a@gmail.com,
- Andrew Lunn <andrew@lunn.ch>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20241202-b4-ovpn-v12-0-239ff733bf97@openvpn.net>
- <20241202-b4-ovpn-v12-11-239ff733bf97@openvpn.net>
- <784fddc4-336c-4674-8277-c7cebea6b94f@redhat.com>
- <2a1b614c-c52d-44c7-8cb8-c68a8864508d@openvpn.net>
- <8714deae-c1f7-42ff-9e76-fabd9ca5188b@openvpn.net>
- <17e7d4c6-4912-4d5e-8723-45a06a1ad529@openvpn.net>
- <813d75bf-1d7f-472b-967f-27ab8f9d4759@kernel.org>
- <e447ef89-e7f1-4c5b-871e-d1cfaa045c6c@openvpn.net>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <e447ef89-e7f1-4c5b-871e-d1cfaa045c6c@openvpn.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/6] kvm: s390: Reject setting flic pfault attributes
+ on ucontrol VMs
+To: Christoph Schlameuss <schlameuss@linux.ibm.com>, kvm@vger.kernel.org
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20241209110717.77279-1-schlameuss@linux.ibm.com>
+ <20241209110717.77279-2-schlameuss@linux.ibm.com>
+Content-Language: en-US
+From: Janosch Frank <frankja@linux.ibm.com>
+Autocrypt: addr=frankja@linux.ibm.com; keydata=
+ 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
+In-Reply-To: <20241209110717.77279-2-schlameuss@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3ieiroFy3wW_m1o3-rMemurXtQsk1myb
+X-Proofpoint-ORIG-GUID: 3ieiroFy3wW_m1o3-rMemurXtQsk1myb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ impostorscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=301
+ mlxscore=0 priorityscore=1501 suspectscore=0 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2412090090
 
-On 09/12/2024 11:58, Antonio Quartulli wrote:
-> On 09/12/2024 11:46, Matthieu Baerts wrote:
->> Hi Antonio,
->>
->> Thank you for working on this, and sharing your work here!
->>
->> On 05/12/2024 00:09, Antonio Quartulli wrote:
->>> On 04/12/2024 23:52, Antonio Quartulli wrote:
->>>> Paolo,
->>>>
->>>> On 04/12/2024 12:15, Antonio Quartulli wrote:
->>>> [...]
->>>>>>> +        mutex_lock(&tcp6_prot_mutex);
->>>>>>> +        if (!ovpn_tcp6_prot.recvmsg)
->>>>>>> +            ovpn_tcp_build_protos(&ovpn_tcp6_prot, &ovpn_tcp6_ops,
->>>>>>> +                          sock->sk->sk_prot,
->>>>>>> +                          sock->sk->sk_socket->ops);
->>>>>>> +        mutex_unlock(&tcp6_prot_mutex);
->>>>>>
->>>>>> This looks like an hack to avoid a build dependency on IPV6, I think
->>>>>> the
->>>>>> explicit
->>>>>
->>>>> I happily copied this approach from espintcp.c:espintcp_init_sk() :-D
->>>>>
->>>>>>
->>>>>> #if IS_ENABLED(CONFIG_IPV6)
->>>>>>
->>>>>> at init time should be preferable
->>>>
->>>> To get this done at init time I need inet6_stream_ops to be
->>>> accessible, but it seems there is no EXPORT_SYMBOL() for this object.
->>>>
->>>> However, I see that mptcp/protocol.c is happily accessing it.
->>>> Any clue how this is possible?
->>>
->>> I answer myself: mptcp is not tristate and it can only be compiled as
->>> built-in.
->>
->> Indeed, that's why.
->>
->> Talking about MPTCP, by chance, do you plan to support it later on? :)
+On 12/9/24 12:07 PM, Christoph Schlameuss wrote:
+> Prevent null pointer dereference when processing the
+> KVM_DEV_FLIC_APF_ENABLE and KVM_DEV_FLIC_APF_DISABLE_WAIT ioctls in the
+> interrupt controller.
 > 
-> Hi Matthieu,
-> 
-> It is not on our current roadmap (TCP doesn't get much love in the VPN
-> world), but I agree it could be an interesting option to explore!
+> Reported-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
 
-I understand, it makes sense not to recommend using TCP for the
-transport layer for tunnelling solutions.
-
-> I have to admit that I haven't played much with MPTCP myself yet, but I
-> am more than happy to talk about potential advantages for the ovpn use
-> case.
-
-Some people told me they were interested in using OpenVPN with MPTCP to
-use multiple (low-capacity) network links at the same time. I think
-intercepting and proxying TCP traffic would always be the best in terms
-of performances, but using OpenVPN with MPTCP seems to be enough for
-some, especially when they want to "improve" some type of UDP traffic
-that cannot be intercepted: QUIC, VPN, etc.
-
-I don't have numbers to share, but I can understand this feature can
-help in some cases.
-
-(This reminds me this: https://github.com/OpenVPN/ovpn-dco/issues/60)
-(and this: https://github.com/arinc9/openvpn/pull/1)
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
+Please add a fixes tag to this patch and #3.
+It's fine to just send a reply to the patches until there are enough 
+comments for a proper v2.
 
