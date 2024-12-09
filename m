@@ -1,55 +1,56 @@
-Return-Path: <linux-kselftest+bounces-23058-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23059-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E68579E9EAB
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 20:01:02 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0A7B9E9EB2
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 20:01:50 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 757AC28294D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 19:01:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BFD61881CA4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 19:01:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09A451990AF;
-	Mon,  9 Dec 2024 18:56:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2FFD19343B;
+	Mon,  9 Dec 2024 18:56:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="DG61zZ0m"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="hsozfRMz"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 421FC19343B;
-	Mon,  9 Dec 2024 18:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00698194C9E;
+	Mon,  9 Dec 2024 18:56:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733770600; cv=pass; b=bVxaf/oUelNyn6e+pqsG6TJ+nFEISuEHsjM8vzc/v5xDvwFcXHFDiLy1Ui1gyT41L1Ts90KD3PdbxDQluhmEEPvpvpaLB7GHvIVLPGY37BfynAxe6TA4Hn/bVyt+uQGOLC8qRD+F3MdiBVu3/Pk010swxA2IH/CXCVZoCdkmzxw=
+	t=1733770607; cv=pass; b=pNyjjWTzEPcXQPnTVZXn1EdcOgCfuJDDt+3RAYJ75gWJkJM3M22CJ/ztoALWtaXzzSv++KaT6L2fsDCx27OwDO+8mtD8JGXaTQXl2gd+t+b9BxKVy81wFvEyKlVhO58TCIAKqlBdUTZtEbpWkEt1xn6vOO6qqD2vo4VrYg++xJ0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733770600; c=relaxed/simple;
-	bh=3R1h6svD0lIfcxLcz0Vc9HntsUuEWub4gv+2p4nSa6g=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UQ4fpkS1W8QHPPm+9A+rNmVsDTS3gXFIuThnMtQ6rsF23hGiadqF1VPoKp2L2G8Dnh7bV51HvHEcM02wYk3miu6EjwhyOLMB4DVXa7+ya3sWYZ7K1V6s/UiBL+lefXNsvYN6ICdd+4rmNtSkIQ77XzKRjOlwVMq40R1rN8N90TU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=DG61zZ0m; arc=pass smtp.client-ip=136.143.188.112
+	s=arc-20240116; t=1733770607; c=relaxed/simple;
+	bh=Kwv6aO/27IArKRiMj1cFQdSsWxkoy6DL3ccDQf9tJ6k=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=l09/WisHRS3dnGxbLEWKbNaykkAHZof0cjleFa1qSPfleuKxUdasuZOxB1TdyY0qlCgAHPBuwCcSFbLQCPrdEbJt+lLseGs14Cq7J94JnJbhIqgP9TgzN9uuTeV7jmJDULxv6DulU4ZwXPnY7oHLUnnb4MtoRBk7KjEULuQuetk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=hsozfRMz; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1733770584; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1733770588; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=lGR4lGg787LeCSb+a+4PddHWEHv2zFMMHFlbksCcUjXWRnuPerxXr7iOs/vSEFW61U7odDtOyx5J+8Job3TLUcYE+997VQS2PjZhleDcNATm5bMB6+2zneU6gp22G/THGiASVl7Dc6mJJTNr1D6qfs2O+I7U6pvS9qsEtEHIg4I=
+	b=BH1uN4PNbgO2EdoTYC+DWceD5kkupIwlLyYjeNybiRzMbJg2dwWY6374yn17xPx93VfOsxP00ItYIP1SdZ8A+1sdDdTEANNmPet8Wo+NKdsGydgrM33DsxIJ+JUaOd8459RYu410iWq6HMo/C/RgMSYScTTKsOJDqXrQd7KnAY8=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1733770584; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=pIQAAr0s4V5rZOCAZkw1ZbSm94i/7OwYX+Tmg9oB6yg=; 
-	b=hH+cl/oZ5G3zw2o5NjjCJDWk5z+nW51r6VdD6QMOp1/H/fWL296Sfz4gnTRh8kS0jXwSa9dDxdGi673dt6bIvZFpo1+9V2OgV2RLg1smMdXNOtQjrOhqzKO2ntsLXDay/lhFnf8YqBjkf1LMI7E8Ely0ZoPgCoKdu/wFQAcUxHM=
+	t=1733770588; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=/Qv2og47kVG8c0xQF+Q2piw26jz1RE6nH/VURIZHB9U=; 
+	b=m24NXzuNBxWQASS9nQIl3zB7p9+GMrbdq1V7xQ7pwHvUPjeDS1O11ek18V59J0yvI5rvlzGF4JC/cg0EmWpkp1vg3exK121D74UNnYGPqERqG0J/JpGDc8P4S0wYSg19/+wWXZw+5t17d+3E1x3w2geEw+FjJBeDLQqGmdkik9I=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
 	dmarc=pass header.from=<usama.anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1733770584;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1733770588;
 	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=pIQAAr0s4V5rZOCAZkw1ZbSm94i/7OwYX+Tmg9oB6yg=;
-	b=DG61zZ0masTRH6n5IEZILsuzC1K6VYo0JddyqbcrciKP+iGwsBLKLF1wA2UqnaBy
-	f70p48eFeXnK3gjDxnGNL34itv+Sy/PcsQpjR7KshRk3ffJrIMDO8vtaQ92/g9TGGkb
-	l256lAqniVacapeKD08Dcgg3v3NzUdhm52Dm3h7A=
-Received: by mx.zohomail.com with SMTPS id 1733770582328336.33983168763575;
-	Mon, 9 Dec 2024 10:56:22 -0800 (PST)
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
+	bh=/Qv2og47kVG8c0xQF+Q2piw26jz1RE6nH/VURIZHB9U=;
+	b=hsozfRMzsNmgww3EpXvmZ74cjdAxxuzkEY6jVQsUKmRRU2FUgwEiRsOYFr4ccrAZ
+	c4FNYl/MZapxI+zHlQOCc6Cn/Pf5YKglvOZ55epMNdTOaweM0lZsuDwxWpD5Q2rIIaf
+	KMHT8RcgD9od9TQRHSqFFre14sSIrtDMzuyjwgfU=
+Received: by mx.zohomail.com with SMTPS id 1733770586925426.83591125268447;
+	Mon, 9 Dec 2024 10:56:26 -0800 (PST)
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Shuah Khan <shuah@kernel.org>,
@@ -60,10 +61,12 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 	linux-kernel@vger.kernel.org
 Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
 	kernel@collabora.com
-Subject: [PATCH 0/4] selftest/mm: Remove warnings found by adding compiler flags
-Date: Mon,  9 Dec 2024 23:56:20 +0500
-Message-Id: <20241209185624.2245158-1-usama.anjum@collabora.com>
+Subject: [PATCH 1/4] selftests/mm: thp_settings: remove const from return type
+Date: Mon,  9 Dec 2024 23:56:21 +0500
+Message-Id: <20241209185624.2245158-2-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20241209185624.2245158-1-usama.anjum@collabora.com>
+References: <20241209185624.2245158-1-usama.anjum@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,31 +76,62 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
-Recently, I reviewed a patch on the mm/kselftest mailing list about a
-test which had obvious type mismatch fix in it. It was strange why that
-wasn't caught during development and when patch was accepted. This led
-me to discover that those extra compiler options to catch these warnings
-aren't being used. When I added them, I found tens of warnings in just
-mm suite.
+Remove cost from the return type as it is ignored anyways and generates
+the warning:
+  warning: type qualifiers ignored on function return type [-Wignored-qualifiers]
 
-In this series, I'm fixing those warnings in a few files. More fixes
-would be sent later.
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+Optional fixes tag.
+Fixes: 00679a183ac6 ("selftests/mm: factor out thp settings management")
+Add fixes tag to last patch which had created these files instead of
+original patch which added these.
+---
+ tools/testing/selftests/mm/thp_settings.c | 4 ++--
+ tools/testing/selftests/mm/thp_settings.h | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Muhammad Usama Anjum (4):
-  selftests/mm: thp_settings: remove const from return type
-  selftests/mm: pagemap_ioctl: Fix types mismatches shown by compiler
-    options
-  selftests/mm: mseal_test: remove unused variables
-  selftests/mm: mremap_test: Remove unused variable and type mismatches
-
- tools/testing/selftests/mm/mremap_test.c   |  15 +--
- tools/testing/selftests/mm/mseal_test.c    |   8 +-
- tools/testing/selftests/mm/pagemap_ioctl.c | 108 +++++++++++----------
- tools/testing/selftests/mm/thp_settings.c  |   4 +-
- tools/testing/selftests/mm/thp_settings.h  |   4 +-
- tools/testing/selftests/mm/vm_util.c       |   2 +-
- 6 files changed, 75 insertions(+), 66 deletions(-)
-
+diff --git a/tools/testing/selftests/mm/thp_settings.c b/tools/testing/selftests/mm/thp_settings.c
+index 577eaab6266fd..ad872af1c81aa 100644
+--- a/tools/testing/selftests/mm/thp_settings.c
++++ b/tools/testing/selftests/mm/thp_settings.c
+@@ -87,7 +87,7 @@ int write_file(const char *path, const char *buf, size_t buflen)
+ 	return (unsigned int) numwritten;
+ }
+ 
+-const unsigned long read_num(const char *path)
++unsigned long read_num(const char *path)
+ {
+ 	char buf[21];
+ 
+@@ -172,7 +172,7 @@ void thp_write_string(const char *name, const char *val)
+ 	}
+ }
+ 
+-const unsigned long thp_read_num(const char *name)
++unsigned long thp_read_num(const char *name)
+ {
+ 	char path[PATH_MAX];
+ 	int ret;
+diff --git a/tools/testing/selftests/mm/thp_settings.h b/tools/testing/selftests/mm/thp_settings.h
+index 876235a23460c..fc131d23d5930 100644
+--- a/tools/testing/selftests/mm/thp_settings.h
++++ b/tools/testing/selftests/mm/thp_settings.h
+@@ -64,12 +64,12 @@ struct thp_settings {
+ 
+ int read_file(const char *path, char *buf, size_t buflen);
+ int write_file(const char *path, const char *buf, size_t buflen);
+-const unsigned long read_num(const char *path);
++unsigned long read_num(const char *path);
+ void write_num(const char *path, unsigned long num);
+ 
+ int thp_read_string(const char *name, const char * const strings[]);
+ void thp_write_string(const char *name, const char *val);
+-const unsigned long thp_read_num(const char *name);
++unsigned long thp_read_num(const char *name);
+ void thp_write_num(const char *name, unsigned long num);
+ 
+ void thp_write_settings(struct thp_settings *settings);
 -- 
 2.39.5
 
