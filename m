@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-23029-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23030-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4969C9E9292
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 12:36:48 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F5D29E929F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 12:41:13 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EF22161D52
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 11:36:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 290FA280FBC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 11:41:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5109721E0A0;
-	Mon,  9 Dec 2024 11:36:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F28021E0BA;
+	Mon,  9 Dec 2024 11:41:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PD+xs/7l"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ZjdDReBv"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A09A721B8E9;
-	Mon,  9 Dec 2024 11:36:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99CF21B90B;
+	Mon,  9 Dec 2024 11:41:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733744199; cv=none; b=f9BVbImmcNqoRFNBxiNH8reuerfp4O5+/Oh0yWof10GdHXSZuB8cZc76TT5mo9S0tQUHTv9nEkd0aQpmELf5CPzGhMkHXIGxY7CLOxZrTAkhgMIGJPIzBKGPTjsgpum/SIuBvL6qLzh2+lLYUnmbls4cPO86aqP6Wz4752UoqaY=
+	t=1733744469; cv=none; b=fH2PxhqHQLQAZNlYfhxXMh9YrYyYedoX75/iv4jzgj6dEEq6Qs6O/UUSNQIBq+QvtrbGB6CsBNVO9Q+MIdfjOsE7n0A3rzdtOan8v60zbtj+/DHT9QGP5F1+6sMmUAsWbTVbKVuISYEzK/AZFNC62iLECqQSALVH927iQE2pnnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733744199; c=relaxed/simple;
-	bh=y4Xn/PNV7F3ZUE54mvAj8QBV1AkBKq5X3EYYW79GHS0=;
+	s=arc-20240116; t=1733744469; c=relaxed/simple;
+	bh=H2Fb+rLSAQGGZ2TmP85u8O8gEOmSROkF+tE09mqNqYk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ey1Jy+UDREi1KjCwycU32jDRYkpDlJPBZZtyvNZ/9HqI4oz7+bQGt6rRZU8FFGVmPvRwJX2j9fUFZCD9Rlrgs3Nojy86GMn1pWQA1SjUbZXxyT7xPzqQHjpV1oDhTPGB6NksnGK3m7Rj7kkTuDa8e5VMBTbg2vsg1pfWmZ+GBt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PD+xs/7l; arc=none smtp.client-ip=148.163.158.5
+	 In-Reply-To:Content-Type; b=P5X6BkpJ4qj0fcFuCv9IV83SP+v2UIWU4HCsYkK3CGqZsIJk4xeuIc5AqnptLHAEX5ZfmclRdJcyV092ElT/EhCbN3WG/nCKplf+P8TReCihDoh4NZ/mU8NQatjM6MFlmYknrRmw3o3L8IDbdh7LnWJ17z7fJDmWkLdDPAtMpA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ZjdDReBv; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B95QNeG024778;
-	Mon, 9 Dec 2024 11:36:33 GMT
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B8MFc1X011164;
+	Mon, 9 Dec 2024 11:40:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=UwON24
-	P/JxHeczfZQMdZLIUqRCyXdehsHwKyzK1PS0g=; b=PD+xs/7lj8QGtCzebo/F86
-	jSabTsw1lhdowWqliYhjMm3wm9qGDbFzBATK5mlIDpEdsDAFAB5snuz2KWRHMRFT
-	8eTKRQ028kZGbFZD7zNC3eI6LVIpsHz32GcWuE5YzBg9fAB+g+wuc7MXA40uUu2+
-	YIRpMAWx/W/3tezXWUhveInFHaTFYUL92zcBltwDeZSfrRL9ban+2LGkCd4IfyE/
-	jLa5ss8J8ZkiHz/cj1OT+XZ8OLt0DGK+eunSfJClMSJo4Cv2j6ME/5AS0GRtIFB0
-	eCAAmSQeeSF4vLmYFl8nYDc8azF6yZ9RIHhGHKxDFBGpjrt4l3YIufI1omn1N83A
+	:message-id:mime-version:references:subject:to; s=pp1; bh=zNAbcS
+	JlzI9zZuIvNYLlljbO/ACfGr9d55IxHaVVEFo=; b=ZjdDReBvPVF1DcKKNjELbS
+	ZoRoCZc7sEOUdrano/RToZf83QP6U3nVgDzOknrkOxvLPtVBOD3HmVmkrzMDL84m
+	y2HyH0SIfdPMfI9vSMdb250gPgSp4icuXi6rWTQlttArw9JVRCQPJQEW5hVzcBES
+	zcj5XxgpvU1NYTfcFFbbMlurV2HxV7I9HbiS2vInlI9kZu2CCWAaRCNQ3q25G3V3
+	ZgqgH3/An6WPBjaWGpK6ReYII5JaiIKuEOq2sZjTLg43h+AbW2wBEzHcuBo2CYMj
+	5ROAlitvGJ0LYqZxFeh899qBhNT5Gqt4vbXeXqwBrvGFsOc/lrECpeTbPxRBAJZQ
 	==
 Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43ccsj87qh-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43ce0x8305-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Dec 2024 11:36:32 +0000 (GMT)
+	Mon, 09 Dec 2024 11:40:59 +0000 (GMT)
 Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4B97SqSL023039;
-	Mon, 9 Dec 2024 11:36:32 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 43d2wjp48n-1
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4B9BApaS023023;
+	Mon, 9 Dec 2024 11:40:58 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 43d2wjp4mh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Dec 2024 11:36:32 +0000
+	Mon, 09 Dec 2024 11:40:58 +0000
 Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4B9BaSHu25756248
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4B9Bet1140567236
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 9 Dec 2024 11:36:28 GMT
+	Mon, 9 Dec 2024 11:40:55 GMT
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5ECCB20043;
-	Mon,  9 Dec 2024 11:36:28 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 3B1F320043;
+	Mon,  9 Dec 2024 11:40:55 +0000 (GMT)
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1CD2A20040;
-	Mon,  9 Dec 2024 11:36:28 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 0E91220040;
+	Mon,  9 Dec 2024 11:40:55 +0000 (GMT)
 Received: from [9.155.198.95] (unknown [9.155.198.95])
 	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  9 Dec 2024 11:36:28 +0000 (GMT)
-Message-ID: <0162282d-a2bb-4c9f-8c7f-2f065a08f6f1@linux.ibm.com>
-Date: Mon, 9 Dec 2024 12:36:27 +0100
+	Mon,  9 Dec 2024 11:40:55 +0000 (GMT)
+Message-ID: <0585d9ec-b680-407e-9f82-6c2c98b93a09@linux.ibm.com>
+Date: Mon, 9 Dec 2024 12:40:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -135,16 +135,16 @@ In-Reply-To: <20241209110717.77279-2-schlameuss@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3ieiroFy3wW_m1o3-rMemurXtQsk1myb
-X-Proofpoint-ORIG-GUID: 3ieiroFy3wW_m1o3-rMemurXtQsk1myb
+X-Proofpoint-GUID: l_aN9b2xTLIeHex7ijfPJeZufVaRV-9e
+X-Proofpoint-ORIG-GUID: l_aN9b2xTLIeHex7ijfPJeZufVaRV-9e
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- impostorscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=301
- mlxscore=0 priorityscore=1501 suspectscore=0 malwarescore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2412090090
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 clxscore=1015 impostorscore=0 mlxscore=0 mlxlogscore=405
+ priorityscore=1501 malwarescore=0 adultscore=0 bulkscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412090090
 
 On 12/9/24 12:07 PM, Christoph Schlameuss wrote:
 > Prevent null pointer dereference when processing the
@@ -154,7 +154,9 @@ On 12/9/24 12:07 PM, Christoph Schlameuss wrote:
 > Reported-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
 > Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
 
-Please add a fixes tag to this patch and #3.
-It's fine to just send a reply to the patches until there are enough 
-comments for a proper v2.
+Please have a look into the documentation and find a place to write down 
+the !ucontrol requirement.
+
+Documentation/virt/kvm/devices/s390_flic.rst
+Documentation/virt/kvm/api.rst
 
