@@ -1,125 +1,113 @@
-Return-Path: <linux-kselftest+bounces-23035-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23036-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FA839E94D5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 13:51:50 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F0BA9E968D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 14:24:48 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B25EB1624BC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 13:21:28 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C20B35955;
+	Mon,  9 Dec 2024 13:12:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CJl7WhjD"
+X-Original-To: linux-kselftest@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2487281F5C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 12:51:48 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC3F2228CA0;
-	Mon,  9 Dec 2024 12:51:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iA0xvu90"
-X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C03C2163B5;
-	Mon,  9 Dec 2024 12:51:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CBF35943;
+	Mon,  9 Dec 2024 13:12:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733748702; cv=none; b=h8ZtuCVpWI1pxPWhRy3a8TQp8I5IxJviSiZCwzH7254W/rqNwJuTBQV0bugepnKjcPw/sY2x4SysqmOMW2Pvt/fPJB8ZiBBjp32GXdRSEogiSCF1rDBu3Ui+SbEd9abZQ+uN9O1YezOVqfVvG7FFYIL8HGaxA0rKHNqy4xbpLdo=
+	t=1733749978; cv=none; b=ChOL6NCI/pSiGiyEQFFJON4lo87dtEjJ2to2zBYeBxkT3neVG1NohlwQefk/FNw7Lrt6QKt00HZULczDYepalCIr+4xZJ/DRK1mLGoHotpS9NQBSSk9i34EhW3FoqqSqkyABcmdCzSy5I22EUVwnydhwPJ8B6IqTkDcH+y/GCO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733748702; c=relaxed/simple;
-	bh=7uMdlMbeAMotNjKM62Hjf14TnIvJ+lF0stexCijYJS4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DrfZX0N/hgRkGb5cQS7oLaIyPrkHPziKrwl2QbLWEvF7zWnkgWzHyKNqYyIm1SUYS6HgOjafTIMBLJsfpkeYTByl+gEgI47YSQdKR4yDa+NWfD8QONSDtoi98nVsTQp0HUGcab/BZJ0/8PplsO7PEkznAfL+hVMsl7X4eYRav4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iA0xvu90; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5d3d74363cbso3776709a12.2;
-        Mon, 09 Dec 2024 04:51:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733748699; x=1734353499; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S0pYVI0rIMt/vUsXuEhU3q6EMT1SoyXTaXNYDyXxI18=;
-        b=iA0xvu90QFl4W7iYDq12VS9BdBsPaPHhtTDDjbdCgSfzydZVCSG2OY1O1GDkE4lm9S
-         RRqiaDnIxGXYpZ8qisoydW0XeajFEzYCG1lPAVcIrZFkmCPbZA+i3wUUoDtQ9noGBaM9
-         P7p5P2NorFNcKUc7DeNW/YinU/ZaqefoGfEWzpuA1YoOakmIiGoo1DHqU4SF/opm30Sz
-         YzBANHqLhoSd3vyXR8WZ/IqJ8U72+0vsB5Jcigf7M5W7yJnu9HRhrbOF0YTfIk0n0W7t
-         YaHglxnOSj4sSkaxJrEVCxD79dOuCHwU9Av4S2U/r0kKoO2T3X42SKYNp//zaEz2E3WN
-         TaKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733748699; x=1734353499;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S0pYVI0rIMt/vUsXuEhU3q6EMT1SoyXTaXNYDyXxI18=;
-        b=POHvzxdERjPLftw7PZRg8Rh5jdgq+7Z03d1LGdpYHWe4E6QoEOppPPIzOsw0zttmvu
-         spmd/mE67Bl6FrAMMmpErbP7vpgDfZNzvxXXoJUD/bCY7fIqqAxVeXBnY6hsxbUsBPMF
-         cbQbx4a8ELDoCmsAWdWmMiMf7N17CmsdpQVtqsI1ZzJPovVIcpTABLxaq+vaPnip9vcP
-         w3pe4wmpifuyq/+01Ja5iP6Hp+qdZwmuPrJo0IDoF83jHbTnbYIwQ0vOCd9RgG/KGd25
-         D+Zg6RFg+lZxon0dvMZ5akh5VdCSpdcc1r6GrpQN8g7jXwDw512kvosNbGC8HR97oAl2
-         0OaA==
-X-Forwarded-Encrypted: i=1; AJvYcCWgEriw+RMsAQHdP3Uw+/taKE1i/M/w3n3hAtdJrJDcUggRBUgqW9DB8+QzkUSnWN5KpnD7Cfv4FREaEhOFaLz5@vger.kernel.org, AJvYcCXw3JKHSAwDBA9NpHQcDcMhi1oS7eeoVyh1nzhXplfXBKmP2ONG+EMzu9ngCY4M1v0Oc6lJp+uYIy2OGUY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYvTIOFEhjoB+x+9NBvSAkM+udmfg9WppdfU7SgvOEPCwyjPnx
-	aHxhlN+8m+B1qjHZOM5DD8mRWGU74ZqULcSUiv5LSUkf1jzXi1AZ6U/IaxZeEecBXZMNpt1Of0Y
-	NRZSUumq6FuWgdCA0zP4DH39ouLA=
-X-Gm-Gg: ASbGncvWGWe49ES2qS8D+jebTZUo6UrWiMW9qL7NabTGs/gKe4bI/d9Tdc6JbjyXsUU
-	ncZt8dHj03227UV3ndCcvUW6zLuAaPvVc9elBCrlzXDc9DnrDMhz66jF7vsbNWTd0
-X-Google-Smtp-Source: AGHT+IExZsuV9qZ60jM3CNxwtfATwtZMmIJq3uoo8pM6xbqf0trkd4ZMavUYr+ponHmxavZhf+YgUtsJjOzCmMrNzZU=
-X-Received: by 2002:a05:6402:2689:b0:5cf:e894:8de9 with SMTP id
- 4fb4d7f45d1cf-5d4184f7b02mr641635a12.3.1733748699088; Mon, 09 Dec 2024
- 04:51:39 -0800 (PST)
+	s=arc-20240116; t=1733749978; c=relaxed/simple;
+	bh=wtt4YzjAc8RnxByK3Ro2ZvCNJOBCvnHq9hYtTBhLeOU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NbmFc0MlG3CWQjLmgGG6ik91OkSmvfeePXA7yLwr7ELYC0vUu5rhtU6qvxhwhngaqU2YjKXIEtTGKZNJEgWWyMc16u7zRxy4WMSX2uXwGtzN+Ad7irnAF6+Br5nEwhyRMsPc31a7XEELULN2tgc67ySk3RPfDp7xezRVTSwocpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CJl7WhjD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BCCBC4CEE0;
+	Mon,  9 Dec 2024 13:12:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733749977;
+	bh=wtt4YzjAc8RnxByK3Ro2ZvCNJOBCvnHq9hYtTBhLeOU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CJl7WhjDi/BWxqxPsHlk4v4npIJnpP1x4xwpteoef21w+K7CnesovMMWnbdTyIEho
+	 AfJTx8b78PjN/6tvL6nu+NrTUONSTznf841w5fTNAisJAZav0u+zlKrUTtv2nwKUIF
+	 ArSJyIFziJT7mJEg7hUprwIp8X9JTX3OiQ9LM08kbJxLF0jObClNE2gyxDEQyoAAAY
+	 gut6DotkQq5Ee57xa/+LUHv6l3onXN1p1BcOSgNT+z7nUI5G1bSOS/W9vQAAFeu50j
+	 FBK2VWjyekwx4VtnyKXWLTLOEFPKQlw1aOMlqKU8hgZMXt0h+o9s4VvqH8xOjZvakU
+	 ZFxSkDGeRN0qQ==
+Date: Mon, 9 Dec 2024 13:12:53 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Weizhao Ouyang <o451686892@gmail.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kselftest/arm64: abi: fix SVCR detection
+Message-ID: <c05f6ad8-2dc1-4ddb-b9c1-b2cddfe78819@sirena.org.uk>
+References: <20241209105237.10498-1-o451686892@gmail.com>
+ <3279e669-1ee2-4792-9e10-8b40928de6b4@sirena.org.uk>
+ <CAHk0Hov5k37=MtTBLWTj+Dwm4EXE0xGJS1Uc8xgyLtJxusqsww@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241209105237.10498-1-o451686892@gmail.com> <3279e669-1ee2-4792-9e10-8b40928de6b4@sirena.org.uk>
-In-Reply-To: <3279e669-1ee2-4792-9e10-8b40928de6b4@sirena.org.uk>
-From: Weizhao Ouyang <o451686892@gmail.com>
-Date: Mon, 9 Dec 2024 20:51:28 +0800
-Message-ID: <CAHk0Hov5k37=MtTBLWTj+Dwm4EXE0xGJS1Uc8xgyLtJxusqsww@mail.gmail.com>
-Subject: Re: [PATCH] kselftest/arm64: abi: fix SVCR detection
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="vxzs0bX2niMoeW8l"
+Content-Disposition: inline
+In-Reply-To: <CAHk0Hov5k37=MtTBLWTj+Dwm4EXE0xGJS1Uc8xgyLtJxusqsww@mail.gmail.com>
+X-Cookie: Lensmen eat Jedi for breakfast.
+
+
+--vxzs0bX2niMoeW8l
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 9, 2024 at 8:36=E2=80=AFPM Mark Brown <broonie@kernel.org> wrot=
-e:
->
-> On Mon, Dec 09, 2024 at 06:52:37PM +0800, Weizhao Ouyang wrote:
->
-> > When using svcr_in to check ZA and Streaming Mode, we should make sure
-> > that the value in x2 is correct, otherwise it may trigger an Illegal
-> > instruction if FEAT_SVE and !FEAT_SME.
->
-> >       // Set SVCR if we're doing SME
-> > -     cbz     x1, 1f
-> >       adrp    x2, svcr_in
-> >       ldr     x2, [x2, :lo12:svcr_in]
-> > +     cbz     x1, 1f
-> >       msr     S3_3_C4_C2_2, x2
->
-> This is against an older verison of the code so wouldn't apply now.
-> It's not also checking the value of SVCR, this is checking the SME flag
-> passed in via x1.  You can see that the SVCR value is loaded into x2 but
-> the check is against x1.
+On Mon, Dec 09, 2024 at 08:51:28PM +0800, Weizhao Ouyang wrote:
+> On Mon, Dec 9, 2024 at 8:36=E2=80=AFPM Mark Brown <broonie@kernel.org> wr=
+ote:
 
-Hi Mark,
+> > >       // Set SVCR if we're doing SME
+> > > -     cbz     x1, 1f
+> > >       adrp    x2, svcr_in
+> > >       ldr     x2, [x2, :lo12:svcr_in]
+> > > +     cbz     x1, 1f
+> > >       msr     S3_3_C4_C2_2, x2
 
-This patch aims to fix the second check (SVCR_ZA_SHIFT) instead of
-the first one (the x1 SME flag you're referring to):
+> > This is against an older verison of the code so wouldn't apply now.
+> > It's not also checking the value of SVCR, this is checking the SME flag
+> > the check is against x1.
 
-// Load ZA and ZT0 if enabled - uses x12 as scratch due to SME LDR
-tbz x2, #SVCR_ZA_SHIFT, 1f
-mov w12, #0
-ldr x2, =3Dza_in
-2: _ldr_za 12, 2
+> This patch aims to fix the second check (SVCR_ZA_SHIFT) instead of
+> the first one (the x1 SME flag you're referring to):
 
-If SME disabled, x2 will not have an expected value.
+If we don't have SME we should be skipping over all the SME code and
+never even looking at the value of SVCR.  Looking at the current version
+of the code it does that, it branches to check_sve_in if SME is not
+enabled.
 
-BR,
-Weizhao
+--vxzs0bX2niMoeW8l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdW7NQACgkQJNaLcl1U
+h9Aq4Qf/Qg9p9l/NYKL8pF+MdwSLjxV0TtHVO294pRrIAlItPtbqpVocz9DV28ye
++vJfxK0cNGHLqaL1gnR/uBSmfhx37MFt8JYwuBl7+bI7THOI5B5jvM4aYQX7Ohpa
+0RcrJak6NhWjaa7+Ro4GNl0Th9f6DrskXSrIkEWvuruiUfKzahUmed4WFVZM9mZK
++UnQxxZ2U7Cp+vx+ZTPGB0WcKT4W3ojoctJ0rBOmZP7/DDyX3Mz/f3R+JYyFpJNw
+KaYtD6qeNsU2sRtOFDOytZ0534PeN2+rZOPJvfp7/wbW9V4C9Pz29YfbP47bUks7
+2nyIY1pfoOUmkB0MwY7sb1PTnWwBnw==
+=odYv
+-----END PGP SIGNATURE-----
+
+--vxzs0bX2niMoeW8l--
 
