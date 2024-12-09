@@ -1,147 +1,173 @@
-Return-Path: <linux-kselftest+bounces-22966-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22967-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 982029E8A7E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 05:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F06959E8B27
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 06:47:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5926E28126D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 04:45:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEE6528111E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 05:47:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 014521917E9;
-	Mon,  9 Dec 2024 04:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 180692063F1;
+	Mon,  9 Dec 2024 05:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eBAX98FP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LCJYHPuC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A81B11531F0;
-	Mon,  9 Dec 2024 04:45:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F712063D7;
+	Mon,  9 Dec 2024 05:47:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733719544; cv=none; b=aRAY+nPKmyRD+ih/RV6na93Jguv3Xs0tXTL+tCkAbQB7V6+6Gw8Z+yx9WqlkjyDBoKC4t91RWHi7Yt8gmHIwu/N/4Z0VkT4eRBp0R2FFkBNB/+Vf1PuwfokmxZU9wHey3vSyUV8t08/Is0sV4bbSZBj/q7XY/81lkHJLrgbzT84=
+	t=1733723261; cv=none; b=kGJHR/SsFsr6Dd7nWKS/M3lbfLAHEkpL6XRwevBKkFztIGjg8Z2bxdrKZbOMnv0OR51a8tOrudpvi9m45DQ/pKZpzo4mgl0VBBeCKsKhj6A3u6wV8MFU8hYWGlu0qxvsnuKH1EJiNOP4+aLJyS3FylMFHhMTJ7fetnBw+t8le7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733719544; c=relaxed/simple;
-	bh=AzHA/hMClI3MRWClxdhjCeAlhT69zRbOOw0yN3/YVe4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VaziNpbV8PUXUIflO7SqmHoJ15qzDGNVYDXaCqO0FCyGbPyujNm255mcUh6ZxTWHD6Tz63Y6XkG3wzOsuFoKKb657MPj2oD4XTj+uCdpMkCsRJhkpXiuyDOBUhA/5+EJWJ/HWT1W1d3txr//R5YyCWdsEeq1SaTLYCQMD2f+9A0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eBAX98FP; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733719543; x=1765255543;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AzHA/hMClI3MRWClxdhjCeAlhT69zRbOOw0yN3/YVe4=;
-  b=eBAX98FPJtvW6CMJdaORlkWOqWOXX5rshtenD+e6L/+EtpLMRbbRskLx
-   a5VIzcDUtL0VRXqG6/DWUy9T30OMv9lDOsKc8Lpcp1RRRpCrdgj5bDkvO
-   3QE19gGcJjIaLrv6AWJ1L19fMfDVP7DchUNW64P3l06c284Tc+RNseby+
-   DTgrCG7eZZsipAeZc/tZckfV1uHhDX3Hs46+Iz94TIjQ2A3DloZVBGYhG
-   mg2y8mEEbqCpMVH11f52pD49guvpwqLWGM12X6jiWW72alNHCqR34+9Tl
-   aNW4odjsenOfCDTANItFhKEwn4ZBVeJWhWzijCsnsj0OTF0x9XLMDFWx8
-   A==;
-X-CSE-ConnectionGUID: +FiFFFC4QF2iwS7GY6vIFw==
-X-CSE-MsgGUID: nMmGVbjaSjiWajgfSKzhtg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="56484236"
-X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
-   d="scan'208";a="56484236"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 20:45:42 -0800
-X-CSE-ConnectionGUID: oUByNaDNQkSJFp3APZlZ3w==
-X-CSE-MsgGUID: FhysvzurSaKKgZ295Irfgg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
-   d="scan'208";a="100012724"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 08 Dec 2024 20:45:39 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tKVeK-0003ub-21;
-	Mon, 09 Dec 2024 04:45:36 +0000
-Date: Mon, 9 Dec 2024 12:45:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Antonio Quartulli <antonio@openvpn.net>, netdev@vger.kernel.org,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, sd@queasysnail.net,
-	ryazanov.s.a@gmail.com, Andrew Lunn <andrew+netdev@lunn.ch>
-Cc: oe-kbuild-all@lists.linux.dev, Simon Horman <horms@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v13 07/22] ovpn: implement basic TX path (UDP)
-Message-ID: <202412081739.56GeY9xL-lkp@intel.com>
-References: <20241206-b4-ovpn-v13-7-67fb4be666e2@openvpn.net>
+	s=arc-20240116; t=1733723261; c=relaxed/simple;
+	bh=kwjtclmgfmugmEFlH6X5T8hfUwNrUkwmU1L96m3Y5CU=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=o4+T6fY/j8m022pjK8/m8jn59dqvzA6644Gkc95BbKvb7iGT/yBu6Z+xOZvMVQzHt8kJpbClXj+Irjly6Vn4g7D9qXDxJnEe6f3hLn6pcvbiqMwh7KJd7hODppo6uoZADYItL6MTCj95fdmJf+wSPS5inIN9EmPLsrPH9xf3/60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LCJYHPuC; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-215770613dbso25278475ad.2;
+        Sun, 08 Dec 2024 21:47:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733723258; x=1734328058; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B+iVONp1bemOOkjT/n7EkSCEGBeAYMzJrereun6Nd8c=;
+        b=LCJYHPuCpPZfA/2KuD4Sm+k9UIWta8vJOHNS2vk1kSpxajlgma8uwENQhqw2LoOayA
+         gILVCnfHEIZugWTrKGrbgppiXtfGLOlG32yYBWDHW+7HyDTE97vVB3TGfuRvUqA3CGAK
+         sNEuQ7CSAQq88UIrDxPtVdXhrDKPGcP3W24tyuTYwdgs4QExYhT4RqdJVkrd0yDgXMac
+         KLk5wclOX9XptZGsQIoyIV5+pEeGgM0bzVYoIonhK4YDSfNS3w/FlVYI06o6s84wOcSV
+         /ZfhoNcH5w/l8Xm2qfMwDqg9JbgKG6gWKD6Wk2Jr9QbdihpGOEOV72DTdbb4jH5P5kBq
+         NXkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733723258; x=1734328058;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=B+iVONp1bemOOkjT/n7EkSCEGBeAYMzJrereun6Nd8c=;
+        b=GzX5t/0Ruajqm+/2X7HIk3LgNKy9qDaO6aE4YIDPORllc2cnlO2vylIxRfGJW6j2TV
+         Pr6To2ayKPJ5I98FjRp/XkluaIR/q6ByBWuSwzkeE2ICQdrf4Vp3sjXvTQQYWorKFmh+
+         MtV3Rju+yIxrnlKN3VytNWDDTgtpF6b/YmIDrNB82BNHCCOmZSUzNkJsOq3St1avx2Vd
+         wBLj13fbDHI3WCO9TkkrjkD2K7rsTqFIHmyr+zkg6RaBhuG6c3r66LalTI2xAh0ySu23
+         fdZPedndMD2w3WBQ9FQur6yZVZd89Fpovyo9f5ugZV70lQkAmpqvMG+c6017j/keBga2
+         jq0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUv6iYoWW6bfbQAIq2OkXUXCVJDeWjUnasWTc7yz5P6tkioAFSezXbaME6q0LAFZzfVasmUOeRiPHxcaC4v1c8=@vger.kernel.org, AJvYcCVgpVsuE+ul0fEKJgq4LAqB1BogMtB5C2Azvim+cvDo8cD5loeocZcmL2iuPBokJJwtNvkjYR12@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEw1IpmHPmvUjtY7gTPr4teekxY3fVAMQDx/ShTvuVGLwl8IDU
+	5szdeRXircw/wbao52PPG1/bdWIndWGPB7yGTDY0WJcnk1a8gGTz
+X-Gm-Gg: ASbGncvM/5n+oOG+0Xlt/JVd8eszVzsmVRcVZuJRB3MUxrjCEXJyPiCjx7WjIr/V0tK
+	9nZDAeDNvwh0oyCTV7/DABZYym6OyxaNlhd5QBtvnleuOHuO0njTuwkLfJ/6jvdwP3cXjQBWcG6
+	mD18lrGyhnDa1O/L4oIDGvmNa1EEFJPPumx/skKR/Ky3TJKrj/FLIO6iws7GVfatpwek2Av8muk
+	ZEG9HmJu3CkcwHKOtAmysS+xF75egVebUjQD9AJz6LsVvJ+Ra8=
+X-Google-Smtp-Source: AGHT+IH3TB1M3EYXQFyQ0vOpAYxhOjsfrL4CUMwiHNTW6xuCQCu0g5lKcbijP8BXnDeb4TrN4r+rYQ==
+X-Received: by 2002:a17:902:ce83:b0:216:50c6:6b42 with SMTP id d9443c01a7336-21650c670ffmr40365835ad.56.1733723258463;
+        Sun, 08 Dec 2024 21:47:38 -0800 (PST)
+Received: from localhost ([98.97.37.114])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2162b13d486sm32392125ad.191.2024.12.08.21.47.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Dec 2024 21:47:37 -0800 (PST)
+Date: Sun, 08 Dec 2024 21:47:36 -0800
+From: John Fastabend <john.fastabend@gmail.com>
+To: Michal Luczaj <mhal@rbox.co>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Mykola Lysenko <mykolal@fb.com>, 
+ Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, 
+ Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>
+Cc: bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ netdev@vger.kernel.org, 
+ Michal Luczaj <mhal@rbox.co>
+Message-ID: <675684786d66c_1abf208ea@john.notmuch>
+In-Reply-To: <20241202-sockmap-replace-v1-1-1e88579e7bd5@rbox.co>
+References: <20241202-sockmap-replace-v1-0-1e88579e7bd5@rbox.co>
+ <20241202-sockmap-replace-v1-1-1e88579e7bd5@rbox.co>
+Subject: RE: [PATCH bpf 1/3] bpf, sockmap: Fix update element with same
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241206-b4-ovpn-v13-7-67fb4be666e2@openvpn.net>
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Hi Antonio,
+Michal Luczaj wrote:
+> Consider a sockmap entry being updated with the same socket:
+> 
+> 	osk = stab->sks[idx];
+> 	sock_map_add_link(psock, link, map, &stab->sks[idx]);
+> 	stab->sks[idx] = sk;
+> 	if (osk)
+> 		sock_map_unref(osk, &stab->sks[idx]);
+> 
+> Due to sock_map_unref(), which invokes sock_map_del_link(), all the psock's
+> links for stab->sks[idx] are torn:
+> 
+> 	list_for_each_entry_safe(link, tmp, &psock->link, list) {
+> 		if (link->link_raw == link_raw) {
+> 			...
+> 			list_del(&link->list);
+> 			sk_psock_free_link(link);
+> 		}
+> 	}
+> 
+> And that includes the new link sock_map_add_link() added just before the
+> unref.
+> 
+> This results in a sockmap holding a socket, but without the respective
+> link. This in turn means that close(sock) won't trigger the cleanup, i.e. a
+> closed socket will not be automatically removed from the sockmap.
+> 
+> Stop tearing the links when a matching link_raw is found.
+> 
+> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+> ---
 
-kernel test robot noticed the following build errors:
+Thanks. LGTM.
 
-[auto build test ERROR on 152d00a913969514967ad3f962b3b1c8983eb2d7]
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Antonio-Quartulli/net-introduce-OpenVPN-Data-Channel-Offload-ovpn/20241207-054712
-base:   152d00a913969514967ad3f962b3b1c8983eb2d7
-patch link:    https://lore.kernel.org/r/20241206-b4-ovpn-v13-7-67fb4be666e2%40openvpn.net
-patch subject: [PATCH net-next v13 07/22] ovpn: implement basic TX path (UDP)
-config: nios2-randconfig-r131-20241208 (https://download.01.org/0day-ci/archive/20241208/202412081739.56GeY9xL-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 14.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20241208/202412081739.56GeY9xL-lkp@intel.com/reproduce)
+>  net/core/sock_map.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> index 78347d7d25ef31525f8ec0a755a18e5793ad92c0..20b348b1964a10a1b0bfbe1a90a4a4cd99715b81 100644
+> --- a/net/core/sock_map.c
+> +++ b/net/core/sock_map.c
+> @@ -159,6 +159,7 @@ static void sock_map_del_link(struct sock *sk,
+>  				verdict_stop = true;
+>  			list_del(&link->list);
+>  			sk_psock_free_link(link);
+> +			break;
+>  		}
+>  	}
+>  	spin_unlock_bh(&psock->link_lock);
+> 
+> -- 
+> 2.46.2
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412081739.56GeY9xL-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/net/ovpn/io.c:18:
-   drivers/net/ovpn/skb.h: In function 'ovpn_ip_check_protocol':
->> drivers/net/ovpn/skb.h:46:56: error: invalid application of 'sizeof' to incomplete type 'struct ipv6hdr'
-      46 |                 if (!pskb_network_may_pull(skb, sizeof(struct ipv6hdr)))
-         |                                                        ^~~~~~
-
-
-vim +46 drivers/net/ovpn/skb.h
-
-    29	
-    30	/* Return IP protocol version from skb header.
-    31	 * Return 0 if protocol is not IPv4/IPv6 or cannot be read.
-    32	 */
-    33	static inline __be16 ovpn_ip_check_protocol(struct sk_buff *skb)
-    34	{
-    35		__be16 proto = 0;
-    36	
-    37		/* skb could be non-linear,
-    38		 * make sure IP header is in non-fragmented part
-    39		 */
-    40		if (!pskb_network_may_pull(skb, sizeof(struct iphdr)))
-    41			return 0;
-    42	
-    43		if (ip_hdr(skb)->version == 4) {
-    44			proto = htons(ETH_P_IP);
-    45		} else if (ip_hdr(skb)->version == 6) {
-  > 46			if (!pskb_network_may_pull(skb, sizeof(struct ipv6hdr)))
-    47				return 0;
-    48			proto = htons(ETH_P_IPV6);
-    49		}
-    50	
-    51		return proto;
-    52	}
-    53	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
