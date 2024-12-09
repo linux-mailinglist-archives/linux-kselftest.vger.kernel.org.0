@@ -1,34 +1,34 @@
-Return-Path: <linux-kselftest+bounces-23086-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23085-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B4E19E9F23
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 20:08:24 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE85C9E9F13
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 20:07:41 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49660188B21E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 19:07:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C253F2851AA
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 19:07:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78F841A9B3B;
-	Mon,  9 Dec 2024 19:03:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EC741A9B25;
+	Mon,  9 Dec 2024 19:03:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="NFey2SuS"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="iaR8KX+p"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB9D91A9B45;
-	Mon,  9 Dec 2024 19:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9617A1A707A;
+	Mon,  9 Dec 2024 19:03:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733771000; cv=none; b=OgfKWBVDIMsYOMKsl9Lhlgxb0AYfZQdEOGmGxFXZX8y5fFkbzkEMPLO0VOJ+wpo1omg89ukUXC3iXz4yiNLqoDdZIagGqKzmKnuTGNrIJvUX2M/+DTIzhNm1+Oa+msLkisKzqVmt7s6JL+bT8CSYVzb5STZrN+3JPKHkrRXGi6Y=
+	t=1733770995; cv=none; b=Gnfs/Ehi6K+DItMkPWFGIPXJNfFiGk1uzDfgA7BLMhcZmot0WhDrkAeinKGcZUrbD7ge5aGNhUn4cvTRolJjiAw/eKAW/tZJRFlqJAOSynibsLMT1cS3J4AxSLCm6vFryimacSry7tOZuShz6/p+0MDceDGwQueyMHTfSe4QHUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733771000; c=relaxed/simple;
-	bh=RjMIMeG6KnVk8HqQ6wwOgtfvSlf5nhwkGOnftj/ll5o=;
+	s=arc-20240116; t=1733770995; c=relaxed/simple;
+	bh=CSWtZmYdEPGFhBHR00Jti0zhe4Sl3AMpzKwLnC89Cbs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KCFW/YCDrT7U/z7NClvMFB73WPK/aw+VHzKPA3qO3XOhtO8LvYdJjbrLZ5iIIcQebMnhH1yN+8cQ8sQMCddWB2l4peWHYSUnW/qKPmGW9+FDGN6I2jU5Dj/bSD5SggstUxD/NJzrPJLD+V0mfAbWbUV8+91nQ0byp1yXg0719MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=NFey2SuS; arc=none smtp.client-ip=4.36.192.163
+	 MIME-Version; b=aYHQMo4b7Ppt4KDxsN3QkG5NizjZvFr+EF9NxxHe3zTSHfdTlJ3zc2ibOdjPTXvQmMiS/nMaTRCBENpb+grdwihA5NaJbQ6iRWPpt+CEBpAf+uTgjERMwP0edXdRCRO4c1hhMuobPNO/ygDG6bkkgBjI+8iZ/ntuUqNbcmV9e2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=iaR8KX+p; arc=none smtp.client-ip=4.36.192.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -37,18 +37,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
 	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=InRezP3YW9qasHnPVT+1MKLKEEmKziLa94eVnmfKD/s=; b=NFey2SuSLSxS6Tiypbv0yntzkk
-	Uzb5HAIgOkBxUMDiCpn3mOKBXS3sS60zixtEs30Wp+psJFjcupchrH3pa6MeiZY/QqyOnKt/LpcNt
-	tnIEZmjiHpUCt0wwyKQdtov10+qsC8l7x1yz79DAZP1EmoAzF3CajHns82BL4qyVxphx1SOyAFevR
-	kNVgLIiTWk4GIMlpp4iSDozZ9Zf8OeFaYOBXHmJ3TI3tUYCgEpOrIqvZufN6Or5AOMdz7h4tKdKuh
-	prtq04W4EaQk5jOwYYFR83pqP6NG5RbP1weuEj+wGKZ5gLodQqkLu7GzKLod5Hml//gUaK/rowJj3
-	CvO2ncyQ==;
+	bh=SN9QY4qrQDEzA/GyZ+ov1ABljEcCDLyc0yuR+RDikLY=; b=iaR8KX+pTAiTcpKsay91WO9/mM
+	rswAT6SQMlJadz5QUpevtvu6zePqFj+YHOp2kr1AEiRJxwNr1n1vaMTDKwN37SaRXHISMjga+8har
+	+XBsj1h+LXYN+GepNAY69LvNJ7mn2Eik659pP0mshLS7OpuAipK068yq7xsFSNw550B9jBYpFdWLh
+	nE15uf03XC/iYmOIzkwc4L+WVmC3/ZQlAYOPquuQ6s5HPG/ufX0KcoLHA0MeYOF8+LIVWLu4PoZxH
+	n/bNsmdCDNlBMh9tdLKkR0E5pfBC3xCP70pCTkIuH4fBQ1PcmoBgwFTnZ26PJd2/1Q4pspCqeiAYy
+	9NTq3nMw==;
 Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.mn.codeweavers.com)
 	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <zfigura@codeweavers.com>)
-	id 1tKiyY-001Gd5-2B;
-	Mon, 09 Dec 2024 12:59:22 -0600
+	id 1tKiyY-001Gd5-2f;
+	Mon, 09 Dec 2024 12:59:23 -0600
 From: Elizabeth Figura <zfigura@codeweavers.com>
 To: Arnd Bergmann <arnd@arndb.de>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -70,9 +70,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Waiman Long <longman@redhat.com>,
 	Boqun Feng <boqun.feng@gmail.com>,
 	Elizabeth Figura <zfigura@codeweavers.com>
-Subject: [PATCH v6 05/28] ntsync: Introduce NTSYNC_IOC_MUTEX_KILL.
-Date: Mon,  9 Dec 2024 12:58:41 -0600
-Message-ID: <20241209185904.507350-6-zfigura@codeweavers.com>
+Subject: [PATCH v6 06/28] ntsync: Introduce NTSYNC_IOC_CREATE_EVENT.
+Date: Mon,  9 Dec 2024 12:58:42 -0600
+Message-ID: <20241209185904.507350-7-zfigura@codeweavers.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241209185904.507350-1-zfigura@codeweavers.com>
 References: <20241209185904.507350-1-zfigura@codeweavers.com>
@@ -84,161 +84,171 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This does not correspond to any NT syscall. Rather, when a thread dies, it
-should be called by the NT emulator for each mutex, with the TID of the dying
-thread.
+This correspond to the NT syscall NtCreateEvent().
 
-NT mutexes are robust (in the pthread sense). When an NT thread dies, any
-mutexes it owned are immediately released. Acquisition of those mutexes by other
-threads will return a special value indicating that the mutex was abandoned,
-like EOWNERDEAD returned from pthread_mutex_lock(), and EOWNERDEAD is indeed
-used here for that purpose.
+An NT event holds a single bit of state denoting whether it is signaled or
+unsignaled.
+
+There are two types of events: manual-reset and automatic-reset. When an
+automatic-reset event is acquired via a wait function, its state is reset to
+unsignaled. Manual-reset events are not affected by wait functions.
+
+Whether the event is manual-reset, and its initial state, are specified at
+creation time.
 
 Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
 ---
- drivers/misc/ntsync.c       | 61 +++++++++++++++++++++++++++++++++++--
- include/uapi/linux/ntsync.h |  1 +
- 2 files changed, 60 insertions(+), 2 deletions(-)
+ drivers/misc/ntsync.c       | 62 +++++++++++++++++++++++++++++++++++++
+ include/uapi/linux/ntsync.h |  7 +++++
+ 2 files changed, 69 insertions(+)
 
 diff --git a/drivers/misc/ntsync.c b/drivers/misc/ntsync.c
-index 6ed278c17be9..0ed864d291a6 100644
+index 0ed864d291a6..ef8949ee2d4b 100644
 --- a/drivers/misc/ntsync.c
 +++ b/drivers/misc/ntsync.c
-@@ -59,6 +59,7 @@ struct ntsync_obj {
- 		struct {
- 			__u32 count;
+@@ -26,6 +26,7 @@
+ enum ntsync_type {
+ 	NTSYNC_TYPE_SEM,
+ 	NTSYNC_TYPE_MUTEX,
++	NTSYNC_TYPE_EVENT,
+ };
+ 
+ /*
+@@ -61,6 +62,10 @@ struct ntsync_obj {
  			pid_t owner;
-+			bool ownerdead;
+ 			bool ownerdead;
  		} mutex;
++		struct {
++			bool manual;
++			bool signaled;
++		} event;
  	} u;
  
-@@ -107,6 +108,7 @@ struct ntsync_q {
- 	atomic_t signaled;
+ 	/*
+@@ -233,6 +238,8 @@ static bool is_signaled(struct ntsync_obj *obj, __u32 owner)
+ 		if (obj->u.mutex.owner && obj->u.mutex.owner != owner)
+ 			return false;
+ 		return obj->u.mutex.count < UINT_MAX;
++	case NTSYNC_TYPE_EVENT:
++		return obj->u.event.signaled;
+ 	}
  
- 	bool all;
-+	bool ownerdead;
- 	__u32 count;
- 	struct ntsync_q_entry entries[];
- };
-@@ -275,6 +277,9 @@ static void try_wake_all(struct ntsync_device *dev, struct ntsync_q *q,
- 				obj->u.sem.count--;
- 				break;
- 			case NTSYNC_TYPE_MUTEX:
-+				if (obj->u.mutex.ownerdead)
-+					q->ownerdead = true;
-+				obj->u.mutex.ownerdead = false;
+ 	WARN(1, "bad object type %#x\n", obj->type);
+@@ -283,6 +290,10 @@ static void try_wake_all(struct ntsync_device *dev, struct ntsync_q *q,
  				obj->u.mutex.count++;
  				obj->u.mutex.owner = q->owner;
  				break;
-@@ -338,6 +343,9 @@ static void try_wake_any_mutex(struct ntsync_obj *mutex)
- 			continue;
- 
- 		if (atomic_try_cmpxchg(&q->signaled, &signaled, entry->index)) {
-+			if (mutex->u.mutex.ownerdead)
-+				q->ownerdead = true;
-+			mutex->u.mutex.ownerdead = false;
- 			mutex->u.mutex.count++;
- 			mutex->u.mutex.owner = q->owner;
- 			wake_up_process(q->task);
-@@ -447,6 +455,52 @@ static int ntsync_mutex_unlock(struct ntsync_obj *mutex, void __user *argp)
- 	return ret;
++			case NTSYNC_TYPE_EVENT:
++				if (!obj->u.event.manual)
++					obj->u.event.signaled = false;
++				break;
+ 			}
+ 		}
+ 		wake_up_process(q->task);
+@@ -353,6 +364,28 @@ static void try_wake_any_mutex(struct ntsync_obj *mutex)
+ 	}
  }
  
-+/*
-+ * Actually change the mutex state to mark its owner as dead,
-+ * returning -EPERM if not the owner.
-+ */
-+static int kill_mutex_state(struct ntsync_obj *mutex, __u32 owner)
++static void try_wake_any_event(struct ntsync_obj *event)
 +{
-+	ntsync_assert_held(mutex);
++	struct ntsync_q_entry *entry;
 +
-+	if (mutex->u.mutex.owner != owner)
-+		return -EPERM;
++	ntsync_assert_held(event);
++	lockdep_assert(event->type == NTSYNC_TYPE_EVENT);
 +
-+	mutex->u.mutex.ownerdead = true;
-+	mutex->u.mutex.owner = 0;
-+	mutex->u.mutex.count = 0;
-+	return 0;
++	list_for_each_entry(entry, &event->any_waiters, node) {
++		struct ntsync_q *q = entry->q;
++		int signaled = -1;
++
++		if (!event->u.event.signaled)
++			break;
++
++		if (atomic_try_cmpxchg(&q->signaled, &signaled, entry->index)) {
++			if (!event->u.event.manual)
++				event->u.event.signaled = false;
++			wake_up_process(q->task);
++		}
++	}
 +}
 +
-+static int ntsync_mutex_kill(struct ntsync_obj *mutex, void __user *argp)
+ /*
+  * Actually change the semaphore state, returning -EOVERFLOW if it is made
+  * invalid.
+@@ -628,6 +661,30 @@ static int ntsync_create_mutex(struct ntsync_device *dev, void __user *argp)
+ 	return put_user(fd, &user_args->mutex);
+ }
+ 
++static int ntsync_create_event(struct ntsync_device *dev, void __user *argp)
 +{
-+	struct ntsync_device *dev = mutex->dev;
-+	__u32 owner;
-+	bool all;
-+	int ret;
++	struct ntsync_event_args __user *user_args = argp;
++	struct ntsync_event_args args;
++	struct ntsync_obj *event;
++	int fd;
 +
-+	if (get_user(owner, (__u32 __user *)argp))
++	if (copy_from_user(&args, argp, sizeof(args)))
 +		return -EFAULT;
-+	if (!owner)
-+		return -EINVAL;
 +
-+	if (mutex->type != NTSYNC_TYPE_MUTEX)
-+		return -EINVAL;
-+
-+	all = ntsync_lock_obj(dev, mutex);
-+
-+	ret = kill_mutex_state(mutex, owner);
-+	if (!ret) {
-+		if (all)
-+			try_wake_all_obj(dev, mutex);
-+		try_wake_any_mutex(mutex);
++	event = ntsync_alloc_obj(dev, NTSYNC_TYPE_EVENT);
++	if (!event)
++		return -ENOMEM;
++	event->u.event.manual = args.manual;
++	event->u.event.signaled = args.signaled;
++	fd = ntsync_obj_get_fd(event);
++	if (fd < 0) {
++		kfree(event);
++		return fd;
 +	}
 +
-+	ntsync_unlock_obj(dev, mutex, all);
-+
-+	return ret;
++	return put_user(fd, &user_args->event);
 +}
 +
- static int ntsync_obj_release(struct inode *inode, struct file *file)
+ static struct ntsync_obj *get_obj(struct ntsync_device *dev, int fd)
  {
- 	struct ntsync_obj *obj = file->private_data;
-@@ -468,6 +522,8 @@ static long ntsync_obj_ioctl(struct file *file, unsigned int cmd,
- 		return ntsync_sem_post(obj, argp);
- 	case NTSYNC_IOC_MUTEX_UNLOCK:
- 		return ntsync_mutex_unlock(obj, argp);
-+	case NTSYNC_IOC_MUTEX_KILL:
-+		return ntsync_mutex_kill(obj, argp);
- 	default:
- 		return -ENOIOCTLCMD;
+ 	struct file *file = fget(fd);
+@@ -758,6 +815,9 @@ static void try_wake_any_obj(struct ntsync_obj *obj)
+ 	case NTSYNC_TYPE_MUTEX:
+ 		try_wake_any_mutex(obj);
+ 		break;
++	case NTSYNC_TYPE_EVENT:
++		try_wake_any_event(obj);
++		break;
  	}
-@@ -658,6 +714,7 @@ static int setup_wait(struct ntsync_device *dev,
- 	q->owner = args->owner;
- 	atomic_set(&q->signaled, -1);
- 	q->all = all;
-+	q->ownerdead = false;
- 	q->count = count;
+ }
  
- 	for (i = 0; i < count; i++) {
-@@ -766,7 +823,7 @@ static int ntsync_wait_any(struct ntsync_device *dev, void __user *argp)
- 		struct ntsync_wait_args __user *user_args = argp;
+@@ -947,6 +1007,8 @@ static long ntsync_char_ioctl(struct file *file, unsigned int cmd,
+ 	void __user *argp = (void __user *)parm;
  
- 		/* even if we caught a signal, we need to communicate success */
--		ret = 0;
-+		ret = q->ownerdead ? -EOWNERDEAD : 0;
- 
- 		if (put_user(signaled, &user_args->index))
- 			ret = -EFAULT;
-@@ -847,7 +904,7 @@ static int ntsync_wait_all(struct ntsync_device *dev, void __user *argp)
- 		struct ntsync_wait_args __user *user_args = argp;
- 
- 		/* even if we caught a signal, we need to communicate success */
--		ret = 0;
-+		ret = q->ownerdead ? -EOWNERDEAD : 0;
- 
- 		if (put_user(signaled, &user_args->index))
- 			ret = -EFAULT;
+ 	switch (cmd) {
++	case NTSYNC_IOC_CREATE_EVENT:
++		return ntsync_create_event(dev, argp);
+ 	case NTSYNC_IOC_CREATE_MUTEX:
+ 		return ntsync_create_mutex(dev, argp);
+ 	case NTSYNC_IOC_CREATE_SEM:
 diff --git a/include/uapi/linux/ntsync.h b/include/uapi/linux/ntsync.h
-index a633db34f284..d7996180c1d2 100644
+index d7996180c1d2..4c0c4271c7de 100644
 --- a/include/uapi/linux/ntsync.h
 +++ b/include/uapi/linux/ntsync.h
-@@ -43,5 +43,6 @@ struct ntsync_wait_args {
+@@ -22,6 +22,12 @@ struct ntsync_mutex_args {
+ 	__u32 count;
+ };
+ 
++struct ntsync_event_args {
++	__u32 event;
++	__u32 manual;
++	__u32 signaled;
++};
++
+ #define NTSYNC_WAIT_REALTIME	0x1
+ 
+ struct ntsync_wait_args {
+@@ -40,6 +46,7 @@ struct ntsync_wait_args {
+ #define NTSYNC_IOC_WAIT_ANY		_IOWR('N', 0x82, struct ntsync_wait_args)
+ #define NTSYNC_IOC_WAIT_ALL		_IOWR('N', 0x83, struct ntsync_wait_args)
+ #define NTSYNC_IOC_CREATE_MUTEX		_IOWR('N', 0x84, struct ntsync_sem_args)
++#define NTSYNC_IOC_CREATE_EVENT		_IOWR('N', 0x87, struct ntsync_event_args)
  
  #define NTSYNC_IOC_SEM_POST		_IOWR('N', 0x81, __u32)
  #define NTSYNC_IOC_MUTEX_UNLOCK		_IOWR('N', 0x85, struct ntsync_mutex_args)
-+#define NTSYNC_IOC_MUTEX_KILL		_IOW ('N', 0x86, __u32)
- 
- #endif
 -- 
 2.45.2
 
