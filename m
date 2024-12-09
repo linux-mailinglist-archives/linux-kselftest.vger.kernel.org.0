@@ -1,162 +1,121 @@
-Return-Path: <linux-kselftest+bounces-23015-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23016-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E2299E90D2
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 11:48:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 862B99E90FF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 11:52:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBC00163949
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 10:47:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EA671882123
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 10:52:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83E6B218E9D;
-	Mon,  9 Dec 2024 10:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC339216E37;
+	Mon,  9 Dec 2024 10:52:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L74J8FAq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uo4XxFok"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580C721767E;
-	Mon,  9 Dec 2024 10:46:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418A7216E02;
+	Mon,  9 Dec 2024 10:52:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733741220; cv=none; b=iSfbcRHpxYLXpQStv8ukLK8NcTEQHY0SeySZosdNafi+GeFNiLeAUhHkwFDOhJkGlXmjCVpc2/RI7w7TLcBDRPkQ3LlpjpJx61PrLKUU++brJRCgqnu0v685LU0v/5xW9QqaP7tLflkYnSV2KFHe4o99cXfeFdp90ldoi2E4F48=
+	t=1733741567; cv=none; b=AR/YjYNPwjNzN7ErNwP54iADvNjT5F6GMxrCIU9BKv+qfW+2xcZgLpmhiayQPpWiN7T0wfp5ORPcnsHOUZiFXZ/9pOBFOsMBgtil7EFMTyqfe0kL9wrZBSxOMvSvc/wbpDp/gs2OueTWrYgmayjd9q7FrdXWCe4awtlYKge/Afk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733741220; c=relaxed/simple;
-	bh=jJ2rl0h5Nz3ydUAfxpIu5guNae//l2ly1UKUjByVYII=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gP3Sb7rOe4Jv3pU9fVCDtJscBXEsCoGeI+NI9R99V1GOs6lGyOkNOa7s8AHpYrxb2ocepi2LmgTtT45cR2g1KOYZDrOFFLA7c1NBEX66RUNsdfk0TVSlNpmPbysVNAHJdOlRXp+Qrzz5M/3w9Y1Ddx1eoxAVO9BzeAZX8rheQBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L74J8FAq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7287BC4CEE1;
-	Mon,  9 Dec 2024 10:46:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733741219;
-	bh=jJ2rl0h5Nz3ydUAfxpIu5guNae//l2ly1UKUjByVYII=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=L74J8FAqyhp3Aq88Nhn3MGfaJTvAn5sXNIKT7rMQuTz2noyjpimFrgee1jqZ93HcG
-	 t5Jtps85W4VkMMxojQr+Xrf6H8M0n0L0Lq5fwdq1XzkfOm3Oz+PRPZjjnB99AsiZjc
-	 BPED5M3op4r2XYxwvxp/J18ftrjoFRuqxtMLk1dyJBQHJ+j0qra7zqH4OdaJXPHnZu
-	 SiDufJ/5KU3a8I1tUSGf/wjd0rcN97RBSaG7mXVM7M2s//d4eYFx54YIq+Wm1euIAL
-	 CFG5j8tyPQERMvsB1QPudPrEfFKqt1E85Y7nDwnS8qOAPirAUFkGI7v1HADAxCtXlk
-	 o1gCdSfo9WZsw==
-Message-ID: <813d75bf-1d7f-472b-967f-27ab8f9d4759@kernel.org>
-Date: Mon, 9 Dec 2024 11:46:44 +0100
+	s=arc-20240116; t=1733741567; c=relaxed/simple;
+	bh=/eKFjQIO9amwjhOrWEdzQ+seL2Clk9SAni/pbzaDf/M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NrnPYDTC3VL116/dDcJ6SB4zqTe81k8dkcZI7YHiYCkPbbFIKEv7tpGsYSMVSjIM8Mv5cKI1JtQI1hn6h6FuBRB3YcQ2mJuPjKuGD1AcWM3cqyDJc6SFGf7LtdhETWj3Q5zMc6aPMM9Pp0TTTtZscQ1cAcPBn2VF8ADuQ1XPbN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uo4XxFok; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-21661be2c2dso2768925ad.1;
+        Mon, 09 Dec 2024 02:52:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733741565; x=1734346365; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=38xYmCBd/yHxA60HebMv1KUqXIVUks1klr7bSBDZuX8=;
+        b=Uo4XxFokHn3Jb1pbUcMlpIQdJs8qxqeFOMiMErM/SUkgZA+pLBuNimFLfp8SAhGCbf
+         9PNde6CKj515XpBIPqfkV1fhocEdhK4SvICLdCJs9rgTf+VuQhY+DgKUafyA8NNn9MXA
+         07748Aaa3vKdW898WPUlNi6A2mQrWk6T+Srkn+RYWdBRwQQIwvG9CCpMPHAsyCCbycp1
+         Bm55lzR4kveq6Ezyodt0J+MQ7Qq/mqpVX24ZsAeNTpXAyscLHVGhO613IrHXGL/hrr3S
+         pnVBDssjzhV60UEyhjupgY5Y7eWlleSxwbBm9thTcNpSWsgsh4SDNUBztcjxtLyKzSxU
+         Zlzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733741565; x=1734346365;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=38xYmCBd/yHxA60HebMv1KUqXIVUks1klr7bSBDZuX8=;
+        b=dobkBOir6OMXes8FTfgmTk6PFcMdVw5LleepZ2G8l1qDCUkmL/TDfph+WjS9gRI94+
+         0TjDlFA+VeUbgSVhpw4ohWomQMNqdAQh7/XsARYmDFyQPYuEribON7UfdZpQ0T5+l4iN
+         RRJbpdCYXmbwHv4khhDCCC1kK82oRvCT0IKPfyLwSMDu6htPFsmh+N8D//4aCESDipCr
+         lx4v1KijitCrh1jY4fKRw9Isrn6iop1jtVbO8vxsU8Z8TE9deqK2+iyFm3mBrsDAJXET
+         tvBeqRSALoqlvhXxQlZ5AZqJF7iaRqBG9VkMbi0NxcuPGrn2zSOwuAMz05lUw4RMC8Bs
+         1oRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVET73nDN2k3XV9Z67TkZdsFAuQ4LgjwIQCPaw3Gx4LlbwCZSxy34i5fEAPc4UbsXe48MtKReufS7p+IbM1dUXM@vger.kernel.org, AJvYcCX3CCZoiE2XohHeYjJPi1aAKdeQksEBqKcZRNGu7prWNcx/Iy8JIA9h6okV3WYu47sRRS28wAG6x7sbVEQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yymd2aedjB4LNjAh9lsXEQyRFsRkXBt5CNDGGPldHiX439mqQXU
+	QuqpSgG2UNd/7uu0Cqk+ea9Xckqy+elYENko3XAX9M1/XUChO0ox
+X-Gm-Gg: ASbGnctuN4HgABxXNtGQ/11JdlQJ56fP2C0DHKnDQZZSR0atm036jVjbvkEiIsSDVUG
+	JEyDMg0wTLkAZsE6Ul2TlIDrco0MtkAJ/LCB2adDvIcTy/xYgoIAJlaePz4S48HlRyUuPOG6+E4
+	8XSDawqHnWB3udLOuMKKkiIddjAPCT2QErFnPokVQ33Ubl/vz6KZ0UD6dmJGDZGawxWNvxxJ5V8
+	sq5Bj+u0WeC4rDmZda1vRn1G+gMGqoYCwvagGm8QWHLZNc02HaquAy6
+X-Google-Smtp-Source: AGHT+IEreUug5wTKCz/c7KcglP+tWMz1wYrXf0knBCV2E6EAZCfQHAEP6KSMVBU1yeGylgbEmynL9g==
+X-Received: by 2002:a17:903:1ca:b0:215:6489:cfb8 with SMTP id d9443c01a7336-21669fd0edamr442795ad.10.1733741565013;
+        Mon, 09 Dec 2024 02:52:45 -0800 (PST)
+Received: from ownia.localdomain ([45.8.186.102])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215f8ef9f5bsm69928815ad.132.2024.12.09.02.52.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Dec 2024 02:52:44 -0800 (PST)
+From: Weizhao Ouyang <o451686892@gmail.com>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Weizhao Ouyang <o451686892@gmail.com>,
+	Mark Brown <broonie@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] kselftest/arm64: abi: fix SVCR detection
+Date: Mon,  9 Dec 2024 18:52:37 +0800
+Message-ID: <20241209105237.10498-1-o451686892@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next v12 11/22] ovpn: implement TCP transport
-Content-Language: en-GB
-To: Antonio Quartulli <antonio@openvpn.net>, Paolo Abeni <pabeni@redhat.com>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
- sd@queasysnail.net, ryazanov.s.a@gmail.com, Andrew Lunn <andrew@lunn.ch>
-Cc: Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20241202-b4-ovpn-v12-0-239ff733bf97@openvpn.net>
- <20241202-b4-ovpn-v12-11-239ff733bf97@openvpn.net>
- <784fddc4-336c-4674-8277-c7cebea6b94f@redhat.com>
- <2a1b614c-c52d-44c7-8cb8-c68a8864508d@openvpn.net>
- <8714deae-c1f7-42ff-9e76-fabd9ca5188b@openvpn.net>
- <17e7d4c6-4912-4d5e-8723-45a06a1ad529@openvpn.net>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <17e7d4c6-4912-4d5e-8723-45a06a1ad529@openvpn.net>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi Antonio,
+When using svcr_in to check ZA and Streaming Mode, we should make sure
+that the value in x2 is correct, otherwise it may trigger an Illegal
+instruction if FEAT_SVE and !FEAT_SME.
 
-Thank you for working on this, and sharing your work here!
+Fixes: 43e3f85523e4 ("kselftest/arm64: Add SME support to syscall ABI test")
+Signed-off-by: Weizhao Ouyang <o451686892@gmail.com>
+---
+ tools/testing/selftests/arm64/abi/syscall-abi-asm.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 05/12/2024 00:09, Antonio Quartulli wrote:
-> On 04/12/2024 23:52, Antonio Quartulli wrote:
->> Paolo,
->>
->> On 04/12/2024 12:15, Antonio Quartulli wrote:
->> [...]
->>>>> +        mutex_lock(&tcp6_prot_mutex);
->>>>> +        if (!ovpn_tcp6_prot.recvmsg)
->>>>> +            ovpn_tcp_build_protos(&ovpn_tcp6_prot, &ovpn_tcp6_ops,
->>>>> +                          sock->sk->sk_prot,
->>>>> +                          sock->sk->sk_socket->ops);
->>>>> +        mutex_unlock(&tcp6_prot_mutex);
->>>>
->>>> This looks like an hack to avoid a build dependency on IPV6, I think
->>>> the
->>>> explicit
->>>
->>> I happily copied this approach from espintcp.c:espintcp_init_sk() :-D
->>>
->>>>
->>>> #if IS_ENABLED(CONFIG_IPV6)
->>>>
->>>> at init time should be preferable
->>
->> To get this done at init time I need inet6_stream_ops to be
->> accessible, but it seems there is no EXPORT_SYMBOL() for this object.
->>
->> However, I see that mptcp/protocol.c is happily accessing it.
->> Any clue how this is possible?
-> 
-> I answer myself: mptcp is not tristate and it can only be compiled as
-> built-in.
-
-Indeed, that's why.
-
-Talking about MPTCP, by chance, do you plan to support it later on? :)
-
-Cheers,
-Matt
+diff --git a/tools/testing/selftests/arm64/abi/syscall-abi-asm.S b/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
+index df3230fdac39..98cde4f37abf 100644
+--- a/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
++++ b/tools/testing/selftests/arm64/abi/syscall-abi-asm.S
+@@ -81,9 +81,9 @@ do_syscall:
+ 	stp	x27, x28, [sp, #96]
+ 
+ 	// Set SVCR if we're doing SME
+-	cbz	x1, 1f
+ 	adrp	x2, svcr_in
+ 	ldr	x2, [x2, :lo12:svcr_in]
++	cbz	x1, 1f
+ 	msr	S3_3_C4_C2_2, x2
+ 1:
+ 
 -- 
-Sponsored by the NGI0 Core fund.
+2.45.2
 
 
