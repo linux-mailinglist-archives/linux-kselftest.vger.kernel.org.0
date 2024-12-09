@@ -1,201 +1,193 @@
-Return-Path: <linux-kselftest+bounces-22969-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-22970-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 085FF9E8B5A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 07:11:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 510E39E8BBE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 07:58:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC6B11885ACE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 06:11:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42363163A89
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 06:57:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24607213E8A;
-	Mon,  9 Dec 2024 06:11:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BDC9214A65;
+	Mon,  9 Dec 2024 06:57:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hr4ihsZ2"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BK+mrXeb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8695616DEB5;
-	Mon,  9 Dec 2024 06:11:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8651D555;
+	Mon,  9 Dec 2024 06:57:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733724691; cv=none; b=XlKJYIqaSWfyV+r4qE7rUG5m0wXIBGWxrhLTitKn1vmsmqmI8Xlh3ZGwp7mOHA198Fjx0YBI5RycaOTGm68UG8heEpIN10tqqHTY59UsDg+P+diGaOkqjGwziMhDGoLHYPsWXXe31MCVTXzkISL7yuOZlZwhey2fD47udi5Qiv8=
+	t=1733727479; cv=none; b=X5QMKanswM7uSYEBiJL7jooQTbW7e1L9uG6TZ6eZ1P22VMrpKcK9T8SSzwtZsBjLB6yCkZEycnxV5M/ST+HEChyD4ylUCFjrWtYbv8ibcoAVdhMpqSOwT+S15TwoC55aAADnug2hCEIn+dhFZOgyFLw+69bnZCiIR78TkpmI0/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733724691; c=relaxed/simple;
-	bh=uWhiM+/cVZ+gZtMPzxGcN6fFIQWwYSzJU8wU6/NrLM4=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=XFFxe6NAB+FK6lMBng7MWm9T31K4+wfM8IUDTPt/SH9+AnhnJwz1wl4I6dMJf+P7GWSD8fEnkTv2U4sAQ+yznhD5U9a1ntEdlum9tA1k1SNdJ292yqNQ3GjMu8aaiUvAtFr1QuDBJMoXJbMHvpcrmXoSvnAg7PmS/BGPud00eOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hr4ihsZ2; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-725abf74334so3336778b3a.3;
-        Sun, 08 Dec 2024 22:11:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733724689; x=1734329489; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U0Dr18ok2Bwr1dMchDb8ArapEa4jmdw3PhKJpSV2ky8=;
-        b=Hr4ihsZ24sMHXs4+qJsfYkG1SmnZSSagiHafDeth6ahrleft7MErLw2vwxrNIeDZHf
-         PBDthx8ol4Mgj9cjhvXmDxnN1VcYuwZiWQ/+H5b99okXVD0JI2vHNLzWtXM+pBHlltHN
-         QyuvfUgcwe62H/YbLylEly5rk7zfO6CqFTN9Szw4PusFgvxi35jB9IX+C1TvnNk6x9tE
-         j/yl0jqgnpaw6QLOzyicJE4UrxR3JdG2a4vbwBhvLPcPyt5fd+JUptlntf4N3MTvXP8N
-         wijicivmhD+jPzrOeo4FZf85WRFByjY2tjlM5KjpRO0jKid/E4KFmbrc7jONZjjgaA0S
-         RO+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733724689; x=1734329489;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=U0Dr18ok2Bwr1dMchDb8ArapEa4jmdw3PhKJpSV2ky8=;
-        b=esSc5nKfP+QNeC/lpuzReWIlFiABjOcx0PoCZZcfEIVZT0BnQD1IAmOY0S6RD84qYP
-         Uq3AndS+S8rmuyayqdOf1D7YJuj9I5SNGovU7hPbXpanN6qTebLeIuj9YpKdrO/fZnVY
-         kAXVC0vqCdLPev+VOXTv6UViDPQMI7URUuUuFk0rZ5RCd5ADC3qWA+imYRmp3SPNnhxw
-         iKYDn7Pbq6EnC4zfXtvlPT3H/rGOuGBQVvaL5dhsXmhV1cXnMW/602iMyadSoEipz50T
-         QkBhCOyChahXttsMYqcWkOex/bJIPZ7wFlyNXbLaVYjDLeZkK/bCn7nULrsogb9nsnF1
-         dWBA==
-X-Forwarded-Encrypted: i=1; AJvYcCV9rZaOgHjxNAtN45mMcwohlAaSZw74sns+cLPFd1piEFqFeVMeY7LI+2NdG3rRGI9hoZrl032d@vger.kernel.org, AJvYcCVHWVirEjGhzMrYeZdFNkSXRHACSQYPqE6+jDJ3F6bI874ECD804/VTOnO/A4uBGuVT1G2zjUKAgmbN9xE5fbs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbuWyQXDN4jNY01n3B9aGCybky/MdGOvcnf48+2RS8ZgMVdvqn
-	inlN0nOlDG0iwtm2TOnc8tQaigLNI8m5oLIE4GCugGvCchL0wjNC
-X-Gm-Gg: ASbGncsnUtxOQbnv01o5BIubqhhDUJL4PB26/vmSqCJLSarNXS1fVA9vAyp4jyrn89a
-	YcOtrmKtfdTOw76B9ipBNU6op7NCXEXINdTp98ufW3QYuLM9pK8r/PzPjwPLZ1bsgl258omNU1H
-	7oLnEQexllFTkoRvUHPjLmT8rJOtFlbmvu9Es1vIWNJlEuJtQ1kxWOPg0QQgNZ0HfE02SgcFoMD
-	xkJE4ja6M6rihyUcDS+5qiJUIuCJd6djMJBiackgdQuKvV6s48=
-X-Google-Smtp-Source: AGHT+IFMQfjWG8+hq0DsREnI77EtruDQsGNSS2eOzaYid2+5l3TTbMj5s/XqTwPKfy6itOzuf3pr4w==
-X-Received: by 2002:a05:6a00:a90:b0:725:f153:22d5 with SMTP id d2e1a72fcca58-725f1532457mr1897792b3a.18.1733724688664;
-        Sun, 08 Dec 2024 22:11:28 -0800 (PST)
-Received: from localhost ([98.97.37.114])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725c9ec7217sm3888129b3a.60.2024.12.08.22.11.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Dec 2024 22:11:27 -0800 (PST)
-Date: Sun, 08 Dec 2024 22:11:26 -0800
-From: John Fastabend <john.fastabend@gmail.com>
-To: Michal Luczaj <mhal@rbox.co>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, 
- KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, 
- Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Jakub Sitnicki <jakub@cloudflare.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>
-Cc: bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- netdev@vger.kernel.org, 
- Michal Luczaj <mhal@rbox.co>
-Message-ID: <67568a0ed36d3_1abf20818@john.notmuch>
-In-Reply-To: <20241202-sockmap-replace-v1-3-1e88579e7bd5@rbox.co>
-References: <20241202-sockmap-replace-v1-0-1e88579e7bd5@rbox.co>
- <20241202-sockmap-replace-v1-3-1e88579e7bd5@rbox.co>
-Subject: RE: [PATCH bpf 3/3] bpf, sockmap: Fix race between element replace
- and close()
+	s=arc-20240116; t=1733727479; c=relaxed/simple;
+	bh=qe6Udq2O6ylQ7lKCDT+058J/wzrj9nl+5v4NIjILIzw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VM/HelCmyOaLm9umBGkIM8O5IftiEfnfGwgDVUbr+iuQmZ2zcaiTq9lLhjyDKasGMXOVhDfrg7I/NC+urfMnrBJ/SPDAtCa9ehhFBnTYz2KAF24GmLoZrgvzXThkzO8KzI0ZrJFI/RcM6qC38gqfRvlVDsU9txwyuFpp2481/E8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BK+mrXeb; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B8MotJN008466;
+	Mon, 9 Dec 2024 06:57:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=6vMnIg568BJtA4W/JJ6yBSKxv2h8U/loKiehbM+EH
+	Z0=; b=BK+mrXebLKo32XdeUVs2F6OhU0s3/LflbVT0YrqOzjnu2cAnV15xXgd/1
+	4/e0UeW+HBzx8CQvDqKsjKk1IuzGpBq8pBldtdA9D5ZUik2pwJVIuqf9fAHpDK6E
+	HRwfxyd3/iTjNcW3o+6y3bAVmRKDW0HpsEnBfmTT82W/ofYXU4+Vop6pTbu7mhKj
+	u9ha03SxsTMOhxmsYkxVxUOImrEzJG5vgIhVpvh0bGld0kYyOTRVLu8Ga5gbpx1F
+	KikVS/lwdOaQhTj8bko8L469TwunhVlNiDt1x62hFSYsIA/uD6jf0gq9Udv5FwBP
+	bHd+pE28v2Jnd+6LCcxILNHhwIj6Q==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43ce0x6vxb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Dec 2024 06:57:28 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4B96m85K005033;
+	Mon, 9 Dec 2024 06:57:27 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43ce0x6vx7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Dec 2024 06:57:27 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4B96HbH5032496;
+	Mon, 9 Dec 2024 06:57:26 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43d1pmwcqh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Dec 2024 06:57:26 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4B96vOVP50856424
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 9 Dec 2024 06:57:24 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7A3192004B;
+	Mon,  9 Dec 2024 06:57:24 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 87B0C2004E;
+	Mon,  9 Dec 2024 06:57:21 +0000 (GMT)
+Received: from li-621bac4c-27c7-11b2-a85c-c2bf7c4b3c07.in.ibm.com (unknown [9.109.219.153])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  9 Dec 2024 06:57:21 +0000 (GMT)
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc: ast@kernel.org, hbathini@linux.ibm.com, andrii@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
+        song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org
+Subject: [PATCH] selftests/bpf: Fix fill_link_info selftest on powerpc
+Date: Mon,  9 Dec 2024 12:27:20 +0530
+Message-ID: <20241209065720.234344-1-skb99@linux.ibm.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: EndXjGVOXSlKrwYrWNmh4Rw4xjAVbk-f
+X-Proofpoint-ORIG-GUID: oXQiw0sbMxZ9FHQllso9ETUFqqmEUX7S
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 clxscore=1015 impostorscore=0 mlxscore=0 mlxlogscore=857
+ priorityscore=1501 malwarescore=0 adultscore=0 bulkscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412090051
 
-Michal Luczaj wrote:
-> Element replace (with a socket different from the one stored) may race with
-> socket's close() link popping & unlinking. __sock_map_delete()
-> unconditionally unrefs the (wrong) element:
-> 
-> // set map[0] = s0
-> map_update_elem(map, 0, s0)
-> 
-> // drop fd of s0
-> close(s0)
->   sock_map_close()
->     lock_sock(sk)               (s0!)
->     sock_map_remove_links(sk)
->       link = sk_psock_link_pop()
->       sock_map_unlink(sk, link)
->         sock_map_delete_from_link
->                                         // replace map[0] with s1
->                                         map_update_elem(map, 0, s1)
->                                           sock_map_update_elem
->                                 (s1!)       lock_sock(sk)
->                                             sock_map_update_common
->                                               psock = sk_psock(sk)
->                                               spin_lock(&stab->lock)
->                                               osk = stab->sks[idx]
->                                               sock_map_add_link(..., &stab->sks[idx])
->                                               sock_map_unref(osk, &stab->sks[idx])
->                                                 psock = sk_psock(osk)
->                                                 sk_psock_put(sk, psock)
->                                                   if (refcount_dec_and_test(&psock))
->                                                     sk_psock_drop(sk, psock)
->                                               spin_unlock(&stab->lock)
->                                             unlock_sock(sk)
->           __sock_map_delete
->             spin_lock(&stab->lock)
->             sk = *psk                        // s1 replaced s0; sk == s1
->             if (!sk_test || sk_test == sk)   // sk_test (s0) != sk (s1); no branch
->               sk = xchg(psk, NULL)
->             if (sk)
->               sock_map_unref(sk, psk)        // unref s1; sks[idx] will dangle
->                 psock = sk_psock(sk)
->                 sk_psock_put(sk, psock)
->                   if (refcount_dec_and_test())
->                     sk_psock_drop(sk, psock)
->             spin_unlock(&stab->lock)
->     release_sock(sk)
-> 
-> Then close(map) enqueues bpf_map_free_deferred, which finally calls
-> sock_map_free(). This results in some refcount_t warnings along with a
-> KASAN splat[1].
-> 
+With CONFIG_KPROBES_ON_FTRACE enabled on powerpc, ftrace_location_range
+returns ftrace location for bpf_fentry_test1 at offset of 4 bytes from
+function entry. This is because branch to _mcount function is at offset
+of 4 bytes in function profile sequence.
 
-[...]
+To fix this, add entry_offset of 4 bytes while verifying the address for
+kprobe entry address of bpf_fentry_test1 in verify_perf_link_info in
+selftest, when CONFIG_KPROBES_ON_FTRACE is enabled.
+
+Disassemble of bpf_fentry_test1:
+
+c000000000e4b080 <bpf_fentry_test1>:
+c000000000e4b080:       a6 02 08 7c     mflr    r0
+c000000000e4b084:       b9 e2 22 4b     bl      c00000000007933c <_mcount>
+c000000000e4b088:       01 00 63 38     addi    r3,r3,1
+c000000000e4b08c:       b4 07 63 7c     extsw   r3,r3
+c000000000e4b090:       20 00 80 4e     blr
+
+When CONFIG_PPC_FTRACE_OUT_OF_LINE [1] is enabled, these function profile
+sequence is moved out of line with an unconditional branch at offset 0.
+So, the test works without altering the offset for
+'CONFIG_KPROBES_ON_FTRACE && CONFIG_PPC_FTRACE_OUT_OF_LINE' case.
+
+Disassemble of bpf_fentry_test1:
+
+c000000000f95190 <bpf_fentry_test1>:
+c000000000f95190:       00 00 00 60     nop
+c000000000f95194:       01 00 63 38     addi    r3,r3,1
+c000000000f95198:       b4 07 63 7c     extsw   r3,r3
+c000000000f9519c:       20 00 80 4e     blr
+
+[1] https://lore.kernel.org/all/20241030070850.1361304-13-hbathini@linux.ibm.com/
+
+Fixes: 23cf7aa539dc ("selftests/bpf: Add selftest for fill_link_info")
+Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+---
+ .../selftests/bpf/prog_tests/fill_link_info.c       |  4 ++++
+ .../selftests/bpf/progs/test_fill_link_info.c       | 13 ++++++++++---
+ 2 files changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
+index d50cbd804..e59af2aa6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
++++ b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
+@@ -171,6 +171,10 @@ static void test_kprobe_fill_link_info(struct test_fill_link_info *skel,
+ 		/* See also arch_adjust_kprobe_addr(). */
+ 		if (skel->kconfig->CONFIG_X86_KERNEL_IBT)
+ 			entry_offset = 4;
++		if (skel->kconfig->CONFIG_PPC64 &&
++		    skel->kconfig->CONFIG_KPROBES_ON_FTRACE &&
++		    !skel->kconfig->CONFIG_PPC_FTRACE_OUT_OF_LINE)
++			entry_offset = 4;
+ 		err = verify_perf_link_info(link_fd, type, kprobe_addr, 0, entry_offset);
+ 		ASSERT_OK(err, "verify_perf_link_info");
+ 	} else {
+diff --git a/tools/testing/selftests/bpf/progs/test_fill_link_info.c b/tools/testing/selftests/bpf/progs/test_fill_link_info.c
+index 6afa83475..fac33a14f 100644
+--- a/tools/testing/selftests/bpf/progs/test_fill_link_info.c
++++ b/tools/testing/selftests/bpf/progs/test_fill_link_info.c
+@@ -6,13 +6,20 @@
+ #include <stdbool.h>
  
-> Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
-> ---
->  net/core/sock_map.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index 20b348b1964a10a1b0bfbe1a90a4a4cd99715b81..f1b9b3958792cd599efcb591742874e9b3f4a76b 100644
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
-> @@ -412,12 +412,11 @@ static void *sock_map_lookup_sys(struct bpf_map *map, void *key)
->  static int __sock_map_delete(struct bpf_stab *stab, struct sock *sk_test,
->  			     struct sock **psk)
->  {
-> -	struct sock *sk;
-> +	struct sock *sk = NULL;
->  	int err = 0;
->  
->  	spin_lock_bh(&stab->lock);
-> -	sk = *psk;
-> -	if (!sk_test || sk_test == sk)
-> +	if (!sk_test || sk_test == *psk)
->  		sk = xchg(psk, NULL);
->  
->  	if (likely(sk))
-> 
-> -- 
-> 2.46.2
-> 
+ extern bool CONFIG_X86_KERNEL_IBT __kconfig __weak;
++extern bool CONFIG_PPC_FTRACE_OUT_OF_LINE __kconfig __weak;
++extern bool CONFIG_KPROBES_ON_FTRACE __kconfig __weak;
++extern bool CONFIG_PPC64 __kconfig __weak;
+ 
+-/* This function is here to have CONFIG_X86_KERNEL_IBT
+- * used and added to object BTF.
++/* This function is here to have CONFIG_X86_KERNEL_IBT,
++ * CONFIG_PPC_FTRACE_OUT_OF_LINE, CONFIG_KPROBES_ON_FTRACE,
++ * CONFIG_PPC6 used and added to object BTF.
+  */
+ int unused(void)
+ {
+-	return CONFIG_X86_KERNEL_IBT ? 0 : 1;
++	return CONFIG_X86_KERNEL_IBT ||
++			CONFIG_PPC_FTRACE_OUT_OF_LINE ||
++			CONFIG_KPROBES_ON_FTRACE ||
++			CONFIG_PPC64 ? 0 : 1;
+ }
+ 
+ SEC("kprobe")
+-- 
+2.45.2
 
-Reviewed-by: John Fastabend <john.fastabend@gmail.com>
 
