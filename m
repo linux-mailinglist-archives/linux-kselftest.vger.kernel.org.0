@@ -1,139 +1,134 @@
-Return-Path: <linux-kselftest+bounces-23114-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23115-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E85D9EB783
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 18:10:32 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18C529EB7E9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 18:16:04 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67BA81638D8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 17:10:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B37E283825
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 17:16:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4814234985;
-	Tue, 10 Dec 2024 17:10:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1C9C2456D3;
+	Tue, 10 Dec 2024 17:11:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IwHNyNAK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fSfLOPPF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A469F2111
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 17:10:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387AA2456C1
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 17:11:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733850605; cv=none; b=WfTdj0kvx2XvILQOyFI1izaRO1EG1M8DOjv1zzn8Tn1eHBt1INOpnrYQYY29kz58z9mcTx0FsGMBDF72rkodNoezbjfgIaNOE5d3Nuawh1LnpJ0qTpkRvDMj+bK4tB55h2fPhnWA6VVEJRSXI+uxfFQZZvCd0lzcKPzNbIbsWdc=
+	t=1733850690; cv=none; b=top2ngNnsTqvWIXNJt+3DSyLWhJDwFZ/Uo2myB0rG/0uAuHsWQH0CPDXoj+YqqGaeImc25C+THX4NGmy1rc1ReB6vXU8p0XcTEdNqYnJK98bCgI7ErwhGDX6vQn+SC4xeaC6KmA7EAEyNlmmT1jTsi3YxEeDd3+yVgHlPBHH40g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733850605; c=relaxed/simple;
-	bh=n7TX/KGVtqtN/arIkiCvvxqUxQBAA9t8KQHNkd+Kzi0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lH1NmZLlQzdV99C/3qwndsb/aiKNZ2apfXcQVdB3GbyQSq1CgZsoxSzS3mdaStgPUqIRjAhk648riWYD0OtxNrLAaMTYvu3Tw+hqqG89xC/YcO/GbCb+TZhPSL2cxN2XB7j4lstX7i4o/3zmv9xk0muX5vRFThoCFGF4Ce9gL5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IwHNyNAK; arc=none smtp.client-ip=209.85.166.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-8442ec2adc7so205427339f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 09:10:02 -0800 (PST)
+	s=arc-20240116; t=1733850690; c=relaxed/simple;
+	bh=nwwrpQSjqsRsYiyq1mDRZl4XTxZG75aj+jpIV0sjklE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Gz2G4/Z0of3bk3FRSZDDQrzPbezNSSXWProXYeD9UVSYAek9TEVn1bt8Yx+/dzkFgho3GCWCZXnC17wZrm6knnGgmG6EqSqiirjRe1oP+c1ysK8a3jjl90UwbNgHhYvXpz1BYVPS2R6HSOJnCzDkDC5nq8HvozW17VBHP8AHThI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fSfLOPPF; arc=none smtp.client-ip=209.85.219.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e3984b1db09so4790974276.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 09:11:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1733850602; x=1734455402; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OVkYBvw17/WfzayXGy8io1dx1e/dJ//f+G5krTuVRXY=;
-        b=IwHNyNAKw68QUf7Y0dFtF1InMFyKaTCi3KU33mGsaZKENYtNPlEtyNL6ga/L08Xceh
-         5JyU9aI/98SF39V5N55km2KkQfcjwREpQtfR0AJO9jtWanv68DVFOskl2bgj85KZuWb4
-         EcWVshIFBqCM4NQxYbKM/EYGhJPErXQ7CZqzk=
+        d=gmail.com; s=20230601; t=1733850688; x=1734455488; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=f/LQuBGhgmo6NAUJm4yyKvyQBh2Y+fdiNz8hKFHi3JM=;
+        b=fSfLOPPF/v63uYZebDuKrJxjrnP4nGts5hdiEm5JwmSAIwqWBUV6DMoOrXnkL3STiP
+         Uih3vdvAZhqiA53s6Xh/bkPwLA5JaNhkOz79tPRuW4Bmt/1KIfY/d1hLKuK/xbop55Qp
+         qo5c7Gfih2YLQpphCHpj77y8fypCR6O1kPUY7DjzWdHu/sf+NGglDJsAhosIzPk/Qun6
+         Ula1M+SddWdIyTrILR9VqeWi6a3Ar/1K8BaKKLLEkyPvXeZppjS6V6rBGC1GptKaTAs7
+         edC94eqLCENbaddxgValNQt3GWhL6MicwM2fiTFgC5JaTsxtsItOV2H7YUqAtYppFsdy
+         wfLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733850602; x=1734455402;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OVkYBvw17/WfzayXGy8io1dx1e/dJ//f+G5krTuVRXY=;
-        b=hk/T/eCL+DDK3U2DM39ybLnpnhIyWJjgWANCTB5fv8xbWE3dbMTMsEbwoWIJ9FqcPA
-         hMvXu4aBg500IZ/hLjhJP6WBqEgMve2HpNuctDYgoliw7KTPCabwmxpeV/2hmSMmN8N0
-         z7stXqKXM2fpMThDsEtdaqA9X+VVWMxPMmbkD0HmVPodQMJfIOZzudKPiA/X7Pa6TfAS
-         iqIyVz06dvcpNlKMOBtkPuK29fPmhTk5agpwcBN0Na7IHr61AM2WWzbPkk17aiOwgdRv
-         H88gko6I7OnHvoKD8xk1xWAwZrRRqTeXAPErANYiG9EV8rDiUSMK8p36UwRB/ROY8I4p
-         Q1qw==
-X-Forwarded-Encrypted: i=1; AJvYcCW9xVvZqcmS+Ftum6tSN7scdlgDVsFp6wGAKrmM+PGHSEPiw3UVpwAUwdSv7Xzl3J4N2qWokZ117McASVskP98=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwTpZBR6/4b8h16awHsRnen4WVWQjsaUfXjYFjmn1K/VbSgO7B
-	ChcBgbIy1oJAye5ryyfFDmgV2FWdZ+m4oH5I7YmY+w91vzwkvPATCA8r9DjSfSk=
-X-Gm-Gg: ASbGncvaQnjFqaM+HPxoXh0+R3i3+W4+n98FH3TUY0Jo4+q1FlSoO4kfJNacAaCt34j
-	3Ksdwto9JetP7wvY7/E/UoiO5AYNfdKne9BF5yux8F1kZuOvP7yf5P0xBwi4rFmsf5lhMk6+p+f
-	DVPPPT74tTulaWE4MhzJYlluKpJ8rTuvHvBOtX4nFdcOqBhv2FQSHkgJhJLE/Udk5eE6ZeeORC0
-	i90sddlgUPtcnVh892DYmRO2/zVnX07p7WYT5NVDa3mmC+Utc5CPuMOck1Sm2QZIg==
-X-Google-Smtp-Source: AGHT+IEzIMlDQqNqHqbv8i4VSsCEok3zEc7VgJmYt6flLbyLvhHrDbMWrBxSWujOoiWgdpiR6ADVtQ==
-X-Received: by 2002:a05:6e02:2199:b0:3a7:80ff:4a6e with SMTP id e9e14a558f8ab-3a811d9c055mr127020545ab.11.1733850601829;
-        Tue, 10 Dec 2024 09:10:01 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e2bff662b7sm1136449173.103.2024.12.10.09.10.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Dec 2024 09:10:01 -0800 (PST)
-Message-ID: <57d11b05-d2ac-4fb3-beb2-cd1f45b38596@linuxfoundation.org>
-Date: Tue, 10 Dec 2024 10:10:00 -0700
+        d=1e100.net; s=20230601; t=1733850688; x=1734455488;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f/LQuBGhgmo6NAUJm4yyKvyQBh2Y+fdiNz8hKFHi3JM=;
+        b=uYrYPoSNsJ41k26AOr/XbdxkzVAAM7lqe8zdiARR6PRhrk7I20Lc3znWVjPNGXOz1J
+         tZWgPpysuXN34mgbQxRnFbZq5uAWnPhaqcHhOE455WHZELyBGfxJSsdOH076A7tqmPhJ
+         UX24kLh31C8btVvl94/fZEBY8duW4UMjErUFbJmToPVK3m5DY1q/DIZ6Ca+Oerx+ukYW
+         SWjTw3ICTuKSm8xWX3UAoBJvdBz3EhsYjyl48wdTJHxEmbC+L9uhheiKgNHsis0J2OuL
+         Jdfi5EDXuOcdhQ471bYDp4B37yzb9Q9D7jaYcU3c3Ulxg613fpkxyKgScrCuDxxkZJlq
+         iwPw==
+X-Forwarded-Encrypted: i=1; AJvYcCVZtbNaxo8JAQVSqbV2HwCS0sCSDQqcSE/gieA+bLnye7X6yLh3QILv7JzyjLTdWeAIIhIvT+GDrhKQjdGmplw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1j1C4VPqjSyf88u5jJeSZl6eS5C8tfb8wakZ9MOzznsslI83z
+	EAfezHHWuBVvdy8PnZVU6JRqh9J7H/fQhPczc6uJk7fMePe/hucbj76QdgmtPH0sNOkEdtrSnzi
+	m21EEfVfGUMeVL1T3kD9TZQ8OZJ8=
+X-Gm-Gg: ASbGncv5By1FK5ZoAhDpN6hGgImHwMpkWbyw/rMbXgKpw2idnts6OnPBmjvBJw6axGO
+	/I9xH9m4CwFtyuX2QiBciJU4WQyyf5OY=
+X-Google-Smtp-Source: AGHT+IFY62ok5Mr1eT6hqoESmjmFdMKLop2seY8rE9apbemAt4SITY5xU7a7STe2MwdBhOYfGNYOAAayobvebwyhGDQ=
+X-Received: by 2002:a05:6902:1709:b0:e29:1b94:ef67 with SMTP id
+ 3f1490d57ef6-e3a59b2216cmr4834235276.19.1733850688154; Tue, 10 Dec 2024
+ 09:11:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH for-next v3] selftests/filesystems: Add missing gitignore
- file
-To: Li Zhijian <lizhijian@fujitsu.com>, linux-kselftest@vger.kernel.org
-Cc: shuah@kernel.org, linux-kernel@vger.kernel.org,
- Christian Brauner <brauner@kernel.org>, Miklos Szeredi
- <mszeredi@redhat.com>, Josef Bacik <josef@toxicpanda.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20241122073725.1531483-1-lizhijian@fujitsu.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241122073725.1531483-1-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20241205114757.5916-1-simeddon@gmail.com> <20241205114757.5916-3-simeddon@gmail.com>
+ <Z1hWqUMmr6pcadqD@pathway.suse.cz>
+In-Reply-To: <Z1hWqUMmr6pcadqD@pathway.suse.cz>
+From: BiscuitBobby <simeddon@gmail.com>
+Date: Tue, 10 Dec 2024 22:40:51 +0530
+Message-ID: <CAGd6pzNUquikRS8pw7D14qXqLixOCQUWqcCcD0C1O6K2TMLeNg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] selftests/lib.mk: Introduce check to validate
+ required configs
+To: Petr Mladek <pmladek@suse.com>
+Cc: shuah@kernel.org, mbenes@suse.cz, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 11/22/24 00:37, Li Zhijian wrote:
-> Compiled binary files should be added to .gitignore
-> 
-> 'git status' complains:
-> Untracked files:
-> (use "git add <file>..." to include in what will be committed)
->       filesystems/statmount/statmount_test_ns
-> 
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Miklos Szeredi <mszeredi@redhat.com>
-> Cc: Josef Bacik <josef@toxicpanda.com>
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> ---
-> Hello,
-> Cover letter is here.
-> 
-> This patch set aims to make 'git status' clear after 'make' and 'make
-> run_tests' for kselftests.
-> ---
-> V3:
->    sorted the ignored files
-> V2:
->     split as a separate patch from a small one [0]
->     [0] https://lore.kernel.org/linux-kselftest/20241015010817.453539-1-lizhijian@fujitsu.com/
-> 
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> ---
->   tools/testing/selftests/filesystems/statmount/.gitignore | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/filesystems/statmount/.gitignore b/tools/testing/selftests/filesystems/statmount/.gitignore
-> index 82a4846cbc4b..973363ad66a2 100644
-> --- a/tools/testing/selftests/filesystems/statmount/.gitignore
-> +++ b/tools/testing/selftests/filesystems/statmount/.gitignore
-> @@ -1,2 +1,3 @@
->   # SPDX-License-Identifier: GPL-2.0-only
-> +statmount_test_ns
->   /*_test
-'
-I am seeing duplicate signature warning on this patch. Please
-fix and send a correct patch.
+On Tue, 10 Dec 2024 at 20:26, Petr Mladek <pmladek@suse.com> wrote:
+>
+> What is the reason to add another set of dependencies, please?
 
-thanks,
--- Shuah
+I had done this because not every test required all the options specified in
+tools/testing/selftests/<test>/config. I thought it would not be desirable to
+prevent these tests from compiling/running.
+
+> Both CONFIG_LIVEPATCH CONFIG_DYNAMIC_DEBUG are already mentioned in
+> tools/testing/selftests/livepatch/config
+
+This particular test only required CONFIG_LIVEPATCH to compile, but I
+had included CONFIG_DYNAMIC_DEBUG, as Miroslav had expressed
+wanting both of them checked.
+
+> IMHO, the new check should read the dependencies
+> from the existing tools/testing/selftests/<test>/config file.
+
+I shall check tools/testing/selftests/<test>/config in my next patch as
+suggested.
+
+> I run the livepatch tests the following way.
+>
+> 1. On my workstation, I build the kernel RPMs using
+>
+>      make rpm-pkg
+>
+> 2. In qemu test system, I mount the build directory from the
+>    workstation and install both kernel and kernel-devel packages:
+>
+>     rpm -ivh rpmbuild/RPMS/x86_64/kernel-6.12.0_default+-35.x86_64.rpm
+>     rpm -ivh rpmbuild/RPMS/x86_64/kernel-devel-6.12.0_default+-35.x86_64.rpm
+>
+>    and reboot
+>
+> 3. In rebooted qemu test system, I mount once again the build
+>    directory from the workstation and run the tests:
+>
+>      cd tools/testing/selftests/livepatch
+>      make run_tests
+
+Thanks, I will test building kernel RPMs when I update the check to be
+more distro agnostic.
+
+Sincerely,
+Siddharth Menon
 
