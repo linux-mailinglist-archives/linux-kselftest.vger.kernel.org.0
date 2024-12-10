@@ -1,137 +1,149 @@
-Return-Path: <linux-kselftest+bounces-23124-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23125-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F08539EBA85
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 20:59:30 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09EA71883BC1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 19:59:24 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49D53226181;
-	Tue, 10 Dec 2024 19:59:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="f3PDxkhn";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="A/VyTXr4"
-X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B730E9EBDFE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 23:44:44 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E8B321420D
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 19:59:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36D8B284134
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 22:44:43 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6074D1F1911;
+	Tue, 10 Dec 2024 22:44:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yekHXpLX"
+X-Original-To: linux-kselftest@vger.kernel.org
+Received: from mail-il1-f202.google.com (mail-il1-f202.google.com [209.85.166.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D051EE7CD
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 22:44:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733860759; cv=none; b=M+OE59XKPbyAFWkHEFyg46juvSLSsiQ8kYefE0avdqgua0Cd04T4fjeCaN9cJ7hdUMCZJLNFVbhq03ygcCfyFYr2KyEfM6iYmyRx+g1kK58HYRsGm+ePSmp14FV0Os21it+9mVT4UraSpLcQAgy8YA6dbkPzP54zKX2u9ST9Svk=
+	t=1733870680; cv=none; b=UUguvZXCz2+Y6gztSk+mVWYcyNHmHxx80L8ey1bTVpucAxhAyryRK611pwf04ysoG3kaeMyQilF6Y09DXO4IqU/vnb+APsFXNmh8IH8X2NasLATgmgaXMQSNwm84VKUiUT77R0cLOoCzCq4SPrI7CSfEvavGid1cgvv5fsGhHFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733860759; c=relaxed/simple;
-	bh=RMhZhYSET6nd2Fmz2e9fskR9q3KW3AepYvXkPGqP2qw=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=lyd6JPz3sfvYbHYMrbGd96Nui18NXEHNKOxMEpQZcdVzHHEOpU8pjPt4PY/bFlk+buOQL+Kd74EfvGlQnsYfxp/dmh9HrZMbyTt0rhNpV6Nm5vAG3MiVxL4uRm7pfTWPAr9D/YnSscHbpmE9sWyQ/3Y6xXOUpJYPsDZy0yMYJoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=f3PDxkhn; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=A/VyTXr4; arc=none smtp.client-ip=202.12.124.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id F274F2540157;
-	Tue, 10 Dec 2024 14:59:14 -0500 (EST)
-Received: from phl-frontend-02 ([10.202.2.161])
-  by phl-compute-04.internal (MEProxy); Tue, 10 Dec 2024 14:59:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fluxnic.net; h=
-	cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1733860754; x=1733947154; bh=nhLJJeGbE0
-	o8UiOo++H8appvZHqsVY2XetMzuS/UGV0=; b=f3PDxkhnnw6HEf13mR7TqJg5FU
-	l9+3kRHLLRhFz0ULPRHg6F7cS77ZMoay+9oW+khr0lZ6nKHxrEONau/Xe8UbrzJF
-	gxB2BDBnCxkfDyT4IjLv+SvWjb0+SvBeOEEzwBG3yAmDQHVDDnVetq6VlGgnFrMt
-	2gtyCqvRY7b2Eg9h7wTl6B1yq/O8w4xMQ0F04MyuU0Y2oACtV/TtCldp7FTDmZkV
-	gL4VWM2+lTIco0qjqP0EWW/xVr9FFPGo1d0vT2QMinkuLRYdq/uxPFbbBU5V0WIQ
-	km6zgwEDwc9BhUhqZOyKkHExzTbJMREZ0oPzdjDlGGioE5MJ9tgRXM3XrEZg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1733860754; x=1733947154; bh=nhLJJeGbE0o8UiOo++H8appvZHqsVY2XetM
-	zuS/UGV0=; b=A/VyTXr4QW4e6vjOcOmGgGWsrR78G/dKb/BhK/3qAqQTcKaZ1EW
-	fdgcrxr1yCQyUOFh0WC5XnT2aiRudz0VonpfIG1SRsSuWGA41Dr6p/GNaJbTI2Lo
-	axR0ZgWVDtJUEPGjY1XbKrQuZtJ2Dpfhkxy8Ke2skAUuxGl2nBoDMp9+0bjlYhVd
-	quWj66pMLniVXfqmbFPaACe7YbJQm5ZsuDGMGwbkPT4L1UTKuegpvophIFkTCK+O
-	CNH1AaegSP04gndpJyIs1nkjqLLkoO1G5eSkJijd0vDY7J9HhuSRD5xz3YqL2lE9
-	JUiz1LIQh9GuIVYg5tDrMlnTMejwGsE3XxA==
-X-ME-Sender: <xms:kZ1YZzpRa5hHe1kF6IV13bAkp8-DkG9DHZyPAAvFc-6DVJvL1s4qXw>
-    <xme:kZ1YZ9rNGcY-xnZS-Xx7J7sOKEtSy-uWIGgCP5wD-uIFZWg32Dhfc4CNQWNT9hVgf
-    qndAEodG1lQnVz5sZs>
-X-ME-Received: <xmr:kZ1YZwPaRlAGSGqmWxCzchBg35qheSes2V3Fsub19yQeUBRvSUlMOPcUExLI8dqZrZn1s9AOZd2Qu8vA1uCOJ0LUXiFNuLdwLk0FJZ3Sh3obshNKEA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrjeekgddufeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepfffhvfevufgjkfhfgggtsehttdertddttddvnecu
-    hfhrohhmpefpihgtohhlrghsucfrihhtrhgvuceonhhitghosehflhhugihnihgtrdhnvg
-    htqeenucggtffrrghtthgvrhhnpefgvedvhfefueejgefggfefhfelffeiieduvdehffdu
-    heduffekkefhgeffhfefveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehnihgtohesfhhluhignhhitgdrnhgvthdpnhgspghrtghpthhtohep
-    uddtpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehurdhklhgvihhnvgdqkhhovg
-    hnihhgsegsrgihlhhisghrvgdrtghomhdprhgtphhtthhopehluhhishdrhhgvrhhnrghn
-    uggviidtleefsehgmhgrihhlrdgtohhmpdhrtghpthhtohepuggrvhhiughgohifsehgoh
-    hoghhlvgdrtghomhdprhgtphhtthhopehkuhhnihhtqdguvghvsehgohhoghhlvghgrhho
-    uhhpshdrtghomhdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhioh
-    hnrdhorhhgpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhu
-    gidrihhnthgvlhdrtghomhdprhgtphhtthhopehskhhhrghnsehlihhnuhigfhhouhhnug
-    grthhiohhnrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlqdhmvghnthgv
-    vghssehlihhsthhsrdhlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoh
-    eprhgsmhesshhushgvrdgtohhm
-X-ME-Proxy: <xmx:kZ1YZ27xsK9OFkJEIFaEPnS8YDZMVlfUtrMztcVTJGPZOSa-Bj6F6w>
-    <xmx:kZ1YZy5k6_jUnv8qgc_6wNapkf2j1isNEJVigVLhocUqSVgwtU6E7g>
-    <xmx:kZ1YZ-iXiTdXf4pr99rmlcq6aNkotriD4UH17wTHwukoTq6Vigj_oQ>
-    <xmx:kZ1YZ06vjfDCcs_GjsEE_xqXAYSo1sSfvkCFmIJOGpxOtFEWdYpsjA>
-    <xmx:kp1YZ_xdyz8yFb3vspNh-KyNLzCWnVclkXAob0TCuFRu9jM9Zh_0eij->
-Feedback-ID: i58514971:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 10 Dec 2024 14:59:13 -0500 (EST)
-Received: from xanadu (unknown [IPv6:fd17:d3d3:663b:0:9696:df8a:e3:af35])
-	by yoda.fluxnic.net (Postfix) with ESMTPSA id DC8CDF36150;
-	Tue, 10 Dec 2024 14:59:12 -0500 (EST)
-Date: Tue, 10 Dec 2024 14:59:12 -0500 (EST)
-From: Nicolas Pitre <nico@fluxnic.net>
-To: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
-cc: davidgow@google.com, Andrew Morton <akpm@linux-foundation.org>, 
-    andriy.shevchenko@linux.intel.com, u.kleine-koenig@baylibre.com, 
-    skhan@linuxfoundation.org, rbm@suse.com, linux-kselftest@vger.kernel.org, 
-    linux-kernel-mentees@lists.linuxfoundation.org, kunit-dev@googlegroups.com
-Subject: Re: [PATCH v4] lib/math: Add int_sqrt test suite
-In-Reply-To: <20241210172822.97683-1-luis.hernandez093@gmail.com>
-Message-ID: <9op57qr3-p152-6ns7-52n6-35599801rq22@syhkavp.arg>
-References: <20241210172822.97683-1-luis.hernandez093@gmail.com>
+	s=arc-20240116; t=1733870680; c=relaxed/simple;
+	bh=u9leJh1meIuUaI/1M+S+UmdCfL/JpflDsWChpBlbaQ0=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=lRByAkk8wKrXob+JLIKxhUdOadhGxFpFTIIYYLHUow1c0BNTZT1hijVCyC5NhkOw4eU46IKZ0UygLv1tan8OEsVYCeACSDGHgWDoBrs2N1JMw3y8HTXDM5VhO6bUw2oKICpL4f4MXoGMRy93hBqmp2U4Xnkv1QgCHm9VhurY7zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rananta.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yekHXpLX; arc=none smtp.client-ip=209.85.166.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rananta.bounces.google.com
+Received: by mail-il1-f202.google.com with SMTP id e9e14a558f8ab-3a812f562bbso84352515ab.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 14:44:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1733870678; x=1734475478; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qqk+CWWqN5rq/MGB/yHuis8ZQybMADaRH3hk0OV3uFc=;
+        b=yekHXpLX+E2jJHHo8MvEQkcunPSy8qjbKcTNBtQErx6td5w0k5BQJOGkPiTDDYFT5Z
+         b++cL5CA7hgHl5U0DnU6ENsvXL/iK5lptiXXFVmTJZhb+zvuK2fDMan4CdeEHZVyIwmA
+         bnEddXaS7N0X+TbVbVv+Dh0hMTqJwRAEokdCznWiuI3Ly+XTKHPaQH8HtAXrjIAp7i2c
+         uW6BqdBC7cHpacBsbziD3qZaEsu8+9q3zU7Z5pud8YYqe/frP49nh8UsVNFAtcPqRoZN
+         qYanLMURSLIFIu6v2Fu0ex2Wf0BQzX9GpHUgfAxz1HCr37PbL64GbVOAO5oq+3c/wpmA
+         7k4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733870678; x=1734475478;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qqk+CWWqN5rq/MGB/yHuis8ZQybMADaRH3hk0OV3uFc=;
+        b=p7skxbDpUsKPFbTPV3t5Q9iLk8eetI1FQYv7Riz6nZcPJiIHo7HyqcGetZupurXQn+
+         HYg3SFOa/QAeLemUCBgyWx65vTza+V6HPxQAbuFADIRpesNoU1gb1qoDG0a3yogu4n2T
+         ymaOn7oQEgAFHdUKnDa7VJ7sVDOFM+wkPcb+2TZiHFyalMo2NPowdWq3V7UGiIXp0FAT
+         nCf+aCVlpdqvtwlYTIDGcdoFlYJKa7lJKj2kjWpOvoYrJc0KbmJSq+pe6zHnkyV91xOw
+         kr2+sXA09gdRtBxlvtIQqQXrAc5r6Lomb5JZQiLNrDTOBWeEt0gR3zPF1+9wadaKgZzs
+         GN7g==
+X-Forwarded-Encrypted: i=1; AJvYcCV7ewFCe/2YvpURsFIMenHjCl9r4UtV4nrNx+kGqicyzYglK4Ti44mDnUaNtEUNXyBv5Z+L3g2LZawQc0NBB3Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXHp+PwqOVeHHxpNV4AZAoTR+X0ULPt8iZm/rslbj1alIfCYPA
+	+HrhHAjZv7OYWzR0KsdunIT/9ukyk8p8E8rGZ5lxcWn9/HUmBPPrOhmey4j6ZiFV0NEl4gzskrD
+	w8BT8lg==
+X-Google-Smtp-Source: AGHT+IET+QW/GxpL9rCtfukOBZmUY2qfXT9xKNqc21i3LI6O4efNul9iMc8xel/3eEjF4fnde26kqvcpA/Uu
+X-Received: from ilgm9.prod.google.com ([2002:a92:4b09:0:b0:3a7:cfdb:57d])
+ (user=rananta job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6e02:1384:b0:3a7:5cda:2769
+ with SMTP id e9e14a558f8ab-3aa06bee07cmr8003405ab.12.1733870677912; Tue, 10
+ Dec 2024 14:44:37 -0800 (PST)
+Date: Tue, 10 Dec 2024 22:44:35 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
+Message-ID: <20241210224435.15206-1-rananta@google.com>
+Subject: [PATCH] selftests/rseq: Fix rseq for cases without glibc support
+From: Raghavendra Rao Ananta <rananta@google.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Raghavendra Rao Anata <rananta@google.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 10 Dec 2024, Luis Felipe Hernandez wrote:
+Currently the rseq constructor, rseq_init(), assumes that glibc always
+has the support for rseq symbols (__rseq_size for instance). However,
+glibc supports rseq from version 2.35 onwards. As a result, for the
+systems that run glibc less than 2.35, the global rseq_size remains
+initialized to -1U. When a thread then tries to register for rseq,
+get_rseq_min_alloc_size() would end up returning -1U, which is
+incorrect. Hence, initialize rseq_size for the cases where glibc doesn't
+have the support for rseq symbols.
 
-> Adds test suite for integer based square root function.
-> 
-> +struct test_case_params {
-> +	unsigned long x;
-> +	unsigned long expected_result;
-> +	const char *name;
-> +};
-> +
-> +static const struct test_case_params params[] = {
-> +	{ 0, 0, "edge-case: square root of 0" },
-> +	{ 4, 2, "perfect square: square root of 4" },
-> +	{ 81, 9, "perfect square: square root of 9" },
-> +	{ 2, 1, "non-perfect square: square root of 2" },
-> +	{ 5, 2, "non-perfect square: square root of 5"},
-> +	{ ULONG_MAX, 4294967295, "large input"},
+Cc: stable@vger.kernel.org
+Fixes: 73a4f5a704a2 ("selftests/rseq: Fix mm_cid test failure")
+Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+---
+ tools/testing/selftests/rseq/rseq.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-This will fail on a 32-bit system where sizeof(long) == 32 and 
-ULONG_MAX == 4294967295. (meaning the result would be 65535).
+diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
+index 5b9772cdf265..9eb5356f25fa 100644
+--- a/tools/testing/selftests/rseq/rseq.c
++++ b/tools/testing/selftests/rseq/rseq.c
+@@ -142,6 +142,16 @@ unsigned int get_rseq_kernel_feature_size(void)
+ 		return ORIG_RSEQ_FEATURE_SIZE;
+ }
+ 
++static void set_default_rseq_size(void)
++{
++	unsigned int rseq_kernel_feature_size = get_rseq_kernel_feature_size();
++
++	if (rseq_kernel_feature_size < ORIG_RSEQ_ALLOC_SIZE)
++		rseq_size = rseq_kernel_feature_size;
++	else
++		rseq_size = ORIG_RSEQ_ALLOC_SIZE;
++}
++
+ int rseq_register_current_thread(void)
+ {
+ 	int rc;
+@@ -219,12 +229,7 @@ void rseq_init(void)
+ 			fallthrough;
+ 		case ORIG_RSEQ_ALLOC_SIZE:
+ 		{
+-			unsigned int rseq_kernel_feature_size = get_rseq_kernel_feature_size();
+-
+-			if (rseq_kernel_feature_size < ORIG_RSEQ_ALLOC_SIZE)
+-				rseq_size = rseq_kernel_feature_size;
+-			else
+-				rseq_size = ORIG_RSEQ_ALLOC_SIZE;
++			set_default_rseq_size();
+ 			break;
+ 		}
+ 		default:
+@@ -239,8 +244,10 @@ void rseq_init(void)
+ 		rseq_size = 0;
+ 		return;
+ 	}
++
+ 	rseq_offset = (void *)&__rseq_abi - rseq_thread_pointer();
+ 	rseq_flags = 0;
++	set_default_rseq_size();
+ }
+ 
+ static __attribute__((destructor))
 
+base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
+-- 
+2.47.0.338.g60cca15819-goog
 
-Nicolas
 
