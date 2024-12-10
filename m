@@ -1,101 +1,117 @@
-Return-Path: <linux-kselftest+bounces-23110-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23111-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 474DF9EB704
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 17:50:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 323D79EB772
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 18:09:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F80D16226E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 16:50:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6FAD162D39
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 17:09:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A033622FE07;
-	Tue, 10 Dec 2024 16:50:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCEE5233D96;
+	Tue, 10 Dec 2024 17:08:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AeuhTwDL"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fbNc3w+K"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B681A76AC;
-	Tue, 10 Dec 2024 16:50:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 281562343D8
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 17:08:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733849415; cv=none; b=XgpIc8VhKjdQNOLC9ze8O6R0fALdlD/isVU594kRfTHgQq6R+NSv6BdpLxXSt7jISqVRunjFHHz+52aCLUMCkroKJ3qhAOkeniiELO+ahtcmVnfBWiBUxdAmY7ue2OvNhDoAYDE7W/t13ejSZLA/BBH41Z8+pMFGun0vLoWXRpM=
+	t=1733850534; cv=none; b=YC4eZpDNjhceaFNrGu9GTq1bBuo2OGsTZBlsQ/OkhmAs6waCb5HlIkRsxNHaQWD3JKhCNfi0AtiXSUro/CEbxpGMgkGolB04eYbv/g2begU5H4m51A5NHA5Hwoe1XLkKcWxfe7qgvyiEJkzCSwuwjyDcxN33RLGPI/dpNwY8llE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733849415; c=relaxed/simple;
-	bh=EzwAGQCNQjBDmSEsXEMzV3AoQPbQdGbQLJo5zAio39g=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ATVHCwV7c1ad8CWcGQWVIzLHXYQZ/6CeWdUZ5nT0eoCIJM3JhguucqkgPUz/qH5pOSIImgBam9W4k1jisFkpUxM13uo++OihrcgpEvzht/361+tuBCjw7CbjjxGrM95j0Iie329lTr6+4SB7mOJFXSdqxvPEk1O+1VLD2NPIrC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AeuhTwDL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9C99C4CED6;
-	Tue, 10 Dec 2024 16:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733849415;
-	bh=EzwAGQCNQjBDmSEsXEMzV3AoQPbQdGbQLJo5zAio39g=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=AeuhTwDLZbFU0OLAxdsQGiGypfa0Bfuk8OsS1QJNm0fDtqlamDe2OOmgE+jpn/OFB
-	 490gWB9UPHuEmFw3lxCLSRnmav8NBAgXapt1N3uxoRKnt/IMRaz/Pk2oqEKmQgRbqL
-	 CJolkQJ2IC9VgpiNkoPio/mQS+ma8AH4g5LCIwXeIlRVxVYePoy9MzfT4e/mbM7uoc
-	 7xBtN9USj2ZsCQXsz8ftWw1/Grb08QTtDu+zJxoROqGPKml75Gf0Fh8Ry/7ozimPDh
-	 4VPpxedNejc1fITip8Iw7aRDHSfcTTabUW0Pn0VksBIKjPtzw0cp/6bEciutTOFYeY
-	 mG1VlGACznXNg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB4B3380A954;
-	Tue, 10 Dec 2024 16:50:31 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1733850534; c=relaxed/simple;
+	bh=vqnBy2TUzl5VEh6Ll+x+Xk8e1C2DbaIVDVhMQuQ/vzg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=i89IN8mk39/Q8EgkPXN1b5RflpH8mqmICHxwB4srGkKmdv0nQVIUx62Mxwm+ChEc+lwx9GCsYI4n+k9FLpI/2mXsrnQU09yE/9Uz2e4VyIGa7/GNlcA56fuklHJI6AdYc3936oEVRs/aF8u5SkQ2U+PNypAOYEUm/CoQz4m0V9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fbNc3w+K; arc=none smtp.client-ip=209.85.166.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-8419d05aa66so400264339f.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 09:08:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1733850532; x=1734455332; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B5PJ17q8lD7k4hVY6ctGVVWNwOwWO51bb5PDCcKGo6o=;
+        b=fbNc3w+Km/yqjUHcR4q0Yw23p971vs1gYm7T0EeLW8sDF0dExjAKQqp4P7N6RbF01X
+         XdNolJsaUKonfeSuqix2Vl9Ffb8nBSyISOmNcIQp0lggxp/U+YnhJXLhOacxHg8yxMX1
+         kikdLbqsPLEbWlgxEapR2IW52icNC9GE1/oUM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733850532; x=1734455332;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B5PJ17q8lD7k4hVY6ctGVVWNwOwWO51bb5PDCcKGo6o=;
+        b=KsuypetFtRXxOh2wnTcvb3s/hp/V5zTwF9L7YKIwCejfOaXWcfxoO0e4SJ+9p+IXsW
+         MuPwnL1b8j7e9kDvyKNz4n84d8qW3PehYLMtcWSHixciKxKfZXgBp6656v+3PM4ovMU2
+         qWuw5/wg66sWlx0aA+FQzuMTuGfsLsvzdKzGbUfO7ym2M4T/W3+iYPg/IB2S3ZufDaJQ
+         GkqtMaiNJHHBz8G+j+ym4Lcjd2K14t7eppAW23ySAzFBj6WJN/7xj+yiZUFTRdOC03Lt
+         U4UBgaGom03YgXcQNpxxe8p+0lPyo9REJ/avBSnBCY40hMPpSztMaRbDPaKhRP7z5ESX
+         h0Cw==
+X-Gm-Message-State: AOJu0Yzjo1YRdCfapUSkWuGoe7Lm+G0lBeS1ybqYo6j5zLrg8q+DBxEP
+	NbsbjVdoeiwQfuzpV8DUzF2HfPd3dmgP3yFu3Izp/UvY53w6T5+cceUW3GYNLCA=
+X-Gm-Gg: ASbGncse1DGlwY7gMwrl6YWmkBn8kweixFWCxYw/i0YG+bBclwunRe/DkOH36jGnoZ/
+	uzVyeDlsc5oNAXUwRdPFvusrbSEL2WXkS2gRENrnzKuO78+Vq/ar2OU/AW1xaDOv910j7q3GUzP
+	fYDY405qlXU6DzOMKl6Kt07ZZHcbX+9yvkdoPJBJDwhWyMO4bT9oyRVTG8OO8wQB4o3tKUtgQk3
+	oQZg9tvCT3+7pT98XawNnntsVKEm+4lmGeEQ2ep1r+yabQSfYiLUel8XXEZek+idg==
+X-Google-Smtp-Source: AGHT+IG/gkZmbkJxGMdHnI+Js79ydu8p5QIVfUBfMDkz2ZNcb9kT6//CIdURU7BGEZClLOWq6Kg11w==
+X-Received: by 2002:a05:6e02:1c8f:b0:3a7:dfe4:bd33 with SMTP id e9e14a558f8ab-3a811d98e10mr213572065ab.6.1733850532088;
+        Tue, 10 Dec 2024 09:08:52 -0800 (PST)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e2ca310cfbsm701831173.152.2024.12.10.09.08.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Dec 2024 09:08:51 -0800 (PST)
+Message-ID: <1e61303f-69b7-47e1-863f-1d52ac6c3ec7@linuxfoundation.org>
+Date: Tue, 10 Dec 2024 10:08:50 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf 0/3] bpf, sockmap: Fix the element replace
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173384943076.907573.13245503646453425882.git-patchwork-notify@kernel.org>
-Date: Tue, 10 Dec 2024 16:50:30 +0000
-References: <20241202-sockmap-replace-v1-0-1e88579e7bd5@rbox.co>
-In-Reply-To: <20241202-sockmap-replace-v1-0-1e88579e7bd5@rbox.co>
-To: Michal Luczaj <mhal@rbox.co>
-Cc: andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- jakub@cloudflare.com, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH for-next v3] selftests/cpufreq: gitignore output files and
+ clean them in make clean
+To: Viresh Kumar <viresh.kumar@linaro.org>, Li Zhijian <lizhijian@fujitsu.com>
+Cc: linux-kselftest@vger.kernel.org, shuah@kernel.org,
+ linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+ linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20241122074757.1583002-1-lizhijian@fujitsu.com>
+ <20241122081304.j2zbjvmgd2nnfca3@vireshk-i7>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20241122081304.j2zbjvmgd2nnfca3@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to bpf/bpf.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
-
-On Mon, 02 Dec 2024 12:29:22 +0100 you wrote:
-> Series takes care of two issues with sockmap update: inconsistent behaviour
-> after update with same, and race/refcount imbalance on element replace.
+On 11/22/24 01:13, Viresh Kumar wrote:
+> On 22-11-24, 15:47, Li Zhijian wrote:
+>> After `make run_tests`, the git status complains:
+>> Untracked files:
+>>      (use "git add <file>..." to include in what will be committed)
+>>          cpufreq/cpufreq_selftest.dmesg_cpufreq.txt
+>>          cpufreq/cpufreq_selftest.dmesg_full.txt
+>>          cpufreq/cpufreq_selftest.txt
+>>
+>> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+>> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+>> Cc: Shuah Khan <shuah@kernel.org>
+>> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
 > 
-> I am hesitant if patch 3/3 ("bpf, sockmap: Fix race between element replace
-> and close()") is the right approach. I might have missed some detail of the
-> current __sock_map_delete() implementation. I'd be grateful for comments,
-> thanks.
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 > 
-> [...]
 
-Here is the summary with links:
-  - [bpf,1/3] bpf, sockmap: Fix update element with same
-    https://git.kernel.org/bpf/bpf/c/75e072a390da
-  - [bpf,2/3] selftest/bpf: Extend test for sockmap update with same
-    https://git.kernel.org/bpf/bpf/c/11d5245f608f
-  - [bpf,3/3] bpf, sockmap: Fix race between element replace and close()
-    https://git.kernel.org/bpf/bpf/c/ed1fc5d76b81
+Applied to
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git/log/?h=cpupower
+for next pull request to Rafael.
 
-
+thanks,
+-- Shuah
 
