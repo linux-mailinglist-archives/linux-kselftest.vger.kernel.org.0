@@ -1,131 +1,201 @@
-Return-Path: <linux-kselftest+bounces-23104-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23105-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0DDB9EB351
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 15:30:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17DB49EB3AD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 15:43:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 742F3162480
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 14:30:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDCB41888D8B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 14:43:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16F391AA1D0;
-	Tue, 10 Dec 2024 14:30:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41E911B422E;
+	Tue, 10 Dec 2024 14:43:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FA27LtW7"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bFueAjGe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1BF71A704C
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 14:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD2A1B21A0
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 14:43:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733841047; cv=none; b=M4O1WgQ5hopHKS744Xnir9w1d3Vmqv/p42PPUwGqF0SzC3H4nnWMIWH6YUFqqhf41Ef+/JQw8DHaP/wzPw0NtFHX6g0svC4A4V8na4W6rW4bg0+QEcRdZkAMyggb0KHMGn4ebfrZBmtSYLRrOOh6HguBKhoasPXQePz7fbie+ME=
+	t=1733841783; cv=none; b=Y9HKHwHTYKlAqAivuGlpfZ6Azi8mIG7dl+GkuyICY0d/dgkkZnfOCYZS47OXTu8qgsoQY06X3VxTO9+V58UoJIfoAXVtoO1JSClepa2XF0W2zZaQ5du70gSB1Ywyxj/ki7Aj7r18WP51W5cjVOfDa4yvIiVur/+zMbGaoFZv7Rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733841047; c=relaxed/simple;
-	bh=TmKNCI5crBsnuoKu79pQm5kUHEY7ldggI2M+CYfFJUk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BF0q1gQ6RrFlR1z84OwpLSCg5Jz8GtGxxNdqcBdXh0UBMDo5PJxvkEMU7sTLbhB4JUHhCH90VD1tAFn4OpnfWOyLuoQsj7AjGxbOkUBj/jGUF/O/DMe2+HYg0CJvk/IK5S6PIpHCVwfauGnVGVIiQQ2sVC3tltqW6E752dEbvs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FA27LtW7; arc=none smtp.client-ip=209.85.221.54
+	s=arc-20240116; t=1733841783; c=relaxed/simple;
+	bh=EqQrouXcz1X/4/zm7JkycQVkH+G/URDYjt1sE40V2dg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dwL5hDkGt6c9ahs42C/z2ySkhsQvTIZyflu/4Kvtc/bQBy9di6Wehvm90MPbrLcuG52KGnynGWHsu+NssLxajKLnvQSg1fMXJWXVGm09THBLUHOcgLui25W88Vm4rqKW4vm0a0hR6QmGT/0ErGhqZKOjz3/sfEO0SNqMy2R3Xuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bFueAjGe; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-37ed3bd6114so2398853f8f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 06:30:43 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-aa659775dd5so41138766b.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 06:43:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1733841042; x=1734445842; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=W/cm+nrSG+5II0qAA1CApN1Olr5UrAZOBnUEX4G2C9k=;
-        b=FA27LtW7gseJNuwxkZexH0iL6PR5Q3/Cy8LYRD0oSYV2n2+HzUof/akhPd4/zzlocB
-         iKaMQ8mrKNjo1bVsZNupePBGJjANG4u3Pu8wrSawNqcRLJK9gDmGqXC7u2Zwr0TMQaC5
-         9N6bKGifjn2LAileq/bRtm3lMm5+7KmGVqqSGkU6UPjsR4zfoE5X22RtP+UeDL+lwcGn
-         rnayHhRoWeLjaL+LzFxOSAa48EqHrEyhcd4FA/BYbwQeG4G03fU31qLBjJsr9sivcRyo
-         9Vpn922atDVpAjANISb0fvsePwRbOebtzgWZmQyqgUCrl8irnKijX3q9SfvuaUvUgojS
-         DdWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733841042; x=1734445842;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=suse.com; s=google; t=1733841779; x=1734446579; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=W/cm+nrSG+5II0qAA1CApN1Olr5UrAZOBnUEX4G2C9k=;
-        b=J2fBNNYvgjQYZws0s27jmDY+u3iysXwI36pxJ8Nl9oinIuQF/Sgj7X4uxGYKbECJWN
-         M5pFT1JVOYErkQlIxgAyKghw6NaKmW6IwCiWpOlFU5lX/PJ30OGxzMa+zlWQ8i45aGtQ
-         dY3FxMrmvjA9mN1OiXr9gVtD+TglgObHSIKRxYdsDALsEykPtr/rxsz9Y44V506bDi8b
-         eKNFQ2sjMYhXCpFi5ib3QD43Zj5z3lSSJpE4XWO2IbKxoPzguIJIrgjWxUUlxOA5IpRM
-         Sscg6FsSv/nrSTN1ggHv11PW5HakNunIiz2rLapMepf3w8nHZ0m2tytXtKUl2FVOhpbX
-         uTug==
-X-Forwarded-Encrypted: i=1; AJvYcCVP6uEUeAkW2LxkEWyDt7z3lOFQlXQYfcrQ4X4dU56EkkijWNZfKjS5HX8dxk4vhocHhC1DqAtsVYFCZLafRyY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwK1IcDfjlY5qtHqYw9bwEUYtBHISplnEISPNeCr3R4A5kF2QTc
-	GX7i1UNEfJHQCB78ZSyJrx/n0h8XPBPuNUxLUE/Bz+kEjIWNhk+2IOkh+0IewTY=
-X-Gm-Gg: ASbGncuPV0ndU7cza1zqZcY0Tbkk2bsRL++5lN/7CvZmKNnprIQDFijvmXrZXq5IydN
-	xif505RSB4LNj739RWb2A/I6k1S8bzswVl5eZ0bSS7FDtRIYGuMFD9gHo4q8fILuYNhjlZSXhQO
-	J3VENrxF+MbgQbe/q9+UE6xIyw3XUVQjJ/b0A67XscPHxQML+jYr15TF+99FDjSNXkRtQAB82oS
-	yMqrIPDIKDGL48Z1rLYWE/NhkeRkCwbMlqBJjWpfYRvEbKgjCUM/5I=
-X-Google-Smtp-Source: AGHT+IEJUtTpPMf6G7jAGMibFprqv06Na9zpQvm8dtsXFCJXR4j5vR2w2ykd5ZBdmLcAr/Bwz0G0XQ==
-X-Received: by 2002:a5d:47c9:0:b0:386:3328:6106 with SMTP id ffacd0b85a97d-386453e5101mr3654337f8f.35.1733841042098;
-        Tue, 10 Dec 2024 06:30:42 -0800 (PST)
-Received: from pathway.suse.cz ([176.114.240.50])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-216688a6d8dsm21735495ad.163.2024.12.10.06.30.37
+        bh=FDMYkDLMWfYBtP7XGNsvPP0tBQfKbCsqwMG2oWCcg18=;
+        b=bFueAjGeLwYVi2pkcEcb2T10U1NZQX/1GPWbmA6opZNnxof/M9WXS7MYFHbnRJSYEY
+         mnoPX6Yq1AIkcH7ynzF2sQHCkNZHg5QMHwnupXW27OwghPdVdLsBdCYpktq1quTFi1Kz
+         gzO2+pT+VdgfaG1rznmhZI1xn4++SD8jCHEDGmZ/7VUv5PtEoXEG88vDDO4JHa670nDC
+         +bThP1bXw4+cy4qjsvRwVJ01HP/6S2QKabbJ/T9u17uOn2147VJKweQHPVgADFF37eKc
+         LFyfWFAvEeCLmIJfOROhgWrWpU0sHArNPUCXjie9Z+36Bdqc5Ke+jk3aGKtWcl16+2xf
+         8Jbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733841779; x=1734446579;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FDMYkDLMWfYBtP7XGNsvPP0tBQfKbCsqwMG2oWCcg18=;
+        b=da86agSiIG7YExYXiqJL7gyJwSOYbWNzaQVVGXCubjbs40SbT7aRmcsO2HQmW9tNIe
+         rN4wVmtxrVrMCNokaRZ73uB5vBerdwLBEWHGsZmx57+s7XnPooGmNTJ5x/ir2i/DUwOM
+         auHAUJCPcnaYhAvkd35gUduIOEOnCntrbMgmWO5dBuKjbRWtKfDUVDzmZVM+0VRwmcaK
+         YaVy3O7ZNW+I806h894xp2lXSb2Y2jt9OTAPOwouvnn1Ox2Zu+CjuF8DUt01Y6kLQFua
+         9kEsG98mK3zPKnIysryj7mOtS0iVaG4it+LxJh5GYs6hNXZimiGp2G/LvqB5eza3oj2f
+         9LqA==
+X-Forwarded-Encrypted: i=1; AJvYcCWy32Nn0dFR9JfEo8L7HEh0N4UKB7Rl0ayiJMkjaPdFyG+tvzf5OpKdccUC/SV5qBTeIH1FdVxxlUPytPSuFEo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxd9+MHm4QM1GHGmY27tHPD/B2Ed3zZL8DaogNmbQ5XA1gqf3fZ
+	hkklfA25QnyWbbvBUfwxK8D+SOVN4Ri+XrNg2h6cfUblWvlEMC0ePUYbcYq20ME=
+X-Gm-Gg: ASbGncsZnQBZcFFDibc78B1L4mceAkezObgjvQZZ7ZBGr81szay8/vswqX3e0Y2EdHW
+	LyPq8jAAFnMk8QOF3NE0K+7Dox1hP9pL3QIQhV0IDXGFO9tIpE7sNSALBqnU5GlTK3RbwyIdKM9
+	dCjpd95u/9Rv2dWbT0z1HAQjkz2Q3zS3VDC4QjzRIFXf0ZwKTjFSmDhP2br1/gCKcCItwzQ22Gb
+	F/aLw4q6DQPOQ4Y00hqXx6CJ55WsEsIt287YQJn4G9lpFRAHcLsHD/EiqiGAMCoJbXpEGR8IpZO
+	wicfN83KsSHNHPNKYqLLdcguGRORfGjzHQnOzCxbcRD1TZIwBXdDz1esvFE=
+X-Google-Smtp-Source: AGHT+IF+BVSl+ovmy5z/z2cOrnSCU4r6DIF0pijy9YMcMwFTwuXECASsWN0wVhsf39b1va2dJNeN6Q==
+X-Received: by 2002:a17:907:d24:b0:a99:a6e0:fa0b with SMTP id a640c23a62f3a-aa69f176cf2mr159635866b.5.1733841779120;
+        Tue, 10 Dec 2024 06:42:59 -0800 (PST)
+Received: from mordecai.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-3010-3bd6-8521-caf1.ipv6.o2.cz. [2a00:1028:83b8:1e7a:3010:3bd6:8521:caf1])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa6749d08efsm443993566b.29.2024.12.10.06.42.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2024 06:30:41 -0800 (PST)
-Date: Tue, 10 Dec 2024 15:30:33 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Siddharth Menon <simeddon@gmail.com>
-Cc: shuah@kernel.org, corbet@lwn.net, mbenes@suse.cz,
-	linux-kselftest@vger.kernel.org, workflows@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/3] docs/kselftests: Explain the usage of
- TEST_CONFIG_DEPS
-Message-ID: <Z1hQiQM5FbSVpiEy@pathway.suse.cz>
-References: <20241205114757.5916-1-simeddon@gmail.com>
- <20241205114757.5916-2-simeddon@gmail.com>
+        Tue, 10 Dec 2024 06:42:58 -0800 (PST)
+Date: Tue, 10 Dec 2024 15:42:49 +0100
+From: Petr Tesarik <ptesarik@suse.com>
+To: Valentin Schneider <vschneid@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Dave Hansen
+ <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
+ bpf@vger.kernel.org, x86@kernel.org, rcu@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Paolo Bonzini <pbonzini@redhat.com>,
+ Wanpeng Li <wanpengli@tencent.com>, Vitaly Kuznetsov <vkuznets@redhat.com>,
+ Andy Lutomirski <luto@kernel.org>, Frederic Weisbecker
+ <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Neeraj
+ Upadhyay <quic_neeraju@quicinc.com>, Joel Fernandes
+ <joel@joelfernandes.org>, Josh Triplett <josh@joshtriplett.org>, Boqun Feng
+ <boqun.feng@gmail.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Uladzislau Rezki
+ <urezki@gmail.com>, Christoph Hellwig <hch@infradead.org>, Lorenzo Stoakes
+ <lstoakes@gmail.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron
+ <jbaron@akamai.com>, Kees Cook <keescook@chromium.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Ard Biesheuvel <ardb@kernel.org>, Nicholas
+ Piggin <npiggin@gmail.com>, Juerg Haefliger
+ <juerg.haefliger@canonical.com>, Nicolas Saenz Julienne
+ <nsaenz@kernel.org>, "Kirill A. Shutemov"
+ <kirill.shutemov@linux.intel.com>, Nadav Amit <namit@vmware.com>, Dan
+ Carpenter <error27@gmail.com>, Chuang Wang <nashuiliang@gmail.com>, Yang
+ Jihong <yangjihong1@huawei.com>, Petr Mladek <pmladek@suse.com>, "Jason A.
+ Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>, Julian Pidancet
+ <julian.pidancet@oracle.com>, Tom Lendacky <thomas.lendacky@amd.com>,
+ Dionna Glaze <dionnaglaze@google.com>, Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?=
+ <linux@weissschuh.net>, Juri Lelli <juri.lelli@redhat.com>, Marcelo Tosatti
+ <mtosatti@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>, Daniel Wagner
+ <dwagner@suse.de>
+Subject: Re: [RFC PATCH v3 13/15] context_tracking,x86: Add infrastructure
+ to defer kernel TLBI
+Message-ID: <20241210154249.1260046a@mordecai.tesarici.cz>
+In-Reply-To: <xhsmhv7vr63vj.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+References: <20241119153502.41361-1-vschneid@redhat.com>
+	<20241119153502.41361-14-vschneid@redhat.com>
+	<20241120152216.GM19989@noisy.programming.kicks-ass.net>
+	<20241120153221.GM38972@noisy.programming.kicks-ass.net>
+	<xhsmhldxdhl7b.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+	<20241121111221.GE24774@noisy.programming.kicks-ass.net>
+	<4b562cd0-7500-4b3a-8f5c-e6acfea2896e@intel.com>
+	<20241121153016.GL39245@noisy.programming.kicks-ass.net>
+	<20241205183111.12dc16b3@mordecai.tesarici.cz>
+	<xhsmh1pyh6p0k.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+	<20241209121249.GN35539@noisy.programming.kicks-ass.net>
+	<20241209154252.4f8fa5a8@mordecai.tesarici.cz>
+	<xhsmhv7vr63vj.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241205114757.5916-2-simeddon@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu 2024-12-05 17:17:55, Siddharth Menon wrote:
-> Update documentation to explain the TEST_CONFIG_DEPS flag in lib.mk.
-> TEST_CONFIG_DEPS is used to validate the presence of required config flags
-> specified in the selftest makefile before compiling or running a test.
+On Tue, 10 Dec 2024 14:53:36 +0100
+Valentin Schneider <vschneid@redhat.com> wrote:
+
+> On 09/12/24 15:42, Petr Tesarik wrote:
+> > On Mon, 9 Dec 2024 13:12:49 +0100
+> > Peter Zijlstra <peterz@infradead.org> wrote:
+> >  
+> >> On Mon, Dec 09, 2024 at 01:04:43PM +0100, Valentin Schneider wrote:
+> >>  
+> >> > > But I wonder what exactly was the original scenario encountered by
+> >> > > Valentin. I mean, if TLB entry invalidations were necessary to sync
+> >> > > changes to kernel text after flipping a static branch, then it might be
+> >> > > less overhead to make a list of affected pages and call INVLPG on them.  
+> >>
+> >> No; TLB is not involved with text patching (on x86).
+> >>  
+> >> > > Valentin, do you happen to know?  
+> >> >
+> >> > So from my experimentation (hackbench + kernel compilation on housekeeping
+> >> > CPUs, dummy while(1) userspace loop on isolated CPUs), the TLB flushes only
+> >> > occurred from vunmap() - mainly from all the hackbench threads coming and
+> >> > going.  
+> >>
+> >> Right, we have virtually mapped stacks.  
+> >
+> > Wait... Are you talking about the kernel stac? But that's only 4 pages
+> > (or 8 pages with KASAN), so that should be easily handled with INVLPG.
+> > No CR4 dances are needed for that.
+> >
+> > What am I missing?
+> >  
 > 
-> Signed-off-by: Siddharth Menon <simeddon@gmail.com>
-> ---
->  Documentation/dev-tools/kselftest.rst | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-> index fdb1df86783a..e816b282363f 100644
-> --- a/Documentation/dev-tools/kselftest.rst
-> +++ b/Documentation/dev-tools/kselftest.rst
-> @@ -301,6 +301,9 @@ Contributing new tests (details)
->  
->     e.g: tools/testing/selftests/android/config
->  
-> + * Use TEST_CONFIG_DEPS to specify required config options to be enabled 
-> +   before a test is allowed to run or compile.
-> +
->   * Create a .gitignore file inside test directory and add all generated objects
->     in it.
+> So the gist of the IPI deferral thing is to coalesce IPI callbacks into a
+> single flag value that is read & acted on upon kernel entry. Freeing a
+> task's kernel stack is not the only thing that can issue a vunmap(), so
 
-It might be a matter of taste. It is a chicken & egg problem. I
-personally find it weird to document something which does not exist yet.
+Thank you for confirming it's not the kernel stack. Peter's remark left
+me a little confused.
 
-Please, either update the documentation together with the code or
-later :-)
+> instead of tracking all the pages affected by the unmap (which is
+> potentially an ever-growing memory leak as long as no kernel entry happens
+> on the isolated CPUs), we just flush everything.
 
-Best Regards,
-Petr
+Yes, this makes some sense. Of course, there is no way to avoid the
+cost; we can only defer it to a "more suitable" point in time, and
+current low-latency requirements make kernel entry better than IPI. It
+is at least more predictable (as long as device interrupts are routed
+to other CPUs).
 
-PS: I haven't got this mail. I have got only 2nd and 3rd patch.
-    I prefer to see the entire patchset. I suggest to always
-    send all patches to the same list of people and mailing lists.
-    
+I have looked into ways to reduce the number of page faults _after_
+flushing the TLB. FWIW if we decide to track to-be-flushed pages, we
+only need an array of tlb_single_page_flush_ceiling pages. If there are
+more, flushing the entire TLB is believed to be cheaper. That is, I
+merely suggest to use the same logic which is already implemented by
+flush_tlb_kernel_range().
+
+Anyway, since there is no easy trick, let's leave the discussion for a
+later optimization. I definitely do not want to block progress on this
+patch series.
+
+Thanks for all your input!
+
+Petr T
 
