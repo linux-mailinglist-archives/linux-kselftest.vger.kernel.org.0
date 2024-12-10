@@ -1,119 +1,139 @@
-Return-Path: <linux-kselftest+bounces-23113-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23114-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF50C9EB77E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 18:10:05 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E85D9EB783
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 18:10:32 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C33042820D2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 17:10:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67BA81638D8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 17:10:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD7D233D70;
-	Tue, 10 Dec 2024 17:10:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4814234985;
+	Tue, 10 Dec 2024 17:10:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SOUMN7Tc"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IwHNyNAK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09D61C07ED;
-	Tue, 10 Dec 2024 17:10:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A469F2111
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 17:10:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733850601; cv=none; b=FN06FKpDrMdHqbq7m608K2Np+NTqIWxh83BiksMr9K8QEkU6D68M0y/VeIji+v8OZJIi1HsFQU7TVzKcyxAfy//IBLmVyt0IBTlo8sjm6S/URF2978RTvMIv/ffdpR8VlWFP61n4ZMJ1GHSIdZXeEKIKtKfn/OfLs1wOASWjHwg=
+	t=1733850605; cv=none; b=WfTdj0kvx2XvILQOyFI1izaRO1EG1M8DOjv1zzn8Tn1eHBt1INOpnrYQYY29kz58z9mcTx0FsGMBDF72rkodNoezbjfgIaNOE5d3Nuawh1LnpJ0qTpkRvDMj+bK4tB55h2fPhnWA6VVEJRSXI+uxfFQZZvCd0lzcKPzNbIbsWdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733850601; c=relaxed/simple;
-	bh=2Lcmq7SHHNoVqPiQ1a9keIwEUzJcb799Uq6YwdCactM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L0EvRMsV2i44n6gJstgYUNE0tT/aeWNQSFV79zoODV2vfW41MPHJi5C9D4qLSDLhfv7tSrW91H/rOmLqMhBsc3Rl0Rpug61VjrVhQeMYW2XjXHKplXi93mPUQFr3VrM9Ruj5UuT85B2r0MZfdyTGxGPOpEOy6hl8GkWwyi3/oOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SOUMN7Tc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 783CAC4CED6;
-	Tue, 10 Dec 2024 17:09:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733850600;
-	bh=2Lcmq7SHHNoVqPiQ1a9keIwEUzJcb799Uq6YwdCactM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SOUMN7Tc4of6hly92PWfFlwTA8xXM7VUYU4bNYDTSXF5sc6BM3VXU2Vig0QEc+AEe
-	 B1bLwSJepN5c33ArBzRH/+2pfEq9bq/zGF3WIdULrNuXpP1H/DUZTn6BTurWdhn31k
-	 lgmllm0L8VibP5t8qgXhC4Z5W443RodVG3Kh8Bfkaz6ttEMteL6rd+fiatbPoa3jit
-	 zTzD5bHnDOW6C3AMOBf8ljeQk7bvJny9XNdkjva9Qx+j/8MPGE1Iv58QlOzoj6xPJV
-	 WzOXQUuppv12EqtG5qRvWoW22GOh7S6MNxeGdySvWKax0o1KLpqnuF3pGZAb20h7hq
-	 lhndv/N0MNHSg==
-Date: Tue, 10 Dec 2024 17:09:55 +0000
-From: Will Deacon <will@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 2/9] arm64/sysreg: Update ID_AA64ISAR3_EL1 to DDI0601
- 2024-09
-Message-ID: <20241210170953.GB16075@willie-the-truck>
-References: <20241203-arm64-2024-dpisa-v3-0-a6c78b1aa297@kernel.org>
- <20241203-arm64-2024-dpisa-v3-2-a6c78b1aa297@kernel.org>
+	s=arc-20240116; t=1733850605; c=relaxed/simple;
+	bh=n7TX/KGVtqtN/arIkiCvvxqUxQBAA9t8KQHNkd+Kzi0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lH1NmZLlQzdV99C/3qwndsb/aiKNZ2apfXcQVdB3GbyQSq1CgZsoxSzS3mdaStgPUqIRjAhk648riWYD0OtxNrLAaMTYvu3Tw+hqqG89xC/YcO/GbCb+TZhPSL2cxN2XB7j4lstX7i4o/3zmv9xk0muX5vRFThoCFGF4Ce9gL5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IwHNyNAK; arc=none smtp.client-ip=209.85.166.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-8442ec2adc7so205427339f.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 09:10:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1733850602; x=1734455402; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OVkYBvw17/WfzayXGy8io1dx1e/dJ//f+G5krTuVRXY=;
+        b=IwHNyNAKw68QUf7Y0dFtF1InMFyKaTCi3KU33mGsaZKENYtNPlEtyNL6ga/L08Xceh
+         5JyU9aI/98SF39V5N55km2KkQfcjwREpQtfR0AJO9jtWanv68DVFOskl2bgj85KZuWb4
+         EcWVshIFBqCM4NQxYbKM/EYGhJPErXQ7CZqzk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733850602; x=1734455402;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OVkYBvw17/WfzayXGy8io1dx1e/dJ//f+G5krTuVRXY=;
+        b=hk/T/eCL+DDK3U2DM39ybLnpnhIyWJjgWANCTB5fv8xbWE3dbMTMsEbwoWIJ9FqcPA
+         hMvXu4aBg500IZ/hLjhJP6WBqEgMve2HpNuctDYgoliw7KTPCabwmxpeV/2hmSMmN8N0
+         z7stXqKXM2fpMThDsEtdaqA9X+VVWMxPMmbkD0HmVPodQMJfIOZzudKPiA/X7Pa6TfAS
+         iqIyVz06dvcpNlKMOBtkPuK29fPmhTk5agpwcBN0Na7IHr61AM2WWzbPkk17aiOwgdRv
+         H88gko6I7OnHvoKD8xk1xWAwZrRRqTeXAPErANYiG9EV8rDiUSMK8p36UwRB/ROY8I4p
+         Q1qw==
+X-Forwarded-Encrypted: i=1; AJvYcCW9xVvZqcmS+Ftum6tSN7scdlgDVsFp6wGAKrmM+PGHSEPiw3UVpwAUwdSv7Xzl3J4N2qWokZ117McASVskP98=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwTpZBR6/4b8h16awHsRnen4WVWQjsaUfXjYFjmn1K/VbSgO7B
+	ChcBgbIy1oJAye5ryyfFDmgV2FWdZ+m4oH5I7YmY+w91vzwkvPATCA8r9DjSfSk=
+X-Gm-Gg: ASbGncvaQnjFqaM+HPxoXh0+R3i3+W4+n98FH3TUY0Jo4+q1FlSoO4kfJNacAaCt34j
+	3Ksdwto9JetP7wvY7/E/UoiO5AYNfdKne9BF5yux8F1kZuOvP7yf5P0xBwi4rFmsf5lhMk6+p+f
+	DVPPPT74tTulaWE4MhzJYlluKpJ8rTuvHvBOtX4nFdcOqBhv2FQSHkgJhJLE/Udk5eE6ZeeORC0
+	i90sddlgUPtcnVh892DYmRO2/zVnX07p7WYT5NVDa3mmC+Utc5CPuMOck1Sm2QZIg==
+X-Google-Smtp-Source: AGHT+IEzIMlDQqNqHqbv8i4VSsCEok3zEc7VgJmYt6flLbyLvhHrDbMWrBxSWujOoiWgdpiR6ADVtQ==
+X-Received: by 2002:a05:6e02:2199:b0:3a7:80ff:4a6e with SMTP id e9e14a558f8ab-3a811d9c055mr127020545ab.11.1733850601829;
+        Tue, 10 Dec 2024 09:10:01 -0800 (PST)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e2bff662b7sm1136449173.103.2024.12.10.09.10.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Dec 2024 09:10:01 -0800 (PST)
+Message-ID: <57d11b05-d2ac-4fb3-beb2-cd1f45b38596@linuxfoundation.org>
+Date: Tue, 10 Dec 2024 10:10:00 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241203-arm64-2024-dpisa-v3-2-a6c78b1aa297@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH for-next v3] selftests/filesystems: Add missing gitignore
+ file
+To: Li Zhijian <lizhijian@fujitsu.com>, linux-kselftest@vger.kernel.org
+Cc: shuah@kernel.org, linux-kernel@vger.kernel.org,
+ Christian Brauner <brauner@kernel.org>, Miklos Szeredi
+ <mszeredi@redhat.com>, Josef Bacik <josef@toxicpanda.com>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20241122073725.1531483-1-lizhijian@fujitsu.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20241122073725.1531483-1-lizhijian@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Dec 03, 2024 at 12:39:21PM +0000, Mark Brown wrote:
-> DDI0601 2024-09 defines several new feature flags in ID_AA64ISAR3_EL1,
-> update our description in sysreg to reflect these.
+On 11/22/24 00:37, Li Zhijian wrote:
+> Compiled binary files should be added to .gitignore
 > 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+> 'git status' complains:
+> Untracked files:
+> (use "git add <file>..." to include in what will be committed)
+>       filesystems/statmount/statmount_test_ns
+> 
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Miklos Szeredi <mszeredi@redhat.com>
+> Cc: Josef Bacik <josef@toxicpanda.com>
+> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
 > ---
->  arch/arm64/tools/sysreg | 18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
+> Hello,
+> Cover letter is here.
 > 
-> diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
-> index 911f16c82ebd3ee98ffed965b02a5c6b153bc50c..c5af604eda6a721cedf5c9c68d6f7038156de651 100644
-> --- a/arch/arm64/tools/sysreg
-> +++ b/arch/arm64/tools/sysreg
-> @@ -1566,7 +1566,23 @@ EndEnum
->  EndSysreg
->  
->  Sysreg	ID_AA64ISAR3_EL1	3	0	0	6	3
-> -Res0	63:16
-> +Res0	63:32
-> +UnsignedEnum	31:28	FPRCVT
-> +	0b0000	NI
-> +	0b0010	IMP
-> +EndEnum
-> +UnsignedEnum	27:24	LSUI
-> +	0b0000	NI
-> +	0b0010	IMP
-> +EndEnum
-> +UnsignedEnum	23:20	OCCMO
-> +	0b0000	NI
-> +	0b0010	IMP
-> +EndEnum
-> +UnsignedEnum	19:16	LSFE
-> +	0b0000	NI
-> +	0b0010	IMP
+> This patch set aims to make 'git status' clear after 'make' and 'make
+> run_tests' for kselftests.
+> ---
+> V3:
+>    sorted the ignored files
+> V2:
+>     split as a separate patch from a small one [0]
+>     [0] https://lore.kernel.org/linux-kselftest/20241015010817.453539-1-lizhijian@fujitsu.com/
+> 
+> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+> ---
+>   tools/testing/selftests/filesystems/statmount/.gitignore | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/filesystems/statmount/.gitignore b/tools/testing/selftests/filesystems/statmount/.gitignore
+> index 82a4846cbc4b..973363ad66a2 100644
+> --- a/tools/testing/selftests/filesystems/statmount/.gitignore
+> +++ b/tools/testing/selftests/filesystems/statmount/.gitignore
+> @@ -1,2 +1,3 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+> +statmount_test_ns
+>   /*_test
+'
+I am seeing duplicate signature warning on this patch. Please
+fix and send a correct patch.
 
-These IMP encodings look wrong to me -- the document you reference in
-the commit message uses 0b0001 for the "implemented" cases.
-
-Can we _please_ just generate this stuff. It feels like we've been
-making silly typos over and over again with the current approach so
-either it's hard or we're not very good at it. Either way, it should be
-automated.
-
-Others have managed it [1], so it's clearly do-able.
-
-Will
-
-[1] https://github.com/ashwio/arm64-sysreg-lib
+thanks,
+-- Shuah
 
