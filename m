@@ -1,83 +1,88 @@
-Return-Path: <linux-kselftest+bounces-23098-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23099-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71C419EA2C1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 00:26:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D4A2D9EA65E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 04:16:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 06E611885B05
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Dec 2024 23:26:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F16A41888412
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 03:16:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87AE01FF7BE;
-	Mon,  9 Dec 2024 23:26:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72C311A0731;
+	Tue, 10 Dec 2024 03:16:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F53pHC6S"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="bWrfkcD3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D6611FD7A3;
-	Mon,  9 Dec 2024 23:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD88CB644;
+	Tue, 10 Dec 2024 03:16:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733786763; cv=none; b=KSFlJI66vAhQ97lds9LF1iydAgPCRqaK7sz1LxpGetwF16o/n527qbKsqIsEwlxDj0kFKpDIF+MZS7RpeanrZtiOidCkR7ctn+NULT8hEPEC3eZ7O/lkzImHhnFKgTDR7hNeJjrGp1ZsssB+79mkfn+ABrUMXx+s8sR6lF9wZ14=
+	t=1733800588; cv=none; b=qqE+I7yEwLPaTh6aYxAbN/AtWfAG6qoIwe09bN4Ni9+RloRwkCtznBWmx+kB/pEooXhGlgScRclgUo5hwg/VuhGjzY6t5HemM0O6j8hty/qwDoK2VutC+8DbJo6nbxsVUU1fOcmj08HTmF7HcrVpM+CdR7tGmlO/VewJkbKLnVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733786763; c=relaxed/simple;
-	bh=qIPxX49xXZagNIW/CMZJSjgZ01tbBFGBDYqCLqukdq0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BfHcGYpifzXWuyQ5jE8u4YbgUxO+ULdJFbOgJ2HPfyFKIrlBFs5sjSCizlscYDVkGsHfteVGnXNSTxOg35lwHgKnf16QaO7sFEkBTmJ+lNeeNQ616nd/+yrUgVnhwLdc+z86ETRU3a9RzUPWej/AVVfABLTRrFNFrAOEWe8UuIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F53pHC6S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A8FCC4CED1;
-	Mon,  9 Dec 2024 23:26:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733786762;
-	bh=qIPxX49xXZagNIW/CMZJSjgZ01tbBFGBDYqCLqukdq0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=F53pHC6Sp/E7HxJiAvT3YWNyDkBIW9IDkDcU/M5vUCHqbaHjnnt0ivg0dtvdUAaKZ
-	 bm2cRReF0ciruyMESsVoC4dOg88njTYVfKJVtihzfu5Bkc7oPdngbJRvERUZzDX+ia
-	 UUm0PGPj1LG/lghoJt3/cxIzNaKiFdN5wTvULbXqvVsyVhXWjK4hfgTjsyZB9Bu0Jq
-	 kPBYgAttYirMbzoyS9L34vrUtY5h29m2ivWH08P0VbxKONQ4YCTP6o61FEEaumQ32N
-	 PVWpW6HZTxJxYe9vvwfkTmlFoR/uqSnKzaqGJKuxgFdkWAU1kdLHi/N54xEpF5/DNv
-	 V9S9tTOlTk19g==
-Message-ID: <b3b02cc6-69c0-4cde-b459-cb7c7fab9f30@kernel.org>
-Date: Mon, 9 Dec 2024 16:26:01 -0700
+	s=arc-20240116; t=1733800588; c=relaxed/simple;
+	bh=eXGEu4KAz6qcPVQA7lYcrlwsLgscu3BE4eAmubYy8Ak=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=q5T5y5INwNWNx9QzBnjM7pbQW5Ox9Py5I+iS0mJN8nV8tBE4HnhG56+ZmuCTh63wAeuN+7DAX1AEEL5Z3vcfPuehZ35ehxgeIJAYH00ZX5U8xFyKfdxXOlZCRPB/8ZhlhDJbeBNdP4+tFj2sspIOO44hvKlAuFlvjWPmKFk/k0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=bWrfkcD3; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:Message-ID:Subject:Cc:To:
+	From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=LeFG3gl+OryxJybRPXpymOyZvJHgwsSv9cMRRfsqXhc=; b=bWrfkcD3njI+eNuA6NOMNOLgRu
+	LB8iQhndZnRzIkGwpPp+zu0Ppcu0SJXYNJQczNIcI41ySOTsKSp5jUAceIxzdpwzyhy2AwbHEY90j
+	FsumA0uvS/w/hixhKXiTlqqVflLC6MZ2VV8+DmT9K7dTRm1vdMRygxF14Lx/Zr/X8CmZJtkzEUA1G
+	CR/+efVgYfa6WFUJIAyjPGTniT32agj8nMV6D+T/9OoLWgZ2jo1GygD5n21Yse5sGga3dSqJzYdyc
+	NxhV/1jizwvdZioiTJXLdb8bSwsaq5Xu7JHJCv9yqVpbKAVRwRq8qKDvmmZb38s+EWs7BzBUQBE5b
+	2whjDbOg==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1tKqWE-000N1U-0A;
+	Tue, 10 Dec 2024 11:15:59 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 10 Dec 2024 11:15:58 +0800
+Date: Tue, 10 Dec 2024 11:15:58 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Enzo Bertoloti <ebertoloti@lkcamp.dev>
+Cc: jpleoncio@lkcamp.dev, ~lkcamp/patches@lists.sr.ht, davem@davemloft.net,
+	linux-crypto@vger.kernel.org, shuah@kernel.org, davidgow@google.com,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: Re: [PATCH] Add KUnit tests for curve25519
+Message-ID: <Z1eybkns92cjDR1i@gondor.apana.org.au>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] selftests/vDSO: support DT_GNU_HASH
-To: Xi Ruoyao <xry111@xry111.site>, Shuah Khan <shuah@kernel.org>,
- Fangrui Song <i@maskray.me>, linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-References: <297cfe11-0418-4633-8c15-4ffc7d290a3d@linuxfoundation.org>
- <20241206130724.7944-2-xry111@xry111.site>
-Content-Language: en-US
-From: Shuah <shuah@kernel.org>
-In-Reply-To: <20241206130724.7944-2-xry111@xry111.site>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241209001335.736045-1-ebertoloti@lkcamp.dev>
+X-Newsgroups: apana.lists.os.linux.cryptoapi
 
-On 12/6/24 06:07, Xi Ruoyao wrote:
-> From: Fangrui Song <i@maskray.me>
+Enzo Bertoloti <ebertoloti@lkcamp.dev> wrote:
+> This test uses the curve25519-selftest data for testing the curve25519
+> arch, generic and the public key generation algorithms on a larger set
+> using KUnit.
+> The comprises of normal, edge cases, valid, invalid results and others.
 > 
-> glibc added support for DT_GNU_HASH in 2006 and DT_HASH has been
-> obsoleted for more than one decade in many Linux distributions.
-> 
-> Many vDSOs support DT_GNU_HASH. This patch adds selftests support.
-> 
-> Signed-off-by: Fangrui Song <i@maskray.me>
-> Tested-by: Xi Ruoyao <xry111@xry111.site>
-> Signed-off-by: Xi Ruoyao <xry111@xry111.site> # rebase
-> ---
+> This is partially based on the existing curve25519 selftests in
+> crypto/curve25519-selftest.c
 
-Thank you. Applied to linux-kselftest next for Linux 6.14-rc1.
+Please explain the difference between this and the existing selftest.
+Why do we need both of them?
 
-thanks,
--- Shuah
-
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
