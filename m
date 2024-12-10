@@ -1,110 +1,120 @@
-Return-Path: <linux-kselftest+bounces-23118-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23119-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 340919EB983
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 19:43:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B9EC9EB9ED
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 20:14:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F34216586A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 18:43:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CE5D1888C79
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2024 19:14:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BBAD204695;
-	Tue, 10 Dec 2024 18:43:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6912320469D;
+	Tue, 10 Dec 2024 19:14:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l3QZf2QU"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PibYboMV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 228C51BC9E2;
-	Tue, 10 Dec 2024 18:43:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D92A01BDAA2
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 19:14:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733856191; cv=none; b=EmGgH90INrrx84oTmB2p6pAwQxI8YGXDM+KDHpOlxqejAqL3WDWYpyHlSlK0kdY34E0Z8HfVhUyafy9DVlQdWnxtNyIIU5aR5ySfHk1P9wUYl8LfeG2kSJwBvx60yHLBN8ertaFSpZX1HxLdODdKoSjYabEUNHXyRLoyf83lU10=
+	t=1733858050; cv=none; b=BE1oBKBnIgGpG7hLuOOoST7gcGIcDIEuZ3w99nfStTb4S4MUcrE00iu/dN1GMbG+uecFwiVPMPyRtqpgFbe1gTWmTszpKoct4g5drHbMlEh/C6T1XJnLDcQHrrXQ6/H9gkp53LXTiap6VqUKNYcXK8xPc/YybLBySxhy0YLY58Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733856191; c=relaxed/simple;
-	bh=LeyVSRDVsBs+4yUCaB87Pq4OseXmV/4M3itrMP0/wm0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D6kB471+RH9aSlGCf0zFY8/4jpEmUN/3zTaKabx3jwTLtULLi3nypm04FETCQc3/ANBcF3OXTaCBAF/plJ5BerUNinAX3bhAm8gzLI/rSCifUzSFbm8uGCpfUFYKtrV/UiTCHpkreFmXYkByb0KF8isdUcFAfu4l5tObY/8G9/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l3QZf2QU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21645C4CED6;
-	Tue, 10 Dec 2024 18:43:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733856190;
-	bh=LeyVSRDVsBs+4yUCaB87Pq4OseXmV/4M3itrMP0/wm0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=l3QZf2QU1+RKgBarpr3fmwhoA5L2UhFOM9C1RZQnVhg7boSvpELYwkm/EJ/f9atQd
-	 vcOIEchsMsRDa9jgC/fglZJI4mvMN8alAfd84kefwG0FYRw9KC7vSHFuP09km5/IcS
-	 CEYTczJEmB7IJNgFMxl4xacUh4LnlRveu+fsyKUwjmNFziOu2IJaDx/1TDPb2lVAJH
-	 XPZD8d5WjtzFfxNjLIQQUKn24rKrurj5mnKjbj0jihY+320p6VCbzNOOZ6uUrh1Kf0
-	 fPS4qcE2JDYYupqGny4KQBES6fDNu1O06rc9d2vfaK5+NPJrBOPt8m5DmUq4BEvGZU
-	 p5ZGCHa9/GO1g==
-Date: Tue, 10 Dec 2024 18:43:05 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 2/9] arm64/sysreg: Update ID_AA64ISAR3_EL1 to DDI0601
- 2024-09
-Message-ID: <b859bdcd-7343-4d53-9f3a-f374deca725a@sirena.org.uk>
-References: <20241203-arm64-2024-dpisa-v3-0-a6c78b1aa297@kernel.org>
- <20241203-arm64-2024-dpisa-v3-2-a6c78b1aa297@kernel.org>
- <20241210170953.GB16075@willie-the-truck>
+	s=arc-20240116; t=1733858050; c=relaxed/simple;
+	bh=8nB9LfqUIlx893EnVEn1oyPaKNloRLzhICUSkzKGANQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=luqybZHQgqfczYKfGY7/A5W/EyAhi/lUFTchcF3/Ldjt7dsZBzUzPuXGDYq0/6lmFXSzk+AYhIWuokfVoVJUnRa8JXKHTpfQ00vv9UtJQQnjtXAioQOLtrQOc7TFuElZ8s7ujhhKzVZB4OdZ71iYuOcIMqf8NfxLRXAGaaJya/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=PibYboMV; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7ee11ff7210so4695964a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 11:14:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1733858048; x=1734462848; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MysYNOOOtjPxn7x1jZehpCDsgb3N3i+OrdKPB7nkcnQ=;
+        b=PibYboMVU0w6jXbXBOCttKgijsfjv5A16l8vN/gCKYXQ95pQnZW0hSI13v9OkqKFuK
+         8wlOe8MKJZTSTt1PPaOEcRLv9krFmhHBs3QSBV9bPcDgM7DxxZJz9BJVxpU6rKHpM+Js
+         0BmQaPGMDXP5Z1IAoygaYzsSLyS7PbOl+3oQQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733858048; x=1734462848;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MysYNOOOtjPxn7x1jZehpCDsgb3N3i+OrdKPB7nkcnQ=;
+        b=JbmgYSbR/KuDSI7LTQPo/eWxi3BpXmk0qN8ih11zBzFiupMIYqb+bZuCzxpQGRW8dr
+         nbSzMGkDGKpc3o/a0f2Of5kBaFv6SfRtR4CCwDazeqMGlMC94MObNEQi2jTqhn1QXiEs
+         OWSRqOW1u2ODU+NL0ty7XJ0gJJXHlUnUsgK3Ud/RU/E6b5X1tT9s/RTOGYN7jfVFaPd/
+         9Hi65+eKT3MfrOXGzarXcPW1p7bbCgHeKH0MeA3UkQMO2wGG3tpgVHadJc0ZCHPgRJFN
+         ysVMZQ+G4qcZlUMzI5UqLKRLOotNvgkIKD9rZHnd3rCvXzoh/mqotMOB0q9vNjYNLsI9
+         Q5cg==
+X-Forwarded-Encrypted: i=1; AJvYcCXQYh5ZK2WNCKNndg0K9WM+FhFp4SsEbpmSBEsGoIs0y+HtqHAH06Fbqj9kbloU0AVvbxsDHzoV21gMbheLvng=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAP2e/vs8/TX65HWiLGykFVX/jGZWPHkc1o3Ddisok1DYV9zIg
+	8Rjs8MmjvKe7+GG7vrx0O9HJPRDpVxRyKUn2dhyy5xlWND3NvU0cLSKKgvGSHA==
+X-Gm-Gg: ASbGncuO32K87R94PohlLYJndXLdWZ8IcqrDtTCtC+T6D7ZQWbUbcon20ltZFIzbyCr
+	wuTystU7LazmVsTUfS2YHuWBWhDKE1aa2yVbFFKc1LRf8NSsiLfYqrC9NGFCAaSx+mkMfPWPShK
+	otMc4XFHUVAyqXlgTRs+apKBZZ1dQKzEGbvKyTsLzUFOjByp7/QE0PJ9o1xZd9UqXGRawXZM4IY
+	zJg0VReBM4GiKd3GsqJAj2oXwfjJdF40nz0hVMnMYWaKEtT6u4a1g2dwZTMuTEwYPoQAnUcRQ6w
+	cXPB4dT8Waw8qeKx
+X-Google-Smtp-Source: AGHT+IG1Y3K1qZ9CQcqUnkQEHUVS4XwePEyG43iObCbw1CEpZyvCGhCju0fkg5G3HVvnA7tqXu0KEw==
+X-Received: by 2002:a05:6a20:3943:b0:1e0:ca33:8ccf with SMTP id adf61e73a8af0-1e1c1360edamr639374637.34.1733858048251;
+        Tue, 10 Dec 2024 11:14:08 -0800 (PST)
+Received: from localhost ([2a00:79e0:2e14:7:cf2b:44dd:668c:5818])
+        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-7fd2f40dc81sm5905791a12.64.2024.12.10.11.14.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Dec 2024 11:14:07 -0800 (PST)
+From: Brian Norris <briannorris@chromium.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	Rob Herring <robh@kernel.org>,
+	David Gow <davidgow@google.com>,
+	Rae Moar <rmoar@google.com>,
+	linux-acpi@vger.kernel.org,
+	Brian Norris <briannorris@chromium.org>
+Subject: [PATCH 0/4] drivers: base: Don't match device with NULL of_node/fwnode/etc + tests
+Date: Tue, 10 Dec 2024 11:13:29 -0800
+Message-ID: <20241210191353.533801-1-briannorris@chromium.org>
+X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="O7xabmfxJqulB9XD"
-Content-Disposition: inline
-In-Reply-To: <20241210170953.GB16075@willie-the-truck>
-X-Cookie: Leave no stone unturned.
+Content-Transfer-Encoding: 8bit
+
+This series:
+1. makes the behavior of_find_device_by_node(),
+   bus_find_device_by_of_node(), bus_find_device_by_fwnode(), etc., more
+   consistent when provided with a NULL node/handle;
+2. adds kunit tests to validate the new NULL-argument behavior; and
+3. makes some related improvements and refactoring for the drivers/base/
+   kunit tests.
+
+This series aims to prevent problems like the ones resolved in commit
+5c8418cf4025 ("PCI/pwrctrl: Unregister platform device only if one
+actually exists").
 
 
---O7xabmfxJqulB9XD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Brian Norris (4):
+  drivers: base: Don't match devices with NULL of_node/fwnode/etc
+  drivers: base: test: Enable device model tests with KUNIT_ALL_TESTS
+  drivers: base: test: Drop "devm" from platform-device-test names
+  drivers: base: test: Add ...find_device_by...(... NULL) tests
 
-On Tue, Dec 10, 2024 at 05:09:55PM +0000, Will Deacon wrote:
+ drivers/base/core.c                      |  8 ++---
+ drivers/base/test/Kconfig                |  1 +
+ drivers/base/test/platform-device-test.c | 42 ++++++++++++++++++++----
+ 3 files changed, 40 insertions(+), 11 deletions(-)
 
-> Can we _please_ just generate this stuff. It feels like we've been
-> making silly typos over and over again with the current approach so
-> either it's hard or we're not very good at it. Either way, it should be
-> automated.
+-- 
+2.47.0.338.g60cca15819-goog
 
-> Others have managed it [1], so it's clearly do-able.
-
-Yes, the issues here are not technical ones.  Though there are some
-complications -  eg, IIRC the XML doesn't encode the signedness of
-fields like we do and there's areas where we've deliberately diverged.
-Given the amount of review I end up having to do of sysreg changes your
-reasoning is especially apparent to me.  I've passed this feedback on
-(again).
-
---O7xabmfxJqulB9XD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdYi7gACgkQJNaLcl1U
-h9CY6wf/S1Ub6ZKKgKDElFV3e1bfepjDl2LGu2hOv6vTYntBUtYf58M4kC5iUUsW
-VhM9pHp1mjel6TFgH+3a9a7LKOOBdnfROZzmbN/WJnMaggX6kUKJ7NdtfxoQptN0
-ifPvJgGbPi5qIBlrVVBPwbw3Zk/Y9RQtbXZqPmz+SeAI2jCre4pjauoNoYpFPrha
-fBV6p6e22M5wwV3E+7WfrBxuDvXcxbxoa9oQMNaozZgyFKkMRhW3rlVjKqQ6WtCp
-vDYL9qGYhVUjVa0XxOlI7pph9xGF8qHFU7uEt14rssvlKisbIJzOn+WbtsQImdwA
-kRgTDRh0VHV1QUFKgSC2MoK5ROEFNg==
-=DVp6
------END PGP SIGNATURE-----
-
---O7xabmfxJqulB9XD--
 
