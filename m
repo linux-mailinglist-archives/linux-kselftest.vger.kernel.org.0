@@ -1,115 +1,79 @@
-Return-Path: <linux-kselftest+bounces-23226-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23227-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF4889ED957
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 23:06:27 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B38A59ED985
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 23:20:40 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9CB8188191F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 22:06:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BD9F28239D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 22:20:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB7471F03E4;
-	Wed, 11 Dec 2024 22:06:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CBDA1EC4D6;
+	Wed, 11 Dec 2024 22:20:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Auj4CTDk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="id9PL6jK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BB11D88D3
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Dec 2024 22:06:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BAF1DB956;
+	Wed, 11 Dec 2024 22:20:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733954776; cv=none; b=ne6uwxmXhUwrDTWtMZ17AurWGM6hAFAX+Ge0hN6v+P/JltzavaFQ4cbWgwcpuxdoxkKct3CChqq3LKv8g2TyAVZyH0eZPLMdNJE+LtfvtAH7YsNYiFP407/wU7/aLYbvCebxxukQ/vsY+DJwr6vfNPr7GPkwKZvsYXNZ6VUxJnc=
+	t=1733955622; cv=none; b=TDwywWGCCaNB4pu13wDdtH89oZc4DqDBzHaj++qY5Fg/8SLftv9MxRmcobJ3+qCO5uxqxu2ADQv7JnVXfqHjDdmyF0ct8qy4kbwpf1ZxFNtLXRUFt8Tc4vY3L9UOZEHrnnAwk8+AdZlsNeSWvE70g7QZ2WaazEqPQI8U75PQifk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733954776; c=relaxed/simple;
-	bh=dc04m6m7A0zBx/3GsGuHlwEymHutsumTTMAD3LQrhZQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=dac8iXWEmwInW7lS2wf6H/5hDEY8WdKF6na2q7SJDRxsgRNI6xMqO8beaYTWEc+d/7DOvJ37/+C1L1IJwZmcp4Qt7LWC3aV7kq+jkGywiAR5RmK/howkOBUoJPwUYtL2CllI2otQ4DRJEPJLFWtvKQqUHctlihVOU87L0NA2iuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Auj4CTDk; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-21681a2c0d5so16172035ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Dec 2024 14:06:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1733954774; x=1734559574; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uTDUEy5ndzyMUOmAANu+2Q5dKv5CytQeXy0bYdZM4AE=;
-        b=Auj4CTDkhS7LzhaNcAPn5mYq6OF8PgwSK7WQQhbEOpT7tWIDubpIezmPMNuoe9GMHz
-         7CdRufWp+F4w+gfK1zolvBvlL8W8bwpE7sC80wV044hKSeuT+mVVpKuc3SkhUkBYUlb8
-         9xt6kN3ge476OS9hpEPCVj5ADX4iduN+WRYgWRaQ4e67e0QxTeWp3iOhe14oPwTIS0Dc
-         bOkRSsk2649RXCsMZ/8F2scbDivSabuOgqLPoQDtiCTd1271HrBHvvNJ2cdVPPoPDD5n
-         18lLyYrZhbOztthodbfPp40xsTKktCeJQiQIOTunZCXbWnOOvhLiaIRQGLjUZZngUh26
-         ztvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733954774; x=1734559574;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uTDUEy5ndzyMUOmAANu+2Q5dKv5CytQeXy0bYdZM4AE=;
-        b=QhsrPtugAy9zJesAXFyMTAxCk6itYctOcWUz6cqJd5XHRWsV6FyBSTk4ZNMvLqn5Bq
-         epncfwzNtEeh/1xlVEywY6M5liwn+mrYV9jU09Le0mn/buwWKg8HxbSb3JMGtUz02drM
-         pri6Z/hyjeJ2QLDAlrr23mYZ2SNR4yqXplFoOnGIVLaIjvHqrY6ye/AMvf7gTve5lnGX
-         SX9x+0z0xPAF7yOLCDJnsZa987c+kYt/scwJx6GS7Q+V5LmE8VHrydORkEht746pWcM9
-         HWZ9aZXhqm4D1Vr6zaNVM9Tov4GdISgmsEON3kAWu6P/71zsCHRSnx7+2vF8rVRDmatd
-         FUXw==
-X-Forwarded-Encrypted: i=1; AJvYcCVkjET0a4lbkK6wuLkJztHw5UAhGfnC6szXK7RLdnTuEZUaqeqxOZUyRRRKBipKsKTqzl+z+B8Atr/R7k4p0Nc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2LJnnC4IlNfu03ZEZ5FaNLnnh27tV3d2JnSCucC5o1XPasHfq
-	dD8QWerW4fchNJ7SLC/cOE6sYBvqEmW/3U3Wdi3OZrKxvoa2HsVTaQXa2kv6t7h9pPA/8QohKo6
-	flQ==
-X-Google-Smtp-Source: AGHT+IHFSnyjPEDTcWJnAvaiGma2JfY/srzHSvKplMJ9OueXQOEiKTtjMmaF+b36NOyPghd7X0ZdCPZjbkA=
-X-Received: from plgn1.prod.google.com ([2002:a17:902:f601:b0:216:499e:dadb])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:db04:b0:215:44fe:163e
- with SMTP id d9443c01a7336-21778397514mr77377935ad.1.1733954774653; Wed, 11
- Dec 2024 14:06:14 -0800 (PST)
-Date: Wed, 11 Dec 2024 14:06:12 -0800
-In-Reply-To: <20240910152207.38974-15-nikwip@amazon.de>
+	s=arc-20240116; t=1733955622; c=relaxed/simple;
+	bh=RFX0bqtFTXdVy3Fc4rEo/xLrnwwojCZGB79un2IZYMU=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=Rb4GnJALec4np16A3lZpkMlzjoeA2c7gEoZYHHdlnRxogItiK5MrH+qa1HeINHgEIyO/Ox7SA/hXGFRZloeFqrsdNFMlAXeQn1qMdrNj1yiWKpzy1SexnK0q7ox6HXtD/n5KJNhgOCYBSdAiYLeQ3qqsFGLy+vrm9N2xM5axYmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=id9PL6jK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA33BC4CED2;
+	Wed, 11 Dec 2024 22:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733955621;
+	bh=RFX0bqtFTXdVy3Fc4rEo/xLrnwwojCZGB79un2IZYMU=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=id9PL6jK/HbVJ9TOeqy/WSwNiGPIIRzyUtMQGYn39D+SrR19UO2Hu5w/5qoOV2HCs
+	 UjyC8mXd5uHV3/40xPt7IKVNGDId4afAe1lgnAdCb81HCgbmkCslAxa4ouVz/kc87b
+	 pXoLfZp29eto29MlCNt3gwbNamXglGc5iUUSG7y9EQzsgPiHewdw2LFn4sTkW3wD57
+	 //8OZbaenov5P5XGWmzBPLNSk+KZ6CLqXh62wmRBZWZMkU4CYKANZdHe1npBSkac/c
+	 2UuvN/ta/hebVCsFVGqDHKhSth1LG1oUslxLDATpZjwPWshgqLDn1+261lbfljAsqi
+	 1cE9EfXycyKkw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EC5AD380A965;
+	Wed, 11 Dec 2024 22:20:38 +0000 (UTC)
+Subject: Re: [GIT PULL] Kselftest fixes for Linux 6.13-rc3
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <e3c2e67e-c80f-417c-a44f-e2f568e90d44@linuxfoundation.org>
+References: <e3c2e67e-c80f-417c-a44f-e2f568e90d44@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kselftest.vger.kernel.org>
+X-PR-Tracked-Message-Id: <e3c2e67e-c80f-417c-a44f-e2f568e90d44@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-fixes-6.13-rc3
+X-PR-Tracked-Commit-Id: 777f290ab328de333b85558bb6807a69a59b36ba
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: becb337c237f9c8030fb976a1d643c0347408cf8
+Message-Id: <173395563740.1746415.5799615296948212104.pr-tracker-bot@kernel.org>
+Date: Wed, 11 Dec 2024 22:20:37 +0000
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240910152207.38974-1-nikwip@amazon.de> <20240910152207.38974-15-nikwip@amazon.de>
-Message-ID: <Z1oM1HQqXrIr1tij@google.com>
-Subject: Re: [PATCH 14/15] KVM: x86: Implement KVM_TRANSLATE2
-From: Sean Christopherson <seanjc@google.com>
-To: Nikolas Wipper <nikwip@amazon.de>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
-	Nicolas Saenz Julienne <nsaenz@amazon.com>, Alexander Graf <graf@amazon.de>, James Gowans <jgowans@amazon.com>, 
-	nh-open-source@amazon.com, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, linux-kernel@vger.kernel.org, 
-	kvm@vger.kernel.org, x86@kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kvmarm@lists.linux.dev, 
-	kvm-riscv@lists.infradead.org
-Content-Type: text/plain; charset="us-ascii"
 
-On Tue, Sep 10, 2024, Nikolas Wipper wrote:
-> +int kvm_arch_vcpu_ioctl_translate2(struct kvm_vcpu *vcpu,
-> +				    struct kvm_translation2 *tr)
-> +{
-> +	int idx, set_bit_mode = 0, access = 0;
-> +	struct x86_exception exception = { };
-> +	gva_t vaddr = tr->linear_address;
-> +	u16 status = 0;
-> +	gpa_t gpa;
-> +
-> +	if (tr->flags & KVM_TRANSLATE_FLAGS_SET_ACCESSED)
-> +		set_bit_mode |= PWALK_SET_ACCESSED;
-> +	if (tr->flags & KVM_TRANSLATE_FLAGS_SET_DIRTY)
-> +		set_bit_mode |= PWALK_SET_DIRTY;
-> +	if (tr->flags & KVM_TRANSLATE_FLAGS_FORCE_SET_ACCESSED)
-> +		set_bit_mode |= PWALK_FORCE_SET_ACCESSED;
-> +
-> +	if (tr->access & KVM_TRANSLATE_ACCESS_WRITE)
-> +		access |= PFERR_WRITE_MASK;
-> +	if (tr->access & KVM_TRANSLATE_ACCESS_USER)
-> +		access |= PFERR_USER_MASK;
-> +	if (tr->access & KVM_TRANSLATE_ACCESS_EXEC)
-> +		access |= PFERR_FETCH_MASK;
+The pull request you sent on Wed, 11 Dec 2024 13:37:41 -0700:
 
-WRITE and FETCH accesses need to be mutually exclusive.
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-fixes-6.13-rc3
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/becb337c237f9c8030fb976a1d643c0347408cf8
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
