@@ -1,141 +1,162 @@
-Return-Path: <linux-kselftest+bounces-23223-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23224-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3162C9ED8FB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 22:49:04 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E1039ED94B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 23:05:08 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C2F01889FCE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 21:45:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E45D42802AC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 22:05:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E8BF1D8A08;
-	Wed, 11 Dec 2024 21:45:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC8351EC4D6;
+	Wed, 11 Dec 2024 22:05:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W3D9Zf4p"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Bm/Z+KBn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF37C259498;
-	Wed, 11 Dec 2024 21:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3897A1C4A20
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Dec 2024 22:05:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733953551; cv=none; b=cDQA0CoG8wdKxzs0JYlF4rMV2h7lxOQdrGmD6ibkEEEbwY2ITDAEvVnSUNv9ClYo4xLeUwm567XOdWmAL+pmFJyS6tVyPAHtog6Cv7CblJYmxL5HY9/qj5inXS/dhGE4yXnnTDtOhaRQGU6huR8cbxx3lfbr71LhosOt55ReViI=
+	t=1733954703; cv=none; b=PTeZE7IHtbZE9YMQiqoZhA07uocXWJZ9b01uwbvQdOWdJC+P5d97k53I3SC19Z92AvcWXk2a/1kZ2zRUOO+hzD2Dja33Yxm7rD7P6BBZg4zG4Ob5h/91HCzSF/X3ARQm22UfAzWP7axDqwsHF1NmfuJxvcLOHA1Lwvy1GUWlcrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733953551; c=relaxed/simple;
-	bh=uZxErtAMqBRDn+WZll10y/bkFTDcTuIEHN0JHfb5GqI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y9ESx4Z5y/+AsX9CyARyS15FjWLMNf/OaA1NEZIuYRZyQvZlwSbR8rHKz+BawYrY68e4g9A793g7LrR77tCOic+6kqlz8shbnAMwXxdyA3zM/mRPCKb8H/D9hzEQODuNtVjbbcPjaWhkVsZd7ibGgrxyj/XFIHfr56tomDkG3tY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W3D9Zf4p; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-435f8f29f8aso14997635e9.2;
-        Wed, 11 Dec 2024 13:45:49 -0800 (PST)
+	s=arc-20240116; t=1733954703; c=relaxed/simple;
+	bh=48hZYgsKO6dztb1elGN9mIv03OaAS788aLKUsXNGgy4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=OPgh1pJ8YuEzeX41FNBq6f6ARdkvBDoye21nmuejMBftRU2tlspdRCb1udeIP+KDsjt8CcufYuXQbKLKketxgL/ZZCgBvDojliJDIMYWfNSrJBYOACcO7TztfNf6J4rRpmTUSBKFVwVOQJcXSAM6O6FjfYGAuOOid4wYTfDSEmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Bm/Z+KBn; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2eeeb5b7022so7007886a91.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Dec 2024 14:05:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733953548; x=1734558348; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kKHGYhS/cBN9KevNGUo8edo38c3cn7FpEtFnnmWm5xE=;
-        b=W3D9Zf4pRGkXziYgoVZJng90TrqmS2zBYiimMc6TQBMg2Y9Jep1NH5H87ZdoJ0M8oP
-         uFn2/h+z6pxvyZjl4FtOUfzCPxrZIeT/B0om8OSfULWloBqDUZaHB9hESqf5euW/ARx1
-         fmjmC1FR29OuQ0uVEF9dgr+IbRkgF7rvIPw6mSM32r0qRUQRtTels30rSsEyXS6jjC+d
-         qZJ7EkjM76T5FmswUkXetdkn7Nu8+eH8iJNXru4OsDkxEq/Ge1eXPhIXqJmibjOR7/7Z
-         askuRMnJk5H9OH/sW8bVKW58bVg8H8hbdU2+esTODohwhnPcbIRPU4IH11yhqojdhbvO
-         Do3w==
+        d=google.com; s=20230601; t=1733954701; x=1734559501; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eUq2+HHfD0MZnKG6S4yv713N9r4cWKPzp2/GucLxJ8U=;
+        b=Bm/Z+KBnws/B9Xb40wlHAK4gw33tR9F7jtsM1TIoOl+tIsS62Jy7Q+vS4Vk0JH1NeV
+         5NfrrhgpZrxzyQYquNHjwrBwTOivIt+5r0PBBSpkuzhY7HebWMvSMplyNiB5/RjJDGxE
+         dNE1kv2Psmmq/j/u0xWWrmUW7K9q08Zp+I/rnLyKajWJTbeei/NtUBWC5fmte/hDN3sJ
+         QP0W97Yl0LVC8nIfzALWRVwKAZRRg6zyyCsayibbXJaWZyIjk7RicpvkoeVIJSWQXA8b
+         i3RtwqmU+smN1JeqWvBxRcLRbTJDxmLsOIrDj/q7ZTHQ3dZQRbfJPzHz5R/QAhXa+DSf
+         7PJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733953548; x=1734558348;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kKHGYhS/cBN9KevNGUo8edo38c3cn7FpEtFnnmWm5xE=;
-        b=t3K6nSk2nowfwftaAPYfOncqu1rkR8lnn15438HPqeXJzRq0hIq/s6APc009ezcekc
-         4sViBdhxmJy4Y94hL6+wO9jX7huXiypIGWnvh27zlxpGD2YkP4WbQwXBSi90O9k2OuPz
-         8NPkiAI34MndpMkfGUrkcMZlzaNKQkRhGUGimS4AovpR3Yzj42WX5Zu6kh1AFLfMSLF/
-         EujMakUNauHBubSOsdo5pUVpAzIBUBVKE/rj9DZ8WGPlh8l/TT+tixkGJvCzGq6AvzAY
-         C7afcogZA/HittvBOBbIGKLt0zQlPcfw7qtwnhOAfjL5Za7RwysmUQ7nk3VH1RCrk56s
-         dhFA==
-X-Forwarded-Encrypted: i=1; AJvYcCWpb00K3LXQxhsHhCeQfP69Y2Jgw2QDQizDrOdHbZJb/vw1jyTedNMnh3Ongwt7wsXG+9xI+gUF+wOZXJhz@vger.kernel.org, AJvYcCWvLA7KZ2A2kAZ0iuCls+SHXRYe8v5xhlB0+dSdEnBetoMIrz54FR1yNi/x1wy9UdJA7p0=@vger.kernel.org, AJvYcCXQNfq/DfPygTOx2Q7Ie74O4h7ek7MDU4g0Cxr7aXwFy1X5Zmkl+6wqSJkQrQ2wz7gFn3EWHfec9kuXa2IGKBb1@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/q9rU/74TaTMHOU1e/u+sVwOdUyGzA6uIgQE++O5yAU+KdbMz
-	reUpy2ngA01GTZof1jR+vCXinqE9E/blOnIPheTvKF1+v/lWnVGE
-X-Gm-Gg: ASbGncvqgXFiZ6hdmIyFKrpBMIm9EIbARjQ1w8UQx6D8mwICXHu2PYEWJ2N6YbV7dKT
-	xKzjyJ8pduzdmG+LHSx+XiGO7/3V7HlDniK6eSNjefWcmKbGlheBFSPUgpNvDSJr/BM/PsTpS6Y
-	ZPHT7Uz8z+Y/JR/nzp0D/3vA2jfEemch1l4pInsu/l+egJ4ZqPKP/pRC2SUwjJXXcMBFwmAc+Bp
-	Bcg6xrozd2YTVluUSsYuXlInUOFgrdJdBON4RUUAKwgvtfIWzU96G5NOblgkzP3L+emWjZhdQOA
-	XDCOIJC0IHdm5hfFESUX8BE=
-X-Google-Smtp-Source: AGHT+IH6R1p/+7YyxKtU/3Pv+FwIn+it1MCc11BigiVlTByBTldrdq5Oc6JbbUCqjWW52cCOGaoVsA==
-X-Received: by 2002:a5d:6daa:0:b0:385:f17b:de54 with SMTP id ffacd0b85a97d-3864ce894d5mr4038779f8f.5.1733953547810;
-        Wed, 11 Dec 2024 13:45:47 -0800 (PST)
-Received: from ?IPV6:2a02:8012:e013:0:1ab3:1f25:931:4d97? ([2a02:8012:e013:0:1ab3:1f25:931:4d97])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38782527520sm2145157f8f.109.2024.12.11.13.45.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Dec 2024 13:45:47 -0800 (PST)
-Message-ID: <fba03de3-f44b-4a2d-a15a-4071c5b09427@gmail.com>
-Date: Wed, 11 Dec 2024 21:45:44 +0000
+        d=1e100.net; s=20230601; t=1733954701; x=1734559501;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eUq2+HHfD0MZnKG6S4yv713N9r4cWKPzp2/GucLxJ8U=;
+        b=fVHT89Tvl5wGMi4AIQBlNb5O6rIQLIArogV+cmSM0a9DigaB8pOxa3ZYCjHckzSnli
+         G/LDTzi2REPbcJgEkOA4J/y9G12QPQf8G0NPZyzMxirKPCv0mESxejVIFBRRK9XSRKcn
+         SZ3qSRWcCiy7j8ZbpRCmBJ5N/D0Nxm4ojnehe7nmZ/JVGDqy6QHfx62Fo3HZVq8W6LGZ
+         A+eJVFECjEG/W1xBEgR2Yj1uR0HBoXL7vq0szM3V1Jx/GDFi0AQ+VleOi8M8oKdeTMUa
+         2IDldqVIJ++Z3YnJ3aXWgkys2KoZAbTKCu46C1z2igNI7vi1Dba8b34SAHBPWWJCTcFC
+         Tsew==
+X-Forwarded-Encrypted: i=1; AJvYcCWssORN578h/WHpmwy1XnYx6xKNGngz6bbF30Iwma6tl+CSyTVv7IR8E0Tyl1BCAyx3Ba5ktzSdWRiQuxK0PEo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZphLPI0VUgnIFfSZFXZXF7FdKsdzqm/894JpbN/6x6FY1nr1/
+	cfKdT9SiWH3uerUv9Z8CiapozJ/ws+1SqYPmdgrYFt63Mzx0CZS5IwRrqQq9/wLxX4o0YW9BX58
+	w6w==
+X-Google-Smtp-Source: AGHT+IEyb50yMKacPTznxoijQx7BN35QC5SQoHLR54g34UBhOfC2yU2PDiXYsV/JHqrTw/B7nLThww6z3/A=
+X-Received: from pjbnb8.prod.google.com ([2002:a17:90b:35c8:b0:2ee:4f3a:d07d])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2e46:b0:2ee:8439:dc8
+ with SMTP id 98e67ed59e1d1-2f1280e2a8amr6417546a91.34.1733954701643; Wed, 11
+ Dec 2024 14:05:01 -0800 (PST)
+Date: Wed, 11 Dec 2024 14:05:00 -0800
+In-Reply-To: <20240910152207.38974-1-nikwip@amazon.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/6] Enhance event delivery error handling
-To: Sean Christopherson <seanjc@google.com>, Ivan Orlov <iorlov@amazon.com>
-Cc: bp@alien8.de, dave.hansen@linux.intel.com, mingo@redhat.com,
- pbonzini@redhat.com, shuah@kernel.org, tglx@linutronix.de, hpa@zytor.com,
- kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, x86@kernel.org, pdurrant@amazon.co.uk,
- dwmw@amazon.co.uk
-References: <20241111102749.82761-1-iorlov@amazon.com>
- <Z1nX8aCfZMvJ4co4@google.com>
-Content-Language: en-US
-From: Ivan Orlov <ivan.orlov0322@gmail.com>
-In-Reply-To: <Z1nX8aCfZMvJ4co4@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20240910152207.38974-1-nikwip@amazon.de>
+Message-ID: <Z1oMjKa3gExDxsCN@google.com>
+Subject: Re: [PATCH 00/15] KVM: x86: Introduce new ioctl KVM_TRANSLATE2
+From: Sean Christopherson <seanjc@google.com>
+To: Nikolas Wipper <nikwip@amazon.de>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Nicolas Saenz Julienne <nsaenz@amazon.com>, Alexander Graf <graf@amazon.de>, James Gowans <jgowans@amazon.com>, 
+	nh-open-source@amazon.com, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, linux-kernel@vger.kernel.org, 
+	kvm@vger.kernel.org, x86@kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kvmarm@lists.linux.dev, 
+	kvm-riscv@lists.infradead.org
+Content-Type: text/plain; charset="us-ascii"
 
-On 12/11/24 18:20, Sean Christopherson wrote:
-> On Mon, Nov 11, 2024, Ivan Orlov wrote:
->> Currently, the situation when guest accesses MMIO during vectoring is
->> handled differently on VMX and SVM: on VMX KVM returns internal error,
->> when SVM goes into infinite loop trying to deliver an event again and
->> again.
->>
->> This patch series eliminates this difference by returning a KVM internal
->> error when guest performs MMIO during vectoring for both VMX and SVM.
->>
->> Also, introduce a selftest test case which covers the error handling
->> mentioned above.
->>
->> V1 -> V2:
->> - Make commit messages more brief, avoid using pronouns
->> - Extract SVM error handling into a separate commit
->> - Introduce a new X86EMUL_ return type and detect the unhandleable
->> vectoring error in vendor-specific check_emulate_instruction instead of
->> handling it in the common MMU code (which is specific for cached MMIO)
->>
->> Ivan Orlov (6):
->>    KVM: x86: Add function for vectoring error generation
->>    KVM: x86: Add emulation status for vectoring during MMIO
->>    KVM: VMX: Handle vectoring error in check_emulate_instruction
->>    KVM: SVM: Handle MMIO during vectroing error
->>    selftests: KVM: extract lidt into helper function
->>    selftests: KVM: Add test case for MMIO during vectoring
+On Tue, Sep 10, 2024, Nikolas Wipper wrote:
+> This series introduces a new ioctl KVM_TRANSLATE2, which expands on
+> KVM_TRANSLATE. It is required to implement Hyper-V's
+> HvTranslateVirtualAddress hyper-call as part of the ongoing effort to
+> emulate HyperV's Virtual Secure Mode (VSM) within KVM and QEMU. The hyper-
+> call requires several new KVM APIs, one of which is KVM_TRANSLATE2, which
+> implements the core functionality of the hyper-call. The rest of the
+> required functionality will be implemented in subsequent series.
 > 
-> Minor nits throughout, but unless you disagree with my suggestions, I'll fix them
-> up when applying, i.e. no need to post a v3.
-> 
+> Other than translating guest virtual addresses, the ioctl allows the
+> caller to control whether the access and dirty bits are set during the
+> page walk. It also allows specifying an access mode instead of returning
+> viable access modes, which enables setting the bits up to the level that
+> caused a failure. Additionally, the ioctl provides more information about
+> why the page walk failed, and which page table is responsible. This
+> functionality is not available within KVM_TRANSLATE, and can't be added
+> without breaking backwards compatiblity, thus a new ioctl is required.
 
-Hi Sean,
+...
 
-Thanks a lot for the review :)
+>  Documentation/virt/kvm/api.rst                | 131 ++++++++
+>  arch/x86/include/asm/kvm_host.h               |  18 +-
+>  arch/x86/kvm/hyperv.c                         |   3 +-
+>  arch/x86/kvm/kvm_emulate.h                    |   8 +
+>  arch/x86/kvm/mmu.h                            |  10 +-
+>  arch/x86/kvm/mmu/mmu.c                        |   7 +-
+>  arch/x86/kvm/mmu/paging_tmpl.h                |  80 +++--
+>  arch/x86/kvm/x86.c                            | 123 ++++++-
+>  include/linux/kvm_host.h                      |   6 +
+>  include/uapi/linux/kvm.h                      |  33 ++
+>  tools/testing/selftests/kvm/Makefile          |   1 +
+>  .../selftests/kvm/x86_64/kvm_translate2.c     | 310 ++++++++++++++++++
+>  virt/kvm/kvm_main.c                           |  41 +++
+>  13 files changed, 724 insertions(+), 47 deletions(-)
+>  create mode 100644 tools/testing/selftests/kvm/x86_64/kvm_translate2.c
 
-I don't have any conceptual disagreement with your suggestions, so 
-please feel free to fix them when applying the patches. Thanks!
+...
 
--- 
-Kind regards,
-Ivan Orlov
+> The simple reason for keeping this functionality in KVM, is that it already
+> has a mature, production-level page walker (which is already exposed) and
+> creating something similar QEMU would take a lot longer and would be much
+> harder to maintain than just creating an API that leverages the existing
+> walker.
+
+I'm not convinced that implementing targeted support in QEMU (or any other VMM)
+would be at all challenging or a burden to maintain.  I do think duplicating
+functionality across multiple VMMs is undesirable, but that's an argument for
+creating modular userspace libraries for such functionality.  E.g. I/O APIC
+emulation is another one I'd love to move to a common library.
+
+Traversing page tables isn't difficult.  Checking permission bits isn't complex.
+Tedious, perhaps.  But not complex.  KVM's rather insane code comes from KVM's
+desire to make the checks as performant as possible, because eking out every little
+bit of performance matters for legacy shadow paging.  I doubt VSM needs _that_
+level of performance.
+
+I say "targeted", because I assume the only use case for VSM is 64-bit non-nested
+guests.  QEMU already has a rudimentary supporting for walking guest page tables,
+and that code is all of 40 LoC.  Granted, it's heinous and lacks permission checks
+and A/D updates, but I would expect a clean implementation with permission checks
+and A/D support would clock in around 200 LoC.  Maybe 300.
+
+And ignoring docs and selftests, that's roughly what's being added in this series.
+Much of the code being added is quite simple, but there are non-trivial changes
+here as well.  E.g. the different ways of setting A/D bits.
+
+My biggest concern is taking on ABI that restricts what KVM can do in its walker.
+E.g. I *really* don't like the PKU change.  Yeah, Intel doesn't explicitly define
+architectural behavior, but diverging from hardware behavior is rarely a good idea.
+
+Similarly, the behavior of FNAME(protect_clean_gpte)() probably isn't desirable
+for the VSM use case.
 
