@@ -1,195 +1,230 @@
-Return-Path: <linux-kselftest+bounces-23147-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23148-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 063689EC461
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 06:40:08 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A0139EC468
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 06:46:36 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 224442843FD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 05:40:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68AFB1889EC1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 05:46:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A839E1C07EA;
-	Wed, 11 Dec 2024 05:40:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F9311C07CF;
+	Wed, 11 Dec 2024 05:46:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sVTt5JUS"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="AoJl7g3P"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D399F6136
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Dec 2024 05:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65234C97
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Dec 2024 05:46:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733895600; cv=none; b=ZdahyJf0oiptjzxRlxbUZWG9vTB5d+WlKF5T42ApcEVXiybXWye8wrNUP/ISSsbpJ69fjLzUHbvFcXn83orhGQfPeGp9ieVM2LH7E6SvNmPoyWCoq81hor8G9ErpIerbs85YYAPHFAx6XlS1zGO+MMlQ+YId8K/5qs3EbLEcIUo=
+	t=1733895990; cv=none; b=lZUk4oTGiRwWYZtVU6/GCuTOe4sVSe20mx7EmN5uSlPv7cQzlBJWbcSzv0JQbCO3YtxEtDmbFtxuYyk8nOxYbQQACh7jfliVJIWIMxgEJzh9cCrNa1DuObFPzY9oJiJ3e/0+7f94wcml5V8tSe1tWk1kc6cy9qigwNObz76G0QA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733895600; c=relaxed/simple;
-	bh=cmLSSNnhREF3JwUwweEtDJM+TE6MLim68CUGz24LJFw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pQxuqh5gWR6UGQdoq5RGjZinscr3YMXS1RaDUUR4kOTyVV755AF4xxqLcncSvbbvsX8nyCOpklbSNvfbf/+v+MFEIKZf3kOdhofMLjWTEUhRJca1Ye3uSDJHd3bD6DucnQ2zSXKDqXxkTMO98ZUoMXjK2KVukc5wROhiuWerf90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sVTt5JUS; arc=none smtp.client-ip=209.85.221.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-517aea3ee2aso1403522e0c.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 21:39:58 -0800 (PST)
+	s=arc-20240116; t=1733895990; c=relaxed/simple;
+	bh=OCWFqx9DLCaDYpgULX15aNbo0sDqDgUlQ85eDq9B0EM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HA+DGV7NPbP5wWdoS6k3CsipRgX3rhmKXOJPRpHPHI4+N6v5haeCAdhcZ4WA1w19aF21SxjW4HlkrShAzdvfVPrKWtf90yROOSUJUE2+33amoVEZy0qoWiLBoMEm6rzqwM45BETU0g0H/YTKx1XzFQSmjN+jtoPW6kM3E0NJ+oU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=AoJl7g3P; arc=none smtp.client-ip=209.85.166.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-844c5f31d48so82005639f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 21:46:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1733895598; x=1734500398; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=L2JyqkiU/6R1xmttvdUUGuANembyWIMM8crCm1+D1nE=;
-        b=sVTt5JUS7UmvwiFC+vzXGMYQs/Ss/UF7U1VOEL248r35uiYLK4rxkGqoH258wNu2HH
-         GpbhfdsL+PfsJyF8zRYnbKnAvNZV6tc0Ol/h6pTyhj83RzIHSdVq1/XifVI9ORmROGbV
-         B46yvpZb78iWI0SNPObVbEJRt0in7Hl83QqUo84eDHe+nmDFSqVTuVcGXcelNy17/xQg
-         yZelDkUZl4fHw6LBAlkYYIEAfdNRuI5Zssjt5au00IU6jecCOUfcmeAmIAq/p+KHdnYF
-         GrWrxt+dLiutUpRsrgeBZ9g7dD8G2NF/0/YM8shlCQhK3bRlMpUxicIk4rfhkxdJ2GRw
-         MVqA==
+        d=sifive.com; s=google; t=1733895987; x=1734500787; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q5oMUqHh+nk9B5mZBiaJ0vvBxq45cqgYB3xD0ERWeFs=;
+        b=AoJl7g3PLCVoLeJIolnVDEbHzgOEMA5LQvlPsDzSrf6aw1djppWxGSrADIY2CLOsC3
+         6rINacm1CnCeVHkpCdujCBNh4EHbSG0T2d7B6pToA9W2g8GJEsLgevik4dEAyHgG+pV7
+         F+Qv3Bfv0u3X15Zi3usdJA8ULQIh4zOzOBoCEBo6m8GtBKeLuMnw5SKJQuIp2FpY6HrQ
+         6MrSj+aDa3hDrVqS5n1Myw6Maea7Si8F0BVKbxduoi57EytHAnqAQ7F9eIh0mpeE49bV
+         BqVsC2ynZptpuCGO+oSrUpAmm6K5kEzwMIGDu3mxc0U9QBhahR88N6Z5x0YZndUVCSgl
+         y6Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733895598; x=1734500398;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L2JyqkiU/6R1xmttvdUUGuANembyWIMM8crCm1+D1nE=;
-        b=ezXnvo/oY1Hp3vByqYG36WGyrMW/XAzmmnNccaFj/2SFQqUvGwio9VZ/DLHrBwFXew
-         JJZ6+y8/5PKkmMyynzrOX022pHcsAEBheRf2GE/4f+Pibq5usOy7huuzAy8SbwmeZs6n
-         fjjp9hCgNTLc1spItkX4BlOGI7rjYVoWa80YguxviGbGhPAOj2zmOXBymB8OXe6711o6
-         NGna49bE2vFiRhKd6vMvI/0KIeu34NPcWcSz8fnzLI9Au2CyUugCLMmE+QiifZcdNZne
-         bOnw6UBe3vBDMkHgdg27v/rJ8a/M18owybzZhO9X2o7tkzkX68/5g7dZVpV0HeJAsFZu
-         qkyw==
-X-Forwarded-Encrypted: i=1; AJvYcCVcSlIJwQtkHr1LvfR25HAbohsQIaW7CHbeX1Wz+U8P39Tu4Z1Z0Xyvvq9EeY/Yk9BByt6yZXlBYPT77GXpPkk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5KHobD9/N5E6akfOINAcn332l2ZC40cF0XeEaRn383GsK9Ul3
-	XHB29gQESTZG1OsVj3JqFB2qpDYijyK/oJ+jUnsQOvbC04kBh439xP/Ax0c8pUwz+bAt+t8OdPH
-	FSrYQjLB16VJBoVh049i0aAlDXDpHdDC4owQQug==
-X-Gm-Gg: ASbGncsI5Y0yk1WFYxsY4s4YCTRcPKM7vvqMoOMauDjqkQnCEBDtbvcQ8V+K+lGS1kf
-	Qj6FhMduZxaz48Z/raJUvmXJxVoXnFxmpjA==
-X-Google-Smtp-Source: AGHT+IGaVQqa3Q+BI6ngTSIj2GVkueSl4Jrs/cm3+CtAoLXynlarl8woucxcn3CryRSjN8OBkzE56/rteEslmfJ/Svc=
-X-Received: by 2002:a05:6122:8292:b0:515:e4c4:3664 with SMTP id
- 71dfb90a1353d-518a3cc3352mr1602173e0c.9.1733895597732; Tue, 10 Dec 2024
- 21:39:57 -0800 (PST)
+        d=1e100.net; s=20230601; t=1733895987; x=1734500787;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q5oMUqHh+nk9B5mZBiaJ0vvBxq45cqgYB3xD0ERWeFs=;
+        b=CSbw43wo+tnUgxDiyUoXGbzE/wWHOIB1UPivcaBBiJBH/U5BjGt3qzUEVGRBhLoHtb
+         IFuJk17Ndpjqng2ASCmitq2rAGv9ePTMaLzPJaQ231tBf9gRcSEpwTSJHba+WHbQ1607
+         9h9cn5msE9OPODyJwHVyiDefJReHnx34Y0Y+QyEXaNLKDD2ePwnsOKF/ot0/DZifDwXc
+         wa/muEvdKPtvAh23LCpfkXgKaibeF1WSfT2OYi5B2UnNpoK1FOt4qLOf2zyym2lFpA/Z
+         tnEuaJia3hf/d49CFMzdCzc/8gzsSV33cHCCPtfuNZHt6pPPaSvOHidNIGBrIQ7Rtx/w
+         5e1w==
+X-Gm-Message-State: AOJu0YyLRzwP982c584C1Aq+SpoiXQ5ZRaNYPfICKRREX1cCFwKqMQxb
+	ZWPgdjleyhMp60wESmF1U/0SjQ5ZsQJ6qgnDPVVZGN14nLu9JEXJgJsfWIM2bUY=
+X-Gm-Gg: ASbGncsUJmXbZ10rF8gjsFFeuvtfqh9WW77kKIblWCyWpaoY0Bt/hUHhI650v3vo6Y8
+	Fs5T56kmN0xdluql7VG0cfXWP9NwzQz2cjCi/Loz9oNxuTJurSY2jsVWn9raEVurcW+hAUatcxx
+	IwBo4d+t6dtFZ1JZOeQwGcaSr43RvnHmPDGZUHkwPd2SdSnFPe/5uJysBKSzufHMWwmaLjvNQIN
+	A/tILc04msdCAW1fQuCCo2NLdgiCM/dfxmMtDPLc8qq+CkCfMXKQEk4g+DbOejEO+UtN5SXvWDk
+	ASQ=
+X-Google-Smtp-Source: AGHT+IEmmvtcV1rwmGFlOaV5k7IoW8oaRRGsYBd4+FUMKqnq0edFVLxZ/CDUJaoapBekOklZskqkiA==
+X-Received: by 2002:a05:6e02:3f87:b0:3ab:1b7a:5932 with SMTP id e9e14a558f8ab-3ab1b7a5b26mr1105265ab.18.1733895986822;
+        Tue, 10 Dec 2024 21:46:26 -0800 (PST)
+Received: from [100.64.0.1] ([147.124.94.167])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e2c8a82832sm1075829173.81.2024.12.10.21.46.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Dec 2024 21:46:26 -0800 (PST)
+Message-ID: <41025b15-2f66-481b-a2da-dbf86e2bfc10@sifive.com>
+Date: Tue, 10 Dec 2024 23:46:24 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+G9fYvcBvbabg+m7brKfpGCGZUcK+KHHTFX7hFvW6GmN2XF0g@mail.gmail.com>
-In-Reply-To: <CA+G9fYvcBvbabg+m7brKfpGCGZUcK+KHHTFX7hFvW6GmN2XF0g@mail.gmail.com>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Wed, 11 Dec 2024 11:09:46 +0530
-Message-ID: <CA+G9fYuHGTKM5P+nEifZwfALPfO9uw7sraCrGo-c3YzR=JjwJg@mail.gmail.com>
-Subject: Re: selftests: core: unshare_test: WARNING: at mm/util.c:671 __kvmalloc_node_noprof
-To: open list <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>, LTP List <ltp@lists.linux.it>
-Cc: Shuah Khan <shuah@kernel.org>, David Gow <davidgow@google.com>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Barry Song <baohua@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Dan Carpenter <dan.carpenter@linaro.org>, 
-	Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5] riscv: selftests: Fix warnings pointer masking test
+To: Charlie Jenkins <charlie@rivosinc.com>,
+ Andrew Jones <ajones@ventanamicro.com>
+Cc: linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+ Shuah Khan <shuah@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>
+References: <20241206-fix_warnings_pointer_masking_tests-v5-1-ed566c2f27e8@rivosinc.com>
+Content-Language: en-US
+From: Samuel Holland <samuel.holland@sifive.com>
+In-Reply-To: <20241206-fix_warnings_pointer_masking_tests-v5-1-ed566c2f27e8@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-[Gentle Reminder]
+Hi Charlie,
 
-On Mon, 26 Aug 2024 at 18:50, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> The following kernel warning is noticed on all arch and all devices while
-> running selftests: core: unshare_test on Linux next-20240823 and next-20240826.
->
-> First seen on next-20240823.
->   Good: next-20240822
->   BAD:  next-20240823 and next-20240826
+On 2024-12-06 11:52 AM, Charlie Jenkins wrote:
+> When compiling the pointer masking tests with -Wall this warning
+> is present:
+> 
+> pointer_masking.c: In function ‘test_tagged_addr_abi_sysctl’:
+> pointer_masking.c:203:9: warning: ignoring return value of ‘pwrite’
+> declared with attribute ‘warn_unused_result’ [-Wunused-result]
+>   203 |         pwrite(fd, &value, 1, 0); |
+>       ^~~~~~~~~~~~~~~~~~~~~~~~ pointer_masking.c:208:9: warning:
+> ignoring return value of ‘pwrite’ declared with attribute
+> ‘warn_unused_result’ [-Wunused-result]
+>   208 |         pwrite(fd, &value, 1, 0);
+> 
+> I came across this on riscv64-linux-gnu-gcc (Ubuntu
+> 11.4.0-1ubuntu1~22.04).
+> 
+> Fix this by checking that the number of bytes written equal the expected
+> number of bytes written.
+> 
+> Fixes: 7470b5afd150 ("riscv: selftests: Add a pointer masking test")
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+> Changes in v5:
+> - No longer skip second pwrite if first one fails
+> - Use wrapper function instead of goto (Drew)
+> - Link to v4: https://lore.kernel.org/r/20241205-fix_warnings_pointer_masking_tests-v4-1-0c77eb725486@rivosinc.com
+> 
+> Changes in v4:
+> - Skip sysctl_enabled test if first pwrite failed
+> - Link to v3: https://lore.kernel.org/r/20241205-fix_warnings_pointer_masking_tests-v3-1-5c28b0f9640d@rivosinc.com
+> 
+> Changes in v3:
+> - Fix sysctl enabled test case (Drew/Alex)
+> - Move pwrite err condition into goto (Drew)
+> - Link to v2: https://lore.kernel.org/r/20241204-fix_warnings_pointer_masking_tests-v2-1-1bf0c5095f58@rivosinc.com
+> 
+> Changes in v2:
+> - I had ret != 2 for testing, I changed it to be ret != 1.
+> - Link to v1: https://lore.kernel.org/r/20241204-fix_warnings_pointer_masking_tests-v1-1-ea1e9665ce7a@rivosinc.com
+> ---
+>  .../testing/selftests/riscv/abi/pointer_masking.c  | 22 ++++++++++++++++------
+>  1 file changed, 16 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/riscv/abi/pointer_masking.c b/tools/testing/selftests/riscv/abi/pointer_masking.c
+> index dee41b7ee3e3..50c4d1bc7570 100644
+> --- a/tools/testing/selftests/riscv/abi/pointer_masking.c
+> +++ b/tools/testing/selftests/riscv/abi/pointer_masking.c
+> @@ -185,8 +185,20 @@ static void test_fork_exec(void)
+>  	}
+>  }
+>  
+> +static bool pwrite_wrapper(int fd, void *buf, size_t count, const char *msg)
+> +{
+> +	int ret = pwrite(fd, buf, count, 0);
+> +
+> +	if (ret != count) {
+> +		ksft_perror(msg);
+> +		return false;
+> +	}
+> +	return true;
+> +}
+> +
+>  static void test_tagged_addr_abi_sysctl(void)
+>  {
+> +	char *err_pwrite_msg = "failed to write to /proc/sys/abi/tagged_addr_disabled\n";
+>  	char value;
+>  	int fd;
+>  
+> @@ -200,14 +212,12 @@ static void test_tagged_addr_abi_sysctl(void)
+>  	}
+>  
+>  	value = '1';
+> -	pwrite(fd, &value, 1, 0);
+> -	ksft_test_result(set_tagged_addr_ctrl(min_pmlen, true) == -EINVAL,
+> -			 "sysctl disabled\n");
+> +	if (!pwrite_wrapper(fd, &value, 1, "write '1'"))
+> +		ksft_test_result_fail(err_pwrite_msg);
+>  
+>  	value = '0';
+> -	pwrite(fd, &value, 1, 0);
+> -	ksft_test_result(set_tagged_addr_ctrl(min_pmlen, true) == 0,
+> -			 "sysctl enabled\n");
+> +	if (!pwrite_wrapper(fd, &value, 1, "write '0'"))
+> +		ksft_test_result_fail(err_pwrite_msg);
 
-This is an open issue from August.
-The reported kernel warning is still seen on linux next and mainline
-while running selftests: core: unshare_test.
+You've removed the ksft_test_result() calls, which contain the actual behavioral
+tests (set_tagged_addr_ctrl()), so the test no longer does anything but toggle
+the sysctl:
 
-Linux version: 6.13.0-rc2-next-20241210
+# Testing fork/exec behavior
+ok 55 dereference after fork
+ok 56 dereference after fork+exec
+# Testing tagged address ABI sysctl
+# Testing tagged address ABI
+ok 57 PMLEN=0 tagged address ABI
+ok 58 PMLEN=7 tagged address ABI
+ok 59 PMLEN=16 tagged address ABI
+# Planned tests != run tests (61 != 59)
+# Totals: pass:59 fail:0 xfail:0 xpass:0 skip:0 error:0
 
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> Crash log:
-> --------
-> # selftests: core: unshare_test
-> <4>[   61.084149] ------------[ cut here ]------------
-> <4>[ 61.085175] WARNING: CPU: 0 PID: 477 at mm/util.c:671
-> __kvmalloc_node_noprof (mm/util.c:671 (discriminator 1))
-> <4>[   61.088958] Modules linked in: crct10dif_ce sm3_ce sm3 sha3_ce
-> sha512_ce sha512_arm64 drm fuse backlight dm_mod ip_tables x_tables
-> <4>[   61.093141] CPU: 0 UID: 0 PID: 477 Comm: unshare_test Not
-> tainted 6.11.0-rc5-next-20240826 #1
-> <4>[   61.094558] Hardware name: linux,dummy-virt (DT)
-> <4>[   61.096763] pstate: 23400009 (nzCv daif +PAN -UAO +TCO +DIT
-> -SSBS BTYPE=--)
-> <4>[ 61.097841] pc : __kvmalloc_node_noprof (mm/util.c:671 (discriminator 1))
-> <4>[ 61.099701] lr : __kvmalloc_node_noprof (mm/util.c:661)
-> <4>[   61.100448] sp : ffff800080abbce0
-> <4>[   61.100819] x29: ffff800080abbcf0 x28: fff0000004549280 x27:
-> 0000000000000000
-> <4>[   61.101744] x26: 0000000000000000 x25: 0000000000000000 x24:
-> fff0000003615e40
-> <4>[   61.102512] x23: fff0000003615ec0 x22: bfafa45863b285c8 x21:
-> 0000000200002000
-> <4>[   61.103232] x20: 00000000ffffffff x19: 0000000000400cc0 x18:
-> 0000000000000000
-> <4>[   61.104053] x17: 0000000000000000 x16: 0000000000000000 x15:
-> 0000000000000000
-> <4>[   61.104927] x14: 0000000000000000 x13: 0000000000000000 x12:
-> 0000000000000000
-> <4>[   61.105752] x11: 0000000000000000 x10: 0000000000000000 x9 :
-> 0000000000000000
-> <4>[   61.106606] x8 : 0000000000000001 x7 : 0000000000000001 x6 :
-> 0000000000000005
-> <4>[   61.107377] x5 : 0000000000000000 x4 : fff0000004549280 x3 :
-> 0000000000000000
-> <4>[   61.108207] x2 : 0000000000000000 x1 : 000000007fffffff x0 :
-> 0000000000000000
-> <4>[   61.109262] Call trace:
-> <4>[ 61.109619] __kvmalloc_node_noprof (mm/util.c:671 (discriminator 1))
-> <4>[ 61.110248] alloc_fdtable (fs/file.c:133)
-> <4>[ 61.110751] expand_files
-> (include/linux/atomic/atomic-arch-fallback.h:457
-> include/linux/atomic/atomic-instrumented.h:33 fs/file.c:177
-> fs/file.c:238)
-> <4>[ 61.111171] ksys_dup3 (fs/file.c:1337)
-> <4>[ 61.111596] __arm64_sys_dup3 (fs/file.c:1355)
-> <4>[ 61.112006] invoke_syscall (arch/arm64/include/asm/current.h:19
-> arch/arm64/kernel/syscall.c:54)
-> <4>[ 61.112480] el0_svc_common.constprop.0
-> (include/linux/thread_info.h:127 (discriminator 2)
-> arch/arm64/kernel/syscall.c:140 (discriminator 2))
-> <4>[ 61.112955] do_el0_svc (arch/arm64/kernel/syscall.c:152)
-> <4>[ 61.113384] el0_svc (arch/arm64/include/asm/irqflags.h:55
-> arch/arm64/include/asm/irqflags.h:76
-> arch/arm64/kernel/entry-common.c:165
-> arch/arm64/kernel/entry-common.c:178
-> arch/arm64/kernel/entry-common.c:713)
-> <4>[ 61.113742] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:731)
-> <4>[ 61.115181] el0t_64_sync (arch/arm64/kernel/entry.S:598)
-> <4>[   61.115709] ---[ end trace 0000000000000000 ]---
->
->
-> Crash Log links,
-> --------
->  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240826/testrun/24953436/suite/log-parser-test/test/check-kernel-exception-warning-cpu-pid-at-mmutilc-__kvmalloc_node_noprof/log
->
-> Crash failed comparison:
-> ----------
->  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240826/testrun/24953436/suite/log-parser-test/test/check-kernel-exception-warning-cpu-pid-at-mmutilc-__kvmalloc_node_noprof/history/
->
-> metadata:
-> ----
->   git describe: next-20240823 and next-20240826
->   git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->   git sha: c79c85875f1af04040fe4492ed94ce37ad729c4d
->
-> Please let me know if you need more information.
->
+It does do the right thing if I `mount --bind /dev/full
+/proc/sys/abi/tagged_addr_disabled`:
 
-Kernel warning log:
------------------
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241210/testrun/26261199/suite/kselftest-core/test/core_unshare_test/log
+# Testing fork/exec behavior
+ok 55 dereference after fork
+ok 56 dereference after fork+exec
+# Testing tagged address ABI sysctl
+# write '1': No space left on device (28)
+not ok 57 failed to write to /proc/sys/abi/tagged_addr_disabled
+# write '0': No space left on device (28)
+not ok 58 failed to write to /proc/sys/abi/tagged_addr_disabled
+# Testing tagged address ABI
+ok 59 PMLEN=0 tagged address ABI
+ok 60 PMLEN=7 tagged address ABI
+ok 61 PMLEN=16 tagged address ABI
+# Totals: pass:59 fail:2 xfail:0 xpass:0 skip:0 error:0
 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+So I guess the "ksft_test_result(set_tagged_addr_ctrl..." needs to go in the
+else case of the pwrite_wrapper() call.
+
+Regards,
+Samuel
+
+>  
+>  	set_tagged_addr_ctrl(0, false);
+>  
+> 
+> ---
+> base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
+> change-id: 20241204-fix_warnings_pointer_masking_tests-3860e4f35429
+
 
