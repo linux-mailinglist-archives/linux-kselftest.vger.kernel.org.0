@@ -1,75 +1,89 @@
-Return-Path: <linux-kselftest+bounces-23196-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23197-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EDA29ED6A0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 20:39:02 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1954D1886568
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 19:38:19 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED2B5229669;
-	Wed, 11 Dec 2024 19:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ac4mpF7I"
-X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55FD29ED6D4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 20:53:39 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418272288EE
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Dec 2024 19:37:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733945843; cv=none; b=WnALYwMSyzJ80da7yYf/ReOcy5ZcGQeBH3dpKP3Npr08YKyUytmKfxUoKplvVl98t75vpfVQdGJp6zgI502Onx5PQepxYnmHfxLClCsz3bVpYRzq5CrVhLohVa4OrvKf3G7lopXhm3zlI8eooIwkzSorQcPmgS5PJFdVaHvHQ2c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733945843; c=relaxed/simple;
-	bh=SKU4owpgrLuU+O36UTv52dBkluhmqyl+EdfAMYBpPRs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Yho+wBFWAO3Rk8mAhkpSKurkmtxzUpDsD7GvLn2V+nZV/suYG/j0ftaqrQW7v6NIw1XZUQohxsYpvdvnRRHORUNrWHyNvHERK4WQgvXM/zoG7LhcDbllbhefJ61pzUZts5z2zp78sOjEt3HCJKRNuK0zGOwWyJ8yxO0hqXIDzX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ac4mpF7I; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1733945841;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oRbzOlXXgzk56NiVC7qJmmj47BtRpf1glV0jPA4JBGg=;
-	b=Ac4mpF7I5a9fAHkc0VUdKNc05Xt+V3q0349/PdvOPeQO7JjqXEvvnZv9INKX61YRMtkx+V
-	xbfgs6c53+3ahCDMw6+oDOQ/uk5PFpK4XBeOwn638WCgAf09f4v5XaBykJbTVHt8upqNQh
-	k5m8VhBAFOrqczsuW5R2+5deyoNTvmA=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-588-1xFFN5XpMXe2ml3pKzlnUg-1; Wed,
- 11 Dec 2024 14:37:17 -0500
-X-MC-Unique: 1xFFN5XpMXe2ml3pKzlnUg-1
-X-Mimecast-MFC-AGG-ID: 1xFFN5XpMXe2ml3pKzlnUg
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCC1C28200D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 19:53:37 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED2D7200BA9;
+	Wed, 11 Dec 2024 19:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fH/EZ2AE"
+X-Original-To: linux-kselftest@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 501C11944B11;
-	Wed, 11 Dec 2024 19:37:16 +0000 (UTC)
-Received: from starship.lan (unknown [10.22.82.46])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EB1FC1956052;
-	Wed, 11 Dec 2024 19:37:14 +0000 (UTC)
-From: Maxim Levitsky <mlevitsk@redhat.com>
-To: kvm@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16EF1C3F27;
+	Wed, 11 Dec 2024 19:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733946813; cv=none; b=XmC+aKajN7IA45K0VCb2RBx5A/+mbfk/KWxa3U+Oj+gjTgwB35qgkQshSZNsghCl2FJOBCo5l9j7wtpW8RIg6lqqYqmyhcCDHX3cCdH4/zHlWpJYweQ1ARf05tcURQxgwbe6D7o9jhZHJbSYLgLIhqvrfA/XpOrtqeclvSmrPj8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733946813; c=relaxed/simple;
+	bh=/Islhx5QPnsZFTF/qi0yWZBLeMxaGO8x2YhrOZpsYTw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=csMhw6pnwor5oBuraItcCkliGCCwZUekZ22Yf4YMLU7DxRPig8SbyzjVpfJAbkYcYAwmDjjfK1mUz66EEjJP63zFS9ooQjGacgliJp3BKGr4p4VEnTF9N3TQFt8LtqeCrFKMqKOL0WobsaHhsM6zhGzij7UZAzpESuWunKpqdg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fH/EZ2AE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F412C4CED2;
+	Wed, 11 Dec 2024 19:53:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733946813;
+	bh=/Islhx5QPnsZFTF/qi0yWZBLeMxaGO8x2YhrOZpsYTw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=fH/EZ2AE2pqH53MRSScd31eG/ObA/GfsrmQtufCSl4yPoy+MCOaa72mq2tTkS/Ptt
+	 MElV3mKuCIyouF7O4TeLksAGyBsjRyyLeNIyCIB3ew5+d2s/AoWfVhNt6/nEerEueP
+	 lsEbi36/ME73ZGwcBD9JV1emQNX/HjB79qiLo2p2jp4Vd5vSmEtM1AlVEEISmjaB/v
+	 g4N+HiAvMqiueLdx51+uGAUPUuNsOAH5p5tavAZcJm5094U4UxAJwv9624a8nmihmv
+	 POMTYqt3LTct+4Fgrr5FfhhslujOt5dVSWkZOavas1KrgLzaRfknHtIs9GeNbFzjQX
+	 QNnQ+32ufo7aw==
+From: SeongJae Park <sj@kernel.org>
+To: Yuanchu Xie <yuanchu@google.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	David Hildenbrand <david@redhat.com>,
+	"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+	Khalid Aziz <khalid.aziz@oracle.com>,
+	Henry Huang <henry.hj@antgroup.com>,
+	Yu Zhao <yuzhao@google.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Gregory Price <gregory.price@memverge.com>,
+	Huang Ying <ying.huang@intel.com>,
+	Lance Yang <ioworker0@gmail.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	Tejun Heo <tj@kernel.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	=?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Daniel Watson <ozzloy@each.do>,
+	cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	x86@kernel.org,
-	Maxim Levitsky <mlevitsk@redhat.com>
-Subject: [PATCH 4/4] KVM: selftests: dirty_log_test: support multiple write retires
-Date: Wed, 11 Dec 2024 14:37:06 -0500
-Message-Id: <20241211193706.469817-5-mlevitsk@redhat.com>
-In-Reply-To: <20241211193706.469817-1-mlevitsk@redhat.com>
-References: <20241211193706.469817-1-mlevitsk@redhat.com>
+	virtualization@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 0/9] mm: workingset reporting
+Date: Wed, 11 Dec 2024 11:53:29 -0800
+Message-Id: <20241211195329.60224-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <CAJj2-QFdP6DKVQJ4Tw6rdV+XtgDihe=UOnvm4cm-q61K0hq6CQ@mail.gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,108 +91,123 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-If dirty_log_test is run nested, it is possible for entries in the emulated
-PML log to appear before the actual memory write is committed to the RAM,
-due to the way KVM retries memory writes as a response to a MMU fault.
+On Fri, 6 Dec 2024 11:57:55 -0800 Yuanchu Xie <yuanchu@google.com> wrote:
 
-In addition to that in some very rare cases retry can happen more than
-once, which will lead to the test failure because once the write is
-finally committed it may have a very outdated iteration value.
+> Thanks for the response Johannes. Some replies inline.
+> 
+> On Tue, Nov 26, 2024 at 11:26\u202fPM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> >
+> > On Tue, Nov 26, 2024 at 06:57:19PM -0800, Yuanchu Xie wrote:
+> > > This patch series provides workingset reporting of user pages in
+> > > lruvecs, of which coldness can be tracked by accessed bits and fd
+> > > references. However, the concept of workingset applies generically to
+> > > all types of memory, which could be kernel slab caches, discardable
+> > > userspace caches (databases), or CXL.mem. Therefore, data sources might
+> > > come from slab shrinkers, device drivers, or the userspace.
+> > > Another interesting idea might be hugepage workingset, so that we can
+> > > measure the proportion of hugepages backing cold memory. However, with
+> > > architectures like arm, there may be too many hugepage sizes leading to
+> > > a combinatorial explosion when exporting stats to the userspace.
+> > > Nonetheless, the kernel should provide a set of workingset interfaces
+> > > that is generic enough to accommodate the various use cases, and extensible
+> > > to potential future use cases.
+> >
+> > Doesn't DAMON already provide this information?
+> >
+> > CCing SJ.
+> Thanks for the CC. DAMON was really good at visualizing the memory
+> access frequencies last time I tried it out!
 
-Detect and avoid this case.
+Thank you for this kind acknowledgement, Yuanchu!
 
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- tools/testing/selftests/kvm/dirty_log_test.c | 52 +++++++++++++++++++-
- 1 file changed, 50 insertions(+), 2 deletions(-)
+> For server use cases,
+> DAMON would benefit from integrations with cgroups.  The key then would be a
+> standard interface for exporting a cgroup's working set to the user.
 
-diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
-index a9428076a681..f07126b0205d 100644
---- a/tools/testing/selftests/kvm/dirty_log_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_test.c
-@@ -154,6 +154,7 @@ static atomic_t vcpu_sync_stop_requested;
-  * sem_vcpu_stop and before vcpu continues to run.
-  */
- static bool dirty_ring_vcpu_ring_full;
-+
- /*
-  * This is only used for verifying the dirty pages.  Dirty ring has a very
-  * tricky case when the ring just got full, kvm will do userspace exit due to
-@@ -168,7 +169,51 @@ static bool dirty_ring_vcpu_ring_full;
-  * dirty gfn we've collected, so that if a mismatch of data found later in the
-  * verifying process, we let it pass.
-  */
--static uint64_t dirty_ring_last_page;
-+static uint64_t dirty_ring_last_page = -1ULL;
-+
-+/*
-+ * In addition to the above, it is possible (especially if this
-+ * test is run nested) for the above scenario to repeat multiple times:
-+ *
-+ * The following can happen:
-+ *
-+ * - L1 vCPU:        Memory write is logged to PML but not committed.
-+ *
-+ * - L1 test thread: Ignores the write because its last dirty ring entry
-+ *                   Resets the dirty ring which:
-+ *                     - Resets the A/D bits in EPT
-+ *                     - Issues tlb flush (invept), which is intercepted by L0
-+ *
-+ * - L0: frees the whole nested ept mmu root as the response to invept,
-+ *       and thus ensures that when memory write is retried, it will fault again
-+ *
-+ * - L1 vCPU:        Same memory write is logged to the PML but not committed again.
-+ *
-+ * - L1 test thread: Ignores the write because its last dirty ring entry (again)
-+ *                   Resets the dirty ring which:
-+ *                     - Resets the A/D bits in EPT (again)
-+ *                     - Issues tlb flush (again) which is intercepted by L0
-+ *
-+ * ...
-+ *
-+ * N times
-+ *
-+ * - L1 vCPU:        Memory write is logged in the PML and then committed.
-+ *                   Lots of other memory writes are logged and committed.
-+ * ...
-+ *
-+ * - L1 test thread: Sees the memory write along with other memory writes
-+ *                   in the dirty ring, and since the write is usually not
-+ *                   the last entry in the dirty-ring and has a very outdated
-+ *                   iteration, the test fails.
-+ *
-+ *
-+ * Note that this is only possible when the write was the last log entry
-+ * write during iteration N-1, thus remember last iteration last log entry
-+ * and also don't fail when it is reported in the next iteration, together with
-+ * an outdated iteration count.
-+ */
-+static uint64_t dirty_ring_prev_iteration_last_page;
- 
- enum log_mode_t {
- 	/* Only use KVM_GET_DIRTY_LOG for logging */
-@@ -320,6 +365,8 @@ static uint32_t dirty_ring_collect_one(struct kvm_dirty_gfn *dirty_gfns,
- 	struct kvm_dirty_gfn *cur;
- 	uint32_t count = 0;
- 
-+	dirty_ring_prev_iteration_last_page = dirty_ring_last_page;
-+
- 	while (true) {
- 		cur = &dirty_gfns[*fetch_index % test_dirty_ring_count];
- 		if (!dirty_gfn_is_dirtied(cur))
-@@ -622,7 +669,8 @@ static void vm_dirty_log_verify(enum vm_guest_mode mode, unsigned long *bmap)
- 					 */
- 					min_iter = iteration - 1;
- 					continue;
--				} else if (page == dirty_ring_last_page) {
-+				} else if (page == dirty_ring_last_page ||
-+					   page == dirty_ring_prev_iteration_last_page) {
- 					/*
- 					 * Please refer to comments in
- 					 * dirty_ring_last_page.
--- 
-2.26.3
+I show two ways to make DAMON supports cgroups for now.  First way is making
+another DAMON operations set implementation for cgroups.  I shared a rough idea
+for this before, probably on kernel summit.  But I haven't had a chance to
+prioritize this so far.  Please let me know if you need more details.  The
+second way is extending DAMOS filter to provide more detailed statistics per
+DAMON-region, and adding another DAMOS action that does nothing but only
+accounting the detailed statistics.  Using the new DAMOS action, users will be
+able to know how much of specific DAMON-found regions are filtered out by the
+given filter.  Because we have DAMOS filter type for cgroups, we can know how
+much of workingset (or, warm memory) belongs to specific groups.  This can be
+applied to not only cgroups, but for any DAMOS filter types that exist (e.g.,
+anonymous page, young page).
 
+I believe the second way is simpler to implement while providing information
+that sufficient for most possible use cases.  I was anyway planning to do this.
+
+> It would be good to have something that will work for different
+> backing implementations, DAMON, MGLRU, or active/inactive LRU.
+
+I think we can do this using the filter statistics, with new filter types.  For
+example, we can add new DAMOS filter that filters pages if it is for specific
+range of MGLRU-gen of the page, or whether the page belongs to active or
+inactive LRU lists.
+
+> 
+> >
+> > > Use cases
+> > > ==========
+[...]
+> > Access frequency is only half the picture. Whether you need to keep
+> > memory with a given frequency resident depends on the speed of the
+> > backing device.
+[...]
+> > > Benchmarks
+> > > ==========
+> > > Ghait Ouled Amar Ben Cheikh has implemented a simple policy and ran Linux
+> > > compile and redis benchmarks from openbenchmarking.org. The policy and
+> > > runner is referred to as WMO (Workload Memory Optimization).
+> > > The results were based on v3 of the series, but v4 doesn't change the core
+> > > of the working set reporting and just adds the ballooning counterpart.
+> > >
+> > > The timed Linux kernel compilation benchmark shows improvements in peak
+> > > memory usage with a policy of "swap out all bytes colder than 10 seconds
+> > > every 40 seconds". A swapfile is configured on SSD.
+[...]
+> > You can do this with a recent (>2018) upstream kernel and ~100 lines
+> > of python [1]. It also works on both LRU implementations.
+> >
+> > [1] https://github.com/facebookincubator/senpai
+> >
+> > We use this approach in virtually the entire Meta fleet, to offload
+> > unneeded memory, estimate available capacity for job scheduling, plan
+> > future capacity needs, and provide accurate memory usage feedback to
+> > application developers.
+> >
+> > It works over a wide variety of CPU and storage configurations with no
+> > specific tuning.
+> >
+> > The paper I referenced above provides a detailed breakdown of how it
+> > all works together.
+> >
+> > I would be curious to see a more in-depth comparison to the prior art
+> > in this space. At first glance, your proposal seems more complex and
+> > less robust/versatile, at least for offloading and capacity gauging.
+> We have implemented TMO PSI-based proactive reclaim and compared it to
+> a kstaled-based reclaimer (reclaiming based on 2 minute working set
+> and refaults). The PSI-based reclaimer was able to save more memory,
+> but it also caused spikes of refaults and a lot higher
+> decompressions/second. Overall the test workloads had better
+> performance with the kstaled-based reclaimer. The conclusion was that
+> it was a trade-off.
+
+I agree it is only half of the picture, and there could be tradeoff.  Motivated
+by those previous works, DAMOS provides PSI-based aggressiveness auto-tuning to
+use both ways.
+
+> I do agree there's not a good in-depth comparison
+> with prior art though.
+
+I would be more than happy to help the comparison work agains DAMON of current
+implementation and future plans, and any possible collaborations.
+
+
+Thanks,
+SJ
 
