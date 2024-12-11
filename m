@@ -1,602 +1,195 @@
-Return-Path: <linux-kselftest+bounces-23146-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23147-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4D8B9EC45D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 06:33:27 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 063689EC461
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 06:40:08 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C789167AE4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 05:33:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 224442843FD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2024 05:40:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 691121C2457;
-	Wed, 11 Dec 2024 05:33:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A839E1C07EA;
+	Wed, 11 Dec 2024 05:40:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="OUfnmVmL"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sVTt5JUS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1C91BD4F1
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Dec 2024 05:33:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D399F6136
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Dec 2024 05:39:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733895197; cv=none; b=k9i/Q78JavEQ/u1BkF8PdP6gfoYhD+smufOMmXnY1KrZmFRqamQechtszns+xSqBsf0p1cZ3UuI4YwgjTycD1d101cunzHdPluGEgaNyi4xM7W0oZXDjOnJUEiiDMo7IaWYtfR7/YLb2pcEMjPk0C3SEGoiXJJJFcuEmImY2Nig=
+	t=1733895600; cv=none; b=ZdahyJf0oiptjzxRlxbUZWG9vTB5d+WlKF5T42ApcEVXiybXWye8wrNUP/ISSsbpJ69fjLzUHbvFcXn83orhGQfPeGp9ieVM2LH7E6SvNmPoyWCoq81hor8G9ErpIerbs85YYAPHFAx6XlS1zGO+MMlQ+YId8K/5qs3EbLEcIUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733895197; c=relaxed/simple;
-	bh=OF6oI5ueIyKXJT8qJr+f0gd7PmjRNdlzpvD5cy4jzzI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HIwwrWx9iYPPTKlH1OikGBxIOEOW1u+KSh+4bEfCzhXzhekTNQuxgdYbRo3vrPV3EKozGE6aE1k5V8JR0TUvnqZHn/CugHN22yWnXX2RMUBhQ8BRcPV3uA/UnZCDhMjH7LusBSUDzGjzYvq5NauMInxHtg3ONHtH1AYT9Ujcw/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=OUfnmVmL; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-21564262babso6755745ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 21:33:14 -0800 (PST)
+	s=arc-20240116; t=1733895600; c=relaxed/simple;
+	bh=cmLSSNnhREF3JwUwweEtDJM+TE6MLim68CUGz24LJFw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pQxuqh5gWR6UGQdoq5RGjZinscr3YMXS1RaDUUR4kOTyVV755AF4xxqLcncSvbbvsX8nyCOpklbSNvfbf/+v+MFEIKZf3kOdhofMLjWTEUhRJca1Ye3uSDJHd3bD6DucnQ2zSXKDqXxkTMO98ZUoMXjK2KVukc5wROhiuWerf90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sVTt5JUS; arc=none smtp.client-ip=209.85.221.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-517aea3ee2aso1403522e0c.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2024 21:39:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1733895194; x=1734499994; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iL0S77s8sue7wDSiMx9oEAzjFbMEM/4/98X0yr6AQos=;
-        b=OUfnmVmLl523pj5fMGGCcK0Kq+135N2kwf1umg8GDvjQaOoNlZHi3e/uFu+cu4e45X
-         4yDYJKg6YBDvEyWBVlLEsc5BpJ7yyOXxinWjbtiH588T+/Pv1RUVUGmEeL/+KpqKh7j+
-         igflwiewZNQJs2iVv+4MqMriL8vv8GZBSveeo=
+        d=linaro.org; s=google; t=1733895598; x=1734500398; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=L2JyqkiU/6R1xmttvdUUGuANembyWIMM8crCm1+D1nE=;
+        b=sVTt5JUS7UmvwiFC+vzXGMYQs/Ss/UF7U1VOEL248r35uiYLK4rxkGqoH258wNu2HH
+         GpbhfdsL+PfsJyF8zRYnbKnAvNZV6tc0Ol/h6pTyhj83RzIHSdVq1/XifVI9ORmROGbV
+         B46yvpZb78iWI0SNPObVbEJRt0in7Hl83QqUo84eDHe+nmDFSqVTuVcGXcelNy17/xQg
+         yZelDkUZl4fHw6LBAlkYYIEAfdNRuI5Zssjt5au00IU6jecCOUfcmeAmIAq/p+KHdnYF
+         GrWrxt+dLiutUpRsrgeBZ9g7dD8G2NF/0/YM8shlCQhK3bRlMpUxicIk4rfhkxdJ2GRw
+         MVqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733895194; x=1734499994;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iL0S77s8sue7wDSiMx9oEAzjFbMEM/4/98X0yr6AQos=;
-        b=It8+MceJI+53sKw9bHEYUuB+WLF1kdB74PkN2BFaSBMVmuuSWd0vd2brI+VF8cczeX
-         IEb9oftWgy+yMBttGNqpuXQiS3WDzKyz2PGc7nhMh+5WgxRVH9xR6vWARhJU6QgIK8n+
-         aEm14+k5FtyC3YfM5+ozUjkaSAG2/jBXB1UdPnPolh3D4Dvu4Fj2DohRWUCaNoF5Jwb3
-         t3AOvNA/KunoHQPNf+z4MtjMVsnvnMOkzPldzcRUQWtnWwxqDY/9VCzrGs/SQcsiXNFH
-         hN0Dd1bTLeh3Mcw50GSmzX8NX1NAh95Lksrq8K/ajE2dtOUCA23fva7yIK7ca6zRZtyj
-         yfyw==
-X-Forwarded-Encrypted: i=1; AJvYcCWfr1gEGAB+nrvbh+g0eun7DwYHYcYLPAgAw/egFHI0xp1c9TXTiiOwIY61K/1K6KN5flz3A1cIpoH6vTRjCgg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyLTaK4Ukptk1LEW5UmETY2U316Adm/MrJQ+nY/200yXwGVrN0
-	e8k3RfURzjF3JTL0Z5f69+3+HAzbPny0p8fJDvawEhPtHi2IPcLn4AOfW+L4mgexVsnk0V/BPIs
-	=
-X-Gm-Gg: ASbGncuM1i5jUCGEiWlhG3Y1RW2HwPpjwXAEfB39J7M0b3g9NAwvkDDKQUyuA2Ga4ZV
-	HbdT5rhB5MXyuws9EMkAG/mznGoDRF9n9MuiHffHr2f+Sd0SXAZnN3cM/zAw3JqdMWa0D8nSFN6
-	koB7W051mN3V/cwIQPRY0D8isIBK46tRdm9rl/0ok8I9U5efKyokz5DfEYP43kFgFateq6hLHsE
-	eDg5VgcWTHjyz9pbl7/vtft1JDawlZthu/MCOM/uQeo4xrQGWlz5ewdD5BGRHHFedu3n6A7HwDx
-	P0djK99P5hwwxxM=
-X-Google-Smtp-Source: AGHT+IEodioB8WIDbacAHjqbGik1UB8Zl0dTrnRUlOKRwzSo0V/bCLKhgz9DK/mJjkSKbCn4PnTMlA==
-X-Received: by 2002:a17:902:ec84:b0:215:5926:2db2 with SMTP id d9443c01a7336-2177851de76mr10375475ad.7.1733895194123;
-        Tue, 10 Dec 2024 21:33:14 -0800 (PST)
-Received: from localhost (238.76.127.34.bc.googleusercontent.com. [34.127.76.238])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-2162b13d486sm66496625ad.191.2024.12.10.21.33.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Dec 2024 21:33:13 -0800 (PST)
-From: jeffxu@chromium.org
-To: akpm@linux-foundation.org,
-	vbabka@suse.cz,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@Oracle.com,
-	broonie@kernel.org,
-	skhan@linuxfoundation.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	jorgelo@chromium.org,
-	keescook@chromium.org,
-	pedro.falcato@gmail.com,
-	rdunlap@infradead.org,
-	jannh@google.com,
-	Jeff Xu <jeffxu@chromium.org>
-Subject: [RFC PATCH v1 1/1] selftest/mm: refactor mseal_test
-Date: Wed, 11 Dec 2024 05:33:11 +0000
-Message-ID: <20241211053311.245636-2-jeffxu@google.com>
-X-Mailer: git-send-email 2.47.1.613.gc27f4b7a9f-goog
-In-Reply-To: <20241211053311.245636-1-jeffxu@google.com>
-References: <20241211053311.245636-1-jeffxu@google.com>
+        d=1e100.net; s=20230601; t=1733895598; x=1734500398;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L2JyqkiU/6R1xmttvdUUGuANembyWIMM8crCm1+D1nE=;
+        b=ezXnvo/oY1Hp3vByqYG36WGyrMW/XAzmmnNccaFj/2SFQqUvGwio9VZ/DLHrBwFXew
+         JJZ6+y8/5PKkmMyynzrOX022pHcsAEBheRf2GE/4f+Pibq5usOy7huuzAy8SbwmeZs6n
+         fjjp9hCgNTLc1spItkX4BlOGI7rjYVoWa80YguxviGbGhPAOj2zmOXBymB8OXe6711o6
+         NGna49bE2vFiRhKd6vMvI/0KIeu34NPcWcSz8fnzLI9Au2CyUugCLMmE+QiifZcdNZne
+         bOnw6UBe3vBDMkHgdg27v/rJ8a/M18owybzZhO9X2o7tkzkX68/5g7dZVpV0HeJAsFZu
+         qkyw==
+X-Forwarded-Encrypted: i=1; AJvYcCVcSlIJwQtkHr1LvfR25HAbohsQIaW7CHbeX1Wz+U8P39Tu4Z1Z0Xyvvq9EeY/Yk9BByt6yZXlBYPT77GXpPkk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5KHobD9/N5E6akfOINAcn332l2ZC40cF0XeEaRn383GsK9Ul3
+	XHB29gQESTZG1OsVj3JqFB2qpDYijyK/oJ+jUnsQOvbC04kBh439xP/Ax0c8pUwz+bAt+t8OdPH
+	FSrYQjLB16VJBoVh049i0aAlDXDpHdDC4owQQug==
+X-Gm-Gg: ASbGncsI5Y0yk1WFYxsY4s4YCTRcPKM7vvqMoOMauDjqkQnCEBDtbvcQ8V+K+lGS1kf
+	Qj6FhMduZxaz48Z/raJUvmXJxVoXnFxmpjA==
+X-Google-Smtp-Source: AGHT+IGaVQqa3Q+BI6ngTSIj2GVkueSl4Jrs/cm3+CtAoLXynlarl8woucxcn3CryRSjN8OBkzE56/rteEslmfJ/Svc=
+X-Received: by 2002:a05:6122:8292:b0:515:e4c4:3664 with SMTP id
+ 71dfb90a1353d-518a3cc3352mr1602173e0c.9.1733895597732; Tue, 10 Dec 2024
+ 21:39:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <CA+G9fYvcBvbabg+m7brKfpGCGZUcK+KHHTFX7hFvW6GmN2XF0g@mail.gmail.com>
+In-Reply-To: <CA+G9fYvcBvbabg+m7brKfpGCGZUcK+KHHTFX7hFvW6GmN2XF0g@mail.gmail.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Wed, 11 Dec 2024 11:09:46 +0530
+Message-ID: <CA+G9fYuHGTKM5P+nEifZwfALPfO9uw7sraCrGo-c3YzR=JjwJg@mail.gmail.com>
+Subject: Re: selftests: core: unshare_test: WARNING: at mm/util.c:671 __kvmalloc_node_noprof
+To: open list <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	Linux Regressions <regressions@lists.linux.dev>, LTP List <ltp@lists.linux.it>
+Cc: Shuah Khan <shuah@kernel.org>, David Gow <davidgow@google.com>, 
+	Al Viro <viro@zeniv.linux.org.uk>, Barry Song <baohua@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Jeff Xu <jeffxu@chromium.org>
+[Gentle Reminder]
 
-This change creates the initial version of memorysealing.c.
+On Mon, 26 Aug 2024 at 18:50, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> The following kernel warning is noticed on all arch and all devices while
+> running selftests: core: unshare_test on Linux next-20240823 and next-20240826.
+>
+> First seen on next-20240823.
+>   Good: next-20240822
+>   BAD:  next-20240823 and next-20240826
 
-The introduction of memorysealing.c, which replaces mseal_test.c and
-uses the kselftest_harness, aims to initiate a discussion on using the
-selftest harness for memory sealing tests. Upon approval of this
-approach, the migration of tests from mseal_test.c to memorysealing.c
-can be implemented in a step-by-step manner.
+This is an open issue from August.
+The reported kernel warning is still seen on linux next and mainline
+while running selftests: core: unshare_test.
 
-This tests addresses following feedback from previous reviews:
+Linux version: 6.13.0-rc2-next-20241210
 
-1> Use kselftest_harness instead of custom macro, such as EXPECT_XX,
-ASSERT_XX, etc.  (Lorenzo Stoakes, Mark Brown) [1]
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> Crash log:
+> --------
+> # selftests: core: unshare_test
+> <4>[   61.084149] ------------[ cut here ]------------
+> <4>[ 61.085175] WARNING: CPU: 0 PID: 477 at mm/util.c:671
+> __kvmalloc_node_noprof (mm/util.c:671 (discriminator 1))
+> <4>[   61.088958] Modules linked in: crct10dif_ce sm3_ce sm3 sha3_ce
+> sha512_ce sha512_arm64 drm fuse backlight dm_mod ip_tables x_tables
+> <4>[   61.093141] CPU: 0 UID: 0 PID: 477 Comm: unshare_test Not
+> tainted 6.11.0-rc5-next-20240826 #1
+> <4>[   61.094558] Hardware name: linux,dummy-virt (DT)
+> <4>[   61.096763] pstate: 23400009 (nzCv daif +PAN -UAO +TCO +DIT
+> -SSBS BTYPE=--)
+> <4>[ 61.097841] pc : __kvmalloc_node_noprof (mm/util.c:671 (discriminator 1))
+> <4>[ 61.099701] lr : __kvmalloc_node_noprof (mm/util.c:661)
+> <4>[   61.100448] sp : ffff800080abbce0
+> <4>[   61.100819] x29: ffff800080abbcf0 x28: fff0000004549280 x27:
+> 0000000000000000
+> <4>[   61.101744] x26: 0000000000000000 x25: 0000000000000000 x24:
+> fff0000003615e40
+> <4>[   61.102512] x23: fff0000003615ec0 x22: bfafa45863b285c8 x21:
+> 0000000200002000
+> <4>[   61.103232] x20: 00000000ffffffff x19: 0000000000400cc0 x18:
+> 0000000000000000
+> <4>[   61.104053] x17: 0000000000000000 x16: 0000000000000000 x15:
+> 0000000000000000
+> <4>[   61.104927] x14: 0000000000000000 x13: 0000000000000000 x12:
+> 0000000000000000
+> <4>[   61.105752] x11: 0000000000000000 x10: 0000000000000000 x9 :
+> 0000000000000000
+> <4>[   61.106606] x8 : 0000000000000001 x7 : 0000000000000001 x6 :
+> 0000000000000005
+> <4>[   61.107377] x5 : 0000000000000000 x4 : fff0000004549280 x3 :
+> 0000000000000000
+> <4>[   61.108207] x2 : 0000000000000000 x1 : 000000007fffffff x0 :
+> 0000000000000000
+> <4>[   61.109262] Call trace:
+> <4>[ 61.109619] __kvmalloc_node_noprof (mm/util.c:671 (discriminator 1))
+> <4>[ 61.110248] alloc_fdtable (fs/file.c:133)
+> <4>[ 61.110751] expand_files
+> (include/linux/atomic/atomic-arch-fallback.h:457
+> include/linux/atomic/atomic-instrumented.h:33 fs/file.c:177
+> fs/file.c:238)
+> <4>[ 61.111171] ksys_dup3 (fs/file.c:1337)
+> <4>[ 61.111596] __arm64_sys_dup3 (fs/file.c:1355)
+> <4>[ 61.112006] invoke_syscall (arch/arm64/include/asm/current.h:19
+> arch/arm64/kernel/syscall.c:54)
+> <4>[ 61.112480] el0_svc_common.constprop.0
+> (include/linux/thread_info.h:127 (discriminator 2)
+> arch/arm64/kernel/syscall.c:140 (discriminator 2))
+> <4>[ 61.112955] do_el0_svc (arch/arm64/kernel/syscall.c:152)
+> <4>[ 61.113384] el0_svc (arch/arm64/include/asm/irqflags.h:55
+> arch/arm64/include/asm/irqflags.h:76
+> arch/arm64/kernel/entry-common.c:165
+> arch/arm64/kernel/entry-common.c:178
+> arch/arm64/kernel/entry-common.c:713)
+> <4>[ 61.113742] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:731)
+> <4>[ 61.115181] el0t_64_sync (arch/arm64/kernel/entry.S:598)
+> <4>[   61.115709] ---[ end trace 0000000000000000 ]---
+>
+>
+> Crash Log links,
+> --------
+>  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240826/testrun/24953436/suite/log-parser-test/test/check-kernel-exception-warning-cpu-pid-at-mmutilc-__kvmalloc_node_noprof/log
+>
+> Crash failed comparison:
+> ----------
+>  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240826/testrun/24953436/suite/log-parser-test/test/check-kernel-exception-warning-cpu-pid-at-mmutilc-__kvmalloc_node_noprof/history/
+>
+> metadata:
+> ----
+>   git describe: next-20240823 and next-20240826
+>   git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+>   git sha: c79c85875f1af04040fe4492ed94ce37ad729c4d
+>
+> Please let me know if you need more information.
+>
 
-2> Use MAP_FAILED to check the return of mmap (Lorenzo Stoakes).
+Kernel warning log:
+-----------------
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20241210/testrun/26261199/suite/kselftest-core/test/core_unshare_test/log
 
-3>  Adding a check for vma size and prot bits. The discussion for
-    this can be found in [2] [3], here is a brief summary:
-    This is to follow up on Pedro’s in-loop change (from
-    can_modify_mm to can_modify_vma). When mseal_test is initially
-    created, they have a common pattern:  setup memory layout,
-    seal the memory, perform a few mm-api steps, verify return code
-    (not zero).  Because of the nature of out-of-loop,  it is sufficient
-    to just verify the error code in a few cases.
-
-    With Pedro's in-loop change, the sealing check happens later in the
-    stack, thus there are more things and scenarios to verify. And there
-    was feedbacks to me that mseal_test should be extensive enough to
-    discover all regressions. Hence I'm adding check for vma size and prot
-    bits.
-
-In this change: we created two fixtures:
-
-Fixture basic:   This creates a single VMA, the VMA has a
-PROT_NONE page at each end to prevent auto-merging.
-
-Fixture wo_vma: Two VMAs back to end, a PROT_NONE page at each
-end to prevent auto-merging.
-
-In addition, I add one test (mprotec) in each fixture to demo the tests.
-
-[1] https://lore.kernel.org/all/20240830180237.1220027-5-jeffxu@chromium.org/
-[2] https://lore.kernel.org/all/CABi2SkUgDZtJtRJe+J9UNdtZn=EQzZcbMB685P=1rR7DUhg=6Q@mail.gmail.com/
-[3] https://lore.kernel.org/all/2qywbjb5ebtgwkh354w3lj3vhaothvubjokxq5fhyri5jeeton@duqngzo3swjz/
-
-Signed-off-by: Jeff Xu <jeffxu@chromium.org>
----
- tools/testing/selftests/mm/.gitignore      |   1 +
- tools/testing/selftests/mm/Makefile        |   1 +
- tools/testing/selftests/mm/memorysealing.c | 182 +++++++++++++++++++++
- tools/testing/selftests/mm/memorysealing.h | 116 +++++++++++++
- tools/testing/selftests/mm/mseal_test.c    |  67 +-------
- 5 files changed, 301 insertions(+), 66 deletions(-)
- create mode 100644 tools/testing/selftests/mm/memorysealing.c
- create mode 100644 tools/testing/selftests/mm/memorysealing.h
-
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index a51a947b2d1d..982234a99f20 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -57,3 +57,4 @@ hugetlb_dio
- pkey_sighandler_tests_32
- pkey_sighandler_tests_64
- guard-pages
-+memorysealing
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 93a46ac633df..08876624f46d 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -67,6 +67,7 @@ TEST_GEN_FILES += map_populate
- ifneq (,$(filter $(ARCH),arm64 riscv riscv64 x86 x86_64))
- TEST_GEN_FILES += memfd_secret
- endif
-+TEST_GEN_FILES += memorysealing
- TEST_GEN_FILES += migration
- TEST_GEN_FILES += mkdirty
- TEST_GEN_FILES += mlock-random-test
-diff --git a/tools/testing/selftests/mm/memorysealing.c b/tools/testing/selftests/mm/memorysealing.c
-new file mode 100644
-index 000000000000..e10032528b64
---- /dev/null
-+++ b/tools/testing/selftests/mm/memorysealing.c
-@@ -0,0 +1,182 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+#define _GNU_SOURCE
-+#include "../kselftest_harness.h"
-+#include <asm-generic/unistd.h>
-+#include <errno.h>
-+#include <syscall.h>
-+#include "memorysealing.h"
-+
-+/*
-+ * To avoid auto-merging, create a VMA with PROT_NONE pages at each end.
-+ * If unsuccessful, return MAP_FAILED.
-+ */
-+static void *setup_single_address(int size, int prot)
-+{
-+	int ret;
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+
-+	ptr = mmap(NULL, size + 2 * page_size, prot,
-+		MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+
-+	if (ptr == MAP_FAILED)
-+		return MAP_FAILED;
-+
-+	/* To avoid auto-merging, change to PROT_NONE at each end. */
-+	ret = sys_mprotect(ptr, page_size, PROT_NONE);
-+	if (ret != 0)
-+		return MAP_FAILED;
-+
-+	ret = sys_mprotect(ptr + size + page_size, page_size, PROT_NONE);
-+	if (ret != 0)
-+		return MAP_FAILED;
-+
-+	return ptr + page_size;
-+}
-+
-+FIXTURE(basic)
-+{
-+	unsigned long page_size;
-+	unsigned long size;
-+	void *ptr;
-+};
-+
-+/*
-+ * Setup for basic:
-+ * Single VMA with 4 pages, prot = (PROT_READ | PROT_WRITE).
-+ */
-+FIXTURE_SETUP(basic)
-+{
-+	int prot;
-+
-+	self->page_size = getpagesize();
-+
-+	if (!mseal_supported())
-+		SKIP(return, "mseal is not supported");
-+
-+	/* Create a single VMA with 4 pages, prot as PROT_READ | PROT_WRITE. */
-+	self->size = self->page_size * 4;
-+	self->ptr = setup_single_address(self->size, PROT_READ | PROT_WRITE);
-+	EXPECT_NE(self->ptr, MAP_FAILED);
-+
-+	EXPECT_EQ(self->size, get_vma_size(self->ptr, &prot));
-+	EXPECT_EQ(PROT_READ | PROT_WRITE, prot);
-+};
-+
-+FIXTURE_TEARDOWN(basic)
-+{
-+}
-+
-+FIXTURE(two_vma)
-+{
-+	unsigned long page_size;
-+	unsigned long size;
-+	void *ptr;
-+};
-+
-+/*
-+ * Setup for two_vma:
-+ * Two consecutive VMAs, each with 2 pages.
-+ * The first VMA:  prot = PROT_READ.
-+ * The second VMA: prot = (PROT_READ | PROT_WRITE).
-+ */
-+FIXTURE_SETUP(two_vma)
-+{
-+	int prot;
-+	int ret;
-+
-+	self->page_size = getpagesize();
-+
-+	if (!mseal_supported())
-+		SKIP(return, "mseal is not supported");
-+
-+	/* Create a single VMA with 4 pages, prot as PROT_READ | PROT_WRITE. */
-+	self->size = getpagesize() * 4;
-+	self->ptr = setup_single_address(self->size, PROT_READ | PROT_WRITE);
-+	EXPECT_NE(self->ptr, MAP_FAILED);
-+
-+	/* Use mprotect to split as two VMA. */
-+	ret = sys_mprotect(self->ptr, self->page_size * 2, PROT_READ);
-+	ASSERT_EQ(ret, 0);
-+
-+	/* Verify the first VMA is 2 pages and prot bits */
-+	EXPECT_EQ(self->page_size * 2, get_vma_size(self->ptr, &prot));
-+	EXPECT_EQ(PROT_READ, prot);
-+
-+	/* Verify the second VMA is 2 pages and prot bits */
-+	EXPECT_EQ(self->page_size * 2,
-+		get_vma_size(self->ptr + self->page_size * 2, &prot));
-+	EXPECT_EQ(PROT_READ | PROT_WRITE, prot);
-+};
-+
-+FIXTURE_TEARDOWN(two_vma)
-+{
-+}
-+
-+/*
-+ * Verify mprotect is blocked.
-+ */
-+TEST_F(basic, mprotect_basic)
-+{
-+	int ret;
-+	unsigned long size;
-+	int prot;
-+
-+	/* Seal the mapping. */
-+	ret = sys_mseal(self->ptr, self->size, 0);
-+	ASSERT_EQ(ret, 0);
-+
-+	/* Verify mprotect is blocked. */
-+	ret = sys_mprotect(self->ptr, self->size, PROT_READ);
-+	EXPECT_GT(0, ret);
-+	EXPECT_EQ(EPERM, errno);
-+
-+	/* Verify the VMA (sealed) isn't changed */
-+	size = get_vma_size(self->ptr, &prot);
-+	EXPECT_EQ(self->size, size);
-+	EXPECT_EQ(PROT_READ | PROT_WRITE, prot);
-+}
-+
-+/*
-+ * Seal both VMAs in one mseal call.
-+ * Verify mprotect is blocked on both VMAs in various cases.
-+ */
-+TEST_F(two_vma, mprotect)
-+{
-+	int ret;
-+	int prot;
-+	unsigned long size;
-+
-+	/* Seal both VMAs in one mseal call. */
-+	ret = sys_mseal(self->ptr, self->size, 0);
-+	ASSERT_EQ(ret, 0);
-+
-+	/* Verify mprotect is rejected on the first VMA. */
-+	ret = sys_mprotect(self->ptr, self->page_size * 2,
-+		PROT_READ | PROT_EXEC);
-+	EXPECT_GT(0, ret);
-+	EXPECT_EQ(EPERM, errno);
-+
-+	/* Verify mprotect is rejected on the second VMA. */
-+	ret = sys_mprotect(self->ptr, self->page_size * 2,
-+		PROT_READ | PROT_EXEC);
-+	EXPECT_GT(0, ret);
-+	EXPECT_EQ(EPERM, errno);
-+
-+	/* Attempt of mprotect two VMAs at the same call is blocked */
-+	ret = sys_mprotect(self->ptr, self->size,
-+		PROT_READ | PROT_EXEC);
-+	EXPECT_GT(0, ret);
-+	EXPECT_EQ(EPERM, errno);
-+
-+	/* Verify both VMAs aren't changed. */
-+	size = get_vma_size(self->ptr, &prot);
-+	EXPECT_EQ(self->page_size * 2, size);
-+	EXPECT_EQ(PROT_READ, prot);
-+
-+	size = get_vma_size(self->ptr + self->page_size * 2, &prot);
-+	EXPECT_EQ(self->page_size * 2, size);
-+	EXPECT_EQ(PROT_READ | PROT_WRITE, prot);
-+}
-+
-+TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/mm/memorysealing.h b/tools/testing/selftests/mm/memorysealing.h
-new file mode 100644
-index 000000000000..aee6e6700028
---- /dev/null
-+++ b/tools/testing/selftests/mm/memorysealing.h
-@@ -0,0 +1,116 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <syscall.h>
-+
-+/*
-+ * Define sys_xyx to call syscall directly.
-+ * This is needed because we want to avoid calling glibc and
-+ * test syscall directly.
-+ * The only exception is mmap, which _NR_mmap2 is not defined for
-+ * some ARM architecture.
-+ */
-+static inline int sys_mseal(void *start, size_t len, unsigned long flags)
-+{
-+	int sret;
-+
-+	errno = 0;
-+	sret = syscall(__NR_mseal, start, len, flags);
-+	return sret;
-+}
-+
-+static inline int sys_mprotect(void *ptr, size_t size, unsigned long prot)
-+{
-+	int sret;
-+
-+	errno = 0;
-+	sret = syscall(__NR_mprotect, ptr, size, prot);
-+	return sret;
-+}
-+
-+static inline int sys_mprotect_pkey(void *ptr, size_t size,
-+	unsigned long orig_prot, unsigned long pkey)
-+{
-+	int sret;
-+
-+	errno = 0;
-+	sret = syscall(__NR_pkey_mprotect, ptr, size, orig_prot, pkey);
-+	return sret;
-+}
-+
-+static inline int sys_munmap(void *ptr, size_t size)
-+{
-+	int sret;
-+
-+	errno = 0;
-+	sret = syscall(__NR_munmap, ptr, size);
-+	return sret;
-+}
-+
-+static inline int sys_madvise(void *start, size_t len, int types)
-+{
-+	int sret;
-+
-+	errno = 0;
-+	sret = syscall(__NR_madvise, start, len, types);
-+	return sret;
-+}
-+
-+static inline void *sys_mremap(void *addr, size_t old_len, size_t new_len,
-+	unsigned long flags, void *new_addr)
-+{
-+	void *sret;
-+
-+	errno = 0;
-+	sret = (void *) syscall(__NR_mremap, addr, old_len, new_len, flags, new_addr);
-+	return sret;
-+}
-+
-+/*
-+ * Parsing /proc/self/maps to get VMA's size and prot bit.
-+ */
-+static unsigned long get_vma_size(void *addr, int *prot)
-+{
-+	FILE *maps;
-+	char line[256];
-+	int size = 0;
-+	uintptr_t  addr_start, addr_end;
-+	char protstr[5];
-+	*prot = 0;
-+
-+	maps = fopen("/proc/self/maps", "r");
-+	if (!maps)
-+		return 0;
-+
-+	while (fgets(line, sizeof(line), maps)) {
-+		if (sscanf(line, "%lx-%lx %4s", &addr_start, &addr_end, protstr) == 3) {
-+			if (addr_start == (uintptr_t) addr) {
-+				size = addr_end - addr_start;
-+				if (protstr[0] == 'r')
-+					*prot |= PROT_READ;
-+				if (protstr[1] == 'w')
-+					*prot |= PROT_WRITE;
-+				if (protstr[2] == 'x')
-+					*prot |= PROT_EXEC;
-+				break;
-+			}
-+		}
-+	}
-+	fclose(maps);
-+	return size;
-+}
-+
-+static inline bool mseal_supported(void)
-+{
-+	int ret;
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+
-+	ptr = mmap(NULL, page_size, PROT_READ, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	if (ptr == MAP_FAILED)
-+		return false;
-+
-+	ret = sys_mseal(ptr, page_size, 0);
-+	if (ret < 0)
-+		return false;
-+
-+	return true;
-+}
-diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
-index ad17005521a8..8dd20341de3d 100644
---- a/tools/testing/selftests/mm/mseal_test.c
-+++ b/tools/testing/selftests/mm/mseal_test.c
-@@ -517,30 +517,6 @@ static void test_seal_twice(void)
- 	REPORT_TEST_PASS();
- }
- 
--static void test_seal_mprotect(bool seal)
--{
--	void *ptr;
--	unsigned long page_size = getpagesize();
--	unsigned long size = 4 * page_size;
--	int ret;
--
--	setup_single_address(size, &ptr);
--	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
--
--	if (seal) {
--		ret = seal_single_address(ptr, size);
--		FAIL_TEST_IF_FALSE(!ret);
--	}
--
--	ret = sys_mprotect(ptr, size, PROT_READ | PROT_WRITE);
--	if (seal)
--		FAIL_TEST_IF_FALSE(ret < 0);
--	else
--		FAIL_TEST_IF_FALSE(!ret);
--
--	REPORT_TEST_PASS();
--}
--
- static void test_seal_start_mprotect(bool seal)
- {
- 	void *ptr;
-@@ -658,41 +634,6 @@ static void test_seal_mprotect_unalign_len_variant_2(bool seal)
- 	REPORT_TEST_PASS();
- }
- 
--static void test_seal_mprotect_two_vma(bool seal)
--{
--	void *ptr;
--	unsigned long page_size = getpagesize();
--	unsigned long size = 4 * page_size;
--	int ret;
--
--	setup_single_address(size, &ptr);
--	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
--
--	/* use mprotect to split */
--	ret = sys_mprotect(ptr, page_size * 2, PROT_READ | PROT_WRITE);
--	FAIL_TEST_IF_FALSE(!ret);
--
--	if (seal) {
--		ret = seal_single_address(ptr, page_size * 4);
--		FAIL_TEST_IF_FALSE(!ret);
--	}
--
--	ret = sys_mprotect(ptr, page_size * 2, PROT_READ | PROT_WRITE);
--	if (seal)
--		FAIL_TEST_IF_FALSE(ret < 0);
--	else
--		FAIL_TEST_IF_FALSE(!ret);
--
--	ret = sys_mprotect(ptr + page_size * 2, page_size * 2,
--			PROT_READ | PROT_WRITE);
--	if (seal)
--		FAIL_TEST_IF_FALSE(ret < 0);
--	else
--		FAIL_TEST_IF_FALSE(!ret);
--
--	REPORT_TEST_PASS();
--}
--
- static void test_seal_mprotect_two_vma_with_split(bool seal)
- {
- 	void *ptr;
-@@ -1876,7 +1817,7 @@ int main(void)
- 	if (!pkey_supported())
- 		ksft_print_msg("PKEY not supported\n");
- 
--	ksft_set_plan(88);
-+	ksft_set_plan(84);
- 
- 	test_seal_addseal();
- 	test_seal_unmapped_start();
-@@ -1889,9 +1830,6 @@ int main(void)
- 	test_seal_zero_length();
- 	test_seal_twice();
- 
--	test_seal_mprotect(false);
--	test_seal_mprotect(true);
--
- 	test_seal_start_mprotect(false);
- 	test_seal_start_mprotect(true);
- 
-@@ -1904,9 +1842,6 @@ int main(void)
- 	test_seal_mprotect_unalign_len_variant_2(false);
- 	test_seal_mprotect_unalign_len_variant_2(true);
- 
--	test_seal_mprotect_two_vma(false);
--	test_seal_mprotect_two_vma(true);
--
- 	test_seal_mprotect_two_vma_with_split(false);
- 	test_seal_mprotect_two_vma_with_split(true);
- 
--- 
-2.47.1.613.gc27f4b7a9f-goog
-
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
 
