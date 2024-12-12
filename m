@@ -1,142 +1,142 @@
-Return-Path: <linux-kselftest+bounces-23243-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23244-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C38CA9EE233
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 10:02:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B42809EE235
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 10:03:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B6DB168E2D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 09:02:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36AA216385D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 09:03:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8279920E334;
-	Thu, 12 Dec 2024 09:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dqYbQMGZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A636720E32E;
+	Thu, 12 Dec 2024 09:03:03 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [195.130.132.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E7801F4E27
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Dec 2024 09:02:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AEFE204C3D
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Dec 2024 09:02:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733994130; cv=none; b=dzZdfEen1xhj/bHYrPOZa9VJbPpg7WFpkyinK6PVNuvRxEPvhOCEqxuQw8U1UPThK5iJK1FKJI5UD96Z+BrqM70foj4F1SmHbZ4g+VjhTqfbV4YnYNgy0BnLp0cBXYVQrVWtANG/o+O4aZE15TarDZjxplEy8YXPR4qUO4YVf7c=
+	t=1733994183; cv=none; b=pTxgoQOmHfYsMjso6Mh2fw1MassTyqMMEM/LhPh8S7GyaX7Kh0MwofS2TMVyiJXmW0omNm07L7m/B8dy3zpYAVKQJoy6NZwoUm13tou5GFrDnsYlGo4tLV6G4cmBxdvYdc6z4Y5iZvFSiO2zSLn8AN0mUdGhblnEAttM9IKH2mw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733994130; c=relaxed/simple;
-	bh=9AT90kklPF3U/jVx0p8QNIfkKZDudoPG9mx4JSZDi1U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=frnq8vJwCzMZc9pX5ujtCUvvp3tlCGnQdqbREE625Wy641GKsYICfL863e9AOmWa4y5s1BWKXv2bOkX6JY1h0yQqeAOcr1Mam/x2auVB6oTSF/9RCzNtmw8fQ/05dgVUzIYY8L2GzaHq22jaknZ+fQ+TEdgUgCe8eA7iKHfnHcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dqYbQMGZ; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-aa6aee68a57so51131866b.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Dec 2024 01:02:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1733994127; x=1734598927; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YX29TL49Dw2MuCUQ5j7U8rKWSDYxRlOCBf9aFWZ7cC0=;
-        b=dqYbQMGZ5uZrbLeXa064M49JVAFwQ433zusML+Pqz6MkD3x9gCZ5gsiOJoiwzZKtlP
-         UDD5oLa7QqlNILBv8zJn1HCAK8R848h+hNVr3ac5uzYixJKqz63hxbBkQsYJBeAIjo+C
-         t95O8+UxIaRU7yPBbGrgtOfk2MhtE8XYP2ZT7SuKSKT76Q0km1B1PsxUfk/Mw6C7e2+a
-         kCIt7V9hka+gFA/7MXxPCoaVMLPNTBoXaa64pw+latkxJVnyfOsKbp0cblKuk4Cb34nL
-         7bAVXYjGOsn2M8umCVKdCmzQF20jEWHhIB+gk117K+BcAAVtikj3hy4E9OL995ZfYfjH
-         QuYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733994127; x=1734598927;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YX29TL49Dw2MuCUQ5j7U8rKWSDYxRlOCBf9aFWZ7cC0=;
-        b=XnXI4ij5YCvazMJxL0b2k5An+D3FdjHqqbckiU695IsmLj9UAZ49fu0YBeRY+MAqWT
-         LeqvqZE4dm5BIL8x8e+CmDUCDkzQP1bynEWz6awXj1wazhZaOhWZVWmRMU5aPJk+w7Xa
-         atvQ87tf4yQbeR4vMpQdlL6F91mhuXm0R5IWqWswfalkOBxYmkZfebwNe84/HKyjtNQo
-         xX3qIuNIXSfq8TmYvI8hj08lgzFa9XJ+JA5iTPIyRD1QRimlxuJAjYdfr5jn9enwA3hb
-         CeSFebUiTnoh9D33FfGchc6ocQTdkBny3aQhhaqW9BC3psvOO2U/faBf6y/M5aTZ24ng
-         JMig==
-X-Forwarded-Encrypted: i=1; AJvYcCUGMkZNXgBc9qOjrtcNYvYgH1pL+QXkIN2xFTiYvCRqj8074EkMz/poBDlRjq4G3ka6YY5zUyiqUXgp3qUyv/M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhamhM+0WueXpNNVQ6fm/ZhrT1Qnirk4nFwnKMcVf44U2Tby7H
-	t47IqyHR+ZeyovGm1frnzVoOCPZqB2eOSxvOIqudiyQYZ7SCOwKAWEhPIAfjy/b2c8iX4nnNMG4
-	4
-X-Gm-Gg: ASbGncsV04GLjSzA1wLY9S8bVLFa0PoGCoU3pGPz3WGRzwZF0dD7Q0n94qd1VRwA4kg
-	r+hU+J/ssAx7t4hD9fMsbJfW6I0cB9rXW6WYrwgjTBDm5hAIifuZjrNsaZVPvmBVOjciEKKeOj6
-	vl+69YTepxqaFq9yqOYv7KhB6Hzo4hk/f//IHWcm4uA79FXD/dqly0wOxLHaDmr0xUYswk07MfM
-	//oyCJAHSDdEGHLyYWVCD8znNN/29xQi7WxcRJWhd4U3DTUtbgwgXhDjg==
-X-Google-Smtp-Source: AGHT+IGqFie4i+0ghIJeQCQTlYcosHNSt8wKFSH+Qs/Y042IQJIwrLcoCKb9ebNwKnrHEjV9nmQDkA==
-X-Received: by 2002:a17:906:23e1:b0:aa6:7e6b:4984 with SMTP id a640c23a62f3a-aa6c1ce756amr272309266b.42.1733994126600;
-        Thu, 12 Dec 2024 01:02:06 -0800 (PST)
-Received: from pathway.suse.cz ([176.114.240.50])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa692846ac8sm502499666b.168.2024.12.12.01.02.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Dec 2024 01:02:06 -0800 (PST)
-Date: Thu, 12 Dec 2024 10:02:03 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: BiscuitBobby <simeddon@gmail.com>
-Cc: shuah@kernel.org, mbenes@suse.cz,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/3] selftests/lib.mk: Introduce check to validate
- required configs
-Message-ID: <Z1qmiwXqJ6rvYmYa@pathway.suse.cz>
-References: <20241205114757.5916-1-simeddon@gmail.com>
- <20241205114757.5916-3-simeddon@gmail.com>
- <Z1hWqUMmr6pcadqD@pathway.suse.cz>
- <CAGd6pzNUquikRS8pw7D14qXqLixOCQUWqcCcD0C1O6K2TMLeNg@mail.gmail.com>
+	s=arc-20240116; t=1733994183; c=relaxed/simple;
+	bh=AsOSLqkWwAHed/g5h3ppTJF/mVD/1GWu4hpb8S7jJ4U=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=g1r9qD1Og+lJf/ouIkEe1lsaKXxAys54FUhh/owNP4fEx2n9FxXR9E+spG3nrOoXps1ZkescFfx86hp5/Fmymegb0l/5pmBGXBNs4sD/n8A3EG5qCN+vBsBxgB9sA5CIftsNzFsm6Lsn9Drxdk9XbqNwW0TZzmF0q0VzZrjaUNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:a086:deff:83e6:222b])
+	by andre.telenet-ops.be with cmsmtp
+	id nl2y2D00Q1T2bNC01l2yMk; Thu, 12 Dec 2024 10:02:58 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tLf5z-000pxc-JH;
+	Thu, 12 Dec 2024 10:02:58 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tLf62-00DEb1-4u;
+	Thu, 12 Dec 2024 10:02:58 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: John Stultz <jstultz@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v2 resend] selftests: timers: clocksource-switch: Adapt progress to kselftest framework
+Date: Thu, 12 Dec 2024 10:02:56 +0100
+Message-Id: <7dd4b9ab6e43268846e250878ebf25ae6d3d01ce.1733994134.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGd6pzNUquikRS8pw7D14qXqLixOCQUWqcCcD0C1O6K2TMLeNg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue 2024-12-10 22:40:51, BiscuitBobby wrote:
-> On Tue, 10 Dec 2024 at 20:26, Petr Mladek <pmladek@suse.com> wrote:
-> >
-> > What is the reason to add another set of dependencies, please?
-> 
-> I had done this because not every test required all the options specified in
-> tools/testing/selftests/<test>/config. I thought it would not be desirable to
-> prevent these tests from compiling/running.
+When adapting the test to the kselftest framework, a few printf() calls
+indicating test progress were not updated.
 
-The biggest problem is that tools/testing/selftests/<test>/config are
-not used during build or tests at the moment. It means that they
-are not tested and might be outdated.
+Fix this by replacing these printf() calls by ksft_print_msg() calls.
 
-If we add the dependency then some <test>/config files might need
-to get fixed.
+Fixes: ce7d101750ff8450 ("selftests: timers: clocksource-switch: adapt to kselftest framework")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+---
+v2:
+  - Add Reviewed-by.
 
-I am not sure how many problems it might cause. But it might
-be worth the effort.
+When just running the test, the output looks like:
 
-> > Both CONFIG_LIVEPATCH CONFIG_DYNAMIC_DEBUG are already mentioned in
-> > tools/testing/selftests/livepatch/config
->
-> This particular test only required CONFIG_LIVEPATCH to compile, but I
-> had included CONFIG_DYNAMIC_DEBUG, as Miroslav had expressed
-> wanting both of them checked.
+    # Validating clocksource arch_sys_counter
+    TAP version 13
+    1..12
+    ok 1 CLOCK_REALTIME
+    ...
+    # Validating clocksource ffca0000.timer
+    TAP version 13
+    1..12
+    ok 1 CLOCK_REALTIME
+    ...
 
-I see. The build succeeds even without CONFIG_DYNAMIC_DEBUG.
-But it must be enabled on the kernel where the test modules
-are loaded. Otherwise, the tests would fail.
+When redirecting the test output to a file, the progress prints are not
+interspersed with the test output, but collated at the end:
 
-Honestly, I think that this is rather an exception. It works
-only because all the needed pr_debug() messages are in
-the livepatch core code. The test modules do not use pr_debug()
-on its own.
+    TAP version 13
+    1..12
+    ok 1 CLOCK_REALTIME
+    ...
+    TAP version 13
+    1..12
+    ok 1 CLOCK_REALTIME
+    ...
+    # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:6 error:0
+    # Validating clocksource arch_sys_counter
+    # Validating clocksource ffca0000.timer
+    ...
 
-I believe that most options in tools/testing/selftests/<test>/config
-have to be enabled on both compile and runtime. Otherwise, the test
-binaries might not have access to the needed API.
+This makes it hard to match the test results with the timer under test.
+Is there a way to fix this?  The test does use fork().
 
-I suggest to keep it simple and require all <test>/config options
-at both compile and run time. IMHO, most people build and run
-the tests on the same kernel anyway.
+Thanks!
+---
+ tools/testing/selftests/timers/clocksource-switch.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Best Regards,
-Petr
+diff --git a/tools/testing/selftests/timers/clocksource-switch.c b/tools/testing/selftests/timers/clocksource-switch.c
+index c5264594064c8516..83faa4e354e389c2 100644
+--- a/tools/testing/selftests/timers/clocksource-switch.c
++++ b/tools/testing/selftests/timers/clocksource-switch.c
+@@ -156,8 +156,8 @@ int main(int argc, char **argv)
+ 	/* Check everything is sane before we start switching asynchronously */
+ 	if (do_sanity_check) {
+ 		for (i = 0; i < count; i++) {
+-			printf("Validating clocksource %s\n",
+-				clocksource_list[i]);
++			ksft_print_msg("Validating clocksource %s\n",
++					clocksource_list[i]);
+ 			if (change_clocksource(clocksource_list[i])) {
+ 				status = -1;
+ 				goto out;
+@@ -169,7 +169,7 @@ int main(int argc, char **argv)
+ 		}
+ 	}
+ 
+-	printf("Running Asynchronous Switching Tests...\n");
++	ksft_print_msg("Running Asynchronous Switching Tests...\n");
+ 	pid = fork();
+ 	if (!pid)
+ 		return run_tests(runtime);
+-- 
+2.34.1
+
 
