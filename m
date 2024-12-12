@@ -1,92 +1,92 @@
-Return-Path: <linux-kselftest+bounces-23248-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23249-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CB059EE327
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 10:35:24 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1528D9EE33A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 10:40:18 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64A11283597
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 09:35:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 527461887E80
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 09:40:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C152A20E6EB;
-	Thu, 12 Dec 2024 09:35:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1C0920E339;
+	Thu, 12 Dec 2024 09:40:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hHx2qL0s"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FXrpJWbK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1EA20E318
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Dec 2024 09:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32CFB1D89ED;
+	Thu, 12 Dec 2024 09:40:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733996114; cv=none; b=RMW+mirBNod2gxaZZUVn1uqqdgqPSCz6o5CEj8p1OlEy1SrNOo+CdWIYntHzyJIyIQwlt4HGAtvEXpm/JFdYRUzIlbgE5CN2VudqXPIYuWU3AyTBkTLxGZnViuIyZx8O+UHOLChUBuqFfpdbelUHHvBRSSHPuDvi2g40dgtWzbI=
+	t=1733996410; cv=none; b=ms5RIio3Vsr3uVoQcNkSLsCYW6XmypOA5fJ4pxBe5pQr6oSl1aNhjocZID1nEJyozYADP69Cnsyra43BUqv51IXzgspGqRhvuQlaK/6uSPb7blq5V5TjmPCqMFTJodumES5vIWAvRO+MCfv8HQ0F/mVkCsxhi8uZdXNkOv3EsqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733996114; c=relaxed/simple;
-	bh=Va7Rbm4URrvIDt/DyH6qR9FjFuQwl7M8B+lnkEdmojI=;
+	s=arc-20240116; t=1733996410; c=relaxed/simple;
+	bh=VWc2DqF30kvxbMoJ5f4EU8dsIWaO5o/gnUsxhi8whLY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NQN25ukvZr3zRvvqoWPT7ul2xEgnWxnixa+Pew70+m7Ze4YBcp2/NxGc/qxXYeo6VewMJSm4VVWSa8cofMeD7IOPchlOOEc75kA0sXIDAaVzGKO5gkXezybTAUrioL+TRnC/YU9pxhNenUhiL/zgcVei97XkrBbTYyr4I5PN4Y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hHx2qL0s; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4361d5dcf5bso3979285e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Dec 2024 01:35:12 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=TumkYOyqBT/ZuIXLGVYmQeY60cGdytlqYadzaZ7JTVhjvTYpwpXYLtGEvtbYRlK2Hi+IvAVzOQCIB6liEzyiXbEK3RJdbZQHiMTDMhwmWerHZ0BAn0FyScjLYKIHCH85SwXkBQlHPrteO9hXNpxROf+lquNgWevWeiEjisFiY98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FXrpJWbK; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2164b662090so3234865ad.1;
+        Thu, 12 Dec 2024 01:40:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1733996111; x=1734600911; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1733996408; x=1734601208; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8c4l7lRS2bRhcX4yC4do8L3ZZ1P+9nyFTMOBopT/2GQ=;
-        b=hHx2qL0suimF4/i617UkBK/fOS+3VIjXHioNBPzo2FTACMU0te/AISNnmEBiYSvhTi
-         W1Lt/ZM4DNHJ7nMKmsRXmY2gaeHSnOe9Y2PqMulfcUUPUAtWNK8yidCZ6GcTq0h9jM/C
-         IdboEt/kEufShJmTCrLPpNNF0vYtui6LabZjeiqKbJ3kshEpWosjhV3tSVKs3W0sagMU
-         r/8DJKX5/ebUtPBFMikYwyFs8iGC+nP9DVpkiHdUnKVqpdeV7s+Rnyv2zbmQMU9d9wF0
-         nQKmjGCC/d4ixSCqab8FwrUC+zlKOWuWAWlaLlkoE3+K63E1NrmzROV1cVxcaRNn0l/Y
-         uhvw==
+        bh=/blI0xGxrLnTmxcF6FdqTJxQ7aP9dl9YPrqYonhfjpE=;
+        b=FXrpJWbK6l8UEo+xhCdM+20WHETvHHBEwfzLFkin7fEkOHWzaZXpfyABfSiZ8ZhnGv
+         xW/VVwW75N+E1q4jbkP/80qR/O2iqSnEeBCdnRd96IsCoKCe7XoXRuvcphapL1Fpdjss
+         cMTyonTA1qS+XRNbiattd1mDnSYFddFaCrrCPRorqXzovpEguHpeW/bHVWNIwK9TFpoN
+         lSku4dhN23MrmhrJGXuYP0MXEovxRvBtxwDNT1RtuY58HcW2DOP2yg2T6++bL/w7lq8X
+         q+439kCR2vp3hkE02OyLsDzWn2KDopCZk9Ywy1suBUGIwicUtMNpSVH+ZPr2wmOOQ3U8
+         xasQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733996111; x=1734600911;
+        d=1e100.net; s=20230601; t=1733996408; x=1734601208;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8c4l7lRS2bRhcX4yC4do8L3ZZ1P+9nyFTMOBopT/2GQ=;
-        b=DkrZ/ZQ/vKqTfY2Ek+B4ReeS+xIlJyrZFrWfpP+U0asZswZRbYvFYtET8b1Qj/CDpp
-         XJYU4EOobUFdhJdyDsM1Ng50erYBg6lxaVhdOaGVX1OPONKSgXfjjLeZkW/coCoug4Fj
-         jYjrxxTv9j7mDfZz3aknrzdRNS5gb9QxxM8eyFPK67FrQWD2DKDqYxEisOV7FqSlRXxW
-         Sz+dK+PeeTnU1mIkmk19t659WN0g0EOEdiswwDucR2JkK0HR52HtxE0McV36TNF2msZ8
-         6ixsUtSskYVV2x+WPOlOxKBwuiRDbLmgzy45dgxAq9IsUrb8u7t+3Epre2WsW5JeHrrP
-         bWAw==
-X-Forwarded-Encrypted: i=1; AJvYcCV6xU9cjoBpUysctROBT/x+fNrwVO1gr6Ruy8e8+PSmw1HV6IUKSgime3qgsiWK6XRVO52GO+csm/Wp5p5yGj0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyvB1tX7J/o+nMxZjDCrP/Kxo/kZz6/WBZyXLLeaFwuknYcJudY
-	E8U4WsEEDkFZVzM5iN0PQQ42iWJakfnkUnU44bHh6tDov8UnRU/tQEr7jhwKPI8=
-X-Gm-Gg: ASbGnctxCOW8uohSxGiK3Q1E/ihEAhah4T5EEah2RM9+qIoDRCIDxpniHRnnz+auS8w
-	CFu6ENuUkYJE05tNNQZnXnOlQ3DVaNTzieRYA//0jkoF+hBary8PJKqY93StvpGrvjLNsS5X4Uu
-	QFZfeRX38/SY9E7yIGSB33CdIc3CLqCAea4LNrCgrwhhBP3CmzkryXv/jo8nXS1Tw9lYhop7goG
-	E6xvFk/SpbtZVUKWqZLGTSJtTDxJizJqsYfh9Z08vOtAe2Cf/+/aTpdW6POfw==
-X-Google-Smtp-Source: AGHT+IGized2vRZ+5/jSNeWf5x91CH3k8LiPPRqNJnZVzhvP9p1wXolywFcegCjc1TiC1IePEY+Hsw==
-X-Received: by 2002:a05:600c:3548:b0:435:40be:3949 with SMTP id 5b1f17b1804b1-43622844ab5mr24401495e9.16.1733996111444;
-        Thu, 12 Dec 2024 01:35:11 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4362559eedcsm10990545e9.23.2024.12.12.01.35.10
+        bh=/blI0xGxrLnTmxcF6FdqTJxQ7aP9dl9YPrqYonhfjpE=;
+        b=BEZ8Jt3uSwaiTTv18x6G/tuAACickzvYGrkNqtxYGL6JsS3b0PR0i36iL0RJtZrCKQ
+         Ef8qQw26amJ/bZFzUjWIQPU0Mg13mIqZr+QMuSkJ4FJXavoN2yrCwBMxl0LqWpjY21Xb
+         z7vsviZrj1lt5bR+UiVdFtsQWdQ2lbAe0qwuhLvOAmsSS+hRm914d+xdLncga06sGP3s
+         IlwHKst37LgvA05UjbHRg5mDyLhtXtaN2YUrlBTEPiqQy9qQjbF5pdu27ALYJWIzpoy2
+         Ap3pOvKWvjQqtYORbU2JfTM+8cr6TwhGPHMYGpJYUZGvW2h5A/8BgVcJ4rKQ/LE9Ki1D
+         lBkA==
+X-Forwarded-Encrypted: i=1; AJvYcCUk0MwMf03jm689OoaNpGQSC7dpURw8xwHudJteEQqhCh9cWWKu5BOJxH1FBDsRaGfyk+NmQG4vXMcZdBI=@vger.kernel.org, AJvYcCVWn31vVV/8ITTGbYEMrXFm8qReLSxxlQyGgGwZ2B3wcp3zEfKm9VKrf2Uw2FTIoMxar3sSmL2o7T09GXYA0Vny@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeJ5Hfkew25va+VnuM3xK5Nh+UR07yspWlpXxtQvDzFlzWolUj
+	UCW6tyjxR7/mJTaG5IoX8X9rgVELIqeLh/rVT+4qnQ99hZ1zyVUf
+X-Gm-Gg: ASbGncvYyi+NS+arwqcnKQ3Xlyu5D+maXAJu3VwQCfAxfzpQa6witwjH4PSCgNFmic1
+	G2SN6sjV3a3Po+N28ACcnOZQACp445ReJINLuvd3w25b5Hl7qXSmwRCGg16OvYq3E63YHWjl7Gk
+	xcmk3hD3FV+IA49sQJTKSTyupEU600yarP+i6LOnnL3k/dy7WitHMX5wIjJgXAYykjhThOETnZD
+	CHzXJCF6xp4xd7caMNBBWNnhQf75wL7Iiz+evpFQW6cXJph5upCYTIRSdq6aQ==
+X-Google-Smtp-Source: AGHT+IHntqbqE7yVouwpim9oB24q3YJgf2IDzhh9r1HTEYqi1yN2bS5ekftsd6hxoWVMvQ3kxEwRMQ==
+X-Received: by 2002:a17:902:c942:b0:215:5c1a:f369 with SMTP id d9443c01a7336-2177838d73emr96475535ad.11.1733996408237;
+        Thu, 12 Dec 2024 01:40:08 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-216281f45a2sm89778335ad.250.2024.12.12.01.40.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Dec 2024 01:35:10 -0800 (PST)
-Date: Thu, 12 Dec 2024 12:35:07 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Zijun Hu <zijun_hu@icloud.com>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Joao Pinto <jpinto@synopsys.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Wei Yongjun <weiyongjun1@huawei.com>, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>,
-	stable@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: Re: [PATCH v3 0/3] PCI: endpoint: fix bug for 2 APIs and simplify 1
- API
-Message-ID: <1fac71d8-dcfe-4924-ab01-dc85a822b740@stanley.mountain>
-References: <20241210-pci-epc-core_fix-v3-0-4d86dd573e4b@quicinc.com>
+        Thu, 12 Dec 2024 01:40:07 -0800 (PST)
+Date: Thu, 12 Dec 2024 09:39:59 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Nikolay Aleksandrov <razor@blackwall.org>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
+	Andy Gospodarek <andy@greyhouse.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 1/2] bonding: fix xfrm offload feature setup on
+ active-backup mode
+Message-ID: <Z1qvb7Nz7zAv0L1w@fedora>
+References: <20241211071127.38452-1-liuhangbin@gmail.com>
+ <20241211071127.38452-2-liuhangbin@gmail.com>
+ <032ea83b-0df0-4c88-b0d1-153d9c1bf865@blackwall.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -95,24 +95,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241210-pci-epc-core_fix-v3-0-4d86dd573e4b@quicinc.com>
+In-Reply-To: <032ea83b-0df0-4c88-b0d1-153d9c1bf865@blackwall.org>
 
-On Tue, Dec 10, 2024 at 10:00:17PM +0800, Zijun Hu wrote:
-> This patch series is to fix bug for APIs
-> - devm_pci_epc_destroy().
-> - pci_epf_remove_vepf().
+On Thu, Dec 12, 2024 at 11:19:33AM +0200, Nikolay Aleksandrov wrote:
+> > diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+> > index 49dd4fe195e5..7daeab67e7b5 100644
+> > --- a/drivers/net/bonding/bond_main.c
+> > +++ b/drivers/net/bonding/bond_main.c
+> > @@ -4389,7 +4389,7 @@ void bond_work_init_all(struct bonding *bond)
+> >  	INIT_DELAYED_WORK(&bond->slave_arr_work, bond_slave_arr_handler);
+> >  }
+> >  
+> > -static void bond_work_cancel_all(struct bonding *bond)
+> > +void bond_work_cancel_all(struct bonding *bond)
+> >  {
+> >  	cancel_delayed_work_sync(&bond->mii_work);
+> >  	cancel_delayed_work_sync(&bond->arp_work);
+> > diff --git a/drivers/net/bonding/bond_netlink.c b/drivers/net/bonding/bond_netlink.c
+> > index 2a6a424806aa..7fe8c62366eb 100644
+> > --- a/drivers/net/bonding/bond_netlink.c
+> > +++ b/drivers/net/bonding/bond_netlink.c
+> > @@ -568,18 +568,21 @@ static int bond_newlink(struct net *src_net, struct net_device *bond_dev,
+> >  			struct nlattr *tb[], struct nlattr *data[],
+> >  			struct netlink_ext_ack *extack)
+> >  {
+> > +	struct bonding *bond = netdev_priv(bond_dev);
+> >  	int err;
+> >  
+> > -	err = bond_changelink(bond_dev, tb, data, extack);
+> > -	if (err < 0)
+> > +	err = register_netdevice(bond_dev);
+> > +	if (err)
+> >  		return err;
+> >  
+> > -	err = register_netdevice(bond_dev);
+> > -	if (!err) {
+> > -		struct bonding *bond = netdev_priv(bond_dev);
+> > +	netif_carrier_off(bond_dev);
+> > +	bond_work_init_all(bond);
+> >  
+> > -		netif_carrier_off(bond_dev);
+> > -		bond_work_init_all(bond);
+> > +	err = bond_changelink(bond_dev, tb, data, extack);
+> > +	if (err) {
+> > +		bond_work_cancel_all(bond);
+> > +		netif_carrier_on(bond_dev);
 > 
-> and simplify APIs below:
-> - pci_epc_get().
+> The patch looks good, but I'm curious why the carrier on here?
+
+The current code set netif_carrier_off(bond_dev) after register_netdevice()
+success, So I make it on if register failed.
+
+Thanks
+hangbin
 > 
-> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
-> ---
-
-This is very good.  This is Config FS.  Is there a kself test for configfs
-or did you create your own test?
-
-regards,
-dan carpenter
-
-
+> > +		unregister_netdevice(bond_dev);
+> >  	}
+> >  
+> >  	return err;
 
