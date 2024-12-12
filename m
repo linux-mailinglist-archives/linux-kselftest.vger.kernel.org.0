@@ -1,355 +1,212 @@
-Return-Path: <linux-kselftest+bounces-23255-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23256-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB7949EE682
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 13:19:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 85E9D9EE6EA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 13:41:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27E99282184
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 12:19:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 080102831D3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 12:41:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32FB6212D8D;
-	Thu, 12 Dec 2024 12:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A4012135B0;
+	Thu, 12 Dec 2024 12:41:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="CWw+m96j"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RtCTHG9c"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C2DA212D67
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Dec 2024 12:19:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34BA6212F9E;
+	Thu, 12 Dec 2024 12:41:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734005991; cv=none; b=XMH/NkpBOO/lqCl1SMrC2zB/7sV80Aa3TFskYprzMA+OWFagEAW3tud6n2HSAJ4C/MlHd+7O8TsWam0wRCm3qDQywkX6kfPh9El7B54z88g9jxripOj487J/OM/xwTWLU/QVT4rTbA4VBeW3LdCMn9S9eCKra79wS9kWFjeIysI=
+	t=1734007307; cv=none; b=H+uRk9BPpCjvQ8mhJkmAnkmVEiQsolymkN/BAebhAV3G1fpccUfix8FvVrT9LM3CiuaQBSjnBy4VnAlFNi5e/p4OKP2+wrC7dcMHKpj50OGFG/E0a+EDaAExJn8HW+4dkt1d9l+IxHhCAgbVT4UvMekW/8ETLxBdf4l23EyfSR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734005991; c=relaxed/simple;
-	bh=VKBQIzStgllWG7ueGDaONoR1vHAbjm+ukTlPYa+H8xs=;
+	s=arc-20240116; t=1734007307; c=relaxed/simple;
+	bh=jo2gukOfLEvouFNhtdX1Kl6/D7IkbXWRkgRk3E64PLw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=c19fCXN9BeQkP2zwBWH6XsELiexGAbid6LCKQz2fWH4MOo4BzITmiwdq2hzAr/zcnDjXoUXD6foAV/tWxAld1/m3skt6UVpWgBV7vqHKEuOxKONsBkykoSJ6vacf7z1WeGXlw/fprfgC+pCV9IPVUTxLPzpQF+HpHNqBCBWV94k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=CWw+m96j; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-aa69251292dso102201866b.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Dec 2024 04:19:48 -0800 (PST)
+	 To:Cc:Content-Type; b=iRa8uGyxizZveQWF+8FoGjgTUxIErxcudlV7T2ajHb+N6qFHRBvSM4ZTZVm4hGGVFqHVgycC+DWFea6KwIDvaevIclyJGhbD3aE4P7/SYhlkLO8W34IEDOB5h4eryoOCysRrVUzKXMtK8ATlDeXYq0NBu+0l754xfjc67azAhbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RtCTHG9c; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-436202dd7f6so6136815e9.0;
+        Thu, 12 Dec 2024 04:41:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1734005987; x=1734610787; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734007303; x=1734612103; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=t/cxRM0Ij2WEG5z2uOS+HsShhYoyfFvbZEEd1iFJwRA=;
-        b=CWw+m96jeM/gLgqfJy4ufGDKAsvmi0geXzlCezwdUtxE+u71MgQE2Kws539aEKC8cZ
-         J8MdrSIqSCTCNYUI9Mkr1JWXfOFJaDKeUBWkAUGGPOKjgchNv7aoAbn00byXMr3meoR7
-         hLj9EL28VHOgu/WBVrTkfn7gva0x2VYGKCYj8=
+        bh=UdqXBrFz+MhhB28jjWBHlFWKaOr9dT3/Vp6X30ps4DU=;
+        b=RtCTHG9cS3eoTTd2KCWow/hepNeQnAYwlY6lHSixeAW1b3fVztcDM5jzG301JWaHXj
+         1Df24Gq1ix5yy+ymwYF/biR7A88m9sg0hh2/tnjgzUPq7lMcXlp6/KT57yzqtTy0cL47
+         E3tM32y2IGBwiAvaOzVlGx5+mOQytM76EL8h8LUW6PpqpqW/GcPqmrCjjBtPYedkMeXA
+         S+AY9sGOYkix3e6O1MEWxJl/pBNytj5NdXUU1D/JHKmKwYnn5hLp2uzLFlKjBR2/jwz+
+         UqrGHuzW/2eMDIm7cGFH2JHGsbij7Su2lCGY7DzftJVjBGvAxPG/Y7WjpfI9CKTTFQUY
+         60Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734005987; x=1734610787;
+        d=1e100.net; s=20230601; t=1734007303; x=1734612103;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=t/cxRM0Ij2WEG5z2uOS+HsShhYoyfFvbZEEd1iFJwRA=;
-        b=hJz7ledvJE/E9UPbaNwq6s2vHeBZxi2NMWwAac8rX0EkDfHMYR2Y+3VKDP2I4agYOP
-         L0sBXreYLNeAdbtmFSCoCWaiI+bAG7Ketp4mLoN8qhMtPsZ6uN/Zix0KWdsgQaz3o6+Q
-         UewtxEX4h6NBGWmEHanDs1cOvOINK/Hn5ANc+FgjKQQ7+aAU8SuZwHH73DE3a8+d92pr
-         Grf3YyhXfPqdb1HnD1NDSu6M/FU5CNpJ75i2FzPrbTWnlxcjsS5f8Ikk8MNOM8k4m6FS
-         7huBtI8NG+lzF1FIcOwFsGLNUthOEHi5aLZRU7IlPq0L5Qlm5CYhEcmCM0ydOURq+4zn
-         whfA==
-X-Forwarded-Encrypted: i=1; AJvYcCWL+zhO9hunpBORMBklrsGkEwS9xSL0HJrvTxgeyoyQ6DjrLG4vkskWgVp+AhmOdZldUS5B1GjHNdwWBMO9rPM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhQKuBRSa8PZdYVzhgPZxM598KIB4qeYTzSBqQxcMQpuVmw5Nc
-	ydj+Il46Qyw9FfxVwSYvrU2CGeWqIiqjXyrajNPnUksbFsDDicN30N6omsLXmqTWpOTIz5uA2kj
-	bqID7Q2VaJLMVrQ6VoyTM+esQMNU0g+iC3MajXaOJLorwDwhJ7X1vP1mfE9N35BOjVT0ivxRMqb
-	n+nz1HGG0AMSGg3XnYsS3gX5Pa34aArA==
-X-Gm-Gg: ASbGncvXVDpsIl1UHyb9UfwS4WD4xEPaNddm3uzDBWnzif6xhWD354F/FtJug314CSO
-	LUj/0sOaLNvts4YwBBF85fs+WFYiWj+GuO4Opig==
-X-Google-Smtp-Source: AGHT+IFQv+cXEVNVFaLo/8WQQrhr8KPYmu+2J6kQYdBp2nt4RjHirpIEciuXmk1t5dRnW7cYitqVsCefUe2Yg9NRj9k=
-X-Received: by 2002:a17:906:4ca:b0:aa6:993a:259f with SMTP id
- a640c23a62f3a-aa6b1396ea0mr722272266b.40.1734005986971; Thu, 12 Dec 2024
- 04:19:46 -0800 (PST)
+        bh=UdqXBrFz+MhhB28jjWBHlFWKaOr9dT3/Vp6X30ps4DU=;
+        b=pIKq8+9wDVXu3BC9M11burBtQQc7MGGMy6h4QR8mxijdlNv9HdDQnjb3R5CNvNmRdV
+         EG+jOxaxK0LMDnVhxEOw0DcLTAUFylDBTAzqOsQxVTQEYrYqdfsSXrJFwbqD5MheIX5B
+         x8zwkYhofJBwe4zZdx176ywIFQ7GkgLG8bw2lZ7AxmANw6LzuyCFROWQOpXKWqh+CmJa
+         QFW6LT3/yQ7l0Dej2A/Ls3MVWrppyUYULuWLFVaIWXKlZhn0GkWF8N3dcCDA/uIMEJZ9
+         TZGzJf2k17aEwwPXpVuGPnRactMRingc1TV/9JmBfo9cAGxd9wxDtwZDvfYRscaMobSA
+         u9Ug==
+X-Forwarded-Encrypted: i=1; AJvYcCU+qtQ7jmvGher16t2jyNTtAQlyDOI5zueQFAlcKClOHPwPcKwIsncAnzdwqdM7pV6a3+NRM+48OZwmpA==@vger.kernel.org, AJvYcCU0uNwB6RNMnIJjdUqimBKnfLaubomdWU0KujD6x1F+oG9ZUKlw2wvSAPhxdIajLL+pt+yRxf8Ly/WRlwpbJic=@vger.kernel.org, AJvYcCUILYc95y/qpsSLSNrbJYcaNFeA4c1AXytvwQq2ZBUhv2gMEYqPgkkSSxIm3nzfjRmjUzLirY7ClPtH@vger.kernel.org, AJvYcCUbIvk8szrAvBHYDz+rz+LZN7/WQawizTw1a/SZIqJaJac0NLhonpqAym/vC1+ELDySVQ0V7ZHEL23Y@vger.kernel.org, AJvYcCVXAUFpY91WrEp4OBtYrOX6SzU1tbSRN6v6R6z2hr8xLvScBq7gvQwI5Cp4Uw1UK3LHOvDHnRlqk87adCE6@vger.kernel.org, AJvYcCWOtaf+qKj4NRzhSMFovPECSTLJ5xdnbCOJOvc7E798Hj5ULcMsl8AVIgXSE1OzU55Xwfd/8SJFdsQM9g==@vger.kernel.org, AJvYcCXduIiLrQCwkvkZ3pduUERsp4y9AO1BY0yCYgO9wVdBBzhj8M0QtaGHzOtS6t2lTM5+yHQ=@vger.kernel.org, AJvYcCXxcmfs7q/5TCS1mP3TitPfo7WoKsCfZa7HD5prGmW1QCfVLab62BFpK93tthqIdSKxq2xTmkgBt3A1KswdKxUC@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjoGbINz+t7IpRJNaOBSs0NnHXtrKdtniXsv2F7OGq3iepBv0h
+	NCDkFYH0KqklngSrPmdzGOg1hZDVV5au3PjDGw2f31k+JUC+NePnj9IzAgTLw6vkOq8aHZUDOpQ
+	QpMEbrsm8qAz4Lwq5DsU26PwyXJs=
+X-Gm-Gg: ASbGncvsdT6DNV65BM/GFrSD768quk64y244O923Eij/aK0pSu8/EgBzDcBGGPpmTgr
+	HWchv8+cebnQfRFofAvdqsr/592PBKIelvA4I
+X-Google-Smtp-Source: AGHT+IFqFk9dpKGWg1iKfKEea53yF0KmGIqYqHw17PI/mHu0HdGMd6qhUvlxmt/ZCzWy1qtAEPF2qQKT7Apiv7Ssc/8=
+X-Received: by 2002:a05:6000:a0b:b0:385:f44a:a68 with SMTP id
+ ffacd0b85a97d-3878769805bmr3014357f8f.35.1734007303234; Thu, 12 Dec 2024
+ 04:41:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241030033514.1728937-1-zack.rusin@broadcom.com>
- <20241030033514.1728937-3-zack.rusin@broadcom.com> <CABgObfaRP6zKNhrO8_atGDLcHs=uvE0aT8cPKnt_vNHHM+8Nxg@mail.gmail.com>
- <CABQX2QMR=Nsn23zojFdhemR7tvGUz6_UM8Rgf6WLsxwDqoFtxg@mail.gmail.com>
- <Zy0__5YB9F5d0eZn@google.com> <CABQX2QNxFDhH1frsGpSQjSs3AWSdTibkxPrjq1QC7FGZC8Go-Q@mail.gmail.com>
- <e3f943a7-a40a-45cb-b0d9-e3ed58344d8b@redhat.com> <CADH9ctD1uf_yBA3NXNQu7TJa_TPhLRN=0YZ3j2gGhgmaFRdCFg@mail.gmail.com>
- <c3026876-8061-4ab2-9321-97cc05bad510@redhat.com> <CADH9ctBivnvP1tNcatLKzd8EDz8Oo6X65660j8ccxYzk3aFzCA@mail.gmail.com>
- <CABgObfZEyCQMiq6CKBOE7pAVzUDkWjqT2cgfbwjW-RseH8VkLw@mail.gmail.com>
- <CADH9ctA_C1dAOus1K+wOH_SOKTb=-X1sVawt5R=dkH1iGt8QUg@mail.gmail.com>
- <CABgObfZrTyft-3vqMz5w0ZiAhp-v6c32brgftynZGJO8OafrdA@mail.gmail.com>
- <CADH9ctBYp-LMbW4hm3+QwNoXvAc5ryVeB0L1jLY0uDWSe3vbag@mail.gmail.com>
- <b1ddb439-9e28-4a58-ba86-0395bfc081e0@redhat.com> <CADH9ctCFYtNfhn3SSp2jp0fzxu6s_X1A+wBNnzvHZVb8qXPk=g@mail.gmail.com>
-In-Reply-To: <CADH9ctCFYtNfhn3SSp2jp0fzxu6s_X1A+wBNnzvHZVb8qXPk=g@mail.gmail.com>
-From: Doug Covelli <doug.covelli@broadcom.com>
-Date: Thu, 12 Dec 2024 07:19:33 -0500
-Message-ID: <CADH9ctB0YSYqC_Vj2nP20vMO_gN--KsqOBOu8sfHDrkZJV6pmw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] KVM: x86: Add support for VMware guest specific hypercalls
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Zack Rusin <zack.rusin@broadcom.com>, Sean Christopherson <seanjc@google.com>, 
-	kvm <kvm@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "the arch/x86 maintainers" <x86@kernel.org>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Arnaldo Carvalho de Melo <acme@redhat.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Joel Stanley <joel@jms.id.au>, Linux Doc Mailing List <linux-doc@vger.kernel.org>, 
-	"Kernel Mailing List, Linux" <linux-kernel@vger.kernel.org>, 
-	linux-kselftest <linux-kselftest@vger.kernel.org>
+References: <20241209140151.231257-1-shaw.leon@gmail.com> <20241209140151.231257-4-shaw.leon@gmail.com>
+ <2b89667d-ccd6-40b7-b355-1c71e159d14f@redhat.com>
+In-Reply-To: <2b89667d-ccd6-40b7-b355-1c71e159d14f@redhat.com>
+From: Xiao Liang <shaw.leon@gmail.com>
+Date: Thu, 12 Dec 2024 20:41:06 +0800
+Message-ID: <CABAhCOTv1tDOXBEE56CL1-S_J6ADZTcvso5GHtkarzJMqOC4xQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v5 3/5] rtnetlink: Decouple net namespaces in rtnl_newlink_create()
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Kuniyuki Iwashima <kuniyu@amazon.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Donald Hunter <donald.hunter@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, 
+	Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jiri Pirko <jiri@resnulli.us>, 
+	Hangbin Liu <liuhangbin@gmail.com>, linux-rdma@vger.kernel.org, 
+	linux-can@vger.kernel.org, osmocom-net-gprs@lists.osmocom.org, 
+	bpf@vger.kernel.org, linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com, 
+	linux-wireless@vger.kernel.org, b.a.t.m.a.n@lists.open-mesh.org, 
+	bridge@lists.linux.dev, linux-wpan@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 14, 2024 at 10:45=E2=80=AFAM Doug Covelli <doug.covelli@broadco=
-m.com> wrote:
+On Thu, Dec 12, 2024 at 5:27=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wro=
+te:
 >
-> On Wed, Nov 13, 2024 at 12:59=E2=80=AFPM Paolo Bonzini <pbonzini@redhat.c=
-om> wrote:
+> On 12/9/24 15:01, Xiao Liang wrote:
+> > There are 4 net namespaces involved when creating links:
 > >
-> > On 11/13/24 17:24, Doug Covelli wrote:
-> > >> No worries, you're not hijacking :) The only reason is that it would
-> > >> be more code for a seldom used feature and anyway with worse perform=
-ance.
-> > >> (To be clear, CR8 based accesses are allowed, but stores cause an ex=
-it
-> > >> in order to check the new TPR against IRR. That's because KVM's API
-> > >> does not have an equivalent of the TPR threshold as you point out be=
-low).
-> > >
-> > > I have not really looked at the code but it seems like it could also
-> > > simplify things as CR8 would be handled more uniformly regardless of
-> > > who is virtualizing the local APIC.
+> >  - source netns - where the netlink socket resides,
+> >  - target netns - where to put the device being created,
+> >  - link netns - netns associated with the device (backend),
+> >  - peer netns - netns of peer device.
 > >
-> > Not much because CR8 basically does not exist at all (it's just a byte
-> > in memory) with userspace APIC.  So it's not easy to make it simpler, e=
-ven
-> > though it's less uniform.
+> > Currently, two nets are passed to newlink() callback - "src_net"
+> > parameter and "dev_net" (implicitly in net_device). They are set as
+> > follows, depending on netlink attributes.
 > >
-> > That said, there is an optimization: you only get KVM_EXIT_SET_TPR if
-> > CR8 decreases.
+> >  +------------+-------------------+---------+---------+
+> >  | peer netns | IFLA_LINK_NETNSID | src_net | dev_net |
+> >  +------------+-------------------+---------+---------+
+> >  |            | absent            | source  | target  |
+> >  | absent     +-------------------+---------+---------+
+> >  |            | present           | link    | link    |
+> >  +------------+-------------------+---------+---------+
+> >  |            | absent            | peer    | target  |
+> >  | present    +-------------------+---------+---------+
+> >  |            | present           | peer    | link    |
+> >  +------------+-------------------+---------+---------+
 > >
-> > >>> Also I could not find these documented anywhere but with MSFT's API=
-C our monitor
-> > >>> relies on extensions for trapping certain events such as INIT/SIPI =
-plus LINT0
-> > >>> and SVR writes:
-> > >>>
-> > >>> UINT64 X64ApicInitSipiExitTrap    : 1; // WHvRunVpExitReasonX64Apic=
-InitSipiTrap
-> > >>> UINT64 X64ApicWriteLint0ExitTrap  : 1; // WHvRunVpExitReasonX64Apic=
-WriteTrap
-> > >>> UINT64 X64ApicWriteLint1ExitTrap  : 1; // WHvRunVpExitReasonX64Apic=
-WriteTrap
-> > >>> UINT64 X64ApicWriteSvrExitTrap    : 1; // WHvRunVpExitReasonX64Apic=
-WriteTrap
-> > >>
-> > >> There's no need for this in KVM's in-kernel APIC model. INIT and
-> > >> SIPI are handled in the hypervisor and you can get the current
-> > >> state of APs via KVM_GET_MPSTATE. LINT0 and LINT1 are injected
-> > >> with KVM_INTERRUPT and KVM_NMI respectively, and they obey IF/PPR
-> > >> and NMI blocking respectively, plus the interrupt shadow; so
-> > >> there's no need for userspace to know when LINT0/LINT1 themselves
-> > >> change. The spurious interrupt vector register is also handled
-> > >> completely in kernel.
-> > >
-> > > I realize that KVM can handle LINT0/SVR updates themselves but our
-> > > interrupt subsystem relies on knowing the current values of these
-> > > registers even when not virtualizing the local APIC.  I suppose we
-> > > could use KVM_GET_LAPIC to sync things up on demand but that seems
-> > > like it might nor be great from a performance point of view.
+> > When IFLA_LINK_NETNSID is present, the device is created in link netns
+> > first. This has some side effects, including extra ifindex allocation,
+> > ifname validation and link notifications. There's also an extra step to
+> > move the device to target netns. These could be avoided if we create it
+> > in target netns at the beginning.
 > >
-> > Ah no, you're right---you want to track the CPU that has ExtINT enabled
-> > and send KVM_INTERRUPT to that one, I guess?  And you need the spurious
-> > vector registers because writes can set the mask bit in LINTx, but
-> > essentially you want to trap LINT0 changes.
+> > On the other hand, the meaning of src_net is ambiguous. It varies
+> > depending on how parameters are passed. It is the effective link or pee=
+r
+> > netns by design, but some drivers ignore it and use dev_net instead.
 > >
-> > Something like this (missing the KVM_ENABLE_CAP and KVM_CHECK_EXTENSION
-> > code) is good, feel free to include it in your v2 (Co-developed-by
-> > and Signed-off-by me):
+> > This patch refactors netns handling by packing newlink() parameters int=
+o
+> > a struct, and passing source, link and peer netns as is through this
+> > struct. Fallback logic is implemented in helper functions -
+> > rtnl_newlink_link_net() and rtnl_newlink_peer_net(). If is not set, pee=
+r
+> > netns falls back to link netns, and link netns falls back to source net=
+ns.
+> > rtnl_newlink_create() now creates devices in target netns directly,
+> > so dev_net is always target netns.
 > >
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm=
-_host.h
-> > index 5fb29ca3263b..b7dd89c99613 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -122,6 +122,7 @@
-> >   #define KVM_REQ_HV_TLB_FLUSH \
-> >         KVM_ARCH_REQ_FLAGS(32, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP=
-)
-> >   #define KVM_REQ_UPDATE_PROTECTED_GUEST_STATE  KVM_ARCH_REQ(34)
-> > +#define KVM_REQ_REPORT_LINT0_ACCESS    KVM_ARCH_REQ(35)
+> > For drivers that use dev_net as fallback of link_netns, current behavio=
+r
+> > is kept for compatibility.
 > >
-> >   #define CR0_RESERVED_BITS                                            =
-   \
-> >         (~(unsigned long)(X86_CR0_PE | X86_CR0_MP | X86_CR0_EM | X86_CR=
-0_TS \
-> > @@ -775,6 +776,7 @@ struct kvm_vcpu_arch {
-> >         u64 smi_count;
-> >         bool at_instruction_boundary;
-> >         bool tpr_access_reporting;
-> > +       bool lint0_access_reporting;
-> >         bool xfd_no_write_intercept;
-> >         u64 ia32_xss;
-> >         u64 microcode_version;
-> > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> > index 88dc43660d23..0e070f447aa2 100644
-> > --- a/arch/x86/kvm/lapic.c
-> > +++ b/arch/x86/kvm/lapic.c
-> > @@ -1561,6 +1561,21 @@ static u32 apic_get_tmcct(struct kvm_lapic *apic=
-)
-> >                               apic->divide_count));
-> >   }
-> >
-> > +static void __report_lint0_access(struct kvm_lapic *apic, u32 value)
-> > +{
-> > +       struct kvm_vcpu *vcpu =3D apic->vcpu;
-> > +       struct kvm_run *run =3D vcpu->run;
-> > +
-> > +       kvm_make_request(KVM_REQ_REPORT_LINT0_ACCESS, vcpu);
-> > +       run->lint0_access.value =3D value;
-> > +}
-> > +
-> > +static inline void report_lint0_access(struct kvm_lapic *apic, u32 val=
-ue)
-> > +{
-> > +       if (apic->vcpu->arch.lint0_access_reporting)
-> > +               __report_lint0_access(apic, value);
-> > +}
-> > +
-> >   static void __report_tpr_access(struct kvm_lapic *apic, bool write)
-> >   {
-> >         struct kvm_vcpu *vcpu =3D apic->vcpu;
-> > @@ -2312,8 +2327,10 @@ static int kvm_lapic_reg_write(struct kvm_lapic =
-*apic, u32 reg, u32 val)
-> >                         int i;
-> >
-> >                         for (i =3D 0; i < apic->nr_lvt_entries; i++) {
-> > -                               kvm_lapic_set_reg(apic, APIC_LVTx(i),
-> > -                                       kvm_lapic_get_reg(apic, APIC_LV=
-Tx(i)) | APIC_LVT_MASKED);
-> > +                               u32 old =3D kvm_lapic_get_reg(apic, API=
-C_LVTx(i));
-> > +                               kvm_lapic_set_reg(apic, APIC_LVTx(i), o=
-ld | APIC_LVT_MASKED);
-> > +                               if (i =3D=3D 0 && !(old & APIC_LVT_MASK=
-ED))
-> > +                                       report_lint0_access(apic, old |=
- APIC_LVT_MASKED);
-> >                         }
-> >                         apic_update_lvtt(apic);
-> >                         atomic_set(&apic->lapic_timer.pending, 0);
-> > @@ -2352,6 +2369,8 @@ static int kvm_lapic_reg_write(struct kvm_lapic *=
-apic, u32 reg, u32 val)
-> >                 if (!kvm_apic_sw_enabled(apic))
-> >                         val |=3D APIC_LVT_MASKED;
-> >                 val &=3D apic_lvt_mask[index];
-> > +               if (index =3D=3D 0 && val !=3D kvm_lapic_get_reg(apic, =
-reg))
-> > +                       report_lint0_access(apic, val);
-> >                 kvm_lapic_set_reg(apic, reg, val);
-> >                 break;
-> >         }
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index d0d3dc3b7ef6..2b039b372c3f 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -10879,6 +10879,11 @@ static int vcpu_enter_guest(struct kvm_vcpu *v=
-cpu)
-> >                         kvm_vcpu_flush_tlb_guest(vcpu);
-> >   #endif
-> >
-> > +               if (kvm_check_request(KVM_REQ_REPORT_LINT0_ACCESS, vcpu=
-)) {
-> > +                       vcpu->run->exit_reason =3D KVM_EXIT_LINT0_ACCES=
-S;
-> > +                       r =3D 0;
-> > +                       goto out;
-> > +               }
-> >                 if (kvm_check_request(KVM_REQ_REPORT_TPR_ACCESS, vcpu))=
- {
-> >                         vcpu->run->exit_reason =3D KVM_EXIT_TPR_ACCESS;
-> >                         r =3D 0;
-> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> > index 637efc055145..ec97727f9de4 100644
-> > --- a/include/uapi/linux/kvm.h
-> > +++ b/include/uapi/linux/kvm.h
-> > @@ -178,6 +178,7 @@ struct kvm_xen_exit {
-> >   #define KVM_EXIT_NOTIFY           37
-> >   #define KVM_EXIT_LOONGARCH_IOCSR  38
-> >   #define KVM_EXIT_MEMORY_FAULT     39
-> > +#define KVM_EXIT_LINT0_ACCESS     40
-> >
-> >   /* For KVM_EXIT_INTERNAL_ERROR */
-> >   /* Emulate instruction failed. */
-> > @@ -283,6 +284,10 @@ struct kvm_run {
-> >                                 __u64 flags;
-> >                         };
-> >                 } hypercall;
-> > +               /* KVM_EXIT_LINT0_ACCESS */
-> > +               struct {
-> > +                       __u32 value;
-> > +               } lint0_access;
-> >                 /* KVM_EXIT_TPR_ACCESS */
-> >                 struct {
-> >                         __u64 rip;
-> >
-> >
-> > For LINT1, it should be less performance critical; if it's possible
-> > to just go through all vCPUs, and do KVM_GET_LAPIC to check who you
-> > should send a KVM_NMI to, then I'd do that.  I'd also accept a patch
-> > that adds a VM-wide KVM_NMI ioctl that does the same in the hypervisor
-> > if it's useful for you.
+> > Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
 >
-> Thanks for the patch - I'll get it a try but it might not be right away.
+> I must admit this patch is way too huge for me to allow any reasonable
+> review except that this has the potential of breaking a lot of things.
 >
-> > And since I've been proven wrong already, what do you need INIT/SIPI fo=
-r?
+> I think you should be splitted to make it more palatable; i.e.
+> - a patch just add the params struct with no semantic changes.
+> - a patch making the dev_change_net_namespace() conditional on net !=3D
+> tge_net[1]
+> - many per-device patches creating directly the device in the target
+> namespace.
+> - a patch reverting [1]
 >
-> I don't think this one is as critical.  I believe the reason it was
-> added was so that we can synchronize startup of the APs with execution
-> of the BSP for guests that do not do a good job of that (Windows).
->
-> Doug
+> Other may have different opinions, I'd love to hear them.
 
-We were able to get the in-kernel APIC working with our code using the spli=
-t
-IRQ chip option with our virtual EFI FW even w/o the traps for SVR and LVT0
-writes.  Performance of Windows VMs is greatly improved as expected.
-Unfortunately our ancient legacy BIOS will not work with > 1 VCPU due to la=
-ck
-of support for IPIs with an archaic delivery mode of remote read which it u=
-ses
-to discover APs by attempting to read their APIC ID register.  MSFT WHP sup=
-ports
-this functionality via an option, WHvPartitionPropertyCodeApicRemoteReadSup=
-port.
+Thanks. I understand your concern. Since the device is created in common
+code, how about splitting the patch this way:
 
-Changing our legacy BIOS is not an option so in order to support Windows VM=
-s
-with the legacy BIOS with decent performance we would either need to add su=
-pport
-for remote reads of the APIC ID register to KVM or support CR8 accesses w/o
-exiting w/o the in-kernel APIC in order.  Do you have a preference?
+ 1) make the params struct contain both current src_net and other netns:
+        struct rtnl_newlink_params {
+                struct net *net;        // renamed from current src_net
+                struct net *src_net;    // real src_net
+                struct net *link_net;
+                ...
+        };
+ 2) convert each driver to use the accurate netns,
+ 3) remove "net", which is not used now, from params struct,
+ 4) change rtnl_newlink_create() to create device in target netns
+    directly.
 
-Thanks,
-Doug
+So 1) will be a big one but has no semantic changes.
+And I will send Patch 1 in this series to the net tree instead.
 
---=20
-This electronic communication and the information and any files transmitted=
-=20
-with it, or attached to it, are confidential and are intended solely for=20
-the use of the individual or entity to whom it is addressed and may contain=
-=20
-information that is confidential, legally privileged, protected by privacy=
-=20
-laws, or otherwise restricted from disclosure to anyone else. If you are=20
-not the intended recipient or the person responsible for delivering the=20
-e-mail to the intended recipient, you are hereby notified that any use,=20
-copying, distributing, dissemination, forwarding, printing, or copying of=
-=20
-this e-mail is strictly prohibited. If you received this e-mail in error,=
-=20
-please return the e-mail to the sender, delete it from your computer, and=
-=20
-destroy any printed copy of it.
+>
+> > diff --git a/drivers/net/amt.c b/drivers/net/amt.c
+> > index 98c6205ed19f..2f7bf50e05d2 100644
+> > --- a/drivers/net/amt.c
+> > +++ b/drivers/net/amt.c
+> > @@ -3161,14 +3161,17 @@ static int amt_validate(struct nlattr *tb[], st=
+ruct nlattr *data[],
+> >       return 0;
+> >  }
+> >
+> > -static int amt_newlink(struct net *net, struct net_device *dev,
+> > -                    struct nlattr *tb[], struct nlattr *data[],
+> > -                    struct netlink_ext_ack *extack)
+> > +static int amt_newlink(struct rtnl_newlink_params *params)
+> >  {
+> > +     struct net_device *dev =3D params->dev;
+> > +     struct nlattr **tb =3D params->tb;
+> > +     struct nlattr **data =3D params->data;
+> > +     struct netlink_ext_ack *extack =3D params->extack;
+> > +     struct net *link_net =3D rtnl_newlink_link_net(params);
+> >       struct amt_dev *amt =3D netdev_priv(dev);
+> >       int err =3D -EINVAL;
+>
+> Minor nit: here and and many other places, please respect the reverse
+> xmas tree order.
+
+Will fix this.
 
