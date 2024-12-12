@@ -1,165 +1,120 @@
-Return-Path: <linux-kselftest+bounces-23251-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23252-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 749EB9EE351
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 10:43:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E562F9EE51C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 12:33:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF738281E93
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 09:43:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38035282BDA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 11:33:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7A3420E703;
-	Thu, 12 Dec 2024 09:43:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACFB120B807;
+	Thu, 12 Dec 2024 11:33:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="r4EAFHGO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dk4cN6NT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 121BF20E6F5
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Dec 2024 09:43:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F10290F;
+	Thu, 12 Dec 2024 11:33:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733996600; cv=none; b=UJqcFXkJesImxWXOMEyv8ti4N6rC4D3hBOSitXU/CX70t4DyeS/VsLFghD+upcKY/kexYG350dEN6M+Sq10XQwJacXTh5bICfho6BowOs2kd1Dykepg2ageQKp+ONNu41siVzYJT//+XC6xf9d7eoaK/l36E0qSnpaLNy8ZKKVA=
+	t=1734003192; cv=none; b=D1WhYIxdTZoHNbzk7Dritcxd2cOFkF9Lg+sFLntwx/QsCYaR/b7RJzUhmonk0H00AuKarFGuPde2s2vV5s9ZvKruC5ciaaWJCwm7FGkaJhG/8CCZmnvJQZ2LLW9UHVPXE4Ql7ChrHX5NvGZp06djURVSvZxk5ofOYwClzN6jlFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733996600; c=relaxed/simple;
-	bh=wlI6Vx9AQIzBF2jM0KW8GGqD5QzMTunPSWLwPFJk11I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FUjpFeKPiBkgDrLARHCKGXH9nFJBsB4euaoFYGbGZq89iYmkwJwpWHvZD/YL0zDuts+3dcrd+kN/9GCj4yr6qDhvD3w+DMqWOv8mRV7XA1AxQn76EmT3bwWVgUUST4mgJRC/YP/vZQ4iDs+L0T/o20br75Ro3GsqTxA7skq/5Ro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=r4EAFHGO; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-aa6aad76beeso58231866b.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Dec 2024 01:43:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1733996597; x=1734601397; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iyR2MXiFEoU2H13Rzo6SI2LM94SiVSjauzhtJPn93dI=;
-        b=r4EAFHGOWIqHWNWF2CNx59wjBRx3cDKe0Qf1EXCQqnaFZGWdnFp7iISWFlcOXHJnfs
-         R5MGHzA8/MxRSJEEASfmx+1aiwCUSwNxhW+zJIRmuQtojOlpF70zqTYjkzED6i6xJUkD
-         sqflOHv5Ays4K4PsrVBfQWBKNtGROaSMyJqPy3fUMXAx3q8OhMcIfXjXg+PTVX4vW9Aa
-         zem5lxdlaRJJp3/nDfe4wmRe6PDY1IGU0b1TQmQpeMyY8XHDNCcBWjtTmrrWyTuQVAJq
-         /wEBTSOvUyjIjxejf9xONNxvNFTt7LR1m+UQV2KD7itl0qJssw83L/J+9Oadk2hTKjgQ
-         tnmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733996597; x=1734601397;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iyR2MXiFEoU2H13Rzo6SI2LM94SiVSjauzhtJPn93dI=;
-        b=rB9Gmq3fs40EqPjCyVzYQg0qwvg0pvgl0mSxX5KuxquxJCfOyzJ9o0aN9aA/AGl43s
-         vg5J9RLv4rEQYJ3oXthAtAXUiARqUea8JWJBwCgkDmmDUF3y5WrCKL0qcVblXZd18GQZ
-         ryHiysgzNyJg39vKORkFJNMg48S/iOvfkCtCqfIPKBx4kL4e6t9qQYs/M9dheqZwmLAL
-         vVuKUgZEB9ysG5bnwSPZph3ieC+41KL6KEmcSihq3O4PcjZOtKnchFTipKzIK6ZJ3TJT
-         z6HidirTKaVBxD/3GnyEmHATf810FOUwM8GxPZ0amWAY2uvfLDeesaGEq/h1Gv0YFRnK
-         VItA==
-X-Forwarded-Encrypted: i=1; AJvYcCVyBnbbhrSiqmaVDAGuJRvU43xsgR/XM7mXKLmSFffn3vjHF1qa1WXxTqu8R3gC4B8rqBCz6ENFFF468AfD6mM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyh9LPQozb1EcsHWzLQGy7QI2tSvWxCpwlZyqdHKLTh5AHAtC9D
-	87qC3AfDMkH3dEF2DtcPREO172v/yMDsoFX8SyP/XXUO5pQx6vV1KEOFD+gT8T4=
-X-Gm-Gg: ASbGncuIkwAiyUE63idvWBDuDuKitPdzmvLtY+HRl02c6TCC+1UYQC4+RTV66Tz5v1H
-	5PUNnY+p4NDN8CqGlbtK557xTIQiECy4RlCTCxPTcZX5RNvsomp8XLsHm7AV/KUniXSef6Z6Mof
-	vYbPtipwyrkADX9QPrwRNda4bgDy4nn/UTZHf2nHKH9JAerHWU13woqyhdFZ0O3k4/TnvWpeHWf
-	Bvm2VuipAgv9OqhqeHMvZYh+MgIpkKAm0icss4eZukYKFe8cKO5DU+Txnk=
-X-Google-Smtp-Source: AGHT+IH4QMf5pvin6wVJSMpuuwVLXt6LuvTJ0Y3P9wBPqNEQoBBct151LQDukhxHB9I5tAqRnBsVXw==
-X-Received: by 2002:a17:906:32d9:b0:aa6:19c9:ad08 with SMTP id a640c23a62f3a-aa6b13977bcmr641736766b.48.1733996597171;
-        Thu, 12 Dec 2024 01:43:17 -0800 (PST)
-Received: from [192.168.0.123] ([62.73.69.208])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa6a394d380sm358006366b.77.2024.12.12.01.43.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Dec 2024 01:43:16 -0800 (PST)
-Message-ID: <d5606430-16cf-4a2b-ac29-88b73b4ef284@blackwall.org>
-Date: Thu, 12 Dec 2024 11:43:15 +0200
+	s=arc-20240116; t=1734003192; c=relaxed/simple;
+	bh=bI+wKiXz+sjwrXGi9W8a7W5Mqy1BmYf1t3VdgNU8DeE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YuriFMTmMCYGFY5vWEAAmAcYP+pCrUtAjc9sCyoDOD/qbWQmPXew66usHcENnAJP9w5Pj59ID1c34Ut0qmCDkPVuRb8RfGWjEh3W/oROo7JO5NAc/b+G+spRkoJtDHNQNiBKjiopUqJ7bfGUOWZ7sWh06TWtChSMM5Z8PRcL9WE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dk4cN6NT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8E3BC4CED4;
+	Thu, 12 Dec 2024 11:33:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734003192;
+	bh=bI+wKiXz+sjwrXGi9W8a7W5Mqy1BmYf1t3VdgNU8DeE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Dk4cN6NTIy2EYGlRKrBLcv8H25jiVzfMj+JOS+5UV3Q6EiSqkPEvqWwc4w7MMOylo
+	 o/DH1ZUOM8UkfVfIMd8gN+z5G39uY4kSPbqjN0lMevSrvzs2PdHwguxSMWXz9iotEZ
+	 fYn4pz+J2iIQ/1lgydd29BcI5TNCjOmJKnikWAt9Tb+fyCcnrx09XtDBlbChM335dM
+	 HrQdGVJx336iJSTYcIjD4CK6/EAgIbf4dbr84Bke5HKdqxBf6+R96Ui1nSMOOZ99y+
+	 Iq88KR0ONVsEbL9CB3TywJTtsVQQEYqAaO3jDnvPe+bz34WzQ4fbOIY+mH8/YUVutW
+	 48SY8Dk2mTf1w==
+Date: Thu, 12 Dec 2024 11:33:05 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Will Deacon <will@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 2/9] arm64/sysreg: Update ID_AA64ISAR3_EL1 to DDI0601
+ 2024-09
+Message-ID: <248dea18-bfad-4ec9-9a7d-5c87c7f48c84@sirena.org.uk>
+References: <20241203-arm64-2024-dpisa-v3-0-a6c78b1aa297@kernel.org>
+ <20241203-arm64-2024-dpisa-v3-2-a6c78b1aa297@kernel.org>
+ <20241210170953.GB16075@willie-the-truck>
+ <b859bdcd-7343-4d53-9f3a-f374deca725a@sirena.org.uk>
+ <20241211224015.GB17836@willie-the-truck>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 1/2] bonding: fix xfrm offload feature setup on
- active-backup mode
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
- Andy Gospodarek <andy@greyhouse.net>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20241211071127.38452-1-liuhangbin@gmail.com>
- <20241211071127.38452-2-liuhangbin@gmail.com>
- <032ea83b-0df0-4c88-b0d1-153d9c1bf865@blackwall.org>
- <Z1qvb7Nz7zAv0L1w@fedora>
-Content-Language: en-US
-From: Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <Z1qvb7Nz7zAv0L1w@fedora>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="cChPOZNdbKWWH8te"
+Content-Disposition: inline
+In-Reply-To: <20241211224015.GB17836@willie-the-truck>
+X-Cookie: All is fear in love and war.
 
-On 12/12/24 11:39, Hangbin Liu wrote:
-> On Thu, Dec 12, 2024 at 11:19:33AM +0200, Nikolay Aleksandrov wrote:
->>> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
->>> index 49dd4fe195e5..7daeab67e7b5 100644
->>> --- a/drivers/net/bonding/bond_main.c
->>> +++ b/drivers/net/bonding/bond_main.c
->>> @@ -4389,7 +4389,7 @@ void bond_work_init_all(struct bonding *bond)
->>>  	INIT_DELAYED_WORK(&bond->slave_arr_work, bond_slave_arr_handler);
->>>  }
->>>  
->>> -static void bond_work_cancel_all(struct bonding *bond)
->>> +void bond_work_cancel_all(struct bonding *bond)
->>>  {
->>>  	cancel_delayed_work_sync(&bond->mii_work);
->>>  	cancel_delayed_work_sync(&bond->arp_work);
->>> diff --git a/drivers/net/bonding/bond_netlink.c b/drivers/net/bonding/bond_netlink.c
->>> index 2a6a424806aa..7fe8c62366eb 100644
->>> --- a/drivers/net/bonding/bond_netlink.c
->>> +++ b/drivers/net/bonding/bond_netlink.c
->>> @@ -568,18 +568,21 @@ static int bond_newlink(struct net *src_net, struct net_device *bond_dev,
->>>  			struct nlattr *tb[], struct nlattr *data[],
->>>  			struct netlink_ext_ack *extack)
->>>  {
->>> +	struct bonding *bond = netdev_priv(bond_dev);
->>>  	int err;
->>>  
->>> -	err = bond_changelink(bond_dev, tb, data, extack);
->>> -	if (err < 0)
->>> +	err = register_netdevice(bond_dev);
->>> +	if (err)
->>>  		return err;
->>>  
->>> -	err = register_netdevice(bond_dev);
->>> -	if (!err) {
->>> -		struct bonding *bond = netdev_priv(bond_dev);
->>> +	netif_carrier_off(bond_dev);
->>> +	bond_work_init_all(bond);
->>>  
->>> -		netif_carrier_off(bond_dev);
->>> -		bond_work_init_all(bond);
->>> +	err = bond_changelink(bond_dev, tb, data, extack);
->>> +	if (err) {
->>> +		bond_work_cancel_all(bond);
->>> +		netif_carrier_on(bond_dev);
->>
->> The patch looks good, but I'm curious why the carrier on here?
-> 
-> The current code set netif_carrier_off(bond_dev) after register_netdevice()
-> success, So I make it on if register failed.
-> 
-> Thanks
-> hangbin
 
-I don't like adding code just for symmetry alone, I think you should drop it
-unless there is an actual reason to turn carrier on.
+--cChPOZNdbKWWH8te
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->>
->>> +		unregister_netdevice(bond_dev);
->>>  	}
->>>  
->>>  	return err;
+On Wed, Dec 11, 2024 at 10:40:15PM +0000, Will Deacon wrote:
+> On Tue, Dec 10, 2024 at 06:43:05PM +0000, Mark Brown wrote:
 
+> > Yes, the issues here are not technical ones.  Though there are some
+> > complications -  eg, IIRC the XML doesn't encode the signedness of
+> > fields like we do and there's areas where we've deliberately diverged.
+> > Given the amount of review I end up having to do of sysreg changes your
+> > reasoning is especially apparent to me.  I've passed this feedback on
+> > (again).
+
+> One thing we _could_ do is have a tool (in-tree) that takes two copies
+> of the sysreg file (i.e. before and after applying a diff) along with a
+> copy of the XML and, for the the new fields being added, shows how the
+> XML represents those compared to the diff. It should then be relatively
+> straightforward to flag the use of an unallocated encoding (like we had
+> here) and also things like assigning a field name to a RES0 region.
+
+> So this wouldn't be generating the patches from the XML, but more like
+> using the XML as an oracle in a linter.
+
+That'd be useful, yes - unfortunately I think that's still something I
+can't work on myself at the moment for the above mentioned non-technical
+reasons.
+
+--cChPOZNdbKWWH8te
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdayfAACgkQJNaLcl1U
+h9Bo9wf8DjHXD65QAeLiB/WQD6MKK2q1vhHifOtaL+lp7nN90YodMEadPyi1bgC0
+7kGLdiSnfBrGie39QosDOpgsd8FrzTWBLbvr7eoAWBjuhNZlFmz0S1sMsZ5eESte
+qFb6DrYC1LG2RbGC6TUy+CUW8gxKmzVYlbES/17f1lrq3v1yH5QSKhZNu2o1uSIJ
+FneGYGH2H23/rX8qM+0QVZlRgiRkUN1AFmlZPOol5YpDCwgppQH4VBMoRgg/kKVs
+4tOIqWWuDBnQ0thBa4o7EeoN+qS7iHl7mEzTkbHxse7zMe+mg3Ffs8jgdtxN55In
+2Rt9VoKhAE5mbSmIlPhZUM08qgHkBA==
+=OGMy
+-----END PGP SIGNATURE-----
+
+--cChPOZNdbKWWH8te--
 
