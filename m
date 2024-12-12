@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-23261-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23262-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1ED39EECE7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 16:39:40 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57E1B167348
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 15:37:06 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37A212210CD;
-	Thu, 12 Dec 2024 15:36:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="HGrpu0Km";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fkh1eyYn"
-X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CB409EECAD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 16:37:14 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F14521E0AA;
-	Thu, 12 Dec 2024 15:36:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 470CE283D03
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 15:37:13 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C9EC21E0AA;
+	Thu, 12 Dec 2024 15:37:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="A0SiBgXe";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="abScBvya"
+X-Original-To: linux-kselftest@vger.kernel.org
+Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36AA1217F28;
+	Thu, 12 Dec 2024 15:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734017819; cv=none; b=h647/O9lmaaZnZruANZqZbc2cvMTBdi+q6t6o1jFTVnzcEfKTkGM5/YgEz8/cxC3lXi/DaytwNt9ymbO02wsc9spc0mlQwNjqThgPBRvDQIsJgcjO3KQe4k+JeRHt9FKe8ZytNPNL2/jujsiHUAri1Ty2FnUwCe9WElYtvGonIo=
+	t=1734017821; cv=none; b=Ga7s+46M9qfjBZvIHsmf4ufdUKzyhjnLN1IIIo6THbhcI69hNi0LxRGmiHIhbhibTRwxsbk0ekdGaJjglJIACF6nzIsMijQi6yYjcAdWrn4Ppooe70pcIzJmcSnN8wzNvBMLPsffHTFoq+4UCm/K2rj+A2MvrTjzWb7CGMzx/uE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734017819; c=relaxed/simple;
-	bh=WRb8zyVfkKEf3V2LP7v507kPz9prbLyRmDyghJ3DxIw=;
+	s=arc-20240116; t=1734017821; c=relaxed/simple;
+	bh=J+XawYgeYRTJx6++DRkn7cg4UxvLyp0v/UPreTWiB00=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=APInJ0Ms8b1bstixPMTId4b4wqWz6Wdk6TXU98f5mTmQd83YC4l+/IWgRqkcbu2v1T3SmVm6udnYADSvTyAln+XwsgcBdOd19qMZzndVs06nhbabLcZO1joWjqjANTHC27/7zV8ahTrvw/8rIpPObomZaI6DRCXCQAF+VsmpZ38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=HGrpu0Km; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=fkh1eyYn; arc=none smtp.client-ip=202.12.124.154
+	 MIME-Version; b=pZy0HeJjdwfwLdfBCwtJ06pZgXVyxD4GiMokk0X3kswNK9YFO+n6QNg0Zrc5APJx280uBc8ippl+/kWOYai3WSOe+2dEX7HA90w9PotaCOzPGmyafX94Npp2DN96Ly+Fh+jvVEFrisieE28ou+xS6RxgW33brZ6mtrb1GB4FPC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=A0SiBgXe; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=abScBvya; arc=none smtp.client-ip=202.12.124.145
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id E2AE1254009F;
-	Thu, 12 Dec 2024 10:36:54 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Thu, 12 Dec 2024 10:36:55 -0500
+	by mailfout.stl.internal (Postfix) with ESMTP id BB58F11400E4;
+	Thu, 12 Dec 2024 10:36:57 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Thu, 12 Dec 2024 10:36:58 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1734017814; x=
-	1734104214; bh=7lCeiUCbZWNTRnlYVDTu79mmqwc/OnQORHATq882gt8=; b=H
-	Grpu0KmvwzXK5gBASRuwhmrubC//R6oBihXyobJ64LrJPOWPYOUUcam8EjMrammr
-	Rrw/T16W2rtKqFqpFwy3/evsdoQ2N8g1BZEA0V88ZufQo8mqQcvbar7APi5zuT0Y
-	xQyVqsu7sS9uOisEvpJ/ofCPV2+RURPdBzxDEg2rlLeEKwDWVNIBUT6q/1/v9dyI
-	SyL3JmM8eriGuG8HY5eznvxOAtefmNs4EkJhvSI7keTkqNVV6a+Xs+1le/I6VH5E
-	E/w75HuV7rat/xu5JxMmxntlfURA7L2c963fkq9AgU3ElmfRCG9VLLWUE5Z8xHJB
-	Kxa8/KpM/AVLFKqGolywA==
+	:reply-to:subject:subject:to:to; s=fm2; t=1734017817; x=
+	1734104217; bh=nC7C7XefrK+Mqd1EomVee/4r+rsa1AmZ2n6KhZZFBlo=; b=A
+	0SiBgXeWFrJKzUVPPqRmlgHNd8TgLnUiun4Z91jbQA9mud0tTGw+bUFPHcCtezO+
+	z6X7DirbTwVLi+yM8IgKO3zx/WZF5ll6s8/Atzg3fbM38QHADeopfmfWVXWezCk1
+	YJBvzGXfooudIGmnhShvK0mxe5tP2bpPgS399nltrsZEJsIowYtN0bpHDmpHNx+b
+	t8L7FqXAAS1VTARc8guCygCfbe8FiVhrc8sVICoDeuCW3senaPW2DXiNqzFoCslI
+	rYA88dFdzMuxIkYlyLhEhObpMvS8gTMZgqWNeHakMk2yq1EApa0pmPfu+CUhk3A2
+	B7FHgj93R75Rt53g6OiGQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm1; t=1734017814; x=1734104214; bh=7
-	lCeiUCbZWNTRnlYVDTu79mmqwc/OnQORHATq882gt8=; b=fkh1eyYnjSv8BfTbU
-	l5YhKK9lH3gUnRgw0TcIXrk8OsAgCdSeQU9r3x21UYXt2IOIqqYeYP6+bf8NVDh0
-	Cy4AWGOae3oIkNdR2vr2iirmWExXV4FPqjO7oNI5on4XTqs56/T1kt2AOIRz8rPn
-	PNPUAYrgXriVGKE/7XNKoxkX6xvqolv87U6iT6kbO4HIySDoVVGPc6i1/956MAUm
-	/QQAIiclmywWO9QW8A4jscpm+KygStmfrdO0zDFIUI2V0tedNHhNyu8f2t5mtcJW
-	VF1b35vjE+dzaX3ZZWGBw81eezjS3VLV2WfuweMmAC9G8xAJiT7VW9I7WnUF0Wg6
-	IQPZA==
-X-ME-Sender: <xms:FgNbZ4-MZKoR9XAr5vo3H6MSKXZLMxWHv7i04i0j2eETdcwcakF60w>
-    <xme:FgNbZwtv4sCnr3_yNHz8xXVa85gOREXt6QhbpvaXO5EkZi0ggOcCrupwwbwLqJpyO
-    wjfAUu6GIZwQELd5ic>
-X-ME-Received: <xmr:FgNbZ-CBsW_G06uTugyB4NfUpOmF73jJCnq7XfEsSs2pSEPIG8MAPM4DcAUM>
+	:x-me-sender:x-sasl-enc; s=fm1; t=1734017817; x=1734104217; bh=n
+	C7C7XefrK+Mqd1EomVee/4r+rsa1AmZ2n6KhZZFBlo=; b=abScBvyaQcf7szzb4
+	wVQluaXD9acA1KEDlVRDxjjjejQ6DGqOQtHzfDOtIA9r5To4zSvAuyMMhGMT0bBI
+	sz9Ep3e3w9bKc5ET35zljXBvNNfQJy95+Ux9mjK333t4aIgSQDFUL/pCAAkA94Dz
+	zuN05Ed3NJCWXaUTxR7vn3lc5c4dAkfy0yVCQpUwi3tSADg3cytucQZlxnj8WhMO
+	/pqHlrIY6aS5u25onDfYOfRqJBALm+nqNokCmFZGLE5j/pHtzOo1qQbJDDRBN0oo
+	WJFtgZ5/Jt2r+JuTHRfhSIGZojiv5M6rPwQwIEKxJtoRXXT5SO8rbG7UBOHJxCzG
+	NV9/g==
+X-ME-Sender: <xms:GQNbZ3_xiM_WMmJtuxtmydX4UMx_Gz8jA_4TKzkfMd3Ubuddq3suJg>
+    <xme:GQNbZzsJUXHD6oAKZmCVnensXQ0I-aX2IbFqmgyITJ7tQo-h9UTvVh_mgpsZPN0Cv
+    wEKY50hEwu83fOvYbg>
+X-ME-Received: <xmr:GQNbZ1BIkLHJUhWfXAtN2g7y7TJ3qpyA_YGX6GTr64ch2_amn2Sqb4zZC3Di>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrkeehgdejjecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
     tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
@@ -81,14 +81,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrkeehgdejjecutefuodetggdote
     drtghomhdprhgtphhtthhopegrphhoohhrvhhkohesrghmrgiiohhnrdgtohhmpdhrtghp
     thhtohepsghorhhishhpsehnvhhiughirgdrtghomhdprhgtphhtthhopehjohhhnhdrfh
     grshhtrggsvghnugesghhmrghilhdrtghomh
-X-ME-Proxy: <xmx:FgNbZ4f4pkjm6HbCaI0XA9blPZ5tvUS6G-ZksEhU_TfNhx5HxZoRyA>
-    <xmx:FgNbZ9PfGF1rMRWCHMjPsEkpkm4Mq5OQkUyCiR7fHGshrPxWkmGv_w>
-    <xmx:FgNbZyl7Gc5AXB1VWAzFxEIGbT4A4ZUrLYlXFdcoYQ-lBl9tJCUUGw>
-    <xmx:FgNbZ_vX6S9nUpaIJVkiJ4C9McCnVzaytLrZZTOF09uBrMGM0OZeVA>
-    <xmx:FgNbZ-t3T3fXW0zuVbANf2sT8FvGvdoXogyEwFNSB00yg_GeaWNtqclz>
+X-ME-Proxy: <xmx:GQNbZzcWCoocTLts3NVSYJkKg5pd_dxiliYifvMujbsi37IbiClBxA>
+    <xmx:GQNbZ8OjOD-eutfOB2hkuP5mr0_ax3trgH8TuNxa6ze7wz298HoPiQ>
+    <xmx:GQNbZ1mI6WBaAxiY3k8dcF6fYyNznogzwsv7pnSeLhRIriVYEcM2MA>
+    <xmx:GQNbZ2uVmGY9BYWTLfIFCxYaGfTuS5ZLal3a3UJxZn5mBIlcjo9k6g>
+    <xmx:GQNbZxuU0f54gSawnT8CUhOSY171M6P9zHl95HzS0kket81UntRLPqWi>
 Feedback-ID: i934648bf:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 12 Dec 2024 10:36:53 -0500 (EST)
+ 12 Dec 2024 10:36:56 -0500 (EST)
 From: Sabrina Dubroca <sd@queasysnail.net>
 To: netdev@vger.kernel.org
 Cc: Sabrina Dubroca <sd@queasysnail.net>,
@@ -105,9 +105,9 @@ Cc: Sabrina Dubroca <sd@queasysnail.net>,
 	Marcel Holtmann <marcel@holtmann.org>,
 	Simon Horman <horms@kernel.org>,
 	Parthiban.Veerasooran@microchip.com
-Subject: [PATCH net-next v5 2/6] tls: implement rekey for TLS1.3
-Date: Thu, 12 Dec 2024 16:36:05 +0100
-Message-ID: <a4278b8f7a396daf7e5cdc1c435a46346cf09aa9.1734013874.git.sd@queasysnail.net>
+Subject: [PATCH net-next v5 3/6] tls: add counters for rekey
+Date: Thu, 12 Dec 2024 16:36:06 +0100
+Message-ID: <d4c4b98697d369bbbdcb3b40d0570fb30be2c86e.1734013874.git.sd@queasysnail.net>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <cover.1734013874.git.sd@queasysnail.net>
 References: <cover.1734013874.git.sd@queasysnail.net>
@@ -119,344 +119,144 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This adds the possibility to change the key and IV when using
-TLS1.3. Changing the cipher or TLS version is not supported.
+This introduces 5 counters to keep track of key updates:
+Tls{Rx,Tx}Rekey{Ok,Error} and TlsRxRekeyReceived.
 
-Once we have updated the RX key, we can unblock the receive side. If
-the rekey fails, the context is unmodified and userspace is free to
-retry the update or close the socket.
-
-This change only affects tls_sw, since 1.3 offload isn't supported.
-
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
-Acked-by: Jakub Kicinski <kuba@kernel.org>
 ---
-v2:
- - reverse xmas tree
- - turn the alt_crypto_info into an else if
- - don't modify the context when rekey fails
+v4: new patch, suggested by Jakub
+v5: add TlsRxRekeyReceived
 
-v3:
- - only call tls_sw_strparser_arm when setting the initial RX key, not
-   on rekeys
- - update tls_sk_poll to not say the socket is readable when we're
-   waiting for a rekey, and wake up poll() when the new key is installed
- - use unsafe_memcpy to make FORTIFY_SOURCE happy
+ include/uapi/linux/snmp.h |  5 +++++
+ net/tls/tls_main.c        | 27 ++++++++++++++++++++++-----
+ net/tls/tls_proc.c        |  5 +++++
+ net/tls/tls_sw.c          |  6 ++++--
+ 4 files changed, 36 insertions(+), 7 deletions(-)
 
-v4:
- - rebase on top of current net-next
- - no {} needed around single line (Simon)
-
-v5: unchanged, keep Jakub's ack from v4
-
- net/tls/tls.h        |   3 +-
- net/tls/tls_device.c |   2 +-
- net/tls/tls_main.c   |  46 ++++++++++++++-----
- net/tls/tls_sw.c     | 105 +++++++++++++++++++++++++++++--------------
- 4 files changed, 108 insertions(+), 48 deletions(-)
-
-diff --git a/net/tls/tls.h b/net/tls/tls.h
-index e5e47452308a..774859b63f0d 100644
---- a/net/tls/tls.h
-+++ b/net/tls/tls.h
-@@ -145,7 +145,8 @@ void tls_err_abort(struct sock *sk, int err);
- int init_prot_info(struct tls_prot_info *prot,
- 		   const struct tls_crypto_info *crypto_info,
- 		   const struct tls_cipher_desc *cipher_desc);
--int tls_set_sw_offload(struct sock *sk, int tx);
-+int tls_set_sw_offload(struct sock *sk, int tx,
-+		       struct tls_crypto_info *new_crypto_info);
- void tls_update_rx_zc_capable(struct tls_context *tls_ctx);
- void tls_sw_strparser_arm(struct sock *sk, struct tls_context *ctx);
- void tls_sw_strparser_done(struct tls_context *tls_ctx);
-diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
-index dc063c2c7950..e50b6e71df13 100644
---- a/net/tls/tls_device.c
-+++ b/net/tls/tls_device.c
-@@ -1227,7 +1227,7 @@ int tls_set_device_offload_rx(struct sock *sk, struct tls_context *ctx)
- 	context->resync_nh_reset = 1;
- 
- 	ctx->priv_ctx_rx = context;
--	rc = tls_set_sw_offload(sk, 0);
-+	rc = tls_set_sw_offload(sk, 0, NULL);
- 	if (rc)
- 		goto release_ctx;
+diff --git a/include/uapi/linux/snmp.h b/include/uapi/linux/snmp.h
+index adf5fd78dd50..51da2e00112d 100644
+--- a/include/uapi/linux/snmp.h
++++ b/include/uapi/linux/snmp.h
+@@ -358,6 +358,11 @@ enum
+ 	LINUX_MIB_TLSRXDEVICERESYNC,		/* TlsRxDeviceResync */
+ 	LINUX_MIB_TLSDECRYPTRETRY,		/* TlsDecryptRetry */
+ 	LINUX_MIB_TLSRXNOPADVIOL,		/* TlsRxNoPadViolation */
++	LINUX_MIB_TLSRXREKEYOK,			/* TlsRxRekeyOk */
++	LINUX_MIB_TLSRXREKEYERROR,		/* TlsRxRekeyError */
++	LINUX_MIB_TLSTXREKEYOK,			/* TlsTxRekeyOk */
++	LINUX_MIB_TLSTXREKEYERROR,		/* TlsTxRekeyError */
++	LINUX_MIB_TLSRXREKEYRECEIVED,		/* TlsRxRekeyReceived */
+ 	__LINUX_MIB_TLSMAX
+ };
  
 diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
-index 6b4b9f2749a6..68b5735dafc1 100644
+index 68b5735dafc1..9ee5a83c5b40 100644
 --- a/net/tls/tls_main.c
 +++ b/net/tls/tls_main.c
-@@ -423,9 +423,10 @@ static __poll_t tls_sk_poll(struct file *file, struct socket *sock,
- 	ctx = tls_sw_ctx_rx(tls_ctx);
- 	psock = sk_psock_get(sk);
+@@ -640,8 +640,11 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
+ 		/* Currently we only support setting crypto info more
+ 		 * than one time for TLS 1.3
+ 		 */
+-		if (crypto_info->version != TLS_1_3_VERSION)
++		if (crypto_info->version != TLS_1_3_VERSION) {
++			TLS_INC_STATS(sock_net(sk), tx ? LINUX_MIB_TLSTXREKEYERROR
++						       : LINUX_MIB_TLSRXREKEYERROR);
+ 			return -EBUSY;
++		}
  
--	if (skb_queue_empty_lockless(&ctx->rx_list) &&
--	    !tls_strp_msg_ready(ctx) &&
--	    sk_psock_queue_empty(psock))
-+	if ((skb_queue_empty_lockless(&ctx->rx_list) &&
-+	     !tls_strp_msg_ready(ctx) &&
-+	     sk_psock_queue_empty(psock)) ||
-+	    READ_ONCE(ctx->key_update_pending))
- 		mask &= ~(EPOLLIN | EPOLLRDNORM);
- 
- 	if (psock)
-@@ -612,11 +613,13 @@ static int validate_crypto_info(const struct tls_crypto_info *crypto_info,
- static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
- 				  unsigned int optlen, int tx)
- {
--	struct tls_crypto_info *crypto_info;
--	struct tls_crypto_info *alt_crypto_info;
-+	struct tls_crypto_info *crypto_info, *alt_crypto_info;
-+	struct tls_crypto_info *old_crypto_info = NULL;
- 	struct tls_context *ctx = tls_get_ctx(sk);
- 	const struct tls_cipher_desc *cipher_desc;
- 	union tls_crypto_context *crypto_ctx;
-+	union tls_crypto_context tmp = {};
-+	bool update = false;
- 	int rc = 0;
- 	int conf;
- 
-@@ -633,9 +636,18 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
- 
- 	crypto_info = &crypto_ctx->info;
- 
--	/* Currently we don't support set crypto info more than one time */
--	if (TLS_CRYPTO_INFO_READY(crypto_info))
--		return -EBUSY;
-+	if (TLS_CRYPTO_INFO_READY(crypto_info)) {
-+		/* Currently we only support setting crypto info more
-+		 * than one time for TLS 1.3
-+		 */
-+		if (crypto_info->version != TLS_1_3_VERSION)
-+			return -EBUSY;
+ 		update = true;
+ 		old_crypto_info = crypto_info;
+@@ -696,8 +699,13 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
+ 						update ? crypto_info : NULL);
+ 			if (rc)
+ 				goto err_crypto_info;
+-			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSTXSW);
+-			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSCURRTXSW);
 +
-+		update = true;
-+		old_crypto_info = crypto_info;
-+		crypto_info = &tmp.info;
-+		crypto_ctx = &tmp;
-+	}
- 
- 	rc = copy_from_sockptr(crypto_info, optval, sizeof(*crypto_info));
- 	if (rc) {
-@@ -643,7 +655,14 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
- 		goto err_crypto_info;
- 	}
- 
--	rc = validate_crypto_info(crypto_info, alt_crypto_info);
-+	if (update) {
-+		/* Ensure that TLS version and ciphers are not modified */
-+		if (crypto_info->version != old_crypto_info->version ||
-+		    crypto_info->cipher_type != old_crypto_info->cipher_type)
-+			rc = -EINVAL;
-+	} else {
-+		rc = validate_crypto_info(crypto_info, alt_crypto_info);
-+	}
- 	if (rc)
- 		goto err_crypto_info;
- 
-@@ -673,7 +692,8 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
- 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSTXDEVICE);
- 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSCURRTXDEVICE);
- 		} else {
--			rc = tls_set_sw_offload(sk, 1);
-+			rc = tls_set_sw_offload(sk, 1,
-+						update ? crypto_info : NULL);
- 			if (rc)
- 				goto err_crypto_info;
- 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSTXSW);
-@@ -687,14 +707,16 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
- 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXDEVICE);
- 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSCURRRXDEVICE);
- 		} else {
--			rc = tls_set_sw_offload(sk, 0);
-+			rc = tls_set_sw_offload(sk, 0,
-+						update ? crypto_info : NULL);
- 			if (rc)
- 				goto err_crypto_info;
- 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXSW);
- 			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSCURRRXSW);
++			if (update) {
++				TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSTXREKEYOK);
++			} else {
++				TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSTXSW);
++				TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSCURRTXSW);
++			}
  			conf = TLS_SW;
  		}
--		tls_sw_strparser_arm(sk, ctx);
-+		if (!update)
-+			tls_sw_strparser_arm(sk, ctx);
- 	}
+ 	} else {
+@@ -711,8 +719,13 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
+ 						update ? crypto_info : NULL);
+ 			if (rc)
+ 				goto err_crypto_info;
+-			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXSW);
+-			TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSCURRRXSW);
++
++			if (update) {
++				TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXREKEYOK);
++			} else {
++				TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXSW);
++				TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSCURRRXSW);
++			}
+ 			conf = TLS_SW;
+ 		}
+ 		if (!update)
+@@ -735,6 +748,10 @@ static int do_tls_setsockopt_conf(struct sock *sk, sockptr_t optval,
+ 	return 0;
  
- 	if (tx)
+ err_crypto_info:
++	if (update) {
++		TLS_INC_STATS(sock_net(sk), tx ? LINUX_MIB_TLSTXREKEYERROR
++					       : LINUX_MIB_TLSRXREKEYERROR);
++	}
+ 	memzero_explicit(crypto_ctx, sizeof(*crypto_ctx));
+ 	return rc;
+ }
+diff --git a/net/tls/tls_proc.c b/net/tls/tls_proc.c
+index 68982728f620..367666aa07b8 100644
+--- a/net/tls/tls_proc.c
++++ b/net/tls/tls_proc.c
+@@ -22,6 +22,11 @@ static const struct snmp_mib tls_mib_list[] = {
+ 	SNMP_MIB_ITEM("TlsRxDeviceResync", LINUX_MIB_TLSRXDEVICERESYNC),
+ 	SNMP_MIB_ITEM("TlsDecryptRetry", LINUX_MIB_TLSDECRYPTRETRY),
+ 	SNMP_MIB_ITEM("TlsRxNoPadViolation", LINUX_MIB_TLSRXNOPADVIOL),
++	SNMP_MIB_ITEM("TlsRxRekeyOk", LINUX_MIB_TLSRXREKEYOK),
++	SNMP_MIB_ITEM("TlsRxRekeyError", LINUX_MIB_TLSRXREKEYERROR),
++	SNMP_MIB_ITEM("TlsTxRekeyOk", LINUX_MIB_TLSTXREKEYOK),
++	SNMP_MIB_ITEM("TlsTxRekeyError", LINUX_MIB_TLSTXREKEYERROR),
++	SNMP_MIB_ITEM("TlsRxRekeyReceived", LINUX_MIB_TLSRXREKEYRECEIVED),
+ 	SNMP_MIB_SENTINEL
+ };
+ 
 diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 3dcf8ee60fea..9e5aff5bab98 100644
+index 9e5aff5bab98..47550d485819 100644
 --- a/net/tls/tls_sw.c
 +++ b/net/tls/tls_sw.c
-@@ -2716,12 +2716,22 @@ int init_prot_info(struct tls_prot_info *prot,
- 	return 0;
+@@ -1724,7 +1724,8 @@ tls_decrypt_device(struct sock *sk, struct msghdr *msg,
+ 	return 1;
  }
  
--int tls_set_sw_offload(struct sock *sk, int tx)
-+static void tls_finish_key_update(struct sock *sk, struct tls_context *tls_ctx)
+-static int tls_check_pending_rekey(struct tls_context *ctx, struct sk_buff *skb)
++static int tls_check_pending_rekey(struct sock *sk, struct tls_context *ctx,
++				   struct sk_buff *skb)
  {
-+	struct tls_sw_context_rx *ctx = tls_ctx->priv_ctx_rx;
-+
-+	WRITE_ONCE(ctx->key_update_pending, false);
-+	/* wake-up pre-existing poll() */
-+	ctx->saved_data_ready(sk);
-+}
-+
-+int tls_set_sw_offload(struct sock *sk, int tx,
-+		       struct tls_crypto_info *new_crypto_info)
-+{
-+	struct tls_crypto_info *crypto_info, *src_crypto_info;
- 	struct tls_sw_context_tx *sw_ctx_tx = NULL;
- 	struct tls_sw_context_rx *sw_ctx_rx = NULL;
- 	const struct tls_cipher_desc *cipher_desc;
--	struct tls_crypto_info *crypto_info;
- 	char *iv, *rec_seq, *key, *salt;
- 	struct cipher_context *cctx;
- 	struct tls_prot_info *prot;
-@@ -2733,45 +2743,47 @@ int tls_set_sw_offload(struct sock *sk, int tx)
- 	ctx = tls_get_ctx(sk);
- 	prot = &ctx->prot_info;
+ 	const struct strp_msg *rxm = strp_msg(skb);
+ 	const struct tls_msg *tlm = tls_msg(skb);
+@@ -1747,6 +1748,7 @@ static int tls_check_pending_rekey(struct tls_context *ctx, struct sk_buff *skb)
+ 		struct tls_sw_context_rx *rx_ctx = ctx->priv_ctx_rx;
  
--	if (tx) {
--		ctx->priv_ctx_tx = init_ctx_tx(ctx, sk);
--		if (!ctx->priv_ctx_tx)
--			return -ENOMEM;
-+	/* new_crypto_info != NULL means rekey */
-+	if (!new_crypto_info) {
-+		if (tx) {
-+			ctx->priv_ctx_tx = init_ctx_tx(ctx, sk);
-+			if (!ctx->priv_ctx_tx)
-+				return -ENOMEM;
-+		} else {
-+			ctx->priv_ctx_rx = init_ctx_rx(ctx);
-+			if (!ctx->priv_ctx_rx)
-+				return -ENOMEM;
-+		}
-+	}
- 
-+	if (tx) {
- 		sw_ctx_tx = ctx->priv_ctx_tx;
- 		crypto_info = &ctx->crypto_send.info;
- 		cctx = &ctx->tx;
- 		aead = &sw_ctx_tx->aead_send;
- 	} else {
--		ctx->priv_ctx_rx = init_ctx_rx(ctx);
--		if (!ctx->priv_ctx_rx)
--			return -ENOMEM;
--
- 		sw_ctx_rx = ctx->priv_ctx_rx;
- 		crypto_info = &ctx->crypto_recv.info;
- 		cctx = &ctx->rx;
- 		aead = &sw_ctx_rx->aead_recv;
--		sw_ctx_rx->key_update_pending = false;
+ 		WRITE_ONCE(rx_ctx->key_update_pending, true);
++		TLS_INC_STATS(sock_net(sk), LINUX_MIB_TLSRXREKEYRECEIVED);
  	}
  
--	cipher_desc = get_cipher_desc(crypto_info->cipher_type);
-+	src_crypto_info = new_crypto_info ?: crypto_info;
-+
-+	cipher_desc = get_cipher_desc(src_crypto_info->cipher_type);
- 	if (!cipher_desc) {
- 		rc = -EINVAL;
- 		goto free_priv;
- 	}
+ 	return 0;
+@@ -1771,7 +1773,7 @@ static int tls_rx_one_record(struct sock *sk, struct msghdr *msg,
+ 	rxm->full_len -= prot->overhead_size;
+ 	tls_advance_record_sn(sk, prot, &tls_ctx->rx);
  
--	rc = init_prot_info(prot, crypto_info, cipher_desc);
-+	rc = init_prot_info(prot, src_crypto_info, cipher_desc);
- 	if (rc)
- 		goto free_priv;
+-	return tls_check_pending_rekey(tls_ctx, darg->skb);
++	return tls_check_pending_rekey(sk, tls_ctx, darg->skb);
+ }
  
--	iv = crypto_info_iv(crypto_info, cipher_desc);
--	key = crypto_info_key(crypto_info, cipher_desc);
--	salt = crypto_info_salt(crypto_info, cipher_desc);
--	rec_seq = crypto_info_rec_seq(crypto_info, cipher_desc);
--
--	memcpy(cctx->iv, salt, cipher_desc->salt);
--	memcpy(cctx->iv + cipher_desc->salt, iv, cipher_desc->iv);
--	memcpy(cctx->rec_seq, rec_seq, cipher_desc->rec_seq);
-+	iv = crypto_info_iv(src_crypto_info, cipher_desc);
-+	key = crypto_info_key(src_crypto_info, cipher_desc);
-+	salt = crypto_info_salt(src_crypto_info, cipher_desc);
-+	rec_seq = crypto_info_rec_seq(src_crypto_info, cipher_desc);
- 
- 	if (!*aead) {
- 		*aead = crypto_alloc_aead(cipher_desc->cipher_name, 0, 0);
-@@ -2784,20 +2796,30 @@ int tls_set_sw_offload(struct sock *sk, int tx)
- 
- 	ctx->push_pending_record = tls_sw_push_pending_record;
- 
-+	/* setkey is the last operation that could fail during a
-+	 * rekey. if it succeeds, we can start modifying the
-+	 * context.
-+	 */
- 	rc = crypto_aead_setkey(*aead, key, cipher_desc->key);
--	if (rc)
--		goto free_aead;
-+	if (rc) {
-+		if (new_crypto_info)
-+			goto out;
-+		else
-+			goto free_aead;
-+	}
- 
--	rc = crypto_aead_setauthsize(*aead, prot->tag_size);
--	if (rc)
--		goto free_aead;
-+	if (!new_crypto_info) {
-+		rc = crypto_aead_setauthsize(*aead, prot->tag_size);
-+		if (rc)
-+			goto free_aead;
-+	}
- 
--	if (sw_ctx_rx) {
-+	if (!tx && !new_crypto_info) {
- 		tfm = crypto_aead_tfm(sw_ctx_rx->aead_recv);
- 
- 		tls_update_rx_zc_capable(ctx);
- 		sw_ctx_rx->async_capable =
--			crypto_info->version != TLS_1_3_VERSION &&
-+			src_crypto_info->version != TLS_1_3_VERSION &&
- 			!!(tfm->__crt_alg->cra_flags & CRYPTO_ALG_ASYNC);
- 
- 		rc = tls_strp_init(&sw_ctx_rx->strp, sk);
-@@ -2805,18 +2827,33 @@ int tls_set_sw_offload(struct sock *sk, int tx)
- 			goto free_aead;
- 	}
- 
-+	memcpy(cctx->iv, salt, cipher_desc->salt);
-+	memcpy(cctx->iv + cipher_desc->salt, iv, cipher_desc->iv);
-+	memcpy(cctx->rec_seq, rec_seq, cipher_desc->rec_seq);
-+
-+	if (new_crypto_info) {
-+		unsafe_memcpy(crypto_info, new_crypto_info,
-+			      cipher_desc->crypto_info,
-+			      /* size was checked in do_tls_setsockopt_conf */);
-+		memzero_explicit(new_crypto_info, cipher_desc->crypto_info);
-+		if (!tx)
-+			tls_finish_key_update(sk, ctx);
-+	}
-+
- 	goto out;
- 
- free_aead:
- 	crypto_free_aead(*aead);
- 	*aead = NULL;
- free_priv:
--	if (tx) {
--		kfree(ctx->priv_ctx_tx);
--		ctx->priv_ctx_tx = NULL;
--	} else {
--		kfree(ctx->priv_ctx_rx);
--		ctx->priv_ctx_rx = NULL;
-+	if (!new_crypto_info) {
-+		if (tx) {
-+			kfree(ctx->priv_ctx_tx);
-+			ctx->priv_ctx_tx = NULL;
-+		} else {
-+			kfree(ctx->priv_ctx_rx);
-+			ctx->priv_ctx_rx = NULL;
-+		}
- 	}
- out:
- 	return rc;
+ int decrypt_skb(struct sock *sk, struct scatterlist *sgout)
 -- 
 2.47.1
 
