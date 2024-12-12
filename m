@@ -1,204 +1,133 @@
-Return-Path: <linux-kselftest+bounces-23257-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23258-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DD3B9EE757
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 14:06:49 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68D549EE8BA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 15:27:43 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5A7318889F9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 14:27:41 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0451B2147F7;
+	Thu, 12 Dec 2024 14:27:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZRmWxufZ"
+X-Original-To: linux-kselftest@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2B30281D48
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2024 13:06:47 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A1CD213E6F;
-	Thu, 12 Dec 2024 13:06:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZktGluM3"
-X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720F21EEE6;
-	Thu, 12 Dec 2024 13:06:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9BEF8837;
+	Thu, 12 Dec 2024 14:27:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734008803; cv=none; b=BegvWGSBuKYl9AfaZ2nJyWuCpEArFrwjeD6VU0UN8NrAKWF+nlLg1iL8E5RH+adKmfXZMotW9+NkKqKYqpr3r+Ux8syFaksKq64tVeyph+WdHWIr+qBh+hZ2Lfy0f+tA6Rgr/yF8AvQJufces29J1PZY22+gIlrvEX8WTYhVbgk=
+	t=1734013656; cv=none; b=ZhsFqxNS5YXFNopP5w1tkw5nnPHSpxbx4qkjeAkJhLb/aSJW7tt0TukMlpaHqZ5TOHtfJoeg/fHEQF8xlRCruMkt/TBqBfBId7r9ucNI1tV01Z28/V4TA8Fizi7/+ZMe/MEWYddIFNiU14uG2IHY6MpjBmKdpfBqInDBxNfe5jY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734008803; c=relaxed/simple;
-	bh=QtnJQVvfbhujzCBbhdoVTuAqzhIPgOKP0r086zlDy7E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r/Apqum03kGBI+CNFfZGWhkzLEQmxNYF0KuZVnuHx+YcgGwq44qEy3hC4R8j2eZWka8LGPclmJEdvFq+Yxb5Ev8Ce4IuTWQVkb9VRVgHAnNwW6KwKrBeph5RV6HU0GLD3rvLXGaXzcQ4hCIKniWZDSqm2vZItpfc6t0c4l4j7r8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZktGluM3; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4361fe642ddso5928795e9.2;
-        Thu, 12 Dec 2024 05:06:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734008800; x=1734613600; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HqYxTqAiECe9wyyAXaPuVyEXlxRKQjZazVAEQa5Qpbg=;
-        b=ZktGluM3dlR/NF+iXXPLFABaWgcjKCjnNLgrvwDNFhu8xp1OFZ5GHABrDQ1Yv/nH8b
-         ZFXbXUYcE7TfhLWarn4g6UQBwoOfQM6mD23j1LXBSTY3/EzSP355LtykvKZV/wGip79k
-         TwehLk2kIdBMiw3GEOoD4ks6CaoxyvsNl5qtpvYDKf4++YhlJwbcFibtA18/DLzUqKcz
-         oc+ZHNejW+ROMyxslfKFhLGSJf1lDQyNIYjhy1+bpgd2Qs1cNaVCbG8P6SRQTTfSur80
-         5S6/kJ4Mt9DAa3Sk5fDa/LqseIyKcI4vJAWboLA5o74/7Br09Gv1LAawbXz5Bh7i7Yit
-         nI2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734008800; x=1734613600;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HqYxTqAiECe9wyyAXaPuVyEXlxRKQjZazVAEQa5Qpbg=;
-        b=DkuoP9tmR4LAp4upucPVi/gANCEW/N9EYXgvaJN+Sa1kGSLtvaM5b3DnSHUGvw+JOh
-         hT3F/y6l6CpiSg9fJJZkUlcbfV/Go4aNCe8wnzO8RnRIyG98sbVK2AdqDYnEmJ7G7Kxb
-         RTejDUH10bjxmJUtrIo3Kk+nlKBRcZJ3vn8VqRnurZcfJHRcjbXn4uCWg85hpwB9ao0g
-         u+vpyNsGYdAggSUKN0sG5gr86i9nqPuXwBWI5g046ZP+hmjY6ZXYrvpJCxtPsHS3Tv6x
-         fRyg4MkAOSxLeiolhik3mCz7az/GLV8fxoBFBZcM5IEHSW3SJmhxqYEyYREfS2AUEKfj
-         1/qQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU0co2m8kQ87soIcfJKzwNxclsUvo2uyTa37dRPsdaKIFLLr0DEj64pZZ+gAc01qnWFRz27o7rS/Uow@vger.kernel.org, AJvYcCU85PbXeNqOaEBYeGeklIoQ/U3dkw5DVFdTjeOatDS59ghUfie5tO8s4KMbic5xOQ0UTKE=@vger.kernel.org, AJvYcCV5coQ0VWJ42/b1iKHA+SrdRhnkIEv5bG7KP6gkK/EJ7W378Mch/w9K27iMt/BVMLgtKo0BXE6zQBidag==@vger.kernel.org, AJvYcCVFOaHkDV658AHNOOnh3KwwhLhnS9Nm/im/vz2w8QDYDUOmcNToQsMaTwTq/6TwXmkiMMpcsI4pH0q3y5Ts@vger.kernel.org, AJvYcCWb6PWROPDhghXhjuSkH505RNcJFBdDDQLGHnluyGj+Ur1uevI44UmWgh1KolYyezPIl2R/LcfcQxEsAp38j+M=@vger.kernel.org, AJvYcCWhRiDf8Bq+lD7dudbo59mwdKqtcx94TlsWgGz6lhXcmZk2dSU4x8qMWxs/hKuv9WyurK8oiV/JZVRT@vger.kernel.org, AJvYcCWulte37j3DZ41CT1brK37eLXzTMB9e9T5M4DIB1RhdjL52u7C+vipG82iTHvtB+sHVSCY1Mm9J7aKYUw==@vger.kernel.org, AJvYcCXzv9fWxhYf2YBUwR5tw+p4GN9J+gL1fLQBMWskLubscEUPubjsrhqhTk17Xzz8TfmJ1cvCoJX502wAs4b4p9Lc@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9oKm1OleroqTcHb1AE+VsCqnDLoCfA6AuoOVrTYbtLJU/QaLg
-	OVsyi3XZId07Fq/1ER1JRz0kCELEY8wQoQ2e3HEyx4+x1cNisdQSaTEp3S0OiNZNOCL+43bx+FW
-	DP+Y9HkwYB2wADHhiSkSL5GI0MyI=
-X-Gm-Gg: ASbGncu5/2LogKtPmifCLgyTBTx8/o5yaXHqveru4ofL6zY9BrBwuliTgRbCM8j48zr
-	w+cT/AzuxNrmCty1TiyoRa8ry15UvK1DiV7Kk
-X-Google-Smtp-Source: AGHT+IEgToBDxS7Y2rJTQaW+KRxkcbBuEM1S3SQpzBBgB7EfM9NZPQ+SlbrHysoSI6mEreAZ9kYV8K51n0HSyiFVXHg=
-X-Received: by 2002:a05:600c:3acf:b0:434:f8a0:9dd8 with SMTP id
- 5b1f17b1804b1-4361c345006mr53002405e9.1.1734008799513; Thu, 12 Dec 2024
- 05:06:39 -0800 (PST)
+	s=arc-20240116; t=1734013656; c=relaxed/simple;
+	bh=THwrYGXIiz69ULgUOChLfT0Apz1xdUGNa3VyZHWINTM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pt6a5uTOENtKAUEInNbNHII3u1Dhd6+NPJbpKJJxHi7BCmqDjj3W55fteAcvtGaUfVRbgbIDxNpWtDVwdJwcwl2cbVzVOOlw910C0dmCoHJAgoO8Y4a1cA0cum6g3TgKbc9gD9Xqx4VwKc59o8PpuE03qDrL8/CObbt+EERlREk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZRmWxufZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE736C4CECE;
+	Thu, 12 Dec 2024 14:27:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734013656;
+	bh=THwrYGXIiz69ULgUOChLfT0Apz1xdUGNa3VyZHWINTM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ZRmWxufZnautQhP11I8b96kLloJChzCpdvI/AftPcxettZ8H9AuEZKL2Ui/HEUzve
+	 pCcnWHp6hX/FJ5nhs4B2d0X+wg8m2w2udD36pKcvGyi1D8Ql4pwZfCV9B9F07ubHBl
+	 D2TNVkRBnz+R2xVvXBHnpq+BDroDWbRFZAwtAIXNRyofbn8DZ2FVtLMAABIt5UKB1I
+	 tSgYWP80ND9XfYTngB39aNOqdhmqe8bpyUsodRePyqbSI+axC5UHyq/JDktDqV+ISY
+	 0jkk4auyl5L+A2AMFoJMU+7Mm6kRnZ9dhAqs9OAsXn/dLwww2AO/wMtFE75JpB9DG6
+	 PStC2/SauN4dg==
+Date: Thu, 12 Dec 2024 06:27:34 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>, Andy Gospodarek
+ <andy@greyhouse.net>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Nikolay Aleksandrov
+ <razor@blackwall.org>, Simon Horman <horms@kernel.org>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 0/2] bond: fix xfrm offload feature during init
+Message-ID: <20241212062734.182a0164@kernel.org>
+In-Reply-To: <20241211071127.38452-1-liuhangbin@gmail.com>
+References: <20241211071127.38452-1-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241209140151.231257-1-shaw.leon@gmail.com> <20241209140151.231257-6-shaw.leon@gmail.com>
- <4a2fe99a-772d-4df1-a8ef-14338682b69e@redhat.com>
-In-Reply-To: <4a2fe99a-772d-4df1-a8ef-14338682b69e@redhat.com>
-From: Xiao Liang <shaw.leon@gmail.com>
-Date: Thu, 12 Dec 2024 21:06:01 +0800
-Message-ID: <CABAhCOQnMGm8y5bVj_fg5veJqim1PEEa02oZHqFt7ZPEQMpFzw@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 5/5] selftests: net: Add two test cases for
- link netns
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Donald Hunter <donald.hunter@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, 
-	Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jiri Pirko <jiri@resnulli.us>, 
-	Hangbin Liu <liuhangbin@gmail.com>, linux-rdma@vger.kernel.org, 
-	linux-can@vger.kernel.org, osmocom-net-gprs@lists.osmocom.org, 
-	bpf@vger.kernel.org, linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com, 
-	linux-wireless@vger.kernel.org, b.a.t.m.a.n@lists.open-mesh.org, 
-	bridge@lists.linux.dev, linux-wpan@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Dec 12, 2024 at 5:40=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wro=
-te:
->
-> On 12/9/24 15:01, Xiao Liang wrote:
-> >  - Add test for creating link in another netns when a link of the same
-> >    name and ifindex exists in current netns.
-> >  - Add test for link netns atomicity - create link directly in target
-> >    netns, and no notifications should be generated in current netns.
-> >
-> > Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
-> > ---
-> >  tools/testing/selftests/net/Makefile        |  1 +
-> >  tools/testing/selftests/net/netns-name.sh   | 10 ++++++
-> >  tools/testing/selftests/net/netns_atomic.py | 39 +++++++++++++++++++++
-> >  3 files changed, 50 insertions(+)
-> >  create mode 100755 tools/testing/selftests/net/netns_atomic.py
-> >
-> > diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selft=
-ests/net/Makefile
-> > index cb2fc601de66..f9f7a765d645 100644
-> > --- a/tools/testing/selftests/net/Makefile
-> > +++ b/tools/testing/selftests/net/Makefile
-> > @@ -34,6 +34,7 @@ TEST_PROGS +=3D gre_gso.sh
-> >  TEST_PROGS +=3D cmsg_so_mark.sh
-> >  TEST_PROGS +=3D cmsg_time.sh cmsg_ipv6.sh
-> >  TEST_PROGS +=3D netns-name.sh
-> > +TEST_PROGS +=3D netns_atomic.py
-> >  TEST_PROGS +=3D nl_netdev.py
-> >  TEST_PROGS +=3D srv6_end_dt46_l3vpn_test.sh
-> >  TEST_PROGS +=3D srv6_end_dt4_l3vpn_test.sh
-> > diff --git a/tools/testing/selftests/net/netns-name.sh b/tools/testing/=
-selftests/net/netns-name.sh
-> > index 6974474c26f3..0be1905d1f2f 100755
-> > --- a/tools/testing/selftests/net/netns-name.sh
-> > +++ b/tools/testing/selftests/net/netns-name.sh
-> > @@ -78,6 +78,16 @@ ip -netns $NS link show dev $ALT_NAME 2> /dev/null &=
-&
-> >      fail "Can still find alt-name after move"
-> >  ip -netns $test_ns link del $DEV || fail
-> >
-> > +#
-> > +# Test no conflict of the same name/ifindex in different netns
-> > +#
-> > +ip -netns $NS link add name $DEV index 100 type dummy || fail
-> > +ip -netns $NS link add netns $test_ns name $DEV index 100 type dummy |=
-|
-> > +    fail "Can create in netns without moving"
-> > +ip -netns $test_ns link show dev $DEV >> /dev/null || fail "Device not=
- found"
-> > +ip -netns $NS link del $DEV || fail
-> > +ip -netns $test_ns link del $DEV || fail
-> > +
-> >  echo -ne "$(basename $0) \t\t\t\t"
-> >  if [ $RET_CODE -eq 0 ]; then
-> >      echo "[  OK  ]"
-> > diff --git a/tools/testing/selftests/net/netns_atomic.py b/tools/testin=
-g/selftests/net/netns_atomic.py
-> > new file mode 100755
-> > index 000000000000..d350a3fc0a91
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/net/netns_atomic.py
-> > @@ -0,0 +1,39 @@
-> > +#!/usr/bin/env python3
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +
-> > +import time
-> > +
-> > +from lib.py import ksft_run, ksft_exit, ksft_true
-> > +from lib.py import ip
-> > +from lib.py import NetNS, NetNSEnter
-> > +from lib.py import RtnlFamily
-> > +
-> > +
-> > +def test_event(ns1, ns2) -> None:
-> > +    with NetNSEnter(str(ns1)):
-> > +        rtnl =3D RtnlFamily()
-> > +
-> > +    rtnl.ntf_subscribe("rtnlgrp-link")
-> > +
-> > +    ip(f"netns set {ns1} 0", ns=3Dstr(ns2))
-> > +
-> > +    ip(f"link add netns {ns2} link-netnsid 0 dummy1 type dummy")
-> > +    ip(f"link add netns {ns2} dummy2 type dummy", ns=3Dstr(ns1))
-> > +
-> > +    ip("link del dummy1", ns=3Dstr(ns2))
-> > +    ip("link del dummy2", ns=3Dstr(ns2))
-> > +
-> > +    time.sleep(1)
-> > +    rtnl.check_ntf()
-> > +    ksft_true(rtnl.async_msg_queue.empty(),
-> > +              "Received unexpected link notification")
->
-> I think we need a much larger coverage here, possibly testing all the
-> update drivers and more 'netns', 'link-netnsid', 'peer netns'
-> permutations for the devices that allow them.
+On Wed, 11 Dec 2024 07:11:25 +0000 Hangbin Liu wrote:
+> The first patch fixes the xfrm offload feature during setup active-backup
+> mode. The second patch add a ipsec offload testing.
 
-OK, I will add more cases. But I'm afraid I don't know how to build
-valid parameters for all of them, and some seem to require hardware.
+Looks like the test is too good, is there a fix pending somewhere for
+the BUG below? We can't merge the test before that:
 
->
-> Thanks,
->
-> Paolo
->
+https://netdev-3.bots.linux.dev/vmksft-bonding-dbg/results/900082/11-bond-ipsec-offload-sh/stderr
+
+[  859.672652][    C3] bond_xfrm_update_stats: eth0 doesn't support xdo_dev_state_update_stats
+[  860.467189][ T8677] bond0: (slave eth0): link status definitely down, disabling slave
+[  860.467664][ T8677] bond0: (slave eth1): making interface the new active one
+[  860.831042][ T9677] bond_xfrm_update_stats: eth1 doesn't support xdo_dev_state_update_stats
+[  862.195271][ T9683] BUG: sleeping function called from invalid context at kernel/locking/mutex.c:562
+[  862.195880][ T9683] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 9683, name: ip
+[  862.196189][ T9683] preempt_count: 201, expected: 0
+[  862.196396][ T9683] RCU nest depth: 0, expected: 0
+[  862.196591][ T9683] 2 locks held by ip/9683:
+[  862.196818][ T9683]  #0: ffff88800a829558 (&net->xfrm.xfrm_cfg_mutex){+.+.}-{4:4}, at: xfrm_netlink_rcv+0x65/0x90 [xfrm_user]
+[  862.197264][ T9683]  #1: ffff88800f460548 (&x->lock){+.-.}-{3:3}, at: xfrm_state_flush+0x1b3/0x3a0
+[  862.197629][ T9683] CPU: 3 UID: 0 PID: 9683 Comm: ip Not tainted 6.13.0-rc1-virtme #1
+[  862.197967][ T9683] Hardware name: Bochs Bochs, BIOS Bochs 01/01/2011
+[  862.198204][ T9683] Call Trace:
+[  862.198352][ T9683]  <TASK>
+[  862.198458][ T9683]  dump_stack_lvl+0xb0/0xd0
+[  862.198659][ T9683]  __might_resched+0x2f8/0x530
+[  862.198852][ T9683]  ? kfree+0x2d/0x330
+[  862.199005][ T9683]  __mutex_lock+0xd9/0xbc0
+[  862.199202][ T9683]  ? ref_tracker_free+0x35e/0x910
+[  862.199401][ T9683]  ? bond_ipsec_del_sa+0x2c1/0x790
+[  862.199937][ T9683]  ? find_held_lock+0x2c/0x110
+[  862.200133][ T9683]  ? __pfx___mutex_lock+0x10/0x10
+[  862.200329][ T9683]  ? bond_ipsec_del_sa+0x280/0x790
+[  862.200519][ T9683]  ? xfrm_dev_state_delete+0x97/0x170
+[  862.200711][ T9683]  ? __xfrm_state_delete+0x681/0x8e0
+[  862.200907][ T9683]  ? xfrm_user_rcv_msg+0x4f8/0x920 [xfrm_user]
+[  862.201151][ T9683]  ? netlink_rcv_skb+0x130/0x360
+[  862.201347][ T9683]  ? xfrm_netlink_rcv+0x74/0x90 [xfrm_user]
+[  862.201587][ T9683]  ? netlink_unicast+0x44b/0x710
+[  862.201780][ T9683]  ? netlink_sendmsg+0x723/0xbe0
+[  862.201973][ T9683]  ? ____sys_sendmsg+0x7ac/0xa10
+[  862.202164][ T9683]  ? ___sys_sendmsg+0xee/0x170
+[  862.202355][ T9683]  ? __sys_sendmsg+0x109/0x1a0
+[  862.202546][ T9683]  ? do_syscall_64+0xc1/0x1d0
+[  862.202738][ T9683]  ? entry_SYSCALL_64_after_hwframe+0x77/0x7f
+[  862.202986][ T9683]  ? __pfx_nsim_ipsec_del_sa+0x10/0x10 [netdevsim]
+[  862.203251][ T9683]  ? bond_ipsec_del_sa+0x2c1/0x790
+[  862.203457][ T9683]  bond_ipsec_del_sa+0x2c1/0x790
+[  862.203648][ T9683]  ? __pfx_lock_acquire.part.0+0x10/0x10
+[  862.203845][ T9683]  ? __pfx_bond_ipsec_del_sa+0x10/0x10
+[  862.204034][ T9683]  ? do_raw_spin_lock+0x131/0x270
+[  862.204225][ T9683]  ? __pfx_do_raw_spin_lock+0x10/0x10
+[  862.204468][ T9683]  xfrm_dev_state_delete+0x97/0x170
+[  862.204665][ T9683]  __xfrm_state_delete+0x681/0x8e0
+[  862.204858][ T9683]  xfrm_state_flush+0x1bb/0x3a0
+[  862.205057][ T9683]  xfrm_flush_sa+0xf0/0x270 [xfrm_user]
+[  862.205290][ T9683]  ? __pfx_xfrm_flush_sa+0x10/0x10 [xfrm_user]
+[  862.205537][ T9683]  ? __nla_validate_parse+0x48/0x3d0
+[  862.205744][ T9683]  xfrm_user_rcv_msg+0x4f8/0x920 [xfrm_user]
+[  862.205985][ T9683]  ? __pfx___lock_release+0x10/0x10
+[  862.206174][ T9683]  ? __pfx_xfrm_user_rcv_msg+0x10/0x10 [xfrm_user]
+[  862.206412][ T9683]  ? __pfx_validate_chain+0x10/0x10
+[  862.206614][ T9683]  ? hlock_class+0x4e/0x130
+[  862.206807][ T9683]  ? mark_lock+0x38/0x3e0
+[  862.206986][ T9683]  ? __mutex_trylock_common+0xfa/0x260
+[  862.207181][ T9683]  ? __pfx___mutex_trylock_common+0x10/0x10
+[  862.207425][ T9683]  netlink_rcv_skb+0x130/0x360
 
