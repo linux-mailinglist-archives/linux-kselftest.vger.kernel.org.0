@@ -1,168 +1,111 @@
-Return-Path: <linux-kselftest+bounces-23374-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23375-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB34F9F1820
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 22:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A9F279F18F3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 23:26:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 131B9188C59A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 21:47:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2A6C188F17C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 22:26:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 287C61922DE;
-	Fri, 13 Dec 2024 21:47:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EF5519992B;
+	Fri, 13 Dec 2024 22:18:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="FT4Q1qQL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OUXqNWTY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A9218FC65
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Dec 2024 21:47:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1F4185949;
+	Fri, 13 Dec 2024 22:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734126445; cv=none; b=TuKcH/ylP55XjAVAWSyoWUCAxzrgjx4pkkgEWIsAmStyMtjQSLzMP94TkFPO1JWluOuDkZB7Kw0dZ5UrdKdX3bn3sWBWHSEyPCWRMSV/tnnpEt8z70oLmgTPknKlf/aXkubgJr+ZTFKewM36UXAR2AOHRFCAjb8zpeQCabRcYpg=
+	t=1734128330; cv=none; b=t3zJGm5LiLIHpEE6uAlLxTW9Gl9gTEIOaPL1n5qf+FK1ojipP3j2j7mlhM3t+8DU7LK80pG8L8xAP6KzLkG7Y1s4OLIUXt+pXf4kzEjvF8giHPXLTcXjaWfqfSUYXUHBaWZ31b6sNqXdVRWkIjHqeorMf59swmj9b43sKF/3GSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734126445; c=relaxed/simple;
-	bh=gSyNEpcN2ZbY4H9ORbzvaIDUuWJ/Yxo0+a1TgtMamxM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d6vs59mSV5aefz1YUPUCj0d3E+t1piQnAmBHHtg3mShJbYn8guEr3/NPbV5+k3k0CRmmDxbm+T6x82AihZDG3rJdZs0oUSYTTPqNMagRsPKSjhnF4UPcAD4k4I2LY8BizpMjgm6/x8tLIUeZEkNupDbaCD9c2Mlt9iwIL4LsFtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=FT4Q1qQL; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-728e1799d95so2687692b3a.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Dec 2024 13:47:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1734126443; x=1734731243; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jVqB/GjiJmYmyOSSLwGXDzti4tsPhIcQpJ5Uo6DF0jc=;
-        b=FT4Q1qQLow6UALDlrPXuRGF1CPbKaNp02ykQs/9lwyngFP9cKM/fj2hb/EdwlUqj3G
-         GF5uZ0xhdQ75VxyhNuqI/aro2XHEM90fJCZBdpqxQYX2r5e0urvIYyAkdv5ujTGuJ1XW
-         hzWen4MIfFd97OHB5sHyDEMaNy5nbvUizlWrk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734126443; x=1734731243;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jVqB/GjiJmYmyOSSLwGXDzti4tsPhIcQpJ5Uo6DF0jc=;
-        b=cCrmGZQkU+ZKe7fwBb4bwz4L1mUAt8J2J81TFD+2Y+6yz6Q/vQBMwRxSaJiQEA3kOK
-         B5t24/VV5W1nivhYtxQNY+625+vNZ4CLOptPiHNtO4MfwBpuA+mBJHbhdJGj7QdHCYXj
-         RJmoJoM2wtr/KR2tYcYvWko9zQzVQNHrRJCqLTpi14cIF+6STvxleqeshBw+G0VrjCQ3
-         Mo7vaaMI6AoBxBHaz0LN2wB7OxvJyYwK7zUoR+4nTAVxnXQGvwS25S4EXo9yvtmirLVm
-         2v6pN3hk/dXzK3IQWEXJwsNm+VarR99un5a/eJ7l0B0Fl3qXq8jLXvR6vpmavDmUBTa2
-         b5pw==
-X-Forwarded-Encrypted: i=1; AJvYcCX3skJJ2WeydVeOMufpEW4HFUs6JPCCSHngP7IqMAkEpfortJEhSrQtVXOI/26RwnB+EXL6/4f4mIq2JIxa5DY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7VGVzO0RUzWL5QRgmVjFFRnEqXAtdox3BpR8/ufZZ2oKXQ+zD
-	zjk03dsaXeAZHjwH6agxaBQznR5qv49EYL5JgPG86VpMnj0i5jojcwxbOAPW1uo=
-X-Gm-Gg: ASbGncv5G04+jxY/9qeCyaf/O6Nq1lN94Aay0LRVtbPEosrAy8qQYOSk7A3vFCoOwDX
-	QKN3HqxGr8aeCrzpOP9MhIiA6PXDDEYYE+RUfbHwAA3nicTY1TpTgtm2QlblIl1qtTYVD+DFMPy
-	CNnKKpsLj3WQKJom9T69KG3jFGcYjDN1XJLOvwLAmUYkFme+RWf9iV3SyOUzvKCqboQ14xax2nl
-	418zbTJdEqpEitEn6cy4jqQ6+EMnb3dhwvG4VxpFxTvWESp1TCei9FMYASVOYCG0Hs+YNyzajs5
-	h3xJ7tmXdUnSPFObW6qoXaJ6UJsE
-X-Google-Smtp-Source: AGHT+IG5EugtjQXxqB177FGmlSSBcMM5rme1KxriIIyA+ifDOLZUoUa/1OcR9z6KC8l2AnXKJKdMaQ==
-X-Received: by 2002:a05:6a00:4209:b0:726:41e:b32a with SMTP id d2e1a72fcca58-7290c0e179amr5612093b3a.4.1734126442828;
-        Fri, 13 Dec 2024 13:47:22 -0800 (PST)
-Received: from LQ3V64L9R2 (c-24-6-151-244.hsd1.ca.comcast.net. [24.6.151.244])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72918af0ca3sm253877b3a.81.2024.12.13.13.47.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2024 13:47:22 -0800 (PST)
-Date: Fri, 13 Dec 2024 13:47:19 -0800
-From: Joe Damato <jdamato@fastly.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 4/5] selftests: net-drv: queues: sanity check netlink
- dumps
-Message-ID: <Z1yrZ7bZq8bTBUAR@LQ3V64L9R2>
-Mail-Followup-To: Joe Damato <jdamato@fastly.com>,
-	Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
-	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
-	shuah@kernel.org, linux-kselftest@vger.kernel.org
-References: <20241213152244.3080955-1-kuba@kernel.org>
- <20241213152244.3080955-5-kuba@kernel.org>
+	s=arc-20240116; t=1734128330; c=relaxed/simple;
+	bh=yGVF+lGT8ur8QZFdxP3rJGdxQv5/psNez7G9/LlnyAo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k7c1h3UoF9ZrJTNfNa0KosM+3xva0NH+lycpLQKItuMPhf6BFYUDjhoctZagm1er1cjpQWDx/iVCe96uw2LyKEhgWMt+bIcKlLyOVlwR4tp2nraPE5NlsJZU19/YbVF4EZuLzMf9rWAI6s8k1LO+E2mNsYNyI/7Mmz1bwl7A5Dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OUXqNWTY; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734128329; x=1765664329;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yGVF+lGT8ur8QZFdxP3rJGdxQv5/psNez7G9/LlnyAo=;
+  b=OUXqNWTYlBzbvRqM+qKeVVc4M4q9SM7LEXOk+5ei+E/0FrT3/YMUKmtz
+   si9i3bp+bffBTixi3wt3cchanWo3cxOYK4+hcj3pIl1IJCleSapnoH7e9
+   ntqDfPE0kMD7UO5WBk6Mlpg+RSYG9wxKQQTjzSrZgVg2n7rLgWw6+16NL
+   5eJ7BH06Gwg35yBinH9AcSiwtvv9Xx/Z91T8DTSTtayZ5F2n1PgumU++L
+   /ioz70YfrN1D6xx2ImT96QhLZBGH+EfM9RbX9JQ1/VfxxSCahlVKJbhxG
+   6BcNSp4i+Hc1ocNSQUm/Unn5jfD+VwGt++IYY3NrekXJ3lpb5nGhFh5Kn
+   w==;
+X-CSE-ConnectionGUID: UcEOFs5GQ1W0S9Z/foQ1fg==
+X-CSE-MsgGUID: YYHLya8YSYm6UKBfkkU6ag==
+X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="38526460"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="38526460"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2024 14:18:48 -0800
+X-CSE-ConnectionGUID: cYDbbYl9QR2Pm3TS6wPPlw==
+X-CSE-MsgGUID: CyLYLFNcQ4Cbf0jiSe7UyA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,232,1728975600"; 
+   d="scan'208";a="96708626"
+Received: from rchatre-desk1.jf.intel.com ([10.165.154.99])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2024 14:18:48 -0800
+From: Reinette Chatre <reinette.chatre@intel.com>
+To: pbonzini@redhat.com,
+	seanjc@google.com,
+	shuah@kernel.org
+Cc: isaku.yamahata@intel.com,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	reinette.chatre@intel.com
+Subject: [PATCH] KVM: selftests: Add printf attribute to _no_printf()
+Date: Fri, 13 Dec 2024 14:30:00 -0800
+Message-ID: <898ec01580f6f4af5655805863239d6dce0d3fb3.1734128510.git.reinette.chatre@intel.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241213152244.3080955-5-kuba@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 13, 2024 at 07:22:43AM -0800, Jakub Kicinski wrote:
-> This test already catches a netlink bug fixed by this series,
-> but only when running on HW with many queues. Make sure the
-> netdevsim instance created has a lot of queues, and constrain
-> the size of the recv_buffer used by netlink.
-> 
-> While at it test both rx and tx queues.
+From: Isaku Yamahata <isaku.yamahata@intel.com>
 
-Thanks for expanding the test to cover TX, as well.
+Annotate the KVM selftests' _no_printf() with the printf format attribute
+so that the compiler can help check parameters provided to pr_debug() and
+pr_info() irrespective of DEBUG and QUIET being defined.
+
+[reinette: move attribute right after storage class, rework changelog]
+
+Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+---
+ tools/testing/selftests/kvm/include/test_util.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+index 3e473058849f..77d13d7920cb 100644
+--- a/tools/testing/selftests/kvm/include/test_util.h
++++ b/tools/testing/selftests/kvm/include/test_util.h
+@@ -22,7 +22,7 @@
  
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: shuah@kernel.org
-> CC: linux-kselftest@vger.kernel.org
-> ---
->  tools/testing/selftests/drivers/net/queues.py | 23 +++++++++++--------
->  1 file changed, 13 insertions(+), 10 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/drivers/net/queues.py b/tools/testing/selftests/drivers/net/queues.py
-> index 30f29096e27c..9c5473abbd78 100755
-> --- a/tools/testing/selftests/drivers/net/queues.py
-> +++ b/tools/testing/selftests/drivers/net/queues.py
-> @@ -8,25 +8,28 @@ from lib.py import cmd
->  import glob
->  
->  
-> -def sys_get_queues(ifname) -> int:
-> -    folders = glob.glob(f'/sys/class/net/{ifname}/queues/rx-*')
-> +def sys_get_queues(ifname, qtype='rx') -> int:
-> +    folders = glob.glob(f'/sys/class/net/{ifname}/queues/{qtype}-*')
->      return len(folders)
->  
->  
-> -def nl_get_queues(cfg, nl):
-> +def nl_get_queues(cfg, nl, qtype='rx'):
->      queues = nl.queue_get({'ifindex': cfg.ifindex}, dump=True)
->      if queues:
-> -        return len([q for q in queues if q['type'] == 'rx'])
-> +        return len([q for q in queues if q['type'] == qtype])
->      return None
->  
->  
->  def get_queues(cfg, nl) -> None:
-> -    queues = nl_get_queues(cfg, nl)
-> -    if not queues:
-> -        raise KsftSkipEx('queue-get not supported by device')
-> +    snl = NetdevFamily(recv_size=4096)
->  
-> -    expected = sys_get_queues(cfg.dev['ifname'])
-> -    ksft_eq(queues, expected)
-> +    for qtype in ['rx', 'tx']:
-> +        queues = nl_get_queues(cfg, snl, qtype)
-> +        if not queues:
-> +            raise KsftSkipEx('queue-get not supported by device')
-> +
-> +        expected = sys_get_queues(cfg.dev['ifname'], qtype)
-> +        ksft_eq(queues, expected)
->  
->  
->  def addremove_queues(cfg, nl) -> None:
-> @@ -57,7 +60,7 @@ import glob
->  
->  
->  def main() -> None:
-> -    with NetDrvEnv(__file__, queue_count=3) as cfg:
-> +    with NetDrvEnv(__file__, queue_count=100) as cfg:
->          ksft_run([get_queues, addremove_queues], args=(cfg, NetdevFamily()))
->      ksft_exit()
->  
+ #define msecs_to_usecs(msec)    ((msec) * 1000ULL)
+ 
+-static inline int _no_printf(const char *format, ...) { return 0; }
++static inline __printf(1, 2) int _no_printf(const char *format, ...) { return 0; }
+ 
+ #ifdef DEBUG
+ #define pr_debug(...) printf(__VA_ARGS__)
+-- 
+2.47.1
 
-Reviewed-by: Joe Damato <jdamato@fastly.com>
 
