@@ -1,154 +1,199 @@
-Return-Path: <linux-kselftest+bounces-23297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23299-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21F829F04B1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 07:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A9C969F0558
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 08:18:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D70316A175
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 06:19:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C4D56168CD4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 07:18:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C0FC188724;
-	Fri, 13 Dec 2024 06:19:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 709BC18C018;
+	Fri, 13 Dec 2024 07:18:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="w5x1RRPl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RSjJDH78"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F7313DDAA
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Dec 2024 06:19:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA82E1552FC;
+	Fri, 13 Dec 2024 07:18:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734070763; cv=none; b=lGetYdNs8WrdQOR+YPe45FaiG0vkoaSVvY4NusMgPxTO0VZrfiyC6LiPMwMI1uuAVn/M5cL89ugKqVh980pDJPIwgBECWiFpX8n5Df3Kwu1meQ17FH+qeH3ve2lllGBMIXbOsCW9FwIbiyrbeIKPLQJucKjkUpiFBR6Zq3vkLHs=
+	t=1734074302; cv=none; b=NgibJfk506vxiXB+vj+YHc0h7ayiLIscAvn2Hopt9+ribxuE2dEp8xTiLhZQqYry/hUHpAAi+934Q3JhmQ6rrvwSSEdm9u3+AWYIDSHE3u622Xx3Dl6fttzUq8BX/ttD6RGkaU2k7cs3oIqfgl+DyCOEVoAqMBwh1SNSHUw3DzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734070763; c=relaxed/simple;
-	bh=K/4DN4i60pVUUdRoPlxfp3YaDzkLkgpBAjbBqyN1pa8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=OF9aKtp8xDuy1Mkc/9JRm/vXEiRZzR96zwc0Pc6nGWkWywA9git4JMh5E3tvTBm3XlYf6ffOwoibL46yyfab5n6qM7MrKg5haSw+FLkmJg9Bdhs6YpdjtoOikB7NUfFk0q33dJaPjRq1GnftjqTlxvhI4FQ3PuwnQLG7HEnit0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=w5x1RRPl; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-216387ddda8so13304695ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Dec 2024 22:19:21 -0800 (PST)
+	s=arc-20240116; t=1734074302; c=relaxed/simple;
+	bh=JUTjC5vX1dVdVtJWRwBrLA9SUDNWUOVFEGRoDkq3eMI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D+AEVue+hFnthy9fLqkbKeMnRXgHkKY//E0TAoe3kIKyPZfsLsCaS7DqUo9t2mZAxmzAFMl6QAiVNBm3uP0VPoodlek8ysYZp0Ss28tiBNnXmoUO1J3FLA1QN0b3Eb0n3TrObRZ1XvKVYWyEq0XUmucrxveYyzR7W/2glfx8KMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RSjJDH78; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-728f1e66418so1273131b3a.2;
+        Thu, 12 Dec 2024 23:18:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1734070761; x=1734675561; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=n5oF9jov6joYFA3TQsmrGHK73Ci9n0mNzk5UXN2ZVo0=;
-        b=w5x1RRPl0jnjljVk8biKm5FuC20tYdGff1zmva7uY1u2Ss8Tb8m4x8jc+MiNYwy20j
-         wUD3hq3WifxRErQRK0AtuLtjOXELCG4FthSHyJN5PznZdCog+mxHJJXcmWl5Ut+RhCtZ
-         lrCcy3TLe4xjf0RhOeJydRecwzcUDxQfKxgFfeJ9UVa3rJX6z6KrZZwZTQAL2EI1uQFc
-         v0FVcQQCeYZ9UzjSsYiiZB/YEFqefj85CH0sUShmXPLSnDlo09wAZdtYIaR3stwf5jo9
-         AFxGMVafsss1lni47OLUdlIRl3J/q6SsXuFjCa7gRYayRGBASAcwCeVZl8blwBvYHiji
-         NWjQ==
+        d=gmail.com; s=20230601; t=1734074298; x=1734679098; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LfvD/8PI0WXSrCtYG4Xt9DWTdGFSjZV64vqg60IXsD4=;
+        b=RSjJDH78vqd86GG8oMpS0VDlf0Phfeu3gLCB/gvSh+OwHDcbhVrHaDfMO2PVW7Tgpp
+         NnJLlRZKlYBxqfGNihY10B++OANzzoRf7cNAjhj8P4QoSVfeOfRrmRegPVr2LS1ZpD2Z
+         LDg9R+Zp0w76pwp4eHjAkw3nqVVzSq0zyU+vzSukyJy+aHlfxdtntFXIxXHKfcuKvJXi
+         nTJP8pJ3DDOxgqRr49YFI1dXRru3tZdxUg/7JmDK/xGUjGER7ccQHP5VXdh2DdevEkIR
+         n4W/UxyDZcK5sS6nSlS2HXROl016v0d1H+iSTEYTj0MU8WBIKK/NinV/X8/apo81Jrgj
+         JB2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734070761; x=1734675561;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n5oF9jov6joYFA3TQsmrGHK73Ci9n0mNzk5UXN2ZVo0=;
-        b=skj5v26RSxNCnpcAH87K0CnQuVWNkeoTcxgR/UXjMRAvKSzJT+2cIueQqnAl/M3Mw8
-         siztrBX2MNtwLpaAFkogtbYJ3Ly7GscZpyac6gGftgjgon/Baih4Z72vrOddUqE8w3Qq
-         iTwzrGDDM8pI0wf0JJzv5sRnzGPnX7H0FZ1UTZmxR6S0CT08rwMlRhVRNmSzhPoSPACJ
-         d1H8wWKdUdLVtuFJVf34dmiVszbJetE6dOWdva0n04qjoc/efnOSyicxVdif5Fv/8/q3
-         isgscs59ILCBJem+V1d0W9CVNFxZDGDvCh26dbXbcGJ2ieCwPHs2M9xBgzbhjvKA8Zi0
-         BAKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVoCIW6pWfPBKIPo5BQb9O/E22mnJv/0jnBRzqplDK4+vIoAN+7SLj7cCUHpIPDjdyNnsAAJ17EEBl50RvXFzo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcnLX3R2pdl7yrvqGhAvqR+kntlgJ1wPGU96d6KLqZaHXrrjcS
-	3+FByUpDIlShT/8FhWrY0oXvpudVrTtuzOODOLh4KXeVc4LNDoZkoS02RqH4kSkLD6b5mBoWezh
-	ZKA==
-X-Google-Smtp-Source: AGHT+IH8Tju6InYA6vGPE54wU0lZHft8YC7vV4TPTHR62raRBFJyNNwUg/F/hXnhEEHuLnSIeoRbN1q7Bg4=
-X-Received: from plqs9.prod.google.com ([2002:a17:902:a509:b0:216:2fcc:4084])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:234d:b0:216:70b6:8723
- with SMTP id d9443c01a7336-21892a5440cmr20189615ad.44.1734070761077; Thu, 12
- Dec 2024 22:19:21 -0800 (PST)
-Date: Thu, 12 Dec 2024 22:19:07 -0800
-In-Reply-To: <a3e75091f2b6b13d4907ac2fdf09058ab88c4ebf.camel@redhat.com>
+        d=1e100.net; s=20230601; t=1734074298; x=1734679098;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LfvD/8PI0WXSrCtYG4Xt9DWTdGFSjZV64vqg60IXsD4=;
+        b=Og+ys8Uz+ZpWRFVmMwD1VYO2VVDJcgo6sdNvAh5BUeCYy1pHjYr26whkwG1fEhF3+0
+         WbGe0tOiE6XnQmArKFYozpsbT25uI0weQBLK0FkClAC1H68254pDgYj5b9avP40wwMUV
+         QA16i4v7CsNfE1dQaq/FyiVQDrURw3zPRerrxmTBlf/EAagHhq0MlyZvh78au3Xi6fP1
+         p553bsrpkaFraIh1hAHXgD0C0jwE/gc4x846tIcXRvMIjFqQX5yd8h0KtUxnRex/9w4g
+         UAZGmfEyNyuUo54es88thuGmyVcGqdsgdtxHgcqCzvM5iiUYnEa1McZP0FNkjH9OeV13
+         dOzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUTjaZsu7W+wxJaVu5ZEXGT2esmaPr58AI1pm85iQLx9Esf+ArxISyIfmfSeBtLH1+Gzrx2azYLMNgl+fc=@vger.kernel.org, AJvYcCUt37ZFC+pC4h+rCK2nIOaY8sLibYkfUH0Qhi+MmUj1XnXEZLvJVgWhaqV0Z3ruvX1RIzAqw0irBZpRd6Ykih5i@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHgu+r69movASQXm2gOKmaUle/m5tl/u3xoxI+aP4s6J/4dh/1
+	Te7daG0FxzgDjXhfOrtwcQVUR1F1+shfJV5MiyLGv5IYnRqAtoQf
+X-Gm-Gg: ASbGncsuYOBYRKHUHehUAspPfpBnwuy40B9SQxM88lOQnvspunpopCpMZGpuP1n54jb
+	aoIvn/lfOEGlsHzcpSZ0FG6X9ES9nIGTIwVHtMguJJTF52BRw8fpyvFdh/CWe9kI8Ue0ZYlJswk
+	Ml0mHSBy2+UCWlh9oECHTiPGvMke+9H8+8Two8oaY9QmstDl8trjDX7uskJvM6TWbm+2ATaGjdv
+	Sc/ZO+FvAqQVjecu8siFwCU9salIQ4esF+55KoJE2qYByb4j3iZhrRVFvLX1A==
+X-Google-Smtp-Source: AGHT+IFL1q55TlEnnrqbzlDlt1VEt1MreABcTpf3y40zMVE5wp4aBpLQ1mhBBtjg5de7EkdLLBv2RQ==
+X-Received: by 2002:a05:6a20:9f04:b0:1e0:dc06:4f4d with SMTP id adf61e73a8af0-1e1dfd70716mr2598345637.19.1734074297996;
+        Thu, 12 Dec 2024 23:18:17 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fd430cec7bsm9055336a12.67.2024.12.12.23.18.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Dec 2024 23:18:17 -0800 (PST)
+Date: Fri, 13 Dec 2024 07:18:08 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
+	Andy Gospodarek <andy@greyhouse.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Simon Horman <horms@kernel.org>, Jianbo Liu <jianbol@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 0/2] bond: fix xfrm offload feature during init
+Message-ID: <Z1vfsAyuxcohT7th@fedora>
+References: <20241211071127.38452-1-liuhangbin@gmail.com>
+ <20241212062734.182a0164@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241211193706.469817-1-mlevitsk@redhat.com> <20241211193706.469817-2-mlevitsk@redhat.com>
- <Z1ox4OHNT6kkincQ@google.com> <a3e75091f2b6b13d4907ac2fdf09058ab88c4ebf.camel@redhat.com>
-Message-ID: <Z1vR25ylN5m_DRSy@google.com>
-Subject: Re: [PATCH 1/4] KVM: VMX: read the PML log in the same order as it
- was written
-From: Sean Christopherson <seanjc@google.com>
-To: Maxim Levitsky <mlevitsk@redhat.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241212062734.182a0164@kernel.org>
 
-On Thu, Dec 12, 2024, Maxim Levitsky wrote:
-> On Wed, 2024-12-11 at 16:44 -0800, Sean Christopherson wrote:
-> > But, I can't help but wonder why KVM bothers emulating PML.  I can appreciate
-> > that avoiding exits to L1 would be beneficial, but what use case actually cares
-> > about dirty logging performance in L1?
+On Thu, Dec 12, 2024 at 06:27:34AM -0800, Jakub Kicinski wrote:
+> On Wed, 11 Dec 2024 07:11:25 +0000 Hangbin Liu wrote:
+> > The first patch fixes the xfrm offload feature during setup active-backup
+> > mode. The second patch add a ipsec offload testing.
 > 
-> It does help with performance by a lot and the implementation is emulated and simple.
+> Looks like the test is too good, is there a fix pending somewhere for
+> the BUG below? We can't merge the test before that:
 
-Yeah, it's not a lot of complexity, but it's architecturally flawed.  And I get
-that it helps with performance, I'm just stumped as to the use case for dirty
-logging in a nested VM in the first place.
+This should be a regression of 2aeeef906d5a ("bonding: change ipsec_lock from
+spin lock to mutex"). As in xfrm_state_delete we called spin_lock_bh(&x->lock)
+for the xfrm state delete.
 
-> Do you have any comments for the rest of the patch series? If not then I'll send
-> v2 of the patch series.
+But I'm not sure if it's proper to release the spin lock in bond code.
+This seems too specific.
 
-*sigh*
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 7daeab67e7b5..69563bc958ca 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -592,6 +592,7 @@ static void bond_ipsec_del_sa(struct xfrm_state *xs)
+ 	real_dev->xfrmdev_ops->xdo_dev_state_delete(xs);
+ out:
+ 	netdev_put(real_dev, &tracker);
++	spin_unlock_bh(&xs->lock);
+ 	mutex_lock(&bond->ipsec_lock);
+ 	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
+ 		if (ipsec->xs == xs) {
+@@ -601,6 +602,7 @@ static void bond_ipsec_del_sa(struct xfrm_state *xs)
+ 		}
+ 	}
+ 	mutex_unlock(&bond->ipsec_lock);
++	spin_lock_bh(&xs->lock);
+ }
+ 
 
-I do.  Through no fault of your own.  I was trying to figure out a way to ensure
-the vCPU made meaningful progress, versus just guaranteeing at least one write,
-and stumbled onto a plethora of flaws and unnecessary complexity in the test.
+What do you think?
 
-Can you post this patch as a standalone v2?  I'd like to do a more agressive
-cleanup of the selftest, but I don't want to hold this up, and there's no hard
-dependency.
-
-As for the issues I encountered with the selftest:
-
- 1. Tracing how many pages have been written for the current iteration with a
-    guest side counter doesn't work without more fixes, because the test doesn't
-    collect all dirty entries for the current iterations.  For the dirty ring,
-    this results in a vCPU *starting* an iteration with a full dirty ring, and
-    the test hangs because the guest can't make forward progress until
-    log_mode_collect_dirty_pages() is called.
-
- 2. The test presumably doesn't collect all dirty entries because of the weird
-    and unnecessary kick in dirty_ring_collect_dirty_pages(), and all the
-    synchronization that comes with it.  The kick is "justified" with a comment
-    saying "This makes sure that hardware PML cache flushed", but there's no
-    reason to do *if* pages that the test collects dirty pages *after* stopping
-    the vCPU.  Which is easy to do while also collecting while the vCPU is
-    running, if the kick+synchronization is eliminated (i.e. it's a self-inflicted
-    wound of sorts).
-
- 3. dirty_ring_after_vcpu_run() doesn't honor vcpu_sync_stop_requested, and so
-    every other iteration runs until the ring is full.  Testing the "soft full"
-    logic is interesting, but not _that_ interesting, and filling the dirty ring
-    basically ignores the "interval".  Fixing this reduces the runtime by a
-    significant amount, especially on nested, at the cost of providing less
-    coverage for the dirty ring with default interval in a nested VM (but if
-    someone cares about testing the dirty ring soft full in a nested VM, they
-    can darn well bump the interval).
-
- 4. Fixing the test to collect all dirty entries for the current iteration
-    exposes another flaw.  The bitmaps (not dirty ring) start with all bits
-    set.  And so the first iteration can see "dirty" pages that have never
-    been written, but only when applying your fix to limit the hack to s390.
-
- 5. "iteration" is synched to the guest *after* the vCPU is restarted, i.e. the
-    guest could see a stale iteration if the main thread is delayed.
-
- 6. host_bmap_track and all of the weird exemptions for writes from previous
-    iterations goes away if all entries are collected for the current iteration
-    (though a second bitmap is needed to handle the second collection; KVM's
-    "get" of the bitmap clobbers the previous value).
-
-I have everything more or less coded up, but I need to split it into patches,
-write changelogs, and interleave it with your fixes.  Hopefully I'll get to that
-tomorrow.
+Thanks
+Hangbin
+> 
+> https://netdev-3.bots.linux.dev/vmksft-bonding-dbg/results/900082/11-bond-ipsec-offload-sh/stderr
+> 
+> [  859.672652][    C3] bond_xfrm_update_stats: eth0 doesn't support xdo_dev_state_update_stats
+> [  860.467189][ T8677] bond0: (slave eth0): link status definitely down, disabling slave
+> [  860.467664][ T8677] bond0: (slave eth1): making interface the new active one
+> [  860.831042][ T9677] bond_xfrm_update_stats: eth1 doesn't support xdo_dev_state_update_stats
+> [  862.195271][ T9683] BUG: sleeping function called from invalid context at kernel/locking/mutex.c:562
+> [  862.195880][ T9683] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 9683, name: ip
+> [  862.196189][ T9683] preempt_count: 201, expected: 0
+> [  862.196396][ T9683] RCU nest depth: 0, expected: 0
+> [  862.196591][ T9683] 2 locks held by ip/9683:
+> [  862.196818][ T9683]  #0: ffff88800a829558 (&net->xfrm.xfrm_cfg_mutex){+.+.}-{4:4}, at: xfrm_netlink_rcv+0x65/0x90 [xfrm_user]
+> [  862.197264][ T9683]  #1: ffff88800f460548 (&x->lock){+.-.}-{3:3}, at: xfrm_state_flush+0x1b3/0x3a0
+> [  862.197629][ T9683] CPU: 3 UID: 0 PID: 9683 Comm: ip Not tainted 6.13.0-rc1-virtme #1
+> [  862.197967][ T9683] Hardware name: Bochs Bochs, BIOS Bochs 01/01/2011
+> [  862.198204][ T9683] Call Trace:
+> [  862.198352][ T9683]  <TASK>
+> [  862.198458][ T9683]  dump_stack_lvl+0xb0/0xd0
+> [  862.198659][ T9683]  __might_resched+0x2f8/0x530
+> [  862.198852][ T9683]  ? kfree+0x2d/0x330
+> [  862.199005][ T9683]  __mutex_lock+0xd9/0xbc0
+> [  862.199202][ T9683]  ? ref_tracker_free+0x35e/0x910
+> [  862.199401][ T9683]  ? bond_ipsec_del_sa+0x2c1/0x790
+> [  862.199937][ T9683]  ? find_held_lock+0x2c/0x110
+> [  862.200133][ T9683]  ? __pfx___mutex_lock+0x10/0x10
+> [  862.200329][ T9683]  ? bond_ipsec_del_sa+0x280/0x790
+> [  862.200519][ T9683]  ? xfrm_dev_state_delete+0x97/0x170
+> [  862.200711][ T9683]  ? __xfrm_state_delete+0x681/0x8e0
+> [  862.200907][ T9683]  ? xfrm_user_rcv_msg+0x4f8/0x920 [xfrm_user]
+> [  862.201151][ T9683]  ? netlink_rcv_skb+0x130/0x360
+> [  862.201347][ T9683]  ? xfrm_netlink_rcv+0x74/0x90 [xfrm_user]
+> [  862.201587][ T9683]  ? netlink_unicast+0x44b/0x710
+> [  862.201780][ T9683]  ? netlink_sendmsg+0x723/0xbe0
+> [  862.201973][ T9683]  ? ____sys_sendmsg+0x7ac/0xa10
+> [  862.202164][ T9683]  ? ___sys_sendmsg+0xee/0x170
+> [  862.202355][ T9683]  ? __sys_sendmsg+0x109/0x1a0
+> [  862.202546][ T9683]  ? do_syscall_64+0xc1/0x1d0
+> [  862.202738][ T9683]  ? entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> [  862.202986][ T9683]  ? __pfx_nsim_ipsec_del_sa+0x10/0x10 [netdevsim]
+> [  862.203251][ T9683]  ? bond_ipsec_del_sa+0x2c1/0x790
+> [  862.203457][ T9683]  bond_ipsec_del_sa+0x2c1/0x790
+> [  862.203648][ T9683]  ? __pfx_lock_acquire.part.0+0x10/0x10
+> [  862.203845][ T9683]  ? __pfx_bond_ipsec_del_sa+0x10/0x10
+> [  862.204034][ T9683]  ? do_raw_spin_lock+0x131/0x270
+> [  862.204225][ T9683]  ? __pfx_do_raw_spin_lock+0x10/0x10
+> [  862.204468][ T9683]  xfrm_dev_state_delete+0x97/0x170
+> [  862.204665][ T9683]  __xfrm_state_delete+0x681/0x8e0
+> [  862.204858][ T9683]  xfrm_state_flush+0x1bb/0x3a0
+> [  862.205057][ T9683]  xfrm_flush_sa+0xf0/0x270 [xfrm_user]
+> [  862.205290][ T9683]  ? __pfx_xfrm_flush_sa+0x10/0x10 [xfrm_user]
+> [  862.205537][ T9683]  ? __nla_validate_parse+0x48/0x3d0
+> [  862.205744][ T9683]  xfrm_user_rcv_msg+0x4f8/0x920 [xfrm_user]
+> [  862.205985][ T9683]  ? __pfx___lock_release+0x10/0x10
+> [  862.206174][ T9683]  ? __pfx_xfrm_user_rcv_msg+0x10/0x10 [xfrm_user]
+> [  862.206412][ T9683]  ? __pfx_validate_chain+0x10/0x10
+> [  862.206614][ T9683]  ? hlock_class+0x4e/0x130
+> [  862.206807][ T9683]  ? mark_lock+0x38/0x3e0
+> [  862.206986][ T9683]  ? __mutex_trylock_common+0xfa/0x260
+> [  862.207181][ T9683]  ? __pfx___mutex_trylock_common+0x10/0x10
+> [  862.207425][ T9683]  netlink_rcv_skb+0x130/0x360
 
