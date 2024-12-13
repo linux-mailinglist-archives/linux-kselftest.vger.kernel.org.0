@@ -1,66 +1,66 @@
-Return-Path: <linux-kselftest+bounces-23320-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23321-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 932389F0EE2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 15:16:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D0709F0F1A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 15:29:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EF7F188FE72
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 14:14:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CF36162C4A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 14:29:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 194201E0DE4;
-	Fri, 13 Dec 2024 14:14:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 335C11E0DE3;
+	Fri, 13 Dec 2024 14:29:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="YOz02sLZ"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="OnQLFQg5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from YQZPR01CU011.outbound.protection.outlook.com (mail-canadaeastazon11020077.outbound.protection.outlook.com [52.101.191.77])
+Received: from YT3PR01CU008.outbound.protection.outlook.com (mail-canadacentralazon11020099.outbound.protection.outlook.com [52.101.189.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD1D41E00B4;
-	Fri, 13 Dec 2024 14:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.191.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E87BD1B6D0F;
+	Fri, 13 Dec 2024 14:29:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.189.99
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734099261; cv=fail; b=tJea8tVCW51P2417DEfQhaGB6o2f7OVq4WkomRyNN5Hn0uaYMV8rC1oZUERMwMoRydZmk4m36G3fgukNRSTRXntWBm5qWGPt8q+tS363dsGjYrQDD2UZpg4FHAP91FUe9qDSINUV9PKsLFfM3D4rWwruDg5Wh1DOsmOPKaKBiiA=
+	t=1734100178; cv=fail; b=ro3okvZFiS6cHVmKzinVu7E8x0k0mqUCtT1+1qhr4+sIoR5XcFXG7oBtrbtEd9g4KcqbJV6rDofxGQkn1levzdEt6GsIROr2UqhtmOX2B4F9ok4xFshAEsF8qvsWar+fpyJb6oPmMtTc0RM5kRw7TQp52DtKEQ0J8FvCgh/azGU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734099261; c=relaxed/simple;
-	bh=8QGPK4AORhc5ToA2xjd34ZeXeA3DvsXP4HqIxqbuJXg=;
+	s=arc-20240116; t=1734100178; c=relaxed/simple;
+	bh=t8FSQQqFVQGQN4NYB+cefeH/nnsCR92ussz19eGrZvM=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=WL96A3zFF6KA7fQ+2JgE6vI+z8ybaZX4qKYq77Rn/ppBw3mFmG7dwOLyf4E/jkxvr2ZJOM7lPQin17bJPgSHYk3160nQfQSOlakYpqX0IFQjL569G5K1FOzzrUqLp7c8Z8py8fTRhxqDbZ1FXDRmnDIczVYGmUuvWxWgNJF72HA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=YOz02sLZ; arc=fail smtp.client-ip=52.101.191.77
+	 Content-Type:MIME-Version; b=HDlGJrbu3w9En7igr9+IWMHzenb/KrxHe3LvF7RFb5/g2gMLgE+gDn0OlcFqZQAjehpuHqeoHXTITexPD0Ed9AePPnTWzFhvD0bakR3AAsRK3UREso0uMCbbd5wjL3kLZ/kRORnmCeMb0O6TLccmPyCmuG3yhxq6V+dG+f5a7j4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=OnQLFQg5; arc=fail smtp.client-ip=52.101.189.99
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=r1kXZmku1mLAIEWQK3si9hEvT92OMoNOBFLQ3irdV5YHfGV7h7+hmUG2FH3yBqxnMgmAfPPm5y9E1qlhlkfx7JgIpndoEa9pXk3JBAjeHPvPGiul2hT8bkWY+Yuma7lfzpGGMPoqF9VNL/yLjgXnGiovWQSfvoAeiGutheujryBTrUVEyg+ZfFvY6l30H0FRAsmkYY2HZQWQ4FBhrbO6D0JIAnRfz9tL5wpdx671H/IGXYelQ89/lX72AUmghFNQTKOPc+v1Dlu79ZxkfzCsw4oSA+m5REc4QzCKkh3iRWcPd7ItqKUa/+T12N6wOWNqzDRGyYu2xjIPqvMAoJCrGA==
+ b=UZ/yxgLxGTlohlu9Lx4L5esRflaVeCsJAWB8GR4/UZXEdSeaQoUqh+60Rpus6oI9A5L/8OvPQP+YRvYdiKqu+e6sitPyerkGkpyaM5pOytDQ0WYpcbNUvabS/+Sj1Hoa5Ny5Ct6tdHKS4XHtl4stVMDiRIxrDP6c/DPK03f2GlcMsLzxOluB6s5GFFwP/l7JwoVr0es7VTBh7L9BO5vSdrpl+S9vcDMPUGDMUPXhQr3ZNliuK8xXgtj9FLt6UpZdZHF4GLHVrQ83KkNBkJeMI5cp9M7Rkb60VOqNO6nE77WApHq0kJ4kMjTPWGzSYRaEFh5vdzx/F0ehUO0gHFF30A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=duCLEeJpptsivnIj3bTO2pUkf0z09ZnhRHYKpVshLIU=;
- b=WHlOfYOXkweVTCsr7nqo9jm0KrA5K6vTwEk0WHWZU/VlgxMPWcsKLQmEI8b3IrsXQdsnlW5VGx18FZEj0jx6ablqMAiGQLnOcnGUy/97Gh33FHWlou46Jkp31Z6//srUbprz87PTYvMvpBwExTVn90Us/o46SvhoBF28tS6UM9M7rMuFC3l/BZmB4KteP/al1NWJGZdnXkrcV56K6unSR1CjlSDeFvYDDx7bRGfPn5j7dGD8vv5rn8lW9q1SykyozafLvzI1yn+cayVf2maxK7NRKyNN1AxDpcDjY8khu0+dBb21wxPKvXWY38QON+iC7tn396oHFP4UbaBnkqP3zw==
+ bh=VIaTi5Ib+S48hgdzga8ZXRMu7TGkCxyXwLSB5/M/wGg=;
+ b=WwJECz7aT3o7PxWFsC7MoyoRedUoi0PzNmE352qDhuQbrSuQ5JpxNlwKW8NOAa05uWzTUSRes7FbIzd4aWMKZTk4wd3QG2t4QuU5uXjfX4YxuT3Qxoj10VIRHKIsVjgnVi0ZXihxGLQ+eoGrULzeiEcnR1xkfoeUAt12XVOfSkIxxUw8y3/J9wIlii13Esjjl9D7MTx9wbEUKlLMXjPiYmM5UV7wgv8aB2ardWtAGFQbumMLM7tsN4gPanyhY+FG99UYvMFyMsmcuydl2w3Qouy/IxXJEIg3iej6dOgYby+AKb3+08do8RGPRVUBTyuh8FPRjreRA1sV/5dJ/mODvw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
  dkim=pass header.d=efficios.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=duCLEeJpptsivnIj3bTO2pUkf0z09ZnhRHYKpVshLIU=;
- b=YOz02sLZPDrpsYVukcMnP1wu/AFzbYK+hS3nbTb47vejI4Gnrfst7jBXpyGi0IF/kvNZM7Q8eqHbxK2cn+EQDC0HjIZZ0UM5HjICeabjXpey301uGhK+OLr6GuINUEqSHCLPnBFw13qxFsuQnt4kd8sLDGvqBEq3BPexirNdPKZuwBIKbnpKq6S0jDG0fRjpCMETECptAYNlySU+tB8fOCsV6k31jfZHDZ3LUEKozRAl9nLHhZF5scKPFvXZDvcSgk6Tkk+5GyGXNkXdP014YGnuZYGJWnFQ5Bprjst7owbw203t779pqcCWLulE3xyFn8UJ6838P5nBVUJKH5Hc9A==
+ bh=VIaTi5Ib+S48hgdzga8ZXRMu7TGkCxyXwLSB5/M/wGg=;
+ b=OnQLFQg58/5DD86ZvNshFzzrHPN4UFbSZ9iyw3hYwawaW6OM2G87DYe8u8oeb9UJk8txAw5s6ojUVcN85fvTvBKMZLFf34UK57MwBQNSfVfRCA5y+NfJ6zmtdoa2AoGmeYk1zcCpVgqaVfcLJcCi9mIkmca0hcmEdzfEE0ezi5b3jfk/nIjZUGOXIOUf3akpvRgMhuVoPSnOM04+KN7o1HrhOPcz6Bv6xPPJ8sK6leTxYqGwlNDUzAGpqUeARpVQ5oU+n5+OOU38OvXITWfH4fP/i92aUzGKPsVnnj/9b2u8Ogtr3mIqzgWLv3JTHSMrvZ1TRm29Hyt1Zs0lb+Q60A==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=efficios.com;
 Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
- by YT3PR01MB5666.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:66::19) with
+ by YT5PR01MB10897.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:137::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.18; Fri, 13 Dec
- 2024 14:14:15 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.19; Fri, 13 Dec
+ 2024 14:29:32 +0000
 Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
  ([fe80::50f1:2e3f:a5dd:5b4]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
  ([fe80::50f1:2e3f:a5dd:5b4%5]) with mapi id 15.20.8251.015; Fri, 13 Dec 2024
- 14:14:15 +0000
-Message-ID: <5fe473bd-600e-447a-a321-cae3d838268f@efficios.com>
-Date: Fri, 13 Dec 2024 09:14:14 -0500
+ 14:29:32 +0000
+Message-ID: <d1e64ae2-9a16-44af-afca-a1940f27d4ef@efficios.com>
+Date: Fri, 13 Dec 2024 09:29:31 -0500
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] sched: Move task_mm_cid_work to mm delayed work
+Subject: Re: [PATCH v2 4/4] rseq/selftests: Add test for mm_cid compaction
 To: Gabriele Monaco <gmonaco@redhat.com>, Ingo Molnar <mingo@redhat.com>,
  Peter Zijlstra <peterz@infradead.org>,
  Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
@@ -69,14 +69,14 @@ Cc: Juri Lelli <juri.lelli@redhat.com>,
  Vincent Guittot <vincent.guittot@linaro.org>, Mel Gorman <mgorman@suse.de>,
  Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
 References: <20241213095407.271357-1-gmonaco@redhat.com>
- <20241213095407.271357-2-gmonaco@redhat.com>
+ <20241213095407.271357-5-gmonaco@redhat.com>
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Content-Language: en-US
-In-Reply-To: <20241213095407.271357-2-gmonaco@redhat.com>
+In-Reply-To: <20241213095407.271357-5-gmonaco@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQBPR01CA0078.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:3::14) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+X-ClientProxiedBy: YQBPR01CA0146.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:7e::14) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
  (2603:10b6:b01:be::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -85,333 +85,341 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT3PR01MB5666:EE_
-X-MS-Office365-Filtering-Correlation-Id: aee3afe5-8bfe-4968-2d08-08dd1b806d20
+X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT5PR01MB10897:EE_
+X-MS-Office365-Filtering-Correlation-Id: 98dbd9ad-70cf-4335-0a60-08dd1b828f89
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|7053199007;
+	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|7053199007;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ajlPN0VOajdYV3ZlUDZvMFV4UHdLc2c5dERrNWFXeUtISlpiQ0dPWXFxbHBi?=
- =?utf-8?B?UEZJNVZpU2tVYkFlQUQ4R29sRi9nNmNEZldyR0tjOGt5YlA5NnlibUlSTmE2?=
- =?utf-8?B?Z3BQdCtsYWZ6TUUxSzROVGxvekVjQVdWVnlVVFk5Nk1vKzdYcG1zWDVpQWlm?=
- =?utf-8?B?N0RuMGNaa0NxUzhHRnRvaHdmamtoeWoxSHNlTVFVM25iSHZ6VitsTUxRRy9Z?=
- =?utf-8?B?T0NTRHNXUG9DME9lbGtaVlRrdUxleXpEbHAvSXhKamJtSzRSNDZVRm9jSWF2?=
- =?utf-8?B?TjZVck93MTR4aXlKb21CdDlnczhmV05HTEZYcWY2QVllMkZTWGFzZkRSTllq?=
- =?utf-8?B?cWo4UkhIT0VJWktTalRHMGp2VVZPTitVeXRBa01zaEhjOXlVcTFWOUpQMEg0?=
- =?utf-8?B?R09nVmRKaTI0azZ2bk41ZnBJQkZjdDFTSHIvWFhTa0VJcjQ1ZG9kNVVlZ3dG?=
- =?utf-8?B?c0N5cUJucEVydExtQW1zN1pqVk5zcklrbmJMS0ozb3VOeis4Y2FvVUZ2dStO?=
- =?utf-8?B?OUlUa0tQQ016bDV1QUF5alM4YmhnTjBQWVIrSWpjNTNyL2F3NzdhTGtzMnNu?=
- =?utf-8?B?R2RsOVJtK0Jmb3V3Uk1ncVRrQ3RRRjFWU0xQQk9kSXhDMlVQcDlGN21FUVB1?=
- =?utf-8?B?eU41dkZ6aUUySEtkY0NMTVdIRDRNLzAzMzQ0RDVCVTFLZ1FJYVdody9uRkZk?=
- =?utf-8?B?VVhjc0VrQXhoRGpLbW8ySUdpT1lUT20yK0JJcHpyVEhEZGJtVWRXSzBTZTcr?=
- =?utf-8?B?MUdyTm5RQWlYTHArTkZTeVRZR0oxajlwdDB0bGx2VFdaY1RPa2k4QTVIUVV4?=
- =?utf-8?B?WXZ2RmJqemc4N0tSN0dwSVVxUzZjOEFWMHFweVBhUHRVN2FBbzU3bmg0c296?=
- =?utf-8?B?anRoZ3hWNkdVdERXOUUzQnF5TnAyeWF2ajVnZG4ralZ3SUFCazcrek1TanVC?=
- =?utf-8?B?ZjNhSk9lYUZKZE9QVFgzZlJ4b2lleXdyOVd0MG82TitNNDF3YVZWOE1LWExL?=
- =?utf-8?B?WFJ4ZEpsV0RsbFQxdEdLMDZUcTA2SmdZdjNGN3N5WTZYMTluL2Y3cko5NC9s?=
- =?utf-8?B?MWdkdG0wZCtSMHd5OEk2SjVnQXEyYmdjVHQ2bldQLzlJSHQvR0IzK3oyTU1H?=
- =?utf-8?B?MnNaSkRLVnZ0QUxTYmJrTllKaVdOV05DUjZOcFFKZmY2aEpOckhqbTQvYU9q?=
- =?utf-8?B?Qlpub0thbkUzaHI1d25velc4WFk3dG1ZY01FYVdjK0R1LzBnOFlJck1sbG41?=
- =?utf-8?B?Y2VSY0ppOVdCSFRUZWJya0NkRXVnOWJzVUhMcS90ckx6SUc5dDRFbUxUQUtE?=
- =?utf-8?B?VzJlbXVqcTdvOHBWcFJVUGl5U0w3ZVNSMUxvZStVOUpid09SMnhVL3lPNGJm?=
- =?utf-8?B?RXZQRzhsdkhrYmdHQ2xEdS8rLzM5UUF0RXo2WEpjblZobVdhL3hTc3FBU0hj?=
- =?utf-8?B?S2dFNmxKUndKVVFPNDNCdGUxVlpzY1hYWDc4OTZFby94cXNnSk1CVUtZa0tK?=
- =?utf-8?B?Zkt4YzJpTUNlRTFobkRkeFdmaGlCUHV2SHNRTXVxNm1EZlRLNVNaVHdHdjRh?=
- =?utf-8?B?L2FSeWdHcGdHRUcxQVJrYVBDOVF5U3ZJUGRuTWhzSWllbk1kclZEaUVzS2hj?=
- =?utf-8?B?aGRUSXdPTGZJVTg3bTVlRTVEUVR0QTN2bCtObWhCcGVqNldianR5MXZPTFJm?=
- =?utf-8?B?ZVRlUWVoY2ZiSCtwcWhNNEY5YkNUdzh6TFZ5ai9oTkZLUElPOFRrRnVwUFRN?=
- =?utf-8?Q?dTb6J3RkTz6Bxu6ulw=3D?=
+	=?utf-8?B?SFdhOGtVeUx2RmtMT2pGTFErcEVISkdMdDJmY0xIZ2J2U1p5UDJEN01VRUNR?=
+ =?utf-8?B?VVJ1Q1B5VGtoV2pjamdZSTlLT01CREdGTmpPeFQxU3hJUVZvUkR0QUJRLzhG?=
+ =?utf-8?B?WXdOMklBVk5DeW56MEdURmJCamVueDlBSXRCT0NBeEthWnZ0UWgzNUg3VVpQ?=
+ =?utf-8?B?NjV2Q2ltQ3BoUDNuZVptKzcrN1pRL2tFaHoxUGJRMkpBWDR2N1hRMWF6WTlO?=
+ =?utf-8?B?TmxHZWRDZmpRd0RqNmZqeTJKbU5QY2psczdlYVU0SXBGSG9EZjQ3WjZlWDBp?=
+ =?utf-8?B?c210K3N2NFZPL1pVRG5TTjlTcUU3b3FWOWJIR2RVZFlpSFV6WHJqMC9mTlFZ?=
+ =?utf-8?B?NjdoRTNKcHFTck9ycmhyZHdMT0ozN0h0TnludENiNzAvczVZMUYrdWJ6YWFm?=
+ =?utf-8?B?Z1pqL3BBRmcyUmpZTlVMY0x6V0poalBEMmhKVjNWUm5zYUxsMkVTbUFsMWFX?=
+ =?utf-8?B?akZabEFZNFgrblVzczVnRVdDNEJTRWVsOEQ3TEk2c2o5VDJSZDJic3E5ckpW?=
+ =?utf-8?B?R0l1dUc3T291OFFBM0VOVVNWdllhK2ZsbG5TQSs1bk5PdU40NEtLNzA0WFRk?=
+ =?utf-8?B?eEJUUEFEZ252blNqeXRkZS93cVRhd3VBYjlTVlRiczVXMjB0ajJGYi95N0Zk?=
+ =?utf-8?B?K3RwY3hlU2JCOTVXNXNPQk5Pd2lINDJYMW5YRnhKR3lqVXB2a1pvWkRvb2Va?=
+ =?utf-8?B?bVNLWno1NkU2dXBOWlNUdFdxb0xKRWhHY0xyZHJkbGk5aXZUNnIzQVlrQUxF?=
+ =?utf-8?B?TDhGVDM0eDNzSWZHL0Rzc1FKUVh1dnpRc2lBaXdpLzNHb3RrZjZwSmprelY0?=
+ =?utf-8?B?Q1BEVGRXZTN0MUtIQlhFMGZ2dlpBVXhpM1R0cEdDWVJxNUFDQVNYSmxhdVJP?=
+ =?utf-8?B?MVBnSXh0YnFVeS83Y0d0b2Q4djFHUXlGYk1UTUpsR3dIbXU1ZDV4RVZQZk9P?=
+ =?utf-8?B?RWQ5OE5mMTZYeU9tdWJCOWt4MlNROVh5MU45WVVnTEtyeXpPVTdMUXFWQ24x?=
+ =?utf-8?B?SVhFSXBTbGRKUGlkS1puTEtTU09CWFNkZ0hvZDNseklkWWw5YW5CWGdWUTc2?=
+ =?utf-8?B?c2ZrWFdrRC8yUnJGeE5KMnQvdWhFRW1IQmFRc08xUlhMSi9hWGlCa1FPZHFx?=
+ =?utf-8?B?aVkwb2pqd2NraFRCL3pWSHJuTzVobVV0VXJEcTVZRk9POVdaTENMellBQnlC?=
+ =?utf-8?B?aVRDK3lSNHozbjZMeHQ2ZEUxUmpGU0pHeHZNM3VOekhVVnduUVpnY0Vsb2I2?=
+ =?utf-8?B?RWl5KzhMcko2Q0hNRG5uRmhmbG81QVZ3TDZ0a1BpWGo1dXd0dG5Ddkx4VEJQ?=
+ =?utf-8?B?YUsrS1hPZW5EUFdldWlvZVhoeittNlIrcWJ5L2ZjVGZHN3loNkkxdURVZXk4?=
+ =?utf-8?B?LzJhd3NGSlgrNUs1WXhNdHovNkRicDFHMkI1b2k1SlNqMk9QVEd2dWZWazJM?=
+ =?utf-8?B?Yzd4Vnkwb25uTktRZTFRY1hGa3pmKzR6VGduaTF3OFpkTGhQK2pCTGFEbHpR?=
+ =?utf-8?B?TU1GU0xNYUc2WjFiY0FBMncyVGxkSG1mZy9wNDRlM01Va2NVUzR1a24xU3VU?=
+ =?utf-8?B?VWF5VDRwMXhSaW1OWGNqWk42RHVPSkhNcytYT1ZJdkl5NitqNU9Bd0xqQlFl?=
+ =?utf-8?B?QXU1Z1dVQUxuZmFnL0JVODBXMG5tUG9OOEltc1F3M2V1UkFyZ0tRVjJ6MEkr?=
+ =?utf-8?B?cVk4MTZvKzdsb2FBVXBwSUlBZFFrckxLVXViVDBOMi9CaDNPYlVOaXAzWlRZ?=
+ =?utf-8?Q?RA+BEQi0QkdPzi6koXON0dbQZ9K2VCSo7kS4NHw?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VU9ZbXVYNmxBeDlQTWhFcFdsZW5Jc285OTRTdUo3bjAzdWFEbUMxakhXSm5h?=
- =?utf-8?B?RjhJZjFyV0RPYzBVcFd1ME5KeGNqdVhKNm5oeUJod1I0STJ1V0IwRmxFM2RF?=
- =?utf-8?B?V1VLOEV4dHY5QXpScU8zWnpkbWVHM0ZORllFL3AwTFFkcDZuK1hJSmI4US9u?=
- =?utf-8?B?dFVBZkk3NEFQOXMrQmZzQ3dBYzRnQkdhT2hNSW9iV3Mwckp3MUdYenVyOWlX?=
- =?utf-8?B?UTc2bnZkWS92eTVydTVKK29kQmpqZ0krQXlvTWFNdmhLc0xWN0xVb2lBL09i?=
- =?utf-8?B?YnRjL3pTZ3ZGbmFxSXpXYmVSbXBlNjB2NkpsM0F1T1lJNVdJZjBRUW1OWHVn?=
- =?utf-8?B?K2N3bWhIcFVrc1Bnb2ROVXVLYlE1cFJhRDY0QUMvb2tJbC95c3dpQ2JlSzlu?=
- =?utf-8?B?Nk8vd2ZwcHArNXdWaDNuUm1xVC9HM2VQdkdWTlhxZ3lZSVZUNVU4SW1SWGdX?=
- =?utf-8?B?N2RTTUJWa3REQ0l0UmRsMTV1YUpxOEs2OTh5b1VmVm42ZWI2V3JybDF1Lzdx?=
- =?utf-8?B?UDJWSWt3MHdGNWZqeGl0TUNjZE04Mm8xZWMremltaDJDalpOMEoyNVhSNUYx?=
- =?utf-8?B?cGUyN1hvL1dsN1VxcmswMjY3RnhwMlVxZkJmYWJqQWxDZ0R5Y0N0cHJlVGw3?=
- =?utf-8?B?MUdzSXQ5VytMMUlFRWM0R0E4NEN3Y2xxQXgrSDlRS2lQeWFJWjM1QnVYVFBt?=
- =?utf-8?B?Zk1NVGRBeDl3b1hZSzFxOTIzVEFWUERXbzNsYnVSRytrRjZGTTgxUVNhU3hR?=
- =?utf-8?B?ZWQ4YUxHbGVPYmVkN1NaN1U5c2JiK0hXK3Y5WnVNcWFGMGNuU25KN2tpY1Rs?=
- =?utf-8?B?RmxjMVZkSDZoUExIWm9iMnk5ZnI2MWljSVVrdFlFVHJHcnBJL2xpZi85YmN0?=
- =?utf-8?B?K3dHNENIUEcxOEJWTnZiWG9UdUt2NWJ2elJlOUtuNkRkSHY0TERXN3Vrc1ZF?=
- =?utf-8?B?TmRCRkJ4S2dMVDF2TW1kbkJUd0YzcnBiRUN6Tml1dGpRU2VuNnV0TC9PK3Zz?=
- =?utf-8?B?cnIrVEZoclQxRWxiMEVzTXV6VzFhdmNNMW1nM2NHbWJReUdaUTFIc3A2Ty9G?=
- =?utf-8?B?R0ZUTXdrSkRtTEZMZzlka25WNUxYNHl5UHprcXJIQ3I4WGR0NWRGN05vbDhD?=
- =?utf-8?B?dVQ0UUQ4S09VbGZ6NzZBT3F1YmlpWUFuZFBLWUJzSldlYnkwNmcxZmFMdlhm?=
- =?utf-8?B?cWNyYjd4NE1lT1lUZmg5QmhSNEtmeWNvb0N0VUt3VzB2OHdwODFDUUVVbGNO?=
- =?utf-8?B?R0hPT0I3ZnhwdTJ5VWVLZyt1d052dnpUWjNQeDlZUVkvQmtUUGMrRzE0Q2Zv?=
- =?utf-8?B?cmNEeXYvaUZRSkpyZFIvRU56TmdZV2drUWVIcmtsdVJPNktiMWhCRUpDd1I1?=
- =?utf-8?B?MEVoN28xNjZXVEFDcjRVdnhVYUFCNWo3NHdFbWdRWVhsL0hOTjJ6WElFMkZm?=
- =?utf-8?B?eHY0Tk9ianFScmN4VnhJQnAwTHJTVS94dlRhTUhiSnJUOHYvaW1MZ3R3bzNz?=
- =?utf-8?B?cWR6NHY1NFhHblZIL0tLclNpZFIxaVpGRGpuMUp5V3g0NWcrZjFqUVdkR05Q?=
- =?utf-8?B?T09GSTRkekpwZ2tTVSs5MUw1RGg3OFJtcXoxVVJ3RzkveEFqbWpVUEh4T2lM?=
- =?utf-8?B?QjY5UmRabVcrMUd2MmNFcFJHSC9VcXhlcFhtenVTQUlXYVc3UG5sa09FamJk?=
- =?utf-8?B?UjgwUElQaDRMS3pQZHhVaUoyYVlWTU9ReE53YkRqZzVOVFpOb0VqdkY0R2k4?=
- =?utf-8?B?akJjU2Z4dk1abHFKUVFjdEIwVVdEcDhwOXBjcG83bTBwN0plQzEzZUgzUGll?=
- =?utf-8?B?cmoyUm1mSzZTVVFjYmJCbEdwTWg2R0xVMUtQMWNHSTJOdkN2YlZoUFdhVTB1?=
- =?utf-8?B?WmRMWUt3NTEyZHNzQ3ZQdmJnZklaaVA2a0dKNUora3J3YWxiaGpWeTQ3Q0xw?=
- =?utf-8?B?NnY5YjViZ1pmUEdPRWFYNnV0MnZLUmFPd25ybWdDS3dWaE12d01zUGR5THhX?=
- =?utf-8?B?WFY2Q2plMDRFQ3R1MVlPVkNpNHI0cTErN08yMUZJd2VIcDljcWlKTHBIenNJ?=
- =?utf-8?B?S2hzY05NTHkvZ2dDNE44aldNaXFRRG9xbTJ6ZVdQTGhQdkxKNzRxUjJUd2NJ?=
- =?utf-8?B?b3ZFTTh2TmJVajZCMW5xZ3IwT1hwRDQrMTZEVHBxcjlPanFhcUx3YzRuamJ4?=
- =?utf-8?Q?29Dm5Zv1880CqfhJa78r2gs=3D?=
+	=?utf-8?B?RmhUTUE1MGFDRHFBTGtRQXM0dTNjQU1tSWhnNHJzV2pTTllwY0Q1MGVGYzFa?=
+ =?utf-8?B?Y3NuVzJ2bElvWlhLZnloZGo0N0tIS240aDhmTmVURFVENkJneW4rcllYQURB?=
+ =?utf-8?B?aFJDNlV0T2dnSjJBMU5HTEwyZGFNU1lmUGtOWGdIUDYzTWRWb1NpdXJhd3VZ?=
+ =?utf-8?B?UldSZVR5U2JlUld0SkZydkVUUHUxWEQvcEFGZGY1M1UydVlJcWl1V2tkSTFj?=
+ =?utf-8?B?Y3cxT01pWEJvZDJvTWl0S1dncVp6K3FuaWhacUZYOEY5UlpIZEJ6NThVbXBC?=
+ =?utf-8?B?SmxqQnRlS2dJdEZneUsyVFRTL28xSzhzRnh6L09FN1VRV3dwUGw5cEt6MUN2?=
+ =?utf-8?B?b1UvY1VTVmIvR2hQbFdYTmkwNW9PNldEMGtEYmVuUGJPaGNhUktIeEVKbDlo?=
+ =?utf-8?B?Nzk5ZzIvK1NpanA5QzA0SFB1VjBTUFVFN3RnUkozb0pDMUVJaGQzR0RXRG9W?=
+ =?utf-8?B?eStLMC9CRmxpNFVKOSsveStlamRpOTZNZERaK0FDY3Q5cithL3lVQTYyQzRG?=
+ =?utf-8?B?WXVqRExycHpnNlFXWEs2aVdzQm9Zekt0djZYcmp1b05nSlZEZkVMSVlTbldJ?=
+ =?utf-8?B?aEFoa3UrOUw1VHdNUnBQR1lPamhyWURjUWJNeUVnRHhmRFVsMHBPRUtUakxY?=
+ =?utf-8?B?K01OZ2lYUTZoNHNYWnFISlFKN0dBcFp6ZUJGcStzQWFZcDZWbnZTUUJUc1kz?=
+ =?utf-8?B?emFPZ0d5VmdPYjdMTFI1ZEhHN015WHpVb2JOMnR0bTR1TVZ6d3pxU0NObzFP?=
+ =?utf-8?B?U0hCcWE4eWdGZ1JTUGlUeGh5enhqc1IzeEVibzlVSi9rdHdDVnZDWTBUQ25V?=
+ =?utf-8?B?Z1dIUWh2QUhKWW9HZDIzd2NhL0QxbTNuSW42QmJCaWliUm52L3lOSGdTUnRZ?=
+ =?utf-8?B?dWQrblRTRXBtQWxKRFNub242MjdrVWV1c0pCZlp0aHV3dEtGSExsNlBXY3pa?=
+ =?utf-8?B?ejhMQi9wWlBXdjlpL1J5T0ErZUJLK252MFd3UGprQVYrT2VaZkxxdXViUVhm?=
+ =?utf-8?B?NytzSXdnejNrVXYyN240SHMxN28rQjl6OXFRZ2daODhCRG5uM0dvK0duZlZl?=
+ =?utf-8?B?WURUemtxNUpkakZQQktKWndMbmRoUjVUUnpEYWF4bXJRTXdrTk9Pazdyd0tX?=
+ =?utf-8?B?OHVrdnA0UW1jQjNxOFlYV1lDektFK1ZBZmdxei9vaHhnckJMbC9wSHIxNTQ2?=
+ =?utf-8?B?VVFiUnVPaXNGd3YyOW50c1lXVTZNZ1FNWTAvay9CV1MvRWx5bWpMMEMrT0Jy?=
+ =?utf-8?B?OU9SNzlxK2luakhRS24wbWV2c1llN2wwRmxwQ2dueUpRaTRvbWtRNiswcWVy?=
+ =?utf-8?B?Z0k1SjRNL2tHQ0ZQbWs0b2p2dS9od1lkRWJvT0ZlTFJCRmN4RXhtQ0RvY3lH?=
+ =?utf-8?B?VFFRRDYxQ05Nc2MxZUFqUEpqemtPZXdYUGlRemc5eHJhQU5yV2ZNKzU1N0Nj?=
+ =?utf-8?B?dTNVL0UyanBCWWhKMTR6czRvaDdpRmJnZFdRYTdSR2txVkw2WmhnclRaWnJw?=
+ =?utf-8?B?aDlxSm9MRnF5V1VraHhUaGgra0UvM1VGdlFaRTZYMnVUSUFqa3JOV0pLQ3BU?=
+ =?utf-8?B?b1VFRlVKL3IyMmFCdjRScjJ0b0M5alQ4eW9oV2xsWklwd3h4aVZ4MHVNc2V6?=
+ =?utf-8?B?UTBCUjdycGRiYXZGQXE5Z1ByNHJpdzFoWEFwUEtTb0x6Z2M1SUttZitWTkV4?=
+ =?utf-8?B?YkdiOWN2SEloL2dsNlJsRWYrbHg3VHJnYjhUZjREVDZJb0Q0Ymw0UlBCM2Zr?=
+ =?utf-8?B?dDdpamMwc056cE1QWXlxNHU4TzZOTWdVaEthZlR5M240Z09pRzVNdnBIdUxU?=
+ =?utf-8?B?V0tsd3l2bjU2TWZRYjhrVmtSKzlpUy9mRHgwazhVUE1nYUxkWVEzeE9UUDJk?=
+ =?utf-8?B?UExIVCsrQk9ZS3ZNaFhLamJpL2JVbVo2OTdOWGhaRlZVTTYzUU5sVkdrU1VR?=
+ =?utf-8?B?WnY3NTB2Z1RYS09vWmg5WThpVnZVWkhkWlBkQWRManR4ZENJbzZ2S0l0aG8x?=
+ =?utf-8?B?UWkyd0g3SXVDM21keDV6UVFxS2g4OHlIRTBJQ3g0Q01pbmo0aDlBQ0I4YTVR?=
+ =?utf-8?B?dUEyUHNYR1RDT1JsUll3NTRvZmpqcnAyZ3AwdHBRNWcyL2lxSzZOckUyWXhE?=
+ =?utf-8?B?emRBc1lzbU5mMmExYmRROTFKZjdTSDZVVWRYWFd0VGlhZ2tBVGM5YUdVM3NB?=
+ =?utf-8?Q?fpCZrQI+/F/Q4mZ+VA4Jq8I=3D?=
 X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aee3afe5-8bfe-4968-2d08-08dd1b806d20
+X-MS-Exchange-CrossTenant-Network-Message-Id: 98dbd9ad-70cf-4335-0a60-08dd1b828f89
 X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2024 14:14:15.8185
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2024 14:29:32.5513
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OEnDW2HYVC8HoNvw8HtsZp2TnVVp6qpidClNKPCKSaX8LMi4FKB25kGIuFJ+bGOfIZbckfFYr9eKo2DZo5Umg4F392K/RFx3AngA0ytsKfo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB5666
+X-MS-Exchange-CrossTenant-UserPrincipalName: aMZjTWAtWTf0YauXs5hNjIZKCVxI1t25Ego+vyOTtwl2ZL4r9qHe+hW4wO1w6DHwYLoaT4+KZeVN6xJWpbsmfdRpGSkNp9itZOUArNIOUZM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT5PR01MB10897
 
 On 2024-12-13 04:54, Gabriele Monaco wrote:
-> Currently, the task_mm_cid_work function is called in a task work
-> triggered by a scheduler tick. This can delay the execution of the task
-> for the entire duration of the function, negatively affecting the
-> response of real time tasks.
+> A task in the kernel (task_mm_cid_work) runs somewhat periodically to
+> compact the mm_cid for each process, this test tries to validate that
+> it runs correctly and timely.
 > 
-> This patch runs the task_mm_cid_work in a new delayed work connected to
-> the mm_struct rather than in the task context before returning to
-> userspace.
+> The test spawns 1 thread pinned to each CPU, then each thread, including
+> the main one, run in short bursts for some time. During this period, the
+> mm_cids should be spanning all numbers between 0 and nproc.
 > 
-> This delayed work is initialised while allocating the mm and disabled
-> before freeing it, its execution is no longer triggered by scheduler
-> ticks but run periodically based on the defined MM_CID_SCAN_DELAY.
+> At the end of this phase, a thread with high enough mm_cid (> nproc/2)
+> is selected to be the new leader, all other threads terminate.
 > 
-> The main advantage of this change is that the function can be offloaded
-> to a different CPU and even preempted by RT tasks.
+> After some time, the only running thread should see 0 as mm_cid, if that
+> doesn't happen, the compaction mechanism didn't work and the test fails.
 > 
-> Moreover, this new behaviour could be more predictable in some
-> situations since the delayed work is always scheduled with the same
-> periodicity for each mm.
+> The test never fails if only 1 core is available, in which case, we
+> cannot test anything as the only available mm_cid is 0.
+> 
+> Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
+> ---
+>   tools/testing/selftests/rseq/.gitignore       |   1 +
+>   tools/testing/selftests/rseq/Makefile         |   2 +-
+>   .../selftests/rseq/mm_cid_compaction_test.c   | 157 ++++++++++++++++++
+>   3 files changed, 159 insertions(+), 1 deletion(-)
+>   create mode 100644 tools/testing/selftests/rseq/mm_cid_compaction_test.c
+> 
+> diff --git a/tools/testing/selftests/rseq/.gitignore b/tools/testing/selftests/rseq/.gitignore
+> index 16496de5f6ce..2c89f97e4f73 100644
+> --- a/tools/testing/selftests/rseq/.gitignore
+> +++ b/tools/testing/selftests/rseq/.gitignore
+> @@ -3,6 +3,7 @@ basic_percpu_ops_test
+>   basic_percpu_ops_mm_cid_test
+>   basic_test
+>   basic_rseq_op_test
+> +mm_cid_compaction_test
+>   param_test
+>   param_test_benchmark
+>   param_test_compare_twice
+> diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+> index 5a3432fceb58..ce1b38f46a35 100644
+> --- a/tools/testing/selftests/rseq/Makefile
+> +++ b/tools/testing/selftests/rseq/Makefile
+> @@ -16,7 +16,7 @@ OVERRIDE_TARGETS = 1
+>   
+>   TEST_GEN_PROGS = basic_test basic_percpu_ops_test basic_percpu_ops_mm_cid_test param_test \
+>   		param_test_benchmark param_test_compare_twice param_test_mm_cid \
+> -		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice
+> +		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice mm_cid_compaction_test
+>   
+>   TEST_GEN_PROGS_EXTENDED = librseq.so
+>   
+> diff --git a/tools/testing/selftests/rseq/mm_cid_compaction_test.c b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
+> new file mode 100644
+> index 000000000000..9bc7310c3cb5
+> --- /dev/null
+> +++ b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
+> @@ -0,0 +1,157 @@
+> +// SPDX-License-Identifier: LGPL-2.1
+> +#define _GNU_SOURCE
+> +#include <assert.h>
+> +#include <pthread.h>
+> +#include <sched.h>
+> +#include <stdint.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <stddef.h>
+> +
+> +#include "../kselftest.h"
+> +#include "rseq.h"
+> +
+> +#define VERBOSE 0
+> +#define printf_verbose(fmt, ...)                    \
+> +	do {                                        \
+> +		if (VERBOSE)                        \
+> +			printf(fmt, ##__VA_ARGS__); \
+> +	} while (0)
+> +
+> +/* 0.5 s */
+> +#define RUNNER_PERIOD 500000
+> +/* Number of runs before we terminate or get the token */
+> +#define THREAD_RUNS 5
+> +
+> +/*
+> + * Number of times we check that the mm_cid were compacted.
+> + * Checks are repeated every RUNNER_PERIOD
+> + */
+> +#define MM_CID_CLEANUP_TIMEOUT 10
+> +
+> +struct thread_args {
+> +	int num_cpus;
+> +	pthread_mutex_t token;
+> +	pthread_t *tinfo;
+> +};
+> +
+> +static void *thread_runner(void *arg)
+> +{
+> +	struct thread_args *args = arg;
+> +	int i, ret, curr_mm_cid;
+> +
+> +	for (i = 0; i < THREAD_RUNS; i++)
+> +		usleep(RUNNER_PERIOD);
+> +	curr_mm_cid = rseq_current_mm_cid();
+> +	/*
+> +	 * We select one thread with high enough mm_cid to be the new leader
+> +	 * all other threads (including the main thread) will terminate
+> +	 * After some time, the mm_cid of the only remaining thread should
+> +	 * converge to 0, if not, the test fails
+> +	 */
+> +	if (curr_mm_cid > args->num_cpus / 2 &&
 
-This last paragraph could be clarified. AFAIR, the problem with
-the preexisting approach based on the scheduler tick is with a mm
-consisting of a set of periodic threads, where none happen to run
-while the scheduler tick is running.
+I think we want  curr_mm_cid >= args->num_cpus / 2   here,
+otherwise the case with 2 cpus would not match.
 
-This would skip mm_cid compaction. So it's not a bug per se, because
-the mm_cid allocation will just be slightly less compact than it should
-be in that case.
+> +	    !pthread_mutex_trylock(&args->token)) {
+> +		printf_verbose("cpu%d has %d and will be the new leader\n",
+> +			       sched_getcpu(), curr_mm_cid);
+> +		for (i = 0; i < args->num_cpus; i++) {
+> +			if (args->tinfo[i] == pthread_self())
+> +				continue;
+> +			ret = pthread_join(args->tinfo[i], NULL);
 
-The underlying question here is whether eventual convergence of mm_cid
-towards 0 when the number of threads or the allowed CPU mask are reduced
-in a mm should be guaranteed or only best effort.
+We'd want a synchronization point to join the main thread. I'm not sure
+if the main thread is joinable.
 
-If best effort, then this corner-case is not worthy of a "Fix" tag.
-Otherwise, we should identify which commit it fixes and introduce a
-"Fix" tag.
+Perhaps we could try calling pthread_self() from the main thread, and
+store that in the main thread struct thread_args, and use it to join
+the main thread afterwards ?
+
+> +			if (ret) {
+> +				fprintf(stderr,
+> +					"Error: failed to join thread %d (%d): %s\n",
+> +					i, ret, strerror(ret));
+> +				assert(ret == 0);
+> +			}
+> +		}
+> +		free(args->tinfo);
+> +
+> +		for (i = 0; i < MM_CID_CLEANUP_TIMEOUT; i++) {
+> +			curr_mm_cid = rseq_current_mm_cid();
+> +			printf_verbose("run %d: mm_cid %d on cpu%d\n", i,
+> +				       curr_mm_cid, sched_getcpu());
+> +			if (curr_mm_cid == 0) {
+> +				printf_verbose(
+> +					"mm_cids successfully compacted, exiting\n");
+> +				pthread_exit(NULL);
+> +			}
+> +			usleep(RUNNER_PERIOD);
+> +		}
+> +		assert(false);
+> +	}
+> +	printf_verbose("cpu%d has %d and is going to terminate\n",
+> +		       sched_getcpu(), curr_mm_cid);
+> +	pthread_exit(NULL);
+> +}
+> +
+> +void test_mm_cid_compaction(void)
+> +{
+> +	cpu_set_t affinity, test_affinity;
+> +	int i, j, ret, num_threads;
+> +	pthread_t *tinfo;
+> +	struct thread_args args = { .token = PTHREAD_MUTEX_INITIALIZER };
+> +
+> +	sched_getaffinity(0, sizeof(affinity), &affinity);
+> +	CPU_ZERO(&test_affinity);
+> +	num_threads = CPU_COUNT(&affinity);
+> +	tinfo = calloc(num_threads, sizeof(*tinfo));
+> +	if (!tinfo) {
+> +		fprintf(stderr, "Error: failed to allocate tinfo(%d): %s\n",
+> +			errno, strerror(errno));
+> +		assert(ret == 0);
+> +	}
+> +	args.num_cpus = num_threads;
+> +	args.tinfo = tinfo;
+> +	if (num_threads == 1) {
+> +		printf_verbose(
+> +			"Running on a single cpu, cannot test anything\n");
+> +		return;
+> +	}
+> +	for (i = 0, j = 0; i < CPU_SETSIZE && j < num_threads; i++) {
+> +		if (CPU_ISSET(i, &affinity)) {
+
+Including the main thread, we end up creating nr_cpus + 1 threads.
+I suspect we want to take the main thread into account here, and create
+one less thread.
+
+We could use tinfo[0] to store the main thread info.
+
+> +			ret = pthread_create(&tinfo[j], NULL, thread_runner,
+> +					     &args);
+> +			if (ret) {
+> +				fprintf(stderr,
+> +					"Error: failed to create thread(%d): %s\n",
+> +					ret, strerror(ret));
+> +				assert(ret == 0);
+> +			}
+> +			CPU_SET(i, &test_affinity);
+> +			pthread_setaffinity_np(tinfo[j], sizeof(test_affinity),
+> +					       &test_affinity);
+
+It would be better that each thread set their own affinity when
+they start rather than having the main thread set each created thread
+affinity while they are already running. Otherwise it's racy and
+timing-dependent.
+
+And don't forget to set the main thread's affinity.
 
 Thanks,
 
 Mathieu
 
-
-> 
-> Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
-> ---
->   include/linux/mm_types.h | 11 +++++++++
->   include/linux/sched.h    |  1 -
->   kernel/sched/core.c      | 51 ++++++----------------------------------
->   kernel/sched/sched.h     |  7 ------
->   4 files changed, 18 insertions(+), 52 deletions(-)
-> 
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 7361a8f3ab68..92acb827fee4 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -856,6 +856,7 @@ struct mm_struct {
->   		 * mm nr_cpus_allowed updates.
->   		 */
->   		raw_spinlock_t cpus_allowed_lock;
-> +		struct delayed_work mm_cid_work;
->   #endif
->   #ifdef CONFIG_MMU
->   		atomic_long_t pgtables_bytes;	/* size of all page tables */
-> @@ -1144,11 +1145,16 @@ static inline void vma_iter_init(struct vma_iterator *vmi,
->   
->   #ifdef CONFIG_SCHED_MM_CID
->   
-> +#define SCHED_MM_CID_PERIOD_NS	(100ULL * 1000000)	/* 100ms */
-> +#define MM_CID_SCAN_DELAY	100			/* 100ms */
+> +			CPU_CLR(i, &test_affinity);
+> +			++j;
+> +		}
+> +	}
+> +	printf_verbose("Started %d threads\n", num_threads);
 > +
->   enum mm_cid_state {
->   	MM_CID_UNSET = -1U,		/* Unset state has lazy_put flag set. */
->   	MM_CID_LAZY_PUT = (1U << 31),
->   };
->   
-> +extern void task_mm_cid_work(struct work_struct *work);
+> +	/* Also main thread will terminate if it is not selected as leader */
+> +	thread_runner(&args);
+> +}
 > +
->   static inline bool mm_cid_is_unset(int cid)
->   {
->   	return cid == MM_CID_UNSET;
-> @@ -1221,12 +1227,17 @@ static inline int mm_alloc_cid_noprof(struct mm_struct *mm, struct task_struct *
->   	if (!mm->pcpu_cid)
->   		return -ENOMEM;
->   	mm_init_cid(mm, p);
-> +	INIT_DELAYED_WORK(&mm->mm_cid_work, task_mm_cid_work);
-> +	mm->mm_cid_next_scan = jiffies + msecs_to_jiffies(MM_CID_SCAN_DELAY);
-> +	schedule_delayed_work(&mm->mm_cid_work,
-> +			      msecs_to_jiffies(MM_CID_SCAN_DELAY));
->   	return 0;
->   }
->   #define mm_alloc_cid(...)	alloc_hooks(mm_alloc_cid_noprof(__VA_ARGS__))
->   
->   static inline void mm_destroy_cid(struct mm_struct *mm)
->   {
-> +	disable_delayed_work_sync(&mm->mm_cid_work);
->   	free_percpu(mm->pcpu_cid);
->   	mm->pcpu_cid = NULL;
->   }
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index d380bffee2ef..5d141c310917 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -1374,7 +1374,6 @@ struct task_struct {
->   	int				last_mm_cid;	/* Most recent cid in mm */
->   	int				migrate_from_cpu;
->   	int				mm_cid_active;	/* Whether cid bitmap is active */
-> -	struct callback_head		cid_work;
->   #endif
->   
->   	struct tlbflush_unmap_batch	tlb_ubc;
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index c6d8232ad9ee..e3b27b73301c 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -4516,7 +4516,6 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
->   	p->wake_entry.u_flags = CSD_TYPE_TTWU;
->   	p->migration_pending = NULL;
->   #endif
-> -	init_sched_mm_cid(p);
->   }
->   
->   DEFINE_STATIC_KEY_FALSE(sched_numa_balancing);
-> @@ -5654,7 +5653,6 @@ void sched_tick(void)
->   		resched_latency = cpu_resched_latency(rq);
->   	calc_global_load_tick(rq);
->   	sched_core_tick(rq);
-> -	task_tick_mm_cid(rq, donor);
->   	scx_tick(rq);
->   
->   	rq_unlock(rq, &rf);
-> @@ -10520,22 +10518,14 @@ static void sched_mm_cid_remote_clear_weight(struct mm_struct *mm, int cpu,
->   	sched_mm_cid_remote_clear(mm, pcpu_cid, cpu);
->   }
->   
-> -static void task_mm_cid_work(struct callback_head *work)
-> +void task_mm_cid_work(struct work_struct *work)
->   {
->   	unsigned long now = jiffies, old_scan, next_scan;
-> -	struct task_struct *t = current;
->   	struct cpumask *cidmask;
-> -	struct mm_struct *mm;
-> +	struct delayed_work *delayed_work = container_of(work, struct delayed_work, work);
-> +	struct mm_struct *mm = container_of(delayed_work, struct mm_struct, mm_cid_work);
->   	int weight, cpu;
->   
-> -	SCHED_WARN_ON(t != container_of(work, struct task_struct, cid_work));
-> -
-> -	work->next = work;	/* Prevent double-add */
-> -	if (t->flags & PF_EXITING)
-> -		return;
-> -	mm = t->mm;
-> -	if (!mm)
-> -		return;
->   	old_scan = READ_ONCE(mm->mm_cid_next_scan);
->   	next_scan = now + msecs_to_jiffies(MM_CID_SCAN_DELAY);
->   	if (!old_scan) {
-> @@ -10548,9 +10538,9 @@ static void task_mm_cid_work(struct callback_head *work)
->   			old_scan = next_scan;
->   	}
->   	if (time_before(now, old_scan))
-> -		return;
-> +		goto out;
->   	if (!try_cmpxchg(&mm->mm_cid_next_scan, &old_scan, next_scan))
-> -		return;
-> +		goto out;
->   	cidmask = mm_cidmask(mm);
->   	/* Clear cids that were not recently used. */
->   	for_each_possible_cpu(cpu)
-> @@ -10562,35 +10552,8 @@ static void task_mm_cid_work(struct callback_head *work)
->   	 */
->   	for_each_possible_cpu(cpu)
->   		sched_mm_cid_remote_clear_weight(mm, cpu, weight);
-> -}
-> -
-> -void init_sched_mm_cid(struct task_struct *t)
-> -{
-> -	struct mm_struct *mm = t->mm;
-> -	int mm_users = 0;
-> -
-> -	if (mm) {
-> -		mm_users = atomic_read(&mm->mm_users);
-> -		if (mm_users == 1)
-> -			mm->mm_cid_next_scan = jiffies + msecs_to_jiffies(MM_CID_SCAN_DELAY);
-> -	}
-> -	t->cid_work.next = &t->cid_work;	/* Protect against double add */
-> -	init_task_work(&t->cid_work, task_mm_cid_work);
-> -}
-> -
-> -void task_tick_mm_cid(struct rq *rq, struct task_struct *curr)
-> -{
-> -	struct callback_head *work = &curr->cid_work;
-> -	unsigned long now = jiffies;
-> -
-> -	if (!curr->mm || (curr->flags & (PF_EXITING | PF_KTHREAD)) ||
-> -	    work->next != work)
-> -		return;
-> -	if (time_before(now, READ_ONCE(curr->mm->mm_cid_next_scan)))
-> -		return;
-> -
-> -	/* No page allocation under rq lock */
-> -	task_work_add(curr, work, TWA_RESUME | TWAF_NO_ALLOC);
-> +out:
-> +	schedule_delayed_work(delayed_work, msecs_to_jiffies(MM_CID_SCAN_DELAY));
->   }
->   
->   void sched_mm_cid_exit_signals(struct task_struct *t)
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index 76f5f53a645f..21be461ff913 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -3581,16 +3581,11 @@ extern void sched_dynamic_update(int mode);
->   
->   #ifdef CONFIG_SCHED_MM_CID
->   
-> -#define SCHED_MM_CID_PERIOD_NS	(100ULL * 1000000)	/* 100ms */
-> -#define MM_CID_SCAN_DELAY	100			/* 100ms */
-> -
->   extern raw_spinlock_t cid_lock;
->   extern int use_cid_lock;
->   
->   extern void sched_mm_cid_migrate_from(struct task_struct *t);
->   extern void sched_mm_cid_migrate_to(struct rq *dst_rq, struct task_struct *t);
-> -extern void task_tick_mm_cid(struct rq *rq, struct task_struct *curr);
-> -extern void init_sched_mm_cid(struct task_struct *t);
->   
->   static inline void __mm_cid_put(struct mm_struct *mm, int cid)
->   {
-> @@ -3839,8 +3834,6 @@ static inline void switch_mm_cid(struct rq *rq,
->   static inline void switch_mm_cid(struct rq *rq, struct task_struct *prev, struct task_struct *next) { }
->   static inline void sched_mm_cid_migrate_from(struct task_struct *t) { }
->   static inline void sched_mm_cid_migrate_to(struct rq *dst_rq, struct task_struct *t) { }
-> -static inline void task_tick_mm_cid(struct rq *rq, struct task_struct *curr) { }
-> -static inline void init_sched_mm_cid(struct task_struct *t) { }
->   #endif /* !CONFIG_SCHED_MM_CID */
->   
->   extern u64 avg_vruntime(struct cfs_rq *cfs_rq);
+> +int main(int argc, char **argv)
+> +{
+> +	if (rseq_register_current_thread()) {
+> +		fprintf(stderr,
+> +			"Error: rseq_register_current_thread(...) failed(%d): %s\n",
+> +			errno, strerror(errno));
+> +		goto error;
+> +	}
+> +	if (!rseq_mm_cid_available()) {
+> +		fprintf(stderr, "Error: rseq_mm_cid unavailable\n");
+> +		goto error;
+> +	}
+> +	test_mm_cid_compaction();
+> +	if (rseq_unregister_current_thread()) {
+> +		fprintf(stderr,
+> +			"Error: rseq_unregister_current_thread(...) failed(%d): %s\n",
+> +			errno, strerror(errno));
+> +		goto error;
+> +	}
+> +	return 0;
+> +
+> +error:
+> +	return -1;
+> +}
 
 -- 
 Mathieu Desnoyers
