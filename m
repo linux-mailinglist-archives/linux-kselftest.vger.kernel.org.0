@@ -1,303 +1,530 @@
-Return-Path: <linux-kselftest+bounces-23313-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23314-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EC559F08D6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 10:58:28 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 295409F0B21
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 12:32:42 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF97A283FEF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 09:58:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A2A21664E7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 11:31:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D52641CBEB9;
-	Fri, 13 Dec 2024 09:56:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B96FB1DE899;
+	Fri, 13 Dec 2024 11:31:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aQ+k69NE"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gnn4lL0E"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3711B4F17
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Dec 2024 09:56:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07FB1AC8B9
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Dec 2024 11:31:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734083762; cv=none; b=iGJnOHC/MUgCYIkKeMFqOYETG5LcIO5Wz9E3YISOlCl14ECSMOIhot4jZ+igrs3Bu/Mj/jnhnW7+vnuacvOkJNrFUoNXEPdkLswzezvUJKnMLgk3jHyv5RQbzZz4rNnuACTHIF/F1uRtm+wP5wzneebotBvuXoL8m49S4/zBqWA=
+	t=1734089506; cv=none; b=K4mjYr6fdil9RSPXpro7IukJGpR1yDb4/TA5vu90cVwjwPrws/4Pqlzbv9gf59znnCMCH00Pw6fz3gZ5+URb0ZxK/VJGjbYppO9cJQvmWusOIW7ANYxgup1H2EeiZKtCjePUmsr/uYjZozDOIjZYeVKm8AHB3kUR4WV+1/C9WZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734083762; c=relaxed/simple;
-	bh=MSeG7NpeNJTJ59YezyPYGEMwMzK1klEVtFDKR9aNIjM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Oz49zuDBaEbDfGORaHqrE/jgSw4Ox+Qwgh/aaxqEC+2bwnE/jyCgypf985r2reWd0D9RQcQU+KbgbBWu73ep2WC27elurs6amMgg6Se6AwokqN+kLOJ8sG/D6iAK3bftSme1A9yBXcBxvxmfn1b5N67ytNSBLMcLVHWe1Bry6x4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aQ+k69NE; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1734089506; c=relaxed/simple;
+	bh=a7m4bFXrXJLnDmxxGYmlQ6gOMwQRAw150r5fPTyWsY4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pbaPZ5hUIhOlY37e36aZhd7XNnpCX2iTiOX6JE0DZG1/Oldywr7Bj1jvHdwfFUb9ZCPpyf9QHaKUxpNyQiGPsfDCraTBQzRlIdszM3JsKYHka197YvlSZGiPh5HeXtDLFZOPPIEwE+5SXhv6mvJZyMmiiRkNbNxDFkmDV0n2U0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gnn4lL0E; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1734083759;
+	s=mimecast20190719; t=1734089503;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4j0XdIbHKHBrG40Ri7lqb7eCCeV+N5WkxyRh1PruNqc=;
-	b=aQ+k69NEi9odG+QFTufSS5yYrepbAhqEY2oSQBO1Jd6ncg9/PIEt3tq1ndqp/mKf27xBmw
-	KcvK2LTGm5Sc5FtQh9hWye2mnuMOLEm7VekPH4dxqbj5STOy1Wvy5VZZp+N7RowAx1yj5/
-	aBAaw1cgInBOjnE7k6F1wJ7OAtCjUwE=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-503-ljxb3HsdNUafwUf2srUAIw-1; Fri,
- 13 Dec 2024 04:55:54 -0500
-X-MC-Unique: ljxb3HsdNUafwUf2srUAIw-1
-X-Mimecast-MFC-AGG-ID: ljxb3HsdNUafwUf2srUAIw
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1827E1955F25;
-	Fri, 13 Dec 2024 09:55:53 +0000 (UTC)
-Received: from gmonaco-thinkpadt14gen3.rmtit.com (unknown [10.39.192.43])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id F02EC195394B;
-	Fri, 13 Dec 2024 09:55:48 +0000 (UTC)
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=9LA1MdNqnVl2M5tE7C+xYNHhC6zMqlfDAUaHlPhnPTw=;
+	b=gnn4lL0E9g82mrCClPDPZfoPdvGQ3GO89wxzvL0Udnii15wcATkoh9Aduudx3+Tf5pc2W7
+	1K8kGcmNTKYvn+428e68volYI7GB9Wh12tpDre/pSo9hXSac87e0ZSStAbHQJy3u1xZIOY
+	QUWq8C2ajCeWsWdg+nD7rdK4Yk3hm2s=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-488-HrB0qHdHMhCewBDas6hQuw-1; Fri, 13 Dec 2024 06:31:39 -0500
+X-MC-Unique: HrB0qHdHMhCewBDas6hQuw-1
+X-Mimecast-MFC-AGG-ID: HrB0qHdHMhCewBDas6hQuw
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3862f3ccf4fso600355f8f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Dec 2024 03:31:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734089498; x=1734694298;
+        h=mime-version:user-agent:autocrypt:references:in-reply-to:date:cc:to
+         :from:subject:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9LA1MdNqnVl2M5tE7C+xYNHhC6zMqlfDAUaHlPhnPTw=;
+        b=wAdZmbEa/XAfuMdpOLquOCMSQlNIPp8HeTW3+igLgR8yXuCN5qPXR+SkjiPfz0wu/I
+         tvpe/pXyUh5A0KeQkBJBCCwczxSi2mIUKHyFwUhvH/C4zKMJQZYjPdfd7Aw1BIupuFAO
+         nRCe8oWcL7D0lLlTmi4BbErBVzPuOf9rLtC9KMtwuKTeJY8US1Aimt+Fa3BBuQPJG4K2
+         ZKx8fR4fNlGqST1WDDpYuYY1YNUQ81fVqfxgkbvfE1cmy1NTZH4K9bDxrTi7oxG1NevQ
+         0PMojKG+NOH9vLvWugMzOGzT+PNor7Aj0/VFXesXSdRfIr4p0CxzbXp8VIKin/oNHyie
+         5g4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUOhCzNVpoVegYmc69vYAcjDOjm8Dw/8KF/lvqLr9MUumZl1lY/s1kQSM2PIchXm4b13xKHrxPiBOeDtf0ZKOM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxa4Oh9aL46WONppkEdgWakCqEXQBBoNYGpQONBVsl82TTezR3+
+	nqC1DB4cwDu+Va9xEeZJ9nMf3VIPYcw3aDKm0faYi1dOyCpgqVozEIGKpo40T8U8HbkFLoSCaoh
+	eBjtZCDtdFxO1+iw/eLPuUZMRPBiOkysnJhKbdm1kpQaLfg9/8cpyNo3n+/suLoAraamtNvsipg
+	rW
+X-Gm-Gg: ASbGncs1Jv8KXYuU1NVFcop5ZwX53Ejna9GAr1ysGn6kzyQGVANZ82EbTgE0UJnwz0t
+	zveDJPPyMztSoQ5gLo0Q5mDkyK15i8tDHqr0p0xTmS0FdAE2m8mwaiu5f6jcqp8Sldp/f9IHzhC
+	/it0rDCI7VD7Dy/vBR6+gZrzRiInhhFAWChpRKwEINvHvy6QZSCm8ETwletWtBhirJiSqhvfZMt
+	nkrw1jVwzwsqk13orHzNPZOWJ5lDUMH+3BPtK4xTbV2m3zfhH5SPZWrqkxt2K3B3qzM8f00iJNn
+	Tx6JkPM=
+X-Received: by 2002:a5d:6d03:0:b0:385:dc45:ea26 with SMTP id ffacd0b85a97d-38880ac244fmr1622423f8f.12.1734089498116;
+        Fri, 13 Dec 2024 03:31:38 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGgMs36iw2eBDK+bKYO9UpdsQZJbbyABbG+SohxQ7EUMAPumZJ5gVhyrbA84M6jrczW1CkjBg==
+X-Received: by 2002:a5d:6d03:0:b0:385:dc45:ea26 with SMTP id ffacd0b85a97d-38880ac244fmr1622388f8f.12.1734089497692;
+        Fri, 13 Dec 2024 03:31:37 -0800 (PST)
+Received: from gmonaco-thinkpadt14gen3.rmtit.csb ([185.107.56.30])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38782521845sm6781912f8f.106.2024.12.13.03.31.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Dec 2024 03:31:37 -0800 (PST)
+Message-ID: <7cf8c25f325d433c2abc473f3d877067e216ff6c.camel@redhat.com>
+Subject: Re: [PATCH v2 0/4] sched: Move task_mm_cid_work to mm delayed work
 From: Gabriele Monaco <gmonaco@redhat.com>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org
-Cc: Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Mel Gorman <mgorman@suse.de>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	Gabriele Monaco <gmonaco@redhat.com>
-Subject: [PATCH v2 4/4] rseq/selftests: Add test for mm_cid compaction
-Date: Fri, 13 Dec 2024 10:54:07 +0100
-Message-ID: <20241213095407.271357-5-gmonaco@redhat.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Ingo Molnar	
+ <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Andrew Morton	
+ <akpm@linux-foundation.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org
+Cc: Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot
+	 <vincent.guittot@linaro.org>, Mel Gorman <mgorman@suse.de>, Shuah Khan
+	 <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Date: Fri, 13 Dec 2024 12:31:35 +0100
 In-Reply-To: <20241213095407.271357-1-gmonaco@redhat.com>
 References: <20241213095407.271357-1-gmonaco@redhat.com>
+Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
+ keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
+ 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0ByZWRoYXQuY29tPoiZBBMWCgBBFiEEysoR+AuB3R
+ Zwp6j270psSVh4TfIFAmbiuWMCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
+ Q70psSVh4TfJzZgD/TXjnqCyqaZH/Y2w+YVbvm93WX2eqBqiVZ6VEjTuGNs8A/iPrKbzdWC7AicnK
+ xyhmqeUWOzFx5P43S1E1dhsrLWgP
+Content-Type: multipart/mixed; boundary="=-8FZMQ6942QnxILGUQGmB"
+User-Agent: Evolution 3.54.2 (3.54.2-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-A task in the kernel (task_mm_cid_work) runs somewhat periodically to
-compact the mm_cid for each process, this test tries to validate that
-it runs correctly and timely.
+--=-8FZMQ6942QnxILGUQGmB
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The test spawns 1 thread pinned to each CPU, then each thread, including
-the main one, run in short bursts for some time. During this period, the
-mm_cids should be spanning all numbers between 0 and nproc.
+On Fri, 2024-12-13 at 10:54 +0100, Gabriele Monaco wrote:
+> OVERHEAD COMPARISON
+>
+> [..]
+>
+> I will post another email with the scripts used to retrieve the data
+> and
+> more details about the runtime distribution.
 
-At the end of this phase, a thread with high enough mm_cid (> nproc/2)
-is selected to be the new leader, all other threads terminate.
+This message contains the performance results produced by my scripts, which=
+ are attached.
+The tracing is done via bpftrace while a simple bash script is spawning and=
+ killing the loads.
 
-After some time, the only running thread should see 0 as mm_cid, if that
-doesn't happen, the compaction mechanism didn't work and the test fails.
+From the histograms it's easier to see the distribution of the durations an=
+d if there are clear outliers.
 
-The test never fails if only 1 core is available, in which case, we
-cannot test anything as the only available mm_cid is 0.
+TEST RESULTS ON HEAD
 
-Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
----
- tools/testing/selftests/rseq/.gitignore       |   1 +
- tools/testing/selftests/rseq/Makefile         |   2 +-
- .../selftests/rseq/mm_cid_compaction_test.c   | 157 ++++++++++++++++++
- 3 files changed, 159 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/rseq/mm_cid_compaction_test.c
+Running without loads on virtme-ng
 
-diff --git a/tools/testing/selftests/rseq/.gitignore b/tools/testing/selftests/rseq/.gitignore
-index 16496de5f6ce..2c89f97e4f73 100644
---- a/tools/testing/selftests/rseq/.gitignore
-+++ b/tools/testing/selftests/rseq/.gitignore
-@@ -3,6 +3,7 @@ basic_percpu_ops_test
- basic_percpu_ops_mm_cid_test
- basic_test
- basic_rseq_op_test
-+mm_cid_compaction_test
- param_test
- param_test_benchmark
- param_test_compare_twice
-diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
-index 5a3432fceb58..ce1b38f46a35 100644
---- a/tools/testing/selftests/rseq/Makefile
-+++ b/tools/testing/selftests/rseq/Makefile
-@@ -16,7 +16,7 @@ OVERRIDE_TARGETS = 1
- 
- TEST_GEN_PROGS = basic_test basic_percpu_ops_test basic_percpu_ops_mm_cid_test param_test \
- 		param_test_benchmark param_test_compare_twice param_test_mm_cid \
--		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice
-+		param_test_mm_cid_benchmark param_test_mm_cid_compare_twice mm_cid_compaction_test
- 
- TEST_GEN_PROGS_EXTENDED = librseq.so
- 
-diff --git a/tools/testing/selftests/rseq/mm_cid_compaction_test.c b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
-new file mode 100644
-index 000000000000..9bc7310c3cb5
---- /dev/null
-+++ b/tools/testing/selftests/rseq/mm_cid_compaction_test.c
-@@ -0,0 +1,157 @@
-+// SPDX-License-Identifier: LGPL-2.1
-+#define _GNU_SOURCE
-+#include <assert.h>
-+#include <pthread.h>
-+#include <sched.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <stddef.h>
-+
-+#include "../kselftest.h"
-+#include "rseq.h"
-+
-+#define VERBOSE 0
-+#define printf_verbose(fmt, ...)                    \
-+	do {                                        \
-+		if (VERBOSE)                        \
-+			printf(fmt, ##__VA_ARGS__); \
-+	} while (0)
-+
-+/* 0.5 s */
-+#define RUNNER_PERIOD 500000
-+/* Number of runs before we terminate or get the token */
-+#define THREAD_RUNS 5
-+
-+/*
-+ * Number of times we check that the mm_cid were compacted.
-+ * Checks are repeated every RUNNER_PERIOD
-+ */
-+#define MM_CID_CLEANUP_TIMEOUT 10
-+
-+struct thread_args {
-+	int num_cpus;
-+	pthread_mutex_t token;
-+	pthread_t *tinfo;
-+};
-+
-+static void *thread_runner(void *arg)
-+{
-+	struct thread_args *args = arg;
-+	int i, ret, curr_mm_cid;
-+
-+	for (i = 0; i < THREAD_RUNS; i++)
-+		usleep(RUNNER_PERIOD);
-+	curr_mm_cid = rseq_current_mm_cid();
-+	/*
-+	 * We select one thread with high enough mm_cid to be the new leader
-+	 * all other threads (including the main thread) will terminate
-+	 * After some time, the mm_cid of the only remaining thread should
-+	 * converge to 0, if not, the test fails
-+	 */
-+	if (curr_mm_cid > args->num_cpus / 2 &&
-+	    !pthread_mutex_trylock(&args->token)) {
-+		printf_verbose("cpu%d has %d and will be the new leader\n",
-+			       sched_getcpu(), curr_mm_cid);
-+		for (i = 0; i < args->num_cpus; i++) {
-+			if (args->tinfo[i] == pthread_self())
-+				continue;
-+			ret = pthread_join(args->tinfo[i], NULL);
-+			if (ret) {
-+				fprintf(stderr,
-+					"Error: failed to join thread %d (%d): %s\n",
-+					i, ret, strerror(ret));
-+				assert(ret == 0);
-+			}
-+		}
-+		free(args->tinfo);
-+
-+		for (i = 0; i < MM_CID_CLEANUP_TIMEOUT; i++) {
-+			curr_mm_cid = rseq_current_mm_cid();
-+			printf_verbose("run %d: mm_cid %d on cpu%d\n", i,
-+				       curr_mm_cid, sched_getcpu());
-+			if (curr_mm_cid == 0) {
-+				printf_verbose(
-+					"mm_cids successfully compacted, exiting\n");
-+				pthread_exit(NULL);
-+			}
-+			usleep(RUNNER_PERIOD);
-+		}
-+		assert(false);
-+	}
-+	printf_verbose("cpu%d has %d and is going to terminate\n",
-+		       sched_getcpu(), curr_mm_cid);
-+	pthread_exit(NULL);
-+}
-+
-+void test_mm_cid_compaction(void)
-+{
-+	cpu_set_t affinity, test_affinity;
-+	int i, j, ret, num_threads;
-+	pthread_t *tinfo;
-+	struct thread_args args = { .token = PTHREAD_MUTEX_INITIALIZER };
-+
-+	sched_getaffinity(0, sizeof(affinity), &affinity);
-+	CPU_ZERO(&test_affinity);
-+	num_threads = CPU_COUNT(&affinity);
-+	tinfo = calloc(num_threads, sizeof(*tinfo));
-+	if (!tinfo) {
-+		fprintf(stderr, "Error: failed to allocate tinfo(%d): %s\n",
-+			errno, strerror(errno));
-+		assert(ret == 0);
-+	}
-+	args.num_cpus = num_threads;
-+	args.tinfo = tinfo;
-+	if (num_threads == 1) {
-+		printf_verbose(
-+			"Running on a single cpu, cannot test anything\n");
-+		return;
-+	}
-+	for (i = 0, j = 0; i < CPU_SETSIZE && j < num_threads; i++) {
-+		if (CPU_ISSET(i, &affinity)) {
-+			ret = pthread_create(&tinfo[j], NULL, thread_runner,
-+					     &args);
-+			if (ret) {
-+				fprintf(stderr,
-+					"Error: failed to create thread(%d): %s\n",
-+					ret, strerror(ret));
-+				assert(ret == 0);
-+			}
-+			CPU_SET(i, &test_affinity);
-+			pthread_setaffinity_np(tinfo[j], sizeof(test_affinity),
-+					       &test_affinity);
-+			CPU_CLR(i, &test_affinity);
-+			++j;
-+		}
-+	}
-+	printf_verbose("Started %d threads\n", num_threads);
-+
-+	/* Also main thread will terminate if it is not selected as leader */
-+	thread_runner(&args);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	if (rseq_register_current_thread()) {
-+		fprintf(stderr,
-+			"Error: rseq_register_current_thread(...) failed(%d): %s\n",
-+			errno, strerror(errno));
-+		goto error;
-+	}
-+	if (!rseq_mm_cid_available()) {
-+		fprintf(stderr, "Error: rseq_mm_cid unavailable\n");
-+		goto error;
-+	}
-+	test_mm_cid_compaction();
-+	if (rseq_unregister_current_thread()) {
-+		fprintf(stderr,
-+			"Error: rseq_unregister_current_thread(...) failed(%d): %s\n",
-+			errno, strerror(errno));
-+		goto error;
-+	}
-+	return 0;
-+
-+error:
-+	return -1;
-+}
--- 
-2.47.1
+@duration_max: 426
+@duration_total: count 13, average 75, total 987
+
+@durations:
+[25, 30)               1 |@@@@@@@@@@@@@@@@@                                =
+   |
+[30, 35)               2 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@               =
+   |
+[35, 40)               2 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@               =
+   |
+[40, 45)               0 |                                                 =
+   |
+[45, 50)               3 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=
+@@@|
+[50, 55)               2 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@               =
+   |
+[55, 60)               0 |                                                 =
+   |
+[60, 65)               1 |@@@@@@@@@@@@@@@@@                                =
+   |
+[65, 70)               0 |                                                 =
+   |
+[70, 75)               0 |                                                 =
+   |
+[75, 80)               0 |                                                 =
+   |
+[80, 85)               0 |                                                 =
+   |
+[85, 90)               0 |                                                 =
+   |
+[90, 95)               1 |@@@@@@@@@@@@@@@@@                                =
+   |
+[95, 100)              0 |                                                 =
+   |
+[100, ...)             1 |@@@@@@@@@@@@@@@@@                                =
+   |
+
+@processes: 12
+@threads: 12
+
+Running with cpu loads on virtme-ng
+
+@duration_max: 2508
+@duration_total: count 35948, average 20, total 742603
+
+@durations:
+[10, 15)            1889 |@@@@@                                            =
+   |
+[15, 20)           17278 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=
+@@@|
+[20, 25)           10742 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                 =
+   |
+[25, 30)            3327 |@@@@@@@@@@                                       =
+   |
+[30, 35)            2350 |@@@@@@@                                          =
+   |
+[35, 40)             326 |                                                 =
+   |
+[40, 45)               5 |                                                 =
+   |
+[45, 50)               1 |                                                 =
+   |
+[50, 55)               2 |                                                 =
+   |
+[55, 60)               1 |                                                 =
+   |
+[60, 65)               2 |                                                 =
+   |
+[65, 70)               2 |                                                 =
+   |
+[70, 75)               0 |                                                 =
+   |
+[75, 80)               0 |                                                 =
+   |
+[80, 85)               1 |                                                 =
+   |
+[85, 90)               0 |                                                 =
+   |
+[90, 95)               1 |                                                 =
+   |
+[95, 100)              1 |                                                 =
+   |
+[100, ...)            20 |                                                 =
+   |
+
+@processes: 129
+@threads: 129
+
+Running with fork loads on virtme-ng
+
+@duration_max: 41
+@duration_total: count 21, average 34, total 720
+
+@durations:
+[30, 35)              12 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=
+@@@|
+[35, 40)               8 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@               =
+   |
+[40, 45)               1 |@@@@                                             =
+   |
+
+@processes: 3592
+@threads: 3592
+
+Running with thread loads on virtme-ng
+
+@duration_max: 195
+@duration_total: count 1286, average 31, total 41082
+
+@durations:
+(..., 10)            326 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@     =
+   |
+[10, 15)              10 |@                                                =
+   |
+[15, 20)               0 |                                                 =
+   |
+[20, 25)               1 |                                                 =
+   |
+[25, 30)              61 |@@@@@@@@                                         =
+   |
+[30, 35)             377 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=
+@@@|
+[35, 40)             264 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@             =
+   |
+[40, 45)              65 |@@@@@@@@                                         =
+   |
+[45, 50)              32 |@@@@                                             =
+   |
+[50, 55)              12 |@                                                =
+   |
+[55, 60)              13 |@                                                =
+   |
+[60, 65)               7 |                                                 =
+   |
+[65, 70)              10 |@                                                =
+   |
+[70, 75)              10 |@                                                =
+   |
+[75, 80)              33 |@@@@                                             =
+   |
+[80, 85)              26 |@@@                                              =
+   |
+[85, 90)              13 |@                                                =
+   |
+[90, 95)               6 |                                                 =
+   |
+[95, 100)              2 |                                                 =
+   |
+[100, ...)            18 |@@                                               =
+   |
+
+@processes: 129
+@threads: 4096
+
+TEST RESULTS ON PATCH
+
+Running without loads on virtme-ng
+
+@duration_max: 42
+@duration_total: count 20601, average 2, total 45496
+
+@durations:
+(..., 10)          20304 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=
+@@@|
+[10, 15)               1 |                                                 =
+   |
+[15, 20)               4 |                                                 =
+   |
+[20, 25)              29 |                                                 =
+   |
+[25, 30)              33 |                                                 =
+   |
+[30, 35)              11 |                                                 =
+   |
+[35, 40)             156 |                                                 =
+   |
+[40, 45)              63 |                                                 =
+   |
+
+@processes: 12
+@threads: 12
+
+Running with cpu loads on virtme-ng
+
+@duration_max: 774
+@duration_total: count 38612, average 7, total 281558
+
+@durations:
+(..., 10)          34607 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=
+@@@|
+[10, 15)            2558 |@@@                                              =
+   |
+[15, 20)             735 |@                                                =
+   |
+[20, 25)             454 |                                                 =
+   |
+[25, 30)             225 |                                                 =
+   |
+[30, 35)              17 |                                                 =
+   |
+[35, 40)               8 |                                                 =
+   |
+[40, 45)               2 |                                                 =
+   |
+[45, 50)               4 |                                                 =
+   |
+[50, 55)               0 |                                                 =
+   |
+[55, 60)               0 |                                                 =
+   |
+[60, 65)               0 |                                                 =
+   |
+[65, 70)               0 |                                                 =
+   |
+[70, 75)               0 |                                                 =
+   |
+[75, 80)               0 |                                                 =
+   |
+[80, 85)               0 |                                                 =
+   |
+[85, 90)               0 |                                                 =
+   |
+[90, 95)               0 |                                                 =
+   |
+[95, 100)              0 |                                                 =
+   |
+[100, ...)             2 |                                                 =
+   |
+
+@processes: 129
+@threads: 129
+
+Running with fork loads on virtme-ng
+
+@duration_max: 457
+@duration_total: count 45683, average 19, total 878511
+
+@durations:
+(..., 10)           8452 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@               =
+   |
+[10, 15)            7287 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                    =
+   |
+[15, 20)           12727 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=
+@@@|
+[20, 25)            2942 |@@@@@@@@@@@@                                     =
+   |
+[25, 30)            2975 |@@@@@@@@@@@@                                     =
+   |
+[30, 35)            7305 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                    =
+   |
+[35, 40)            2994 |@@@@@@@@@@@@                                     =
+   |
+[40, 45)             676 |@@                                               =
+   |
+[45, 50)             180 |                                                 =
+   |
+[50, 55)              57 |                                                 =
+   |
+[55, 60)              19 |                                                 =
+   |
+[60, 65)               6 |                                                 =
+   |
+[65, 70)               4 |                                                 =
+   |
+[70, 75)               2 |                                                 =
+   |
+[75, 80)               5 |                                                 =
+   |
+[80, 85)               6 |                                                 =
+   |
+[85, 90)               4 |                                                 =
+   |
+[90, 95)               5 |                                                 =
+   |
+[95, 100)              2 |                                                 =
+   |
+[100, ...)            34 |                                                 =
+   |
+
+@processes: 3982
+@threads: 3982
+
+Running with thread loads on virtme-ng
+
+@duration_max: 1046
+@duration_total: count 38643, average 21, total 833034
+
+@durations:
+(..., 10)           1631 |@@@@@                                            =
+   |
+[10, 15)           11027 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@           =
+   |
+[15, 20)           14832 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=
+@@@|
+[20, 25)            1338 |@@@@                                             =
+   |
+[25, 30)            1112 |@@@                                              =
+   |
+[30, 35)            3781 |@@@@@@@@@@@@@                                    =
+   |
+[35, 40)            1994 |@@@@@@                                           =
+   |
+[40, 45)             464 |@                                                =
+   |
+[45, 50)             262 |                                                 =
+   |
+[50, 55)             200 |                                                 =
+   |
+[55, 60)             294 |@                                                =
+   |
+[60, 65)             620 |@@                                               =
+   |
+[65, 70)             256 |                                                 =
+   |
+[70, 75)             119 |                                                 =
+   |
+[75, 80)             232 |                                                 =
+   |
+[80, 85)             220 |                                                 =
+   |
+[85, 90)              55 |                                                 =
+   |
+[90, 95)              30 |                                                 =
+   |
+[95, 100)             19 |                                                 =
+   |
+[100, ...)           157 |                                                 =
+   |
+
+@processes: 129
+@threads: 4096
+
+
+--=20
+  Gabriele Monaco=20
+ Senior Software Engineer - Kernel Real Time=20
+=20
+Red Hat=20
+  gmonaco@redhat.com=C2=A0 =C2=A0=20
+
+
+--=-8FZMQ6942QnxILGUQGmB
+Content-Disposition: attachment; filename="func_benchmark.bt"
+Content-Type: text/plain; name="func_benchmark.bt"; charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+IyEvdXNyL2Jpbi9lbnYgYnBmdHJhY2UKLyoqCiAqIFByaW50IGR1cmF0aW9ucyBhbmQgaW52b2Nh
+dGlvbnMKICogQ2FsbCB0aGlzIHNjcmlwdCB3aXRoIHRoZSBkdXJhdGlvbiBpbiBzZWNvbmRzIGFz
+IGFyZ3VtZW50CiAqIGUuZy4gYnBmdHJhY2UgZnVuY19iZW5jaG1hcmsuYnQgMzAKICovCgovL3Ry
+YWNlcG9pbnQ6c2NoZWQ6c2NoZWRfd2FrZXVwCmZlbnRyeTp0cnlfdG9fd2FrZV91cAp7CiAgaWYo
+YXJncy0+cC0+bW0gIT0gMCkgewogICAgQF9tbXNbYXJncy0+cC0+bW1dID0gdHJ1ZTsKICAgIEBf
+cHJvY2Vzc2VzW2FyZ3MtPnAtPnRnaWRdID0gdHJ1ZTsKICAgIEBfdGhyZWFkc1thcmdzLT5wLT5w
+aWRdID0gdHJ1ZTsKICB9Cn0KCmZlbnRyeTp0YXNrX21tX2NpZF93b3JrCnsKICBAc3RhcnRbdGlk
+XSA9IG5zZWNzOwogIEBwcmVlbXB0aW9uc1t0aWRdID0gKHVpbnQ2NCkwOwp9CgpmZXhpdDp0YXNr
+X21tX2NpZF93b3JrCi9Ac3RhcnRbdGlkXS8KewogICRjdXJyX3ByZWVtcHRpb24gPSBAcHJlZW1w
+dGVkW3RpZF0gPyBAcHJlZW1wdGlvbnNbdGlkXSA6IDA7CiAgJGR1cmF0aW9uID0gKG5zZWNzIC0g
+QHN0YXJ0W3RpZF0gLSAkY3Vycl9wcmVlbXB0aW9uKS8xMDAwOwogIEBkdXJhdGlvbnMgPSBsaGlz
+dCgkZHVyYXRpb24sIDEwLCAxMDAsIDUpOwogIEBkdXJhdGlvbl90b3RhbCA9IHN0YXRzKCRkdXJh
+dGlvbik7CiAgQGR1cmF0aW9uX21heCA9IG1heCgkZHVyYXRpb24pOwogIGRlbGV0ZShAc3RhcnRb
+dGlkXSk7CiAgZGVsZXRlKEBwcmVlbXB0aW9uc1t0aWRdKTsKICBkZWxldGUoQHByZWVtcHRlZFt0
+aWRdKTsKfQoKLyogU3VwcG9ydCBvbmx5IG9uZSBwcmVlbXB0aW9uLCBzaG91bGQgYmUgZmluZSBm
+b3Igbm9uLXNsZWVwaW5nIGZ1bmN0aW9ucyAqLwp0cmFjZXBvaW50OnNjaGVkOnNjaGVkX3N3aXRj
+aAovLyAvQHN0YXJ0W2FyZ3MucHJldl9waWRdIHx8IEBzdGFydFthcmdzLm5leHRfcGlkXS8Kewog
+IGlmIChAc3RhcnRbYXJncy5wcmV2X3BpZF0pIHsKICAgIEBwcmVlbXB0ZWRbYXJncy5wcmV2X3Bp
+ZF0gPSB0cnVlOwogICAgQHByZWVtcHRpb25zW2FyZ3MucHJldl9waWRdID0gbnNlY3M7CiAgfQog
+IGlmIChAc3RhcnRbYXJncy5uZXh0X3BpZF0gJiYgQHByZWVtcHRlZFthcmdzLm5leHRfcGlkXSkg
+ewogICAgQHByZWVtcHRpb25zW2FyZ3MubmV4dF9waWRdID0gbnNlY3MgLSBAcHJlZW1wdGlvbnNb
+YXJncy5uZXh0X3BpZF07CiAgfQp9CgovL2ludGVydmFsOnM6MzAKaW50ZXJ2YWw6czokMQp7CiAg
+ZXhpdCgpOwp9CgpFTkQKewogIEBtbXMgPSBsZW4oQF9tbXMpOwogIEBwcm9jZXNzZXMgPSBsZW4o
+QF9wcm9jZXNzZXMpOwogIEB0aHJlYWRzID0gbGVuKEBfdGhyZWFkcyk7CiAgY2xlYXIoQF9tbXMp
+OwogIGNsZWFyKEBfcHJvY2Vzc2VzKTsKICBjbGVhcihAX3RocmVhZHMpOwogIGNsZWFyKEBzdGFy
+dCk7CiAgY2xlYXIoQHByZWVtcHRpb25zKTsKICBjbGVhcihAcHJlZW1wdGVkKTsKfQo=
+
+
+
+--=-8FZMQ6942QnxILGUQGmB
+Content-Type: application/x-shellscript; name="runtest_mm_cid.sh"
+Content-Disposition: attachment; filename="runtest_mm_cid.sh"
+Content-Transfer-Encoding: base64
+
+bnByb2M9JChucHJvYykKZHVyYXRpb249MzAKCmVjaG8gUnVubmluZyB3aXRob3V0IGxvYWRzIG9u
+ICRIT1NUTkFNRQpicGZ0cmFjZSBmdW5jX2JlbmNobWFyay5idCAiJGR1cmF0aW9uIgpzbGVlcCAi
+JGR1cmF0aW9uIgoKZWNobyBSdW5uaW5nIHdpdGggY3B1IGxvYWRzIG9uICRIT1NUTkFNRQpzdHJl
+c3MtbmcgLS1jcHUgIiRucHJvYyIgLS1jcHUtbG9hZCA4MCAmPiAvZGV2L251bGwgJgpicGZ0cmFj
+ZSBmdW5jX2JlbmNobWFyay5idCAiJGR1cmF0aW9uIgpwa2lsbCBzdHJlc3MtbmcKc2xlZXAgIiRk
+dXJhdGlvbiIKCmVjaG8gUnVubmluZyB3aXRoIGZvcmsgbG9hZHMgb24gJEhPU1ROQU1FCnN0cmVz
+cy1uZyAtLWZvcmsgIiRucHJvYyIgJj4gL2Rldi9udWxsICYKYnBmdHJhY2UgZnVuY19iZW5jaG1h
+cmsuYnQgIiRkdXJhdGlvbiIKcGtpbGwgc3RyZXNzLW5nCnNsZWVwICIkZHVyYXRpb24iCgplY2hv
+IFJ1bm5pbmcgd2l0aCB0aHJlYWQgbG9hZHMgb24gJEhPU1ROQU1FCnN0cmVzcy1uZyAtLXB0aHJl
+YWQgIiRucHJvYyIgLS1wdGhyZWFkLW1heCA0ICY+IC9kZXYvbnVsbCAmCmJwZnRyYWNlIGZ1bmNf
+YmVuY2htYXJrLmJ0ICIkZHVyYXRpb24iCnBraWxsIHN0cmVzcy1uZwo=
+
+
+--=-8FZMQ6942QnxILGUQGmB--
 
 
