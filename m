@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-23294-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23295-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 634539F0358
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 05:04:41 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 256BB9F035E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 05:05:14 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 196F528443A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 04:04:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54D33188B233
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 04:05:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EC5916EB76;
-	Fri, 13 Dec 2024 04:04:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 158E017C7B6;
+	Fri, 13 Dec 2024 04:04:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hUAtMkvC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ba+oFRq6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0BF8F5E;
-	Fri, 13 Dec 2024 04:04:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8732317BB34;
+	Fri, 13 Dec 2024 04:04:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734062676; cv=none; b=obazx7c3SWKf6MB+4lX+fkx4cKEJH0srnLdvTZkKwq277dbzKjkpV0xYaIjj+l7phS5vvetMwFvsLVhxQM+Prruv8qKceRm4DH/Kem/YKVkPMQtbK4zDAuwgITvbtYWT5wnxHvISHuqhv/Y/SZ4nq5k8qB0PD5BUozZNT6LX8Ts=
+	t=1734062693; cv=none; b=KQTdGwRH2cJRE3CLkIP3Zb4UqNmrAJpzjOqN6sPGSX7zJWgFVWiAdDvhegoecbxQ0kO5WNkJbAJcnje1m0bxb+f6eGKNrjEi6ght0c/vh9st59h1Yhsc5YLjspJllb0wvU+5RC2YOxNuZcDjubzfBD7XI6EnHF0K2bcI/C2cUWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734062676; c=relaxed/simple;
-	bh=Lr7LQGbvd4wuev1AjaD6YqWh9lB5cJFr9owEedqmdvY=;
+	s=arc-20240116; t=1734062693; c=relaxed/simple;
+	bh=VYEwYTh4meAMKcxZgF3yTMcdoRqjlcIbP4/merjlEv0=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pG74dgcDJcM21f5djVtC75U6QqzW/PtIU9M6KkQm2uwCGM5/mglPdR8+ktJvOIn+YXpWOqNp3WUsgwyzhwAH6QPHJq7ER+WDi3KqgbmPMFCln+Au+Vxb0T4+hbNYkq4ia59tmRX5bI42E7HUtB9f8AxMM/PQTPA2qfI1HhbSA/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hUAtMkvC; arc=none smtp.client-ip=209.85.214.182
+	 Content-Type:MIME-Version; b=gOJq+B5CfoDEpp/hFhoVXfU402L0pA8Ar1gNLAkUaLqmTAYOwVRzZYfSzIiV8lqRib9Sb2NQHAxfRkPO/l//YNDmj6eTxDv+KGOvRKll5NPeJuM+FiGu76joMG94O/XhB5BgzF16MGaOOjuCZoMmEwjF52XLqaTLzmcI4f+IAGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ba+oFRq6; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2164b1f05caso12944815ad.3;
-        Thu, 12 Dec 2024 20:04:34 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21619108a6bso10334985ad.3;
+        Thu, 12 Dec 2024 20:04:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734062674; x=1734667474; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734062691; x=1734667491; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=xzcHtM4625I5D50j6uu6xeVIa1jpXt6gHxEIvpDf7CI=;
-        b=hUAtMkvCJaTScZmleW3Qop7gGh9KVAMMp/vncTcEKMGnOjhmzFbcVEUO/AvKVpMBkj
-         DmIXw5uoQwoywIrMb1CSPiYvWid3RUbd6w8xzoBRBhSO2TyAJ5ILFOCZrCD9dyhw+pBg
-         nKoldl75Ksc/PwrVcodpte1Pf6qHcfykNiAhuNe86jwHqEhAMcG08D+MAckL7m9cy2Nx
-         Mvx7JfTnuEaz1rgczJph/cKsSoOpw+d1JTJyXxXd+1sWfeTrkoh9hSP04Ot1pOyMGLzC
-         DJrRkgFtSAJTgpMqDqPd2fj/jvO+rJeZmRe37KzcHo2/o/suwUW9uPZKLHWWV4cW9Y5J
-         EdKA==
+        bh=pTTUiqA1JaNZpV3zkUZn5BbgQBGF1lbLwZtKk2rpqZg=;
+        b=Ba+oFRq6JHBt0aVVT4+8qtekOFDooz0UYXArMw0vCu3zFWwwr8j7f7vyyyFsrSjwfv
+         maqsNo7jH+NaEor+jexXyBhKUvZbgWt7jTiiMzPGuQNFX/Soyi1a6NDofwwCVT1TPDFJ
+         S883OcwiqWTEu3c85jOqyejO+4P9BasgHzSUXnsOP1c0K0ZSsKW9l4GJaIo+LV1SpKOI
+         MNQgrEmSJJuxaWsq3jkkHofs/fATVUNHIXlkD47U7WfHFqshl7Pg6vvzpdgtF42gqRSC
+         U1R6ORydmL2ZSsnnNFWG3qRVeQR+OMssCRb8UhZBCZ1048mDh7ZroaBDAd9Inpdq2GNR
+         RwrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734062674; x=1734667474;
+        d=1e100.net; s=20230601; t=1734062691; x=1734667491;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xzcHtM4625I5D50j6uu6xeVIa1jpXt6gHxEIvpDf7CI=;
-        b=CsFYQlWJ+gohcwA7PCK+9iorG3dnof0MvXYPktuJ3ti9fqiBiHrJODPEB/q8OYR0DT
-         /414Ps7Forc2qhITLdkkcwhCml08AeCHYl3B9RgH3F/U8RCDeYn/Amz6bGbMxXtZwazc
-         LHgDamAeTegobuqxh2vvC8s2rHOjvIQ4l4YaMGTGbNXb5WhdPk0PzlM5cY6MUOjHLsgW
-         G5uhaF/rYzuj6xoA/F4qQNIGbt9bpG1sjdkO7DpmcsdeQGqL2GdPwPhvkNZ2SAuwibv+
-         OnKnyK5bu3DFiCq6N1tXnZzOPtnfCtk6gKzk50XexGZz0fTfXIQZU6qKu4/B//bqTHzW
-         YH/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUR5QFU38Ytpqwshtla/p9q3Yhf+uRJc+FJPiECZuY6LAJCLIn50yTvc8FsI1TyvElG2Z+8hw7i1O6yW+7W@vger.kernel.org, AJvYcCUVs+OpEKpOwJeZZWjwBqmeTtzrV74VDclx71XKk+zG4mrb2tNdhYR4aWt0yOTrjyGA++ryuFVZvgsFtw/XVcPJ@vger.kernel.org, AJvYcCVL7vnv1/AqAQkeE5ckgTrl6KSfGoswilzx7IJ17IUgctu+lsyXqNIPR84tTC6VwVP/ogg=@vger.kernel.org, AJvYcCXC2zrFtXxDZA6ji21BTcSQLVKWEf96cNpvrAq3p9wMEchvCZ/f+uWjXD18H5VgfWGkMOLVxOny@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLeOdwDEF9yDgCsf2egiZYgu/pBDpeCsPPB2Gm0xad3p2OCS3c
-	WCUJEqmL1ha95DxWq7N5MUZtaF7/u4KLG9n449pxkkaMape7yUSq
-X-Gm-Gg: ASbGnctbfrPj0E5UT+Ztjq0V7HRRnbsf8zTtMdgOq/2joRUPQ2QN2izSfZvgZx9JxrC
-	oOVtg52NiybunKa++F3S83aj5CXmUmu7nIX52CiceTUFhfMQtuGCZUcTk7lt/hgqJrl6kh6fxdO
-	d9hoBUBh14KvDEF9oGfQNkNod8LYY6+Jo6CwUP3zc/SJQA8y5paPYWJcUV8dOrHItZziWps/MYs
-	9kynwWnVoOnothwl6J23ZYZJ6+f+2TYx1io7aC2gPUN1w5fYxBtKg==
-X-Google-Smtp-Source: AGHT+IEiczGJ5x34lhN8LhMymQTWLT/xwZGklt3tM0ClHmnnfxPojX+b+1esUx6LZ67ZkomNi1c18g==
-X-Received: by 2002:a17:902:e886:b0:216:59ed:1aa3 with SMTP id d9443c01a7336-218929d8431mr15903305ad.27.1734062674130;
-        Thu, 12 Dec 2024 20:04:34 -0800 (PST)
+        bh=pTTUiqA1JaNZpV3zkUZn5BbgQBGF1lbLwZtKk2rpqZg=;
+        b=tRqL6jzeOr4dR/7aCbRYZaG/1HDRb+wPKLgqV3jeHcvwUx5DdwxXFt6iZLETZPTOau
+         431GXAQWZlGbEfI1iK4xBvTiWZv6w3YMPzChqbglbn6GBMc9qQfzg/h2LFZeCH2WA3cF
+         32y1hLwUrAoSmYC7N6Bl9hf6e11mI+ebCDu3aZSGeceSsuS0gk+jpU3aAKB7smMSX7z0
+         SsZhkd6OCGWKOtE4TDIJk8FE6/oux9/+v2IIE86h4zT24WlmMYBZ6lCTxZceHuBsz5UQ
+         ZERC0JtlVt6K52YSQYMYiTR4/3TQoprO76izGcU2CRMAPLfym7vOGcEh33GIUB34Hzhb
+         gpGg==
+X-Forwarded-Encrypted: i=1; AJvYcCUAql1FDTM1fIaQwAIddXXAdXor2AMd9xXEpZLGTCOf3MofaIpq1qrZKdq9VSDbw25VPvGFtwlW7xzeDsD/sQgS@vger.kernel.org, AJvYcCUUQhxaLz1ZIIRDcmIGfX6mo/qFFiW26StZtAYMwKj7bfnNzDT4omMe6JlWnPWABBUtPBo=@vger.kernel.org, AJvYcCUsNbpYCWuFQnieihqf1Fg758oAoeYRjGilrOiswd5XoM7U90Go1SpmY0c97qjTBy6ahw0qw20tFTaqHSXp@vger.kernel.org, AJvYcCVBt5JBhy0sjAwJXNGnastDxrcfUUqcdkArt+DMh9XqsThjQcBn0sLsZLHMLVq/+Jn6xkJtMrR+@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWRF+qvEQa3s810xTLM5zWF4OehNAJI5aM2rDxHm0cWKGLeh/U
+	iImTGS4XuOPLGtPcrHM7UVLtbtTNjZ6OBzVj44/5yAzt0n9gbovq
+X-Gm-Gg: ASbGncu4uB6MTWclx8WIzkRjaRBEWs8Tsm8MhDIaLNN+Fh8XD6xCsi5MC+6FiZApZwP
+	s4IPc1j7Mw/MB6mgVSVa//nHVsNZUKxvSOs/FKfQv/QVGmrlryymfzP2Eq3xUZA17WsioPLTOmg
+	JiglTj8SJf6vUJHIhU/i0FaOGgYy2XCsnEV7owdP52cszizic1Ag90uuOgF2y5L29wwZI8xZcQf
+	za+CR6TKl4OOH8Gv/MURelbJ5zKwuUGRbXH7tF2wAMaWFAKnZhzew==
+X-Google-Smtp-Source: AGHT+IEKy1GALG5iBgebmvW+KMj+zATRP8zpKqCAK01KBRgfIQNZW1RurQVztjBNlutr98NGSOSlrg==
+X-Received: by 2002:a17:902:db04:b0:216:414e:aa53 with SMTP id d9443c01a7336-21892a42244mr16122635ad.52.1734062690694;
+        Thu, 12 Dec 2024 20:04:50 -0800 (PST)
 Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21654150cc2sm74300745ad.68.2024.12.12.20.04.33
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fd4cd45b18sm7777975a12.73.2024.12.12.20.04.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Dec 2024 20:04:33 -0800 (PST)
-Message-ID: <341df2d52af6c1584353b89a8a65d9d0fb5f0f27.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v5 3/5] bpf: verifier: Refactor helper access
- type tracking
+        Thu, 12 Dec 2024 20:04:50 -0800 (PST)
+Message-ID: <1b0e59ee87b765513c6488112e6e3e3cf4af7cb6.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/5] bpf: verifier: Support eliding map
+ lookup nullness
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Daniel Xu <dxu@dxuuu.xyz>, andrii@kernel.org, ast@kernel.org, 
 	shuah@kernel.org, daniel@iogearbox.net
@@ -82,10 +82,10 @@ Cc: john.fastabend@gmail.com, martin.lau@linux.dev, song@kernel.org,
  haoluo@google.com, 	jolsa@kernel.org, mykolal@fb.com, bpf@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	netdev@vger.kernel.org
-Date: Thu, 12 Dec 2024 20:04:28 -0800
-In-Reply-To: <4727abf12fbc53723359d4edcdf5b6dd7d33f9cb.1734045451.git.dxu@dxuuu.xyz>
+Date: Thu, 12 Dec 2024 20:04:45 -0800
+In-Reply-To: <92065ca054beccd6d0f35efe9715ef965e8d379f.1734045451.git.dxu@dxuuu.xyz>
 References: <cover.1734045451.git.dxu@dxuuu.xyz>
-		 <4727abf12fbc53723359d4edcdf5b6dd7d33f9cb.1734045451.git.dxu@dxuuu.xyz>
+		 <92065ca054beccd6d0f35efe9715ef965e8d379f.1734045451.git.dxu@dxuuu.xyz>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
@@ -97,73 +97,90 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Thu, 2024-12-12 at 16:22 -0700, Daniel Xu wrote:
-> Previously, the verifier was treating all PTR_TO_STACK registers passed
-> to a helper call as potentially written to by the helper. However, all
-> calls to check_stack_range_initialized() already have precise access type
-> information available.
->=20
-> Rather than treat ACCESS_HELPER as a proxy for BPF_WRITE, pass
-> enum bpf_access_type to check_stack_range_initialized() to more
-> precisely track helper arguments.
->=20
-> One benefit from this precision is that registers tracked as valid
-> spills and passed as a read-only helper argument remain tracked after
-> the call.  Rather than being marked STACK_MISC afterwards.
->=20
-> An additional benefit is the verifier logs are also more precise. For
-> this particular error, users will enjoy a slightly clearer message. See
-> included selftest updates for examples.
->=20
-> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> ---
 
-I think this change is ok.
-With it there is only one use of 'enum bpf_access_src' remains,
-but it doesn't look like it could be removed.
+I think these changes are fine in general, but see below.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-
-[...]
-
-> --- a/tools/testing/selftests/bpf/progs/uninit_stack.c
-> +++ b/tools/testing/selftests/bpf/progs/uninit_stack.c
-> @@ -55,33 +55,4 @@ exit_%=3D:	r0 =3D 0;					\
->  		      : __clobber_all);
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 58b36cc96bd5..4947ef884a18 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -287,6 +287,7 @@ struct bpf_call_arg_meta {
+>  	u32 ret_btf_id;
+>  	u32 subprogno;
+>  	struct btf_field *kptr_field;
+> +	s64 const_map_key;
+>  };
+> =20
+>  struct bpf_kfunc_call_arg_meta {
+> @@ -9163,6 +9164,53 @@ static int check_reg_const_str(struct bpf_verifier=
+_env *env,
+>  	return 0;
 >  }
 > =20
-> -static __noinline void dummy(void) {}
-> -
-> -/* Pass a pointer to uninitialized stack memory to a helper.
-> - * Passed memory block should be marked as STACK_MISC after helper call.
-> - */
-> -SEC("socket")
-> -__log_level(7) __msg("fp-104=3Dmmmmmmmm")
-> -__naked int helper_uninit_to_misc(void *ctx)
+> +/* Returns constant key value if possible, else -1 */
+> +static s64 get_constant_map_key(struct bpf_verifier_env *env,
+> +				struct bpf_reg_state *key,
+> +				u32 key_size)
 
-Is it possible to peek a helper that writes into memory and not delete
-this test?
+I understand that this is not your use case, but maybe generalize this
+a bit by checking maximal register value instead of a constant?
 
-> -{
-> -	asm volatile ("					\
-> -		/* force stack depth to be 128 */	\
-> -		*(u64*)(r10 - 128) =3D r1;		\
-> -		r1 =3D r10;				\
-> -		r1 +=3D -128;				\
-> -		r2 =3D 32;				\
-> -		call %[bpf_trace_printk];		\
-> -		/* Call to dummy() forces print_verifier_state(..., true),	\
-> -		 * thus showing the stack state, matched by __msg().		\
-> -		 */					\
-> -		call %[dummy];				\
-> -		r0 =3D 0;					\
-> -		exit;					\
-> -"
-> -		      :
-> -		      : __imm(bpf_trace_printk),
-> -			__imm(dummy)
-> -		      : __clobber_all);
-> -}
-> -
+> +{
+> +	struct bpf_func_state *state =3D func(env, key);
+> +	struct bpf_reg_state *reg;
+> +	int zero_size =3D 0;
+> +	int stack_off;
+> +	u8 *stype;
+> +	int slot;
+> +	int spi;
+> +	int i;
+> +
+> +	if (!env->bpf_capable)
+> +		return -1;
+> +	if (key->type !=3D PTR_TO_STACK)
+> +		return -1;
+> +	if (!tnum_is_const(key->var_off))
+> +		return -1;
+> +
+> +	stack_off =3D key->off + key->var_off.value;
+> +	slot =3D -stack_off - 1;
+> +	spi =3D slot / BPF_REG_SIZE;
+> +
+> +	/* First handle precisely tracked STACK_ZERO, up to BPF_REG_SIZE */
+> +	stype =3D state->stack[spi].slot_type;
+> +	for (i =3D 0; i < BPF_REG_SIZE && stype[i] =3D=3D STACK_ZERO; i++)
+> +		zero_size++;
+> +	if (zero_size =3D=3D key_size)
+> +		return 0;
+> +
+> +	if (!is_spilled_reg(&state->stack[spi]))
+> +		/* Not pointer to stack */
+> +		return -1;
+
+Nit: there is a 'is_spilled_scalar_reg' utility function.
+
+> +
+> +	reg =3D &state->stack[spi].spilled_ptr;
+> +	if (reg->type !=3D SCALAR_VALUE)
+> +		/* Only scalars are valid array map keys */
+> +		return -1;
+> +	else if (!tnum_is_const(reg->var_off))
+> +		/* Stack value not statically known */
+> +		return -1;
+
+I think you need to check if size of the spill matches the size of the key.
+The mismatch would be unsafe when spill size is smaller than key size.
+E.g. consider 1-byte spill with mask 'mmmmmmrr' and a 4-byte key,
+at runtime the 'mmmmmm' part might be non-zero, rendering key to be
+out of range.
+
+> +
+> +	return reg->var_off.value;
+> +}
+> +
+>  static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+>  			  struct bpf_call_arg_meta *meta,
+>  			  const struct bpf_func_proto *fn,
 
 [...]
 
