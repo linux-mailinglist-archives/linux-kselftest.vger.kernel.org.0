@@ -1,109 +1,239 @@
-Return-Path: <linux-kselftest+bounces-23379-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23380-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17AAD9F19CB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Dec 2024 00:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 474519F1C29
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Dec 2024 03:45:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3414C166721
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2024 23:19:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30CD616988B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Dec 2024 02:45:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 281611B3724;
-	Fri, 13 Dec 2024 23:19:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 664751CD2B;
+	Sat, 14 Dec 2024 02:45:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XebVGns7"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="aK4LgnTZ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="X2TTGGoi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B934C194C7D;
-	Fri, 13 Dec 2024 23:19:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1E34DF49;
+	Sat, 14 Dec 2024 02:45:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734131947; cv=none; b=N8tEFrwMCV3Vm0L4saycuS8er7Mi6b3PciAvjp6lLWR3eZRaYn2sHrcC0CA1xkHt9mhMBcTLI/kNpHuKmWUSsy+topJY0ar7xWDnvyrCZ8ubWT+HR7+rK427SgSHah4ijKajMbbf6Y2nzyJsxV8Inin8YpA33rNnJ0AUMs3JfZM=
+	t=1734144305; cv=none; b=la/wwr7j3rWsx8VvNq7PxpgjTZHzC0F/ZhANtc5wwxowTbJMsaH/lPeJDZj4gNJEOFyVphq82sLqZY1yiRQ8embcVqx7gStX9b8lWsfa4BiaLSne+rH6v+TAdb6QGi9HiTrpmYyf9j+UvS/+MVkTGa1EMesfgxz804BYFRGfDYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734131947; c=relaxed/simple;
-	bh=buSXj9Eu3v5WysNxEm8QcbC/XQhDnt9c4n4hd/cbp3o=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iyOuS6PDUzWeAh5gZ8c9Rvm56UaQU7OSpPEN+5NXLy14ReFpvpvthZxXOVwT70xcGO6rlA2bgxSpkqKwrNYga/PmmL9kljlCBvPxKVR0BJFOio9PzZekoyTp5mOufC+mNnpFMsjXNJBBgtIx9aPOzJPg/mhFPqRafFfyFfFnxpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XebVGns7; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-728f337a921so2469294b3a.3;
-        Fri, 13 Dec 2024 15:19:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734131945; x=1734736745; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=buSXj9Eu3v5WysNxEm8QcbC/XQhDnt9c4n4hd/cbp3o=;
-        b=XebVGns7taFZvtyTpsmRSeXVJ9T3bkmimNyVWsnrUVvbmQhUxwiNNWVhZxRjtt4OJp
-         9Em2KxiLs476PKkg7Ucsd+0fxo3qDnSK1xvHMliOABoMVVZCvEP/xSLgCsLruA+olABg
-         5Asic4bVi3uQUoEutDHN//0ho+f6dLw1V75DXPYOdgELDpUbWyrka5uW5qtALdnokiRK
-         WImdZ9uP4ee3w1C+MZpkpl91d4bcrqv9SMIqLikqpCBQ9GnH9g0tEmR3RYtrgqSYKnSx
-         2rqNmXraIdcpX0klfyy90W3fsu0/Przzp2QiUoXVGjHSvfm6LccNF2WToPRhQW3pQkzG
-         Tfow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734131945; x=1734736745;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=buSXj9Eu3v5WysNxEm8QcbC/XQhDnt9c4n4hd/cbp3o=;
-        b=mhz0fqxqc/m9NU/2fE09QcCwC7HdnHNPP6jywtVTe3n+qmTd54SlnvnGaV5m3hRnpr
-         IG1Yhl2jaBpFIKXYs95GdbFBni1cEeKibY8zY8b+MuS3KlyU0aKoTiPizjVLcbPc8MKX
-         bC8ZTKVD/Eca48WbXU67quS692B0uSKGuzza5zhuO+cINsePD0iRVggYJ1eZKDuOVw2T
-         KD2NY3y0v9SYKDkYZeXG4bs7ILy45pbXOx9RLxNeoaB6ar3GrZrJLqgiZgr5iLSC37wR
-         x5MAGUqt9lJwa4GAsfcV1WMMH/U+9ASsjLw7RoZ3/s+zi47p8IkABj4YEVvSJUErJA22
-         kRcg==
-X-Forwarded-Encrypted: i=1; AJvYcCUIOhsXq/Jdm7C+RrQ+YwBhPWAaAr13Utk5LmrLqfWm/ikwi2L4+DQDqt31UIRluMWwu9Ffvjr9QfkKXD3P@vger.kernel.org, AJvYcCWiG/ZavX8aHlznt0QIpSgHL2bw+B/SwRICwBvBVTUR67y20AKxNN7mzmbsw5XOMe0kU1mZ51v7O94CZ9HRscFn@vger.kernel.org, AJvYcCXW0+l46fMjoXig9lSLasTgt/RqXzhLbpi/I0cxu8w/MyUEBRPCjtoXtAP3VN4b6T49LaMMFFDP@vger.kernel.org, AJvYcCXlmmo0klgjEmDKiSstgLEtjy29u31fd24WfhFVZt5WTbZlVDB+iDW9uyxAGeZDY/E0OUc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2C9LH4J6Em4SgBiD3ckXyAv0KKg6LqXQ+1GygmUYFUybO8TeR
-	gXy6SmVO6gEz0NG6JQzhesmjailbNdCLabIDUsonQTEy2/kdGIAt
-X-Gm-Gg: ASbGncu+I3e8NBpb634BfaGSor2uHaTkgg09IekdS4Oxl1cniN29uWlPyM9jLXZUVcH
-	f5IF7QwweaYGe4l0lRKMDySSy9e2BnomsHHtrkaGtmzN3w5MK+IFYHfoXpZU06YQ1U//Lfvj4Eo
-	a0m3bMlO6Vgdp8PEatGbVv/1zW9uQ7BBjrBka1jPdaOL4NgshbhbXMfL9U0VTlxm9/7iImG4E/P
-	np9fZKL1mn2vYQWlKLH46ALI4ABSg2YHs20YjElaNatz323EwjtyQ==
-X-Google-Smtp-Source: AGHT+IFAZ3aQ/IPrf/Ya3bUc+Pvgb9Vh0D2C49sG8d1FwoFV5ZloaqsCFeu0BSkRbqo7WmToNT6ftw==
-X-Received: by 2002:a05:6a20:3947:b0:1e0:c8d9:3382 with SMTP id adf61e73a8af0-1e1dfe6a67bmr6134972637.45.1734131944960;
-        Fri, 13 Dec 2024 15:19:04 -0800 (PST)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72918bad9d2sm313385b3a.157.2024.12.13.15.19.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2024 15:19:04 -0800 (PST)
-Message-ID: <0eb169a27a61eb29f8a0c1ae44904934c9b4f14d.camel@gmail.com>
+	s=arc-20240116; t=1734144305; c=relaxed/simple;
+	bh=9qyDgkeCX1tal18Hf/Ny/eaU0q+9ST+DwYCRWojmXUA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ew4nemQn4+0EDvjoEPNl5xXLdqDwwkg38E6WcnzpwDUKVvDB4BIXZyYt5BFjJzQ/86XzPAyta4zslbFP1FqhqD4JKYXjnUuGEyyqvNZvKrJPBFQMhpHK8QdGXyIZYpxa2FzQFYDjXOBnEYn2Eub9fQo57LslEwkXl+BggnnvCto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=aK4LgnTZ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=X2TTGGoi; arc=none smtp.client-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfout.phl.internal (Postfix) with ESMTP id A661513841EB;
+	Fri, 13 Dec 2024 21:45:01 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-12.internal (MEProxy); Fri, 13 Dec 2024 21:45:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1734144301;
+	 x=1734230701; bh=JzF+XelSXj4HAebN6G10rWGrSfReZwqnUK4DNzdHLvE=; b=
+	aK4LgnTZIQr2LvYmqh+sdZAcp6mZBlTwVcXtY7l2/IaeCDCPEf4oKyvBpMR0Y3h8
+	8lsF7+N7lcGsQ2Ix6YrtO5hDawNVr7myi3Y2YOM+efGOxQuZGYU77KcSt42xli3b
+	kn7wdbz+9fobWlMOgMalmMNFwzAdJq2Ur2HJu1NpwhBDbL2Vn/B+1IrwDGB2ZoSB
+	qFdf9kq+Hp2pm6UWC8PLR/xth1Hbkrb9gjk67mURZsyMotSgO5UiugYiA6WJ2Hy8
+	6kiDARd869JpTua8uq8DECTY98SZISNsNpqPRQy/GIDhMsl+5IEGr5W7ZAkoTTF2
+	rKpbR+OQv+WHFz3UWzlCaQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1734144301; x=
+	1734230701; bh=JzF+XelSXj4HAebN6G10rWGrSfReZwqnUK4DNzdHLvE=; b=X
+	2TTGGoiGHB61jbOt3JIO+2DXRt+TnyMdRiQjkywVO1Hm5GoE406bhgpCSOClYWM6
+	yD/Pgb84I3bkx7U3oXXJ3iqv2FswmQZoXAp0VNS1QNVcrlOrRkcBZoxIab6zIryR
+	KhA7p0rJtoa0NUzJdc26390d8Mp+yn1T1P+hVwBhbJkukVVVm4aJHCjuWpadPb+M
+	/rAGVUDfBYJVEmehxn3PxkBywOaXPAX+cNldUB8imX5WnUUlwG1DVGqvaibFfBpf
+	8jF+AQhyltwCvMfmqBh468w4JnZiLCZZDzZgv75fWc3e78CCs0jT8C4CL+9ihz6T
+	klQbKM7eJP4wz/ieqCakg==
+X-ME-Sender: <xms:LPFcZ4wJZddKBDuYpgpEVJh6Kd5_PvzT5pbkHZ0_YpHzjWCEX-RMsg>
+    <xme:LPFcZ8T0nvmXN9AWaMo9_EApz9rsAUotFWr6n5AoE2rNJHlipBGOahgdkNOR1telj
+    CNzaqupYOQxDtXNLw>
+X-ME-Received: <xmr:LPFcZ6WnpqztuP9BJS1aDML29exPp0xFn0mCsLPA5VAOceR_jGrPu1ViNNn-FOd_BFRlYR_QmFQ-HH5mRzWvjtc9x6P6pq8QBph8Ig6fRK-o9Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrkeekgdeglecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
+    hsucdlqddutddtmdenfghrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffkfhgg
+    tggugfgjsehtkefstddttdejnecuhfhrohhmpeffrghnihgvlhcuighuuceougiguhesug
+    iguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnheptdfgueeuueekieekgfeiueekffel
+    teekkeekgeegffevtddvjeeuheeuueelfeetnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihiidpnhgspghrtghp
+    thhtohepudelpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhgurhhiihdrnh
+    grkhhrhihikhhosehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnughrihhisehkvghr
+    nhgvlhdrohhrghdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtth
+    hopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgv
+    rhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlsehiohhgvggrrhgsohigrdhnvg
+    htpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdhr
+    tghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtohepsh
+    honhhgsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:LPFcZ2gLkySSqTMO_YhbArEZesnigQoXjcf8K_aOYKlgAjZ1ndhOTA>
+    <xmx:LPFcZ6AP_57R1QgUv69a5iI_LwvZYRbs-Vr2QCFFGwnhor3CIYtGCw>
+    <xmx:LPFcZ3IDCoN-MfP5bHzlqq5u-1i6ZF5Oc_U26usG9-mRJrG7CTFc7Q>
+    <xmx:LPFcZxB1EUYMwDohZcDaygtKvP0j_ivo0b2UWSasplQ7wB9F1EoDvQ>
+    <xmx:LfFcZ1UMNp2tLaZxTNMh6fNG75fQe5whelrusP6SR-6Ir6QEGBNgLO3e>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 13 Dec 2024 21:44:57 -0500 (EST)
+Date: Fri, 13 Dec 2024 19:44:55 -0700
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: andrii@kernel.org, ast@kernel.org, eddyz87@gmail.com, shuah@kernel.org, 
+	daniel@iogearbox.net, john.fastabend@gmail.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, 
+	jolsa@kernel.org, mykolal@fb.com, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
 Subject: Re: [PATCH bpf-next v5 4/5] bpf: verifier: Support eliding map
  lookup nullness
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Daniel Xu <dxu@dxuuu.xyz>
-Cc: andrii@kernel.org, ast@kernel.org, shuah@kernel.org,
- daniel@iogearbox.net, 	john.fastabend@gmail.com, martin.lau@linux.dev,
- song@kernel.org, 	yonghong.song@linux.dev, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, 	jolsa@kernel.org, mykolal@fb.com,
- bpf@vger.kernel.org, 	linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, 	netdev@vger.kernel.org
-Date: Fri, 13 Dec 2024 15:18:59 -0800
-In-Reply-To: <f99a31f62c19262fcad7debf10ede0bb0b970af4.camel@gmail.com>
+Message-ID: <zow3q3nhlz6vedbni3upag5yr7zzrhyiqysl5nwyubebmbwojk@th7kbm62x36g>
 References: <cover.1734045451.git.dxu@dxuuu.xyz>
-		 <92065ca054beccd6d0f35efe9715ef965e8d379f.1734045451.git.dxu@dxuuu.xyz>
-		 <CAP01T76UQgb=Y0kh6bKPABt=p8=JRmDHsFc31rsijXSrK+5+8A@mail.gmail.com>
-	 <f99a31f62c19262fcad7debf10ede0bb0b970af4.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
+ <92065ca054beccd6d0f35efe9715ef965e8d379f.1734045451.git.dxu@dxuuu.xyz>
+ <CAEf4BzaqCgW9keiT+tJUBQWT6Q+jMwuvn4O2ZghO0c+ZvACNrw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzaqCgW9keiT+tJUBQWT6Q+jMwuvn4O2ZghO0c+ZvACNrw@mail.gmail.com>
 
-On Fri, 2024-12-13 at 15:14 -0800, Eduard Zingerman wrote:
+On Fri, Dec 13, 2024 at 03:02:11PM GMT, Andrii Nakryiko wrote:
+> On Thu, Dec 12, 2024 at 3:23 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
+> >
+> > This commit allows progs to elide a null check on statically known map
+> > lookup keys. In other words, if the verifier can statically prove that
+> > the lookup will be in-bounds, allow the prog to drop the null check.
+> >
+> > This is useful for two reasons:
+> >
+> > 1. Large numbers of nullness checks (especially when they cannot fail)
+> >    unnecessarily pushes prog towards BPF_COMPLEXITY_LIMIT_JMP_SEQ.
+> > 2. It forms a tighter contract between programmer and verifier.
+> >
+> > For (1), bpftrace is starting to make heavier use of percpu scratch
+> > maps. As a result, for user scripts with large number of unrolled loops,
+> > we are starting to hit jump complexity verification errors.  These
+> > percpu lookups cannot fail anyways, as we only use static key values.
+> > Eliding nullness probably results in less work for verifier as well.
+> >
+> > For (2), percpu scratch maps are often used as a larger stack, as the
+> > currrent stack is limited to 512 bytes. In these situations, it is
+> > desirable for the programmer to express: "this lookup should never fail,
+> > and if it does, it means I messed up the code". By omitting the null
+> > check, the programmer can "ask" the verifier to double check the logic.
+> >
+> > Tests also have to be updated in sync with these changes, as the
+> > verifier is more efficient with this change. Notable, iters.c tests had
+> > to be changed to use a map type that still requires null checks, as it's
+> > exercising verifier tracking logic w.r.t iterators.
+> >
+> > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> > ---
+> >  kernel/bpf/verifier.c                         | 80 ++++++++++++++++++-
+> >  tools/testing/selftests/bpf/progs/iters.c     | 14 ++--
+> >  .../selftests/bpf/progs/map_kptr_fail.c       |  2 +-
+> >  .../selftests/bpf/progs/verifier_map_in_map.c |  2 +-
+> >  .../testing/selftests/bpf/verifier/map_kptr.c |  2 +-
+> >  5 files changed, 87 insertions(+), 13 deletions(-)
+> >
+> 
+> Eduard has great points. I've added a few more comments below.
+> 
+> pw-bot: cr
+> 
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 58b36cc96bd5..4947ef884a18 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -287,6 +287,7 @@ struct bpf_call_arg_meta {
+> >         u32 ret_btf_id;
+> >         u32 subprogno;
+> >         struct btf_field *kptr_field;
+> > +       s64 const_map_key;
+> >  };
+> >
+> >  struct bpf_kfunc_call_arg_meta {
+> > @@ -9163,6 +9164,53 @@ static int check_reg_const_str(struct bpf_verifier_env *env,
+> >         return 0;
+> >  }
+> >
+> > +/* Returns constant key value if possible, else -1 */
+> > +static s64 get_constant_map_key(struct bpf_verifier_env *env,
+> > +                               struct bpf_reg_state *key,
+> > +                               u32 key_size)
+> > +{
+> > +       struct bpf_func_state *state = func(env, key);
+> > +       struct bpf_reg_state *reg;
+> > +       int zero_size = 0;
+> > +       int stack_off;
+> > +       u8 *stype;
+> > +       int slot;
+> > +       int spi;
+> > +       int i;
+> > +
+> > +       if (!env->bpf_capable)
+> > +               return -1;
+> > +       if (key->type != PTR_TO_STACK)
+> > +               return -1;
+> > +       if (!tnum_is_const(key->var_off))
+> > +               return -1;
+> > +
+> > +       stack_off = key->off + key->var_off.value;
+> > +       slot = -stack_off - 1;
+> > +       spi = slot / BPF_REG_SIZE;
+> > +
+> > +       /* First handle precisely tracked STACK_ZERO, up to BPF_REG_SIZE */
+> > +       stype = state->stack[spi].slot_type;
+> > +       for (i = 0; i < BPF_REG_SIZE && stype[i] == STACK_ZERO; i++)
+> 
+> it's Friday and I'm lazy, but please double-check that this works for
+> both big-endian and little-endian :)
 
-[...]
+Any tips? Are the existing tests running thru s390x hosts in CI
+sufficient or should I add some tests writen in C (and not BPF
+assembler)? I can never think about endianness correctly...
 
-> Great point, I'm sure this does not happen.
+> 
+> with Eduard's suggestion this also becomes interesting when you have
+> 000mmm mix (as one example), because that gives you a small range, and
+> all values might be valid keys for arrays
 
-I mean, mark_chain_precision() does not happen at the moment.
+Can you define what "small range" means? What range is there with 0's?
+Any pointers would be helpful.
+
+
+> 
+> > +               zero_size++;
+> > +       if (zero_size == key_size)
+> > +               return 0;
+> > +
+> > +       if (!is_spilled_reg(&state->stack[spi]))
+> > +               /* Not pointer to stack */
+> 
+> !is_spilled_reg and "Not pointer to stack" seem to be not exactly the
+> same things?
+
+You're right - comment is not helpful. I'll make the change to
+use is_spilled_scalar_reg() which is probably as clear as it gets.
+
+[..]
+
 
 
