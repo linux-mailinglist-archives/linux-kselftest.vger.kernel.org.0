@@ -1,112 +1,115 @@
-Return-Path: <linux-kselftest+bounces-23382-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23383-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0E8A9F1C67
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Dec 2024 04:31:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 973DA9F1CFE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Dec 2024 07:18:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59A6B188D48F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Dec 2024 03:31:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC46416928F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Dec 2024 06:18:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 360761A28D;
-	Sat, 14 Dec 2024 03:31:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C54147E782;
+	Sat, 14 Dec 2024 06:18:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F3PawN9Z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mvO9T7e7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D0017579;
-	Sat, 14 Dec 2024 03:31:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F3A19BA6;
+	Sat, 14 Dec 2024 06:18:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734147089; cv=none; b=LNVIA6kK60FKlk+jg6ycZHYJJtQY0DJHugivH1vliIVKXmJIocN5y67ccPORogJQ/2FIaaGBJxnzQJqEmUAphpxl2MFiBYZI5D8SyFt3CW092AY3jBTPVA1MjelC9OhVSnPUAjUS0DkqPQzP5B/dzv9eF7ncsNXx/FY8IyelSR0=
+	t=1734157085; cv=none; b=L3655UUxhMUW03V8l32QQMrzOtRNRdx4BmfYYaXA0jrh3SwRS5Cu2uVeVrwp917lnzuI4dNv4Evylqi7oylLvJfEvabDbindXJM20v1D8wagnfliYSaKA0zl4r8Np1st1M1C1OgUOME1Ygsd3kOjZ2sFcKL7DuNbg5XAY8fRRB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734147089; c=relaxed/simple;
-	bh=OqHWtTWBs6sriZ4OxwBTxJdDw3GeyRWWqwRxGJKmth4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cHyXAOZQl5vKcjJJDUromU7Gbff8ysou5SuB9ts1v3OKvzgew0rHLveRmJyfpegQQLjbDjS9J5D8BFvw/EFmOXioAC+Vh4Z6whhdxtuSWEICiAW4ezYh0bin1MvBFLD7VOIyLezpEcEKN4KwM5oOiwcbZeUEgBx0vjwonBZsDY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F3PawN9Z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F00C9C4CED1;
-	Sat, 14 Dec 2024 03:31:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734147088;
-	bh=OqHWtTWBs6sriZ4OxwBTxJdDw3GeyRWWqwRxGJKmth4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=F3PawN9Zac03Ke+1WvQxNrHvKCLp9VoQL20cinoAserMrdH+tMCjnP6CNLPJHGOGJ
-	 IOV85DQGbOjAkpSXpBhxlCMtf0hzzCu28VUsnXlc+Vd+rTEowDhf4IusO/AYs+9mWY
-	 G3FPbd82kHXU8biq+hifDjpR2rMTK4G0CMCCZunetnpYxfMw+ToFlxWuB/SdhoNGDw
-	 cGmLxlz15kYvBta9XyCP9znNkni5r6IsHcr1c1DQpkhCc5Zx4klrAk4Pt+so4Vniwd
-	 7U9L+Q+uJGcRBO2F55P1HWtZQg7HwJBNmOHL+tqPztRh/4azDvt46D9QgM4QKijZVu
-	 iUF4OP7nnbFpA==
-Date: Fri, 13 Dec 2024 19:31:27 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>, Andy Gospodarek
- <andy@greyhouse.net>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Nikolay Aleksandrov
- <razor@blackwall.org>, Simon Horman <horms@kernel.org>, Jianbo Liu
- <jianbol@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 0/2] bond: fix xfrm offload feature during init
-Message-ID: <20241213193127.4c31ef80@kernel.org>
-In-Reply-To: <Z1vfsAyuxcohT7th@fedora>
-References: <20241211071127.38452-1-liuhangbin@gmail.com>
-	<20241212062734.182a0164@kernel.org>
-	<Z1vfsAyuxcohT7th@fedora>
+	s=arc-20240116; t=1734157085; c=relaxed/simple;
+	bh=fHcDC9/3fjxqA23UY0rgQz3K5BSqWz9mQZQLiNiCkOI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mzyXvOqeetaXLLzI7sYpF+dDEbgNkIcurbxWXHqHSGbbMQelZUJH4CvbfPFFRyKSSSyKyFOM/qX2i/9wtmq6uRRn+IF+3ge5aTfCofgHuBD7apmLrA9xpbj2e6Z/qGt8alHqLHccw7ZZ3aDV6M1qDSuJiNMYGVaJoZDz+ez2xqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mvO9T7e7; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-728eedfca37so2642105b3a.2;
+        Fri, 13 Dec 2024 22:18:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734157083; x=1734761883; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=fHcDC9/3fjxqA23UY0rgQz3K5BSqWz9mQZQLiNiCkOI=;
+        b=mvO9T7e7xp7YEDWKl8o+JDvmsOBMs2sifaSfY8+pyy2u8O+TFX7psnHfmDHaggErXg
+         Z972CUa3oWq8QHDrFwBZe8Jpz+iiyT1Ioz6kf042dBUnDV0RSnvKZtaucn+8s9H37FBb
+         RL0YioNko4lXKfz2g21lQFFP20dc4GH8fYfO4mkoQn5zEoOcCYuE7VgQXVadI2U3yclf
+         IO+xK43SOChPIZipMbPai9prd6vUxhLmLgV9Yj5VuRfWWRslQ4tsvru2AXzlPG4yda9G
+         kNw5lIDz2lm3ot4VliwyFiJrptt4Do2OPerx9pmQXnPQTWlD4cMREWAEO6gvvi7Oi8WZ
+         +VLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734157083; x=1734761883;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fHcDC9/3fjxqA23UY0rgQz3K5BSqWz9mQZQLiNiCkOI=;
+        b=XX6bHmzFtv21gak4HA627e4P9nPIm64outPThj7ZSGUGcW+y6UWqYZafJeAX96QeAV
+         G/2MMFcRikPoDYTQcixxf2gcnX5ppghfi1yuJOT+Dv3iGWLhWxMO5/H9qY36rbo7pAuS
+         pvpkcp1F4e4TliWuS+gbKZZt9oTIiqPUA+w/1cLnNNFt9Z2neiYDrJvHA9+VK6m54V84
+         2ZZTrmVR466P3eyUD3/vwRGKfVyV3BLNBHaqEm6o+Yyc8iG0c1Qgt6rc5cBV2zcsY3bb
+         f6hH6Tz8kmNv95yUPpNGvk8H8kVYEYZLHVK4wuKwVM6L2HsAe3chbrStRjDLayIuAqYa
+         rvrg==
+X-Forwarded-Encrypted: i=1; AJvYcCU+uKbmowzSiHdlYcPszIDesUvIOV/BAiF0GoCPlGsJFkYRNWlMLGvCHP04mcSnndg00IeHd2LZ12l2h0fq@vger.kernel.org, AJvYcCUfqzsRcF9yYbXAg6deMM5HfzxEVuZR6mxN8Ad4mN+nIGRVAvzxt+DwPlDlqJRH9XYSU+uv73aZ@vger.kernel.org, AJvYcCV6e/vNHZNYfoeglu309z8Mz01Pr0cbNiUVThmb0kJgjYK20mQ7WD9ayYm2vT1Mokgx/N4=@vger.kernel.org, AJvYcCVEKT7HFSCfvh7QMlMPtWPpXEzGJeWycgcuibs8CDngbYbJMGvMJ642hkWaBNLcD39bcIB50koYJZVsVYhcwb8c@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzq0tmEsV2Xw4UCEOuhVZci5l9DRA6j/1c6cCz8FSTW35RFEttc
+	80OSDOz/M2hfnHP8vTGkzaxEQ6oozF/gP4Y2qLrFKRTkIoYphnYu
+X-Gm-Gg: ASbGnctEg73KFzL+KHKK/jkw9yO1MmjHb5ngPEE3arhtomLrWliyGV9dCF36dWqBx7S
+	vhnozK02F0+OAjs+yaXVPe9eycbp2fawuvczLDvVwhgYj565MIN4XRn+NKfnIghm6R+YGZVzcCN
+	mD9zY/+aBP2dcy3Z/xH5pGOJErSWzL/uZxKq54kcOt6Di8xVaoK+xU+VubpX6SrHfCkSes8zvCG
+	D/IIUso8oUnk52jF3YA7ulVrS9FHowRhKOfReafQvIPyvyLkUFVEQ==
+X-Google-Smtp-Source: AGHT+IGWJW1+Pwpvx67EW8U4m0L0clqnU493+l3wbL2x0EMI3Oje+f6Aw9Q0/lrCQB/2hhJyEiBupA==
+X-Received: by 2002:a05:6a21:6da3:b0:1e1:a9dd:5a58 with SMTP id adf61e73a8af0-1e1dfdee4d9mr7575951637.30.1734157082400;
+        Fri, 13 Dec 2024 22:18:02 -0800 (PST)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72918bce8d9sm763149b3a.200.2024.12.13.22.18.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Dec 2024 22:18:01 -0800 (PST)
+Message-ID: <00d01559793cb22a323ff8e800e1ed6e79163e57.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v5 5/5] bpf: selftests: verifier: Add nullness
+ elision tests
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Daniel Xu <dxu@dxuuu.xyz>, andrii@kernel.org, ast@kernel.org, 
+	shuah@kernel.org, daniel@iogearbox.net
+Cc: mykolal@fb.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org
+Date: Fri, 13 Dec 2024 22:17:56 -0800
+In-Reply-To: <c97b9ffd2042790ae6eb55ba01eae94282014006.1734045451.git.dxu@dxuuu.xyz>
+References: <cover.1734045451.git.dxu@dxuuu.xyz>
+	 <c97b9ffd2042790ae6eb55ba01eae94282014006.1734045451.git.dxu@dxuuu.xyz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Fri, 13 Dec 2024 07:18:08 +0000 Hangbin Liu wrote:
-> On Thu, Dec 12, 2024 at 06:27:34AM -0800, Jakub Kicinski wrote:
-> > On Wed, 11 Dec 2024 07:11:25 +0000 Hangbin Liu wrote:  
-> > > The first patch fixes the xfrm offload feature during setup active-backup
-> > > mode. The second patch add a ipsec offload testing.  
-> > 
-> > Looks like the test is too good, is there a fix pending somewhere for
-> > the BUG below? We can't merge the test before that:  
-> 
-> This should be a regression of 2aeeef906d5a ("bonding: change ipsec_lock from
-> spin lock to mutex"). As in xfrm_state_delete we called spin_lock_bh(&x->lock)
-> for the xfrm state delete.
-> 
-> But I'm not sure if it's proper to release the spin lock in bond code.
-> This seems too specific.
-> 
-> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-> index 7daeab67e7b5..69563bc958ca 100644
-> --- a/drivers/net/bonding/bond_main.c
-> +++ b/drivers/net/bonding/bond_main.c
-> @@ -592,6 +592,7 @@ static void bond_ipsec_del_sa(struct xfrm_state *xs)
->  	real_dev->xfrmdev_ops->xdo_dev_state_delete(xs);
->  out:
->  	netdev_put(real_dev, &tracker);
-> +	spin_unlock_bh(&xs->lock);
->  	mutex_lock(&bond->ipsec_lock);
->  	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
->  		if (ipsec->xs == xs) {
-> @@ -601,6 +602,7 @@ static void bond_ipsec_del_sa(struct xfrm_state *xs)
->  		}
->  	}
->  	mutex_unlock(&bond->ipsec_lock);
-> +	spin_lock_bh(&xs->lock);
->  }
->  
-> 
-> What do you think?
+On Thu, 2024-12-12 at 16:22 -0700, Daniel Xu wrote:
+> Test that nullness elision works for common use cases. For example, we
+> want to check that both full and subreg stack slots are recognized. As
+> well as when there's both const and non-const values of R2 leading up to
+> a lookup. And obviously some bound checks.
+>=20
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
 
-Re-locking doesn't look great, glancing at the code I don't see any
-obvious better workarounds. Easiest fix would be to don't let the
-drivers sleep in the callbacks and then we can go back to a spin lock.
-Maybe nvidia people have better ideas, I'm not familiar with this
-offload.
+Daniel,
+
+since there would be a respin of this patch-set,
+maybe consider using plain C for some of the tests?
+
+[...]
+
 
