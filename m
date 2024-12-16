@@ -1,88 +1,87 @@
-Return-Path: <linux-kselftest+bounces-23425-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23426-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DB889F353B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 17:04:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 832F09F353C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 17:04:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CAB64188A38C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 16:03:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 505431886CBC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 16:03:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 919BF1494D4;
-	Mon, 16 Dec 2024 16:03:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F21711465A1;
+	Mon, 16 Dec 2024 16:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Raj1khFM"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="T968UMGg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC443137750
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2024 16:03:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5723F53E23
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2024 16:03:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734365023; cv=none; b=ihUpWV9Ap07qW8/Jy70/+/Yw1bvBH+1oXpT996G5SNed7n0pYZeUHKIZ99jstUvcBHmh+nUE6PWR6L0q6gDWxf30PXc55EUNqk/cY7CnMFSDtQ04mAft1rIERvl44bXrNGILkEOFmo+h+nYO8q1FjQchEec3BsenoD7RGMIJ+ls=
+	t=1734365031; cv=none; b=GyDhZz+UcakuLlFBFtXaMD1gBONxGOQgTiCQHwkS4Ljj7QQGEO1I8ome9sWBnGmxCSFJRXVsozxDtQUldW9taAaBqEyr2zZjVdtIiv6Der5KcRdxhzUvrFrRsYGx+jSv7RZg/Es5i5preKVO5PnWEu9+y0qCWFt+BuAM8iYnz38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734365023; c=relaxed/simple;
-	bh=29hEdNDTva91Lqd5u7UDg1JTuqOwMhR2hkxCClYT6tU=;
+	s=arc-20240116; t=1734365031; c=relaxed/simple;
+	bh=4ElTjVDbGUQmiRjXyvHnqvalfySMcyrzAwbBl3gNkJU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KOrEZxy0hvGhPl1aCPo3TLtURkyl8mgI277uWRHEOOLlrA7aiJgXNu1m7aVBi8w60vVtO+PnF53QU3GrYwJ48l7TJ0wC4jrSwGW85wKiPlGVXtpJFEIYSba8P0V2uR+nQduuaG0D73yTXHbm1lt7a59Sjp8xSptCM6wdoMXdhiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Raj1khFM; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=th3qAu1y/mpTz9nv5l76HwdidQho4rRviP3z3N6b4nG/rZFn8aA2jij6wrUXuRcfvqxvm13DbvQkCLvdZoVbnGTfZH9u7piQNLplCOEWaLVcfsP9lam7jpdgh0/0rsMK6SC6AyE7WilMTeZpU6sLeDIx7XbUZyh7ZvoADHdy7XM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=T968UMGg; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BGCVa6s021475;
-	Mon, 16 Dec 2024 16:03:28 GMT
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BGCtF4v009108;
+	Mon, 16 Dec 2024 16:03:36 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=8pjw3Qa0Bp7zw06a8
-	nTmhYIZV+qhxPVsPbu+Aqtp8Ao=; b=Raj1khFMffwmvsDNNaVFz4IHtrtjqnyjp
-	uIwy2YKRNC83iCLu2wVvPFYBprpv3q04l80S57xqWEyi73dTfmR7zkf46FY5XdLC
-	MNBtXwiKlb5PR44RnXnGWEgqNn/bhj7kBb88166Qys33rS40oCreNy3VXMzlkrPb
-	Yhu6t/7clkJ3QOjs0dH7o+gEKtky7SOGOOToX09LKuHNgcHPXuMh3LhrhCMQsd/O
-	sKJgd3wUqQpR3SPnqRNAueRlgQmUFjld6wlcMy48dMUuZmOzKJnW8JuGcKDSoI18
-	EcI+ukE0jysRLOkDISA+Jhkgh1c3WW86oRySu7/GTEeDWUDbTx79Q==
+	:mime-version:references:subject:to; s=pp1; bh=qWrWP29wqKFHLLKF2
+	sOgSyYt3Ljp5XDmh5aF1EScO3I=; b=T968UMGghSJXj6k4Zm9si5HiRKryS6Mc0
+	dc7mYxrfFi5MLzHj6vxnjnmFf1bFs83udI/npItHgcoLkk9RIV5EqbqPKPCeCPzr
+	cZ+GQ3R2XfscE/MYmrbI2sMwArIxkojKm3XN8JGRNQ5715TmS8b21HB5MTxwCrM8
+	B2cfhvjtdLMpZK7AN1Ig6nmp8RyoWwPnjT4MrLld9OorK2EDlqaX8Krgwcpd6Pd1
+	qxDrIfaw9PYb3oayG0dZWQJ7k1AUAgcfyGfN/7wICAn5UObvWWy2guEjSTASBGFR
+	hPcwDBmqsg90A/qajQJ9JAGGtrV2ZaR1LlpJ3CDTlKaiMxY1XYg4g==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43j8xaksmq-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43j98h3yrk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Dec 2024 16:03:27 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4BGFiTu6005272;
-	Mon, 16 Dec 2024 16:03:27 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43j8xaksmk-1
+	Mon, 16 Dec 2024 16:03:35 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4BGFdmue025077;
+	Mon, 16 Dec 2024 16:03:35 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43j98h3yrf-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Dec 2024 16:03:27 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BGEGZLI024015;
-	Mon, 16 Dec 2024 16:03:26 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43hnuk6h9p-1
+	Mon, 16 Dec 2024 16:03:35 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BGDGd2R014335;
+	Mon, 16 Dec 2024 16:03:34 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43hmqxxqxh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Dec 2024 16:03:26 +0000
+	Mon, 16 Dec 2024 16:03:33 +0000
 Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BGG3O3N56558070
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BGG3WYH21037362
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 16 Dec 2024 16:03:24 GMT
+	Mon, 16 Dec 2024 16:03:32 GMT
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 65C8D20040;
-	Mon, 16 Dec 2024 16:03:24 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id F134D2004D;
+	Mon, 16 Dec 2024 16:03:31 +0000 (GMT)
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C45F620043;
-	Mon, 16 Dec 2024 16:03:19 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id C06DA20043;
+	Mon, 16 Dec 2024 16:03:27 +0000 (GMT)
 Received: from li-c439904c-24ed-11b2-a85c-b284a6847472.ibm.com.com (unknown [9.43.70.111])
 	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 16 Dec 2024 16:03:19 +0000 (GMT)
+	Mon, 16 Dec 2024 16:03:27 +0000 (GMT)
 From: Madhavan Srinivasan <maddy@linux.ibm.com>
 To: mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
         naveen@kernel.org, shuah@kernel.org
 Cc: linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
-Subject: [PATCH v2 2/3] selftest/powerpc/ptrace/ptrace-pkey: Remove duplicate macros
-Date: Mon, 16 Dec 2024 21:32:56 +0530
-Message-ID: <20241216160257.87252-2-maddy@linux.ibm.com>
+        Madhavan Srinivasan <maddy@linux.ibm.com>
+Subject: [PATCH v2 3/3] selftest/powerpc/ptrace: Cleanup duplicate macro definitions
+Date: Mon, 16 Dec 2024 21:32:57 +0530
+Message-ID: <20241216160257.87252-3-maddy@linux.ibm.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241216160257.87252-1-maddy@linux.ibm.com>
 References: <20241216160257.87252-1-maddy@linux.ibm.com>
@@ -94,68 +93,101 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: mVmwIwWHL3sNC6hcYpKyx0FODVtoW8OB
-X-Proofpoint-ORIG-GUID: 7dQ864CrCqKZ__wlvCpT4uy1JWZ7ghpL
+X-Proofpoint-ORIG-GUID: CaL2mTjAe4Q65c47NgpxxXJJrO92w-lC
+X-Proofpoint-GUID: WWlbwlNSNedLMkS3byKv0IW08V-OvhDs
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 mlxlogscore=999 adultscore=0 malwarescore=0 spamscore=0
- lowpriorityscore=0 clxscore=1015 impostorscore=0 bulkscore=0
- suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0 bulkscore=0
+ adultscore=0 mlxscore=0 impostorscore=0 mlxlogscore=848 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2411120000 definitions=main-2412160133
 
-./powerpc/ptrace/Makefile includes flags.mk.
-In flags.mk, -I$(selfdir)/powerpc/include is
-always included as part of CFLAGS. So it will
-pick up the "pkeys.h" defined in powerpc/include.
+Both core-pkey.c and ptrace-pkey.c tests have
+similar macro definitions, move them to "pkeys.h"
+and remove the macro definitions from the C file.
 
-ptrace-pkey.c test has macros defined which
-are part of "pkeys.h" header file. Remove those
-duplicates and include "pkeys.h"
-
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
 Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
 ---
 Changelog v1:
- - Added Reviewed-by tag
- - made changes to commit message 
+ - Removed additional macros pointed out by Ritesh
+   which are duplicates and are avilable in "pkeys.h"
 
- .../testing/selftests/powerpc/ptrace/ptrace-pkey.c | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+ tools/testing/selftests/powerpc/include/pkeys.h      |  8 ++++++++
+ tools/testing/selftests/powerpc/ptrace/core-pkey.c   | 12 ------------
+ tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c | 12 ------------
+ 3 files changed, 8 insertions(+), 24 deletions(-)
 
+diff --git a/tools/testing/selftests/powerpc/include/pkeys.h b/tools/testing/selftests/powerpc/include/pkeys.h
+index 51729d9a7111..3a0129467de6 100644
+--- a/tools/testing/selftests/powerpc/include/pkeys.h
++++ b/tools/testing/selftests/powerpc/include/pkeys.h
+@@ -35,10 +35,18 @@
+ #define __NR_pkey_alloc		384
+ #define __NR_pkey_free		385
+ 
++#ifndef NT_PPC_PKEY
++#define NT_PPC_PKEY		0x110
++#endif
++
+ #define PKEY_BITS_PER_PKEY	2
+ #define NR_PKEYS		32
+ #define PKEY_BITS_MASK		((1UL << PKEY_BITS_PER_PKEY) - 1)
+ 
++#define AMR_BITS_PER_PKEY 2
++#define PKEY_REG_BITS (sizeof(u64) * 8)
++#define pkeyshift(pkey) (PKEY_REG_BITS - ((pkey + 1) * AMR_BITS_PER_PKEY))
++
+ inline unsigned long pkeyreg_get(void)
+ {
+ 	return mfspr(SPRN_AMR);
+diff --git a/tools/testing/selftests/powerpc/ptrace/core-pkey.c b/tools/testing/selftests/powerpc/ptrace/core-pkey.c
+index 31c9bf6d95db..f061434af452 100644
+--- a/tools/testing/selftests/powerpc/ptrace/core-pkey.c
++++ b/tools/testing/selftests/powerpc/ptrace/core-pkey.c
+@@ -18,18 +18,6 @@
+ #include "child.h"
+ #include "pkeys.h"
+ 
+-#ifndef NT_PPC_PKEY
+-#define NT_PPC_PKEY		0x110
+-#endif
+-
+-#ifndef PKEY_DISABLE_EXECUTE
+-#define PKEY_DISABLE_EXECUTE	0x4
+-#endif
+-
+-#define AMR_BITS_PER_PKEY 2
+-#define PKEY_REG_BITS (sizeof(u64) * 8)
+-#define pkeyshift(pkey) (PKEY_REG_BITS - ((pkey + 1) * AMR_BITS_PER_PKEY))
+-
+ #define CORE_FILE_LIMIT	(5 * 1024 * 1024)	/* 5 MB should be enough */
+ 
+ static const char core_pattern_file[] = "/proc/sys/kernel/core_pattern";
 diff --git a/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c b/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
-index d89474377f11..6893ed096457 100644
+index 6893ed096457..fc633014424f 100644
 --- a/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
 +++ b/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
-@@ -7,14 +7,7 @@
-  */
- #include "ptrace.h"
+@@ -9,18 +9,6 @@
  #include "child.h"
--
--#ifndef __NR_pkey_alloc
--#define __NR_pkey_alloc		384
+ #include "pkeys.h"
+ 
+-#ifndef NT_PPC_PKEY
+-#define NT_PPC_PKEY		0x110
 -#endif
 -
--#ifndef __NR_pkey_free
--#define __NR_pkey_free		385
+-#ifndef PKEY_DISABLE_EXECUTE
+-#define PKEY_DISABLE_EXECUTE	0x4
 -#endif
-+#include "pkeys.h"
- 
- #ifndef NT_PPC_PKEY
- #define NT_PPC_PKEY		0x110
-@@ -61,11 +54,6 @@ struct shared_info {
- 	unsigned long invalid_uamor;
- };
- 
--static int sys_pkey_alloc(unsigned long flags, unsigned long init_access_rights)
--{
--	return syscall(__NR_pkey_alloc, flags, init_access_rights);
--}
 -
- static int child(struct shared_info *info)
- {
- 	unsigned long reg;
+-#define AMR_BITS_PER_PKEY 2
+-#define PKEY_REG_BITS (sizeof(u64) * 8)
+-#define pkeyshift(pkey) (PKEY_REG_BITS - ((pkey + 1) * AMR_BITS_PER_PKEY))
+-
+ static const char user_read[] = "[User Read (Running)]";
+ static const char user_write[] = "[User Write (Running)]";
+ static const char ptrace_read_running[] = "[Ptrace Read (Running)]";
 -- 
 2.47.0
 
