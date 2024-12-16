@@ -1,174 +1,153 @@
-Return-Path: <linux-kselftest+bounces-23436-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23437-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B2389F3E04
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 00:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EFA4E9F3E2A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 00:24:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C62B16A9F5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 23:08:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A91116E098
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 23:24:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 286EF1D5CDE;
-	Mon, 16 Dec 2024 23:08:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8829F1D63E9;
+	Mon, 16 Dec 2024 23:24:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EEMjdNxb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lxVwKFFp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A59B1D5ADB
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2024 23:08:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1666281ACA;
+	Mon, 16 Dec 2024 23:24:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734390503; cv=none; b=CeDblNtLO6MnJZbFCX7tsERSR5hLY/gMorkA3KQaeNK1+kdo4/zbyL7QlTZMoE3mJV0nCouOb2iYYdOpa6LG6KORV4O7MxWMDbQrH6mXYehifr6Bpgo9R3ibBiCkpEbuAgVgiob6BFNsMWo6wmhKQwcfpM8f86gYtmghElhQzGY=
+	t=1734391456; cv=none; b=irLwAjJfK+4hkuTqoevCfeA6vrDFV/O/s3DeIG4DXC85m+higortJEVMNPsWzl6jvVbB/49O8gCqcWj/Mk/ez5x7ig6rwXfnWyHoM0NTUtmLcESyXYLyPIEB6NjxEy5EM3m5vPPHUPS8UVXzRFcv/KspZ+lubhjIZUuV+7Zttso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734390503; c=relaxed/simple;
-	bh=BOY3hgn9j9vkltOI8aTIIoi8jv+JFmY0EGyzVvQu70g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aBImHUJPArNBJXC7KE28gytFYTMNHfesSwT3oePvsrIJuFfEM9mPALjEt3KrSoaW+o6zteWk5GlUiVqwyu7d5j28Ze91n7T8eQU90opUKIDucw3kAnkScjPoHo9Q35s7CB5jjaDeRywdTTugwndIN9KFMB1XZ4yih48fuMUtF/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EEMjdNxb; arc=none smtp.client-ip=209.85.166.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-844d67eb693so336220639f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2024 15:08:21 -0800 (PST)
+	s=arc-20240116; t=1734391456; c=relaxed/simple;
+	bh=FqyU2F+GfdfijPyRH9XrNGOxgNKLuRAGHwJ8YtTjB3M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eb1SxIEeRgpMY2+F+O2HP1gglXdwrRlt1xUQboG7kxiT0uxxS9v7+XpI9vzI4i1jOiaFQhiS77Vrx5mR9Axd3fbSQDPx5OwG8EmZXFEtLjCtDzKq0RB/8zzUTxqruciNrPDZa6/CUS8dxDVq9D4OS6Awm3Gg1/HymYrAcf60ikQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lxVwKFFp; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-801c081a652so3123382a12.0;
+        Mon, 16 Dec 2024 15:24:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1734390500; x=1734995300; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OS94voLSWfEjTx6K2R3aOqE+lStws7kGltqqRCQYk5M=;
-        b=EEMjdNxb4BgOSyvaym+dKnvFTSTIr2HsSljauEE4UsVqBPIWQ+2fQVioMOzLy5yIcV
-         nk4EHFTYlz1L6+zo4kMPshM95sABvhi1sVXP7IUSMXVq5/cGOPZt4Xzrs/CJjf6+q7pJ
-         0tft9DxyLZnSzpyutIOxhiOlAPwbr4usQeu7A=
+        d=gmail.com; s=20230601; t=1734391453; x=1734996253; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O1rrej6bTfckNoeV0BiN+uUX+SYIqaZUUyRvqwZzeA4=;
+        b=lxVwKFFppLxhxLmpQecYBHndO7kCvFyhpq1ixL7AzMSe/i9xuiWznA6+zSbzCf1h4e
+         aZVtBG5kUjEusBpHTcZRuo+vZVknZbo4UdvI8EEE0RNqF2Qs+tE0JJIN4HD2n7A4pFb5
+         uY85hQnLqJ6aQ+p/RDtzzCR5yiDWkSU+pxDZqPraUCEJGmEy0RtCWIeCuWYkAbm4hUHm
+         nA9+Oq0sKOtutoG8cwm01KAuOVbp6Nck86HWXc4XIS9lkcLiLDTdLwE/zT+70dgj/+95
+         4oWWlPJ6PsOle6YpTaN50RUG/Kn3pK2UGxQ4qEx47VGWUxh/5n/GmXre8susCyxy4CaO
+         M8+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734390500; x=1734995300;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OS94voLSWfEjTx6K2R3aOqE+lStws7kGltqqRCQYk5M=;
-        b=oy1C3uaSF6AEsDW+tCpTIOCaCY2EEP0Y7t8I1A9U/baUKznRMX1nnGKVHKraqxOky0
-         eXb8tr+f3siLoUZlJC479IeAw1cEgpFDU+DDQ0JNl0QOGNZNfUgHOAeimA0SfvF6fqMQ
-         cdtgGz6swfp5+BCgxmmt07/2KriDpaQHXKFWheny4tqMd4K4hmHbLe7pV/nZr6hcfV+f
-         yRdQIKNY9POaIp9cjoQV/QTwoXDm7bJk5wTv02R2TPBpFgZZUaenmpqfkuzudiKiEqf+
-         blmun1VLl3yUfuYu3pOmJV38BarUdWYkQuc4Xq7M4s62a7vX4nLesZr39WwXioV8Qy8V
-         fGJQ==
-X-Gm-Message-State: AOJu0Yyt0CObtvq8mOpGbfptD1VyXGD9awuUnNCwQPnfysFCxTMXrrdi
-	x7E2DEd5zUkoHyA8Bp1dn6sSU68t/4RnV5bYCU9YzR+uCSF/EVvvjIlG9y1FRME=
-X-Gm-Gg: ASbGnctIiDTselWVRRx6L0+uNbxww4BJEtv3EUgcxEyr2ZtFlXCjVUY5zdzPfTg8AnR
-	KcSHKVTvRNZOpOOmrewcMoJnv1sS+qSSl00NzyOBZxgr0n9aKB39buXelC0+JrDN1WPRg7Hn8QR
-	mp2XzpEosAHX56YJZZLrpL3w2pBK1kJzfnAcc8thzXDJU8KuzEKzWz3ToY5mmZxljxccDk13mDC
-	duSJDAK5yFtwAQGR56XI4vUFfPOQ+xxzUu8mYrB50xAZEP++7puuL2yhxfCDv2JG+yD
-X-Google-Smtp-Source: AGHT+IHev4woPz3cPHVkrgHa5mG+siQEsm5AhB3LOex5FrUR07AUAr4fPtANg5m/efCiubNYW+tcmw==
-X-Received: by 2002:a05:6602:b85:b0:847:37fb:80f0 with SMTP id ca18e2360f4ac-84737fb8a2amr446343439f.15.1734390500470;
-        Mon, 16 Dec 2024 15:08:20 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-844f6239ad3sm152616439f.7.2024.12.16.15.08.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Dec 2024 15:08:19 -0800 (PST)
-Message-ID: <16657ef3-72e5-4da3-8785-9f4391cc0002@linuxfoundation.org>
-Date: Mon, 16 Dec 2024 16:08:19 -0700
+        d=1e100.net; s=20230601; t=1734391453; x=1734996253;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O1rrej6bTfckNoeV0BiN+uUX+SYIqaZUUyRvqwZzeA4=;
+        b=v8vAUNBK7sgNRHjuBVQxB7AIen+bsjXd+GcLuyRBhbSBrJclEwiOf3J/k/teKluhAJ
+         wWAbyIJJfHoVMyU4UrEl7g2WBjQOh5nCKHdB5wwyic5uUpq8CiDgEDcLm0cLFlYkhkJ3
+         vNlhO2bsBAZ0dGcxSwyDMyWOT3zR+UCoDKNVHXHVI6q+T5uzY2VkZeMxBYJWauk8YKkF
+         qxbhXbMoi1s9sYfRmTjN0j+Vt+0jF852hRYRU+8qQMBBByKMB+pK4phiWg81PQxtZJR3
+         /Ov0H2D7/3RUASaqe3dALhwQvwLG99Qao7awf/vrPHlh6gWwqaXg5fWmBADe7xV2tyyB
+         ftOA==
+X-Forwarded-Encrypted: i=1; AJvYcCWzU6Y5e3SBE18FbLDSZJFvVFbeuVs7B2qreroy7Wij2dPoe2kvDj5vpr95VvQ6qJPbUD8=@vger.kernel.org, AJvYcCX1xUcAQYz+ddJHDTPn5l+fV7WgnFq9CSADH2CcysMOGdJA9SGPiaavVeC3omXdgGn/uxWw4+uN@vger.kernel.org, AJvYcCXHpDDYAMQiMDHmz+q7hO3mN2OIr11Teb/ak2EpF0F1KsUJFsEZB+l7IGTcPOQBPlDQxmgznmA/ba5uKYZ5@vger.kernel.org, AJvYcCXTbViOJFSFyQxEWlrEqnarNuuxCg2MfzTnmlm3FqFAaZAaRkHpgpmQf36QiaOBsLxjlxUEgwvjbdy23MExnnTy@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQnZ5g7wyYR3vFhQ9tEgkJDehpFkFuHGzKPOAue8oFZakrt6TS
+	nFKOk2ZmhMdCrZ6KM70dS1uWbCq+uEq45qCtCmabzLBRtNKfEJtOZJJoUEBs1N81Jl5bLTscMJY
+	JTFbmDm4gVvYIRPb/CzPpxdUWDdIjpQ==
+X-Gm-Gg: ASbGncsk2qfuwOue3GBdK05EHCfHY1A1aoMOSAlyU6W0kALjT+9WbzxMUS1BstRKeS9
+	WPe5Cmta7BXmchPoz5uzVcOax3ba+zih7Yy0JEPO8r0Vc9EfLeHBZrQ==
+X-Google-Smtp-Source: AGHT+IFU1FuEzXwiVYWcoVnoCytp4SvlrA4g1SWYK8Ytf5WaPd5675uFznQpDftn+Y8gvkkTdppZSeqV5/u+6S8Ol04=
+X-Received: by 2002:a17:90b:1a88:b0:2ea:61c4:a443 with SMTP id
+ 98e67ed59e1d1-2f2d8798991mr1703822a91.4.1734391453490; Mon, 16 Dec 2024
+ 15:24:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 resend] selftests: timers: clocksource-switch: Adapt
- progress to kselftest framework
-To: Geert Uytterhoeven <geert+renesas@glider.be>,
- John Stultz <jstultz@google.com>, Thomas Gleixner <tglx@linutronix.de>,
- Stephen Boyd <sboyd@kernel.org>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Frederic Weisbecker <frederic@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <7dd4b9ab6e43268846e250878ebf25ae6d3d01ce.1733994134.git.geert+renesas@glider.be>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <7dd4b9ab6e43268846e250878ebf25ae6d3d01ce.1733994134.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cover.1734045451.git.dxu@dxuuu.xyz> <92065ca054beccd6d0f35efe9715ef965e8d379f.1734045451.git.dxu@dxuuu.xyz>
+ <CAEf4BzaqCgW9keiT+tJUBQWT6Q+jMwuvn4O2ZghO0c+ZvACNrw@mail.gmail.com>
+ <zow3q3nhlz6vedbni3upag5yr7zzrhyiqysl5nwyubebmbwojk@th7kbm62x36g> <31b0c85dbf85486df116ade20caf8685843899b4.camel@gmail.com>
+In-Reply-To: <31b0c85dbf85486df116ade20caf8685843899b4.camel@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 16 Dec 2024 15:24:01 -0800
+Message-ID: <CAEf4BzaEOBtrSWZTx40AdT=SQY6Qaia405KWgU-NowaqNdmpkA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/5] bpf: verifier: Support eliding map lookup nullness
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Daniel Xu <dxu@dxuuu.xyz>, andrii@kernel.org, ast@kernel.org, shuah@kernel.org, 
+	daniel@iogearbox.net, john.fastabend@gmail.com, martin.lau@linux.dev, 
+	song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me, 
+	haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 12/12/24 02:02, Geert Uytterhoeven wrote:
-> When adapting the test to the kselftest framework, a few printf() calls
-> indicating test progress were not updated.
-> 
-> Fix this by replacing these printf() calls by ksft_print_msg() calls.
-> 
-> Fixes: ce7d101750ff8450 ("selftests: timers: clocksource-switch: adapt to kselftest framework")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
-> v2:
->    - Add Reviewed-by.
-> 
-> When just running the test, the output looks like:
-> 
->      # Validating clocksource arch_sys_counter
->      TAP version 13
->      1..12
->      ok 1 CLOCK_REALTIME
->      ...
->      # Validating clocksource ffca0000.timer
->      TAP version 13
->      1..12
->      ok 1 CLOCK_REALTIME
->      ...
-> 
-> When redirecting the test output to a file, the progress prints are not
-> interspersed with the test output, but collated at the end:
-> 
->      TAP version 13
->      1..12
->      ok 1 CLOCK_REALTIME
->      ...
->      TAP version 13
->      1..12
->      ok 1 CLOCK_REALTIME
->      ...
->      # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:6 error:0
->      # Validating clocksource arch_sys_counter
->      # Validating clocksource ffca0000.timer
->      ...
-> 
-> This makes it hard to match the test results with the timer under test.
-> Is there a way to fix this?  The test does use fork().
-> 
-> Thanks!
-> ---
->   tools/testing/selftests/timers/clocksource-switch.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/timers/clocksource-switch.c b/tools/testing/selftests/timers/clocksource-switch.c
-> index c5264594064c8516..83faa4e354e389c2 100644
-> --- a/tools/testing/selftests/timers/clocksource-switch.c
-> +++ b/tools/testing/selftests/timers/clocksource-switch.c
-> @@ -156,8 +156,8 @@ int main(int argc, char **argv)
->   	/* Check everything is sane before we start switching asynchronously */
->   	if (do_sanity_check) {
->   		for (i = 0; i < count; i++) {
-> -			printf("Validating clocksource %s\n",
-> -				clocksource_list[i]);
-> +			ksft_print_msg("Validating clocksource %s\n",
-> +					clocksource_list[i]);
->   			if (change_clocksource(clocksource_list[i])) {
->   				status = -1;
->   				goto out;
-> @@ -169,7 +169,7 @@ int main(int argc, char **argv)
->   		}
->   	}
->   
-> -	printf("Running Asynchronous Switching Tests...\n");
-> +	ksft_print_msg("Running Asynchronous Switching Tests...\n");
->   	pid = fork();
->   	if (!pid)
->   		return run_tests(runtime);
+On Fri, Dec 13, 2024 at 7:13=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
+>
+> On Fri, 2024-12-13 at 19:44 -0700, Daniel Xu wrote:
+>
+> [...]
+>
+> > > > +       /* First handle precisely tracked STACK_ZERO, up to BPF_REG=
+_SIZE */
+> > > > +       stype =3D state->stack[spi].slot_type;
+> > > > +       for (i =3D 0; i < BPF_REG_SIZE && stype[i] =3D=3D STACK_ZER=
+O; i++)
+> > >
+> > > it's Friday and I'm lazy, but please double-check that this works for
+> > > both big-endian and little-endian :)
+> >
+> > Any tips? Are the existing tests running thru s390x hosts in CI
+> > sufficient or should I add some tests writen in C (and not BPF
+> > assembler)? I can never think about endianness correctly...
+>
+> I think that if test operates on a key like:
+>
+>       valid key 15
+>              v
+>       0000000f   <-- written to stack as a single u64 value
+>       ^^^^^^^
+>     stack zero marks
+>
+> and is executed (e.g. using __retval annotation),
+> then CI passing for s390 should be enough.
 
-Applied to linux-kselftest next for Linux 6.14-rc1.
++1, something like that where for big-endian it will be all zero while
+for little endian it would be 0xf (and then make sure that the test
+should *fail* by making sure that 0xf is not a valid index, so NULL
+check is necessary)
 
-thanks,
--- Shuah
+>
+> There is a guide on how to gen a s390 environment locally:
+> https://docs.kernel.org/bpf/s390.html
+> I used it recently to build a vmlinux for s390 with no or minimal
+> issues. Used it to boot long time ago, but don't remember if there
+> were any surprises.
+>
+> > > with Eduard's suggestion this also becomes interesting when you have
+> > > 000mmm mix (as one example), because that gives you a small range, an=
+d
+> > > all values might be valid keys for arrays
+> >
+> > Can you define what "small range" means? What range is there with 0's?
+> > Any pointers would be helpful.
+>
+> I think Andrii means that each 'm' adds 8 bits of range.
+> E.g. range for 0000_000m is 0-255, range for 0000_00mm is 0-65535, etc.
+
+yes, exactly, thank you, Eduard!
+
+>
+> [...]
+>
 
