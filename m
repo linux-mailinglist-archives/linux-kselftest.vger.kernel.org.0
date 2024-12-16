@@ -1,169 +1,145 @@
-Return-Path: <linux-kselftest+bounces-23391-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23392-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F21C69F29BC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 06:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 30BE69F29CE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 07:04:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3ADF3164702
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 05:50:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB5D816684F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 06:03:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92F131C5498;
-	Mon, 16 Dec 2024 05:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7228B1C54B4;
+	Mon, 16 Dec 2024 06:03:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="kPNfJws6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gkfYUpBq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE9CC157469;
-	Mon, 16 Dec 2024 05:50:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3C31946CC
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2024 06:03:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734328228; cv=none; b=tRM8JCvsf2TmEt0Q5eJQ5t6TfDZAT/qLcCmDHCUhMD/ESR2okVYJsDPiYuZ82GEsW61RABLnz4gsWROv/XkI2NUKqOsPFlRnCqBgnkHedr5pyGA2a80Vwrwf8UhoZ3VyaaP1mYfbIJNYZPOnz86D+7rTxL9io0iXYXfNMyjYEPQ=
+	t=1734329037; cv=none; b=KVagsKe8ImOaORA7WG0nKOf3bqAeo5liA1lS5LU/2V84MQjJXBje6wk1nLQSqDWTKsIPvGU35Hbt11Qx9khsHuwOPtICkIBSpicn62glzaSjnVvQrLmTF8ogOPFYrBKNB17gCJOFHZg07/3uqFSuXgoZtKmnGe84HUcR7gxEtAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734328228; c=relaxed/simple;
-	bh=N/MufcIXoeNYB+zKT/lQpUdgN+fWVfhoOXO/N8mGp2o=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R0GkgviIatQgAAQOwhUtdyajjGez94O3vBPZ5Wj8o/HJ0tXpkv1cTZne29XxX/5298q/pYaziBW9IWyHrcZk2S3DibrzVZnG+RfTj/9CXzOhGpzgC/IMKAg4hfLU3Pd8U6iBZS0HZJB7jzjH1LFuV43fGrQKYE2UU6itR08qJXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=kPNfJws6; arc=none smtp.client-ip=67.231.148.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
-Received: from pps.filterd (m0431384.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BG4CqjX014943;
-	Sun, 15 Dec 2024 21:50:16 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pfpt0220; bh=k+RLTPUZy3+zfG6K2U5lRmIcg
-	b4pnhmlUqm9rLAiFJE=; b=kPNfJws6YkDTGM2m3e4Ls0SR6ZXLswcu51cG8yUu0
-	4SzW6f9oUHQaYjlJfyRJWTZumbJlSVd9psXUmVw3nV2Cg7VbyjX1olcmDwGWA2QL
-	nv2TdMyd7rvuNUaREmlbx90PYg4iyS9mPCKbC/m5tlBsSmljJY4/ebjv94toXSZE
-	Uq7xtoYk69m/vU6fY91Nnn60V9tdqxF6yDnkXyP/gNE66X7i6Asw7qruwd1Kwujk
-	Q7J+tH8baqk0SjUEZkPNfemXb7zaIeG+BL7CS9udSUplueNH9FvcCDC5x74AP/Ab
-	axIxPZ8CpuU7Fc8qDerf+wOIlwewJr8f47JRGZh15oHPA==
-Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 43jcyv08ju-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 15 Dec 2024 21:50:16 -0800 (PST)
-Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
- DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Sun, 15 Dec 2024 21:50:15 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
- (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Sun, 15 Dec 2024 21:50:15 -0800
-Received: from hyd1403.caveonetworks.com (unknown [10.29.37.84])
-	by maili.marvell.com (Postfix) with SMTP id 8A92F3F7093;
-	Sun, 15 Dec 2024 21:50:11 -0800 (PST)
-Date: Mon, 16 Dec 2024 11:20:10 +0530
-From: Linu Cherian <lcherian@marvell.com>
-To: James Clark <james.clark@linaro.org>
-CC: "coresight@lists.linaro.org" <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <sgoutham@marvell.com>, <gcherian@marvell.com>,
-        Mike Leach
-	<mike.leach@linaro.org>,
-        Suzuki K Poulose <Suzuki.Poulose@arm.com>, Leo Yan
-	<leo.yan@arm.com>
-Subject: Re: [PATCH] selftests: arm coresight: sysfsmode testing
-Message-ID: <20241216055010.GA1237565@hyd1403.caveonetworks.com>
-References: <20241129083813.3056909-1-lcherian@marvell.com>
- <1b7aaa17-48b7-45cd-b468-ef54ca048e31@linaro.org>
+	s=arc-20240116; t=1734329037; c=relaxed/simple;
+	bh=yOIMDtITdjwU8dGlUR5f1kxRPPSJQcdRUFbDxwRHrkg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P7+oha7+bFSAIlN+tjmbhXCN6as+jj3w8XnQtdahRvMCadi9zL4x5vRd8ODbu2RsF/Sv9nCEOYTRGnG4vAe4rI4PDCapOmJiDbO/LUlH8VLbReQuRmKL46BQM0GSkVKpfOQIQbyY0Zlfr9PkqtrQDe/ddBrNwyF3UrYpJZj2gUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gkfYUpBq; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-725ce7b82cbso4262637b3a.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Dec 2024 22:03:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1734329035; x=1734933835; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8l56HNoVKCWoq3UFQbYWo8NhPQGEBKhUZs3vIB/kw4s=;
+        b=gkfYUpBqvyEiXJARbueaiqOtQ6w/MIK9IUxJduIfjPEbNcd+YnqmTgjTbIJwNJTRBf
+         Ilc7AAd4WuZ0oid+ofouRJ/0Op10+R5UuS9d4fV9oguvaZ7I4SZL+IyAkJkeTaTS7Haa
+         Rge5w27OiYdJRnAVffmoER6TFQq+dGqZw/Kg12pRRqQ19n3pZcL+B4biRbP4bg0/oDua
+         CUNPmDGMZiQy3aQjQvIM4KCX3/T6E+99r62UVpQTp4OUPXGS0Zmk135ImWd74dgRDbkt
+         3B1lB4pdnhDKUFjk9kkZQZaBlftvJBNPUTzOzwost+Zlm3n48+rP4ZewRGNeclihIH/a
+         xV7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734329035; x=1734933835;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8l56HNoVKCWoq3UFQbYWo8NhPQGEBKhUZs3vIB/kw4s=;
+        b=cfdy1f6buP/UUe1YLjoTjIIcn18ZxhKZ66TaGOIbZKGVUNiCO88UwLXREx+GnZPWed
+         nnW1jaAJMAEdfCWU7VlF6TOJ7y9sGqWojI+uqNvuwBZJPK4gOZPE2GxSj9QllYARZYlw
+         tJZExx9tbH1Mnaz9cedY+scP0zUL11XMdeXkyD3ttX33nO44is6nGiOijheAoMbSnODN
+         a4Gnruu92nHKa5iiqNMNUqX2JtrVc2f1T99WRrxM08X9Vb7Uqbe3Mvkb85NoR6i00nXp
+         cUmdZWmX+tGr9rsM3lxw87ROp0eGt5rmcqM4c50kZUK5pbfQsEjHgRpLdfhfggc+6fkK
+         97vg==
+X-Forwarded-Encrypted: i=1; AJvYcCWTKly/TpPR+l0jmHJnR8fP3rI+ridpE0ftfS9gGwLcB7rgThA+qC9Ajbvr9SGaLuFZjyGYTNtoWVUPLfOUUNw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHSqlBfN8TGYwHmRwjTTGLgHrq5RqdI8QN8g5lP6MmkIUUUvZa
+	qV+0AfsO7tvGTrrYlFV0D61qL0/1L3M0wESoD57L+oOziqdO4hIYylRIww+Jmg==
+X-Gm-Gg: ASbGncuMyKAbUQKCFuPTVNiZq40k5ANoDemKKD0su8d4mSvgP/wbmIr+CCkd7u+co4Z
+	0YOvRzyHxRo5mdBQn+9TTL+hvyVz2UO4xz29lBQ5GS0j9Vu6M9eYkqrDas5S48UqgWw/1/7WFEX
+	mCj3+h7tW1uEN0o3MAJu324oFKk/cSiZ9BB7/u+uM+UYS+5VsazbfIhx01vurDaD8hn2S0NP3ia
+	Zautr1QczE7ev4ojVGhtswNa2pdDkrqfodbAkhPhZDMhFLTwZffSzK6flJmUvVFff8=
+X-Google-Smtp-Source: AGHT+IE89dTdzc53pbTNLiYWQP76UGO9avKXTxiixxWoLDIUfwYBcA6Og+5vQuX+VCSfds7qpcJuug==
+X-Received: by 2002:a05:6a00:17a1:b0:725:e05a:c975 with SMTP id d2e1a72fcca58-7290c264e09mr16165494b3a.19.1734329035071;
+        Sun, 15 Dec 2024 22:03:55 -0800 (PST)
+Received: from thinkpad ([120.60.56.176])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72918ad5664sm3936114b3a.73.2024.12.15.22.03.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Dec 2024 22:03:54 -0800 (PST)
+Date: Mon, 16 Dec 2024 11:33:37 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Niklas Cassel <cassel@kernel.org>
+Cc: kw@linux.com, gregkh@linuxfoundation.org, arnd@arndb.de,
+	lpieralisi@kernel.org, shuah@kernel.org, kishon@kernel.org,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bhelgaas@google.com, linux-arm-msm@vger.kernel.org, robh@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] Migrate PCI Endpoint Subsystem tests to Kselftest
+Message-ID: <20241216060337.cvhwvdzt34ocg2uf@thinkpad>
+References: <20241211080105.11104-1-manivannan.sadhasivam@linaro.org>
+ <Z1qsIREtdeR38fF6@ryzen>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1b7aaa17-48b7-45cd-b468-ef54ca048e31@linaro.org>
-X-Proofpoint-GUID: Zj18E5iGenMM-xpe-bK_TsBZ9dFSQz9d
-X-Proofpoint-ORIG-GUID: Zj18E5iGenMM-xpe-bK_TsBZ9dFSQz9d
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.687,Hydra:6.0.235,FMLib:17.0.607.475
- definitions=2020-10-13_15,2020-10-13_02,2020-04-07_01
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z1qsIREtdeR38fF6@ryzen>
 
-On 2024-12-04 at 16:45:42, James Clark (james.clark@linaro.org) wrote:
+On Thu, Dec 12, 2024 at 10:25:53AM +0100, Niklas Cassel wrote:
+> Hello Mani,
 > 
-> 
-> On 29/11/2024 8:38 am, Linu Cherian wrote:
-> > Add sysfs mode selftest for ARM Coresight hardware tracer.
+> On Wed, Dec 11, 2024 at 01:31:01PM +0530, Manivannan Sadhasivam wrote:
+> > Hi,
 > > 
-> > Signed-off-by: Linu Cherian <lcherian@marvell.com>
-> > ---
-> >   .../drivers/hwtracing/coresight/Makefile      |   5 +
-> >   .../hwtracing/coresight/sysfs_test_trace.sh   | 144 ++++++++++++++++++
-> >   2 files changed, 149 insertions(+)
-> >   create mode 100644 tools/testing/selftests/drivers/hwtracing/coresight/Makefile
-> 
-> Hi Linu,
-> 
-> You need to add this path into TARGETS for make install to work:
-> 
->  TARGETS += drivers/dma-buf
-> +TARGETS += drivers/hwtracing/coresight
->  TARGETS += drivers/s390x/uvdevice
-> 
-> 
-> >   create mode 100755 tools/testing/selftests/drivers/hwtracing/coresight/sysfs_test_trace.sh
+> > This series carries forward the effort to add Kselftest for PCI Endpoint
+> > Subsystem started by Aman Gupta [1] a while ago. I reworked the initial version
+> > based on another patch that fixes the return values of IOCTLs in
+> > pci_endpoint_test driver and did many cleanups. Since the resulting work
+> > modified the initial version substantially, I took over the authorship.
 > > 
-> > diff --git a/tools/testing/selftests/drivers/hwtracing/coresight/Makefile b/tools/testing/selftests/drivers/hwtracing/coresight/Makefile
-> > new file mode 100644
-> > index 000000000000..7dc68ae1c0a9
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/drivers/hwtracing/coresight/Makefile
-> > @@ -0,0 +1,5 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +
-> > +TEST_PROGS = sysfs_test_trace.sh
-> > +
-> > +include ../../../lib.mk
-> > diff --git a/tools/testing/selftests/drivers/hwtracing/coresight/sysfs_test_trace.sh b/tools/testing/selftests/drivers/hwtracing/coresight/sysfs_test_trace.sh
-> > new file mode 100755
-> > index 000000000000..0d6307fff1d2
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/drivers/hwtracing/coresight/sysfs_test_trace.sh
-> > @@ -0,0 +1,144 @@
-> > +#!/bin/sh
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +# Copyright (C) 2024 Marvell.
-> > +
-> > +# Test Arm CoreSight trace capture in sysfs mode
-> > +# Based on tools/perf/tests/shell/test_arm_coresight.sh
-> > +
-> > +glb_err=0
-> > +
-> > +arm_cs_report() {
-> > +	if [ $2 != 0 ]; then
-> > +		echo "$1: FAIL"
-> > +		glb_err=$2
-> > +	else
-> > +		echo "$1: PASS"
-> > +	fi
-> > +}
-> > +
-> > +is_device_sink() {
-> > +	# If the node of "enable_sink" is existed under the device path, this
-> > +	# means the device is a sink device.
-> > +
+> > This series also incorporates the review comment by Shuah Khan [2] to move the
+> > existing tests from 'tools/pci' to 'tools/testing/kselftest/pci_endpoint' before
+> > migrating to Kselftest framework. I made sure that the tests are executable in
+> > each commit and updated documentation accordingly.
+> > 
+> > NOTE: Patch 1 is strictly not related to this series, but necessary to execute
+> > Kselftests with Qualcomm Endpoint devices. So this can be merged separately.
 > 
-> Looks like you still need the skip for TPIU here the same as the Perf test.
-> It's an external sink and doesn't have a readable file so the test fails.
+> Having to write a big NOTE is usually a hint that you should just have done
+> things differently :)
+> 
+> If you need to respin this series, I strongly suggest that you send the
+> Qcom fix separately. It is totally independent, and should be merged ASAP.
 > 
 
-Okay will skip.
+Even though it is an independent fix, it is needed to get Kselftests (also the
+legacy ones) passing without failures. That's why I kept it as patch 1.
+Otherwise, someone may test it and report failures.
 
-> With those changes, looks good. Thanks for adding the first sysfs test.
-> Hopefully we can expand them more in the future.
+> As you know, this series conflicts with:
+> https://lore.kernel.org/linux-pci/20241116032045.2574168-2-cassel@kernel.org/
 > 
-> Reviewed-by: James Clark <james.clark@linaro.org>
+> I don't see any reason why the above patch has not been merged yet,
+> but it would be really nice if the above could be picked up first,
+> so this series could also add a kselftest testcase for the above.
 > 
 
-Thanks.
-Linu Cherian.
- 
+I was hoping that Greg would pick misc driver changes, but looking at the git
+log of this driver I got to know that the changes were picked by PCI folks only.
+
+@kw: Could you please pick the patch from Niklas?
+
+- Mani
+
+-- 
+மணிவண்ணன் சதாசிவம்
 
