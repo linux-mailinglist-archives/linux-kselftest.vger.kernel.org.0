@@ -1,196 +1,128 @@
-Return-Path: <linux-kselftest+bounces-23427-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1B529F37AF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 18:36:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9F019F39E0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 20:30:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59222188C29E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 17:36:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E5F07A129F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 19:30:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF652066E0;
-	Mon, 16 Dec 2024 17:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62AD82080F1;
+	Mon, 16 Dec 2024 19:29:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YirRE0bH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RceAWJ5Q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5013E20765E
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2024 17:36:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A2B0206F35;
+	Mon, 16 Dec 2024 19:29:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734370571; cv=none; b=hIOH93clKuO03yOteybMBvbITm7kkrvT+6RcwkXb0BJcRGRh3bjwJEiMmO4pSsTKoa8lAV8axuOIvHyxp5DBJynqgt4Fuov5siwfN79LVavXhQ+HuJUoQPKO4rTQgTlxJ2LVtuIFONYflwCE/d+jV8mIKjZQKPGXRLZjw8oY/VA=
+	t=1734377388; cv=none; b=lrZXCR3k5P+qQnnLRvRVfq4RuRB77HeRQ8TeAfA55kmJr0p7lU7tlEyL12lkg8TIafoOS7++0pY2pqP2sVchIikRtf9OndKuyNG6lNZwqKGg5TUbShAocq5+cCax0e0NxXxRqlttPCXx525j8f/6pyKgY9maM6cFj4gpACtDdHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734370571; c=relaxed/simple;
-	bh=Coc7NOpbdSi1XoEVAQEV/4mMo/dNRQykeG5v1vlYuaA=;
-	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References; b=CsL+1o2JgSEO8/vMS5Nx+idXfi2ag2IAR3uJ7am3DbiSuNU2Nbyojxvs9ankAZGKrBdl4/n9rhy9kSDSLlON/BeDSSPYOQtwMbNRwpaFHSXmPQWLz77bfvySKQ6NKfQ6Vl3PHwZ/RhAfyfMVMC8qsngMcFKK7FF3UmM/SONz5mI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YirRE0bH; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-725f4623df7so3771071b3a.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2024 09:36:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734370570; x=1734975370; darn=vger.kernel.org;
-        h=references:message-id:date:in-reply-to:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FSidIYogNXz2GKEcIpG1NgqD/WO+bMgS5pOibDpj814=;
-        b=YirRE0bH7LKEu7f1aGAABWBgSejQMTTgZvEgsRgNJsLOY2HcqmSpkMtsoHVBECKlOQ
-         5D40uuBglbtasuz86bf25WEwHz7YoH/MMP1I+E6rsxyENg4JVRuYVF0oqEzjO3fPjdWj
-         kqU1bKNO97ogrWAPCGHrXc0LBy6GAn+U5acLummWtF1p44iO9p7zKbt0RTZJCnMeJMRN
-         0LSpdr4RuJ7g/5n63CrDPcKhoudv2Y+CJPltwptsZvWR4HBuFpiNeMW7Ij1R/RmxK/g8
-         /g6OYxtsId3ExkuY7gX7JZBhZ8I2kgO0/il96tRyc4vVTWsNs9zVGBI0qBBk8ziJJmkk
-         fDIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734370570; x=1734975370;
-        h=references:message-id:date:in-reply-to:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FSidIYogNXz2GKEcIpG1NgqD/WO+bMgS5pOibDpj814=;
-        b=bsISeq/Hqt0tZt4DpuaTNP9umTey4M8RfTRMCFfhptlBpqHlVWLeoIQNevZY9skotE
-         PyUSUTT1WDjmzjNSNlHj/vyYl4mfATGkNDsiJt7eeGjb9YHR8ohBSVHlnUB7BGa6RQP+
-         g4JNXdhwSFVGbs3hP9O2VA/2TBN9XXh+5hbsWEmsrwOqkVY22LLOo+As4sOlRTnjDOIn
-         DxqRAdUKDCt0CJxTC9bvBhfJcb3j4VEqkXFjtoLSyZ80CanqqeOCCTlXmcr8gIbSd8be
-         0wfUnVO0a0GgHu7VPAQG1SocLvrcRyM/Xg0Cfy0XLpIdUGh9nvV9i8/KsJrEbTL4wgoY
-         lpqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWbw4RWQvh8FvM//dFKHIlNZDme2KaFXm3VNPQD88df917uyp3X7lYflNTLXbISSBrUZ3YHAf1nMtAnxHxwD54=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3Sj6fjXzxI2ztIsjveUDAq4IgXlLLwESWk0D1tY0c71y1u5uK
-	DFkW89tf8iLwuod1U6O6Z4pjImJCyrVmg555pBdwJmgZiKPB6XX+
-X-Gm-Gg: ASbGnctIvY5zEm1EGADgThZBzKgwaAl0WTkJudTGina2l8kmsJopbN0LIjGe+W1j8GY
-	1mnhAYlPtR6AJiAUSwYVDTLOS7wpaJj5XE/e2DjJpxbHSf9VnolquA+r0ZxdoCF35jpRZWK3OZL
-	D8RWtJBj/JXmkRcwVUrsZ8bu/0zpApB7SQ3IbELfishJAfOqPgzrAahXWYvy8ii74eZ9vHWIgp1
-	7FrDtKQiVn+vpKOCu2ZG91GuU/sVvmp2DTYYCKvsBD3Xxt0kA==
-X-Google-Smtp-Source: AGHT+IExEQkn+NPoAaYjM4wJoDfBmC62mhKiXO92/+2AgclJqqMbMv84UkJ6llvY+HQqci7zKrX/ZA==
-X-Received: by 2002:a05:6a20:9c8d:b0:1e0:cfc0:df34 with SMTP id adf61e73a8af0-1e1dfd3ea15mr20259089637.16.1734370569570;
-        Mon, 16 Dec 2024 09:36:09 -0800 (PST)
-Received: from dw-tp ([49.205.218.89])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72918b78986sm5008691b3a.91.2024.12.16.09.36.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2024 09:36:08 -0800 (PST)
-From: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-To: Madhavan Srinivasan <maddy@linux.ibm.com>, mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu, naveen@kernel.org, shuah@kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org, Madhavan Srinivasan <maddy@linux.ibm.com>
-Subject: Re: [PATCH v2 3/3] selftest/powerpc/ptrace: Cleanup duplicate macro definitions
-In-Reply-To: <20241216160257.87252-3-maddy@linux.ibm.com>
-Date: Mon, 16 Dec 2024 22:54:02 +0530
-Message-ID: <87ikrj4k3x.fsf@gmail.com>
-References: <20241216160257.87252-1-maddy@linux.ibm.com> <20241216160257.87252-3-maddy@linux.ibm.com>
+	s=arc-20240116; t=1734377388; c=relaxed/simple;
+	bh=zob8cBbXpNsaY9MTVMiTWopsdDQ7UbvHJyGMOED+hro=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Egll8SH6sb6nhRrDaioF27RGEvSzdQOM2+6jwbQTjM6CdkxBWAGLCOevGkBDPfZQMN6a/LNzIKPI9YYPuP0MKPfy1IsMM0cpWj87jKgZosMVB0gAuSFHXwN2QSMPDppSjy7SwHRM95eFgpmmAE4u9kDIgAWiUz6d9ETvFQTZzGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RceAWJ5Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C88EC4CED0;
+	Mon, 16 Dec 2024 19:29:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734377387;
+	bh=zob8cBbXpNsaY9MTVMiTWopsdDQ7UbvHJyGMOED+hro=;
+	h=From:Date:Subject:To:Cc:From;
+	b=RceAWJ5Q2b4cYp49HafjaGkvIF9zm69/z/2HLKc3IS9jz5zzn38GD+oTZSnh2IbYc
+	 jr+FOGAmx09yngJSQoX/EYvhpQNh9STzPtn0RqhJ/PSyAPPXLtlmHYXc7KdNDDUhAJ
+	 tcBc1lJv/sytueVF9aHmsvhJC06GcDzdMSuPfzI7yHeQQLR9nLWrKQto8qFTJhhAiF
+	 VQwcTGXNvF7V2nZOyYp+r1YhWaoAYRiJvOaOvGB92CEOa9edLORlo1EAslUr9y/KCC
+	 DCIw9DDaSLGIseq2rxT1fqdK9+Gsz1Ov0gw8UN1e9QvGgV7eqS2Ofxbxy08XEY0gm0
+	 T3kdVHQTcTJPw==
+From: Mark Brown <broonie@kernel.org>
+Date: Mon, 16 Dec 2024 19:28:24 +0000
+Subject: [PATCH] KVM: arm64: Fix set_id_regs selftest for ASIDBITS becoming
+ unwritable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241216-kvm-arm64-fix-set-id-asidbits-v1-1-8b105b888fc3@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAFd/YGcC/x3MSQqAMAxA0atI1gZsndCriIvWRg3iQCMiiHc3u
+ Pzw+A8IRSaBNnkg0sXC+6Zh0gSG2W0TIQdtsJktjDUVLteKLq5VgSPfKHQqQCccPJ+CjadAtvS
+ 1Czno44ik7P93/ft+dELguG8AAAA=
+X-Change-ID: 20241216-kvm-arm64-fix-set-id-asidbits-9bede25b7ad3
+To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+ Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+ Catalin Marinas <catalin.marinas@arm.com>, 
+ Zenghui Yu <yuzenghui@huawei.com>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-9b746
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2077; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=zob8cBbXpNsaY9MTVMiTWopsdDQ7UbvHJyGMOED+hro=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnYH+o8aXSlFkq0JGBg1lM1VwGO+DbhuBYGgA0lSnu
+ em750Y2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ2B/qAAKCRAk1otyXVSH0HySB/
+ 9KXCZ0JRJ0FegaopfpAL6MwAVzZ47XDi1i0B4ODxl5pBgFCnLOSZOzxG1WNdAKaNxymgQOG9TyZNq+
+ 7ReuXTGTiZspw2CqVdH3ypZNWzIgfkRzNg8hYx+nli6lddmcubxQE94D75DmMTJAAz+jZVraqxmSSs
+ vlZxm1WG8s1gN5WfYEwkrsnxQkCsjDoRTlVKg4oVOs6X7Kc3ePbuvIwk1exGMWGZ8uHUaTab9+r5sl
+ ej+WQt7MSuXLY2ymYH6oaITPjt+FJM0kDNg6k1J962MLyfQEMkpS3m2z36sGgVFlsspasqbgMStuif
+ qk7g0Ba+4gaA/8CXKp9bQ91TfgI9K/
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Madhavan Srinivasan <maddy@linux.ibm.com> writes:
+In commit 03c7527e97f7 ("KVM: arm64: Do not allow ID_AA64MMFR0_EL1.ASIDbits
+to be overridden") we made that bitfield in the ID registers unwritable
+however the change neglected to make the corresponding update to set_id_regs
+resulting in it failing:
 
-> Both core-pkey.c and ptrace-pkey.c tests have
-> similar macro definitions, move them to "pkeys.h"
-> and remove the macro definitions from the C file.
->
-> Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
-> ---
-> Changelog v1:
->  - Removed additional macros pointed out by Ritesh
->    which are duplicates and are avilable in "pkeys.h"
+# ok 56 ID_AA64MMFR0_EL1_BIGEND
+# ==== Test Assertion Failure ====
+#   aarch64/set_id_regs.c:434: masks[idx] & ftr_bits[j].mask == ftr_bits[j].mask
+#   pid=5566 tid=5566 errno=22 - Invalid argument
+#      1	0x00000000004034a7: test_vm_ftr_id_regs at set_id_regs.c:434
+#      2	0x0000000000401b53: main at set_id_regs.c:684
+#      3	0x0000ffff8e6b7543: ?? ??:0
+#      4	0x0000ffff8e6b7617: ?? ??:0
+#      5	0x0000000000401e6f: _start at ??:?
+#   0 != 0xf0 (masks[idx] & ftr_bits[j].mask != ftr_bits[j].mask)
+not ok 8 selftests: kvm: set_id_regs # exit=254
 
-Thanks! The changes looks good to me. 
+Remove ID_AA64MMFR1_EL1.ASIDBITS from the set of bitfields we test for
+writeability.
 
-Please feel free to add - 
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+Fixes: 03c7527e97f7 ("KVM: arm64: Do not allow ID_AA64MMFR0_EL1.ASIDbits to be overridden")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/kvm/aarch64/set_id_regs.c | 1 -
+ 1 file changed, 1 deletion(-)
 
+diff --git a/tools/testing/selftests/kvm/aarch64/set_id_regs.c b/tools/testing/selftests/kvm/aarch64/set_id_regs.c
+index a79b7f18452d2ec336ae623b8aa5c9cf329b6b4e..3a97c160b5fec990aaf8dfaf100a907b913f057c 100644
+--- a/tools/testing/selftests/kvm/aarch64/set_id_regs.c
++++ b/tools/testing/selftests/kvm/aarch64/set_id_regs.c
+@@ -152,7 +152,6 @@ static const struct reg_ftr_bits ftr_id_aa64mmfr0_el1[] = {
+ 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, BIGENDEL0, 0),
+ 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, SNSMEM, 0),
+ 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, BIGEND, 0),
+-	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, ASIDBITS, 0),
+ 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, PARANGE, 0),
+ 	REG_FTR_END,
+ };
 
-Gave a quick run on my lpar too - 
+---
+base-commit: 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8
+change-id: 20241216-kvm-arm64-fix-set-id-asidbits-9bede25b7ad3
 
-# selftests: powerpc/ptrace: core-pkey
-# test: core_pkey
-# [User Write (Running)]         AMR: 3cffffffffffffff pkey1: 4 pkey2: 5 pkey3: 6
-# success: core_pkey
-ok 9 selftests: powerpc/ptrace: core-pkey
-# selftests: powerpc/ptrace: ptrace-pkey
-# test: ptrace_pkey
-# [User Write (Running)]         AMR: 3cffffffffffffff pkey1: 4 pkey2: 5 pkey3: 6
-# success: ptrace_pkey
-ok 13 selftests: powerpc/ptrace: ptrace-pkey
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
-
--ritesh
-
->
->  tools/testing/selftests/powerpc/include/pkeys.h      |  8 ++++++++
->  tools/testing/selftests/powerpc/ptrace/core-pkey.c   | 12 ------------
->  tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c | 12 ------------
->  3 files changed, 8 insertions(+), 24 deletions(-)
->
-> diff --git a/tools/testing/selftests/powerpc/include/pkeys.h b/tools/testing/selftests/powerpc/include/pkeys.h
-> index 51729d9a7111..3a0129467de6 100644
-> --- a/tools/testing/selftests/powerpc/include/pkeys.h
-> +++ b/tools/testing/selftests/powerpc/include/pkeys.h
-> @@ -35,10 +35,18 @@
->  #define __NR_pkey_alloc		384
->  #define __NR_pkey_free		385
->  
-> +#ifndef NT_PPC_PKEY
-> +#define NT_PPC_PKEY		0x110
-> +#endif
-> +
->  #define PKEY_BITS_PER_PKEY	2
->  #define NR_PKEYS		32
->  #define PKEY_BITS_MASK		((1UL << PKEY_BITS_PER_PKEY) - 1)
->  
-> +#define AMR_BITS_PER_PKEY 2
-> +#define PKEY_REG_BITS (sizeof(u64) * 8)
-> +#define pkeyshift(pkey) (PKEY_REG_BITS - ((pkey + 1) * AMR_BITS_PER_PKEY))
-> +
->  inline unsigned long pkeyreg_get(void)
->  {
->  	return mfspr(SPRN_AMR);
-> diff --git a/tools/testing/selftests/powerpc/ptrace/core-pkey.c b/tools/testing/selftests/powerpc/ptrace/core-pkey.c
-> index 31c9bf6d95db..f061434af452 100644
-> --- a/tools/testing/selftests/powerpc/ptrace/core-pkey.c
-> +++ b/tools/testing/selftests/powerpc/ptrace/core-pkey.c
-> @@ -18,18 +18,6 @@
->  #include "child.h"
->  #include "pkeys.h"
->  
-> -#ifndef NT_PPC_PKEY
-> -#define NT_PPC_PKEY		0x110
-> -#endif
-> -
-> -#ifndef PKEY_DISABLE_EXECUTE
-> -#define PKEY_DISABLE_EXECUTE	0x4
-> -#endif
-> -
-> -#define AMR_BITS_PER_PKEY 2
-> -#define PKEY_REG_BITS (sizeof(u64) * 8)
-> -#define pkeyshift(pkey) (PKEY_REG_BITS - ((pkey + 1) * AMR_BITS_PER_PKEY))
-> -
->  #define CORE_FILE_LIMIT	(5 * 1024 * 1024)	/* 5 MB should be enough */
->  
->  static const char core_pattern_file[] = "/proc/sys/kernel/core_pattern";
-> diff --git a/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c b/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
-> index 6893ed096457..fc633014424f 100644
-> --- a/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
-> +++ b/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
-> @@ -9,18 +9,6 @@
->  #include "child.h"
->  #include "pkeys.h"
->  
-> -#ifndef NT_PPC_PKEY
-> -#define NT_PPC_PKEY		0x110
-> -#endif
-> -
-> -#ifndef PKEY_DISABLE_EXECUTE
-> -#define PKEY_DISABLE_EXECUTE	0x4
-> -#endif
-> -
-> -#define AMR_BITS_PER_PKEY 2
-> -#define PKEY_REG_BITS (sizeof(u64) * 8)
-> -#define pkeyshift(pkey) (PKEY_REG_BITS - ((pkey + 1) * AMR_BITS_PER_PKEY))
-> -
->  static const char user_read[] = "[User Read (Running)]";
->  static const char user_write[] = "[User Write (Running)]";
->  static const char ptrace_read_running[] = "[Ptrace Read (Running)]";
-> -- 
-> 2.47.0
 
