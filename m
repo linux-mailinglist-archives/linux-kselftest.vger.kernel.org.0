@@ -1,102 +1,174 @@
-Return-Path: <linux-kselftest+bounces-23435-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23436-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 126D49F3D0C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 22:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B2389F3E04
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 00:08:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5579F16CAEF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 21:50:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C62B16A9F5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 23:08:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99C3F1D5CC7;
-	Mon, 16 Dec 2024 21:50:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 286EF1D5CDE;
+	Mon, 16 Dec 2024 23:08:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lLTb/Wgh"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EEMjdNxb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0E71B87E0;
-	Mon, 16 Dec 2024 21:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A59B1D5ADB
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2024 23:08:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734385814; cv=none; b=Gi5YAAmPy2+iqCtWq6WrZS6NCCXUxdLDZs8PdNKqKQF/JFkX7zkKagA2hhHOgVNSoyQ0uKqR0dlyD7nqxGiDE9EJvSvRpsQQCm6CX4sU8Y74fwReG2od//JoXN+w3mQCGc0nJsCdPv5VDwQ3BnAgnajlj0CNL2mrYsNmolgA4XY=
+	t=1734390503; cv=none; b=CeDblNtLO6MnJZbFCX7tsERSR5hLY/gMorkA3KQaeNK1+kdo4/zbyL7QlTZMoE3mJV0nCouOb2iYYdOpa6LG6KORV4O7MxWMDbQrH6mXYehifr6Bpgo9R3ibBiCkpEbuAgVgiob6BFNsMWo6wmhKQwcfpM8f86gYtmghElhQzGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734385814; c=relaxed/simple;
-	bh=BZJFK3QeyYb8JBUBB5s5NB7yEt4OJerhWaTrDQv0mzg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=pZfpllFyWiUAoWnMb0ChkOyCwJIwQSbTSzp5j1j0+wbt83AG10LqOkA/4fFHYcS5B/zrjJ+Yd7wqIpewd57R8Ew9EMSgx2T6p3QYnAkrNmfZ19SDnDYqHFmkXTj1IqFl5t2Mn/YCvrP3XRa2STkDa6uXmXsp5RQY5jz+uWt1SvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lLTb/Wgh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE67FC4CED0;
-	Mon, 16 Dec 2024 21:50:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734385813;
-	bh=BZJFK3QeyYb8JBUBB5s5NB7yEt4OJerhWaTrDQv0mzg=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=lLTb/WghvGnl7+LgXhxmuAKKgGLhcVwCV0Iur6LhyBcq5yEfQZtLHkk9RKhRWVcid
-	 oi6FxYwzTBcgPH+lpuG3Agh3uPsvZHY6zz2jYT252RSdCn6sQpgK8TZQEQD5VUTRnc
-	 RCMatLe33qTmzd1uCuvOhp/TYtpYRLZnIAdGUZ02gMAyI41gIxtiP+GmmCw0bLRmyP
-	 oOCzjdyAmRlTOwOqpHloi9pHOQaxpsjfKgaKVsYruhfxNRpQP3/MyqWBsEGhi1mFcu
-	 1HX7cwCNAYAbwpXQdYYeIO/kwkUVordwOvl+RPqAr4LB0snpLEdQZxCN/gO5ymLqax
-	 G3X7Re2vHRKLQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33DB53806656;
-	Mon, 16 Dec 2024 21:50:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1734390503; c=relaxed/simple;
+	bh=BOY3hgn9j9vkltOI8aTIIoi8jv+JFmY0EGyzVvQu70g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aBImHUJPArNBJXC7KE28gytFYTMNHfesSwT3oePvsrIJuFfEM9mPALjEt3KrSoaW+o6zteWk5GlUiVqwyu7d5j28Ze91n7T8eQU90opUKIDucw3kAnkScjPoHo9Q35s7CB5jjaDeRywdTTugwndIN9KFMB1XZ4yih48fuMUtF/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EEMjdNxb; arc=none smtp.client-ip=209.85.166.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-844d67eb693so336220639f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2024 15:08:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1734390500; x=1734995300; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OS94voLSWfEjTx6K2R3aOqE+lStws7kGltqqRCQYk5M=;
+        b=EEMjdNxb4BgOSyvaym+dKnvFTSTIr2HsSljauEE4UsVqBPIWQ+2fQVioMOzLy5yIcV
+         nk4EHFTYlz1L6+zo4kMPshM95sABvhi1sVXP7IUSMXVq5/cGOPZt4Xzrs/CJjf6+q7pJ
+         0tft9DxyLZnSzpyutIOxhiOlAPwbr4usQeu7A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734390500; x=1734995300;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OS94voLSWfEjTx6K2R3aOqE+lStws7kGltqqRCQYk5M=;
+        b=oy1C3uaSF6AEsDW+tCpTIOCaCY2EEP0Y7t8I1A9U/baUKznRMX1nnGKVHKraqxOky0
+         eXb8tr+f3siLoUZlJC479IeAw1cEgpFDU+DDQ0JNl0QOGNZNfUgHOAeimA0SfvF6fqMQ
+         cdtgGz6swfp5+BCgxmmt07/2KriDpaQHXKFWheny4tqMd4K4hmHbLe7pV/nZr6hcfV+f
+         yRdQIKNY9POaIp9cjoQV/QTwoXDm7bJk5wTv02R2TPBpFgZZUaenmpqfkuzudiKiEqf+
+         blmun1VLl3yUfuYu3pOmJV38BarUdWYkQuc4Xq7M4s62a7vX4nLesZr39WwXioV8Qy8V
+         fGJQ==
+X-Gm-Message-State: AOJu0Yyt0CObtvq8mOpGbfptD1VyXGD9awuUnNCwQPnfysFCxTMXrrdi
+	x7E2DEd5zUkoHyA8Bp1dn6sSU68t/4RnV5bYCU9YzR+uCSF/EVvvjIlG9y1FRME=
+X-Gm-Gg: ASbGnctIiDTselWVRRx6L0+uNbxww4BJEtv3EUgcxEyr2ZtFlXCjVUY5zdzPfTg8AnR
+	KcSHKVTvRNZOpOOmrewcMoJnv1sS+qSSl00NzyOBZxgr0n9aKB39buXelC0+JrDN1WPRg7Hn8QR
+	mp2XzpEosAHX56YJZZLrpL3w2pBK1kJzfnAcc8thzXDJU8KuzEKzWz3ToY5mmZxljxccDk13mDC
+	duSJDAK5yFtwAQGR56XI4vUFfPOQ+xxzUu8mYrB50xAZEP++7puuL2yhxfCDv2JG+yD
+X-Google-Smtp-Source: AGHT+IHev4woPz3cPHVkrgHa5mG+siQEsm5AhB3LOex5FrUR07AUAr4fPtANg5m/efCiubNYW+tcmw==
+X-Received: by 2002:a05:6602:b85:b0:847:37fb:80f0 with SMTP id ca18e2360f4ac-84737fb8a2amr446343439f.15.1734390500470;
+        Mon, 16 Dec 2024 15:08:20 -0800 (PST)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-844f6239ad3sm152616439f.7.2024.12.16.15.08.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Dec 2024 15:08:19 -0800 (PST)
+Message-ID: <16657ef3-72e5-4da3-8785-9f4391cc0002@linuxfoundation.org>
+Date: Mon, 16 Dec 2024 16:08:19 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/2] selftests: bpf: Migrate test_xdp_meta.sh
- to test_progs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173438583101.361160.455801228839827369.git-patchwork-notify@kernel.org>
-Date: Mon, 16 Dec 2024 21:50:31 +0000
-References: <20241213-xdp_meta-v2-0-634582725b90@bootlin.com>
-In-Reply-To: <20241213-xdp_meta-v2-0-634582725b90@bootlin.com>
-To: Bastien Curutchet <bastien.curutchet@bootlin.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
- kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
- alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 resend] selftests: timers: clocksource-switch: Adapt
+ progress to kselftest framework
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+ John Stultz <jstultz@google.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Stephen Boyd <sboyd@kernel.org>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <7dd4b9ab6e43268846e250878ebf25ae6d3d01ce.1733994134.git.geert+renesas@glider.be>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <7dd4b9ab6e43268846e250878ebf25ae6d3d01ce.1733994134.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (net)
-by Martin KaFai Lau <martin.lau@kernel.org>:
-
-On Fri, 13 Dec 2024 16:06:19 +0100 you wrote:
-> Hi all,
+On 12/12/24 02:02, Geert Uytterhoeven wrote:
+> When adapting the test to the kselftest framework, a few printf() calls
+> indicating test progress were not updated.
 > 
-> This patch series continues the work to migrate the script tests into
-> prog_tests.
+> Fix this by replacing these printf() calls by ksft_print_msg() calls.
 > 
-> test_xdp_meta.sh uses the BPF programs defined in progs/test_xdp_meta.c
-> to do a simple XDP/TC functional test that checks the metadata
-> allocation performed by the bpf_xdp_adjust_meta() helper.
+> Fixes: ce7d101750ff8450 ("selftests: timers: clocksource-switch: adapt to kselftest framework")
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+> v2:
+>    - Add Reviewed-by.
 > 
-> [...]
+> When just running the test, the output looks like:
+> 
+>      # Validating clocksource arch_sys_counter
+>      TAP version 13
+>      1..12
+>      ok 1 CLOCK_REALTIME
+>      ...
+>      # Validating clocksource ffca0000.timer
+>      TAP version 13
+>      1..12
+>      ok 1 CLOCK_REALTIME
+>      ...
+> 
+> When redirecting the test output to a file, the progress prints are not
+> interspersed with the test output, but collated at the end:
+> 
+>      TAP version 13
+>      1..12
+>      ok 1 CLOCK_REALTIME
+>      ...
+>      TAP version 13
+>      1..12
+>      ok 1 CLOCK_REALTIME
+>      ...
+>      # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:6 error:0
+>      # Validating clocksource arch_sys_counter
+>      # Validating clocksource ffca0000.timer
+>      ...
+> 
+> This makes it hard to match the test results with the timer under test.
+> Is there a way to fix this?  The test does use fork().
+> 
+> Thanks!
+> ---
+>   tools/testing/selftests/timers/clocksource-switch.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/timers/clocksource-switch.c b/tools/testing/selftests/timers/clocksource-switch.c
+> index c5264594064c8516..83faa4e354e389c2 100644
+> --- a/tools/testing/selftests/timers/clocksource-switch.c
+> +++ b/tools/testing/selftests/timers/clocksource-switch.c
+> @@ -156,8 +156,8 @@ int main(int argc, char **argv)
+>   	/* Check everything is sane before we start switching asynchronously */
+>   	if (do_sanity_check) {
+>   		for (i = 0; i < count; i++) {
+> -			printf("Validating clocksource %s\n",
+> -				clocksource_list[i]);
+> +			ksft_print_msg("Validating clocksource %s\n",
+> +					clocksource_list[i]);
+>   			if (change_clocksource(clocksource_list[i])) {
+>   				status = -1;
+>   				goto out;
+> @@ -169,7 +169,7 @@ int main(int argc, char **argv)
+>   		}
+>   	}
+>   
+> -	printf("Running Asynchronous Switching Tests...\n");
+> +	ksft_print_msg("Running Asynchronous Switching Tests...\n");
+>   	pid = fork();
+>   	if (!pid)
+>   		return run_tests(runtime);
 
-Here is the summary with links:
-  - [bpf-next,v2,1/2] selftests/bpf: test_xdp_meta: Rename BPF sections
-    https://git.kernel.org/bpf/bpf-next/c/8dccbecbb969
-  - [bpf-next,v2,2/2] selftests/bpf: Migrate test_xdp_meta.sh into xdp_context_test_run.c
-    (no matching commit)
+Applied to linux-kselftest next for Linux 6.14-rc1.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+thanks,
+-- Shuah
 
