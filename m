@@ -1,80 +1,82 @@
-Return-Path: <linux-kselftest+bounces-23408-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23409-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 722829F2FC7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 12:50:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15F6D9F301D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 13:09:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA2691883149
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 11:50:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CA62188356A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 12:09:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D43CE2040BC;
-	Mon, 16 Dec 2024 11:50:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 489F3204681;
+	Mon, 16 Dec 2024 12:09:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="c9vwyuZ8"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ChfgpvZ1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 805F9203712
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2024 11:50:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96AAD38FA6
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2024 12:09:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734349808; cv=none; b=T47IQvdx8hDM3TLcS6tHTxj8BwSBnUH6SEBOfPgf65fktwnGe+Dd5pRFowpRZiWc2a3/a+5a0Jctw1c3yZveMsl61aH+s2wEJPBXy8/UZKinbzOxtpNFa3Jv+vGC3I+zHSVSQteZGnHE9kDTZTvfEIpc3UPaLdK+2f6GCCynY58=
+	t=1734350988; cv=none; b=hbc4nYvbe9nfgxzDWlaFI7Xu2uQvvvML5taEK7feZInyUd+Vih4mYG6inyNwDlfo2YoyWcrRXROAucP5zTHkaxHFeFvuAgLTNQ2ILzi8dC1GLD7aUnwH/YBWv5NXT9AkS+v2oBOKPz2unUyae1cLeXYt/bFGp/TkMUNyYhcV8Yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734349808; c=relaxed/simple;
-	bh=LjoNpo99IS9TQ2tcnB3Fb50v0g/in8V7E04lFrHtrcg=;
+	s=arc-20240116; t=1734350988; c=relaxed/simple;
+	bh=qnTfM1RDGI+BOo3E0RgeA8Wurqz5znwsN2lu8UFXSrk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bSpZdgJOAGvz02glZ7fhN0wNhklQe+aTsHl50jcf9eP3TOS1AiqtwTuO/ILlZfQP6Jc6wVMLQFJ8mKiMUze8IGMhR2EE+IofSVkOsrjvJtn7aZWEOy3tJG2YFhxHK9ij3h0brPGV9Aip8bT9yQu1L2aA22jVVnTTeBduc2VJ3Nk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=c9vwyuZ8; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-aa692211331so768756666b.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2024 03:50:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1734349805; x=1734954605; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=n4Fnqt3+wn3Jqih2/E06bFWlfYBOS+/nVME6Ot/StK8=;
-        b=c9vwyuZ89rAz7fOyhoTxkT4XTjxhvSfi8DfiW/OjpFNMUsA6v8hG/0DMPbvXC/rz/l
-         mEs7ru+VNaN8SR2XoIjkmkvTCMcWxveJ221IG5428MABbHm2OCcgfwF8MsRA47LsDijz
-         jI5zrkCHtawtSvKKMW8ZdPV6ugWaD45Qfr8WmV07MyZ/uCGM0kl7n5KVYLs+Ct4EMw1n
-         Nlye7HkWVhOLvd6ZSY3O74dwKvlgj/U7iOKklH0TOIGBaVMLFZ4b6wjhYJhbuCmkO7tD
-         WmRYq51FMQ03kdB1nFYWNXaBa+f8fCsp4mt1EULh09x+A5fRqfkkrVMJqmVdNqufzKQe
-         JQ/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734349805; x=1734954605;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n4Fnqt3+wn3Jqih2/E06bFWlfYBOS+/nVME6Ot/StK8=;
-        b=IAXsydsmYBTHvwsZPSEUxPB3vca+m5sC75b2Zrw3sbeA3SVEhvsm2VZqUZjvpdl7Sv
-         Z6/8Z5WZ9hBHnFZiccm5sye2N4t4bllo/OCXk9m7mXrCKCYAFXjjizD3djG0R5e+42tj
-         QG5PF6WYfAPmGdMMLxMDUWtwtHVUP0OGqyW6xNW6gtWa91LXvRsebqxWMFWG84A1VfRm
-         ggwiqC9dxb/+UyKUTqYPsL426frUcfAbnZUSdTGtdu9pnbM47m7cAT5yNju5ceyt8N2g
-         bu9irIbdgUEprYfzn4IX+gyDCyteso8hv//K+jAlJiOCJJrhoLta1bwjg8Mq1HDYm2zP
-         Fo3A==
-X-Forwarded-Encrypted: i=1; AJvYcCWBJ18K0MBNTYJhP58YwNajIkZZKNsB4+XyfZiVHsKP42y8AueMntfgi4velCIHUSem2J7lHY475OcqjnAOqa4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFo+aZczuIv4SkD12J/Jt+MJIihNnDfNMAXBv/V9g8IRFuNk22
-	HIEpOU2s2kG/xwqQGgYCqiEVsHS5awukHaKKU6TmNCvL6b4leUSi4JU40xP3EMA=
-X-Gm-Gg: ASbGncsGZPoYWUTpc28WecnRENsz6e2evNm+asDLzVp15jw5D9gtoD5h8vj+0C2DMmA
-	Wp7Kr4HL2zz/ivn46jSevquF3C6NmKTW8ubMC2gRbaQ0OkPE7q98fJmn5NBonAzyrUEOf4I3mHG
-	l5keq6OYC+wsHmqntF6S5aXkbKJ3diLR1sGAZ920vOUmIpjqBzArTjFkYQqyGPOkTI+kP5nt5u4
-	a800aVwse8IwXmGJZmjWqLmrzzJ/i5oOG22xAUp4X7Tiy+Gtavg0mp/G0KqiEH4E4V9Dna1tvkW
-	Dw5vqYVeSx81EvJ5Ij0=
-X-Google-Smtp-Source: AGHT+IEnfewEiJGs3lq7FqGj7ad6Ew/gCcV3xnhPzkvANe07z2h/NIw9ORmy8DNUwq06lbUogwLfZA==
-X-Received: by 2002:a17:907:7e92:b0:aa6:a9fe:46de with SMTP id a640c23a62f3a-aab7b777564mr1235220266b.19.1734349804846;
-        Mon, 16 Dec 2024 03:50:04 -0800 (PST)
-Received: from ?IPV6:2001:67c:2fbc:1:f3f5:d43f:11fb:5f45? ([2001:67c:2fbc:1:f3f5:d43f:11fb:5f45])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aab96089f88sm321885466b.91.2024.12.16.03.50.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Dec 2024 03:50:04 -0800 (PST)
-Message-ID: <a1137cc2-6985-44bc-a802-e070da7208dc@openvpn.net>
-Date: Mon, 16 Dec 2024 12:50:53 +0100
+	 In-Reply-To:Content-Type; b=prTLf8ER3eJ176XmwtTInwwu+aimBG8J4pN8lPzwNFXddKHGjDY2zVi+3qwPMifgQDU4qU0nxmir3uX350nUUFd7muHjghGrRlcoBiS2Cj7lv8xgr9dPseV3oMtAqcFNflWGKNOx1AqrUMci8cFiW+IWY0imxu3xnZXp5B5T5p0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ChfgpvZ1; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BG85ZiZ027025;
+	Mon, 16 Dec 2024 12:09:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=WTSHcJ
+	8eRCQYNL+hWiFrScopX+ZbF/jNY8lXSWTn3Ck=; b=ChfgpvZ1WWBUw2MPcuNizl
+	tM7m1HK6aVnVvzOUzaRRtS1ozNw+v/vY/zekAW08+rHzh7M8UkVvTPHwk+nNMTLS
+	k6OmfCGcYd+j/H9FEVm6alLI70902+8Pdl+tzL2LhZ0UwXDtwDwEKpwBNuz0Y1fL
+	jLnzzGqeGTtS2zqKOEWWFDiX8yLFEY79xNKY+E4D8qgHX+EG9iDKjShx6EGScife
+	ffZUgnzbqIvghUIHCTCgwA0jTRpEwyLcX9OmMh3ubMYujINL8rcF/E+lYKnjldyD
+	Nhjg4WI/exQMRWeCfxHRUkYpyXHnGY8t76Q+zXpUsogVe/44y2GMxLba1JB7GArQ
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43jgd292kf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Dec 2024 12:09:26 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4BGC3TIN002189;
+	Mon, 16 Dec 2024 12:09:26 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43jgd292kb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Dec 2024 12:09:26 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BGASkJ8011260;
+	Mon, 16 Dec 2024 12:09:25 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 43hpjjwjcu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Dec 2024 12:09:25 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BGC9OKY27132444
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 16 Dec 2024 12:09:24 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5ADB658065;
+	Mon, 16 Dec 2024 12:09:24 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C54EC5805D;
+	Mon, 16 Dec 2024 12:09:19 +0000 (GMT)
+Received: from [9.43.70.111] (unknown [9.43.70.111])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 16 Dec 2024 12:09:19 +0000 (GMT)
+Message-ID: <bbde8e05-fc85-434e-998c-a6fcc8b2df4e@linux.ibm.com>
+Date: Mon, 16 Dec 2024 17:39:17 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,155 +84,133 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v15 06/22] ovpn: introduce the ovpn_socket object
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
- ryazanov.s.a@gmail.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>,
- willemdebruijn.kernel@gmail.com
-References: <20241211-b4-ovpn-v15-0-314e2cad0618@openvpn.net>
- <20241211-b4-ovpn-v15-6-314e2cad0618@openvpn.net> <Z1sNEgQLMzZua3mS@hog>
- <fa19f3a8-c273-4d2c-a10e-e9bda2375365@openvpn.net> <Z2AKg6ntLd94anHv@hog>
+Subject: Re: [PATCH 3/3] selftest/powerpc/ptrace: Cleanup duplicate macro
+ definitions
+To: "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu, naveen@kernel.org,
+        shuah@kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org
+References: <20241209151418.348085-1-maddy@linux.ibm.com>
+ <20241209151418.348085-3-maddy@linux.ibm.com> <87ldwf520w.fsf@gmail.com>
 Content-Language: en-US
-From: Antonio Quartulli <antonio@openvpn.net>
-Autocrypt: addr=antonio@openvpn.net; keydata=
- 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
-Organization: OpenVPN Inc.
-In-Reply-To: <Z2AKg6ntLd94anHv@hog>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Madhavan Srinivasan <maddy@linux.ibm.com>
+In-Reply-To: <87ldwf520w.fsf@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: l6k8yrErjU-dP8EVAwrEkxuevyu2ZaYK
+X-Proofpoint-GUID: SZ4kf7HNimysG9KiQGPyaUuUwoSNRgI2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ suspectscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015
+ mlxlogscore=867 priorityscore=1501 malwarescore=0 impostorscore=0
+ mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412160101
 
-On 16/12/2024 12:09, Sabrina Dubroca wrote:
-[...]
->> Maybe we should call cancel_sync_work(&ovpn_sock->work) inside
->> ovpn_socket_get()?
->> So the latter will return NULL only when it is sure that the socket has been
->> detached.
+
+
+On 12/16/24 4:27 PM, Ritesh Harjani (IBM) wrote:
+> Madhavan Srinivasan <maddy@linux.ibm.com> writes:
+> 
+>> Both core-pkey.c and ptrace-pkey.c tests have similar macro
+>> definitions, move them to "pkeys.h" and remove the macro
+>> definitions from the C file.
 >>
->> At that point we can skip the following return and continue along the "new
->> socket" path.
+>> Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
+>> ---
+>>  tools/testing/selftests/powerpc/include/pkeys.h      | 8 ++++++++
+>>  tools/testing/selftests/powerpc/ptrace/core-pkey.c   | 8 --------
+>>  tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c | 8 --------
+>>  3 files changed, 8 insertions(+), 16 deletions(-)
 >>
->> What do you think?
+>> diff --git a/tools/testing/selftests/powerpc/include/pkeys.h b/tools/testing/selftests/powerpc/include/pkeys.h
+>> index 51729d9a7111..3a0129467de6 100644
+>> --- a/tools/testing/selftests/powerpc/include/pkeys.h
+>> +++ b/tools/testing/selftests/powerpc/include/pkeys.h
+>> @@ -35,10 +35,18 @@
+>>  #define __NR_pkey_alloc		384
+>>  #define __NR_pkey_free		385
+>>  
+>> +#ifndef NT_PPC_PKEY
+>> +#define NT_PPC_PKEY		0x110
+>> +#endif
+>> +
+>>  #define PKEY_BITS_PER_PKEY	2
+>>  #define NR_PKEYS		32
+>>  #define PKEY_BITS_MASK		((1UL << PKEY_BITS_PER_PKEY) - 1)
+>>  
+>> +#define AMR_BITS_PER_PKEY 2
+>> +#define PKEY_REG_BITS (sizeof(u64) * 8)
+>> +#define pkeyshift(pkey) (PKEY_REG_BITS - ((pkey + 1) * AMR_BITS_PER_PKEY))
+>> +
+>>  inline unsigned long pkeyreg_get(void)
+>>  {
+>>  	return mfspr(SPRN_AMR);
+>> diff --git a/tools/testing/selftests/powerpc/ptrace/core-pkey.c b/tools/testing/selftests/powerpc/ptrace/core-pkey.c
+>> index 31c9bf6d95db..f8ff05e5bf6e 100644
+>> --- a/tools/testing/selftests/powerpc/ptrace/core-pkey.c
+>> +++ b/tools/testing/selftests/powerpc/ptrace/core-pkey.c
+>> @@ -18,18 +18,10 @@
+>>  #include "child.h"
+>>  #include "pkeys.h"
+>>  
+>> -#ifndef NT_PPC_PKEY
+>> -#define NT_PPC_PKEY		0x110
+>> -#endif
+>> -
+>>  #ifndef PKEY_DISABLE_EXECUTE
+>>  #define PKEY_DISABLE_EXECUTE	0x4
+>>  #endif
 > 
-> The work may not have been scheduled yet? (small window between the
-> last kref_put and schedule_work)
-> 
-> Maybe a completion [Documentation/scheduler/completion.rst] would
-> solve it (but it makes things even more complex, unfortunately):
-> 
->   - at the end of ovpn_socket_detach: complete(&ovpn_sock->detached);
->   - in ovpn_socket_new when handling EALREADY: wait_for_completion(&ovpn_sock->detached);
->   - in ovpn_socket_new for the new socket: init_completion(&ovpn_sock->detached);
-> 
-> but ovpn_sock could be gone immediately after complete(). Maybe
-> something with completion_done() before the kfree_rcu in
-> ovpn_socket_detach? I'm not that familiar with the completion API.
+> We could remove this as well right. Since pkeys.h already has this
+> permission defines i.e.
+> PKEY_DISABLE_[ACCESS|WRITE|EXECUTE] 
 > 
 
-It seems the solution we are aiming for is more complex than the concept 
-of ovpn_socket per se :-D
+Nice catch. Yes we can drop these too.
+Will fix and send a v2
+ 
 
-I'll think a bit more about this..maybe we can avoid entering this 
-situation at all..
-
+>>  
+>> -#define AMR_BITS_PER_PKEY 2
+>> -#define PKEY_REG_BITS (sizeof(u64) * 8)
+>> -#define pkeyshift(pkey) (PKEY_REG_BITS - ((pkey + 1) * AMR_BITS_PER_PKEY))
+>> -
+>>  #define CORE_FILE_LIMIT	(5 * 1024 * 1024)	/* 5 MB should be enough */
+>>  
+>>  static const char core_pattern_file[] = "/proc/sys/kernel/core_pattern";
+>> diff --git a/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c b/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
+>> index 6893ed096457..5d528d0ea9d1 100644
+>> --- a/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
+>> +++ b/tools/testing/selftests/powerpc/ptrace/ptrace-pkey.c
+>> @@ -9,18 +9,10 @@
+>>  #include "child.h"
+>>  #include "pkeys.h"
+>>  
+>> -#ifndef NT_PPC_PKEY
+>> -#define NT_PPC_PKEY		0x110
+>> -#endif
+>> -
+>>  #ifndef PKEY_DISABLE_EXECUTE
+>>  #define PKEY_DISABLE_EXECUTE	0x4
+>>  #endif
+>>  
 > 
->> However, this makes we wonder: what happens if we have two racing PEER_NEW
->> with the same non-yet-attached UDP socket?
+> Same here. This can be cleaned up, no? Since pkeys already has this defined.
 > 
-> mhmm, I remember noticing that, but it seems I never mentioned it in
-> my reviews. Sorry.
 > 
->> Maybe we should lock the socket in ovpn_udp_socket_attach() when checking
->> its user-data and setting it (in order to make the test-and-set atomic)?
+> -ritesh
 > 
-> I'd use the lock to protect all of ovpn_socket_new.
-> ovpn_tcp_socket_attach locks the socket but after doing the initial
-> checks, so 2 callers could both see sock->sk->sk_user_data == NULL and
-> do the full attach. And I don't think unlocking before
-> rcu_assign_sk_user_data is safe for either UDP or TCP.
-
-I tend to agree here. Guarding the whole ovpn_socket_new with 
-lock_sock() seems the right thing to do.
-
-> 
->> I am specifically talking about this in udp.c:
->>
->> 345         /* make sure no pre-existing encapsulation handler exists */
->> 346         rcu_read_lock();
->> 347         old_data = rcu_dereference_sk_user_data(sock->sk);
->> 348         if (!old_data) {
->> 349                 /* socket is currently unused - we can take it */
->> 350                 rcu_read_unlock();
->> 351                 setup_udp_tunnel_sock(sock_net(sock->sk), sock, &cfg);
->> 352                 return 0;
->> 353         }
->>
->> We will end up returning 0 in both contexts and thus allocate two
->> ovpn_sockets instead of re-using the first one we allocated.
->>
->> Does it make sense?
-> 
-> Yes.
-> 
-> [...]
->>> [I have some more nits/typos here and there but I worry the
->>> maintainers will get "slightly" annoyed if I make you repost 22
->>> patches once again :) -- if that's all I find in the next few days,
->>> everyone might be happier if I stash them and we get them fixed after
->>> merging?]
->>
->> If we have to rework this socket attaching part, it may be worth throwing in
->> those typ0 fixes too :)
-> 
-> ACK, I'll send them out.
-
-Thanks.
-
-Regards,
-
-
--- 
-Antonio Quartulli
-OpenVPN Inc.
+>> -#define AMR_BITS_PER_PKEY 2
+>> -#define PKEY_REG_BITS (sizeof(u64) * 8)
+>> -#define pkeyshift(pkey) (PKEY_REG_BITS - ((pkey + 1) * AMR_BITS_PER_PKEY))
+>> -
+>>  static const char user_read[] = "[User Read (Running)]";
+>>  static const char user_write[] = "[User Write (Running)]";
+>>  static const char ptrace_read_running[] = "[Ptrace Read (Running)]";
+>> -- 
+>> 2.47.0
 
 
