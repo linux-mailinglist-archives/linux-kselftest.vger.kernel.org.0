@@ -1,128 +1,126 @@
-Return-Path: <linux-kselftest+bounces-23428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23429-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9F019F39E0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 20:30:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1C8D9F3A7A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 21:12:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E5F07A129F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 19:30:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75A5618889AC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 20:12:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62AD82080F1;
-	Mon, 16 Dec 2024 19:29:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D92FD1CEEB0;
+	Mon, 16 Dec 2024 20:11:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RceAWJ5Q"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="DTv7N2gp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A2B0206F35;
-	Mon, 16 Dec 2024 19:29:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5E51CCEDB
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2024 20:11:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734377388; cv=none; b=lrZXCR3k5P+qQnnLRvRVfq4RuRB77HeRQ8TeAfA55kmJr0p7lU7tlEyL12lkg8TIafoOS7++0pY2pqP2sVchIikRtf9OndKuyNG6lNZwqKGg5TUbShAocq5+cCax0e0NxXxRqlttPCXx525j8f/6pyKgY9maM6cFj4gpACtDdHI=
+	t=1734379919; cv=none; b=nzZVfG0i66t40eg10KUjpPi1sB2zTktDqwpYXG8ASQ37dCNViKXhsf9vakF0243zaTCSLTGQ7Cz/xD00m+umuXHL+u4rV80cdAOdhnAI9purAWiCO7CS/Y8syggh4vyBAv3AE/SVe2/9qHfPbLagEEHOan/IqLglCNLJkblBIy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734377388; c=relaxed/simple;
-	bh=zob8cBbXpNsaY9MTVMiTWopsdDQ7UbvHJyGMOED+hro=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Egll8SH6sb6nhRrDaioF27RGEvSzdQOM2+6jwbQTjM6CdkxBWAGLCOevGkBDPfZQMN6a/LNzIKPI9YYPuP0MKPfy1IsMM0cpWj87jKgZosMVB0gAuSFHXwN2QSMPDppSjy7SwHRM95eFgpmmAE4u9kDIgAWiUz6d9ETvFQTZzGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RceAWJ5Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C88EC4CED0;
-	Mon, 16 Dec 2024 19:29:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734377387;
-	bh=zob8cBbXpNsaY9MTVMiTWopsdDQ7UbvHJyGMOED+hro=;
-	h=From:Date:Subject:To:Cc:From;
-	b=RceAWJ5Q2b4cYp49HafjaGkvIF9zm69/z/2HLKc3IS9jz5zzn38GD+oTZSnh2IbYc
-	 jr+FOGAmx09yngJSQoX/EYvhpQNh9STzPtn0RqhJ/PSyAPPXLtlmHYXc7KdNDDUhAJ
-	 tcBc1lJv/sytueVF9aHmsvhJC06GcDzdMSuPfzI7yHeQQLR9nLWrKQto8qFTJhhAiF
-	 VQwcTGXNvF7V2nZOyYp+r1YhWaoAYRiJvOaOvGB92CEOa9edLORlo1EAslUr9y/KCC
-	 DCIw9DDaSLGIseq2rxT1fqdK9+Gsz1Ov0gw8UN1e9QvGgV7eqS2Ofxbxy08XEY0gm0
-	 T3kdVHQTcTJPw==
-From: Mark Brown <broonie@kernel.org>
-Date: Mon, 16 Dec 2024 19:28:24 +0000
-Subject: [PATCH] KVM: arm64: Fix set_id_regs selftest for ASIDBITS becoming
- unwritable
+	s=arc-20240116; t=1734379919; c=relaxed/simple;
+	bh=MB50HxS4XH0AqjPhn5Rt0ZHwX9KYAvQUP7Mn+X0hDf4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=K3PPfS2vQsFm5iQJ/9ERQxvFk6opy5OIcPLYJgUW0ENLnAmyXB7/HnEwFLvNkKXd7BY7UkuVI4gsfjbJhC9k39vQ0Jzor9bFGHzxk143PYVHB1NQVAGoRS6CMo0S4r7MoIkhUZoljNAtdvJZj3qzb4GwXICFrA3rMWlcSAX/Kbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=DTv7N2gp; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2165448243fso44306015ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2024 12:11:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1734379918; x=1734984718; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wJDssvkykOLxnPgPj3hUuXjlWR0oF5mqDpbk9Gz8f6E=;
+        b=DTv7N2gpMFbixsIhveL3lVdYHruIx6TKfO6Jpdybg60ZOMO8/Vk1m2/jmzLZlq98lJ
+         NroZtPtjvfba9LZvM0/Iu7w3cVi7ve2TmkIIx6m4mIUeff49KQT9m1SwFq2Kp5W/dVwk
+         NMA+AoAi5ipYEsat0vWlGCKIKcOGoaN/y3sCQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734379918; x=1734984718;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wJDssvkykOLxnPgPj3hUuXjlWR0oF5mqDpbk9Gz8f6E=;
+        b=ZQT6eSPNiJ6s05mTB3149jxvMxzeJSLStib2nkg/z4dJmN6uOYNuwxerIw/pDFTX0z
+         mlTp2h93l9tOzn5U+ziJLn2CSYYd5OfeErRrR1JwN7ju5FMX1UCWyR3P4DXaKbRSCTCR
+         n+JR18BPFuLMbADZmP49eFCv2D/i7Tbyx2hJuheWgkKN1tWep8j7hDpL+v2gIpBAmimT
+         3H2CxP3Kx+ASInkXzYnxTha6lvPyzHPVDwg6cqOeddkVMVR0l8AJIaVnOzMoeQ47nvOM
+         NIY8j05QOI+ApEE9P3SqjaxoEKF7YarqaMyIcOuTG9sw++Qk9XkznFwkqWneNGIdCpER
+         zgfA==
+X-Forwarded-Encrypted: i=1; AJvYcCVOY8KexwYXTUjSCogAF/VfmSUtkw9pmmDuXilXmMCH37Cqjk2eTFj0zIHw5HEpWOM6cR/eQJr1VKjf4DzfhVA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2NaeZlESzy7w2K1RG88djEOBwUT1IKqGbAEjvCw80m/94VKPw
+	pm+mdkNwZWhUGqpP/j1A/b7kJOJ1PFFxk8d25UgE6Yt/Nkz/umlGGgds+3ZD5w==
+X-Gm-Gg: ASbGnctuK0z/9ypFwZIcGV3ZCnbDH+t91jmPBbNX6QYjjz9QI2aZm8/c+aghdB9/Sec
+	qdeGTSGsg6hw0WO2UVxnMa1I8QQ7RFQ3CUYRKHLyAggbomsM+XZWLNZnNFeRyYV1Zht0YEVNlFd
+	UakZxoy8hXMWLXdRvFV+dlq2ZwymboEph0PpTOLgSrmKwYTYrMYzGErnhaJ+YnENN7JlI9IYL0O
+	mNlFyPUna3JUMY2jIbBZcYjDOluPri0VFYfunPAsxGedv/v6BYhdK6skXHK/nG03Z1b3YzxlSjH
+	cYMahBhxqzc6wlRVMA==
+X-Google-Smtp-Source: AGHT+IFPt/yzYkL+WqzS7KUdkz894jceh43TbHhApgYdMJ4tZu2dlgeGJiFcBrRdgNqp8SzfUDRSiQ==
+X-Received: by 2002:a17:903:1d2:b0:216:7cd8:e964 with SMTP id d9443c01a7336-218929e814cmr205215925ad.22.1734379917836;
+        Mon, 16 Dec 2024 12:11:57 -0800 (PST)
+Received: from localhost ([2a00:79e0:2e14:7:953:5b91:a52c:e817])
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-218a1e501f1sm46466775ad.145.2024.12.16.12.11.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Dec 2024 12:11:57 -0800 (PST)
+From: Brian Norris <briannorris@chromium.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Maxime Ripard <mripard@kernel.org>,
+	linux-acpi@vger.kernel.org,
+	Rae Moar <rmoar@google.com>,
+	Rob Herring <robh@kernel.org>,
+	David Gow <davidgow@google.com>,
+	linux-kselftest@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	Brian Norris <briannorris@chromium.org>
+Subject: [PATCH v3 0/3] drivers: base: Don't match device with NULL of_node/fwnode/etc + tests
+Date: Mon, 16 Dec 2024 12:11:41 -0800
+Message-ID: <20241216201148.535115-1-briannorris@chromium.org>
+X-Mailer: git-send-email 2.47.1.613.gc27f4b7a9f-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241216-kvm-arm64-fix-set-id-asidbits-v1-1-8b105b888fc3@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAFd/YGcC/x3MSQqAMAxA0atI1gZsndCriIvWRg3iQCMiiHc3u
- Pzw+A8IRSaBNnkg0sXC+6Zh0gSG2W0TIQdtsJktjDUVLteKLq5VgSPfKHQqQCccPJ+CjadAtvS
- 1Czno44ik7P93/ft+dELguG8AAAA=
-X-Change-ID: 20241216-kvm-arm64-fix-set-id-asidbits-9bede25b7ad3
-To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
- Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, 
- Zenghui Yu <yuzenghui@huawei.com>
-Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-9b746
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2077; i=broonie@kernel.org;
- h=from:subject:message-id; bh=zob8cBbXpNsaY9MTVMiTWopsdDQ7UbvHJyGMOED+hro=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnYH+o8aXSlFkq0JGBg1lM1VwGO+DbhuBYGgA0lSnu
- em750Y2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ2B/qAAKCRAk1otyXVSH0HySB/
- 9KXCZ0JRJ0FegaopfpAL6MwAVzZ47XDi1i0B4ODxl5pBgFCnLOSZOzxG1WNdAKaNxymgQOG9TyZNq+
- 7ReuXTGTiZspw2CqVdH3ypZNWzIgfkRzNg8hYx+nli6lddmcubxQE94D75DmMTJAAz+jZVraqxmSSs
- vlZxm1WG8s1gN5WfYEwkrsnxQkCsjDoRTlVKg4oVOs6X7Kc3ePbuvIwk1exGMWGZ8uHUaTab9+r5sl
- ej+WQt7MSuXLY2ymYH6oaITPjt+FJM0kDNg6k1J962MLyfQEMkpS3m2z36sGgVFlsspasqbgMStuif
- qk7g0Ba+4gaA/8CXKp9bQ91TfgI9K/
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Transfer-Encoding: 8bit
 
-In commit 03c7527e97f7 ("KVM: arm64: Do not allow ID_AA64MMFR0_EL1.ASIDbits
-to be overridden") we made that bitfield in the ID registers unwritable
-however the change neglected to make the corresponding update to set_id_regs
-resulting in it failing:
+This series:
+1. makes the behavior of_find_device_by_node(),
+   bus_find_device_by_of_node(), bus_find_device_by_fwnode(), etc., more
+   consistent when provided with a NULL node/handle;
+2. adds kunit tests to validate the new NULL-argument behavior; and
+3. makes some related improvements and refactoring for the drivers/base/
+   kunit tests.
 
-# ok 56 ID_AA64MMFR0_EL1_BIGEND
-# ==== Test Assertion Failure ====
-#   aarch64/set_id_regs.c:434: masks[idx] & ftr_bits[j].mask == ftr_bits[j].mask
-#   pid=5566 tid=5566 errno=22 - Invalid argument
-#      1	0x00000000004034a7: test_vm_ftr_id_regs at set_id_regs.c:434
-#      2	0x0000000000401b53: main at set_id_regs.c:684
-#      3	0x0000ffff8e6b7543: ?? ??:0
-#      4	0x0000ffff8e6b7617: ?? ??:0
-#      5	0x0000000000401e6f: _start at ??:?
-#   0 != 0xf0 (masks[idx] & ftr_bits[j].mask != ftr_bits[j].mask)
-not ok 8 selftests: kvm: set_id_regs # exit=254
+This series aims to prevent problems like the ones resolved in commit
+5c8418cf4025 ("PCI/pwrctrl: Unregister platform device only if one
+actually exists").
 
-Remove ID_AA64MMFR1_EL1.ASIDBITS from the set of bitfields we test for
-writeability.
+Changes in v3:
+ * Fix potential leak in test error case
 
-Fixes: 03c7527e97f7 ("KVM: arm64: Do not allow ID_AA64MMFR0_EL1.ASIDbits to be overridden")
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/kvm/aarch64/set_id_regs.c | 1 -
- 1 file changed, 1 deletion(-)
+Changes in v2:
+ * CC LKML (oops!)
+ * Keep "devm" and "match" tests in separate suites
 
-diff --git a/tools/testing/selftests/kvm/aarch64/set_id_regs.c b/tools/testing/selftests/kvm/aarch64/set_id_regs.c
-index a79b7f18452d2ec336ae623b8aa5c9cf329b6b4e..3a97c160b5fec990aaf8dfaf100a907b913f057c 100644
---- a/tools/testing/selftests/kvm/aarch64/set_id_regs.c
-+++ b/tools/testing/selftests/kvm/aarch64/set_id_regs.c
-@@ -152,7 +152,6 @@ static const struct reg_ftr_bits ftr_id_aa64mmfr0_el1[] = {
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, BIGENDEL0, 0),
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, SNSMEM, 0),
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, BIGEND, 0),
--	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, ASIDBITS, 0),
- 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, PARANGE, 0),
- 	REG_FTR_END,
- };
+Brian Norris (3):
+  drivers: base: Don't match devices with NULL of_node/fwnode/etc
+  drivers: base: test: Enable device model tests with KUNIT_ALL_TESTS
+  drivers: base: test: Add ...find_device_by...(... NULL) tests
 
----
-base-commit: 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8
-change-id: 20241216-kvm-arm64-fix-set-id-asidbits-9bede25b7ad3
+ drivers/base/core.c                      |  8 ++---
+ drivers/base/test/Kconfig                |  1 +
+ drivers/base/test/platform-device-test.c | 41 +++++++++++++++++++++++-
+ 3 files changed, 45 insertions(+), 5 deletions(-)
 
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
+2.47.1.613.gc27f4b7a9f-goog
 
 
