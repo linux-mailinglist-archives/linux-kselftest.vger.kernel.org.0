@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-23397-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23398-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CC3F9F2CD8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 10:22:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 228199F2CDB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 10:22:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6C041883E93
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 09:22:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25C03166D2E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2024 09:22:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58725202C37;
-	Mon, 16 Dec 2024 09:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98F56202C45;
+	Mon, 16 Dec 2024 09:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="RjVQ3dGc"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="GoqHdN0l"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42DB202C2D;
-	Mon, 16 Dec 2024 09:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6111FFC6E;
+	Mon, 16 Dec 2024 09:22:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734340937; cv=none; b=C2DtG7I2yfvfJ9OQDAZQ5FPKbBHMyJ2UqBPGd5QOSnS/OcvtCmBP9N2lY9aHNMMkfjaF7u9U9YVDqedodbWBAzSAY6WrGgoWZNV4CCEM8FslltOuMkq9tIzqfxHpX4YpOSrIJ8FiZa1uujscXcf0bXmVp6VrERqCPBldPFBbZ3I=
+	t=1734340938; cv=none; b=Eu6SL1rBqQFv0hMVNpdgnP4PRHiFfQonmqhsCztzCfZkPHRD0laBEoyxn75MxQ4wAYeBE1w/UiZuYB3iJft5RTAKbvIfsrmMFHFEOyv6QPKmr+EGMsJBjfY2ys5ybQG1UMn0F++z1RZoDC1XYSj5/IPGIBJyHu8w6B5MKsq7hTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734340937; c=relaxed/simple;
-	bh=7B54tR1iKt0w3fNUGvj2YAS4o0xv6aTFm+7Tn6SDW7w=;
+	s=arc-20240116; t=1734340938; c=relaxed/simple;
+	bh=qW+vm4m+APf6pUaHyUDS9sIWffeWj2PiIMAA0cE9GdU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=azCHAcNeAUFovac13QPtYdAisf+1khOYZrgmyXLnsRVH5yK4rxx0+LJ0IZ8iClGB/oblC+gKHoaR7trSO2XShs79GvWGcYTnV8HfxeqUjkaV5A3QvLpCmW6B4uOpmKLAJa6sYIHrjx2KDiSh4VzrzshbT8hFc7vSlITuTq1r8BQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=RjVQ3dGc; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=AnuOLh9q+KXh3z3nW94+ITRaX6phCSG96XGJClbMEMOOFRRWglqk8yEYMZ1LkVx0cMHuscqtjEe6YshsesmIE6/SeicaeGC8p/23/Oy05WwvHzC3z5PSrVx0aRc1XEuoalOmJwcKbJIaw5cLHQIzgJu8LcgOyo+U+SSd9QYmbUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=GoqHdN0l; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BG3qT9o011994;
-	Mon, 16 Dec 2024 09:22:06 GMT
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BFNxBPa008225;
+	Mon, 16 Dec 2024 09:22:07 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=TPXhzVRC9InqJX36q
-	MuFuhGo3TZReRYuagQV5gd2jc8=; b=RjVQ3dGcL4+IiKqs/LUaEDWtjbJQdFbU1
-	idpAdRjePv2uHDNtcmnGUMfTyvivcMyBF8Qi/XBK6Z4gkfjb+/HMr3nv7RNJWidE
-	MoR06Jk7rkNry1HHJz5Hgd9BHcZ+l8plcohgX95xPCKeLWZtFL2tL7D94aelAQxH
-	Dv3QrQuVloPUjgGleTw2J/943o1XUCKB75HKTM1vamDOXhy73fLldKlpea0DBYmv
-	p1/mxF3Ebn+VJBjDIPJTyhQZEVFQqJ4wekByctSQy4oHtogz76nwCZT4hzqN21Vq
-	4h6BBe84XuN+cXwnZd1xv8HUnj1wDIgad1NrWPTt1yD99quiwnruA==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43jcpb1amt-1
+	:mime-version:references:subject:to; s=pp1; bh=mwwACa2qlkNCkcmRz
+	wabhKHcHa7VksaqjcdEleuJpoI=; b=GoqHdN0lYjfgU+r7tAd3SuhODWszZu0Ks
+	X73lUdjmFgH0arQAVFjpDWO7F2wOVHU9k6mZK10tbXL7ThiTAXlpgUbXfDuZh79C
+	Ch/ciB2KZNHbx4bh06C/oJd8EV8oeTA02s+SqApg6PZVujqj8L8isX6cENq3G0OJ
+	BO4DtG9lzdEYBo2Kuly+3SK2qy/BApj6oXg65f9ZrzVSF55uksIxlIkCTnZ7+B9g
+	L4nAa/x40YHEWfIeiy41ovCcDrS3U/412rhI3yYpADrerWMTym6INjZjk2Kvv6Pv
+	bciGke6I5Iqh5w624QoYW79tR23QTyJO61C1jbBra7aE6L0ICorPg==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43j98h20dn-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Mon, 16 Dec 2024 09:22:06 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BG4kYcX005544;
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BG8O0MF029321;
 	Mon, 16 Dec 2024 09:22:05 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43hnbmw81r-1
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 43hmbsdetb-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Mon, 16 Dec 2024 09:22:05 +0000
 Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BG9M12u56820216
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BG9M2kq31326578
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 16 Dec 2024 09:22:01 GMT
+	Mon, 16 Dec 2024 09:22:02 GMT
 Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8920B2004B;
+	by IMSVA (Postfix) with ESMTP id 601B62004B;
+	Mon, 16 Dec 2024 09:22:02 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A312B20040;
 	Mon, 16 Dec 2024 09:22:01 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C30E920040;
-	Mon, 16 Dec 2024 09:22:00 +0000 (GMT)
 Received: from darkmoore.ibmuc.com (unknown [9.179.0.126])
 	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 16 Dec 2024 09:22:00 +0000 (GMT)
+	Mon, 16 Dec 2024 09:22:01 +0000 (GMT)
 From: Christoph Schlameuss <schlameuss@linux.ibm.com>
 To: kvm@vger.kernel.org
 Cc: Christian Borntraeger <borntraeger@linux.ibm.com>,
@@ -78,9 +78,9 @@ Cc: Christian Borntraeger <borntraeger@linux.ibm.com>,
         Ulrich Weigand <ulrich.weigand@de.ibm.com>,
         Dominik Dingel <dingel@linux.vnet.ibm.com>,
         Cornelia Huck <cohuck@redhat.com>
-Subject: [PATCH v2 4/6] selftests: kvm: s390: Add ucontrol gis routing test
-Date: Mon, 16 Dec 2024 10:21:38 +0100
-Message-ID: <20241216092140.329196-5-schlameuss@linux.ibm.com>
+Subject: [PATCH v2 5/6] selftests: kvm: s390: Streamline uc_skey test to issue iske after sske
+Date: Mon, 16 Dec 2024 10:21:39 +0100
+Message-ID: <20241216092140.329196-6-schlameuss@linux.ibm.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20241216092140.329196-1-schlameuss@linux.ibm.com>
 References: <20241216092140.329196-1-schlameuss@linux.ibm.com>
@@ -92,56 +92,86 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: lW5AWENBFJgIpDIAqvjperoXpvCmgbZ_
-X-Proofpoint-GUID: lW5AWENBFJgIpDIAqvjperoXpvCmgbZ_
+X-Proofpoint-ORIG-GUID: XJgknQPVDfm5RMlgMW4ollLFotvmjCjl
+X-Proofpoint-GUID: XJgknQPVDfm5RMlgMW4ollLFotvmjCjl
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- lowpriorityscore=0 impostorscore=0 spamscore=0 mlxscore=0 adultscore=0
- mlxlogscore=932 suspectscore=0 bulkscore=0 phishscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2412160074
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0 bulkscore=0
+ adultscore=0 mlxscore=0 impostorscore=0 mlxlogscore=911 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412160074
 
-Add a selftests for the interrupt routing configuration when using
-ucontrol VMs.
+In some rare situations a non default storage key is already set on the
+memory used by the test. Within normal VMs the key is reset / zapped
+when the memory is added to the VM. This is not the case for ucontrol
+VMs. With the initial iske check removed this test case can work in all
+situations. The function of the iske instruction is still validated by
+the remaining code.
 
-Calling the test may trigger a null pointer dereferences on kernels not
-containing the fixes in this patch series.
-
+Fixes: 7d900f8ac191 ("selftests: kvm: s390: Add uc_skey VM test case")
 Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
 ---
- .../selftests/kvm/s390x/ucontrol_test.c       | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ .../selftests/kvm/s390x/ucontrol_test.c       | 22 +++++--------------
+ 1 file changed, 5 insertions(+), 17 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/s390x/ucontrol_test.c b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
-index b003abda8495..8f306395696e 100644
+index 8f306395696e..ef3e391811b3 100644
 --- a/tools/testing/selftests/kvm/s390x/ucontrol_test.c
 +++ b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
-@@ -783,4 +783,23 @@ TEST_F(uc_kvm, uc_flic_attrs)
- 	close(cd.fd);
- }
+@@ -88,10 +88,6 @@ asm("test_skey_asm:\n"
+ 	"	ahi	%r0,1\n"
+ 	"	st	%r1,0(%r5,%r6)\n"
  
-+TEST_F(uc_kvm, uc_set_gsi_routing)
-+{
-+	struct kvm_irq_routing *routing = kvm_gsi_routing_create();
-+	struct kvm_irq_routing_entry ue = {
-+		.type = KVM_IRQ_ROUTING_S390_ADAPTER,
-+		.gsi = 1,
-+		.u.adapter = (struct kvm_irq_routing_s390_adapter) {
-+			.ind_addr = 0,
-+		},
-+	};
-+	int rc;
-+
-+	routing->entries[0] = ue;
-+	routing->nr = 1;
-+	rc = ioctl(self->vm_fd, KVM_SET_GSI_ROUTING, routing);
-+	ASSERT_EQ(-1, rc) TH_LOG("err %s (%i)", strerror(errno), errno);
-+	ASSERT_EQ(EINVAL, errno) TH_LOG("err %s (%i)", strerror(errno), errno);
-+}
-+
- TEST_HARNESS_MAIN
+-	"	iske	%r1,%r6\n"
+-	"	ahi	%r0,1\n"
+-	"	diag	0,0,0x44\n"
+-
+ 	"	sske	%r1,%r6\n"
+ 	"	xgr	%r1,%r1\n"
+ 	"	iske	%r1,%r6\n"
+@@ -593,7 +589,9 @@ TEST_F(uc_kvm, uc_skey)
+ 	ASSERT_EQ(true, uc_handle_exit(self));
+ 	ASSERT_EQ(1, sync_regs->gprs[0]);
+ 
+-	/* ISKE */
++	/* SSKE + ISKE */
++	sync_regs->gprs[1] = skeyvalue;
++	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
+ 	ASSERT_EQ(0, uc_run_once(self));
+ 
+ 	/*
+@@ -607,19 +605,9 @@ TEST_F(uc_kvm, uc_skey)
+ 	TEST_ASSERT_EQ(ICPT_INST, sie_block->icptcode);
+ 	TEST_REQUIRE(sie_block->ipa != 0xb229);
+ 
+-	/* ISKE contd. */
++	/* SSKE + ISKE contd. */
+ 	ASSERT_EQ(false, uc_handle_exit(self));
+ 	ASSERT_EQ(2, sync_regs->gprs[0]);
+-	/* assert initial skey (ACC = 0, R & C = 1) */
+-	ASSERT_EQ(0x06, sync_regs->gprs[1]);
+-	uc_assert_diag44(self);
+-
+-	/* SSKE + ISKE */
+-	sync_regs->gprs[1] = skeyvalue;
+-	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
+-	ASSERT_EQ(0, uc_run_once(self));
+-	ASSERT_EQ(false, uc_handle_exit(self));
+-	ASSERT_EQ(3, sync_regs->gprs[0]);
+ 	ASSERT_EQ(skeyvalue, sync_regs->gprs[1]);
+ 	uc_assert_diag44(self);
+ 
+@@ -628,7 +616,7 @@ TEST_F(uc_kvm, uc_skey)
+ 	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
+ 	ASSERT_EQ(0, uc_run_once(self));
+ 	ASSERT_EQ(false, uc_handle_exit(self));
+-	ASSERT_EQ(4, sync_regs->gprs[0]);
++	ASSERT_EQ(3, sync_regs->gprs[0]);
+ 	/* assert R reset but rest of skey unchanged */
+ 	ASSERT_EQ(skeyvalue & 0xfa, sync_regs->gprs[1]);
+ 	ASSERT_EQ(0, sync_regs->gprs[1] & 0x04);
 -- 
 2.47.1
 
