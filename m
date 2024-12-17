@@ -1,75 +1,138 @@
-Return-Path: <linux-kselftest+bounces-23443-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23444-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E382E9F4550
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 08:41:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48E249F4610
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 09:30:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 356FA169AB4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 07:41:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 45E817A2A5F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 08:30:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9680E1D9A47;
-	Tue, 17 Dec 2024 07:41:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 841461D88C4;
+	Tue, 17 Dec 2024 08:30:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZbxekWgh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l71SWLKk"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A04E13D244;
-	Tue, 17 Dec 2024 07:41:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5132342AA1;
+	Tue, 17 Dec 2024 08:30:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734421264; cv=none; b=BeL9JMwwQXtOwlrHo8E/vysiSgX2jOkOXuRMvRH02tuHeGhmoQPVHkH+TTM/zJNckw0gRVQDdX5kvWgxXvz8P/qFN2MMM7QmRTmUxIT/vAtyZ7aK470I1JBi3QNobrkUaF8WHT5NnxC60SGiNth8MsKYj6V3NfTn+r/5lRpjqtc=
+	t=1734424242; cv=none; b=RH1VoDeGzHk13AXVEOsiOUT8zl7Qht+k9CuZlDgH13MrSSLXibbOWJ7RkrFM/3YvHqAe+cY1BAjbJz8AGBBzI1sq6pAk0wD/AWHJYTob4I2m6hEAt5j17AJ1z4GIk45Mf5DyHHVqBJPyWGfgWsLk5vUC1r6RVbdb7jRZgpANYtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734421264; c=relaxed/simple;
-	bh=RX9k1VmegBCx5K+I/yb/Brg71gytyPPuM70sMeD07I4=;
-	h=Message-ID:Date:From:To:Subject:In-Reply-To:References:Cc; b=KTGAECgZK6MlubR9NcXHKmSBbyEWt1zp2NPv5giHigXhBtMn5lNw8yTh7XsRKe6WliFQBfxG6TgLo0GZ+lMOQGSVKUDLxoTgyVPIwX0PeA6nopN0CgFQ8JSnS7CL0MCFEnRgMU3sPurcsvSyHLTchUJLEYq8MhNrmBWCODq8kiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZbxekWgh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF942C4CED3;
-	Tue, 17 Dec 2024 07:41:03 +0000 (UTC)
+	s=arc-20240116; t=1734424242; c=relaxed/simple;
+	bh=sJTelRh5BsOfm4lONdvvjAu3mDOe48NrRuTOIBtnAMI=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=K+HAseZuvJUF0HZxal4awqmQ16CGFCO9sKdOxr2ML6PzDoH6Gb48NK5xtpxnlOwnLcteW59dMJdypW1/CANg5H23c3OizQoP1gHityStU221d/9Jb2mTDT+QsjIINZhIvMIH02eT3GJTQBu9+Y9G33+rqGpyWLvu278k8GfxM1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l71SWLKk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4114C4CED3;
+	Tue, 17 Dec 2024 08:30:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734421264;
-	bh=RX9k1VmegBCx5K+I/yb/Brg71gytyPPuM70sMeD07I4=;
-	h=Date:From:To:Subject:In-Reply-To:References:Cc:From;
-	b=ZbxekWgh/0GWDXFIXpU1Vmpz713NEebbw6dPS9jcFBWYoVoCezr6bYKI8eFqkJUit
-	 /C3KqHtmYib/a9z3Kkam5Vn9iauekzVv3OovbrZaCXmwKOD/iaZVY0NN/4lfwqbg3S
-	 kNENzTUTxGxcAkqTSDVd/FaAD4QTkgHGea6ByHPXmixy1VRxKs5muouphn0AFYXcEs
-	 7nYefIbJ8y7SJoMtLCg4dy2dzDnsvDitUXKKKgzc2wgms5hM+QVIXoI1NBijrL5Wi/
-	 f3CmButgU9BLUJ8fsIuAstEUWktpVp8R0jOsGbi4hnr3qLzQSboLcwHUG0ROCIuPfg
-	 73rJgbn+sbW9Q==
-Message-ID: <17fbc356583050369235d1a23456eb2e@kernel.org>
-Date: Tue, 17 Dec 2024 07:41:01 +0000
-From: "Maxime Ripard" <mripard@kernel.org>
-To: "Brian Norris" <briannorris@chromium.org>
-Subject: Re: [PATCH v3 2/3] drivers: base: test: Enable device model tests
- with KUNIT_ALL_TESTS
-In-Reply-To: <20241216201148.535115-3-briannorris@chromium.org>
-References: <20241216201148.535115-3-briannorris@chromium.org>
-Cc: kunit-dev@googlegroups.com, linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, "David
- Gow" <davidgow@google.com>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Maxime
- Ripard" <mripard@kernel.org>, "Rae Moar" <rmoar@google.com>, "\"Rafael J. Wysocki\"" <rafael@kernel.org>, "Rob
- Herring" <robh@kernel.org>
-Content-Transfer-Encoding: 7bit
+	s=k20201202; t=1734424241;
+	bh=sJTelRh5BsOfm4lONdvvjAu3mDOe48NrRuTOIBtnAMI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=l71SWLKkp5Nr6M3mGg7Pnz7kNu8F11xrwYQn0V5no43bAVGRUefq9YI++b48YR2iF
+	 XLzjqUZM8Kxrli6aeQOs/nhmsuSFeNGB58flYwT/Osicp7ooEbd8k/maROtfilItWx
+	 95hl/39ExSBwDRDk4bJtjMT+Nbyye7DCJ6/WPw2lkagcGYv4pi58fdXz5JhxWL9ESo
+	 53w70EyCfe9PH5Z07DepXeIuhq7+cIVJYuMQ5oEEGF242D6/uau1OwGXGUfVnf37WB
+	 drfRHAwCnDGcxlCO89pXxOsWD7CExbpQTB5CIAN+tPV64VgIdYVKDufjF/4KaiRUPP
+	 dE4KMrklV1DIQ==
+Received: from [82.132.185.145] (helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1tNSyV-004TdD-Hg;
+	Tue, 17 Dec 2024 08:30:39 +0000
+Date: Tue, 17 Dec 2024 08:30:37 +0000
+Message-ID: <875xnisocy.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: arm64: Fix set_id_regs selftest for ASIDBITS becoming unwritable
+In-Reply-To: <20241216-kvm-arm64-fix-set-id-asidbits-v1-1-8b105b888fc3@kernel.org>
+References: <20241216-kvm-arm64-fix-set-id-asidbits-v1-1-8b105b888fc3@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 82.132.185.145
+X-SA-Exim-Rcpt-To: broonie@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, shuah@kernel.org, catalin.marinas@arm.com, yuzenghui@huawei.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Mon, 16 Dec 2024 12:11:43 -0800, Brian Norris wrote:
-> Per commit bebe94b53eb7 ("drivers: base: default KUNIT_* fragments to
-> KUNIT_ALL_TESTS"), it seems like we should default to KUNIT_ALL_TESTS.
+On Mon, 16 Dec 2024 19:28:24 +0000,
+Mark Brown <broonie@kernel.org> wrote:
 > 
-> This enables these platform_device tests for common configurations, such
-> as with:
+> In commit 03c7527e97f7 ("KVM: arm64: Do not allow ID_AA64MMFR0_EL1.ASIDbits
+> to be overridden") we made that bitfield in the ID registers unwritable
+> however the change neglected to make the corresponding update to set_id_regs
+> resulting in it failing:
 > 
-> [ ... ]
+> # ok 56 ID_AA64MMFR0_EL1_BIGEND
+> # ==== Test Assertion Failure ====
+> #   aarch64/set_id_regs.c:434: masks[idx] & ftr_bits[j].mask == ftr_bits[j].mask
+> #   pid=5566 tid=5566 errno=22 - Invalid argument
+> #      1	0x00000000004034a7: test_vm_ftr_id_regs at set_id_regs.c:434
+> #      2	0x0000000000401b53: main at set_id_regs.c:684
+> #      3	0x0000ffff8e6b7543: ?? ??:0
+> #      4	0x0000ffff8e6b7617: ?? ??:0
+> #      5	0x0000000000401e6f: _start at ??:?
+> #   0 != 0xf0 (masks[idx] & ftr_bits[j].mask != ftr_bits[j].mask)
+> not ok 8 selftests: kvm: set_id_regs # exit=254
+> 
+> Remove ID_AA64MMFR1_EL1.ASIDBITS from the set of bitfields we test for
+> writeability.
+> 
+> Fixes: 03c7527e97f7 ("KVM: arm64: Do not allow ID_AA64MMFR0_EL1.ASIDbits to be overridden")
 
-Reviewed-by: Maxime Ripard <mripard@kernel.org>
+A patch for a test doesn't fix anything in the kernel.
 
-Thanks!
-Maxime
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  tools/testing/selftests/kvm/aarch64/set_id_regs.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/aarch64/set_id_regs.c b/tools/testing/selftests/kvm/aarch64/set_id_regs.c
+> index a79b7f18452d2ec336ae623b8aa5c9cf329b6b4e..3a97c160b5fec990aaf8dfaf100a907b913f057c 100644
+> --- a/tools/testing/selftests/kvm/aarch64/set_id_regs.c
+> +++ b/tools/testing/selftests/kvm/aarch64/set_id_regs.c
+> @@ -152,7 +152,6 @@ static const struct reg_ftr_bits ftr_id_aa64mmfr0_el1[] = {
+>  	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, BIGENDEL0, 0),
+>  	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, SNSMEM, 0),
+>  	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, BIGEND, 0),
+> -	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, ASIDBITS, 0),
+>  	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64MMFR0_EL1, PARANGE, 0),
+>  	REG_FTR_END,
+>  };
+> 
+
+With the Fixes: line dropped,
+
+Acked-by: Marc Zyngier <maz@kernel.org>
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
 
