@@ -1,124 +1,119 @@
-Return-Path: <linux-kselftest+bounces-23470-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23471-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB1A69F56D0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 20:23:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C23649F58B2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 22:25:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6BCF16D564
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 19:22:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B2EC189658E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 21:17:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B1DB1F8EFF;
-	Tue, 17 Dec 2024 19:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC6ED1FA830;
+	Tue, 17 Dec 2024 21:17:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mkIXFDJT"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L8c8kQXB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B17A1F76C7;
-	Tue, 17 Dec 2024 19:22:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE231FA149
+	for <linux-kselftest@vger.kernel.org>; Tue, 17 Dec 2024 21:17:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734463342; cv=none; b=CXofuSjqRrIAXgIV8ZjcM/PP7c8Oi3QR9ymYZGqmzkRQjeNPVYlnMZbO4EEfR68God7XM39tdNcV05qin+hZhdA7DsazPnIiFjm/T/GzdH0lIwFxldlfkVFUh1f+Qj4LfwnEH6K5XjPWCkp6if73Cq343jh4CjuUIvPGhz58Gyk=
+	t=1734470234; cv=none; b=c0/sW6rd+7+AXMCJgopYqk/XiFrgfaGSQWQwJsRj5To5w2+EvM72G+o5DyBl5GBPS/kI7IgzAtOeICHXvSUnQkqB+ce9HAC/pxmbLueRdefzVPqLZ1THA4rKEnwedSSD752wf4Kqhuoz/pQuE+jy79N/Z6QxhzBrsRv/K1D8YtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734463342; c=relaxed/simple;
-	bh=9mNOA8/WNTIvajmOpeIQjXIZVIGGtLZcsx8KEPpiCsY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ozjgu0CyYQPNgh5c8YsNxrJc5cnvS/EJxO3H2lW8t+iiU/7a7J4k6RK9Cu6gAZBeVV38sO4OADqe8jbvxlnu+U4Ng0QxjKf91RQytDuhKcvH6cYFb51k8JX90ayAilfAXMa6k5qzgwI/4lIjCS7cR0BjV40cNYZdslKQWJOknAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mkIXFDJT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA13AC4CED3;
-	Tue, 17 Dec 2024 19:22:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734463340;
-	bh=9mNOA8/WNTIvajmOpeIQjXIZVIGGtLZcsx8KEPpiCsY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mkIXFDJTUssl2V6+nik/zcYBEbniOgN/ejXZqXsaBUKkIvtLGg7iodsVtHUa/YG3s
-	 nsl0kmRA+DSsYmywJOLN7ICCvJyViwS4NTU4Khb/irkzeUFmkH4akAP3jaTZ4JIejC
-	 Ox1Ae5Z8TInNWC2AaaEeD8W3kmnGqufIutlmKwetK1DTmxe2aKWKvc7N77GtDdAVYy
-	 BYc+ptatgw07i6sWU8iRM/NjUhFD/VDGOXNtlVdUUNorPB+RzA7spd48cWjK8QcOai
-	 LpGanlHJs+xA7jSyL3JhHYgG8o00dRivzklmG8u/kWoUUGJ25352nDKFxEVy8bK3Ev
-	 LZA6SlPeY6tLg==
-Date: Tue, 17 Dec 2024 19:22:14 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Oliver Upton <oliver.upton@linux.dev>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	s=arc-20240116; t=1734470234; c=relaxed/simple;
+	bh=XQqcSXCS7+3yXeFhYE/LHLIlCgVev1+/ITPt3X/ZZ0Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lSgf9US4OebfRrip/UegrbAiygCszdeKXWxooORtwyiVucMLPCxYXdBH4ozLkJnPiZzRH5D7T0/LlvgDVFWHAMuPmPqBhpVN/JlHXVY7kDysVB3l+1fOm5S0gIXSAHiYwmPDCEmtsylfTGZIJPvmtHItTeCTFRIUijS3svPEM90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=L8c8kQXB; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1734470231;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=PORQUlxGEfR5cpiw3XNjF5GcFo76IHLBJiTCdzbzG9A=;
+	b=L8c8kQXBDwrFqMBYxfd9fza39i/tv+0di4Z9T3WO0aqKkcyPRukC4xJZLp8F0z9sq/tgv8
+	ffcflfUuflhcHIBPSXK5s3pbzEF1mAkJjwITXhokD+UY8Eef4FKybfO50NAnXUId//ywsf
+	hoPYOLiBIhb9f97c71ZlMRc/7ebddUw=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-442-SC-GqNSmPEexydsu2nAyJg-1; Tue,
+ 17 Dec 2024 16:17:08 -0500
+X-MC-Unique: SC-GqNSmPEexydsu2nAyJg-1
+X-Mimecast-MFC-AGG-ID: SC-GqNSmPEexydsu2nAyJg
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 29EDD1955F66;
+	Tue, 17 Dec 2024 21:17:06 +0000 (UTC)
+Received: from antares.redhat.com (unknown [10.39.194.221])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1B00419560A2;
+	Tue, 17 Dec 2024 21:17:00 +0000 (UTC)
+From: Adrian Moreno <amorenoz@redhat.com>
+To: linux-kselftest@vger.kernel.org
+Cc: Adrian Moreno <amorenoz@redhat.com>,
+	Pravin B Shelar <pshelar@ovn.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Aaron Conole <aconole@redhat.com>,
+	netdev@vger.kernel.org,
+	dev@openvswitch.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: arm64: Fix set_id_regs selftest for ASIDBITS
- becoming unwritable
-Message-ID: <9b657364-140b-482d-82fe-01c59711e764@sirena.org.uk>
-References: <20241216-kvm-arm64-fix-set-id-asidbits-v1-1-8b105b888fc3@kernel.org>
- <875xnisocy.wl-maz@kernel.org>
- <53b40aa8-f51c-4c4e-a4ad-e6a9512e5197@sirena.org.uk>
- <86v7viqusg.wl-maz@kernel.org>
- <b13b14df-00ee-4bee-8f65-d2cb7a9bfa6b@sirena.org.uk>
- <Z2G8TFw4wg7bnwzB@linux.dev>
+Subject: [PATCH net] selftests: openvswitch: fix tcpdump execution
+Date: Tue, 17 Dec 2024 22:16:51 +0100
+Message-ID: <20241217211652.483016-1-amorenoz@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="KSSckS5oYWmHvwuz"
-Content-Disposition: inline
-In-Reply-To: <Z2G8TFw4wg7bnwzB@linux.dev>
-X-Cookie: The sum of the Universe is zero.
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
+Fix the way tcpdump is executed by:
+- Using the right variable for the namespace. Currently the use of the
+  empty "ns" makes the command fail.
+- Waiting until it starts to capture to ensure the interesting traffic
+  is caught on slow systems.
+- Using line-buffered output to ensure logs are available when the test
+  is paused with "-p". Otherwise the last chunk of data might only be
+  written when tcpdump is killed.
 
---KSSckS5oYWmHvwuz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Fixes: 74cc26f416b9 ("selftests: openvswitch: add interface support")
+Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
+---
+ tools/testing/selftests/net/openvswitch/openvswitch.sh | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-On Tue, Dec 17, 2024 at 10:00:44AM -0800, Oliver Upton wrote:
-> On Tue, Dec 17, 2024 at 03:10:28PM +0000, Mark Brown wrote:
+diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+index cc0bfae2bafa..960e1ab4dd04 100755
+--- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
++++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+@@ -171,8 +171,10 @@ ovs_add_netns_and_veths () {
+ 		ovs_add_if "$1" "$2" "$4" -u || return 1
+ 	fi
+ 
+-	[ $TRACING -eq 1 ] && ovs_netns_spawn_daemon "$1" "$ns" \
+-			tcpdump -i any -s 65535
++	if [ $TRACING -eq 1 ]; then
++		ovs_netns_spawn_daemon "$1" "$3" tcpdump -l -i any -s 6553
++		ovs_wait grep -q "listening on any" ${ovs_dir}/stderr
++	fi
+ 
+ 	return 0
+ }
+-- 
+2.47.1
 
-> > No, this isn't a new use - a Fixes: tag indicates that the referenced
-> > commit introduced the problem being fixed and that is exactly what's
-> > going on here.  Like I say the selftests are not a completely separate
-> > project, they are a part of the same source release as the rest of the
-> > kernel and it is helpful to track information like this.
-
-> A Fixes tag suggests a bug in the referenced commit, which isn't the
-> case here.
-
-> I agree that having some relation between the two is useful for
-> determining the scope of a backport, but conveniently in this case the
-> test failure was introduced in 6.13.
-
-While the patch introducing the test failure was introduced in -rc3 it
-was tagged as a fix for d5a32b60dc18 ("KVM: arm64: Allow userspace to
-change ID_AA64MMFR{0-2}_EL1") which was in v6.7 so I'm expecting to see
-it being backported to relevant stable kernels, which will in turn cause
-testsuite failures in those stable kernels if this change doesn't go
-back with it.  Hopefully they'll find it from the commit message.
-
-I would say there's a case that leaving the tests broken is a bug, it's
-certainly some kind of problem.  Obviously we're sometimes a bit relaxed
-on that within a series, though it's fortunately relatively rare.
-
---KSSckS5oYWmHvwuz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdhz2YACgkQJNaLcl1U
-h9CZ+Qf8CgogvpmIGkRfSWc1vGgw0N6bTzH396O9wr/88wFUL7jPGP1DKTMW4Bdw
-K6lOtGL59M2SLDObeGZqQSShw7sQPOewW54CNZlyj0GIZzkz/ezfRG/+Jzb3Y33h
-VNgyLvJ5g6twjzKTfDbo0TXFgAiBk5+wO8igobH7DWZlXEWaWku9w6fmoZhFkF4T
-f4ne4D+3iSg0iihgcjth8ReHrIuGZ6Cx6vw9LwjCmFwBuJlRQxmDKeJKktEUKFrk
-n2IGbzOiiq0ZPl2zNLX0fRYIFwP/+E7yyIwhtWbKJootYl5DAyJzJtDIFhP5tEBI
-rxqQc5m7WTdNbZEedU0trXAx7uPrSA==
-=V2CE
------END PGP SIGNATURE-----
-
---KSSckS5oYWmHvwuz--
 
