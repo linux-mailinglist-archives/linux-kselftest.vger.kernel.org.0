@@ -1,504 +1,340 @@
-Return-Path: <linux-kselftest+bounces-23468-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23469-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 508BC9F5691
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 19:53:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F5739F56B5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 20:13:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4EE0A189311B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 18:53:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68035164DC2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 19:13:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 426D31F9EBF;
-	Tue, 17 Dec 2024 18:52:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C779E1F8AF6;
+	Tue, 17 Dec 2024 19:13:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CUS8lVGr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QZmHqFxy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C871F9EB3;
-	Tue, 17 Dec 2024 18:52:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FC8D13EFF3;
+	Tue, 17 Dec 2024 19:13:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734461543; cv=none; b=hBXmBOgXfhxhSi+REJ0iaP18uT02RyEftyNYgHGQ2/ms9Go1r9GymNp5pcCL+OnFYHyGCfu3C5IKUZC3XzqnaAdohwJrGb2fqYRKOMsKtSJoyJd4Xr+n9upSTvhyAKMmxdC+EvrX3Pz3sVS8vhbqtdidFU4bsrPES/aby6ZU12o=
+	t=1734462801; cv=none; b=gizEmrFd3lEJyqXOmRRmy1XWxjKq1fJE7vNUBKpXaGxXYvhUdzkFK1k134IVulVUfqr6gV951Dju0wk6FS9fVTbUYH0xNk0Y0JAbl2Djlp8b4YZv20+VccpuB6im9BRv6MsxATbBgo2Lbwrxw1GbvJ8EY1kiyOMYYcZ5EU0GTx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734461543; c=relaxed/simple;
-	bh=eDTOOP8Yq3N41D0FGgrvMaqRwwPdZB1ENd5RTz6n+vI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NF1p45VYTeeI4Ta9nBsJ/FmFOcH2IhuvfXOAEiCH4tkXJXfP+o7c6TPOCgTXmI3y3RfKz+p0QttK6uWvf8bNLSo+16UxOpSjcnv9RCl68Pvfly+J1jrGWSYjPhghL3b6+bGtEHxBWhLTKXzQEHouUbebPOMzg/hc/UbNccq9FHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CUS8lVGr; arc=none smtp.client-ip=209.85.214.174
+	s=arc-20240116; t=1734462801; c=relaxed/simple;
+	bh=3VGH1vYVBrsWeUDahrT1PHtZ8ZpNs1yyW1jcA118qaI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LM21uvP6guqiO3UPObPDkkLkuIRUmRPglxl9dPczabDcJqew9mWb3z8jqH8+gJ4lXCCYeIAG5hHiBwL8kDzbsLfLA8y5NOJ8wiI6oLshFe6jAajcxSN46O6XF0uJGBWpHWLdqqDiw5qRZ8HlKKbyVQETgySXq9HzORJFgUObuuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QZmHqFxy; arc=none smtp.client-ip=209.85.208.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-218c80a97caso11653595ad.0;
-        Tue, 17 Dec 2024 10:52:20 -0800 (PST)
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-30037784fceso55914541fa.2;
+        Tue, 17 Dec 2024 11:13:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734461540; x=1735066340; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1734462797; x=1735067597; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KZyO+6QCWNwjrR6mezZYFG5l+My1Kog/pkP8ltIOYNU=;
-        b=CUS8lVGr/ZcW6+2bnpTuySH6gxGfjVP8bReAE+hkMCluffpZTyBxO+HW/qQoPAemKm
-         xKn8ZxM/vVSFxQQFKobM43HCwq0qr0iZMfcavqTpDYp8ZinHKAGkbYI6jr7YX7au/HcC
-         MJb/nPp6I06tJKKqZRCggzpJWfNBHsHAJA+tkRINJWvDXVlGAEaIbUo3NH2I6MqAPy3Z
-         Jmjksxf4ocyATsbhREPX7FL3BU7Ul8bXsJiUwySEq+JpMA0PD7ag3u57eJHcZCtaaO7f
-         LAq05dTRoe/Vw80EIK3QWL7c56NF1XP6+gd3Zbssc6sBghTwgWb2znYz885lA3rqyc61
-         s7Zw==
+        bh=K0rKp6mBH8exkyc8h25XmwIjNsUF89sr5xJr4af9wn4=;
+        b=QZmHqFxyizw+o9ZT2ZY1QSdGTq9w7GzyTsyK1dYP0jcEan5EtFo1tv0pKn/xYy2YKx
+         /dQUjghIxOS81xrUcKDS6QvDfWaCfX02WrPi8OojGs8D+xArGq7jqB9SuU8RfRskNnMZ
+         u8tVORHTOsSJ4nfGQ/Ir9UQ05cOgyxnaYsYIop0tIoXz2HJ7KYnRPDDRdgxhhCubJlZu
+         Cm+yhWrtRpJXNxSWOEI0O04kmb6t/i49/7xRRg5pghZAWtc8tRyBAaKS4jSvkEA+fEiA
+         ZLahiNpkW9unEmKrA+8S6mvA303d2AH45KcmXyClAVqXH1j82zBGn+Y4fx57vd3iXeqc
+         TDfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734461540; x=1735066340;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1734462797; x=1735067597;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KZyO+6QCWNwjrR6mezZYFG5l+My1Kog/pkP8ltIOYNU=;
-        b=vBNmxTsVOV3kbQlzliC3CFAdYDp04v7NxEtKPDUdmjMRD4sfZLvHUdIe1kXpZaTYY8
-         AbZO1hCBBbOs3hm3XR4nK2+bvN7m/eDO7rsA8I8RhW0NSgW2e+PysPhRddRrRAzOxeCo
-         eNTKSYpK4B3mmxmk+Tx8CVW52wjBmJs9JtaiOCY3+D2vEEOcHHqANwD6h9hoHTtGjP0v
-         oyYEGfG+Rbmo7uia/kAMslNonUOrqnOg4/bgZ3vXCJ62t6Cw9NP05ooeEOeXF2SIjU+s
-         3Uv+088yOMaV9LpYW4c4Ne9NuPADp/ay6D45QOUiwrW83bx6GY+ZlmdHrS0pIZEaIvyK
-         gtQw==
-X-Forwarded-Encrypted: i=1; AJvYcCXBjzT2gWJrxTm4v802nzMAdW0oxq1S4gImDvljOfQxoXUeKEM+DW9srE9jwppTPJzZarAwfYXtm85Spea5/fo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywvjyg/J5lntxf5p++8S+7sKYPqavbwkupli86MfxHdzNM2n9wp
-	BpiQ+sH2m8HxOCGePlKoWT8fbFsJcB8bc68FzKIAM04ts+Ky/eHEhhBpARHBTpk=
-X-Gm-Gg: ASbGncsmJOkH46enDGgb0yCETEF0WJw7tJnGPvlVkVUzAhstKyL8LcnA6YzYvtQY6YY
-	xWk/13Y6ZHZNROiJuiU8uwrGkfJhr03hJyRGJzoCkMsLts9FTjSOQ66TUvy6d6GHQAe+UCGfznM
-	plEWl6/NDFHTiZmhYd1Rne8U7aAYstovVYskXZqOLChQYG5Fz0no5209eJm0Dwj1RB1XoiXbRt1
-	xu0wgqxtK2OmJyNuAoKk/MQ0OUkKiMJ7sWe0Z4BujWnroyWvOOMob8tpyo+GOHa1V89GgYBAP6e
-	fp5wcZk9mEPrWovm6VabhUdq+nrqZilI4j08AT52msiZgoJqEHHGHvXzsQ==
-X-Google-Smtp-Source: AGHT+IFS//apqzSboEGkPLjAnkEbA4QthafKWVkXB7esAa3Szox5Y1STqh+LuQNBE/M/kchETDZmfQ==
-X-Received: by 2002:a17:902:bf06:b0:215:577b:ab77 with SMTP id d9443c01a7336-218d52b4bb6mr7190445ad.39.1734461539460;
-        Tue, 17 Dec 2024 10:52:19 -0800 (PST)
-Received: from sohamch-kvm.c.googlers.com.com (148.175.199.104.bc.googleusercontent.com. [104.199.175.148])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1dbb079sm62307715ad.31.2024.12.17.10.52.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Dec 2024 10:52:18 -0800 (PST)
-From: Soham Chakradeo <sohamch.kernel@gmail.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	linux-kselftest@vger.kernel.org,
-	Soham Chakradeo <sohamch@google.com>,
-	Willem de Bruijn <willemb@google.com>
-Subject: [PATCH net-next 4/4] selftests/net: packetdrill: import tcp/user_timeout, tcp/validate, tcp/sendfile, tcp/limited-transmit, tcp/syscall_bad_arg
-Date: Tue, 17 Dec 2024 18:52:01 +0000
-Message-ID: <20241217185203.297935-5-sohamch.kernel@gmail.com>
-X-Mailer: git-send-email 2.47.1.613.gc27f4b7a9f-goog
-In-Reply-To: <20241217185203.297935-1-sohamch.kernel@gmail.com>
-References: <20241217185203.297935-1-sohamch.kernel@gmail.com>
+        bh=K0rKp6mBH8exkyc8h25XmwIjNsUF89sr5xJr4af9wn4=;
+        b=owQZrboZFhIP6NppjdjNnaEDBBFnbRxnOUfUhsbGKVfIP57qnPHGA7Emj0mMWCPaUF
+         wByATeq7+31YVP5gYqp7Z7SJJJmBRyzg5KYGUj8d/dPE/LKIDGS13gY1jUEzV+Vz6V+A
+         RXracuvCyJVwPHHgCBf8ekiZtZVXgMwkTnO3sURti25Qp+nnrxFOd5jpNRXvkXejUV1z
+         XidpWKL5KLUZGCTfPaNZp4nS1TshzLaPX53zzQ5hF82dt9eGXAMkfzjMc9AtSR2ZqjHp
+         hDpnHKNE4durRrKJgVKKeiRspNVhdBn8tPbXn6li5eiLMGIkkYNBdTNv25/2xGL7Ytsl
+         NSXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVO8G7AYkzLZ9uD7PHNNWlB9T0f8tRMyYaSm926/rvxY9mQVRjo5hs6OuZcE/ZZoAP1yVJHpJqgX5RtClje@vger.kernel.org, AJvYcCWRDaGGdVGCMKcwDNpnG1ISdAOyCUdulzUwmup/Lo/2WzQ7nzphr5+7a5z/i3DRk7ZlRBM=@vger.kernel.org, AJvYcCWpBAdwN2cGwC9g9XFRcXbc/BHIWLIGk6zupMWtF57HDXZ8N+zsHZNWjGssUGFiCHRTdgJ0+ko6UTvLRbr3etO9@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSHLswUON63xcFa3fn2+2SIzcu0Hoag9/opMda1XaVPNXQSlP9
+	8T64pP+7iDn5KCyjbA3DAcJ5yEzefiHO7Py2QylIHkjfeoxDW8X6ELTPBlhIcWktzRVtsBIrrfP
+	4haqCUpYA9eSKmChafIP3xluJ6/M=
+X-Gm-Gg: ASbGnct14g+hJVv9NpsL0B7P5pn0ItD8hD5MF4a2xFK11BzQYIkkJU4gHU058Mh0K/2
+	hILzdnTWfKXugC2aLgRoLuxlwn++fikijAUBexg==
+X-Google-Smtp-Source: AGHT+IEWVqo6bximdOECsGPjoRFpTHbOMP5jV90CZPDaTjs6ef9+bCmU+A8glkmkljcfNPdQVO9I8ST4tEoL0FBMMiA=
+X-Received: by 2002:a05:651c:50f:b0:300:3a15:8f19 with SMTP id
+ 38308e7fff4ca-3044db51d52mr918421fa.32.1734462796320; Tue, 17 Dec 2024
+ 11:13:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241214190413.25587-1-m.shachnai@gmail.com> <20241214190413.25587-2-m.shachnai@gmail.com>
+ <CAADnVQ+wdbbFUN03_YPYLDtr4KyQAowk5_V8SzwyM6wjE9JvLA@mail.gmail.com>
+In-Reply-To: <CAADnVQ+wdbbFUN03_YPYLDtr4KyQAowk5_V8SzwyM6wjE9JvLA@mail.gmail.com>
+From: Matan Shachnai <m.shachnai@gmail.com>
+Date: Tue, 17 Dec 2024 14:13:04 -0500
+Message-ID: <CACGhDH0sJaQhZOUYy5fpqtV--vT_CjbU3VmU2AEZOk55tVGaiw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf, verifier: Improve precision of BPF_MUL
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, 
+	Srinivas Narayana <srinivas.narayana@rutgers.edu>, 
+	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>, Matan Shachnai <m.shachnai@rutgers.edu>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Cupertino Miranda <cupertino.miranda@oracle.com>, Menglong Dong <menglong8.dong@gmail.com>, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Soham Chakradeo <sohamch@google.com>
+On Mon, Dec 16, 2024 at 3:31=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Sat, Dec 14, 2024 at 11:04=E2=80=AFAM Matan Shachnai <m.shachnai@gmail=
+.com> wrote:
+> >
+> > This patch improves (or maintains) the precision of register value trac=
+king
+> > in BPF_MUL across all possible inputs. It also simplifies
+> > scalar32_min_max_mul() and scalar_min_max_mul().
+> >
+> > As it stands, BPF_MUL is composed of three functions:
+> >
+> > case BPF_MUL:
+> >   tnum_mul();
+> >   scalar32_min_max_mul();
+> >   scalar_min_max_mul();
+> >
+> > The current implementation of scalar_min_max_mul() restricts the u64 in=
+put
+> > ranges of dst_reg and src_reg to be within [0, U32_MAX]:
+> >
+> >     /* Both values are positive, so we can work with unsigned and
+> >      * copy the result to signed (unless it exceeds S64_MAX).
+> >      */
+> >     if (umax_val > U32_MAX || dst_reg->umax_value > U32_MAX) {
+> >         /* Potential overflow, we know nothing */
+> >         __mark_reg64_unbounded(dst_reg);
+> >         return;
+> >     }
+> >
+> > This restriction is done to avoid unsigned overflow, which could otherw=
+ise
+> > wrap the result around 0, and leave an unsound output where umin > umax=
+. We
+> > also observe that limiting these u64 input ranges to [0, U32_MAX] leads=
+ to
+> > a loss of precision. Consider the case where the u64 bounds of dst_reg =
+are
+> > [0, 2^34] and the u64 bounds of src_reg are [0, 2^2]. While the
+> > multiplication of these two bounds doesn't overflow and is sound [0, 2^=
+36],
+> > the current scalar_min_max_mul() would set the entire register state to
+> > unbounded.
+> >
+> > Importantly, we update BPF_MUL to allow signed bound multiplication
+> > (i.e. multiplying negative bounds) as well as allow u64 inputs to take =
+on
+> > values from [0, U64_MAX]. We perform signed multiplication on two bound=
+s
+> > [a,b] and [c,d] by multiplying every combination of the bounds
+> > (i.e. a*c, a*d, b*c, and b*d) and checking for overflow of each product=
+. If
+> > there is an overflow, we mark the signed bounds unbounded [S64_MIN, S64=
+_MAX].
+> > In the case of no overflow, we take the minimum of these products to
+> > be the resulting smin, and the maximum to be the resulting smax.
+> >
+> > The key idea here is that if there=E2=80=99s no possibility of overflow=
+, either
+> > when multiplying signed bounds or unsigned bounds, we can safely multip=
+ly the
+> > respective bounds; otherwise, we set the bounds that exhibit overflow
+> > (during multiplication) to unbounded.
+> >
+> > if (check_mul_overflow(*dst_umax, src_reg->umax_value, dst_umax) ||
+> >        (check_mul_overflow(*dst_umin, src_reg->umin_value, dst_umin))) =
+{
+> >         /* Overflow possible, we know nothing */
+> >         dst_reg->umin_value =3D 0;
+> >         dst_reg->umax_value =3D U64_MAX;
+> >     }
+> >   ...
+> >
+> > Below, we provide an example BPF program (below) that exhibits the
+> > imprecision in the current BPF_MUL, where the outputs are all unbounded=
+. In
+> > contrast, the updated BPF_MUL produces a bounded register state:
+> >
+> > BPF_LD_IMM64(BPF_REG_1, 11),
+> > BPF_LD_IMM64(BPF_REG_2, 4503599627370624),
+> > BPF_ALU64_IMM(BPF_NEG, BPF_REG_2, 0),
+> > BPF_ALU64_IMM(BPF_NEG, BPF_REG_2, 0),
+> > BPF_ALU64_REG(BPF_AND, BPF_REG_1, BPF_REG_2),
+> > BPF_LD_IMM64(BPF_REG_3, 809591906117232263),
+> > BPF_ALU64_REG(BPF_MUL, BPF_REG_3, BPF_REG_1),
+> > BPF_MOV64_IMM(BPF_REG_0, 1),
+> > BPF_EXIT_INSN(),
+> >
+> > Verifier log using the old BPF_MUL:
+> >
+> > func#0 @0
+> > 0: R1=3Dctx() R10=3Dfp0
+> > 0: (18) r1 =3D 0xb                      ; R1_w=3D11
+> > 2: (18) r2 =3D 0x10000000000080         ; R2_w=3D0x10000000000080
+> > 4: (87) r2 =3D -r2                      ; R2_w=3Dscalar()
+> > 5: (87) r2 =3D -r2                      ; R2_w=3Dscalar()
+> > 6: (5f) r1 &=3D r2                      ; R1_w=3Dscalar(smin=3Dsmin32=
+=3D0,smax=3Dumax=3Dsmax32=3Dumax32=3D11,var_off=3D(0x0; 0xb)) R2_w=3Dscalar=
+()
+> > 7: (18) r3 =3D 0xb3c3f8c99262687        ; R3_w=3D0xb3c3f8c99262687
+> > 9: (2f) r3 *=3D r1                      ; R1_w=3Dscalar(smin=3Dsmin32=
+=3D0,smax=3Dumax=3Dsmax32=3Dumax32=3D11,var_off=3D(0x0; 0xb)) R3_w=3Dscalar=
+()
+> > ...
+> >
+> > Verifier using the new updated BPF_MUL (more precise bounds at label 9)
+> >
+> > func#0 @0
+> > 0: R1=3Dctx() R10=3Dfp0
+> > 0: (18) r1 =3D 0xb                      ; R1_w=3D11
+> > 2: (18) r2 =3D 0x10000000000080         ; R2_w=3D0x10000000000080
+> > 4: (87) r2 =3D -r2                      ; R2_w=3Dscalar()
+> > 5: (87) r2 =3D -r2                      ; R2_w=3Dscalar()
+> > 6: (5f) r1 &=3D r2                      ; R1_w=3Dscalar(smin=3Dsmin32=
+=3D0,smax=3Dumax=3Dsmax32=3Dumax32=3D11,var_off=3D(0x0; 0xb)) R2_w=3Dscalar=
+()
+> > 7: (18) r3 =3D 0xb3c3f8c99262687        ; R3_w=3D0xb3c3f8c99262687
+> > 9: (2f) r3 *=3D r1                      ; R1_w=3Dscalar(smin=3Dsmin32=
+=3D0,smax=3Dumax=3Dsmax32=3Dumax32=3D11,var_off=3D(0x0; 0xb)) R3_w=3Dscalar=
+(smin=3D0,smax=3Dumax=3D0x7b96bb0a94a3a7cd,var_off=3D(0x0; 0x7fffffffffffff=
+ff))
+> > ...
+> >
+> > Finally, we proved the soundness of the new scalar_min_max_mul() and
+> > scalar32_min_max_mul() functions. Typically, multiplication operations =
+are
+> > expensive to check with bitvector-based solvers. We were able to prove =
+the
+> > soundness of these functions using Non-Linear Integer Arithmetic (NIA)
+> > theory. Additionally, using Agni [2,3], we obtained the encodings for
+> > scalar32_min_max_mul() and scalar_min_max_mul() in bitvector theory, an=
+d
+> > were able to prove their soundness using 8-bit bitvectors (instead of
+> > 64-bit bitvectors that the functions actually use).
+> >
+> > In conclusion, with this patch,
+> >
+> > 1. We were able to show that we can improve the overall precision of
+> >    BPF_MUL. We proved (using an SMT solver) that this new version of
+> >    BPF_MUL is at least as precise as the current version for all inputs
+> >    and more precise for some inputs.
+> >
+> > 2. We are able to prove the soundness of the new scalar_min_max_mul() a=
+nd
+> >    scalar32_min_max_mul(). By leveraging the existing proof of tnum_mul
+> >    [1], we can say that the composition of these three functions within
+> >    BPF_MUL is sound.
+> >
+> > [1] https://ieeexplore.ieee.org/abstract/document/9741267
+> > [2] https://link.springer.com/chapter/10.1007/978-3-031-37709-9_12
+> > [3] https://people.cs.rutgers.edu/~sn349/papers/sas24-preprint.pdf
+> >
+> > Co-developed-by: Harishankar Vishwanathan <harishankar.vishwanathan@gma=
+il.com>
+> > Signed-off-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail=
+.com>
+> > Co-developed-by: Srinivas Narayana <srinivas.narayana@rutgers.edu>
+> > Signed-off-by: Srinivas Narayana <srinivas.narayana@rutgers.edu>
+> > Co-developed-by: Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+> > Signed-off-by: Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+> > Signed-off-by: Matan Shachnai <m.shachnai@gmail.com>
+> > ---
+> >  kernel/bpf/verifier.c | 72 +++++++++++++++++++------------------------
+> >  1 file changed, 32 insertions(+), 40 deletions(-)
+> >
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index c855e7905c35..5b0f83cc7f4d 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -14118,64 +14118,56 @@ static void scalar_min_max_sub(struct bpf_reg=
+_state *dst_reg,
+> >  static void scalar32_min_max_mul(struct bpf_reg_state *dst_reg,
+> >                                  struct bpf_reg_state *src_reg)
+> >  {
+> > -       s32 smin_val =3D src_reg->s32_min_value;
+> > -       u32 umin_val =3D src_reg->u32_min_value;
+> > -       u32 umax_val =3D src_reg->u32_max_value;
+> > +       s32 *dst_smin =3D &dst_reg->s32_min_value;
+> > +       s32 *dst_smax =3D &dst_reg->s32_max_value;
+> > +       u32 *dst_umin =3D &dst_reg->u32_min_value;
+> > +       u32 *dst_umax =3D &dst_reg->u32_max_value;
+> > +       s32 tmp_prod[4];
+> >
+> > -       if (smin_val < 0 || dst_reg->s32_min_value < 0) {
+> > -               /* Ain't nobody got time to multiply that sign */
+> > -               __mark_reg32_unbounded(dst_reg);
+> > -               return;
+> > -       }
+> > -       /* Both values are positive, so we can work with unsigned and
+> > -        * copy the result to signed (unless it exceeds S32_MAX).
+> > -        */
+> > -       if (umax_val > U16_MAX || dst_reg->u32_max_value > U16_MAX) {
+> > -               /* Potential overflow, we know nothing */
+> > -               __mark_reg32_unbounded(dst_reg);
+> > -               return;
+> > +       if (check_mul_overflow(*dst_umax, src_reg->u32_max_value, dst_u=
+max) ||
+> > +           check_mul_overflow(*dst_umin, src_reg->u32_min_value, dst_u=
+min)) {
+> > +               /* Overflow possible, we know nothing */
+> > +               dst_reg->u32_min_value =3D 0;
+> > +               dst_reg->u32_max_value =3D U32_MAX;
+>
+> It would be cleaner to use:
+> *dst_umin =3D 0;
+> *dst_umax =3D U32_MAX;
+>
+> to make it obvious that though check_mul_overflow()-s wrote something
+> into dst_umax and dst_umin,
+> we clean them up with these two assignments.
+>
+> Just like scalar32_min_max_add() does already.
 
-Use the standard import and testing method, as described in the
-import of tcp/ecn and tcp/close , tcp/sack , tcp/tcp_info.
+Thanks, Alexei.
+I'll fix it up and follow up with a v4 soon.
 
-Signed-off-by: Willem de Bruijn <willemb@google.com>
-Signed-off-by: Soham Chakradeo <sohamch@google.com>
----
- ...ited_transmit_limited-transmit-no-sack.pkt | 53 +++++++++++++++++++
- ...limited_transmit_limited-transmit-sack.pkt | 50 +++++++++++++++++
- .../tcp_sendfile_sendfile-simple.pkt          | 26 +++++++++
- ...scall_bad_arg_fastopen-invalid-buf-ptr.pkt | 42 +++++++++++++++
- .../tcp_syscall_bad_arg_sendmsg-empty-iov.pkt | 31 +++++++++++
- ...yscall_bad_arg_syscall-invalid-buf-ptr.pkt | 25 +++++++++
- .../tcp_user_timeout_user-timeout-probe.pkt   | 37 +++++++++++++
- .../tcp_user_timeout_user_timeout.pkt         | 33 ++++++++++++
- ...validate_validate-established-no-flags.pkt | 24 +++++++++
- 9 files changed, 321 insertions(+)
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_limited_transmit_limited-transmit-no-sack.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_limited_transmit_limited-transmit-sack.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_sendfile_sendfile-simple.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_syscall_bad_arg_fastopen-invalid-buf-ptr.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_syscall_bad_arg_sendmsg-empty-iov.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_syscall_bad_arg_syscall-invalid-buf-ptr.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_user_timeout_user-timeout-probe.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_user_timeout_user_timeout.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_validate_validate-established-no-flags.pkt
-
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_limited_transmit_limited-transmit-no-sack.pkt b/tools/testing/selftests/net/packetdrill/tcp_limited_transmit_limited-transmit-no-sack.pkt
-new file mode 100644
-index 000000000000..96b01eb5b7a4
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_limited_transmit_limited-transmit-no-sack.pkt
-@@ -0,0 +1,53 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test RFC 3042 "Limited Transmit": "sending a new data segment in
-+// response to each of the first two duplicate acknowledgments that
-+// arrive at the sender".
-+// This variation tests a receiver that doesn't support SACK.
-+
-+`./defaults.sh`
-+
-+// Establish a connection.
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+  +.1 < S 0:0(0) win 32792 <mss 1000,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,wscale 8>
-+  +.1 < . 1:1(0) ack 1 win 320
-+   +0 accept(3, ..., ...) = 4
-+
-+// Write some data, and send the initial congestion window.
-+   +0 write(4, ..., 15000) = 15000
-+   +0 > P. 1:10001(10000) ack 1
-+
-+// Limited transmit: on first dupack, send a new data segment.
-+ +.11 < . 1:1(0) ack 1 win 320
-+   +0 > . 10001:11001(1000) ack 1
-+
-+// Limited transmit: on second dupack, send a new data segment.
-+ +.01 < . 1:1(0) ack 1 win 320
-+   +0 > . 11001:12001(1000) ack 1
-+
-+// It turned out to be reordering, not loss.
-+// We have one packet newly acked (1001:3001 were DUP-ACK'd)
-+// So we revert state back to Open. Slow start cwnd from 10 to 11
-+// and send 11 - 9 = 2 packets
-+ +.01 < . 1:1(0) ack 3001 win 320
-+   +0 > P. 12001:14001(2000) ack 1
-+
-+ +.02 < . 1:1(0) ack 5001 win 320
-+   +0 > P. 14001:15001(1000) ack 1
-+
-+// Client gradually ACKs all data.
-+ +.02 < . 1:1(0) ack 7001 win 320
-+ +.02 < . 1:1(0) ack 9001 win 320
-+ +.02 < . 1:1(0) ack 11001 win 320
-+ +.02 < . 1:1(0) ack 13001 win 320
-+ +.02 < . 1:1(0) ack 15001 win 320
-+
-+// Clean up.
-+ +.17 close(4) = 0
-+   +0 > F. 15001:15001(0) ack 1
-+  +.1 < F. 1:1(0) ack 15002 win 257
-+   +0 > . 15002:15002(0) ack 2
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_limited_transmit_limited-transmit-sack.pkt b/tools/testing/selftests/net/packetdrill/tcp_limited_transmit_limited-transmit-sack.pkt
-new file mode 100644
-index 000000000000..642da51ec3a4
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_limited_transmit_limited-transmit-sack.pkt
-@@ -0,0 +1,50 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test RFC 3042 "Limited Transmit": "sending a new data segment in
-+// response to each of the first two duplicate acknowledgments that
-+// arrive at the sender".
-+// This variation tests a receiver that supports SACK.
-+
-+`./defaults.sh`
-+
-+// Establish a connection.
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+  +.1 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+  +.1 < . 1:1(0) ack 1 win 320
-+   +0 accept(3, ..., ...) = 4
-+
-+// Write some data, and send the initial congestion window.
-+   +0 write(4, ..., 15000) = 15000
-+   +0 > P. 1:10001(10000) ack 1
-+
-+// Limited transmit: on first dupack, send a new data segment.
-+ +.11 < . 1:1(0) ack 1 win 320 <sack 1001:2001,nop,nop>
-+   +0 > . 10001:11001(1000) ack 1
-+
-+// Limited transmit: on second dupack, send a new data segment.
-+ +.01 < . 1:1(0) ack 1 win 320 <sack 1001:3001,nop,nop>
-+   +0 > . 11001:12001(1000) ack 1
-+
-+// It turned out to be reordering, not loss.
-+ +.01 < . 1:1(0) ack 3001 win 320
-+   +0 > P. 12001:14001(2000) ack 1
-+
-+ +.02 < . 1:1(0) ack 5001 win 320
-+   +0 > P. 14001:15001(1000) ack 1
-+
-+// Client gradually ACKs all data.
-+ +.02 < . 1:1(0) ack 7001 win 320
-+ +.02 < . 1:1(0) ack 9001 win 320
-+ +.02 < . 1:1(0) ack 11001 win 320
-+ +.02 < . 1:1(0) ack 13001 win 320
-+ +.02 < . 1:1(0) ack 15001 win 320
-+
-+// Clean up.
-+ +.17 close(4) = 0
-+   +0 > F. 15001:15001(0) ack 1
-+  +.1 < F. 1:1(0) ack 15002 win 257
-+   +0 > . 15002:15002(0) ack 2
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_sendfile_sendfile-simple.pkt b/tools/testing/selftests/net/packetdrill/tcp_sendfile_sendfile-simple.pkt
-new file mode 100644
-index 000000000000..6740859a1360
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_sendfile_sendfile-simple.pkt
-@@ -0,0 +1,26 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Simplest possible test of open() and then sendfile().
-+// We write some zeroes into a file (since packetdrill expects payloads
-+// to be all zeroes) and then open() the file, then use sendfile()
-+// and verify that the correct number of zeroes goes out.
-+
-+`./defaults.sh
-+/bin/rm -f /tmp/testfile
-+/bin/dd bs=1 count=5 if=/dev/zero of=/tmp/testfile status=none
-+`
-+
-+// Initialize connection
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 10>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+   +0 < . 1:1(0) ack 1 win 514
-+
-+   +0 accept(3, ..., ...) = 4
-+
-+   +0 open("/tmp/testfile", O_RDONLY) = 5
-+   +0 sendfile(4, 5, [0], 5) = 5
-+   +0 > P. 1:6(5) ack 1
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_syscall_bad_arg_fastopen-invalid-buf-ptr.pkt b/tools/testing/selftests/net/packetdrill/tcp_syscall_bad_arg_fastopen-invalid-buf-ptr.pkt
-new file mode 100644
-index 000000000000..8940726a3ec2
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_syscall_bad_arg_fastopen-invalid-buf-ptr.pkt
-@@ -0,0 +1,42 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test TCP fastopen behavior with NULL as buffer pointer, but a non-zero
-+// buffer length.
-+`./defaults.sh
-+./set_sysctls.py /proc/sys/net/ipv4/tcp_timestamps=0`
-+
-+// Cache warmup: send a Fast Open cookie request
-+ 0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-++0 fcntl(3, F_SETFL, O_RDWR|O_NONBLOCK) = 0
-++0 setsockopt(3, SOL_TCP, TCP_FASTOPEN_CONNECT, [1], 4) = 0
-++0 connect(3, ..., ...) = -1 EINPROGRESS (Operation is now in progress)
-++0 > S 0:0(0) <mss 1460,nop,nop,sackOK,nop,wscale 8,FO,nop,nop>
-++0 < S. 123:123(0) ack 1 win 14600 <mss 1460,nop,nop,sackOK,nop,wscale 6,FO abcd1234,nop,nop>
-++0 > . 1:1(0) ack 1
-++0 close(3) = 0
-++0 > F. 1:1(0) ack 1
-++0 < F. 1:1(0) ack 2 win 92
-++0 > .  2:2(0) ack 2
-+
-+// Test with MSG_FASTOPEN without TCP_FASTOPEN_CONNECT.
-++0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 4
-++0 fcntl(4, F_SETFL, O_RDWR|O_NONBLOCK) = 0
-++0 sendto(4, NULL, 1, MSG_FASTOPEN, ..., ...) = -1
-++0 close(4) = 0
-+
-+// Test with TCP_FASTOPEN_CONNECT without MSG_FASTOPEN.
-++0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 5
-++0 fcntl(5, F_SETFL, O_RDWR|O_NONBLOCK) = 0
-++0 setsockopt(5, SOL_TCP, TCP_FASTOPEN_CONNECT, [1], 4) = 0
-++0 connect(5, ..., ...) = 0
-++0 sendto(5, NULL, 1, 0, ..., ...) = -1
-++0 close(5) = 0
-+
-+// Test with both TCP_FASTOPEN_CONNECT and MSG_FASTOPEN.
-++0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 6
-++0 fcntl(6, F_SETFL, O_RDWR|O_NONBLOCK) = 0
-++0 setsockopt(6, SOL_TCP, TCP_FASTOPEN_CONNECT, [1], 4) = 0
-++0 connect(6, ..., ...) = 0
-++0 sendto(6, NULL, 1, MSG_FASTOPEN, ..., ...) = -1
-++0 close(6) = 0
-+
-+`/tmp/sysctl_restore_${PPID}.sh`
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_syscall_bad_arg_sendmsg-empty-iov.pkt b/tools/testing/selftests/net/packetdrill/tcp_syscall_bad_arg_sendmsg-empty-iov.pkt
-new file mode 100644
-index 000000000000..171c15da2728
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_syscall_bad_arg_sendmsg-empty-iov.pkt
-@@ -0,0 +1,31 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test that we correctly skip zero-length IOVs.
-+`./defaults.sh`
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_ZEROCOPY, [1], 4) = 0
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 32792 <mss 1000,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,wscale 8>
-+ +.01 < . 1:1(0) ack 1 win 257
-+   +0 accept(3, ..., ...) = 4
-+   +0 setsockopt(4, SOL_TCP, TCP_NODELAY, [1], 4) = 0
-+
-+   +0 sendmsg(4, {msg_name(...)=...,
-+                  msg_iov(4)=[{..., 0}, {..., 40}, {..., 0}, {..., 20}],
-+                  msg_flags=0}, 0) = 60
-+   +0 > P. 1:61(60) ack 1
-+ +.01 < . 1:1(0) ack 61 win 257
-+
-+   +0 sendmsg(4, {msg_name(...)=...,
-+                  msg_iov(4)=[{..., 0}, {..., 0}, {..., 0}, {..., 0}],
-+                  msg_flags=0}, MSG_ZEROCOPY) = 0
-+
-+   +0 sendmsg(4, {msg_name(...)=...,
-+                  msg_iov(4)=[{..., 0}, {..., 10}, {..., 0}, {..., 50}],
-+                  msg_flags=0}, MSG_ZEROCOPY) = 60
-+   +0 > P. 61:121(60) ack 1
-+ +.01 < . 1:1(0) ack 121 win 257
-+
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_syscall_bad_arg_syscall-invalid-buf-ptr.pkt b/tools/testing/selftests/net/packetdrill/tcp_syscall_bad_arg_syscall-invalid-buf-ptr.pkt
-new file mode 100644
-index 000000000000..59f5903f285c
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_syscall_bad_arg_syscall-invalid-buf-ptr.pkt
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test kernel behavior with NULL as buffer pointer
-+
-+`./defaults.sh`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 fcntl(3, F_SETFL, O_RDWR|O_NONBLOCK) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 10>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+  +.2 < . 1:1(0) ack 1 win 514
-+
-+   +0 accept(3, ..., ...) = 4
-+
-+   +0 write(4, NULL, 1000) = -1 EFAULT (Bad address)
-+   +0 send(4, NULL, 1000, 0) = -1 EFAULT (Bad address)
-+   +0 sendto(4, NULL, 1000, 0, ..., ...) = -1 EFAULT (Bad address)
-+
-+   +0 < . 1:1001(1000) ack 1 win 200
-+   +0 read(4, NULL, 1000) = -1 EFAULT (Bad address)
-+   +0 recv(4, NULL, 1000, 0) = -1 EFAULT (Bad address)
-+   +0 recvfrom(4, NULL, 1000, 0, ..., ...) = -1 EFAULT (Bad address)
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_user_timeout_user-timeout-probe.pkt b/tools/testing/selftests/net/packetdrill/tcp_user_timeout_user-timeout-probe.pkt
-new file mode 100644
-index 000000000000..183051ba0cae
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_user_timeout_user-timeout-probe.pkt
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+`./defaults.sh`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+
-+   +0 < S 0:0(0) win 0 <mss 1460>
-+   +0 > S. 0:0(0) ack 1 <mss 1460>
-+
-+  +.1 < . 1:1(0) ack 1 win 65530
-+   +0 accept(3, ..., ...) = 4
-+
-+   +0 setsockopt(4, SOL_TCP, TCP_USER_TIMEOUT, [3000], 4) = 0
-+   +0 write(4, ..., 24) = 24
-+   +0 > P. 1:25(24) ack 1
-+   +.1 < . 1:1(0) ack 25 win 65530
-+   +0 %{ assert tcpi_probes == 0, tcpi_probes; \
-+         assert tcpi_backoff == 0, tcpi_backoff }%
-+
-+// install a qdisc dropping all packets
-+   +0 `tc qdisc delete dev tun0 root 2>/dev/null ; tc qdisc add dev tun0 root pfifo limit 0`
-+   +0 write(4, ..., 24) = 24
-+   // When qdisc is congested we retry every 500ms
-+   // (TCP_RESOURCE_PROBE_INTERVAL) and therefore
-+   // we retry 6 times before hitting 3s timeout.
-+   // First verify that the connection is alive:
-++3.250 write(4, ..., 24) = 24
-+   // Now verify that shortly after that the socket is dead:
-+ +.100 write(4, ..., 24) = -1 ETIMEDOUT (Connection timed out)
-+
-+   +0 %{ assert tcpi_probes == 6, tcpi_probes; \
-+         assert tcpi_backoff == 0, tcpi_backoff }%
-+   +0 close(4) = 0
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_user_timeout_user_timeout.pkt b/tools/testing/selftests/net/packetdrill/tcp_user_timeout_user_timeout.pkt
-new file mode 100644
-index 000000000000..edc371a5596b
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_user_timeout_user_timeout.pkt
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: GPL-2.0
-+`./defaults.sh`
-+
-+// Initialize connection
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK>
-+  +.1 < . 1:1(0) ack 1 win 32792
-+
-+
-+   +0 accept(3, ..., ...) = 4
-+
-+// Okay, we received nothing, and decide to close this idle socket.
-+// We set TCP_USER_TIMEOUT to 3 seconds because really it is not worth
-+// trying hard to cleanly close this flow, at the price of keeping
-+// a TCP structure in kernel for about 1 minute !
-+   +2 setsockopt(4, SOL_TCP, TCP_USER_TIMEOUT, [3000], 4) = 0
-+   +0 close(4) = 0
-+
-+   +0 > F. 1:1(0) ack 1
-+  +.3~+.400 > F. 1:1(0) ack 1
-+  +.3~+.400 > F. 1:1(0) ack 1
-+  +.6~+.800 > F. 1:1(0) ack 1
-+
-+// We finally receive something from the peer, but it is way too late
-+// Our socket vanished because TCP_USER_TIMEOUT was really small
-+   +0 < . 1:2(1) ack 1 win 32792
-+   +0 > R 1:1(0)
-+
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_validate_validate-established-no-flags.pkt b/tools/testing/selftests/net/packetdrill/tcp_validate_validate-established-no-flags.pkt
-new file mode 100644
-index 000000000000..8bd60226ccfc
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_validate_validate-established-no-flags.pkt
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Verify that established connections drop a segment without the ACK flag set.
-+
-+`./defaults.sh`
-+
-+// Create a socket.
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+// Establish a connection.
-+   +0 < S 0:0(0) win 20000 <mss 1000,sackOK,nop,nop>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK>
-+ +.01 < . 1:1(0) ack 1 win 20000
-+   +0 accept(3, ..., ...) = 4
-+
-+// Receive a segment with no flags set, verify that it's not enqueued.
-+ +.01 < - 1:1001(1000) win 20000
-+   +0 ioctl(4, SIOCINQ, [0]) = 0
-+
-+// Receive a segment with ACK flag set, verify that it is enqueued.
-+ +.01 < . 1:1001(1000) ack 1 win 20000
-+   +0 ioctl(4, SIOCINQ, [1000]) = 0
--- 
-2.47.1.613.gc27f4b7a9f-goog
-
+>
+> >         }
+> > -       dst_reg->u32_min_value *=3D umin_val;
+> > -       dst_reg->u32_max_value *=3D umax_val;
+> > -       if (dst_reg->u32_max_value > S32_MAX) {
+> > +       if (check_mul_overflow(*dst_smin, src_reg->s32_min_value, &tmp_=
+prod[0]) ||
+> > +           check_mul_overflow(*dst_smin, src_reg->s32_max_value, &tmp_=
+prod[1]) ||
+> > +           check_mul_overflow(*dst_smax, src_reg->s32_min_value, &tmp_=
+prod[2]) ||
+> > +           check_mul_overflow(*dst_smax, src_reg->s32_max_value, &tmp_=
+prod[3])) {
+> >                 /* Overflow possible, we know nothing */
+> >                 dst_reg->s32_min_value =3D S32_MIN;
+> >                 dst_reg->s32_max_value =3D S32_MAX;
+> >         } else {
+> > -               dst_reg->s32_min_value =3D dst_reg->u32_min_value;
+> > -               dst_reg->s32_max_value =3D dst_reg->u32_max_value;
+> > +               dst_reg->s32_min_value =3D min_array(tmp_prod, 4);
+> > +               dst_reg->s32_max_value =3D max_array(tmp_prod, 4);
+>
+> dst_smin/smax here too.
 
