@@ -1,58 +1,66 @@
-Return-Path: <linux-kselftest+bounces-23439-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23440-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BABE9F4000
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 02:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E9B829F407E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 03:20:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9DD9B163BAA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 01:29:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFE261610FA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2024 02:20:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA3864D8CE;
-	Tue, 17 Dec 2024 01:29:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9489414036E;
+	Tue, 17 Dec 2024 02:20:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s3OBWA+C"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kz/3TXCd"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B207A2837A;
-	Tue, 17 Dec 2024 01:29:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CDBD13DBB6;
+	Tue, 17 Dec 2024 02:20:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734398978; cv=none; b=ew+2/9JFqLkN4Tjt95uCnpsIm5TUKuB0hIGc1TvDOKEtHmoUAvcr8JaA0TUc+WNQUZtdsmOCYm1+FMtwdKEmToqUEv8PVgTE3UuYePJLNzsYGQ3SLk7ATdHF45IetkZXcn/0g16MMx7hglobA30ULTYZahptWoJzKmlACupVTco=
+	t=1734402005; cv=none; b=s1Y8N43O4RUVzvQoTrdedprgNyb0jvM7BL/E8SPsRxLCe0umsjRKfD6lLBZZlWzgig3sTWedNtycwibedXuSMeOWc9dIPe2MwmVjyMIXwofPrtCUhPH/WA/wkme+KW3DYIvDXayADo4aQ7Xec9OlNVbesuHCRZQcIlreQVyF2EQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734398978; c=relaxed/simple;
-	bh=05ionxI3KsEGqCdtDd73IYlz2pycNNXjkGCtNme9dXE=;
+	s=arc-20240116; t=1734402005; c=relaxed/simple;
+	bh=Zot6Em4Di0coBiKxeXdbs2tjclcZ+C2YYQ9nbTfTr1c=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bFTFSN5CDtGvhIWi4TomNf8dqKPValI6tb0sc1M4sV7CrTjwMrxaUxgQ+8mSXNp4aMUbkrbj5rOr6VllC3Xb783/s0wNl5wLc72ZahJGHw09lNnlUmOx955xQVjA7FeEBHgOhiyvGXfE3nuIooA5XUlaBq8s7JCMXnUq1i7RFts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s3OBWA+C; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EDF7C4CED0;
-	Tue, 17 Dec 2024 01:29:38 +0000 (UTC)
+	 MIME-Version:Content-Type; b=CviQ0J+194sxaI9jvFoHPPcE0iq5+MQWkN1weNKVdFVif6hUylb/eQvaEWyEqaIfZTL86sYAxbSBy/MiIoYcPmfH+LZy/EizFk1lX2MfRhgCQyI4khkTI6/NNQtU190cdTqQlDEqfem1KDbcZzMF8s+9uJlZlbzSfaBKdRFmquY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kz/3TXCd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B74D2C4CED7;
+	Tue, 17 Dec 2024 02:20:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734398978;
-	bh=05ionxI3KsEGqCdtDd73IYlz2pycNNXjkGCtNme9dXE=;
+	s=k20201202; t=1734402003;
+	bh=Zot6Em4Di0coBiKxeXdbs2tjclcZ+C2YYQ9nbTfTr1c=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=s3OBWA+COxQSV32k+bpazAnkMXbjGhaLh5+K3P/ERmYnRa8xKb89OFxpCHUmwRZsV
-	 TA1B7IZuHEGOpsmWzKs0YQ3IGSk+B37O+mwczYLA0XrgrEijPNRjOWWc0SB43Ryv9h
-	 md0eGegoTJmGig6FKwGz2OqB0V6rIGXvHm7G5DN2yCCpd5sSlqBikVcdP/cWb7IY30
-	 XLxX8b7C4JlOUqrxX/luDPfZSZ5oemYsm3fT/j9pOnjPkqqgKR1q5tmgVRhYSjKP24
-	 xL4a94DMkc859cHgn3KTJQM5glTHgeOLWDCNVSG5w19o3NHZnS5Eq/I6JOu2Wc2NU1
-	 sgPfxfZZWsZpA==
-Date: Mon, 16 Dec 2024 17:29:36 -0800
+	b=Kz/3TXCdt7zW6TZfim1b5SYJT7miZdxCADSIFvfT0ueZUZGHVmogm60J2VQjjKBb5
+	 H1sNBY+MZFuzYHo2GUOud4pyBf9TP3SBDqAjoHWFd41tL5naAQerd+G4KapQxSwmtK
+	 wO0EhLSQjOO0IzydHsiaFWYPnQi0HuKPpVV3CAOQYObJCd9v6o66OP4ohjdHTl3WsH
+	 aTndzfU7Dvh/9TVOhha1lqsgyvwkxCypDH/2iU0Tpt+ncBk6C5l4jNQd1sfDcWRnr0
+	 J69VPS5ZzcuFLpBTIGCLSPMK2hpG1vEYSrnG6fx4+FR2SdwHJ2KD18w+cK/goDwtfX
+	 X+3CGwtRNqzbg==
+Date: Mon, 16 Dec 2024 18:20:01 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Petr Machata <petrm@nvidia.com>
-Cc: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
- <pabeni@redhat.com>, <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net 5/5] selftests: net-drv: stats: sanity check netlink
- dumps
-Message-ID: <20241216172936.3223273e@kernel.org>
-In-Reply-To: <877c7zvqe4.fsf@nvidia.com>
-References: <20241213152244.3080955-1-kuba@kernel.org>
-	<20241213152244.3080955-6-kuba@kernel.org>
-	<877c7zvqe4.fsf@nvidia.com>
+To: Anna Emese Nyiri <annaemesenyiri@gmail.com>
+Cc: netdev@vger.kernel.org, fejes@inf.elte.hu, edumazet@google.com,
+ pabeni@redhat.com, willemb@google.com, idosch@idosch.org, horms@kernel.org,
+ dsahern@kernel.org, linux-can@vger.kernel.org, socketcan@hartkopp.net,
+ mkl@pengutronix.de, linux-kselftest@vger.kernel.org, shuah@kernel.org,
+ tsbogend@alpha.franken.de, kaiyuanz@google.com,
+ James.Bottomley@HansenPartnership.com, richard.henderson@linaro.org,
+ arnd@arndb.de, almasrymina@google.com, asml.silence@gmail.com,
+ linux-mips@vger.kernel.org, andreas@gaisler.com, mattst88@gmail.com,
+ kerneljasonxing@gmail.com, sparclinux@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org, deller@gmx.de,
+ vadim.fedorenko@linux.dev, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH net-next v7 4/4] sock: Introduce SO_RCVPRIORITY socket
+ option
+Message-ID: <20241216182001.557e2c19@kernel.org>
+In-Reply-To: <20241213084457.45120-5-annaemesenyiri@gmail.com>
+References: <20241213084457.45120-1-annaemesenyiri@gmail.com>
+	<20241213084457.45120-5-annaemesenyiri@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,20 +70,15 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 16 Dec 2024 11:53:58 +0100 Petr Machata wrote:
-> > +        if ifindex not in parsed:
-> > +            parsed[ifindex] = {"rx":[], "tx": []}
-> > +        parsed[ifindex][entry["queue-type"]].append(entry['queue-id'])  
-> 
-> BTW setdefault() exists for exactly these add-unless-already-exists
-> scenarios:
-> 
->         parsed_entry = parsed.setdefault(ifindex, {"rx":[], "tx": []})
->         parsed_entry[entry["queue-type"]].append(entry['queue-id'])
-> 
-> Sometimes this can be used to inline the whole expression, such as
-> mydict.setdefault(key, []).append(value), but that would be unwieldy here.
+On Fri, 13 Dec 2024 09:44:57 +0100 Anna Emese Nyiri wrote:
+> Add new socket option, SO_RCVPRIORITY, to include SO_PRIORITY in the
+> ancillary data returned by recvmsg().
+> This is analogous to the existing support for SO_RCVMARK, 
+> as implemented in commit <6fd1d51cfa253>
+> ("net: SO_RCVMARK socket option for SO_MARK with recvmsg()").
 
-Ack, I used setdefault() initially but it made the line too
-incomprehensible. Too many things get indexed at once..
+Could you follow up with a test? The functionality is pretty
+straightforward but it'd nonetheless be good to exercise it,
+even if it's a trivial C program which sends a UDP packet to 
+itself over loopback?
 
