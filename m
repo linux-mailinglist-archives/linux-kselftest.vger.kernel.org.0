@@ -1,159 +1,121 @@
-Return-Path: <linux-kselftest+bounces-23495-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23496-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADDA69F6419
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 11:56:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27FBA9F655E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 12:54:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FE4D7A38E5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 10:56:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A94918806A4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 11:53:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C86381B4227;
-	Wed, 18 Dec 2024 10:54:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3FAD1A2396;
+	Wed, 18 Dec 2024 11:51:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="WKf4BDVf"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="zRbHESjN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 302C11ACEC5;
-	Wed, 18 Dec 2024 10:54:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975641B4234
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 11:51:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734519268; cv=none; b=G6HBXUoMo7Zb6TZEwBarhAtw+qnr1ovhHlCifj+MD4HM4bWyiKL5MMxkGkrlOhLSg9C3IFnoRAaj56qbx+42SQnOZfO0Chju0WjBmA8+rED7FJFCgUht+XgIONWeEJxHVOtcX1kH8Fv50wS/IN/w+eqGGOI+caUJzr9j/1XfBUE=
+	t=1734522712; cv=none; b=urJyFbOllMc2PN44buIz8umgmGcB1QwUK8NMlXdjOyKoLHdVBXdU9aCHwf588LLRbtsI0FCMyI/YBF+DOrBpZBvCa9q96Q8uDFbuyWNPqCrsuimk2ZgIlAUZG06AWyIXRMgYqbVnP2x4ZssqibI/Tn8Jpk8u5WLkDLzcULz2mkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734519268; c=relaxed/simple;
-	bh=9cD/qRaX+N/PM5TkKF7XPWCDKrNFi+a4Ia2jzBM4qLE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dJJPxZYlB7Qq+6BVoUeogjQifVmxkPuq+ojdxN80zU2VOpy/Lfo4BTXWcWVOWfUztGfzr/xaRdN3cJnzRRKQtMLWVpZhctK6PuJ/qlDBBXzgU1OzQO5XZ9thsKtz/uExncZ8YAJme9WwBB/iN+Drq8AaFzyBroRgo1+lR9SCVj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=WKf4BDVf; arc=none smtp.client-ip=117.135.210.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=mqEOq
-	80EgXPg5j44EKuiTiSK93GjhC/NcrgmRSuMMy4=; b=WKf4BDVfpGMzyec56NMMV
-	LtuxLsXDr7JhwrBTwLu5zFGJEYYsR0ON2L0PqNi9IFWPRifiMWl/X5ZiB1Ij5oRh
-	HdJl+MYbTQ4flkEUnOYtva1biIgFS0B3rapxxhiiQYBmdOvend7yiVGJVN/8db9p
-	tDGq+fbMs0lTvqoCNaRHxg=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wB396t5qWJnjyoDAA--.461S2;
-	Wed, 18 Dec 2024 18:52:50 +0800 (CST)
-From: Jiayuan Chen <mrpre@163.com>
-To: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: martin.lau@linux.dev,
-	ast@kernel.org,
-	edumazet@google.com,
-	jakub@cloudflare.com,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
+	s=arc-20240116; t=1734522712; c=relaxed/simple;
+	bh=bVQk1IH/oYmp2ISiAjJgs9fhUluBeTZ2boMdlRAm1X0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sC17XsifLXJ9sbLOU9TnufEqqg4OxeL/T5vsFR88Q5o/RsCt11sLMM69fBy4ip+RFT1e9TSAfaXYR7zwHN3Ta0elF+uufSFJrBpXpfoq4pQvZapL0VKjDTSxDuDb7JAsJyaOil94JSbDZmrqWIkxDK1BLXutG70x1xcOdspRiSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=zRbHESjN; arc=none smtp.client-ip=84.16.66.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4YCsTl5N3Fz5DQ;
+	Wed, 18 Dec 2024 12:51:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1734522699;
+	bh=LBITfqfai7J37XOUwox6hatMirnCfP5i+juTnBH9htY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=zRbHESjNAMyorCyUxpToqsVkVTb9pimoRoGs0s3pDSN3/nzFAbd0LCV7OY6Mgsy1j
+	 MVgvoWuJkO/M2vdvInk+sls7zzXfr49hylKMF/DljnGCFh6rraGLCeG8RiuFdF565M
+	 RZfQf7x3Ny5Ex2EhNSuKRVgUNkIqmxAj3LPC7PY8=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4YCsTk3xmFzCGS;
+	Wed, 18 Dec 2024 12:51:38 +0100 (CET)
+From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To: linux-kbuild@vger.kernel.org,
+	linux-um@lists.infradead.org
+Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	song@kernel.org,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	mhal@rbox.co,
-	yonghong.song@linux.dev,
-	daniel@iogearbox.net,
-	xiyou.wangcong@gmail.com,
-	horms@kernel.org,
-	eddyz87@gmail.com,
-	mykolal@fb.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf-next v1] selftests/bpf: avoid generating untracked files when running bpf selftests
-Date: Wed, 18 Dec 2024 18:52:20 +0800
-Message-ID: <20241218105220.855128-1-mrpre@163.com>
-X-Mailer: git-send-email 2.43.5
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Richard Weinberger <richard@nod.at>
+Subject: [PATCH v1] kbuild: Allow building of samples with UML
+Date: Wed, 18 Dec 2024 12:51:23 +0100
+Message-ID: <20241218115126.264342-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wB396t5qWJnjyoDAA--.461S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Kw17Cry7Xw13AryDAFWfAFb_yoW5JFy7p3
-	yrJw1jkrZaqFWUt3Z7ZrW3ur1rJr4DZFW0va1UZryDZwn8JFykWF4IyFy5Za43urZYqrZI
-	v3yIgF9xAFW8A3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0z_dgA7UUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiDxa5p2dinVv9AwAAs6
+X-Infomaniak-Routing: alpha
 
-Currently, when we run the BPF selftests with the following command:
+It's useful to build samples/* with UML and the only blocker is the
+artificial incompatibility with CONFIG_HEADERS_INSTALL.
 
-'make -C tools/testing/selftests TARGETS=bpf SKIP_TARGETS=""'
+Allow the headers_install target with ARCH=um, which then allow building
+samples (and tests using them) with UML too:
 
-The command generates untracked files and directories:
-'''
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	tools/testing/selftests/bpfFEATURE-DUMP.selftests
-	tools/testing/selftests/bpffeature/
-'''
+  printf 'CONFIG_SAMPLES=y\nCONFIG_HEADERS_INSTALL=y\nCONFIG_SAMPLE_LANDLOCK=y\n' >.config
+  make ARCH=um olddefconfig headers_install
+  make ARCH=um samples/landlock/
 
-The core reason is our Makefile(tools/testing/selftests/bpf/Makefile)
-was written like this:
-'''
-OUTPUT := $(OUTPUT)/
-$(eval include ../../../build/Makefile.feature)
-OUTPUT := $(patsubst %/,%,$(OUTPUT))
-'''
-
-This way of assigning values to OUTPUT will never be effective for the
-variable OUTPUT provided via the command argument and sub makefile called
-like this(tools/testing/selftests/Makefile):
-'''
-all:
-    ...
-	$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET
-'''
-
-As stated in the GNU make documentation:
-'''
-An argument that contains '=' specifies the value of a variable: 'v=x'
-sets the value of the variable v to x. If you specify a value in this way,
-all ordinary assignments of the same variable in the makefile are ignored;
-we say they have been overridden by the command line argument.
-'''
-
-According to GNU make, we use override Directive to fix this issue:
-'''
-If you want to set the variable in the makefile even though it was set
-with a command argument, you can use an override directive, which is a
-line that looks like this:
-override variable := value
-
-Link: https://www.gnu.org/software/make/manual/make.html#Override-Directive
-Fixes: dc3a8804d790 ("selftests/bpf: Adapt OUTPUT appending logic to lower versions of Make")
-
-Signed-off-by: Jiayuan Chen <mrpre@163.com>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nicolas@fjasle.eu>
+Cc: Richard Weinberger <richard@nod.at>
+Fixes: 1b620d539ccc ("kbuild: disable header exports for UML in a straightforward way")
+Signed-off-by: Mickaël Salaün <mic@digikod.net>
 ---
- tools/testing/selftests/bpf/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Makefile          | 1 -
+ lib/Kconfig.debug | 1 -
+ 2 files changed, 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 9e870e519c30..eb4d21651aa7 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -202,9 +202,9 @@ ifeq ($(shell expr $(MAKE_VERSION) \>= 4.4), 1)
- $(let OUTPUT,$(OUTPUT)/,\
- 	$(eval include ../../../build/Makefile.feature))
- else
--OUTPUT := $(OUTPUT)/
-+override OUTPUT := $(OUTPUT)/
- $(eval include ../../../build/Makefile.feature)
--OUTPUT := $(patsubst %/,%,$(OUTPUT))
-+override OUTPUT := $(patsubst %/,%,$(OUTPUT))
- endif
- endif
+diff --git a/Makefile b/Makefile
+index e5b8a8832c0c..6e2cce16a2a3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1355,7 +1355,6 @@ hdr-inst := -f $(srctree)/scripts/Makefile.headersinst obj
  
-
-base-commit: a7c205120d339b6ad2557fe3f33fdf20394f1a0f
+ PHONY += headers
+ headers: $(version_h) scripts_unifdef uapi-asm-generic archheaders archscripts
+-	$(if $(filter um, $(SRCARCH)), $(error Headers not exportable for UML))
+ 	$(Q)$(MAKE) $(hdr-inst)=include/uapi
+ 	$(Q)$(MAKE) $(hdr-inst)=arch/$(SRCARCH)/include/uapi
+ 
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index f3d723705879..fac1208f48e4 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -473,7 +473,6 @@ config READABLE_ASM
+ 
+ config HEADERS_INSTALL
+ 	bool "Install uapi headers to usr/include"
+-	depends on !UML
+ 	help
+ 	  This option will install uapi headers (headers exported to user-space)
+ 	  into the usr/include directory for use during the kernel build.
 -- 
-2.43.5
+2.47.1
 
 
