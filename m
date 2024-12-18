@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-23528-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23529-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39EEF9F6D89
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 19:44:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 646D39F6D8D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 19:45:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD8B7166F6D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 18:44:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43332189036F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 18:45:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 311DC1FA8E9;
-	Wed, 18 Dec 2024 18:44:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85A431FAC4B;
+	Wed, 18 Dec 2024 18:44:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HNIFORqD"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Kiq1TdhH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAAFA1F9F5E
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 18:44:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212AF1F75B2
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 18:44:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734547451; cv=none; b=BcchCYoQ8GLiv4T2V3AG9Q5+725UL0RXnZG67eNVi8Nq50WK8wKbnsaXhNSuaLKAYb81JIpz+9XkP54SUhE+Pls/r8URNe8CALd998DDmr7UN1vEPkhSoK1bYUoYvZ6wIRhs1JCROBA8VsyLmySp0RFwuTPODApgr00Adcb1cAc=
+	t=1734547494; cv=none; b=nFdJLzyhcHytLfOC8N5/At6b3G6AG7hgXnFrSL7dTOfRT8wicAClukM0otAwtWrRV3bgJD7ypSi98cupKeJxXbhezmqb78SCp6DVGeVoTPlbyxHA9qurd4M+JVkoLShS90Ij7KFlBAV/AqwT7hJ/A2PeLhZXHVdmaPa9gRhd64M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734547451; c=relaxed/simple;
-	bh=w6VdZk8D12KKSyCgYaCAJHabEXKIGL109NplDledyDM=;
+	s=arc-20240116; t=1734547494; c=relaxed/simple;
+	bh=9N1nw5pDv+lDvi7BeKzhIjUt9l0WZpYj+8WvPGktrTo=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=u04U7/aYiG+YUHHICDN8w5wIp6BVqQKSr8X4zrapdFQRNSEAA0hu3uYrlo3w+ZovgUGSROr19miGBA5WkizYfD9T4KUCKi5Lqd0mAKkQcbwgIKu19ei+av+bT5wYzabdeZ/rMKNbiA2dEhUMVzPzFwcsvfWT1gMZ7lmNWBuZtzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HNIFORqD; arc=none smtp.client-ip=209.85.210.202
+	 To:Cc:Content-Type; b=gSEo/xNqNn8cBb5njMlfCwhqMt1Uw9HmCtTnk2XmSQEFYcPR9jkmbe4nl8HE3bZZmd3DK3Bniu3Gx/aup/azWFBAsBhJ089Fu+s+oEtWgq5k4Oabb5GuJz9zvYbhgvL2PJDbXnrqzGhuyIKZsaFIHu2oEe55aRcztQw/P9jV/zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Kiq1TdhH; arc=none smtp.client-ip=209.85.215.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-727c59ecb9fso12564b3a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 10:44:09 -0800 (PST)
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-7f71e2fc065so4403373a12.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 10:44:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1734547449; x=1735152249; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1734547492; x=1735152292; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7jSic6TIOj3w851bzmdbHRdhUPvd3z/Q4EhEJqzsZcM=;
-        b=HNIFORqDglzfLaN2/HFfedbvk2EO5d1/gKkIX/WGiNRD9md6AHGHpqBQYQ5WXllEA8
-         gFm42WpPhnDIO+cJDppxFMhd5CkXgkyK2S3yiM6naB6BUF9N83cIRHfqNu4dXLZWWFH5
-         kKPzDxrTOekDFKktU6nxq3ved4gc13Bcd7KbYeeXV/hoRr15LlXYEM++hvsbEInHNoYh
-         z+zwxLNXS7dP3oHd2BkiaBQMtt5k99z58+xds2bpLbx4z+Y8qyMOkSxq4Zo1OZ60A8bz
-         11PvdwJSyt+h97QLue5CGrgehqrvRVNpHrOzoM2xquu4LLjnMefpsGGgqTaLigavdTOE
-         VWJA==
+        bh=IAiuyQN341JkpI4EyBxh+99WaLVM7eEU9nP2zLmsuDM=;
+        b=Kiq1TdhHidnc4A//NzLJne0SvsBj5ZP4gzPCRsrN95BrhNbNomhnFJWvRX+3E3qLOf
+         7KTrPJws4xD0+vSbUSsUbn/lU9QWZHUbd3sVgfvfjRNnXuLwDOk0j84zBnuXwRa1CIO2
+         KienbbW77DzFUj6dLmWWdg+Z6S52oMnCcF/pia6T525MUzZlCPs520QRvTmJfEFnv0ks
+         I81KYPGmYHIqe8WLJHpKpkUa+iT9kRe38gNWUSNYS0wS+KcaEgI35Dyv/Q81evkhi496
+         lVP9xkVUIoTd9b/UH0irfG3cTGhtuhnAejNkb3pZuuodgTqtbZEIJccxXotchxSQkN/M
+         /8MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734547449; x=1735152249;
+        d=1e100.net; s=20230601; t=1734547492; x=1735152292;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7jSic6TIOj3w851bzmdbHRdhUPvd3z/Q4EhEJqzsZcM=;
-        b=uWKmXxYFVANLomHlho7bEOt61AHp9xnI0ujxRXF8Ro33EipWDAKjAIahUJqoTYNpMf
-         rCVdgEgT8Vh+0NPrlDgaRs/7h7tQnVglBeWz6OZj5TjI6vGDXQWabNz8Bcu1zGRj3J0X
-         gWuYSXTW+yUMnNZbJgMHwvfFPIb5fe5ZJgas3o9WvLGGMaj80Ym5Lr5yKJ4pLWOEKpTM
-         lWrGlcPMFBZT+dBl1FgXQ/7X0hDS5emLA7SbVm5ljUQTYbEmOjcR1N20uMiy6fw4GN2X
-         PbDTJU+YNjNTh4vQYCvN1DhOjzrwGknjw+SQjFgIh6kuYiIeGpIEKWE2uyEkHQ3JcZ3J
-         CTEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVsrjFQ/miMEjw6SLP3R18A4gopigJ+SiORSULsCvqKt5BCRn5dnqY8h4RZl343qGDmeSA+s8RHkz9MafK2NJo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOvsxAaST/Z4UJ9PCmSF9w4SdySZV6Bh9rIo2mq+8W1GC4y6Er
-	UraA2DFmESum2170qc5x5r/4LFRg2Q2nN1fY6sXqSupQvURcRMWn2Rx7rgtEUf1qixSryJ1Qpbk
-	RAg==
-X-Google-Smtp-Source: AGHT+IGLlbGARYjW3VToWr9kgBEQplNywz6RBTD9omsrF56xvNNHVLKbUj2hBvCY+P6Y5w0cv4rhhCyNmcc=
-X-Received: from pgbcp7.prod.google.com ([2002:a05:6a02:4007:b0:7fd:342d:a180])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:e85:b0:1e1:c8f5:19ee
- with SMTP id adf61e73a8af0-1e5b482a145mr7124926637.25.1734547449091; Wed, 18
- Dec 2024 10:44:09 -0800 (PST)
-Date: Wed, 18 Dec 2024 10:44:07 -0800
-In-Reply-To: <20241217181458.68690-8-iorlov@amazon.com>
+        bh=IAiuyQN341JkpI4EyBxh+99WaLVM7eEU9nP2zLmsuDM=;
+        b=Bw6yP4AIDBNO8ViCR3TP7sNGM9abzAJol12vATYfpaNaH7cFnnI5NIBGta9DWxbVpm
+         PfSV6nEODAUbKbstT2V7egGUO+Ujah9Bj7bd6w8fQSNzjGySx0etmzEgmkoaP8uepiv5
+         jVNfuQMNuYhwfYA4gIr5IGClDB2dZaqCeLdzifmhIlxfORwMx+aCt7Cz69YX8bCYTyA3
+         8lp/J9vFnrVuuLJh7/c6L5QjgHProKaShGjJk9q9sYypaUeNYEcM3r4wQO/pHmn1O+97
+         QAqko0dV8VW7S6ptERiIujxmlSFh01UzUc2JLw5IFWe7mKt20cEjviHJZbdI2NuCWTJg
+         3pYg==
+X-Forwarded-Encrypted: i=1; AJvYcCVGkcNaiWdyCEAtOnEvk7HhaaynI6dws1IIkWTVG3OQdHigC0JpYCgH0wTyeJBwzXZuOd5im85TF3Go1TTZSAA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxuEOSx/wTsKz18STO9Db22ZOSHIKUjgehsKCXTIl1BQpeY4lq
+	AwzGklLNeUOslFDb9/+Biukk0I4F2ojYt/eLGHWVu3DnFxNVMJE7WRIh2pbsLugjtJO7jJ8EZeN
+	hwg==
+X-Google-Smtp-Source: AGHT+IH+sl+v/O3EB94NvcKnWSkH0NdBBH9kGuVv5fLPWor3f5h3drQQPuJCwiKgIop1mJ7cvRHthevdpiE=
+X-Received: from pfbna12.prod.google.com ([2002:a05:6a00:3e0c:b0:72a:83ec:b170])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:999c:b0:1d9:3acf:8bdc
+ with SMTP id adf61e73a8af0-1e5c76f91b4mr440300637.46.1734547492547; Wed, 18
+ Dec 2024 10:44:52 -0800 (PST)
+Date: Wed, 18 Dec 2024 10:44:50 -0800
+In-Reply-To: <20241217181458.68690-1-iorlov@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20241217181458.68690-1-iorlov@amazon.com> <20241217181458.68690-8-iorlov@amazon.com>
-Message-ID: <Z2MX9ygvHPgS8rRf@google.com>
-Subject: Re: [PATCH v3 7/7] selftests: KVM: Add test case for MMIO during vectoring
+References: <20241217181458.68690-1-iorlov@amazon.com>
+Message-ID: <Z2MYImBJGSjmBOII@google.com>
+Subject: Re: [PATCH v3 0/7] Enhance event delivery error handling
 From: Sean Christopherson <seanjc@google.com>
 To: Ivan Orlov <iorlov@amazon.com>
 Cc: bp@alien8.de, dave.hansen@linux.intel.com, mingo@redhat.com, 
@@ -84,28 +84,17 @@ Cc: bp@alien8.de, dave.hansen@linux.intel.com, mingo@redhat.com,
 	pdurrant@amazon.co.uk, jalliste@amazon.co.uk
 Content-Type: text/plain; charset="us-ascii"
 
-KVM: selftests:
-
 On Tue, Dec 17, 2024, Ivan Orlov wrote:
-> Extend the 'set_memory_region_test' with a test case which covers the
-> MMIO during vectoring error handling. The test case
-
-Probably a good idea to explicitly state this is x86-only (hard to see that
-from the diff alone).
-
+> Currently, the unhandleable vectoring (e.g. when guest accesses MMIO
+> during vectoring) is handled differently on VMX and SVM: on VMX KVM
+> returns internal error, when SVM goes into infinite loop trying to
+> deliver an event again and again.
 > 
-> 1) Sets an IDT descriptor base to point to an MMIO address
-> 2) Generates a #GP in the guest
-> 3) Verifies that we got a correct exit reason and suberror code
+> This patch series eliminates this difference by returning a KVM internal
+> error when KVM can't emulate during vectoring for both VMX and SVM.
+> 
+> Also, introduce a selftest test case which covers the error handling
+> mentioned above.
 
-No "we".  It's very specifically userspace that needs to see the exit.
- 
-> 4) Verifies that we got a corrent reported GPA in internal.data[3]
-
-s/corrent/correct?
-
-And #4 can be combined with #3:
-
-3) Verifies userspace gets the correct exit reason, suberror code, and
-   GPA in internal.data[3]
+A few nits throughout, but I'll address them when applying.  Thanks!
 
