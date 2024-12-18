@@ -1,121 +1,159 @@
-Return-Path: <linux-kselftest+bounces-23494-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23495-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 914989F6261
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 11:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ADDA69F6419
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 11:56:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D9EF7A4648
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 10:08:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FE4D7A38E5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 10:56:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 453D01991AF;
-	Wed, 18 Dec 2024 10:08:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C86381B4227;
+	Wed, 18 Dec 2024 10:54:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b3gSTQZu"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="WKf4BDVf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606CE198E69
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 10:08:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 302C11ACEC5;
+	Wed, 18 Dec 2024 10:54:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734516516; cv=none; b=my8g4BiaLqb3COMZTyz/7/akZCQPNmZj9h2DGmYiUdkH/Ias61OnxS9d02JNLfEhGJScgRtdlBO+d59wxup0aOIQH8z1PCzBCAeQ6ssvozoi9LFUCqEonqBYsTRTB2UmcR1+owP6jiAZ5+3RR9mk39hAGmD/CpH4bWKEBmpooh4=
+	t=1734519268; cv=none; b=G6HBXUoMo7Zb6TZEwBarhAtw+qnr1ovhHlCifj+MD4HM4bWyiKL5MMxkGkrlOhLSg9C3IFnoRAaj56qbx+42SQnOZfO0Chju0WjBmA8+rED7FJFCgUht+XgIONWeEJxHVOtcX1kH8Fv50wS/IN/w+eqGGOI+caUJzr9j/1XfBUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734516516; c=relaxed/simple;
-	bh=McJFBGRi73qOskvj2dJzcmMaMHZrowp+ckL4fxI8kEE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=c+beESHIBeapHG7maZCDxLs1OaK3U3WcQDs6UpxBkKeW+a9JKTNfdwVzpnpxlQwDlkejzp0fI2zfmJJMVv9UtpoAnKCkZmHVZ97ZzayWnT1kfIq/TNbwl4HNnhFafsHzOYyrBtwqMVtlAyDJoqa8anXDwRfurih2YAfNCAocN04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b3gSTQZu; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1734516513;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=28LtfQqtpdHfDU07S6WF6bvRxmpMXf24CtX5DCj2iy0=;
-	b=b3gSTQZux+RKapAjzcgO2LUmkrNoJHKTU6ckJJqY6gS4C0b6U6UoZ5DvGqFgZCGYv6gEmI
-	Bp0o/Bv7sU+7mgUR8y3xbzeR5zrDMk1Zqv6t4aiGGP7UjHE/ECOFoPifw0VXXK71djkEfw
-	vUv5GRA7wVNiCfl2Dwk2b2jectB4QWo=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-663-cGkI5xVcMk61VhaEobb4ug-1; Wed, 18 Dec 2024 05:08:32 -0500
-X-MC-Unique: cGkI5xVcMk61VhaEobb4ug-1
-X-Mimecast-MFC-AGG-ID: cGkI5xVcMk61VhaEobb4ug
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-aa68952272bso602815666b.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 02:08:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734516511; x=1735121311;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=28LtfQqtpdHfDU07S6WF6bvRxmpMXf24CtX5DCj2iy0=;
-        b=j5eBhhASLWVChcCECZOaYvTEHXS3g6Oj/3i+OgPb04GD11MJVEK3/9bxXGr57pwEQi
-         R5BfIjj4vB2uZHjzPOy78xNQR/tCR0Rmp6yMJgsyn54WJ8M/75xcS9rceh+NEIns9BaO
-         HV61HqR+QCnSajDZPHkIv/rU93ScLIG2Qij+Ec0ZLlBd6gEbAJXYGIzKgfsXiJ9K6XVX
-         aaUWZF+eFHHxIOJ1EymO+5ob4EcxWUOZTo0O/FQ1p77dpmVUNUbq8ti+MtIL6csFeUfI
-         3tlS1XV3vW2/xhykKU7jKvi6mvrSUhCM9LYji19N+H63dY8/uGWoGKq4JG7qCxwEk0ti
-         esHQ==
-X-Gm-Message-State: AOJu0YwdoDc0mr6XtKLlLTjTnJJKaCp/02AQmiLtijONxJaqNxaelA4b
-	2SRCmuT/49tnm9nDDCkIFvfUdjni244809sPE1A7hlb06wn6dExTz8U8Cj4aCIpEeWvr/6nBar8
-	bDsgDbv15F6MsmE0bfBuH+w2ianieSJFQgpEBYNwlLlYt/bW87HYkH0Xx7s9b8DjwdQ==
-X-Gm-Gg: ASbGnctYbh0PDtWX85MjNczYUWnhcDTzHNGY+BVE4A4dV5sApPUQPuOgaTHu3EwAv9j
-	i7M4A9M4MJ2GCpb8idJpnqNTihvdWwKBFZ4PNC3cfD93Flrk6JeukMXeZwvf8UfnWPKWkiw9Pfa
-	yj78CUwyazYz1R9Hgza/KoeD1To2uCnPWWXU8351Rnq/HDomK/F5hav33Z5xVVNi2WNP+DQ2cYZ
-	lR38yB9LGtFkdHrcvGeHiVPZzUoy1QH8hZlHJGdpyry//khmOh6UC1A60GQe43ilvUyzCv/12BX
-	qZ0AfePKrm558BgESuTT00OpfkY=
-X-Received: by 2002:a17:906:ee88:b0:aa6:950c:ae0e with SMTP id a640c23a62f3a-aabf491e146mr184740166b.51.1734516510649;
-        Wed, 18 Dec 2024 02:08:30 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IElz+KnDnIV4/z/HLgJGjKzAErVWdv9XAf6U6sQ+wwJVIlLKVdwuAxA2tbLvawq9el84pF0yg==
-X-Received: by 2002:a17:906:ee88:b0:aa6:950c:ae0e with SMTP id a640c23a62f3a-aabf491e146mr184736566b.51.1734516510242;
-        Wed, 18 Dec 2024 02:08:30 -0800 (PST)
-Received: from [10.39.193.174] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aab96067ef1sm534517866b.48.2024.12.18.02.08.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 18 Dec 2024 02:08:29 -0800 (PST)
-From: Eelco Chaudron <echaudro@redhat.com>
-To: Adrian Moreno <amorenoz@redhat.com>
-Cc: linux-kselftest@vger.kernel.org, dev@openvswitch.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- Eric Dumazet <edumazet@google.com>, Simon Horman <horms@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>
-Subject: Re: [ovs-dev] [PATCH net] selftests: openvswitch: fix tcpdump
- execution
-Date: Wed, 18 Dec 2024 11:08:29 +0100
-X-Mailer: MailMate (1.14r6065)
-Message-ID: <6D309AF5-AC5A-4F68-9F86-84E66AC0FB4F@redhat.com>
-In-Reply-To: <20241217211652.483016-1-amorenoz@redhat.com>
-References: <20241217211652.483016-1-amorenoz@redhat.com>
+	s=arc-20240116; t=1734519268; c=relaxed/simple;
+	bh=9cD/qRaX+N/PM5TkKF7XPWCDKrNFi+a4Ia2jzBM4qLE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dJJPxZYlB7Qq+6BVoUeogjQifVmxkPuq+ojdxN80zU2VOpy/Lfo4BTXWcWVOWfUztGfzr/xaRdN3cJnzRRKQtMLWVpZhctK6PuJ/qlDBBXzgU1OzQO5XZ9thsKtz/uExncZ8YAJme9WwBB/iN+Drq8AaFzyBroRgo1+lR9SCVj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=WKf4BDVf; arc=none smtp.client-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=mqEOq
+	80EgXPg5j44EKuiTiSK93GjhC/NcrgmRSuMMy4=; b=WKf4BDVfpGMzyec56NMMV
+	LtuxLsXDr7JhwrBTwLu5zFGJEYYsR0ON2L0PqNi9IFWPRifiMWl/X5ZiB1Ij5oRh
+	HdJl+MYbTQ4flkEUnOYtva1biIgFS0B3rapxxhiiQYBmdOvend7yiVGJVN/8db9p
+	tDGq+fbMs0lTvqoCNaRHxg=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wB396t5qWJnjyoDAA--.461S2;
+	Wed, 18 Dec 2024 18:52:50 +0800 (CST)
+From: Jiayuan Chen <mrpre@163.com>
+To: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: martin.lau@linux.dev,
+	ast@kernel.org,
+	edumazet@google.com,
+	jakub@cloudflare.com,
+	davem@davemloft.net,
+	dsahern@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	linux-kernel@vger.kernel.org,
+	song@kernel.org,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	mhal@rbox.co,
+	yonghong.song@linux.dev,
+	daniel@iogearbox.net,
+	xiyou.wangcong@gmail.com,
+	horms@kernel.org,
+	eddyz87@gmail.com,
+	mykolal@fb.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	Jiayuan Chen <mrpre@163.com>
+Subject: [PATCH bpf-next v1] selftests/bpf: avoid generating untracked files when running bpf selftests
+Date: Wed, 18 Dec 2024 18:52:20 +0800
+Message-ID: <20241218105220.855128-1-mrpre@163.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wB396t5qWJnjyoDAA--.461S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Kw17Cry7Xw13AryDAFWfAFb_yoW5JFy7p3
+	yrJw1jkrZaqFWUt3Z7ZrW3ur1rJr4DZFW0va1UZryDZwn8JFykWF4IyFy5Za43urZYqrZI
+	v3yIgF9xAFW8A3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0z_dgA7UUUUU=
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiDxa5p2dinVv9AwAAs6
 
+Currently, when we run the BPF selftests with the following command:
 
+'make -C tools/testing/selftests TARGETS=bpf SKIP_TARGETS=""'
 
-On 17 Dec 2024, at 22:16, Adrian Moreno wrote:
+The command generates untracked files and directories:
+'''
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	tools/testing/selftests/bpfFEATURE-DUMP.selftests
+	tools/testing/selftests/bpffeature/
+'''
 
-> Fix the way tcpdump is executed by:
-> - Using the right variable for the namespace. Currently the use of the
->   empty "ns" makes the command fail.
-> - Waiting until it starts to capture to ensure the interesting traffic
->   is caught on slow systems.
-> - Using line-buffered output to ensure logs are available when the test
->   is paused with "-p". Otherwise the last chunk of data might only be
->   written when tcpdump is killed.
->
-> Fixes: 74cc26f416b9 ("selftests: openvswitch: add interface support")
-> Signed-off-by: Adrian Moreno <amorenoz@redhat.com>
+The core reason is our Makefile(tools/testing/selftests/bpf/Makefile)
+was written like this:
+'''
+OUTPUT := $(OUTPUT)/
+$(eval include ../../../build/Makefile.feature)
+OUTPUT := $(patsubst %/,%,$(OUTPUT))
+'''
 
-Thank for fixing this, the change looks good to me.
+This way of assigning values to OUTPUT will never be effective for the
+variable OUTPUT provided via the command argument and sub makefile called
+like this(tools/testing/selftests/Makefile):
+'''
+all:
+    ...
+	$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET
+'''
 
-Acked-by: Eelco Chaudron <echaudro@redhat.com>
+As stated in the GNU make documentation:
+'''
+An argument that contains '=' specifies the value of a variable: 'v=x'
+sets the value of the variable v to x. If you specify a value in this way,
+all ordinary assignments of the same variable in the makefile are ignored;
+we say they have been overridden by the command line argument.
+'''
+
+According to GNU make, we use override Directive to fix this issue:
+'''
+If you want to set the variable in the makefile even though it was set
+with a command argument, you can use an override directive, which is a
+line that looks like this:
+override variable := value
+
+Link: https://www.gnu.org/software/make/manual/make.html#Override-Directive
+Fixes: dc3a8804d790 ("selftests/bpf: Adapt OUTPUT appending logic to lower versions of Make")
+
+Signed-off-by: Jiayuan Chen <mrpre@163.com>
+---
+ tools/testing/selftests/bpf/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 9e870e519c30..eb4d21651aa7 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -202,9 +202,9 @@ ifeq ($(shell expr $(MAKE_VERSION) \>= 4.4), 1)
+ $(let OUTPUT,$(OUTPUT)/,\
+ 	$(eval include ../../../build/Makefile.feature))
+ else
+-OUTPUT := $(OUTPUT)/
++override OUTPUT := $(OUTPUT)/
+ $(eval include ../../../build/Makefile.feature)
+-OUTPUT := $(patsubst %/,%,$(OUTPUT))
++override OUTPUT := $(patsubst %/,%,$(OUTPUT))
+ endif
+ endif
+ 
+
+base-commit: a7c205120d339b6ad2557fe3f33fdf20394f1a0f
+-- 
+2.43.5
 
 
