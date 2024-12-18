@@ -1,140 +1,143 @@
-Return-Path: <linux-kselftest+bounces-23473-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23474-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 415C19F5D27
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 04:00:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E712B9F5D63
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 04:24:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63D137A2610
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 03:00:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC5CF7A3FB2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 03:24:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F68F13AD3F;
-	Wed, 18 Dec 2024 03:00:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1E2814AD38;
+	Wed, 18 Dec 2024 03:24:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="HqFBhd5N"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Psd2rbq6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from esa12.hc1455-7.c3s2.iphmx.com (esa12.hc1455-7.c3s2.iphmx.com [139.138.37.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6018783CD2;
-	Wed, 18 Dec 2024 03:00:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.37.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 323D44A23;
+	Wed, 18 Dec 2024 03:24:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734490804; cv=none; b=DrJSGE00oY3SFAiGn++bxzOn2Ll7uIbORX3AgnnOQmaOQjSLJEw/uTlO+wkM5LKzxPHECVNY09bkBewCpfpEmmDhZia1koKKBO9M3JW7KxYmPOeCz39ScjDHP/RG+JGgt2bbypmxEjGEQqjiNYJs1eTz1X4RVCwKvhScoZQ3Qb8=
+	t=1734492253; cv=none; b=BS69UHMtrhf5wHSBm8mRRAXlff6pivTl6uhYo8Mq0tA8MY3imyfMJmRwDLX+SBUDR7iwgp1XS5KzNermr6IHi6e6rpfgYabOk6slT3DiUr6LN2PbtftUesm+667kfBGeLYbGo4FMmPz4lrwbZoGBPZNN5p/9qsLPB2lFIaTvsAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734490804; c=relaxed/simple;
-	bh=sWCNm7GtXZu0rAuQgCNsRCB6FD44Dpbggu8hcxTLg7s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fDszYzNHFZU3LUjvk33maDbIDfJc/6VD3zJU+EWuQSp7yjJiS6fTS5pev+cxxMkhpUuoCE+KP78SYvjGr7JbKp1BGuB8itl39WCaLbTLSmw7rTWfanfz7qPB4uKT3eX/p8xoXXV6Foa207aPMfm/w08Uojbgls5Qv+fctEqxySc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=HqFBhd5N; arc=none smtp.client-ip=139.138.37.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1734490802; x=1766026802;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=sWCNm7GtXZu0rAuQgCNsRCB6FD44Dpbggu8hcxTLg7s=;
-  b=HqFBhd5NCPI7Tyq+vhd3c3jyTMtu4OHN4E8ooYuGjytkxNOtxPxpoMF7
-   ron5o0AgkFkCLAPWS84pHuqBh/q4thOXIGZ7G9yVqQM9jtIT/afB1NZEW
-   /+OZSLZuR0bsd2DpZIRdNpbqGhaOcAPhC3txZgymMpnF9mane1KAGC3J7
-   Fml48fMOg4hN/PHBzgLLOJN+0zOstpTWWxxxGHBWQfbxagBd+2NjamR7s
-   0EQQkllSpZvT7irtmKMFcwubyA2EWdSC7gFzKyVKfkMVflz5JE8SpvkdD
-   IWnFBzlh7kaq3bHxezEv0IqyY9l2ryS5vGufgyIAwLgbwrfH6Q5EAOLjQ
-   w==;
-X-CSE-ConnectionGUID: aV5HgltyQF+xu20f+mXZ1Q==
-X-CSE-MsgGUID: IfFqR4u/SDaqUXoJKU23aw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11289"; a="163047232"
-X-IronPort-AV: E=Sophos;i="6.12,243,1728918000"; 
-   d="scan'208";a="163047232"
-Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
-  by esa12.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2024 11:58:49 +0900
-Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
-	by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id D7214C2267;
-	Wed, 18 Dec 2024 11:58:46 +0900 (JST)
-Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
-	by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id AAEDFD5B57;
-	Wed, 18 Dec 2024 11:58:46 +0900 (JST)
-Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id 360B82007C3F5;
-	Wed, 18 Dec 2024 11:58:46 +0900 (JST)
-Received: from iaas-rdma.. (unknown [10.167.135.44])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id 34FF91A006C;
-	Wed, 18 Dec 2024 10:58:45 +0800 (CST)
-From: Li Zhijian <lizhijian@fujitsu.com>
-To: linux-kselftest@vger.kernel.org
-Cc: Li Zhijian <lizhijian@fujitsu.com>,
-	Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
+	s=arc-20240116; t=1734492253; c=relaxed/simple;
+	bh=1TaZy8LbZok9k7/bfQHsxcHss8JJBsnuk+zvzcUjHHw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=W+fQCA/ahfm6tr8thbtfQI7PUSecIxP7F2SyHB6qqJr0qlSLJysrQIat9qAtAFzerM1ZjujDCOdYI2XQQLD0WXBiz3y8sa7IiOWBqUUPWGAz500lmQRlMRatOVbzoQ8/ovZBZ7NgZkfElZr02UUJ6UbwFHOinJkX517OsTeYVzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Psd2rbq6; arc=none smtp.client-ip=209.85.219.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6dccccd429eso34550416d6.3;
+        Tue, 17 Dec 2024 19:24:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734492251; x=1735097051; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vFNeEwirO/h58hmP1aJdwpws+9vkTVfElh866GVv4Hk=;
+        b=Psd2rbq6Voi8TTeI4tvjeFMb+O7QerrTLUqqf5nxBp/gYg61xvBKm+uAmb0trXT/et
+         igr8ot6vXMXLJEt4Q3TlJmG/pWXkyBCnVC+L9L0JYPZWdbGmd/HV4bw0+i2XzRKtchg5
+         Cf2D6wu6fZInALWNmFvlQmoUtkBsX7aPtAvtDl6xDFyhwW9Oasjd6ISzYEv8CjZDTH4m
+         pVpMvrA09kVMFQmoyCw5ZMZzv9zkA/ZQSHj5Hr3YAvFdowyCzX7szN2PwlapRCUbcvA3
+         bsO1XKeiQf7xyA3S3kXD3xqH0fYpB51WUiOOSiM344aH2Xl0jpPRlPu/h+MB1oQ5Lqq0
+         PxaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734492251; x=1735097051;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vFNeEwirO/h58hmP1aJdwpws+9vkTVfElh866GVv4Hk=;
+        b=aAsC1W8JuMXIg5h13vKU/2WgldOQNmdi+axo9BdhzIO2WT9TnWCMVlhLo85qfd9F4Q
+         DkiOADRhhOm1kKivportgksihURXAIIumnVDyF0g6sNF7qeauzANw8pp/Xys+ot7YDGa
+         cc+4LiiAWUXzyc3uJYFUXXfBv53PtY12RzKGWrsyzPRUVZ2xSvFTRUQ9jJ2lglsvTBX0
+         n9CFzYWwR8CfYhI9avV6FHcOOLWjimx2F/tl3a9WA1lJM4GbVMs4ijqy+FqfvI957TRE
+         csbsefGqSCQhSJumlKm7ez4tHGKDapt85lWgj3woOXl3EFPIkfL5RrAV6RuEt856l06t
+         BPdg==
+X-Forwarded-Encrypted: i=1; AJvYcCUDPvI2pqNAYjl47+daFEur2p855E1QZBhLQfdFw8W+XYVyXAf6Hh/ijxFCWRHyRtl8KeS4fwfTKmmPJ61crgT/@vger.kernel.org, AJvYcCVZs/U8hkqdud1ffaccZmdYiyaKqY381sNrgop819Z+nzfpib3WzJ4vfo872p9usl0q62DpRMLGLOv5WEHl@vger.kernel.org, AJvYcCWjw453rxuG9KyJc+KPO+SOrYBPvilDglBChWh8z8dbA1qreyPk0LWS+eZ2melPwBbRYes=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxq0WAdDbeI8itPgYXKW+R4B6L848rqswMmoLZXIzESFzW09Xhr
+	LsuQUbVdjZ1q83uAMpLmEIuEN4J3kdDIEeGeLxdnNcNH4BeMQ0E1
+X-Gm-Gg: ASbGncsVstEx8pa0MSAsfmIuvmLmvGif8Or7VMRGbi3hY2bHpSmsNpD9Aj2Pe58nCX9
+	ynMb9iO4LDmxj4XMg5o1UCpeGtaQ4r63FB4ffTl898cpD3W88eys40gBmty1XMFyUDGB6V5js9O
+	YQ92ruS0jbG/0wfN47Ry4gkyhRGoiJ3G1WcLLEULMMJnxzc2CF4bL4gbdBnF3gQORH27oo3wRL4
+	znczu1zouP09BDyLq3D3bbVQzgxJSaavOAtrm+NhbUg7ILFtwwvM7dmF69qCuqS2iKu9Lswcc5b
+	V4EremZAWCejBAEiCi68zn8EorVyR3A=
+X-Google-Smtp-Source: AGHT+IGylr/Abx7AhqtBcEoi9bv3r0KgSCW8USByO4qXDCg3XZkgy59Wgjeww/7i9s5Jn0hmg4JGHQ==
+X-Received: by 2002:a05:6214:194c:b0:6d8:aa04:9a60 with SMTP id 6a1803df08f44-6dd0918c15amr26922756d6.7.1734492251110;
+        Tue, 17 Dec 2024 19:24:11 -0800 (PST)
+Received: from Matan-Desktop.localdomain (ool-457a37de.dyn.optonline.net. [69.122.55.222])
+        by smtp.googlemail.com with ESMTPSA id af79cd13be357-7b7047aa6bbsm381977985a.3.2024.12.17.19.24.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2024 19:24:09 -0800 (PST)
+From: Matan Shachnai <m.shachnai@gmail.com>
+To: ast@kernel.org
+Cc: harishankar.vishwanathan@gmail.com,
+	srinivas.narayana@rutgers.edu,
+	santosh.nagarakatte@rutgers.edu,
+	m.shachnai@rutgers.edu,
+	Matan Shachnai <m.shachnai@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
 	Shuah Khan <shuah@kernel.org>,
-	linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH for-next] selftests/alsa: Fix circular dependency involving global-timer
-Date: Wed, 18 Dec 2024 10:59:31 +0800
-Message-ID: <20241218025931.914164-1-lizhijian@fujitsu.com>
-X-Mailer: git-send-email 2.44.0
+	Cupertino Miranda <cupertino.miranda@oracle.com>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v4 0/2] bpf, verifier: Improve precision of BPF_MUL
+Date: Tue, 17 Dec 2024 22:23:33 -0500
+Message-Id: <20241218032337.12214-1-m.shachnai@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28866.004
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28866.004
-X-TMASE-Result: 10--9.385500-10.000000
-X-TMASE-MatchedRID: WJKewK3e/SCzMXLXYBHcMqEtILqFekmXEDnDEqNPdupM+b8yxBqvA5+1
-	agqjkx7svO1JeTfAZ/1kFhZi8d5BgK88naeSWWBZoHDoEp2TszGDy+T4Lu/PHnhh5KUdlgWi/h7
-	y6YgwyJ0JN0MAlHoa5DWfD65lvMkvoYY7KoErjW8ReM8i8p3vgFQQ0EgzIoPRmyiLZetSf8mfop
-	0ytGwvXiq2rl3dzGQ1akthIh2XonG1rR6YWXAbZc1f6GUbOEOFV/rph4RkvB1p4hIGlA/PwQ==
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
-The pattern rule `$(OUTPUT)/%: %.c` inadvertently included a circular
-dependency on the global-timer target due to its inclusion in
-$(TEST_GEN_PROGS_EXTENDED). This resulted in a circular dependency
-warning during the build process.
+Hi All,
 
-To resolve this, the dependency on $(TEST_GEN_PROGS_EXTENDED) has been
-replaced with an explicit dependency on $(OUTPUT)/libatest.so. This change
-ensures that libatest.so is built before any other targets that require it,
-without creating a circular dependency.
+This patch-set aims to improve precision of BPF_MUL and add testcases
+to illustrate precision gains using signed and unsigned bounds. 
 
-This fix addresses the following warning:
+Thanks for taking the time to review and for all the feedback!
 
-make[4]: Entering directory 'tools/testing/selftests/alsa'
-make[4]: Circular default_modconfig/kselftest/alsa/global-timer <- default_modconfig/kselftest/alsa/global-timer dependency dropped.
-make[4]: Nothing to be done for 'all'.
-make[4]: Leaving directory 'tools/testing/selftests/alsa'
+Best,
+Matan
 
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
----
-Cc: linux-sound@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- tools/testing/selftests/alsa/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes from v1:
+ - Fixed typo made in patch.
 
-diff --git a/tools/testing/selftests/alsa/Makefile b/tools/testing/selftests/alsa/Makefile
-index 944279160fed..8dab90ad22bb 100644
---- a/tools/testing/selftests/alsa/Makefile
-+++ b/tools/testing/selftests/alsa/Makefile
-@@ -27,5 +27,5 @@ include ../lib.mk
- $(OUTPUT)/libatest.so: conf.c alsa-local.h
- 	$(CC) $(CFLAGS) -shared -fPIC $< $(LDLIBS) -o $@
- 
--$(OUTPUT)/%: %.c $(TEST_GEN_PROGS_EXTENDED) alsa-local.h
-+$(OUTPUT)/%: %.c $(OUTPUT)/libatest.so alsa-local.h
- 	$(CC) $(CFLAGS) $< $(LDLIBS) -latest -o $@
+Changes from v2:
+ - Added signed multiplication to BPF_MUL.
+ - Added test cases to exercise BPF_MUL.
+ - Reordered patches in the series.
+
+Changes from v3:
+ - Coding style fixes.
+
+Matan Shachnai (2):
+  bpf, verifier: Improve precision of BPF_MUL
+  selftests/bpf: Add testcases for BPF_MUL
+
+ kernel/bpf/verifier.c                         |  80 +++++------
+ .../selftests/bpf/progs/verifier_bounds.c     | 134 ++++++++++++++++++
+ 2 files changed, 170 insertions(+), 44 deletions(-)
+
 -- 
-2.44.0
+2.25.1
 
 
