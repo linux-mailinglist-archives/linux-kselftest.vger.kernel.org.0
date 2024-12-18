@@ -1,268 +1,157 @@
-Return-Path: <linux-kselftest+bounces-23476-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23477-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23AF69F5D69
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 04:25:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 489B59F5D93
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 04:44:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDCC5188259E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 03:25:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABE3C1890B2F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 03:44:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B44403597A;
-	Wed, 18 Dec 2024 03:24:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C62FE14D283;
+	Wed, 18 Dec 2024 03:43:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TaQAKisi"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JuViTJyE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC62D15250F;
-	Wed, 18 Dec 2024 03:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3015014B06A
+	for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 03:43:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734492262; cv=none; b=ZEn0OZCKENEpWaqUbL5bV6COK6eiws+5zstTrP2XC1kUnNp259m3bz4O1DpYlgNjA1RlvUH+nVfvz1Fh42jPuC47xT9g9BF/KfCKgIYnzn6pxV+ex/WSGNiU2oeBoZq+40zxJRgu84oNd6z9UTdB3tYUNDOMlPDXFRgP4Cqx2Xk=
+	t=1734493437; cv=none; b=ggxUiGZXLVtCnknrBOMDNWme3ccg1KOzb86L0zmR6RYQEarxE4dTL+2LCJvjPcJ6mKNEc1ASGSHwiVSx2RZvU9/iz/95gHtNJnCZRBYU2w+rsNE2ZXhWQG3XgU+9TdVd7mQN1jCsGnK/GfKWtiit1+ohd60g6/QtRYnhi/8uBus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734492262; c=relaxed/simple;
-	bh=EpIiynsjnozVqw/0x3LVUCzOWJ6olzjgv5hUvkC7X1U=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dYF5zJJ99lgzkwrNuKVGBGoWY6VVSbkrRi4LROFH84nrC3FA9uKuriuLrPngnOCjpOVEnIv6eVG8TdxQ25uCbzMS6T7miLoi60rqR6zvytAS4LLA5P6/v7UbPlHNR+PM+9DW7S7y+VWRR3BK4gmlxzKBJefPMPmSUdGIw1pDFFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TaQAKisi; arc=none smtp.client-ip=209.85.222.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7b6ff72ba5aso356417685a.1;
-        Tue, 17 Dec 2024 19:24:20 -0800 (PST)
+	s=arc-20240116; t=1734493437; c=relaxed/simple;
+	bh=T9P0nKFIxiPyS8k4DExDFRUY23tQRBPVrKGYouHSjtg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=gU0POLDZtwUUG54r7G6IABqBsn7okj9UjFtd2k4ptGvPuC1el9LJgrc1CrBHskri2GHsj0zGMrAR+tZxKokzCqk75mHcwkS70QEKb3Bb+JEsLyjRi+PkLfIDCjVPBTUCByxBtTNsaGS1Q2S+Ur+JquUhBS+OeTFLLZ8jMupZaSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JuViTJyE; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2ef9da03117so8152927a91.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Dec 2024 19:43:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734492260; x=1735097060; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vU1DPjWTLJX1jYc4OU+MA5rIh9EYQGoOHy6NRrQN9LI=;
-        b=TaQAKisiyxhxs+d2lAuXWXqV3OOrIgrfaGIh08Dl6A756JLAvDx64+/41hJaoWlagU
-         XbFdCuqxSrBDnVHlW5EkMNMwAytnKQTkc0Z2eIw5zUIHA3NcV66rEVIcFzvil2Mc1WuO
-         FKR55cJ/gzXOqZ0rzS3IJWaf7gtbKWhrbmxjlYBBocVErNLVfvF4aX2vJmJ1YbY6L0/y
-         ctugGRmTjuEBMkJHHCT6s8Zup7PEZHBHEIKwthk37xek0wh9oovW16MriTVZb/KeM3YB
-         1m3gxi4arK0eJRVDAkgyE76Z4GTxUMp7R5BSVFSCH8P7efbeq3T6MfsTcFQu4X4Er3k6
-         8ezQ==
+        d=google.com; s=20230601; t=1734493435; x=1735098235; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vMvxGFaauCT6EXkSSVcakmGQcSaxmrUYWuzpakI6n64=;
+        b=JuViTJyEXDRPQmhzC6lKYjIAQtYMNGSxDFvZ+5JPzBOXlHOSG0FJrWO3kBuk8XX9Z+
+         aW6ayge6DkIwnTBJFrbPfgTJDXW6xUfhli9YoULF4OODZbZlHENwUCh6uzvh/FuqGm2k
+         ulDiKeFRmN9UUI+XKFQPGynMeXTEsb5kmnP0eMQpnrtzeMQ/Th14xvyxlQLD8auv5+YJ
+         TxG8BvhhRrlPHGkXU78SsNMD8OqYrMojb306HstcrZRTjP1g7iRqNiI7y1sTzW1tMpv2
+         GQjwjFrzptar6PRmTRi4z5rhM0hFzwljnkvjEG73nVhXdIhCzH+yJTZ+MW1T7L0DHHPK
+         zkHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734492260; x=1735097060;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vU1DPjWTLJX1jYc4OU+MA5rIh9EYQGoOHy6NRrQN9LI=;
-        b=w3f7LZj4xyIpZrfJFDL4fn1BV+0Sos+i0MTLEPxJmpCCnH1YFd7hTamfBJG1j6FuQQ
-         K1OAiDJUZZpxuD/vlh+1LoX9g/6akh2H4RfoO2Ktxzn8WMQGLMXvGSrcGnGh5XF46EWW
-         slpit7lrpq169EUdj7yOhaivzJt5Q0+TPhEYZxDwhcm+LLzUgwYxpe05WX+9G/ASfSs3
-         qvHMTUP8MssbynAfZ4HgphzeqHL0SfROgD94OFE7EK0MJU5QMaLDZBXKFMlySQ4KObSp
-         Tu3H4IOQwHtNcSkuhxvOgkGiMf5v/Z8QIet8FeWROsqG6yOWwMwPLCd2oOhp86hZ8eeU
-         /krg==
-X-Forwarded-Encrypted: i=1; AJvYcCUmDp2ac3U6vfRentna9ldBvQC3drsqUCIDzLUjfmeG6CganI5nTAVzAvCGz76Mj0+Tptqj39pHcA5VFR5j@vger.kernel.org, AJvYcCXbsPS/KJbNa6hfuJ10/MKJ6xIRFByBln+DMMGITFYEQZbnUfPavgGfxfJozwahmYvFjcA=@vger.kernel.org, AJvYcCXgbbKuVzBTGoXu6Na/XQFuqYpJvcKx9betqQf+dsurzKsc/wRItfBjbQtW9byqdpnUS/ZDJC0GpcJvimTXPErC@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJE2tCrj5S/fDFVxF+vPzWEFAfqkwBYkpFTNRq6ABYn++0a+Kv
-	AQ1YvH0Gnu1H++clENHenhGZ2doo9CRq5aZPplIsOSrVlxDChL56
-X-Gm-Gg: ASbGnctvEkp09sTGaGmkZggMR2W1FhA3nFs9bEuOuccTA4cKlv8kne8geqNYAfZJGrV
-	pC3MQdguLDLYTrB28t9QaH1jPskHet9GBEf99ZkR6cNFLn+K6nxwrdv+VwtCTbAsMLPybhVRHvT
-	qcbtACiZgelY04gszbBm4OkFMpEdE+hc1bY6MAVGd2G5HcFu27zsgufFubRX954r2AYbKV2oiKT
-	ZC6CplqSedkwInVYmrxCEMIGn6NgFjC7mDXogqGng49zyf/4yaEcUh92Ld5p9GzbRkTJI481K2/
-	K2BA6UooL8A8PDgKgRYMd5bFKVIeqJ4=
-X-Google-Smtp-Source: AGHT+IG5vxfsDUp+PMTN1rdUWhcZAKT9Ky2wjbLSfXxt0fmilRdnxS2teb8kS6i6n4M0BkjCuiICDA==
-X-Received: by 2002:a05:620a:4714:b0:7a9:c333:c559 with SMTP id af79cd13be357-7b8637b167amr237291685a.48.1734492259898;
-        Tue, 17 Dec 2024 19:24:19 -0800 (PST)
-Received: from Matan-Desktop.localdomain (ool-457a37de.dyn.optonline.net. [69.122.55.222])
-        by smtp.googlemail.com with ESMTPSA id af79cd13be357-7b7047aa6bbsm381977985a.3.2024.12.17.19.24.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Dec 2024 19:24:18 -0800 (PST)
-From: Matan Shachnai <m.shachnai@gmail.com>
-To: ast@kernel.org
-Cc: harishankar.vishwanathan@gmail.com,
-	srinivas.narayana@rutgers.edu,
-	santosh.nagarakatte@rutgers.edu,
-	m.shachnai@rutgers.edu,
-	Matan Shachnai <m.shachnai@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Cupertino Miranda <cupertino.miranda@oracle.com>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Add testcases for BPF_MUL
-Date: Tue, 17 Dec 2024 22:23:35 -0500
-Message-Id: <20241218032337.12214-3-m.shachnai@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20241218032337.12214-1-m.shachnai@gmail.com>
-References: <20241218032337.12214-1-m.shachnai@gmail.com>
+        d=1e100.net; s=20230601; t=1734493435; x=1735098235;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vMvxGFaauCT6EXkSSVcakmGQcSaxmrUYWuzpakI6n64=;
+        b=TjU5C+BhIsL8td8lBUhsMjqb/Wbp6sB7k8vcpJBpQuz+1WBYQaUSKXyyroFx7eaIna
+         OfMcJdzZHn1N7xpLjXjlnlTQnipFG3YNQWWiu2LkyDI14tY4B1undBa/ZquBy9iCmF7n
+         D/IRKv45xYGK7I/UsU/TudrfFHkS5hypPkxLKXL1PXRF1leaNiZNpnNhajwtdMiAMIfN
+         7ewlAKTOpIGVaJEeaLj9TX66KLLeEX6L0UHPG8mUO1dXtTNZFSbMItDVtiUzAiHeQoEr
+         W56TzPWRqaWyW813BmRKOC+LJ9yWe3+moA8nloNSuSGheA6CoM4MD7d9NdxWvTobSwYC
+         dMkw==
+X-Forwarded-Encrypted: i=1; AJvYcCU5IYVkK8MWIdZ2ceM+dEAg5AFJbZqvpobXAFTt2yIfOYUTDVyCfbeip0aT3oJQnWJgBko7sV8rC4yoV89+1ec=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyutsbC/6DniBviWD1Py7wjoXXbTXYswvblT48LZTDbAXC+0Rqq
+	ArA7STpXgtPw3lrTXWUOIYzd4umZte7TbVivBwKO7MW2TQv4JcZ1LTjtddqNn3udpr9wtqHK6My
+	9eg==
+X-Google-Smtp-Source: AGHT+IEgztvLWb52BnIZoHvncjnNyp90SJMgAHmmjKQFhaCOV0qDcxqDayfebRz4dcLnBBg0mCziG+9A4kQ=
+X-Received: from pjuw4.prod.google.com ([2002:a17:90a:d604:b0:2da:5868:311c])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:544e:b0:2ee:dcf6:1c8f
+ with SMTP id 98e67ed59e1d1-2f2e91f29ffmr2409883a91.16.1734493435506; Tue, 17
+ Dec 2024 19:43:55 -0800 (PST)
+Date: Tue, 17 Dec 2024 19:43:54 -0800
+In-Reply-To: <CADH9ctB0YSYqC_Vj2nP20vMO_gN--KsqOBOu8sfHDrkZJV6pmw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <CADH9ctD1uf_yBA3NXNQu7TJa_TPhLRN=0YZ3j2gGhgmaFRdCFg@mail.gmail.com>
+ <c3026876-8061-4ab2-9321-97cc05bad510@redhat.com> <CADH9ctBivnvP1tNcatLKzd8EDz8Oo6X65660j8ccxYzk3aFzCA@mail.gmail.com>
+ <CABgObfZEyCQMiq6CKBOE7pAVzUDkWjqT2cgfbwjW-RseH8VkLw@mail.gmail.com>
+ <CADH9ctA_C1dAOus1K+wOH_SOKTb=-X1sVawt5R=dkH1iGt8QUg@mail.gmail.com>
+ <CABgObfZrTyft-3vqMz5w0ZiAhp-v6c32brgftynZGJO8OafrdA@mail.gmail.com>
+ <CADH9ctBYp-LMbW4hm3+QwNoXvAc5ryVeB0L1jLY0uDWSe3vbag@mail.gmail.com>
+ <b1ddb439-9e28-4a58-ba86-0395bfc081e0@redhat.com> <CADH9ctCFYtNfhn3SSp2jp0fzxu6s_X1A+wBNnzvHZVb8qXPk=g@mail.gmail.com>
+ <CADH9ctB0YSYqC_Vj2nP20vMO_gN--KsqOBOu8sfHDrkZJV6pmw@mail.gmail.com>
+Message-ID: <Z2IXvsM0olS5GvbR@google.com>
+Subject: Re: [PATCH 2/3] KVM: x86: Add support for VMware guest specific hypercalls
+From: Sean Christopherson <seanjc@google.com>
+To: Doug Covelli <doug.covelli@broadcom.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Zack Rusin <zack.rusin@broadcom.com>, 
+	kvm <kvm@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "the arch/x86 maintainers" <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@redhat.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Joel Stanley <joel@jms.id.au>, Linux Doc Mailing List <linux-doc@vger.kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-The previous commit improves precision of BPF_MUL.
-Add tests to exercise updated BPF_MUL.
+On Thu, Dec 12, 2024, Doug Covelli wrote:
+> On Thu, Nov 14, 2024 at 10:45=E2=80=AFAM Doug Covelli <doug.covelli@broad=
+com.com> wrote:
+> > > For LINT1, it should be less performance critical; if it's possible
+> > > to just go through all vCPUs, and do KVM_GET_LAPIC to check who you
+> > > should send a KVM_NMI to, then I'd do that.  I'd also accept a patch
+> > > that adds a VM-wide KVM_NMI ioctl that does the same in the hyperviso=
+r
+> > > if it's useful for you.
+> >
+> > Thanks for the patch - I'll get it a try but it might not be right away=
+.
+> >
+> > > And since I've been proven wrong already, what do you need INIT/SIPI =
+for?
+> >
+> > I don't think this one is as critical.  I believe the reason it was
+> > added was so that we can synchronize startup of the APs with execution
+> > of the BSP for guests that do not do a good job of that (Windows).
+> >
+> > Doug
+>=20
+> We were able to get the in-kernel APIC working with our code using the sp=
+lit
+> IRQ chip option with our virtual EFI FW even w/o the traps for SVR and LV=
+T0
+> writes.  Performance of Windows VMs is greatly improved as expected.
+> Unfortunately our ancient legacy BIOS will not work with > 1 VCPU due to =
+lack
+> of support for IPIs with an archaic delivery mode of remote read which it=
+ uses
+> to discover APs by attempting to read their APIC ID register.  MSFT WHP s=
+upports
+> this functionality via an option, WHvPartitionPropertyCodeApicRemoteReadS=
+upport.
+>=20
+> Changing our legacy BIOS is not an option so in order to support Windows =
+VMs
+> with the legacy BIOS with decent performance we would either need to add =
+support
+> for remote reads of the APIC ID register to KVM or support CR8 accesses w=
+/o
+> exiting w/o the in-kernel APIC in order.  Do you have a preference?
 
-Signed-off-by: Matan Shachnai <m.shachnai@gmail.com>
----
- .../selftests/bpf/progs/verifier_bounds.c     | 134 ++++++++++++++++++
- 1 file changed, 134 insertions(+)
+I didn't quite follow the CR8 access thing.  If the choice is between emula=
+ting
+Remote Read IPIs and using a userspace local APIC, then I vote with both ha=
+nds
+for emulating Remote Reads, especially if we can do a half-assed version th=
+at
+provides only what your crazy BIOS needs :-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index a0bb7fb40ea5..0eb33bb801b5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -1200,4 +1200,138 @@ l0_%=:	r0 = 0;						\
- 	: __clobber_all);
- }
- 
-+SEC("tc")
-+__description("multiply mixed sign bounds. test 1")
-+__success __log_level(2)
-+__msg("r6 *= r7 {{.*}}; R6_w=scalar(smin=umin=0x1bc16d5cd4927ee1,smax=umax=0x1bc16d674ec80000,smax32=0x7ffffeff,umax32=0xfffffeff,var_off=(0x1bc16d4000000000; 0x3ffffffeff))")
-+__naked void mult_mixed0_sign(void)
-+{
-+	asm volatile (
-+	"call %[bpf_get_prandom_u32];"
-+	"r6 = r0;"
-+	"call %[bpf_get_prandom_u32];"
-+	"r7 = r0;"
-+	"r6 &= 0xf;"
-+	"r6 -= 1000000000;"
-+	"r7 &= 0xf;"
-+	"r7 -= 2000000000;"
-+	"r6 *= r7;"
-+	"exit"
-+	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm(bpf_skb_store_bytes)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("multiply mixed sign bounds. test 2")
-+__success __log_level(2)
-+__msg("r6 *= r7 {{.*}}; R6_w=scalar(smin=smin32=-100,smax=smax32=200)")
-+__naked void mult_mixed1_sign(void)
-+{
-+	asm volatile (
-+	"call %[bpf_get_prandom_u32];"
-+	"r6 = r0;"
-+	"call %[bpf_get_prandom_u32];"
-+	"r7 = r0;"
-+	"r6 &= 0xf;"
-+	"r6 -= 0xa;"
-+	"r7 &= 0xf;"
-+	"r7 -= 0x14;"
-+	"r6 *= r7;"
-+	"exit"
-+	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm(bpf_skb_store_bytes)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("multiply negative bounds")
-+__success __log_level(2)
-+__msg("r6 *= r7 {{.*}}; R6_w=scalar(smin=umin=smin32=umin32=0x3ff280b0,smax=umax=smax32=umax32=0x3fff0001,var_off=(0x3ff00000; 0xf81ff))")
-+__naked void mult_sign_bounds(void)
-+{
-+	asm volatile (
-+	"r8 = 0x7fff;"
-+	"call %[bpf_get_prandom_u32];"
-+	"r6 = r0;"
-+	"call %[bpf_get_prandom_u32];"
-+	"r7 = r0;"
-+	"r6 &= 0xa;"
-+	"r6 -= r8;"
-+	"r7 &= 0xf;"
-+	"r7 -= r8;"
-+	"r6 *= r7;"
-+	"exit"
-+	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm(bpf_skb_store_bytes)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("multiply bounds that don't cross signed boundary")
-+__success __log_level(2)
-+__msg("r8 *= r6 {{.*}}; R6_w=scalar(smin=smin32=0,smax=umax=smax32=umax32=11,var_off=(0x0; 0xb)) R8_w=scalar(smin=0,smax=umax=0x7b96bb0a94a3a7cd,var_off=(0x0; 0x7fffffffffffffff))")
-+__naked void mult_no_sign_crossing(void)
-+{
-+	asm volatile (
-+	"r6 = 0xb;"
-+	"r8 = 0xb3c3f8c99262687 ll;"
-+	"call %[bpf_get_prandom_u32];"
-+	"r7 = r0;"
-+	"r6 &= r7;"
-+	"r8 *= r6;"
-+	"exit"
-+	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm(bpf_skb_store_bytes)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("multiplication overflow, result in unbounded reg. test 1")
-+__success __log_level(2)
-+__msg("r6 *= r7 {{.*}}; R6_w=scalar()")
-+__naked void mult_unsign_ovf(void)
-+{
-+	asm volatile (
-+	"r8 = 0x7ffffffffff ll;"
-+	"call %[bpf_get_prandom_u32];"
-+	"r6 = r0;"
-+	"call %[bpf_get_prandom_u32];"
-+	"r7 = r0;"
-+	"r6 &= 0x7fffffff;"
-+	"r7 &= r8;"
-+	"r6 *= r7;"
-+	"exit"
-+	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm(bpf_skb_store_bytes)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__description("multiplication overflow, result in unbounded reg. test 2")
-+__success __log_level(2)
-+__msg("r6 *= r7 {{.*}}; R6_w=scalar()")
-+__naked void mult_sign_ovf(void)
-+{
-+	asm volatile (
-+	"r8 = 0x7ffffffff ll;"
-+	"call %[bpf_get_prandom_u32];"
-+	"r6 = r0;"
-+	"call %[bpf_get_prandom_u32];"
-+	"r7 = r0;"
-+	"r6 &= 0xa;"
-+	"r6 -= r8;"
-+	"r7 &= 0x7fffffff;"
-+	"r6 *= r7;"
-+	"exit"
-+	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm(bpf_skb_store_bytes)
-+	: __clobber_all);
-+}
- char _license[] SEC("license") = "GPL";
--- 
-2.25.1
-
+The biggest wrinkle I can think of is that KVM uses the Remote Read IPI enc=
+oding
+for a paravirt vCPU kick feature, but I doubt that's used by Windows guests=
+ and
+so can be sacrificed on the Altar of Ancient BIOS.
 
