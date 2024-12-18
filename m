@@ -1,76 +1,76 @@
-Return-Path: <linux-kselftest+bounces-23507-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23508-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 800239F6702
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 14:18:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 983AA9F670D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 14:19:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CAAA816206D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 13:16:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 316EA166729
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 13:17:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C9B51FC11E;
-	Wed, 18 Dec 2024 13:10:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 173211FCCE3;
+	Wed, 18 Dec 2024 13:10:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fwjuFNV1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mwyUxSWg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C1B31B4255;
-	Wed, 18 Dec 2024 13:10:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EF921B0425;
+	Wed, 18 Dec 2024 13:10:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734527441; cv=none; b=IcaLMGSH8A0Nb4bX8X9drsnm6DyjizRUxcCps6+3mwX36gmonByzDERkI4Ert/3L9S9pTQ9ZSnCPCQKr1++RUteUs/pCH9uuYHbw4UlLtpqluoniNNbINlOcE/Mv24u69s4TGmJZL7NQzRkatoppCNmkTrqgz50qy58dODohtAo=
+	t=1734527450; cv=none; b=aXhsRxupDrvRF8bZT7K11teihRPQyXYDWoEMNvXL29ThyoAXa4a4JHg3IpU3lg5WfQBkWAbTxJezuZv0XWTHsw10L3HuGKEY1bZa9VrVk+x/C5pVvcdF6dEjP3HfFWe/jFwYfNBpDgBtUqPmYWds8784C3+7+K/no5lDggN9LLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734527441; c=relaxed/simple;
-	bh=v/XyDBj1rv0kMGLFRo/fVc4C1+xJWpbKQllsecdMufM=;
+	s=arc-20240116; t=1734527450; c=relaxed/simple;
+	bh=PdyhCxIiCvxYyD0kNCUPOuthJbFGoqxPJVmAtqTiJvU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j2HTH3m4HVqkQOI8Opo0t5Gp/oD1FXyq4qMRox5ZJhB0QEtcCfITr+AMl4vqlpZuhEs6U/ZmWqGpeQ39n2uN5GWJN54cEj6vKDV5NyuWBdtZopF6/aUrco3MDomJb1M3eKqkdlnIC7SyHee1jR7mlhRUhhczsiOVNC8wRgTYgdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fwjuFNV1; arc=none smtp.client-ip=209.85.216.44
+	 MIME-Version; b=X+upu15c+aGsUgNT9ne4Z6AH0hDkVs+/YM1Ib8WTlYw1r13dtW6k4GcIjXFx8BtNP1/3HH/20dFQDmbsW4QdpuFqYa9+i8AskEqi+fzrb+jMsiP15aqK/DJ6T8GVD+8lwPN9FtGvTVUZhGx440Vl9YrcunWpbIl+RzK3Nqd3R14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mwyUxSWg; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2eec9b3a1bbso4477312a91.3;
-        Wed, 18 Dec 2024 05:10:39 -0800 (PST)
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-725ef0397aeso5776280b3a.2;
+        Wed, 18 Dec 2024 05:10:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734527438; x=1735132238; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734527446; x=1735132246; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VEdGbFyA09FJ7+QqmmCxpz6A7u+HUg5+S5fgAXCQeJc=;
-        b=fwjuFNV1Nk0lLZdtKVIBtPvEmD0FpM2Zg6hA83lyD/ntezolOf7RjQezpYZLedaCAO
-         CBQQ3nR5c3ANBuuqwCpfFChZcr5z/HKH1/1GM60VwS272bWKTo376LdLiOdBeiW5PxNB
-         nsbTQZZqywvQoBFIi0D7K+L2GxL+TKNTo5npJW8AO6pCoPa1h5DWYhynbniWX57rBtFG
-         69ffIDwWbugDdWHsL3I9bD1R43J8582tYTwXOS0CA6o1rUcMRKz5yS+eUMHNmC4OrJlF
-         MzYZjhppO/4+U1VPQi06z7hix7p2pRS6ybZ1AzZjq7kOc58EPOdBqZl4TTZgt24VEnKE
-         aL2Q==
+        bh=f/aVoxIsj2NaHZxO0wthneclpZNQFTaEi7bz2gcdad0=;
+        b=mwyUxSWgeAJstMKG1S3NO3wvrfsxcTMy/Td3gywlCDDXyFkuljjDvBWu9j6AaPO0VA
+         XOyHWhWe3jRUgZ0lH8wfItdHIvEbPc/A6LdDYL+PglqLGu6xdTWMl6enzoh8B8MsqnXk
+         iQFR7DLcpTYTDqd4abfa25vCkOaGq88AziJ0wZtaGY1OVH9CrKhlSOZc/EWtG7Axe1DC
+         nj1/XQu7dP+zpq1yVxjoi9kFOYVBIWMsSKKGAbo1wBsYEhUL9x8KKqUodM5LfmZRW5Ai
+         318K76Hhba64sMVp1DUzwnj5/adoRTx0ThQUXvAJTGpiLyu7fHtHK+GetI9wXaS29I/d
+         GCdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734527438; x=1735132238;
+        d=1e100.net; s=20230601; t=1734527446; x=1735132246;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VEdGbFyA09FJ7+QqmmCxpz6A7u+HUg5+S5fgAXCQeJc=;
-        b=wT4DVu70ZFX9BWkAWmUSwYH/pIX21nzGjrlmUxNkhe8HPAv+Yt2Dgh4sXmLw/HJwV3
-         8MdsycTZnUQzxSJH7/Z0OysiZrO3l2tf/42sB8XtZuSb1/VLHtPSOSN06Ci/HyLZIAcJ
-         /lDZpAvNiVB7Qwcfq4eIMJnfsuAu1vVIBqSQbZlUu8JXmCCY23/NLMKdfBJ2ofo62rC4
-         ZjQDopf6m38WguCoBOq8Xkfmyr9u/MD5/ysTT0I53E+5cXJZnnpI9K0gmp9WdEQqg02h
-         bzf1x2cWIt5KJZPGYreBcW460zAHx8XJL9wUJp77Tu29yc/gN3dQ0Tek9zD5KGFwBhsH
-         1MwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUAl9e4MDZcJ+h7IPtI68GUULbmM5E7Gf5PYQm2b2IE76G1ugzNdCvO//yOmhW/qVUw+Vsth4YjWJZIFg==@vger.kernel.org, AJvYcCURioy7SHTJlJcJYlWl4sb3O4/BQuSLNKUpmDwK2iOlIba3ajX2AnbXRrcLyI8annyHjB8rfUoCa933@vger.kernel.org, AJvYcCUfW7Nah+vHQ2HEz/imgAduouCzmITMjOztocQ+ynd1h0mR7j6yhbfPB0OCA22PbvSOzw4GTHbIJmb1DQ==@vger.kernel.org, AJvYcCV1p8UXnZaHodIQlB3+cUQKEk2FVLeT3ufLLY8cmfvJocyHWiJVaH/Jrsn49mbyONTeVg27ybkcKy48@vger.kernel.org, AJvYcCVEBXCwuTJT8A6QJJUcokZbLCqMXhdQdHuTyMwLZaO6dwyokbeTYdk8UhtGZYX81B5zEI8=@vger.kernel.org, AJvYcCXCHS+nUsnU0qw3jocrkhENblK/EncJwFxn1lFOD72pJa+ZMCpJ1D3lII8Zai0/EEio5bfU9JiZtFqkX90Z@vger.kernel.org, AJvYcCXP34SdKGF20dIzWaKpZAMrwpQgavmVDFeHJ4gT6APXBsos7QJnt0xg3OOv4ezH9ssvk93I1c4VcLZJ4sLxxbA=@vger.kernel.org, AJvYcCXwvOaYnZQ7yN+KO59dLjSRSUEeBVkatgNrbGXFoRFNdzp9QztvJEQ7gShbZ7c58S5RjKoZYzYBXV8EKgdfOAZy@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpbtWnlGkXShR/u6X1uNwa92+yCtSq3OifTnxk+4XhnD0LtQf/
-	wOxlrUauhk1zS426rDxMH0FZ3/hhih/MUPr9WnE/rfasKEMdUKdYB/e4JbiZf6c=
-X-Gm-Gg: ASbGnctWmgNu+D+GOJd9/Zd5bcO53/q9mIwsh7qoWSOoyygoYgtCTncxlNyZwQAfERv
-	K3wTvy8nDCofBfVyZ+XTzevwZVqjvGyTXZaxcPKd+C2X1toIuu7Ux74DAuGEiH16R7JEnB6b/AE
-	IA9Q9uf9Zi+QNN6+2VOb13DH0bgJQqJfa+8Srse9P2x2sHUUyKBzUmFNhxq+zfBYwQn/HsfpgHm
-	lkvCUpWp+eI3DZm3FZ5XP1xR44bmka5SRd0yRSK7HVfGb4=
-X-Google-Smtp-Source: AGHT+IH6m2w3HOgAGhkzn76085OHsWsSUyL1uFaSoqu4LH4xby0CPd4muKbobH9sGAmWFqgh4Hldug==
-X-Received: by 2002:a17:90b:53cc:b0:2ee:fd53:2b17 with SMTP id 98e67ed59e1d1-2f2e934616amr4153078a91.29.1734527438446;
-        Wed, 18 Dec 2024 05:10:38 -0800 (PST)
+        bh=f/aVoxIsj2NaHZxO0wthneclpZNQFTaEi7bz2gcdad0=;
+        b=wfmyQKimoCWqSgEHRTMap0Eh+vpBtQBiGM/AuJUR/jt2dIPaPAd5asb9HI3FUxD713
+         gNQoAau3YIm0xOo86Osf4PFCTia81YS59GhBff89s94A1qyBs45Tk3dB8hazgciaKBqN
+         3+gBxoknJ+v91IzzaENwPUDZ9SwYEjKS/EElTdYRvGD0jcim9KsA21N+oVrlIP/YolEu
+         2BSD/xM9E8A1Mo9C3lcBnvtK5zyuItpaM0xObg3C2Wi9RMhIDAkLwjku+NbJEjTkJI05
+         JUve8rcXgIUFNp+gwzJ3Kt9JpuxQaYfzxocdiqz0dPWjj0K+5PBKSXPolJy+k2tzbq5z
+         H/4g==
+X-Forwarded-Encrypted: i=1; AJvYcCUKnRx/Q+f3sntBQXep7f8/Q/p1cUnoGuxSimCrQB4vno5zGDD9fkZN1ih6feKTFcxUnQ9dt87GMwES6chDtYw=@vger.kernel.org, AJvYcCVG9JrjftG/LemhBpDWmgBjTu3Q74yNeMM4w57TTD4dt+/lj+8s213HfXbrBrDvKg6HK45oCgIE787zRL9B@vger.kernel.org, AJvYcCVsGyUFkrNBUTrWzfSYsbCEHga00i19lfYYinFvbUapjZjvxUbtbQulL/8N3I4m01eeI+NJgAp4yVDy9Yfwd3RK@vger.kernel.org, AJvYcCWII15uQIMa6RhdbZR6EH/QjqhQmnH4Vpny6pNvTAZyCV3ARC8PGOc0KzWrmhh3kU6dPC8=@vger.kernel.org, AJvYcCWfyQRxtZ1CCxx1qzCu2V+GYwQb9vwGCqZcVrODbmZjoqTe0PsH4ksQL/ol1s/M26UGAjhPXooAmSCl@vger.kernel.org, AJvYcCWrMTq3BucU//B522/2nuDmfVkjiUKAgyVNJ+cv5FP1U3+OfvrBleqJ65+UWlKtVlZespG0JrHgZzRjWw==@vger.kernel.org, AJvYcCXZgAYDKB79vNAuWn9l3nsYVQYqiY64w3NqY78wdaMg7l9njg9Sbdh6xwwEWAnlv5b1N4EvnTNmhGJnEA==@vger.kernel.org, AJvYcCXvTqbZUdiJSXNiS66LjaYDWyxraUUkA6lnoar6zlboXrPmHeVtb3dQSkuLQQkaenvXy07Mz1t+322M@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsDG2R0ybQ04K5alL9oA3qDm5AlTlSqNlogZopvGOiLeJlTmgW
+	/zSLWCu0JbEB6rSNHv7NNlUjsZb4PmvZ+47NL0IcJBeEMY3SyXk3mvk0U1dvYY0=
+X-Gm-Gg: ASbGnctir3FQR13Z87on4ZWCdZ6M8ylYYTwKOMCGSzSC05mj2EfHXOUhGzABTd7qSpw
+	+7/i2yCEL7wa7ABkkWR/3bxai+WLDfMvYOQXJ+T3j1F5qiYxrkGTNA87fJZqIkN6zaPQgxtWHcN
+	vUytLi/k81VdmzkTHkOuBuWi3Idv0FzKmwmjEiieP53C8etgvgKGzIJaRiscEYX5yxHnxcRyvzL
+	cuZd1uq/SXBlgb7nuvnMjDcoGhI3xnOF1pb7AsLpgG4cg4=
+X-Google-Smtp-Source: AGHT+IFJSba0hMYoxDtWWfQo3+fMH+6cNLxoIt5yunX4KkQHyaeVCZq9fnVPYHJO8DT42j8sEsCrNg==
+X-Received: by 2002:a05:6a21:6f02:b0:1e0:dcc5:164d with SMTP id adf61e73a8af0-1e5b47f3b12mr5217374637.8.1734527446438;
+        Wed, 18 Dec 2024 05:10:46 -0800 (PST)
 Received: from ws.. ([103.167.140.11])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-801d5c0f59asm7434754a12.67.2024.12.18.05.10.30
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-801d5c0f59asm7434754a12.67.2024.12.18.05.10.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2024 05:10:37 -0800 (PST)
+        Wed, 18 Dec 2024 05:10:45 -0800 (PST)
 From: Xiao Liang <shaw.leon@gmail.com>
 To: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
@@ -98,9 +98,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	bridge@lists.linux.dev,
 	linux-wpan@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v6 09/11] rtnetlink: Create link directly in target net namespace
-Date: Wed, 18 Dec 2024 21:09:07 +0800
-Message-ID: <20241218130909.2173-10-shaw.leon@gmail.com>
+Subject: [PATCH net-next v6 10/11] selftests: net: Add python context manager for netns entering
+Date: Wed, 18 Dec 2024 21:09:08 +0800
+Message-ID: <20241218130909.2173-11-shaw.leon@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20241218130909.2173-1-shaw.leon@gmail.com>
 References: <20241218130909.2173-1-shaw.leon@gmail.com>
@@ -112,45 +112,69 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Make rtnl_newlink_create() create device in target namespace directly.
-Avoid extra netns change when link netns is provided.
+Change netns of current thread and switch back on context exit.
+For example:
 
-Device drivers has been converted to be aware of link netns, that is not
-assuming device netns is and link netns is the same when ops->newlink()
-is called.
+    with NetNSEnter("ns1"):
+        ip("link add dummy0 type dummy")
+
+The command be executed in netns "ns1".
 
 Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
 ---
- net/core/rtnetlink.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ tools/testing/selftests/net/lib/py/__init__.py |  2 +-
+ tools/testing/selftests/net/lib/py/netns.py    | 18 ++++++++++++++++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-index e33ef8a0a6d6..ce5bea096bac 100644
---- a/net/core/rtnetlink.c
-+++ b/net/core/rtnetlink.c
-@@ -3776,8 +3776,8 @@ static int rtnl_newlink_create(struct sk_buff *skb, struct ifinfomsg *ifm,
- 		name_assign_type = NET_NAME_ENUM;
- 	}
+diff --git a/tools/testing/selftests/net/lib/py/__init__.py b/tools/testing/selftests/net/lib/py/__init__.py
+index 54d8f5eba810..e2d6c7b63019 100644
+--- a/tools/testing/selftests/net/lib/py/__init__.py
++++ b/tools/testing/selftests/net/lib/py/__init__.py
+@@ -2,7 +2,7 @@
  
--	dev = rtnl_create_link(link_net ? : tgt_net, ifname,
--			       name_assign_type, ops, tb, extack);
-+	dev = rtnl_create_link(tgt_net, ifname, name_assign_type, ops, tb,
-+			       extack);
- 	if (IS_ERR(dev)) {
- 		err = PTR_ERR(dev);
- 		goto out;
-@@ -3798,11 +3798,6 @@ static int rtnl_newlink_create(struct sk_buff *skb, struct ifinfomsg *ifm,
- 	err = rtnl_configure_link(dev, ifm, portid, nlh);
- 	if (err < 0)
- 		goto out_unregister;
--	if (link_net) {
--		err = dev_change_net_namespace(dev, tgt_net, ifname);
--		if (err < 0)
--			goto out_unregister;
--	}
- 	if (tb[IFLA_MASTER]) {
- 		err = do_set_master(dev, nla_get_u32(tb[IFLA_MASTER]), extack);
- 		if (err)
+ from .consts import KSRC
+ from .ksft import *
+-from .netns import NetNS
++from .netns import NetNS, NetNSEnter
+ from .nsim import *
+ from .utils import *
+ from .ynl import NlError, YnlFamily, EthtoolFamily, NetdevFamily, RtnlFamily
+diff --git a/tools/testing/selftests/net/lib/py/netns.py b/tools/testing/selftests/net/lib/py/netns.py
+index ecff85f9074f..8e9317044eef 100644
+--- a/tools/testing/selftests/net/lib/py/netns.py
++++ b/tools/testing/selftests/net/lib/py/netns.py
+@@ -1,9 +1,12 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ from .utils import ip
++import ctypes
+ import random
+ import string
+ 
++libc = ctypes.cdll.LoadLibrary('libc.so.6')
++
+ 
+ class NetNS:
+     def __init__(self, name=None):
+@@ -29,3 +32,18 @@ class NetNS:
+ 
+     def __repr__(self):
+         return f"NetNS({self.name})"
++
++
++class NetNSEnter:
++    def __init__(self, ns_name):
++        self.ns_path = f"/run/netns/{ns_name}"
++
++    def __enter__(self):
++        self.saved = open("/proc/thread-self/ns/net")
++        with open(self.ns_path) as ns_file:
++            libc.setns(ns_file.fileno(), 0)
++        return self
++
++    def __exit__(self, exc_type, exc_value, traceback):
++        libc.setns(self.saved.fileno(), 0)
++        self.saved.close()
 -- 
 2.47.1
 
