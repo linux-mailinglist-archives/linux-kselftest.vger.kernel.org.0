@@ -1,67 +1,78 @@
-Return-Path: <linux-kselftest+bounces-23523-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23524-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DF5F9F6CCD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 19:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CE2B9F6CEA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 19:10:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 223147A0F9D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 18:00:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E4A07A06C0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 18:10:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AACBF1FBE8C;
-	Wed, 18 Dec 2024 18:00:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6C0E1FA8C0;
+	Wed, 18 Dec 2024 18:10:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fx8gXtt9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rcEdgsBg"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750BD1FBCB8;
-	Wed, 18 Dec 2024 18:00:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6343597C;
+	Wed, 18 Dec 2024 18:10:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734544815; cv=none; b=BeU6sGR38IMRonyHb+1BmGI1wH/+y3SEP8EvzE6xsyFAjahBM4Ab8yEtAUqBVoQ8xpY5gutAi1BCjCxLx/UI281ZVv3ssJWMSXbDUG1BO1L61CxRNp7n1rnI1WaqVwMTFwUOBoPN0r4Vdu233i8xs+okg6p+NtLRctMfP4Ft+jM=
+	t=1734545415; cv=none; b=n4u6/0FwGWyGRXOygy9/mTVLOqAqu0337KE1qyQFm/AU5uFNcJ6xN+xBtYEtZ/c7GHkGPsKAxJ4OdDUEZzwAndc7/0UCNRqO9goAMf+w7eFv3AoINLik2IuJyZ0Id1DsZHnkXqHBg6Q4wNCPo553H6WypsoFBV/1+rQrEAxPbwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734544815; c=relaxed/simple;
-	bh=KrFtZTkvNLg8jGJuRIG3Se+sYB/V7HQf3f/RnlVQrnk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YTUNmv3Ixx+5YHCjDmpw0QzKnrqaRBoD+7iKsi9lffT7E+4OuxD8Ajujc4OCitNPXy/OpNLKLkBZ7eZEsNBpiNWqy8+lG6BhlLU2TTetEurc+jERVS3p5o1Jh/OsEKc85P2hrtI9QZbNtG59Bh4AMP0IjAx5PeBslJb52yiI8ew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fx8gXtt9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD0E4C4CECD;
-	Wed, 18 Dec 2024 18:00:14 +0000 (UTC)
+	s=arc-20240116; t=1734545415; c=relaxed/simple;
+	bh=EhJjd+bikCf0qPNbSX/6JAH0WfTX+I4qhzrb9BZk4H0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=hVHsWKE5nC/EhV7AfCilMnjWUdgMGDjbzg3DQERYOMjy7AzkRQkcF5ipvDDFio6Z9wrWHWusD8jiDJh03brIgHmE3uxpc36bd7pY19uGmNfnBTcCfLR3SE937vI107VLXTh7s/P0UVXVu4q0EAa8EUSg16wlcrp+n8Tb6RJsIkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rcEdgsBg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB6EC4CECD;
+	Wed, 18 Dec 2024 18:10:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734544815;
-	bh=KrFtZTkvNLg8jGJuRIG3Se+sYB/V7HQf3f/RnlVQrnk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=fx8gXtt9HdU4yKO8k9z6Hflt3ebNMSGXiEiFHIFGUfBolJb1gRDsdFp2H4lshvy6E
-	 cGygzcNY238AnSPmVkl/nGZ7qP3ekm3OlFT5ebqIJuFBa2PcuNYf5E7PwvElS/JT3w
-	 f76Q/434GDlxAPFW1N6kl7/LXlITO+HHQfR0sL7/9qSGpBSPss79WPZ2sxJDieJ83+
-	 7gQ5dKRnU06Y5jsI5ljWqQtzO8F/BBS1Grav9tqoZ8pyPQBE6fIw3LR+iGRnId1YsG
-	 yb6egruVOA+itrsGRCwoBMlFVCZHbBc9sVwXVWcJ9PxLDATjCBLlGK+/sLVfcG+oi4
-	 WXVdGrbStSIeQ==
-Date: Wed, 18 Dec 2024 10:00:13 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Soham Chakradeo <sohamch.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, linux-kselftest@vger.kernel.org, Soham Chakradeo
- <sohamch@google.com>, Willem de Bruijn <willemb@google.com>
-Subject: Re: [PATCH net-next 0/4] selftests/net: packetdrill: import
- multiple tests
-Message-ID: <20241218100013.0c698629@kernel.org>
-In-Reply-To: <20241217185203.297935-1-sohamch.kernel@gmail.com>
-References: <20241217185203.297935-1-sohamch.kernel@gmail.com>
+	s=k20201202; t=1734545414;
+	bh=EhJjd+bikCf0qPNbSX/6JAH0WfTX+I4qhzrb9BZk4H0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=rcEdgsBg+7n1FhVyV0+OFXoHCHmlftdgmLdQh2PzNiIIUD0Tpy9uk9XlwOkJqXiul
+	 9QH7TnpZ/m2YxHRyCx9vQPjVr6Y4iwiiFWymcjJetnFTcSB+Jrh4Egm0NFACvS4atl
+	 pjgfjkkrumHrFq45QUO4tbi84QD4m9s2heW4Q46tZlP8dtJThLX9tWamiZAhTKE2dF
+	 EZs8tARwFkIWVQ1OTOG1AH8yshhP0KPYsAnCB0dXPfXu5SE5bSgUd8tphhBabeF4bZ
+	 Q7lCtBOealavAPAHbXRGdrd3PW4Wd2FTSQSrpvJWA0LBqPRbYAvYLBXu+dZP9WPBZI
+	 u6Kpka9aJLkrg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADF883805DB1;
+	Wed, 18 Dec 2024 18:10:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/4] selftests/net: packetdrill: import multiple
+ tests
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <173454543151.1691835.8973634359314883058.git-patchwork-notify@kernel.org>
+Date: Wed, 18 Dec 2024 18:10:31 +0000
+References: <20241217185203.297935-1-sohamch.kernel@gmail.com>
+In-Reply-To: <20241217185203.297935-1-sohamch.kernel@gmail.com>
+To: Soham Chakradeo <sohamch.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+ edumazet@google.com, pabeni@redhat.com, linux-kselftest@vger.kernel.org,
+ sohamch@google.com, willemb@google.com
 
-On Tue, 17 Dec 2024 18:51:57 +0000 Soham Chakradeo wrote:
+Hello:
+
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue, 17 Dec 2024 18:51:57 +0000 you wrote:
+> From: Soham Chakradeo <sohamch@google.com>
+> 
 > Import tests for the following features (folder names in brackets):
 > ECN (ecn) : RFC 3168
 > Close (close) : RFC 9293
@@ -78,26 +89,23 @@ On Tue, 17 Dec 2024 18:51:57 +0000 Soham Chakradeo wrote:
 > Splice (splice)
 > End of record (eor)
 > Limited transmit (limited_transmit)
+> 
+> [...]
 
-Excellent, thanks for adding all these! I will merge the patches
-momentarily but I do see a number of flakes on our VMs with debug
-configs enabled:
-https://netdev.bots.linux.dev/flakes.html?min-flip=0&tn-needle=packetdrill-dbg
+Here is the summary with links:
+  - [net-next,1/4] selftests/net: packetdrill: import tcp/ecn, tcp/close, tcp/sack, tcp/tcp_info
+    (no matching commit)
+  - [net-next,2/4] selftests/net: packetdrill: import tcp/fast_recovery, tcp/nagle, tcp/timestamping
+    https://git.kernel.org/netdev/net-next/c/eab35989cc37
+  - [net-next,3/4] selftests/net: packetdrill: import tcp/eor, tcp/splice, tcp/ts_recent, tcp/blocking
+    https://git.kernel.org/netdev/net-next/c/6f6692053939
+  - [net-next,4/4] selftests/net: packetdrill: import tcp/user_timeout, tcp/validate, tcp/sendfile, tcp/limited-transmit, tcp/syscall_bad_arg
+    (no matching commit)
 
-In the 7 runs so far we got 2 flakes on:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
- tcp-timestamping-client-only-last-byte-pkt
- tcp-fast-recovery-prr-ss-ack-below-snd-una-cubic-pkt
- tcp-timestamping-server-pkt
 
-1 flake on:
-
- tcp-timestamping-partial-pkt
- tcp-eor-no-coalesce-retrans-pkt
-
-LMK if you can't find the outputs, they should be there within a couple
-of clicks.
-
-I'll set these cases to be ignored for now, but would be great if we
-could find the way for them to be less time sensitive, perhaps?
 
