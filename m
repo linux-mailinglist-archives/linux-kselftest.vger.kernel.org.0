@@ -1,105 +1,103 @@
-Return-Path: <linux-kselftest+bounces-23522-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23523-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA4D99F6CC2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 18:57:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DF5F9F6CCD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 19:00:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C85D188A00B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 17:57:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 223147A0F9D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 18:00:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7434C1FBCB5;
-	Wed, 18 Dec 2024 17:57:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AACBF1FBE8C;
+	Wed, 18 Dec 2024 18:00:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OqKJ9AMJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fx8gXtt9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ADD41F7072
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 17:57:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750BD1FBCB8;
+	Wed, 18 Dec 2024 18:00:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734544655; cv=none; b=jZn5OS80aNGDYKAzgixBwUxTHxGtG1N5m6Wd5+4f1QtIDu5Gk3T4g4VhsEC5kdF/h2KKp5c4whXlxepc8UNbQo6IZonWAwNEClao/JJ8VKBO4Z268yguRZxDfR3IAhbIjP4dicDl2IwGvzcaeKGfb/rNcYnN9LaSwLyiGnfnVBM=
+	t=1734544815; cv=none; b=BeU6sGR38IMRonyHb+1BmGI1wH/+y3SEP8EvzE6xsyFAjahBM4Ab8yEtAUqBVoQ8xpY5gutAi1BCjCxLx/UI281ZVv3ssJWMSXbDUG1BO1L61CxRNp7n1rnI1WaqVwMTFwUOBoPN0r4Vdu233i8xs+okg6p+NtLRctMfP4Ft+jM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734544655; c=relaxed/simple;
-	bh=fdB0svn2IykAVnwwywBw2gz//mi+2KF+JcQcZEIPz2Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=en1F8yimQis+7d3ZXh9zjEP+0tdrnHVvLFyrye9hOUXCBQsoG21msjPP4//qwYb9xSCI+hVHdlX0IOP6toN0oHQM7En1lgMDjEuFLwrG6ccfPMHcV9DPzXcZeCHSyLgNiqpNx1yY5xuzKE81EnFLVMw0Yc+KJ6+44nlPBHnImgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OqKJ9AMJ; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1734544652;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=oDVTgihxonMnUGQyldRP1JnTHpETqeFjIwyXoZkQt3M=;
-	b=OqKJ9AMJg2RXQfYHNUesdff8VAfZD+9+8HWWl46PtilV/gH8fnTrMMLeTPaoAfXeTcrzsN
-	boqbqJXKQIiiqYFeMPl1OpA+dEycwqUmE2gNIBmRotG1bkmbrpZ3ISJPywKEp2sX7OeayA
-	9jvzqD069N0EqoZFrZDi1FD1sWD4E+w=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-99-G-cnryS1MnCiJpU55YnotQ-1; Wed,
- 18 Dec 2024 12:57:28 -0500
-X-MC-Unique: G-cnryS1MnCiJpU55YnotQ-1
-X-Mimecast-MFC-AGG-ID: G-cnryS1MnCiJpU55YnotQ
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CA66E1955F34;
-	Wed, 18 Dec 2024 17:57:27 +0000 (UTC)
-Received: from fedora (unknown [10.43.17.16])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 63D81195608A;
-	Wed, 18 Dec 2024 17:57:25 +0000 (UTC)
-Received: by fedora (sSMTP sendmail emulation); Wed, 18 Dec 2024 18:57:24 +0100
-From: "Jerome Marchand" <jmarchan@redhat.com>
-To: bpf@vger.kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jerome Marchand <jmarchan@redhat.com>
-Subject: [PATCH] selftests/bpf: Fix compilation error in get_uprobe_offset()
-Date: Wed, 18 Dec 2024 18:57:24 +0100
-Message-ID: <20241218175724.578884-1-jmarchan@redhat.com>
+	s=arc-20240116; t=1734544815; c=relaxed/simple;
+	bh=KrFtZTkvNLg8jGJuRIG3Se+sYB/V7HQf3f/RnlVQrnk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YTUNmv3Ixx+5YHCjDmpw0QzKnrqaRBoD+7iKsi9lffT7E+4OuxD8Ajujc4OCitNPXy/OpNLKLkBZ7eZEsNBpiNWqy8+lG6BhlLU2TTetEurc+jERVS3p5o1Jh/OsEKc85P2hrtI9QZbNtG59Bh4AMP0IjAx5PeBslJb52yiI8ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fx8gXtt9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD0E4C4CECD;
+	Wed, 18 Dec 2024 18:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734544815;
+	bh=KrFtZTkvNLg8jGJuRIG3Se+sYB/V7HQf3f/RnlVQrnk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=fx8gXtt9HdU4yKO8k9z6Hflt3ebNMSGXiEiFHIFGUfBolJb1gRDsdFp2H4lshvy6E
+	 cGygzcNY238AnSPmVkl/nGZ7qP3ekm3OlFT5ebqIJuFBa2PcuNYf5E7PwvElS/JT3w
+	 f76Q/434GDlxAPFW1N6kl7/LXlITO+HHQfR0sL7/9qSGpBSPss79WPZ2sxJDieJ83+
+	 7gQ5dKRnU06Y5jsI5ljWqQtzO8F/BBS1Grav9tqoZ8pyPQBE6fIw3LR+iGRnId1YsG
+	 yb6egruVOA+itrsGRCwoBMlFVCZHbBc9sVwXVWcJ9PxLDATjCBLlGK+/sLVfcG+oi4
+	 WXVdGrbStSIeQ==
+Date: Wed, 18 Dec 2024 10:00:13 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Soham Chakradeo <sohamch.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, linux-kselftest@vger.kernel.org, Soham Chakradeo
+ <sohamch@google.com>, Willem de Bruijn <willemb@google.com>
+Subject: Re: [PATCH net-next 0/4] selftests/net: packetdrill: import
+ multiple tests
+Message-ID: <20241218100013.0c698629@kernel.org>
+In-Reply-To: <20241217185203.297935-1-sohamch.kernel@gmail.com>
+References: <20241217185203.297935-1-sohamch.kernel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-In get_uprobe_offset(), the call to procmap_query() use the constant
-PROCMAP_QUERY_VMA_EXECUTABLE, even if PROCMAP_QUERY is not defined.
+On Tue, 17 Dec 2024 18:51:57 +0000 Soham Chakradeo wrote:
+> Import tests for the following features (folder names in brackets):
+> ECN (ecn) : RFC 3168
+> Close (close) : RFC 9293
+> TCP_INFO (tcp_info) : RFC 9293
+> Fast recovery (fast_recovery) : RFC 5681
+> Timestamping (timestamping) : RFC 1323
+> Nagle (nagle) : RFC 896
+> Selective Acknowledgments (sack) : RFC 2018
+> Recent Timestamp (ts_recent) : RFC 1323
+> Send file (sendfile)
+> Syscall bad arg (syscall_bad_arg)
+> Validate (validate)
+> Blocking (blocking)
+> Splice (splice)
+> End of record (eor)
+> Limited transmit (limited_transmit)
 
-Define PROCMAP_QUERY_VMA_EXECUTABLE when PROCMAP_QUERY isn't.
+Excellent, thanks for adding all these! I will merge the patches
+momentarily but I do see a number of flakes on our VMs with debug
+configs enabled:
+https://netdev.bots.linux.dev/flakes.html?min-flip=0&tn-needle=packetdrill-dbg
 
-Fixes: 4e9e07603ecd ("selftests/bpf: make use of PROCMAP_QUERY ioctl if available")
-Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
----
- tools/testing/selftests/bpf/trace_helpers.c | 3 +++
- 1 file changed, 3 insertions(+)
+In the 7 runs so far we got 2 flakes on:
 
-diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-index 2d742fdac6b9..51fa29e0e083 100644
---- a/tools/testing/selftests/bpf/trace_helpers.c
-+++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -293,6 +293,9 @@ static int procmap_query(int fd, const void *addr, __u32 query_flags, size_t *st
- 	return 0;
- }
- #else
-+
-+#define PROCMAP_QUERY_VMA_EXECUTABLE 0x04
-+
- static int procmap_query(int fd, const void *addr, __u32 query_flags, size_t *start, size_t *offset, int *flags)
- {
- 	return -EOPNOTSUPP;
--- 
-2.47.1
+ tcp-timestamping-client-only-last-byte-pkt
+ tcp-fast-recovery-prr-ss-ack-below-snd-una-cubic-pkt
+ tcp-timestamping-server-pkt
 
+1 flake on:
+
+ tcp-timestamping-partial-pkt
+ tcp-eor-no-coalesce-retrans-pkt
+
+LMK if you can't find the outputs, they should be there within a couple
+of clicks.
+
+I'll set these cases to be ignored for now, but would be great if we
+could find the way for them to be less time sensitive, perhaps?
 
