@@ -1,176 +1,112 @@
-Return-Path: <linux-kselftest+bounces-23607-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23608-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9EB99F7F9E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 17:26:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 74F179F800E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 17:39:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5932A7A2850
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 16:25:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21EE07A0603
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 16:39:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32F7E226881;
-	Thu, 19 Dec 2024 16:25:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FA1C22688D;
+	Thu, 19 Dec 2024 16:39:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="auXtyA4x"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D86226182;
-	Thu, 19 Dec 2024 16:25:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EBB022619A;
+	Thu, 19 Dec 2024 16:39:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734625510; cv=none; b=d3JUmzhE/c7bBR90UidACkw/59qr+YiJcUwwvjrQO2jiyYynBJkCbrjUVbkORdbqOb8jotw1QiJpCtn1KmJbkO6Qj1wCu+Ome3y5Msz9y8MWkyofr6BqbPauyELZS1giXCp09MXqasFkGZue0nZmUJJfBpQYFE6DLlWC6tKE30s=
+	t=1734626351; cv=none; b=TjME16LvEUk3z3IzO2769zUl/x52+dpkyA7245XbJuOqrlQ7VUJTdLdqF0T0qucKwf93UNAS4GMzU8QbQCL6cKy7cEgIxlTJ7AJx4pxQkOpMUi4pxg/St6ly8HXQa67PaP5VW1/LA5tr5lZtz3luJpjE9nZ7QFgFkazXsbxZelE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734625510; c=relaxed/simple;
-	bh=C10guj747IMjasBGZPFtSpI5ZWmYbozpm2FiPIruGl4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rEpchVdvQLE6ETckmqM34FwlAjEa7VDbtkaeDbIqfe721S+3JnQSDTKXw/tQkQaBmYdZlStRwKQ5iEJFPEXbhAfYBduN82+4yWKBYJk3LIM6iof2ZppnAN0YhHiFOXy5G69sQGbysO0zYKgaBLgoJbD5n/5gqtpt5euCwj+iUUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8FEAC4CECE;
-	Thu, 19 Dec 2024 16:25:08 +0000 (UTC)
-Date: Thu, 19 Dec 2024 11:25:49 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, Tom Zanussi <zanussi@kernel.org>, Mathieu
- Desnoyers <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v6 2/3] tracing/hist: Support POLLPRI event for poll on
- histogram
-Message-ID: <20241219112549.48307109@gandalf.local.home>
-In-Reply-To: <172907577331.470540.11394819971376123947.stgit@mhiramat.roam.corp.google.com>
-References: <172907575534.470540.12941248697563459082.stgit@mhiramat.roam.corp.google.com>
-	<172907577331.470540.11394819971376123947.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1734626351; c=relaxed/simple;
+	bh=ypXaJWp5FnrK2zptKyzvmWYExxQK1Fxh1FHf08743/A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=plyLmYnhOsktqdOpK12Ljn8wlP7HW71PvENmx8c+vLjAd5UPxrKVOWaVOPqp/e4CVIxCW6eEB4/mPfiXi5ZpLeSSJg2pmyvhePczcGN+S0LvdiWSdciBK6MSJaBxw91m18TGgCAbEqKGsvt8S8u9Z4J7p5OzN6a63DwsBZ8+qEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=auXtyA4x; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74C4DC4CECE;
+	Thu, 19 Dec 2024 16:39:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734626350;
+	bh=ypXaJWp5FnrK2zptKyzvmWYExxQK1Fxh1FHf08743/A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=auXtyA4xrFWrERNxmVwHNDhnAXBkQxQ2WML0TSPU6xnFHbLaINkmx1/oIbmaw5UBd
+	 ha3o7TLRPYCPasKpFBQqR+Scs44gxkCMHpLkg5khJ4msvqvp915YROa8KrUSQeVLys
+	 O5N4H6/CFaPPd9f2RVlV+3GPSO8k3IxcQS4D6Kc7wEA6lExl6216/v/pcHgArGaejl
+	 9CQn9BdKHAeS0gylpCDC8jMONqiIYAHQjJr28zWy6ux14GJfrVdVBOM18yC75A6/0M
+	 vnqSZ/R+PItnqEvhVKdrGRM+Qz3Cfx3Hi3bcJVcsB19zwxo818GFQM0+FE9VcSBvuP
+	 X9q/fMkZdX7vg==
+Date: Thu, 19 Dec 2024 16:39:04 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Will Deacon <will@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 2/9] arm64/sysreg: Update ID_AA64ISAR3_EL1 to DDI0601
+ 2024-09
+Message-ID: <51632b4e-19a0-487f-878d-f03abeea2553@sirena.org.uk>
+References: <20241203-arm64-2024-dpisa-v3-0-a6c78b1aa297@kernel.org>
+ <20241203-arm64-2024-dpisa-v3-2-a6c78b1aa297@kernel.org>
+ <20241210170953.GB16075@willie-the-truck>
+ <b859bdcd-7343-4d53-9f3a-f374deca725a@sirena.org.uk>
+ <20241211224015.GB17836@willie-the-truck>
+ <248dea18-bfad-4ec9-9a7d-5c87c7f48c84@sirena.org.uk>
+ <20241219155547.GC24724@willie-the-truck>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="VyjcJ0zj30NUrDgi"
+Content-Disposition: inline
+In-Reply-To: <20241219155547.GC24724@willie-the-truck>
+X-Cookie: You have taken yourself too seriously.
 
-On Wed, 16 Oct 2024 19:49:33 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Since POLLIN will not be flashed until read the hist file, user needs
-> to repeat read() and poll() on hist for monitoring the event
-> continuously. But the read() is somewhat redundant only for monitoring
-> events.
-> 
-> This add POLLPRI poll event on hist, this event returns when a histogram
-> is updated after open(), poll() or read(). Thus it is possible to wait
-> next event without read().
+--VyjcJ0zj30NUrDgi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I would reword the above to:
+On Thu, Dec 19, 2024 at 03:55:48PM +0000, Will Deacon wrote:
+> On Thu, Dec 12, 2024 at 11:33:05AM +0000, Mark Brown wrote:
 
-    Since POLLIN will not be flushed until the hist file is read, the user
-    needs to repeatedly read() and poll() on the hist file for monitoring the
-    event continuously. But the read() is somewhat redundant when the user is
-    only monitoring for event updates.
-    
-    Add POLLPRI poll event on the hist file so the event returns when a
-    histogram is updated after open(), poll() or read(). Thus it is possible
-    to wait for the next event without having to issue a read().
+> > That'd be useful, yes - unfortunately I think that's still something I
+> > can't work on myself at the moment for the above mentioned non-technical
+> > reasons.
 
-> 
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Reviewed-by: Tom Zanussi <zanussi@kernel.org>
-> ---
->  kernel/trace/trace_events_hist.c |   29 +++++++++++++++++++++++++++--
->  1 file changed, 27 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-> index 107eaa0f40f1..8819a8cc4d53 100644
-> --- a/kernel/trace/trace_events_hist.c
-> +++ b/kernel/trace/trace_events_hist.c
-> @@ -5598,6 +5598,7 @@ static void hist_trigger_show(struct seq_file *m,
->  struct hist_file_data {
->  	struct file *file;
->  	u64 last_read;
-> +	u64 last_act;
->  };
->  
->  static u64 get_hist_hit_count(struct trace_event_file *event_file)
-> @@ -5635,6 +5636,11 @@ static int hist_show(struct seq_file *m, void *v)
->  			hist_trigger_show(m, data, n++);
->  	}
->  	hist_file->last_read = get_hist_hit_count(event_file);
-> +	/*
-> +	 * Update last_act too so that poll()/POLLPRI can wait for the next
-> +	 * event after any syscall on hist file.
-> +	 */
-> +	hist_file->last_act = hist_file->last_read;
->  
->   out_unlock:
->  	mutex_unlock(&event_mutex);
-> @@ -5648,6 +5654,7 @@ static __poll_t event_hist_poll(struct file *file, struct poll_table_struct *wai
->  	struct seq_file *m = file->private_data;
->  	struct hist_file_data *hist_file = m->private;
->  	__poll_t ret = 0;
-> +	u64 cnt;
->  
->  	mutex_lock(&event_mutex);
->  
-> @@ -5659,8 +5666,13 @@ static __poll_t event_hist_poll(struct file *file, struct poll_table_struct *wai
->  
->  	hist_poll_wait(file, wait);
->  
-> -	if (hist_file->last_read != get_hist_hit_count(event_file))
-> -		ret = EPOLLIN | EPOLLRDNORM;
-> +	cnt = get_hist_hit_count(event_file);
-> +	if (hist_file->last_read != cnt)
-> +		ret |= EPOLLIN | EPOLLRDNORM;
-> +	if (hist_file->last_act != cnt) {
-> +		hist_file->last_act = cnt;
-> +		ret |= EPOLLPRI;
-> +	}
->  
->  out_unlock:
->  	mutex_unlock(&event_mutex);
-> @@ -5679,6 +5691,7 @@ static int event_hist_release(struct inode *inode, struct file *file)
->  
->  static int event_hist_open(struct inode *inode, struct file *file)
->  {
-> +	struct trace_event_file *event_file;
->  	struct hist_file_data *hist_file;
->  	int ret;
->  
-> @@ -5689,13 +5702,25 @@ static int event_hist_open(struct inode *inode, struct file *file)
->  	hist_file = kzalloc(sizeof(*hist_file), GFP_KERNEL);
->  	if (!hist_file)
->  		return -ENOMEM;
-> +
-> +	mutex_lock(&event_mutex);
+> Is anybody able to work on it? Without insight into the "non-technical
+> reasons", I don't know what I'm supposed to do other than write the tool
+> myself (which means finding some spare cycles...) or refusing to take
+> wholesale sysreg definitions until it's been ironed out :/
 
-And switch this over to guard() as well.
+Similar issues will apply to anyone at Arm as things currently stand.
 
-Thanks,
+--VyjcJ0zj30NUrDgi
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- Steve
+-----BEGIN PGP SIGNATURE-----
 
-> +	event_file = event_file_data(file);
-> +	if (!event_file) {
-> +		ret = -ENODEV;
-> +		goto out_unlock;
-> +	}
-> +
->  	hist_file->file = file;
-> +	hist_file->last_act = get_hist_hit_count(event_file);
->  
->  	/* Clear private_data to avoid warning in single_open() */
->  	file->private_data = NULL;
->  	ret = single_open(file, hist_show, hist_file);
-> +
-> +out_unlock:
->  	if (ret)
->  		kfree(hist_file);
-> +	mutex_unlock(&event_mutex);
->  	return ret;
->  }
->  
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdkTCgACgkQJNaLcl1U
+h9DCJAf8CuU5u1XxAnkW18x2L4cYSHQf98sGUnZENATCQW4WaqnatXSW03A/Y0Fs
+56SZ9lcKhlhbbcGp0oO4AM02igAnOtSCQBtPG/ZSv7eOLdNLvMsRve9RX5Prgbp1
+J63vhYvmVBhqcp0+OO9BJHkdqTkZvs2fgyTL5wb8yTv2u0EAkX32Dx2Qo1fCX1Pr
+dgrbnXcXjyc+yq5Q2DrpBhKsMANKyogTFubMPlgYyhCyqeEJbE6irqiO6um+thHW
+6Z9IkgN0vqfJUAEEbnOD5acFDamTlED+km44BJJ6hCAA3VtrNqesF0adCSV0Da3k
+0rPz0JhoTWgz6DjCMQFwhzG9xz4DPw==
+=evNu
+-----END PGP SIGNATURE-----
 
+--VyjcJ0zj30NUrDgi--
 
