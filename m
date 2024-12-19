@@ -1,412 +1,354 @@
-Return-Path: <linux-kselftest+bounces-23619-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23620-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0E649F8625
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 21:43:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25BC49F86EB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 22:30:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA74F16CCF7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 20:43:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A7D557A304A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 21:30:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01B511D63D1;
-	Thu, 19 Dec 2024 20:43:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6553F1C3039;
+	Thu, 19 Dec 2024 21:30:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="O8rcKaAs"
+	dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b="Mp1U2niv";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="xEmPJhIP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from flow-b5-smtp.messagingengine.com (flow-b5-smtp.messagingengine.com [202.12.124.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5DD1D3582;
-	Thu, 19 Dec 2024 20:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88DCB1A2632;
+	Thu, 19 Dec 2024 21:30:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734641000; cv=none; b=ELnxXJ0ZomhZ50ODpQuvnyGLuoumDCSvfkqaOZP0BV2deGrzrHVyN9ByN0yryYV9ry5Rt+Z8EFqRRwiMbLkKUtjWg8hCP4OFO9SZru8aV6yUtTxSF4B8w0zohD/nZ7Ww0U8zQxDo1DRlyT0ZjxohZ9s76NXCoHBn2PCtrXEKAL0=
+	t=1734643803; cv=none; b=IdgrrBLWObqX0iTZEPospzFCU09sApTp74slwhXLWxF7ucc4vtATJpc/OJyzKWjrf9FxXV0AQVaHUluiwQwTpcj70MfwqCUCWRgpXwD7p27pmhBiI3/93TXoyJaGkAUqm7k23MIVCbPpijESWu0I+VmRzZtFd2FuNIIdoSqB5JA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734641000; c=relaxed/simple;
-	bh=Aw0ygaTgXE8shj74qZIYsfpAaIwxFnzyySU10omah6M=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IVLYSQ7KKF+/HT3dgpXdWE7K5bSs1oM/P/W6a01he8c1HbzqDgBKVXj+8wDH3P/OnJZCkXdFGH3z5HXHXqcSZ53CMuBBWsxG1fAt7oSyscjAcMxcd3eqJxy4Kt4Iap+NLRKwgcdjcpkHZIxOGCHVpRmCfw5OsTrQthkHHlWhPnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=O8rcKaAs; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BJJrTfj024244;
-	Thu, 19 Dec 2024 20:42:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	A9KLcfHAemRRS1s4tP3cKSagcyHYfQ+dNOBZUMh27rI=; b=O8rcKaAs+yti+Oz/
-	Xq3q++2EIHcTc32E29paYw2EsP9V/0xkBj7QcOS4bYJ+LEuYnGWca5Z81xoXEtiB
-	KJT+ymQg8j0VYV+wjS8DzvBOZdJV2rrCgxuPHRY1BUapx2xb9Qbn5pgwrVazn1EO
-	T+fUrbQC70Pb3fAFkUmhV984Eqzt0olf3y80YZdTcJs4uj1kU0rFej5Jm7lvbL2D
-	zSgakloFno29D2Zhcu6e0XSV00WbLoXEOhEFk3ohh77UZNdNN4oj5WOkL6KtMw0g
-	QYM2cn7kt2adtPwL9iQF2uH8ZtNOqpVlhTPGQ89pVOCrDySokUyRqCOaKwacUbB5
-	qhyr2Q==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43mt1wr32y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 19 Dec 2024 20:42:59 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BJKgwpS008071
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 19 Dec 2024 20:42:58 GMT
-Received: from PHILBER.qualcomm.com (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 19 Dec
- 2024 12:42:52 -0800
-From: Peter Hilber <quic_philber@quicinc.com>
-To: <linux-kernel@vger.kernel.org>, <virtualization@lists.linux.dev>,
-        <virtio-dev@lists.linux.dev>, <netdev@vger.kernel.org>
-CC: Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri
-	<quic_svaddagi@quicinc.com>,
-        Peter Hilber <quic_philber@quicinc.com>,
-        "David
- S. Miller" <davem@davemloft.net>,
-        =?UTF-8?q?Eugenio=20P=C3=A9rez?=
-	<eperezma@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Andrew Lunn
-	<andrew+netdev@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>,
-        Jason Wang <jasowang@redhat.com>, Paolo Abeni
-	<pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Shuah Khan
-	<shuah@kernel.org>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        <linux-kselftest@vger.kernel.org>, <linux-api@vger.kernel.org>,
-        "David
- Woodhouse" <dwmw2@infradead.org>,
-        "Ridoux, Julien" <ridouxj@amazon.com>,
-        "John Stultz" <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        Anna-Maria Behnsen
-	<anna-maria@linutronix.de>
-Subject: [RFC PATCH 2/2] virtio_rtc: Support PTP_SYS_OFFSET_STAT ioctl
-Date: Thu, 19 Dec 2024 21:42:04 +0100
-Message-ID: <20241219204208.3160-3-quic_philber@quicinc.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241219204208.3160-1-quic_philber@quicinc.com>
-References: <20241219204208.3160-1-quic_philber@quicinc.com>
+	s=arc-20240116; t=1734643803; c=relaxed/simple;
+	bh=tMQBpQaB9R9b19u3HON61Sjo/poteZGRSxXa+j/0QPY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Aq4UDuBo6ILtrJF/zlfhrL9YZyD/XJoISvQbeoJjzV1gsgixqKT+Fnisfhokak14B6DvG0g7hrlqDBxUcU7JGVOx7HuM5//n95udAEzaZERxjcgUXah66UUCxC86gvUBlCulXN4IacGVtvpqAIbqOTzfT/TfVWxt0CwgL6Icw4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name; spf=pass smtp.mailfrom=coelacanthus.name; dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b=Mp1U2niv; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=xEmPJhIP; arc=none smtp.client-ip=202.12.124.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=coelacanthus.name
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailflow.stl.internal (Postfix) with ESMTP id F41541D40584;
+	Thu, 19 Dec 2024 16:29:58 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Thu, 19 Dec 2024 16:29:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	coelacanthus.name; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1734643798; x=1734650998; bh=Ly5Y8jVk5m
+	oLHMzQ7W8exXV5U16sE/p4pCtMgqqBuII=; b=Mp1U2nivsGGD80upLCLOGHvbCr
+	oaNvhOH+NhMVGOszjBPvJhb6rmQhba0k4N8psWIMmOJgi2Gzr+DZm4H/V0yLNcT2
+	qVKzRnf+wO2rjJijf55cmphYq4S5Ry8NXL9r5OUQaJYh3Dw88QmP+RrzC8itNZf7
+	diiAHjmvtVns58TL/rjl0/Ai3mmrm+Jtb7i53WHt/UjRlHIjuFz0x0n/LzTn2Hrc
+	mEFZqTh2Isx9h6uotGuqG6AVsnL9rdd7lSAzv2IDLoZeQ/m4iguMEjwqmui/p/y1
+	6fvd188JCzi4T5MkuhVv9J3t7dQflCoJAxg7wIfTvgKZOwxb6T6UkahIkZ2w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1734643798; x=
+	1734650998; bh=Ly5Y8jVk5moLHMzQ7W8exXV5U16sE/p4pCtMgqqBuII=; b=x
+	EmPJhIPrE3uJpeIijsDG14VGPg2S5j5sejI3Me1x8kIQ5A9O6yotGXCxb13QC5bw
+	7e/sq7OuuAxiPa+thcmElCqcO8UGrZ6kJpbKmGjt6S74FpkLlI+Iy3K5fqCVoybZ
+	RDuQYtnZ4hqoWIHKQsQKTB6O9QOM62ARCXzfdrU9g57qzqOH1OvUVpJEHTmRk+wp
+	VDeBzID0JlxGKrScMarxGTQSb3l/RWH+mha9fzwtN4DRFjDqFV6uo6KJgZBJVFyH
+	UAXpEQme1vBoIN+Gdw4UZrfXck8fk1pzNraKXbnttjUDze4n9SoGFv14ZU5h57qL
+	WFGtuWK4ggTwHXcqt099g==
+X-ME-Sender: <xms:VJBkZ94YbhHRO-5R1VH-1cQLDbY5ioUSARjnoOm9zDrQPg16PgMWUg>
+    <xme:VJBkZ64m1g5kGwUKVQjrnVL0HYBnPhLXckgRCsCsQVABeJnfnFKXDfGw9Hma0tZao
+    AcWc-Qudq4KLoiawaI>
+X-ME-Received: <xmr:VJBkZ0cktzvYhBt3JKWnno8HUxxa3WTrfR81W-j4brxt0uzO2kN5iBzPaKYXDqWN>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddruddttddgudegjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttddv
+    jeenucfhrhhomhepvegvlhgvshhtvgcunfhiuhcuoehufihusegtohgvlhgrtggrnhhthh
+    hushdrnhgrmhgvqeenucggtffrrghtthgvrhhnpeefgfdvgfetveevkeehleffteekvdfh
+    vedvheduueehkedvuedvhfeiieejudekueenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehufihusegtohgvlhgrtggrnhhthhhushdrnhgrmhgv
+    pdhnsggprhgtphhtthhopedvvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheptg
+    hhrghrlhhivgesrhhivhhoshhinhgtrdgtohhmpdhrtghpthhtoheprghjohhnvghssehv
+    vghnthgrnhgrmhhitghrohdrtghomhdprhgtphhtthhopeholhgvghesrhgvughhrghtrd
+    gtohhmpdhrtghpthhtohepphgruhhlrdifrghlmhhslhgvhiesshhifhhivhgvrdgtohhm
+    pdhrtghpthhtohepphgrlhhmvghrsegurggssggvlhhtrdgtohhmpdhrtghpthhtoheprg
+    houhesvggvtghsrdgsvghrkhgvlhgvhidrvgguuhdprhgtphhtthhopegvsghivgguvghr
+    mhesgihmihhsshhiohhnrdgtohhmpdhrtghpthhtohepkhgvvghssehkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:VJBkZ2Ko6T9hth8lfkB2eDU3wjCXjTLIFfix2R0Fehb2RuFPHrCLMw>
+    <xmx:VJBkZxKCYJYLo2EBDpHwK28iZLuaawgldCvUomZMG62di_KSh-2ITA>
+    <xmx:VJBkZ_wpcsGm5HgrVWtkBnsnUM33f-icqTuxU86JtTRPuMyFJ0GTbA>
+    <xmx:VJBkZ9LZQZ57APh6GizakD-7MUbSzuR1qZGIutmgXhOntoZ6J315CQ>
+    <xmx:VpBkZ5_AE5GlgtiWDbX5kpCRrI71Azt1liL7xRl12BIgi53EhpZ1rxzO>
+Feedback-ID: i95c648bc:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 19 Dec 2024 16:29:49 -0500 (EST)
+Message-ID: <50a62291-5ae1-47b0-8f64-a42271820789@coelacanthus.name>
+Date: Fri, 20 Dec 2024 05:29:45 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: kZi1uzOJnq87MzXwLdEbElKHqTFgiQiO
-X-Proofpoint-ORIG-GUID: kZi1uzOJnq87MzXwLdEbElKHqTFgiQiO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 mlxlogscore=999 priorityscore=1501 mlxscore=0 spamscore=0
- clxscore=1011 phishscore=0 bulkscore=0 malwarescore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412190164
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] riscv: selftests: Add a ptrace test to verify
+ syscall parameter modification
+Content-Language: en-GB-large
+To: Charlie Jenkins <charlie@rivosinc.com>,
+ Andrew Jones <ajones@ventanamicro.com>
+Cc: Oleg Nesterov <oleg@redhat.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Eric Biederman <ebiederm@xmission.com>,
+ Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Alexandre Ghiti <alex@ghiti.fr>, "Dmitry V. Levin" <ldv@strace.io>,
+ Andrea Bolognani <abologna@redhat.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Ron Economos <re@w6rz.net>, Quan Zhou <zhouquan@iscas.ac.cn>,
+ Guo Ren <guoren@kernel.org>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, stable@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20241203-riscv-new-regset-v2-0-d37da8c0cba6@coelacanthus.name>
+ <20241203-riscv-new-regset-v2-2-d37da8c0cba6@coelacanthus.name>
+ <20241203-55c76715e16422ddaf8d7edf@orel> <Z2RlR1cP9tne8rNi@ghost>
+From: Celeste Liu <uwu@coelacanthus.name>
+In-Reply-To: <Z2RlR1cP9tne8rNi@ghost>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Support the new PTP_SYS_OFFSET_STAT ioctl. The virtio-rtc cross-timestamp
-status information is aligned with the PTP_SYS_OFFSET_STAT output, so the
-conversion is trivial.
 
-Drop the getcrosststamp op implementation, for which the PTP clock core
-will insert a getstattstamp wrapper.
+On 2024-12-20 02:26, Charlie Jenkins wrote:
+> On Tue, Dec 03, 2024 at 01:55:07PM +0100, Andrew Jones wrote:
+>> On Tue, Dec 03, 2024 at 05:30:05PM +0800, Celeste Liu wrote:
+>>> From: Charlie Jenkins <charlie@rivosinc.com>
+>>>
+>>> This test checks that orig_a0 allows a syscall argument to be modified,
+>>> and that changing a0 does not change the syscall argument.
+>>>
+>>> Cc: stable@vger.kernel.org
+>>> Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
+>>> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
+>>> Co-developed-by: Celeste Liu <uwu@coelacanthus.name>
+>>> Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
+>>> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+>>> ---
+>>>  tools/testing/selftests/riscv/abi/.gitignore |   1 +
+>>>  tools/testing/selftests/riscv/abi/Makefile   |   5 +-
+>>>  tools/testing/selftests/riscv/abi/ptrace.c   | 134 +++++++++++++++++++++++++++
+>>>  3 files changed, 139 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/testing/selftests/riscv/abi/.gitignore b/tools/testing/selftests/riscv/abi/.gitignore
+>>> index b38358f91c4d2240ae64892871d9ca98bda1ae58..378c605919a3b3d58eec2701eb7af430cfe315d6 100644
+>>> --- a/tools/testing/selftests/riscv/abi/.gitignore
+>>> +++ b/tools/testing/selftests/riscv/abi/.gitignore
+>>> @@ -1 +1,2 @@
+>>>  pointer_masking
+>>> +ptrace
+>>> diff --git a/tools/testing/selftests/riscv/abi/Makefile b/tools/testing/selftests/riscv/abi/Makefile
+>>> index ed82ff9c664e7eb3f760cbab81fb957ff72579c5..3f74d059dfdcbce4d45d8ff618781ccea1419061 100644
+>>> --- a/tools/testing/selftests/riscv/abi/Makefile
+>>> +++ b/tools/testing/selftests/riscv/abi/Makefile
+>>> @@ -2,9 +2,12 @@
+>>>  
+>>>  CFLAGS += -I$(top_srcdir)/tools/include
+>>>  
+>>> -TEST_GEN_PROGS := pointer_masking
+>>> +TEST_GEN_PROGS := pointer_masking ptrace
+>>>  
+>>>  include ../../lib.mk
+>>>  
+>>>  $(OUTPUT)/pointer_masking: pointer_masking.c
+>>>  	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
+>>> +
+>>> +$(OUTPUT)/ptrace: ptrace.c
+>>> +	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
+>>> diff --git a/tools/testing/selftests/riscv/abi/ptrace.c b/tools/testing/selftests/riscv/abi/ptrace.c
+>>> new file mode 100644
+>>> index 0000000000000000000000000000000000000000..d192764b428d1f1c442f3957c6fedeb01a48d556
+>>> --- /dev/null
+>>> +++ b/tools/testing/selftests/riscv/abi/ptrace.c
+>>> @@ -0,0 +1,134 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>> +#include <stdio.h>
+>>> +#include <stdlib.h>
+>>> +#include <string.h>
+>>> +#include <unistd.h>
+>>> +#include <fcntl.h>
+>>> +#include <signal.h>
+>>> +#include <errno.h>
+>>> +#include <sys/types.h>
+>>> +#include <sys/ptrace.h>
+>>> +#include <sys/stat.h>
+>>> +#include <sys/user.h>
+>>> +#include <sys/wait.h>
+>>> +#include <sys/uio.h>
+>>> +#include <linux/elf.h>
+>>> +#include <linux/unistd.h>
+>>> +#include <asm/ptrace.h>
+>>> +
+>>> +#include "../../kselftest_harness.h"
+>>> +
+>>> +#define ORIG_A0_MODIFY      0x01
+>>> +#define A0_MODIFY           0x02
+>>> +#define A0_OLD              0x03
+>>> +#define A0_NEW              0x04
+>>
+>> Shouldn't A0_OLD and A0_NEW set more bits, since 3 and 4 aren't very
+>> unique (we could have those values by accident)? And should we include
+>> setting bits over 31 for 64-bit targets?
+>>
+>>> +
+>>> +#define perr_and_exit(fmt, ...)						\
+>>> +	({								\
+>>> +		char buf[256];						\
+>>> +		snprintf(buf, sizeof(buf), "%s:%d:" fmt ": %m\n",	\
+>>> +			__func__, __LINE__, ##__VA_ARGS__);		\
+>>> +		perror(buf);						\
+>>> +		exit(-1);						\
+>>> +	})
+>>
+>> Can we use e.g. ksft_exit_fail_perror() instead? I'd prefer we try to
+>> consolidate testing/selftests/riscv/* tests on a common format for
+>> errors and exit codes and we're already using other kselftest stuff.
+>>
+>>> +
+>>> +static inline void resume_and_wait_tracee(pid_t pid, int flag)
+>>> +{
+>>> +	int status;
+>>> +
+>>> +	if (ptrace(flag, pid, 0, 0))
+>>> +		perr_and_exit("failed to resume the tracee %d\n", pid);
+>>> +
+>>> +	if (waitpid(pid, &status, 0) != pid)
+>>> +		perr_and_exit("failed to wait for the tracee %d\n", pid);
+>>> +}
+>>> +
+>>> +static void ptrace_test(int opt, int *result)
+>>> +{
+>>> +	int status;
+>>> +	pid_t pid;
+>>> +	struct user_regs_struct regs;
+>>> +	struct iovec iov = {
+>>> +		.iov_base = &regs,
+>>> +		.iov_len = sizeof(regs),
+>>> +	};
+>>> +
+>>> +	unsigned long orig_a0;
+>>> +	struct iovec a0_iov = {
+>>> +		.iov_base = &orig_a0,
+>>> +		.iov_len = sizeof(orig_a0),
+>>> +	};
+>>> +
+>>> +	pid = fork();
+>>> +	if (pid == 0) {
+>>> +		/* Mark oneself being traced */
+>>> +		long val = ptrace(PTRACE_TRACEME, 0, 0, 0);
+>>> +
+>>> +		if (val)
+>>> +			perr_and_exit("failed to request for tracer to trace me: %ld\n", val);
+>>> +
+>>> +		kill(getpid(), SIGSTOP);
+>>> +
+>>> +		/* Perform exit syscall that will be intercepted */
+>>> +		exit(A0_OLD);
+>>> +	}
+>>> +
+>>> +	if (pid < 0)
+>>> +		exit(1);
+>>
+>> This unexpected error condition deserves a message, so I'd use
+>> ksft_exit_fail_perror() here.
+>>
+>>> +
+>>> +	if (waitpid(pid, &status, 0) != pid)
+>>> +		perr_and_exit("failed to wait for the tracee %d\n", pid);
+>>> +
+>>> +	/* Stop at the entry point of the syscall */
+>>> +	resume_and_wait_tracee(pid, PTRACE_SYSCALL);
+>>> +
+>>> +	/* Check tracee regs before the syscall */
+>>> +	if (ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, &iov))
+>>> +		perr_and_exit("failed to get tracee registers\n");
+>>> +	if (ptrace(PTRACE_GETREGSET, pid, NT_RISCV_ORIG_A0, &a0_iov))
+>>> +		perr_and_exit("failed to get tracee registers\n");
+>>> +	if (orig_a0 != A0_OLD)
+>>> +		perr_and_exit("unexpected orig_a0: 0x%lx\n", orig_a0);
+>>> +
+>>> +	/* Modify a0/orig_a0 for the syscall */
+>>> +	switch (opt) {
+>>> +	case A0_MODIFY:
+>>> +		regs.a0 = A0_NEW;
+>>> +		break;
+>>> +	case ORIG_A0_MODIFY:
+>>> +		orig_a0 = A0_NEW;
+>>> +		break;
+>>> +	}
+>>> +
+>>> +	if (ptrace(PTRACE_SETREGSET, pid, NT_RISCV_ORIG_A0, &a0_iov))
+>>> +		perr_and_exit("failed to set tracee registers\n");
+>>> +
+>>> +	/* Resume the tracee */
+>>> +	ptrace(PTRACE_CONT, pid, 0, 0);
+>>> +	if (waitpid(pid, &status, 0) != pid)
+>>> +		perr_and_exit("failed to wait for the tracee\n");
+>>> +
+>>> +	*result = WEXITSTATUS(status);
+>>> +}
+>>> +
+>>> +TEST(ptrace_modify_a0)
+>>> +{
+>>> +	int result;
+>>> +
+>>> +	ptrace_test(A0_MODIFY, &result);
+>>> +
+>>> +	/* The modification of a0 cannot affect the first argument of the syscall */
+>>> +	EXPECT_EQ(A0_OLD, result);
+>>
+>> What about checking that we actually set regs.a0 to A0_NEW? We'd need
+>> A0_NEW to be more unique than 4, though.
+>>
+>>> +}
+>>> +
+>>> +TEST(ptrace_modify_orig_a0)
+>>> +{
+>>> +	int result;
+>>> +
+>>> +	ptrace_test(ORIG_A0_MODIFY, &result);
+>>> +
+>>> +	/* Only modify orig_a0 to change the first argument of the syscall */
+>>
+>> If we run ptrace_modify_a0 first then we've already set regs.a0 to A0_NEW
+>> and can't check with this test that we don't set it to A0_NEW. We should
+>> probably have two different test values, one for regs.a0 and one for
+>> orig_a0 and ensure on both tests that we aren't writing both.
+>>
+> 
+> Celeste, do you want to fix this up or are you waiting for me to?
 
-Signed-off-by: Peter Hilber <quic_philber@quicinc.com>
----
- drivers/virtio/Kconfig               |   4 +-
- drivers/virtio/virtio_rtc_driver.c   | 122 ++++++++++++++++++++++++++-
- drivers/virtio/virtio_rtc_internal.h |   3 +-
- drivers/virtio/virtio_rtc_ptp.c      |  25 +++---
- 4 files changed, 140 insertions(+), 14 deletions(-)
+Sorry for delay. I was busy with household affairs in the past few weeks.
+v3 will be sent tomorrow or the day after tomorrow.
 
-diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
-index 6db5235a7693..7cb8b761eaa1 100644
---- a/drivers/virtio/Kconfig
-+++ b/drivers/virtio/Kconfig
-@@ -230,8 +230,8 @@ config VIRTIO_RTC_ARM
- 	 This enables Virtio RTC cross-timestamping using the Arm Generic Timer.
- 	 It only has an effect if the Virtio RTC device also supports this. The
- 	 cross-timestamp is available through the PTP clock driver precise
--	 cross-timestamp ioctl (PTP_SYS_OFFSET_PRECISE2 aka
--	 PTP_SYS_OFFSET_PRECISE).
-+	 cross-timestamp ioctls (PTP_SYS_OFFSET_PRECISE2 aka
-+	 PTP_SYS_OFFSET_PRECISE, PTP_SYS_OFFSET_STAT).
- 
- 	 If unsure, say Y.
- 
-diff --git a/drivers/virtio/virtio_rtc_driver.c b/drivers/virtio/virtio_rtc_driver.c
-index f8b890afc528..055aa1166519 100644
---- a/drivers/virtio/virtio_rtc_driver.c
-+++ b/drivers/virtio/virtio_rtc_driver.c
-@@ -13,6 +13,7 @@
- #include <linux/device.h>
- #include <linux/module.h>
- #include <linux/pm.h>
-+#include <linux/ptp_clock.h>
- 
- #include <uapi/linux/virtio_rtc.h>
- 
-@@ -617,16 +618,22 @@ int viortc_read(struct viortc_dev *viortc, u16 vio_clk_id, u64 *reading)
-  * @hw_counter: virtio_rtc HW counter type
-  * @reading: clock reading [ns]
-  * @cycles: HW counter cycles during clock reading
-+ * @stat_extra: extra information, if non-NULL
-  *
-  * Context: Process context.
-  * Return: Zero on success, negative error code otherwise.
-  */
- int viortc_read_cross(struct viortc_dev *viortc, u16 vio_clk_id, u8 hw_counter,
--		      u64 *reading, u64 *cycles)
-+		      u64 *reading, u64 *cycles,
-+		      struct ptp_stat_extra *stat_extra)
- {
- 	VIORTC_DECLARE_MSG_HDL_ONSTACK(hdl, VIRTIO_RTC_REQ_READ_CROSS,
- 				       struct virtio_rtc_req_read_cross,
- 				       struct virtio_rtc_resp_read_cross);
-+	struct ptp_clock_accuracy *accuracy;
-+	u8 flags, leap, clock_status;
-+	u32 smear_offset_nsec;
-+	u16 tai_offset_sec;
- 	int ret;
- 
- 	ret = VIORTC_MSG_INIT(hdl, viortc);
-@@ -647,6 +654,119 @@ int viortc_read_cross(struct viortc_dev *viortc, u16 vio_clk_id, u8 hw_counter,
- 	VIORTC_MSG_READ(hdl, clock_reading, reading);
- 	VIORTC_MSG_READ(hdl, counter_cycles, cycles);
- 
-+	if (stat_extra) {
-+		accuracy = &stat_extra->accuracy;
-+
-+		VIORTC_MSG_READ(hdl, perf.freq_esterror,
-+				&accuracy->freq_esterror);
-+		VIORTC_MSG_READ(hdl, perf.freq_maxerror,
-+				&accuracy->freq_maxerror);
-+		VIORTC_MSG_READ(hdl, perf.time_esterror,
-+				&accuracy->time_esterror);
-+		VIORTC_MSG_READ(hdl, perf.time_maxerror,
-+				&accuracy->time_maxerror);
-+
-+		VIORTC_MSG_READ(hdl, perf.flags, &flags);
-+
-+		accuracy->flags = 0;
-+
-+		if (flags & VIRTIO_RTC_FLAG_FREQ_ESTERROR_VALID)
-+			accuracy->flags |= PTP_CLOCK_FREQ_EST_VALID;
-+
-+		if (flags & VIRTIO_RTC_FLAG_FREQ_MAXERROR_VALID)
-+			accuracy->flags |= PTP_CLOCK_FREQ_MAX_VALID;
-+
-+		if (flags & VIRTIO_RTC_FLAG_TIME_ESTERROR_VALID)
-+			accuracy->flags |= PTP_CLOCK_TIME_EST_VALID;
-+
-+		if (flags & VIRTIO_RTC_FLAG_TIME_MAXERROR_VALID)
-+			accuracy->flags |= PTP_CLOCK_TIME_MAX_VALID;
-+
-+		VIORTC_MSG_READ(hdl, perf.clock_status, &clock_status);
-+
-+		switch (clock_status) {
-+		case VIRTIO_RTC_STATUS_INITIALIZING:
-+			accuracy->clock_status = PTP_CLOCK_STATUS_INITIALIZING;
-+			break;
-+		case VIRTIO_RTC_STATUS_SYNCHRONIZED:
-+			accuracy->clock_status = PTP_CLOCK_STATUS_SYNCHRONIZED;
-+			break;
-+		case VIRTIO_RTC_STATUS_FREERUNNING:
-+			accuracy->clock_status = PTP_CLOCK_STATUS_FREERUNNING;
-+			break;
-+		case VIRTIO_RTC_STATUS_UNRELIABLE:
-+			accuracy->clock_status = PTP_CLOCK_STATUS_UNRELIABLE;
-+			break;
-+		default:
-+			accuracy->clock_status = PTP_CLOCK_STATUS_UNKNOWN;
-+			break;
-+		}
-+
-+		VIORTC_MSG_READ(hdl, leap_info.flags, &flags);
-+
-+		stat_extra->flags = 0;
-+
-+		if (flags & VIRTIO_RTC_FLAG_LEAP_VALID)
-+			stat_extra->flags |= PTP_CLOCK_LEAP_VALID;
-+
-+		if (flags & VIRTIO_RTC_FLAG_TAI_OFFSET_VALID)
-+			stat_extra->flags |= PTP_CLOCK_TAI_OFFSET_VALID;
-+
-+		if (flags & VIRTIO_RTC_FLAG_SMEAR_OFFSET_VALID)
-+			stat_extra->flags |= PTP_CLOCK_SMEAR_OFFSET_VALID;
-+
-+		VIORTC_MSG_READ(hdl, leap_info.leap, &leap);
-+
-+		switch (leap) {
-+		case VIRTIO_RTC_LEAP_NONE:
-+			stat_extra->leap = PTP_LEAP_NONE;
-+			break;
-+		case VIRTIO_RTC_LEAP_PRE_POS:
-+			stat_extra->leap = PTP_LEAP_PRE_POS;
-+			break;
-+		case VIRTIO_RTC_LEAP_PRE_NEG:
-+			stat_extra->leap = PTP_LEAP_PRE_NEG;
-+			break;
-+		case VIRTIO_RTC_LEAP_POS:
-+			stat_extra->leap = PTP_LEAP_POS;
-+			break;
-+		case VIRTIO_RTC_LEAP_POST_POS:
-+			stat_extra->leap = PTP_LEAP_POST_POS;
-+			break;
-+		case VIRTIO_RTC_LEAP_POST_NEG:
-+			stat_extra->leap = PTP_LEAP_POST_NEG;
-+			break;
-+		case VIRTIO_RTC_LEAP_SMEAR_PRE_POS:
-+			stat_extra->leap = PTP_LEAP_SMEAR_PRE_POS;
-+			break;
-+		case VIRTIO_RTC_LEAP_SMEAR_PRE_NEG:
-+			stat_extra->leap = PTP_LEAP_SMEAR_PRE_NEG;
-+			break;
-+		case VIRTIO_RTC_LEAP_SMEAR_POS:
-+			stat_extra->leap = PTP_LEAP_SMEAR_POS;
-+			break;
-+		case VIRTIO_RTC_LEAP_SMEAR_NEG:
-+			stat_extra->leap = PTP_LEAP_SMEAR_NEG;
-+			break;
-+		case VIRTIO_RTC_LEAP_SMEAR_POST_POS:
-+			stat_extra->leap = PTP_LEAP_SMEAR_POST_POS;
-+			break;
-+		case VIRTIO_RTC_LEAP_SMEAR_POST_NEG:
-+			stat_extra->leap = PTP_LEAP_SMEAR_POST_NEG;
-+			break;
-+		default:
-+			ret = -EINVAL;
-+			goto out_release;
-+		}
-+
-+		VIORTC_MSG_READ(hdl, leap_info.tai_offset_sec, &tai_offset_sec);
-+		stat_extra->tai_offset_sec = (s16)tai_offset_sec;
-+
-+		VIORTC_MSG_READ(hdl, leap_info.smear_offset_nsec,
-+				&smear_offset_nsec);
-+		stat_extra->smear_offset_nsec = (s32)smear_offset_nsec;
-+	}
-+
- out_release:
- 	viortc_msg_release(VIORTC_MSG(hdl));
- 
-diff --git a/drivers/virtio/virtio_rtc_internal.h b/drivers/virtio/virtio_rtc_internal.h
-index e7f865259afd..ab998e033f07 100644
---- a/drivers/virtio/virtio_rtc_internal.h
-+++ b/drivers/virtio/virtio_rtc_internal.h
-@@ -20,7 +20,8 @@ struct viortc_dev;
- 
- int viortc_read(struct viortc_dev *viortc, u16 vio_clk_id, u64 *reading);
- int viortc_read_cross(struct viortc_dev *viortc, u16 vio_clk_id, u8 hw_counter,
--		      u64 *reading, u64 *cycles);
-+		      u64 *reading, u64 *cycles,
-+		      struct ptp_stat_extra *stat_extra);
- int viortc_cross_cap(struct viortc_dev *viortc, u16 vio_clk_id, u8 hw_counter,
- 		     bool *supported);
- int viortc_read_alarm(struct viortc_dev *viortc, u16 vio_clk_id,
-diff --git a/drivers/virtio/virtio_rtc_ptp.c b/drivers/virtio/virtio_rtc_ptp.c
-index 09f5a9adf2e4..1a02ee3121d9 100644
---- a/drivers/virtio/virtio_rtc_ptp.c
-+++ b/drivers/virtio/virtio_rtc_ptp.c
-@@ -79,6 +79,7 @@ static int viortc_ptp_get_time_fn(ktime_t *device_time,
-  * @hw_counter: virtio_rtc HW counter type
-  * @cs_id: clocksource id corresponding to hw_counter
-  * @ctx: context for get_device_system_crosststamp()
-+ * @stat_extra: extra information, if non-NULL
-  *
-  * Reads HW-specific crosststamp from device.
-  *
-@@ -87,7 +88,8 @@ static int viortc_ptp_get_time_fn(ktime_t *device_time,
-  */
- static int viortc_ptp_do_xtstamp(struct viortc_ptp_clock *vio_ptp,
- 				 u8 hw_counter, enum clocksource_ids cs_id,
--				 struct viortc_ptp_cross_ctx *ctx)
-+				 struct viortc_ptp_cross_ctx *ctx,
-+				 struct ptp_stat_extra *stat_extra)
- {
- 	u64 ns;
- 	u64 max_ns;
-@@ -96,8 +98,8 @@ static int viortc_ptp_do_xtstamp(struct viortc_ptp_clock *vio_ptp,
- 	ctx->system_counterval.cs_id = cs_id;
- 
- 	ret = viortc_read_cross(vio_ptp->viortc, vio_ptp->vio_clk_id,
--				hw_counter, &ns,
--				&ctx->system_counterval.cycles);
-+				hw_counter, &ns, &ctx->system_counterval.cycles,
-+				stat_extra);
- 	if (ret)
- 		return ret;
- 
-@@ -115,15 +117,17 @@ static int viortc_ptp_do_xtstamp(struct viortc_ptp_clock *vio_ptp,
-  */
- 
- /**
-- * viortc_ptp_getcrosststamp() - PTP clock getcrosststamp op
-+ * viortc_ptp_getstattstamp() - PTP clock getcrosststamp with extras op
-  * @ptp: PTP clock info
-  * @xtstamp: crosststamp
-+ * @stat_extra: extra information, if non-NULL
-  *
-  * Context: Process context.
-  * Return: Zero on success, negative error code otherwise.
-  */
--static int viortc_ptp_getcrosststamp(struct ptp_clock_info *ptp,
--				     struct system_device_crosststamp *xtstamp)
-+static int viortc_ptp_getstattstamp(struct ptp_clock_info *ptp,
-+				    struct system_device_crosststamp *xtstamp,
-+				    struct ptp_stat_extra *stat_extra)
- {
- 	struct viortc_ptp_clock *vio_ptp =
- 		container_of(ptp, struct viortc_ptp_clock, ptp_info);
-@@ -152,7 +156,8 @@ static int viortc_ptp_getcrosststamp(struct ptp_clock_info *ptp,
- 	 *
- 	 * So, get the actual cross-timestamp first.
- 	 */
--	ret = viortc_ptp_do_xtstamp(vio_ptp, hw_counter, cs_id, &ctx);
-+	ret = viortc_ptp_do_xtstamp(vio_ptp, hw_counter, cs_id, &ctx,
-+				    stat_extra);
- 	if (ret)
- 		return ret;
- 
-@@ -225,7 +230,7 @@ static int viortc_ptp_enable(struct ptp_clock_info *ptp,
-  *
-  * The .name member will be set for individual virtio_rtc PTP clocks.
-  *
-- * The .getcrosststamp member will be cleared for PTP clocks not supporting
-+ * The .getstattstamp member will be cleared for PTP clocks not supporting
-  * crosststamp.
-  */
- static const struct ptp_clock_info viortc_ptp_info_template = {
-@@ -236,7 +241,7 @@ static const struct ptp_clock_info viortc_ptp_info_template = {
- 	.gettimex64 = viortc_ptp_gettimex64,
- 	.settime64 = viortc_ptp_settime64,
- 	.enable = viortc_ptp_enable,
--	.getcrosststamp = viortc_ptp_getcrosststamp,
-+	.getstattstamp = viortc_ptp_getstattstamp,
- };
- 
- /**
-@@ -329,7 +334,7 @@ struct viortc_ptp_clock *viortc_ptp_register(struct viortc_dev *viortc,
- 		goto err_free_dev;
- 
- 	if (!vio_ptp->have_cross)
--		vio_ptp->ptp_info.getcrosststamp = NULL;
-+		vio_ptp->ptp_info.getstattstamp = NULL;
- 
- 	ptp_clock = ptp_clock_register(&vio_ptp->ptp_info, parent_dev);
- 	if (IS_ERR(ptp_clock))
--- 
-2.43.0
+I am deeply sorry for this.
+
+> 
+> - Charlie
+> 
+>>> +	EXPECT_EQ(A0_NEW, result);
+>>> +}
+>>> +
+>>> +TEST_HARNESS_MAIN
+>>>
+>>> -- 
+>>> 2.47.0
+>>>
+>>
+>> Thanks,
+>> drew
 
 
