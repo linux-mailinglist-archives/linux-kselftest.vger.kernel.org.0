@@ -1,266 +1,137 @@
-Return-Path: <linux-kselftest+bounces-23584-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23585-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEAD49F799B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 11:28:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED2629F7B42
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 13:28:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92A9D16E5B4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 10:28:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41F6C166DA2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 12:28:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43812222591;
-	Thu, 19 Dec 2024 10:27:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF37E223E74;
+	Thu, 19 Dec 2024 12:28:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="sV4AGMNS"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="XUDRHwL3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EE16222567;
-	Thu, 19 Dec 2024 10:27:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223C52248A0;
+	Thu, 19 Dec 2024 12:28:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734604059; cv=none; b=cFUnFf3fVcOACnGe/Jqeu3qd4obY9cYFhc+Tfyao+DxGeLUerQ4JjaVa73oldNg7L+0BMj2nQhrMK5Q0+3zyIsXbu/KBOZ5rWatsB/kY+LvwR6utJ3pQz/NcBaP56e+MuE0RsGt4Y/F8yYSI0W0QrB0uOrkNrgzaRKjYBsXuLZI=
+	t=1734611292; cv=none; b=oEGF18JeMPviVYr2IXlM35spI5SOPbd+eophUUc2BWkbBnSZp+ii6Otmf1Jf94NllcB6E3NzT+7J5W2ZXGN/8bXpuyPdJ7o4XBdlkWGaCgSC5oySoxqzn3MYu8dghZiP57RGeQuWJCDDVKwyE2K6gJbRl1YxJbKY15feiwXJ4gA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734604059; c=relaxed/simple;
-	bh=HDa168BdxQX06ZtiTf8KKlIpYnakwdao496rIRT3w9Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fiVRY5DAQS5svawIfbD9MiPVsSDFTXJja0fktaJZhA8dsHMzD6RCMcrXl+8Mzx08uYn33NtrVLbtMjK6ihmjdR745W+qa8yv7FhZM52axpkDaTSI8lAt77N4787olkgS3glyclViU+zGczI3WrX4i3YbgUshDb7SFx2HRMzez84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=sV4AGMNS; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BJ0w5RB009282;
-	Thu, 19 Dec 2024 10:27:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=8BdCbc0aWpyGMPoKibD+Rzg4VO7AiW9QJCqyQkaUK
-	JI=; b=sV4AGMNSISzEP4hGSkp+agy+gJOn0zA8y+4pXIDw/NZX3k1DgmJoZcTwF
-	Oe/aDn5DiIePEx+rLbqKm/BBNekCnfMwOLDHE6f/LWzscSJ7zBZAf1oWz7QpMe1g
-	p1joTZos7oAGHsgAjZUgWVxAsIZj/jQl9F32fq9fjeyF8WhAez3UO3kGMjq2Nwcb
-	DyIjcwaRpfx+010v8uIICQkzsMiv1BZCzKsQHvCwhqPHDpDICmOB3JVgQmNRE1xJ
-	I/BCKsQg3kMR0lqeiG1NtHXPOSWNpsdWOh2Ly1srvQzDTlKabL0p/WLxuMv3KrOR
-	T7duYMLD33m2T4dwuVlPujuQ4QqyA==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43kyv4vvr1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 19 Dec 2024 10:27:26 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4BJAMphA023538;
-	Thu, 19 Dec 2024 10:27:25 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43kyv4vvqw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 19 Dec 2024 10:27:25 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BJ732tv029728;
-	Thu, 19 Dec 2024 10:27:25 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 43hmbsvwgt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 19 Dec 2024 10:27:24 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BJARNQH55902470
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 19 Dec 2024 10:27:23 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2582220067;
-	Thu, 19 Dec 2024 10:27:23 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9796D20065;
-	Thu, 19 Dec 2024 10:27:21 +0000 (GMT)
-Received: from ltczz402-lp1.aus.stglabs.ibm.com (unknown [9.40.194.31])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 19 Dec 2024 10:27:21 +0000 (GMT)
-From: Donet Tom <donettom@linux.ibm.com>
-To: Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: Ritesh Harjani <ritesh.list@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>, Zi Yan <ziy@nvidia.com>,
-        David Hildenbrand <david@redhat.com>, shuah Khan <shuah@kernel.org>,
-        Dev Jain <dev.jain@arm.com>
-Subject: [PATCH] selftests/mm: Added new test cases to the migration test
-Date: Thu, 19 Dec 2024 04:27:20 -0600
-Message-ID: <20241219102720.4487-1-donettom@linux.ibm.com>
-X-Mailer: git-send-email 2.43.5
+	s=arc-20240116; t=1734611292; c=relaxed/simple;
+	bh=FCTPIybH7gGn7ZB9Nu38SUkN8Ryag6rpBVNiR0FskZo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YvpjuC1Z5rMAT/nK3H5LBobt4knN1ptDryffeJneJPNdYXCr9OdrXEAgO07WXPVgNghv/9kNO10zF2cuRg8091T2UpigwpxaiDeLpZ9zHI5gGtq/xL+bsLjI8hXWjO2zxIJMmhkqJLr06ZLKEWGrKe7XZDWQ5txXrgWgR+1ZzRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=XUDRHwL3; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=XHgeCfD5EM5bNxSLV85im9Yq4BlkRy5I75wY3shqOu0=; b=XUDRHwL32TjA0Jp6H2wbEbyOrJ
+	Jlq/X8lMW25XGTiMSjmB7OLZ/73hEFfVpoGDsfYswTttX5CPfFqo9dFqV9yaPIzb+VcOPY5Hs/UP9
+	8QAsd3NLcI6ydRE4uoinZrsgbp9PsZaC2rpulwmqR7gFsIhmRHkS5hnDKLg9tCsPnOrgKFQ/cA9G1
+	TUac2bh40FTuDjT4uBpKdI9fd9whsIw+sBz5c/WIez0qDoH8QROjI+zKKbXIw6rhxz5ZEUa3lUELM
+	BeXKiVjjk7k83J48cKeDJ5++uoJanqriSnE+LrYC2FVGG4JjA29nebFM376PN3RxeU2a6wGR8u8bW
+	pqYs6qvg==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1tOFdI-000Pim-W7; Thu, 19 Dec 2024 13:28:01 +0100
+Received: from [85.1.206.226] (helo=[192.168.1.114])
+	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1tOFdI-000EHx-1p;
+	Thu, 19 Dec 2024 13:28:00 +0100
+Message-ID: <975c7d53-bbca-4ed7-9635-53f5741ee2ff@iogearbox.net>
+Date: Thu, 19 Dec 2024 13:27:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4VB2ASD33czmFKJnF1RMbaav34FvzEOH
-X-Proofpoint-ORIG-GUID: XaV_nVvu-X8CjbA6panhQFhjzWYpS6qW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- lowpriorityscore=0 mlxlogscore=827 mlxscore=0 spamscore=0 impostorscore=0
- priorityscore=1501 adultscore=0 phishscore=0 bulkscore=0 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2412190080
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/bpf: Fix compilation error in
+ get_uprobe_offset()
+To: Yonghong Song <yonghong.song@linux.dev>,
+ Jerome Marchand <jmarchan@redhat.com>, bpf@vger.kernel.org,
+ Andrii Nakryiko <andrii@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20241218175724.578884-1-jmarchan@redhat.com>
+ <2397f348-9d7f-4ea4-bf95-ed1452fa2156@linux.dev>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <2397f348-9d7f-4ea4-bf95-ed1452fa2156@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 1.0.7/27492/Thu Dec 19 10:44:32 2024)
 
-Added three new test cases to the migration tests:
+On 12/19/24 2:28 AM, Yonghong Song wrote:
+> On 12/18/24 9:57 AM, Jerome Marchand wrote:
+>> In get_uprobe_offset(), the call to procmap_query() use the constant
+>> PROCMAP_QUERY_VMA_EXECUTABLE, even if PROCMAP_QUERY is not defined.
+>>
+>> Define PROCMAP_QUERY_VMA_EXECUTABLE when PROCMAP_QUERY isn't.
+>>
+>> Fixes: 4e9e07603ecd ("selftests/bpf: make use of PROCMAP_QUERY ioctl if available")
+>> Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
+> 
+> Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
-1. Shared anon THP migration test
-This test will mmap shared anon memory, madvise it to
-MADV_HUGEPAGE, then do migration entry testing. One thread
-will move pages back and forth between nodes whilst other
-threads try and access them.
-
-2. Private anon hugetlb migration test
-This test will mmap private anon hugetlb memory and then
-do the migration entry testing.
-
-3. Shared anon hugetlb migration test
-This test will mmap shared anon hugetlb memory and then
-do the migration entry testing.
-
-Test results
-============
- # ./tools/testing/selftests/mm/migration
- TAP version 13
- 1..6
- # Starting 6 tests from 1 test cases.
- #  RUN           migration.private_anon ...
- #            OK  migration.private_anon
- ok 1 migration.private_anon
- #  RUN           migration.shared_anon ...
- #            OK  migration.shared_anon
- ok 2 migration.shared_anon
- #  RUN           migration.private_anon_thp ...
- #            OK  migration.private_anon_thp
- ok 3 migration.private_anon_thp
- #  RUN           migration.shared_anon_thp ...
- #            OK  migration.shared_anon_thp
- ok 4 migration.shared_anon_thp
- #  RUN           migration.private_anon_htlb ...
- #            OK  migration.private_anon_htlb
- ok 5 migration.private_anon_htlb
- #  RUN           migration.shared_anon_htlb ...
- #            OK  migration.shared_anon_htlb
- ok 6 migration.shared_anon_htlb
- # PASSED: 6 / 6 tests passed.
- # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:0 error:0
- #
-
-Signed-off-by: Donet Tom <donettom@linux.ibm.com>
----
- tools/testing/selftests/mm/migration.c | 99 ++++++++++++++++++++++++++
- 1 file changed, 99 insertions(+)
-
-diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
-index 64bcbb7151cf..1e3a595fbf01 100644
---- a/tools/testing/selftests/mm/migration.c
-+++ b/tools/testing/selftests/mm/migration.c
-@@ -204,4 +204,103 @@ TEST_F_TIMEOUT(migration, private_anon_thp, 2*RUNTIME)
- 		ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
- }
- 
-+/*
-+ * migration test with shared anon THP page
-+ */
-+
-+TEST_F_TIMEOUT(migration, shared_anon_thp, 2*RUNTIME)
-+{
-+	pid_t pid;
-+	uint64_t *ptr;
-+	int i;
-+
-+	if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
-+		SKIP(return, "Not enough threads or NUMA nodes available");
-+
-+	ptr = mmap(NULL, 2 * TWOMEG, PROT_READ | PROT_WRITE,
-+		MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	ptr = (uint64_t *) ALIGN((uintptr_t) ptr, TWOMEG);
-+	ASSERT_EQ(madvise(ptr, TWOMEG, MADV_HUGEPAGE), 0);
-+
-+	memset(ptr, 0xde, TWOMEG);
-+	for (i = 0; i < self->nthreads - 1; i++) {
-+		pid = fork();
-+		if (!pid) {
-+			prctl(PR_SET_PDEATHSIG, SIGHUP);
-+			/* Parent may have died before prctl so check now. */
-+			if (getppid() == 1)
-+				kill(getpid(), SIGHUP);
-+			access_mem(ptr);
-+		} else {
-+			self->pids[i] = pid;
-+		}
-+	}
-+
-+	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
-+	for (i = 0; i < self->nthreads - 1; i++)
-+		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
-+}
-+
-+/*
-+ * migration test with private anon hugetlb page
-+ */
-+TEST_F_TIMEOUT(migration, private_anon_htlb, 2*RUNTIME)
-+{
-+	uint64_t *ptr;
-+	int i;
-+
-+	if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
-+		SKIP(return, "Not enough threads or NUMA nodes available");
-+
-+	ptr = mmap(NULL, TWOMEG, PROT_READ | PROT_WRITE,
-+		MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	memset(ptr, 0xde, TWOMEG);
-+	for (i = 0; i < self->nthreads - 1; i++)
-+		if (pthread_create(&self->threads[i], NULL, access_mem, ptr))
-+			perror("Couldn't create thread");
-+
-+	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
-+	for (i = 0; i < self->nthreads - 1; i++)
-+		ASSERT_EQ(pthread_cancel(self->threads[i]), 0);
-+}
-+
-+/*
-+ * migration test with shared anon hugetlb page
-+ */
-+TEST_F_TIMEOUT(migration, shared_anon_htlb, 2*RUNTIME)
-+{
-+	pid_t pid;
-+	uint64_t *ptr;
-+	int i;
-+
-+	if (self->nthreads < 2 || self->n1 < 0 || self->n2 < 0)
-+		SKIP(return, "Not enough threads or NUMA nodes available");
-+
-+	ptr = mmap(NULL, TWOMEG, PROT_READ | PROT_WRITE,
-+		MAP_SHARED | MAP_ANONYMOUS | MAP_HUGETLB, -1, 0);
-+	ASSERT_NE(ptr, MAP_FAILED);
-+
-+	memset(ptr, 0xde, TWOMEG);
-+	for (i = 0; i < self->nthreads - 1; i++) {
-+		pid = fork();
-+		if (!pid) {
-+			prctl(PR_SET_PDEATHSIG, SIGHUP);
-+			/* Parent may have died before prctl so check now. */
-+			if (getppid() == 1)
-+				kill(getpid(), SIGHUP);
-+			access_mem(ptr);
-+		} else {
-+			self->pids[i] = pid;
-+		}
-+	}
-+
-+	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
-+	for (i = 0; i < self->nthreads - 1; i++)
-+		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
-+}
-+
- TEST_HARNESS_MAIN
--- 
-2.37.2
-
+lgtm, I've wrapped this in an ifndef while applying.
 
