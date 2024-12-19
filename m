@@ -1,200 +1,164 @@
-Return-Path: <linux-kselftest+bounces-23625-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23626-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C14309F8793
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 23:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EC6C9F87E0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 23:30:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B3F11895771
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 22:11:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2BD171898613
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 22:30:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93BF01F1922;
-	Thu, 19 Dec 2024 22:10:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1294216FF3B;
+	Thu, 19 Dec 2024 22:30:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X7m2XuF/"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ID6W5xeq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2069.outbound.protection.outlook.com [40.107.243.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE00D1EE7BC
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Dec 2024 22:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734646253; cv=none; b=F6rQ8/E1zBwA3z9EimkkGGzStBbIZDwb7RWSjCwKa8uQiN6mE9XYxdso75naEba3bwKrvRLaB32RA1F3m4lMpfhV5fooLxOT5wNd0BgQpYrY1m4a/6ZKhmHVSrrodjPnQAY6M2jK5x8ejr8yHnKjguaX25uEnvuoyinQcq0vXmA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734646253; c=relaxed/simple;
-	bh=Zhhm0ZpcBmst9JD3aVZLS37xkX0mSzRrgXUOWlXrNJk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=X6uFkkQnfAxxDtCMxun0mDpz95BCqHlsY8qetGcg45ysGnA46V6Iw09Iqt4tH4TSDff2Ye39U4CPASz7Jizf5stmXmJRpTVKm9zLMzPC/AZ1F6VwNNf5epfF2gSk8JfKRokXBDjfCepGI5tPnU40NRZ1vmKxpx5zMUaJh1vhZmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X7m2XuF/; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1734646250;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=O80D5yXFQRMxzbQOj64sE8dgntjB5gQ4EubvDrxxqXM=;
-	b=X7m2XuF/YFFd6Ux5R0ntZk4quUyVW+Xq1pBhNv6SqHEnT4Owp/H2v1lgX7GMV9yVeVsYL1
-	k8VH1EjmVs/1nO8fsZK1qaQi9cA8ygwGsU3Lqc6djKuGZAcdlU4sbONSQ9wZH+WLcnBp/n
-	NYeTrQnM5y6mJL392EGTQq3EY1keqAY=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-198-gaDJbv7bPE6Cdz50KGKLuQ-1; Thu,
- 19 Dec 2024 17:10:44 -0500
-X-MC-Unique: gaDJbv7bPE6Cdz50KGKLuQ-1
-X-Mimecast-MFC-AGG-ID: gaDJbv7bPE6Cdz50KGKLuQ
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 677BE1955EB9;
-	Thu, 19 Dec 2024 22:10:42 +0000 (UTC)
-Received: from starship.lan (unknown [10.22.65.181])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2E2101953953;
-	Thu, 19 Dec 2024 22:10:40 +0000 (UTC)
-From: Maxim Levitsky <mlevitsk@redhat.com>
-To: kvm@vger.kernel.org
-Cc: Ingo Molnar <mingo@redhat.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	linux-kernel@vger.kernel.org,
-	x86@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Borislav Petkov <bp@alien8.de>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Maxim Levitsky <mlevitsk@redhat.com>
-Subject: [PATCH v2 2/2] KVM: VMX: read the PML log in the same order as it was written
-Date: Thu, 19 Dec 2024 17:10:34 -0500
-Message-Id: <20241219221034.903927-3-mlevitsk@redhat.com>
-In-Reply-To: <20241219221034.903927-1-mlevitsk@redhat.com>
-References: <20241219221034.903927-1-mlevitsk@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4CC1BDABE;
+	Thu, 19 Dec 2024 22:30:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.69
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734647452; cv=fail; b=LWgv/cwlgk4eMg/PNnqFVD7UFghQ7YHcRVa6jci1EPu9TAjfjqPZncrU6xcv8FU3wzF/5N71FsZqBjglCyUlMa51mC/5joX8TZKxL/pJsQVSuodBsyJLxeNQwgMVxMrVTlA2kA6lhFQclfkIrgacP/4NSL4bYN3h5hku+ylBXC0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734647452; c=relaxed/simple;
+	bh=OoXe48t5N6gvHZpWrg5aeHQZPRUSPodzDjr+R0RQdj4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eQo+TDE/nMlZAjPid8qE+erCbk381f6qQXSraYqoOrGRQnaYux5yotC1mgmrUpwhcRgMc5Kkkq8bEvro+G3VcrRbHrNmkVBI+nO5+9x3r80Ndg5vwqZzO+qG4YP3cjWfQmgTwY8Mfe6q1wI5gD8sr4JlmsOGGwtAVSgGimFlzuc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ID6W5xeq; arc=fail smtp.client-ip=40.107.243.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YAhVSk82XunmmX9WnO8XdAfqWYiA4f+eZDQgvlg2RA6LmwppobKU8NudyIGw+KFjyGZbh5ILCu5rGf+CP3IAzgwl2Bo5gawXju01QOh2zZg1Ypk2FCYUCYcjYSDxhzdWQ1FhYecbz6BuewCaIIyzPzsvG7Kaqus/16johq56hZGdp1Oy+fvoHT1CjrNWkP5k6VMpFYFljQZ7MdU/cVQlKhVkywBoUZxUlHT01Wxw3Nvf6VDPB+s6v1QCCXzP3jybXIfTGcrNOZLhIGIp/Qr/RlBCHKEk5IHQqUMBU9m3TvaR1jrGEgo9G/3d8PlKo0DrViR1O7O5m8bECUv54EAGeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OoXe48t5N6gvHZpWrg5aeHQZPRUSPodzDjr+R0RQdj4=;
+ b=kgdOJdskfh/G9JxNpkET6/8hGLoKWx2SwHCdwfXEY/ZwrweSUgcb2gdbRKQ2WRVzsdYZAcF81J6dml0egFkn+GDQizVyKwviQY0Evmt9ISiGFI9qpq7BOEcgCnL/s9ZOsWSZpoMdZoSI87SaFmpUnkmS4f7ac6cTfL8u76EO7ywK6EdCFcf81fwz2DNPwPKKl4iM1t1p0z6GGj032O4o4zbMXAEpqFxF50MCSud2aQyde8QtLNu1aqrVAzXzuDA6W7wmkFuRpbicOpcUZlbyInezK680gdSK1eT4uh+5b5XaXE9ZMND3SxPej7OgptHhL1+GC8ZNXM+rmfYieanIfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OoXe48t5N6gvHZpWrg5aeHQZPRUSPodzDjr+R0RQdj4=;
+ b=ID6W5xeqcG58sDvcN5JYy6K/RpaS6SgF0Zv+fgwWn3R/pxRNdhBpmV2Cx6HZ353x/KxsEJHgNqNPl9gIrx9w11y/JVx0nltcowfN+6jDZTVTuGZHZfmXwuEkSnVVxaFroOo4scHzytoZG7TTG0lP1BU5ueOanbOWhzFZZN/FJPANor372g8SFAXP6iieHU+Zm4PTmpQoz+B9MkihGZ7wAUT/iFulsBqySxGNgrrzO1k4GVJd+XIvrfBmI4lTpZhDWKuc1JH+X6ySjWlEPb9QlPZuuHw8ZP0pWSYfCeoPumvpNAJubsHxcLnDy8SunoPQBYSuYI+uQj4lSNstrxrPXw==
+Received: from SJ0PR13CA0021.namprd13.prod.outlook.com (2603:10b6:a03:2c0::26)
+ by SJ0PR12MB8168.namprd12.prod.outlook.com (2603:10b6:a03:4e7::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.21; Thu, 19 Dec
+ 2024 22:30:45 +0000
+Received: from SJ5PEPF000001E8.namprd05.prod.outlook.com
+ (2603:10b6:a03:2c0:cafe::8e) by SJ0PR13CA0021.outlook.office365.com
+ (2603:10b6:a03:2c0::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8272.9 via Frontend Transport; Thu,
+ 19 Dec 2024 22:30:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ SJ5PEPF000001E8.mail.protection.outlook.com (10.167.242.196) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8251.15 via Frontend Transport; Thu, 19 Dec 2024 22:30:45 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 19 Dec
+ 2024 14:30:23 -0800
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Thu, 19 Dec 2024 14:30:22 -0800
+Received: from Asurada-Nvidia (10.127.8.10) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
+ Transport; Thu, 19 Dec 2024 14:30:21 -0800
+Date: Thu, 19 Dec 2024 14:30:19 -0800
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <will@kernel.org>
+CC: <corbet@lwn.net>, <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
+	<robin.murphy@arm.com>, <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
+	<shuah@kernel.org>, <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <eric.auger@redhat.com>,
+	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
+	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>,
+	<ddutile@redhat.com>, <yi.l.liu@intel.com>, <patches@lists.linux.dev>
+Subject: Re: [PATCH v3 01/14] iommufd: Keep IOCTL list in an alphabetical
+ order
+Message-ID: <Z2See1oS+Ogr4LQI@Asurada-Nvidia>
+References: <cover.1734477608.git.nicolinc@nvidia.com>
+ <0bdb04c6dc32f428a7f181471a0d78642e80d3b8.1734477608.git.nicolinc@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <0bdb04c6dc32f428a7f181471a0d78642e80d3b8.1734477608.git.nicolinc@nvidia.com>
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001E8:EE_|SJ0PR12MB8168:EE_
+X-MS-Office365-Filtering-Correlation-Id: b6670d5c-9b02-48f1-3042-08dd207cc77a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|376014|7416014|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?FSG/Q8oFGre4yMrCv6e11QutC8ByK0pdgmtBTqwMVzxnB+AXReiHeadX9ufi?=
+ =?us-ascii?Q?MLnoFQOHKX7rH3zrsvhDb5gO57TJHiFORVPRTfcYghlfmYijFP07YDGDO4em?=
+ =?us-ascii?Q?cZcIHeZq4vVkr2figX+5reWkv41AdCXKir2m2AYe7G/6he1qbkbXe5D/vPu+?=
+ =?us-ascii?Q?xDoTludeL33TDtSsBiy3p/WgsGa+43rwtbveqonHDEA5kUetGofcfEQa0WOd?=
+ =?us-ascii?Q?WOm/Cbof1r7gSGK6T2oI+apdyr40FB9WUZ7lOHRQL3y+7TE8XEizeK0Ersd5?=
+ =?us-ascii?Q?p1yiQ8or6iUTsA3qEzxaGOEXpQZ4XEeMnPXNp5JMvyVoXOjgMwQvfgFlKRW3?=
+ =?us-ascii?Q?bERYkLVqONYYPP7xf9bZRhaUG7zsI+X0cnWCQNTita5tDgFvJ/3aj8RYRgBE?=
+ =?us-ascii?Q?C2l7KK8zFV4lwSnb1Hr1Vdfc9vL+YqMuXXmSYih+PQfBTTkwI/eQByAjZFIv?=
+ =?us-ascii?Q?G+VlvLaGLkjMNgeObOTbpV3WDkhaxO+AkELWfa0AaHol9oWpWuMQDNje1LjU?=
+ =?us-ascii?Q?Gmuah/o7a/gE+1YKQ2BTFm3ACJ2HxvnPSXrMRK9Ubn00354xAtm+0qRnhYCj?=
+ =?us-ascii?Q?slMJZP1LzZDwJ3bGZHjevUsizX55X0BNr25SAxxXFx1XnLuvP/ZmpUnM4WaV?=
+ =?us-ascii?Q?Kr+22yu14H28wMFKITCojml9FNJYTkXjMolAAKkiFITRD2sPhjmcoiPPMerP?=
+ =?us-ascii?Q?QD4Az8+SG6dIgcxpf/RM894GhvFLRgZx98WVjsJ+KBtKHmkTd+ceDW3A0CR+?=
+ =?us-ascii?Q?Uqs2Z0TMNYTiHEnpjHitblehhS7A77AW0+G8By30VWFli23gd6KSiZwGd3V2?=
+ =?us-ascii?Q?v9VBtgAQHtb3mUBHAh3IA3oJNJWtd/L8JDAFvY8SR0qYDhbzt86/vIYJ0yFo?=
+ =?us-ascii?Q?cojTeIFnJqZReYs+yhBUqS8b5Gs+Pgjrn2Mw3AVFfcelhkOZ2AhJpEQNsuE8?=
+ =?us-ascii?Q?CW9vj1HvB1aRO2ESI+jHYXxSLBe3+w006VSIOmjjwpHdlZTwsGiq5WNFXxGV?=
+ =?us-ascii?Q?oXsZn5RywK1YD115aalPJoOAoKjfyq6q6twseOIMxPLbe6GUltROsQQ+z09g?=
+ =?us-ascii?Q?hKhThzo0YdqDgJkKjcaTVMVUBX/pQq2SC0kzgGNLZXy9/ZlFfDxC0Oq4A7U6?=
+ =?us-ascii?Q?m9hu5osow+ddCHkrmjTF8M9vh+E9Sqr2U9L3ZlvebNxqRwXXVKAHx3k+j7jK?=
+ =?us-ascii?Q?8axskW2YtpMWSk2dbQFkCoR1Wr5+FWLpIPc9sCQUy3sbvun+PNa5GqMJLgPW?=
+ =?us-ascii?Q?zIHTQcYqRTyJdzOMJ9+mYQHEfWYsN4tb0Z3lU0NejgCcWQLgXYhBNCP+Uz8k?=
+ =?us-ascii?Q?I/zJ/3VibOpVpIYxc2iQFAMQvLHJvJukLsKywSFHrTZfmjmxR62pcRMj34bn?=
+ =?us-ascii?Q?c4ONYdP8s0yMdttZCi65irHzSwwdBNEziT8KfloUFYohPG+eu4nXfNE6WXF3?=
+ =?us-ascii?Q?sYrgSUa5z2fS0BrbfirsYh9N0O+4rbn/vbVNyfqztdR6gCulRJzgmJYYhgTl?=
+ =?us-ascii?Q?pbpwfEE6HkOqyTI=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(7416014)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2024 22:30:45.0873
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b6670d5c-9b02-48f1-3042-08dd207cc77a
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ5PEPF000001E8.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB8168
 
-Intel's PRM specifies that the CPU writes to the PML log 'backwards'
-or in other words, it first writes entry 511, then entry 510 and so on.
+On Tue, Dec 17, 2024 at 09:00:14PM -0800, Nicolin Chen wrote:
+> Move VDEVICE upward to keep the order. Also run clang-format keep the same
+> coding style at line wrappings. No functional change.
 
-I also confirmed on the bare metal that the CPU indeed writes the entries
-in this order.
+It should fix the order in ucmd_buffer too. Will include in v4.
 
-KVM on the other hand, reads the entries in the opposite order, from the
-last written entry and towards entry 511 and dumps them in this order to
-the dirty ring.
-
-Usually this doesn't matter, except for one complex nesting case:
-
-KVM reties the instructions that cause MMU faults.
-This might cause an emulated PML log entry to be visible to L1's hypervisor
-before the actual memory write was committed.
-
-This happens when the L0 MMU fault is followed directly by the VM exit to
-L1, for example due to a pending L1 interrupt or due to the L1's
-'PML log full' event.
-
-This problem doesn't have a noticeable real-world impact because this
-write retry is not much different from the guest writing to the same page
-multiple times, which is also not reflected in the dirty log. The users of
-the dirty logging only rely on correct reporting of the clean pages, or
-in other words they assume that if a page is clean, then no writes were
-committed to it since the moment it was marked clean.
-
-However KVM has a kvm_dirty_log_test selftest, a test that tests both
-the clean and the dirty pages vs the memory contents, and can fail if it
-detects a dirty page which has an old value at the offset 0 which the test
-writes.
-
-To avoid failure, the test has a workaround for this specific problem:
-
-The test skips checking memory that belongs to the last dirty ring entry,
-which it has seen, relying on the fact that as long as memory writes are
-committed in-order, only the last entry can belong to a not yet committed
-memory write.
-
-However, since L1's KVM is reading the PML log in the opposite direction
-that L0 wrote it, the last dirty ring entry often will be not the last
-entry written by the L0.
-
-To fix this, switch the order in which KVM reads the PML log.
-
-Note that this issue is not present on the bare metal, because on the
-bare metal, an update of the A/D bits of a present entry, PML logging and
-the actual memory write are all done by the CPU without any hypervisor
-intervention and pending interrupt evaluation, thus once a PML log and/or
-vCPU kick happens, all memory writes that are in the PML log are
-committed to memory.
-
-The only exception to this rule is when the guest hits a not present EPT
-entry, in which case KVM first reads (backward) the PML log, dumps it to
-the dirty ring, and *then* sets up a SPTE entry with A/D bits set, and logs
-this to the dirty ring, thus making the entry be the last one in the
-dirty ring.
-
-Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
----
- arch/x86/kvm/vmx/vmx.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
-
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 30fc54eefeb4..25ea43a8efb2 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -6211,25 +6211,33 @@ static void vmx_flush_pml_buffer(struct kvm_vcpu *vcpu)
- {
- 	struct vcpu_vmx *vmx = to_vmx(vcpu);
- 	u64 *pml_buf;
--	u16 pml_idx;
-+	u16 pml_idx, pml_tail_index;
-+	int i;
- 
- 	pml_idx = vmcs_read16(GUEST_PML_INDEX);
- 
- 	/* Do nothing if PML buffer is empty */
- 	if (pml_idx == PML_HEAD_INDEX)
- 		return;
-+	/*
-+	 * PML index always points to the next available PML buffer entity
-+	 * unless PML log has just overflowed.
-+	 */
-+	pml_tail_index = (pml_idx >= PML_LOG_NR_ENTRIES) ? 0 : pml_idx + 1;
- 
--	/* PML index always points to next available PML buffer entity */
--	if (pml_idx >= PML_LOG_NR_ENTRIES)
--		pml_idx = 0;
--	else
--		pml_idx++;
--
-+	/*
-+	 * PML log is written backwards: the CPU first writes the entry 511
-+	 * then the entry 510, and so on.
-+	 *
-+	 * Read the entries in the same order they were written, to ensure that
-+	 * the dirty ring is filled in the same order the CPU wrote them.
-+	 */
- 	pml_buf = page_address(vmx->pml_pg);
--	for (; pml_idx < PML_LOG_NR_ENTRIES; pml_idx++) {
-+
-+	for (i = PML_HEAD_INDEX; i >= pml_tail_index; i--) {
- 		u64 gpa;
- 
--		gpa = pml_buf[pml_idx];
-+		gpa = pml_buf[i];
- 		WARN_ON(gpa & (PAGE_SIZE - 1));
- 		kvm_vcpu_mark_page_dirty(vcpu, gpa >> PAGE_SHIFT);
- 	}
--- 
-2.26.3
-
+Nicolin
 
