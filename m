@@ -1,115 +1,151 @@
-Return-Path: <linux-kselftest+bounces-23588-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23589-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCE209F7D31
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 15:31:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D3B69F7E1A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 16:30:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C0DD167672
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 14:31:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85982188A068
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 15:30:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CB80222589;
-	Thu, 19 Dec 2024 14:31:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4449F226198;
+	Thu, 19 Dec 2024 15:29:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sSRTFOk0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ncphvG1i"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC99C78F47;
-	Thu, 19 Dec 2024 14:31:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC2A22617E
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Dec 2024 15:29:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734618687; cv=none; b=e2jabraB3hsxHpGOhogdD9pPmnYiHbVVIFfZ8qflKfLYLuBZykQcx4ThkwjaZp5drCvS04IcuffBawhd6+sHKRMWHxE67ewk/43ZGsgl8JT++P0Mbf1ZnC1G6Uzz4kzPbSJs9Yv+tLz28GS/XEisVI9uyNFmHEC6iAhtSjflmYE=
+	t=1734622196; cv=none; b=dLLf1+OEWCYKkpbN47sOv9d7Xm3fDBRgi0ffJhC3mRrvdMAkpJpjzyr9PhLtLuayIrdyBtdc6rAsRF1JxNtXhFzN7O7viM9WbKoTrD6cBaBIioTcG9I7eUHDTGng6ZC+JoCKF4hNeWGhd/6AWLncZGmtrxWNatmbNFb/8le4Kwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734618687; c=relaxed/simple;
-	bh=AQNB3IZcwD9rOfdfKyc5+rPRa42g1Y9eH/XQhTMkGso=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H1LzBqvYVyk3Gyo8GxVhfdWsYAcUveO+ZW5rQjuFgN/QZD9xoLKeXu6zLGrS1glLJqBBBjPPxQ8OICFBMPbpkQPmyAjd/cpBQLjxGh3x8JCALgI8Zva6L3zoxFitQfizZ6cvEPHtL9OlAdhs3AY3e2TZ2/vUqaJugoq9DzGnTzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sSRTFOk0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFF6FC4CECE;
-	Thu, 19 Dec 2024 14:31:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734618686;
-	bh=AQNB3IZcwD9rOfdfKyc5+rPRa42g1Y9eH/XQhTMkGso=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sSRTFOk0xzWL3N2izqlKGZvIraDwiJJZhugV+eBaXXeB/xlQwTTnKy7SlllkYzIr/
-	 NTd/c4i/7CKKEQeq6UEZBr8XBLYNAawCLsH+aI0dQ0PYmdh4XRBJZAy6XLV6g7sRne
-	 PUdHoXt2M1kOfRxI9/IfH9zOIBBUFyLJxY58eUa1prXuwUsTtCmXmnlqmy5d+38hRk
-	 p3lUpbSf0TJ2XT7aSWHsmUHng14OIKfJmcartStdpAqS4aV7n9OmD2/TDPQE22o7xE
-	 6/WiUbw6MCS6oocMqbVGOjPY0+ssjmdaSF0/R7WjhAPLAo1pnV1d7XFHslJrfQu19Y
-	 Ahh0/e21RC1Bg==
-Date: Thu, 19 Dec 2024 15:31:21 +0100
-From: Niklas Cassel <cassel@kernel.org>
-To: Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	gregkh@linuxfoundation.org, arnd@arndb.de, lpieralisi@kernel.org,
-	shuah@kernel.org, kishon@kernel.org, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bhelgaas@google.com,
-	linux-arm-msm@vger.kernel.org, robh@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] Migrate PCI Endpoint Subsystem tests to Kselftest
-Message-ID: <Z2QuORW5kXSrc1AX@ryzen>
-References: <20241211080105.11104-1-manivannan.sadhasivam@linaro.org>
- <20241219000112.GE1444967@rocinante>
+	s=arc-20240116; t=1734622196; c=relaxed/simple;
+	bh=LzzYWztar7b02vkDjuYPug/bdBMGRAM6NkSBRRZ0bxM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=P0pZk3ndqeC+zxtKUjHfVXBCKhgcYOl5F3X76JHF4Ryxj5dG7oTubp08+gGrlcoWpOgjuoXE26Zsdy0a6hq3teqIsDMIDxRmLiSL6BJ40V7zXspytRvbyLGD1XrqBipkO8+RNqmAvh3amO+TQljsvBJTNstOl2C0pBKxK0rRTdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ncphvG1i; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-21661be2c2dso7653075ad.1;
+        Thu, 19 Dec 2024 07:29:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734622194; x=1735226994; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kbPDmXw6jYJerfGsuZshqvUEgILGJH+W+WazUYideyk=;
+        b=ncphvG1i2tDaNW/3oED+KJc2o4R/mpHxrft7FP7DSS1z+9OEsI6jViw8h17EYdQgY2
+         nRYtqijcSvOAZd5t2moLu/nkWhIbDaSoA4kejkZwq4ke/IOOFzaP7Hch3hF/a/LQj3vF
+         x4z5S3Ogd1L33CV5Z4O9Vssu1B1zybdBbvRVId7wOnfZNm4X3d1E/fDcme9KYoP30J/h
+         kmPDR+Ojo84+RREKS15oxE7NZ3VUsS9Sm77uIm5295FTAGWus2DFXRl5UT9jxw+Nk8v4
+         6mFnhZpLVf8cwrJYPqKybZg2CpGZneGan53BW7cWn+m1pnSfnwfAHKVAQVQHAgq0Kos7
+         qPqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734622194; x=1735226994;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kbPDmXw6jYJerfGsuZshqvUEgILGJH+W+WazUYideyk=;
+        b=t/nNHxqNHCbc6UKFsGHelkeNn84+RhOpbpSeqY4d0vSPSHLkcmiR7Q1LNGySoTR8m3
+         oqtlhLcjKDeqMvSe4BHXGxVwhwVe8dbinkIIElm/4BiG9iwqDyuQIgJIiMiuudq1CL8l
+         bKTfOyXhVGALgFwvJ6G3D2VoGpUIWXUxEU1Am8d9oRykWAtjZj6VZYoW0TbIezP7j4Xd
+         nDd5+sLs/GURxrHL8Pt1rfPEDupwx2AJdSXBdVjdI5yb7HrmuGLqbqMrRcI0LAQfMCKW
+         BxmwApSUM/78oB2Z4pN47GAKgbBsKk1cUtIoDFQ8+KaRhDhzZl/2WF9/t3FN+sMPwnmR
+         wApQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVR3XPY4pRCWYGYYE5pXUyCiAzW+7nlhaLMOdaJVFzlrciR6mzwnh/yE8NgdHEpPhHQtqpCq7EO7VI5MQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEaQKaBqVCiCgxvdMkofzqtjnszoZb0TZ60cGQMKwL1LXhucB+
+	HbiPP5+p7huiDBvK12xw8Xm3qZJgBK0igFzrzaToT7yQF4Jw7D9uJ1Gh1w==
+X-Gm-Gg: ASbGncsoc4b8So6SgDiAzbPs9DqzK4RXJS7xO/pyOobNprv8EdT79XxTFQ7SWjq6VTh
+	q0/N0OtlhUG0FGJ9Ba07he2Thr/J3qz5iSvaWwxDfP8lyI9tn81UkhPRYmwFF+iJ2LBdmPi6Yqz
+	B2PEmkzyPiMhzauloXFv18Bj9xAFGawaTTmyiJxYAu6XA4Edr8ayYERhYkaS7cnSzrkmKcIgPo9
+	jH737MUg5tLKWx8HLLP8fARyFVCzIdj+tXOv3StF3I3fctLnLlop+3lZDft+7skJtoM2g==
+X-Google-Smtp-Source: AGHT+IF9KgbjMsOxh+2HRKZ+JCF2k7g4faFH+AwnD4aPZUKt5OrI9nzt6tZGv9DGnYnUvckTpL8kkA==
+X-Received: by 2002:a17:902:db11:b0:216:7cbf:9500 with SMTP id d9443c01a7336-219d9617e21mr54319675ad.6.1734622193996;
+        Thu, 19 Dec 2024 07:29:53 -0800 (PST)
+Received: from 2abb50c-lcedt.nvidia.com ([203.200.25.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9cdeecsm13321755ad.123.2024.12.19.07.29.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Dec 2024 07:29:53 -0800 (PST)
+From: Shivam Chaudhary <cvam0000@gmail.com>
+To: shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	inux-kernel@vger.kernel.org,
+	Shivam Chaudhary <cvam0000@gmail.com>
+Subject: [PATCH v6 0/2] kselftest: tmpfs: Add ksft macros and skip if no root
+Date: Thu, 19 Dec 2024 20:59:27 +0530
+Message-Id: <20241219152929.4005003-1-cvam0000@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241219000112.GE1444967@rocinante>
 
-On Thu, Dec 19, 2024 at 09:01:12AM +0900, Krzysztof Wilczyński wrote:
-> Hello,
-> 
-> > This series carries forward the effort to add Kselftest for PCI Endpoint
-> > Subsystem started by Aman Gupta [1] a while ago. I reworked the initial version
-> > based on another patch that fixes the return values of IOCTLs in
-> > pci_endpoint_test driver and did many cleanups. Since the resulting work
-> > modified the initial version substantially, I took over the authorship.
-> > 
-> > This series also incorporates the review comment by Shuah Khan [2] to move the
-> > existing tests from 'tools/pci' to 'tools/testing/kselftest/pci_endpoint' before
-> > migrating to Kselftest framework. I made sure that the tests are executable in
-> > each commit and updated documentation accordingly.
-> > 
-> > NOTE: Patch 1 is strictly not related to this series, but necessary to execute
-> > Kselftests with Qualcomm Endpoint devices. So this can be merged separately.
-> 
-> Applied to selftests, thank you!
-> 
-> [01/04] PCI: qcom-ep: Mark BAR0/BAR2 as 64bit BARs and BAR1/BAR3 as RESERVED
->         https://git.kernel.org/pci/pci/c/71ae1c3a342c
-> 
-> [02/04] misc: pci_endpoint_test: Fix the return value of IOCTL
->         https://git.kernel.org/pci/pci/c/7908208a2f6a
-> 
-> [03/04] selftests: Move PCI Endpoint tests from tools/pci to Kselftests
->         https://git.kernel.org/pci/pci/c/5c892b60e4c6
-> 
-> [04/04] selftests: pci_endpoint: Migrate to Kselftest framework
->         https://git.kernel.org/pci/pci/c/62f966e676b5
-> 
-> 	Krzysztof
+This version 5 patch series replace direct error handling methods with ksft
+macros, which provide better reporting.Currently, when the tmpfs test runs,
+it does not display any output if it passes,and if it fails
+(particularly when not run as root),it simply exits without any warning or
+message.
 
-I'm a bit surprised that this series was picked up,
-since as you could see earlier in this same thread:
-https://lore.kernel.org/linux-pci/20241219000112.GE1444967@rocinante/T/#m7bb0e624a4bf88f5cc13dc3804972c4fa9a79bcd
+This series of patch adds:
 
-Mani suggested that my patch (which conflicts with this),
-should be picked up first.
+1. Add 'ksft_print_header()' and 'ksft_set_plan()'
+   to structure test outputs more effectively.
 
-Is there a reason for the sudden chance of plans?
+2. skip if not run as root.
 
-Please advice on how to proceed.
+3. Replace direct error handling with 'ksft_test_result_*',
+   macros for better reporting.
+
+v5->v6:
+         - Skip if not run as root.
+v5 v1: https://lore.kernel.org/all/20241112143056.565122-2-cvam0000@gmail.com/
+v5 v2: https://lore.kernel.org/all/20241112143056.565122-3-cvam0000@gmail.com/
+
+v4->v5:
+         - Remove unnecessary pass messages.
+         - Remove unnecessary use of KSFT_SKIP.
+         - Add appropriate use of ksft_exit_fail_msg.
+v4 v1: https://lore.kernel.org/all/8db9feab-0600-440b-b4b2-042695a100b5@linuxfoundation.org/        
+v4 v2: https://lore.kernel.org/all/63d5e3bb-9817-4a34-98fe-823a9cac7c16@linuxfoundation.org/
+
+v3->v4:
+         - Start a patchset
+         - Split patch into smaller patches to make it easy to review.
+  Patch1 Replace  'ksft_test_result_skip' with 'KSFT_SKIP' during root run check.
+  Patch2 Replace  'ksft_test_result_fail' with 'KSFT_SKIP' where fail does not make sense,
+         or failure could be due to not unsupported APIs with appropriate warnings.
 
 
-Kind regards,
-Niklas
+v3: https://lore.kernel.org/all/20241028185756.111832-1-cvam0000@gmail.com/
+
+v2->v3:
+        - Remove extra ksft_set_plan()
+        - Remove function for unshare()
+        - Fix the comment style
+v2: https://lore.kernel.org/all/20241026191621.2860376-1-cvam0000@gmail.com/
+
+v1->v2:
+        - Make the commit message more clear.
+v1: https://lore.kernel.org/all/20241024200228.1075840-1-cvam0000@gmail.com/T/#u
+
+
+thanks
+Shivam
+
+Shivam Chaudhary (2):
+  selftests: tmpfs: Add Test-skip if not run as root
+  selftests: tmpfs: Add kselftest support to tmpfs
+
+ .../selftests/tmpfs/bug-link-o-tmpfile.c      | 41 ++++++++++++-------
+ 1 file changed, 27 insertions(+), 14 deletions(-)
+
+-- 
+2.34.1
+
 
