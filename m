@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-23554-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23555-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99B089F7215
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 02:49:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA96F9F7218
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 02:50:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D99551895626
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 01:48:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 257FE1885294
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 01:48:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F57D1A7262;
-	Thu, 19 Dec 2024 01:42:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6F121A9B3C;
+	Thu, 19 Dec 2024 01:42:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="Bhf4cpGD"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="DjSHqlSM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C9951A2564
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Dec 2024 01:42:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0EA21A4E98
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Dec 2024 01:42:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734572548; cv=none; b=um54Nrbe2J5sXJvCJPDT3K+I2zj8bLPPJLJzNC6YIOuOMljOOQxmTx7gne4laDEYB/vNCR1urzgEdwCN2yqEra9Zr0BMTp+Mp8/guxlFT3U7MNm6TLiJ462OTe7EbRsCxNRCBcQk1uhQ9givrnTGjuuF+hJ7nSEcoezmbEn7KlE=
+	t=1734572550; cv=none; b=JRIe3ZLUAqF1rA6mGizSRrVxvrEY9yl2sUa1gDcRWcuPzK2InLTT7Vd4Xxn1kQBNWNfJ2+WGO6TQ0IpqCB1474rYJg/IOy5oewWNZX8Lu2406SyignAERPoUSf5i8rwpoBIMOX3Lf08e0oouBuHSncrrYR4aqiIzE6eAbhIfyXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734572548; c=relaxed/simple;
-	bh=+I0CIsXtEiIwM67fyET5J2S6dQohwJOCqzXgQfocGBc=;
+	s=arc-20240116; t=1734572550; c=relaxed/simple;
+	bh=zxwzzE3nSe/2L9mPGgMJNnofJbeP+COcEZoGUu6OnOA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mieXjCU7ExUJB8ps9RFEWAoobGOmkZd8gHGPxmeL5CfCf44Jwuaet+YZ5HcDjiq6PirIZraEu+S/nOIgl6jykcGy602BOPtq85/oSUOzYtD7grG/EAQ0Ra1NKuRfaDHu22s3luLCdTPnY3DCMrMiEbtMRZyx3uyABA/x3jfnfoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=Bhf4cpGD; arc=none smtp.client-ip=209.85.128.47
+	 In-Reply-To:To:Cc; b=H61z9iHLuXm4jqPzddmEIS2Bz0wSy8jk8/haM9CiE9/G8+tSuIMatCWZcxy5PGLzJzS0NjQ5r9Nc8hbGriBxAGJgvj2Ky6RznD/P281oyMRDVHnkzyhxQY2q21df0UlQi4sSXxNOvYvhxEzGhN6yAENyDBDUwbRbzWRTjVNb7N0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=DjSHqlSM; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4363dc916ceso8789055e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 17:42:25 -0800 (PST)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-436281c8a38so1751425e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 17:42:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1734572544; x=1735177344; darn=vger.kernel.org;
+        d=openvpn.net; s=google; t=1734572545; x=1735177345; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6eaSomrt0ENXr78HcIYaZg80aU6nwBAZS74Oa3PamkQ=;
-        b=Bhf4cpGDEcIw4EUMMrXBc4sigDgadfa+ypnVYxLDvge+uMNSuP3TxhqvCk0PycWQRe
-         gnRMep5Tbt9HPPuT77i4fNhEnfnwGDQttKZ7vYz35efphzzuMKhPAI0OCKVaL5yXMGn7
-         3CJS3rnD1vtRHhu7nBwEZBcbCEhb3XXLZe0/G/EwpTqJHsj8miFQ9OQvZuk+zWUu4aNw
-         fF0kJGpzzILQfK22k7JummC4I+qYs/q17H1CiRZGmQjneZHcNsBh+oOUM3q6mjcSHf1R
-         Kb2xJJKIsTiL14APIxW8mn/YE55WB5hVYGjXcZcMa/Ne5SsqEFBm8FEFLtC/t/k6jLlj
-         YOlg==
+        bh=kInVyKQTg4IxbPTkwUrhctxmy7AbAvQ2mFaojiMhLv8=;
+        b=DjSHqlSMKFy3jP9sv6QO+YsDReUYpnF11n39+El2jvSzbLiSLJ4K0Ao7Zdv+716jyr
+         9Mx3tNhozT8hyUp5B6OTn0ZPBVofBfUyFjF378FWbbfM5RVBUT/OQc8Ljgp7tlXijZ84
+         TVi+JbPG/wGFIqYB0VeWDk6LDYEXP931ya4Qs+/jXbnGkLZ/WIrrz1gepHcvzoClPYJ/
+         aBApuF+cudXz3BTVk/bkdkyuFYp2B1oMVq6qMoIsWzaxF0t5menH8JdHDhAzsGJrOcKG
+         laM9BMNwlNxCaYnD4ovAxywIkW3uEz2Sn1ElAt9kvJcKZaU52PF6l09Rk0Bx1wDQYj61
+         YIrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734572544; x=1735177344;
+        d=1e100.net; s=20230601; t=1734572545; x=1735177345;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6eaSomrt0ENXr78HcIYaZg80aU6nwBAZS74Oa3PamkQ=;
-        b=fYhjx2KE3FVyQw6ntoQr6iZVt4YzgCfMSuw2iHlEyVFPDWk0pJFOSSmlwCDY1mNBe8
-         JNTfAutHrRebNUelcpxii17nW+VL8UprOT99b+Dk2gOPa/F38pQGpHJ35FdwtGp+p2t7
-         Ikpq0Kp7JOgrDf1cQT81brmHWFhit3mrEJMnad1HqwK5qKuuaphWpTv875MGq5EzoXR/
-         EaqkGwRkUzpusxPoRnM9tO8ndWV8UvuH2dpoV66s20dftjPE3DePhCesoJ2Awo19e5Tw
-         ArhAFVcF7P5q6N9pzqcGr48RTALWdG8SuLcgM+fjm/2vzzeeRLuVXIXpzFdbPgwBMBJ6
-         IT5A==
-X-Forwarded-Encrypted: i=1; AJvYcCVMBoTyOI/F81I18Nvsw/TAOVmqdjLkyLHPY6RKneC0JN05LMh9MBant0XWCofUzm+ExFPnz0XCnD77DKZQ1ik=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGhkV8xtXY1dZyD06n3RMjiMYUxRoa3+SCV8Nc6bn/5FMjd8pL
-	JxY8JOOlSTkAMgF4JtaM4WQlbybFZjz83C+CFpVJ/Nb8YJzVXtbKczA3VTYZkrY=
-X-Gm-Gg: ASbGncterqd6jb5yHNxxgHenPev7sXlelv4qzVMtQPTW+rC/VdLuYtRId4N6pAWysfE
-	vI3h4nlhXr7Jgzv7qUeDRz6jlb66XchsuqjAsBaWAO6k4DhE7DHlLTkm03hofJeQvVEo5TsU9V0
-	dz6z5ZrSR+k3xipiX5cvW67nDpny+UJjA3RVGIlPzQe2Dkfs/xGpJE1/aug7HR4QpYWdCsV6fA4
-	F0Jx4QhybIF6RcHiDdxIXx9Hetrkqwhqgup4QZohApKKGt/ntzSEghYJm+yrC59tGnz
-X-Google-Smtp-Source: AGHT+IEmDmiP9adgHvZUH4ZdlfvVLP7hkdCZyPEoUJ32kAK8T+wIcxazuHb4UVtZBttRZSUEDk4d+Q==
-X-Received: by 2002:a5d:6d03:0:b0:386:3213:5b80 with SMTP id ffacd0b85a97d-38a1a274920mr1045676f8f.24.1734572543725;
-        Wed, 18 Dec 2024 17:42:23 -0800 (PST)
+        bh=kInVyKQTg4IxbPTkwUrhctxmy7AbAvQ2mFaojiMhLv8=;
+        b=aaVuwwqvi82KHqzTxvH7obpAOgJIGn9wgcL4LHgI6CRIsYAMVspfdSUfOP9Qaf1gUV
+         LYyFR6fOFZW3kky72Qkmqr082uYngRo4JreCJxbdxPqQMJe0TG6uqgIU/nagPGyu/r12
+         O8ArH3k3mLZGPknt0sT88bgTdwI5mAamyqDcY8+0QsrlZYMcwxfWNvVP20sGlsmV1F2/
+         UbxQmU7JTZFaA/AJmOPqSmageSqEnUalAVxBkY3fQBgJd77inrHmq5ooq50/lFU5iX/d
+         ds4A7roru0XZHKhbCa4K+s5N4fZ5xCr438aYimO2cL/rBBW0pkvHKbWj9vHKqS83+L4v
+         9Jkw==
+X-Forwarded-Encrypted: i=1; AJvYcCV+Rt4IP3bem/9XUj3xb8o+1XxExB9aajbeff0IzdcQLZyepjRk76z7fmYeBKzCkkKERRqHYF5L69yQSrkZ1ls=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxDMNE/z4bdifUaBJf4EwT53yMnovpiPj+iNQ83CZBO+UIhwPi
+	WIXXrCbgu/3Cl3MANey/ISbGX5kcDayjm4ViYIwioNivfT65SrtgvEBWpdTP/DE=
+X-Gm-Gg: ASbGncvelwbz9k5MePx5QYPzeowA4txTih6tY+mYx3BzOHQGowt7GjPUAafw4EvUDkQ
+	hymWUBfJ79iHnwdivBM0JAK3DTcYb9erb0T0dwUAhKEdAiVOYtw/D946gUtdG+gIf3DC42yP+kL
+	oC9NOvnonL9dXMwyN3yWgivNX/0Sk/XL5HoZoCQTGq1Bj4niGZcCfy99Tzo63otTeiSeZoXCToV
+	7AkwUy/j/bsr8/LRQ7QTAAFe/7mIoZI5Lk+mVPj0G55ph+Lla61kTejSmOQH38TQSt+
+X-Google-Smtp-Source: AGHT+IEVmLU2Pt78q4Xlm8RP+cEm+XNhbr5lxPwZIGZ7G5fq62WLFtsMu25xCn1BU9rRwsyqYoasZQ==
+X-Received: by 2002:a05:600c:4587:b0:434:fbd5:2f0a with SMTP id 5b1f17b1804b1-4365535bb16mr46245725e9.9.1734572544857;
+        Wed, 18 Dec 2024 17:42:24 -0800 (PST)
 Received: from serenity.mandelbit.com ([2001:67c:2fbc:1:3257:f823:e26a:c3fa])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4364a376846sm63615715e9.0.2024.12.18.17.42.21
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4364a376846sm63615715e9.0.2024.12.18.17.42.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2024 17:42:23 -0800 (PST)
+        Wed, 18 Dec 2024 17:42:24 -0800 (PST)
 From: Antonio Quartulli <antonio@openvpn.net>
-Date: Thu, 19 Dec 2024 02:42:08 +0100
-Subject: [PATCH net-next v16 14/26] skb: implement
- skb_send_sock_locked_with_flags()
+Date: Thu, 19 Dec 2024 02:42:09 +0100
+Subject: [PATCH net-next v16 15/26] ovpn: add support for MSG_NOSIGNAL in
+ tcp_sendmsg
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,7 +83,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241219-b4-ovpn-v16-14-3e3001153683@openvpn.net>
+Message-Id: <20241219-b4-ovpn-v16-15-3e3001153683@openvpn.net>
 References: <20241219-b4-ovpn-v16-0-3e3001153683@openvpn.net>
 In-Reply-To: <20241219-b4-ovpn-v16-0-3e3001153683@openvpn.net>
 To: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>, 
@@ -95,107 +95,88 @@ To: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
 Cc: Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3763; i=antonio@openvpn.net;
- h=from:subject:message-id; bh=+I0CIsXtEiIwM67fyET5J2S6dQohwJOCqzXgQfocGBc=;
- b=owEBbQGS/pANAwAIAQtw5TqgONWHAcsmYgBnY3oWuuG/wRfGFDKMhdE5emdD3X85H9AV4LMSR
- 6NnMRVCSdSJATMEAAEIAB0WIQSZq9xs+NQS5N5fwPwLcOU6oDjVhwUCZ2N6FgAKCRALcOU6oDjV
- h8w4B/4jileuqzc56A1VuiSz3H9+qoRWC3/uD2rM+Ki2t9ncx/3TEEd0i6mQ7MFuUTDFNYde2m8
- 7SlQYrSawN0hXDAjsw8neL8IBb77VfM2oF3LdRybot0cMX+UnAH/iVAd9zg1AEeJAXGAsMzl3IF
- SOBx+Yn14No5yMLwBsfn9snRI8A9gmeQ3KBGgmaQBRgDN7kmn4fvzb3EwaGb8TcfwaH2eFl+qm/
- N27Vkea7LKQxYqLmOSIGgfvnV19tTopRGKo506UqY6CyDhlzPodEeawiFbe8Fp3dnxZ4rzd2+C/
- qCPTuFiYwYhSh28dTJg6ZBOMxbBPqRx9RS9ePaO4Vo5yyzFQ
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2486; i=antonio@openvpn.net;
+ h=from:subject:message-id; bh=zxwzzE3nSe/2L9mPGgMJNnofJbeP+COcEZoGUu6OnOA=;
+ b=owEBbQGS/pANAwAIAQtw5TqgONWHAcsmYgBnY3oWXZbP6sWaytRRHFfzfox6RkRNuuwyidrp+
+ rPHRR3XiYeJATMEAAEIAB0WIQSZq9xs+NQS5N5fwPwLcOU6oDjVhwUCZ2N6FgAKCRALcOU6oDjV
+ h63zCAC1r1HFA/sDcwB4AZl02DRa2Jm0cd7Zu8/9Xdz+Uasf/frFbIesh/NTWUgv+MyZJRaviaY
+ KOM8EHkmmaQv+wAYTHjA5LL31tntBO2/Au2c/Z7vZsQc6B+vP6sG59RmXyokNWoTzz0lx6DxPdm
+ imjtAc/4ifLVzBjMgFQCKMGzB+2EYC7dmcaGR5S3PkckB1TETLn55ybKJwAKlJ3WFENZTXEQQiQ
+ x91VzSCl/xjW4l6q+S7EFTYOuW0hMVE1m0/wdBtRUvofc2oQvwkDZAtyp6q8S2v/74bQId+X4t0
+ EZoHoPUg3NOVeR0hbOa0wAAIUstVX4uCH/3ENo4VXLyQeNFw
 X-Developer-Key: i=antonio@openvpn.net; a=openpgp;
  fpr=CABDA1282017C267219885C748F0CCB68F59D14C
 
-When sending an skb over a socket using skb_send_sock_locked(),
-it is currently not possible to specify any flag to be set in
-msghdr->msg_flags.
+Userspace may want to pass the MSG_NOSIGNAL flag to
+tcp_sendmsg() in order to avoid generating a SIGPIPE.
 
-However, we may want to pass flags the user may have specified,
-like MSG_NOSIGNAL.
-
-Extend __skb_send_sock() with a new argument 'flags' and add a
-new interface named skb_send_sock_locked_with_flags().
+To pass this flag down the TCP stack a new skb sending API
+accepting a flags argument is introduced.
 
 Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
 Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Simon Horman <horms@kernel.org>
 Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
 ---
- include/linux/skbuff.h |  2 ++
- net/core/skbuff.c      | 18 +++++++++++++-----
- 2 files changed, 15 insertions(+), 5 deletions(-)
+ drivers/net/ovpn/skb.h |  1 +
+ drivers/net/ovpn/tcp.c | 12 ++++++++----
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index b2509cd0b930688d9ae94bc4e37a7549797e608f..86c2eea2344114c6b51b38d402167fe6175a8a92 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -4154,6 +4154,8 @@ int skb_splice_bits(struct sk_buff *skb, struct sock *sk, unsigned int offset,
- 		    unsigned int flags);
- int skb_send_sock_locked(struct sock *sk, struct sk_buff *skb, int offset,
- 			 int len);
-+int skb_send_sock_locked_with_flags(struct sock *sk, struct sk_buff *skb,
-+				    int offset, int len, int flags);
- int skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset, int len);
- void skb_copy_and_csum_dev(const struct sk_buff *skb, u8 *to);
- unsigned int skb_zerocopy_headlen(const struct sk_buff *from);
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index a441613a1e6c1765f7fc2e40f982b81f8f8fdb96..e83327bcbce37625f5c0b8b0581d6e3bf5fb55a5 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -3267,7 +3267,7 @@ static int sendmsg_unlocked(struct sock *sk, struct msghdr *msg)
+diff --git a/drivers/net/ovpn/skb.h b/drivers/net/ovpn/skb.h
+index fd19cc3081227e01c4c1ef25155de614b2dc2795..67c6e1e4a79041198f554d7c534bc2373ca96033 100644
+--- a/drivers/net/ovpn/skb.h
++++ b/drivers/net/ovpn/skb.h
+@@ -24,6 +24,7 @@ struct ovpn_cb {
+ 	struct aead_request *req;
+ 	struct scatterlist *sg;
+ 	unsigned int payload_offset;
++	bool nosignal;
+ };
  
- typedef int (*sendmsg_func)(struct sock *sk, struct msghdr *msg);
- static int __skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset,
--			   int len, sendmsg_func sendmsg)
-+			   int len, sendmsg_func sendmsg, int flags)
+ static inline struct ovpn_cb *ovpn_skb_cb(struct sk_buff *skb)
+diff --git a/drivers/net/ovpn/tcp.c b/drivers/net/ovpn/tcp.c
+index 9658513cf021681d20de2f4a581ca032d9d3dfdc..f1be4cd94e16953b39901046ede4381018e8a615 100644
+--- a/drivers/net/ovpn/tcp.c
++++ b/drivers/net/ovpn/tcp.c
+@@ -222,6 +222,7 @@ void ovpn_tcp_socket_detach(struct socket *sock)
+ static void ovpn_tcp_send_sock(struct ovpn_peer *peer)
  {
- 	unsigned int orig_len = len;
- 	struct sk_buff *head = skb;
-@@ -3285,7 +3285,7 @@ static int __skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset,
- 		kv.iov_base = skb->data + offset;
- 		kv.iov_len = slen;
- 		memset(&msg, 0, sizeof(msg));
--		msg.msg_flags = MSG_DONTWAIT;
-+		msg.msg_flags = MSG_DONTWAIT | flags;
+ 	struct sk_buff *skb = peer->tcp.out_msg.skb;
++	int ret, flags;
  
- 		iov_iter_kvec(&msg.msg_iter, ITER_SOURCE, &kv, 1, slen);
- 		ret = INDIRECT_CALL_2(sendmsg, sendmsg_locked,
-@@ -3322,7 +3322,8 @@ static int __skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset,
- 		while (slen) {
- 			struct bio_vec bvec;
- 			struct msghdr msg = {
--				.msg_flags = MSG_SPLICE_PAGES | MSG_DONTWAIT,
-+				.msg_flags = MSG_SPLICE_PAGES | MSG_DONTWAIT |
-+					     flags,
- 			};
+ 	if (!skb)
+ 		return;
+@@ -232,9 +233,11 @@ static void ovpn_tcp_send_sock(struct ovpn_peer *peer)
+ 	peer->tcp.tx_in_progress = true;
  
- 			bvec_set_page(&bvec, skb_frag_page(frag), slen,
-@@ -3368,14 +3369,21 @@ static int __skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset,
- int skb_send_sock_locked(struct sock *sk, struct sk_buff *skb, int offset,
- 			 int len)
- {
--	return __skb_send_sock(sk, skb, offset, len, sendmsg_locked);
-+	return __skb_send_sock(sk, skb, offset, len, sendmsg_locked, 0);
- }
- EXPORT_SYMBOL_GPL(skb_send_sock_locked);
+ 	do {
+-		int ret = skb_send_sock_locked(peer->sock->sock->sk, skb,
+-					       peer->tcp.out_msg.offset,
+-					       peer->tcp.out_msg.len);
++		flags = ovpn_skb_cb(skb)->nosignal ? MSG_NOSIGNAL : 0;
++		ret = skb_send_sock_locked_with_flags(peer->sock->sock->sk, skb,
++						      peer->tcp.out_msg.offset,
++						      peer->tcp.out_msg.len,
++						      flags);
+ 		if (unlikely(ret < 0)) {
+ 			if (ret == -EAGAIN)
+ 				goto out;
+@@ -371,7 +374,7 @@ static int ovpn_tcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
  
-+int skb_send_sock_locked_with_flags(struct sock *sk, struct sk_buff *skb,
-+				    int offset, int len, int flags)
-+{
-+	return __skb_send_sock(sk, skb, offset, len, sendmsg_locked, flags);
-+}
-+EXPORT_SYMBOL_GPL(skb_send_sock_locked_with_flags);
-+
- /* Send skb data on a socket. Socket must be unlocked. */
- int skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset, int len)
- {
--	return __skb_send_sock(sk, skb, offset, len, sendmsg_unlocked);
-+	return __skb_send_sock(sk, skb, offset, len, sendmsg_unlocked, 0);
- }
+ 	lock_sock(peer->sock->sock->sk);
  
- /**
+-	if (msg->msg_flags & ~MSG_DONTWAIT) {
++	if (msg->msg_flags & ~(MSG_DONTWAIT | MSG_NOSIGNAL)) {
+ 		ret = -EOPNOTSUPP;
+ 		goto peer_free;
+ 	}
+@@ -404,6 +407,7 @@ static int ovpn_tcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ 		goto peer_free;
+ 	}
+ 
++	ovpn_skb_cb(skb)->nosignal = msg->msg_flags & MSG_NOSIGNAL;
+ 	ovpn_tcp_send_sock_skb(sock->peer, skb);
+ 	ret = size;
+ peer_free:
 
 -- 
 2.45.2
