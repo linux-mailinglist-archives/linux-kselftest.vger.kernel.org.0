@@ -1,85 +1,85 @@
-Return-Path: <linux-kselftest+bounces-23573-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23574-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 566159F7422
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 06:45:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 927299F7426
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 06:45:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1786F188285B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 05:45:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B5D77A064E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 05:45:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C51C5216608;
-	Thu, 19 Dec 2024 05:45:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D01C4216618;
+	Thu, 19 Dec 2024 05:45:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Yygsv2Jd"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pSDLpHw+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B02D216607
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Dec 2024 05:45:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A9A1FAC3B
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Dec 2024 05:45:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734587123; cv=none; b=uJ3PKOXNtRQGBoA1wkKZKVfPVgQ5WjIIOORS0p+B/hth9nl83AowJPAmzghC6eGSHS+BupIUZd7TwC8Y9ekfqB+MpzMi9ozu8jMf6KCfXWvmR+KJfs1w9Ge2QAVGC1IKNBzkD/Xv2HKkXKUpGI9knITHysjehQUxoUNOes2U29A=
+	t=1734587129; cv=none; b=YvPU3qizJqDhZhymIzmzCkZmrIfbuwyYv86XOqdBcEEupLiwGIZL9ewjIUWgkKwF/P+x4bMvr7GbbypcQ0+yrlmGV5+cg4Ec9eUm2NJeZgiSrPx7+jIjTRGY5RQtrHm5GWqdgf2QqyJYd6sdE1B/jzLWN+QJmyDINHTL+lxIxoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734587123; c=relaxed/simple;
-	bh=74ubGUpENDsFmLHrMwMQJPSeWObYh5Ip8dDdRWvJhV8=;
+	s=arc-20240116; t=1734587129; c=relaxed/simple;
+	bh=1XtD9DF1dl1qPzGlfyPAsL1ypkPR3cxlXTc5hIQMUr4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dehMMGfOxcl4/1bn7/AjSA9SnQYpo35jrcJLVJwCXS159lU2hjS9/mPlEZcIHBKxAgsdJIV/96Vwuyl6dACYUhzIGkxzjPnxOp3EH7nU/atWflFUAF2P/yHSYU/d6KsD0PhET5HRZL+Hmjo4NbxC8sMXsMBd3KtVvZ7YkxvGDCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Yygsv2Jd; arc=none smtp.client-ip=209.85.219.54
+	 To:Cc:Content-Type; b=fsz3y1otAtaSnzh0P3EQdJQdNxODo9asnRIqkORX4dHEF171Hfdhg+gBb9WutKTLsL1DD7s9pfVWvvwpW/QxHQKxr3B1OPZ9IUoVi0KMXQQ3lBdU5DGleS+KstnS21veLgVC0n5JROe0LuYLDAajmBcA8xS9Kt69fZISb0pQQAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pSDLpHw+; arc=none smtp.client-ip=209.85.219.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6d8fa32d3d6so5928006d6.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 21:45:21 -0800 (PST)
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6dcf63155b0so2418496d6.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 21:45:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1734587121; x=1735191921; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1734587126; x=1735191926; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xAABsB71QBus13OKesqt4IisNnlJkRDslKe9S2py0lk=;
-        b=Yygsv2Jd45Zvzs9/YFdp4kZHJ7hcsa6ltip+mXDT5K3tUDKzY9SxHpM3n8Sn0E4+af
-         shCjErFJSaMFfPdK+OTUypgw21iTRxEDYOQg+BT5ZSl9Hnw1xs9yZHesGX0gfbn+xfIQ
-         s/rXRfVQGXl/4s53O31ttvfzSCDb/SwcDVRXzAJxcCdXqC1costmbI6zgM/R+SbTSY1e
-         JZF/tkx+D/s2DHgcrtOt/eciQF2G7mHFGl+BjKaEsf801sCAQFrFoY3KeKDKT7UFWLMh
-         aG89l7D03XaLg434UPw9vR27g/dBNaDj1huK593mHSqxBRHRfOYIfzcwjo3XmG1vke2i
-         Havw==
+        bh=InkUkU/acIGvnWBUYWprdcSksOT2KhAuvAD+xDJEhO0=;
+        b=pSDLpHw+WXIdoYBSC43ovpGLYQsXAAj3mnOLLKxanAAYAsYpKN5j7trbCCs97/pWJF
+         cszBvhOs31nHSH7qoOPYpCdJjwCVlHVH6Re4sYXSoOMHVeLqSbysblmgTGckEHKK48gI
+         1wVPCupZAbAEHDS5grn82yp9MRL/gvdtfi1/6qth9OoC9K5vphRFsEH7YDk0LSYgdWeE
+         OID55nUfmQq7Nf7eH41d9v02ppbR5ji5NgfbXVMtUH+f+g8lKnqLHb30xFzBTj2ezgGW
+         QU73skDTXhoVUigZH6ZGAL3prVaFrWFHnyS6lH1a5iICITcByVDg7B0XWlpDnpgxXk+D
+         Dc6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734587121; x=1735191921;
+        d=1e100.net; s=20230601; t=1734587126; x=1735191926;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xAABsB71QBus13OKesqt4IisNnlJkRDslKe9S2py0lk=;
-        b=WI5FGCWct4IseJpry1Xzve1MtbWjjrLoUTq1HlyqU+eym4utqD4a+BV1je3GKwaYlw
-         Df6vc4Nz3HHh0UBAB9WSa6/aKCVBhV1PjX+ze5jdpcgnL5dtSY3J4vszhSXywQVkCaZJ
-         QQQ+xaPGo395wVz+T+2HegY9G3Xdq2ncIQjGWZVwH650q/4VONYxG5HJkVAJiHj2nPEX
-         RmDGrdTZAdjT1UceH2EIALWR159vb3RRqAfyd8WI2Rw29XYwCw7bw4NgNlwsF2yh8Hs9
-         Hme0/blqN+mces1qKaKo9f75gwCN6tgKaNcTPVY23qAHXGFlOsJKpNQQ7loPbQ7G58jx
-         kS1w==
-X-Forwarded-Encrypted: i=1; AJvYcCU9aO1JmHuqKLP1JIPmlEPwdg46lTan/a58v5ar+wuhZ2kAOtVcxyFcQVqdilso/vv+lHtR/XgJldn/ijrB4cI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDRf+d91qKlktFIjlVuPLSdKCp1w0urhpw5zzf2XUY4Vx4d3tO
-	HuSU/IyXvqArYpiK+ZIyo2DOvOlCrntGLE75nDVWZxgFoZhKV+F2Va8Rlo6wGLsC2K5P+5PtkdF
-	KXSGdHy9kQstfZSLgi51iR+k+MKIQYngtCnHB
-X-Gm-Gg: ASbGncs2Zch2pWoCoqHrpdRMTrY0o501jth/TBmohCp2yKRswDMHyiUsKyDHXzwq6Rt
-	hLUtZ8sq9t88r4aSQZysv89QizLgElHcYvp9Mx9c=
-X-Google-Smtp-Source: AGHT+IGeFswxrjSa2mgH/eHR+oXcMRe9CjYozK4EjsC6wiiAsyqeLIbCahQ1uXmyjiU5qWiBZGDrq6XSETsQVuQJNVE=
-X-Received: by 2002:a05:6214:dca:b0:6d8:9a85:5b4d with SMTP id
- 6a1803df08f44-6dd14b772fbmr50188886d6.5.1734587120904; Wed, 18 Dec 2024
- 21:45:20 -0800 (PST)
+        bh=InkUkU/acIGvnWBUYWprdcSksOT2KhAuvAD+xDJEhO0=;
+        b=GACIfCRP80qlc0Yi1t+GB9IfwXhqs/29rLkaz7BMc+xIlTpP6KJZBct1tbzjzHZZva
+         mTNim/OD5mw4k+T0TWczvzzoh/qh8z/iBfmIRiyqNVI4p+IwxK1IjU2TBdPyAewtNQFF
+         2cxAbpr8l2vECx9ODoZIJuy30BXSdEHiugiR+C18TMfRpbUB/urWiecT9KWDtAwZJOEs
+         /AElG4k5lWI6yStyXoY6T6s/AvsalFqIRg4OTF7UCJxeNfYkD8aI4wWwgTNoVUGjCXHE
+         LxveqQ6HQnVvxTn3gFUlxkrzjvbyR4tMz4z3JWmOzv72YksPItPIdbP4Nwl5Oq9FErTl
+         p/FA==
+X-Forwarded-Encrypted: i=1; AJvYcCWwXPdW0sNn1O6votRgWnHrDXdnieXUYzPo77fZJzrhrD+1HR4ful3eMfubPynVoEn31sKMhpgKH/obERCrPhg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQXMztsasxjpR2HERYYXQtPCXyccVEObmK+/gYbT2VJdRG3yao
+	3Kz30/UYCCd7ZfnYrClbZByaODw0vnos+rqM93c2Ra1wP3DmkQfX3UqRLk7MQKo+Q2GOWf6epUF
+	Mk0XlUBEic0QaeFa6pg7HxVLOmJXN8R2kP4XS
+X-Gm-Gg: ASbGnct6U88Pio9awGdo4UepklSs0FYqP1U08ew8LjhT7+tRhKWuW4EU2G7+On49cV0
+	H9t7QkUZFamUQFNa4mNKyB1QowpUNVJ5qH6Gv3mg=
+X-Google-Smtp-Source: AGHT+IFG8pAtrNtHDLySzLKcFMOEVC6cao+v4eWIY6t5hFiYDzawGScV7o6rPaJAxk+ewsQxJsAZbkps8de8R2C8HaY=
+X-Received: by 2002:a05:6214:2aa5:b0:6d1:87f7:2924 with SMTP id
+ 6a1803df08f44-6dd092750a6mr99678066d6.47.1734587124721; Wed, 18 Dec 2024
+ 21:45:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241216201148.535115-1-briannorris@chromium.org> <20241216201148.535115-3-briannorris@chromium.org>
-In-Reply-To: <20241216201148.535115-3-briannorris@chromium.org>
+References: <20241216201148.535115-1-briannorris@chromium.org> <20241216201148.535115-4-briannorris@chromium.org>
+In-Reply-To: <20241216201148.535115-4-briannorris@chromium.org>
 From: David Gow <davidgow@google.com>
-Date: Thu, 19 Dec 2024 13:45:09 +0800
-X-Gm-Features: AbW1kvYPiHFcf66hjiyC5LLr1_QAIb5ykOc3XMacwanvZyom2kk27AwPknYKqmM
-Message-ID: <CABVgOSmWBAf-=hyeiMQaqAgEwpeLeYZnRvheFuYB6BWiJ+voKw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] drivers: base: test: Enable device model tests
- with KUNIT_ALL_TESTS
+Date: Thu, 19 Dec 2024 13:45:13 +0800
+X-Gm-Features: AbW1kvY1NZRh-6cGsvJVAptImGsFQcrw3-7HmI0Fq09ar_36BjeBd6YSZlyuPsw
+Message-ID: <CABVgOSkL3iCA9j553GM8pX_SZ80Xx+BWGZ_qaL0jHAY69-WMmg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] drivers: base: test: Add ...find_device_by...(...
+ NULL) tests
 To: Brian Norris <briannorris@chromium.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Maxime Ripard <mripard@kernel.org>, 
 	linux-acpi@vger.kernel.org, Rae Moar <rmoar@google.com>, 
@@ -87,54 +87,109 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Maxime Ripard <mripard@kern
 	"Rafael J. Wysocki" <rafael@kernel.org>, kunit-dev@googlegroups.com, 
 	linux-kernel@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="00000000000032dd930629990998"
+	boundary="00000000000085a02e062999092a"
 
---00000000000032dd930629990998
+--00000000000085a02e062999092a
 Content-Type: text/plain; charset="UTF-8"
 
 On Tue, 17 Dec 2024 at 04:12, Brian Norris <briannorris@chromium.org> wrote:
 >
-> Per commit bebe94b53eb7 ("drivers: base: default KUNIT_* fragments to
-> KUNIT_ALL_TESTS"), it seems like we should default to KUNIT_ALL_TESTS.
+> We recently updated these device_match*() (and therefore, various
+> *find_device_by*()) functions to return a consistent 'false' value when
+> trying to match a NULL handle. Add tests for this.
 >
-> This enables these platform_device tests for common configurations, such
-> as with:
->   ./tools/testing/kunit/kunit.py run
+> This provides regression-testing coverage for the sorts of bugs that
+> underly commit 5c8418cf4025 ("PCI/pwrctrl: Unregister platform device
+> only if one actually exists").
 >
+> Reviewed-by: Maxime Ripard <mripard@kernel.org>
 > Signed-off-by: Brian Norris <briannorris@chromium.org>
 > ---
+>
 
-Excellent!
+Thanks. This looks good to me.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
-Cheers,
+
 -- David
 
-
+> Changes in v3:
+>  * Fix potential leak in test error case
+>  * Add Maxime's Reviewed-by
 >
-> (no changes since v1)
+> Changes in v2:
+>  * Keep "devm" and "match" tests in separate suites
 >
->  drivers/base/test/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/base/test/platform-device-test.c | 41 +++++++++++++++++++++++-
+>  1 file changed, 40 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/base/test/Kconfig b/drivers/base/test/Kconfig
-> index 5c7fac80611c..2756870615cc 100644
-> --- a/drivers/base/test/Kconfig
-> +++ b/drivers/base/test/Kconfig
-> @@ -12,6 +12,7 @@ config TEST_ASYNC_DRIVER_PROBE
->  config DM_KUNIT_TEST
->         tristate "KUnit Tests for the device model" if !KUNIT_ALL_TESTS
->         depends on KUNIT
-> +       default KUNIT_ALL_TESTS
+> diff --git a/drivers/base/test/platform-device-test.c b/drivers/base/test/platform-device-test.c
+> index ea05b8785743..6355a2231b74 100644
+> --- a/drivers/base/test/platform-device-test.c
+> +++ b/drivers/base/test/platform-device-test.c
+> @@ -1,8 +1,11 @@
+>  // SPDX-License-Identifier: GPL-2.0
 >
->  config DRIVER_PE_KUNIT_TEST
->         tristate "KUnit Tests for property entry API" if !KUNIT_ALL_TESTS
+> +#include <kunit/platform_device.h>
+>  #include <kunit/resource.h>
+>
+>  #include <linux/device.h>
+> +#include <linux/device/bus.h>
+> +#include <linux/of_platform.h>
+>  #include <linux/platform_device.h>
+>
+>  #define DEVICE_NAME "test"
+> @@ -217,7 +220,43 @@ static struct kunit_suite platform_device_devm_test_suite = {
+>         .test_cases = platform_device_devm_tests,
+>  };
+>
+> -kunit_test_suite(platform_device_devm_test_suite);
+> +static void platform_device_find_by_null_test(struct kunit *test)
+> +{
+> +       struct platform_device *pdev;
+> +       int ret;
+> +
+> +       pdev = kunit_platform_device_alloc(test, DEVICE_NAME, PLATFORM_DEVID_NONE);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
+> +
+> +       ret = kunit_platform_device_add(test, pdev);
+> +       KUNIT_ASSERT_EQ(test, ret, 0);
+> +
+> +       KUNIT_EXPECT_PTR_EQ(test, of_find_device_by_node(NULL), NULL);
+> +
+> +       KUNIT_EXPECT_PTR_EQ(test, bus_find_device_by_of_node(&platform_bus_type, NULL), NULL);
+> +       KUNIT_EXPECT_PTR_EQ(test, bus_find_device_by_fwnode(&platform_bus_type, NULL), NULL);
+> +       KUNIT_EXPECT_PTR_EQ(test, bus_find_device_by_acpi_dev(&platform_bus_type, NULL), NULL);
+> +
+> +       KUNIT_EXPECT_FALSE(test, device_match_of_node(&pdev->dev, NULL));
+> +       KUNIT_EXPECT_FALSE(test, device_match_fwnode(&pdev->dev, NULL));
+> +       KUNIT_EXPECT_FALSE(test, device_match_acpi_dev(&pdev->dev, NULL));
+> +       KUNIT_EXPECT_FALSE(test, device_match_acpi_handle(&pdev->dev, NULL));
+> +}
+> +
+> +static struct kunit_case platform_device_match_tests[] = {
+> +       KUNIT_CASE(platform_device_find_by_null_test),
+> +       {}
+> +};
+> +
+> +static struct kunit_suite platform_device_match_test_suite = {
+> +       .name = "platform-device-match",
+> +       .test_cases = platform_device_match_tests,
+> +};
+> +
+> +kunit_test_suites(
+> +       &platform_device_devm_test_suite,
+> +       &platform_device_match_test_suite,
+> +);
+>
+>  MODULE_DESCRIPTION("Test module for platform devices");
+>  MODULE_AUTHOR("Maxime Ripard <mripard@kernel.org>");
 > --
 > 2.47.1.613.gc27f4b7a9f-goog
 >
 
---00000000000032dd930629990998
+--00000000000085a02e062999092a
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -224,14 +279,14 @@ BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
 hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
 AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
-eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgJCgBhO/le5lbtcAss+sK5XABurwb
-Yx1SBrEfD7tiNTYwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
-MjE5MDU0NTIxWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgNYSepKK93PrHwrWN7EGHKi4RUthG
+b5rYQ1DfBLlyQaswGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
+MjE5MDU0NTI2WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBAH+k4W/BNnm6SApkVaTV7YG28PxlA/QTSfylTz3QPFH/vpm8
-dUAE9eJ9Hty0aixAZKXOlYu1vsOO/kVZO7NQa+zDUCmmSNO5tk75udfXzZfDxoiAXLw+5ZmDvtZw
-3LTG/7H5mAwBonU5KiJ50E0c5FVIOz4yAWb79/8zFp6MpetNbcVMpWN5e5g1zKDI1KtyKtto1pWt
-m/vLgAbqvnqD8E4aUOkuFeIXhUJrCcWbjwK/GKWhMLxO9xaTMPdSOLCTa5ioQuHA6wZw4V51PSa0
-r+gMMMYDKTW7m/4nUwLKan/dafDssxsrEPWy5fMKderjVaPcRTme0SY7ZYEAjhBR1jk=
---00000000000032dd930629990998--
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAJ3Sk+KTQ0TVrvYxVPitJbYLr9ZvekqUbRmm4haOsW6eHNfs
+Wrgb+2eoxRbhwx1qcqgElZ28jh5zk1Tv/hj3QgxWFSkyR4OU5NGjkrF7ZhrV5xZiVY4sQ7DjkzQ1
+wmNmP8pZMvWlz+faZAmjEvQsgxKS/Z+FDHCqGXakhtkwg+4yJFkIGw4yQ/4ioft2Z2QrEVN2eTa6
+3fU9bbwcTw905F5o9fR3frN12NTYMFAB8mlTKMaFtVV/DhNGiTtLkZzZuIzj0HFairj7yGU6ok1W
+59Kjnzb4apVKF7XZw5j/fmXzMfWbSMhgPTZaiIeVCEKJv6ejkcu5WcC1aSWejOkdqO4=
+--00000000000085a02e062999092a--
 
