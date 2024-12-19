@@ -1,172 +1,141 @@
-Return-Path: <linux-kselftest+bounces-23577-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23578-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 531669F75F5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 08:43:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D54D9F760A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 08:46:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A3FC168738
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 07:43:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0BEF37A57E0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 07:46:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F280D216E37;
-	Thu, 19 Dec 2024 07:43:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E4F921767F;
+	Thu, 19 Dec 2024 07:46:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="Zyim+WEM"
+	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="fNtPrkBx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 566112165EE
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Dec 2024 07:43:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60363208961
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Dec 2024 07:46:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734594192; cv=none; b=Ch0cSyWw5FyfcNgFVKb3JzWhY2tc2b4BVLcVNfdS8DyODk2RTbzsnuOOn5p27eCbEWSx7kSQvBPT1xIdhIlHg03S5HdaR9flHWjxPgtT9fxqbeQfLxGMDoBF4vlvQjB0tnKt2NVWdJvd0zC30VWHn8Q7b2EoixuT37H3xtziuFM=
+	t=1734594391; cv=none; b=u41VGUNw/lx9QbhdUp7/dxaxignwUqyt8iM9VU+Kn3kGwYDTVnQWv896j+hVa92PHyXWRto2rOjmJyDM0+wrlNxExfuf4vh7fw0u5nQ+Xx3U0nl4iesHpkCoTlXA2lfusAjJeE1PXnCurqZLXl3fNh5yndxNN5ChY1L/EWh6W4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734594192; c=relaxed/simple;
-	bh=VacssBPVArSm6k/3qDdJeMgOVxZskDxHg9GeKEaHoMM=;
+	s=arc-20240116; t=1734594391; c=relaxed/simple;
+	bh=7somDA3en/hJolBi8kdko15hS7Vg45ntK/V1RkSgs4o=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D70tZao07/8PaPba2sHCCZ5Zf3eMApt+h4sLrJ/v51rJIOC5AXYLQz2+cM5tZGKtFkbiIjVO8bSVaZNstL9d75QD5ebUO8ipLTyYLD8nDFN6Kbz6qRyO9eQ4uZ9XBEavzYzYEB7vC+YfShsR+Xv+ZavRBzNjsub58BwEPKa37Yg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=Zyim+WEM; arc=none smtp.client-ip=209.85.166.181
+	 To:Cc:Content-Type; b=t9VSmF9ptg1lnsFr+jdZSuDOTZbyZLdbfvsVdZJyQ9obk12QrmlG4R7bDTMAtdj+Vc00bX/C273ab5ACKDnwHCHOM6fHtWQre5Gdg9Vn7Uip2OE7z/rNbYzG1Yi7XguqMbA8l8hejpzG9PczxC5cxJCfUMmbmilIX1qWhWrwOMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=fNtPrkBx; arc=none smtp.client-ip=209.85.166.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
-Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-3ab29214f45so1539545ab.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 23:43:11 -0800 (PST)
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-83eb38883b5so16933439f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 23:46:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1734594190; x=1735198990; darn=vger.kernel.org;
+        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1734594388; x=1735199188; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1OBSLf6ezAUOBKlVMuu5hWXIY5CF9SG01M/FkrWs7IM=;
-        b=Zyim+WEMchFZGGrpuToBRvAytqNVClL3yfQTYorWO4lzImaVWSi+8UPvCCiGmbAPyf
-         G16lhJJwX69bv2Tusc72pZy6CesbIHzKU8R018QIvK3fGQhKscDkUHSTBApR6qzAoW1v
-         FyWqyAAyufgIbouyh5li6QqWXULL8HB4xegx8rsFlgq3MkBHBPpAH+nrQzCYHble5U+C
-         e/6TEqwu5Iz2iTeOaKSI/rdsBTSD9rFjL0ZBz5zTlCGHxakOwShPfwikE+RTwa5GAebT
-         xidQqdGQ/r6PFBeAOW0z/s02HZt8KmXEuv4rVcmGcjjBlFgEvR985uAaab27I335ZxQd
-         Y8xA==
+        bh=FzlfxWAFyTOjTnsD6DMp9PLLcJQhroXi6XJ0Ja4jKS8=;
+        b=fNtPrkBxghH49xHCTr69cdcSqidEDMMiFD52lk9xL/LNFTzR3ktQUnJ60kqHpy8+Jl
+         88LTjAK//boS0ZHZ1yYHhxvFM9WN3powY0nkj9n+V3tHS2QeSn2lFxbKdS99IiDAH4jr
+         0R7AxQihNjiXO3Pw7sW4p4dcFj4LjXaRyfHRhAzDRBm8tinH9ExzvbtG0rAAVRXeZzHc
+         SlhjviBBZkgps+t+bVlWKBrR6t8MHSq9zYBhEg/v/PibsdGjgvvT/f7T3C58xblGqWG1
+         d2kfFp+BDqlcgkEJfHFrMBWs9hqAQsNvZ59l+abZlb+ToicjWe8zYOM6fjxdIN5j8NlD
+         BlHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734594190; x=1735198990;
+        d=1e100.net; s=20230601; t=1734594388; x=1735199188;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1OBSLf6ezAUOBKlVMuu5hWXIY5CF9SG01M/FkrWs7IM=;
-        b=QYXo05Gk1h92h+cfD11B2WS9E+mABByBjZnUpDjLauIpM1tACp5CgyR+wjoDLlGNLI
-         uXNarXk4Ps5VE7VA80PJP6+CzcoQjI8vw3OPkdg/UPmNPH+WQuXKdFPZ80VzyW99ZJYJ
-         eXcNNC6ObyK7VGuwWXs7NMjZAtwWaW81/7OiptYjpG+UpMKdNITJN8cRfZlqbkEVt8p5
-         W82vhIhsBtx1zYF9skLr/QSFzNGxPyFpMwW1pVYRcHooWaBkp97Z6kabDKGqlGzI3HQK
-         kxcOYUTzMvUh1+zqZ0/WujRKfVkgZLY8w4arS1ICepaKoUiO4GLUaVvJ2uP66cmH9ZGX
-         oKHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWn/s7kY3Egs6ETHUz8CEEoqzu5GFsb2NkEqiltpzEHJiEBRMcf0DbyorbAk3+VfuRR1EZhs7iytwwwBY36gRE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSwiOAKabDxfpnXd0knNRAB7xwb3nKVIAw4KR7Ul7Q0nRcjdw+
-	MXFcO5dJ2cl0MlGQrfyX5fdHrE7+zaLxJbbEZc1gWMetyUcqR62UW1hAP8AiM4pk37r22YOV7TL
-	YTYfvdB9Bpl6XFqRbn9Ti/PO2GObKl7GCI+0QGg==
-X-Gm-Gg: ASbGncufEJxDboVr1KLz63U10NHlrkoSvBtnqPUrsuxWDIiG0tfNCriGrmUaQZyvZH9
-	KqCXbdHxfDjFaqKImsu2IzrF2F616pQJrXmZ3Sz2N
-X-Google-Smtp-Source: AGHT+IEYkbHFgP7rWEbUL4gJw6AmdAq+2B/xjkc5BL4zM4osboITpF6FofLzy/cYgFT9HyU3ZxpxXw1GxTtEEJ9scZ0=
-X-Received: by 2002:a05:6e02:160a:b0:3a7:e86a:e80f with SMTP id
- e9e14a558f8ab-3bdc003ea26mr62053815ab.3.1734594190381; Wed, 18 Dec 2024
- 23:43:10 -0800 (PST)
+        bh=FzlfxWAFyTOjTnsD6DMp9PLLcJQhroXi6XJ0Ja4jKS8=;
+        b=RfA44BFA/BbVYfHlGx6XinacfBkIQ+4/dAEGvYQPARjOwg70AVz7gGjh0Obi9pYd0z
+         /KFvX+HKqCbYOrfefBKpEdGjcHOoomWkIdPlsnEaCOeonxNp3SNyI5fwgfEj0E1AQWQq
+         ODvCvOIwYg9R0MoNWknFKOiNKbrTVBJTRQOjXqL7w8PqTatWxPWydlgoRZy1aVjYKBFc
+         gLdF7206ev4yZsa3AItNvCDYyjD5bknpytGGYiPTTkDjSoRu2EvP42Y6OIPNO0Xtq09l
+         EZiS8GjNvfkbHeMm1m5Plk4UndyUnWzWZbWmh607Ydw3YQ4U78WYHt7v41JtTzjuO8/i
+         5ggA==
+X-Forwarded-Encrypted: i=1; AJvYcCUjusfCf/niPx0VT/1Fo3Xe4O1ZO0VgN9I92Sh+Vut77eTySxcVd245w+GltJxx90M7UwwOIj5JC5RdslQuryU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxipw7cPlarMxUeyfEXLjLPOkKP1MpwHsmMSm8uEOmDTxIyCUQG
+	mXgCwQWLUt57URXfP2QNaKMPKipKezirLnDKau9BmTYvmlIwgyi5jUfWUu1sKfLeuYzyNYwNOhN
+	uCzYDEKy2EruxKPH5kvE/OheGT3ntPUc010hx+Q==
+X-Gm-Gg: ASbGncunMs6c4r+utZy/LLKCeLYQVs/4dYMCy6QBKAct+vmELlrxabipkJ+SA2raWtR
+	BibwTnorWvMA/u9vyIU98dy/a1l9cKYPY0rI2+OfD
+X-Google-Smtp-Source: AGHT+IEl2VHIINWWOqX/TIjrPphy37QQEWpY//lPf2cQsAGp5Fr2UzQ2zg1QergkXg+gvTvXBtQ46kjIk7rWXXu2I5s=
+X-Received: by 2002:a05:6e02:164e:b0:3a7:8208:b847 with SMTP id
+ e9e14a558f8ab-3c014994c32mr17541505ab.22.1734594388418; Wed, 18 Dec 2024
+ 23:46:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240619153913.867263-1-cleger@rivosinc.com> <20240619153913.867263-6-cleger@rivosinc.com>
-In-Reply-To: <20240619153913.867263-6-cleger@rivosinc.com>
+References: <20240619153913.867263-1-cleger@rivosinc.com>
+In-Reply-To: <20240619153913.867263-1-cleger@rivosinc.com>
 From: Anup Patel <anup@brainfault.org>
-Date: Thu, 19 Dec 2024 13:12:58 +0530
-X-Gm-Features: AbW1kvZ_WXwEDbsqmAKgoCiT1ZSWNjyowoJciFKcgfWXJoYFYtMyuYjF6-4g-mE
-Message-ID: <CAAhSdy3gYPa82zj+fAXtkDvJuKXoWBNj5Mx+XjHXkn=a2c__ig@mail.gmail.com>
-Subject: Re: [PATCH 5/5] KVM: riscv: selftests: Add Zaamo/Zalrsc extensions to
- get-reg-list test
-To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
+Date: Thu, 19 Dec 2024 13:16:16 +0530
+X-Gm-Features: AbW1kvZvVibTIPOmSKzCzxVje5Rw-BrkbRTFTVX8TQ75LxnNOw1pz_vbOq-3DA4
+Message-ID: <CAAhSdy0NkNgZraqnrTGtGYn-aM+tJ8hhGF4n3U+JP+VOF2BJfw@mail.gmail.com>
+Subject: Re: [PATCH 0/5] riscv: add support for Zaamo and Zalrsc extensions
+To: Palmer Dabbelt <palmer@dabbelt.com>, Palmer Dabbelt <palmer@rivosinc.com>
 Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Shuah Khan <shuah@kernel.org>, 
-	Atish Patra <atishp@atishpatra.org>, linux-doc@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, kvm@vger.kernel.org, 
+	Atish Patra <atishp@atishpatra.org>, =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
+	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, kvm@vger.kernel.org, 
 	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
+Hi Palmer,
+
 On Wed, Jun 19, 2024 at 9:11=E2=80=AFPM Cl=C3=A9ment L=C3=A9ger <cleger@riv=
 osinc.com> wrote:
 >
-> The KVM RISC-V allows Zaamo/Zalrsc extensions for Guest/VM so add these
-> extensions to get-reg-list test.
+> Since commit e87412e621f1 ("integrate Zaamo and Zalrsc text (#1304)"),
+> the A extension has been described as a set of instructions provided by
+> Zaamo and Zalrsc. Add these two extensions.
 >
-> Signed-off-by: Cl=C3=A9ment L=C3=A9ger <cleger@rivosinc.com>
+> This series is based on the Zc one [1].
+>
+> Link: https://lore.kernel.org/linux-riscv/20240619113529.676940-1-cleger@=
+rivosinc.com/
+>
+> ---
+>
+> Cl=C3=A9ment L=C3=A9ger (5):
+>   dt-bindings: riscv: add Zaamo and Zalrsc ISA extension description
+>   riscv: add parsing for Zaamo and Zalrsc extensions
+>   riscv: hwprobe: export Zaamo and Zalrsc extensions
+>   RISC-V: KVM: Allow Zaamo/Zalrsc extensions for Guest/VM
+>   KVM: riscv: selftests: Add Zaamo/Zalrsc extensions to get-reg-list
+>     test
 
-LGTM.
+These patches conflict with some of the KVM patches which
+I have queued for Linux-6.14.
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+If you can ACK these patches then I can take it through the
+KVM RISC-V tree.
 
 Regards,
 Anup
 
-> ---
->  tools/testing/selftests/kvm/riscv/get-reg-list.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
 >
-> diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/tes=
-ting/selftests/kvm/riscv/get-reg-list.c
-> index 1a5637a6ea1e..70216a1760c3 100644
-> --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> @@ -48,7 +48,9 @@ bool filter_reg(__u64 reg)
->         case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_SVINVAL:
->         case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_SVNAPOT:
->         case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_SVPBMT:
-> +       case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_ZAAMO:
->         case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_ZACAS:
-> +       case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_ZALRSC:
->         case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_ZBA:
->         case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_ZBB:
->         case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV=
-_ISA_EXT_ZBC:
-> @@ -420,7 +422,9 @@ static const char *isa_ext_single_id_to_str(__u64 reg=
-_off)
->                 KVM_ISA_EXT_ARR(SVINVAL),
->                 KVM_ISA_EXT_ARR(SVNAPOT),
->                 KVM_ISA_EXT_ARR(SVPBMT),
-> +               KVM_ISA_EXT_ARR(ZAAMO),
->                 KVM_ISA_EXT_ARR(ZACAS),
-> +               KVM_ISA_EXT_ARR(ZALRSC),
->                 KVM_ISA_EXT_ARR(ZBA),
->                 KVM_ISA_EXT_ARR(ZBB),
->                 KVM_ISA_EXT_ARR(ZBC),
-> @@ -950,7 +954,9 @@ KVM_ISA_EXT_SIMPLE_CONFIG(sstc, SSTC);
->  KVM_ISA_EXT_SIMPLE_CONFIG(svinval, SVINVAL);
->  KVM_ISA_EXT_SIMPLE_CONFIG(svnapot, SVNAPOT);
->  KVM_ISA_EXT_SIMPLE_CONFIG(svpbmt, SVPBMT);
-> +KVM_ISA_EXT_SIMPLE_CONFIG(zaamo, ZAAMO);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zacas, ZACAS);
-> +KVM_ISA_EXT_SIMPLE_CONFIG(zalrsc, ZALRSC);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zba, ZBA);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zbb, ZBB);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zbc, ZBC);
-> @@ -1012,7 +1018,9 @@ struct vcpu_reg_list *vcpu_configs[] =3D {
->         &config_svinval,
->         &config_svnapot,
->         &config_svpbmt,
-> +       &config_zaamo,
->         &config_zacas,
-> +       &config_zalrsc,
->         &config_zba,
->         &config_zbb,
->         &config_zbc,
+>  Documentation/arch/riscv/hwprobe.rst          |  8 ++++++++
+>  .../devicetree/bindings/riscv/extensions.yaml | 19 +++++++++++++++++++
+>  arch/riscv/include/asm/hwcap.h                |  2 ++
+>  arch/riscv/include/uapi/asm/hwprobe.h         |  2 ++
+>  arch/riscv/include/uapi/asm/kvm.h             |  2 ++
+>  arch/riscv/kernel/cpufeature.c                |  9 ++++++++-
+>  arch/riscv/kernel/sys_hwprobe.c               |  2 ++
+>  arch/riscv/kvm/vcpu_onereg.c                  |  4 ++++
+>  .../selftests/kvm/riscv/get-reg-list.c        |  8 ++++++++
+>  9 files changed, 55 insertions(+), 1 deletion(-)
+>
 > --
 > 2.45.2
 >
