@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-23597-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23598-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91FE79F7E74
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 16:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 73F189F7E7A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 16:53:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C0D3188F092
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 15:52:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3614188E0C8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 15:53:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A28CB22616E;
-	Thu, 19 Dec 2024 15:50:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F02F228CBC;
+	Thu, 19 Dec 2024 15:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KVFAE+lX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="inodVxpZ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F14E226163;
-	Thu, 19 Dec 2024 15:50:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC1F228CAD;
+	Thu, 19 Dec 2024 15:50:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734623440; cv=none; b=CoSxb77/uEoxmUzcze0LvbXJbQd7Q8YutBIY1pcyLoXtWU6WbBrKG9n0+HBWLSBDyaAucdFblH7HnYqs80rxGCMGxaIE7oaA4Nfb8Ok5jKN7mJOKNh41n7haS0wa9k9uVWyvGoJ2AKrqWN1CD69LBNpgGaF4T6R5XQ7wrH4FDT4=
+	t=1734623446; cv=none; b=hraqTbQEWTWI/xxd/HXlxoytiqpuzhrDVpxHjfs/u60xpIIo8lKgfCffMURxJbrKlBilkKyESehnrMJudkO2HZcdHlv0EYhZSVixIfeDUNONViAlWn1TWDNcNTWNOjm4a8o994k/b0DgfQYf5xmeuBzPWIAfVYNliIsiNVoyBTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734623440; c=relaxed/simple;
-	bh=885bqhsxwSrHf3hr8m6L9FjjSKd1BhbPypgPwXzqfg8=;
+	s=arc-20240116; t=1734623446; c=relaxed/simple;
+	bh=DszTJJw7BeF4Dq9illY7Eq+noW6jmff6HalMxhu2MhM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=P7I8FuFT1N+MViGXmGoBPTeZZIufWYAcRjcldgDcCA+saZ3rrOjtfTe4vO0ibEV0yvnopKQS6U5UIVCpa96p5NdOYxl8rDlejgZ6MWAZTwZMI9EP3lFO/+aOS4gBR0/P8i8NlR1kqFlDTfv0hbqrQSmCnpht20vo8681gLPxhSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KVFAE+lX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC76AC4CEDF;
-	Thu, 19 Dec 2024 15:50:34 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=mfOfMzSKSWZI4nSrZPjO3x+6vGcKtPidKIYZmeayV7Dqiqe0IwAuR/U6radoYqL0TDprHkYSwb9HpaScFd+EZJDLjMlGTpIS8saA3mnSzrWCBFuF3ZpQnDTOpTZSaE7K8/sAD7nhzZPkREqMe6+poFG62dX4bFK2AbzOzZMQgas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=inodVxpZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60BF1C4CEDE;
+	Thu, 19 Dec 2024 15:50:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734623439;
-	bh=885bqhsxwSrHf3hr8m6L9FjjSKd1BhbPypgPwXzqfg8=;
+	s=k20201202; t=1734623445;
+	bh=DszTJJw7BeF4Dq9illY7Eq+noW6jmff6HalMxhu2MhM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=KVFAE+lXFnFxPEFWLHM+mL3Pvb9Xon/BYJlxo8SafbWo/85IE4LEf23aHFO6iTwWI
-	 6D6bqdS0H3tNG5iV0PRSncl8lmjwN0RRZJVMcOlkcjXZBlY+dRqzqM1GvQ2pl2Jd0V
-	 evcoKLZ2VLZOSvMuwySFKoP4uUTsJLTNv5uDJIkTLBuXgYkedSXp5UFK4bp9TEP40/
-	 StOtotULv+PzCCQN9TXFDh/DpSvHOwY8alETHmTXBi0aYo5wCvFJUEXdK8335flivI
-	 L+GubkLyR0tPXPjRsm94bAdgCJUhekMFXkrBOpOCbSofChv5Eyh758ZHdF6X/mmcvJ
-	 rG7Y3TNvN/3YQ==
+	b=inodVxpZX+tuUtf+60UKSQKZgyCvOEy0XUtcHRbfoD8WNUfAwa4iy2FB/+xgbF8Wm
+	 eLq74MU34VcjVpanttNXc6Kw6omQ4KC4SY7NyoVt00Ht1MRVaeMZcJTA0X8lbWogJe
+	 VV1HZc3z/wEEzk/ccSVb+PYxq0ZfGJqiHAijOVkxZd8gIrDEztPPhRLbtWfmnO27ne
+	 NFz37WyWXuhsDIbJGhuweyoLLuQ/+vGrx/AGOSlPmlheg2sv4Y+UW0oTqK/2/RGxAL
+	 AKFcCuYpURAzeAEBSVVwr9CdO1U6tVhxkgoa3zF8It7njixM6WoTpg+kRVk+PxLM0I
+	 91zUyb1tdd97g==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Thu, 19 Dec 2024 16:46:44 +0100
-Subject: [PATCH bpf-next/net v2 5/7] bpf: Acquire and release mptcp socket
+Date: Thu, 19 Dec 2024 16:46:45 +0100
+Subject: [PATCH bpf-next/net v2 6/7] selftests/bpf: More endpoints for
+ endpoint_init
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241219-bpf-next-net-mptcp-bpf_iter-subflows-v2-5-ae244d3cdbbc@kernel.org>
+Message-Id: <20241219-bpf-next-net-mptcp-bpf_iter-subflows-v2-6-ae244d3cdbbc@kernel.org>
 References: <20241219-bpf-next-net-mptcp-bpf_iter-subflows-v2-0-ae244d3cdbbc@kernel.org>
 In-Reply-To: <20241219-bpf-next-net-mptcp-bpf_iter-subflows-v2-0-ae244d3cdbbc@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -73,77 +74,133 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
  Geliang Tang <geliang@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2002; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=EEPXf9FaRn8aAdYNTiDw9/bU62ypSH7UW8zt9P0k814=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnZECul4EIMgu1Vz0B45o5ZDIdsPYVVKHIytZiV
- YxQHcjGFRGJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ2RArgAKCRD2t4JPQmmg
- c2vYD/9Tkzh/OtVbJRSiXvaFURaoVlPR5w+InOLbWk5p7hT/2LxKXT2zYMBRJJyLZ84nY9r1V52
- VNJOLrvkHk5vXVSt7tOrtNEQkHaDqX0hAD0kaTKVBZ2SxppKMM5paua8k9RpTitKsUstr6QAIDZ
- fLR2c54vJZKB5TkBRrgIx5oU24Q5DILIhs+OMEquzAXc7Z3WnXqteWXcncQWi+DJ6pXt7bWFiL1
- oIYPt2Vr16n2zWLjFGa1mXY8PS46JKit2eb8MhnEhArjOeWEDMPd9k5wXZqq5cOA76vsIR/onkC
- NX5HzPf7Iea3//EdMMatk6FwWXR214MPucoMsRXuO6BP5/vgs49XpCgQ2OPWAp4xy0CnJUjiZl4
- kKWsbAnYCOoDRyvxqahvXm7DqzUJXUzt2mhLwX17cQBjINFguwgC3bYcWjUVfjLDBTPA4O0wNGB
- 8Jk07Em0QulHSciKNhZe3tExisppCOn+oLhZSX7nDQpvJC3d/4bUX1X4VLGJ9gRTbGT0G9dO8G8
- 2KSst0LVmUYzylMYsXLlaBZdHdd0xhiqKe4/rjTOzofLscNQ9hFw3fEjMqfYk4XkgUYYKhZLGx1
- bwO9AE/dq2wseAkDiDTUnJOAG+FgO9eiigVeOpi1KmzVqGRBmNazNAYp8GTzqgqlxtsgH7nD6PK
- s9DCj4hYOaaWFxg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3788; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=Po09A6yg2QyWP12VFvj6lUg78RIYIk2YxWtr3rxOpQk=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnZECuhP2z2ITaXuAOojzKD7j3pk1TEvcNJIfDR
+ ycxmgA053iJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ2RArgAKCRD2t4JPQmmg
+ c/VnD/9PhaUefizQp8URVACGbALKPMkyZ8UlEy1TfbG+K24rhewTdKY/i8OlueG88Gq06jARQR/
+ S0rF7wMSkUF5nZw8wOP3OXSre+IJuNLC6ccki+4x/913nAYBgkyXPsY6p6XMT3iCGz14BAIxGE8
+ f7gCN1quUxfWu+9xEocWCyuQDNU5higx0G66PDtVhkUDpWC/RlhfDuFEsEB8Vy6ev7F3OiOaHm4
+ m/ObJweQYno8e73x+4iCDcsvu76GmuxOIOW2w+Mu3SGGEgrxZRvsxIIgpJgl5AXW3+yilO49AAV
+ 9LzuJHV3+unu0YByPqf0/pLdZdlhxVDDQCHRi8dnbFCGPbJRgZYpsuGbkW+4d/jo7YWifJA8hQJ
+ w5GbKo9OBzjZ4mdgtyPqu1VbNkEujDVzg7GrTC+GPh7xrd5RUTTRSU3HNP3rJnCnVpReXINSDxT
+ eNkD6zSnu15j2/cccCN51BLkji8mDjb75SskIXjmZ3Q3/OrAVXAv4J0bHTZuXL4UvRDn9s4jpJN
+ 4i2s1GP2+faXxFNJ4+CBrvTz0MllFb1xxzE5vaCboRNwJluSu2EQ35MVMO6lNeEiY5x1WWIuARB
+ wnu53vcpbGcBoCzJJi+PKbW94caQdh9ZLU0kVxGxWWBkyQUbx1j682tdWOxJDw/56sQeXE2Agt0
+ O36dLQSPw6udQGw==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-The KF_TRUSTED_ARGS flag is used for bpf_iter_mptcp_subflow_new, it
-indicates that the all pointer arguments are valid. It's necessary to
-add a KF_ACQUIRE helper to get valid "msk".
+This patch changes ADDR_2 from "10.0.1.2" to "10.0.2.1", and adds two more
+IPv4 test addresses ADDR_3 - ADDR_4, four IPv6 addresses ADDR6_1 - ADDR6_4.
+Add a new helper address_init() to initialize all these addresses.
 
-This patch adds bpf_mptcp_sock_acquire() and bpf_mptcp_sock_release()
-helpers for this. Increase sk->sk_refcnt in _acquire() and decrease it
-in _release(). Register them with KF_ACQUIRE flag and KF_RELEASE flag.
+Add a new parameter "endpoints" for endpoint_init() to control how many
+endpoints are used for the tests. This makes it more flexible. Update the
+parameters of endpoint_init() in test_subflow().
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- net/mptcp/bpf.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/mptcp.c | 56 +++++++++++++++++++++++---
+ 1 file changed, 50 insertions(+), 6 deletions(-)
 
-diff --git a/net/mptcp/bpf.c b/net/mptcp/bpf.c
-index e39f0e4fb683c1aa31ee075281daee218dac5878..d50bd1ea7f6d0ff1abff32deef9a98b98ee8f42c 100644
---- a/net/mptcp/bpf.c
-+++ b/net/mptcp/bpf.c
-@@ -97,6 +97,23 @@ bpf_iter_mptcp_subflow_destroy(struct bpf_iter_mptcp_subflow *it)
- {
+diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+index f8eb7f9d4fd20bbb7ee018728f7ae0f0a09d4d30..85f3d4119802a85c86cde7b74a0b857252bad8b8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
++++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+@@ -14,7 +14,13 @@
+ 
+ #define NS_TEST "mptcp_ns"
+ #define ADDR_1	"10.0.1.1"
+-#define ADDR_2	"10.0.1.2"
++#define ADDR_2	"10.0.2.1"
++#define ADDR_3	"10.0.3.1"
++#define ADDR_4	"10.0.4.1"
++#define ADDR6_1	"dead:beef:1::1"
++#define ADDR6_2	"dead:beef:2::1"
++#define ADDR6_3	"dead:beef:3::1"
++#define ADDR6_4	"dead:beef:4::1"
+ #define PORT_1	10001
+ 
+ #ifndef IPPROTO_MPTCP
+@@ -322,22 +328,60 @@ static void test_mptcpify(void)
+ 	close(cgroup_fd);
  }
  
-+__bpf_kfunc static struct
-+mptcp_sock *bpf_mptcp_sock_acquire(struct mptcp_sock *msk)
-+{
-+	struct sock *sk = (struct sock *)msk;
+-static int endpoint_init(char *flags)
++static int address_init(void)
+ {
+ 	SYS(fail, "ip -net %s link add veth1 type veth peer name veth2", NS_TEST);
+ 	SYS(fail, "ip -net %s addr add %s/24 dev veth1", NS_TEST, ADDR_1);
++	SYS(fail, "ip -net %s addr add %s/64 dev veth1 nodad", NS_TEST, ADDR6_1);
+ 	SYS(fail, "ip -net %s link set dev veth1 up", NS_TEST);
+ 	SYS(fail, "ip -net %s addr add %s/24 dev veth2", NS_TEST, ADDR_2);
++	SYS(fail, "ip -net %s addr add %s/64 dev veth2 nodad", NS_TEST, ADDR6_2);
+ 	SYS(fail, "ip -net %s link set dev veth2 up", NS_TEST);
+-	if (SYS_NOFAIL("ip -net %s mptcp endpoint add %s %s", NS_TEST, ADDR_2, flags)) {
 +
-+	if (sk && refcount_inc_not_zero(&sk->sk_refcnt))
-+		return msk;
-+	return NULL;
++	SYS(fail, "ip -net %s link add veth3 type veth peer name veth4", NS_TEST);
++	SYS(fail, "ip -net %s addr add %s/24 dev veth3", NS_TEST, ADDR_3);
++	SYS(fail, "ip -net %s addr add %s/64 dev veth3 nodad", NS_TEST, ADDR6_3);
++	SYS(fail, "ip -net %s link set dev veth3 up", NS_TEST);
++	SYS(fail, "ip -net %s addr add %s/24 dev veth4", NS_TEST, ADDR_4);
++	SYS(fail, "ip -net %s addr add %s/64 dev veth4 nodad", NS_TEST, ADDR6_4);
++	SYS(fail, "ip -net %s link set dev veth4 up", NS_TEST);
++
++	return 0;
++fail:
++	return -1;
 +}
 +
-+__bpf_kfunc static void bpf_mptcp_sock_release(struct mptcp_sock *msk)
++static int endpoint_add(char *addr, char *flags)
 +{
-+	struct sock *sk = (struct sock *)msk;
-+
-+	WARN_ON_ONCE(!sk || !refcount_dec_not_one(&sk->sk_refcnt));
++	return SYS_NOFAIL("ip -net %s mptcp endpoint add %s %s", NS_TEST, addr, flags);
 +}
 +
- __bpf_kfunc_end_defs();
++static int endpoint_init(char *flags, u8 endpoints)
++{
++	int ret = -1;
++
++	if (!endpoints || endpoints > 4)
++		goto fail;
++
++	if (address_init())
++		goto fail;
++
++	if (SYS_NOFAIL("ip -net %s mptcp limits set add_addr_accepted 4 subflows 4",
++		       NS_TEST)) {
+ 		printf("'ip mptcp' not supported, skip this test.\n");
+ 		test__skip();
+ 		goto fail;
+ 	}
  
- BTF_KFUNCS_START(bpf_mptcp_common_kfunc_ids)
-@@ -104,6 +121,8 @@ BTF_ID_FLAGS(func, bpf_mptcp_subflow_ctx, KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_iter_mptcp_subflow_new, KF_ITER_NEW | KF_TRUSTED_ARGS)
- BTF_ID_FLAGS(func, bpf_iter_mptcp_subflow_next, KF_ITER_NEXT | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_iter_mptcp_subflow_destroy, KF_ITER_DESTROY)
-+BTF_ID_FLAGS(func, bpf_mptcp_sock_acquire, KF_ACQUIRE | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_mptcp_sock_release, KF_RELEASE)
- BTF_KFUNCS_END(bpf_mptcp_common_kfunc_ids)
+-	return 0;
++	if (endpoints > 1)
++		ret = endpoint_add(ADDR_2, flags);
++	if (endpoints > 2)
++		ret = ret ?: endpoint_add(ADDR_3, flags);
++	if (endpoints > 3)
++		ret = ret ?: endpoint_add(ADDR_4, flags);
++
+ fail:
+-	return -1;
++	return ret;
+ }
  
- static const struct btf_kfunc_id_set bpf_mptcp_common_kfunc_set = {
+ static void wait_for_new_subflows(int fd)
+@@ -423,7 +467,7 @@ static void test_subflow(void)
+ 	if (!ASSERT_OK_PTR(netns, "netns_new: mptcp_subflow"))
+ 		goto skel_destroy;
+ 
+-	if (endpoint_init("subflow") < 0)
++	if (endpoint_init("subflow", 2) < 0)
+ 		goto close_netns;
+ 
+ 	run_subflow();
 
 -- 
 2.47.1
