@@ -1,158 +1,124 @@
-Return-Path: <linux-kselftest+bounces-23602-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23603-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A3299F7E94
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 16:56:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 746509F7E95
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 16:56:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72C661636B1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 15:56:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 61A347A2037
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 15:56:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8328C22653F;
-	Thu, 19 Dec 2024 15:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="M/gLjEgd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 067C7226531;
+	Thu, 19 Dec 2024 15:55:10 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE4C822616C;
-	Thu, 19 Dec 2024 15:54:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C547226163;
+	Thu, 19 Dec 2024 15:55:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734623682; cv=none; b=NmyE9FSqr4bdUE3wOwZIWQHNzF8c//eWAvzXRBAS7BYOC/W/KBxd7Z8wwCAyXHZTJEtsVmDtxckTY/ByAH57uHcFZ2v7DVn6QDJYALjrGVKaTRZGRhEY9FeYdmrp72B9dTCBJVfEUiAHx4jdLKgFiFeRJ7cl+MsNrE2+FtrgmOQ=
+	t=1734623709; cv=none; b=Jde7BEs9aFVrTCVzRwvjSn0KliWNbIwB5VMB+uZno4CSfE+klBCMsavxDRSpPpGRSkSCBl+y38Ykv8hTDluJ8RQyxHwBFnhxnsnbDpALnlLrv7snXgPzRAQJSQEMEAl8QMFYq7ogif836Xo/LDjiyau21hN4ayCv9PVaYmk7n60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734623682; c=relaxed/simple;
-	bh=po0srZuivOCxjd54M/INi2PjQra+4925Ud1lFzjdEP0=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=Hn2CzaMvagC7Yw9Wj3cAZ/NER2ZORC2qPXvmhV8oFFF5jyxCofv612euFnmhz7CWN1d8krAUn8YBO3GFtLUPNvmPW2x3+GrPIUVScF2dQkYooJTHmwE1300jqGsRjpF2z2+KHQyxJPh7USEYg1Todh4RxG0uFEf97alG2stlJco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=M/gLjEgd; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BJElccg025422;
-	Thu, 19 Dec 2024 15:54:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=OLPXt2
-	Fr7DHqwKhW5a4fC/btDgfwvSE9Zz8c5UZXHpA=; b=M/gLjEgdDx4EWuSnudsmfJ
-	hu2EbTF+jSyhPJmPyiUJGOVMAEZUQj6OLQKMXHBIeGktGGWmE3iZwnfk2Y44KRgT
-	wmHgu+xTgiBgpAd0NTY2Z9MGcElIbAygMwt/0PC67xyF9eSiENi4gjQNxoHXlb0a
-	SmZed1vL0eNGMt1Ap8f6aDjFJTSNsYjOd/kb8fVf9OFhfDUzQmGE704xPMSnlj7r
-	t5anvFCFwmpafIyQpIJbdnmcX5m+yOYouMFPguYXFy0w4ciOIpEiYkHqy/CLHeFO
-	NBwUg2PQuGF31mxfDbmZrMGoaoG1vXfFWCvsiwQVIkMxTTP9w9auTz9JsM7J0pjw
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43mbyhu3p9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 19 Dec 2024 15:54:36 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4BJE7rRZ011295;
-	Thu, 19 Dec 2024 15:54:35 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 43hpjkdjrv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 19 Dec 2024 15:54:35 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4BJFsYZj23331530
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 19 Dec 2024 15:54:34 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 30B1B5805A;
-	Thu, 19 Dec 2024 15:54:34 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A4EAE58056;
-	Thu, 19 Dec 2024 15:54:33 +0000 (GMT)
-Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 19 Dec 2024 15:54:33 +0000 (GMT)
+	s=arc-20240116; t=1734623709; c=relaxed/simple;
+	bh=GQqf1fRpSu/2k+MlXCkD0lKi8IukdszBOzdqzf5L/qY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ebSijicMshVwZuHOrygHvcucVVGoM3CI5csmmHb5mf9Th5v0zSX1RtButIixFh+zGvL0b18LTkuHAxZlk7SlpIqAj/OrdlHQZefRSYpEGsIiw0ac90YrrNpt0RYS7+x434XtR42OEVPFhQnfwvcHff3+9XNjr6ZpAT95leSt7rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2ee786b3277so632845a91.1;
+        Thu, 19 Dec 2024 07:55:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734623707; x=1735228507;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2t6Jq4KRiIS1xK87Xyuxl8mXW7KiJrj7EInR2tG+Z7g=;
+        b=dqU0IYeeJU17I4WNQzZxGb46jc1SabHf+GGmbikEeQpfd2EJF3LQN23vWewo8HDeqD
+         ElZCuLeBuS5NNbPFiTjwbFfZaCRmL9En0P4Ta6DsQSngEr6DbYXOlW8OVpd44K0MP2Ch
+         s68TB/kWZjbH4dA9/Pe0osNPguycR9P77iy341d+CqJry8FWMbJSMytZv4oN2Ay+oBzk
+         BtfCaFr200PzMSl0X2VZK1mr0vPmDrZ1IDAQ+XL82VstIW8ZvKHBz4fvVCesjjeGesi0
+         2Hv5+T2blDJiWk3dPLAx77WdfI07T3XDAsDyiVukJIdagvTmDuRbNnfvwFRmwzya0kFM
+         1j5g==
+X-Forwarded-Encrypted: i=1; AJvYcCUircVSz0u6nMP60xB5mB/KX65JqojlK+4007NtpxklSldtXjNsXAgN4rDeUS3GWyr8KsTOsS4SGCOO@vger.kernel.org, AJvYcCVOuSfWRYyULQAp7CS5SsNFBfTwcsqUwEg3L3JQeHWRCcpzOL1vctH9QlbHP+lXsZY0rJD29O7NAU6TMSSM@vger.kernel.org, AJvYcCX3YlcTaZlZtbVWbixkK/r8n8CsLMYvf4bKWmQyn5LGk6Jhygk3IJ4e283TnZGC/me1TRJBvRtSz+NRVsExv0Jm@vger.kernel.org, AJvYcCXfNoGmGKDq7aTrlT1dvHXqWQ/KTvLtIs9yLzHu1eDrlimOgIob9KNak/s9ntasBsomb6Hwbm0CzSIeaLOG@vger.kernel.org
+X-Gm-Message-State: AOJu0YwX3qn8Gp/gpkRcX6x8P5pTR1Mf136LJgMFmA2CcAfvPBJNwwW9
+	D4QU8nitG6cxmZYUxD6Yet89/IJYAJs5LmX81A+M59dVVGJS/ypn
+X-Gm-Gg: ASbGncvJSPOaagEQDQtPB58vL4X+qkQvP+P7vvPkECrnWOXK6KVwgJWZZ1Img69mI4H
+	79O9la+AukPzK4mv8xe0X5RdRBon2Hzp6Bqb+vSy81L5XM43zc33CpmxAqxOzUqUtKH/u72NPMs
+	2PsH7XL4c4LvM1a9wapJzoM0TyiBMsZWmINCkxhBIxY3ClCDGngvaNpmjEOt8hktV/4Ga9RZpwo
+	yvDRIGIx6SKAfLOHPqZKhXjoB523Woii0+GDVsGDKGEU7rVMXURoHnxrfpSxWZgL6tfarKIfgPS
+	fC5gyq2bPS64kHA=
+X-Google-Smtp-Source: AGHT+IFlQFnGW0LCelWqxYVDXsvjMbButg7GSvf2SPbqNdVqeI8uyNyNcjur3wHNigpyGQThVq+77g==
+X-Received: by 2002:a17:90b:5484:b0:2ea:853b:2761 with SMTP id 98e67ed59e1d1-2f2e93865f6mr11139181a91.37.1734623707451;
+        Thu, 19 Dec 2024 07:55:07 -0800 (PST)
+Received: from localhost (fpd11144dd.ap.nuro.jp. [209.17.68.221])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f2ed52d27esm3505678a91.10.2024.12.19.07.55.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Dec 2024 07:55:06 -0800 (PST)
+Date: Fri, 20 Dec 2024 00:55:04 +0900
+From: Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To: Niklas Cassel <cassel@kernel.org>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	gregkh@linuxfoundation.org, arnd@arndb.de, lpieralisi@kernel.org,
+	shuah@kernel.org, kishon@kernel.org, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bhelgaas@google.com,
+	linux-arm-msm@vger.kernel.org, robh@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] Migrate PCI Endpoint Subsystem tests to Kselftest
+Message-ID: <20241219155504.GA309825@rocinante>
+References: <20241211080105.11104-1-manivannan.sadhasivam@linaro.org>
+ <20241219000112.GE1444967@rocinante>
+ <Z2QuORW5kXSrc1AX@ryzen>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 19 Dec 2024 16:54:33 +0100
-From: Hariharan Mari <hari55@linux.ibm.com>
-To: Christoph Schlameuss <schlameuss@linux.ibm.com>
-Cc: kvm@vger.kernel.org, Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda
- <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Paolo
- Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Ulrich Weigand
- <ulrich.weigand@de.ibm.com>,
-        Dominik Dingel <dingel@linux.vnet.ibm.com>,
-        Cornelia Huck <cohuck@redhat.com>
-Subject: Re: [PATCH v2 4/6] selftests: kvm: s390: Add ucontrol gis routing
- test
-In-Reply-To: <20241216092140.329196-5-schlameuss@linux.ibm.com>
-References: <20241216092140.329196-1-schlameuss@linux.ibm.com>
- <20241216092140.329196-5-schlameuss@linux.ibm.com>
-Message-ID: <0d8a5868b97d02470453b4175f347153@linux.ibm.com>
-X-Sender: hari55@linux.ibm.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: HFjC_aw1Qv-mHTAoPzwnOPQ6I27NOJ08
-X-Proofpoint-GUID: HFjC_aw1Qv-mHTAoPzwnOPQ6I27NOJ08
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 adultscore=0 bulkscore=0 clxscore=1015 phishscore=0
- mlxscore=0 lowpriorityscore=0 mlxlogscore=999 malwarescore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412190124
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z2QuORW5kXSrc1AX@ryzen>
 
-On 2024-12-16 10:21, Christoph Schlameuss wrote:
-> Add a selftests for the interrupt routing configuration when using
-> ucontrol VMs.
-> 
-> Calling the test may trigger a null pointer dereferences on kernels not
-> containing the fixes in this patch series.
-> 
-> Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
+Hello,
 
-Reviewed-by: Hariharan Mari <hari55@linux.ibm.com>
-> ---
->  .../selftests/kvm/s390x/ucontrol_test.c       | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
+[...]
+> > Applied to selftests, thank you!
+> > 
+> > [01/04] PCI: qcom-ep: Mark BAR0/BAR2 as 64bit BARs and BAR1/BAR3 as RESERVED
+> >         https://git.kernel.org/pci/pci/c/71ae1c3a342c
+> > 
+> > [02/04] misc: pci_endpoint_test: Fix the return value of IOCTL
+> >         https://git.kernel.org/pci/pci/c/7908208a2f6a
+> > 
+> > [03/04] selftests: Move PCI Endpoint tests from tools/pci to Kselftests
+> >         https://git.kernel.org/pci/pci/c/5c892b60e4c6
+> > 
+> > [04/04] selftests: pci_endpoint: Migrate to Kselftest framework
+> >         https://git.kernel.org/pci/pci/c/62f966e676b5
+> > 
+> > 	Krzysztof
 > 
-> diff --git a/tools/testing/selftests/kvm/s390x/ucontrol_test.c
-> b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
-> index b003abda8495..8f306395696e 100644
-> --- a/tools/testing/selftests/kvm/s390x/ucontrol_test.c
-> +++ b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
-> @@ -783,4 +783,23 @@ TEST_F(uc_kvm, uc_flic_attrs)
->  	close(cd.fd);
->  }
+> I'm a bit surprised that this series was picked up,
+> since as you could see earlier in this same thread:
+> https://lore.kernel.org/linux-pci/20241219000112.GE1444967@rocinante/T/#m7bb0e624a4bf88f5cc13dc3804972c4fa9a79bcd
 > 
-> +TEST_F(uc_kvm, uc_set_gsi_routing)
-> +{
-> +	struct kvm_irq_routing *routing = kvm_gsi_routing_create();
-> +	struct kvm_irq_routing_entry ue = {
-> +		.type = KVM_IRQ_ROUTING_S390_ADAPTER,
-> +		.gsi = 1,
-> +		.u.adapter = (struct kvm_irq_routing_s390_adapter) {
-> +			.ind_addr = 0,
-> +		},
-> +	};
-> +	int rc;
-> +
-> +	routing->entries[0] = ue;
-> +	routing->nr = 1;
-> +	rc = ioctl(self->vm_fd, KVM_SET_GSI_ROUTING, routing);
-> +	ASSERT_EQ(-1, rc) TH_LOG("err %s (%i)", strerror(errno), errno);
-> +	ASSERT_EQ(EINVAL, errno) TH_LOG("err %s (%i)", strerror(errno), 
-> errno);
-> +}
-> +
->  TEST_HARNESS_MAIN
+> Mani suggested that my patch (which conflicts with this),
+> should be picked up first.
+> 
+> Is there a reason for the sudden chance of plans?
+
+No, no change to the plan here.
+
+There were some mixed signals between the mailing list, IRC and
+the Patchwork queue.  But I will proceed as planned there.
+
+> Please advice on how to proceed.
+
+I will pick your patch and drop Mani's series.  Mani told me on IRC that he
+plans to work on it a bit more.
+
+	Krzysztof
 
