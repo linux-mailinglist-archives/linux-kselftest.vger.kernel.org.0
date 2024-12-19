@@ -1,344 +1,166 @@
-Return-Path: <linux-kselftest+bounces-23621-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23622-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0A6C9F8729
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 22:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 72A8B9F8739
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 22:41:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D78118984AB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 21:37:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75A35188FF32
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 21:41:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 150E91BEF81;
-	Thu, 19 Dec 2024 21:36:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D445A1C07EC;
+	Thu, 19 Dec 2024 21:41:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="sfm9t730"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="aXqnkQNR";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gni1hwxs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 724B917E00E
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Dec 2024 21:36:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B6817E00E;
+	Thu, 19 Dec 2024 21:41:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734644218; cv=none; b=EEbTqIPFYLCYJNtF2AiI96ujWjOMMl4YIzkdTvA4gbvRtm3rNwoIefios/gWpP6ImHZcEKkca71jmd+hojJRqthp5Ax6QdK98x4eEic31K7wuEd127JrIYh2LpYH3mMrrh2XGGq4SEDKVVqJg5uIIO1oboQDKmDtOTNYQvFzyBc=
+	t=1734644496; cv=none; b=tEdWkNyLf3g3ToneVXA0MPWtHN7zeJAvuS49n92IXQyC2nZIDnecr8Vomnv+21ImweymfKVjwIUOb6FGjD7jn9F4a4V0O6uuOfJXiZ/6Zsncfxk7iEoCBUEjGA1Tevo0WKhYe8aCxNH8eXpHIpI3CL6u422nJ7kQcx4KnvZMniI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734644218; c=relaxed/simple;
-	bh=3S23dTTP7NsKmXAV0bzH89sOImqZmkUX/E13JUSWaW0=;
+	s=arc-20240116; t=1734644496; c=relaxed/simple;
+	bh=8UmFB3ctcuiDHHQgssQ2wpXNJtLZB9VRdpGjPoqc53c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YF4fMtuUqC4jI2Emz0IA2Jl9Dik3F43ExJcjmSsWLVL+lhbv2TpMBexO0hmp6I016uK+jPPpgXC3aFSagrsivf2s0WlWMs/SPITWviqzmw3s8JnVjJVONELW8Ss2z2n325alFty63/57pNTlN7s9CGzBPXeGuE4R6bphwFGAOiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=sfm9t730; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2ee74291415so940470a91.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Dec 2024 13:36:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1734644215; x=1735249015; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sBYqbJyIvcJfLc67nzPKYdjSB+90GgtMbY2G3flDnUI=;
-        b=sfm9t730EGhHY/HDvwVTSzZ6n+w4e5zbkvbO3U3TktsIyyvsMuC1DpteOC9joE4eye
-         UnX8mxwqaI6JtFfHp/dnCfOBJLKfWYxC3+J+0elcFDji9ACm7T/gPL64zkoeqZ8dWEKd
-         us4a/6RiS1c9wHvm5fzGE/L6lX7pzDO5lY22OduTQ8iy0VFMP3SB1GmTGQgTAVnOVoY+
-         h9XXQriSE3oBbfHwrxctU71DmNQLt+hWD559NBo6gumI1/+w0m1AaS1+Pzq2OToYAoer
-         q2b0yFOY+8cgu4isaFK0r8ObbeMvTEeT0my2zmbBfCqqK8HcNnegpqwE/nCQOfedkno+
-         3kZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734644215; x=1735249015;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sBYqbJyIvcJfLc67nzPKYdjSB+90GgtMbY2G3flDnUI=;
-        b=hd85c8Oon/u9QsV8jrkPXJ7h1pZXC//ThUqkRsOB+1wUqL2Pz15B6ICb1UcKUNV0cZ
-         NC/DNGzNyrs19B+SVziMGD4YEBHRl4PmtQatSC/eLMVsoLTiI1D3oEcE/t9BK6KcTkjI
-         mNf7YDsit0mqBfQlSNyXHywWjA+a0ujri1YTSL68mjZ2bD/K1HkGJ9khRXpQM5CTFQ5w
-         MBZEedB1nZXzbEVoQcJOWe46BzdRsjuqv1AoGdY1lekD++L2got+q1drIXtizOt3pQ+C
-         V0G2BI5it/P+ccOc2haUo4i64ONiIYQAJTMx11g9Bkj4QRdsVA6Z3/wsrqVz0pAHx91k
-         sq+w==
-X-Forwarded-Encrypted: i=1; AJvYcCXQ9bMx3/WTeBo8XuA90O7wAe4sEKKSiH1oGtscon6lzFvxa7NY6Dc86IsvW9cMQJlDx9FBz+l31thh3iZvuGA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzidYdQLtpGVCHp+JxogtXIYSEef63OaUlJEAINZDnqhK05aBOV
-	KDygBjJSCy5X2pHc5WEue2X89ixiAZa3PYNHr5JkGOEd68hyRcMUyx0fdSHo0oY=
-X-Gm-Gg: ASbGncvsz/nIwSFSY0SD5QnUoOPGkLiq6DDQesO1EhnnpyHnZ60Nlv7dzk8QoTbn5Ni
-	bU1CI9/nV6Rkzc9m3qbSeybJNh1Lrk/tLIuH2D/8XimIGRexxaaNhRP0ss2JZ9kk+RUYD4xglG9
-	i1IKzAwb/bh6ia3RDI789gTU9XkeIIcpacZxx1MtmfbjewiZbs+VTvicI6Qub3OOh4NBqGhVq2E
-	5NlF1ejlUXSZes5FatJ4zNYew5+ztiEwYwB2jMgJs1qBAs=
-X-Google-Smtp-Source: AGHT+IG/Dgc/5kYcDlkg099vZ9/LAsV1QDOIoLm+mwtiNyuB7pILZ0WR6EgDxOuwJUotkZK+n+l86A==
-X-Received: by 2002:a17:90a:d64d:b0:2ee:b2fe:eeee with SMTP id 98e67ed59e1d1-2f452e3021cmr942885a91.15.1734644214713;
-        Thu, 19 Dec 2024 13:36:54 -0800 (PST)
-Received: from ghost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f2ed644d87sm4166935a91.27.2024.12.19.13.36.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Dec 2024 13:36:54 -0800 (PST)
-Date: Thu, 19 Dec 2024 13:36:51 -0800
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Celeste Liu <uwu@coelacanthus.name>
-Cc: Andrew Jones <ajones@ventanamicro.com>, Oleg Nesterov <oleg@redhat.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, Alexandre Ghiti <alex@ghiti.fr>,
-	"Dmitry V. Levin" <ldv@strace.io>,
-	Andrea Bolognani <abologna@redhat.com>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>, Ron Economos <re@w6rz.net>,
-	Quan Zhou <zhouquan@iscas.ac.cn>, Guo Ren <guoren@kernel.org>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, stable@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] riscv: selftests: Add a ptrace test to verify
- syscall parameter modification
-Message-ID: <Z2SR86wpB5waLtx-@ghost>
-References: <20241203-riscv-new-regset-v2-0-d37da8c0cba6@coelacanthus.name>
- <20241203-riscv-new-regset-v2-2-d37da8c0cba6@coelacanthus.name>
- <20241203-55c76715e16422ddaf8d7edf@orel>
- <Z2RlR1cP9tne8rNi@ghost>
- <50a62291-5ae1-47b0-8f64-a42271820789@coelacanthus.name>
+	 Content-Type:Content-Disposition:In-Reply-To; b=SoWvEIJWHEcGn6UBTf6LCxNpNk6Ir1bI+bMtUkIagvRX+pZoM27hlLeVmn/zIBjk5vFqSvokqzcz0xYvCOlKgBgKggG7bPG76hnzr51+VbFv8RkyPIniak75SCW2OK9+41DeTvXDKoDwX0VHLWXlpLekzDtmfGDn2FdI8I2wH6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=aXqnkQNR; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gni1hwxs; arc=none smtp.client-ip=202.12.124.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 3D1292540182;
+	Thu, 19 Dec 2024 16:41:33 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-04.internal (MEProxy); Thu, 19 Dec 2024 16:41:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1734644493;
+	 x=1734730893; bh=7HNi+Oxo7O1Ju2DD7K0mOmaR80xjOw6PNJN1e+KhpbM=; b=
+	aXqnkQNR3d4MgNYa6yjoWsP6xiRkRsdBfyzbaBPfFgYL2p9cOD4pg+6UxHFcLC5k
+	J50kpE5mXr8qXwcQKQxoAhXjiy9l6ouEOkkHiEFMlfSWgn/7tlbvs7ye8YFfDj4R
+	SnQmEPepYRlfLbK2keSzfro7v8jrCJHlhsikDsCIRCXvJuEoa+fESE5v6BlLod5d
+	wrLvRIhuUQVwIxKzB1k2lz1Xzk/leKfdRp9Pi0L8eoRV/QayGR7RAvgEfMaJJ9z6
+	KCzY20R86edRUjXKR2HiVqQ4B2N3x7c/7rDaGgBdxbiw54ekvmHOG/XGC1B0VIg4
+	Uf9jImKEdTafcxvKWZRfjg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1734644493; x=
+	1734730893; bh=7HNi+Oxo7O1Ju2DD7K0mOmaR80xjOw6PNJN1e+KhpbM=; b=g
+	ni1hwxsdt4SNB0gY+1IgszsJ9zAT+MxNl/2jLMy2SlPZpWPQ3yeuPthjsgn4xY6E
+	t+RK7s85SZR6vpxTK9asl0vMe9Sx6ChpE01Xdrb7jf+5mj3HwNo+QeiQqRmLh8gf
+	81hyCYql5vNYWMtgf4OvAHC7kAOiih0oovOIsWgiILNbH73sYeo+lj1pePstwP5L
+	4cG9Jg1TAeKz1fjT7H9SD+evrOoMbDz6iZ4+5joXf2gyalPrn1HIzVfuZg1W8HAe
+	TBmpQ6pG2aH2uPIZl+sxwTNxoWQbEOezw/8QlSlaOcxa1aVtMQkqK/zX3DQD9jpH
+	WwCDo22CRv5mVu+0pdtmw==
+X-ME-Sender: <xms:DJNkZ4MfS_mMLK-6pgjkj4iNJcdBe1MCEG_nYiLSROzlMYvu6f1rvQ>
+    <xme:DJNkZ-84BpKcm-vbdCGMBYvx51fgjjdVMtcA1xJBb46mxjomyLpmdGZC3WmtaykXm
+    7Juoay2cdGNPVE3dA>
+X-ME-Received: <xmr:DJNkZ_RPgXleWpRlpYjgkVgZwxXJHl7_pVayffhAJAPPy6aayesmVu-r0ZGHU_Qy16_w4HH4TLX1J-4nr4ltjL4wKFPX8z2yLJY1obBS1K1q7g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddruddttddgudehtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenfghrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffk
+    fhggtggugfgjsehtkefstddttdejnecuhfhrohhmpeffrghnihgvlhcuighuuceougiguh
+    esugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnheptdfgueeuueekieekgfeiueek
+    ffelteekkeekgeegffevtddvjeeuheeuueelfeetnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihiidpnhgspghr
+    tghpthhtohepudelpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhgurhhiih
+    drnhgrkhhrhihikhhosehgmhgrihhlrdgtohhmpdhrtghpthhtohepvgguugihiiekjees
+    ghhmrghilhdrtghomhdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpd
+    hrtghpthhtoheprghstheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhhes
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlsehiohhgvggrrhgsohigrd
+    hnvghtpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhm
+    pdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtoh
+    epshhonhhgsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:DJNkZwuvt3tnYN54Eq1uCnYDL2NlcgftMQqLbPS3hCicaEnlK-C9RQ>
+    <xmx:DJNkZwcu4dgkXVG_TC3yvX_tQUw50WSvlFrwejV8-9ZTU2yDULRqCw>
+    <xmx:DJNkZ01_lajFu88kt7VPEYaTOYbNua-CPngYe30YRiAe3pQzO4D1gg>
+    <xmx:DJNkZ0_zn6tANlSHMEmNp7rv9Qo5dDBHnLCG03IrUQZQd5i-__UpSQ>
+    <xmx:DZNkZ1CNOK4IR9-6Dou635QXItOGMbuJqTvu-3T0UnBwzn7Hc6e7U4hZ>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 19 Dec 2024 16:41:30 -0500 (EST)
+Date: Thu, 19 Dec 2024 14:41:28 -0700
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, andrii@kernel.org, 
+	ast@kernel.org, shuah@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5 4/5] bpf: verifier: Support eliding map
+ lookup nullness
+Message-ID: <kghvgxu5wdkupssnq7dy5upuf2wscsxgsnwl2yoam4mwk3h5pn@wjjsliwg6fzl>
+References: <cover.1734045451.git.dxu@dxuuu.xyz>
+ <92065ca054beccd6d0f35efe9715ef965e8d379f.1734045451.git.dxu@dxuuu.xyz>
+ <CAEf4BzaqCgW9keiT+tJUBQWT6Q+jMwuvn4O2ZghO0c+ZvACNrw@mail.gmail.com>
+ <zow3q3nhlz6vedbni3upag5yr7zzrhyiqysl5nwyubebmbwojk@th7kbm62x36g>
+ <31b0c85dbf85486df116ade20caf8685843899b4.camel@gmail.com>
+ <CAEf4BzaEOBtrSWZTx40AdT=SQY6Qaia405KWgU-NowaqNdmpkA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <50a62291-5ae1-47b0-8f64-a42271820789@coelacanthus.name>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzaEOBtrSWZTx40AdT=SQY6Qaia405KWgU-NowaqNdmpkA@mail.gmail.com>
 
-On Fri, Dec 20, 2024 at 05:29:45AM +0800, Celeste Liu wrote:
+On Mon, Dec 16, 2024 at 03:24:01PM -0800, Andrii Nakryiko wrote:
+> On Fri, Dec 13, 2024 at 7:13 PM Eduard Zingerman <eddyz87@gmail.com> wrote:
+> >
+> > On Fri, 2024-12-13 at 19:44 -0700, Daniel Xu wrote:
+> >
+> > [...]
+> >
+> > > > > +       /* First handle precisely tracked STACK_ZERO, up to BPF_REG_SIZE */
+> > > > > +       stype = state->stack[spi].slot_type;
+> > > > > +       for (i = 0; i < BPF_REG_SIZE && stype[i] == STACK_ZERO; i++)
+> > > >
+> > > > it's Friday and I'm lazy, but please double-check that this works for
+> > > > both big-endian and little-endian :)
+> > >
+> > > Any tips? Are the existing tests running thru s390x hosts in CI
+> > > sufficient or should I add some tests writen in C (and not BPF
+> > > assembler)? I can never think about endianness correctly...
+> >
+> > I think that if test operates on a key like:
+> >
+> >       valid key 15
+> >              v
+> >       0000000f   <-- written to stack as a single u64 value
+> >       ^^^^^^^
+> >     stack zero marks
+> >
+> > and is executed (e.g. using __retval annotation),
+> > then CI passing for s390 should be enough.
 > 
-> On 2024-12-20 02:26, Charlie Jenkins wrote:
-> > On Tue, Dec 03, 2024 at 01:55:07PM +0100, Andrew Jones wrote:
-> >> On Tue, Dec 03, 2024 at 05:30:05PM +0800, Celeste Liu wrote:
-> >>> From: Charlie Jenkins <charlie@rivosinc.com>
-> >>>
-> >>> This test checks that orig_a0 allows a syscall argument to be modified,
-> >>> and that changing a0 does not change the syscall argument.
-> >>>
-> >>> Cc: stable@vger.kernel.org
-> >>> Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> >>> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> >>> Co-developed-by: Celeste Liu <uwu@coelacanthus.name>
-> >>> Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
-> >>> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> >>> ---
-> >>>  tools/testing/selftests/riscv/abi/.gitignore |   1 +
-> >>>  tools/testing/selftests/riscv/abi/Makefile   |   5 +-
-> >>>  tools/testing/selftests/riscv/abi/ptrace.c   | 134 +++++++++++++++++++++++++++
-> >>>  3 files changed, 139 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/tools/testing/selftests/riscv/abi/.gitignore b/tools/testing/selftests/riscv/abi/.gitignore
-> >>> index b38358f91c4d2240ae64892871d9ca98bda1ae58..378c605919a3b3d58eec2701eb7af430cfe315d6 100644
-> >>> --- a/tools/testing/selftests/riscv/abi/.gitignore
-> >>> +++ b/tools/testing/selftests/riscv/abi/.gitignore
-> >>> @@ -1 +1,2 @@
-> >>>  pointer_masking
-> >>> +ptrace
-> >>> diff --git a/tools/testing/selftests/riscv/abi/Makefile b/tools/testing/selftests/riscv/abi/Makefile
-> >>> index ed82ff9c664e7eb3f760cbab81fb957ff72579c5..3f74d059dfdcbce4d45d8ff618781ccea1419061 100644
-> >>> --- a/tools/testing/selftests/riscv/abi/Makefile
-> >>> +++ b/tools/testing/selftests/riscv/abi/Makefile
-> >>> @@ -2,9 +2,12 @@
-> >>>  
-> >>>  CFLAGS += -I$(top_srcdir)/tools/include
-> >>>  
-> >>> -TEST_GEN_PROGS := pointer_masking
-> >>> +TEST_GEN_PROGS := pointer_masking ptrace
-> >>>  
-> >>>  include ../../lib.mk
-> >>>  
-> >>>  $(OUTPUT)/pointer_masking: pointer_masking.c
-> >>>  	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-> >>> +
-> >>> +$(OUTPUT)/ptrace: ptrace.c
-> >>> +	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-> >>> diff --git a/tools/testing/selftests/riscv/abi/ptrace.c b/tools/testing/selftests/riscv/abi/ptrace.c
-> >>> new file mode 100644
-> >>> index 0000000000000000000000000000000000000000..d192764b428d1f1c442f3957c6fedeb01a48d556
-> >>> --- /dev/null
-> >>> +++ b/tools/testing/selftests/riscv/abi/ptrace.c
-> >>> @@ -0,0 +1,134 @@
-> >>> +// SPDX-License-Identifier: GPL-2.0-only
-> >>> +#include <stdio.h>
-> >>> +#include <stdlib.h>
-> >>> +#include <string.h>
-> >>> +#include <unistd.h>
-> >>> +#include <fcntl.h>
-> >>> +#include <signal.h>
-> >>> +#include <errno.h>
-> >>> +#include <sys/types.h>
-> >>> +#include <sys/ptrace.h>
-> >>> +#include <sys/stat.h>
-> >>> +#include <sys/user.h>
-> >>> +#include <sys/wait.h>
-> >>> +#include <sys/uio.h>
-> >>> +#include <linux/elf.h>
-> >>> +#include <linux/unistd.h>
-> >>> +#include <asm/ptrace.h>
-> >>> +
-> >>> +#include "../../kselftest_harness.h"
-> >>> +
-> >>> +#define ORIG_A0_MODIFY      0x01
-> >>> +#define A0_MODIFY           0x02
-> >>> +#define A0_OLD              0x03
-> >>> +#define A0_NEW              0x04
-> >>
-> >> Shouldn't A0_OLD and A0_NEW set more bits, since 3 and 4 aren't very
-> >> unique (we could have those values by accident)? And should we include
-> >> setting bits over 31 for 64-bit targets?
-> >>
-> >>> +
-> >>> +#define perr_and_exit(fmt, ...)						\
-> >>> +	({								\
-> >>> +		char buf[256];						\
-> >>> +		snprintf(buf, sizeof(buf), "%s:%d:" fmt ": %m\n",	\
-> >>> +			__func__, __LINE__, ##__VA_ARGS__);		\
-> >>> +		perror(buf);						\
-> >>> +		exit(-1);						\
-> >>> +	})
-> >>
-> >> Can we use e.g. ksft_exit_fail_perror() instead? I'd prefer we try to
-> >> consolidate testing/selftests/riscv/* tests on a common format for
-> >> errors and exit codes and we're already using other kselftest stuff.
-> >>
-> >>> +
-> >>> +static inline void resume_and_wait_tracee(pid_t pid, int flag)
-> >>> +{
-> >>> +	int status;
-> >>> +
-> >>> +	if (ptrace(flag, pid, 0, 0))
-> >>> +		perr_and_exit("failed to resume the tracee %d\n", pid);
-> >>> +
-> >>> +	if (waitpid(pid, &status, 0) != pid)
-> >>> +		perr_and_exit("failed to wait for the tracee %d\n", pid);
-> >>> +}
-> >>> +
-> >>> +static void ptrace_test(int opt, int *result)
-> >>> +{
-> >>> +	int status;
-> >>> +	pid_t pid;
-> >>> +	struct user_regs_struct regs;
-> >>> +	struct iovec iov = {
-> >>> +		.iov_base = &regs,
-> >>> +		.iov_len = sizeof(regs),
-> >>> +	};
-> >>> +
-> >>> +	unsigned long orig_a0;
-> >>> +	struct iovec a0_iov = {
-> >>> +		.iov_base = &orig_a0,
-> >>> +		.iov_len = sizeof(orig_a0),
-> >>> +	};
-> >>> +
-> >>> +	pid = fork();
-> >>> +	if (pid == 0) {
-> >>> +		/* Mark oneself being traced */
-> >>> +		long val = ptrace(PTRACE_TRACEME, 0, 0, 0);
-> >>> +
-> >>> +		if (val)
-> >>> +			perr_and_exit("failed to request for tracer to trace me: %ld\n", val);
-> >>> +
-> >>> +		kill(getpid(), SIGSTOP);
-> >>> +
-> >>> +		/* Perform exit syscall that will be intercepted */
-> >>> +		exit(A0_OLD);
-> >>> +	}
-> >>> +
-> >>> +	if (pid < 0)
-> >>> +		exit(1);
-> >>
-> >> This unexpected error condition deserves a message, so I'd use
-> >> ksft_exit_fail_perror() here.
-> >>
-> >>> +
-> >>> +	if (waitpid(pid, &status, 0) != pid)
-> >>> +		perr_and_exit("failed to wait for the tracee %d\n", pid);
-> >>> +
-> >>> +	/* Stop at the entry point of the syscall */
-> >>> +	resume_and_wait_tracee(pid, PTRACE_SYSCALL);
-> >>> +
-> >>> +	/* Check tracee regs before the syscall */
-> >>> +	if (ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, &iov))
-> >>> +		perr_and_exit("failed to get tracee registers\n");
-> >>> +	if (ptrace(PTRACE_GETREGSET, pid, NT_RISCV_ORIG_A0, &a0_iov))
-> >>> +		perr_and_exit("failed to get tracee registers\n");
-> >>> +	if (orig_a0 != A0_OLD)
-> >>> +		perr_and_exit("unexpected orig_a0: 0x%lx\n", orig_a0);
-> >>> +
-> >>> +	/* Modify a0/orig_a0 for the syscall */
-> >>> +	switch (opt) {
-> >>> +	case A0_MODIFY:
-> >>> +		regs.a0 = A0_NEW;
-> >>> +		break;
-> >>> +	case ORIG_A0_MODIFY:
-> >>> +		orig_a0 = A0_NEW;
-> >>> +		break;
-> >>> +	}
-> >>> +
-> >>> +	if (ptrace(PTRACE_SETREGSET, pid, NT_RISCV_ORIG_A0, &a0_iov))
-> >>> +		perr_and_exit("failed to set tracee registers\n");
-> >>> +
-> >>> +	/* Resume the tracee */
-> >>> +	ptrace(PTRACE_CONT, pid, 0, 0);
-> >>> +	if (waitpid(pid, &status, 0) != pid)
-> >>> +		perr_and_exit("failed to wait for the tracee\n");
-> >>> +
-> >>> +	*result = WEXITSTATUS(status);
-> >>> +}
-> >>> +
-> >>> +TEST(ptrace_modify_a0)
-> >>> +{
-> >>> +	int result;
-> >>> +
-> >>> +	ptrace_test(A0_MODIFY, &result);
-> >>> +
-> >>> +	/* The modification of a0 cannot affect the first argument of the syscall */
-> >>> +	EXPECT_EQ(A0_OLD, result);
-> >>
-> >> What about checking that we actually set regs.a0 to A0_NEW? We'd need
-> >> A0_NEW to be more unique than 4, though.
-> >>
-> >>> +}
-> >>> +
-> >>> +TEST(ptrace_modify_orig_a0)
-> >>> +{
-> >>> +	int result;
-> >>> +
-> >>> +	ptrace_test(ORIG_A0_MODIFY, &result);
-> >>> +
-> >>> +	/* Only modify orig_a0 to change the first argument of the syscall */
-> >>
-> >> If we run ptrace_modify_a0 first then we've already set regs.a0 to A0_NEW
-> >> and can't check with this test that we don't set it to A0_NEW. We should
-> >> probably have two different test values, one for regs.a0 and one for
-> >> orig_a0 and ensure on both tests that we aren't writing both.
-> >>
-> > 
-> > Celeste, do you want to fix this up or are you waiting for me to?
-> 
-> Sorry for delay. I was busy with household affairs in the past few weeks.
-> v3 will be sent tomorrow or the day after tomorrow.
-> 
-> I am deeply sorry for this.
+> +1, something like that where for big-endian it will be all zero while
+> for little endian it would be 0xf (and then make sure that the test
+> should *fail* by making sure that 0xf is not a valid index, so NULL
+> check is necessary)
 
-No need to apologize! Just wanted to make sure you weren't expected me
-to update the test :)
+How would it work for LE to be 0xF but BE to be 0x0?
 
-- Charlie
+The prog passes a pointer to the beginning of the u32 to
+bpf_map_lookup_elem(). The kernel does a 4 byte read starting from that
+address. On both BE and LE all 4 bytes will be interpreted. So set bits
+cannot just go away.
 
-> 
-> > 
-> > - Charlie
-> > 
-> >>> +	EXPECT_EQ(A0_NEW, result);
-> >>> +}
-> >>> +
-> >>> +TEST_HARNESS_MAIN
-> >>>
-> >>> -- 
-> >>> 2.47.0
-> >>>
-> >>
-> >> Thanks,
-> >> drew
-> 
+Am I missing something?
+
+Thanks,
+Daniel
 
