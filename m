@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-23593-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23594-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D7CB9F7E61
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 16:50:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46E129F7E68
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 16:51:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47E78188E718
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 15:50:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDB26188F1EE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 15:51:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB9AC22655E;
-	Thu, 19 Dec 2024 15:50:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDBCB226552;
+	Thu, 19 Dec 2024 15:50:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qBQInViE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DO4HcIth"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D3F226552;
-	Thu, 19 Dec 2024 15:50:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C78022616C;
+	Thu, 19 Dec 2024 15:50:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734623417; cv=none; b=brMNocpb6zozY9IxFkSkTCk5mPVj/EIlu3E7HF4VwjiCP/+4jgwxQ9LpuCS16OFbHpJVj+8Xi9oMjheRJgHUqzIeflvayWYE+ZlPK0TE6XDAMvVlhrbcVJMq2U/IW3rL2TprvXCS7EGCUxNbJj/nvP4IIeiSixA1In4MzWYrLwU=
+	t=1734623423; cv=none; b=YOV8/y2nxU+HeFc6AFp4d/rdPOPPKII8P6drw0lltTxt+VJ+2F5D6/c+DTkvxELVimZU1cjEsFHxoUJmnL6PJ2W82vY7JXDB1oSLyJ8RgS4V6OpuoCZ4Hd/2QT74fA3bo0zrQ3kf8CMBRjrUNn7koF/il/Uq6Fd8ibLBqK7wIE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734623417; c=relaxed/simple;
-	bh=uSOupaSl0R2bP+tGvViCkeLrCZOlUFfU6pCZQqCqeKA=;
+	s=arc-20240116; t=1734623423; c=relaxed/simple;
+	bh=W96t/RxyrkRGBDbdV5a6GjcXQ/s600KDjdOOQeqhKcw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fIoF/tFrtwUHXhoaoZuirCMYU/aZN4dJVzOoj0kiToStbtFESy3b7UCNaD1aVQpq1p5ZU8WNxaOKwk0MusfPpbJqq3JFjyLGq2L/7pGt/6kFTIz+euuIBrQBBQp6XVv3ucPDwqrT0CcqZgWwYdMGKmQIyouVlBRcLaicWLobacs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qBQInViE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A4A2C4CEE1;
-	Thu, 19 Dec 2024 15:50:12 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=GIDJEt619SOdubAz4SGJgcmqA4cnSol3Ppl4Y/Kx+sRT+AQOvaGX0NChDlEsEqdxmsW0VKBOCNVdAp3LJa/YUVANdGiJi2PNu9/J17WeFCsgOJ58bjZzRdGiKRoH6i6gpfnjy0kerrRfFs1PYl4UWK0QKYD+P1r7QVbnWBy6fXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DO4HcIth; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F27EFC4CEE0;
+	Thu, 19 Dec 2024 15:50:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734623417;
-	bh=uSOupaSl0R2bP+tGvViCkeLrCZOlUFfU6pCZQqCqeKA=;
+	s=k20201202; t=1734623423;
+	bh=W96t/RxyrkRGBDbdV5a6GjcXQ/s600KDjdOOQeqhKcw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=qBQInViE3X3MrBuNQTZ0fawJH+eTIscHj4mTNPkqJqMDpkthDT9cMiHJichU/81iS
-	 OteNVeV1YeEgjxKxnmRgR+m5GHu4dTJngRyb+j9aJDMjmMdRUn07tmTda/ZcSUz3IP
-	 ibZfy9hoh4PUlI+PYdu1QDyBBq5TKX95H51RT/tGA3EUxQjzbzM2EyJxbOdZ2bKFxQ
-	 kvBvnr2mtz9Bnhzc07ynV17FTtxW0rUXFfIEhjuSzQJ/eJPfih28ljWOcHu9XVIw6P
-	 kzvN3xBZWrWVMytHl18vUYs3twUVwl3/SYCp22o+NYCrYIdyfGkxoiycCaQMrv9ujx
-	 8hPGDDdWxtSmQ==
+	b=DO4HcIth/Q3IyqDkFpuUFwup3+MDVzFPS8Dhf2Pe/i60mejZu9Buah4WQ13amFKOi
+	 VTAF48JSSKFguNEPVmeG+oPbqGKDLIFy06xijfHtB1uWTD8JFCDzWnH9LtNF0Nh06d
+	 GEEz6stZuMrG98U65YLfcUxO6IU04o4JmSe++nXRJUjQ5qxeZPW00k83dasehp2MNv
+	 3bIi0NiZnBadt/fkmnaRDk+MOSewgbTcdB512hRrbhjeYg7e5XYhWRYMpNLS7Xc8iK
+	 Z9AGsABGAnMcQwiLSKtBoAVruHwIslk5vto6NtJ4DgtnZH58qieQYhP0ZtbhHb8vAw
+	 9o76j8ZjDAWuA==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Thu, 19 Dec 2024 16:46:40 +0100
-Subject: [PATCH bpf-next/net v2 1/7] bpf: Extend bpf_skc_to_mptcp_sock to
- MPTCP sock
+Date: Thu, 19 Dec 2024 16:46:41 +0100
+Subject: [PATCH bpf-next/net v2 2/7] bpf: Allow use of skc_to_mptcp_sock in
+ cg_sockopt
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241219-bpf-next-net-mptcp-bpf_iter-subflows-v2-1-ae244d3cdbbc@kernel.org>
+Message-Id: <20241219-bpf-next-net-mptcp-bpf_iter-subflows-v2-2-ae244d3cdbbc@kernel.org>
 References: <20241219-bpf-next-net-mptcp-bpf_iter-subflows-v2-0-ae244d3cdbbc@kernel.org>
 In-Reply-To: <20241219-bpf-next-net-mptcp-bpf_iter-subflows-v2-0-ae244d3cdbbc@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -74,38 +74,31 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
  Geliang Tang <geliang@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3112; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=lnryqshajbYUd9cCgDiyIBOFzeb7Ox7Vw7A9hLDDvHY=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnZECtu/pzH08fKosSsCBeA/bO7d2/QiJaRXxhB
- BAAKUCg+U2JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ2RArQAKCRD2t4JPQmmg
- cyReEAC0BjYOvTnlmA+RuJIdOqEBdGShz7oSfVgeHZgeoS9NEDaAt50uuVuNvOhNBoCp78WV6B6
- 8+T6yLk3EXmYmiX7cAkAwqofnTePZ3PhbNNTrXx4AiBZcBkbjsMfGG8dPsKCAKTjj60vJI1GURL
- GtIkusE6YPni4VQlWrnlkLWiDtsSvx7jvaKZ/DSvyOCZNBUeklzfpqGKTNbzSvWX1mQ3Dj4sfaG
- ZMTywh5qpnxj96WHfj1ax2E+/xOijw6AJZSDrAKU02qxBcJVYJHaqJtr3u7Odhwce/NxAVpxioC
- QAgAJMdEwTgZCTMMXO7Epo4z+2bMKpiprsbk0lyFpc0M1NEnsCoLDysD4vnnvvhMno48cDulusp
- +570GUwrZuGUgJHjQkysfDWTpb60BPIahbZVK/NDST5/1gpvN4QpZcMaeJIcsHvN0wlFcR/M35I
- ZTue6+cpPAOkGHBedToehoVCk9AvCXqzWPEZYgAOU/ZhBKRtn9rVC5QntwsiM91llJzmFoCoqRR
- Il5d9bSe0V8WA2JLS9AkfKXnNTXKXYuC6XGTy84uMTBmt0FVkZwsyzIKDHL/eauELfsVfNnF7Pk
- S0r/KQhbrUYmDLM4U3sAfuybeOWfK9f5AFoUIIHiJXGegqmtXBk7G1h3l6W2NFosh2X6hW0YhDI
- ygFZCx+xjTaiWdQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1143; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=6JrVc2ULAFXcwJoeGrzMjRsZ5K+d/6l9XN9k4QmIJsg=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnZECusixmfR7aeSuAt+bA3fIj0UldEuyvFNW4y
+ 0SbiAMp5o6JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ2RArgAKCRD2t4JPQmmg
+ czPLEADqcXMCkCE3I8HxzUrqLApKF5oodPBxy8gItnot6SJ0kJJZqdGQ7Dkdluzj06wBWP7xvYc
+ 9DdUtRTfCC+lQi8kBZ9UkrDS/mkVgBIRhZSI5gaSN19wTR7jeBYRyKYyt1FuKG6mo95tau+5l6j
+ tJmRn8gTS+/1+h2oV7NDaZWGsgJ3na5Osn8abmoBRmtf6aCqWrPIGGToWQI3+jsyFOM8wyjXPY2
+ DTbRqPsTIFiLV4wAJ3DcW7wY/21s6AhCHu4MHAbZIkraQZzqQ1X+4+Qfww6ePWtwwQVEFmwpinR
+ pM/gqXW+R5JNY+LtRRUiAr4IImLdLEMhjPYf4hnmQTnhRpPbqdEIkE4K8oUA/+LcleFSzYmay5R
+ fBicig2WA4qGi3Jfmvrt+LQEqU5PZhNaeXJJ9xiO4FG14kmwHw+OmYS7j3+BpM4sxmV6OtSIBWO
+ w9UurakX9f/+f11dFvIkSvLIxjmJpqfP0ryTaq4tkeOrOmxpTDzrij310RwolWPKr6MXsA0EUBr
+ bwYM5ntRH67eDsq1UP5qUPmmHusphpN4vewCV4fOa/7wTs1tRt3o6mkIi0OlbXMZ/Z8qa8YlGvf
+ zGhSynqv0Zkhslpv9BuG0iIbODAfH2239nKFk+kZ9IjI9x4t1sJ26Kht+C3kv8eREfe6K4TqZZy
+ c8A7oElNsNbZXXg==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Currently, bpf_skc_to_mptcp_sock() can only be used with sockets that
-are MPTCP subflows: TCP sockets with tp->is_mptcp, created by the kernel
-from an MPTCP socket (IPPROTO_MPTCP). Typically used with BPF sock_ops
-operators.
+Currently, bpf_skc_to_mptcp_sock() helper is not allowed to be used
+in cg_sockopt. This patch adds this permission.
 
-Here, this helper is extended to support MPTCP sockets, the ones created
-by the userspace (IPPROTO_MPTCP). This is useful for BPF hooks involving
-these sockets, e.g. [gs]etsocktopt.
-
-bpf_skc_to_mptcp_sock() uses bpf_mptcp_sock_from_subflow(). The former
-suggests any MPTCP type/subtype can be used, but the latter only accepts
-subflow ones. So bpf_mptcp_sock_from_subflow is modified here to support
-MPTCP socket, and renamed to avoid confusions.
+Thanks to the previous patch allowing skc_to_mptcp_sock() to be used
+with MPTCP sockets, this permission allows this helper to be use it in
+CGroup BPF hooks, e.g. [gs]etsocktopt.
 
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
@@ -114,62 +107,22 @@ Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Notes:
  - v2: new patch.
 ---
- include/net/mptcp.h |  4 ++--
- net/core/filter.c   |  2 +-
- net/mptcp/bpf.c     | 10 ++++++++--
- 3 files changed, 11 insertions(+), 5 deletions(-)
+ kernel/bpf/cgroup.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/net/mptcp.h b/include/net/mptcp.h
-index 814b5f2e3ed5e3e474a2bac5e4cca5a89abcfe1c..94d5976f7b8d8eb8b82f298f7b33ecd653937dc0 100644
---- a/include/net/mptcp.h
-+++ b/include/net/mptcp.h
-@@ -322,9 +322,9 @@ static inline void mptcpv6_handle_mapped(struct sock *sk, bool mapped) { }
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 46e5db65dbc8d8c6591b53dfc77bb689357f33ea..1ca22e4842cf6b6c6bdbc37bf415187e706b2b69 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -2358,6 +2358,8 @@ cg_sockopt_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ #ifdef CONFIG_INET
+ 	case BPF_FUNC_tcp_sock:
+ 		return &bpf_tcp_sock_proto;
++	case BPF_FUNC_skc_to_mptcp_sock:
++		return &bpf_skc_to_mptcp_sock_proto;
  #endif
- 
- #if defined(CONFIG_MPTCP) && defined(CONFIG_BPF_SYSCALL)
--struct mptcp_sock *bpf_mptcp_sock_from_subflow(struct sock *sk);
-+struct mptcp_sock *bpf_mptcp_sock_from_sock(struct sock *sk);
- #else
--static inline struct mptcp_sock *bpf_mptcp_sock_from_subflow(struct sock *sk) { return NULL; }
-+static inline struct mptcp_sock *bpf_mptcp_sock_from_sock(struct sock *sk) { return NULL; }
- #endif
- 
- #if !IS_ENABLED(CONFIG_MPTCP)
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 6625b3f563a4a3110a76b9c12a46340828e16b6e..40ed3854a899bf9d11847ec0e8aee174923f03d2 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -11833,7 +11833,7 @@ const struct bpf_func_proto bpf_skc_to_unix_sock_proto = {
- BPF_CALL_1(bpf_skc_to_mptcp_sock, struct sock *, sk)
- {
- 	BTF_TYPE_EMIT(struct mptcp_sock);
--	return (unsigned long)bpf_mptcp_sock_from_subflow(sk);
-+	return (unsigned long)bpf_mptcp_sock_from_sock(sk);
- }
- 
- const struct bpf_func_proto bpf_skc_to_mptcp_sock_proto = {
-diff --git a/net/mptcp/bpf.c b/net/mptcp/bpf.c
-index 8a16672b94e2384f5263e1432296cbca1236bb30..988b22a06331ac293b36f3c6f9bc29ff0f6db048 100644
---- a/net/mptcp/bpf.c
-+++ b/net/mptcp/bpf.c
-@@ -12,9 +12,15 @@
- #include <linux/bpf.h>
- #include "protocol.h"
- 
--struct mptcp_sock *bpf_mptcp_sock_from_subflow(struct sock *sk)
-+struct mptcp_sock *bpf_mptcp_sock_from_sock(struct sock *sk)
- {
--	if (sk && sk_fullsock(sk) && sk->sk_protocol == IPPROTO_TCP && sk_is_mptcp(sk))
-+	if (unlikely(!sk || !sk_fullsock(sk)))
-+		return NULL;
-+
-+	if (sk->sk_protocol == IPPROTO_MPTCP)
-+		return mptcp_sk(sk);
-+
-+	if (sk->sk_protocol == IPPROTO_TCP && sk_is_mptcp(sk))
- 		return mptcp_sk(mptcp_subflow_ctx(sk)->conn);
- 
- 	return NULL;
+ 	case BPF_FUNC_perf_event_output:
+ 		return &bpf_event_output_data_proto;
 
 -- 
 2.47.1
