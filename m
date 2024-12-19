@@ -1,330 +1,241 @@
-Return-Path: <linux-kselftest+bounces-23613-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23614-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65AD19F8337
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 19:26:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 695CB9F8355
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 19:36:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AEAA5167CE8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 18:26:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 375BB7A272F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 18:36:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53A0B1A2554;
-	Thu, 19 Dec 2024 18:26:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E0531A071C;
+	Thu, 19 Dec 2024 18:36:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="dO2x4/ZC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DHEdbtLk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB931A08C5
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Dec 2024 18:26:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734632783; cv=none; b=rLltei7Wgc8maNceFgwWeAXAu4lj2/2ugMrZruD2AnjcQnO1lvjV7FsqZIWGj+RYb5RZtBP3SDNi+9KLYiCPW7xIluXOsDO5r4Bo2PTImelqghoCcsxCZfXc98Bc8iwIPiJl3hh9V0HW1RnBOpBcPRsUL3YQ135+Qm8kjHCP2Xs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734632783; c=relaxed/simple;
-	bh=/2GFVTGWItCrct80AUQkOv7AggOUOeigNcKeS4Yoytc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KuXXVjv4Ki5ljm8M5pajIlXSOhagTjtDAhIn3fvUcEyC7NUvLfLl4H3seS+AOK1CkONinzWWC9N0uhhNLbuKrbleT60n8XtwTgBGWa1CmsvXkOpOKOjzBycPLffDj8jvLT+DuaItyu3UOFE13M6XCYIVvh8+HSETLRpcLDGdQqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=dO2x4/ZC; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2ef89dbd8eeso743761a91.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Dec 2024 10:26:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1734632779; x=1735237579; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hMRnvozbssngVqbSknpjzbx2RK+JVnD39zwZDG+y2n8=;
-        b=dO2x4/ZCJFI+la1r4/jZdjk0XFVqDmcOJ1x7+fuTT52KH1i92kkbroUXqv/rU68PMj
-         ZagsLlGsikFlgnxcPCBbarvl6HxzYFDYNOHswgWPXvwstGO2ZfRVgWyeJ5E1lpdXbIr3
-         4rlp5lU64zSMyu1Q1LujpeuQtBT7hC0cS2L7qXybmhkKF673Nd+S017gVaPFh3WxQ9Lo
-         fFYIeXTUUpRk1iExxz/k8IQ8bGa7dQE/S2wC98J24KFAYkIwKYD4RKX1kpgFsLU9gQme
-         W2Shp0BTVILPc+fwZPoW4FQcVjxnW2B+C7RM4m0eR7STEaN37+Zna9offByYbx9C25BY
-         H+6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734632779; x=1735237579;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hMRnvozbssngVqbSknpjzbx2RK+JVnD39zwZDG+y2n8=;
-        b=wSoFQ4d6f4h38KNbcX9RpL2y4uS6/2IEY7NkN8QhBz37GeNmNrnzKv5FCaaYz2kY2i
-         0cB2/dHNYhFNCLHSd+lEmLLsKJccsQD85EBcd9HL19Hnn/dHCr+K4P2d5fQizkMl4LcK
-         iA1KGj8jsHofmwTZZnVBvoTglW6NxxEiKJSKUvwNohi+khqyakIZ6FKNbqzB/gpx9sQG
-         s9mWoxBq/Imeunm3R0h+gjXigDUibcCftX/bsVM322DQ4AESv9DkXCVwtRB5rYUzSlpj
-         qkSgSyo15rtvbd9Yc4V1NiBcS2+0DOpQ8CwrfbmLChwRuE+N66uSR2gR106UopVTWu5A
-         RWqw==
-X-Forwarded-Encrypted: i=1; AJvYcCWdlV+z5c/XV3VTuhhSq6qIvXt2aPGXCQxysK3ug554fxlUFUSEn1IMF0yRFmuK2UJSoZoHAlFPqxzIGbhz9G0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLX08No6SqeXjdR+ngixz91gCMkbaKmSy6oIzkPBQyHvSEoLmg
-	RRw7H/w0+8wD1NZklHfjR0Iyg2nfUKHy//1leJC9ST4atbE3TAxPlB/RZf8/a0g=
-X-Gm-Gg: ASbGncuI+nhoEA1vndsVvwF9a+WW4cDGBxoQ6zDDQeiRSHgmV6/evZCthoWFHtM9x3O
-	gV8c1rRIqObKIvJdSpAqz+tXkZYwWO23LyYQ0Y/5VVlzmo0b5gXD6ydYzsOW4A3k+hpmrJxkJe4
-	hqBeRSyUiT94ZlwOLrFls1zO3YL0/MV2TPOrb36IhgV6w09R6X7NwE/FgpRmWXqJ7Z8nDfM/XSs
-	8Kc2tvJXEVpCGJGnSsR5FK095FKkpIe2xWvZa1kMzvtBan6N/y1
-X-Google-Smtp-Source: AGHT+IFsWgJOva12zvp6tp180q3OiFLZ0d0TjIkVYwvTLN5q8JRYcM/SHtSfXHGK+OHbcvE+dj549w==
-X-Received: by 2002:a17:90b:2c84:b0:2ee:bbe0:98c6 with SMTP id 98e67ed59e1d1-2f452dfcb28mr13994a91.8.1734632779465;
-        Thu, 19 Dec 2024 10:26:19 -0800 (PST)
-Received: from ghost ([2601:647:6700:64d0:1e6a:6188:cfff:248e])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f447883b0csm1887523a91.42.2024.12.19.10.26.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Dec 2024 10:26:18 -0800 (PST)
-Date: Thu, 19 Dec 2024 10:26:15 -0800
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: Celeste Liu <uwu@coelacanthus.name>, Oleg Nesterov <oleg@redhat.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, Alexandre Ghiti <alex@ghiti.fr>,
-	"Dmitry V. Levin" <ldv@strace.io>,
-	Andrea Bolognani <abologna@redhat.com>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>, Ron Economos <re@w6rz.net>,
-	Quan Zhou <zhouquan@iscas.ac.cn>,
-	Felix Yan <felixonmars@archlinux.org>,
-	Ruizhe Pan <c141028@gmail.com>,
-	Shiqi Zhang <shiqi@isrc.iscas.ac.cn>, Guo Ren <guoren@kernel.org>,
-	Yao Zi <ziyao@disroot.org>, Han Gao <gaohan@iscas.ac.cn>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, stable@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] riscv: selftests: Add a ptrace test to verify
- syscall parameter modification
-Message-ID: <Z2RlR1cP9tne8rNi@ghost>
-References: <20241203-riscv-new-regset-v2-0-d37da8c0cba6@coelacanthus.name>
- <20241203-riscv-new-regset-v2-2-d37da8c0cba6@coelacanthus.name>
- <20241203-55c76715e16422ddaf8d7edf@orel>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2104B35948;
+	Thu, 19 Dec 2024 18:36:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734633370; cv=fail; b=BHuF5C50HxD+wKWKMd5rfi7EcTp9HTq7/DswYTHVPbsTcKRAJLrKvwn6OsLwrhJhij0zfF9iN/fIZ9DbLZu12+5BnJMmrZipJwVzbfbe1asFnDfD1tYx70ugROlv8oyJWca9OYAHytaUmhBIzNrdY/NYdgHq0mHjSHBHiaGl1x4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734633370; c=relaxed/simple;
+	bh=ftjVbQks7KN1C1szNEmTavAchX7RX6OeKALlycn+Is4=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=LS0s+zttiqeZiIZBENe7jrRvsJvWm1nV2ttkXaYID8vq3wuaiZyGfKYzKkyuRW4OBDKm5LCPZ3cpDRDuroMi1BmZKT2GEoMMH/juN2ItiUOnHO6bqGFC9X2jvJhW8+joBC8uBIzxO52WVZ4mLVEuo8Cq3N1pXW1Q7aJ6l4mgzbk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DHEdbtLk; arc=fail smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734633368; x=1766169368;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ftjVbQks7KN1C1szNEmTavAchX7RX6OeKALlycn+Is4=;
+  b=DHEdbtLkf1FhiH1cRCeCf1TrOVR+a6oixc4+8QSDklS6ryUMIoP7YkNm
+   MyYpKKjL3B2dwHftOaG2B1c0Jruxt5y3Zb8wPAeSAdDCrJ8UVEWrrL9i+
+   /mY8mwT7m33kg+0JJujFfJZPBQwiniPipZejQAum7Q6pxm01eHlUK5bMe
+   cqNcSLbdhuv8dyems1l3BDdx1Lk5gdBufKcE7l/1LiY/85eqboeOHr7Kr
+   nMj9OORUATINpd1hlfiQ0K5o7JIoR5e+a/fY3JH+SlfvNWYZOLw4/1/sD
+   65IZ9aPlFENpXN8AuFOCJ/F0xGf7VWhH/pZahOzukaaBMp7V20Yg63/Aq
+   Q==;
+X-CSE-ConnectionGUID: gtjYJTeUSS2y9qqBbbN/Pw==
+X-CSE-MsgGUID: 3jKBzSHxTY2kJPLGmQ9pKw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11291"; a="35383296"
+X-IronPort-AV: E=Sophos;i="6.12,248,1728975600"; 
+   d="scan'208";a="35383296"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 10:35:48 -0800
+X-CSE-ConnectionGUID: uTrzkhypTcaG0zOLts32sQ==
+X-CSE-MsgGUID: HhvF1+VUTNCULHiKx4P/Ww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,248,1728975600"; 
+   d="scan'208";a="103260867"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orviesa004.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 19 Dec 2024 10:35:47 -0800
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Thu, 19 Dec 2024 10:35:47 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44 via Frontend Transport; Thu, 19 Dec 2024 10:35:47 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Thu, 19 Dec 2024 10:35:45 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=qjZEUe1erjKe+y7mkJfFwitlTiUtmVMXEm7xTu4r7kV/PLc/AH3LzBnhdvwQlfVzeMtggTeAxxZ7olKhV/NV+7LQnvO5zymgvbWadM0zajsZBgr8tGCed+SKpkm6zIyA2PEsKMRcwzim7Eym/oqfYvV8rbXb5lIoeWfB9T4rN/oL0VXMY07hoPrWcntV2XQGVph48++JEttGuUNZrBs3KsR4j115DPll+AFae3FSr6Ulnk5ZhPOB1KVUmRBw3vZ32bzTA3VUOcb9JW3A2bAzVpd8q1QYzbWbfjEaqOA/oAGux66j5M3Q8YXBJlahRhY0R25Zgq3emQxkkHK2rGT3GQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=n/d+2pQ1CORRWvL+h5yEZUG6f4AsiwijnnWDphNrKVw=;
+ b=GR7EI3NpIFCtfqJuoybxAHQETfXcdJEvOse0Rwi+FtIe4rcEUtUQYGN1hCsOQZYDZczZk+GGptzy7nvQCebIpihg01CENwglHjcwWHXB306W6708Uws7WrQOeTYxhw1YXq2XLULNnnM7wB+8kBsvK+pcA/J5cbuFH3xVrjE3ldSQZBXYKqlniaWBwMw2mn0+tst5kwX72rzCP2Me0CWiL98ir4747MMV5GFREwGuhCdFnyqdf/4+I7fDWZ+zTnpL3wow7Y4i6Z3jrNZD50sEoy6MigyEK4O0u4yb5uLo/9tHW28oufKQ835f79j+XJaZSadCKMBI8hb3CKQsB+Jsvg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
+ by DS0PR11MB6325.namprd11.prod.outlook.com (2603:10b6:8:cf::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.21; Thu, 19 Dec
+ 2024 18:35:16 +0000
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::61a:aa57:1d81:a9cf]) by SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::61a:aa57:1d81:a9cf%7]) with mapi id 15.20.8272.005; Thu, 19 Dec 2024
+ 18:35:16 +0000
+Message-ID: <808036fb-9a2c-44c3-ac6c-5406313a232a@intel.com>
+Date: Thu, 19 Dec 2024 10:35:14 -0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 0/2] selftests/resctrl: SNC kernel support discovery
+To: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
+	<fenghua.yu@intel.com>, <shuah@kernel.org>
+CC: <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<ilpo.jarvinen@linux.intel.com>, <tony.luck@intel.com>
+References: <cover.1734361935.git.maciej.wieczor-retman@intel.com>
+From: Reinette Chatre <reinette.chatre@intel.com>
+Content-Language: en-US
+In-Reply-To: <cover.1734361935.git.maciej.wieczor-retman@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR04CA0185.namprd04.prod.outlook.com
+ (2603:10b6:303:86::10) To SJ2PR11MB7573.namprd11.prod.outlook.com
+ (2603:10b6:a03:4d2::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241203-55c76715e16422ddaf8d7edf@orel>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|DS0PR11MB6325:EE_
+X-MS-Office365-Filtering-Correlation-Id: d6349385-4716-46e3-9d8f-08dd205be226
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?eHpjdmwzUVhKYTJKaXZYT2t5YUhuQnYxem9kNUxlNmFEZEtCK3pJSXZMb0d4?=
+ =?utf-8?B?M3l3NWdWWmtqaXJxZ0J3TzJKQkM0U20wWmtFbDVaRWFma1dYOTU4SXgwdEwr?=
+ =?utf-8?B?ZFFSbVdZWlVWcGJzN0JnY3YvZ2pQZzBSenJzek1TTkFrcjdCRXRKUlpDN1k2?=
+ =?utf-8?B?N2gvRXVzdG5rdmxCTXZGdnYwUWZqaGliY1c5VmxoOHF0S3hGRHZ4ck1KekFG?=
+ =?utf-8?B?MkMranRXUW9zTitLRG83SlAwQmJKYnZnLzhyRnlnYWxrZ1YvNlJFTGpzRHlv?=
+ =?utf-8?B?Sk8wSUpXdjJhNWFEMlo0dlZCZGFlSmloU0Vsell5WWtMS2w4STdsN1ZyWjlI?=
+ =?utf-8?B?cWRPeTBpc25yTE9razdlTC9Ra0NDaHZ1RjVySFN2cEp0TEF1aC9Ma0Rxc1o0?=
+ =?utf-8?B?RFlmK2ZHM3lwM3lEZXRldTErNnNoblQyVzltNnhobzdOcU1IWjNSK01KdHdM?=
+ =?utf-8?B?U21XekFMczkweUV6NXVwR1pOaXpjVm1tbWhSRGxHMFNCODhoN2FyVWo3ZzVH?=
+ =?utf-8?B?cVpmdjJHcFA5R1hvcjZpSUFwanV3ekdxQW0rQ3FjSi9pUGVhelRQTE5lRlZK?=
+ =?utf-8?B?Q2dtaXFVRitWTmlpUFpveXZRVnlOY1hzNEVyWnVpSUNTcWN1NTB1MUZGQi9T?=
+ =?utf-8?B?Zk5kWHliRjRMWGFvTlhoZWliR3NkbGsyb3ZuTEdDSnhha1RJMDFjbWhBcTYw?=
+ =?utf-8?B?NEx5ODNMNU9Ta2V5eC8rbFpkcldDd1MxYmhaYUFhSVNFV24rdXdrN2MrVVJJ?=
+ =?utf-8?B?MVdaMVFlUC9CaGtZZmdJc3ZhWWNIejczL3ZHdk9peCtRbjUrTHNoQW1jZDZZ?=
+ =?utf-8?B?ZFBpNUwyVHkvTG9xSFJLWXdaUXI3SFRZWkNqVmZBOUliUUhXOEdlMzFqbWpu?=
+ =?utf-8?B?a1R5NkcxckhMa1d3MzZ5TWFyUTRjYmRDd0ZVL1Bia0Znc3ZlR0MyLytMYUFt?=
+ =?utf-8?B?ck16aTA4akJSUmticUtPRzFWWmREOGNEYzJETTl1MVNva0JuSk9DUEljMitr?=
+ =?utf-8?B?bERTVjFmUnNScGZ3UkExbk1oL3JONFpVNi92TzNZVDNQNHI1dVdBYklsSm4z?=
+ =?utf-8?B?bEZXbjRRWUJhNytiQmZiZ1RyVitWZ2ZtSklTbUFjVDUwK3cvRDBSdDh1OUFm?=
+ =?utf-8?B?eXk0anpyY1JRRmZQcTMwc2F5WktzSkdhVjJia25kSnFuOXJ6S2c1YXpFZVN1?=
+ =?utf-8?B?SUtlQ0tDMjlSRkw2RkdCdUEzZStCRnVQRTNZNzV2bHp5UkdlZktsWkRzTXlp?=
+ =?utf-8?B?MXo3SkMyY0lPU1gwdUtBUWlUWkxvYW9PbEVsVTBtYmxoOERUZThMK2pic044?=
+ =?utf-8?B?alhoWVVKa0FBNW91MnVuSCt2K0gvbFB6Szk2T01MNFZhK1phQ2ZkcTFlNVJI?=
+ =?utf-8?B?N21CUG5ZTXNPcmVyUjQwbHduYVJYL3YwcWxxbWxZZWpLSmFsUGFVUXB2Y1RV?=
+ =?utf-8?B?NlFsZ1BuU0RSRDhBMS9VS1hhQUFZd2hWQ1Rvck5zVzZNNWNSV3I4U3hVa1dh?=
+ =?utf-8?B?V3ArKzVXTlUzWWRsQUd0d2x0Q0FVUm5DRDFTVFJrV080WnBkNWRCV0VFYk9K?=
+ =?utf-8?B?NElhY3MxWWh5enZLdkZwN0V2SVNWTnlGdms5a3p6Z3dXSUY4eld1MW9OTDN5?=
+ =?utf-8?B?alQzY3BRbm9QNUlCQXJPK1lrOUwxL25rWEtEV1VVYTV3cjBtOUpaMVB4R3hE?=
+ =?utf-8?B?T09oVWNnV3B4Tzlsb3UvaTNsbjExam1rb3czTEVHL1VjWml2aUpSZVN5SVAv?=
+ =?utf-8?B?Q0YxMDRianJ4eGozNVd6d2RhK3VoYXpDRmU3ZXlMOUl3V3pJWVc5enV5ZlFO?=
+ =?utf-8?B?eWlhN08xQSs0L096a01xU21EUUpuODNyNWZSc2ViNWVSMTNYMm5yZGFXM3FG?=
+ =?utf-8?Q?ZqWv8wLdPE4sU?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cmxjM3NwbGpnd2RtZ1h1ZGYvRDk3ZEZpNHNWL1M2NGxQOW5tL2JYQTVlQk82?=
+ =?utf-8?B?MngvQlFPVzZZSHNjN3lRb0Q5eDFyODNzbUEvcHMwZGFoa0dvSTl4dVJWWU91?=
+ =?utf-8?B?bjJZRm9iMmFQTzRjQWVreDVIOUtPRXF3V3ZURnU5dzBCN3BHWjBFUDdZSlVT?=
+ =?utf-8?B?WVlFRFQ0OUI0ZGhLRFdpUU5OdlVyWTduVVh0SnNMMVhNZUFxaU1xVC9HeDRw?=
+ =?utf-8?B?V2M2NU9jWWZUTm5nWDFQMWVsMGNvS3NiZDZkQXFaQkxreGlPY2tJYXVwR1FW?=
+ =?utf-8?B?RUJHMWE3QmJWUmlYbGZ6cnBhTjhIWUVLTnVDc1VlaE8vUFFHdTI3Q0Mvc2Nu?=
+ =?utf-8?B?eFdsMEtJWmgyNGtWS2RrKzROR2hnTW83azJNSzBUV0dlNWtOU2JzVXlXbk96?=
+ =?utf-8?B?OUw0VmZkOGFtQlcvYlhrbzJweXVGVGJEM05VZkowdjI5WEQ1dnN0ZC9GYzg2?=
+ =?utf-8?B?Nmo1RldlYnk3TWFKM2ZrTVU4WUNkbjhpKzYzOUhXZnFhTFdOc0FCaXcweXVq?=
+ =?utf-8?B?VkU5MnhMc3g0allhQnpTbU5XbFg1ZDI2eDA0QW9wUWNUNUsvS1FFdGh1L2pD?=
+ =?utf-8?B?SjQ0REpaL0RkYjdRVmo3YXNqTS82ejJUTU16dmJqTXo2SlNPS1pRWVZ2cmpl?=
+ =?utf-8?B?UytOY0dEVFhIaGFESVoxMUhnZVJGY3ZOV3M2ZmJ1elRQbnRnaWxtb1ZZQnF2?=
+ =?utf-8?B?ellyeEljQ1J1aUlwVDB3RllnbzlyRmRLckhHQ0dBSHdnVDMxYWw5YW1PQ3pi?=
+ =?utf-8?B?YXRnSkRkeU9mYjV5MXQ2SS8walVDR0pvWnAwanZUbmVZbjJYZ0xORHcxaUFr?=
+ =?utf-8?B?NFJCZlMyZDNEQVQ5MVZkc3E0UUJrdHVDODUrNCtNbVgyeHF6MnFjdjNBeCtG?=
+ =?utf-8?B?NkoveGRnWjkyQzA4dE04S3pvSHhPZ3h1cW9Mb2JYYlAyTVAwdmdqM21wbS9R?=
+ =?utf-8?B?RUdveFNGbGdsTmQ5T1pSZEx2ZEZxV2ZkZncwT1NmUTRobHJKU2NDRWZoaG9B?=
+ =?utf-8?B?YlRJRU8xMzRzS3YyeC9UN2lLZWhaNWlhdFFteFJaekZzNFllVVZqYW9UK1BK?=
+ =?utf-8?B?d21MNmxqWjVqb2F6NmZJUFF0MitLNjh4cDluamtBV0UrTVBKTjBIeTY5eEl0?=
+ =?utf-8?B?YVFMSHRmMWRNQmY5SEdsbE5kdXpPa1lqWDVvaHlXbFgycWVFWFdnTXcwN2E1?=
+ =?utf-8?B?a2VxTTVpbmtYWEYzMGx1YUphTVNPVWRvS1FUWnVEcTR2SHJnNm5aN3JWaXox?=
+ =?utf-8?B?b2JGWjRQLzFsNFdnQ0NxdXJmYk9MODZ4L3praHBYVlNTWmNxazlyZmdPVkRw?=
+ =?utf-8?B?R2hBc1FvQ2EvQkNnNENGQ3JZNG93bE5XN29VbmVPOTJQQzdvYXB0aGFkN3RZ?=
+ =?utf-8?B?T2xvcnhJdTVralhXRzI2QnZ0NzYyRjN2R2Z5T3JEcms0QXgzRUh5MmhsbkVV?=
+ =?utf-8?B?RGpsRDI4MTdtUzRwODQzNHBiRWRlaC8yN2h0ZlpKd3Q2MExHU1ZMdFRSdHBO?=
+ =?utf-8?B?a2dzZ0hId2c2L0ZKRE5KbGhHM2lmL0VUZmpYZkdWNE8yY2FKckxLVGc1T3dS?=
+ =?utf-8?B?MmFyVWIwSUk4MjVTLzBwTkRCNEI4MHpWRWR5ZVYzdldaVjg3aUZRMEpaS0U4?=
+ =?utf-8?B?SGFrQXlvT3htU0NzUGVXeStvVVh6OWFkSElEOFFRVU9naW9XOUhoTTlDL2tI?=
+ =?utf-8?B?YnpRWGFJVzZqd0d5Y20wMjEwN1gzOWVMcjFVYWpXNTVTZ2UzVnV2cHFBbS8v?=
+ =?utf-8?B?ckVJY3kwUmtuVVhLNllYV2ZuYVB0bjVVREVvcE9ndnUxMkxCZTNYaGFYcXJa?=
+ =?utf-8?B?WTZvZ3ZGWUVSWG12M0JScjlGVEprNEtEdEFZb0E3cUVIUkFONlFwalFjWTdz?=
+ =?utf-8?B?ZnZGcnZmSXNTaGFUUzBBS1FBd0MycmwrN1V6OUtKVUx6c2hjK2krUTZ2WXZp?=
+ =?utf-8?B?NUpicFppMFpQbXJ3RjBoVGV2clN3TmhEZ3JuUEwzWE96djhUZ0VySXJ4UGRp?=
+ =?utf-8?B?aDhHWk9jSUltcnhUdE13bjdYMTlZYnF6WTQ4U1RNOHdodzdyMGNUOXRPYzlQ?=
+ =?utf-8?B?cVd6VU5CV243WjVYck9qNEVBdE8vWTcycXRsRmQxMGJYbVpqRTE2Wmt0NS80?=
+ =?utf-8?B?bkt2bmQ5S2gxQjNmYUloeGVGY0c3Y05TTGQrV1dzMG1qSWxaZTFsR3dYTnlO?=
+ =?utf-8?B?YWc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6349385-4716-46e3-9d8f-08dd205be226
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2024 18:35:16.6268
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Z0U83V6YWozZyyYgnXMDEy6oZztPEEWmPvqL9GK4s0TXdXd0kxSEapgx2rpcm6JnyxdHMw3oHCr98rPiLIOu7k5mq+l9guoDA/gjwOF2pjk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6325
+X-OriginatorOrg: intel.com
 
-On Tue, Dec 03, 2024 at 01:55:07PM +0100, Andrew Jones wrote:
-> On Tue, Dec 03, 2024 at 05:30:05PM +0800, Celeste Liu wrote:
-> > From: Charlie Jenkins <charlie@rivosinc.com>
-> > 
-> > This test checks that orig_a0 allows a syscall argument to be modified,
-> > and that changing a0 does not change the syscall argument.
-> > 
-> > Cc: stable@vger.kernel.org
-> > Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> > Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> > Co-developed-by: Celeste Liu <uwu@coelacanthus.name>
-> > Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
-> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> > ---
-> >  tools/testing/selftests/riscv/abi/.gitignore |   1 +
-> >  tools/testing/selftests/riscv/abi/Makefile   |   5 +-
-> >  tools/testing/selftests/riscv/abi/ptrace.c   | 134 +++++++++++++++++++++++++++
-> >  3 files changed, 139 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/riscv/abi/.gitignore b/tools/testing/selftests/riscv/abi/.gitignore
-> > index b38358f91c4d2240ae64892871d9ca98bda1ae58..378c605919a3b3d58eec2701eb7af430cfe315d6 100644
-> > --- a/tools/testing/selftests/riscv/abi/.gitignore
-> > +++ b/tools/testing/selftests/riscv/abi/.gitignore
-> > @@ -1 +1,2 @@
-> >  pointer_masking
-> > +ptrace
-> > diff --git a/tools/testing/selftests/riscv/abi/Makefile b/tools/testing/selftests/riscv/abi/Makefile
-> > index ed82ff9c664e7eb3f760cbab81fb957ff72579c5..3f74d059dfdcbce4d45d8ff618781ccea1419061 100644
-> > --- a/tools/testing/selftests/riscv/abi/Makefile
-> > +++ b/tools/testing/selftests/riscv/abi/Makefile
-> > @@ -2,9 +2,12 @@
-> >  
-> >  CFLAGS += -I$(top_srcdir)/tools/include
-> >  
-> > -TEST_GEN_PROGS := pointer_masking
-> > +TEST_GEN_PROGS := pointer_masking ptrace
-> >  
-> >  include ../../lib.mk
-> >  
-> >  $(OUTPUT)/pointer_masking: pointer_masking.c
-> >  	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-> > +
-> > +$(OUTPUT)/ptrace: ptrace.c
-> > +	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-> > diff --git a/tools/testing/selftests/riscv/abi/ptrace.c b/tools/testing/selftests/riscv/abi/ptrace.c
-> > new file mode 100644
-> > index 0000000000000000000000000000000000000000..d192764b428d1f1c442f3957c6fedeb01a48d556
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/riscv/abi/ptrace.c
-> > @@ -0,0 +1,134 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +#include <stdio.h>
-> > +#include <stdlib.h>
-> > +#include <string.h>
-> > +#include <unistd.h>
-> > +#include <fcntl.h>
-> > +#include <signal.h>
-> > +#include <errno.h>
-> > +#include <sys/types.h>
-> > +#include <sys/ptrace.h>
-> > +#include <sys/stat.h>
-> > +#include <sys/user.h>
-> > +#include <sys/wait.h>
-> > +#include <sys/uio.h>
-> > +#include <linux/elf.h>
-> > +#include <linux/unistd.h>
-> > +#include <asm/ptrace.h>
-> > +
-> > +#include "../../kselftest_harness.h"
-> > +
-> > +#define ORIG_A0_MODIFY      0x01
-> > +#define A0_MODIFY           0x02
-> > +#define A0_OLD              0x03
-> > +#define A0_NEW              0x04
+Hi Shuah,
+
+On 12/16/24 7:18 AM, Maciej Wieczor-Retman wrote:
 > 
-> Shouldn't A0_OLD and A0_NEW set more bits, since 3 and 4 aren't very
-> unique (we could have those values by accident)? And should we include
-> setting bits over 31 for 64-bit targets?
+> Sub-Numa Clustering (SNC) allows splitting CPU cores, caches and memory
+> into multiple NUMA nodes. When enabled, NUMA-aware applications can
+> achieve better performance on bigger server platforms.
 > 
-> > +
-> > +#define perr_and_exit(fmt, ...)						\
-> > +	({								\
-> > +		char buf[256];						\
-> > +		snprintf(buf, sizeof(buf), "%s:%d:" fmt ": %m\n",	\
-> > +			__func__, __LINE__, ##__VA_ARGS__);		\
-> > +		perror(buf);						\
-> > +		exit(-1);						\
-> > +	})
+> SNC support was merged into the kernel [1]. With SNC enabled
+> and kernel support in place all the tests will function normally (aside
+> from effective cache size). There might be a problem when SNC is enabled
+> but the system is still using an older kernel version without SNC
+> support. Currently the only message displayed in that situation is a
+> guess that SNC might be enabled and is causing issues. That message also
+> is displayed whenever the test fails on an Intel platform.
 > 
-> Can we use e.g. ksft_exit_fail_perror() instead? I'd prefer we try to
-> consolidate testing/selftests/riscv/* tests on a common format for
-> errors and exit codes and we're already using other kselftest stuff.
+> Add a mechanism to discover kernel support for SNC which will add more
+> meaning and certainty to the error message.
 > 
-> > +
-> > +static inline void resume_and_wait_tracee(pid_t pid, int flag)
-> > +{
-> > +	int status;
-> > +
-> > +	if (ptrace(flag, pid, 0, 0))
-> > +		perr_and_exit("failed to resume the tracee %d\n", pid);
-> > +
-> > +	if (waitpid(pid, &status, 0) != pid)
-> > +		perr_and_exit("failed to wait for the tracee %d\n", pid);
-> > +}
-> > +
-> > +static void ptrace_test(int opt, int *result)
-> > +{
-> > +	int status;
-> > +	pid_t pid;
-> > +	struct user_regs_struct regs;
-> > +	struct iovec iov = {
-> > +		.iov_base = &regs,
-> > +		.iov_len = sizeof(regs),
-> > +	};
-> > +
-> > +	unsigned long orig_a0;
-> > +	struct iovec a0_iov = {
-> > +		.iov_base = &orig_a0,
-> > +		.iov_len = sizeof(orig_a0),
-> > +	};
-> > +
-> > +	pid = fork();
-> > +	if (pid == 0) {
-> > +		/* Mark oneself being traced */
-> > +		long val = ptrace(PTRACE_TRACEME, 0, 0, 0);
-> > +
-> > +		if (val)
-> > +			perr_and_exit("failed to request for tracer to trace me: %ld\n", val);
-> > +
-> > +		kill(getpid(), SIGSTOP);
-> > +
-> > +		/* Perform exit syscall that will be intercepted */
-> > +		exit(A0_OLD);
-> > +	}
-> > +
-> > +	if (pid < 0)
-> > +		exit(1);
+> Add runtime SNC mode detection and verify how reliable that information
+> is.
 > 
-> This unexpected error condition deserves a message, so I'd use
-> ksft_exit_fail_perror() here.
+> Series was tested on Ice Lake server platforms with SNC disabled, SNC-2
+> and SNC-4. The tests were also ran with and without kernel support for
+> SNC.
 > 
-> > +
-> > +	if (waitpid(pid, &status, 0) != pid)
-> > +		perr_and_exit("failed to wait for the tracee %d\n", pid);
-> > +
-> > +	/* Stop at the entry point of the syscall */
-> > +	resume_and_wait_tracee(pid, PTRACE_SYSCALL);
-> > +
-> > +	/* Check tracee regs before the syscall */
-> > +	if (ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, &iov))
-> > +		perr_and_exit("failed to get tracee registers\n");
-> > +	if (ptrace(PTRACE_GETREGSET, pid, NT_RISCV_ORIG_A0, &a0_iov))
-> > +		perr_and_exit("failed to get tracee registers\n");
-> > +	if (orig_a0 != A0_OLD)
-> > +		perr_and_exit("unexpected orig_a0: 0x%lx\n", orig_a0);
-> > +
-> > +	/* Modify a0/orig_a0 for the syscall */
-> > +	switch (opt) {
-> > +	case A0_MODIFY:
-> > +		regs.a0 = A0_NEW;
-> > +		break;
-> > +	case ORIG_A0_MODIFY:
-> > +		orig_a0 = A0_NEW;
-> > +		break;
-> > +	}
-> > +
-> > +	if (ptrace(PTRACE_SETREGSET, pid, NT_RISCV_ORIG_A0, &a0_iov))
-> > +		perr_and_exit("failed to set tracee registers\n");
-> > +
-> > +	/* Resume the tracee */
-> > +	ptrace(PTRACE_CONT, pid, 0, 0);
-> > +	if (waitpid(pid, &status, 0) != pid)
-> > +		perr_and_exit("failed to wait for the tracee\n");
-> > +
-> > +	*result = WEXITSTATUS(status);
-> > +}
-> > +
-> > +TEST(ptrace_modify_a0)
-> > +{
-> > +	int result;
-> > +
-> > +	ptrace_test(A0_MODIFY, &result);
-> > +
-> > +	/* The modification of a0 cannot affect the first argument of the syscall */
-> > +	EXPECT_EQ(A0_OLD, result);
-> 
-> What about checking that we actually set regs.a0 to A0_NEW? We'd need
-> A0_NEW to be more unique than 4, though.
-> 
-> > +}
-> > +
-> > +TEST(ptrace_modify_orig_a0)
-> > +{
-> > +	int result;
-> > +
-> > +	ptrace_test(ORIG_A0_MODIFY, &result);
-> > +
-> > +	/* Only modify orig_a0 to change the first argument of the syscall */
-> 
-> If we run ptrace_modify_a0 first then we've already set regs.a0 to A0_NEW
-> and can't check with this test that we don't set it to A0_NEW. We should
-> probably have two different test values, one for regs.a0 and one for
-> orig_a0 and ensure on both tests that we aren't writing both.
+> Series applies cleanly on kselftest/next.
 > 
 
-Celeste, do you want to fix this up or are you waiting for me to?
+Could you please consider this series for inclusion?
 
-- Charlie
+Thank you very much.
 
-> > +	EXPECT_EQ(A0_NEW, result);
-> > +}
-> > +
-> > +TEST_HARNESS_MAIN
-> > 
-> > -- 
-> > 2.47.0
-> >
-> 
-> Thanks,
-> drew
+Reinette
+
 
