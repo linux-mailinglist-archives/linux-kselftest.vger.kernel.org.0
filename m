@@ -1,132 +1,119 @@
-Return-Path: <linux-kselftest+bounces-23567-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23568-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D914B9F727B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 03:07:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0F649F72CD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 03:43:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2F39188577B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 02:07:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9894218909DB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 02:43:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47DF470809;
-	Thu, 19 Dec 2024 02:07:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E687786327;
+	Thu, 19 Dec 2024 02:42:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NVTkSXsf"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YWbCxTAY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E83B3594F;
-	Thu, 19 Dec 2024 02:07:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB9378F34
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Dec 2024 02:42:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734574060; cv=none; b=gApgahl8orXxDRjLRTIOepZAvUERIHMfmJd3zX7k3tq5zFPiwpLL3L8/F7oXOmthqSc5tbbjORsW8Upas03rfoEvwiZp7cHJS0YXUjfxmWKOHJ5glqbD90vSi61CVGroeIvvjgm+v2C5+e4eeQmSGO6sN2/CJ2Wwb/9T2OadcVA=
+	t=1734576131; cv=none; b=ukaMnyTA7MTtXt3XUhdIVsh5R0pf6Uw07ytyqC5wLEV3hkjBqXZB9SNnOmB9dn7FNmGcrPcsFlzOmUzrBL+WYT4pqsYbGOLmUgDPnZV6hwM425b0GSvlC9Uuc/xaYiaxghCMfMJfOYNpnX6TjtNyGs248J9XAR3Gt+N1P0pPX/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734574060; c=relaxed/simple;
-	bh=u9RKb7yTKqQPGL6ESkRUFOfnECFsgIrUnpYAIzAyl1Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pshQj+5Oi7ZRU74FcxMg9qtth+b59F6tR6fyMacoCahYEKf+kiuqYAbLLRjvMIysVM1IHCIdDnSQlhl/XotMW3hVfbY+BRLt4/jpBsljQYQzsZnE7jJKS4JL5H1VlLmb2o7676lmnM/+ZBGpV6pfjYIgqzX6EbPxLTlyVSqQ1BY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NVTkSXsf; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734574057; x=1766110057;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=u9RKb7yTKqQPGL6ESkRUFOfnECFsgIrUnpYAIzAyl1Y=;
-  b=NVTkSXsf7t00dEecaADWF+S+OiFIGTZ8ZiNhrtghH/QQVHqNI3rkJC6e
-   egXj3APkAnPuhL3sMlB/q/9nxQ5w0xj4RLL2gtSEY/ALhuds+LB8Ueodh
-   ugn0X0wLrQPu9uXZSR99i12uuZsEyNJIhgdcQD7/0YdSXsJg/phddgYYU
-   AXFCqbI6gjoapEdJnOtg1RmHYWgP67ztYXyhqwK7Wg7JiHUookRP0tyRy
-   xDAkLsZP9rx3ZmUWi8px4IhTDvC1/Y0fwZxRZ1XSLAa1u1wzii96rcKtR
-   4Oj5Qoi8HB0gWuGwpFz7Cr+1PhDuYY7nQsRhDE3MmsD2Xcs7UCpu03sAy
-   A==;
-X-CSE-ConnectionGUID: KQIHwrbmS2S5PoFIazp8cg==
-X-CSE-MsgGUID: 0pyaHKCZStWPr63C75cpfQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11290"; a="35101035"
-X-IronPort-AV: E=Sophos;i="6.12,246,1728975600"; 
-   d="scan'208";a="35101035"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2024 18:07:37 -0800
-X-CSE-ConnectionGUID: BUEwx9zdRY+0awZQGNEcJQ==
-X-CSE-MsgGUID: Mwq7DUNKQP+Q7w80W636Fg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,246,1728975600"; 
-   d="scan'208";a="98449984"
-Received: from allen-sbox.sh.intel.com (HELO [10.239.159.30]) ([10.239.159.30])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2024 18:07:32 -0800
-Message-ID: <56c65e50-5890-42af-85b7-85f8a1bf5cf5@linux.intel.com>
-Date: Thu, 19 Dec 2024 10:05:53 +0800
+	s=arc-20240116; t=1734576131; c=relaxed/simple;
+	bh=+0YB1wnZO+N4Mgt+2ULmShqZq3rw6HcIFLVbUH2eZuw=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=a0ecpZFYmDR4BZj8ReIWVW1L4rtgGv3mI23/mY3u+YExOXZBCSkvA0xDwvP7oTaO3VnxPOHb8WehEAUr6tY57VeZOIRfhgdEFOndG3FJIUtOXg1rlUfNtVA7tm3tFUcKSDAKAgEkgdKsSqOCo9QRcpRm4ElQ5eyIe2O7kArgxXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YWbCxTAY; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2ef9e4c5343so449355a91.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2024 18:42:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1734576129; x=1735180929; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=m0Cubv7YLSSEZBcbcu/q09glZ18XxGHJ6dVd9FcHtzc=;
+        b=YWbCxTAYzCw3rL0VtmJprR2WLwkCsLQS/+LIa/g9XDenXlJIn3Za7I/i9r8eWT9PL7
+         dUvOWIoAUkZkPEWEDaXPVV9yKlwyD11VB20AnU9Isde704rZgBJVOCYofEeFqkq+gukk
+         RVs6Jrbb91XMR0fP1EhxKc9rqV5wJad8daZhhO8BW5tQyqal3LR1H2v2H2DNDyeJmAw+
+         XTZZe3LzRwlD1i7Iud9HpTxKn0PS7L/M6fD2boj9w7rGIqzIS9Q/LxkWgmWN1EphAFJZ
+         1yNVDu9yInr6z2jpu2NM8gbnX1/MyEW6GupHk1Dikf3kirISp2QYx99Jnom/aScoEGO2
+         QtxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734576129; x=1735180929;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m0Cubv7YLSSEZBcbcu/q09glZ18XxGHJ6dVd9FcHtzc=;
+        b=aeODKaN1LpMz91Uovmchm1lOXi85sJ6klFuK9NDtlR2NanW4RK5IHzf7Xohhzqp5pU
+         KCGJtBHXtHd6zvCjF1SC3Cra6CHHuiCISSLzhLLY3AUaZxztEwdOg8xDHZkuZLdyzYIF
+         WJ1182OFgLqtZ2Vq+4DS+jTFgmMervR36S/3ahT6qWxWvRdUpCyllAqJNSDFbatNox4r
+         mjLmJa+Nr11fHmSdt2iJTRRMx9FLErn8kO9MPcYay14A7+CzrvW1Jy4iNg6KXyaSLGVD
+         1aTDytB1s5IzncOfHBiGFWYOiVnAb+ozuKxaNOngPx4XjTs3V+yppOD8ec77Iq/Qlg1z
+         ZvkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVFT/FEKIubAETZEr5GRnkvra5M8Ff/cCezuspXbD3aUMZq5apafDeptGxw+9ypgjTRF5kcWnat3i5ed7X1Nd4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5FV5v0Pnlw4CBivaR5XhUBWHsjm74ogmecVOPDJOh/YXM97A5
+	iIDefwPSm/MjiuGixyLOm6iV9KpdvTRKfgp+tCEYv+cTmlQw9I3jhhI28r8kTXPUTAvKQXndD5k
+	+ww==
+X-Google-Smtp-Source: AGHT+IEnYzmbvfGN7/B6ViEtGfWEw0anaTCEutqaOfeDitWi6EveqXP0+98dhgD6pETsbyq/KQ5AnaRCuh4=
+X-Received: from pjbso12.prod.google.com ([2002:a17:90b:1f8c:b0:2ef:85ba:108f])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:d648:b0:2ee:9b2c:3253
+ with SMTP id 98e67ed59e1d1-2f443d45292mr2198688a91.30.1734576128828; Wed, 18
+ Dec 2024 18:42:08 -0800 (PST)
+Date: Wed, 18 Dec 2024 18:40:46 -0800
+In-Reply-To: <20241217181458.68690-1-iorlov@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 07/14] iommufd/viommu: Add iommufd_viommu_get_vdev_id
- helper
-To: Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com, kevin.tian@intel.com,
- will@kernel.org
-Cc: corbet@lwn.net, joro@8bytes.org, suravee.suthikulpanit@amd.com,
- robin.murphy@arm.com, dwmw2@infradead.org, shuah@kernel.org,
- linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org,
- linux-doc@vger.kernel.org, eric.auger@redhat.com, jean-philippe@linaro.org,
- mdf@kernel.org, mshavit@google.com, shameerali.kolothum.thodi@huawei.com,
- smostafa@google.com, ddutile@redhat.com, yi.l.liu@intel.com,
- patches@lists.linux.dev
-References: <cover.1734477608.git.nicolinc@nvidia.com>
- <21d7e63b97d81d0acf9127418a67efe386787261.1734477608.git.nicolinc@nvidia.com>
-Content-Language: en-US
-From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <21d7e63b97d81d0acf9127418a67efe386787261.1734477608.git.nicolinc@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20241217181458.68690-1-iorlov@amazon.com>
+X-Mailer: git-send-email 2.47.1.613.gc27f4b7a9f-goog
+Message-ID: <173457555486.3295983.11848882309599168611.b4-ty@google.com>
+Subject: Re: [PATCH v3 0/7] Enhance event delivery error handling
+From: Sean Christopherson <seanjc@google.com>
+To: Sean Christopherson <seanjc@google.com>, bp@alien8.de, dave.hansen@linux.intel.com, 
+	mingo@redhat.com, pbonzini@redhat.com, shuah@kernel.org, tglx@linutronix.de, 
+	Ivan Orlov <iorlov@amazon.com>
+Cc: hpa@zytor.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, x86@kernel.org, dwmw@amazon.co.uk, 
+	pdurrant@amazon.co.uk, jalliste@amazon.co.uk
+Content-Type: text/plain; charset="utf-8"
 
-On 12/18/24 13:00, Nicolin Chen wrote:
-> This is a reverse search v.s. iommufd_viommu_find_dev, as drivers may want
-> to convert a struct device pointer (physical) to its virtual device ID for
-> an event injection to the user space VM.
+On Tue, 17 Dec 2024 18:14:51 +0000, Ivan Orlov wrote:
+> Currently, the unhandleable vectoring (e.g. when guest accesses MMIO
+> during vectoring) is handled differently on VMX and SVM: on VMX KVM
+> returns internal error, when SVM goes into infinite loop trying to
+> deliver an event again and again.
 > 
-> Again, this avoids exposing more core structures to the drivers, than the
-> iommufd_viommu alone.
+> This patch series eliminates this difference by returning a KVM internal
+> error when KVM can't emulate during vectoring for both VMX and SVM.
 > 
-> Signed-off-by: Nicolin Chen<nicolinc@nvidia.com>
-> ---
->   include/linux/iommufd.h        |  8 ++++++++
->   drivers/iommu/iommufd/driver.c | 20 ++++++++++++++++++++
->   2 files changed, 28 insertions(+)
-> 
-> diff --git a/include/linux/iommufd.h b/include/linux/iommufd.h
-> index b082676c9e43..ac1f1897d290 100644
-> --- a/include/linux/iommufd.h
-> +++ b/include/linux/iommufd.h
-> @@ -190,6 +190,8 @@ struct iommufd_object *_iommufd_object_alloc(struct iommufd_ctx *ictx,
->   					     enum iommufd_object_type type);
->   struct device *iommufd_viommu_find_dev(struct iommufd_viommu *viommu,
->   				       unsigned long vdev_id);
-> +unsigned long iommufd_viommu_get_vdev_id(struct iommufd_viommu *viommu,
-> +					 struct device *dev);
+> [...]
 
-Hi Nicolin,
+Applied to kvm-x86 misc, thanks!  If you get a chance, please double check that
+I didn't fat-finger anything.
 
-This series overall looks good to me. But I have a question that might
-be irrelevant to this series itself.
+[1/7] KVM: x86: Add function for vectoring error generation
+      https://github.com/kvm-x86/linux/commit/11c98fa07a79
+[2/7] KVM: x86: Add emulation status for unhandleable vectoring
+      https://github.com/kvm-x86/linux/commit/5c9cfc486636
+[3/7] KVM: x86: Unprotect & retry before unhandleable vectoring check
+      https://github.com/kvm-x86/linux/commit/704fc6021b9e
+[4/7] KVM: VMX: Handle vectoring error in check_emulate_instruction
+      https://github.com/kvm-x86/linux/commit/47ef3ef843c0
+[5/7] KVM: SVM: Handle vectoring error in check_emulate_instruction
+      https://github.com/kvm-x86/linux/commit/7bd7ff99110a
+[6/7] selftests: KVM: extract lidt into helper function
+      https://github.com/kvm-x86/linux/commit/4e9427aeb957
+[7/7] selftests: KVM: Add test case for MMIO during vectoring
+      https://github.com/kvm-x86/linux/commit/62e41f6b4f36
 
-The iommufd provides both IOMMUFD_OBJ_DEVICE and IOMMUFD_OBJ_VDEVICE
-objects. What is the essential difference between these two from
-userspace's perspective? And, which object ID should the IOMMU device
-driver provide when reporting other events in the future?
-
-Currently, the IOMMUFD uAPI reports IOMMUFD_OBJ_DEVICE in the page
-fault message, and IOMMUFD_OBJ_VDEVICE (if I understand it correctly) in
-the vIRQ message. It will be more future-proof if this could be defined
-clearly.
-
-Thanks,
-baolu
+--
+https://github.com/kvm-x86/linux/tree/next
 
