@@ -1,93 +1,113 @@
-Return-Path: <linux-kselftest+bounces-23536-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23537-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 519179F7107
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 00:42:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 945559F7126
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 01:01:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 373E2188F7E2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2024 23:42:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5B0E1676BD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 00:01:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71DA71FD7B1;
-	Wed, 18 Dec 2024 23:38:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SMB95StF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23AB323B0;
+	Thu, 19 Dec 2024 00:01:16 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2947E19CCEC;
-	Wed, 18 Dec 2024 23:38:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8113A17C;
+	Thu, 19 Dec 2024 00:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734565081; cv=none; b=I4mObAh5Uz/8WJHj4fjezexar8bkfSG4/kZoQ+f0y0L/MUpbsLoBnAKBL853s4VsCm5SgpVGeFewh36EbxNTcUuQE6U1DUb7tB9OXlyNtKpuDs5zW+IaQryuy7SXUS1dN3HpuiN7qPEilzqFJGcef71bpu8+ofCFhceOVm3XJog=
+	t=1734566476; cv=none; b=hQQQJiu0uPG9ovYsFdpQFXhScKdFGbs6fZnJMzTNbd6DmUWqhmsrswMPQ0Xc5f2V6uneQY6Avt/EsXbeLUmI9EN5/L1/cVVTRyRkbNAvDmQR25kcASdJ9KI67ikHkIWVLVhrhEft+wXFjg2UR4LznyQc9l0Cr90kGLaVi4mk0Zs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734565081; c=relaxed/simple;
-	bh=TE9MeQggFrUNHk7GnpsPc1qOO621qZHYt6YKXQvYGUs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uUFcnQ9HasVvhYRx6bQG2VCh7AJ68uSHy46mgS2LED2hmIDRPkWAPwVaNSwabrwBXmtSU+Qqqou6Rg17Nu7bet9yj1m2Qy1qc0VAkmUVavJN578pEdKt6/4cp4yk1Fsjo890fdj230dO6+dCzD6bI57uKadixfKK0u624IgY7rM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SMB95StF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9872C4CECD;
-	Wed, 18 Dec 2024 23:37:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734565080;
-	bh=TE9MeQggFrUNHk7GnpsPc1qOO621qZHYt6YKXQvYGUs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=SMB95StF87lMswBTmoy5w+GFfz3iCmebU4gbeFCJK7sk9+I16C9cplpIYLf0W9Qul
-	 QxmbLpIR7/E6R0kf5eKkyEYZx8mBxxIidhrnHdr7M4IeFwaA3J5y2wWv4oQmfmxORv
-	 D1j6lmCsAMuKx+jWknHgUh8GEb58788JfHfg1N+UuccR+d6b8ALbB6vzMOTnfrbNpk
-	 nrbFqHQ3vUtoVAGtl14Lhqr/MD+oEcAwxAPHEo6k2fp/JS6ZLbq87qH4FknN0j6i1c
-	 yDKA9jZ2UNpUbRlqHX4gnIrK03GFSOZ91dNOO2mqCDLBVJi/w2/4kNnX7grOmVIZvb
-	 15jS4zu2mRPLw==
-Date: Wed, 18 Dec 2024 15:37:59 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Xiao Liang <shaw.leon@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, Kuniyuki
- Iwashima <kuniyu@amazon.com>, Donald Hunter <donald.hunter@gmail.com>,
- Paolo Abeni <pabeni@redhat.com>, "David S. Miller" <davem@davemloft.net>,
- David Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, Ido
- Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Simon
- Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jiri Pirko
- <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>,
- linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
- osmocom-net-gprs@lists.osmocom.org, bpf@vger.kernel.org,
- linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
- linux-wireless@vger.kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
- bridge@lists.linux.dev, linux-wpan@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v6 11/11] selftests: net: Add test cases for
- link and peer netns
-Message-ID: <20241218153759.672b7014@kernel.org>
-In-Reply-To: <20241218130909.2173-12-shaw.leon@gmail.com>
-References: <20241218130909.2173-1-shaw.leon@gmail.com>
-	<20241218130909.2173-12-shaw.leon@gmail.com>
+	s=arc-20240116; t=1734566476; c=relaxed/simple;
+	bh=wUsZsoTKw74ZT+K7l6LOXmPYeFTWo3CXD2jruq/rv/4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YZfssB6Y5bbbpZ58T9/zzGhO41kkiKSGQ5PDM6f/OWKgQj/YYfCqpZ/O8nUhk6nHJp+IjkwuCheS68+FHonBoTt+TBS51EgN5yBlyZQ6OdhuKFEM1zSpfpkVGfm0o1oG2N1ZvZBYF0JSgNddkH55cFop7R7qdhM68s/IP+qFHKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2165cb60719so2304255ad.0;
+        Wed, 18 Dec 2024 16:01:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734566474; x=1735171274;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Up/Rr7n4EANj9bJXyIXJdEYoDQoHUZwlTzYX06DAtSE=;
+        b=WVL9mVyiO3098jDBb+Daw3v46r6SGX1Ja/kdVDgdFb1bQvJF5e9aRYQ2wiXwDoAUZj
+         jCHVOpyjvHRRiogczNLb0c5tGz8hcm2gmdhASon5Wzy7GalSP7/DEOh86FosUdFo1zk0
+         hFvFcb13/I+AtVsPImFxSs9VzrfAPNNk3ks/4MQio+xkZB1KXpd57o7AMuwDmIGvQsmg
+         D470NvlWjd7jLUz3pWr21CD0FxGxTmOnIGX1Bb4CIIdr7TgLqR/uSrfdiYB1S210J9Q0
+         FSHaKPqQG5jxQKEWxN5RNKxHoNcv184Yz9fF2X3qPW/VHeBRv4ozNF9DJRf2dZw0DcTs
+         XVdg==
+X-Forwarded-Encrypted: i=1; AJvYcCV3Jo6LlFQuPbcvTDSwl3EolQIS53sHjo/8hAgm9EhGVuM/bDSoQR56W2oopuTfxraLlufGCIsZfwxA@vger.kernel.org, AJvYcCVnZc/XiUnVkGcDaLJt8K+sHjGmOhcPE/WOGUCEVGPKzsyGSFsgPvTXyz2G5n0rX7aVIb00nVKZXVYEv5I/@vger.kernel.org, AJvYcCXO6cBjMotZxi3qX6XOzEFZdLpwDxPLTKAlN48MChV/kuk08+KxoWDns/jpwDSKwMbCvdyx6wMl7EvgK4MW@vger.kernel.org, AJvYcCXZgZQIJP9Z8ZXwDoNfbtOwwsG2TpqBeWyhCSTuD+rq+omvoKPiLzCmbBSJxonnJsGb5fLON7TCXnqapah23Rc7@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/JcHtyb+0lBfgdgiCpGHVjvtiIVeGW45s70oiI8JjKmJFFhJP
+	eaUYAmJyT7u65/X3T91Bqp6rSPqEjPzpskrWpSK++vibHnwg3qkHwPvYbow+
+X-Gm-Gg: ASbGncuury/IPlkjC7xGycuVrSi/I9mXJulfehV/K8flxFxap0V4sfpsRLopwFqAHZA
+	C5YxRgEQmG374DXM/j8HA2HXwEayIjNrt7CuLyqUZDtzMNb8VHNsthq+mw6sk2oA4C/VQo40VKA
+	ghy51uputorcXIhgO8Ww8LE7F5ZksTxCzRZUlM8bvuf+nJfNxJOitQ7WWfRHkoP9M2a91lGUbKa
+	WMq+1errBFBiXIsJw/UW4XDbp5mzGGMx4QYqDoy+K63OiFa4SdAXKdJ7WtX+nzzVT0AHGl19BSu
+	jVKkfUMfn1vFxvY=
+X-Google-Smtp-Source: AGHT+IFeMHhCj7d1DIOUSl82Q6mpQs6HKNYAmMHRy+B6N2e9piBfiIhw3wHAUP5Ayy8o7ch/aMh54w==
+X-Received: by 2002:a17:902:d483:b0:216:6fbc:3904 with SMTP id d9443c01a7336-219d9625d6emr21076805ad.13.1734566473716;
+        Wed, 18 Dec 2024 16:01:13 -0800 (PST)
+Received: from localhost (fpd11144dd.ap.nuro.jp. [209.17.68.221])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f51a0sm986735ad.187.2024.12.18.16.01.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Dec 2024 16:01:13 -0800 (PST)
+Date: Thu, 19 Dec 2024 09:01:12 +0900
+From: Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: gregkh@linuxfoundation.org, arnd@arndb.de, lpieralisi@kernel.org,
+	shuah@kernel.org, kishon@kernel.org, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bhelgaas@google.com,
+	linux-arm-msm@vger.kernel.org, robh@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] Migrate PCI Endpoint Subsystem tests to Kselftest
+Message-ID: <20241219000112.GE1444967@rocinante>
+References: <20241211080105.11104-1-manivannan.sadhasivam@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241211080105.11104-1-manivannan.sadhasivam@linaro.org>
 
-On Wed, 18 Dec 2024 21:09:09 +0800 Xiao Liang wrote:
->  - Add test for creating link in another netns when a link of the same
->    name and ifindex exists in current netns.
->  - Add test to verify that link is created in target netns directly -
->    no link new/del events should be generated in link netns or current
->    netns.
->  - Add test cases to verify that link-netns is set as expected for
->    various drivers and combination of namespace-related parameters.
+Hello,
 
-Nice work!
+> This series carries forward the effort to add Kselftest for PCI Endpoint
+> Subsystem started by Aman Gupta [1] a while ago. I reworked the initial version
+> based on another patch that fixes the return values of IOCTLs in
+> pci_endpoint_test driver and did many cleanups. Since the resulting work
+> modified the initial version substantially, I took over the authorship.
+> 
+> This series also incorporates the review comment by Shuah Khan [2] to move the
+> existing tests from 'tools/pci' to 'tools/testing/kselftest/pci_endpoint' before
+> migrating to Kselftest framework. I made sure that the tests are executable in
+> each commit and updated documentation accordingly.
+> 
+> NOTE: Patch 1 is strictly not related to this series, but necessary to execute
+> Kselftests with Qualcomm Endpoint devices. So this can be merged separately.
 
-You need to make sure all the drivers the test is using are enabled by
-the selftest kernel config: tools/testing/selftests/net/config
+Applied to selftests, thank you!
 
-This may be helpful:
-https://github.com/linux-netdev/nipa/wiki/How-to-run-netdev-selftests-CI-style#how-to-build
--- 
-pw-bot: cr
+[01/04] PCI: qcom-ep: Mark BAR0/BAR2 as 64bit BARs and BAR1/BAR3 as RESERVED
+        https://git.kernel.org/pci/pci/c/71ae1c3a342c
+
+[02/04] misc: pci_endpoint_test: Fix the return value of IOCTL
+        https://git.kernel.org/pci/pci/c/7908208a2f6a
+
+[03/04] selftests: Move PCI Endpoint tests from tools/pci to Kselftests
+        https://git.kernel.org/pci/pci/c/5c892b60e4c6
+
+[04/04] selftests: pci_endpoint: Migrate to Kselftest framework
+        https://git.kernel.org/pci/pci/c/62f966e676b5
+
+	Krzysztof
 
