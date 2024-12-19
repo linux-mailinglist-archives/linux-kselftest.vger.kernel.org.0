@@ -1,68 +1,68 @@
-Return-Path: <linux-kselftest+bounces-23581-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23580-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DA319F77D3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 09:58:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86DEE9F77CE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 09:57:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 542DF7A3FCE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 08:58:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5C0916ADD3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2024 08:57:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65575221447;
-	Thu, 19 Dec 2024 08:58:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA1E3221440;
+	Thu, 19 Dec 2024 08:57:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="M6ycW5y2"
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="Vz4U0lMG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from esa7.hc1455-7.c3s2.iphmx.com (esa7.hc1455-7.c3s2.iphmx.com [139.138.61.252])
+Received: from esa12.hc1455-7.c3s2.iphmx.com (esa12.hc1455-7.c3s2.iphmx.com [139.138.37.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D5C219A80;
-	Thu, 19 Dec 2024 08:58:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.61.252
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6980AC147;
+	Thu, 19 Dec 2024 08:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.37.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734598724; cv=none; b=FUpcqdFkrDZc12zKyUTxtQHZu6V1q0Zg77rpPh47J5y43PL0FXpCwmtQUR0LvGmlO2KzkVCAYhlkpiJ1rXqlL2iLYNwXYFpc7hPxjrq9DPkx+6TpovOmki1zn19PsxF/e3ml5XHIcLitVQqOS1VFBzc8th+gnCoSCLFWIHMVi4Q=
+	t=1734598662; cv=none; b=uICyr4u49r9YTqXNdcZNM2UAtN65FJuMKoEIrN2Hf7w2WG3afI+dpAfJIFheRiiZ5GaNPS0BYEV7aoN1unMo/GvF+tyMDI11SnxNk/WQTPZCO1znUjT3+8gdYr5vm8ukyxQZDRGDRwLUQqsNcYXPzMM60Dp1cTi203mJCokn8JY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734598724; c=relaxed/simple;
-	bh=zw4H02dlKrhAnEhZe+ox+sBa9eRKpbqW7Ma+PY94/8o=;
+	s=arc-20240116; t=1734598662; c=relaxed/simple;
+	bh=HN5aUie6KS/sLX+7BhH8yVUFBGEX+sBFKApAn4ymeNQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GwgJzFDbqtUp2gztIDUgQ4gJ8DmMmGoIISJ4WvJsB8aTSJntJpIanR3cvlzEN9e1jTPQ1tkWEwisuBzl9+6o01kjQ7lfBRTt2E3RP9OEkQDnxOcPI0htzt2zuh88FJ+qWRuaIU3sye4lZNlfU7c7NtELlAdhdDrGDW9q62UbCxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=M6ycW5y2; arc=none smtp.client-ip=139.138.61.252
+	 MIME-Version; b=ATRZJaxl7hxru8dIsMOKO9q2N3rJqoJX7nq6OfFSMbiOvtYAbamy9arcqJ7TuNbCWzFgDdrkEH1C4IhZpdUsbw5uT3Rixj6v5jimid6N2vadxhjHx1Egkv29l571ViaEnWg/zg37pCYF0jdXOC0rmd+mvtXq7BNuA6pWqyqEGPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=Vz4U0lMG; arc=none smtp.client-ip=139.138.37.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1734598722; x=1766134722;
+  t=1734598661; x=1766134661;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=zw4H02dlKrhAnEhZe+ox+sBa9eRKpbqW7Ma+PY94/8o=;
-  b=M6ycW5y2Yq3w8Uoo9O36p5qBviiVE7P6OMCE9cg63fh7svoojewLfs3c
-   ri+bAqKR4I42Ub7MdIsacFIlZWevYH/smscKr2QkqeydnxZYCDS1N6oK4
-   wUtAatQFDlTBap6KRabOcRA0/hYG/Dd9Cu8acXGMmMXHLBoE8241jGas+
-   vQPkJlU9esM2q6vFNa+Uq9VO4EVkAfmIkxfmi8afAzvtlKBhHDTrnpcD6
-   ZsvKZo3VoP9vWMQcji5JytgK1s1xHUHgoSTaOkNKmAZ8JYE6LQJ9x5hip
-   l10wCsJh8LSfDZM0mX3BqhzMGqSHdNlzfwtnweSpOJsSLdlzK7XWAsSm9
+  bh=HN5aUie6KS/sLX+7BhH8yVUFBGEX+sBFKApAn4ymeNQ=;
+  b=Vz4U0lMGAkcooq4swQZJLDnjx+GF7UQYUmK4XOmB0FOMSAK4DUb1Eeti
+   I4nAft/RMX/IGKwCnJ5yemqOxu/NTneAD2pViuPe+c/QFx0bYHedkdCXf
+   WFIEuJA9XwGZPoR+/o0xkS1+WQEpfFwB9/q9ceMWOScrCeLOG6+UwCO/l
+   P4Z7aYzurC28fiIOLQbBOwGVB/wqrt+El7rjy5CLkVVcR/YDs9viWapj4
+   Mv7pPiwdqXpc2MmhW3ifiLNOJ4+87XBHcX/tEdaK3/IeDtGPYelJv98lm
+   U3TKu8kBi4qSip1kt3ntAXYnhu+pPMcLY3RZ2ZhOjjJWL06IeHkmYiOje
    Q==;
-X-CSE-ConnectionGUID: FpliFrx9SXuheDYB3Tcw7A==
-X-CSE-MsgGUID: hQxBiJ3JRcGe8QpZ+4laPQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11290"; a="163187777"
+X-CSE-ConnectionGUID: QHvrLQQXTB+uc5605Eq1xg==
+X-CSE-MsgGUID: qx0cApdUQOubcu5GuGxP/g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11290"; a="163224235"
 X-IronPort-AV: E=Sophos;i="6.12,247,1728918000"; 
-   d="scan'208";a="163187777"
-Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
-  by esa7.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 17:57:31 +0900
-Received: from oym-m1.gw.nic.fujitsu.com (oym-nat-oym-m1.gw.nic.fujitsu.com [192.168.87.58])
-	by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id 49EE2C2266;
+   d="scan'208";a="163224235"
+Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
+  by esa12.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 17:57:32 +0900
+Received: from yto-m4.gw.nic.fujitsu.com (yto-nat-yto-m4.gw.nic.fujitsu.com [192.168.83.67])
+	by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id DB682D6EA7;
 	Thu, 19 Dec 2024 17:57:29 +0900 (JST)
 Received: from kws-ab4.gw.nic.fujitsu.com (kws-ab4.gw.nic.fujitsu.com [192.51.206.22])
-	by oym-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id 222CDD99A6;
+	by yto-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id A790FD5044;
 	Thu, 19 Dec 2024 17:57:29 +0900 (JST)
 Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id 86F4D6AB43;
-	Thu, 19 Dec 2024 17:57:28 +0900 (JST)
+	by kws-ab4.gw.nic.fujitsu.com (Postfix) with ESMTP id 27082223040;
+	Thu, 19 Dec 2024 17:57:29 +0900 (JST)
 Received: from iaas-rdma.. (unknown [10.167.135.44])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id C49DE1A0071;
-	Thu, 19 Dec 2024 16:57:27 +0800 (CST)
+	by edo.cn.fujitsu.com (Postfix) with ESMTP id 6D6171A006C;
+	Thu, 19 Dec 2024 16:57:28 +0800 (CST)
 From: Li Zhijian <lizhijian@fujitsu.com>
 To: linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org
@@ -73,9 +73,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Simon Horman <horms@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
 	Li Zhijian <lizhijian@fujitsu.com>
-Subject: [PATCH for-next 1/2] selftests/Makefile: Create BUILD_TARGET directory for INSTALL_DEP_TARGETS
-Date: Thu, 19 Dec 2024 16:58:02 +0800
-Message-ID: <20241219085803.1145606-2-lizhijian@fujitsu.com>
+Subject: [PATCH for-next 2/2] selftests/Makefile: add INSTALL_DEP_TARGETS to run_tests
+Date: Thu, 19 Dec 2024 16:58:03 +0800
+Message-ID: <20241219085803.1145606-3-lizhijian@fujitsu.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20241219085803.1145606-1-lizhijian@fujitsu.com>
 References: <20241219085803.1145606-1-lizhijian@fujitsu.com>
@@ -90,40 +90,51 @@ X-TM-AS-GCONF: 00
 X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28868.006
 X-TM-AS-User-Approved-Sender: Yes
 X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28868.006
-X-TMASE-Result: 10--0.939700-10.000000
-X-TMASE-MatchedRID: k00rMrYn+g5xonXTOXZ8CyrLqyE6Ur/j/eXcEqFSY3/fUZT83lbkEL8F
-	Hrw7frlufNyclu9BH8qAMuqetGVetk6N1CbkSyKE3QfwsVk0UbvqwGfCk7KUs1WId3agGYvIXd2
-	wXf8zD1j3yTxce2B/QL8BDGTmGcgA59p/hzepK/TVwuESWNw0zJLHieN0XKSWYm6Se+nk8m8Vfc
-	fmpVfR7SHJp2UYVccqxOB8J0pRLhyJxKSZiwBX6QtRTXOqKmFVftwZ3X11IV0=
+X-TMASE-Result: 10--0.021700-10.000000
+X-TMASE-MatchedRID: 54gb2yeIOXS0+ZONdwr5Uzyjd/AizytBa9qiaDSLgo2Y5nVpihxiww4f
+	VAbTdT+ITyMAPRCpByAI9FbMZs+aDuo7bV31UxoOoHDoEp2TszEXivwflisSrFQuGn5b9r2ZRfB
+	9456KWmoi+t+0AiFaYvL3NxFKQpq1yV682/wvVhyeAiCmPx4NwGmRqNBHmBveVDC1CbuJXmMqtq
+	5d3cxkNUgFmQHHop1mKurGNJsxTad8FhQcyncbVWFDorg1GpunZE381kduDD4mhuNrohXY3nO31
+	pzixVHLEXMQHQWTna7o5K4b13wWjgPMScShcwsoFcUQf3Yp/ridO0/GUi4gFb0fOPzpgdcEKeJ/
+	HkAZ8Is=
 X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
-Similar to 'all' which will create BUILD_TARGET for TARGETS, we should
-create BUILD_TARGET directory for INSTALL_DEP_TARGETS before generate
-the binaries.
+Similar to the installation process, run_tests out-of-tree requires
+copying TEST_FILES and TEST_INCLUDES to the OUTPUT directory.
 
-This helps to fix the following error for net target during
-kselftest-install:
-$ make O=$build/ kselftest-install TARGETS=net V=1
-...
-/usr/bin/ld: cannot open output file $O/kselftest/net/lib/csum: No such file or directory
+The `net/lib` directory is a special case because it is a dependency for
+`net`. Therefore, it should be processed before `net`.
+
+This patch fixes the following error:
+ $ make O=$build/ TARGETS=net kselftest V=1
+  # selftests: net: rtnetlink.sh
+  # lib.sh: line 5: $O/kselftest/net/lib/sh/defer.sh: No such file or directory
+  # FAIL: cannot add dummy interface
+  not ok 20 selftests: net: rtnetlink.sh # exit=1
+  # timeout set to 3600
+  # selftests: net: xfrm_policy.sh
+  # lib.sh: line 5: $O/kselftest/net/lib/sh/defer.sh: No such file or directory
 
 Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
 ---
- tools/testing/selftests/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 2401e973c359..fcaebd122d64 100644
+index fcaebd122d64..326dfd6ec497 100644
 --- a/tools/testing/selftests/Makefile
 +++ b/tools/testing/selftests/Makefile
-@@ -263,6 +263,7 @@ ifdef INSTALL_PATH
- 	@ret=1;	\
- 	for TARGET in $(TARGETS) $(INSTALL_DEP_TARGETS); do \
+@@ -206,8 +206,9 @@ all:
+ 	done; exit $$ret;
+ 
+ run_tests: all
+-	@for TARGET in $(TARGETS); do \
++	@for TARGET in $(INSTALL_DEP_TARGETS) $(TARGETS); do \
  		BUILD_TARGET=$$BUILD/$$TARGET;	\
-+		mkdir $$BUILD_TARGET -p;			\
- 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET install \
- 				INSTALL_PATH=$(INSTALL_PATH)/$$TARGET \
++		mkdir -p $$BUILD_TARGET;	\
+ 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests \
  				SRC_PATH=$(shell readlink -e $$(pwd)) \
+ 				OBJ_PATH=$(BUILD)                   \
 -- 
 2.44.0
 
