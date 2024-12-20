@@ -1,97 +1,100 @@
-Return-Path: <linux-kselftest+bounces-23657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23658-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D62789F9429
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 15:22:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D36B19F94D6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 15:48:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A2721887A6D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 14:22:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4317F189353F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 14:48:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EF3D215F56;
-	Fri, 20 Dec 2024 14:22:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20578218AB7;
+	Fri, 20 Dec 2024 14:47:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mu5BGaQB"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BA8OJcge"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03159215717;
-	Fri, 20 Dec 2024 14:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A471A208AD;
+	Fri, 20 Dec 2024 14:47:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734704536; cv=none; b=l0yvc0v0NavzPBn+Ta+0BYZ4U+QJZaMxz+OJsmd5J6EUbL6WgpzoeSFZSJetNUjM7w2LP8WSruXMZOCF0qjKxnOeweA9FeVuhsojjlxG2UoA6dRos6HJYj9jWBgAeBodLKwgHx4BzhgkfgvJa6JNmJArmE0jGCxmfWaZfg2Q6o0=
+	t=1734706024; cv=none; b=PB/UOcKSO4QIBtSfrLe5A1If6e+GNF4cVbNxMcoTkq64RKCGpiRbZIDL7WhG3cIUzxEipTRG8MtpYKtX5gdULDybAjuvODNEeRptXYk3WHI/3gYeBbp5NN2FSQaeadCCsfnS6T/0qhTgUcUF1WIVkxdRn5zti1UY6sBD3LC0SIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734704536; c=relaxed/simple;
-	bh=txIex3QN3yTqNXp6lUA//gB6opNg24p+Kc8nV8iHv0Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=vBRgkbnQWCqvSOoalpv5UefSrtMeKE4kvL2cdYCc0l8EpjMom+43xUjL/tgN9FstcJ5xd7fwNNV07AcRSX5ILGBqzg50lHze53FAywkf3gXwH9bg+mt7StWetAI/Lb3KJxXpk8XVrEMsGnrJJxceE2kOy+0XP0AnzHUpwywTH7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mu5BGaQB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BF5DC4CECD;
-	Fri, 20 Dec 2024 14:22:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734704535;
-	bh=txIex3QN3yTqNXp6lUA//gB6opNg24p+Kc8nV8iHv0Y=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=mu5BGaQB4Bj4b38Hhn/5Mz8tyVxowBkNx0TzuYDMrHlWjHwb3i1ZcVYjHlNGt+3aC
-	 9ZQB0vdCkiPaG+i1KShRmgAy4dkqPlwLmosDc7Db+A8CKM/JX5pfamGA7O8hzU2TNI
-	 Qffcrgmd2tZ+TNNJ0j3r7TZWKpdjb+zy1wSMZx9oalSiPHf7LgM18Nec07LSLgGInw
-	 mR0OUcyDIx0EWvTznY7Vzoqe59YQhAd3yOkB1HLGeiMn1JorMUtvrIVpZUlWj/zkOF
-	 gpUTbvyueWs47p8fxHRghMyZUfRntd73KxdQOOB/VVRD9jq3aet2CFLuRGErfdB/GJ
-	 rsOKQ/jx5pC/w==
-Date: Fri, 20 Dec 2024 06:22:14 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, shuah@kernel.org, willemb@google.com, petrm@nvidia.com,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests: drv-net: assume stats refresh is 0
- if no ethtool -c support
-Message-ID: <20241220062214.3e8823ac@kernel.org>
-In-Reply-To: <e933e67f-66f2-422b-b00e-09ae788ed51d@lunn.ch>
-References: <20241220003116.1458863-1-kuba@kernel.org>
-	<e933e67f-66f2-422b-b00e-09ae788ed51d@lunn.ch>
+	s=arc-20240116; t=1734706024; c=relaxed/simple;
+	bh=HCrEAAyotKxKRWLBaBxhQwY17aOJ/YM4MOqrqDIB0AQ=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Cc:Content-Type; b=K5Opqtc6FpSfof3OTKGY1dfWeZqE9Dxwhasb2/jOU+jdwozLWETmYspiqXJIlw/cafzHrVstzoF81CMdK7Kwsww46YZZ2YhXcrJJlS5yvSxUxNf5HW4fjBaxxsyXl8LCc92ErAF1KDxsHauAzfi73k5U7XpqRQ+gQJozLeoO98c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BA8OJcge; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3AC231C0002;
+	Fri, 20 Dec 2024 14:46:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1734706014;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=24pEqrf3AtOU4unFt++SFGFTIhLGoaZLEbxNJKCl+R8=;
+	b=BA8OJcgeH3pw47BeyGLyPP7bKXKACC+R3qH3qX36+fw8ojUVr/KB7eSnMKJ85QunWJeR1Z
+	2sjUUjlYbItSXjiDF/UTos4wE3vhF3Veq2QDhN+7h+q+ls/0+jBfFA7ktRzSzREHY6KL+w
+	6K9RkDAea6xuh1Ayq8/yN8Ae/X0zrX3fJdLNO7hsZCY94ypWhKHSjyEDlH6dAHD+UZJ6Oo
+	Jc9J2M5OQWDtTMoA3LcDXy/ZKimx4zKXFXKb/+Ip5h587p0zRUcm9hXhPSRxc7PuFeZBki
+	GYRFyfl4oKZa1j14i0SppIM+9ozlM3zFdJy02xuQ5P+X2EGwp82i1hNx6dZUOg==
+Message-ID: <e3d0bd36-c074-4cda-b6e1-5f873453ad30@bootlin.com>
+Date: Fri, 20 Dec 2024 15:46:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+To: bpf@vger.kernel.org
+Content-Language: en-US
+From: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Subject: Question about test_xsk.sh
+Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Magnus Karlsson <magnus.karlsson@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-On Fri, 20 Dec 2024 10:09:06 +0100 Andrew Lunn wrote:
-> > @@ -234,7 +234,12 @@ from .remote import Remote
-> >          Good drivers will tell us via ethtool what their sync period is.
-> >          """
-> >          if self._stats_settle_time is None:
-> > -            data = ethtool("-c " + self.ifname, json=True)[0]
-> > +            data = {}
-> > +            try:
-> > +                data = ethtool("-c " + self.ifname, json=True)[0]
-> > +            except CmdExitFailure as e:
-> > +                if "Operation not supported" not in e.cmd.stderr:
-> > +                    raise  
-> 
-> How important is this time to the test itself? 
+Hello all,
 
-Just to be clear (because unfortunately git doesn't do a good job of
-calling out Python method names in the diff :() this is part of a
-method called wait_hw_stats_settle() within the test env class. 
-It's used by various tests which use/check device stats.
+I was looking  at other test candidates for conversion to bpf test_progs
+framework (to increase automatic testing scope) and found test_xsk.sh, which
+does not seem to have coverage yet in test_progs. This test validates the AF_XDP
+socket behavior with different XDP modes (SKB, DRV, zero copy) and socket
+configuration (normal, busy polling).
 
-> If it is not available,
-> can the test just default to 50ms and keep going? I would of thought
-> we find more issues by running the test too slowly, than not running
-> it at all, unless having the wrong timer makes it more flaky.
+The testing program looks pretty big, considering all files involved
+(test_xsk.sh, xskxceiver.c, xsk.c, the different XDP programs) and the matrix of
+tests it runs. So before really diving into it, I would like to ask:
+- is it indeed a good/relevant target for integration in test_progs (all tests
+look like functional tests, so I guess it is) ?
+- if so, is there anyone already working on this ?
+- multiple commits on xskxceiver.c hint that the program is also used for
+testing on real hardware, could someone confirm that it is still the case
+(similar need has been seen with test_xdp_features.sh for example) ? If so, it
+means that the current form must be preserved, and it would be an additional
+integration into test_progs rather a conversion (then most of the code should be
+shared between the non-test_progs and the test_progs version)
 
-We already use zero for majority of driver which don't report stat
-refresh:
+Thanks,
 
-                 data.get('stats-block-usecs', 0) / 1000 / 1000
-                                              ^^^
-this patch just does the same thing not only if the driver doesn't
-report 'stats-block-usecs' but also if it doesn't support -c at all.
+Alexis
+
+-- 
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
