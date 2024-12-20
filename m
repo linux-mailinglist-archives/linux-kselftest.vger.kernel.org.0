@@ -1,83 +1,84 @@
-Return-Path: <linux-kselftest+bounces-23653-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23654-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD2049F90D9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 12:00:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61A069F90E2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 12:06:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC881189642D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 11:00:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E9927A30EA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 11:06:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0EE41C4610;
-	Fri, 20 Dec 2024 11:00:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695CC1C07CF;
+	Fri, 20 Dec 2024 11:06:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a6/y9oHT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bImwbTGt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5EA1C1F1F;
-	Fri, 20 Dec 2024 11:00:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA3E2594A8;
+	Fri, 20 Dec 2024 11:06:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734692434; cv=none; b=Cn9WAMxS0WuW6PGhF34YqJr9SMiPs7GTtJB0dTM7y2xILvnQYGGRsry9pKLLis4K0z5foU1a5GEtECWe+uq5naHo1AYiPzPjskLbgO1kUavJGMGX1unw1xCFtbWwF6xsmaDS5GK3wT+gAiPzYqyQ0zXfNYt3BZ+Y954DCFaAEEM=
+	t=1734692783; cv=none; b=WANxniocBGu1VQQN6gN0cM52CD0K0JNtSVdIa68YwZxhVwgeoDYIheV4SMOjOaL8WYkcHgjKuEt4q4Qmcc48v3gBW878AwxZiSqVKYUiSiBm88XxUSdueugsX9jzWrBK+YVBodDIujoJ7vnJbBA0CcnZZUV1mSVbFh/9wch5dY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734692434; c=relaxed/simple;
-	bh=4ncuJMnReeVs8eOMu4awK9L7h8C8WOMebthwRegivuo=;
+	s=arc-20240116; t=1734692783; c=relaxed/simple;
+	bh=/ZDzMlN1Y5CWOBvGHDWuBBtDKiF44ozzaes71yDd7C8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kGXWuz7JDl+kmE65oyN94auygkoG1Ju/gTmQKwikzCVd+w968Jik9gZC/lpgmoS6VDJK70y0ksdRU70/CB7+qe/l56d7hQjq4ELawMqCeMQNpyHDnbEtBDmxg9yUxPoiO/Jrbp0zDMyUC9KXhtQcWK34YsUJoQe9q3VuDzQHBjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a6/y9oHT; arc=none smtp.client-ip=209.85.161.43
+	 To:Cc:Content-Type; b=Eb9VkLHGKcnegu8vMCzRrnP/uJhZVKUZYoomqm2sRaYORmDS/Qrz9wUFXCbLmijWIzsXmUTGJcumvlMdnXZzf/j0tG1+YJNhKiWf9107Wt8f90UTB/HHGpT3vQE9seAtWumRkh2pfkRGjsxXRyC5o7fMNf38shjjb0yQSsD/eSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bImwbTGt; arc=none smtp.client-ip=209.85.161.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5f2da12248fso1450839eaf.1;
-        Fri, 20 Dec 2024 03:00:33 -0800 (PST)
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5f31841c6f6so887515eaf.0;
+        Fri, 20 Dec 2024 03:06:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734692432; x=1735297232; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734692781; x=1735297581; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ncuJMnReeVs8eOMu4awK9L7h8C8WOMebthwRegivuo=;
-        b=a6/y9oHTomytbT+G3FlatprjtYcOQ2qkULc5zIK8h2klfASaQgDPbQMWKMZULIkplO
-         eTXtFkV1B4qjnzD2t7vYAEjtHXeKgbOGREQPpvnLuyK9aQfbUasaTQHbK/MW7NTulLlM
-         FhZ3n6MyftJC1zysK4AUpy++Zrw+F63jBnvYnAoPKIXc2SErOoWRdzbbmlQbxVl6l8q7
-         LZZK6+f+uch/HyNoxFJIBSAgqDVBpt9yaO6ndJqWkExugyJYgAqVReTdJO1TOz8r6m6C
-         8zkWg9P+NUkOXTgulOdUi/jkj5Cf/k6/oCzYGvB2iycLNvQuWJjmtPWf9Cf2FLjF/y2k
-         P8EQ==
+        bh=/ZDzMlN1Y5CWOBvGHDWuBBtDKiF44ozzaes71yDd7C8=;
+        b=bImwbTGt9dONedOtzGGYNb8W6E6NgceVquHKOdRrzNiROKPx9rPI8kgYbQSVIfMgKk
+         1Kko0BGuyT+G4YPKn9Red6nd18mzY3hdv6Amtcf6aCiRsi6gLUkVKTh/Xvz56VCoNELN
+         O0a3IVLDCrhVUpzB3TGkPwinseq1B6ZOZPBv965qCnKDO+fBAFNDb+rtqWAGxs7562YL
+         d3axR5rGb/AOydw0XSrNAkYdovrj4vsL30KJ61sntULr8rmF63qfQBeXfVpUv6kQ62CY
+         oRz7yuV8Auy8iIHaIpoNEY2/aijwLGHiVJrg/phEKpkQy2Cb63Zp+uknjc9c+iaoQABP
+         Rgdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734692432; x=1735297232;
+        d=1e100.net; s=20230601; t=1734692781; x=1735297581;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4ncuJMnReeVs8eOMu4awK9L7h8C8WOMebthwRegivuo=;
-        b=ScNiS3ERNSGhFv+v3bQlcPdTaaYDqBHmZCm65pK5WFGRgs0OoRcUUwgCMekROhuP6A
-         BqHdhFVcq4ydnTc/2z6NHTIuaUxQ5qAHWSlcIt9rgUxX5UJzG8Phx4U6CN6G6+RKg95f
-         /f6iLKcCvK2DmO95cHXTM2nw7YXLNxtNNa2OjYZZMXhTu6s8+H0kraXMEmoh+x4vzqP7
-         fSYwLqKlgEa3E8+zCEWf7R2xhja2X29GHq4n7SBAwd0lMK/fIPsDhNE3yI2xUuPEeEQS
-         nWxB1/ZxzpGtmL/w0xMyd0ziSx89WIAmEcUyT6PliT6nwlVLGD6hjHpdPUo04KOrVP1y
-         8Rsg==
-X-Forwarded-Encrypted: i=1; AJvYcCXFau+Mpt2JXfgh3MJnfDEWUCehkQr/BSnYhO0+S8Yljyih5oDBdrjJ1FNrQ2NSgTdPDebzJyW1SaH8sgk=@vger.kernel.org, AJvYcCXPAat+Dt1PXmT99Z0RXfeu+PTHZfmxurh22zgO+Rnp5ecUakWGcrlgXcMYlzTToVC7XqhWgJuBAeSaN2mxXCc4@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywe6m9kWXp9fRvtBnpoPngafABafmiGki4J/C9OXXPLaY+di8yg
-	Y/KnEzruivjpOP+YN/9MlWKtn3KuvBrARV5BiVypVaSBTo1yf6YGGZuABoeqTBXHMnRMUvefphX
-	e2HcxtzRHzWcSauIXIFs6Aeunf7k=
-X-Gm-Gg: ASbGnct3tQakyMNq77okrboz7c067yX5HwsGpZKKA+CXydf3PSQ4DJaEExWmbXc5k07
-	ilLMj7EgfPSNpkvgzocBhYaUCCPIp8TelJfONFBb0363q70G7+iZiyLW+xkc043WWXy62
-X-Google-Smtp-Source: AGHT+IFTXVg/HT/WINUpDxJWNMrwpBi0uDCbB5gFq3ArMRfXz+UCM0bzxAtFUX1nz0ZPw9F7Sx433RufOx4B2nJOFI0=
-X-Received: by 2002:a05:6871:b13:b0:29f:99de:4330 with SMTP id
- 586e51a60fabf-2a7d10b0bdcmr3938690fac.4.1734692432404; Fri, 20 Dec 2024
- 03:00:32 -0800 (PST)
+        bh=/ZDzMlN1Y5CWOBvGHDWuBBtDKiF44ozzaes71yDd7C8=;
+        b=lvm9jzAQElxcvWb5ljXPJ1VvOXPyIKIQtSwBmALT6ADlzrtYX6epFopfas4Jk8lQwb
+         2RUfmW/UyHQ2SRZyHNCVWn1XSSsq6C2h5FUSbQiT+GTg53cIT9SwAi/j++apVKUvHrUP
+         q0ZeT5kzGJJPtK2yrlTluXdls93cgNEaPPyzS80L0QB/cKJneiao6TWV8KV1sj17IZu5
+         usdp2wqPJ5hKCkY96p+08ULxfgAKBxLWovBJdjz855oDWFyUY7mMj7aJGfcWkfbszuG5
+         AF//XVwSYDF2BiTMK/C5jxFGQgkchrMKPYM5bV2v8DC+MI+b8upmvGkzkffbc4nyVr4l
+         SKFA==
+X-Forwarded-Encrypted: i=1; AJvYcCUgcbpU3/g+cHc1sq2MDuB/Fw0Pqnccg98dOH/mrqXyg/5ROaB1uzTcrVqd2LLAOj2vPHHS5hC4ZRVgFxE=@vger.kernel.org, AJvYcCUiLGlXX/yx/AfqqHsW9U6cpt3+h9u8JMHGO64vWD6/DT78Aea1J7bf73KYxkjbj/lBP4P5w7S4hYjdv01dm/B0@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgUyeYxmxxRfJsRCAl+CybomgO7wWU1Wm1Shvxv5/Bv7l4T7ak
+	7LAYjg1QlNc4BhLml3pf/iv/5+f6sp76WZpZ/UNXgMU6VzzFkI7bPfd0n3uujCH6o2Ns0fhlQ7f
+	h4odFax/tgtbIl3JtMWrSDJlNEOSgk9VN
+X-Gm-Gg: ASbGncvN9zx4zO4XnnUBlFDtvp+vvpbRmu1GZHD4OUOAdvYRv1bEaLF/XX6QiTFKAbz
+	/6cx3BJrAKsEXHQ/kGmcUU91D19RFNMUpZmIZDLJrn2T7xkPfK/wbsOvl32iTwWmCRFgQ
+X-Google-Smtp-Source: AGHT+IGXEk6kSuQnhlhzJDbOplKyL9YbQH0k2oEM3yHbsMLFcHtl+jTiGbLT6wYwqrlIw+TfSuHp/jxm6J/XIJ7w5Ik=
+X-Received: by 2002:a05:6870:9c84:b0:29e:6b6a:d6f3 with SMTP id
+ 586e51a60fabf-2a7fb3a6acfmr1157948fac.39.1734692780987; Fri, 20 Dec 2024
+ 03:06:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241219-b4-ovpn-v16-0-3e3001153683@openvpn.net> <20241219-b4-ovpn-v16-2-3e3001153683@openvpn.net>
-In-Reply-To: <20241219-b4-ovpn-v16-2-3e3001153683@openvpn.net>
+References: <20241219-b4-ovpn-v16-0-3e3001153683@openvpn.net> <20241219-b4-ovpn-v16-3-3e3001153683@openvpn.net>
+In-Reply-To: <20241219-b4-ovpn-v16-3-3e3001153683@openvpn.net>
 From: Donald Hunter <donald.hunter@gmail.com>
-Date: Fri, 20 Dec 2024 11:00:21 +0000
-Message-ID: <CAD4GDZxg6VUrB6VXqRqz3o5jUS2KKikv5n=bHorNbrWoM_wsug@mail.gmail.com>
-Subject: Re: [PATCH net-next v16 02/26] ovpn: add basic netlink support
+Date: Fri, 20 Dec 2024 11:06:09 +0000
+Message-ID: <CAD4GDZx+HpD1W1pAWw0PL2doPD=M7vCXDb7Yooyhad+23m3SSQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v16 03/26] ovpn: add basic interface
+ creation/destruction/management routines
 To: Antonio Quartulli <antonio@openvpn.net>
 Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>, 
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
@@ -88,17 +89,9 @@ Content-Type: text/plain; charset="UTF-8"
 
 On Thu, 19 Dec 2024 at 01:42, Antonio Quartulli <antonio@openvpn.net> wrote:
 >
-> This commit introduces basic netlink support with family
-> registration/unregistration functionalities and stub pre/post-doit.
+> Add basic infrastructure for handling ovpn interfaces.
 >
-> More importantly it introduces the YAML uAPI description along
-> with its auto-generated files:
-> - include/uapi/linux/ovpn.h
-> - drivers/net/ovpn/netlink-gen.c
-> - drivers/net/ovpn/netlink-gen.h
->
-> Cc: donald.hunter@gmail.com
 > Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
 
-Reviewed-by: Donald Hunter <donald.hunter@gmail.com>
+Tested-by: Donald Hunter <donald.hunter@gmail.com>
 
