@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-23675-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23676-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDBE29F970D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 17:57:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B3ED9F9704
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 17:55:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6D00188BFF3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 16:54:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA43E16D409
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 16:54:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8DD32210F8;
-	Fri, 20 Dec 2024 16:51:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 662F0221D86;
+	Fri, 20 Dec 2024 16:51:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="crEj/i06"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q1dx1hu+"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76BA721B1BC;
-	Fri, 20 Dec 2024 16:51:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3509D221468;
+	Fri, 20 Dec 2024 16:51:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734713489; cv=none; b=fUWJNLxw8Qy5wZSV9QUGRlL3PqMOVXRso+VtNYT5oE4g+gMx+aPrlxn1eYf/GthtpQ3Gm//BZfv7/crdBfFQ0GHUMUGDsSCgUI6lBdwR/LeX69DxQA2lAz3DEtzKeXPTCW35ZY1dCErJEGrKv3aG507GVrb7zdDuV6DbfvnZgQg=
+	t=1734713492; cv=none; b=eRMDj+LLg9gOcl0kSluhg/TilK0dXsdGd1jDmv4TpqM1CMSQsWiUx8Ez5KqBDvQmvJq5PwHkFiT1ESTfC/l2Hrx1xXeTEPfX2zPl51lkv+4xAficRngbMKsmHKu5uBW9V1pGsMAHMA57w03kg9vhIN8ZQPCRHCZl/SkqI8pMnwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734713489; c=relaxed/simple;
-	bh=/i3TwaKgCBLSWDUFzgZJ5E4rHb3UDDDbQ/9/hT2MAGs=;
+	s=arc-20240116; t=1734713492; c=relaxed/simple;
+	bh=2lAEiIWK9uzi24UbNru8zKCgLUdInhjJdDB12WbDPZ8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QP3EUwUh/YIi/AddD6wIiHG1c19lCqL7axrTeEFVHQanh56xi6R8y6l58jmlJGbTiFJFkLP/Wwp+AJDVz0ItRYpJXuj9XOIGL5Qfcztgs8Eu48VDzKLaoprL8JlLaDUqkh9X+yNfyoqBBWR+6ME5/qZKqBc13aK/walxXWI0G6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=crEj/i06; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACAB8C4CEDC;
-	Fri, 20 Dec 2024 16:51:24 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=XWMuzw3OTRVnV3fyS/H/j575tpaInN+KgMcKOTHRrQQF6YVXqy4hOgagyKg9HJLgM+B72VNyNB2m0U199OzLVbrvqW86xZjDEzIrSrLO7Xjg9hzR3YMz7UafHlf/Qjgos7qd2Vm7v18T9RFlBEfRTcIT3VbkXiyEceSfEi/S4DU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q1dx1hu+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DCE2C4CECD;
+	Fri, 20 Dec 2024 16:51:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734713488;
-	bh=/i3TwaKgCBLSWDUFzgZJ5E4rHb3UDDDbQ/9/hT2MAGs=;
+	s=k20201202; t=1734713491;
+	bh=2lAEiIWK9uzi24UbNru8zKCgLUdInhjJdDB12WbDPZ8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=crEj/i06gGmZk5M1LHwTVOq3Ku4eZAwf5Lzjlpp4UJMXlDax1g3QMdBxXpwDIF7FL
-	 3f4Sw2E19x5pgh+/SUWeExgu5ZqBXoC0UQYa9MfQqEiEqAYj7i1uvEoPBmwRt3Zch/
-	 yBRzbMe3fLfIJ0ZQU2nlMSoQ4Z4Ft0xsLUnbt10tgLxn8eAPoNfh4jbCJEWaXWYKkj
-	 6+JriIQTN1rfxrzPFATGPza69g/KlQ6qL7xrR2ftbW4arHneM8tELY2c83conD3+sc
-	 Ne7bT4T5Z9rC0XG/I9u3BvNBBAG9H0C3RtojGEnJmqcjV8an0PT22I8GWfXd1YQeOo
-	 D+NPSWaiBOsYg==
+	b=Q1dx1hu+4QMc1mfXYgXW5GgGjr1mUzSxYFJgffUwtQmrpsnMXNfGgX8nb11rLLwX4
+	 XrwGngKrIFIqsSMFXDHY+DeRYIkvUBxaj7lXGhbESDULbxOFuJP0m2annSQVOaftr6
+	 /hnel/AIzS9qfRWSdb0e4LywnwIeogj15u6skZCozHsnbFB5upp0FdfsQid551iBVv
+	 ky5aO+ca1oyoNRVkh/T5eu+O8F05tYl87lh8vFqxq6K0e7UrRwyXM2ZgMSmsnPk+vo
+	 pmvCYRSDeBpeitZMZfu1C9xvwuRxmh4cksqhwFjs/SPBxZsVfkHIGZM4QyMOJKKLWx
+	 V7AuoSMAXwjfg==
 From: Mark Brown <broonie@kernel.org>
-Date: Fri, 20 Dec 2024 16:46:33 +0000
-Subject: [PATCH RFC v3 08/27] KVM: arm64: Move SVE state access macros
- after feature test macros
+Date: Fri, 20 Dec 2024 16:46:34 +0000
+Subject: [PATCH RFC v3 09/27] KVM: arm64: Factor SVE guest exit handling
+ out into a function
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241220-kvm-arm64-sme-v3-8-05b018c1ffeb@kernel.org>
+Message-Id: <20241220-kvm-arm64-sme-v3-9-05b018c1ffeb@kernel.org>
 References: <20241220-kvm-arm64-sme-v3-0-05b018c1ffeb@kernel.org>
 In-Reply-To: <20241220-kvm-arm64-sme-v3-0-05b018c1ffeb@kernel.org>
 To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
@@ -67,91 +67,115 @@ Cc: Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-1b0d6
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2613; i=broonie@kernel.org;
- h=from:subject:message-id; bh=/i3TwaKgCBLSWDUFzgZJ5E4rHb3UDDDbQ/9/hT2MAGs=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnZaBaSCMFrVKugleuCqcjESXruDC/s6CaD4yZ5F6Z
- p7wReKWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ2WgWgAKCRAk1otyXVSH0LqlB/
- 9idSTtrsfAftjwtJ51rl1MDfrczjOESiyC+PCFAePnmVi3KdagMZPCJQvdE7wrKQuchGOWvo9/CLq+
- cN7EaMnLRHfgp8Z/hUnReRjkCeiHX6BBOj0iNBGSRirbpxgDO95XXMQAGYnQLEeGAXP1431tdMRmzf
- LAzBVbJtNVeUBBEHCRD0Yn5Wb8AKl7fWQYwAJHJikESsLd6fPuwCVKe+oekBg/R1YaUxiTNfVApgOM
- s4PZRY/HFMAqM77VIzYl/XflL9D6jQAwR2yKjwLDgt7OK5tGxJk41JJH0hl36jcAdH41yrYuMic6lU
- kq+tPZijmIyttMxtCnye3BE46zZ1AN
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3607; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=2lAEiIWK9uzi24UbNru8zKCgLUdInhjJdDB12WbDPZ8=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnZaBb/PNHOdXC2QqIWTml92xipzWpK0C3H1dFAHdq
+ 34bDHjSJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ2WgWwAKCRAk1otyXVSH0H5LB/
+ 47krYQyM/wfFiJzoZcaTezF83TBLhU5DbVnNlFyU3Egm70Ppq11143hsfCVTZd8BQ1p+1iWtkpMWVq
+ 1BVFdSxpQEeZ8bEmA/oTGLpm+MY3fKmHWviByjr1N6GedW9hPQcxyxVvtZhzu2slXSjRD3RMMYM3PT
+ p61lT89WeRN/AIS3wtwEgYzqigpqu8Hlrv3dUDKYf5HnxmOmqdMd/rfu4Scw1D2z9ZnnO7SFSYzXKU
+ sBXgBW2jIfIRcfTw5ro3Xe4PuKHVUV5bdAl/5/QzwuPwFRSanXJRr4Wo+zAZtyt324t5mz8Sc8N1E/
+ 9/cg7CYQeavXMq0CfnAD5jwEHozx9w
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-In preparation for SME support move the macros used to access SVE state
-after the feature test macros, we will need to test for SME subfeatures to
-determine the size of the SME state.
+The SVE portion of kvm_vcpu_put() is quite large, especially given the
+comments required.  When we add similar handling for SME the function
+will get even larger, in order to keep things managable factor the SVE
+portion out of the main kvm_vcpu_put().
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/kvm_host.h | 46 +++++++++++++++++++--------------------
- 1 file changed, 23 insertions(+), 23 deletions(-)
+ arch/arm64/kvm/fpsimd.c | 67 +++++++++++++++++++++++++++----------------------
+ 1 file changed, 37 insertions(+), 30 deletions(-)
 
-diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-index fca81ede6140c0ee7d03cb6ca8f5eead45b87033..97b617606221e8c11fd2b55d9636848d8453209f 100644
---- a/arch/arm64/include/asm/kvm_host.h
-+++ b/arch/arm64/include/asm/kvm_host.h
-@@ -934,29 +934,6 @@ struct kvm_vcpu_arch {
- #define IN_WFI			__vcpu_single_flag(sflags, BIT(7))
+diff --git a/arch/arm64/kvm/fpsimd.c b/arch/arm64/kvm/fpsimd.c
+index 09b65abaf9db60cc57dbc554ad2108a80c2dc46b..3c2e0b96877ac5b4f3b9d8dfa38975f11b74b60d 100644
+--- a/arch/arm64/kvm/fpsimd.c
++++ b/arch/arm64/kvm/fpsimd.c
+@@ -151,6 +151,41 @@ void kvm_arch_vcpu_ctxsync_fp(struct kvm_vcpu *vcpu)
+ 	}
+ }
  
- 
--/* Pointer to the vcpu's SVE FFR for sve_{save,load}_state() */
--#define vcpu_sve_pffr(vcpu) (kern_hyp_va((vcpu)->arch.sve_state) +	\
--			     sve_ffr_offset((vcpu)->arch.sve_max_vl))
--
--#define vcpu_sve_max_vq(vcpu)	sve_vq_from_vl((vcpu)->arch.sve_max_vl)
--
--#define vcpu_sve_zcr_elx(vcpu)						\
--	(unlikely(is_hyp_ctxt(vcpu)) ? ZCR_EL2 : ZCR_EL1)
--
--#define vcpu_sve_state_size(vcpu) ({					\
--	size_t __size_ret;						\
--	unsigned int __vcpu_vq;						\
--									\
--	if (WARN_ON(!sve_vl_valid((vcpu)->arch.sve_max_vl))) {		\
--		__size_ret = 0;						\
--	} else {							\
--		__vcpu_vq = vcpu_sve_max_vq(vcpu);			\
--		__size_ret = SVE_SIG_REGS_SIZE(__vcpu_vq);		\
--	}								\
--									\
--	__size_ret;							\
--})
--
- #define KVM_GUESTDBG_VALID_MASK (KVM_GUESTDBG_ENABLE | \
- 				 KVM_GUESTDBG_USE_SW_BP | \
- 				 KVM_GUESTDBG_USE_HW | \
-@@ -992,6 +969,29 @@ struct kvm_vcpu_arch {
- 
- #define vcpu_gp_regs(v)		(&(v)->arch.ctxt.regs)
- 
-+/* Pointer to the vcpu's SVE FFR for sve_{save,load}_state() */
-+#define vcpu_sve_pffr(vcpu) (kern_hyp_va((vcpu)->arch.sve_state) +	\
-+			     sve_ffr_offset((vcpu)->arch.sve_max_vl))
++static void kvm_vcpu_put_sve(struct kvm_vcpu *vcpu)
++{
++	u64 zcr;
 +
-+#define vcpu_sve_max_vq(vcpu)	sve_vq_from_vl((vcpu)->arch.sve_max_vl)
++	if (!vcpu_has_sve(vcpu))
++		return;
 +
-+#define vcpu_sve_zcr_elx(vcpu)						\
-+	(unlikely(is_hyp_ctxt(vcpu)) ? ZCR_EL2 : ZCR_EL1)
++	zcr = read_sysreg_el1(SYS_ZCR);
 +
-+#define vcpu_sve_state_size(vcpu) ({					\
-+	size_t __size_ret;						\
-+	unsigned int __vcpu_vq;						\
-+									\
-+	if (WARN_ON(!sve_vl_valid((vcpu)->arch.sve_max_vl))) {		\
-+		__size_ret = 0;						\
-+	} else {							\
-+		__vcpu_vq = vcpu_sve_max_vq(vcpu);			\
-+		__size_ret = SVE_SIG_REGS_SIZE(__vcpu_vq);		\
-+	}								\
-+									\
-+	__size_ret;							\
-+})
++	/*
++	 * If the vCPU is in the hyp context then ZCR_EL1 is loaded
++	 * with its vEL2 counterpart.
++	 */
++	__vcpu_sys_reg(vcpu, vcpu_sve_zcr_elx(vcpu)) = zcr;
++
++	/*
++	 * Restore the VL that was saved when bound to the CPU, which
++	 * is the maximum VL for the guest. Because the layout of the
++	 * data when saving the sve state depends on the VL, we need
++	 * to use a consistent (i.e., the maximum) VL.  Note that this
++	 * means that at guest exit ZCR_EL1 is not necessarily the
++	 * same as on guest entry.
++	 *
++	 * ZCR_EL2 holds the guest hypervisor's VL when running a
++	 * nested guest, which could be smaller than the max for the
++	 * vCPU. Similar to above, we first need to switch to a VL
++	 * consistent with the layout of the vCPU's SVE state. KVM
++	 * support for NV implies VHE, so using the ZCR_EL1 alias is
++	 * safe.
++	 */
++	if (!has_vhe() || (vcpu_has_nv(vcpu) && !is_hyp_ctxt(vcpu)))
++		sve_cond_update_zcr_vq(vcpu_sve_max_vq(vcpu) - 1,
++				       SYS_ZCR_EL1);
++}
 +
  /*
-  * Only use __vcpu_sys_reg/ctxt_sys_reg if you know you want the
-  * memory backed version of a register, and not the one most recently
+  * Write back the vcpu FPSIMD regs if they are dirty, and invalidate the
+  * cpu FPSIMD regs so that they can't be spuriously reused if this vcpu
+@@ -179,38 +214,10 @@ void kvm_arch_vcpu_put_fp(struct kvm_vcpu *vcpu)
+ 	}
+ 
+ 	if (guest_owns_fp_regs()) {
+-		if (vcpu_has_sve(vcpu)) {
+-			u64 zcr = read_sysreg_el1(SYS_ZCR);
+-
+-			/*
+-			 * If the vCPU is in the hyp context then ZCR_EL1 is
+-			 * loaded with its vEL2 counterpart.
+-			 */
+-			__vcpu_sys_reg(vcpu, vcpu_sve_zcr_elx(vcpu)) = zcr;
+-
+-			/*
+-			 * Restore the VL that was saved when bound to the CPU,
+-			 * which is the maximum VL for the guest. Because the
+-			 * layout of the data when saving the sve state depends
+-			 * on the VL, we need to use a consistent (i.e., the
+-			 * maximum) VL.
+-			 * Note that this means that at guest exit ZCR_EL1 is
+-			 * not necessarily the same as on guest entry.
+-			 *
+-			 * ZCR_EL2 holds the guest hypervisor's VL when running
+-			 * a nested guest, which could be smaller than the
+-			 * max for the vCPU. Similar to above, we first need to
+-			 * switch to a VL consistent with the layout of the
+-			 * vCPU's SVE state. KVM support for NV implies VHE, so
+-			 * using the ZCR_EL1 alias is safe.
+-			 */
+-			if (!has_vhe() || (vcpu_has_nv(vcpu) && !is_hyp_ctxt(vcpu)))
+-				sve_cond_update_zcr_vq(vcpu_sve_max_vq(vcpu) - 1,
+-						       SYS_ZCR_EL1);
+-		}
++		kvm_vcpu_put_sve(vcpu);
+ 
+ 		/*
+-		 * Flush (save and invalidate) the fpsimd/sve state so that if
++		 * Flush (save and invalidate) the FP state so that if
+ 		 * the host tries to use fpsimd/sve, it's not using stale data
+ 		 * from the guest.
+ 		 *
 
 -- 
 2.39.5
