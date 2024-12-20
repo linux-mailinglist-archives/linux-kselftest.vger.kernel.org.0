@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-23674-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23675-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F40AB9F96FD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 17:54:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDBE29F970D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 17:57:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F0A516E087
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 16:53:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C6D00188BFF3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 16:54:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D12F82206B5;
-	Fri, 20 Dec 2024 16:51:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8DD32210F8;
+	Fri, 20 Dec 2024 16:51:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vLhYu+o1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="crEj/i06"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E08121B1A7;
-	Fri, 20 Dec 2024 16:51:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76BA721B1BC;
+	Fri, 20 Dec 2024 16:51:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734713484; cv=none; b=mW3y8eYWls8YRmklBi8I1HEuDqaBzIV6jh5ucNixzQPtLkdks8/5YapbLi1zVJylV2XHva/DrmJ4RW8m/b8/VweTchi3R+sf28k5wCu7L4xrPji5IgnTkluVYf/MRfw5uZkGn5tY6B1CfFgHXKpVDrU/HShufzlIsy5lQzKUOm0=
+	t=1734713489; cv=none; b=fUWJNLxw8Qy5wZSV9QUGRlL3PqMOVXRso+VtNYT5oE4g+gMx+aPrlxn1eYf/GthtpQ3Gm//BZfv7/crdBfFQ0GHUMUGDsSCgUI6lBdwR/LeX69DxQA2lAz3DEtzKeXPTCW35ZY1dCErJEGrKv3aG507GVrb7zdDuV6DbfvnZgQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734713484; c=relaxed/simple;
-	bh=a+yncXwMMueTmbDqZnDIxIoJ5xsyf/PU5pYLC6ZbRbM=;
+	s=arc-20240116; t=1734713489; c=relaxed/simple;
+	bh=/i3TwaKgCBLSWDUFzgZJ5E4rHb3UDDDbQ/9/hT2MAGs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PWlM12fL2EQ0A9XRbPK5VVZooKDKZLEWs0OQpeKxNNY4BjFxUOPUadzBD+JB/tv7P7ZkyQ4dKX1YIkKGCYOl9BG4nN8lW7mCUebRPiGsBST3U0sjfkDizkmKYMKKnUDYkBsc5MAXKbcu+7JC9OKmhsA8E69pwh40PRkhL9uenAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vLhYu+o1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D7A3C4CED3;
-	Fri, 20 Dec 2024 16:51:20 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=QP3EUwUh/YIi/AddD6wIiHG1c19lCqL7axrTeEFVHQanh56xi6R8y6l58jmlJGbTiFJFkLP/Wwp+AJDVz0ItRYpJXuj9XOIGL5Qfcztgs8Eu48VDzKLaoprL8JlLaDUqkh9X+yNfyoqBBWR+6ME5/qZKqBc13aK/walxXWI0G6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=crEj/i06; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACAB8C4CEDC;
+	Fri, 20 Dec 2024 16:51:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734713484;
-	bh=a+yncXwMMueTmbDqZnDIxIoJ5xsyf/PU5pYLC6ZbRbM=;
+	s=k20201202; t=1734713488;
+	bh=/i3TwaKgCBLSWDUFzgZJ5E4rHb3UDDDbQ/9/hT2MAGs=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=vLhYu+o1l++cILw7iyIVCcLat3F3ew01Ad54HxoZ0pxbH6rThGz/L0017gDWjF0Te
-	 2dsAfTr8PLX+dlbs/lw6y+VBYIILA/8P6jovxfMPegV5yFcjF14U1UvdVGD7jL8f73
-	 xwpkqjohLRCroOVtSg0rhhqL5tuTq8e8tSFGANkEH/3xgEMf3iz3fPW5W5WyHfMb13
-	 XoKFe3Aba1VLOG+VjFFcL7zslcQ+OGdwUErrh0dZc9tFWio/bUfXnnVo3X4TY6EzJW
-	 2PXEDecDpmzbhMkIiwKCs+s4zXLdWAGtEDKNHbB1pVUEMKbgGGpL+adtC/HI4R7tF+
-	 x48mrTY9irCgg==
+	b=crEj/i06gGmZk5M1LHwTVOq3Ku4eZAwf5Lzjlpp4UJMXlDax1g3QMdBxXpwDIF7FL
+	 3f4Sw2E19x5pgh+/SUWeExgu5ZqBXoC0UQYa9MfQqEiEqAYj7i1uvEoPBmwRt3Zch/
+	 yBRzbMe3fLfIJ0ZQU2nlMSoQ4Z4Ft0xsLUnbt10tgLxn8eAPoNfh4jbCJEWaXWYKkj
+	 6+JriIQTN1rfxrzPFATGPza69g/KlQ6qL7xrR2ftbW4arHneM8tELY2c83conD3+sc
+	 Ne7bT4T5Z9rC0XG/I9u3BvNBBAG9H0C3RtojGEnJmqcjV8an0PT22I8GWfXd1YQeOo
+	 D+NPSWaiBOsYg==
 From: Mark Brown <broonie@kernel.org>
-Date: Fri, 20 Dec 2024 16:46:32 +0000
-Subject: [PATCH RFC v3 07/27] KVM: arm64: Convert cpacr_clear_set() to a
- static inline
+Date: Fri, 20 Dec 2024 16:46:33 +0000
+Subject: [PATCH RFC v3 08/27] KVM: arm64: Move SVE state access macros
+ after feature test macros
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241220-kvm-arm64-sme-v3-7-05b018c1ffeb@kernel.org>
+Message-Id: <20241220-kvm-arm64-sme-v3-8-05b018c1ffeb@kernel.org>
 References: <20241220-kvm-arm64-sme-v3-0-05b018c1ffeb@kernel.org>
 In-Reply-To: <20241220-kvm-arm64-sme-v3-0-05b018c1ffeb@kernel.org>
 To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
@@ -67,70 +67,91 @@ Cc: Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-1b0d6
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2083; i=broonie@kernel.org;
- h=from:subject:message-id; bh=a+yncXwMMueTmbDqZnDIxIoJ5xsyf/PU5pYLC6ZbRbM=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnZaBZdrU2V+OphtPgF7NwJy6uVDv4tmY4K7qACS27
- 7872fXSJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ2WgWQAKCRAk1otyXVSH0BvtB/
- wI5sZMQ9hxIxROX5W9UZZrhMrY9fD+KkpsCZhFytntZ+8JR14prgNoUKPp3948eBLgtc15UJFySKGQ
- Ndru+92DG2ZY0Jfpg8pOhwNHdNFRf7i8iy3x6NzdfOWsfqsFgHVk4qGK9zhmwxyzl84dDIWHGhpD6e
- aRNiSuALRNHMgpvN3KbhOIO2wOCiR1eJz6gqILHINr0Cx6I7KcuiDQ4ryhz0W6rq+fPlwFLAM8lKW4
- grkNv1hEE5V4XG9cdtv5p0H99/KNSRxF0mf2l92afCdiNeSWHOqx3stkBvfaEzA96MuM5jrGDz875+
- KAGD/VaHBJfxPDBer/1e77U+E3qsCQ
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2613; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=/i3TwaKgCBLSWDUFzgZJ5E4rHb3UDDDbQ/9/hT2MAGs=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnZaBaSCMFrVKugleuCqcjESXruDC/s6CaD4yZ5F6Z
+ p7wReKWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZ2WgWgAKCRAk1otyXVSH0LqlB/
+ 9idSTtrsfAftjwtJ51rl1MDfrczjOESiyC+PCFAePnmVi3KdagMZPCJQvdE7wrKQuchGOWvo9/CLq+
+ cN7EaMnLRHfgp8Z/hUnReRjkCeiHX6BBOj0iNBGSRirbpxgDO95XXMQAGYnQLEeGAXP1431tdMRmzf
+ LAzBVbJtNVeUBBEHCRD0Yn5Wb8AKl7fWQYwAJHJikESsLd6fPuwCVKe+oekBg/R1YaUxiTNfVApgOM
+ s4PZRY/HFMAqM77VIzYl/XflL9D6jQAwR2yKjwLDgt7OK5tGxJk41JJH0hl36jcAdH41yrYuMic6lU
+ kq+tPZijmIyttMxtCnye3BE46zZ1AN
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Currently cpacr_clear_set() is defined as a macro in order to allow it to
-include a number of build time asserts that the bits being set and cleared
-are appropriate. While this check is welcome it only works when the
-arguments are constant which starts to scale poorly as we add SME unless we
-do multiple updates of the system register.
-
-Convert the function to a static inline so that it can accept runtime
-variable arguments.
+In preparation for SME support move the macros used to access SVE state
+after the feature test macros, we will need to test for SME subfeatures to
+determine the size of the SME state.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/kvm_emulate.h | 27 +++++++++------------------
- 1 file changed, 9 insertions(+), 18 deletions(-)
+ arch/arm64/include/asm/kvm_host.h | 46 +++++++++++++++++++--------------------
+ 1 file changed, 23 insertions(+), 23 deletions(-)
 
-diff --git a/arch/arm64/include/asm/kvm_emulate.h b/arch/arm64/include/asm/kvm_emulate.h
-index 2d91fb88298a263dcd73a4269318f8edf1379650..5f05da7f538d29d321c424233f21b8448d8b4628 100644
---- a/arch/arm64/include/asm/kvm_emulate.h
-+++ b/arch/arm64/include/asm/kvm_emulate.h
-@@ -592,24 +592,15 @@ static __always_inline void kvm_incr_pc(struct kvm_vcpu *vcpu)
- 		cptr;							\
- 	})
+diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+index fca81ede6140c0ee7d03cb6ca8f5eead45b87033..97b617606221e8c11fd2b55d9636848d8453209f 100644
+--- a/arch/arm64/include/asm/kvm_host.h
++++ b/arch/arm64/include/asm/kvm_host.h
+@@ -934,29 +934,6 @@ struct kvm_vcpu_arch {
+ #define IN_WFI			__vcpu_single_flag(sflags, BIT(7))
  
--#define cpacr_clear_set(clr, set)					\
--	do {								\
--		BUILD_BUG_ON((set) & CPTR_VHE_EL2_RES0);		\
--		BUILD_BUG_ON((clr) & CPACR_ELx_E0POE);			\
--		__build_check_all_or_none((clr), CPACR_ELx_FPEN);	\
--		__build_check_all_or_none((set), CPACR_ELx_FPEN);	\
--		__build_check_all_or_none((clr), CPACR_ELx_ZEN);	\
--		__build_check_all_or_none((set), CPACR_ELx_ZEN);	\
--		__build_check_all_or_none((clr), CPACR_ELx_SMEN);	\
--		__build_check_all_or_none((set), CPACR_ELx_SMEN);	\
+ 
+-/* Pointer to the vcpu's SVE FFR for sve_{save,load}_state() */
+-#define vcpu_sve_pffr(vcpu) (kern_hyp_va((vcpu)->arch.sve_state) +	\
+-			     sve_ffr_offset((vcpu)->arch.sve_max_vl))
+-
+-#define vcpu_sve_max_vq(vcpu)	sve_vq_from_vl((vcpu)->arch.sve_max_vl)
+-
+-#define vcpu_sve_zcr_elx(vcpu)						\
+-	(unlikely(is_hyp_ctxt(vcpu)) ? ZCR_EL2 : ZCR_EL1)
+-
+-#define vcpu_sve_state_size(vcpu) ({					\
+-	size_t __size_ret;						\
+-	unsigned int __vcpu_vq;						\
 -									\
--		if (has_vhe() || has_hvhe())				\
--			sysreg_clear_set(cpacr_el1, clr, set);		\
--		else							\
--			sysreg_clear_set(cptr_el2,			\
--					 __cpacr_to_cptr_clr(clr, set),	\
--					 __cpacr_to_cptr_set(clr, set));\
--	} while (0)
-+static __always_inline void cpacr_clear_set(u64 clr, u64 set)
-+{
-+	if (has_vhe() || has_hvhe())
-+		sysreg_clear_set(cpacr_el1, clr, set);
-+	else
-+		sysreg_clear_set(cptr_el2,
-+				 __cpacr_to_cptr_clr(clr, set),
-+				 __cpacr_to_cptr_set(clr, set));
-+}
+-	if (WARN_ON(!sve_vl_valid((vcpu)->arch.sve_max_vl))) {		\
+-		__size_ret = 0;						\
+-	} else {							\
+-		__vcpu_vq = vcpu_sve_max_vq(vcpu);			\
+-		__size_ret = SVE_SIG_REGS_SIZE(__vcpu_vq);		\
+-	}								\
+-									\
+-	__size_ret;							\
+-})
+-
+ #define KVM_GUESTDBG_VALID_MASK (KVM_GUESTDBG_ENABLE | \
+ 				 KVM_GUESTDBG_USE_SW_BP | \
+ 				 KVM_GUESTDBG_USE_HW | \
+@@ -992,6 +969,29 @@ struct kvm_vcpu_arch {
  
- static __always_inline void kvm_write_cptr_el2(u64 val)
- {
+ #define vcpu_gp_regs(v)		(&(v)->arch.ctxt.regs)
+ 
++/* Pointer to the vcpu's SVE FFR for sve_{save,load}_state() */
++#define vcpu_sve_pffr(vcpu) (kern_hyp_va((vcpu)->arch.sve_state) +	\
++			     sve_ffr_offset((vcpu)->arch.sve_max_vl))
++
++#define vcpu_sve_max_vq(vcpu)	sve_vq_from_vl((vcpu)->arch.sve_max_vl)
++
++#define vcpu_sve_zcr_elx(vcpu)						\
++	(unlikely(is_hyp_ctxt(vcpu)) ? ZCR_EL2 : ZCR_EL1)
++
++#define vcpu_sve_state_size(vcpu) ({					\
++	size_t __size_ret;						\
++	unsigned int __vcpu_vq;						\
++									\
++	if (WARN_ON(!sve_vl_valid((vcpu)->arch.sve_max_vl))) {		\
++		__size_ret = 0;						\
++	} else {							\
++		__vcpu_vq = vcpu_sve_max_vq(vcpu);			\
++		__size_ret = SVE_SIG_REGS_SIZE(__vcpu_vq);		\
++	}								\
++									\
++	__size_ret;							\
++})
++
+ /*
+  * Only use __vcpu_sys_reg/ctxt_sys_reg if you know you want the
+  * memory backed version of a register, and not the one most recently
 
 -- 
 2.39.5
