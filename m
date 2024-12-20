@@ -1,173 +1,112 @@
-Return-Path: <linux-kselftest+bounces-23647-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23648-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E8F99F8E7A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 10:01:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EE129F8E9C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 10:09:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D9BE160373
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 09:01:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18667188ED81
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 09:09:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A01111AA1F1;
-	Fri, 20 Dec 2024 09:01:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F9641AA1F4;
+	Fri, 20 Dec 2024 09:09:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="O/zOjsko";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="7SDhuTMb";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="O/zOjsko";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="7SDhuTMb"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="OOm3UNH9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7251A0737;
-	Fri, 20 Dec 2024 09:01:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CF61A0BED;
+	Fri, 20 Dec 2024 09:09:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734685274; cv=none; b=PSdPN0xLpNViJwJVOd+2HE8gXiCj+qoDvXCKQXbabbBAvlcZWc8eEK38iME01NOkf2mH6q3dJbF6MQx6O2hj4O3IgwNv4MGI0d66vKatTnOn8B5UdIQUuN13Jprx5YfZQwoC3Z3iegEGsWvyydv283CTXP1cxSH8HVBrKwC4xAE=
+	t=1734685756; cv=none; b=cgqdmq2JrgdsNeyehNcmHYBLmyGOu/UxOaFDc3jWE5lS4egpOixWrL2BwaABHiKaZ9OoWgOO0V2AJU5TOAwJLdIcphMfir/95Wa9VafyD//6l4RpjAzkZ9qU7BOk0jeLs4N7L+RlxYmp+c706LUy/ODZpKGPbOySU0eHW0dvrls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734685274; c=relaxed/simple;
-	bh=mtsHNjErBVbM6gd7EEjP+xrkYhw1P+PuXWzaMldQ6PA=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FbkbfF3E3YeJjXozjrTaq4Yj1ZBhvb0Tk6F6wqWtzPxa5/rg49yv2W0OV6afR7uY99Lesv9XlTg5+pqy7M9hY+5SulpJAx0B7JbkeBkOvSxDDbv/JWC+iPznqtjGYfdrfKukHKxQyBuCDS/mRviiJe3Y/EP1iArkLpRLtJT6UDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=O/zOjsko; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=7SDhuTMb; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=O/zOjsko; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=7SDhuTMb; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 6490F1F365;
-	Fri, 20 Dec 2024 09:01:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1734685270; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vNQKf9XZcrQRmEaqIbgcvlF0ZTKrQqX3PeU841MH1EY=;
-	b=O/zOjskoj+E2hvPTcL0W71i/X0+PINNJ54B0ou6mw/SMUkSqae6dARnx3mq0nUc6l8KKkm
-	50al0JoOAJSZ3n3NWPXD0ZUrpPOCeHiRA1BvxBBzfczoqLklmMGvgOITXBPVEUc0HnEF+m
-	T/Hn7ibqWvwzHLY66t7ybNrQHNnCASU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1734685270;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vNQKf9XZcrQRmEaqIbgcvlF0ZTKrQqX3PeU841MH1EY=;
-	b=7SDhuTMbeqe2Rl2FiMm6Rbx0f6KgKxtCLhZbNKz8+aZ+yOVxqDm5cZPtAM6Ral1qQUeQzs
-	7afiKStdTM9QbLBQ==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="O/zOjsko";
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=7SDhuTMb
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1734685270; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vNQKf9XZcrQRmEaqIbgcvlF0ZTKrQqX3PeU841MH1EY=;
-	b=O/zOjskoj+E2hvPTcL0W71i/X0+PINNJ54B0ou6mw/SMUkSqae6dARnx3mq0nUc6l8KKkm
-	50al0JoOAJSZ3n3NWPXD0ZUrpPOCeHiRA1BvxBBzfczoqLklmMGvgOITXBPVEUc0HnEF+m
-	T/Hn7ibqWvwzHLY66t7ybNrQHNnCASU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1734685270;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vNQKf9XZcrQRmEaqIbgcvlF0ZTKrQqX3PeU841MH1EY=;
-	b=7SDhuTMbeqe2Rl2FiMm6Rbx0f6KgKxtCLhZbNKz8+aZ+yOVxqDm5cZPtAM6Ral1qQUeQzs
-	7afiKStdTM9QbLBQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C1F8413A32;
-	Fri, 20 Dec 2024 09:01:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id FW/XK1UyZWcybgAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Fri, 20 Dec 2024 09:01:09 +0000
-Date: Fri, 20 Dec 2024 10:01:09 +0100
-Message-ID: <8734iirane.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Li Zhijian <lizhijian@fujitsu.com>
-Cc: linux-kselftest@vger.kernel.org,
-	Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH for-next] selftests/alsa: Fix circular dependency involving global-timer
-In-Reply-To: <20241218025931.914164-1-lizhijian@fujitsu.com>
-References: <20241218025931.914164-1-lizhijian@fujitsu.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1734685756; c=relaxed/simple;
+	bh=Xb7KT61jJgZO2Tg0EvUGSo0SO7JHi3VFIJn/QKeIgXQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OcoG3Bu1VpgbLB+WPsNFWRN974OhPHZpwXncVOoGkJJB82eJjAN2/M4SACQWcIP+PRALo6eCIcGbb/TSvw5Pi4iOwsJbfLGor25IkJka7bTz4b6ri99VvsGWsCfnWhWYM+W/5g9A+jrygKd+rXL6WFCFUVxr2+YVD7OgMbOt3c0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=OOm3UNH9; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=N8rdmGGLvK0LXtWYUxQUyuK9ddF4H5fIrx2FjLjKJ9M=; b=OOm3UNH9ea3TGSkPD1tyQxS3Ft
+	d65wOst1zG6TT95O2hBA8yJkdTILbA1ypscoHZfo4E++Idmb/6O1dl8vt/mLNvwBsMQYIu4vpeixw
+	bEayBCjrxz5pfEUHm8NquhdyKv/EhUOzxaFtjc+mdeD3RqZeUEDUEgXB3tWOWI0tloqI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1tOZ0M-001vwF-D8; Fri, 20 Dec 2024 10:09:06 +0100
+Date: Fri, 20 Dec 2024 10:09:06 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, shuah@kernel.org, willemb@google.com,
+	petrm@nvidia.com, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests: drv-net: assume stats refresh is 0
+ if no ethtool -c support
+Message-ID: <e933e67f-66f2-422b-b00e-09ae788ed51d@lunn.ch>
+References: <20241220003116.1458863-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Rspamd-Queue-Id: 6490F1F365
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.51 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_TLS_ALL(0.00)[];
-	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
-	ARC_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim,suse.de:mid];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -3.51
-X-Spam-Flag: NO
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241220003116.1458863-1-kuba@kernel.org>
 
-On Wed, 18 Dec 2024 03:59:31 +0100,
-Li Zhijian wrote:
+On Thu, Dec 19, 2024 at 04:31:16PM -0800, Jakub Kicinski wrote:
+> Tests using HW stats wait for them to stabilize, using data from
+> ethtool -c as the delay. Not all drivers implement ethtool -c
+> so handle the errors gracefully.
 > 
-> The pattern rule `$(OUTPUT)/%: %.c` inadvertently included a circular
-> dependency on the global-timer target due to its inclusion in
-> $(TEST_GEN_PROGS_EXTENDED). This resulted in a circular dependency
-> warning during the build process.
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: shuah@kernel.org
+> CC: willemb@google.com
+> CC: petrm@nvidia.com
+> CC: linux-kselftest@vger.kernel.org
+> ---
+>  tools/testing/selftests/drivers/net/lib/py/env.py | 9 +++++++--
+>  tools/testing/selftests/net/lib/py/utils.py       | 6 ++++--
+>  2 files changed, 11 insertions(+), 4 deletions(-)
 > 
-> To resolve this, the dependency on $(TEST_GEN_PROGS_EXTENDED) has been
-> replaced with an explicit dependency on $(OUTPUT)/libatest.so. This change
-> ensures that libatest.so is built before any other targets that require it,
-> without creating a circular dependency.
-> 
-> This fix addresses the following warning:
-> 
-> make[4]: Entering directory 'tools/testing/selftests/alsa'
-> make[4]: Circular default_modconfig/kselftest/alsa/global-timer <- default_modconfig/kselftest/alsa/global-timer dependency dropped.
-> make[4]: Nothing to be done for 'all'.
-> make[4]: Leaving directory 'tools/testing/selftests/alsa'
-> 
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Jaroslav Kysela <perex@perex.cz>
-> Cc: Takashi Iwai <tiwai@suse.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+> diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
+> index 1ea9bb695e94..fea343f209ea 100644
+> --- a/tools/testing/selftests/drivers/net/lib/py/env.py
+> +++ b/tools/testing/selftests/drivers/net/lib/py/env.py
+> @@ -5,7 +5,7 @@ import time
+>  from pathlib import Path
+>  from lib.py import KsftSkipEx, KsftXfailEx
+>  from lib.py import ksft_setup
+> -from lib.py import cmd, ethtool, ip
+> +from lib.py import cmd, ethtool, ip, CmdExitFailure
+>  from lib.py import NetNS, NetdevSimDev
+>  from .remote import Remote
+>  
+> @@ -234,7 +234,12 @@ from .remote import Remote
+>          Good drivers will tell us via ethtool what their sync period is.
+>          """
+>          if self._stats_settle_time is None:
+> -            data = ethtool("-c " + self.ifname, json=True)[0]
+> +            data = {}
+> +            try:
+> +                data = ethtool("-c " + self.ifname, json=True)[0]
+> +            except CmdExitFailure as e:
+> +                if "Operation not supported" not in e.cmd.stderr:
+> +                    raise
 
-Applied now.  Thanks.
+How important is this time to the test itself? If it is not available,
+can the test just default to 50ms and keep going? I would of thought
+we find more issues by running the test too slowly, than not running
+it at all, unless having the wrong timer makes it more flaky.
 
-
-Takashi
+	Andrew
 
