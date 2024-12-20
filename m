@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-23702-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23703-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CAFA9F9A9B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 20:37:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E9C429F9A9C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 20:37:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EF2E1884C81
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 19:37:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E3011891A69
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 19:37:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5168D2210FF;
-	Fri, 20 Dec 2024 19:37:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 667C521A431;
+	Fri, 20 Dec 2024 19:37:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hTPpAuxF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oymkflz2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91946220694
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Dec 2024 19:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3232721CFF0
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Dec 2024 19:37:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734723445; cv=none; b=u3B7GqOIuGiOJN7kle/BGpYC6mWb80JViDbJGDmZelBpzx7g/nE9ZTxR/9TIXa0NPKy9rBkU+lIckwNE4iOV/yaxtuCO/g/2nQ/qrYItsjVh/Cn70VQD71CL31PEoY2fK1T8tDZMJR9kVy+8I8PS4C3DA7YoxW6rJBg+WtdQOF8=
+	t=1734723462; cv=none; b=ZvgtQFMPvFjoFh4JEma3pycTPxVM76N358eh6e9VHiQvaBBZtVMs9Rp/tq6f3sUypHI5pGm0HGrSNlh2fMiVUgfflKhXzU4RN9ewJluJhaT+hTbXAgz0JCEnu0vET+GJ0mNKz+i1xq4mkzFBJ9IFVC6y3daeJf+GMAQyPj5RTxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734723445; c=relaxed/simple;
-	bh=wPPMGD/Y+Ku7662J0HTdVsnnY/F/h8+6kZs7AobTU48=;
+	s=arc-20240116; t=1734723462; c=relaxed/simple;
+	bh=7J2HSKMDZyciFL9W52T+XM/U0XrW3eHPjutLK4T1t2A=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JJJiEYKFj0ZVvWu/Y4r+kxcpJSVgOwT8o/e+j4OfZWAfmn0ggLI6SXIigHWil5avQegrbyVE57Bsjse2AVX54s6Q3Meg7roLWng4I8TODzIazUWHgXlFOySX6ozQWaHnMOfdULnoN9gDTMEIRPnKAL5ngFGQQ3PtMl1VSez4a+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hTPpAuxF; arc=none smtp.client-ip=209.85.216.51
+	 MIME-Version; b=bXXC2O4Y+YiEMZEIiZsbI9GVvP7KkOk/E31orPQGQW8OOTUSLzNI8DTfLexFzdmbQ/Nmw0JvQDxhw18fC+F8868LR7tTmwVili43/u5uYlYqFOVdYC2iRjFFNatAunm0GZ04eeoj71bLp9ge8VsR6HGpdKCBlRrZNcsfO7cYVuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oymkflz2; arc=none smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2ef87d24c2dso1848021a91.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Dec 2024 11:37:23 -0800 (PST)
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-820b825cbfcso2866873a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Dec 2024 11:37:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734723443; x=1735328243; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734723459; x=1735328259; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LVzXk/euw75c72myAQZ4X8aeAOsNecDya69b0DzjfKc=;
-        b=hTPpAuxFc+RF70Hwg3QCzaOTwc7izi0x+7A7ngRYi9NNx80g93odMxOFumIpyfp1ag
-         JQWdOufrXZeiJIxs2g4yYnlXnyUqAZAFUzbmT8OAISMPJWSSCUqoZnZpIJN4eD5qSggo
-         PvXUY+2ZQqFo0SV/4ojvlpeE3WLQ7Zj98scs/U4F/kSa03yop4H3LmEuJ5N16o9ZHalS
-         4nfYo8lHzQa15TGvjFyStAS/wwClpe+27VxqhcR5D8wJyyKqQlrtpOlt8H4Xc0ITL+s+
-         OE03f0NOfWDQUjDQ926aiX8sN1Psl6kdZwcMeKF/e8uv86lWzHRMsgKiiAFF1AyDc73x
-         lcWw==
+        bh=S/4/1lKAMtLS+F1t7d6RDrMvXKesNiqyvDziIAq2bJk=;
+        b=Oymkflz2bpFtP84YJbPoOLM6MItrXpemnZKgn0x7LD7g1R75kSYJDihSkdEcmZysUW
+         FoiBRnehKCw3dGJkUVA4xOONtMxkAU4HvoN7lB9tmExQGiv+/wv0YZ0HQObAG3KXvkrX
+         I+2R4vNTv9jvkEZbyiWhgHRFY6xefVLKmxaYPcyy1WCSct9QJihuCVz7/yM2lHl7IdKj
+         U3q8NBmlfbdRJD9fMBJ1b+bZ0w2ekNA5DIqFOsFNZ2w8CEHEOZguz2YFbhGVE1LK09Cr
+         pBH36OO1kEeOtTuoQgjWcToOtyN1ZHsRxR2603gDJRHo4tszwKGCHgbNAYel4wTU3br5
+         0Dtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734723443; x=1735328243;
+        d=1e100.net; s=20230601; t=1734723459; x=1735328259;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LVzXk/euw75c72myAQZ4X8aeAOsNecDya69b0DzjfKc=;
-        b=RD4V6+uh8w9MOTsF/nDG/7+j0MMoS+JPBu044Lckx8KcurpbKgadSQPTTgEYHIiucH
-         WZso2bVDYtnn/meH86XLa3luJqTgM0Dg5cNUjeu/uo/VwHc10Tm571Cci7z7+KEyRjnl
-         pAdeaidJmw/NN7U5VgdW0Rt1IviN3XFXGnpOp4qsNIqXJXSpurmfYCKUNai2pqlEH4I5
-         EU1askL3fMhL6ToGX4/kAeqh57oVvsofR0QW0rRyHVo47tKbbn4CC8Bku/wABx+uGwl6
-         LsOGVHj72sw9GcdCcsBZR5zwwTi4urOZjLD4UDTcWwfagBWeNe2JrPoJrUTFCJNJu6Md
-         LddA==
-X-Forwarded-Encrypted: i=1; AJvYcCXRS5ceBNIe4dNblBe2ZdLLL8x33GA2LVrZkwhfWQ9Fmu+VhmMUIyFRTsPuI5zaEvRg2HnQKkuiB2PylFGuYLY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSVGTBRkGdRM7f70CHNZl7zTAO7Q8nLZGGaOI+tEHEBWyLaiH6
-	GbMK8ywDdKaQuZaWMRn3yalQzUdULXoYY3ivdQifUQxFd1X2mtYWZKaqMha3BxbNMw==
-X-Gm-Gg: ASbGncve6mONWDcgI11c/dx1c1GhQtzl4WHdMuRPkcYFu38ghRmK6+2hH3LfbdepRNk
-	L3kxgwD3yWSRP1+SLV2dB0xzjgp1JN8skTWpu+ooU4/I+fJaRFsAHTISBGHM9AYvY4YI6ITpl3X
-	qoYb23GHq1e2BrNxr5vqmvEnWlPJ276l6Vy5te+WL6n1gT4npoK8MRw1WG4ott8CzwPZvNE5x9B
-	jghzJjJCQi3y8iTUVUptm/1jVks5/jHq6/ofyERdlY2REawG0pFkhERZho4mtONoAjsGO89ZHhF
-	4sDHLv2RiPk=
-X-Google-Smtp-Source: AGHT+IHj906krwAWz7XUjbA04ryYXEHC+FhYCZEf32IXssM2QnPHJGO4AEBOpRhPvsQIxc2RD5njdQ==
-X-Received: by 2002:a17:90b:2545:b0:2ee:a76a:820 with SMTP id 98e67ed59e1d1-2f452e3eebamr5810043a91.18.1734723442816;
-        Fri, 20 Dec 2024 11:37:22 -0800 (PST)
+        bh=S/4/1lKAMtLS+F1t7d6RDrMvXKesNiqyvDziIAq2bJk=;
+        b=KW70TXX6gpxmpEu8kxvmi18Sm4u7UEhw3zrJtwUjR1TkLYpa7SiyfgsLYpK99476+G
+         X4ePvSw4As60JOXhIjue15AXi4f9AVq482c9XL3z77y44TF6lhJRr+Rd6Vsj/K5YYEOz
+         U241QMWCzgFJSsRtRX2jxpBQ03l54TLvb23LWZum0q0KDwququ5mYb5RnuRsFcw774rx
+         r3faWNF/YLb/J1YSlNP0n3lNnmCczGRcW/OiiYx9QuOhqzWGPeWwnTLg+e0r8o82y/X9
+         6YreNMH7d+y8e2vLP+v5BI/5rU6h1LBoQYVeq0g9Yzcp0vRzhxONEEggXVqVJTmMeJ7D
+         RNPA==
+X-Forwarded-Encrypted: i=1; AJvYcCVM9uQgUzK0rsSwMDjxmObxfBVCiAhuUBBUhvACXj3UdVIvLsaq79f+8RvgM3ea+W28WZ/7XYW+6ubT0gwB/t0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCA+xRBVMnt3KU/Fgyd4pmFPW1gswYgD0q5PBDrPGYXei6m+jL
+	1OWOqE/+VJcUBVVbAuiHXKycn3+5L2tqZVyW9vIyDkjax0YKN6QabeDvf6R4Afh2ig==
+X-Gm-Gg: ASbGncvoK+mcT00M+B4ggBGvi++y7TyLpEIlhx/IWguUbhQkxyi/HhWTiryC85/pjk/
+	5vHp+VFGhzE0PxAtLyrI3KjNnkudnr3NLdTE9tpjk66VJFpzEvJK+2Jbyz3IESzjxcxGAKX5yXj
+	6rI0UwMG//KvtOIBqej+NhkPxc6eMbIHvRgAQbJhy1o8edhbmvNf+2rR5cbLQLuHy7+emiQ82Fe
+	vaUVWa1nW6vrVh22y2iTG+DyzRIQOZskm7PADBT51FI+EFdQLkRACaZCzO17mx3Hp6n+lKJhwO0
+	Q5t6CWn3e+Q=
+X-Google-Smtp-Source: AGHT+IEBAuDv2uS/78Mtvpo1Ltj2D7cQBlhlEwQmsRHVrwYpALaaeDMijTwwy4kUwjHbpgEYC6HU+A==
+X-Received: by 2002:a17:90b:524d:b0:2ee:9229:e4bd with SMTP id 98e67ed59e1d1-2f4536030d8mr6034403a91.2.1734723459257;
+        Fri, 20 Dec 2024 11:37:39 -0800 (PST)
 Received: from BiscuitBobby.am.students.amrita.edu ([175.184.253.10])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f4477ef3d9sm3680917a91.26.2024.12.20.11.37.20
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f4477ef3d9sm3680917a91.26.2024.12.20.11.37.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Dec 2024 11:37:22 -0800 (PST)
+        Fri, 20 Dec 2024 11:37:38 -0800 (PST)
 From: Siddharth Menon <simeddon@gmail.com>
 To: simeddon@gmail.com,
 	shuah@kernel.org
@@ -79,9 +79,9 @@ Cc: skhan@linuxfoundation.org,
 	pmladek@suse.com,
 	mbenes@suse.cz,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 1/2] selftests: Introduce script to validate required configs
-Date: Sat, 21 Dec 2024 01:05:35 +0530
-Message-Id: <20241220193536.13781-2-simeddon@gmail.com>
+Subject: [PATCH v2 2/2] selftests/lib.mk: Introduce check to validate required configs
+Date: Sat, 21 Dec 2024 01:05:36 +0530
+Message-Id: <20241220193536.13781-3-simeddon@gmail.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20241220193536.13781-1-simeddon@gmail.com>
 References: <20241220193536.13781-1-simeddon@gmail.com>
@@ -93,170 +93,58 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch adds a script to validate that the current kernel configuration
-satisfies the requirements for selftests. The script compares the current
-kernel configs against the required selftest configs.
+Currently, kselftests does not have a generalised mechanism to skip compilation
+and run tests when required kernel configuration flags are missing.
 
-A config mismatch exits with error value 1 while matching configs or missing
-config files exit with value 0.In order to get debug output, set the
-environment variable LOCALMODCONFIG_DEBUG=1.
+This patch introduces a check to validate the presence of required config flags
+specified in the selftest config files. In case scripts/config or the current
+kernel config is not found, this check is skipped.
 
-The code for extracting the current kernel configs is adapted from
-scripts/kconfig/streamline_config.pl.
+In order to view the missing config options required to compile the test,
+set the environment variable LOCALMODCONFIG_DEBUG=1.
+
+example usage:
+```
+LOCALMODCONFIG_DEBUG=1 make -C livepatch/
+```
 
 Suggested-by: Petr Mladek <pmladek@suse.com>
 Suggested-by: Miroslav Benes <mbenes@suse.cz>
 Signed-off-by: Siddharth Menon <simeddon@gmail.com>
 ---
- v1->v2: created this perl script instead of checking directly in lib.mk
- tools/testing/selftests/mktest.pl | 138 ++++++++++++++++++++++++++++++
- 1 file changed, 138 insertions(+)
- create mode 100755 tools/testing/selftests/mktest.pl
+ v1->v2: moved the config checking logic to a separate perl script
+ tools/testing/selftests/lib.mk | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+ mode change 100644 => 100755 tools/testing/selftests/lib.mk
 
-diff --git a/tools/testing/selftests/mktest.pl b/tools/testing/selftests/mktest.pl
-new file mode 100755
-index 000000000000..60462f323bde
---- /dev/null
-+++ b/tools/testing/selftests/mktest.pl
-@@ -0,0 +1,138 @@
-+#!/usr/bin/env perl
-+# SPDX-License-Identifier: GPL-2.0
-+use warnings;
-+use strict;
-+use Getopt::Long;
-+use File::Spec;
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+old mode 100644
+new mode 100755
+index d6edcfcb5be8..98dda6d8d702
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -97,7 +97,14 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
+ TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
+ TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
+ 
+-all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) \
++TEST_DIR := $(shell pwd)
 +
-+# set the environment variable LOCALMODCONFIG_DEBUG to get
-+# debug output.
-+my $debugprint = 0;
-+$debugprint = 1 if (defined($ENV{LOCALMODCONFIG_DEBUG}));
-+
-+sub dprint {
-+    return if (!$debugprint);
-+    print STDERR @_;
-+}
-+
-+my $uname = `uname -r`;
-+chomp $uname;
-+
-+my @searchconfigs = (
-+    {
-+        "file" => ".config",
-+        "exec" => "cat",
-+    },
-+    {
-+        "file" => "/proc/config.gz",
-+        "exec" => "zcat",
-+    },
-+    {
-+        "file" => "/boot/config-$uname",
-+        "exec" => "cat",
-+    },
-+    {
-+        "file" => "/boot/vmlinuz-$uname",
-+        "exec" => "scripts/extract-ikconfig",
-+        "test" => "scripts/extract-ikconfig",
-+    },
-+    {
-+        "file" => "vmlinux",
-+        "exec" => "scripts/extract-ikconfig",
-+        "test" => "scripts/extract-ikconfig",
-+    },
-+    {
-+        "file" => "/lib/modules/$uname/kernel/kernel/configs.ko",
-+        "exec" => "scripts/extract-ikconfig",
-+        "test" => "scripts/extract-ikconfig",
-+    },
-+    {
-+        "file" => "/lib/modules/$uname/build/.config",
-+        "exec" => "cat",
-+    },
-+    {
-+        "file" => "kernel/configs.ko",
-+        "exec" => "scripts/extract-ikconfig",
-+        "test" => "scripts/extract-ikconfig",
-+    },
-+    {
-+        "file" => "kernel/configs.o",
-+        "exec" => "scripts/extract-ikconfig",
-+        "test" => "scripts/extract-ikconfig",
-+    },
-+);
-+
-+sub read_config {
-+    foreach my $conf (@searchconfigs) {
-+    my $file = $conf->{"file"};
-+
-+    next if (! -f "$file");
-+    
-+    if (defined($conf->{"test"})) {
-+        `$conf->{"test"} $conf->{"file"} 2>/dev/null`;
-+        next if ($?);
-+    }
-+    
-+    my $exec = $conf->{"exec"};
-+    
-+    dprint "Kernel config: '$file'\n";
-+    
-+    open(my $infile, '-|', "$exec $file") || die "Failed to run $exec $file";
-+    my @x = <$infile>;
-+    close $infile;
-+    return @x;
-+    }
-+    dprint "Unable to find kernel config file, skipping check\n";
-+    exit 0;
-+}
-+
-+# Check if selftest path is provided
-+die "Usage: $0 <selftest_path>\n" unless @ARGV == 1;
-+
-+my $file_path = $ARGV[0];
-+
-+my @config_file = read_config();
-+
-+my %kern_configs;
-+my $valid = "A-Za-z_0-9";
-+foreach my $line (@config_file) {
-+    chomp $line;
-+    next if $line =~ /^\s*$/ || $line =~ /^#/;
-+    
-+    if ($line =~ /^(CONFIG_\w+)=(.+)$/) {
-+        $kern_configs{$1} = $2;
-+    }
-+}
-+
-+my %test_configs;
-+# Continue as normal if /config file does not exist 
-+open(my $fh, '<', $file_path) or exit 0;
-+
-+while (my $line = <$fh>) {
-+    chomp $line;
-+    next if $line =~ /^\s*$/ || $line =~ /^#/;
-+    
-+    if ($line =~ /^(CONFIG_\w+)=(.+)$/) {
-+        $test_configs{$1} = $2;
-+    }
-+}
-+close $fh;
-+
-+# Check if all selftest configs match kernel config
-+my $all_match = 1;
-+my @missing_or_mismatched;
-+
-+foreach my $key (keys %test_configs) {
-+    if (!exists $kern_configs{$key} || $kern_configs{$key} ne $test_configs{$key}) {
-+        push @missing_or_mismatched, "Required: $key=$test_configs{$key}";
-+        $all_match = 0;
-+    }
-+}
++check_config_deps:
++	@$(selfdir)/mktest.pl $(TEST_DIR)/config || \
++	{ echo "Skipping test: $(notdir $(TEST_DIR))"; exit 1; }
 +
 +
-+if ($all_match) {
-+    exit 0;
-+} else {
-+    dprint "$_\n" for @missing_or_mismatched;
-+    exit 1;
-+}
++all: check_config_deps $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) \
+ 	$(if $(TEST_GEN_MODS_DIR),gen_mods_dir)
+ 
+ define RUN_TESTS
+@@ -228,4 +235,4 @@ $(OUTPUT)/%:%.S
+ 	$(LINK.S) $^ $(LDLIBS) -o $@
+ endif
+ 
+-.PHONY: run_tests all clean install emit_tests gen_mods_dir clean_mods_dir
++.PHONY: run_tests all clean install emit_tests gen_mods_dir clean_mods_dir check_config_deps
 -- 
 2.39.5
 
