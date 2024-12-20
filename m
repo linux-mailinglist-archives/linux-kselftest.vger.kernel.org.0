@@ -1,160 +1,119 @@
-Return-Path: <linux-kselftest+bounces-23635-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23636-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 830F89F891D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 01:49:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D56879F8921
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 01:53:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBC9816BAC2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 00:49:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 374EE16CBCD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 00:52:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB9003D81;
-	Fri, 20 Dec 2024 00:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A73362594AB;
+	Fri, 20 Dec 2024 00:52:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nqw1nXeN"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CpuCWLfL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B81F5383;
-	Fri, 20 Dec 2024 00:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 386E92594A9
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Dec 2024 00:52:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734655767; cv=none; b=Blq/nWLAc9EAdYTPpn7r7KuULt0ZtrAxSiPKOQQwfT6j8z6a/O3QlrGO5z4e6toKx00/gnPWFzrq5k/eImL4luSwfMjps/b2JQtaHab6XWCw0cO6SUdIfK16lpsx+49m13OIXbeXp770qbGR3aD0aST6OITCA3ZXVX/Ou2m1zJc=
+	t=1734655974; cv=none; b=owhBcYCxstvr8F9Ql6BwB79QmFPP6OaCguSDhQbLGgi309LUe8dgvqgxve6lpTlp8QjKUMjpH7tuuXAyy5LLKtaQOWKbq/knh/IEBKtgBE8BbLRiW+ipHiRHsN4hKfuJ7yhcJiR/VAM2GCTfmZIHO0+Hv3S7xhsRLTi9zRyfpEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734655767; c=relaxed/simple;
-	bh=EsNchNsgLi9NKgKgusMJtQOj3Mvxvz/inQM29tynq+M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ud6mN8De4vWEBm+uF1yO4JNBaz6mqFKR30vcHIPmZgBARja4kGeEyc9lZvY2F3k++9wL7Dkl+GABJJkw8z82x2C2hEE8qhh/L4j7wq24sZ+CdlncWUtzGdHgWIRKaUWnRLdzV9yYyw6WbLZUF83gt18gEI+ZExBDTCWQoh2YG5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nqw1nXeN; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43625c4a50dso9756085e9.0;
-        Thu, 19 Dec 2024 16:49:25 -0800 (PST)
+	s=arc-20240116; t=1734655974; c=relaxed/simple;
+	bh=RrG9Ssm1ZAjOHE3F6vFIHPlrr9LFrZdQMzcHXRs4/R8=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=LPJWHSvBGGiV/lwMqsik5HG6ePb0KJUZxmOZ7BPlA74JOa1UEhp75i+voo7W7aiv8239FdbiVcvmj6Y4p7gfFIrTGztCv0znBuHULJ8ZHUb33B4yrxHZZse+JHN1tYHabuYDAt99yvAArtEAlBhTQ+PmGUGuLcax7FfUO2cF5lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CpuCWLfL; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7289afa200aso1682845b3a.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Dec 2024 16:52:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734655764; x=1735260564; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xuZI3ulWjAFi2AzZ0aYmiv3guuJ9AjC0a+kRD8wMWjM=;
-        b=nqw1nXeNplCrFdg4AIpIlo4GCmh7OVPcOcHrzN9t61R8jNlDhfrddBnNhQ5dHiPv4v
-         6H+WFmvGPwQysf5pG+eKfLDILiiIiIqvzYuvquXoKChfFdhaXdUQPuRZYxMVAIfZBNCu
-         GZsEyaXoKhrYlwABbCLDuPRrU9Rg8WxS97cSjBH628Uxg3ZWK1QiOCFmC4yU1vEGfR7U
-         xhd5z3jHEpDcGABxRxCJ4ULXLAYyM9/2sclteZ7q243senFx0IZh8EzmqnX7UMZAyNXn
-         QSlOFvd+87mrxU0F/2QED+sh8zJG9sWPhSYkQSfTrXF2b+02yuJA9ZWtOEVFO3nx1ali
-         WLzg==
+        d=google.com; s=20230601; t=1734655972; x=1735260772; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ihkyfuq3wElMG8pxO8ONTksxyGREtABtMduu+TMvtg0=;
+        b=CpuCWLfLCbmNGTbUj97SvGEaObEXM+ycz63BpqnWaUiW6TpGMi9K2QGABkKsHCyWdB
+         QB0uAX0sc6pzzzI8eK5gIHYRQ/MmP3e9fYKogZ6l63n1VAyoiRp5sxMCMbm7uHM3nkri
+         ke9GugAZm4rbBrciK21EYqdHX5NPT0pvl2pQcCDuOU575008Zaas+2l+QvaiTXkqAPRo
+         Lu55I9CxlYrccmLZ4CQl2R00NjbWBEkGA8CIGYuLLLBDHuI3PkfLuPw7nSBbf9iLSpaX
+         ygA2oEIFAni0pqUvs1dmCtfhqChQ/F0HIA8o7rLDm2FXiDDxt8XdDbHTdLOwnxzA25pF
+         BQFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734655764; x=1735260564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xuZI3ulWjAFi2AzZ0aYmiv3guuJ9AjC0a+kRD8wMWjM=;
-        b=XOvInE2/rxMod+2MB+st4k+xzE1IT5BMkX4jkJanoXnBqkvLcjRLOT54GLDoWbDYX0
-         refhWW1MYXFqc5EioqJxpHh6hB4lv6LQ1BmPV9xKPtT3ePNhYyXVUU6u5qSNIveC1nO8
-         n+0vJj2SgwdFxHZCXuzQG3uaQdfLn2W/y3l9bNXkGu52p14oWAiad8D4gTrV+nlKkJbK
-         e8azD/pJFCq5i6G0YkEtX1iKg1gc6qDyiL7XGM+Du22sMWyZMhnyhfcJpGCgVEfWMNEA
-         baIpXlDeQ9a74NNzUGqEjc+F6xWHphkMP48O5xwa5CSEevWhkhoVGpEargJ8Jq72J8zK
-         O7tA==
-X-Forwarded-Encrypted: i=1; AJvYcCU+EPApGPNZqWjjXltSrjrLY3uFsyUneimulvHgGwAspHSYZKm/8X8j2nhqO8UMAkaCeWxR4oxFTigREZuc@vger.kernel.org, AJvYcCUFSMev0wqwr5G8TxhedHSdjk5LAV4L/qd4xpUEjYK6DSg+LtIVHTKAJj87/CuiGdTFww/SYAZD@vger.kernel.org, AJvYcCV7qdERt3iAkxm8KPEx6m+Shqd2ZY5V6SMPCB7LgnQczD4Mx4EDcTikpvlrY2ezAICIqrY=@vger.kernel.org, AJvYcCXGNyzOOQi9boTNMAYI+5X5G25fu//q0nY5lVj5YgPexZw2yg3Hx1ckrQcpHqtMRIGS6FrHjmkQ22HFWmLXbhtB@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwU0/NVBflpbpdSUh9CbCTxzbboPTin/pgfnPCY8ALU2TnLarC
-	9LY3bReuuOR20/PZOaudEzhi8GIV/DEKarSexZpTGrWdsTXA/B0J3SHjRYtLEIz5DjZZBoaAc3N
-	lp6WC7TKgsGJrzIrgGmbuT5Bq3LE=
-X-Gm-Gg: ASbGncvfMLXBoceA6uNJN0IB4eh/L/xGa8ydB+mqDBqUadS3+opIDY+Rahntiklpxpw
-	Bp4Fj5ETiGz4ZK4lW70rzoWXERWn6wuty2GPEGw==
-X-Google-Smtp-Source: AGHT+IHS89C4V0R9V1vvBTgYx7sd3REU/1ybhwNYHIIy6pt0wl7aYGhtsODhSc67kX9JJcFRGhh690qG1vduF+r673I=
-X-Received: by 2002:a05:600c:511d:b0:436:5fc9:309d with SMTP id
- 5b1f17b1804b1-43668b78383mr6470205e9.30.1734655763974; Thu, 19 Dec 2024
- 16:49:23 -0800 (PST)
+        d=1e100.net; s=20230601; t=1734655972; x=1735260772;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ihkyfuq3wElMG8pxO8ONTksxyGREtABtMduu+TMvtg0=;
+        b=EeIRrgjoPpW6SjipgkrHBsbXaFEsKUCPDm2NA0XF5WwBffhnu1TfUzs6meYLib7ElN
+         /9fyE+uQCKEA7dd7eJMERrqRv9b5JMzIkK9MQ+sva7gN3sFcKdeIlfYHlCyjoT3d16at
+         eSTAenj0SahTT4AbIMUJItivigISdeJQw43E10+3FFP54hRTsFZfiYK/kmWSN2hOmlLe
+         kbS41O1AYx5rG6peBaDEP2ha6ifIBjp0v4loqa14HFLs9JvpgWbVtG0mCVdILK/fygN0
+         PARgeYjOi2GseAlUhYQ8vn9xh2sJBRCm1MJlEt+eNckHH/lJYwK2YoAPx02s3bOGPZl2
+         oJWA==
+X-Forwarded-Encrypted: i=1; AJvYcCWCeQwJGQ2QX8wkSKWN4iLLWLkyj6Rs/QznYyHulyUNgx/971v81EVcEINmufw/VZEclUCF7ENHzjF2dwE713w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsJl8emWKB9dsq7EeLC9XfTaDdhb+ZGdNDsooMowo2OVX5FmeJ
+	6jgdiL2hAt/Yv/nm6CO5qMI81hoxEx9ZJMXq+RTrdgCKY7398fqEXjHEHiAbmi+Nd09sddlfhWQ
+	2Ag==
+X-Google-Smtp-Source: AGHT+IGALSk1HidppKjt7K6MREWQN1zNPGPG5cwm5FqS51kn12/cvSPf29/wWjmFgw0cJl1Q2J1tAjz+HZo=
+X-Received: from pfbeb6.prod.google.com ([2002:a05:6a00:4c86:b0:72a:a7a4:9a53])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:430d:b0:725:db34:6a8c
+ with SMTP id d2e1a72fcca58-72abddbd4f7mr1196960b3a.13.1734655972548; Thu, 19
+ Dec 2024 16:52:52 -0800 (PST)
+Date: Thu, 19 Dec 2024 16:52:51 -0800
+In-Reply-To: <20241021062226.108657-1-manali.shukla@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <cover.1734045451.git.dxu@dxuuu.xyz> <92065ca054beccd6d0f35efe9715ef965e8d379f.1734045451.git.dxu@dxuuu.xyz>
- <CAEf4BzaqCgW9keiT+tJUBQWT6Q+jMwuvn4O2ZghO0c+ZvACNrw@mail.gmail.com>
- <zow3q3nhlz6vedbni3upag5yr7zzrhyiqysl5nwyubebmbwojk@th7kbm62x36g>
- <31b0c85dbf85486df116ade20caf8685843899b4.camel@gmail.com>
- <CAEf4BzaEOBtrSWZTx40AdT=SQY6Qaia405KWgU-NowaqNdmpkA@mail.gmail.com>
- <kghvgxu5wdkupssnq7dy5upuf2wscsxgsnwl2yoam4mwk3h5pn@wjjsliwg6fzl>
- <a2999d8b4827516fe4bfd17646d2284580712d08.camel@gmail.com>
- <f7taicw6c3f3yae4d6lrdagv26jiuihumklo4tkmqduvauargi@ld4bcmsbbiqn> <d0b5e424445f498fdedca04fd4b0f138fbb6ae36.camel@gmail.com>
-In-Reply-To: <d0b5e424445f498fdedca04fd4b0f138fbb6ae36.camel@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 19 Dec 2024 16:49:13 -0800
-Message-ID: <CAADnVQKs3=pEea7VeTfxpuB7uxzZRCjikPGu17uusTpGdqLxDA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 4/5] bpf: verifier: Support eliding map lookup nullness
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Daniel Xu <dxu@dxuuu.xyz>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20241021062226.108657-1-manali.shukla@amd.com>
+Message-ID: <Z2S_453UZG7t0TcF@google.com>
+Subject: Re: [PATCH v1 0/4] KVM selftests enhancements
+From: Sean Christopherson <seanjc@google.com>
+To: Manali Shukla <manali.shukla@amd.com>
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, 
+	shuah@kernel.org, nikunj@amd.com
+Content-Type: text/plain; charset="us-ascii"
 
-On Thu, Dec 19, 2024 at 4:43=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Thu, 2024-12-19 at 17:40 -0700, Daniel Xu wrote:
->
-> [...]
->
-> > > Ok, thinking a bit more, the best test I can come up with is:
-> > >
-> > >   u8 vals[8];
-> > >   vals[0] =3D 0;
-> > >   ...
-> > >   vals[6] =3D 0;
-> > >   vals[7] =3D 0xf;
-> > >   p =3D bpf_map_lookup_elem(... vals ...);
-> > >   *p =3D 42;
-> > >
-> > > For LE vals as u32 should be 0x0f;
-> > > For BE vals as u32 should be 0xf000_0000.
-> > > Hence, it is not safe to remove null check for this program.
-> > > What would verifier think about the value of such key?
-> > > As far as I understand, there would be stack zero for for vals[0-6]
-> > > and u8 stack spill for vals[7].
-> >
-> > Right. By checking that spill size is same as key size, we stay endian
-> > neutral, as constant values are tracked in native endianness.
-> >
-> > However, if we were to start interpreting combinations of STACK_ZERO,
-> > STACK_MISC, and STACK_SPILL, the verifier would have to be endian aware
-> > (IIUC). Which makes it a somewhat interesting problem but also requires
-> > some thought to correctly handle the state space.
->
-> Right.
->
-> > > You were going to add a check for the spill size, which should help h=
-ere.
-> > > So, a negative test like above that checks that verifier complains
-> > > that 'p' should be checked for nullness first?
-> > >
-> > > If anyone has better test in mind, please speak-up.
-> >
-> > I think this case reduces down to a spill_size !=3D key_size test. As l=
-ong
-> > as the sizes match, we don't have to worry about endianness.
->
-> Agree.
+On Mon, Oct 21, 2024, Manali Shukla wrote:
+> This series was prompted by feedback given in [1].
+> Patch 1   : Adds safe_hlt() and cli() helpers.
+> Patch 2, 3: Adds an interface to read vcpu stat in selftest.  Adds
+>             a macro to generate compiler error to detect typos at
+>             compile time while parsing vcpu and vm stats.
+> Patch 4   : Fix few of the selftests based on newly defined macro.
+> 
+> This series was split from the Idle HLT intercept support series [2]
+> because the series has a few changes in the vm_get_stat() interface
+> as suggested in [1] and a few changes in two of the self-tests
+> (nx_huge_pages_test.c and dirty_log_page_splitting_test.c) which use
+> vm_get_stat() functionality to retrieve specified VM stats. These
+> changes are unrelated to the Idle HLT intercept support series [2].
+> 
+> [1] https://lore.kernel.org/kvm/ZruDweYzQRRcJeTO@google.com/T/#m7cd7a110f0fcff9a03176935ed016f49088df6b0
+> 
+> [2] https://lore.kernel.org/kvm/ZruDweYzQRRcJeTO@google.com/T/#m6c67ca8ccb226e5f357d943da2a2965a4224f69a
+> 
+> 
+> Manali Shukla (4):
+>   KVM: selftests: Add safe_halt() and cli() helpers to common code
+>   KVM: selftests: Add an interface to read the data of named vcpu stat
+>   KVM: selftests: convert vm_get_stat to macro
+>   KVM: selftests: Replace previously used vm_get_stat() to macro
 
-Earlier I suggested to generalize this zero/misc/spill counting
-into a helper and reuse here and in check_stack_read_fixed_off().
+Thanks for giving this a shot.  I appreciate the effort, especially on the stats
+code.  But unfortunately, very little of the code in this series moves things in
+the right direction.  There's too much copy+paste, and too much unnecessary
+complexity.
 
-We do very similar checks there with a similar purpose.
-
-It sounds there are ideas to make this particular feature smarter
-than what we have in check_stack_read_fixed_off().
-Let's not overdo it.
-Even if a common helper is not possible, keep things consistent.
-The simpler the better.
+I'll post a patch for the STI/CLI helpers and a series for the stats changes,
+and will review the Idle HLT series.  Please plan on posting v5 of that series
+on top of kvm-x86/next plus the to-be-posted patches (I highly doubt I will get
+them queued before you are ready to post v5).
 
