@@ -1,110 +1,173 @@
-Return-Path: <linux-kselftest+bounces-23646-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23647-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E10AC9F8C57
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 07:06:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E8F99F8E7A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 10:01:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C25CA7A15A4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 06:06:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D9BE160373
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 09:01:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE3D474059;
-	Fri, 20 Dec 2024 06:05:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A01111AA1F1;
+	Fri, 20 Dec 2024 09:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="O/zOjsko";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="7SDhuTMb";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="O/zOjsko";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="7SDhuTMb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABC5671750;
-	Fri, 20 Dec 2024 06:05:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7251A0737;
+	Fri, 20 Dec 2024 09:01:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734674752; cv=none; b=N/h0a36MPD8t9kjEg+xZ/0n7Z0SxJ4qdr4mL9JfRDRBAOwDO93012g5MaA89eGDnvL29j1CPrLl607UMyVd2xYV0KYYExHe9tKNBLCURhtZeNjJMVeSYr3a0aurFx1QI1nHDv31uxc5jSdivzoOLUhQsy5g9E4KLsCHYq+T/TO0=
+	t=1734685274; cv=none; b=PSdPN0xLpNViJwJVOd+2HE8gXiCj+qoDvXCKQXbabbBAvlcZWc8eEK38iME01NOkf2mH6q3dJbF6MQx6O2hj4O3IgwNv4MGI0d66vKatTnOn8B5UdIQUuN13Jprx5YfZQwoC3Z3iegEGsWvyydv283CTXP1cxSH8HVBrKwC4xAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734674752; c=relaxed/simple;
-	bh=ayvwCmYz2UZS+AuBXpAH+MXqMHUHMeRZC5BEFX0+lHc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZsQflXeBrGj5nhAip+l8qdMzHzhMw7Ky1Z4GiCWdjAckoP21XOMl+GQmwSV1IOQq9iz9Km0f9GmhxZbxyvIBj2zU6qPbLACOUKlGJ/59MHJS1mr5Y4Bf3/h914AJbvivrtRAF7AUW0J9hNBneXbg2zRwnx9B7fdtK052hHU1w70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D93F41480;
-	Thu, 19 Dec 2024 22:06:16 -0800 (PST)
-Received: from [10.162.42.20] (K4MQJ0H1H2.blr.arm.com [10.162.42.20])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 57AFD3F58B;
-	Thu, 19 Dec 2024 22:05:45 -0800 (PST)
-Message-ID: <64863269-050d-47c9-81e2-135671cff23e@arm.com>
-Date: Fri, 20 Dec 2024 11:35:42 +0530
+	s=arc-20240116; t=1734685274; c=relaxed/simple;
+	bh=mtsHNjErBVbM6gd7EEjP+xrkYhw1P+PuXWzaMldQ6PA=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FbkbfF3E3YeJjXozjrTaq4Yj1ZBhvb0Tk6F6wqWtzPxa5/rg49yv2W0OV6afR7uY99Lesv9XlTg5+pqy7M9hY+5SulpJAx0B7JbkeBkOvSxDDbv/JWC+iPznqtjGYfdrfKukHKxQyBuCDS/mRviiJe3Y/EP1iArkLpRLtJT6UDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=O/zOjsko; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=7SDhuTMb; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=O/zOjsko; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=7SDhuTMb; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 6490F1F365;
+	Fri, 20 Dec 2024 09:01:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1734685270; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vNQKf9XZcrQRmEaqIbgcvlF0ZTKrQqX3PeU841MH1EY=;
+	b=O/zOjskoj+E2hvPTcL0W71i/X0+PINNJ54B0ou6mw/SMUkSqae6dARnx3mq0nUc6l8KKkm
+	50al0JoOAJSZ3n3NWPXD0ZUrpPOCeHiRA1BvxBBzfczoqLklmMGvgOITXBPVEUc0HnEF+m
+	T/Hn7ibqWvwzHLY66t7ybNrQHNnCASU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1734685270;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vNQKf9XZcrQRmEaqIbgcvlF0ZTKrQqX3PeU841MH1EY=;
+	b=7SDhuTMbeqe2Rl2FiMm6Rbx0f6KgKxtCLhZbNKz8+aZ+yOVxqDm5cZPtAM6Ral1qQUeQzs
+	7afiKStdTM9QbLBQ==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="O/zOjsko";
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=7SDhuTMb
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1734685270; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vNQKf9XZcrQRmEaqIbgcvlF0ZTKrQqX3PeU841MH1EY=;
+	b=O/zOjskoj+E2hvPTcL0W71i/X0+PINNJ54B0ou6mw/SMUkSqae6dARnx3mq0nUc6l8KKkm
+	50al0JoOAJSZ3n3NWPXD0ZUrpPOCeHiRA1BvxBBzfczoqLklmMGvgOITXBPVEUc0HnEF+m
+	T/Hn7ibqWvwzHLY66t7ybNrQHNnCASU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1734685270;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vNQKf9XZcrQRmEaqIbgcvlF0ZTKrQqX3PeU841MH1EY=;
+	b=7SDhuTMbeqe2Rl2FiMm6Rbx0f6KgKxtCLhZbNKz8+aZ+yOVxqDm5cZPtAM6Ral1qQUeQzs
+	7afiKStdTM9QbLBQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C1F8413A32;
+	Fri, 20 Dec 2024 09:01:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id FW/XK1UyZWcybgAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Fri, 20 Dec 2024 09:01:09 +0000
+Date: Fri, 20 Dec 2024 10:01:09 +0100
+Message-ID: <8734iirane.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Li Zhijian <lizhijian@fujitsu.com>
+Cc: linux-kselftest@vger.kernel.org,
+	Mark Brown <broonie@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH for-next] selftests/alsa: Fix circular dependency involving global-timer
+In-Reply-To: <20241218025931.914164-1-lizhijian@fujitsu.com>
+References: <20241218025931.914164-1-lizhijian@fujitsu.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: Added new test cases to the migration test
-To: Donet Tom <donettom@linux.ibm.com>,
- Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: Ritesh Harjani <ritesh.list@gmail.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, Zi Yan <ziy@nvidia.com>,
- David Hildenbrand <david@redhat.com>, shuah Khan <shuah@kernel.org>
-References: <20241219102720.4487-1-donettom@linux.ibm.com>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <20241219102720.4487-1-donettom@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Rspamd-Queue-Id: 6490F1F365
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.51 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_TLS_ALL(0.00)[];
+	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim,suse.de:mid];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -3.51
+X-Spam-Flag: NO
+
+On Wed, 18 Dec 2024 03:59:31 +0100,
+Li Zhijian wrote:
+> 
+> The pattern rule `$(OUTPUT)/%: %.c` inadvertently included a circular
+> dependency on the global-timer target due to its inclusion in
+> $(TEST_GEN_PROGS_EXTENDED). This resulted in a circular dependency
+> warning during the build process.
+> 
+> To resolve this, the dependency on $(TEST_GEN_PROGS_EXTENDED) has been
+> replaced with an explicit dependency on $(OUTPUT)/libatest.so. This change
+> ensures that libatest.so is built before any other targets that require it,
+> without creating a circular dependency.
+> 
+> This fix addresses the following warning:
+> 
+> make[4]: Entering directory 'tools/testing/selftests/alsa'
+> make[4]: Circular default_modconfig/kselftest/alsa/global-timer <- default_modconfig/kselftest/alsa/global-timer dependency dropped.
+> make[4]: Nothing to be done for 'all'.
+> make[4]: Leaving directory 'tools/testing/selftests/alsa'
+> 
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Jaroslav Kysela <perex@perex.cz>
+> Cc: Takashi Iwai <tiwai@suse.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+
+Applied now.  Thanks.
 
 
-On 19/12/24 3:57 pm, Donet Tom wrote:
-> Added three new test cases to the migration tests:
->
-> 1. Shared anon THP migration test
-> This test will mmap shared anon memory, madvise it to
-> MADV_HUGEPAGE, then do migration entry testing. One thread
-> will move pages back and forth between nodes whilst other
-> threads try and access them.
->
-> 2. Private anon hugetlb migration test
-> This test will mmap private anon hugetlb memory and then
-> do the migration entry testing.
->
-> 3. Shared anon hugetlb migration test
-> This test will mmap shared anon hugetlb memory and then
-> do the migration entry testing.
->
-> Test results
-> ============
->   # ./tools/testing/selftests/mm/migration
->   TAP version 13
->   1..6
->   # Starting 6 tests from 1 test cases.
->   #  RUN           migration.private_anon ...
->   #            OK  migration.private_anon
->   ok 1 migration.private_anon
->   #  RUN           migration.shared_anon ...
->   #            OK  migration.shared_anon
->   ok 2 migration.shared_anon
->   #  RUN           migration.private_anon_thp ...
->   #            OK  migration.private_anon_thp
->   ok 3 migration.private_anon_thp
->   #  RUN           migration.shared_anon_thp ...
->   #            OK  migration.shared_anon_thp
->   ok 4 migration.shared_anon_thp
->   #  RUN           migration.private_anon_htlb ...
->   #            OK  migration.private_anon_htlb
->   ok 5 migration.private_anon_htlb
->   #  RUN           migration.shared_anon_htlb ...
->   #            OK  migration.shared_anon_htlb
->   ok 6 migration.shared_anon_htlb
->   # PASSED: 6 / 6 tests passed.
->   # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:0 error:0
->   #
->
-> Signed-off-by: Donet Tom <donettom@linux.ibm.com>
-> ---
-
-Reviewed-by: Dev Jain <dev.jain@arm.com>
-
+Takashi
 
