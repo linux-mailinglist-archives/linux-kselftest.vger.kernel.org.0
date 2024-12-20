@@ -1,216 +1,186 @@
-Return-Path: <linux-kselftest+bounces-23631-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23632-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD8D09F8903
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 01:35:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F7E69F8906
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 01:40:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 348EE16AAEB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 00:35:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D1E118905AB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2024 00:40:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC009259492;
-	Fri, 20 Dec 2024 00:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C60E52594A9;
+	Fri, 20 Dec 2024 00:40:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HcfrR3nd"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="YVu904Hw";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CO+DZSik"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5147817C2
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Dec 2024 00:35:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67594800;
+	Fri, 20 Dec 2024 00:40:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734654916; cv=none; b=ECBBrlgjh17EeQkNZPcQMd36ci4f+1w6kBjDbqp3yBtC5KLH09V13D9SLCLVOEDY4I71wXfIMWZ+S9/6zEjBJz0hk09V+fKe6/lU6ijUi6fOE8PXtfnt5ogUcN7el0HBPwOUxnnRzAKwTovsVOlxQu1bpJJTF3t5ho3C9qDC++w=
+	t=1734655238; cv=none; b=YgXcxLHsxUtPccoByVWcwaaFGlCcUVphXYEFLV+b1B4jBH4HtJurvtyIT7qF6sRFEz+ypcXepFPE6cycLYIWYVAAj3VLxqAuKlZ0h/n2Y7N71fk4EW4wTl7by26gYkpz+A2cLi/FbCJJI0A9NLjFNS8H2LUOxzAkyJy2yhGKOSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734654916; c=relaxed/simple;
-	bh=8zesFsrhYxe56sl6AP//SXwGCndt3z3bBtXXdGkbVnc=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Hut8mjijcg8sCSKPrDaKEu1puwmtkG5lDMti+9YON+5kEIVE4lmiZ5KkdxZtAG6qrTA3aAn8/CSL2TniMj/SxtSOp3LhTID52/y2bFX9zCbuWTCx6M3gIrm2VvT+z6NZmH45u3gHOh/9M4gplVBnXk4XElAuVgdPsBIgg7qWqU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HcfrR3nd; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-8019f05c629so1422497a12.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Dec 2024 16:35:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1734654914; x=1735259714; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZP7EweettbHnaJfHAvM9ZvXX/gJoJ0NtSQ9ImC1SkLU=;
-        b=HcfrR3ndRq0vOl02bA4z/UGgpScbxC2PzdDjL6VV1T6TseSoFxQZaQmT4yqis/i3A+
-         Owy27vBsHivMP/d2Dc0veWCeaQ5YarxTp6ezPPhz6jUH4t5M5cAACABi7hzXM+GbUVnw
-         vae/NUL2cny1k7uFtHosqVQVf/dsz8oeaobMZ9z5+Y5i+1mrQnZrRd3kmOirgUulpvxi
-         fckj6NkAKYijD3njnz+Ho0MpHGgQhH7oxDeD14io3z+/xw+LeJHlOiMUIRPZQ+6MWN4S
-         em71z0EBsyMIIqFH+iufa8fwe3FY6uo+3y5A7CSLwhzPQHh30V+NVKK81Sxc3FV5MHZM
-         2ZkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734654914; x=1735259714;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZP7EweettbHnaJfHAvM9ZvXX/gJoJ0NtSQ9ImC1SkLU=;
-        b=sIvzGByTp/ohyIIX578eCXOEDmRtGAFxb0P+638mx2dwTGlfObh88oGHc3my+VsRyu
-         /RtEICkm3Uoy69yo4ZWWFDLy90iL8rZZ48moLu8Po+gRR7c96Glw1cYQ0KKTUvJAQPn9
-         HTSdrrZOo1wYTKz9rXDWo0e1aPE2LZNYXCJftH1+x/zdX1BN5p0o/R6sR03YFdx7hjYE
-         jz58jP3iS2Hla6dVy4wfjdLjVZrm7iup7BTZsqMcqJb6C4S5+s0J2UIBH8GdvTTH9BL5
-         SalqEhPv2NOMMLIGcilHyUly1HFii22Xh9GY+rbtyAxCuyN0oHGR4LoB9iNC2qj4eTVx
-         c04g==
-X-Forwarded-Encrypted: i=1; AJvYcCVS2Wz0aB00ukjLQP8hv+TnzWUGH8G4xhpOS8Q2rT8R9AeqL9CYyhKnXJ4+J6atse8SMCe/IzhS6ji0yuiDeJM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0AAvKYbyWxvODKkiZTTZ6ALCeSjueTV+n6qlNvF/42BlCjqZW
-	pWBYQoi7sfevzeLu2wYvQgP48dtONx6AfDGD2D0nBQEL7Tz68cjiOKdILU+hjKmmVua6c5HLu5i
-	ljw==
-X-Google-Smtp-Source: AGHT+IGl8E4sDgGBr1D8JkzPtvpN5PJd847VMGo8Pw0nVcJamESqSCKGCzn3YUhvVhWMECtIO8funFn8/PM=
-X-Received: from pjbli10.prod.google.com ([2002:a17:90b:48ca:b0:2ee:2761:b67a])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1f85:b0:2ee:7870:8835
- with SMTP id 98e67ed59e1d1-2f452f0164cmr1565495a91.33.1734654913764; Thu, 19
- Dec 2024 16:35:13 -0800 (PST)
-Date: Thu, 19 Dec 2024 16:35:12 -0800
-In-Reply-To: <20241021062226.108657-3-manali.shukla@amd.com>
+	s=arc-20240116; t=1734655238; c=relaxed/simple;
+	bh=13wJenR/mQ9s96VRt2lf8g8bCxoH2vnPVKeXG18STug=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e3uhucQaBb4JSI1EcKPb21NVS0v5CzzvWXWN0OY0XlXo8GWL11dvBU12C0iA2ub8y/P9TpaZN7ocJjW7ogMee5wN/WkiIyq4fMGg0TnUDdAXlzN5/m7howHjIk8chzWpcwCv6gvo1IItPIPM1hAulgeJcoj1xBE3f/6zByG7T9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=YVu904Hw; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CO+DZSik; arc=none smtp.client-ip=202.12.124.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id EE66425401B3;
+	Thu, 19 Dec 2024 19:40:34 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-11.internal (MEProxy); Thu, 19 Dec 2024 19:40:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1734655234; x=1734741634; bh=Ktg3pBXvwq
+	rACo60Nz+FZ0dP2d3kQw9ZPLTVaSGME6c=; b=YVu904HwsvcD+iMamYb0DtCwTR
+	KE4zxYU8qnGj/aCb+Dz45swpg0xrVGz6HGKcz0DQbVA10XLi3GO8HKzGIFdCdef2
+	CTMy2oAquLubCysfeBlet0T4LxsI9SL0CG/Kgtm0BOkiFQAMoeol7FbdtJ4ppqjk
+	Dv5rUk9dwJsjw8B3VX02CADDvvbgN2cb8hBIWfFpNCxpndFR2Hsc4uCkqYcN1Fx3
+	nuDI2gzncgwCt5HPnzbih5PIWyqJM7T2KTCuTfpCbTFzhHZ2IlzasRN2hz3+uCdx
+	WAwxVe4fy4q7XkfMrOLiQBGWh0/AhUrOPPjeXbTMJkSALEtw1EAIUtu1GfFw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1734655234; x=1734741634; bh=Ktg3pBXvwqrACo60Nz+FZ0dP2d3kQw9ZPLT
+	VaSGME6c=; b=CO+DZSikI6zeNipBcfQCeYvgUIsnUbbGg43oQc1em2WeefdYVMy
+	8sx6TJbv0Cwgb4+wTRlWfuwPL7lQCCusq9cZCDc0NuFBtoP1f+3NLb97LTxH74OP
+	aLzYfPJ0jw1XAw/cFwFjN99m4ePBVY7pssBOKvbzO2lJF6+aLNSbSNf9PlcB05Wc
+	tSwGI5jUAB4pod7t0So4YWWEAJnuGikdRmql+NQT5uJNiNSsIATm4FYkFQGtrlUG
+	hS7l9vbj7Ti5WQSz8/v4Y8PbCmStG4QKBbGAiAkjrHHY0Rpg0SB8OmAYXbntSMwb
+	NkUGC0ngtOk7ZnfjRQCTF/9iamoM+7td8Mg==
+X-ME-Sender: <xms:Ar1kZ_gTFOWiRtl934rMJnpvJ-zQYTDKEWe8wvTD2WyNstdAr1Ha5A>
+    <xme:Ar1kZ8BsE1Sjv995-kkLxUvIOGWDjtbByoPXilVjSlUfxyXztaWeD7AavUNbsccrV
+    vNVYqltFXJS755bGA>
+X-ME-Received: <xmr:Ar1kZ_ElWviMBKPGNhDEun6DGZZ4dM-yfZDw3xecGUr3M9dibu0nPYZQXiC-HMEPG0BqBE4Q_0lTXRBqigUEf5SQD-Zoq12WhUU_86vsMGaxMg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddruddtuddgvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnegfrhhlucfvnfffucdljedtmdenucfjughrpeffhffvvefukfhf
+    gggtuggjsehttdfstddttddvnecuhfhrohhmpeffrghnihgvlhcuighuuceougiguhesug
+    iguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepvdefkeetuddufeeigedtheefffek
+    uedukeehudffudfffffggeeitdetgfdvhfdvnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihiidpnhgspghrtghp
+    thhtohepudelpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegvugguhiiikeejse
+    hgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnughrihhirdhnrghkrhihihhkohesghhm
+    rghilhdrtghomhdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtoheprghstheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhheskhgv
+    rhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlsehiohhgvggrrhgsohigrdhnvg
+    htpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdhr
+    tghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtghpthhtohepsh
+    honhhgsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:Ar1kZ8QZiPlQNIXCdPRdzFuMBfqWBnTKV3nqINDls8dj2BePfpd_uA>
+    <xmx:Ar1kZ8zUDHuZjuKE5TTVdzDcwI7cKF6gWnVuZldfo2M6Sn3G4k5u6g>
+    <xmx:Ar1kZy5_nICnCcMA3-SqMlf4GO4gl0O5QzO673cSgM6YgAqPBLrvEA>
+    <xmx:Ar1kZxwM6_HX1mMRX1NTbR0wU_EYC4wUg4_DASC2ow04GM8bbVoSPg>
+    <xmx:Ar1kZ5EKqn7ysuS1lzn323HtK0ElfxqdCNsBOXzBDY8amWWfIRnXb0Rs>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 19 Dec 2024 19:40:32 -0500 (EST)
+Date: Thu, 19 Dec 2024 17:40:30 -0700
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, andrii@kernel.org, 
+	ast@kernel.org, shuah@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next v5 4/5] bpf: verifier: Support eliding map
+ lookup nullness
+Message-ID: <f7taicw6c3f3yae4d6lrdagv26jiuihumklo4tkmqduvauargi@ld4bcmsbbiqn>
+References: <cover.1734045451.git.dxu@dxuuu.xyz>
+ <92065ca054beccd6d0f35efe9715ef965e8d379f.1734045451.git.dxu@dxuuu.xyz>
+ <CAEf4BzaqCgW9keiT+tJUBQWT6Q+jMwuvn4O2ZghO0c+ZvACNrw@mail.gmail.com>
+ <zow3q3nhlz6vedbni3upag5yr7zzrhyiqysl5nwyubebmbwojk@th7kbm62x36g>
+ <31b0c85dbf85486df116ade20caf8685843899b4.camel@gmail.com>
+ <CAEf4BzaEOBtrSWZTx40AdT=SQY6Qaia405KWgU-NowaqNdmpkA@mail.gmail.com>
+ <kghvgxu5wdkupssnq7dy5upuf2wscsxgsnwl2yoam4mwk3h5pn@wjjsliwg6fzl>
+ <a2999d8b4827516fe4bfd17646d2284580712d08.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241021062226.108657-1-manali.shukla@amd.com> <20241021062226.108657-3-manali.shukla@amd.com>
-Message-ID: <Z2S7wArwoBu4wBUb@google.com>
-Subject: Re: [PATCH v1 2/4] KVM: selftests: Add an interface to read the data
- of named vcpu stat
-From: Sean Christopherson <seanjc@google.com>
-To: Manali Shukla <manali.shukla@amd.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, 
-	shuah@kernel.org, nikunj@amd.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a2999d8b4827516fe4bfd17646d2284580712d08.camel@gmail.com>
 
-On Mon, Oct 21, 2024, Manali Shukla wrote:
-> From: Manali Shukla <Manali.Shukla@amd.com>
+On Thu, Dec 19, 2024 at 04:04:43PM -0800, Eduard Zingerman wrote:
+> On Thu, 2024-12-19 at 14:41 -0700, Daniel Xu wrote:
 > 
-> The interface is used to read the data values of a specified vcpu stat
-> from the currenly available binary stats interface.
+> [...]
 > 
-> Add a concatenation trickery to trigger compiler error if the stat
-> doesn't exist, so that it is not possible to pass a per-VM stat into
-> vcpu_get_stat().
+> > > > I think that if test operates on a key like:
+> > > > 
+> > > >       valid key 15
+> > > >              v
+> > > >       0000000f   <-- written to stack as a single u64 value
+> > > >       ^^^^^^^
+> > > >     stack zero marks
+> > > > 
+> > > > and is executed (e.g. using __retval annotation),
+> > > > then CI passing for s390 should be enough.
+> > > 
+> > > +1, something like that where for big-endian it will be all zero while
+> > > for little endian it would be 0xf (and then make sure that the test
+> > > should *fail* by making sure that 0xf is not a valid index, so NULL
+> > > check is necessary)
+> > 
+> > How would it work for LE to be 0xF but BE to be 0x0?
+> > 
+> > The prog passes a pointer to the beginning of the u32 to
+> > bpf_map_lookup_elem(). The kernel does a 4 byte read starting from that
+> > address. On both BE and LE all 4 bytes will be interpreted. So set bits
+> > cannot just go away.
+> > 
+> > Am I missing something?
 > 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Manali Shukla <Manali.Shukla@amd.com>
-> ---
->  .../testing/selftests/kvm/include/kvm_util.h  | 52 +++++++++++++++++++
->  .../kvm/include/x86_64/kvm_util_arch.h        | 36 +++++++++++++
->  tools/testing/selftests/kvm/lib/kvm_util.c    | 40 ++++++++++++++
->  3 files changed, 128 insertions(+)
+> Ok, thinking a bit more, the best test I can come up with is:
 > 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> index bc7c242480d6..5dd3acf174f8 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> @@ -531,6 +531,14 @@ void read_stat_data(int stats_fd, struct kvm_stats_header *header,
->  		    struct kvm_stats_desc *desc, uint64_t *data,
->  		    size_t max_elements);
->  
-> +#define DEFINE_CHECK_STAT(type, stat)			\
-> +static inline int check_##type##_##stat##_exists(void)	\
-> +{							\
-> +	return 1;					\
-> +}							\
-> +
-> +#define STAT_EXISTS(type, stat) (check_##type##_##stat##_exists())
+>   u8 vals[8];
+>   vals[0] = 0;
+>   ...
+>   vals[6] = 0;
+>   vals[7] = 0xf;
+>   p = bpf_map_lookup_elem(... vals ...);
+>   *p = 42;
+> 
+> For LE vals as u32 should be 0x0f;
+> For BE vals as u32 should be 0xf000_0000.
+> Hence, it is not safe to remove null check for this program.
+> What would verifier think about the value of such key?
+> As far as I understand, there would be stack zero for for vals[0-6]
+> and u8 stack spill for vals[7].
 
-This is all unnecessary complicated.  To trigger a compilation error, the set
-of knnown stats just needs to be defined as _something_ and then referenced.
-There's no need for layers of macros and a function for each stat.  The fact that
-a stat is defined is proof of its existence.
+Right. By checking that spill size is same as key size, we stay endian
+neutral, as constant values are tracked in native endianness.
 
-> +
->  void __vm_get_stat(struct kvm_vm *vm, const char *stat_name, uint64_t *data,
->  		   size_t max_elements);
->  
-> @@ -542,6 +550,50 @@ static inline uint64_t vm_get_stat(struct kvm_vm *vm, const char *stat_name)
->  	return data;
->  }
->  
-> +#define DEFINE_GENERIC_VCPU_STAT				\
-> +	DEFINE_CHECK_STAT(vcpu, halt_successfull_poll)		\
-> +	DEFINE_CHECK_STAT(vcpu, halt_attempted_poll)		\
-> +	DEFINE_CHECK_STAT(vcpu, halt_poll_invalid)		\
-> +	DEFINE_CHECK_STAT(vcpu, halt_wakeup)			\
-> +	DEFINE_CHECK_STAT(vcpu, halt_poll_success_ns)		\
-> +	DEFINE_CHECK_STAT(vcpu, halt_poll_fail_ns)		\
-> +	DEFINE_CHECK_STAT(vcpu, halt_wait_ns)			\
-> +	DEFINE_CHECK_STAT(vcpu, halt_poll_success_hist)		\
-> +	DEFINE_CHECK_STAT(vcpu, halt_poll_fail_hist)		\
-> +	DEFINE_CHECK_STAT(vcpu, halt_wait_hist)			\
-> +	DEFINE_CHECK_STAT(vcpu, blocking)			\
-> +
-> +/*
-> + * Define a default empty macro for architectures which do not specify
-> + * arch specific vcpu stats
-> + */
-> +
-> +#ifndef DEFINE_ARCH_VCPU_STAT
-> +#define DEFINE_ARCH_VCPU_STAT
-> +#endif
-> +
-> +DEFINE_GENERIC_VCPU_STAT
+However, if we were to start interpreting combinations of STACK_ZERO,
+STACK_MISC, and STACK_SPILL, the verifier would have to be endian aware
+(IIUC). Which makes it a somewhat interesting problem but also requires
+some thought to correctly handle the state space.
 
-There's also no need to define macros in arch code just to expand them in common
-code.  Add simple macros in kvm_util_types.h and this goes away.
+> You were going to add a check for the spill size, which should help here.
+> So, a negative test like above that checks that verifier complains
+> that 'p' should be checked for nullness first?
+> 
+> If anyone has better test in mind, please speak-up.
 
-> +DEFINE_ARCH_VCPU_STAT
-> +
-> +#undef DEFINE_CHECK_STAT
-> +#undef DEFINE_GENERIC_VCPU_STAT
-> +#undef DEFINE_ARCH_VCPU_STAT
+I think this case reduces down to a spill_size != key_size test. As long
+as the sizes match, we don't have to worry about endianness.
 
-> +void __vcpu_get_stat(struct kvm_vcpu *vcpu, const char *stat_name, uint64_t *data,
-> +		   size_t max_elements);
-> +
-> +#define vcpu_get_stat(vcpu, stat_name)				\
-> +({								\
-> +	uint64_t data;						\
-> +								\
-> +	STAT_EXISTS(vcpu, stat_name);				\
-> +	__vcpu_get_stat(vcpu, #stat_name, &data, 1);		\
-> +	data;							\
-> +})								\
-> +
-> +#undef DEFINE_CHECK_STAT
-> +#undef DEFINE_GENERIC_VCPU_STAT
-> +
-
-...
-
-> +void __vcpu_get_stat(struct kvm_vcpu *vcpu, const char *stat_name, uint64_t *data,
-> +		   size_t max_elements)
-> +{
-> +	int vcpu_stats_fd;
-> +	struct kvm_stats_header header;
-> +	struct kvm_stats_desc *desc, *t_desc;
-> +	size_t size_desc;
-> +	int i;
-> +
-> +	vcpu_stats_fd = vcpu_get_stats_fd(vcpu);
-> +	read_stats_header(vcpu_stats_fd, &header);
-> +
-> +	desc = read_stats_descriptors(vcpu_stats_fd, &header);
-> +	size_desc = get_stats_descriptor_size(&header);
-> +
-> +	for (i = 0; i < header.num_desc; ++i) {
-> +		t_desc = (void *)desc + (i * size_desc);
-> +
-> +		if (strcmp(t_desc->name, stat_name))
-> +			continue;
-> +
-> +		read_stat_data(vcpu_stats_fd, &header, t_desc,
-> +			       data, max_elements);
-> +		break;
-> +	}
-> +}
-
-This is copy-pasted nearly verbatim from the VM-scoped code.  It even has the
-same bugs (doesn't assert the stat exists), along with new bugs (leaks the fd
-and header).
-
-It takes a bit of work, but not _that_ much work, to genericize the VM-scoped
-infrastructure and reuse it for vCPU-scoped stats.
+Thanks,
+Daniel
 
