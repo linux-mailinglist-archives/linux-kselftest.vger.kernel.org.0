@@ -1,174 +1,110 @@
-Return-Path: <linux-kselftest+bounces-23712-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23713-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B6949F9E19
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Dec 2024 04:42:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FB059F9E33
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Dec 2024 05:06:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33B94188DD7E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Dec 2024 03:42:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AA0716A4DB
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Dec 2024 04:06:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF6E21D9A60;
-	Sat, 21 Dec 2024 03:41:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB3E1154444;
+	Sat, 21 Dec 2024 04:05:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HQN/eqnk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mPX/BEX0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F79191F88;
-	Sat, 21 Dec 2024 03:41:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 594422905;
+	Sat, 21 Dec 2024 04:05:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734752519; cv=none; b=Kgabjel8b0SmPrGSXvcsy5nMNiJsKfKCZc2Yjq+qYVlpBSmuAAVzfS/qG/XP7LaYz5xU11rJFLCYBTwlwk4KLY/OUsRl5ypi1OHWn4u5KJbSsMwIj1uPxjjkL2LiT3GMtp22BtgVTTfwxxy6HlQBii3bcOXdCxhDFZ1fE4iqEk4=
+	t=1734753959; cv=none; b=gdwArsmVg6T8PWG4/WFsL0AU9Qw5Lx/63lJIIslJU939jQwoYL2iQzC8ZaJ1QSyw/sSaD516OVv2Foyar6rZRcZjc4suIzU/DV4K3ap6WIrwJ7Qf66LYMCA/Wn/uFZq+7KWYqJVKJV5hQLpll8w4m4CuG5clwVkaCT8ZGYW8GG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734752519; c=relaxed/simple;
-	bh=yG9MP6/1nDTaMeFSwhjRT+j3EwObKL+mO76ZF2tLz3w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o5YJCrn5d9sxeTeu+/uTMwKmEw5Sj6IHOBRt/RikLQ4CGWHaXS44PmTvZq7NfQJwjGQTxHJXCk12Q4RY2AAI6wEThxIlLqAvsB4zqTr+r6XGqkUYzeWFxgOLaC6PMFH6tzXM0dwTBnvHmCG7TWCy37zP8oqU7VpdpsKxPNoMrY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HQN/eqnk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1BF4C4CEDC;
-	Sat, 21 Dec 2024 03:41:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734752518;
-	bh=yG9MP6/1nDTaMeFSwhjRT+j3EwObKL+mO76ZF2tLz3w=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=HQN/eqnkhplQgwaYqx6q/aYlGAAK3XbLp2SEXTYmh4ODuWAOhYYbhRgPEPov2Sr/6
-	 aeddXVi0PCLkolnEQ0OOfYPW8iRgtmA04BMZz4rEEMopWfpMVn5O5N8lzzBmxoTM59
-	 hAcKGIMI8f8jBbZcliMw6ZKRkCytJqoyuwbu/SEjRzLNq7RvGFdz79ZDQkuw53YTu+
-	 UfCoOCOC+8iYC243Vzc9mpJ01tovi7gtZL4IgXYvf1FjKrCz/h2arxGFKuCOfyrXRV
-	 4erL78nkO88U/+wiuXx5qA5oYKMSkqG/YZ7PyHTtlFNfmGLB0h3B4XemvMa4xZk+cZ
-	 3HeejBGaly6Qg==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-53e3c47434eso2650973e87.3;
-        Fri, 20 Dec 2024 19:41:58 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUMCwau5LA8QOc7VLcXzBoK9GVYsNf20WX1tBKP1FU2DMMJcpTt+9Ra6FXuhxTuTXnxyQNT8vCsBzgHFkRG@vger.kernel.org, AJvYcCUtaGK008EQvVgn184xWeKF09VKJxZQWjUHXSh4WfPfUD8kgoC2DWayXIg/vGky+hgZtb7/uhJxN0zgJkWNvhfq@vger.kernel.org, AJvYcCV4Cot6HWo0gMdrdH2t/j+3Nxs4bp2zD85Yih4yc3umO8I/zIIdPfLE8/MtUs9gBeVy+5g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgyhYrzsq3Cq5mRILGzqNsAa5hvrh8AA5Di9BD3Nn0xrHKLeLD
-	yKkT9lCrEpWBL0k1KHz6bg6mQ79ksZCdbvbZLacQhmSQmRKdLNpY+RgOrFV7JHPah5D/keeXa1T
-	UhYJOL0Qy1QEq59Aq9Yig1I9qeqU=
-X-Google-Smtp-Source: AGHT+IHIP6YEkUj/lGilUyhY5zs38Ycs0bicoiYQQh+9XbXFMhOFib18iKHw3u5M4pvLfqhkO62vVO5dxMj4pGpnNzc=
-X-Received: by 2002:a05:6512:230a:b0:53e:28e0:cde3 with SMTP id
- 2adb3069b0e04-54229540697mr1491984e87.30.1734752517474; Fri, 20 Dec 2024
- 19:41:57 -0800 (PST)
+	s=arc-20240116; t=1734753959; c=relaxed/simple;
+	bh=1WaPko44qPzgQph8NDihAxRlF2tass6KzBoO4iXRFJI=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=An1FGqIfteF/Lum3/0v1CgCU0QOu7WbKs64bINPKmWd7mRmGduHGprq+HC0OWJiRE3MZL5vFogGQNojW2WZYxd4LxByqeGMzceeMdrAuShqRu8LvnMtAkRCrBdzy/ZppGV9C96hW4wO9b2ujZSDdS4Zz9/Vs533yTPC+d7gSC4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mPX/BEX0; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7b6f19a6c04so215028685a.0;
+        Fri, 20 Dec 2024 20:05:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734753957; x=1735358757; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pzN8QfUAkxpC4Y01O5VArX/c81H4WRdPrqVwM/67j4c=;
+        b=mPX/BEX0/cHHV6JFv3M1vOZvZh1b4y1L3XX8SkIFRd21Ov8cKTDf0fRZVC6Eqq3s+t
+         YHmd/Dr5NWQcxg4riT7oUJvV0Y0PN5Rb+b1qxmT8AsVRS9swxzPe6VbhoiAv3pfmmJgF
+         QkuCZ2IMdCAl4nyK4Jo1ie8YrpHI8VYOXf3wUAl/Reus3lleiUMzTLKApisUfU/902jx
+         KYnGcm2zA+DV2JHulLR6n65gjytUdTaRJwI1cz4SxQKFmkaA2ki7FpNsaW6VJStJ5yYG
+         s5mEDv1U1tci8JDNP6x5gujKz/3tKAo/1HqTm33si+PhwvzOPCSNAIqoWeAp+mh6bQYC
+         yG7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734753957; x=1735358757;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pzN8QfUAkxpC4Y01O5VArX/c81H4WRdPrqVwM/67j4c=;
+        b=VZybjeqTVWx4UCyRj1xC/73GnoaeW+KglpvJLw5XJPN2dGH+qYW7W9NHxdIkhxeyZY
+         EWgShOWfp/WWWOKXchCbTaSahRPbIJgao4wifAYeGjDSL+rX4FZQKxOxOcJu/OALpOpn
+         43Jz5ri9+qdkK4KcVWCeAsXKBxXBjqsJXyX+K9aARQFop+f+ySOXTSSi3xLgueM/NDwA
+         +9ACw5g7hahvuxSzUfhH4hUXPNdzti4LBnqhNto892MjhCmUn27cdU57sAUZMq1xCdjc
+         Me8hLDnJm+tXg55NvCG/EDfPh/tptETHrqj4vhYehJIdRIItW6WBqsbd07QS+0NEH8h3
+         efkw==
+X-Forwarded-Encrypted: i=1; AJvYcCV7eLJAjQN7XdGcweEEMwg5HFUPb0wX1ABJ+pVhD46AuIUsqHGHCLZwgX28/rGNomyHsnmjkR/VZfUClPJy1b8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxuW42M+b/GSFhHtSHowXElN4Tt5qtWH35L43nkho7GXk0vwfR
+	v5g9bZI4hdxvVZKJm5f5qTTcDNkaYtKVz1Q/1oGEkzegJ+2WtDGg
+X-Gm-Gg: ASbGncsnEcSNwQrC7+xZBkwtM0GRI5IJLq/muMBUU6vedQYQDPjKbra+w0KtNZWK1Lc
+	VTvkv/xY3P6dlXEfUkur718jEIuhP/P9XWzwBkBu6x31jQkbx7LtwdOn5nxdOgq7Oa2OrpeLWH6
+	dLyzWbvJiqp+rr6oN2199cnmmQy2tXanfZ2AAy90H7oT2hondRmWKOcf92AL8TyyDRYzossrZZm
+	9tD1auPHxAnD8Scmq0FvhIpCJckoe9nWItiukxze3jxUWf8HI7lDCGuR73JQlqPsBMoePe58y1/
+	iBUelRYvzdLCGjNKqQhYvSYcUOL2b7hUSQ==
+X-Google-Smtp-Source: AGHT+IGA/Io+YQNP2P8lF5/4s/q2WOKbzSQ4EMuL2ypI+Wl9az589GEn2mxVpZjMM0VOd7PVMA8UGQ==
+X-Received: by 2002:a05:620a:1915:b0:7b6:73de:f340 with SMTP id af79cd13be357-7b9ba716869mr736590085a.12.1734753957028;
+        Fri, 20 Dec 2024 20:05:57 -0800 (PST)
+Received: from localhost (96.206.236.35.bc.googleusercontent.com. [35.236.206.96])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b9ac2df40bsm193508685a.39.2024.12.20.20.05.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Dec 2024 20:05:56 -0800 (PST)
+Date: Fri, 20 Dec 2024 23:05:55 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ davem@davemloft.net
+Cc: netdev@vger.kernel.org, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ shuah@kernel.org, 
+ willemb@google.com, 
+ petrm@nvidia.com, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <67663ea38bdc6_2bec4f29445@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20241220003116.1458863-1-kuba@kernel.org>
+References: <20241220003116.1458863-1-kuba@kernel.org>
+Subject: Re: [PATCH net-next] selftests: drv-net: assume stats refresh is 0 if
+ no ethtool -c support
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241217031052.69744-1-lizhijian@fujitsu.com>
-In-Reply-To: <20241217031052.69744-1-lizhijian@fujitsu.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 21 Dec 2024 12:41:21 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAS4yrEvvDOFdHyNxBp9Yzi9=eGRsO+2R-t+NNTOfp=gHg@mail.gmail.com>
-Message-ID: <CAK7LNAS4yrEvvDOFdHyNxBp9Yzi9=eGRsO+2R-t+NNTOfp=gHg@mail.gmail.com>
-Subject: Re: [PATCH RFC] Makefile: Export absolute srctree path for
- out-of-tree builds
-To: Li Zhijian <lizhijian@fujitsu.com>
-Cc: linux-kbuild@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Dec 17, 2024 at 12:10=E2=80=AFPM Li Zhijian <lizhijian@fujitsu.com>=
- wrote:
->
-> Fixes an issue where out-of-tree kselftest builds fail when building
-> the BPF and bpftools components. The failure occurs because the top-level
-> Makefile passes a relative srctree path ('..') to its sub-Makefiles, whic=
-h
-> leads to errors in locating necessary files.
->
-> For example, the following error is encountered:
->
-> ```
-> $ make V=3D1 O=3D$build/ TARGETS=3Dhid kselftest-all
-> ...
-> make -C ../tools/testing/selftests all
-> make[4]: Entering directory '/path/to/linux/tools/testing/selftests/hid'
-> make  -C /path/to/linux/tools/testing/selftests/../../../tools/lib/bpf OU=
-TPUT=3D/path/to/linux/O/kselftest/hid/tools/build/libbpf/ \
->             EXTRA_CFLAGS=3D'-g -O0'                                      =
-\
->             DESTDIR=3D/path/to/linux/O/kselftest/hid/tools prefix=3D all =
-install_headers
-> make[5]: Entering directory '/path/to/linux/tools/lib/bpf'
-> ...
-> make[5]: Entering directory '/path/to/linux/tools/bpf/bpftool'
-> Makefile:127: ../tools/build/Makefile.feature: No such file or directory
-> make[5]: *** No rule to make target '../tools/build/Makefile.feature'.  S=
-top.
-> ```
->
-> To resolve this, the srctree is exported as an absolute path (abs_srctree=
-)
-> when performing an out-of-tree build. This ensures that all sub-Makefiles
-> have the correct path to the source tree, preventing directory resolution
-> errors.
+Jakub Kicinski wrote:
+> Tests using HW stats wait for them to stabilize, using data from
+> ethtool -c as the delay. Not all drivers implement ethtool -c
+> so handle the errors gracefully.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-NACK.
-This negates 9da0763bdd82572be243fcf5161734f11568960f
-
-This is a recurring topic [1] because kselftest adopts a completely
-different build system.
-If kselftest cannot do this correctly, please do not hook it to the
-top-Makefile.
-
-[1] https://lore.kernel.org/linux-kbuild/cover.1657614127.git.guillaume.tuc=
-ker@collabora.com/
-
-
-
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> ---
-> Request for Additional Testing
->
-> We welcome all contributors and CI systems to test this change thoroughly=
-.
-
-This is NACKed. I recommend not wasting CI system resources.
-
-
-
-
-
-
-> In theory, this change should not affect in-tree builds. However, to ensu=
-re
-> stability and compatibility, we encourage testing across different
-> configurations.
->
-> What has been tested?
-> - out-of-tree kernel build
-> - out-of-tree kselftest-all
-> ---
->  Makefile | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/Makefile b/Makefile
-> index e5b8a8832c0c..36e65806bb5e 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -275,7 +275,8 @@ else ifeq ($(srcroot)/,$(dir $(CURDIR)))
->      srcroot :=3D ..
->  endif
->
-> -export srctree :=3D $(if $(KBUILD_EXTMOD),$(abs_srctree),$(srcroot))
-> +srctree :=3D $(if $(KBUILD_EXTMOD),$(abs_srctree),$(srcroot))
-> +export srctree :=3D $(if $(building_out_of_srctree),$(abs_srctree),$(src=
-tree))
->
->  ifdef building_out_of_srctree
->  export VPATH :=3D $(srcroot)
-> --
-> 2.44.0
->
->
-
-
---=20
-Best Regards
-Masahiro Yamada
+Reviewed-by: Willem de Bruijn <willemb@google.com>
 
