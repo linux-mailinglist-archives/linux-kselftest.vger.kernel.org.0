@@ -1,110 +1,127 @@
-Return-Path: <linux-kselftest+bounces-23713-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23714-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FB059F9E33
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Dec 2024 05:06:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F5BD9F9E4A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Dec 2024 05:53:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AA0716A4DB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Dec 2024 04:06:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCEF916B472
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Dec 2024 04:53:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB3E1154444;
-	Sat, 21 Dec 2024 04:05:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17FCE1DE2D4;
+	Sat, 21 Dec 2024 04:53:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mPX/BEX0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e9EFj1db"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 594422905;
-	Sat, 21 Dec 2024 04:05:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914D6817;
+	Sat, 21 Dec 2024 04:53:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734753959; cv=none; b=gdwArsmVg6T8PWG4/WFsL0AU9Qw5Lx/63lJIIslJU939jQwoYL2iQzC8ZaJ1QSyw/sSaD516OVv2Foyar6rZRcZjc4suIzU/DV4K3ap6WIrwJ7Qf66LYMCA/Wn/uFZq+7KWYqJVKJV5hQLpll8w4m4CuG5clwVkaCT8ZGYW8GG0=
+	t=1734756816; cv=none; b=CSvzbOF/7PEFMz+5SkqJ+jUyeV+mM6JFqlUBXf2j3DVqhb/O/BdzkeAIf9EUte3LI+CG7HZIeCgDRBlJOTF77Qr91L1oO3h9kuTa6sHSvm6jSewQWTJ4RvN9wjUsJSOLryW5YLT5N6XokmlTCPa4Z+jLTHZ/4QmW3/5eMev04MU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734753959; c=relaxed/simple;
-	bh=1WaPko44qPzgQph8NDihAxRlF2tass6KzBoO4iXRFJI=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=An1FGqIfteF/Lum3/0v1CgCU0QOu7WbKs64bINPKmWd7mRmGduHGprq+HC0OWJiRE3MZL5vFogGQNojW2WZYxd4LxByqeGMzceeMdrAuShqRu8LvnMtAkRCrBdzy/ZppGV9C96hW4wO9b2ujZSDdS4Zz9/Vs533yTPC+d7gSC4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mPX/BEX0; arc=none smtp.client-ip=209.85.222.169
+	s=arc-20240116; t=1734756816; c=relaxed/simple;
+	bh=a6ZvjQA4/kqmDuCOMFGSi2a2T8rwtspvFrFjZAv2Blc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ntz/5oVBq82C8uYgU2ABrN2Q5yACv0+J6sxIabWmAc3s2wZ+UyzQnC2GLlBkU47//3B7gVt5RpyWjosx5qj+bdf5/VPtjXqyeWJWdCwrixW97yOlN2F6mwL980Br6k/Q2kjctE854I2p5+XI2r3H+u7VBHB4X8qDlK4xXk8T+hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e9EFj1db; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7b6f19a6c04so215028685a.0;
-        Fri, 20 Dec 2024 20:05:58 -0800 (PST)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-216395e151bso17473435ad.0;
+        Fri, 20 Dec 2024 20:53:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734753957; x=1735358757; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pzN8QfUAkxpC4Y01O5VArX/c81H4WRdPrqVwM/67j4c=;
-        b=mPX/BEX0/cHHV6JFv3M1vOZvZh1b4y1L3XX8SkIFRd21Ov8cKTDf0fRZVC6Eqq3s+t
-         YHmd/Dr5NWQcxg4riT7oUJvV0Y0PN5Rb+b1qxmT8AsVRS9swxzPe6VbhoiAv3pfmmJgF
-         QkuCZ2IMdCAl4nyK4Jo1ie8YrpHI8VYOXf3wUAl/Reus3lleiUMzTLKApisUfU/902jx
-         KYnGcm2zA+DV2JHulLR6n65gjytUdTaRJwI1cz4SxQKFmkaA2ki7FpNsaW6VJStJ5yYG
-         s5mEDv1U1tci8JDNP6x5gujKz/3tKAo/1HqTm33si+PhwvzOPCSNAIqoWeAp+mh6bQYC
-         yG7g==
+        d=gmail.com; s=20230601; t=1734756814; x=1735361614; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=r/akANvp7VhtOPKaDZibMQ+5IWRJH6Tag+KqsgXaV/k=;
+        b=e9EFj1dbPeAWcfiuj8WUd3SqcY1tTZcevBbAEmpbZzSkTlyDokUGSgtTWSFjhotUzr
+         N2JQRlbZqCkznkFFPlO6/IuQFoM5SIytrXe/iqs31mlUYk77t2F7JunZhgciamDbxII+
+         vsEG/98EUN8sD7NNS9laDcj38NMjG5+X8nYa3JzkEQDqfORMJCOTmnlJOlKDY4DZSyby
+         t0E9kefaamJ542a78VOsgYncPnj4Q2v650Tt9mmk6nAfeQXvjGJPIYnhr2BrtVCHRCRV
+         no7s9e0YZA0SSLNOY8HTugBjjgCcLdk3LqNcJkHDo/V+ToP94jevIoWHPt94ge4wfd1a
+         THiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734753957; x=1735358757;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pzN8QfUAkxpC4Y01O5VArX/c81H4WRdPrqVwM/67j4c=;
-        b=VZybjeqTVWx4UCyRj1xC/73GnoaeW+KglpvJLw5XJPN2dGH+qYW7W9NHxdIkhxeyZY
-         EWgShOWfp/WWWOKXchCbTaSahRPbIJgao4wifAYeGjDSL+rX4FZQKxOxOcJu/OALpOpn
-         43Jz5ri9+qdkK4KcVWCeAsXKBxXBjqsJXyX+K9aARQFop+f+ySOXTSSi3xLgueM/NDwA
-         +9ACw5g7hahvuxSzUfhH4hUXPNdzti4LBnqhNto892MjhCmUn27cdU57sAUZMq1xCdjc
-         Me8hLDnJm+tXg55NvCG/EDfPh/tptETHrqj4vhYehJIdRIItW6WBqsbd07QS+0NEH8h3
-         efkw==
-X-Forwarded-Encrypted: i=1; AJvYcCV7eLJAjQN7XdGcweEEMwg5HFUPb0wX1ABJ+pVhD46AuIUsqHGHCLZwgX28/rGNomyHsnmjkR/VZfUClPJy1b8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxuW42M+b/GSFhHtSHowXElN4Tt5qtWH35L43nkho7GXk0vwfR
-	v5g9bZI4hdxvVZKJm5f5qTTcDNkaYtKVz1Q/1oGEkzegJ+2WtDGg
-X-Gm-Gg: ASbGncsnEcSNwQrC7+xZBkwtM0GRI5IJLq/muMBUU6vedQYQDPjKbra+w0KtNZWK1Lc
-	VTvkv/xY3P6dlXEfUkur718jEIuhP/P9XWzwBkBu6x31jQkbx7LtwdOn5nxdOgq7Oa2OrpeLWH6
-	dLyzWbvJiqp+rr6oN2199cnmmQy2tXanfZ2AAy90H7oT2hondRmWKOcf92AL8TyyDRYzossrZZm
-	9tD1auPHxAnD8Scmq0FvhIpCJckoe9nWItiukxze3jxUWf8HI7lDCGuR73JQlqPsBMoePe58y1/
-	iBUelRYvzdLCGjNKqQhYvSYcUOL2b7hUSQ==
-X-Google-Smtp-Source: AGHT+IGA/Io+YQNP2P8lF5/4s/q2WOKbzSQ4EMuL2ypI+Wl9az589GEn2mxVpZjMM0VOd7PVMA8UGQ==
-X-Received: by 2002:a05:620a:1915:b0:7b6:73de:f340 with SMTP id af79cd13be357-7b9ba716869mr736590085a.12.1734753957028;
-        Fri, 20 Dec 2024 20:05:57 -0800 (PST)
-Received: from localhost (96.206.236.35.bc.googleusercontent.com. [35.236.206.96])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b9ac2df40bsm193508685a.39.2024.12.20.20.05.55
+        d=1e100.net; s=20230601; t=1734756814; x=1735361614;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r/akANvp7VhtOPKaDZibMQ+5IWRJH6Tag+KqsgXaV/k=;
+        b=YLP1oznpwlg9GxaQlc2PshjxcRP7MHh3f/8TexW5BcusMSp32F2zKg0Fez09f7CAO5
+         bjqnk0ZuHRf3UVffMJ5eBRgpJPxRMWgm8K8E/9HDoKoKvYam+KNYjG1iLPNLAzN5LXjr
+         HTPBvLalHh0PQnu7Bean6VTHzVrWmI3WCTThFIhCX5nnqMfz8eZnLODaZN3Eajzq/aGj
+         01bJssPC0gIpkVGQZBYpSvAUSWqlykmc4OfOa22yybvuRuZq12Ol0NCwc1yWWmKnSK2o
+         C3PmhozuSCzZ9VEDeQ+Hofrqs6KIumGvoliKBlezbTHuqcyhApD3ucI3hzrQbjJCTGQK
+         HJcw==
+X-Forwarded-Encrypted: i=1; AJvYcCUfT2Bc6WIJYy3Y6MD69NmAFalIR1bL+/6gpUPWMjCVDe6BfgbE3Jdx4RWmORf6YRRB1q5oBH3oJxGZ3Eyy@vger.kernel.org, AJvYcCWcfSzukS8l7njYqSQ604B+Fh6U4ZNnpn1rqX4lcXIoQLZR8jsHvrlFqRolFPSRw6wwIBg=@vger.kernel.org, AJvYcCWhDnJ8P5nSqx5Zi5it7plNDENhSONwrFrqAsfdjfYs3vgVH+4VO4tBvm0EfawxJBVmDG9B84QBule9@vger.kernel.org, AJvYcCXdWp+e1iAjrcw6Tk61Kn5yEXLicCYXFcSiWUm78fg/T6ohyXT56wSLK7eq97szlLPrJvsaeA7D4iNLA8Wk5Ept@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMoa5LOnmo8HoyFf59Ai5/pq0lwuQtfPMA0e0DqrX0UUA+BpQj
+	YVUSllFeeaQ1GW3UyEjB6sjWNGEBH7pL+hpchDIYDomO0HeSRl0=
+X-Gm-Gg: ASbGncv1demMq4Gem57bgHh/nciUmPt0vknBY0dBGZkYJk8OtXeOvtJfJW8jNlLPcIM
+	vnM4TX5g37s+4zxoDPYtOujqh5CHHnM3SjWSVCHezODDoEpjDcywVNVyRROG4hZAzm20vdr7Oc3
+	y+4mhw9DzeRIcW4G5lZbRquXi7bMsZzMTuzlPuRovQyLhqEtSvVT2bSeDl+x1iUayX5ENVZo2BN
+	YpiAu9uYxNL2pcNmTbIQxDsNAhZsXKm4MbFohWpzOXEhhPBzfwgrZ2d
+X-Google-Smtp-Source: AGHT+IGefqGwlNhgS844VD5QltPfx06Q1qkLbqdGPbeGj27JsIktfQiNrqJssTxBch8qAGNI9J6jqA==
+X-Received: by 2002:a17:903:1c4:b0:215:58be:3349 with SMTP id d9443c01a7336-219e6cf87fbmr80420885ad.14.1734756813706;
+        Fri, 20 Dec 2024 20:53:33 -0800 (PST)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dca02888sm37069405ad.261.2024.12.20.20.53.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Dec 2024 20:05:56 -0800 (PST)
-Date: Fri, 20 Dec 2024 23:05:55 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- davem@davemloft.net
-Cc: netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- Jakub Kicinski <kuba@kernel.org>, 
- shuah@kernel.org, 
- willemb@google.com, 
- petrm@nvidia.com, 
- linux-kselftest@vger.kernel.org
-Message-ID: <67663ea38bdc6_2bec4f29445@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20241220003116.1458863-1-kuba@kernel.org>
-References: <20241220003116.1458863-1-kuba@kernel.org>
-Subject: Re: [PATCH net-next] selftests: drv-net: assume stats refresh is 0 if
- no ethtool -c support
+        Fri, 20 Dec 2024 20:53:33 -0800 (PST)
+Date: Fri, 20 Dec 2024 20:53:32 -0800
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, virtualization@lists.linux.dev,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	David Ahern <dsahern@kernel.org>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	Stefano Garzarella <sgarzare@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Kaiyuan Zhang <kaiyuanz@google.com>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Joe Damato <jdamato@fastly.com>, dw@davidwei.uk
+Subject: Re: [PATCH RFC net-next v1 0/5] Device memory TCP TX
+Message-ID: <Z2ZJzAqS7ZrnREuI@mini-arch>
+References: <20241221004236.2629280-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241221004236.2629280-1-almasrymina@google.com>
 
-Jakub Kicinski wrote:
-> Tests using HW stats wait for them to stabilize, using data from
-> ethtool -c as the delay. Not all drivers implement ethtool -c
-> so handle the errors gracefully.
+On 12/21, Mina Almasry wrote:
+> The TX path had been dropped from the Device Memory TCP patch series
+> post RFCv1 [1], to make that series slightly easier to review. This
+> series rebases the implementation of the TX path on top of the
+> net_iov/netmem framework agreed upon and merged. The motivation for
+> the feature is thoroughly described in the docs & cover letter of the
+> original proposal, so I don't repeat the lengthy descriptions here, but
+> they are available in [1].
 > 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Sending this series as RFC as the winder closure is immenient. I plan on
+> reposting as non-RFC once the tree re-opens, addressing any feedback
+> I receive in the meantime.
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+Thank you for squeezing it in before the window closure. I will be off
+on Monday-Wednesday, but I'll try to test it on Thursday-Friday.
 
