@@ -1,113 +1,112 @@
-Return-Path: <linux-kselftest+bounces-23726-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23727-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 373A29FA577
-	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Dec 2024 12:39:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 335ED9FA7A6
+	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Dec 2024 20:19:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C3161622E4
-	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Dec 2024 11:39:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7412718852C0
+	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Dec 2024 19:19:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50206158DC4;
-	Sun, 22 Dec 2024 11:39:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A907818BC36;
+	Sun, 22 Dec 2024 19:19:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="U5YmYccQ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OxjY5uLP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 078E3131E2D;
-	Sun, 22 Dec 2024 11:39:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64001531C1
+	for <linux-kselftest@vger.kernel.org>; Sun, 22 Dec 2024 19:19:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734867549; cv=none; b=VlHpkNjJC6ATnfwiNsww2eN60JK+okMRFZTsCH5ndDIq4IisHZswt4nhX3gA7ReVv3cM1kbAw8RWCci6rKCH6//wP9dQ1jEYPc2m4vdl73lzOommY8UXh5e+iUoMQWhb+ERdekwOJXi08zwrmXtE729cuMA5nKulsOXN5q4zG2Q=
+	t=1734895155; cv=none; b=GBNqsGj9Dt4hBPQ3ym8CqbQtAlSZsqwSpVAo4dj5igmKuGof/xzQa0VotkmcDzr4YV9t6yjK1K3mGxqBhJlT9S1txt73nGCQxFS4jrli4KsmNxlED7JkTck2mAnCQjvXITn7+O91fpcGqJWhftx6UH6cLkd/owwoKH1w73ao/S0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734867549; c=relaxed/simple;
-	bh=YPw6sMaDMzAuh1Vjj/VL1FTkNY/UOx5jYTXHVNGYTts=;
+	s=arc-20240116; t=1734895155; c=relaxed/simple;
+	bh=3fYwNzIBWKbEuxRCKjXnKf6+QLQCZIJ7U4RHQamSGUY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NCGVPAvdazlo4WEp/GfcaJmtjWsXxpcBsry4/pqlyOt424LnoP0krM+YEfyAQgUM6HtZ0no9w8Jyv9VfzSYzOQqc+hHzv0QzRpI1zVk3BGwAD2SPhmQ9l6UVe3NaC28G0FtNwL/5E+MxWp/S+y2N3XskyK9XByhzorOkIatf5JY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=U5YmYccQ; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1734867542;
-	bh=YPw6sMaDMzAuh1Vjj/VL1FTkNY/UOx5jYTXHVNGYTts=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=U5YmYccQ8QsUZuEHcBgt9b/0DxV/PbWZ9oM7L875luoqZl+AzzW3MKUoNf1ql8QVg
-	 PtA0+b617zdYsX24vztrIdVBeDS1M3tfvsUhsIoNYcsRCEKTCo4gEFlNv67Gfg1u6V
-	 LSisdAK6Z0NCFH6lLcOzofXeNC92Ab3Zv73bl2uE=
-Date: Sun, 22 Dec 2024 12:39:01 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>
-Cc: Shuah Khan <shuah@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, Zhangjin Wu <falcon@tinylab.org>
-Subject: Re: [PATCH 1/6] tools/nolibc: add support for waitid()
-Message-ID: <732f202e-c0de-493e-adec-59fe069b17c9@t-8ch.de>
-References: <20241221-nolibc-rv32-v1-0-d9ef6dab7c63@weissschuh.net>
- <20241221-nolibc-rv32-v1-1-d9ef6dab7c63@weissschuh.net>
- <20241221163540.GA11984@1wt.eu>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lLFAGc+bdI8UsLSTauJqwNKhfrh+9BIXxVmNFNIoIfSurkoCn6wl/CMbdm5WfS9me3zXkzWx2FNmyFnZq7Wq6NxxFViF1tQv43MHLTc5coX9IE43AkhJWr3fQXfIB2KHq+29upiMrQsxZAUkiqrFAszEavcv5A9AwDWi1fcQdao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OxjY5uLP; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1734895152;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3fYwNzIBWKbEuxRCKjXnKf6+QLQCZIJ7U4RHQamSGUY=;
+	b=OxjY5uLPt9BTGTTrrLM7dU45kdenvG5Z4cGpRn5MNF4gdYf81G3KBH1gmVXh60D1e0T0Uf
+	gFk4JSHwwara6krA+EweyIAERAa4gZ2kP/RRHmk3VQ9b6Tq2luZq2xn2QYGq2EOjtIpkmG
+	OLsvChvPCbS68hvpIfzOw9LRaUM8664=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-125-M0dHsuhIMK6xe8Bd2aO7gg-1; Sun,
+ 22 Dec 2024 14:19:09 -0500
+X-MC-Unique: M0dHsuhIMK6xe8Bd2aO7gg-1
+X-Mimecast-MFC-AGG-ID: M0dHsuhIMK6xe8Bd2aO7gg
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5DA5719560AA;
+	Sun, 22 Dec 2024 19:19:07 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.16])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 535C83000197;
+	Sun, 22 Dec 2024 19:19:02 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Sun, 22 Dec 2024 20:18:43 +0100 (CET)
+Date: Sun, 22 Dec 2024 20:18:37 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: Nam Cao <namcao@linutronix.de>
+Cc: Shuah Khan <shuah@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Dylan Hatch <dylanbhatch@google.com>,
+	"Eric W . Biederman" <ebiederm@xmission.com>,
+	John Ogness <john.ogness@linutronix.de>,
+	Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] fs/proc: do_task_stat: Fix ESP not readable during
+ coredump
+Message-ID: <20241222191837.GA4224@redhat.com>
+References: <cover.1730883229.git.namcao@linutronix.de>
+ <11e1777296b7d06085c9fd341bafc4b9d82e6e4e.1730883229.git.namcao@linutronix.de>
+ <20241217145923.GA29091@redhat.com>
+ <20241217150913.GB29091@redhat.com>
+ <20241220145326.Q7Z6NQ7j@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241221163540.GA11984@1wt.eu>
+In-Reply-To: <20241220145326.Q7Z6NQ7j@linutronix.de>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Hi Willy!
+Hi Nam,
 
-On 2024-12-21 17:35:40+0100, Willy Tarreau wrote:
-> On Sat, Dec 21, 2024 at 03:44:28PM +0100, Thomas Weißschuh wrote:
-> > waitid() is the modern variant of the family of wait-like syscalls.
-> > Some architectures have dropped support for wait(), wait4() and waitpid()
-> > but all of them support waitid().
-> > It is more flexible and easier to use than the older ones.
-> 
-> I'm generally fine with the series, but I'm starting to get concerned
-> that some simple applications that used to rely on wait() or waitpid()
-> will not work on this architecture. Just like we did for some early
-> syscalls that got replaced (e.g. open->openat etc), I think we'll have
-> to implement a default wrapper relying on waitid() for all these calls
-> in this case, and maybe as well for lseek->llseek() btw, what do you
-> think ?
+On 12/20, Nam Cao wrote:
+>
+> > Can't the trivial patch below fix the problem?
+>
+> It can. In fact this is the original fix we had. I thought that checking a
+> single "core_state" is simpler than checking 3 flags, oh well..
+>
+> Can you send a proper patch, or should I do it?
 
-Indeed, it would be nice to have full compatibility. However there are
-more syscalls missing than wait() and lseek(). These are just the
-missing ones affecting nolibc-test.
-Adding wrappers will be more work. This series is only meant to
-ensure that the existing limited support does not regress.
+Can you send V2 please? It was you who found/investigated the problem,
+and the patch is trivial.
 
-We can add compatibility wrappers one after the other on top.
-I think Zhangjin implemented and proposed a few before, but a few of
-them ended up complicated.
+Feel free to include my acked-by.
 
-> The single fact that you've had to modify some of the nolibc-test code
-> (which is supposed to be the application here) indicates that we're
-> progressively going away from what applications need on certain archs.
-> Ideally an application relying on long-established calls should continue
-> to work unmodified.
+Thanks,
 
-Agreed.
+Oleg.
 
-> Maybe it will be time for us to run an overall audit of arch-dependent
-> syscalls we currently have, to make sure that the common ones continue
-> to work fine there (and waitpid() definitely is as common a syscall as
-> open() since it's the good old and portable one).
-
-Isn't this what nolibc-test is already doing?
-Or do you also want to compare it to non-current kernel versions?
-
-In general the special rv32 syscalls are not really
-architecture-dependent, they just dropped the "legacy" ones, especially
-all using 32bit timestamps.
-
-
-Thomas
 
