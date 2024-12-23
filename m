@@ -1,98 +1,179 @@
-Return-Path: <linux-kselftest+bounces-23737-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23738-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3B5F9FB354
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Dec 2024 17:50:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAD8F9FB3E1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Dec 2024 19:14:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50C3C1632D6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Dec 2024 16:50:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B56291666D8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Dec 2024 18:14:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72D9A1A8F8B;
-	Mon, 23 Dec 2024 16:50:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E586D1BEF9D;
+	Mon, 23 Dec 2024 18:14:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WM6Djv83"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VEpJcF84"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F7F80038;
-	Mon, 23 Dec 2024 16:50:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6E912C544;
+	Mon, 23 Dec 2024 18:14:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734972635; cv=none; b=Yj2tlDxiJhr2pGrEBfGGgXc4BWJ/wzLg2Gfzwxw8yXWhN7G2hjM4k+j+csVQKIiQo/T87c/ypZH6kP5IRamxkmdlHc/iOSODPKk6mfNg9qEgI4ZeahQi++WzAW3vephPleQTpramaN3vhA2+SBeDL1BYbsJBPSr4KG5i48dTBQg=
+	t=1734977673; cv=none; b=cfkmXabPUfpzzvje++Q6B3y6NDKHqukE2zVoAUUo0qczs9StQobXsW/3l3iiFU5AvyRb1ecv6Vz6sW5hWnvfckoAmpiiHgfUFcCSm4Og5kefGtEsKFm6pqa8+BtPqAaXdyI7z9wxfCbvGM8LKknF6iMdZfaqVw/mh32eOSBic0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734972635; c=relaxed/simple;
-	bh=1ICzWEYg/SjkAHesfsZYH1PIBuyI7JOU8lzjwZ72/nU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BgNdYluVQbzKkna4KNR1SC9UDikig5a2cNLRyZ1+uGIq3B6jL4RoMsiFOo7wUiL8y7fq1Km9NPk3/F+cPe4XG5wjXqKBmr+bPHbLjWiFfaYMpnlntXnDomYy2LfwYEy7Hs3XXKM07ee5aQkhL+XUazoYPUyilHisEqv6QlR+7Dk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WM6Djv83; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 631A4C4CED4;
-	Mon, 23 Dec 2024 16:50:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734972634;
-	bh=1ICzWEYg/SjkAHesfsZYH1PIBuyI7JOU8lzjwZ72/nU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=WM6Djv83uHOx8hadDlR39Pf9KBY1yCY9se48fzkwqMwU3kLAJIKmqpavrHw0GdJ48
-	 f8it/EH/s4+kKbDKMSvkd4yPKvwNi/LMskJWfhRGb7gSBDlUAdpnjFiIonb9ABMu1P
-	 ukr8lM/OMuH9AOw8Xer9a+aGTjE6TKJRO/UggXUdPiiD8WgQKkgFE05yrcCKFGQAgK
-	 gb8NLJ10W8NcXCHJJRsed9gy+eOk5dZK9QcMxtYUY61BWOj2LZJygW+R62DAZlhpiv
-	 uOBL9Sef0HXeFrs42DIvrr8KUCq0JCdnygIeLUKGnWKYp3zqTrwCI/W+IWW/+t1+zZ
-	 huhRHvdV+pNOA==
-Date: Mon, 23 Dec 2024 08:50:33 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: Paolo Abeni <pabeni@redhat.com>, Soham Chakradeo
- <sohamch.kernel@gmail.com>, Willem de Bruijn <willemb@google.com>,
- netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- linux-kselftest@vger.kernel.org, Soham Chakradeo <sohamch@google.com>
-Subject: Re: [PATCH net-next 0/4] selftests/net: packetdrill: import
- multiple tests
-Message-ID: <20241223085033.5926d1a6@kernel.org>
-In-Reply-To: <6768dd1289ee2_3cff202943a@willemb.c.googlers.com.notmuch>
-References: <20241217185203.297935-1-sohamch.kernel@gmail.com>
-	<20241218100013.0c698629@kernel.org>
-	<19df2c4d-c40c-40c5-8fec-bb3e63e65533@redhat.com>
-	<676474a0398f0_1f2e51294ad@willemb.c.googlers.com.notmuch>
-	<20241219180144.7cf5226c@kernel.org>
-	<6768dd1289ee2_3cff202943a@willemb.c.googlers.com.notmuch>
+	s=arc-20240116; t=1734977673; c=relaxed/simple;
+	bh=ACi8vxZdg1xtJrN+M3qMtrF4XVnDsm9UPrvFVgwgpFw=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RmrHPMxb9rVfC/M4msh0t9B7He+a8kSmISvGeLcuRXo354p6APKhm7NVA0b3Pieqx0NYFxUgjoh852Q8IICGvQgEGEKjzKiBQvfeHRcC3ca88Aobu5xA1cIS4G33gU89oyTxPtnJeRRuzvaZAp8ytVIbMiMdlsOT1UmX3NrHPdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VEpJcF84; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BNBw84j019164;
+	Mon, 23 Dec 2024 18:13:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=+rHQBPfBA3sp/wpNzoOEpYr7
+	By9U3FbqOwM5hpdHtv4=; b=VEpJcF84xE/W+8ybUAkMtJelp+ThEbKlyfO/+zjq
+	mw10ilhp2oF/2hRdYBCTIdd2zyXg17dIVUXvWwn+IOxGdcu7mDQXpP3jdoUS4rF7
+	97opp87KPu9iqoblpYy+jqHvsj5iLFMdZLsHoibVwgsgdbMyG9AN6HaW7GOrS8ON
+	FwIRbWFMjKoZcxJg4N5Du8jOWJOQmC/tECwu58UvVvW6p7xWK6nZllByNfYUlLWV
+	fAfeFDkxnKvY6p8OUfbP0XDPvmtLGXNDJNf0SJ17CtlOXej4NiFRgtj/LW1kZyFJ
+	rCm2DBbKe2PnmQZFvLYUEsJyD7QkeS0DWW9XKKysHpgRfg==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43q7ev1afn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Dec 2024 18:13:57 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BNIDuQd028444
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Dec 2024 18:13:56 GMT
+Received: from PHILBER.na.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 23 Dec 2024 10:13:49 -0800
+Date: Mon, 23 Dec 2024 19:13:46 +0100
+From: Peter Hilber <quic_philber@quicinc.com>
+To: Richard Cochran <richardcochran@gmail.com>
+CC: <linux-kernel@vger.kernel.org>, <virtualization@lists.linux.dev>,
+        <virtio-dev@lists.linux.dev>, <netdev@vger.kernel.org>,
+        Trilok Soni
+	<quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eugenio =?utf-8?B?UMOpcmV6?=
+	<eperezma@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Andrew Lunn
+	<andrew+netdev@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>,
+        Jason Wang <jasowang@redhat.com>, Paolo Abeni
+	<pabeni@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Xuan Zhuo
+	<xuanzhuo@linux.alibaba.com>,
+        <linux-kselftest@vger.kernel.org>, <linux-api@vger.kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "Ridoux,
+ Julien" <ridouxj@amazon.com>,
+        John Stultz <jstultz@google.com>,
+        "Thomas
+ Gleixner" <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Anna-Maria
+ Behnsen" <anna-maria@linutronix.de>
+Subject: Re: [RFC PATCH 1/2] ptp: add PTP_SYS_OFFSET_STAT for xtstamping with
+ status
+Message-ID: <wcxdbqhoe4cppukyy5rvkq5am4ht6wk5u6d6g2k2swqhidjw7i@6nar5vuusm35>
+References: <20241219204208.3160-1-quic_philber@quicinc.com>
+ <20241219204208.3160-2-quic_philber@quicinc.com>
+ <Z2WLGHRdlsRpT6BL@hoboy.vegasvil.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Z2WLGHRdlsRpT6BL@hoboy.vegasvil.org>
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: lo_CQoVfd-cd2w2zqVfOdmlKGtmptnZ2
+X-Proofpoint-GUID: lo_CQoVfd-cd2w2zqVfOdmlKGtmptnZ2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ spamscore=0 lowpriorityscore=0 priorityscore=1501 phishscore=0
+ mlxlogscore=999 malwarescore=0 adultscore=0 suspectscore=0 bulkscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412230162
 
-On Sun, 22 Dec 2024 22:46:26 -0500 Willem de Bruijn wrote:
-> Jakub Kicinski wrote:
-> > On Thu, 19 Dec 2024 14:31:44 -0500 Willem de Bruijn wrote:  
-> > > All three timestamping flakes are instances where the script expects
-> > > the timestamp to be taken essentially instantaneously after the send
-> > > call.
-> > > 
-> > > This is not the case, and the delay is outside even the 14K tolerance.
-> > > I see occurrences of 20K. At some point we cannot keep increasing the
-> > > tolerance, perhaps.  
-> > 
-> > I pinned the other services away and gave the packetdrill tester its
-> > own cores. Let's see how much of a difference this makes.
-> > The net-next-2024-12-20--03-00 branch will be the first to have this.  
+On Fri, Dec 20, 2024 at 07:19:52AM -0800, Richard Cochran wrote:
+> On Thu, Dec 19, 2024 at 09:42:03PM +0100, Peter Hilber wrote:
+> > Ioctl PTP_SYS_OFFSET_PRECISE2 provides cross-timestamping of device time
+> > and system time. This can be used for virtualization where (virtualization)
+> > host and guest refer to the same clocksource. It may be preferred to
+> > indicate UTC time, rather than TAI. It is then useful to indicate when and
+> > how the host processes UTC leap seconds (stepping or smearing on leap
+> > seconds),
 > 
-> Thanks. It does not seem to resolve the flakes.
+> If the VM host provides TAI, then the guest may freely derive UTC and
+> leap seconds on its own.  Whether to smear leap seconds or not is
+> properly an administrative configuration choice in the VM guest.
 > 
-> At this point I think the best path is to run them in debug mode to
-> get coverage, but ignore errors. With the below draft patch, error
-> output is still logged. For instance:
-> 
-> # tcp_timestamping_partial.pkt:58: runtime error in recvmsg call: Bad timestamp 0 in scm_timestamping 0: expected=1734924748967958 (20000) actual=1734924748982069 (34111) start=1734924748947958
-> # ok 2 ipv6 # SKIP
 
-Makes sense. Can we make this XFAIL instead of SKIP, tho?
-Not exactly accurate but we try to use SKIP for reporting env / setup
-problems like missing commands. We have FAIL_TO_XFAIL and
-xfail_on_slow() in the lib for netdev bash tests, already.
+The precise synchronization of the VM guest with its immediate
+environment can also be important; a VM guest may depend the decision
+about leap second smearing on its environment. Also, the administrative
+configuration choice may change over the lifetime of a system.
+
+> Leap seconds are scheduled to be deleted in 2036.  If, between now and
+> then, another one occurs, it will be global event, not determined by a
+> VM host.  The way you find out about leap seconds is through
+> networking using the NTP (or even just downloading the published list
+> once in a while).  VM clients typically have networking, and so
+> they can learn about a leap second all by themselves.
+> 
+
+The intent is to also support (embedded) VM clients which are themselves
+not necessarily internetworked, which do not get a lot of maintenance,
+and which are not guaranteed to get an update within the typically less
+than 6 months between leap second announcement and occurrence. I will
+document this in the patch message.
+
+> > in particular if the guest is not guaranteed to have an
+> > up-to-date Time Zone Database or similar.
+> 
+> Time zones are not connected to leap seconds.
+> 
+
+The IANA Time Zone Database includes a leap seconds list.
+
+> > Also, a host may have a notion of how accurate its clock is w.r.t. the
+> > hosts' reference clocks.
+> 
+> I'm opposed to having device drivers try to claim any kind of clock
+> quality.  All of the clock control, servos, statistics, etc, are done
+> in user space, and so only user space software can generate meaningful
+> clock quality metrics.  Putting some kind of hand wavy values into
+> kernel drivers is just plain wrong IMO.
+
+I agree that a device driver should not determine clock quality metrics.
+The intent is that the driver forwards metrics, if such are advertised
+by the device. These metrics should describe the accuracy etc. of the
+device itself. The patch message should document this more clearly. The
+metrics can be determined e.g. by virtualization host user space
+software. The device driver would just expose the device metrics to user
+space.
+
+Thanks for the feedback,
+
+Peter
 
