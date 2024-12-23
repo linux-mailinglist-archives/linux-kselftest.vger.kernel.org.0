@@ -1,171 +1,176 @@
-Return-Path: <linux-kselftest+bounces-23730-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23731-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D1A19FA95D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Dec 2024 03:30:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF1609FA9D0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Dec 2024 04:46:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA40B7A062E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Dec 2024 02:30:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 002D81884E62
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Dec 2024 03:46:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C3B521348;
-	Mon, 23 Dec 2024 02:30:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B96A980038;
+	Mon, 23 Dec 2024 03:46:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jylnz1wZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZCWTuMHy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A6E3EA69;
-	Mon, 23 Dec 2024 02:30:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF1D64A;
+	Mon, 23 Dec 2024 03:46:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734921022; cv=none; b=kc0pW4oHfRmvHC4w6ecQfQuX69CasN1YhNva7vjnmwlwQKPzeAd64gLUtaZc9swb5WvO7wbu/z+gdNdI+BsWMAOdaEcumhVGeW6iYy2R+nFQPm5DmvxM9Jur4H04gKvAAYAoDhijeRM6XLCZSApuUgYwq0lhHykAw22NoUYyIdM=
+	t=1734925590; cv=none; b=L/AZEQnS1hQmWxSW/fiY8htiKENLlPVUG586nk3jBsyW0AK4c1oaAvVLrXqvBvbXPXXRbhrUORNkN0cLlR0yNLyqOZRIG54gzkcJeDfFywpHq62fUywhX+ISWRtxHbqdnnhe4F/avJ6IWNdBvlE5eb0VMRmcxSWbFGiJxYcZ8hU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734921022; c=relaxed/simple;
-	bh=846d+cRFBoDrFep8BfHDhcE6RYZkZKHKE60fLL1H0x4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z5qhZdszUKtdB5GS2anMD0XvKWb4PyOOzDzJMgM77wfNy1/C04HIrqlzi6mn/2qgpCpsnRiYG21WqEHBL3VXf+mY75UbO29UYQnTMUXAW2sd9Nya4sBVxRmji+kJ8lYhzdoX8fEFWf8DAzfTWhsIwHtgqlJbYH9UFMT7R35+tMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jylnz1wZ; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734921020; x=1766457020;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=846d+cRFBoDrFep8BfHDhcE6RYZkZKHKE60fLL1H0x4=;
-  b=Jylnz1wZfontQF03VHvyrKc1XCHjfWQByCsgwiUD80iClThSAm2/zo4p
-   H6Y0e780mBOcOn3NLXAl5LwxiekA/tVcKrcwFjmWsLvBy+qs2VxzVX1H2
-   9LrJVHjHUxFqGU8FD8Tdty01HFTPCb9jnah88dencyXoKJA9rTUa/Dhtx
-   2bQ2kXlYy6Ieob7UJtJk5wckdFulgwKalZidOB6MDqAdgvPi2j/pU0tbJ
-   oAR+fuFkPsWHWC77u5zVLxQtLAe4CzD2fbDD4073H644O62jk6FaO60n/
-   s1FUnnsOJKpQQ5v1P+mQpL7ULScnngQrjUAKSeFY9lx6yzU0dKIdyzP+m
-   w==;
-X-CSE-ConnectionGUID: Vc4zmSz6RSqPBdZ47Q2kdw==
-X-CSE-MsgGUID: NoRkUdOjR6OPxCmAFy54Jg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11294"; a="39320711"
-X-IronPort-AV: E=Sophos;i="6.12,256,1728975600"; 
-   d="scan'208";a="39320711"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2024 18:30:19 -0800
-X-CSE-ConnectionGUID: WxF/1ytIQjSsv80o60rM8A==
-X-CSE-MsgGUID: FxLvu3rfS3Gtu8sDqEny9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="103189883"
-Received: from allen-sbox.sh.intel.com (HELO [10.239.159.30]) ([10.239.159.30])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2024 18:30:14 -0800
-Message-ID: <74bc9dbe-3420-4f0c-9e32-db49327a723d@linux.intel.com>
-Date: Mon, 23 Dec 2024 10:28:32 +0800
+	s=arc-20240116; t=1734925590; c=relaxed/simple;
+	bh=JfeOxWnyv3SUEHJqwMm4FEys+TylQmQpBfVr7lhI7p8=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=fYUyN78rcatLA80RvIkyjy6YvnEHHngSUnt+JSzwQfytdshVl+/T/h1B7UL4IVFw3oJ+7t7m77y1ST9Ra1t6L+PQGG5pcTsBQWtM3vuE5UfmqVewjUDtIQKU8RsAbtvWEZ5FrEqTPCscwmYTfXPtmMOvpI8Em/J+yvugrlERG3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZCWTuMHy; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7b98a2e3b3eso160533385a.2;
+        Sun, 22 Dec 2024 19:46:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734925588; x=1735530388; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YFRQRoeZrGXA6lHV5tJUaxXAjSIRQ81AYPmgj+PQGfc=;
+        b=ZCWTuMHyYHq6pnnSG7CMsRPkQbf8qwGFlZcTTL6KPbP90/5xAJYYhLw/j+TvcwRSkZ
+         1aOIYDyvoWm9nEpO3Lt7Hfk1D27Eb5bAih4T1ziPOCLInXpKErJ6P65U/J9/hIC9wbqw
+         KJkvMcC9Gd766dfuNzCvreVaEgIYhtNegTHDKc60qd1ZPK19JLbEITO7Ea1Lc2TM2HEe
+         5z/lFKCAi0nz8zFCCaqo2uttzaxSpX54GpgaEIlcv9CJCdC9Hxmq6MJFOWqaBzLymexr
+         MPgf+xG8IxqZsIhSyQRH9j+nErSufuILNhPpkExx6k1LBkqCvw9bNYd00U8+U/+a5wG7
+         YiUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734925588; x=1735530388;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=YFRQRoeZrGXA6lHV5tJUaxXAjSIRQ81AYPmgj+PQGfc=;
+        b=q2blox0EpTrlS8/xlCWpwOsbhxHe8Neeqvwp6kgJFwkr/Wk4AsmtAmIfSsZfsGe44H
+         Q3n+2L+I+SOyy38o7N1gOdvl8hF/wW8l+S0RpwGLiF7fkXlU5dECHyLBej+1dvhiVEvt
+         Ched2HDqd007xL+EKgwlfaN4iynNLtHGkeEJ2Zk3gKWimbef76pVtZTveuLmHSbpinsm
+         OicSP9vXpgfxDgRk1am+b6HqRaF5kEliMZoVfCLYFHS9Yx3EyOPIezMhUhGlfk4S70Hq
+         o1l4k2j3m1zpnqwKWlnlSB0vb+9xIf+t5ryRpT3Dhlvpbb6HeZP7x7O5cdw1G3wD2mq1
+         vb2w==
+X-Forwarded-Encrypted: i=1; AJvYcCWJevnT2OfXLP5OrZG1giy08KrXm3kyi0Pf45rsM3+M9l1vF/ueOThn4+9aOuG6uRovqVk2xJzH@vger.kernel.org, AJvYcCWauARTDKU00BnzMRb/mAn+9f8kl/ChnBTCOLgGTSzncWEuH4wJhZWCDePmGsJ8olloigfcV4TU8iCkiZZkVnU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFLDJCztPdVTULE7XUPEBBclxfyXPufSlYatelIrYyxrOG1w/g
+	wzPXCQEIQCwZKs7QlgKObRi2XDmMCyoHAVv0+lbYN+H4QK9vL/mx
+X-Gm-Gg: ASbGncuofTHANix/PfrIGN4QMFp+y690UKj77dqMbRDtssXamFcLn/SlwLteXqotP4r
+	0IfpUx/v/fnVfg18PcWK4E/wNzTn346thAoPXvIc/sOfTHC18UmDn8JheafOIm3ZooAB4FeSKQQ
+	57DcPzPYPu5srD9Miqf42G3V63s0vCQ8Bl8dO7hWrqiPHIXPi46tGziBNo9sUteSRdtvm5PCjm1
+	TAB2BGShyT6XlUGO1+sveQHJZ/BeOUt5RxPgow6Bn72Q1s1CcRW1Mma1OqghK2EH1v/3Ssl8nJv
+	+ZXl3t1CE++Hi9juwyJDPOr2jOhNKuqDVw==
+X-Google-Smtp-Source: AGHT+IFxZ/PFYtoRTHD5I4xzQc+7Q8s0I7jc6H31fsySfBtgWmvkwzOLwyzllox0LcldHagbR+4M3g==
+X-Received: by 2002:a05:620a:191f:b0:7b6:d3e5:4f45 with SMTP id af79cd13be357-7b9ba79b519mr1949539685a.30.1734925587893;
+        Sun, 22 Dec 2024 19:46:27 -0800 (PST)
+Received: from localhost (96.206.236.35.bc.googleusercontent.com. [35.236.206.96])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b9ac2d15cfsm351932185a.34.2024.12.22.19.46.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Dec 2024 19:46:27 -0800 (PST)
+Date: Sun, 22 Dec 2024 22:46:26 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: Paolo Abeni <pabeni@redhat.com>, 
+ Soham Chakradeo <sohamch.kernel@gmail.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ netdev@vger.kernel.org, 
+ davem@davemloft.net, 
+ edumazet@google.com, 
+ linux-kselftest@vger.kernel.org, 
+ Soham Chakradeo <sohamch@google.com>
+Message-ID: <6768dd1289ee2_3cff202943a@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20241219180144.7cf5226c@kernel.org>
+References: <20241217185203.297935-1-sohamch.kernel@gmail.com>
+ <20241218100013.0c698629@kernel.org>
+ <19df2c4d-c40c-40c5-8fec-bb3e63e65533@redhat.com>
+ <676474a0398f0_1f2e51294ad@willemb.c.googlers.com.notmuch>
+ <20241219180144.7cf5226c@kernel.org>
+Subject: Re: [PATCH net-next 0/4] selftests/net: packetdrill: import multiple
+ tests
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 07/14] iommufd/viommu: Add iommufd_viommu_get_vdev_id
- helper
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: jgg@nvidia.com, kevin.tian@intel.com, will@kernel.org, corbet@lwn.net,
- joro@8bytes.org, suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
- dwmw2@infradead.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
- iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- eric.auger@redhat.com, jean-philippe@linaro.org, mdf@kernel.org,
- mshavit@google.com, shameerali.kolothum.thodi@huawei.com,
- smostafa@google.com, ddutile@redhat.com, yi.l.liu@intel.com,
- patches@lists.linux.dev
-References: <cover.1734477608.git.nicolinc@nvidia.com>
- <21d7e63b97d81d0acf9127418a67efe386787261.1734477608.git.nicolinc@nvidia.com>
- <56c65e50-5890-42af-85b7-85f8a1bf5cf5@linux.intel.com>
- <Z2OpylDlhLXoo3dt@Asurada-Nvidia>
-Content-Language: en-US
-From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <Z2OpylDlhLXoo3dt@Asurada-Nvidia>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-On 12/19/24 13:06, Nicolin Chen wrote:
-> On Thu, Dec 19, 2024 at 10:05:53AM +0800, Baolu Lu wrote:
->> On 12/18/24 13:00, Nicolin Chen wrote:
->>> This is a reverse search v.s. iommufd_viommu_find_dev, as drivers may want
->>> to convert a struct device pointer (physical) to its virtual device ID for
->>> an event injection to the user space VM.
->>>
->>> Again, this avoids exposing more core structures to the drivers, than the
->>> iommufd_viommu alone.
->>>
->>> Signed-off-by: Nicolin Chen<nicolinc@nvidia.com>
->>> ---
->>>    include/linux/iommufd.h        |  8 ++++++++
->>>    drivers/iommu/iommufd/driver.c | 20 ++++++++++++++++++++
->>>    2 files changed, 28 insertions(+)
->>>
->>> diff --git a/include/linux/iommufd.h b/include/linux/iommufd.h
->>> index b082676c9e43..ac1f1897d290 100644
->>> --- a/include/linux/iommufd.h
->>> +++ b/include/linux/iommufd.h
->>> @@ -190,6 +190,8 @@ struct iommufd_object *_iommufd_object_alloc(struct iommufd_ctx *ictx,
->>>    					     enum iommufd_object_type type);
->>>    struct device *iommufd_viommu_find_dev(struct iommufd_viommu *viommu,
->>>    				       unsigned long vdev_id);
->>> +unsigned long iommufd_viommu_get_vdev_id(struct iommufd_viommu *viommu,
->>> +					 struct device *dev);
->> Hi Nicolin,
->>
->> This series overall looks good to me. But I have a question that might
->> be irrelevant to this series itself.
->>
->> The iommufd provides both IOMMUFD_OBJ_DEVICE and IOMMUFD_OBJ_VDEVICE
->> objects. What is the essential difference between these two from
->> userspace's perspective?
-> A quick answer is an IOMMUFD_OBJ_DEVICE being a host physical
-> device and an IOMMUFD_OBJ_VDEVICE being an IOMMUFD_OBJ_DEVICE
-> related to IOMMUFD_OBJ_VIOMMU. Two of them can be seen in two
-> different layers. May refer to this graph:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/ 
-> Documentation/userspace-api/iommufd.rst?h=v6.13-rc3#n150
+Jakub Kicinski wrote:
+> On Thu, 19 Dec 2024 14:31:44 -0500 Willem de Bruijn wrote:
+> > All three timestamping flakes are instances where the script expects
+> > the timestamp to be taken essentially instantaneously after the send
+> > call.
+> > 
+> > This is not the case, and the delay is outside even the 14K tolerance.
+> > I see occurrences of 20K. At some point we cannot keep increasing the
+> > tolerance, perhaps.
 > 
->> And, which object ID should the IOMMU device
->> driver provide when reporting other events in the future?
->>
->> Currently, the IOMMUFD uAPI reports IOMMUFD_OBJ_DEVICE in the page
->> fault message, and IOMMUFD_OBJ_VDEVICE (if I understand it correctly) in
->> the vIRQ message. It will be more future-proof if this could be defined
->> clearly.
-> A vIRQ is actually reported per-vIOMMU in this design. Although
-> in the this series the SMMU driver seems to report a per-device
-> vIRQ, it internally converts the vDEVICE to a virtual device ID
-> and packs the virtual device ID into a per-vIOMMU event:
-> 
-> +/**
-> + * struct iommu_virq_arm_smmuv3 - ARM SMMUv3 Virtual IRQ
-> + *                                (IOMMU_VIRQ_TYPE_ARM_SMMUV3)
-> + * @evt: 256-bit ARM SMMUv3 Event record, little-endian.
-> + *       (Refer to "7.3 Event records" in SMMUv3 HW Spec)
-> + *
-> + * StreamID field reports a virtual device ID. To receive a virtual IRQ for a
-> + * device, a vDEVICE must be allocated via IOMMU_VDEVICE_ALLOC.
-> + */
-> +struct iommu_virq_arm_smmuv3 {
-> +	__aligned_le64 evt[4];
->   };
+> I pinned the other services away and gave the packetdrill tester its
+> own cores. Let's see how much of a difference this makes.
+> The net-next-2024-12-20--03-00 branch will be the first to have this.
 
-Thanks for the explanation. Maybe I am a bit over-considering here.
+Thanks. It does not seem to resolve the flakes.
 
-Initially, my understanding is to report a virtual device ID when the
-object originates from a vIOMMU, and an iommufd device ID otherwise.
+At this point I think the best path is to run them in debug mode to
+get coverage, but ignore errors. With the below draft patch, error
+output is still logged. For instance:
 
-However, considering page fault scenarios, which are self-contained but
-linked to a hardware page table (hwpt), introduces ambiguity. Hwpt can
-be created with or without a vIOMMU. This raises the question: should
-the page fault message always report the iommufd device ID, or should
-the reporting depend on whether the hwpt was created from a vIOMMU?
+# tcp_timestamping_partial.pkt:58: runtime error in recvmsg call: Bad timestamp 0 in scm_timestamping 0: expected=1734924748967958 (20000) actual=1734924748982069 (34111) start=1734924748947958
+# ok 2 ipv6 # SKIP
 
-Thanks,
-baolu
+Such timestamping test failures are fairly straightforward. We could
+just increase the KSFT_MACHINE_SLOW timeout. But other tests see an
+actual difference in TCP stack behavior, e.g., size of packet. That is
+not addressed by a further relaxation of the tolerance.
+
+
++++ b/tools/testing/selftests/net/packetdrill/ksft_runner.sh
+@@ -23,7 +23,7 @@ if [ $# -ne 1 ]; then
+        ktap_exit_fail_msg "usage: $0 <script>"
+        exit "$KSFT_FAIL"
+ fi
+-script="$1"
++script="$(basename $1)"
+ 
+ if [ -z "$(which packetdrill)" ]; then
+        ktap_skip_all "packetdrill not found in PATH"
+@@ -31,16 +31,27 @@ if [ -z "$(which packetdrill)" ]; then
+ fi
+ 
+ declare -a optargs
++failfunc=ktap_test_fail
++
+ if [[ -n "${KSFT_MACHINE_SLOW}" ]]; then
+        optargs+=('--tolerance_usecs=14000')
++
++       declare -ar skip_list=(
++               "tcp_fast_recovery_prr-ss.*.pkt"
++               "tcp_timestamping.*.pkt"
++               "tcp_user_timeout_user-timeout-probe.pkt"
++               "tcp_zerocopy_epoll_.*.pkt"
++       )
++       readonly skip_pattern="^($(printf '%s|' "${skip_list[@]}"))$"
++       [[ "$script" =~ ${skip_pattern} ]] && failfunc=ktap_test_skip
+ fi
+ 
+ ktap_print_header
+ ktap_set_plan 2
+ 
+-unshare -n packetdrill ${ipv4_args[@]} ${optargs[@]} $(basename $script) > /dev/null \
+-       && ktap_test_pass "ipv4" || ktap_test_fail "ipv4"
+-unshare -n packetdrill ${ipv6_args[@]} ${optargs[@]} $(basename $script) > /dev/null \
+-       && ktap_test_pass "ipv6" || ktap_test_fail "ipv6"
++unshare -n packetdrill ${ipv4_args[@]} ${optargs[@]} $script > /dev/null \
++       && ktap_test_pass "ipv4" || $failfunc "ipv4"
++unshare -n packetdrill ${ipv6_args[@]} ${optargs[@]} $script > /dev/null \
++       && ktap_test_pass "ipv6" || $failfunc "ipv6"
+
 
