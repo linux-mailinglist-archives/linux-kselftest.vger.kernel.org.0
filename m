@@ -1,100 +1,142 @@
-Return-Path: <linux-kselftest+bounces-23741-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23742-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0BBD9FB8CF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Dec 2024 04:04:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04E139FBFDB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Dec 2024 16:59:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3455188336A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Dec 2024 03:04:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 690867A1F18
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Dec 2024 15:59:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80AEB18AE2;
-	Tue, 24 Dec 2024 03:04:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F4D71D6DA3;
+	Tue, 24 Dec 2024 15:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IgWgtgJd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8416FB0;
-	Tue, 24 Dec 2024 03:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC2BF1D90DC;
+	Tue, 24 Dec 2024 15:59:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735009455; cv=none; b=Y+HQubLQ9hjZot6MnprPtlTkLV6dac7adECJQMQa+MB9oIOyRxSx2z0wqf9sCyIurga/WP2Dy09LSEudD+Ldf2gDe638gP9GP8oJDIL58U0At3OQg995dFA2EnG3Gd+xLSF3WI7WDH3wwMQKsxH/zEzhOR1yVfTAZ6kCQ4rOJaY=
+	t=1735055982; cv=none; b=qeRLDwLPJEoiMSzYJcmKFOIOViWB+EQe5kuTumoID1PKA2NFexA2nGTO3I/8ogVXVhLXCm/ARAAEWtlxjnDNik1J4UtqHw1HL6Eczq4dLsEDmAroxRVUHJbjXKzNLOzwJeZgqeWBE4KYEmMVStasMHu3ZV07l71lwFIQTUgWyvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735009455; c=relaxed/simple;
-	bh=YxA0KHq7c4WL8WEfp7rdnCJqMKDdaSip03Dk/2E0JmM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=V2RajuRPYDn7hO95GLn/WPIUeopZ7lN0r/1HykBR2tesclOsPlp/E08Ib89z3nykByD6ZAdx9IaJc1PmDSC+/tZr8UdCaCjvuGlj2A06G6sRl54DCBslUJiXPcuLMxU1mgPcApdnlFk7+YwGwfnSnZOw4r5B66HpK1xU2+tu+tY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDD6AC4CED3;
-	Tue, 24 Dec 2024 03:04:12 +0000 (UTC)
-Date: Mon, 23 Dec 2024 22:05:04 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Vincent Donnefort <vdonnefort@google.com>, mhiramat@kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- kernel-team@android.com, aha310510@gmail.com, eadavis@qq.com,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/ring-buffer: Add test for out-of-bound pgoff
- mapping
-Message-ID: <20241223220504.4ae4adf2@gandalf.local.home>
-In-Reply-To: <20241218170318.2814991-1-vdonnefort@google.com>
-References: <20241218170318.2814991-1-vdonnefort@google.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1735055982; c=relaxed/simple;
+	bh=7DyIlHjFebT6zDyVRgFUxZ6GijPPif5/KWh4Fb844mk=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=IwPiA6Q+4FhtrVHOZUGjFuP+fEzlTAqkBqU2l/HOA1xu7qv+RWSyVES5bMrTJuhmGaHb5LYF2R3qxDNTOoOQ7Q5LCYsXiaHmAmEEBWnsxmEVqOgri1Wgvp3tyf2D92BkdA4XFhia4cJjWjJkXL0lNczyREqkXdbOT2/6AYscL2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IgWgtgJd; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6d8e773ad77so39097026d6.2;
+        Tue, 24 Dec 2024 07:59:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1735055979; x=1735660779; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EsEj38Wc4+3p/n8Nt86B3Bu1A1OGSpRTG9YDhoxEV88=;
+        b=IgWgtgJdEwsajFRnwqZN1Uwo9TZcFyOqyYhbzYsCQN8kFxtFO8jA+aOXfCkYzSDI9X
+         fObfGg+9GokgvYeatZsvPxZe2Fo1SGDPNs/Cmjo82iemLUYEZBxlAUW5Kj6hjcit+Qc1
+         C8Hsr5RoOE3Eld7Fq1Kin9CLitOyYZVxvyZj8sq9RgqoFHSF9uQVVWfEgxqyyWEeZOaa
+         BejFKbgtJ32zlUbLaJ1PC1xug1cUdxIHQef3EJYtu6DNlLoWwaWRGneLNQm7pqrqFrCc
+         s6bwx66WjiWgnSQo9Yn31QPrwiGHm6aGc37uikNJfxajpOfa9qJM5yLVKWXHTcYGwatM
+         mNXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735055979; x=1735660779;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EsEj38Wc4+3p/n8Nt86B3Bu1A1OGSpRTG9YDhoxEV88=;
+        b=QWFEYSbeEawFx3vgEnNHMSnolzAyV8iAdizc52wOm/bRvhhBRu/QrXmtONIXhZcbOx
+         EdgtqCpD+m4G0exJ2LQAihXo650AM7fs8M8xmCZkmaPFOFdbyjoCmOak4hxy3bNelE0r
+         zH50G2hcyOfSbMPtgA2SEuSYYqQng+mrbumVK6gF981SCCIIEHbrH/ugkwRixpuD487L
+         hCX9BepSK6TpO6e4ZQpxpmJV6KrCu/t2qHndI3Vz0zYUJ6HG8OydWmHnw62oxmx7e4er
+         3GY+TdRUpi7c8l0mfXjjQRII7PL9CA9NdzDiqol89SrhYX2DNC5RoMPy9ygKGmQzBXYZ
+         W+Gg==
+X-Forwarded-Encrypted: i=1; AJvYcCWrvBTmnkIpEn0ZVMJYl1AJNSeFHrb23uKfyMQqMTdGbClOh+YAkrUFVNH6/Zbyq138kYYCDAi89bxWwer83Ek=@vger.kernel.org, AJvYcCXOb/5+tuoT5D251soDcncujQM+o8f7IXo/ASRLnbt8+5LEhZj5FkKM0Kv+MXeUWLB4OuxTTvFe@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPP41yOOT5WnSy5pxGioM8wTOlpVO69/ZDFRgS/vBoypsb6AwY
+	Ac8KV8Sw0jK9XXeQr42FHMR1+y3/qaPXwCHTulH7SwHOkQKfLl1a
+X-Gm-Gg: ASbGncsmP43vjlj9dNGG6z6JR2PCVe7lkKGh5jdjUIGZULPVhDoiJlLvUNNrGt4K6ZZ
+	+jkgIgjPJFmRmUdzkD6TfRhjRUjX2fP7BKCh+CrnmYrdyvSsVDRA6HGmpFeroHwM2rCprOgPoMu
+	H956Uf84AmVUUkrQHX9AEEaC6z2B5Ym1rb/pAyh7XmfIOvcYOCG53CqcNt69rTlo9EoYmgYIFft
+	aivBBsVZ/woG9w8qV2l5mXPT9PNYUFbspQDzz80ResExfkzvAbutlPZYK7HMkYBG/wq8k29Ck+M
+	DJ8nfO9HSH0JADCpz634zZ7F2uO6lF398w==
+X-Google-Smtp-Source: AGHT+IE5mT88U2Wl8oS8QkxtmWuijssZtkB7o5MwrCcB3QQmeGdC1zJ3aGAay9In5k9TFWdV3VSZhA==
+X-Received: by 2002:a05:6214:2242:b0:6d8:fa8a:af7e with SMTP id 6a1803df08f44-6dd23337bc0mr255685596d6.12.1735055979477;
+        Tue, 24 Dec 2024 07:59:39 -0800 (PST)
+Received: from localhost (96.206.236.35.bc.googleusercontent.com. [35.236.206.96])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6dd181bb525sm53931386d6.97.2024.12.24.07.59.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Dec 2024 07:59:38 -0800 (PST)
+Date: Tue, 24 Dec 2024 10:59:38 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: Paolo Abeni <pabeni@redhat.com>, 
+ Soham Chakradeo <sohamch.kernel@gmail.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ netdev@vger.kernel.org, 
+ davem@davemloft.net, 
+ edumazet@google.com, 
+ linux-kselftest@vger.kernel.org, 
+ Soham Chakradeo <sohamch@google.com>
+Message-ID: <676ada6afb03_a069c294d6@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20241223085033.5926d1a6@kernel.org>
+References: <20241217185203.297935-1-sohamch.kernel@gmail.com>
+ <20241218100013.0c698629@kernel.org>
+ <19df2c4d-c40c-40c5-8fec-bb3e63e65533@redhat.com>
+ <676474a0398f0_1f2e51294ad@willemb.c.googlers.com.notmuch>
+ <20241219180144.7cf5226c@kernel.org>
+ <6768dd1289ee2_3cff202943a@willemb.c.googlers.com.notmuch>
+ <20241223085033.5926d1a6@kernel.org>
+Subject: Re: [PATCH net-next 0/4] selftests/net: packetdrill: import multiple
+ tests
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-
-Hi Shuah,
-
-Care to take this through your tree?
-
-On Wed, 18 Dec 2024 17:03:18 +0000
-Vincent Donnefort <vdonnefort@google.com> wrote:
-
-> Extend the ring-buffer mapping test coverage by checking an out-of-bound
-> pgoff which has proven to be problematic in the past.
+Jakub Kicinski wrote:
+> On Sun, 22 Dec 2024 22:46:26 -0500 Willem de Bruijn wrote:
+> > Jakub Kicinski wrote:
+> > > On Thu, 19 Dec 2024 14:31:44 -0500 Willem de Bruijn wrote:  
+> > > > All three timestamping flakes are instances where the script expects
+> > > > the timestamp to be taken essentially instantaneously after the send
+> > > > call.
+> > > > 
+> > > > This is not the case, and the delay is outside even the 14K tolerance.
+> > > > I see occurrences of 20K. At some point we cannot keep increasing the
+> > > > tolerance, perhaps.  
+> > > 
+> > > I pinned the other services away and gave the packetdrill tester its
+> > > own cores. Let's see how much of a difference this makes.
+> > > The net-next-2024-12-20--03-00 branch will be the first to have this.  
+> > 
+> > Thanks. It does not seem to resolve the flakes.
+> > 
+> > At this point I think the best path is to run them in debug mode to
+> > get coverage, but ignore errors. With the below draft patch, error
+> > output is still logged. For instance:
+> > 
+> > # tcp_timestamping_partial.pkt:58: runtime error in recvmsg call: Bad timestamp 0 in scm_timestamping 0: expected=1734924748967958 (20000) actual=1734924748982069 (34111) start=1734924748947958
+> > # ok 2 ipv6 # SKIP
 > 
-> Cc: Shuah Khan <skhan@linuxfoundation.org>
-> Cc: linux-kselftest@vger.kernel.org
-> Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
-> 
-> diff --git a/tools/testing/selftests/ring-buffer/map_test.c b/tools/testing/selftests/ring-buffer/map_test.c
-> index d10a847130fb..a58f520f2f41 100644
-> --- a/tools/testing/selftests/ring-buffer/map_test.c
-> +++ b/tools/testing/selftests/ring-buffer/map_test.c
-> @@ -233,12 +233,18 @@ TEST_F(map, data_mmap)
->  	ASSERT_NE(data, MAP_FAILED);
->  	munmap(data, data_len);
->  
-> -	/* Overflow the available subbufs by 1 */
-> +	/* Offset within ring-buffer bounds, mapping size overflow */
->  	meta_len += desc->meta->subbuf_size * 2;
->  	data = mmap(NULL, data_len, PROT_READ, MAP_SHARED,
->  		    desc->cpu_fd, meta_len);
->  	ASSERT_EQ(data, MAP_FAILED);
->  
-> +	/* Offset outside ring-buffer bounds */
-> +	data_len = desc->meta->subbuf_size * desc->meta->nr_subbufs;
-> +	data = mmap(NULL, data_len, PROT_READ, MAP_SHARED,
-> +		    desc->cpu_fd, data_len + (desc->meta->subbuf_size * 2));
-> +	ASSERT_EQ(data, MAP_FAILED);
-> +
->  	/* Verify meta-page padding */
->  	if (desc->meta->meta_page_size > getpagesize()) {
->  		data_len = desc->meta->meta_page_size;
-> 
-> base-commit: 61baee2dc5341c936e7fa7b1ca33c5607868de69
+> Makes sense. Can we make this XFAIL instead of SKIP, tho?
+> Not exactly accurate but we try to use SKIP for reporting env / setup
+> problems like missing commands. We have FAIL_TO_XFAIL and
+> xfail_on_slow() in the lib for netdev bash tests, already.
 
-You can ignore the above "base-commit" (I don't have it), as it applies
-fine to v6.13-rc4.
+Sounds good. I'll add a ktap_test_xfail() to stay with that API.
+I see no clean way to make use of xfail_on_slow directly.
 
--- Steve
+When net-next reopens, unless the noisy dash is annoying.
 
