@@ -1,65 +1,68 @@
-Return-Path: <linux-kselftest+bounces-23754-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23755-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CD059FCC8F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Dec 2024 19:12:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85E1E9FCC90
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Dec 2024 19:12:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0805A16184F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Dec 2024 18:12:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29669161894
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Dec 2024 18:12:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39F4613DBB6;
-	Thu, 26 Dec 2024 18:12:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34CB6145335;
+	Thu, 26 Dec 2024 18:12:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b="sy0h9CTj"
+	dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b="WssSvYF3"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.eurecom.fr (smtp.eurecom.fr [193.55.113.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 729E9136351
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Dec 2024 18:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A93B145A11
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Dec 2024 18:12:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.55.113.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735236739; cv=none; b=oxT1CU+efxHkI6TEaOo7oyK9hVEbOfv9QpTiN3rdGALqdMZlrI9U57d5basel8lcf5F5+zTj2VMSUY9/tIa6JMyJYTojDrI+LgyPhcUa4Edew6j7m3MG7LbZmnnJs+Y13ecNrP08E5ZR/3MwRyo+lGlbBqZ2VCk7i0/unQpKW/k=
+	t=1735236742; cv=none; b=TqRLQwQgKx4l5P14x70GxfO/LZpKnU7fuoZD9eO2njX/xNfM52eKHLPuhCWrKzNbnZzj4m8aQcXXe1hmTjyDYUoPYLlvyMtUEbacJF03b1+DICK4fCLdZRp25lAZWuq24q+OiQo43PweiwL/AO4kpSg8Wx1yPXC9vRTP2VWwAmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735236739; c=relaxed/simple;
-	bh=uhMfqDUhtkR+GQP452MsKCCd8W8gks/GmHEk4DiWRYY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ky4VhhLNFgsbh2673WxwlDNluO7YSl4zXXw7RN5+ceYorGnjPiEBli0M9shOnvx1z5aiIZl7rUmQGjilKl1Vt9IUjp3tfp4RAvWr0aBLvQo2j3KoekENJswxo3iwUe6vIY2GtMUtt/AjMJ4OoiEFwaDkG2oUy6FJOJT+BNCWaPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eurecom.fr; spf=pass smtp.mailfrom=eurecom.fr; dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b=sy0h9CTj; arc=none smtp.client-ip=193.55.113.210
+	s=arc-20240116; t=1735236742; c=relaxed/simple;
+	bh=nzG1DzuJnea5g6X5o1vjigq8qEV2BSXYKeLXVo9tUuI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CKjXOoVhPGuvruoeJnISte0TuDvv22zTufZ/bgTdilhMJPz6AfJeqyOHFkIJZp/zPwdstW0nOx6Hnm6LR+VWnU87cG+GdNGnizZXXsnej6FrwgiH6ZHdNqsBbzMON6YO7FGxeaEhjluC7ZjP5swEbep/ch39Gp0Pr625hBHK1cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eurecom.fr; spf=pass smtp.mailfrom=eurecom.fr; dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b=WssSvYF3; arc=none smtp.client-ip=193.55.113.210
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eurecom.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eurecom.fr
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=eurecom.fr; i=@eurecom.fr; q=dns/txt; s=default;
-  t=1735236735; x=1766772735;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=uhMfqDUhtkR+GQP452MsKCCd8W8gks/GmHEk4DiWRYY=;
-  b=sy0h9CTjfod+dpU8F/bTNaV5TvkSkRRkFenREM4rAGJw2ctj004OcW8r
-   6c4kV6Z0sS8P+kWp17s3Vu9FIPHVQyewzG7X0gQ9TGC0rr0deN2ryO4/k
-   uMS0vFUFxV7zhxfKaER2YgVjWj8yLphQMlCJvASuf9G26rT/RAxuU5jgh
-   0=;
-X-CSE-ConnectionGUID: JD5S3PjXTfOTUTDfJTyZvw==
-X-CSE-MsgGUID: Yy361EnIQw2HBvR8nINvUw==
+  t=1735236739; x=1766772739;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=nzG1DzuJnea5g6X5o1vjigq8qEV2BSXYKeLXVo9tUuI=;
+  b=WssSvYF3oyd0cnRtgNoBDvfJc8JSEMYgZ5o17+Ge44iuGqpFJQTmtjbg
+   g1N68OuNep6FrZU9hGES4Qzk+15dBAZ0pcEM+67JbWLaKrZb14qP0Lym9
+   YPdnjx/agu69Rr6+BJGGdzlj/wsXxszluc5H8RtYm77RuqQKK1laG4OUe
+   c=;
+X-CSE-ConnectionGUID: CO6kCXVHQN69+vrx+oCIgQ==
+X-CSE-MsgGUID: AQZNUrUyT7KyQs1p26BKSA==
 X-IronPort-AV: E=Sophos;i="6.12,267,1728943200"; 
-   d="scan'208";a="28325974"
+   d="scan'208";a="28325975"
 Received: from waha.eurecom.fr (HELO smtps.eurecom.fr) ([10.3.2.236])
-  by drago1i.eurecom.fr with ESMTP; 26 Dec 2024 19:12:07 +0100
+  by drago1i.eurecom.fr with ESMTP; 26 Dec 2024 19:12:10 +0100
 Received: from ntu.. (88-183-119-157.subs.proxad.net [88.183.119.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtps.eurecom.fr (Postfix) with ESMTPSA id 1B8D62DB2;
-	Thu, 26 Dec 2024 19:12:07 +0100 (CET)
+	by smtps.eurecom.fr (Postfix) with ESMTPSA id AA2D62DB3;
+	Thu, 26 Dec 2024 19:12:10 +0100 (CET)
 From: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
 To: linux-kselftest@vger.kernel.org
 Cc: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>,
+	kernel test robot <lkp@intel.com>,
 	Christian Brauner <brauner@kernel.org>
-Subject: [PATCH 0/1] selftests: Clear -Wimplicit-function-declaration warnings
-Date: Thu, 26 Dec 2024 19:09:32 +0100
-Message-ID: <20241226181203.527121-1-ariel.otilibili-anieli@eurecom.fr>
+Subject: [PATCH 1/1] selftests: Clear -Wimplicit-function-declaration warnings
+Date: Thu, 26 Dec 2024 19:09:33 +0100
+Message-ID: <20241226181203.527121-2-ariel.otilibili-anieli@eurecom.fr>
 X-Mailer: git-send-email 2.43.0
-Cs: Shuah Khan <shuah@kernel.org>
+In-Reply-To: <20241226181203.527121-1-ariel.otilibili-anieli@eurecom.fr>
+References: <20241226181203.527121-1-ariel.otilibili-anieli@eurecom.fr>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,21 +72,58 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hello,
+Seen while compiling tests,
 
-This patch clears out warnings seen while compiling the tests; at the time, it closes a test report.
+```
+$ make -C tools/testing/selftests/ TARGET=bpf 2>&1 | grep implicit
 
-Thank you,
+pidfd_fdinfo_test.c:230:13: warning: implicit declaration of function ‘mount’ [-Wimplicit-function-declaration]
+pidfd_fdinfo_test.c:236:15: warning: implicit declaration of function ‘umount2’; did you mean ‘SYS_umount2’? [-Wimplicit-function-declaration]
+pid_max.c:42:15: warning: implicit declaration of function ‘mount’ [-Wimplicit-function-declaration]
+pid_max.c:48:9: warning: implicit declaration of function ‘umount2’; did you mean ‘SYS_umount2’? [-Wimplicit-function-declaration]
+```
 
-Link: https://lore.kernel.org/oe-kbuild-all/202412222015.lMBH62zB-lkp@intel.com/
+Adding sys/mount in the header clears out the warnings
 
-Ariel Otilibili (1):
-  selftests: Clear -Wimplicit-function-declaration warnings
+```
+$ make -C tools/testing/selftests/ TARGET=bpf 2>&1 | grep implicit; echo $?
+1
+```
 
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202412222015.lMBH62zB-lkp@intel.com/
+Cc: Christian Brauner <brauner@kernel.org>
+Cs: Shuah Khan <shuah@kernel.org>
+Signed-off-by: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
+---
  tools/testing/selftests/pid_namespace/pid_max.c   | 1 +
  tools/testing/selftests/pidfd/pidfd_fdinfo_test.c | 1 +
  2 files changed, 2 insertions(+)
 
+diff --git a/tools/testing/selftests/pid_namespace/pid_max.c b/tools/testing/selftests/pid_namespace/pid_max.c
+index 51c414faabb0..96f274f0582b 100644
+--- a/tools/testing/selftests/pid_namespace/pid_max.c
++++ b/tools/testing/selftests/pid_namespace/pid_max.c
+@@ -10,6 +10,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <syscall.h>
++#include <sys/mount.h>
+ #include <sys/wait.h>
+ 
+ #include "../kselftest_harness.h"
+diff --git a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+index f062a986e382..f718aac75068 100644
+--- a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
++++ b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+@@ -13,6 +13,7 @@
+ #include <syscall.h>
+ #include <sys/wait.h>
+ #include <sys/mman.h>
++#include <sys/mount.h>
+ 
+ #include "pidfd.h"
+ #include "../kselftest.h"
 -- 
 2.43.0
 
