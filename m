@@ -1,45 +1,46 @@
-Return-Path: <linux-kselftest+bounces-23769-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23770-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E16989FD12D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Dec 2024 08:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5709F9FD132
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Dec 2024 08:29:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DB24163AAD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Dec 2024 07:28:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC6EF163CF2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Dec 2024 07:28:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 188AD145B1D;
-	Fri, 27 Dec 2024 07:28:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FB211465BE;
+	Fri, 27 Dec 2024 07:28:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VWflVN7V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XIKjst/1"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D077513DDD3;
-	Fri, 27 Dec 2024 07:28:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9241448DC;
+	Fri, 27 Dec 2024 07:28:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735284526; cv=none; b=S6Ba99Hcy970ECNLXm9NlgyzNBJmKB/z21e/wE0gMzHbeD/xFzmg4lZ0XuD3+al+TVL78vTvhU7KpMRaEdv3Cxt9DXI9n0A6kRae21h3l0HzWyIhtN2ia1XWM96aLGvpoQnaD61NJ5/HICKv2VVNVQRlF/ZtQOXH5mVua/3ANA4=
+	t=1735284536; cv=none; b=AkpuyGN9dpZhc9qgwKIcy1PEHionrJ5yN3iVMX0iBI9Fww56jempGUNpp6ROXc5O6WQwZjkBh4BwQYcb9aY13GsM/Oq8C10Hh+0tASP7I3FZJDVcubHxhgb7ZuWw68wVVmD5pyQqSh4AuuZjrMj6CyGyol9UMUGvWCQGlNvfShM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735284526; c=relaxed/simple;
-	bh=jbs+82vTwYkxQ3EpjI+1yvm0nBPBr9HhcF8xhKMgyb4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Sryd9bmshc9uGklD1hy/cCeXzwuudDVAqYTBr2h/FF3nkaO2bxTqKTlf4SpAnIVm3sfr1yKHcaILypQaL3MBH5RwZvGzJaIo7wLNrBRB+cmcGZOUdEH6lY401p9DCiltyMS8sCHsbmrMoiilfz58KbZTGpcejaOh6S+cJC27kW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VWflVN7V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BECBC4CED0;
-	Fri, 27 Dec 2024 07:28:35 +0000 (UTC)
+	s=arc-20240116; t=1735284536; c=relaxed/simple;
+	bh=dDY3jvGc45EmH43gWTWL5MYq9/Q1o2IM8rTUBWv64F4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=GSymvEPxNwS1YCCFq5V3MaOn8WfRAIFVxMRVlsWSiVk/RqWTKnxmoGiWv44SSDYbXOuJBtA1YNsgjuFnmXsIiLhji+6w/IQXlS8YtRYzK+yhVrNF+0VBOIk21CnMQCaqADdVRTQIf/3kI9SOwz34dDZMGLC+Qmc2jX/bGvLmix0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XIKjst/1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE67BC4CEE0;
+	Fri, 27 Dec 2024 07:28:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735284525;
-	bh=jbs+82vTwYkxQ3EpjI+1yvm0nBPBr9HhcF8xhKMgyb4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=VWflVN7Vf0mMrePAw/GmezMrZdtva3K3h36HGmBxa/KroU575WF5NJHeh0C6TXNjF
-	 qQhJ4X9PGAqzjrUVpQRiVvwIGMd+mISM5MQXFvk45sfhmzlny3nUqVMIbeY6kdii/w
-	 zWWKCDoOIlTrr71quUFFRbqLg+DHcfKtQtVHdMmb1lnaMhGLAzyiY7V3autquhweL9
-	 gpxz7kV3lQ4EAySR1yDZ2syQZsNyGHLgB/w6HxDmV2RAqrWKXeYkMQOMk5oc3c8Pn5
-	 sSBAIqOuQ0ZL0h2iDfLAfuFMjvlnSpx46Mfk1CVcx/gQmlnCTUUVbl2c6KeEM5cwGT
-	 y+LUWaqHdI5Jg==
+	s=k20201202; t=1735284535;
+	bh=dDY3jvGc45EmH43gWTWL5MYq9/Q1o2IM8rTUBWv64F4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=XIKjst/1wY9OLHzpWhKj4UYzvvFmcR4hmg80K6xgftHuqpsmSc/WhiGud59GDjjzi
+	 aNz3dTtAuVNVEHjllJa1agh/PcGzzQ66TpAnxGLd8odvdPn/NGL5AyLFLNK0v+Lnhp
+	 bhPN1Os0xv0DFA2Rowt02pnOqtwzGCgnOcp8m0lYJbqUII24zTaeAR3jrs4wuFfxUY
+	 +QIvMRxsnN0EZtVPbUliy1r7vLNbumpP1LYjLd+z4MU8NZ06lZWiXEn3S3nkWyCjKQ
+	 N/1w2f1V8lMe32qPhndZ+dbjWAY10MCC6iOXhG754bFZ9u/qEZfhDQflknVMn5jliH
+	 ZskGTUVYsxgjw==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Andy Lutomirski <luto@kernel.org>,
@@ -84,10 +85,12 @@ Cc: Andy Lutomirski <luto@kernel.org>,
 	linux-um@lists.infradead.org,
 	live-patching@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH 0/8] x86/module: rework ROX cache to avoid writable copy
-Date: Fri, 27 Dec 2024 09:28:17 +0200
-Message-ID: <20241227072825.1288491-1-rppt@kernel.org>
+Subject: [PATCH 1/8] x86/mm/pat: cpa-test: fix length for CPA_ARRAY test
+Date: Fri, 27 Dec 2024 09:28:18 +0200
+Message-ID: <20241227072825.1288491-2-rppt@kernel.org>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241227072825.1288491-1-rppt@kernel.org>
+References: <20241227072825.1288491-1-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -98,67 +101,31 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Hi,
+The CPA_ARRAY test always uses len[1] as numpages argument to
+change_page_attr_set() although the addresses array is different each
+iteration of the test loop.
 
-Following Peter's comments [1] these patches rework handling of ROX caches
-for module text allocations. 
+Replace len[1] with len[i] to have numpages matching the addresses array.
 
-Instead of using a writable copy that really complicates alternatives
-patching, temporarily remap parts of a large ROX page as RW for the time of
-module formation and then restore it's ROX protections when the module is
-ready.
+Fixes: ecc729f1f471 ("x86/mm/cpa: Add ARRAY and PAGES_ARRAY selftests")
+Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+---
+ arch/x86/mm/pat/cpa-test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-To keep the ROX memory mapped with large pages, make set_memory code
-capable of restoring large pages (more details are in patch 3).
-
-The patches also available in git
-https://git.kernel.org/rppt/h/execmem/x86-rox/v8
-
-[1] https://lore.kernel.org/all/20241209083818.GK8562@noisy.programming.kicks-ass.net
-
-Kirill A. Shutemov (1):
-  x86/mm/pat: Restore large pages after fragmentation
-
-Mike Rapoport (Microsoft) (7):
-  x86/mm/pat: cpa-test: fix length for CPA_ARRAY test
-  x86/mm/pat: drop duplicate variable in cpa_flush()
-  execmem: add API for temporal remapping as RW and restoring ROX
-    afterwards
-  module: introduce MODULE_STATE_GONE
-  modules: switch to execmem API for remapping as RW and restoring ROX
-  Revert "x86/module: prepare module loading for ROX allocations of
-    text"
-  module: drop unused module_writable_address()
-
- arch/um/kernel/um_arch.c                      |  11 +-
- arch/x86/entry/vdso/vma.c                     |   3 +-
- arch/x86/include/asm/alternative.h            |  14 +-
- arch/x86/include/asm/pgtable_types.h          |   2 +
- arch/x86/kernel/alternative.c                 | 181 ++++++---------
- arch/x86/kernel/ftrace.c                      |  30 ++-
- arch/x86/kernel/module.c                      |  45 ++--
- arch/x86/mm/pat/cpa-test.c                    |   2 +-
- arch/x86/mm/pat/set_memory.c                  | 216 +++++++++++++++++-
- include/linux/execmem.h                       |  31 +++
- include/linux/module.h                        |  21 +-
- include/linux/moduleloader.h                  |   4 -
- include/linux/vm_event_item.h                 |   2 +
- kernel/module/kallsyms.c                      |   8 +-
- kernel/module/kdb.c                           |   2 +-
- kernel/module/main.c                          |  86 ++-----
- kernel/module/procfs.c                        |   2 +-
- kernel/module/strict_rwx.c                    |   9 +-
- kernel/tracepoint.c                           |   2 +
- lib/kunit/test.c                              |   2 +
- mm/execmem.c                                  | 118 ++++++++--
- mm/vmstat.c                                   |   2 +
- samples/livepatch/livepatch-callbacks-demo.c  |   1 +
- .../test_modules/test_klp_callbacks_demo.c    |   1 +
- .../test_modules/test_klp_callbacks_demo2.c   |   1 +
- .../livepatch/test_modules/test_klp_state.c   |   1 +
- .../livepatch/test_modules/test_klp_state2.c  |   1 +
- 27 files changed, 511 insertions(+), 287 deletions(-)
-
+diff --git a/arch/x86/mm/pat/cpa-test.c b/arch/x86/mm/pat/cpa-test.c
+index 3d2f7f0a6ed1..ad3c1feec990 100644
+--- a/arch/x86/mm/pat/cpa-test.c
++++ b/arch/x86/mm/pat/cpa-test.c
+@@ -183,7 +183,7 @@ static int pageattr_test(void)
+ 			break;
+ 
+ 		case 1:
+-			err = change_page_attr_set(addrs, len[1], PAGE_CPA_TEST, 1);
++			err = change_page_attr_set(addrs, len[i], PAGE_CPA_TEST, 1);
+ 			break;
+ 
+ 		case 2:
 -- 
 2.45.2
 
