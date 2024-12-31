@@ -1,136 +1,168 @@
-Return-Path: <linux-kselftest+bounces-23792-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23793-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA5A19FED7B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Dec 2024 08:42:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F3D39FEF89
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Dec 2024 14:14:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03A043A2976
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Dec 2024 07:42:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E2541883210
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Dec 2024 13:14:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28B4D18873E;
-	Tue, 31 Dec 2024 07:42:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2B2619D88F;
+	Tue, 31 Dec 2024 13:13:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="QsKlaobR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Hgtjg3Ll"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25936EB7D
-	for <linux-kselftest@vger.kernel.org>; Tue, 31 Dec 2024 07:42:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E6419CD1D
+	for <linux-kselftest@vger.kernel.org>; Tue, 31 Dec 2024 13:13:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735630939; cv=none; b=feCTtkS5LuBQKIh2sy37Pe4UmrD0VNVujMSFg1MJdARBTZGCWPkAw/KHyjLOkth8fQg9V3OuCLoEJq4wd38XSDtm8x9iVl7L2xDyj6U4+YmjZaLWw0TomTA43zhyhf7fvMtc4r6pg6J3FbXlqD/m6hG0A1r7fZ9ha8P+gCY3qkw=
+	t=1735650839; cv=none; b=WXVr/hVTDoUdW4Amkl6lvdF4Y+MXLQWc20z6/lz56+a7LVjouNuN88k7iMH65ZiWP/tC/2d9qXDxVI1CTx9xspF+XF21nEYNprw+DgYmQjtmKcVupHLf3UlW+r6AXW9fzL6tZoAZq8bZk0kQAx0rp1q1FXWdt2h7kyHcisLNUv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735630939; c=relaxed/simple;
-	bh=OIIIHvRIxIHxEBMmDuGdkER/XB9yAK9pRHFHJSHH2Nk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iu/zFFOZlySwLBusu/l+WqDd7Wot1fDXXBzV4O71VPX8pqIGK/YY5w6IdoSI64CVTwTx5cePAWx3qyqtyy3W7zriHZIrAffAsvYz0/GqHYx19Vrivyw7StHMgGZ1eu0Rt9H22U2ijQfJPdMjSqcTc0IUSP+UX1S5QXLe9UsQf/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=QsKlaobR; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aa66ead88b3so1798373666b.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Dec 2024 23:42:16 -0800 (PST)
+	s=arc-20240116; t=1735650839; c=relaxed/simple;
+	bh=GZGMWyQUBw5pvCtQOnp4NjRcrAnPqiX8Obv8YFOqrxo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SI7PC3aF+e9JPx79eypvVdUjV/H528eMVqG1Y+rx04MSgDClkGAcTAZdo5SNpiXRbRFE/YIC6KncflCmNPOtOCeH46Oq00ylmWFiHIPfqzN73NazYvv8YicgDEFz3DmaA0kjjZDSG0vD8e2fy+96neil4SwXQMNlT9gNPo+FmiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Hgtjg3Ll; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21619108a6bso124268105ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Dec 2024 05:13:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1735630935; x=1736235735; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SUQ/117o2pVOfsQwHm9Em7LXO/LveElAMhz4OgmXTrM=;
-        b=QsKlaobRqW5WfgOLJhs3QcoRm+6VquQKBWzay6xhNFGXTR/J8tRL5fHdZXwS6n6ssu
-         ob4lTP/qIo8breSwvXl5AKNPmLpgSlDU2ndSA41l7rajEVgsfHqMsBgN1xyPchfVwyQZ
-         13B07bRIq4h79LY9QxF1/VcRBL3nruIOZTvyAIY7tdmJofoJ7g+6imCdGI/plziHJkTZ
-         NLBrso+YDg8dVzCrVtNlIgbUOdZ5yK0jxHYnZ+YvMMPMfricNI6pAonwwKZLBO3glz0s
-         Rq5kt+Q2w1oaWyIGj8Vsjz6mlIMbd80sgreGa4+x1wRsnFp48uCOfT1Ifh+rC4ho1/3d
-         YR8Q==
+        d=linaro.org; s=google; t=1735650837; x=1736255637; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fZgp4jfle0ZGJPd2mHyE73pz/6DhpqLqrjCBngOXHZ4=;
+        b=Hgtjg3LlF6mWFgQoo2+KBkF1BmXy0IEDZmvkN1plRzxo5cSpFNxZhTXVvUQj86fdU0
+         84k803cFmw4ESrQOj++TFveRCM+oTdInGzO0B4B+NJ4mxykWc/RV5nJQpg5yKdx+UTYP
+         yp/xHaf6SEo4H68GFpKT8XCztI1PXo+HLtrM8mc2suo72YjHLfyFuo4zK/z+f+Nvsevz
+         9I7WefFLZ/uIkemLkVgC9T8TeUD6EhN6urnTl/tRTw7qdf8uZwVVGmWfyTm/rw4PuiRL
+         89mBkZdcgIYcgigyii3OFFA8JoMe5/2onSDEuTFeTLSOTy8YLtMr5rN17FnFuvUztPUL
+         kIQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735630935; x=1736235735;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SUQ/117o2pVOfsQwHm9Em7LXO/LveElAMhz4OgmXTrM=;
-        b=TOL4veIaH9skBRkw3wK0pJmXoDKWtV5sZOb4DKGpby/DqYmzc/+RgG0SC+lBo4F+SJ
-         W3a92moFc040nY4gIe/S+MPvAOQ1Xr2ABy0YnL4xDZvam+g7XU8L0uZ6LdKCuMmSeR9V
-         x+DrlMhMo7+5HYsNriN62Aw1895X4V0Z9x9IwbSuG3mO5dKmLrDnKyeIPvcfbCLD5mgD
-         tC/gnAoIjXBUc41XXABDid4810dMsIBAEPSSzSEtJU2xViVftBEqeYc8WX9c/uGnJvNe
-         0QMm7+imdvjE97GdvGKcgwUzNRCA8gnT6O8TyUjpQti8clqr7dcYZBvYrEmi6yp9gwWJ
-         1UsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVXnfZyu9Uaz/sUGYvnw5Rwa8DRtFCtpWR2wYtz2yQn3LtMmRPIqdjSP4tjNkPrkkw9x3Wjw2xQJIOOspspj/g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxd/llquwvilxD6DL5EjIcBJ/Ct6JIB2cFOc5i2yiU+c7rhU98P
-	M4uqlzkoMvCxfOh+Jd44jaMHvcnUWGT2BU6gwwiFPGaceo25Fw1a/vS+bboSlDA=
-X-Gm-Gg: ASbGnctsVzUs4vUF9FDT301/dd0P1mm79BxXAu4w9HVXElkH8JrDu5WsAbdFxOFVwTh
-	KK8oG6cvVBRsG+ntTnPAfM1hve/Tp2U8t4LxxH+JnYl8KURgNXyyVvfz4jEP5M7vnSiK+1WzEHr
-	/oSrAYOIySoY3U7tny0kS0R/yDm6g0bsJirmmYjG/okRxvuLQFphiQjI2JX00QcHWLboJ5NefQV
-	gc9IZ1Q2Q7GrO3TkUetDdihddVU5DhpX3cZW+g3JMhRfWo/Bdo3kGYTc1lXZOCNHQ==
-X-Google-Smtp-Source: AGHT+IHJ3LZn/dw6Q3RdklojRoLZ4JYqxGeF/O2KsycT1HvQOXnJk5lDUSk8vRMOcWtIAvIoEXjYaQ==
-X-Received: by 2002:a17:907:7f8e:b0:aa6:995d:9ee8 with SMTP id a640c23a62f3a-aac2702ae5cmr3305806366b.5.1735630935342;
-        Mon, 30 Dec 2024 23:42:15 -0800 (PST)
-Received: from ?IPV6:2001:67c:2fbc:1000::1001? ([2001:67c:2fbc:1000::1001])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aac0e89490dsm1538233666b.45.2024.12.30.23.42.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Dec 2024 23:42:14 -0800 (PST)
-Message-ID: <97f8ebf1-bdea-4084-aadd-360d02d00d85@openvpn.net>
-Date: Tue, 31 Dec 2024 08:42:11 +0100
+        d=1e100.net; s=20230601; t=1735650837; x=1736255637;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fZgp4jfle0ZGJPd2mHyE73pz/6DhpqLqrjCBngOXHZ4=;
+        b=jnwclyfQwDlhPFZpPKNuaHfc1wl49QLzm64ZDTqgNBF7f5WR/9RYduhSbG3p2rebZ6
+         vsJ/molLeO0jqqlCl+fkXTio1aWetH4zD0wCqJFvbaROYJmy5PYv5F7myZUXLbO3RCjX
+         IcdhewVrGeuUU87/1r6B/8aPEPgtPBV8wVxxk6gT0cunU1LS3JqPOqepd/V+dRyOHC49
+         phD+lneZ5qscEL/+g3rzjvVLVoAws5Eu9u3beVPFW6qpkg2J4Gjmv07BOxTKGuMgpDJQ
+         GcArrXmILj8lR/fkMcU87DKwvb8ChaUX77xlHXFboZEG5hUNaw9Q+ogXKpk4dLq4Irzj
+         /GqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVqs7jWCWpkILYtOVgdNpIqq8ZPQKSTTlPdYZU5GFU4i/PjfV9k/BnVS5D3y09oFkAZBDqOxtes2sWBbASplkg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPfb4SjLYBetEtfSZakTeHHyrkwh6VTvHpj/OhocU8OlQD3Hx/
+	PNknJdfsfM8A9ObBmKwbby53JSHZsXEjOfnDvQqB98bAw+B6djmcldXlD/woyA==
+X-Gm-Gg: ASbGnctlW348XWlUwVJNBWjKho/5C1xE2EqBZLuq8ZwzcBRGvy3WF0REutEY3f2F7fh
+	BQopePoGNX+RlQxvMqB5FeRW10aMEma9IMf7cLg0o8qoQHh3Mf37AVeChNHTjjJWF6Gb/N/dPSr
+	Vv09ah9fntXgVkl6oWuSJeQPDMyNnzDqoyRZCpQ8XHKIHCzD3Uq+zVVJ3CX4LjhqeyZbdeAt3oT
+	tVoQWW7YOC65suQEAvixso1wJjUJpOZYyju62TKLSAaupRLRRJiR9WeXyhIZ8CIWle9NzfkhbsK
+	V/ZfqBT/LDc=
+X-Google-Smtp-Source: AGHT+IGEg0Sm2+Gv2ELKmcTe/s3eXcD2xxWC9XS2B49nFl0hlJ0LsI4H01w3iCdwEken+HN3bGEavA==
+X-Received: by 2002:a05:6a00:1152:b0:725:f4c6:6b71 with SMTP id d2e1a72fcca58-72abde9eb64mr62183286b3a.20.1735650837496;
+        Tue, 31 Dec 2024 05:13:57 -0800 (PST)
+Received: from localhost.localdomain ([117.193.213.202])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad6cc885sm20994862b3a.0.2024.12.31.05.13.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Dec 2024 05:13:57 -0800 (PST)
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: kw@linux.com,
+	gregkh@linuxfoundation.org,
+	arnd@arndb.de,
+	lpieralisi@kernel.org,
+	shuah@kernel.org
+Cc: kishon@kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bhelgaas@google.com,
+	linux-arm-msm@vger.kernel.org,
+	robh@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v4 0/3] Migrate PCI Endpoint Subsystem tests to Kselftest
+Date: Tue, 31 Dec 2024 18:43:38 +0530
+Message-Id: <20241231131341.39292-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v16 26/26] testing/selftests: add test tool and
- scripts for ovpn module
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Shuah Khan <shuah@kernel.org>, sd@queasysnail.net, ryazanov.s.a@gmail.com,
- Andrew Lunn <andrew+netdev@lunn.ch>, Simon Horman <horms@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Xiao Liang <shaw.leon@gmail.com>, Shuah Khan <skhan@linuxfoundation.org>
-References: <20241219-b4-ovpn-v16-0-3e3001153683@openvpn.net>
- <20241219-b4-ovpn-v16-26-3e3001153683@openvpn.net>
- <20241219200222.4b0365b7@kernel.org>
-Content-Language: en-US
-From: Antonio Quartulli <antonio@openvpn.net>
-In-Reply-To: <20241219200222.4b0365b7@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 20/12/24 05:02, Jakub Kicinski wrote:
-> On Thu, 19 Dec 2024 02:42:20 +0100 Antonio Quartulli wrote:
->> +uint64_t nla_get_uint(struct nlattr *attr)
->> +{
->> +	if (nla_len(attr) == sizeof(uint32_t))
->> +		return nla_get_u32(attr);
->> +	else
->> +		return nla_get_u64(attr);
->> +}
-> 
-> Fedora 41 has: libnl3 3.11.0
-> which already defines nla_get_uint()
-> 
-> ovpn-cli.c:46:10: error: conflicting types for ‘nla_get_uint’; have ‘uint64_t(struct nlattr *)’ {aka ‘long unsigned int(struct nlattr *)’}
->     46 | uint64_t nla_get_uint(struct nlattr *attr)
->        |          ^~~~~~~~~~~~
-> In file included from /usr/include/libnl3/netlink/msg.h:11,
->                   from /usr/include/libnl3/netlink/genl/genl.h:10,
->                   from ovpn-cli.c:26:
-> /usr/include/libnl3/netlink/attr.h:126:25: note: previous declaration of ‘nla_get_uint’ with type ‘uint64_t(const struct nlattr *)’ {aka ‘long unsigned int(const struct nlattr *)’}
->    126 | extern uint64_t         nla_get_uint(const struct nlattr *);
->        |                         ^~~~~~~~~~~~
+Hi,
 
-dang!
-I guess I will just rename this function to avoid the clash for the time 
-being.
+This series carries forward the effort to add Kselftest for PCI Endpoint
+Subsystem started by Aman Gupta [1] a while ago. I reworked the initial version
+based on another patch that fixes the return values of IOCTLs in
+pci_endpoint_test driver and did many cleanups. Since the resulting work
+modified the initial version substantially, I took over the authorship.
 
-Thanks.
+This series also incorporates the review comment by Shuah Khan [2] to move the
+existing tests from 'tools/pci' to 'tools/testing/kselftest/pci_endpoint' before
+migrating to Kselftest framework. I made sure that the tests are executable in
+each commit and updated documentation accordingly.
 
-Regards,
+- Mani
+
+[1] https://lore.kernel.org/linux-pci/20221007053934.5188-1-aman1.gupta@samsung.com
+[2] https://lore.kernel.org/linux-pci/b2a5db97-dc59-33ab-71cd-f591e0b1b34d@linuxfoundation.org
+
+Changes in v4:
+
+* Dropped the BAR fix patches and submitted them separately:
+  https://lore.kernel.org/linux-pci/20241231130224.38206-1-manivannan.sadhasivam@linaro.org/
+* Rebased on top of pci/next 9e1b45d7a5bc0ad20f6b5267992da422884b916e
+
+Changes in v3:
+
+* Collected tags.
+* Added a note about failing testcase 10 and command to skip it in
+  documentation.
+* Removed Aman Gupta and Padmanabhan Rajanbabu from CC as their addresses are
+  bouncing.
+
+Changes in v2:
+
+* Added a patch that fixes return values of IOCTL in pci_endpoint_test driver
+* Moved the existing tests to new location before migrating
+* Added a fix for BARs on Qcom devices
+* Updated documentation and also added fixture variants for memcpy & DMA modes
+
+Manivannan Sadhasivam (3):
+  misc: pci_endpoint_test: Fix the return value of IOCTL
+  selftests: Move PCI Endpoint tests from tools/pci to Kselftests
+  selftests: pci_endpoint: Migrate to Kselftest framework
+
+ Documentation/PCI/endpoint/pci-test-howto.rst | 155 ++++------
+ MAINTAINERS                                   |   2 +-
+ drivers/misc/pci_endpoint_test.c              | 250 ++++++++---------
+ tools/pci/Build                               |   1 -
+ tools/pci/Makefile                            |  58 ----
+ tools/pci/pcitest.c                           | 264 ------------------
+ tools/pci/pcitest.sh                          |  73 -----
+ tools/testing/selftests/Makefile              |   1 +
+ .../testing/selftests/pci_endpoint/.gitignore |   2 +
+ tools/testing/selftests/pci_endpoint/Makefile |   7 +
+ tools/testing/selftests/pci_endpoint/config   |   4 +
+ .../pci_endpoint/pci_endpoint_test.c          | 194 +++++++++++++
+ 12 files changed, 386 insertions(+), 625 deletions(-)
+ delete mode 100644 tools/pci/Build
+ delete mode 100644 tools/pci/Makefile
+ delete mode 100644 tools/pci/pcitest.c
+ delete mode 100644 tools/pci/pcitest.sh
+ create mode 100644 tools/testing/selftests/pci_endpoint/.gitignore
+ create mode 100644 tools/testing/selftests/pci_endpoint/Makefile
+ create mode 100644 tools/testing/selftests/pci_endpoint/config
+ create mode 100644 tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
 
 -- 
-Antonio Quartulli
-OpenVPN Inc.
+2.25.1
 
 
