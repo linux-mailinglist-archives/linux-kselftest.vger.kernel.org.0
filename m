@@ -1,132 +1,156 @@
-Return-Path: <linux-kselftest+bounces-23804-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23805-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 409149FF393
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Jan 2025 10:09:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BBCC9FF4F8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Jan 2025 22:35:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B6F13A2E5D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Jan 2025 09:09:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35AA718824C6
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Jan 2025 21:35:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA32C7DA67;
-	Wed,  1 Jan 2025 09:09:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EBB685931;
+	Wed,  1 Jan 2025 21:35:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OcV/MApP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="odGBA8SU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A60F25771
-	for <linux-kselftest@vger.kernel.org>; Wed,  1 Jan 2025 09:09:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA801F5FA;
+	Wed,  1 Jan 2025 21:35:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735722541; cv=none; b=coeUbH72sXKI8L7hbSsN+lt8gPyeTBoUvYNMVFWqZTBevCtnZykIdgkBM1rZUX5x57/FKND6QEXf49R/ZKKSAblpQw5g+qvpzO3ECe5JCeh6XXpi3wQKpopHD2d8t5u9A5IsrR+kVhaa+tcjiywFgpDLST84YLr8geyuhDPeYSk=
+	t=1735767336; cv=none; b=IlOFwMn+eOFsmiN3dNkeB1NWp9lRzqmnbIiCh/j0StDUVU0Gi+5Ueu/BuK9fagWdjTeFoI5FeFVigvRtOkXZWPGL6EDGMsbxiasQbLEeIiRhQtvX0u5j2PwrH0yvCDJl2RLdp+kbdxNJphb/LCOWHd1tDuMmmJN19MStHS8fgxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735722541; c=relaxed/simple;
-	bh=ZlVI8n/Ssm8sao/auvQOl4mL8VUySAukyc0dVbDiYxk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Allo/LP7FR+hr7UBmDM9H17QTa4JhSoqzbQQunQ56CfpBKdcftuVztQEKFGvSpb05xF2wlxZsvnY/IcTx8G1mScOMW4HeQkMvMWrzieBJFEoCKimusd4xpCdg1rdwoCmKwIEdoSQknBNzbBK1xNO+tLEiSVCn94NFDN8cbuNmj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OcV/MApP; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5014iCup024354;
-	Wed, 1 Jan 2025 09:08:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=oYoas6
-	1OhAYOoieOqXCEGrdvSIwZzmKeua7845ofkRw=; b=OcV/MApP+X6A6aOUls2sAb
-	ilvI3+YvvpcgjfwiM3Voehd7fOJdoxip8JN3H3x/wYTYNfDgHRJKWqnbsEWTMG7o
-	sR2aZNoRCOwRBqfdDp0ODhZSbOOETpOdLcCTB/Req4TYcyHyWb2CPzU/i7jhyXQP
-	N44rw4kb2lAVNohgTi9KdBUb+tNBrh5Fn/nAYt3gLRXN/EquhHjVUiuTwCwQadJ8
-	d8S1xDnPr1MlSC4sFDFvF8N3kQ6QQB8WwFuxE8Y+mUpe4jD19JkWhyG7o0xP9nm9
-	ce6iS515RG+J64iTra4lwYkRR/ki+e7LmUouDcwDj+NRyGcbnhFCRBuIkJOJnusQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43vx6hrrys-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 Jan 2025 09:08:46 +0000 (GMT)
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50194sme030394;
-	Wed, 1 Jan 2025 09:08:46 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43vx6hrryn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 Jan 2025 09:08:46 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5017EseG016711;
-	Wed, 1 Jan 2025 09:08:45 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43tw5kdj1t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 Jan 2025 09:08:45 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50198hc739518588
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 1 Jan 2025 09:08:43 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2308E20043;
-	Wed,  1 Jan 2025 09:08:43 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C86062004B;
-	Wed,  1 Jan 2025 09:08:38 +0000 (GMT)
-Received: from li-c439904c-24ed-11b2-a85c-b284a6847472.ibm.com.com (unknown [9.43.115.214])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  1 Jan 2025 09:08:38 +0000 (GMT)
-From: Madhavan Srinivasan <maddy@linux.ibm.com>
-To: mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        naveen@kernel.org, shuah@kernel.org,
-        Madhavan Srinivasan <maddy@linux.ibm.com>
-Cc: linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-        "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
-Subject: Re: [PATCH v2 1/3] selftest/powerpc/ptrace/core-pkey: Remove duplicate macros
-Date: Wed,  1 Jan 2025 14:38:36 +0530
-Message-ID: <173572211261.1875638.17052629553644664859.b4-ty@linux.ibm.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241216160257.87252-1-maddy@linux.ibm.com>
-References: <20241216160257.87252-1-maddy@linux.ibm.com>
+	s=arc-20240116; t=1735767336; c=relaxed/simple;
+	bh=VI1FVtTdDy6zRISgwkKnUfrXpXMVcNAmZGQ25y0xwEI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=frgIP8Us/CU+ytYsfYM5nVKF142p0j7opsah+SU5XOQpwZ5uplNTeqDpuS90bL8W8Y1iA0rfIDc3dSF2Y2+2WiIPOhN1jkmjZVn8TvfVG+J9zxiw9PbLL/hN3p96haULy/IfnYfX5AguuDuvuw5d0XCMVA5BxhbqHbwr3vQmEjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=odGBA8SU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48247C4CECE;
+	Wed,  1 Jan 2025 21:35:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1735767335;
+	bh=VI1FVtTdDy6zRISgwkKnUfrXpXMVcNAmZGQ25y0xwEI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=odGBA8SUpOMTRk0lWCE5KBuLhXp5s7lgYnpbTfXfVNf4otCnhc5EK1ujpEJAlvuXT
+	 HMK5Jm7tqRPDNW9Bm5LG4JLzsAH3kWGHzy++ykCUDDK7i8DmSPndwvdwS/DWl4reTV
+	 quUTJjeHjic3oo+V57TmmK2C8z7Qe61jhUzi4UJfDQ0XWa+jk7uOPvYqRFAC5BpX3H
+	 uqn5PYO1vRI8AxbSj8z8DTGjCeNLrzDrZ5y9EUPTkYiF6dupQpYOG9rLo7qQeSlzQ8
+	 duA4Da+a4Q48HWLUUsX2QEVlcLwk52+QDCMvDd8cEAQTxd2zDNY/c2TI81ZguokdWO
+	 4eYcjw+HPzA/g==
+From: SeongJae Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SeongJae Park <sj@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Rae Moar <rmoar@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH 0/7] mm/damon: remove DAMON debugfs interface
+Date: Wed,  1 Jan 2025 13:35:20 -0800
+Message-Id: <20250101213527.74203-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: opcIxYR9v9nmOHoU2v1fY2vME-gYTL-f
-X-Proofpoint-GUID: oJiLXkRhD9L1p11bwTdyMOfvRgitffjb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- lowpriorityscore=0 malwarescore=0 phishscore=0 bulkscore=0 impostorscore=0
- mlxlogscore=828 priorityscore=1501 spamscore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2501010077
 
-On Mon, 16 Dec 2024 21:32:55 +0530, Madhavan Srinivasan wrote:
-> ./powerpc/ptrace/Makefile includes flags.mk. In flags.mk,
-> -I$(selfdir)/powerpc/include is always included as part of
-> CFLAGS. So it will pick up the "pkeys.h" defined in
-> powerpc/include.
-> 
-> core-pkey.c test has couple of macros defined which
-> are part of "pkeys.h" header file. Remove those
-> duplicates and include "pkeys.h"
-> 
-> [...]
+DAMON debugfs interface was the only user interface of DAMON at the
+beginning[1].  However, it turned out the interface would be not good
+enough for long-term flexibility and stability.
 
-Applied to powerpc/next.
+In Feb 2022[2], we therefore introduced DAMON sysfs interface as an
+alternative user interface that aims long-term flexibility and
+stability.  With its introduction, DAMON debugfs interface has announced
+to be deprecated in near future.
 
-[1/3] selftest/powerpc/ptrace/core-pkey: Remove duplicate macros
-      https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?h=next&id=026ac4dda8f666f737b375731e30ef8f5698b215 
-[2/3] selftest/powerpc/ptrace/ptrace-pkey: Remove duplicate macros
-      https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?h=next&id=b0e1b95b1597ad3d87ff91d52f6b67cc9423c31e 
-[3/3] selftest/powerpc/ptrace: Cleanup duplicate macro definitions
-      https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?h=next&id=65f5038352e8f635fb827f7482f1d08fae4d16bf 
+In Feb 2023[3], we announced the official deprecation of DAMON debugfs
+interface.  In Jan 2024[4], we further made the deprecation difficult to
+be ignored.
 
-Thanks
+In Oct 2024[5], we posted an RFC version of this patch series as the
+last notice.
+
+And as of this writing, no problem or concerns about the removal plan
+have reported.  Apparently users are already moved to the alternative,
+or made good plans for the change.
+
+Remove the DAMON debugfs interface code from the tree.  Given the past
+timeline and the absence of reported problems or concerns, it is safe
+enough to be done.
+
+[1] https://lore.kernel.org/20210716081449.22187-1-sj38.park@gmail.com
+[2] https://lore.kernel.org/20220228081314.5770-1-sj@kernel.org
+[3] https://lore.kernel.org/20230209192009.7885-1-sj@kernel.org
+[4] https://lore.kernel.org/20240130013549.89538-1-sj@kernel.org
+[5] https://lore.kernel.org/20241015175412.60563-1-sj@kernel.org
+
+Changes from RFC
+(https://lore.kernel.org/20241015175412.60563-1-sj@kernel.org)
+- Rebased on latest mm-unstable
+- Update and wordsmith commit messages
+
+SeongJae Park (7):
+  Docs/admin-guide/mm/damon/usage: remove DAMON debugfs interface
+    documentation
+  Docs/mm/damon/design: update for removal of DAMON debugfs interface
+  selftests/damon/config: remove configs for DAMON debugfs interface
+    selftests
+  selftests/damon: remove tests for DAMON debugfs interface
+  kunit: configs: remove configs for DAMON debugfs interface tests
+  mm/damon: remove DAMON debugfs interface kunit tests
+  mm/damon: remove DAMON debugfs interface
+
+ Documentation/admin-guide/mm/damon/usage.rst  |  309 -----
+ Documentation/mm/damon/design.rst             |   23 +-
+ mm/damon/Kconfig                              |   30 -
+ mm/damon/Makefile                             |    1 -
+ mm/damon/dbgfs.c                              | 1148 -----------------
+ mm/damon/tests/.kunitconfig                   |    7 -
+ mm/damon/tests/dbgfs-kunit.h                  |  173 ---
+ tools/testing/kunit/configs/all_tests.config  |    3 -
+ tools/testing/selftests/damon/.gitignore      |    3 -
+ tools/testing/selftests/damon/Makefile        |   11 +-
+ tools/testing/selftests/damon/config          |    1 -
+ .../testing/selftests/damon/debugfs_attrs.sh  |   17 -
+ .../debugfs_duplicate_context_creation.sh     |   27 -
+ .../selftests/damon/debugfs_empty_targets.sh  |   21 -
+ .../damon/debugfs_huge_count_read_write.sh    |   22 -
+ .../damon/debugfs_rm_non_contexts.sh          |   19 -
+ .../selftests/damon/debugfs_schemes.sh        |   19 -
+ .../selftests/damon/debugfs_target_ids.sh     |   19 -
+ .../damon/debugfs_target_ids_pid_leak.c       |   68 -
+ .../damon/debugfs_target_ids_pid_leak.sh      |   22 -
+ ...fs_target_ids_read_before_terminate_race.c |   80 --
+ ...s_target_ids_read_before_terminate_race.sh |   14 -
+ .../selftests/damon/huge_count_read_write.c   |   46 -
+ 23 files changed, 11 insertions(+), 2072 deletions(-)
+ delete mode 100644 mm/damon/dbgfs.c
+ delete mode 100644 mm/damon/tests/dbgfs-kunit.h
+ delete mode 100755 tools/testing/selftests/damon/debugfs_attrs.sh
+ delete mode 100755 tools/testing/selftests/damon/debugfs_duplicate_context_creation.sh
+ delete mode 100755 tools/testing/selftests/damon/debugfs_empty_targets.sh
+ delete mode 100755 tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
+ delete mode 100755 tools/testing/selftests/damon/debugfs_rm_non_contexts.sh
+ delete mode 100755 tools/testing/selftests/damon/debugfs_schemes.sh
+ delete mode 100755 tools/testing/selftests/damon/debugfs_target_ids.sh
+ delete mode 100644 tools/testing/selftests/damon/debugfs_target_ids_pid_leak.c
+ delete mode 100755 tools/testing/selftests/damon/debugfs_target_ids_pid_leak.sh
+ delete mode 100644 tools/testing/selftests/damon/debugfs_target_ids_read_before_terminate_race.c
+ delete mode 100755 tools/testing/selftests/damon/debugfs_target_ids_read_before_terminate_race.sh
+ delete mode 100644 tools/testing/selftests/damon/huge_count_read_write.c
+
+-- 
+2.39.5
 
