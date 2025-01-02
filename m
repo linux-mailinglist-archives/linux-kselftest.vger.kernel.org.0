@@ -1,313 +1,151 @@
-Return-Path: <linux-kselftest+bounces-23809-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23810-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F5ED9FF503
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Jan 2025 22:36:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E12D9FF59B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jan 2025 03:45:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48EFC161A5C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Jan 2025 21:36:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 167D73A27FF
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jan 2025 02:45:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08E431E500C;
-	Wed,  1 Jan 2025 21:35:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88980D299;
+	Thu,  2 Jan 2025 02:45:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PfmiU+x5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rn91vxzr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D14181E5019;
-	Wed,  1 Jan 2025 21:35:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B694C70;
+	Thu,  2 Jan 2025 02:45:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735767342; cv=none; b=FJ53HxobSoVDBnmtchXJ16Hjvr9REHu7vyugaepwSulD4MymHMpsz9jeRvMJPQzMBVJiItWwNdQt3MsHJciXbHDPLQfXiBwPBhzyGKxcybfkAWezl4W7WvdJzcdfmaHwnxUfFKMAqKF1U5KuE3l2rr2LwBE5NBTGLeDDSFfje9Q=
+	t=1735785904; cv=none; b=R8ZQBsmq+CjUHTlkI3L39T4aNIxlmPjhhwNexPXIN5JOcKK8Uub46EyWWnruzpJkQ1iACp1b1tspYwfZIU1qo3YGlj23rBf2ajq6yESKiCZzv7HdUk+R1Cv5CUWMAN4GD7hB4ua+6khmvc17cU+GQsYZiQjrz6iDX81hdIbvO5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735767342; c=relaxed/simple;
-	bh=6FG97a2QCkNzbJZKIVGLLC/WiWRcYRT8nrNZYRnHJGo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=C/0ehwW2W9lrF+gMQW9yQll6SyszNZn5q5VWIJybKYuiMCpPyqSZH9Vaf3fegc+1HQxggRRq3UqsLd8bo5ELv9+FN8cHeu3cqU2vxwzlIbUfEuQ5AcKWqevyDGaeeXCL9c/sfOcp/+0YARYxa9zFmEegq/ezJcObgwlIEaiSmfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PfmiU+x5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AAC8C4CECE;
-	Wed,  1 Jan 2025 21:35:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735767342;
-	bh=6FG97a2QCkNzbJZKIVGLLC/WiWRcYRT8nrNZYRnHJGo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PfmiU+x53jG0P2hkwOLeJFVcJzHVBEXfJOtZ7ZHtL0QGphXvJ7hChiXdUtQEI6gKh
-	 iGHSSkCjlQ2XYrrQbxhovBS80RTyAWV1U2mwMN7jUs6Ikl8J/rMMPyKNF3BQzdT6t6
-	 7jrNIYWMHc0ENW3QRCzVLdg5JZg5nA7QPhk4StNU91ZfJeV04T+0iiEFzw4t2ShShc
-	 FgddVLy7XaT+djzpLJIxK8dOMWjy5Hou6jJmxndNwgsnPLx0NObN7cgal64/nYEQtU
-	 uMknyqLl8NuP3oLbd+X33NiUodQ09gmDPVe9daQQHgVO3EIh4f3q1FHM0zmWMq5Dqk
-	 NvgNaj2KwnTIg==
-From: SeongJae Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SeongJae Park <sj@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH 6/7] mm/damon: remove DAMON debugfs interface kunit tests
-Date: Wed,  1 Jan 2025 13:35:26 -0800
-Message-Id: <20250101213527.74203-7-sj@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250101213527.74203-1-sj@kernel.org>
-References: <20250101213527.74203-1-sj@kernel.org>
+	s=arc-20240116; t=1735785904; c=relaxed/simple;
+	bh=b+udHYxmnAWh83Ndm9I2k1MeSwhvbE1pnhaSL35u+Cs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SoO5Yh/vN7Dl1I1s1NQUL7+DO1b14obH2tDBYYr7Gk5OnlatHCEmBWsSIvNXL5m/n0EtwnjdEs+of80uoYELUTuHLGPxcbUT3eHHRohv2dg6Oj6l7UlKNTeZPNHYF5BWWmvuz+HWgOOSJdVThzv4ZPmriixBgoT6WSkZVBNWi+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rn91vxzr; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-219f8263ae0so106327815ad.0;
+        Wed, 01 Jan 2025 18:45:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1735785902; x=1736390702; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NV+H7z8d5Oed173rvGxNf9WBhBaq1lMGljWmWtTw8qU=;
+        b=Rn91vxzrMKFD+p5ZKBwsyoFZ9Ch9H19BCKlz1dtb/jVoTqNKJDf69b3c8ShzOke0HF
+         6wqtCyysDdVOAjb4wIb4PgFJgPfhifAMrR7TTeb+lM+svxEpddfj/qOo8sHTtmIFBcB9
+         SelvNkMHF+eYiR5jnu6Sop7WG2mf94yMqUwziAhfStHXAvEyaHK3fTj13RegH8t+B7HY
+         hTctGhjGAUtbJH7qMeykpj+niklYoEvwpbyqxyoweRwM0XYznPPC03uZ0amVr6UJHQ16
+         eKKOKN37osLmTrgwV7zSlXYeIt5dT0d59STF0MB+1G93dYZURA+7p+FNOAKtETcoOzOr
+         rBFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735785902; x=1736390702;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NV+H7z8d5Oed173rvGxNf9WBhBaq1lMGljWmWtTw8qU=;
+        b=q8uN7kZrScjdM8v2aRSkj7VXdFUhh3+vvNup/BxOv393IN1o1qCrva+HDtU3s9Angd
+         PaJCdmCATRztb3AivnwneIoZo58mC0oWtsRgAjxLZgL6jnc3W+WiOcCYvVypgtOogvs6
+         0G0e/kqeuzQ+w1DiR1xKWewiPL0mPblXxmUfhqrRU3ud3FG7tedZQLceeJAwkthmfY95
+         QNtk/Da/NARQlNDWTv7269I1AtkyuX8xusWrHvcSo/+3u/N3YcPwK4r09ZwWUZOMQzVx
+         SIAtyY6kIhkh8hLpWkyWSf0pciPkB1a8opbQpY4U96KIdQoVEpp3vwjWIZO8CCXr0w4E
+         vhIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU+vFNGNZbD5CIJAZxHXSMecvW9r/c10YL4ulPYPupYbVCnBzjy8f3Gai1UDTFiRYE1kM9or2OqF3Lb5qs=@vger.kernel.org, AJvYcCVa8vUeKiG1SBPFJnroLxWMvAsZm26MrgAeSTj9nUatPZyhNVJHXShMuRDxGdtZ1sETwuzPa0wMM5bsjVVUeLMP@vger.kernel.org
+X-Gm-Message-State: AOJu0YzafPertDu4mVGuFMMwX6qJw7HTZ2YftrURm8b6PL6CzN15TVnO
+	GFLw5NNerfTptIy11QZ7kHuZlxGDNM4FSe5F5EfgpMkdi86hr/Aw
+X-Gm-Gg: ASbGncsridZqJVfqAa6Dfg+NpnQpgtNdmsYOOBmGpkCEFyMo+HMh633oGUe9EMmLIsv
+	6gOHU9uJb1tpbRga+fQwD6DPdkfUJsS+Wn4EFX101tt6fZmuQh4I+FQZ3nC4dBtMdpC9ZGWzC79
+	gYBM4Z75PioRhTq5jvFgARPcDO9FEMvD0CoSwpGd5fmzxes3cF1VQvD8ZKb2v0HCtVH7mn77vm4
+	NPhFKTKlcAT103LPy6nUT5gcQ+xKTXcIFjxRFZ8J/F6vrX9eS8FV1tStykyxw==
+X-Google-Smtp-Source: AGHT+IH3rf1kcd0vrNYGIZA/SByquhhX1V9Kp53NNGLWfIEamjc9Cv0r+C0SbulHDdaTKfQ4pUT83w==
+X-Received: by 2002:a17:902:c40b:b0:206:9a3f:15e5 with SMTP id d9443c01a7336-219e6ebb6e2mr592607825ad.32.1735785902284;
+        Wed, 01 Jan 2025 18:45:02 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f4478accb3sm24991003a91.51.2025.01.01.18.44.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jan 2025 18:45:01 -0800 (PST)
+Date: Thu, 2 Jan 2025 02:44:53 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, Jianbo Liu <jianbol@nvidia.com>
+Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
+	Andy Gospodarek <andy@greyhouse.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Simon Horman <horms@kernel.org>, Jianbo Liu <jianbol@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 0/2] bond: fix xfrm offload feature during init
+Message-ID: <Z3X9pfu12GUOBUY6@fedora>
+References: <20241211071127.38452-1-liuhangbin@gmail.com>
+ <20241212062734.182a0164@kernel.org>
+ <Z1vfsAyuxcohT7th@fedora>
+ <20241213193127.4c31ef80@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241213193127.4c31ef80@kernel.org>
 
-It's time to remove DAMON debugfs interface, which has deprecated long
-before in February 2023.  Read the cover letter of this patch series for
-more details.
+On Fri, Dec 13, 2024 at 07:31:27PM -0800, Jakub Kicinski wrote:
+> On Fri, 13 Dec 2024 07:18:08 +0000 Hangbin Liu wrote:
+> > On Thu, Dec 12, 2024 at 06:27:34AM -0800, Jakub Kicinski wrote:
+> > > On Wed, 11 Dec 2024 07:11:25 +0000 Hangbin Liu wrote:  
+> > > > The first patch fixes the xfrm offload feature during setup active-backup
+> > > > mode. The second patch add a ipsec offload testing.  
+> > > 
+> > > Looks like the test is too good, is there a fix pending somewhere for
+> > > the BUG below? We can't merge the test before that:  
+> > 
+> > This should be a regression of 2aeeef906d5a ("bonding: change ipsec_lock from
+> > spin lock to mutex"). As in xfrm_state_delete we called spin_lock_bh(&x->lock)
+> > for the xfrm state delete.
+> > 
+> > But I'm not sure if it's proper to release the spin lock in bond code.
+> > This seems too specific.
+> > 
+> > diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+> > index 7daeab67e7b5..69563bc958ca 100644
+> > --- a/drivers/net/bonding/bond_main.c
+> > +++ b/drivers/net/bonding/bond_main.c
+> > @@ -592,6 +592,7 @@ static void bond_ipsec_del_sa(struct xfrm_state *xs)
+> >  	real_dev->xfrmdev_ops->xdo_dev_state_delete(xs);
+> >  out:
+> >  	netdev_put(real_dev, &tracker);
+> > +	spin_unlock_bh(&xs->lock);
+> >  	mutex_lock(&bond->ipsec_lock);
+> >  	list_for_each_entry(ipsec, &bond->ipsec_list, list) {
+> >  		if (ipsec->xs == xs) {
+> > @@ -601,6 +602,7 @@ static void bond_ipsec_del_sa(struct xfrm_state *xs)
+> >  		}
+> >  	}
+> >  	mutex_unlock(&bond->ipsec_lock);
+> > +	spin_lock_bh(&xs->lock);
+> >  }
+> >  
+> > 
+> > What do you think?
+> 
+> Re-locking doesn't look great, glancing at the code I don't see any
+> obvious better workarounds. Easiest fix would be to don't let the
+> drivers sleep in the callbacks and then we can go back to a spin lock.
+> Maybe nvidia people have better ideas, I'm not familiar with this
+> offload.
 
-Remove kunit tests for the interface, to prevent unnecessary test
-failures.
+I don't know how to disable bonding sleeping since we use mutex_lock now.
+Hi Jianbo, do you have any idea?
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- mm/damon/Kconfig             |  12 ---
- mm/damon/dbgfs.c             |   2 -
- mm/damon/tests/.kunitconfig  |   7 --
- mm/damon/tests/dbgfs-kunit.h | 173 -----------------------------------
- 4 files changed, 194 deletions(-)
- delete mode 100644 mm/damon/tests/dbgfs-kunit.h
-
-diff --git a/mm/damon/Kconfig b/mm/damon/Kconfig
-index d0357f3e9372..db0d92624e8b 100644
---- a/mm/damon/Kconfig
-+++ b/mm/damon/Kconfig
-@@ -89,18 +89,6 @@ config DAMON_DBGFS
- 	default y
- 	depends on DAMON_DBGFS_DEPRECATED
- 
--config DAMON_DBGFS_KUNIT_TEST
--	bool "Test for damon debugfs interface" if !KUNIT_ALL_TESTS
--	depends on DAMON_DBGFS && KUNIT=y
--	default KUNIT_ALL_TESTS
--	help
--	  This builds the DAMON debugfs interface Kunit test suite.
--
--	  For more information on KUnit and unit tests in general, please refer
--	  to the KUnit documentation.
--
--	  If unsure, say N.
--
- config DAMON_RECLAIM
- 	bool "Build DAMON-based reclaim (DAMON_RECLAIM)"
- 	depends on DAMON_PADDR
-diff --git a/mm/damon/dbgfs.c b/mm/damon/dbgfs.c
-index b4213bc47e44..5664c2cb0a5e 100644
---- a/mm/damon/dbgfs.c
-+++ b/mm/damon/dbgfs.c
-@@ -1144,5 +1144,3 @@ static int __init damon_dbgfs_init(void)
- }
- 
- module_init(damon_dbgfs_init);
--
--#include "tests/dbgfs-kunit.h"
-diff --git a/mm/damon/tests/.kunitconfig b/mm/damon/tests/.kunitconfig
-index a73be044fc9b..36a450f57b58 100644
---- a/mm/damon/tests/.kunitconfig
-+++ b/mm/damon/tests/.kunitconfig
-@@ -13,10 +13,3 @@ CONFIG_DAMON_VADDR_KUNIT_TEST=y
- CONFIG_SYSFS=y
- CONFIG_DAMON_SYSFS=y
- CONFIG_DAMON_SYSFS_KUNIT_TEST=y
--
--# for DAMON debugfs interface
--CONFIG_DEBUG_FS=y
--CONFIG_DAMON_PADDR=y
--CONFIG_DAMON_DBGFS_DEPRECATED=y
--CONFIG_DAMON_DBGFS=y
--CONFIG_DAMON_DBGFS_KUNIT_TEST=y
-diff --git a/mm/damon/tests/dbgfs-kunit.h b/mm/damon/tests/dbgfs-kunit.h
-deleted file mode 100644
-index 087e53f641a8..000000000000
---- a/mm/damon/tests/dbgfs-kunit.h
-+++ /dev/null
-@@ -1,173 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * DAMON Debugfs Interface Unit Tests
-- *
-- * Author: SeongJae Park <sj@kernel.org>
-- */
--
--#ifdef CONFIG_DAMON_DBGFS_KUNIT_TEST
--
--#ifndef _DAMON_DBGFS_TEST_H
--#define _DAMON_DBGFS_TEST_H
--
--#include <kunit/test.h>
--
--static void damon_dbgfs_test_str_to_ints(struct kunit *test)
--{
--	char *question;
--	int *answers;
--	int expected[] = {12, 35, 46};
--	ssize_t nr_integers = 0, i;
--
--	question = "123";
--	answers = str_to_ints(question, strlen(question), &nr_integers);
--	KUNIT_EXPECT_EQ(test, (ssize_t)1, nr_integers);
--	KUNIT_EXPECT_EQ(test, 123, answers[0]);
--	kfree(answers);
--
--	question = "123abc";
--	answers = str_to_ints(question, strlen(question), &nr_integers);
--	KUNIT_EXPECT_EQ(test, (ssize_t)1, nr_integers);
--	KUNIT_EXPECT_EQ(test, 123, answers[0]);
--	kfree(answers);
--
--	question = "a123";
--	answers = str_to_ints(question, strlen(question), &nr_integers);
--	KUNIT_EXPECT_EQ(test, (ssize_t)0, nr_integers);
--	kfree(answers);
--
--	question = "12 35";
--	answers = str_to_ints(question, strlen(question), &nr_integers);
--	KUNIT_EXPECT_EQ(test, (ssize_t)2, nr_integers);
--	for (i = 0; i < nr_integers; i++)
--		KUNIT_EXPECT_EQ(test, expected[i], answers[i]);
--	kfree(answers);
--
--	question = "12 35 46";
--	answers = str_to_ints(question, strlen(question), &nr_integers);
--	KUNIT_EXPECT_EQ(test, (ssize_t)3, nr_integers);
--	for (i = 0; i < nr_integers; i++)
--		KUNIT_EXPECT_EQ(test, expected[i], answers[i]);
--	kfree(answers);
--
--	question = "12 35 abc 46";
--	answers = str_to_ints(question, strlen(question), &nr_integers);
--	KUNIT_EXPECT_EQ(test, (ssize_t)2, nr_integers);
--	for (i = 0; i < 2; i++)
--		KUNIT_EXPECT_EQ(test, expected[i], answers[i]);
--	kfree(answers);
--
--	question = "";
--	answers = str_to_ints(question, strlen(question), &nr_integers);
--	KUNIT_EXPECT_EQ(test, (ssize_t)0, nr_integers);
--	kfree(answers);
--
--	question = "\n";
--	answers = str_to_ints(question, strlen(question), &nr_integers);
--	KUNIT_EXPECT_EQ(test, (ssize_t)0, nr_integers);
--	kfree(answers);
--}
--
--static void damon_dbgfs_test_set_targets(struct kunit *test)
--{
--	struct damon_ctx *ctx = dbgfs_new_ctx();
--	char buf[64];
--
--	if (!damon_is_registered_ops(DAMON_OPS_PADDR)) {
--		dbgfs_destroy_ctx(ctx);
--		kunit_skip(test, "PADDR not registered");
--	}
--
--	/* Make DAMON consider target has no pid */
--	damon_select_ops(ctx, DAMON_OPS_PADDR);
--
--	dbgfs_set_targets(ctx, 0, NULL);
--	sprint_target_ids(ctx, buf, 64);
--	KUNIT_EXPECT_STREQ(test, (char *)buf, "\n");
--
--	dbgfs_set_targets(ctx, 1, NULL);
--	sprint_target_ids(ctx, buf, 64);
--	KUNIT_EXPECT_STREQ(test, (char *)buf, "42\n");
--
--	dbgfs_set_targets(ctx, 0, NULL);
--	sprint_target_ids(ctx, buf, 64);
--	KUNIT_EXPECT_STREQ(test, (char *)buf, "\n");
--
--	dbgfs_destroy_ctx(ctx);
--}
--
--static void damon_dbgfs_test_set_init_regions(struct kunit *test)
--{
--	struct damon_ctx *ctx = damon_new_ctx();
--	/* Each line represents one region in ``<target idx> <start> <end>`` */
--	char * const valid_inputs[] = {"1 10 20\n 1   20 30\n1 35 45",
--		"1 10 20\n",
--		"1 10 20\n0 39 59\n0 70 134\n  1  20 25\n",
--		""};
--	/* Reading the file again will show sorted, clean output */
--	char * const valid_expects[] = {"1 10 20\n1 20 30\n1 35 45\n",
--		"1 10 20\n",
--		"0 39 59\n0 70 134\n1 10 20\n1 20 25\n",
--		""};
--	char * const invalid_inputs[] = {"3 10 20\n",	/* target not exists */
--		"1 10 20\n 1 14 26\n",		/* regions overlap */
--		"0 10 20\n1 30 40\n 0 5 8"};	/* not sorted by address */
--	char *input, *expect;
--	int i, rc;
--	char buf[256];
--
--	if (!damon_is_registered_ops(DAMON_OPS_PADDR)) {
--		damon_destroy_ctx(ctx);
--		kunit_skip(test, "PADDR not registered");
--	}
--
--	damon_select_ops(ctx, DAMON_OPS_PADDR);
--
--	dbgfs_set_targets(ctx, 3, NULL);
--
--	/* Put valid inputs and check the results */
--	for (i = 0; i < ARRAY_SIZE(valid_inputs); i++) {
--		input = valid_inputs[i];
--		expect = valid_expects[i];
--
--		rc = set_init_regions(ctx, input, strnlen(input, 256));
--		KUNIT_EXPECT_EQ(test, rc, 0);
--
--		memset(buf, 0, 256);
--		sprint_init_regions(ctx, buf, 256);
--
--		KUNIT_EXPECT_STREQ(test, (char *)buf, expect);
--	}
--	/* Put invalid inputs and check the return error code */
--	for (i = 0; i < ARRAY_SIZE(invalid_inputs); i++) {
--		input = invalid_inputs[i];
--		pr_info("input: %s\n", input);
--		rc = set_init_regions(ctx, input, strnlen(input, 256));
--		KUNIT_EXPECT_EQ(test, rc, -EINVAL);
--
--		memset(buf, 0, 256);
--		sprint_init_regions(ctx, buf, 256);
--
--		KUNIT_EXPECT_STREQ(test, (char *)buf, "");
--	}
--
--	dbgfs_set_targets(ctx, 0, NULL);
--	damon_destroy_ctx(ctx);
--}
--
--static struct kunit_case damon_test_cases[] = {
--	KUNIT_CASE(damon_dbgfs_test_str_to_ints),
--	KUNIT_CASE(damon_dbgfs_test_set_targets),
--	KUNIT_CASE(damon_dbgfs_test_set_init_regions),
--	{},
--};
--
--static struct kunit_suite damon_test_suite = {
--	.name = "damon-dbgfs",
--	.test_cases = damon_test_cases,
--};
--kunit_test_suite(damon_test_suite);
--
--#endif /* _DAMON_DBGFS_TEST_H */
--
--#endif	/* CONFIG_DAMON_KUNIT_TEST */
--- 
-2.39.5
+Thanks
+Hangbin
 
