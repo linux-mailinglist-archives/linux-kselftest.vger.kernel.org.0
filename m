@@ -1,180 +1,187 @@
-Return-Path: <linux-kselftest+bounces-23835-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23836-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D5C9A00133
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jan 2025 23:31:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A611A001C8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 00:33:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 578E218835CC
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jan 2025 22:31:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 456243A1267
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jan 2025 23:32:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1653B1BBBCC;
-	Thu,  2 Jan 2025 22:31:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CD341AB6EA;
+	Thu,  2 Jan 2025 23:33:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="YP+F3I9H"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EeZ2fAGs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2071.outbound.protection.outlook.com [40.107.92.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE7FE193073;
-	Thu,  2 Jan 2025 22:31:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.71
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735857091; cv=fail; b=KubFz3kcZ1ALaCNv1rWF5AlkfGuHcCLmYPocBvvgpBcNQL2NkEe+qytl+EiNeZkM4x5GSaO+umETu3d7+gwHDXKJH+ogcW7axpu2klfxcD2y4ZwURHwZ2PDxx2pvCoZxgdCD10aT6kDp3plgMxDpMI7B2Cng6NVjbDlMCkhE0BM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735857091; c=relaxed/simple;
-	bh=uTKUPLOIYsbGYhC4fKjo78IMdEA1EC+6toH8aaittCM=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=amWcBJDeBO4lFdhY4LCec42U42VhyNx9hf3LqHgLq6W9x0B4RA1OWKNeSIWRokU1xh7tn99hvT3d7C5Nfaay6LRg6ZWA0XMuPclhKX7XcWFPz8TSqH7/lc9Xb5fO7VxRt+0E0HZQtnwH6lnPl1o/dpPSXjtygIf3rKZf/ixmMFA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=YP+F3I9H; arc=fail smtp.client-ip=40.107.92.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nsZELCejGPfq1MGIM9t5fjHi1rq/uVMdasczidD4iLUdHJGXyMADdL4xYeO32aFtuqrP4Zp8cwTiFMAipcXFNfoNIy5q9CLVbySi/m5MqUE3lAjrguwhEf4JD3P/OVcdRFPfJZIauYqX+DPwZaVo+L91tTkYlMaxBWGXLPMjXB+qtRf0NYEN6Jx18WZFnNwkBKBzKi5qYB8I6E1lwslijdSHF3ITVHiDZ0rt8qOJUwFpeZINWkM9q9ZlyGfQ1bMllU7Mv2M8YY3S4qlDgx1v/mk4B8kp5Cby/SnlzTiAlQd97kdULRsDc4jzHrxpH/eId8tHUgVm46APYniuzhQn3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=shwH6aBj6wibVdLZoo0K7B2rHMZbMFS2kL7akYRi74E=;
- b=naydfNi0CuzaDLi5dyCayZT2mnV/zsBIOQv2NSrQhUwKdL9+TL3ML7g3m1oGA4q8PKgrQCUYYpV/bBziuMp9MjO7azD3nHAT3lD45uWP9rcDC7Vezp86m3Tw/iO2Yp3GNZm1ms7YmhelJ2oprgOTz4FT45zWmzezKbNseYxZ1J82m/92o0014hdJ2XRlCew5mMWoCmTX0z1pcOyTrdIIFKtKfYLiPyXKneemNrElAMhUphZ9hfKTayB/W+5JKs1dJhkN4iQO8J0XT0LdielXFx0wluLKvtlfavmzyXTSMYnltZh+oARhQPVxdCKuGAWX1wD7d5XSAJ4Q6WFWrVVCrw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=shwH6aBj6wibVdLZoo0K7B2rHMZbMFS2kL7akYRi74E=;
- b=YP+F3I9HWOcdj+lWP6RB1+LWCxupYIj3b6Fz/jWRVZblh3sLAr6kj/8NZBhYF7GXYqQLlRV8aGjFCFounDGD9kaG5wJgOwIgWZkF0JYibcRLCn7ILuvJnlLFmp7/BlLGHoy/XOwgC8UAy8iny7gRAW0owOgRffcoCaqWwNAnwymi+k8jQYts9nbeBstYetzT25udd+i1veQX2ih1Q/9x30e0ked6gLsl2Z6TJ+kv8Ou2bDG8t18Zj1xBwiey/syROPvQrc0x4EkuXpBjokNH5uNvtlxUdc3v6TUoxa1o8IOp3rLmsRLMhiHEIS7TibcI4fWmb6ldJikYnTjFvyc0Mg==
-Received: from BN9PR03CA0285.namprd03.prod.outlook.com (2603:10b6:408:f5::20)
- by DS7PR12MB6309.namprd12.prod.outlook.com (2603:10b6:8:96::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8314.12; Thu, 2 Jan
- 2025 22:31:17 +0000
-Received: from BN3PEPF0000B06A.namprd21.prod.outlook.com
- (2603:10b6:408:f5:cafe::96) by BN9PR03CA0285.outlook.office365.com
- (2603:10b6:408:f5::20) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8182.15 via Frontend Transport; Thu,
- 2 Jan 2025 22:31:16 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN3PEPF0000B06A.mail.protection.outlook.com (10.167.243.69) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8335.0 via Frontend Transport; Thu, 2 Jan 2025 22:31:16 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 2 Jan 2025
- 14:30:59 -0800
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 2 Jan 2025
- 14:30:59 -0800
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.7)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
- Transport; Thu, 2 Jan 2025 14:30:56 -0800
-Date: Thu, 2 Jan 2025 14:30:55 -0800
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: <kevin.tian@intel.com>, <will@kernel.org>, <corbet@lwn.net>,
-	<joro@8bytes.org>, <suravee.suthikulpanit@amd.com>, <robin.murphy@arm.com>,
-	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>, <shuah@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <eric.auger@redhat.com>,
-	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
-	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>,
-	<ddutile@redhat.com>, <yi.l.liu@intel.com>, <patches@lists.linux.dev>
-Subject: Re: [PATCH v3 06/14] iommufd: Add IOMMUFD_OBJ_VIRQ and
- IOMMUFD_CMD_VIRQ_ALLOC
-Message-ID: <Z3cTn9nXAh+kKtZd@Asurada-Nvidia>
-References: <cover.1734477608.git.nicolinc@nvidia.com>
- <dc1252de7ff06c944cb7d91c91b4f61c25182f91.1734477608.git.nicolinc@nvidia.com>
- <20250102204507.GF5556@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C97E315B111
+	for <linux-kselftest@vger.kernel.org>; Thu,  2 Jan 2025 23:32:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1735860780; cv=none; b=HXD8mQiCbV6BmK7JGbe6VNPUOE8/9TUY488fEiYTguf6TD6Ju51RbLu1ADpR3wkymAQ32FjkIepcsutk2QCmfzj2VMGusi16AeGgqbsX3LPtBzov/wl9Rl2fKYI/w/lZsoFFI4a7fowqqnAi/YJK0kyysASspVnR+cudMHpyO0M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1735860780; c=relaxed/simple;
+	bh=WHoFZVu9/NbFhYk/LG7oSzL9kGz8cogN15++JUcpMAg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=DT94h7uMnZdm5rzxP/iVM9c/rISXW89Il36j+mrx3J4Y9k5Kt1Wa0GPWsxFbkVydbg8R8eQBrMkB8+NI1uapZ8daizBEs71fYUqB+wboqGVxoceDOcWHT0z46Pd+gMVmQgFxnTHpIz9VWPhQXLw4RExt7H84UMcnGuknI7aWUHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--isaacmanjarres.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EeZ2fAGs; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--isaacmanjarres.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2ef728e36d5so16413942a91.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Jan 2025 15:32:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1735860778; x=1736465578; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=QDuU3J1IGGphn0zaLirngh/aUSWdaIEND3bK3n59yFo=;
+        b=EeZ2fAGsMscWAcIOUVKzq3+NwzXISn0D59dJhQDUv4eSXA48Enbaywk/cHY0UWqfcJ
+         NA2Scru8DhNvAqetgUfXPwoNI1cp7/BR1Fwckkm+9v3K1/G/Q4WV9JCxKyQTMarSD5CD
+         zyAq2T8KVDb4HM9waQWBfOWo7o50Qpb0NNlVwsqsa2YwBjp9oTx7ACyS88zUa7pRMg8+
+         DkXdK13ItmBg8pULXy0uwE6J2mcG8gPvjBTnQZYC/du7k/YLZhoKKs6eN7BmPdCD/BPr
+         oeD7ITtjGxw9/NDqtdluK5TPBwDIsvUSulCAzrZeBcpNxeY/aNUuKbmdN0EQgq/9L8hO
+         b4dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735860778; x=1736465578;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QDuU3J1IGGphn0zaLirngh/aUSWdaIEND3bK3n59yFo=;
+        b=FkIJRUlA9gpidIGdpzWPZfw/NcjVkdgafQEnXmFlYY09b9wjSexJR/CU8B4SSSmTSl
+         9X2VFH9MPYzNBwwnUvKVM1oegJeSYAgWhD4v+wHKwwhEyByG/VjGlOUW1Y1qHyOrsACA
+         PX7ZAytpJC0bmsioF6//MCh4tX4IcTNiHGi8J5I64CbAD0Lfc1zhfpO/+ztnlobOEJ6K
+         tOC+9R7LVuJ9/h5roaUPgn2F/DRU3PiyKcrZRWli60hp9pxFdSi8oKYpugCb5IfTk6zT
+         sXJtWPx7Exb83radmNBgHwAvxreCmx7ZTpVSBzJrg97KzKGtNmLegrI+V974YfL3BZPu
+         iDBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUGs3UVe4NiiPRuFTt3nseWKJ+oRSgGukDYDwwXkHYCX/PtQtK83qxbNwlk3lTT3xNDB/ftxy3umsr3kigqF5k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywd8yaeFBP4P9t3U/nnHU1ZosqYD5VXXYSEuZHsN8LjAydxVhBX
+	JCZliqQRq7S5Hsn5XeUpsbze03ZOfhfmvOpFISV908mUkKB5j5WqfxEW6/3FgY/jVX4VVOOxN6s
+	gpVyYrGrk9h5HXBdcEvjJoj4uww9NLWMA7g==
+X-Google-Smtp-Source: AGHT+IG7y+IwwDV/Tqo322/ozip7aZe+2uc1Qx4485ddX1VhXCnLu1xgDDARozVocD5+sVJXjpD1g9odrGjfFfvYjZV0OA==
+X-Received: from pfwy1.prod.google.com ([2002:a05:6a00:1c81:b0:727:3a40:52d7])
+ (user=isaacmanjarres job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a00:1144:b0:729:597:4f97 with SMTP id d2e1a72fcca58-72abde828c1mr74507334b3a.20.1735860778070;
+ Thu, 02 Jan 2025 15:32:58 -0800 (PST)
+Date: Thu,  2 Jan 2025 15:32:49 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250102204507.GF5556@nvidia.com>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B06A:EE_|DS7PR12MB6309:EE_
-X-MS-Office365-Filtering-Correlation-Id: de690a27-de28-411a-c213-08dd2b7d2c14
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|376014|1800799024|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?RZlJJweWizOE+KVkpVB0cftBAkArHYpdt5fK4lsfGKRy8myjMR/6TXH4HcR5?=
- =?us-ascii?Q?4tVNf5zVM0hI8EoCZma2Qr2YWHT30Jk8/i7n4JY9O8Nyn1X2RGwfw/uzOB9b?=
- =?us-ascii?Q?xBS2DlbCauDWBAfyleQQTfjZFEBHNF4DTUM2WNxsgFxssYwxWCcNXv+XV1cx?=
- =?us-ascii?Q?/NuxalUIfkt4J7RxV2dKNcrp80FwLsX09zRzX05kDJTIlqu/nNua4ZZnrZk+?=
- =?us-ascii?Q?q/69ulLjXID14K83ZGsMl0fqC6808ZLBBGjiKzP19ZZvMLU9+biSByy9bIrL?=
- =?us-ascii?Q?F9Odk6utivsIcwY1yYN8ZFxwNR296adGyzz4zsa+luighCudTlkbs+0T/pc8?=
- =?us-ascii?Q?0fC1zGRrb9+AwAdZU4pIw+rxXcPEkC6Sci5EQyGuWOq612JANWGqijlbKj6e?=
- =?us-ascii?Q?T+0fzXdYxSG81yL7I3gB6ixAntrLk/1NQV7dXfZP/HxF9ToqtKA0wYAIxvVk?=
- =?us-ascii?Q?8H+Q1KmaLxWvKiYz9rZhZ/EswTN0nLd+npXmf1asQtWFxXxryf+flyyl/xF0?=
- =?us-ascii?Q?O8WnIpoFTdL87oom+Uyu8B6uZcdqbyEWb/rcc3uCKbh/jswJJINylqqKhkls?=
- =?us-ascii?Q?Hok14OkgPVg0k9RY72Vd5MgvQWDPGOjmVGrs5KEreFq+svGAoL1SfWQEWiv1?=
- =?us-ascii?Q?2M7apCG801rvIbXhRlhXDeKzg/T4vI9KkUdh6564pWXFDBlnK6YXVEmvIbU9?=
- =?us-ascii?Q?Ezsn/cVDRm3TG6aM0QMyYyXpid0av3KYRve8w0Fwgm9lU77OMw+inKAAzKxj?=
- =?us-ascii?Q?PytxZnvNQvPJrdulOHjfDQR151t/0uquFSxhpYsogvcMLPYhmEzR3bk/NAIN?=
- =?us-ascii?Q?mqiW99+HkuniYeI64VZJeeWcrqfsmbZrCecqz4tnxlycfR8RkTnO3pW9yzhZ?=
- =?us-ascii?Q?V0eI9YyixeposzKOJ/2pYO1yQjOLgXsJOFKvKwfLCInXpDfTludlUzWJCah8?=
- =?us-ascii?Q?Xjoilb63+c8/m/sWse1kRfipJfQXWJEfOFCL3+f0BiRnaGc6EyOUv/4JbNZa?=
- =?us-ascii?Q?3tFD7uBkr0FTx7HhWLGOJr8JCaNCHzEvBBvTjYY20H/2D16dwziiM+3Ks8oP?=
- =?us-ascii?Q?2yBQqNTvk85hu5fckYVRAtnWWu6iLDYo6IC/AYgT0pXUHXfZtkJaq4n6M6y4?=
- =?us-ascii?Q?WRB3JwgF8WDkaQX+JIjN/F/N4aWEMCEx4MJmCW1BFcyjOl+x9sRXUVgOoRmq?=
- =?us-ascii?Q?jqYtrrDYiXegGLR9E835R1J2RzxnGkhrPsT0v9gfjZGf9Lhkv6lVz6LBodsA?=
- =?us-ascii?Q?vw3mGNkk4X5VQ0n2US9Qpt7+BOJcnCjqANRVf6qoobsCVq7Rgt0ryfxI4mAj?=
- =?us-ascii?Q?jnZItzpEsK59vE9l+8qf7f0Z2IKlbw4C9QsDgP8vMosn2WenftHX5GJ/wViJ?=
- =?us-ascii?Q?M2KYEUBzSIR3oQHNgf7Alzaegxq5oC5KQN3J+ov4b2jYpX9QrDmxgZAn79Ld?=
- =?us-ascii?Q?yZX1Gx2C7j87gqCDTUjOm/L+PH25JXjuzmuZgkXKIR0ih5wdpt0SSgXTA2LC?=
- =?us-ascii?Q?zTG0W+Ct395CYZQ=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(376014)(1800799024)(7416014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jan 2025 22:31:16.4911
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: de690a27-de28-411a-c213-08dd2b7d2c14
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B06A.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6309
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.47.1.613.gc27f4b7a9f-goog
+Message-ID: <20250102233255.1180524-1-isaacmanjarres@google.com>
+Subject: [RFC PATCH RESEND v2 0/2] Add file seal to prevent future exec mappings
+From: "Isaac J. Manjarres" <isaacmanjarres@google.com>
+To: lorenzo.stoakes@oracle.com, Jeff Layton <jlayton@kernel.org>, 
+	Chuck Lever <chuck.lever@oracle.com>, Alexander Aring <alex.aring@gmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: surenb@google.com, kaleshsingh@google.com, jstultz@google.com, 
+	aliceryhl@google.com, jeffxu@google.com, kees@kernel.org, 
+	"Isaac J. Manjarres" <isaacmanjarres@google.com>, kernel-team@android.com, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Jan 02, 2025 at 04:45:07PM -0400, Jason Gunthorpe wrote:
-> On Tue, Dec 17, 2024 at 09:00:19PM -0800, Nicolin Chen wrote:
-> > Allow a vIOMMU object to allocate vIRQ Event Queues, with a condition that
-> > each vIOMMU can only have one single vIRQ event queue per type.
-> 
-> I suggest you should tend to use the eventq as the primary naming not
-> vIRQ, I think that will be a bit clearer.
-> 
-> The virq in the VM is edge triggered by an event queue FD becoming
-> readable, but the event queue is the file descriptor that reports a
-> batch of events on read().
-> 
-> The virq name evokes similarities to the virq in vfio which is purely
-> about conveying if an IRQ edge has happened through an eventfd and has
-> no event queue associated with it.
+* Resending because I accidentally forgot to include Lorenzo in the
+  "to" list.
 
-Ack. By doing the "Part-3: vEVENTQ" specifying one type of queue,
-I think the Part-4 then should be "vCMDQ" likewise v.s. "vQUEUE".
+Android uses the ashmem driver [1] for creating shared memory regions
+between processes. The ashmem driver exposes an ioctl command for
+processes to restrict the permissions an ashmem buffer can be mapped
+with.
 
-Thanks
-Nicolin
+Buffers are created with the ability to be mapped as readable, writable,
+and executable. Processes remove the ability to map some ashmem buffers
+as executable to ensure that those buffers cannot be used to inject
+malicious code for another process to run. Other buffers retain their
+ability to be mapped as executable, as these buffers can be used for
+just-in-time (JIT) compilation. So there is a need to be able to remove
+the ability to map a buffer as executable on a per-buffer basis.
+
+Android is currently trying to migrate towards replacing its ashmem
+driver usage with memfd. Part of the transition involved introducing a
+library that serves to abstract away how shared memory regions are
+allocated (i.e. ashmem vs memfd). This allows clients to use a single
+interface for restricting how a buffer can be mapped without having to
+worry about how it is handled for ashmem (through the ioctl
+command mentioned earlier) or memfd (through file seals).
+
+While memfd has support for preventing buffers from being mapped as
+writable beyond a certain point in time (thanks to
+F_SEAL_FUTURE_WRITE), it does not have a similar interface to prevent
+buffers from being mapped as executable beyond a certain point.
+However, that could be implemented as a file seal (F_SEAL_FUTURE_EXEC)
+which works similarly to F_SEAL_FUTURE_WRITE.
+
+F_SEAL_FUTURE_WRITE was chosen as a template for how this new seal
+should behave, instead of F_SEAL_WRITE, for the following reasons:
+
+1. Having the new seal behave like F_SEAL_FUTURE_WRITE matches the
+   behavior that was present with ashmem. This aids in seamlessly
+   transitioning clients away from ashmem to memfd.
+
+2. Making the new seal behave like F_SEAL_WRITE would mean that no
+   mappings that could become executable in the future (i.e. via
+   mprotect()) can exist when the seal is applied. However, there are
+   known cases (e.g. CursorWindow [2]) where restrictions are applied
+   on how a buffer can be mapped after a mapping has already been made.
+   That mapping may have VM_MAYEXEC set, which would not allow the seal
+   to be applied successfully.
+
+Therefore, the F_SEAL_FUTURE_EXEC seal was designed to have the same
+semantics as F_SEAL_FUTURE_WRITE.
+
+Note: this series depends on Lorenzo's work [3], [4], [5] from Andrew
+Morton's mm-unstable branch [6], which reworks memfd's file seal checks,
+allowing for newer file seals to be implemented in a cleaner fashion.
+
+Changes from v1 ==> v2:
+
+- Changed the return code to be -EPERM instead of -EACCES when
+  attempting to map an exec sealed file with PROT_EXEC to align
+  to mmap()'s man page. Thank you Kalesh Singh for spotting this!
+
+- Rebased on top of Lorenzo's work to cleanup memfd file seal checks in
+  mmap() ([3], [4], and [5]). Thank you for this Lorenzo!
+
+- Changed to deny PROT_EXEC mappings only if the mapping is shared,
+  instead of for both shared and private mappings, after discussing
+  this with Lorenzo.
+
+Opens:
+
+- Lorenzo brought up that this patch may negatively impact the usage of
+  MFD_NOEXEC_SCOPE_NOEXEC_ENFORCED [7]. However, it is not clear to me
+  why that is the case. At the moment, my intent is for the executable
+  permissions of the file to be disjoint from the ability to create
+  executable mappings.
+
+Links:
+
+[1] https://cs.android.com/android/kernel/superproject/+/common-android-mainline:common/drivers/staging/android/ashmem.c
+[2] https://developer.android.com/reference/android/database/CursorWindow
+[3] https://lore.kernel.org/all/cover.1732804776.git.lorenzo.stoakes@oracle.com/
+[4] https://lkml.kernel.org/r/20241206212846.210835-1-lorenzo.stoakes@oracle.com
+[5] https://lkml.kernel.org/r/7dee6c5d-480b-4c24-b98e-6fa47dbd8a23@lucifer.local
+[6] https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/tree/?h=mm-unstable
+[7] https://lore.kernel.org/all/3a53b154-1e46-45fb-a559-65afa7a8a788@lucifer.local/
+
+Links to previous versions:
+
+v1: https://lore.kernel.org/all/20241206010930.3871336-1-isaacmanjarres@google.com/
+
+Isaac J. Manjarres (2):
+  mm/memfd: Add support for F_SEAL_FUTURE_EXEC to memfd
+  selftests/memfd: Add tests for F_SEAL_FUTURE_EXEC
+
+ include/uapi/linux/fcntl.h                 |  1 +
+ mm/memfd.c                                 | 39 ++++++++++-
+ tools/testing/selftests/memfd/memfd_test.c | 79 ++++++++++++++++++++++
+ 3 files changed, 118 insertions(+), 1 deletion(-)
+
+-- 
+2.47.1.613.gc27f4b7a9f-goog
+
 
