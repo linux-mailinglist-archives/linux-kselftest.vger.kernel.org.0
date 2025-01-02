@@ -1,116 +1,135 @@
-Return-Path: <linux-kselftest+bounces-23821-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23822-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6E249FF939
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jan 2025 13:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 84DB09FFA75
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jan 2025 15:23:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82717160E10
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jan 2025 12:11:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58490160B4D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jan 2025 14:23:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23FC81B0F21;
-	Thu,  2 Jan 2025 12:10:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 019AA374CB;
+	Thu,  2 Jan 2025 14:23:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qmon.net header.i=@qmon.net header.b="G25pdtLs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UJTdpopN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from outbound.soverin.net (outbound.soverin.net [185.233.34.146])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF9F31A8F71;
-	Thu,  2 Jan 2025 12:10:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.233.34.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB63AAD51;
+	Thu,  2 Jan 2025 14:23:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735819835; cv=none; b=qdVCXhMHfjqszhsjh5vVNlYxgIM862xYtE33BGkV4zTu1NG8VTapz+uVSKZ3dhz7NR3ov1FmvPbqu9tf25ycglEZwhLv612Xwv4R2NziFTNrzLkYqw05oZVbPOXk3g4KSn5UW6aHsey1DTlBA99kAouWxQwgt+CR/s03+y6qVcc=
+	t=1735827800; cv=none; b=XLcW3LeHh2psG9NVeaiyhBOTWn6NDe1rPnSkSOF7MMWhwkhGC8C+yvKA/b4EK53jlLqAD9DBeexNiIcjZXVKKvw9kAfRmSbdaUHU3N6gjEYhj43x0nK9ebuu1BgRoUQhYEj3YJewtpEa/saeZqme3F44HDasxZ8/O/f03xZwstA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735819835; c=relaxed/simple;
-	bh=nHO7aMcaqWplyUVhEV3/XzoCazeJaQfAdkc4sWxxIXU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XgdCfOkESkdPyfiAjAnvVKsyGYdM/kYvEIxzVHwK7TisWglxnwu/amTqvVltbW0qtsA0P6jepB3GK8FQfil+KktqSm0MJ//wl18Dn2TDov5ucZMUW1BDXey0irzRk0QYtOcMrQnLvaOp6lHQikg7EFcbWmNEN24jPHGbEIn5k5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qmon.net; spf=pass smtp.mailfrom=qmon.net; dkim=pass (2048-bit key) header.d=qmon.net header.i=@qmon.net header.b=G25pdtLs; arc=none smtp.client-ip=185.233.34.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qmon.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qmon.net
-Received: from smtp.soverin.net (c04cst-smtp-sov02.int.sover.in [10.10.4.100])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by outbound.soverin.net (Postfix) with ESMTPS id 4YP52f6JKbzPl;
-	Thu,  2 Jan 2025 12:03:38 +0000 (UTC)
-Received: from smtp.soverin.net (smtp.soverin.net [10.10.4.100]) by soverin.net (Postfix) with ESMTPSA id 4YP52f291fzF1;
-	Thu,  2 Jan 2025 12:03:38 +0000 (UTC)
-Authentication-Results: smtp.soverin.net;
-	dkim=pass (2048-bit key; unprotected) header.d=qmon.net header.i=@qmon.net header.a=rsa-sha256 header.s=soverin1 header.b=G25pdtLs;
-	dkim-atps=neutral
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qmon.net; s=soverin1;
-	t=1735819418;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=euA1s4tqvaa1JuxKiLr5lj/Tt4znoq56DOJJ9tN+nVk=;
-	b=G25pdtLstq8tqtNNt2HnRpE2HfEqPa4HOs34v8BWLRmKSrvCr4IngnStM93T2krWHF9Bfa
-	k84j4rwv23X5mjYjt92li9aJiy6dWMv6Tu1U7iC0uzUlGM8Hyh6+zukEDhfZZ/xEDfb1Mx
-	gfLdSakD6cAU+biw3xgYxslYNmCfDgxUgJN+poHQZVr1PjJkvy46XAKC76teH26RQ0t8Ve
-	UPigFEyFdnGt3hTRaWJxKioUffERs/J2Kr7IkAyzXtKe5Ty+k++2Nzw605YxSucEpOpYvt
-	Ii4+2glgGuX/RUqQJMPOpdp0PM8BMyATdXADGGOuIhBbMPhZkbf+xLksnFQG8w==
-X-CMAE-Score: 0
-X-CM-Analysis: v=2.4 cv=e8f8Sbp/ c=1 sm=1 tr=0 ts=6776809a a=1BjqCW58WNvRLN6f/gJorg==:617 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=omOdbC7AAAAA:8 a=VwQbUJbxAAAA:8 a=cRoicrVNchjBets08OYA:9 a=QEXdDO2ut3YA:10
-X-CM-Envelope: MS4xfGJp98eV3jbZTJH1JTmosxeJVXMU3nR520Q8ae/7RqtDavldxlp4+MR1Bc6C2B82Vb8u9kxBJA3d6AU8YULQm1vW6oyco97kwP6xxOP9jjm3lDoe3gin PJnB7IIa9qKO1mEul9QeXdOkcOwEIV2RouWTAkFY7Z0/u771DwGGMwklJDpIzWYM4No4aR8L08EI6lHVFbMvpHo34r0OqWAutYjmqrt8jFu9cN3ghipSfKLN foAZuo5edzgeIhrircod9YW2rFFu7Z98WsqmJLFwSoZoIRpt2yJLRRINY1g1EpQ6lOEYJkC526IhYL21LzrzWB19Q95i96QPdfGEQuLuIPcrCZwDRbq1pa3p zjSUH8FEEEvZ67wrSiDRMLSMAEMyVDKVeqTT3vWvp1DOs7xSSUDouaofVvyMvYhI7MD5rWcrxGMkfEKvADyavK+jARnmWVHKqJdKgq25nBOtWugQT00=
-Message-ID: <56929291-3a6d-471b-8329-5acf5f3a7a0a@qmon.net>
-Date: Thu, 2 Jan 2025 12:03:37 +0000
+	s=arc-20240116; t=1735827800; c=relaxed/simple;
+	bh=WBASArHNWuzDRkBlzLrre+5pUpttJP04ha3ml0jtfCk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s2IYBj9EurKjW8fPPOenwbuaDqR1T4IDFMp87DGDYusi9upM/tj4ycNRtz+tEkv59vmJUS8z5bs3LBsTFp80BtzixZMwk9nx/a46wM0G1BAID8/2pLK5QPNXzZ00P2eM3Y+qXbtX+QjwdIHG03yI9JlqG0al2MpkvirbytFm6SQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UJTdpopN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0884CC4CED0;
+	Thu,  2 Jan 2025 14:23:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1735827800;
+	bh=WBASArHNWuzDRkBlzLrre+5pUpttJP04ha3ml0jtfCk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UJTdpopNJ8Vj/ZLQ+tn7e1QU4O0Wl0nN6iLW8fcuhsETsiToAynXzvl01EdD3PM4M
+	 zUvWDEgp0z8fKFKBYtIL2XqB3GxlLhI3kZpmWvpXV7ONrsEOE8nfdEa003xw97t5QX
+	 jJEW+U/CfV4q8re1wf+223LksgBfYgj6WUZ86ACCp08KpZEU8Vx1wIk0cKUzmBxpMR
+	 BSwFtQMo00zb1XPCKkUWaH4k9nKxS5PT+81SXVgPXahXc40jHlbZFgqo/rn4wlurGr
+	 SklXJ73W/VNXkOluc9BirsLEIDaqDRg9u5AJF46rZJxph5QOPDRvx8bDyBjX+3KO7D
+	 Gjg1R5XKD2deA==
+Date: Thu, 2 Jan 2025 15:23:14 +0100
+From: Niklas Cassel <cassel@kernel.org>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Vinod Koul <vkoul@kernel.org>
+Cc: kw@linux.com, gregkh@linuxfoundation.org, arnd@arndb.de,
+	lpieralisi@kernel.org, shuah@kernel.org, kishon@kernel.org,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bhelgaas@google.com, linux-arm-msm@vger.kernel.org, robh@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Aman Gupta <aman1.gupta@samsung.com>,
+	Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+Subject: Re: [PATCH v4 3/3] selftests: pci_endpoint: Migrate to Kselftest
+ framework
+Message-ID: <Z3ahUuSjRv66L_g9@ryzen>
+References: <20241231131341.39292-1-manivannan.sadhasivam@linaro.org>
+ <20241231131341.39292-4-manivannan.sadhasivam@linaro.org>
+ <Z3QtEihbiKIGogWA@ryzen>
+ <20241231191812.ymyss2dh7naz4oda@thinkpad>
+ <2C16240A-28F8-4D9B-9FD7-33E4E6F0879E@kernel.org>
+ <20250102070404.aempesitsqktfnle@thinkpad>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH for-next v2] selftests/Makefile: override the srctree for
- out-of-tree builds
-To: Li Zhijian <lizhijian@fujitsu.com>, linux-kselftest@vger.kernel.org
-Cc: Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, Shuah Khan <shuah@kernel.org>
-References: <20241223083342.1172756-1-lizhijian@fujitsu.com>
-From: Quentin Monnet <qmo@qmon.net>
-Content-Language: en-GB
-In-Reply-To: <20241223083342.1172756-1-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spampanel-Class: ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250102070404.aempesitsqktfnle@thinkpad>
 
-2024-12-23 16:33 UTC+0800 ~ Li Zhijian <lizhijian@fujitsu.com>
-> Fixes an issue where out-of-tree kselftest builds fail when building
-> the BPF and bpftools components. The failure occurs because the top-level
-> Makefile passes a relative srctree path to its sub-Makefiles, which
-> leads to errors in locating necessary files.
+Hello Mani, Vinod,
+
+On Thu, Jan 02, 2025 at 12:34:04PM +0530, Manivannan Sadhasivam wrote:
+> On Tue, Dec 31, 2024 at 08:33:57PM +0100, Niklas Cassel wrote:
+> > 
+> > I have some patches that adds DMA_MEMCPY to dw-edma, but I'm not sure if the DWC eDMA hardware supports having both src and dst as PCI addresses, or if only one of them can be a PCI address (with the other one being a local address).
+> > 
+> > If only one of them can be a PCI address, then I'm not sure if your suggested patch is correct.
+> > 
 > 
-> For example, the following error is encountered:
-> 
-> ```
-> $ make V=1 O=$build/ TARGETS=hid kselftest-all
-> ...
-> make -C ../tools/testing/selftests all
-> make[4]: Entering directory '/path/to/linux/tools/testing/selftests/hid'
-> make  -C /path/to/linux/tools/testing/selftests/../../../tools/lib/bpf OUTPUT=/path/to/linux/O/kselftest/hid/tools/build/libbpf/ \
->             EXTRA_CFLAGS='-g -O0'                                      \
->             DESTDIR=/path/to/linux/O/kselftest/hid/tools prefix= all install_headers
-> make[5]: Entering directory '/path/to/linux/tools/lib/bpf'
-> ...
-> make[5]: Entering directory '/path/to/linux/tools/bpf/bpftool'
-> Makefile:127: ../tools/build/Makefile.feature: No such file or directory
-> make[5]: *** No rule to make target '../tools/build/Makefile.feature'.  Stop.
-> ```
-> 
-> To resolve this, override the srctree in the kselftests's top Makefile
-> when performing an out-of-tree build. This ensures that all sub-Makefiles
-> have the correct path to the source tree, preventing directory resolution
-> errors.
-> 
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+> I don't see why that would be an issue. DMA_MEMCPY is independent of PCI/local
+> addresses. If a dmaengine driver support doing MEMCPY, then the dma cap should
+> be sufficient. As you said, if a controller supports both SLAVE and MEMCPY, the
+> test currently errors out, which is wrong.
+
+While I am okay with your suggested change to pci-epf-test.c:
+> >-               if (epf_test->dma_private) {
+> >+               if (!dma_has_cap(DMA_MEMCPY, epf_test->dma_chan_tx->device->cap_mask)) {
+
+Since this will ensure that a DMA driver implementing DMA_MEMCPY,
+which cannot be shared (has DMA_PRIVATE set), will not error out.
 
 
-I simply tested with "make V=1 O=build/ TARGETS=hid kselftest-all", this
-approach fixes the build just as well as v1. Thanks!
+What I'm trying to explain is that in:
+https://lore.kernel.org/linux-pci/Z2BW4CjdE1p50AhC@vaman/
+https://lore.kernel.org/linux-pci/20241217090129.6dodrgi4tn7l3cod@thinkpad/
 
-Tested-by: Quentin Monnet <qmo@kernel.org>
+Vinod (any you) suggested that we should add support for prep_memcpy()
+(which implies also setting cap DMA_MEMCPY) in the dw-edma DMA driver.
+
+However, from section "6.3 Using the DMA" in the DWC databook,
+the DWC eDMA hardware only supports:
+- Transfer (copy) of a block of data from local memory to remote memory.
+- Transfer (copy) of a block of data from remote memory to local memory.
+
+
+Currently, we have:
+https://github.com/torvalds/linux/blob/v6.13-rc5/include/linux/dmaengine.h#L843-L844
+https://github.com/torvalds/linux/blob/v6.13-rc5/drivers/dma/dw-edma/dw-edma-core.c#L215-L231
+
+Where we can expose per-channel capabilities, so we set MEM_TO_DEV/DEV_TO_MEM
+per channel, however, these are returned in a struct dma_slave_caps *caps,
+so this is AFAICT only for DMA_SLAVE, not for DMA_MEMCPY.
+
+Looking at:
+https://github.com/torvalds/linux/blob/v6.13-rc5/include/linux/dmaengine.h#L975-L979
+it seems that DMA_MEMCPY is always assumed to be MEM_TO_MEM.
+
+To me, it seems that we would either need a new dma_transaction_type (e.g. DMA_COPY)
+where we can set dir:
+MEM_TO_DEV, DEV_TO_MEM, or DEV_TO_DEV. (dw-edma would not support DEV_TO_DEV.)
+
+Or, if we should stick with DMA_MEMCPY, we would need another way of telling
+client drivers that only src or dst can be a remote address.
+
+Until this is solved, I think I will stop my work on adding DMA_MEMCPY to the
+dw-edma driver.
+
+
+Kind regards,
+Niklas
 
