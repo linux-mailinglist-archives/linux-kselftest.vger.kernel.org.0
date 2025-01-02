@@ -1,184 +1,116 @@
-Return-Path: <linux-kselftest+bounces-23820-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23821-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBE1B9FF7C7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jan 2025 11:05:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6E249FF939
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jan 2025 13:11:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F266D1882E07
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jan 2025 10:05:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82717160E10
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jan 2025 12:11:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 791FF1AB6DD;
-	Thu,  2 Jan 2025 10:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23FC81B0F21;
+	Thu,  2 Jan 2025 12:10:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GmSRfDER"
+	dkim=pass (2048-bit key) header.d=qmon.net header.i=@qmon.net header.b="G25pdtLs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from outbound.soverin.net (outbound.soverin.net [185.233.34.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF9319D8BB;
-	Thu,  2 Jan 2025 10:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF9F31A8F71;
+	Thu,  2 Jan 2025 12:10:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.233.34.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735812315; cv=none; b=SzRTqJdbZniMc4rixXC6Nr+YD8v+FGZjK3TZlrEUe1ZHUnx9IByZmLj4T+7gEvV/nxIM4wdEN+p3cVcN1hhVm4MFNrN3Ewv2YLuCcrBd552pfbOY/PfsDm0kcX3ku1ZLH+RDEtsNHbr0IOgdouMXZcY+U1aZqqkBh6/9dE0gsaw=
+	t=1735819835; cv=none; b=qdVCXhMHfjqszhsjh5vVNlYxgIM862xYtE33BGkV4zTu1NG8VTapz+uVSKZ3dhz7NR3ov1FmvPbqu9tf25ycglEZwhLv612Xwv4R2NziFTNrzLkYqw05oZVbPOXk3g4KSn5UW6aHsey1DTlBA99kAouWxQwgt+CR/s03+y6qVcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735812315; c=relaxed/simple;
-	bh=E5B04nP/p1tjctc7tRaDi3KpmTPtDYnoyQ4NxS9KzGo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XDsaal0m5zmsEhGkcR9aPri+3jHkuJ7oNx4Y4YNzEzZ8prDTamrevzlT+AGPnr2gyRdF/vqCydlXc0k+Mgp2S5yEEzjQFCHtov/wAI36/rc/Y6biTveDkxvZivrcZsFII9Fqzh7p5dC4ldJ/G+c/qaZ9L6BEMRM1p+7d3S+zi4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GmSRfDER; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2164b1f05caso150222135ad.3;
-        Thu, 02 Jan 2025 02:05:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735812313; x=1736417113; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R9pqvO/HmvM8F30k0JXImorQhWQmk8hgeeTlW54kQmw=;
-        b=GmSRfDERU4TdvSwWQjR2HchpZ9ijLb79HIvIM2i7QYfJuh0vBSoPbLVp0+yIvoU0Jw
-         TsLIuLeA+qUVrHJ8sSI9G2stpG3sda6toc2XWW4aafvC+4+Gm7Zaul2CVjEK+AXZw2R/
-         Hw/BfUYhwxANZzTcIYZJHDLFke5fYvyKug8H7pvgRskaSPeJzrg5FEk4OsFngCSUL0U/
-         tYARLSJpYgMKEUu/4wwIT+XFs4IgvD7u0RtbsRyjscmWAwAe3IBhIXjoyJoXlaj07ih/
-         mh5hs6OaRI5Ymc22hg8ozctTTrTEmy6iQJHyaEfh4f8zXKyg/e1D0hYanNzlsJSDuINm
-         Oq6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735812313; x=1736417113;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R9pqvO/HmvM8F30k0JXImorQhWQmk8hgeeTlW54kQmw=;
-        b=q8gY5DBm6Gw9rejPlOVddUTd6OutJnPW7GnDkoRtBOW1V4OX6dT4BvYZCiocySYPiM
-         dLHuZxuSuY46YVULoohNAHmfh2RcQFVqjiZyuEzIu6tHKn0G0PdeaLK688iGnBl3C1j5
-         rs8ZIP6GlwVdFOB63YPP5Yevez3WqJe1WaPuqJJG8sGKHs3Nd5SUc2qpIx/xjXzuT05N
-         UlZ9Gi3nx7baa01eMofBVFsvI7/QmF3ciecpnQkbkFX39cCi0aXpFHrDUwVTrEUriMjH
-         wd2H8X3YaXAGZ/Prm2BZc6TZPQStM5UFjJMGb7H3N33+yTwlW3htlKgAyA8G8qmCEZUC
-         EdqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUl8giPWPLcb7KvHKlcBroAsd3+TPWuMIbD3r3GY9kW4Llo9lhNyWxkoPHK2sA69imHAsdaRlItbrwoVV4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTcbD1yWc3GnjgC2MkKfCro3SL8CuCPHm5eSe1BW0ub/W0NjDE
-	WQREBGLwxTkKJlemcTZR5aRanGtiYD1FCLNrAC6yp/LOnKjmV7kpIOCFtg==
-X-Gm-Gg: ASbGncvs93gdbNiu7aIgdQN2brf2CRLqkJhKwL0GUSz6a5gXJIJgXxJyUMf5NRRZl0E
-	3Gp3arYI3TbQuyokJxQZ0EoMoobNN6D2lHd4DYvKuq6p78PO5GiLmfSfqZ3C11GA2gTLwLnUuwv
-	UEv6nBgCoLJh4tOUE14DyJtnSZMsexNPaGNOZQpyqgWaiMEAKcX2dbtPUGxt7Rx2skNysfiPF2f
-	zyZBq5DOpmOpcpsU2dldoxXcNpeInrcGAR9PfO2oEjAIaqqUkGs6sv95TrxrCUBwKAfVQ==
-X-Google-Smtp-Source: AGHT+IGz+JOKRKnBWp+Kh76fkqrY6rwNqq4as+W+NSqOnua3pty4goNpTJyyEFi2UrgSyhbSUDMM/Q==
-X-Received: by 2002:a17:902:fc4e:b0:216:31aa:1308 with SMTP id d9443c01a7336-219e6ec1da0mr683111145ad.34.1735812313322;
-        Thu, 02 Jan 2025 02:05:13 -0800 (PST)
-Received: from 2abb50c-lcedt.nvidia.com ([203.200.25.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f7457sm219759945ad.201.2025.01.02.02.05.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jan 2025 02:05:13 -0800 (PST)
-From: Shivam Chaudhary <cvam0000@gmail.com>
-To: shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Shivam Chaudhary <cvam0000@gmail.com>
-Subject: [PATCH v7 2/2] selftests: tmpfs: Add kselftest support to tmpfs
-Date: Thu,  2 Jan 2025 15:34:59 +0530
-Message-Id: <20250102100459.1291426-3-cvam0000@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250102100459.1291426-1-cvam0000@gmail.com>
-References: <20250102100459.1291426-1-cvam0000@gmail.com>
+	s=arc-20240116; t=1735819835; c=relaxed/simple;
+	bh=nHO7aMcaqWplyUVhEV3/XzoCazeJaQfAdkc4sWxxIXU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XgdCfOkESkdPyfiAjAnvVKsyGYdM/kYvEIxzVHwK7TisWglxnwu/amTqvVltbW0qtsA0P6jepB3GK8FQfil+KktqSm0MJ//wl18Dn2TDov5ucZMUW1BDXey0irzRk0QYtOcMrQnLvaOp6lHQikg7EFcbWmNEN24jPHGbEIn5k5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qmon.net; spf=pass smtp.mailfrom=qmon.net; dkim=pass (2048-bit key) header.d=qmon.net header.i=@qmon.net header.b=G25pdtLs; arc=none smtp.client-ip=185.233.34.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qmon.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qmon.net
+Received: from smtp.soverin.net (c04cst-smtp-sov02.int.sover.in [10.10.4.100])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by outbound.soverin.net (Postfix) with ESMTPS id 4YP52f6JKbzPl;
+	Thu,  2 Jan 2025 12:03:38 +0000 (UTC)
+Received: from smtp.soverin.net (smtp.soverin.net [10.10.4.100]) by soverin.net (Postfix) with ESMTPSA id 4YP52f291fzF1;
+	Thu,  2 Jan 2025 12:03:38 +0000 (UTC)
+Authentication-Results: smtp.soverin.net;
+	dkim=pass (2048-bit key; unprotected) header.d=qmon.net header.i=@qmon.net header.a=rsa-sha256 header.s=soverin1 header.b=G25pdtLs;
+	dkim-atps=neutral
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qmon.net; s=soverin1;
+	t=1735819418;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=euA1s4tqvaa1JuxKiLr5lj/Tt4znoq56DOJJ9tN+nVk=;
+	b=G25pdtLstq8tqtNNt2HnRpE2HfEqPa4HOs34v8BWLRmKSrvCr4IngnStM93T2krWHF9Bfa
+	k84j4rwv23X5mjYjt92li9aJiy6dWMv6Tu1U7iC0uzUlGM8Hyh6+zukEDhfZZ/xEDfb1Mx
+	gfLdSakD6cAU+biw3xgYxslYNmCfDgxUgJN+poHQZVr1PjJkvy46XAKC76teH26RQ0t8Ve
+	UPigFEyFdnGt3hTRaWJxKioUffERs/J2Kr7IkAyzXtKe5Ty+k++2Nzw605YxSucEpOpYvt
+	Ii4+2glgGuX/RUqQJMPOpdp0PM8BMyATdXADGGOuIhBbMPhZkbf+xLksnFQG8w==
+X-CMAE-Score: 0
+X-CM-Analysis: v=2.4 cv=e8f8Sbp/ c=1 sm=1 tr=0 ts=6776809a a=1BjqCW58WNvRLN6f/gJorg==:617 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=omOdbC7AAAAA:8 a=VwQbUJbxAAAA:8 a=cRoicrVNchjBets08OYA:9 a=QEXdDO2ut3YA:10
+X-CM-Envelope: MS4xfGJp98eV3jbZTJH1JTmosxeJVXMU3nR520Q8ae/7RqtDavldxlp4+MR1Bc6C2B82Vb8u9kxBJA3d6AU8YULQm1vW6oyco97kwP6xxOP9jjm3lDoe3gin PJnB7IIa9qKO1mEul9QeXdOkcOwEIV2RouWTAkFY7Z0/u771DwGGMwklJDpIzWYM4No4aR8L08EI6lHVFbMvpHo34r0OqWAutYjmqrt8jFu9cN3ghipSfKLN foAZuo5edzgeIhrircod9YW2rFFu7Z98WsqmJLFwSoZoIRpt2yJLRRINY1g1EpQ6lOEYJkC526IhYL21LzrzWB19Q95i96QPdfGEQuLuIPcrCZwDRbq1pa3p zjSUH8FEEEvZ67wrSiDRMLSMAEMyVDKVeqTT3vWvp1DOs7xSSUDouaofVvyMvYhI7MD5rWcrxGMkfEKvADyavK+jARnmWVHKqJdKgq25nBOtWugQT00=
+Message-ID: <56929291-3a6d-471b-8329-5acf5f3a7a0a@qmon.net>
+Date: Thu, 2 Jan 2025 12:03:37 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH for-next v2] selftests/Makefile: override the srctree for
+ out-of-tree builds
+To: Li Zhijian <lizhijian@fujitsu.com>, linux-kselftest@vger.kernel.org
+Cc: Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, Shuah Khan <shuah@kernel.org>
+References: <20241223083342.1172756-1-lizhijian@fujitsu.com>
+From: Quentin Monnet <qmo@qmon.net>
+Content-Language: en-GB
+In-Reply-To: <20241223083342.1172756-1-lizhijian@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spampanel-Class: ham
 
-Replace direct error handling with 'ksft_test_result_*'
-macros for better reporting.
+2024-12-23 16:33 UTC+0800 ~ Li Zhijian <lizhijian@fujitsu.com>
+> Fixes an issue where out-of-tree kselftest builds fail when building
+> the BPF and bpftools components. The failure occurs because the top-level
+> Makefile passes a relative srctree path to its sub-Makefiles, which
+> leads to errors in locating necessary files.
+> 
+> For example, the following error is encountered:
+> 
+> ```
+> $ make V=1 O=$build/ TARGETS=hid kselftest-all
+> ...
+> make -C ../tools/testing/selftests all
+> make[4]: Entering directory '/path/to/linux/tools/testing/selftests/hid'
+> make  -C /path/to/linux/tools/testing/selftests/../../../tools/lib/bpf OUTPUT=/path/to/linux/O/kselftest/hid/tools/build/libbpf/ \
+>             EXTRA_CFLAGS='-g -O0'                                      \
+>             DESTDIR=/path/to/linux/O/kselftest/hid/tools prefix= all install_headers
+> make[5]: Entering directory '/path/to/linux/tools/lib/bpf'
+> ...
+> make[5]: Entering directory '/path/to/linux/tools/bpf/bpftool'
+> Makefile:127: ../tools/build/Makefile.feature: No such file or directory
+> make[5]: *** No rule to make target '../tools/build/Makefile.feature'.  Stop.
+> ```
+> 
+> To resolve this, override the srctree in the kselftests's top Makefile
+> when performing an out-of-tree build. This ensures that all sub-Makefiles
+> have the correct path to the source tree, preventing directory resolution
+> errors.
+> 
+> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
 
-Test logs:
 
-Before change:
-- Without root
- error: unshare, errno 1
+I simply tested with "make V=1 O=build/ TARGETS=hid kselftest-all", this
+approach fixes the build just as well as v1. Thanks!
 
-- With root
- No, output
-
-After change:
-- Without root
-TAP version 13
-1..1
-ok 2 # SKIP This test needs root to run!
-Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
-
-- With root
-TAP version 13
-1..1
-ok 1 Test : Success
-Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Signed-off-by: Shivam Chaudhary <cvam0000@gmail.com>
----
- .../selftests/tmpfs/bug-link-o-tmpfile.c      | 28 +++++++++----------
- 1 file changed, 14 insertions(+), 14 deletions(-)
-
-diff --git a/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c b/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
-index 657b64857e82..290f11a81d2b 100644
---- a/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
-+++ b/tools/testing/selftests/tmpfs/bug-link-o-tmpfile.c
-@@ -41,39 +41,39 @@ int main(void)
- 
- 	if (unshare(CLONE_NEWNS) == -1) {
- 		if (errno == ENOSYS || errno == EPERM) {
--			fprintf(stderr, "error: unshare, errno %d\n", errno);
--			return 4;
-+			ksft_exit_skip("unshare() error: unshare, errno %d\n", errno);
-+		} else {
-+			ksft_exit_fail_msg("unshare() error: unshare, errno %d\n", errno);
- 		}
--		fprintf(stderr, "error: unshare, errno %d\n", errno);
--		return 1;
- 	}
-+
- 	if (mount(NULL, "/", NULL, MS_PRIVATE|MS_REC, NULL) == -1) {
--		fprintf(stderr, "error: mount '/', errno %d\n", errno);
--		return 1;
-+		ksft_exit_fail_msg("mount() error: Root filesystem private mount: Fail %d\n", errno);
- 	}
- 
- 	/* Our heroes: 1 root inode, 1 O_TMPFILE inode, 1 permanent inode. */
- 	if (mount(NULL, "/tmp", "tmpfs", 0, "nr_inodes=3") == -1) {
--		fprintf(stderr, "error: mount tmpfs, errno %d\n", errno);
--		return 1;
-+		ksft_exit_fail_msg("mount() error: Mounting tmpfs on /tmp: Fail %d\n", errno);
- 	}
- 
- 	fd = openat(AT_FDCWD, "/tmp", O_WRONLY|O_TMPFILE, 0600);
- 	if (fd == -1) {
--		fprintf(stderr, "error: open 1, errno %d\n", errno);
--		return 1;
-+		ksft_exit_fail_msg("openat() error: Open first temporary file: Fail %d\n", errno);
- 	}
-+
- 	if (linkat(fd, "", AT_FDCWD, "/tmp/1", AT_EMPTY_PATH) == -1) {
--		fprintf(stderr, "error: linkat, errno %d\n", errno);
--		return 1;
-+		ksft_exit_fail_msg("linkat() error: Linking the temporary file: Fail %d\n", errno);
-+		/* Ensure fd is closed on failure */
-+		close(fd);
- 	}
- 	close(fd);
- 
- 	fd = openat(AT_FDCWD, "/tmp", O_WRONLY|O_TMPFILE, 0600);
- 	if (fd == -1) {
--		fprintf(stderr, "error: open 2, errno %d\n", errno);
--		return 1;
-+		ksft_exit_fail_msg("openat() error: Opening the second temporary file: Fail %d\n", errno);
- 	}
- 
-+	ksft_test_result_pass("Test : Success\n");
-+	ksft_exit_pass();
- 	return 0;
- }
--- 
-2.34.1
-
+Tested-by: Quentin Monnet <qmo@kernel.org>
 
