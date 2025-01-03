@@ -1,84 +1,85 @@
-Return-Path: <linux-kselftest+bounces-23875-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23876-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F317A00B9E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 16:43:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C827A00BA7
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 16:48:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A20B1884869
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 15:43:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A1183A28F1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 15:48:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B43BC1FA24D;
-	Fri,  3 Jan 2025 15:43:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDCB61A9B5D;
+	Fri,  3 Jan 2025 15:48:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aSY7Dc52"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LYGhJx19"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AC4217BA3;
-	Fri,  3 Jan 2025 15:43:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 420DFEEBB;
+	Fri,  3 Jan 2025 15:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735919009; cv=none; b=uZFFOHvk3IDOQJTHlig5uN38DeX5+I/dbqj3gr3aFppy3lTnnajdA7cfli9CfLrkSj6qeuM/DJZ6PxqWG6a01FcvNKn2u9uWtPOQPr8XG8tsFaQM50xLwDKAHQ8E+mD6bI3fkJH+krL8BFTPsH+pAW/2T3qGt0PdkLffMrVaSdA=
+	t=1735919316; cv=none; b=PsT3u1HiQd95QOQMZucHszRMhKQEvvm77SIh7VmIN8LqkQBSetKvY+Ufy80ff1uaXf+u4RuRThcZuNMpHuksT4LX5DcWPJTfzLlf8uBO9jW9Bq91z452vYU5DgcETOPWEjEw4qjXE7YOtlmXUC9qbR81Nd+so/5XrKvUZ6cnC1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735919009; c=relaxed/simple;
-	bh=wZ5eJLs2akZMOcNUFHkT2IHpMMrs27teBjxbQTJZcAM=;
+	s=arc-20240116; t=1735919316; c=relaxed/simple;
+	bh=v8XTnh3FrjBpDTGUIMIEXyZChw4qfS/sAiIqpIJcrdU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MfALluWed4JF3D/1hUxG0uij6ZILkglxXF7z7Rh/kzXvFYxCI2t85Jq3CtEw5HmC7Zt1AiWZtdlyGw7JYwyYFtzIOszrvobvsNI8G8sn/ZKacYW16req/ErHfv61wB3Dog9guQmve7zVVlzlJsYQ6Q0CLFydeSjrPX/dvg6ZbCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aSY7Dc52; arc=none smtp.client-ip=209.85.214.169
+	 To:Cc:Content-Type; b=LQQ1GIRLLQicQG+0DZ9mrVAc4vMXQ+f0CS1R1ddd6uIiUZ408VyJq9SmpBy6gJMa4ZJSx9bbJ8LiuaMNMDPoRjtRKxcl1ZwWrevusczNMxARFw7UPNjpzTDNKqe1O2EFN4D5wsC1yPpacRMd8vCg3vpvAesqqmkpQnnLbbfSswQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LYGhJx19; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-216513f8104so16997865ad.2;
-        Fri, 03 Jan 2025 07:43:27 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21644db9f3cso17251825ad.2;
+        Fri, 03 Jan 2025 07:48:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735919007; x=1736523807; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1735919314; x=1736524114; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U5Cj+dv8k85BhdyjAiDFJMj3Zb2/QvYVSVLgI0pirM4=;
-        b=aSY7Dc52IjfmwTbps15usSbg3yThJYIdYW62EEYHInuijPHZXu5oSvGs/qqDzOeecq
-         fSMcWKWp9BSwK1mcx0mZLS9FUvf424zB/oQ8CTnTu/KweDU9whrWNiGJDEfL3L6CN67H
-         46msr5RsmznJEdfQ775GslmTv2kSz6c8SNXBsDGL0gTpq2ocqL9oBZPiw8ZTtKFZOdm8
-         YxjDBvkm87vC7mPujG6dKNcNZFj6mqWREf4xxXoz8AtxbceV7hGOApTBfAFrTqr/xbv+
-         lrEy8IO1To+Pp2AqyKAeaMlCEGCLEEHQ/dKdoL9Uux2ySltG/VAB45HPirDE/Kwzbb5G
-         ImNQ==
+        bh=RZ0ZFHg1UhVx59ziT2yB8Ah8dFaXGwOjNvAYlk4PRXc=;
+        b=LYGhJx192dkS8KiwT1T9QAbH2m2P0XUUy0yIBzqyw+OyXxgV+Xx+/AJkLHvgkrMZfU
+         H8LVbbj18S/K8JT/n7LWIS0lyclgyOlxhtvKaAEtnBvgmPaLLwQ4kloVVnCs6MRpGkSE
+         2DsudxBcHmO14SZpgJG1xr4hH4oKMiWjVtX/lqqJ2rUNiJjMeu+FmCpP3BdHFnBmtsij
+         VyI9QNAUZm2E49q7RakRdzdedMt338DwHJHf0ch3rmSU8OxvEYMuwX+AFXnY+nrljY/v
+         aDIMRJeEthygOVMRSFDGRGeLpFjXSPyZzqPlAjdrhs97qjFD6VriPPYTsSDmm8oKhtRv
+         l3pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735919007; x=1736523807;
+        d=1e100.net; s=20230601; t=1735919314; x=1736524114;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=U5Cj+dv8k85BhdyjAiDFJMj3Zb2/QvYVSVLgI0pirM4=;
-        b=BhJiSnEAWvU55uIfxna06GTpTu+QjFyaCNIkJBvE8Duob43TAVglNB1ehw0DPyYs5g
-         nSj4LEw1LPtETTSnHZc8RjdcMcIQc+z4cQjHk8N/kuDBWrQOcdqJqFHshrnt+TOVMxLH
-         UK3onImqDdvpFdR80p43r8KUnxkwL7/Chfm2C35TJ69AG41/UeQ+ASv+B19PQ2m3gWGe
-         oueNa/uMaaBk+4YGVX4h7UzIdMAHb4/k+HclhKxFILUNUm3AhYLxW8WZdjkWp2lsdklF
-         0+JDXN8AxmQlBw+TJCjDdiQtLrFsXJvgiZ79XOYNS+ql5TYsdInGiu0DLR7H6Whoj8o9
-         MfdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUePg6+GkXVCcfTqICLHoU/Za0UTwt33PuhE6y6SF6zZLgELzu5Vrht2Z3p1k5e13lE1bH0dqFo1bac+gnKXp8U@vger.kernel.org, AJvYcCUr6UMugyzr5Xue3XZSJQdoVOlS4+VCgS9Qy+F1XFjH3d6qRgbTmPO0NMD6TM1n01AqwwDTSegg9vb5XCozUOI=@vger.kernel.org, AJvYcCVAmTRJR9pWA2VkwImU8NccCclFEjWtx5EeFuWe9u6M+of/bCyL8FH8yYUWA+x62GHOBkTyMdKsi5R8Qsc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3kArOnMifk/FJbLDgTKLhmi0fzgEE/VC7e8twv27tFMTc/RMn
-	F1+9kQpfq7N8xBikkq4g8kcnK1/r8KD6/QZYZEhpbVnGxAHZQxSmcDIICcyqIFKAvuz0yX6l3si
-	UKJsDfZlykderVXHop3VK9+1Yyak=
-X-Gm-Gg: ASbGncvbibrjT1o824Y+op9jlTa1V6ekAlB/nBZrt3uW6uOkO2hAhUQKIJw4CA7oXn2
-	Woz8Z0uAXgBt4ZynwwEpQ6f64//4DPAMTst7waA==
-X-Google-Smtp-Source: AGHT+IFCA7G0jR3qB6OEjg2YkmOHctxWSKstr7y+0g5C7duADQmK9x+abiRSEk5WZMjUbSsYQcPO3ZvaSRNjfH9HRyI=
-X-Received: by 2002:a17:903:2cc:b0:216:536a:9d3b with SMTP id
- d9443c01a7336-219e6e8541dmr256483435ad.1.1735919007260; Fri, 03 Jan 2025
- 07:43:27 -0800 (PST)
+        bh=RZ0ZFHg1UhVx59ziT2yB8Ah8dFaXGwOjNvAYlk4PRXc=;
+        b=fJmtvRgiV53sK1Zw4Z33WlqdS7TuOr2haaNjYPkOZhBB+C8GaYz/SVAmfGPm06XPbW
+         BTooUlr7utoGFznEn4+Goz7oiVLuEuCvaboDnfZdRTiFJrFQG1knl5/FvFKQusW1+bS+
+         +l3nOy34ShLA6MyfBjWbYmi4RhF5TD/kf8VPUs/Mpf0HvUc8ytTH2wO0/C8X2I+Clzo4
+         QWhzQDi6+30CcoQiGEGWAI9CmdSDA9feqEgj3Z1G0R9UWjQULmo78RLxXLBV6zziE5V5
+         GQRLOAARokzYkmUP3A5loL7H65gZKBOsHuQQ6Z43ebfUn4vtLMuiQui+vp3QwOuwnYn6
+         +IaA==
+X-Forwarded-Encrypted: i=1; AJvYcCWF2AYqhKnCSPBAvphopzTp82iLwl1F1IX60AUlpWRi1iyNiUg8VA3nDpieh6+R0PTtxUgxUVNbnmgzNQ0fdGUW@vger.kernel.org, AJvYcCXCw/xpqTiPAfyEDKK3H7zKqD7YjgSkO+8+E/otLD7u3XTXzH/fm54AmgN0cTCERhes30ccjRZ5M+yBn4g=@vger.kernel.org, AJvYcCXdfkeRQc1QKS2NvFJUzgH6e5n9Wxg1QvTWCTqm/xoi/2NyJeBPAzXmP8pa4VD6TdYobO3tt108+mFI1LYvvTI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeoQo7HAcYwbUYhkrwF2pxs0msSpNqgb4ebx0aJDj4igcnaUNo
+	0I/5aqjP/61G/bUCF+yfioRc5lkW/irLdMBAw5Xc4Ykus3ozqVkh/AppOFy/tWJ6cP3dX/BIluC
+	Jp/tpUcFffKP1xq1e7bDx+JFjxvg=
+X-Gm-Gg: ASbGncv4bhl4lZX+ary6bkVG5sfTmQt4GLyOIZweEGYC7uMSGAyEZqJi6vJJ4l+OTyY
+	3R/wgAS4UCyMV/4YlxFXQCQFoWOYYvuP/gTvH1w==
+X-Google-Smtp-Source: AGHT+IEC3Y25x4G4wmOqSarjtQ2yJi34gmfsmq4j2BPZ3BCrEs8OBCnu2HCI7EPfXTY02/zk7UEclFesfWjHYRHeZ98=
+X-Received: by 2002:a17:903:1209:b0:215:a81b:42e1 with SMTP id
+ d9443c01a7336-219e6eb62e2mr249842295ad.8.1735919314544; Fri, 03 Jan 2025
+ 07:48:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241213081035.2069066-1-davidgow@google.com> <20241213081035.2069066-4-davidgow@google.com>
-In-Reply-To: <20241213081035.2069066-4-davidgow@google.com>
+References: <20241213081035.2069066-1-davidgow@google.com>
+In-Reply-To: <20241213081035.2069066-1-davidgow@google.com>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 3 Jan 2025 16:43:15 +0100
-Message-ID: <CANiq72=A2kT4ZHCH2c7DVv+WQpH+c2vKcib-Kh7=6LWyUv9Xaw@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] rust: kunit: allow to know if we are in a test
+Date: Fri, 3 Jan 2025 16:48:22 +0100
+Message-ID: <CANiq72nekbmSond9VK8TVO76YdCV8BKX1nPzpHhNJTS_CqR-oA@mail.gmail.com>
+Subject: Re: [PATCH v5 0/3] rust: kunit: Support KUnit tests with a user-space
+ like syntax
 To: David Gow <davidgow@google.com>
 Cc: Miguel Ojeda <ojeda@kernel.org>, =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>, 
 	Rae Moar <rmoar@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
@@ -94,153 +95,38 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, Dec 13, 2024 at 9:10=E2=80=AFAM David Gow <davidgow@google.com> wro=
 te:
 >
-> +/// In some cases, you need to call test-only code from outside the test=
- case, for example, to
-> +/// create a function mock. This function can be invoked to know whether=
- we are currently running a
-> +/// KUnit test or not.
+> v5 here is a small set of fixes and a rebase of the previous versions.
+> If there are no major issues, I'd like to land this soon so it can be
+> used and tested ready for 6.14.
 
-The documentation of items use the first paragraph as a "short
-description" in some places, so ideally it should be as short as
-possible (e.g. one line), similar to Git commit titles.
+Thanks as usual David for keeping this one alive over time.
 
-So what about:
+I was thinking of applying this or giving you an Acked-by so that you
+take it, but I ended up noticing a few things that I think need fixing
+(the recommended mocking wouldn't work, warns/errors with 1.83,
+duplicated/unused `static`s, intermediate mutable references being
+created), so I sent a review. The good news is that we can simplify
+the code (especially the generated one) while fixing those at the same
+time. I hope the review helps.
 
-    /// Returns whether we are currently running a KUnit test.
-    ///
-    /// In some cases, you need to call test-only code from outside
-the test case, for example, to
-    /// create a function mock. This function allows to change
-behavior depending on whether we are
-    /// currently running a KUnit test or not.
+I have put the review result here too (in a single commit, since I was
+testing and didn't expect to fixup, sorry), in case it helps to see
+the final result:
 
-I tweaked the second sentence to avoid repetition, and to take the
-chance to mention "allows to change behavior" instead, since that is
-what we want to achieve.
+    https://github.com/ojeda/linux/commit/151681df53ac8ad52086f6758b51c6fb4=
+414427b
 
-> +/// #
+If you agree with the changes (at least the big ones, i.e. that I
+didn't miss something), then I think we can take it through KUnit or
+Rust, though it may be a good idea to have the result in the list for
+a few days (and/or put it early next cycle) given the magnitude of the
+changes.
 
-Nit: currently the style we use doesn't keep empty `#` lines to separate.
+Finally, it is not a blocker for 6.14 or otherwise, but we should
+eventually add/explain the new features in
+`Documentation/rust/testing.rst`.
 
-> +/// fn fn_mock_example(n: i32) -> i32 {
-> +///     if in_kunit_test() {
-> +///         100
-> +///     } else {
-> +///         n + 1
-> +///     }
-> +/// }
-
-Early return would look better here since we really want to do
-something completely different, and would avoid indentation in the
-"normal code".
-
-> +/// // This module mocks `bindings`.
-
-This could perhaps be documentation (`///`), but either way it is fine.
-
-> +/// mod bindings_mock_example {
-
-Could this get a `#[cfg(CONFIG_KUNIT)]` too?
-
-> +///         if in_kunit_test() {
-> +///             1234
-> +///         } else {
-> +///             // SAFETY: ktime_get_boot_fast_ns() is safe to call, and=
- just returns a u64.
-
-Formatting: `ktime_get_boot_fast_ns()` and `u64`
-
-Perhaps emphasize with "always safe"?
-
-Also, why does the `u64` need to be part of the safety comment?
-
-> +///             // Additionally, this is never actually called in this e=
-xample, as we're in a test
-> +///             // and it's mocked out.
-
-If the function is safe to call, should we have this as part of the
-`SAFETY` comment then? We can move it above, if we need to keep it, or
-we could just remove it.
-
-In any case, if the `else` is dead code, why do we have it? i.e.
-shouldn't the mock just return the 1234 value? (see below)
-
-> +/// // This is the function we want to test. Since `bindings` has been m=
-ocked, we can use its
-> +/// // functions seamlessly.
-> +/// fn get_boot_ns() -> u64 {
-> +///     bindings::ktime_get_boot_fast_ns()
-
-I think this wouldn't work: `ktime_get_boot_fast_ns()` is unsafe when
-`CONFIG_KUNIT` is disabled, so it wouldn't build for an actual user.
-
-Unless I am missing something, mocks should keep the `unsafe` status
-(i.e. in general, the signature should be kept the same), and the
-`SAFETY` comment should be here, i.e. in the "normal code", not above
-in the mock (we should probably mention this as a guideline in
-`Documentation/rust/testing.rst` too, when the docs are added there
-for this).
-
-And by doing that, we can remove all the usage of `bindings` inside
-the mocking module, and we keep the "normal code" looking as normal as
-possible, i.e. we don't hide `// SAFETY` comments inside mocking
-modules.
-
-With all put together, we get something like this:
-
-    /// ```
-    /// // Import our mock naming it as the real module.
-    /// #[cfg(CONFIG_KUNIT)]
-    /// use bindings_mock_example as bindings;
-    /// #[cfg(not(CONFIG_KUNIT))]
-    /// use kernel::bindings;
-    ///
-    /// // This module mocks `bindings`.
-    /// #[cfg(CONFIG_KUNIT)]
-    /// mod bindings_mock_example {
-    ///     /// Mock `ktime_get_boot_fast_ns` to return a well-known
-value when running a KUnit test.
-    ///     pub(crate) fn ktime_get_boot_fast_ns() -> u64 {
-    ///         1234
-    ///     }
-    /// }
-    ///
-    /// // This is the function we want to test. Since `bindings` has
-been mocked, we can use its
-    /// // functions seamlessly.
-    /// fn get_boot_ns() -> u64 {
-    ///     // SAFETY: `ktime_get_boot_fast_ns()` is always safe to call.
-    ///     unsafe { bindings::ktime_get_boot_fast_ns() }
-    /// }
-    ///
-    /// let time =3D get_boot_ns();
-    /// assert_eq!(time, 1234);
-    /// ```
-
-I added a `#[cfg(CONFIG_KUNIT)]` for the mocking module here, like for
-the other example.
-
-> +pub fn in_kunit_test() -> bool {
-> +    // SAFETY: kunit_get_current_test() is always safe to call from C (i=
-t has fallbacks for
-
-Formatting: `kunit_get_current_test()`
-
-Also, I think we should remove "from C" since it may be confusing --
-or what is it trying to say here? i.e. it is always safe to call from
-both C and Rust, no? Or is there something I am missing?
-
-> +    // when KUnit is not enabled), and we're only comparing the result t=
-o NULL.
-
-Does "and we're only comparing the result to NULL" need to be part of
-the safety comment? i.e. comparing a pointer is safe (and `is_null()`
-too).
-
-> +        let in_kunit =3D in_kunit_test();
-> +        assert!(in_kunit);
-
-I would simplify and call directly the function.
+Thanks again!
 
 Cheers,
 Miguel
