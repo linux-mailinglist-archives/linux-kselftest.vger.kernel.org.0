@@ -1,211 +1,113 @@
-Return-Path: <linux-kselftest+bounces-23838-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23839-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C810A001CE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 00:33:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31397A00245
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 02:21:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F9707A1A37
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Jan 2025 23:33:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C0A51883E11
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 01:21:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAC7F1BEF9E;
-	Thu,  2 Jan 2025 23:33:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAD3C148FE6;
+	Fri,  3 Jan 2025 01:21:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jpiA8Osc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z905Qmmd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ACB81BEF94
-	for <linux-kselftest@vger.kernel.org>; Thu,  2 Jan 2025 23:33:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C241E3232;
+	Fri,  3 Jan 2025 01:21:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735860789; cv=none; b=G3KkCBf0zJXJYYZmMht6TXMWjfvQJILYWz0BVFoQY1ResXoc54Z/6Xa8remKihvjYcX00BgudNrKdtVlTWcvlpHwSOkfaYwjypzBsqE2GTUvsmvbL5WjOtZoth+uBtzHVo0CgRwEkDArkaAJRW/mUoyUWwzc+3xfFqMSwPG5fbo=
+	t=1735867308; cv=none; b=L1Mi+Knlo5TNPvGkpCZMyUt10jr/IotH+GTyrZVFwE2vIcnW5OlE97qEIuwG8sGjAQesPkAFCE/Lqjot4PXYqC03vQHfpz+DAqIC0caynGnbfZOHYk7CLy27pmwB1LseAWey+qWRqcDPoTmot7wx/RP3h0RKBCFkg+cGYPqf2Ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735860789; c=relaxed/simple;
-	bh=4DBEFnoWxm6wOsHhIgJEisd7g7YgHjqynQfwaJjdS5Y=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ZZRyMVrpdPzIK1CzHvNm5ZG4GH8d5RNRHRR9+ELcQFUZejutqaWqDZkTjm5sjSTSFtbDJQ/5VpcyW5MpNJHhvd2022Zs2GdPnEvB8pb55jyPwOBqZty5LxDlDf8rCxiFzfMZ0qTsxJDI9QObo33VpAHew8bI6gX1lyO+j4ojHGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--isaacmanjarres.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jpiA8Osc; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--isaacmanjarres.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2ef9b9981f1so26022823a91.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Jan 2025 15:33:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1735860787; x=1736465587; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9DO6BLM5CMOo/wBOU4R18TkGC6gkh5CUUEjeVIIwslA=;
-        b=jpiA8Osco+BhjV6lgxDW7yMmP5qo7rbNCYJnqb/hNYh/t0z+x9mnq/FyznpgZCrFrk
-         Lj6s8Fq8bBDEq4GALY+mUYC7WviJol2+E7lvgrFctJlmE5Z6h3asNkdBVwHlMT3STLEy
-         0Uq2et+PmM8cql1NQz5Oq+Om7QgDwRUsqAOJi5qkjsu0sNVJOgjzCaWtHIfjTMsCuKjn
-         PwPFik3blaioSXouHSCuUmmGxVH1yE7/Pat2SQLwHDS/Vjgl3a2HOyPqVqNkwS7J2vRj
-         OpmyVT8mlmLDsM2i1KcxhD+ZRiyICQt4JTscvA+mCfWdQlQ8z7FLWByu6jBNWn9Op1kw
-         emWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735860787; x=1736465587;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9DO6BLM5CMOo/wBOU4R18TkGC6gkh5CUUEjeVIIwslA=;
-        b=IGhKymYmypTVLAVXWickKaPMIBw4xMvO+qjki8lEHwVQ0ZwulwZfD1FrJqQ8KCeIb0
-         dgewaaeZg6tWq+lkBZpJpMj+kka8QJcxHFrgIU4lEmMFIlMVjqk+u+IhknQY5X/fvtZx
-         uu8iCLPJYA9JfXObc/ZKZX1rF8J3Iq50TaBYCAej6WTBoTkIo/93miqTbIWBc4zGXAVT
-         0NoNk7FhMVn87v6dz7SwFztGAfdggOU5AiRJeUeJLWKFIs4XaaH9clmkboGITigqAPGc
-         oH96ha4gzNf+Dabco54PUXopygcHoQl5r3KfPxUc5g0zT9Z+NvRhqrxP3PPoCBh0961C
-         6mow==
-X-Forwarded-Encrypted: i=1; AJvYcCXbuammQMPUusd4RQucGn6Yr8wJq7eqDfiIwEQm0l4wNcQsLNqQzagSxSbe235UcolAhkJSUvHeoFEhKne/AEg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxC+/53svQICAwIRih26VOqcMtf3Xy00LlRB34t3P8fgpmtZRbV
-	/ZlirmDCKC3P3zvlS1C4Vj78FNTpNCiWIoUK8vi8vzHZ3txMPMHGYQZjdIRwj3JccK/e4DAakmX
-	guRxaW2YeyAcQORC++hs9p+WekZNyxfafHg==
-X-Google-Smtp-Source: AGHT+IGn4ET5k3Rw4jazgCpM0o7s4VxY7D3G9HLPKKDi9G1NhugDfSye1BKW8ZRtwa2K9tuUnnUmyyKAttJLjZ0jGRqBSQ==
-X-Received: from pfd7.prod.google.com ([2002:a05:6a00:a807:b0:727:2d74:d385])
- (user=isaacmanjarres job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:2d05:b0:1e1:a647:8a54 with SMTP id adf61e73a8af0-1e5e05ac4cbmr72878987637.20.1735860787347;
- Thu, 02 Jan 2025 15:33:07 -0800 (PST)
-Date: Thu,  2 Jan 2025 15:32:51 -0800
-In-Reply-To: <20250102233255.1180524-1-isaacmanjarres@google.com>
+	s=arc-20240116; t=1735867308; c=relaxed/simple;
+	bh=oERkHMNpZAO8boq4patQNzNmzLxeyP9280etk+NkYxI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QRxy6EFy5pUuA4enRT8V/8YflH3TrMTOlBAWhW/R3DPxYxGMtQipvwjMLLuWVzUIey03ynD4zFDSh4NXFuimKkdID/60/JJlFtUF2OaDIBzaN91NkgED9SaJgiJWomFO6S10Y9SK3Nt7ZbO/04Je+iyBX3zPW6PJOnDUpU4Ak2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z905Qmmd; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735867306; x=1767403306;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oERkHMNpZAO8boq4patQNzNmzLxeyP9280etk+NkYxI=;
+  b=Z905QmmdNQci19gRstTjWicXbs7a4GuJc0bHNe8N8YB93A9IatqzQZ4P
+   MG8OWPOMm6kB/P7C1U0IAlh1cMBvLv75A5bYfQCEPKoAqS04bAswQlEzL
+   AzZMcD5L9U/4cL8dUV1pvCLEYSL6iIybunV5/wrVPV2CAzsqQvZVuHE6M
+   apPzAFENAtapHhWAmJETibz+W+UitHDRliOTDMADESm296YYKZsT5ua8z
+   T7EecfKSSDnwLPivWW1qN4LDHo0l6BsCOkN/agifTo5k2RszEl+5xUDxK
+   1x8Oi/d8stS+MA6dPhG7h6MwVGADxsRR7PF0yQQoPQciH+ENyedlPT/h/
+   g==;
+X-CSE-ConnectionGUID: DsLc9JjLRUGXpFkuOeRIeQ==
+X-CSE-MsgGUID: rsXLqi6mQvCyi7HOpq74Og==
+X-IronPort-AV: E=McAfee;i="6700,10204,11303"; a="36277847"
+X-IronPort-AV: E=Sophos;i="6.12,286,1728975600"; 
+   d="scan'208";a="36277847"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2025 17:21:46 -0800
+X-CSE-ConnectionGUID: l7d9TjMyT3+vsV64Qnxyyw==
+X-CSE-MsgGUID: haCY/+8GQc64Sj1azNOVCA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="106695561"
+Received: from allen-sbox.sh.intel.com (HELO [10.239.159.30]) ([10.239.159.30])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2025 17:21:40 -0800
+Message-ID: <33d397ce-c324-4594-9f83-8f7e513e86e7@linux.intel.com>
+Date: Fri, 3 Jan 2025 09:19:23 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250102233255.1180524-1-isaacmanjarres@google.com>
-X-Mailer: git-send-email 2.47.1.613.gc27f4b7a9f-goog
-Message-ID: <20250102233255.1180524-3-isaacmanjarres@google.com>
-Subject: [RFC PATCH RESEND v2 2/2] selftests/memfd: Add tests for F_SEAL_FUTURE_EXEC
-From: "Isaac J. Manjarres" <isaacmanjarres@google.com>
-To: lorenzo.stoakes@oracle.com, Jeff Layton <jlayton@kernel.org>, 
-	Chuck Lever <chuck.lever@oracle.com>, Alexander Aring <alex.aring@gmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: surenb@google.com, kaleshsingh@google.com, jstultz@google.com, 
-	aliceryhl@google.com, jeffxu@google.com, kees@kernel.org, 
-	"Isaac J. Manjarres" <isaacmanjarres@google.com>, kernel-team@android.com, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 07/14] iommufd/viommu: Add iommufd_viommu_get_vdev_id
+ helper
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Nicolin Chen <nicolinc@nvidia.com>, kevin.tian@intel.com,
+ will@kernel.org, corbet@lwn.net, joro@8bytes.org,
+ suravee.suthikulpanit@amd.com, robin.murphy@arm.com, dwmw2@infradead.org,
+ shuah@kernel.org, linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org,
+ linux-doc@vger.kernel.org, eric.auger@redhat.com, jean-philippe@linaro.org,
+ mdf@kernel.org, mshavit@google.com, shameerali.kolothum.thodi@huawei.com,
+ smostafa@google.com, ddutile@redhat.com, yi.l.liu@intel.com,
+ patches@lists.linux.dev
+References: <cover.1734477608.git.nicolinc@nvidia.com>
+ <21d7e63b97d81d0acf9127418a67efe386787261.1734477608.git.nicolinc@nvidia.com>
+ <56c65e50-5890-42af-85b7-85f8a1bf5cf5@linux.intel.com>
+ <Z2OpylDlhLXoo3dt@Asurada-Nvidia>
+ <74bc9dbe-3420-4f0c-9e32-db49327a723d@linux.intel.com>
+ <20250102202955.GE5556@nvidia.com>
+Content-Language: en-US
+From: Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20250102202955.GE5556@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add tests to ensure that F_SEAL_FUTURE_EXEC behaves as expected.
+On 1/3/25 04:29, Jason Gunthorpe wrote:
+> On Mon, Dec 23, 2024 at 10:28:32AM +0800, Baolu Lu wrote:
+> 
+>> However, considering page fault scenarios, which are self-contained but
+>> linked to a hardware page table (hwpt), introduces ambiguity. Hwpt can
+>> be created with or without a vIOMMU. This raises the question: should
+>> the page fault message always report the iommufd device ID, or should
+>> the reporting depend on whether the hwpt was created from a vIOMMU?
+> I think every single event record read from the FD needs to clearly
+> specify what its fields are.
 
-Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+That would work.
+
+> Page fault need to clearly say it's field is a device ID.
+
+Each field of fault message has been specified in uapi/linux/iommufd.h.
+
 ---
- tools/testing/selftests/memfd/memfd_test.c | 79 ++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
-
-diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-index c0c53451a16d..abc213a5ce99 100644
---- a/tools/testing/selftests/memfd/memfd_test.c
-+++ b/tools/testing/selftests/memfd/memfd_test.c
-@@ -31,6 +31,7 @@
- #define STACK_SIZE 65536
- 
- #define F_SEAL_EXEC	0x0020
-+#define F_SEAL_FUTURE_EXEC	0x0040
- 
- #define F_WX_SEALS (F_SEAL_SHRINK | \
- 		    F_SEAL_GROW | \
-@@ -318,6 +319,37 @@ static void *mfd_assert_mmap_private(int fd)
- 	return p;
- }
- 
-+static void *mfd_fail_mmap_exec(int fd)
-+{
-+	void *p;
-+
-+	p = mmap(NULL,
-+		 mfd_def_size,
-+		 PROT_EXEC,
-+		 MAP_SHARED,
-+		 fd,
-+		 0);
-+	if (p != MAP_FAILED) {
-+		printf("mmap() didn't fail as expected\n");
-+		abort();
-+	}
-+
-+	return p;
-+}
-+
-+static void mfd_fail_mprotect_exec(void *p)
-+{
-+	int ret;
-+
-+	ret = mprotect(p,
-+		       mfd_def_size,
-+		       PROT_EXEC);
-+	if (!ret) {
-+		printf("mprotect didn't fail as expected\n");
-+		abort();
-+	}
-+}
-+
- static int mfd_assert_open(int fd, int flags, mode_t mode)
- {
- 	char buf[512];
-@@ -998,6 +1030,52 @@ static void test_seal_future_write(void)
- 	close(fd);
- }
- 
-+/*
-+ * Test SEAL_FUTURE_EXEC_MAPPING
-+ * Test whether SEAL_FUTURE_EXEC_MAPPING actually prevents executable mappings.
-+ */
-+static void test_seal_future_exec_mapping(void)
-+{
-+	int fd;
-+	void *p;
-+
-+
-+	printf("%s SEAL-FUTURE-EXEC-MAPPING\n", memfd_str);
-+
-+	fd = mfd_assert_new("kern_memfd_seal_future_exec_mapping",
-+			    mfd_def_size,
-+			    MFD_CLOEXEC | MFD_ALLOW_SEALING);
-+
-+	/*
-+	 * PROT_READ | PROT_WRITE mappings create VMAs with VM_MAYEXEC set.
-+	 * However, F_SEAL_FUTURE_EXEC applies to subsequent mappings,
-+	 * so it should still succeed even if this mapping is active when the
-+	 * seal is applied.
-+	 */
-+	p = mfd_assert_mmap_shared(fd);
-+
-+	mfd_assert_has_seals(fd, 0);
-+
-+	mfd_assert_add_seals(fd, F_SEAL_FUTURE_EXEC);
-+	mfd_assert_has_seals(fd, F_SEAL_FUTURE_EXEC);
-+
-+	mfd_fail_mmap_exec(fd);
-+
-+	munmap(p, mfd_def_size);
-+
-+	/* Ensure that new mappings without PROT_EXEC work. */
-+	p = mfd_assert_mmap_shared(fd);
-+
-+	/*
-+	 * Ensure that mappings created after the seal was applied cannot be
-+	 * made executable via mprotect().
-+	 */
-+	mfd_fail_mprotect_exec(p);
-+
-+	munmap(p, mfd_def_size);
-+	close(fd);
-+}
-+
- static void test_seal_write_map_read_shared(void)
- {
- 	int fd;
-@@ -1639,6 +1717,7 @@ int main(int argc, char **argv)
- 	test_seal_shrink();
- 	test_seal_grow();
- 	test_seal_resize();
-+	test_seal_future_exec_mapping();
- 
- 	if (pid_ns_supported()) {
- 		test_sysctl_simple();
--- 
-2.47.1.613.gc27f4b7a9f-goog
-
+baolu
 
