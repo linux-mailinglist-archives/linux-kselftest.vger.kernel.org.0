@@ -1,271 +1,239 @@
-Return-Path: <linux-kselftest+bounces-23846-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23848-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16EB1A004A4
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 07:58:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D549A005A3
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 09:19:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25E741883EA3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 06:58:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4B81161E5B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 08:19:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 727221BC099;
-	Fri,  3 Jan 2025 06:58:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A3F91CD1EA;
+	Fri,  3 Jan 2025 08:18:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fv3QmmTB"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="rSexzEfs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2041.outbound.protection.outlook.com [40.107.92.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6691B87EF
-	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jan 2025 06:58:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.66
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735887500; cv=none; b=HhrRwPJ3v2zeqZjK7K8gqXlzA2+OZfyCOpvXXogkTp1QdcJY9enLtMMJlFJdbtVNMuVfyDqGwP6fmu3hV7+bWhbU7Y/0Qf8gs5Q5UbuovgWL5h9uAvAguEq2yjH5DiAVQZbnWCiS81T9a9SGSn6LkNxyQanuRemsrSC7Sjq0ycQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735887500; c=relaxed/simple;
-	bh=uZvmFNXraGxVUvTGYtVZ/ME0RVp73Xzv7aLP6o5YXhc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Uycm5a9FN9PMG3kZds6cdKQHgDQHbVHJ/a4qcbDieHpJHv39HsnLV9v5qXIPKP32dT3S2zsbzKLpcQuWj456Z0pGrsvvIdfH/+nhP1TIqddDjsKGw8WOvyhxjBLpK81rbvSoyLIzuktoBNc42+lPNyF5YcWZ7vIsloiM1UgbAJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fv3QmmTB; arc=none smtp.client-ip=209.85.221.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-3862b364538so6841710f8f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Jan 2025 22:58:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1735887496; x=1736492296; darn=vger.kernel.org;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=uZvmFNXraGxVUvTGYtVZ/ME0RVp73Xzv7aLP6o5YXhc=;
-        b=fv3QmmTBlD7xvvE/GGchQPWnfhzKrUhqj66OtzmuQOn4gn6E1t7DLZSEblLdIKQ0EB
-         yQbUje9Z7qCxxV4n2g15ST2H1elW7XVOobPZnz2WhJk2X2FJdgmW6vOKSjN+mH/fOl04
-         yM/eCO0Q2E8j5mdXIp+36LyTowi492so/VAxMZbS+FtA4kXcF5k4yXE5YeglfLYPYq6n
-         cb63T0+0/lS2+TBurO4PQ1hzw+y0ZF1pxJd+tH2UlGqjxECbQHNIggJQODV2FM786kFo
-         slOW+Wb0ZY2CKPHJ1PFiRt1GMV9XdjjVSthhWzaITLlGJkkT8GrY3Rj6BQnUqlGmaKet
-         tEwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735887496; x=1736492296;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uZvmFNXraGxVUvTGYtVZ/ME0RVp73Xzv7aLP6o5YXhc=;
-        b=c1jKYz4bfUaIO3XWBeVpV7egchNhLJB4Ra35vCAsrYVDYQxUN0uQ1ayNos77s6btR1
-         L6F9Fo/FOlU8UDXsW0b8XbdtPZZdWW3LR9h+MzrH7uYzaQH4guwEMY97FIzYsLL8Jveu
-         urD51Y7FQHVKvafgOXlI347gMGVGmCz7v5NVv9kYYwFdVslcy9F2gk0r48PbeZTlWXdf
-         FDnShnOZgWHV3As+D1drFlUmy8vSEbFlBJo8Kt4CiPDvk50rm1I7jYGJINWFVre/hHGz
-         4FV3dQxoRLAqKx7WOnrl3uvWP30S1ZTX6FVtB1fbY5QTi56kEYlWH4adaUN+tszTrrPu
-         IbEg==
-X-Forwarded-Encrypted: i=1; AJvYcCW18rEb7PbuED3oWTZ5WymLYdCqEY9equwsYtfmb8XRZZEriAIBEdLZdWnHphqlrZZ2K3+cg0YAzIdAJu0oYE8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqN/KTTBd50OsMbzxDiJWoEWbgqU7DcAQ6ny+20W+bDDRpdwbp
-	YftEobeOEIv824tWey7ktm0uO/sm2Ofj3NGRjEFlRcUcxsDvYVlbMsXVQZg9DAg=
-X-Gm-Gg: ASbGnctSuz8YK1etuUxUmEj1NL3kDUMQH0kOZv+OuDnP5HWlE1ZLYbcGSPfjsxtHt8T
-	chUDJZm45qY7wuZplRsbGjdPhF2mNIZIqWQCbWlGXnC8ZRoL+VgmXhLJgJHSTiQl2VWRi1aZcjy
-	1vpcBxk1C/ndqfGeubE8pH0BkP3aEtR3sOjedWH0DktKiQNzsTxe2EjLmp7Lr+P3gy1VZPElDpC
-	17WQtTGxq+8pjK8mqiGOXYb4oT8GjylV9SvBbp/2VMAPbCy3wUxcCTiI1xn5usBzjyfiW/WfDy5
-	aHpSQIUCxfMHFTBCKh7Tiw72Gg96HbPbjl/Xii7dtHOMyrC5TI0mJo5GQ4RZ62hIkNG85F5EJbn
-	mzN72Yg==
-X-Google-Smtp-Source: AGHT+IH0GAtrEtOzyc8yCFlj/GI2tQ+enhDK8ABHkVTraKDu3aontF3mFgvrkrxtUKrD1XyGNRWMNw==
-X-Received: by 2002:a5d:64a4:0:b0:386:374b:e8bc with SMTP id ffacd0b85a97d-38a1a221d7amr44309704f8f.15.1735887496434;
-        Thu, 02 Jan 2025 22:58:16 -0800 (PST)
-Received: from ?IPV6:2003:e5:8731:2800:842d:42a0:5992:3595? (p200300e587312800842d42a059923595.dip0.t-ipconnect.de. [2003:e5:8731:2800:842d:42a0:5992:3595])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c89e219sm40466083f8f.84.2025.01.02.22.58.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jan 2025 22:58:16 -0800 (PST)
-Message-ID: <9878d90f-faf3-4853-9a79-a21b4f58ab4c@suse.com>
-Date: Fri, 3 Jan 2025 07:58:13 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287DC4C62;
+	Fri,  3 Jan 2025 08:18:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1735892334; cv=fail; b=H+pobC3v20bYTMi2U/RBIIDh2D5bvWDOnAkEbT0iaYKr2TDxq+IKANH/u7Gg2S776q04tcGe08/4DpIxvFbZYtcqxbMn5roJ3r9KEr/XlsnYtYF5Q+pHutdWM5sRjhKMI9rmP2uoOhGQjA0l7kaUWsr2OiVtKqyKdIOvhM7gwO4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1735892334; c=relaxed/simple;
+	bh=F4bkq/AFGZWfy8G8Z2t5D51SFOBxGT3dCMX3DPMG7yM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=P7V/AY80z0iV6oTQePBuo4S4ES4l4hIBRU6Dh3LGM9j1UF2eKl7qE71NiSjrnT1UrFF7ip5fe74v8ZewsKx12rTw3nc2Hg4ngyWau/d04zzoLnXQ1E/cuThTDQVDZ+j41eUSvML15ecD5TRiqGZ4p+poetWiqBYl15NQZka2IPI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=rSexzEfs; arc=fail smtp.client-ip=40.107.92.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QAxiaRoZmU0np55MZn4bQfSlPeGiOXvbBbvszWGVorguNlOHDGs76kZIeJNjiUR0s7R8JDbdhAUAxtJi1mI6+cxQUL8R4ABf3a9KgIFPRYAf+Po1XkTPFIhT4vcjbuypJYhcNLPBgVvP9BFn5mH/s+hFjjz+uppZ4zhVsqY2monWDSoP1sDOsi65fDbHe7fDKUbRB+dqxFINSgi54+DFHL3RcuE3hGu+b8IErGW8pfAMhR/3yQIsgqrVuD9p7Rn406vjVZ8rebwEGlvzdoTX4pGgSp7+M2gWESPy5sIPUiJkuR8tHKy96nNcLe4FDU2MrCZNpA4RYSgGminEvNirCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FvkTLdMSJwdzcGA2FHYbzybg0KDVssrpF1pO1ZN1aZg=;
+ b=o5hWc8rSChpvvtJwWXaHYf8PzI9BqEicFaIuNB62wS9goWjLJaU3jG8DUvnvrlPtBsLsfO42AZadGvdCqXg7eyJ3WjjVYeThrvlcBDz8Q2QmvwOYJZwCh46nJeu/x4q8r/0QXsUAlF6525nOl7TEdoI9CwlsRpFjJmOmB66ROnJbyInF0rf36LBxTJ5r0IuaFQcj6WBmCIqWhdIS5gvYNKQJ3bKaQdbibnnBANirGiePKTuPNLmOklSvF+z/+3A5YdHBduSAUPhQYkmH8Iz0TQ/WBDMe0Yce8qwA3SGe7Fw7ZnXqCWkwAFf0oUqUOcckLiq2VqZZUxyDZT+xzXBrIA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FvkTLdMSJwdzcGA2FHYbzybg0KDVssrpF1pO1ZN1aZg=;
+ b=rSexzEfsEvyq4QZm1zRetqZkIUiGA/GconuyXEmqXoU1TSWz2RLzf1zZpgqAzyEiipGZJwQTtWR/ys+eBQus5XmAKf2HI2JOML7iNuAxkXRBBhvE9z+PpKlTe2LgjyMbkAL+K4WFeFEjsPL/3+9zCYFxeiSTpG6ypQVOx6NiN14=
+Received: from DS7PR07CA0006.namprd07.prod.outlook.com (2603:10b6:5:3af::16)
+ by SN7PR12MB8604.namprd12.prod.outlook.com (2603:10b6:806:273::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8314.12; Fri, 3 Jan
+ 2025 08:18:44 +0000
+Received: from CY4PEPF0000EDD0.namprd03.prod.outlook.com
+ (2603:10b6:5:3af:cafe::90) by DS7PR07CA0006.outlook.office365.com
+ (2603:10b6:5:3af::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8314.14 via Frontend Transport; Fri,
+ 3 Jan 2025 08:18:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000EDD0.mail.protection.outlook.com (10.167.241.196) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8314.11 via Frontend Transport; Fri, 3 Jan 2025 08:18:44 +0000
+Received: from chalupa-d178host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 3 Jan
+ 2025 02:18:42 -0600
+From: Manali Shukla <manali.shukla@amd.com>
+To: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC: <pbonzini@redhat.com>, <seanjc@google.com>, <shuah@kernel.org>,
+	<nikunj@amd.com>, <thomas.lendacky@amd.com>, <vkuznets@redhat.com>,
+	<manali.shukla@amd.com>, <bp@alien8.de>, <babu.moger@amd.com>
+Subject: [PATCH v5 0/3] Add support for the Idle HLT intercept feature
+Date: Fri, 3 Jan 2025 08:18:25 +0000
+Message-ID: <20250103081828.7060-1-manali.shukla@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/8] modules: switch to execmem API for remapping as RW
- and restoring ROX
-To: Andrew Cooper <andrew.cooper3@citrix.com>, lorenzo.stoakes@oracle.com
-Cc: akpm@linux-foundation.org, anton.ivanov@cambridgegreys.com, bp@alien8.de,
- brendan.higgins@linux.dev, da.gomez@samsung.com, danielt@kernel.org,
- dave.hansen@linux.intel.com, davidgow@google.com, dianders@chromium.org,
- hpa@zytor.com, jason.wessel@windriver.com, jikos@kernel.org,
- joe.lawrence@redhat.com, johannes@sipsolutions.net, jpoimboe@kernel.org,
- kgdb-bugreport@lists.sourceforge.net, kirill.shutemov@linux.intel.com,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-um@lists.infradead.org, live-patching@vger.kernel.org,
- luto@kernel.org, mark.rutland@arm.com, mbenes@suse.cz, mcgrof@kernel.org,
- mhiramat@kernel.org, mingo@redhat.com, peterz@infradead.org,
- petr.pavlu@suse.com, pmladek@suse.com, richard@nod.at, rmoar@google.com,
- rostedt@goodmis.org, rppt@kernel.org, samitolvanen@google.com,
- shuah@kernel.org, song@kernel.org, tglx@linutronix.de, x86@kernel.org,
- =?UTF-8?Q?Marek_Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
-References: <86eba318-464b-4b9b-a79e-64039b17be34@lucifer.local>
- <d48193a3-65fe-4aa9-98f6-dd5869bd9127@citrix.com>
-Content-Language: en-US
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-Autocrypt: addr=jgross@suse.com; keydata=
- xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOB
- ycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJve
- dYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJ
- NwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvx
- XP3FAp2pkW0xqG7/377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEB
- AAHNH0p1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT7CwHkEEwECACMFAlOMcK8CGwMH
- CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw3p3WKL8TL8eZB/9G0juS/kDY9LhEXseh
- mE9U+iA1VsLhgDqVbsOtZ/S14LRFHczNd/Lqkn7souCSoyWsBs3/wO+OjPvxf7m+Ef+sMtr0
- G5lCWEWa9wa0IXx5HRPW/ScL+e4AVUbL7rurYMfwCzco+7TfjhMEOkC+va5gzi1KrErgNRHH
- kg3PhlnRY0Udyqx++UYkAsN4TQuEhNN32MvN0Np3WlBJOgKcuXpIElmMM5f1BBzJSKBkW0Jc
- Wy3h2Wy912vHKpPV/Xv7ZwVJ27v7KcuZcErtptDevAljxJtE7aJG6WiBzm+v9EswyWxwMCIO
- RoVBYuiocc51872tRGywc03xaQydB+9R7BHPzsBNBFOMcBYBCADLMfoA44MwGOB9YT1V4KCy
- vAfd7E0BTfaAurbG+Olacciz3yd09QOmejFZC6AnoykydyvTFLAWYcSCdISMr88COmmCbJzn
- sHAogjexXiif6ANUUlHpjxlHCCcELmZUzomNDnEOTxZFeWMTFF9Rf2k2F0Tl4E5kmsNGgtSa
- aMO0rNZoOEiD/7UfPP3dfh8JCQ1VtUUsQtT1sxos8Eb/HmriJhnaTZ7Hp3jtgTVkV0ybpgFg
- w6WMaRkrBh17mV0z2ajjmabB7SJxcouSkR0hcpNl4oM74d2/VqoW4BxxxOD1FcNCObCELfIS
- auZx+XT6s+CE7Qi/c44ibBMR7hyjdzWbABEBAAHCwF8EGAECAAkFAlOMcBYCGwwACgkQsN6d
- 1ii/Ey9D+Af/WFr3q+bg/8v5tCknCtn92d5lyYTBNt7xgWzDZX8G6/pngzKyWfedArllp0Pn
- fgIXtMNV+3t8Li1Tg843EXkP7+2+CQ98MB8XvvPLYAfW8nNDV85TyVgWlldNcgdv7nn1Sq8g
- HwB2BHdIAkYce3hEoDQXt/mKlgEGsLpzJcnLKimtPXQQy9TxUaLBe9PInPd+Ohix0XOlY+Uk
- QFEx50Ki3rSDl2Zt2tnkNYKUCvTJq7jvOlaPd6d/W0tZqpyy7KVay+K4aMobDsodB3dvEAs6
- ScCnh03dDAFgIq5nsB11j3KPKdVoPlfucX2c7kGNH+LUMbzqV6beIENfNexkOfxHfw==
-In-Reply-To: <d48193a3-65fe-4aa9-98f6-dd5869bd9127@citrix.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------AdhG8ToVhAfNI4L0hQ66iNcN"
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD0:EE_|SN7PR12MB8604:EE_
+X-MS-Office365-Filtering-Correlation-Id: 22d7c2a5-b700-464d-7d18-08dd2bcf3d3b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|36860700013|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ckxGRFJMbVcxSjBYMzVFdUFoV3dDVTg0ZHc5aWllTW9NUmJubzlCUXMzVzdw?=
+ =?utf-8?B?RWpOSGZvUWk0TFk5VXBVb2lzVEhFVXEzOWVjODE2LzlqUVo0bm5veE9mcGla?=
+ =?utf-8?B?Q3RJbDd5NTRoQXBPei9JelcwZkk0NXhXQzlQSDBwQUdNb2N3ck1iVXlraHNx?=
+ =?utf-8?B?bnhOdWdDdlNsdDFjOStZdnZXYmZNZlJIbU1BV1lvMkJIa3lZK2FEalNxWjR4?=
+ =?utf-8?B?ZE5KemF2aUc1TDdXODJySnlvY0JWaFNab05qeXFNU0pObUhKYy9tcFN3ZWQr?=
+ =?utf-8?B?eTUxSXJkanZ6TzM1UXh2UDYvdU5OZlJvN1cvSDljUTB0MzBPOW5XMFJ6dHNO?=
+ =?utf-8?B?OTdPK2UzQnZncU9GVlBQY0hoZDJ4em9VZm1reGI2Rk0rdXZWUFRGcHRlQXgv?=
+ =?utf-8?B?M01RdE9WKzVIeDNuQjQ4VFN3L1RuZmVQYnEwa3hQM1UrVlM1ZFltL3ZLY0RC?=
+ =?utf-8?B?d2pQbm9FS2JuWU5YNDRSSlYyVzAxTndGdURlQ2JsclJzU2x1RWR5WE5ia25U?=
+ =?utf-8?B?bGNVMUFzVUY5Y3BYMGF5OHRLQzZKdjlyVTdFSk5xa0M2eFJXcWROcGExQ0NK?=
+ =?utf-8?B?OHNoUDUvM0VYa2FmVWdabnZkeCs3MnNnV3dDK2RVc0tnN3o2TDhPbnNBYlR0?=
+ =?utf-8?B?czh0bWJQaVF5ZnU2NkY5KzZlSVg3cCt5dWoyd0xHTHh1K1dUYUR1VUZ1QlJK?=
+ =?utf-8?B?b3VqSkNJN1Z3Mk4yTm1WaWhwemFOSnR5VVkyeWJUdjdUdnlCR2xPcjYvL2Jm?=
+ =?utf-8?B?RTJ5WGZoczN2WFJvLzRtMjBHdWUwK1ppTkd0cE9kaitzRWRHcytRa05DVTI0?=
+ =?utf-8?B?ZzJEV2tveit0dlRCRmp1Mk8wUUszdnA2cHZlTXdxUzVVWGVYUXc5bHdoNDFK?=
+ =?utf-8?B?amE2U215Y3JFQWZGZ2hMV3dNa1V2Q3N4Q01IU0NrVGQrcEtudGF2bmZ3UXln?=
+ =?utf-8?B?eFN6SUlhS1FjSXdLTjRDZ3JmNlZIcFdoeXl0djA1ZWYrYUtjcE90TFZCaUNj?=
+ =?utf-8?B?Mjh2dEh4bEJodDBIR21vVEptc1h2UjJCb1pWd1JmeXl6cTI2VWhEZ2VOWGZq?=
+ =?utf-8?B?KzBLS296SGVxSTJuMW00U2UwZndtZVgwSHpZVkw2VWlDS0VxeXBJaDVlK0hq?=
+ =?utf-8?B?OU5BUmc0WDIvV1h5VXAvQkRLZ2FFUUx4cmxsU3NneGhKa29Zc2hYaVdnQzNz?=
+ =?utf-8?B?dUdWNlFrS0hSYU8wYVo3MU4yMTlhamhtUU9yYXVSZkRDYkRsdE50Z1RXK3Uv?=
+ =?utf-8?B?R3l2dzBVUGRaWEp1eCtpLzhsSFhHckVQTzhyWEtGbkxoWjZjdkh4U3BYV3I3?=
+ =?utf-8?B?aTAzdjZLaUN1UEdycFFtNS9Gdm9pZWlBNUhLMzBYS3c1cDJqaDc1Ykd5U0Yw?=
+ =?utf-8?B?YlFsY0ZVejllN2I0SFJweFd4UlloWTltMXhmK0xuWXpBOUpWRTBWbXJNR1c3?=
+ =?utf-8?B?Q0lBSlpkR0Z4WE0xUkg1WW5tY2loZWM0UUlnL0lyY3FSU0d5ZXZRTVVCWGNQ?=
+ =?utf-8?B?cS92elBYTmp5NmdYWDJLSFIwOHFmbjhtWUhnejV6OVlGellrdTU5L0VaL3k4?=
+ =?utf-8?B?dVVMQlVKTGFXdW9aUGlBVjJoZEdMdmtxV3RLVDBGMld0SG1PM1BoOGVIYWR4?=
+ =?utf-8?B?YW9adldIemtLbVpOMWdVVnJodXY4bjBzN0djOVJaUk5NVnZQTStqTnE1SVBX?=
+ =?utf-8?B?NUp3aDY5NFllZ0RWc2ZKY0xJTW1zV0dSdzR2ZUtyNmhuMEI0SWszekV2UktM?=
+ =?utf-8?B?RWpkWFg4cE9jdkNJVTh2dmJDUmhHemlyemtqWDVFUENsMW9MRkw4OTIzUUFD?=
+ =?utf-8?B?RDNWOVNUUWZlM1VzM2JqU0hJTGxWYXpyZEVVTmdYOXdGMEkyZHFObllKb3Za?=
+ =?utf-8?B?U2JGaHoxZVNuYmNMbkk4ZnJlZDlDcjF6VVQ1Z1hMTGJ5OXNmK0NoQzVxRXB4?=
+ =?utf-8?Q?C1qO6WWafpNGFYAtroiiuYe0fmE1gU/r?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2025 08:18:44.0293
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 22d7c2a5-b700-464d-7d18-08dd2bcf3d3b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EDD0.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8604
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------AdhG8ToVhAfNI4L0hQ66iNcN
-Content-Type: multipart/mixed; boundary="------------3WUDo4UJMp9BYldWFyaC18GU";
- protected-headers="v1"
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-To: Andrew Cooper <andrew.cooper3@citrix.com>, lorenzo.stoakes@oracle.com
-Cc: akpm@linux-foundation.org, anton.ivanov@cambridgegreys.com, bp@alien8.de,
- brendan.higgins@linux.dev, da.gomez@samsung.com, danielt@kernel.org,
- dave.hansen@linux.intel.com, davidgow@google.com, dianders@chromium.org,
- hpa@zytor.com, jason.wessel@windriver.com, jikos@kernel.org,
- joe.lawrence@redhat.com, johannes@sipsolutions.net, jpoimboe@kernel.org,
- kgdb-bugreport@lists.sourceforge.net, kirill.shutemov@linux.intel.com,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-um@lists.infradead.org, live-patching@vger.kernel.org,
- luto@kernel.org, mark.rutland@arm.com, mbenes@suse.cz, mcgrof@kernel.org,
- mhiramat@kernel.org, mingo@redhat.com, peterz@infradead.org,
- petr.pavlu@suse.com, pmladek@suse.com, richard@nod.at, rmoar@google.com,
- rostedt@goodmis.org, rppt@kernel.org, samitolvanen@google.com,
- shuah@kernel.org, song@kernel.org, tglx@linutronix.de, x86@kernel.org,
- =?UTF-8?Q?Marek_Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
-Message-ID: <9878d90f-faf3-4853-9a79-a21b4f58ab4c@suse.com>
-Subject: Re: [PATCH 6/8] modules: switch to execmem API for remapping as RW
- and restoring ROX
-References: <86eba318-464b-4b9b-a79e-64039b17be34@lucifer.local>
- <d48193a3-65fe-4aa9-98f6-dd5869bd9127@citrix.com>
-In-Reply-To: <d48193a3-65fe-4aa9-98f6-dd5869bd9127@citrix.com>
+The upcoming new Idle HLT Intercept feature allows for the HLT
+instruction execution by a vCPU to be intercepted by the hypervisor
+only if there are no pending V_INTR and V_NMI events for the vCPU.
+When the vCPU is expected to service the pending V_INTR and V_NMI
+events, the Idle HLT intercept won’t trigger. The feature allows the
+hypervisor to determine if the vCPU is actually idle and reduces
+wasteful VMEXITs.
 
---------------3WUDo4UJMp9BYldWFyaC18GU
-Content-Type: multipart/mixed; boundary="------------63xrDYqOCLn00LODgHDKUWxX"
+The Idle HLT intercept feature is used for enlightened guests who wish
+to securely handle the events. When an enlightened guest does a HLT
+while an interrupt is pending, hypervisor will not have a way to
+figure out whether the guest needs to be re-entered or not. The Idle
+HLT intercept feature allows the HLT execution only if there are no
+pending V_INTR and V_NMI events.
 
---------------63xrDYqOCLn00LODgHDKUWxX
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Presence of the Idle HLT Intercept feature is indicated via CPUID
+function Fn8000_000A_EDX[30].
 
-T24gMDMuMDEuMjUgMDM6MDYsIEFuZHJldyBDb29wZXIgd3JvdGU6DQo+PiBIaSBNaWtlLA0K
-Pj4NCj4+IFRoaXMgY29tbWl0IGlzIG1ha2luZyBteSBpbnRlbCBib3ggbm90IGJvb3QgaW4g
-bW0tdW5zdGFibGUgOj4pIEkgYmlzZWN0ZWQgaXQgdG8NCj4+IHRoaXMgY29tbWl0Lg0KPiAN
-Cj4gRm9yIHdoYXQgaXQncyB3b3J0aCwgd2UndmUgZm91bmQgdGhlIHNhbWUgdW5kZXIgWGVu
-IHRvby4NCj4gDQo+IFRoZXJlJ3Mgb25lIGNvbmNyZXRlIGJ1ZyBpbiB0aGUgc2VyaWVzLCBm
-YWlsaW5nIHRvIGNvcGUgd2l0aCB0aGUgYWJzZW5jZQ0KPiBvZiBzdXBlcnBhZ2VzIChmaXgg
-aW4NCj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcveGVuLWRldmVsLzZiYjAzMzMzLTc0Y2Et
-NGMyYy04NWE4LTcyNTQ5Yjg1YTViNEBzdXNlLmNvbS8NCj4gYnV0IG5vdCBmb3JtYWxseSBw
-b3N0ZWQgeWV0IEFGQUlDVCkuDQoNCk5vdyBzZW50IG91dDoNCg0KaHR0cHM6Ly9sb3JlLmtl
-cm5lbC5vcmcvbGttbC8yMDI1MDEwMzA2NTYzMS4yNjQ1OS0xLWpncm9zc0BzdXNlLmNvbS9U
-LyN1DQoNCg0KSnVlcmdlbg0K
---------------63xrDYqOCLn00LODgHDKUWxX
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Document for the Idle HLT intercept feature is available at [1].
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+This series is based on kvm-x86/next (13e98294d7ce) + [2] + [3].
 
-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
-kt+z4drzFUyEjLM1vVvIMjkUoJs=3D
-=3DeeAB
------END PGP PUBLIC KEY BLOCK-----
+Testing Done:
+- Tested the functionality for the Idle HLT intercept feature
+  using selftest ipi_hlt_test.
+- Tested on normal, SEV, SEV-ES, SEV-SNP guest for the Idle HLT intercept
+  functionality.
+- Tested the Idle HLT intercept functionality on nested guest.
 
---------------63xrDYqOCLn00LODgHDKUWxX--
+v4 -> v5
+- Incorporated Sean's review comments on nested Idle HLT intercept support.
+- Make svm_idle_hlt_test independent of the Idle HLT to run on all hardware.
 
---------------3WUDo4UJMp9BYldWFyaC18GU--
+v3 -> v4
+- Drop the patches to add vcpu_get_stat() into a new series [2].
+- Added nested Idle HLT intercept support.
 
---------------AdhG8ToVhAfNI4L0hQ66iNcN
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+v2 -> v3
+- Incorporated Andrew's suggestion to structure vcpu_stat_types in
+  a way that each architecture can share the generic types and also
+  provide its own.
 
------BEGIN PGP SIGNATURE-----
+v1 -> v2
+- Done changes in svm_idle_hlt_test based on the review comments from Sean.
+- Added an enum based approach to get binary stats in vcpu_get_stat() which
+  doesn't use string to get stat data based on the comments from Sean.
+- Added safe_halt() and cli() helpers based on the comments from Sean.
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmd3ioYFAwAAAAAACgkQsN6d1ii/Ey+c
-fgf/UYpXMGX7CcsGrANTtlW7HBt7eur3Q96rFTVnTBejNHfIm/TemXv9C9/w5NhEcq9sqmeIDxOe
-8DTdPK/EM5qfS06x4EFYjxdJgORMczX4P0IvRZHJY6T7hojulK2dyumKZNaCPY1ceUV3nERaBWKl
-csa1KbWcBMA7uMBCl1w8M8aL3+0T0UBDu3oV2jUGR4dKJdaHqRqGJCZKE2pztzSGmiboOTfmOnr2
-CxpyEu6JVMTl782cRiOS/KfVmVWY8jfA0D14iopSM0cKYF0W9Bo2XbTiD8Vp/pCCDBDOWlllYtlC
-c63hcFoml+h9kNfEU4Yl4H4kAWki0dCgwk3RbXj3rA==
-=xSk+
------END PGP SIGNATURE-----
+[1]: AMD64 Architecture Programmer's Manual Pub. 24593, April 2024,
+     Vol 2, 15.9 Instruction Intercepts (Table 15-7: IDLE_HLT).
+     https://bugzilla.kernel.org/attachment.cgi?id=306250
 
---------------AdhG8ToVhAfNI4L0hQ66iNcN--
+[2]: https://lore.kernel.org/kvm/20241220013906.3518334-1-seanjc@google.com/T/#u
+
+[3]: https://lore.kernel.org/kvm/20241220012617.3513898-1-seanjc@google.com/T/#u
+
+---
+
+V4: https://lore.kernel.org/kvm/20241022054810.23369-1-manali.shukla@amd.com/
+V3: https://lore.kernel.org/kvm/20240528041926.3989-4-manali.shukla@amd.com/T/
+V2: https://lore.kernel.org/kvm/20240501145433.4070-1-manali.shukla@amd.com/
+V1: https://lore.kernel.org/kvm/20240307054623.13632-1-manali.shukla@amd.com/
+
+Manali Shukla (3):
+  x86/cpufeatures: Add CPUID feature bit for Idle HLT intercept
+  KVM: SVM: Add Idle HLT intercept support
+  KVM: selftests: Add self IPI HLT test
+
+ arch/x86/include/asm/cpufeatures.h            |  1 +
+ arch/x86/include/asm/svm.h                    |  1 +
+ arch/x86/include/uapi/asm/svm.h               |  2 +
+ arch/x86/kvm/svm/svm.c                        | 13 ++-
+ tools/testing/selftests/kvm/Makefile.kvm      |  1 +
+ .../selftests/kvm/include/x86/processor.h     |  1 +
+ tools/testing/selftests/kvm/ipi_hlt_test.c    | 85 +++++++++++++++++++
+ 7 files changed, 101 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/ipi_hlt_test.c
+
+
+base-commit: 13e98294d7cec978e31138d16824f50556a62d17
+prerequisite-patch-id: cb345fc0d814a351df2b5788b76eee0eef9de549
+prerequisite-patch-id: 71806f400cffe09f47d6231cb072cbdbd540de1b
+prerequisite-patch-id: 9ea0412aab7ecd8555fcee3e9609dbfe8456d47b
+prerequisite-patch-id: 3504df50cdd33958456f2e56139d76867273525c
+prerequisite-patch-id: 674e56729a56cc487cb85be1a64ef561eb7bac8a
+prerequisite-patch-id: 48e87354f9d6e6bd121ca32ab73cd0d7f1dce74f
+prerequisite-patch-id: 74daffd7677992995f37e5a5cb784b8d4357e342
+prerequisite-patch-id: 509018dc2fc1657debc641544e86f5a92d04bc1a
+prerequisite-patch-id: 4a50c6a4dc3b3c8c8c640a86072faafb7bae4384
+-- 
+2.34.1
+
 
