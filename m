@@ -1,126 +1,139 @@
-Return-Path: <linux-kselftest+bounces-23861-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23862-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E4ABA008E6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 12:49:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADEE4A00983
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 13:54:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AA0216163C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 11:49:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D0E93A4130
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 12:54:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 644921F9F7E;
-	Fri,  3 Jan 2025 11:49:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2CA01FA170;
+	Fri,  3 Jan 2025 12:54:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="AXKxr+Gw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C821F9F5A;
-	Fri,  3 Jan 2025 11:49:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE391F9AB5;
+	Fri,  3 Jan 2025 12:54:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735904945; cv=none; b=bGQ+zbJYNKktP8oirDCHMVgKgorw8TzbEevdUSVeLEz0Zzbx068iaXj2Xfb0gTmxKESlJT3IzF7eOLVp3EeH0+8e5TOLE2ndS+0FHrHYXgPs9hjrHVuycQkdITbaRe/yrsm8GWjEp/D+czkMd12K2tawmtJhzr3fYqmNXCtu2H8=
+	t=1735908849; cv=none; b=Wl9t8kYpb36JK+jyawZTZr4NbWjeTSWFRxNILX20XDwjfHeugPQsDiOOv/tZSfBc/LiQJZOf3yAyr9Uj9sGCxqJnzTQZpPCNzNxzekBn+7NgT7dzFyTnSN1wgywfHky2T+3BoL0ObAx0JGVKPBRbd7eNegYynQmpDpuVCcoVQ1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735904945; c=relaxed/simple;
-	bh=qdKLzzN9ioQ5N2h/vnZ4pwmIKkw2/GRKmEOFzfiMBAY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NFzj2zMe6ixCyDl8U+llLrpsJRdmja5ttSZX2762TZnLqSMd3hzqW8PQp5FcFMVODyJZcAJKzhVQguO04EMCEEyZiIxwShhzjFSXS80zNyxLpPM0tRJVU0hlEPNzNvOan4rFJnGOsiZw42CGr6BhZQXV3m4B/vYp5aP6cYmUg5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5d3e8f64d5dso21578229a12.3;
-        Fri, 03 Jan 2025 03:49:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735904941; x=1736509741;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+YaWYvxBpsXsNhIH8IAB9JAPH+eN4WXohxKH5ZEtc0U=;
-        b=kku0CCTwcn+HxCZSCs7RIrF5KKAIEUeaLmmt35tm0s0lTCmspl5ynnXOITzhCLmHRa
-         to2RBseHvUskHbYSAvwMVdJsWyxvLfupdOV10wD0jbV9JbqaAW68noqz3NgPC7p9GnvV
-         pJU+aWTHw+y5tpislSHz9cQz/O++AQq6cH1qDhkS0n0+rJgu4dPjmy1xyey1Xl0WOV5A
-         P1rHN5tRopXaQ3+JqMumAUWlsS8+6TzFeZ7p01lTODoGrKPG7qtIknfp4VGzxfgSFK/5
-         fHD1ndV6jNf8Ak+obBo3FP9fvduVPZAlQwBwd6cZdBFz4h7PUeg1Tn46uiE4/8fw6PvC
-         dCrA==
-X-Forwarded-Encrypted: i=1; AJvYcCUK+7/xobaBsglZR9DnYy5N3JwNWkkSxaXEFY4M//HQqIMXysjraEYws3i5+8p+hqBaU3FL2FFh@vger.kernel.org, AJvYcCVS3zXBm7H3qAlPh17kzIv5ZMqCjI8wICmrZQO+Unj/eXmbUptXKE3H3Oq2Oq75dwN9SNqisTNYCNE8ov3izd8b@vger.kernel.org, AJvYcCWiqfYFck95mdDt9DaRMGc4MXVZvPoBYAlYKO0JmSeWxhukBi6JcyQDvub1H2eh8GzxnXqr93iwDt8j05A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8i3892yU/6zfZFQ6yPhSLoWEdRWmfZJfIWSeqcpSFmED10U1Y
-	LCNRs4xD2BuhC3BnFHOiGmRAQ+CHu0ANHOVnDJn7CKVuWjxwOlbVkK6UXg==
-X-Gm-Gg: ASbGncshF0WHxWnmXclTDmsL/tseau9Ig/xyvICVXSnwVfjW/NIRFGxNVte3zIe0bpX
-	IRBfxJ4z0HRok0w14Jgv/qTj4mXS2NSDiLW7lIFZnaQus6Fad+GtdPsHY+jXVAcAYrZ0SqZ9wXd
-	1XUDvwGY9yxGPFTQthNLgLNeGB0UMuLA5AHbVwNulhVsOn1HN/tJsK1PUVAvH51Ld94070d6gKx
-	7ZYewhxjSNTQPPRNXCRBuaFOqc0BrOuEKp3jVcEgwjyJ7A=
-X-Google-Smtp-Source: AGHT+IG8dyh+fMmnd099ZNG8MVYlMrVkV3zDjyjs9qDpBWBxnNaUibtLJ5EieJfUJy/JKSgZW7EMdA==
-X-Received: by 2002:a05:6402:254d:b0:5d0:c67e:e263 with SMTP id 4fb4d7f45d1cf-5d81ddf3bcamr41809011a12.8.1735904941111;
-        Fri, 03 Jan 2025 03:49:01 -0800 (PST)
-Received: from gmail.com ([2a03:2880:30ff:5::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d80675a49fsm19263147a12.15.2025.01.03.03.49.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jan 2025 03:49:00 -0800 (PST)
-Date: Fri, 3 Jan 2025 03:48:58 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Simon Horman <horms@kernel.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 4/4] netconsole: selftest: verify userdata entry
- limit
-Message-ID: <20250103-careful-silent-cuckoo-e4fbba@leitao>
-References: <20241204-netcons_overflow_test-v1-0-a85a8d0ace21@debian.org>
- <20241204-netcons_overflow_test-v1-4-a85a8d0ace21@debian.org>
- <20241206150918.GU2581@kernel.org>
+	s=arc-20240116; t=1735908849; c=relaxed/simple;
+	bh=DokGVZAo+UUlU+hYOCt41gahFKtvvzU+qiTRiI/6lOo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WNlPNLfE5jRirRrT2qJzT5AXpy3YE45rR8vo6TIMbKr+SSxA9xKlBgILLPYrAvIFEAgEKo5Yybmphl3lZ+81DMqwNAd87Z9bgOiFy8OPqvB0N0/E1jES2+WdOlyqOb9mG3BBE5SuXDD81EPFuGZN8S+BM4pqqcvO/s6gHZ3XQn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=AXKxr+Gw; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D8CAB40004;
+	Fri,  3 Jan 2025 12:54:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1735908845;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SrP471C2ngogmcSn0oE7jqDyzd1g7ACgc1oMTOJHdMA=;
+	b=AXKxr+GwEwJu/GQ5aWiYySvcHNa+qUcLgRh14jeGg2k2oj+Q47a7vkeFxJgdxQg7g1qlrF
+	gF9HRLW64zofeSaYhVR/PFeGPxLqDfaKTuLPaWGPaQOOnN3XPcrSAEBvK1g/5bfBHskW6U
+	TcT7p/PK5iCGY/Qa7Vlfd++DmBsRT7uvtC4qSFzVEK0TXs6ZPF9U2DgTqm26z6tWyodmKg
+	OHdRe4ODBozI9Va1iwjp/4Yv0hugHQ3EKgVq8Cdx843mLNim2ZZArVxK0DcHqdVmLYRKCG
+	IsW1n9jZf2B7N3kdTnwVXmbJWlKnjGyg9FcYRPPzLSZ/yxmcM1Im/FH1rutKeA==
+Message-ID: <c7ff7788-d3af-4867-8b13-57a0bf1f529a@bootlin.com>
+Date: Fri, 3 Jan 2025 13:54:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241206150918.GU2581@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] selftests/bpf: Migrate test_xdp_redirect.sh to
+ xdp_do_redirect.c
+To: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250103-xdp_redirect-v1-0-e93099f59069@bootlin.com>
+ <20250103-xdp_redirect-v1-2-e93099f59069@bootlin.com>
+From: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Content-Language: en-US
+In-Reply-To: <20250103-xdp_redirect-v1-2-e93099f59069@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-Hello Simon,
+Hi Bastien,
 
-On Fri, Dec 06, 2024 at 03:09:18PM +0000, Simon Horman wrote:
-> On Wed, Dec 04, 2024 at 08:40:45AM -0800, Breno Leitao wrote:
-> > Add a new selftest for netconsole that tests the userdata entry limit
-> > functionality. The test performs two key verifications:
-> > 
-> > 1. Create MAX_USERDATA_ITEMS (16) userdata entries successfully
-> > 2. Confirm that attempting to create an additional userdata entry fails
-> > 
-> > The selftest script uses the netcons library and checks the behavior
-> > by attempting to create entries beyond the maximum allowed limit.
-> > 
-> > Signed-off-by: Breno Leitao <leitao@debian.org>
-> > ---
-> >  MAINTAINERS                                        |  2 +-
-> >  .../selftests/drivers/net/netcons_overflow.sh      | 67 ++++++++++++++++++++++
-> >  2 files changed, 68 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 8af5c9a28e68c4b6a785e2e6b82db20b3cf59822..62192db4641a4056d1eab911f5c141fb37eaed36 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -16092,7 +16092,7 @@ S:	Maintained
-> >  F:	Documentation/networking/netconsole.rst
-> >  F:	drivers/net/netconsole.c
-> >  F:	tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-> > -F:	tools/testing/selftests/drivers/net/netcons_basic.sh
-> > +F:	tools/testing/selftests/drivers/net/netcons\*
-> >  
-> >  NETDEVSIM
-> >  M:	Jakub Kicinski <kuba@kernel.org>
-> > diff --git a/tools/testing/selftests/drivers/net/netcons_overflow.sh b/tools/testing/selftests/drivers/net/netcons_overflow.sh
-> 
-> Nit: I think you need to add netcons_overflow.sh to
->      tools/testing/selftests/drivers/net/Makefile
+On 1/3/25 11:10, Bastien Curutchet (eBPF Foundation) wrote:
 
-Good catch. I will fix it and send a v2.
+[...]
 
-Thanks for the review,
---breno
+> +		SYS(fail, "ip link add veth%d index %d%d%d type veth peer name veth0 netns %s",
+> +		    i, i, i, i, ns_name);
+
+nit: since you have to run an ip command through SYS anyway, you can reduce the
+open ns/run command/close ns dance (and all the resulting error checks) by
+running directly `SYS("ip netns exec %s ip link add [...]", NS0, [...])`
+
+[...]
+
+> +	ret = bpf_xdp_attach(if_nametoindex("veth2"),
+> +			     bpf_program__fd(prog_to_111),
+> +			     data->xdp_flags, NULL);
+
+nit: since we are setting static if index at veth creation (which looks needed
+for this test), the if_nametoindex could be replaced by the corresponding index,
+which could be directly a define
+
+> +	if (!ASSERT_GE(ret, 0, "bpf_xdp_attach"))
+> +		goto close;
+> +
+> +	ret = bpf_xdp_attach(if_nametoindex("veth1"),
+> +			     bpf_program__fd(prog_to_222),
+> +			     data->xdp_flags, NULL);
+> +	if (!ASSERT_GE(ret, 0, "bpf_xdp_attach"))
+> +		goto close;
+> +
+> +	close_netns(nstoken);
+> +
+> +	nstoken = open_netns(NS1);
+> +	if (!ASSERT_OK_PTR(nstoken, "open NS1"))
+> +		goto close;
+> +
+> +	SYS(close, "ping -c 1 %s.2", IPV4_NETWORK);
+> +
+> +	close_netns(nstoken);
+> +
+> +	nstoken = open_netns(NS2);
+> +	if (!ASSERT_OK_PTR(nstoken, "open NS2"))
+> +		goto close;
+> +
+> +	SYS(close, "ping -c 1 %s.1", IPV4_NETWORK);
+
+Is it really useful to check ping originating from both interfaces, isn´t a
+single ping able to stimulate programs attached to both veth0 ?
+
+Aside from those minor points, LGTM :)
+
+-- 
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
