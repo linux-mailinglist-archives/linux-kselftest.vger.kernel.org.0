@@ -1,106 +1,101 @@
-Return-Path: <linux-kselftest+bounces-23882-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23883-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6980CA00D98
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 19:25:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 741B0A00DAD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 19:35:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A805F18848CB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 18:25:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5223F16461C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 18:35:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ACDC1E9B01;
-	Fri,  3 Jan 2025 18:25:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E7931FC7C7;
+	Fri,  3 Jan 2025 18:35:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kF0rd6R7"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SrDmrANg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6B3BE4F;
-	Fri,  3 Jan 2025 18:25:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0231B983E
+	for <linux-kselftest@vger.kernel.org>; Fri,  3 Jan 2025 18:35:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735928732; cv=none; b=n74MyvkjbbtGeAs2pilpY3z1VFt93aKyfmsjxutwu0s4iBhew5eXYqEWZEz+k6byVUDuDPAnsbJCYnfLu5OkVvudD5LeNTs0tI4HDUwufjUg9xpeo4wErc3cC2m3Gtu0B6qPW3mbUIJ0p7HkgnKCQpYRKPBDr/DHAddcJVQ4CSQ=
+	t=1735929323; cv=none; b=qlTWVFxk8cIzXzvjblm5zHUY+NUVuQJduGunivqHHJjceqdF3lhgfmC2XCJcMz1DiMe+3R6pyFJ/iEiEsmrzcA+znzw9hQaCQDIff7guwVFkqZeg/coVjibXNvZ0mlNg/Ua86Mxbu2KA/t18ND6lx+YvUICskgoYV4vgT3w3brg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735928732; c=relaxed/simple;
-	bh=+PHZHw3/c/2u1a+6hdiiQo5uhHfhWbkTZF64FWt5BlI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IYux+GXxoDHlGpR1Wa8vKSy4iysnoYoMvFzWVRjujeAcVNv2aEwaS/gm6d6Pyg/MS4VUmy3akq+IHE5YHZUn7SUBro5Ozez9z+jdAZSl+mimFjUK2pVhmXXagDI2LRVmd/U/jYKUMKeqHaZHQVozOXX9/leccvobB+FTw+ixXUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kF0rd6R7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56859C4CECE;
-	Fri,  3 Jan 2025 18:25:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735928731;
-	bh=+PHZHw3/c/2u1a+6hdiiQo5uhHfhWbkTZF64FWt5BlI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kF0rd6R7co2V+t+3EJh7+myH3mHG53NqReBCeT6Bt0sQLQ9XllFJ60Z9pPmM51zVT
-	 JBasfJdtNaANoVvYOCd40zQ69asiyDMmthgDfyylqSAA64/Lu8fdPHxAGPTHc11NGO
-	 5G5Nn+T7jcSH1FyXSt4G0v97JnlzRJBGAb14st55spsVumYuoSyM1xIxvG2GmS3vOr
-	 /TNlEbhxmH7lF1Nrdjo1NveHS3rsXJ8HWw82nMGhF0lMoQmdmZ5OWXW+Z/3VS4fjdO
-	 AWCtVop+zUkPkcdFxhE1DflzDCN0XBZH287Do1eId+Mrw3gMO1DDfp/W5OjNoVsT4W
-	 FU8jl8im28/0g==
-From: Jakub Kicinski <kuba@kernel.org>
-To: edumazet@google.com
-Cc: netdev@vger.kernel.org,
-	davem@davemloft.net,
-	pabeni@redhat.com,
-	Jakub Kicinski <kuba@kernel.org>,
-	jhs@mojatatu.com,
-	xiyou.wangcong@gmail.com,
-	jiri@resnulli.us,
-	shuah@kernel.org,
-	karansanghvi98@gmail.com,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net] selftests: tc-testing: reduce rshift value
-Date: Fri,  3 Jan 2025 10:24:58 -0800
-Message-ID: <20250103182458.1213486-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250103104546.3714168-1-edumazet@google.com>
-References: <20250103104546.3714168-1-edumazet@google.com>
+	s=arc-20240116; t=1735929323; c=relaxed/simple;
+	bh=QaOJp7HJHHdPaRMU0X9pZcayUF+tNiAnvQkPGvNtOFw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sZc9AF3++mxrk2L3FAyS86Mk0jzRLPXq7+ND5PrCxMleDzG8OIAg3Wnim17SA+2ivwiYNklUXcl/hYTq3WytbtmxCBJbEf1FFmvjXgfSlSM1t340ArN5Ni7FvwsnQ+PHPUUd+1/tzALZb7Q9bCgakCGF8n+NOxFRV8FltjR+HRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SrDmrANg; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5d41848901bso24035336a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Jan 2025 10:35:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1735929320; x=1736534120; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QaOJp7HJHHdPaRMU0X9pZcayUF+tNiAnvQkPGvNtOFw=;
+        b=SrDmrANg7bq7XatCTkHKwPS69xZ5LSrV1dCtFu5IYgNafX308iHdM25dLyTip2Uwo7
+         Mk/IAs9mO3qjdu+itm4a4+Crs+egeCV8O6ml77OnLTqDgZv9eqDmVh/Ezjwr7XcE5r9J
+         gJJ6HQa2WEzahZb0no3Y+xJKh2bR2slc61RSstB74BccLgROHKw+a+xVGGWOFNmAb9C5
+         ywwhbNMcZ7Z/a0hnu6ZZXjIkNzFWLlCpbiiSJYVPz/W5KJ42APre/Saatx4QJE4ogF1P
+         WMTc1cQT8MXR1A8azwekDOWa/n9dYUqb52DgpAM62vR0sXl7l+E2SL9S5dd5l8Uzr0xl
+         SIBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735929320; x=1736534120;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QaOJp7HJHHdPaRMU0X9pZcayUF+tNiAnvQkPGvNtOFw=;
+        b=X17cyicKIcFRS4gJafl+bYwpV/AG88lyzl0wNhihaRldTk4WvHNbMqMDqx4VUOuMK3
+         G58y+ZLec/5eaTP3IJ1g8jEMRY0Ql38e5SOQNFnUF8hb5pTs3k++z9o4pHRce3JjgM+R
+         T2XQBcGRIvnNuI1NP4DV1Qbzl9mXmd3xNqcf+SjMcvw4DYv/gUVYiOU9MNKg1eugcXQ1
+         g0BJ8cMvXKFIG5uZaUhyTfr6Q3kUTRk+NY6VVC5O8PcTXLFojwQb07ZlDECJVs/BxDWO
+         b1zjJtWq6Z1mLI76HODhy4mLjmX8UBQntxo9za7aBBeiWRG2lfQsmcxtKY37LQ1xScST
+         03PQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVpzattaUk87GexaK64GmUBl0pHObwoy5WQg07e7jMyFmGJieUnUuRP2JVO7si3ZkDQBQTKk7dQbtrAGAs7W8w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0X77kbOfs6NdXJe5coq9ks4e8UDBpstQGzZ32uL8bfz+JQqQV
+	rWDJXUy/L9ylxfv+QsbgAHWBp2DXT8sfY2c4nHEomPLl4GP6p+/6jFcpwEbWKD86w9CvdaRAZRy
+	p/ZkvZZ+DctNdPxKUV7unG59iY12z+MMpn5+4
+X-Gm-Gg: ASbGncvJksWWQFnjxCqHu4BLKllD6J1qlGe0dMFjZTHq7xmUQ0MZsZiO1VdW8YcDhBu
+	in0VIVI8O3EbwPnjeDq/RpWw6m8OsiYwNwaGRUw==
+X-Google-Smtp-Source: AGHT+IFb9aRY0DVrCM919IVThtD+cuQpRatmwe2KgRjXI1yw5UOYd+sHnm4XRiC0Xok2nGQctE2vtiWzgpKQdzLC68I=
+X-Received: by 2002:a05:6402:268c:b0:5d0:d2b1:6831 with SMTP id
+ 4fb4d7f45d1cf-5d81e8c1309mr47104018a12.14.1735929319710; Fri, 03 Jan 2025
+ 10:35:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250103104546.3714168-1-edumazet@google.com> <20250103182458.1213486-1-kuba@kernel.org>
+In-Reply-To: <20250103182458.1213486-1-kuba@kernel.org>
+From: Eric Dumazet <edumazet@google.com>
+Date: Fri, 3 Jan 2025 19:35:08 +0100
+Message-ID: <CANn89i+oLRQmAeXq9wCfg6E3-_dEZRJtd1tn4W1OxpcKnwFefA@mail.gmail.com>
+Subject: Re: [PATCH net] selftests: tc-testing: reduce rshift value
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, pabeni@redhat.com, 
+	jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us, 
+	shuah@kernel.org, karansanghvi98@gmail.com, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-After previous change rshift >= 32 is no longer allowed.
-Modify the test to use 31, the test doesn't seem to send
-any traffic so the exact value shouldn't matter.
+On Fri, Jan 3, 2025 at 7:25=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wro=
+te:
+>
+> After previous change rshift >=3D 32 is no longer allowed.
+> Modify the test to use 31, the test doesn't seem to send
+> any traffic so the exact value shouldn't matter.
+>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: jhs@mojatatu.com
-CC: xiyou.wangcong@gmail.com
-CC: jiri@resnulli.us
-CC: shuah@kernel.org
-CC: karansanghvi98@gmail.com
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/tc-testing/tc-tests/filters/flow.json | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks !
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json b/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
-index 996448afe31b..91d120548bf5 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
-@@ -78,10 +78,10 @@
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
--        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key dst rshift 0xff",
-+        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key dst rshift 0x1f",
-         "expExitCode": "0",
-         "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
--        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys dst rshift 255 baseclass",
-+        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys dst rshift 31 baseclass",
-         "matchCount": "1",
-         "teardown": [
-             "$TC qdisc del dev $DEV1 ingress"
--- 
-2.47.1
-
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 
