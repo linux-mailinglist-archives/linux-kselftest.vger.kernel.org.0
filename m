@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-23854-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23855-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB325A00778
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 11:11:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9063FA0077C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 11:11:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACD06163E3A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 10:11:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F06CD3A40A8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 10:11:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD2BB1F9F49;
-	Fri,  3 Jan 2025 10:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5348A1F9F6B;
+	Fri,  3 Jan 2025 10:10:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LQ0A/nqv"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="TzTX/ijV"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52661F943F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA8D1F9A8A;
 	Fri,  3 Jan 2025 10:10:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735899024; cv=none; b=Xbz9I0npymywVXFZQPdNNKoNJiAzLy06QGRroO71r6u9rbfUBrtD3uBgeP6I2TD8agoT3wrWPVp8HirCreLYbioW7s+yVBwfdRj/n12cl3OI9nR+5iz9gFRk+cXlkzvrSglOjVmQJaij3MgtYhr02Cfn2GpqPoUpbCZYD9YFldE=
+	t=1735899025; cv=none; b=PN0PMlpGwzjLsBfhUCubsMURGtCsYnzqTep6nFX+wxD/iVOW9myVUHDe6bhBx+DoCFMbnmGxxC1dBCVoOjRfHL52zxpFvd61AkcGjgDmHyuZogl2zUq2LFkx1yr2uaFrfUX/y10F266ZJBACerdJc4Yt5h7v1wqM8p1nrKI9gow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735899024; c=relaxed/simple;
-	bh=CJe2t/7o1G7i+S+gsuJ2iD3w8FhGydZ48bdNdgOE+8Q=;
+	s=arc-20240116; t=1735899025; c=relaxed/simple;
+	bh=onZqTgSv1nVjtygP1DGkbqE2QulIN9qAwiKwPKumM9o=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BQVCWnqOmEADw4MACLa2lw4jVoYwzSoxM3jhhspTDtW9QD1oAJnOBPf8YNqwGeLA7sPrD9Se/TRvzQw2hBZ7dZVdOwBNB0ETqJOENGy+2r9287xWcRO5emWL14GbKIJP0cVoGqKjuUbIPCPVgJbnnVYVmjWv3s/nigdZLy5fRgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LQ0A/nqv; arc=none smtp.client-ip=217.70.183.194
+	 In-Reply-To:To:Cc; b=eUDbm/PJeOwmv5s7hJZOU5saB1p8P0avzlt+RKHsNiuu8QGsNs3mtZ/DzxlOdqsFg/vRC74aBykACXpYhNxYBro1J8x3J3VlRuFDWabT3HL2LwAslg0adhsYTVGhk+1oecSTcQKBoXkeMdAoeESNyLgeFPeLgZ4zPFhft7EWQWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=TzTX/ijV; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5DEDF40002;
-	Fri,  3 Jan 2025 10:10:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8565B40004;
+	Fri,  3 Jan 2025 10:10:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1735899014;
+	t=1735899015;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=lH5gRiAYurltjt9E9EyfwQ+W2ICDQnjVf5eBzZvYrPY=;
-	b=LQ0A/nqvMmgdikU7MjrvO7AvaaMj4T+/vt8OY763iwvgKDZmNDYjjRezpDcgLkpuUGW3n6
-	xcddcH4hrDf0G9UK5RJMQi9jix7zvejxRk7pWma3s1SYkVk2kLobDiSMCqj47z4+GKCeB9
-	bpsUJb6MxNpt3iXb1BZ8OoKNgGCxsWnowsk2WF3fUsyM77BTTSXTVo+ck7coGttkxeB2aG
-	G1P9rwOTiiGhze1TAHpDUECE7EDoitdxpNaz13UIex0O1tGckco2HQYDUnuxMv1W4hvyfC
-	Uy1efKrqo9iWKgnBTYsxZ++5BtvP77+BYjj2qJEvVUNdoCBlI8GTc/fGoqOm1Q==
+	bh=XnSpllNGmta8NGcSRwuk0NlkPAUWn6+7CUuBzzajKyk=;
+	b=TzTX/ijVFs6QPy+5BtClCk7ebzqZJgiUKmIkDeIih1BJEqJv4NuhhYVG51QIB6fmXF0v9z
+	eTGDKJEvyLRs/NSpGG7eKsoQTsG8pn7YGNQIpPAgKkk9q6O5imogoktEB0hQz9pJlZ3mjA
+	F0NKemhTr5hvOz+WlxMuB8VJEVq5AFs41GhI9qXIAwWFDVxM8An0TED8lyLCRvcX3swRHz
+	EdvUZhQ4d1lcL0o1P3OnnC6pVp9XBUQ5SXskR+tbqCsBfLO0XgSu+aLVox41bi9afoo2bO
+	zH8chY1K3Bnpr36XbZ/JluIP/m6F7ePyj2Xsk0uzXN6dR+IgBvVg7+WQzvVYsQ==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Fri, 03 Jan 2025 11:10:10 +0100
-Subject: [PATCH 2/3] selftests/bpf: Migrate test_xdp_redirect.sh to
- xdp_do_redirect.c
+Date: Fri, 03 Jan 2025 11:10:11 +0100
+Subject: [PATCH 3/3] selftests/bpf: Migrate test_xdp_redirect.c to
+ test_xdp_do_redirect.c
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250103-xdp_redirect-v1-2-e93099f59069@bootlin.com>
+Message-Id: <20250103-xdp_redirect-v1-3-e93099f59069@bootlin.com>
 References: <20250103-xdp_redirect-v1-0-e93099f59069@bootlin.com>
 In-Reply-To: <20250103-xdp_redirect-v1-0-e93099f59069@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -80,325 +80,114 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: bastien.curutchet@bootlin.com
 
-test_xdp_redirect.sh can't be used by the BPF CI.
+prog_tests/xdp_do_redirect.c is the only user of the BPF programs
+located in progs/test_xdp_do_redirect.c and progs/test_xdp_redirect.c.
+There is no need to keep both files with such close names.
 
-Migrate test_xdp_redirect.sh into two new test cases in
-xdp_do_redirect.c. They use the same network topology and the same BPF
-programs located in progs/test_xdp_redirect.c and progs/xdp_dummy.c.
-Remove test_xdp_redirect.sh and its Makefile entry.
+Move test_xdp_redirect.c contents to test_xdp_do_redirect.c and remove
+progs/test_xdp_redirect.c
 
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
- tools/testing/selftests/bpf/Makefile               |   1 -
- .../selftests/bpf/prog_tests/xdp_do_redirect.c     | 193 +++++++++++++++++++++
- tools/testing/selftests/bpf/test_xdp_redirect.sh   |  79 ---------
- 3 files changed, 193 insertions(+), 80 deletions(-)
+ .../selftests/bpf/prog_tests/xdp_do_redirect.c     |  7 +++---
+ .../selftests/bpf/progs/test_xdp_do_redirect.c     | 12 ++++++++++
+ .../selftests/bpf/progs/test_xdp_redirect.c        | 26 ----------------------
+ 3 files changed, 15 insertions(+), 30 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 9e870e519c30e4a241ce05491743e1784af2bd8b..3cf571ccbde6e13535c1d199759221804710b9ff 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -127,7 +127,6 @@ TEST_FILES = xsk_prereqs.sh $(wildcard progs/btf_dump_test_case_*.c)
- 
- # Order correspond to 'make run_tests' order
- TEST_PROGS := test_kmod.sh \
--	test_xdp_redirect.sh \
- 	test_xdp_redirect_multi.sh \
- 	test_xdp_meta.sh \
- 	test_tunnel.sh \
 diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-index d12f926b4b8b1fcbc2a88ef7e3bd20ef2cbbd72c..47b0ea84ae57b2c6ba3388ba865bfdf4bbe2146c 100644
+index 47b0ea84ae57b2c6ba3388ba865bfdf4bbe2146c..9faaacdcdb019c629ded87a57b28052923c7cea8 100644
 --- a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
 +++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-@@ -11,6 +11,8 @@
+@@ -11,7 +11,6 @@
  #include <bpf/bpf_endian.h>
  #include <uapi/linux/netdev.h>
  #include "test_xdp_do_redirect.skel.h"
-+#include "test_xdp_redirect.skel.h"
-+#include "xdp_dummy.skel.h"
+-#include "test_xdp_redirect.skel.h"
+ #include "xdp_dummy.skel.h"
  
  struct udp_packet {
- 	struct ethhdr eth;
-@@ -246,3 +248,194 @@ void test_xdp_do_redirect(void)
- 	SYS_NOFAIL("ip netns del testns");
- 	test_xdp_do_redirect__destroy(skel);
+@@ -334,7 +333,7 @@ static int ping_setup(struct test_data *data)
+ static void ping_test(struct test_data *data)
+ {
+ 	struct bpf_program *prog_to_111, *prog_to_222, *dummy_prog;
+-	struct test_xdp_redirect *skel = NULL;
++	struct test_xdp_do_redirect *skel = NULL;
+ 	struct xdp_dummy *skel_dummy = NULL;
+ 	struct nstoken *nstoken = NULL;
+ 	int i, ret;
+@@ -364,7 +363,7 @@ static void ping_test(struct test_data *data)
+ 		close_netns(nstoken);
+ 	}
+ 
+-	skel = test_xdp_redirect__open_and_load();
++	skel = test_xdp_do_redirect__open_and_load();
+ 	if (!ASSERT_OK_PTR(skel, "open and load skeleton"))
+ 		goto close;
+ 
+@@ -411,7 +410,7 @@ static void ping_test(struct test_data *data)
+ close:
+ 	close_netns(nstoken);
+ 	xdp_dummy__destroy(skel_dummy);
+-	test_xdp_redirect__destroy(skel);
++	test_xdp_do_redirect__destroy(skel);
  }
-+
-+#define NS_NB		3
-+#define NS0		"NS0"
-+#define NS1		"NS1"
-+#define NS2		"NS2"
-+#define IPV4_NETWORK	"10.1.1"
-+
-+struct test_data {
-+	struct netns_obj *ns[NS_NB];
-+	u32 xdp_flags;
-+};
-+
-+static void cleanup(struct test_data *data)
+ 
+ 
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c b/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
+index 3abf068b84464ce0460a671abc4dfb97e1f2be4a..5928ed0911caf4d5a71ef37889d9315bfa6623ae 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
+@@ -98,6 +98,18 @@ int xdp_count_pkts(struct xdp_md *xdp)
+ 	return XDP_DROP;
+ }
+ 
++SEC("xdp")
++int xdp_redirect_to_111(struct xdp_md *xdp)
 +{
-+	int i;
-+
-+	for (i = 0; i < NS_NB; i++)
-+		netns_free(data->ns[i]);
++	return bpf_redirect(111, 0);
 +}
 +
-+/**
-+ * ping_setup -
-+ * Create two veth peers and forward packets in-between using XDP
-+ *
-+ *    ------------           ------------
-+ *    |    NS1   |           |    NS2   |
-+ *    |   veth0  |           |   veth0  |
-+ *    | 10.1.1.1 |           | 10.1.1.2 |
-+ *    -----|------           ------|-----
-+ *         |                       |
-+ *         |                       |
-+ *    -----|-----------------------|-------
-+ *    |  veth1                   veth2    |
-+ *    | (id:111)                (id:222)  |
-+ *    |    |                        |     |
-+ *    |    ----- xdp forwarding -----     |
-+ *    |                                   |
-+ *    |               NS0                 |
-+ *    -------------------------------------
-+ */
-+static int ping_setup(struct test_data *data)
++SEC("xdp")
++int xdp_redirect_to_222(struct xdp_md *xdp)
 +{
-+	struct nstoken *nstoken = NULL;
-+	int i;
-+
-+	data->ns[0] = netns_new(NS0, false);
-+	if (!ASSERT_OK_PTR(data->ns[0], "create ns"))
-+		return -1;
-+
-+	for (i = 1; i < NS_NB; i++) {
-+		char ns_name[4] = {};
-+
-+		snprintf(ns_name, 4, "NS%d", i);
-+		data->ns[i] = netns_new(ns_name, false);
-+		if (!ASSERT_OK_PTR(data->ns[i], "create ns"))
-+			goto fail;
-+
-+		nstoken = open_netns(NS0);
-+		if (!ASSERT_OK_PTR(nstoken, "open NS0"))
-+			goto fail;
-+
-+		SYS(fail, "ip link add veth%d index %d%d%d type veth peer name veth0 netns %s",
-+		    i, i, i, i, ns_name);
-+		SYS(fail, "ip link set veth%d up", i);
-+		close_netns(nstoken);
-+
-+		nstoken = open_netns(ns_name);
-+		if (!ASSERT_OK_PTR(nstoken, "open ns"))
-+			goto fail;
-+
-+		SYS(fail, "ip addr add %s.%d/24 dev veth0", IPV4_NETWORK, i);
-+		SYS(fail, "ip link set veth0 up");
-+		close_netns(nstoken);
-+	}
-+
-+	return 0;
-+
-+fail:
-+	close_netns(nstoken);
-+	cleanup(data);
-+	return -1;
++	return bpf_redirect(222, 0);
 +}
 +
-+static void ping_test(struct test_data *data)
-+{
-+	struct bpf_program *prog_to_111, *prog_to_222, *dummy_prog;
-+	struct test_xdp_redirect *skel = NULL;
-+	struct xdp_dummy *skel_dummy = NULL;
-+	struct nstoken *nstoken = NULL;
-+	int i, ret;
-+
-+	skel_dummy = xdp_dummy__open_and_load();
-+	if (!ASSERT_OK_PTR(skel_dummy, "open and load xdp_dummy skeleton"))
-+		goto close;
-+
-+	dummy_prog = bpf_object__find_program_by_name(skel_dummy->obj, "xdp_dummy_prog");
-+	if (!ASSERT_OK_PTR(dummy_prog, "get dummy_prog"))
-+		goto close;
-+
-+	for (i = 1; i < NS_NB; i++) {
-+		char ns_name[4] = {};
-+
-+		snprintf(ns_name, 4, "NS%d", i);
-+		nstoken = open_netns(ns_name);
-+		if (!ASSERT_OK_PTR(nstoken, "open ns"))
-+			goto close;
-+
-+		ret = bpf_xdp_attach(if_nametoindex("veth0"),
-+				     bpf_program__fd(dummy_prog),
-+				     data->xdp_flags, NULL);
-+		if (!ASSERT_GE(ret, 0, "bpf_xdp_attach dummy_prog"))
-+			goto close;
-+
-+		close_netns(nstoken);
-+	}
-+
-+	skel = test_xdp_redirect__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open and load skeleton"))
-+		goto close;
-+
-+	prog_to_111 = bpf_object__find_program_by_name(skel->obj, "xdp_redirect_to_111");
-+	if (!ASSERT_OK_PTR(prog_to_111, "get redirect_to_111 prog"))
-+		goto close;
-+
-+	prog_to_222 = bpf_object__find_program_by_name(skel->obj, "xdp_redirect_to_222");
-+	if (!ASSERT_OK_PTR(prog_to_222, "get redirect_to_222 prog"))
-+		goto close;
-+
-+	nstoken = open_netns(NS0);
-+	if (!ASSERT_OK_PTR(nstoken, "open NS0"))
-+		goto close;
-+
-+	ret = bpf_xdp_attach(if_nametoindex("veth2"),
-+			     bpf_program__fd(prog_to_111),
-+			     data->xdp_flags, NULL);
-+	if (!ASSERT_GE(ret, 0, "bpf_xdp_attach"))
-+		goto close;
-+
-+	ret = bpf_xdp_attach(if_nametoindex("veth1"),
-+			     bpf_program__fd(prog_to_222),
-+			     data->xdp_flags, NULL);
-+	if (!ASSERT_GE(ret, 0, "bpf_xdp_attach"))
-+		goto close;
-+
-+	close_netns(nstoken);
-+
-+	nstoken = open_netns(NS1);
-+	if (!ASSERT_OK_PTR(nstoken, "open NS1"))
-+		goto close;
-+
-+	SYS(close, "ping -c 1 %s.2", IPV4_NETWORK);
-+
-+	close_netns(nstoken);
-+
-+	nstoken = open_netns(NS2);
-+	if (!ASSERT_OK_PTR(nstoken, "open NS2"))
-+		goto close;
-+
-+	SYS(close, "ping -c 1 %s.1", IPV4_NETWORK);
-+
-+close:
-+	close_netns(nstoken);
-+	xdp_dummy__destroy(skel_dummy);
-+	test_xdp_redirect__destroy(skel);
-+}
-+
-+
-+void test_xdp_generic_redirect_ping(void)
-+{
-+	struct test_data data = {};
-+
-+	if (ping_setup(&data) < 0)
-+		return;
-+
-+	data.xdp_flags = XDP_FLAGS_SKB_MODE;
-+	ping_test(&data);
-+	cleanup(&data);
-+}
-+
-+void test_xdp_drv_redirect_ping(void)
-+{
-+	struct test_data data = {};
-+
-+	if (ping_setup(&data) < 0)
-+		return;
-+
-+	data.xdp_flags = XDP_FLAGS_DRV_MODE;
-+	ping_test(&data);
-+	cleanup(&data);
-+}
-+
-diff --git a/tools/testing/selftests/bpf/test_xdp_redirect.sh b/tools/testing/selftests/bpf/test_xdp_redirect.sh
-deleted file mode 100755
-index 3c61a1c22b084aa5ca824ec5e8057aa2fee12b71..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/bpf/test_xdp_redirect.sh
+ SEC("tc")
+ int tc_count_pkts(struct __sk_buff *skb)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_redirect.c b/tools/testing/selftests/bpf/progs/test_xdp_redirect.c
+deleted file mode 100644
+index 7025aee08a001cfc42e52174a4acce7869dd331b..0000000000000000000000000000000000000000
+--- a/tools/testing/selftests/bpf/progs/test_xdp_redirect.c
 +++ /dev/null
-@@ -1,79 +0,0 @@
--#!/bin/bash
--# Create 2 namespaces with two veth peers, and
--# forward packets in-between using generic XDP
--#
--# NS1(veth11)     NS2(veth22)
--#     |               |
--#     |               |
--#   (veth1, ------ (veth2,
--#   id:111)         id:222)
--#     | xdp forwarding |
--#     ------------------
+@@ -1,26 +0,0 @@
+-/* Copyright (c) 2017 VMware
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of version 2 of the GNU General Public
+- * License as published by the Free Software Foundation.
+- *
+- * This program is distributed in the hope that it will be useful, but
+- * WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+- * General Public License for more details.
+- */
+-#include <linux/bpf.h>
+-#include <bpf/bpf_helpers.h>
 -
--readonly NS1="ns1-$(mktemp -u XXXXXX)"
--readonly NS2="ns2-$(mktemp -u XXXXXX)"
--ret=0
--
--setup()
+-SEC("xdp")
+-int xdp_redirect_to_111(struct xdp_md *xdp)
 -{
--
--	local xdpmode=$1
--
--	ip netns add ${NS1}
--	ip netns add ${NS2}
--
--	ip link add veth1 index 111 type veth peer name veth11 netns ${NS1}
--	ip link add veth2 index 222 type veth peer name veth22 netns ${NS2}
--
--	ip link set veth1 up
--	ip link set veth2 up
--	ip -n ${NS1} link set dev veth11 up
--	ip -n ${NS2} link set dev veth22 up
--
--	ip -n ${NS1} addr add 10.1.1.11/24 dev veth11
--	ip -n ${NS2} addr add 10.1.1.22/24 dev veth22
+-	return bpf_redirect(111, 0);
+-}
+-SEC("xdp")
+-int xdp_redirect_to_222(struct xdp_md *xdp)
+-{
+-	return bpf_redirect(222, 0);
 -}
 -
--cleanup()
--{
--	ip link del veth1 2> /dev/null
--	ip link del veth2 2> /dev/null
--	ip netns del ${NS1} 2> /dev/null
--	ip netns del ${NS2} 2> /dev/null
--}
--
--test_xdp_redirect()
--{
--	local xdpmode=$1
--
--	setup
--
--	ip link set dev veth1 $xdpmode off &> /dev/null
--	if [ $? -ne 0 ];then
--		echo "selftests: test_xdp_redirect $xdpmode [SKIP]"
--		return 0
--	fi
--
--	ip -n ${NS1} link set veth11 $xdpmode obj xdp_dummy.bpf.o sec xdp &> /dev/null
--	ip -n ${NS2} link set veth22 $xdpmode obj xdp_dummy.bpf.o sec xdp &> /dev/null
--	ip link set dev veth1 $xdpmode obj test_xdp_redirect.bpf.o program xdp_redirect_to_222 &> /dev/null
--	ip link set dev veth2 $xdpmode obj test_xdp_redirect.bpf.o program xdp_redirect_to_111 &> /dev/null
--
--	if ip netns exec ${NS1} ping -c 1 10.1.1.22 &> /dev/null &&
--	   ip netns exec ${NS2} ping -c 1 10.1.1.11 &> /dev/null; then
--		echo "selftests: test_xdp_redirect $xdpmode [PASS]";
--	else
--		ret=1
--		echo "selftests: test_xdp_redirect $xdpmode [FAILED]";
--	fi
--
--	cleanup
--}
--
--set -e
--trap cleanup 2 3 6 9
--
--test_xdp_redirect xdpgeneric
--test_xdp_redirect xdpdrv
--
--exit $ret
+-char _license[] SEC("license") = "GPL";
 
 -- 
 2.47.1
