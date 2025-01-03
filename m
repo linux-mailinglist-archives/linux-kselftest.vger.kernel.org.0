@@ -1,120 +1,106 @@
-Return-Path: <linux-kselftest+bounces-23881-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23882-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2E84A00CAA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 18:19:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6980CA00D98
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 19:25:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 226313A4631
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 17:18:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A805F18848CB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 18:25:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 836A91FCF45;
-	Fri,  3 Jan 2025 17:18:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ACDC1E9B01;
+	Fri,  3 Jan 2025 18:25:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="btpj1l4D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kF0rd6R7"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556871FC0FA;
-	Fri,  3 Jan 2025 17:18:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6B3BE4F;
+	Fri,  3 Jan 2025 18:25:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735924685; cv=none; b=KLNmLXLwtep/au+MZP3q9m2uUxnL7by5zLe4kZtcn5dwYAjCjH/29PFO7inm0HqjyC9aAVFTi9qI3jMy0l636DN7i+HCBExHOHAg6JDMjkxOg8GRzJ21252k256V/acUO9XaCl2tsl7ceWPabtfNtBL3VSxHXJF0P5GVMJdtZ/I=
+	t=1735928732; cv=none; b=n74MyvkjbbtGeAs2pilpY3z1VFt93aKyfmsjxutwu0s4iBhew5eXYqEWZEz+k6byVUDuDPAnsbJCYnfLu5OkVvudD5LeNTs0tI4HDUwufjUg9xpeo4wErc3cC2m3Gtu0B6qPW3mbUIJ0p7HkgnKCQpYRKPBDr/DHAddcJVQ4CSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735924685; c=relaxed/simple;
-	bh=SqCjzWuL9FY9OVHCuPhbiYvaKmVxKTYgjqxCFqz1ytI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pxDSitA38H3QWOwy6emytZc4KR9VJk98g23hZbX4N08h3EeidTCSVSVEVa8ckUIU6cCmHeJQCpH0+bV1AIGrdNrX7jE8r0znopZC7C4Nr6eEtzECGW+/z6FoauVYWZbBHRA2QpEwL8di44gMw6G9wkyBpbxM2S1X9zJp+sjZ+Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=btpj1l4D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A331AC4CECE;
-	Fri,  3 Jan 2025 17:18:03 +0000 (UTC)
+	s=arc-20240116; t=1735928732; c=relaxed/simple;
+	bh=+PHZHw3/c/2u1a+6hdiiQo5uhHfhWbkTZF64FWt5BlI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=IYux+GXxoDHlGpR1Wa8vKSy4iysnoYoMvFzWVRjujeAcVNv2aEwaS/gm6d6Pyg/MS4VUmy3akq+IHE5YHZUn7SUBro5Ozez9z+jdAZSl+mimFjUK2pVhmXXagDI2LRVmd/U/jYKUMKeqHaZHQVozOXX9/leccvobB+FTw+ixXUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kF0rd6R7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56859C4CECE;
+	Fri,  3 Jan 2025 18:25:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735924684;
-	bh=SqCjzWuL9FY9OVHCuPhbiYvaKmVxKTYgjqxCFqz1ytI=;
+	s=k20201202; t=1735928731;
+	bh=+PHZHw3/c/2u1a+6hdiiQo5uhHfhWbkTZF64FWt5BlI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=btpj1l4Dw0lF+zMuDN6WGqtK3vb9fMChTb3mkkmDSqRtX+TEPX+Io2sB0seNxWqPO
-	 5yLlt3G56fmdVmzysxpjTNfgnBtnJ6Yqv1DUvKpyWajjcznGx6dx2K98BUDhl7714f
-	 AQ/SIWGo6IL2XK8B1bMvxEtB+n4zLCFV+GHQwD9ePrapLtwNuiijyQH+mD0pSvvPJG
-	 FF+i62PG/HaMTT5cy+D2MEZ0j5nhTkYrc45nO5H6+GsrbRQndJK99Tbg+Q85vET8BB
-	 H9UfVDn1kSWu+jZq0dMWi+AvjtC+z2b2TPJ8YMBIxzGTVjIsj/xTfOOwawnvz5K5Cu
-	 QlA+YntrgKwxQ==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Li Zhijian <lizhijian@fujitsu.com>,
-	Mark Brown <broonie@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Takashi Iwai <tiwai@suse.de>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-sound@vger.kernel.org,
+	b=kF0rd6R7co2V+t+3EJh7+myH3mHG53NqReBCeT6Bt0sQLQ9XllFJ60Z9pPmM51zVT
+	 JBasfJdtNaANoVvYOCd40zQ69asiyDMmthgDfyylqSAA64/Lu8fdPHxAGPTHc11NGO
+	 5G5Nn+T7jcSH1FyXSt4G0v97JnlzRJBGAb14st55spsVumYuoSyM1xIxvG2GmS3vOr
+	 /TNlEbhxmH7lF1Nrdjo1NveHS3rsXJ8HWw82nMGhF0lMoQmdmZ5OWXW+Z/3VS4fjdO
+	 AWCtVop+zUkPkcdFxhE1DflzDCN0XBZH287Do1eId+Mrw3gMO1DDfp/W5OjNoVsT4W
+	 FU8jl8im28/0g==
+From: Jakub Kicinski <kuba@kernel.org>
+To: edumazet@google.com
+Cc: netdev@vger.kernel.org,
+	davem@davemloft.net,
+	pabeni@redhat.com,
+	Jakub Kicinski <kuba@kernel.org>,
+	jhs@mojatatu.com,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	shuah@kernel.org,
+	karansanghvi98@gmail.com,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 3/3] selftests/alsa: Fix circular dependency involving global-timer
-Date: Fri,  3 Jan 2025 12:17:56 -0500
-Message-Id: <20250103171756.492191-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250103171756.492191-1-sashal@kernel.org>
-References: <20250103171756.492191-1-sashal@kernel.org>
+Subject: [PATCH net] selftests: tc-testing: reduce rshift value
+Date: Fri,  3 Jan 2025 10:24:58 -0800
+Message-ID: <20250103182458.1213486-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250103104546.3714168-1-edumazet@google.com>
+References: <20250103104546.3714168-1-edumazet@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.69
 Content-Transfer-Encoding: 8bit
 
-From: Li Zhijian <lizhijian@fujitsu.com>
+After previous change rshift >= 32 is no longer allowed.
+Modify the test to use 31, the test doesn't seem to send
+any traffic so the exact value shouldn't matter.
 
-[ Upstream commit 55853cb829dc707427c3519f6b8686682a204368 ]
-
-The pattern rule `$(OUTPUT)/%: %.c` inadvertently included a circular
-dependency on the global-timer target due to its inclusion in
-$(TEST_GEN_PROGS_EXTENDED). This resulted in a circular dependency
-warning during the build process.
-
-To resolve this, the dependency on $(TEST_GEN_PROGS_EXTENDED) has been
-replaced with an explicit dependency on $(OUTPUT)/libatest.so. This change
-ensures that libatest.so is built before any other targets that require it,
-without creating a circular dependency.
-
-This fix addresses the following warning:
-
-make[4]: Entering directory 'tools/testing/selftests/alsa'
-make[4]: Circular default_modconfig/kselftest/alsa/global-timer <- default_modconfig/kselftest/alsa/global-timer dependency dropped.
-make[4]: Nothing to be done for 'all'.
-make[4]: Leaving directory 'tools/testing/selftests/alsa'
-
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-Link: https://patch.msgid.link/20241218025931.914164-1-lizhijian@fujitsu.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/alsa/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+CC: jhs@mojatatu.com
+CC: xiyou.wangcong@gmail.com
+CC: jiri@resnulli.us
+CC: shuah@kernel.org
+CC: karansanghvi98@gmail.com
+CC: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/tc-testing/tc-tests/filters/flow.json | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/alsa/Makefile b/tools/testing/selftests/alsa/Makefile
-index 5af9ba8a4645..140c7f821727 100644
---- a/tools/testing/selftests/alsa/Makefile
-+++ b/tools/testing/selftests/alsa/Makefile
-@@ -23,5 +23,5 @@ include ../lib.mk
- $(OUTPUT)/libatest.so: conf.c alsa-local.h
- 	$(CC) $(CFLAGS) -shared -fPIC $< $(LDLIBS) -o $@
- 
--$(OUTPUT)/%: %.c $(TEST_GEN_PROGS_EXTENDED) alsa-local.h
-+$(OUTPUT)/%: %.c $(OUTPUT)/libatest.so alsa-local.h
- 	$(CC) $(CFLAGS) $< $(LDLIBS) -latest -o $@
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json b/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
+index 996448afe31b..91d120548bf5 100644
+--- a/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
++++ b/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
+@@ -78,10 +78,10 @@
+         "setup": [
+             "$TC qdisc add dev $DEV1 ingress"
+         ],
+-        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key dst rshift 0xff",
++        "cmdUnderTest": "$TC filter add dev $DEV1 parent ffff: handle 1 prio 1 protocol ip flow map key dst rshift 0x1f",
+         "expExitCode": "0",
+         "verifyCmd": "$TC filter get dev $DEV1 parent ffff: handle 1 protocol ip prio 1 flow",
+-        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys dst rshift 255 baseclass",
++        "matchPattern": "filter parent ffff: protocol ip pref 1 flow chain [0-9]+ handle 0x1 map keys dst rshift 31 baseclass",
+         "matchCount": "1",
+         "teardown": [
+             "$TC qdisc del dev $DEV1 ingress"
 -- 
-2.39.5
+2.47.1
 
 
