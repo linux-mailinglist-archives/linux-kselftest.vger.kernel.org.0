@@ -1,157 +1,97 @@
-Return-Path: <linux-kselftest+bounces-23844-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23845-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95F08A0035F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 05:04:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EA75A003D3
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 06:57:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7550A1883BB9
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 04:04:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D68291883B91
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2025 05:57:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E14514D444;
-	Fri,  3 Jan 2025 04:03:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C76D759B71;
+	Fri,  3 Jan 2025 05:57:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WQ4JyHvt"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="aQZpAR0m"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75E6433DF;
-	Fri,  3 Jan 2025 04:03:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61DEDBE4F;
+	Fri,  3 Jan 2025 05:57:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735877038; cv=none; b=fAEuXH0n+le/Rxtqvg9mzOnFoj/1nHLUDIcHfFUTnh525tYaB6CP6dD8Mfqr6iaWw7BXrz8unDF4fP4IW2E7e0EbudLT+ejisleO6O3/jNAJGFCClBEi/FtlAUEsJ+ZiiflTtG2JacFnAkL3Z4D86C+1oiWvkjd1fKVfKe1AzH8=
+	t=1735883837; cv=none; b=iZFI0UzDrYkrToxuwBMnE3s6AxAXNdlKt6f1N9gFHPIsGYGV1GF7JQFTpL97ryDpaEwHkHSKotJjLaHGbDwK+oyq/oLtThPuJ1XOzxGOxCpeTeM/jVem0XHHEHZLq+1HJJKh8FUtv1JrkFuZcA3W8BQ8soHNb288ZUXB9D3Hrrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735877038; c=relaxed/simple;
-	bh=7x/PwdmTzGkIDVYD3WqJDRsi7f1m4FX68oZe1VEab30=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YsisGPC6BdeBGHNdC/tt2VldnH4wIKF+Wq5K0T08rng9rbjDg4G4bHCRRUxaXWga3OloWeiOuJ+ZC4F1vn+IN+v1ijxdwG52pOiIy594zVFlNnctsMorvPlVnJK4np1OCmr0Rca7+8XQVnbuuJUvKVmwZBeDhKve0Mvqk9pWkcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WQ4JyHvt; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43618283dedso118409755e9.3;
-        Thu, 02 Jan 2025 20:03:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735877033; x=1736481833; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fJuGqMO/jQ4z+TowIOoPl2aMlmVXNRNIGfU0gnbDMo4=;
-        b=WQ4JyHvt/0oeI5DN2IoKJwinsdHf4OjbVAjuwLS0lNVupnuDGtH9JTcbrhlAB+9ooa
-         lwh+9JbSHYWgVBbOTqDQlT2COWslLrndjkcIfaIL8aSxPFHzLmdG7ezofqw8A3T0yaYX
-         JNfec4q+d+lo0DrCIue63ZslWfO4rA/MivQgHRrTLc1GVPbU2TYMEfKLllHZvf/hZAIE
-         HsfTZcsmOo4rSODJDlayuov40PhubDWmHSwH9yy8p49htjUYRD+D0QY3D4xnwBq2z5zu
-         2dzEice8iMBWYBCQ1l6vMcDq1NkpknRVaZ4G1NBjVSLaCK59YsLQqN4gdMOxswonZ7+/
-         oWfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735877033; x=1736481833;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fJuGqMO/jQ4z+TowIOoPl2aMlmVXNRNIGfU0gnbDMo4=;
-        b=aEH+D+CR08jX1HpGxsYDYPhdjPqpF3NgUDWdNU5r56s3e9HAh1nCPOIo/wJCTOrdC/
-         KZmLIeGyLG4+PIXxmKzXzcRGGOrps1IrnzSORcrEXQ1mSYzhTfYh0GvwP08m3dc0weF+
-         BBVsgoDWy0LhRg5su8guswcYiadbNvzp3P1JoRT2jVACxqYN8janehDaeauhR/5cN75x
-         L6dZMJ5ZyYAlKjt+YoQ+QZqeme+UOFSK2a/MgBDKSt1oavBrw8WE0ujWzdqpPvsQ4l/c
-         bExwT3qWSEsq+djM8ED4OetTXPCYKeoXzPb9FJRJHlMe+xGtd08bQI8MAZ2v2JL40bUX
-         D/Og==
-X-Forwarded-Encrypted: i=1; AJvYcCVqSBqkZFaKYA8OBbt1pSS1nbNkJtqKnpGYstqohq2r5zvliNeyHH6TXmf/99oC4t8/+Ya8jnnVqHkEohje1K4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjswjdTeSzC8tdAAlzqrKG5LZen5oU6w0La5wcMlMlhVkkdSk8
-	3f5uUPpm7m/Nww/hUGqRaNI8Sy2cTgdzZ29op37JJQMj8CfMkNU2kYv5XLWk
-X-Gm-Gg: ASbGncskFjuY5Gg8633vs5huqn3WfIpmJl8TVjQNL+q0y056QzfM7WB0LiObY1LJ4yH
-	b7yInRX++1HfAa5ppR/q6fJJhqPc700PrE1Pd9jLiAlvnZVgvFShfY2RxIdUE8P3mpIWtwO3pxQ
-	Cl3ftsQfSi0dA6kcbDDMNU1vh+8/6/NlIcL1lGTC4BHMQ28LCBX61Ai3TfeFu9lYBkhQVdCAt+w
-	XLSb8RHE1QXO7a/sOx65RSPQGT401PRGCDFglweJNBfwXawmubWQcZl9w/gX++DtXef8vPJ2w9h
-	jZn4UKNqB6ZdOxP+pXeg
-X-Google-Smtp-Source: AGHT+IFz1LXuucqG5XV4LRRH13gBdh5dZWFfNIE1AWBUxiyuEmTm3SbKU5ReRbu84ZTQzvFYvORA9w==
-X-Received: by 2002:a05:600c:470b:b0:434:a75b:5f59 with SMTP id 5b1f17b1804b1-43668547127mr431260385e9.3.1735877032812;
-        Thu, 02 Jan 2025 20:03:52 -0800 (PST)
-Received: from localhost (cpc1-brnt4-2-0-cust862.4-2.cable.virginm.net. [86.9.131.95])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43661289995sm468388165e9.36.2025.01.02.20.03.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jan 2025 20:03:51 -0800 (PST)
-From: Stafford Horne <shorne@gmail.com>
-To: LKML <linux-kernel@vger.kernel.org>
-Cc: Stafford Horne <shorne@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: [PATCH] rseq/selftests: Fix riscv rseq_offset_deref_addv inline asm
-Date: Fri,  3 Jan 2025 04:03:26 +0000
-Message-ID: <20250103040326.2603734-1-shorne@gmail.com>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1735883837; c=relaxed/simple;
+	bh=ahkJxGtysqPWgnOL67yhgSmmIjzKoeYD0h3gq1Efw8s=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=qjZHujU8EJbrI+2bPTDN1//ge5GnByQYQfZp0kot0CHrDc2upTqXVjxCieIJiHQujqyJY18scziqXAvLPwOiDzIxhTCUa2CKtg7pq8xcsAPVH/N1/qACLAr7ldOzfMgGmnogg1uNCJXGYWDqhdIewgyHCv3QmvCjH7Oy25l6XRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=aQZpAR0m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77287C4CECE;
+	Fri,  3 Jan 2025 05:57:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1735883836;
+	bh=ahkJxGtysqPWgnOL67yhgSmmIjzKoeYD0h3gq1Efw8s=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=aQZpAR0mwD+9uME8jJKLdIKsDsBBNx7RFftbrdOt2Z9ezUhGkaSxQYeWN3B5a5lXK
+	 swbw4eAbHvBcyBGp53eUADLv9enJyd7F1VABGcwP2T6kkfI7+ZcsM5B7c9YUKvQsve
+	 5gOb9teUK9gxiG0ELqADgwYPpQaTpTwlUT6BuhO0=
+Date: Thu, 2 Jan 2025 21:57:14 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Andrew Cooper <andrew.cooper3@citrix.com>
+Cc: lorenzo.stoakes@oracle.com, anton.ivanov@cambridgegreys.com,
+ bp@alien8.de, brendan.higgins@linux.dev, da.gomez@samsung.com,
+ danielt@kernel.org, dave.hansen@linux.intel.com, davidgow@google.com,
+ dianders@chromium.org, hpa@zytor.com, jason.wessel@windriver.com,
+ jikos@kernel.org, joe.lawrence@redhat.com, johannes@sipsolutions.net,
+ jpoimboe@kernel.org, kgdb-bugreport@lists.sourceforge.net,
+ kirill.shutemov@linux.intel.com, kunit-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org, linux-modules@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+ live-patching@vger.kernel.org, luto@kernel.org, mark.rutland@arm.com,
+ mbenes@suse.cz, mcgrof@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+ peterz@infradead.org, petr.pavlu@suse.com, pmladek@suse.com,
+ richard@nod.at, rmoar@google.com, rostedt@goodmis.org, rppt@kernel.org,
+ samitolvanen@google.com, shuah@kernel.org, song@kernel.org,
+ tglx@linutronix.de, x86@kernel.org, Juergen Gross <jgross@suse.com>, Marek
+ =?ISO-8859-1?Q?Marczykowski-G=F3recki?= <marmarek@invisiblethingslab.com>
+Subject: Re: [PATCH 6/8] modules: switch to execmem API for remapping as RW
+ and restoring ROX
+Message-Id: <20250102215714.a37e828cf073ea6a14d30559@linux-foundation.org>
+In-Reply-To: <d48193a3-65fe-4aa9-98f6-dd5869bd9127@citrix.com>
+References: <86eba318-464b-4b9b-a79e-64039b17be34@lucifer.local>
+	<d48193a3-65fe-4aa9-98f6-dd5869bd9127@citrix.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-When working on OpenRISC support for restartable sequences I noticed
-and fixed these two issues with the riscv support bits.
+On Fri, 3 Jan 2025 02:06:10 +0000 Andrew Cooper <andrew.cooper3@citrix.com> wrote:
 
- 1 The 'inc' argument to RSEQ_ASM_OP_R_DEREF_ADDV was being implicitly
-   passed to the macro.  Fix this by adding 'inc' to the list of macro
-   arguments.
- 2 The inline asm input constraints for 'inc' and 'off' use "er",  The
-   riscv gcc port does not have an "e" constraint, this looks to be
-   copied from the x86 port.  Fix this by just using an "r" constraint.
+> > Hi Mike,
+> >
+> > This commit is making my intel box not boot in mm-unstable :>) I bisected it to
+> > this commit.
+> 
+> For what it's worth, we've found the same under Xen too.
+> 
+> There's one concrete bug in the series, failing to cope with the absence
+> of superpages (fix in
+> https://lore.kernel.org/xen-devel/6bb03333-74ca-4c2c-85a8-72549b85a5b4@suse.com/
+> but not formally posted yet AFAICT).
+> 
+> The rest of the thread then found a crash looking to be the same as
+> reported here, but you've made better progress narrowing it down than we
+> have.
+> 
 
-I have compile tested this only for riscv.  However, the same fixes I
-use in the OpenRISC rseq selftests and everything passes with no issues.
-
-Signed-off-by: Stafford Horne <shorne@gmail.com>
----
- tools/testing/selftests/rseq/rseq-riscv-bits.h | 6 +++---
- tools/testing/selftests/rseq/rseq-riscv.h      | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/rseq/rseq-riscv-bits.h b/tools/testing/selftests/rseq/rseq-riscv-bits.h
-index de31a0143139..f02f411d550d 100644
---- a/tools/testing/selftests/rseq/rseq-riscv-bits.h
-+++ b/tools/testing/selftests/rseq/rseq-riscv-bits.h
-@@ -243,7 +243,7 @@ int RSEQ_TEMPLATE_IDENTIFIER(rseq_offset_deref_addv)(intptr_t *ptr, off_t off, i
- #ifdef RSEQ_COMPARE_TWICE
- 				  RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, "%l[error1]")
- #endif
--				  RSEQ_ASM_OP_R_DEREF_ADDV(ptr, off, 3)
-+				  RSEQ_ASM_OP_R_DEREF_ADDV(ptr, off, inc, 3)
- 				  RSEQ_INJECT_ASM(4)
- 				  RSEQ_ASM_DEFINE_ABORT(4, abort)
- 				  : /* gcc asm goto does not allow outputs */
-@@ -251,8 +251,8 @@ int RSEQ_TEMPLATE_IDENTIFIER(rseq_offset_deref_addv)(intptr_t *ptr, off_t off, i
- 				    [current_cpu_id]		"m" (rseq_get_abi()->RSEQ_TEMPLATE_CPU_ID_FIELD),
- 				    [rseq_cs]			"m" (rseq_get_abi()->rseq_cs.arch.ptr),
- 				    [ptr]			"r" (ptr),
--				    [off]			"er" (off),
--				    [inc]			"er" (inc)
-+				    [off]			"r" (off),
-+				    [inc]			"r" (inc)
- 				    RSEQ_INJECT_INPUT
- 				  : "memory", RSEQ_ASM_TMP_REG_1
- 				    RSEQ_INJECT_CLOBBER
-diff --git a/tools/testing/selftests/rseq/rseq-riscv.h b/tools/testing/selftests/rseq/rseq-riscv.h
-index 37e598d0a365..67d544aaa9a3 100644
---- a/tools/testing/selftests/rseq/rseq-riscv.h
-+++ b/tools/testing/selftests/rseq/rseq-riscv.h
-@@ -158,7 +158,7 @@ do {									\
- 	"bnez	" RSEQ_ASM_TMP_REG_1 ", 222b\n"				\
- 	"333:\n"
- 
--#define RSEQ_ASM_OP_R_DEREF_ADDV(ptr, off, post_commit_label)		\
-+#define RSEQ_ASM_OP_R_DEREF_ADDV(ptr, off, inc, post_commit_label)	\
- 	"mv	" RSEQ_ASM_TMP_REG_1 ", %[" __rseq_str(ptr) "]\n"	\
- 	RSEQ_ASM_OP_R_ADD(off)						\
- 	REG_L	  RSEQ_ASM_TMP_REG_1 ", 0(" RSEQ_ASM_TMP_REG_1 ")\n"	\
--- 
-2.47.0
-
+Thanks.  I removed this series from mm.git while this is worked on.
 
