@@ -1,113 +1,105 @@
-Return-Path: <linux-kselftest+bounces-23899-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23900-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C467AA011B9
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Jan 2025 03:07:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 059EFA01372
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Jan 2025 09:57:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C238164BE9
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Jan 2025 02:07:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99B2D3A1B06
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Jan 2025 08:57:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F5197711F;
-	Sat,  4 Jan 2025 02:07:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B09015B12A;
+	Sat,  4 Jan 2025 08:57:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="joD0NAbR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B7C1z/kX"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B57035280;
-	Sat,  4 Jan 2025 02:07:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF3CD14A605;
+	Sat,  4 Jan 2025 08:57:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735956446; cv=none; b=Hb9DidHAdgz16eeqc5annIYFn48Zqa0pLHfrOE4BjbMGed4YszkTjqLeIrS9vjyQF3pNX5w7io1x2quJfVX0GX3yKhoGzcRqOaqik834mn7U1H/hw2R0em+RJoj5NLrDqgZR/hofku4kyw0P+aAcuVpfw/jRed4pwmLRycuSmxo=
+	t=1735981062; cv=none; b=LgV056R4tu9psMf87ZwCd3KB1JOZF1IRQ1J2LqWBj7vEoCEWgvRhqqEbeMmz6US/OK8u5bwg65o7bUZuz76zz34grmTKAr8DGP+DFutl7tzJYfeczLRZu/QDyLPLl1ccKqhEgsidTxU0aJ2zBXFUJnAosLll/Fr4W2SB9iWgz34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735956446; c=relaxed/simple;
-	bh=5+k5XIDfmklKhyQNZnytCq6Wbtr3vAtBCZfKfKHl6CA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T5hL11w7Xod8pldHAPy55U10eS9edtfP+HEbTG9YH8knh29nCHebnVgO/pShEJPimq17w3mueHowuyLwz3DB5Ql7dDS1R/Lo7LMpHQrou9hcBmNo2h78hip12bxd+8sKHazBtbhgIhQy+SbT80PdI8Bu4g04vJMUhHgaaL37VW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=joD0NAbR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56E24C4CED6;
-	Sat,  4 Jan 2025 02:07:24 +0000 (UTC)
+	s=arc-20240116; t=1735981062; c=relaxed/simple;
+	bh=Ngs7UO8p1JCMfAXuAnuvOR/jRHfGsXotovGZg+ytYMo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EB4SvCxpbkxi3e/+2n/HxJvZkQDvdhhhdbGOoZ5V5qB/CR2QA88fOUBvlCZDkKyNU7dqjgLZkQHAwfWq37lPmn7eAxOMjQIDgbj98bOP6i+ctc5Zryc2ap/sqTDuIvJcsUbttpVg1PAzU3n2zhHmWAKJtl9dVD5eMMOSRR8lI98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B7C1z/kX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3C46C4CED1;
+	Sat,  4 Jan 2025 08:57:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735956445;
-	bh=5+k5XIDfmklKhyQNZnytCq6Wbtr3vAtBCZfKfKHl6CA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=joD0NAbRBPE0lezKTTDP1O/kr2E6iJf9COWb+q26eFjVoffuI5L/uXxAbsoYlryoQ
-	 fYP/yaVyXmntFcDd1a3Fy5BzamjHbURSTyP3IdaXyhV79hmDEblPiZtS6iVgzwGlo3
-	 Kx4vTa/nHoqIBT7WaRKz0y7zXQ0mNg/SZWWNqb701SX3cdNH0ZRCTN14xhyhSGJ8Pg
-	 cXiLSChUUEnHpXT+4yMfzWCREm/wGuuwBvwu0rahfPZ8BSGvXEuUhX3QReboXWGoBI
-	 95VoZXg6cVJmIgpcGSWX14DR8XQkeIf/4vXIKDW+eMgmO5cxqmChke6AdKsiTp7rM/
-	 m8eDNhFD+TAEA==
-Date: Fri, 3 Jan 2025 18:07:22 -0800
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: =?iso-8859-1?Q?J=FCrgen_Gro=DF?= <jgross@suse.com>,
-	Marek =?utf-8?B?TWHFm2xhbmth?= <mmaslanka@google.com>,
-	Adam Williamson <awilliam@redhat.com>
-Cc: Andrew Cooper <andrew.cooper3@citrix.com>, lorenzo.stoakes@oracle.com,
-	akpm@linux-foundation.org, anton.ivanov@cambridgegreys.com,
-	bp@alien8.de, brendan.higgins@linux.dev, da.gomez@samsung.com,
-	danielt@kernel.org, dave.hansen@linux.intel.com,
-	davidgow@google.com, dianders@chromium.org, hpa@zytor.com,
-	jason.wessel@windriver.com, jikos@kernel.org,
-	joe.lawrence@redhat.com, johannes@sipsolutions.net,
-	jpoimboe@kernel.org, kgdb-bugreport@lists.sourceforge.net,
-	kirill.shutemov@linux.intel.com, kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, linux-modules@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	live-patching@vger.kernel.org, luto@kernel.org,
-	mark.rutland@arm.com, mbenes@suse.cz, mhiramat@kernel.org,
-	mingo@redhat.com, peterz@infradead.org, petr.pavlu@suse.com,
-	pmladek@suse.com, richard@nod.at, rmoar@google.com,
-	rostedt@goodmis.org, rppt@kernel.org, samitolvanen@google.com,
-	shuah@kernel.org, song@kernel.org, tglx@linutronix.de,
-	x86@kernel.org,
-	Marek =?iso-8859-1?Q?Marczykowski-G=F3recki?= <marmarek@invisiblethingslab.com>
-Subject: Re: [PATCH 6/8] modules: switch to execmem API for remapping as RW
- and restoring ROX
-Message-ID: <Z3iX2mNtqSYrvYPT@bombadil.infradead.org>
-References: <86eba318-464b-4b9b-a79e-64039b17be34@lucifer.local>
- <d48193a3-65fe-4aa9-98f6-dd5869bd9127@citrix.com>
- <9878d90f-faf3-4853-9a79-a21b4f58ab4c@suse.com>
+	s=k20201202; t=1735981060;
+	bh=Ngs7UO8p1JCMfAXuAnuvOR/jRHfGsXotovGZg+ytYMo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=B7C1z/kXrD5/JGPPk6VBA21VcL6gu8u/TKuRHJ2WWHP3G4w4sAoX4aOd8pKg7R+Yn
+	 izKrHpx42+woh6tzmRPoGQdGAz5Y66pqkgdrjjS66F0sEIg4OEscRvlX1mrUqIkHn/
+	 1NCnpHNOSg8KXaJzvHBDnXndmdqKENpFxx95ceoKY/ugtCdgHm4iVURq7QhRn4LJ1W
+	 spSx8QsPBz/EvPnKBEFhfb4iAtvrJNrau11cd7H0huizNy+zTMlmYi/ij84RevGaor
+	 LtowiCz5RvXOxk8GUd6vXNMIpG91R+9p2j+xY2WKkGjLP8tnyLYQLUAXoOzonqtAp/
+	 Xvt1utNZbrK3A==
+From: Christian Brauner <brauner@kernel.org>
+To: Nam Cao <namcao@linutronix.de>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Dylan Hatch <dylanbhatch@google.com>,
+	"Eric W . Biederman" <ebiederm@xmission.com>,
+	John Ogness <john.ogness@linutronix.de>,
+	Kees Cook <kees@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] fix reading ESP during coredump
+Date: Sat,  4 Jan 2025 09:57:19 +0100
+Message-ID: <20250104-vollversammlung-biomedizin-f4c1164669d6@brauner>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <cover.1735805772.git.namcao@linutronix.de>
+References: <cover.1735805772.git.namcao@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <9878d90f-faf3-4853-9a79-a21b4f58ab4c@suse.com>
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1359; i=brauner@kernel.org; h=from:subject:message-id; bh=Ngs7UO8p1JCMfAXuAnuvOR/jRHfGsXotovGZg+ytYMo=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaRXfP9z1OdcrajPh9j0nXMdL5y3Tkh81l7F63C/I3Cij sWPv0FaHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABNxdWf4p3Uqp8Fh3e9dzc9L VSpq1IvywjYGvZ8juM9m3aPJtd7t7IwM939KrnD7wLbwfBHvrsb2vV99XmjrxsZd3sD2VnTFl5u 2zAA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jan 03, 2025 at 07:58:13AM +0100, J=FCrgen Gro=DF wrote:
-> On 03.01.25 03:06, Andrew Cooper wrote:
-> > > Hi Mike,
-> > >=20
-> > > This commit is making my intel box not boot in mm-unstable :>) I bise=
-cted it to
-> > > this commit.
-> >=20
-> > For what it's worth, we've found the same under Xen too.
-> >=20
-> > There's one concrete bug in the series, failing to cope with the absence
-> > of superpages (fix in
-> > https://lore.kernel.org/xen-devel/6bb03333-74ca-4c2c-85a8-72549b85a5b4@=
-suse.com/
-> > but not formally posted yet AFAICT).
->=20
-> Now sent out:
->=20
-> https://lore.kernel.org/lkml/20250103065631.26459-1-jgross@suse.com/T/#u
+On Thu, 02 Jan 2025 09:22:55 +0100, Nam Cao wrote:
+> In /proc/PID/stat, there is the kstkesp field which is the stack pointer of
+> a thread. While the thread is active, this field reads zero. But during a
+> coredump, it should have a valid value.
+> 
+> However, at the moment, kstkesp is zero even during coredump.
+> 
+> The first commit fixes this problem, and the second commit adds a selftest
+> to detect if this problem appears again in the future.
+> 
+> [...]
 
-Thanks,=20
+Applied to the vfs-6.14.misc branch of the vfs/vfs.git tree.
+Patches in the vfs-6.14.misc branch should appear in linux-next soon.
 
-Marek, Adam, can you try this patch? Although the reply here is for
-another future series being worked on the fix is for commit
-2e45474ab14f ("execmem: add support for cache of large ROX pages").
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-  Luis
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
+
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs-6.14.misc
+
+[1/2] fs/proc: do_task_stat: Fix ESP not readable during coredump
+      https://git.kernel.org/vfs/vfs/c/e37bea052952
+[2/2] selftests: coredump: Add stackdump test
+      https://git.kernel.org/vfs/vfs/c/49db83214002
 
