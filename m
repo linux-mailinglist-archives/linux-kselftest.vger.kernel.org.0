@@ -1,114 +1,332 @@
-Return-Path: <linux-kselftest+bounces-23924-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23925-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4C05A01A95
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 17:26:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96796A01CAE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 00:26:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F07667A2302
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 16:26:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5A9C1883111
+	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 23:26:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6A7719F13C;
-	Sun,  5 Jan 2025 16:25:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BFBA1AA1F2;
+	Sun,  5 Jan 2025 23:26:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OTXuER5U"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="ZqfKP6sq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B94F14883C;
-	Sun,  5 Jan 2025 16:25:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAAF21547C6
+	for <linux-kselftest@vger.kernel.org>; Sun,  5 Jan 2025 23:26:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736094348; cv=none; b=AjGbfCFdbDb0CP7g1OXlAi/yo5nfNiE31SXkkY1qnUAw37KZAn6GTL68poko618rUtBLCNQUYsu04ARVTavjOGXJtxsVlAvnwhMWoVgPOIZxupt1Iyba/v33+Ax6rvV51WpvGytmnJ3JsD2+4JSg0+qnH2Ed9iAKa2KWRG/l1YU=
+	t=1736119610; cv=none; b=R752n87HKXZHHMWDalxPyKatAltkj7ppWIjBd0ycFsRCpJ3hJMnkzdICcbX+LiC+09B0Hjb5rYgP1tR1jHz+HbzwRNOuEpy45Y8BmWdt9Dnmi/AzQQJX/sr8fsA8sHGg2uxZvBgD9esrzdT2lRHVcoK3rWRgqojfR5qump6eFpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736094348; c=relaxed/simple;
-	bh=56ebDlc6JL5+ZMpwm02Qeii/sBIWqAz2/PSCN53vB2U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SUj/WeVt7f92p/GTsqjDZ/w+mQ6Cz2+cE5b6SHiFzPjU9iqnynxSbJp2YiFkdNR7V5MI0qGD2gSucamw8sjMoAbKc4Dunv5CbbVJBo6GVXsqAaDvTbPx1AjwgzzztuzEfjSmuCzAgAgheR+6DwzKoXJj9GYg8BrCduakKoV/qOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OTXuER5U; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2ee9a780de4so14352738a91.3;
-        Sun, 05 Jan 2025 08:25:47 -0800 (PST)
+	s=arc-20240116; t=1736119610; c=relaxed/simple;
+	bh=LP7ZLzht5qbhm2Mnl3NnvvqM1w2ujNW6Pp/NlVJ/d+k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U1FezQfYa8t2S45aJJuQgBm2aukFB6D/rxQ/5Gr3Sm+LcPY/uKhpJCWGG01b57ntkVTEp3W+j0sasIcmJQccuHe6HkCpE4Tml+33OG00JtgnT3jyssNd8dKtQoiuHb7fMHdh9NaOP8piuRajNx5XuNPqWOP8RK66uUpW9DKWR9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=ZqfKP6sq; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43623f0c574so94582995e9.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 05 Jan 2025 15:26:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736094346; x=1736699146; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BqRDxETieKo+8LV73GKB3gXqTd/uCkmgBGJiOO4mOFg=;
-        b=OTXuER5UcAoJIWaMHdqMSwFQF3pYn+2Dkm+jmSRogyGaOcA3NskZQ0wM0NkXL+EH9V
-         Om9yM2wIITbq8LPxoNHhwu+rrN0eKujIbSXwZ/gTXx7FTBU879zeruLlcAU9ADBlMDsP
-         zG6aJLiMGOED6azyWMQPubyMRrO/xYFdtSJSZHaRy4k98aOrx/hTyzm9ncAbvOpctP3k
-         GGB0k2xWc7Xmk8WMc6rYdwDOVDbF7T0tUoH2z64JUy1Mt8qd3NtyNYY+apQI1TMuabPv
-         Y3cTqqWb8O77DSe3xgcdSa5P+mlepwEdlf60TnP+QdXeGBe6N+3qH+jd/Ssn+I+pDCAN
-         frFA==
+        d=openvpn.net; s=google; t=1736119606; x=1736724406; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z9mHf8yFtOKVgQZRZ2k2zr9KtmnpbUApiV/Ef6697gs=;
+        b=ZqfKP6sq3K2uN0xvGlky/BDPUos5hV/kAwhOQgrmkGcqKP6eXI9U7ghfbBFqMZNHJA
+         CQ/QlDqPaMy2PmGzXDBAewGegJGHF4/QgH4N4VcTjxv3uHs+39+zai5kv3cT4ELXcb/O
+         ijzfHDOgUGSQ9mu1VqHwEa+JGzVb7DPmJPcJtotinzuhrJBjstD5LDTDOIxbbkio+yUI
+         ziJSMeeM2y0JRllFBrwPqciyJDpyzDbTrkNal8x4PG/2BuL5s4zrtmkMb1e+aDPIQ7lK
+         Df+HX26wLGOk1kX9iht0C7bAIqBvPb1takoKbZUsfT1HJUaxUp9mACAsameo1zoSwxqw
+         +Rkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736094346; x=1736699146;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BqRDxETieKo+8LV73GKB3gXqTd/uCkmgBGJiOO4mOFg=;
-        b=ZeFLnsqvm2e8PQsH8H5joSsIsBVsFT7q6Yz0clzA0N/pW2B313qI817l+ghfI9VgO4
-         YBw/niKgCUkuWk8OLKTzx8S07WX1dkqNrdxzblXP3LKxAJdRJkDMLOpMjmY377k3yRFk
-         mDU2oFuCjq3i24GmkVbukjS7ycFEx92AkON1WUxaSvHPdo17hiPLiYcQBAubs0/3O5Q+
-         XgLRUwT8jUHnOcwrXr7jrIy3VZan/mYzGoUQvjC86x7rIwaesHipMf6TDkRyWkJcrEti
-         7wsgXF+iXmHdwloVjwjtKIe/BriWGJmTlXViu4InZpzzqjB3H7oPJM0WKNKNS274TtrJ
-         tKpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUec4dvsmz5Mo72hRzVo2PpUYLnHGt8/FIhhYM7M0WCJ646268JV9IvtLgldwP8UBDx0VSldS+KqB+ggXi+SVo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2F0/X4rjwV6GjDfBBiGAAfNIwi9zjKtYT8vwKVs+20EugkUcv
-	CFipwy8+TmYluYuYvLewW95qavJZuWGhy4B3d30dWBcfiVxkVry2Ji1q60dRm/In3lkUIJNQiEY
-	cgbOf41gWCNO+w0OMfc7+UnRImNU=
-X-Gm-Gg: ASbGncu1d3+l3idY49YDwZNE8qvGtpA2WK3BNZaL8An5iNnivClHwOU06X4IAK+bN9g
-	eBASRwkqBBKhYAZZAF11dvxE7z8gDx7Z9H8YfUgY=
-X-Google-Smtp-Source: AGHT+IH2+khpZuwV/UXGR/BF5U6xqgXLMlviIw4B+TtjMphMUGOjhladr0Lh2wSn3HqLSS5KQs2I5FOW+J2wTf7Ziqs=
-X-Received: by 2002:a17:90b:54d0:b0:2ee:c918:cd60 with SMTP id
- 98e67ed59e1d1-2f452e4a7f6mr85268600a91.20.1736094346461; Sun, 05 Jan 2025
- 08:25:46 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736119606; x=1736724406;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z9mHf8yFtOKVgQZRZ2k2zr9KtmnpbUApiV/Ef6697gs=;
+        b=ekjmaYtZraMeYt9EeVLO5XN0EulUIhfPmU60AH0laZ0m/PcjUg7+Lf5g2V8BveXVGd
+         k88uFv/u9Tk3vpKHknBZ3R6YRZovYLMxakWmxJmoFH0veSfqGDHHEIOPZbJHkRmrMUly
+         yIt5mQk3AtQTmMTHdsd6QR6ytQI1lZeJwivpqeQrOws5ZhIzqXwrrOBi0p/p4DJ6EA0f
+         B/REGagzXau+HMmIuvLKllrs3xLDm6AmDF5ETsxI9m+HmfKxCzEvLBK+01DQR8ONGaFD
+         7PuRl7g1NbDJvmslygNuGsBmZy6O0R4wZf7mZBTHQZHMKxPwj3EiYkKPvcUyldGFzE/O
+         TS/A==
+X-Forwarded-Encrypted: i=1; AJvYcCUjg9Nilk8GPOlSSnkEJOeNC+JQaHrq9m8JavltOpCLD+qxKO2EDnw2MVBx4ySt2YCOdi1V5ZAfNgsvawJavs0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsI2eMdSBLe0iEOqOKUH8+20ANUXUXysAMJ0pyP33ii0njO43x
+	wic2V9JYn/4HFNHZwZ3tLOP+I9HrpwUF8PfWg/0SSx7Z3orE5Tkcdqny90DVvMI=
+X-Gm-Gg: ASbGnctfzkOM3ELyJnjJOTp6YXCJgAPxyDw1wHPi62LB9Agaiuc7oho7b+smY4TLHJt
+	d5gcj32Ldmt/p5c1ca2ox62STMk7BLQiJcg0CeE6IN0X7cWTmdOPtclkP8aNQJUpHck7lsUQAPd
+	vMBb8oSyO65KxOxqSPyGMogP+600SqdhhDLHpl6BkLQMISMxgMe4BmINKGiGvRHpvgq2MJTlI0J
+	9zwlkYS1SzCOg4SXSOfrTUA9KPi43hf1FFd94ZUrRPPoovWHXMI8mH7R/iVN8upT47Cj1vhXsjv
+	j82x0NCiDyfMu/8tUTs=
+X-Google-Smtp-Source: AGHT+IFfyRzFKSxBAa63INUl99UzqXvW//BGflMBlLyb+ckrsSV0XVNj70wBWEe+D3lGmyzFG2e2hA==
+X-Received: by 2002:a05:600c:3516:b0:434:fbda:1f44 with SMTP id 5b1f17b1804b1-436686464e7mr478522965e9.19.1736119605988;
+        Sun, 05 Jan 2025 15:26:45 -0800 (PST)
+Received: from ?IPV6:2001:67c:2fbc:1:4853:2a1d:28b3:4797? ([2001:67c:2fbc:1:4853:2a1d:28b3:4797])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43661219a71sm547181665e9.26.2025.01.05.15.26.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Jan 2025 15:26:44 -0800 (PST)
+Message-ID: <9634a1e1-6cc4-45ef-89d8-30d0e50ba319@openvpn.net>
+Date: Mon, 6 Jan 2025 00:27:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241220091730.28006-1-yongxuan.wang@sifive.com>
-In-Reply-To: <20241220091730.28006-1-yongxuan.wang@sifive.com>
-From: Andy Chiu <andybnac@gmail.com>
-Date: Mon, 6 Jan 2025 00:25:35 +0800
-Message-ID: <CAFTtA3Op9go6pi6Om=e+hXGAfMGv_kGeS4CfqXbdVhLcRW89ew@mail.gmail.com>
-Subject: Re: [PATCH 0/2] selftest: fix riscv/vector tests
-To: Yong-Xuan Wang <yongxuan.wang@sifive.com>
-Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-kselftest@vger.kernel.org, greentime.hu@sifive.com, 
-	vincent.chen@sifive.com, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v16 07/26] ovpn: introduce the ovpn_socket object
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ ryazanov.s.a@gmail.com, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>,
+ willemdebruijn.kernel@gmail.com
+References: <20241219-b4-ovpn-v16-0-3e3001153683@openvpn.net>
+ <20241219-b4-ovpn-v16-7-3e3001153683@openvpn.net> <Z3gXs65jjYc-g2iw@hog>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <Z3gXs65jjYc-g2iw@hog>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Yong-Xuan Wang <yongxuan.wang@sifive.com> =E6=96=BC 2024=E5=B9=B412=E6=9C=
-=8820=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:17=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> Add test counts and pass message to remove warning of riscv/vector tests.
->
-> Yong-Xuan Wang (2):
->   tools: selftests: riscv: Add pass message for v_initval_nolibc
->   tools: selftests: riscv: Add test count for vstate_prctl
->
->  tools/testing/selftests/riscv/vector/v_initval_nolibc.c | 4 ++++
->  tools/testing/selftests/riscv/vector/vstate_prctl.c     | 2 ++
->  2 files changed, 6 insertions(+)
->
-> --
-> 2.17.1
->
+Hi Sabrina,
 
-For the series,
+On 03/01/2025 18:00, Sabrina Dubroca wrote:
+> Hello Antonio,
+> 
+> 2024-12-19, 02:42:01 +0100, Antonio Quartulli wrote:
+>> +static void ovpn_socket_release_kref(struct kref *kref)
+>> +	__releases(sock->sock->sk)
+>> +{
+>> +	struct ovpn_socket *sock = container_of(kref, struct ovpn_socket,
+>> +						refcount);
+>> +
+> 
+> [extend with bits of patch 9]
+>> 	/* UDP sockets are detached in this kref callback because
+>> 	 * we now know for sure that all concurrent users have
+>> 	 * finally gone (refcounter dropped to 0).
+>> 	 *
+>> 	 * Moreover, detachment is performed under lock to prevent
+>> 	 * a concurrent ovpn_socket_new() call with the same socket
+>> 	 * to find the socket still attached but with refcounter 0.
+> 
+> I'm not convinced this really works, because ovpn_socket_new() doesn't
+> use the same lock. lock_sock and bh_lock_sock both "lock the socket"
+> in some sense, but they're not mutually exclusive (we talked about
+> that around the TCP patch).
 
-Reviewed-by: Andy Chiu <AndybnAC@gmail.com>
+You're right - but what prevents us from always using bh_lock_sock?
 
-Thanks,
-Andy
+> 
+> Are you fundamentally opposed to making attach permanent? ie, once
+> a UDP or TCP socket is assigned to an ovpn instance, it can't be
+> detached and reused. I think it would be safer, simpler, and likely
+> sufficient (I don't know openvpn much, but I don't see a use case for
+> moving a socket from one ovpn instance to another, or using it without
+> encap).
+
+I hardly believe a socket will ever be moved to a different instance.
+There is no use case (and no userspace support) for that at the moment.
+
+> 
+> Rough idea:
+>   - ovpn_socket_new is pretty much unchanged (locking still needed to
+>     protect against another simultaneous attach attempt, EALREADY case
+>     becomes a bit easier)
+>   - ovpn_peer_remove doesn't do anything socket-related
+>   - use ->encap_destroy/ovpn_tcp_close() to clean up sk_user_data
+>   - no more refcounting on ovpn_socket (since the encap can't be
+>     removed, the lifetime to ovpn_socket is tied to its socket)
+> 
+> What do you think?
+
+hmm how would that work with UDP?
+On a server all clients may disconnect, but the UDP socket is expected 
+to still survive and be re-used for new clients (userspace will keep it 
+alive and keep listening for new clients).
+
+Or you're saying that the socket will remain "attached" (i.e. 
+sk_user_data set to the ovpn_priv*) even when no more clients are connected?
+
+> 
+> I'm trying to poke holes into this idea now. close() vs attach worries
+> me a bit.
+
+Can that truly happen?
+If a socket is going through close(), there should be some way to mark 
+it as "non-attachable".
+
+Actually, do we even need to clean up sk_user_data? The socket is being 
+destroyed - why clean that up at all?
+
+> 
+> 
+>> 	 */
+>> 	if (sock->sock->sk->sk_protocol == IPPROTO_UDP)
+>> 		ovpn_udp_socket_detach(sock->sock);
+> 
+> 
+>> +	bh_unlock_sock(sock->sock->sk);
+>> +	sockfd_put(sock->sock);
+>> +	kfree_rcu(sock, rcu);
+>> +}
+> 
+> [...]
+>> +struct ovpn_socket *ovpn_socket_new(struct socket *sock, struct ovpn_peer *peer)
+>> +{
+>> +	struct ovpn_socket *ovpn_sock;
+>> +	int ret;
+>> +
+>> +	lock_sock(sock->sk);
+>> +
+>> +	ret = ovpn_socket_attach(sock, peer);
+>> +	if (ret < 0 && ret != -EALREADY)
+>> +		goto err_release;
+>> +
+>> +	/* if this socket is already owned by this interface, just increase the
+>> +	 * refcounter and use it as expected.
+>> +	 *
+>> +	 * Since UDP sockets can be used to talk to multiple remote endpoints,
+>> +	 * openvpn normally instantiates only one socket and shares it among all
+>> +	 * its peers. For this reason, when we find out that a socket is already
+>> +	 * used for some other peer in *this* instance, we can happily increase
+>> +	 * its refcounter and use it normally.
+>> +	 */
+>> +	if (ret == -EALREADY) {
+>> +		/* caller is expected to increase the sock refcounter before
+>> +		 * passing it to this function. For this reason we drop it if
+>> +		 * not needed, like when this socket is already owned.
+>> +		 */
+>> +		ovpn_sock = ovpn_socket_get(sock);
+>> +		release_sock(sock->sk);
+>> +		sockfd_put(sock);
+>> +		return ovpn_sock;
+>> +	}
+>> +
+>> +	ovpn_sock = kzalloc(sizeof(*ovpn_sock), GFP_KERNEL);
+>> +	if (!ovpn_sock) {
+>> +		ret = -ENOMEM;
+>> +		goto err_detach;
+>> +	}
+>> +
+>> +	ovpn_sock->ovpn = peer->ovpn;
+>> +	ovpn_sock->sock = sock;
+>> +	kref_init(&ovpn_sock->refcount);
+>> +
+>> +	rcu_assign_sk_user_data(sock->sk, ovpn_sock);
+>> +	release_sock(sock->sk);
+>> +
+>> +	return ovpn_sock;
+>> +err_detach:
+>> +	if (sock->sk->sk_protocol == IPPROTO_UDP)
+>> +		ovpn_udp_socket_detach(sock);
+> 
+> This would leave the TCP socket half-attached, and if userspace tries
+> to attach the same socket again (I don't think the ovpn module would
+> prevent that since sk_user_data is still unset), both ->sk_data_ready
+> and tcp.sk_cb.sk_data_ready will be set to ovpn's (same for
+> sk_write_space with ovpn_tcp_write_space which will recurse into
+> itself when called).
+> 
+> I think it'd be easier to do the alloc first, then attach. Handling a
+> failure to attach would be a simple kfree, while handling a failure to
+> alloc is a detach (or part of a detach) which is not as easy.
+
+Yap, makes sense!
+
+> 
+> 
+> 
+>> +int ovpn_udp_socket_attach(struct socket *sock, struct ovpn_priv *ovpn)
+>> +{
+>> +	struct ovpn_socket *old_data;
+>> +	int ret = 0;
+>> +
+>> +	/* make sure no pre-existing encapsulation handler exists */
+>> +	rcu_read_lock();
+>> +	old_data = rcu_dereference_sk_user_data(sock->sk);
+>> +	if (!old_data) {
+>> +		/* socket is currently unused - we can take it */
+>> +		rcu_read_unlock();
+>> +		return 0;
+>> +	}
+>> +
+>> +	/* socket is in use. We need to understand if it's owned by this ovpn
+>> +	 * instance or by something else.
+>> +	 * In the former case, we can increase the refcounter and happily
+>> +	 * use it, because the same UDP socket is expected to be shared among
+>> +	 * different peers.
+>> +	 *
+>> +	 * Unlikely TCP, a single UDP socket can be used to talk to many remote
+> 
+> nit: s/Unlikely/Unlike/
+
+ACK
+
+> 
+>> +	 * hosts and therefore openvpn instantiates one only for all its peers
+>> +	 */
+
+Thanks a lot!
+
+Regards,
+
+
+> 
+
+-- 
+Antonio Quartulli
+OpenVPN Inc.
+
 
