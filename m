@@ -1,150 +1,144 @@
-Return-Path: <linux-kselftest+bounces-23919-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23920-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 097BEA01978
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 13:53:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9DE0A019A2
+	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 14:34:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CD403A3024
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 12:52:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 178241882AE1
+	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 13:34:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3453314D28C;
-	Sun,  5 Jan 2025 12:52:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDDC51E535;
+	Sun,  5 Jan 2025 13:34:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p0fvjz8G"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dA10PAHm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D3F1369AE
-	for <linux-kselftest@vger.kernel.org>; Sun,  5 Jan 2025 12:52:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6993D1E485;
+	Sun,  5 Jan 2025 13:34:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736081576; cv=none; b=l4MhmhC4vCEERsHo4GC0iQeb9nDX/N5Sg4jXylXvlaRtF6s3XFbGCx+Dntsp0FYGe5rbANpwZx7Rv+7qaJh7r5iVnmWJvOXq0cnkWX9d2JYgMSTrytU9y3BacbBbdEuqJXENv8/+PovR7pm6sEBu/qFjfHaqBC+0n78wLOZwe3U=
+	t=1736084049; cv=none; b=OMlIzeoJCJjbOzCyjo62GH2xvhl2P0sLrJ0SFwuspTYG+esmh6Mi8KKSUaKUk/Qg57365wRNEkaBbPNruhJWbJhxwmesn1/nUurihilMBYHiikj70z2bVin4+/lr5J/E+3eoqvYVXEK534/XYgLSpJRmcR8THnuz1RWeVU2YiJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736081576; c=relaxed/simple;
-	bh=5UfF6jzmGPHI0cPnrn6XRUmUTB4P+KEml3GX6b/5tzE=;
+	s=arc-20240116; t=1736084049; c=relaxed/simple;
+	bh=sHYU5YGMQPzJkuw7LdRWjvh8Qb/SisWxK140pFcK4/g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jLB+qLQKSNTEPcUar7sYSHQvf2KLLK6beSs63b3iu03Z2y3oaOHSDFUIW5d/Ko14abkBB55jj58MPjhNkoy9ydt2ISVP/DpzLfaSh06lCMYY+GswtftbvFc1ZYuuVC3QM/d/jjDIOQrVhi5FljdxjJVMNARgSsQqjeXMVx23VKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p0fvjz8G; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2163affd184so95235ad.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 05 Jan 2025 04:52:54 -0800 (PST)
+	 To:Cc:Content-Type; b=m6O+MIPfzYTU6p41/i4ryoWt0ukSORqKJ0TdIe6+SQFwXzx41BI8YBVM5ZaP0MKVhPB4dtaGtALkevz5d2iA3Dl48EBqmLamKB6oEImzb1tRMiy3mze2xvbv0dpug2JM0Rv47FJxaRhUnhc+Su4YZJ5u+dwEVI7HExNB9GBCw/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dA10PAHm; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2ee9b1a2116so2760961a91.3;
+        Sun, 05 Jan 2025 05:34:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1736081574; x=1736686374; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736084048; x=1736688848; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9CZd9YA/vxsfF1o+1S6lXa7zVfnq9bHCryfS5okIqnQ=;
-        b=p0fvjz8G8GHDKm7wNZ5uN4aXtc0sbHW3ZH83tqC8wj/Dm9I/MK6sjE5i8VUWtFMygv
-         ntdIAUOl4O+aoZ360zxFewIUNbfPjEENqig0/Eu0Z9Y9+lsXijGphyOTbvl65VzYvsmM
-         9m8ej/YJYljPXtcDR/sdl8i3WA/IkIu2vTwKp6A11qFAfFGgA130wn2bhVOs4/spko/C
-         z49U0XnrMo7cC8K4ns+z/bdjPl86MT/u/T+tf4lzrlj7VNs/G5i/gac/DdvAYTkXZnOz
-         BtUnzYNh7fF15HJQdPonD5TZXqntIACLneIvdWiSU0DmdtGSdTMp0cIZP8X7HsldCXSc
-         Y/VQ==
+        bh=2RvtPVpQUDZYQyy4W0YLNqt9ec0D50dW+OTyYllUecw=;
+        b=dA10PAHm3FnEjnchlwKHTIjfnGNJ5FNghlDJSDhvz2ugjrt+wfZ682nGuBYVOGx8+L
+         dN9qjtJVNDdULxzPWNnp3h6nwumjigfsXcr14AuJS8BSrbhHtJS5X90KW0bFXAmZLCix
+         WcuLWvKvmD71HeIoZ80swLTcg2PboQelYPADAuzbcgEiTO6dqQf084srwgNJaO/P++zt
+         0GZWH11JqZAHhVfT55jOq+nxvTjob/rIykeisQhoXPXH2c5KpZoLgHRkBH/CqTqgNXIv
+         dMmK9V9yW1X+qbgtU2BGwqK28YlzGwn/784f9bjCQetZ+FK2JusZF9PLEd8C6DlnKAzP
+         1JhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736081574; x=1736686374;
+        d=1e100.net; s=20230601; t=1736084048; x=1736688848;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9CZd9YA/vxsfF1o+1S6lXa7zVfnq9bHCryfS5okIqnQ=;
-        b=LH/1nWDWCqljeWJf89Lxi64+MYeSrCqWT4xfKmf4BVfY+FoJE6dfBKxb7PibK2C75N
-         nrUEL4E9AB2As2Jr7RNM1L6jTitYOldY/wWwEAFKl8JDmJTd2ljZ6f9ME0Ka0E7PXEEo
-         h1dffc83rYqKS+YUXTbNSEAkTwysIeLd3m1WCvpG2gR1GTUQ+/OQ1B7NOSSvje9C4cew
-         XvkNcKB5n0Ww0+Qw3ADEGLoV+ZWXCbrCzaWaTIoeUFxpK3tzvJFUB94RX1MfpFOYhJbA
-         P5dO8XKQ28PdFwi24TD2p6ISepOc9mTexz8/MerG1ZAR9ZckYMobL8GjHIiCHv6Rbzyt
-         wiKw==
-X-Forwarded-Encrypted: i=1; AJvYcCUdQY9oLKRtWZW59ldqOcYCK8jyLRrhe+vwClSN6p8IQBg9hiKRY+rp+hBHf8qa0fpaEKzwzmU6eCB6g3Q/itQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyc+PWton6JIBf+GjmYKbCwoBWqhCLVqNKLxI3uKFEwuGoJEIxh
-	85ph7XRZ9U6uVjKJwcfxti0V4w5G8Y+6f+2RBAYHFNnbuEpFi1Lk8lkoJ82YfBC4hV0fgMlsYxV
-	86WJhTImTBlUb8S0YQlC6t8uCN+FncF4lH2OG
-X-Gm-Gg: ASbGncsjZR1apa9NaqykUObnkxTq1iP1V7xMUl9Atn185UCwNod9W4Tipbw2oTfxIiL
-	EsSJXSkpAfghkFjfjuHGzYvBNJejRAXBxVquD
-X-Google-Smtp-Source: AGHT+IEHA5ba+jpkkdNpDLtsolTeg8E9FnKLL/jtGaf6DdgcjgXXRiauZ5nf4OWT8s7tM+6ZsYXlno3RjzvbYUw9zeI=
-X-Received: by 2002:a17:903:120d:b0:216:6dab:8042 with SMTP id
- d9443c01a7336-21a62b6ffb8mr1842805ad.12.1736081573755; Sun, 05 Jan 2025
- 04:52:53 -0800 (PST)
+        bh=2RvtPVpQUDZYQyy4W0YLNqt9ec0D50dW+OTyYllUecw=;
+        b=X/Ilzics45vwmYwaMwAUdLwv+EccU/mMYf76/zTskZ1OCDXAsXZTuZ71C072aJO9sC
+         1yhUvh6zhLBmZSmSnqCI9W/ciiLp5+mLoe6tDHYQHRQ+wLoZMVhR6A3eCPJN7SZg3bxe
+         IEUV2atWp9F9MbKc0EcqPnhPE5A5KoaoHk1OdFIOCK3w2aMegc5gkcAO6vWrGEz58cuq
+         qZUNqxjgQ7G1nfifa491eUruBQA80xkHpbDjRyi62qyh+rrT/Ox2fhUiugjk5S5mCneu
+         h67AeVQYvHLno6mgRbOmHCMl19SVhhvgSVB/UNnH5DEsZnp1NfRoVfcbOb8q6a9gqNwC
+         HNAg==
+X-Forwarded-Encrypted: i=1; AJvYcCVlMdK8sIPAMnZJ0k/igC6NlxT9iLL2li8khL+Hcj/Gs1pJqVmubv85DGsV6NmOsV42utSikUcKpIBnwBh8XP4=@vger.kernel.org, AJvYcCWDBCScObznEH57V/Zsu2KA0h8i9Tl9U7UGH5D7u6FvO9JhU4Ko/zdQ4vuPQJa3nSC/GMC1dTl7SXX1XK8GyNc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMDrAa1APvkLKw9bEDvV/VEmgd2lq7aLIkOh856h/2TFyxe7wf
+	lHZ02Qsb9UQGouk2y5RdE6QpL8TF/S8U4MOemh3GhIRJ6qt5rNOfjN22RLnI0Vt4EiOeIffR4t2
+	MNtJBsmJnqJu/rsC7C7FCMYvIlQRfRorf
+X-Gm-Gg: ASbGncuvuAePE15Onl4brVHRQM5mzACuIVFumec8FOFwB/SO1asKr1vCwr3WNXtCSZP
+	qPtcJxYv93rwsghVrH7gQkOnWABBa2LaWRaft/g==
+X-Google-Smtp-Source: AGHT+IGhAQT371nKxmaH8vlp3RgkBvFgyLagooOKijX0LuPewuplUERiQHzADDs25UttZ06GLEYh3U8t95HmWnQ4Esc=
+X-Received: by 2002:a17:90b:3bcb:b0:2ee:6db1:21dc with SMTP id
+ 98e67ed59e1d1-2f452de8c1bmr31993001a91.1.1736084047613; Sun, 05 Jan 2025
+ 05:34:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <86eba318-464b-4b9b-a79e-64039b17be34@lucifer.local>
- <d48193a3-65fe-4aa9-98f6-dd5869bd9127@citrix.com> <9878d90f-faf3-4853-9a79-a21b4f58ab4c@suse.com>
- <Z3iX2mNtqSYrvYPT@bombadil.infradead.org>
-In-Reply-To: <Z3iX2mNtqSYrvYPT@bombadil.infradead.org>
-From: =?UTF-8?Q?Marek_Ma=C5=9Blanka?= <mmaslanka@google.com>
-Date: Sun, 5 Jan 2025 13:52:27 +0100
-Message-ID: <CAGcaFA2Htgu8w6S_Zuz2zn3FwpaetZRbY8n0CWEdh07YfMO==A@mail.gmail.com>
-Subject: Re: [PATCH 6/8] modules: switch to execmem API for remapping as RW
- and restoring ROX
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>, 
-	Adam Williamson <awilliam@redhat.com>, Andrew Cooper <andrew.cooper3@citrix.com>, 
-	lorenzo.stoakes@oracle.com, akpm@linux-foundation.org, 
-	anton.ivanov@cambridgegreys.com, bp@alien8.de, brendan.higgins@linux.dev, 
-	da.gomez@samsung.com, danielt@kernel.org, dave.hansen@linux.intel.com, 
-	davidgow@google.com, dianders@chromium.org, hpa@zytor.com, 
-	jason.wessel@windriver.com, jikos@kernel.org, joe.lawrence@redhat.com, 
-	johannes@sipsolutions.net, jpoimboe@kernel.org, 
-	kgdb-bugreport@lists.sourceforge.net, kirill.shutemov@linux.intel.com, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-um@lists.infradead.org, live-patching@vger.kernel.org, luto@kernel.org, 
-	mark.rutland@arm.com, mbenes@suse.cz, mhiramat@kernel.org, mingo@redhat.com, 
-	peterz@infradead.org, petr.pavlu@suse.com, pmladek@suse.com, richard@nod.at, 
-	rmoar@google.com, rostedt@goodmis.org, rppt@kernel.org, 
-	samitolvanen@google.com, shuah@kernel.org, song@kernel.org, 
-	tglx@linutronix.de, x86@kernel.org, 
-	=?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= <marmarek@invisiblethingslab.com>
+References: <CA+G9fYvM96LS63Wa1+5Md9w0V0JZgBW+f50kzx9RjRCYj3aDkA@mail.gmail.com>
+In-Reply-To: <CA+G9fYvM96LS63Wa1+5Md9w0V0JZgBW+f50kzx9RjRCYj3aDkA@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sun, 5 Jan 2025 14:33:55 +0100
+Message-ID: <CANiq72mMo9fyw-NbLUQi_5jD68W78Q5ZMn-ubstWCa6hue7qHA@mail.gmail.com>
+Subject: Re: rust/kernel/lib.rs:17:12 : warning: the feature `new_uninit` has
+ been stable since 1.82.0 and no longer requires an attribute to enable
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: open list <linux-kernel@vger.kernel.org>, rust-for-linux@vger.kernel.org, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	Sasha Levin <sashal@kernel.org>, Anders Roxell <anders.roxell@linaro.org>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Miguel Ojeda <ojeda@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jan 4, 2025 at 3:07=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.org>=
- wrote:
+On Sun, Jan 5, 2025 at 9:42=E2=80=AFAM Naresh Kamboju <naresh.kamboju@linar=
+o.org> wrote:
 >
-> On Fri, Jan 03, 2025 at 07:58:13AM +0100, J=C3=BCrgen Gro=C3=9F wrote:
-> > On 03.01.25 03:06, Andrew Cooper wrote:
-> > > > Hi Mike,
-> > > >
-> > > > This commit is making my intel box not boot in mm-unstable :>) I bi=
-sected it to
-> > > > this commit.
-> > >
-> > > For what it's worth, we've found the same under Xen too.
-> > >
-> > > There's one concrete bug in the series, failing to cope with the abse=
-nce
-> > > of superpages (fix in
-> > > https://lore.kernel.org/xen-devel/6bb03333-74ca-4c2c-85a8-72549b85a5b=
-4@suse.com/
-> > > but not formally posted yet AFAICT).
-> >
-> > Now sent out:
-> >
-> > https://lore.kernel.org/lkml/20250103065631.26459-1-jgross@suse.com/T/#=
-u
+> The following kselftest rust builds failed on sashal/linus-next.git
+> due to following build warnings / errors.
 >
-> Thanks,
->
-> Marek, Adam, can you try this patch? Although the reply here is for
-> another future series being worked on the fix is for commit
-> 2e45474ab14f ("execmem: add support for cache of large ROX pages").
->
->   Luis
+> Good: 829d8581c398a96deea1d6bc78578950347dcbec
+> Bad:   b2d472701a703596889c3fd067fd8929aeffc4be
 
-Hi Luis,
+These seem unrelated, old but rebased/recommitted recently (without SoB).
 
-I suppose you're referring to the issue described here
-https://lore.kernel.org/linux-mm/CAGcaFA2hdThQV6mjD_1_U+GNHThv84+MQvMWLgEuX=
-+LVbAyDxg@mail.gmail.com/T/
-Unfortnuetly this patch didn't help.
+> warning: the feature `new_uninit` has been stable since 1.82.0 and no
+> longer requires an attribute to enable
+>   --> /rust/kernel/lib.rs:17:12
+>    |
+> 17 | #![feature(new_uninit)]
+>    |            ^^^^^^^^^^
+>    |
+>    =3D note: `#[warn(stable_features)]` on by default
 
-Best,
-Marek
+This should not happen since commit 8e95e53ca379 ("rust: allow
+`stable_features` lint"), which is in v6.11-rc7.
+
+> error[E0658]: use of unstable library feature 'box_uninit_write'
+>   --> /rust/kernel/alloc/box_ext.rs:41:12
+>    |
+> 41 |         Ok(Box::write(b, x))
+>    |            ^^^^^^^^^^
+>    |
+>    =3D note: see issue #129397
+> <https://github.com/rust-lang/rust/issues/129397> for more information
+>    =3D help: add `#![feature(box_uninit_write)]` to the crate attributes =
+to enable
+>    =3D note: this compiler was built on 2024-11-26; consider upgrading
+> it if it is out of date
+
+This should not happen since commit 0903b9e2a46c ("rust: alloc: eschew
+`Box<MaybeUninit<T>>::write`"), which is also in v6.11-rc7. (The file
+is gone nowadays too, since v6.13-rc1).
+
+>  toolchain: rustgcc
+>   compiler: 'name': 'gcc', 'version': '14', 'version_full': 'gcc
+> (Debian 14.2.0-8) 14.2.0'
+
+By the way, it would be nice to mention here the Rust compiler too, if used=
+.
+
+Thanks for the report! I think there is nothing to be done here given
+the details above.
+
+Cheers,
+Miguel
 
