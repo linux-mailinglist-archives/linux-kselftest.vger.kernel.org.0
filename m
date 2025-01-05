@@ -1,108 +1,84 @@
-Return-Path: <linux-kselftest+bounces-23921-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23922-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4664FA019AA
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 14:54:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4894DA019B4
+	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 15:22:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EC93162646
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 13:54:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA15A1882E15
+	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 14:22:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9101145A07;
-	Sun,  5 Jan 2025 13:54:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D424143C40;
+	Sun,  5 Jan 2025 14:22:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kfAFQ7qc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sUy5pprJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FD1849C;
-	Sun,  5 Jan 2025 13:54:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF7A42A93;
+	Sun,  5 Jan 2025 14:22:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736085278; cv=none; b=J7iSWth4R0v5lzB6sSt6jSSMmcXrOgfcMJWfcpFjfvkC03TM+J1+MTWIZSjrffXjK91orZd8UaaBjuTDTSdSvHjhEv89hgeoARgAerRBvH8xjxP7/6TgbAWpFn/waxuTFtLuzj1R0+PW22VXAEwvITw9UhcTlMU8Kie1NnPbzW4=
+	t=1736086953; cv=none; b=WjQvF16derT+TuVP1uvoie4uyOrO/mWJd9GrF3v5fNky6Gmuoig6i/JC4enbfkSeA7w+tzpmYbStdnauTlKT6dbgkSihsN0YwG4KUS58fQTkHRSbv1bhFyC/F/bxO5DdTxGi/HcuART3d9w710FGO1CaYXrGqJoFrug8QwZ4tFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736085278; c=relaxed/simple;
-	bh=3fxk3OnoZkN1Z1f8Ji8vmU8OCT1AMTuKhEIc0DPCTzA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TZQSZO+99J4UmadZ6fmgbqQQaIXMQJLab6AL5ooy9hOnWYme4c3sYM405cbE8E1vHQem7eTQg4mMvjB0s2xZ8Tfh5lZS+wF4+7eriRjHVjPPu0KlhBeCKT6IP4GHeH8eSUhJl1geAF5ogMvye4q5HmkpY7nOZcgBgnHRGlyW8yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kfAFQ7qc; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2ef7733a1dcso2863705a91.3;
-        Sun, 05 Jan 2025 05:54:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736085276; x=1736690076; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3fxk3OnoZkN1Z1f8Ji8vmU8OCT1AMTuKhEIc0DPCTzA=;
-        b=kfAFQ7qcXCNNne8kWdv04iwHPXgZWxcwqp9v1utjZbXXVVBUtJyi/9tNSPZGc64/Jm
-         UQN/V2KIiz0ZDBilD9HvUaVdnocd7Nb8k89VlxWMyZpm/Hh+wyVcr/95qyELKN9SxOhU
-         IHYKS/L9ZduvYmV2wqtYdAYPdkpXM8xqDarK2VQSdp+ctdBjEfNCWb+ps+NgxRPDumA3
-         UZH7tB5J2gh5Q35LWgvf1GYYANw7N7hHYeZGSx+Tx7tZzePSFgdKob5dqDC5n2PvQWiB
-         vSVsonGjQQATDertOSmbOt5vNGFPqHufJCcU5GU1ftuUixaEzCK5A9PAipzlhhAGyund
-         7rzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736085276; x=1736690076;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3fxk3OnoZkN1Z1f8Ji8vmU8OCT1AMTuKhEIc0DPCTzA=;
-        b=BXv3/ZgrqdZO7I9aLpne6ffdnkAmmblhHS1f3qnQAxRdUgNobb6nGN6jr7k6MdR9hK
-         8W5IoIYgFT3+O7lB967/fGUq/mVgCRxvT20NOqAN731b8Zj78dCaSGZsl1aF7nR8tRXr
-         1YR2PA7pJiRBsm3aOtzgLtAdLLopAF7Utip+jhdd8RkIBO3YROD6WOlN3xZ3Gj98JSMB
-         AqJVWTQAnr5918IQy/HezXKbCPwRHeqnD9U1/+jyvkBeThjTzw6EQtdwlrL80GgVBDid
-         FmOenYkrsryW9w399ap1qMneytpOYryZwaPKX58R3YV8Hn/GBmjJKoVewD9go1oismfj
-         PsZw==
-X-Forwarded-Encrypted: i=1; AJvYcCUxJJG1mphZEGXAgZHX8Hdedu7GTGacNgPYu6PBzdtF64Qf2HoqR6ANSiRykfidxkPygzHzG/0rsl+pJQWDXWU=@vger.kernel.org, AJvYcCVEES7Uy1P7G1coeG+wTNlELLEnGjZoR7K2UFyGkMngPBzF1DKvGhjxV4iyMc1okxNTK23GIdsHeIA2ayVYAmg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5lJRfDj6nPVDH/s3iPtqpsfmVA7v/38Kluq5JJBfH0c5+8A2P
-	W6vv5dklOQAeRDnmS3QOmCMGZXFu3Wuk9SIEXZMMvDDlQUKEcd5exmG/0xbukJjS0oVXJ1520Ve
-	tkrv1tk45iX2O4HcfSemrq7qgu4LCkQ==
-X-Gm-Gg: ASbGncsAMfpjLSjShZgQ7G7K6oPvsWLOYBs6AhS2sjyEOIh9VqcbflcyWT1JvzbOXtv
-	tn97YvoSpQVhsvRmuEK1GdAKO+W15y4QglZWggQ==
-X-Google-Smtp-Source: AGHT+IErXFkVxv4dKvMNLHylfuM/owCnaNmH8+o/zslGc+qTc7wsP+OT9Qo+2SUcirlTsNJ11X42KBRVBb8wkAhSGlw=
-X-Received: by 2002:a17:90b:2cc7:b0:2f2:a9bd:afe9 with SMTP id
- 98e67ed59e1d1-2f452deb7a8mr30475176a91.2.1736085276598; Sun, 05 Jan 2025
- 05:54:36 -0800 (PST)
+	s=arc-20240116; t=1736086953; c=relaxed/simple;
+	bh=o0vjkhKP3lbGLakXGR25MuS5hNOiRQSUwIloZwYrbRA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QSRB/oP+Ycb8OjAs45Xg6U1q8qj9KmfpLMOHNRATJLmZ1ZgldCb8QOiw+tBvE41LlkJXaB9QUlS/odj/ybaBKBPAtSqnPYYUvTXCvH6mB0lvZrITPW9dYOiffP6E7Pl2wVvuw9pP2itN1SCfdDFd8eK4guWO6Lze9TJmvtIjqbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sUy5pprJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D832C4CED0;
+	Sun,  5 Jan 2025 14:22:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736086952;
+	bh=o0vjkhKP3lbGLakXGR25MuS5hNOiRQSUwIloZwYrbRA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sUy5pprJ31qbPGclJoZtCgn4ILdc+/Vh6t+HBIdeHEJLzTfdeVcyRQ6xb3p9W4YEI
+	 9P7v1mmqd8GQuzbZGCU2IqM2tfO4/p0RBKT3uiv5Il3TExhsdNyVC/UbPrpMeql1YM
+	 tl4XkIvPC8b+eUblR3n0YjGRMuXAwEgNmgOAqa1YDAU7k3SSwy0rfQs6QnoRGOJbgK
+	 EA9zQyisuvgVGyX9tTAaHDoAMK7+MaBwFhH3g2DgdTmGCUaV/9ttmNKF2ay+kqVGLj
+	 KZ5bjSaejazgnGiVlwJ1bKbwXrOOwuhS4pS4YNVNYWTMrspfzlHof5BgoSbWfiEYuD
+	 yOTF0IAzcZD/Q==
+Date: Sun, 5 Jan 2025 09:22:31 -0500
+From: Sasha Levin <sashal@kernel.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: open list <linux-kernel@vger.kernel.org>,
+	rust-for-linux@vger.kernel.org,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	lkft-triage@lists.linaro.org,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>, Miguel Ojeda <ojeda@kernel.org>
+Subject: Re: rust/kernel/lib.rs:17:12 : warning: the feature `new_uninit` has
+ been stable since 1.82.0 and no longer requires an attribute to enable
+Message-ID: <Z3qVp1m8zKiMrtnd@lappy>
+References: <CA+G9fYvM96LS63Wa1+5Md9w0V0JZgBW+f50kzx9RjRCYj3aDkA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+G9fYvM96LS63Wa1+5Md9w0V0JZgBW+f50kzx9RjRCYj3aDkA@mail.gmail.com>
- <CANiq72mMo9fyw-NbLUQi_5jD68W78Q5ZMn-ubstWCa6hue7qHA@mail.gmail.com>
-In-Reply-To: <CANiq72mMo9fyw-NbLUQi_5jD68W78Q5ZMn-ubstWCa6hue7qHA@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 5 Jan 2025 14:54:24 +0100
-Message-ID: <CANiq72mvp85d8GMcdhdmUAdoUci1-Pd6rNxrPg_THs=NKPNp8Q@mail.gmail.com>
-Subject: Re: rust/kernel/lib.rs:17:12 : warning: the feature `new_uninit` has
- been stable since 1.82.0 and no longer requires an attribute to enable
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: open list <linux-kernel@vger.kernel.org>, rust-for-linux@vger.kernel.org, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Sasha Levin <sashal@kernel.org>, Anders Roxell <anders.roxell@linaro.org>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Miguel Ojeda <ojeda@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYvM96LS63Wa1+5Md9w0V0JZgBW+f50kzx9RjRCYj3aDkA@mail.gmail.com>
 
-On Sun, Jan 5, 2025 at 2:33=E2=80=AFPM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> Thanks for the report! I think there is nothing to be done here given
-> the details above.
+I'm sorry, this is my bad: I haven't realized anyone else will be
+looking at these results...
 
-To clarify: v6.11.y is newer (and EOL), v6.12.y LTS is newer, and
-older LTSs had the Rust toolchain pinned.
+Naresh, I'm cheating and using this tree to bisect the issue you've
+originally reported in
+https://lore.kernel.org/all/CA+G9fYvcBvbabg+m7brKfpGCGZUcK+KHHTFX7hFvW6GmN2XF0g@mail.gmail.com/
+.
 
-If there is something I am missing, please let me know.
+It seems we can't get traction to get it fixes, so I'm trying to make
+forward progress.
 
-Thanks!
+Please ignore linus-next for the next day or two :)
 
-Cheers,
-Miguel
+-- 
+Thanks,
+Sasha
 
