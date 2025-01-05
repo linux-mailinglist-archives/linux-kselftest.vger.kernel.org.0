@@ -1,250 +1,141 @@
-Return-Path: <linux-kselftest+bounces-23914-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23915-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3355CA017AB
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 02:15:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE599A018AA
+	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 09:42:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 666631883EE8
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 01:15:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8AB0161C58
+	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 08:42:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79CD7481B3;
-	Sun,  5 Jan 2025 01:15:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DFE1130499;
+	Sun,  5 Jan 2025 08:42:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ath7H3MY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NsDyFWEL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26EFF43AA9;
-	Sun,  5 Jan 2025 01:15:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4471057C93
+	for <linux-kselftest@vger.kernel.org>; Sun,  5 Jan 2025 08:42:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736039739; cv=none; b=RVvSW5nbSkP+/Nn/qjY15gz8tXtNaNRQzIOUxQHPHM8KSK5nnn+xy5fU1C5Z1T3MvqPIfM9RoCyryJNLoutQCwaxTHrVepdoc5jaS2h31WQ24yLyHkuYz+b1MgFuGFqxwYNDED/amClbmnF8rbQktO7x9QPfdSrMBf7SBodmQ0w=
+	t=1736066540; cv=none; b=OEaazDFHKlJf1ayqIK79zkFMfHkOUDQf8aUJfkHr4hX5HcsC5iUTowrfhGwSTEkxpBT7sUCypHm3dDH8ljdz+K/oTz3zMhl386T1aby0b9hrC78A98k0oMh7VbA0dmjktI/dxUV1Ueh7gUMKeaZzM5T9JYhKTWqTkbhA/6YSJ9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736039739; c=relaxed/simple;
-	bh=vkgR1MygQk6r8sEA+qf0oBjWRT4+t7Ar6oNBpL2pnKI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cwwM0VuWM5ox/IppFIvmSdH+z5Rs6kYwCF1v115ulG/DlENZWJnY65UF06d7L2sBuvaLP2H5QhKf2I/+fCOmrdYQwLAQySVl3wk4Bc374gIyR+qocH16r9drc6YJaf7NwcCmeeernMCi9KinQ5kld5OdtOT6+pokk4a76Xisnlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ath7H3MY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 232C9C4CED1;
-	Sun,  5 Jan 2025 01:15:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736039738;
-	bh=vkgR1MygQk6r8sEA+qf0oBjWRT4+t7Ar6oNBpL2pnKI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Ath7H3MY02APj0mHRHFGBCpi2eOWkSyf1EddR+59PZUpc6e34greu5/Rz7LyUJgL5
-	 B8PX0Rx12yR7jeXZkGhwPmPmXZX2blR1/OeZb6+BkE/9uapvixVah+fIXolf0sTj98
-	 i4cDAYiG1x39uc/lFgJEuUXdL+jlcqGm0rG3ijOxoZlfFlEW6v6kDwb9dgfXwlkbNn
-	 TqxzZdlweeQKse3/LSAKiT6BPttySbIevQ3gx8qCHZQbacWmc5dDEfXzJujP6OvYs4
-	 OBb2u+LIw/4oIgfPMMi4egc4etZ2HAprInXLtEnkufgksYd2NMHKbdVCTIveZj7irs
-	 jT9i6MGNe61DQ==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	Jakub Kicinski <kuba@kernel.org>,
-	shuah@kernel.org,
-	willemb@google.com,
-	petrm@nvidia.com,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next] selftests: drv-net: test drivers sleeping in ndo_get_stats64
-Date: Sat,  4 Jan 2025 17:15:25 -0800
-Message-ID: <20250105011525.1718380-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.47.1
+	s=arc-20240116; t=1736066540; c=relaxed/simple;
+	bh=7L9ByarG82VQIQZiqcsiZ5vKOMJLdlSkWqoCUexnngQ=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=mcN/nE8AkEUyrqhEXWGopUDz/OFLSMWV6n+dK3SMlqncXAsumvzvQl4AJaQ+BEFZC5XbFOqw62RVA16Ap0Ke+bkt1Et5IUufEqL7GcusD4Bi6gtrPjauoitbt19nCc2TnXZT2lWLGI3EUsL45sZqyme01WR2hM0t0tDZRm2r728=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NsDyFWEL; arc=none smtp.client-ip=209.85.221.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-5189105c5f5so7067580e0c.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 05 Jan 2025 00:42:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736066537; x=1736671337; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2slI3HZOfX662CqU+CyvEyDvwQcyKSthqjp9QTlo934=;
+        b=NsDyFWELysV/cPIrOaJYHEbaur63KwOQCrh6JQuo2DjdYNu9AWHYJulJ4Dczcz/wB6
+         kv5Q/k5rp8+cCiOU6Rpijlnq20gLm92a6v5ty5FXGuPKW4EHaJTw0cX//QCCGcWZ5MXP
+         6CIWT0tQjLpx3OqhCEIwgL1eVa+F1TOC6KWsCsmJX/1qLLQYZdGgbSobb1xVcnzWBXCR
+         rINODSaNX3xNx/rdhe2891KfhfnC+QfwHDVP+L9QgwJYBgjBD3HXEFxR7vqGFOEDNsxn
+         31Rq3wP/iut4E65E2LGBGPs9tKRvnI6235G0IJ5J+Qbj8PM460WckfevNyWzUjvUreTK
+         ur4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736066537; x=1736671337;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2slI3HZOfX662CqU+CyvEyDvwQcyKSthqjp9QTlo934=;
+        b=Nzm/4WMrONiqhkn0rUKNMBGGZU21HdPuRH9j8Od9om7Y+Oobg/kpI02dFkKWP3P/7B
+         fYIaqbpklclgJiRwe3QQHU5fKGFn0ohnAaTGGkGLZZnO6lrmTYEc4Z/OLE8c8Df5L6Li
+         xx23YiaiTxNtOA5MaxYC3vKL+6Ffc93GNeLeHfReX+pGLDyL3kfq+343aZ5ro2Hh8PTT
+         2OEpbGBcPgAyy0mcamHfSwv1nz307aUk0pMyeio8g9wEO4lUt61IPy7fJ8b3XnbXLiNH
+         61y30EqeD5ID8ET6f0+k5jsikc+Kjgc1vFXiTB8kPH3JxH3S/wLiOAxk1wBDFqOJry7x
+         uE4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVSTQkXex4FmFGkuZm9CjwmlwgUwjdrj/TbL74ctvg608fB0xF70NSdVnbiL5Gs+AcF6MpguLQBjVVv4lD+PBE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzm+5iBaBuby1GvnqGBhxJecVqs6VqliXchN3SJ9CVf1MdLhWNr
+	upTYg55W+DqiukguZ14O2LVf1hzhO055JWPamDIakBqs/gtqj3QTwXSUZj71GBpGIsqKH3hwoG9
+	1ngJbdaQ/LGWwmUwuXPgrEegC1XC3bQJMFKxC3g==
+X-Gm-Gg: ASbGncv/cEkqRNwydMfOp9c5ze0XuF8qPVP3X1Fgyf3rSJUa1hDGabzRfXMvn+lk4wS
+	2goXrY8kkH5LLA+a03LQBfZJBg5EAeMKGADSktLI=
+X-Google-Smtp-Source: AGHT+IESZBYT1KgJtkzvY6N5m3b7nV5aJaVfVbLNS6I6Vq/LSvI4synW71xSLKVBpAoNRau1qyzEQpTF5JucTdwNPKU=
+X-Received: by 2002:a05:6122:8c15:b0:518:9582:dba2 with SMTP id
+ 71dfb90a1353d-51b75d67f88mr37948743e0c.10.1736066537136; Sun, 05 Jan 2025
+ 00:42:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Sun, 5 Jan 2025 14:12:05 +0530
+Message-ID: <CA+G9fYvM96LS63Wa1+5Md9w0V0JZgBW+f50kzx9RjRCYj3aDkA@mail.gmail.com>
+Subject: rust/kernel/lib.rs:17:12 : warning: the feature `new_uninit` has been
+ stable since 1.82.0 and no longer requires an attribute to enable
+To: open list <linux-kernel@vger.kernel.org>, rust-for-linux@vger.kernel.org, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org
+Cc: Sasha Levin <sashal@kernel.org>, Anders Roxell <anders.roxell@linaro.org>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Miguel Ojeda <ojeda@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Most of our tests use rtnetlink to read device stats, so they
-don't expose the drivers much to paths in which device stats
-are read under RCU. Add tests which hammer profcs reads to
-make sure drivers:
- - don't sleep while reporting stats,
- - can handle parallel reads,
- - can handle device going down while reading.
+The following kselftest rust builds failed on sashal/linus-next.git
+due to following build warnings / errors.
 
-Set ifname on the env class in NetDrvEnv, we already do that
-in NetDrvEpEnv.
+Good: 829d8581c398a96deea1d6bc78578950347dcbec
+Bad:   b2d472701a703596889c3fd067fd8929aeffc4be
 
-  KTAP version 1
-  1..7
-  ok 1 stats.check_pause
-  ok 2 stats.check_fec
-  ok 3 stats.pkt_byte_sum
-  ok 4 stats.qstat_by_ifindex
-  ok 5 stats.check_down
-  ok 6 stats.procfs_hammer
-  # completed up/down cycles: 6
-  ok 7 stats.procfs_downup_hammer
-  # Totals: pass:7 fail:0 xfail:0 xpass:0 skip:0 error:0
+Build error:
+--------------
+warning: the feature `new_uninit` has been stable since 1.82.0 and no
+longer requires an attribute to enable
+  --> /rust/kernel/lib.rs:17:12
+   |
+17 | #![feature(new_uninit)]
+   |            ^^^^^^^^^^
+   |
+   = note: `#[warn(stable_features)]` on by default
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: shuah@kernel.org
-CC: willemb@google.com
-CC: petrm@nvidia.com
-CC: linux-kselftest@vger.kernel.org
----
- .../selftests/drivers/net/lib/py/env.py       |  1 +
- tools/testing/selftests/drivers/net/stats.py  | 94 ++++++++++++++++++-
- tools/testing/selftests/net/lib/py/ksft.py    |  5 +
- 3 files changed, 97 insertions(+), 3 deletions(-)
+error[E0658]: use of unstable library feature 'box_uninit_write'
+  --> /rust/kernel/alloc/box_ext.rs:41:12
+   |
+41 |         Ok(Box::write(b, x))
+   |            ^^^^^^^^^^
+   |
+   = note: see issue #129397
+<https://github.com/rust-lang/rust/issues/129397> for more information
+   = help: add `#![feature(box_uninit_write)]` to the crate attributes to enable
+   = note: this compiler was built on 2024-11-26; consider upgrading
+it if it is out of date
 
-diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
-index fea343f209ea..987e452d3a45 100644
---- a/tools/testing/selftests/drivers/net/lib/py/env.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/env.py
-@@ -48,6 +48,7 @@ from .remote import Remote
-         else:
-             self._ns = NetdevSimDev(**kwargs)
-             self.dev = self._ns.nsims[0].dev
-+        self.ifname = self.dev['ifname']
-         self.ifindex = self.dev['ifindex']
- 
-     def __enter__(self):
-diff --git a/tools/testing/selftests/drivers/net/stats.py b/tools/testing/selftests/drivers/net/stats.py
-index 031ac9def6c0..55d647c006ed 100755
---- a/tools/testing/selftests/drivers/net/stats.py
-+++ b/tools/testing/selftests/drivers/net/stats.py
-@@ -2,12 +2,15 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- import errno
-+import subprocess
-+import time
- from lib.py import ksft_run, ksft_exit, ksft_pr
--from lib.py import ksft_ge, ksft_eq, ksft_in, ksft_true, ksft_raises, KsftSkipEx, KsftXfailEx
-+from lib.py import ksft_ge, ksft_eq, ksft_is, ksft_in, ksft_lt, ksft_true, ksft_raises
-+from lib.py import KsftSkipEx, KsftXfailEx
- from lib.py import ksft_disruptive
- from lib.py import EthtoolFamily, NetdevFamily, RtnlFamily, NlError
- from lib.py import NetDrvEnv
--from lib.py import ip, defer
-+from lib.py import cmd, ip, defer
- 
- ethnl = EthtoolFamily()
- netfam = NetdevFamily()
-@@ -174,10 +177,95 @@ rtnl = RtnlFamily()
-     netfam.qstats_get({"ifindex": cfg.ifindex, "scope": "queue"}, dump=True)
- 
- 
-+def __run_inf_loop(body):
-+    body = body.strip()
-+    if body[-1] != ';':
-+        body += ';'
-+
-+    return subprocess.Popen(f"while true; do {body} done", shell=True,
-+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-+
-+
-+def __stats_increase_sanely(old, new) -> None:
-+    for k in old.keys():
-+        ksft_ge(new[k], old[k])
-+        ksft_lt(new[k] - old[k], 1 << 31, comment="likely wrapping error")
-+
-+
-+def procfs_hammer(cfg) -> None:
-+    """
-+    Reading stats via procfs only holds the RCU lock, which is not an exclusive
-+    lock, make sure drivers can handle parallel reads of stats.
-+    """
-+    one = __run_inf_loop("cat /proc/net/dev")
-+    defer(one.kill)
-+    two = __run_inf_loop("cat /proc/net/dev")
-+    defer(two.kill)
-+
-+    time.sleep(1)
-+    # Make sure the processes are running
-+    ksft_is(one.poll(), None)
-+    ksft_is(two.poll(), None)
-+
-+    rtstat1 = rtnl.getlink({"ifi-index": cfg.ifindex})['stats64']
-+    time.sleep(2)
-+    rtstat2 = rtnl.getlink({"ifi-index": cfg.ifindex})['stats64']
-+    __stats_increase_sanely(rtstat1, rtstat2)
-+    # defers will kill the loops
-+
-+
-+@ksft_disruptive
-+def procfs_downup_hammer(cfg) -> None:
-+    """
-+    Reading stats via procfs only holds the RCU lock, drivers often try
-+    to sleep when reading the stats, or don't protect against races.
-+    """
-+    # Max out the queues, we'll flip between max an 1
-+    channels = ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    if channels['combined-count'] == 0:
-+        rx_type = 'rx'
-+    else:
-+        rx_type = 'combined'
-+    cur_queue_cnt = channels[f'{rx_type}-count']
-+    max_queue_cnt = channels[f'{rx_type}-max']
-+
-+    cmd(f"ethtool -L {cfg.ifname} {rx_type} {max_queue_cnt}")
-+    defer(cmd, f"ethtool -L {cfg.ifname} {rx_type} {cur_queue_cnt}")
-+
-+    # Real test stats
-+    stats = __run_inf_loop("cat /proc/net/dev")
-+    defer(stats.kill)
-+
-+    ipset = f"ip link set dev {cfg.ifname}"
-+    defer(ip, f"link set dev {cfg.ifname} up")
-+    # The "echo -n 1" lets us count iterations below
-+    updown = f"{ipset} down; sleep 0.05; {ipset} up; sleep 0.05; " + \
-+             f"ethtool -L {cfg.ifname} {rx_type} 1; " + \
-+             f"ethtool -L {cfg.ifname} {rx_type} {max_queue_cnt}; " + \
-+              "echo -n 1"
-+    updown = __run_inf_loop(updown)
-+    kill_updown = defer(updown.kill)
-+
-+    time.sleep(1)
-+    # Make sure the processes are running
-+    ksft_is(stats.poll(), None)
-+    ksft_is(updown.poll(), None)
-+
-+    rtstat1 = rtnl.getlink({"ifi-index": cfg.ifindex})['stats64']
-+    # We're looking for crashes, give it extra time
-+    time.sleep(9)
-+    rtstat2 = rtnl.getlink({"ifi-index": cfg.ifindex})['stats64']
-+    __stats_increase_sanely(rtstat1, rtstat2)
-+
-+    kill_updown.exec()
-+    stdout, _ = updown.communicate(timeout=5)
-+    ksft_pr("completed up/down cycles:", len(stdout.decode('utf-8')))
-+
-+
- def main() -> None:
-     with NetDrvEnv(__file__, queue_count=100) as cfg:
-         ksft_run([check_pause, check_fec, pkt_byte_sum, qstat_by_ifindex,
--                  check_down],
-+                  check_down, procfs_hammer, procfs_downup_hammer],
-                  args=(cfg, ))
-     ksft_exit()
- 
-diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
-index 477ae76de93d..3efe005436cd 100644
---- a/tools/testing/selftests/net/lib/py/ksft.py
-+++ b/tools/testing/selftests/net/lib/py/ksft.py
-@@ -71,6 +71,11 @@ KSFT_DISRUPTIVE = True
-         _fail("Check failed", a, "not in", b, comment)
- 
- 
-+def ksft_is(a, b, comment=""):
-+    if a is not b:
-+        _fail("Check failed", a, "is not", b, comment)
-+
-+
- def ksft_ge(a, b, comment=""):
-     if a < b:
-         _fail("Check failed", a, "<", b, comment)
--- 
-2.47.1
+error: aborting due to 1 previous error; 1 warning emitted
 
+For more information about this error, try `rustc --explain E0658`.
+make[3]: *** [/rust/Makefile:425: rust/kernel.o] Error 1
+
+Links:
+-------
+ - https://qa-reports.linaro.org/lkft/sashal-linus-next/build/v6.11-rc4-6237-gb2d472701a70/testrun/26563483/suite/build/test/rustgcc-lkftconfig-kselftest/log
+ - https://qa-reports.linaro.org/lkft/sashal-linus-next/build/v6.11-rc4-6237-gb2d472701a70/testrun/26563483/suite/build/test/rustgcc-lkftconfig-kselftest/history/
+ - https://qa-reports.linaro.org/lkft/sashal-linus-next/build/v6.11-rc4-6237-gb2d472701a70/testrun/26563483/suite/build/test/rustgcc-lkftconfig-kselftest/details/
+
+metadata:
+----
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/sashal/linus-next.git
+  kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2rByIOiC9ssqI7NjEPY7IcRs8SN/config
+  build url: https://storage.tuxsuite.com/public/linaro/lkft/builds/2rByIOiC9ssqI7NjEPY7IcRs8SN/
+  toolchain: rustgcc
+  compiler: 'name': 'gcc', 'version': '14', 'version_full': 'gcc
+(Debian 14.2.0-8) 14.2.0'
+  config: rustgcc-lkftconfig-kselftest
+  arch: arm64
+
+
+ --
+Linaro LKFT
+https://lkft.linaro.org
 
