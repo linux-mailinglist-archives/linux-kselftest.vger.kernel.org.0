@@ -1,167 +1,114 @@
-Return-Path: <linux-kselftest+bounces-23923-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23924-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1985DA01A29
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 16:55:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4C05A01A95
+	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 17:26:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B6243A220C
-	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 15:55:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F07667A2302
+	for <lists+linux-kselftest@lfdr.de>; Sun,  5 Jan 2025 16:26:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62BDB1487C5;
-	Sun,  5 Jan 2025 15:55:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6A7719F13C;
+	Sun,  5 Jan 2025 16:25:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LU2Dppsq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OTXuER5U"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12EAF9C1;
-	Sun,  5 Jan 2025 15:55:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B94F14883C;
+	Sun,  5 Jan 2025 16:25:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736092554; cv=none; b=Ede0YEXJZ6QgjkQrSG0e98oKkFgjRgOm7UVUq4Aq6sELaK7kim48SzaB/hoIV6TdOENonPgaz7gRSCYte7+QIeLrhkGDGzIj2dEJwFKSaJMMlASdSsxPw4eNaT8FtYwnPGqqi4odt4Wflk6vQUxJR2Q210Cge18cf3CSq4H+Cjg=
+	t=1736094348; cv=none; b=AjGbfCFdbDb0CP7g1OXlAi/yo5nfNiE31SXkkY1qnUAw37KZAn6GTL68poko618rUtBLCNQUYsu04ARVTavjOGXJtxsVlAvnwhMWoVgPOIZxupt1Iyba/v33+Ax6rvV51WpvGytmnJ3JsD2+4JSg0+qnH2Ed9iAKa2KWRG/l1YU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736092554; c=relaxed/simple;
-	bh=vHiyfqbbiMv27ceQHkYUTpJyBV3Jr00owhby3UcZeA8=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=biaOD9HIP2iC5WrPs6pvxdmI5dui+jKPsTp0jYCEoMowSGx+hXJQKacbR+8uYHKDHiIvyNBbcq4OCKgfnslD9oBtMutvGFbLgAtnfROioPKagFCIwbndcg5rebpX6WU27XcPFRuMjf1Kt6XSgw3ZJAAqAlnkvGtc5/GEokVZFxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LU2Dppsq; arc=none smtp.client-ip=209.85.222.173
+	s=arc-20240116; t=1736094348; c=relaxed/simple;
+	bh=56ebDlc6JL5+ZMpwm02Qeii/sBIWqAz2/PSCN53vB2U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SUj/WeVt7f92p/GTsqjDZ/w+mQ6Cz2+cE5b6SHiFzPjU9iqnynxSbJp2YiFkdNR7V5MI0qGD2gSucamw8sjMoAbKc4Dunv5CbbVJBo6GVXsqAaDvTbPx1AjwgzzztuzEfjSmuCzAgAgheR+6DwzKoXJj9GYg8BrCduakKoV/qOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OTXuER5U; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7b6c3629816so694749885a.1;
-        Sun, 05 Jan 2025 07:55:52 -0800 (PST)
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2ee9a780de4so14352738a91.3;
+        Sun, 05 Jan 2025 08:25:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736092551; x=1736697351; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1736094346; x=1736699146; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QjBzssZLOeeCrtTzTNVMOIQiCtnHfR58sCjKytPf3C4=;
-        b=LU2Dppsq8jpZllcaLnjlD5TnbSHwMzdJImQTL83AP0dRD0YRW66GnEqvb/R10D7W4e
-         tVI90mvAUIijXo65Yf7UVS9I/OHjriqVd40IXIx4MSIehsnGVzqxEHi5914QSZ16k+Lu
-         6FEz+R/YAYjia6JqM+B0+5BbDXCrPdDzL3+vtw0ah6pGUWG96MDyWwTRH9HobP3bRdJ6
-         RLl4nqMq/Po7gXXSIT3wkn2mJ6TRGLYm+RoBh3LYgz63b4ojPR1oN8j03qqXiossNV/H
-         Csexk1wjzVi9qfoCuPFjO4+RKhwyrFvcRAvfs4NzzRzeATr7eSd/cyXKamJXLf1Enhgi
-         iFag==
+        bh=BqRDxETieKo+8LV73GKB3gXqTd/uCkmgBGJiOO4mOFg=;
+        b=OTXuER5UcAoJIWaMHdqMSwFQF3pYn+2Dkm+jmSRogyGaOcA3NskZQ0wM0NkXL+EH9V
+         Om9yM2wIITbq8LPxoNHhwu+rrN0eKujIbSXwZ/gTXx7FTBU879zeruLlcAU9ADBlMDsP
+         zG6aJLiMGOED6azyWMQPubyMRrO/xYFdtSJSZHaRy4k98aOrx/hTyzm9ncAbvOpctP3k
+         GGB0k2xWc7Xmk8WMc6rYdwDOVDbF7T0tUoH2z64JUy1Mt8qd3NtyNYY+apQI1TMuabPv
+         Y3cTqqWb8O77DSe3xgcdSa5P+mlepwEdlf60TnP+QdXeGBe6N+3qH+jd/Ssn+I+pDCAN
+         frFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736092552; x=1736697352;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QjBzssZLOeeCrtTzTNVMOIQiCtnHfR58sCjKytPf3C4=;
-        b=FqpesMvLAiOD8OCQSaiUFSTCW/Sam/lfHW4uHYZ9ZD4Oo2bLXfsG2wgxq+zjFdTJIU
-         /NiiNUVhj4zquurm8s5z6UTkt+vo2tQe4mumnMfgkM4iyt043XuXaJt4776Ri+kwNihr
-         g8vaJXHt8QO9KkgIE0wAQ0b9TUQ1ydq3STtym7R01W2DWf6JedK77Tn/26ctxswc/lHJ
-         JPy3gCHszNdSmt18a2ojjp7I+CGgMHjhk1g2hoZL7f7L8FH1w1mGCIDTKfohpv+0U4Id
-         SYqIAFJhggPgAPJaOSiC9GqoN+0VbzjDCDC1Rtvj2sQc7xDvHB0n4WRcCpDrlj13f27N
-         ySYA==
-X-Forwarded-Encrypted: i=1; AJvYcCXQQ358/vsUnXDTRv0mzyUc7EY/QBLHYxZVja1QgZfH/R3QxzfihxvlgBv2YNMY5edhkoimCq9Nge3Fp/O00uM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRkSPI2TyXaASTp/wszINHpOQiUDMIoDB0qKLpSNlRQ4ZX+hdY
-	iox+qa5/kNun1fRHLWVh/Z3vLM9ykaVxDmgYyWu7ol/zW/Jk8uVz
-X-Gm-Gg: ASbGncsIt7IPK45XzNEUx/vkvKaNj93VNbgMyKjumcnU/CMuFraKIvLKTHF/weWcDEm
-	B1Pz9P7k0Cscuk0GmrOVpqXQXKWd1BEYeWQ1ooMzlzODVOcsJuGgyhE6rtXx5pVj3uj0g/WK49s
-	xn7Bmki797xs1+thYqfQUO+KWcMue2DQTD3J8DN8CDpa4AdNMC3ipnTkE22p73VlTi+tnJaghYC
-	sEDNv1ECS76WvCW/he4uLVLTIDMKJRdRKlcW6IuO5TWuMjvCo+7iEBfNExbEsEUZa2AJ9V5ub5y
-	x6M0brVs7O6KhKYL1kFQ+ciRDzJb
-X-Google-Smtp-Source: AGHT+IFInoUEVT+deoVMV6E0TFL9nHB+V+AsVTKQ5lXyd8G9Kp9J2jLwhlwPNfaXi3ek0nQxTAwIkQ==
-X-Received: by 2002:a05:620a:1911:b0:7b6:ce4c:69d2 with SMTP id af79cd13be357-7b9ba7abfa9mr10459220885a.36.1736092551613;
-        Sun, 05 Jan 2025 07:55:51 -0800 (PST)
-Received: from localhost (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b9ac30e816sm1433833885a.64.2025.01.05.07.55.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jan 2025 07:55:50 -0800 (PST)
-Date: Sun, 05 Jan 2025 10:55:50 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- davem@davemloft.net
-Cc: netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- Jakub Kicinski <kuba@kernel.org>, 
- shuah@kernel.org, 
- willemb@google.com, 
- petrm@nvidia.com, 
- linux-kselftest@vger.kernel.org
-Message-ID: <677aab862c9b3_15102629427@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250105011525.1718380-1-kuba@kernel.org>
-References: <20250105011525.1718380-1-kuba@kernel.org>
-Subject: Re: [PATCH net-next] selftests: drv-net: test drivers sleeping in
- ndo_get_stats64
+        d=1e100.net; s=20230601; t=1736094346; x=1736699146;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BqRDxETieKo+8LV73GKB3gXqTd/uCkmgBGJiOO4mOFg=;
+        b=ZeFLnsqvm2e8PQsH8H5joSsIsBVsFT7q6Yz0clzA0N/pW2B313qI817l+ghfI9VgO4
+         YBw/niKgCUkuWk8OLKTzx8S07WX1dkqNrdxzblXP3LKxAJdRJkDMLOpMjmY377k3yRFk
+         mDU2oFuCjq3i24GmkVbukjS7ycFEx92AkON1WUxaSvHPdo17hiPLiYcQBAubs0/3O5Q+
+         XgLRUwT8jUHnOcwrXr7jrIy3VZan/mYzGoUQvjC86x7rIwaesHipMf6TDkRyWkJcrEti
+         7wsgXF+iXmHdwloVjwjtKIe/BriWGJmTlXViu4InZpzzqjB3H7oPJM0WKNKNS274TtrJ
+         tKpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUec4dvsmz5Mo72hRzVo2PpUYLnHGt8/FIhhYM7M0WCJ646268JV9IvtLgldwP8UBDx0VSldS+KqB+ggXi+SVo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2F0/X4rjwV6GjDfBBiGAAfNIwi9zjKtYT8vwKVs+20EugkUcv
+	CFipwy8+TmYluYuYvLewW95qavJZuWGhy4B3d30dWBcfiVxkVry2Ji1q60dRm/In3lkUIJNQiEY
+	cgbOf41gWCNO+w0OMfc7+UnRImNU=
+X-Gm-Gg: ASbGncu1d3+l3idY49YDwZNE8qvGtpA2WK3BNZaL8An5iNnivClHwOU06X4IAK+bN9g
+	eBASRwkqBBKhYAZZAF11dvxE7z8gDx7Z9H8YfUgY=
+X-Google-Smtp-Source: AGHT+IH2+khpZuwV/UXGR/BF5U6xqgXLMlviIw4B+TtjMphMUGOjhladr0Lh2wSn3HqLSS5KQs2I5FOW+J2wTf7Ziqs=
+X-Received: by 2002:a17:90b:54d0:b0:2ee:c918:cd60 with SMTP id
+ 98e67ed59e1d1-2f452e4a7f6mr85268600a91.20.1736094346461; Sun, 05 Jan 2025
+ 08:25:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20241220091730.28006-1-yongxuan.wang@sifive.com>
+In-Reply-To: <20241220091730.28006-1-yongxuan.wang@sifive.com>
+From: Andy Chiu <andybnac@gmail.com>
+Date: Mon, 6 Jan 2025 00:25:35 +0800
+Message-ID: <CAFTtA3Op9go6pi6Om=e+hXGAfMGv_kGeS4CfqXbdVhLcRW89ew@mail.gmail.com>
+Subject: Re: [PATCH 0/2] selftest: fix riscv/vector tests
+To: Yong-Xuan Wang <yongxuan.wang@sifive.com>
+Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org, greentime.hu@sifive.com, 
+	vincent.chen@sifive.com, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Jakub Kicinski wrote:
-> Most of our tests use rtnetlink to read device stats, so they
-> don't expose the drivers much to paths in which device stats
-> are read under RCU. Add tests which hammer profcs reads to
-> make sure drivers:
->  - don't sleep while reporting stats,
->  - can handle parallel reads,
->  - can handle device going down while reading.
-> 
-> Set ifname on the env class in NetDrvEnv, we already do that
-> in NetDrvEpEnv.
-> 
->   KTAP version 1
->   1..7
->   ok 1 stats.check_pause
->   ok 2 stats.check_fec
->   ok 3 stats.pkt_byte_sum
->   ok 4 stats.qstat_by_ifindex
->   ok 5 stats.check_down
->   ok 6 stats.procfs_hammer
->   # completed up/down cycles: 6
->   ok 7 stats.procfs_downup_hammer
->   # Totals: pass:7 fail:0 xfail:0 xpass:0 skip:0 error:0
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Yong-Xuan Wang <yongxuan.wang@sifive.com> =E6=96=BC 2024=E5=B9=B412=E6=9C=
+=8820=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:17=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+> Add test counts and pass message to remove warning of riscv/vector tests.
+>
+> Yong-Xuan Wang (2):
+>   tools: selftests: riscv: Add pass message for v_initval_nolibc
+>   tools: selftests: riscv: Add test count for vstate_prctl
+>
+>  tools/testing/selftests/riscv/vector/v_initval_nolibc.c | 4 ++++
+>  tools/testing/selftests/riscv/vector/vstate_prctl.c     | 2 ++
+>  2 files changed, 6 insertions(+)
+>
+> --
+> 2.17.1
+>
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+For the series,
 
-Two tiny comments, neither cause for respin.
+Reviewed-by: Andy Chiu <AndybnAC@gmail.com>
 
-> +@ksft_disruptive
-> +def procfs_downup_hammer(cfg) -> None:
-> +    """
-> +    Reading stats via procfs only holds the RCU lock, drivers often try
-> +    to sleep when reading the stats, or don't protect against races.
-> +    """
-> +    # Max out the queues, we'll flip between max an 1
-
-s/an/and/
-
-> +    channels = ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-> +    if channels['combined-count'] == 0:
-> +        rx_type = 'rx'
-> +    else:
-> +        rx_type = 'combined'
-> +    cur_queue_cnt = channels[f'{rx_type}-count']
-> +    max_queue_cnt = channels[f'{rx_type}-max']
-> +
-> +    cmd(f"ethtool -L {cfg.ifname} {rx_type} {max_queue_cnt}")
-> +    defer(cmd, f"ethtool -L {cfg.ifname} {rx_type} {cur_queue_cnt}")
-> +
-> +    # Real test stats
-> +    stats = __run_inf_loop("cat /proc/net/dev")
-> +    defer(stats.kill)
-> +
-> +    ipset = f"ip link set dev {cfg.ifname}"
-> +    defer(ip, f"link set dev {cfg.ifname} up")
-
-unimportant: could reference ipset here too, as in below.
-
-> +    # The "echo -n 1" lets us count iterations below
-> +    updown = f"{ipset} down; sleep 0.05; {ipset} up; sleep 0.05; " + \
-> +             f"ethtool -L {cfg.ifname} {rx_type} 1; " + \
-> +             f"ethtool -L {cfg.ifname} {rx_type} {max_queue_cnt}; " + \
-> +              "echo -n 1"
+Thanks,
+Andy
 
