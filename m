@@ -1,65 +1,65 @@
-Return-Path: <linux-kselftest+bounces-23929-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23930-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB79EA01DD8
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 03:51:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF06AA01DDA
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 03:52:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB8F21633D1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 02:51:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BF3B188521C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 02:52:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F239216190B;
-	Mon,  6 Jan 2025 02:51:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E66F13A250;
+	Mon,  6 Jan 2025 02:52:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m0eA2Plp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hjbD3kaE"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2539A15CD79;
-	Mon,  6 Jan 2025 02:51:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A7723A0;
+	Mon,  6 Jan 2025 02:51:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736131897; cv=none; b=GMEEIHJYjF50WF/fVwx0MUHpJvAMY3sEHTBKZpd6AesuwMmyYm7Oc1iz1MXHDgQVSzuvgdE1df55CPDJnYYUPvK3NwJzL0PO9yL+6zL/VYPPcVENVNsiwbHJORHqFbEvvVpfto+VketNrq261OW/qbdcI8x44lqYtqSU/mSDJKE=
+	t=1736131920; cv=none; b=CvW14jk5fzqz4KQkhiqcpghrrhhpoofzfkUtFmts/SMJEssdmx3LXdoDTtyMDSCGCYkjV61Frr3bKd02QHjQS44v15W9ysj6F8NBPMsGop+oj/eGsaElGkWa1Wjrpcur3qrPuHbRNsd0FnU+myPllJTNRTHvgshekU6nadBNhqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736131897; c=relaxed/simple;
-	bh=p+rSGSb1fcY4Z+BFW/0sBY66DwVhq4ZBNQgOm7e3CZw=;
+	s=arc-20240116; t=1736131920; c=relaxed/simple;
+	bh=yg92nUqhJzU5b5Z5WgjE9KWWIe4THP7jzmQyZfctNpI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j/pgHZO8cQBjOAamghMAyn6vgqomTBfgE0GOERCXDWpaHoDOWlq6dooaJ05pl3dkVf6Z8LoAM/2vRcyD8mOIlQV41Idy3cg2UlJAo3CoWeqWQP9sIjsDfEeVLPi/Krm7ZToDMcafVxFj9xODMv10D+spZ46EHdc/NX48kauV9Pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m0eA2Plp; arc=none smtp.client-ip=192.198.163.18
+	 In-Reply-To:Content-Type; b=PaPbx5PXpqAMd/y8XuYJgC5lGNI+aiAfZrHmrqN0Z0dWVzXyYW+77J6BnioV/udRtKYuVlkqi+sKFXw6HGJVqBEUHBu2ZnQTL1ynOmxkezNyxwSgwx9WqoclGSuxgcuYtcGhOtrI8NG/DjZYC0SE1tnWm61Z3UAj3B4RjpZK6wI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hjbD3kaE; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736131896; x=1767667896;
+  t=1736131919; x=1767667919;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=p+rSGSb1fcY4Z+BFW/0sBY66DwVhq4ZBNQgOm7e3CZw=;
-  b=m0eA2PlpmlyX9CZoHEc+eM0P4aW2Y51k2CsoOV7SGDp5LoZ7QiMHwOto
-   nZX/uhnq9oH7vYV1PFK3aHda42j+PnpxYFyWJs0jXbbkLpJdxi6RtmnUX
-   BKiAeppDlgw+5blHglnS4PRGbBsDeDTClAGuiE2p6md/yoms84UJT0Kms
-   VxdbuEyjF4i78IXMGleOnZqtv66I6z2FdptDoninyHF7Q5i6TLBl2ahtt
-   p7mcFI8PywVRPjlXV/eV2Udyv/1/0r8S+2wAI3XRaefBLGSityv+bxpZx
-   G694MN9stF3il0VclJwHtLWvGJVodjR7uP/lPCYjuDMYOCuMd+SS4WzrO
+  bh=yg92nUqhJzU5b5Z5WgjE9KWWIe4THP7jzmQyZfctNpI=;
+  b=hjbD3kaE/dtLC4UlWUiB2FtiB/8B5z4r7tb3ouDz1u8YOg93G6ZAQ6ir
+   aMX5F8gpYvgZF/w1v7iBl2YHjR+oo3fehvWL7DbhaxG7X3YHZGzGp561/
+   I+LTSk/phISIhyxZQk+YJdoGTszIzdRJBXcRV2IKu9LUH3KA1HzZbDVd/
+   NXFbBknpNXOGNugLbdDZyp3Jx+mKLcGlsmQBKrmZuRLQc3uha4USr2r/c
+   rHyBpeadzUgDKJiIvNl5o+dCY2SvL4qkEBi6PXkQaMCSjCTOA9yjpqJq/
+   JrK0GoVyCTajj5Lf5gQH72KUkJpcHHJVkSUbxre9MJ5VPmoQUMVhLFlbR
    A==;
-X-CSE-ConnectionGUID: IbaQBg8qSAe0KPL8tf/jtg==
-X-CSE-MsgGUID: pkYO/MP8Qvil+mRpap5kAw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11306"; a="35574953"
+X-CSE-ConnectionGUID: /AjEwQmjRSuFuIoC1MUZeQ==
+X-CSE-MsgGUID: 7ztijGihQE+Xog8PMfll/w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11306"; a="35574989"
 X-IronPort-AV: E=Sophos;i="6.12,292,1728975600"; 
-   d="scan'208";a="35574953"
+   d="scan'208";a="35574989"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2025 18:51:35 -0800
-X-CSE-ConnectionGUID: rc2EfEReT5uicVtr1fh1Wg==
-X-CSE-MsgGUID: FRP5fobRRRSKxYmFBPvXNA==
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2025 18:51:58 -0800
+X-CSE-ConnectionGUID: uz74PbeKRJCEdbLuqgEM9A==
+X-CSE-MsgGUID: JMNX9CZzRaWjqBlMZHYLNQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="103191561"
+   d="scan'208";a="103191593"
 Received: from allen-sbox.sh.intel.com (HELO [10.239.159.30]) ([10.239.159.30])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2025 18:51:30 -0800
-Message-ID: <3992ea4a-a0f9-47bd-b46b-c50e47496d53@linux.intel.com>
-Date: Mon, 6 Jan 2025 10:49:24 +0800
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2025 18:51:53 -0800
+Message-ID: <e59cbded-6f76-4533-8368-1d0f13a54c95@linux.intel.com>
+Date: Mon, 6 Jan 2025 10:49:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,8 +67,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 04/14] iommufd: Abstract an iommufd_eventq from
- iommufd_fault
+Subject: Re: [PATCH v4 05/14] iommufd: Rename fault.c to eventq.c
 To: Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com, kevin.tian@intel.com,
  corbet@lwn.net, will@kernel.org
 Cc: joro@8bytes.org, suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
@@ -80,34 +79,23 @@ Cc: joro@8bytes.org, suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
  smostafa@google.com, ddutile@redhat.com, yi.l.liu@intel.com,
  patches@lists.linux.dev
 References: <cover.1735933254.git.nicolinc@nvidia.com>
- <5d4bf92ce7e64a1c424f1b89d1a78f20bc6d7557.1735933254.git.nicolinc@nvidia.com>
+ <de1a507d2393edc25395242d1c9b704a36f02296.1735933254.git.nicolinc@nvidia.com>
 Content-Language: en-US
 From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <5d4bf92ce7e64a1c424f1b89d1a78f20bc6d7557.1735933254.git.nicolinc@nvidia.com>
+In-Reply-To: <de1a507d2393edc25395242d1c9b704a36f02296.1735933254.git.nicolinc@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 1/4/25 03:43, Nicolin Chen wrote:
-> The fault object was designed exclusively for hwpt's IO page faults (PRI).
-> But its queue implementation can be reused for other purposes too, such as
-> hardware IRQ and event injections to user space.
+> Rename the file, aligning with the new eventq object.
 > 
-> Meanwhile, a fault object holds a list of faults. So it's more accurate to
-> call it a "fault queue". Combining the reusing idea above, abstract a new
-> iommufd_eventq as a common structure embedded into struct iommufd_fault,
-> similar to hwpt_paging holding a common hwpt.
-> 
-> Add a common iommufd_eventq_ops and iommufd_eventq_init to prepare for an
-> IOMMUFD_OBJ_VEVENTQ (vIOMMU Event Queue).
-> 
-> Also, add missing xa_destroy and mutex_destroy in iommufd_fault_destroy().
-> 
+> Reviewed-by: Kevin Tian<kevin.tian@intel.com>
 > Signed-off-by: Nicolin Chen<nicolinc@nvidia.com>
 > ---
->   drivers/iommu/iommufd/iommufd_private.h |  52 ++++++---
->   drivers/iommu/iommufd/fault.c           | 142 +++++++++++++++---------
->   drivers/iommu/iommufd/hw_pagetable.c    |   6 +-
->   3 files changed, 130 insertions(+), 70 deletions(-)
+>   drivers/iommu/iommufd/Makefile              | 2 +-
+>   drivers/iommu/iommufd/{fault.c => eventq.c} | 0
+>   2 files changed, 1 insertion(+), 1 deletion(-)
+>   rename drivers/iommu/iommufd/{fault.c => eventq.c} (100%)
 
 Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
 
