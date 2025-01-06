@@ -1,147 +1,132 @@
-Return-Path: <linux-kselftest+bounces-23955-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23956-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA0B0A02F48
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 18:48:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AA66A02F53
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 18:52:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7034F3A4DFD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 17:48:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C120F3A37E3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 17:51:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 287D6191F75;
-	Mon,  6 Jan 2025 17:48:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33FE91DEFE9;
+	Mon,  6 Jan 2025 17:51:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VdunQCs8"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="d0O41+ep"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31BCD2AF06;
-	Mon,  6 Jan 2025 17:48:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70C341DDC0F
+	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jan 2025 17:51:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736185683; cv=none; b=F02OSdCCA1EmNW9VgtbMGIOE6msUrrwUQ6IDkwOhmoovLWYOysGzfj0SGHKxNfK75BDkUm9Ha40lLM7X9bJ5kQE0jsKBhguLXk1CFZ00M4tJwBC+vsRxIQOVLJqbL73OaSIwxbMVidZtjyH6Yp2yG/zHMrkezxD41YlUW3O189s=
+	t=1736185917; cv=none; b=pTQpmFI1enjvXbxHkGs0A9KPWg1MVBK9Inrdml23JwI+X2Lmhzg2km5kkyhY7QvFI1vOAD2d1vd4MooRtxWg9+8Eo+Rd4/U+8VDuusG2dgDqTjVou2hZXA0gI7hPlICM+1jC4oG0xBh8KKWIhqtU0fzWpiEfCjJEmISigKZRJ+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736185683; c=relaxed/simple;
-	bh=dJwLyChi/EnOT24oVuUMdY6a6RUOFaJJrcDRbpRF8XM=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dJoI760RiBhnzDRZD3BMwOCUxMmM1TbsJWuaGgCZ6j83GvITxNAgFpmvo83ydAao3jbzHG/yRtezVTzn6Vlg4hRX5/wSyCqFvxSzF9fFwwuFbvtCzkLBxeetRLKDRG9CAn7j3hr3jubtx3Fw/KRHEZtey6ajs6x+mGXATkCzGzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VdunQCs8; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 506G2oDm001290;
-	Mon, 6 Jan 2025 17:47:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=g1OlXN+r8fkCZxXYqiGEVezy
-	SBUM+VtpKZlgxYr1d5Q=; b=VdunQCs8SYsDOiv4awx4CrGCyLFTKZsFRoJP5MAs
-	gCXDAYo8FfCFgmVKQSOGuikcwyXQp7GKx8jyPTbvBpePGFyhrjKK2MBm8TMemFnF
-	+KDd7t6oo4tt7qfejoWRUypayNjbrh4xih7GhcHzYv25J9nGNZZisBH9/QtUGFWv
-	9ijqg1PX+tpp4gIe6JosD3AmbZ2EqJuAPjczm37TVwMdbj9DMiM6PrB4QJgNjS22
-	bKWwhpOaUkp9brjRZb2sju2BTglSeZBS/nVEiKoHNzPBZ1UGxIi0DJPbapAvj6hr
-	wVxcxBX/DSlOOsOyBksy90HuSh5oizXO20Xokh8uNIXJiQ==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 440jbmg7pt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 Jan 2025 17:47:25 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 506HlOFm025416
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 6 Jan 2025 17:47:24 GMT
-Received: from PHILBER.na.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 6 Jan 2025 09:46:28 -0800
-Date: Mon, 6 Jan 2025 18:46:17 +0100
-From: Peter Hilber <quic_philber@quicinc.com>
-To: Richard Cochran <richardcochran@gmail.com>
-CC: <linux-kernel@vger.kernel.org>, <virtualization@lists.linux.dev>,
-        <virtio-dev@lists.linux.dev>, <netdev@vger.kernel.org>,
-        Trilok Soni
-	<quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eugenio =?utf-8?B?UMOpcmV6?=
-	<eperezma@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Andrew Lunn
-	<andrew+netdev@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>,
-        Jason Wang <jasowang@redhat.com>, Paolo Abeni
-	<pabeni@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, Xuan Zhuo
-	<xuanzhuo@linux.alibaba.com>,
-        <linux-kselftest@vger.kernel.org>, <linux-api@vger.kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Ridoux,
- Julien" <ridouxj@amazon.com>,
-        John Stultz <jstultz@google.com>,
-        "Thomas
- Gleixner" <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Anna-Maria
- Behnsen" <anna-maria@linutronix.de>
-Subject: Re: [RFC PATCH 1/2] ptp: add PTP_SYS_OFFSET_STAT for xtstamping with
- status
-Message-ID: <ae5hdnhewksv2wkshxyyt3262mqi6o45opkl4occ5nt5zidr5e@lii7fgucetvu>
-References: <20241219204208.3160-1-quic_philber@quicinc.com>
- <20241219204208.3160-2-quic_philber@quicinc.com>
- <Z2WLGHRdlsRpT6BL@hoboy.vegasvil.org>
- <wcxdbqhoe4cppukyy5rvkq5am4ht6wk5u6d6g2k2swqhidjw7i@6nar5vuusm35>
- <Z2ymZuiFqY8mxihJ@hoboy.vegasvil.org>
- <a352mltlizneonxazn4bffydn57fyudrc3zougii2rnatg3jga@3yagssaob5sb>
- <Z3a892mBOSRl6BlN@hoboy.vegasvil.org>
+	s=arc-20240116; t=1736185917; c=relaxed/simple;
+	bh=dSwJhiucIjzviI8zkbOZjizCEDk25fMipu2qo+VGLZ8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ObleLiRJB8DQ063EPKbdMHORLr4bZl0zydUvQle0VQKypkK1Fr6hkQS3vMxvpUC1LvDHolTmqYJU+gTRYnHPLB8L/TTYuHUm2aKvAVe9MqPORdLBTcJdc5iY9rlyAOXaDBkpzkqMhVITCRwhf+VVcU8oRf+8ZP1XlJj7Qh8Jq8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=d0O41+ep; arc=none smtp.client-ip=209.85.166.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-3a9cdcec53fso135334935ab.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jan 2025 09:51:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1736185914; x=1736790714; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hh7z7hs2L2Q3CKN2LM+mEdcfdq2ua3GmHPxlWRJVTGs=;
+        b=d0O41+epzPItuazr2AwiSAa3gSoxJNi94DHhV2Jy8mPR7ZRF8Zsq/9OFo9sLH+iYh1
+         eZXvcOcLQ+d8sNVZHA6qDm8oFkCwzWv2gan68qKUQq65X5g6oeKODmy88mkcqvxUaQw+
+         l2sNFQLdC1tTGj49A9bFE/56SR3qTyxHh7xus=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736185914; x=1736790714;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hh7z7hs2L2Q3CKN2LM+mEdcfdq2ua3GmHPxlWRJVTGs=;
+        b=WSO+01Bdhdezq0s7aLndLaeafi0TXD0A5vE/STf3wOh38Q8LE1J9s0hiupqvwBg8M/
+         dYCipdqls6rQfa/w3yyxgcR1rgnMkGYIxCfWM7P0kVQvA4W4pTyhOd2T5SaRFBQ/m8mk
+         8wvWe0JAki3WSoVNAFVwGCQh9ylCxYhgY9Hec+bVSRtaquUkaV5Hh6d8GGNoqfcXBAld
+         H6FTUCY9PRiSPk/6lHVwxIULcIf8cmFKBAPnszn7cUk5AxyinWLFXzQ1jhS9eV8vFX1H
+         //s052/15CeHW+Byz6ONwnnUTzvBPNoHeHozlVI0btEMLA0+tXBzkhDiq38Iczk5Bqsy
+         OSIg==
+X-Gm-Message-State: AOJu0YyHSt2GXCFVIBwusdLhNXTqP790r6TuRoAe1H0KkKkTeG+yWs3H
+	9HIbKLW26CFr/xiO1G/6BgRKn4udUoElvdzSGf6V5CxghAt0XTAb0Gva79LQD1A=
+X-Gm-Gg: ASbGncuZ+kh7178+B9YZ88rtGE+hh0zOQvR4TAlARyxsbVoSsvbNIA1BvkvVlLMVaA2
+	W2chvogwrAkj5gFBoCgsWgDvMLFxYzQ2l3U5l42kn2RkdbqEtHT30M5FEzw1l4bIVwaK4XxudJi
+	OkQ7R9KsNbZ91nHE5fXgLZixCqh7e28GUJuMBrV/JtjB+EmJVHTuOqqcofnIlY4oVZcM+soBmFR
+	qirX/eV1QUAbHalXZAEsTWVim0BA5yZskjIujKR2PIdGXQyu8AKVmu4sxafAys050Pj
+X-Google-Smtp-Source: AGHT+IGXRcdZWF2jCRScVMr+t7sXk+A4or8J3uIr1tF5CgNk7sbOvUzn3cQJxoftBgVabFi/w/O2jw==
+X-Received: by 2002:a05:6e02:1c8d:b0:3a7:e0e6:65a5 with SMTP id e9e14a558f8ab-3c2d1f753e4mr503355785ab.6.1736185914298;
+        Mon, 06 Jan 2025 09:51:54 -0800 (PST)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e68c222118sm9453581173.149.2025.01.06.09.51.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jan 2025 09:51:53 -0800 (PST)
+Message-ID: <333c5179-64f8-43bb-8b34-eaeb912b40f0@linuxfoundation.org>
+Date: Mon, 6 Jan 2025 10:51:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Z3a892mBOSRl6BlN@hoboy.vegasvil.org>
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: r9V-M1YzFMt2DWTG4Vxl7gdWGlCaAN0G
-X-Proofpoint-ORIG-GUID: r9V-M1YzFMt2DWTG4Vxl7gdWGlCaAN0G
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 malwarescore=0 spamscore=0 bulkscore=0 adultscore=0
- phishscore=0 mlxlogscore=874 priorityscore=1501 lowpriorityscore=0
- clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501060156
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/nolibc: start qemu with 1 GiB of memory
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Willy Tarreau <w@1wt.eu>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
+ <linux@weissschuh.net>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20241007-nolibc-qemu-mem-v1-1-c1c2f9acd0f8@linutronix.de>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20241007-nolibc-qemu-mem-v1-1-c1c2f9acd0f8@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 02, 2025 at 08:21:11AM -0800, Richard Cochran wrote:
-> On Thu, Jan 02, 2025 at 05:11:01PM +0100, Peter Hilber wrote:
-> > For sure. But the aim of this proposal is to have an interoperable time
-> > synchronization solution for VMs through a Virtio device. So the idea is
-> > to include metrics, if a consensus on their usefulness can be reached.
-> > AFAIU it is difficult to bypass the kernel for Virtio devices.
+On 10/7/24 02:10, Thomas Weißschuh wrote:
+> Recently the loongarch defconfig stopped working with the default 128 MiB
+> of memory. The VM just spins infinitively.
+> Increasing the available memory to 1 GiB, similar to s390, fixes the
+> issue. To avoid having to do this for each architecture on its own,
+> proactively apply to all architectures.
 > 
-> Providing clock metrics only makes sense when there is some choice to
-> be made based on those metrics.  If the "limited" VM guests don't even
-> have networking, then they have no choice but to accept the time from
-> the VM host, right?  In which case, the metrics do not provide any
-> benefit to the guest.
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> ---
+>   tools/testing/selftests/nolibc/Makefile | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Or what am I missing?
+> diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> index 8de98ea7af8071caa0597aa7b86d91a2d1d50e68..e92e0b88586111072a0e043cb15f3b59cf42c3a6 100644
+> --- a/tools/testing/selftests/nolibc/Makefile
+> +++ b/tools/testing/selftests/nolibc/Makefile
+> @@ -130,9 +130,9 @@ QEMU_ARGS_ppc        = -M g3beige -append "console=ttyS0 panic=-1 $(TEST:%=NOLIB
+>   QEMU_ARGS_ppc64      = -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+>   QEMU_ARGS_ppc64le    = -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+>   QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+> -QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+> +QEMU_ARGS_s390       = -M s390-ccw-virtio -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+>   QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+> -QEMU_ARGS            = $(QEMU_ARGS_$(XARCH)) $(QEMU_ARGS_BIOS) $(QEMU_ARGS_EXTRA)
+> +QEMU_ARGS            = -m 1G $(QEMU_ARGS_$(XARCH)) $(QEMU_ARGS_BIOS) $(QEMU_ARGS_EXTRA)
+>   
+>   # OUTPUT is only set when run from the main makefile, otherwise
+>   # it defaults to this nolibc directory.
+> 
+> ---
+> base-commit: 8cf0b93919e13d1e8d4466eb4080a4c4d9d66d7b
+> change-id: 20241007-nolibc-qemu-mem-5ed605520472
+> 
+> Best regards,
 
-The proposal is not limited to guests with no networking.
+Did we take care of this one? Apologies if I didn't. We can include
+this in 6.14 pr.
 
-Guests *might* not have internet access (might not be "internetworked").
-Even then, guests can still interact with the environment (so metrics
-can be important) and might decide to reduce features when the metrics
-are too bad.
-
-Thanks for the comments,
-
-Peter
+thanks,
+-- Shuah
 
