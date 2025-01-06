@@ -1,273 +1,147 @@
-Return-Path: <linux-kselftest+bounces-23954-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23955-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC34DA02F19
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 18:35:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA0B0A02F48
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 18:48:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 723413A3789
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 17:35:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7034F3A4DFD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 17:48:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 113DB1DE88C;
-	Mon,  6 Jan 2025 17:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 287D6191F75;
+	Mon,  6 Jan 2025 17:48:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Xj2SGU2D"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VdunQCs8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4120F1DE8A6
-	for <linux-kselftest@vger.kernel.org>; Mon,  6 Jan 2025 17:35:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31BCD2AF06;
+	Mon,  6 Jan 2025 17:48:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736184924; cv=none; b=g/yhqZd2kgM6AtQ2pLSzYDDwcoeLLTWfZTAgvBlIz4jI5rVLL27V3z4uYLF2OqJ1MWG899M8Mfu71s5CfWf0f7pit+kvt9t3Ss0ZOTEVUrBum2/KDGy1BsJS3MgkpCoI3qr8snQCum0Zl9t4KmShtednwWpGKWDbp8pFj9Ok2W4=
+	t=1736185683; cv=none; b=F02OSdCCA1EmNW9VgtbMGIOE6msUrrwUQ6IDkwOhmoovLWYOysGzfj0SGHKxNfK75BDkUm9Ha40lLM7X9bJ5kQE0jsKBhguLXk1CFZ00M4tJwBC+vsRxIQOVLJqbL73OaSIwxbMVidZtjyH6Yp2yG/zHMrkezxD41YlUW3O189s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736184924; c=relaxed/simple;
-	bh=8BEZwuWRp3CLOKaQlLqswK7jHoXgsvrQnBN+biv/YfE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dniP3ylJKmizYP3NN1eNpD0V8oJazUHckwlZZsaSPhxPfWiGW6+yetjJdxdZUjyvYQtIAh/qhenofKwhofp5zi0T+2CMj9mM8w61JEOQjXzYxk5IhYrew/wVaOtkL9Xa72uXwcHbyWpFJiffG+o/mFavYWJ5+fp6dxPPRWue8/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Xj2SGU2D; arc=none smtp.client-ip=209.85.160.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-29e2bb5f100so452463fac.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jan 2025 09:35:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1736184921; x=1736789721; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pKp7aPmOTHvMER9QV0OoIt9TQh4BPYke1ArM9VzzgAw=;
-        b=Xj2SGU2D9dTVOOOJYlckrGQrutsOZAC602S4YfG7tsAarm4jTzc2Kiq5hoblOhFRWE
-         RzsFw6RPJhtBc4UGknFQsXRWgC4ewQlf6Gfon52165mFVF9zYVmliEfF5SZNOA/NVfge
-         7ABu8q51foOKSt+v4Apt28/rncAZwqXicPbcE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736184921; x=1736789721;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pKp7aPmOTHvMER9QV0OoIt9TQh4BPYke1ArM9VzzgAw=;
-        b=sfP+m2bjcf2iOKWpKnGQ8Pe0RlEfbrM6+wWGCgAQkm6pkyyQRjYuJdvRa5I4UE++bJ
-         Anea7tIP1kYa2HtD5qlDG4MOMCx2tr/TEqj7rwBhjQa+byABupq75X+OkVdjGmQexlc9
-         aMrpzxHdcK83VkG7cDoOeLS0jbCvG0IG7fD3QRcbo28hSnfPShEwqrmCPtQw3G4clm3y
-         +mKlRw8+P+/hY8urnvFOGrVvEqAUL3Qftz8XOQoaraLhtzQJBqvvjcTYh6sO2rRWGckc
-         jCbXo7y3ic3N5k/EoWLZiKogvfdkKCjUHW53IRSJyudb0e6W90s69PBuXEjapMQLWn38
-         3wQw==
-X-Forwarded-Encrypted: i=1; AJvYcCXbr8LdpUWLMsNwO2gqiTUUME/oP/sk2xyMm19kVoId8XhNAlJWsRCHHwgXKLWTXN9EynNMoLJSyX9IYsmcCsE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz30fsNCO25QO0ipY6X/dKt0ZP+kTt2k0SKw5ZI7RObPApv+iib
-	IV44E5TRJR4k/Xae7Xe24ou72RZlC3/6srAu/ZyRIa3Wp63o9O+BITQWVkfq/XsSktb/uNFaERW
-	7SnhSJLgj7MQW7vXIYqAXQuyuMCft9EpGJZSg
-X-Gm-Gg: ASbGncuNpOO5m6ADHYjpjcRsnKQXhhEyCZ8drxGy2tzehPze1l9hbk2tg9iPIad52Lm
-	DjRYLDe4E8Qa6Q6QeUcBlxElCER1XKtw2ugOwlTPmSwWZ0DRlPvl2aP/nB0ULsyxy+Q8=
-X-Google-Smtp-Source: AGHT+IFKUMHqJMC7OwYbzyAXF8vzNPgoUNTgojG07VvQbtPqbUNXWJfoqydAkiw3Lx9C8McHpEeXmpt31qs2elbcKE0=
-X-Received: by 2002:a05:6870:9a21:b0:29e:49f7:f456 with SMTP id
- 586e51a60fabf-2a7fb16cf2amr10241213fac.7.1736184921130; Mon, 06 Jan 2025
- 09:35:21 -0800 (PST)
+	s=arc-20240116; t=1736185683; c=relaxed/simple;
+	bh=dJwLyChi/EnOT24oVuUMdY6a6RUOFaJJrcDRbpRF8XM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dJoI760RiBhnzDRZD3BMwOCUxMmM1TbsJWuaGgCZ6j83GvITxNAgFpmvo83ydAao3jbzHG/yRtezVTzn6Vlg4hRX5/wSyCqFvxSzF9fFwwuFbvtCzkLBxeetRLKDRG9CAn7j3hr3jubtx3Fw/KRHEZtey6ajs6x+mGXATkCzGzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VdunQCs8; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 506G2oDm001290;
+	Mon, 6 Jan 2025 17:47:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=g1OlXN+r8fkCZxXYqiGEVezy
+	SBUM+VtpKZlgxYr1d5Q=; b=VdunQCs8SYsDOiv4awx4CrGCyLFTKZsFRoJP5MAs
+	gCXDAYo8FfCFgmVKQSOGuikcwyXQp7GKx8jyPTbvBpePGFyhrjKK2MBm8TMemFnF
+	+KDd7t6oo4tt7qfejoWRUypayNjbrh4xih7GhcHzYv25J9nGNZZisBH9/QtUGFWv
+	9ijqg1PX+tpp4gIe6JosD3AmbZ2EqJuAPjczm37TVwMdbj9DMiM6PrB4QJgNjS22
+	bKWwhpOaUkp9brjRZb2sju2BTglSeZBS/nVEiKoHNzPBZ1UGxIi0DJPbapAvj6hr
+	wVxcxBX/DSlOOsOyBksy90HuSh5oizXO20Xokh8uNIXJiQ==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 440jbmg7pt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 06 Jan 2025 17:47:25 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 506HlOFm025416
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 6 Jan 2025 17:47:24 GMT
+Received: from PHILBER.na.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 6 Jan 2025 09:46:28 -0800
+Date: Mon, 6 Jan 2025 18:46:17 +0100
+From: Peter Hilber <quic_philber@quicinc.com>
+To: Richard Cochran <richardcochran@gmail.com>
+CC: <linux-kernel@vger.kernel.org>, <virtualization@lists.linux.dev>,
+        <virtio-dev@lists.linux.dev>, <netdev@vger.kernel.org>,
+        Trilok Soni
+	<quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eugenio =?utf-8?B?UMOpcmV6?=
+	<eperezma@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Andrew Lunn
+	<andrew+netdev@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>,
+        Jason Wang <jasowang@redhat.com>, Paolo Abeni
+	<pabeni@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Xuan Zhuo
+	<xuanzhuo@linux.alibaba.com>,
+        <linux-kselftest@vger.kernel.org>, <linux-api@vger.kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "Ridoux,
+ Julien" <ridouxj@amazon.com>,
+        John Stultz <jstultz@google.com>,
+        "Thomas
+ Gleixner" <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Anna-Maria
+ Behnsen" <anna-maria@linutronix.de>
+Subject: Re: [RFC PATCH 1/2] ptp: add PTP_SYS_OFFSET_STAT for xtstamping with
+ status
+Message-ID: <ae5hdnhewksv2wkshxyyt3262mqi6o45opkl4occ5nt5zidr5e@lii7fgucetvu>
+References: <20241219204208.3160-1-quic_philber@quicinc.com>
+ <20241219204208.3160-2-quic_philber@quicinc.com>
+ <Z2WLGHRdlsRpT6BL@hoboy.vegasvil.org>
+ <wcxdbqhoe4cppukyy5rvkq5am4ht6wk5u6d6g2k2swqhidjw7i@6nar5vuusm35>
+ <Z2ymZuiFqY8mxihJ@hoboy.vegasvil.org>
+ <a352mltlizneonxazn4bffydn57fyudrc3zougii2rnatg3jga@3yagssaob5sb>
+ <Z3a892mBOSRl6BlN@hoboy.vegasvil.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250102233255.1180524-1-isaacmanjarres@google.com>
- <20250102233255.1180524-2-isaacmanjarres@google.com> <CAG48ez2q_V_cOu8O_mor8WCt7GaC47baYQgjisP=KDzkxkqR1Q@mail.gmail.com>
-In-Reply-To: <CAG48ez2q_V_cOu8O_mor8WCt7GaC47baYQgjisP=KDzkxkqR1Q@mail.gmail.com>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Mon, 6 Jan 2025 09:35:09 -0800
-Message-ID: <CABi2SkVmdxuETrgucYA2RucV3D4UoaPkDrXZKvLGjfEGp1-v2A@mail.gmail.com>
-Subject: Re: [RFC PATCH RESEND v2 1/2] mm/memfd: Add support for
- F_SEAL_FUTURE_EXEC to memfd
-To: Jann Horn <jannh@google.com>, Kees Cook <keescook@chromium.org>
-Cc: "Isaac J. Manjarres" <isaacmanjarres@google.com>, lorenzo.stoakes@oracle.com, 
-	Jeff Layton <jlayton@kernel.org>, Chuck Lever <chuck.lever@oracle.com>, 
-	Alexander Aring <alex.aring@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Shuah Khan <shuah@kernel.org>, surenb@google.com, kaleshsingh@google.com, 
-	jstultz@google.com, aliceryhl@google.com, jeffxu@google.com, kees@kernel.org, 
-	kernel-team@android.com, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Z3a892mBOSRl6BlN@hoboy.vegasvil.org>
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: r9V-M1YzFMt2DWTG4Vxl7gdWGlCaAN0G
+X-Proofpoint-ORIG-GUID: r9V-M1YzFMt2DWTG4Vxl7gdWGlCaAN0G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 malwarescore=0 spamscore=0 bulkscore=0 adultscore=0
+ phishscore=0 mlxlogscore=874 priorityscore=1501 lowpriorityscore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501060156
 
-+ Kees because this is related to W^X memfd and security.
+On Thu, Jan 02, 2025 at 08:21:11AM -0800, Richard Cochran wrote:
+> On Thu, Jan 02, 2025 at 05:11:01PM +0100, Peter Hilber wrote:
+> > For sure. But the aim of this proposal is to have an interoperable time
+> > synchronization solution for VMs through a Virtio device. So the idea is
+> > to include metrics, if a consensus on their usefulness can be reached.
+> > AFAIU it is difficult to bypass the kernel for Virtio devices.
+> 
+> Providing clock metrics only makes sense when there is some choice to
+> be made based on those metrics.  If the "limited" VM guests don't even
+> have networking, then they have no choice but to accept the time from
+> the VM host, right?  In which case, the metrics do not provide any
+> benefit to the guest.
+> 
+> Or what am I missing?
 
-On Fri, Jan 3, 2025 at 7:04=E2=80=AFAM Jann Horn <jannh@google.com> wrote:
->
-> On Fri, Jan 3, 2025 at 12:32=E2=80=AFAM Isaac J. Manjarres
-> <isaacmanjarres@google.com> wrote:
-> > Android currently uses the ashmem driver [1] for creating shared memory
-> > regions between processes. Ashmem buffers can initially be mapped with
-> > PROT_READ, PROT_WRITE, and PROT_EXEC. Processes can then use the
-> > ASHMEM_SET_PROT_MASK ioctl command to restrict--never add--the
-> > permissions that the buffer can be mapped with.
-> >
-> > Processes can remove the ability to map ashmem buffers as executable to
-> > ensure that those buffers cannot be exploited to run unintended code.
->
-> Is there really code out there that first maps an ashmem buffer with
-> PROT_EXEC, then uses the ioctl to remove execute permission for future
-> mappings? I don't see why anyone would do that.
->
-> > For instance, suppose process A allocates a memfd that is meant to be
-> > read and written by itself and another process, call it B.
-> >
-> > Process A shares the buffer with process B, but process B injects code
-> > into the buffer, and compromises process A, such that it makes A map
-> > the buffer with PROT_EXEC. This provides an opportunity for process A
-> > to run the code that process B injected into the buffer.
-> >
-> > If process A had the ability to seal the buffer against future
-> > executable mappings before sharing the buffer with process B, this
-> > attack would not be possible.
->
-> I think if you want to enforce such restrictions in a scenario where
-> the attacker can already make the target process perform
-> semi-arbitrary syscalls, it would probably be more reliable to enforce
-> rules on executable mappings with something like SELinux policy and/or
-> F_SEAL_EXEC.
->
-I would like to second on the suggestion of  making this as part of F_SEAL_=
-EXEC.
+The proposal is not limited to guests with no networking.
 
-> > Android is currently trying to replace ashmem with memfd. However, memf=
-d
-> > does not have a provision to permanently remove the ability to map a
-> > buffer as executable, and leaves itself open to the type of attack
-> > described earlier. However, this should be something that can be
-> > achieved via a new file seal.
-> >
-> > There are known usecases (e.g. CursorWindow [2]) where a process
-> > maps a buffer with read/write permissions before restricting the buffer
-> > to being mapped as read-only for future mappings.
->
-> Here you're talking about write permission, but the patch is about
-> execute permission?
->
-> > The resulting VMA from the writable mapping has VM_MAYEXEC set, meaning
-> > that mprotect() can change the mapping to be executable. Therefore,
-> > implementing the seal similar to F_SEAL_WRITE would not be appropriate,
-> > since it would not work with the CursorWindow usecase. This is because
-> > the CursorWindow process restricts the mapping permissions to read-only
-> > after the writable mapping is created. So, adding a file seal for
-> > executable mappings that operates like F_SEAL_WRITE would fail.
-> >
-> > Therefore, add support for F_SEAL_FUTURE_EXEC, which is handled
-> > similarly to F_SEAL_FUTURE_WRITE. This ensures that CursorWindow can
-> > continue to create a writable mapping initially, and then restrict the
-> > permissions on the buffer to be mappable as read-only by using both
-> > F_SEAL_FUTURE_WRITE and F_SEAL_FUTURE_EXEC. After the seal is
-> > applied, any calls to mmap() with PROT_EXEC will fail.
-> >
-> > [1] https://cs.android.com/android/kernel/superproject/+/common-android=
--mainline:common/drivers/staging/android/ashmem.c
-> > [2] https://developer.android.com/reference/android/database/CursorWind=
-ow
-> >
-> > Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
-> > ---
-> >  include/uapi/linux/fcntl.h |  1 +
-> >  mm/memfd.c                 | 39 +++++++++++++++++++++++++++++++++++++-
-> >  2 files changed, 39 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
-> > index 6e6907e63bfc..ef066e524777 100644
-> > --- a/include/uapi/linux/fcntl.h
-> > +++ b/include/uapi/linux/fcntl.h
-> > @@ -49,6 +49,7 @@
-> >  #define F_SEAL_WRITE   0x0008  /* prevent writes */
-> >  #define F_SEAL_FUTURE_WRITE    0x0010  /* prevent future writes while =
-mapped */
-> >  #define F_SEAL_EXEC    0x0020  /* prevent chmod modifying exec bits */
-> > +#define F_SEAL_FUTURE_EXEC     0x0040 /* prevent future executable map=
-pings */
-> >  /* (1U << 31) is reserved for signed error codes */
-> >
-> >  /*
-> > diff --git a/mm/memfd.c b/mm/memfd.c
-> > index 5f5a23c9051d..cfd62454df5e 100644
-> > --- a/mm/memfd.c
-> > +++ b/mm/memfd.c
-> > @@ -184,6 +184,7 @@ static unsigned int *memfd_file_seals_ptr(struct fi=
-le *file)
-> >  }
-> >
-> >  #define F_ALL_SEALS (F_SEAL_SEAL | \
-> > +                    F_SEAL_FUTURE_EXEC |\
-> >                      F_SEAL_EXEC | \
-> >                      F_SEAL_SHRINK | \
-> >                      F_SEAL_GROW | \
-> > @@ -357,14 +358,50 @@ static int check_write_seal(unsigned long *vm_fla=
-gs_ptr)
-> >         return 0;
-> >  }
-> >
-> > +static inline bool is_exec_sealed(unsigned int seals)
-> > +{
-> > +       return seals & F_SEAL_FUTURE_EXEC;
-> > +}
-> > +
-> > +static int check_exec_seal(unsigned long *vm_flags_ptr)
-> > +{
-> > +       unsigned long vm_flags =3D *vm_flags_ptr;
-> > +       unsigned long mask =3D vm_flags & (VM_SHARED | VM_EXEC);
-> > +
-> > +       /* Executability is not a concern for private mappings. */
-> > +       if (!(mask & VM_SHARED))
-> > +               return 0;
->
-> Why is it not a concern for private mappings?
->
-> > +       /*
-> > +        * New PROT_EXEC and MAP_SHARED mmaps are not allowed when exec=
- seal
-> > +        * is active.
-> > +        */
-> > +       if (mask & VM_EXEC)
-> > +               return -EPERM;
-> > +
-> > +       /*
-> > +        * Prevent mprotect() from making an exec-sealed mapping execut=
-able in
-> > +        * the future.
-> > +        */
-> > +       *vm_flags_ptr &=3D ~VM_MAYEXEC;
-> > +
-> > +       return 0;
-> > +}
-> > +
-> >  int memfd_check_seals_mmap(struct file *file, unsigned long *vm_flags_=
-ptr)
-> >  {
-> >         int err =3D 0;
-> >         unsigned int *seals_ptr =3D memfd_file_seals_ptr(file);
-> >         unsigned int seals =3D seals_ptr ? *seals_ptr : 0;
-> >
-> > -       if (is_write_sealed(seals))
-> > +       if (is_write_sealed(seals)) {
-> >                 err =3D check_write_seal(vm_flags_ptr);
-> > +               if (err)
-> > +                       return err;
-> > +       }
-> > +
-> > +       if (is_exec_sealed(seals))
-> > +               err =3D check_exec_seal(vm_flags_ptr);
-> >
-memfd_check_seals_mmap is only for mmap() path, right ?
+Guests *might* not have internet access (might not be "internetworked").
+Even then, guests can still interact with the environment (so metrics
+can be important) and might decide to reduce features when the metrics
+are too bad.
 
-How about the mprotect()  path ? i.e.  An attacker can first create a
-RW VMA mapping for the memfd and later mprotect the VMA to be
-executable.
+Thanks for the comments,
 
-Similar to the check_write_seal call , we might want to block mprotect
-for write seal as well.
-
-> >         return err;
-> >  }
-> > --
-> > 2.47.1.613.gc27f4b7a9f-goog
-> >
-> >
-> >
->
+Peter
 
