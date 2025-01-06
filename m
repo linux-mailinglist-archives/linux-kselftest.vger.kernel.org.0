@@ -1,229 +1,171 @@
-Return-Path: <linux-kselftest+bounces-23958-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23959-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CB09A02FEC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 19:46:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21230A03060
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 20:19:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9B213A2817
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 18:46:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 748F81885F99
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2025 19:19:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D3D1DF971;
-	Mon,  6 Jan 2025 18:46:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FB9B1527B4;
+	Mon,  6 Jan 2025 19:19:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="mR86ZsHz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qr5KdAA6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2071.outbound.protection.outlook.com [40.107.244.71])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B4A1DF24B;
-	Mon,  6 Jan 2025 18:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.71
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736189201; cv=fail; b=UEt6eLfR3TgtOM7UTvECTYfxsJEqAhuv/I69lbXQRzdw0eYVtf0nDI4reSMtVgtB71KyZ3eQCn5Z8C8mg3a2jcUnv2VQRICjkaLQLieXNC7I4lgDNVA7X6XFdtBe1HNvdrFYXVlnN/ldozqGioiNH1na5iuYRSPes2DFKV8Qs4M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736189201; c=relaxed/simple;
-	bh=BKnvbYyP9sHEuz1yR+C2wixPIW+WQnlx5/wC0sKbcfo=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kV59tpFe1WNdarLSkX8x25jm710s+o8dYOG03lubcklv4fk1u4adnds/kb1YgAAq9OFlGTc4G6khRuJsXL9UQl8sTBUVyU0cz1ssD4xMHoUmH1bafCZeq3vCy6TYxoMjedK388vo8FY274txSoiBX5waQey4wpgjAl9i/avp3pU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=mR86ZsHz; arc=fail smtp.client-ip=40.107.244.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HE+TK9aiKl8/7KpEfnEtNGI+sGOHualbyKBzeneViVa91C2qt9ep6hPJ0AViouJqCIp2+8My1DJoITYDUyFOneaPAj3WfXpMqydDK4yNMqqvaWQL1BfQ8NCPTWbWejMXnSRbDFc4VHwsGa49Hn0uFPmTv2jX5UtklGTi4y5lIhJab/JKZHB7r1DHiKwGJhj5xlTHhcPclF3DKafehb/l6i+oBhZe0o2J9ccB1EE4MEC/RxQGR1gVYw2LYJi0mvVyYOAaxh8kjSYY24BVjehF/G1IcGscEafbU2BoPe+/Bwd9GPa527DBr5xBcE9rWxpq4hV5vQa/Wr7UPWq+EyUo3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G4pyQMQesI0VN6u/oMLqzRbScdAPSCw9Xw8P39SllYc=;
- b=MssWKiyI4sG/SrNB0slqZ11POqt3WL68z3AkXyiRLpWGOKQOR7bS9bsle91WMmRIae7wpQr6dFlXCGiaorH/CmTWBBZ31VDnaLk4X+bbFpxJeNqEg4mXw3UuHE5Z/lwYiAHVKhW4NEEn8g5DCZ6FTnmkKzOx8zTru6HMHBtk4Czo996gxEA9qegOc2RKtY1ka5XrGMkOcmaeuVh1bVxhkh66Qrd1kyL7PIN61Jz/Jq+54lWtYDK8CviWLw7EhGkIgezlr3Z2s4m2Sj+0jRdvQa8ABAbMMmxtv4nJfiK2OgLxDX2t2Q9QOJKUvGu4z8sjeURzgJ3W8uDjdOQI1piEJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G4pyQMQesI0VN6u/oMLqzRbScdAPSCw9Xw8P39SllYc=;
- b=mR86ZsHzIerCdRlHXJwq+LQ8ItceV28iTOT+JSKbFcxJdiuhp4y8AK/wfLUprddF0OvArWJPCmAR8MSysY/LTd6Jxt5lz2suSuucDPixtbuBmzWN8JzJwgvwE2mcV2hOZLWoxruW/MY2iL+gx3CD4847jRiRnWM3dCdrmYUSyLZ/zerByJ45zGB7mHVoSR901ubALKprPJlgH8cSwzPS1KRF2syfebE71+S8oiAKnr7Ny9am2aCtYI8SCCCO4NQMelSTFBd09mKvD5f2wCqt5I75904IQnmHV8DFY+g4Ea89Z93YttH0/wCBV0Pkq3VfS1Bhg2cxwAOItakUo5iQhQ==
-Received: from SA0PR11CA0094.namprd11.prod.outlook.com (2603:10b6:806:d1::9)
- by SA0PR12MB4350.namprd12.prod.outlook.com (2603:10b6:806:92::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8314.17; Mon, 6 Jan
- 2025 18:46:31 +0000
-Received: from SA2PEPF00003AEB.namprd02.prod.outlook.com
- (2603:10b6:806:d1:cafe::d) by SA0PR11CA0094.outlook.office365.com
- (2603:10b6:806:d1::9) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8314.18 via Frontend Transport; Mon,
- 6 Jan 2025 18:46:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- SA2PEPF00003AEB.mail.protection.outlook.com (10.167.248.11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8335.7 via Frontend Transport; Mon, 6 Jan 2025 18:46:31 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 6 Jan 2025
- 10:46:18 -0800
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 6 Jan 2025
- 10:46:17 -0800
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.10)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
- Transport; Mon, 6 Jan 2025 10:46:15 -0800
-Date: Mon, 6 Jan 2025 10:46:13 -0800
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Baolu Lu <baolu.lu@linux.intel.com>
-CC: <jgg@nvidia.com>, <kevin.tian@intel.com>, <corbet@lwn.net>,
-	<will@kernel.org>, <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
-	<robin.murphy@arm.com>, <dwmw2@infradead.org>, <shuah@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <eric.auger@redhat.com>,
-	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
-	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>,
-	<ddutile@redhat.com>, <yi.l.liu@intel.com>, <patches@lists.linux.dev>
-Subject: Re: [PATCH v4 14/14] iommu/arm-smmu-v3: Report events that belong to
- devices attached to vIOMMU
-Message-ID: <Z3wk9TvmUhB3/zlk@Asurada-Nvidia>
-References: <cover.1735933254.git.nicolinc@nvidia.com>
- <69a46c72e43ed086840be462eef731167d90a9d8.1735933254.git.nicolinc@nvidia.com>
- <585fc99f-c2dc-459c-929a-c7c7631b9caf@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED543BA34;
+	Mon,  6 Jan 2025 19:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736191188; cv=none; b=A5IV7qbB1SneSHtPA+Ovk0/4Su0c5Cp3k69KTyVV8TMapWNPzUA+iRCoSXihMC7QIub3B+7uqSt8ERUfjuZHIUjOo0ZiwzqdyDoB03L+95D5RVGokDScheCg/Fyhiq1vH0cvnXbULEuPf4u4+d4Xi253y5J2RnUfqa/Eks7kD0k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736191188; c=relaxed/simple;
+	bh=audGqB4/75vUXAunZqESaFOW2tw4o9rlfVrGxy/3FPA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MmRU7LkmXhNKe1mU1o0mV199Wm8XMHmE04LmovedGQgpAvvMQ3r05JpfaMCW/nVGlrm3jFWXi2sUCPO5uTbJ6yvVRhXZjrkD6gsmOthkIMABps3C/GalhS8uzRB4nBW+yZvn30VQLxf9RJlxpeYKhMPFR+S4qOo8/khk4W7mQDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qr5KdAA6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 547AFC4CED2;
+	Mon,  6 Jan 2025 19:19:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736191187;
+	bh=audGqB4/75vUXAunZqESaFOW2tw4o9rlfVrGxy/3FPA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=qr5KdAA6pMmrOy8OubqulhBtCmtGOwQ/P+V+ict8MbapJRuPjuDl4sMcaX+bELYid
+	 v3kP2Z9GWAPZBRz/UlVXaWKsMxos1kWwiFx9fWJqeJSNraVvRMYOJC/YMl8WC5KzjU
+	 oOgvz3magSYeKkoyStUGqb63Z6WJXXW/yOnOEsmdX36rcEj44sY2LW4H60aYy1xbwr
+	 BCnGC069k9v+FMZ8Urivr3zKS4ayT03F/8cuk90/G3RjHMTKjFrN7hvZk1nRQSuayZ
+	 ud42MkIMk6dMOLfZzvp5e6dCzkP375jU2Qd/BVK3PSS29ZLJzbhlz84Kcv/57JrMJy
+	 Stoc8v5VzlcTw==
+From: SeongJae Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SeongJae Park <sj@kernel.org>,
+	Alex Shi <alexs@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Hu Haowen <2023002089@link.tyut.edu.cn>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Rae Moar <rmoar@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH v2 0/8] mm/damon: remove DAMON debugfs interface
+Date: Mon,  6 Jan 2025 11:19:33 -0800
+Message-Id: <20250106191941.107070-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <585fc99f-c2dc-459c-929a-c7c7631b9caf@linux.intel.com>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF00003AEB:EE_|SA0PR12MB4350:EE_
-X-MS-Office365-Filtering-Correlation-Id: 77764df7-e657-45ff-f8ff-08dd2e826fc3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|36860700013|82310400026|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?BGOlOI6BMW2nbGCbJ20oaNvRebmWx/aSrVKG/eZtEMBj2YLTPiMM/s41SfJj?=
- =?us-ascii?Q?gO81cPJU81IV8Wz0JCSUxnIHtbGHja0KE4Uoui5aTlOt5zOavXwxiNZAhF9n?=
- =?us-ascii?Q?1VSdPrqZlDlBnjNORbTr0gObWzc7YcjGuaGl5Gn0AZjT6TDw8jW1Pz0K5qh5?=
- =?us-ascii?Q?IcNnl4ELRD5WimUfWelXNX8ZIk6JT3FLefadOewQeOz0rhWJsHjpZqAyI1JR?=
- =?us-ascii?Q?waTO+WRy37xXnz0HWiOUSDgm5mZXGA2wAtWui9+IClGsqN/E/IvWROW9P1O7?=
- =?us-ascii?Q?RGQq6bauU6G7UrES8x3JS32pJvX4lkL3Yhss0oL8zBKIsjc3QPtGdLQKNxhS?=
- =?us-ascii?Q?1z6r4hgg9zrsYdfXWYhn5Exdm4YSdLh32FjszModqG8sqz9+AYAhKQ0Nm/my?=
- =?us-ascii?Q?UEVyDYIV731UO/AiilNsjJnBBbRsq/ljDwn5vDh03BnmKxHNSH3joNJDHxp6?=
- =?us-ascii?Q?Cla+kEsa5VhWKpAyDG7eNFS43eJH8ZatXqO5SaBZFeZ3PbpgxLH2536TSMOx?=
- =?us-ascii?Q?50Nbbqf9SvwztiVwTYh2cA8ypJ7yNQcsZCS3xF28CIEEdAjCgadWXddsN7R0?=
- =?us-ascii?Q?0NedL2nT4NneDLiAP9ovo4Xm80Lz7V84av87zu/RymbGW1S+sYl4Mmgno8Dg?=
- =?us-ascii?Q?+l3EatahAORr2E2JgnCVrIo88i7e1B0OijJaGxgzBEjEcpHF/COl1Y5RhmW0?=
- =?us-ascii?Q?0qdtDAbB+rirEDgL8OwrRSxURuvRHrn/suNynF9cShTGIpEhtrYjsYzq0JpZ?=
- =?us-ascii?Q?WgkzQK01vM0NbtSzWmw3d2lx0XXQ2ut+DTJlfVR6miwd5EJCl252ZnpyXkUl?=
- =?us-ascii?Q?3Ng60aaEwW+iXZWoCm1Hkc29oVoRbUj+JllBzwf+M2LzTIK8YBezdaatK2Jj?=
- =?us-ascii?Q?hbcmB61AnsDoZ2rmmezTdUr5/PiHqEdIy3Ex47ICvMvh6/sB8dvNYaZLseOc?=
- =?us-ascii?Q?cTqVKQdHvzObg+Qctl0s4Rd4l7a4v9AoRUhcz23nXvyN+z7JjDz45frhHQZ8?=
- =?us-ascii?Q?Bo4BK0U/874Bj69418kJlxCHGe1PITVNXG06B+k5+c3Xh8RHjsavHMBy9jt2?=
- =?us-ascii?Q?wFTsauhJQWquobjF+LAO1Q0zUgOyhHan9qeplO5W46jvsrNZG4eNj8/9wCyV?=
- =?us-ascii?Q?Uq8vCoSrKxP/AXUaW5/pYktEFG6HFPp9vGRLeXxeeUNLlcz5Dzggp3h1Vn+7?=
- =?us-ascii?Q?0taLbFfoQwhQvPcvzvBE09EqKH6R7iRUXx31W/VqfjSj//0zVKQy5GXb5kiz?=
- =?us-ascii?Q?H33vv0iXZdWsSapO7wJ4rwbvtVZPBDjAZ7NEcKSHZ1GrNgeBx1T6Nb4dY6bL?=
- =?us-ascii?Q?8SmIXMIFe7icRW33hsAXK99WQLBLFeEtjId5dq5j9yIo7HaCeh7mAfnNqPXb?=
- =?us-ascii?Q?TVloh6YAqFG/yWAe0OZj4QO/3/RIY+slSocvEIKZXtdtrkmK3m6mi4ddb8UC?=
- =?us-ascii?Q?Ks0PCpY6HcX4asta82hg0/pTyXPYpSBg69bhu0iFQNWSAxIGOPnn4M40rZ5R?=
- =?us-ascii?Q?duWGRkUn4M+xnpo=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2025 18:46:31.0812
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 77764df7-e657-45ff-f8ff-08dd2e826fc3
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF00003AEB.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4350
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 06, 2025 at 11:01:32AM +0800, Baolu Lu wrote:
-> On 1/4/25 03:43, Nicolin Chen wrote:
-> > diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-> > index 0a08aa82e7cc..55e3d5a14cca 100644
-> > --- a/include/uapi/linux/iommufd.h
-> > +++ b/include/uapi/linux/iommufd.h
-> > @@ -1016,9 +1016,24 @@ struct iommu_ioas_change_process {
-> >   /**
-> >    * enum iommu_veventq_type - Virtual Event Queue Type
-> >    * @IOMMU_VEVENTQ_TYPE_DEFAULT: Reserved for future use
-> > + * @IOMMU_VEVENTQ_TYPE_ARM_SMMUV3: ARM SMMUv3 Virtual Event Queue
-> >    */
-> >   enum iommu_veventq_type {
-> >   	IOMMU_VEVENTQ_TYPE_DEFAULT = 0,
-> > +	IOMMU_VEVENTQ_TYPE_ARM_SMMUV3 = 1,
-> > +};
-> > +
-> > +/**
-> > + * struct iommu_vevent_arm_smmuv3 - ARM SMMUv3 Virtual Event
-> > + *                                  (IOMMU_VEVENTQ_TYPE_ARM_SMMUV3)
-> > + * @evt: 256-bit ARM SMMUv3 Event record, little-endian.
-> > + *       (Refer to "7.3 Event records" in SMMUv3 HW Spec)
-> > + *
-> > + * StreamID field reports a virtual device ID. To receive a virtual event for a
-> > + * device, a vDEVICE must be allocated via IOMMU_VDEVICE_ALLOC.
-> > + */
-> > +struct iommu_vevent_arm_smmuv3 {
-> > +	__aligned_le64 evt[4];
-> >   };
-> 
-> Nit: I think it would be more readable to add a check in the vevent
-> reporting helper.
-> 
-> diff --git a/drivers/iommu/iommufd/driver.c b/drivers/iommu/iommufd/driver.c
-> index 77c34f8791ef..ccada0ada5ff 100644
-> --- a/drivers/iommu/iommufd/driver.c
-> +++ b/drivers/iommu/iommufd/driver.c
-> @@ -86,6 +86,9 @@ int iommufd_viommu_report_event(struct iommufd_viommu
-> *viommu,
->         if (WARN_ON_ONCE(!data_len || !event_data))
->                 return -EINVAL;
-> 
-> +       if (WARN_ON_ONCE(type != IOMMU_VEVENTQ_TYPE_ARM_SMMUV3))
-> +               return -EINVAL;
-> +
+DAMON debugfs interface was the only user interface of DAMON at the
+beginning[1].  However, it turned out the interface would be not good
+enough for long-term flexibility and stability.
 
-Hmm, that's a good point I think.
+In Feb 2022[2], we therefore introduced DAMON sysfs interface as an
+alternative user interface that aims long-term flexibility and
+stability.  With its introduction, DAMON debugfs interface has announced
+to be deprecated in near future.
 
->         down_read(&viommu->veventqs_rwsem);
-> 
->         veventq = iommufd_viommu_find_veventq(viommu, type);
-		    ^
-		    |
-We actually have been missing a type validation entirely, so the
-type could have been rejected by this function. Perhaps we should
-add a static list of supported types to struct iommufd_viommu_ops
-for drivers to report so that then the core could reject from the
-first place during a vEVENTQ allocation.
+In Feb 2023[3], we announced the official deprecation of DAMON debugfs
+interface.  In Jan 2024[4], we further made the deprecation difficult to
+be ignored.
 
-> Or perhaps the compiler could automatically make a warning if the @type
-> is not one of those values in enum iommu_veventq_type?
+In Oct 2024[5], we posted an RFC version of this patch series as the
+last notice.
 
-Just gave that a try. Mine doesn't give any warning. Not sure if
-needs to be some "-W" augment though..
+And as of this writing, no problem or concerns about the removal plan
+have reported.  Apparently users are already moved to the alternative,
+or made good plans for the change.
 
-> Others look good to me.
+Remove the DAMON debugfs interface code from the tree.  Given the past
+timeline and the absence of reported problems or concerns, it is safe
+enough to be done.
 
-Thanks for the review!
+[1] https://lore.kernel.org/20210716081449.22187-1-sj38.park@gmail.com
+[2] https://lore.kernel.org/20220228081314.5770-1-sj@kernel.org
+[3] https://lore.kernel.org/20230209192009.7885-1-sj@kernel.org
+[4] https://lore.kernel.org/20240130013549.89538-1-sj@kernel.org
+[5] https://lore.kernel.org/20241015175412.60563-1-sj@kernel.org
 
-Nicolin
+Revision History
+----------------
+
+Changes from v1
+(https://lore.kernel.org/20250101213527.74203-1-sj@kernel.org)
+- Remove debugfs usage section and references from translations
+  (https://lore.kernel.org/20250106183944.103569-1-sj@kernel.org)
+
+Changes from RFC
+(https://lore.kernel.org/20241015175412.60563-1-sj@kernel.org)
+- Rebased on latest mm-unstable
+- Update and wordsmith commit messages
+
+SeongJae Park (8):
+  Docs/translations/*/admin-guide/mm/damon/usage: remove DAMON debugfs
+    interface documentation
+  Docs/admin-guide/mm/damon/usage: remove DAMON debugfs interface
+    documentation
+  Docs/mm/damon/design: update for removal of DAMON debugfs interface
+  selftests/damon/config: remove configs for DAMON debugfs interface
+    selftests
+  selftests/damon: remove tests for DAMON debugfs interface
+  kunit: configs: remove configs for DAMON debugfs interface tests
+  mm/damon: remove DAMON debugfs interface kunit tests
+  mm/damon: remove DAMON debugfs interface
+
+ Documentation/admin-guide/mm/damon/usage.rst  |  309 -----
+ Documentation/mm/damon/design.rst             |   23 +-
+ .../zh_CN/admin-guide/mm/damon/usage.rst      |  248 +---
+ .../zh_TW/admin-guide/mm/damon/usage.rst      |  248 +---
+ mm/damon/Kconfig                              |   30 -
+ mm/damon/Makefile                             |    1 -
+ mm/damon/dbgfs.c                              | 1148 -----------------
+ mm/damon/tests/.kunitconfig                   |    7 -
+ mm/damon/tests/dbgfs-kunit.h                  |  173 ---
+ tools/testing/kunit/configs/all_tests.config  |    3 -
+ tools/testing/selftests/damon/.gitignore      |    3 -
+ tools/testing/selftests/damon/Makefile        |   11 +-
+ tools/testing/selftests/damon/config          |    1 -
+ .../testing/selftests/damon/debugfs_attrs.sh  |   17 -
+ .../debugfs_duplicate_context_creation.sh     |   27 -
+ .../selftests/damon/debugfs_empty_targets.sh  |   21 -
+ .../damon/debugfs_huge_count_read_write.sh    |   22 -
+ .../damon/debugfs_rm_non_contexts.sh          |   19 -
+ .../selftests/damon/debugfs_schemes.sh        |   19 -
+ .../selftests/damon/debugfs_target_ids.sh     |   19 -
+ .../damon/debugfs_target_ids_pid_leak.c       |   68 -
+ .../damon/debugfs_target_ids_pid_leak.sh      |   22 -
+ ...fs_target_ids_read_before_terminate_race.c |   80 --
+ ...s_target_ids_read_before_terminate_race.sh |   14 -
+ .../selftests/damon/huge_count_read_write.c   |   46 -
+ 25 files changed, 13 insertions(+), 2566 deletions(-)
+ delete mode 100644 mm/damon/dbgfs.c
+ delete mode 100644 mm/damon/tests/dbgfs-kunit.h
+ delete mode 100755 tools/testing/selftests/damon/debugfs_attrs.sh
+ delete mode 100755 tools/testing/selftests/damon/debugfs_duplicate_context_creation.sh
+ delete mode 100755 tools/testing/selftests/damon/debugfs_empty_targets.sh
+ delete mode 100755 tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
+ delete mode 100755 tools/testing/selftests/damon/debugfs_rm_non_contexts.sh
+ delete mode 100755 tools/testing/selftests/damon/debugfs_schemes.sh
+ delete mode 100755 tools/testing/selftests/damon/debugfs_target_ids.sh
+ delete mode 100644 tools/testing/selftests/damon/debugfs_target_ids_pid_leak.c
+ delete mode 100755 tools/testing/selftests/damon/debugfs_target_ids_pid_leak.sh
+ delete mode 100644 tools/testing/selftests/damon/debugfs_target_ids_read_before_terminate_race.c
+ delete mode 100755 tools/testing/selftests/damon/debugfs_target_ids_read_before_terminate_race.sh
+ delete mode 100644 tools/testing/selftests/damon/huge_count_read_write.c
+
+-- 
+2.39.5
 
