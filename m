@@ -1,110 +1,107 @@
-Return-Path: <linux-kselftest+bounces-23996-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23997-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DDFCA043DF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 16:13:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A57F6A043F6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 16:15:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2F053A45AE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 15:13:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0914D18874F3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 15:15:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE6F21F2386;
-	Tue,  7 Jan 2025 15:13:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57CC71F37D0;
+	Tue,  7 Jan 2025 15:15:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iqI8oUkr"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="GastSH01";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OBHHGAWz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C6CA1E377F;
-	Tue,  7 Jan 2025 15:13:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72741F3D28;
+	Tue,  7 Jan 2025 15:14:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736262810; cv=none; b=UyyY/vjek2VExchkNh6VJCvTqJ6puIb5G/CelxOyGRBwhzAU9b12QpdmFDT5Xg3Sz2pHJH3LY4DUaG9aXCtdi6ZNA0NWtW9kSfBMDbL+9Vvu6NosXroeo4WKBGbtsUcgINwjX/ij5EQkYiy5QKen2eOWze2w2ZNNtSZ4rpp48wk=
+	t=1736262900; cv=none; b=JgmLJjg9AOB5R/OaIR1XLeqM7bDL6IIbh2OV5WSVIQyt4CtDDFhGDQqcObBPsNQYwqV9jjc+fcAVJpX0KZrL9pS1aK27Tnj8hAlcBu3BVSOh6KmTaVmZ7QYVueyojOyk86qXfBuT3xdwyU5Eg5ltomPG+DlIwY6WwiEN+aZPQsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736262810; c=relaxed/simple;
-	bh=KlzauW3PgDKVIWbsqXawXo+ipjiNK9vtMAkDOh4G9u0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dPBs5TH2dRnWydVy1YmMbso+MDkBw4U+ydmgl2vSg/cVUNGczDAKyyDaNsIvMPDdb7KtyTdwvOFVG+YtOg9M1qzMqQRQxv2CLsNzGQZHAt5hQXELlp96bAm6iT6+fZ8zTY4OHqHLyWqHnV28FWIWHwdEf9f0hMX/42ymGcpyQaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iqI8oUkr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7B28C4CED6;
-	Tue,  7 Jan 2025 15:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736262810;
-	bh=KlzauW3PgDKVIWbsqXawXo+ipjiNK9vtMAkDOh4G9u0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iqI8oUkrsXt02ErcpWwCjOZ0+kwUPWOHvsmYw1hBh1mh2dbvvPVZ2Wan01b2RdMmq
-	 Bw12CenQBYNbPpk04NSbiV5xzljPk2/wp7zk8S8ftSdWoxjXND1+v4YblHl6k5MH++
-	 uNHKKh5lkGKTiLC++MtN7FoSCbfohmK1LakO9YkIpUsKb9wONt2LAlg9ChpZUQeCgC
-	 gSTbiGy0gG/sFw3mPAOPbR2+B5pA6Axb3g0W5e0pQzVNJzKT9fnPA6kZCDwLAs5hes
-	 77se1IHjYOYnoA4b3g75FNPn3IB0wloW5wxPW75rT1h/yQj2DgpMdq/V3o4HdF6Rzj
-	 HviMJNifgFAPA==
-Date: Tue, 7 Jan 2025 15:13:24 +0000
-From: Will Deacon <will@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 5/9] arm64/sysreg: Update ID_AA64SMFR0_EL1 to DDI0601
- 2024-09
-Message-ID: <20250107151323.GA7368@willie-the-truck>
-References: <20241211-arm64-2024-dpisa-v4-0-0fd403876df2@kernel.org>
- <20241211-arm64-2024-dpisa-v4-5-0fd403876df2@kernel.org>
+	s=arc-20240116; t=1736262900; c=relaxed/simple;
+	bh=JUGocPrWu2QxeYZ5cRItpEriLyPsPdb256CAX16xnb4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QlnMlYmHDmqXStD0R+xP+ITQnfgSiJ5nQ+DCHjeP5tEmR2dRmQNIU9Kn896hWklnJTTQ7f/X+qutqeg9sI2H3DYK917dhEA7X6cBH908TVg8lc2/Nfc7hl4lDDYOjZNTcsISbfwnu0qVmSBU2mtGGMnIALJVPfuAW1Wu60tTDUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=GastSH01; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OBHHGAWz; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1736262894;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=sCicWoiJ2PPUbfuW8fJ3dfo9H0yJpSulZ9DMj/yBOJQ=;
+	b=GastSH01ogRzkOZD82Fid3xB3jn9NcSoiSee/lgVGEtNFtLLGD1Euo+f1WX6qtch3NRVfI
+	Chm1AWhLB4T4RsFezdzZYxaYuYPAnPMAVN/VA7YI0roKbDS93DXxGUNGu5XwV4tfdhuuWH
+	fdJuHe0+qp+wKecvOdUR+YuarkJiwJ0tdMg/TPhcsZMQ6csxb566D7nAqCmJnx08kqCcXe
+	5EZbJ6hQZaPbG37pHNMglgjpDAOcPGmrKnkKuJSlSPew8DnhZNOoaBqstNTXFtgXk+vlsq
+	Km1aZnz0S4wvUe5xEFtyZtApLIPeiHqKGFHtkoj7QHxWLUhgU5L/k/wvrsN0rw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1736262894;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=sCicWoiJ2PPUbfuW8fJ3dfo9H0yJpSulZ9DMj/yBOJQ=;
+	b=OBHHGAWzrs3hcUocIj8fwNvupeAjJHv3TUlqBLra2Pgff4geXaq70k43BV57RK8yg9cEKx
+	17oIcxsIEAipEjCg==
+Subject: [PATCH 0/3] selftests/mm: virtual_address_range: Two bugfixes and
+ a cleanup
+Date: Tue, 07 Jan 2025 16:14:44 +0100
+Message-Id: <20250107-virtual_address_range-tests-v1-0-3834a2fb47fe@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241211-arm64-2024-dpisa-v4-5-0fd403876df2@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAOREfWcC/x3M3QpAQBBA4VfRXNtav4tXkbbNDqaEZpaUvLvN5
+ Ven84AgEwp0yQOMFwntW0SWJjAubptRkY+GXOeVzrRRF3E43Wqd94wilv8ooARRbdWUhanrybU
+ G4uFgnOj+7/3wvh/7UwftbQAAAA==
+X-Change-ID: 20250107-virtual_address_range-tests-95843766fa97
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Shuah Khan <shuah@kernel.org>, Dev Jain <dev.jain@arm.com>, 
+ Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1736262892; l=842;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=JUGocPrWu2QxeYZ5cRItpEriLyPsPdb256CAX16xnb4=;
+ b=2gfAGnXQw1hiHxNv7xHvpqQxjBKUovhW4dlr/7eq6B2gJM8zjGHqfpHVHYb2SJyERvxvUbTBn
+ OJhSSXjkz+UCfLXeByK5H1tPkrREsCtIArCtQwU325Cx2dtoJU4UuIb
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On Wed, Dec 11, 2024 at 01:02:50AM +0000, Mark Brown wrote:
-> DDI0601 2024-09 introduces SME 2.2 as well as a few new optional features,
-> update sysreg to reflect the changes in ID_AA64SMFR0_EL1 enumerating them.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  arch/arm64/tools/sysreg | 32 +++++++++++++++++++++++++++++++-
->  1 file changed, 31 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
-> index c792bd3b0afbb5fb7e438a4d760d9f2d15621eee..d78b12c59658b480739ae797f5ea2c2f14d8d765 100644
-> --- a/arch/arm64/tools/sysreg
-> +++ b/arch/arm64/tools/sysreg
-> @@ -1105,6 +1105,7 @@ UnsignedEnum	59:56	SMEver
->  	0b0000	SME
->  	0b0001	SME2
->  	0b0010	SME2p1
-> +	0b0011	SME2p2
->  	0b0000	IMP
->  EndEnum
->  UnsignedEnum	55:52	I16I64
-> @@ -1169,7 +1170,36 @@ UnsignedEnum	28	SF8DP2
->  	0b0	NI
->  	0b1	IMP
->  EndEnum
-> -Res0	27:0
-> +UnsignedEnum	27	SF8MM8
-> +	0b0	NI
-> +	0b1	IMP
-> +EndEnum
-> +UnsignedEnum	26	SF8MM4
-> +	0b0	NI
-> +	0b1	IMP
-> +EndEnum
+The selftest started failing since commit e93d2521b27f
+("x86/vdso: Split virtual clock pages into dedicated mapping")
+was merged. While debugging I stumbled upon another bug and potential
+cleanup.
 
-afaict, bits 27 and 26 are still RES0 in all the documentation I can
-find...
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Thomas Weißschuh (3):
+      selftests/mm: virtual_address_range: Fix error when CommitLimit < 1GiB
+      selftests/mm: virtual_address_range: Avoid reading VVAR mappings
+      selftests/mm: virtual_address_range: Dump to /dev/null
 
-Will
+ tools/testing/selftests/mm/virtual_address_range.c | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
+---
+base-commit: fbfd64d25c7af3b8695201ebc85efe90be28c5a3
+change-id: 20250107-virtual_address_range-tests-95843766fa97
+
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
 
