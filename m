@@ -1,72 +1,73 @@
-Return-Path: <linux-kselftest+bounces-24027-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24028-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3F5BA047FD
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 18:17:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BD99A04809
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 18:18:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 978A1166B16
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 17:17:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23C8D1617C4
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 17:18:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8A841F4727;
-	Tue,  7 Jan 2025 17:16:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 062E21F2C43;
+	Tue,  7 Jan 2025 17:18:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W1tlShfb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L53kt8aD"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE731E9B0F;
-	Tue,  7 Jan 2025 17:16:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA17419AD8B;
+	Tue,  7 Jan 2025 17:18:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736270174; cv=none; b=uKvdiyl8vVjZzGdqNItQtVnDCSsYlTOkPoVq16kTS1MCvCtHm+RQG3bhs1KkGJxCrQfnjbCqfgAPR7TfXlSki5YMYVHpiEJa0v2LRsENWlsy8X/S2rNfXg36vBy5G330IRV2weDvfN16LG5QT5wA1GChbEC9M17V6rewsixQpoQ=
+	t=1736270326; cv=none; b=ZepS4r8jzWv7t1PLQOPQC/woCTnm6DD8DWILE/BGe6of5GsIMidSVW+GCqD2cVGCs8oAL1Snu2OZEx5OR2g01GfPux1BukDtrRSYQYVOPG3KAjwFBHC/DBYyfTIACbFUj46Dh/8Dtez0wNcYNPLy5JcFgo5VHWr7QX1u6f3q1GQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736270174; c=relaxed/simple;
-	bh=7zZK4HnjoM+8nD7CCL8TwDVBKWJFzLY4fLR46la0oek=;
+	s=arc-20240116; t=1736270326; c=relaxed/simple;
+	bh=rcX8ixVRnBXLhZk41AKtcgO9a3ngIO7uwqWcHOz69Ec=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=umO57EmvsxwugR8aX4P6GMoYMH8s4dDoEGaaCVEmhOkU5S8i9g6OzHWDLon5X/d/le9CXSxlDVLU/eRyMENB57JZ/MtM+cY/ZWVOEIZgEa3qFQgvnPv9YpoG+PBbvl2LFLipkqQbNIfeYqVo0MLqidyX1Xp3odEZPIMEBhSOcVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W1tlShfb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B19F3C4CEDE;
-	Tue,  7 Jan 2025 17:16:13 +0000 (UTC)
+	 MIME-Version:Content-Type; b=e3HsOusp3hkcVdKzprAwCA0wYdgfmzCIYEBQqZ6oks7Gs/PNg5QLDrMrg5K5KiCm9nxUJcqWxQhNaEbq17zmlJXawUgl+p4pHimVdcXV8eWPnJszhQmPvRGA3bI8EC/+297oID2GgTXl1sYOLDtxAkbyRuGPPkytWRF5YEsAT0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L53kt8aD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6434FC4CED6;
+	Tue,  7 Jan 2025 17:18:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736270173;
-	bh=7zZK4HnjoM+8nD7CCL8TwDVBKWJFzLY4fLR46la0oek=;
+	s=k20201202; t=1736270326;
+	bh=rcX8ixVRnBXLhZk41AKtcgO9a3ngIO7uwqWcHOz69Ec=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=W1tlShfb7sEMb+UaBdXk2+9BgKOZFkQ7y0eO9LSvm1dWFBDkDRkJBl4bf/hMQCXiR
-	 QmjO7Q39wMW/cLab/G+2hzOBXunKJ4lMwLWs+ODjSYzVgQrYi+wGbmJM1MiLqvfjIB
-	 osf/+K5hufEgN/6eKYnH0FjOoh5gXxFaLETZQGHBI05QCbedwd8x4NYOUyjHdPRkB0
-	 7zXwRbaT/en+CNsGhEUKlnFR8vsuc6baABlt+SfXlgNjjUojS8+WKRmI76muPYtasV
-	 6A8nD0Ezjz4cwlKeYuWYJZwJNr64LWFt4XMbXsr6OIjO5mfro/1wbKYu5XOm9dmo5L
-	 0ioWBuNcmaNDw==
+	b=L53kt8aDnVLWtXngveoCegXYkz8KwTsfho0anKyXn8H3mB+sEgDsL5AOHQ/5rngHJ
+	 fpm9F9JEgkeVS9/TfO0l5ruUCk1yRfDojpy0KzIjv+hpMsm+CC8NGEQ1EjBZYbE/WQ
+	 Q97epwwpsnjSkyXfqpgU5BDiKEautbJc1tj0owzrTIaKxH1Nap7llXGBoYWw2YPRmo
+	 WAx7epIVRbQ3W2o+2cyELw+5un0UB7WT2m0U6GmX9nYtgP/YNgqZIEAdCrtFE9ZJxK
+	 bEbKq2qUm+vt96mqwPGECVJOcQ5cr9/zvTWqAIh/IWLz0QTlPqgHgaFaa9z1OwvWqR
+	 yhXT6xVJkoJWw==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.95)
 	(envelope-from <maz@kernel.org>)
-	id 1tVDBb-009sRL-At;
-	Tue, 07 Jan 2025 17:16:11 +0000
-Date: Tue, 07 Jan 2025 17:16:10 +0000
-Message-ID: <861pxey279.wl-maz@kernel.org>
+	id 1tVDE4-009sW7-1R;
+	Tue, 07 Jan 2025 17:18:44 +0000
+Date: Tue, 07 Jan 2025 17:18:43 +0000
+Message-ID: <86zfk2wnik.wl-maz@kernel.org>
 From: Marc Zyngier <maz@kernel.org>
-To: Mark Brown <broonie@kernel.org>
+To: Will Deacon <will@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
 	Jonathan Corbet <corbet@lwn.net>,
 	Oliver Upton <oliver.upton@linux.dev>,
 	Joey Gouly <joey.gouly@arm.com>,
 	Suzuki K Poulose <suzuki.poulose@arm.com>,
 	Shuah Khan <shuah@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	kernel-team@android.com,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	kvmarm@lists.linux.dev,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 8/9] KVM: arm64: Allow control of dpISA extensions in ID_AA64ISAR3_EL1
-In-Reply-To: <20241211-arm64-2024-dpisa-v4-8-0fd403876df2@kernel.org>
+Subject: Re: [PATCH v4 0/9] arm64: Support 2024 dpISA extensions
+In-Reply-To: <173626298431.2741856.11908646584681839796.b4-ty@kernel.org>
 References: <20241211-arm64-2024-dpisa-v4-0-0fd403876df2@kernel.org>
-	<20241211-arm64-2024-dpisa-v4-8-0fd403876df2@kernel.org>
+	<173626298431.2741856.11908646584681839796.b4-ty@kernel.org>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -78,20 +79,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, corbet@lwn.net, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
+X-SA-Exim-Rcpt-To: will@kernel.org, catalin.marinas@arm.com, corbet@lwn.net, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, shuah@kernel.org, broonie@kernel.org, kernel-team@android.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Wed, 11 Dec 2024 01:02:53 +0000,
-Mark Brown <broonie@kernel.org> wrote:
+On Tue, 07 Jan 2025 16:42:38 +0000,
+Will Deacon <will@kernel.org> wrote:
 > 
-> ID_AA64ISAR3_EL1 is currently marked as unallocated in KVM but does have a
-> number of bitfields defined in it. Expose FPRCVT and FAMINMAX, two simple
-> instruction only extensions to guests.
+> On Wed, 11 Dec 2024 01:02:45 +0000, Mark Brown wrote:
+> > The 2024 architecture release includes a number of data processing
+> > extensions, mostly SVE and SME additions with a few others.  These are
+> > all very straightforward extensions which add instructions but no
+> > architectural state so only need hwcaps and exposing of the ID registers
+> > to KVM guests and userspace.
+> > 
+> > 
+> > [...]
 > 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+> For the sysreg definitions that Marc's fantastic script is happy with,
+> applied to arm64 (for-next/cpufeature), thanks!
+> 
+> [1/9] arm64/sysreg: Update ID_AA64PFR2_EL1 to DDI0601 2024-09
+>       https://git.kernel.org/arm64/c/1ad9a56442a0
+> [2/9] arm64/sysreg: Update ID_AA64ISAR3_EL1 to DDI0601 2024-09
+>       https://git.kernel.org/arm64/c/054339beae58
+> [3/9] arm64/sysreg: Update ID_AA64FPFR0_EL1 to DDI0601 2024-09
+>       https://git.kernel.org/arm64/c/12b5ff517a19
+> [4/9] arm64/sysreg: Update ID_AA64ZFR0_EL1 to DDI0601 2024-09
+>       https://git.kernel.org/arm64/c/9a43ee864349
+> 
+> [6/9] arm64/sysreg: Update ID_AA64ISAR2_EL1 to DDI0601 2024-09
+>       https://git.kernel.org/arm64/c/d66e21d59ed0
+> 
+> The KVM patch needs an Ack from the maintainers and the hwcap change
+> probably needs checking in light of [1].
 
-Reviewed-by: Marc Zyngier <maz@kernel.org>
+I've now acked the KVM patch in case you want to take it, or I can add
+it to the KVM queue, since I already have a merge of the cpufeature
+branch.
+
+Thanks,
 
 	M.
 
