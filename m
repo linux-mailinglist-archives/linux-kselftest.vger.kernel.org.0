@@ -1,45 +1,46 @@
-Return-Path: <linux-kselftest+bounces-23981-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23982-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E11FA03ECC
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 13:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CEE1A03ECF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 13:11:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 115AA3A0717
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 12:11:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8FC73A5A09
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 12:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A30221E131B;
-	Tue,  7 Jan 2025 12:11:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F26B1E3DE7;
+	Tue,  7 Jan 2025 12:11:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fg7mflJw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YCUqfmMj"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7561E1DF756;
-	Tue,  7 Jan 2025 12:11:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7386A15665C;
+	Tue,  7 Jan 2025 12:11:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736251862; cv=none; b=XSV0zCiyLvgo5v3hnhnpR8x/wznfShjxyELmxnpC0QmLKWHU55gWj5owHvMTGO6j1Qs1r4l4FDhealWetLUfXXo1zwUhe3dsTtVYNjpZnkCkkKnjgFfj0jK2eBV7XR+3NWuUGHGraQ/4MW5I7RUQTTwmfwx1TlN6c9ZVMpa/wlY=
+	t=1736251871; cv=none; b=Mk+3qvPy2+P6wOdsRorWh4yPm5w/ps6vIWO1nx7mZ9ab98DGbA6ju6Zgj3KRR27YIEtg/eHeUN3+c22lVHcCPw8drIFapEVPNJwpQlyoCMuFOsybFBQFRuAu6ARzKrgOnjJ7FkkN8oakVcj6C67RGkcXcbsnSo4CUeQ2gH9qPoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736251862; c=relaxed/simple;
-	bh=R47DTda37APvq+1TJKFhmAoY6opYe++laPAmzeVqy44=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nQn9GBlN90gTCjR9M6luXZq4oav2kiwTTj2DOHfvCdobWj546TjwHMmgRHpdmICbg5jUmyviRtuOUCaRAjBTi6znalQvbsqxRz+rlxiU4B7OBkDTp/WjrfpfwUiiJnpYA9gVIS2/ANPHhI6OvKaPagVGdy71zSNvnSMNtsBcE/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fg7mflJw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 696AAC4CED6;
-	Tue,  7 Jan 2025 12:11:00 +0000 (UTC)
+	s=arc-20240116; t=1736251871; c=relaxed/simple;
+	bh=2w9n1ebv7JIiAM6iAMFJs2zl5Da5ijt2vVC0a54ryI8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Y8YD0WRZ3g4DV9T981eHKdaobFN+RKcba7VnDPYTY2d8xfJQP4fD4yFJHYN2oP6pEW7o3PsVWHWU2XnQ28KlW6uOjrz5DaVyy+BGQnabEbtBfnitt5Ka1EZTQIJGkAq8/kdMwQW4YVBzoy6hGkFB8EP9ZZyOIf4dDO73scqThLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YCUqfmMj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 857C0C4CED6;
+	Tue,  7 Jan 2025 12:11:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736251862;
-	bh=R47DTda37APvq+1TJKFhmAoY6opYe++laPAmzeVqy44=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Fg7mflJwSgchMpES9jN9xaj1eQ/vR3BEm9YLuoMNOnmjqt7cQVyMTDXVLZogS4b9W
-	 gOj7YYuse9biIZ6Bb7A9Kmz1/7SQs5izWzRVaAJJgcQPM933l//0VblngaBwV6VZvp
-	 79+om3dTwWq8cqO4jQsL6NfpJFdj8I3U9LmQp1tJ2P2Id83Xw2dRPo3f85iVq9ZK5I
-	 3IkvyVVuGBXJobq/jdAUhRtc1cGbr/5WkV8fA2DY1VSEaxS1o8PFluOocJNaIZwHvW
-	 obp7/wUtswmqeYlbg5/DGC9NULgXqSlwO3JcB4ejdh08w7uIufzYWboO888nRShs96
-	 cSoWJFVPuf5+g==
+	s=k20201202; t=1736251871;
+	bh=2w9n1ebv7JIiAM6iAMFJs2zl5Da5ijt2vVC0a54ryI8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=YCUqfmMjpM01qfJjNL8MGVDE3PsE3nUKo24MJHWgSbyEQQiTbRR+jIbfH1N6Gp8F/
+	 8DJiL1iX7Aj1YfqJdSPNBcKbHXm8IJtkQ8H89lE2aSu3OmVn5ACoq0UB3DB3yEQuf6
+	 n2lWCAVnniVnKhU6S1d3V+9JhSfNasNoWqltICkzXvjGb346pAOMGehWYJayyyEsSq
+	 17eSQ/si6t3o48UUkhw8GpemkxvtjnJ0dCki7dNzS7X1K+CXlgAgpAnsRX7uNctemO
+	 TGWDsUbj8pJtgODQn+RuhU5ci4eA99rmKxiCs9ZTL/6rmRQzuAoxS9WNGoIJGbO9Qa
+	 6D/0aRH8upYzQ==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Shuah Khan <shuah@kernel.org>
@@ -47,10 +48,12 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	mhiramat@kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 0/2] selftests/ftrace: Fix ftracetest test cases
-Date: Tue,  7 Jan 2025 21:10:58 +0900
-Message-ID: <173625185823.1383744.4020760882101555349.stgit@devnote2>
+Subject: [PATCH 1/2] selftests/ftrace: Fix to use remount when testing mount GID option
+Date: Tue,  7 Jan 2025 21:11:07 +0900
+Message-ID: <173625186741.1383744.16707876180798573039.stgit@devnote2>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <173625185823.1383744.4020760882101555349.stgit@devnote2>
+References: <173625185823.1383744.4020760882101555349.stgit@devnote2>
 User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -61,23 +64,55 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Here is a couple of patches to fix issues. I think mount_options.tc's one
-is a real bug(I'm not sure how it worked), but another one is an enhancement
-for (my) execution environment.
-Anyway, those should go through kselftests tree.
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Thank you,
+Fix mount_options.tc to use remount option to mount the tracefs.
+Since the current implementation does not umount the tracefs,
+this test always fails because of -EBUSY error.
+Using remount option will allow us to change the mount option.
+
+Fixes: 8b55572e5180 ("tracing/selftests: Add tracefs mount options test")
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Cc: stable@vger.kernel.org
 ---
-
-Masami Hiramatsu (Google) (2):
-      selftests/ftrace: Fix to use remount when testing mount GID option
-      selftests/ftrace: Make uprobe test more robust against binary name
-
-
  .../ftrace/test.d/00basic/mount_options.tc         |    8 ++++----
- .../ftrace/test.d/dynevent/add_remove_uprobe.tc    |    4 +++-
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+diff --git a/tools/testing/selftests/ftrace/test.d/00basic/mount_options.tc b/tools/testing/selftests/ftrace/test.d/00basic/mount_options.tc
+index 35e8d47d6072..8a7ce647a60d 100644
+--- a/tools/testing/selftests/ftrace/test.d/00basic/mount_options.tc
++++ b/tools/testing/selftests/ftrace/test.d/00basic/mount_options.tc
+@@ -15,11 +15,11 @@ find_alternate_gid() {
+ 	tac /etc/group | grep -v ":$original_gid:" | head -1 | cut -d: -f3
+ }
+ 
+-mount_tracefs_with_options() {
++remount_tracefs_with_options() {
+ 	local mount_point="$1"
+ 	local options="$2"
+ 
+-	mount -t tracefs -o "$options" nodev "$mount_point"
++	mount -t tracefs -o "remount,$options" nodev "$mount_point"
+ 
+ 	setup
+ }
+@@ -81,7 +81,7 @@ test_gid_mount_option() {
+ 
+ 	# Unmount existing tracefs instance and mount with new GID
+ 	unmount_tracefs "$mount_point"
+-	mount_tracefs_with_options "$mount_point" "$new_options"
++	remount_tracefs_with_options "$mount_point" "$new_options"
+ 
+ 	check_gid "$mount_point" "$other_group"
+ 
+@@ -92,7 +92,7 @@ test_gid_mount_option() {
+ 
+ 	# Unmount and remount with the original GID
+ 	unmount_tracefs "$mount_point"
+-	mount_tracefs_with_options "$mount_point" "$mount_options"
++	remount_tracefs_with_options "$mount_point" "$mount_options"
+ 	check_gid "$mount_point" "$original_group"
+ }
+ 
+
 
