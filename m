@@ -1,131 +1,91 @@
-Return-Path: <linux-kselftest+bounces-24030-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24031-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7806A04A7D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 20:49:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59A5DA04B16
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 21:38:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31FEA1888924
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 19:49:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB3303A4C7D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 20:38:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8C451F63C3;
-	Tue,  7 Jan 2025 19:48:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 052731F669F;
+	Tue,  7 Jan 2025 20:38:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UoxgCbzg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IincHyk5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93741F63E9
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jan 2025 19:48:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE70F1F63E7;
+	Tue,  7 Jan 2025 20:38:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736279332; cv=none; b=gbHJ52bgXPI0U1T+GFuaiF52BrWV5FzmcyP1tawq4IoTGG9lDetGyAxnhG/WohxyNzZrgquU7A2omshqpkBJ8hjABCTqXEwIg/pf8oQmoMpaLGAxJJn6UBuCcAcDTm9QecIe5BzrL60+SSmkLes+E+2fmaQH1hQgIjajLJpzX/8=
+	t=1736282288; cv=none; b=VAFZVz54otiSFrvgspvOsHRhhdSKY6YGtyZEz+ilrB7VAhWOqQveKL9u6DCR1DM5OhXNDxxexIj1JIYjEWELOGnVISnUqDHvyieOccG2KfQI7jLz/sOna87UprnzMxvxwMO4DhsWUksL+fJFY7WYfyf6s7mclZ+Wm9/hbzDxVFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736279332; c=relaxed/simple;
-	bh=Kgz2jx7bib0PN4twzARuqIrW4rC6y55S605NP2TJFDk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lPip+WxbuZBkrF910pF0sn/+xyBR9htQ9/byyxexfkVFeBl69EccXiNWicHkx25F1Cg4SM5O6ozf/SknuFz3SBQxBnHxCTWfL/RSYzHTngzGqPzdSLs6w8l695BUsIrg4NJOjbbizCrNzsOJZ+30EESjuArp2yRJNGg57SmwCyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UoxgCbzg; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <01084af1-4f39-46f8-a278-9cfa7f242a11@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1736279326;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=B5ZAmugUbFS8tTnvREFaNPziAJZ+taQuMYqxt7qiZl4=;
-	b=UoxgCbzgF9qgfmI7I00gcuVoFHoO7m69/ZcURii2U6nIKntvz3n3PSkCIfLUymfythcrDH
-	nDGDw948NmehGcw0ncxnEg/DUlO8aJjNb8nEv4gt4x2u+dNOm2pP0PRx15dapROBxSjg2h
-	7X2GsRidLj2ywaHK7povwtQMy+6tgxw=
-Date: Tue, 7 Jan 2025 11:48:36 -0800
+	s=arc-20240116; t=1736282288; c=relaxed/simple;
+	bh=xVENo9muNO/TQ5xVqUKOs/5Q4+G96PW1sKSnQr73q9Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=U14vuusbfwKnu2pH69MbVBc1eKEdkMX/chwVTNtajetkhO6xwi7m74cLY/k8ac5c+MX0RrI206b704qlUqOaXdM+aV6iQbzq5lSl28FpER3LUPzbZkMsV6KrnqF5mB4CstaLafwPTymWoZzNYnWuqkUx3PnksWlv/MrGPfzQJ4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IincHyk5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 582D5C4CED6;
+	Tue,  7 Jan 2025 20:38:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736282287;
+	bh=xVENo9muNO/TQ5xVqUKOs/5Q4+G96PW1sKSnQr73q9Q=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=IincHyk5dnHSj14WBxB3nZ8H+ad7Wv7JCDFqB3ioz1CyxVIL28f/wayA5OfnPboFy
+	 w4bYeV8oyIpNsDF2th/1YTvksDeeiWBKLOGweUN5unnHCsYuY6UO9/ov33L1S7sVm+
+	 1K3BnLtTw6iZPtOBVnjoMMzolL2SbZULRRKu+YNbYACOMPPIofT1Am+zEPd/PAx/vs
+	 ld0p/Rkjj2unh6Png65S7WHaBoyC3nNe0ZjG8UBnxGV+bt8cBPNwF55J92ceGMmf0M
+	 9p3XnJzVS37fvnQRlLFc7Do5qJjEPxgQYy5375IiG9MyjZthi5D9QPQCuQtvR2QVYT
+	 LbPjcwrrJqcnA==
+Date: Tue, 7 Jan 2025 12:38:05 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Xiao Liang <shaw.leon@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, Kuniyuki
+ Iwashima <kuniyu@amazon.com>, Donald Hunter <donald.hunter@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Ido
+ Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Simon
+ Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jiri Pirko
+ <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>,
+ linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
+ osmocom-net-gprs@lists.osmocom.org, bpf@vger.kernel.org,
+ linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+ linux-wireless@vger.kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
+ bridge@lists.linux.dev, linux-wpan@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v7 02/11] rtnetlink: Pack newlink() params into
+ struct
+Message-ID: <20250107123805.748080ab@kernel.org>
+In-Reply-To: <20250104125732.17335-3-shaw.leon@gmail.com>
+References: <20250104125732.17335-1-shaw.leon@gmail.com>
+	<20250104125732.17335-3-shaw.leon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 2/3] selftests/bpf: Migrate test_xdp_redirect.sh to
- xdp_do_redirect.c
-To: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Alexis Lothore <alexis.lothore@bootlin.com>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250103-xdp_redirect-v1-0-e93099f59069@bootlin.com>
- <20250103-xdp_redirect-v1-2-e93099f59069@bootlin.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20250103-xdp_redirect-v1-2-e93099f59069@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 1/3/25 2:10 AM, Bastien Curutchet (eBPF Foundation) wrote:
-> +static int ping_setup(struct test_data *data)
-> +{
-> +	struct nstoken *nstoken = NULL;
-> +	int i;
-> +
-> +	data->ns[0] = netns_new(NS0, false);
-> +	if (!ASSERT_OK_PTR(data->ns[0], "create ns"))
-> +		return -1;
-> +
-> +	for (i = 1; i < NS_NB; i++) {
-> +		char ns_name[4] = {};
-> +
-> +		snprintf(ns_name, 4, "NS%d", i);
-> +		data->ns[i] = netns_new(ns_name, false);
-> +		if (!ASSERT_OK_PTR(data->ns[i], "create ns"))
-> +			goto fail;
-> +
-> +		nstoken = open_netns(NS0);
-> +		if (!ASSERT_OK_PTR(nstoken, "open NS0"))
-> +			goto fail;
-> +
-> +		SYS(fail, "ip link add veth%d index %d%d%d type veth peer name veth0 netns %s",
-> +		    i, i, i, i, ns_name);
-> +		SYS(fail, "ip link set veth%d up", i);
-> +		close_netns(nstoken);
-> +
-> +		nstoken = open_netns(ns_name);
-> +		if (!ASSERT_OK_PTR(nstoken, "open ns"))
-> +			goto fail;
-> +
-> +		SYS(fail, "ip addr add %s.%d/24 dev veth0", IPV4_NETWORK, i);
-> +		SYS(fail, "ip link set veth0 up");
-> +		close_netns(nstoken);
+On Sat,  4 Jan 2025 20:57:23 +0800 Xiao Liang wrote:
+> -static int amt_newlink(struct net *net, struct net_device *dev,
+> -		       struct nlattr *tb[], struct nlattr *data[],
+> -		       struct netlink_ext_ack *extack)
+> +static int amt_newlink(struct rtnl_newlink_params *params)
+>  {
+> -	struct amt_dev *amt = netdev_priv(dev);
+> +	struct netlink_ext_ack *extack = params->extack;
+> +	struct net_device *dev = params->dev;
+> +	struct nlattr **data = params->data;
+> +	struct nlattr **tb = params->tb;
+> +	struct net *net = params->net;
+> +	struct amt_dev *amt;
 
-		nstoken = NULL;
-
-Otherwise, the other "goto fail;" of this loop will close and free the already 
-closed nstoken again.
-
-Some of the other close_netns(nstoken) in this patch may have similar issue.
-
-> +	}
-> +
-> +	return 0;
-> +
-> +fail:
-> +	close_netns(nstoken);
-> +	cleanup(data);
-> +	return -1;
-> +}
-
+IMHO you packed a little too much into the struct.
+Could you take the dev and the extack back out?
 
