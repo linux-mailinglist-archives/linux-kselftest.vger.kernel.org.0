@@ -1,91 +1,94 @@
-Return-Path: <linux-kselftest+bounces-24031-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24032-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59A5DA04B16
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 21:38:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFEC4A04B66
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 22:11:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB3303A4C7D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 20:38:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8EEF166698
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 21:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 052731F669F;
-	Tue,  7 Jan 2025 20:38:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83F051F63F0;
+	Tue,  7 Jan 2025 21:11:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IincHyk5"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="Uf5NZX7/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE70F1F63E7;
-	Tue,  7 Jan 2025 20:38:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F13CD1D8DFE;
+	Tue,  7 Jan 2025 21:11:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736282288; cv=none; b=VAFZVz54otiSFrvgspvOsHRhhdSKY6YGtyZEz+ilrB7VAhWOqQveKL9u6DCR1DM5OhXNDxxexIj1JIYjEWELOGnVISnUqDHvyieOccG2KfQI7jLz/sOna87UprnzMxvxwMO4DhsWUksL+fJFY7WYfyf6s7mclZ+Wm9/hbzDxVFw=
+	t=1736284268; cv=none; b=O6xw7UvnNF/fzyVovrxqc8NJuL204qmdXrcczobdJKZp4aprpw1t1kmKyGakReAP+f89fbjUICEyY1lJdPvPVK1eAFMulNjP1avVzujnPDhEB5KOexCglSoJAlborayM6/+9/bUzBhFzDARktz6UDFmKpDW7Ab1/rXO0rIMfjgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736282288; c=relaxed/simple;
-	bh=xVENo9muNO/TQ5xVqUKOs/5Q4+G96PW1sKSnQr73q9Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=U14vuusbfwKnu2pH69MbVBc1eKEdkMX/chwVTNtajetkhO6xwi7m74cLY/k8ac5c+MX0RrI206b704qlUqOaXdM+aV6iQbzq5lSl28FpER3LUPzbZkMsV6KrnqF5mB4CstaLafwPTymWoZzNYnWuqkUx3PnksWlv/MrGPfzQJ4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IincHyk5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 582D5C4CED6;
-	Tue,  7 Jan 2025 20:38:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736282287;
-	bh=xVENo9muNO/TQ5xVqUKOs/5Q4+G96PW1sKSnQr73q9Q=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=IincHyk5dnHSj14WBxB3nZ8H+ad7Wv7JCDFqB3ioz1CyxVIL28f/wayA5OfnPboFy
-	 w4bYeV8oyIpNsDF2th/1YTvksDeeiWBKLOGweUN5unnHCsYuY6UO9/ov33L1S7sVm+
-	 1K3BnLtTw6iZPtOBVnjoMMzolL2SbZULRRKu+YNbYACOMPPIofT1Am+zEPd/PAx/vs
-	 ld0p/Rkjj2unh6Png65S7WHaBoyC3nNe0ZjG8UBnxGV+bt8cBPNwF55J92ceGMmf0M
-	 9p3XnJzVS37fvnQRlLFc7Do5qJjEPxgQYy5375IiG9MyjZthi5D9QPQCuQtvR2QVYT
-	 LbPjcwrrJqcnA==
-Date: Tue, 7 Jan 2025 12:38:05 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Xiao Liang <shaw.leon@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, Kuniyuki
- Iwashima <kuniyu@amazon.com>, Donald Hunter <donald.hunter@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Ido
- Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Simon
- Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jiri Pirko
- <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>,
- linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
- osmocom-net-gprs@lists.osmocom.org, bpf@vger.kernel.org,
- linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
- linux-wireless@vger.kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
- bridge@lists.linux.dev, linux-wpan@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v7 02/11] rtnetlink: Pack newlink() params into
- struct
-Message-ID: <20250107123805.748080ab@kernel.org>
-In-Reply-To: <20250104125732.17335-3-shaw.leon@gmail.com>
-References: <20250104125732.17335-1-shaw.leon@gmail.com>
-	<20250104125732.17335-3-shaw.leon@gmail.com>
+	s=arc-20240116; t=1736284268; c=relaxed/simple;
+	bh=WfcEzCEVu4DeR2h92Sq0A6eiH0nM6HU/BvVWJyg9gfo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VBVSfLMYv0nATLxP1uet6lqpAyLDAL3Mkm6Fr1Jj5+musqp2jvujzlU03oyjxTm9HMFh/591kGDvNs1Jn8YaIeSKpTLYGWSVjgsxtVCW93rQ576GQp3QmlGZMVkhBCkqDGfdVkcwRLwyQEqfvIEVpLvduD33Oxe3v7DJzhbQN0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=Uf5NZX7/; arc=none smtp.client-ip=4.36.192.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=codeweavers.com; s=s1; h=Content-Type:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=Lndng4N3lO1ivo9syb5BDhuB4i7UvrhyhygqCR2rS2A=; b=Uf5NZX7/Mi4QtnsOxAyrXmNQtL
+	aBFequoaRBP0u5aZt0Wr4/ZomaFQPqmGRxRW6Ufhhjy05EKZewosHc37L21+tjm2XpZZEc11O5ehB
+	59JUaRVcOjS9kPlcSnSaEefCn6HTwEn1wjUvrVIPVIqbspfEQ32SnQRqaH+hKROfuhVuCmixgSOwR
+	ZDHgysSKj8SkDWZki+r7vXFmXRubzkP0dxVAOmD8emXYof2O3ozJXmcXPc22uA2tSpDBBjIKiqGE6
+	JyKezXKbRuDLDAAnTvFGyLDm9v4NjFueZNnCjKf/XG6cMPO8y+IrRjGNGoMbvIBoSknOuf0vMmUSt
+	DEQpShAA==;
+Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.localnet)
+	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <zfigura@codeweavers.com>)
+	id 1tVGqe-008hkY-3C;
+	Tue, 07 Jan 2025 15:10:53 -0600
+From: Elizabeth Figura <zfigura@codeweavers.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Peter Zijlstra <peterz@infradead.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-api@vger.kernel.org, wine-devel@winehq.org,
+ =?ISO-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+ Wolfram Sang <wsa@kernel.org>, Arkadiusz Hiler <ahiler@codeweavers.com>,
+ Andy Lutomirski <luto@kernel.org>, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+ Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH v7 00/30] NT synchronization primitive driver
+Date: Tue, 07 Jan 2025 15:10:48 -0600
+Message-ID: <8516093.NyiUUSuA9g@camazotz>
+In-Reply-To: <20250107194241.GC28303@noisy.programming.kicks-ass.net>
+References:
+ <20241213193511.457338-1-zfigura@codeweavers.com>
+ <2025010738-amicably-art-f746@gregkh>
+ <20250107194241.GC28303@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-On Sat,  4 Jan 2025 20:57:23 +0800 Xiao Liang wrote:
-> -static int amt_newlink(struct net *net, struct net_device *dev,
-> -		       struct nlattr *tb[], struct nlattr *data[],
-> -		       struct netlink_ext_ack *extack)
-> +static int amt_newlink(struct rtnl_newlink_params *params)
->  {
-> -	struct amt_dev *amt = netdev_priv(dev);
-> +	struct netlink_ext_ack *extack = params->extack;
-> +	struct net_device *dev = params->dev;
-> +	struct nlattr **data = params->data;
-> +	struct nlattr **tb = params->tb;
-> +	struct net *net = params->net;
-> +	struct amt_dev *amt;
+On Tuesday, 7 January 2025 13:42:41 CST Peter Zijlstra wrote:
+> On Tue, Jan 07, 2025 at 06:06:03PM +0100, Greg Kroah-Hartman wrote:
+> > Given a lack of complaints, I've now applied this to my testing tree.
+> > Thanks for sticking with it!
+> 
+> Right, so I acked v6, which wasn't preserved. The v7 changes are minor
+> and seem fine (IIRc I even suggested them some very very long time ago).
 
-IMHO you packed a little too much into the struct.
-Could you take the dev and the extack back out?
+I wasn't sure it was fine to preserve the ack across changes (even if they were the ones you suggested) and decided to err on the safe side.
+
+Thank you for the review!
+
+
 
