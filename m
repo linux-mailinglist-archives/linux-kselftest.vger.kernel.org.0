@@ -1,169 +1,147 @@
-Return-Path: <linux-kselftest+bounces-24010-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24011-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24F3BA04795
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 18:07:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE074A047AD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 18:10:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0CA7C16155E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 17:07:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D6101887D58
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 17:10:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F421C1F3D4F;
-	Tue,  7 Jan 2025 17:07:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB1321F473E;
+	Tue,  7 Jan 2025 17:10:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nrNAd2iX"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LihkKnYL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB3618B47D;
-	Tue,  7 Jan 2025 17:07:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1D751F3D35
+	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jan 2025 17:10:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736269663; cv=none; b=IaYADUd+TQnpTou7gDALUNTYPJoT1PtKnXgoKlRuhNiBwfa/6/SX+GEjd5JpiPIp6qgxYxgWWrW0+S0PKwUfpqem10BvKuASUu+IYMqxS+UHqOZcTUQKtW111HrEuBcWKOr1JIINc0yCIoCofnD92zQUAwF8Ii4CbXZJfrfX8f8=
+	t=1736269814; cv=none; b=DfdQRrofxyVbjEFLNQd7v1b7Y/qkPzUjrsA+V1ehCydo0cVxJu3bAB7RM1bNQifr2P7yctFVS870vksuFl2V04p8B6h5LWUP72zfaXHmJb1fUrRLRA9HLLltBw+jyH+pX94HQAt+o75I73e+7NvrJwMeRDrfjYntQHbJormtn8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736269663; c=relaxed/simple;
-	bh=uhLxoMhIxsCUyDi5ICic7xl1VPBctvcjCTJ8sYAxDL4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pe4A85NwUvcomjBXnx9ZHZlauYHGTJmHMAbuXCjhBHA18GkiU5SCliq6nSLlhGXDwNxRY+kPlp/522KyUSgBg11KYx6NI5GQh9K925I0gIcGM2WXADB+HlW8e1eGITCDqVY6bOa1U923k8L9XmyofbjstBi9sQNfZRtzxhfzUb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nrNAd2iX; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2164b1f05caso228213545ad.3;
-        Tue, 07 Jan 2025 09:07:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736269662; x=1736874462; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=H6IgG8TBqPF+D4hNW02w96Pdr6FXNShPU0XiGtGLP2U=;
-        b=nrNAd2iXBbdI6w4TUPzyADwHCTEoeJGL8rFkllL318pQSS9fOTlCajJL/VifEs2gRq
-         EWsLEYEC4g9gP7JYSQNrpU2fFE+b+q3F0loZoWDyRufy07NPd/QmjmWhE/s7F6L+I45H
-         OGP2Rjy448vifQhTmUq4kaAVhj30JTuzHZMwjLEs1wMF9ywwASBaRko0ut5vOK9ZLkrN
-         2hSymh4Tha0OuPYJ5VpEIrylhdxp1pSDQ85LsY2DusSCIO+xSYZXuN9QLPvcDr0BO4qa
-         9PMuqY6+e0WQcwQg+QWFtuLqehvzBEdHKjuSW9Czot80BKnrVu3cWoBNmfBmRXGDKii4
-         LSSg==
+	s=arc-20240116; t=1736269814; c=relaxed/simple;
+	bh=k6MVnlt34ZD0SBO9MSU8T78C7vNtxZTkYcttZnmsriY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B/TkRelIajbYdqXT3rKxMQfCPK+nrKh8isG7m/ZuhtNjH8tSlbwwqoaUzkoSm6K8JHvitopmg9e9qD12sGF5gA4cof1UU5tYCmuGK4DFpUZm6hZiSOzsNZlG1pZuZvyZ0DYxMRyBRvH/9f1ginMzCoor3jTslo54GcHbb7s4sXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LihkKnYL; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1736269811;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gwQkyTcOMsZ2EjZrTGgt+ipO0/RY4nS6QVm5/aGbi9U=;
+	b=LihkKnYL6MWH+UyAoy3TYoMIKBqQqLCVWP6YTNNDg2/W9DN5l/+FaiQwBcWtuecYvC6TYn
+	DTQsT5c7BLUgWve2y+1gBzB9vXaz8ARMrsDn470W2r47DcPrQthFrCloSlZ194KUNxdFiR
+	cg9zRjOEb2+ECJ1ENGDNMG3+QmrPr7k=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-683-VvKULfRGNUCX8K3eHg_yQg-1; Tue, 07 Jan 2025 12:10:08 -0500
+X-MC-Unique: VvKULfRGNUCX8K3eHg_yQg-1
+X-Mimecast-MFC-AGG-ID: VvKULfRGNUCX8K3eHg_yQg
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-436379713baso76691905e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jan 2025 09:10:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736269662; x=1736874462;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H6IgG8TBqPF+D4hNW02w96Pdr6FXNShPU0XiGtGLP2U=;
-        b=flLujTEk9Dr1hSzQfp5Lc3UTbhpDmEJ2Uahh+VD3Q7YcwmZwnmCAYJmMkHvrwUx1R5
-         6lK9hKIjlNwEBKzKe34nvyqvr5fnJvqIFCcd4bwRQiuiHqzL4gdXjOV3JcViR7vJPkOp
-         HddTd9p7Hqgva8qQsolmd1FBvoJWcPpLe2TAC3wN5CnP4EiLb6tFRXdQFo4qySAB/7tX
-         amHNyfZli9sY7nexV62gCCEQ35fXMUhh7NYua8xUXuhsAZngriR0WrP/kiMhRrygv+aC
-         lwN5bMsUn3S6otIJTSCNZI2pzrDwCqcfNjmvNYMwj2ovJ/OL5k+VBd+QuwadVrQmAYxe
-         HE+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU+PalGOlyK2oAOXatH41GK1C5gLCBam6LOTJYwGweGLqGxwYMTm7g+UCyLH28LBItl1uySfWKa8h6O@vger.kernel.org, AJvYcCUc3QEyr/LpUmtU6HToJED6DsNRuBJltAmWywuIb3NuMf4tjxJqJb47gaxoxlKlq0JV4oigRzUKmINoGfQJnwDS@vger.kernel.org, AJvYcCW/d4wkMvVAf2O5kWdF5P3drfYrfp1ufbLenWg27HwujDnllBbdQV7SQ896pg5+HHYd2fHc2YI6@vger.kernel.org, AJvYcCWF9LjRJHLx6R5V4YmXtfQHSX/FFDxW2rPSbN1veXBmxOBwFafVoYHVJ8hy9cLBLnK0JYsPlmn9IPGKhvzv@vger.kernel.org, AJvYcCXzHr1w0f5zWjONbwnR19Y3THfOnComW8K+mnQMhmHbGK6JFpIPLZO0UgBUlDYrcOLwGcI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0vmAwPaKa3zBSD+kiWR3gHmxBl/b0XuRmflexKF7cdvVHyUnE
-	SX4vKeM6S+DApvFYTLP6XYK4Xx9vkdsrIjOJzhw8zGX0hUKtWig=
-X-Gm-Gg: ASbGncvL5mg/UjCK0B1f7x85FfTCKUGRXqLJ8/klBdyElW32DaHWNih0fciUhumws1N
-	NZMynRmdstfbAy8WBoGmtZo3lZXr9x5RUijN8Vuj6pKMyKBskC5syxM+v1df83WdqdhtQ1x8jwW
-	bElVQGVuv32OZ/FVdDb8E27FAFcdGHTXkpNv+LrgwAAUAxUXVWIkIyqevNJFmTkJNgjZL9PpEwG
-	T1bS+a4VlnwMdRobGqBLYdL4BBNCFBiiJRmdIK2gMPbA9eKLnBUnIHD
-X-Google-Smtp-Source: AGHT+IHI4UAilr4fOsWcWRXO8E8vJoNjH2hq0o3vxddLmqIYgmVN8lBTyI8wQrNNttLzXRdwB4KPiw==
-X-Received: by 2002:a17:902:ce92:b0:215:5ea2:6544 with SMTP id d9443c01a7336-219e6e8c365mr758236605ad.7.1736269661645;
-        Tue, 07 Jan 2025 09:07:41 -0800 (PST)
-Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dca04ce7sm305940015ad.283.2025.01.07.09.07.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2025 09:07:41 -0800 (PST)
-Date: Tue, 7 Jan 2025 09:07:40 -0800
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Song Yoong Siang <yoong.siang.song@intel.com>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Florian Bezdeka <florian.bezdeka@siemens.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>, Bjorn Topel <bjorn@kernel.org>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Jonathan Lemon <jonathan.lemon@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Joe Damato <jdamato@fastly.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Mina Almasry <almasrymina@google.com>,
-	Daniel Jurgens <danielj@nvidia.com>,
-	Amritha Nambiar <amritha.nambiar@intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <joabreu@synopsys.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	intel-wired-lan@lists.osuosl.org, xdp-hints@xdp-project.net
-Subject: Re: [PATCH bpf-next v4 3/4] net: stmmac: Add launch time support to
- XDP ZC
-Message-ID: <Z31fXHxWuKNog_Qh@mini-arch>
-References: <20250106135658.9734-1-yoong.siang.song@intel.com>
+        d=1e100.net; s=20230601; t=1736269807; x=1736874607;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gwQkyTcOMsZ2EjZrTGgt+ipO0/RY4nS6QVm5/aGbi9U=;
+        b=mycmbTaArHqofckEVS4b+Q3GbtUyDqmZElexlCs3ZRCxkAchHAf91p8ZVgvH9O0CgL
+         tIGqMevrQrs1pjiGhzNPoymDJGutBXdWodh5WaIZXf+NoX73V3woCSiDcrFXlTOaBGgj
+         2LV+wt9AsDdMQvC5SOJ716/MaCK2TMap3cJvJroPdqQuhWW28Lgry7ms9HdTQSNn29O0
+         IcN7suy1iY2Q80oBv34GdgBDWYy+nNta9OwfRxrxDtj8T+jsza11BW7Mq6jz5Ulm0sxG
+         qLk5NuoZutkdoqFU5/ArsYCq8P2IDY+rx/8dwfkvvzEf/Y3lSqK7UP1IHjZDUtEZBJ7K
+         811A==
+X-Forwarded-Encrypted: i=1; AJvYcCXeEh/7fP6leU+RnRf9ONoCbthhoMgZ9+tg/zgISY95EnNqWhNu0EMRxo9QmGG6JKmSa3UF698fzbv9/hvOSto=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYL62611QhzhU1TfRfTNk6WDDfyRbunG6utDNSoqaO3wkPaqYP
+	UGmjXVbi6vMC7foMGHe7fjV/foevqTbrnL4dXWp828Dx8+t6+Ft8JvBliLZSg4i9gPIrPkhG+FS
+	H++qzzX2snvQ+ugKA32YERPeO8i3Pw55UxyQPJCPPei2CIbVkiudirNzv4bs3tJMsHAWh73xGxI
+	JanlqcNqbvfuyq3kx3nEMMS35CK7Srl8LOqoXmwj2x
+X-Gm-Gg: ASbGncuqJIl+WuOjBYuOUZlAFhZocK1fFWwdh445Qa322ey6AFo1vIqZWF6mIzPjEwr
+	oM+NQkzLONHTDTvJA3pzp2sEBNPlflI1tz588fQ==
+X-Received: by 2002:a05:600c:1d21:b0:434:a4a6:51f8 with SMTP id 5b1f17b1804b1-4366790e3fdmr593069185e9.0.1736269806956;
+        Tue, 07 Jan 2025 09:10:06 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGSvogatKxKxqA2wBw/+7sDsL67SJLzCtKQockD6aGfvTv8LM12x53+vGigfD/GcR6BSKn5UMxxRiIg0aVgOFw=
+X-Received: by 2002:a05:600c:1d21:b0:434:a4a6:51f8 with SMTP id
+ 5b1f17b1804b1-4366790e3fdmr593068955e9.0.1736269806643; Tue, 07 Jan 2025
+ 09:10:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250106135658.9734-1-yoong.siang.song@intel.com>
+References: <CADH9ctD1uf_yBA3NXNQu7TJa_TPhLRN=0YZ3j2gGhgmaFRdCFg@mail.gmail.com>
+ <c3026876-8061-4ab2-9321-97cc05bad510@redhat.com> <CADH9ctBivnvP1tNcatLKzd8EDz8Oo6X65660j8ccxYzk3aFzCA@mail.gmail.com>
+ <CABgObfZEyCQMiq6CKBOE7pAVzUDkWjqT2cgfbwjW-RseH8VkLw@mail.gmail.com>
+ <CADH9ctA_C1dAOus1K+wOH_SOKTb=-X1sVawt5R=dkH1iGt8QUg@mail.gmail.com>
+ <CABgObfZrTyft-3vqMz5w0ZiAhp-v6c32brgftynZGJO8OafrdA@mail.gmail.com>
+ <CADH9ctBYp-LMbW4hm3+QwNoXvAc5ryVeB0L1jLY0uDWSe3vbag@mail.gmail.com>
+ <b1ddb439-9e28-4a58-ba86-0395bfc081e0@redhat.com> <CADH9ctCFYtNfhn3SSp2jp0fzxu6s_X1A+wBNnzvHZVb8qXPk=g@mail.gmail.com>
+ <CADH9ctB0YSYqC_Vj2nP20vMO_gN--KsqOBOu8sfHDrkZJV6pmw@mail.gmail.com> <Z2IXvsM0olS5GvbR@google.com>
+In-Reply-To: <Z2IXvsM0olS5GvbR@google.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
+Date: Tue, 7 Jan 2025 18:09:54 +0100
+X-Gm-Features: AbW1kvYbICc679MeQNzE1ow2NFvGxOmTuZ13zzWBDAwtldHBRVtXoFV8OfA0EJs
+Message-ID: <CABgObfadZZ5sXYB0xR5OcLDw_eVUmXTOTFSWkVpkgiCJmNnFRQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] KVM: x86: Add support for VMware guest specific hypercalls
+To: Sean Christopherson <seanjc@google.com>
+Cc: Doug Covelli <doug.covelli@broadcom.com>, Zack Rusin <zack.rusin@broadcom.com>, 
+	kvm <kvm@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "the arch/x86 maintainers" <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Arnaldo Carvalho de Melo <acme@redhat.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Joel Stanley <joel@jms.id.au>, Linux Doc Mailing List <linux-doc@vger.kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 01/06, Song Yoong Siang wrote:
-> Enable launch time (Time-Based Scheduling) support to XDP zero copy via XDP
-> Tx metadata framework.
-> 
-> This patch is tested with tools/testing/selftests/bpf/xdp_hw_metadata on
-> Intel Tiger Lake platform. Below are the test steps and result.
-> 
-> Test Steps:
-> 1. Add mqprio qdisc:
->    $ sudo tc qdisc add dev enp0s30f4 handle 8001: parent root mqprio num_tc
->      4 map 0 1 2 3 3 3 3 3 3 3 3 3 3 3 3 3 queues 1@0 1@1 1@2 1@3 hw 0
-> 
-> 2. Enable launch time hardware offload on hardware queue 1:
->    $ sudo tc qdisc replace dev enp0s30f4 parent 8001:2 etf offload clockid
->      CLOCK_TAI delta 500000
-> 
-> 3. Add an ingress qdisc:
->    $ sudo tc qdisc add dev enp0s30f4 ingress
-> 
-> 4. Add a flower filter to route incoming packet with VLAN priority 1 into
->    hardware queue 1:
->    $ sudo tc filter add dev enp0s30f4 parent ffff: protocol 802.1Q flower
->      vlan_prio 1 hw_tc 1
-> 
-> 5. Enable VLAN tag stripping:
->    $ sudo ethtool -K enp0s30f4 rxvlan on
-> 
-> 6. Start xdp_hw_metadata selftest application:
->    $ sudo ./xdp_hw_metadata enp0s30f4 -l 1000000000
-> 
-> 7. Send an UDP packet with VLAN priority 1 to port 9091 of DUT.
+On Wed, Dec 18, 2024 at 4:44=E2=80=AFAM Sean Christopherson <seanjc@google.=
+com> wrote:
+> > Changing our legacy BIOS is not an option so in order to support Window=
+s VMs
+> > with the legacy BIOS with decent performance we would either need to ad=
+d support
+> > for remote reads of the APIC ID register to KVM or support CR8 accesses=
+ w/o
+> > exiting w/o the in-kernel APIC in order.  Do you have a preference?
+>
+> I didn't quite follow the CR8 access thing.  If the choice is between emu=
+lating
+> Remote Read IPIs and using a userspace local APIC, then I vote with both =
+hands
+> for emulating Remote Reads, especially if we can do a half-assed version =
+that
+> provides only what your crazy BIOS needs :-)
 
-Tangential: I wonder whether we can add the setup steps to the
-xdp_hw_metadata tool? It is useful to have one command to run that
-takes care of all the details. Same way it already enables HW
-tstamping.. 
+Absolutely.  Not quite userspace local APIC - VMware only needs
+userspace traps on CR8 access but yeah, it would not be great to have
+that. Remote read support is totally acceptable and hopefully win-win
+for VMware too.
 
-Or, if not the full setup, some kind of detection we can signal to the
-user that some things might be missing?
+> The biggest wrinkle I can think of is that KVM uses the Remote Read IPI e=
+ncoding
+> for a paravirt vCPU kick feature, but I doubt that's used by Windows gues=
+ts and
+> so can be sacrificed on the Altar of Ancient BIOS.
+
+That's easy, the existing code can be wrapped with
+
+                if (guest_pv_has(vcpu, KVM_FEATURE_PV_UNHALT))
+
+The remote-read hack is not even supposed to be used by the guest
+(it's used internally by kvm_pv_kick_cpu_op).
+
+Paolo
+
 
