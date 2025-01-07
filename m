@@ -1,181 +1,112 @@
-Return-Path: <linux-kselftest+bounces-24004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24005-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 406CEA045ED
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 17:23:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BFCFA046DF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 17:44:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 088303A5362
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 16:23:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71FB01888C30
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 16:44:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFA261F4273;
-	Tue,  7 Jan 2025 16:23:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 921921E3784;
+	Tue,  7 Jan 2025 16:42:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="APKjrjxp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CWF6m7NP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0B6125B9
-	for <linux-kselftest@vger.kernel.org>; Tue,  7 Jan 2025 16:23:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486DF1F5406;
+	Tue,  7 Jan 2025 16:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736267028; cv=none; b=p2zdKXtoJh8zKGw6aGB8A85Ogc7rWL9OPKZr/9iLPFFWp5omIaWC2WlfxsnXUZCoObtj0h1UqJsddSOeSQZ5MUGFKYIvSSW7QCZFlgsdFsT3geP74M3cAQwmgKompYnll/BrmScbSzXsISgHNLBarPgxv+LYf/+1gWHWwAcjhyk=
+	t=1736268167; cv=none; b=XLjT0/BsufRY/P44ut92Bwo4SgoMIIz/NbF9/gRgZDvC7M+lG/WIiyA8uEY/GPaGcKS5p0GPCfXYaeDOuXMM005NNu1xHeOK9dtY34qIr2+5TNTZPcvUOYCwQ4qn+EDBqt9e+QGeOX8MAQY4T+ePuDxjvV/BpBXoGTNjH8q72zo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736267028; c=relaxed/simple;
-	bh=W4KF39PABBH5ml2mGjKonNLqTB8qoU6Mmq6wPWwdFNM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DZFohSyC84t4qPBQL7YlXx88SOcJ656F5DNChI+iO3e+8TCwGjugLpiqizGJXuYevmoXnUVQE8ZRTEOkJqeV2pMu2icwwlcTC7inpyHJKvWvlbwC4rZzRW8l5M2yprOXu2I74rELEOhWV6U97iIlKecnSWoXO3+uAMUD65chbaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=APKjrjxp; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736267023;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SML5E82jLDZPoDfWHBjc7GGkwKJX7zSEAE1HHyFwSy0=;
-	b=APKjrjxpsxCR8mGrfuEkcmAV1juJzeR6pJKwiR9mz8aAhxg1Kz3gEvHL7uFt6VVfNQbBcA
-	b3rkh01WRwgfjFXd0AWLNag6f8FRx9x2XzG+1gBN32xG85zToQrZIPV9P/CsqfhyXYFPnZ
-	z2U+gKHZXSUaFaLyKtXtPyuIVNBOZK8=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-519-ZinBM8BGPCO1rxzAVLBQ1A-1; Tue,
- 07 Jan 2025 11:23:39 -0500
-X-MC-Unique: ZinBM8BGPCO1rxzAVLBQ1A-1
-X-Mimecast-MFC-AGG-ID: ZinBM8BGPCO1rxzAVLBQ1A
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C74C71955E9D;
-	Tue,  7 Jan 2025 16:23:37 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.65.30])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 518A81955F40;
-	Tue,  7 Jan 2025 16:23:35 +0000 (UTC)
-Date: Tue, 7 Jan 2025 11:23:32 -0500
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: Filipe Xavier <felipeaggger@gmail.com>
-Cc: Marcos Paulo de Souza <mpdesouza@suse.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>, Shuah Khan <shuah@kernel.org>,
-	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Felipe Xavier <felipe_life@live.com>
-Subject: Re: [PATCH] selftests: livepatch: test if ftrace can trace a
- livepatched function
-Message-ID: <Z31VBN3zo47Ohr27@redhat.com>
-References: <20250102-ftrace-selftest-livepatch-v1-1-84880baefc1b@gmail.com>
+	s=arc-20240116; t=1736268167; c=relaxed/simple;
+	bh=7m9srgpMEiXCY3EwU421KJCD1mkHAQtbO2dhdmFCRw0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uf8IWaYsX3VXWvS8IaV5uxVSyKJYjKfez5JdP+k8aGtfoW6XoTujqeICliO8dlYTSIR8oByq/QphUNVfWyxLUZCDOjiiOoUN+JQxR0x6f3ikF7uOkQguYnkNsmOFzc0Shnna7OsDO24yigLOOeFuCQUXNz45fx8FiqGVTqyKRTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CWF6m7NP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F22AC4CED6;
+	Tue,  7 Jan 2025 16:42:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736268167;
+	bh=7m9srgpMEiXCY3EwU421KJCD1mkHAQtbO2dhdmFCRw0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=CWF6m7NPfxEG40b4664zvEnm1bLBbYX24kosBrfehIi+uCYikhhmwIgk8aX6vTd3M
+	 WX73/yYf7UoE0cTeCqfXrk4UF9hU0ugpJGt/sStNIL4JTMessrl/tX5ZXJMkQntu2s
+	 dP7uYqFoQDO1Is5Q9HmqxckBWzw84D67zhOsV1gnEh7EHT/clAiHIH9jE2IhW5wdYZ
+	 czkQPMsMiZ1jtXLgnhrabVozQQE/fGQ18EJxYvdPTxa817TFIT+y/bO+QKs//XuRRa
+	 IL8Pzfqr1VbRW7vrYKgqIQ/jM4tsj2FH3aL+3iofcfaDbEpFg+kYGWWS3LnDEEYI/l
+	 +FQTBg+LuFrNA==
+From: Will Deacon <will@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Mark Brown <broonie@kernel.org>
+Cc: kernel-team@android.com,
+	Will Deacon <will@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 0/9] arm64: Support 2024 dpISA extensions
+Date: Tue,  7 Jan 2025 16:42:38 +0000
+Message-Id: <173626298431.2741856.11908646584681839796.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20241211-arm64-2024-dpisa-v4-0-0fd403876df2@kernel.org>
+References: <20241211-arm64-2024-dpisa-v4-0-0fd403876df2@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250102-ftrace-selftest-livepatch-v1-1-84880baefc1b@gmail.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 02, 2025 at 03:42:10PM -0300, Filipe Xavier wrote:
-> This new test makes sure that ftrace can trace a
-> function that was introduced by a livepatch.
->
-
-Hi Filipe,
-
-Thanks for adding a test!
-
-Aside: another similar test could verify that the original function, in
-this case cmdline_proc_show(), can still be traced despite it being
-livepatched.  That may be non-intuitive but it demonstrates how the
-ftrace handler works.
- 
-> Signed-off-by: Filipe Xavier <felipeaggger@gmail.com>
-> ---
->  tools/testing/selftests/livepatch/test-ftrace.sh | 37 ++++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
+On Wed, 11 Dec 2024 01:02:45 +0000, Mark Brown wrote:
+> The 2024 architecture release includes a number of data processing
+> extensions, mostly SVE and SME additions with a few others.  These are
+> all very straightforward extensions which add instructions but no
+> architectural state so only need hwcaps and exposing of the ID registers
+> to KVM guests and userspace.
 > 
-> diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
-> index fe14f248913acbec46fb6c0fec38a2fc84209d39..5f0d5308c88669e84210393ce7b8aa138b694ebd 100755
-> --- a/tools/testing/selftests/livepatch/test-ftrace.sh
-> +++ b/tools/testing/selftests/livepatch/test-ftrace.sh
-> @@ -61,4 +61,41 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
->  % rmmod $MOD_LIVEPATCH"
->  
->  
-> +# - verify livepatch can load
-> +# - check traces if have a patched function
-
-nit: wording?  "check if traces have a patched function" ?
-
-> +# - unload livepatch and reset trace
-> +
-> +start_test "livepatch trace patched function and check that the live patch remains in effect"
-
-nit: wording?  "trace livepatched function and check ..." ?
-
-> +
-> +TRACE_FILE="$SYSFS_DEBUG_DIR/tracing/trace"
-> +FUNCTION_NAME="livepatch_cmdline_proc_show"
-> +
-> +load_lp $MOD_LIVEPATCH
-> +
-> +echo $FUNCTION_NAME > $SYSFS_DEBUG_DIR/tracing/set_ftrace_filter
-> +echo "function" > $SYSFS_DEBUG_DIR/tracing/current_tracer
-> +echo "" > $TRACE_FILE
-
-A few suggestions:
-
-- The tracing is also dependent on the 'tracing_on' file, so if it
-  happens to be turned off, the test will fail.
-
-- See functions.sh :: push_config() and pop_config() for an example of
-  saving the existing values rather than turning them all off at the end
-  of the test.
-
-- Nitpick: shellcheck suggests wrapping filenames in double quotations,
-  applicable in several places.
-
-> +
-> +if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
-> +	echo -e "FAIL\n\n"
-> +	die "livepatch kselftest(s) failed"
-> +fi
-> +
-> +grep -q $FUNCTION_NAME $TRACE_FILE
-> +FOUND=$?
-> +
-> +disable_lp $MOD_LIVEPATCH
-> +unload_lp $MOD_LIVEPATCH
-> +
-> +# Reset tracing
-> +echo "nop" > $SYSFS_DEBUG_DIR/tracing/current_tracer
-> +echo "" > $SYSFS_DEBUG_DIR/tracing/set_ftrace_filter
-> +echo "" > $TRACE_FILE
-> +
-> +if [ "$FOUND" -eq 1 ]; then
-> +	echo -e "FAIL\n\n"
-> +	die "livepatch kselftest(s) failed"
-> +fi
-> +
-> +
->  exit 0
 > 
-> ---
-> base-commit: fc033cf25e612e840e545f8d5ad2edd6ba613ed5
-> change-id: 20250101-ftrace-selftest-livepatch-161fb77dbed8
-> 
-> Best regards,
-> -- 
-> Filipe Xavier <felipeaggger@gmail.com>
-> 
+> [...]
 
-Thanks,
---
-Joe
+For the sysreg definitions that Marc's fantastic script is happy with,
+applied to arm64 (for-next/cpufeature), thanks!
 
+[1/9] arm64/sysreg: Update ID_AA64PFR2_EL1 to DDI0601 2024-09
+      https://git.kernel.org/arm64/c/1ad9a56442a0
+[2/9] arm64/sysreg: Update ID_AA64ISAR3_EL1 to DDI0601 2024-09
+      https://git.kernel.org/arm64/c/054339beae58
+[3/9] arm64/sysreg: Update ID_AA64FPFR0_EL1 to DDI0601 2024-09
+      https://git.kernel.org/arm64/c/12b5ff517a19
+[4/9] arm64/sysreg: Update ID_AA64ZFR0_EL1 to DDI0601 2024-09
+      https://git.kernel.org/arm64/c/9a43ee864349
+
+[6/9] arm64/sysreg: Update ID_AA64ISAR2_EL1 to DDI0601 2024-09
+      https://git.kernel.org/arm64/c/d66e21d59ed0
+
+The KVM patch needs an Ack from the maintainers and the hwcap change
+probably needs checking in light of [1].
+
+Cheers,
+-- 
+Will
+
+[1] https://lore.kernel.org/r/20250106174020.1793678-1-maz@kernel.org
+
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
 
