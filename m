@@ -1,38 +1,38 @@
-Return-Path: <linux-kselftest+bounces-23992-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23993-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C5FBA04318
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 15:48:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D547A0431A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 15:48:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29E853A2DBD
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 14:48:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1207C1881934
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 14:48:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A0061F2375;
-	Tue,  7 Jan 2025 14:48:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35F541F2C41;
+	Tue,  7 Jan 2025 14:48:17 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A6601F131F;
-	Tue,  7 Jan 2025 14:48:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0341F1F2360;
+	Tue,  7 Jan 2025 14:48:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736261294; cv=none; b=XR53VsaQyLQIVbfmABxFlM7vwWwJ7uD0cXIqob+6YP5YkaFplhvoyNO/DVUQsl55rs7+MuHwCiqJ8Hp/nzCuI6EPdd4RpJSvkzTJUp81f+YLgv//XDZIHhW4lAgn/6zQjPTgWGeY1ThTSc9I3c2ypuYSL1v1Ha/iI4vDcuYID8o=
+	t=1736261297; cv=none; b=Lt9S/Lm9U+3n/g53rev9/eg6Or6Ma9U2M8g9Ua2UK1A9SpwBwCfb6j/sfq3sN1QN02FNBWCmluQucZJX09oB6YkBuzJG1djJ8523OCsG+ssnGeOravwW+gzhSzWZ8kfhcsswkD5ASrpMb8UDJPuFuv5DSqsoI4pEmmDyJI8R3OY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736261294; c=relaxed/simple;
-	bh=M1PYsB5HIYDaBzxnabK19Z+svsnDtN0Qp2CDIJCSRII=;
+	s=arc-20240116; t=1736261297; c=relaxed/simple;
+	bh=z9i9dM3tC84n6BLausBaEiPcmC7avbE0NRpsdx+SO8k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=vBl/JQ+yq5WHmYjcmZ7sXHeZhyUht+fgyKGkBZojYCrEOeNOE4DkDEDG/ZdNQ5OusG65AotovsmAZKGL3pF2RVIcVA2C8o1ViYDqc8BjeTY83OSmt/xFrQ972zj0fSkwDgDcPppKqLnq3MQLryc/hEKktiLeu3S7RRBkJnn/44k=
+	 MIME-Version; b=ZFygT5C0u0PzZ8kA+Bo7svs9lhxIP0TLTBShmhPbnGkBfbwuDtGOFgS+msy/W7pezUdRBkFNPRHOgJS+t+x+mlGoOCp7Pig8uoQa8KTxVgGCwa/1S5y4luAzPsIVtt7M8JZ6xJtpdYzeQ9BwkwXq8Ccu7z7n3drlaHW5vOHWvDM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BBBBD143D;
-	Tue,  7 Jan 2025 06:48:38 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD24115A1;
+	Tue,  7 Jan 2025 06:48:41 -0800 (PST)
 Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.27])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E3ECC3F59E;
-	Tue,  7 Jan 2025 06:48:07 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D4ECF3F59E;
+	Tue,  7 Jan 2025 06:48:10 -0800 (PST)
 From: Ryan Roberts <ryan.roberts@arm.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Muchun Song <muchun.song@linux.dev>,
@@ -48,11 +48,10 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 Cc: Ryan Roberts <ryan.roberts@arm.com>,
 	linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v1 1/2] mm: Clear uffd-wp PTE/PMD state on mremap()
-Date: Tue,  7 Jan 2025 14:47:52 +0000
-Message-ID: <20250107144755.1871363-2-ryan.roberts@arm.com>
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v1 2/2] selftests/mm: Introduce uffd-wp-mremap regression test
+Date: Tue,  7 Jan 2025 14:47:53 +0000
+Message-ID: <20250107144755.1871363-3-ryan.roberts@arm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250107144755.1871363-1-ryan.roberts@arm.com>
 References: <20250107144755.1871363-1-ryan.roberts@arm.com>
@@ -62,192 +61,460 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-When mremap()ing a memory region previously registered with userfaultfd
-as write-protected but without UFFD_FEATURE_EVENT_REMAP, an
-inconsistency in flag clearing leads to a mismatch between the vma flags
-(which have uffd-wp cleared) and the pte/pmd flags (which do not have
-uffd-wp cleared). This mismatch causes a subsequent mprotect(PROT_WRITE)
-to trigger a warning in page_table_check_pte_flags() due to setting the
-pte to writable while uffd-wp is still set.
+Introduce a test that registers a range of memory for
+UFFDIO_WRITEPROTECT_MODE_WP without UFFD_FEATURE_EVENT_REMAP. First
+check that the uffd-wp bit is set for every PTE in the range. Then
+mremap() the range to a new location and check that the uffd-wp bit is
+clear for every PTE in the range.
 
-Fix this by always explicitly clearing the uffd-wp pte/pmd flags on any
-such mremap() so that the values are consistent with the existing
-clearing of VM_UFFD_WP. Be careful to clear the logical flag regardless
-of its physical form; a PTE bit, a swap PTE bit, or a PTE marker. Cover
-PTE, huge PMD and hugetlb paths.
+Run the test for small folios, all supported THP sizes and all supported
+hugetlb sizes, and for swapped out memory, shared and private.
 
-Co-developed-by: Mikołaj Lenczewski <miko.lenczewski@arm.com>
-Signed-off-by: Mikołaj Lenczewski <miko.lenczewski@arm.com>
+There was previously a bug in the kernel where the uffd-wp bits remained
+set in all PTEs for this case, after fixing the kernel, the tests all
+pass.
+
 Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-Closes: https://lore.kernel.org/linux-mm/810b44a8-d2ae-4107-b665-5a42eae2d948@arm.com/
-Fixes: 63b2d4174c4a ("userfaultfd: wp: add the writeprotect API to userfaultfd ioctl")
-Cc: stable@vger.kernel.org
 ---
- include/linux/userfaultfd_k.h | 12 ++++++++++++
- mm/huge_memory.c              | 12 ++++++++++++
- mm/hugetlb.c                  | 14 +++++++++++++-
- mm/mremap.c                   | 32 +++++++++++++++++++++++++++++++-
- 4 files changed, 68 insertions(+), 2 deletions(-)
+ tools/testing/selftests/mm/.gitignore       |   1 +
+ tools/testing/selftests/mm/Makefile         |   2 +
+ tools/testing/selftests/mm/run_vmtests.sh   |   1 +
+ tools/testing/selftests/mm/uffd-wp-mremap.c | 380 ++++++++++++++++++++
+ 4 files changed, 384 insertions(+)
+ create mode 100644 tools/testing/selftests/mm/uffd-wp-mremap.c
 
-diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-index cb40f1a1d081..75342022d144 100644
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -247,6 +247,13 @@ static inline bool vma_can_userfault(struct vm_area_struct *vma,
- 	    vma_is_shmem(vma);
- }
+diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
+index a51a947b2d1d..121000c28c10 100644
+--- a/tools/testing/selftests/mm/.gitignore
++++ b/tools/testing/selftests/mm/.gitignore
+@@ -27,6 +27,7 @@ protection_keys_64
+ madv_populate
+ uffd-stress
+ uffd-unit-tests
++uffd-wp-mremap
+ mlock-intersect-test
+ mlock-random-test
+ virtual_address_range
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 1c5504e63ebd..a96bff5b4f42 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -81,6 +81,7 @@ TEST_GEN_FILES += thuge-gen
+ TEST_GEN_FILES += transhuge-stress
+ TEST_GEN_FILES += uffd-stress
+ TEST_GEN_FILES += uffd-unit-tests
++TEST_GEN_FILES += uffd-wp-mremap
+ TEST_GEN_FILES += split_huge_page_test
+ TEST_GEN_FILES += ksm_tests
+ TEST_GEN_FILES += ksm_functional_tests
+@@ -151,6 +152,7 @@ $(TEST_GEN_FILES): vm_util.c thp_settings.c
  
-+static inline bool vma_has_uffd_without_event_remap(struct vm_area_struct *vma)
-+{
-+	struct userfaultfd_ctx *uffd_ctx = vma->vm_userfaultfd_ctx.ctx;
+ $(OUTPUT)/uffd-stress: uffd-common.c
+ $(OUTPUT)/uffd-unit-tests: uffd-common.c
++$(OUTPUT)/uffd-wp-mremap: uffd-common.c
+ $(OUTPUT)/protection_keys: pkey_util.c
+ $(OUTPUT)/pkey_sighandler_tests: pkey_util.c
+ 
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index 00c3f07ea100..333c468c2699 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -309,6 +309,7 @@ CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb "$half_ufd_size_MB" 3
+ CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb-private "$half_ufd_size_MB" 32
+ CATEGORY="userfaultfd" run_test ${uffd_stress_bin} shmem 20 16
+ CATEGORY="userfaultfd" run_test ${uffd_stress_bin} shmem-private 20 16
++CATEGORY="userfaultfd" run_test ./uffd-wp-mremap
+ 
+ #cleanup
+ echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
+diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c
+new file mode 100644
+index 000000000000..2c4f984bd73c
+--- /dev/null
++++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
+@@ -0,0 +1,380 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +
-+	return uffd_ctx && (uffd_ctx->features & UFFD_FEATURE_EVENT_REMAP) == 0;
++#define _GNU_SOURCE
++#include <stdbool.h>
++#include <stdint.h>
++#include <fcntl.h>
++#include <assert.h>
++#include <linux/mman.h>
++#include <sys/mman.h>
++#include "../kselftest.h"
++#include "thp_settings.h"
++#include "uffd-common.h"
++
++static int pagemap_fd;
++static size_t pagesize;
++static int nr_pagesizes = 1;
++static int nr_thpsizes;
++static size_t thpsizes[20];
++static int nr_hugetlbsizes;
++static size_t hugetlbsizes[10];
++
++static int sz2ord(size_t size)
++{
++	return __builtin_ctzll(size / pagesize);
 +}
 +
- extern int dup_userfaultfd(struct vm_area_struct *, struct list_head *);
- extern void dup_userfaultfd_complete(struct list_head *);
- void dup_userfaultfd_fail(struct list_head *);
-@@ -402,6 +409,11 @@ static inline bool userfaultfd_wp_async(struct vm_area_struct *vma)
- 	return false;
- }
- 
-+static inline bool vma_has_uffd_without_event_remap(struct vm_area_struct *vma)
++static int detect_thp_sizes(size_t sizes[], int max)
 +{
-+	return false;
-+}
++	int count = 0;
++	unsigned long orders;
++	size_t kb;
++	int i;
 +
- #endif /* CONFIG_USERFAULTFD */
- 
- static inline bool userfaultfd_wp_use_markers(struct vm_area_struct *vma)
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index c89aed1510f1..2654a9548749 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2212,6 +2212,16 @@ static pmd_t move_soft_dirty_pmd(pmd_t pmd)
- 	return pmd;
- }
- 
-+static pmd_t clear_uffd_wp_pmd(pmd_t pmd)
-+{
-+	if (pmd_present(pmd))
-+		pmd = pmd_clear_uffd_wp(pmd);
-+	else if (is_swap_pmd(pmd))
-+		pmd = pmd_swp_clear_uffd_wp(pmd);
++	/* thp not supported at all. */
++	if (!read_pmd_pagesize())
++		return 0;
 +
-+	return pmd;
-+}
++	orders = thp_supported_orders();
 +
- bool move_huge_pmd(struct vm_area_struct *vma, unsigned long old_addr,
- 		  unsigned long new_addr, pmd_t *old_pmd, pmd_t *new_pmd)
- {
-@@ -2250,6 +2260,8 @@ bool move_huge_pmd(struct vm_area_struct *vma, unsigned long old_addr,
- 			pgtable_trans_huge_deposit(mm, new_pmd, pgtable);
- 		}
- 		pmd = move_soft_dirty_pmd(pmd);
-+		if (vma_has_uffd_without_event_remap(vma))
-+			pmd = clear_uffd_wp_pmd(pmd);
- 		set_pmd_at(mm, new_addr, new_pmd, pmd);
- 		if (force_flush)
- 			flush_pmd_tlb_range(vma, old_addr, old_addr + PMD_SIZE);
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 354eec6f7e84..cdbc55d5384f 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -5454,6 +5454,7 @@ static void move_huge_pte(struct vm_area_struct *vma, unsigned long old_addr,
- 			  unsigned long new_addr, pte_t *src_pte, pte_t *dst_pte,
- 			  unsigned long sz)
- {
-+	bool need_clear_uffd_wp = vma_has_uffd_without_event_remap(vma);
- 	struct hstate *h = hstate_vma(vma);
- 	struct mm_struct *mm = vma->vm_mm;
- 	spinlock_t *src_ptl, *dst_ptl;
-@@ -5470,7 +5471,18 @@ static void move_huge_pte(struct vm_area_struct *vma, unsigned long old_addr,
- 		spin_lock_nested(src_ptl, SINGLE_DEPTH_NESTING);
- 
- 	pte = huge_ptep_get_and_clear(mm, old_addr, src_pte);
--	set_huge_pte_at(mm, new_addr, dst_pte, pte, sz);
-+
-+	if (need_clear_uffd_wp && pte_marker_uffd_wp(pte))
-+		huge_pte_clear(mm, new_addr, dst_pte, sz);
-+	else {
-+		if (need_clear_uffd_wp) {
-+			if (pte_present(pte))
-+				pte = huge_pte_clear_uffd_wp(pte);
-+			else if (is_swap_pte(pte))
-+				pte = pte_swp_clear_uffd_wp(pte);
-+		}
-+		set_huge_pte_at(mm, new_addr, dst_pte, pte, sz);
++	for (i = 0; orders && count < max; i++) {
++		if (!(orders & (1UL << i)))
++			continue;
++		orders &= ~(1UL << i);
++		kb = (pagesize >> 10) << i;
++		sizes[count++] = kb * 1024;
++		ksft_print_msg("[INFO] detected THP size: %zu KiB\n", kb);
 +	}
- 
- 	if (src_ptl != dst_ptl)
- 		spin_unlock(src_ptl);
-diff --git a/mm/mremap.c b/mm/mremap.c
-index 60473413836b..cff7f552f909 100644
---- a/mm/mremap.c
-+++ b/mm/mremap.c
-@@ -138,6 +138,7 @@ static int move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
- 		struct vm_area_struct *new_vma, pmd_t *new_pmd,
- 		unsigned long new_addr, bool need_rmap_locks)
- {
-+	bool need_clear_uffd_wp = vma_has_uffd_without_event_remap(vma);
- 	struct mm_struct *mm = vma->vm_mm;
- 	pte_t *old_pte, *new_pte, pte;
- 	pmd_t dummy_pmdval;
-@@ -216,7 +217,18 @@ static int move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
- 			force_flush = true;
- 		pte = move_pte(pte, old_addr, new_addr);
- 		pte = move_soft_dirty_pte(pte);
--		set_pte_at(mm, new_addr, new_pte, pte);
 +
-+		if (need_clear_uffd_wp && pte_marker_uffd_wp(pte))
-+			pte_clear(mm, new_addr, new_pte);
-+		else {
-+			if (need_clear_uffd_wp) {
-+				if (pte_present(pte))
-+					pte = pte_clear_uffd_wp(pte);
-+				else if (is_swap_pte(pte))
-+					pte = pte_swp_clear_uffd_wp(pte);
-+			}
-+			set_pte_at(mm, new_addr, new_pte, pte);
++	return count;
++}
++
++static void *mmap_aligned(size_t size, int prot, int flags)
++{
++	size_t mmap_size = size * 2;
++	char *mmap_mem, *mem;
++
++	mmap_mem = mmap(NULL, mmap_size, prot, flags, -1, 0);
++	if (mmap_mem == MAP_FAILED)
++		return mmap_mem;
++
++	mem = (char *)(((uintptr_t)mmap_mem + size - 1) & ~(size - 1));
++	munmap(mmap_mem, mem - mmap_mem);
++	munmap(mem + size, mmap_mem + mmap_size - mem - size);
++
++	return mem;
++}
++
++static void *alloc_one_folio(size_t size, bool private, bool hugetlb)
++{
++	bool thp = !hugetlb && size > pagesize;
++	int flags = MAP_ANONYMOUS;
++	int prot = PROT_READ | PROT_WRITE;
++	char *mem, *addr;
++
++	assert((size & (size - 1)) == 0);
++
++	if (private)
++		flags |= MAP_PRIVATE;
++	else
++		flags |= MAP_SHARED;
++
++	/*
++	 * For THP, we must explicitly enable the THP size, allocate twice the
++	 * required space then manually align.
++	 */
++	if (thp) {
++		struct thp_settings settings = *thp_current_settings();
++
++		if (private)
++			settings.hugepages[sz2ord(size)].enabled = THP_ALWAYS;
++		else
++			settings.shmem_hugepages[sz2ord(size)].enabled = SHMEM_ALWAYS;
++
++		thp_push_settings(&settings);
++
++		mem = mmap_aligned(size, prot, flags);
++	} else {
++		if (hugetlb) {
++			flags |= MAP_HUGETLB;
++			flags |= __builtin_ctzll(size) << MAP_HUGE_SHIFT;
 +		}
- 	}
- 
- 	arch_leave_lazy_mmu_mode();
-@@ -278,6 +290,15 @@ static bool move_normal_pmd(struct vm_area_struct *vma, unsigned long old_addr,
- 	if (WARN_ON_ONCE(!pmd_none(*new_pmd)))
- 		return false;
- 
-+	/* If this pmd belongs to a uffd vma with remap events disabled, we need
-+	 * to ensure that the uffd-wp state is cleared from all pgtables. This
-+	 * means recursing into lower page tables in move_page_tables(), and we
-+	 * can reuse the existing code if we simply treat the entry as "not
-+	 * moved".
-+	 */
-+	if (vma_has_uffd_without_event_remap(vma))
-+		return false;
 +
- 	/*
- 	 * We don't have to worry about the ordering of src and dst
- 	 * ptlocks because exclusive mmap_lock prevents deadlock.
-@@ -333,6 +354,15 @@ static bool move_normal_pud(struct vm_area_struct *vma, unsigned long old_addr,
- 	if (WARN_ON_ONCE(!pud_none(*new_pud)))
- 		return false;
- 
-+	/* If this pud belongs to a uffd vma with remap events disabled, we need
-+	 * to ensure that the uffd-wp state is cleared from all pgtables. This
-+	 * means recursing into lower page tables in move_page_tables(), and we
-+	 * can reuse the existing code if we simply treat the entry as "not
-+	 * moved".
-+	 */
-+	if (vma_has_uffd_without_event_remap(vma))
-+		return false;
++		mem = mmap(NULL, size, prot, flags, -1, 0);
++	}
 +
- 	/*
- 	 * We don't have to worry about the ordering of src and dst
- 	 * ptlocks because exclusive mmap_lock prevents deadlock.
++	if (mem == MAP_FAILED) {
++		mem = NULL;
++		goto out;
++	}
++
++	assert(((uintptr_t)mem & (size - 1)) == 0);
++
++	/*
++	 * Populate the folio by writing the first byte and check that all pages
++	 * are populated. Finally set the whole thing to non-zero data to avoid
++	 * kernel from mapping it back to the zero page.
++	 */
++	mem[0] = 1;
++	for (addr = mem; addr < mem + size; addr += pagesize) {
++		if (!pagemap_is_populated(pagemap_fd, addr)) {
++			munmap(mem, size);
++			mem = NULL;
++			goto out;
++		}
++	}
++	memset(mem, 1, size);
++out:
++	if (thp)
++		thp_pop_settings();
++
++	return mem;
++}
++
++static bool check_uffd_wp_state(void *mem, size_t size, bool expect)
++{
++	uint64_t pte;
++	void *addr;
++
++	for (addr = mem; addr < mem + size; addr += pagesize) {
++		pte = pagemap_get_entry(pagemap_fd, addr);
++		if (!!(pte & PM_UFFD_WP) != expect) {
++			ksft_test_result_fail("uffd-wp not %s for pte %lu!\n",
++					      expect ? "set" : "clear",
++					      (addr - mem) / pagesize);
++			return false;
++		}
++	}
++
++	return true;
++}
++
++static bool range_is_swapped(void *addr, size_t size)
++{
++	for (; size; addr += pagesize, size -= pagesize)
++		if (!pagemap_is_swapped(pagemap_fd, addr))
++			return false;
++	return true;
++}
++
++static void test_one_folio(size_t size, bool private, bool swapout, bool hugetlb)
++{
++	struct uffdio_writeprotect wp_prms;
++	uint64_t features = 0;
++	void *addr = NULL;
++	void *mem = NULL;
++
++	assert(!(hugetlb && swapout));
++
++	ksft_print_msg("[RUN] %s(size=%zu, private=%s, swapout=%s, hugetlb=%s)\n",
++				__func__,
++				size,
++				private ? "true" : "false",
++				swapout ? "true" : "false",
++				hugetlb ? "true" : "false");
++
++	/* Allocate a folio of required size and type. */
++	mem = alloc_one_folio(size, private, hugetlb);
++	if (!mem) {
++		ksft_test_result_fail("alloc_one_folio() failed\n");
++		goto out;
++	}
++
++	/* Register range for uffd-wp. */
++	if (userfaultfd_open(&features)) {
++		ksft_test_result_fail("userfaultfd_open() failed\n");
++		goto out;
++	}
++	if (uffd_register(uffd, mem, size, false, true, false)) {
++		ksft_test_result_fail("uffd_register() failed\n");
++		goto out;
++	}
++	wp_prms.mode = UFFDIO_WRITEPROTECT_MODE_WP;
++	wp_prms.range.start = (uintptr_t)mem;
++	wp_prms.range.len = size;
++	if (ioctl(uffd, UFFDIO_WRITEPROTECT, &wp_prms)) {
++		ksft_test_result_fail("ioctl(UFFDIO_WRITEPROTECT) failed\n");
++		goto out;
++	}
++
++	if (swapout) {
++		madvise(mem, size, MADV_PAGEOUT);
++		if (!range_is_swapped(mem, size)) {
++			ksft_test_result_skip("MADV_PAGEOUT did not work, is swap enabled?\n");
++			goto out;
++		}
++	}
++
++	/* Check that uffd-wp is set for all PTEs in range. */
++	if (!check_uffd_wp_state(mem, size, true))
++		goto out;
++
++	/*
++	 * Move the mapping to a new, aligned location. Since
++	 * UFFD_FEATURE_EVENT_REMAP is not set, we expect the uffd-wp bit for
++	 * each PTE to be cleared in the new mapping.
++	 */
++	addr = mmap_aligned(size, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS);
++	if (addr == MAP_FAILED) {
++		ksft_test_result_fail("mmap_aligned() failed\n");
++		goto out;
++	}
++	if (mremap(mem, size, size, MREMAP_FIXED | MREMAP_MAYMOVE, addr) == MAP_FAILED) {
++		ksft_test_result_fail("mremap() failed\n");
++		munmap(addr, size);
++		goto out;
++	}
++	mem = addr;
++
++	/* Check that uffd-wp is cleared for all PTEs in range. */
++	if (!check_uffd_wp_state(mem, size, false))
++		goto out;
++
++	ksft_test_result_pass("%s(size=%zu, private=%s, swapout=%s, hugetlb=%s)\n",
++				__func__,
++				size,
++				private ? "true" : "false",
++				swapout ? "true" : "false",
++				hugetlb ? "true" : "false");
++out:
++	if (mem)
++		munmap(mem, size);
++	if (uffd >= 0) {
++		close(uffd);
++		uffd = -1;
++	}
++}
++
++struct testcase {
++	size_t *sizes;
++	int *nr_sizes;
++	bool private;
++	bool swapout;
++	bool hugetlb;
++};
++
++static const struct testcase testcases[] = {
++	/* base pages. */
++	{
++		.sizes = &pagesize,
++		.nr_sizes = &nr_pagesizes,
++		.private = false,
++		.swapout = false,
++		.hugetlb = false,
++	},
++	{
++		.sizes = &pagesize,
++		.nr_sizes = &nr_pagesizes,
++		.private = true,
++		.swapout = false,
++		.hugetlb = false,
++	},
++	{
++		.sizes = &pagesize,
++		.nr_sizes = &nr_pagesizes,
++		.private = false,
++		.swapout = true,
++		.hugetlb = false,
++	},
++	{
++		.sizes = &pagesize,
++		.nr_sizes = &nr_pagesizes,
++		.private = true,
++		.swapout = true,
++		.hugetlb = false,
++	},
++
++	/* thp. */
++	{
++		.sizes = thpsizes,
++		.nr_sizes = &nr_thpsizes,
++		.private = false,
++		.swapout = false,
++		.hugetlb = false,
++	},
++	{
++		.sizes = thpsizes,
++		.nr_sizes = &nr_thpsizes,
++		.private = true,
++		.swapout = false,
++		.hugetlb = false,
++	},
++	{
++		.sizes = thpsizes,
++		.nr_sizes = &nr_thpsizes,
++		.private = false,
++		.swapout = true,
++		.hugetlb = false,
++	},
++	{
++		.sizes = thpsizes,
++		.nr_sizes = &nr_thpsizes,
++		.private = true,
++		.swapout = true,
++		.hugetlb = false,
++	},
++
++	/* hugetlb. */
++	{
++		.sizes = hugetlbsizes,
++		.nr_sizes = &nr_hugetlbsizes,
++		.private = false,
++		.swapout = false,
++		.hugetlb = true,
++	},
++	{
++		.sizes = hugetlbsizes,
++		.nr_sizes = &nr_hugetlbsizes,
++		.private = true,
++		.swapout = false,
++		.hugetlb = true,
++	},
++};
++
++int main(int argc, char **argv)
++{
++	struct thp_settings settings;
++	int i, j, plan = 0;
++
++	pagesize = getpagesize();
++	nr_thpsizes = detect_thp_sizes(thpsizes, ARRAY_SIZE(thpsizes));
++	nr_hugetlbsizes = detect_hugetlb_page_sizes(hugetlbsizes,
++						    ARRAY_SIZE(hugetlbsizes));
++
++	/* If THP is supported, save THP settings and initially disable THP. */
++	if (nr_thpsizes) {
++		thp_save_settings();
++		thp_read_settings(&settings);
++		for (i = 0; i < NR_ORDERS; i++) {
++			settings.hugepages[i].enabled = THP_NEVER;
++			settings.shmem_hugepages[i].enabled = SHMEM_NEVER;
++		}
++		thp_push_settings(&settings);
++	}
++
++	for (i = 0; i < ARRAY_SIZE(testcases); i++)
++		plan += *testcases[i].nr_sizes;
++	ksft_set_plan(plan);
++
++	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
++	if (pagemap_fd < 0)
++		ksft_exit_fail_msg("opening pagemap failed\n");
++
++	for (i = 0; i < ARRAY_SIZE(testcases); i++) {
++		const struct testcase *tc = &testcases[i];
++
++		for (j = 0; j < *tc->nr_sizes; j++)
++			test_one_folio(tc->sizes[j], tc->private, tc->swapout,
++				       tc->hugetlb);
++	}
++
++	/* If THP is supported, restore original THP settings. */
++	if (nr_thpsizes)
++		thp_restore_settings();
++
++	i = ksft_get_fail_cnt();
++	if (i)
++		ksft_exit_fail_msg("%d out of %d tests failed\n",
++				   i, ksft_test_num());
++	ksft_exit_pass();
++}
 -- 
 2.43.0
 
