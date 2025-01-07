@@ -1,95 +1,49 @@
-Return-Path: <linux-kselftest+bounces-24039-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24040-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37B2BA04D05
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 00:03:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25E51A04D23
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 00:05:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DAE653A61B3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 23:02:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F986166F97
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 23:05:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BE6D1E3775;
-	Tue,  7 Jan 2025 23:02:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AA3F1E9B0C;
+	Tue,  7 Jan 2025 23:05:06 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DF1E1E0E0A;
-	Tue,  7 Jan 2025 23:02:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 939FA1F37B4;
+	Tue,  7 Jan 2025 23:05:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736290923; cv=none; b=NEHDnL+11KYczsg1HfqLIewrx7QwshmGGmBxMCOrKnl0gtR4evN/Rz5ZbjOxVr8ANKj9rEzB/FiQjNXRaECcMCySvYUtU7lxOIPD53Q4PZSoby6wONcUEuHtZ/POVtR5ITDKzvdlojaKp1VpYQzQSQE+2ZZYFHrxlfwg3djoKe4=
+	t=1736291106; cv=none; b=u+ISt+CaAoNHJR9ymdUmKqyqbHhEthJaMvBGPZmB4bHgPHIvF4W2qp/taOe7/ohtt/0DOFhNRFRODGwMSkrKMPYfBHACb7RjEpKm1Wci+AdWpthBdNlvjBuJ6g0etuoCdRwpXUguw1Sq0pjLPtsdRhXF74c3f65FgnTBwX2lBk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736290923; c=relaxed/simple;
-	bh=eewKFwXwVyNsBh0nwKFE4AtEZK8ybowe7wgEkOHOryU=;
+	s=arc-20240116; t=1736291106; c=relaxed/simple;
+	bh=TXRAXR8E29lImjMDnEAUaxdDSATZNMoqBSz6buKT2gA=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XUWtm56J/dThRbOofjn+swrhbvuG8bkYpadThUuEMJZNB5DA7Qmf8fIT0fr/BMXQ5Zaxn1UpjBxai6756UYc8rw4A0Lx3ntlLiJySyhJb40fXaJY2mSiSpuoJCccEDan7iiVaWo5KdDF6o7HE9DxgsXla+wkDZncXLWhg7Kwoqk=
+	 Content-Disposition:In-Reply-To; b=LP4k8Ro24ZzZG9VamVWmEi/iUqrN4Brb2jSzzx+Mq8dECI9F3ErIKOSAdtqCPmP060GjGzvE4eLVvIAmFvRn2D9gxhd1IILV6T3u94YlP41CiK/RR+pXoYWL61PedxCaZSums34XGAHAcptgjMaQ9Y9LttLnI7cC9S13g4thv+k=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
 Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
-	by vmicros1.altlinux.org (Postfix) with ESMTP id 3F6F272C8F5;
-	Wed,  8 Jan 2025 02:01:53 +0300 (MSK)
+	by vmicros1.altlinux.org (Postfix) with ESMTP id C111972C97E;
+	Wed,  8 Jan 2025 02:05:02 +0300 (MSK)
 Received: by mua.local.altlinux.org (Postfix, from userid 508)
-	id 2CA007CCB3A; Wed,  8 Jan 2025 01:01:53 +0200 (IST)
-Date: Wed, 8 Jan 2025 01:01:53 +0200
+	id 93CFD7CCB3A; Wed,  8 Jan 2025 01:05:02 +0200 (IST)
+Date: Wed, 8 Jan 2025 01:05:02 +0200
 From: "Dmitry V. Levin" <ldv@strace.io>
-To: Oleg Nesterov <oleg@redhat.com>
+To: Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>
 Cc: Eugene Syromyatnikov <evgsyr@gmail.com>,
 	Mike Frysinger <vapier@gentoo.org>,
 	Renzo Davoli <renzo@cs.unibo.it>,
 	Davide Berardi <berardi.dav@gmail.com>,
-	strace-devel@lists.strace.io, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Michal Simek <monstr@monstr.eu>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-	Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-	Shuah Khan <shuah@kernel.org>, linux-snps-arc@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-	linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
+	strace-devel@lists.strace.io, linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 0/6] ptrace: introduce PTRACE_SET_SYSCALL_INFO API
-Message-ID: <20250107230153.GA30560@strace.io>
+Subject: [PATCH 6/6] selftests/ptrace: add a test case for
+ PTRACE_SET_SYSCALL_INFO
+Message-ID: <20250107230502.GF30633@strace.io>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -98,84 +52,472 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250107230153.GA30560@strace.io>
 
-PTRACE_SET_SYSCALL_INFO is a generic ptrace API that complements
-PTRACE_GET_SYSCALL_INFO by letting the ptracer modify details of
-system calls the tracee is blocked in.
+Check whether PTRACE_SET_SYSCALL_INFO semantics implemented in the
+kernel matches userspace expectations.
 
-This API allows ptracers to obtain and modify system call details
-in a straightforward and architecture-agnostic way.
-
-Current implementation supports changing only those bits of system call
-information that are used by strace, namely, syscall number, syscall
-arguments, and syscall return value.
-
-Support of changing additional details returned by PTRACE_GET_SYSCALL_INFO,
-such as instruction pointer and stack pointer, could be added later
-if needed, by re-using struct ptrace_syscall_info.reserved to specify
-the additional details that should be set.  Currently, the reserved
-field of struct ptrace_syscall_info must be initialized with zeroes;
-arch, instruction_pointer, and stack_pointer fields are ignored.
-
-PTRACE_SET_SYSCALL_INFO currently supports only PTRACE_SYSCALL_INFO_ENTRY,
-PTRACE_SYSCALL_INFO_EXIT, and PTRACE_SYSCALL_INFO_SECCOMP operations.
-Other operations could be added later if needed.
-
-Ideally, PTRACE_SET_SYSCALL_INFO should have been introduced along with
-PTRACE_GET_SYSCALL_INFO, but it didn't happen.  The last straw that
-convinced me to implement PTRACE_SET_SYSCALL_INFO was apparent failure
-to provide an API of changing the first system call argument on riscv
-architecture [1].
-
-ptrace(2) man page:
-
-long ptrace(enum __ptrace_request request, pid_t pid, void *addr, void *data);
-...
-PTRACE_SET_SYSCALL_INFO
-       Modify information about the system call that caused the stop.
-       The "data" argument is a pointer to struct ptrace_syscall_info
-       that specifies the system call information to be set.
-       The "addr" argument should be set to sizeof(struct ptrace_syscall_info)).
-
-[1] https://lore.kernel.org/all/59505464-c84a-403d-972f-d4b2055eeaac@gmail.com/
-
-Dmitry V. Levin (6):
-  Revert "arch: remove unused function syscall_set_arguments()"
-  syscall.h: add syscall_set_arguments() on remaining
-    HAVE_ARCH_TRACEHOOK arches
-  syscall.h: introduce syscall_set_nr()
-  ptrace_get_syscall_info: factor out ptrace_get_syscall_info_op
-  ptrace: introduce PTRACE_SET_SYSCALL_INFO request
-  selftests/ptrace: add a test case for PTRACE_SET_SYSCALL_INFO
-
- arch/arc/include/asm/syscall.h                |  20 +
- arch/arm/include/asm/syscall.h                |  25 +
- arch/arm64/include/asm/syscall.h              |  20 +
- arch/csky/include/asm/syscall.h               |  13 +
- arch/hexagon/include/asm/syscall.h            |  14 +
- arch/loongarch/include/asm/syscall.h          |  15 +
- arch/m68k/include/asm/syscall.h               |   7 +
- arch/microblaze/include/asm/syscall.h         |   7 +
- arch/mips/include/asm/syscall.h               |  53 +++
- arch/nios2/include/asm/syscall.h              |  16 +
- arch/openrisc/include/asm/syscall.h           |  13 +
- arch/parisc/include/asm/syscall.h             |  19 +
- arch/powerpc/include/asm/syscall.h            |  15 +
- arch/riscv/include/asm/syscall.h              |  16 +
- arch/s390/include/asm/syscall.h               |  19 +
- arch/sh/include/asm/syscall_32.h              |  19 +
- arch/sparc/include/asm/syscall.h              |  17 +
- arch/um/include/asm/syscall-generic.h         |  19 +
- arch/x86/include/asm/syscall.h                |  43 ++
- arch/xtensa/include/asm/syscall.h             |  18 +
- include/asm-generic/syscall.h                 |  30 ++
- include/linux/ptrace.h                        |   3 +
- include/uapi/linux/ptrace.h                   |   3 +-
- kernel/ptrace.c                               | 154 ++++++-
+Signed-off-by: Dmitry V. Levin <ldv@strace.io>
+---
  tools/testing/selftests/ptrace/Makefile       |   2 +-
  .../selftests/ptrace/set_syscall_info.c       | 436 ++++++++++++++++++
- 26 files changed, 994 insertions(+), 22 deletions(-)
+ 2 files changed, 437 insertions(+), 1 deletion(-)
  create mode 100644 tools/testing/selftests/ptrace/set_syscall_info.c
+
+diff --git a/tools/testing/selftests/ptrace/Makefile b/tools/testing/selftests/ptrace/Makefile
+index 1c631740a730..c5e0b76ba6ac 100644
+--- a/tools/testing/selftests/ptrace/Makefile
++++ b/tools/testing/selftests/ptrace/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ CFLAGS += -std=c99 -pthread -Wall $(KHDR_INCLUDES)
+ 
+-TEST_GEN_PROGS := get_syscall_info peeksiginfo vmaccess get_set_sud
++TEST_GEN_PROGS := get_syscall_info set_syscall_info peeksiginfo vmaccess get_set_sud
+ 
+ include ../lib.mk
+diff --git a/tools/testing/selftests/ptrace/set_syscall_info.c b/tools/testing/selftests/ptrace/set_syscall_info.c
+new file mode 100644
+index 000000000000..f43294e1248e
+--- /dev/null
++++ b/tools/testing/selftests/ptrace/set_syscall_info.c
+@@ -0,0 +1,436 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Copyright (c) 2018-2025 Dmitry V. Levin <ldv@strace.io>
++ * All rights reserved.
++ *
++ * Check whether PTRACE_SET_SYSCALL_INFO semantics implemented in the kernel
++ * matches userspace expectations.
++ */
++
++#include "../kselftest_harness.h"
++#include <err.h>
++#include <fcntl.h>
++#include <signal.h>
++#include <asm/unistd.h>
++#include "linux/ptrace.h"
++
++static int
++kill_tracee(pid_t pid)
++{
++	if (!pid)
++		return 0;
++
++	int saved_errno = errno;
++
++	int rc = kill(pid, SIGKILL);
++
++	errno = saved_errno;
++	return rc;
++}
++
++static long
++sys_ptrace(int request, pid_t pid, unsigned long addr, unsigned long data)
++{
++	return syscall(__NR_ptrace, request, pid, addr, data);
++}
++
++#define LOG_KILL_TRACEE(fmt, ...)				\
++	do {							\
++		kill_tracee(pid);				\
++		TH_LOG("wait #%d: " fmt,			\
++		       ptrace_stop, ##__VA_ARGS__);		\
++	} while (0)
++
++struct si_entry {
++	int nr;
++	unsigned long args[6];
++};
++struct si_exit {
++	unsigned int is_error;
++	int rval;
++};
++
++TEST(set_syscall_info)
++{
++	const pid_t tracer_pid = getpid();
++	const unsigned long dummy[] = {
++		0xbad0fed0,
++		0xbad1fed1,
++		0xbad2fed2,
++		0xbad3fed3,
++		0xbad4fed4,
++		0xbad5fed5,
++	};
++	int splice_in[2], splice_out[2];
++
++	ASSERT_EQ(0, pipe(splice_in));
++	ASSERT_EQ(0, pipe(splice_out));
++	ASSERT_EQ(sizeof(dummy), write(splice_in[1], dummy, sizeof(dummy)));
++
++	const struct {
++		struct si_entry entry[2];
++		struct si_exit exit[2];
++	} si[] = {
++		/* change scno, keep non-error rval */
++		{
++			{
++				{
++					__NR_gettid,
++					{
++						dummy[0], dummy[1], dummy[2],
++						dummy[3], dummy[4], dummy[5]
++					}
++				}, {
++					__NR_getppid,
++					{
++						dummy[0], dummy[1], dummy[2],
++						dummy[3], dummy[4], dummy[5]
++					}
++				}
++			}, {
++				{ 0, tracer_pid }, { 0, tracer_pid }
++			}
++		},
++
++		/* set scno to -1, keep error rval */
++		{
++			{
++				{
++					__NR_chdir,
++					{
++						(unsigned long) ".", dummy[1], dummy[2],
++						dummy[3], dummy[4], dummy[5]
++					}
++				}, {
++					-1,
++					{
++						(unsigned long) ".", dummy[1], dummy[2],
++						dummy[3], dummy[4], dummy[5]
++					}
++				}
++			}, {
++				{ 1, -ENOSYS }, { 1, -ENOSYS }
++			}
++		},
++
++		/* keep scno, change non-error rval */
++		{
++			{
++				{
++					__NR_getppid,
++					{
++						dummy[0], dummy[1], dummy[2],
++						dummy[3], dummy[4], dummy[5]
++					}
++				}, {
++					__NR_getppid,
++					{
++						dummy[0], dummy[1], dummy[2],
++						dummy[3], dummy[4], dummy[5]
++					}
++				}
++			}, {
++				{ 0, tracer_pid }, { 0, tracer_pid + 1 }
++			}
++		},
++
++		/* change arg1, keep non-error rval */
++		{
++			{
++				{
++					__NR_chdir,
++					{
++						(unsigned long) "", dummy[1], dummy[2],
++						dummy[3], dummy[4], dummy[5]
++					}
++				}, {
++					__NR_chdir,
++					{
++						(unsigned long) ".", dummy[1], dummy[2],
++						dummy[3], dummy[4], dummy[5]
++					}
++				}
++			}, {
++				{ 0, 0 }, { 0, 0 }
++			}
++		},
++
++		/* set scno to -1, change error rval to non-error */
++		{
++			{
++				{
++					__NR_gettid,
++					{
++						dummy[0], dummy[1], dummy[2],
++						dummy[3], dummy[4], dummy[5]
++					}
++				}, {
++					-1,
++					{
++						dummy[0], dummy[1], dummy[2],
++						dummy[3], dummy[4], dummy[5]
++					}
++				}
++			}, {
++				{ 1, -ENOSYS }, { 0, tracer_pid }
++			}
++		},
++
++		/* change scno, change non-error rval to error */
++		{
++			{
++				{
++					__NR_chdir,
++					{
++						dummy[0], dummy[1], dummy[2],
++						dummy[3], dummy[4], dummy[5]
++					}
++				}, {
++					__NR_getppid,
++					{
++						dummy[0], dummy[1], dummy[2],
++						dummy[3], dummy[4], dummy[5]
++					}
++				}
++			}, {
++				{ 0, tracer_pid }, { 1, -EISDIR }
++			}
++		},
++
++		/* change scno and all args, change non-error rval */
++		{
++			{
++				{
++					__NR_gettid,
++					{
++						splice_in[0], dummy[1], dummy[2],
++						dummy[3], dummy[4], dummy[5]
++					}
++				}, {
++					__NR_splice,
++					{
++						splice_in[0], 0, splice_out[1], 0,
++						sizeof(dummy), SPLICE_F_NONBLOCK
++					}
++				}
++			}, {
++				{ 0, sizeof(dummy) }, { 0, sizeof(dummy) + 1 }
++			}
++		},
++
++		/* change arg1, no exit stop */
++		{
++			{
++				{
++					__NR_exit_group,
++					{
++						dummy[0], dummy[1], dummy[2],
++						dummy[3], dummy[4], dummy[5]
++					}
++				}, {
++					__NR_exit_group,
++					{
++						0, dummy[1], dummy[2],
++						dummy[3], dummy[4], dummy[5]
++					}
++				}
++			}, {
++				{ 0, 0 }, { 0, 0 }
++			}
++		},
++	};
++
++	long rc;
++	unsigned int i;
++	unsigned int ptrace_stop;
++
++	pid_t pid = fork();
++
++	ASSERT_LE(0, pid) {
++		TH_LOG("fork: %m");
++	}
++
++	if (pid == 0) {
++		/* get the pid before PTRACE_TRACEME */
++		pid = getpid();
++		ASSERT_EQ(0, sys_ptrace(PTRACE_TRACEME, 0, 0, 0)) {
++			TH_LOG("PTRACE_TRACEME: %m");
++		}
++		ASSERT_EQ(0, kill(pid, SIGSTOP)) {
++			/* cannot happen */
++			TH_LOG("kill SIGSTOP: %m");
++		}
++		for (i = 0; i < ARRAY_SIZE(si); ++i) {
++			rc = syscall(si[i].entry[0].nr,
++				     si[i].entry[0].args[0],
++				     si[i].entry[0].args[1],
++				     si[i].entry[0].args[2],
++				     si[i].entry[0].args[3],
++				     si[i].entry[0].args[4],
++				     si[i].entry[0].args[5]);
++			if (si[i].exit[1].is_error) {
++				if (rc != -1 || errno != -si[i].exit[1].rval)
++					break;
++			} else {
++				if (rc != si[i].exit[1].rval)
++					break;
++			}
++		}
++		/*
++		 * Something went wrong, but in this state tracee
++		 * cannot reliably issue syscalls, so just crash.
++		 */
++		*(volatile unsigned char *) (unsigned long) i = 42;
++		/* unreachable */
++		_exit(i + 1);
++	}
++
++	for (ptrace_stop = 0; ; ++ptrace_stop) {
++		struct ptrace_syscall_info info = {
++			.op = 0xff	/* invalid PTRACE_SYSCALL_INFO_* op */
++		};
++		const size_t size = sizeof(info);
++		const int expected_entry_size =
++			(void *) &info.entry.args[6] - (void *) &info;
++		const int expected_exit_size =
++			(void *) (&info.exit.is_error + 1) -
++			(void *) &info;
++		int status;
++
++		ASSERT_EQ(pid, wait(&status)) {
++			/* cannot happen */
++			LOG_KILL_TRACEE("wait: %m");
++		}
++		if (WIFEXITED(status)) {
++			pid = 0;	/* the tracee is no more */
++			ASSERT_EQ(0, WEXITSTATUS(status)) {
++				LOG_KILL_TRACEE("unexpected exit status %u",
++						WEXITSTATUS(status));
++			}
++			break;
++		}
++		ASSERT_FALSE(WIFSIGNALED(status)) {
++			pid = 0;	/* the tracee is no more */
++			LOG_KILL_TRACEE("unexpected signal %u",
++					WTERMSIG(status));
++		}
++		ASSERT_TRUE(WIFSTOPPED(status)) {
++			/* cannot happen */
++			LOG_KILL_TRACEE("unexpected wait status %#x", status);
++		}
++
++		ASSERT_LT(ptrace_stop, ARRAY_SIZE(si) * 2) {
++			LOG_KILL_TRACEE("ptrace stop overflow");
++		}
++
++		switch (WSTOPSIG(status)) {
++		case SIGSTOP:
++			ASSERT_EQ(0, ptrace_stop) {
++				LOG_KILL_TRACEE("unexpected signal stop");
++			}
++			ASSERT_EQ(0, sys_ptrace(PTRACE_SETOPTIONS, pid, 0,
++						PTRACE_O_TRACESYSGOOD)) {
++				LOG_KILL_TRACEE("PTRACE_SETOPTIONS: %m");
++			}
++			break;
++
++		case SIGTRAP | 0x80:
++			ASSERT_LT(0, ptrace_stop) {
++				LOG_KILL_TRACEE("unexpected syscall stop");
++			}
++			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
++						      pid, size,
++						      (unsigned long) &info))) {
++				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
++			}
++			if (ptrace_stop & 1) {
++				/* entering syscall */
++				const struct si_entry *exp_entry =
++					&si[ptrace_stop / 2].entry[0];
++				const struct si_entry *set_entry =
++					&si[ptrace_stop / 2].entry[1];
++
++				ASSERT_EQ(expected_entry_size, rc) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				ASSERT_EQ(PTRACE_SYSCALL_INFO_ENTRY, info.op) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				ASSERT_TRUE(info.arch) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				ASSERT_TRUE(info.instruction_pointer) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				ASSERT_TRUE(info.stack_pointer) {
++					LOG_KILL_TRACEE("entry stop mismatch");
++				}
++				ASSERT_EQ(exp_entry->nr, info.entry.nr) {
++					LOG_KILL_TRACEE("syscall nr mismatch");
++				}
++				for (i = 0; i < ARRAY_SIZE(exp_entry->args); ++i) {
++					ASSERT_EQ(exp_entry->args[i], info.entry.args[i]) {
++						LOG_KILL_TRACEE("syscall arg #%u mismatch", i);
++					}
++				}
++				info.entry.nr = set_entry->nr;
++				for (i = 0; i < ARRAY_SIZE(set_entry->args); ++i)
++					info.entry.args[i] = set_entry->args[i];
++				ASSERT_EQ(0, sys_ptrace(PTRACE_SET_SYSCALL_INFO,
++							pid, size,
++							(unsigned long) &info)) {
++					LOG_KILL_TRACEE("PTRACE_SET_SYSCALL_INFO: %m");
++				}
++			} else {
++				/* exiting syscall */
++				const struct si_exit *exp_exit =
++					&si[ptrace_stop / 2 - 1].exit[0];
++				const struct si_exit *set_exit =
++					&si[ptrace_stop / 2 - 1].exit[1];
++
++				ASSERT_EQ(expected_exit_size, rc) {
++					LOG_KILL_TRACEE("exit stop mismatch");
++				}
++				ASSERT_EQ(PTRACE_SYSCALL_INFO_EXIT, info.op) {
++					LOG_KILL_TRACEE("exit stop mismatch");
++				}
++				ASSERT_TRUE(info.arch) {
++					LOG_KILL_TRACEE("exit stop mismatch");
++				}
++				ASSERT_TRUE(info.instruction_pointer) {
++					LOG_KILL_TRACEE("exit stop mismatch");
++				}
++				ASSERT_TRUE(info.stack_pointer) {
++					LOG_KILL_TRACEE("exit stop mismatch");
++				}
++				ASSERT_EQ(exp_exit->is_error, info.exit.is_error) {
++					LOG_KILL_TRACEE("exit stop mismatch");
++				}
++				ASSERT_EQ(exp_exit->rval, info.exit.rval) {
++					LOG_KILL_TRACEE("exit stop mismatch");
++				}
++				info.exit.is_error = set_exit->is_error;
++				info.exit.rval = set_exit->rval;
++				ASSERT_EQ(0, sys_ptrace(PTRACE_SET_SYSCALL_INFO,
++							pid, size,
++							(unsigned long) &info)) {
++					LOG_KILL_TRACEE("PTRACE_SET_SYSCALL_INFO: %m");
++				}
++			}
++			break;
++
++		default:
++			LOG_KILL_TRACEE("unexpected stop signal %u",
++					WSTOPSIG(status));
++			abort();
++		}
++
++		ASSERT_EQ(0, sys_ptrace(PTRACE_SYSCALL, pid, 0, 0)) {
++			LOG_KILL_TRACEE("PTRACE_SYSCALL: %m");
++		}
++	}
++
++	ASSERT_EQ(ptrace_stop, ARRAY_SIZE(si) * 2);
++}
++
++TEST_HARNESS_MAIN
 
 -- 
 ldv
