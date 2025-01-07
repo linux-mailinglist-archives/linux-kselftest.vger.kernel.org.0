@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-23982-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23983-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CEE1A03ECF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 13:11:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D52CFA03ED0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 13:11:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8FC73A5A09
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 12:11:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA77F164BAF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 12:11:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F26B1E3DE7;
-	Tue,  7 Jan 2025 12:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36F431E3DE7;
+	Tue,  7 Jan 2025 12:11:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YCUqfmMj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="urnK4yTw"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7386A15665C;
-	Tue,  7 Jan 2025 12:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A2C1DF756;
+	Tue,  7 Jan 2025 12:11:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736251871; cv=none; b=Mk+3qvPy2+P6wOdsRorWh4yPm5w/ps6vIWO1nx7mZ9ab98DGbA6ju6Zgj3KRR27YIEtg/eHeUN3+c22lVHcCPw8drIFapEVPNJwpQlyoCMuFOsybFBQFRuAu6ARzKrgOnjJ7FkkN8oakVcj6C67RGkcXcbsnSo4CUeQ2gH9qPoA=
+	t=1736251880; cv=none; b=GV975GyDpkJtrfLmfCaPG/RmpCBs0AhFWGs5xA+1LzWiukW5JSiLBwBisYTJqCdYEFAIr2TdPCAbmO1VV1zkkVBNWJpDX7d78NdrAK5lbPh7ccMDfNO16CGLw1rXBAWvpa6kf2IXjqx8xKfihSar9Reblp2jo4OErVIzMEDXx8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736251871; c=relaxed/simple;
-	bh=2w9n1ebv7JIiAM6iAMFJs2zl5Da5ijt2vVC0a54ryI8=;
+	s=arc-20240116; t=1736251880; c=relaxed/simple;
+	bh=ttXlZYbcu4cUdbyQCrfr2kVGW2kymYPcsMSHBJkkeC4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Y8YD0WRZ3g4DV9T981eHKdaobFN+RKcba7VnDPYTY2d8xfJQP4fD4yFJHYN2oP6pEW7o3PsVWHWU2XnQ28KlW6uOjrz5DaVyy+BGQnabEbtBfnitt5Ka1EZTQIJGkAq8/kdMwQW4YVBzoy6hGkFB8EP9ZZyOIf4dDO73scqThLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YCUqfmMj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 857C0C4CED6;
-	Tue,  7 Jan 2025 12:11:09 +0000 (UTC)
+	 MIME-Version:Content-Type; b=TaWrvcwUl6MlPbfR3x7ovf6D+g4u2FQk3kHvAGvhMsG4WHv63aTop3KEsvKj9Cy+gZRMAUIeVoMYBvGNF6wrGflJnN18IhyUph3qmS5MTl5cg7WzsuENE2LPozsRbTUoIjgNWc/O2uq04N3oJVAD8JXyUT+AC7CqwqMamzjYQyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=urnK4yTw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D343FC4CED6;
+	Tue,  7 Jan 2025 12:11:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736251871;
-	bh=2w9n1ebv7JIiAM6iAMFJs2zl5Da5ijt2vVC0a54ryI8=;
+	s=k20201202; t=1736251880;
+	bh=ttXlZYbcu4cUdbyQCrfr2kVGW2kymYPcsMSHBJkkeC4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YCUqfmMjpM01qfJjNL8MGVDE3PsE3nUKo24MJHWgSbyEQQiTbRR+jIbfH1N6Gp8F/
-	 8DJiL1iX7Aj1YfqJdSPNBcKbHXm8IJtkQ8H89lE2aSu3OmVn5ACoq0UB3DB3yEQuf6
-	 n2lWCAVnniVnKhU6S1d3V+9JhSfNasNoWqltICkzXvjGb346pAOMGehWYJayyyEsSq
-	 17eSQ/si6t3o48UUkhw8GpemkxvtjnJ0dCki7dNzS7X1K+CXlgAgpAnsRX7uNctemO
-	 TGWDsUbj8pJtgODQn+RuhU5ci4eA99rmKxiCs9ZTL/6rmRQzuAoxS9WNGoIJGbO9Qa
-	 6D/0aRH8upYzQ==
+	b=urnK4yTwSzoFUTtqQemH2ZW+560oyeAbM9+93TtKoU9/2bSYsCau+JydwgPJOnTON
+	 fWBhbTworCgtk8yjbmtcZ0NXe4TAfwD94zQhq3H04eOZUvZnoCfHZnfKTp4CIDrdDJ
+	 HUlhrZhcuEtUG0wY/YzLDKMrISx4Y2nSbs1H/hI5l6yA1hQMxBZ3WxXeVoRyKgKOBm
+	 DBLK/Jh45ewANXE6UlI7/t1L+I36FlEt8KtXSN/79Ok2AJQbK9BJd0WZMbGqNgY68r
+	 xrZ8NorxHZ1jyTNZ2nZqrjflyATU3NKOtt/YtX3TqGGXOVNeCeytJkQuAV5P+Z20Xl
+	 gdxY8UkgJR6cg==
 From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Shuah Khan <shuah@kernel.org>
@@ -48,9 +48,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	mhiramat@kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 1/2] selftests/ftrace: Fix to use remount when testing mount GID option
-Date: Tue,  7 Jan 2025 21:11:07 +0900
-Message-ID: <173625186741.1383744.16707876180798573039.stgit@devnote2>
+Subject: [PATCH 2/2] selftests/ftrace: Make uprobe test more robust against binary name
+Date: Tue,  7 Jan 2025 21:11:16 +0900
+Message-ID: <173625187633.1383744.2840679071525852811.stgit@devnote2>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <173625185823.1383744.4020760882101555349.stgit@devnote2>
 References: <173625185823.1383744.4020760882101555349.stgit@devnote2>
@@ -66,53 +66,33 @@ Content-Transfer-Encoding: 8bit
 
 From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Fix mount_options.tc to use remount option to mount the tracefs.
-Since the current implementation does not umount the tracefs,
-this test always fails because of -EBUSY error.
-Using remount option will allow us to change the mount option.
+Make add_remove_uprobe test case more robust against various real
+binary name.
+Current add_remove_uprobe.tc test expects the real binary of /bin/sh
+is '*/bin/*sh', but it does not work on busybox environment.
+Instead of using fixed pattern, use readlink to identify real binary
+name.
 
-Fixes: 8b55572e5180 ("tracing/selftests: Add tracefs mount options test")
 Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Cc: stable@vger.kernel.org
 ---
- .../ftrace/test.d/00basic/mount_options.tc         |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ .../ftrace/test.d/dynevent/add_remove_uprobe.tc    |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/00basic/mount_options.tc b/tools/testing/selftests/ftrace/test.d/00basic/mount_options.tc
-index 35e8d47d6072..8a7ce647a60d 100644
---- a/tools/testing/selftests/ftrace/test.d/00basic/mount_options.tc
-+++ b/tools/testing/selftests/ftrace/test.d/00basic/mount_options.tc
-@@ -15,11 +15,11 @@ find_alternate_gid() {
- 	tac /etc/group | grep -v ":$original_gid:" | head -1 | cut -d: -f3
- }
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc
+index a275decdc880..86c76679c56e 100644
+--- a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc
+@@ -6,8 +6,10 @@
+ echo 0 > events/enable
+ echo > dynamic_events
  
--mount_tracefs_with_options() {
-+remount_tracefs_with_options() {
- 	local mount_point="$1"
- 	local options="$2"
++REALBIN=`readlink -f /bin/sh`
++
+ echo 'cat /proc/$$/maps' | /bin/sh | \
+-	grep "r-xp .*/bin/.*sh$" | \
++	grep "r-xp .*${REALBIN}$" | \
+ 	awk '{printf "p:myevent %s:0x%s\n", $6,$3 }' >> uprobe_events
  
--	mount -t tracefs -o "$options" nodev "$mount_point"
-+	mount -t tracefs -o "remount,$options" nodev "$mount_point"
- 
- 	setup
- }
-@@ -81,7 +81,7 @@ test_gid_mount_option() {
- 
- 	# Unmount existing tracefs instance and mount with new GID
- 	unmount_tracefs "$mount_point"
--	mount_tracefs_with_options "$mount_point" "$new_options"
-+	remount_tracefs_with_options "$mount_point" "$new_options"
- 
- 	check_gid "$mount_point" "$other_group"
- 
-@@ -92,7 +92,7 @@ test_gid_mount_option() {
- 
- 	# Unmount and remount with the original GID
- 	unmount_tracefs "$mount_point"
--	mount_tracefs_with_options "$mount_point" "$mount_options"
-+	remount_tracefs_with_options "$mount_point" "$mount_options"
- 	check_gid "$mount_point" "$original_group"
- }
- 
+ grep -q myevent uprobe_events
 
 
