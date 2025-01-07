@@ -1,213 +1,372 @@
-Return-Path: <linux-kselftest+bounces-23977-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-23978-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3B43A039DA
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 09:34:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E961DA03A5B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 09:57:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50C293A4A37
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 08:34:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E801B7A233C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 08:57:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05C9A1DF726;
-	Tue,  7 Jan 2025 08:34:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95F5B1DFDBF;
+	Tue,  7 Jan 2025 08:57:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="a3Sfxp+G";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="k8VSI27f"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="bU4BdYcn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9C313B58D;
-	Tue,  7 Jan 2025 08:34:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736238847; cv=fail; b=E2pGnS1Suf/urZYdPO/WqvIM6F7DuVstDoum3XL7H3/YYejadpmmFiqRe/X1jwC79dQ+y03EmeiYhgm08FLs+Ph4xpYT+Kywb1Fd8UvLuMBVDy3l4qFtsKruM8SoRuS/od8jo/6wmSJIKAcw2bPJopegcO9TynA9y7jWxB7tNmQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736238847; c=relaxed/simple;
-	bh=kBpoqVBKH96DuDPc6LxoEvJB/G5fuGyY0SK1gIvkd00=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=EGMPCpCL/T/IIyExBA8nyCih4kp/sSDsdQntaREGuinbDLSHEe5N24A76T7G6c9ZcATMOCSLZ8mA5aBfUFiHbwmEfN1A3CTeKYivX9gi2zAmaL9oA8F+TofnwtBLIsfxvpeP7Me0HTPNqxkU5Fd7dDfJQLkhSrRYl0kN+yUpGNU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=a3Sfxp+G; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=k8VSI27f; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5072tpJu020484;
-	Tue, 7 Jan 2025 08:33:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2023-11-20; bh=kBpoqVBKH96DuDPc6L
-	xoEvJB/G5fuGyY0SK1gIvkd00=; b=a3Sfxp+GuvDSS3vxu0qrK36EFGR+S9xMxH
-	+M2YkzuvNttjTJpQf/if4XMMbaXYyhTHWdM32x5pNLmHcoCUEpG8QvE+rUDm7lls
-	eX8xQwAsb8W0+EIoMuK1up72LpSmNOhoAEk+zQVI4xsUjb46k+n9c75lijKiuUg8
-	lNUDsCrsp18CYpUuD+dqRwfVhptnO+Vdzc8W1JJ6pPmYKZS9SIy5IjY4ZtDHLz5f
-	IaDl1eFJOjftQ2ohLhfpDCGvSPAyDEvSWQU/RKxTzi+n/PdYdxiZKcxzaWrW5oed
-	h7PX4Keho560XrtnCvM4qJ734xpjTitK768qPnTBMV+Zd/+bQcPg==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 43xuk04d07-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 07 Jan 2025 08:33:26 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 50765GE6023426;
-	Tue, 7 Jan 2025 08:33:25 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2170.outbound.protection.outlook.com [104.47.57.170])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 43xue87yxt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 07 Jan 2025 08:33:25 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bFToKRTboaTup582lQiMqsM7jQkvV7v+lCHkqm37zQJx5SYIG+7ceP9cosVaMUYM8hm8y2s2n0H8xCuOyMtaE3bbeizN1jsQ1io8Bt3WGhjz5a+uAjkMhPNbkPHMYCVVFWAxNqQ02/Eru3fxeevteJ2P3OXZIk3vJneyd/nkTPtAzI3PeNXf1PQHsTArDvrAkRvm+wr7AxkXlV9jhpVPE1LGzFzEFn5/NyNO1m/lK/cUBURtOkRN4ALBu7tsRJxcyzq5teeOGxjP5GGEX0e9enNDTGX5pfiLAVsY0pYLz3MUVKxZlx2pYT1LmCYehxRXetp6n1XLANXHepYZGM/0aw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kBpoqVBKH96DuDPc6LxoEvJB/G5fuGyY0SK1gIvkd00=;
- b=fBap4WOkle0ulYRGbFsYcR7qlatTfm8FgGiHRg7gOPIUst+Aw8+vs1uzuF2ZEpSYx/ZQ0o+C8XdtcrhuXjceSdv6oTwn5yZm+b/ulr4BHfzOBhcoCxLBetiFeoxj80zHQT3P9edCzfna9uPh14qcwBZYBzfhlrtrP2va02U3/DJ1Sx5YdiNYPxjjt7iJgH+QDxnD2ruiqTdHOGzb67t3byBTgnjW4KaHXiVViV7N5IbZodwEU/GR+kGVra+NZsmeUOB7qjEpflV7f3SwoSQmQkpSjU0CY7xiDJdI2vTYhxQwu6lZzyb9hIW4NuWjPITfebs1N26Gf08B/PgvbQnMmQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41677198E78;
+	Tue,  7 Jan 2025 08:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.219
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736240254; cv=none; b=p65pfIyGT9WgmXpuS7pKdSI533Jb4PdIFfrtMzcC2j+IJilUnOJhDVMsVuiPjzy/2FKu4PiVL81SItaQVh6fjp9UUJLvZRtxPDW0yDj2fkRJ+CllqFYlLoEzxNxCMRYs7H/I9WB8Ez0z0GU9xEveggauSUhzbbBWURbR+nwrljY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736240254; c=relaxed/simple;
+	bh=2j0To2z708Hn2b6bNch2njDc+GPMbDoEWEYZbiTv8rQ=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=P0Dl3nDUPm0pq7HyThDhbv9WqKE89dKowRV6Qh0rKRtqAY7ZoCue99GZ8OOReK+Gzrz7cyXpbixSdjLjEAuFJ6fSyNRjWkKb2fhf7T9UJpd3aUVSfBfdajX/BWNdqNCufqakKbxpp+pNlNoaWaiaM6XV4ALIf4utjAkmPeblVj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=bU4BdYcn; arc=none smtp.client-ip=99.78.197.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kBpoqVBKH96DuDPc6LxoEvJB/G5fuGyY0SK1gIvkd00=;
- b=k8VSI27f9fkDUiapj5USx5Pf9Xce5rvzyp39xHppRawQ2ryoAEQex130D1EDiw8hX2epn8tWOS1Otrc0DNFfa8vNi/dx96FIU9n/faPRXMnUt7IydclnbiGMcVzMNK2f/cKZTbYSAjqNLya5jn5M2G3I2aS7LDml9YoojCBw04Y=
-Received: from BYAPR10MB3366.namprd10.prod.outlook.com (2603:10b6:a03:14f::25)
- by IA1PR10MB7309.namprd10.prod.outlook.com (2603:10b6:208:3fe::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8314.17; Tue, 7 Jan
- 2025 08:32:58 +0000
-Received: from BYAPR10MB3366.namprd10.prod.outlook.com
- ([fe80::baf2:dff1:d471:1c9]) by BYAPR10MB3366.namprd10.prod.outlook.com
- ([fe80::baf2:dff1:d471:1c9%4]) with mapi id 15.20.8314.015; Tue, 7 Jan 2025
- 08:32:58 +0000
-Date: Tue, 7 Jan 2025 08:32:51 +0000
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: Christian Brauner <brauner@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
-        Christian Brauner <christian@brauner.io>,
-        Shuah Khan <shuah@kernel.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver Sang <oliver.sang@intel.com>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v6 2/5] pidfd: add PIDFD_SELF_* sentinels to refer to own
- thread/process
-Message-ID: <7b80b532-e2a4-4086-9bc0-33df75ade608@lucifer.local>
-References: <cover.1729926229.git.lorenzo.stoakes@oracle.com>
- <8eceec08eb64b744b24bf2aa09d4535e77e1ba47.1729926229.git.lorenzo.stoakes@oracle.com>
- <20241028-gesoffen-drehmoment-5314faba9731@brauner>
- <c96df57a-fa1b-4301-9556-94a6b8c93a31@lucifer.local>
- <b8f4664c-b8f0-46ca-b9a3-8d73e398b5ca@lucifer.local>
- <55764300-1b53-4d14-99cc-e735d3704713@lucifer.local>
- <fbcea328-9545-4f3e-9f99-2e2057ce32df@lucifer.local>
- <wvwahrb5yxd4dzfy6an7dpefiswtbc5uutckltbtx5p7hv4pxg@4n6tds6cmjx3>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <wvwahrb5yxd4dzfy6an7dpefiswtbc5uutckltbtx5p7hv4pxg@4n6tds6cmjx3>
-X-ClientProxiedBy: LO4P123CA0295.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:196::12) To BYAPR10MB3366.namprd10.prod.outlook.com
- (2603:10b6:a03:14f::25)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1736240251; x=1767776251;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=SC1mbAev+9sK6OCOjA6+EkRnZ+bYlCkoq+asNgcdmS4=;
+  b=bU4BdYcn0Ax0KfqIt9LTTFgJpdB5xiU49v4k/HZFsOk2ktDZcqN+Rm2B
+   4mP3cG7zpiv0HZKg13pQgQOTmNPT/X4aunjU5ErSAURKYX4RqHr+OKV9I
+   L+Ryr5HiLY4ZfRb+UdU1E3OPeFFUbryZnSwsaGKLiuX3tA0OcP3XFMugP
+   Y=;
+X-IronPort-AV: E=Sophos;i="6.12,295,1728950400"; 
+   d="scan'208";a="159523600"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
+  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2025 08:57:29 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [10.0.38.20:39955]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.36.119:2525] with esmtp (Farcaster)
+ id 9f3ed6e6-aeb4-4841-95ac-539e22d429cf; Tue, 7 Jan 2025 08:57:29 +0000 (UTC)
+X-Farcaster-Flow-ID: 9f3ed6e6-aeb4-4841-95ac-539e22d429cf
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.39;
+ Tue, 7 Jan 2025 08:57:28 +0000
+Received: from 6c7e67c6786f.amazon.com (10.118.249.113) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.39;
+ Tue, 7 Jan 2025 08:57:07 +0000
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
+To: <shaw.leon@gmail.com>
+CC: <andrew+netdev@lunn.ch>, <b.a.t.m.a.n@lists.open-mesh.org>,
+	<bpf@vger.kernel.org>, <bridge@lists.linux.dev>, <davem@davemloft.net>,
+	<donald.hunter@gmail.com>, <dsahern@kernel.org>, <edumazet@google.com>,
+	<horms@kernel.org>, <idosch@nvidia.com>, <jiri@resnulli.us>,
+	<kuba@kernel.org>, <kuniyu@amazon.com>, <linux-can@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-ppp@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+	<linux-wireless@vger.kernel.org>, <linux-wpan@vger.kernel.org>,
+	<liuhangbin@gmail.com>, <netdev@vger.kernel.org>,
+	<osmocom-net-gprs@lists.osmocom.org>, <pabeni@redhat.com>,
+	<shuah@kernel.org>, <wireguard@lists.zx2c4.com>
+Subject: Re: [PATCH net-next v7 00/11] net: Improve netns handling in rtnetlink
+Date: Tue, 7 Jan 2025 17:56:46 +0900
+Message-ID: <20250107085646.42302-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20250104125732.17335-1-shaw.leon@gmail.com>
+References: <20250104125732.17335-1-shaw.leon@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR10MB3366:EE_|IA1PR10MB7309:EE_
-X-MS-Office365-Filtering-Correlation-Id: 22467def-c59e-4b7b-3e5e-08dd2ef5e41f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?BAle3urETsGVuiy4AvU0VzjLy+++aUlTBYTHWgtE/ZNB7zszHPN2HM8ZR70k?=
- =?us-ascii?Q?qVu9kqZxCmoV6I6vSpU8nag1kdRDAR/PJzsxQC2lutQXNyn/SIILW009UPwi?=
- =?us-ascii?Q?QYg7gUBfB+AyKSxLMjbQ9ztM/HrUS+1o1IJvEvHS5rhiyDE6EieozQINgbVy?=
- =?us-ascii?Q?uZG/Uwz6y9INdkRH0ERVLRCZXHu3LzHeE3XUTUr/g7Ml62Tx5cZnQaesks1z?=
- =?us-ascii?Q?5lmRygteIfic0qoWxXnyQU+u4kgKL+nHiWoLGtQk2O5CialFjA3ry4MasWrP?=
- =?us-ascii?Q?1IodoR01/YGEPl6DkkOhy1t/xAjApjb620r+eNc2Ibphd9cpGy4xn7uaDjPb?=
- =?us-ascii?Q?QUnrQYKgDbYIaBSGTM2CSgKc1maR+edaVLcUUqmiYH0DOofm7g4R7Toh4t3r?=
- =?us-ascii?Q?9XieGAYjrjBSHQEOW+Tzu9MrqsWBX1RJnKGcuN9T3WNszCliTzrt8NpqC/eB?=
- =?us-ascii?Q?S5WZCwahNKVheuLHuIOX4m8wCOMzzWPP1LRMyEFZRFZYSW9DFkeTYDtlKtxl?=
- =?us-ascii?Q?6RHSLRCda+Jegj5b6KeNyXcKIS/MJDp6sd9NeyITxkWrNNY1l3zPYjjYxi7m?=
- =?us-ascii?Q?qEB09OQgD6+M6fyIn19EBFeppVQQHBDiw06V8hPXCt7fUNAASve68AE7uOj6?=
- =?us-ascii?Q?f2xj8Q0WtGrQUcgLdIINA1CDtQiPxdLliuGlRvLL5c83+8MAToRBf8BtAlCz?=
- =?us-ascii?Q?AxQE/giPYkf6VGdvGScbuLFQONpw80bC5HCCd9BVAfDe3tFW3qZKGzdanoGL?=
- =?us-ascii?Q?BEQmq+IMAW7B4+LmWz8lkEoXVCftOHrSkoDfebirk2Ei9OwbX6qpfbjsFLKd?=
- =?us-ascii?Q?v40Px706dxQ0MYcYZw7sPWIIft1zFDwdOMdCJDcVHVHDUYNKyY93ZAc7lpZT?=
- =?us-ascii?Q?1PbiYdKyBs1okN17TArr58ehwJYWQmbj2zVeF1hUhpWyolkdd61mL31ZB0qA?=
- =?us-ascii?Q?iHGbjAoDJBfkCLpCwQL0QBxbrW1omAY1l8BxeTRTTAxoe8JZ66GYgx9IrwCy?=
- =?us-ascii?Q?MhjiYZdiV/xH/DXavz7XWWynBu8UMmFDpRPEK51iO+NoAKWdemKP0/uNXV8g?=
- =?us-ascii?Q?g/wneQb5D4BLF735S6OH0zoTKxyum7MX8Pq5QuwG/R98asIBipz+LwCQ8tkF?=
- =?us-ascii?Q?WosLcbSR96WezDdABmRLfeNqdvgr2oHh2kDYYtIvQ7lTu+76OQVkB/Cc77UU?=
- =?us-ascii?Q?0nJA4XHgMUQ8Vddecqx5aFwd3RZe9sweGWIm5IYqQMf3j2kmJiObIsigpxSv?=
- =?us-ascii?Q?3N3yh0yTEb2srg+YBUWJef7YM0sJUyxgyuvQ4/tOu60jO7FnV2z6lXhLjJbF?=
- =?us-ascii?Q?unf7LGKNqV4PoyTMwHVl4Q3K9PBNOBSUG42/PuwpzSqFQUTuGr4yk5wkx5mx?=
- =?us-ascii?Q?+hPJ3IzYUQVMCU/7zSjHEViO1cZy?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3366.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?5uExagbJ4XiBBzWNwwq/9aIqskgpS4VPtWbc4ar8kFtN2rxVBzaKO/9nSoWo?=
- =?us-ascii?Q?DX3dgG98+ANyLni1/deDcTcp5ZEZoZhUPhwsEwrROzL+e4FWsic1KJwUXodt?=
- =?us-ascii?Q?/7/sTuWmFTDp0dNCefCiqQ6kQZmYyfpnxDkyAH/mWNffAlbWkL9uktOsAtt6?=
- =?us-ascii?Q?B2OF4n07nLXas3YpLjSp3nbmkbcf/9k2C38qlRPxS7p3QzsTtSghYstkmgUz?=
- =?us-ascii?Q?rPBLTHykEaLHISosIttumL5g6FyHMhaNQCjzEEYJNiTq6+sJUdlMFJ+4MqJt?=
- =?us-ascii?Q?9qnMcqP/T694lkHQYivZlHzZZzcTqeM/2r6K6JhLW7rxSgXM9l5gLt1fb8O9?=
- =?us-ascii?Q?D/UNVEEJuMJ/iTkEOZNLTgCO/QHL+43o5GRprHOpPZj11svunlT3raiK2wo0?=
- =?us-ascii?Q?nmWAg02Qu/GlvZdlCsPrW91m9kJI3A1v39kwG40JMt5FARhKjaBUnFm+K570?=
- =?us-ascii?Q?Py+lk42afvhq6MnqZVBgpvKl5jRlBGa5QGgdrABIrnX7demC6bEgoeErPV44?=
- =?us-ascii?Q?/MR8KXTKYPbr/Vy3pswTkcRUjUnKmalzQViAaZX4byLS/g4E1vKjuY/3sEhR?=
- =?us-ascii?Q?F+NBcq4OhsOD0PcvTehB43MQzqK9ZxdiBVG9/24lUJEYSC7d0J/vq/4G58Nb?=
- =?us-ascii?Q?qIgnrN5mv8Eybr7KvlRITco08iJA5sQUgyYpi6kGZIgv1WQ3rxGC4v6fX2f6?=
- =?us-ascii?Q?WDN9saiEcf6KarKHQfNzF48TRhggaQCkRd0sGRi/oEIIkfuUmr/G/LceOrss?=
- =?us-ascii?Q?pXPLEnV2C4I2DRxDLwOgzgYJF8FPxNyzLKVBrH6r2m+HfszD1h+aXTwNfw8q?=
- =?us-ascii?Q?yFWtP/arUAbjbLr4vJeNcJ6zmZFPPqFjVxAT/v3RF/jAPT9N+iIEimBPq1Gt?=
- =?us-ascii?Q?Kjv4lVYxelB0JOYiIuNTnRUDv69O8yOn85S0QuDoiAoI8pF+i+20VFKX3SU4?=
- =?us-ascii?Q?8DxPFHyM9Wm0YNSUdrg1Xk+INcZW8YKic6qF2xlz/bWex+Re/brGEewU+QFN?=
- =?us-ascii?Q?CwmPkR1CMmgQ7NX25QiOIfBpA0bjYUXKLkQ45R5YIed/zbubAKtLGbGh9k9t?=
- =?us-ascii?Q?reFE7chyXgJtKF2koHHepjd8cb3bekVrxufjUvlWYqlwtgf8Mvqz2REAuJ7w?=
- =?us-ascii?Q?VypRlQO401U9lr3C3xUO9PjxdwL5fFEeoaT5HJnIjDKDjjRgMqDhrFIK1yQ4?=
- =?us-ascii?Q?/NLSlcVmitpXnQm42/x1BgctFZKdxxwwWVSCITnzaF3X1A+2Vy2C2YkcEEQf?=
- =?us-ascii?Q?ev8RUEWGSQNuCVnThXRD7Q6j7aom1mfqOLkB2BSyLfegueGYsGQsR75l/Ncl?=
- =?us-ascii?Q?MRPw2tMbQDg0AhUcTIX8sWUypoDGaMoSXDzj736jUJQwhfEEFtjGfH+luhMw?=
- =?us-ascii?Q?9/K42GhSHRkMpxZsUtwRSn3IqMFokHK7w3ihYVVz8Cw/iCGCWNSzIMwlweAH?=
- =?us-ascii?Q?Rl/X+ol6usZ8xyFIhnr7ZrLfkzxUQYdnJeu3zXzuXoLxG0yIJfnyIvzStdly?=
- =?us-ascii?Q?U0mAuqUmNaPHlcHh1E3HM5NQIIU03g4/Xfyn49jxAKW412THyMW4JMdLrRMJ?=
- =?us-ascii?Q?F+Sn2GCaA9AsDnOjvdU61bjpP+PdHa68okJg0Omcs5HKBN/Jnd/B2zFn9Kek?=
- =?us-ascii?Q?Rg=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	YPXgvTVCtwJh+03OnISwbbZKR6AGyC9wFTtdLegRKVnM1YjOt12utPe0N4HO7CPwse8y7QHZ0eddRLOBsyHscjIrQOB1oJ1LzXHoz86ao3hTC69DkW69F1s643ZplTfor+Iq8kusPZF/0T8LYayjLVeSHNp5rua0CVzZZcKOCqVzklS2nnOW7oX5aS7l4m+gNj3o6RDTDwPLEGzCXW1Ek9JRi6Kdbe1qd5HRfMMztmASj3ug9BURgsYA+w5uAMKjmAkF3zItrpo1E0om+yVIoEph9nfeMsBGDdNHZLzl+txIPjtSDc71WCtBhuU0TTaB+hcibX5zhvTwtobKAV4h1/eTJpGy/utn6R7eJoxY4oyIj7tTn80/uhOqYsUYJHwrkfVoHwwOqk5jaRZimJiX2qFxD0M9xCXa2nBmoW6i4flKNM9vUzDNTtdaWdmTA5J24MtVr1HczNVKtlQFX2VZz5j9/RER0dkgPNad/d2mTz8+Qvdh5K5Ee6esuuexURwcqorpsd45FE3ajbicp9vheavS2gOCJ4TdrbRD5ecLPAMMqlz3y4YQUNYI5wRQ/s/JpS9wRT/GShCkqJA9UniQKzRv+7t/Zj7vDh8skh5dZhQ=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 22467def-c59e-4b7b-3e5e-08dd2ef5e41f
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3366.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2025 08:32:58.7442
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2RbezS7RG/HhSbt/Bo12RPBZCVptEY3rRvoxT2FR0bhsMF66021/MxL+RgzaY4v5Dx9l1Y1rumkDGUxVQ+TSm3IiRe97VBcBtA0bNzfqWdc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB7309
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-02_03,2025-01-06_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 bulkscore=0
- malwarescore=0 mlxscore=0 adultscore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2411120000
- definitions=main-2501070071
-X-Proofpoint-ORIG-GUID: E8JpFi5InIPNU-zDEF91K9yvueXyu3CT
-X-Proofpoint-GUID: E8JpFi5InIPNU-zDEF91K9yvueXyu3CT
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D031UWA001.ant.amazon.com (10.13.139.88) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
-On Mon, Jan 06, 2025 at 01:03:31PM -0800, Shakeel Butt wrote:
-> Hey Lorenzo & Christian, what's the latest here? I see Christian has
-> code suggestions at [1] which just needs to be addressed. Any thing
-> else? I am hoping we can get this merged in the coming open window.
+From: Xiao Liang <shaw.leon@gmail.com>
+Date: Sat,  4 Jan 2025 20:57:21 +0800
+> This patch series includes some netns-related improvements and fixes for
+> rtnetlink, to make link creation more intuitive:
+> 
+>  1) Creating link in another net namespace doesn't conflict with link
+>     names in current one.
+>  2) Refector rtnetlink link creation. Create link in target namespace
+>     directly.
+> 
+> So that
+> 
+>   # ip link add netns ns1 link-netns ns2 tun0 type gre ...
+> 
+> will create tun0 in ns1, rather than create it in ns2 and move to ns1.
+> And don't conflict with another interface named "tun0" in current netns.
+> 
+> Patch 01 serves for 1) to avoids link name conflict in different netns.
+> 
+> To achieve 2), there're mainly 3 steps:
+> 
+>  - Patch 02 packs newlink() parameters into a struct, including
+>    the original "src_net" along with more netns context. No semantic
+>    changes are introduced.
+>  - Patch 03 ~ 07 converts device drivers to use the explicit netns
+>    extracted from params.
+>  - Patch 08 ~ 09 removes the old netns parameter, and converts
+>    rtnetlink to create device in target netns directly.
+> 
+> Patch 10 ~ 11 adds some tests for link name and link netns.
+> 
+> 
+> BTW please note there're some issues found in current code:
+> 
+> - In amt_newlink() drivers/net/amt.c:
+> 
+>     amt->net = net;
+>     ...
+>     amt->stream_dev = dev_get_by_index(net, ...
+> 
+>   Uses net, but amt_lookup_upper_dev() only searches in dev_net.
+>   So the AMT device may not be properly deleted if it's in a different
+>   netns from lower dev.
 
-This is on my radar don't worry :) I will get to it as soon as I can.
+I think you are right, and the upper device will be leaked
+and UAF will happen.
 
-Cheers, Lorenzo
+amt must manage a list linked to a lower dev.
+
+Given no one has reported the issue, another option would be
+drop cross netns support in a short period.
+
+---8<---
+diff --git a/drivers/net/amt.c b/drivers/net/amt.c
+index 98c6205ed19f..d39a5fe17a6f 100644
+--- a/drivers/net/amt.c
++++ b/drivers/net/amt.c
+@@ -3168,6 +3168,12 @@ static int amt_newlink(struct net *net, struct net_device *dev,
+ 	struct amt_dev *amt = netdev_priv(dev);
+ 	int err = -EINVAL;
+ 
++	if (!net_eq(net, dev_net(dev))) {
++		NL_SET_ERR_MSG_ATTR(extack, tb[IFLA_TARGET_NETNSID],
++				    "Can't find stream device in a different netns");
++		return err;
++	}
++
+ 	amt->net = net;
+ 	amt->mode = nla_get_u32(data[IFLA_AMT_MODE]);
+ 
+---8<---
+
+
+> 
+> - In gtp_newlink() in drivers/net/gtp.c:
+> 
+>     gtp->net = src_net;
+>     ...
+>     gn = net_generic(dev_net(dev), gtp_net_id);
+>     list_add_rcu(&gtp->list, &gn->gtp_dev_list);
+> 
+>   Uses src_net, but priv is linked to list in dev_net. So it may not be
+>   properly deleted on removal of link netns.
+
+The device is linked to a list in the same netns, so the
+device will not be leaked.  See gtp_net_exit_batch_rtnl().
+
+Rather, the problem is the udp tunnel socket netns could be
+freed earlier than the dev netns.
+
+---8<---
+# ip netns add test
+# ip netns attach root 1
+# ip -n test link add netns root name gtp0 type gtp role sgsn
+# ip netns del test
+[  125.828205] ref_tracker: net notrefcnt@0000000061c9afc0 has 1/2 users at
+[  125.828205]      sk_alloc+0x7c8/0x8c0
+[  125.828205]      inet_create+0x284/0xd70
+[  125.828205]      __sock_create+0x23b/0x6a0
+[  125.828205]      udp_sock_create4+0x94/0x3f0
+[  125.828205]      gtp_create_sock+0x286/0x340
+[  125.828205]      gtp_create_sockets+0x43/0x110
+[  125.828205]      gtp_newlink+0x775/0x1070
+[  125.828205]      rtnl_newlink+0xa7f/0x19e0
+[  125.828205]      rtnetlink_rcv_msg+0x71b/0xc10
+[  125.828205]      netlink_rcv_skb+0x12b/0x360
+[  125.828205]      netlink_unicast+0x446/0x710
+[  125.828205]      netlink_sendmsg+0x73a/0xbf0
+[  125.828205]      ____sys_sendmsg+0x89d/0xb00
+[  125.828205]      ___sys_sendmsg+0xe9/0x170
+[  125.828205]      __sys_sendmsg+0x104/0x190
+[  125.828205]      do_syscall_64+0xc1/0x1d0
+[  125.828205] 
+[  125.833135] ref_tracker: net notrefcnt@0000000061c9afc0 has 1/2 users at
+[  125.833135]      sk_alloc+0x7c8/0x8c0
+[  125.833135]      inet_create+0x284/0xd70
+[  125.833135]      __sock_create+0x23b/0x6a0
+[  125.833135]      udp_sock_create4+0x94/0x3f0
+[  125.833135]      gtp_create_sock+0x286/0x340
+[  125.833135]      gtp_create_sockets+0x21/0x110
+[  125.833135]      gtp_newlink+0x775/0x1070
+[  125.833135]      rtnl_newlink+0xa7f/0x19e0
+[  125.833135]      rtnetlink_rcv_msg+0x71b/0xc10
+[  125.833135]      netlink_rcv_skb+0x12b/0x360
+[  125.833135]      netlink_unicast+0x446/0x710
+[  125.833135]      netlink_sendmsg+0x73a/0xbf0
+[  125.833135]      ____sys_sendmsg+0x89d/0xb00
+[  125.833135]      ___sys_sendmsg+0xe9/0x170
+[  125.833135]      __sys_sendmsg+0x104/0x190
+[  125.833135]      do_syscall_64+0xc1/0x1d0
+[  125.833135] 
+[  125.837998] ------------[ cut here ]------------
+[  125.838345] WARNING: CPU: 0 PID: 11 at lib/ref_tracker.c:179 ref_tracker_dir_exit+0x26c/0x520
+[  125.838906] Modules linked in:
+[  125.839130] CPU: 0 UID: 0 PID: 11 Comm: kworker/u16:0 Not tainted 6.13.0-rc5-00150-gc707e6e25dde #188
+[  125.839734] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+[  125.840497] Workqueue: netns cleanup_net
+[  125.840773] RIP: 0010:ref_tracker_dir_exit+0x26c/0x520
+[  125.841128] Code: 00 00 00 fc ff df 4d 8b 26 49 bd 00 01 00 00 00 00 ad de 4c 39 f5 0f 85 df 00 00 00 48 8b 74 24 08 48 89 df e8 a5 cc 12 02 90 <0f> 0b 90 48 8d 6b 44 be 04 00 00 00 48 89 ef e8 80 de 67 ff 48 89
+[  125.842364] RSP: 0018:ff11000007f3fb60 EFLAGS: 00010286
+[  125.842714] RAX: 0000000000004337 RBX: ff1100000d231aa0 RCX: 1ffffffff0e40d5c
+[  125.843195] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffff8423ee3c
+[  125.843664] RBP: ff1100000d231af0 R08: 0000000000000001 R09: fffffbfff0e397ae
+[  125.844142] R10: 0000000000000001 R11: 0000000000036001 R12: ff1100000d231af0
+[  125.844606] R13: dead000000000100 R14: ff1100000d231af0 R15: dffffc0000000000
+[  125.845067] FS:  0000000000000000(0000) GS:ff1100006ce00000(0000) knlGS:0000000000000000
+[  125.845596] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  125.845984] CR2: 0000564cbf104000 CR3: 000000000ef44001 CR4: 0000000000771ef0
+[  125.846480] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  125.846958] DR3: 0000000000000000 DR6: 00000000fffe07f0 DR7: 0000000000000400
+[  125.847450] PKRU: 55555554
+[  125.847634] Call Trace:
+[  125.847800]  <TASK>
+[  125.847946]  ? __warn+0xcc/0x2d0
+[  125.848177]  ? ref_tracker_dir_exit+0x26c/0x520
+[  125.848485]  ? report_bug+0x28c/0x2d0
+[  125.848742]  ? handle_bug+0x54/0xa0
+[  125.848982]  ? exc_invalid_op+0x18/0x50
+[  125.849252]  ? asm_exc_invalid_op+0x1a/0x20
+[  125.849537]  ? _raw_spin_unlock_irqrestore+0x2c/0x50
+[  125.849865]  ? ref_tracker_dir_exit+0x26c/0x520
+[  125.850174]  ? __pfx_ref_tracker_dir_exit+0x10/0x10
+[  125.850510]  ? kfree+0x1cf/0x3e0
+[  125.850740]  net_free+0x5d/0x90
+[  125.850962]  cleanup_net+0x685/0x8e0
+[  125.851226]  ? __pfx_cleanup_net+0x10/0x10
+[  125.851514]  process_one_work+0x7d4/0x16f0
+[  125.851795]  ? __pfx_lock_acquire+0x10/0x10
+[  125.852072]  ? __pfx_process_one_work+0x10/0x10
+[  125.852396]  ? assign_work+0x167/0x240
+[  125.852653]  ? lock_is_held_type+0x9e/0x120
+[  125.852931]  worker_thread+0x54c/0xca0
+[  125.853193]  ? __pfx_worker_thread+0x10/0x10
+[  125.853485]  kthread+0x249/0x300
+[  125.853709]  ? __pfx_kthread+0x10/0x10
+[  125.853966]  ret_from_fork+0x2c/0x70
+[  125.854229]  ? __pfx_kthread+0x10/0x10
+[  125.854480]  ret_from_fork_asm+0x1a/0x30
+[  125.854746]  </TASK>
+[  125.854897] irq event stamp: 17849
+[  125.855138] hardirqs last  enabled at (17883): [<ffffffff812dc6ad>] __up_console_sem+0x4d/0x60
+[  125.855714] hardirqs last disabled at (17892): [<ffffffff812dc692>] __up_console_sem+0x32/0x60
+[  125.856315] softirqs last  enabled at (17878): [<ffffffff8117d603>] handle_softirqs+0x4f3/0x750
+[  125.856908] softirqs last disabled at (17857): [<ffffffff8117d9e4>] __irq_exit_rcu+0xc4/0x100
+[  125.857492] ---[ end trace 0000000000000000 ]---
+---8<---
+
+We can fix this by linking the dev to the socket's netns and
+clean them up in __net_exit hook as done in bareudp and geneve.
+
+---8<---
+diff --git a/drivers/net/gtp.c b/drivers/net/gtp.c
+index 89a996ad8cd0..77638a815873 100644
+--- a/drivers/net/gtp.c
++++ b/drivers/net/gtp.c
+@@ -70,6 +70,7 @@ struct pdp_ctx {
+ /* One instance of the GTP device. */
+ struct gtp_dev {
+ 	struct list_head	list;
++	struct list_head	sock_list;
+ 
+ 	struct sock		*sk0;
+ 	struct sock		*sk1u;
+@@ -102,6 +103,7 @@ static unsigned int gtp_net_id __read_mostly;
+ 
+ struct gtp_net {
+ 	struct list_head gtp_dev_list;
++	struct list_head gtp_sock_list;
+ };
+ 
+ static u32 gtp_h_initval;
+@@ -1526,6 +1528,10 @@ static int gtp_newlink(struct net *src_net, struct net_device *dev,
+ 
+ 	gn = net_generic(dev_net(dev), gtp_net_id);
+ 	list_add_rcu(&gtp->list, &gn->gtp_dev_list);
++
++	gn = net_generic(src_net, gtp_net_id);
++	list_add(&gtp->sock_list, &gn->gtp_sock_list);
++
+ 	dev->priv_destructor = gtp_destructor;
+ 
+ 	netdev_dbg(dev, "registered new GTP interface\n");
+@@ -1552,6 +1558,7 @@ static void gtp_dellink(struct net_device *dev, struct list_head *head)
+ 			pdp_context_delete(pctx);
+ 
+ 	list_del_rcu(&gtp->list);
++	list_del(&gtp->sock_list);
+ 	unregister_netdevice_queue(dev, head);
+ }
+ 
+@@ -2465,6 +2472,8 @@ static int __net_init gtp_net_init(struct net *net)
+ 	struct gtp_net *gn = net_generic(net, gtp_net_id);
+ 
+ 	INIT_LIST_HEAD(&gn->gtp_dev_list);
++	INIT_LIST_HEAD(&gn->gtp_sock_list);
++
+ 	return 0;
+ }
+ 
+@@ -2475,9 +2484,12 @@ static void __net_exit gtp_net_exit_batch_rtnl(struct list_head *net_list,
+ 
+ 	list_for_each_entry(net, net_list, exit_list) {
+ 		struct gtp_net *gn = net_generic(net, gtp_net_id);
+-		struct gtp_dev *gtp;
++		struct gtp_dev *gtp, *next;
++
++		list_for_each_entry_safe(gtp, next, &gn->gtp_dev_list, list)
++			gtp_dellink(gtp->dev, dev_to_kill);
+ 
+-		list_for_each_entry(gtp, &gn->gtp_dev_list, list)
++		list_for_each_entry_safe(gtp, next, &gn->gtp_sock_list, sock_list)
+ 			gtp_dellink(gtp->dev, dev_to_kill);
+ 	}
+ }
+---8<---
+
+
+> 
+> - In pfcp_newlink() in drivers/net/pfcp.c:
+> 
+>     pfcp->net = net;
+>     ...
+>     pn = net_generic(dev_net(dev), pfcp_net_id);
+>     list_add_rcu(&pfcp->list, &pn->pfcp_dev_list);
+> 
+>   Same as above.
+
+I haven't tested pfcp but it seems to have the same problem.
+
+I'll post patches for gtp and pfcp.
+
+
+> 
+> - In lowpan_newlink() in net/ieee802154/6lowpan/core.c:
+> 
+>     wdev = dev_get_by_index(dev_net(ldev), nla_get_u32(tb[IFLA_LINK]));
+> 
+>   Looks for IFLA_LINK in dev_net, but in theory the ifindex is defined
+>   in link netns.
+
+I guess you mean the ifindex is defined in src_net instead.
+Not sure if it's too late to change the behaviour.
 
