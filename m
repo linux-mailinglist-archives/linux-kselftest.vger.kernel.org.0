@@ -1,49 +1,99 @@
-Return-Path: <linux-kselftest+bounces-24040-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24041-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25E51A04D23
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 00:05:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54FAAA050FA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 03:46:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F986166F97
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2025 23:05:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFEF43A2269
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 02:46:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AA3F1E9B0C;
-	Tue,  7 Jan 2025 23:05:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60FE556446;
+	Wed,  8 Jan 2025 02:46:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b3t+pXwD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 939FA1F37B4;
-	Tue,  7 Jan 2025 23:05:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC2D2594B9;
+	Wed,  8 Jan 2025 02:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736291106; cv=none; b=u+ISt+CaAoNHJR9ymdUmKqyqbHhEthJaMvBGPZmB4bHgPHIvF4W2qp/taOe7/ohtt/0DOFhNRFRODGwMSkrKMPYfBHACb7RjEpKm1Wci+AdWpthBdNlvjBuJ6g0etuoCdRwpXUguw1Sq0pjLPtsdRhXF74c3f65FgnTBwX2lBk8=
+	t=1736304412; cv=none; b=D0m+JtmFi9i69SkE3G/NhTc7Ck/5V7gfuF3ZJ3bu3+8NSxmEIsjMQ/pdrUIpiUPVplFCDqHGyt/PHxIPpCuLyXWm/yKMj4uXl8ihMd2ngrJmJo++8tDDCkAPaMlpm4JQ0m0lHRFBS2KL2Twqt59LGLmeKN+Ut7yk9uDF9MDAItQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736291106; c=relaxed/simple;
-	bh=TXRAXR8E29lImjMDnEAUaxdDSATZNMoqBSz6buKT2gA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=LP4k8Ro24ZzZG9VamVWmEi/iUqrN4Brb2jSzzx+Mq8dECI9F3ErIKOSAdtqCPmP060GjGzvE4eLVvIAmFvRn2D9gxhd1IILV6T3u94YlP41CiK/RR+pXoYWL61PedxCaZSums34XGAHAcptgjMaQ9Y9LttLnI7cC9S13g4thv+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
-	by vmicros1.altlinux.org (Postfix) with ESMTP id C111972C97E;
-	Wed,  8 Jan 2025 02:05:02 +0300 (MSK)
-Received: by mua.local.altlinux.org (Postfix, from userid 508)
-	id 93CFD7CCB3A; Wed,  8 Jan 2025 01:05:02 +0200 (IST)
-Date: Wed, 8 Jan 2025 01:05:02 +0200
-From: "Dmitry V. Levin" <ldv@strace.io>
-To: Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: Eugene Syromyatnikov <evgsyr@gmail.com>,
-	Mike Frysinger <vapier@gentoo.org>,
-	Renzo Davoli <renzo@cs.unibo.it>,
-	Davide Berardi <berardi.dav@gmail.com>,
-	strace-devel@lists.strace.io, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 6/6] selftests/ptrace: add a test case for
- PTRACE_SET_SYSCALL_INFO
-Message-ID: <20250107230502.GF30633@strace.io>
+	s=arc-20240116; t=1736304412; c=relaxed/simple;
+	bh=9eWmdF6gs0tLkHhvzbNzvV9+rB0KFa6F0HYvPhFDViY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UJIcCH+1FjrHDl2FZ4X57G+UPtorRUI5Ri/iY2Y2fqn8A+liJqogxsN0uu38AtGhZw8M1oZ5sOTmjtzYYrC3OeAHN+UH6jOO4+S1QFO4kQ2uziiLGopK7vKKNNMZ3d+NqFREoHE9QQV6bgHszRX+JwE/Oq9vSmjkmgbGeYHQOkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b3t+pXwD; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2156e078563so208766665ad.2;
+        Tue, 07 Jan 2025 18:46:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736304410; x=1736909210; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EwMIaOWIX6HK6xtZj32qqz+aCv3HfqyGs0CSVnT0OGc=;
+        b=b3t+pXwD0O77OgXICkQ3J68IpCc6D2fOk01q841mbFPelFLZKKn3iPAUQjO4GyjZYj
+         qCcp2UwLxCZVDYPxSyIL3ysZgubJpZv3ycKyS0fBztzRGtTP+9Zu8u2ZS0G3Gr4p9s7c
+         Jzm80yBn2G3TYr20zEbaWd3+HPQimFsnRsIvip6sdJTan/uXi2fOijEVKEHWxGN2/94q
+         hVFUpQom7z5Pz4JniLSDIXVn+39seDRpUorEMq39OX/PVAKxj05ldQkaikPfZfIBZGBz
+         2sKxUzdegpCUhtl+xyZ67XKdP6zCGi3W3XOdTe/YUF8+s0D4evM13J29VyJhl75AHHP5
+         QTsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736304410; x=1736909210;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EwMIaOWIX6HK6xtZj32qqz+aCv3HfqyGs0CSVnT0OGc=;
+        b=oE97Os0R4SLRZ/05defASBZxEj318hJBV8zw9OMrMOqtOpDf2QEgxgEvrUMwSlyB0U
+         I6ggSvjIWwcqSbWFVvzjq7XiOuwbWJJaoc7MaEPtcAVLEq9MhXs+G0sGoOJur1RdBbrL
+         x335rXVSMzpBWzRnXURM3QSfy7dfIFttYbpmz2tmIzc140+xU0h/iZodx6/Nuk+47xMC
+         D82xrFyqADYcLxSYeKrg7/d7t9uJQ73UYknA1IhsMjIzvzrxrs5nqsr+W2blGb6ZROpu
+         IRl0iV7apMWoKj/TObkMjthVYRRzV4/KWk3a4i512MkpJYWSNDa0sC00LcnzhhR+2qlF
+         rNhw==
+X-Forwarded-Encrypted: i=1; AJvYcCVDtcOsTAHwDxNnhKYFIZeWEe7CWwIORC1kzo2PWxzuEZzYJACOAKbCvLzZYbpf+ONohf5Tnd5I4q+ZVE8ytLCR@vger.kernel.org, AJvYcCXcQ8LQtWAHHhYbfhY5LTENcIELLHMMHDPV1dsCqnTDfNTjVsm91cdkyY+NY7XfFnAR3u4OJi1j@vger.kernel.org, AJvYcCXoEC84U1ozQFiwZLMPzKhvNgxvmp5tBMgh2/wE32gkAeTXJmdenO85MRR55EvDLJs2ttAsmebC6K+d+Y0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHkTCdbnTd2Jd8hTkkRIWMWV2MPJKQJ8HofeFKmxc1639OJDL3
+	LBQbonLON7/Cf7xgd/xfOQcAUanEPk1X/VDAaYNSjYwN7OTtWJld
+X-Gm-Gg: ASbGncvAmoHeFQRjR9n/i5qDIYA9ze48Qkr0H96Df5KONFCGd66LYDbcZtolNH+fzR9
+	ZVoC5O97wu5Ch9temqr6P2jBoPccZ2rYd1Fkh706mx/qYIQNMdXrOAJOBxq0o3M6wtwSMVbRsFr
+	hmE+8/2AiOJgZm2BkOgsFy/IPhltWLr1FeMAq1+9yBUgk4N1Vo772/X4uyK7y4VnD3I+OW75bia
+	XOnJqAXnr0Iy6pxq6uVxoRNSu8jltBCC1/n6GxAFdwD2QWAFH4wi6dsyF89Uw==
+X-Google-Smtp-Source: AGHT+IFWAl/uDIwvcJXeb2PkQ0/f6+UTvUH+WsAb/7LCQZYCq1eMHz9xtQSe4bIMQ/T7oHi8QGnAmg==
+X-Received: by 2002:a17:903:1cf:b0:21a:8300:b9d5 with SMTP id d9443c01a7336-21a83f4cd36mr21203355ad.23.1736304410114;
+        Tue, 07 Jan 2025 18:46:50 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f7356sm317570365ad.193.2025.01.07.18.46.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jan 2025 18:46:49 -0800 (PST)
+Date: Wed, 8 Jan 2025 02:46:40 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Jianbo Liu <jianbol@nvidia.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+	Jay Vosburgh <jv@jvosburgh.net>,
+	Andy Gospodarek <andy@greyhouse.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Simon Horman <horms@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 0/2] bond: fix xfrm offload feature during init
+Message-ID: <Z33nEKg4PxwReUu_@fedora>
+References: <20241211071127.38452-1-liuhangbin@gmail.com>
+ <20241212062734.182a0164@kernel.org>
+ <Z1vfsAyuxcohT7th@fedora>
+ <20241213193127.4c31ef80@kernel.org>
+ <Z3X9pfu12GUOBUY6@fedora>
+ <1d8c901f-e292-43e4-970f-8440b26e92b0@nvidia.com>
+ <Z3u0q5HSOshLn2V0@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,473 +102,40 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250107230153.GA30560@strace.io>
+In-Reply-To: <Z3u0q5HSOshLn2V0@fedora>
 
-Check whether PTRACE_SET_SYSCALL_INFO semantics implemented in the
-kernel matches userspace expectations.
+On Mon, Jan 06, 2025 at 10:47:16AM +0000, Hangbin Liu wrote:
+> On Thu, Jan 02, 2025 at 11:33:34AM +0800, Jianbo Liu wrote:
+> > > > Re-locking doesn't look great, glancing at the code I don't see any
+> > > > obvious better workarounds. Easiest fix would be to don't let the
+> > > > drivers sleep in the callbacks and then we can go back to a spin lock.
+> > > > Maybe nvidia people have better ideas, I'm not familiar with this
+> > > > offload.
+> > > 
+> > > I don't know how to disable bonding sleeping since we use mutex_lock now.
+> > > Hi Jianbo, do you have any idea?
+> > > 
+> > 
+> > I think we should allow drivers to sleep in the callbacks. So, maybe it's
+> > better to move driver's xdo_dev_state_delete out of state's spin lock.
+> 
+> I just check the code, xfrm_dev_state_delete() and later
+> dev->xfrmdev_ops->xdo_dev_state_delete(x) have too many xfrm_state x
+> checks. Can we really move it out of spin lock from xfrm_state_delete()
 
-Signed-off-by: Dmitry V. Levin <ldv@strace.io>
----
- tools/testing/selftests/ptrace/Makefile       |   2 +-
- .../selftests/ptrace/set_syscall_info.c       | 436 ++++++++++++++++++
- 2 files changed, 437 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/ptrace/set_syscall_info.c
+I tried to move the mutex lock code to a work queue, but found we need to
+check (ipsec->xs == xs) in bonding. So we still need xfrm_state x during bond
+ipsec gc.
 
-diff --git a/tools/testing/selftests/ptrace/Makefile b/tools/testing/selftests/ptrace/Makefile
-index 1c631740a730..c5e0b76ba6ac 100644
---- a/tools/testing/selftests/ptrace/Makefile
-+++ b/tools/testing/selftests/ptrace/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- CFLAGS += -std=c99 -pthread -Wall $(KHDR_INCLUDES)
- 
--TEST_GEN_PROGS := get_syscall_info peeksiginfo vmaccess get_set_sud
-+TEST_GEN_PROGS := get_syscall_info set_syscall_info peeksiginfo vmaccess get_set_sud
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/ptrace/set_syscall_info.c b/tools/testing/selftests/ptrace/set_syscall_info.c
-new file mode 100644
-index 000000000000..f43294e1248e
---- /dev/null
-+++ b/tools/testing/selftests/ptrace/set_syscall_info.c
-@@ -0,0 +1,436 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (c) 2018-2025 Dmitry V. Levin <ldv@strace.io>
-+ * All rights reserved.
-+ *
-+ * Check whether PTRACE_SET_SYSCALL_INFO semantics implemented in the kernel
-+ * matches userspace expectations.
-+ */
-+
-+#include "../kselftest_harness.h"
-+#include <err.h>
-+#include <fcntl.h>
-+#include <signal.h>
-+#include <asm/unistd.h>
-+#include "linux/ptrace.h"
-+
-+static int
-+kill_tracee(pid_t pid)
-+{
-+	if (!pid)
-+		return 0;
-+
-+	int saved_errno = errno;
-+
-+	int rc = kill(pid, SIGKILL);
-+
-+	errno = saved_errno;
-+	return rc;
-+}
-+
-+static long
-+sys_ptrace(int request, pid_t pid, unsigned long addr, unsigned long data)
-+{
-+	return syscall(__NR_ptrace, request, pid, addr, data);
-+}
-+
-+#define LOG_KILL_TRACEE(fmt, ...)				\
-+	do {							\
-+		kill_tracee(pid);				\
-+		TH_LOG("wait #%d: " fmt,			\
-+		       ptrace_stop, ##__VA_ARGS__);		\
-+	} while (0)
-+
-+struct si_entry {
-+	int nr;
-+	unsigned long args[6];
-+};
-+struct si_exit {
-+	unsigned int is_error;
-+	int rval;
-+};
-+
-+TEST(set_syscall_info)
-+{
-+	const pid_t tracer_pid = getpid();
-+	const unsigned long dummy[] = {
-+		0xbad0fed0,
-+		0xbad1fed1,
-+		0xbad2fed2,
-+		0xbad3fed3,
-+		0xbad4fed4,
-+		0xbad5fed5,
-+	};
-+	int splice_in[2], splice_out[2];
-+
-+	ASSERT_EQ(0, pipe(splice_in));
-+	ASSERT_EQ(0, pipe(splice_out));
-+	ASSERT_EQ(sizeof(dummy), write(splice_in[1], dummy, sizeof(dummy)));
-+
-+	const struct {
-+		struct si_entry entry[2];
-+		struct si_exit exit[2];
-+	} si[] = {
-+		/* change scno, keep non-error rval */
-+		{
-+			{
-+				{
-+					__NR_gettid,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}, {
-+					__NR_getppid,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}
-+			}, {
-+				{ 0, tracer_pid }, { 0, tracer_pid }
-+			}
-+		},
-+
-+		/* set scno to -1, keep error rval */
-+		{
-+			{
-+				{
-+					__NR_chdir,
-+					{
-+						(unsigned long) ".", dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}, {
-+					-1,
-+					{
-+						(unsigned long) ".", dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}
-+			}, {
-+				{ 1, -ENOSYS }, { 1, -ENOSYS }
-+			}
-+		},
-+
-+		/* keep scno, change non-error rval */
-+		{
-+			{
-+				{
-+					__NR_getppid,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}, {
-+					__NR_getppid,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}
-+			}, {
-+				{ 0, tracer_pid }, { 0, tracer_pid + 1 }
-+			}
-+		},
-+
-+		/* change arg1, keep non-error rval */
-+		{
-+			{
-+				{
-+					__NR_chdir,
-+					{
-+						(unsigned long) "", dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}, {
-+					__NR_chdir,
-+					{
-+						(unsigned long) ".", dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}
-+			}, {
-+				{ 0, 0 }, { 0, 0 }
-+			}
-+		},
-+
-+		/* set scno to -1, change error rval to non-error */
-+		{
-+			{
-+				{
-+					__NR_gettid,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}, {
-+					-1,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}
-+			}, {
-+				{ 1, -ENOSYS }, { 0, tracer_pid }
-+			}
-+		},
-+
-+		/* change scno, change non-error rval to error */
-+		{
-+			{
-+				{
-+					__NR_chdir,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}, {
-+					__NR_getppid,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}
-+			}, {
-+				{ 0, tracer_pid }, { 1, -EISDIR }
-+			}
-+		},
-+
-+		/* change scno and all args, change non-error rval */
-+		{
-+			{
-+				{
-+					__NR_gettid,
-+					{
-+						splice_in[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}, {
-+					__NR_splice,
-+					{
-+						splice_in[0], 0, splice_out[1], 0,
-+						sizeof(dummy), SPLICE_F_NONBLOCK
-+					}
-+				}
-+			}, {
-+				{ 0, sizeof(dummy) }, { 0, sizeof(dummy) + 1 }
-+			}
-+		},
-+
-+		/* change arg1, no exit stop */
-+		{
-+			{
-+				{
-+					__NR_exit_group,
-+					{
-+						dummy[0], dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}, {
-+					__NR_exit_group,
-+					{
-+						0, dummy[1], dummy[2],
-+						dummy[3], dummy[4], dummy[5]
-+					}
-+				}
-+			}, {
-+				{ 0, 0 }, { 0, 0 }
-+			}
-+		},
-+	};
-+
-+	long rc;
-+	unsigned int i;
-+	unsigned int ptrace_stop;
-+
-+	pid_t pid = fork();
-+
-+	ASSERT_LE(0, pid) {
-+		TH_LOG("fork: %m");
-+	}
-+
-+	if (pid == 0) {
-+		/* get the pid before PTRACE_TRACEME */
-+		pid = getpid();
-+		ASSERT_EQ(0, sys_ptrace(PTRACE_TRACEME, 0, 0, 0)) {
-+			TH_LOG("PTRACE_TRACEME: %m");
-+		}
-+		ASSERT_EQ(0, kill(pid, SIGSTOP)) {
-+			/* cannot happen */
-+			TH_LOG("kill SIGSTOP: %m");
-+		}
-+		for (i = 0; i < ARRAY_SIZE(si); ++i) {
-+			rc = syscall(si[i].entry[0].nr,
-+				     si[i].entry[0].args[0],
-+				     si[i].entry[0].args[1],
-+				     si[i].entry[0].args[2],
-+				     si[i].entry[0].args[3],
-+				     si[i].entry[0].args[4],
-+				     si[i].entry[0].args[5]);
-+			if (si[i].exit[1].is_error) {
-+				if (rc != -1 || errno != -si[i].exit[1].rval)
-+					break;
-+			} else {
-+				if (rc != si[i].exit[1].rval)
-+					break;
-+			}
-+		}
-+		/*
-+		 * Something went wrong, but in this state tracee
-+		 * cannot reliably issue syscalls, so just crash.
-+		 */
-+		*(volatile unsigned char *) (unsigned long) i = 42;
-+		/* unreachable */
-+		_exit(i + 1);
-+	}
-+
-+	for (ptrace_stop = 0; ; ++ptrace_stop) {
-+		struct ptrace_syscall_info info = {
-+			.op = 0xff	/* invalid PTRACE_SYSCALL_INFO_* op */
-+		};
-+		const size_t size = sizeof(info);
-+		const int expected_entry_size =
-+			(void *) &info.entry.args[6] - (void *) &info;
-+		const int expected_exit_size =
-+			(void *) (&info.exit.is_error + 1) -
-+			(void *) &info;
-+		int status;
-+
-+		ASSERT_EQ(pid, wait(&status)) {
-+			/* cannot happen */
-+			LOG_KILL_TRACEE("wait: %m");
-+		}
-+		if (WIFEXITED(status)) {
-+			pid = 0;	/* the tracee is no more */
-+			ASSERT_EQ(0, WEXITSTATUS(status)) {
-+				LOG_KILL_TRACEE("unexpected exit status %u",
-+						WEXITSTATUS(status));
-+			}
-+			break;
-+		}
-+		ASSERT_FALSE(WIFSIGNALED(status)) {
-+			pid = 0;	/* the tracee is no more */
-+			LOG_KILL_TRACEE("unexpected signal %u",
-+					WTERMSIG(status));
-+		}
-+		ASSERT_TRUE(WIFSTOPPED(status)) {
-+			/* cannot happen */
-+			LOG_KILL_TRACEE("unexpected wait status %#x", status);
-+		}
-+
-+		ASSERT_LT(ptrace_stop, ARRAY_SIZE(si) * 2) {
-+			LOG_KILL_TRACEE("ptrace stop overflow");
-+		}
-+
-+		switch (WSTOPSIG(status)) {
-+		case SIGSTOP:
-+			ASSERT_EQ(0, ptrace_stop) {
-+				LOG_KILL_TRACEE("unexpected signal stop");
-+			}
-+			ASSERT_EQ(0, sys_ptrace(PTRACE_SETOPTIONS, pid, 0,
-+						PTRACE_O_TRACESYSGOOD)) {
-+				LOG_KILL_TRACEE("PTRACE_SETOPTIONS: %m");
-+			}
-+			break;
-+
-+		case SIGTRAP | 0x80:
-+			ASSERT_LT(0, ptrace_stop) {
-+				LOG_KILL_TRACEE("unexpected syscall stop");
-+			}
-+			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
-+						      pid, size,
-+						      (unsigned long) &info))) {
-+				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
-+			}
-+			if (ptrace_stop & 1) {
-+				/* entering syscall */
-+				const struct si_entry *exp_entry =
-+					&si[ptrace_stop / 2].entry[0];
-+				const struct si_entry *set_entry =
-+					&si[ptrace_stop / 2].entry[1];
-+
-+				ASSERT_EQ(expected_entry_size, rc) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(PTRACE_SYSCALL_INFO_ENTRY, info.op) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_TRUE(info.arch) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_TRUE(info.instruction_pointer) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_TRUE(info.stack_pointer) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_entry->nr, info.entry.nr) {
-+					LOG_KILL_TRACEE("syscall nr mismatch");
-+				}
-+				for (i = 0; i < ARRAY_SIZE(exp_entry->args); ++i) {
-+					ASSERT_EQ(exp_entry->args[i], info.entry.args[i]) {
-+						LOG_KILL_TRACEE("syscall arg #%u mismatch", i);
-+					}
-+				}
-+				info.entry.nr = set_entry->nr;
-+				for (i = 0; i < ARRAY_SIZE(set_entry->args); ++i)
-+					info.entry.args[i] = set_entry->args[i];
-+				ASSERT_EQ(0, sys_ptrace(PTRACE_SET_SYSCALL_INFO,
-+							pid, size,
-+							(unsigned long) &info)) {
-+					LOG_KILL_TRACEE("PTRACE_SET_SYSCALL_INFO: %m");
-+				}
-+			} else {
-+				/* exiting syscall */
-+				const struct si_exit *exp_exit =
-+					&si[ptrace_stop / 2 - 1].exit[0];
-+				const struct si_exit *set_exit =
-+					&si[ptrace_stop / 2 - 1].exit[1];
-+
-+				ASSERT_EQ(expected_exit_size, rc) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_EQ(PTRACE_SYSCALL_INFO_EXIT, info.op) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_TRUE(info.arch) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_TRUE(info.instruction_pointer) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_TRUE(info.stack_pointer) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_EQ(exp_exit->is_error, info.exit.is_error) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_EQ(exp_exit->rval, info.exit.rval) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				info.exit.is_error = set_exit->is_error;
-+				info.exit.rval = set_exit->rval;
-+				ASSERT_EQ(0, sys_ptrace(PTRACE_SET_SYSCALL_INFO,
-+							pid, size,
-+							(unsigned long) &info)) {
-+					LOG_KILL_TRACEE("PTRACE_SET_SYSCALL_INFO: %m");
-+				}
-+			}
-+			break;
-+
-+		default:
-+			LOG_KILL_TRACEE("unexpected stop signal %u",
-+					WSTOPSIG(status));
-+			abort();
-+		}
-+
-+		ASSERT_EQ(0, sys_ptrace(PTRACE_SYSCALL, pid, 0, 0)) {
-+			LOG_KILL_TRACEE("PTRACE_SYSCALL: %m");
-+		}
-+	}
-+
-+	ASSERT_EQ(ptrace_stop, ARRAY_SIZE(si) * 2);
-+}
-+
-+TEST_HARNESS_MAIN
+So either we add a new lock for xfrm_state, or we need to unlock spin lock in
+bonding bond_ipsec_del_sa().
 
--- 
-ldv
+Cc IPsec experts to see if they have any comments.
+
+Background: The xfrm_dev_state_delete() in xfrm_state_delete() is protected
+by spin lock. But the driver delete ops dev->xfrmdev_ops->xdo_dev_state_delete(x)
+may sleep, e.g. bond_ipsec_del_sa(). What we should deal with this issue?
+
+Thanks
+Hangbin
 
