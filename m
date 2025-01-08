@@ -1,145 +1,119 @@
-Return-Path: <linux-kselftest+bounces-24085-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24086-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69D4DA067F2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 23:09:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B4F92A06961
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 00:23:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D422F1881965
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 22:09:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60E791889382
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 23:23:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB412205ABD;
-	Wed,  8 Jan 2025 22:07:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FE8E2046B7;
+	Wed,  8 Jan 2025 23:23:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TBzY9i6x"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="aCHxWQpe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DEFB205ABB;
-	Wed,  8 Jan 2025 22:07:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABDF203717
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jan 2025 23:23:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736374048; cv=none; b=Ikp6MI5Js/TIiF1YM1Gav/BhJKhRwd3Ikz+EY5XZpifk02r0yYh0exZpLhGFEpja7DKryZ+JaL4Be0KHAGPw5ZzNjbGRmTB5LW+7MljRzT9CqldNHI4RsI/DcBfxkqhpC57/+X3OZ1LGxi0kOtOfnbQqLD7gsjchJacSLgJm6Mw=
+	t=1736378598; cv=none; b=XZRstKLr9W/l/m148ZhmmaCyMjfkMxMe+pdObgB0+o8D4GnoO5WjckztED50t3BJlL8oEfcLZPCCXpxrys4mkGL0TQqMGLOYNW2G70MsljVEj5qyODbnydLAqWzdkgxOLjH4MnKjEVLV6uQq87igiCo08F3lotrHlH6pO4HeLyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736374048; c=relaxed/simple;
-	bh=HZMtphnmGpO98shKkSgLqE5zhCeRjx5Z8omYdITC2Lc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UR8XDZD2Nt74klPAFy5jXFbldGyxk/HZhp6KyP87Gl0JHnNmlgsnPzWf+Zp1N+Aj+0sxk+pXUHMyuID0xZ3RAcoyjVLG/5gvzW/GQQ7WKzHoWE1WiVSkYU38aGKtcvJTdLbu4Ht5ZFfljmKBzxY4/Q1h1us7KvTMsCfzv1GHr6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TBzY9i6x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2DB1C4CEE2;
-	Wed,  8 Jan 2025 22:07:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736374046;
-	bh=HZMtphnmGpO98shKkSgLqE5zhCeRjx5Z8omYdITC2Lc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TBzY9i6xZm7Q5qxptV4de0bTHK7HCunPfhrBNUQilnqhL3pZE+uI0vC/9Pb7nI8Ms
-	 FS8iAMLQvjEGMcujFh/LA+mxhbxR29d0J1gJqXDXpRffnKNCwE3LBt6jOyxTdF+Yys
-	 qMPXKnuDdo+prruBE41e9QgBLCiyzcxHxC8v/A29S5ThSsGfnKb2xG/pZHQDj9MVQI
-	 CoC1lwV9dUHE3GN2FJ65TIcr2tyzKf/WC619/o4n6hUvk2je+b6VXXRdZ/1C45Waa/
-	 qnsEHu4c/gnLxSthwJ9xKAucthsZXBYgmlO6MOjihIray8iTnJHMz/87HNp2pEhDMy
-	 J661iaYTv1q4w==
-Date: Wed, 8 Jan 2025 14:07:23 -0800
-From: Kees Cook <kees@kernel.org>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Jeff Xu <jeffxu@chromium.org>, Jann Horn <jannh@google.com>,
-	"Isaac J. Manjarres" <isaacmanjarres@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Alexander Aring <alex.aring@gmail.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Shuah Khan <shuah@kernel.org>,
-	kernel-team@android.com, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Suren Baghdasaryan <surenb@google.com>,
-	Kalesh Singh <kaleshsingh@google.com>,
-	John Stultz <jstultz@google.com>
-Subject: Re: [RFC PATCH v1 1/2] mm/memfd: Add support for F_SEAL_FUTURE_EXEC
- to memfd
-Message-ID: <202501081358.3EF3114D6E@keescook>
-References: <20241206010930.3871336-1-isaacmanjarres@google.com>
- <20241206010930.3871336-2-isaacmanjarres@google.com>
- <0ff1c9d9-85f0-489e-a3f7-fa4cef5bb7e5@lucifer.local>
- <CAG48ez1gnURo_DVSfNk0RLWNbpdbMefNcQXu3as9z2AkNgKaqg@mail.gmail.com>
- <CABi2SkUuz=qGvoW1-qrgxiDg1meRdmq3bN5f89XPR39itqtmUg@mail.gmail.com>
- <202501061643.986D9453@keescook>
- <e8d21f15-56c6-43c3-9009-3de74cccdf3a@lucifer.local>
+	s=arc-20240116; t=1736378598; c=relaxed/simple;
+	bh=YWSZYRuIOr1i0hoeKfTzR3n/6mxUtpAWZAjkf1WBpuA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MqHus8x5gPrdsVNRXmqiU2P/aNSEv3I+QsTCo9oD5hh62RTDDnDvRL2xPyf3rjufpzwnsyIX+66AGQEFiUz2ArBhnV7dGzhlQarpKCeTntVzFrY27Ewkv5YGcaoEvorjGAQiPuc3chWXndz9fNBaUQyr95K+dGWhzxbRmhQ33cw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=aCHxWQpe; arc=none smtp.client-ip=209.85.166.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-844ee15d6f4so22161839f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jan 2025 15:23:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1736378596; x=1736983396; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Mzn00ZfytrdNeZqAzFwZC/i104dlV8ULO69Ct63d0jQ=;
+        b=aCHxWQpe1U8lCoxJ2h5T7EAL3UgufVBTDu4pdxw4ff4ei6K+kSPetr8zwIHcH33UPY
+         /i1O51okqj3lBpu5XJ2O3NMdUEDtRLhiv89Fdh5Jm79C69YTM/KilCd21e3AplqecCHR
+         jYmtGWgyids9x9SNQfqi9QuMkGOip2h+UTE9I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736378596; x=1736983396;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mzn00ZfytrdNeZqAzFwZC/i104dlV8ULO69Ct63d0jQ=;
+        b=CmqFG6WJzZxE7Q7SdoZXB4F23CC+PUnl/PymKjNB8t4epxeT91KW/K4o6Kv7Q1392Z
+         ShaZvaQG/7jy0eJmjfCYlLWYSyz5sg2es8HRUjnYRVt7aZzSrfYUObBe4FCkJWsntLp3
+         zjlUGSv64+FZFl9HB1KpQzGfkrMlhTijKbRLCVkGyxaNHTp00qMja6Co0e8ZchjwajBc
+         R6fqmwh/3LJpiyPHF5+6Hmzb8GDpbBfK33fNfzJXWuAqQxXWL6Jitom/lhK+5phakX3z
+         HtIpn3BxtNixhdRztgOztSs2Va4mdiB50QAjMKsu/TMwPnjfyKth9YkXpwF3E1zCTmip
+         723Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVgvANLiR2q83rlyNMwBkkOgLLFa508z/DC3g0bE3TESiCtPw/N4B9H+W+iw9vEZYA/35iL1cvK3d5Qzie5Yv0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhKJw8xhrRk3cgO2v4BU8YB7fT+RPeZAdsNa2HD0T3QsVY+05Y
+	9j/+8u1BmvQALqlkQPnelAS0Ap4S+ugeCfC+br4QVbiweHjiMhyCv9w00hCws4Y=
+X-Gm-Gg: ASbGncuXSeO188Rofenx8ZSnAVJNzUEAJW3rw/vKPfR9zeb/JjDxG4wKKcRlhWoBZV7
+	xF+v5I9JU34vOA9s1Tkxw/GDpJ89nsQC1N8536crlxpQsYmTVPYzm858I/xEiwIDP6H1Rw6EoQV
+	VLE/DMGoeM6JOdTkHo3d9A4CFIb069RXWM3VCcwWsBuT1l8VBU97A3psDQwnabQ43BWwNq9/gJc
+	WYDgmb68ha+5YsLmS2rgZxzLwyezWo0KjlV8qN/YGe8dzx9Ok3+Cdk21pLGp/kBXBz1
+X-Google-Smtp-Source: AGHT+IGwSBFteg1yBzTr+ht0Vs+wiAvXeihmvJdKOSSEhZm+icx0U5LWV6uYJxFPhp36KnRBX2lrSA==
+X-Received: by 2002:a05:6602:6cc6:b0:843:e8d0:a728 with SMTP id ca18e2360f4ac-84ce0092d9dmr490122039f.4.1736378595899;
+        Wed, 08 Jan 2025 15:23:15 -0800 (PST)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ea1b6292ccsm18029173.73.2025.01.08.15.23.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jan 2025 15:23:15 -0800 (PST)
+Message-ID: <cefadfa1-7702-4cf9-9f4e-c89ed9a131e4@linuxfoundation.org>
+Date: Wed, 8 Jan 2025 16:23:14 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e8d21f15-56c6-43c3-9009-3de74cccdf3a@lucifer.local>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: harness: fix printing of mismatch values in
+ __EXPECT()
+To: Kees Cook <kees@kernel.org>, "Dmitry V. Levin" <ldv@strace.io>
+Cc: Shuah Khan <shuah@kernel.org>, Gabi Falk <gabifalk@gmx.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250108170757.GA6723@strace.io>
+ <202501081357.BE10EC4403@keescook>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <202501081357.BE10EC4403@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jan 08, 2025 at 07:06:13PM +0000, Lorenzo Stoakes wrote:
-> On Mon, Jan 06, 2025 at 04:44:33PM -0800, Kees Cook wrote:
-> > On Mon, Jan 06, 2025 at 10:26:27AM -0800, Jeff Xu wrote:
-> > > + Kees because this is related to W^X memfd and security.
-> > >
-> > > On Fri, Jan 3, 2025 at 7:14 AM Jann Horn <jannh@google.com> wrote:
-> > > >
-> > > > On Fri, Dec 6, 2024 at 7:19 PM Lorenzo Stoakes
-> > > > <lorenzo.stoakes@oracle.com> wrote:
-> > > > > On Thu, Dec 05, 2024 at 05:09:22PM -0800, Isaac J. Manjarres wrote:
-> > > > > > +             if (is_exec_sealed(seals)) {
-> > > > >
-> > > > > Are we intentionally disallowing a MAP_PRIVATE memfd's mapping's execution?
-> > > > > I've not tested this scenario so don't know if we somehow disallow this in
-> > > > > another way but note on write checks we only care about shared mappings.
-> > > > >
-> > > > > I mean one could argue that a MAP_PRIVATE situation is the same as copying
-> > > > > the data into an anon buffer and doing what you want with it, here you
-> > > > > could argue the same...
-> > > > >
-> > > > > So probably we should only care about VM_SHARED?
-> > > >
-> > > > FWIW I think it doesn't make sense to distinguish between
-> > > > shared/private mappings here - in the scenario described in the cover
-> > > > letter, it wouldn't matter that much to an attacker whether the
-> > > > mapping is shared or private (as long as the VMA contents haven't been
-> > > > CoWed already).
-> > > +1 on this.
-> > > The concept of blocking this for only shared mapping is questionable.
-> >
-> > Right -- why does sharedness matter? It seems more robust to me to not
-> > create a corner case but rather apply the flag/behavior universally?
-> >
+On 1/8/25 14:57, Kees Cook wrote:
+> On Wed, Jan 08, 2025 at 07:07:57PM +0200, Dmitry V. Levin wrote:
+>> intptr_t and uintptr_t are not big enough types on 32-bit architectures
+>> when printing 64-bit values, resulting to the following incorrect
+>> diagnostic output:
+>>
+>>    # get_syscall_info.c:209:get_syscall_info:Expected exp_args[2] (3134324433) == info.entry.args[1] (3134324433)
+>>
+>> Replace intptr_t and uintptr_t with intmax_t and uintmax_t, respectively.
+>> With this fix, the same test produces more usable diagnostic output:
+>>
+>>    # get_syscall_info.c:209:get_syscall_info:Expected exp_args[2] (3134324433) == info.entry.args[1] (18446744072548908753)
+>>
+>> Fixes: b5bb6d3068ea ("selftests/seccomp: fix 32-bit build warnings")
+>> Signed-off-by: Dmitry V. Levin <ldv@strace.io>
 > 
-> I'm struggling to understand what you are protecting against, if I can receive a
-> buffer '-not executable-'. But then copy it into another buffer I mapped, and
-> execute it?
+> Ah nice, thanks!
 > 
-> I mean am I missing something? It's very possible :)
+> Reviewed-by: Kees Cook <kees@kernel.org>
+> 
 
-Jann, how do you see a private mapping being exploited this way? My
-mental model of the attack depends on a malicious process tricking a
-victim process -- i.e. setting it executable and then gaining exec
-control of the victim to point into the buffer. An attack on a private
-mapping would require a way to trick the process into making the mapping
-executable (which seems a high barrier) first.
+Thank you. Applied to linux-kselftest next for Linux 6.14-rc1.
 
-> The cost is complexity. And the difference between mappings which are shared and
-> those which are private and moreso MAP_PRIVATE of an fd are actually quite a lot
-> internally (go look at anon_vma code if you have the great benefit of not yet
-> doing so to see the deepest, darkest, 9th circle of complexity hell :>).
-
-Ah, okay, I thought it would be pretty "early" in the VMA logic. i.e.
-asking the question "Can I make this executable?" I was expecting to be
-common across the VMA regardless of private/shared. I will need to go
-read the code more carefully.
-
-Still, it seems nicer to me if the "can this be made executable in the
-future" question doesn't matter on sharing, just from a perspective of
-least surprise.
-
--- 
-Kees Cook
+thanks,
+-- Shuah
 
