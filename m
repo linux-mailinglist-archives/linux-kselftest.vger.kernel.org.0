@@ -1,220 +1,254 @@
-Return-Path: <linux-kselftest+bounces-24060-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24061-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15205A05A71
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 12:52:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 732F7A05CCA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 14:30:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DBC51885913
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 11:52:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6156016702F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 13:30:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93F331FCCEB;
-	Wed,  8 Jan 2025 11:50:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEAB31FC0FE;
+	Wed,  8 Jan 2025 13:30:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MqCNJ7OS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A318B1FC11C;
-	Wed,  8 Jan 2025 11:50:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 295DF1917D6
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jan 2025 13:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736337047; cv=none; b=EKoqjWtDwNbj1FvLtEyDf3N8QUDKVSsJ6DNVb/5243O2WUVu6vK7kWz0JmwNWmI08ujoJS0Awy/rtyzYU7W5NFT2u0scIz9JY9xixgmGlwsG8K9z7yuvmsTAuraC1i89akcH1BbJ8zvZPfMfT5AggcFqV9Xm+cKiakDDOjKvovo=
+	t=1736343031; cv=none; b=aL2gSVIB0eyjGuyvI9SXBLK/BTYi/HGJ6F3iN7pjupfSKZ7Vay0xhqTlga2D1BB3EIDqMz4+ycE15fwH/SOYWHpGYMG+I909IsqaA2HTcWel8Dw57IL0I6vP59QBkUJB29B+xSktIj4ZYaGRe46VdTa4JawNm51Q7qFGy74LpT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736337047; c=relaxed/simple;
-	bh=FxHCTrtEmHlr3dDtmtGQco4f9/wDAlZQfRPrG20bCrc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MxjJlu8LPPEsToZKKnAh0zqcE3aSlUz3J6BPXlJWklf8VQ1o8lB9Yr6KaNp0lg0hLUTkdgRzdKLsg7g4YdTt+QsgXvxABgskVebGAHsuPCtHxuBk4677TeRF+5868Tmv+hQkY1wXZxPpJ2eLDkf9lzEnaYncodjyJhKF1P7SCFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-aa689a37dd4so533854366b.3;
-        Wed, 08 Jan 2025 03:50:45 -0800 (PST)
+	s=arc-20240116; t=1736343031; c=relaxed/simple;
+	bh=9wm9/2bc4CaLbJ96gp52m0rxFdK7uFEi2Tc3EtkoZyE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ql1Ko55FozpTHJhsOJluZvB4vF5AXQ9ikeYhA6k3VCLWFwM2g3rBe02MzcfUIMWk8tyL9XdnGvlumHKx+OGatztM7ponWfDinJ4t/2r1z4Xlsv3wZSf1MPWIWDbUSMeYjgePaXJ+kfIvWNr5eY6ST1kwReyXoDV7x6qNAo4LP88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MqCNJ7OS; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1736343029;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Xm5QqGkMZ1TZAuorlc012W7N6Xo0szgU26qviS0Ja9Q=;
+	b=MqCNJ7OSJp7IEM6RQ4rDQMrv+lRPnVylW9aEMfc5e0r6R1Ksk6x3dNl9NEd0w2BTAMMXH/
+	c94Gr95qjFtYCi7j7MAVE3PN8UAE1vokhQ+/aGOQdx9SL6DEp8ulWGS3c877sjJRU04VYd
+	GJINmdrIsbrCbeZjjeZoo+4VLyZ6Ks8=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-191-lNit-fuoPvWEigr7Qt_o6A-1; Wed, 08 Jan 2025 08:30:27 -0500
+X-MC-Unique: lNit-fuoPvWEigr7Qt_o6A-1
+X-Mimecast-MFC-AGG-ID: lNit-fuoPvWEigr7Qt_o6A
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-385e27c5949so10312667f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jan 2025 05:30:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736337044; x=1736941844;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NJbpaWVafqwrrz+ZENkKDr5EG7mjxcdM072QuX4YMuo=;
-        b=VY/TNxFC5NZlosi5ZJXgbSwG66Oy9AErQ6rK8hQs4wmQV+PI0r6RhRJZDuUhwe62+a
-         QqVTAsfNWlpK+iQ0k3Xs9KgolvAuwqVb3Ve0O7jsDrv91MJ++amiDFK3g30LJ45+718a
-         9NuDYJ9uLq+ssqMaxDqGkFOjq82dJa6UdATSFPiDFSNbp+pEiVZOMKp9aEJO6MBFmNjK
-         Y6fezCyIeUIt1SfHwGQl5bLQUmllhAt3kYEuqQobfLdT5bTJcK4/8k47b0GUSMtrF0fQ
-         aQvYH+11WTH2b79h6eT3JE4LeGFAVSIpyRXZSKD5u1VcrNYq9TXcK/pXEV3mHoMX57E2
-         32rw==
-X-Forwarded-Encrypted: i=1; AJvYcCW6FUehK7QzL0l4qVzeHM/Q/4rOLTBAAylCIFAkvRYlaYi4q+sYTZMZPkuapap/Q+CVTae7zEciTt9ZErpNJbO9@vger.kernel.org, AJvYcCXG7VJkKN1SYl1NG/fHyXUYnFuDRvTYxToBJzugIWawGOYJF8UAsetgvREIDiUY0DoIIo8zq7QW5tvulAo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvjhqbJf9QxfK/XFpdlDMC9quttPfdbVLwMDN/wWBVoPPf++v+
-	wiB4QtEyk7YhHTSuPQhIgQRxlvC/jp7etCj96Hw7r6F/tXLHhQeakNYwxw==
-X-Gm-Gg: ASbGnct9ukxvNLVBH25iFdLTxL4E8n6V8Un98lGWotYMgjlu5GPOiD87/Bw9PRHmUP3
-	RDq+6N7XtShfJlDJeBrl4UGS54YpAqqYYh0P8/yK6om3SNPS7jbRazTwx9P7Kchl4K+Ojpol7vT
-	mCMh0MgrVDVBs+bToS8FW/idkzkmgIzORb4fKuTH6dQEtKZKcxeqJSxQcfGb2XdsUUpsEyEBltA
-	1C3lkplMqkQ2Pv1Z+vXZFaR7beG8q00iavXQODhvgbZ
-X-Google-Smtp-Source: AGHT+IGakNtI4bbSXZ+97iyWdDz31MdnmCsTICCsbc+mlfNjy7LWX8mBCDxPvF0ejv6v1zPchbYH/g==
-X-Received: by 2002:a17:906:f585:b0:aa6:7933:8b26 with SMTP id a640c23a62f3a-ab2ab6a8deamr162899666b.9.1736337043769;
-        Wed, 08 Jan 2025 03:50:43 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d80678c6dfsm25460691a12.37.2025.01.08.03.50.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jan 2025 03:50:43 -0800 (PST)
-From: Breno Leitao <leitao@debian.org>
-Date: Wed, 08 Jan 2025 03:50:28 -0800
-Subject: [PATCH net-next v3 4/4] netconsole: selftest: verify userdata
- entry limit
+        d=1e100.net; s=20230601; t=1736343027; x=1736947827;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Xm5QqGkMZ1TZAuorlc012W7N6Xo0szgU26qviS0Ja9Q=;
+        b=tofs4+66lkIYGXRGzIbNzE2p0LA20VIVCpOIv9IThLTgxEAULAlMt+rq8Cjj0K0BSo
+         y52B2yd+bAxgwrw4G6OhzXCj/2NzyW6ZiJuvjmIgU76OS1deTTdrWXQjHMf3pvGTA1xF
+         KRT5um4TNpUTvWaYYORErTAip5AdWfoxclNQbboEpYtqUmfAveiaOixighJN1vwc6OJM
+         KXjhaJ9Ve1TXva2rqlhBt5KYshuqPx4r5ce+zWxgMP4k1jWU1PN+k09tmxzhdNFsGBzQ
+         DOa6Dy7PabQgRvES4Ma+5tVdMpqSy4GFrJBrAIcnxckRK4oyGpHfuCL4hZ82A2/dKJz3
+         mODg==
+X-Forwarded-Encrypted: i=1; AJvYcCUINQSmQrMujhhyXarkbaIoLoZ7Jaar5+xhdtsr1KlsJAq4FAZB5T6iHYVYbTEu8iJvU87Aa7qLYKd+WNv1el4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycBcZXfE3uYTyyFte6zmXeiLyZpvNy2ACeasDMX3UbSRzfUzIr
+	u0pXYyPbv4o6z4LuPMza9bjVDQNMW12fs1b66A6kJ3Bp7tTxRfq2HJXDgMIOUE2enhV0Hg3tBpq
+	wI6ZLuWc46PUWFlNSMcsq5fBfJf2x1onNmbjlJs2M6U8XysdZ/BhLH9tzoieslRBwdA==
+X-Gm-Gg: ASbGnct2WNDJGozndrh3cnrLsKH5eLRJcMu32VKnV7At5hPM1ygib78pwR/+4JFTHHN
+	sEa2oNm8oPDzG2m0Sf5iFqjurIE+lqagk7nRln3t3HSYt5Upzym6HlY2q4l7lhWU/x/40zDj7zk
+	DLD3wo6Ll506BD1uzIGpd6xHpgegj0AACq++qDgOds1bYyf10G69Ik9HeQ0MYWxa4PFliINlQDY
+	PZCHO+5mtJ3KtE0DLq05khKXXlIrDqzYcdL/PRWTWB3+k8mlkJst7a0hXRz8U5ZBOVE+TWT8fLU
+	QLZx0QAhsEdJ902C4qajsrTGPgVF0EHwDBhen9PTUNZYp7ua2L4Egq5KNxBjPObxQuLxett4O8V
+	WvtQGjw==
+X-Received: by 2002:a5d:5f44:0:b0:386:3e3c:efd with SMTP id ffacd0b85a97d-38a8730fa79mr2263812f8f.44.1736343026631;
+        Wed, 08 Jan 2025 05:30:26 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHpKD2IZfZIbcwaLCk3XNbI7djRJXsloJfDmvj7kjgwF76HCzj7aPJFB7xbPGBAxKmz03fCTw==
+X-Received: by 2002:a5d:5f44:0:b0:386:3e3c:efd with SMTP id ffacd0b85a97d-38a8730fa79mr2263785f8f.44.1736343026167;
+        Wed, 08 Jan 2025 05:30:26 -0800 (PST)
+Received: from ?IPV6:2003:cb:c70d:3a00:d73c:6a8:ca9f:1df7? (p200300cbc70d3a00d73c06a8ca9f1df7.dip0.t-ipconnect.de. [2003:cb:c70d:3a00:d73c:6a8:ca9f:1df7])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c89e2dfsm53584503f8f.74.2025.01.08.05.30.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jan 2025 05:30:25 -0800 (PST)
+Message-ID: <63481999-0665-4f40-a1bd-377a6ae69f90@redhat.com>
+Date: Wed, 8 Jan 2025 14:30:23 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250108-netcons_overflow_test-v3-4-3d85eb091bec@debian.org>
-References: <20250108-netcons_overflow_test-v3-0-3d85eb091bec@debian.org>
-In-Reply-To: <20250108-netcons_overflow_test-v3-0-3d85eb091bec@debian.org>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
- kernel-team@meta.com, Simon Horman <horms@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4125; i=leitao@debian.org;
- h=from:subject:message-id; bh=FxHCTrtEmHlr3dDtmtGQco4f9/wDAlZQfRPrG20bCrc=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnfmaK/oL+TEo0vdH3f7qL2qsiDS0LlxM+QiXYa
- a+AphiRc92JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ35migAKCRA1o5Of/Hh3
- bYb1D/9OiOlMTwUJSSQOGK0b8iQ2Cu4BW3XBxlDlKLkPgDZC+k+wc9NwdKfoh/DEUtHuaHMr7hM
- 51yWAP2VCFy3/WwexQS8c09K7ZeovJCYn34V7rOEt6+cUdS0L2bMb+5PhiBG5v+7wnAYWz6HYuc
- Du14l8jPNCCp3cilVRG1UZnIe3V1GYB62w1E/ctn4UoM19BjHIy9GbtAbUkXS9mBmzzH6FHwSSC
- +SCJSL7UTq+9to0jzR20CDercbl8eIfSOhPjiOJWRm1v0Xdt8lzeDN1d8V1g/q1EZZY0EwtEzkg
- U2ICUoRyu9JxP6Vw22PO+Qq9cSgYPZINTHN7OuIhIv6AbEJWxCcHo4cR/kaQLP+v7tw140VRw1m
- RP2fdMnf4CSsO9Aq405rCXL/Q6eBNM0PjflJXpiDL3Zl2HGm5J9s47fOmzdy5XHVM27+WLnDzYU
- zQgQPfWdod2Q7jAuKFYSTwEaqYmvnvyscK6Uky6rlqadL71y8A7M/jLtsZC812cOyIP483qc/hH
- Kb15Vv7a+DB47JZEWBflAjYeZU4CROn9/QhBWLlasu6ENfLHLjNMQfkbQ+TAmwchBYiWAFkkjye
- xdIaOVCWV1lba/UzxMLavhrOnbNSv0c3VKhQQpVKiiWDCcbsuZgf5JOrER9F8glxisy50jzICjO
- YBGiau5Q+GrHdLA==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] selftests/mm: virtual_address_range: Dump to
+ /dev/null
+To: Dev Jain <dev.jain@arm.com>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Ryan Roberts <ryan.roberts@arm.com>
+References: <20250107-virtual_address_range-tests-v1-0-3834a2fb47fe@linutronix.de>
+ <20250107-virtual_address_range-tests-v1-3-3834a2fb47fe@linutronix.de>
+ <2c5ab3af-2e58-449a-94f2-5cbcaa8b66f2@arm.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
+ dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
+ QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
+ XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
+ Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
+ PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
+ WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
+ UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
+ jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
+ B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzSREYXZpZCBIaWxk
+ ZW5icmFuZCA8ZGF2aWRAcmVkaGF0LmNvbT7CwZgEEwEIAEICGwMGCwkIBwMCBhUIAgkKCwQW
+ AgMBAh4BAheAAhkBFiEEG9nKrXNcTDpGDfzKTd4Q9wD/g1oFAl8Ox4kFCRKpKXgACgkQTd4Q
+ 9wD/g1oHcA//a6Tj7SBNjFNM1iNhWUo1lxAja0lpSodSnB2g4FCZ4R61SBR4l/psBL73xktp
+ rDHrx4aSpwkRP6Epu6mLvhlfjmkRG4OynJ5HG1gfv7RJJfnUdUM1z5kdS8JBrOhMJS2c/gPf
+ wv1TGRq2XdMPnfY2o0CxRqpcLkx4vBODvJGl2mQyJF/gPepdDfcT8/PY9BJ7FL6Hrq1gnAo4
+ 3Iv9qV0JiT2wmZciNyYQhmA1V6dyTRiQ4YAc31zOo2IM+xisPzeSHgw3ONY/XhYvfZ9r7W1l
+ pNQdc2G+o4Di9NPFHQQhDw3YTRR1opJaTlRDzxYxzU6ZnUUBghxt9cwUWTpfCktkMZiPSDGd
+ KgQBjnweV2jw9UOTxjb4LXqDjmSNkjDdQUOU69jGMUXgihvo4zhYcMX8F5gWdRtMR7DzW/YE
+ BgVcyxNkMIXoY1aYj6npHYiNQesQlqjU6azjbH70/SXKM5tNRplgW8TNprMDuntdvV9wNkFs
+ 9TyM02V5aWxFfI42+aivc4KEw69SE9KXwC7FSf5wXzuTot97N9Phj/Z3+jx443jo2NR34XgF
+ 89cct7wJMjOF7bBefo0fPPZQuIma0Zym71cP61OP/i11ahNye6HGKfxGCOcs5wW9kRQEk8P9
+ M/k2wt3mt/fCQnuP/mWutNPt95w9wSsUyATLmtNrwccz63XOwU0EVcufkQEQAOfX3n0g0fZz
+ Bgm/S2zF/kxQKCEKP8ID+Vz8sy2GpDvveBq4H2Y34XWsT1zLJdvqPI4af4ZSMxuerWjXbVWb
+ T6d4odQIG0fKx4F8NccDqbgHeZRNajXeeJ3R7gAzvWvQNLz4piHrO/B4tf8svmRBL0ZB5P5A
+ 2uhdwLU3NZuK22zpNn4is87BPWF8HhY0L5fafgDMOqnf4guJVJPYNPhUFzXUbPqOKOkL8ojk
+ CXxkOFHAbjstSK5Ca3fKquY3rdX3DNo+EL7FvAiw1mUtS+5GeYE+RMnDCsVFm/C7kY8c2d0G
+ NWkB9pJM5+mnIoFNxy7YBcldYATVeOHoY4LyaUWNnAvFYWp08dHWfZo9WCiJMuTfgtH9tc75
+ 7QanMVdPt6fDK8UUXIBLQ2TWr/sQKE9xtFuEmoQGlE1l6bGaDnnMLcYu+Asp3kDT0w4zYGsx
+ 5r6XQVRH4+5N6eHZiaeYtFOujp5n+pjBaQK7wUUjDilPQ5QMzIuCL4YjVoylWiBNknvQWBXS
+ lQCWmavOT9sttGQXdPCC5ynI+1ymZC1ORZKANLnRAb0NH/UCzcsstw2TAkFnMEbo9Zu9w7Kv
+ AxBQXWeXhJI9XQssfrf4Gusdqx8nPEpfOqCtbbwJMATbHyqLt7/oz/5deGuwxgb65pWIzufa
+ N7eop7uh+6bezi+rugUI+w6DABEBAAHCwXwEGAEIACYCGwwWIQQb2cqtc1xMOkYN/MpN3hD3
+ AP+DWgUCXw7HsgUJEqkpoQAKCRBN3hD3AP+DWrrpD/4qS3dyVRxDcDHIlmguXjC1Q5tZTwNB
+ boaBTPHSy/Nksu0eY7x6HfQJ3xajVH32Ms6t1trDQmPx2iP5+7iDsb7OKAb5eOS8h+BEBDeq
+ 3ecsQDv0fFJOA9ag5O3LLNk+3x3q7e0uo06XMaY7UHS341ozXUUI7wC7iKfoUTv03iO9El5f
+ XpNMx/YrIMduZ2+nd9Di7o5+KIwlb2mAB9sTNHdMrXesX8eBL6T9b+MZJk+mZuPxKNVfEQMQ
+ a5SxUEADIPQTPNvBewdeI80yeOCrN+Zzwy/Mrx9EPeu59Y5vSJOx/z6OUImD/GhX7Xvkt3kq
+ Er5KTrJz3++B6SH9pum9PuoE/k+nntJkNMmQpR4MCBaV/J9gIOPGodDKnjdng+mXliF3Ptu6
+ 3oxc2RCyGzTlxyMwuc2U5Q7KtUNTdDe8T0uE+9b8BLMVQDDfJjqY0VVqSUwImzTDLX9S4g/8
+ kC4HRcclk8hpyhY2jKGluZO0awwTIMgVEzmTyBphDg/Gx7dZU1Xf8HFuE+UZ5UDHDTnwgv7E
+ th6RC9+WrhDNspZ9fJjKWRbveQgUFCpe1sa77LAw+XFrKmBHXp9ZVIe90RMe2tRL06BGiRZr
+ jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <2c5ab3af-2e58-449a-94f2-5cbcaa8b66f2@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Add a new selftest for netconsole that tests the userdata entry limit
-functionality. The test performs two key verifications:
+On 08.01.25 07:09, Dev Jain wrote:
+> 
+> On 07/01/25 8:44 pm, Thomas Weißschuh wrote:
+>> During the execution of validate_complete_va_space() a lot of memory is
+>> on the VM subsystem. When running on a low memory subsystem an OOM may
+>> be triggered, when writing to the dump file as the filesystem may also
+>> require memory.
+>>
+>> On my test system with 1100MiB physical memory:
+>>
+>> 	Tasks state (memory values in pages):
+>> 	[  pid  ]   uid  tgid total_vm      rss rss_anon rss_file rss_shmem pgtables_bytes swapents oom_score_adj name
+>> 	[     57]     0    57 34359215953      695      256        0       439 1064390656        0             0 virtual_address
+>>
+>> 	Out of memory: Killed process 57 (virtual_address) total-vm:137436863812kB, anon-rss:1024kB, file-rss:0kB, shmem-rss:1756kB, UID:0 pgtables:1039444kB oom_score_adj:0
+>> 	<snip>
+>> 	fault_in_iov_iter_readable+0x4a/0xd0
+>> 	generic_perform_write+0x9c/0x280
+>> 	shmem_file_write_iter+0x86/0x90
+>> 	vfs_write+0x29c/0x480
+>> 	ksys_write+0x6c/0xe0
+>> 	do_syscall_64+0x9e/0x1a0
+>> 	entry_SYSCALL_64_after_hwframe+0x77/0x7f
+>>
+>> Write the dumped data into /dev/null instead which does not require
+>> additional memory during write(), making the code simpler as a
+>> side-effect.
+>>
+>> Signed-off-by: Thomas Weißschuh<thomas.weissschuh@linutronix.de>
+>> ---
+>>   tools/testing/selftests/mm/virtual_address_range.c | 6 ++----
+>>   1 file changed, 2 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
+>> index 484f82c7b7c871f82a7d9ec6d6c649f2ab1eb0cd..4042fd878acd702d23da2c3293292de33bd48143 100644
+>> --- a/tools/testing/selftests/mm/virtual_address_range.c
+>> +++ b/tools/testing/selftests/mm/virtual_address_range.c
+>> @@ -103,10 +103,9 @@ static int validate_complete_va_space(void)
+>>   	FILE *file;
+>>   	int fd;
+>>   
+>> -	fd = open("va_dump", O_CREAT | O_WRONLY, 0600);
+>> -	unlink("va_dump");
+>> +	fd = open("/dev/null", O_WRONLY);
+>>   	if (fd < 0) {
+>> -		ksft_test_result_skip("cannot create or open dump file\n");
+>> +		ksft_test_result_skip("cannot create or open /dev/null\n");
+>>   		ksft_finished();
+>>   	}
+ >>   >> @@ -152,7 +151,6 @@ static int validate_complete_va_space(void)
+>>   		while (start_addr + hop < end_addr) {
+>>   			if (write(fd, (void *)(start_addr + hop), 1) != 1)
+>>   				return 1;
+>> -			lseek(fd, 0, SEEK_SET);
+>>   
+>>   			hop += MAP_CHUNK_SIZE;
+>>   		}
+>>
+> 
+> The reason I had not used /dev/null was that write() was succeeding to /dev/null
+> even from an address not in my VA space. I was puzzled about this behaviour of
+> /dev/null and I chose to ignore it and just use a real file.
+> 
+> To test this behaviour, run the following program:
+> 
+> #include <stdio.h>
+> #include <stdlib.h>
+> #include <unistd.h>
+> #include <fcntl.h>
+> #include <sys/mman.h>
+> intmain()
+> {
+> intfd;
+> fd = open("va_dump", O_CREAT| O_WRONLY, 0600);
+> unlink("va_dump");
+> // fd = open("/dev/null", O_WRONLY);
+> intret = munmap((void*)(1UL<< 30), 100);
+> if(!ret)
+> printf("munmap succeeded\n");
+> intres = write(fd, (void*)(1UL<< 30), 1);
+> if(res == 1)
+> printf("write succeeded\n");
+> return0;
+> }
+> The write will fail as expected, but if you comment out the va_dump
+> lines and use /dev/null, the write will succeed.
 
-1. Create MAX_USERDATA_ITEMS (16) userdata entries successfully
-2. Confirm that attempting to create an additional userdata entry fails
+What exactly do we want to achieve with the write? Verify that the 
+output of /proc/self/map is reasonable and we can actually resolve a 
+fault / map a page?
 
-The selftest script uses the netcons library and checks the behavior
-by attempting to create entries beyond the maximum allowed limit.
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
-Tested-by: Simon Horman <horms@kernel.org>
-Reviewed-by: Simon Horman <horms@kernel.org>
----
- MAINTAINERS                                        |  2 +-
- tools/testing/selftests/drivers/net/Makefile       |  1 +
- .../selftests/drivers/net/netcons_overflow.sh      | 67 ++++++++++++++++++++++
- 3 files changed, 69 insertions(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d3cd4b7e48652b7a56873b840fd2ed6e12791008..44b560e3470ad612b60c7bf002152311bb419c72 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16175,7 +16175,7 @@ S:	Maintained
- F:	Documentation/networking/netconsole.rst
- F:	drivers/net/netconsole.c
- F:	tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
--F:	tools/testing/selftests/drivers/net/netcons_basic.sh
-+F:	tools/testing/selftests/drivers/net/netcons\*
- 
- NETDEVSIM
- M:	Jakub Kicinski <kuba@kernel.org>
-diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-index dafff5d7fe88c82a1d27aa49faca728b52435ebc..469179c18935ffcc12b979ccdc9f84e9d4082b90 100644
---- a/tools/testing/selftests/drivers/net/Makefile
-+++ b/tools/testing/selftests/drivers/net/Makefile
-@@ -7,6 +7,7 @@ TEST_INCLUDES := $(wildcard lib/py/*.py) \
- 
- TEST_PROGS := \
- 	netcons_basic.sh \
-+	netcons_overflow.sh \
- 	ping.py \
- 	queues.py \
- 	stats.py \
-diff --git a/tools/testing/selftests/drivers/net/netcons_overflow.sh b/tools/testing/selftests/drivers/net/netcons_overflow.sh
-new file mode 100755
-index 0000000000000000000000000000000000000000..29bad56448a24a2d98c21bd53b74f3bc2ca7e64a
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/netcons_overflow.sh
-@@ -0,0 +1,67 @@
-+#!/usr/bin/env bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# This test verifies that users can successfully create up to
-+# MAX_USERDATA_ITEMS userdata entries without encountering any failures.
-+#
-+# Additionally, it tests for expected failure when attempting to exceed this
-+# maximum limit.
-+#
-+# Author: Breno Leitao <leitao@debian.org>
-+
-+set -euo pipefail
-+
-+SCRIPTDIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
-+
-+source "${SCRIPTDIR}"/lib/sh/lib_netcons.sh
-+# This is coming from netconsole code. Check for it in drivers/net/netconsole.c
-+MAX_USERDATA_ITEMS=16
-+
-+# Function to create userdata entries
-+function create_userdata_max_entries() {
-+	# All these keys should be created without any error
-+	for i in $(seq $MAX_USERDATA_ITEMS)
-+	do
-+		# USERDATA_KEY is used by set_user_data
-+		USERDATA_KEY="key"${i}
-+		set_user_data
-+	done
-+}
-+
-+# Function to verify the entry limit
-+function verify_entry_limit() {
-+	# Allowing the test to fail without exiting, since the next command
-+	# will fail
-+	set +e
-+	mkdir "${NETCONS_PATH}/userdata/key_that_will_fail" 2> /dev/null
-+	ret="$?"
-+	set -e
-+	if [ "$ret" -eq 0 ];
-+	then
-+		echo "Adding more than ${MAX_USERDATA_ITEMS} entries in userdata should fail, but it didn't" >&2
-+		ls "${NETCONS_PATH}/userdata/" >&2
-+		exit "${ksft_fail}"
-+	fi
-+}
-+
-+# ========== #
-+# Start here #
-+# ========== #
-+
-+modprobe netdevsim 2> /dev/null || true
-+modprobe netconsole 2> /dev/null || true
-+
-+# Check for basic system dependency and exit if not found
-+check_for_dependencies
-+
-+# Remove the namespace, interfaces and netconsole target on exit
-+trap cleanup EXIT
-+# Create one namespace and two interfaces
-+set_network
-+# Create a dynamic target for netconsole
-+create_dynamic_target
-+# populate the maximum number of supported keys in userdata
-+create_userdata_max_entries
-+# Verify an additional entry is not allowed
-+verify_entry_limit
-+exit "${ksft_pass}"
+Why not access the memory directly+signal handler or using 
+/proc/self/mem, so you can avoid the temp file completely?
 
 -- 
-2.43.5
+Cheers,
+
+David / dhildenb
 
 
