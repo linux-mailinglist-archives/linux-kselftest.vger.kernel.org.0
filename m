@@ -1,128 +1,141 @@
-Return-Path: <linux-kselftest+bounces-24051-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24052-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D839A05987
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 12:19:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 37B67A05A1F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 12:41:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6056D3A50B7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 11:19:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD30D3A31A3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 11:41:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89A461F893B;
-	Wed,  8 Jan 2025 11:19:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D7D71F8AF6;
+	Wed,  8 Jan 2025 11:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="0O8o2Rg3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 081981A9B25;
-	Wed,  8 Jan 2025 11:19:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01DD11632D9
+	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jan 2025 11:40:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736335178; cv=none; b=m93QnYSd61TO9k8QrI5uW8ADjTAYCD2wivsEOYOGcaxjxYFIVuzH5UYLUYR3W6Td691ma+lqcOmM2m9kJSLiCJq6ROSl7EY8hFl7yxMVMTJDclGUH2gUCP5l7jb4LbxVlCyPAaaeICX2xC7QRAZmF7RUa7TuHWUMfxYuQ/FbtuY=
+	t=1736336461; cv=none; b=nteOqTEJgEalwoN+gALjSU1i47Unby/13gd//WxrdlMyg9G14/6JwJAiNPR2OVhtc7I2jAnsU71FSai7ieH9aa7oRWHcf0jz1tAlvhQkUr6DkdmLcYXJ241uD326EvxB2sh5bGUtWAk1dK72LgUG0hLnCHI16OvHF7qKkUq6y3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736335178; c=relaxed/simple;
-	bh=yeUemPURzxnkOKE217P6sfksaBXEA5Ks98fHnGpHndM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E7ZEjwMYgP/f2zFyw2nuxJ5aQGCWg47KpylJTG/8lQowQKiZ9rALBDXphutstPsX9RQvGDybQdTVg6M6BHufwF7SJ+4/OQPFK0HQQoZQPTo7QH3+3AIeUbXniRNNaIpyCKtzYTSl+2w3aWQdOEPLsAQc+7Nxcr8gJSEQkz66xQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aab925654d9so2924591966b.2;
-        Wed, 08 Jan 2025 03:19:35 -0800 (PST)
+	s=arc-20240116; t=1736336461; c=relaxed/simple;
+	bh=lWV/O/UttiTJkLULUBKYE0bPmgRlaCXXqj66Zi3wY7Q=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To; b=ENvpXy9ano4SuVYRDnmj3gVcPhd6SNtQY+QdiHttJHpHvrXeZBxASvGrHy6Q4K4KleHTC1RoP6lMsbI4x4Ly8lcBS+k32p0gtqY4baGQRd6gh12O004G1cHNhzoTQAzbOD+tWqjg+VCW+gC7AK41GFr0gA/WCGeBY2Bre1TVPiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=0O8o2Rg3; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-216634dd574so162847025ad.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Jan 2025 03:40:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1736336458; x=1736941258; darn=vger.kernel.org;
+        h=to:content-transfer-encoding:mime-version:message-id:date:subject
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fjDlOhfFjHDP1GFg1z841jK8M5cnJcOZe4IzLR2+JLQ=;
+        b=0O8o2Rg3kvaLwTV7ygIfM0gm+EEqBR9VCbQbVmRBWTBvDkUbau3obtsHEq1PZ3l1hp
+         kvTaA2nWRnRzyhPXWxj3Awjwv8AWEe4o7WUWbyxFQOmgDgnQJAjVo8MGxYEJfVlX53EO
+         spVp8qV768U6zs1ljdYdfNwcDGIVdFXlnm27ZvU4if347G3mFP5Z5vnoc8OAI7xYDEjH
+         GbXq6SEzpFnT6XOy7UIHyrLm+CT2StEp+MIZQIIaLESlHA/ZoRIIJ0QuEL88EIEZDTIF
+         pY9eMQBFbAh41Heay52j4jueCBlTsvk5XMF0Kwpjccu+xU1uMM4ITsIAi1CYSQOk65Io
+         HDXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736335174; x=1736939974;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qdZdR2vmY6pQ6CbeX0E/1eal93fC7L+t/jqfobGLHOg=;
-        b=AC+0ZOzjeqaTbWK86jWMIbxvZmQUIO9/hID3kX/L8XDZCxFozL6zLjARuO6ghYxBpT
-         ttdssqbcj6hNw6k7B27PNlifcx1lmt4q3GITBoam7I4VTTfHOkOGNhdn+jxoLZ0aaSNy
-         XwtBjX6nCwjYO5mnfNb/YeFlZ3gwnW+el67JGtaCX3ErO5MJF8rXpTjkhzLC9uTpswAE
-         SEXWvTwElQJnxaBTTMoaBJpajKGB92c2o1FPgQ76SDX35imZYs7tZibOVVZ8ibrSrSJt
-         PXCeRyrDP97A2vVOLlNSBdBXXft/3O/17dYNzFkPGe19Q55lmkoVLW/udmrxBt1WBEx0
-         +K5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVrpaR7GkrRK76be3DBTZaJ3uGb4hHLbj5FB9IM2hXauM1decmMguIQEt1TVnS2yDzc48q76d7S9TfKSSg=@vger.kernel.org, AJvYcCWAhoEK5ftIFviR41r989gMlrV13Bv61wkRuvcAZCv4fz4tB9qjTnyxHNkYLBRG79IbFaV1FY8j@vger.kernel.org, AJvYcCXnvRZOiJabNH0rz2iyYjzJiranoUFFAjU6lXasBzlsmF+cMMwKADPGHUXOQ5GnfmNii2cD6lcm6MJSSU4e/Dl5@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDzFtKG/aXyE9DI9clEpbr6NT2uf8yqFAsSPzD6eHXgGNbcrr1
-	cig7ML64Q+3sncnttl/tDdKP+lPuy7regbIqs8gazmz5sz7MeYCSHFXy9w==
-X-Gm-Gg: ASbGnctQWHBYjXrRPZb+6gedfh0Zwm85dVYXz3C3xAsBdx4C+28LqPqGDHzET2Od/lT
-	nBH7EpWrh3YurzVRHFSjP7y85oI1P08JRa4W7nN+CvDL2GHkEKR3ImPZUHUGpLOr3SVKicP+XKI
-	YSQsxJR22xuOkutm6lA857r+q4WDWtWRIs47yBKa20j/mW9e+2a1C39aZ54iBNFCg/kW9Rhi956
-	n9Ix0QM7NMRzVI7/5Si0k65RSAi6fCDkwRPsEJAsefz/1uZ
-X-Google-Smtp-Source: AGHT+IHLUmbkBfm8XFo3JgVs6d0HcYccmRHZ8A9kTcesVdXpYSZN39A0Hhu5szytmk47QfjVcYnudw==
-X-Received: by 2002:a17:906:f583:b0:aab:f124:cb82 with SMTP id a640c23a62f3a-ab2ab73e7fcmr171948066b.28.1736335174079;
-        Wed, 08 Jan 2025 03:19:34 -0800 (PST)
-Received: from gmail.com ([2a03:2880:30ff:70::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aac0f015ab9sm2463032466b.155.2025.01.08.03.19.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jan 2025 03:19:33 -0800 (PST)
-Date: Wed, 8 Jan 2025 03:19:31 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com, Simon Horman <horms@kernel.org>
-Subject: Re: [PATCH net-next v2 2/4] netconsole: selftest: Split the helpers
- from the selftest
-Message-ID: <20250108-hidden-wakeful-cuckoo-14a2bf@leitao>
-References: <20250103-netcons_overflow_test-v2-0-a49f9be64c21@debian.org>
- <20250103-netcons_overflow_test-v2-2-a49f9be64c21@debian.org>
- <20250106160653.2fcdb192@kernel.org>
+        d=1e100.net; s=20230601; t=1736336458; x=1736941258;
+        h=to:content-transfer-encoding:mime-version:message-id:date:subject
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fjDlOhfFjHDP1GFg1z841jK8M5cnJcOZe4IzLR2+JLQ=;
+        b=Lf2phqd5x9x3VDhuOOjE8HjKqBlQ+zJIwfIXB54ng6rKFUWWa5veROjdfOMVelI5Pr
+         vKV2seafI80P/j+NuTWMhWh3EIllzVvHu9CS40mQCaUaW5AXISGJsIoSoBDSpvlpkYac
+         lr/uwAiYvQskXzv6w52gZf9sO4RDiJ+kuislqeZnZOLz36O9zrun5TxXNI329s7UV2F3
+         HGQ56O48ZbKh2CNY8yWwKxV8U4jYVkHX9M78p0sDIxqdLWzz9eGI2ItEo0Vzb/ylb43H
+         wiKhaaoWrp/g2UWt6zmsSUA6eCPFkjZjp9nKW2JGt+tSgWK+il2CXypeG3+x2RUkRIDU
+         15tQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU4GvNWr5GT4ob1xqXx7Uao2ldN7X5p81cWhwpt/0qAMeWZkPEo20J10DUE9kRghqGrdP/IDOZg0SVTV4tz+ac=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWKJ7aiuMGU65zauGik4pDS3uEpW6Znqf8xPRhp6JUFzotzKYO
+	A6RLnZeoqWJk1+aQNI5OnTzSUbkFDaToTDfA+GjRqOkHvqoo5ITGf7uICOioKso=
+X-Gm-Gg: ASbGnctXMBWkBh7u7arb9AkvWDlhgpSOtOwyI9fVBxbZXCpmrHT2sLADielRXs2DENi
+	6dBTRtxcEBZKpjDyNSPZpCF7bRZim917A3VWhZdjLcoGtA3i7KZ3TKBT1AoMy5gsVhcCIuyO7fA
+	qzq8PixJxlz0In59KbU49ZgQ1U5oQOjkuPf/uBAI7DYy/J6fX/4Lsk4+JcfhUbz8oOq3KD+HZJS
+	0YkFxTUXHs+eVJFgSVRmhB4yQA5nE2EfTddoxw7Y2lYNQspOw20eu/ZeJg=
+X-Google-Smtp-Source: AGHT+IHFRNXARPASashVpP22bZbsPAi6fmuWW4IEFR4NWYNiuFbqTXoYAUP1T7En6RP96xLPSNA5Pg==
+X-Received: by 2002:a17:902:e750:b0:216:5268:9aab with SMTP id d9443c01a7336-21a83fe4ba3mr38646875ad.46.1736336458432;
+        Wed, 08 Jan 2025 03:40:58 -0800 (PST)
+Received: from localhost ([157.82.203.37])
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-219dc964b84sm325595705ad.50.2025.01.08.03.40.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jan 2025 03:40:57 -0800 (PST)
+From: Akihiko Odaki <akihiko.odaki@daynix.com>
+Subject: [PATCH 0/3] tun: Unify vnet implementation and fill full vnet
+ header
+Date: Wed, 08 Jan 2025 20:40:10 +0900
+Message-Id: <20250108-tun-v1-0-67d784b34374@daynix.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250106160653.2fcdb192@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABpkfmcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxNDI2MD3ZLSPF0zs1RDg0QTyySDZHMloMqCotS0zAqwKdGxtbUAGJ7vjVU
+ AAAA=
+To: Jonathan Corbet <corbet@lwn.net>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Jason Wang <jasowang@redhat.com>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>, 
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org, kvm@vger.kernel.org, 
+ virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
+ Yuri Benditovich <yuri.benditovich@daynix.com>, 
+ Andrew Melnychenko <andrew@daynix.com>, 
+ Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com, 
+ devel@daynix.com, Akihiko Odaki <akihiko.odaki@daynix.com>
+X-Mailer: b4 0.14-dev-fd6e3
 
-On Mon, Jan 06, 2025 at 04:06:53PM -0800, Jakub Kicinski wrote:
-> On Fri, 03 Jan 2025 04:57:50 -0800 Breno Leitao wrote:
-> > Split helper functions from the netconsole basic test into a separate
-> > library file to enable reuse across different netconsole tests. This
-> > change only moves the existing helper functions to lib/sh/lib_netcons.sh
-> > while preserving the same test functionality.
-> > 
-> > The helpers provide common functions for:
-> > - Setting up network namespaces and interfaces
-> > - Managing netconsole dynamic targets
-> > - Setting user data
-> > - Handling test dependencies
-> > - Cleanup operations
-> > 
-> > Do not make any change in the code, other than the mechanical
-> > separation.
-> 
-> You have to update the Makefile, we don't wildcard all files under
-> drivers/net/lib, the lib support in ksft is not great :(
-> 
-> $ make -C tools/testing/selftests/ \
-> 	TARGETS="drivers/net drivers/net/hw" \
-> 	install INSTALL_PATH=/tmp/ksft-net-drv
-> [... noise ...]
-> $ find /tmp/ksft-net-drv/ -iname '*netcons*'
-> /tmp/ksft-net-drv/drivers/net/netcons_basic.sh
-> /tmp/ksft-net-drv/drivers/net/netcons_overflow.sh
-> 
-> .. your new lib file won't get installed.
+When I implemented virtio's hash-related features to tun/tap [1],
+I found tun/tap does not fill the entire region reserved for the virtio
+header, leaving some uninitialized hole in the middle of the buffer
+after read()/recvmesg().
 
-Thanks for the detailed explanation. I found that the new lib was not
-installed.
+This series fills the uninitialized hole. More concretely, the
+num_buffers field will be initialized with 1, and the other fields will
+be inialized with 0. Setting the num_buffers field to 1 is mandated by
+virtio 1.0 [2].
 
-I will be adding the following to the upcoming revision.
+The change to virtio header is preceded by another change that refactors
+tun and tap to unify their virtio-related code.
 
-/tools/testing/selftests/drivers/net/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
+[1]: https://lore.kernel.org/r/20241008-rss-v5-0-f3cf68df005d@daynix.com
+[2]: https://lore.kernel.org/r/20241227084256-mutt-send-email-mst@kernel.org/
 
- TEST_INCLUDES := $(wildcard lib/py/*.py) \
-+                $(wildcard lib/sh/*.sh) \
-		 ../../net/net_helper.sh \
-		 ../../net/lib.sh \
+Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+---
+Akihiko Odaki (3):
+      tun: Unify vnet implementation
+      tun: Pad virtio header with zero
+      tun: Set num_buffers for virtio 1.0
+
+ MAINTAINERS            |   1 +
+ drivers/net/Kconfig    |   5 ++
+ drivers/net/Makefile   |   1 +
+ drivers/net/tap.c      | 174 ++++++----------------------------------
+ drivers/net/tun.c      | 212 ++++++++-----------------------------------------
+ drivers/net/tun_vnet.c | 191 ++++++++++++++++++++++++++++++++++++++++++++
+ drivers/net/tun_vnet.h |  24 ++++++
+ 7 files changed, 281 insertions(+), 327 deletions(-)
+---
+base-commit: a32e14f8aef69b42826cf0998b068a43d486a9e9
+change-id: 20241230-tun-66e10a49b0c7
+
+Best regards,
+-- 
+Akihiko Odaki <akihiko.odaki@daynix.com>
+
 
