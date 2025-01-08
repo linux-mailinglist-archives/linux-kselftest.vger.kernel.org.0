@@ -1,88 +1,114 @@
-Return-Path: <linux-kselftest+bounces-24043-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24044-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 095B9A0526B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 05:56:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3526A05312
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 07:16:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE652167A06
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 04:56:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 119033A6A7C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 06:16:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F0E5198851;
-	Wed,  8 Jan 2025 04:56:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="lOHbqkuu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAFBF1A23AC;
+	Wed,  8 Jan 2025 06:16:29 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60EB079FE
-	for <linux-kselftest@vger.kernel.org>; Wed,  8 Jan 2025 04:56:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B38D1A0BFB;
+	Wed,  8 Jan 2025 06:16:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736312192; cv=none; b=LSAYLEI6pg9PmdxPgbzGOoYbBYNUzel+dQnE0q7CdOJr5MDK2UZKHDgsNcHzIDRVqF/Lh3lGaqhmwm0YpPkAJHIgWC4CNQKHCCXlMRBvne6XIEJp8G68Q1JAoE0lkCjkd6eQgR+7wZmRCcmgA756edwQoAwoCMFESQIuwPn8h0o=
+	t=1736316989; cv=none; b=B0qF9i3Qos+TKrzOCUrFtSkaKkICoB7p+vKaDPo6mtrXFBi0T4W8OAJffeEmCPC2p4uyop676E7MtsqZfOUt66yHlyBfn/UaSxeukWjOk/VWOwqB2By14Fzwoyoc2aDNYidmFHqFpkbBZ+GqZvzSdA8wp2yiecZAeEDuUIZGZ/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736312192; c=relaxed/simple;
-	bh=NGu6EmnLNJaRhak7jqhR5JYU9X+B4KMm8+roVR5/bs4=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=WDybWcix3wmWbS2jB7oW37/75/X4Sd7Ti5ZZrr4sVHx6D/buSSgGXdIWbi3Ty24CJdsfV8He/ywFXBfncHLLEMW4zql/vXUxqHXFL8k2/7C5pYKt/fsdKEcFUMlQmVubb/fkPNZrQHQ+whi4AOocNrfgTC5WMjhuNMI3j/7cHPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=lOHbqkuu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2301C4CED0;
-	Wed,  8 Jan 2025 04:56:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1736312191;
-	bh=NGu6EmnLNJaRhak7jqhR5JYU9X+B4KMm8+roVR5/bs4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=lOHbqkuuxi5z7p6qOjJl1B56mZ7J6qDhEducjWri5zo2wASlxkx5QNqWBbCqKpqg7
-	 3Gg6jv/inAceczUzoST2icC04dVUdfoHX+pbYTFofsZ9UVxTofu1Ds5jHYlGyEqo+E
-	 O4OoJvdWJzoqwy9LQMvfbIszzBab//c6e7W6Ch9I=
-Date: Tue, 7 Jan 2025 20:56:31 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Ryan Roberts <ryan.roberts@arm.com>
-Cc: Shuah Khan <shuah@kernel.org>, David Hildenbrand <david@redhat.com>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org, Usama Arif
- <usamaarif642@gmail.com>, Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH v1] selftests/mm: Set allocated memory to non-zero
- content in cow test
-Message-Id: <20250107205631.6db80f0947102792c3f956a3@linux-foundation.org>
-In-Reply-To: <20250107142555.1870101-1-ryan.roberts@arm.com>
-References: <20250107142555.1870101-1-ryan.roberts@arm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1736316989; c=relaxed/simple;
+	bh=E4cj80yT/7TJ3pTJJyDumkOo2HKtryvSG00oPGG4abM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ieueI6DE7utGA9oQEscU52JJiWQkM7k1MDYVSdx4FLOxtMugDAHzhTqiIxnHHn6POaDOSU8Go4dYQCHIlujRKu/LvEu0SozotYPzlsK2qYcnrQieysAE6AAeiS7ao0F6b7/wgduJXfIAWezmAyyoaNfNw0eY5jVacnpdS65vSZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2068213D5;
+	Tue,  7 Jan 2025 22:16:54 -0800 (PST)
+Received: from [10.162.43.18] (K4MQJ0H1H2.blr.arm.com [10.162.43.18])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8CCFC3F66E;
+	Tue,  7 Jan 2025 22:16:22 -0800 (PST)
+Message-ID: <5811cf74-d333-4653-ab64-0e981eda7745@arm.com>
+Date: Wed, 8 Jan 2025 11:46:19 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] selftests/mm: virtual_address_range: Fix error when
+ CommitLimit < 1GiB
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+ Ryan Roberts <ryan.roberts@arm.com>, David Hildenbrand <david@redhat.com>
+References: <20250107-virtual_address_range-tests-v1-0-3834a2fb47fe@linutronix.de>
+ <20250107-virtual_address_range-tests-v1-1-3834a2fb47fe@linutronix.de>
+Content-Language: en-US
+From: Dev Jain <dev.jain@arm.com>
+In-Reply-To: <20250107-virtual_address_range-tests-v1-1-3834a2fb47fe@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue,  7 Jan 2025 14:25:53 +0000 Ryan Roberts <ryan.roberts@arm.com> wrote:
 
-> After commit b1f202060afe ("mm: remap unused subpages to shared zeropage
-> when splitting isolated thp"), cow test cases involving swapping out
-> THPs via madvise(MADV_PAGEOUT) started to be skipped due to the
-> subsequent check via pagemap determining that the memory was not
-> actually swapped out. Logs similar to this were emitted:
-> 
-> ...
+On 07/01/25 8:44 pm, Thomas Weißschuh wrote:
+> If not enough physical memory is available the kernel may fail mmap();
+> see __vm_enough_memory() and vm_commit_limit().
+> In that case the logic in validate_complete_va_space() does not make
+> sense and will even incorrectly fail.
+> Instead skip the test if no mmap() succeeded.
 >
-> The commit in question introduces the behaviour of scanning THPs and if
-> their content is predominantly zero, it splits them and replaces the
-> pages which are wholly zero with the zero page. These cow test cases
-> were getting caught up in this.
-> 
-> So let's avoid that by filling the contents of all allocated memory with
-> a non-zero value. With this in place, the tests are passing again.
-> 
+> Fixes: 010409649885 ("selftests/mm: confirm VA exhaustion without reliance on correctness of mmap()")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+>
+> ---
+> The logic in __vm_enough_memory() seems weird.
+> It describes itself as "Check that a process has enough memory to
+> allocate a new virtual mapping", however it never checks the current
+> memory usage of the process.
+> So it only disallows large mappings. But many small mappings taking the
+> same amount of memory are allowed; and then even automatically merged
+> into one big mapping.
+> ---
+>   tools/testing/selftests/mm/virtual_address_range.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+>
+> diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
+> index 2a2b69e91950a37999f606847c9c8328d79890c2..d7bf8094d8bcd4bc96e2db4dc3fcb41968def859 100644
+> --- a/tools/testing/selftests/mm/virtual_address_range.c
+> +++ b/tools/testing/selftests/mm/virtual_address_range.c
+> @@ -178,6 +178,12 @@ int main(int argc, char *argv[])
+>   		validate_addr(ptr[i], 0);
+>   	}
+>   	lchunks = i;
+> +
+> +	if (!lchunks) {
+> +		ksft_test_result_skip("Not enough memory for a single chunk\n");
+> +		ksft_finished();
+> +	}
+> +
+>   	hptr = (char **) calloc(NR_CHUNKS_HIGH, sizeof(char *));
+>   	if (hptr == NULL) {
+>   		ksft_test_result_skip("Memory constraint not fulfilled\n");
+>
 
-Thanks, I'll add
+I do not  know about __vm_enough_memory(), but I am going by your description:
+You say that the kernel may fail mmap() when enough physical memory is not
+there, but it may happen that we have already done 100 mmap()'s, and then
+the kernel fails mmap(), so if (!lchunks) won't be able to handle this case.
+Basically, lchunks == 0 is not a complete indicator of kernel failing mmap().
 
-Fixes: b1f202060afe ("mm: remap unused subpages to shared zeropage when splitting isolated thp")
-...
-Cc: Usama Arif <usamaarif642@gmail.com>
-Cc: Yu Zhao <yuzhao@google.com>
-Cc: <stable@vger.kernel.org>
+The basic assumption of the test is that any process should be able to exhaust
+its virtual address space, and running the test under memory pressure and the
+kernel violating this behaviour defeats the point of the test I think?
+
 
