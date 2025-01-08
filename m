@@ -1,66 +1,66 @@
-Return-Path: <linux-kselftest+bounces-24059-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24060-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81DC5A05A6D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 12:52:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15205A05A71
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 12:52:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D46CF3A039C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 11:52:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DBC51885913
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2025 11:52:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DAD81FC0F7;
-	Wed,  8 Jan 2025 11:50:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93F331FCCEB;
+	Wed,  8 Jan 2025 11:50:47 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525711FBC91;
-	Wed,  8 Jan 2025 11:50:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A318B1FC11C;
+	Wed,  8 Jan 2025 11:50:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736337045; cv=none; b=o9EDziNWC7HRyk3N4SAEpy4tbHtbS5ld0eaIvXdUTgTqwpeNlNCwfDGzHIOKyPb8vL11x7L+QsNLAl3C+q/y/kR3lxZAap8KVSwLoOsMmdplv4Zrz5O9bAHtAaOAqmXZ1ym+CBoJ3XSCZfXZ6MVMo48jjMh7aYIIw3lWLhG+k9k=
+	t=1736337047; cv=none; b=EKoqjWtDwNbj1FvLtEyDf3N8QUDKVSsJ6DNVb/5243O2WUVu6vK7kWz0JmwNWmI08ujoJS0Awy/rtyzYU7W5NFT2u0scIz9JY9xixgmGlwsG8K9z7yuvmsTAuraC1i89akcH1BbJ8zvZPfMfT5AggcFqV9Xm+cKiakDDOjKvovo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736337045; c=relaxed/simple;
-	bh=5NsZyre7dhB8gjVJrgCTRYi8hSfLC+Af6awHSBnzZaA=;
+	s=arc-20240116; t=1736337047; c=relaxed/simple;
+	bh=FxHCTrtEmHlr3dDtmtGQco4f9/wDAlZQfRPrG20bCrc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iuYnOzTMhKDqhMB0svLZD64dJhJi4bCCT5vNY7FsqyekP9zBYMCdZGb9RqQmT8incoYzJ93JPBf+y3h5NQKhDCQsRjpvU1MXEtoBG+cu7MNiLKm+27KsJh5WRVuR5Rk+jC5IB6o8iZT2tXMkmsU4c/l01EUxh/4pBFiSgI1LqS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.51
+	 In-Reply-To:To:Cc; b=MxjJlu8LPPEsToZKKnAh0zqcE3aSlUz3J6BPXlJWklf8VQ1o8lB9Yr6KaNp0lg0hLUTkdgRzdKLsg7g4YdTt+QsgXvxABgskVebGAHsuPCtHxuBk4677TeRF+5868Tmv+hQkY1wXZxPpJ2eLDkf9lzEnaYncodjyJhKF1P7SCFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5d3f28881d6so24759579a12.1;
-        Wed, 08 Jan 2025 03:50:43 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-aa689a37dd4so533854366b.3;
+        Wed, 08 Jan 2025 03:50:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736337041; x=1736941841;
+        d=1e100.net; s=20230601; t=1736337044; x=1736941844;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=10Sv9Y7ixrJh+da5K4zI/xAp2zqjv0+XI+pN38JTjZ8=;
-        b=cKJ5eVE5pVWL21KQQGfiJsX/PptL4v4RKoh9tbFJ9CgzyXdypFcFu7iVoiaUpYsqaL
-         C7d+wauGP5hgM3BDuMzHX9HVK3GYI3Rds8ux/epyzGKhvsJzzorokzQxxUIksN/HAcww
-         MU07cmyznAXrkBZsbOcDqBF7ww5u7tNcGdl6w7ufCCNF4n/HxaYc+LzyyP5dEhoSLkzP
-         gCfdSK4/OZVoBUa2e+wC5StiJzGp11Y5JZN9ioBE4GYsrpKvnw6pGGaPhbklu1+bDVOv
-         y86jpD4MF35vsFxQEAAo0SML14YZc63mObP37BNTTYQSeFVSOBhcoJsnFtAYp8KrHSVy
-         1kfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWEmYFgCGpSv59kgqsj0b+PYKOzuAYlrq343QjJ5usOhcaUOX5+RDHrqIpsknztjMhP/82uqlpNG8dmJcz8skwN@vger.kernel.org, AJvYcCXsvq4LQ1RdWcE2UrdEWLtE6xofIRKA3nCQFLPCHzavD/2lzJjKF0FrsVo8r1KxboAO9HcHLRO4aARGlU0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwBRT38jZc8YSTQ6Sp6nCIAhobeylSClMWqldEHKs1zMZ+cDrd
-	kmryP/+TwmSIDE2PoIoLPZ6s42hoafvIiTctkthXoPerTB4rue01
-X-Gm-Gg: ASbGncs8UhngJMMJ4ybMYEMNts8SWjncp48+7co7TaMoTZwFnBsiY31JSFbDA4VtPEv
-	caW8vlnWrKj3g+yXXnmFE2KJr8GnZNmVGC59DXybMoFkqTBRDHzlRMhG1p4yvCihmbjWY4HYvQw
-	OKiesGuixv5haxqMCryFT8q95O9fIRWLYneDrXuHdPp8gYVu5YuKEe7ZrRpimZNBZVWG6S72Au/
-	gD9y7xoG8WAPX3I6f3N+nYfRHs6Rlewr33r+k3gvcACpEGm
-X-Google-Smtp-Source: AGHT+IH7NRytDkgi57nzFn007chLWDtnMegqO5CoMn01qjqkiJcL0beA2O+M/nI74hZBU5K073h7fQ==
-X-Received: by 2002:a05:6402:2548:b0:5d4:2ef7:1c with SMTP id 4fb4d7f45d1cf-5d972e639e4mr5337731a12.24.1736337041391;
-        Wed, 08 Jan 2025 03:50:41 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:74::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aae8b7de1cesm2321862666b.23.2025.01.08.03.50.40
+        bh=NJbpaWVafqwrrz+ZENkKDr5EG7mjxcdM072QuX4YMuo=;
+        b=VY/TNxFC5NZlosi5ZJXgbSwG66Oy9AErQ6rK8hQs4wmQV+PI0r6RhRJZDuUhwe62+a
+         QqVTAsfNWlpK+iQ0k3Xs9KgolvAuwqVb3Ve0O7jsDrv91MJ++amiDFK3g30LJ45+718a
+         9NuDYJ9uLq+ssqMaxDqGkFOjq82dJa6UdATSFPiDFSNbp+pEiVZOMKp9aEJO6MBFmNjK
+         Y6fezCyIeUIt1SfHwGQl5bLQUmllhAt3kYEuqQobfLdT5bTJcK4/8k47b0GUSMtrF0fQ
+         aQvYH+11WTH2b79h6eT3JE4LeGFAVSIpyRXZSKD5u1VcrNYq9TXcK/pXEV3mHoMX57E2
+         32rw==
+X-Forwarded-Encrypted: i=1; AJvYcCW6FUehK7QzL0l4qVzeHM/Q/4rOLTBAAylCIFAkvRYlaYi4q+sYTZMZPkuapap/Q+CVTae7zEciTt9ZErpNJbO9@vger.kernel.org, AJvYcCXG7VJkKN1SYl1NG/fHyXUYnFuDRvTYxToBJzugIWawGOYJF8UAsetgvREIDiUY0DoIIo8zq7QW5tvulAo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvjhqbJf9QxfK/XFpdlDMC9quttPfdbVLwMDN/wWBVoPPf++v+
+	wiB4QtEyk7YhHTSuPQhIgQRxlvC/jp7etCj96Hw7r6F/tXLHhQeakNYwxw==
+X-Gm-Gg: ASbGnct9ukxvNLVBH25iFdLTxL4E8n6V8Un98lGWotYMgjlu5GPOiD87/Bw9PRHmUP3
+	RDq+6N7XtShfJlDJeBrl4UGS54YpAqqYYh0P8/yK6om3SNPS7jbRazTwx9P7Kchl4K+Ojpol7vT
+	mCMh0MgrVDVBs+bToS8FW/idkzkmgIzORb4fKuTH6dQEtKZKcxeqJSxQcfGb2XdsUUpsEyEBltA
+	1C3lkplMqkQ2Pv1Z+vXZFaR7beG8q00iavXQODhvgbZ
+X-Google-Smtp-Source: AGHT+IGakNtI4bbSXZ+97iyWdDz31MdnmCsTICCsbc+mlfNjy7LWX8mBCDxPvF0ejv6v1zPchbYH/g==
+X-Received: by 2002:a17:906:f585:b0:aa6:7933:8b26 with SMTP id a640c23a62f3a-ab2ab6a8deamr162899666b.9.1736337043769;
+        Wed, 08 Jan 2025 03:50:43 -0800 (PST)
+Received: from localhost ([2a03:2880:30ff::])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d80678c6dfsm25460691a12.37.2025.01.08.03.50.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jan 2025 03:50:40 -0800 (PST)
+        Wed, 08 Jan 2025 03:50:43 -0800 (PST)
 From: Breno Leitao <leitao@debian.org>
-Date: Wed, 08 Jan 2025 03:50:27 -0800
-Subject: [PATCH net-next v3 3/4] netconsole: selftest: Delete all userdata
- keys
+Date: Wed, 08 Jan 2025 03:50:28 -0800
+Subject: [PATCH net-next v3 4/4] netconsole: selftest: verify userdata
+ entry limit
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250108-netcons_overflow_test-v3-3-3d85eb091bec@debian.org>
+Message-Id: <20250108-netcons_overflow_test-v3-4-3d85eb091bec@debian.org>
 References: <20250108-netcons_overflow_test-v3-0-3d85eb091bec@debian.org>
 In-Reply-To: <20250108-netcons_overflow_test-v3-0-3d85eb091bec@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -80,71 +80,139 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
  kernel-team@meta.com, Simon Horman <horms@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2070; i=leitao@debian.org;
- h=from:subject:message-id; bh=5NsZyre7dhB8gjVJrgCTRYi8hSfLC+Af6awHSBnzZaA=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnfmaKFSsKWkOpGsBGb+V3+6JtTu/T/ABaU304s
- fNMMYay2/eJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ35migAKCRA1o5Of/Hh3
- bZzXD/90cStCYZR/lkixASdyf3TlSbyXMF4991WY+3N0N2Kivj9DRwkBaG5s5TP7+76Lhx3Xdej
- /QG6rTZRrd3SiQ67wunmvXuEwtIjeR6YVLHNxXFIwK1nFbXwEeq/T9kXffs/PS1cgSMAn0BzbTj
- l4IxTehF8k6Lhzm4bEZrjsAkwtrwL+eeW8PhUljQ5BAonIVxHzm3ZLYd4AQwwdaurJNEqCgMsz1
- aiKwywDOhQ7kOl5NiLU+c5cFpcrBjY054pu1hz5CZYHMD/sMmudRgiNNDokXT5CT8RACJ3AeZv0
- nfFppHLgQWjk0ANJzbjPgMrd0r3lvvtnC4NPzI55rFNCG1goIvKuSEo6Mm26VXozLOwn9YWVTH9
- TX5XH5Qc4+kYJV0xnDssxJ4tZa+n8+AgEC7oy2VSIxcu1Z4DuEUqMuVX+v8ydjUEg+PDOAKbKvF
- ZimAezn1GtQqSp+EA3/xGYzgklDPDZooF/dJbB74nItNhKam6vZiS/BPeSmj5TTMawZhsusrWJq
- 4ssbm6tff6hZQxt/jo7a9F4GEoKeTccwMdmop0QMNv5BTJYogceVtEDSNIaAs03pIhiRfrU1G8+
- 62oBetljrc10Ya43KTcXsWUw9+5r5K4Df8gr4aGNlUBVT4rCxPtZc8oa8/ZABW/4sVkc56JRDaN
- LYuwkCrzMQgaIeg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4125; i=leitao@debian.org;
+ h=from:subject:message-id; bh=FxHCTrtEmHlr3dDtmtGQco4f9/wDAlZQfRPrG20bCrc=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnfmaK/oL+TEo0vdH3f7qL2qsiDS0LlxM+QiXYa
+ a+AphiRc92JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ35migAKCRA1o5Of/Hh3
+ bYb1D/9OiOlMTwUJSSQOGK0b8iQ2Cu4BW3XBxlDlKLkPgDZC+k+wc9NwdKfoh/DEUtHuaHMr7hM
+ 51yWAP2VCFy3/WwexQS8c09K7ZeovJCYn34V7rOEt6+cUdS0L2bMb+5PhiBG5v+7wnAYWz6HYuc
+ Du14l8jPNCCp3cilVRG1UZnIe3V1GYB62w1E/ctn4UoM19BjHIy9GbtAbUkXS9mBmzzH6FHwSSC
+ +SCJSL7UTq+9to0jzR20CDercbl8eIfSOhPjiOJWRm1v0Xdt8lzeDN1d8V1g/q1EZZY0EwtEzkg
+ U2ICUoRyu9JxP6Vw22PO+Qq9cSgYPZINTHN7OuIhIv6AbEJWxCcHo4cR/kaQLP+v7tw140VRw1m
+ RP2fdMnf4CSsO9Aq405rCXL/Q6eBNM0PjflJXpiDL3Zl2HGm5J9s47fOmzdy5XHVM27+WLnDzYU
+ zQgQPfWdod2Q7jAuKFYSTwEaqYmvnvyscK6Uky6rlqadL71y8A7M/jLtsZC812cOyIP483qc/hH
+ Kb15Vv7a+DB47JZEWBflAjYeZU4CROn9/QhBWLlasu6ENfLHLjNMQfkbQ+TAmwchBYiWAFkkjye
+ xdIaOVCWV1lba/UzxMLavhrOnbNSv0c3VKhQQpVKiiWDCcbsuZgf5JOrER9F8glxisy50jzICjO
+ YBGiau5Q+GrHdLA==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Modify the cleanup function to remove all userdata keys created during the
-test, instead of just deleting a single predefined key. This ensures a
-more thorough cleanup of temporary resources.
+Add a new selftest for netconsole that tests the userdata entry limit
+functionality. The test performs two key verifications:
 
-Move the KEY_PATH variable definition inside the set_user_data function
-to reduce global variables and improve encapsulation. The KEY_PATH
-variable is now dynamically created when setting user data.
+1. Create MAX_USERDATA_ITEMS (16) userdata entries successfully
+2. Confirm that attempting to create an additional userdata entry fails
 
-This change has no effect on the current test, while improving an
-upcoming test that would create several userdata entries.
+The selftest script uses the netcons library and checks the behavior
+by attempting to create entries beyond the maximum allowed limit.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
+Tested-by: Simon Horman <horms@kernel.org>
 Reviewed-by: Simon Horman <horms@kernel.org>
 ---
- tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ MAINTAINERS                                        |  2 +-
+ tools/testing/selftests/drivers/net/Makefile       |  1 +
+ .../selftests/drivers/net/netcons_overflow.sh      | 67 ++++++++++++++++++++++
+ 3 files changed, 69 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-index fdd45a3468f17449eeb66d9a808b7a3b2107e47c..3acaba41ac7b21aa2fd8457ed640a5ac8a41bc12 100644
---- a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-+++ b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-@@ -23,7 +23,6 @@ TARGET=$(mktemp -u netcons_XXXXX)
- DEFAULT_PRINTK_VALUES=$(cat /proc/sys/kernel/printk)
- NETCONS_CONFIGFS="/sys/kernel/config/netconsole"
- NETCONS_PATH="${NETCONS_CONFIGFS}"/"${TARGET}"
--KEY_PATH="${NETCONS_PATH}/userdata/${USERDATA_KEY}"
- # NAMESPACE will be populated by setup_ns with a random value
- NAMESPACE=""
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d3cd4b7e48652b7a56873b840fd2ed6e12791008..44b560e3470ad612b60c7bf002152311bb419c72 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16175,7 +16175,7 @@ S:	Maintained
+ F:	Documentation/networking/netconsole.rst
+ F:	drivers/net/netconsole.c
+ F:	tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+-F:	tools/testing/selftests/drivers/net/netcons_basic.sh
++F:	tools/testing/selftests/drivers/net/netcons\*
  
-@@ -116,8 +115,8 @@ function cleanup() {
+ NETDEVSIM
+ M:	Jakub Kicinski <kuba@kernel.org>
+diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
+index dafff5d7fe88c82a1d27aa49faca728b52435ebc..469179c18935ffcc12b979ccdc9f84e9d4082b90 100644
+--- a/tools/testing/selftests/drivers/net/Makefile
++++ b/tools/testing/selftests/drivers/net/Makefile
+@@ -7,6 +7,7 @@ TEST_INCLUDES := $(wildcard lib/py/*.py) \
  
- 	# delete netconsole dynamic reconfiguration
- 	echo 0 > "${NETCONS_PATH}"/enabled
--	# Remove key
--	rmdir "${KEY_PATH}"
-+	# Remove all the keys that got created during the selftest
-+	find "${NETCONS_PATH}/userdata/" -mindepth 1 -type d -delete
- 	# Remove the configfs entry
- 	rmdir "${NETCONS_PATH}"
- 
-@@ -139,6 +138,7 @@ function set_user_data() {
- 		exit "${ksft_skip}"
- 	fi
- 
-+	KEY_PATH="${NETCONS_PATH}/userdata/${USERDATA_KEY}"
- 	mkdir -p "${KEY_PATH}"
- 	VALUE_PATH="${KEY_PATH}""/value"
- 	echo "${USERDATA_VALUE}" > "${VALUE_PATH}"
+ TEST_PROGS := \
+ 	netcons_basic.sh \
++	netcons_overflow.sh \
+ 	ping.py \
+ 	queues.py \
+ 	stats.py \
+diff --git a/tools/testing/selftests/drivers/net/netcons_overflow.sh b/tools/testing/selftests/drivers/net/netcons_overflow.sh
+new file mode 100755
+index 0000000000000000000000000000000000000000..29bad56448a24a2d98c21bd53b74f3bc2ca7e64a
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/netcons_overflow.sh
+@@ -0,0 +1,67 @@
++#!/usr/bin/env bash
++# SPDX-License-Identifier: GPL-2.0
++
++# This test verifies that users can successfully create up to
++# MAX_USERDATA_ITEMS userdata entries without encountering any failures.
++#
++# Additionally, it tests for expected failure when attempting to exceed this
++# maximum limit.
++#
++# Author: Breno Leitao <leitao@debian.org>
++
++set -euo pipefail
++
++SCRIPTDIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
++
++source "${SCRIPTDIR}"/lib/sh/lib_netcons.sh
++# This is coming from netconsole code. Check for it in drivers/net/netconsole.c
++MAX_USERDATA_ITEMS=16
++
++# Function to create userdata entries
++function create_userdata_max_entries() {
++	# All these keys should be created without any error
++	for i in $(seq $MAX_USERDATA_ITEMS)
++	do
++		# USERDATA_KEY is used by set_user_data
++		USERDATA_KEY="key"${i}
++		set_user_data
++	done
++}
++
++# Function to verify the entry limit
++function verify_entry_limit() {
++	# Allowing the test to fail without exiting, since the next command
++	# will fail
++	set +e
++	mkdir "${NETCONS_PATH}/userdata/key_that_will_fail" 2> /dev/null
++	ret="$?"
++	set -e
++	if [ "$ret" -eq 0 ];
++	then
++		echo "Adding more than ${MAX_USERDATA_ITEMS} entries in userdata should fail, but it didn't" >&2
++		ls "${NETCONS_PATH}/userdata/" >&2
++		exit "${ksft_fail}"
++	fi
++}
++
++# ========== #
++# Start here #
++# ========== #
++
++modprobe netdevsim 2> /dev/null || true
++modprobe netconsole 2> /dev/null || true
++
++# Check for basic system dependency and exit if not found
++check_for_dependencies
++
++# Remove the namespace, interfaces and netconsole target on exit
++trap cleanup EXIT
++# Create one namespace and two interfaces
++set_network
++# Create a dynamic target for netconsole
++create_dynamic_target
++# populate the maximum number of supported keys in userdata
++create_userdata_max_entries
++# Verify an additional entry is not allowed
++verify_entry_limit
++exit "${ksft_pass}"
 
 -- 
 2.43.5
