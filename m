@@ -1,56 +1,56 @@
-Return-Path: <linux-kselftest+bounces-24142-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24143-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AEB2A07EF2
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 18:40:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 649A0A07EF5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 18:40:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B68116859E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 17:40:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 272AB3A7DA7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 17:40:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F33D1953BD;
-	Thu,  9 Jan 2025 17:39:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 088091A238E;
+	Thu,  9 Jan 2025 17:39:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="jZBwCQLG"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="IoEfXM2z"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6DB191F83;
-	Thu,  9 Jan 2025 17:39:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57507190662;
+	Thu,  9 Jan 2025 17:39:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736444369; cv=pass; b=QY+kTHALOdMP0WkWOgSj4peL+c2fff3mYdWDtgIxXR80eLvari8uudxjtmQVIHk2iBnc1c+E0Z1rdAL/olcnJRUjMpfO9rDYJRBlG0eyuGB31RQeRobehv3LjicUt9vyiS0HY+kyDPtcscaNOlBz4SPv7yk+8lpPK+Iqeous6kA=
+	t=1736444370; cv=pass; b=sh0LKeAWap79tV9e7QPR1FkzEPhUvQRdT3/AY+IBHHNLdrWdf4hT2eE+nljwrvC01JVmTXNSQ5SilNcOmlonqK4xQB1jLzL+MikzJIw10NQnEn7WZ1VCfYZcREiuPPXDMRtbJrBbfzrSGWTlur10eEVvdbdsE23LWmSfAF1JYJQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736444369; c=relaxed/simple;
-	bh=dMj0sy0YSVnlCxQmc/t4dFNEI9VrrWmASdc9jq3wOo8=;
+	s=arc-20240116; t=1736444370; c=relaxed/simple;
+	bh=I/HPO0FETKLELTJ02oEm2rWJlXiUjzXWKzfoKZWpxg8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pIhS0itrDWxTnne68o82CepJZ3sKC9cktzWxtcdeYcjqZfzBse2Ifvr9T5aCRLeoNNGipS/nISZMV0PthDs4fA++H/VF+RZMmrBLitB00tHh24HEMyfp6+7xusKUOdcOPppcPEt0UULbW6V9WSJ6zUiG+e8UlErVPbCO8yuAYv8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=jZBwCQLG; arc=pass smtp.client-ip=136.143.188.112
+	 MIME-Version:Content-Type; b=TNJ6tsA4kb6al7JoAet/yCAf11wMgUkGnZ4eOcQue3j+HBfBtkCh2JRqRDvL5W+B/gxbVRPq53Z6xjNSQu5DYFdiXwwlHWU97yVM3nk+pG+5+G2o7F/2Bh2Wae0Bo+3bLCLehE4h+A1QFwLmuXezIAZshxaXELGQ2r7imstUeUA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=IoEfXM2z; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1736444349; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1736444353; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=HHkqer9D9jOpYsHxWEyHRpi13jplxxgtYJDH71wMARrdu73i7SG/Bwa2BnWYvhh5j1T1bDGGM81c+M8H/isTROi8mXFAjDjAcTAYH6c4CNY+OTAd62wZ44V26E/4wGjzIsGQmtCvxQuldUR0wUEVcGloHhwKuiD+P0ZstplSFrU=
+	b=L3XyLRs0/trsxb9q5kJQLxsWkrZgP4LKcSTY9MpD+TWdxL3bVef3hn1GeNer/FNAPcWug+2y9E2FUbiyd7XM2yaey7hVrg4VuiHM2xcfr1iPO2Bgdbu32D5rAdbbFupngXZt2REyMRDKk8XaxBIDonxRNahZSIMY3EFWU4mfDeQ=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1736444349; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=eJgiI6Vx5zFOc8jFmmCKCG1szUd46kqPcPMGhbEUP04=; 
-	b=NEs77iCxdncBgju4MXnwU0ozZeijflfvDge8zUAoe5UCgkq1X3PSJQUpglLYwQD/8l44guCeHnXLzSiJeSg7PBR0VhgPrYur2w+Z4PynY317ysyW/2ytmRnnNNGC+xTmCXeSwGqVwvU2sDh+7tuUqyaTyjk8V8xQLSd5UoQsTnA=
+	t=1736444353; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=1BDwyNsRViNjuXlosD/y7qBAy6y9oVjeJbNXHd6mzLM=; 
+	b=Ej8pZXtD0YiNC16sxLhqORerDh5GbRffB/N2oicvJ7Sa5HaRRrRfdSHDmjl4SpvxZ+6qpIOhO/f/uKSyDlEjp0I4jYyt/2bYANYp3bINuiMgJmFqnmRTp5VO2zxS90JB9uO/5C38EosKaWTAeLv2Lp5pzKGeKfWkg7ngEjy6gzg=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
 	dmarc=pass header.from=<usama.anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1736444349;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1736444353;
 	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=eJgiI6Vx5zFOc8jFmmCKCG1szUd46kqPcPMGhbEUP04=;
-	b=jZBwCQLGCsVNAzEP5uALr00gMia10ZsyrVMFVizansqMMAt9eckT3AfdkjHHKlWi
-	0uFx9Fbnehzcxvk4GpExok1AWpkkYgfEBO+UzhhOjZxdeyZOnmuObiTXT/kP2miLyw4
-	eFzMHGY0U8dg8EMFxKnjozg0GX29Kf8d9Yv66s5Y=
-Received: by mx.zohomail.com with SMTPS id 1736444346808142.8966002616171;
-	Thu, 9 Jan 2025 09:39:06 -0800 (PST)
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
+	bh=1BDwyNsRViNjuXlosD/y7qBAy6y9oVjeJbNXHd6mzLM=;
+	b=IoEfXM2z6Y0Gt5j9jm1HV1EL/AHRZJTGgqvgphvkAE2zkV/mWHBZP/KiSGM4qyrg
+	dxIo9nl7hsc+vRkFFA1R+eo1y0jn5uqf80ncEIaqmVMbWMd3BP2MbGT9MTzg5V2+/mO
+	uGLS8n4/Nt3yXvwUPX2SZvJdHjqcUrNQDuvKBtts=
+Received: by mx.zohomail.com with SMTPS id 1736444351927807.2354560001573;
+	Thu, 9 Jan 2025 09:39:11 -0800 (PST)
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 To: Kees Cook <kees@kernel.org>,
 	Andy Lutomirski <luto@amacapital.net>,
@@ -63,9 +63,9 @@ To: Kees Cook <kees@kernel.org>,
 	linux-mm@kvack.org
 Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
 	kernel@collabora.com
-Subject: [PATCH 04/16] selftests/mm: Fix type mismatch warnings
-Date: Thu,  9 Jan 2025 22:38:30 +0500
-Message-Id: <20250109173842.1142376-5-usama.anjum@collabora.com>
+Subject: [PATCH 05/16] selftests/mm: kselftest_harness: Fix warnings
+Date: Thu,  9 Jan 2025 22:38:31 +0500
+Message-Id: <20250109173842.1142376-6-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250109173842.1142376-1-usama.anjum@collabora.com>
 References: <20250109173842.1142376-1-usama.anjum@collabora.com>
@@ -75,169 +75,76 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
-Fix type mismatch warnings in different tests.
+Found warnings through hmm-tests and mdwe_test.
+
+Fix following warnings:
+- Mark unused variable with unused attribute
+- __EXPECT is causing types mismatch warnings when __exp is unsigned and
+  _seen is equal to a constant number, __typeof__(_seen) returns signed
+  type.
+
+  hmm-tests.c: In function ‘hmm_anon_read’:
+  ../kselftest_harness.h:523:52: warning: comparison of integer expressions of different signedness: ‘long unsigned int’ and ‘int’ [-Wsign-compare]
+    523 |         __EXPECT(expected, #expected, seen, #seen, !=, 1)
+        |                                                    ^~
+  ../kselftest_harness.h:759:21: note: in definition of macro ‘__EXPECT’
+    759 |         if (!(__exp _t __seen)) { \
+        |                     ^~
+  hmm-tests.c:303:9: note: in expansion of macro ‘ASSERT_NE’
+    303 |         ASSERT_NE(npages, 0);
+        |         ^~~~~~~~~
+- Mark variant as unused:
+mdwe_test.c: In function ‘wrapper_prctl_flags’:
+../kselftest_harness.h:177:52: warning: unused parameter ‘variant’ [-Wunused-parameter]
+  177 |                 struct __fixture_variant_metadata *variant) \
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+../kselftest_harness.h:152:25: note: in expansion of macro ‘__TEST_IMPL’
+  152 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+      |                         ^~~~~~~~~~~
+mdwe_test.c:23:1: note: in expansion of macro ‘TEST’
+   23 | TEST(prctl_flags)
+      | ^~~~
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/mm/compaction_test.c          | 2 +-
- tools/testing/selftests/mm/gup_longterm.c             | 3 ++-
- tools/testing/selftests/mm/hugetlb_dio.c              | 2 +-
- tools/testing/selftests/mm/hugetlb_fault_after_madv.c | 2 +-
- tools/testing/selftests/mm/hugetlb_madv_vs_map.c      | 2 +-
- tools/testing/selftests/mm/ksm_functional_tests.c     | 6 +++---
- tools/testing/selftests/mm/mlock-random-test.c        | 4 ++--
- tools/testing/selftests/mm/pkey_sighandler_tests.c    | 2 +-
- tools/testing/selftests/mm/soft-dirty.c               | 2 +-
- 9 files changed, 13 insertions(+), 12 deletions(-)
+ tools/testing/selftests/kselftest_harness.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
-index 8d23b698ce9db..f6f32a5732e9e 100644
---- a/tools/testing/selftests/mm/compaction_test.c
-+++ b/tools/testing/selftests/mm/compaction_test.c
-@@ -134,7 +134,7 @@ int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
- 	lseek(fd, 0, SEEK_SET);
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 666c9fde76da9..76e6b3be0e9d6 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -174,7 +174,7 @@
+ 	static void test_name(struct __test_metadata *_metadata); \
+ 	static inline void wrapper_##test_name( \
+ 		struct __test_metadata *_metadata, \
+-		struct __fixture_variant_metadata *variant) \
++		struct __fixture_variant_metadata __attribute__((unused)) *variant) \
+ 	{ \
+ 		_metadata->setup_completed = true; \
+ 		if (setjmp(_metadata->env) == 0) \
+@@ -756,7 +756,7 @@
+ 	/* Avoid multiple evaluation of the cases */ \
+ 	__typeof__(_expected) __exp = (_expected); \
+ 	__typeof__(_seen) __seen = (_seen); \
+-	if (!(__exp _t __seen)) { \
++	if (!(__exp _t (__typeof__(_expected)) __seen)) { \
+ 		/* Report with actual signedness to avoid weird output. */ \
+ 		switch (is_signed_type(__exp) * 2 + is_signed_type(__seen)) { \
+ 		case 0: { \
+@@ -965,7 +965,7 @@ static inline void __test_check_assert(struct __test_metadata *t)
+ }
  
- 	if (write(fd, init_nr_hugepages, strlen(init_nr_hugepages))
--	    != strlen(init_nr_hugepages)) {
-+	    != (signed long int)strlen(init_nr_hugepages)) {
- 		ksft_print_msg("Failed to write value to /proc/sys/vm/nr_hugepages: %s\n",
- 			       strerror(errno));
- 		goto close_fd;
-diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
-index 03a31dcb57577..7f1b4ad7fcaec 100644
---- a/tools/testing/selftests/mm/gup_longterm.c
-+++ b/tools/testing/selftests/mm/gup_longterm.c
-@@ -446,7 +446,8 @@ static int tests_per_test_case(void)
- 
- int main(void)
+ struct __test_metadata *__active_test;
+-static void __timeout_handler(int sig, siginfo_t *info, void *ucontext)
++static void __timeout_handler(int sig, siginfo_t *info, void __attribute__((unused)) *ucontext)
  {
--	int i, err;
-+	unsigned int i;
-+	int err;
+ 	struct __test_metadata *t = __active_test;
  
- 	pagesize = getpagesize();
- 	nr_hugetlbsizes = detect_hugetlb_page_sizes(hugetlbsizes,
-diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
-index db63abe5ee5e8..62f368d4c8c16 100644
---- a/tools/testing/selftests/mm/hugetlb_dio.c
-+++ b/tools/testing/selftests/mm/hugetlb_dio.c
-@@ -63,7 +63,7 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
- 	memset(buffer, 'A', writesize);
- 
- 	/* Write the buffer to the file */
--	if (write(fd, buffer, writesize) != (writesize)) {
-+	if (write(fd, buffer, writesize) != (signed int)writesize) {
- 		munmap(orig_buffer, h_pagesize);
- 		close(fd);
- 		ksft_exit_fail_perror("Error writing to file\n");
-diff --git a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-index e62f4e1388f26..2b5acb13ee0be 100644
---- a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-+++ b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-@@ -88,7 +88,7 @@ int main(void)
- 				MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
- 				-1, 0);
- 
--		if ((unsigned long)huge_ptr == -1)
-+		if (huge_ptr == MAP_FAILED)
- 			ksft_exit_skip("Failed to allocated huge page\n");
- 
- 		pthread_create(&thread1, NULL, madv, NULL);
-diff --git a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
-index 6c326cf3dcf6b..eda38b63e9e8d 100644
---- a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
-+++ b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
-@@ -100,7 +100,7 @@ int main(void)
- 				MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
- 				-1, 0);
- 
--		if ((unsigned long)huge_ptr == -1) {
-+		if (huge_ptr == MAP_FAILED) {
- 			ksft_test_result_fail("Failed to allocate huge page\n");
- 			return KSFT_FAIL;
- 		}
-diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
-index 66b4e111b5a27..4f96126e4e1f9 100644
---- a/tools/testing/selftests/mm/ksm_functional_tests.c
-+++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-@@ -306,7 +306,7 @@ static void test_unmerge_zero_pages(void)
- 
- 	/* Check if ksm_zero_pages is updated correctly after KSM merging */
- 	pages_expected = size / pagesize;
--	if (pages_expected != get_my_ksm_zero_pages()) {
-+	if ((signed long)pages_expected != get_my_ksm_zero_pages()) {
- 		ksft_test_result_fail("'ksm_zero_pages' updated after merging\n");
- 		goto unmap;
- 	}
-@@ -319,7 +319,7 @@ static void test_unmerge_zero_pages(void)
- 
- 	/* Check if ksm_zero_pages is updated correctly after unmerging */
- 	pages_expected /= 2;
--	if (pages_expected != get_my_ksm_zero_pages()) {
-+	if ((signed long)pages_expected != get_my_ksm_zero_pages()) {
- 		ksft_test_result_fail("'ksm_zero_pages' updated after unmerging\n");
- 		goto unmap;
- 	}
-@@ -625,7 +625,7 @@ static void test_prot_none(void)
- {
- 	const unsigned int size = 2 * MiB;
- 	char *map;
--	int i;
-+	unsigned int i;
- 
- 	ksft_print_msg("[RUN] %s\n", __func__);
- 
-diff --git a/tools/testing/selftests/mm/mlock-random-test.c b/tools/testing/selftests/mm/mlock-random-test.c
-index 0d95d630d0450..f410699458f2a 100644
---- a/tools/testing/selftests/mm/mlock-random-test.c
-+++ b/tools/testing/selftests/mm/mlock-random-test.c
-@@ -138,7 +138,7 @@ static void test_mlock_within_limit(char *p, int alloc_size)
- 	int page_size = 0;
- 
- 	getrlimit(RLIMIT_MEMLOCK, &cur);
--	if (cur.rlim_cur < alloc_size)
-+	if (cur.rlim_cur < (unsigned int)alloc_size)
- 		ksft_exit_fail_msg("alloc_size[%d] < %u rlimit,lead to mlock failure\n",
- 				   alloc_size, (unsigned int)cur.rlim_cur);
- 
-@@ -204,7 +204,7 @@ static void test_mlock_outof_limit(char *p, int alloc_size)
- 	struct rlimit cur;
- 
- 	getrlimit(RLIMIT_MEMLOCK, &cur);
--	if (cur.rlim_cur >= alloc_size)
-+	if (cur.rlim_cur >= (unsigned int)alloc_size)
- 		ksft_exit_fail_msg("alloc_size[%d] >%u rlimit, violates test condition\n",
- 				   alloc_size, (unsigned int)cur.rlim_cur);
- 
-diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-index cd46528d6c215..89c0f4e090374 100644
---- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
-+++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-@@ -535,7 +535,7 @@ static void (*pkey_tests[])(void) = {
- 
- int main(void)
- {
--	int i;
-+	unsigned int i;
- 
- 	ksft_print_header();
- 	ksft_set_plan(ARRAY_SIZE(pkey_tests));
-diff --git a/tools/testing/selftests/mm/soft-dirty.c b/tools/testing/selftests/mm/soft-dirty.c
-index b6eb5c4642ce5..68edb2475ccd4 100644
---- a/tools/testing/selftests/mm/soft-dirty.c
-+++ b/tools/testing/selftests/mm/soft-dirty.c
-@@ -77,7 +77,7 @@ static void test_vma_reuse(int pagemap_fd, int pagesize)
- static void test_hugepage(int pagemap_fd)
- {
- 	char *map;
--	int i, ret;
-+	unsigned int i, ret;
- 	size_t hpage_len = read_pmd_pagesize();
- 
- 	if (!hpage_len)
 -- 
 2.39.5
 
