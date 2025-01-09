@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-24128-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24129-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 759D5A07677
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 14:06:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 368B6A0771B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 14:19:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17AA6188ADEA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 13:06:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 292E6168DA9
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 13:19:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E60F1218ABC;
-	Thu,  9 Jan 2025 13:05:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C4922185AB;
+	Thu,  9 Jan 2025 13:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VqTOlkDZ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Q611BghL"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 282FE21885B
-	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jan 2025 13:05:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F6A1853
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jan 2025 13:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736427953; cv=none; b=AsMrXUfJaKgvN6C5LBKljrveFSQRCsqu1SrtnOx+XB9q39HHTr8mOLjJEIzbWZwRDON81hnM58+6M9svFHGYCTiDKnwP34WHQ5vXA6GUpsHqZkNpmpERHBYdObPHQg+IAKUK6JhWlgjZ8Wgfby9vPI1wt/rRW4wZlKMBnUaqRu0=
+	t=1736428774; cv=none; b=Vw84492183eGa9bss3w6qiNAU4iC33kYbzLsrzEeMSZRNmdNDpLNEYFBF7jb5qgpiJwJI0vG4ZpjsO+4eNAt8LhH52l5onZhGoNSSpJ0QLS+b16Da6G4Fs+Pca+UI9giIzjez8hvZa91bi48L6HSVEwTn2c+snzYZ1cnG4GSHhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736427953; c=relaxed/simple;
-	bh=curNqgXUQNuUhOshq+8hDCnkqHQaxA4k+pwE9uSUrko=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qDonO2U/JkAfrFcDCotSmNh2ukFE6NVy6PL43U6pCc4bti5T9lQFmRi9E2dQoEvu/g4HPwe/XxaHJ89HG5AqmEhV0ijqlVNvvC582L4WDuJx5dkUA/HEN42pWUC2Ahg6sJu5iEcj0hMklxXJpi9hZc8BRAItPDei0HAOuZcXt78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VqTOlkDZ; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1736428774; c=relaxed/simple;
+	bh=mFVzdF0pszM/tYeZMs7JC5DwtEb0TK7wbJpk2UEkzXM=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=tJ7qS3jv1NSTtaAIcPTKTfk0E1/PSfnKIkO3m/lCaMYvHMHzcJjzi/rtxyya8a+WgKv7a3WvQdQdyoDpD0ve0aswfaCp+4snahe7Nql6/bzI+0Que1q2BAp6SONGdOFKVPxggYW5q+HkvrBksBK0Mg/rrhJXXrax/HRhl1hH/BM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Q611BghL; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736427951;
+	s=mimecast20190719; t=1736428772;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=RYyOisobOV+2GEps8qgootwJ53om8dGMQtS6YtO5WZ4=;
-	b=VqTOlkDZKKUpRdqhjd5ig8LN9Bv8cbIk07qzOtlJrxjnTi6vvGwo0PEUZmb1rZdXTBJuk2
-	NgFVQWBqGbqrOpGlM/x2YuDIVyGp83lAVnhLIoYOvTWxbqveRhaexsDm/yMz1mnO9jRA2x
-	6IS3EXnM49wIpWCoaPxW+WTyj/KBxY4=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=PXBNX64TJkMh4OLSnNckA8Ioe5kSCrqL68UfxPxPkjc=;
+	b=Q611BghLQa54Lq1cR2ov1hfE6DHUvdCUdIDY4HUU3yGA1MCrMUeZuddKNEjb+CjDUSHvpc
+	9u9QKDZrYu8oAgn0JoGg+/zhXEGxrBWNEAVajg+qW3c5TPhlO1bxfwYKI51gxEa+w5ovLB
+	ho47AUPIes8q2hXjJDfA4b1UlX3Gqw4=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-225-LK__pzcXPrSQqtIq1RIpIw-1; Thu, 09 Jan 2025 08:05:47 -0500
-X-MC-Unique: LK__pzcXPrSQqtIq1RIpIw-1
-X-Mimecast-MFC-AGG-ID: LK__pzcXPrSQqtIq1RIpIw
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4362b9c1641so4525375e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jan 2025 05:05:47 -0800 (PST)
+ us-mta-251-Fvb5KLVMNkGJ0Z9AHi53bw-1; Thu, 09 Jan 2025 08:19:30 -0500
+X-MC-Unique: Fvb5KLVMNkGJ0Z9AHi53bw-1
+X-Mimecast-MFC-AGG-ID: Fvb5KLVMNkGJ0Z9AHi53bw
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-385e2579507so422634f8f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jan 2025 05:19:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736427946; x=1737032746;
+        d=1e100.net; s=20230601; t=1736428769; x=1737033569;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
+         :content-language:references:cc:to:from:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=RYyOisobOV+2GEps8qgootwJ53om8dGMQtS6YtO5WZ4=;
-        b=YaoPDn5iZdnsP5jJjB4vy5l8N5umsVKmLV1b/bOnon/RxUK8BUX8EzATUzbulFpmD2
-         TAVe53ilxCYvnKdVR1TD55Vv0S9skuISbBxdOMCDcZaBEurwLU9V672ms5x/OmV50BiV
-         dJ19+dHlBmV9byDrDrxDiMtKaCfiuMRg9TYpuQnLiTZ7wHEjBV2y8I/jGPR0P1UIW6AY
-         yq2SaFQiQlAeKcw9IR+1w9du8cWMkW650z6s/IGPTHj74+4L5OAYfHZe7J3ziFfg6/UR
-         U1qgnRcN+YEAOSVlEMY67gcdmrVrACrXdFJPPiDQS7Ql+EKnTXuBuU1J9Al64xnq/52m
-         cNcg==
-X-Forwarded-Encrypted: i=1; AJvYcCVTGhFhKCPXP9J7i8qDc6Srof4FjoL8n5zzbi3mCyth/qVbB6lqlNEJGOM3UJZXVWGpOGHZHNBXnwW64nL1KTk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yynk3YG7COY9SVz3NnEaKSV68+FX7dizcjNMOIXURYnWEPYJRwi
-	XJKNj/asc9p1Ctjx9YmBoSUBf7epG2VdXd57KQLNKEZCFve1yLgNFE0h663yuyfeLIuJ6z1EjbR
-	4FXjOf/GkHhaUO94tqd35cv3A3VHZyrJu8+rqZK6xF7XRqx6u9spy3qtLVmijV1fKow==
-X-Gm-Gg: ASbGncuSTMbk8i6Ml5be0QYgGiSFNE+k4gDinskmFWFvagokwf+mezuKD5rs8Jcczhx
-	NY7h6uORivIMvebMIQ5L4HSJ+AvQrJnqViBoXag6Nl9uBWBWgyXVEpd9hBTlAmfbDrHMPI60P3A
-	ql3gmdD7uW1R9xvVjoxqnbIlf5d3nifoDbn6nd+f4SAVWo41/atBdC5G/zVAdtHV+ZudeMb/kJc
-	oT6i+A5diyiEZux68d/tobZcigc76/+iCwDSQYbm7bxZLMFS3W+c92uXwg5qcanQx7ggsfdqLxI
-	eyGTFA5kVvj/5hN+ZtsjjHcS1fhgslRqrBisXdNh1O3/+DCtikFk1wQkto3GtsIow1GBHKs+W0y
-	lc1wAOw==
-X-Received: by 2002:a05:6000:470d:b0:382:4b52:ffcc with SMTP id ffacd0b85a97d-38a870826d9mr6315572f8f.0.1736427946660;
-        Thu, 09 Jan 2025 05:05:46 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHB3N96DhcA/zslHvED8A7bOQqnlFm6h5Y9J/8+74AahoNWEqj+ZFqcvUPpuqbx2wL5BfhP0w==
-X-Received: by 2002:a05:6000:470d:b0:382:4b52:ffcc with SMTP id ffacd0b85a97d-38a870826d9mr6315514f8f.0.1736427946306;
-        Thu, 09 Jan 2025 05:05:46 -0800 (PST)
+        bh=PXBNX64TJkMh4OLSnNckA8Ioe5kSCrqL68UfxPxPkjc=;
+        b=LpE2U2Ovu6GjTl3ZMJvQ+TnbSlcuvZEqUkdRMIfjUcRQGYfDf7e+8fmZZ6CrjQWIWX
+         TFzCvy/hQXmgYTjbxY0FlHiVj2IVIYDMeOMkMr8UTbuwoJDZMKx2c8/Ebpqo3lz812fZ
+         ZjxqztRChgGCMqcXsFyhIpdFwLK/LsOEbO9ukoqbZwCeaLPVYLdUgqOKcdBcZ8+qqgrn
+         cudkY4ZfkK5jLS6a6YXGDD4V93VX3DydcMGWKhXniayGG+glVoBFF+/nQtLDPlYsVSVn
+         ZQwFW3KHfi+nJxSFkYy4PXavkbRRy4J27xjOAwB5JMol2ExUlRLk027PwU3NqqmZ1XtR
+         Uo6g==
+X-Forwarded-Encrypted: i=1; AJvYcCV6nMqfd6Iha0as3Ihx5q11wCOy2A8LrOkSKm+8Wz5eZQl/9oH0f4gu9NXCk83VGTKHizIh0GP6ACUNnLFj7tA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9RMhrtierLSqrNZ5J/TioeBFOLWicQiYh2A1gPQj9gbyqZM0T
+	XOQ+H21t6l5jFaRJ5KDR0EvVc2LHZ0zRl/PuzvCbM6WdlUxn3KY7QWYkqh2zbRrMEvweFdChKNN
+	ZoB6eCfo+c/+Sg5H5Mcxwj+psKJ7R82IrASTh7oHUjG0/Oem2oAGplg4OVQqbolGG8Q==
+X-Gm-Gg: ASbGncvWqskYZNhdTqtpcwCw2eFaLYVkfIJD6uNZ6enFAQIyxHQTO151qAyQtPVyvuz
+	lw4+PmMvO5AcSS/a6qF26RUlfEP2Dj1+3bTl/QuaWmdU5N11pRSqKkzdXyqHQYiqZgQAL/rKR8i
+	mCWS5EJzjxp2QIchjcawCqDTpmdgHW/8M3mRhJom9buH8i5eEMpphkTLmo4opQG+kHOc9tyKjSN
+	vb8k8U4gO1e+AkT42K/wq/CptnTyBaG7M56y/GlOjmCas5flwMIYUrHvueaPocpdsKfa4YuaTJ5
+	i6KpLEP5+K79kv3WljUZBqnV3x9pWlksD5qAJZc3ND+3w1pNFTBvRZ3489okBew9Rk3+tqR1ypt
+	JdZGVFQ==
+X-Received: by 2002:a5d:64e7:0:b0:38a:624b:d55e with SMTP id ffacd0b85a97d-38a8733773cmr5487377f8f.41.1736428769431;
+        Thu, 09 Jan 2025 05:19:29 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFXcbZCk3q5LQaFi3ITePlDEDaVeaHB+L2r3D578hx0VS7N4F0kQsVLqMtNS9eey88weDM1HA==
+X-Received: by 2002:a5d:64e7:0:b0:38a:624b:d55e with SMTP id ffacd0b85a97d-38a8733773cmr5487355f8f.41.1736428769084;
+        Thu, 09 Jan 2025 05:19:29 -0800 (PST)
 Received: from ?IPV6:2003:cb:c72e:800:d383:9661:5934:2cfa? (p200300cbc72e0800d383966159342cfa.dip0.t-ipconnect.de. [2003:cb:c72e:800:d383:9661:5934:2cfa])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e2e92794sm54178075e9.37.2025.01.09.05.05.43
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e4c1b44sm1821641f8f.90.2025.01.09.05.19.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jan 2025 05:05:45 -0800 (PST)
-Message-ID: <4e52d67c-e968-4cf6-9c9b-88646f0d3a23@redhat.com>
-Date: Thu, 9 Jan 2025 14:05:43 +0100
+        Thu, 09 Jan 2025 05:19:27 -0800 (PST)
+Message-ID: <eb3b0ebe-97b7-4504-aab0-3a008fd66c37@redhat.com>
+Date: Thu, 9 Jan 2025 14:19:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,6 +92,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/3] selftests/mm: virtual_address_range: Fix error when
  CommitLimit < 1GiB
+From: David Hildenbrand <david@redhat.com>
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 Cc: Dev Jain <dev.jain@arm.com>, Andrew Morton <akpm@linux-foundation.org>,
  Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
@@ -106,7 +107,7 @@ References: <20250107-virtual_address_range-tests-v1-0-3834a2fb47fe@linutronix.d
  <20250108165052-c03470bd-6ff7-44c9-87b9-9145456bdea8@linutronix.de>
  <618798d5-71b2-43d6-8f5c-78d911c5dd43@redhat.com>
  <20250109083527-e3c77b5f-14f5-467b-9cee-f71c75b2d654@linutronix.de>
-From: David Hildenbrand <david@redhat.com>
+ <4e52d67c-e968-4cf6-9c9b-88646f0d3a23@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -153,56 +154,32 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20250109083527-e3c77b5f-14f5-467b-9cee-f71c75b2d654@linutronix.de>
+In-Reply-To: <4e52d67c-e968-4cf6-9c9b-88646f0d3a23@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
- >
-> That is clear. The issue would be to figure which chunks are valid to
-> unmap. If something critical like the executable file is unmapped,
-> the process crashes. But see below.
-
-Ah, now I see what you mean. Yes, also the stack etc. will be 
-problematic. So IIUC, you want to limit the munmap optimization only to 
-the manually mmap()ed parts.
-
+On 09.01.25 14:05, David Hildenbrand wrote:
+>   >
+>> That is clear. The issue would be to figure which chunks are valid to
+>> unmap. If something critical like the executable file is unmapped,
+>> the process crashes. But see below.
 > 
->>> Is it fine to rely on CONFIG_ANON_VMA_NAME?
->>> That would make it much easier to implement.
+> Ah, now I see what you mean. Yes, also the stack etc. will be
+> problematic. So IIUC, you want to limit the munmap optimization only to
+> the manually mmap()ed parts.
+> 
 >>
->> Can you elaborate how you would do it?
-> 
-> First set the VMA name after mmap():
-> 
-> for (i = 0; i < NR_CHUNKS_LOW; i++) {
-> 	ptr[i] = mmap(NULL, MAP_CHUNK_SIZE, PROT_READ | PROT_WRITE,
-> 		     MAP_NORESERVE | MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> 
-> 	if (ptr[i] == MAP_FAILED) {
-> 		if (validate_lower_address_hint())
-> 			ksft_exit_fail_msg("mmap unexpectedly succeeded with hint\n");
-> 		break;
-> 	}
-> 
-> 	validate_addr(ptr[i], 0);
-> 	if (prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ptr[i], MAP_CHUNK_SIZE, "virtual_address_range"))
-> 		ksft_exit_fail_msg("prctl(PR_SET_VMA_ANON_NAME) failed: %s\n", strerror(errno));
+>>>> Is it fine to rely on CONFIG_ANON_VMA_NAME?
+>>>> That would make it much easier to implement.
+>>>
+>>> Can you elaborate how you would do it?
+>>
+>> First set the VMA name after mmap():
 
-Likely this would prevent merging of VMAs.
+I took a look at the implementation, and VMA merging seems to be able to 
+merge such VMAs that share the same name (even when set separately).
 
-With a 1 GiB chunk size, and NR_CHUNKS_LOW == 128TiB, you'd already 
-require 128k VMAs. The default limit is frequently 64k.
-
-We could just scan the ptr / hptr array to see if this is a manual mmap 
-area or not. If this takes too long, one could sort the arrays by 
-address and perform a binary search.
-
-Not the most efficient way of doing it, but maybe good enough for this test?
-
-Alternatively, store the pointer in a xarray-like tree instead of two 
-arrays. Requires a bit more memory ... and we'd have to find a simple 
-implementation we could just reuse in this test. So maybe there is a 
-simpler way to get it done.
+So assuming you use the same name for all, that should indeed also work.
 
 -- 
 Cheers,
