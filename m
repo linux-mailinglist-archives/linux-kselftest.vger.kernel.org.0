@@ -1,72 +1,74 @@
-Return-Path: <linux-kselftest+bounces-24089-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24090-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9DECA06C34
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 04:30:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4853A06C38
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 04:31:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FBC01889330
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 03:30:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 284387A2D45
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 03:30:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11D4019AD8D;
-	Thu,  9 Jan 2025 03:28:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0322D19DF52;
+	Thu,  9 Jan 2025 03:28:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NMU3tKUY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fjB3oky0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 663F6198E77;
-	Thu,  9 Jan 2025 03:28:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA56199238;
+	Thu,  9 Jan 2025 03:28:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736393313; cv=none; b=lwn75JjpJ/6Ygqp+hTAeH2yMpucecuKJNSB39jLIEx8zN/6Ne5P7wGqEUOFIAN/q6YEa3g0Z62CsfOi7iI2wpS3sfNocsjAesdxz1Tn0J2J7cm/G4t4BB2GyzB3BAElBqM23QXRk/0pUQUPOBwx4QAEXfsL5zb4WMPQNUhWCSTU=
+	t=1736393313; cv=none; b=Z7w2BArbUWabQGo3joCSzekDbhwYSZoT8ON3qJvv3PNYSgqMrWrdM7D3QaOJclhO2ccfcamsJJ3g+S8xYZRLj4VTTQv1GzjRMqQdP7FuZSf96aFJ6zsDKgtkNzxMmNq6bmyvkxIj2uNSRC/IoSoeKSqR5dfa2OOhMNN2U6s2n30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736393313; c=relaxed/simple;
-	bh=CJ+Sz3VRSgzZg4XewFSs+jRIjAPqqLAeY562oCmKo9o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AuYQvp1+wfPPa1QQ9h2z4VcuPoKyasvOXSlSJIAKG4SYOIkcX+h5K35zxoytgvfR7C7eKY05SGa5rBk76FKAoHUlaUE//ZpXhqkWkfo1Aa7N6gzug6kfq6Y/Yrn2vur7MtvHvxNgsnkxeK0BI2I+69CuwyzMIKpOpOD2TIjbeTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NMU3tKUY; arc=none smtp.client-ip=209.85.222.169
+	bh=1CvGJBdfsQrSZP0bq41YTjTW80fDNBCU6ihC5Tvay2s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KxCDmCxKNaTgxQah8kYW1eCNw1uUbETBfkCWc1uslzN3VFRrWwIZ7gojopQZKiSmBpf5Bxe3zqA/QIP6lulgLZTjCpH8Yd8APiDQYD78llUFwzM4S7EbMlLXy2FX6O9LUFiuUSp1O43Hx4jMIWkh/2Dmkx6ao0FMw+GGTDCOpwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fjB3oky0; arc=none smtp.client-ip=209.85.222.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7b6f1be1daeso39886585a.0;
-        Wed, 08 Jan 2025 19:28:31 -0800 (PST)
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7b8618be68bso33850085a.3;
+        Wed, 08 Jan 2025 19:28:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736393310; x=1736998110; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DbEbQtkPmS8Lo6Ovvd4eTHWZc9XmLg0j1ZOSK1JWbsw=;
-        b=NMU3tKUY13bnBDrEp97QUHnj+2JgB3CBBBq1652MS6z7eOu1sX7sutrK/n3fd7XHoG
-         P121RESpYB/Q3IFJzSxk+lF9IpDemrPzNzEaBh9PmTSSmzGD63NA0nCX89g9ViHo6WWe
-         VpASj5uB7D94FZVb1SnG+T6qFdX8HKhuVL0tpWGZpM/CXvtpLOA1QHf1mwaLSdzEo5Gl
-         2NAzmudA8bdTCUbG92vHW0eO6t82D5/kpUshoMzWBvxfbKZ+rZIjpUa2df33VgUpuOk9
-         F7MnWbgow/xmhdXEkeaFLAHKi1wn1aexVWdu2bQzx8ytkUPv5je7Gb/mXH4LMXqBRXw3
-         BW9A==
+        d=gmail.com; s=20230601; t=1736393311; x=1736998111; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jXzhdavCNuMsnLueA0771kqTUjEAV7QKi1FIGuZMdYk=;
+        b=fjB3oky03wUN23xEcjeg95z3rDtdSeK7BOIxlbOfsEz64uoVL+O90zeuIR3KFiYhiM
+         EsLWSq89m82OH26tgYyrPaApPIdGYRPRQzuO3pdZYEpek/49ANuQGCeoBRsgCDKaMzuI
+         G9mnIGSVL7xiZnz8sroMYi6OVNno9UE48R8iJmornYm6xsxkB4diD9pSQrKVmWA+gMX8
+         ExF8pi6dT7EOWmKFnwFJe83dq6zTvby1O9NieMOUbLBp4jvE1nc9oCCIwzo6JyJZqgRn
+         dEq56iIcGrPVvfqeo+fG4kAjQ+x5jML4FlisWIXE3tu8KjxJZSrUU4CqEwr3+S1/expj
+         jPXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736393310; x=1736998110;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DbEbQtkPmS8Lo6Ovvd4eTHWZc9XmLg0j1ZOSK1JWbsw=;
-        b=RjguFXTB8ioGIyFnOpdN2run64XzA1xy0NoVijD9AJFOunbXvczKjSBbVOiX4m886H
-         U+TAf2Se53dbXHBX5D5bzZdhvBp+RxQ4N54+v30AKKfBNT9veFWWPa0jzxoBShfyv/0m
-         W/MI0pxldIu6Fcag1nxK8/+Oh/SV0q+WRJN1gQp52FSBD9uBuTv0T/zhwZhSlrDwuIbW
-         zkPShGWpmBwz7pRkLZB0dFsWlbAT8Opdnnu+3f22L5NLnwcC0FDFoflL0X0kBRRUqBCj
-         Jkg26ZyDGZ4RBr5QMQFlWLRb+UBSb/emoZdLApTsGkRDdDfIMIdA1KXB1egNNcrldDd2
-         xSng==
-X-Forwarded-Encrypted: i=1; AJvYcCVqoJUH/AVg/Zg5E8TL3Y7cI2e6P3RQrh3MuFhUdhKvpAq4i0yrrZlByGD7Ml3M5wDgw2uN5nYeL1jguIZw7Vw=@vger.kernel.org, AJvYcCX0qs4o21m37zdESilxUo2BeCdxAcbnJW6C90AwQbQov8DtsxAz0XN60ZZKPCs4h3gZjbRU3xVh@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOjX3cl+Y+qaGHAYqxDz0j6IPQwz1cNKpsLwMMxuGvZyPivFMB
-	QIwEVPLJBu4AzB1s82jXmVGpUtRY8Tr8HwnzZVmQVQOMJj1K3DUkAxQkluga
-X-Gm-Gg: ASbGncuDaMb796ZvAjUcebL/UA46+y+2BUOLPdiJXWjKEyF3Yjk+j8U59k8SBd0Flvm
-	ExlFOfsNQH/qyqbKzMU1qXyJdq/heKbgjftngkQa7pJuxZzhtLpww/LADCGo53owexGLzrrjXlt
-	+/eL1yeOZcY3MywlMXKARjMKP0Q7OHohT5lHbI1a4MzG6GG5+iKsICT3qvHJ/tC2k2hTpRsjRE9
-	9fef+93B7PuNKwoZbjmComgzQyJxZKu7Ng/eZ8TL/5js9GSWjg95hfqqw==
-X-Google-Smtp-Source: AGHT+IEEXg+vOUkSNTGkO+BJFxHu2+AME8iS0mDYdKrJKDRIO3CIIxB7EgiKID/209z03BDoPaiUCw==
-X-Received: by 2002:a05:620a:2916:b0:7b6:c6f8:1d2a with SMTP id af79cd13be357-7bcd97158bcmr599215385a.28.1736393310275;
-        Wed, 08 Jan 2025 19:28:30 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736393311; x=1736998111;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jXzhdavCNuMsnLueA0771kqTUjEAV7QKi1FIGuZMdYk=;
+        b=IfvIo8ezOVwQj+fkLSO5+h6fTawlDxZgFAwxYDjWtkcpgmxozL40VyzD7jt2bXknmi
+         KaZHeQKX6sMyTBO1nXIjaGzL89U87ufqM+LVYHN67Wh/0TGxO1xiwIio2uYRdcdzfY30
+         Nufclb60pGHj8ISP+HqPv38CntNHw9lhj+TwYnUy3h6jsg3xAZ+sedbVp+yPOTKvpo7r
+         JBNGRLuGoJi8KwIkSuOWsSk1qYg7ro0H2q01d2Kw9qh/OTJ1qbt3hMXAEdZrZl5ke3Xm
+         YlPXQ6ng3yK5wZvpamDqnyOPGr2XUFqj7iWcmhbtQdTIa8qKdJAhVxNO/R6MOoU2AiKj
+         6/Jg==
+X-Forwarded-Encrypted: i=1; AJvYcCV4DZucK8eOL2q3k+3S6i+ptU3N1zcNlj31Gsa+VBfqqDk9WFnQb/yGyvK4cL9BRZdCgDutGQXK9AiTj2vjrjQ=@vger.kernel.org, AJvYcCWd8w1KyHqHuT1P0a2NXWLM2UQ88mJWmxlyW5hgAQsJRkvcrJCEy5rwpJJI3nV6TVt5FwytoTcd@vger.kernel.org
+X-Gm-Message-State: AOJu0YziGZEm9gIqus5GoVCRWFz8fduJulH27p4Hqde92YQYoFwORQf9
+	Dpq4o0D+w6j06bDzZFKgeyDjwxRNbk55BSZAFvmmIiTjnfIbrFk3MlIAd9wt
+X-Gm-Gg: ASbGnctHJL1KHI4QrK3DXRQduUAHwXMRJcaoUlqVTiu4WiseUSnZL2qcEZWtrAjZODK
+	ACW2KkYtVSHnCTxQCvmRgNVh5LgWA+oQe9hXk+tMGjmuii5400QmzEQ58mkp8ZOwNd0CxFSoSWG
+	Kfrx7lXj/Tcfe2JANY/CXfX+g7xeWV6FeIkvlxaRIc7yDumif0bF262oVbTX2vwMevXC+teaXTm
+	bHuuexHdgvr2Srx6kL49hdyXiQOQQX5qFMgNUpjPR//Asfe6G6ntfGx4g==
+X-Google-Smtp-Source: AGHT+IGmGky1psL51y6RMRavI8fZGYTmcJUDQZkiQve7kzUZ0k4cwfJnjA4pFibfRMLOGuYp8Dkh7A==
+X-Received: by 2002:a05:620a:1992:b0:7b6:de3e:1831 with SMTP id af79cd13be357-7bcd972f1eemr896165585a.9.1736393311220;
+        Wed, 08 Jan 2025 19:28:31 -0800 (PST)
 Received: from echampetier.lan ([2607:fea8:1b9f:c5b0::4c4])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7bce35160c6sm25547085a.114.2025.01.08.19.28.29
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7bce35160c6sm25547085a.114.2025.01.08.19.28.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 08 Jan 2025 19:28:30 -0800 (PST)
 From: Etienne Champetier <champetier.etienne@gmail.com>
@@ -78,10 +80,12 @@ To: Andrew Lunn <andrew+netdev@lunn.ch>,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
 Cc: Etienne Champetier <champetier.etienne@gmail.com>
-Subject: [PATCH net-next v2 0/2] ipvlan: Support bonding events
-Date: Wed,  8 Jan 2025 22:28:17 -0500
-Message-ID: <20250109032819.326528-1-champetier.etienne@gmail.com>
+Subject: [PATCH net-next v2 1/2] ipvlan: Support bonding events
+Date: Wed,  8 Jan 2025 22:28:18 -0500
+Message-ID: <20250109032819.326528-2-champetier.etienne@gmail.com>
 X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250109032819.326528-1-champetier.etienne@gmail.com>
+References: <20250109032819.326528-1-champetier.etienne@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,23 +94,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-No changes for first commit.
-Second commit rework bond_macvlan.sh test to add minimal
-ipvlan over bond testing (asked by Jakub during v1 review).
+This allows ipvlan to function properly on top of
+bonds using active-backup mode.
+This was implemented for macvlan in 2014 in commit
+4c9912556867 ("macvlan: Support bonding events").
 
-Etienne Champetier (2):
-  ipvlan: Support bonding events
-  selftests: bonding: add ipvlan over bond testing
+Signed-off-by: Etienne Champetier <champetier.etienne@gmail.com>
+---
+ drivers/net/ipvlan/ipvlan_main.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- drivers/net/ipvlan/ipvlan_main.c              |  6 ++
- .../selftests/drivers/net/bonding/Makefile    |  2 +-
- .../drivers/net/bonding/bond_macvlan.sh       | 99 -------------------
- .../net/bonding/bond_macvlan_ipvlan.sh        | 96 ++++++++++++++++++
- .../selftests/drivers/net/bonding/config      |  1 +
- 5 files changed, 104 insertions(+), 100 deletions(-)
- delete mode 100755 tools/testing/selftests/drivers/net/bonding/bond_macvlan.sh
- create mode 100755 tools/testing/selftests/drivers/net/bonding/bond_macvlan_ipvlan.sh
-
+diff --git a/drivers/net/ipvlan/ipvlan_main.c b/drivers/net/ipvlan/ipvlan_main.c
+index ee2c3cf4df36..da3a97a65507 100644
+--- a/drivers/net/ipvlan/ipvlan_main.c
++++ b/drivers/net/ipvlan/ipvlan_main.c
+@@ -799,6 +799,12 @@ static int ipvlan_device_event(struct notifier_block *unused,
+ 	case NETDEV_PRE_TYPE_CHANGE:
+ 		/* Forbid underlying device to change its type. */
+ 		return NOTIFY_BAD;
++
++	case NETDEV_NOTIFY_PEERS:
++	case NETDEV_BONDING_FAILOVER:
++	case NETDEV_RESEND_IGMP:
++		list_for_each_entry(ipvlan, &port->ipvlans, pnode)
++			call_netdevice_notifiers(event, ipvlan->dev);
+ 	}
+ 	return NOTIFY_DONE;
+ }
 -- 
 2.47.1
 
