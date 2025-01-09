@@ -1,56 +1,56 @@
-Return-Path: <linux-kselftest+bounces-24141-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24142-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19E88A07EEC
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 18:39:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AEB2A07EF2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 18:40:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 824203A5F9F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 17:39:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B68116859E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 17:40:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43F3D199EBB;
-	Thu,  9 Jan 2025 17:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F33D1953BD;
+	Thu,  9 Jan 2025 17:39:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="RxGbR76O"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="jZBwCQLG"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61743191F83;
-	Thu,  9 Jan 2025 17:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6DB191F83;
+	Thu,  9 Jan 2025 17:39:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736444363; cv=pass; b=YUMpIHnnMqxDroky/iwz55MMX0nOetqm4CmtOypeiejVPY73TcWOmu8Pz1xrX4fSM9+ajds22inSzlGDn6uBM1EtBmIBBprOwygv65/D1ngE7daIWGU1DlxfjGJVXpNzBoJItMVfksZLPajnV5NjYUz2oAbpWzxSlWfhyltm1YQ=
+	t=1736444369; cv=pass; b=QY+kTHALOdMP0WkWOgSj4peL+c2fff3mYdWDtgIxXR80eLvari8uudxjtmQVIHk2iBnc1c+E0Z1rdAL/olcnJRUjMpfO9rDYJRBlG0eyuGB31RQeRobehv3LjicUt9vyiS0HY+kyDPtcscaNOlBz4SPv7yk+8lpPK+Iqeous6kA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736444363; c=relaxed/simple;
-	bh=IypNeO5jz4FyVUQhVIzrEuryUjrGTW9c8zTbvlxDswo=;
+	s=arc-20240116; t=1736444369; c=relaxed/simple;
+	bh=dMj0sy0YSVnlCxQmc/t4dFNEI9VrrWmASdc9jq3wOo8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=u/EfO5uSSG2uSwRb98K078KW7/3OD01JNVIvE9yF2bUa9DcxWxmryXZFaXpf0ZkWJJNb/T6TcD2h8gSYN+0xXXMgSpDlHNpWxmSltT5Xp4AYDcW5PgAqxaFIH412NSIJtrV+tuZVHXtezucG1XMdUrUFuYwIpKpJ0fwyIpHyA9Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=RxGbR76O; arc=pass smtp.client-ip=136.143.188.112
+	 MIME-Version; b=pIhS0itrDWxTnne68o82CepJZ3sKC9cktzWxtcdeYcjqZfzBse2Ifvr9T5aCRLeoNNGipS/nISZMV0PthDs4fA++H/VF+RZMmrBLitB00tHh24HEMyfp6+7xusKUOdcOPppcPEt0UULbW6V9WSJ6zUiG+e8UlErVPbCO8yuAYv8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=jZBwCQLG; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1736444343; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1736444349; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=YklJUeOzj8JLFJvKWPF881sglOIFJXR/Q94B968H/0eeoGYOud4eIIN43wmKOd9xvXbOYLxDSsf1kDv0Od7q6rida9iSBfoi5pg9j8p7qYmJIED4xDz9D6PhWP62wenRv+iKnv6/W7eN+uS/AG8E6Qj/FQ18GaVR0sEel6TvYPY=
+	b=HHkqer9D9jOpYsHxWEyHRpi13jplxxgtYJDH71wMARrdu73i7SG/Bwa2BnWYvhh5j1T1bDGGM81c+M8H/isTROi8mXFAjDjAcTAYH6c4CNY+OTAd62wZ44V26E/4wGjzIsGQmtCvxQuldUR0wUEVcGloHhwKuiD+P0ZstplSFrU=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1736444343; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=wQRYp4NaHn6qZOxrq/QHoWxtMXxEn9kcEYhJcS6nYa8=; 
-	b=lfOS/OsurKC7ZWxEKVxVBdOLaFCA/fAFKIC/MgdmBrsmd9CSD9axohcszYu2ZLCYNZrdT55CkuYrtMzZNa9bXhZ/aSPfaC+yOCxZOPn7MyZzkTx1mzXJapx48JiscJgGxhp6p/VD39HRthQAkx0SiH/SHe0bE+ErD1xDWP2H5yk=
+	t=1736444349; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=eJgiI6Vx5zFOc8jFmmCKCG1szUd46kqPcPMGhbEUP04=; 
+	b=NEs77iCxdncBgju4MXnwU0ozZeijflfvDge8zUAoe5UCgkq1X3PSJQUpglLYwQD/8l44guCeHnXLzSiJeSg7PBR0VhgPrYur2w+Z4PynY317ysyW/2ytmRnnNNGC+xTmCXeSwGqVwvU2sDh+7tuUqyaTyjk8V8xQLSd5UoQsTnA=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
 	dmarc=pass header.from=<usama.anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1736444343;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1736444349;
 	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=wQRYp4NaHn6qZOxrq/QHoWxtMXxEn9kcEYhJcS6nYa8=;
-	b=RxGbR76OTIUSMV5K6a1KOXlhEkaEYHu+EO7eJCjD4eZaFD+kti0SnJ9nfBh/X/fO
-	vgyqep6C/rnHMyohN+Byz2GqbckBRV6dsgG3Cqxk3AzTxECG847KiAswzj+nfUCuR4/
-	HGeeGDzUTX4gMEQk5D5hHzETlANo1wrKfD5PytQQ=
-Received: by mx.zohomail.com with SMTPS id 1736444341790884.6842476868715;
-	Thu, 9 Jan 2025 09:39:01 -0800 (PST)
+	bh=eJgiI6Vx5zFOc8jFmmCKCG1szUd46kqPcPMGhbEUP04=;
+	b=jZBwCQLGCsVNAzEP5uALr00gMia10ZsyrVMFVizansqMMAt9eckT3AfdkjHHKlWi
+	0uFx9Fbnehzcxvk4GpExok1AWpkkYgfEBO+UzhhOjZxdeyZOnmuObiTXT/kP2miLyw4
+	eFzMHGY0U8dg8EMFxKnjozg0GX29Kf8d9Yv66s5Y=
+Received: by mx.zohomail.com with SMTPS id 1736444346808142.8966002616171;
+	Thu, 9 Jan 2025 09:39:06 -0800 (PST)
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 To: Kees Cook <kees@kernel.org>,
 	Andy Lutomirski <luto@amacapital.net>,
@@ -63,9 +63,9 @@ To: Kees Cook <kees@kernel.org>,
 	linux-mm@kvack.org
 Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
 	kernel@collabora.com
-Subject: [PATCH 03/16] selftests/mm: Fix unused parameter warnings
-Date: Thu,  9 Jan 2025 22:38:29 +0500
-Message-Id: <20250109173842.1142376-4-usama.anjum@collabora.com>
+Subject: [PATCH 04/16] selftests/mm: Fix type mismatch warnings
+Date: Thu,  9 Jan 2025 22:38:30 +0500
+Message-Id: <20250109173842.1142376-5-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250109173842.1142376-1-usama.anjum@collabora.com>
 References: <20250109173842.1142376-1-usama.anjum@collabora.com>
@@ -78,171 +78,166 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-ZohoMailClient: External
 
-Fix unused parameter warnings.
+Fix type mismatch warnings in different tests.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/mm/pkey-x86.h          |  4 +++-
- .../selftests/mm/pkey_sighandler_tests.c       | 17 +++++++++++------
- tools/testing/selftests/mm/protection_keys.c   | 18 ++++++++++--------
- 3 files changed, 24 insertions(+), 15 deletions(-)
+ tools/testing/selftests/mm/compaction_test.c          | 2 +-
+ tools/testing/selftests/mm/gup_longterm.c             | 3 ++-
+ tools/testing/selftests/mm/hugetlb_dio.c              | 2 +-
+ tools/testing/selftests/mm/hugetlb_fault_after_madv.c | 2 +-
+ tools/testing/selftests/mm/hugetlb_madv_vs_map.c      | 2 +-
+ tools/testing/selftests/mm/ksm_functional_tests.c     | 6 +++---
+ tools/testing/selftests/mm/mlock-random-test.c        | 4 ++--
+ tools/testing/selftests/mm/pkey_sighandler_tests.c    | 2 +-
+ tools/testing/selftests/mm/soft-dirty.c               | 2 +-
+ 9 files changed, 13 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/pkey-x86.h b/tools/testing/selftests/mm/pkey-x86.h
-index f7ecd335df1e6..75cef8ee00702 100644
---- a/tools/testing/selftests/mm/pkey-x86.h
-+++ b/tools/testing/selftests/mm/pkey-x86.h
-@@ -157,7 +157,9 @@ static inline void expect_fault_on_read_execonly_key(void *p1, int pkey)
- 	expected_pkey_fault(pkey);
- }
+diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
+index 8d23b698ce9db..f6f32a5732e9e 100644
+--- a/tools/testing/selftests/mm/compaction_test.c
++++ b/tools/testing/selftests/mm/compaction_test.c
+@@ -134,7 +134,7 @@ int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
+ 	lseek(fd, 0, SEEK_SET);
  
--static inline void *malloc_pkey_with_mprotect_subpage(long size, int prot, u16 pkey)
-+static inline void *malloc_pkey_with_mprotect_subpage(long __attribute__((unused)) size,
-+						      int __attribute__((unused)) prot,
-+						      u16 __attribute__((unused)) pkey)
+ 	if (write(fd, init_nr_hugepages, strlen(init_nr_hugepages))
+-	    != strlen(init_nr_hugepages)) {
++	    != (signed long int)strlen(init_nr_hugepages)) {
+ 		ksft_print_msg("Failed to write value to /proc/sys/vm/nr_hugepages: %s\n",
+ 			       strerror(errno));
+ 		goto close_fd;
+diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
+index 03a31dcb57577..7f1b4ad7fcaec 100644
+--- a/tools/testing/selftests/mm/gup_longterm.c
++++ b/tools/testing/selftests/mm/gup_longterm.c
+@@ -446,7 +446,8 @@ static int tests_per_test_case(void)
+ 
+ int main(void)
  {
- 	return PTR_ERR_ENOTSUP;
- }
+-	int i, err;
++	unsigned int i;
++	int err;
+ 
+ 	pagesize = getpagesize();
+ 	nr_hugetlbsizes = detect_hugetlb_page_sizes(hugetlbsizes,
+diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
+index db63abe5ee5e8..62f368d4c8c16 100644
+--- a/tools/testing/selftests/mm/hugetlb_dio.c
++++ b/tools/testing/selftests/mm/hugetlb_dio.c
+@@ -63,7 +63,7 @@ void run_dio_using_hugetlb(unsigned int start_off, unsigned int end_off)
+ 	memset(buffer, 'A', writesize);
+ 
+ 	/* Write the buffer to the file */
+-	if (write(fd, buffer, writesize) != (writesize)) {
++	if (write(fd, buffer, writesize) != (signed int)writesize) {
+ 		munmap(orig_buffer, h_pagesize);
+ 		close(fd);
+ 		ksft_exit_fail_perror("Error writing to file\n");
+diff --git a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
+index e62f4e1388f26..2b5acb13ee0be 100644
+--- a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
++++ b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
+@@ -88,7 +88,7 @@ int main(void)
+ 				MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
+ 				-1, 0);
+ 
+-		if ((unsigned long)huge_ptr == -1)
++		if (huge_ptr == MAP_FAILED)
+ 			ksft_exit_skip("Failed to allocated huge page\n");
+ 
+ 		pthread_create(&thread1, NULL, madv, NULL);
+diff --git a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
+index 6c326cf3dcf6b..eda38b63e9e8d 100644
+--- a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
++++ b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
+@@ -100,7 +100,7 @@ int main(void)
+ 				MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
+ 				-1, 0);
+ 
+-		if ((unsigned long)huge_ptr == -1) {
++		if (huge_ptr == MAP_FAILED) {
+ 			ksft_test_result_fail("Failed to allocate huge page\n");
+ 			return KSFT_FAIL;
+ 		}
+diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
+index 66b4e111b5a27..4f96126e4e1f9 100644
+--- a/tools/testing/selftests/mm/ksm_functional_tests.c
++++ b/tools/testing/selftests/mm/ksm_functional_tests.c
+@@ -306,7 +306,7 @@ static void test_unmerge_zero_pages(void)
+ 
+ 	/* Check if ksm_zero_pages is updated correctly after KSM merging */
+ 	pages_expected = size / pagesize;
+-	if (pages_expected != get_my_ksm_zero_pages()) {
++	if ((signed long)pages_expected != get_my_ksm_zero_pages()) {
+ 		ksft_test_result_fail("'ksm_zero_pages' updated after merging\n");
+ 		goto unmap;
+ 	}
+@@ -319,7 +319,7 @@ static void test_unmerge_zero_pages(void)
+ 
+ 	/* Check if ksm_zero_pages is updated correctly after unmerging */
+ 	pages_expected /= 2;
+-	if (pages_expected != get_my_ksm_zero_pages()) {
++	if ((signed long)pages_expected != get_my_ksm_zero_pages()) {
+ 		ksft_test_result_fail("'ksm_zero_pages' updated after unmerging\n");
+ 		goto unmap;
+ 	}
+@@ -625,7 +625,7 @@ static void test_prot_none(void)
+ {
+ 	const unsigned int size = 2 * MiB;
+ 	char *map;
+-	int i;
++	unsigned int i;
+ 
+ 	ksft_print_msg("[RUN] %s\n", __func__);
+ 
+diff --git a/tools/testing/selftests/mm/mlock-random-test.c b/tools/testing/selftests/mm/mlock-random-test.c
+index 0d95d630d0450..f410699458f2a 100644
+--- a/tools/testing/selftests/mm/mlock-random-test.c
++++ b/tools/testing/selftests/mm/mlock-random-test.c
+@@ -138,7 +138,7 @@ static void test_mlock_within_limit(char *p, int alloc_size)
+ 	int page_size = 0;
+ 
+ 	getrlimit(RLIMIT_MEMLOCK, &cur);
+-	if (cur.rlim_cur < alloc_size)
++	if (cur.rlim_cur < (unsigned int)alloc_size)
+ 		ksft_exit_fail_msg("alloc_size[%d] < %u rlimit,lead to mlock failure\n",
+ 				   alloc_size, (unsigned int)cur.rlim_cur);
+ 
+@@ -204,7 +204,7 @@ static void test_mlock_outof_limit(char *p, int alloc_size)
+ 	struct rlimit cur;
+ 
+ 	getrlimit(RLIMIT_MEMLOCK, &cur);
+-	if (cur.rlim_cur >= alloc_size)
++	if (cur.rlim_cur >= (unsigned int)alloc_size)
+ 		ksft_exit_fail_msg("alloc_size[%d] >%u rlimit, violates test condition\n",
+ 				   alloc_size, (unsigned int)cur.rlim_cur);
+ 
 diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-index 249989f8b7a2a..cd46528d6c215 100644
+index cd46528d6c215..89c0f4e090374 100644
 --- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
 +++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-@@ -42,7 +42,8 @@ static siginfo_t siginfo = {0};
-  * which is protected by MPK 0 which we don't have access to.
-  */
- static inline __always_inline
--long syscall_raw(long n, long a1, long a2, long a3, long a4, long a5, long a6)
-+long syscall_raw(long n, long a1, long a2, long a3, long a4, long a5,
-+		 long __attribute__((unused)) a6)
- {
- 	unsigned long ret;
- #ifdef __x86_64__
-@@ -110,7 +111,8 @@ static inline u64 pkey_reg_restrictive_default(void)
- 	return set_pkey_bits(PKEY_REG_ALLOW_NONE, 0, PKEY_DISABLE_ACCESS);
- }
+@@ -535,7 +535,7 @@ static void (*pkey_tests[])(void) = {
  
--static void sigsegv_handler(int signo, siginfo_t *info, void *ucontext)
-+static void sigsegv_handler(int __attribute__((unused)) signo, siginfo_t *info,
-+			    void __attribute__((unused)) *ucontext)
+ int main(void)
  {
- 	pthread_mutex_lock(&mutex);
+-	int i;
++	unsigned int i;
  
-@@ -122,7 +124,8 @@ static void sigsegv_handler(int signo, siginfo_t *info, void *ucontext)
- 	syscall_raw(SYS_exit, 0, 0, 0, 0, 0, 0);
- }
- 
--static void sigusr1_handler(int signo, siginfo_t *info, void *ucontext)
-+static void sigusr1_handler(int __attribute__((unused)) signo, siginfo_t *info,
-+			    void __attribute__((unused)) *ucontext)
+ 	ksft_print_header();
+ 	ksft_set_plan(ARRAY_SIZE(pkey_tests));
+diff --git a/tools/testing/selftests/mm/soft-dirty.c b/tools/testing/selftests/mm/soft-dirty.c
+index b6eb5c4642ce5..68edb2475ccd4 100644
+--- a/tools/testing/selftests/mm/soft-dirty.c
++++ b/tools/testing/selftests/mm/soft-dirty.c
+@@ -77,7 +77,7 @@ static void test_vma_reuse(int pagemap_fd, int pagesize)
+ static void test_hugepage(int pagemap_fd)
  {
- 	pthread_mutex_lock(&mutex);
+ 	char *map;
+-	int i, ret;
++	unsigned int i, ret;
+ 	size_t hpage_len = read_pmd_pagesize();
  
-@@ -132,7 +135,9 @@ static void sigusr1_handler(int signo, siginfo_t *info, void *ucontext)
- 	pthread_mutex_unlock(&mutex);
- }
- 
--static void sigusr2_handler(int signo, siginfo_t *info, void *ucontext)
-+static void sigusr2_handler(int __attribute__((unused)) signo,
-+			    siginfo_t __attribute__((unused)) *info,
-+			    void __attribute__((unused)) *ucontext)
- {
- 	/*
- 	 * pkru should be the init_pkru value which enabled MPK 0 so
-@@ -155,7 +160,7 @@ static void raise_sigusr2(void)
- 	 */
- }
- 
--static void *thread_segv_with_pkey0_disabled(void *ptr)
-+static void *thread_segv_with_pkey0_disabled(void __attribute__((unused)) *ptr)
- {
- 	/* Disable MPK 0 (and all others too) */
- 	__write_pkey_reg(pkey_reg_restrictive_default());
-@@ -165,7 +170,7 @@ static void *thread_segv_with_pkey0_disabled(void *ptr)
- 	return NULL;
- }
- 
--static void *thread_segv_pkuerr_stack(void *ptr)
-+static void *thread_segv_pkuerr_stack(void __attribute__((unused)) *ptr)
- {
- 	/* Disable MPK 0 (and all others too) */
- 	__write_pkey_reg(pkey_reg_restrictive_default());
-diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
-index a4683f2476f27..3a66798a8e8d6 100644
---- a/tools/testing/selftests/mm/protection_keys.c
-+++ b/tools/testing/selftests/mm/protection_keys.c
-@@ -309,7 +309,7 @@ static char *si_code_str(int si_code)
- 
- static int pkey_faults;
- static int last_si_pkey = -1;
--static void signal_handler(int signum, siginfo_t *si, void *vucontext)
-+static void signal_handler(int __attribute__((unused)) signum, siginfo_t *si, void *vucontext)
- {
- 	ucontext_t *uctxt = vucontext;
- 	int trapno;
-@@ -891,7 +891,7 @@ static void close_test_fds(void)
- 	nr_test_fds = 0;
- }
- 
--static void test_pkey_alloc_free_attach_pkey0(int *ptr, u16 pkey)
-+static void test_pkey_alloc_free_attach_pkey0(int *ptr, u16 __attribute__((unused)) pkey)
- {
- 	int i, err;
- 	int max_nr_pkey_allocs;
-@@ -1108,7 +1108,7 @@ static void test_pkey_syscalls_on_non_allocated_pkey(int *ptr, u16 pkey)
- }
- 
- /* Assumes that all pkeys other than 'pkey' are unallocated */
--static void test_pkey_syscalls_bad_args(int *ptr, u16 pkey)
-+static void test_pkey_syscalls_bad_args(int *ptr, u16 __attribute__((unused)) pkey)
- {
- 	int err;
- 	int bad_pkey = NR_PKEYS+99;
-@@ -1134,7 +1134,7 @@ static void become_child(void)
- }
- 
- /* Assumes that all pkeys other than 'pkey' are unallocated */
--static void test_pkey_alloc_exhaust(int *ptr, u16 pkey)
-+static void test_pkey_alloc_exhaust(int __attribute__((unused)) *ptr, u16 __attribute__((unused)) pkey)
- {
- 	int err;
- 	int allocated_pkeys[NR_PKEYS] = {0};
-@@ -1240,7 +1240,7 @@ static void arch_force_pkey_reg_init(void)
-  * a long-running test that continually checks the pkey
-  * register.
-  */
--static void test_pkey_init_state(int *ptr, u16 pkey)
-+static void test_pkey_init_state(int __attribute__((unused)) *ptr, u16 __attribute__((unused)) pkey)
- {
- 	int err;
- 	int allocated_pkeys[NR_PKEYS] = {0};
-@@ -1399,7 +1399,7 @@ static void *get_pointer_to_instructions(void)
- 	return p1;
- }
- 
--static void test_executing_on_unreadable_memory(int *ptr, u16 pkey)
-+static void test_executing_on_unreadable_memory(int __attribute__((unused)) *ptr, u16 pkey)
- {
- 	void *p1;
- 	int scratch;
-@@ -1431,7 +1431,8 @@ static void test_executing_on_unreadable_memory(int *ptr, u16 pkey)
- 	pkey_assert(!ret);
- }
- 
--static void test_implicit_mprotect_exec_only_memory(int *ptr, u16 pkey)
-+static void test_implicit_mprotect_exec_only_memory(int __attribute__((unused)) *ptr,
-+						    u16 __attribute__((unused)) pkey)
- {
- 	void *p1;
- 	int scratch;
-@@ -1480,7 +1481,8 @@ static void test_implicit_mprotect_exec_only_memory(int *ptr, u16 pkey)
- }
- 
- #if defined(__i386__) || defined(__x86_64__)
--static void test_ptrace_modifies_pkru(int *ptr, u16 pkey)
-+static void test_ptrace_modifies_pkru(int __attribute__((unused)) *ptr,
-+				      u16 __attribute__((unused)) pkey)
- {
- 	u32 new_pkru;
- 	pid_t child;
+ 	if (!hpage_len)
 -- 
 2.39.5
 
