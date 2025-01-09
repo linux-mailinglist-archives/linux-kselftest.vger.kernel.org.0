@@ -1,203 +1,220 @@
-Return-Path: <linux-kselftest+bounces-24115-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24116-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AEBEA06F54
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 08:47:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68DB3A0702D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 09:37:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84A183A1AA3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 07:47:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47BE1164B9C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 08:37:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91D532036F6;
-	Thu,  9 Jan 2025 07:47:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1F6A215051;
+	Thu,  9 Jan 2025 08:37:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="BRBXlF0X";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="N/HAIf5B"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xe666t05"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D314A2D;
-	Thu,  9 Jan 2025 07:47:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1270B1FDA;
+	Thu,  9 Jan 2025 08:37:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736408874; cv=none; b=LJETDCN9gRsVFeo6On7+BnA8L9R/d1QYSyVRoOV44Jtov5tDyC+6NlpM2I0EU1vCpyOJUzR//JzDScnwaUMcpZHIbhPsFuOcloGLe94YTrg7pHDJuYREPLGwfthg7YhF5XEhza+S925FVc3n12axGmq0+SdoLMjBFNtxvNjuf+c=
+	t=1736411857; cv=none; b=apZ6igRHVD3MhNh2ekC7cqajWG+fI5vDAfMF8Uf7J37TPadJTq56LBG4o3JLaiXOhxB1ruWfd/tiC1iGK8gmNr7jWafMuCp8jBAWbBqpkfmTPXhY/V1L+h23R3xFLu9CLRkXdFGmKup6UiN84OH/rLyQaBLIl76iCvrfamRS8Ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736408874; c=relaxed/simple;
-	bh=eRjlLDGfZ6TONdV7dd7oLhJ9Q453qsuQ3OEQZK6dDdg=;
+	s=arc-20240116; t=1736411857; c=relaxed/simple;
+	bh=0dr0+T7QZnjroGZ5z0KHvZ0v75x3dfYB7mTK1iBfr+s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Udzfflbi1jL6/FpoMEmjAd/F51C+kwmJtJl6+6guRNkYmDqR5HzkkW37AlQQSAFRrQmOB94468edGgMYQdm0V3hz6vv2l6poAsZgcio+PZIwxxaD/EWrPaWYAMsnr5wEmUcVCQ6/IlHJPYz6tkbToaBY3sDQGrozgkUq+es6N80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=BRBXlF0X; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=N/HAIf5B; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Thu, 9 Jan 2025 08:47:48 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1736408869;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i1V0TrdJKeHlH2Z9S5D1oxp0ND7KirJepJzthqVZ+FQ=;
-	b=BRBXlF0XjNWj1YBVE5ZNopGgiROM/RFyclkHtBquuaVzilav4qq0Qlht2lVj1FSI6xGuBo
-	v90Q/yK5GQUQPhiwWeX0/HpkJy+p84RLEgZ3/5Inh1t//LOIFq3NG7dHx/6qkjuGAOWnVz
-	JUbB05bp+iNcv0PI1yb5jpSPN90jRxC2l9PXUZtTM9yJ/mqt/Nz0y9vKmdK4OHnS+LUk4p
-	B9swCdR7l3tVaMlanihG5rlxfHcdyOqka65J+bCxZau9JEMahJen0VxMkLhNhnAxsTGz2G
-	PrlI7uJ5P1SZVleV8YYtw/47LQ17cy+ounmBKfvaI8nZCvkGQVyqyDKZZj7zOQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1736408869;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i1V0TrdJKeHlH2Z9S5D1oxp0ND7KirJepJzthqVZ+FQ=;
-	b=N/HAIf5Be6QwreeT3nX298vDvaTYMJwCvjxNXYRri75wgx+CyYEmlf2044sFvN15lWVdwo
-	4VLOU5lu+gI5hZAQ==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: David Hildenbrand <david@redhat.com>
-Cc: Dev Jain <dev.jain@arm.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	Ryan Roberts <ryan.roberts@arm.com>
-Subject: Re: [PATCH 1/3] selftests/mm: virtual_address_range: Fix error when
- CommitLimit < 1GiB
-Message-ID: <20250109083527-e3c77b5f-14f5-467b-9cee-f71c75b2d654@linutronix.de>
-References: <20250107-virtual_address_range-tests-v1-0-3834a2fb47fe@linutronix.de>
- <20250107-virtual_address_range-tests-v1-1-3834a2fb47fe@linutronix.de>
- <5811cf74-d333-4653-ab64-0e981eda7745@arm.com>
- <20250108083855-840c688b-003f-423b-8327-2a10a2b27d58@linutronix.de>
- <05edee1e-04f1-4f19-816f-db03c182a201@redhat.com>
- <20250108165052-c03470bd-6ff7-44c9-87b9-9145456bdea8@linutronix.de>
- <618798d5-71b2-43d6-8f5c-78d911c5dd43@redhat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZNunWmFM2BHWzumYrirV6AKQUavKPzMILctlQ9iPZyFDNGXRz299pBrBuLks4hLTZ3UlDTx/Q8WVXaubnFM4memRPd2tqUhfFdSYWjEh5IKE7wr7FqUdfWJCBhFaFTcJyJJs+66ABdkleKvxcx2uuUV8QIMMOrLzZvGFpnvUXdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xe666t05; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-21619108a6bso9301945ad.3;
+        Thu, 09 Jan 2025 00:37:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736411855; x=1737016655; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=84B0RNeNpnyJnx6ts+MMJFqcCSs0cCqPqFLFhHuue/k=;
+        b=Xe666t05jo1JYiKlY1dwPx6LTek+JAba/qAtToB+vja/myAIZSMy4cdyPiv3dI0pMI
+         mGDpT7BMez/MiLepFL4Fe+qrRVQJgRsy/I5jlJ9k6eAHJF7mxr/DHp/lS2rwSYKNIeG1
+         t32kYTBRQwweSI2XzTpBmrXOAWqfLWJJ7GZsHKp2Roc9ULC9NzQ75TySDIjWK21XjoZ8
+         3817qRfFwWruuB3TXumk7atXufEE6YP+eA94lwUzuChn+1h7mlxKMnPMBmilg/oi+Obd
+         Cnax2ixOv22NpGih080AsCTBWFyp4CDC4vj/uvlqsxPbcPF36IjLpAksETD+L0tVUO/Y
+         34bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736411855; x=1737016655;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=84B0RNeNpnyJnx6ts+MMJFqcCSs0cCqPqFLFhHuue/k=;
+        b=oYZxhIDRKJcEquZDzzOV+OQu7cRMVRGkkVyxPAK5Jpf+nOVok4zTEZmN7qzSoB5xEB
+         k9qLQm7G5TxsH1mf10cIfmfkfhnQVKA/J8099XB4Kx7iYuTZrOvxcsQAqzodNCiqgsdN
+         lCkJ3GrDK5dwUC9KNlYVdqmy9R9GJq0OpMrpLIK0Yd7SvNkKk2oH3MSgejyhCRNreAMB
+         DojD1DDVfwxNHa6gf6ywOYXMHIcq9PmJGHCgL1YV4r0uEsNAKDRtMT7kBFMfSYveqvT4
+         rCaAUUOit5enzdKaJ/JFgVzReiKqcEygIla8Hqvx6EsdVh0kqW+gSh80sr2dQIJUUbho
+         tHcw==
+X-Forwarded-Encrypted: i=1; AJvYcCVA9A3YfehQj/lsIgQsztqdHAbIioEoj0/wUigQ6GG3vR46kVa4JQSRD0nP7J7E7Kuz+Xg6JO/Vpqp6+mE=@vger.kernel.org, AJvYcCVOalJdzPHSp22tX5WRq9YichY58+0zlQwbXgfWgg2QPV86tEREmolAmKM4wG03nVHqvZkZTcia2AbeEQN1ipny@vger.kernel.org, AJvYcCWwUer4KUjikYglEgX+Q3bPZqwCUKd9CSBqV/JHSLASt9WcCMI0v9kyrCr6Eof871D7ZicdpqNK@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFT7mosZAnz8kh3Gh8t03WKUM8EUzeh+FO7iIpBid+vayxftQ8
+	wOmc++3jqbOWOMDLQWXpjOiTOtnvkoiJmTIHIIMxXF+IVJP/yFTX
+X-Gm-Gg: ASbGnctv2bTAvsQRv4zLQqot7o3kUpRPiorths8o7yIZzWeP1w/cURLtwttcSr2iHRj
+	B33ENoyChTrsTWq7Vf9NH27VAFl9NxnuZBNSqosR5BkssomlCr7qx52ye+5j8kjnhn+ZtYu2NYU
+	R8wUkDnoMJl/VQnw7uFj+Y+GLNksB0T6orfxI0jVoYMx4anUhkBNvtMnAb1Kzyx1VPMK85BqIpE
+	h1xe4q/v2wzhvHcF4i3/m2gi1kdgEN5Tf3FGLlapmtthVQxrbOlZtRRBSAnVg==
+X-Google-Smtp-Source: AGHT+IFzA+T9PPh8OZiq7E8qPdc4YQXZGmueGDWAwk/vJWf3An6eZSWFs/dZFc49o2hNl2yJSwq6Ow==
+X-Received: by 2002:a17:902:d2c6:b0:216:2426:767f with SMTP id d9443c01a7336-21a83ffc1f1mr82521675ad.49.1736411853826;
+        Thu, 09 Jan 2025 00:37:33 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f4f5esm339802285ad.178.2025.01.09.00.37.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jan 2025 00:37:33 -0800 (PST)
+Date: Thu, 9 Jan 2025 08:37:25 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Jianbo Liu <jianbol@nvidia.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+	Jay Vosburgh <jv@jvosburgh.net>,
+	Andy Gospodarek <andy@greyhouse.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Simon Horman <horms@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 0/2] bond: fix xfrm offload feature during init
+Message-ID: <Z3-KxbofkhOrWin7@fedora>
+References: <20241212062734.182a0164@kernel.org>
+ <Z1vfsAyuxcohT7th@fedora>
+ <20241213193127.4c31ef80@kernel.org>
+ <Z3X9pfu12GUOBUY6@fedora>
+ <1d8c901f-e292-43e4-970f-8440b26e92b0@nvidia.com>
+ <Z3u0q5HSOshLn2V0@fedora>
+ <Z33nEKg4PxwReUu_@fedora>
+ <ad289f9a-41c3-4544-8aeb-535615f45aef@nvidia.com>
+ <Z34l6hpbzPP9n65Y@fedora>
+ <e01bae5f-30b5-4ec4-8c4b-5c133dd4552a@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <618798d5-71b2-43d6-8f5c-78d911c5dd43@redhat.com>
+In-Reply-To: <e01bae5f-30b5-4ec4-8c4b-5c133dd4552a@nvidia.com>
 
-On Wed, Jan 08, 2025 at 05:46:37PM +0100, David Hildenbrand wrote:
-> On 08.01.25 17:13, Thomas Weißschuh wrote:
-> > On Wed, Jan 08, 2025 at 02:36:57PM +0100, David Hildenbrand wrote:
-> > > On 08.01.25 09:05, Thomas Weißschuh wrote:
-> > > > On Wed, Jan 08, 2025 at 11:46:19AM +0530, Dev Jain wrote:
-> > > > > 
-> > > > > On 07/01/25 8:44 pm, Thomas Weißschuh wrote:
-> > > > > > If not enough physical memory is available the kernel may fail mmap();
-> > > > > > see __vm_enough_memory() and vm_commit_limit().
-> > > > > > In that case the logic in validate_complete_va_space() does not make
-> > > > > > sense and will even incorrectly fail.
-> > > > > > Instead skip the test if no mmap() succeeded.
-> > > > > > 
-> > > > > > Fixes: 010409649885 ("selftests/mm: confirm VA exhaustion without reliance on correctness of mmap()")
-> > > > > > Cc: stable@vger.kernel.org
+On Thu, Jan 09, 2025 at 09:26:38AM +0800, Jianbo Liu wrote:
+> 
+> 
+> On 1/8/2025 3:14 PM, Hangbin Liu wrote:
+> > On Wed, Jan 08, 2025 at 11:40:05AM +0800, Jianbo Liu wrote:
 > > > 
-> > > CC stable on tests is ... odd.
+> > > 
+> > > On 1/8/2025 10:46 AM, Hangbin Liu wrote:
+> > > > On Mon, Jan 06, 2025 at 10:47:16AM +0000, Hangbin Liu wrote:
+> > > > > On Thu, Jan 02, 2025 at 11:33:34AM +0800, Jianbo Liu wrote:
+> > > > > > > > Re-locking doesn't look great, glancing at the code I don't see any
+> > > > > > > > obvious better workarounds. Easiest fix would be to don't let the
+> > > > > > > > drivers sleep in the callbacks and then we can go back to a spin lock.
+> > > > > > > > Maybe nvidia people have better ideas, I'm not familiar with this
+> > > > > > > > offload.
+> > > > > > > 
+> > > > > > > I don't know how to disable bonding sleeping since we use mutex_lock now.
+> > > > > > > Hi Jianbo, do you have any idea?
+> > > > > > > 
+> > > > > > 
+> > > > > > I think we should allow drivers to sleep in the callbacks. So, maybe it's
+> > > > > > better to move driver's xdo_dev_state_delete out of state's spin lock.
+> > > > > 
+> > > > > I just check the code, xfrm_dev_state_delete() and later
+> > > > > dev->xfrmdev_ops->xdo_dev_state_delete(x) have too many xfrm_state x
+> > > > > checks. Can we really move it out of spin lock from xfrm_state_delete()
+> > > > 
+> > > > I tried to move the mutex lock code to a work queue, but found we need to
+> > > > check (ipsec->xs == xs) in bonding. So we still need xfrm_state x during bond
+> > > 
+> > > Maybe I miss something, but why need to hold spin lock. You can keep xfrm
+> > > state by its refcnt.
 > > 
-> > I thought it was fairly common, but it isn't.
-> > Will drop it.
-> 
-> As it's not really a "kernel BUG", it's rather uncommon.
-
-I also used it on patch 2, which is now reproducibly broken on x86
-mainline since my commit mentioned in that patch.
-But I'll drop it there, too.
-
-> > > Note that with MAP_NORESRVE, most setups we care about will allow mapping as
-> > > much as you want, but on access OOM will fire.
+> > Do you mean move the xfrm_dev_state_delete() out of spin lock directly like:
 > > 
-> > Thanks for the hint.
+> 
+> Yes. Not feasible?
+> 
+> > diff --git a/net/xfrm/xfrm_state.c b/net/xfrm/xfrm_state.c
+> > index 67ca7ac955a3..6881ddeb4360 100644
+> > --- a/net/xfrm/xfrm_state.c
+> > +++ b/net/xfrm/xfrm_state.c
+> > @@ -766,13 +766,6 @@ int __xfrm_state_delete(struct xfrm_state *x)
+> >   		if (x->encap_sk)
+> >   			sock_put(rcu_dereference_raw(x->encap_sk));
+> > -		xfrm_dev_state_delete(x);
+> > -
+> > -		/* All xfrm_state objects are created by xfrm_state_alloc.
+> > -		 * The xfrm_state_alloc call gives a reference, and that
+> > -		 * is what we are dropping here.
+> > -		 */
+> > -		xfrm_state_put(x);
+> >   		err = 0;
+> >   	}
+> > @@ -787,8 +780,20 @@ int xfrm_state_delete(struct xfrm_state *x)
+> >   	spin_lock_bh(&x->lock);
+> >   	err = __xfrm_state_delete(x);
+> >   	spin_unlock_bh(&x->lock);
+> > +	if (err)
+> > +		return err;
+> > -	return err;
+> > +	if (x->km.state == XFRM_STATE_DEAD) {
+> > +		xfrm_dev_state_delete(x);
+> > +
+> > +		/* All xfrm_state objects are created by xfrm_state_alloc.
+> > +		 * The xfrm_state_alloc call gives a reference, and that
+> > +		 * is what we are dropping here.
+> > +		 */
+> > +		xfrm_state_put(x);
+> > +	}
+> > +
+> > +	return 0;
+> >   }
+> >   EXPORT_SYMBOL(xfrm_state_delete);
 > > 
-> > > So one could require that /proc/sys/vm/overcommit_memory is setup properly
-> > > and use MAP_NORESRVE.
+> > Then why we need the spin lock in xfrm_state_delete?
 > > 
-> > Isn't the check for lchunks == 0 essentially exactly this?
 > 
-> I assume paired with MAP_NORESERVE?
+> No, we don't need. But I am trying to understand what you said in your last
+> email about adding a new lock, or unlocking spin lock in
 
-Yes.
+I *thought* we need the spin lock in xfrm_state_delete(). So to protect xfrm_state,
+we need a new lock. Although it looks redundant. e.g. 
 
-> Maybe, but it could be better to have something that says "if
-> overcommit_memory is not setup properly I will SKIP this test", but
-> otherwise I expect this to work and will FAIL if it doesn't".
+int xfrm_state_delete(struct xfrm_state *x)
+{
+        int err;
 
-Ok, I'll validate the sysctl value.
+        spin_lock_bh(&x->lock);
+        err = __xfrm_state_delete(x);
+        spin_unlock_bh(&x->lock);
+        if (err)
+                return err;
 
-> Or would you expect to run into lchunks == 0 even if overcommit_memory is
-> setup properly and MAP_NORESERVE is used? (very very low memory that we
-> cannot even create all the VMAs?)
+	another_lock(&x->other_lock)
+        if (x->km.state == XFRM_STATE_DEAD) {
+                xfrm_dev_state_delete(x);
+                xfrm_state_put(x);
+        }
+	another_unlock(&x->other_lock)
 
-No.
-
-> > > Reading from anonymous memory will populate the shared zeropage. To mitigate
-> > > OOM from "too many page tables", one could simply unmap the pieces as they
-> > > are verified (or MAP_FIXED over them, to free page tables).
-> > 
-> > The code has to figure out if a verified region was created by mmap(),
-> > otherwise an munmap() could crash the process.
-> > As the entries from /proc/self/maps may have been merged and (I assume)
-> 
-> Yes, and partial unmap (in chunk granularity?) would split them again.
-> 
-> > the ordering of mappings is not guaranteed, some bespoke logic to establish
-> > the link will be needed.
-> 
-> My thinking was that you simply process one /proc/self/maps entry in some
-> chunks. After processing a chunk, you munmap() it.
-> 
-> So you would process + munmap in chunks.
-
-That is clear. The issue would be to figure which chunks are valid to
-unmap. If something critical like the executable file is unmapped,
-the process crashes. But see below.
-
-> > Is it fine to rely on CONFIG_ANON_VMA_NAME?
-> > That would make it much easier to implement.
-> 
-> Can you elaborate how you would do it?
-
-First set the VMA name after mmap():
-
-for (i = 0; i < NR_CHUNKS_LOW; i++) {
-	ptr[i] = mmap(NULL, MAP_CHUNK_SIZE, PROT_READ | PROT_WRITE,
-		     MAP_NORESERVE | MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-
-	if (ptr[i] == MAP_FAILED) {
-		if (validate_lower_address_hint())
-			ksft_exit_fail_msg("mmap unexpectedly succeeded with hint\n");
-		break;
-	}
-
-	validate_addr(ptr[i], 0);
-	if (prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ptr[i], MAP_CHUNK_SIZE, "virtual_address_range"))
-		ksft_exit_fail_msg("prctl(PR_SET_VMA_ANON_NAME) failed: %s\n", strerror(errno));
+        return 0;
 }
+> bond_ipsec_del_sa(). Anything I missed?
 
-During validation:
+The unlock spin lock in bond_ipsec_del_sa looks like
+https://lore.kernel.org/netdev/Z1vfsAyuxcohT7th@fedora/
 
-hop = 0;
-while (start_addr + hop < end_addr) {
-	if (write(fd, (void *)(start_addr + hop), 1) != 1)
-		return 1;
-	lseek(fd, 0, SEEK_SET);
-
-	if (!strncmp(line + path_offset, "[anon:virtual_address_range]", 28))
-		munmap((char *)(start_addr + hop), MAP_CHUNK_SIZE);
-
-	hop += MAP_CHUNK_SIZE;
-
-}
-
-It is done for each chunk, as all chunks may have been merged into a
-single VMA and a per-VMA unmap would not happen before OOM.
-
-> > Using MAP_NORESERVE and eager munmap()s, the testcase works nicely even
-> > in very low physical memory conditions.
-> 
-> Cool.
+Thanks
+Hangbin
 
