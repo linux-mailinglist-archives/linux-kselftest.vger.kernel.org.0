@@ -1,76 +1,76 @@
-Return-Path: <linux-kselftest+bounces-24140-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24152-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B678EA07EEB
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 18:39:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9664AA07F09
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 18:42:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEED83A723B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 17:39:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C783163E33
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 17:42:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14BD3199239;
-	Thu,  9 Jan 2025 17:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D002D19E7F7;
+	Thu,  9 Jan 2025 17:40:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fLrvEsCs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kxYDKtFm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 332DC191499;
-	Thu,  9 Jan 2025 17:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EDF8191499;
+	Thu,  9 Jan 2025 17:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736444362; cv=none; b=LDv5pUDOce92N5aPmHJV/jLfagZpOKkhM9U99Sp/Q21Mn5aoz8vXOsKrZr1j7YsyE9kVR73fgvV579G5x8+Zunh6SjQ535uyX9XuNSGuVxdMD56eUHIXq5SFlo3A7oTlqpXfH1/Wl8zyRLL5vEKPVezzhjtntuwqKcXOhzCYYl0=
+	t=1736444413; cv=none; b=FqsQeOyIP35AndS351rNHZlkRjYkQCjSfdpAv2ZGaeC4fafoKjI9e5XpVGR+hG8gEMdXF2VK5eFxB0iWTmy9ah1aYFzaMpO0UKmp75WNmwXT9bFgBSJvQ2+Y6QRry3V1QL/6zUiRogG/6f9+fLjpN6IESzYnkC5YjH0S9xMHqEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736444362; c=relaxed/simple;
-	bh=zVcyNZXN3VvSpw0kulxzE8v0LRQqK88fl5EDuOLBaYs=;
+	s=arc-20240116; t=1736444413; c=relaxed/simple;
+	bh=sgY/WTgpLVob/H26v16vqR9o2OrCi4sBG/wp4T0MeF4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EUQEbYFEuD2YWaMqUGOF2HVp4UoRhBi5KUbvpjbo0ZLQzyrBzA3lqHi1SHGbNpY6/FTN5ZThG8MWGix2TUhEZqj4eFcmsmGjEOmH7R8zUvGHosswvJ8SaNE2IpFX4djprw+v4li94nWyvo+24N08KlVYR6/aQjdbfAUuwuW86vM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fLrvEsCs; arc=none smtp.client-ip=209.85.214.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=i8FjNXQNn8RbNtP8kguG9TNFuPiUAtLk1dNP+l7oPPrZ6tCgD0Jsfxr5eIP5w4n4XtgArJr3JMCEKUqXCR2G1lBCuua2/OoiGer6qGhsqqxLLVoK7Dh8o/CSfxd7R0ovJrpo7od9TlUALW7MirAQxab2r395brKQc4k+Tdm5uEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kxYDKtFm; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-21669fd5c7cso19315555ad.3;
-        Thu, 09 Jan 2025 09:39:20 -0800 (PST)
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2ef760a1001so1964313a91.0;
+        Thu, 09 Jan 2025 09:40:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736444360; x=1737049160; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736444411; x=1737049211; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6KsRQIc1JxQBezEIVdfkOzKqKFxNDLhEnsfcwp5vSS0=;
-        b=fLrvEsCs266ief/HIKVkKkTSNjOmMJiOS4K7TNmKEujm8Gdh+vT9ph1wCXv21QQPjR
-         Pqgm1XSaL6lq1d9m2E54KYtkAQLS1klnrcPB5db8qbSjOqZsQ3l/R7PZ3H1Fiayp7BF6
-         55Imw0JiaB8OGDiqNWaFDA6WrwldNZgMYNOMO866AVcnPgM4TZHFRHH2/A83zwli7Ngx
-         3iQGvdIWonPZQGGbxBoass/ex5BeArOnPxZgXReKKLv9vUl8Or0f4KY2mveArgKZYl5v
-         I1SK80dNcFmH72/2FJJMLfNHzMyBslyP6n/M1UntC5nmq3Y/CD8/t4ajwIP2w6wD9XK/
-         zYyA==
+        bh=tWpZAtZ5fwsLcgO5aqlcO3OYh1NgLbgjWHyNFFao33Y=;
+        b=kxYDKtFmK/XZikqpNb+WWnSfItRCtjNabdE5eMqKZHR0qwpi4hrZu2d7roxLzTuxTl
+         T6M4hxEXM7WaIJpdDW2w2pJnbkHcFZ4BvDVrZpNU2fLHoNx+0qUaz0I+RgZbYPLujNEj
+         quJIzXvcC0lr2QdO6vfVNSowux256wEWDejv0lZcyfUcTEcQJKlEdQPXShyazaL/1UA7
+         cFmLgnHzzrMxuPx5TaOI9TGM64s4lzTkunbQ6RMQ05k6S7oxZNwTCUm/uA0GB5Yjaa8m
+         89dBS0m6oiZDht7ml3k0c23Fif7RWg/X6d3vvpY+SjRrOAJvGdWiw6/fL7Fwt3CEXPTT
+         Xwdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736444360; x=1737049160;
+        d=1e100.net; s=20230601; t=1736444411; x=1737049211;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6KsRQIc1JxQBezEIVdfkOzKqKFxNDLhEnsfcwp5vSS0=;
-        b=TN9MVYiqc78zZN3SUAUJvYcAYcrxj/jPAL4XUqMm+w5FvWG98c62O4VagwXXDKwcoB
-         FDBgaa3CvGqHqqITWkXDQvBiUDEqlSm2EupDDDgx7FmIeaen7XIg8r01XmHP67BNmSub
-         L/PUeZX0G8FcfsXfkvChqnrObdF0wVE1YUene6OunBA9nvOD7lLZ1nxLsIcO1nAjRrHj
-         PEtuvkMeHPqlD5Z5x3pjcjY3lVEJt7GVXyDld9ja8m9hIfBRuylAMPxSiinxUlZrw74I
-         gBdOMLoo/q7zKnRNv6ZDu9m4IMLBqhYLPwBNpS6VuSffTgB9L7+xXE19psgtlGr/9JM6
-         1Liw==
-X-Forwarded-Encrypted: i=1; AJvYcCUkQKrHdvkeBGP7Q9EURSXIsJpNxb9BGEj31qhFF3N/xDSP/A+dpj8Tr/EEGOyRj6+ATnX7ggzH@vger.kernel.org, AJvYcCVdHXX+LHB50g8azcQIN34c7oxzkcEeOdl8cASenIOANiqGgcCxmGp4+xCML1shj2kn8X9FQPHJ91nV@vger.kernel.org, AJvYcCVgzZ6kBNZTnxPjr0TOZOQtICjKIj351vk2HCinPxa0B38GSNhB6+T5vogVHUp4uOl6mizEKfefMrkwhk1SyUoj@vger.kernel.org, AJvYcCWAcauJTO5abggW2v2bH6YjbwmKEprqiGaTL9aWXM+B9yXUi/4DVuUvPxNKt3yYi0Mg4t8=@vger.kernel.org, AJvYcCXxLUxk6EKjlcCWQHM4A0bkczSIi2RaA+knTwJeELooVTZIvuK0vyUEAcAdg6/NjHsKK0gTt94bXlegcDxF@vger.kernel.org
-X-Gm-Message-State: AOJu0YxE0LYCf33TD53/smm9C6ScijrVyNb2xwLrZnxIaKAdk3aEM2UP
-	9xz/h/s6v55h+no/gH8cU4C0juonfJ4nD6hIX0FkMlWSsj2mlGo=
-X-Gm-Gg: ASbGnctrnKE9P5agziqblp/jv2u5b3zZudHItTJfgjihpJ3ahow8IpD6UzZ8TxGEo6b
-	ZSvqLNe/GN3Xitw+u8BlQhmx3ibKA4KizGjm/QohLfLZrbbuGoLd3bfHOZnwF1ELPR8U7U0COe4
-	SbPhNKSE2AHDXnDKDcYmSgmuMHQpMRhA+jiRznWkpIijoOECTiEJCP+coOSjsKQMViGlBg0NOoM
-	FXP2KJVj7ZW0tfug2MP/J0f7PE9+ZTENWZzsQCbGrWMZrnX1E/RqEjZ
-X-Google-Smtp-Source: AGHT+IEOsPd8gi8EzkqvvII6DaS7kpXwJUDoEvR9sz6x99GD7Aypk+y99jv+WqRaCxVsNJdjbVm5kQ==
-X-Received: by 2002:a17:902:d2ca:b0:216:56d5:d87 with SMTP id d9443c01a7336-21a83f8ea52mr112422135ad.34.1736444360267;
-        Thu, 09 Jan 2025 09:39:20 -0800 (PST)
+        bh=tWpZAtZ5fwsLcgO5aqlcO3OYh1NgLbgjWHyNFFao33Y=;
+        b=Jf40ld+WFRiwiBC0FRv0vlYEvsPWw8pJPZLUfc56I8ng6xbwjc4vk+Yu0Elh4ZWE0c
+         P4MCqNJmn4PuVcfr1XIsu4vuoy190Y/LKSO21Aa5f8LjZzIm8EjGebmtlXVfUOKCsFLY
+         p+vhCEwIgkrWXXSMh2pp2CGPHZBPiXwNThyh/Jg6IrdcfoUd91g/t/rg7Ye19zaMDY5l
+         RsXUFfqmPAnZxB50oNTWQrJK3LUN1LsImNewQ2C+qalZBofOZVUOYfb3aKv1eQU8Cku+
+         fRE3OHFNMXWqvM1+OdjjBL38yXA/biFwM1qwscKVKaUx3cxhOdxHC1jWEttrlaJPsvPC
+         ixOA==
+X-Forwarded-Encrypted: i=1; AJvYcCUGJ5op8VYK09mtia2uE7i9jF4UVGbMP5cGtJ0wk1dyGTMZkDjXudqW5uglRULRGMs2qx3FhAjZd3mTOEBwDG1Y@vger.kernel.org, AJvYcCVAEkseggCGr0TfYIV7d8XK10RMYQDalDqWLgiB22v47FB2MD3zkjIvzYNAuZcAhXUVF/uF9zfSKXQW5vzv@vger.kernel.org, AJvYcCWDCS18WAh/6P1R0FzgyXK3HcQjKxt9zng8DUbQZOgzy/6nlBw3a4nUJrEeXcxKplt0xgBtX1eKDA4N@vger.kernel.org, AJvYcCXDeB/wR1M77ih1ePzIZ1CIlqbzKN2OXjhS4z+F5b6haxSGYgP04KPKIlULq3eccaesv5kDdTA/@vger.kernel.org, AJvYcCXzh/DZ5xCGecAiv+fFmE5x2fdk6eu/scEtiAa5zjPYVf3+yKddoBEUym5e6Za6Egy+gbg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+xgZTp3EhVcmhdc8ZeuRZG036JDQBNubpLL/lq+7omGK2qptQ
+	WU0zzO1HnSNmRrFAyxZNFNclmJd58o3QZH19tKbB7pqiD9diM4c=
+X-Gm-Gg: ASbGncu2N1IRhXg5M+2Ad0GWGg4OZ9pJ3xM5u2c6qYNXIVV5dd5kgztcLzEDYCpKawt
+	NUdoZNWTZ+GmJX3GKBnmXu/9YURVR5rZkD+lL6mkUbC9ql4u+lLT4oCpywKmu0Zd7jkrhvL1tmD
+	rls4iT3Z8maiGY0ArioKOGvQWAsYIZzsYp6jph4laRy/rC6eBHRI4vQ1lOuj0Jd78oGGylBngvS
+	72wQBiQxg+FtRp1KM6YPNwWpkDDPhUy2PPt/F2NleUqOLPdY3D5COsS
+X-Google-Smtp-Source: AGHT+IEZHpA+1As7rYRP/wbYTv7BBI8EycFV1R1kQaORb6ULu5g6y7WttO6FZ+OmR/qIEMsz9TCzbg==
+X-Received: by 2002:a17:90a:d887:b0:2ea:7cd5:4ad6 with SMTP id 98e67ed59e1d1-2f5490dbefemr9659697a91.32.1736444411540;
+        Thu, 09 Jan 2025 09:40:11 -0800 (PST)
 Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f22f051sm516575ad.203.2025.01.09.09.39.19
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f5593d0911sm1848116a91.8.2025.01.09.09.40.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2025 09:39:19 -0800 (PST)
-Date: Thu, 9 Jan 2025 09:39:19 -0800
+        Thu, 09 Jan 2025 09:40:11 -0800 (PST)
+Date: Thu, 9 Jan 2025 09:40:10 -0800
 From: Stanislav Fomichev <stfomichev@gmail.com>
 To: "Song, Yoong Siang" <yoong.siang.song@intel.com>
 Cc: "David S . Miller" <davem@davemloft.net>,
@@ -116,12 +116,12 @@ Cc: "David S . Miller" <davem@davemloft.net>,
 	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
 	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
 	"xdp-hints@xdp-project.net" <xdp-hints@xdp-project.net>
-Subject: Re: [PATCH bpf-next v4 3/4] net: stmmac: Add launch time support to
- XDP ZC
-Message-ID: <Z4AJx-a-eY3pgHNv@mini-arch>
-References: <20250106135658.9734-1-yoong.siang.song@intel.com>
- <Z31fXHxWuKNog_Qh@mini-arch>
- <PH0PR11MB58304082BF0EA96D1A74E4C5D8132@PH0PR11MB5830.namprd11.prod.outlook.com>
+Subject: Re: [PATCH bpf-next v4 1/4] xsk: Add launch time hardware offload
+ support to XDP Tx metadata
+Message-ID: <Z4AJ-pIyAUbXJJpx@mini-arch>
+References: <20250106135606.9704-1-yoong.siang.song@intel.com>
+ <Z31bQ6xEkyQvbutN@mini-arch>
+ <PH0PR11MB5830D33B679A0ACD3FD6E23CD8132@PH0PR11MB5830.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -130,64 +130,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <PH0PR11MB58304082BF0EA96D1A74E4C5D8132@PH0PR11MB5830.namprd11.prod.outlook.com>
+In-Reply-To: <PH0PR11MB5830D33B679A0ACD3FD6E23CD8132@PH0PR11MB5830.namprd11.prod.outlook.com>
 
 On 01/09, Song, Yoong Siang wrote:
-> On Wednesday, January 8, 2025 1:08 AM, Stanislav Fomichev <stfomichev@gmail.com> wrote:
+> On Wednesday, January 8, 2025 12:50 AM, Stanislav Fomichev <stfomichev@gmail.com> wrote:
 > >On 01/06, Song Yoong Siang wrote:
-> >> Enable launch time (Time-Based Scheduling) support to XDP zero copy via XDP
-> >> Tx metadata framework.
+> >> Extend the XDP Tx metadata framework so that user can requests launch time
+> >> hardware offload, where the Ethernet device will schedule the packet for
+> >> transmission at a pre-determined time called launch time. The value of
+> >> launch time is communicated from user space to Ethernet driver via
+> >> launch_time field of struct xsk_tx_metadata.
 > >>
-> >> This patch is tested with tools/testing/selftests/bpf/xdp_hw_metadata on
-> >> Intel Tiger Lake platform. Below are the test steps and result.
-> >>
-> >> Test Steps:
-> >> 1. Add mqprio qdisc:
-> >>    $ sudo tc qdisc add dev enp0s30f4 handle 8001: parent root mqprio num_tc
-> >>      4 map 0 1 2 3 3 3 3 3 3 3 3 3 3 3 3 3 queues 1@0 1@1 1@2 1@3 hw 0
-> >>
-> >> 2. Enable launch time hardware offload on hardware queue 1:
-> >>    $ sudo tc qdisc replace dev enp0s30f4 parent 8001:2 etf offload clockid
-> >>      CLOCK_TAI delta 500000
-> >>
-> >> 3. Add an ingress qdisc:
-> >>    $ sudo tc qdisc add dev enp0s30f4 ingress
-> >>
-> >> 4. Add a flower filter to route incoming packet with VLAN priority 1 into
-> >>    hardware queue 1:
-> >>    $ sudo tc filter add dev enp0s30f4 parent ffff: protocol 802.1Q flower
-> >>      vlan_prio 1 hw_tc 1
-> >>
-> >> 5. Enable VLAN tag stripping:
-> >>    $ sudo ethtool -K enp0s30f4 rxvlan on
-> >>
-> >> 6. Start xdp_hw_metadata selftest application:
-> >>    $ sudo ./xdp_hw_metadata enp0s30f4 -l 1000000000
-> >>
-> >> 7. Send an UDP packet with VLAN priority 1 to port 9091 of DUT.
-> >
-> >Tangential: I wonder whether we can add the setup steps to the
-> >xdp_hw_metadata tool? It is useful to have one command to run that
-> >takes care of all the details. Same way it already enables HW
-> >tstamping..
-> >
-> >Or, if not the full setup, some kind of detection we can signal to the
-> >user that some things might be missing?
+> >> Suggested-by: Stanislav Fomichev <sdf@google.com>
 > 
-> Sure. I can try to add the setup steps into xdp_hw_metadata
-> by using ioctl() function. However, there are some device specific
-> command, like the number of queue, their priority,
-> how they route the incoming packet, etc. I will try to find out
-> a common way that can work for most of the devices,
-> at least work for both igc and stmmac.
+> Hi Stanislav Fomichev,
+> 
+> Thanks for your review comments.
+> I notice that you have two emails:
+> sdf@google.com & stfomichev@gmail.com
+> 
+> Which one I should use in the suggested-by tag?
 
-We can query the number of queues (and everything else you need) in the
-tool, similar to what we do in
-testing/selftests/drivers/net/hw/ncdevmem.c, take a look. But if it's
-too complicated, maybe at least print these commands on startup and tell
-the user to run them.
-
-The reason I'm asking is that I hope that we eventually can run this
-tool from (automatic) testing/selftests/drivers/net/hw testsuite to
-make sure the metadata stuff keeps working.
+google.com should be bouncing now. sdf@fomichev.me is preferred.
 
