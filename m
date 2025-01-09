@@ -1,176 +1,156 @@
-Return-Path: <linux-kselftest+bounces-24165-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24166-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB69BA0837C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 00:31:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBC56A0839E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 00:42:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 587CF188BD2A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 23:31:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10E8B3A7CAE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 23:42:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB550205E0B;
-	Thu,  9 Jan 2025 23:31:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B5162063CF;
+	Thu,  9 Jan 2025 23:42:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="RffI9t5r";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="i2Mb/yk1"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="cv1I0l/6";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Q6432d7a"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D2E7189BBB;
-	Thu,  9 Jan 2025 23:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE32618C00B;
+	Thu,  9 Jan 2025 23:42:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736465460; cv=none; b=Iv6F374YLK71mt9lkoyfygadx2nCVpjtxPHcAnzTuZ36Ft84EZxve2EkzWRzcD4XXCZknMpkMBqgrel+YKwPw0HHJRMj4CMNHFNVWRijnf0ztbTV1cXAqhDSbC6//eIl2bB7hBKluw6Wz7sTeYaPwZbX8rs8jezhaiMVL4rUf4c=
+	t=1736466168; cv=none; b=GJie1n8xlrZLXACtjJAm+wFLhM4VJQqcaMbmQCuFrQwmaqp3MN6JCxDYC3VXMI1O6BbYcD0RjK/+6BSBQi44zktWb7LvYZ7UJtXYkT8LEWbRwW5lxF6Hb8+lcGcMvGEX/gklJq8NnNQKIhyFUjxgrkRP/YZV4Mhk6Fi5iJStNW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736465460; c=relaxed/simple;
-	bh=w7GkOc9bZq2Zjok5ovgUZijFRHaFsLDijd9IU/zYoGQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S2ElfJ0YRx+lkQViWgExWYWox+fgaHlMnHwL/7CcP4iw1zPge//35EkBO8dGC8ByRZQq/hcdV4rbV261ptl1rmsVXT4QOZxSvO8bJ5zaqQCxrewqSavlsDvZ+D0mZqGLPO8Dx9GhPelEaP+CH0Bgd+Cn4CLpDfzo0aYOby+rjoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=RffI9t5r; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=i2Mb/yk1; arc=none smtp.client-ip=103.168.172.145
+	s=arc-20240116; t=1736466168; c=relaxed/simple;
+	bh=8PLDozhomkyuke4vvgLU0O26lPQt3JPxUiiRnkWIz3Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SqaYVdtQkJ86/umXoEVW6zwaqcDqefivCPvWBAEVh/kEOvfjn5cl+3WVSN5EHNQQ1PO9+avkmLchy2JuEyYnoq1OD0M0xKSo3wp05N3BKh36DbUb0WPWpvYdQbEMzWTE/wsT8hvYCcEeyqK4iDGgAecOOViv2d5CmGR+bb8N4iI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=cv1I0l/6; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Q6432d7a; arc=none smtp.client-ip=103.168.172.145
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfout.phl.internal (Postfix) with ESMTP id AF6411380264;
-	Thu,  9 Jan 2025 18:30:57 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-09.internal (MEProxy); Thu, 09 Jan 2025 18:30:57 -0500
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfout.phl.internal (Postfix) with ESMTP id ABB171380285;
+	Thu,  9 Jan 2025 18:42:45 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-12.internal (MEProxy); Thu, 09 Jan 2025 18:42:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1736465457; x=1736551857; bh=16dvk/IUtc
-	/d/6djVXoA4pGwlcklIfSpJOnuxMcfJ90=; b=RffI9t5r9ljgXbZGIIheYL3knI
-	QhQ865YwYOTZX30Pw712e4SysCuFt2LHJbygAOgGRaiVHpDgY4mSOBwTdLF+Njmw
-	5b2FutGJhNTM1OoJ/z4+tgJAtewj5PL1/wySLLIxdPAflMPxGdOH/mHvt0OgO6aw
-	9vLMw2QtDCX0ZS3j4x8n602a5y/2uWKy6CV5c+ucSAKh++whsRtmYHAbRdyj64Ag
-	99f8RQIASWvsPeVxPrW0vmVinGHbcz/C0Ygc1TOwZFgPvFc34IQOy5Y0Pvvr2nRm
-	GEUlwPGhA5xM+lnO2kRK3ZT3vtiIB5LdapvxJ5w7VeB5iAGJtw32eXel43Dg==
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=fm1; t=1736466165; x=1736552565; bh=bT8qtCPvpDtiIG8OFwtM4
+	I8IhIxG5AZwEqb6EFkP6r8=; b=cv1I0l/6zfBkzrDZ7l25dJPsVqXuI5E73vf0h
+	xWfxRDMAhmdkKzir2H847gNx1/+AUlvYUGEvDfPaNZilVJHmps0tvadUY3ob2Re9
+	6NkgQhelSCe0H0cnRVMedE70rNIRZUZUnwYZQY6o6CefzH3YwunUA/3mrP//y5GH
+	gWbJ6+mkrQ83NAo2jo7rSppJFT3YZbQhLC8Z3DRN9mSFma3uv3bKqVbngNqFk+my
+	CxADGH7vKKuCiiXzeuk8RDpiRed2OJ03uwVJd7nQK7jtFB5X1SpQqvqlytad2qWj
+	ZurnNtUN4iwlG6NqZf2XOfXT7Uu5JU/jChIBVfGKkfGyy/PNQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
 	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1736465457; x=1736551857; bh=16dvk/IUtc/d/6djVXoA4pGwlcklIfSpJOn
-	uxMcfJ90=; b=i2Mb/yk1Nu+xU05U0olQh6zdaLEAlcWcpIpjtm1SrKtYJwNy7aB
-	FqlLe0u9FNJV4290H7F5TmGkGfqT60luvLtKqmOToqh5QS+N8uq/UjzAXPJtHtXG
-	l68YyHmPnXH3dFSE2xhID9iXzRM73epM71kKmCju65+hOjWcNy33akdqGCGbFOf6
-	09P6Ng+cMVJtpjtT4M74dmDAhb6A3bSWjOKzVejZAKtBKaOb/faW3AU/o0QFON2a
-	wgswglbA1ZPX9fPiwJH8cOHNIodUmJ69ZyMm4+7m2tfyA8V+BrPhtDps3qju16Po
-	7ytT1IOJyiThsS7StsCIbzAaYfcRdBaUJ4Q==
-X-ME-Sender: <xms:MFyAZ6fbRro6Lemb1a3AHKXHveXVPSibn23FQZkbtpujXz30TiNUqA>
-    <xme:MFyAZ0OsbZFLB6fquwVQSXFGiumOklqplchnIZFX-TFuQSe_YNxJYNmOdGrdc1XSz
-    6ysYcii_0TBCLA-kw>
-X-ME-Received: <xmr:MFyAZ7jimlOPvQcMxt2MdNdi3O2UKw--ChugNpbplwyk1Ce2xPOAjNLjDhkM0cQ-2XB3pI03c_ni0Oc6eZZIylqJIrUTNSRrwnIs1_tEdH2WGQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudegjedgtdelucetufdoteggodetrfdotf
+	1736466165; x=1736552565; bh=bT8qtCPvpDtiIG8OFwtM4I8IhIxG5AZwEqb
+	6EFkP6r8=; b=Q6432d7aWqW3Rretfnn1dZOXeJuH8l5O8g+oD6cZL3leaUiYkEw
+	WW7WzIs+BW98n5GXBxz03MN3biVcIsUsowiE1Yz3aptagTaWg6GTJGKNKWO18D4E
+	IC4YuaDlYP6tfImSV4Eq/sE18sxdZVB8MwgVy/Wrg4b+KiVYQXDz3HCORQfePAC3
+	Y7I5mC1xAdvFayLIjmQCV01fM3jxSIy3MzpQw21E9OfOfrPue2EZVjLVzMmzF8SX
+	7sDjqIz4/XiYnAW9iJR+U4KC/+98dOtEabQWm8CsJvJvj7o2ab9gcq91JkANNi4L
+	l30HS/GZj9Afjcz68s9xsAnxMBgnmjf0gFg==
+X-ME-Sender: <xms:9V6AZ504SD8Pc-MSBBn5pl4HlxSEOt07VlnFe-aj6oI3bALPX93Aaw>
+    <xme:9V6AZwFFT3MeWonJPFOAcmfkGg7jQFbRPCs9mgZAW4ScB2TAXtV92z_Ia2srq2uMZ
+    t3gec0udJ-8KX-HJg>
+X-ME-Received: <xmr:9V6AZ56fC8MoLZxljfJOhBxdGMrWNN9Xw_BwBeJjUskA6nM1WIL_Frc-3W4nCzhfx0nja6o-NvkKOPRyjhwfDO4qgEzT6ww9oJ8XThLzVZvF7OBLw-xj>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudegjedgudduucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
     rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlje
-    dtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdfstddttddvnecuhfhrohhmpeff
-    rghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnh
-    epvdefkeetuddufeeigedtheefffekuedukeehudffudfffffggeeitdetgfdvhfdvnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesug
-    iguhhuuhdrgiihiidpnhgspghrtghpthhtohepudejpdhmohguvgepshhmthhpohhuthdp
-    rhgtphhtthhopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnug
-    hrihhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurg
-    hnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopehjohhhnhdrfhgrshht
-    rggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopehmrghrthhinhdrlhgruheslh
-    hinhhugidruggvvhdprhgtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhgpdhrtghp
-    thhtohephihonhhghhhonhhgrdhsohhngheslhhinhhugidruggvvh
-X-ME-Proxy: <xmx:MVyAZ39EJ5dmCb70mBTNz7FkW705Qi8VXqMAc2gR-Vci1anKrXZ8BQ>
-    <xmx:MVyAZ2sImiYzxCzODb5vtw-9qmzF9H2AZwxuR4VV1qv0tigMnf-UIw>
-    <xmx:MVyAZ-FTsODGcypL6puVZZAExNWpQdrsygGg757wrixqDVEes3tGqA>
-    <xmx:MVyAZ1NuefqADU9au8diD_14DjnK93zhKX3HMWOvTTEpuRPOIJEoyA>
-    <xmx:MVyAZ-R8LfOgNSoZ5rEIxMpNXlHq8Z0T2TkKoPLxk-jfdszoyQKxEpUj>
+    dtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeffrghn
+    ihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepvd
+    eggfetgfelhefhueefkeduvdfguedvhfegleejudduffffgfetueduieeikeejnecuvehl
+    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguh
+    huuhdrgiihiidpnhgspghrtghpthhtohepudejpdhmohguvgepshhmthhpohhuthdprhgt
+    phhtthhopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnughrih
+    hisehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsgho
+    gidrnhgvthdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtth
+    hopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmhihkohhlrghlsehfsgdr
+    tghomhdprhgtphhtthhopehmrghrthhinhdrlhgruheslhhinhhugidruggvvhdprhgtph
+    htthhopehsohhngheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephihonhhghhhonhhg
+    rdhsohhngheslhhinhhugidruggvvh
+X-ME-Proxy: <xmx:9V6AZ21W5uuYNrtwwsrDUpGS4MYWEom8XMSgoPVigLsLzc2ylXJfyg>
+    <xmx:9V6AZ8F-eNEL7XR1CJ1eCsvBJdqnjCtIxA7JCqHGT9HgfaiBWr4BcQ>
+    <xmx:9V6AZ3_6ASvyK7GuG4XAyMnZ9FIPGenn5ajSm3R5P-c9Af3N8JZdpQ>
+    <xmx:9V6AZ5lTl5gbDaQYDx5cetRvDn2jRHEFrM0j-MPvyD3P-GdHNXfviw>
+    <xmx:9V6AZxJm-1Y5P0xgTmGfHGdj9ePwl4f63rHrZ5R6dm1oRA3GwriDhQLH>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 9 Jan 2025 18:30:55 -0500 (EST)
-Date: Thu, 9 Jan 2025 16:30:53 -0700
+ 9 Jan 2025 18:42:43 -0500 (EST)
 From: Daniel Xu <dxu@dxuuu.xyz>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: andrii@kernel.org, ast@kernel.org, shuah@kernel.org, 
-	daniel@iogearbox.net, john.fastabend@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, 
-	jolsa@kernel.org, mykolal@fb.com, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v6 4/5] bpf: verifier: Support eliding map
- lookup nullness
-Message-ID: <gpqzoa2kvemzeuwpc2q4jnlcgscut5ouz7gcnd3e5my7vuml4a@bhhditb2jzq5>
-References: <cover.1734667691.git.dxu@dxuuu.xyz>
- <86213ea40c6e6a30bf8ba967da9b9c4c6d77fd0b.1734667691.git.dxu@dxuuu.xyz>
- <478322da282bbdae28027967ff47bfe2504559fe.camel@gmail.com>
+To: eddyz87@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	shuah@kernel.org,
+	ast@kernel.org
+Cc: mykolal@fb.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] bpf: veristat: Document verifier log dumping capability
+Date: Thu,  9 Jan 2025 16:42:29 -0700
+Message-ID: <d57bbcca81e06ae8dcdadaedb99a48dced67e422.1736466129.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <478322da282bbdae28027967ff47bfe2504559fe.camel@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 02, 2025 at 06:53:54PM -0800, Eduard Zingerman wrote:
-> On Thu, 2024-12-19 at 21:09 -0700, Daniel Xu wrote:
-> 
-> lgtm, but please see a note below.
-> 
-> [...]
-> 
-> > +/* Returns constant key value if possible, else negative error */
-> > +static s64 get_constant_map_key(struct bpf_verifier_env *env,
-> > +				struct bpf_reg_state *key,
-> > +				u32 key_size)
-> > +{
-> > +	struct bpf_func_state *state = func(env, key);
-> > +	struct bpf_reg_state *reg;
-> > +	int slot, spi, off;
-> > +	int spill_size = 0;
-> > +	int zero_size = 0;
-> > +	int stack_off;
-> > +	int i, err;
-> > +	u8 *stype;
-> > +
-> > +	if (!env->bpf_capable)
-> > +		return -EOPNOTSUPP;
-> > +	if (key->type != PTR_TO_STACK)
-> > +		return -EOPNOTSUPP;
-> > +	if (!tnum_is_const(key->var_off))
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	stack_off = key->off + key->var_off.value;
-> > +	slot = -stack_off - 1;
-> > +	spi = slot / BPF_REG_SIZE;
-> > +	off = slot % BPF_REG_SIZE;
-> > +	stype = state->stack[spi].slot_type;
-> > +
-> > +	/* First handle precisely tracked STACK_ZERO */
-> > +	for (i = off; i >= 0 && stype[i] == STACK_ZERO; i--)
-> > +		zero_size++;
-> > +	if (zero_size >= key_size)
-> > +		return 0;
-> > +
-> > +	/* Check that stack contains a scalar spill of expected size */
-> > +	if (!is_spilled_scalar_reg(&state->stack[spi]))
-> > +		return -EOPNOTSUPP;
-> > +	for (i = off; i >= 0 && stype[i] == STACK_SPILL; i--)
-> > +		spill_size++;
-> > +	if (spill_size != key_size)
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	reg = &state->stack[spi].spilled_ptr;
-> > +	if (!tnum_is_const(reg->var_off))
-> > +		/* Stack value not statically known */
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	/* We are relying on a constant value. So mark as precise
-> > +	 * to prevent pruning on it.
-> > +	 */
-> > +	bt_set_frame_slot(&env->bt, env->cur_state->curframe, spi);
-> 
-> I think env->cur_state->curframe is not always correct here.
-> It should be key->frameno, as key might point a few stack frames up.
+`-l2 -v` is a useful combination of flags to dump the entire
+verification log. This is helpful when making changes to the verifier,
+as you can see what it thinks program one instruction at a time.
 
-Ack, nice catch.
+This was more or less a hidden feature before. Document it so others can
+discover it.
+
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+---
+ tools/testing/selftests/bpf/veristat.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index 974c808f9321..7d0a9cb753e3 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -216,7 +216,8 @@ const char argp_program_doc[] =
+ "\n"
+ "USAGE: veristat <obj-file> [<obj-file>...]\n"
+ "   OR: veristat -C <baseline.csv> <comparison.csv>\n"
+-"   OR: veristat -R <results.csv>\n";
++"   OR: veristat -R <results.csv>\n"
++"   OR: veristat -v -l2 <to_analyze.bpf.o>\n";
+ 
+ enum {
+ 	OPT_LOG_FIXED = 1000,
+@@ -228,7 +229,7 @@ static const struct argp_option opts[] = {
+ 	{ "version", 'V', NULL, 0, "Print version" },
+ 	{ "verbose", 'v', NULL, 0, "Verbose mode" },
+ 	{ "debug", 'd', NULL, 0, "Debug mode (turns on libbpf debug logging)" },
+-	{ "log-level", 'l', "LEVEL", 0, "Verifier log level (default 0 for normal mode, 1 for verbose mode)" },
++	{ "log-level", 'l', "LEVEL", 0, "Verifier log level (default 0 for normal mode, 1 for verbose mode, 2 for full verification log)" },
+ 	{ "log-fixed", OPT_LOG_FIXED, NULL, 0, "Disable verifier log rotation" },
+ 	{ "log-size", OPT_LOG_SIZE, "BYTES", 0, "Customize verifier log size (default to 16MB)" },
+ 	{ "top-n", 'n', "N", 0, "Emit only up to first N results." },
+-- 
+2.47.1
 
 
