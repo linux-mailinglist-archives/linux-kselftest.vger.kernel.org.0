@@ -1,102 +1,115 @@
-Return-Path: <linux-kselftest+bounces-24120-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24121-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49D93A072A3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 11:17:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43322A07370
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 11:38:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E20A16597C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 10:17:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AE8416665A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 10:37:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97523215798;
-	Thu,  9 Jan 2025 10:17:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2008D215F4C;
+	Thu,  9 Jan 2025 10:37:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kQJSU2YU"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="UhabqEOq";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="fqGqhtka";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="UhabqEOq";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="fqGqhtka"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 156AA2153FA;
-	Thu,  9 Jan 2025 10:17:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A992204C0D;
+	Thu,  9 Jan 2025 10:37:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736417832; cv=none; b=OAHrgfIaTQKAjWPR4dAzunBsfEIW0pHBQ4HAaPajdHpF+pks7r08PPJCdHdkYuZUGfcwLidr+q0sNLAown+UxuKpLjDIVKqdn/jfpwZ2FTL6jMT0XXHJcVvFTIKaW2gCRUKS/FgsSLgkkl6ffq4wtpWuRtb7y7G8LkNr4ScQjVE=
+	t=1736419075; cv=none; b=DLXauAxIE3slLXzj0BSRsVJHm2ohVxFrSjXqJo+SxNw6M5mtC1CntM6BAnjPIuNmj7gc4F6K2ZcvUHxD9cyWOxhwjHI6OpkrJg4CLT3yXa2QcYLtPwMkwSSXHUNded4u8zDfbymk/5rMbsrbtxrEVSX8lM2N/hnscr8LXOTyUGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736417832; c=relaxed/simple;
-	bh=+rnIXIXl+omhSFdifxJMCOg+IS+vRghw3Hf4napuhs8=;
+	s=arc-20240116; t=1736419075; c=relaxed/simple;
+	bh=7xl1sBFt2GFWC41AWFg2risMqWrJmQ862WAJ8DnWKlc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eTWilHH4zQ3lk/EjOI8OawM1z5T6kq3Q4gchhy7BR9NFS2IhXGYVmDKWejBCM0Yl+BDX9+nzXHO2MeqxLgKVk8DI5HLWLHtCh0f9L4rE7yFGEI6mLZSVDi3wT2dC3+iHZlm5OvUZ+A5wJ3o9ofDbZfuQ0Dk5UZTyfb5698gQJL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kQJSU2YU; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2ee8e8e29f6so995705a91.0;
-        Thu, 09 Jan 2025 02:17:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736417830; x=1737022630; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wxwj8Vr2NS04fD1ExMGN1qbk+uSKoXbrW6r3E3W4B6U=;
-        b=kQJSU2YU4/YMPgBLXjDQyJDYlWJOgrmQVrcNCvCMFEK3ZmXaLLuKxbhrGiZjHRef/d
-         VW3ivUnG2ap/ubAh6AkMeYJ7hSMIHEcqz/sNJhAhcgPTLWdN0iiNcslkMdB9tV1/fQnW
-         4VUBGBGLdMw/7qOaufhsTGPGLGUqhsJv5rCOZIt8bjPmWVgmzrQHT0l11tS1oDoAPSqQ
-         LT+H/0kBGI/vkQRRUoOCK7JboYp2wA0haO46SUuOU1JmlpEQKon0clbUVNRhNI71aCAr
-         AGbhxqGniUOLpw0k8k7/6V6m6W8yWSS4O8uOTNX4URmPeTSZocGK6SABf3e9biMTxiWg
-         3xnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736417830; x=1737022630;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wxwj8Vr2NS04fD1ExMGN1qbk+uSKoXbrW6r3E3W4B6U=;
-        b=QNdgwyCIeMY6UnS5QyDOUsufI09836L8w2eYES23wt3m9ReKMYdAFHCzJ7InvcZ3om
-         Jm6ZV3FMPPW9b7lHJWDsrIM2S8d/cyAAX2EKb6pmVuexsAk1NM/oBEVYw1ODkZBUvkd/
-         bgDzNp9nieqTCjkeZzmdTNYtfIiN1oTPwkGhZ4z3Z5e7wzlDDSFElvotGiSuNXLp+pNz
-         H97ZTQhMWTU6/+X1wd6B2OgJzNvu5p2gZEHi1v1T7S3fnR7a8VheXkIPtnlQ4MnDeqAx
-         vlJM1nVWTcFaob26DVEQPAGQrsOxtyAAaib5OKTAWaaqt90g9pXpxBMN4et2Fczq1X2Y
-         82Mg==
-X-Forwarded-Encrypted: i=1; AJvYcCW2zLU9GGmARuHUztDMqk4gz3sOnAYTr5bWKy/ZPYWMKRcCYhqiRYlVzQ1qb4un0gqbwZdxbYzMqinOpjvY2IlG@vger.kernel.org, AJvYcCWVDZPaQtwFBFzNBCoYhBmcL1xkTitp35tCPGnSvMWEV+cL71y+g+/yeZPumLXfpT5EiZC28fpM@vger.kernel.org, AJvYcCWeVO1nWjymf/O0EiyyZdI8KzVZgjpgPzS7zz5/fYbhV8ui4DQ3YC/a1tHbFtjScwKtjH7HaWuJVNmi7lE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhalEGP9Nu9N0a6kB/II4uqnPXPrkw3Vbat6hWa6NcmBZm6MHb
-	rAO86PbAQf9+wLuN7ZjpqvmDsSU5TKQoQ7bVoBP7mzswCxzl7AWC
-X-Gm-Gg: ASbGncu4eEh6g0JaztWdjq9tXD9wNkWhtL9zdoGQEoM9ES9mgLDXZxh+6dSqo4SKalp
-	T8Trnu21twthrr53e+o9bWnZ0QVjV2WC77y9W/NlMdibWmF+PViohNzQEJW6XUyeTISWNOkL31s
-	Sf38PUvXqgVh2huZSznJsqr9pSVmImiuM8A85o2QMJh/yPSzt4ShX5MRnohp5Zi6XFyV9/olkCR
-	TNz6j0TqcIOkOXMileFV1WRlmtqobZ7fDyBDgT6Hm/hq0ajD8kSApYr4RuzWQ==
-X-Google-Smtp-Source: AGHT+IFBOOb/qVq5kprleuNjAH5wcJBcISGwHGfGP/smHaUA0POLs59ltUxYscizxSHgVnGFNjk8gw==
-X-Received: by 2002:a05:6a00:3e01:b0:725:e37d:cd35 with SMTP id d2e1a72fcca58-72d21ff4af7mr9963216b3a.18.1736417830140;
-        Thu, 09 Jan 2025 02:17:10 -0800 (PST)
-Received: from fedora ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad8faf9esm37939042b3a.144.2025.01.09.02.17.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2025 02:17:09 -0800 (PST)
-Date: Thu, 9 Jan 2025 10:17:00 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Jianbo Liu <jianbol@nvidia.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	Jay Vosburgh <jv@jvosburgh.net>,
-	Andy Gospodarek <andy@greyhouse.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Simon Horman <horms@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
-	Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Sabrina Dubroca <sd@queasysnail.net>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 0/2] bond: fix xfrm offload feature during init
-Message-ID: <Z3-iHO1gqQt3T0Tl@fedora>
-References: <20241213193127.4c31ef80@kernel.org>
- <Z3X9pfu12GUOBUY6@fedora>
- <1d8c901f-e292-43e4-970f-8440b26e92b0@nvidia.com>
- <Z3u0q5HSOshLn2V0@fedora>
- <Z33nEKg4PxwReUu_@fedora>
- <ad289f9a-41c3-4544-8aeb-535615f45aef@nvidia.com>
- <Z34l6hpbzPP9n65Y@fedora>
- <e01bae5f-30b5-4ec4-8c4b-5c133dd4552a@nvidia.com>
- <Z3-KxbofkhOrWin7@fedora>
- <b39dfbee-dd80-48b2-b79c-29682269522a@nvidia.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZFPbIPj2SU5c7cvX8DpqpfKPwFMeBUZQYyxuYEysXt1cDhiwsbg8C4Kty+iKpuEO2mRwvjce/lnTgVhI6KQHa0wyrV0jRYu5cmqtQfNTfWyf6mZ3r/TyodER0GNBEa7F9ML7HPBAa+DGYcgtOIytdFUWtjBxDasYY85f+Ky7Tbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=UhabqEOq; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=fqGqhtka; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=UhabqEOq; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=fqGqhtka; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 235E821114;
+	Thu,  9 Jan 2025 10:37:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1736419071; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CX40sLvsmEhDLSJTaTldfvB4pJb1E1M5ld3ODr0Mkbs=;
+	b=UhabqEOqWkFJt9pS2Eg7bmNobXgAaYioaBedkfwEo6llN+5M7LZttYYlHSWbWwnIK5CAv4
+	uCYy6llxHAUGUOZRo2WXQ8ksSFDzmbZMGytwVMhwE0AztxyqrPRhgLGuTlQTRygCldfEhg
+	HiYoojxFk1Z5q1xzu01v0zQdB2VgIQU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1736419071;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CX40sLvsmEhDLSJTaTldfvB4pJb1E1M5ld3ODr0Mkbs=;
+	b=fqGqhtka0ItNK7M+x7GYmey/2CvecS9u9o5ZCX/Gzcn4G1CO+LTRHjXpV4N1ALoQKV4UZE
+	WppUXtBqx4qV0aAA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=UhabqEOq;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=fqGqhtka
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1736419071; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CX40sLvsmEhDLSJTaTldfvB4pJb1E1M5ld3ODr0Mkbs=;
+	b=UhabqEOqWkFJt9pS2Eg7bmNobXgAaYioaBedkfwEo6llN+5M7LZttYYlHSWbWwnIK5CAv4
+	uCYy6llxHAUGUOZRo2WXQ8ksSFDzmbZMGytwVMhwE0AztxyqrPRhgLGuTlQTRygCldfEhg
+	HiYoojxFk1Z5q1xzu01v0zQdB2VgIQU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1736419071;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CX40sLvsmEhDLSJTaTldfvB4pJb1E1M5ld3ODr0Mkbs=;
+	b=fqGqhtka0ItNK7M+x7GYmey/2CvecS9u9o5ZCX/Gzcn4G1CO+LTRHjXpV4N1ALoQKV4UZE
+	WppUXtBqx4qV0aAA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 14593139AB;
+	Thu,  9 Jan 2025 10:37:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 1pDtBP+mf2ewFQAAD6G6ig
+	(envelope-from <jack@suse.cz>); Thu, 09 Jan 2025 10:37:51 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id BF005A0887; Thu,  9 Jan 2025 11:37:46 +0100 (CET)
+Date: Thu, 9 Jan 2025 11:37:46 +0100
+From: Jan Kara <jack@suse.cz>
+To: Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc: "Michael S. Tsirkin" <mst@redhat.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	linux-fsdevel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, 
+	Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	Jason Wang <jasowang@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kvm@vger.kernel.org, virtualization@lists.linux-foundation.org, 
+	linux-kselftest@vger.kernel.org, Yuri Benditovich <yuri.benditovich@daynix.com>, 
+	Andrew Melnychenko <andrew@daynix.com>, Stephen Hemminger <stephen@networkplumber.org>, 
+	gur.stavi@huawei.com, devel@daynix.com
+Subject: Re: [PATCH v2 2/3] tun: Pad virtio header with zero
+Message-ID: <apouzqstvjjracsde2o4ky3wguw7xeerolc5mp4aty4zgnpxct@gongys63jwdw>
+References: <20250109-tun-v2-0-388d7d5a287a@daynix.com>
+ <20250109-tun-v2-2-388d7d5a287a@daynix.com>
+ <20250109023056-mutt-send-email-mst@kernel.org>
+ <571a2d61-5fbe-4e49-b4d1-6bf0c7604a57@daynix.com>
+ <20250109024247-mutt-send-email-mst@kernel.org>
+ <6f33c048-81ad-4d15-872d-187e965e6d79@daynix.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -105,37 +118,91 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b39dfbee-dd80-48b2-b79c-29682269522a@nvidia.com>
+In-Reply-To: <6f33c048-81ad-4d15-872d-187e965e6d79@daynix.com>
+X-Rspamd-Queue-Id: 235E821114
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.51 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[27];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[3];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RLxr8yp7wrfbdywxro7ki6ncu8)];
+	MISSING_XM_UA(0.00)[];
+	FREEMAIL_CC(0.00)[redhat.com,zeniv.linux.org.uk,kernel.org,suse.cz,vger.kernel.org,davemloft.net,google.com,lwn.net,gmail.com,linux.alibaba.com,lists.linux-foundation.org,daynix.com,networkplumber.org,huawei.com];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.cz:dkim]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -2.51
+X-Spam-Flag: NO
 
-On Thu, Jan 09, 2025 at 05:51:07PM +0800, Jianbo Liu wrote:
-> > > No, we don't need. But I am trying to understand what you said in your last
-> > > email about adding a new lock, or unlocking spin lock in
+On Thu 09-01-25 18:36:52, Akihiko Odaki wrote:
+> On 2025/01/09 16:43, Michael S. Tsirkin wrote:
+> > On Thu, Jan 09, 2025 at 04:41:50PM +0900, Akihiko Odaki wrote:
+> > > On 2025/01/09 16:31, Michael S. Tsirkin wrote:
+> > > > On Thu, Jan 09, 2025 at 03:58:44PM +0900, Akihiko Odaki wrote:
+> > > > > tun used to simply advance iov_iter when it needs to pad virtio header,
+> > > > > which leaves the garbage in the buffer as is. This is especially
+> > > > > problematic when tun starts to allow enabling the hash reporting
+> > > > > feature; even if the feature is enabled, the packet may lack a hash
+> > > > > value and may contain a hole in the virtio header because the packet
+> > > > > arrived before the feature gets enabled or does not contain the
+> > > > > header fields to be hashed. If the hole is not filled with zero, it is
+> > > > > impossible to tell if the packet lacks a hash value.
+> > > > > 
+> > > > > In theory, a user of tun can fill the buffer with zero before calling
+> > > > > read() to avoid such a problem, but leaving the garbage in the buffer is
+> > > > > awkward anyway so fill the buffer in tun.
+> > > > > 
+> > > > > Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> > > > 
+> > > > But if the user did it, you have just overwritten his value,
+> > > > did you not?
+> > > 
+> > > Yes. but that means the user expects some part of buffer is not filled after
+> > > read() or recvmsg(). I'm a bit worried that not filling the buffer may break
+> > > assumptions others (especially the filesystem and socket infrastructures in
+> > > the kernel) may have.
+> > > 
+> > > If we are really confident that it will not cause problems, this behavior
+> > > can be opt-in based on a flag or we can just write some documentation
+> > > warning userspace programmers to initialize the buffer.
 > > 
-> > I *thought* we need the spin lock in xfrm_state_delete(). So to protect xfrm_state,
+> > It's been like this for years, I'd say we wait until we know there's a problem?
 > 
-> But not need in bond_ipsec_del_sa() because the state still hold by
-> xfrm_state_hold(), right?
+> Perhaps we can just leave it as is. Let me ask filesystem and networking
+> people:
+> 
+> Is it OK to leave some part of buffer uninitialized with read_iter() or
+> recvmsg()?
 
-Hmm, I'm not sure. If xfrm_state_hold() is safe. Why not just remove the spin
-lock in xfrm_state_delete(). This is more straightforward. e.g.
+I think that leaving part of the IO buffer within returned IO length
+uninitialized is a very bad practice and I'm not aware of any place in
+filesystem area that would do that. It makes life unnecessarily harder
+for userspace and also it is invitation for subtle information leaks
+(depending on who allocates the buffer and who then gets to read the
+results). So I think the patch makes sense.
 
-diff --git a/net/xfrm/xfrm_state.c b/net/xfrm/xfrm_state.c
-index 67ca7ac955a3..150562abf513 100644
---- a/net/xfrm/xfrm_state.c
-+++ b/net/xfrm/xfrm_state.c
-@@ -784,9 +784,7 @@ int xfrm_state_delete(struct xfrm_state *x)
- {
-        int err;
-
--       spin_lock_bh(&x->lock);
-        err = __xfrm_state_delete(x);
--       spin_unlock_bh(&x->lock);
-
-        return err;
- }
-
-We can even rename xfrm_state_delete() to xfrm_state_delete() directly.
-
-Thanks
-Hangbin
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
 
