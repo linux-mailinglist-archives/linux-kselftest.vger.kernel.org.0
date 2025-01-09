@@ -1,145 +1,238 @@
-Return-Path: <linux-kselftest+bounces-24123-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24124-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E285CA0741D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 12:04:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05CD3A07448
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 12:11:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F24A3A075C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 11:04:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3A3B3A846E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Jan 2025 11:10:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF607215F55;
-	Thu,  9 Jan 2025 11:04:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B684921638C;
+	Thu,  9 Jan 2025 11:10:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ii0cE7+6"
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="XWRQ2O4p"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7531714D7;
-	Thu,  9 Jan 2025 11:04:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E272163B5
+	for <linux-kselftest@vger.kernel.org>; Thu,  9 Jan 2025 11:10:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736420664; cv=none; b=BBfewwmG24Lx/xMgl00hRthpFYDsj557LZJHIGrDMJrALzpOJ4nKUkVnTptvO1UqTcLE8N99U2BkmFX9QJWVup0BNHzHu6obYZtWUsIj0Us4/DKn7tHjwhDy/kLyy05WfAXvvnUI9JLn0e+EOCJxOBjUUCK7FmGiPtgj3h5H5ts=
+	t=1736421049; cv=none; b=T85T+x83v+vGhcOwFf9rp0dQMTL3a1XZE95wv+R8JnX62nn9ILmzPaEhvTTxM+11BND/NTrRsSY7VyKfL29aa/+NkB3s4pnwc+mWAvps9HupKP3/EGD1UOk3GlTCjXr+oTyHV/ePHekvWoYUBbLeQNhtecDiMpj6IgUUpN4Y0Sw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736420664; c=relaxed/simple;
-	bh=IP79LBJkq7R0JdTUMY4tcQDHZkX+te/jZ0WVpzZaqp4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fJeWAgtx/+PpOY1hE8/5BlzhOtHvE2p6IJ3ImrvfhhgnmwVmbIoW3cbxVSNPyHmidWBrTaE+D5TtKaIVCMDyAWAcKYwEQp/+d8fsJakXzffFA39TlEkTZvEqaD8uMUcc4IcTDW7GFnweBVjFkvd9NRwzfgMZ4VRA/hLfVNfbzjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ii0cE7+6; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736420663; x=1767956663;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IP79LBJkq7R0JdTUMY4tcQDHZkX+te/jZ0WVpzZaqp4=;
-  b=ii0cE7+69Or4wslApfIvUmV5ay2+FzJu0CWQvstXuCB02Otv0ECea1JX
-   ijs+HNw+cq73JBYB5WIZEY0MADyqf3437WYCAAFbsSWz8T4uOm9GNbTb4
-   WLN8KqNZ7hb9xT7X55SDjZJQjlErZ2i+1/w+TRhqE9pFpfnBrIn0GawH4
-   uL/drBF2RsHH521M43J5uiH/kqSj1doN1omlRATEA6cFiG71MnF1FIu8C
-   W49sM+XmvCWrsyJJardsISrdz4LJNDUgXUfJ8mDfSjtpZvb/qoAMShbsq
-   5VNKyz+VLaKSCiCvx4eI8+gYGdZdpjXfUxIA7w/T3DwslMeGHtFvNy1W7
-   Q==;
-X-CSE-ConnectionGUID: bK+YTM82S2SMsqwSW1kUjg==
-X-CSE-MsgGUID: iKrkadf6RMGnUd49EWbGig==
-X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="36370917"
-X-IronPort-AV: E=Sophos;i="6.12,301,1728975600"; 
-   d="scan'208";a="36370917"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 03:04:22 -0800
-X-CSE-ConnectionGUID: KWuf3KQCRHuOZRxQ0NsmIw==
-X-CSE-MsgGUID: GsyVUl2OT/W0wQ0EAIHqMg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="103259034"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 09 Jan 2025 03:04:16 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tVqKk-000HRT-0t;
-	Thu, 09 Jan 2025 11:04:14 +0000
-Date: Thu, 9 Jan 2025 19:04:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nicolin Chen <nicolinc@nvidia.com>, jgg@nvidia.com,
-	kevin.tian@intel.com, corbet@lwn.net, will@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, joro@8bytes.org,
-	suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
-	dwmw2@infradead.org, baolu.lu@linux.intel.com, shuah@kernel.org,
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	eric.auger@redhat.com, jean-philippe@linaro.org, mdf@kernel.org,
-	mshavit@google.com, shameerali.kolothum.thodi@huawei.com,
-	smostafa@google.com, ddutile@redhat.com, yi.l.liu@intel.com,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v5 14/14] iommu/arm-smmu-v3: Report events that belong to
- devices attached to vIOMMU
-Message-ID: <202501091822.4ocbIobQ-lkp@intel.com>
-References: <03c01be90e53f743a91b6c1376c408404b891867.1736237481.git.nicolinc@nvidia.com>
+	s=arc-20240116; t=1736421049; c=relaxed/simple;
+	bh=OBb7WnRDA/eExZU7D3/aK8uhImmdl6QUV+d3JW/hSbc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZN1gPrkGxKVFoQR/Xg8nOq36phBrMgDAkVTzT10JVH0ObgvZBn+PiwzkPnzDrHbGT3n1CKTkvpnkCWarTu4fTknlyEL3NSL6qR7QILECEraKy0itZqWDKNDqE/HIOvwbE/R1GD9i9GwwhQm+m5+JCiRVYk3LRnAa9aA/YJDmYlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=XWRQ2O4p; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-21a7ed0155cso11661725ad.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jan 2025 03:10:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1736421047; x=1737025847; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZR674zUgyjyCfLgZwJdeM+9L7LlWuveDZzXkvs31rv4=;
+        b=XWRQ2O4plA9t6m646yZ4ahESwYI2HrblY6gZmd0BRpcgA3fnFoZVy9klw4V4XKZUUj
+         6ogh2gzmEUuxpkIOenVkRjoKN8VZpeNRQjb8BoLaKCX/YneBl98NNEyVzcxuzlcPZE6T
+         MsW4ziZzXqpj74b5Jd0+oh6rhPO/bDRfSNZDL3EtAh38Wg1yLOC0IoA46cyibr19GyyT
+         UvAVnDfvsdUkAkqHvXd5yUuqvAWA1+8/9C28BFkiS1/siSgjuvjQhtrEs7BTwbUlVfP/
+         fVosdTRL/Iky5Ctw+pHUtYiKC29Prq4m38YPQz7mmUI4ug6Sou4U99kX/HDt9neou8EC
+         +Kxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736421047; x=1737025847;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZR674zUgyjyCfLgZwJdeM+9L7LlWuveDZzXkvs31rv4=;
+        b=bKRWADnHruRjxefrqYSUNVej8HvPr0CBAg2nJIg63VuL8cY4KPHrGAQne4TJB8Bt8R
+         6g8hoXPcJ9pzvDvgURX76GVh7v2hq63I5xxE7aBKCMewTwZSHjoRggcbaXLYz63dmmFo
+         04calruzLspW5vHlBgj6oc0NrXCASoZ7sktIClr55NLUKNKDXYIlctUatAFrP3KOVBVu
+         m8cH6NKzOczLxXbaUOxRIq1Uh2ONhJpXZ5F2tgP/O76rcNQC9tJhtElK1TWP3s3L/W6U
+         0nEzWpXMb9XtvNKZzc4ISh8DGjcMmqCyK6b3e4531lcJ3cUM8+qzB7Cga1hKwHk1M7wf
+         VfuA==
+X-Forwarded-Encrypted: i=1; AJvYcCVRx2ROZppy2DcJFH+S6BIgDbdLreDKZGBMqM6PBCoU9sic4NA5AJeABDHTEuE67FqPFxsQah057Fl4GbDiIE4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynW4a1g9VfY3BKuobREAMnGW0HthnqlKqrk02DTJbe+SMzEkPm
+	KM4+xz8OvQCLIdVKF7Kb1x/vQb5qPzCvl+8K+TYbgB6AKfZsg2mkcJC83WFbCtA=
+X-Gm-Gg: ASbGncvsqpDv5RlWIdRdwHAdHSpOvfn45EsOqASRaN1GaHnUQWNYWIuEv4/VkXThB0b
+	jcWk0F91ob7ByexT9awg+EG9btKzO00PQz8FP2ZXIZcnEFDYZ+8HiDMEInUls9v5rV7bdyRztKF
+	xCNLWlreoBqMN9AYueSpfxdHniAtBIjIbMtt4tnUGcButAn5KWinyHGh6MagfmESsrO4oJz8WP1
+	S7O4mJ6FU0OI/8oTUrjbOVivsvXad8Bl7fCZTQNwRMwhy4qualdnkfVFQafDs2sdOs=
+X-Google-Smtp-Source: AGHT+IErb9LUclnkXFQGn0vJiPxbHdGenSK/alc5p9FV2tY+1eSNLiHiCoCuCfOfmQGgoqtm3g0RKA==
+X-Received: by 2002:a17:902:db09:b0:216:5556:8b46 with SMTP id d9443c01a7336-21a83fd96e7mr91665305ad.49.1736421047119;
+        Thu, 09 Jan 2025 03:10:47 -0800 (PST)
+Received: from [157.82.203.37] ([157.82.203.37])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a91744428sm10194715ad.60.2025.01.09.03.10.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jan 2025 03:10:46 -0800 (PST)
+Message-ID: <293ce6ac-4bf8-4b26-9291-023b7e101572@daynix.com>
+Date: Thu, 9 Jan 2025 20:10:41 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <03c01be90e53f743a91b6c1376c408404b891867.1736237481.git.nicolinc@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/3] tun: Set num_buffers for virtio 1.0
+To: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Jason Wang <jasowang@redhat.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+ Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org, kvm@vger.kernel.org,
+ virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
+ Yuri Benditovich <yuri.benditovich@daynix.com>,
+ Andrew Melnychenko <andrew@daynix.com>,
+ Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com,
+ devel@daynix.com
+References: <20250109-tun-v2-0-388d7d5a287a@daynix.com>
+ <20250109-tun-v2-3-388d7d5a287a@daynix.com>
+ <20250109023144-mutt-send-email-mst@kernel.org>
+ <20250109023829-mutt-send-email-mst@kernel.org>
+ <ad580d7b-2bd1-401e-bb7b-b67ec943918f@daynix.com>
+ <20250109055425-mutt-send-email-mst@kernel.org>
+Content-Language: en-US
+From: Akihiko Odaki <akihiko.odaki@daynix.com>
+In-Reply-To: <20250109055425-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Nicolin,
+On 2025/01/09 19:54, Michael S. Tsirkin wrote:
+> On Thu, Jan 09, 2025 at 06:38:10PM +0900, Akihiko Odaki wrote:
+>> On 2025/01/09 16:40, Michael S. Tsirkin wrote:
+>>> On Thu, Jan 09, 2025 at 02:32:25AM -0500, Michael S. Tsirkin wrote:
+>>>> On Thu, Jan 09, 2025 at 03:58:45PM +0900, Akihiko Odaki wrote:
+>>>>> The specification says the device MUST set num_buffers to 1 if
+>>>>> VIRTIO_NET_F_MRG_RXBUF has not been negotiated.
+>>>>>
+>>>>> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+>>>>
+>>>>
+>>>> How do we know this is v1 and not v0? Confused.
+>>>
+>>> Ah I got it, you assume userspace will over-write it
+>>> if VIRTIO_NET_F_MRG_RXBUF is set.
+>>> If we are leaving this up to userspace, why not let it do
+>>> it always?
+>>
+>> tun may be used with vhost_net, which does not set the field.
+> 
+> I'd fix that in vhost net.
 
-kernel test robot noticed the following build warnings:
+Let's see what filesystem and networking people will say for the earlier 
+patch. We can fix num_buffers for free if the earlier patch is getting 
+merged. We will need to come up with another solution otherwise.
 
-[auto build test WARNING on e94dc6ddda8dd3770879a132d577accd2cce25f9]
+> 
+> 
+>>>
+>>>>> ---
+>>>>>    drivers/net/tap.c      |  2 +-
+>>>>>    drivers/net/tun.c      |  6 ++++--
+>>>>>    drivers/net/tun_vnet.c | 14 +++++++++-----
+>>>>>    drivers/net/tun_vnet.h |  4 ++--
+>>>>>    4 files changed, 16 insertions(+), 10 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/net/tap.c b/drivers/net/tap.c
+>>>>> index 60804855510b..fe9554ee5b8b 100644
+>>>>> --- a/drivers/net/tap.c
+>>>>> +++ b/drivers/net/tap.c
+>>>>> @@ -713,7 +713,7 @@ static ssize_t tap_put_user(struct tap_queue *q,
+>>>>>    	int total;
+>>>>>    	if (q->flags & IFF_VNET_HDR) {
+>>>>> -		struct virtio_net_hdr vnet_hdr;
+>>>>> +		struct virtio_net_hdr_v1 vnet_hdr;
+>>>>>    		vnet_hdr_len = READ_ONCE(q->vnet_hdr_sz);
+>>>>> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+>>>>> index dbf0dee92e93..f211d0580887 100644
+>>>>> --- a/drivers/net/tun.c
+>>>>> +++ b/drivers/net/tun.c
+>>>>> @@ -1991,7 +1991,9 @@ static ssize_t tun_put_user_xdp(struct tun_struct *tun,
+>>>>>    	size_t total;
+>>>>>    	if (tun->flags & IFF_VNET_HDR) {
+>>>>> -		struct virtio_net_hdr gso = { 0 };
+>>>>> +		struct virtio_net_hdr_v1 gso = {
+>>>>> +			.num_buffers = __virtio16_to_cpu(true, 1)
+>>>>> +		};
+>>>>>    		vnet_hdr_sz = READ_ONCE(tun->vnet_hdr_sz);
+>>>>>    		ret = tun_vnet_hdr_put(vnet_hdr_sz, iter, &gso);
+>>>>> @@ -2044,7 +2046,7 @@ static ssize_t tun_put_user(struct tun_struct *tun,
+>>>>>    	}
+>>>>>    	if (vnet_hdr_sz) {
+>>>>> -		struct virtio_net_hdr gso;
+>>>>> +		struct virtio_net_hdr_v1 gso;
+>>>>>    		ret = tun_vnet_hdr_from_skb(tun->flags, tun->dev, skb, &gso);
+>>>>>    		if (ret < 0)
+>>>>> diff --git a/drivers/net/tun_vnet.c b/drivers/net/tun_vnet.c
+>>>>> index ffb2186facd3..a7a7989fae56 100644
+>>>>> --- a/drivers/net/tun_vnet.c
+>>>>> +++ b/drivers/net/tun_vnet.c
+>>>>> @@ -130,15 +130,17 @@ int tun_vnet_hdr_get(int sz, unsigned int flags, struct iov_iter *from,
+>>>>>    EXPORT_SYMBOL_GPL(tun_vnet_hdr_get);
+>>>>>    int tun_vnet_hdr_put(int sz, struct iov_iter *iter,
+>>>>> -		     const struct virtio_net_hdr *hdr)
+>>>>> +		     const struct virtio_net_hdr_v1 *hdr)
+>>>>>    {
+>>>>> +	int content_sz = MIN(sizeof(*hdr), sz);
+>>>>> +
+>>>>>    	if (iov_iter_count(iter) < sz)
+>>>>>    		return -EINVAL;
+>>>>> -	if (copy_to_iter(hdr, sizeof(*hdr), iter) != sizeof(*hdr))
+>>>>> +	if (copy_to_iter(hdr, content_sz, iter) != content_sz)
+>>>>>    		return -EFAULT;
+>>>>> -	if (iov_iter_zero(sz - sizeof(*hdr), iter) != sz - sizeof(*hdr))
+>>>>> +	if (iov_iter_zero(sz - content_sz, iter) != sz - content_sz)
+>>>>>    		return -EFAULT;
+>>>>>    	return 0;
+>>>>> @@ -154,11 +156,11 @@ EXPORT_SYMBOL_GPL(tun_vnet_hdr_to_skb);
+>>>>>    int tun_vnet_hdr_from_skb(unsigned int flags, const struct net_device *dev,
+>>>>>    			  const struct sk_buff *skb,
+>>>>> -			  struct virtio_net_hdr *hdr)
+>>>>> +			  struct virtio_net_hdr_v1 *hdr)
+>>>>>    {
+>>>>>    	int vlan_hlen = skb_vlan_tag_present(skb) ? VLAN_HLEN : 0;
+>>>>> -	if (virtio_net_hdr_from_skb(skb, hdr,
+>>>>> +	if (virtio_net_hdr_from_skb(skb, (struct virtio_net_hdr *)hdr,
+>>>>>    				    tun_vnet_is_little_endian(flags), true,
+>>>>>    				    vlan_hlen)) {
+>>>>>    		struct skb_shared_info *sinfo = skb_shinfo(skb);
+>>>>> @@ -176,6 +178,8 @@ int tun_vnet_hdr_from_skb(unsigned int flags, const struct net_device *dev,
+>>>>>    		return -EINVAL;
+>>>>>    	}
+>>>>> +	hdr->num_buffers = 1;
+>>>>> +
+>>>>>    	return 0;
+>>>>>    }
+>>>>>    EXPORT_SYMBOL_GPL(tun_vnet_hdr_from_skb);
+>>>>> diff --git a/drivers/net/tun_vnet.h b/drivers/net/tun_vnet.h
+>>>>> index 2dfdbe92bb24..d8fd94094227 100644
+>>>>> --- a/drivers/net/tun_vnet.h
+>>>>> +++ b/drivers/net/tun_vnet.h
+>>>>> @@ -12,13 +12,13 @@ int tun_vnet_hdr_get(int sz, unsigned int flags, struct iov_iter *from,
+>>>>>    		     struct virtio_net_hdr *hdr);
+>>>>>    int tun_vnet_hdr_put(int sz, struct iov_iter *iter,
+>>>>> -		     const struct virtio_net_hdr *hdr);
+>>>>> +		     const struct virtio_net_hdr_v1 *hdr);
+>>>>>    int tun_vnet_hdr_to_skb(unsigned int flags, struct sk_buff *skb,
+>>>>>    			const struct virtio_net_hdr *hdr);
+>>>>>    int tun_vnet_hdr_from_skb(unsigned int flags, const struct net_device *dev,
+>>>>>    			  const struct sk_buff *skb,
+>>>>> -			  struct virtio_net_hdr *hdr);
+>>>>> +			  struct virtio_net_hdr_v1 *hdr);
+>>>>>    #endif /* TUN_VNET_H */
+>>>>>
+>>>>> -- 
+>>>>> 2.47.1
+>>>
+> 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nicolin-Chen/iommufd-Keep-OBJ-IOCTL-lists-in-an-alphabetical-order/20250108-011247
-base:   e94dc6ddda8dd3770879a132d577accd2cce25f9
-patch link:    https://lore.kernel.org/r/03c01be90e53f743a91b6c1376c408404b891867.1736237481.git.nicolinc%40nvidia.com
-patch subject: [PATCH v5 14/14] iommu/arm-smmu-v3: Report events that belong to devices attached to vIOMMU
-config: arm64-randconfig-r131-20250109 (https://download.01.org/0day-ci/archive/20250109/202501091822.4ocbIobQ-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce: (https://download.01.org/0day-ci/archive/20250109/202501091822.4ocbIobQ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501091822.4ocbIobQ-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c:461:21: sparse: sparse: invalid assignment: &=
-   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c:461:21: sparse:    left side has type restricted __le64
-   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c:461:21: sparse:    right side has type unsigned long long
-   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c:462:21: sparse: sparse: invalid assignment: |=
-   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c:462:21: sparse:    left side has type restricted __le64
-   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c:462:21: sparse:    right side has type unsigned long long
->> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c:464:23: sparse: sparse: cast from restricted __le64
-   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c:465:23: sparse: sparse: cast from restricted __le64
-
-vim +461 drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-iommufd.c
-
-   455	
-   456	int arm_vmaster_report_event(struct arm_smmu_vmaster *vmaster, u64 *evt)
-   457	{
-   458		struct iommu_vevent_arm_smmuv3 vevt =
-   459			*(struct iommu_vevent_arm_smmuv3 *)evt;
-   460	
- > 461		vevt.evt[0] &= ~EVTQ_0_SID;
-   462		vevt.evt[0] |= FIELD_PREP(EVTQ_0_SID, vmaster->vsid);
-   463	
- > 464		vevt.evt[0] = cpu_to_le64(vevt.evt[0]);
-   465		vevt.evt[1] = cpu_to_le64(vevt.evt[1]);
-   466	
-   467		return iommufd_viommu_report_event(&vmaster->vsmmu->core,
-   468						   IOMMU_VEVENTQ_TYPE_ARM_SMMUV3, &vevt,
-   469						   sizeof(vevt));
-   470	}
-   471	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
