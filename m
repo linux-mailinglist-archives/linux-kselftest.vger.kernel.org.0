@@ -1,206 +1,149 @@
-Return-Path: <linux-kselftest+bounces-24172-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24173-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FE60A085D2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 04:18:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3417DA085E3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 04:25:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8ED3188DACB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 03:18:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53D573A9CAD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 03:25:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0770D80BEC;
-	Fri, 10 Jan 2025 03:18:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 564CD1E22F0;
+	Fri, 10 Jan 2025 03:25:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="UI2PWbpd"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FGoWxuua"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17B218BEC;
-	Fri, 10 Jan 2025 03:18:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555286EB7D
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2025 03:25:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736479097; cv=none; b=EneuVV6Pd1pFA+uYo6ZjkqaWRQ0hhdKGPUw/Jjbxw+rtHUFAeAY//2K4GyOdmNdOEA5kf3duikyo0HM0Aj313yOLwIvqt3Ilp7C27VcQ3aDSUdiLGXlsBycxrOjvzjBXgqiNjC99H7Tb7as+9ew0Aa5S/XETZSwRAbfQHmx9dME=
+	t=1736479503; cv=none; b=baolT/AWcT3sQBPwiPQVcndI9MYm4i78NAbdJRKVCX5otq2B4752bprCJqA+u/A+PELx5MOCo9B/RKrV6AmX3pHABbw6jsrBVyOjcGf7owv/tLbSJwAecqc9z1GLyR2rUUuShArPODHd20ysawcmPyUUtAhKLeCY2OSy6p0uxbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736479097; c=relaxed/simple;
-	bh=aIXN1fFDfC84V416aPhCKGkGdMkFr9cf9umweXfeUA0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QpyZFcwDh+Csjsc1M8UGNyPSONPvmIIVtETI1dWXcT24NTRgyUaQoFTcn10iYYPcMBE6rR9eRRQE/BjafqESQV08+biouFs+fKZjsNiu0jGrwe/PU8rP2B/9/QoMhYuDUP4M3hQyYAJenvKEKOrQ48siMmPC/DqQw187J2OcZXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=UI2PWbpd; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [IPV6:2601:646:8080:c1f1:e386:c572:17d3:6ddc] ([IPv6:2601:646:8080:c1f1:e386:c572:17d3:6ddc])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 50A3FGON981507
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Thu, 9 Jan 2025 19:15:22 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 50A3FGON981507
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2024121701; t=1736478939;
-	bh=2Gsk7+JP3PoZg8VhoEWFUmet8fDEOviqEDX2siCLmXA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UI2PWbpd/173uf8ET7OhKCSxHMq3wIV9uPwlDabKLopTn4XQlVOW2UhdDhLNKQ2ou
-	 8eY5IkJPjKd/ufxYXpC3T7ngILIHHww7s3f/TxHKadq33uowsRPtdqvlulWYDcl4s8
-	 98gF9cD/iHRBhl+LkNR2Vz4dcuRwuyCMkzCPxTONo9GrePkGJYLa5vUD7mYV9L5Uos
-	 ee2fTgpV4TmVkm3/EnjzCs2Wh3is/8drjYQa4kdxx6i4NZ58BWsIW3fEOCUEzu/US4
-	 z0xQ+UHFUiZOJoDRJIqr/23SWWVPTNXl6Nb/6Jv9OAyLaNK9jKDb4DWbnzq60xty/Q
-	 X0SCgYzOXKJQw==
-Message-ID: <4536aca6-c430-4cf9-a98f-8282c7378955@zytor.com>
-Date: Thu, 9 Jan 2025 19:15:09 -0800
+	s=arc-20240116; t=1736479503; c=relaxed/simple;
+	bh=xiIZOksV9gK8x5lTS+rlahAEFaL/qj64KXL6RVencw0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XPGVTbJuf8CYb102zwepKJSzBlFyqF1BmSpEFeCEJbmuLo7fXIJJCnwp3lExdR4DyixHDQBb/a/WRK1/4SoNa+xTzuzmn/MH2VOdpOPs3hpm0uHmBOQRtx7on3lAcFmjrxP+Oq6zXTMtT29nuReVsYQ5pdhSkMU1S+frRHc13g0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FGoWxuua; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1736479500;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ux/EFJGUhHtGiPWKsNCatUDg5uRU42FVCWFIHQvV8s8=;
+	b=FGoWxuua4vh9ZGE34vxHBfMXrmAA0IqaqUQSOfBG14Fh7uMn7akli2l2u5ChCY5ZzuQiai
+	o3YzTmCAGJczKmJVWDj/QvsEw8WVVAySuMG3y+UmmTVj+YEtpATcoctzDK/WfsG1GDdbiF
+	EMBAkw/0kZAYfn+UfNrFcYCF29oT4Qs=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-80-QYx2z-wNMrOXtiqbxDjU-Q-1; Thu, 09 Jan 2025 22:24:58 -0500
+X-MC-Unique: QYx2z-wNMrOXtiqbxDjU-Q-1
+X-Mimecast-MFC-AGG-ID: QYx2z-wNMrOXtiqbxDjU-Q
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-2ee46799961so4206804a91.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jan 2025 19:24:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736479498; x=1737084298;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ux/EFJGUhHtGiPWKsNCatUDg5uRU42FVCWFIHQvV8s8=;
+        b=mPwacPdi5bpAcSwnN9j1vOhhdmlJCrCWrGWmtBDXPGimHdtKxfdlfJGWISgNLCQMpT
+         ZnbdG0rbQuihET1gtvLt/4TSJFOtBcA7TYF1/4zJYVyF6eXwTqRe6x35UOBNEIZDdVpJ
+         AMhS01+jknMw98Zqi2Gw1EJvRHN83DDzolfNPlKkPIUP7aUJM2UuDpjTOyA9cxh+XMa/
+         CHFEP/rn5d/6Jw2Kb3kjZI8PXnUYbLcfd9QrGaG/Gs8xou14e+/g8eWILVwbfNfjojSf
+         1QTCV5iNsAg7nH0ItGAvm3VqO+lyoJ4G+WIuubeZxLbUY3fVWpktsn2twfXzP6Anai7k
+         3fRg==
+X-Forwarded-Encrypted: i=1; AJvYcCXWBQ2D1Pnayx+C3c074cFgEpX13cAje3IC52FZ7IzWbXi9H4TDd7godhIjcKkitmFdVJsQg1j08Zfd1DL9zE8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1tyXlzh0Nxe+nVQ+Wi+SNMuNLkXH93g8vIMjcpoVJFwpTjHBV
+	5nbWBHdHLPxkC311WFQZteU6VdqDIFj9YYv0q+cT6AUxmNcnn7YcopKUGmDm0DNwE6afj/9uQHT
+	suKVLu9MBwPmqdsVRid9jIUVbnjRUPR1IJBPVTmvBYpfz7WRmW+2/zHFw6qSiFiEMbaRdwHfBmk
+	No6wVJCDcfgONsow/TWhdCkpuz9z1aTRuroNO7XQ1t
+X-Gm-Gg: ASbGncuPu0iCSj3cjBYPM/a+Ta5VHcx7xqL2G7xsMd7JKwRQ1qkiA3DnvocYOsSL9/e
+	MWzhv7PenAsB43SkIE2MaasJTZ75w7jqTafdi1oc=
+X-Received: by 2002:a17:90b:2f45:b0:2ef:2f49:7d7f with SMTP id 98e67ed59e1d1-2f548ece7afmr14119978a91.18.1736479497870;
+        Thu, 09 Jan 2025 19:24:57 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGl4su9kuwxLueN6s9pabolA/u0yv9vnPxFtYkK0ZVCk201Nafu3Va6ZCJu8GUQ/vQJh85IIDkmsOql8mxd8mA=
+X-Received: by 2002:a17:90b:2f45:b0:2ef:2f49:7d7f with SMTP id
+ 98e67ed59e1d1-2f548ece7afmr14119944a91.18.1736479497484; Thu, 09 Jan 2025
+ 19:24:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/6] ptrace: introduce PTRACE_SET_SYSCALL_INFO API
-To: "Dmitry V. Levin" <ldv@strace.io>, Oleg Nesterov <oleg@redhat.com>
-Cc: Eugene Syromyatnikov <evgsyr@gmail.com>,
-        Mike Frysinger <vapier@gentoo.org>, Renzo Davoli <renzo@cs.unibo.it>,
-        Davide Berardi <berardi.dav@gmail.com>, strace-devel@lists.strace.io,
-        Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Naveen N Rao <naveen@kernel.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt
- <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.osdn.me>, Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andreas Larsson <andreas@gaisler.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20250107230153.GA30560@strace.io>
-Content-Language: en-US
-From: "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <20250107230153.GA30560@strace.io>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250109-tun-v2-0-388d7d5a287a@daynix.com> <20250109-tun-v2-1-388d7d5a287a@daynix.com>
+In-Reply-To: <20250109-tun-v2-1-388d7d5a287a@daynix.com>
+From: Jason Wang <jasowang@redhat.com>
+Date: Fri, 10 Jan 2025 11:24:45 +0800
+X-Gm-Features: AbW1kvayDbWMw6YuULfNbkLhEoUv0nyH0UVx2PFd5rLWnQcrUga4t_8H0CMLDNk
+Message-ID: <CACGkMEs2S=G-Y077hCeFE57ar0h1A5EaySOOTcvFZUVC0oGdXQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] tun: Unify vnet implementation
+To: Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, kvm@vger.kernel.org, 
+	virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
+	Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>, 
+	Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com, devel@daynix.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This would seem like a very good idea. However, it is perhaps important 
-to realize that it doesn't fully eliminate the problems with 64-bit 
-arguments on 32-bit ABIs being handled differently (never mind 
-inconsistencies in system call ABIs etc.) There isn't all that much that 
-can be done about that directly, though.
+On Thu, Jan 9, 2025 at 2:59=E2=80=AFPM Akihiko Odaki <akihiko.odaki@daynix.=
+com> wrote:
+>
+> Both tun and tap exposes the same set of virtio-net-related features.
+> Unify their implementations to ease future changes.
+>
+> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> ---
+>  MAINTAINERS            |   1 +
+>  drivers/net/Kconfig    |   5 ++
+>  drivers/net/Makefile   |   1 +
+>  drivers/net/tap.c      | 172 ++++++----------------------------------
+>  drivers/net/tun.c      | 208 ++++++++-----------------------------------=
+------
+>  drivers/net/tun_vnet.c | 186 +++++++++++++++++++++++++++++++++++++++++++
+>  drivers/net/tun_vnet.h |  24 ++++++
+>  7 files changed, 273 insertions(+), 324 deletions(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 910305c11e8a..1be8a452d11f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -23903,6 +23903,7 @@ F:      Documentation/networking/tuntap.rst
+>  F:     arch/um/os-Linux/drivers/
+>  F:     drivers/net/tap.c
+>  F:     drivers/net/tun.c
+> +F:     drivers/net/tun_vnet.h
+>
+>  TURBOCHANNEL SUBSYSTEM
+>  M:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+> diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
+> index 1fd5acdc73c6..255c8f9f1d7c 100644
+> --- a/drivers/net/Kconfig
+> +++ b/drivers/net/Kconfig
+> @@ -395,6 +395,7 @@ config TUN
+>         tristate "Universal TUN/TAP device driver support"
+>         depends on INET
+>         select CRC32
+> +       select TUN_VNET
 
-	-hpa
+I don't think we need a dedicated Kconfig option here.
 
+Btw, fixes should come first as it simplifies the backporting.
 
-On 1/7/25 15:01, Dmitry V. Levin wrote:
-> PTRACE_SET_SYSCALL_INFO is a generic ptrace API that complements
-> PTRACE_GET_SYSCALL_INFO by letting the ptracer modify details of
-> system calls the tracee is blocked in.
-> 
-> This API allows ptracers to obtain and modify system call details
-> in a straightforward and architecture-agnostic way.
-> 
-> Current implementation supports changing only those bits of system call
-> information that are used by strace, namely, syscall number, syscall
-> arguments, and syscall return value.
-> 
-> Support of changing additional details returned by PTRACE_GET_SYSCALL_INFO,
-> such as instruction pointer and stack pointer, could be added later
-> if needed, by re-using struct ptrace_syscall_info.reserved to specify
-> the additional details that should be set.  Currently, the reserved
-> field of struct ptrace_syscall_info must be initialized with zeroes;
-> arch, instruction_pointer, and stack_pointer fields are ignored.
-> 
-> PTRACE_SET_SYSCALL_INFO currently supports only PTRACE_SYSCALL_INFO_ENTRY,
-> PTRACE_SYSCALL_INFO_EXIT, and PTRACE_SYSCALL_INFO_SECCOMP operations.
-> Other operations could be added later if needed.
-> 
-> Ideally, PTRACE_SET_SYSCALL_INFO should have been introduced along with
-> PTRACE_GET_SYSCALL_INFO, but it didn't happen.  The last straw that
-> convinced me to implement PTRACE_SET_SYSCALL_INFO was apparent failure
-> to provide an API of changing the first system call argument on riscv
-> architecture [1].
-> 
-> ptrace(2) man page:
-> 
-> long ptrace(enum __ptrace_request request, pid_t pid, void *addr, void *data);
-> ...
-> PTRACE_SET_SYSCALL_INFO
->         Modify information about the system call that caused the stop.
->         The "data" argument is a pointer to struct ptrace_syscall_info
->         that specifies the system call information to be set.
->         The "addr" argument should be set to sizeof(struct ptrace_syscall_info)).
-> 
-> [1] https://lore.kernel.org/all/59505464-c84a-403d-972f-d4b2055eeaac@gmail.com/
-> 
-> Dmitry V. Levin (6):
->    Revert "arch: remove unused function syscall_set_arguments()"
->    syscall.h: add syscall_set_arguments() on remaining
->      HAVE_ARCH_TRACEHOOK arches
->    syscall.h: introduce syscall_set_nr()
->    ptrace_get_syscall_info: factor out ptrace_get_syscall_info_op
->    ptrace: introduce PTRACE_SET_SYSCALL_INFO request
->    selftests/ptrace: add a test case for PTRACE_SET_SYSCALL_INFO
-> 
->   arch/arc/include/asm/syscall.h                |  20 +
->   arch/arm/include/asm/syscall.h                |  25 +
->   arch/arm64/include/asm/syscall.h              |  20 +
->   arch/csky/include/asm/syscall.h               |  13 +
->   arch/hexagon/include/asm/syscall.h            |  14 +
->   arch/loongarch/include/asm/syscall.h          |  15 +
->   arch/m68k/include/asm/syscall.h               |   7 +
->   arch/microblaze/include/asm/syscall.h         |   7 +
->   arch/mips/include/asm/syscall.h               |  53 +++
->   arch/nios2/include/asm/syscall.h              |  16 +
->   arch/openrisc/include/asm/syscall.h           |  13 +
->   arch/parisc/include/asm/syscall.h             |  19 +
->   arch/powerpc/include/asm/syscall.h            |  15 +
->   arch/riscv/include/asm/syscall.h              |  16 +
->   arch/s390/include/asm/syscall.h               |  19 +
->   arch/sh/include/asm/syscall_32.h              |  19 +
->   arch/sparc/include/asm/syscall.h              |  17 +
->   arch/um/include/asm/syscall-generic.h         |  19 +
->   arch/x86/include/asm/syscall.h                |  43 ++
->   arch/xtensa/include/asm/syscall.h             |  18 +
->   include/asm-generic/syscall.h                 |  30 ++
->   include/linux/ptrace.h                        |   3 +
->   include/uapi/linux/ptrace.h                   |   3 +-
->   kernel/ptrace.c                               | 154 ++++++-
->   tools/testing/selftests/ptrace/Makefile       |   2 +-
->   .../selftests/ptrace/set_syscall_info.c       | 436 ++++++++++++++++++
->   26 files changed, 994 insertions(+), 22 deletions(-)
->   create mode 100644 tools/testing/selftests/ptrace/set_syscall_info.c
-> 
+Thanks
 
 
