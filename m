@@ -1,191 +1,171 @@
-Return-Path: <linux-kselftest+bounces-24204-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24205-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6307AA08E23
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 11:37:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 336EAA08E55
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 11:46:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F2873A61F4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 10:37:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DBE07A3947
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 10:46:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAC3820ADFD;
-	Fri, 10 Jan 2025 10:37:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AADF205AAF;
+	Fri, 10 Jan 2025 10:45:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="lF9l1Oxg";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="rD9VT4L+"
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="p+9k1nB1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from flow-a1-smtp.messagingengine.com (flow-a1-smtp.messagingengine.com [103.168.172.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36EB20A5F2;
-	Fri, 10 Jan 2025 10:37:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52E2D205516
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2025 10:45:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736505441; cv=none; b=igxpbWAD4FF1jSKKLB6Z4Qrfa3tLo4QbFZE8TRfe8cxezfRqSCQ3lQ6Z7V2aEwuDOBlPy1M019UvBuHbaaFCWj1QFBA7yud5/1lTxQZLNm4BPXvLgK61y8jGRdwlXFyWUpkcbvYNTF7aW7DN7g4vm2AT1TQTh4Xywe7Bv3mlB9g=
+	t=1736505953; cv=none; b=UFFSCJ5qh8Wunvw9J8kk9DksTgGHRbdYHWMnQwGE5wP84W7xtCHe7GtC2+P0QXq3eARXEu/D4xyGTBW2XBg6r6wlWA2WOMdyR2OydN7/UgrTsh3Yb+PN5JzqFBCE/G9va12WTEyEEHg6HdfSlXNTtPxRFnhnR55MhcrEkwx/kZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736505441; c=relaxed/simple;
-	bh=I1oVtbaOlFFHu0DmV8zdRMs9cNx4ils+QPsuoigo9rI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NRMKgE2lREn7KtrSz7ie9gu5bdCswunhVPZ/ZmV+ttpFmqNgKwtARNTRuI2S+vPL7C5SaWLWKcbaK33n0jaAXgpA1qswLDQWFbFz8X2BTIwPc+J47dchTDdmhTkZIgSijxZaK67dXD5Lx4rP1W26k6QgfeRm5P6ROm/6efPf60s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=lF9l1Oxg; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=rD9VT4L+; arc=none smtp.client-ip=103.168.172.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailflow.phl.internal (Postfix) with ESMTP id D91B32010D6;
-	Fri, 10 Jan 2025 05:37:17 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-08.internal (MEProxy); Fri, 10 Jan 2025 05:37:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1736505437; x=
-	1736512637; bh=Km4XzsnzHBTNNJzmGN8m2TrMMSFreEGVyXvVDroQ2DY=; b=l
-	F9l1OxgwNCSVpVzHNp2jvRIgcZtfmBz/E4/CO27dbRnPpywlZHXNuQhSufjq09iR
-	0Q1ceb1IRZSS/fN6814PVfVlDFZc/EVLYl2vi58mWFhJp18o89cYZreU1XtVLRmD
-	19T4xnFzlXyyyMJOMNOqGvLHe6C60LN2xggK+JESVtgZPwAH5HJRI5xPshZSfrlZ
-	GcMXvirGEd1tDeBMy5m8L171rno7Opv+KWlrx+H6cbu757OIulT2KyrYFRI4HfHI
-	IeQFsKKAHooUKWsb04Ck1WkK+W3OgtdvrKfxU53JSObu8cpzKureitBsWxKiHuto
-	y3zwRAmHw1P1k+RSkV1RQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1736505437; x=1736512637; bh=Km4XzsnzHBTNNJzmGN8m2TrMMSFreEGVyXv
-	VDroQ2DY=; b=rD9VT4L+x6wScm0MmUZeIMvpHgMx8qAL83gowQ/aifn4QOfo3nw
-	18acnJdLdQvErdaVPbYP4SqjyKSQJGLB3E5eZzuJ9Dtxvp3QeH2dP/hfVmiAoRmf
-	GWim3pv96frkdHzWOHix2M5qmmBHHkE2E9qlP4U6LV/Ha5ZxKqk10JuNAvA27n30
-	qdxMfQmD+i4hm5mNMNftbXsWI4fysYE9pymAWInDaeeeVJifSUXB3JzOL2PwBEE2
-	azJQJpPCW1nC9N+YVplzgJm6rVTgPozOzsC1XEmejWeWoA3KkM4A98S8XvWF96jp
-	o69S196+kqgvwK+y07aXY0dqMcuZxp6uqiQ==
-X-ME-Sender: <xms:W_iAZ00nxgJw64svIet4IdZP3JkbK1OhjQjIlVOQzlhHOwiSX9jkow>
-    <xme:W_iAZ_EFoH6iwh3lMqZ8MhM0WyE1LksqHeyql6hCcSzFXriLt6zgQj9KcqBOVeqFR
-    14FSvtmUagZUhrYj1g>
-X-ME-Received: <xmr:W_iAZ85lBR8fS3KVrpwwP-tcfcdKyK7KrEupA9vygKO6KEH9a87CckaGqhGuGKt21qAemA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudegkedgudejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtsfdttddtvden
-    ucfhrhhomhepfdfmihhrihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlse
-    hshhhuthgvmhhovhdrnhgrmhgvqeenucggtffrrghtthgvrhhnpeeltedugedtgfehuddu
-    hfetleeiuedvtdehieejjedufeejfeegteetuddtgefgudenucffohhmrghinhepkhgvrh
-    hnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
-    rhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgvpdhnsggprhgtphhtthhope
-    egfedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhhpphhtsehkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorh
-    hgpdhrtghpthhtoheplhhuthhosehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhht
-    ohhnrdhivhgrnhhovhestggrmhgsrhhiughgvghgrhgvhihsrdgtohhmpdhrtghpthhtoh
-    epsghpsegrlhhivghnkedruggvpdhrtghpthhtohepsghrvghnuggrnhdrhhhighhgihhn
-    sheslhhinhhugidruggvvhdprhgtphhtthhopegurgdrghhomhgviiesshgrmhhsuhhngh
-    drtghomhdprhgtphhtthhopegurghnihgvlhhtsehkvghrnhgvlhdrohhrghdprhgtphht
-    thhopegurghvvgdrhhgrnhhsvghnsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-ME-Proxy: <xmx:W_iAZ93YjtGqyQ_KhyMe78rNVusaOBrYpJoPXwMLehTvKhN1WUbxyg>
-    <xmx:W_iAZ3GoqF6B8L2mTflFziY9ijfyGAomHfUPxnFZQ_ui45RQ_ik4tw>
-    <xmx:W_iAZ2_aN5wdvfhDfYaCp4mM9S-7Ff2DFoYQYHii7uiepbjsstVyLA>
-    <xmx:W_iAZ8lM-cSB7BXqi74IqSxpaazEX5g3lCuiI9gwh0GEiOvb_BC0bg>
-    <xmx:XfiAZ17mYS2-77H8F-lcSSO9soujJP_-GYVn8onu-R3c3sOdSsV828s5>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 10 Jan 2025 05:37:03 -0500 (EST)
-Date: Fri, 10 Jan 2025 12:36:59 +0200
-From: "Kirill A. Shutemov" <kirill@shutemov.name>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- 	Andy Lutomirski <luto@kernel.org>,
- Anton Ivanov <anton.ivanov@cambridgegreys.com>,
- 	Borislav Petkov <bp@alien8.de>,
- Brendan Higgins <brendan.higgins@linux.dev>,
- 	Daniel Gomez <da.gomez@samsung.com>,
- Daniel Thompson <danielt@kernel.org>,
- 	Dave Hansen <dave.hansen@linux.intel.com>,
- David Gow <davidgow@google.com>,
- 	Douglas Anderson <dianders@chromium.org>,
- Ingo Molnar <mingo@redhat.com>,
- 	Jason Wessel <jason.wessel@windriver.com>,
- Jiri Kosina <jikos@kernel.org>, 	Joe Lawrence <joe.lawrence@redhat.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- 	Josh Poimboeuf <jpoimboe@kernel.org>,
- "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
- 	Luis Chamberlain <mcgrof@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- 	Masami Hiramatsu <mhiramat@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
- 	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- 	Petr Mladek <pmladek@suse.com>, Petr Pavlu <petr.pavlu@suse.com>,
- Rae Moar <rmoar@google.com>, 	Richard Weinberger <richard@nod.at>,
- Sami Tolvanen <samitolvanen@google.com>, 	Shuah Khan <shuah@kernel.org>,
- Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- 	Thomas Gleixner <tglx@linutronix.de>,
- kgdb-bugreport@lists.sourceforge.net, kunit-dev@googlegroups.com,
- 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, 	linux-modules@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
- 	live-patching@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 3/8] x86/mm/pat: Restore large pages after fragmentation
-Message-ID: <jut35igb2kstpz24apqdeubv5rvyl3vmp2s43xtivpz54uiedj@wmd2onulv4xw>
-References: <20241227072825.1288491-1-rppt@kernel.org>
- <20241227072825.1288491-4-rppt@kernel.org>
+	s=arc-20240116; t=1736505953; c=relaxed/simple;
+	bh=xwTt7EqwBQG9jsW/MlOAUi0BI8IrI3gTou3huVPPuY0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kEOnxYHQ0HipBQFU0SRYAQINefZKfilMxznJ+sddmW4kXfod9KqfSWI+Qun3JTW4bCxHsKi7/ZHDxVq489CqlW6V/QEco6Y1IMdUIH7cnXS+roe+O7C7krPgoak75MFDEAuiUz/Q6TCkhJUsQH0WcXrchN2E3EhXTg/yHuFQcx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=p+9k1nB1; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2165cb60719so33092385ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2025 02:45:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1736505950; x=1737110750; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lsqFmJrwySuAsgeQ23Hdp8zYfHgcqjGeQVThq/MnWD0=;
+        b=p+9k1nB1y1wLV4WAMd6GxCzPpVGINnfcjx4nS24pw7fZ/hn3Ly9tYIkV5IySy0AbyK
+         aOXcSz4wHFF9tbEmM93KdWsCVwG5WqVjTyWSOk65sD/ojHlm9ICq09k1pWkhKAleJW2Y
+         GTpwiuoMSgAUOr/YqrhWk0gdTtaC6LTn5HtGSjUDFQo8I1HMsLOeti+9umCaqx44hAZc
+         QTyJXAhs//a1i3RM15mcLV/fA+lMeyVQITdrIQtXuahzFtoXTgRyQ4kghTD5jz7Z9KMq
+         0wMQx+ee12Ua1YNIKaehndgJ07Kvrs3dmjzDAheUSpLTmyVK9vJRpmy333GkrjNXUT/F
+         IiAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736505950; x=1737110750;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lsqFmJrwySuAsgeQ23Hdp8zYfHgcqjGeQVThq/MnWD0=;
+        b=Eikt7rq9fzC3zb3c5QEBG0vQK6Btd1Oe0qvv+KZwhyHnwAjKish3pORGJROqjvUMBB
+         d4f3zuhC26pSgCbQxJrGfaTpyxQg0MGdM8azsApi092i+5B86kAid+WmHX9bvzZqLvK7
+         DZTgSIQOQlq9XkXn815aYKa3Dzg4PeKYmPoEcWcSc6XxTJlvkUNcq1MpHJCq+jy7u8Q2
+         KpGAiQMTat22OlsYVhuWnOGiUwHbSbR/hVTpCLPqbcNxyZB/ZRIE6x6YdO+W916nYosU
+         3cr4Wi8hM/GhyehrPwe96+ggu70ckDgbemXR6UTZUSSQ6zcIVN0F0yDxmw9Q/dqWmDxR
+         2o5g==
+X-Forwarded-Encrypted: i=1; AJvYcCVM0ZU4HWmqDwVBSyxZCsFV3/ZS1tty3fBczw6velvhTHPfAP3SCac3lUe0my+5Zi9mj4o+vQpTdVJ2rsfPx/c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1884KAcmlqq2Wpy8UILfQW+zTY3Vlwc4w+Qy9MPuM0oB+rStu
+	KanfX6onoDlvUUXqO/dD4I4GMknwfV3fVsm+MMUiRUNZeQZ+FxRrNYqePbYs+HY=
+X-Gm-Gg: ASbGncs/eOFGk7mSJSjt153TSY3uzvYULrD2c4givnHs0HIj4+gSW4ZTTBzJYOkIjT+
+	BQDJZOnQPnBjY33mh9l7ecaUR3VeZZiMQYAQm80zVcVHi3wEgdpdmAPf+kJ+qY6pdunw6DOu3hX
+	mMuMBZe9uiCVeLqv6V+Lhp8oRm9WVWyN/yjvYXbLBnVCOui+i0ixTK54ALLCJfSasUBLRQi8sT3
+	JiHDGRc6AyizxvmizrakfJk7vWZSGUmq5Fn9bdhb5R0PfPJcE+4mfZdcgGb6TzkB/I=
+X-Google-Smtp-Source: AGHT+IFPsdQcQ1JqLrS7hF+DlyZPpDcSA6WD6jF46cfVg9u5bIjzxZ5xlWPHe2yN4Ld9eivHDLICVA==
+X-Received: by 2002:a17:902:ecc5:b0:216:7cbf:9500 with SMTP id d9443c01a7336-21a83f36df7mr150799945ad.6.1736505950548;
+        Fri, 10 Jan 2025 02:45:50 -0800 (PST)
+Received: from [157.82.203.37] ([157.82.203.37])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f10e0dfsm11714655ad.41.2025.01.10.02.45.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jan 2025 02:45:50 -0800 (PST)
+Message-ID: <3a5001b5-9a07-4dfd-8cec-1e5f7180b88a@daynix.com>
+Date: Fri, 10 Jan 2025 19:45:44 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241227072825.1288491-4-rppt@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/3] tun: Pad virtio header with zero
+To: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>, Jason Wang <jasowang@redhat.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, kvm@vger.kernel.org,
+ virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
+ Yuri Benditovich <yuri.benditovich@daynix.com>,
+ Andrew Melnychenko <andrew@daynix.com>,
+ Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com,
+ devel@daynix.com
+References: <20250109-tun-v2-0-388d7d5a287a@daynix.com>
+ <20250109-tun-v2-2-388d7d5a287a@daynix.com>
+ <20250109023056-mutt-send-email-mst@kernel.org>
+ <571a2d61-5fbe-4e49-b4d1-6bf0c7604a57@daynix.com>
+ <677fc517b7b6e_362bc12945@willemb.c.googlers.com.notmuch>
+ <5e193a94-8f5a-4a2a-b4c4-3206c21c0b63@daynix.com>
+ <20250110033306-mutt-send-email-mst@kernel.org>
+Content-Language: en-US
+From: Akihiko Odaki <akihiko.odaki@daynix.com>
+In-Reply-To: <20250110033306-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Dec 27, 2024 at 09:28:20AM +0200, Mike Rapoport wrote:
-> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+On 2025/01/10 17:33, Michael S. Tsirkin wrote:
+> On Fri, Jan 10, 2025 at 01:38:06PM +0900, Akihiko Odaki wrote:
+>> On 2025/01/09 21:46, Willem de Bruijn wrote:
+>>> Akihiko Odaki wrote:
+>>>> On 2025/01/09 16:31, Michael S. Tsirkin wrote:
+>>>>> On Thu, Jan 09, 2025 at 03:58:44PM +0900, Akihiko Odaki wrote:
+>>>>>> tun used to simply advance iov_iter when it needs to pad virtio header,
+>>>>>> which leaves the garbage in the buffer as is. This is especially
+>>>>>> problematic when tun starts to allow enabling the hash reporting
+>>>>>> feature; even if the feature is enabled, the packet may lack a hash
+>>>>>> value and may contain a hole in the virtio header because the packet
+>>>>>> arrived before the feature gets enabled or does not contain the
+>>>>>> header fields to be hashed. If the hole is not filled with zero, it is
+>>>>>> impossible to tell if the packet lacks a hash value.
+>>>
+>>> Zero is a valid hash value, so cannot be used as an indication that
+>>> hashing is inactive.
+>>
+>> Zeroing will initialize the hash_report field to
+>> VIRTIO_NET_HASH_REPORT_NONE, which tells it does not have a hash value.
+>>
+>>>
+>>>>>> In theory, a user of tun can fill the buffer with zero before calling
+>>>>>> read() to avoid such a problem, but leaving the garbage in the buffer is
+>>>>>> awkward anyway so fill the buffer in tun.
+>>>>>>
+>>>>>> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+>>>>>
+>>>>> But if the user did it, you have just overwritten his value,
+>>>>> did you not?
+>>>>
+>>>> Yes. but that means the user expects some part of buffer is not filled
+>>>> after read() or recvmsg(). I'm a bit worried that not filling the buffer
+>>>> may break assumptions others (especially the filesystem and socket
+>>>> infrastructures in the kernel) may have.
+>>>
+>>> If this is user memory that is ignored by the kernel, just reflected
+>>> back, then there is no need in general to zero it. There are many such
+>>> instances, also in msg_control.
+>>
+>> More specifically, is there any instance of recvmsg() implementation which
+>> returns N and does not fill the complete N bytes of msg_iter?
 > 
-> Change of attributes of the pages may lead to fragmentation of direct
-> mapping over time and performance degradation as result.
-> 
-> With current code it's one way road: kernel tries to avoid splitting
-> large pages, but it doesn't restore them back even if page attributes
-> got compatible again.
-> 
-> Any change to the mapping may potentially allow to restore large page.
-> 
-> Hook up into cpa_flush() path to check if there's any pages to be
-> recovered in PUD_SIZE range around pages we've just touched.
-> 
-> CPUs don't like[1] to have to have TLB entries of different size for the
-> same memory, but looks like it's okay as long as these entries have
-> matching attributes[2]. Therefore it's critical to flush TLB before any
-> following changes to the mapping.
-> 
-> Note that we already allow for multiple TLB entries of different sizes
-> for the same memory now in split_large_page() path. It's not a new
-> situation.
-> 
-> set_memory_4k() provides a way to use 4k pages on purpose. Kernel must
-> not remap such pages as large. Re-use one of software PTE bits to
-> indicate such pages.
-> 
-> [1] See Erratum 383 of AMD Family 10h Processors
-> [2] https://lore.kernel.org/linux-mm/1da1b025-cabc-6f04-bde5-e50830d1ecf0@amd.com/
-> 
-> [rppt@kernel.org:
->  * s/restore/collapse/
->  * update formatting per peterz
->  * use 'struct ptdesc' instead of 'struct page' for list of page tables to
->    be freed
->  * try to collapse PMD first and if it succeeds move on to PUD as peterz
->    suggested
->  * flush TLB twice: for changes done in the original CPA call and after
->    collapsing of large pages
-> ]
-> 
-> Link: https://lore.kernel.org/all/20200416213229.19174-1-kirill.shutemov@linux.intel.com
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Co-developed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> The one in tun. It was a silly idea but it has been here for years now.
 
-When I originally attempted this, the patch was dropped because of
-performance regressions. Was it addressed somehow?
+Except tun. If there is such an example of recvmsg() implementation and 
+it is not accidental and people have agreed to keep it functioning, we 
+can confidently say this construct is safe without fearing pushback from 
+people maintaining filesystem/networking infrastructure. Ultimately I 
+want those people decide if this can be supported for the future or not.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+> 
+> 
+>>>
+>>> If not zeroing leads to ambiguity with the new feature, that would be
+>>> a reason to add it -- it is always safe to do so.
+>>>> If we are really confident that it will not cause problems, this
+>>>> behavior can be opt-in based on a flag or we can just write some
+>>>> documentation warning userspace programmers to initialize the buffer.
+> 
+
 
