@@ -1,287 +1,167 @@
-Return-Path: <linux-kselftest+bounces-24189-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24190-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A04AA08A1E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 09:29:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58430A08A40
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 09:33:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AAEA188D2EA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 08:29:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9A213A924B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 08:33:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E0302080DF;
-	Fri, 10 Jan 2025 08:28:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4BC7207E16;
+	Fri, 10 Jan 2025 08:33:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="ibSmOIFU"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ftEv9mTY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 270F91F9428
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2025 08:28:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE9FC207DFD
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2025 08:33:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736497729; cv=none; b=pYiwi6kP1jdWoWr9oTdVoa6d7t5glO/is5NTEfLadshfTOzGRMP/A1fXTnb1AaeXGGNR4wUaFGYo1BkY091VXDbHRQ7rjuSzgJ0ut6Gw3QhruL1f7fKl9CKy3bujb7BoLKbXc+aVhEeiXu/cxO9rcZ7NGmID+Sd5STtM57G+XwQ=
+	t=1736498021; cv=none; b=h3IgipgtuZBEXge+FhmAtYczqvlM8MDx8qz+9y0Z2Qard9FZi4TE4QTH+ASxSBSBAB+Fvm/ERADWPSmXPU7Cm9PWjlSnVnjPl5PBKpJsLOSfePzLWgfwVXSwVDTTnFTwy0nTagqmTeIiv5W052lE9sBPLcq/mRQsdqLkEKBjX+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736497729; c=relaxed/simple;
-	bh=mpE7hYntObRlHLj2s8ybBavAi+cZh37RwpDamWOgN40=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=CLgv+e97YQ11NiW7TpTqXcYEnJDaNkUKKtjad0ewsO08nA8wlpWINma85FjMTLfas/ATRHlP0+bOGqzL4TF8jqmiknLZrHyTh+fZ5m9mcjq5frCmKAie/gWlyUgmJsA2b5dzsTnfVn90M5FbO2eOUx7FIZ3e2O+7IYJCsisaVWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=ibSmOIFU; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-21669fd5c7cso29296395ad.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2025 00:28:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1736497725; x=1737102525; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fMHAnr47gYJmPF4Dg6UKLdQQ9r7gUgpmT9CNdLeTBRg=;
-        b=ibSmOIFU95uLATydrlyBKwidi+SiBBJLTbHROLEupNuyUdhtsPo3JPxU1iBTcry3Fd
-         Y3sh+sXTQ54mu063/v8sDikWMRzTPNMPlj4T0fMvhzjKyqUQSUnUKDEjOwRrXk0XkVh5
-         zKvEI5+Y2dGpMMXdaXAeddnE08xaeLFOlOlRRV4pXq2xUmzWOZF68D94xeLjfmmgY4cW
-         uNpL4wu2pFrEf5ql8q4QogNgiSzOwwh2j9lfMup4CLPMlqotjagZLNuWj8ViTR8FbM9k
-         jfuveoSIx3pOMk/nzwYvdeDYrp3YWpAe59RktpbQRTv/5tpLtPOtEOj5o8YuI2MYxD9G
-         5ZQA==
+	s=arc-20240116; t=1736498021; c=relaxed/simple;
+	bh=jHWzqnciWVxWixyPQhRuC+28OpV2V/bBQGrWzPx3hbg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u3Cw+UwzKLeZNmRO82qR394TvOgeBWqennfYFcGbj49sHWI2HYUkIqxogAV0IV2uZwhgYVu9NAoFWOhUewXrucMSY2FOy+LYGcdYLrWQ/93pldvqEgTJEE4LmxPfOjx0evcGAvU/3KRHx6Zw9ZJdnOsCPbNwHaex+ps5NmDcZ6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ftEv9mTY; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1736498018;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=v3AxsQKFkY0E+0MZ060gdGU5E31S3yG/jY+mnuNkfgk=;
+	b=ftEv9mTYws7LJlI9kXr3WgbR/ZoLzAJhKF4SxzUUXANmsfrmAAa6uCPAatbgLgW8N1YZDB
+	xGKpSvFKCvXvwHiophkL8IAyCRe4wtzSzmQ4rWeGUGsEC1uGvAsg6e9ZpZci48vtuhazJT
+	7JnD3i7fTJ1cgmJ9+rx1UH8VXWXUXwI=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-56-JL8J6XwKODyWAFfFKbYKFA-1; Fri, 10 Jan 2025 03:33:37 -0500
+X-MC-Unique: JL8J6XwKODyWAFfFKbYKFA-1
+X-Mimecast-MFC-AGG-ID: JL8J6XwKODyWAFfFKbYKFA
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3862e986d17so725856f8f.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2025 00:33:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736497725; x=1737102525;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fMHAnr47gYJmPF4Dg6UKLdQQ9r7gUgpmT9CNdLeTBRg=;
-        b=ku+Nc2zRobeXta0DAQ639QPyRCuIvBgplKpRY65UuMtgWIqJPaSLT/0TeURQLhogI4
-         xsn71IXKpaLd8pN3ca6eBZvbUsWJ5quHp0ZEF/u7UYOqwAt5HLMP7uvzUNIQMiY1XXzT
-         6Cbr9NufnM29zcgv0TCSdaGdMlu2ZyzvpavJyGhhodAmu4u13wU8zq0VlGtPeipH91P1
-         W6dJByebawCX11DA3+rfiSEyf/APs8rzk8Lin8yi+45IXTeGPeg0rT1ofW8QDn3Zj+A9
-         S9XjMCkjNQG+nlpGS78qHLYjK8j5cO7OGNSyScd7ziVTd8XkuwODU3h8iz5izRkMvHb/
-         xWTg==
-X-Forwarded-Encrypted: i=1; AJvYcCVHmxX7y4CrINT7sXWC+vgd4Hkb1T62+pi/56ntpIj2ZhW7Sk7IKp/ubBP0Mfy2nncDrBZ30TNaR674pfq5vOs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxH1pBwOC/hcyCKYrRl3GSgD7UuauiLOwDhc64RrijD/o22xJ7B
-	xYkoizPAzJv0MCIH+nEDl6YnapYtuVDDsvna2i8cAl6SN8sx/eBFKfNxcQg3E6E=
-X-Gm-Gg: ASbGncvmg2XCptf4dxJr+5QYh5Nk8u3JUxW1rnqZSfDJPhyWSL9PEJTo9uVvPMr8gi6
-	FBPSDE6IG7GFrllDs+ebJuC8WxscrNpQ6+ESBpakJMj21d2O6CzHhA2DutO+GwDi8Cu5/yI2BIF
-	+n/IRQxrx6K1FHnMcG6gN7ADjV+NisxGGCjVpaQfIJon9pkPZe7paLYkSUezuVWrApj4jAZU3t6
-	qC8XhAiA6HGz8I0VShxOrZe2PQUfXuAxsPousDEVS4/C7/rPF/reEugae8bMAT1P8Q=
-X-Google-Smtp-Source: AGHT+IF1ZJ34S8wHfK4e0giFWrsLi/td4d5wyPmgupD6AicJN1a26QYSVhI7ULzCco4C0ujTpbXL5A==
-X-Received: by 2002:a05:6a20:c70a:b0:1dc:37a:8dc0 with SMTP id adf61e73a8af0-1e88cfd5b94mr16188605637.21.1736497725427;
-        Fri, 10 Jan 2025 00:28:45 -0800 (PST)
-Received: from [157.82.203.37] ([157.82.203.37])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d40569fddsm1067441b3a.39.2025.01.10.00.28.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jan 2025 00:28:44 -0800 (PST)
-Message-ID: <aeb2bd68-f5b9-49b7-81ff-18472bd8b7b0@daynix.com>
-Date: Fri, 10 Jan 2025 17:28:38 +0900
+        d=1e100.net; s=20230601; t=1736498016; x=1737102816;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v3AxsQKFkY0E+0MZ060gdGU5E31S3yG/jY+mnuNkfgk=;
+        b=wOgHvZEbwvqiu9ySThRnoK4nmAQfTnSb7AQMwoFRwfAkirLs919+FbCcp9Hkogl7zQ
+         Bk4e1biGzCdx8gS05UO2GCEz6aH70yK1Cn0/Ru1BDaDkImDC/RPTGXe5u1RX2KAstkld
+         Vtv334uPPP1ak9OniRm7lHufNNia1oU3vLRTvF1xw3B9qdmncRmbLheDZACJslvAubYZ
+         xXqb5FT9RGS0jueGjygRDG1uFl+sm6XURM8Bxhi8GvVlvKt4VQj4ooMQ18eVDXiyW1QO
+         SY5FWN+TdFU6+IFiOKsn6jgR+iCrDTE/b7GIWpR92QxV70+MxcrJ2bx5SPYwvrNwqJg9
+         SwxA==
+X-Forwarded-Encrypted: i=1; AJvYcCVF6BThIQo1RxfbQy1ZzFdagpIFjUTmBATwx0410lzjFAQJTljchFyDSdLjDXDc+kw0FoGCkLVPnY9OCpfmPDE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOhvX0ngF280RwrJktCrJS/Es0OU2W2WFYy7bUPKP9Dv24yihK
+	9WMrDitAS3EMuP2MEkdG7dhL7kOwbN9EMSopuCp1MX8zFBfCYesOeIbl96ISrqaC24nkCe4zatN
+	de6qYNdVS8I+SxQsnx/l5Gb6qW2mO64QP2c3gufr+ktlxDHvthbMAd9C5EyvUCje/Wg==
+X-Gm-Gg: ASbGncsBikhs1xcXgeNSJvd5/KGl3rrLse2/UZi+t/T5zImOvLrQC7AWPFNvKUoqOil
+	+pIjbQGUPKXb4SLYMqlg+3nrFvI2tnh2Mh0Ho3tvTKD6N+8v0fde12HNLpYyVLtcFfM/ihWKvNp
+	NloD72RsBx28rdtCslZ6PLLb24E3CacJZfNZR+THr9MTBvRsYivkm7xq/BqvnkFvH47Mn55BauM
+	3YGfCxln5UJ0EFyX//mUacy4MKByEW19f+Zxc7zhuBHnn3l3Uxl
+X-Received: by 2002:a05:6000:704:b0:386:3272:ee68 with SMTP id ffacd0b85a97d-38a8730af1emr7361850f8f.28.1736498016257;
+        Fri, 10 Jan 2025 00:33:36 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHDkmvAzVbQy4Z1oN4ubuGOtq8JEjPwlHX/LMcj/lU9WejRkYESinAg0MOkridrYlqI4G3XFw==
+X-Received: by 2002:a05:6000:704:b0:386:3272:ee68 with SMTP id ffacd0b85a97d-38a8730af1emr7361814f8f.28.1736498015919;
+        Fri, 10 Jan 2025 00:33:35 -0800 (PST)
+Received: from redhat.com ([2a06:c701:740d:3500:7f3a:4e66:9c0d:1416])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e4b82ddsm3883422f8f.71.2025.01.10.00.33.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jan 2025 00:33:35 -0800 (PST)
+Date: Fri, 10 Jan 2025 03:33:31 -0500
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>, Jason Wang <jasowang@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+	linux-kselftest@vger.kernel.org,
+	Yuri Benditovich <yuri.benditovich@daynix.com>,
+	Andrew Melnychenko <andrew@daynix.com>,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	gur.stavi@huawei.com, devel@daynix.com
+Subject: Re: [PATCH v2 2/3] tun: Pad virtio header with zero
+Message-ID: <20250110033306-mutt-send-email-mst@kernel.org>
+References: <20250109-tun-v2-0-388d7d5a287a@daynix.com>
+ <20250109-tun-v2-2-388d7d5a287a@daynix.com>
+ <20250109023056-mutt-send-email-mst@kernel.org>
+ <571a2d61-5fbe-4e49-b4d1-6bf0c7604a57@daynix.com>
+ <677fc517b7b6e_362bc12945@willemb.c.googlers.com.notmuch>
+ <5e193a94-8f5a-4a2a-b4c4-3206c21c0b63@daynix.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] tun: Unify vnet implementation
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Jason Wang <jasowang@redhat.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, kvm@vger.kernel.org,
- virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
- Yuri Benditovich <yuri.benditovich@daynix.com>,
- Andrew Melnychenko <andrew@daynix.com>,
- Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com,
- devel@daynix.com
-References: <20250109-tun-v2-0-388d7d5a287a@daynix.com>
- <20250109-tun-v2-1-388d7d5a287a@daynix.com>
- <677fd7d26e090_362bc129432@willemb.c.googlers.com.notmuch>
-Content-Language: en-US
-From: Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <677fd7d26e090_362bc129432@willemb.c.googlers.com.notmuch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5e193a94-8f5a-4a2a-b4c4-3206c21c0b63@daynix.com>
 
-On 2025/01/09 23:06, Willem de Bruijn wrote:
-> Akihiko Odaki wrote:
->> Both tun and tap exposes the same set of virtio-net-related features.
->> Unify their implementations to ease future changes.
->>
->> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
->> ---
->>   MAINTAINERS            |   1 +
->>   drivers/net/Kconfig    |   5 ++
->>   drivers/net/Makefile   |   1 +
->>   drivers/net/tap.c      | 172 ++++++----------------------------------
->>   drivers/net/tun.c      | 208 ++++++++-----------------------------------------
->>   drivers/net/tun_vnet.c | 186 +++++++++++++++++++++++++++++++++++++++++++
->>   drivers/net/tun_vnet.h |  24 ++++++
->>   7 files changed, 273 insertions(+), 324 deletions(-)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 910305c11e8a..1be8a452d11f 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -23903,6 +23903,7 @@ F:	Documentation/networking/tuntap.rst
->>   F:	arch/um/os-Linux/drivers/
->>   F:	drivers/net/tap.c
->>   F:	drivers/net/tun.c
->> +F:	drivers/net/tun_vnet.h
->>   
->>   TURBOCHANNEL SUBSYSTEM
->>   M:	"Maciej W. Rozycki" <macro@orcam.me.uk>
->> diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
->> index 1fd5acdc73c6..255c8f9f1d7c 100644
->> --- a/drivers/net/Kconfig
->> +++ b/drivers/net/Kconfig
->> @@ -395,6 +395,7 @@ config TUN
->>   	tristate "Universal TUN/TAP device driver support"
->>   	depends on INET
->>   	select CRC32
->> +	select TUN_VNET
+On Fri, Jan 10, 2025 at 01:38:06PM +0900, Akihiko Odaki wrote:
+> On 2025/01/09 21:46, Willem de Bruijn wrote:
+> > Akihiko Odaki wrote:
+> > > On 2025/01/09 16:31, Michael S. Tsirkin wrote:
+> > > > On Thu, Jan 09, 2025 at 03:58:44PM +0900, Akihiko Odaki wrote:
+> > > > > tun used to simply advance iov_iter when it needs to pad virtio header,
+> > > > > which leaves the garbage in the buffer as is. This is especially
+> > > > > problematic when tun starts to allow enabling the hash reporting
+> > > > > feature; even if the feature is enabled, the packet may lack a hash
+> > > > > value and may contain a hole in the virtio header because the packet
+> > > > > arrived before the feature gets enabled or does not contain the
+> > > > > header fields to be hashed. If the hole is not filled with zero, it is
+> > > > > impossible to tell if the packet lacks a hash value.
+> > 
+> > Zero is a valid hash value, so cannot be used as an indication that
+> > hashing is inactive.
 > 
-> No need for this new Kconfig
+> Zeroing will initialize the hash_report field to
+> VIRTIO_NET_HASH_REPORT_NONE, which tells it does not have a hash value.
+> 
+> > 
+> > > > > In theory, a user of tun can fill the buffer with zero before calling
+> > > > > read() to avoid such a problem, but leaving the garbage in the buffer is
+> > > > > awkward anyway so fill the buffer in tun.
+> > > > > 
+> > > > > Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> > > > 
+> > > > But if the user did it, you have just overwritten his value,
+> > > > did you not?
+> > > 
+> > > Yes. but that means the user expects some part of buffer is not filled
+> > > after read() or recvmsg(). I'm a bit worried that not filling the buffer
+> > > may break assumptions others (especially the filesystem and socket
+> > > infrastructures in the kernel) may have.
+> > 
+> > If this is user memory that is ignored by the kernel, just reflected
+> > back, then there is no need in general to zero it. There are many such
+> > instances, also in msg_control.
+> 
+> More specifically, is there any instance of recvmsg() implementation which
+> returns N and does not fill the complete N bytes of msg_iter?
 
-I will merge tun_vnet.c into TAP.
+The one in tun. It was a silly idea but it has been here for years now.
 
-> 
->>   static struct proto tap_proto = {
->>   	.name = "tap",
->> @@ -641,10 +576,10 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
->>   	struct sk_buff *skb;
->>   	struct tap_dev *tap;
->>   	unsigned long total_len = iov_iter_count(from);
->> -	unsigned long len = total_len;
->> +	unsigned long len;
->>   	int err;
->>   	struct virtio_net_hdr vnet_hdr = { 0 };
->> -	int vnet_hdr_len = 0;
->> +	int hdr_len;
->>   	int copylen = 0;
->>   	int depth;
->>   	bool zerocopy = false;
->> @@ -652,38 +587,20 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
->>   	enum skb_drop_reason drop_reason;
->>   
->>   	if (q->flags & IFF_VNET_HDR) {
->> -		vnet_hdr_len = READ_ONCE(q->vnet_hdr_sz);
->> -
->> -		err = -EINVAL;
->> -		if (len < vnet_hdr_len)
->> -			goto err;
->> -		len -= vnet_hdr_len;
->> -
->> -		err = -EFAULT;
->> -		if (!copy_from_iter_full(&vnet_hdr, sizeof(vnet_hdr), from))
->> -			goto err;
->> -		iov_iter_advance(from, vnet_hdr_len - sizeof(vnet_hdr));
->> -		if ((vnet_hdr.flags & VIRTIO_NET_HDR_F_NEEDS_CSUM) &&
->> -		     tap16_to_cpu(q, vnet_hdr.csum_start) +
->> -		     tap16_to_cpu(q, vnet_hdr.csum_offset) + 2 >
->> -			     tap16_to_cpu(q, vnet_hdr.hdr_len))
->> -			vnet_hdr.hdr_len = cpu_to_tap16(q,
->> -				 tap16_to_cpu(q, vnet_hdr.csum_start) +
->> -				 tap16_to_cpu(q, vnet_hdr.csum_offset) + 2);
->> -		err = -EINVAL;
->> -		if (tap16_to_cpu(q, vnet_hdr.hdr_len) > len)
->> +		hdr_len = tun_vnet_hdr_get(READ_ONCE(q->vnet_hdr_sz), q->flags, from, &vnet_hdr);
->> +		if (hdr_len < 0) {
->> +			err = hdr_len;
->>   			goto err;
->> +		}
->> +	} else {
->> +		hdr_len = 0;
->>   	}
->>   
->> -	err = -EINVAL;
->> -	if (unlikely(len < ETH_HLEN))
->> -		goto err;
->> -
-> 
-> Is this check removal intentional?
 
-No, I'm not sure what this check is for, but it is irrlevant with vnet 
-header and shouldn't be modified with this patch. I'll restore the check 
-with the next version.
+> > 
+> > If not zeroing leads to ambiguity with the new feature, that would be
+> > a reason to add it -- it is always safe to do so.
+> > > If we are really confident that it will not cause problems, this
+> > > behavior can be opt-in based on a flag or we can just write some
+> > > documentation warning userspace programmers to initialize the buffer.
 
-> 
->> +	len = iov_iter_count(from);
->>   	if (msg_control && sock_flag(&q->sk, SOCK_ZEROCOPY)) {
->>   		struct iov_iter i;
->>   
->> -		copylen = vnet_hdr.hdr_len ?
->> -			tap16_to_cpu(q, vnet_hdr.hdr_len) : GOODCOPY_LEN;
->> +		copylen = hdr_len ? hdr_len : GOODCOPY_LEN;
->>   		if (copylen > good_linear)
->>   			copylen = good_linear;
->>   		else if (copylen < ETH_HLEN)
->> @@ -697,7 +614,7 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
->>   
->>   	if (!zerocopy) {
->>   		copylen = len;
->> -		linear = tap16_to_cpu(q, vnet_hdr.hdr_len);
->> +		linear = hdr_len;
->>   		if (linear > good_linear)
->>   			linear = good_linear;
->>   		else if (linear < ETH_HLEN)
->> @@ -732,9 +649,8 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
->>   	}
->>   	skb->dev = tap->dev;
->>   
->> -	if (vnet_hdr_len) {
->> -		err = virtio_net_hdr_to_skb(skb, &vnet_hdr,
->> -					    tap_is_little_endian(q));
->> +	if (q->flags & IFF_VNET_HDR) {
->> +		err = tun_vnet_hdr_to_skb(q->flags, skb, &vnet_hdr);
->>   		if (err) {
->>   			rcu_read_unlock();
->>   			drop_reason = SKB_DROP_REASON_DEV_HDR;
->> @@ -797,23 +713,17 @@ static ssize_t tap_put_user(struct tap_queue *q,
->>   	int total;
->>   
->>   	if (q->flags & IFF_VNET_HDR) {
->> -		int vlan_hlen = skb_vlan_tag_present(skb) ? VLAN_HLEN : 0;
->>   		struct virtio_net_hdr vnet_hdr;
->>   
->>   		vnet_hdr_len = READ_ONCE(q->vnet_hdr_sz);
->> -		if (iov_iter_count(iter) < vnet_hdr_len)
->> -			return -EINVAL;
->> -
->> -		if (virtio_net_hdr_from_skb(skb, &vnet_hdr,
->> -					    tap_is_little_endian(q), true,
->> -					    vlan_hlen))
->> -			BUG();
->>   
->> -		if (copy_to_iter(&vnet_hdr, sizeof(vnet_hdr), iter) !=
->> -		    sizeof(vnet_hdr))
->> -			return -EFAULT;
->> +		ret = tun_vnet_hdr_from_skb(q->flags, NULL, skb, &vnet_hdr);
->> +		if (ret < 0)
->> +			goto done;
->>   
->> -		iov_iter_advance(iter, vnet_hdr_len - sizeof(vnet_hdr));
->> +		ret = tun_vnet_hdr_put(vnet_hdr_len, iter, &vnet_hdr);
->> +		if (ret < 0)
->> +			goto done;
-> 
-> Please split this patch in to a series of smaller patches.
-> 
-> If feasible:
-> 
-> 1. one that move the head of tun.c into tun_vnet.[hc].
-> 2. then one that uses that also in tap.c.
-> 3. then a separate patch for the ioctl changes.
-> 4. then introduce tun_vnet_hdr_from_skb, tun_vnet_hdr_put
-> and friends in (a) follow-up patch(es).
-
-I will do so.
-
-> 
-> This is subtle code. Please report what tests you ran to ensure
-> that it does not introduce behavioral changes / regressions.
-
-I tried:
-- curl on QEMU with macvtap (vhost=on)
-- curl on QEMU with macvtap (vhost=off)
 
