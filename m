@@ -1,175 +1,146 @@
-Return-Path: <linux-kselftest+bounces-24202-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24203-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D0FEA08DD7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 11:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1234EA08E10
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 11:32:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA90C1884D61
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 10:25:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D737A18814DE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 10:32:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FD9220ADFF;
-	Fri, 10 Jan 2025 10:25:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCD63209F59;
+	Fri, 10 Jan 2025 10:31:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="rPx28O8B"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Mk7Ik4Ut"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28FE20ADEC
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2025 10:25:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 284451C3BE7;
+	Fri, 10 Jan 2025 10:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736504738; cv=none; b=GOzGeY/XO6VtQx1Slhj42atTcGHSKGWLmt/DeyTOZpqWsHQtz6XLsWTohHIEllcaZp2V5ZbTSdx97G0HeAkuITC9HJqUe/6i9wn3pDta7Rib1RuaPsAspn+8WjbITYkIFbVFug5/OyQeODJ5kI/pIDQO0C0NXO6HcsJM1sD3Exk=
+	t=1736505116; cv=none; b=oxJfrU5/cPpjTOtSPvq2AajS26ylNeE/7SfFbS8GNbEK3ZDxMYxlKFQa0zHLukeJBB+y7uz6/Bx7ZlwnkWYpPjdauUdGHU+rH+R+DSfvy8iEu5QV90TX5X+F8rrQlEnwi0mkc8DNIPqhVUPruXwo6GbdE+GHsOcaMGqotARM3ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736504738; c=relaxed/simple;
-	bh=8au50NRA9MKnrMJHspaeqOs6+2vtRBg/UI1G2kjsrFM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LOgBDfNiQyQWWHKSDVVBfAkBoGSrY0D7WfN+cK7ayU+puizv6VmxrAmML1U63qbxTeCkyXHaZ5XCNylE4OUcpQQBp+FeWnfIEq5QiwQflsDLKIUHw9VtiZPyxIrfCjzBfg5a27+d1a39gKWMwMYHLt+sG1P9IjnRT6dQpcxLqNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=rPx28O8B; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2166022c5caso29088415ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2025 02:25:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1736504736; x=1737109536; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TpdUX+5YwuD+zGTb80IjIfkrR9ePLf07c4eG06u5O1I=;
-        b=rPx28O8BA99xifr668QAkwYFvFv2g5E6Tr/OumlUk3zI3csntVeILrEf5vVW+5NSXW
-         i0GT3ghmCMbbnW5MEGixVZSGoyyrmESIuRfxSrOhB1KKGApE0vO/PpOpEOnH31caLkzy
-         10XNoQfuGpQA0au1ycNjqv6mAjuRS5ApFx9JaRH1nu9nPNEd0W/S4YhVTJueJpvwhTIX
-         1H8zilqJh8n21AasvRHMn3mV/3xlj7M9gWaXyR5R1uF1Ir0ptadG9lvRusH5OakIz88u
-         esiHsbODEFTWSNffxHCj9pZlPfHgWuW3MDKHbtmCQyp/Gr+XHHaHoFxeP+jtITiIt6UY
-         rvSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736504736; x=1737109536;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TpdUX+5YwuD+zGTb80IjIfkrR9ePLf07c4eG06u5O1I=;
-        b=GyeXSl60hvYrofgVDAIDvfZs8wVeX+IOA7OmPwyj9CVALlfkoBibeeQvA6tIpxJ2Zi
-         YFizyK9juRwrWdiKrhbMnchB1/6brLo4WykUs3GP5C/72wPRDNt4wVNmsNAAIN5JVjX/
-         +YMYZIuSgcSgtf8vm9zMOuDAhX3bsjBY26JlsgzuEKvy/fK7Q7Rx9lGWgvFWMzHoGbmy
-         74dYTQ0BAufJsIdHabAdvrwt0xMd0ah0QW8S/TKc1Kv5Fkpgm8+ynmS6Q6NIl/tpphF8
-         z3/1VC8p1Ha4QSAyr29Anzu04rW8WoWZ77jXfuZHK0R6uy42N4hj4xG658TryipDEsQD
-         3JJA==
-X-Forwarded-Encrypted: i=1; AJvYcCXMAArkvbgLo5c9hGg0UxGd77gP1mRXojd9ptY7t1fgbvv/ivJOKOqypHJrW5HvsHB2P6g4LAaBPj0uOUsqIrE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGF0NW+wK6PNdH3Nw6ehFlf0ipUB5wlNTV8mh45cwhEUZXGgrv
-	DaDjgbuRWTmfoiCeIpFl7tVqZIjaul/YLKdmZwHrpQ66cATdEye42aYYfCEgcDk=
-X-Gm-Gg: ASbGnctHlNVcOxcXv/3SDIDkdbdpbS8AKi2fyrjV1SEksGEvSm4tNzW1CRLRTGKAGbb
-	2JDXVknoYtF+HY5hBTodNVsUp/t0kDAtr9zSaRNkGXOiHIdlYtYn9hmE843EW5ZlLjDqFeZDpML
-	skdpRa6yuVqSC1FnrnhmBhd1C9EDYDTugTlgHXW4gWAsCLtHwth+29LeQwabVd4Js8Z8iJlYzjg
-	OQOVGfr0aPiFq5wjQd0kMSKQbW3dyIZis1wKt5Et6DG8DpUCKe5hXusRTGfb/ZCzmA=
-X-Google-Smtp-Source: AGHT+IEPk96o1z16upoqDF0UlLrtkOdu9nG1oSobpYhznvCU7YqxeKG3oXL/nadW69o0yG72TxPalw==
-X-Received: by 2002:a17:902:dacf:b0:215:b5c6:9ed3 with SMTP id d9443c01a7336-21a83f43b28mr154387855ad.12.1736504735978;
-        Fri, 10 Jan 2025 02:25:35 -0800 (PST)
-Received: from [157.82.203.37] ([157.82.203.37])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f253b6csm11183165ad.220.2025.01.10.02.25.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jan 2025 02:25:35 -0800 (PST)
-Message-ID: <4843eb55-eff2-4bc8-bed2-ba12dd46b573@daynix.com>
-Date: Fri, 10 Jan 2025 19:25:29 +0900
+	s=arc-20240116; t=1736505116; c=relaxed/simple;
+	bh=CxWGiJGU9/Zn1bv0YzFeTKzMHG/t4Te4bbf/omnlS4U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=So3Tj5FEQ+JQwUxXnmQr/WSLlvWXU+tbVgPyXQwtQyfLUM70zEHEllnxmnt0VdKHQlWSk288vJQ1a71tcsgrdKEE//9Ll8LViDd/dzmrExKGpYQPwMTAM87eX7o2cmXaAmeDtydQZ3dkq3ikjnt9L0EdCQES++aK3bKCCXvyBUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Mk7Ik4Ut; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 509Nx5YP002168;
+	Fri, 10 Jan 2025 10:31:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=OBsjov9ThPbAR7dxg/CNMbqXw91YLJjBbFEIZZiSs
+	Ck=; b=Mk7Ik4Utq/qn4OFVVGB2q5UIBkFBAsJ0tkfFjwen4OxNGVnCfQcku2zmx
+	ZWKsUCChbREbS1Gp/qWuQa342XoSeDt4htitHDc16FAhL5/TwWZitPNrX+XgfAJV
+	C7T1KSwJIM6QtmH1Kx9DV6Hg3jvuLVYPkGtFBCfp72wIKv+g/ipZRQBJNyJ1/UjY
+	6n3NK9Nyx3ix4GYl4P26Nwvo/XCb4w4szBDhWm17t1kx63GDeWY938ilyl4l6GeK
+	Yl4yMFTL42X2iqixE8MzihlXfdNCrQkGwJqQCU8FUpO5JL6AGxckC7jl8QFiLj+H
+	6sfDavPp4XUWdG+DNJkUYtVj/ja3g==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 442rkht3dy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 10 Jan 2025 10:31:31 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50AAUOBp003623;
+	Fri, 10 Jan 2025 10:31:30 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 442rkht3dw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 10 Jan 2025 10:31:30 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50AA2Ouf015903;
+	Fri, 10 Jan 2025 10:31:29 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43ygtm9pad-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 10 Jan 2025 10:31:29 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50AAVRfG59638162
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 10 Jan 2025 10:31:27 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6CFB020043;
+	Fri, 10 Jan 2025 10:31:27 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9FEB520040;
+	Fri, 10 Jan 2025 10:31:17 +0000 (GMT)
+Received: from li-621bac4c-27c7-11b2-a85c-c2bf7c4b3c07.ibm.com.com (unknown [9.43.104.43])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 10 Jan 2025 10:31:17 +0000 (GMT)
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc: ast@kernel.org, hbathini@linux.ibm.com, andrii@kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+        song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org
+Subject: [PATCH] selftests/bpf: Fix test_xdp_adjust_tail_grow2 selftest on powerpc
+Date: Fri, 10 Jan 2025 16:01:09 +0530
+Message-ID: <20250110103109.3670793-1-skb99@linux.ibm.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] tun: Pad virtio header with zero
-To: Jason Wang <jasowang@redhat.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, kvm@vger.kernel.org,
- virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
- Yuri Benditovich <yuri.benditovich@daynix.com>,
- Andrew Melnychenko <andrew@daynix.com>,
- Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com,
- devel@daynix.com
-References: <20250109-tun-v2-0-388d7d5a287a@daynix.com>
- <20250109-tun-v2-2-388d7d5a287a@daynix.com>
- <CACGkMEs73Pms5FB3ouzrLsDjAsQ4OhMMDVD2LnO6kVHCsN0A0w@mail.gmail.com>
-Content-Language: en-US
-From: Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <CACGkMEs73Pms5FB3ouzrLsDjAsQ4OhMMDVD2LnO6kVHCsN0A0w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: zDrGMnLUi_G3QeX4TcVDY0ShClZjLlHd
+X-Proofpoint-GUID: OPNysoGTUs22IsG8wgIaOgAYPyJ4tFbs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
+ mlxscore=0 suspectscore=0 phishscore=0 impostorscore=0 adultscore=0
+ malwarescore=0 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501100084
 
-On 2025/01/10 12:27, Jason Wang wrote:
-> On Thu, Jan 9, 2025 at 2:59 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->>
->> tun used to simply advance iov_iter when it needs to pad virtio header,
->> which leaves the garbage in the buffer as is. This is especially
->> problematic when tun starts to allow enabling the hash reporting
->> feature; even if the feature is enabled, the packet may lack a hash
->> value and may contain a hole in the virtio header because the packet
->> arrived before the feature gets enabled or does not contain the
->> header fields to be hashed. If the hole is not filled with zero, it is
->> impossible to tell if the packet lacks a hash value.
-> 
-> I'm not sure I will get here, could we do this in the series of hash reporting?
+On powerpc cache line size is 128 bytes, so skb_shared_info must be
+aligned accordingly.
 
-I'll create another series dedicated for this and num_buffers change as 
-suggested by Willem.
+Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+---
+ tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c      | 2 ++
+ tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c | 2 ++
+ 2 files changed, 4 insertions(+)
 
-> 
->>
->> In theory, a user of tun can fill the buffer with zero before calling
->> read() to avoid such a problem, but leaving the garbage in the buffer is
->> awkward anyway so fill the buffer in tun.
->>
->> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
->> ---
->>   drivers/net/tun_vnet.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/tun_vnet.c b/drivers/net/tun_vnet.c
->> index fe842df9e9ef..ffb2186facd3 100644
->> --- a/drivers/net/tun_vnet.c
->> +++ b/drivers/net/tun_vnet.c
->> @@ -138,7 +138,8 @@ int tun_vnet_hdr_put(int sz, struct iov_iter *iter,
->>          if (copy_to_iter(hdr, sizeof(*hdr), iter) != sizeof(*hdr))
->>                  return -EFAULT;
->>
->> -       iov_iter_advance(iter, sz - sizeof(*hdr));
->> +       if (iov_iter_zero(sz - sizeof(*hdr), iter) != sz - sizeof(*hdr))
->> +               return -EFAULT;
->>
->>          return 0;
-> 
-> There're various callers of iov_iter_advance(), do we need to fix them all?
-
-No. For example, there are iov_iter_advance() calls for SOCK_ZEROCOPY in 
-tun_get_user() and tap_get_user(). They are fine as they are not writing 
-buffers after skipping.
-
-The problem is that read_iter() and recvmsg() says it wrote N bytes but 
-it leaves some of this N bytes uninialized. Such an implementation may 
-be created even without iov_iter_advance() (for example just returning a 
-too big number), and it is equally problematic with the current 
-tun_get_user()/tap_get_user().
-
-Regards,
-Akihiko Odaki
-
-> 
-> Thanks
-> 
->>   }
-> 
->>
->> --
->> 2.47.1
->>
-> 
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+index 53d6ad8c2257..b2b2d85dbb1b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+@@ -82,6 +82,8 @@ static void test_xdp_adjust_tail_grow2(void)
+ 	/* SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) */
+ #if defined(__s390x__)
+ 	int tailroom = 512;
++#elif defined(__powerpc__)
++	int tailroom = 384;
+ #else
+ 	int tailroom = 320;
+ #endif
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c b/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c
+index 81bb38d72ced..dc74d8cf9e3f 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c
+@@ -10,6 +10,8 @@ int _xdp_adjust_tail_grow(struct xdp_md *xdp)
+ 	/* SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) */
+ #if defined(__TARGET_ARCH_s390)
+ 	int tailroom = 512;
++#elif defined(__TARGET_ARCH_powerpc)
++	int tailroom = 384;
+ #else
+ 	int tailroom = 320;
+ #endif
+-- 
+2.43.5
 
 
