@@ -1,279 +1,131 @@
-Return-Path: <linux-kselftest+bounces-24206-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24207-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 579BFA08E77
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 11:50:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6A31A08EE2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 12:12:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A5E63A13D3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 10:50:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EBE83A11EF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 11:12:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5606920551E;
-	Fri, 10 Jan 2025 10:50:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D46DC20ADF6;
+	Fri, 10 Jan 2025 11:12:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SK5M87Rq"
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="MwO3UGQ8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E5A205518;
-	Fri, 10 Jan 2025 10:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA7B205AB5
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2025 11:12:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736506227; cv=none; b=XPDlE7rMxDvQT4iY1l4luc7alFsjo2xBAdei6uMHpKfbi0SbEV0Wi8zIL1Qipe6hUvyCrJleO8wvQFcnBuvSZ0OX3vGa33SVEgK51G4VRVPXczX3FeZWkdvl+3asFCWKnnKybx01d5kyLHYQf+A5jcaa6n8zLpTg+mEb0PVrxWE=
+	t=1736507554; cv=none; b=PhXpyNXN8DNFFKzVui3KRiB7NKgrlbhrEwoV+kDZGxxF00G+FvSK7IiMvE6X/d5fLNUvpZJRQrTe/ZEYAB+lCpNRxbcJmCMHQNaV6A5ybsOvr5vF5j4xAPbK1J8CzsX6Aqcy1Bb2k2TglYy/Wpx8XcuAz26UTvq+rNXH79xb81E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736506227; c=relaxed/simple;
-	bh=l9ObgbxqXIT3r1GP++2d3ibpYuTubcJWUeiNWvhZGU4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZFd41V2euF0oSifEFflg0tcFVvxvwVqqyEwY8+igJC89ymsYnVuus17Qk8ccFJ4nSIXvr+Zp14VvNglpybpVt5p78Wg0Mkj/ei8uQashnohxZuoHe4qNZPWrjCbwFjKzzW9WepJWixtDB29IMTcrEdrPOw1SueTnJ/ftWpvX/WY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SK5M87Rq; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 509NbOb3020642;
-	Fri, 10 Jan 2025 10:49:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=xLCnIa
-	QSRFVx0+1QdBz6TDmGxf0p9m21F+ppq+ltZEw=; b=SK5M87RqrqWXSSDTfc74Qn
-	E0pObZ0GrZaI+d/CzYVaDqhO0D9jRx6MNwTvhzUTUOpbbOSckjZnYD26A+Fy/haJ
-	AX2DvWgks8nZmjnADwMEu8usQxvarEp9JRdD39/LzONqgXS0MwBlm+xb6cUR/1XB
-	v6Ff2Xb0cCW2+Ujk2clyP3yn0IVyD3HPvY0W6jwjxRFMY9PR1soEvwlRvxbdpmip
-	4l+np8xGrhRBOo633yDGBTAjGklQ2UFh/YGNysN2vRiCF21JTGKYLze8PzfG24vF
-	/gduOnfaE1eCOnfpC0OoL46SS/q1/d1Nl9MO7YK+2VtLv4TZRnKDJ0TpjHY0UM8Q
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 442r9at623-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 Jan 2025 10:49:56 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50AAllnV024783;
-	Fri, 10 Jan 2025 10:49:56 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 442r9at621-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 Jan 2025 10:49:55 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50AA2F3Z013648;
-	Fri, 10 Jan 2025 10:49:55 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43ygap9t3v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 Jan 2025 10:49:55 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50AAnrfG39256328
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 10 Jan 2025 10:49:53 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2DC992004B;
-	Fri, 10 Jan 2025 10:49:53 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EB99C20040;
-	Fri, 10 Jan 2025 10:49:43 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.43.104.43])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Fri, 10 Jan 2025 10:49:43 +0000 (GMT)
-Date: Fri, 10 Jan 2025 16:19:39 +0530
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ast@kernel.org, hbathini@linux.ibm.com,
-        andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
-        eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
-        haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, mykolal@fb.com
-Subject: Re: [PATCH 2/3] libbpf: Remove powerpc prefix from syscall function
- names
-Message-ID: <Z4D7Qx6pQEZ/bHDa@linux.ibm.com>
-References: <20241104050007.13812-1-skb99@linux.ibm.com>
- <20241104050007.13812-3-skb99@linux.ibm.com>
- <CAEf4BzZ9Bz8a_hY-jDkqaYg6Phi9bjvoxbBeVZqcgjYXg4a-mA@mail.gmail.com>
- <Zz33lM0rTJBZpaJR@linux.ibm.com>
- <CAEf4Bzbek6CYbx5Atz_xwwx5J3gC1ELdVmW-kFrrR=CWNLMyBA@mail.gmail.com>
+	s=arc-20240116; t=1736507554; c=relaxed/simple;
+	bh=qXSynCY96TYG7wZ7OASI5Muii12uM+aBd0x+fKz2Q64=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fE82IGeDN61HGtSTUi5Nj9IpYJQU/KdKaxt6NAl0Ewh4n36N+UbtF4GXnQa7ywUrNtqOFtGOqQOm2yyhzr6UFlp81VpriavJ/rfd1XlrIKa8Bjiq8UniVTxFd5iGa4hqWQk02S1fzRBJzE/7RBDAM9JuiXCinc5boAxb6RF72K4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=MwO3UGQ8; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2164b662090so28959635ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2025 03:12:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1736507552; x=1737112352; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fUI/Gf/iNdZ2kON6E6PSrhEkMNvEUQIh/sL8yMhLamQ=;
+        b=MwO3UGQ8TvdlcnS1Er/wPY9ota4qi9gGOgTNt7g7S6YG1L9H3gqX0ExQeXxKJnXL7X
+         XeAWFpsMp3pjyvWra0SCvqOuqk/80Ss1ztp4HN27fDmWYrpuva407XWMh4/xOAEXA3KJ
+         WuOh5DzuQ4gbLE0fUUS7YS/+tghLtkvK+s5eGulTypBG7qqUOlAMyYF9c7Z+TLIAXXwW
+         UE9+ude3fE3mDWHLqpT9hK6iDDqMJCmdSPQ2vfvJ015wBRsVUBZDs2Tw0Jz3m2fwhswE
+         9BT0HSyyEVIF8eiJ9+cOWEtoHXvBzBFnnCNhJrTMzYH6h9prUzxWAnD2O7WOPlgDTkiH
+         UdzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736507552; x=1737112352;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fUI/Gf/iNdZ2kON6E6PSrhEkMNvEUQIh/sL8yMhLamQ=;
+        b=Mcl4AIGYYO50HLfSbvuKsI1AIhfDdg+akf2uAHEdgRHrluEehFhNcK67D3RC1la+ES
+         AQzOE4DrpqjcQSISYNsyw/8R1cqn2Brz6YPsi2gMkxoYJRv1CIes587b17nx3OANB2r0
+         NlTxTauzAv4pVFAlSxTGjm1gxHQ6h7J437qItX3okS1ocRXWb6k62qPooqZXopX+qEx8
+         Sv+Rb9bsQKHM+wmWiKj6fvOkFq0yur7wHx7KgukoTRfgKA0V1YH+V/o7p6ta79t/mLCS
+         toX5t+1EOhvzR8fkC8woZ1KjK2Wu4pujUSU6hn83uo8ebMBLtohYp8sQEiN80mhXiTQt
+         pvuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVk/+iVrFOulhLwg2gHBzoi2cJpV193abgb5rX5fXJm8cluBtbc68hJOajDuyKzNBAHHZv3mF5hgx0ea7wi/lg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOqQWp14qCgWJzjwJrdID4uVskbAoIeKD/w1npoZsKaoAPangR
+	GXLBwCbj5fxT+sr/ijQ092g80Ml/slhnNcgfAzMyIqjB+PeuAmbR4OzMY/eM4wg=
+X-Gm-Gg: ASbGnct4wPFEt/9eJP7y4m9yhwSb4kNT49GJYIJKMJQPE//aN+WO++pruXzrfVPBIMJ
+	c/50Bqp+zks3rcVk30z4BxKPAzpa6SlSutpPq5zpGHfTD7npsRww6vEeuPwPn3lzFrjC4PunSkd
+	Bb2TKoEzJSyDoS1OpHw4NbM1635R1vs+05MbVS4oc4CV0afrtQJ23Rk6JmN9JPQVSuad1M+nbCv
+	LZBKddhtKiUhGoZ8woFFBjcAVhFOdf8Zqx8nmZMUT/FrqZZYRg+3MmRloWtg1f9QLg=
+X-Google-Smtp-Source: AGHT+IFsisJKA6JOrR0eUj5WfV8wXSlwG+ErpDxaHPAWov6uHn2OYu5jltHENp4vvgdoL273AAhZWg==
+X-Received: by 2002:a05:6a20:244d:b0:1d9:fbc:457c with SMTP id adf61e73a8af0-1e88d0a4770mr18461822637.36.1736507552500;
+        Fri, 10 Jan 2025 03:12:32 -0800 (PST)
+Received: from [157.82.203.37] ([157.82.203.37])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d4056a2cfsm1373935b3a.51.2025.01.10.03.12.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jan 2025 03:12:32 -0800 (PST)
+Message-ID: <2e015ee6-8a3b-43fb-b119-e1921139c74b@daynix.com>
+Date: Fri, 10 Jan 2025 20:12:25 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/3] tun: Set num_buffers for virtio 1.0
+To: "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, kvm@vger.kernel.org,
+ virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
+ Yuri Benditovich <yuri.benditovich@daynix.com>,
+ Andrew Melnychenko <andrew@daynix.com>,
+ Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com,
+ devel@daynix.com
+References: <20250109-tun-v2-0-388d7d5a287a@daynix.com>
+ <20250109-tun-v2-3-388d7d5a287a@daynix.com>
+ <CACGkMEsm5DCb+n3NYeRjmq3rAANztZz5QmV8rbPNo+cH-=VzDQ@mail.gmail.com>
+ <20250110052246-mutt-send-email-mst@kernel.org>
+Content-Language: en-US
+From: Akihiko Odaki <akihiko.odaki@daynix.com>
+In-Reply-To: <20250110052246-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4Bzbek6CYbx5Atz_xwwx5J3gC1ELdVmW-kFrrR=CWNLMyBA@mail.gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: aPAy5z_Ih2s1DQUeRqNK86qSVWvODn0-
-X-Proofpoint-ORIG-GUID: Eklc1R9ZEFhJD0PuJcsTXu-41x2cIdyy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- lowpriorityscore=0 bulkscore=0 malwarescore=0 adultscore=0 suspectscore=0
- mlxlogscore=999 impostorscore=0 priorityscore=1501 mlxscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2501100084
 
-On Thu, Nov 21, 2024 at 04:00:13PM -0800, Andrii Nakryiko wrote:
-> On Wed, Nov 20, 2024 at 6:52 AM Saket Kumar Bhaskar <skb99@linux.ibm.com> wrote:
-> >
-> > On Fri, Nov 08, 2024 at 10:43:54AM -0800, Andrii Nakryiko wrote:
-> > > On Sun, Nov 3, 2024 at 9:00 PM Saket Kumar Bhaskar <skb99@linux.ibm.com> wrote:
-> > > >
-> > > > Since commit 94746890202cf ("powerpc: Don't add __powerpc_ prefix to
-> > > > syscall entry points") drops _powerpc prefix to syscall entry points,
-> > > > even though powerpc now supports syscall wrapper, so /proc/kallsyms
-> > > > have symbols for syscall entry without powerpc prefix(sys_*).
-> > > >
-> > > > For this reason, arch specific prefix for syscall functions in powerpc
-> > > > is dropped.
-> > > >
-> > > > Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-> > > > ---
-> > > >  tools/lib/bpf/libbpf.c | 12 +++++++++---
-> > > >  1 file changed, 9 insertions(+), 3 deletions(-)
-> > > >
-> > > > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > > > index 219facd0e66e..3a370fa37d8a 100644
-> > > > --- a/tools/lib/bpf/libbpf.c
-> > > > +++ b/tools/lib/bpf/libbpf.c
-> > > > @@ -11110,9 +11110,7 @@ static const char *arch_specific_syscall_pfx(void)
-> > > >  #elif defined(__riscv)
-> > > >         return "riscv";
-> > > >  #elif defined(__powerpc__)
-> > > > -       return "powerpc";
-> > > > -#elif defined(__powerpc64__)
-> > > > -       return "powerpc64";
-> > > > +       return "";
-> > > >  #else
-> > > >         return NULL;
-> > > >  #endif
-> > > > @@ -11127,7 +11125,11 @@ int probe_kern_syscall_wrapper(int token_fd)
-> > > >         if (!ksys_pfx)
-> > > >                 return 0;
-> > > >
-> > > > +#if defined(__powerpc__)
-> > > > +       snprintf(syscall_name, sizeof(syscall_name), "sys_bpf");
-> > > > +#else
-> > > >         snprintf(syscall_name, sizeof(syscall_name), "__%s_sys_bpf", ksys_pfx);
-> > > > +#endif
-> > >
-> > > The problem is that on older versions of kernel it will have this
-> > > prefix, while on newer ones it won't. So to not break anything on old
-> > > kernels, we'd need to do feature detection and pick whether to use
-> > > prefix or not, right?
-> > >
-> > > So it seems like this change needs a bit more work.
-> > >
-> > > pw-bot: cr
-> > >
-> > Hi Andrii,
-> >
-> > IMO since both the patches 7e92e01b7245(powerpc: Provide syscall wrapper)
-> > and 94746890202cf(powerpc: Don't add __powerpc_ prefix to syscall entry points)
-> > went into the same kernel version v6.1-rc1, there won't me much kernel
-> > versions that has only one of these patches.
-> >
-> > Also, to test more I tried this patch with ARCH_HAS_SYSCALL_WRAPPER disabled,
-> > and it the test passed in this case too.
-> >
+On 2025/01/10 19:23, Michael S. Tsirkin wrote:
+> On Fri, Jan 10, 2025 at 11:27:13AM +0800, Jason Wang wrote:
+>> On Thu, Jan 9, 2025 at 2:59 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>>
+>>> The specification says the device MUST set num_buffers to 1 if
+>>> VIRTIO_NET_F_MRG_RXBUF has not been negotiated.
+>>
+>> Have we agreed on how to fix the spec or not?
+>>
+>> As I replied in the spec patch, if we just remove this "MUST", it
+>> looks like we are all fine?
+>>
+>> Thanks
 > 
-> Keep in mind that libbpf is supposed to work across many kernel
-> versions. So as long as there are powerpc (old) kernels that do use
-> arch-specific prefix, we need to detect them and supply prefix when
-> attaching ksyscall programs.
+> We should replace MUST with SHOULD but it is not all fine,
+> ignoring SHOULD is a quality of implementation issue.
 > 
-Hi Andrii,
 
-Sorry about the delayed response, I have started looking at this after
-a vacation.
+Should we really replace it? It would mean that a driver conformant with 
+the current specification may not be compatible with a device conformant 
+with the future specification.
 
-There are unlikely to be any old kernels that use arch-specific prefix
-as syscall wrapper support was added to powerpc in v6.1 and 
-commit 94746890202cf that dropped the prefix also went into the same 
-kernel release (v6.1-rc1). So, is it worth it support both sys_bpf and
-__powerpc_sys_bpf cases?
-
-But yes, there can be a kernel without syscall wrapper but having the 
-sys_bpf symbol. So, how about identifying syscall wrapper enablement
-with __se_sys_bpf instead:
-
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 66173ddb5a2d..ff69a30cfe9b 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -11163,11 +11163,15 @@ int probe_kern_syscall_wrapper(int token_fd)
- 	char syscall_name[64];
- 	const char *ksys_pfx;
- 
-+#if defined(__powerpc__)
-+	snprintf(syscall_name, sizeof(syscall_name), "__se_sys_bpf", ksys_pfx);
-+#else
- 	ksys_pfx = arch_specific_syscall_pfx();
- 	if (!ksys_pfx)
- 		return 0;
- 
- 	snprintf(syscall_name, sizeof(syscall_name), "__%s_sys_bpf", ksys_pfx);
-+#endif
- 
- 	if (determine_kprobe_perf_type() >= 0) {
- 		int pfd;
-@@ -11176,16 +11180,28 @@ int probe_kern_syscall_wrapper(int token_fd)
- 		if (pfd >= 0)
- 			close(pfd);
- 
-+#if defined(__powerpc__)
- 		return pfd >= 0 ? 1 : 0;
-+#else
-+		return pfd >= 0 ? 1 : 0;
-+#endif
- 	} else { /* legacy mode */
- 		char probe_name[128];
- 
- 		gen_kprobe_legacy_event_name(probe_name, sizeof(probe_name), syscall_name, 0);
- 		if (add_kprobe_event_legacy(probe_name, false, syscall_name, 0) < 0)
-+#if defined(__powerpc__)
-+			return 1;
-+#else
- 			return 0;
-+#endif
- 
- 		(void)remove_kprobe_event_legacy(probe_name, false);
-+#if defined(__powerpc__)
-+		return 0;
-+#else
- 		return 1;
-+#endif
- 	}
- }
-
-Actually, all architectures could use this '__se_' prefix instead of
-arch specific prefix  to identify if syscall wrapper is enabled.
-Separate way to handle powerpc case may not be needed. Will
-wait for your inputs to send v2.
-
-Thanks,
-Saket
-> > Thanks,
-> > Saket
-> > > >
-> > > >         if (determine_kprobe_perf_type() >= 0) {
-> > > >                 int pfd;
-> > > > @@ -11272,8 +11274,12 @@ struct bpf_link *bpf_program__attach_ksyscall(const struct bpf_program *prog,
-> > > >                  * compiler does not know that we have an explicit conditional
-> > > >                  * as well.
-> > > >                  */
-> > > > +#if defined(__powerpc__)
-> > > > +               snprintf(func_name, sizeof(func_name), "sys_%s", syscall_name);
-> > > > +#else
-> > > >                 snprintf(func_name, sizeof(func_name), "__%s_sys_%s",
-> > > >                          arch_specific_syscall_pfx() ? : "", syscall_name);
-> > > > +#endif
-> > > >         } else {
-> > > >                 snprintf(func_name, sizeof(func_name), "__se_sys_%s", syscall_name);
-> > > >         }
-> > > > --
-> > > > 2.43.5
-> > > >
+We are going to fix all implementations known to buggy (QEMU and Linux) 
+anyway so I think it's just fine to leave that part of specification as is.
 
