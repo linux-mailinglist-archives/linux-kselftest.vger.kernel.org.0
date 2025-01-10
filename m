@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-24213-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24214-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B315CA0916B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 14:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 15CE9A0916C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 14:06:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F77C188C5DA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 13:06:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDFD6188DC4F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 13:06:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 206AF20DD79;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4326820E010;
 	Fri, 10 Jan 2025 13:06:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="vflGQwKo";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xv1l3BxM"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="cgMVMM0X";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="vnqKOQqc"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4567A20D4FB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A902E20D4FD;
 	Fri, 10 Jan 2025 13:06:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736514379; cv=none; b=Q6qMx/pYktR0UtuBL+lJAE+YQhMmwRWup/vKGczZUvjd03ZlKL6sEGTsXcIyAIAHzwFXVvvx4jgj/uTCr0LhcRPDwHRnRMbn7xCIdnwaqNfeSZJuGJW16XxZdb81/UJngo3sK2ODnQaLz9tfMjWQ5lHy+/ZsTTGXjhV1Oh62dFs=
+	t=1736514379; cv=none; b=pTFOB8sCCAnQSY85NhF2chGWFr1EKMhfE9umWEMML6I7Z0wv6K2C5HeBHNfX72Dtj/ygRKlWpc0z97SKu7w9O6xNRnpecOBP0ZEx/EBLrPOpW1XW/U7WhKa4BTqupE0r8yJlHRzCVMczuO7vMIcB7its8uDy+IPUp5Wrz41d9+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736514379; c=relaxed/simple;
-	bh=oH2aay2q7fFXdPQqT97Za+YuSgFw9tqAjxqs/EP1Kzk=;
+	bh=bdSDA3kxsRphOJAe1hxQQ4SiKiKcoohRKkjKfuCnFKc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NkXIiAohTVknQq5NK8XVscZtduavZ2TVPPjwo4d+Nu0o9X2I3KsX6n2otAYkhEu0YkJ9g1sMaGxCBKMLpdYn+A9ZPYlMISIyixIUw9Av34uID+O1ROB4Eu43dQwp1XSNXMqx31vuICuyeO6NJOyd9K7TqKBvUHwjhp7bAzHQOv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=vflGQwKo; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xv1l3BxM; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=Y24YjCfMBe3jz/n2XJlxz4a8SYizJqv/GMLuE5qKjEvodnxNxVpYIC41z4cHpLfhPn4OLMlSqxzsyXx8bwE430EMMIv5hkkjTH6u9xNtBdiFb/mGhOrmbyNHYlPf3/d0OcE/3iNdYXg/doZ74pF6f16Ty/lBZao47xXZSASHRX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=cgMVMM0X; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=vnqKOQqc; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1736514375;
+	s=2020; t=1736514376;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FfSwcoper7Dt8IbJd6SAJbSWE7t+Dn+VNNOEgXwNNto=;
-	b=vflGQwKokksy9wndTuq2JDp+6s69Q4PSQE8lsJVo/7ytgk1kgyOqo2DNj7xUlianGmIxpM
-	dwtU55pWT9kh/QtQ3bPk2y9YrAyJzjFYnlTrQEieNrCbY7DOnCStBvTuAaf4GwVKd7HRwG
-	JmHRaoF0AGj8YJbtKHGI2Lxh4rUA9xu82Lwu3yu6mDmzlRx3voVagjPpMSuxK/nH88OYC3
-	NJsTYU3D2P8oehUd23xQ1N1id1VFGhEDBWcnuCHMxLZGt8DK7csgf/dA/QK+IO89+FOaSW
-	crR4UkvEa3TOGQIinakJzlWKpLeOm290nKcGAKzRvvy0rL+5Ghkskz5gOE82cw==
+	bh=7/HpKeU3nB17qCbgw45LzfDStDcTMTxJdySqt4LT06I=;
+	b=cgMVMM0XMvPpgk7LQVls0/NjZqULU4tlyO7mR7tS+j2wRjYSlSDJj1NU5zpG7j3eU2jJG0
+	RFR31a/9lS28uHmr5fDEca2yBUHlNtFks2HYxvKM9igXsAHf6VSe8gonN3qjICvqN6jeGv
+	xqos6rZYmqHPdEixvDMfQdTPfVrFKQVEweEvgBMcnCOWHBzuI4IvcXz8ilknht6CFNqYbz
+	rLVx5bNwFeFRmrti2Rkzn0CANvENJNbfUGCNDj4uAG3PEQd7rrtqgn7qx0kKr3OlcNGsKm
+	8l2FXpnZyu5HLbFzfwPIGMNVChguSF/0q2e65AzVHOYHrfL7CVpcZ4EstcnZsA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1736514375;
+	s=2020e; t=1736514376;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=FfSwcoper7Dt8IbJd6SAJbSWE7t+Dn+VNNOEgXwNNto=;
-	b=xv1l3BxMw4fVDw1Q7ltYhO+FHNtq+hmY6thNOPkVzJOhJW55YkcR0nToy/OQXE3yrsADa+
-	oCwAHbkGm0wmjkAA==
-Date: Fri, 10 Jan 2025 14:05:51 +0100
-Subject: [PATCH v2 2/3] selftests/mm: virtual_address_range: Unmap chunks
- after validation
+	bh=7/HpKeU3nB17qCbgw45LzfDStDcTMTxJdySqt4LT06I=;
+	b=vnqKOQqcnyThrY7uwgt10ODiZAJvUV1j7RK4XfnLpFpnSDHBblD4BPTaFhJM6d71HmumZy
+	r3TkoT027CrLHjDg==
+Date: Fri, 10 Jan 2025 14:05:52 +0100
+Subject: [PATCH v2 3/3] selftests/mm: virtual_address_range: Avoid reading
+ VVAR mappings
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250110-virtual_address_range-tests-v2-2-262a2bf3c3d0@linutronix.de>
+Message-Id: <20250110-virtual_address_range-tests-v2-3-262a2bf3c3d0@linutronix.de>
 References: <20250110-virtual_address_range-tests-v2-0-262a2bf3c3d0@linutronix.de>
 In-Reply-To: <20250110-virtual_address_range-tests-v2-0-262a2bf3c3d0@linutronix.de>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -73,120 +73,53 @@ To: Andrew Morton <akpm@linux-foundation.org>,
  Thomas Gleixner <tglx@linutronix.de>, David Hildenbrand <david@redhat.com>
 Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1736514373; l=3739;
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ kernel test robot <oliver.sang@intel.com>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1736514373; l=1931;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=oH2aay2q7fFXdPQqT97Za+YuSgFw9tqAjxqs/EP1Kzk=;
- b=mS86EYLMAXqOl7y/cnaZgsSNJY87tS1Z/rkrO57qBRkaq02XGrGaGId/wVKSlYBOv1mWsF16C
- J0pGqBlWmmJDP2C0qPH9D6og59+leY8TwHdjXT7pyuGMpY13DOhWck2
+ bh=bdSDA3kxsRphOJAe1hxQQ4SiKiKcoohRKkjKfuCnFKc=;
+ b=gKZeKPISRJ9eyZV3iQPMGCo8+Fm6utfH+O07hIoYZsNN5ZCKnoVoHyndhFCIolHxljj1aIu4l
+ qp0SJjbKI5LBX7Q3yIWHuSlRgoFOxhE/K020QA06NXrxEPE/bZTtSOY
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-For each accessed chunk a PTE is created.
-More than 1GiB of PTEs is used in this way.
-Remove each PTE after validating a chunk to reduce peak memory usage.
+The virtual_address_range selftest reads from the start of each mapping
+listed in /proc/self/maps.
+However not all mappings are valid to be arbitrarily accessed.
+For example the vvar data used for virtual clocks on x86 [vvar_vclock]
+can only be accessed if 1) the kernel configuration enables virtual
+clocks and 2) the hypervisor provided the data for it.
+Only the VDSO itself has the necessary information to know this.
+Since commit e93d2521b27f ("x86/vdso: Split virtual clock pages into dedicated mapping")
+the virtual clock data was split out into its own mapping, leading
+to EFAULT from read() during the validation.
 
-It is important to only unmap memory that previously mmap()ed,
-as unmapping other mappings like the stack, heap or executable mappings
-will crash the process.
-The mappings read from /proc/self/maps and the return values from mmap()
-don't allow a simple correlation due to merging and no guaranteed order.
-To correlate the pointers and mappings use prctl(PR_SET_VMA_ANON_NAME).
-While it introduces a test dependency, other alternatives would
-introduce runtime or development overhead.
+Skip the various vvar mappings in virtual_address_range to avoid the issue.
 
+Fixes: e93d2521b27f ("x86/vdso: Split virtual clock pages into dedicated mapping")
 Fixes: 010409649885 ("selftests/mm: confirm VA exhaustion without reliance on correctness of mmap()")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Closes: https://lore.kernel.org/oe-lkp/202412271148.2656e485-lkp@intel.com
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- tools/testing/selftests/mm/config                  |  1 +
- tools/testing/selftests/mm/virtual_address_range.c | 26 ++++++++++++++++++++--
- 2 files changed, 25 insertions(+), 2 deletions(-)
+ tools/testing/selftests/mm/virtual_address_range.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/mm/config b/tools/testing/selftests/mm/config
-index 4309916f629e36498efb07eb606b2f0c49ee6211..a28baa536332f3fcfb1b83759b5fbb432ae80178 100644
---- a/tools/testing/selftests/mm/config
-+++ b/tools/testing/selftests/mm/config
-@@ -7,3 +7,4 @@ CONFIG_TEST_HMM=m
- CONFIG_GUP_TEST=y
- CONFIG_TRANSPARENT_HUGEPAGE=y
- CONFIG_MEM_SOFT_DIRTY=y
-+CONFIG_ANON_VMA_NAME=y
 diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
-index ea6ccf49ef4c552f26317c2a40b09bca1a677f8f..4fc1c21a5e218eaec4d059b75c31a21dd4e8a215 100644
+index 4fc1c21a5e218eaec4d059b75c31a21dd4e8a215..993990aba56fc986c42084ffa91973558aa07e87 100644
 --- a/tools/testing/selftests/mm/virtual_address_range.c
 +++ b/tools/testing/selftests/mm/virtual_address_range.c
-@@ -10,6 +10,7 @@
- #include <string.h>
- #include <unistd.h>
- #include <errno.h>
-+#include <sys/prctl.h>
- #include <sys/mman.h>
- #include <sys/time.h>
- #include <fcntl.h>
-@@ -82,6 +83,17 @@ static void validate_addr(char *ptr, int high_addr)
- 		ksft_exit_fail_msg("Bad address %lx\n", addr);
- }
+@@ -152,6 +152,10 @@ static int validate_complete_va_space(void)
+ 		if (prot[0] != 'r')
+ 			continue;
  
-+static void mark_addr(char *ptr)
-+{
-+	if (prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ptr, MAP_CHUNK_SIZE, "virtual_address_range"))
-+		ksft_exit_fail_msg("prctl(PR_SET_VMA_ANON_NAME) failed: %s\n", strerror(errno));
-+}
++		/* Only the VDSO can know if a VVAR mapping is really readable */
++		if (vma_name && !strncmp(vma_name, "[vvar", 5))
++			continue;
 +
-+static int is_marked_addr(const char *vma_name)
-+{
-+	return vma_name && !strcmp(vma_name, "[anon:virtual_address_range]\n");
-+}
-+
- static int validate_lower_address_hint(void)
- {
- 	char *ptr;
-@@ -116,12 +128,17 @@ static int validate_complete_va_space(void)
- 
- 	prev_end_addr = 0;
- 	while (fgets(line, sizeof(line), file)) {
-+		const char *vma_name = NULL;
-+		int vma_name_start = 0;
- 		unsigned long hop;
- 
--		if (sscanf(line, "%lx-%lx %s[rwxp-]",
--			   &start_addr, &end_addr, prot) != 3)
-+		if (sscanf(line, "%lx-%lx %4s %*s %*s %*s %n",
-+			   &start_addr, &end_addr, prot, &vma_name_start) != 3)
- 			ksft_exit_fail_msg("cannot parse /proc/self/maps\n");
- 
-+		if (vma_name_start)
-+			vma_name = line + vma_name_start;
-+
- 		/* end of userspace mappings; ignore vsyscall mapping */
- 		if (start_addr & (1UL << 63))
- 			return 0;
-@@ -149,6 +166,9 @@ static int validate_complete_va_space(void)
- 				return 1;
- 			lseek(fd, 0, SEEK_SET);
- 
-+			if (is_marked_addr(vma_name))
-+				munmap((char *)(start_addr + hop), MAP_CHUNK_SIZE);
-+
- 			hop += MAP_CHUNK_SIZE;
- 		}
- 	}
-@@ -175,6 +195,7 @@ int main(int argc, char *argv[])
- 			break;
- 		}
- 
-+		mark_addr(ptr[i]);
- 		validate_addr(ptr[i], 0);
- 	}
- 	lchunks = i;
-@@ -192,6 +213,7 @@ int main(int argc, char *argv[])
- 		if (hptr[i] == MAP_FAILED)
- 			break;
- 
-+		mark_addr(ptr[i]);
- 		validate_addr(hptr[i], 1);
- 	}
- 	hchunks = i;
+ 		/*
+ 		 * Confirm whether MAP_CHUNK_SIZE chunk can be found or not.
+ 		 * If write succeeds, no need to check MAP_CHUNK_SIZE - 1
 
 -- 
 2.47.1
