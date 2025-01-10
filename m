@@ -1,169 +1,119 @@
-Return-Path: <linux-kselftest+bounces-24176-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24177-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36016A0860C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 04:34:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10747A08620
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 05:09:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC68C188B573
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 03:34:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D962318891F6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 04:09:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6196A205AD7;
-	Fri, 10 Jan 2025 03:34:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6417D205AA2;
+	Fri, 10 Jan 2025 04:09:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="eBUZwVGD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LWp965nR"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82E532A1BA
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2025 03:34:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8CA3B661;
+	Fri, 10 Jan 2025 04:09:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736480071; cv=none; b=ACw/8BmWYRHLar8JIBsK7Zx+ETstMIBIsPdwkqWNV0e4dMxoKk/YcoUPkPo5lQh3IN7PXdGFN0Iobw9Eyaoo7jLfWMmD7TTuYAJIB3P27I6LwKg/BwgYfZvxthqJsGySkacVMTwA+qUDrScJSJrJsdnn50JYft9iGe4GujN4xw4=
+	t=1736482157; cv=none; b=F/1WH6GFAGzwM8kYmG06VcErRKgxcoEN9Twq/Cy4+J4t/RwC5msPr4FkRyVgQfy5czlbe+XFvWQN2CKKmzjyledda2mJrNG3esyp/GjXmmBwec6etqjHJk15Ln/2U7Z6PEOatwQRuNbHh5xgjoNudvlidrVup90Wqu+kocBq2QI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736480071; c=relaxed/simple;
-	bh=A9fX/VY2dYRWoEe0eb7yQncWibBrwOENzsi82qWwsEI=;
+	s=arc-20240116; t=1736482157; c=relaxed/simple;
+	bh=fN1k0d6vbsE0+iO67xt+DGJKe4SdxMxiTgACV4vWfZU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LjnO3S2sN5g1du9rTTOOmMQmNuL7pkWMifhtFBoi+kHmfuiK+QEdA2hLht42jVxW7Od3op5m39sVCJHoO6D/Ip7TbRTdd4KfR77e0vT9IdWWCLBvB8J8RhwTq3cXpZPxkO91rNxQYySf6lzpYG/3/pyzFYofqJ7524+mr89U2AY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=eBUZwVGD; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2166651f752so33354745ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jan 2025 19:34:28 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=kC+2Zs6D9lkVE+O6O5V0oXJ8MeBlujGzmxL0tHsw5+uIyow0Fp9glppJ7jt7k6N6KRR48nvs1iXH1Wpc0RWk8LPgDJnU5T3tPM23z/HP0Vv6rldfOmf2c8Df+S+zLJVd85jrPMooK0Z2QBf85qlwGRJHpqT7KtAdXn0abKipsLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LWp965nR; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21675fd60feso35319545ad.2;
+        Thu, 09 Jan 2025 20:09:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1736480068; x=1737084868; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Viayt1DprygJVfkBr8f2Q096yWM1X8ypOSSUQGDK3YM=;
-        b=eBUZwVGDam67JwyMqc1Txd0LJvomzfvh4onYKPKcAEO03AuG+VZPPBiTkkS2l7rOYZ
-         P6AtRpJl5w5GPdFvK3DyTiaKO/so5ARIyv0QLvhzi8R6X2SlVS4sksgjO8SYO8tWJmeS
-         GsCpE8yK8p+f1RVtl0pgUPDPD+NJWZlXTvjDH+xcBE5joPQ97l4VPSTgY7Zm9MdTIrbz
-         OjZVehjgZ5kaD3lDLIn76uRg71bht9HB+cdQcSCKRZUewQq+1t25aurZ2/yw5cc1H/U8
-         EH+F80pKiYegpmxZgmijWCPpkjQp7H0MIo5fJpHrcJtgdiAAZS7Rd69Iwa0mlNNYDYdb
-         Xo6g==
+        d=gmail.com; s=20230601; t=1736482155; x=1737086955; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WcIPIwc0JhDfP3jSatfcuTE0xoBjfeC22KMLpqnla8s=;
+        b=LWp965nR3MfIOPpZtV24+dJYEcRYah82AZ+a1urpwUyyjQJs2SyIpZvNYHHqZE04gm
+         bK23qmMJio8ciVefOYILd7bsSty+ObT2qTaHD/7q8SsLI0ScjaK5Xv9Y2WZUf73DDjCA
+         s19bAPT852DispQTBNNXnSwmJcqqQvrXQgNfUUZ+WpOmYTouYg8vjBLHxgXTgol79IH0
+         FmLnvQCPrcGYvDwnHXOPySVeFu1ejEoeyk+VE7t9uE87xuxfoeVcmUyxAmwI6ilIqOV0
+         1pkaqOAVnOlnHyuZn1t9dC9Ru3+CkwMMC2lyeE8Z2HCpvlCeX12F+lWMDCFlVogBoKik
+         RkMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736480068; x=1737084868;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Viayt1DprygJVfkBr8f2Q096yWM1X8ypOSSUQGDK3YM=;
-        b=tRWh+N/+n2XxPeCsOCUo+g4pReIgj3fmnUOFTmCrT8cFAhpYKfl540yhC296h65kFQ
-         WkHa+VrhwiBTp+nis42oJwnJh84x7Cn2txCXKOSUndJvRMDTvLiaAOWYajgYriVe9SXk
-         F2VwlI/RrTOZcBABzXoHBhC2MsJykqMB8Kajfqr6jTb00jYmWkreAfx5E0n+Bl1c08OS
-         zAWiqSdxRyDRk+8nbfO2CEAmfX65exImhl8Ev2BOfJFu9K/qoGTULSYaREwrtmGz5h+G
-         KkpsWY+q7fRtVtXdif7f4zFyWWx58qNWAXlagtcscPla6hJh4auP7eLEvHyNkQ6oHc4z
-         zUoA==
-X-Forwarded-Encrypted: i=1; AJvYcCXWxMm+E+kThjEI7nHlPWZFgUkrSCfybVhrw8AXDMDs8oIzzxsdT9vM64Fyi7zr8/GCM1ppyuodLR3UAEy53Os=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5WQwhMx8E9wh76u4Y8ynkYuzMijQwBz9MSHrho0Uvo8d28kc2
-	nrXySpM5/8N62TwaCsUIyekHwrOqxG+4Y/xSqJ79/Jmqw2M8NNDanG/gvgIpOa8=
-X-Gm-Gg: ASbGncu7zI/Yl++lF2crWnhRvGNJsJUq3GxNRHkk6QGGNUJJ6jcpR31U5pKtqKzAqn0
-	92D+GCVrg+N62KvPsu78UGEo/q4bOJDAGB9EZ8rAf/nlZJzMy/Pv/oQnRMHRR0ail4GMCMKQE1k
-	m5JfL1quilIMHZ09vHD3n2gXH/5EJVJiCtPpk8NlgyV9H/XAObWHHjKyx5oT9ixIuvNbf36CUO1
-	Owqvi7rQ2Zwkl5yR19/PMgEl4TJPVAblXfKG3xoFWZdxlwmdm6M
-X-Google-Smtp-Source: AGHT+IG3bbMYbkS4jJPSzQ9p7FyUYg9x1B/aqRiSj2rt9ftAdecMCL/6FTOfSLcR8vnjUeA3BTKFRA==
-X-Received: by 2002:a05:6a00:1c92:b0:725:e499:5b86 with SMTP id d2e1a72fcca58-72d21fdfc66mr14107164b3a.20.1736480067688;
-        Thu, 09 Jan 2025 19:34:27 -0800 (PST)
-Received: from ghost ([2601:647:6700:64d0:691c:638a:ff10:3765])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d406a4dddsm569643b3a.155.2025.01.09.19.34.26
+        d=1e100.net; s=20230601; t=1736482155; x=1737086955;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WcIPIwc0JhDfP3jSatfcuTE0xoBjfeC22KMLpqnla8s=;
+        b=qgEjTNdQrz9YcqW5B71KD8FBaplzXdj24xECuwqxPOIUsjKWTV4NU9U8m5sSaZMa02
+         rIH0/LZ7OyPgaQ1ayu0JuKJLoalaUKenqIIq9IsceF7S61BtQHo/T+X7W1JyTHvodCuV
+         maXA1R1XU8QE2zvTRvmYYvtgHw+gF4hLXr/cBvvmwN+vK1a/saNMKaEaahFUXU0V3vAJ
+         VUuhfifKgBl03bWyrCmD8A7pLVEpw9tq+X9s22jbyzSJYPVyxXtw3UmD8taRcTEmFaVv
+         snfA3PDnYQxIgYPK7ZyHX0IEVcDbfIJQJQRyE37r5OQBaTUF8Fli7cnme6/mEKfHW+JY
+         t1Hw==
+X-Forwarded-Encrypted: i=1; AJvYcCVWkFn47N6UgPe0WVkr64mn78F8mJsR0E9bM9yVZiQdOghJRrsmnlvFh+QA5hxLDhVCIfVHdOyf@vger.kernel.org, AJvYcCWS5XkEOsP45yIBc1wAsScGCwllxpZHS7C2RYC7orC7tLTtfZPQC9FJUwSx89fd5RF8pQxnd5NtjrF0BPu74DCx@vger.kernel.org, AJvYcCX85nqyIgTpLJ5JOQR5NP5DoNGk3RAqyft/hI1mgQNwbekn5bjPpKaaY+xZmmpDjfPx5bvbyxEsh+9Ph90=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnecmSXOxTSlZtWow2bNMjBosTe5KmHsoAoWwq+nq2RqSTWE4W
+	HwGc+bZ+1/AflBH9jzUMyyhSz2qbmo3sdWBk9YiNwbqOOIEFsNH3yyPaVtVxPVg=
+X-Gm-Gg: ASbGncvPNXIT1QiyZdWl6G7grKa1WSzz9qCnYy8TfqhpKyLatlVI7EjX2o8MFenFuLS
+	18Zn3udj0gPv7wh4sXrX3DzGTkPfobTcDMdEBtvxabwe7KfPRmBqh8YzLQUK4JJchZkwiklwuU7
+	H5sjNTW6ecEpu46XjyNniLSMk7myyV8TixF5OPHw95q1TCYEobirG08S67pDSogRay0TLU9X1wJ
+	qlZpG3rhuXVo1BVY2r3kdoLw+elp6kio43uswR6krgDhY6pT9elv1KQHNNl9w==
+X-Google-Smtp-Source: AGHT+IEjk2/ZLMouXDj6tlGREyrMRmd1z64cbAmKign0zA9nwRc0222GvyxKXO7lpoelsyVx7A2DFA==
+X-Received: by 2002:a17:902:ce88:b0:216:356b:2685 with SMTP id d9443c01a7336-21a83f46a03mr135480345ad.11.1736482155107;
+        Thu, 09 Jan 2025 20:09:15 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f22c958sm5424375ad.174.2025.01.09.20.09.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2025 19:34:27 -0800 (PST)
-Date: Thu, 9 Jan 2025 19:34:24 -0800
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Celeste Liu <uwu@coelacanthus.name>
-Cc: "Dmitry V. Levin" <ldv@strace.io>, Oleg Nesterov <oleg@redhat.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Andrea Bolognani <abologna@redhat.com>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>, Ron Economos <re@w6rz.net>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Quan Zhou <zhouquan@iscas.ac.cn>,
-	Felix Yan <felixonmars@archlinux.org>,
-	Ruizhe Pan <c141028@gmail.com>, Guo Ren <guoren@kernel.org>,
-	Yao Zi <ziyao@disroot.org>, Eugene Syromyatnikov <evgsyr@gmail.com>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>
-Subject: Re: [PATCH v4 2/2] riscv: selftests: Add a ptrace test to verify
- syscall parameter modification
-Message-ID: <Z4CVQKkViqJycnaq@ghost>
-References: <20241226-riscv-new-regset-v4-0-4496a29d0436@coelacanthus.name>
- <20241226-riscv-new-regset-v4-2-4496a29d0436@coelacanthus.name>
- <20241226133459.GA30481@strace.io>
- <2e09aedc-44ba-40e3-ae93-1d6dc21b5eb1@coelacanthus.name>
+        Thu, 09 Jan 2025 20:09:14 -0800 (PST)
+Date: Fri, 10 Jan 2025 04:09:07 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Alessandro Zanni <alessandro.zanni87@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/net/forwarding: teamd command not found
+Message-ID: <Z4CdYzmSn2cySE_h@fedora>
+References: <20250110000752.81062-1-alessandro.zanni87@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2e09aedc-44ba-40e3-ae93-1d6dc21b5eb1@coelacanthus.name>
+In-Reply-To: <20250110000752.81062-1-alessandro.zanni87@gmail.com>
 
-On Thu, Dec 26, 2024 at 11:21:59PM +0800, Celeste Liu wrote:
+On Fri, Jan 10, 2025 at 01:07:44AM +0100, Alessandro Zanni wrote:
+> Running "make kselftest TARGETS=net/forwarding" results in several
+> occurrences of the same error:
+>  ./lib.sh: line 787: teamd: command not found
 > 
-> On 2024-12-26 21:35, Dmitry V. Levin wrote:
-> > On Thu, Dec 26, 2024 at 06:52:52PM +0800, Celeste Liu wrote:
-> >> This test checks that orig_a0 allows a syscall argument to be modified,
-> >> and that changing a0 does not change the syscall argument.
-> >>
-> >> Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> >> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> >> Co-developed-by: Charlie Jenkins <charlie@rivosinc.com>
-> >> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> >> Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
-> >> Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
-> > [...]
-> >> diff --git a/tools/testing/selftests/riscv/abi/ptrace.c b/tools/testing/selftests/riscv/abi/ptrace.c
-> >> new file mode 100644
-> >> index 0000000000000000000000000000000000000000..023695352215bb5de3f91c1a6f5ea3b4f9373ff9
-> >> --- /dev/null
-> >> +++ b/tools/testing/selftests/riscv/abi/ptrace.c
-> > [...]
-> >> +	if (ptrace(PTRACE_GET_SYSCALL_INFO, pid, PTRACE_SYSCALL_INFO_ENTRY, &syscall_info_entry))
-> >> +		perr_and_exit("failed to get syscall info of entry\n");
-> >> +	result->orig_a0 = syscall_info_entry->entry.args[0];
-> >> +	if (ptrace(PTRACE_GET_SYSCALL_INFO, pid, PTRACE_SYSCALL_INFO_EXIT, &syscall_info_exit))
-> >> +		perr_and_exit("failed to get syscall info of exit\n");
-> >> +	result->a0 = syscall_info_exit->exit.rval;
-> > 
-> > I'm sorry but this is not how PTRACE_GET_SYSCALL_INFO should be used.
-> > 
-> > PTRACE_GET_SYSCALL_INFO operation takes a pointer and a size,
-> > and in this example instead of size you pass constants 1 and 2, which
-> > essentially means that both syscall_info_entry->entry.args[0] and
-> > syscall_info_exit->exit.rval are not going to be assigned
-> > and would just contain some garbage from the stack.
-> > 
-> > Also, PTRACE_GET_SYSCALL_INFO operation returns the number of bytes
-> > available to be written by the kernel, which is always nonzero on any
-> > PTRACE_GET_SYSCALL_INFO-capable kernel.  In other words, this example
-> > will always end up with perr_and_exit() call.
-> > 
-> > I wonder how this test was tested before the submission.
+> Since many tests depends on teamd, this fix stops the tests if the
+> teamd command is not installed.
 > 
-> Oops... It seems I forget sync the code to test board so it runs with the old code...
-> The code is completely not tested...
-> I'm so sorry for my mistake.
+> Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
+> ---
+>  tools/testing/selftests/net/forwarding/lib.sh | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> I will correct it and test it carefully later...
+> diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+> index 7337f398f9cc..a6a74a4be4bf 100644
+> --- a/tools/testing/selftests/net/forwarding/lib.sh
+> +++ b/tools/testing/selftests/net/forwarding/lib.sh
+> @@ -784,6 +784,7 @@ team_destroy()
+>  {
+>  	local if_name=$1; shift
+>  
+> +	require_command $TEAMD
+>  	$TEAMD -t $if_name -k
+>  }
 
-It would be great to get this into 6.14. Let me know if you would like
-any help!
-
-- Charlie
-
-> 
-> > 
-> > 
-> 
+I saw team_create() has `require_command $TEAMD`. Is some test called
+team_destroy() before team_create()?
 
