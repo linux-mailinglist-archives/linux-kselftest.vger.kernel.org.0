@@ -1,154 +1,169 @@
-Return-Path: <linux-kselftest+bounces-24175-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24176-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54693A085F4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 04:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 36016A0860C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 04:34:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F14E18844AE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 03:28:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC68C188B573
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 03:34:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67637205AA3;
-	Fri, 10 Jan 2025 03:27:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6196A205AD7;
+	Fri, 10 Jan 2025 03:34:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PC20kvAB"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="eBUZwVGD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974401E22F0
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2025 03:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82E532A1BA
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2025 03:34:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736479674; cv=none; b=etgIWaDoXJlSwVX0MhYxoEoEvZYLLV7nJSwykmqkiC691T+3eClcPSVcfrh3Ahr9Iw0EEmUfk3H7DcRUj8yMrrLO/mHl09SF8QZY40ybwxV+543Yh1NJhqV0zZefSIfzA1h6hlozAIr/SDCwzgwXpl9f8td3sRZ+tLhNbHSAKUY=
+	t=1736480071; cv=none; b=ACw/8BmWYRHLar8JIBsK7Zx+ETstMIBIsPdwkqWNV0e4dMxoKk/YcoUPkPo5lQh3IN7PXdGFN0Iobw9Eyaoo7jLfWMmD7TTuYAJIB3P27I6LwKg/BwgYfZvxthqJsGySkacVMTwA+qUDrScJSJrJsdnn50JYft9iGe4GujN4xw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736479674; c=relaxed/simple;
-	bh=bvWTIT+RRjRSbxQiao2G4A++ngFStBHKJpnvXhynHk0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Dsd83ihr5WxJzftZQc5DGzuil+wSiVJbs1hSNGud0MtY002skKDnKK+IJaNCqqI6KUNYLheBO5pS5rNa5u8s+ew+WNNV9BRe9DBWKn15LompK0LSw+3wLcwGrSg5956dUGqmJGIMsC/JuXNVJ4/lSAEEuSRGLD8Y4+98tmX7vMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PC20kvAB; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736479671;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iajL1yDgIUIr5hibojx7mafI5SxR1wepNTMSNzOVtuU=;
-	b=PC20kvABsfvfy6Z/+muDX++E9b5N9/eSCbhahHRjoP9miPSAKLG4GFtkR57RMk43jNfWWT
-	GmYvdo51Hj7YPd/Ya5SvNMrNJlnohyESVcOzL9rgibiLZMReJKqoiz5R0wA83FQyxciYE3
-	MUF+0TDS2mgByOh8EW/5A45JP/fkpCg=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-683-fZ3JrsB_NTS4FpIjESOI6A-1; Thu, 09 Jan 2025 22:27:49 -0500
-X-MC-Unique: fZ3JrsB_NTS4FpIjESOI6A-1
-X-Mimecast-MFC-AGG-ID: fZ3JrsB_NTS4FpIjESOI6A
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-2f2a9f056a8so3002239a91.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jan 2025 19:27:49 -0800 (PST)
+	s=arc-20240116; t=1736480071; c=relaxed/simple;
+	bh=A9fX/VY2dYRWoEe0eb7yQncWibBrwOENzsi82qWwsEI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LjnO3S2sN5g1du9rTTOOmMQmNuL7pkWMifhtFBoi+kHmfuiK+QEdA2hLht42jVxW7Od3op5m39sVCJHoO6D/Ip7TbRTdd4KfR77e0vT9IdWWCLBvB8J8RhwTq3cXpZPxkO91rNxQYySf6lzpYG/3/pyzFYofqJ7524+mr89U2AY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=eBUZwVGD; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2166651f752so33354745ad.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Jan 2025 19:34:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1736480068; x=1737084868; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Viayt1DprygJVfkBr8f2Q096yWM1X8ypOSSUQGDK3YM=;
+        b=eBUZwVGDam67JwyMqc1Txd0LJvomzfvh4onYKPKcAEO03AuG+VZPPBiTkkS2l7rOYZ
+         P6AtRpJl5w5GPdFvK3DyTiaKO/so5ARIyv0QLvhzi8R6X2SlVS4sksgjO8SYO8tWJmeS
+         GsCpE8yK8p+f1RVtl0pgUPDPD+NJWZlXTvjDH+xcBE5joPQ97l4VPSTgY7Zm9MdTIrbz
+         OjZVehjgZ5kaD3lDLIn76uRg71bht9HB+cdQcSCKRZUewQq+1t25aurZ2/yw5cc1H/U8
+         EH+F80pKiYegpmxZgmijWCPpkjQp7H0MIo5fJpHrcJtgdiAAZS7Rd69Iwa0mlNNYDYdb
+         Xo6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736479668; x=1737084468;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iajL1yDgIUIr5hibojx7mafI5SxR1wepNTMSNzOVtuU=;
-        b=VfqpgTPtezvQSkVu6FStTHe1w0YWAT4wuMfErFYubWArkxeYogMZk7+IgQDI928i6J
-         oqH6PNhRS83by2ugVNUawXRkrKw4qysLhkU91Ow4FhQ1JuwnI/f3kRV1pi+xg4PBl8fm
-         /i5jLV421F+k1/puq0fO76pkSGQc9NBBaNCIklPBT45l+NzMOq8Ha1LhPEZclBC2PcEm
-         oLERwKSpFnZlXsZyHfvL/J+3UuZiJMdEdvvFPCRPN+N0MqMzWtjP4yjIYL405tK1AJ/0
-         vFNCqz747weOVh5vNji/JxsRk2aeAoTDyi5GoJeJrhdNgrtUVzez+CIm6bFyqjzW9+r0
-         ezLg==
-X-Forwarded-Encrypted: i=1; AJvYcCXpH/NMZPt29SaMY4E9E5FFU81e74TwCwc5y7sVIajNmz9iCB2xz46PDEfqorM1UiqQ41EgsLKs10NdNhzaKMo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxi7T9VKF1FV5CDyMWono9/e8jNCRRzLP/psKJlZTEzVJVEU0v8
-	DeKx/aL+T5/iFNm+aq5DY8OvgBcXzMU42pLfRwIo3Ic+wsXN9noF+K30wgQbnbESxvwjBqN5JZA
-	AN3i/B8H/SC+F2ZZmRjHMPpneMGLsS/Q/D817Pyh9P8mrbwc9Qt0puPAeXhWm0Lc1zdTEfBMYUu
-	UfYKKmfLpmcMSbWWa5G9KeOhTe0On396of8HpIJWkG
-X-Gm-Gg: ASbGncsz4HxawMbPFMnB5lK5A4t01Rmo8fx8lA8Nfb9xUF73qGNAMHUVtTX7ZdKOCQE
-	EZgS1r6Y60sMK8c83RWikxLy6593LU5feJGtiRhE=
-X-Received: by 2002:a17:90b:2f4e:b0:2ee:f550:3848 with SMTP id 98e67ed59e1d1-2f548e98ea9mr13264764a91.5.1736479668660;
-        Thu, 09 Jan 2025 19:27:48 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEM0zVlBA7j66fikaniieFtidBDy2a+ngdaxzHXHvpNz92dgP0y0YBOPXi63aR37F36fwt1W0RporavDwFYaFI=
-X-Received: by 2002:a17:90b:2f4e:b0:2ee:f550:3848 with SMTP id
- 98e67ed59e1d1-2f548e98ea9mr13264741a91.5.1736479668256; Thu, 09 Jan 2025
- 19:27:48 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736480068; x=1737084868;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Viayt1DprygJVfkBr8f2Q096yWM1X8ypOSSUQGDK3YM=;
+        b=tRWh+N/+n2XxPeCsOCUo+g4pReIgj3fmnUOFTmCrT8cFAhpYKfl540yhC296h65kFQ
+         WkHa+VrhwiBTp+nis42oJwnJh84x7Cn2txCXKOSUndJvRMDTvLiaAOWYajgYriVe9SXk
+         F2VwlI/RrTOZcBABzXoHBhC2MsJykqMB8Kajfqr6jTb00jYmWkreAfx5E0n+Bl1c08OS
+         zAWiqSdxRyDRk+8nbfO2CEAmfX65exImhl8Ev2BOfJFu9K/qoGTULSYaREwrtmGz5h+G
+         KkpsWY+q7fRtVtXdif7f4zFyWWx58qNWAXlagtcscPla6hJh4auP7eLEvHyNkQ6oHc4z
+         zUoA==
+X-Forwarded-Encrypted: i=1; AJvYcCXWxMm+E+kThjEI7nHlPWZFgUkrSCfybVhrw8AXDMDs8oIzzxsdT9vM64Fyi7zr8/GCM1ppyuodLR3UAEy53Os=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5WQwhMx8E9wh76u4Y8ynkYuzMijQwBz9MSHrho0Uvo8d28kc2
+	nrXySpM5/8N62TwaCsUIyekHwrOqxG+4Y/xSqJ79/Jmqw2M8NNDanG/gvgIpOa8=
+X-Gm-Gg: ASbGncu7zI/Yl++lF2crWnhRvGNJsJUq3GxNRHkk6QGGNUJJ6jcpR31U5pKtqKzAqn0
+	92D+GCVrg+N62KvPsu78UGEo/q4bOJDAGB9EZ8rAf/nlZJzMy/Pv/oQnRMHRR0ail4GMCMKQE1k
+	m5JfL1quilIMHZ09vHD3n2gXH/5EJVJiCtPpk8NlgyV9H/XAObWHHjKyx5oT9ixIuvNbf36CUO1
+	Owqvi7rQ2Zwkl5yR19/PMgEl4TJPVAblXfKG3xoFWZdxlwmdm6M
+X-Google-Smtp-Source: AGHT+IG3bbMYbkS4jJPSzQ9p7FyUYg9x1B/aqRiSj2rt9ftAdecMCL/6FTOfSLcR8vnjUeA3BTKFRA==
+X-Received: by 2002:a05:6a00:1c92:b0:725:e499:5b86 with SMTP id d2e1a72fcca58-72d21fdfc66mr14107164b3a.20.1736480067688;
+        Thu, 09 Jan 2025 19:34:27 -0800 (PST)
+Received: from ghost ([2601:647:6700:64d0:691c:638a:ff10:3765])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d406a4dddsm569643b3a.155.2025.01.09.19.34.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jan 2025 19:34:27 -0800 (PST)
+Date: Thu, 9 Jan 2025 19:34:24 -0800
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Celeste Liu <uwu@coelacanthus.name>
+Cc: "Dmitry V. Levin" <ldv@strace.io>, Oleg Nesterov <oleg@redhat.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Andrea Bolognani <abologna@redhat.com>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>, Ron Economos <re@w6rz.net>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Quan Zhou <zhouquan@iscas.ac.cn>,
+	Felix Yan <felixonmars@archlinux.org>,
+	Ruizhe Pan <c141028@gmail.com>, Guo Ren <guoren@kernel.org>,
+	Yao Zi <ziyao@disroot.org>, Eugene Syromyatnikov <evgsyr@gmail.com>,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>
+Subject: Re: [PATCH v4 2/2] riscv: selftests: Add a ptrace test to verify
+ syscall parameter modification
+Message-ID: <Z4CVQKkViqJycnaq@ghost>
+References: <20241226-riscv-new-regset-v4-0-4496a29d0436@coelacanthus.name>
+ <20241226-riscv-new-regset-v4-2-4496a29d0436@coelacanthus.name>
+ <20241226133459.GA30481@strace.io>
+ <2e09aedc-44ba-40e3-ae93-1d6dc21b5eb1@coelacanthus.name>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250109-tun-v2-0-388d7d5a287a@daynix.com> <20250109-tun-v2-2-388d7d5a287a@daynix.com>
-In-Reply-To: <20250109-tun-v2-2-388d7d5a287a@daynix.com>
-From: Jason Wang <jasowang@redhat.com>
-Date: Fri, 10 Jan 2025 11:27:23 +0800
-X-Gm-Features: AbW1kvblvM77hJwOCPbcZnQaLsOAKege2X0nqRs93PNDqFsP8xaZKCI_l-JSk84
-Message-ID: <CACGkMEs73Pms5FB3ouzrLsDjAsQ4OhMMDVD2LnO6kVHCsN0A0w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] tun: Pad virtio header with zero
-To: Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, kvm@vger.kernel.org, 
-	virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
-	Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>, 
-	Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com, devel@daynix.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2e09aedc-44ba-40e3-ae93-1d6dc21b5eb1@coelacanthus.name>
 
-On Thu, Jan 9, 2025 at 2:59=E2=80=AFPM Akihiko Odaki <akihiko.odaki@daynix.=
-com> wrote:
->
-> tun used to simply advance iov_iter when it needs to pad virtio header,
-> which leaves the garbage in the buffer as is. This is especially
-> problematic when tun starts to allow enabling the hash reporting
-> feature; even if the feature is enabled, the packet may lack a hash
-> value and may contain a hole in the virtio header because the packet
-> arrived before the feature gets enabled or does not contain the
-> header fields to be hashed. If the hole is not filled with zero, it is
-> impossible to tell if the packet lacks a hash value.
+On Thu, Dec 26, 2024 at 11:21:59PM +0800, Celeste Liu wrote:
+> 
+> On 2024-12-26 21:35, Dmitry V. Levin wrote:
+> > On Thu, Dec 26, 2024 at 06:52:52PM +0800, Celeste Liu wrote:
+> >> This test checks that orig_a0 allows a syscall argument to be modified,
+> >> and that changing a0 does not change the syscall argument.
+> >>
+> >> Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
+> >> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
+> >> Co-developed-by: Charlie Jenkins <charlie@rivosinc.com>
+> >> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> >> Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
+> >> Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
+> > [...]
+> >> diff --git a/tools/testing/selftests/riscv/abi/ptrace.c b/tools/testing/selftests/riscv/abi/ptrace.c
+> >> new file mode 100644
+> >> index 0000000000000000000000000000000000000000..023695352215bb5de3f91c1a6f5ea3b4f9373ff9
+> >> --- /dev/null
+> >> +++ b/tools/testing/selftests/riscv/abi/ptrace.c
+> > [...]
+> >> +	if (ptrace(PTRACE_GET_SYSCALL_INFO, pid, PTRACE_SYSCALL_INFO_ENTRY, &syscall_info_entry))
+> >> +		perr_and_exit("failed to get syscall info of entry\n");
+> >> +	result->orig_a0 = syscall_info_entry->entry.args[0];
+> >> +	if (ptrace(PTRACE_GET_SYSCALL_INFO, pid, PTRACE_SYSCALL_INFO_EXIT, &syscall_info_exit))
+> >> +		perr_and_exit("failed to get syscall info of exit\n");
+> >> +	result->a0 = syscall_info_exit->exit.rval;
+> > 
+> > I'm sorry but this is not how PTRACE_GET_SYSCALL_INFO should be used.
+> > 
+> > PTRACE_GET_SYSCALL_INFO operation takes a pointer and a size,
+> > and in this example instead of size you pass constants 1 and 2, which
+> > essentially means that both syscall_info_entry->entry.args[0] and
+> > syscall_info_exit->exit.rval are not going to be assigned
+> > and would just contain some garbage from the stack.
+> > 
+> > Also, PTRACE_GET_SYSCALL_INFO operation returns the number of bytes
+> > available to be written by the kernel, which is always nonzero on any
+> > PTRACE_GET_SYSCALL_INFO-capable kernel.  In other words, this example
+> > will always end up with perr_and_exit() call.
+> > 
+> > I wonder how this test was tested before the submission.
+> 
+> Oops... It seems I forget sync the code to test board so it runs with the old code...
+> The code is completely not tested...
+> I'm so sorry for my mistake.
+> 
+> I will correct it and test it carefully later...
 
-I'm not sure I will get here, could we do this in the series of hash report=
-ing?
+It would be great to get this into 6.14. Let me know if you would like
+any help!
 
->
-> In theory, a user of tun can fill the buffer with zero before calling
-> read() to avoid such a problem, but leaving the garbage in the buffer is
-> awkward anyway so fill the buffer in tun.
->
-> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
-> ---
->  drivers/net/tun_vnet.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/net/tun_vnet.c b/drivers/net/tun_vnet.c
-> index fe842df9e9ef..ffb2186facd3 100644
-> --- a/drivers/net/tun_vnet.c
-> +++ b/drivers/net/tun_vnet.c
-> @@ -138,7 +138,8 @@ int tun_vnet_hdr_put(int sz, struct iov_iter *iter,
->         if (copy_to_iter(hdr, sizeof(*hdr), iter) !=3D sizeof(*hdr))
->                 return -EFAULT;
->
-> -       iov_iter_advance(iter, sz - sizeof(*hdr));
-> +       if (iov_iter_zero(sz - sizeof(*hdr), iter) !=3D sz - sizeof(*hdr)=
-)
-> +               return -EFAULT;
->
->         return 0;
+- Charlie
 
-There're various callers of iov_iter_advance(), do we need to fix them all?
-
-Thanks
-
->  }
-
->
-> --
-> 2.47.1
->
-
+> 
+> > 
+> > 
+> 
 
