@@ -1,133 +1,158 @@
-Return-Path: <linux-kselftest+bounces-24233-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24234-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFE81A09B91
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 20:07:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18CC6A09BB5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 20:18:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C81693ABB1F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 19:05:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F030F188BF39
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 19:18:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E11EF22488B;
-	Fri, 10 Jan 2025 19:01:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 532FE2135A8;
+	Fri, 10 Jan 2025 19:18:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OBj6+/cO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lVSbNBfB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2057B2139CB;
-	Fri, 10 Jan 2025 19:01:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2AA24B248;
+	Fri, 10 Jan 2025 19:18:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736535662; cv=none; b=JGAbdwDbZ5GV46ivhPFcvQ02R6P3FcZuZrF8tg3ktFFvHdPlUkwgh8JxQ77uOL+bpUEK5KJp2K59ChqMj+8TJPfx9DnZnIC4kw8m1gGkRmbvyQRuPksdTqpHsJUHy85sK3YYc3afRhG+1eL0ardpc4wUcwYhSVLHqZG13uvdzBM=
+	t=1736536715; cv=none; b=CtK0z6iKeVRdQVCFrA7wQeWIEphwWEFLAbkSTvTEwBPqqmwukLQjHI3lYudgrVWvquAqjc9Eu8yjPPJnPlkAUqroKj9N5l759VZT29uq2ie7cgR0eupNsqeH7R21a1EmpmUwNPRm3LxqYkSYSt3ZHszNxhIMT7ewFGChCzGJJG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736535662; c=relaxed/simple;
-	bh=eb6NgulhDzrZkbA71d6HYlQt+zV/kGdNXlXc5cyMR8w=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ouvOJhkGlLSsWEy7TLgq7S1ZsdiwNacA7sSS3dJ8NrOQ1J3nJTg77KCRjYybAo5Z7Wrs9roZu2EuwlZ69F+/92x2lTiPD5/EKjQneU4FNiZTu4v983UJynvxcU3ZKF+j328ItgkwBc0g7rqstSQX/ZDfz/mcI+fvM9hazNT9pbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OBj6+/cO; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4361b6f9faeso15531365e9.1;
-        Fri, 10 Jan 2025 11:01:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736535659; x=1737140459; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jl28WGFBUnyXFL1l4Ve02m6xRTatJU9EP+pENMko8OE=;
-        b=OBj6+/cOMjPWCUmRaZHH4elYk2S3rfHL2SqiM16q4JMH3Sj2PxMwkdO31heaD1v1ut
-         tVTTkc/eKPYGINdnszb2vqXr3eyFH0x7JwaiuoJ6pPJcbFlm5k7zEq7lPlLLIBWjMn+6
-         dFzh+WddfSQhxJU6L2H7aIVLCXZYWpC0hUfTNugXWVmmbmHwepgwkShFGEjQVETlmDRj
-         nMoJSCbkTyUlY44LU5ZnkcLGvALFXmQZzlhw7aDYg3KNDK916GfCxYUYnhQRIYQI5gS0
-         Y77KM4Zi1QsDJRM70Yfvs0prZ7pYBXLy+kQwOEWE5dlKn1jIefG8Oya2oC3OHZKZd3mD
-         tBSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736535659; x=1737140459;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jl28WGFBUnyXFL1l4Ve02m6xRTatJU9EP+pENMko8OE=;
-        b=YYmugT0lvcq9egEJUEdSIkEsyzD2htK2lQqPVTyHDe3h3murOAy4nxRsdQkGwv5TGF
-         mKX3ksweum7Uv2btHsOzNK9Un6qc14g9nrxsoULkk58fVfO++Dvo9nPI97OMPgzkFAy7
-         b+tNjX2o7/jVEa2+h3Txjfp+elVgN03acVJbxYNl2nOcPOWnAsosiLwCofKZlzF/0skf
-         qNAIluibRVDcAeQ498CTLSaCkBWE+TNhtlktZiY68ZkQuzQPZ5b324XCaUz7aIbljpaz
-         VgoZGHXVKkVYMlg9LnimTmMMxa9rlrWkl8f+nOv2OHRT9ApoCZfW+FZ1RQSSM1Q7WxR+
-         Tr7A==
-X-Forwarded-Encrypted: i=1; AJvYcCUxWAqCQdJEcz2o5RzoQZ2nqhIZA5hem3IeqSgf25HdNkT4Bj5UXvB6YLXbEn3dhh+uXyymlRnmWFx4utGTkjQL@vger.kernel.org, AJvYcCWo5Wj6qDfLbOwsdPmeDm5yaGRbeQ++Xj8mg4o8IeoGbzf6OEwRrrHdOeZ8AYK680FqmuQLkADHZynkLDY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6kxJt0Bi6EWNLAVCl59nGa9O8jxIF01ost5+NxZ/D3iHET9PN
-	Vwy0GsPf3x9fXUrMl9jdvAhvuroglA2irZKI4o2rk9ivxgdSevsB
-X-Gm-Gg: ASbGnctvqK4g1BsWo2pOrmBTn+X4C4jqREFxBiAHT7m6OKuhRojBvTLLopVNk94fByM
-	wJWFNYDZKj4enBRBWe21GI5j2CraVj7wN+LCjghM2cTfjmaq9i2v9zFjYkZx1OnBX/tvaAhwtM5
-	5DJA9mrWL4dHqa34G6qpxm/A+hbKkzme7UzDAhvyLrfhwMmjF4oIO9pvtrFW2ph5MPSBv10E5Vg
-	LbFN8m5CKM+SzfCPtceyFNO9a640bID5rUSa9hae4YrLxBKSYmzzx9f2uGjxW/Fpg3qPFd06ATJ
-	y3HvNkwKxWpfQUgVsLg=
-X-Google-Smtp-Source: AGHT+IFqfQ9D/+Ru2s28NeOwpa6tmi6l/3Fy+siG6IN7TXQbcoEEAlkBeBjEy92hU2amqqBnx5IKrQ==
-X-Received: by 2002:a05:600c:1827:b0:436:199e:8458 with SMTP id 5b1f17b1804b1-436e8849de0mr73803245e9.14.1736535659163;
-        Fri, 10 Jan 2025 11:00:59 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e2ddd013sm96255465e9.24.2025.01.10.11.00.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jan 2025 11:00:58 -0800 (PST)
-Date: Fri, 10 Jan 2025 19:00:57 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, Will
- Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, =?UTF-8?B?SsOpcsO0bWU=?= Glisse
- <jglisse@redhat.com>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, kernel@collabora.com
-Subject: Re: [PATCH 01/16] selftests/mm: remove argc and argv unused
- parameters
-Message-ID: <20250110190057.2294fd5a@pumpkin>
-In-Reply-To: <20250109173842.1142376-2-usama.anjum@collabora.com>
-References: <20250109173842.1142376-1-usama.anjum@collabora.com>
-	<20250109173842.1142376-2-usama.anjum@collabora.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	s=arc-20240116; t=1736536715; c=relaxed/simple;
+	bh=2qtn/yN8KGnvKM4Be6ymIMRepfChNk260BsIzmavFNU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BcOx9WM7MED90MDfxMUQ/dAwQs8WXGn23K5YOIhd3gQPtA3x1TlfMPguVxVqdgdc9GF2d//U2dbZI+YrTb6Wqk8cYxFTico3veMUares8+ZcZMMDz2GoHv0GWopwOirMNijPAAjxhX837+s4OpU8HtgqKG5A5LZ9wegR3WNb9AE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lVSbNBfB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D2BDC4CED6;
+	Fri, 10 Jan 2025 19:18:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736536714;
+	bh=2qtn/yN8KGnvKM4Be6ymIMRepfChNk260BsIzmavFNU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lVSbNBfBgiPxfs3j9J4+Q/Mm+va0HnyJJvJ511BIZPHoPIheFgi517TCooWsbBMUd
+	 WSTmKdJWe1UfTSlATsW95ACeJ+2Ll0h4BtuuaSFwVIFk0Wv0zZu3LZGeJRFeQJn0qe
+	 lg2p9xQs3O5V2HOaVWmRlOJx02Yzw7s7vpvz4fokLmZ7ey61g0GQZuRvribH6nHyqr
+	 xDH3Wpe0L5t74rdpA5UINqI4Hxxsp6lB+b5KVRB/rten4cAybUcKdl/88Oc2pCe2TE
+	 6b7kfjQEJbS5HJyWvsAtyyHoKwfXfP3N4KXgVgUwkJm645MDTdxDa3wPAeEVyf6U26
+	 meOgl0uiogQDw==
+Date: Fri, 10 Jan 2025 11:18:32 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc: Mike Rapoport <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andy Lutomirski <luto@kernel.org>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Daniel Thompson <danielt@kernel.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Gow <davidgow@google.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Jason Wessel <jason.wessel@windriver.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>, "H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Petr Mladek <pmladek@suse.com>, Petr Pavlu <petr.pavlu@suse.com>,
+	Rae Moar <rmoar@google.com>, Richard Weinberger <richard@nod.at>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	kgdb-bugreport@lists.sourceforge.net, kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	live-patching@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 3/8] x86/mm/pat: Restore large pages after fragmentation
+Message-ID: <Z4FyiALKwX-AIWtF@bombadil.infradead.org>
+References: <20241227072825.1288491-1-rppt@kernel.org>
+ <20241227072825.1288491-4-rppt@kernel.org>
+ <jut35igb2kstpz24apqdeubv5rvyl3vmp2s43xtivpz54uiedj@wmd2onulv4xw>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <jut35igb2kstpz24apqdeubv5rvyl3vmp2s43xtivpz54uiedj@wmd2onulv4xw>
 
-On Thu,  9 Jan 2025 22:38:27 +0500
-Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
+On Fri, Jan 10, 2025 at 12:36:59PM +0200, Kirill A. Shutemov wrote:
+> On Fri, Dec 27, 2024 at 09:28:20AM +0200, Mike Rapoport wrote:
+> > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> > 
+> > Change of attributes of the pages may lead to fragmentation of direct
+> > mapping over time and performance degradation as result.
+> > 
+> > With current code it's one way road: kernel tries to avoid splitting
+> > large pages, but it doesn't restore them back even if page attributes
+> > got compatible again.
+> > 
+> > Any change to the mapping may potentially allow to restore large page.
+> > 
+> > Hook up into cpa_flush() path to check if there's any pages to be
+> > recovered in PUD_SIZE range around pages we've just touched.
+> > 
+> > CPUs don't like[1] to have to have TLB entries of different size for the
+> > same memory, but looks like it's okay as long as these entries have
+> > matching attributes[2]. Therefore it's critical to flush TLB before any
+> > following changes to the mapping.
+> > 
+> > Note that we already allow for multiple TLB entries of different sizes
+> > for the same memory now in split_large_page() path. It's not a new
+> > situation.
+> > 
+> > set_memory_4k() provides a way to use 4k pages on purpose. Kernel must
+> > not remap such pages as large. Re-use one of software PTE bits to
+> > indicate such pages.
+> > 
+> > [1] See Erratum 383 of AMD Family 10h Processors
+> > [2] https://lore.kernel.org/linux-mm/1da1b025-cabc-6f04-bde5-e50830d1ecf0@amd.com/
+> > 
+> > [rppt@kernel.org:
+> >  * s/restore/collapse/
+> >  * update formatting per peterz
+> >  * use 'struct ptdesc' instead of 'struct page' for list of page tables to
+> >    be freed
+> >  * try to collapse PMD first and if it succeeds move on to PUD as peterz
+> >    suggested
+> >  * flush TLB twice: for changes done in the original CPA call and after
+> >    collapsing of large pages
+> > ]
+> > 
+> > Link: https://lore.kernel.org/all/20200416213229.19174-1-kirill.shutemov@linux.intel.com
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Co-developed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> 
+> When I originally attempted this, the patch was dropped because of
+> performance regressions. Was it addressed somehow?
+> 
 
-> Remove the following warnings by removing unused argc and argv
-> parameters:
-> In function =E2=80=98main=E2=80=99:
->   warning: unused parameter =E2=80=98argc=E2=80=99 [-Wunused-parameter]
->     158 | int main(int argc, char *argv[])
->         |          ~~~~^~~~
->   warning: unused parameter =E2=80=98argv=E2=80=99 [-Wunused-parameter]
->     158 | int main(int argc, char *argv[])
-...
-> diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing=
-/selftests/mm/compaction_test.c
-> index 2c3a0eb6b22d3..8d23b698ce9db 100644
-> --- a/tools/testing/selftests/mm/compaction_test.c
-> +++ b/tools/testing/selftests/mm/compaction_test.c
-> @@ -194,7 +194,7 @@ int set_zero_hugepages(unsigned long *initial_nr_huge=
-pages)
->  	return ret;
->  }
-> =20
-> -int main(int argc, char **argv)
-> +int main(void)
+Also, the statement:
 
-Doesn't that generate a different warning because main() is a special funct=
-ion
-and gcc knows the arguments it should have.
+"Change of attributes of the pages may lead to fragmentation of
+direct mapping over time and performance degradation as result.  "
 
-Just disable -Wunused-parameter - there are far too many places where it pr=
-oduces
-unwanted warnings.
+Seems to contradict the findings reported at LSFMM by Mike before
+that direct map fragmentation does not incur performance penalty,
+so I don't see a point in contradicing those findings and confusing
+people further.
 
-	David
+  Luis
 
