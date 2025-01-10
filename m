@@ -1,102 +1,118 @@
-Return-Path: <linux-kselftest+bounces-24210-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24211-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC07AA08F92
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 12:37:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6174A09169
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 14:06:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD041161E7E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 11:37:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97DB7188AE42
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2025 13:06:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1D762080E9;
-	Fri, 10 Jan 2025 11:37:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D47B920DD47;
+	Fri, 10 Jan 2025 13:06:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MJmzoecL"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="y6R/VRrv";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zIwLeQlH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136491F5435
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2025 11:37:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4533A20C024;
+	Fri, 10 Jan 2025 13:06:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736509038; cv=none; b=ssS6tuInz4M5Z4AnkQVyYLKvCtvCHYcrEHB8IuhLHfP0CNW43KwiRFWbDkUiTbZGheM32FTmm6PtN0xcpVK//6+lIxw0CqzZFz/wV1RsACGwDnq7282aNCmjbZsrLxeoZtt/KzgyMocZdsMJNO1pcOBZABI8R6kFv/yJu2pRl6c=
+	t=1736514378; cv=none; b=L7PVOG4ao1ezC1ztq5fvWi+1vCS1lTuKAAQ7Zvx1xmUBTfc6EvlVzvQZxIPejBu4/z+Gg3XDJNqmvSFe1MPqfhokJjPprId+LITSpJdEamFlzVD6UtzjLknHPpfYyjSqVsDFnGx4H3gm5ohaZ6HenKPpOyUm+F4uC2J/CuuqmoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736509038; c=relaxed/simple;
-	bh=7zmvdbFWSKbkAV4KyjZZv86GYrGfYPkJHSF3xMZZcb4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=twz1lwqqVDQYti2YuHur/MFSxRjg7AAOkUTRQ5Amqsg6w4T2oZ9S/qktsGR/EvieWaCyyPPKGXFm4BjYGCnSpxWC2R6UMMYCC7XAx+JbGpK+NjDKPm7uiZClvpJoVrHrQCpdOrNu/lDactUsbbw/EEzpy4nFB8Qk1/exSVaHQR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MJmzoecL; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-38a88ba968aso1756871f8f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2025 03:37:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1736509035; x=1737113835; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7zmvdbFWSKbkAV4KyjZZv86GYrGfYPkJHSF3xMZZcb4=;
-        b=MJmzoecLUdC2br+CmUw5U/rdCaFGXDaIzxCSb8KUDc2ufTwh6wC6NDRE6fAuEtzOoJ
-         le1vjeq+gnbIyTPXnVXFeTZg6nv1XLwFZB3MOM4/hg5F5kL+QMF8K/x7LDu6kabrmGgL
-         NvpC2pU2YVy5McGdQGGVcufcp8oDvs5WNIXx4LIzIWmNxiAZE7qJfeLenRUUFWW33p0P
-         oVYEYurLrwGI8MdG4GUV5uttdLwNTy1pJdGgEM0eTlHH2DDZQClkdM6drla/EnO43OEA
-         BbYFGIFPXooa8YXKEIdFo2AKneAI0SCLqenWN0lFak7nD4DSXh0R6MrUiV4bPHsn/E4N
-         JHzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736509035; x=1737113835;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7zmvdbFWSKbkAV4KyjZZv86GYrGfYPkJHSF3xMZZcb4=;
-        b=LuVv1oZ/PLUg8LnmVLrAHIUJlI1u8Eq91o/UO8y67ue3O32iI59JhYF+5lU1Eg6bLo
-         GeM3035a6B97ClxEjV/Z2sgyaIkaH8vRvVPQcszSWGM++icjTFRWMUOUQTvchhncgjMr
-         MjumCU9oRE7y2ug2Ord9A7N6LlaxVyHG51pY+cxF8UHc5CAjTJmJU6PIV9dTB3boLRCU
-         TGebDNaJdeh5B1Uy/2U1tNRNMukCFXjQvXimrnVlQnWFkN1cn2lksTLzev8PrPE7nrje
-         H2oH5kEkoVtHtsqY67TKGUp4TP0nru+Tc2JFPyTq/03Lw7f1YloYWtFEJp+hAFnbihur
-         p2UQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXFyuD3d4uX6QwSdljC9rKWNLKvYIsR5ehowo11bcdYXlUjG1yurGnFeAW4RMS7UZ+5OVJ3eVe/07uz6wd2NhE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBPIaWhDjx8VMSHOQ1JqwxBTbAf6CyYI5BG/Lur+GrN2VGpzlO
-	wcnlqZAXdpM9SPwcDmwxGV5dvXdS3MH+CBsBI3oOm208Tq8ZuGXNfqj79b60hR1/eFLHEuM/Kvx
-	owYFfUYeGD+4usTASugEzfb13jH+GTZqGoYiv
-X-Gm-Gg: ASbGnctBzrS8oR9GR5L8M+DNFE+3VaE+wrqMnY5mjxJlO376GciCMItoOaxQ4yMfWrQ
-	NiGAy1JougXlbmJAJt12L4SlcSZwOaDSO5mvLLWURHnE7bzcL3f0QjfwzXUo7gtRa
-X-Google-Smtp-Source: AGHT+IHTjv7ZEaDdnZKccljFWwP2cqfKG/YwK1Bus+BafuIS4nyzS6/p2+0zJfumRICahytHtsKlLLgGE1/LM/YxhoU=
-X-Received: by 2002:adf:9799:0:b0:38a:888c:7df0 with SMTP id
- ffacd0b85a97d-38a888c8017mr6861676f8f.1.1736509035458; Fri, 10 Jan 2025
- 03:37:15 -0800 (PST)
+	s=arc-20240116; t=1736514378; c=relaxed/simple;
+	bh=Sm0PwuQVte7XgbVjXyiHOsXJPFjpuw/9FI9ZkNuRORk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Lnz0svQQw/LpW6PSNB5VGZlW8sdSsmsLqjn60mGP+97pGEH4k6KSKnH24758OVbRRjQB4r92Ref44rdRs2RBf+xd994Vl1EmF1WJFVUP7bGeBAwhfLNBmHlIsY/U+zo6DvxPwCXeBYYPKl2qNQT/1Ua0IUX6AD+K9y/TJdgYlpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=y6R/VRrv; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zIwLeQlH; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1736514374;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hr6uhuBMBGWM5gCFEu7lA3MvYpepc6DeWCXpBbX8k8U=;
+	b=y6R/VRrvBuUbBCwqYt1vy+AblejtqeTeIATftwuhB05oxyehbDT5Nu8zcuLU1bN7aRkxUg
+	HtQw8v1Y+5jbRGJCMq0I0U4q3Gsm72IR61aVqtvYvYldl0G27V6OJ4kzN054WpewbOEUZ3
+	FW9FR3kXgEfUkj1BiNQb+VRR/zBdhqH5AWG+0C9QEvSrRgiTSxK1qjvoEeQlVPjE2e1rpX
+	J/vN91ULKrQGt1Fpsrm2ioc+hlF13d2qDlaR0xzpHxDSv9HmVyuxF2TYhr/IHO6VJVK23m
+	1iZ6uizCOKFYTgagImTW1MNHShGPC3w6SUyFOLZ+2548a8zhHBQ9GEZdK6x+4w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1736514374;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hr6uhuBMBGWM5gCFEu7lA3MvYpepc6DeWCXpBbX8k8U=;
+	b=zIwLeQlHVlCdEsUilfgbRnxBL2G3jpoalSJDa4O4dHHh9JPJCmy+1NNbyTHZTlo14wDYMn
+	ZYtxLh0Om0uaIBBA==
+Subject: [PATCH v2 0/3] selftests/mm: virtual_address_range: Reduce memory
+ usage and avoid VVAR access
+Date: Fri, 10 Jan 2025 14:05:49 +0100
+Message-Id: <20250110-virtual_address_range-tests-v2-0-262a2bf3c3d0@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241227015205.1375680-1-isaacmanjarres@google.com> <20241227015205.1375680-3-isaacmanjarres@google.com>
-In-Reply-To: <20241227015205.1375680-3-isaacmanjarres@google.com>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Fri, 10 Jan 2025 12:37:03 +0100
-X-Gm-Features: AbW1kvbVlPrXTHnA7AqgeRpIk1UcxEJGcZCoLyM-wZBRKWBCXPeNHX_wgjxQVTQ
-Message-ID: <CAH5fLghiNqhLeO0199kvyJyqDkGO=d_n7--J0nhTHD+W3=wj5A@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 2/2] selftests/memfd: Add tests for F_SEAL_FUTURE_EXEC
-To: "Isaac J. Manjarres" <isaacmanjarres@google.com>
-Cc: Jeff Layton <jlayton@kernel.org>, Chuck Lever <chuck.lever@oracle.com>, 
-	Alexander Aring <alex.aring@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Shuah Khan <shuah@kernel.org>, surenb@google.com, kaleshsingh@google.com, 
-	jstultz@google.com, jeffxu@google.com, kees@kernel.org, 
-	kernel-team@android.com, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAC0bgWcC/42NWwqDMBBFtyL5bkqMj9h+dR9FJG0mdUBimYnBI
+ u69qSvo5zlczt0EAyGwuBabIEjIOIcM+lSI52jDCyS6zEIr3ahSGZmQ4mKnwTpHwDzQMYrAkeW
+ l6erKtK23FyNy4U3gcT3q9z7ziBxn+hxnqfzZ/7qplEpWXVVb7R+18XCbMCyR5oDr2YHo933/A
+ uHfB5TKAAAA
+X-Change-ID: 20250107-virtual_address_range-tests-95843766fa97
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Shuah Khan <shuah@kernel.org>, Dev Jain <dev.jain@arm.com>, 
+ Thomas Gleixner <tglx@linutronix.de>, David Hildenbrand <david@redhat.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ kernel test robot <oliver.sang@intel.com>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1736514373; l=1221;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=Sm0PwuQVte7XgbVjXyiHOsXJPFjpuw/9FI9ZkNuRORk=;
+ b=0MGnfl/mOOpYHNMAN/TGe0wEWb8OEbo+Wd8yCQEVr/8tilq6PHxZS2/XtQpyjXGH7/HZDzQFu
+ T3UYHV4OGPwBtVBoPAkfXpidwHxsPuiEwQ+lcsBOcBJup31Xju9PBPt
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On Fri, Dec 27, 2024 at 2:52=E2=80=AFAM Isaac J. Manjarres
-<isaacmanjarres@google.com> wrote:
->
-> Add tests to ensure that F_SEAL_FUTURE_EXEC behaves as expected.
->
-> Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+The selftest started failing since commit e93d2521b27f
+("x86/vdso: Split virtual clock pages into dedicated mapping")
+was merged. While debugging I stumbled upon some memory usage
+optimizations.
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+With these test now runs on a VM with only 60MiB of memory.
+
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Changes in v2:
+- Drop /dev/null usage
+- Avoid overcommit restrictions by dropping PROT_WRITE
+- Avoid high memory usage due to PTEs
+- Link to v1: https://lore.kernel.org/r/20250107-virtual_address_range-tests-v1-0-3834a2fb47fe@linutronix.de
+
+---
+Thomas Weißschuh (3):
+      selftests/mm: virtual_address_range: mmap() without PROT_WRITE
+      selftests/mm: virtual_address_range: Unmap chunks after validation
+      selftests/mm: virtual_address_range: Avoid reading VVAR mappings
+
+ tools/testing/selftests/mm/config                  |  1 +
+ tools/testing/selftests/mm/virtual_address_range.c | 34 +++++++++++++++++++---
+ 2 files changed, 31 insertions(+), 4 deletions(-)
+---
+base-commit: 32af4d2269d20fe2f8d32aaa456cad8e40abd365
+change-id: 20250107-virtual_address_range-tests-95843766fa97
+
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
 
