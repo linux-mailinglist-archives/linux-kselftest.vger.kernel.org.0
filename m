@@ -1,103 +1,141 @@
-Return-Path: <linux-kselftest+bounces-24278-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FA4CA0A023
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Jan 2025 02:41:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9081A0A02B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Jan 2025 02:46:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F52716ABA7
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Jan 2025 01:41:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DF1F3AB1D8
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Jan 2025 01:46:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6044A1758B;
-	Sat, 11 Jan 2025 01:41:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E26AB481CD;
+	Sat, 11 Jan 2025 01:46:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xk/mzqtO"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IYLLMPex"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-187.mta0.migadu.com (out-187.mta0.migadu.com [91.218.175.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A91A5C96;
-	Sat, 11 Jan 2025 01:41:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2734438B;
+	Sat, 11 Jan 2025 01:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736559689; cv=none; b=VOi8F+akontjdmYJl4LefRDTgzF+D6q6u5J3bSdV/r0gG93R1UowRYm9tkn/caH3MGEkt1w/ZDy4ZN/PlL6sM2DJJQ/aojuc97HhycUfMOwHGaUOpAKJ8V9X7V14me4iyzNFH6odEoZ6KlHqFRPXIe6dq5c7HURC+2TTZTsA0+A=
+	t=1736559975; cv=none; b=H0cijr6fhKGdRQWQ32bN9yWqWf/bo4XMa89gjJGiDmqL/sXsj3L+uIvlv2X60wlWZWTO9+k/yHXgpF9cur7rfxi++1GUirPVTOeYll2/AOXgu4SegbpAijybp2mh/n4Y4pQbqLcBue3VTWUfJeUlSu5aczlda6MEicjY+rJt3Sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736559689; c=relaxed/simple;
-	bh=SaAkLuVh5qeM5RczhYtiRyngltVs9Mjfy/xMJTVOWIs=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=pTlsq1ws6nOscmdgw5Dhjj1zjhuJUIbQE999FmQ4y3Lf4A2CbPH0HCOXy/GrNhUaZqITf3r4lgiIFj+ySXqsz4Q6rZwqd+ANRtu4Nd4j89HSCSwIfRdTV6K+U1AICspsuq2KVFqdX5bPl6rwC0XCCphkjwaw7x2QcsbPe5a5lFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xk/mzqtO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BAB1C4CED6;
-	Sat, 11 Jan 2025 01:41:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736559685;
-	bh=SaAkLuVh5qeM5RczhYtiRyngltVs9Mjfy/xMJTVOWIs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Xk/mzqtOkZWZ1bUHvh65lktetTPQyhONBxEJYI82Ed1EgCypli7pVEpV3JJGUm8mw
-	 A8XIbZ/KqWanSuFYi5Ywu380X4oTGrN0NmWnT0TQRI4DXC/MRQGz7OQDtIjQdqnLbP
-	 3ZCb7+okz/UmGqKsWY4EAWumje6bupcbRCFjOmxmLpk1R8bvv0vUAI6JnLZZ3XTjOr
-	 jq6vPtk2rcfT6kJSUrZQks0iZWWg8E/Dtn7WCAGWGBHr8ePem5PqlIj8po1XEh7xm/
-	 3mRIQhJzsNVWTcyzKurazP9smQ38f3FXwBsPPeJTj+DGh6nFFZ7R2PHYiKDJLOqSps
-	 NMqN4m/44D3HA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADF93380AA57;
-	Sat, 11 Jan 2025 01:41:48 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1736559975; c=relaxed/simple;
+	bh=oL1znrA+BuRTsJSUJJ28nbRVw8azI79r0G/QLQ0/4o4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BcprjWs9TxThGbLXOn3trEz7e/w3Jyqg0ww0XF48bqmC0LIR9E/nbiH6QaoWJPQ0ZemCHu5McAFBUmQcg4Y9ZHS0tMVMM3V5bzys9EehqPq9OmF5hY7EDAdvGMVuLj8ZD9mfzwMkGH3+PCyidBEMT+v9Hlfu1KNXMKFuvdptWHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IYLLMPex; arc=none smtp.client-ip=91.218.175.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <8b72630d-8804-4b80-b4bd-857066b64b08@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1736559957;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MFVi31aY68398PatoQWdmgcINX7DagiGOAeQw2HTam8=;
+	b=IYLLMPexR21QLu7QXdCu3/evVz+nvYMGe3ML8ZcEdzziHZXSOyhmw04YDiOax6C6N13ONg
+	bX+0f4lBidpi8Kkm0M1ZyfSbd8M/B8eI/pYt0ShdUQPuuhoCPaK8fqSEckvvnY0KjExxJH
+	CefzJJpO1O/MSWulw5tTUxnD14mAPLw=
+Date: Fri, 10 Jan 2025 17:45:45 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/3] selftests: bpf: Migrate
- test_xdp_redirect.sh to test_progs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173655970751.2262030.14087955659103507101.git-patchwork-notify@kernel.org>
-Date: Sat, 11 Jan 2025 01:41:47 +0000
-References: <20250110-xdp_redirect-v2-0-b8f3ae53e894@bootlin.com>
-In-Reply-To: <20250110-xdp_redirect-v2-0-b8f3ae53e894@bootlin.com>
-To: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
- kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
- thomas.petazzoni@bootlin.com, alexis.lothore@bootlin.com,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+Subject: Re: [PATCH bpf-next v2 2/3] selftests/bpf: Migrate
+ test_xdp_redirect.sh to xdp_do_redirect.c
+To: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Alexis Lothore <alexis.lothore@bootlin.com>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
+References: <20250110-xdp_redirect-v2-0-b8f3ae53e894@bootlin.com>
+ <20250110-xdp_redirect-v2-2-b8f3ae53e894@bootlin.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20250110-xdp_redirect-v2-2-b8f3ae53e894@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
+On 1/10/25 1:21 AM, Bastien Curutchet (eBPF Foundation) wrote:
+> +static void ping_test(struct test_data *data)
+> +{
+> +	struct test_xdp_redirect *skel = NULL;
+> +	struct xdp_dummy *skel_dummy = NULL;
+> +	struct nstoken *nstoken = NULL;
+> +	int i, ret;
+> +
+> +	skel_dummy = xdp_dummy__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel_dummy, "open and load xdp_dummy skeleton"))
+> +		goto close;
+> +
+> +	for (i = 1; i < NS_NB; i++) {
+> +		char ns_name[4] = {};
+> +
+> +		snprintf(ns_name, 4, "NS%d", i);
+> +		nstoken = open_netns(ns_name);
+> +		if (!ASSERT_OK_PTR(nstoken, "open ns"))
+> +			goto close;
+> +
+> +		ret = bpf_xdp_attach(if_nametoindex("veth0"),
+> +				     bpf_program__fd(skel_dummy->progs.xdp_dummy_prog),
+> +				     data->xdp_flags, NULL);
+> +		if (!ASSERT_GE(ret, 0, "bpf_xdp_attach dummy_prog"))
+> +			goto close;
+> +
+> +		close_netns(nstoken);
+> +		nstoken = NULL;
+> +	}
+> +
+> +	skel = test_xdp_redirect__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "open and load skeleton"))
+> +		goto close;
+> +
+> +	nstoken = open_netns(NS0);
+> +	if (!ASSERT_OK_PTR(nstoken, "open NS0"))
+> +		goto close;
+> +
+> +	ret = bpf_xdp_attach(VETH2_INDEX,
+> +			     bpf_program__fd(skel->progs.xdp_redirect_to_111),
+> +			     data->xdp_flags, NULL);
+> +	if (!ASSERT_GE(ret, 0, "bpf_xdp_attach"))
+> +		goto close;
+> +
+> +	ret = bpf_xdp_attach(VETH1_INDEX,
+> +			     bpf_program__fd(skel->progs.xdp_redirect_to_222),
+> +			     data->xdp_flags, NULL);
+> +	if (!ASSERT_GE(ret, 0, "bpf_xdp_attach"))
+> +		goto close;
+> +
+> +	close_netns(nstoken);
+> +	nstoken = NULL;
+> +
+> +	nstoken = open_netns(NS1);
+> +	if (!ASSERT_OK_PTR(nstoken, "open NS1"))
+> +		goto close;
+> +
+> +	SYS(close, "ping -c 1 %s.2", IPV4_NETWORK);
 
-This series was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
+I added "> /dev/null" to remove noise for common case.
 
-On Fri, 10 Jan 2025 10:21:08 +0100 you wrote:
-> Hi all,
-> 
-> This patch series continues the work to migrate the *.sh tests into
-> prog_tests.
-> 
-> test_xdp_redirect.sh tests the XDP redirections done through
-> bpf_redirect().
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v2,1/3] selftests/bpf: test_xdp_redirect: Rename BPF sections
-    https://git.kernel.org/bpf/bpf-next/c/2c6c5c7c1ad1
-  - [bpf-next,v2,2/3] selftests/bpf: Migrate test_xdp_redirect.sh to xdp_do_redirect.c
-    (no matching commit)
-  - [bpf-next,v2,3/3] selftests/bpf: Migrate test_xdp_redirect.c to test_xdp_do_redirect.c
-    https://git.kernel.org/bpf/bpf-next/c/3e99fa9fab19
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Applied. Thanks.
 
