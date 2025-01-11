@@ -1,197 +1,159 @@
-Return-Path: <linux-kselftest+bounces-24297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79D81A0A552
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Jan 2025 19:42:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5DE8A0A562
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Jan 2025 19:48:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77066168D8E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Jan 2025 18:42:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF3593A6F67
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Jan 2025 18:47:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6758F1B4F23;
-	Sat, 11 Jan 2025 18:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A7041B5823;
+	Sat, 11 Jan 2025 18:47:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S7pQfgF7"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="cF8Pl9uL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEBAA1B4253;
-	Sat, 11 Jan 2025 18:42:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41EE71AB6FF
+	for <linux-kselftest@vger.kernel.org>; Sat, 11 Jan 2025 18:47:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736620968; cv=none; b=eM/ZbwWubg02qsChjCW12nHClk/D8xxqj9Cf8LCQXHmobJ5QzDo9PvSK5gVyDQzvMJVBXoQ4Wk/JhsQxcVZ5IJ7TZALgT0VRNgsHgD1xkHwN5QvUCCNc5n9lOar2ZsBTWpexiR86cyPNDhJp+FlAMCTsgiSxjgoxTVgX7Blk8io=
+	t=1736621275; cv=none; b=ZluhA2CaWYByiqo5YGTJ6lka7b0wL4HEGi+HBRZ8ItZdRbByykgnkzhDMMx8Pm25WZ5TiIGl0XG+PhVMGewB2BZ9uIuPoT+e90eABEzFfXYncRznaCDaGBgvh+KYJXhr0MjgWZIcSJEaAtBTpz01n1y9krTlMZhEF+ZV4w7dHXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736620968; c=relaxed/simple;
-	bh=qHN6h7rUSVo5CIeTRnZQIDZR55pp4S6wi3KyOIE7X2Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Vu4Mnngk9HGZwyjO0zGo1UZySKpoz2F5t1fYIlPs+n7byVti8hv9mkrkhQTjnMVLhrmxsq/FwVL5MKcqc5hfVv/Ri6fkqrdiN8lAAVSuzoWhdUbnJJqGc8UCOQ99Q5Ns6DLXfAI5v0ztse+vcMIlyanWeJMXNwYhgWhKOEOZQ1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S7pQfgF7; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-21628b3fe7dso51413345ad.3;
-        Sat, 11 Jan 2025 10:42:46 -0800 (PST)
+	s=arc-20240116; t=1736621275; c=relaxed/simple;
+	bh=ZWAKyj00T8TijV5rEAQHOMx8MOnLE5MvVnhZKGuLwzo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=D/0P25vJJMoZV1s7JOZxEp3q7DupZDVzmHCbOXIb4Gw2kBu+/jUWQS3iEXuRS3EAeiIxvuSZ17bwU0qCjRkthBIm+drXRln3SyxTMlz75/wter/d7ocv8h4ONISZ9N2p2q7c5+C2Yyi4GeEhsmeHNIrHm2ltm9bQJZabtuuULZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=cF8Pl9uL; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-38a25d4b9d4so1576419f8f.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 11 Jan 2025 10:47:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736620966; x=1737225766; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9fvGqwZAuw5vpQfQsA/WWi9Bqd1oJsgWApQ/uA7RLxw=;
-        b=S7pQfgF78RmKh2fvV8EuJQQxjJzoE4xXPv2R+TIu6WKLhmXVecpGMxDlK3Fo6/Xnp9
-         xtNIsqKi+eQ+/ntO2FHZfae2jbLAQddklJB58qXNg9ARxcnPSnFpzRt3e+MEZCWScPkG
-         ANIPh2pMd5vwxJ9sn4a5YL8HvJzXKYVhBFX5zXKNQWFUJAUdNcC0Kpvlj9pfEKhzFsUc
-         UHubHPHRvVXLuHKsg+teJ4yUTNfauMcFzC/CE7Pz5gG89x6yxjIuKTTEXP/FXz4YPdsA
-         fP9vctefmYngQ8uVKLLGPwfG3Gdc6H8u41NwmYLfKC2GSvpxfEI3FdQ+HZMupM/AIe35
-         YKtA==
+        d=openvpn.net; s=google; t=1736621271; x=1737226071; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ANmr11cRLBqi4SS62Fb0tVKeKCJrg8dPP238NA50z10=;
+        b=cF8Pl9uLGLg3OvGdMVmN3h/PAMp5xp99b6VE1yntgfocopCEQPIwPUeJFvqBrFVvPH
+         N6h2gzoiJ15ixE/96+lrZ0Dp6qmOX7YCTpoJAn6tNc6/SS+vvhutnm+2deJ6VF3H6Hdy
+         mgg0HiTSihhkuBDidWBsqLECZLs6O+s9XyEBZE6HVbGs75vgbQkQyFh4GNq9A+cWSv1A
+         0vHhHp6DmSKJpUV1TRecljmZViT6l5ac2DK0E0oN5piOpEDQxrBcyqXiRLUrKNuZgLMz
+         mM7AP0EBFI1hAVVj8SG2tJDUrE/fd+pCoy6S4lhI/WPNCthXbdtb1dZQNIC9GOPqQ0Xk
+         oEhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736620966; x=1737225766;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9fvGqwZAuw5vpQfQsA/WWi9Bqd1oJsgWApQ/uA7RLxw=;
-        b=TGjq9XjyIJAyu6iZKzKw666OscXW0EV5e/KdMGL8HymXyk29ArtRTHoWHnjxfwkyJf
-         9pbkKMeTe2TaSPtjAm48hG5qs/IIc5UQZxMY5CVqrN0ArZCBiHNwD9w0HK1V3VbsUquR
-         dUen52hnYFXipuzCuWdmuKBMr3x0NOB/FsAiS08ExHuJ9rm2eVbb77kUNlxq+5Z2b45I
-         reIpT0PfjiXB/sHIIHcwTodhIPy5JpHx6HUlNccjrQSn5aSYEW80dSADFUYLJNZDrLpx
-         UDxLbUx8NmWK7+OXNkvEp5DaQDzBOyFTF0b464lo6w2tmn911oYlLhkAHAOumw/KCNcz
-         HtnA==
-X-Forwarded-Encrypted: i=1; AJvYcCUlrqXqmLz8XUZ594GptDE8RNp+m9gqLTv0JUxRVAl+SnvLWDfodidPPaTrPTB5lhveggaHQsqfhEEQZAE=@vger.kernel.org, AJvYcCXMgRR5Ur9RPmhGQY9y/VH6/m/6OPesooi9PrK0vpUxRIZD6wKRdWsg63+Y3wFFe0Ji0+AImP6P7o0zsExeJ1sN@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwI/4JQ7BwfPYK+aqM7dhoyDuGiHpr2jZIEQ7e6/eMwvV+QCBo
-	WPmOcIBWv79Gl21vuJS2sJKYUy2acRqTKeXUnxH72zVhJfkL6yUDB9aWn19d29c=
-X-Gm-Gg: ASbGncsQDrcHLhPCW2PFuJzviS5Y6cJbpJzKNkMyUBM2cTnSF/vBFw7U1xJ/Jr3nBXY
-	SILixRPepZlcEOOfXGOnAobNJymz2ctWo6SLfHQO0jQpuK+8tq3m9XW7qFfvgVJ+uGSLuxcnWLU
-	dU65FuV5jv32pF+Ww7EH6iHVaarRsc5Ae73uH9eXAoX7O//R7hd4pHAPXoeVyZV8apxSbbkPkL1
-	OPqKEMSsDrVIQxnRZWNt7K/l3Y2vrU15Xh/qMxoTo9tk3rllvZjSXJcpIt1Lmfy
-X-Google-Smtp-Source: AGHT+IEBe/MCZn89f8LfBZ1StrWiBjS3xJcv0zgoqM72+sAAj8nA+48SpAnEkXV9/1mkDBJcX3farg==
-X-Received: by 2002:a17:902:ecc5:b0:215:7dbf:f3de with SMTP id d9443c01a7336-21a83f5e4e5mr228852025ad.28.1736620966091;
-        Sat, 11 Jan 2025 10:42:46 -0800 (PST)
-Received: from fedora.local ([2804:d57:4e50:a700:f33d:65d1:e22e:109b])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f22c99csm30037235ad.164.2025.01.11.10.42.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jan 2025 10:42:45 -0800 (PST)
-From: Filipe Xavier <felipeaggger@gmail.com>
-Date: Sat, 11 Jan 2025 15:42:27 -0300
-Subject: [PATCH v2] selftests: livepatch: test if ftrace can trace a
- livepatched function
+        d=1e100.net; s=20230601; t=1736621271; x=1737226071;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ANmr11cRLBqi4SS62Fb0tVKeKCJrg8dPP238NA50z10=;
+        b=CvxeVlsgpRQtcu+EpM/aa+sVrqSjHba+P4DZihgMYnIJpv58shuKKLYVneJ7UbYmPX
+         iThF/ozh2wboHbb3QB7HEkcbPp/WWRMZRAnqX42yhJBKc7XK3dfjk4lREwp2eYdRo7xg
+         tep5I0k7jFOrxWPWWQqKYeO33OKIfWiZp+E//lns18LeGtIAGDeH8tpM4nXtN2Wj3+Hp
+         80aAwo2bRhcwI72BxwWyCeqcuTdKdkwuaEPDw7J11jAQRgPxRBfkh/hWyYFChyev2RED
+         e9mNbMNhzH/2YzcmM5AjC7tmUNCUHopaQcXHUMpkAN7HE5Uavvkq7jNPplcaFQILt66k
+         PeJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWkVNdy/dYf3TKQP55d8qrsqf6HtkWBk2t4l24IbCPti5yZ9KCR4Tm0azKziiwiDbWMdnZeWb+1nCvZKqkQz08=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyU3d8EIG099khPug7y9A40UOpLY6vBzFESc0YbSLx8mCP/ND4a
+	2XxsiAwS/c72ZD/DPZQzq1iHswp1mcP0UQyNy7FSfqA8XCUlHInBMeRqqNKTZQ0=
+X-Gm-Gg: ASbGncvvF2JC+dmIzfsHZq1EcPGsa8TcVS1eJE0W3WLoH4P1k01e1tQiFCL0P3pl17H
+	TFAAc12o5qmbEIbMkGz+ZQO5oL7gv+Fiu07IOgNghEqTt0K21pPtR3wCMrLpPQWHb78aBA6Znrb
+	GZEWdvqY4VoOT/xPaFV0a+3njFQLTjPnFLDcbUAnVlPAeCQPlbssCi+OY2xtOjZtaHIRK50B8ZK
+	BOqfSGCRHz0gnzbU6LyvRI5QZReBffnRsUreBM2JQapmLIKOF3725M7o6xVYVDfA5Ywm+qZYxPy
+	o1UDRwz7f7Zhm0E80mI=
+X-Google-Smtp-Source: AGHT+IE096+ozhxD6WgMhTSunNjZzt4wQ/N/cd4TxFbRqTlqF/XMkU+O7aXUkT5CYlua3ex3DsDlQg==
+X-Received: by 2002:a05:6000:18a7:b0:385:f220:f798 with SMTP id ffacd0b85a97d-38a872c93eemr11877006f8f.6.1736621271554;
+        Sat, 11 Jan 2025 10:47:51 -0800 (PST)
+Received: from ?IPV6:2001:67c:2fbc:1:9001:bc26:643c:1b67? ([2001:67c:2fbc:1:9001:bc26:643c:1b67])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e4b7ff0sm7899684f8f.77.2025.01.11.10.47.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Jan 2025 10:47:50 -0800 (PST)
+Message-ID: <08b1e117-b6a3-49be-999a-885a8bbfa0f9@openvpn.net>
+Date: Sat, 11 Jan 2025 19:48:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v17 25/25] testing/selftests: add test tool and
+ scripts for ovpn module
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>,
+ netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, sd@queasysnail.net, ryazanov.s.a@gmail.com,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20250110-b4-ovpn-v17-0-47b2377e5613@openvpn.net>
+ <20250110-b4-ovpn-v17-25-47b2377e5613@openvpn.net>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <20250110-b4-ovpn-v17-25-47b2377e5613@openvpn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250111-ftrace-selftest-livepatch-v2-1-9f4ff90f251a@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAJK7gmcC/32NywrCMBBFf6Vk7UgmqA2u/A/pIo9JO9AXSQhK6
- b8bC25dngP33E0kikxJ3JtNRCqceJkrqFMj3GDmnoB9ZaGkukqUCCFH4wgSjSFTyjByodVkNwD
- eMNi29Za8FnW/Rgr8OtrPrvLAKS/xfVwV/NpfVf2pFgQEfdFaWkPBoX30k+Hx7JZJdPu+fwAsp
- 0/YwgAAAA==
-X-Change-ID: 20250101-ftrace-selftest-livepatch-161fb77dbed8
-To: Marcos Paulo de Souza <mpdesouza@suse.com>, 
- Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
- Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
- Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Felipe Xavier <felipe_life@live.com>, 
- Filipe Xavier <felipeaggger@gmail.com>
-X-Mailer: b4 0.14.2
 
-This new test makes sure that ftrace can trace a
-function that was introduced by a livepatch.
+Hey Jakub,
 
-Signed-off-by: Filipe Xavier <felipeaggger@gmail.com>
----
-Changes in v2:
-- functions.sh: added reset tracing on push and pop_config.
-- test-ftrace.sh: enabled tracing_on before test init.
-- nitpick: added double quotations on filenames and fixed some wording. 
-- Link to v1: https://lore.kernel.org/r/20250102-ftrace-selftest-livepatch-v1-1-84880baefc1b@gmail.com
----
- tools/testing/selftests/livepatch/functions.sh   | 14 ++++++++++
- tools/testing/selftests/livepatch/test-ftrace.sh | 33 ++++++++++++++++++++++++
- 2 files changed, 47 insertions(+)
+I just realized that I forgot to fix the nla_get_uint clash triggered on 
+Fedora.
 
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index e5d06fb402335d85959bafe099087effc6ddce12..e6c13514002dae5f8d7461f90b8241ab43024ea4 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -62,6 +62,9 @@ function push_config() {
- 			awk -F'[: ]' '{print "file " $1 " line " $2 " " $4}')
- 	FTRACE_ENABLED=$(sysctl --values kernel.ftrace_enabled)
- 	KPROBE_ENABLED=$(cat "$SYSFS_KPROBES_DIR/enabled")
-+	TRACING_ON=$(cat "$SYSFS_DEBUG_DIR/tracing/tracing_on")
-+	CURRENT_TRACER=$(cat "$SYSFS_DEBUG_DIR/tracing/current_tracer")
-+	FTRACE_FILTER=$(cat "$SYSFS_DEBUG_DIR/tracing/set_ftrace_filter")
- }
- 
- function pop_config() {
-@@ -74,6 +77,17 @@ function pop_config() {
- 	if [[ -n "$KPROBE_ENABLED" ]]; then
- 		echo "$KPROBE_ENABLED" > "$SYSFS_KPROBES_DIR/enabled"
- 	fi
-+	if [[ -n "$TRACING_ON" ]]; then
-+		echo "$TRACING_ON" > "$SYSFS_DEBUG_DIR/tracing/tracing_on"
-+	fi
-+	if [[ -n "$CURRENT_TRACER" ]]; then
-+		echo "$CURRENT_TRACER" > "$SYSFS_DEBUG_DIR/tracing/current_tracer"
-+	fi
-+	if [[ "$FTRACE_FILTER" == *"#"* ]]; then
-+		echo > "$SYSFS_DEBUG_DIR/tracing/set_ftrace_filter"
-+	elif [[ -n "$FTRACE_FILTER" ]]; then
-+		echo "$FTRACE_FILTER" > "$SYSFS_DEBUG_DIR/tracing/set_ftrace_filter"
-+	fi
- }
- 
- function set_dynamic_debug() {
-diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
-index fe14f248913acbec46fb6c0fec38a2fc84209d39..66af5d726c52e48e5177804e182b4ff31784d5ac 100755
---- a/tools/testing/selftests/livepatch/test-ftrace.sh
-+++ b/tools/testing/selftests/livepatch/test-ftrace.sh
-@@ -61,4 +61,37 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- % rmmod $MOD_LIVEPATCH"
- 
- 
-+# - verify livepatch can load
-+# - check if traces have a patched function
-+# - unload livepatch and reset trace
-+
-+start_test "trace livepatched function and check that the live patch remains in effect"
-+
-+TRACE_FILE="$SYSFS_DEBUG_DIR/tracing/trace"
-+FUNCTION_NAME="livepatch_cmdline_proc_show"
-+
-+load_lp $MOD_LIVEPATCH
-+
-+echo 1 > "$SYSFS_DEBUG_DIR/tracing/tracing_on"
-+echo $FUNCTION_NAME > "$SYSFS_DEBUG_DIR/tracing/set_ftrace_filter"
-+echo "function" > "$SYSFS_DEBUG_DIR/tracing/current_tracer"
-+echo "" > "$TRACE_FILE"
-+
-+if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
-+	echo -e "FAIL\n\n"
-+	die "livepatch kselftest(s) failed"
-+fi
-+
-+grep -q $FUNCTION_NAME "$TRACE_FILE"
-+FOUND=$?
-+
-+disable_lp $MOD_LIVEPATCH
-+unload_lp $MOD_LIVEPATCH
-+
-+if [ "$FOUND" -eq 1 ]; then
-+	echo -e "FAIL\n\n"
-+	die "livepatch kselftest(s) failed"
-+fi
-+
-+
- exit 0
+However, I'd rather not send a new patchset right away...
 
----
-base-commit: fc033cf25e612e840e545f8d5ad2edd6ba613ed5
-change-id: 20250101-ftrace-selftest-livepatch-161fb77dbed8
+Maybe we will be happy with this version and then I will just resend 
+this patch alone.
 
-Best regards,
+Best Regards,
+
+
 -- 
-Filipe Xavier <felipeaggger@gmail.com>
+Antonio Quartulli
+OpenVPN Inc.
 
 
