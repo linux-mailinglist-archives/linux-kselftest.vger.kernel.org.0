@@ -1,144 +1,197 @@
-Return-Path: <linux-kselftest+bounces-24296-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E8CCA0A527
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Jan 2025 19:00:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79D81A0A552
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Jan 2025 19:42:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BA0F3A662C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Jan 2025 18:00:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77066168D8E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Jan 2025 18:42:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ECE71B424A;
-	Sat, 11 Jan 2025 18:00:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6758F1B4F23;
+	Sat, 11 Jan 2025 18:42:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AzB8vYm8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S7pQfgF7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08D21B0F23
-	for <linux-kselftest@vger.kernel.org>; Sat, 11 Jan 2025 18:00:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEBAA1B4253;
+	Sat, 11 Jan 2025 18:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736618440; cv=none; b=m6dxm9E/TKqHjicl3PpkM5Z+92PNf2UbJC3ffCltfcz5XoRqziLQ5FEEhXACvEMk89cs9/8MEc4pWbOK6PGolOxZNwpnnR8BeNtWK9be3YDx/YO7fzTLLjqUq5kmGsno2xJMdRAeoQ+o3c1FK36wfUZdTnd3myeEyzvA9Kf5/HY=
+	t=1736620968; cv=none; b=eM/ZbwWubg02qsChjCW12nHClk/D8xxqj9Cf8LCQXHmobJ5QzDo9PvSK5gVyDQzvMJVBXoQ4Wk/JhsQxcVZ5IJ7TZALgT0VRNgsHgD1xkHwN5QvUCCNc5n9lOar2ZsBTWpexiR86cyPNDhJp+FlAMCTsgiSxjgoxTVgX7Blk8io=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736618440; c=relaxed/simple;
-	bh=rl4tzMbjTVPrZL8vIZg0CsU+U4RCupZ142ByB8y5vNA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uMdq8MU7s8q5u9YiyMfgwyr889HuI3gXM9sndmTk4bwV8Cap3QPelFzvrfF42jPrXREfsQW2uCepSZFQJvr6AzcJmrRh15Qz2Fm7vxiC06IUPIxqD6sLtD+lIXAfOpoe7YR6PG+chSsEg12Mkb+61pS50CdnrkhIvNGwfgDBPMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AzB8vYm8; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736618437;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=65m01HXSlqOBQF0X6QUSrEpGfIBoOq9A2r6WX82xrgk=;
-	b=AzB8vYm8cdmWtbGHKFds9On9i3pwXYtAQGR46EywRC48ogFZICdX1FL6jn765G2AVtZ9lv
-	21CpJovhi7gd6M8euEA6kW/69MNAhM8ezNW/mpPEBJP3w7NqZPRJVFk4wkvLm7gLHrKX9i
-	9mVm6jBj1PohHX3FNa0MCZRSBNzsPDY=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-388-KleSDxVGPuW1dqEw7TWN7Q-1; Sat, 11 Jan 2025 13:00:36 -0500
-X-MC-Unique: KleSDxVGPuW1dqEw7TWN7Q-1
-X-Mimecast-MFC-AGG-ID: KleSDxVGPuW1dqEw7TWN7Q
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7b6e5c9ef38so509510885a.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 11 Jan 2025 10:00:36 -0800 (PST)
+	s=arc-20240116; t=1736620968; c=relaxed/simple;
+	bh=qHN6h7rUSVo5CIeTRnZQIDZR55pp4S6wi3KyOIE7X2Q=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Vu4Mnngk9HGZwyjO0zGo1UZySKpoz2F5t1fYIlPs+n7byVti8hv9mkrkhQTjnMVLhrmxsq/FwVL5MKcqc5hfVv/Ri6fkqrdiN8lAAVSuzoWhdUbnJJqGc8UCOQ99Q5Ns6DLXfAI5v0ztse+vcMIlyanWeJMXNwYhgWhKOEOZQ1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S7pQfgF7; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-21628b3fe7dso51413345ad.3;
+        Sat, 11 Jan 2025 10:42:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736620966; x=1737225766; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9fvGqwZAuw5vpQfQsA/WWi9Bqd1oJsgWApQ/uA7RLxw=;
+        b=S7pQfgF78RmKh2fvV8EuJQQxjJzoE4xXPv2R+TIu6WKLhmXVecpGMxDlK3Fo6/Xnp9
+         xtNIsqKi+eQ+/ntO2FHZfae2jbLAQddklJB58qXNg9ARxcnPSnFpzRt3e+MEZCWScPkG
+         ANIPh2pMd5vwxJ9sn4a5YL8HvJzXKYVhBFX5zXKNQWFUJAUdNcC0Kpvlj9pfEKhzFsUc
+         UHubHPHRvVXLuHKsg+teJ4yUTNfauMcFzC/CE7Pz5gG89x6yxjIuKTTEXP/FXz4YPdsA
+         fP9vctefmYngQ8uVKLLGPwfG3Gdc6H8u41NwmYLfKC2GSvpxfEI3FdQ+HZMupM/AIe35
+         YKtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736618435; x=1737223235;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=65m01HXSlqOBQF0X6QUSrEpGfIBoOq9A2r6WX82xrgk=;
-        b=ODTUcdKI8SwsTcpe1+XmsKQovtF1TvEk2eNMN42S56yz1IWqnXt0PeBSQuNWln2WD7
-         K3BPLTog5YyPBqY9g2bg7DMOG7C108z7JBl8AY9f0zDn+tBXuYGbeOm1kghrbiwTMVI1
-         04DT3odbjF0v3fnyrrW++RXLHBzMXTmXnCurDPn/30eTo/89moRUZBH8WULTqUG/44JF
-         26dTjYqJ0msVWmx5BE0ck+7slAQRWFCHpq3god4QrZziSohA9Udgi5ZArFYqRWdPN5e6
-         YYhw6bkA0DfzoRKU+PfWRPeLZPAEfRWEc3jUXEeRGlhNfh745dXGHIyEhLeHYp2SyU9R
-         2Wqg==
-X-Forwarded-Encrypted: i=1; AJvYcCXy9Wozq8Gc6pdBWagXnl8624KoXnahx2dxGlO0fUPvHmUvVApNuf+3T+8s55MXtl5h4SXSBTxXPUbBsOBXpBw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw00Yxl6u3Et1T11lDWGRXwEwNbam/szK4/Dh3k9W8HbhCB4uyD
-	Ne0AsT5TqSan7pD2+pv3KHXL5n0YcxkuzvYcRR5cgPHuN16d5Ox+o2rFEr8K6sfOBiAyePoFZWj
-	VgpecuVLaeRAxAOKmcec7JOXQz5iiqAUiRYCAEWgZYsvBOZpcdyiQdcLboPl/ShM7uA==
-X-Gm-Gg: ASbGnctZEdr23zHwspFkq8OuJ21yO+j3gGJYHUjGve+Oa9XDoOrH9zRpECT6TaDVvA2
-	48WZMfO540N+RDSWI+9SsIriWVi5Jl2ygcvFh5B3m0M2eD+regfgpYBXz1zyrIyQtKKS8Vg4Kdq
-	rcisp2i5QDw72K9sMWk9aDb5F9QYpbBEaXpgTA3r2GTXdsy5lP+utSXZ5btbT4Ftjj5VH3X8P0/
-	GJMoQv4NXYdNZto0yyhzJKa72ZI0bdDboN7BIjhiStUcI9QYawBBuuNrNXyDn3sZgsvaJ9/Et9U
-	S3pxgUTzev7pPSBfYs6/oAe8krKaCoNFdLSNaIk=
-X-Received: by 2002:a05:620a:4e50:b0:7b6:d237:abfa with SMTP id af79cd13be357-7bcf3670440mr376712485a.21.1736618435657;
-        Sat, 11 Jan 2025 10:00:35 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGUdu/RdQiy62AcFdeOz8EqMSt9UG6Qp5/L1AaHX+TMZ/CBG16QzRl866a0rluy1MJWs1zVjw==
-X-Received: by 2002:a05:620a:4e50:b0:7b6:d237:abfa with SMTP id af79cd13be357-7bcf3670440mr376708085a.21.1736618435329;
-        Sat, 11 Jan 2025 10:00:35 -0800 (PST)
-Received: from [192.168.1.45] (pool-68-160-135-240.bstnma.fios.verizon.net. [68.160.135.240])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7bce3238003sm303883985a.2.2025.01.11.10.00.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Jan 2025 10:00:33 -0800 (PST)
-Message-ID: <20867ce3-901c-7821-fe02-ccd223fdcf17@redhat.com>
-Date: Sat, 11 Jan 2025 13:00:31 -0500
+        d=1e100.net; s=20230601; t=1736620966; x=1737225766;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9fvGqwZAuw5vpQfQsA/WWi9Bqd1oJsgWApQ/uA7RLxw=;
+        b=TGjq9XjyIJAyu6iZKzKw666OscXW0EV5e/KdMGL8HymXyk29ArtRTHoWHnjxfwkyJf
+         9pbkKMeTe2TaSPtjAm48hG5qs/IIc5UQZxMY5CVqrN0ArZCBiHNwD9w0HK1V3VbsUquR
+         dUen52hnYFXipuzCuWdmuKBMr3x0NOB/FsAiS08ExHuJ9rm2eVbb77kUNlxq+5Z2b45I
+         reIpT0PfjiXB/sHIIHcwTodhIPy5JpHx6HUlNccjrQSn5aSYEW80dSADFUYLJNZDrLpx
+         UDxLbUx8NmWK7+OXNkvEp5DaQDzBOyFTF0b464lo6w2tmn911oYlLhkAHAOumw/KCNcz
+         HtnA==
+X-Forwarded-Encrypted: i=1; AJvYcCUlrqXqmLz8XUZ594GptDE8RNp+m9gqLTv0JUxRVAl+SnvLWDfodidPPaTrPTB5lhveggaHQsqfhEEQZAE=@vger.kernel.org, AJvYcCXMgRR5Ur9RPmhGQY9y/VH6/m/6OPesooi9PrK0vpUxRIZD6wKRdWsg63+Y3wFFe0Ji0+AImP6P7o0zsExeJ1sN@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwI/4JQ7BwfPYK+aqM7dhoyDuGiHpr2jZIEQ7e6/eMwvV+QCBo
+	WPmOcIBWv79Gl21vuJS2sJKYUy2acRqTKeXUnxH72zVhJfkL6yUDB9aWn19d29c=
+X-Gm-Gg: ASbGncsQDrcHLhPCW2PFuJzviS5Y6cJbpJzKNkMyUBM2cTnSF/vBFw7U1xJ/Jr3nBXY
+	SILixRPepZlcEOOfXGOnAobNJymz2ctWo6SLfHQO0jQpuK+8tq3m9XW7qFfvgVJ+uGSLuxcnWLU
+	dU65FuV5jv32pF+Ww7EH6iHVaarRsc5Ae73uH9eXAoX7O//R7hd4pHAPXoeVyZV8apxSbbkPkL1
+	OPqKEMSsDrVIQxnRZWNt7K/l3Y2vrU15Xh/qMxoTo9tk3rllvZjSXJcpIt1Lmfy
+X-Google-Smtp-Source: AGHT+IEBe/MCZn89f8LfBZ1StrWiBjS3xJcv0zgoqM72+sAAj8nA+48SpAnEkXV9/1mkDBJcX3farg==
+X-Received: by 2002:a17:902:ecc5:b0:215:7dbf:f3de with SMTP id d9443c01a7336-21a83f5e4e5mr228852025ad.28.1736620966091;
+        Sat, 11 Jan 2025 10:42:46 -0800 (PST)
+Received: from fedora.local ([2804:d57:4e50:a700:f33d:65d1:e22e:109b])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f22c99csm30037235ad.164.2025.01.11.10.42.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Jan 2025 10:42:45 -0800 (PST)
+From: Filipe Xavier <felipeaggger@gmail.com>
+Date: Sat, 11 Jan 2025 15:42:27 -0300
+Subject: [PATCH v2] selftests: livepatch: test if ftrace can trace a
+ livepatched function
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] selftests: livepatch: test if ftrace can trace a
- livepatched function
-Content-Language: en-US
-To: Filipe Xavier <felipeaggger@gmail.com>
-Cc: Marcos Paulo de Souza <mpdesouza@suse.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
- Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
- Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Felipe Xavier <felipe_life@live.com>
-References: <20250102-ftrace-selftest-livepatch-v1-1-84880baefc1b@gmail.com>
- <Z31VBN3zo47Ohr27@redhat.com>
- <9edd671a-be5e-41c9-a8dc-b1fd1d5e3375@gmail.com>
-From: Joe Lawrence <joe.lawrence@redhat.com>
-In-Reply-To: <9edd671a-be5e-41c9-a8dc-b1fd1d5e3375@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250111-ftrace-selftest-livepatch-v2-1-9f4ff90f251a@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAJK7gmcC/32NywrCMBBFf6Vk7UgmqA2u/A/pIo9JO9AXSQhK6
+ b8bC25dngP33E0kikxJ3JtNRCqceJkrqFMj3GDmnoB9ZaGkukqUCCFH4wgSjSFTyjByodVkNwD
+ eMNi29Za8FnW/Rgr8OtrPrvLAKS/xfVwV/NpfVf2pFgQEfdFaWkPBoX30k+Hx7JZJdPu+fwAsp
+ 0/YwgAAAA==
+X-Change-ID: 20250101-ftrace-selftest-livepatch-161fb77dbed8
+To: Marcos Paulo de Souza <mpdesouza@suse.com>, 
+ Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+ Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+ Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Felipe Xavier <felipe_life@live.com>, 
+ Filipe Xavier <felipeaggger@gmail.com>
+X-Mailer: b4 0.14.2
 
-On 1/10/25 12:13, Filipe Xavier wrote:
-> Em 07/01/2025 13:23, Joe Lawrence escreveu:
-> 
->> On Thu, Jan 02, 2025 at 03:42:10PM -0300, Filipe Xavier wrote:
->>> This new test makes sure that ftrace can trace a
->>> function that was introduced by a livepatch.
->>>
->> Hi Filipe,
->>
->> Thanks for adding a test!
->>
->> Aside: another similar test could verify that the original function, in
->> this case cmdline_proc_show(), can still be traced despite it being
->> livepatched.  That may be non-intuitive but it demonstrates how the
->> ftrace handler works.
-> 
-> Thanks for the review Joe!
-> 
-> I have fixed all points mentioned below,
-> 
-> and have a patch ready to submit.
-> 
-> Do you believe that this other similar test could be sent later,
-> 
-> or is it required in this patch?
-> 
+This new test makes sure that ftrace can trace a
+function that was introduced by a livepatch.
 
-The second test could be added later if you like, either way is fine w/me.
+Signed-off-by: Filipe Xavier <felipeaggger@gmail.com>
+---
+Changes in v2:
+- functions.sh: added reset tracing on push and pop_config.
+- test-ftrace.sh: enabled tracing_on before test init.
+- nitpick: added double quotations on filenames and fixed some wording. 
+- Link to v1: https://lore.kernel.org/r/20250102-ftrace-selftest-livepatch-v1-1-84880baefc1b@gmail.com
+---
+ tools/testing/selftests/livepatch/functions.sh   | 14 ++++++++++
+ tools/testing/selftests/livepatch/test-ftrace.sh | 33 ++++++++++++++++++++++++
+ 2 files changed, 47 insertions(+)
 
-Thanks,
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index e5d06fb402335d85959bafe099087effc6ddce12..e6c13514002dae5f8d7461f90b8241ab43024ea4 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -62,6 +62,9 @@ function push_config() {
+ 			awk -F'[: ]' '{print "file " $1 " line " $2 " " $4}')
+ 	FTRACE_ENABLED=$(sysctl --values kernel.ftrace_enabled)
+ 	KPROBE_ENABLED=$(cat "$SYSFS_KPROBES_DIR/enabled")
++	TRACING_ON=$(cat "$SYSFS_DEBUG_DIR/tracing/tracing_on")
++	CURRENT_TRACER=$(cat "$SYSFS_DEBUG_DIR/tracing/current_tracer")
++	FTRACE_FILTER=$(cat "$SYSFS_DEBUG_DIR/tracing/set_ftrace_filter")
+ }
+ 
+ function pop_config() {
+@@ -74,6 +77,17 @@ function pop_config() {
+ 	if [[ -n "$KPROBE_ENABLED" ]]; then
+ 		echo "$KPROBE_ENABLED" > "$SYSFS_KPROBES_DIR/enabled"
+ 	fi
++	if [[ -n "$TRACING_ON" ]]; then
++		echo "$TRACING_ON" > "$SYSFS_DEBUG_DIR/tracing/tracing_on"
++	fi
++	if [[ -n "$CURRENT_TRACER" ]]; then
++		echo "$CURRENT_TRACER" > "$SYSFS_DEBUG_DIR/tracing/current_tracer"
++	fi
++	if [[ "$FTRACE_FILTER" == *"#"* ]]; then
++		echo > "$SYSFS_DEBUG_DIR/tracing/set_ftrace_filter"
++	elif [[ -n "$FTRACE_FILTER" ]]; then
++		echo "$FTRACE_FILTER" > "$SYSFS_DEBUG_DIR/tracing/set_ftrace_filter"
++	fi
+ }
+ 
+ function set_dynamic_debug() {
+diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
+index fe14f248913acbec46fb6c0fec38a2fc84209d39..66af5d726c52e48e5177804e182b4ff31784d5ac 100755
+--- a/tools/testing/selftests/livepatch/test-ftrace.sh
++++ b/tools/testing/selftests/livepatch/test-ftrace.sh
+@@ -61,4 +61,37 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
+ % rmmod $MOD_LIVEPATCH"
+ 
+ 
++# - verify livepatch can load
++# - check if traces have a patched function
++# - unload livepatch and reset trace
++
++start_test "trace livepatched function and check that the live patch remains in effect"
++
++TRACE_FILE="$SYSFS_DEBUG_DIR/tracing/trace"
++FUNCTION_NAME="livepatch_cmdline_proc_show"
++
++load_lp $MOD_LIVEPATCH
++
++echo 1 > "$SYSFS_DEBUG_DIR/tracing/tracing_on"
++echo $FUNCTION_NAME > "$SYSFS_DEBUG_DIR/tracing/set_ftrace_filter"
++echo "function" > "$SYSFS_DEBUG_DIR/tracing/current_tracer"
++echo "" > "$TRACE_FILE"
++
++if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
++	echo -e "FAIL\n\n"
++	die "livepatch kselftest(s) failed"
++fi
++
++grep -q $FUNCTION_NAME "$TRACE_FILE"
++FOUND=$?
++
++disable_lp $MOD_LIVEPATCH
++unload_lp $MOD_LIVEPATCH
++
++if [ "$FOUND" -eq 1 ]; then
++	echo -e "FAIL\n\n"
++	die "livepatch kselftest(s) failed"
++fi
++
++
+ exit 0
 
+---
+base-commit: fc033cf25e612e840e545f8d5ad2edd6ba613ed5
+change-id: 20250101-ftrace-selftest-livepatch-161fb77dbed8
+
+Best regards,
 -- 
-Joe
+Filipe Xavier <felipeaggger@gmail.com>
 
 
