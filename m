@@ -1,160 +1,191 @@
-Return-Path: <linux-kselftest+bounces-24301-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24302-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 122E9A0A7CF
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Jan 2025 09:55:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0680AA0A84F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Jan 2025 11:42:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E56C1655DF
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Jan 2025 08:55:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E18A7A31D9
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Jan 2025 10:42:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0126187FE4;
-	Sun, 12 Jan 2025 08:55:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D25871990DB;
+	Sun, 12 Jan 2025 10:42:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bt//TFsj"
+	dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b="ph2OkD71";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="q1z/HPfC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from flow-b2-smtp.messagingengine.com (flow-b2-smtp.messagingengine.com [202.12.124.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74747BA3F;
-	Sun, 12 Jan 2025 08:55:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64DF319CC0A;
+	Sun, 12 Jan 2025 10:42:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736672110; cv=none; b=EQDY3X1LxpfaUK/A8JEC10M7mS2YoOtTSavQ6/z2PJvpOZ+lnrBUyuu+wxbHpqHW5/sBRzYmhbLwOvo8cTkESajyXAlVAms4/pfIbFo7+lMJWqofQetqWGTjp3qnduv0lodX3cqnJ5W9/as8j7qyhfbzI4jKQNzcaZ0LCqoyukE=
+	t=1736678526; cv=none; b=A1HvReypL7lCCLdfIrnenmtRPb617xq+9rxlXvbM/nuhAsK9MySyuFqyZ9C/hE2nNBCrOarFvnhcBslfbRtf7G2N6LwKtVglnahEWOML4yJR5zKe+ZPip64P7K5SWjL7PtRvmE8WdGJZdNwe5DpZ+bzQzFG3KfhBZfZAqmAT+1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736672110; c=relaxed/simple;
-	bh=2OdLtNhpOzwVLBuyjT4Pmrh9g+J++anxIOyBzX8oFRo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HkjMZhR5L/feVFOhkqcEWoMNuSUZHG6EJsS0e7X7AxoycWZKSWsWpbs24+P9syEXDhHdSYcDDIEyw4Oc7OpUqPYcizKrsD7VIgBeZxKTl9SnTxdz72uN5zbJYCvZ0Xc3gLAc+aP/R0sTvhcItM3ROoxAdZDRYpSHq1wzzfzmqhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bt//TFsj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78674C4CEDF;
-	Sun, 12 Jan 2025 08:54:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736672109;
-	bh=2OdLtNhpOzwVLBuyjT4Pmrh9g+J++anxIOyBzX8oFRo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bt//TFsjp7oBP/+mYKotPM1CCH/pvCViP9lReiFZD2VikywkhE1q0XvAzRMYgR9w/
-	 rDXqF5aM9MujwGkgmdrwVN+U9S/HNKSeUhH0oeUj1JklV0TXx4lQhSwaKnFu9xce32
-	 ftWG7NtXr9D1Marf2RroYue+KEiHc08VUhcxsxtgtvH/1RuSspxTlk/8FfWRwTUUWL
-	 GQrOHNuzVf53wyl/rIxgHT4G9jfVuY7AOydTBH62p6BSjVcKmEwo1PW/k1dMtwfkJE
-	 pWwQqokKV7JcLsi4Ix+zyeqNEodjirjOo+JMvLDH6LUhiX+SLLVYTId1lNsII6yjXH
-	 ekVDGfSuma34Q==
-Date: Sun, 12 Jan 2025 10:54:46 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Andy Lutomirski <luto@kernel.org>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Daniel Thompson <danielt@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	David Gow <davidgow@google.com>,
-	Douglas Anderson <dianders@chromium.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Jason Wessel <jason.wessel@windriver.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>, "H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Petr Mladek <pmladek@suse.com>, Petr Pavlu <petr.pavlu@suse.com>,
-	Rae Moar <rmoar@google.com>, Richard Weinberger <richard@nod.at>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	kgdb-bugreport@lists.sourceforge.net, kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, linux-modules@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	live-patching@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 3/8] x86/mm/pat: Restore large pages after fragmentation
-Message-ID: <Z4ODVmnC4fDnIUSN@kernel.org>
-References: <20241227072825.1288491-1-rppt@kernel.org>
- <20241227072825.1288491-4-rppt@kernel.org>
- <jut35igb2kstpz24apqdeubv5rvyl3vmp2s43xtivpz54uiedj@wmd2onulv4xw>
+	s=arc-20240116; t=1736678526; c=relaxed/simple;
+	bh=UylQ7hbe4mvYcKxM8lJiBMUtP4NwfWTA1XOCBBEM710=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=g9qKoVKwUcl3KvZfkwuHOjj4Zn8J/y0iH1IwhF8ZbHC162oauFbLWcFFNoTX+k9cQDoy1O4hf8Z8Ot5hMW3PFanQuhGDlBodZGOVOQ9z065pQr24W6EoVdIYo8yWNB7y+MpVL0Z2rLNRiA37N/6L4MaF7j/HGjJGOV1Cy9XnVu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name; spf=pass smtp.mailfrom=coelacanthus.name; dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b=ph2OkD71; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=q1z/HPfC; arc=none smtp.client-ip=202.12.124.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=coelacanthus.name
+Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
+	by mailflow.stl.internal (Postfix) with ESMTP id 4F0DF1D40AA4;
+	Sun, 12 Jan 2025 05:42:02 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-06.internal (MEProxy); Sun, 12 Jan 2025 05:42:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	coelacanthus.name; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1736678522; x=1736685722; bh=oaDf/Ac90E
+	bejoB/UI1UVChf0YVbXYbpJL+sA5TcwZA=; b=ph2OkD71U6adFSgvCCpweFwQ1u
+	ksLpq9skHD0NkR8SWwZaDBvVR/1bzMZbCtABSHPQOQ5F7X5nnDU2x6Sd24UxW0Hv
+	F8Of8CWWpECV4frNAjMiwr/MQm2dsxKP4aPwHyds+qdXSfZias6aAk2l8FV/fy+l
+	AM0FfqCqzCmTxRFd9ldYQNdRB73BDrjPkSD7qVtKsXTjmSLzA9PT0rcErWBIdhnY
+	olz/EhS7L4XICp/7nzhz55P2mEmcV3gKPdTKjtNu4iag1nI+rRK7UKEplugCnoBi
+	b6BnWypqnUvztKn/IS5RmncLM+n5KHyV1lYWfLjX+SYxn1Uo7qOTifESXGJQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736678522; x=
+	1736685722; bh=oaDf/Ac90EbejoB/UI1UVChf0YVbXYbpJL+sA5TcwZA=; b=q
+	1z/HPfC5wlgKu1dvVWJdLaRsgHPdXHotzZJ5o1fB8vAVQ+h9V2BDjngziPYn1VNt
+	84c/qZLWkCKSqbQfKV/dWei8IHTEZfF5f+3sVKQwG+9gz75ig/T3weSknkMmtuDr
+	2mDuIYlK2H5Hbmv6YxvZiva+B5tKPK0AD3peJDbUVem5ef53Hwt2wgMnfvMLoVGP
+	O9tI6YrZgITmi9E7moVRtzAgb3p8cgoA+t08IMfVt0yD1jbsjRc2AmaorIVUu5W0
+	HRuRc7+RxB+ROWZJ+IJj3iSydC9j5OgwcvzfglRqyuW2E/dC8Xd7+zTeWAlMFLyE
+	4ZKkRVIkGDu25EFvwewVQ==
+X-ME-Sender: <xms:eJyDZ2RG0QfEE5sJzrKmOa3GKMYNSTar3cymEzku1I4-M1QsaGaXBg>
+    <xme:eJyDZ7zsfj3PcfHw8oDBarFmECKDPz7r-n2iYpRt-kkflmD80VAzq7DbSEDSySZJ-
+    H0qOnV1FycnAV-_zYs>
+X-ME-Received: <xmr:eJyDZz0MbHSWNCu0n3_M68QX8nPAtUFmjt_d4b8KwENphPmMWnvmzW3NKZkpQKIb>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehvddgudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtvdej
+    necuhfhrohhmpeevvghlvghsthgvucfnihhuuceouhifuhestghovghlrggtrghnthhhuh
+    hsrdhnrghmvgeqnecuggftrfgrthhtvghrnhepfefhfeefteekgedvfeehhfefvedutedt
+    fefhkeeileehgefgveffvdffudehhfeknecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepuhifuhestghovghlrggtrghnthhhuhhsrdhnrghmvgdp
+    nhgspghrtghpthhtohepvdefpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegthh
+    grrhhlihgvsehrihhvohhsihhntgdrtghomhdprhgtphhtthhopehlughvsehsthhrrggt
+    vgdrihhopdhrtghpthhtohepohhlvghgsehrvgguhhgrthdrtghomhdprhgtphhtthhope
+    hprghulhdrfigrlhhmshhlvgihsehsihhfihhvvgdrtghomhdprhgtphhtthhopehprghl
+    mhgvrhesuggrsggsvghlthdrtghomhdprhgtphhtthhopegvsghivgguvghrmhesgihmih
+    hsshhiohhnrdgtohhmpdhrtghpthhtohepkhgvvghssehkvghrnhgvlhdrohhrghdprhgt
+    phhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrohhusegvvg
+    gtshdrsggvrhhkvghlvgihrdgvughu
+X-ME-Proxy: <xmx:eJyDZyBwHxi6hGuPnApGDGL0oR7tdXX2zNO3zrctot6Y2dnA2Q4zzA>
+    <xmx:eJyDZ_hB490Z5liCm7rcUr7qePELh2VGdIhiSUMGOzE_LTXCXZwqcA>
+    <xmx:eJyDZ-qCjgj1e6N2y82jxhJ9fhZvvt-_xPe19VUSaaUZnl349Verog>
+    <xmx:eJyDZyiLobx_jdQIJzud-Ztz92M0ohFxjF3pIG_T3dW9tZN_DqaOfg>
+    <xmx:epyDZygjILnW2BAo23eprz0jdRwOKUmmO6ZDU0bbZJ2k3wU6b2s9JzL_>
+Feedback-ID: i95c648bc:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 12 Jan 2025 05:41:52 -0500 (EST)
+Message-ID: <0b538b70-bc14-4038-a1b2-428192d6f51b@coelacanthus.name>
+Date: Sun, 12 Jan 2025 18:41:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <jut35igb2kstpz24apqdeubv5rvyl3vmp2s43xtivpz54uiedj@wmd2onulv4xw>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/2] riscv: selftests: Add a ptrace test to verify
+ syscall parameter modification
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: "Dmitry V. Levin" <ldv@strace.io>, Oleg Nesterov <oleg@redhat.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Eric Biederman <ebiederm@xmission.com>,
+ Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+ Andrea Bolognani <abologna@redhat.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Ron Economos <re@w6rz.net>, Andrew Jones <ajones@ventanamicro.com>,
+ Quan Zhou <zhouquan@iscas.ac.cn>, Guo Ren <guoren@kernel.org>,
+ Eugene Syromyatnikov <evgsyr@gmail.com>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@rivosinc.com>
+References: <20241226-riscv-new-regset-v4-0-4496a29d0436@coelacanthus.name>
+ <20241226-riscv-new-regset-v4-2-4496a29d0436@coelacanthus.name>
+ <20241226133459.GA30481@strace.io>
+ <2e09aedc-44ba-40e3-ae93-1d6dc21b5eb1@coelacanthus.name>
+ <Z4CVQKkViqJycnaq@ghost>
+Content-Language: en-GB-large
+From: Celeste Liu <uwu@coelacanthus.name>
+In-Reply-To: <Z4CVQKkViqJycnaq@ghost>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Kirill,
-
-On Fri, Jan 10, 2025 at 12:36:59PM +0200, Kirill A. Shutemov wrote:
-> On Fri, Dec 27, 2024 at 09:28:20AM +0200, Mike Rapoport wrote:
-> > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> > 
-> > Change of attributes of the pages may lead to fragmentation of direct
-> > mapping over time and performance degradation as result.
-> > 
-> > With current code it's one way road: kernel tries to avoid splitting
-> > large pages, but it doesn't restore them back even if page attributes
-> > got compatible again.
-> > 
-> > Any change to the mapping may potentially allow to restore large page.
-> > 
-> > Hook up into cpa_flush() path to check if there's any pages to be
-> > recovered in PUD_SIZE range around pages we've just touched.
-> > 
-> > CPUs don't like[1] to have to have TLB entries of different size for the
-> > same memory, but looks like it's okay as long as these entries have
-> > matching attributes[2]. Therefore it's critical to flush TLB before any
-> > following changes to the mapping.
-> > 
-> > Note that we already allow for multiple TLB entries of different sizes
-> > for the same memory now in split_large_page() path. It's not a new
-> > situation.
-> > 
-> > set_memory_4k() provides a way to use 4k pages on purpose. Kernel must
-> > not remap such pages as large. Re-use one of software PTE bits to
-> > indicate such pages.
-> > 
-> > [1] See Erratum 383 of AMD Family 10h Processors
-> > [2] https://lore.kernel.org/linux-mm/1da1b025-cabc-6f04-bde5-e50830d1ecf0@amd.com/
-> > 
-> > [rppt@kernel.org:
-> >  * s/restore/collapse/
-> >  * update formatting per peterz
-> >  * use 'struct ptdesc' instead of 'struct page' for list of page tables to
-> >    be freed
-> >  * try to collapse PMD first and if it succeeds move on to PUD as peterz
-> >    suggested
-> >  * flush TLB twice: for changes done in the original CPA call and after
-> >    collapsing of large pages
-> > ]
-> > 
-> > Link: https://lore.kernel.org/all/20200416213229.19174-1-kirill.shutemov@linux.intel.com
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > Co-developed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+On 2025-01-10 11:34, Charlie Jenkins wrote:
+> On Thu, Dec 26, 2024 at 11:21:59PM +0800, Celeste Liu wrote:
+>>
+>> On 2024-12-26 21:35, Dmitry V. Levin wrote:
+>>> On Thu, Dec 26, 2024 at 06:52:52PM +0800, Celeste Liu wrote:
+>>>> This test checks that orig_a0 allows a syscall argument to be modified,
+>>>> and that changing a0 does not change the syscall argument.
+>>>>
+>>>> Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
+>>>> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
+>>>> Co-developed-by: Charlie Jenkins <charlie@rivosinc.com>
+>>>> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+>>>> Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
+>>>> Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
+>>> [...]
+>>>> diff --git a/tools/testing/selftests/riscv/abi/ptrace.c b/tools/testing/selftests/riscv/abi/ptrace.c
+>>>> new file mode 100644
+>>>> index 0000000000000000000000000000000000000000..023695352215bb5de3f91c1a6f5ea3b4f9373ff9
+>>>> --- /dev/null
+>>>> +++ b/tools/testing/selftests/riscv/abi/ptrace.c
+>>> [...]
+>>>> +	if (ptrace(PTRACE_GET_SYSCALL_INFO, pid, PTRACE_SYSCALL_INFO_ENTRY, &syscall_info_entry))
+>>>> +		perr_and_exit("failed to get syscall info of entry\n");
+>>>> +	result->orig_a0 = syscall_info_entry->entry.args[0];
+>>>> +	if (ptrace(PTRACE_GET_SYSCALL_INFO, pid, PTRACE_SYSCALL_INFO_EXIT, &syscall_info_exit))
+>>>> +		perr_and_exit("failed to get syscall info of exit\n");
+>>>> +	result->a0 = syscall_info_exit->exit.rval;
+>>>
+>>> I'm sorry but this is not how PTRACE_GET_SYSCALL_INFO should be used.
+>>>
+>>> PTRACE_GET_SYSCALL_INFO operation takes a pointer and a size,
+>>> and in this example instead of size you pass constants 1 and 2, which
+>>> essentially means that both syscall_info_entry->entry.args[0] and
+>>> syscall_info_exit->exit.rval are not going to be assigned
+>>> and would just contain some garbage from the stack.
+>>>
+>>> Also, PTRACE_GET_SYSCALL_INFO operation returns the number of bytes
+>>> available to be written by the kernel, which is always nonzero on any
+>>> PTRACE_GET_SYSCALL_INFO-capable kernel.  In other words, this example
+>>> will always end up with perr_and_exit() call.
+>>>
+>>> I wonder how this test was tested before the submission.
+>>
+>> Oops... It seems I forget sync the code to test board so it runs with the old code...
+>> The code is completely not tested...
+>> I'm so sorry for my mistake.
+>>
+>> I will correct it and test it carefully later...
 > 
-> When I originally attempted this, the patch was dropped because of
-> performance regressions. Was it addressed somehow?
+> It would be great to get this into 6.14. Let me know if you would like
+> any help!
 
-I didn't realize the patch was dropped because of performance regressions,
-so I didn't address it.
+Sorry, delayed due to personal reasons. I have returned to this job recently.
+The update patchset will be sent tomorrow.
 
-Do you remember where did the regressions show up?
- 
-> -- 
->   Kiryl Shutsemau / Kirill A. Shutemov
 > 
+> - Charlie
+> 
+>>
+>>>
+>>>
+>>
 
--- 
-Sincerely yours,
-Mike.
 
