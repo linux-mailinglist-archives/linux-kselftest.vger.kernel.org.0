@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-24412-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24413-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 785A0A0C4FB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2025 23:59:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6B41A0C51F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 00:06:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B4883A1333
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2025 22:59:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A56373A798D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2025 23:06:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE4C91F9A95;
-	Mon, 13 Jan 2025 22:59:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D871D1F9ECE;
+	Mon, 13 Jan 2025 23:06:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DSUmBqI7"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fGN55zD+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB6C1BFE05
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jan 2025 22:59:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 368401CACF6
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jan 2025 23:06:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736809168; cv=none; b=njwV7SF4C+L8RpcfMT/ipISi4FpMb+YNjO33t1QuxI4ezlG07BN/d8A7Xvozvu0xVH0p9Sb2zvNeIf9Zp99nzd8ApS72v9vO662sFx6xIqi7gxlD/cUSqEnuvtm36OHB2QPYmoKgJFHlOFJzDr7W0yQn0TzeczYEW3cwRU/T55M=
+	t=1736809603; cv=none; b=Ahz8WozQRwg9ehfDHPQnUvS+jIQRBHXPll206B6U8Y/MzNXcQ6LNJZHWpAilwL9Zd0EcB6PUc6NoF9xtWtrxWPVic34jenajt5FfuCxh3mZLeYNxOTfrk+y08GLKQKibgezXg4zrjw3dEyVzKiY6Lw3j2McD+VzCUPSPr8WZAZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736809168; c=relaxed/simple;
-	bh=Y1Sf8wRGQ2ymwBDVZ2CefySURUrE7CJVRkTHWYLe6Q4=;
+	s=arc-20240116; t=1736809603; c=relaxed/simple;
+	bh=FY3CAUHnUAGPlAvnTqBwytKqjfIe0H96ZK2+kvt3Gpo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X4iJWlHb0UZIjJiY94UukleOAEksO/FBDbDloEfQFg6XSvCvlYt87WEvRD1NmIZuiineSq73DAnWJlIhqISN9tp3VDl87IN2gyBxsZOB2FEnGoK//j5nEBWcrKh0vGEw5M2r2wwjZLGAR8VL8JmoCIn0814LXYjd/O4gzdfkkts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DSUmBqI7; arc=none smtp.client-ip=209.85.166.47
+	 In-Reply-To:Content-Type; b=SNgbD+hANurzUoZztFk86rVye81tzxu43qQRtIhv2FSk0Xq0F1pxa9SAp6kPdWhmcke0ftms/Kfj+tOgKj/O8i5uoiV67Nnwfu3OxuisjATmoIQhYGI8TipK4l4O0zlAowiFNM3LATjHaVO3ypIIZsP1E1osiCP7CYd1sePavxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fGN55zD+; arc=none smtp.client-ip=209.85.166.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-844ee15d6f4so383018639f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jan 2025 14:59:25 -0800 (PST)
+Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-844e6d1283aso190304239f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jan 2025 15:06:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1736809165; x=1737413965; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1736809600; x=1737414400; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GQ2gkNd4r9DMxTqkbVKwWo3rDcj05xjd+dF6fL8Gq6E=;
-        b=DSUmBqI72hPk9seFSWz3nk3/xvRtkC1lbakZJSo3O/F90kACpsCJyOoLHQmMbdSlWc
-         ZKq5+PVvZ7+VIRMFkMJl0Bwp9JYf0ME3gQrZgZIdcjbvqM2Pi2GQXZAX/hf3RT9L7+aP
-         Bd5tbrdtBKocLBZ9/Es8BkCjx7CrnI/mBaaG0=
+        bh=t98L05cLqoN9QlNAdFWwtAB2uSyAKNpsq0R3tlTJnx4=;
+        b=fGN55zD+QPKLTIC1ERc58hM9umFVkrs3t9SSVj3jKPYQaee3iswV/0spT0NsKCUget
+         JEyaj3elRNTisN9FN7FtU5LE4NLRwVksQ6Iqm7IzCO96TvYeJpyB84YBTzrg3KQtZIFP
+         uHobzoMZG9AS9FwjzAsqrxgm2ABSeadHkVotc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736809165; x=1737413965;
+        d=1e100.net; s=20230601; t=1736809600; x=1737414400;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GQ2gkNd4r9DMxTqkbVKwWo3rDcj05xjd+dF6fL8Gq6E=;
-        b=a2xarr9N4BEqydLq+TqP7JTUXOGt2nxKdW5Gj/68aipUGVzIVnZhd14c0F3q7junTz
-         ghMqYt+46wDlTTGnHd9v1cyoLExKvqTL93Azwe6L3bxUDsKx9YDCDTFhMyV53512O6Nt
-         U6E3j1/L9fZLg3POveOFNM3CdJ0beDLBP3gCLh7CtL5J+ajtBTqjnRd6djo1pfL1xndM
-         K/TfbIQw7HT8Xh1JvQV/pMFXV7WLIWyUkqYOzIelewHDqVSnbVTgOkzy8J1Vxo1miuDp
-         InMs0xzxE9ih3zjL+zSXyqCIh0CH9VMxt40EcFb3UKt8JIZsKWdAcjq1kzlFI89JGAJ2
-         TtXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW1dSjQZpD9M4vo6cjFl7MusKCrcNAic0NTSVVng0GQfbWtZr5iLhVX8HT/97VTyyV/WKDqyOg7ldCoXgZWV4o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUHK57eiXoom6YUqpvmow1zddfsekPW0tVAizmAaTexOQwmVDZ
-	NpXx+LmCDaCnjWBcTO3zIxSmd3WeR6ZdtQ5VoKVnT5NdbrCkj9STjwQWlY9jrQo=
-X-Gm-Gg: ASbGncuel9RafRGJQZKk0eDIlLvdWkIDImGg8HXwznoIM8U5fWJQ7Ik2QM/pqqne4Mr
-	kcbBZuerCGnM12vrLQcl5FSk1k21vlbDQMJBmupNjzB8ZplArBnQaOQY94R8oKw98/i+8pfv2ie
-	OnBm7PmmjZDcOfbZB6me+eAM7QB278wrSLrs8jxqclpZLpW8t9KjTmGn3h1W1zoFpfyW/VeEOcr
-	/rcLhPhdFKZn+WhNKyLGNZXfh5JO5Y/NGlinmlIMlGAi6aavrtGumYS3oqBdrKi/TM=
-X-Google-Smtp-Source: AGHT+IHOuxI2cX2rWco2UdItAy0w43rmA9Z7pNHw9QLL1Jzj184Hh3jFHAinlOQ+DJl0iE7GLseE7w==
-X-Received: by 2002:a05:6602:3e8f:b0:83a:a746:68a6 with SMTP id ca18e2360f4ac-84ce0095b54mr2190395039f.5.1736809165348;
-        Mon, 13 Jan 2025 14:59:25 -0800 (PST)
+        bh=t98L05cLqoN9QlNAdFWwtAB2uSyAKNpsq0R3tlTJnx4=;
+        b=q6Jjv+M9ApO1RIj3IBirrDw2plFeSelpevNeK3GQ4nPM+NIYiWbPzc622aeiDWbIFw
+         XWu4Amy6C3IL33akVZpvF9DWqGPEi5FpgFYtLept7tTPIywYqYWejevldCdXDEKP7of/
+         mK0GAXxCdlHztGipYVFnI3mRyMzLaNxtwAYSuxFQkTBC0q0vQQZc+N4xlMs2MUBdedgB
+         fTRXZ/Qz6cXB/qJ3lwmJLVdDafEDtcvWm0/C0yNmUfwUaLBNUbFQrHM29fYFUj1ZBrdM
+         QjUpSjsjVWmDTu1aMihn/NEkPrQHD/3KMaXe3V6OB1+UAVjKZ9eOTnXobbFwQYaNipix
+         VzzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWSFqXrDDBffQYU2tEMXwJ8fGfnvZiUCUrfO6D5r4l0iN6IM83wCLoCWjhhAFu0xFrUO/nw4ETS4B6vUi/689Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YySuCZHoSgIeav4Vpb7wqH5ysllOshnk4faGZd0Mp8NwZdyXXER
+	NLX8NpCsy0zmp1BVzbfMyzyDiiM53oDxWmfvqeW8HWecNp5VCBQLVRnR0sn74Mc=
+X-Gm-Gg: ASbGncuJGDjJkDSwtJdPc0AFyZVG0bBGbn5HvhtjosQ8ahe9hTZPgyqNVj7nhpcP7up
+	O1AVdRGahVjCPwU8nlkNLoege/DmOIPnwSHIXKxW+dsCbPo73KEjnqCGnh+4ARoeMzJlyfPTS05
+	Nay4N8jbC7n/l04O+P5+RY7vL5qAYBj8Zuwyy031yZUg+va+yOlYfT5EuFXj8hnGNUvJL0Begh0
+	UtHEW/had4KBcA8ce6Jw1T8Vx8as+DtvuBQPeNwSeJt1on7N3VE2I2q+dn0tsH4T2s=
+X-Google-Smtp-Source: AGHT+IH8D8/WA3nsz270K68ibq75FwpYAmp8r79kGSFWGw5muQ30GDD6Uv2Knph7vskIzmqScVtI3A==
+X-Received: by 2002:a05:6e02:1a8f:b0:3cd:c260:9f55 with SMTP id e9e14a558f8ab-3ce47570cd3mr131591595ab.4.1736809600570;
+        Mon, 13 Jan 2025 15:06:40 -0800 (PST)
 Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-84d4fb403b7sm291636339f.24.2025.01.13.14.59.24
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ea1b717838sm3014196173.102.2025.01.13.15.06.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jan 2025 14:59:24 -0800 (PST)
-Message-ID: <3bcdf139-81e2-4ef3-8e86-1e22b4df6d49@linuxfoundation.org>
-Date: Mon, 13 Jan 2025 15:59:24 -0700
+        Mon, 13 Jan 2025 15:06:40 -0800 (PST)
+Message-ID: <15339541-8912-4a1f-b5ca-26dd825dfb88@linuxfoundation.org>
+Date: Mon, 13 Jan 2025 16:06:39 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,49 +77,36 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] rseq/selftests: Fix riscv rseq_offset_deref_addv inline
- asm
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Stafford Horne <shorne@gmail.com>, LKML <linux-kernel@vger.kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>,
- "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+Subject: Re: [PATCH] selftests/rseq: Fix rseq for cases without glibc support
+To: Raghavendra Rao Ananta <rananta@google.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
  Shuah Khan <skhan@linuxfoundation.org>
-References: <20250103040326.2603734-1-shorne@gmail.com>
- <44f202e8-dc35-40aa-8dc3-2f2e4c28feda@efficios.com>
+References: <20241210224435.15206-1-rananta@google.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <44f202e8-dc35-40aa-8dc3-2f2e4c28feda@efficios.com>
+In-Reply-To: <20241210224435.15206-1-rananta@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 1/10/25 09:22, Mathieu Desnoyers wrote:
-> On 2025-01-02 23:03, Stafford Horne wrote:
->> When working on OpenRISC support for restartable sequences I noticed
->> and fixed these two issues with the riscv support bits.
->>
->>   1 The 'inc' argument to RSEQ_ASM_OP_R_DEREF_ADDV was being implicitly
->>     passed to the macro.  Fix this by adding 'inc' to the list of macro
->>     arguments.
->>   2 The inline asm input constraints for 'inc' and 'off' use "er",  The
->>     riscv gcc port does not have an "e" constraint, this looks to be
->>     copied from the x86 port.  Fix this by just using an "r" constraint.
->>
->> I have compile tested this only for riscv.  However, the same fixes I
->> use in the OpenRISC rseq selftests and everything passes with no issues.
->>
->> Signed-off-by: Stafford Horne <shorne@gmail.com>
+On 12/10/24 15:44, Raghavendra Rao Ananta wrote:
+> Currently the rseq constructor, rseq_init(), assumes that glibc always
+> has the support for rseq symbols (__rseq_size for instance). However,
+> glibc supports rseq from version 2.35 onwards. As a result, for the
+> systems that run glibc less than 2.35, the global rseq_size remains
+> initialized to -1U. When a thread then tries to register for rseq,
+> get_rseq_min_alloc_size() would end up returning -1U, which is
+> incorrect. Hence, initialize rseq_size for the cases where glibc doesn't
+> have the support for rseq symbols.
 > 
-> Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> 
+> Cc: stable@vger.kernel.org
+> Fixes: 73a4f5a704a2 ("selftests/rseq: Fix mm_cid test failure")
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> ---
 
-If these are going through risc repo
-
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-
-If you would like me to take this, let me know.
+Applied to linux_kselftest next for Linux 6.14-rc1 after fixing the
+commit if for Fixes tag
 
 thanks,
 -- Shuah
