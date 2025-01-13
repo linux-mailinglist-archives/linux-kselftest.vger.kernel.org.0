@@ -1,134 +1,220 @@
-Return-Path: <linux-kselftest+bounces-24327-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24328-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56E73A0B267
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2025 10:09:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFF34A0B28F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2025 10:18:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C7DD1676EA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2025 09:09:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A25F73A214B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2025 09:18:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 839FF23979E;
-	Mon, 13 Jan 2025 09:09:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88FE423872C;
+	Mon, 13 Jan 2025 09:18:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="mcaohpNQ";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="k+8qHVUq"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="EmIO+rDv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60154237A24;
-	Mon, 13 Jan 2025 09:09:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B352E234962
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jan 2025 09:18:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736759371; cv=none; b=Hc8ukjoxGR9s2VCR4gyqgYofs8HuiL5EcFZTo5Ht5OUftZzl2Umoi8JyHDRa+SeCLpWqGWtA+7EBaPIY3wCBXoYZZLuGPQRs83dI6so97JukfCF0k5HWdU1bTv3o4rOmLWj/5XFWHQiC9MML2HY4i+M4x7NUKdwuXKObfCC8Lbo=
+	t=1736759893; cv=none; b=pD9M9/Fnu7MDXywzlhevYzxUOlLlOKSmZJ+R7bMRSRpy39PYr9ToPUN4QpQMKzl1WFjGaLa8dWNYTj/GHZF5nf4xWQYPPx+0YlGeZVnl5mx11FMnoMaFeLwgpX1nCQUazLSMXqt/Hfq60ypHkZG4QpZlXFVnkpuycFSru6NmPXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736759371; c=relaxed/simple;
-	bh=1fM1Az5QRn4ri1PSilPTe5LZp1jm/BOHCoYc5LvH38I=;
+	s=arc-20240116; t=1736759893; c=relaxed/simple;
+	bh=MxD98rkF6qDAaTJ28GtgUIk05vVOZ2HyLy7W+HdhNbo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HVVUri+Eg3quTUZjH89AQ/gQHEPkjCP8sxi7NeaJdOM30DekKlkd6j3K/T41R2soTQg+q+t046h5qUKBUquu88C+L3e7eAJNGkSEtb/qf+Ud2nhlkmhyrGCIAH2bzuP/dTDY9jRA5SGBqus9lSinyWKLgtjZ7Dn0Kf/JPvCQv64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=mcaohpNQ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=k+8qHVUq; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Mon, 13 Jan 2025 10:09:25 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1736759367;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iaLJCE3hZZaKYg76kr4H+6YhZeYEIBWjz6gvokJ8d2w=;
-	b=mcaohpNQiMTCqKmmAsznrkto+jkaQNMg/3nkJ+6jZwFcZHMMOApc4jrv+kZUrAPmG9hvsU
-	bfH377Lks/ZZ3sBmXDF0UR1SY5XI9YE2aI5k/kEb6W4TYt1VbQ+37gSXi5msPhM4c5EfcN
-	X3eIB85RO23IIcoaFQupU8hiYHfWe7jlmqaJgRLM/nmlDGUfrIcu+OF06ZQ1hVjzpUgVzm
-	TluqBiWyfFTAVDotMghElkSQdcOBCuIbEdJLHt0160+MkyLIYG+SZ7AluSej2p39EbQ3iQ
-	6UPbfqLifwvb+pjjilzujLFjJakXLEt15qJIwurWWULwoj92fZeHM9nKRQx1RQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1736759367;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iaLJCE3hZZaKYg76kr4H+6YhZeYEIBWjz6gvokJ8d2w=;
-	b=k+8qHVUq/yui+wPfgv7TJls0yz4ZNoWIiI0adnkZkh3awxwDlnU8ITZCt9jh7Tcd+JEkUz
-	uz5RWe1Ro5KsXKDA==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: David Hildenbrand <david@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Dev Jain <dev.jain@arm.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kernel test robot <oliver.sang@intel.com>
-Subject: Re: [PATCH v2 3/3] selftests/mm: virtual_address_range: Avoid
- reading VVAR mappings
-Message-ID: <20250113095211-bde77070-8be1-4393-898e-22eff532189b@linutronix.de>
-References: <20250110-virtual_address_range-tests-v2-0-262a2bf3c3d0@linutronix.de>
- <20250110-virtual_address_range-tests-v2-3-262a2bf3c3d0@linutronix.de>
- <9243dd8e-3f03-4ed5-bdcf-95c947c57849@redhat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=h2WfjRYqandx9XnJbqecZCws2WdznLcOOkvHSIxCvfemguMiQDL0XQOKhkdSFyk8nr5HGJIAQlG3iVF0Q97BG/7xrJ47p8pgCaKnFHtvmqaD9qajvzVQj3ZdAQir0llie8/3nG4d0W1YJ1cMX642SjS8HUXSI0IXNfM58GPbhmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=EmIO+rDv; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5d3ecae02beso5231608a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jan 2025 01:18:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1736759890; x=1737364690; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=i7ow4LmK8LAIX2pz+FFCl7mzerfRukfRpE2elRTOITM=;
+        b=EmIO+rDvh/kQh+IPtQmKWyvgwoYItU/DYJucCn0NvjW5jppQCFSkio27RYkzCAdHVo
+         laic4nrrrkJh2Ou3aZw3lI2C7I6ESTvsSCL6bizMG6kTCFrNhTQUZZCkPkjmESh1VwsW
+         rfarhdYQOTTtvurqlBCcWW+tCUr96L5vpwTe2vRSBL6CY0jBRSQt8v2owVgb9u+7G9nV
+         fcaRNKmMQcvInE7sciQY//k9j12EzlR3BqbgfQuw6+uo5m68cKTwN2YEB4WX2NFgra6N
+         bEsu74ye96odVK10GwGwt9DNIfNOsQZxONpBbjGnBV3nTUdynd0Uq49aF5loXx2mkiTO
+         BnYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736759890; x=1737364690;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i7ow4LmK8LAIX2pz+FFCl7mzerfRukfRpE2elRTOITM=;
+        b=jLzi3M8ERjW3JlFTSNZGrzlBfpgGy/az5kdF3aKcyTqIK11LqiX4mVbSI+eJ0RLs3Z
+         VlzgFkqJBw42Qpc2H7Ak7+8hBTD5GMtKngrxcyR6ZKB9HjHaSYSuUkTDQjwi9JmWYoek
+         E/GkVXfeAoW5KvaC0u9SjVk5EXKiVs6lGoWw3+myi5gZeAZjLGJdrmFDwxWhyGSsDL5q
+         Rm7vYyiuz8Nf0n23WbGGMOeuapCnSQy7YeREp8WOOJ86fSleNcsgChBhC0eYPXdt3K9F
+         fx3Pwz2lQvnAmhbymkxjbm1CVFu2fZremfPNA1fjdrQzqvjnZWfbI2giZd9jG7aTzE7d
+         lETw==
+X-Forwarded-Encrypted: i=1; AJvYcCVUsRDQKTNFt56ccJRUYlG4bbgt7jySca+Bbynae9Tmr+vfO5LD0LxPoH+UupGFlTvlrPWjQIVYWbnHkSYghak=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxf4t5MeDhXilIK29erBlYw17/1HABzosMuyyPMG99AVt/yP1ih
+	AjfO+pnNbMls62KSXmBWFWJ6aW9m4kwVzRihFPkjZ3J6c6qMfz9YqniSitkKMco=
+X-Gm-Gg: ASbGncsaebHmrnk2doSoUIhq71vsLQJx2eG+Xjeat6R2Csa/0mFJW4ZhUskndOVmlt5
+	80UgwscwpQPA7W/f8DWRiF02I56hKDxWaNqY+D14D5TLnPdvVyZR+ZNeLwsoHWbFsUDp6FolBg/
+	zIj9k0WoRY6vedKUUiUVstoy8oPF0bHeWmsZuafOAvU23ee2pcQzHn3i7qLZTi9RvRlU5X7+N4N
+	6QkPngzCVcALUG8DpFhHiZ1gcHL30VKCGM/H3zpsWW7rr5AuILirOthHXx9teZKB/SEFBhgN3ps
+	2XGctJjjxiLCNLnf8furcfbEh4O9ykGlhjBE+n+KnA==
+X-Google-Smtp-Source: AGHT+IH1rRhvK49925uTYwm7NvAMhca9Bp5YhadD93H9N4IOJBblIVLz1qkvp3f0hmehiooacU8gIg==
+X-Received: by 2002:a05:6402:3225:b0:5d3:bab1:513f with SMTP id 4fb4d7f45d1cf-5d972e178cbmr21227303a12.18.1736759889858;
+        Mon, 13 Jan 2025 01:18:09 -0800 (PST)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d98fe8f68csm4683842a12.0.2025.01.13.01.18.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jan 2025 01:18:08 -0800 (PST)
+Date: Mon, 13 Jan 2025 10:18:07 +0100
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Yunhui Cui <cuiyunhui@bytedance.com>
+Cc: alexghiti@rivosinc.com, andybnac@gmail.com, aou@eecs.berkeley.edu, 
+	charlie@rivosinc.com, cleger@rivosinc.com, conor.dooley@microchip.com, 
+	conor@kernel.org, corbet@lwn.net, evan@rivosinc.com, jesse@rivosinc.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, palmer@dabbelt.com, paul.walmsley@sifive.com, 
+	samuel.holland@sifive.com, shuah@kernel.org
+Subject: Re: [PATCH v3 3/3] RISC-V: selftests: Add TEST_ZICBOM into CBO tests
+Message-ID: <20250113-cb08bcb35bc8b6213fe89ecd@orel>
+References: <20250113083635.73826-1-cuiyunhui@bytedance.com>
+ <20250113083635.73826-3-cuiyunhui@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9243dd8e-3f03-4ed5-bdcf-95c947c57849@redhat.com>
+In-Reply-To: <20250113083635.73826-3-cuiyunhui@bytedance.com>
 
-On Fri, Jan 10, 2025 at 04:41:03PM +0100, David Hildenbrand wrote:
-> On 10.01.25 14:05, Thomas Weiﬂschuh wrote:
-> > The virtual_address_range selftest reads from the start of each mapping
-> > listed in /proc/self/maps.
-> > However not all mappings are valid to be arbitrarily accessed.
-> > For example the vvar data used for virtual clocks on x86 [vvar_vclock]
-> > can only be accessed if 1) the kernel configuration enables virtual
-> > clocks and 2) the hypervisor provided the data for it.
-> > Only the VDSO itself has the necessary information to know this.
-> > Since commit e93d2521b27f ("x86/vdso: Split virtual clock pages into dedicated mapping")
-> > the virtual clock data was split out into its own mapping, leading
-> > to EFAULT from read() during the validation.
-> > 
-> > Skip the various vvar mappings in virtual_address_range to avoid the issue.
-> > 
-> > Fixes: e93d2521b27f ("x86/vdso: Split virtual clock pages into dedicated mapping")
-> > Fixes: 010409649885 ("selftests/mm: confirm VA exhaustion without reliance on correctness of mmap()")
-> > Reported-by: kernel test robot <oliver.sang@intel.com>
-> > Closes: https://lore.kernel.org/oe-lkp/202412271148.2656e485-lkp@intel.com
-> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> > ---
-> >   tools/testing/selftests/mm/virtual_address_range.c | 4 ++++
-> >   1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
-> > index 4fc1c21a5e218eaec4d059b75c31a21dd4e8a215..993990aba56fc986c42084ffa91973558aa07e87 100644
-> > --- a/tools/testing/selftests/mm/virtual_address_range.c
-> > +++ b/tools/testing/selftests/mm/virtual_address_range.c
-> > @@ -152,6 +152,10 @@ static int validate_complete_va_space(void)
-> >   		if (prot[0] != 'r')
-> >   			continue;
-> > +		/* Only the VDSO can know if a VVAR mapping is really readable */
-> > +		if (vma_name && !strncmp(vma_name, "[vvar", 5))
-> > +			continue;
+On Mon, Jan 13, 2025 at 04:36:35PM +0800, Yunhui Cui wrote:
+> Add test for Zicbom and its block size into CBO tests, when
+> Zicbom is present, test that cbo.clean/flush may be issued and works.
+> As the software can't verify the clean/flush functions, we just judged
+> that cbo.clean/flush isn't executed illegally.
 > 
-> I'm wondering if there is a more generic way ... but likely not when staring
-> at /proc/self/maps.
+> Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
+> ---
+>  tools/testing/selftests/riscv/hwprobe/cbo.c | 49 ++++++++++++++++++---
+>  1 file changed, 43 insertions(+), 6 deletions(-)
 > 
-> /proc/self/smaps would indicate this as
-> 
-> VM_IO: "io"
-> VM_DONTDUMP: "dd"
-> VM_PFNMAP: "pf"
-> 
-> Especially checking for VM_IO sounds reasonable ...
+> diff --git a/tools/testing/selftests/riscv/hwprobe/cbo.c b/tools/testing/selftests/riscv/hwprobe/cbo.c
+> index a40541bb7c7d..b63e23f95e08 100644
+> --- a/tools/testing/selftests/riscv/hwprobe/cbo.c
+> +++ b/tools/testing/selftests/riscv/hwprobe/cbo.c
+> @@ -81,6 +81,30 @@ static bool is_power_of_2(__u64 n)
+>  	return n != 0 && (n & (n - 1)) == 0;
+>  }
+>  
+> +static void test_zicbom(void *arg)
+> +{
+> +	struct riscv_hwprobe pair = {
+> +		.key = RISCV_HWPROBE_KEY_ZICBOM_BLOCK_SIZE,
+> +	};
+> +	cpu_set_t *cpus = (cpu_set_t *)arg;
+> +	__u64 block_size;
+> +	long rc;
+> +
+> +	rc = riscv_hwprobe(&pair, 1, sizeof(cpu_set_t), (unsigned long *)cpus, 0);
+> +	block_size = pair.value;
+> +	ksft_test_result(rc == 0 && pair.key == RISCV_HWPROBE_KEY_ZICBOM_BLOCK_SIZE &&
+> +			 is_power_of_2(block_size), "Zicbom block size\n");
+> +	ksft_print_msg("Zicbom block size: %llu\n", block_size);
+> +
+> +	illegal_insn = false;
+> +	cbo_clean(&mem[block_size]);
+> +	ksft_test_result(!illegal_insn, "cbo.clean\n");
+> +
+> +	illegal_insn = false;
+> +	cbo_flush(&mem[block_size]);
+> +	ksft_test_result(!illegal_insn, "cbo.flush\n");
+> +}
+> +
+>  static void test_zicboz(void *arg)
+>  {
+>  	struct riscv_hwprobe pair = {
+> @@ -129,7 +153,7 @@ static void test_zicboz(void *arg)
+>  	ksft_test_result_pass("cbo.zero check\n");
+>  }
+>  
+> -static void check_no_zicboz_cpus(cpu_set_t *cpus)
+> +static void check_no_zicbo_cpus(cpu_set_t *cpus, __u64 cbo)
+>  {
+>  	struct riscv_hwprobe pair = {
+>  		.key = RISCV_HWPROBE_KEY_IMA_EXT_0,
+> @@ -137,6 +161,7 @@ static void check_no_zicboz_cpus(cpu_set_t *cpus)
+>  	cpu_set_t one_cpu;
+>  	int i = 0, c = 0;
+>  	long rc;
+> +	char *cbostr;
+>  
+>  	while (i++ < CPU_COUNT(cpus)) {
+>  		while (!CPU_ISSET(c, cpus))
+> @@ -148,10 +173,13 @@ static void check_no_zicboz_cpus(cpu_set_t *cpus)
+>  		rc = riscv_hwprobe(&pair, 1, sizeof(cpu_set_t), (unsigned long *)&one_cpu, 0);
+>  		assert(rc == 0 && pair.key == RISCV_HWPROBE_KEY_IMA_EXT_0);
+>  
+> -		if (pair.value & RISCV_HWPROBE_EXT_ZICBOZ)
+> -			ksft_exit_fail_msg("Zicboz is only present on a subset of harts.\n"
+> -					   "Use taskset to select a set of harts where Zicboz\n"
+> -					   "presence (present or not) is consistent for each hart\n");
+> +		cbostr = cbo == RISCV_HWPROBE_EXT_ZICBOZ ? "Zicboz" : "Zicbom";
+> +
+> +		if (pair.value & cbo)
+> +			ksft_exit_fail_msg("%s is only present on a subset of harts.\n"
+> +					   "Use taskset to select a set of harts where %s\n"
+> +					   "presence (present or not) is consistent for each hart\n",
+> +					   cbostr, cbostr);
+>  		++c;
+>  	}
+>  }
+> @@ -159,6 +187,7 @@ static void check_no_zicboz_cpus(cpu_set_t *cpus)
+>  enum {
+>  	TEST_ZICBOZ,
+>  	TEST_NO_ZICBOZ,
+> +	TEST_ZICBOM,
+>  	TEST_NO_ZICBOM,
+>  };
+>  
+> @@ -169,6 +198,7 @@ static struct test_info {
+>  } tests[] = {
+>  	[TEST_ZICBOZ]		= { .nr_tests = 3, test_zicboz },
+>  	[TEST_NO_ZICBOZ]	= { .nr_tests = 1, test_no_zicboz },
+> +	[TEST_ZICBOM]		= { .nr_tests = 3, test_zicbom },
+>  	[TEST_NO_ZICBOM]	= { .nr_tests = 3, test_no_zicbom },
+>  };
+>  
+> @@ -206,7 +236,14 @@ int main(int argc, char **argv)
+>  		tests[TEST_ZICBOZ].enabled = true;
+>  		tests[TEST_NO_ZICBOZ].enabled = false;
+>  	} else {
+> -		check_no_zicboz_cpus(&cpus);
+> +		check_no_zicbo_cpus(&cpus, RISCV_HWPROBE_EXT_ZICBOZ);
+> +	}
+> +
+> +	if (pair.value & RISCV_HWPROBE_EXT_ZICBOM) {
+> +		tests[TEST_ZICBOM].enabled = true;
+> +		tests[TEST_NO_ZICBOM].enabled = false;
+> +	} else {
+> +		check_no_zicbo_cpus(&cpus, RISCV_HWPROBE_EXT_ZICBOM);
+>  	}
+>  
+>  	for (i = 0; i < ARRAY_SIZE(tests); ++i)
+> -- 
+> 2.39.2
+>
 
-Agreed.
+The test_no_zicbom() test needs to have the illegal instruction SIGILL
+test for cbo.inval moved out into its own test. So, even when we have
+zicbom we still test that cbo.inval generates a SIGILL.
 
-Can we instead rely on madvise(MADV_DOFORK) returning EINVAL iff VM_IO?
-That would remove the need for custom parsing and the dependency on
-CONFIG_PROC_PAGE_MONITOR.
-
-
-Thomas
+Thanks,
+drew
 
