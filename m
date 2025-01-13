@@ -1,106 +1,117 @@
-Return-Path: <linux-kselftest+bounces-24409-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24410-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32107A0C340
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2025 22:06:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 237B7A0C4E6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2025 23:55:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C3C91698A3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2025 21:06:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 98E257A142D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2025 22:55:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6CA41B6CFF;
-	Mon, 13 Jan 2025 21:06:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A4EC1F9419;
+	Mon, 13 Jan 2025 22:55:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mBegDzaj"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="E/umheod"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF2724023A;
-	Mon, 13 Jan 2025 21:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA081D31A2
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Jan 2025 22:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736802395; cv=none; b=pOeIMhiiVHcb1KrBZn+4pIwENFOCpWR12Ayjrj6E6dOO90YM7hQoKkhTcw0XvhYDmu/2abZUE3vZY7BMC/heLTFHHLOs+6ftK17dWqpBpUhT/BpvsMpXhqQql7yIkuf9mQ27rwN7xMX0N5kmxGQyeHrctu/xqfSRalSsEXZDLgI=
+	t=1736808909; cv=none; b=SCL6nWvshGYz4wU1mxejBQ6Cw0tCnwB1CdkDKtv9ke+Chy/kp9+sbNr5aKkEM4fBprsvS90iJkTnUesCesdVDScRP5Ggj9dWjZrqIi24IuT9BOM9xqTJx/D0SVohJSMDKThr2+fi5/iBjccIatt1PxmMo6RGoWy+KmCDJPx2+NY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736802395; c=relaxed/simple;
-	bh=1E6joxxMwdvaQ5wl/wjoDrLZBUgYA+oAW2RvWLS0UUQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y4ZfHWatRSjvSBaXVOQCP7abRlZYfpO80N5TRgNESIItR6Ymat93ilrfpf+UKPdE0NhSEMd/mR2BN1lKIKVg5oZGfywupGFsPMZGORR/fcnWi3X8dGZmnwsuvVRN+f5uCMVPTcG2VP5jH0S0gfq4lK8vXnt04RKocIbKW+jXm9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mBegDzaj; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-303489e8775so41985001fa.3;
-        Mon, 13 Jan 2025 13:06:33 -0800 (PST)
+	s=arc-20240116; t=1736808909; c=relaxed/simple;
+	bh=vkipq98eiuOQy7kWpyrNKFUnOaO4Hf/hTSg9Tud/Wo4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=niqvzmCDvdyRPfq1MbwnWRgbkYAON1XD5mFXILv3DCGUkuh0rRTsDDZdrD3BHp+yE8LWxffu4k+o9pMIKXhrBQKU4BmUcc28FVy+/B+6YQIE3rcnvfg1ClVr85Y4T9cqGE0ggwSFkg4uC3lJGgWPyKzcUGEJZTSwBGnxtCiAEEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=E/umheod; arc=none smtp.client-ip=209.85.166.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3ce34c6872aso34165005ab.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jan 2025 14:55:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736802392; x=1737407192; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1E6joxxMwdvaQ5wl/wjoDrLZBUgYA+oAW2RvWLS0UUQ=;
-        b=mBegDzajtI5MbnM3emnXXCBNEBnYQHbv0yeIC/Ua4Bc/C0qI6beQph6Ns2SDjv9pes
-         lI1VPumMA2LLtC40glQXHqB8r7J6s93uNumtTATyDgRQt14W8JNUrjbxeht9cbFVFvnt
-         iaOq6Gcr5hx9aBcJU541yO300Iib/vxjKGF+6AgChzyZpDJ8pJgrYmOrMmmFDsiKyFIo
-         iiWG+RNhwvpc3yHZ7vRic2Oj5uOKEE37IG0xzU63jkezGnvIw0EatLVoJd26EPxaZu7/
-         SWSpkKqWRVn7Dq4u2MFfHXvPZ+f8PXURaEFUNpA7RrLOA2aVb7nG/ZR98zkLJDLQBV8M
-         N2PA==
+        d=linuxfoundation.org; s=google; t=1736808906; x=1737413706; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ACh5EO2+ycjbq2FN4kF3D56JbKZG03WJC6qrYAkuDJQ=;
+        b=E/umheodbrXJthE8cr/GhrDCEPH8F+csiBB341oPyiGAJKeZUd1RChJicsRpFdfHd5
+         lTFRKGEPhjfST6rB3HX72qto74WAqhjNGYqFfEIZPY8dCA9BLQCE4H8XJ715atj+gfHB
+         x0aaiz9uyeJnqQJi8Q0hGrTkQ2hQgrcrxuV00=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736802392; x=1737407192;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1E6joxxMwdvaQ5wl/wjoDrLZBUgYA+oAW2RvWLS0UUQ=;
-        b=uSojKGJWwyn22l25GblfJsItva93V/PFS4CgEblKJgpoHB9//DXXLjY+boaxgaUUe+
-         g4Naa0jfFVXl0Mi4OR6aO3LBjvBGgjg1GYv8EuO/UrTlUuJipYgVWoL1AhPy8CBCf4hh
-         8ooC9f3h+Y5CScYWWEbyL6BujoHZyhoPZctOWR5pJ8ijaJKHICIc798dr0mzAgEfk4Na
-         diDaVrZ1FqoPg2xEMb7TuedlbaRh0kUBl7/ehuCngfGBiAH35JQmN1U1SNtOXJq/JhkB
-         J6bQhctTJGg3Ym1eGhVJROJy1WDYxEAVG70APX/vwarNx7FA2k/2tVGkklYr+PUeAnVw
-         X9Ig==
-X-Forwarded-Encrypted: i=1; AJvYcCVlMUyrGBdo9ajxB/n/8jZaw6Ug9kdfLWvuo6A0dJ2XLlj2fIaD6iBt3Qo4kTUndro885xLMAdTO9qWvLg=@vger.kernel.org, AJvYcCWPEDMspWldqONwctC0SAYi5lw3yV+z0g2CawKgRBeECyEPAEeeuuV6PChavl7op6FLFjZy19vIKbJHurluwg0C@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAI1mdBr2BtwPoUkwvNSdQDK0QvN4+g8+JQJPkrinM3XgAXS17
-	XqM+6rN2DkHOGCaS0TxI95qhbnqO2bJ3qoYg9/xNiIRgN99NS2okwn6SK59D+E+13/5lD7XIpP/
-	mYsuDjVaOdxus3A4MYC+EOVvWNhh7kDfB1uc=
-X-Gm-Gg: ASbGncunay/5hqSwmRX1Solt23jVCDvBtjt1IjUcHGqDoUztZ043QCnlA4KKb/Dim6M
-	60AOdopufAGNEe2ZgOFKu1YORROub4TRlPh2EN2DxE8JMuM4kuNostg==
-X-Google-Smtp-Source: AGHT+IGPnC7YhtVXJROyDwuHQp+eiBd9V8UpXkdY/tvXG/BosIsmzpRlZ2gcFXB1KdUXYuY3ffYOu4uvB4d6OdwML/0=
-X-Received: by 2002:a2e:a98e:0:b0:302:1b18:2c06 with SMTP id
- 38308e7fff4ca-305f458cd31mr73721961fa.17.1736802391961; Mon, 13 Jan 2025
- 13:06:31 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736808906; x=1737413706;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ACh5EO2+ycjbq2FN4kF3D56JbKZG03WJC6qrYAkuDJQ=;
+        b=Q+/sraedcX/7OJdHQ9rALgSlJgLae5fvt7I4bxXCu8sH2ASZNfOnTweoeR8q0caDAV
+         IqrCtOeWlWjGjZM5HDI4KLLJs5e86AYBtUnkU7EmIwT+6gfbMN6NIyPen7MHGgToSu/j
+         ElSaRrDbFTBIxrOBpT7QKuV7B+rf9CyaKnsNKlIGJNWL6Hy43Vp80pNwuxqbwsqMBfK1
+         1vUCDIwI/Zt16mgQNCU94a0yC2nPh9YSWqSecEbtm0Z7bsQis73wqqfSPtdw+KB2a3KG
+         T0kt2AxMFX9I7rKarhq2sFR1VyZoqxR+cr67+unYpxsdDDxcoaPFUcm47hG5eli8CV8P
+         wi2w==
+X-Forwarded-Encrypted: i=1; AJvYcCX9BdU2bYJNh0jXB8GLMxFeW60f8VlzL+Sm1DMlHJJKaKZO0YBPL75VSid6HDTbSHGymwAbWFxTMJW2f89Of98=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSoHHpD2a34YFvlP34JK2XBNqFW3i1ni07dJ9rxrMzL5TckB+E
+	yxnDkgs/dmhYGdDPudRNX9DWxPw5c7EPGFWfGa7CPj9/L2MxPp/bi8/Tg0/RFx0=
+X-Gm-Gg: ASbGncuwcuLlmWkpl/FzZLnq2F5z7fz6HPCDzFIlPmRTbLqelaliXP0LNmXcB0zJrGA
+	15lwyYvSJ3ZfEj2p6DxPVWwavTQ/731SSUqtr/mtKL1f7/4zKOEqu39TYNZxCcdaxGKoemF+YBn
+	uq+A0rK+uybV+ZAVzpTei8ZQZxUXzIoS7eYQKj3jtwnhxqQD8FsG+k9BiLw0WssAE6ou91Bp1Lm
+	j3cDT3tCkfNElNd3F2lQ58XumA5slzJeGLzGPk8RzPATkgMSVlPXER2yh83B0HM8B0=
+X-Google-Smtp-Source: AGHT+IGCGX3p/H8zPoC4bzSxi3Glhut+QAz2DFVy5lIgY0UGNwRfbSr5gyfb3+A3zfW9W+Bc+ehgng==
+X-Received: by 2002:a05:6e02:1f02:b0:3a7:c5b1:a55e with SMTP id e9e14a558f8ab-3ce3a7a8aa1mr181433625ab.0.1736808906566;
+        Mon, 13 Jan 2025 14:55:06 -0800 (PST)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ea1b613391sm3036239173.47.2025.01.13.14.55.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jan 2025 14:55:05 -0800 (PST)
+Message-ID: <bea75a31-2778-4065-ac50-1a9e75cde2da@linuxfoundation.org>
+Date: Mon, 13 Jan 2025 15:55:05 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241102-kunit-qemu-accel-macos-v2-0-9d4579fddd20@gmail.com>
- <20241102-kunit-qemu-accel-macos-v2-1-9d4579fddd20@gmail.com>
- <CABVgOS==_+DDRYzto6Wn21kCBQCDhAHwhORU8f+AUQ2GDArXHg@mail.gmail.com> <CAJ-ks9kFEp=B9eq5JWkZNDGo4awPwu=rqGASOn9RL8EMtqBAZQ@mail.gmail.com>
-In-Reply-To: <CAJ-ks9kFEp=B9eq5JWkZNDGo4awPwu=rqGASOn9RL8EMtqBAZQ@mail.gmail.com>
-From: Tamir Duberstein <tamird@gmail.com>
-Date: Mon, 13 Jan 2025 16:05:55 -0500
-X-Gm-Features: AbW1kvaHuaeGGCg8GQ_xonBUyKPo-tS8PYPHar8Veh1-ssKbFTNH9tOZU4gS_kM
-Message-ID: <CAJ-ks9=9+CzeODNP_opz73KbkO2sx5zQjgv7O+o5=jm+-ygJZA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] kunit: add fallback for os.sched_getaffinity
-To: David Gow <davidgow@google.com>, Shuah Khan <skhan@linuxfoundation.org>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
-	Alyssa Ross <hi@alyssa.is>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] selftests/ftrace: Fix ftracetest test cases
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <173625185823.1383744.4020760882101555349.stgit@devnote2>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <173625185823.1383744.4020760882101555349.stgit@devnote2>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-+Shuah Khan <skhan@linuxfoundation.org>
+On 1/7/25 05:10, Masami Hiramatsu (Google) wrote:
+> Here is a couple of patches to fix issues. I think mount_options.tc's one
+> is a real bug(I'm not sure how it worked), but another one is an enhancement
+> for (my) execution environment.
+> Anyway, those should go through kselftests tree.
+> 
+> Thank you,
+> ---
+> 
+> Masami Hiramatsu (Google) (2):
+>        selftests/ftrace: Fix to use remount when testing mount GID option
+>        selftests/ftrace: Make uprobe test more robust against binary name
+> 
+> 
+>   .../ftrace/test.d/00basic/mount_options.tc         |    8 ++++----
+>   .../ftrace/test.d/dynevent/add_remove_uprobe.tc    |    4 +++-
+>   2 files changed, 7 insertions(+), 5 deletions(-)
+> 
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-On Sat, Dec 7, 2024 at 1:52=E2=80=AFPM Tamir Duberstein <tamird@gmail.com> =
-wrote:
->
-> Thanks David! While the next patch is still plausibly undergoing
-> discussion, would it be possible to pick this one up? Without it
-> kunit.py is not usable on macOS.
+I applied these two patches to linux-kselftest next fro Linux 6.14-rc1
 
-Shuah, could you pick this if you agree?
-
-Cheers,
-Tamir
+thanks,
+-- Shuah
 
