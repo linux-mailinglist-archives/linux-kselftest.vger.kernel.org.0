@@ -1,76 +1,76 @@
-Return-Path: <linux-kselftest+bounces-24374-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24375-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B1A6A0B9FB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2025 15:43:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58597A0BA07
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2025 15:43:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C0217A26BF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2025 14:42:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B55387A2C04
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2025 14:42:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBB0322CA1D;
-	Mon, 13 Jan 2025 14:38:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B9C922CA10;
+	Mon, 13 Jan 2025 14:38:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kAze0crh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TCymOuVN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5030B22C9FC;
-	Mon, 13 Jan 2025 14:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0AE922DFBB;
+	Mon, 13 Jan 2025 14:38:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736779129; cv=none; b=cNSBwrY2EWiUJRaVUhDY+G5FAhrTzvDu6w4u7liCuk44O3ZDws2rXxdYVkvi3tbPuh2ntEgOXqmkG7J6y6XsernJI09zDX75ywaz6Bkv0UYX+PvcjV3V2rzdBSak4k0UX3IUjU6EK1fpq2TeejWxLGl5FKsphRHMlEwJRBDAdC8=
+	t=1736779138; cv=none; b=ADzK7oEC8EknPnFYpxqKP5YTAiQrfzA1BPRr6Ue/D968sOZ4Vc/Lb73dcuMTbNSOPYyDBkvgZMWJ2eoBl/OY+lMm+g2o87RsWCja+xrQyyBTDgkUJy+H5UrstjVTk9Gz+yJwaKDOYo0RR/fXomuILTp1FZgPGekzNNOcP5e58bw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736779129; c=relaxed/simple;
-	bh=3ZFVoGehuDwl/mWPg6mYnMbYtzRE432EuJk5jze9RMo=;
+	s=arc-20240116; t=1736779138; c=relaxed/simple;
+	bh=HRgkD5FKjFgLgWVxBNT3gyl1M0RycbLvrFOZUB35tkQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YR5xzFB0AnW5DDqFx+hOLHX67ZjAoziTLBXVtSHS2/Sp+vF03uOQihqeUxrQHY+p3tWdTRghkbvYgPp6PTM8Qq5T1EK1alCqcBIWbC8c26ceJJbnGxzyEN/4Ybh3g1YuM2GlaMxwDrEo31R9sllu8MwqCT9+drbSn0cGrJYnnhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kAze0crh; arc=none smtp.client-ip=209.85.214.182
+	 MIME-Version; b=Td++9PxjjmlCjNRnktdJ9PfYP/ec198sa5tkhTbe8w9BPY5oLGstcX4JhPK+qYlI8EijRt5M9140EzXgObwhg/h1H98fHdVHe5UwIn88vnhK6JLep0huV5iDyxsajXDePUi9wcp0Wz5g2wkN+Z0F3piQCYPYOb0HkuKVDEUCJvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TCymOuVN; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-21628b3fe7dso73483805ad.3;
-        Mon, 13 Jan 2025 06:38:48 -0800 (PST)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2164b662090so72494875ad.1;
+        Mon, 13 Jan 2025 06:38:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736779127; x=1737383927; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736779136; x=1737383936; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=O0itpuEZRuaRQ33kirP60JpiMAPNyz5teegcwQ5xuJQ=;
-        b=kAze0crhPHvwQAVQFM8UNrhQ0ibbf1uXbP64MVxUHrah/2OHgSsiMw9kXhYZJmYMP1
-         UZYDO0lG9DMzbgkZ2e/H/y0n/F0rolVDQFLyOJVKmGjtHeWidoScBr9TEZrVmRr+L7/e
-         rx+7I5m6inLXU84tDT4nvJ8JC68BxNZfJAm+Mnf0H7Ip1v7N/oFjjgQOSiQ1cR4pZRsI
-         C6Ixd/Qeyip3S5Iu2Joidpo/it/nDmEsea6MEuR3OQMrVDehp5TVQyTyVQqVZBpD/5aL
-         vdmbLUr4Y4VQ5mXjwU9Cr5gG26BG1p5Rc1FpLXpYjs5NKkJemmemgT1HYThU/XpC2aL7
-         k2BQ==
+        bh=3RwrUezkHV4Bxso8Lan3H8PNeHkallTCdG4JVNGo1S0=;
+        b=TCymOuVNtub+RoSE/q4/jI7nJDy2ZTafd4gGusYP1GD4bB0XE8b5fqgX4mjn3nUp+P
+         vtvKnWDy/FTUsILLdgeCGUcRTGnbuJ79Qw3e2HEXwMi5cXXcPU6v7UPLZ6OuxyU+BnC0
+         5CEailZ12Ufq3Y4PjnQQ4ccHc5Lh7JzpwX/98C3tYSiDR/NdzGdKlhcmEgPWhChFBPj9
+         YrfAWUl9nWlspKF08eJaTz1QLwUFnfTDdNmm4L0D/VlkgZJfns7P8x6hhNMnPJolM+/e
+         +ARHlADeagomj5phE8nsBLzr/a/Xg0HJ2+ZR41EWOqAiow9Ja4gCdHe9cNGclldV3pwJ
+         aLEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736779127; x=1737383927;
+        d=1e100.net; s=20230601; t=1736779136; x=1737383936;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=O0itpuEZRuaRQ33kirP60JpiMAPNyz5teegcwQ5xuJQ=;
-        b=C4t2TN+DPVcf/J2kX6ZFprOZ6O5uELqYPlog1gubdgSlsZO+S1JGwl/mdnPbsVt28S
-         vFTR8GVEj2hQVPIGiLzZXNQMf2FX4GG6dlvPBhI3YVspz4ftgQ9VX9WDrRMt+rlNDZNB
-         PSMHfK1oQvZrNch+uISIOkwljDA+UcD5xDAfA7jChvGTu6NyODqmozGCDmHK/PXgP/jA
-         FhESTYtcZ8/PkkeIJkuaGoMBn9F7rgwi9IMVEP6YVUuazTqnLm9FlbdZthbWeO2O8v87
-         7XiA5/buQ//CnQRwTip9BeSpWFoi+gngRwQRqgK+KQuuLhnnicJg20grf/nMzVg5q73N
-         GnLg==
-X-Forwarded-Encrypted: i=1; AJvYcCUCiiOLAO/FS02ytrsuch3SXkBqSliI7Lo75Lr44lDP7oLBYzrxNfccEQkV6n1WKjdRQEhBIuJPIy52ZA==@vger.kernel.org, AJvYcCUL60OTZgoiXQ0SYSgKGlj4Nrq5OqzGCHcbsan1ULfkx+/irqu28AUw6g5BVVf6GFn/jENLRlpfgfI4KmIrdt8=@vger.kernel.org, AJvYcCURT8a9zzWxt9a03WxqJKKzen539BwJGgKWW9anSjvaXRvRlk+hYUfABx7SRsu8XfPpkdCKe9RQQYWJwmuY@vger.kernel.org, AJvYcCUZPVnH2946ieuZX5/IVeaoQDvRtGD3HP6aG8K4ojrxmWKTv7shvohEuOmq5BNilWkrwMOlgvFvoXPl@vger.kernel.org, AJvYcCVWXgPL/7opb/T2oz4UdzubVeOHhSI+pquZHOZIgG8j8hQzpJo4RlcrKhf1lL58jnExkJI=@vger.kernel.org, AJvYcCWHsI2laDEuhxsbgEC8/X73TLWsY5EXbKtv3sWOGc6fA+IO7ogy76wffl4QUJqyCq3uYfa4DP81Vvc+z/s1fgwx@vger.kernel.org, AJvYcCWV4rA8ZPYq+nsj9syLVBtitCDEHUnRolnPpWUPmtp9ZTwW14pQ+XjCf3P/a+8jjnNTsF8QYpoIdBKx@vger.kernel.org, AJvYcCXNBFMo+azk8yJgWyV+41/Kl5CC85VG57GRH5LltK9zRkNW0cJONgM7M2dLd6+JfCroGq2N48u0Y8M61Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxojYaXwnRTGZlp6/dtdj1XeSqRO7670wKI3urNFTEwyynuEIt8
-	udkBzu/JWeIjfuGFAzG54XTiyH9ofTt683c0xki7bo+1CKNfJHIYDCEtOyOvovg=
-X-Gm-Gg: ASbGncvJyLqavOxyZdtfwZSEn4e47Y5leUIQuA7eSUkg95gzUoe3qWZJY0veXUHA3zy
-	KYOkT+ZKEm3zfNsi24r2QsxYZ1ER6IYtag16ux++kA5d43k4l7u3xTJwN7s5/ZyhRfoPa1+Rx/M
-	FkCGI4Cnv2VJDN1T5aTHdOUiF6NokcAUGIy4GKvE60IDUBLBJEvEVrK/HF+NKtnW7XaW+IUPYbM
-	JwqlJs9cd46LHdS3uWo2Ef1RoL0Spq2w1vnZ24/Eh3MEEk=
-X-Google-Smtp-Source: AGHT+IF46BIJsHmY25FQQjjhe3rRKluIF8yEXaDZgFjxpJ6wghwfrMVhniqYlndXdS242mt6yFdpoQ==
-X-Received: by 2002:a17:903:230d:b0:215:cbbf:8926 with SMTP id d9443c01a7336-21a83fb0da4mr356224215ad.35.1736779127243;
-        Mon, 13 Jan 2025 06:38:47 -0800 (PST)
+        bh=3RwrUezkHV4Bxso8Lan3H8PNeHkallTCdG4JVNGo1S0=;
+        b=WnviK/ZcJIFKatA1O4q/t0C0s52kmuVHnHCsY8u+AODeXEGIW2tu8FLBiESJ80BumF
+         gW/TNUFgW4HlbuJoyhmq0c4unehs7dBucZiZ6mIHL3iitt9rGkScHwY9yYv4LDIRn7t6
+         6E5bU0cabahRTR/vKHhLWKhit0tKQ5QXqJGegbaCqeUlAWpJ0IhEWAnKu9iNGw1x6yLo
+         fJUtJTFX9EA9GIkmT2vIVyFjdf1SlQ2cxUL1T3SgiNWusevcxCpKFwZGlg9IdWdHVjuy
+         v5TWeJha7lTlGBGmY5x2f8HD6fUL5/sNBuE7VxFUNjnM0jbQwNXqYMx1wVQZVnfSTNoq
+         nakg==
+X-Forwarded-Encrypted: i=1; AJvYcCU3kPIFp32L68EAjgtaZ82+hHKbwN8Bc/g0T39e5/loGLgNSa4imobz41uqdH5O2JiTHYaF6F7tJ+Ke@vger.kernel.org, AJvYcCU97xC8iLU9PbPoqk5nZXyXjtjr5Ruv2VkRBfj5LhjhJWhdORCrAuPl5rKZJ+Qt2trpSUjcS57iSSlJ@vger.kernel.org, AJvYcCUXgPW1rjteQ7WOIGWs9R1PVlCXYUXF4p7/3tuihuUHKr5zd84Sj0l0C70c54Inzjp5KW+4NAXBo6PXopZ/PTA=@vger.kernel.org, AJvYcCWXfSjICMyvOKRjSGgmK6sup0SRjrxwAN/l2EJ58rRokct2GPZRg/3zdYz58GUU9Un9pCE3+CvU09DHIw==@vger.kernel.org, AJvYcCWac8ybgMS3OkRLE56avFYqOuW3/O4+VtD2DcScckmVo5pbfk6gjQrO69h9TqFt5EGm/Qo=@vger.kernel.org, AJvYcCWxBKoabvtBkqs/KHwhYwzTrALQlw0x7+m4Zvi5ONOlg1UZEI6YB/rbcIc7ibp3q3xmbO7BnJkP6h8dTA==@vger.kernel.org, AJvYcCX1l2+pgVaXvtEaCcoPKstIQPpMSkbwGAtPSnayailoNW5rNd3+7f84M92jZyVZCCYvqCcCDbEOkhSuzBcE@vger.kernel.org, AJvYcCXj9zMBVBs6IZOrfdyNuavH5zO4qOTtK/cq+3jQYUIpIZ6e0OH+R9EHQ7+wD+MTzMN1q994oZD9zKDOHLYpgdC2@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhLtCiD4ayWXm+QiQs1uZYiG/4hC4crhh46QdpoyQDgiVWgg/L
+	zCIS41OOAQUhSytwE6U+5aic0BSeHMcJwqKobeyP3D1s8eaP9DNoQFnrSIyst3Q=
+X-Gm-Gg: ASbGncsmZuvyHUSquy6otKQY8/7Od6oxNvHHnfeA/c4h9KGtqrLeN5ijlV3oZQEf5yu
+	t22GLf7IvwM84dH8KQVKWA5DZy1SaVjUmdQCn7PJrsHiz6DTE+MsycRJwDD15zm19rAz3ssVPNb
+	lcXaGpQKvtNMTkngDyXKHE8KrR8B6EYKNAUoibvzcx0osquVlMDDxO5Vsd8rYQp1YKduUYcYlFh
+	qVOcxHhvAYZ0lIk7hnGQm50TQHcfMi6IKjZaXHCnYCUarU=
+X-Google-Smtp-Source: AGHT+IHt1nCTDh10fBQS9NHgK/oOky2VtiRHLWbePcQNxSAsFYQfmLDkyg61R0c+C95BGg+IP2F6xw==
+X-Received: by 2002:a17:903:18a:b0:216:4a06:e87a with SMTP id d9443c01a7336-21a83fc7640mr358427785ad.40.1736779135888;
+        Mon, 13 Jan 2025 06:38:55 -0800 (PST)
 Received: from ws.. ([103.167.140.11])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f155e00sm54328715ad.103.2025.01.13.06.38.39
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f155e00sm54328715ad.103.2025.01.13.06.38.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2025 06:38:46 -0800 (PST)
+        Mon, 13 Jan 2025 06:38:55 -0800 (PST)
 From: Xiao Liang <shaw.leon@gmail.com>
 To: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
@@ -100,9 +100,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	bridge@lists.linux.dev,
 	linux-wpan@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v8 08/11] rtnetlink: Remove "net" from newlink params
-Date: Mon, 13 Jan 2025 22:37:16 +0800
-Message-ID: <20250113143719.7948-9-shaw.leon@gmail.com>
+Subject: [PATCH net-next v8 09/11] rtnetlink: Create link directly in target net namespace
+Date: Mon, 13 Jan 2025 22:37:17 +0800
+Message-ID: <20250113143719.7948-10-shaw.leon@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250113143719.7948-1-shaw.leon@gmail.com>
 References: <20250113143719.7948-1-shaw.leon@gmail.com>
@@ -114,59 +114,45 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now that devices have been converted to use the specific netns instead
-of ambiguous "net", let's remove it from newlink parameters.
+Make rtnl_newlink_create() create device in target namespace directly.
+Avoid extra netns change when link netns is provided.
+
+Device drivers has been converted to be aware of link netns, that is not
+assuming device netns is and link netns is the same when ops->newlink()
+is called.
 
 Signed-off-by: Xiao Liang <shaw.leon@gmail.com>
 ---
- include/net/rtnetlink.h | 2 --
- net/core/rtnetlink.c    | 6 ------
- 2 files changed, 8 deletions(-)
+ net/core/rtnetlink.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/include/net/rtnetlink.h b/include/net/rtnetlink.h
-index 00c086ca0c11..dd51240431b8 100644
---- a/include/net/rtnetlink.h
-+++ b/include/net/rtnetlink.h
-@@ -72,7 +72,6 @@ static inline int rtnl_msg_family(const struct nlmsghdr *nlh)
- /**
-  *	struct rtnl_newlink_params - parameters of rtnl_link_ops::newlink()
-  *
-- *	@net: Netns of interest
-  *	@src_net: Source netns of rtnetlink socket
-  *	@link_net: Link netns by IFLA_LINK_NETNSID, NULL if not specified
-  *	@peer_net: Peer netns
-@@ -80,7 +79,6 @@ static inline int rtnl_msg_family(const struct nlmsghdr *nlh)
-  *	@data: IFLA_INFO_DATA attributes
-  */
- struct rtnl_newlink_params {
--	struct net *net;
- 	struct net *src_net;
- 	struct net *link_net;
- 	struct net *peer_net;
 diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-index 7ff5e96f6ba7..cce5bcd1f257 100644
+index cce5bcd1f257..65f09ab616b5 100644
 --- a/net/core/rtnetlink.c
 +++ b/net/core/rtnetlink.c
-@@ -3767,7 +3767,6 @@ static int rtnl_newlink_create(struct sk_buff *skb, struct ifinfomsg *ifm,
- 	char ifname[IFNAMSIZ];
- 	int err;
- 	struct rtnl_newlink_params params = {
--		.net = net,
- 		.src_net = net,
- 		.link_net = link_net,
- 		.peer_net = peer_net,
-@@ -3794,11 +3793,6 @@ static int rtnl_newlink_create(struct sk_buff *skb, struct ifinfomsg *ifm,
+@@ -3784,8 +3784,8 @@ static int rtnl_newlink_create(struct sk_buff *skb, struct ifinfomsg *ifm,
+ 		name_assign_type = NET_NAME_ENUM;
+ 	}
  
- 	dev->ifindex = ifm->ifi_index;
- 
--	if (link_net)
--		params.net = link_net;
--	if (peer_net)
--		params.net = peer_net;
--
- 	if (ops->newlink)
- 		err = ops->newlink(dev, &params, extack);
- 	else
+-	dev = rtnl_create_link(link_net ? : tgt_net, ifname,
+-			       name_assign_type, ops, tb, extack);
++	dev = rtnl_create_link(tgt_net, ifname, name_assign_type, ops, tb,
++			       extack);
+ 	if (IS_ERR(dev)) {
+ 		err = PTR_ERR(dev);
+ 		goto out;
+@@ -3805,11 +3805,6 @@ static int rtnl_newlink_create(struct sk_buff *skb, struct ifinfomsg *ifm,
+ 	err = rtnl_configure_link(dev, ifm, portid, nlh);
+ 	if (err < 0)
+ 		goto out_unregister;
+-	if (link_net) {
+-		err = dev_change_net_namespace(dev, tgt_net, ifname);
+-		if (err < 0)
+-			goto out_unregister;
+-	}
+ 	if (tb[IFLA_MASTER]) {
+ 		err = do_set_master(dev, nla_get_u32(tb[IFLA_MASTER]), extack);
+ 		if (err)
 -- 
 2.47.1
 
