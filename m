@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-24516-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24517-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36412A111F7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 21:29:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18757A111F9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 21:30:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A7B9188ACB5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 20:30:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A83A13A685F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 20:29:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABB5620C030;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D153C20F999;
 	Tue, 14 Jan 2025 20:29:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="H/b78WsQ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gJyZtbWq"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="dW2RfUGk";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HGwWBTXP"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58BB320F096;
-	Tue, 14 Jan 2025 20:29:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70C620F983;
+	Tue, 14 Jan 2025 20:29:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736886558; cv=none; b=heND6ujdfBDe00vQY+DA5fY2PNnMv+xDxwiiR0QPWkOaObE7QAxedLu6IlplvI3g2mokNh42/NZuVtzg4qFqN3UdM83tw6Yi4OutMzmOxs5hjcR+DvbpoShfddtqBJUUyL66Zf2OY+2SYwEhDzqQC2px8pc4r33JN57NmIzBWAQ=
+	t=1736886558; cv=none; b=jmbYwURC0Nu48NfqYYoaswaGTEGfOwU2KnuYig/wdWCYLDDLFpBMQ36aajWsAnFylLN5QiYFiCyl8byPhC/0SvLPlJYdp0GqfoHPfH6NMxUdjj2Rwl91tlUnHaBqhaYHoljrfEHNi3w9P+fHSYxzWDWHeIEZMePoG6vgclX8a/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736886558; c=relaxed/simple;
-	bh=MhtQTfNzlQ3tsKqwl5lM43sNtekGx4WB6JQmq98WyGU=;
+	bh=gK1/cSRGs/Y9BqxmQSW9haDJWTtrx8uVa2wdtMltsOo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fCEU1cfkwBXkaplnCSNUZbp9fWmFPdl8kGyKzYu6z7SsRTegAF5aT1irDzY934yTzuYgYkQvuA7zQUHgLAYHHr9ltd/x2IS2gsDSBY/tktmMzmGtd6+QLL8shzefRorxqt0t3gOH6ymQtgNI5RUBm++VXx9+izQ2IenmpmGASvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=H/b78WsQ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gJyZtbWq; arc=none smtp.client-ip=202.12.124.149
+	 MIME-Version; b=fIvwdxzbMv2WNbiC67l8MtCM4xVobEIEcHSHyo7+bY3PFx48aLWoE8iJ+vGzyOL+WVRGJws9s33rC37AK/rkisxS8l3mX8mlwAisfqkqeqG+sM+CrqDbFCRUwOz1PHFI/wA0mF48PCfdwwox4yBA8Bdu/zo++of9FRVnJcuZ9tI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=dW2RfUGk; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HGwWBTXP; arc=none smtp.client-ip=202.12.124.149
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
 Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
-	by mailfout.stl.internal (Postfix) with ESMTP id 2279111400D8;
-	Tue, 14 Jan 2025 15:29:13 -0500 (EST)
+	by mailfout.stl.internal (Postfix) with ESMTP id ACA0F114011A;
+	Tue, 14 Jan 2025 15:29:15 -0500 (EST)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Tue, 14 Jan 2025 15:29:13 -0500
+  by phl-compute-02.internal (MEProxy); Tue, 14 Jan 2025 15:29:16 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1736886552; x=
-	1736972952; bh=tPLVDZkancaTDemgUaoWTMsE0V6WQ6n9aGnjEoOUFOg=; b=H
-	/b78WsQUA6s/mc7XNOOeGEdlgfka8Jz09b7B4suRcJAvE/qMPJgGdA0x2Vjw5nx9
-	IRptk5WZoe2q5a92zZ7UkXdqh0ALxI0RQsI/mIKmfFqQPAwuGvu60MsYCovtBSVd
-	BAIYpCekLVl1Pbq4hjCN2ICbnWlnS8NEKsRMut+6WTLrOmNOY6pnIoR5aIF2BwlN
-	I/Yb+oyNJWmhZgixHXeH+KCfnkzdhJvPs/qMa1GqsAbwP+JfY7PGHqiG50O6XjgW
-	ng+PjcoWSWH30xBcL7xRM2pwznTmFr5pST302bXAznGSI2llXNPnwN51J27xuC+v
-	D4/BtMPr4noqBYYIYrKBw==
+	:reply-to:subject:subject:to:to; s=fm1; t=1736886555; x=
+	1736972955; bh=0tVFe/5fh6fMgpuPO/mkrH2T5WxZhgl8HlJOyHen5ss=; b=d
+	W2RfUGkN1APqTkYRLnkl2MoARJHfolb3cXMD3IfMwPQZyW+J4pdidG2Z3Xa0/W72
+	ZlDsZ1Hz46VEMpzraOhpqO36SxdxhF7Wj238lAL98Qmd57tNEtPK8XH1Act2ikxm
+	FU0wXXsJBfhEeT2njENs02oP2GajOKSsUzFA4KEXrVC9XNZ72GcxVHT7AGAh93EB
+	gLyxGNjw7Z/L/eXaVMRm4fPxU7naD8QKANdlsTNCvQ/t90leB45D5JXDm76NNTrW
+	ARTx1qAZ2CEMzpgZoYDlPxJ204WGHdFF7HkFZ1gi9jBaaUvHBXAUBgFAnWYBjlVQ
+	yt7gAJsguF9aHAqdR7xQw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm2; t=1736886552; x=1736972952; bh=t
-	PLVDZkancaTDemgUaoWTMsE0V6WQ6n9aGnjEoOUFOg=; b=gJyZtbWqOjgsNTGFl
-	X4gWJjCBrQyYKy7uxi/GpaEr9BqhXrJgFuUr+VReeUWH3VtwSx+YWomCmthkmysv
-	gjv0mSY9MY8Wv3ZydrMlPAPHjaNPK9ItsMqLomOeZdSe1i+AOcQXy+JYxjAB03kd
-	Jzp4S0MOCK4qezyQmFxh8MJJsYc/xoeA8EK1gBsh0r5C5f/AyAwQgRJ/A8KM8X/Z
-	sXPcDEnuKC9uZs4yUjCYNGJVeaJVoJo9m8rh6Zg/VvHXXEynvLRMhysstSwuqrDf
-	2uvxJmSmVLZJcPf+0UO5z3FXNCbpWWE8qyZ8PZu1BB4eHI1WxpLMJCdvuCcAqG9G
-	lntIw==
-X-ME-Sender: <xms:GMmGZ4ZZC2swDdx_on5PaJqrp36XjzIg9Cfb37LjM2-DPJ6VtnkLUw>
-    <xme:GMmGZzaewclf3zZKHhPigX-jinl5LYgSYhhqE7Zb_q73SE-f0dMcDAcFaXjlwQFZQ
-    51gLJshnDzy_6xf2g>
-X-ME-Received: <xmr:GMmGZy85vYB0TZTLRrQdkNx4U_QG_VsvbUrDu-gxdCmfOk0W6WJCZ4B-V6UoglghSIAs1LFJV59HmTn5bGUCHAYvSgpQJLfLviRMj5JOuuxdILPyWp60>
+	:x-me-sender:x-sasl-enc; s=fm2; t=1736886555; x=1736972955; bh=0
+	tVFe/5fh6fMgpuPO/mkrH2T5WxZhgl8HlJOyHen5ss=; b=HGwWBTXPDbGU20zaN
+	SVLHChiicY9OHsP6xmZl5ks5axKOmxbtCABKbwwipM225VIMqGUsHjpmNtyvO70d
+	T3enoDaeajAH3pbxA7jYECRQ7uNLhKyOzI7D6uyH47+1xi4edITH7TGx9IzJDbDm
+	/1GMYWCMRAm1ae56rcuFXycfVlY7hOWrfE+r1JfPfEhY6O9SdN2S7AYMaExHPegE
+	L+TFrRRgguhN95/b9nd2jsYsSZHBcW0GFmkpIyqOk8kKHVvm3HM5FTofjwevd484
+	WWWaVSDKszocxbdavQMBU5OuCi7sGAdC8L7UDHVVRhc8H3Ac2+Dog6KZOCArry2e
+	5vxRg==
+X-ME-Sender: <xms:G8mGZzM_BMwEP8MljRyB8xxGuECa6SFLYXQAAq_uHZnWyJpVrG7HoQ>
+    <xme:G8mGZ9_WkHPgURvwtPEk_l4dz2VLJGOdfkJMpMlfuIn95zV5bmKhrwsLeWbnAkXk4
+    XKjMr79TRpTPPlVcA>
+X-ME-Received: <xmr:G8mGZyQvrMSOpUQh40soLruO36CDK5Uar5HdTWQqpoQUg4xk31-KjVghE8HcgLZZ4nelzn_njlL97w_ACtOP2cC43t7ordPW2sYRUC9e4JmKFDwvrOqQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehiedgudefiecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculd
     ejtddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhep
     ffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrh
     hnpefgfefggeejhfduieekvdeuteffleeifeeuvdfhheejleejjeekgfffgefhtddtteen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihuse
+    ucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihuse
     gugihuuhhurdighiiipdhnsggprhgtphhtthhopedujedpmhhouggvpehsmhhtphhouhht
     pdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguug
     ihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhr
@@ -80,14 +80,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehiedgudefiecutefuodetgg
     thgrsggvnhgusehgmhgrihhlrdgtohhmpdhrtghpthhtohepmhgrrhhtihhnrdhlrghuse
     hlihhnuhigrdguvghvpdhrtghpthhtohepshhonhhgsehkvghrnhgvlhdrohhrghdprhgt
     phhtthhopeihohhnghhhohhnghdrshhonhhgsehlihhnuhigrdguvghv
-X-ME-Proxy: <xmx:GMmGZyr_KJA80kKUfeJmKrjSPeuuW4Ozkks2doG7iPGDeC1y3bTBzQ>
-    <xmx:GMmGZzolsBnX-r3JGa-eDnuKElrRiKbyg-0-50wlN2ZMgFZ1MfN_7A>
-    <xmx:GMmGZwSS0E857OtHtHkl4tu_ocT1DAIRoi91G3hpV_zcIvc2N7G41Q>
-    <xmx:GMmGZzpVS-UWvAAfhgr_KgdEDFQ55tc1sSoAP1Pl5BIzxqUlW-XbtQ>
-    <xmx:GMmGZ68apXB1DkfgkFQ1ccQzdRDnbDwIWTGkR2kOZAuIentP-Br3XxGd>
+X-ME-Proxy: <xmx:G8mGZ3vWvWG_JkU1Y2cAORqpaau5BZhvRcf1uufi3Fvpx_rUWR5yOg>
+    <xmx:G8mGZ7eYLszxvxvKbnMg95uvZCVhiMawmCFD7XRQiHQ_LkEdnWyTAw>
+    <xmx:G8mGZz0Mpsh8Xdh7TtivMSmcXO4UAhcVc_uDhQOIT5FkF7-saEPRhA>
+    <xmx:G8mGZ3-Viz6A-MMo1LfgbIzAj5NofTG6KiB5EHFKe2Y5lU4GEYm5rw>
+    <xmx:G8mGZ2Apnk_XxOFrLbbJnEfPvG4IAbRr-qArNgnkbLN-lNJBM7_Rf9bl>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 14 Jan 2025 15:29:10 -0500 (EST)
+ 14 Jan 2025 15:29:13 -0500 (EST)
 From: Daniel Xu <dxu@dxuuu.xyz>
 To: shuah@kernel.org,
 	eddyz87@gmail.com,
@@ -106,9 +106,9 @@ Cc: john.fastabend@gmail.com,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v7 3/5] bpf: verifier: Refactor helper access type tracking
-Date: Tue, 14 Jan 2025 13:28:44 -0700
-Message-ID: <ff885c0e5859e0cd12077c3148ff0754cad4f7ed.1736886479.git.dxu@dxuuu.xyz>
+Subject: [PATCH bpf-next v7 4/5] bpf: verifier: Support eliding map lookup nullness
+Date: Tue, 14 Jan 2025 13:28:45 -0700
+Message-ID: <68f3ea96ff3809a87e502a11a4bd30177fc5823e.1736886479.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <cover.1736886479.git.dxu@dxuuu.xyz>
 References: <cover.1736886479.git.dxu@dxuuu.xyz>
@@ -120,443 +120,282 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Previously, the verifier was treating all PTR_TO_STACK registers passed
-to a helper call as potentially written to by the helper. However, all
-calls to check_stack_range_initialized() already have precise access type
-information available.
+This commit allows progs to elide a null check on statically known map
+lookup keys. In other words, if the verifier can statically prove that
+the lookup will be in-bounds, allow the prog to drop the null check.
 
-Rather than treat ACCESS_HELPER as a proxy for BPF_WRITE, pass
-enum bpf_access_type to check_stack_range_initialized() to more
-precisely track helper arguments.
+This is useful for two reasons:
 
-One benefit from this precision is that registers tracked as valid
-spills and passed as a read-only helper argument remain tracked after
-the call.  Rather than being marked STACK_MISC afterwards.
+1. Large numbers of nullness checks (especially when they cannot fail)
+   unnecessarily pushes prog towards BPF_COMPLEXITY_LIMIT_JMP_SEQ.
+2. It forms a tighter contract between programmer and verifier.
 
-An additional benefit is the verifier logs are also more precise. For
-this particular error, users will enjoy a slightly clearer message. See
-included selftest updates for examples.
+For (1), bpftrace is starting to make heavier use of percpu scratch
+maps. As a result, for user scripts with large number of unrolled loops,
+we are starting to hit jump complexity verification errors.  These
+percpu lookups cannot fail anyways, as we only use static key values.
+Eliding nullness probably results in less work for verifier as well.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+For (2), percpu scratch maps are often used as a larger stack, as the
+currrent stack is limited to 512 bytes. In these situations, it is
+desirable for the programmer to express: "this lookup should never fail,
+and if it does, it means I messed up the code". By omitting the null
+check, the programmer can "ask" the verifier to double check the logic.
+
+Tests also have to be updated in sync with these changes, as the
+verifier is more efficient with this change. Notable, iters.c tests had
+to be changed to use a map type that still requires null checks, as it's
+exercising verifier tracking logic w.r.t iterators.
+
 Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 ---
- kernel/bpf/verifier.c                         | 45 +++++++------------
- .../testing/selftests/bpf/progs/dynptr_fail.c |  6 +--
- .../selftests/bpf/progs/test_global_func10.c  |  2 +-
- .../selftests/bpf/progs/uninit_stack.c        |  5 ++-
- .../bpf/progs/verifier_basic_stack.c          |  2 +-
- .../selftests/bpf/progs/verifier_const_or.c   |  4 +-
- .../progs/verifier_helper_access_var_len.c    | 12 ++---
- .../selftests/bpf/progs/verifier_int_ptr.c    |  2 +-
- .../selftests/bpf/progs/verifier_mtu.c        |  2 +-
- .../selftests/bpf/progs/verifier_raw_stack.c  |  4 +-
- .../selftests/bpf/progs/verifier_unpriv.c     |  2 +-
- .../selftests/bpf/progs/verifier_var_off.c    |  8 ++--
- tools/testing/selftests/bpf/verifier/calls.c  |  2 +-
- 13 files changed, 42 insertions(+), 54 deletions(-)
+ kernel/bpf/verifier.c                         | 92 ++++++++++++++++++-
+ tools/testing/selftests/bpf/progs/iters.c     | 14 +--
+ .../selftests/bpf/progs/map_kptr_fail.c       |  2 +-
+ .../selftests/bpf/progs/verifier_map_in_map.c |  2 +-
+ .../testing/selftests/bpf/verifier/map_kptr.c |  2 +-
+ 5 files changed, 99 insertions(+), 13 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8879977eb9eb..b71858390e65 100644
+index b71858390e65..245f1f3f1aec 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -5303,7 +5303,7 @@ enum bpf_access_src {
- static int check_stack_range_initialized(struct bpf_verifier_env *env,
- 					 int regno, int off, int access_size,
- 					 bool zero_size_allowed,
--					 enum bpf_access_src type,
-+					 enum bpf_access_type type,
- 					 struct bpf_call_arg_meta *meta);
+@@ -287,6 +287,7 @@ struct bpf_call_arg_meta {
+ 	u32 ret_btf_id;
+ 	u32 subprogno;
+ 	struct btf_field *kptr_field;
++	s64 const_map_key;
+ };
  
- static struct bpf_reg_state *reg_state(struct bpf_verifier_env *env, int regno)
-@@ -5336,7 +5336,7 @@ static int check_stack_read_var_off(struct bpf_verifier_env *env,
- 	/* Note that we pass a NULL meta, so raw access will not be permitted.
- 	 */
- 	err = check_stack_range_initialized(env, ptr_regno, off, size,
--					    false, ACCESS_DIRECT, NULL);
-+					    false, BPF_READ, NULL);
- 	if (err)
- 		return err;
+ struct bpf_kfunc_call_arg_meta {
+@@ -9148,6 +9149,63 @@ static int check_reg_const_str(struct bpf_verifier_env *env,
+ 	return 0;
+ }
  
-@@ -7190,7 +7190,7 @@ static int check_stack_slot_within_bounds(struct bpf_verifier_env *env,
- static int check_stack_access_within_bounds(
- 		struct bpf_verifier_env *env,
- 		int regno, int off, int access_size,
--		enum bpf_access_src src, enum bpf_access_type type)
-+		enum bpf_access_type type)
- {
- 	struct bpf_reg_state *regs = cur_regs(env);
- 	struct bpf_reg_state *reg = regs + regno;
-@@ -7199,10 +7199,7 @@ static int check_stack_access_within_bounds(
- 	int err;
- 	char *err_extra;
- 
--	if (src == ACCESS_HELPER)
--		/* We don't know if helpers are reading or writing (or both). */
--		err_extra = " indirect access to";
--	else if (type == BPF_READ)
-+	if (type == BPF_READ)
- 		err_extra = " read from";
- 	else
- 		err_extra = " write to";
-@@ -7420,7 +7417,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 
- 	} else if (reg->type == PTR_TO_STACK) {
- 		/* Basic bounds checks. */
--		err = check_stack_access_within_bounds(env, regno, off, size, ACCESS_DIRECT, t);
-+		err = check_stack_access_within_bounds(env, regno, off, size, t);
- 		if (err)
- 			return err;
- 
-@@ -7640,13 +7637,11 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
- static int check_stack_range_initialized(
- 		struct bpf_verifier_env *env, int regno, int off,
- 		int access_size, bool zero_size_allowed,
--		enum bpf_access_src type, struct bpf_call_arg_meta *meta)
-+		enum bpf_access_type type, struct bpf_call_arg_meta *meta)
- {
- 	struct bpf_reg_state *reg = reg_state(env, regno);
- 	struct bpf_func_state *state = func(env, reg);
- 	int err, min_off, max_off, i, j, slot, spi;
--	char *err_extra = type == ACCESS_HELPER ? " indirect" : "";
--	enum bpf_access_type bounds_check_type;
- 	/* Some accesses can write anything into the stack, others are
- 	 * read-only.
- 	 */
-@@ -7657,18 +7652,10 @@ static int check_stack_range_initialized(
- 		return -EACCES;
- 	}
- 
--	if (type == ACCESS_HELPER) {
--		/* The bounds checks for writes are more permissive than for
--		 * reads. However, if raw_mode is not set, we'll do extra
--		 * checks below.
--		 */
--		bounds_check_type = BPF_WRITE;
-+	if (type == BPF_WRITE)
- 		clobber = true;
--	} else {
--		bounds_check_type = BPF_READ;
--	}
--	err = check_stack_access_within_bounds(env, regno, off, access_size,
--					       type, bounds_check_type);
++/* Returns constant key value if possible, else negative error */
++static s64 get_constant_map_key(struct bpf_verifier_env *env,
++				struct bpf_reg_state *key,
++				u32 key_size)
++{
++	struct bpf_func_state *state = func(env, key);
++	struct bpf_reg_state *reg;
++	int slot, spi, off;
++	int spill_size = 0;
++	int zero_size = 0;
++	int stack_off;
++	int i, err;
++	u8 *stype;
 +
-+	err = check_stack_access_within_bounds(env, regno, off, access_size, type);
- 	if (err)
- 		return err;
++	if (!env->bpf_capable)
++		return -EOPNOTSUPP;
++	if (key->type != PTR_TO_STACK)
++		return -EOPNOTSUPP;
++	if (!tnum_is_const(key->var_off))
++		return -EOPNOTSUPP;
++
++	stack_off = key->off + key->var_off.value;
++	slot = -stack_off - 1;
++	spi = slot / BPF_REG_SIZE;
++	off = slot % BPF_REG_SIZE;
++	stype = state->stack[spi].slot_type;
++
++	/* First handle precisely tracked STACK_ZERO */
++	for (i = off; i >= 0 && stype[i] == STACK_ZERO; i--)
++		zero_size++;
++	if (zero_size >= key_size)
++		return 0;
++
++	/* Check that stack contains a scalar spill of expected size */
++	if (!is_spilled_scalar_reg(&state->stack[spi]))
++		return -EOPNOTSUPP;
++	for (i = off; i >= 0 && stype[i] == STACK_SPILL; i--)
++		spill_size++;
++	if (spill_size != key_size)
++		return -EOPNOTSUPP;
++
++	reg = &state->stack[spi].spilled_ptr;
++	if (!tnum_is_const(reg->var_off))
++		/* Stack value not statically known */
++		return -EOPNOTSUPP;
++
++	/* We are relying on a constant value. So mark as precise
++	 * to prevent pruning on it.
++	 */
++	bt_set_frame_slot(&env->bt, key->frameno, spi);
++	err = mark_chain_precision_batch(env);
++	if (err < 0)
++		return err;
++
++	return reg->var_off.value;
++}
++
+ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			  struct bpf_call_arg_meta *meta,
+ 			  const struct bpf_func_proto *fn,
+@@ -9158,6 +9216,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 	enum bpf_arg_type arg_type = fn->arg_type[arg];
+ 	enum bpf_reg_type type = reg->type;
+ 	u32 *arg_btf_id = NULL;
++	u32 key_size;
+ 	int err = 0;
  
-@@ -7685,8 +7672,8 @@ static int check_stack_range_initialized(
- 			char tn_buf[48];
- 
- 			tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
--			verbose(env, "R%d%s variable offset stack access prohibited for !root, var_off=%s\n",
--				regno, err_extra, tn_buf);
-+			verbose(env, "R%d variable offset stack access prohibited for !root, var_off=%s\n",
-+				regno, tn_buf);
+ 	if (arg_type == ARG_DONTCARE)
+@@ -9291,8 +9350,13 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			verbose(env, "invalid map_ptr to access map->key\n");
  			return -EACCES;
  		}
- 		/* Only initialized buffer on stack is allowed to be accessed
-@@ -7767,14 +7754,14 @@ static int check_stack_range_initialized(
- 		}
- 
- 		if (tnum_is_const(reg->var_off)) {
--			verbose(env, "invalid%s read from stack R%d off %d+%d size %d\n",
--				err_extra, regno, min_off, i - min_off, access_size);
-+			verbose(env, "invalid read from stack R%d off %d+%d size %d\n",
-+				regno, min_off, i - min_off, access_size);
- 		} else {
- 			char tn_buf[48];
- 
- 			tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
--			verbose(env, "invalid%s read from stack R%d var_off %s+%d size %d\n",
--				err_extra, regno, tn_buf, i - min_off, access_size);
-+			verbose(env, "invalid read from stack R%d var_off %s+%d size %d\n",
-+				regno, tn_buf, i - min_off, access_size);
- 		}
- 		return -EACCES;
- mark:
-@@ -7849,7 +7836,7 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
- 		return check_stack_range_initialized(
- 				env,
- 				regno, reg->off, access_size,
--				zero_size_allowed, ACCESS_HELPER, meta);
-+				zero_size_allowed, access_type, meta);
- 	case PTR_TO_BTF_ID:
- 		return check_ptr_to_btf_access(env, regs, regno, reg->off,
- 					       access_size, BPF_READ, -1);
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-index dfd817d0348c..bd8f15229f5c 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -192,7 +192,7 @@ int ringbuf_invalid_api(void *ctx)
- 
- /* Can't add a dynptr to a map */
- SEC("?raw_tp")
--__failure __msg("invalid indirect read from stack")
-+__failure __msg("invalid read from stack")
- int add_dynptr_to_map1(void *ctx)
- {
- 	struct bpf_dynptr ptr;
-@@ -210,7 +210,7 @@ int add_dynptr_to_map1(void *ctx)
- 
- /* Can't add a struct with an embedded dynptr to a map */
- SEC("?raw_tp")
--__failure __msg("invalid indirect read from stack")
-+__failure __msg("invalid read from stack")
- int add_dynptr_to_map2(void *ctx)
- {
- 	struct test_info x;
-@@ -398,7 +398,7 @@ int data_slice_missing_null_check2(void *ctx)
-  * dynptr argument
-  */
- SEC("?raw_tp")
--__failure __msg("invalid indirect read from stack")
-+__failure __msg("invalid read from stack")
- int invalid_helper1(void *ctx)
- {
- 	struct bpf_dynptr ptr;
-diff --git a/tools/testing/selftests/bpf/progs/test_global_func10.c b/tools/testing/selftests/bpf/progs/test_global_func10.c
-index 5da001ca57a5..09d027bd3ea8 100644
---- a/tools/testing/selftests/bpf/progs/test_global_func10.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_func10.c
-@@ -26,7 +26,7 @@ __noinline int foo(const struct Big *big)
+-		err = check_helper_mem_access(env, regno, meta->map_ptr->key_size,
+-					      BPF_READ, false, NULL);
++		key_size = meta->map_ptr->key_size;
++		err = check_helper_mem_access(env, regno, key_size, BPF_READ, false, NULL);
++		if (err)
++			return err;
++		meta->const_map_key = get_constant_map_key(env, reg, key_size);
++		if (meta->const_map_key < 0 && meta->const_map_key != -EOPNOTSUPP)
++			return meta->const_map_key;
+ 		break;
+ 	case ARG_PTR_TO_MAP_VALUE:
+ 		if (type_may_be_null(arg_type) && register_is_null(reg))
+@@ -10816,6 +10880,21 @@ static void update_loop_inline_state(struct bpf_verifier_env *env, u32 subprogno
+ 				 state->callback_subprogno == subprogno);
  }
  
- SEC("cgroup_skb/ingress")
--__failure __msg("invalid indirect access to stack")
-+__failure __msg("invalid read from stack")
- int global_func10(struct __sk_buff *skb)
++/* Returns whether or not the given map type can potentially elide
++ * lookup return value nullness check. This is possible if the key
++ * is statically known.
++ */
++static bool can_elide_value_nullness(enum bpf_map_type type)
++{
++	switch (type) {
++	case BPF_MAP_TYPE_ARRAY:
++	case BPF_MAP_TYPE_PERCPU_ARRAY:
++		return true;
++	default:
++		return false;
++	}
++}
++
+ static int get_helper_proto(struct bpf_verifier_env *env, int func_id,
+ 			    const struct bpf_func_proto **ptr)
  {
- 	const struct Small small = {.x = skb->len };
-diff --git a/tools/testing/selftests/bpf/progs/uninit_stack.c b/tools/testing/selftests/bpf/progs/uninit_stack.c
-index 8a403470e557..046a204c8fc6 100644
---- a/tools/testing/selftests/bpf/progs/uninit_stack.c
-+++ b/tools/testing/selftests/bpf/progs/uninit_stack.c
-@@ -70,7 +70,8 @@ __naked int helper_uninit_to_misc(void *ctx)
- 		r1 = r10;				\
- 		r1 += -128;				\
- 		r2 = 32;				\
--		call %[bpf_trace_printk];		\
-+		r3 = 0;					\
-+		call %[bpf_probe_read_user];		\
- 		/* Call to dummy() forces print_verifier_state(..., true),	\
- 		 * thus showing the stack state, matched by __msg().		\
- 		 */					\
-@@ -79,7 +80,7 @@ __naked int helper_uninit_to_misc(void *ctx)
- 		exit;					\
- "
- 		      :
--		      : __imm(bpf_trace_printk),
-+		      : __imm(bpf_probe_read_user),
- 			__imm(dummy)
- 		      : __clobber_all);
+@@ -11182,10 +11261,17 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 				"kernel subsystem misconfigured verifier\n");
+ 			return -EINVAL;
+ 		}
++
++		if (func_id == BPF_FUNC_map_lookup_elem &&
++		    can_elide_value_nullness(meta.map_ptr->map_type) &&
++		    meta.const_map_key >= 0 &&
++		    meta.const_map_key < meta.map_ptr->max_entries)
++			ret_flag &= ~PTR_MAYBE_NULL;
++
+ 		regs[BPF_REG_0].map_ptr = meta.map_ptr;
+ 		regs[BPF_REG_0].map_uid = meta.map_uid;
+ 		regs[BPF_REG_0].type = PTR_TO_MAP_VALUE | ret_flag;
+-		if (!type_may_be_null(ret_type) &&
++		if (!type_may_be_null(ret_flag) &&
+ 		    btf_record_has_field(meta.map_ptr->record, BPF_SPIN_LOCK)) {
+ 			regs[BPF_REG_0].id = ++env->id_gen;
+ 		}
+diff --git a/tools/testing/selftests/bpf/progs/iters.c b/tools/testing/selftests/bpf/progs/iters.c
+index 7c969c127573..190822b2f08b 100644
+--- a/tools/testing/selftests/bpf/progs/iters.c
++++ b/tools/testing/selftests/bpf/progs/iters.c
+@@ -524,11 +524,11 @@ int iter_subprog_iters(const void *ctx)
  }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_basic_stack.c b/tools/testing/selftests/bpf/progs/verifier_basic_stack.c
-index 8d77cc5323d3..fb62e09f2114 100644
---- a/tools/testing/selftests/bpf/progs/verifier_basic_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_basic_stack.c
-@@ -28,7 +28,7 @@ __naked void stack_out_of_bounds(void)
- SEC("socket")
- __description("uninitialized stack1")
- __success __log_level(4) __msg("stack depth 8")
--__failure_unpriv __msg_unpriv("invalid indirect read from stack")
-+__failure_unpriv __msg_unpriv("invalid read from stack")
- __naked void uninitialized_stack1(void)
- {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_const_or.c b/tools/testing/selftests/bpf/progs/verifier_const_or.c
-index ba8922b2eebd..68c568c3c3a0 100644
---- a/tools/testing/selftests/bpf/progs/verifier_const_or.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_const_or.c
-@@ -25,7 +25,7 @@ __naked void constant_should_keep_constant_type(void)
  
- SEC("tracepoint")
- __description("constant register |= constant should not bypass stack boundary checks")
--__failure __msg("invalid indirect access to stack R1 off=-48 size=58")
-+__failure __msg("invalid write to stack R1 off=-48 size=58")
- __naked void not_bypass_stack_boundary_checks_1(void)
- {
- 	asm volatile ("					\
-@@ -62,7 +62,7 @@ __naked void register_should_keep_constant_type(void)
+ struct {
+-	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(type, BPF_MAP_TYPE_HASH);
+ 	__type(key, int);
+ 	__type(value, int);
+ 	__uint(max_entries, 1000);
+-} arr_map SEC(".maps");
++} hash_map SEC(".maps");
  
- SEC("tracepoint")
- __description("constant register |= constant register should not bypass stack boundary checks")
--__failure __msg("invalid indirect access to stack R1 off=-48 size=58")
-+__failure __msg("invalid write to stack R1 off=-48 size=58")
- __naked void not_bypass_stack_boundary_checks_2(void)
- {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c b/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c
-index 50c6b22606f6..f2c54e4d89eb 100644
---- a/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c
-@@ -67,7 +67,7 @@ SEC("socket")
- __description("helper access to variable memory: stack, bitwise AND, zero included")
- /* in privileged mode reads from uninitialized stack locations are permitted */
- __success __failure_unpriv
--__msg_unpriv("invalid indirect read from stack R2 off -64+0 size 64")
-+__msg_unpriv("invalid read from stack R2 off -64+0 size 64")
- __retval(0)
- __naked void stack_bitwise_and_zero_included(void)
- {
-@@ -100,7 +100,7 @@ __naked void stack_bitwise_and_zero_included(void)
+ SEC("?raw_tp")
+ __failure __msg("invalid mem access 'scalar'")
+@@ -539,7 +539,7 @@ int iter_err_too_permissive1(const void *ctx)
  
- SEC("tracepoint")
- __description("helper access to variable memory: stack, bitwise AND + JMP, wrong max")
--__failure __msg("invalid indirect access to stack R1 off=-64 size=65")
-+__failure __msg("invalid write to stack R1 off=-64 size=65")
- __naked void bitwise_and_jmp_wrong_max(void)
- {
- 	asm volatile ("					\
-@@ -187,7 +187,7 @@ l0_%=:	r0 = 0;						\
+ 	MY_PID_GUARD();
  
- SEC("tracepoint")
- __description("helper access to variable memory: stack, JMP, bounds + offset")
--__failure __msg("invalid indirect access to stack R1 off=-64 size=65")
-+__failure __msg("invalid write to stack R1 off=-64 size=65")
- __naked void memory_stack_jmp_bounds_offset(void)
- {
- 	asm volatile ("					\
-@@ -211,7 +211,7 @@ l0_%=:	r0 = 0;						\
+-	map_val = bpf_map_lookup_elem(&arr_map, &key);
++	map_val = bpf_map_lookup_elem(&hash_map, &key);
+ 	if (!map_val)
+ 		return 0;
  
- SEC("tracepoint")
- __description("helper access to variable memory: stack, JMP, wrong max")
--__failure __msg("invalid indirect access to stack R1 off=-64 size=65")
-+__failure __msg("invalid write to stack R1 off=-64 size=65")
- __naked void memory_stack_jmp_wrong_max(void)
- {
- 	asm volatile ("					\
-@@ -260,7 +260,7 @@ SEC("socket")
- __description("helper access to variable memory: stack, JMP, no min check")
- /* in privileged mode reads from uninitialized stack locations are permitted */
- __success __failure_unpriv
--__msg_unpriv("invalid indirect read from stack R2 off -64+0 size 64")
-+__msg_unpriv("invalid read from stack R2 off -64+0 size 64")
- __retval(0)
- __naked void stack_jmp_no_min_check(void)
- {
-@@ -750,7 +750,7 @@ SEC("socket")
- __description("helper access to variable memory: 8 bytes leak")
- /* in privileged mode reads from uninitialized stack locations are permitted */
- __success __failure_unpriv
--__msg_unpriv("invalid indirect read from stack R2 off -64+32 size 64")
-+__msg_unpriv("invalid read from stack R2 off -64+32 size 64")
- __retval(0)
- __naked void variable_memory_8_bytes_leak(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_int_ptr.c b/tools/testing/selftests/bpf/progs/verifier_int_ptr.c
-index 5f2efb895edb..59e34d558654 100644
---- a/tools/testing/selftests/bpf/progs/verifier_int_ptr.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_int_ptr.c
-@@ -96,7 +96,7 @@ __naked void arg_ptr_to_long_misaligned(void)
+@@ -561,12 +561,12 @@ int iter_err_too_permissive2(const void *ctx)
  
- SEC("cgroup/sysctl")
- __description("arg pointer to long size < sizeof(long)")
--__failure __msg("invalid indirect access to stack R4 off=-4 size=8")
-+__failure __msg("invalid write to stack R4 off=-4 size=8")
- __naked void to_long_size_sizeof_long(void)
- {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_mtu.c b/tools/testing/selftests/bpf/progs/verifier_mtu.c
-index 4ccf1ebc42d1..256956ea1ac5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_mtu.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_mtu.c
-@@ -8,7 +8,7 @@ SEC("tc/ingress")
- __description("uninit/mtu: write rejected")
- __success
- __caps_unpriv(CAP_BPF|CAP_NET_ADMIN)
--__failure_unpriv __msg_unpriv("invalid indirect read from stack")
-+__failure_unpriv __msg_unpriv("invalid read from stack")
- int tc_uninit_mtu(struct __sk_buff *ctx)
- {
- 	__u32 mtu;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_raw_stack.c b/tools/testing/selftests/bpf/progs/verifier_raw_stack.c
-index 7cc83acac727..c689665e07b9 100644
---- a/tools/testing/selftests/bpf/progs/verifier_raw_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_raw_stack.c
-@@ -236,7 +236,7 @@ __naked void load_bytes_spilled_regs_data(void)
+ 	MY_PID_GUARD();
  
- SEC("tc")
- __description("raw_stack: skb_load_bytes, invalid access 1")
--__failure __msg("invalid indirect access to stack R3 off=-513 size=8")
-+__failure __msg("invalid write to stack R3 off=-513 size=8")
- __naked void load_bytes_invalid_access_1(void)
- {
- 	asm volatile ("					\
-@@ -255,7 +255,7 @@ __naked void load_bytes_invalid_access_1(void)
+-	map_val = bpf_map_lookup_elem(&arr_map, &key);
++	map_val = bpf_map_lookup_elem(&hash_map, &key);
+ 	if (!map_val)
+ 		return 0;
  
- SEC("tc")
- __description("raw_stack: skb_load_bytes, invalid access 2")
--__failure __msg("invalid indirect access to stack R3 off=-1 size=8")
-+__failure __msg("invalid write to stack R3 off=-1 size=8")
- __naked void load_bytes_invalid_access_2(void)
- {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-index 7ea535bfbacd..a4a5e2071604 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -199,7 +199,7 @@ __naked void pass_pointer_to_helper_function(void)
- SEC("socket")
- __description("unpriv: indirectly pass pointer on stack to helper function")
- __success __failure_unpriv
--__msg_unpriv("invalid indirect read from stack R2 off -8+0 size 8")
-+__msg_unpriv("invalid read from stack R2 off -8+0 size 8")
- __retval(0)
- __naked void on_stack_to_helper_function(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_var_off.c b/tools/testing/selftests/bpf/progs/verifier_var_off.c
-index c810f4f6f479..1d36d01b746e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_var_off.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_var_off.c
-@@ -203,7 +203,7 @@ __naked void stack_write_clobbers_spilled_regs(void)
+ 	bpf_repeat(1000000) {
+-		map_val = bpf_map_lookup_elem(&arr_map, &key);
++		map_val = bpf_map_lookup_elem(&hash_map, &key);
+ 	}
  
- SEC("sockops")
- __description("indirect variable-offset stack access, unbounded")
--__failure __msg("invalid unbounded variable-offset indirect access to stack R4")
-+__failure __msg("invalid unbounded variable-offset write to stack R4")
- __naked void variable_offset_stack_access_unbounded(void)
- {
- 	asm volatile ("					\
-@@ -236,7 +236,7 @@ l0_%=:	r0 = 0;						\
+ 	*map_val = 123;
+@@ -585,7 +585,7 @@ int iter_err_too_permissive3(const void *ctx)
+ 	MY_PID_GUARD();
  
- SEC("lwt_in")
- __description("indirect variable-offset stack access, max out of bound")
--__failure __msg("invalid variable-offset indirect access to stack R2")
-+__failure __msg("invalid variable-offset read from stack R2")
- __naked void access_max_out_of_bound(void)
- {
- 	asm volatile ("					\
-@@ -269,7 +269,7 @@ __naked void access_max_out_of_bound(void)
-  */
- SEC("socket")
- __description("indirect variable-offset stack access, zero-sized, max out of bound")
--__failure __msg("invalid variable-offset indirect access to stack R1")
-+__failure __msg("invalid variable-offset write to stack R1")
- __naked void zero_sized_access_max_out_of_bound(void)
- {
- 	asm volatile ("                      \
-@@ -294,7 +294,7 @@ __naked void zero_sized_access_max_out_of_bound(void)
+ 	bpf_repeat(1000000) {
+-		map_val = bpf_map_lookup_elem(&arr_map, &key);
++		map_val = bpf_map_lookup_elem(&hash_map, &key);
+ 		found = true;
+ 	}
  
- SEC("lwt_in")
- __description("indirect variable-offset stack access, min out of bound")
--__failure __msg("invalid variable-offset indirect access to stack R2")
-+__failure __msg("invalid variable-offset read from stack R2")
- __naked void access_min_out_of_bound(void)
+@@ -606,7 +606,7 @@ int iter_tricky_but_fine(const void *ctx)
+ 	MY_PID_GUARD();
+ 
+ 	bpf_repeat(1000000) {
+-		map_val = bpf_map_lookup_elem(&arr_map, &key);
++		map_val = bpf_map_lookup_elem(&hash_map, &key);
+ 		if (map_val) {
+ 			found = true;
+ 			break;
+diff --git a/tools/testing/selftests/bpf/progs/map_kptr_fail.c b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+index c2a6bd392e48..4c0ff01f1a96 100644
+--- a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+@@ -345,7 +345,7 @@ int reject_indirect_global_func_access(struct __sk_buff *ctx)
+ }
+ 
+ SEC("?tc")
+-__failure __msg("Unreleased reference id=5 alloc_insn=")
++__failure __msg("Unreleased reference id=4 alloc_insn=")
+ int kptr_xchg_ref_state(struct __sk_buff *ctx)
  {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
-index 7afc2619ab14..18596ae0b0c1 100644
---- a/tools/testing/selftests/bpf/verifier/calls.c
-+++ b/tools/testing/selftests/bpf/verifier/calls.c
-@@ -2252,7 +2252,7 @@
- 	BPF_EXIT_INSN(),
- 	},
- 	.fixup_map_hash_48b = { 7 },
--	.errstr_unpriv = "invalid indirect read from stack R2 off -8+0 size 8",
-+	.errstr_unpriv = "invalid read from stack R2 off -8+0 size 8",
- 	.result_unpriv = REJECT,
- 	/* in privileged mode reads from uninitialized stack locations are permitted */
- 	.result = ACCEPT,
+ 	struct prog_test_ref_kfunc *p;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_map_in_map.c b/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
+index 4eaab1468eb7..7d088ba99ea5 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
++++ b/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
+@@ -47,7 +47,7 @@ l0_%=:	r0 = 0;						\
+ 
+ SEC("xdp")
+ __description("map in map state pruning")
+-__success __msg("processed 26 insns")
++__success __msg("processed 15 insns")
+ __log_level(2) __retval(0) __flag(BPF_F_TEST_STATE_FREQ)
+ __naked void map_in_map_state_pruning(void)
+ {
+diff --git a/tools/testing/selftests/bpf/verifier/map_kptr.c b/tools/testing/selftests/bpf/verifier/map_kptr.c
+index f420c0312aa0..4b39f8472f9b 100644
+--- a/tools/testing/selftests/bpf/verifier/map_kptr.c
++++ b/tools/testing/selftests/bpf/verifier/map_kptr.c
+@@ -373,7 +373,7 @@
+ 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
+ 	.fixup_map_kptr = { 1 },
+ 	.result = REJECT,
+-	.errstr = "Unreleased reference id=5 alloc_insn=20",
++	.errstr = "Unreleased reference id=4 alloc_insn=20",
+ 	.fixup_kfunc_btf_id = {
+ 		{ "bpf_kfunc_call_test_acquire", 15 },
+ 	}
 -- 
 2.47.1
 
