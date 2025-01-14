@@ -1,89 +1,65 @@
-Return-Path: <linux-kselftest+bounces-24449-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24450-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BD3DA1096E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 15:32:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E8D4A10A16
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 15:59:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49DEA1608F2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 14:32:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7297B18870BA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 14:59:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FED11474A5;
-	Tue, 14 Jan 2025 14:32:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A72815746B;
+	Tue, 14 Jan 2025 14:58:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AjLS4P50"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="uJtnCU+Q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94A313A879;
-	Tue, 14 Jan 2025 14:32:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 543BF155CBF;
+	Tue, 14 Jan 2025 14:58:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=158.69.130.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736865145; cv=none; b=uTlrj9fsDZHKU/58qheTHFNS3lgCrwpwVss0cXvFieUi/YR/0DfUHvhPvm6vej3Na1GGWELMY2jpzCgYifbCHE/VETCcOd7I5P4yf+0xxKOQypNt0fRz0FBn606JezjQNePGlJsNob0aMqGIOaAL+Bf2SyHQLxH0XxD3C4MXF2w=
+	t=1736866732; cv=none; b=jVmIIADEmHcGZiNa0lW3HCFDTJY5oZPAbnkp7SiJFwOWm0VgNih2gDegLijZqSYzi4CXN00wtKMWT8GS1WWVnv+A+372xAj2NqOm+N8WE2gsyzznnhQC7+5qe1P6FRfbcAFynfFcS9DuhoLxlsKZGjOGIEQZ87OC7nqs2oSguPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736865145; c=relaxed/simple;
-	bh=kF0aFyyo7XaoEXlUuD7nHmdei0HxOgClY6gAvpRoQRE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IUmNJ+F6DMtTO/WmH6LrNEjoWix7syD3EJa3rHz4AkXz/8SC78EUVXDMPfDNWt1CPFI2a6dz+36S1nFeF388JJFxoI7a6T8rHLGat+n6Lx1v24fNOEM8TR/x5//FMOFEKh86nqKLPHxBwqNAP6DZbpnQUL+EmMyXCj9rssy2l7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=AjLS4P50; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50E3s7DV005799;
-	Tue, 14 Jan 2025 14:32:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=WuwNzSCv4EUuRn8dRTh7pIOxZia6gwwm11Bgq1t1C
-	Ak=; b=AjLS4P501IufRuKc92kDYkBUM694yB5w/MZlTC7+3X9c7BC+BgMMfBs/N
-	vitm9AUJcpmRlfYQtxRG04HyOkPUcQy9vxfJ6aUQyE2bqjrNYYISglkfK1Q4QgmH
-	qIBTC+QXuWShepkfFmZkHBaCgPpzJ6fV1WGfTC0CEJLWRWh9q/g3f/530INX32vb
-	PHjeBfAklyhJ5F9zeqTWnbeWMm5c+9PtdGd9ER+L5wn/ujIM9C4j/GvObFtHX5pf
-	jJO7f7rodkOa1Y5yhdSTjILTf7G0FXwSbF+z55S0yRI+yVoN+0JhpLEORdFf7Vdg
-	HWpZYoqFQ57sqNu9qhMkaEcnkJ7zQ==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 445gdjjaa2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Jan 2025 14:32:02 +0000 (GMT)
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50EETRnd029597;
-	Tue, 14 Jan 2025 14:32:02 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 445gdjja9v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Jan 2025 14:32:02 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50EEJctk017014;
-	Tue, 14 Jan 2025 14:32:01 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4444fk3fc4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Jan 2025 14:32:00 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50EEVxHk29754032
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 14 Jan 2025 14:31:59 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EDA5C20043;
-	Tue, 14 Jan 2025 14:31:58 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CA0D420040;
-	Tue, 14 Jan 2025 14:31:52 +0000 (GMT)
-Received: from li-c439904c-24ed-11b2-a85c-b284a6847472.ibm.com.com (unknown [9.43.0.219])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 14 Jan 2025 14:31:52 +0000 (GMT)
-From: Madhavan Srinivasan <maddy@linux.ibm.com>
-To: jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
-        joe.lawrence@redhat.com, shuah@kernel.org
-Cc: mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        naveen@kernel.org, live-patching@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Madhavan Srinivasan <maddy@linux.ibm.com>
-Subject: [PATCH] selftests: livepatch: handle PRINTK_CALLER in check_result()
-Date: Tue, 14 Jan 2025 20:01:44 +0530
-Message-ID: <20250114143144.164250-1-maddy@linux.ibm.com>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1736866732; c=relaxed/simple;
+	bh=Dg25GqDVqqCMzAW6PQxRrOB9Py5nYcOhwwIW8ovLDYY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mmkMag5psr0ndv+G+IAChGTtywQ1LgT3/nWcp6O3/KoKicprMb2Fl3J/RqvKQmu4KumKx1gZaszpwpJ+HKzdfnG1sH9vE4cAAMjg/7uNjTo1aCsXMMeRcgVhhvkUvWkoNDk6fLxUWGtr2XIFby+IEL4P0FzKp0cWSKGnSUv3hJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=uJtnCU+Q; arc=none smtp.client-ip=158.69.130.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1736866297;
+	bh=Dg25GqDVqqCMzAW6PQxRrOB9Py5nYcOhwwIW8ovLDYY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=uJtnCU+Qnk5rFjnzVK/b25yXDRcnfrUN4wn1zjfzXskvJSKElhYrybZ5tltXCLHg6
+	 PECHwiTVprgHddFQOYMbS06BaoLFEn6RyArLRvv2GVROGIIwIZL2yHXpBPk55Hbe8P
+	 9bpdM4xkE8JZiUkVm9s2rPkNJRWC46Et2ApYvKcPy8OFCGgbTm7eJsLuVdwkdwsEBM
+	 NOr40uvv+0LY7CQW1u/k7xlPsq3CU09U2kYR0ENSmGnVkoq2SXKzMlVe1U2Ny2GfdV
+	 SOqqTnQp0ussdqS2sES9Un5AB2hupchi58M6jDqs5JW5UU78Ks6igcxE3YVFG1mZlD
+	 KdrGebd1O0gyw==
+Received: from thinkos.internal.efficios.com (96-127-217-162.qc.cable.ebox.net [96.127.217.162])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4YXXBw6nWBz1HCw;
+	Tue, 14 Jan 2025 09:51:36 -0500 (EST)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Carlos O'Donell <carlos@redhat.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	Michael Jeanson <mjeanson@efficios.com>,
+	linux-kselftest@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH] selftests/rseq: Fix handling of glibc without rseq support
+Date: Tue, 14 Jan 2025 09:51:32 -0500
+Message-Id: <20250114145132.612569-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,73 +67,138 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: qnPN_SzONfNK6j-06uxQuxcWq8HlKsP6
-X-Proofpoint-ORIG-GUID: gCspiTx0ec9vkIAjl20tG56LdC5i68fC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=635
- suspectscore=0 malwarescore=0 bulkscore=0 clxscore=1011 phishscore=0
- priorityscore=1501 adultscore=0 impostorscore=0 spamscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501140115
 
-Some arch configs (like ppc64) enable CONFIG_PRINTK_CALLER, which
-adds the caller id as part of the dmesg. Due to this, even though
-the expected vs observed are same, end testcase results are failed.
+When porting librseq commit:
 
- -% insmod test_modules/test_klp_livepatch.ko
- -livepatch: enabling patch 'test_klp_livepatch'
- -livepatch: 'test_klp_livepatch': initializing patching transition
- -livepatch: 'test_klp_livepatch': starting patching transition
- -livepatch: 'test_klp_livepatch': completing patching transition
- -livepatch: 'test_klp_livepatch': patching complete
- -% echo 0 > /sys/kernel/livepatch/test_klp_livepatch/enabled
- -livepatch: 'test_klp_livepatch': initializing unpatching transition
- -livepatch: 'test_klp_livepatch': starting unpatching transition
- -livepatch: 'test_klp_livepatch': completing unpatching transition
- -livepatch: 'test_klp_livepatch': unpatching complete
- -% rmmod test_klp_livepatch
- +[   T3659] % insmod test_modules/test_klp_livepatch.ko
- +[   T3682] livepatch: enabling patch 'test_klp_livepatch'
- +[   T3682] livepatch: 'test_klp_livepatch': initializing patching transition
- +[   T3682] livepatch: 'test_klp_livepatch': starting patching transition
- +[    T826] livepatch: 'test_klp_livepatch': completing patching transition
- +[    T826] livepatch: 'test_klp_livepatch': patching complete
- +[   T3659] % echo 0 > /sys/kernel/livepatch/test_klp_livepatch/enabled
- +[   T3659] livepatch: 'test_klp_livepatch': initializing unpatching transition
- +[   T3659] livepatch: 'test_klp_livepatch': starting unpatching transition
- +[    T789] livepatch: 'test_klp_livepatch': completing unpatching transition
- +[    T789] livepatch: 'test_klp_livepatch': unpatching complete
- +[   T3659] % rmmod test_klp_livepatch
+commit c7b45750fa85 ("Adapt to glibc __rseq_size feature detection")
 
-  ERROR: livepatch kselftest(s) failed
- not ok 1 selftests: livepatch: test-livepatch.sh # exit=1
+from librseq to the kernel selftests, the following line was missed
+at the end of rseq_init():
 
-Currently the check_result() handles the "[time]" removal from
-the dmesg. Enhance the check to handle removal of "[Tid]" also.
+  rseq_size = get_rseq_kernel_feature_size();
 
-Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
+which effectively leaves rseq_size initialized to -1U when glibc does not
+have rseq support. glibc supports rseq from version 2.35 onwards.
+
+In a following librseq commit
+
+commit c67d198627c2 ("Only set 'rseq_size' on first thread registration")
+
+to mimic the libc behavior, a new approach is taken: don't set the
+feature size in 'rseq_size' until at least one thread has successfully
+registered. This allows using 'rseq_size' in fast-paths to test for both
+registration status and available features. The caveat is that on libc
+either all threads are registered or none are, while with bare librseq
+it is the responsability of the user to register all threads using rseq.
+
+This combines the changes from the following librseq commits:
+
+commit c7b45750fa85 ("Adapt to glibc __rseq_size feature detection")
+commit c67d198627c2 ("Only set 'rseq_size' on first thread registration")
+
+Fixes: 73a4f5a704a2 ("selftests/rseq: Fix mm_cid test failure")
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Raghavendra Rao Ananta <rananta@google.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Carlos O'Donell <carlos@redhat.com>
+Cc: Florian Weimer <fweimer@redhat.com>
+Cc: Michael Jeanson <mjeanson@efficios.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: stable@vger.kernel.org
 ---
- tools/testing/selftests/livepatch/functions.sh | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/rseq/rseq.c | 32 ++++++++++++++++++++++-------
+ tools/testing/selftests/rseq/rseq.h |  9 +++++++-
+ 2 files changed, 33 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index e5d06fb40233..a1730c1864a4 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -306,7 +306,8 @@ function check_result {
- 	result=$(dmesg | awk -v last_dmesg="$LAST_DMESG" 'p; $0 == last_dmesg { p=1 }' | \
- 		 grep -e 'livepatch:' -e 'test_klp' | \
- 		 grep -v '\(tainting\|taints\) kernel' | \
--		 sed 's/^\[[ 0-9.]*\] //')
-+		 sed 's/^\[[ 0-9.]*\] //' | \
-+		 sed 's/^\[[ ]*T[0-9]*\] //')
+diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
+index 5b9772cdf265..f6156790c3b4 100644
+--- a/tools/testing/selftests/rseq/rseq.c
++++ b/tools/testing/selftests/rseq/rseq.c
+@@ -61,7 +61,6 @@ unsigned int rseq_size = -1U;
+ unsigned int rseq_flags;
  
- 	if [[ "$expect" == "$result" ]] ; then
- 		echo "ok"
+ static int rseq_ownership;
+-static int rseq_reg_success;	/* At least one rseq registration has succeded. */
+ 
+ /* Allocate a large area for the TLS. */
+ #define RSEQ_THREAD_AREA_ALLOC_SIZE	1024
+@@ -152,14 +151,27 @@ int rseq_register_current_thread(void)
+ 	}
+ 	rc = sys_rseq(&__rseq_abi, get_rseq_min_alloc_size(), 0, RSEQ_SIG);
+ 	if (rc) {
+-		if (RSEQ_READ_ONCE(rseq_reg_success)) {
++		/*
++		 * After at least one thread has registered successfully
++		 * (rseq_size > 0), the registration of other threads should
++		 * never fail.
++		 */
++		if (RSEQ_READ_ONCE(rseq_size) > 0) {
+ 			/* Incoherent success/failure within process. */
+ 			abort();
+ 		}
+ 		return -1;
+ 	}
+ 	assert(rseq_current_cpu_raw() >= 0);
+-	RSEQ_WRITE_ONCE(rseq_reg_success, 1);
++
++	/*
++	 * The first thread to register sets the rseq_size to mimic the libc
++	 * behavior.
++	 */
++	if (RSEQ_READ_ONCE(rseq_size) == 0) {
++		RSEQ_WRITE_ONCE(rseq_size, get_rseq_kernel_feature_size());
++	}
++
+ 	return 0;
+ }
+ 
+@@ -235,12 +247,18 @@ void rseq_init(void)
+ 		return;
+ 	}
+ 	rseq_ownership = 1;
+-	if (!rseq_available()) {
+-		rseq_size = 0;
+-		return;
+-	}
++
++	/* Calculate the offset of the rseq area from the thread pointer. */
+ 	rseq_offset = (void *)&__rseq_abi - rseq_thread_pointer();
++
++	/* rseq flags are deprecated, always set to 0. */
+ 	rseq_flags = 0;
++
++	/*
++	 * Set the size to 0 until at least one thread registers to mimic the
++	 * libc behavior.
++	 */
++	rseq_size = 0;
+ }
+ 
+ static __attribute__((destructor))
+diff --git a/tools/testing/selftests/rseq/rseq.h b/tools/testing/selftests/rseq/rseq.h
+index 4e217b620e0c..062d10925a10 100644
+--- a/tools/testing/selftests/rseq/rseq.h
++++ b/tools/testing/selftests/rseq/rseq.h
+@@ -60,7 +60,14 @@
+ extern ptrdiff_t rseq_offset;
+ 
+ /*
+- * Size of the registered rseq area. 0 if the registration was
++ * The rseq ABI is composed of extensible feature fields. The extensions
++ * are done by appending additional fields at the end of the structure.
++ * The rseq_size defines the size of the active feature set which can be
++ * used by the application for the current rseq registration. Features
++ * starting at offset >= rseq_size are inactive and should not be used.
++ *
++ * The rseq_size is the intersection between the available allocation
++ * size for the rseq area and the feature size supported by the kernel.
+  * unsuccessful.
+  */
+ extern unsigned int rseq_size;
 -- 
-2.47.0
+2.39.5
 
 
