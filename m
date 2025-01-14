@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-24437-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24438-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53F7FA1038A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 11:02:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2891FA103C9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 11:15:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 619DD1621DD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 10:02:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32C9C18876CB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 10:15:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 061F81ADC8E;
-	Tue, 14 Jan 2025 10:02:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ABB722DC3C;
+	Tue, 14 Jan 2025 10:15:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AtoW7U5Z"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J0qRM5Gt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F6A1ADC84
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 10:01:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF4A91CF2B7
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 10:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736848920; cv=none; b=IPYBt4fCp+jDuG7oRuF1vGcx6wBuPijNW9Ap3ZccOeu1TditwAZNFE+JoLgDHL/hCf9matTdKASb702rJr3XpArqkQOajpSJlI1ZulijN8xbuPRPgtwYTky7RNw8InULBrXs94nyWQDtBEZVMGEqKmD7T8XyQFZnN+FMSrjUwrI=
+	t=1736849741; cv=none; b=AnbqOapMzivyAuuiyOVtNDXdeGiHZodXhbTHFkb+T8bdc1afH7xRLtXAdMBRwjBMhXnkelx1QxswOBGCXWbH3jyS+yII7q9AyBy/XEc06IW+JXm4ng4djmwX7w4mcY1rJgxP4gomHnqlJELCfHk4LDwzZsECvZIjGeNICJsJahA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736848920; c=relaxed/simple;
-	bh=dX6o8MVnu7hHH5mzHRWTbY7Q5cZNVuSHHr5APtT7xWY=;
+	s=arc-20240116; t=1736849741; c=relaxed/simple;
+	bh=KTl3q5pYXLSH0DeiMj44Uash53egDogV0MDwlIHtVVk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UEWfUQNOtc4C2ZJcXfMBTu/D8uWb4Fs0eRMHFB15zQsXbQRC+np5iNbbCnisUTRupqR8cE5jklSiCrQUm63+WyT1SyKErAuLhxTPs+6INYgVu+Q3hQYxKKUya5trLnCZkN+S2nLjj/nJWXoMHyXEoUZ/5vdNRAazgBJRIDhHlVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AtoW7U5Z; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=LWwqCBKjawqSpeHGp6/4oNvSKY3WIiysJxaXD4DpsoaWmmQdv62+3eG88EllbY+LkP+0dZMvdKYP4RZPxnaqUR8KR/Gqp8NDoDQj0fxssVVcITcoHF0FTgY1yA9WBbtfF3RiPxu+tg3kVaEGI0qUHsSmYyvtxaG1mQlIvjsH+oU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J0qRM5Gt; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736848918;
+	s=mimecast20190719; t=1736849738;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=ISTJvNY/yuUbjJURhevN2PidXwlioNt1jGja0wDB6kw=;
-	b=AtoW7U5ZNl2Bd9vf0t2BYxo7sYAXh5wbProgG42ibBafJxVJh0S22zZvWfYWpNvDPhBi+N
-	usNYhyvfkyFOkiiEsyigShJuRujTmUrWmBVflPONmuTwCR0HcXsW+aoogVJp0pxYaehn5Z
-	8lOgKGQMyU/2/SPKmzkMKXyQwX0kpFk=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=bL9exZbXhYW4wMhK5x/31VM6rwxkJFZApmhn7EVPFHA=;
+	b=J0qRM5GtFgsb1mGBfhmOYL7KuWYxP8VL7SPpJS5QlV5w796NA7wD0hUftnOzNM5Y3YjVoU
+	Oqd0hl7XQmEWg82XJD10IoiOQ3NKIanffELskJd1WiZaEpond9lYe837wJ4KT5usVR6Iy3
+	6wzZUcrkTZFLX2WK7pWHx1AHLeXOrSo=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-215-Q6wO1BqNOfqLS3W-0lxYGA-1; Tue, 14 Jan 2025 05:01:55 -0500
-X-MC-Unique: Q6wO1BqNOfqLS3W-0lxYGA-1
-X-Mimecast-MFC-AGG-ID: Q6wO1BqNOfqLS3W-0lxYGA
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4361ac607b6so40836435e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 02:01:55 -0800 (PST)
+ us-mta-460-VXsUphiiMQWbdgZbH0u7KA-1; Tue, 14 Jan 2025 05:15:37 -0500
+X-MC-Unique: VXsUphiiMQWbdgZbH0u7KA-1
+X-Mimecast-MFC-AGG-ID: VXsUphiiMQWbdgZbH0u7KA
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-43651b1ba8aso36329305e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 02:15:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736848914; x=1737453714;
+        d=1e100.net; s=20230601; t=1736849736; x=1737454536;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=ISTJvNY/yuUbjJURhevN2PidXwlioNt1jGja0wDB6kw=;
-        b=aC9qtaGDdxQpN81RDQ761HNxR8G5v4DiL4wu9BzVmH3awUJAB4pP4ZDEPE87vAYcvJ
-         EVETAhbCFggv1dbgr0twey9bWKtWfaYS0O9XtMW8Ll/ALUIBV5JFTyH3jLg2B8CVNvER
-         m5r3BhdGFPpPaqzs3JXZnsBuMQ7rky4+9QWWyTuiiJ6Pt3ofz47Sb/4P3a1LSWCGsiua
-         zcgCKCaKCxgkCKAh/74SX/J1cj0oDVl6GTxQKWNUr0qwbFo9+8qSSJYu8RqynmOuRE01
-         wVTQAWODP3pmcz0ADTWNxnRavWavoQxXBrrlB/IyQnsVkX+HbtlmYlg2DXRU+36NNU+p
-         4kWA==
-X-Forwarded-Encrypted: i=1; AJvYcCVSpoPpaH10hB1HtvtuEwBGJKqDrX2pr5YM5uNwLcZa4TouMnMVxmn1JIGuPgMzX9E2WGMhxaaD2K0iQ29+dXQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7NsTieXzfkmhuH9SjOldyRtHi0hhsZ2QZel4KGwbBlLD9O+Tn
-	+4vKmIvcZ3lq9Tn6aPKD+7HSMh7ZLqpgccDz3r67Lsue+uEUGtGbPh04AK19l3vDgbVbzvwPbIb
-	zgzt0VySSK2Aog6Hk+GqjrbC2z31j/VXiw9Ze3+DB3JjZNTVkr4EftL8/QqWKWFb7QA==
-X-Gm-Gg: ASbGncvJsF0r/v5/J1mE6FNRvJLlLWdOIM2ZIjLpqn6D3JJa5+6Gv3YU1XWXMVtoowj
-	rNU20+mkv0dLEyhWjhJjLSigBCROjev8VNyO0VyW9DAX88bhbXQcsw/fOcUws12ChZnlElr06uz
-	j0Jz1Xza66WdhuQ6L1hjn5P4+58tZN5B22P1C5EzYAtjd5lV9mzyQXlmnfaQz5HNpRAD78+0sO5
-	osV0gEuIyMnUiDMg4UwNPm/TPMSYOTImtLSLCx2XZ/LJbAmyqucdsa4HNuPom7vzTLRsHfG14ay
-	0mXFy1aqdiIrZHnER9ExMphtZJWdTLfAE7bTVT0nw66akaHH9iulmZ0FAhkzRYuvLVa7U573tnP
-	c9068xybi
-X-Received: by 2002:a05:600c:1d0c:b0:436:1bbe:f686 with SMTP id 5b1f17b1804b1-436e2707c59mr183355325e9.21.1736848914526;
-        Tue, 14 Jan 2025 02:01:54 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHRY6+qucxJhLZExA9LpgdhtKCettG1AwaZVPfGO1DmZyF0yWGxruw/LcgTVeSaJlA0lezfmQ==
-X-Received: by 2002:a05:600c:1d0c:b0:436:1bbe:f686 with SMTP id 5b1f17b1804b1-436e2707c59mr183354965e9.21.1736848914123;
-        Tue, 14 Jan 2025 02:01:54 -0800 (PST)
+        bh=bL9exZbXhYW4wMhK5x/31VM6rwxkJFZApmhn7EVPFHA=;
+        b=ECopWISfssBPRivMOmerNYA0yny3TriIsv9hXDVRqEDyaJb75064DILeGgubJiSbIo
+         lVCjYR+W7Py/bossSzKQd/yuEfY568bZFuBkXwkjmqT5o/0sVyW76KPalBM1s3VmO7N1
+         qeLHLJTOp6n6sK4UNDTbcqSbF22A6gFGEFtLocu3pt79DTFJbaX+zZzLE1ULgV1/k4wT
+         h5Qhuaji2v/QN+wRXYC/RrBe6Wy8cJpBmGTpzsy/yEKjxXuNo8MYqy2JprcOYyOrwLHr
+         4oXVLvC1fFmWacoFP5Z7lsXE/jlqNX7LgfTjxfZHEOy/giWBNCF7fliQlD1Na/dtbdqV
+         WP9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUvF4W2Gx0fBIZ/tpTuX4JDTJVcN7dcR2y/UX4xsVNc8KVcgwQPZVJrXn3dIsOUTJi1rKhoFlvkb75IDgB107o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMS3h1ijsu3Ax5C3dRz06CTrxBpb6QeNRo8xNdcWZwAratW3ut
+	rYkO9gUzK/rTmgQRWGYqtjsxF9b1+4RzN/VIijejVEf3m7wcDex/MFUrKDzhcKaNtYomL17w6ie
+	5W1OYrFXAGFYlQ4Z4xG2Wh9ZVo3nbjZLXuMsWQK6x5IDQYgmoJgc1AyaKi8nabRZrew==
+X-Gm-Gg: ASbGnct6WaHofxv/KO7Kyr6pj7mWmk6SN4n6be3hr8j2XsKCZzPQ2rJFP/bIOpxbzG3
+	jJ4A/DQscQYSKYc97sSS3trqa1+h4mrnA2Hg7NAtgc4UokrgwwZUEJhwLcQGqBIyQ9kElVhtdHf
+	5WKR+5EGrJXhIwlAUhQou0+UPeIr/CK3QiYMatJU10i4YDRdhrcHr1LpVvzvS3GDQgmJvipA7W0
+	cGHjH/7Fd97gsNmbM5ia3DkbNGq06THb4Xf5amVPIEqUTIqSa2A9GbS6ap/TeD5JkA6GkUe4WA0
+	gmrkalC5RLXF9QhoVjaWzVMGlqFJqf0RDndhyYYbLd77tMYWtXwWhkSRAz9Hx9eONijSAo7nsV6
+	juxcOV84R
+X-Received: by 2002:a05:600c:138a:b0:434:a781:f5d5 with SMTP id 5b1f17b1804b1-436e271bcb3mr241756425e9.30.1736849736084;
+        Tue, 14 Jan 2025 02:15:36 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFGMrkauFOVr3JbtLeqJkX9WkpCDEDyD7FpKkIC0rHyr+Xh4wMJkpIAALTNhPD7GJmK8V8xow==
+X-Received: by 2002:a05:600c:138a:b0:434:a781:f5d5 with SMTP id 5b1f17b1804b1-436e271bcb3mr241756045e9.30.1736849735677;
+        Tue, 14 Jan 2025 02:15:35 -0800 (PST)
 Received: from ?IPV6:2003:cb:c738:3100:8133:26cf:7877:94aa? (p200300cbc7383100813326cf787794aa.dip0.t-ipconnect.de. [2003:cb:c738:3100:8133:26cf:7877:94aa])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436f9bc6b9bsm79963645e9.22.2025.01.14.02.01.51
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e9d8fc5csm171535915e9.2.2025.01.14.02.15.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jan 2025 02:01:52 -0800 (PST)
-Message-ID: <0a34b3f5-fe67-498e-a648-27524b50abc7@redhat.com>
-Date: Tue, 14 Jan 2025 11:01:51 +0100
+        Tue, 14 Jan 2025 02:15:35 -0800 (PST)
+Message-ID: <c494f2b2-714e-4531-9c39-2fb9f7ebfe06@redhat.com>
+Date: Tue, 14 Jan 2025 11:15:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,15 +90,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/4] selftests/mm: vm_util: Split up /proc/self/smaps
- parsing
+Subject: Re: [PATCH v3 4/4] selftests/mm: virtual_address_range: Avoid reading
+ from VM_IO mappings
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
  Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
  Dev Jain <dev.jain@arm.com>, Thomas Gleixner <tglx@linutronix.de>
 Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
+ linux-kernel@vger.kernel.org, kernel test robot <oliver.sang@intel.com>
 References: <20250113-virtual_address_range-tests-v3-0-f4a8e6b7feed@linutronix.de>
- <20250113-virtual_address_range-tests-v3-3-f4a8e6b7feed@linutronix.de>
+ <20250113-virtual_address_range-tests-v3-4-f4a8e6b7feed@linutronix.de>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -146,87 +146,108 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20250113-virtual_address_range-tests-v3-3-f4a8e6b7feed@linutronix.de>
+In-Reply-To: <20250113-virtual_address_range-tests-v3-4-f4a8e6b7feed@linutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 On 13.01.25 14:15, Thomas Weißschuh wrote:
-> Upcoming changes want to reuse the /proc/self/smaps parsing logic to
-> parse the VmFlags field.
-> As that works differently from the currently parsed HugePage counters,
-> split up the logic so common functionality can be shared.
+> The virtual_address_range selftest reads from the start of each mapping
+> listed in /proc/self/maps.
+> However not all mappings are valid to be arbitrarily accessed.
 > 
-> While reworking this code, also use the correct sscanf placeholder for
-> the "uint64_t thp" variable.
+> For example the vvar data used for virtual clocks on x86 [vvar_vclock]
+> can only be accessed if 1) the kernel configuration enables virtual
+> clocks and 2) the hypervisor provided the data for it.
+> Only the VDSO itself has the necessary information to know this.
+> Since commit e93d2521b27f ("x86/vdso: Split virtual clock pages into dedicated mapping")
+> the virtual clock data was split out into its own mapping, leading
+> to EFAULT from read() during the validation.
 > 
+> Check for the VM_IO flag as a proxy.
+> It is present for the VVAR mappings and MMIO ranges can be dangerous to
+> access arbitrarily.
+> 
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Closes: https://lore.kernel.org/oe-lkp/202412271148.2656e485-lkp@intel.com
+> Fixes: e93d2521b27f ("x86/vdso: Split virtual clock pages into dedicated mapping")
+> Fixes: 010409649885 ("selftests/mm: confirm VA exhaustion without reliance on correctness of mmap()")
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Link: https://lore.kernel.org/lkml/e97c2a5d-c815-4936-a767-ac42a3220a90@redhat.com/
 > Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> ---
->   tools/testing/selftests/mm/vm_util.c | 42 +++++++++++++++++++++++++-----------
->   1 file changed, 29 insertions(+), 13 deletions(-)
 > 
+> Revert "selftests/mm: virtual_address_range: Avoid reading VVAR mappings"
+> 
+> This reverts commit 05cc5d292ac4238684b59922aecf59c932edefa0.
+> ---
+>   tools/testing/selftests/mm/virtual_address_range.c |  4 ++++
+>   tools/testing/selftests/mm/vm_util.c               | 21 +++++++++++++++++++++
+>   tools/testing/selftests/mm/vm_util.h               |  1 +
+>   3 files changed, 26 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
+> index 386e4e46fa65b98af78dee4bb30144eb2b51f528..b380e102b22f0a44654ab046f257e8c35e8d90e9 100644
+> --- a/tools/testing/selftests/mm/virtual_address_range.c
+> +++ b/tools/testing/selftests/mm/virtual_address_range.c
+> @@ -15,6 +15,7 @@
+>   #include <sys/time.h>
+>   #include <fcntl.h>
+>   
+> +#include "vm_util.h"
+>   #include "../kselftest.h"
+>   
+>   /*
+> @@ -159,6 +160,9 @@ static int validate_complete_va_space(void)
+>   		if (prot[0] != 'r')
+>   			continue;
+>   
+> +		if (check_vmflag_io((void *)start_addr))
+> +			continue;
+> +
+>   		/*
+>   		 * Confirm whether MAP_CHUNK_SIZE chunk can be found or not.
+>   		 * If write succeeds, no need to check MAP_CHUNK_SIZE - 1
 > diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index d8d0cf04bb57fd22bd7748fffec6a23c3103e35c..8468a19d6acca10c7e9228c03a935cdeb2402b5d 100644
+> index 8468a19d6acca10c7e9228c03a935cdeb2402b5d..161fe03b07af78244efc669a36155ad603fa6f7d 100644
 > --- a/tools/testing/selftests/mm/vm_util.c
 > +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -2,6 +2,7 @@
->   #include <string.h>
->   #include <fcntl.h>
->   #include <dirent.h>
-> +#include <inttypes.h>
->   #include <sys/ioctl.h>
->   #include <linux/userfaultfd.h>
->   #include <linux/fs.h>
-> @@ -193,13 +194,11 @@ unsigned long rss_anon(void)
->   	return rss_anon;
+> @@ -400,3 +400,24 @@ unsigned long get_free_hugepages(void)
+>   	fclose(f);
+>   	return fhp;
 >   }
->   
-> -bool __check_huge(void *addr, char *pattern, int nr_hpages,
-> -		  uint64_t hpage_size)
-> +char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
->   {
-> -	uint64_t thp = -1;
->   	int ret;
->   	FILE *fp;
-> -	char buffer[MAX_LINE_LENGTH];
-> +	char *entry;
->   	char addr_pattern[MAX_LINE_LENGTH];
->   
->   	ret = snprintf(addr_pattern, MAX_LINE_LENGTH, "%08lx-",
-> @@ -211,23 +210,40 @@ bool __check_huge(void *addr, char *pattern, int nr_hpages,
->   	if (!fp)
->   		ksft_exit_fail_msg("%s: Failed to open file %s\n", __func__, SMAP_FILE_PATH);
->   
-> -	if (!check_for_pattern(fp, addr_pattern, buffer, sizeof(buffer)))
-> +	if (!check_for_pattern(fp, addr_pattern, buf, len))
->   		goto err_out;
->   
-> -	/*
-> -	 * Fetch the pattern in the same block and check the number of
-> -	 * hugepages.
-> -	 */
-> -	if (!check_for_pattern(fp, pattern, buffer, sizeof(buffer)))
-> +	/* Fetch the pattern in the same block */
-> +	if (!check_for_pattern(fp, pattern, buf, len))
->   		goto err_out;
->   
-> -	snprintf(addr_pattern, MAX_LINE_LENGTH, "%s%%9ld kB", pattern);
-> +	/* Trim trailing newline */
-> +	entry = strchr(buf, '\n');
-> +	if (entry)
-> +		*entry = '\0';
->   
-> -	if (sscanf(buffer, addr_pattern, &thp) != 1)
-> -		ksft_exit_fail_msg("Reading smap error\n");
-> +	entry = buf + strlen(pattern);
->   
->   err_out:
->   	fclose(fp);
-> +	return entry;
-> +}
+> +
+> +bool check_vmflag_io(void *addr)
 
-Yes, LGTM!
+Interestingly, this will only work if addr really is the start of the 
+mapping, as __get_smap_entry() cannot handle "address falls into a 
+mapping". Good enough for now, but might be worth a comment.
 
-Acked-by: David Hildenbrand <david@redhat.com>
+(wrong usage would fail with  No VmFlags for ... )
+
+> +{
+> +	char *saveptr, *flag, *strtok_arg;
+
+" On some implementations, *saveptr is required to be NULL on the first 
+call to strtok_r() that is being used to parse str."
+
+Maybe just initialize it to NULL.
+
+> +	char buffer[MAX_LINE_LENGTH];
+> +
+> +	strtok_arg = __get_smap_entry(addr, "VmFlags:", buffer, sizeof(buffer));
+> +	if (!strtok_arg)
+> +		ksft_exit_fail_msg("%s: No VmFlags for %p\n", __func__, addr);
+> +
+> +	while (true) {
+> +		flag = strtok_r(strtok_arg, " ", &saveptr);
+> +		if (!flag)
+> +			break;
+> +		if (strcmp(flag, "io") == 0)
+> +			return true;
+
+Are these early exit allowed with strtok_r()?
+
+An alternative seems to be using strcspn() that doesn't modify 
+strings/maintain state in-between calls.
 
 -- 
 Cheers,
