@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-24463-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24464-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24FDEA10CAF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 17:49:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FE4FA10CBE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 17:54:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34BD816305E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 16:49:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 026643A45DB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 16:54:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 767BE1D47BB;
-	Tue, 14 Jan 2025 16:49:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4A101B6CFB;
+	Tue, 14 Jan 2025 16:54:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Abi+VcOa"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DnwKDPoC"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C260E1B21AD
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 16:49:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9761B87C6
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 16:54:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736873379; cv=none; b=C6xVjkFLK4FLQt0PIfkyAwM8O/Xd4shcMxUAPQcpVwygCzGwy3KX4XfjrzbXrsygdlnhyRKrPZpAkpMeiBs3Qs0HXy1dyF3FoSW/iFJIHpzuTCI2FRqPPhYFKDoWRxMCWMLOr915DGG/R558JoyYYaUKnVi87NeXkC64t1zZcDk=
+	t=1736873646; cv=none; b=Fc1vuWVWVrGyUzu/gWB5tDVupR/EtudxNwsbIg1xO3ddjFRJhm/aIUULJdt+vbbFZbO3CNlY26O4U+KhjA9Z52vpPe9SHQ9PtIx8lcF71mbYUYKUEoKGc+FT5f90UNxiZkBZkMTrbXQh6r4BoIKj6Vddi/IdANAmFuRUV6LPinE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736873379; c=relaxed/simple;
-	bh=BMlCOae7Wj6SjTMxH02RsjJjI/ets9dgYNnwGlKC4yI=;
+	s=arc-20240116; t=1736873646; c=relaxed/simple;
+	bh=E6rBuDhlJ4GjffILCBxpeUuQWhfKb+jIjMY361CEv0w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GKhQhEFO5jaC4j7eYjjQlVHHV9iWATmxRcc/t2OOqKcxi0yRxmgF3ZXy37EzriYHDyFbZvBbg+Nc8/ePm59CUpojx0eMwMO3wyZZCzHTBSqYyuSV7z+pRM1qV/8OR1KzR/DhxayfZlpBs2BI4TLqgTIHA4tjjSWc+MI5rO4excI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Abi+VcOa; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=sKF1Mnz0FaA7+T2A7OB5Q7xk3JZ9QpG+vRdSR2z3lD4o9liuN2CIidBgMpbt7vtYmyYfVcVI7vnhHKpoz5ngZf/z216c6+M/i4HvJ5GS6+AsSnqt80AJUvU477e32cwRwy6XoGDkCChd2E5PmIaw89fpjj2M2rzlRzZczn+Ge3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DnwKDPoC; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736873376;
+	s=mimecast20190719; t=1736873644;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=phlr2P2Bd9OZggweW2xYFMsNy1St1AWnhTYL3T3s0vQ=;
-	b=Abi+VcOaanO01FT4dXA5nOKl8yxWx2k2zST1WeH4OUBdE2QSpzhU+vx4ZBPJ1xNI8gxaeC
-	TiNiz3RIENikHO/Ue0Ge5yd+DUS8PH1LhtvsMY381u38JfMjWvRJ9+WLv7fOSfNuMOHoQc
-	hN9t09w1vYyr08nBaGUpDPvvxoMpW6A=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=056ZHJ91+HDRI4BQYHeDGeZYL/iE09ANEtZFdy1HhhA=;
+	b=DnwKDPoCL3j8XQTUMgbkopa/ZO+Thg7SMabGSdh67PniNISgUhzXixbYRWoUJu9tfr4+FW
+	3yxz3CHBLceuNVGysG7kQsbto+jmAf9LZBoAz38QXHO3EFbJn9U64BvyEcfPdkrYWNcr0L
+	rfnPt6J2nsfElRb2eSq9e9gQFa3trms=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-647-hKM2Odi6NO-Rp2Xin4pyXw-1; Tue, 14 Jan 2025 11:49:33 -0500
-X-MC-Unique: hKM2Odi6NO-Rp2Xin4pyXw-1
-X-Mimecast-MFC-AGG-ID: hKM2Odi6NO-Rp2Xin4pyXw
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-436723db6c4so39097305e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 08:49:32 -0800 (PST)
+ us-mta-627-NJr042eAOVCU_iiiRWDU0Q-1; Tue, 14 Jan 2025 11:54:02 -0500
+X-MC-Unique: NJr042eAOVCU_iiiRWDU0Q-1
+X-Mimecast-MFC-AGG-ID: NJr042eAOVCU_iiiRWDU0Q
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-385e03f54d0so2547743f8f.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 08:54:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736873371; x=1737478171;
+        d=1e100.net; s=20230601; t=1736873641; x=1737478441;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=phlr2P2Bd9OZggweW2xYFMsNy1St1AWnhTYL3T3s0vQ=;
-        b=eBHEUcw0j4vM3Rrap5nJ9r/TxslRi9btOYIK6FZdzNzuzPFPNHmGWvoCw2MUDOV+jy
-         9eFrsu3hSwbpjk/Wmxid00MPbIbtXntWN2fG8RlssPVSV+WrT5u+0VMroibaWFO/skRZ
-         Q9QWAjSJsJ44VPt4G41g67dTfvKI+SX9uULYQVCl8GnYCpTbRsHnG5VDx9QRkKnRDaAU
-         QHkb9n2NPyBC+wUxU/kX2wSN8XkUXdQu80GAwSV8CNXMZfvo6YbFo8ecJDcJbvjiFMNn
-         XWA6OOAaAdT/b/XNSHjb+dhL57mdjj6M4Ul1GxmCSNApQPDy58+IyOJoAdZLErKxTEQc
-         xqNw==
-X-Forwarded-Encrypted: i=1; AJvYcCURxaKTkmEO4ggsVk3EnU49o4wohCrxg2vV4fKIfLe1FVVhn8fTa8+WmvycOFso3Dofs8mmor0Yk9Fx4XyNmxM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzT/kVEuvp5JACDV1RS6azbCXTFOVuychOKzbGk+pbbdqmxAWpD
-	EMetX9ZWgCFexO1hjzJ64fpitJaJ++ARmNrcO17rWGmaY6ujWzXWcxyodhdokRpPPMjcbwuh3yU
-	FoDVR8IbpUH0UCWxslQy9w/dcuA+SS63lxzBvKF4mjz5iWLESGX8KXlZjRUmxiq3cBQ==
-X-Gm-Gg: ASbGncvJOKvytmdcgZVfEvT2UQEq41JTdcs6tYiqQ9EW6Q5Fvnm8N82A0YCZHvvWItO
-	c4n3zdbHQV0Bspwjwfpma+WpuwQ+ImUzo7BESrK5LMwC4mlSZ4khb2pNZzeTlNumtuSwl4EGK8p
-	WdnkL34yVwwpSuWF4SV2XzncNHOBTrPSDhsX0PEV1JwR5UTpGluxYA2NPZX/F3ah+vrkHiT6d7O
-	5VOpy9ZVsry+jhl1DROOg5+jD+mxlUzLERLkZ2joP00aqnG9wSftHY0BQEZgFJLHUQy8HwrXpck
-	Yj/gwPSASydCGA0cplANX3oavFyQcFWTacosqFx26i8E45XL8WslrG7no9HDed+fG2WC79o8PHS
-	qd/xXvXcn
-X-Received: by 2002:a05:600c:3c9f:b0:432:cbe5:4f09 with SMTP id 5b1f17b1804b1-436e2686716mr229898495e9.4.1736873370798;
-        Tue, 14 Jan 2025 08:49:30 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGR+NAZOHYpGvs/S1fzgk+OWmBa299GHLKJtiiwOGgut9bjrcuEoEq6+e2QmWHMPB+PR6kO1g==
-X-Received: by 2002:a05:600c:3c9f:b0:432:cbe5:4f09 with SMTP id 5b1f17b1804b1-436e2686716mr229898305e9.4.1736873370477;
-        Tue, 14 Jan 2025 08:49:30 -0800 (PST)
+        bh=056ZHJ91+HDRI4BQYHeDGeZYL/iE09ANEtZFdy1HhhA=;
+        b=qfITwhQWDkeZYPyAvyEMmxQ/2jKxg665nl0mHW0/7G0YfnbUBj4JIjOSDhJ8AacSVx
+         63T2BAtofezmwI3beAcjRwHvrQrbOT3CNMT2obOC46R3ZXnDWPVbx3IlLyPXUTciADfg
+         CqJFGEVR7zvqz/xOopUSROyy8PDRTrCvJT3xLmkpUZt8GpLoZFVvA4KmQylD3GNYMUqv
+         NDNkSFrB6uGqm4UiCFxiHswEUKZXnGn6Uy7OjfOENDFMYdCaA46EjwN8I3/J03uX8fzF
+         fQVazMGK5uGCVvzh7HasR9dtenjeWyKXA+ObhHZ9DTwxoKDkFlWcQ7cmI0qbWn1aWjG1
+         e9OA==
+X-Forwarded-Encrypted: i=1; AJvYcCX4ZimsYDxOeDyGQ1p4JNdNJu3ouMPRtNSPGuptNNsh0QYWo1kgxDmLuPRClKhWG7bpaGNpetnun2eHqIRbtU0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSWDXXdK7UUI3CBNbS15eDTjJg/IR4P8lzkO3gK/wzRnJw8ojt
+	Id+OsUY9KEo1oA5BRBzN1B5qOMSNnruKw3Aoa4CVdmLB7K5Dom3lj3jRcBAzHfNFEdus6u7X9vn
+	8xgFLVcnXYgkIjHci4vE2QgeK2zTv12mlJmTkBJV462q2Y2FD0c/0ImWb26gZT4iHtQ==
+X-Gm-Gg: ASbGncuOxA/kqjf4Tj6J+NgPSmu3To/pZT7ewVuU+2FsyhLh3DU9viyex1GnboyQ0/Y
+	KddrShJXwFASn8LF3hiQoJq7/doJ/V4i7YPYKdJHIZeT0e16fZl+FX35leIKc2ZGbvP4auunulT
+	rHUnh0vN5UGXU71wKnKpJprBgsS3amj1v45oxkliMHDlthzjD5I0KoOd9EJPAEyuRXgxb5gcaZE
+	uGzAi7auZShnNodAsMRi6N4bRSoyl5aPzXRdZep/YyM0IIEuhfWl51+Rfu38wE5jUJgAYuDLdVW
+	jaiv7Ri+gDkcqWZT0MBJ220FfPCd6BK5no1DeisehALadBXfjU7lrCOHvJNS+8csJiUETI4WxTq
+	/0JDWLJSV
+X-Received: by 2002:a5d:5985:0:b0:38a:2798:c3e0 with SMTP id ffacd0b85a97d-38a87358f3bmr22039207f8f.54.1736873641189;
+        Tue, 14 Jan 2025 08:54:01 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHszYQ25Q8gOYLXiUeL3WQw5fG7HtbGIoBScqOz9la2MvGnmSzFJ80J/RseI4NGCCdbYcB6Eg==
+X-Received: by 2002:a5d:5985:0:b0:38a:2798:c3e0 with SMTP id ffacd0b85a97d-38a87358f3bmr22039192f8f.54.1736873640840;
+        Tue, 14 Jan 2025 08:54:00 -0800 (PST)
 Received: from ?IPV6:2003:cb:c738:3100:8133:26cf:7877:94aa? (p200300cbc7383100813326cf787794aa.dip0.t-ipconnect.de. [2003:cb:c738:3100:8133:26cf:7877:94aa])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e9d8fc81sm183799285e9.5.2025.01.14.08.49.29
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e9d26a7bsm187883795e9.0.2025.01.14.08.53.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jan 2025 08:49:30 -0800 (PST)
-Message-ID: <1ac24517-6f7b-4923-836f-2b4284a46a41@redhat.com>
-Date: Tue, 14 Jan 2025 17:49:29 +0100
+        Tue, 14 Jan 2025 08:54:00 -0800 (PST)
+Message-ID: <56a1657c-d60f-4cdc-88a7-826ad977890f@redhat.com>
+Date: Tue, 14 Jan 2025 17:53:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,8 +90,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/4] selftests/mm: virtual_address_range: Reduce memory
- usage and avoid VM_IO access
+Subject: Re: [PATCH v4 4/4] selftests/mm: virtual_address_range: Avoid reading
+ from VM_IO mappings
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
  Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
  Dev Jain <dev.jain@arm.com>, Thomas Gleixner <tglx@linutronix.de>,
@@ -99,6 +99,7 @@ To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
 Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, kernel test robot <oliver.sang@intel.com>
 References: <20250114-virtual_address_range-tests-v4-0-6fd7269934a5@linutronix.de>
+ <20250114-virtual_address_range-tests-v4-4-6fd7269934a5@linutronix.de>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -146,19 +147,45 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20250114-virtual_address_range-tests-v4-0-6fd7269934a5@linutronix.de>
+In-Reply-To: <20250114-virtual_address_range-tests-v4-4-6fd7269934a5@linutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 On 14.01.25 17:06, Thomas Weißschuh wrote:
-> The selftest started failing since commit e93d2521b27f
-> ("x86/vdso: Split virtual clock pages into dedicated mapping")
-> was merged. While debugging I stumbled upon some memory usage
-> optimizations.
+> The virtual_address_range selftest reads from the start of each mapping
+> listed in /proc/self/maps.
+> However not all mappings are valid to be arbitrarily accessed.
 > 
-> With these test now runs on a VM with only 60MiB of memory.
+> For example the vvar data used for virtual clocks on x86 [vvar_vclock]
+> can only be accessed if 1) the kernel configuration enables virtual
+> clocks and 2) the hypervisor provided the data for it.
+> Only the VDSO itself has the necessary information to know this.
+> Since commit e93d2521b27f ("x86/vdso: Split virtual clock pages into dedicated mapping")
+> the virtual clock data was split out into its own mapping, leading
+> to EFAULT from read() during the validation.
+> 
+> Check for the VM_IO flag as a proxy.
+> It is present for the VVAR mappings and MMIO ranges can be dangerous to
+> access arbitrarily.
+> 
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Closes: https://lore.kernel.org/oe-lkp/202412271148.2656e485-lkp@intel.com
+> Fixes: e93d2521b27f ("x86/vdso: Split virtual clock pages into dedicated mapping")
+> Fixes: 010409649885 ("selftests/mm: confirm VA exhaustion without reliance on correctness of mmap()")
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> Link: https://lore.kernel.org/lkml/e97c2a5d-c815-4936-a767-ac42a3220a90@redhat.com/
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
-60 MiB ? Crazy :)
+Acked-by: David Hildenbrand <david@redhat.com>
+
+Unfortunately, vsyscall doesn't seem to set VM_IO, it only has
+
+VmFlags: ex
+
+
+Which is rather weird.
+
+So we cannot remove that special-casing right now,
 
 -- 
 Cheers,
