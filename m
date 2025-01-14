@@ -1,196 +1,198 @@
-Return-Path: <linux-kselftest+bounces-24519-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24520-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 736ACA1120C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 21:32:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83FB8A112C6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 22:14:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3EEC169D87
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 20:32:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2F4F166ED5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 21:14:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D8E720F090;
-	Tue, 14 Jan 2025 20:32:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F18C920F09D;
+	Tue, 14 Jan 2025 21:14:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b="FUu2prLJ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DFgmAYnt"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tdal1sZu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B551220C47F;
-	Tue, 14 Jan 2025 20:32:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9485F20CCE4
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 21:13:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736886726; cv=none; b=G4BQ4pECgj926Q8UnvIDONg8M5vo4qw2BLybTT36NnVFew/lAYooZM/2YpotqwcK+AiYEelRP1N9F7H2bUDEx0TuTwzxZiTArQqWcSTfMW3uVJIVB0Qn1+iuWd/ctIfIidrDsoa8tX3pBIt+OQ+YgoeabtHXO/VRRREXocS6ANo=
+	t=1736889241; cv=none; b=ZZDBrhaTIHm/gUrNNLa4iwfhJ4PvLZot6GIdv6uXjyjn1V6nmhViwr1OaJXgim6ZpfJsrz/3qMf0F09J+t9eqV78+Snap/QvZMzKIfW3gVx6+yFckhkEKKu2bV6SpbpR12Z7oTSXCS+pGuMPfe8dDpK3stjQrJtYbdq8ZRskIxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736886726; c=relaxed/simple;
-	bh=/v/P2m8/hpnNoBNP9m4lZJpDZj91viqX7SE/j73ggHU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h6XZKdHMaHUiEdapVSV5ZRdZ5PBrSqbueSWaoikfrqIeSbj+ViVE6D2GCgPNW8CmC0yMEmPiUJhn/xnmiYwun3jA22OkBui+txedqIVYeVD4yHdNufvlkR861j+AfSXMMffmvZ5h1YHZWiEwyUV/mhcYhZTsgUQAKn8OUb2bNXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name; spf=pass smtp.mailfrom=coelacanthus.name; dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b=FUu2prLJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DFgmAYnt; arc=none smtp.client-ip=202.12.124.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=coelacanthus.name
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailflow.stl.internal (Postfix) with ESMTP id 14FC91D40844;
-	Tue, 14 Jan 2025 15:32:03 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Tue, 14 Jan 2025 15:32:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	coelacanthus.name; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1736886722; x=1736893922; bh=k3aK0yvw6s
-	3XgHhobmGdwD1q9qT+ce2iJbSudHfZEug=; b=FUu2prLJ1is+E6pfAnsUuGSgwu
-	F2PNTmouhWFckCjs7RP2LXWUbMWmQP861AX7k699XzNt+GIDaThA9BaonOyr0wB3
-	iOBNfyQNFbIzTXgMB3H+ppZH5/W6rQz4weA10Hc/AtNEvIYMKnecZbn8hzNawett
-	e5k0Svbmqo02Pz6x2DLFtXN5gkhamNCZXES/bGFC0DF2EN4wKhon+GiTeaabqU1i
-	tg9/r3WaEzNbr/gjzcLugNmDc7KgTA0ki683cFHSSVDIFnDVWapEVt5HqT3XShYb
-	AWOgP8mq+fdSDaesmeuadnycx3PzjfS93whEaDRwdC8JjUnWS/1yQ+/kDctA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736886722; x=
-	1736893922; bh=k3aK0yvw6s3XgHhobmGdwD1q9qT+ce2iJbSudHfZEug=; b=D
-	FgmAYnt5ayLH5wRYBsYb9NOkdf0VuWsBSxpJYNWxtSLbZkROUVUjE98RK+5YnLuS
-	NdNPZ2jddAQkFsSM2L7MbdmZ6TlrfmUB8iA7B4Ha5zgsdlb8zGLyyo+HwfuxR/GE
-	hmxQ2Z2iqyikGW+/td2nta7C6xy2eeIG+5jVs3Xy1RrYPzRbrDDTufXkBp3eaI3R
-	Hw/1e7CpXB3+A3dNpaqxc1vstFlua9yP/s2bbeAU0ltCJ3YR/tf83yvHaE2jQ3cV
-	WJiOYY7lBf2hBuwT4le0zSu3DJYTn8q581pqZRks905uKxgPo/ZDjktp8sORvKjb
-	iOihm+YdBxecJbouyxGVA==
-X-ME-Sender: <xms:wcmGZ8yWRyXxhIcvlmuRbHY6A2sbKJsWVN5lamYYR_kRlWitSZ_nOw>
-    <xme:wcmGZwSZ_GThlD7ZWI0cf7dapvWckQSuKJePUeBDxpP5pOk3-RXjC4WNhMenIspfS
-    obLIiMupBSlvy4XfNc>
-X-ME-Received: <xmr:wcmGZ-UWF3C77y7hucvYopwHtNvkUOjRK2YTmrNo7I25xdN9kbk-_HUWZPJd6E6u>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehiedgudefiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddv
-    jeenucfhrhhomhepvegvlhgvshhtvgcunfhiuhcuoehufihusegtohgvlhgrtggrnhhthh
-    hushdrnhgrmhgvqeenucggtffrrghtthgvrhhnpeefffdujedtleetieffleehjeffudet
-    feeghfdtieeiheevueeggfeuiefgvdekvdenucffohhmrghinhepkhgvrhhnvghlrdhorh
-    hgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepuhif
-    uhestghovghlrggtrghnthhhuhhsrdhnrghmvgdpnhgspghrtghpthhtohepvdeipdhmoh
-    guvgepshhmthhpohhuthdprhgtphhtthhopegthhgrrhhlihgvsehrihhvohhsihhntgdr
-    tghomhdprhgtphhtthhopehlughvsehsthhrrggtvgdrihhopdhrtghpthhtohepohhlvg
-    hgsehrvgguhhgrthdrtghomhdprhgtphhtthhopehprghulhdrfigrlhhmshhlvgihsehs
-    ihhfihhvvgdrtghomhdprhgtphhtthhopehprghlmhgvrhesuggrsggsvghlthdrtghomh
-    dprhgtphhtthhopegvsghivgguvghrmhesgihmihhsshhiohhnrdgtohhmpdhrtghpthht
-    ohepkhgvvghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhhurghhsehkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopegrohhusegvvggtshdrsggvrhhkvghlvgihrdgvughu
-X-ME-Proxy: <xmx:wcmGZ6jpZW4MqjOd3ak_VcDAOQLuSdpdXsCcWQVmKtGjHt1HiIo67g>
-    <xmx:wcmGZ-AwdeQryJpPUW-FMNT3pIq-hYivUf1Mg_Go5E5ykzNFNakRTQ>
-    <xmx:wcmGZ7KrNV88kGIaZ3TLH55saBZgmqLpHD7sMHKDpPFt1SXQjuH6ng>
-    <xmx:wcmGZ1CY0diCWBx-i2BY_cTyODvMN049uCAh_xGiBRZcQfr9GqJZgw>
-    <xmx:wsmGZ_xatnRalfHDXBhBcagXq89TXNU-EnMEZCvBMgZ_6PBtnx-hSnGJ>
-Feedback-ID: i95c648bc:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 14 Jan 2025 15:31:53 -0500 (EST)
-Message-ID: <6bacd2ec-fd86-41c9-b5dc-e14796737b4b@coelacanthus.name>
-Date: Wed, 15 Jan 2025 04:31:50 +0800
+	s=arc-20240116; t=1736889241; c=relaxed/simple;
+	bh=HPeOyPTCGGTDHOMXLb+UXWG1X7FxbwpONqdOtUySSrA=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=tj/LHr+i71wxblHOosuBgaWrtQDJA2PLwksXZ5f4bVa0iLN6Rp+sbxGIRm0n+yucK1hSrtKStL0CqdCv6m8t2HttXXvjPp4Fvq7Qvh5xaE69fcC8PoSv1cxuYpXnKeZgDWO3alYixa1EstZuNexXt3YCIH1NZXoBXrNhCRXsKoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tdal1sZu; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2ee5668e09bso10664010a91.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 13:13:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1736889239; x=1737494039; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=d9cRGGic7Te5o12Iwy1M3OB31drPOXRp+PHli2u04Fc=;
+        b=tdal1sZu79aUYEJfdP1gM9Xcda9j8Wwc4Tr5g7qpUO5NRZ7iabU1ZFvpgbZtTzfbBd
+         QHSuHYSZorVXmiWAGPR+NqJx0xIYP4Ro4dtIgEM2k1Ap0E6HbTMlDo7wxa77Rvy6jjph
+         z7ln0jTq4mLdSJFLR+HRPA5g+EPuLxoHVnBOMJa1iCdMwZBNwfPK5lU/umsM4pKTLkyn
+         xdFrMH4+9KXg4DO3kLyTN/L1RoO0oaZkWrp39eI25LyL6GbhY/NF0TCtt4ykMiSvfram
+         jXm1aHRzkXPSYYs0OljrbiGSfMUJYtQlNhWckV29e/yccyIiV2hPSJe5IJV1yElmyU+1
+         rYpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736889239; x=1737494039;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d9cRGGic7Te5o12Iwy1M3OB31drPOXRp+PHli2u04Fc=;
+        b=LsbSK/VRv0xCDzwp6v8jnNrt/LpQQjJnpT5qojaGiUVwiPW+zj0sWcIRx1RN8XRX7z
+         f2smOwdmavcu50cVu5suzTDwh8/hvUnXksXm1vmfXLvz5a6Gi/z4xxIHeqIHqXzjo83x
+         XIc3MW1ZfKz3x6ze1BO6KxyFeN6uZ2XRyT2XaSqNTWzMkZbbmprVKy4CbKWhVdT/pCjv
+         pddV2fV7/0VxIsEhQnH+bFbjioknC1MZQN2Odc17UVYUzX3TC2nHhg3eV0zT8FuUpLo2
+         tQrMiXrE7PYkHEEX9V/zm7CMXLDucNdlM2rcZt8Kk6AuxEjefGtm44UCMhG6Ia3LZykF
+         chiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWANzj/MoJ4gJ6mJf0qa4hqST7t9DWiHsLmq3EvAO21e2d3ef6zPHOK+QohOkHWLkAWWF9021IybSYV3Yxtsws=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNooR0pAOT1a1wEh5OgQfIC1KC2VDNsh4AN8ZkpU54yQCTXh21
+	zpzXmeZ4Z9NYicSls3fA9+BWH5X7EUBTuQ7ezaqjzx+Rgp9XMQSzm4/Ist6tCMeDLdGgBL/T4fo
+	AMQ==
+X-Google-Smtp-Source: AGHT+IFnD8IBYtaFLZfmn+yp8faKF4j5W1D2QQ93HaiFkyR3KITtNCKyHKA+6Vtw5k/ROipPB4Gea/5UJbQ=
+X-Received: from pjbsn8.prod.google.com ([2002:a17:90b:2e88:b0:2f4:465d:5c61])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1f8b:b0:2ee:bf84:4fe8
+ with SMTP id 98e67ed59e1d1-2f548f1d44cmr36656404a91.30.1736889238866; Tue, 14
+ Jan 2025 13:13:58 -0800 (PST)
+Date: Tue, 14 Jan 2025 13:13:57 -0800
+In-Reply-To: <20250114175143.81438-26-vschneid@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] riscv: selftests: Add a ptrace test to verify
- syscall parameter modification
-Content-Language: en-GB-large
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: "Dmitry V. Levin" <ldv@strace.io>, Oleg Nesterov <oleg@redhat.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Eric Biederman <ebiederm@xmission.com>,
- Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Andrea Bolognani <abologna@redhat.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Ron Economos <re@w6rz.net>, Andrew Jones <ajones@ventanamicro.com>,
- Quan Zhou <zhouquan@iscas.ac.cn>, Felix Yan <felixonmars@archlinux.org>,
- Ruizhe Pan <c141028@gmail.com>, Guo Ren <guoren@kernel.org>,
- Yao Zi <ziyao@disroot.org>, Eugene Syromyatnikov <evgsyr@gmail.com>,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>
-References: <20241226-riscv-new-regset-v4-0-4496a29d0436@coelacanthus.name>
- <20241226-riscv-new-regset-v4-2-4496a29d0436@coelacanthus.name>
- <20241226133459.GA30481@strace.io>
- <2e09aedc-44ba-40e3-ae93-1d6dc21b5eb1@coelacanthus.name>
- <Z4CVQKkViqJycnaq@ghost>
-From: Celeste Liu <uwu@coelacanthus.name>
-In-Reply-To: <Z4CVQKkViqJycnaq@ghost>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20250114175143.81438-1-vschneid@redhat.com> <20250114175143.81438-26-vschneid@redhat.com>
+Message-ID: <Z4bTlZkqihaAyGb4@google.com>
+Subject: Re: [PATCH v4 25/30] context_tracking,x86: Defer kernel text patching IPIs
+From: Sean Christopherson <seanjc@google.com>
+To: Valentin Schneider <vschneid@redhat.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, 
+	virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	loongarch@lists.linux.dev, linux-riscv@lists.infradead.org, 
+	linux-perf-users@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	kvm@vger.kernel.org, linux-arch@vger.kernel.org, rcu@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
+	bcm-kernel-feedback-list@broadcom.com, Peter Zijlstra <peterz@infradead.org>, 
+	Nicolas Saenz Julienne <nsaenzju@redhat.com>, Juergen Gross <jgross@suse.com>, 
+	Ajay Kaher <ajay.kaher@broadcom.com>, Alexey Makhalov <alexey.amakhalov@broadcom.com>, 
+	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Frederic Weisbecker <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Jason Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ard Biesheuvel <ardb@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Joel Fernandes <joel@joelfernandes.org>, Josh Triplett <josh@joshtriplett.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>, 
+	Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli <juri.lelli@redhat.com>, 
+	Clark Williams <williams@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>, 
+	Tomas Glozar <tglozar@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, 
+	Mel Gorman <mgorman@suse.de>, Kees Cook <kees@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Christoph Hellwig <hch@infradead.org>, 
+	Shuah Khan <shuah@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>, Samuel Holland <samuel.holland@sifive.com>, Rong Xu <xur@google.com>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Yosry Ahmed <yosryahmed@google.com>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, 
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Tiezhu Yang <yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset="us-ascii"
 
-On 2025-01-10 11:34, Charlie Jenkins wrote:
-> On Thu, Dec 26, 2024 at 11:21:59PM +0800, Celeste Liu wrote:
->>
->> On 2024-12-26 21:35, Dmitry V. Levin wrote:
->>> On Thu, Dec 26, 2024 at 06:52:52PM +0800, Celeste Liu wrote:
->>>> This test checks that orig_a0 allows a syscall argument to be modified,
->>>> and that changing a0 does not change the syscall argument.
->>>>
->>>> Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
->>>> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
->>>> Co-developed-by: Charlie Jenkins <charlie@rivosinc.com>
->>>> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
->>>> Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
->>>> Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
->>> [...]
->>>> diff --git a/tools/testing/selftests/riscv/abi/ptrace.c b/tools/testing/selftests/riscv/abi/ptrace.c
->>>> new file mode 100644
->>>> index 0000000000000000000000000000000000000000..023695352215bb5de3f91c1a6f5ea3b4f9373ff9
->>>> --- /dev/null
->>>> +++ b/tools/testing/selftests/riscv/abi/ptrace.c
->>> [...]
->>>> +	if (ptrace(PTRACE_GET_SYSCALL_INFO, pid, PTRACE_SYSCALL_INFO_ENTRY, &syscall_info_entry))
->>>> +		perr_and_exit("failed to get syscall info of entry\n");
->>>> +	result->orig_a0 = syscall_info_entry->entry.args[0];
->>>> +	if (ptrace(PTRACE_GET_SYSCALL_INFO, pid, PTRACE_SYSCALL_INFO_EXIT, &syscall_info_exit))
->>>> +		perr_and_exit("failed to get syscall info of exit\n");
->>>> +	result->a0 = syscall_info_exit->exit.rval;
->>>
->>> I'm sorry but this is not how PTRACE_GET_SYSCALL_INFO should be used.
->>>
->>> PTRACE_GET_SYSCALL_INFO operation takes a pointer and a size,
->>> and in this example instead of size you pass constants 1 and 2, which
->>> essentially means that both syscall_info_entry->entry.args[0] and
->>> syscall_info_exit->exit.rval are not going to be assigned
->>> and would just contain some garbage from the stack.
->>>
->>> Also, PTRACE_GET_SYSCALL_INFO operation returns the number of bytes
->>> available to be written by the kernel, which is always nonzero on any
->>> PTRACE_GET_SYSCALL_INFO-capable kernel.  In other words, this example
->>> will always end up with perr_and_exit() call.
->>>
->>> I wonder how this test was tested before the submission.
->>
->> Oops... It seems I forget sync the code to test board so it runs with the old code...
->> The code is completely not tested...
->> I'm so sorry for my mistake.
->>
->> I will correct it and test it carefully later...
-> 
-> It would be great to get this into 6.14. Let me know if you would like
-> any help!
+On Tue, Jan 14, 2025, Valentin Schneider wrote:
+> text_poke_bp_batch() sends IPIs to all online CPUs to synchronize
+> them vs the newly patched instruction. CPUs that are executing in userspace
+> do not need this synchronization to happen immediately, and this is
+> actually harmful interference for NOHZ_FULL CPUs.
 
-v5 has been sent.
+...
 
-Sorry for delay. My test environment was broken yesterday so I have to
-spend time to repair it first...
+> This leaves us with static keys and static calls.
 
-https://lore.kernel.org/lkml/20250115-riscv-new-regset-v5-0-d0e6ec031a23@coelacanthus.name/T/
+...
 
-> 
-> - Charlie
-> 
->>
->>>
->>>
->>
+> @@ -2317,11 +2334,20 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
+>  	 * First step: add a int3 trap to the address that will be patched.
+>  	 */
+>  	for (i = 0; i < nr_entries; i++) {
+> -		tp[i].old = *(u8 *)text_poke_addr(&tp[i]);
+> -		text_poke(text_poke_addr(&tp[i]), &int3, INT3_INSN_SIZE);
+> +		void *addr = text_poke_addr(&tp[i]);
+> +
+> +		/*
+> +		 * There's no safe way to defer IPIs for patching text in
+> +		 * .noinstr, record whether there is at least one such poke.
+> +		 */
+> +		if (is_kernel_noinstr_text((unsigned long)addr))
+> +			cond = NULL;
 
+Maybe pre-check "cond", especially if multiple ranges need to be checked?  I.e.
+
+		if (cond && is_kernel_noinstr_text(...))
+> +
+> +		tp[i].old = *((u8 *)addr);
+> +		text_poke(addr, &int3, INT3_INSN_SIZE);
+>  	}
+>  
+> -	text_poke_sync();
+> +	__text_poke_sync(cond);
+>  
+>  	/*
+>  	 * Second step: update all but the first byte of the patched range.
+
+...
+
+> +/**
+> + * is_kernel_noinstr_text - checks if the pointer address is located in the
+> + *                    .noinstr section
+> + *
+> + * @addr: address to check
+> + *
+> + * Returns: true if the address is located in .noinstr, false otherwise.
+> + */
+> +static inline bool is_kernel_noinstr_text(unsigned long addr)
+> +{
+> +	return addr >= (unsigned long)__noinstr_text_start &&
+> +	       addr < (unsigned long)__noinstr_text_end;
+> +}
+
+This doesn't do the right thing for modules, which matters because KVM can be
+built as a module on x86, and because context tracking understands transitions
+to GUEST mode, i.e. CPUs that are running in a KVM guest will be treated as not
+being in the kernel, and thus will have IPIs deferred.  If KVM uses a static key
+or branch between guest_state_enter_irqoff() and guest_state_exit_irqoff(), the
+patching code won't wait for CPUs to exit guest mode, i.e. KVM could theoretically
+use the wrong static path.
+
+I don't expect this to ever cause problems in practice, because patching code in
+KVM's VM-Enter/VM-Exit path that has *functional* implications, while CPUs are
+actively running guest code, would be all kinds of crazy.  But I do think we
+should plug the hole.
+
+If this issue is unique to KVM, i.e. is not a generic problem for all modules (I
+assume module code generally isn't allowed in the entry path, even via NMI?), one
+idea would be to let KVM register its noinstr section for text poking.
 
