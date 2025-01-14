@@ -1,347 +1,196 @@
-Return-Path: <linux-kselftest+bounces-24518-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24519-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 827CEA111FE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 21:30:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 736ACA1120C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 21:32:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB9873A58B1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 20:30:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3EEC169D87
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 20:32:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F4F3212B3C;
-	Tue, 14 Jan 2025 20:29:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D8E720F090;
+	Tue, 14 Jan 2025 20:32:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="dKaXkNSv";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="BZkNBxBW"
+	dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b="FUu2prLJ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DFgmAYnt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
+Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944E720C46E;
-	Tue, 14 Jan 2025 20:29:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B551220C47F;
+	Tue, 14 Jan 2025 20:32:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736886562; cv=none; b=EBGvy+35WyqMkCLleHAoOPwcRA9jk7XbqXpom8rOBV+cwBguyTSEJeCq72HshWHSqp4/wrg8uFDkRSzDY4SYzRw9EKmfhCz6dMg3wR2Ld0Gt2z5MAPtQVv2dB4oYAiizwTureXqmX9v3VDtSCnTIDhevNEiqUsk6FLczdvUP048=
+	t=1736886726; cv=none; b=G4BQ4pECgj926Q8UnvIDONg8M5vo4qw2BLybTT36NnVFew/lAYooZM/2YpotqwcK+AiYEelRP1N9F7H2bUDEx0TuTwzxZiTArQqWcSTfMW3uVJIVB0Qn1+iuWd/ctIfIidrDsoa8tX3pBIt+OQ+YgoeabtHXO/VRRREXocS6ANo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736886562; c=relaxed/simple;
-	bh=czZ4Mpnmkrow1hHAmMCKjnkd+QwGSZhyq8WqbZoRWuY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OfOahjmJFw6orgRiUj987PtKKMerVSL5EnfEdsf/yw1o2g5kVVOkBRcVtlAEH5EKoAUnu1DsVs3NlceGmuHLeX8c4pmQWrCghEx03ZYaPTjgemurwC/p51ofhVFyyqsSDlcOXONZ+OeFtfHVHJbgDfhplK6RmcdTYEwUDLALCPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=dKaXkNSv; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=BZkNBxBW; arc=none smtp.client-ip=202.12.124.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 5F4302540192;
-	Tue, 14 Jan 2025 15:29:18 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-09.internal (MEProxy); Tue, 14 Jan 2025 15:29:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1736886558; x=
-	1736972958; bh=hiAH15ASAJl1qeq8RbV4azHqOQtb6ImILSyAe1zcbpg=; b=d
-	KaXkNSv2ogGxozNlOb5hP2cHrOiG9PgZ/v5QFciwzcPScb1FCBPUgYNOdcD7v3ua
-	F5TIafiZv1UrgL5uBT1+mhYea2MmDq6lmOp84uXii6/cCXdI/CarctJ0UK58Dcqp
-	GheJT8RgGmpIPYDDgpNw2fpTy3RLDvdw7/zVNLvmCAoBIBhxUMaLsXt6oBHxYu/M
-	LLo/PmwadIlSnlBpu4GYYirQ8oYkZzX7ER/li+PNX1dVRp0MId8MDsA5l5HXiPlH
-	OTrQlsXBBGu4TJJEVS98NJF9Jl9qM8MX80vOo//xv/pUBCS2tzlBpQEwHabZh0qw
-	VIFRw0Ucma/3lC9BuG44w==
+	s=arc-20240116; t=1736886726; c=relaxed/simple;
+	bh=/v/P2m8/hpnNoBNP9m4lZJpDZj91viqX7SE/j73ggHU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=h6XZKdHMaHUiEdapVSV5ZRdZ5PBrSqbueSWaoikfrqIeSbj+ViVE6D2GCgPNW8CmC0yMEmPiUJhn/xnmiYwun3jA22OkBui+txedqIVYeVD4yHdNufvlkR861j+AfSXMMffmvZ5h1YHZWiEwyUV/mhcYhZTsgUQAKn8OUb2bNXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name; spf=pass smtp.mailfrom=coelacanthus.name; dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b=FUu2prLJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DFgmAYnt; arc=none smtp.client-ip=202.12.124.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=coelacanthus.name
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailflow.stl.internal (Postfix) with ESMTP id 14FC91D40844;
+	Tue, 14 Jan 2025 15:32:03 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Tue, 14 Jan 2025 15:32:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	coelacanthus.name; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1736886722; x=1736893922; bh=k3aK0yvw6s
+	3XgHhobmGdwD1q9qT+ce2iJbSudHfZEug=; b=FUu2prLJ1is+E6pfAnsUuGSgwu
+	F2PNTmouhWFckCjs7RP2LXWUbMWmQP861AX7k699XzNt+GIDaThA9BaonOyr0wB3
+	iOBNfyQNFbIzTXgMB3H+ppZH5/W6rQz4weA10Hc/AtNEvIYMKnecZbn8hzNawett
+	e5k0Svbmqo02Pz6x2DLFtXN5gkhamNCZXES/bGFC0DF2EN4wKhon+GiTeaabqU1i
+	tg9/r3WaEzNbr/gjzcLugNmDc7KgTA0ki683cFHSSVDIFnDVWapEVt5HqT3XShYb
+	AWOgP8mq+fdSDaesmeuadnycx3PzjfS93whEaDRwdC8JjUnWS/1yQ+/kDctA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm2; t=1736886558; x=1736972958; bh=h
-	iAH15ASAJl1qeq8RbV4azHqOQtb6ImILSyAe1zcbpg=; b=BZkNBxBWmR7Usvrsb
-	jDH9N4t2LA3u78YtSaJ4180YBS3JSz8W6de0NhsLq1zCuJE+26HB5QHi5Cq09De5
-	zRcicN08vJVnsMpdAXZBk7l9a7xZCrpPTj1z9ZLcJHeZQQW50fVLmuUAKhD0GSYM
-	Efkd+ucrLJlWssQzoqjnpvSogcKn+mCv9T0aYM6NQK3gDVrwA8tPwTx1eG3kvG1I
-	vazlVTVzjdzVGZDWC95euGn/jSczlUFmGQEXLjuT9sHLq7Y85y3yK8pBesabi+Dl
-	6sd7EQm2ry428tHR4B87GT/q/zF9B6XGJ9tQKoGYgaQHd7+eCczjUghtswuo4v95
-	AScFQ==
-X-ME-Sender: <xms:HsmGZ9tazW8GEsju6e0koweX-RoLr2LzSAxCbKFVYv0cMXSXN3YBIw>
-    <xme:HsmGZ2eN6g14EgrISF04FhuJziaC3LtItFUWWcmnmmJD4EskoA8aDsaJDnjyuOyWR
-    sG36q0n6fHsqNv0Vg>
-X-ME-Received: <xmr:HsmGZwwXPUw5IReXzNvOrpZBo95V6TFvfORHtoeJpzpppV5tGbjDgWlGNq5xxjWaKpQVNogkH5dAgoqTMZYqlUFiH68PTBPfLzFxt79KgCVc490CczxG>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehiedgudefjecutefuodetggdotefrod
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736886722; x=
+	1736893922; bh=k3aK0yvw6s3XgHhobmGdwD1q9qT+ce2iJbSudHfZEug=; b=D
+	FgmAYnt5ayLH5wRYBsYb9NOkdf0VuWsBSxpJYNWxtSLbZkROUVUjE98RK+5YnLuS
+	NdNPZ2jddAQkFsSM2L7MbdmZ6TlrfmUB8iA7B4Ha5zgsdlb8zGLyyo+HwfuxR/GE
+	hmxQ2Z2iqyikGW+/td2nta7C6xy2eeIG+5jVs3Xy1RrYPzRbrDDTufXkBp3eaI3R
+	Hw/1e7CpXB3+A3dNpaqxc1vstFlua9yP/s2bbeAU0ltCJ3YR/tf83yvHaE2jQ3cV
+	WJiOYY7lBf2hBuwT4le0zSu3DJYTn8q581pqZRks905uKxgPo/ZDjktp8sORvKjb
+	iOihm+YdBxecJbouyxGVA==
+X-ME-Sender: <xms:wcmGZ8yWRyXxhIcvlmuRbHY6A2sbKJsWVN5lamYYR_kRlWitSZ_nOw>
+    <xme:wcmGZwSZ_GThlD7ZWI0cf7dapvWckQSuKJePUeBDxpP5pOk3-RXjC4WNhMenIspfS
+    obLIiMupBSlvy4XfNc>
+X-ME-Received: <xmr:wcmGZ-UWF3C77y7hucvYopwHtNvkUOjRK2YTmrNo7I25xdN9kbk-_HUWZPJd6E6u>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehiedgudefiecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculd
-    ejtddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhep
-    ffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrh
-    hnpefgfefggeejhfduieekvdeuteffleeifeeuvdfhheejleejjeekgfffgefhtddtteen
-    ucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihuse
-    gugihuuhhurdighiiipdhnsggprhgtphhtthhopedujedpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvgguug
-    ihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtth
-    hopegrnhgurhhiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrrhhtihhnrdhl
-    rghusehlihhnuhigrdguvghvpdhrtghpthhtohepshhonhhgsehkvghrnhgvlhdrohhrgh
-    dprhgtphhtthhopeihohhnghhhohhnghdrshhonhhgsehlihhnuhigrdguvghvpdhrtghp
-    thhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:HsmGZ0MEq0QB94Y8l3l-GKgJfvrZ6Nwnu4eNElFIdFJ80yByGoklMA>
-    <xmx:HsmGZ9_GrCYPutrNPvOWrkDRy8GhXXsbv43ljPqXv05dt9sGqfhszA>
-    <xmx:HsmGZ0Wjt-oAyMxNleTvSwml_aZBJ1MFU24VLP8KMvyMDsE5MQI5kQ>
-    <xmx:HsmGZ-cTGrkwvREWJSbcYRlud3kItFoFXyVkbn831gtOhC8izkjnOg>
-    <xmx:HsmGZyiK7faUJcnwt0gseTep_aNFM9MDJxu3JOGb4MnRmdFAU8VPjqVJ>
-Feedback-ID: i6a694271:Fastmail
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddv
+    jeenucfhrhhomhepvegvlhgvshhtvgcunfhiuhcuoehufihusegtohgvlhgrtggrnhhthh
+    hushdrnhgrmhgvqeenucggtffrrghtthgvrhhnpeefffdujedtleetieffleehjeffudet
+    feeghfdtieeiheevueeggfeuiefgvdekvdenucffohhmrghinhepkhgvrhhnvghlrdhorh
+    hgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepuhif
+    uhestghovghlrggtrghnthhhuhhsrdhnrghmvgdpnhgspghrtghpthhtohepvdeipdhmoh
+    guvgepshhmthhpohhuthdprhgtphhtthhopegthhgrrhhlihgvsehrihhvohhsihhntgdr
+    tghomhdprhgtphhtthhopehlughvsehsthhrrggtvgdrihhopdhrtghpthhtohepohhlvg
+    hgsehrvgguhhgrthdrtghomhdprhgtphhtthhopehprghulhdrfigrlhhmshhlvgihsehs
+    ihhfihhvvgdrtghomhdprhgtphhtthhopehprghlmhgvrhesuggrsggsvghlthdrtghomh
+    dprhgtphhtthhopegvsghivgguvghrmhesgihmihhsshhiohhnrdgtohhmpdhrtghpthht
+    ohepkhgvvghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhhurghhsehkvghrnh
+    gvlhdrohhrghdprhgtphhtthhopegrohhusegvvggtshdrsggvrhhkvghlvgihrdgvughu
+X-ME-Proxy: <xmx:wcmGZ6jpZW4MqjOd3ak_VcDAOQLuSdpdXsCcWQVmKtGjHt1HiIo67g>
+    <xmx:wcmGZ-AwdeQryJpPUW-FMNT3pIq-hYivUf1Mg_Go5E5ykzNFNakRTQ>
+    <xmx:wcmGZ7KrNV88kGIaZ3TLH55saBZgmqLpHD7sMHKDpPFt1SXQjuH6ng>
+    <xmx:wcmGZ1CY0diCWBx-i2BY_cTyODvMN049uCAh_xGiBRZcQfr9GqJZgw>
+    <xmx:wsmGZ_xatnRalfHDXBhBcagXq89TXNU-EnMEZCvBMgZ_6PBtnx-hSnGJ>
+Feedback-ID: i95c648bc:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 14 Jan 2025 15:29:16 -0500 (EST)
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: shuah@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	mykolal@fb.com,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v7 5/5] bpf: selftests: verifier: Add nullness elision tests
-Date: Tue, 14 Jan 2025 13:28:46 -0700
-Message-ID: <f1dacaa777d4516a5476162e0ea549f7c3354d73.1736886479.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <cover.1736886479.git.dxu@dxuuu.xyz>
-References: <cover.1736886479.git.dxu@dxuuu.xyz>
+ 14 Jan 2025 15:31:53 -0500 (EST)
+Message-ID: <6bacd2ec-fd86-41c9-b5dc-e14796737b4b@coelacanthus.name>
+Date: Wed, 15 Jan 2025 04:31:50 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/2] riscv: selftests: Add a ptrace test to verify
+ syscall parameter modification
+Content-Language: en-GB-large
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: "Dmitry V. Levin" <ldv@strace.io>, Oleg Nesterov <oleg@redhat.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Eric Biederman <ebiederm@xmission.com>,
+ Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+ Andrea Bolognani <abologna@redhat.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Ron Economos <re@w6rz.net>, Andrew Jones <ajones@ventanamicro.com>,
+ Quan Zhou <zhouquan@iscas.ac.cn>, Felix Yan <felixonmars@archlinux.org>,
+ Ruizhe Pan <c141028@gmail.com>, Guo Ren <guoren@kernel.org>,
+ Yao Zi <ziyao@disroot.org>, Eugene Syromyatnikov <evgsyr@gmail.com>,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>
+References: <20241226-riscv-new-regset-v4-0-4496a29d0436@coelacanthus.name>
+ <20241226-riscv-new-regset-v4-2-4496a29d0436@coelacanthus.name>
+ <20241226133459.GA30481@strace.io>
+ <2e09aedc-44ba-40e3-ae93-1d6dc21b5eb1@coelacanthus.name>
+ <Z4CVQKkViqJycnaq@ghost>
+From: Celeste Liu <uwu@coelacanthus.name>
+In-Reply-To: <Z4CVQKkViqJycnaq@ghost>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Test that nullness elision works for common use cases. For example, we
-want to check that both constant scalar spills and STACK_ZERO functions.
-As well as when there's both const and non-const values of R2 leading up
-to a lookup. And obviously some bound checks.
+On 2025-01-10 11:34, Charlie Jenkins wrote:
+> On Thu, Dec 26, 2024 at 11:21:59PM +0800, Celeste Liu wrote:
+>>
+>> On 2024-12-26 21:35, Dmitry V. Levin wrote:
+>>> On Thu, Dec 26, 2024 at 06:52:52PM +0800, Celeste Liu wrote:
+>>>> This test checks that orig_a0 allows a syscall argument to be modified,
+>>>> and that changing a0 does not change the syscall argument.
+>>>>
+>>>> Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
+>>>> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
+>>>> Co-developed-by: Charlie Jenkins <charlie@rivosinc.com>
+>>>> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+>>>> Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
+>>>> Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
+>>> [...]
+>>>> diff --git a/tools/testing/selftests/riscv/abi/ptrace.c b/tools/testing/selftests/riscv/abi/ptrace.c
+>>>> new file mode 100644
+>>>> index 0000000000000000000000000000000000000000..023695352215bb5de3f91c1a6f5ea3b4f9373ff9
+>>>> --- /dev/null
+>>>> +++ b/tools/testing/selftests/riscv/abi/ptrace.c
+>>> [...]
+>>>> +	if (ptrace(PTRACE_GET_SYSCALL_INFO, pid, PTRACE_SYSCALL_INFO_ENTRY, &syscall_info_entry))
+>>>> +		perr_and_exit("failed to get syscall info of entry\n");
+>>>> +	result->orig_a0 = syscall_info_entry->entry.args[0];
+>>>> +	if (ptrace(PTRACE_GET_SYSCALL_INFO, pid, PTRACE_SYSCALL_INFO_EXIT, &syscall_info_exit))
+>>>> +		perr_and_exit("failed to get syscall info of exit\n");
+>>>> +	result->a0 = syscall_info_exit->exit.rval;
+>>>
+>>> I'm sorry but this is not how PTRACE_GET_SYSCALL_INFO should be used.
+>>>
+>>> PTRACE_GET_SYSCALL_INFO operation takes a pointer and a size,
+>>> and in this example instead of size you pass constants 1 and 2, which
+>>> essentially means that both syscall_info_entry->entry.args[0] and
+>>> syscall_info_exit->exit.rval are not going to be assigned
+>>> and would just contain some garbage from the stack.
+>>>
+>>> Also, PTRACE_GET_SYSCALL_INFO operation returns the number of bytes
+>>> available to be written by the kernel, which is always nonzero on any
+>>> PTRACE_GET_SYSCALL_INFO-capable kernel.  In other words, this example
+>>> will always end up with perr_and_exit() call.
+>>>
+>>> I wonder how this test was tested before the submission.
+>>
+>> Oops... It seems I forget sync the code to test board so it runs with the old code...
+>> The code is completely not tested...
+>> I'm so sorry for my mistake.
+>>
+>> I will correct it and test it carefully later...
+> 
+> It would be great to get this into 6.14. Let me know if you would like
+> any help!
 
-Particularly tricky are spills both smaller or larger than key size. For
-smaller, we need to ensure verifier doesn't let through a potential read
-into unchecked bytes. For larger, endianness comes into play, as the
-native endian value tracked in the verifier may not be the bytes the
-kernel would have read out of the key pointer. So check that we disallow
-both.
+v5 has been sent.
 
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- .../bpf/progs/verifier_array_access.c         | 188 ++++++++++++++++++
- 1 file changed, 188 insertions(+)
+Sorry for delay. My test environment was broken yesterday so I have to
+spend time to repair it first...
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_array_access.c b/tools/testing/selftests/bpf/progs/verifier_array_access.c
-index 4195aa824ba5..29eb9568633f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_array_access.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_array_access.c
-@@ -28,6 +28,20 @@ struct {
- 	__uint(map_flags, BPF_F_WRONLY_PROG);
- } map_array_wo SEC(".maps");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, 2);
-+	__type(key, __u32);
-+	__type(value, struct test_val);
-+} map_array_pcpu SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 2);
-+	__type(key, __u32);
-+	__type(value, struct test_val);
-+} map_array SEC(".maps");
-+
- struct {
- 	__uint(type, BPF_MAP_TYPE_HASH);
- 	__uint(max_entries, 1);
-@@ -525,4 +539,178 @@ l0_%=:	exit;						\
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("valid map access into an array using constant without nullness")
-+__success __retval(4) __log_level(2)
-+__msg("mark_precise: frame0: regs= stack=-8 before {{[0-9]}}: ({{[a-f0-9]+}}) *(u32 *)(r10 -8) = {{(1|r[0-9])}}")
-+unsigned int an_array_with_a_constant_no_nullness(void)
-+{
-+	/* Need 8-byte alignment for spill tracking */
-+	__u32 __attribute__((aligned(8))) key = 1;
-+	struct test_val *val;
-+
-+	val = bpf_map_lookup_elem(&map_array, &key);
-+	val->index = offsetof(struct test_val, foo);
-+
-+	return val->index;
-+}
-+
-+SEC("socket")
-+__description("valid multiple map access into an array using constant without nullness")
-+__success __retval(8) __log_level(2)
-+__msg("mark_precise: frame0: regs= stack=-8 before {{[0-9]}}: ({{[a-f0-9]+}}) *(u32 *)(r10 -16) = {{(0|r[0-9])}}")
-+__msg("mark_precise: frame0: regs= stack=-8 before {{[0-9]}}: ({{[a-f0-9]+}}) *(u32 *)(r10 -8) = {{(1|r[0-9])}}")
-+unsigned int multiple_array_with_a_constant_no_nullness(void)
-+{
-+	__u32 __attribute__((aligned(8))) key = 1;
-+	__u32 __attribute__((aligned(8))) key2 = 0;
-+	struct test_val *val, *val2;
-+
-+	val = bpf_map_lookup_elem(&map_array, &key);
-+	val->index = offsetof(struct test_val, foo);
-+
-+	val2 = bpf_map_lookup_elem(&map_array, &key2);
-+	val2->index = offsetof(struct test_val, foo);
-+
-+	return val->index + val2->index;
-+}
-+
-+SEC("socket")
-+__description("valid map access into an array using natural aligned 32-bit constant 0 without nullness")
-+__success __retval(4)
-+unsigned int an_array_with_a_32bit_constant_0_no_nullness(void)
-+{
-+	/* Unlike the above tests, 32-bit zeroing is precisely tracked even
-+	 * if writes are not aligned to BPF_REG_SIZE. This tests that our
-+	 * STACK_ZERO handling functions.
-+	 */
-+	struct test_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&map_array, &key);
-+	val->index = offsetof(struct test_val, foo);
-+
-+	return val->index;
-+}
-+
-+SEC("socket")
-+__description("valid map access into a pcpu array using constant without nullness")
-+__success __retval(4) __log_level(2)
-+__msg("mark_precise: frame0: regs= stack=-8 before {{[0-9]}}: ({{[a-f0-9]+}}) *(u32 *)(r10 -8) = {{(1|r[0-9])}}")
-+unsigned int a_pcpu_array_with_a_constant_no_nullness(void)
-+{
-+	__u32 __attribute__((aligned(8))) key = 1;
-+	struct test_val *val;
-+
-+	val = bpf_map_lookup_elem(&map_array_pcpu, &key);
-+	val->index = offsetof(struct test_val, foo);
-+
-+	return val->index;
-+}
-+
-+SEC("socket")
-+__description("invalid map access into an array using constant without nullness")
-+__failure __msg("R0 invalid mem access 'map_value_or_null'")
-+unsigned int an_array_with_a_constant_no_nullness_out_of_bounds(void)
-+{
-+	/* Out of bounds */
-+	__u32 __attribute__((aligned(8))) key = 3;
-+	struct test_val *val;
-+
-+	val = bpf_map_lookup_elem(&map_array, &key);
-+	val->index = offsetof(struct test_val, foo);
-+
-+	return val->index;
-+}
-+
-+SEC("socket")
-+__description("invalid map access into an array using constant smaller than key_size")
-+__failure __msg("R0 invalid mem access 'map_value_or_null'")
-+unsigned int an_array_with_a_constant_too_small(void)
-+{
-+	__u32 __attribute__((aligned(8))) key;
-+	struct test_val *val;
-+
-+	/* Mark entire key as STACK_MISC */
-+	bpf_probe_read_user(&key, sizeof(key), NULL);
-+
-+	/* Spilling only the bottom byte results in a tnum const of 1.
-+	 * We want to check that the verifier rejects it, as the spill is < 4B.
-+	 */
-+	*(__u8 *)&key = 1;
-+	val = bpf_map_lookup_elem(&map_array, &key);
-+
-+	/* Should fail, as verifier cannot prove in-bound lookup */
-+	val->index = offsetof(struct test_val, foo);
-+
-+	return val->index;
-+}
-+
-+SEC("socket")
-+__description("invalid map access into an array using constant larger than key_size")
-+__failure __msg("R0 invalid mem access 'map_value_or_null'")
-+unsigned int an_array_with_a_constant_too_big(void)
-+{
-+	struct test_val *val;
-+	__u64 key = 1;
-+
-+	/* Even if the constant value is < max_entries, if the spill size is
-+	 * larger than the key size, the set bits may not be where we expect them
-+	 * to be on different endian architectures.
-+	 */
-+	val = bpf_map_lookup_elem(&map_array, &key);
-+	val->index = offsetof(struct test_val, foo);
-+
-+	return val->index;
-+}
-+
-+SEC("socket")
-+__description("invalid elided lookup using const and non-const key")
-+__failure __msg("R0 invalid mem access 'map_value_or_null'")
-+unsigned int mixed_const_and_non_const_key_lookup(void)
-+{
-+	__u32 __attribute__((aligned(8))) key;
-+	struct test_val *val;
-+	__u32 rand;
-+
-+	rand = bpf_get_prandom_u32();
-+	key = rand > 42 ? 1 : rand;
-+	val = bpf_map_lookup_elem(&map_array, &key);
-+
-+	return val->index;
-+}
-+
-+SEC("socket")
-+__failure __msg("invalid read from stack R2 off=4096 size=4")
-+__naked void key_lookup_at_invalid_fp(void)
-+{
-+	asm volatile ("					\
-+	r1 = %[map_array] ll;				\
-+	r2 = r10;					\
-+	r2 += 4096;					\
-+	call %[bpf_map_lookup_elem];			\
-+	r0 = *(u64*)(r0 + 0);				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_array)
-+	: __clobber_all);
-+}
-+
-+volatile __u32 __attribute__((aligned(8))) global_key;
-+
-+SEC("socket")
-+__description("invalid elided lookup using non-stack key")
-+__failure __msg("R0 invalid mem access 'map_value_or_null'")
-+unsigned int non_stack_key_lookup(void)
-+{
-+	struct test_val *val;
-+
-+	global_key = 1;
-+	val = bpf_map_lookup_elem(&map_array, (void *)&global_key);
-+	val->index = offsetof(struct test_val, foo);
-+
-+	return val->index;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.47.1
+https://lore.kernel.org/lkml/20250115-riscv-new-regset-v5-0-d0e6ec031a23@coelacanthus.name/T/
+
+> 
+> - Charlie
+> 
+>>
+>>>
+>>>
+>>
 
 
