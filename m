@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-24473-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24474-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CCC2A10E58
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 18:55:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0714A10E62
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 18:55:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BA29169E4B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 17:54:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D86D1188A0BC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 17:55:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D0161FBBFC;
-	Tue, 14 Jan 2025 17:54:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E0E11FBE9C;
+	Tue, 14 Jan 2025 17:55:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NcxdypVy"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KvqnHIsK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4AD1FA8EC
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 17:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A47A1FA838
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 17:55:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736877286; cv=none; b=hQtw0PlnheOxmDbHhYnaRcKkx53ZMfn3gvvKMFqgMAxeXlapgwbT2J98RpKWt8fiZRpHYAh9S/KL86e/JdSrJMfR0aPI6ehCkZ4dvAsbFmkRhiq1GpJnzra33qkhwIVhgJSy9vV1eaH5m0miz7NTkDT4LIGNT5IRcGQITY30fOc=
+	t=1736877313; cv=none; b=FEZuuAjIJoPaa2Zm8Z4+lJx/oBGvs6T6yh+/4LyT9bNZeO71yCDK1Pb7b57cjrwDMqVxYdDHeb3sJcLjL/Fx6fPpn9ES4dPEbWVNE+9OUqNoESUoZPgaH9fTj6riPuK0ZGVDE6VfNde4u1uhQt9mq8FH7Q+bP0Wl9XReAxYS53Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736877286; c=relaxed/simple;
-	bh=UkJ2yj55j1oMCnT1Rz8O8l+No6/OTFEGUS2K4yE4das=;
+	s=arc-20240116; t=1736877313; c=relaxed/simple;
+	bh=y/wHSkpDm/13uxwEFGeeXlBJL+JV6XQC91p1D0NpZ+s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eZZIzcA+sKVw9a9lo7Rky6eiNlMHw+BommnNM/ZJqUEdzXfrDu9fLbQ6r9/bvFbTNkMXYchFNirJ0V312QrUtiq8/DvcSnLysF3UZqSka8zdJBdpUxXS+iYVYDnWjES+ZjEfbykNwjTBbIDtQK2Trrz3PEfpvPhoeRCMZUd8GsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NcxdypVy; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=EuOwXxszG+HKXnOefHWlf0UM0lxmK77IfrdH7L/ZumDIDIEZRW5tcgkVU1qw6bA4v5pXQP1AXXrjg4aiyA3WSDruebdQpYHqxSJlN1klB9bhWpKVeAYuvs/Kt57Gz1Nw2LHrgrJuhvk9tm2fjwCo3KLSHfm4xUd2pXxLf7cyFwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KvqnHIsK; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736877283;
+	s=mimecast20190719; t=1736877309;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=sXsyWlIRHxUaG616jNoO6fTMagUzfNCGxp09271a4iI=;
-	b=NcxdypVyNu+XipMn7CzdxJzN56AyGlzt0+tFUPAeXIZ5gdSYyHTTEt+A7euttxd6FeGaLX
-	pni1Y3GrCi7XgWChDPuvNtYrACUZt2bTPzmb2DhkVSWY3hc1wYvZNyZ4U0K3RbwbpYtHpE
-	9QGoum5kzy/B7PYmktoX/w/yAfuVBCo=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+	bh=tq2pU6+Sz+OC+aH2F2609vpzg9lrw/4sZVW/JKS6LBM=;
+	b=KvqnHIsKIVXRPlWbETt7MtGkZ4bWzWv3+eU9WWcBjKqWrNLNIIRXEWYfX1NJzkb0Soq4mD
+	X+9ILNo909ajv6xN8yJfM8/vOQ7dbnwhbnucOIOy//PPKVNZFpGpVE6J2cOB/17mNy6/WL
+	Ggdy3txGqegryNwOINIE5iaCpTxFasw=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-217-NTn38snjMKqDKDXKnJ2usQ-1; Tue,
- 14 Jan 2025 12:54:39 -0500
-X-MC-Unique: NTn38snjMKqDKDXKnJ2usQ-1
-X-Mimecast-MFC-AGG-ID: NTn38snjMKqDKDXKnJ2usQ
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-526-rasDThuXPT-KkBXykuo6Cg-1; Tue,
+ 14 Jan 2025 12:55:06 -0500
+X-MC-Unique: rasDThuXPT-KkBXykuo6Cg-1
+X-Mimecast-MFC-AGG-ID: rasDThuXPT-KkBXykuo6Cg
 Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C835019560B8;
-	Tue, 14 Jan 2025 17:54:35 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F41581955F67;
+	Tue, 14 Jan 2025 17:55:01 +0000 (UTC)
 Received: from vschneid-thinkpadt14sgen2i.remote.csb (unknown [10.39.192.55])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 151C7195608A;
-	Tue, 14 Jan 2025 17:54:09 +0000 (UTC)
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 594CC19560AB;
+	Tue, 14 Jan 2025 17:54:36 +0000 (UTC)
 From: Valentin Schneider <vschneid@redhat.com>
 To: linux-kernel@vger.kernel.org,
 	x86@kernel.org,
@@ -74,7 +74,7 @@ To: linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	bpf@vger.kernel.org,
 	bcm-kernel-feedback-list@broadcom.com
-Cc: "Paul E . McKenney" <paulmck@kernel.org>,
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
 	Juergen Gross <jgross@suse.com>,
 	Ajay Kaher <ajay.kaher@broadcom.com>,
 	Alexey Makhalov <alexey.amakhalov@broadcom.com>,
@@ -101,13 +101,13 @@ Cc: "Paul E . McKenney" <paulmck@kernel.org>,
 	Adrian Hunter <adrian.hunter@intel.com>,
 	"Liang, Kan" <kan.liang@linux.intel.com>,
 	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
 	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
 	Sean Christopherson <seanjc@google.com>,
 	Paolo Bonzini <pbonzini@redhat.com>,
 	Andy Lutomirski <luto@kernel.org>,
 	Arnd Bergmann <arnd@arndb.de>,
 	Frederic Weisbecker <frederic@kernel.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
 	Jason Baron <jbaron@akamai.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	Ard Biesheuvel <ardb@kernel.org>,
@@ -146,9 +146,9 @@ Cc: "Paul E . McKenney" <paulmck@kernel.org>,
 	Luis Chamberlain <mcgrof@kernel.org>,
 	Randy Dunlap <rdunlap@infradead.org>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v4 04/30] rcutorture: Make TREE04 use CONFIG_RCU_DYNTICKS_TORTURE
-Date: Tue, 14 Jan 2025 18:51:17 +0100
-Message-ID: <20250114175143.81438-5-vschneid@redhat.com>
+Subject: [PATCH v4 05/30] jump_label: Add annotations for validating noinstr usage
+Date: Tue, 14 Jan 2025 18:51:18 +0100
+Message-ID: <20250114175143.81438-6-vschneid@redhat.com>
 In-Reply-To: <20250114175143.81438-1-vschneid@redhat.com>
 References: <20250114175143.81438-1-vschneid@redhat.com>
 Precedence: bulk
@@ -160,29 +160,51 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
-We now have an RCU_EXPERT config for testing small-sized RCU dynticks
-counter:  CONFIG_RCU_DYNTICKS_TORTURE.
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Modify scenario TREE04 to exercise to use this config in order to test a
-ridiculously small counter (2 bits).
+Deferring a code patching IPI is unsafe if the patched code is in a
+noinstr region.  In that case the text poke code must trigger an
+immediate IPI to all CPUs, which can rudely interrupt an isolated NO_HZ
+CPU running in userspace.
 
-Link: http://lore.kernel.org/r/4c2cb573-168f-4806-b1d9-164e8276e66a@paulmck-laptop
-Suggested-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Valentin Schneider <vschneid@redhat.com>
-Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+Some noinstr static branches may really need to be patched at runtime,
+despite the resulting disruption.  Add DEFINE_STATIC_KEY_*_NOINSTR()
+variants for those.  They don't do anything special yet; that will come
+later.
+
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/testing/selftests/rcutorture/configs/rcu/TREE04 | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/jump_label.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE04 b/tools/testing/selftests/rcutorture/configs/rcu/TREE04
-index dc4985064b3ad..67caf4276bb01 100644
---- a/tools/testing/selftests/rcutorture/configs/rcu/TREE04
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE04
-@@ -16,3 +16,4 @@ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
- CONFIG_RCU_EXPERT=y
- CONFIG_RCU_EQS_DEBUG=y
- CONFIG_RCU_LAZY=y
-+CONFIG_RCU_DYNTICKS_TORTURE=y
+diff --git a/include/linux/jump_label.h b/include/linux/jump_label.h
+index f5a2727ca4a9a..88bb6e32fdcbc 100644
+--- a/include/linux/jump_label.h
++++ b/include/linux/jump_label.h
+@@ -385,6 +385,23 @@ struct static_key_false {
+ #define DEFINE_STATIC_KEY_FALSE_RO(name)	\
+ 	struct static_key_false name __ro_after_init = STATIC_KEY_FALSE_INIT
+ 
++/*
++ * The _NOINSTR variants are used to tell objtool the static key is allowed to
++ * be used in noinstr code.
++ *
++ * They should almost never be used, as they prevent code patching IPIs from
++ * being deferred, which can be problematic for isolated NOHZ_FULL CPUs running
++ * in pure userspace.
++ *
++ * If using one of these _NOINSTR variants, please add a comment above the
++ * definition with the rationale.
++ */
++#define DEFINE_STATIC_KEY_TRUE_NOINSTR(name)					\
++	DEFINE_STATIC_KEY_TRUE(name)
++
++#define DEFINE_STATIC_KEY_FALSE_NOINSTR(name)					\
++	DEFINE_STATIC_KEY_FALSE(name)
++
+ #define DECLARE_STATIC_KEY_FALSE(name)	\
+ 	extern struct static_key_false name
+ 
 -- 
 2.43.0
 
