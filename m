@@ -1,387 +1,208 @@
-Return-Path: <linux-kselftest+bounces-24514-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24515-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6027EA111DA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 21:26:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDC80A111EE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 21:29:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 691E4188AA53
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 20:26:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 713E83A1106
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 20:29:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1547220C488;
-	Tue, 14 Jan 2025 20:25:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76DBF20967A;
+	Tue, 14 Jan 2025 20:29:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b="WgZDBvrE";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="H5KT5zYV"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="WPY8GV+I";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Bt+VibFX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
+Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1AD420E6F1;
-	Tue, 14 Jan 2025 20:25:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E30B1FBCA6;
+	Tue, 14 Jan 2025 20:29:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736886336; cv=none; b=QEIHgMnGEmud6mBuk0QgFnzhr+cjH5FuduE3jNbUcDCDR97TmaOJWOeM6nCynMgRqBQTL4+lH33JBFx+OnSNDrGLgEs5Widi9LJaFNudP4mduyd4EqEb5welWd3f1Gvge8xaiXa27kkJZg94gsXDvBLTIfs6ivlWcc2iVYFNfpQ=
+	t=1736886547; cv=none; b=VcF08YQIqnZQThTiaAj4K38RxqICR/W8hQokmcdphPFZsPC0OQJRPBeAxA6h1lxgkbOGDSD9u3+ABQCvAwdVreZoIuQOt+KtK8vOWqVneAaK6luBrIuhPbpjYY6gk8lxAWBaXe4EMrnmRfjp6lOp/ejp1zIshZI6a3WUhcNMyrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736886336; c=relaxed/simple;
-	bh=JHyWpvTLVV/62CjvMtPU1ES86qpvTbLYXerWGMWdLcU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SmGKdWj7cIqAfT4bxsYNKbSxNSB9Lu4KKlQXi7M/VTAGTWGWPeMgdUBtDVKBLTirmDsi2K4P3heYCpZc2fMrS7NcOKAqu2xFm5LkrsNdYtBTYf5Y+bwWtaup0LUQANb8jgf1J4LIaq50bJendob146pK+9ok4F0BS6gnjR1Ghk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name; spf=pass smtp.mailfrom=coelacanthus.name; dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b=WgZDBvrE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=H5KT5zYV; arc=none smtp.client-ip=202.12.124.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=coelacanthus.name
-Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
-	by mailflow.stl.internal (Postfix) with ESMTP id 6FEFC1D40BF4;
-	Tue, 14 Jan 2025 15:25:32 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Tue, 14 Jan 2025 15:25:33 -0500
+	s=arc-20240116; t=1736886547; c=relaxed/simple;
+	bh=w3GKJW4dxKObWJJ5sS1uX5ni/6l1HKrWIipHuxFBUi4=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=ihnwm4cKwf+1F19VmT2oBoPlUzhZetBE3KBMecmwOl/4c4Ik4ry5ItDyd+fWUnVrrGmSTn0Xjia3NMNdDyyP3dhXiTlpAxCrYhstHsynZ7YevYr8J5+3jsN9Y3N5JLEh3YsuupnfsVslibiooOwX0auAHB+TrRBN5rJp8uRe/ms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=WPY8GV+I; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Bt+VibFX; arc=none smtp.client-ip=202.12.124.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfout.stl.internal (Postfix) with ESMTP id 0DD6F1140051;
+	Tue, 14 Jan 2025 15:29:04 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-09.internal (MEProxy); Tue, 14 Jan 2025 15:29:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=fm1; t=1736886543; x=1736972943; bh=fAhBMPcT3KWreyXJ6/K8X
+	IUq8LGhJ37NMiB9G2KJzTc=; b=WPY8GV+Ir8n+KSCD7nziudLbJs4+mwxHMwMzf
+	CEjA1gHu/hzuVR4RGAPoQ2ANpmuCxfyoVeG4KQYjfNEWXXGggJ0hK43KUzRtpz/W
+	7OSZ2Zh3dM0KtxOWaxqc9FVXKLvPkcdZ2KCoU9SKI74qME15NRZdEDkVlZnU2Bc7
+	fKx9qWT5WOfw9xPCm5quHeK/001HtrjWoOxbTp4k91VzC8MND1VCahbOoBK288YW
+	rOpGQtjFIwDVv/cWxIo/wLb2hK7n09zHZapqWwPvSwjel3xxHGJAXUhUH9G8j6h4
+	PDJkK1vBnILztrlk2KhKOrrkSLIsyl9RjrskQ29gZBrlOQiUw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	coelacanthus.name; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1736886332; x=1736893532; bh=X84OC6j3D/
-	EcHmFCrIItppTILcpGDU3BEqt5Odrm7tQ=; b=WgZDBvrE4myYXVdo8lmC9V7go1
-	MBNUZAT+PvPqb5oGn6x9Kl2qG1YUJMqvH5XJ+XPxutA33rnDI7pZZZtx57DmYIib
-	YuT54hy8qxi3+XWsBqM7U0e1GLKfGaZleF7Ejy5/5FSWckl4EvWvr8A7AT58wlvG
-	tTWWAKVrLJCC5avhWp0dLXQ6ISFZcvPIaK4g1SRw0RlmPygLLxc2p2zZZ4cT1VDL
-	fP5mjcKT04he4UlDi7KwhjSwqyj0Jkyt9xYb8v7waNYmBNs8rBzw0co39X5iAocG
-	Gom4h+dGGkIgaicrLNfqShZH9+5/y3am1u/BnXWVG7moTaDfTmtrFdFe4hzw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736886332; x=
-	1736893532; bh=X84OC6j3D/EcHmFCrIItppTILcpGDU3BEqt5Odrm7tQ=; b=H
-	5KT5zYVPKM7Nwr0zWxaG2QUwLi0MZsWF61JiqEvq8WKbOPfmItvqOF9o8ZZTb3CA
-	h6VjYCzB9weaEq0/uZVUzwq7HdgWBbhEhs3b9y5y5WRR1hJKyKDndqtuupTHV7gw
-	6ept+8nqMi0uqejwWxkJsxNYoztaUgZo/1HdVILdsQo1zTa+38qukLR+vOPxbRJG
-	yDLLPHayjZ6Q5Lh367RG/+sUEG5GxW/YIuWfi1oyCz2SiDgeTO3HmEaVpt1l8VpB
-	HnulfY5HvNvtwGRpKfD33Tmdwl6de1+9j3i8jDlrHIeDpAXVEZEiy1j3wIa2L9Og
-	PVe2hYZIVkt4C/jya4Qew==
-X-ME-Sender: <xms:OsiGZ0GDSjZ0QWkEVG3Q3dlisHgGL4NVHnVcyQ7ImnKq8vWQeW-i3Q>
-    <xme:OsiGZ9VkiLVkW2SeW8khs225NmeQ4nMzJsQtHwJ5MnakKxzd4NlkaMOuac9oGiHmS
-    rucSWDAwG4UUEUnt_U>
-X-ME-Received: <xmr:OsiGZ-KkZncRT2goEFr_ZGhOY0ivJ3-11CBJRzikQbH7X1KPZQ5GK24_1QqQBw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehiedgudefhecutefuodetggdotefrod
+	messagingengine.com; h=cc:content-transfer-encoding:content-type
+	:date:date:feedback-id:feedback-id:from:from:in-reply-to
+	:message-id:mime-version:reply-to:subject:subject:to:to
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1736886543; x=1736972943; bh=fAhBMPcT3KWreyXJ6/K8XIUq8LGhJ37NMiB
+	9G2KJzTc=; b=Bt+VibFXxZJoZndvJteRGgNVxV32vm9IXuKC8/PgiwKzuacxqZe
+	KGTU07n1jgUDuP+0bvB4SRxwCNQql4+pKnTcLpU39kfzeyliT1maLhLG8qLDTfgo
+	2I45gVFD9QvtO2LuC40ptuZFra580MEETWEKAqfDTeZvzRFndOZaBdMJHQr56l2A
+	nGOZ4rYsPRMEeQR7sKIJPrZuO+ivnSo5r1y3ch175I3ynMDRM+sV+Kssqy8jV50m
+	S7plpue1QFCNj8CJjG2V8KC1JCvNb/GmIVpP4aukUYS7aRZRLpzgFBEqhxTGKq9l
+	sG/03UzmxlC34Dr0mrXomzuMgMAckSEC5Hw==
+X-ME-Sender: <xms:D8mGZwI4F2scOwUVIC3b9u1WTSYuQZPXjee3_PNrWOGq-b5OPCZlhw>
+    <xme:D8mGZwLBAhv7gy7KDOeEDrlFbpPPEKLj83V19dMErK7YbyG4iQnSskc-0HUmiYNyy
+    0s7LqrauZqcGguDKA>
+X-ME-Received: <xmr:D8mGZwtSzJpXkIlb5rZETM8TToFYuCFrEP1B0Y_slurgIwgaPrUbAqNvYS1iVRZeGeAfe_XExpqeIFmNS07Kg8cE66DXycH66UE_XDVys6gkTN_wry7x>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehiedgudefjecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkfhgjvfevofesthekredtredt
-    jeenucfhrhhomhepvegvlhgvshhtvgcunfhiuhcuoehufihusegtohgvlhgrtggrnhhthh
-    hushdrnhgrmhgvqeenucggtffrrghtthgvrhhnpeeiudegfffhtdeuuddufefhfefhheej
-    jefhueekhefffeeugfeuveetieeuvddtfeenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehufihusegtohgvlhgrtggrnhhthhhushdrnhgrmhgv
-    pdhnsggprhgtphhtthhopedviedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheplh
-    hinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
-    phgrlhhmvghrsegurggssggvlhhtrdgtohhmpdhrtghpthhtohepfhgvlhhigihonhhmrg
-    hrshesrghrtghhlhhinhhugidrohhrghdprhgtphhtthhopehlughvsehsthhrrggtvgdr
-    ihhopdhrtghpthhtohepthhglhigsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtoh
-    epuhifuhestghovghlrggtrghnthhhuhhsrdhnrghmvgdprhgtphhtthhopehshhhurghh
-    sehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkvggvsheskhgvrhhnvghlrdhorhhgpd
-    hrtghpthhtohepiihhohhuqhhurghnsehishgtrghsrdgrtgdrtghn
-X-ME-Proxy: <xmx:OsiGZ2GsElB4Y2Hx7eHM_aSf8SgUoXLXQbwvy8GrWczhZGLI-PYrbQ>
-    <xmx:OsiGZ6VPgiIBHH6D9lhZAWiD9_8t4fUseJ3pjZhy2IgOR-rLyWgOzQ>
-    <xmx:OsiGZ5PDDMh4MUGzgrGZOGpNv9yvjVcRiQ6aKkrGOAqzKOjLZVeAXw>
-    <xmx:OsiGZx3pRt2nc2euzCA9G9Jw5mVBmTwWrBDPkBJ8PRLjMqCMEBf5Ug>
-    <xmx:PMiGZ01jkZFaGlKW-kzPni9imdluDmUkmXJb24hUI4ousQCKU-tR98sB>
-Feedback-ID: i95c648bc:Fastmail
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculd
+    ejtddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeffrghn
+    ihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepie
+    ffgfelvdffiedtleejvdetfeefiedvfeehieevveejudeiiefgteeiveeiffffnecuvehl
+    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguh
+    huuhdrgiihiidpnhgspghrtghpthhtohepledpmhhouggvpehsmhhtphhouhhtpdhrtghp
+    thhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtohepsghpfhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrshht
+    sehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmvghmgihorhesghhmrghilhdrtghomh
+    dprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthho
+    pehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuh
+    igqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    vgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopegrnhgurhhiiheskhgvrh
+    hnvghlrdhorhhg
+X-ME-Proxy: <xmx:D8mGZ9Y8vOt2HqBhMRV1Q9XuwFADpUwuU8LqPA5iVTZCsU7LVQrOYA>
+    <xmx:D8mGZ3bvWWOGIF3vYgLQdejp7ILCRZkZEo21dVE0ZxGoxBRTBB_XdA>
+    <xmx:D8mGZ5CVHbCY5NkOGN26Tf-rPDC6HDiuq3Labk3rgB_z0WMLLULotQ>
+    <xmx:D8mGZ9afVcSgq-rwfdO0qmX41EvdOvdyeB1jW4qal8WYHeZDjsPW4w>
+    <xmx:D8mGZxk_UkGXH7zQRt_s_Fh9HjeqCQmHx7fe7ro--4cN-7SZwQlPHY06>
+Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 14 Jan 2025 15:25:29 -0500 (EST)
-From: Celeste Liu <uwu@coelacanthus.name>
-Date: Wed, 15 Jan 2025 04:24:59 +0800
-Subject: [PATCH v5 2/2] riscv: selftests: Add a ptrace test to verify a0
- and orig_a0 access
+ 14 Jan 2025 15:29:02 -0500 (EST)
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	ast@kernel.org,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	eddyz87@gmail.com,
+	andrii@kernel.org
+Subject: [PATCH bpf-next v7 0/5] Support eliding map lookup nullness
+Date: Tue, 14 Jan 2025 13:28:41 -0700
+Message-ID: <cover.1736886479.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250115-riscv-new-regset-v5-2-d0e6ec031a23@coelacanthus.name>
-References: <20250115-riscv-new-regset-v5-0-d0e6ec031a23@coelacanthus.name>
-In-Reply-To: <20250115-riscv-new-regset-v5-0-d0e6ec031a23@coelacanthus.name>
-To: Oleg Nesterov <oleg@redhat.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Eric Biederman <ebiederm@xmission.com>, 
- Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Albert Ou <aou@eecs.berkeley.edu>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, "Dmitry V. Levin" <ldv@strace.io>, 
- Andrea Bolognani <abologna@redhat.com>, 
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
- Thomas Gleixner <tglx@linutronix.de>, Ron Economos <re@w6rz.net>, 
- Charlie Jenkins <charlie@rivosinc.com>, 
- Andrew Jones <ajones@ventanamicro.com>, Quan Zhou <zhouquan@iscas.ac.cn>, 
- Felix Yan <felixonmars@archlinux.org>, Ruizhe Pan <c141028@gmail.com>, 
- Guo Ren <guoren@kernel.org>, Yao Zi <ziyao@disroot.org>, 
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
- Celeste Liu <uwu@coelacanthus.name>, 
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@rivosinc.com>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7877; i=uwu@coelacanthus.name;
- h=from:subject:message-id; bh=JHyWpvTLVV/62CjvMtPU1ES86qpvTbLYXerWGMWdLcU=;
- b=kA0DAAoWT2Qv82QkrXgByyZiAGeGyCiiQ/UipLwCo1ZxlhWCvh+tEMPj8P8eGMLet11Mo7+mP
- Yh1BAAWCgAdFiEEbnQE+QnSzYu9iLeKT2Qv82QkrXgFAmeGyCgACgkQT2Qv82QkrXgtRAD8DQ3t
- m4IYDX1buEhi22FOFeG2lTxpLFGOsmFktIorlmEA/ioVOvQeEyBhz+AI3kUPJbx96RWmT6t9/op
- IjMuhOLIC
-X-Developer-Key: i=uwu@coelacanthus.name; a=openpgp;
- fpr=892EBC7DC392DFF9C9C03F1D15F4180E73787863
 
-This test checks that orig_a0 and a0 can be modified and accessed
-independently.
+This patch allows progs to elide a null check on statically known map
+lookup keys. In other words, if the verifier can statically prove that
+the lookup will be in-bounds, allow the prog to drop the null check.
 
-Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
-Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
-Co-developed-by: Charlie Jenkins <charlie@rivosinc.com>
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
-Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
----
- tools/testing/selftests/riscv/abi/.gitignore |   1 +
- tools/testing/selftests/riscv/abi/Makefile   |   6 +-
- tools/testing/selftests/riscv/abi/ptrace.c   | 201 +++++++++++++++++++++++++++
- 3 files changed, 207 insertions(+), 1 deletion(-)
+This is useful for two reasons:
 
-diff --git a/tools/testing/selftests/riscv/abi/.gitignore b/tools/testing/selftests/riscv/abi/.gitignore
-index b38358f91c4d2240ae64892871d9ca98bda1ae58..378c605919a3b3d58eec2701eb7af430cfe315d6 100644
---- a/tools/testing/selftests/riscv/abi/.gitignore
-+++ b/tools/testing/selftests/riscv/abi/.gitignore
-@@ -1 +1,2 @@
- pointer_masking
-+ptrace
-diff --git a/tools/testing/selftests/riscv/abi/Makefile b/tools/testing/selftests/riscv/abi/Makefile
-index ed82ff9c664e7eb3f760cbab81fb957ff72579c5..359a082c88a401883fb3776b35e4dacf69beaaaa 100644
---- a/tools/testing/selftests/riscv/abi/Makefile
-+++ b/tools/testing/selftests/riscv/abi/Makefile
-@@ -1,10 +1,14 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- CFLAGS += -I$(top_srcdir)/tools/include
-+CFLAGS += $(KHDR_INCLUDES)
- 
--TEST_GEN_PROGS := pointer_masking
-+TEST_GEN_PROGS := pointer_masking ptrace
- 
- include ../../lib.mk
- 
- $(OUTPUT)/pointer_masking: pointer_masking.c
- 	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-+
-+$(OUTPUT)/ptrace: ptrace.c
-+	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-diff --git a/tools/testing/selftests/riscv/abi/ptrace.c b/tools/testing/selftests/riscv/abi/ptrace.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..f1a0458adccdd040bfaa350e2e8d98b1ef34c0ad
---- /dev/null
-+++ b/tools/testing/selftests/riscv/abi/ptrace.c
-@@ -0,0 +1,201 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <fcntl.h>
-+#include <signal.h>
-+#include <errno.h>
-+#include <sys/types.h>
-+#include <sys/ptrace.h>
-+#include <sys/stat.h>
-+#include <sys/user.h>
-+#include <sys/wait.h>
-+#include <sys/uio.h>
-+#include <linux/elf.h>
-+#include <linux/unistd.h>
-+#include <linux/ptrace.h>
-+#include <asm/ptrace.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+#ifndef sizeof_field
-+#define sizeof_field(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
-+#endif
-+#ifndef offsetofend
-+#define offsetofend(TYPE, MEMBER) \
-+	(offsetof(TYPE, MEMBER) + sizeof_field(TYPE, MEMBER))
-+#endif
-+
-+
-+#define ORIG_A0_MODIFY      0x01
-+#define A0_MODIFY           0x02
-+#define A0_OLD              0xbadbeefbeeff
-+#define A0_NEW              0xffeebfeebdab
-+
-+
-+struct a0_regs {
-+	__s64 orig_a0;
-+	__u64 a0;
-+};
-+
-+#define perr_and_exit(fmt, ...)						\
-+	({								\
-+		char buf[256];						\
-+		snprintf(buf, sizeof(buf), "%s:%d:" fmt ": %m\n",	\
-+			__func__, __LINE__, ##__VA_ARGS__);		\
-+		ksft_exit_fail_perror(buf);				\
-+	})
-+
-+static void ptrace_test(int opt, struct a0_regs result[])
-+{
-+	int status;
-+	long rc;
-+	pid_t pid;
-+	struct user_regs_struct regs;
-+	struct iovec iov = {
-+		.iov_base = &regs,
-+		.iov_len = sizeof(regs),
-+	};
-+
-+	unsigned long orig_a0;
-+	struct iovec a0_iov = {
-+		.iov_base = &orig_a0,
-+		.iov_len = sizeof(orig_a0),
-+	};
-+	struct ptrace_syscall_info syscall_info = {
-+		.op = 0xff,
-+	};
-+	const unsigned int expected_sci_entry_size =
-+		offsetofend(struct ptrace_syscall_info, entry.args);
-+	const unsigned int expected_sci_exit_size =
-+		offsetofend(struct ptrace_syscall_info, exit.is_error);
-+
-+	pid = fork();
-+	if (pid == 0) {
-+		/* Mark oneself being traced */
-+		long val = ptrace(PTRACE_TRACEME, 0, 0, 0);
-+
-+		if (val < 0)
-+			perr_and_exit("failed to request for tracer to trace me: %ld", val);
-+
-+		kill(getpid(), SIGSTOP);
-+
-+		/* Perform chdir syscall that will be intercepted */
-+		syscall(__NR_chdir, A0_OLD);
-+
-+		exit(0);
-+	}
-+
-+	if (pid < 0)
-+		ksft_exit_fail_perror("failed to fork");
-+
-+	for (int i = 0; i < 3; i++) {
-+		if (waitpid(pid, &status, 0) != pid)
-+			perr_and_exit("failed to wait for the tracee %d", pid);
-+		if (WIFSTOPPED(status)) {
-+			switch (WSTOPSIG(status)) {
-+			case SIGSTOP:
-+				if (ptrace(PTRACE_SETOPTIONS, pid, 0, PTRACE_O_TRACESYSGOOD) < 0)
-+					perr_and_exit("failed to set PTRACE_O_TRACESYSGOOD");
-+				break;
-+			case SIGTRAP|0x80:
-+				/* Modify twice so GET_SYSCALL_INFO get modified a0 and orig_a0 */
-+				if (ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, &iov))
-+					perr_and_exit("failed to get tracee registers");
-+				if (ptrace(PTRACE_GETREGSET, pid, NT_RISCV_ORIG_A0, &a0_iov))
-+					perr_and_exit("failed to get tracee registers");
-+
-+				/* Modify a0/orig_a0 for the syscall */
-+				switch (opt) {
-+				case A0_MODIFY:
-+					regs.a0 = A0_NEW;
-+					break;
-+				case ORIG_A0_MODIFY:
-+					orig_a0 = A0_NEW;
-+					break;
-+				}
-+
-+				if (ptrace(PTRACE_SETREGSET, pid, NT_PRSTATUS, &iov))
-+					perr_and_exit("failed to set tracee registers");
-+				if (ptrace(PTRACE_SETREGSET, pid, NT_RISCV_ORIG_A0, &a0_iov))
-+					perr_and_exit("failed to set tracee registers");
-+				switch (i) {
-+				case 1:
-+					/* Stop at the beginning of syscall */
-+					rc = ptrace(PTRACE_GET_SYSCALL_INFO, pid,
-+						sizeof(syscall_info), &syscall_info);
-+					if (rc < 0)
-+						perr_and_exit("failed to get syscall info of entry");
-+					if (rc < expected_sci_entry_size
-+						|| syscall_info.op != PTRACE_SYSCALL_INFO_ENTRY)
-+						perr_and_exit("stop position of entry mismatched");
-+					result[0].orig_a0 = syscall_info.entry.args[0];
-+					break;
-+
-+				case 2:
-+					/* Stop at the end of syscall */
-+					rc = ptrace(PTRACE_GET_SYSCALL_INFO, pid,
-+						sizeof(syscall_info), &syscall_info);
-+					if (rc < 0)
-+						perr_and_exit("failed to get syscall info of entry");
-+					if (rc < expected_sci_exit_size
-+						|| syscall_info.op != PTRACE_SYSCALL_INFO_EXIT)
-+						perr_and_exit("stop position of exit mismatched");
-+					result[0].a0 = syscall_info.exit.rval;
-+
-+					if (ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, &iov))
-+						perr_and_exit("failed to get tracee registers");
-+					result[1].a0 = regs.a0;
-+					if (ptrace(PTRACE_GETREGSET, pid, NT_RISCV_ORIG_A0,
-+						   &a0_iov))
-+						perr_and_exit("failed to get tracee registers");
-+					result[1].orig_a0 = orig_a0;
-+				}
-+			}
-+			if (ptrace(PTRACE_SYSCALL, pid, 0, 0) < 0)
-+				perr_and_exit("failed to resume tracee");
-+		}
-+	}
-+
-+	/* Resume the tracee */
-+	ptrace(PTRACE_CONT, pid, 0, 0);
-+	if (waitpid(pid, &status, 0) != pid)
-+		perr_and_exit("failed to wait for the tracee");
-+
-+}
-+
-+TEST(ptrace_access_a0)
-+{
-+	struct a0_regs result[2];
-+
-+	ptrace_test(A0_MODIFY, result);
-+
-+	/* Verify PTRACE_SETREGSET */
-+	/* The modification of a0 cannot affect the first argument of the syscall */
-+	EXPECT_EQ(A0_OLD, result[0].orig_a0);
-+	EXPECT_EQ(A0_NEW, result[0].a0);
-+
-+	/* Verify PTRACE_GETREGSET */
-+	EXPECT_EQ(result[1].orig_a0, result[0].orig_a0);
-+	EXPECT_EQ(result[1].a0, result[0].a0);
-+}
-+
-+TEST(ptrace_access_orig_a0)
-+{
-+	struct a0_regs result[2];
-+
-+	ptrace_test(ORIG_A0_MODIFY, result);
-+
-+	/* Verify PTRACE_SETREGSET */
-+	/* Only modify orig_a0 to change the first argument of the syscall */
-+	EXPECT_EQ(A0_NEW, result[0].orig_a0);
-+	/* a0 will keep default value, orig_a0 or -ENOSYS, depends on internal. */
-+	EXPECT_NE(A0_NEW, result[0].a0);
-+
-+	/* Verify PTRACE_GETREGSET */
-+	EXPECT_EQ(result[1].orig_a0, result[0].orig_a0);
-+	EXPECT_EQ(result[1].a0, result[0].a0);
-+}
-+
-+TEST_HARNESS_MAIN
+1. Large numbers of nullness checks (especially when they cannot fail)
+   unnecessarily pushes prog towards BPF_COMPLEXITY_LIMIT_JMP_SEQ.
+2. It forms a tighter contract between programmer and verifier.
+
+For (1), bpftrace is starting to make heavier use of percpu scratch
+maps. As a result, for user scripts with large number of unrolled loops,
+we are starting to hit jump complexity verification errors.  These
+percpu lookups cannot fail anyways, as we only use static key values.
+Eliding nullness probably results in less work for verifier as well.
+
+For (2), percpu scratch maps are often used as a larger stack, as the
+currrent stack is limited to 512 bytes. In these situations, it is
+desirable for the programmer to express: "this lookup should never fail,
+and if it does, it means I messed up the code". By omitting the null
+check, the programmer can "ask" the verifier to double check the logic.
+
+=== Changelog ===
+
+Changes in v7:
+* Use more accurate frame number when marking precise
+* Add test for non-stack key
+* Test for marking stack slot precise
+
+Changes in v6:
+* Use is_spilled_scalar_reg() helper and remove unnecessary comment
+* Add back deleted selftest with different helper to dirty dst buffer
+* Check size of spill is exactly key_size and update selftests
+* Read slot_type from correct offset into the spi
+* Rewrite selftests in C where possible
+* Mark constant map keys as precise
+
+Changes in v5:
+* Dropped all acks
+* Use s64 instead of long for const_map_key
+* Ensure stack slot contains spilled reg before accessing spilled_ptr
+* Ensure spilled reg is a scalar before accessing tnum const value
+* Fix verifier selftest for 32-bit write to write at 8 byte alignment
+  to ensure spill is tracked
+* Introduce more precise tracking of helper stack accesses
+* Do constant map key extraction as part of helper argument processing
+  and then remove duplicated stack checks
+* Use ret_flag instead of regs[BPF_REG_0].type
+* Handle STACK_ZERO
+* Fix bug in bpf_load_hdr_opt() arg annotation
+
+Changes in v4:
+* Only allow for CAP_BPF
+* Add test for stack growing upwards
+* Improve comment about stack growing upwards
+
+Changes in v3:
+* Check if stack is (erroneously) growing upwards
+* Mention in commit message why existing tests needed change
+
+Changes in v2:
+* Added a check for when R2 is not a ptr to stack
+* Added a check for when stack is uninitialized (no stack slot yet)
+* Updated existing tests to account for null elision
+* Added test case for when R2 can be both const and non-const
+
+Daniel Xu (5):
+  bpf: verifier: Add missing newline on verbose() call
+  bpf: tcp: Mark bpf_load_hdr_opt() arg2 as read-write
+  bpf: verifier: Refactor helper access type tracking
+  bpf: verifier: Support eliding map lookup nullness
+  bpf: selftests: verifier: Add nullness elision tests
+
+ kernel/bpf/verifier.c                         | 139 ++++++++++---
+ net/core/filter.c                             |   2 +-
+ .../testing/selftests/bpf/progs/dynptr_fail.c |   6 +-
+ tools/testing/selftests/bpf/progs/iters.c     |  14 +-
+ .../selftests/bpf/progs/map_kptr_fail.c       |   2 +-
+ .../selftests/bpf/progs/test_global_func10.c  |   2 +-
+ .../selftests/bpf/progs/uninit_stack.c        |   5 +-
+ .../bpf/progs/verifier_array_access.c         | 188 ++++++++++++++++++
+ .../bpf/progs/verifier_basic_stack.c          |   2 +-
+ .../selftests/bpf/progs/verifier_const_or.c   |   4 +-
+ .../progs/verifier_helper_access_var_len.c    |  12 +-
+ .../selftests/bpf/progs/verifier_int_ptr.c    |   2 +-
+ .../selftests/bpf/progs/verifier_map_in_map.c |   2 +-
+ .../selftests/bpf/progs/verifier_mtu.c        |   2 +-
+ .../selftests/bpf/progs/verifier_raw_stack.c  |   4 +-
+ .../selftests/bpf/progs/verifier_unpriv.c     |   2 +-
+ .../selftests/bpf/progs/verifier_var_off.c    |   8 +-
+ tools/testing/selftests/bpf/verifier/calls.c  |   2 +-
+ .../testing/selftests/bpf/verifier/map_kptr.c |   2 +-
+ 19 files changed, 331 insertions(+), 69 deletions(-)
 
 -- 
-2.48.0
+2.47.1
 
 
