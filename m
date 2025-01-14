@@ -1,98 +1,99 @@
-Return-Path: <linux-kselftest+bounces-24512-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24513-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1DD9A111D2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 21:25:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 702F8A111D7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 21:25:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 06578188AB28
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 20:25:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C298B7A29F6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 20:25:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5696A20AF83;
-	Tue, 14 Jan 2025 20:25:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 067B320CCFD;
+	Tue, 14 Jan 2025 20:25:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b="MKb6BPqK";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lh0s0tQR"
+	dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b="FmrjpT07";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DkS5xN+S"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A991FCD03;
-	Tue, 14 Jan 2025 20:25:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 087B720C488;
+	Tue, 14 Jan 2025 20:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736886326; cv=none; b=dXIMkmFLo2F1DV+etnoOuy4d+Zg69PCXblDsH44XM4nB69HtGq+Xtqm6V1dGujuUVbbvVKY11/b1f7iTEuLOHE9/n5GBbbVdnkMUrxrlTkycgi1WGzR0IrDc+9fZFjqit+Jv3ESIHUFPamY8gxI178VD7sdGHLhiLmwlJq/hJxY=
+	t=1736886329; cv=none; b=fuCbsTgid7HtnOvQzwYVD3JNSp94noFl4lR4bJ8br5JNvmOPMt611Eg7ELLOirsbQpv2lzezU1U2onWJb7AWhv0+zN8zi7tBd70CvmaUjXY6kGewO+g/d26a+fRYFUl59shmlPup9KNQhwc4ZfhovLF0uFMGj+F5K5fPG8RB/2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736886326; c=relaxed/simple;
-	bh=Cuptt6+X+DwvcSwxeLzs4iLG9ApcFbolf+DmWtr4qCE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mS5bRhLdc61L1Y3jl0Ixvv/R46KIR6VsuYyp7IQZ29JTEg8ggPwnEt/xXyPwJYboFF60ivEhlTIHWULb24tYAzzvxMmRDX6vkuHSexd+HqPu0cXnBWRa4KmuE8jp+9vi8y968umDgQb0q0/m/+6ZHl7Cw2N9aKsRY8YbfiJUa+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name; spf=pass smtp.mailfrom=coelacanthus.name; dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b=MKb6BPqK; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=lh0s0tQR; arc=none smtp.client-ip=202.12.124.141
+	s=arc-20240116; t=1736886329; c=relaxed/simple;
+	bh=Bd0I0lIMKMC4KxEOjUIKWSGVerkNEic9IL2ALFZ+R48=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Ilf9cA7XHubBYiibjM6G2drcPGH/BCZlIGPTX7fnr6LYVyk+6swQRDRIcvsIstNLF1t0z63h7aAOfCIuk0okSMLs6cG9QfzbJ6jTNWvczVHKY9+3ljNUnn5G/pnsA26a+Y2RyFwgCUlFeCxw7gojwtbegK6QEAQSrnqfsDv1gjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name; spf=pass smtp.mailfrom=coelacanthus.name; dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b=FmrjpT07; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DkS5xN+S; arc=none smtp.client-ip=202.12.124.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=coelacanthus.name
-Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
-	by mailflow.stl.internal (Postfix) with ESMTP id B80BD1D40BF1;
-	Tue, 14 Jan 2025 15:25:21 -0500 (EST)
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailflow.stl.internal (Postfix) with ESMTP id 6CA841D40BEE;
+	Tue, 14 Jan 2025 15:25:26 -0500 (EST)
 Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Tue, 14 Jan 2025 15:25:22 -0500
+  by phl-compute-12.internal (MEProxy); Tue, 14 Jan 2025 15:25:27 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	coelacanthus.name; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:from:from:in-reply-to
-	:message-id:mime-version:reply-to:subject:subject:to:to; s=fm3;
-	 t=1736886321; x=1736893521; bh=V0+Wok2NSxIYdNRIMGImlXm9psq07jFt
-	AJcTnTk5u9g=; b=MKb6BPqK3qISkV/G6g9PJY01hvYgTa8K9J6BiGuF6VWbKSHr
-	+9uaEIP0ebrmw/hQvIGvFQPDii6lisJfuQUEOmkb6mu3cVydasm91SithUCLVG44
-	GJGiChX6uGa/rCpe9HuIa+KsnU0BdzjV9BgVtd1D7NGFKnUqjyHXt/A6eINFsl1X
-	H5IBTz3+02PQ0lfB3awLsLkEfeCu5F4wQZy3Cp+QC7wtvwmiuAOKSuKmtf/PrEAM
-	keI0gfzCFx1tV/p7Ldij2H52LRlURsVAGAcOvXSs7rZvhZVg/iNMCj6bvSg2VHiX
-	80xHF6+MC/b+k3VV03/Wkya3B5yNtBogdrlFgQ==
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1736886326; x=1736893526; bh=WfiGYnphGq
+	vudtD6RXFjAbGTohKPfJnsfNrRsHzlEL4=; b=FmrjpT07YapVSFaY1sGnvFnz1X
+	V3Wm4K9jF/8ZFsbjNyEHtlB+iE5FhcNl8xWf+/4OldWNfafM0TAwhl8aCBlTofh8
+	UqTU7IIEtFUcVJedu8CbGfZ3RYegTh+OlhwwmbCv1bmiELDc1Zyyw0v/k3xAcPTg
+	+cpw3JxrMj3tksGRxA86I2rOXftWQdLa+sao9gXpV0Uki+oqmlXv3j8xhLtYM4kQ
+	yD20dABste7apThlgQ9Sa1qTW9r6YOkPuj4CBEkdlrxFXeAE+XNTIJsDjPBlogSh
+	mLtlzIKSZN94apzID/Y1LN1G1aob8JOf3aMvbvqZN1DyuwhAZiy4+X5v9HEQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1736886321; x=1736893521; bh=V0+Wok2NSxIYdNRIMGImlXm9psq0
-	7jFtAJcTnTk5u9g=; b=lh0s0tQRs+cbFEqubIRL/GiUxf03g7RQC+vAdWWO1CI1
-	jLjzsUz4BYY+IGxBq8zpVJYIzW7fh9iQJ1T9N/ZEMoizv7f4G8hK+FHBYGH4Wwra
-	HJIBzOOpaqTYsV+mnYTcjboV0UGepxnT2aLtz3twylGmzxbp6jPAgbxo/aF1zvfW
-	HkP5QLoBxMGyMq6hSFvlDnnnHuXrIsvpYAiAtzWu4io+DUIXLFsjHdTBoywmon91
-	Ol69q8N1Lc+zoo2H8McjWcSYb60/qaCHlIrrVZCIOUMitJDpjjdWE4kS22iyw3si
-	Y2tuFOmqq+n1RY2pcJT5oXu96YGdj1iczPeQX/6AAg==
-X-ME-Sender: <xms:L8iGZzAOUGif0VTJzIh9Qm6kV2biPdxzEhDf_5NMUVAVe3OzEMKxPw>
-    <xme:L8iGZ5hGC1OHOWC6h9nxNb3-RobXlM2mBFc4_uxJ8aaPgFK-phzEUAekAMQSolv3H
-    10bBpEXcbz_cmkCAYQ>
-X-ME-Received: <xmr:L8iGZ-n2uVjBO_g2Hy7bpUxTJwGj_88x4e3G8ZDdNml0KsLOc0k-_i3zBWA9-w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehiedgudefiecutefuodetggdotefrod
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736886326; x=
+	1736893526; bh=WfiGYnphGqvudtD6RXFjAbGTohKPfJnsfNrRsHzlEL4=; b=D
+	kS5xN+SrokCOeuGkeA0Rdl4Iche77/VAi327Qoasu9ZzmyB87bixfvKkTIMLX3vB
+	nkNc/BinfuUlHmTOzlZZ7hU2L3r+KJ6lmyualOmSRHNVQXzJMqZeG+8PwDRKgS5B
+	gXY9oklDQ4114W1eADDOTQp9U4hqLc6pTWRtdKALxkl7gYqE3Px3P1WbPI8hoyAm
+	vhL0t/blkS+migWR31gbiU+VTYyCWoQ5aPseWYq3+gag/tE1yErRRAUUBxBUlEah
+	DWXimM6yNxZ9eBda4zxRJ8AVZFN832dvhooTghHnOm3qvGXxysl3WpwyGUtJubxl
+	lNn3yDn3jX0LoOJB+limg==
+X-ME-Sender: <xms:NciGZ_LAYEY89IPy9tZNkEECacWIUsVz6LhZUbWymAxu9EzEvLTb1w>
+    <xme:NciGZzKvmee4bRhjDWOXnbbyr6nfBbenRZf0QHN7JXM1YbRALlmbosNptsoajVPGn
+    WBkvr3G42_OCElHQnc>
+X-ME-Received: <xmr:NciGZ3vcToVEMPiNKXM0DImFLeWH-OfXFVcjOLRh24oD94bXxzIvdBmonIi5Zg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehiedgudefhecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefhufffkfggtgfgvfevofesthejredtredtjeen
-    ucfhrhhomhepvegvlhgvshhtvgcunfhiuhcuoehufihusegtohgvlhgrtggrnhhthhhush
-    drnhgrmhgvqeenucggtffrrghtthgvrhhnpeduveelffdvkeekkedvgeeugfdutdekteeu
-    udfhleffhffhffeihfetjefhleehueenucffohhmrghinhepkhgvrhhnvghlrdhorhhgne
-    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepuhifuhes
-    tghovghlrggtrghnthhhuhhsrdhnrghmvgdpnhgspghrtghpthhtohepvdejpdhmohguvg
-    epshhmthhpohhuthdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhk
-    vghrnhgvlhdrohhrghdprhgtphhtthhopehprghlmhgvrhesuggrsggsvghlthdrtghomh
-    dprhgtphhtthhopehfvghlihigohhnmhgrrhhssegrrhgthhhlihhnuhigrdhorhhgpdhr
-    tghpthhtoheplhguvhesshhtrhgrtggvrdhiohdprhgtphhtthhopehtghhlgieslhhinh
-    huthhrohhnihigrdguvgdprhgtphhtthhopehufihusegtohgvlhgrtggrnhhthhhushdr
-    nhgrmhgvpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
-    epkhgvvghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopeiihhhouhhquhgrnhesihhs
-    tggrshdrrggtrdgtnh
-X-ME-Proxy: <xmx:L8iGZ1zjssxftcZGhQfrRT4pBxaxHcPGMlDjeGTf58peRzNNTT4klw>
-    <xmx:L8iGZ4Q6g30VOF7WY7hCGo4TcEfpQ99vk1_bnSb_pCYiroJJXg9rLw>
-    <xmx:L8iGZ4YeCUJhdCwiTCHr_DPm2vJgUFB6WeK3xnuyRqX-JQGQwPiSoA>
-    <xmx:L8iGZ5T0cxkhqoTVh_HNarRPypZO8L-nOiaiaLH0X-bz1MP5WE1seQ>
-    <xmx:MciGZ5CBm_TzDd4JOqllhAco0uT8aUj3e78PFytDZHMgHNnR8Hpdms2c>
+    hnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkfhgjvfevofesthekredtredt
+    jeenucfhrhhomhepvegvlhgvshhtvgcunfhiuhcuoehufihusegtohgvlhgrtggrnhhthh
+    hushdrnhgrmhgvqeenucggtffrrghtthgvrhhnpeeuiefgudffleffgeeiffeffeefieel
+    veejgfehhfejffeutedvffeiudevtdelgeenucffohhmrghinhepkhgvrhhnvghlrdhorh
+    hgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepuhif
+    uhestghovghlrggtrghnthhhuhhsrdhnrghmvgdpnhgspghrtghpthhtohepvdejpdhmoh
+    guvgepshhmthhpohhuthdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghr
+    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehprghlmhgvrhesuggrsggsvghlthdrtg
+    homhdprhgtphhtthhopehfvghlihigohhnmhgrrhhssegrrhgthhhlihhnuhigrdhorhhg
+    pdhrtghpthhtoheplhguvhesshhtrhgrtggvrdhiohdprhgtphhtthhopehtghhlgieslh
+    hinhhuthhrohhnihigrdguvgdprhgtphhtthhopehufihusegtohgvlhgrtggrnhhthhhu
+    shdrnhgrmhgvpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpth
+    htohepkhgvvghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopeiihhhouhhquhgrnhes
+    ihhstggrshdrrggtrdgtnh
+X-ME-Proxy: <xmx:NciGZ4bO8cwhk4-uRV0eZfRV6hSiI_tEdmWZabv9LRTHHgYg6V6WOA>
+    <xmx:NciGZ2YXTVYXTZ_yCzfIYqYalplE8HdGiIDiBJiwtNGNK4IiBfDmHg>
+    <xmx:NciGZ8A2x4hjK9eakMRBxIjgRkjryQHr9Bqoz02iLvDu9upqIyM82Q>
+    <xmx:NciGZ0ZhoKMWvlMfnTFAraZ7egopmUFY98diACn4Gi09PxqwjsJpCA>
+    <xmx:NsiGZyKYvMmwzYyeJFReKdwFq0HtBTp0o00acWOEI0hWn_ki4C_s1Izn>
 Feedback-ID: i95c648bc:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 14 Jan 2025 15:25:18 -0500 (EST)
+ 14 Jan 2025 15:25:24 -0500 (EST)
 From: Celeste Liu <uwu@coelacanthus.name>
-Subject: [PATCH v5 0/2] riscv/ptrace: add new regset to access original a0
+Date: Wed, 15 Jan 2025 04:24:58 +0800
+Subject: [PATCH v5 1/2] riscv/ptrace: add new regset to access original a0
  register
-Date: Wed, 15 Jan 2025 04:24:57 +0800
-Message-Id: <20250115-riscv-new-regset-v5-0-d0e6ec031a23@coelacanthus.name>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -100,13 +101,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIABnIhmcC/4XOzW4CIRQF4FcxrKWBy49DV76H6QIuV4ekMg2M2
- MbMuxdduRjb5bnJ/c65sUolUWXvmxsr1FJNU+7BbDcMR59PxFPsmYEALUFIXlLFxjNdeaFTpZl
- HAy44Az6KyPrbV6Fj+n6Qh4+ex1Tnqfw8Gpq8X//AmuSS46DQDD4g7sIeJ/r06PM8Xupb9mdid
- 7TBM6RWIOCCR7WLfkCBwdtXkHqCwK5AqkNHE5zV1gxgXy7S/0G6Q1o768FFodXqomVZfgEMb5o
- FkwEAAA==
-X-Change-ID: 20241201-riscv-new-regset-d529b952ad0d
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250115-riscv-new-regset-v5-1-d0e6ec031a23@coelacanthus.name>
+References: <20250115-riscv-new-regset-v5-0-d0e6ec031a23@coelacanthus.name>
+In-Reply-To: <20250115-riscv-new-regset-v5-0-d0e6ec031a23@coelacanthus.name>
 To: Oleg Nesterov <oleg@redhat.com>, 
  Paul Walmsley <paul.walmsley@sifive.com>, 
  Palmer Dabbelt <palmer@dabbelt.com>, Eric Biederman <ebiederm@xmission.com>, 
@@ -125,12 +123,12 @@ Cc: Alexandre Ghiti <alex@ghiti.fr>, "Dmitry V. Levin" <ldv@strace.io>,
  Celeste Liu <uwu@coelacanthus.name>, stable@vger.kernel.org, 
  =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@rivosinc.com>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1951; i=uwu@coelacanthus.name;
- h=from:subject:message-id; bh=Cuptt6+X+DwvcSwxeLzs4iLG9ApcFbolf+DmWtr4qCE=;
- b=owJ4nJvAy8zAJeafov85RWVtBeNptSSG9LYTKkdWMKhyCd+WdrbelpqpvTBhaVvWN8mQFUvnP
- XVi9P2YGd5RysIgxsUgK6bIklfC8pPz0tnuvR3bu2DmsDKBDGHg4hSAicSKMzI0LJC4sb5IIXbB
- v6mdd3012oxU7j3b1Swlt89jw8Rnea/tGBk+n2JIk7rH6i8l1er33Clvkt/fhRY+6heDy41f2e/
- hqeEAAHpwROc=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3197; i=uwu@coelacanthus.name;
+ h=from:subject:message-id; bh=Bd0I0lIMKMC4KxEOjUIKWSGVerkNEic9IL2ALFZ+R48=;
+ b=owJ4nJvAy8zAJeafov85RWVtBeNptSSG9LYTahxei2+ZK7gL31/p1LKEL+S0u9TWg2pWopNOn
+ ch+9jLbmr2jlIVBjItBVkyRJa+E5SfnpbPdezu2d8HMYWUCGcLAxSkAE1nRz8jQulbWYqJDmdS9
+ yH0Xd0ZtaImSZtoiOvOPRm3rh46tD2JXMjJMt7t61ztq0xrZnQ+9mjfNvhsjKVJToZO/aUXVeeO
+ /8z/yAADK3kiB
 X-Developer-Key: i=uwu@coelacanthus.name; a=openpgp;
  fpr=892EBC7DC392DFF9C9C03F1D15F4180E73787863
 
@@ -140,49 +138,87 @@ no way to add it without breaking UAPI. (See Link tag below)
 Like NT_ARM_SYSTEM_CALL do, we add a new regset name NT_RISCV_ORIG_A0 to
 access original a0 register from userspace via ptrace API.
 
+Fixes: e2c0cdfba7f6 ("RISC-V: User-facing API")
 Link: https://lore.kernel.org/all/59505464-c84a-403d-972f-d4b2055eeaac@gmail.com/
-
+Cc: stable@vger.kernel.org
+Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
 Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
 ---
-Changes in v5:
-- Fix wrong usage in selftests.
-- Link to v4: https://lore.kernel.org/r/20241226-riscv-new-regset-v4-0-4496a29d0436@coelacanthus.name
+ arch/riscv/kernel/ptrace.c | 32 ++++++++++++++++++++++++++++++++
+ include/uapi/linux/elf.h   |  1 +
+ 2 files changed, 33 insertions(+)
 
-Changes in v4:
-- Fix a copy paste error in selftest. (Forget to commit...)
-- Link to v3: https://lore.kernel.org/r/20241226-riscv-new-regset-v3-0-f5b96465826b@coelacanthus.name
+diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
+index ea67e9fb7a583683b922fe2c017ea61f3bc848db..ef9ab74c8575a5c440155973b1c625c06a867c97 100644
+--- a/arch/riscv/kernel/ptrace.c
++++ b/arch/riscv/kernel/ptrace.c
+@@ -31,6 +31,7 @@ enum riscv_regset {
+ #ifdef CONFIG_RISCV_ISA_SUPM
+ 	REGSET_TAGGED_ADDR_CTRL,
+ #endif
++	REGSET_ORIG_A0,
+ };
+ 
+ static int riscv_gpr_get(struct task_struct *target,
+@@ -184,6 +185,29 @@ static int tagged_addr_ctrl_set(struct task_struct *target,
+ }
+ #endif
+ 
++static int riscv_orig_a0_get(struct task_struct *target,
++			     const struct user_regset *regset,
++			     struct membuf to)
++{
++	return membuf_store(&to, task_pt_regs(target)->orig_a0);
++}
++
++static int riscv_orig_a0_set(struct task_struct *target,
++			     const struct user_regset *regset,
++			     unsigned int pos, unsigned int count,
++			     const void *kbuf, const void __user *ubuf)
++{
++	unsigned long orig_a0 = task_pt_regs(target)->orig_a0;
++	int ret;
++
++	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &orig_a0, 0, -1);
++	if (ret)
++		return ret;
++
++	task_pt_regs(target)->orig_a0 = orig_a0;
++	return 0;
++}
++
+ static const struct user_regset riscv_user_regset[] = {
+ 	[REGSET_X] = {
+ 		.core_note_type = NT_PRSTATUS,
+@@ -224,6 +248,14 @@ static const struct user_regset riscv_user_regset[] = {
+ 		.set = tagged_addr_ctrl_set,
+ 	},
+ #endif
++	[REGSET_ORIG_A0] = {
++		.core_note_type = NT_RISCV_ORIG_A0,
++		.n = 1,
++		.size = sizeof(elf_greg_t),
++		.align = sizeof(elf_greg_t),
++		.regset_get = riscv_orig_a0_get,
++		.set = riscv_orig_a0_set,
++	},
+ };
+ 
+ static const struct user_regset_view riscv_user_native_view = {
+diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+index b44069d29cecc0f9de90ee66bfffd2137f4275a8..390060229601631da2fb27030d9fa2142e676c14 100644
+--- a/include/uapi/linux/elf.h
++++ b/include/uapi/linux/elf.h
+@@ -452,6 +452,7 @@ typedef struct elf64_shdr {
+ #define NT_RISCV_CSR	0x900		/* RISC-V Control and Status Registers */
+ #define NT_RISCV_VECTOR	0x901		/* RISC-V vector registers */
+ #define NT_RISCV_TAGGED_ADDR_CTRL 0x902	/* RISC-V tagged address control (prctl()) */
++#define NT_RISCV_ORIG_A0	  0x903	/* RISC-V original a0 register */
+ #define NT_LOONGARCH_CPUCFG	0xa00	/* LoongArch CPU config registers */
+ #define NT_LOONGARCH_CSR	0xa01	/* LoongArch control and status registers */
+ #define NT_LOONGARCH_LSX	0xa02	/* LoongArch Loongson SIMD Extension registers */
 
-Changes in v3:
-- Use return 0 directly for readability.
-- Fix test for modify a0.
-- Add Fixes: tag
-- Remove useless Cc: stable.
-- Selftest will check both a0 and orig_a0, but depends on the
-  correctness of PTRACE_GET_SYSCALL_INFO.
-- Link to v2: https://lore.kernel.org/r/20241203-riscv-new-regset-v2-0-d37da8c0cba6@coelacanthus.name
-
-Changes in v2:
-- Fix integer width.
-- Add selftest.
-- Link to v1: https://lore.kernel.org/r/20241201-riscv-new-regset-v1-1-c83c58abcc7b@coelacanthus.name
-
----
-Celeste Liu (2):
-      riscv/ptrace: add new regset to access original a0 register
-      riscv: selftests: Add a ptrace test to verify a0 and orig_a0 access
-
- arch/riscv/kernel/ptrace.c                   |  32 +++++
- include/uapi/linux/elf.h                     |   1 +
- tools/testing/selftests/riscv/abi/.gitignore |   1 +
- tools/testing/selftests/riscv/abi/Makefile   |   6 +-
- tools/testing/selftests/riscv/abi/ptrace.c   | 201 +++++++++++++++++++++++++++
- 5 files changed, 240 insertions(+), 1 deletion(-)
----
-base-commit: 0e287d31b62bb53ad81d5e59778384a40f8b6f56
-change-id: 20241201-riscv-new-regset-d529b952ad0d
-
-Best regards,
 -- 
-Celeste Liu <uwu@coelacanthus.name>
+2.48.0
 
 
