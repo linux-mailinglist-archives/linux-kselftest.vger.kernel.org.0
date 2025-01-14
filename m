@@ -1,34 +1,34 @@
-Return-Path: <linux-kselftest+bounces-24430-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24431-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26B1DA1007A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 06:42:17 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B96FA10179
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 08:44:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB3A4188815A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 05:42:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF74F7A04B3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 07:43:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43D2D231A5C;
-	Tue, 14 Jan 2025 05:42:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01F4824633A;
+	Tue, 14 Jan 2025 07:43:55 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1884B24025D;
-	Tue, 14 Jan 2025 05:42:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1351C5F2A;
+	Tue, 14 Jan 2025 07:43:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736833330; cv=none; b=N3SeHhCW8eTpqkMMH17yjOLmVQBgM/rPl/+z8WdoFJ61rIfQ+dWY6FrbSJso4BUcVnYicQGeaR0pdjslNTqMcVb49KWuKbLyvqiF9bjAun9OeAXlNpmk8BqonXgjGgz1E5B8NhJbn5SPfRiusN+9AIzPLTkUR4pHTVulYLaUov8=
+	t=1736840634; cv=none; b=fa/ucRCMPx5CpmsdW2oex/TE059wF/w91pHr5M3of/NbxDRrr2PORoDP079F9G+Kwj3Hr4yaQZ5OiaYeepf3fjoR0HpFIhRW1wNv064oVukZrBWIJX/LJYyFmgniVzW3EmEL+aKyvinvNEKlTCSPQ3Cf5XowPb4Fa7YNYpl3RZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736833330; c=relaxed/simple;
-	bh=pJ0ZMqAJVQHS+mzvS73FTFri7vqerXbdvVYDkcJAksU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ejNavEM4f6v5bPBpZVyGZ+qHi52z62ZoBSFhtZPEPDvrTg39S2vEnN7MoKroq+iYJfNEa65lSP9z8WMbEwtvL6DociiKo58CYkrlAg1rW8x886uCcMUVPbmCE2r27W1lp1p0+JsptLs2XQtYL2lEeTVUYZGmRZETfWtTPV+wz+0=
+	s=arc-20240116; t=1736840634; c=relaxed/simple;
+	bh=Qp64m5qXP3bAf4yTYt26gGF7J1hRqwzHoEFUlhAhNzg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cFuntw18gWeQCEwAiiQpqhb70cO/NZESVHx+/ehflnPtEyOCl8AebnwPtPuZl7bUireFZY2DqVHGZn+Ac1t2xEjaEcxxA0Ot17D/n9UIZEplOYBHefk6bLF1O41ob2MyzFQWox7XYNmu28Cmd7x21sqoNGgnBpVPTUwY13I8Fuk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 457bb6d0d23a11efa216b1d71e6e1362-20250114
+X-UUID: 47e9522cd24b11efa216b1d71e6e1362-20250114
 X-CTIC-Tags:
 	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
 	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
@@ -39,35 +39,41 @@ X-CTIC-Tags:
 	GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_T1, AMN_GOOD
 	AMN_C_TI, AMN_C_BU
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:e67ee197-e3d1-4fa4-8c24-94385079bfd7,IP:10,
-	URL:0,TC:0,Content:0,EDM:-25,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,AC
-	TION:release,TS:-30
-X-CID-INFO: VERSION:1.1.45,REQID:e67ee197-e3d1-4fa4-8c24-94385079bfd7,IP:10,UR
-	L:0,TC:0,Content:0,EDM:-25,RT:0,SF:-15,FILE:0,BULK:0,RULE:EDM_GE969F26,ACT
-	ION:release,TS:-30
-X-CID-META: VersionHash:6493067,CLOUDID:6882ff5972c98d22d96f231d27637257,BulkI
-	D:2501141342010I5YS1S4,BulkQuantity:0,Recheck:0,SF:17|19|24|44|66|78|102,T
-	C:nil,Content:0|50,EDM:1,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:n
-	il,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
-X-UUID: 457bb6d0d23a11efa216b1d71e6e1362-20250114
+X-CID-O-INFO: VERSION:1.1.45,REQID:bffcfed6-9e1a-4625-9c45-a79afa0ab656,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:-5
+X-CID-INFO: VERSION:1.1.45,REQID:bffcfed6-9e1a-4625-9c45-a79afa0ab656,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-META: VersionHash:6493067,CLOUDID:550f6b411b45b16ff3870ac392bf877f,BulkI
+	D:2501141543458414M4QM,BulkQuantity:0,Recheck:0,SF:17|19|24|38|44|66|78|10
+	2,TC:nil,Content:0|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,B
+	EC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS
+X-UUID: 47e9522cd24b11efa216b1d71e6e1362-20250114
 X-User: liuye@kylinos.cn
 Received: from localhost.localdomain [(223.70.160.239)] by mailgw.kylinos.cn
 	(envelope-from <liuye@kylinos.cn>)
 	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1740425968; Tue, 14 Jan 2025 13:41:58 +0800
+	with ESMTP id 1019664734; Tue, 14 Jan 2025 15:43:44 +0800
 From: liuye <liuye@kylinos.cn>
-To: shuah@kernel.org
-Cc: amer.shanawany@gmail.com,
-	usama.anjum@collabora.com,
+To: steffen.klassert@secunet.com,
+	herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org
+Cc: horms@kernel.org,
+	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	liuye <liuye@kylinos.cn>
-Subject: [PATCH] selftests/capabilities/test_execve: Initialize the variable have_outer_privilege
-Date: Tue, 14 Jan 2025 13:41:29 +0800
-Message-Id: <20250114054129.73331-1-liuye@kylinos.cn>
+Subject: [PATCH] selftests/net/ipsec: Fix Null pointer dereference in rtattr_pack()
+Date: Tue, 14 Jan 2025 15:43:29 +0800
+Message-Id: <20250114074329.102691-1-liuye@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -77,27 +83,39 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-    Uninitialized variable: have_outer_privilege.
-    Fix it.
+    Fix the following warning.
+
+    tools/testing/selftests/net/ipsec.c:230:25: warning: Possible null pointer
+    dereference: payload [nullPointer]
+    memcpy(RTA_DATA(attr), payload, size);
+                           ^
+    tools/testing/selftests/net/ipsec.c:1618:54: note: Calling function 'rtattr_pack',
+    4th argument 'NULL' value is 0
+    if (rtattr_pack(&req.nh, sizeof(req), XFRMA_IF_ID, NULL, 0)) {
+                                                       ^
+    tools/testing/selftests/net/ipsec.c:230:25: note: Null pointer dereference
+    memcpy(RTA_DATA(attr), payload, size);
+                           ^
 
 Signed-off-by: liuye <liuye@kylinos.cn>
 ---
- tools/testing/selftests/capabilities/test_execve.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/ipsec.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/capabilities/test_execve.c b/tools/testing/selftests/capabilities/test_execve.c
-index 47bad7ddc5bc..c9617b38d6f7 100644
---- a/tools/testing/selftests/capabilities/test_execve.c
-+++ b/tools/testing/selftests/capabilities/test_execve.c
-@@ -83,7 +83,7 @@ static bool create_and_enter_ns(uid_t inner_uid)
- 	uid_t outer_uid;
- 	gid_t outer_gid;
- 	int i, ret;
--	bool have_outer_privilege;
-+	bool have_outer_privilege = false;
+diff --git a/tools/testing/selftests/net/ipsec.c b/tools/testing/selftests/net/ipsec.c
+index be4a30a0d02a..725310ac26a9 100644
+--- a/tools/testing/selftests/net/ipsec.c
++++ b/tools/testing/selftests/net/ipsec.c
+@@ -227,7 +227,8 @@ static int rtattr_pack(struct nlmsghdr *nh, size_t req_sz,
  
- 	outer_uid = getuid();
- 	outer_gid = getgid();
+ 	attr->rta_len = RTA_LENGTH(size);
+ 	attr->rta_type = rta_type;
+-	memcpy(RTA_DATA(attr), payload, size);
++	if (payload != NULL)
++		memcpy(RTA_DATA(attr), payload, size);
+ 
+ 	return 0;
+ }
 -- 
 2.25.1
 
