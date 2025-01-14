@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-24439-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24440-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1649EA103ED
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 11:21:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EA45A103FA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 11:24:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C90553A8E5B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 10:21:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF4947A1AC6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 10:24:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D63AE1C5F07;
-	Tue, 14 Jan 2025 10:21:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3486C28EC78;
+	Tue, 14 Jan 2025 10:24:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QeN6tk6P"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hV44XA1w"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2470E230D0F
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 10:21:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DBFE284A6B
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 10:24:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736850085; cv=none; b=C06/rib9+/m0Fng2DvFwmppY5TeWPUORKM32KUrCcKFA0ZkSyrWsfSHqeADB/Wq8yV7MpI/ECzsfqjBJ/Fp+GPGVGFzXWpnrwtwUB09S5H65SZbe9mZjVmxFXTBpURc2W50jR33mp+nK7ePG9sTpOaRTPcLj+oI7RcTxPypFcUw=
+	t=1736850248; cv=none; b=bH9diy0LOeD28hOjdA6dgOgnyLxM9ooTPAX3tgq0He/iGci+QeWE1Hsy9JUbw/R/67dPk4KgWfJChCyDSWQJDFqA/TR3cI4KW3CtLXte/yuWWmcQl46mmYEgv8e2uVp4rmZbMqdI2Usts1m+nP7/odVeea8aMtf9mbosIhlcKd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736850085; c=relaxed/simple;
-	bh=D8eUiETDdEytNg+smqfwnQkoBOOou42Q5oI6EK/SAJU=;
+	s=arc-20240116; t=1736850248; c=relaxed/simple;
+	bh=rCJVFkVeS3Srd5IAm71d1HCjHOZnITFfS3Yb/5XS5Gs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qtoGY+SMHLNWI9K0EJ+iOEQl5+LJDiGhTmyN7I9mOJFRkx/xcE0QzF4K8dGfjzJq2YYhIb/ad5hEWMb84Dq1S+gX58I7q7tLi01fTTh+7moJifuWaKnZAF+KcUg57gjDyEDHYA8qRxp9+lO5Y4oXxwRC7F3AjVtfqLxodnVwwF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QeN6tk6P; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=Lq3I2mSb6fS97fPRdhsHyRYB8oCruVMD/5sltkdklzsTU5oTdfNVRX73bVFQlNyQV95jlaaS2vNIzIf73Nj8TNGNWa4C1Anv6XiMF80WNA+BnZXMxABlyUldxacsAYJLhNVJjw//DjaxbDvch1dUrQco6IL4g76BmwQTvNVXt3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hV44XA1w; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736850083;
+	s=mimecast20190719; t=1736850245;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=v/eDGvYOLeDMHVMqWmrB864wlTs2RG2NStXaSHeGJEM=;
-	b=QeN6tk6P8b5iRR6FaURIAUSr+2rE5F8zPg2hy9y33RgDurygOqSxOGT54iqEpAMMEKFMub
-	uxNeRrjPX6lRvtZta3K+YJXiSdiT6Dz4NVTKQrICUDJj7AjEyPQAPGT6QRGjjczSCUtBGm
-	sNF9vpUgwYGeHT68CkYaE7+db1eSZmQ=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=FK+xa/fmgG/jyvWf9H8pjEbAVH2RYy7jsXq3UQXJCJs=;
+	b=hV44XA1wPUM2S+4FANcqaTExMgYVV/4OohsmARiMZ/532+cC2n944Xz7ZEKI26dayZamZF
+	R7SZV3LoBGSHZZdCZHmtWYKMx9vxwU5e8nACl+H62cpV+oH5iqDgdQKow4zgZeTfy2PKQk
+	t8O//uheqAR8lmvVLvoEXgKlbvbKxxE=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-437-Qj9eFosuM5axRu33Y96O1g-1; Tue, 14 Jan 2025 05:21:21 -0500
-X-MC-Unique: Qj9eFosuM5axRu33Y96O1g-1
-X-Mimecast-MFC-AGG-ID: Qj9eFosuM5axRu33Y96O1g
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-43628594d34so29704345e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 02:21:21 -0800 (PST)
+ us-mta-202-sQC6T9K1OVmYAvH0-uqWSA-1; Tue, 14 Jan 2025 05:24:04 -0500
+X-MC-Unique: sQC6T9K1OVmYAvH0-uqWSA-1
+X-Mimecast-MFC-AGG-ID: sQC6T9K1OVmYAvH0-uqWSA
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4361b090d23so28113625e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 02:24:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736850080; x=1737454880;
+        d=1e100.net; s=20230601; t=1736850243; x=1737455043;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt
          :content-language:from:references:cc:to:subject:user-agent
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=v/eDGvYOLeDMHVMqWmrB864wlTs2RG2NStXaSHeGJEM=;
-        b=dfHSDLxNnFva51uRz61bM8FmAzOnR06axdXZ6+6E9wVZDeKGatkRwWGYxR59z4MAsx
-         m8l5+6AADJ6KOd2U7/ixU9MGvRlSPOT2k0sG/b6idMmVmqlgYxDxfEaUOq3k1YyYiVGe
-         tFseN0f2a6pjsAZOyaphJ07sv/3e0bMF5SXbUJKVETwMvZVarpI35jP5jDJP2OnxdH6j
-         MfjFz6PxyjGJWLZktCBYC+vZx1UoxXa+9hSBjkFBXo8pOZ7pbYKNIaNfXZQ2DlnnS9VL
-         M1+KWbP7mrHR+RAHhcT8V1d4IJyZsUtN/sdRCtXxR4Q3qXD2f3rAMFZSuMDRFIOMSWuP
-         HGbw==
-X-Forwarded-Encrypted: i=1; AJvYcCVaAAVvusarpHrqQPNxTEUGTqNh576hcMhxerRKIEeFUYjMx5i9g7vW5QXwNLzw2X8eXajy+HT2e+qrXLQEGoU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzt0JN12AACB2qiYuhLjvpxBdoEFreAImLSvzLAtqAA+J/13KIG
-	CnLl3tFZ+pq4Kova1SHzTGFOKYdB3dTZ2Dy54MbREVMXvHItt2etxvpXkjDJg7GJ8GhvlJah70a
-	xitghhs8kqa8YfmOqtoxOjG4vRmbAkvBiLMPQsY8nZ5yL8O49/A+0/n90x0+51caz+g==
-X-Gm-Gg: ASbGncsghakEu+HdmP+wPDPsR4q8DkxQN8aQ6nj7tXgJsp2+1hSPSCtFZwuZhZRFEVu
-	y2OVcSwsp+SfpSgrTaL7TazKj49FfkW3UGjSDlClfsII09LsrhLJUXyCNj3+XXkCB6WJCR95A/D
-	+gGWToMviR5kweaZcP211GiVUBHPh29RyYvd6xFa5C+ckKqSd4flc56badcRUPC3Eo77hfF+ORH
-	jz4Jc6wJi5HOz7fZc9rQoVHEdwRUXOKBWWW2+d2FzBrS4QnXh0u9dazkmEBMgjP2W+1gk9JnAXL
-	H+xKL7uGmhrgL/s2qjbKu3C435yKvynQQlhoV08h6zC5owwXZ8z7NskRC3HExO8k+gMPDM9kiQ0
-	tBcAWAo5Z
-X-Received: by 2002:a05:600c:1f95:b0:434:a525:7257 with SMTP id 5b1f17b1804b1-436e26d946cmr185726015e9.21.1736850080369;
-        Tue, 14 Jan 2025 02:21:20 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHRX4r3vQSk65lIDDMtCZ3iqMQpWAru7hzZ2jkt7zPuzHqnJH+ZR9OmQCGiZWluLKj3OZXNDA==
-X-Received: by 2002:a05:600c:1f95:b0:434:a525:7257 with SMTP id 5b1f17b1804b1-436e26d946cmr185725875e9.21.1736850080018;
-        Tue, 14 Jan 2025 02:21:20 -0800 (PST)
+        bh=FK+xa/fmgG/jyvWf9H8pjEbAVH2RYy7jsXq3UQXJCJs=;
+        b=IgMEO3B+H7SCkpPowdBymhOB3nW5i0vscd4f5N0yVcsUPhmoeh1BiIy5AoXXVgBPD0
+         lu2tCO0Lu6TRhiMtCsJhsBptp+4+tTNwixSSRl8ISNMCPCBeaJPsf7WkuLFy8TIXTqD1
+         sjTdEgHDWrTU3+R9fKi71YZlCBUwlLP+Ix07ZcNqhX4zsfVU1l4eEz69uhZK2nlxqyiT
+         y+F8IaDgDTYiIR0/d2Ncn90B8WQHJYIST9gW2CZFBZCpGKOcQV/5hRhpJqv4X1MctWeg
+         wWaN2MhKRA4e7WJ5HXNJiQxIcIrEE8ZsWysBD1F58nI4Yu4OsyhOvEqRfdbPU0OBHYkR
+         1PEA==
+X-Forwarded-Encrypted: i=1; AJvYcCWIEUkGBh8JX52h/dxOc2tWPZk8vsuNBWe7oN1omrTPRu6UDl3FJukI7DfuLALFdoHbfNsMN7aE5nXIP24MpQ4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzN5NeAbi4EElpACh6uo5KTfLbh9epqqghFUaXzszN5te0BCQaC
+	Phs20gTpPZNQ5TxpFAqx6G37q8Nj9YabKvO1GoPU1OdoBQvWPbIJmBcZPHcbJzU+kgejjtsgp1V
+	BAiHmXjN0Q0ate1aQ2YE0yfYYNmiOc4OQCJSd1gU2vqpECLIilgezfJfcCh5NZrgxkw==
+X-Gm-Gg: ASbGncsDZWW3OJh9lhcwT1CsSAopATCoQe4iyNsxFsRHmNC5qJoAsGUHopWzrV842nF
+	2zLXDtG8r+Tl51JBy7BGRGFeIgT2eASOznQiJj9wLjbrLhPE36zTQ9yOYk+nDjq3o4cnzJ4z4jQ
+	9RHgPOPxxx0HE82Ge4hnOZokQTa9fIUM0ut913eyzlmRJ/TheBS8FkVGXRGSatp0hcz1rBjztY0
+	ZMDCBxah5PztFoS/QXRMlFAAm+vP3R9+eE2xw64yvNAnanCkui5Gs3L8CAlekDS/khlkTDaRWpV
+	kqP6ty88qVRJmx8AxEgqFm9IIuLzK8UqwXL/2vpRVFQ21zpXPePBxJsLGRx1MgYOX1xlkQGBrLg
+	sCb6YES8x
+X-Received: by 2002:a05:600c:3c9e:b0:431:5e3c:2ff0 with SMTP id 5b1f17b1804b1-436e26a6727mr213878355e9.8.1736850242640;
+        Tue, 14 Jan 2025 02:24:02 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGOWjvyHJ7MmSDTJAQTamhmssQWsN+EFga/BCnXhzGm5kMPY93nNn4f9s9OcKULczW/vf1bqA==
+X-Received: by 2002:a05:600c:3c9e:b0:431:5e3c:2ff0 with SMTP id 5b1f17b1804b1-436e26a6727mr213878145e9.8.1736850242277;
+        Tue, 14 Jan 2025 02:24:02 -0800 (PST)
 Received: from ?IPV6:2003:cb:c738:3100:8133:26cf:7877:94aa? (p200300cbc7383100813326cf787794aa.dip0.t-ipconnect.de. [2003:cb:c738:3100:8133:26cf:7877:94aa])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e2dc0bb7sm202589705e9.16.2025.01.14.02.21.17
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e9e03f8bsm168847805e9.23.2025.01.14.02.23.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jan 2025 02:21:18 -0800 (PST)
-Message-ID: <ffe62886-ddaa-4623-88d1-5ce1e6f3632e@redhat.com>
-Date: Tue, 14 Jan 2025 11:21:16 +0100
+        Tue, 14 Jan 2025 02:24:01 -0800 (PST)
+Message-ID: <4fd2fdca-ea98-499f-ba04-0f1140180ba4@redhat.com>
+Date: Tue, 14 Jan 2025 11:23:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,12 +90,12 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm/mkdirty: Fix memory leak in
- test_uffdio_copy()
+Subject: Re: [PATCH] selftests/mm/cow : Fix memory leak in
+ child_vmsplice_memcmp_fn()
 To: liuye <liuye@kylinos.cn>, akpm@linux-foundation.org, shuah@kernel.org
 Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
-References: <20250114023838.48589-1-liuye@kylinos.cn>
+References: <20250114022929.46364-1-liuye@kylinos.cn>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -143,43 +143,61 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20250114023838.48589-1-liuye@kylinos.cn>
+In-Reply-To: <20250114022929.46364-1-liuye@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 14.01.25 03:38, liuye wrote:
->      Release memory before exception branch returns to prevent memory leaks
-> 
-> Checking tools/testing/selftests/mm/mkdirty.c ...
-> tools/testing/selftests/mm/mkdirty.c:283:3: error: Memory leak: src [memleak]
->    return;
->    ^
-
-Don't take this the wrong way: there must be something better to be done 
-with your time than fixing memory leaks on exit paths in tests.
-
+On 14.01.25 03:29, liuye wrote:
+>      Release memory before exception branch returns to prevent memory leaks.
 > 
 > Signed-off-by: liuye <liuye@kylinos.cn>
 > ---
->   tools/testing/selftests/mm/mkdirty.c | 1 +
->   1 file changed, 1 insertion(+)
+>   tools/testing/selftests/mm/cow.c | 21 ++++++++++++++++-----
+>   1 file changed, 16 insertions(+), 5 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/mm/mkdirty.c b/tools/testing/selftests/mm/mkdirty.c
-> index 1db134063c38..af2fce496912 100644
-> --- a/tools/testing/selftests/mm/mkdirty.c
-> +++ b/tools/testing/selftests/mm/mkdirty.c
-> @@ -280,6 +280,7 @@ static void test_uffdio_copy(void)
->   	dst = mmap(NULL, pagesize, PROT_READ, MAP_PRIVATE|MAP_ANON, -1, 0);
->   	if (dst == MAP_FAILED) {
->   		ksft_test_result_fail("mmap() failed\n");
-> +		free(src);
+> diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
+> index 1238e1c5aae1..959327ba6258 100644
+> --- a/tools/testing/selftests/mm/cow.c
+> +++ b/tools/testing/selftests/mm/cow.c
+> @@ -167,19 +167,30 @@ static int child_vmsplice_memcmp_fn(char *mem, size_t size,
+>   	/* Backup the original content. */
+>   	memcpy(old, mem, size);
+>   
+> -	if (pipe(fds) < 0)
+> +	if (pipe(fds) < 0) {
+> +		free(old);
+> +		free(new);
+>   		return -errno;
+> -
+> +	}
+>   	/* Trigger a read-only pin. */
+>   	transferred = vmsplice(fds[1], &iov, 1, 0);
+> -	if (transferred < 0)
+> +	if (transferred < 0) {
+> +		free(old);
+> +		free(new);
+>   		return -errno;
+> -	if (transferred == 0)
+> +	}
+> +	if (transferred == 0) {
+> +		free(old);
+> +		free(new);
+>   		return -EINVAL;
+> +	}
+>   
+>   	/* Unmap it from our page tables. */
+> -	if (munmap(mem, size) < 0)
+> +	if (munmap(mem, size) < 0) {
+> +		free(old);
+> +		free(new);
+>   		return -errno;
+> +	}
 
+We are immediately exiting the test in do_test_cow_in_parent()
+	exit(fn(mem, size, &comm_pipes));
 
-We are immediately exiting the test afterwards ...
-
-In any case, the change LGTM
-
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Your changes make the code unnecessarily more complicated to read, so 
+I'm not in favor of this one to make some checker tool happy.
 
 -- 
 Cheers,
