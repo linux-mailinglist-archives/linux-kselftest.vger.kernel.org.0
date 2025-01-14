@@ -1,233 +1,205 @@
-Return-Path: <linux-kselftest+bounces-24427-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77903A0FFFD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 05:50:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D5ECA10053
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 06:28:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D5CF188855D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 04:50:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78D711670D6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 05:28:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F21EB2253E0;
-	Tue, 14 Jan 2025 04:50:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63F00233534;
+	Tue, 14 Jan 2025 05:28:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="COW1ZdIw"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="F32cSSGE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-52003.amazon.com (smtp-fw-52003.amazon.com [52.119.213.152])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ED9924023E;
-	Tue, 14 Jan 2025 04:49:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A8D5240251
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 05:28:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736830201; cv=none; b=pbYde5fm7Ox4qq8hNdUlImXGPOvWXIOmYv6U7kwnARd1b2Z64xGzCCjxfDbVSjeBgzfX3aTxaEJyscGmXZUpiD3LM5sc74gUfr2FQiKztv3OzEuT8rquJs3YupVi8xWQdsb5xHtmm1vmf7Z2eigCSrjhRyNqAv1D1v3Qt0MsfZk=
+	t=1736832507; cv=none; b=uPYlvUoFtRGKdhvdAbzAOdlu52nRf7blC9uw8t/M13aHFksTS+g9mQCI7kW8jWRymJFOXHudn6iWdtNmaaDeE3RYUxtq7mQhqHbr9ocMOZb2ht2K5NEajBxvo+S9CfmZ1ncsiXaGjEc6jhQ8w5z34m/kfnWHvl7a4o7F8T1E+AI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736830201; c=relaxed/simple;
-	bh=CG5ADQvDH2PcbnFujbCeqXAd7kbVHN7UAWyREHlgoEc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cf03h3EbKqqkPku1QkeD4WG5PPBtMV2PLDcOxM/xtCoRtF/A00AbI1ril7/cgQvj1ec6x1Z0dxbk5lAQGy8oWdOUaAdeEZ9D8ddIfUQX2cp+a9Z+zCDDv+xAS6InI0Tuuj07gqwHShS3b5Qotx4ssy/LdsTeD1P+u3ZSGvvgAbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=COW1ZdIw; arc=none smtp.client-ip=52.119.213.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+	s=arc-20240116; t=1736832507; c=relaxed/simple;
+	bh=GQshcU8QyJxIFhKdNOE0/w+AaKJphQdmAFnP00ASe6g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
+	 In-Reply-To:Content-Type; b=WD4k/FGPMBLwsISP6p0L5Q7pHxwOEXxUAkjWNBhbtOMuuLJ46RVBHxvjjSyFqGyVj2LP3qH+qK7YhxY97fwBz+bDkay2vod5BKTp6uDCvyjBtUgBR86n9la32nCjH277VOzOKLdjajRtAYqqBA+zvab98m31+825ld32zcXmHDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=F32cSSGE; arc=none smtp.client-ip=209.85.166.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3a9c9f2a569so34425005ab.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jan 2025 21:28:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1736830201; x=1768366201;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=A4qSpa9PKTl3u7k1DQyLqfv8mgl5yR42K0bhyD7dYtE=;
-  b=COW1ZdIwZiklBml6Wt/rKHHhfhf0eL4SlXcS5jjqeHHLzX9kF+aJ6MLt
-   UHKkt6j6aRIzzo2r/7GrRfWU7vwdmVX7+L+ZtGXjUtMV8k7KRAb+2pFSg
-   WgRtxA6fzX2AAKW8eClhT1+Tk+4SEFJYAUeZ4LXBN96EqpoN6Fu4S+1nN
-   I=;
-X-IronPort-AV: E=Sophos;i="6.12,313,1728950400"; 
-   d="scan'208";a="57499934"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-52003.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2025 04:49:55 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [10.0.38.20:22602]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.15.93:2525] with esmtp (Farcaster)
- id 7019b803-c524-49e9-8de0-4c37547d545c; Tue, 14 Jan 2025 04:49:53 +0000 (UTC)
-X-Farcaster-Flow-ID: 7019b803-c524-49e9-8de0-4c37547d545c
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.39;
- Tue, 14 Jan 2025 04:49:53 +0000
-Received: from 6c7e67c6786f.amazon.com (10.119.11.99) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.39;
- Tue, 14 Jan 2025 04:49:44 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <shaw.leon@gmail.com>
-CC: <alex.aring@gmail.com>, <andrew+netdev@lunn.ch>,
-	<b.a.t.m.a.n@lists.open-mesh.org>, <bpf@vger.kernel.org>,
-	<bridge@lists.linux.dev>, <davem@davemloft.net>, <donald.hunter@gmail.com>,
-	<dsahern@kernel.org>, <edumazet@google.com>, <herbert@gondor.apana.org.au>,
-	<horms@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-	<linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-ppp@vger.kernel.org>,
-	<linux-rdma@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
-	<linux-wpan@vger.kernel.org>, <miquel.raynal@bootlin.com>,
-	<netdev@vger.kernel.org>, <osmocom-net-gprs@lists.osmocom.org>,
-	<pabeni@redhat.com>, <shuah@kernel.org>, <stefan@datenfreihafen.org>,
-	<steffen.klassert@secunet.com>, <wireguard@lists.zx2c4.com>
-Subject: Re: [PATCH net-next v8 06/11] net: ipv6: Use link netns in newlink() of rtnl_link_ops
-Date: Tue, 14 Jan 2025 13:49:35 +0900
-Message-ID: <20250114044935.26418-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20250113143719.7948-3-shaw.leon@gmail.com>
-References: <20250113143719.7948-3-shaw.leon@gmail.com>
+        d=sifive.com; s=google; t=1736832503; x=1737437303; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:cc:content-language:from
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/hyRwhy9eFQaQwT5Y554E2+vSBUsIfx45e4KpeScOPg=;
+        b=F32cSSGEHVpODakRoQj+4olryw3DfmY5CsOYgKIKd2zCQZ1LkupPjvoeIjzluGyXoP
+         wu2uGmSHl8gAIVs2HKw8slFCYDFtIBRZuJyysxd8C37gcB5iBzfe/DYgUM+pGRA6kUzk
+         d0K2DuiUHETGiBilgHnQXPT7DOQH5lYPMLBsd4wx8ImOARHg5PsmO0qNyfCX2CdjvO4U
+         1vuQ9FwJUhYLfgd3tFnPcWweEqKTGS/Tc87TZL/bS44MSmoJHfju27bdMYDQJ0Gpx1ft
+         YDX83Pe14IBtmSPKgpWDYyuc/thl1xGtbMVQI33rn4GAX+jbQ9KZvk7JL0GPwmQONzZ7
+         7TUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736832503; x=1737437303;
+        h=content-transfer-encoding:in-reply-to:cc:content-language:from
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/hyRwhy9eFQaQwT5Y554E2+vSBUsIfx45e4KpeScOPg=;
+        b=HlP+jZ5p7p8+t1nlPA7w6u2BRJdi5ywT8zaR9BIzvXcdpYp9ZLUKmKziUXbRwvVVVD
+         7h+WsoVii2fkVbTnO8WLL2+GE2RdQr+529CQ/q45RHZsIXDZMey5Rz0k96odS8+AJTxC
+         yLXWli8VcgA2yehz2c+fy4EdhsNb8OwgnRJ6tq5F2r804/ZU3V4BspMVcFnJ4JgeIv6A
+         fpdN4xtlej5uMhbQf9UO4bblT9pgsmFJ4LRfnRbnthyhdfwtD8VVsub/rEh6C+Mhfh5n
+         f92/NcFHs8r5TgeLsiyYyAw/Ut9k6ugvqRueaCMHSkjJrgeyZq9NRQb0KeJ9QAKpSlBE
+         6oRw==
+X-Forwarded-Encrypted: i=1; AJvYcCUgiItCFvpeFTCLAVodZO1LmyflCNRuQwUKuoxz6Gust5fbK0wYFmvVwiV6NcoUt4A1Y27ssIYNR0nC4/HWP9Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5a7YbRnNTeGYoixsBdxLA4HWyVZsqjYd156ed3QWg58dTbn+b
+	p7bBKMPe28zRvKxRo5dk6cJ7NUQHEmZx2pBm8yWjufDgf+7bOeYswep8iEm05pA=
+X-Gm-Gg: ASbGncuCYDgTkb8sx8juMOU1Pm9zckv9hAYWQ1DvmPkZGjmK1bnITuU674LcskavJF3
+	YmCjiynKLvIzMl+1OuifJnSnjPe38LRkoZCCHOQ8fUB4VZQeAySLI2mA5OgjubRVq02wubbV3JA
+	eMQgIFL+9U7/m3nWZLQQnfDT+vc+Kt0S3x69hqsutGsWJgVvrgRkICeR1gsqxayqDVHV0XZpJXi
+	v0Uu3vJI6mufJdvWKjSDAiDvIcvmhZqaZIsQMEmE0AUiQDMjXg8eA1FcKrwX15yM9FlMzlBSlRf
+	5sVV
+X-Google-Smtp-Source: AGHT+IFFGVHpfUG8VTfLaLNGH63wxU+Nwu7BqgDd/pRCCnZpwPE2D3wlvuT3cfxMO0fJl4clFa4nnQ==
+X-Received: by 2002:a05:6e02:1a82:b0:3a7:d7dd:e70f with SMTP id e9e14a558f8ab-3ce3a88a4a1mr214560075ab.12.1736832503331;
+        Mon, 13 Jan 2025 21:28:23 -0800 (PST)
+Received: from [100.64.0.1] ([165.188.116.9])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3ce4afc39d6sm31893185ab.69.2025.01.13.21.28.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jan 2025 21:28:22 -0800 (PST)
+Message-ID: <7c181d03-b0d0-4b81-bbd0-06943a58a287@sifive.com>
+Date: Mon, 13 Jan 2025 23:28:20 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D033UWA004.ant.amazon.com (10.13.139.85) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/3] RISC-V: hwprobe: Expose Zicbom extension and its
+ block size
+To: Yunhui Cui <cuiyunhui@bytedance.com>
+References: <20250114021936.17234-1-cuiyunhui@bytedance.com>
+ <20250114021936.17234-3-cuiyunhui@bytedance.com>
+From: Samuel Holland <samuel.holland@sifive.com>
+Content-Language: en-US
+Cc: ajones@ventanamicro.com, alexghiti@rivosinc.com, andybnac@gmail.com,
+ aou@eecs.berkeley.edu, charlie@rivosinc.com, cleger@rivosinc.com,
+ conor.dooley@microchip.com, conor@kernel.org, corbet@lwn.net,
+ evan@rivosinc.com, jesse@rivosinc.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+ paul.walmsley@sifive.com, shuah@kernel.org
+In-Reply-To: <20250114021936.17234-3-cuiyunhui@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Xiao Liang <shaw.leon@gmail.com>
-Date: Mon, 13 Jan 2025 22:37:14 +0800
-> diff --git a/drivers/net/bonding/bond_netlink.c b/drivers/net/bonding/bond_netlink.c
-> index 2a6a424806aa..ac5e402c34bc 100644
-> --- a/drivers/net/bonding/bond_netlink.c
-> +++ b/drivers/net/bonding/bond_netlink.c
-> @@ -564,10 +564,12 @@ static int bond_changelink(struct net_device *bond_dev, struct nlattr *tb[],
->  	return 0;
->  }
+Hi Yunhui,
+
+On 2025-01-13 8:19 PM, Yunhui Cui wrote:
+> Expose Zicbom through hwprobe and also provide a key to extract its
+> respective block size.
+> 
+> Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
+> ---
+>  Documentation/arch/riscv/hwprobe.rst  | 6 ++++++
+>  arch/riscv/include/asm/hwprobe.h      | 2 +-
+>  arch/riscv/include/uapi/asm/hwprobe.h | 2 ++
+>  arch/riscv/kernel/sys_hwprobe.c       | 6 ++++++
+>  4 files changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/arch/riscv/hwprobe.rst b/Documentation/arch/riscv/hwprobe.rst
+> index 955fbcd19ce9..0ea7754b2049 100644
+> --- a/Documentation/arch/riscv/hwprobe.rst
+> +++ b/Documentation/arch/riscv/hwprobe.rst
+> @@ -242,6 +242,9 @@ The following keys are defined:
+>    * :c:macro:`RISCV_HWPROBE_EXT_SUPM`: The Supm extension is supported as
+>         defined in version 1.0 of the RISC-V Pointer Masking extensions.
 >  
-> -static int bond_newlink(struct net *src_net, struct net_device *bond_dev,
-> -			struct nlattr *tb[], struct nlattr *data[],
-> +static int bond_newlink(struct net_device *bond_dev,
-> +			struct rtnl_newlink_params *params,
->  			struct netlink_ext_ack *extack)
+> +  * :c:macro:`RISCV_HWPROBE_EXT_ZICBOM`: The Zicbom extension is supported, as
+> +       ratified in commit 3dd606f ("Create cmobase-v1.0.pdf") of riscv-CMOs.
+> +
+>  * :c:macro:`RISCV_HWPROBE_KEY_CPUPERF_0`: Deprecated.  Returns similar values to
+>       :c:macro:`RISCV_HWPROBE_KEY_MISALIGNED_SCALAR_PERF`, but the key was
+>       mistakenly classified as a bitmask rather than a value.
+> @@ -281,6 +284,9 @@ The following keys are defined:
+>  * :c:macro:`RISCV_HWPROBE_KEY_MISALIGNED_VECTOR_PERF`: An enum value describing the
+>       performance of misaligned vector accesses on the selected set of processors.
+>  
+> +* :c:macro:`RISCV_HWPROBE_KEY_ZICBOM_BLOCK_SIZE`: An unsigned int which
+> +  represents the size of the Zicbom block in bytes.
+> +
+>    * :c:macro:`RISCV_HWPROBE_MISALIGNED_VECTOR_UNKNOWN`: The performance of misaligned
+>      vector accesses is unknown.
+
+The new key needs to go further down, below this list of possible values for the
+previous key.
+
+Regards,
+Samuel
+
+>  
+> diff --git a/arch/riscv/include/asm/hwprobe.h b/arch/riscv/include/asm/hwprobe.h
+> index 1ce1df6d0ff3..89379f9a2e6e 100644
+> --- a/arch/riscv/include/asm/hwprobe.h
+> +++ b/arch/riscv/include/asm/hwprobe.h
+> @@ -8,7 +8,7 @@
+>  
+>  #include <uapi/asm/hwprobe.h>
+>  
+> -#define RISCV_HWPROBE_MAX_KEY 10
+> +#define RISCV_HWPROBE_MAX_KEY 11
+>  
+>  static inline bool riscv_hwprobe_key_is_valid(__s64 key)
 >  {
-> +	struct nlattr **data = params->data;
-> +	struct nlattr **tb = params->tb;
->  	int err;
+> diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
+> index 3af142b99f77..b15c0bd83ef2 100644
+> --- a/arch/riscv/include/uapi/asm/hwprobe.h
+> +++ b/arch/riscv/include/uapi/asm/hwprobe.h
+> @@ -73,6 +73,7 @@ struct riscv_hwprobe {
+>  #define		RISCV_HWPROBE_EXT_ZCMOP		(1ULL << 47)
+>  #define		RISCV_HWPROBE_EXT_ZAWRS		(1ULL << 48)
+>  #define		RISCV_HWPROBE_EXT_SUPM		(1ULL << 49)
+> +#define		RISCV_HWPROBE_EXT_ZICBOM	(1ULL << 50)
+>  #define RISCV_HWPROBE_KEY_CPUPERF_0	5
+>  #define		RISCV_HWPROBE_MISALIGNED_UNKNOWN	(0 << 0)
+>  #define		RISCV_HWPROBE_MISALIGNED_EMULATED	(1 << 0)
+> @@ -94,6 +95,7 @@ struct riscv_hwprobe {
+>  #define		RISCV_HWPROBE_MISALIGNED_VECTOR_SLOW		2
+>  #define		RISCV_HWPROBE_MISALIGNED_VECTOR_FAST		3
+>  #define		RISCV_HWPROBE_MISALIGNED_VECTOR_UNSUPPORTED	4
+> +#define RISCV_HWPROBE_KEY_ZICBOM_BLOCK_SIZE	11
+>  /* Increase RISCV_HWPROBE_MAX_KEY when adding items. */
 >  
->  	err = bond_changelink(bond_dev, tb, data, extack);
+>  /* Flags */
+> diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwprobe.c
+> index cb93adfffc48..04150e62f998 100644
+> --- a/arch/riscv/kernel/sys_hwprobe.c
+> +++ b/arch/riscv/kernel/sys_hwprobe.c
+> @@ -106,6 +106,7 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
+>  		EXT_KEY(ZCA);
+>  		EXT_KEY(ZCB);
+>  		EXT_KEY(ZCMOP);
+> +		EXT_KEY(ZICBOM);
+>  		EXT_KEY(ZICBOZ);
+>  		EXT_KEY(ZICOND);
+>  		EXT_KEY(ZIHINTNTL);
+> @@ -278,6 +279,11 @@ static void hwprobe_one_pair(struct riscv_hwprobe *pair,
+>  		if (hwprobe_ext0_has(cpus, RISCV_HWPROBE_EXT_ZICBOZ))
+>  			pair->value = riscv_cboz_block_size;
+>  		break;
+> +	case RISCV_HWPROBE_KEY_ZICBOM_BLOCK_SIZE:
+> +		pair->value = 0;
+> +		if (hwprobe_ext0_has(cpus, RISCV_HWPROBE_EXT_ZICBOM))
+> +			pair->value = riscv_cbom_block_size;
+> +		break;
+>  	case RISCV_HWPROBE_KEY_HIGHEST_VIRT_ADDRESS:
+>  		pair->value = user_max_virt_addr();
+>  		break;
 
-Note that IFLA_BOND_ACTIVE_SLAVE uses dev_net(dev) for
-__dev_get_by_index().
-
-
-[...]
-> diff --git a/drivers/net/macvlan.c b/drivers/net/macvlan.c
-> index fed4fe2a4748..0c496aa1f706 100644
-> --- a/drivers/net/macvlan.c
-> +++ b/drivers/net/macvlan.c
-> @@ -1565,11 +1565,12 @@ int macvlan_common_newlink(struct net *src_net, struct net_device *dev,
->  }
->  EXPORT_SYMBOL_GPL(macvlan_common_newlink);
->  
-> -static int macvlan_newlink(struct net *src_net, struct net_device *dev,
-> -			   struct nlattr *tb[], struct nlattr *data[],
-> +static int macvlan_newlink(struct net_device *dev,
-> +			   struct rtnl_newlink_params *params,
->  			   struct netlink_ext_ack *extack)
->  {
-> -	return macvlan_common_newlink(src_net, dev, tb, data, extack);
-> +	return macvlan_common_newlink(params->net, dev, params->tb,
-> +				      params->data, extack);
-
-Pass params as is as you did for ipvlan_link_new().
-
-Same for macvtap_newlink().
-
-
-[...]
-> diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-> index 1e1b00756be7..1e9eadc77da2 100644
-> --- a/drivers/net/netkit.c
-> +++ b/drivers/net/netkit.c
-> @@ -327,10 +327,13 @@ static int netkit_validate(struct nlattr *tb[], struct nlattr *data[],
->  
->  static struct rtnl_link_ops netkit_link_ops;
->  
-> -static int netkit_new_link(struct net *peer_net, struct net_device *dev,
-> -			   struct nlattr *tb[], struct nlattr *data[],
-> +static int netkit_new_link(struct net_device *dev,
-> +			   struct rtnl_newlink_params *params,
->  			   struct netlink_ext_ack *extack)
->  {
-> +	struct nlattr **data = params->data;
-> +	struct net *peer_net = params->net;
-> +	struct nlattr **tb = params->tb;
-
-nit: please keep the reverse xmas tree order.
-
-
->  	struct nlattr *peer_tb[IFLA_MAX + 1], **tbp = tb, *attr;
-
-you can define *tbp here and initialise it later.
-
-  	struct nlattr *peer_tb[IFLA_MAX + 1], **tbp, *attr;
-
->  	enum netkit_action policy_prim = NETKIT_PASS;
->  	enum netkit_action policy_peer = NETKIT_PASS;
-
-
-[...]
-> @@ -1064,6 +1067,11 @@ static void wwan_create_default_link(struct wwan_device *wwandev,
->  	struct net_device *dev;
->  	struct nlmsghdr *nlh;
->  	struct sk_buff *msg;
-> +	struct rtnl_newlink_params params = {
-> +		.net = &init_net,
-> +		.tb = tb,
-> +		.data = data,
-> +	};
-
-nit: Reverse xmas tree order
-
-
-[...]
-> diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-> index ec98349b9620..7ff5e96f6ba7 100644
-> --- a/net/core/rtnetlink.c
-> +++ b/net/core/rtnetlink.c
-> @@ -3766,6 +3766,14 @@ static int rtnl_newlink_create(struct sk_buff *skb, struct ifinfomsg *ifm,
->  	struct net_device *dev;
->  	char ifname[IFNAMSIZ];
->  	int err;
-> +	struct rtnl_newlink_params params = {
-
-nit: Reverse xmas tree order
-
-
-> +		.net = net,
-
-Use sock_net(skb->sk) directly here and remove net defined above,
-which is no longer used in this function.
-
----8<---
-        unsigned char name_assign_type = NET_NAME_USER;
-        struct rtnl_newlink_params params = {
-                .net = sock_net(skb->sk),
-                .src_net = net,
-                .link_net = link_net,
-                .peer_net = peer_net,
-                .tb = tb,
-                .data = data,
-        };
-        u32 portid = NETLINK_CB(skb).portid;
----8<---
-
-
-[...]
-> @@ -1698,6 +1702,10 @@ struct net_device *gretap_fb_dev_create(struct net *net, const char *name,
->  	LIST_HEAD(list_kill);
->  	struct ip_tunnel *t;
->  	int err;
-> +	struct rtnl_newlink_params params = {
-> +		.net = net,
-> +		.tb = tb,
-> +	};
->  
->  	memset(&tb, 0, sizeof(tb));
-
-nit: Reverse xmas tree
 
