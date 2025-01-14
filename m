@@ -1,169 +1,164 @@
-Return-Path: <linux-kselftest+bounces-24507-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24509-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EE2AA10FBB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 19:18:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2E7FA1100E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 19:29:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7E9F18808C5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 18:18:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 623CE3A0743
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 18:29:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74A1E207A23;
-	Tue, 14 Jan 2025 18:17:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52CBC1FBE9B;
+	Tue, 14 Jan 2025 18:29:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="grbEg9HZ"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="KFBFTQuv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4523A2063FF;
-	Tue, 14 Jan 2025 18:17:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C47A1FAC34
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 18:29:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736878620; cv=none; b=GDQCwT6udBfnwd0QyW7R4Q1c1gy7QgDoWervTVaQf4NypVR4qKNh88zPfRpMIj53lcZpFvULiCn18Gs9wd1fYVYDBi6cLHrvVOrYaI6CIWYB1Tm5+VUNqMYUx1uz8Ds/a/Pyi28xXrfs+W0ELLR8PNRVqcCaoH1KMhWMF341Fpg=
+	t=1736879367; cv=none; b=uzU93/onXmfU5RqqKmeMZGRF7yG9HyVcVFWwUFaH9rfUKiOylZJdauP4C/jOSffaG/YxhJnUoENZeZTnc6MvswuZh1vArkm81PK7fww6K/0SHe0gOzkYHbpStWW2zUMaE81MyL6OQx/yzdgRjBV6vZF8H/20fEuSbP/TDXzV8VI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736878620; c=relaxed/simple;
-	bh=D/SHSgsiMa7Rb7nwePwpbtlLjnB91paCMmxG3twAM0U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j9IKEpiklcKGHSrrYpC4aX2FuGbg+CmQoTi08MWb15D31z+W1wsema2fIHl9jwqqe0C0oEp5B/dSIabfgQOtq8SqNgDld+II+N+E7khgAZSX3Hwa8TGRFGHOHTIW7Qk/DxtKyI6PQiym+Rpsvwq1eMd42m/Z/ZMqdwtuizf3wZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=grbEg9HZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42B0CC4CEDD;
-	Tue, 14 Jan 2025 18:16:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736878620;
-	bh=D/SHSgsiMa7Rb7nwePwpbtlLjnB91paCMmxG3twAM0U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=grbEg9HZFr7ic23HcKgcX38W0WpdUNeWm4A4ldc8lnNCc4kCFJSoldtNdzPcBUnIT
-	 7NwtszrgHzsaVarRiraZlO6HmxshtdEevhYBwMSo9zg1QsIib3uo5ycjgzJFyv/lUz
-	 JFDv3EMZ4N5THpqFqQEhfrnLgRcd84xPn16L79BpEg0ZCa0BXEi2CCzX3cyt6drOW7
-	 ecIdI8mC1ePpRFXm0wtGwjFEzZnzea4UbXGz5KpsSvssGkioBLfk+pQfztcNLah1Yf
-	 rpJBKCpayU2M0q4R83tRFHRsDyIRU4BJ8358WWuordQdjjmGsbexqAwOQRUwVj98SC
-	 TP7rs4DvGmksg==
-Message-ID: <5e2058ea-2292-4403-a7b9-ace4b21dc9c1@kernel.org>
-Date: Tue, 14 Jan 2025 19:16:46 +0100
+	s=arc-20240116; t=1736879367; c=relaxed/simple;
+	bh=jsa0CovMO5ZT70pqhIrCF6Xwrs9x8fVebY2Xd/EYn6o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ty/SALo0vFH45WMXZAfwvXe7CVrA6ymzWeeWOOTq9LxZOMtX4XLWt2hULPvKmW34IGSbeJ5IrTO4sEdsG3lVSAWFlVVkjDskmr8cwoAS+kIMG9cix6PhtL9wgkTtIHlunS5wV98nX69/x8LbRQm+FftwB+O82o3G31ACeHUdQCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=KFBFTQuv; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-aa6c0d1833eso429556266b.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 10:29:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1736879362; x=1737484162; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+L6x2g4BC/d/+jfoDGOj0pMskOpzz9VGXCLG5E4WwRY=;
+        b=KFBFTQuv4suEhQgFHTC00K5qiQ3Jw2kiLcP2Ut9JBRBrS6MG3+DcQWnTJ2OvOmD2ET
+         VmAoHdL2GNwADncv1A6R63Igi6HrsrO4q0Iy0Tf0ktWX9MhkhZAWTt4DFpf39SgVrvcn
+         goB1HrkuDsZ6EUUMHyn+nRAXkfPC0D6r+s8all1P1Tni6YRXh8p/Hn56TaO13lf8p0o+
+         e8waI5tHtQROzxqeDrKmwdFRhQ/JWlNMRBEbvpsdANDX4sa5h9naV2GPaEWOaWIvEYUT
+         GOIozzsliRXxnLRPkM//8kc56luukRtxY3CL4EKdxIA1Jd9xtXGcUDyU6uX7Lky9U82N
+         XglQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736879362; x=1737484162;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+L6x2g4BC/d/+jfoDGOj0pMskOpzz9VGXCLG5E4WwRY=;
+        b=sGzX99BIv8z00vnGI/llp9802hSnJz9my6OpfM+oh9lGXE8YOmfDV8r7qPcznQg3Xr
+         eYuNXb9/9JKKjULE5bOPD09fUGAWgYxvXC+aQk8DzJeX0vNt6Vg/lcJBGOxYlpdDKx6t
+         N63Mh05Fz62gsqPVf4z42Vft2BpjPziqfusmQHLE+5oxa3/d7HknFtCkQs74Ir5LAKhp
+         j7e+WLINJtIbws7mggpe1EK0r8dusvDCsFOvnlCys4llqe0UT8OnXZ6DV8dvbWQsi4LJ
+         mviZfNLyBy/jekqokfRaVjHdTVvwjSq2Am4axLCs4NoLtFdv+o6M08led8RAlVCd+VtH
+         GPhw==
+X-Forwarded-Encrypted: i=1; AJvYcCVVR/VlDmLdGf37/cwHobIQ2HDghThM/MOG80LVnYYoVTyAk1E/GXwGXl+IHoloUS8+Bp+XDvC56u+YZGNZPDQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzc2i2Kryq2Yr88oRH42tPtszhrbPBHo9CoBvjZTwMzKDnYWtym
+	DBZ565+DD0aqFogrVlDP/DLtwykimHYeFTU5pEiWOlPwlXXU40L472Fhsd+tzw8=
+X-Gm-Gg: ASbGncvxk3F67m50mchRXDRB7MhyjmPfhPG0ne7TAiIkYhsj/Z7OlKdHhn1pPqrhxVs
+	nYo2/9wkQ07S+xZTeRzKdrFANHh5RsrbXN8g1NhOAVMXK2KBsF4ATrYhtKI0BNM6NuG1L8LNDac
+	qFVu/H69pyKDEQO69xONb9T0TLOrLGnfjHgUnJsa2bpj3dEnV9tQD3++Bb+4EAIV2Cg1QbhIVlN
+	JS68MxCzwO8LmxPmr7iFsGcgIzvd1Rda6871vBKzC5vKsWSYMMehcd5FQRRMg1ag6cM/WHFMH1G
+	olP1+E9I+LnhZmHlBn2rcHSLpHC/LeVdccbvhAxgGA==
+X-Google-Smtp-Source: AGHT+IElLRyBSSFsvDLttv+1rxbirlHss1/zCBNTWvitDc/Y1ed9oUs4kNSXL7wHp3+sai4oSrFAlg==
+X-Received: by 2002:a17:907:96a7:b0:aa6:2c18:aaa2 with SMTP id a640c23a62f3a-ab2ab73e7dbmr2340049566b.27.1736879362392;
+        Tue, 14 Jan 2025 10:29:22 -0800 (PST)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab2c905f04fsm659166066b.27.2025.01.14.10.29.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jan 2025 10:29:21 -0800 (PST)
+Date: Tue, 14 Jan 2025 19:29:21 +0100
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Valentin Schneider <vschneid@redhat.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org, 
+	virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	kvm@vger.kernel.org, linux-arch@vger.kernel.org, rcu@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com, 
+	Juergen Gross <jgross@suse.com>, Ajay Kaher <ajay.kaher@broadcom.com>, 
+	Alexey Makhalov <alexey.amakhalov@broadcom.com>, Russell King <linux@armlinux.org.uk>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, "Liang, Kan" <kan.liang@linux.intel.com>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, Sean Christopherson <seanjc@google.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Frederic Weisbecker <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Jason Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ard Biesheuvel <ardb@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Joel Fernandes <joel@joelfernandes.org>, Josh Triplett <josh@joshtriplett.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>, 
+	Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli <juri.lelli@redhat.com>, 
+	Clark Williams <williams@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>, 
+	Tomas Glozar <tglozar@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Kees Cook <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Christoph Hellwig <hch@infradead.org>, Shuah Khan <shuah@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
+	Samuel Holland <samuel.holland@sifive.com>, Rong Xu <xur@google.com>, 
+	Nicolas Saenz Julienne <nsaenzju@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Yosry Ahmed <yosryahmed@google.com>, "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, 
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 10/30] riscv/paravirt: Mark pv_steal_clock static call
+ as __ro_after_init
+Message-ID: <20250114-7fc0ed577ee91b6813f92806@orel>
+References: <20250114175143.81438-1-vschneid@redhat.com>
+ <20250114175143.81438-11-vschneid@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH 0/3] selftests: mptcp: Fix various issues in main_loop
-Content-Language: en-GB
-To: Cong Liu <liucong2@kylinos.cn>, Mat Martineau <martineau@kernel.org>,
- Geliang Tang <geliang@kernel.org>, "'David S . Miller'"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250113085228.121778-1-liucong2@kylinos.cn>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20250113085228.121778-1-liucong2@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250114175143.81438-11-vschneid@redhat.com>
 
-Hi Cong Liu,
-
-On 13/01/2025 09:52, Cong Liu wrote:
-> Fix several issues in the mptcp connect test's main_loop function.
+On Tue, Jan 14, 2025 at 06:51:23PM +0100, Valentin Schneider wrote:
+> The static call is only ever updated in:
 > 
->  - Fix a bug where the wrong file descriptor was being checked for errors
->  - Fix the input file descriptor lifecycle in the reconnection loop to
->    prevent use of invalid fd
->  - Add proper resource cleanup in error paths
-
-Thank you for these fixes!
-
-Please note that when sending patches to the Netdev mailing list, it is
-asked to follow some specific rules, e.g.
-
-- designate your patch to a tree - [PATCH net] or [PATCH net-next]
-- for fixes the Fixes: tag is required, regardless of the tree
-
-https://docs.kernel.org/process/maintainer-netdev.html
-
-If I'm not mistaken, it looks like you have here fixes for net, and the
-Fixes tag is missing.
-
-Do you mind sending a v2 with this being fixed please? Because these
-fixes are not urgent, do you mind sending them only to the MPTCP ML for
-the moment, and not to the other ones (and no other people in CC).
-
-> Cong Liu (3):
->   selftests: mptcp: Fix incorrect file descriptor check in main_loop
->   selftests: mptcp: Fix input fd lifecycle in reconnection loop
->   selftests: mptcp: Clean up resources properly in main_loop
+>   __init pv_time_init()
+>   __init xen_time_setup_guest()
 > 
->  .../selftests/net/mptcp/mptcp_connect.c        | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
+> so mark it appropriately as __ro_after_init.
 > 
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> ---
+>  arch/riscv/kernel/paravirt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> base-commit: 2b88851f583d3c4e40bcd40cfe1965241ec229dd
+> diff --git a/arch/riscv/kernel/paravirt.c b/arch/riscv/kernel/paravirt.c
+> index fa6b0339a65de..dfe8808016fd8 100644
+> --- a/arch/riscv/kernel/paravirt.c
+> +++ b/arch/riscv/kernel/paravirt.c
+> @@ -30,7 +30,7 @@ static u64 native_steal_clock(int cpu)
+>  	return 0;
+>  }
+>  
+> -DEFINE_STATIC_CALL(pv_steal_clock, native_steal_clock);
+> +DEFINE_STATIC_CALL_RO(pv_steal_clock, native_steal_clock);
+>  
+>  static bool steal_acc = true;
+>  static int __init parse_no_stealacc(char *arg)
+> -- 
+> 2.43.0
+>
 
-Note that this base-commit doesn't seem to exist. Because of that, our
-MPTCP CI was not able to automatically apply this commit.
-
-Talking about our CI, it looks like that 'mptcp_connect' now crashes in
-some cases with:
-
-  free(): double free detected in tcache 2
-
-Do you mind checking this please?
-
-https://github.com/multipath-tcp/mptcp_net-next/actions/runs/12751035845
-
-pw-bot: cr
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
