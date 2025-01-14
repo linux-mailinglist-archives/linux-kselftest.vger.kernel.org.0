@@ -1,194 +1,133 @@
-Return-Path: <linux-kselftest+bounces-24461-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24462-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25F06A10BCC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 17:07:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A06F6A10BEF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 17:13:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 489AF3A1FDE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 16:07:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A46F51881E89
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 16:13:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6007B1CB9EA;
-	Tue, 14 Jan 2025 16:07:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87F451BD9E7;
+	Tue, 14 Jan 2025 16:13:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="cnFtEm18";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="KnaL0Bqp"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Xrll/1pW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1601A8F8A;
-	Tue, 14 Jan 2025 16:07:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C6E35966
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 16:12:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736870835; cv=none; b=Ufj9lzUQ9rnFWmRhwqB/jP2IF5VizdiXr/hj7ZwQRN2XHcwzrU67DdRY2lhhg/ML+aGWZ3mmCfkJbFV8NvLIeznif1Xi9eWSUBhNY14hXVlP3Dr5BTJ1uQQugEDRjEys9gsKPUq1qJPk8B6OELC0a521hPTtZ2fiZW3OG5Rijfs=
+	t=1736871180; cv=none; b=UVDAAEAtZxlrP+zW1wAqJvsq9/Unb4KU9WxbOwBISu8UjTxhHvHjCUppjWt/Sa7X27Bm76ZfBnrTBCb2smjpUqoRFVTgs4lfanbD3Z/rwrbD0UWiJP/PQpD3HIrE+ZhulbY9B+TIqb+ZMco0xkzNUPj3aoVbMIpaybleX+w/pss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736870835; c=relaxed/simple;
-	bh=dH3RzX1kWHmc070i/rqPW6ADGmajD2eJb8ZOtqkz4DI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CXbMNm4EoEUPHMaZgm5Wkg4biHnW10fd6o+c3qzxiVJ5FzADcErDVX13mTPdcFSkq3OOqTn82ovPDYhYCQxcX+AbNyQRw0fjAQ9EEiDiXx+EDdPK0GIaAZlXb/iEd4NcYpKrG/fi2w6AXuv29vfCr6K9LT00uNfhGhmfAbdNeHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=cnFtEm18; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=KnaL0Bqp; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1736870831;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8RpmujbkErM0AyBS/jsicWpVLkLAFbMaYP9rwEqJEd4=;
-	b=cnFtEm18MbrSTZZNuEaTkbh1BCcJt6ODsBTtckfbbeBTuMwWvfgoDH3wreQrDdYd1I0hw8
-	97ExHGFWJLfiU6XcyeJtpAwoC0Qz1BIovPU4xCrc8zfK7umEq2FCW1b9xv3S92UJChPxeI
-	tKtUWD1C7mvfBy86MAPmtENlpMqANSi8EfbAps+ZDGu9SEPH548AoatKNvljt7zOw90zTk
-	oTEyluL2uULENRWrH4iVCaTTYUj05nGT4qftjRCQp0nC+/v0mveb4TPDoLF3HpAt3N8xVE
-	QXHaHQqJ10QuHj+hBWYkwwD9Srq37GiphfOKHOOYwuSSW0V8RyGLEC17HbnREA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1736870831;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8RpmujbkErM0AyBS/jsicWpVLkLAFbMaYP9rwEqJEd4=;
-	b=KnaL0Bqp9VgUi6gfGyMii2Jd+8VSJEQIwpet4OdI32Z/16BYWMCnsNmSsVtWJTtQZh+xOC
-	Zg4dYFNssdyZ38Ag==
-Date: Tue, 14 Jan 2025 17:06:48 +0100
-Subject: [PATCH v4 4/4] selftests/mm: virtual_address_range: Avoid reading
- from VM_IO mappings
+	s=arc-20240116; t=1736871180; c=relaxed/simple;
+	bh=DPxSBXYj5+Cie9FQhV3urqAbzP460lDWuePHUdfwhY0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XtGNBDFYKvoy5OqXUrKoS/F3d5lAYiJZmxP4cWUjlRjNGMrA7WWFZxhV7An2Aw7fnkevWCEiB5Gl43fru0ztVO7HJ2NXkmMVKujFXiFV20OEOpzO7V4oHtb7AxVVKTZmnf6eqSIsO+7iKcbtYfsi789xm/0Lde991mPPJB9dxj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Xrll/1pW; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4678cd314b6so53361841cf.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 08:12:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1736871177; x=1737475977; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V1ez0Y9/qkSWPKaIZfJ3AgE1cJ4EV6MroSfCc0eODCI=;
+        b=Xrll/1pWKSrhiA35Eatzn/BczuelTUdgepvzkBD7IEq5/nkaR2W/DmAN9aW/Vjwi+0
+         5br2CChhpafae7l5YTCduRJn5++y6/9l9uk/6vdvx3/xl//XWRaktQjXo5+/l1eDF7JE
+         uiM5vSfVfKGZy6DCqb+gHoS8qCbWvJ6gUcvVc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736871177; x=1737475977;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V1ez0Y9/qkSWPKaIZfJ3AgE1cJ4EV6MroSfCc0eODCI=;
+        b=HNWP6d3Ta46MMIkFi4l+InLa0RP98dQZ6wV09areQAzexmPsiOj8sv3u760iqVd+vj
+         gvHHICWDCHg9UB3UE7LmRzQsZBuPGnCYTjWaskLh94Ci0mfH3mpRO77FV1Alt+hpLCbm
+         CsZdELMK8Dkd1UScGgnxVb7mHaZ8LOxwC5m6brph++ZlEGTSHoOfPgy0zQzmGBrGoMYD
+         ertugSZqeIjfdUzwCEXuqOftoB0Hyssa92OLaaZKVemBeBegeKYU975qK422X0akUrqM
+         VMs1Pp1ScjnM2RwTjjCXHgZgWjRdfKG4XmRQSHQwiqV4+DMflBkfH42ccpLJGFPfPb0u
+         Ed1A==
+X-Forwarded-Encrypted: i=1; AJvYcCWpoF1HlsQdPWTKY4GMBcXR8uJdJg8F43uuhdCK9fliSjytyHZMKnbjWSK7WrVD4+ltBuG0s2GfTOj6/kgPBpA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKmfwH5To99LoqGSiGiymPFsxCWq1Aw4iq63irzONkPtoyUq2n
+	h5zkMYofodQLUL+axhyuuVaS3VpjqQ6ZCIJ4fiCkHYSvzLEm94EOj0m9Qo0Rhv2lPTdug/rLVQB
+	c
+X-Gm-Gg: ASbGncu2n6PBB48Mxwaejxg3aRuNWJMYM0qVrF1AItn78C6mT3bxggxpxDm8Nty3o4N
+	kbXjMXr+IImSEfLHSknWpgwPwhS97KagkIQUoI6UZ+82uOaeFrWg/9l/BOvznCzpX4wdcXxMm8Y
+	cv4VFLHEi7VFhyY8I0/I5i/O0EF5xSTv0eyq9eKZExUCQmC35ZS16NbjihU8kRMXFaWFeGJlbvG
+	tPuLtIr30NJPMviFN0n170P2c25IhjVOyv5KB9qELJg0CQCNhJCGTCrSbZ1AialzHI=
+X-Google-Smtp-Source: AGHT+IHrpXsovA0TmTlCENO3wBEAm5DshEtDzJ+tfCxG67zi2dsgrXWeJ08LvJG3WrXCFjZLz5iriQ==
+X-Received: by 2002:a05:6e02:114f:b0:3ce:7cca:7c0d with SMTP id e9e14a558f8ab-3ce7cca7c40mr17669525ab.12.1736871167110;
+        Tue, 14 Jan 2025 08:12:47 -0800 (PST)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3ce7d9d720esm3366995ab.70.2025.01.14.08.12.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jan 2025 08:12:46 -0800 (PST)
+Message-ID: <af9577f7-71fb-4760-9bd6-c3fc43aa0f30@linuxfoundation.org>
+Date: Tue, 14 Jan 2025 09:12:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250114-virtual_address_range-tests-v4-4-6fd7269934a5@linutronix.de>
-References: <20250114-virtual_address_range-tests-v4-0-6fd7269934a5@linutronix.de>
-In-Reply-To: <20250114-virtual_address_range-tests-v4-0-6fd7269934a5@linutronix.de>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- Shuah Khan <shuah@kernel.org>, Dev Jain <dev.jain@arm.com>, 
- Thomas Gleixner <tglx@linutronix.de>, David Hildenbrand <david@redhat.com>, 
- Anshuman Khandual <khandual@linux.vnet.ibm.com>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
- kernel test robot <oliver.sang@intel.com>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1736870827; l=4152;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=dH3RzX1kWHmc070i/rqPW6ADGmajD2eJb8ZOtqkz4DI=;
- b=xQ+14+XJAZIgmtLRSLuvQ0RJRXCT1ZR5pG5JrfZEm4tjhZLiKT2rLZ0+9AZVNI24R/g7D4PPN
- oQPBYszSdrkDyMlNo2pPeLn+tt9sG8qIS0glZuGpfXKUlxWf9D0u92u
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/rseq: Fix rseq for cases without glibc support
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Raghavendra Rao Ananta <rananta@google.com>
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20241210224435.15206-1-rananta@google.com>
+ <15339541-8912-4a1f-b5ca-26dd825dfb88@linuxfoundation.org>
+ <291b5c9a-af51-4b7a-91de-8408a33f8390@efficios.com>
+ <fbfe56d9-863b-4bf4-868c-bc64e0d3e93a@efficios.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <fbfe56d9-863b-4bf4-868c-bc64e0d3e93a@efficios.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The virtual_address_range selftest reads from the start of each mapping
-listed in /proc/self/maps.
-However not all mappings are valid to be arbitrarily accessed.
+On 1/14/25 07:27, Mathieu Desnoyers wrote:
+> On 2025-01-14 09:07, Mathieu Desnoyers wrote:
+>> On 2025-01-13 18:06, Shuah Khan wrote:
+>>> On 12/10/24 15:44, Raghavendra Rao Ananta wrote:
+>>>> Currently the rseq constructor, rseq_init(), assumes that glibc always
+>>>> has the support for rseq symbols (__rseq_size for instance). However,
+>>>> glibc supports rseq from version 2.35 onwards. As a result, for the
+>>>> systems that run glibc less than 2.35, the global rseq_size remains
+>>>> initialized to -1U. When a thread then tries to register for rseq,
+>>>> get_rseq_min_alloc_size() would end up returning -1U, which is
+>>>> incorrect. Hence, initialize rseq_size for the cases where glibc doesn't
+>>>> have the support for rseq symbols.
+>>>>
+>>>> Cc: stable@vger.kernel.org
+>>>> Fixes: 73a4f5a704a2 ("selftests/rseq: Fix mm_cid test failure")
+>>>> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+>>>> ---
+>>>
+>>> Applied to linux_kselftest next for Linux 6.14-rc1 after fixing the
+>>> commit if for Fixes tag
+>>
+>> Hi Shuah,
+>>
+>> I did not review nor ack this patch. I need to review it carefully
+>> to make sure it does not break anything else moving forward.
+>>
+>> Please wait before merging.
+> 
+> I am preparing an alternative fix which keeps the selftests
+> code in sync with librseq.
+> 
 
-For example the vvar data used for virtual clocks on x86 [vvar_vclock]
-can only be accessed if 1) the kernel configuration enables virtual
-clocks and 2) the hypervisor provided the data for it.
-Only the VDSO itself has the necessary information to know this.
-Since commit e93d2521b27f ("x86/vdso: Split virtual clock pages into dedicated mapping")
-the virtual clock data was split out into its own mapping, leading
-to EFAULT from read() during the validation.
+Sorry for the mixup. I will go drop this now.
 
-Check for the VM_IO flag as a proxy.
-It is present for the VVAR mappings and MMIO ranges can be dangerous to
-access arbitrarily.
-
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202412271148.2656e485-lkp@intel.com
-Fixes: e93d2521b27f ("x86/vdso: Split virtual clock pages into dedicated mapping")
-Fixes: 010409649885 ("selftests/mm: confirm VA exhaustion without reliance on correctness of mmap()")
-Suggested-by: David Hildenbrand <david@redhat.com>
-Link: https://lore.kernel.org/lkml/e97c2a5d-c815-4936-a767-ac42a3220a90@redhat.com/
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-
----
-I left out the comment about the requirement for check_vmflag_io() to be
-called with the start address of a mapping.
-It's the same for the check_huge_*() functions and there it's not
-documented either.
-Also there is only a single, correct user and any misuse will instantly
-result in visible breakage.
----
- tools/testing/selftests/mm/virtual_address_range.c |  4 ++++
- tools/testing/selftests/mm/vm_util.c               | 24 ++++++++++++++++++++++
- tools/testing/selftests/mm/vm_util.h               |  1 +
- 3 files changed, 29 insertions(+)
-
-diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
-index 386e4e46fa65b98af78dee4bb30144eb2b51f528..b380e102b22f0a44654ab046f257e8c35e8d90e9 100644
---- a/tools/testing/selftests/mm/virtual_address_range.c
-+++ b/tools/testing/selftests/mm/virtual_address_range.c
-@@ -15,6 +15,7 @@
- #include <sys/time.h>
- #include <fcntl.h>
- 
-+#include "vm_util.h"
- #include "../kselftest.h"
- 
- /*
-@@ -159,6 +160,9 @@ static int validate_complete_va_space(void)
- 		if (prot[0] != 'r')
- 			continue;
- 
-+		if (check_vmflag_io((void *)start_addr))
-+			continue;
-+
- 		/*
- 		 * Confirm whether MAP_CHUNK_SIZE chunk can be found or not.
- 		 * If write succeeds, no need to check MAP_CHUNK_SIZE - 1
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index a450ab353f8e710a6bfce347bc3a7309920c70f5..8bd2c5e59bc73bdfa617d4b11b448da84e2a3daf 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -400,3 +400,27 @@ unsigned long get_free_hugepages(void)
- 	fclose(f);
- 	return fhp;
- }
-+
-+bool check_vmflag_io(void *addr)
-+{
-+	char buffer[MAX_LINE_LENGTH];
-+	const char *flags;
-+	size_t flaglen;
-+
-+	flags = __get_smap_entry(addr, "VmFlags:", buffer, sizeof(buffer));
-+	if (!flags)
-+		ksft_exit_fail_msg("%s: No VmFlags for %p\n", __func__, addr);
-+
-+	while (true) {
-+		flags += strspn(flags, " ");
-+
-+		flaglen = strcspn(flags, " ");
-+		if (!flaglen)
-+			return false;
-+
-+		if (flaglen == strlen("io") && !memcmp(flags, "io", flaglen))
-+			return true;
-+
-+		flags += flaglen;
-+	}
-+}
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index 2eaed82099255e09ffd38ad9714994397f304685..b60ac68a9dc8893895f49946b258260f7a82218a 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -53,6 +53,7 @@ int uffd_unregister(int uffd, void *addr, uint64_t len);
- int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
- 			      bool miss, bool wp, bool minor, uint64_t *ioctls);
- unsigned long get_free_hugepages(void);
-+bool check_vmflag_io(void *addr);
- 
- /*
-  * On ppc64 this will only work with radix 2M hugepage size
-
--- 
-2.47.1
-
+thanks,
+-- Shuah
 
