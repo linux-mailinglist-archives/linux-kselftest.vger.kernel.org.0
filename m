@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-24495-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24496-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A87DEA10F34
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 19:07:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1778CA10F52
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 19:09:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E232D188B720
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 18:07:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3114C3ADD60
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2025 18:08:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F181D20D507;
-	Tue, 14 Jan 2025 18:03:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CFFA224894;
+	Tue, 14 Jan 2025 18:03:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XymEbIfq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yh85gC+k"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDEBA20CCC2;
-	Tue, 14 Jan 2025 18:03:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B5F3224890;
+	Tue, 14 Jan 2025 18:03:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736877804; cv=none; b=BfnrP4vTKCJ7Ax/+u0q07XASRQqM6gCROqdR4tGEfQ6lMPAlPO5gDYiSVZDRGWjVuLz79gp6QD7vylpWJm5Z1zudYGcSLUcCxAWBqUcMJLZB9aE/MW9N/KEUwzXN4WUT67srPlGBMRZ7yLW+mXCilLCdrTMSJzhfkYb87mbdhVE=
+	t=1736877809; cv=none; b=uwV9ACT4MYLmC2Cvi/SrvHoSJnfDIjPTVCewRGC6442kmVdJpCxB0OIP7T2Pd11XE7XEJrH10FvFtdClBTDWRd/NNn5ant3ynuDFt6YQkneLNk7Y2N/nF3Cti4SJyul1aeulx1CtC3vBjL4FtDOtxHSIRFKh3nfZfZr1uxJhYtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736877804; c=relaxed/simple;
-	bh=1Vx6MDob7DYZ0cYhjz+3te+cEC2Fukkfaa1zFfoLMDE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CFvu2u4Tp6Sx2v8lweo3hac0mICcCsbGlwoF+0A/gVxL22vJjFHZ8dk+3DvTZSuiYzafR/4ydYJWeytJJuT5rShPQhXypXWlNo6HYq2Q/ZwMjc2U9wU6wFyGAkn+SHuGeokW6vwB/sdYs/FbJ3Fam+Gw9ZXQvkVEJV59DtCrglw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XymEbIfq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A058C4CEDD;
-	Tue, 14 Jan 2025 18:03:21 +0000 (UTC)
+	s=arc-20240116; t=1736877809; c=relaxed/simple;
+	bh=/b63IGbH+aHXEuEpHipqlQZiw/AdT73vujdQ3l36d+E=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=esjuLY7ZXgYEojBu5Tdnw1O8NHZwcmz6zeChdNAm48tClM7EhmEuP5rIe0UvKq3MUKLAPARaC16I9gHnFhrwxax5BA2MKFSS7wGuFqmsg+YpmBevKeEeefcnfYgYXtiX+ae/2eHHaFtCRPcw/h7V2O7ks/yF7/xgjjaZXblxk6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yh85gC+k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC197C4CEE4;
+	Tue, 14 Jan 2025 18:03:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736877804;
-	bh=1Vx6MDob7DYZ0cYhjz+3te+cEC2Fukkfaa1zFfoLMDE=;
-	h=From:Subject:Date:To:Cc:From;
-	b=XymEbIfqgixbf8aS9k+1ttVB6CvnrQF4azha8iCptATWYrbeaG90Dv6eA1mKLADmt
-	 JbsPRwyJErUhdgEHybfW8y6godYPENZgCunjMjyObEc5xw7xxabN7v+DJ239vuKLKx
-	 J038TBaRzeaf3aVCOzMxMwuOnPxy5NTNq7SG2bjE96m7245gMAsjEQ9kbSSkdrFQWH
-	 2koT1XlKzL5bPtUoyXKMnCGLk/cTWMWlBmVHIOWGQeIuX8ElgMsFIPvFT4WZNSCPJ/
-	 ZLF9MenIYhF1ySoAJMAYkimyN5X9oe6niVh0Y6nhEdYfl4NzoWRxPp40PcwArcZ8CT
-	 e2qM8CLHaU3hQ==
+	s=k20201202; t=1736877807;
+	bh=/b63IGbH+aHXEuEpHipqlQZiw/AdT73vujdQ3l36d+E=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=Yh85gC+kGk1luu2Q4/5QXVsiJVnYu00zigUQLda8r9HZy6mxD1VLLmuiVMHB/Z1ps
+	 5RGLakHVe52MjiMvvGrt7ZuIr5g6FtM6aEKnaVWkOdwgtbtXroLesowp/7RsPU51Vt
+	 HnPpBtgRvcpHna6sWumleIytU66MfJ8N+z5nnz0OLAjmiln0duw6xU6yLiNBp8dkfB
+	 eRpVUYsVmuk9Qzvfyu2GzcJgmRBb2jU0PKkvLL/DobUPr0ono8nYoKGAzqkdxz7z1/
+	 +ErC0zQPZjXg3aEzlpveq6WpQPTCu1FvXggBJTdpuVoJYi/zj+VEDO6MAX1ZCvjJ9+
+	 nWRnLLDcw2bgw==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH net-next 0/6] mptcp: selftests: more debug in case of
- errors
-Date: Tue, 14 Jan 2025 19:03:10 +0100
-Message-Id: <20250114-net-next-mptcp-st-more-debug-err-v1-0-2ffb16a6cf35@kernel.org>
+Date: Tue, 14 Jan 2025 19:03:11 +0100
+Subject: [PATCH net-next 1/6] selftests: mptcp: simult_flows: unify errors
+ msgs
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,10 +53,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAN6mhmcC/zWNsQrDMAxEfyVorsBKmqW/Ujq4yTnVUMfIbgmE/
- HtEocPBveHd7VRhikq3bifDV6uu2UEuHU2vmBewzs7Uh34MIlfOaJ6t8bu0qXD1shp4xvOzMMx
- 4SEOSGGWMEshniiHp9ru409+mx3GcAApNQ3wAAAA=
-X-Change-ID: 20250114-net-next-mptcp-st-more-debug-err-3f3f1aa15a10
+Message-Id: <20250114-net-next-mptcp-st-more-debug-err-v1-1-2ffb16a6cf35@kernel.org>
+References: <20250114-net-next-mptcp-st-more-debug-err-v1-0-2ffb16a6cf35@kernel.org>
+In-Reply-To: <20250114-net-next-mptcp-st-more-debug-err-v1-0-2ffb16a6cf35@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
  Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
@@ -64,64 +63,103 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
  Shuah Khan <shuah@kernel.org>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <geliang@kernel.org>
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1521; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=1Vx6MDob7DYZ0cYhjz+3te+cEC2Fukkfaa1zFfoLMDE=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnhqboEWD42bX/epxILilDBKHu3xMoh5VocUrOy
- Cg+67+WQa6JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ4am6AAKCRD2t4JPQmmg
- c944D/9xP4y9lK1kwrhR1FmweCzgSRXl1LKSCx9xXpP/FDtLLzdo205/rFizMLFW7lv2/Pp1Upi
- q0jdOGUUgcltJHvoRil14tXHKiw4yGuewFIduCvqZBPr5RwqvXYMy196XwKzMKQat6hu59T61n8
- FfiWpCE5jeSUCghO93SqLnKKeHf1lhQ0cgeo1wni1Al5X+AE7QLfyFWOK0YcjdoVVwwWVbG045I
- 35/18ZLbrXFFB6zOxODh3MGgef1kGPs7y1NI/7q/X9rAkbIOEIFKHTOvotkWPg40pLtAyPSQAdT
- lIYgAKieN01AijVPsYVbaaH23bkXjKJ57wwIrG6Oq9yrVoOOFv0rP9IMAO9fKkLpzZljsrluR6j
- cKr+aYhf/tIh895wF7wB4iTTnQLD0Xv+gxs5W+KYmkmqgVLF0XA6J3u8GEePkKmi0zCy5WM8IL8
- qnax36Kr7+e+tVaRJilwKH2oyJzNljX85vm8/3GjwFFB3rF1uak2v7q+QB7YHTgG45+LgWBlZqy
- x5L2dUU3kygojQBlYDabRdJNxWtn4lai0c8A0TSxpnxdbDsIP4U3lHTaczzhxd8xcFxoHA6eIdB
- 85cQSemozPEkqEG9WkRopSO5GFAZMpt1U+xHxAwrudhjbSqC1Sn+N0F//oF4/zwtFX3jH49Km2s
- 6/YGoJrKS1OPsMA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2675; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=/b63IGbH+aHXEuEpHipqlQZiw/AdT73vujdQ3l36d+E=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBnhqboaM5i5mtI9ikWTnu1wp1kA/LxAclN7NgM5
+ oB25ecrt7CJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZ4am6AAKCRD2t4JPQmmg
+ czPNEACCjH89Q0eWe3LoqfQz97B5voQRiWjytmGBqqYKjEdZqjn40cgTg9Ykaob8ADBh+YWLV0v
+ u0cux3ENLegsdInqH3knq29B9RIO8q4lEQyi9EOBanvm2dFZITWq83mlJTalvzjwKWfcKG4wjDb
+ +Ks9GAwsFDi1Kg7N+GfmCcVfSOLp0XPK1gphaTFvHq5RA1Psrn41ToMESgC2yahq2ChkM065pfo
+ 5f4FOryWZx8j/H5rlbUujzJWHPNdlB5UPbm9wJWwUW0ggaQP2kToEXeQVS1zgUrnZF3XWWhtVaB
+ zbsDYzrXW+xPAwkqEzHnwMaQL5hFCh0/sJrZN8mXSta3uFCnqmkJJvR7y28V3vMx1vThamteRIu
+ VcN6kIZja9fKWADh0xojBgO9AgFtFlJ5Hob2zosu6QFJd/0nUGI+NJgdbjNdUDyTJM347SVg2rI
+ +TlVWcEFErHam2zSJbS5J2HtiZbNOoV1hA1Dp3l0Sjqc700mJ/gnZ8hJrl6diGVs5DkurdhbZfR
+ d2Nm28DMAOq98Y0fmzX3GC8AvRvmvToP1ytSMOL5z+rQaKp2wZaQnEsuwVJ/exbG/7H4tnLGyNY
+ h8Fi4+rIvCLT2t1g/2bj5Ao+mjlH3iyXf2eWZl2cM9En1Ci0yooc0TwWi7X6vVxyUAMMd0gvup0
+ SPNXLTycYh2Fx7w==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Here are just a bunch of small improvements for the MPTCP selftests:
+In order to unify what is printed in case of error, similar to what is
+done in mptcp_connect.sh and mptcp_join.sh, it is interesting to do the
+following modifications in simult_flows.sh:
 
-Patch 1: Unify errors messages in simult_flows: print MIB and 'ss -Me'.
+- Print the rc errors at the end of the line.
 
-Patch 2: Unify errors messages in sockopt: print MIB.
+- Print the MIB counters.
 
-Patch 3: Move common code to print debug info to mptcp_lib.sh.
+- Use the same ss options: add -M (MPTCP sockets) and -e (detailed
+  socket information).
 
-Patch 4: Use 'ss' with '-m' in case of errors.
+While at it, also print of the 'max' time only in case of success,
+because 'mptcp_connect.c' will already print this info in case of error,
+e.g.:
 
-Patch 5: Remove an unused variable.
+  transfer slower than expected! runtime 11948 ms, expected 11921 ms
 
-Patch 6: Print only the size instead of size + filename again.
-
+Reviewed-by: Geliang Tang <geliang@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Geliang Tang (1):
-      selftests: mptcp: sockopt: save nstat infos
+ tools/testing/selftests/net/mptcp/simult_flows.sh | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
 
-Matthieu Baerts (NGI0) (5):
-      selftests: mptcp: simult_flows: unify errors msgs
-      selftests: mptcp: move stats info in case of errors to lib.sh
-      selftests: mptcp: add -m with ss in case of errors
-      selftests: mptcp: connect: remove unused variable
-      selftests: mptcp: connect: better display the files size
+diff --git a/tools/testing/selftests/net/mptcp/simult_flows.sh b/tools/testing/selftests/net/mptcp/simult_flows.sh
+index 8fa77c8e9b651171a34c89bfd5c9ded0288a5bde..e98e5907d52c2d0e9c0152efda82176861905cf1 100755
+--- a/tools/testing/selftests/net/mptcp/simult_flows.sh
++++ b/tools/testing/selftests/net/mptcp/simult_flows.sh
+@@ -155,6 +155,11 @@ do_transfer()
+ 		sleep 1
+ 	fi
+ 
++	NSTAT_HISTORY=/tmp/${ns3}.nstat ip netns exec ${ns3} \
++		nstat -n
++	NSTAT_HISTORY=/tmp/${ns1}.nstat ip netns exec ${ns1} \
++		nstat -n
++
+ 	timeout ${timeout_test} \
+ 		ip netns exec ${ns3} \
+ 			./mptcp_connect -jt ${timeout_poll} -l -p $port -T $max_time \
+@@ -180,25 +185,31 @@ do_transfer()
+ 		kill ${cappid_connector}
+ 	fi
+ 
++	NSTAT_HISTORY=/tmp/${ns3}.nstat ip netns exec ${ns3} \
++		nstat | grep Tcp > /tmp/${ns3}.out
++	NSTAT_HISTORY=/tmp/${ns1}.nstat ip netns exec ${ns1} \
++		nstat | grep Tcp > /tmp/${ns1}.out
++
+ 	cmp $sin $cout > /dev/null 2>&1
+ 	local cmps=$?
+ 	cmp $cin $sout > /dev/null 2>&1
+ 	local cmpc=$?
+ 
+-	printf "%-16s" " max $max_time "
+ 	if [ $retc -eq 0 ] && [ $rets -eq 0 ] && \
+ 	   [ $cmpc -eq 0 ] && [ $cmps -eq 0 ]; then
++		printf "%-16s" " max $max_time "
+ 		mptcp_lib_pr_ok
+ 		cat "$capout"
+ 		return 0
+ 	fi
+ 
+-	mptcp_lib_pr_fail
+-	echo "client exit code $retc, server $rets" 1>&2
++	mptcp_lib_pr_fail "client exit code $retc, server $rets"
+ 	echo -e "\nnetns ${ns3} socket stat for $port:" 1>&2
+-	ip netns exec ${ns3} ss -nita 1>&2 -o "sport = :$port"
++	ip netns exec ${ns3} ss -Menita 1>&2 -o "sport = :$port"
++	cat /tmp/${ns3}.out
+ 	echo -e "\nnetns ${ns1} socket stat for $port:" 1>&2
+-	ip netns exec ${ns1} ss -nita 1>&2 -o "dport = :$port"
++	ip netns exec ${ns1} ss -Menita 1>&2 -o "dport = :$port"
++	cat /tmp/${ns1}.out
+ 	ls -l $sin $cout
+ 	ls -l $cin $sout
+ 
 
- tools/testing/selftests/net/mptcp/mptcp_connect.sh | 13 ++++---------
- tools/testing/selftests/net/mptcp/mptcp_join.sh    |  9 ++-------
- tools/testing/selftests/net/mptcp/mptcp_lib.sh     | 21 +++++++++++++++++++++
- tools/testing/selftests/net/mptcp/mptcp_sockopt.sh | 17 ++++++++++++-----
- tools/testing/selftests/net/mptcp/simult_flows.sh  | 21 ++++++++++++++-------
- 5 files changed, 53 insertions(+), 28 deletions(-)
----
-base-commit: 9c7ad35632297edc08d0f2c7b599137e9fb5f9ff
-change-id: 20250114-net-next-mptcp-st-more-debug-err-3f3f1aa15a10
-
-Best regards,
 -- 
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+2.47.1
 
 
