@@ -1,65 +1,66 @@
-Return-Path: <linux-kselftest+bounces-24573-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24574-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C604A124DD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 14:36:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E54EA124D9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 14:36:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A4DC37A309F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 13:35:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 295E41667C4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 13:36:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD8C824225A;
-	Wed, 15 Jan 2025 13:35:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DA2E242274;
+	Wed, 15 Jan 2025 13:35:41 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C172419F5;
-	Wed, 15 Jan 2025 13:35:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA57242250;
+	Wed, 15 Jan 2025 13:35:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736948139; cv=none; b=f5/auFki2car/Gq7M/NG0bLBEOBCdsT/aGBZ3o5Jh4sZf3V3w57uB8m4jRD0H4x7i8feLRdO7yCnFfbFKWwGMgOWeuYNAlk9KX11X11WvKgAVpttM/0CezkpVyr33qWe0FOshUeHorMoj2kAfWG1r1kmuGgXxpT5luDJnXvryHk=
+	t=1736948141; cv=none; b=FAraTJvpBbJ51E69zX/r+mtSdwCdRQo0yPN4TJWrteQy3sSNnsTkHMh9HyPRJVQ3gvLJ5T11AjsQXR405aTmWMZSH9HR1bWCgSpWMAN0fplNrf6MCgZjVTFGHoDe1+Opn5hojlTH0M5TafUd8phF+WyrlkdyygfVWG/J6JYRh+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736948139; c=relaxed/simple;
-	bh=I44r0ohDanmuyGUNmsb93UKVYeAjH4Ix9dgCMmolnZA=;
+	s=arc-20240116; t=1736948141; c=relaxed/simple;
+	bh=+5zPit+6w4Q87PebYLLQqICHMl8W7vM3JOE4biu2VRY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aLxwsiefkgTAl6/Wbq+TbCjeUaNWcDG+8soPYSShk2k8g04i9xQTAupqaZrPpXmnApOFKIIDceBhBCUyfAgVCn7kfVtJSBrr736mrsxg3RaaX2mzVE7n2yw8e09tIGXCAGiPlhLmDqCIyt/fie5r/nL7RtixWSYZ8G7viQcBuWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.43
+	 In-Reply-To:To:Cc; b=rXKu8/NVgNX0iu0ErBrTqVBl/zq/9tb1HHXjyEF9IXztavphxN3rCiVXv5Z1LkaRhrDavSumOT3lgsUrdLPg4JNW6lhY1I9F3j8k1eW5SESnQZWyYXrZSaDmmTGPPfg+h+OtSGYMBUDm2oZYj2QXdWjvYOFN1YXZwyr08Fu349I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5d3d0205bd5so10247855a12.3;
-        Wed, 15 Jan 2025 05:35:37 -0800 (PST)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5da135d3162so912675a12.3;
+        Wed, 15 Jan 2025 05:35:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736948136; x=1737552936;
+        d=1e100.net; s=20230601; t=1736948137; x=1737552937;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=df2IhOg8gjz9sUPxNfKqvMxzOJiOqxvGrLLj83bUoYA=;
-        b=hLv3AFBX8ZVqbIlicnKbuUKUZeudhardmH9m5JK2G48NS9ACqjzq9Jb44cGHAEFmGG
-         lMWhS071vPWTEct9fN9N3JFXC/M3aAoKnbPyEPC1cuouEIycGbXfprh2baHDHhPi2Gfp
-         c7iJvi60jxArCPHcFD61rYPk8Vqe5z+6deh+DLqerjdx585tPV2yRUOtpSfI78RAeZr+
-         JU6lB+mea+EiH+LwBnkocrPaFOaKDtWqM1sH6ssfcoA84vBdlwna9Isk2Hr1u0RjwZA+
-         T6aOGZfw4JojmKE3mbDdk5NX+b9QXhXvrwEUW7IpCjZveeCqH6KEAmhWjOieNYaTxW5x
-         tVzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV+8mwTy9nxE4ZUmQg9EXXxLlNB5ItuAq1/BCQpeGC1ryzHliqi0zq80ZSeXzGNjDzpAMFWMcr9tWMyasARwq/2@vger.kernel.org, AJvYcCWQpgral8UBDvNghmQyEqxqG7xnfVQ/CHAZJAduu7PZHFpDiG1Zvm6AMXK4xZ0RmsQ0kAHlia68sNOGns8g@vger.kernel.org, AJvYcCWjjTogMtORp7XEQzuCGGHOaEpn7BNCk+XT0RMY97SOEWc6rKWOcKJs289TCZ1qke3+uZEXgJFKkhs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEmsKY1G1RAmy3PDCCHNIWy244HeYYTqoKoj6zuiqgEnTLJHs2
-	k0p28SkcJ5AB5/hbG3Ivqxe7foF5+2wvQUD6aF/okVGQk42OumUK3LMfoA==
-X-Gm-Gg: ASbGncs+DIrAZ7zGa6C+gVggdBoa6AwGr1YLkQcG+n2Or3ajrYxOPraIzRN015OvhQZ
-	35ih5e71w4ezQWff/ydTh9Boj2BIvRvgIAcBVv/LUyK/d+TL1AabNmIaNSWLjGK7DSJYfaKClSz
-	Rh3K1m1Y3sh7NR29oFduztGn+UCPGiYQVw0ZnGZuIJQU/7FX9+EJs2AnHkN9F5Q9Ku90hUOFZ8D
-	aSLS8JZCAJnhJco5Eb8hiBwXTB0L27EKzgJLScIh/w8UEw=
-X-Google-Smtp-Source: AGHT+IH+jzZB+6H7tb2ufIL0iv9VO3Ke5GHd3vthkaBLWfZZiuwGOj0yB6/tLGzksHnYgKgAypln0A==
-X-Received: by 2002:a05:6402:51d0:b0:5d2:7346:3ecb with SMTP id 4fb4d7f45d1cf-5d972e08366mr27860822a12.12.1736948135564;
-        Wed, 15 Jan 2025 05:35:35 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:1::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d99046d7e3sm7183701a12.60.2025.01.15.05.35.33
+        bh=ec7/MpEi/atSJrAfxhBY2CBnYVqA9MsTtmzPCtszyDs=;
+        b=b7rrZJWBjygi8FLdDMuuw0xm3JgetqvX5P2rMHi5l4mBcImpOl/Xnp1+Le8vMYPChs
+         n9r3LLUbPfVJDyW2/z7ho3sj3/5ww19qtoF8i76gw1z4Hr/QWm6ZMz1RB9d/zxh4M2OL
+         xgANfsuCQMkYAFkR3KUlj8tRDjDYB84JjijSMx6U9XzvGBm/kWTYvfgJicZwXhc+jefy
+         awhZ+RT7Xkn31N4NY1vCQG4g4A/RDvwsGL7ig1w5tvhTGcRpW+NxOabk45PWFzLEt95e
+         drrMl7HtmWgnXIBfZ4yheFJC7izFMG7M37K/tqMTvbhBcXUZNKWR50WmSNBbFrRTpBMz
+         Cm3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUKntCjvsBYSvigdZuUjd5kg7s3k+3KLNBOo66i8jv/5EsKIRjhEen3uk5qF1NdCmE025oXGrj9Yeqi4HEBeJ6R@vger.kernel.org, AJvYcCUmDzX1FbSZeaDpf9fAHi0MRDcnSF7GxzJaUaK9ZtZLx5dSBH8CSts40x/bLh2iyhG4ZKriN5OzUKdp5jo1@vger.kernel.org, AJvYcCXrclpNq6eV/KUq/JBjeKdvR2GoVYL7do65o/Vzeg0HCQQvv9ZEDWBZymE8OcYQvkKZLRplYObwXXc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxia6Bi53oq4JxtNfurH22ZsrY82IBlAr+fADi8FvmkpyB5l56U
+	E8U2YXnZHAkcoc+plAKFvpFt52Yj0cFFj6Rnzcve2DcAv3+MPEXm
+X-Gm-Gg: ASbGncvPEAlQuKid4O6XxMGu2ndHig7R4s+LjvKCI5ckd/yGaKb217qUN2vLua9Mvp2
+	G2IDmtrSQCc6og+//FK4nyCuqc0LbnHI5yB3KJU0xUNKRhWJkMmIefNzWEhvDH5CccBcQd/I3Rf
+	ZyUcqZ5Zhmdh+YMGMjUMTDYeeoHO4oBOBYgpX4ZIBuPaUMWjZB5qTFDkmrMrsBdfODAoe3ZrTOg
+	+pLNvfo5stsaR63J+Ipx7Q0I9on9fW+5Dr+Df/L3wpkAeU=
+X-Google-Smtp-Source: AGHT+IH09HBaE5F9R+1j7gXj0uFhR8rhyxsE5IJFKPryqtPDjj7EmdMPOhto+lldRrb+zhknk2Yo9A==
+X-Received: by 2002:a17:906:d555:b0:aa6:7b34:c1a8 with SMTP id a640c23a62f3a-ab2ab70a5a8mr2744648966b.55.1736948137238;
+        Wed, 15 Jan 2025 05:35:37 -0800 (PST)
+Received: from localhost ([2a03:2880:30ff:3::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab2c906200dsm756580566b.40.2025.01.15.05.35.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2025 05:35:34 -0800 (PST)
+        Wed, 15 Jan 2025 05:35:36 -0800 (PST)
 From: Breno Leitao <leitao@debian.org>
-Date: Wed, 15 Jan 2025 05:35:18 -0800
-Subject: [PATCH net-next v2 1/5] netconsole: Rename userdata to extradata
+Date: Wed, 15 Jan 2025 05:35:19 -0800
+Subject: [PATCH net-next v2 2/5] netconsole: Helper to count number of used
+ entries
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,7 +69,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250115-netcon_cpu-v2-1-95971b44dc56@debian.org>
+Message-Id: <20250115-netcon_cpu-v2-2-95971b44dc56@debian.org>
 References: <20250115-netcon_cpu-v2-0-95971b44dc56@debian.org>
 In-Reply-To: <20250115-netcon_cpu-v2-0-95971b44dc56@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -81,300 +82,74 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  Breno Leitao <leitao@debian.org>, kernel-team@meta.com, max@kutsevol.com, 
  thepacketgeek@gmail.com
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10512; i=leitao@debian.org;
- h=from:subject:message-id; bh=I44r0ohDanmuyGUNmsb93UKVYeAjH4Ix9dgCMmolnZA=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnh7mjB5DwkkBvfj6RL/Z/OSwlrlFr9WV/+JG6t
- PyDuzkSsnqJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ4e5owAKCRA1o5Of/Hh3
- bYqND/472GKbeKPvYgOZBGTzDezqgW2rctj19Zm5Ii0h2NlBEszHZue1/TtDEjZ/2yPIZ7h1tO5
- 6vz4NkmN3vXRjDaZH/69FLVuatnWnoUrfSlwUtwiMwTwom5+SMngoK5qVZKpUnYDyruE2NY33sL
- lMwDHqtft4fos5PHEIVetAJJO94pvvHPQVllUaTkJ4Mj5quHyxN4AUT0eHECX8rd+09mEoq1eSX
- wt577hGMVMoOfK6nldzjeghgsCx5Gpxlw8ElXNxWkcuDMOZiqRWVol2eMGVFdI8jwqm5yl/fuWd
- lYYtuA7KW4Jfbqb+bvKAZxJeJFVNqLBA1OQAXdSoyQB52J2ISopeIbVJC3Yc42PPq0wZUXw18r6
- XAI/6b0PQIZ+6GNa/qeDQ39qeHdE0oxI/dbbs4xOjFsMrjQdyrQRK4tfhdXd4DCyAvqhiktiQtk
- UxkjLmGXlPZVIx3FR9lKukmWmQgFAnT1ZcY0Yn1QetZQ2q3L9GHoQwph1eX2OFEaHpEbQw8DB2z
- 7fLoD1coFKFdV2CJd6elbo7EQyAzoNvgxbAbg4RGVf5antS7sJgOumW63g1eAjM6ghYtczQYW8t
- YQfGZ9zS4hYld4wcSQPYugKgrVdOIoIhy2JumPdXNK81+GoxRZxR8vYU7VRZzS0lOv2wXaJBK/S
- xKFL8+2bDe7ELYg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1997; i=leitao@debian.org;
+ h=from:subject:message-id; bh=+5zPit+6w4Q87PebYLLQqICHMl8W7vM3JOE4biu2VRY=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnh7mjq51PJL8Ycf9UXn9bXWsFHJY2bHIhz8/j6
+ yD2bPtiDH+JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ4e5owAKCRA1o5Of/Hh3
+ bWkuD/sEih3WhwQkHz5ZBfOd+xWT6WuuCHltCtJPb69SIob1kvyXGrh3WRYEUruuP1BzvglbWws
+ OPX+xu2mG3AS+LzWQ9O7thr7/MMUilEKfMCfMe/v2u69awx+wdNNDKpJVg8iigcH7vJuF6bskOC
+ yjuLvNQk54JiWQ2IRNKAbfQPXRiNkR9abgzWvTW8P7V4G2KeZ/4uHYuJtihJSLBDScZbHvsdhKC
+ uFc2hAkgczwPGSf7GqIve+4vL0Z1b8e44fXUDlRz42BHwO7ua7klFPE1yO+uU1Iy23/45JRRxPW
+ FHe4cUDrgg3Mq7VDac3dxKjSnlIx3/Xi+4bkCu8djGIqcD1+w/tEePh6xV53pk8gqVR9fA1hOmG
+ GIrN8BwOjCa9StFMUF+DlTX67zcCgOyTruvzPUFAct5N52BoQg5/db3AFQUo4A7WI164WblqedS
+ 8AbWCSpFXJmXmlxkEbWzaS0Q1x35j686AUlJMF4y8GhzNWW9GU+QfcZtDvSPSv9ToOweJflJWJZ
+ vWeCH+oCT6ygA3zEahgTmEyFproaXvqqeixhQLIuW/8ri71eG7wxxHsXI0gus6LI4qjKNs3dEAB
+ m3HXfVw2skRe3nRH1QFZvLbC9rgbGaps/SUzre0M6PiWBS36v3Qxk7mykzLqVHLVkJUnGEqBh+f
+ r4UA61CyiU8hsOA==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Rename "userdata" to "extradata" since this structure will hold both
-user and system data in future patches. Keep "userdata" term only for
-data that comes from userspace (configfs), while "extradata" encompasses
-both userdata and future kerneldata.
+Add a helper function nr_extradata_entries() to count the number of used
+extradata entries in a netconsole target. This refactors the duplicate
+code for counting entries into a single function, which will be reused
+by upcoming CPU sysdata changes.
 
-These are the rules of the design
-
-1. extradata_complete will hold userdata and sysdata (coming)
-2. sysdata will come after userdata_length
-3. extradata_complete[userdata_length] string will be replaced at every
-   message
-5. userdata is replaced when configfs changes (update_userdata())
-6. sysdata is replaced at every message
-
-Example:
-  extradata_complete = "userkey=uservalue cpu=42"
-  userdata_length = 17
-  sysdata_length = 7 (space (" ") is part of sysdata)
-
-Since sysdata is still not available, you will see the following in the
-send functions:
-
-	extradata_len = nt->userdata_length;
-
-The upcoming patches will, which will add support for sysdata, will
-change it to:
-
-	extradata_len = nt->userdata_length + sysdata_len;
+The helper uses list_count_nodes() to count the number of children in
+the userdata group configfs hierarchy.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- drivers/net/netconsole.c | 84 ++++++++++++++++++++++++------------------------
- 1 file changed, 42 insertions(+), 42 deletions(-)
+ drivers/net/netconsole.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
-index 86ab4a42769a49eebe5dd6f01dafafc6c86ec54f..5ef069e8277efa87d6f00d08277dcfe97a858cf9 100644
+index 5ef069e8277efa87d6f00d08277dcfe97a858cf9..108ec4f836b62860832c601768546c0ecbdb1153 100644
 --- a/drivers/net/netconsole.c
 +++ b/drivers/net/netconsole.c
-@@ -45,12 +45,12 @@ MODULE_DESCRIPTION("Console driver for network interfaces");
- MODULE_LICENSE("GPL");
- 
- #define MAX_PARAM_LENGTH		256
--#define MAX_USERDATA_ENTRY_LENGTH	256
--#define MAX_USERDATA_VALUE_LENGTH	200
-+#define MAX_EXTRADATA_ENTRY_LEN		256
-+#define MAX_EXTRADATA_VALUE_LEN	200
- /* The number 3 comes from userdata entry format characters (' ', '=', '\n') */
--#define MAX_USERDATA_NAME_LENGTH	(MAX_USERDATA_ENTRY_LENGTH - \
--					MAX_USERDATA_VALUE_LENGTH - 3)
--#define MAX_USERDATA_ITEMS		16
-+#define MAX_EXTRADATA_NAME_LEN		(MAX_EXTRADATA_ENTRY_LEN - \
-+					MAX_EXTRADATA_VALUE_LEN - 3)
-+#define MAX_EXTRADATA_ITEMS		16
- #define MAX_PRINT_CHUNK			1000
- 
- static char config[MAX_PARAM_LENGTH];
-@@ -102,8 +102,8 @@ struct netconsole_target_stats  {
-  * @list:	Links this target into the target_list.
-  * @group:	Links us into the configfs subsystem hierarchy.
-  * @userdata_group:	Links to the userdata configfs hierarchy
-- * @userdata_complete:	Cached, formatted string of append
-- * @userdata_length:	String length of userdata_complete
-+ * @extradata_complete:	Cached, formatted string of append
-+ * @userdata_length:	String length of usedata in extradata_complete.
-  * @stats:	Packet send stats for the target. Used for debugging.
-  * @enabled:	On / off knob to enable / disable target.
-  *		Visible from userspace (read-write).
-@@ -129,7 +129,7 @@ struct netconsole_target {
- #ifdef	CONFIG_NETCONSOLE_DYNAMIC
- 	struct config_group	group;
- 	struct config_group	userdata_group;
--	char userdata_complete[MAX_USERDATA_ENTRY_LENGTH * MAX_USERDATA_ITEMS];
-+	char extradata_complete[MAX_EXTRADATA_ENTRY_LEN * MAX_EXTRADATA_ITEMS];
- 	size_t			userdata_length;
- #endif
- 	struct netconsole_target_stats stats;
-@@ -687,7 +687,7 @@ static ssize_t remote_mac_store(struct config_item *item, const char *buf,
- 
- struct userdatum {
- 	struct config_item item;
--	char value[MAX_USERDATA_VALUE_LENGTH];
-+	char value[MAX_EXTRADATA_VALUE_LEN];
- };
- 
- static struct userdatum *to_userdatum(struct config_item *item)
-@@ -724,13 +724,13 @@ static void update_userdata(struct netconsole_target *nt)
- 
- 	/* Clear the current string in case the last userdatum was deleted */
- 	nt->userdata_length = 0;
--	nt->userdata_complete[0] = 0;
-+	nt->extradata_complete[0] = 0;
- 
- 	list_for_each(entry, &nt->userdata_group.cg_children) {
- 		struct userdatum *udm_item;
- 		struct config_item *item;
- 
--		if (WARN_ON_ONCE(child_count >= MAX_USERDATA_ITEMS))
-+		if (WARN_ON_ONCE(child_count >= MAX_EXTRADATA_ITEMS))
- 			break;
- 		child_count++;
- 
-@@ -738,19 +738,19 @@ static void update_userdata(struct netconsole_target *nt)
- 		udm_item = to_userdatum(item);
- 
- 		/* Skip userdata with no value set */
--		if (strnlen(udm_item->value, MAX_USERDATA_VALUE_LENGTH) == 0)
-+		if (strnlen(udm_item->value, MAX_EXTRADATA_VALUE_LEN) == 0)
- 			continue;
- 
--		/* This doesn't overflow userdata_complete since it will write
--		 * one entry length (1/MAX_USERDATA_ITEMS long), entry count is
-+		/* This doesn't overflow extradata_complete since it will write
-+		 * one entry length (1/MAX_EXTRADATA_ITEMS long), entry count is
- 		 * checked to not exceed MAX items with child_count above
- 		 */
--		complete_idx += scnprintf(&nt->userdata_complete[complete_idx],
--					  MAX_USERDATA_ENTRY_LENGTH, " %s=%s\n",
-+		complete_idx += scnprintf(&nt->extradata_complete[complete_idx],
-+					  MAX_EXTRADATA_ENTRY_LEN, " %s=%s\n",
- 					  item->ci_name, udm_item->value);
- 	}
--	nt->userdata_length = strnlen(nt->userdata_complete,
--				      sizeof(nt->userdata_complete));
-+	nt->userdata_length = strnlen(nt->extradata_complete,
-+				      sizeof(nt->extradata_complete));
+@@ -659,6 +659,16 @@ static ssize_t remote_ip_store(struct config_item *item, const char *buf,
+ 	return ret;
  }
  
- static ssize_t userdatum_value_store(struct config_item *item, const char *buf,
-@@ -761,7 +761,7 @@ static ssize_t userdatum_value_store(struct config_item *item, const char *buf,
++/* Count number of entries we have in extradata.
++ * This is important because the extradata_complete only supports
++ * MAX_EXTRADATA_ITEMS entries. Before enabling any new {user,sys}data
++ * feature, number of entries needs to checked for available space.
++ */
++static size_t count_extradata_entries(struct netconsole_target *nt)
++{
++	return list_count_nodes(&nt->userdata_group.cg_children);
++}
++
+ static ssize_t remote_mac_store(struct config_item *item, const char *buf,
+ 		size_t count)
+ {
+@@ -808,15 +818,13 @@ static struct config_item *userdatum_make_item(struct config_group *group,
+ 	struct netconsole_target *nt;
+ 	struct userdatum *udm;
  	struct userdata *ud;
- 	ssize_t ret;
+-	size_t child_count;
  
--	if (count > MAX_USERDATA_VALUE_LENGTH)
-+	if (count > MAX_EXTRADATA_VALUE_LEN)
- 		return -EMSGSIZE;
- 
- 	mutex_lock(&dynamic_netconsole_mutex);
-@@ -810,13 +810,13 @@ static struct config_item *userdatum_make_item(struct config_group *group,
- 	struct userdata *ud;
- 	size_t child_count;
- 
--	if (strlen(name) > MAX_USERDATA_NAME_LENGTH)
-+	if (strlen(name) > MAX_EXTRADATA_NAME_LEN)
+ 	if (strlen(name) > MAX_EXTRADATA_NAME_LEN)
  		return ERR_PTR(-ENAMETOOLONG);
  
  	ud = to_userdata(&group->cg_item);
  	nt = userdata_to_target(ud);
- 	child_count = list_count_nodes(&nt->userdata_group.cg_children);
--	if (child_count >= MAX_USERDATA_ITEMS)
-+	if (child_count >= MAX_EXTRADATA_ITEMS)
+-	child_count = list_count_nodes(&nt->userdata_group.cg_children);
+-	if (child_count >= MAX_EXTRADATA_ITEMS)
++	if (count_extradata_entries(nt) >= MAX_EXTRADATA_ITEMS)
  		return ERR_PTR(-ENOSPC);
  
  	udm = kzalloc(sizeof(*udm), GFP_KERNEL);
-@@ -1118,11 +1118,11 @@ static void send_msg_no_fragmentation(struct netconsole_target *nt,
- 				      int release_len)
- {
- 	static char buf[MAX_PRINT_CHUNK]; /* protected by target_list_lock */
--	const char *userdata = NULL;
-+	const char *extradata = NULL;
- 	const char *release;
- 
- #ifdef CONFIG_NETCONSOLE_DYNAMIC
--	userdata = nt->userdata_complete;
-+	extradata = nt->extradata_complete;
- #endif
- 
- 	if (release_len) {
-@@ -1134,10 +1134,10 @@ static void send_msg_no_fragmentation(struct netconsole_target *nt,
- 		memcpy(buf, msg, msg_len);
- 	}
- 
--	if (userdata)
-+	if (extradata)
- 		msg_len += scnprintf(&buf[msg_len],
- 				     MAX_PRINT_CHUNK - msg_len,
--				     "%s", userdata);
-+				     "%s", extradata);
- 
- 	send_udp(nt, buf, msg_len);
- }
-@@ -1154,24 +1154,24 @@ static void send_fragmented_body(struct netconsole_target *nt, char *buf,
- 				 const char *msgbody, int header_len,
- 				 int msgbody_len)
- {
--	const char *userdata = NULL;
-+	const char *extradata = NULL;
- 	int body_len, offset = 0;
--	int userdata_len = 0;
-+	int extradata_len = 0;
- 
- #ifdef CONFIG_NETCONSOLE_DYNAMIC
--	userdata = nt->userdata_complete;
--	userdata_len = nt->userdata_length;
-+	extradata = nt->extradata_complete;
-+	extradata_len = nt->userdata_length;
- #endif
- 
- 	/* body_len represents the number of bytes that will be sent. This is
- 	 * bigger than MAX_PRINT_CHUNK, thus, it will be split in multiple
- 	 * packets
- 	 */
--	body_len = msgbody_len + userdata_len;
-+	body_len = msgbody_len + extradata_len;
- 
- 	/* In each iteration of the while loop below, we send a packet
- 	 * containing the header and a portion of the body. The body is
--	 * composed of two parts: msgbody and userdata. We keep track of how
-+	 * composed of two parts: msgbody and extradata. We keep track of how
- 	 * many bytes have been sent so far using the offset variable, which
- 	 * ranges from 0 to the total length of the body.
- 	 */
-@@ -1198,36 +1198,36 @@ static void send_fragmented_body(struct netconsole_target *nt, char *buf,
- 
- 		/* msgbody was finally written, either in the previous
- 		 * messages and/or in the current buf. Time to write
--		 * the userdata.
-+		 * the extradata.
- 		 */
- 		msgbody_written |= offset + this_offset >= msgbody_len;
- 
--		/* Msg body is fully written and there is pending userdata to
--		 * write, append userdata in this chunk
-+		/* Msg body is fully written and there is pending extradata to
-+		 * write, append extradata in this chunk
- 		 */
- 		if (msgbody_written && offset + this_offset < body_len) {
- 			/* Track how much user data was already sent. First
- 			 * time here, sent_userdata is zero
- 			 */
--			int sent_userdata = (offset + this_offset) - msgbody_len;
-+			int sent_extradata = (offset + this_offset) - msgbody_len;
- 			/* offset of bytes used in current buf */
- 			int preceding_bytes = this_chunk + this_header;
- 
--			if (WARN_ON_ONCE(sent_userdata < 0))
-+			if (WARN_ON_ONCE(sent_extradata < 0))
- 				return;
- 
--			this_chunk = min(userdata_len - sent_userdata,
-+			this_chunk = min(extradata_len - sent_extradata,
- 					 MAX_PRINT_CHUNK - preceding_bytes);
- 			if (WARN_ON_ONCE(this_chunk < 0))
- 				/* this_chunk could be zero if all the previous
- 				 * message used all the buffer. This is not a
--				 * problem, userdata will be sent in the next
-+				 * problem, extradata will be sent in the next
- 				 * iteration
- 				 */
- 				return;
- 
- 			memcpy(buf + this_header + this_offset,
--			       userdata + sent_userdata,
-+			       extradata + sent_extradata,
- 			       this_chunk);
- 			this_offset += this_chunk;
- 		}
-@@ -1285,17 +1285,17 @@ static void send_msg_fragmented(struct netconsole_target *nt,
- static void send_ext_msg_udp(struct netconsole_target *nt, const char *msg,
- 			     int msg_len)
- {
--	int userdata_len = 0;
-+	int extradata_len = 0;
- 	int release_len = 0;
- 
- #ifdef CONFIG_NETCONSOLE_DYNAMIC
--	userdata_len = nt->userdata_length;
-+	extradata_len = nt->userdata_length;
- #endif
- 
- 	if (nt->release)
- 		release_len = strlen(init_utsname()->release) + 1;
- 
--	if (msg_len + release_len + userdata_len <= MAX_PRINT_CHUNK)
-+	if (msg_len + release_len + extradata_len <= MAX_PRINT_CHUNK)
- 		return send_msg_no_fragmentation(nt, msg, msg_len, release_len);
- 
- 	return send_msg_fragmented(nt, msg, msg_len, release_len);
 
 -- 
 2.43.5
