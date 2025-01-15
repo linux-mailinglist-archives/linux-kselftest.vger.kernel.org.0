@@ -1,101 +1,107 @@
-Return-Path: <linux-kselftest+bounces-24587-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24588-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C7B5A129AE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 18:21:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23FE8A129D0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 18:26:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08D493A77AD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 17:21:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4786716621D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 17:26:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4096C18C939;
-	Wed, 15 Jan 2025 17:21:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDE7F1C1AAA;
+	Wed, 15 Jan 2025 17:25:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hccsjDLT"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="SOPkBzoe";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Gf0Z5MB3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3B7181334
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2025 17:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616A543ACB;
+	Wed, 15 Jan 2025 17:25:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736961687; cv=none; b=cGgrXQKucC9g/lQa0biskO3J8ggFxLLwE0b4HWdzAEHR6aFkMHmqBGy43fyQ/IgAa8ocQ1b6TQsf1w/jvMBJ2GI/CuveNIji8hALZp9/Au1xmSYBzFiPPcYgKhWpdgZTQwv2RhJkFEGIOq6l24dWa3J7prvPFG0+vRILHxoBguo=
+	t=1736961950; cv=none; b=C7jTR72YtTVxs/F4kTe0dWqt77b5CDhoKdHoKN5+W0QKCOxQUgthAtPXcffklVQER8zwdU9/FAONSuKuR3QjG+zN8ySyC7NMWLKage4Z1+Pv2kNDwGiITVZQ3BZIHS9mvhksAdl/ulZLvXwARSs7loI+knDWC4XJ120psbpl204=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736961687; c=relaxed/simple;
-	bh=qv8K6P+rJ3N3NWZzO4UOpR58BJ5OlP70iiFx0t6OsTs=;
+	s=arc-20240116; t=1736961950; c=relaxed/simple;
+	bh=L/y/gio9PHgozPJQ5DdFgec3HVA+WmVn2Yosa/ULK/M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jO0iU7WJ2AeHVgB8l3dyjIMqgb3UOSuyxdcpc57H5eMKPpljkBowadcV8jv3fzUs8EAqqrjcElKpV4a5/kzCo35b+OE1O58MrH0r9HipfEZod22B5EuWwLGfyJ+odL2eeCUzi1CMDwbBtGkyDorIrtQ+qhDrhiNp1qtv8lPs1f4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hccsjDLT; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736961684;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=n7fD6FZnMW/OK3LA1vYZfY+rnhacvCh2TilJm5lNlJg=;
-	b=hccsjDLTmRjg3mGKUiuFmwXeUMZ7LMZhgSf59fjolI46cvyTMjcUhcNMZStrzpeWBg3bOu
-	aQfzg8/EXrup1oP5hsJ/wbSCr4XRmsSO5qmXRId2b7VSYT/dTqgbiV1B+GQQMtgoYe9p3t
-	zXV7IlH9w0MFkRNRkH5IZmIGHaNoYb4=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-356-xHh68VnCMS25TkJqjXHprQ-1; Wed, 15 Jan 2025 12:21:22 -0500
-X-MC-Unique: xHh68VnCMS25TkJqjXHprQ-1
-X-Mimecast-MFC-AGG-ID: xHh68VnCMS25TkJqjXHprQ
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-2ef80d30df1so104554a91.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2025 09:21:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736961682; x=1737566482;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n7fD6FZnMW/OK3LA1vYZfY+rnhacvCh2TilJm5lNlJg=;
-        b=bcSrUA5CBCngyP4NtYKF+iHj7na42NexDb3tXjuvZ3k6gfuosYZtxBXi0V/5yp2aFG
-         hOJxCBjyS1TDmmzG9oSnwX/d4gzS2TkAbZXp65tmT4ypxe7GHJgdodHRc4sss8GB9MOf
-         oKekOqGMBvzil+iiEDvGujXYyQL/PpE6YUMBQaFVBjSHI25qLxF782bKavcvUww0DiOE
-         gxYnbb/MXdCcagfWl+D3BeQLkJ4mdHYSFMchDSz18NpHiP1cMz+OCU08xbR7C7A92A3J
-         nYOS3obzZFY+2lJCNQ/d71vfIMMn1NDHxowoqxl5a8mMglXolNBlx01hjdZf4AK3ZCHh
-         7VFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV6r3829zYZ/GhT2Yeok9/6Z95ydDjDvGZl4D7mYDLpnt7SySW00F3g1EWIHqr5hUq2akUUkHhwI1ZFmq5Z+Xo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHiyboo8svRhL4xiZFCKoJQviieYDP8Cl+QOIbvSjr4mrnjEG3
-	Yw3fnAjhz6o8njjRPspFrL+2shOoVRWFZgyr2p8auDdSBQ5+f9xqJTk/J3mWi+zw70gcZ5CqNI3
-	iKAV46S8cgrq/xwhSkKu9KdjFEIxXmj2HdaaX9kLOIYUrmYlh5N++5TuQMGf2eax0kw==
-X-Gm-Gg: ASbGncv10Lq2o3WA6GDqHKFlKs6M9rDHm5WJeR44ounlHaHoaGgbAIptp+FWlca5MsF
-	yb8cvtFZP4DA/zWwSAnSQ2plDSYUDl+yqO/uAnmxxCQvaACUyWBaK0tlgnDS/zH0kNzE3l8HPK3
-	dTJJEbUivIYBHKb6ltxfxRKqCL6yXuXG5mEpKbkdAFqR00fhQR82QUBQM48dZfxjddqpXj2RuoN
-	YIrnl9v+cVnfigK5PnvveR0aMjk4puvsAYXkiJ6aJsf1YhZ9Hg1CSU//KUqmpZOsVwhc3LnYwWH
-	boDDzHntxZq/nPNRVQ==
-X-Received: by 2002:a05:6a00:914b:b0:72d:35ed:214b with SMTP id d2e1a72fcca58-72d35ed2202mr34314257b3a.24.1736961681637;
-        Wed, 15 Jan 2025 09:21:21 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHSsNepujGNbz1J1IXBjb/0km3pMtHIrAFEFy5rxiY9EIHAZSxb6F0qyHmauJ7UyfeA7MZUmQ==
-X-Received: by 2002:a05:6a00:914b:b0:72d:35ed:214b with SMTP id d2e1a72fcca58-72d35ed2202mr34314191b3a.24.1736961680947;
-        Wed, 15 Jan 2025 09:21:20 -0800 (PST)
-Received: from x1n (pool-99-254-114-190.cpe.net.cable.rogers.com. [99.254.114.190])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d4067f84csm9648975b3a.142.2025.01.15.09.21.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2025 09:21:20 -0800 (PST)
-Date: Wed, 15 Jan 2025 12:21:15 -0500
-From: Peter Xu <peterx@redhat.com>
-To: Ryan Roberts <ryan.roberts@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-	Shuah Khan <shuah@kernel.org>, David Hildenbrand <david@redhat.com>,
-	=?utf-8?Q?Miko=C5=82aj?= Lenczewski <miko.lenczewski@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] mm: Clear uffd-wp PTE/PMD state on mremap()
-Message-ID: <Z4fui1wQ97Hlmbqd@x1n>
-References: <20250107144755.1871363-1-ryan.roberts@arm.com>
- <20250107144755.1871363-2-ryan.roberts@arm.com>
- <26ee9ae0-405f-4085-a864-48d1ee6371f1@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=h+Ov6yhHEGIgRzLU3/Ga2auY4uOzrFxd+YRdnAvhY1ZeCetu10mewSaIMg6doM6rJMcqMrLT6fj2pwcDcFKbu3zuSN4jSaf/bXXZEyrLPVE9d85imqnXPopRwItXzJAjxCH0nJtalYfSxvcimsk96NnWxP05oqWamxoU9fTGqfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=SOPkBzoe; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Gf0Z5MB3; arc=none smtp.client-ip=103.168.172.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 53A75114017A;
+	Wed, 15 Jan 2025 12:25:46 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-09.internal (MEProxy); Wed, 15 Jan 2025 12:25:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1736961946; x=
+	1737048346; bh=yj/IsjT0ULiPtO76mLIqcNBspRAdw74njWDzregRk4A=; b=S
+	OPkBzoeR3sU0W8SJW0BxpdupLdfVxNkLTzq3D4PhITXJzWPYxy56UiQLIqD+KwLB
+	wzx4yd8JZQcrOO8tVkKcaVxPFbltNXRu4oM/G1DbmOTpbn9bpDklzJmhbsxlJ3G1
+	oIw/VuguGPmASTE2RpqukqavwT4MYYtx0WPoZikZEFvNQAt5kqgTy4lKnTM59YGj
+	JFUojxw24DHZEtjMZyuKfQ4Po1TGM+NSI9DrbYeD7SlpyGdRXa9YKgmwvsg3jmUC
+	D8QndnLVJMEl+ybkBdTZ2+6Vj5jP8Zgf9DvUSC2pJ0+BSYtHnuY3GvxlCL65iVuM
+	oiWD8fBs4d92ina1m4Umg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1736961946; x=1737048346; bh=yj/IsjT0ULiPtO76mLIqcNBspRAdw74njWD
+	zregRk4A=; b=Gf0Z5MB34TFHCZstZpWY6QPp/MNd2/Lmqtyeb4MEvRtdyZpqbXi
+	jnzT0CtsFbMBtIF5fnRHKq2EZBlAdIkWTGLF4JdA21A2PDbP0B+8m2hpbV2dIsK0
+	H6MFjrpWUHZ2N8SfIJTGXgXwqUWBKm+tPRaOHCekL48WzCk1OuS8SBZiRbsGMEld
+	qpFvodyD47mwj3iEYRD+gJxX2a8BN0QC+FtyreGamgkR007Xz/q/w9YtmMIx8Ere
+	CEhdo82WWvHKdkAC3ux1dmWSrYV7eaH1GfhQXJ8RXplbDeDgRWSnkZaQJxIJYgkt
+	S1uXefX/nsZJT3j7YYAUQckg/zvmJ9K1swA==
+X-ME-Sender: <xms:me-HZwXv2Het-Bo3gDp8ev62BLDNt3dE5d7AQ_2E0ZqZbsPQQEdC_g>
+    <xme:me-HZ0lfruSFtiUT-T3-tO-vU-u9CQOmWvl1clXlDPp5Fp2JOE1bnOluLK4wDBkMK
+    qRjdZAZIkT7nivRDSA>
+X-ME-Received: <xmr:me-HZ0aAhiS5ScO2S-DQqSA9Bv5r2XQHvS62tKqFk7VqYBw8nrWX-Qvy8Op1>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehledgjeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtjeen
+    ucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrg
+    hilhdrnhgvtheqnecuggftrfgrthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfek
+    geetheegheeifffguedvuefffefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggp
+    rhgtphhtthhopedufedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnthhonh
+    hiohesohhpvghnvhhpnhdrnhgvthdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdho
+    rhhgpdhrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhope
+    hnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegvughumhgr
+    iigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepughonhgrlhgurdhhuhhnthgvrh
+    esghhmrghilhdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdp
+    rhgtphhtthhopehrhigriigrnhhovhdrshdrrgesghhmrghilhdrtghomhdprhgtphhtth
+    hopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghh
+X-ME-Proxy: <xmx:me-HZ_Xt7p0hoWuLpl70YZQhEYNrXrZQSjap42s3l9LXQiX9cPzBfw>
+    <xmx:me-HZ6kzpfjlNneShT473xgNo1G7qvEl80JQXwQQ6xhRt7R6JEUs6g>
+    <xmx:me-HZ0dxc_nPDJrglcLVqYahmghfz0ow8Ry7hkehvLbQffSu5cqjQA>
+    <xmx:me-HZ8GW_l9VkDELXHtAuKh-Pj-ds14DD1NrRIfpXb4NxlwJC3Wo1w>
+    <xmx:mu-HZwmT09v6y9uvrbBdUdGC9VMzDjEE-kEtNDT347prHvsMlR_IxkRZ>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 15 Jan 2025 12:25:45 -0500 (EST)
+Date: Wed, 15 Jan 2025 18:25:43 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
+Subject: Re: [PATCH net-next v18 12/25] ovpn: implement TCP transport
+Message-ID: <Z4fvl9Rk1tuD7Oq7@hog>
+References: <20250113-b4-ovpn-v18-0-1f00db9c2bd6@openvpn.net>
+ <20250113-b4-ovpn-v18-12-1f00db9c2bd6@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -104,42 +110,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <26ee9ae0-405f-4085-a864-48d1ee6371f1@arm.com>
+In-Reply-To: <20250113-b4-ovpn-v18-12-1f00db9c2bd6@openvpn.net>
 
-On Wed, Jan 15, 2025 at 04:58:06PM +0000, Ryan Roberts wrote:
-> Hi Peter, David,
+@maintainers could I get another day or two to poke at the new socket
+release mechanism? I haven't had time to look at it in depth yet.
 
-Hey, Ryan,
 
-> 
-> On 07/01/2025 14:47, Ryan Roberts wrote:
-> > When mremap()ing a memory region previously registered with userfaultfd
-> > as write-protected but without UFFD_FEATURE_EVENT_REMAP, an
-> > inconsistency in flag clearing leads to a mismatch between the vma flags
-> > (which have uffd-wp cleared) and the pte/pmd flags (which do not have
-> > uffd-wp cleared). This mismatch causes a subsequent mprotect(PROT_WRITE)
-> > to trigger a warning in page_table_check_pte_flags() due to setting the
-> > pte to writable while uffd-wp is still set.
-> > 
-> > Fix this by always explicitly clearing the uffd-wp pte/pmd flags on any
-> > such mremap() so that the values are consistent with the existing
-> > clearing of VM_UFFD_WP. Be careful to clear the logical flag regardless
-> > of its physical form; a PTE bit, a swap PTE bit, or a PTE marker. Cover
-> > PTE, huge PMD and hugetlb paths.
-> 
-> I just noticed that Andrew sent this to Linus and it's now in his tree; I'm
-> suddenly very nervous that it doesn't have any acks. I don't suppose you would
-> be able to do a quick review to calm the nerves??
+Just a small thing I saw on this patch:
 
-Heh, I fully trusted you, and I appreciated your help too. I'll need to run
-for 1-2 hours, but I'll read it this afternoon.
+2025-01-13, 10:31:31 +0100, Antonio Quartulli wrote:
+> +int ovpn_tcp_socket_attach(struct socket *sock, struct ovpn_peer *peer)
+> +{
+> +	struct strp_callbacks cb = {
+> +		.rcv_msg = ovpn_tcp_rcv,
+> +		.parse_msg = ovpn_tcp_parse,
+> +	};
+> +	int ret;
+> +
+> +	/* make sure no pre-existing encapsulation handler exists */
+> +	if (sock->sk->sk_user_data)
+> +		return -EBUSY;
+> +
+> +	/* only a fully connected socket is expected. Connection should be
+> +	 * handled in userspace
+> +	 */
+> +	if (sock->sk->sk_state != TCP_ESTABLISHED) {
+> +		net_err_ratelimited("%s: provided TCP socket is not in ESTABLISHED state: %d\n",
+> +				    netdev_name(peer->ovpn->dev),
+> +				    sock->sk->sk_state);
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = strp_init(&peer->tcp.strp, sock->sk, &cb);
+> +	if (ret < 0) {
+> +		DEBUG_NET_WARN_ON_ONCE(1);
+> +		release_sock(sock->sk);
 
-Side note: no review is as good as tests on reliability POV if that was the
-concern, but I'll try my best.
+Leftover from the old locking scheme. Could probably get snipped when
+applying if we decide this version is good otherwise.
 
-Thanks,
+> +		return ret;
+> +	}
 
 -- 
-Peter Xu
-
+Sabrina
 
