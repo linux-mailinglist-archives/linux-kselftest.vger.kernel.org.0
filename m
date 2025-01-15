@@ -1,166 +1,110 @@
-Return-Path: <linux-kselftest+bounces-24607-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24608-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38FDFA12ECA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 23:57:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB006A12F0A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 00:21:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 828CD1883CA3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 22:57:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A8B61885409
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 23:21:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F9DF1DACB8;
-	Wed, 15 Jan 2025 22:56:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEB1B1DD863;
+	Wed, 15 Jan 2025 23:21:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="E82tfRqX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BWZRY9Uk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3502D14A60C;
-	Wed, 15 Jan 2025 22:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C6A24A7CC;
+	Wed, 15 Jan 2025 23:21:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736981817; cv=none; b=LDUHSz9vgqFbpCxJiMkIJjzTAT+XvG2FgoXb0VjlhX3AXk+xU7Mrh1cuynds9onCBEN6JYtcCHvnHFZOfXtLxSc4pozuXr68EYuBkSKdm/no9x06+5F7sYiWfqFRmSJmf3H5qaw4JomxVoSmlU+S9THnPQWtxKB/FKj9N2YpPF0=
+	t=1736983295; cv=none; b=ZLnu++vmzwOwvpxwdSHVpSpNKloD7VGgz43gG2uZY7DRrSLOQ9ksKCPncSiOfn5naRL8VV4T+xr72ByNLJhCBZNnQ7W2Ca4Vpdt9PaI4UGHc03bzBW6rIdqni3IsJSYuS1Q6nDQH0ZqYAfQY3MFiCyrtpYjTCjzqh2Z8XLnqRBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736981817; c=relaxed/simple;
-	bh=44VBVDh1y25Pyfov8nyUQBukrb9Y7jivr9pU/8hKkeg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pIR2fTCqg6CfxAK86vV/2JbIcfFrJkhzeNdNBaq85+2IFWa5Xj1pTJfoLeAIC2xcAq/zdCxPy3GjmQifMhh20Q17XsUaqtncqy0g/YedqtIneJrWGOoyhT9b7nJpuXfBCHRbkZpamPS46XoqPyrKxPeoDtovq7hYe5dPND6Pg04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=E82tfRqX; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=e3t+sE5c7F20pd/0hjWdIAKazrUAgFjySYN0mc/PB8o=; b=E82tfRqXxW3ZYOgLRVKyt4v6L7
-	9y/hYa6VyzdPsH2uyhUFrFKasMASEvizdoZuDozC7Fc7j76el1akCc40tg9HPsE40pIQvxGrbcaZQ
-	fhHJqiHsmrEV+pL//ra4VNOsfOWc1sYQdzaxy35jTdwFZzuLf+lErpk9eJBdtxeM6Q+DCaAfN+DrH
-	CAfhRJ9A0tIePhROwxcBff41xrAni0eappVlqSUqlbshxALtTIhZYho1lnNITQnsdpu04h5Laoo8B
-	3jgBscuZnHsYkMM8cFbdSBBEFC6BAESCPSoSzuOREQUM/MSZT6i+byg0OMd6bjZJQr4/KKxghQds3
-	NtyzaFaw==;
-Received: from [50.53.2.24] (helo=[192.168.254.17])
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tYCJ3-0000000AxbX-1Zai;
-	Wed, 15 Jan 2025 22:56:40 +0000
-Message-ID: <417a5115-891b-41b9-bd2c-a77e813b4ef0@infradead.org>
-Date: Wed, 15 Jan 2025 14:56:06 -0800
+	s=arc-20240116; t=1736983295; c=relaxed/simple;
+	bh=mPosCnzgcJbE1pjkdLDkGQw+G/s6LoErO422lPW/XII=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HICzABxa/7j7m2GS7g9OtnTOc359lxg7x8F6dEphHPaKe88HlocJW1DT8k9u2HBd4dVcXtWmN/SQzhlFEXdOSrdr/BStZuuccFSPyCX2IWQ1YCA+WHNngfy7RYHuMh8pVv2Z3esDdAvms8dCG+9wrmY5XKAmUFfgRcN4JB2S6g4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BWZRY9Uk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5B5C4CEE1;
+	Wed, 15 Jan 2025 23:21:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736983295;
+	bh=mPosCnzgcJbE1pjkdLDkGQw+G/s6LoErO422lPW/XII=;
+	h=From:To:Cc:Subject:Date:From;
+	b=BWZRY9UkEVjlxkgk+qRn0xLEFakd/Nqiw/TYpwFN14NUw3x5gDzPTzbYbzWuXUzWU
+	 ubdPFC+IXGfXjrA5Skl7MXjYIY3TaEeukJa8+afESZO/wAQj2gbw+PvrOWdkp4rrIV
+	 42eGkcz8u+Gk3bByZBHN3pUKZkPu6jj0X22d6Nq3hmMFq7Uy4njqkVP5zyIc5nbIcs
+	 74/B+Lnv776gQ5shR20t6rmyh70q6qviNOENqpXbIajdlPBNKseVz3gVpzsNipXFvJ
+	 Jh9SZlWdyI5wtt/cnQ/wtSlJzu9JvSIWTB/aVH2LbQq79B2foxC80OcEWsPNzDmypk
+	 VPhZli9hGdWVw==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	shuah@kernel.org,
+	willemb@google.com,
+	matttbe@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests/net: packetdrill: make tcp buf limited timing tests benign
+Date: Wed, 15 Jan 2025 15:21:29 -0800
+Message-ID: <20250115232129.845884-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.48.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 5/5] netconsole: docs: Add documentation for
- CPU number auto-population
-To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-team@meta.com, max@kutsevol.com, thepacketgeek@gmail.com
-References: <20250115-netcon_cpu-v2-0-95971b44dc56@debian.org>
- <20250115-netcon_cpu-v2-5-95971b44dc56@debian.org>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250115-netcon_cpu-v2-5-95971b44dc56@debian.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+The following tests are failing on debug kernels:
 
+  tcp_tcp_info_tcp-info-rwnd-limited.pkt
+  tcp_tcp_info_tcp-info-sndbuf-limited.pkt
 
-On 1/15/25 5:35 AM, Breno Leitao wrote:
-> Update the netconsole documentation to explain the new feature that
-> allows automatic population of the CPU number.
-> 
-> The key changes include introducing a new section titled "CPU number
-> auto population in userdata", explaining how to enable the CPU number
-> auto-population feature by writing to the "populate_cpu_nr" file in the
-> netconsole configfs hierarchy.
-> 
-> This documentation update ensures users are aware of the new CPU number
-> auto-population functionality and how to leverage it for better
-> demultiplexing and visibility of parallel netconsole output.
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
->  Documentation/networking/netconsole.rst | 45 +++++++++++++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
-> 
-> diff --git a/Documentation/networking/netconsole.rst b/Documentation/networking/netconsole.rst
-> index 94c4680fdf3e7e1a0020d11b44547acfd68072a5..bc9ccebdae7adadd7c57aef20a726536d7ab3173 100644
-> --- a/Documentation/networking/netconsole.rst
-> +++ b/Documentation/networking/netconsole.rst
-> @@ -17,6 +17,8 @@ Release prepend support by Breno Leitao <leitao@debian.org>, Jul 7 2023
->  
->  Userdata append support by Matthew Wood <thepacketgeek@gmail.com>, Jan 22 2024
->  
-> +Sysdata append support by Breno Leitao <leitao@debian.org>, Jan 15 2025
-> +
->  Please send bug reports to Matt Mackall <mpm@selenic.com>
->  Satyam Sharma <satyam.sharma@gmail.com>, and Cong Wang <xiyou.wangcong@gmail.com>
->  
-> @@ -238,6 +240,49 @@ Delete `userdata` entries with `rmdir`::
->  
->     It is recommended to not write user data values with newlines.
->  
-> +CPU number auto population in userdata
-> +--------------------------------------
-> +
-> +Inside the netconsole configfs hierarchy, there is a file called
-> +`cpu_nr` under the `userdata` directory. This file is used to enable or disable
-> +the automatic CPU number population feature. This feature automatically
-> +populate the CPU number that is sending the message.
+with reports like:
 
-   populates
+      assert 19000 <= tcpi_sndbuf_limited <= 21000, tcpi_sndbuf_limited; \
+  AssertionError: 18000
 
-> +
-> +To enable the CPU number auto-population::
-> +
-> +  echo 1 > /sys/kernel/config/netconsole/target1/userdata/cpu_nr
-> +
-> +When this option is enabled, the netconsole messages will include an additional
-> +line in the userdata field with the format `cpu=<cpu_number>`. This allows the
-> +receiver of the netconsole messages to easily differentiate and demultiplex
-> +messages originating from different CPUs, which is particularly useful when
-> +dealing with parallel log output.
-> +
-> +Example::
-> +
-> +  echo "This is a message" > /dev/kmsg
-> +  12,607,22085407756,-;This is a message
-> +   cpu=42
-> +
-> +In this example, the message was sent by CPU 42.
-> +
-> +.. note::
-> +
-> +   If the user has set a conflicting `cpu` key in the userdata dictionary,
-> +   both keys will be reported, with the kernel-populated entry appearing after
-> +   the user one. For example::
-> +
-> +     # User-defined CPU entry
-> +     mkdir -p /sys/kernel/config/netconsole/target1/userdata/cpu
-> +     echo "1" > /sys/kernel/config/netconsole/target1/userdata/cpu/value
-> +
-> +   Output might look like::
-> +
-> +     12,607,22085407756,-;This is a message
-> +      cpu=1
-> +      cpu=42    # kernel-populated value
-> +
-> +
->  Extended console:
->  =================
->  
-> 
+and:
 
+      assert 348000 <= tcpi_busy_time <= 360000, tcpi_busy_time
+  AssertionError: 362000
+
+Extend commit 912d6f669725 ("selftests/net: packetdrill: report benign
+debug flakes as xfail") to cover them.
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: shuah@kernel.org
+CC: willemb@google.com
+CC: matttbe@kernel.org
+CC: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/net/packetdrill/ksft_runner.sh | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/net/packetdrill/ksft_runner.sh b/tools/testing/selftests/net/packetdrill/ksft_runner.sh
+index ff989c325eef..e15c43b7359b 100755
+--- a/tools/testing/selftests/net/packetdrill/ksft_runner.sh
++++ b/tools/testing/selftests/net/packetdrill/ksft_runner.sh
+@@ -43,6 +43,7 @@ if [[ -n "${KSFT_MACHINE_SLOW}" ]]; then
+ 		"tcp_timestamping.*.pkt"
+ 		"tcp_user_timeout_user-timeout-probe.pkt"
+ 		"tcp_zerocopy_epoll_.*.pkt"
++		"tcp_tcp_info_tcp-info-*-limited.pkt"
+ 	)
+ 	readonly xfail_regex="^($(printf '%s|' "${xfail_list[@]}"))$"
+ 	[[ "$script" =~ ${xfail_regex} ]] && failfunc=ktap_test_xfail
 -- 
-~Randy
+2.48.0
 
 
