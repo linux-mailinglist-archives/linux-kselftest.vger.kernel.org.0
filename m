@@ -1,353 +1,211 @@
-Return-Path: <linux-kselftest+bounces-24571-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24572-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5208DA122B9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 12:37:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3086DA124D6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 14:35:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E46643A27BC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 11:37:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2EFD37A35F9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 13:35:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BA271EEA5E;
-	Wed, 15 Jan 2025 11:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="kKCo+pn+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4591E241685;
+	Wed, 15 Jan 2025 13:35:37 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74EC01EBFE8
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2025 11:37:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 413942459AB;
+	Wed, 15 Jan 2025 13:35:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736941043; cv=none; b=n8RglMZwlCLdbCYLI3ek4TTrBzj4SoHFfhqOpRixetqQbjEEIolm1k8xv0oCTWBiZ1lCRzPb0FOiIgIxNENd958jkblMTEjyF0LXPiWWzR9iqDchXEqjBXa+L/auSsskntQhGYqyI2zMXw1+JjwT8L4Cg7lXUrJuaUqVI4b4mQE=
+	t=1736948137; cv=none; b=JWGIYNmzWEFuLIfOwHjPPLa9+/1RsTMqrpFED6MqW5/Zki4kAPnyNL/DA0Qud3yi5FoqNf5p9n8JjXFj5WmLE5kxEpnRpVx/+v5bpyV4eqaih0w1Rv+oHSWBFftLI2Vid8Rjo1uxu7g8HZq6Vx/P4fcDplF1VIBqwrZLzqIpui4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736941043; c=relaxed/simple;
-	bh=DwkxGouHc3BqlYdBKhtJ9qrBMlyUp10OuLpK6o2GlzQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qzICfp8d1AEfWqlr7whiUDmsuNYHqu8YPQSUVbxdgFOCRzVANvOju46q0ZQio4SROoesCKTQ0TFI0PgznDXLvfcUGU8WVxSSZ8Mle03CZYNOi9U6ovFx+pXeTqQgQ7jktOC3Vx9xWvVasZ0ZZiLRur//k5Irpuga41epEOg/YAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=kKCo+pn+; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ab34a170526so165230966b.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2025 03:37:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1736941040; x=1737545840; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bR+WWYwGVwj9iq4wp1piIxfs/pyaIAjlJdJ0bpNK8EE=;
-        b=kKCo+pn+dKJI0grpQI2sJdAOmn3wFvAbzRi43bXieOkDN5rDgV5AR/3gXLyWo6uwBV
-         OkMp6ac30IJu8wFZdqT+oHXIq7W1x8VSTksuMjqPYS6PhhDJlCT+aDQhVOXX7PfdyWSC
-         69hCKRrC/Vr7dxAcYFzNZE/ZhpfhMMiaIBe52MFxj1cOkakZx1tzW/G+gvElIkng3Jjh
-         px5+8RwfabQLFBe2jNTGBadDwjEar6/iGBX2zJk+VTe0O+Y0Cr0ICWsgiNqFGArGEhjn
-         T2gkRDKUlmbm7YdxX9lbCtMW7RR/iHDeSUNUuEN44PK6o4K4tFn9x1bvYNk+z9NY7pm9
-         bizg==
+	s=arc-20240116; t=1736948137; c=relaxed/simple;
+	bh=ulj1HOTDaNMpMqYVSJ4X3p1JpX3evQ0ThnqfDmvEpDs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NjCJ66dNc0Pg+Bkoymg7Jx+t/SyXE5MzgYc/QE1mEtZCFP+zvapv73cCRVWDN6Jlfud1igNr40q9avtyNQplLLWcVRk+M1njb6b/95NBT4/lIb0STCfJbjYCaiqhdb2W5XsUo6Cr1PIxzkuOEbm9s6d2uO9q4v2lrGzwMgtlZMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-aa6a92f863cso1270215966b.1;
+        Wed, 15 Jan 2025 05:35:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736941040; x=1737545840;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bR+WWYwGVwj9iq4wp1piIxfs/pyaIAjlJdJ0bpNK8EE=;
-        b=G7FTo96Ddt4j2ctbQPIKaM6j72hdqGvYXzfw92WSW71zopmBDt+F7VGx+W7VYqY4Ry
-         UMEUxKfUDwDJJQEyuf92UAInxcyVnuOm+TQ8zk/f4Dwh83YMqOPqecawww1t2wL7uHfe
-         Iyb2R4zC3EAKrW4oNFCpJPL2c/Gwy2/y8hwEVU4elPIMJsoH3/0yFsaJZdJ1WAjFqtTY
-         kqIZo0jX6CLBCJjiLrqQ1kN1HNvgGVr341z8QNkocz7jcsYmrGZxPIRWRlU9BniW2DOh
-         t7KU4pV9s5q2Q2P9NlVwYiDmfpZCDP+mhzHUpmjJ7udYKO6G8nQrpolsoiyF+5ciap/q
-         OfLg==
-X-Forwarded-Encrypted: i=1; AJvYcCX8hj6o52RFANTIQTH1KY06zM6gfJw7PZ+4FKjKd4deRenGl4stzgM2Mg3dpmtEP2GD+rPABQIsUMe1uI1ezqE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyV/RpbKd1iSUn9YCTbGEfRJdzyhrHn4Eh/gD8XBJ1OWMfahquw
-	GT/EuFUtPnbfUijNFHed6bebKTWJ79BEpMzC72oQs0n8wta8Lgh7EeR9WVp0QDw=
-X-Gm-Gg: ASbGncuEfPloKR856k5y+YSMcq5zQFGCOF6C9gadMeXag6Gjp7/9zJHCRLE/f0czIVA
-	C4ly88eZAZ9DKp/K9KQAphk27+ws9dRsAeirWNyIj5gGhLUnAO8zjCs8rACCYVJHPUQ5i8jaDEf
-	jYkokGUYBHEhtXum0ONPV8911P1S8NXvY6np3ciPsHATS4ezVqpNg5NVdNo3eaosYpQmBwOjYAu
-	edaYv50npsSz8igCOHgOKLCGJNO3AT/DsDGxNDC+vwP9FodB782QnC2M8i290VYIcXOoCiY9Sym
-	I5cihEWwYL/cYdJrCi3f3ifqBpbU++ENy/KIej0ZsQ==
-X-Google-Smtp-Source: AGHT+IEOkZVi43hTcd5c9zWbi3HxwwGowdbRYih1cWc4DFfPmKBxVNAcGDdIhoBiy/DfEt+4yE+XqA==
-X-Received: by 2002:a17:906:f58e:b0:aa5:225f:47d9 with SMTP id a640c23a62f3a-ab2ab749f27mr2166727066b.29.1736941039534;
-        Wed, 15 Jan 2025 03:37:19 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab2c95af65dsm746359666b.140.2025.01.15.03.37.18
+        d=1e100.net; s=20230601; t=1736948133; x=1737552933;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SALK4sDCQYvTb0KKst1+p1P7McWo3sTt16aXL5fdW8Q=;
+        b=DnyVr8PaDnnEznS/OsmTmYhg8OFFd13A+37eUkycZNPR7z0gs1C+/ezF4d3GW01PiF
+         dUfEZwN3zvoZqFizOXISgnhqYCyFV4PuJn3OkYryHzUUElv+B0+ckOoTZh1IGjXTOkF3
+         1Xa8NIgvQK0iBC7OcSzEHND9lHQYjBVIPCdU9+1/H18T0ucT8EQ0rmrSPp4jBON735vW
+         mCmSEju46z1vZ9kSaXYV0LNSNa8vxqzAyLOeJbQfiw8Or6XhBnpqNCBD+4m6t+P1Xaf7
+         M3QJ6xKqkp2RbZ6k8212wmF39VDhOTbSUofpwHKyWJ44e/Sxv69ySwqPGlSyEDUEktsJ
+         afTg==
+X-Forwarded-Encrypted: i=1; AJvYcCUbk8D5xQzNZWJ3EJ3RamcIBptdtLA6U8V12CPS2ii3mVWsNox/qERgQL5buKCNlM6pRAJSw6VFKxw=@vger.kernel.org, AJvYcCVKiTZAqj3xFvYLo1h5QJV/yF3jKHxW2DtrSoS+xiJ3lLz9eTg32CJXSXxUKq7ktMQxZO0cxzwV9sGl8Ot2@vger.kernel.org, AJvYcCW7CyWoJFKkCrHwHoenr4HBGWqcLXfnkqsEKvCxDYKuRFTql4HNjzC+ERL0b2uRRRVImZ3k3n+P462B7hcUany4@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlneaqtWPf3ZWBX3ORlAAoXI5tCnuNSlcwXM8h9i3g9eU0/rJF
+	bHaGFs8h6eOflFPfE3u4GrDqLEZYeKfMS+Zwq7YyJe46UyecB8l7
+X-Gm-Gg: ASbGnctZ0+rrJKsrgScPc/f6txqvlwu5ZXETgUqcMxijdq6HacjxuCoC7l9hUItSjRu
+	n6ajLDEIy/CKbILT/GGwBh5aa4ypjMw3NZX3r+8pXYQXmNPh+9hzS8ryjQfTDKe0EDAhI7WcN6U
+	3ZuGfSWsHSSjZF+0iGln5rEOPOex1oSQcnsGG45kI90IqQLsmOv2AXa7Fj6JZeIPMckoho2qRms
+	dMcdxIdVSM+JSekxhGpQmI5YNE5e76h3ujejcHP9g4yF8U=
+X-Google-Smtp-Source: AGHT+IGt5sXVoPCFD/NMTDdlvFSvgoOs1cqdB0gLt7NTHLg9S9IfSV9GbbpY5XrTZcAEXxmAo2TzPA==
+X-Received: by 2002:a17:907:60d5:b0:aa6:a228:afaf with SMTP id a640c23a62f3a-ab2abcb139cmr2753855966b.52.1736948133280;
+        Wed, 15 Jan 2025 05:35:33 -0800 (PST)
+Received: from localhost ([2a03:2880:30ff:4::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab2c90da0d9sm764196266b.67.2025.01.15.05.35.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2025 03:37:19 -0800 (PST)
-Date: Wed, 15 Jan 2025 12:37:18 +0100
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Celeste Liu <uwu@coelacanthus.name>
-Cc: Oleg Nesterov <oleg@redhat.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	"Dmitry V. Levin" <ldv@strace.io>, Andrea Bolognani <abologna@redhat.com>, 
-	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ron Economos <re@w6rz.net>, 
-	Charlie Jenkins <charlie@rivosinc.com>, Quan Zhou <zhouquan@iscas.ac.cn>, 
-	Felix Yan <felixonmars@archlinux.org>, Ruizhe Pan <c141028@gmail.com>, Guo Ren <guoren@kernel.org>, 
-	Yao Zi <ziyao@disroot.org>, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>
-Subject: Re: [PATCH v6 3/3] riscv: selftests: Add a ptrace test to verify a0
- and orig_a0 access
-Message-ID: <20250115-13cc73c36c7bb3b9f046f614@orel>
-References: <20250115-riscv-new-regset-v6-0-59bfddd33525@coelacanthus.name>
- <20250115-riscv-new-regset-v6-3-59bfddd33525@coelacanthus.name>
+        Wed, 15 Jan 2025 05:35:32 -0800 (PST)
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next v2 0/5] netconsole: Add support for CPU population
+Date: Wed, 15 Jan 2025 05:35:17 -0800
+Message-Id: <20250115-netcon_cpu-v2-0-95971b44dc56@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250115-riscv-new-regset-v6-3-59bfddd33525@coelacanthus.name>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJa5h2cC/03NQQqDMBBA0auEWZuSiYKpq96jSDFx1NlMJEnFI
+ t69YDddf3j/gEyJKUOnDki0ceYo0ClbKQjLIDNpHqFTYI1tEI3TQiVEeYX1rQPVd2zJuanxUCl
+ YE028X9gThIoW2gv0lYKFc4npc102vPoPxPof3FAbPaJr/dQGU1t8jOR5kFtMM/TneX4B/iPkf
+ K8AAAA=
+X-Change-ID: 20241108-netcon_cpu-ce3917e88f4b
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Breno Leitao <leitao@debian.org>, kernel-team@meta.com, max@kutsevol.com, 
+ thepacketgeek@gmail.com
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5085; i=leitao@debian.org;
+ h=from:subject:message-id; bh=ulj1HOTDaNMpMqYVSJ4X3p1JpX3evQ0ThnqfDmvEpDs=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnh7mj4ovbpc3+8RLnALPtLdIZci51EBJyVBkvP
+ Vd0ycrX0f2JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ4e5owAKCRA1o5Of/Hh3
+ bTYaD/9Or/0PCBZ6RxYA9GN1yOIZRCzplMG4SkXR/D86PUqUwUdEH1SNqTB6gT7t0oXCQ+a7H0K
+ RF/zPWOHHMCqVANtHwW5C1b/0N6uDDmv/mgVYFdhHMa8QJyd9/5PHBbSYbBHr7faYGL4Y/WVTXe
+ pNn39H08YyewZzhAfIsh/ZLckDYCubnkUJiM4UyVeaqslrLMFkVVuwtGCLYawPoyMB9hXoezvMb
+ w0wo5IL9DI3x4cvBuNDBXSze72YeoE0Bb0anloCGi5P4GWgfD7ogidSM4JkfviS2dyzjvNuvq6w
+ DZoB6WpJLGClpXXJHoXejzS/2ilQogWJu5xFBC0JvEPWGtzmw26lqLIzgR8qBBgzRCLI8Y/3nRC
+ jJLChsrg+cQG58rLM+G398z0ZKfxheDwOwMEEqHs+APpLEFsObwqPjxe/CXe6Y6Dz1O7Jw+0pDL
+ qMDc/6Y2BxDEhz3AcbZpj5YNsr4OAL18d44m+p5G9vJtVdNiEo9bYiGRHxCTDkPeQLZppdKfjxG
+ va1nkYZfUNFPnqPD8IbVWCD8yrmZBXplBrZPSXmGGNd9DRU2vwhwDKl9vnfTMZcqRAvy2PVJ8YY
+ S69nc+seupuRIAfno5EPTwikmHVGQ91S0TFOLmVF0WQaN/sQRCrR80OrbasLqTnXLiC40Pqpd90
+ mLGyKbkTpT0EKkQ==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-On Wed, Jan 15, 2025 at 07:13:29PM +0800, Celeste Liu wrote:
-> This test checks that orig_a0 and a0 can be modified and accessed
-> independently.
-> 
-> Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
-> Co-developed-by: Charlie Jenkins <charlie@rivosinc.com>
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
-> Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
-> ---
->  tools/testing/selftests/riscv/abi/.gitignore |   1 +
->  tools/testing/selftests/riscv/abi/Makefile   |   6 +-
->  tools/testing/selftests/riscv/abi/ptrace.c   | 193 +++++++++++++++++++++++++++
->  3 files changed, 199 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/riscv/abi/.gitignore b/tools/testing/selftests/riscv/abi/.gitignore
-> index b38358f91c4d2240ae64892871d9ca98bda1ae58..378c605919a3b3d58eec2701eb7af430cfe315d6 100644
-> --- a/tools/testing/selftests/riscv/abi/.gitignore
-> +++ b/tools/testing/selftests/riscv/abi/.gitignore
-> @@ -1 +1,2 @@
->  pointer_masking
-> +ptrace
-> diff --git a/tools/testing/selftests/riscv/abi/Makefile b/tools/testing/selftests/riscv/abi/Makefile
-> index ed82ff9c664e7eb3f760cbab81fb957ff72579c5..359a082c88a401883fb3776b35e4dacf69beaaaa 100644
-> --- a/tools/testing/selftests/riscv/abi/Makefile
-> +++ b/tools/testing/selftests/riscv/abi/Makefile
-> @@ -1,10 +1,14 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
->  CFLAGS += -I$(top_srcdir)/tools/include
-> +CFLAGS += $(KHDR_INCLUDES)
->  
-> -TEST_GEN_PROGS := pointer_masking
-> +TEST_GEN_PROGS := pointer_masking ptrace
->  
->  include ../../lib.mk
->  
->  $(OUTPUT)/pointer_masking: pointer_masking.c
->  	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-> +
-> +$(OUTPUT)/ptrace: ptrace.c
-> +	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-> diff --git a/tools/testing/selftests/riscv/abi/ptrace.c b/tools/testing/selftests/riscv/abi/ptrace.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..cbd60462021165ca2bcc38be24b8423c96047b93
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/abi/ptrace.c
-> @@ -0,0 +1,193 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <unistd.h>
-> +#include <fcntl.h>
-> +#include <signal.h>
-> +#include <errno.h>
-> +#include <sys/types.h>
-> +#include <sys/ptrace.h>
-> +#include <sys/stat.h>
-> +#include <sys/user.h>
-> +#include <sys/wait.h>
-> +#include <sys/uio.h>
-> +#include <linux/elf.h>
-> +#include <linux/unistd.h>
-> +#include <linux/ptrace.h>
-> +#include <linux/stddef.h>
-> +#include <asm/ptrace.h>
-> +
-> +#include "../../kselftest_harness.h"
-> +
-> +#define ORIG_A0_MODIFY      0x01
-> +#define A0_MODIFY           0x02
-> +#define A0_OLD              0xbadbeefbeeff
-> +#define A0_NEW              0xffeebfeebdab
-> +
-> +
-> +struct a0_regs {
-> +	__s64 orig_a0;
-> +	__u64 a0;
-> +};
-> +
-> +#define perr_and_exit(fmt, ...)						\
-> +	({								\
-> +		char buf[256];						\
-> +		snprintf(buf, sizeof(buf), "%s:%d:" fmt ": %m\n",	\
-> +			__func__, __LINE__, ##__VA_ARGS__);		\
-> +		ksft_exit_fail_perror(buf);				\
-> +	})
-> +
-> +static void ptrace_test(int opt, struct a0_regs result[])
-> +{
-> +	int status;
-> +	long rc;
-> +	pid_t pid;
-> +	struct user_regs_struct regs;
-> +	struct iovec iov = {
-> +		.iov_base = &regs,
-> +		.iov_len = sizeof(regs),
-> +	};
-> +
-> +	unsigned long orig_a0;
-> +	struct iovec a0_iov = {
-> +		.iov_base = &orig_a0,
-> +		.iov_len = sizeof(orig_a0),
-> +	};
-> +	struct ptrace_syscall_info syscall_info = {
-> +		.op = 0xff,
-> +	};
-> +	const unsigned int expected_sci_entry_size =
-> +		offsetofend(struct ptrace_syscall_info, entry.args);
-> +	const unsigned int expected_sci_exit_size =
-> +		offsetofend(struct ptrace_syscall_info, exit.is_error);
-> +
-> +	pid = fork();
-> +	if (pid == 0) {
-> +		/* Mark oneself being traced */
-> +		long val = ptrace(PTRACE_TRACEME, 0, 0, 0);
-> +
-> +		if (val < 0)
-> +			perr_and_exit("failed to request for tracer to trace me: %ld", val);
-> +
-> +		kill(getpid(), SIGSTOP);
-> +
-> +		/* Perform chdir syscall that will be intercepted */
-> +		syscall(__NR_chdir, A0_OLD);
-> +
-> +		exit(0);
-> +	}
-> +
-> +	if (pid < 0)
-> +		ksft_exit_fail_perror("failed to fork");
-> +
-> +	for (int i = 0; i < 3; i++) {
-> +		if (waitpid(pid, &status, 0) != pid)
-> +			perr_and_exit("failed to wait for the tracee %d", pid);
-> +		if (WIFSTOPPED(status)) {
-> +			switch (WSTOPSIG(status)) {
-> +			case SIGSTOP:
-> +				if (ptrace(PTRACE_SETOPTIONS, pid, 0, PTRACE_O_TRACESYSGOOD) < 0)
-> +					perr_and_exit("failed to set PTRACE_O_TRACESYSGOOD");
-> +				break;
-> +			case SIGTRAP|0x80:
-> +				/* Modify twice so GET_SYSCALL_INFO get modified a0 and orig_a0 */
-> +				if (ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, &iov))
-> +					perr_and_exit("failed to get tracee registers");
-> +				if (ptrace(PTRACE_GETREGSET, pid, NT_RISCV_ORIG_A0, &a0_iov))
-> +					perr_and_exit("failed to get tracee registers");
-> +
-> +				/* Modify a0/orig_a0 for the syscall */
-> +				switch (opt) {
-> +				case A0_MODIFY:
-> +					regs.a0 = A0_NEW;
-> +					break;
-> +				case ORIG_A0_MODIFY:
-> +					orig_a0 = A0_NEW;
-> +					break;
-> +				}
-> +
-> +				if (ptrace(PTRACE_SETREGSET, pid, NT_PRSTATUS, &iov))
-> +					perr_and_exit("failed to set tracee registers");
-> +				if (ptrace(PTRACE_SETREGSET, pid, NT_RISCV_ORIG_A0, &a0_iov))
-> +					perr_and_exit("failed to set tracee registers");
-> +				switch (i) {
-> +				case 1:
-> +					/* Stop at the beginning of syscall */
-> +					rc = ptrace(PTRACE_GET_SYSCALL_INFO, pid,
-> +						sizeof(syscall_info), &syscall_info);
-> +					if (rc < 0)
-> +						perr_and_exit("failed to get syscall info of entry");
-> +					if (rc < expected_sci_entry_size
-> +						|| syscall_info.op != PTRACE_SYSCALL_INFO_ENTRY)
-> +						perr_and_exit("stop position of entry mismatched");
-> +					result[0].orig_a0 = syscall_info.entry.args[0];
-> +					break;
-> +
-> +				case 2:
-> +					/* Stop at the end of syscall */
-> +					rc = ptrace(PTRACE_GET_SYSCALL_INFO, pid,
-> +						sizeof(syscall_info), &syscall_info);
-> +					if (rc < 0)
-> +						perr_and_exit("failed to get syscall info of entry");
-> +					if (rc < expected_sci_exit_size
-> +						|| syscall_info.op != PTRACE_SYSCALL_INFO_EXIT)
-> +						perr_and_exit("stop position of exit mismatched");
-> +					result[0].a0 = syscall_info.exit.rval;
-> +
-> +					if (ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, &iov))
-> +						perr_and_exit("failed to get tracee registers");
-> +					result[1].a0 = regs.a0;
-> +					if (ptrace(PTRACE_GETREGSET, pid, NT_RISCV_ORIG_A0,
-> +						   &a0_iov))
-> +						perr_and_exit("failed to get tracee registers");
-> +					result[1].orig_a0 = orig_a0;
-> +				}
-> +			}
-> +			if (ptrace(PTRACE_SYSCALL, pid, 0, 0) < 0)
-> +				perr_and_exit("failed to resume tracee");
-> +		}
-> +	}
-> +
-> +	/* Resume the tracee */
-> +	ptrace(PTRACE_CONT, pid, 0, 0);
-> +	if (waitpid(pid, &status, 0) != pid)
-> +		perr_and_exit("failed to wait for the tracee");
-> +
-> +}
-> +
-> +TEST(ptrace_access_a0)
-> +{
-> +	struct a0_regs result[2];
-> +
-> +	ptrace_test(A0_MODIFY, result);
-> +
-> +	/* Verify PTRACE_SETREGSET */
-> +	/* The modification of a0 cannot affect the first argument of the syscall */
-> +	EXPECT_EQ(A0_OLD, result[0].orig_a0);
-> +	EXPECT_EQ(A0_NEW, result[0].a0);
-> +
-> +	/* Verify PTRACE_GETREGSET */
-> +	EXPECT_EQ(result[1].orig_a0, result[0].orig_a0);
-> +	EXPECT_EQ(result[1].a0, result[0].a0);
-> +}
-> +
-> +TEST(ptrace_access_orig_a0)
-> +{
-> +	struct a0_regs result[2];
-> +
-> +	ptrace_test(ORIG_A0_MODIFY, result);
-> +
-> +	/* Verify PTRACE_SETREGSET */
-> +	/* Only modify orig_a0 to change the first argument of the syscall */
-> +	EXPECT_EQ(A0_NEW, result[0].orig_a0);
-> +	/* a0 will not be affected */
-> +	EXPECT_NE(A0_NEW, result[0].a0);
-> +
-> +	/* Verify PTRACE_GETREGSET */
-> +	EXPECT_EQ(result[1].orig_a0, result[0].orig_a0);
-> +	EXPECT_EQ(result[1].a0, result[0].a0);
-> +}
-> +
-> +TEST_HARNESS_MAIN
-> 
-> -- 
-> 2.48.0
->
+The current implementation of netconsole sends all log messages in
+parallel, which can lead to an intermixed and interleaved output on the
+receiving side. This makes it challenging to demultiplex the messages
+and attribute them to their originating CPUs.
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+As a result, users and developers often struggle to effectively analyze
+and debug the parallel log output received through netconsole.
+
+Example of a message got from produciton hosts:
+
+	------------[ cut here ]------------
+	------------[ cut here ]------------
+	refcount_t: saturated; leaking memory.
+	WARNING: CPU: 2 PID: 1613668 at lib/refcount.c:22 refcount_warn_saturate+0x5e/0xe0
+	refcount_t: addition on 0; use-after-free.
+	WARNING: CPU: 26 PID: 4139916 at lib/refcount.c:25 refcount_warn_saturate+0x7d/0xe0
+	Modules linked in: bpf_preload(E) vhost_net(E) tun(E) vhost(E)
+
+This series of patches introduces a new feature to the netconsole
+subsystem that allows the automatic population of the CPU number in the
+userdata field for each log message. This enhancement provides several
+benefits:
+
+* Improved demultiplexing of parallel log output: When multiple CPUs are
+  sending messages concurrently, the added CPU number in the userdata
+  makes it easier to differentiate and attribute the messages to their
+  originating CPUs.
+
+* Better visibility into message sources: The CPU number information
+  gives users and developers more insight into which specific CPU a
+  particular log message came from, which can be valuable for debugging
+  and analysis.
+
+The changes in this series are as follows:
+
+Patch 1: netconsole: Rename userdata to extradata
+=================================================
+Create the a concept of extradata, which encompasses the concept of
+userdata and the upcoming sysdatao
+
+Sysdata is a new concept being added, which is basically fields that are
+populated by the kernel. At this time only the CPU#, but, there is a
+desire to add current task name, kernel release version, etc.
+
+Patch 2: netconsole: Helper to count number of used entries
+===========================================================
+Create a simple helper to count number of entries in extradata. I am
+separating this in a function since it will need to count userdata and
+sysdata. For instance, when the user adds an extra userdata, we need to
+check if there is space, counting the previous data entries (from
+userdata and cpu data)
+
+Patch 3: netconsole: add support for sysdata and CPU population
+===============================================================
+This is the core patch. Basically add a new option to enable automatic
+CPU number population in the netconsole userdata Provides a new "cpu_nr"
+sysfs attribute to control this feature
+
+Patch 4: "netconsole: selftest: test CPU number auto-population"
+=============================================================
+Expands the existing netconsole selftest to verify the CPU number
+auto-population functionality Ensures the received netconsole messages
+contain the expected "cpu=<CPU>" entry in the message. Test different
+permutation with userdata
+
+Patch 5: "netconsole: docs: Add documentation for CPU number auto-population"
+=============================================================================
+Updates the netconsole documentation to explain the new CPU number
+auto-population feature Provides instructions on how to enable and use
+the feature
+
+I believe these changes will be a valuable addition to the netconsole
+subsystem, enhancing its usefulness for kernel developers and users.
+
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Changes in v2:
+- Create the concept of extradata and sysdata. This will make the design
+  easier to understand, and the code easier to read.
+  * Basically extradata encompasses userdata and the new sysdata.
+    Userdata originates from user, and sysdata originates in kernel.
+- Improved the test to send from a very specific CPU, which can be
+  checked to be correct on the other side, as suggested by Jakub.
+- Fixed a bug where CPU # was populated at the wrong place
+- Link to v1: https://lore.kernel.org/r/20241113-netcon_cpu-v1-0-d187bf7c0321@debian.org
+
+---
+Breno Leitao (5):
+      netconsole: Rename userdata to extradata
+      netconsole: Helper to count number of used entries
+      netconsole: add support for sysdata and CPU population
+      netconsole: selftest: test for sysdata CPU
+      netconsole: docs: Add documentation for CPU number auto-population
+
+ Documentation/networking/netconsole.rst            |  45 +++++
+ drivers/net/netconsole.c                           | 223 ++++++++++++++++-----
+ tools/testing/selftests/drivers/net/Makefile       |   1 +
+ .../selftests/drivers/net/lib/sh/lib_netcons.sh    |  17 ++
+ .../selftests/drivers/net/netcons_sysdata.sh       | 166 +++++++++++++++
+ 5 files changed, 407 insertions(+), 45 deletions(-)
+---
+base-commit: 7b24f164cf005b9649138ef6de94aaac49c9f3d1
+change-id: 20241108-netcon_cpu-ce3917e88f4b
+
+Best regards,
+-- 
+Breno Leitao <leitao@debian.org>
+
 
