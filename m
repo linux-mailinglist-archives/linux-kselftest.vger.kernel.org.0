@@ -1,153 +1,131 @@
-Return-Path: <linux-kselftest+bounces-24592-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24593-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F489A12A7B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 19:10:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA0A7A12A98
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 19:13:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BC753A5A9F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 18:10:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5076165451
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 18:13:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BEA01A8F7D;
-	Wed, 15 Jan 2025 18:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1063E1D5AB8;
+	Wed, 15 Jan 2025 18:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i/9Tykbk"
+	dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b="T+ifXIDj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from alln-iport-4.cisco.com (alln-iport-4.cisco.com [173.37.142.91])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5484214A630
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2025 18:10:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 026141D5AD3;
+	Wed, 15 Jan 2025 18:13:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.37.142.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736964623; cv=none; b=eInaDYB1JpdIYjzpiJcYNWk4i6G7Jl/43KnbvIa5F2drn3npwKbWz2NXW3d4R7frEirJIKFDr+1v1Q0Sh+xzfubsOhmly95ovcK3EDMKA+rwn9wCWyr6JOdrkVM1zTPrBdArXMutQKzyREb0T8mj7f103KWdcZGpieYcgmTh/4A=
+	t=1736964804; cv=none; b=hh9HgdrgWJCSy5eeGvP0TuOMgBSMa8Nk7E3xo5bJ8KmqVQS7wHfag5P8UViYakoWAxcOp3F4UrR/Dm1aa+5i4Cyzr6vr/ZL+MteBVYleFqUMju0kx8cPBqcd2KTc5PKWlOnSSsq+YbksIEX/WoP2FLT2q0Ox1PYG7AaMDBy5ozc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736964623; c=relaxed/simple;
-	bh=JXmTrsaNqVrR1MmMysbscv4cmOFjopCGy4kCDdPxb8s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b+C/7BlEO/5T37SRg/DP/CE+1ttfoqAAvscbaIpfzircBHegAxdUD7YTEN+PX0osRSmH7xXKxn4xctQtoENoTMOyxd9oLFbpWrHrgyzhbXLT0GPOfLqsV3AjSfKPiyDlL0SSvrR6qeeKBIjA+yncmZmG2iYweFc9LVGDe4b5IJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i/9Tykbk; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736964621;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Np7pSsxaw2iUiB/sIQw22hWaNnI9by8bAfVe0S6KgrQ=;
-	b=i/9TykbknnYnH/5huvZ9sHjknCxJRASBhm64anDLferdn6FtidAKAzZIcrO9X31Z2WBqEu
-	QkSJwDAj5Pw/2wF4NwQ7eXsyZmtWzKNz3YqcFgNe4QKuNXxU4K3hbHj3+FP4gedIgqeF4E
-	67u6qATUSz3WQ+dfegZlNncUfFIg+2Q=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-279-cfTrX9eZNAu5ZcVcw0aX2w-1; Wed,
- 15 Jan 2025 13:10:17 -0500
-X-MC-Unique: cfTrX9eZNAu5ZcVcw0aX2w-1
-X-Mimecast-MFC-AGG-ID: cfTrX9eZNAu5ZcVcw0aX2w
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 278E71956055;
-	Wed, 15 Jan 2025 18:10:15 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.81.40])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 151E719560AB;
-	Wed, 15 Jan 2025 18:10:11 +0000 (UTC)
-Date: Wed, 15 Jan 2025 13:10:09 -0500
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: Madhavan Srinivasan <maddy@linux.ibm.com>
-Cc: jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, shuah@kernel.org,
-	mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-	naveen@kernel.org, live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] selftests: livepatch: handle PRINTK_CALLER in
- check_result()
-Message-ID: <Z4f6AbC7pQLIWuX+@redhat.com>
-References: <20250114143144.164250-1-maddy@linux.ibm.com>
+	s=arc-20240116; t=1736964804; c=relaxed/simple;
+	bh=xiZTuScPICSHxiPZw6TpcBCR4iAOHgY5jeibxe1G/us=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=meARGq26Z/2A/C1ab5Nvm9Xu3sCkdNjSr6TjFT4cp2Mkc4PvIBcLbI5DMklqyKnOvZgL++Kx9CebvwOEZIGujuk1+GtSY0Lur1qq3+4e4IkPK+qL46GhZAzFt+DTrjwifsNIXqkfNXCK5svB/g7IKwWGzy4U9qn25zhnk4Aa+A8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b=T+ifXIDj; arc=none smtp.client-ip=173.37.142.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cisco.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=cisco.com; i=@cisco.com; l=657; q=dns/txt; s=iport;
+  t=1736964802; x=1738174402;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9yPlq0paGW1t21A5XZQoIo8EZ1mLH+6G71g63v/l46o=;
+  b=T+ifXIDjY6Nd/5Kf6D149O2fAYzLcJ1caTrSrOxicqtif/T7zBScgRJh
+   3kiW6L1jOfFhm3SzJovPDPO+5sajXfsHsuBH5TD+TiV/fjvUhhJhKEZXX
+   mDx8nihqHnFp3UizuTB/UoV9JFqhqhl1AwRyai2W7xT+qACwuV3Hc8OGx
+   A=;
+X-CSE-ConnectionGUID: HswO6xuaQGChputcmr+9Dg==
+X-CSE-MsgGUID: jesyjq9ZQqusJFRY37khQg==
+X-IPAS-Result: =?us-ascii?q?A0AEAABs+Ydnj47/Ja1aGwEBAQEBAQEBBQEBARIBAQEDA?=
+ =?us-ascii?q?wEBAYF/BgEBAQsBhBlDSIxyX6cOgSUDVg8BAQEPRAQBAYUHinUCJjQJDgECB?=
+ =?us-ascii?q?AEBAQEDAgMBAQEBAQEBAQEBAQsBAQUBAQECAQcFFAEBAQEBATkFSYYIhl02A?=
+ =?us-ascii?q?UaBDDISgwGCZQOzeoIsgQHeM4FtgUgBhWqHX3CEdycbgUlEhH2BD4QBhXcEg?=
+ =?us-ascii?q?jKBRYNunwRIgSEDWSwBVRMNCgsHBYE5OAMiCwsMCxQcFQIVHg8GEARtRDeCR?=
+ =?us-ascii?q?mlJNwINAjWCHiRYgiuEXIRHhFOCR1SCR4IUeoEXhD1AAwsYDUgRLDcGDhsGP?=
+ =?us-ascii?q?m4Hmzc8g3F7FKgvoQOEJYFjn2MaM6pTLodkkGoipCWEZoFnOoFbMxoIGxWDI?=
+ =?us-ascii?q?lIZD446xDMlMjwCBwsBAQMJkXEBAQ?=
+IronPort-Data: A9a23:raGLoqjRN2HiE/pNXipTk1UqX1615hAKZh0ujC45NGQN5FlHY01je
+ htvCD2Oa/eNZ2PxKtwjbN+2pB8Hup+DyYcyQAtpqHhhESxjpJueD7x1DKtf0wB+jyHnZBg6h
+ ynLQoCYdKjYdleF+FH1dOCn9SQkvU2xbuKUIPbePSxsThNTRi4kiBZy88Y0mYcAbeKRW2thg
+ vus5ZSEULOZ82QsaD9Msvve8E8HUMna4Vv0gHRvPZing3eG/5UlJMp3Db28KXL+Xr5VEoaSL
+ 87fzKu093/u5BwkDNWoiN7TKiXmlZaLYGBiIlIPM0STqkAqSh4ai87XB9JAAatjsAhlqvgqo
+ Dl7WTNcfi9yVkHEsLx1vxC1iEiSN4UekFPMCSDXXcB+UyQqflO0q8iCAn3aMqU44flQX3FT/
+ MU3AzAVcwyIgvj1kZ60H7wEasQLdKEHPasFsX1miDWcBvE8TNWbHuPB5MRT23E7gcUm8fT2P
+ pVCL2EwKk6dPlsWZg1/5JEWxI9EglH9dD1epFuRqII84nPYy0p6172F3N/9JoXWHZwKwRbIz
+ o7A12b0GQAYLY2t8COY6VCCvN6UwiD7YY1HQdVU8dYx3QXMnTZMYPEMbnOgrfeRhEm7WtlfJ
+ lJS/ydGhbcz8EimS9PVUBq/r3qJ+BUbXrJ4EPAw4SmOx7DS7gLfAXILJhZaaMEvtOc1SCYs2
+ 1vPmMnmbRRrsbuIWTee+62SoDeaJycYNykBaDUCQA9D5MPsyKk3jxTSXpNgC6OxgMH4Ai3Y3
+ T+Htm49iq8VgMpN0L+0lXjBji6gq4bhUAE4/EPUU3ij4wc/Y5SqD7FE8nDB5vpGaYLcRV6bs
+ T1cxo6V7fsFCteGkynlrPgx8K+Bx+2aF2PMnFdWMLIh7ymx8Hu5PtF872QrTKt2CfosdTjsa
+ U7VnApe4p5PIXenBZObharvUKzGKoC+TrzYuuDoUzZYXnRmmOa6EMBSiay4gjyFfKsEyP1X1
+ XKnnSCEVipy5UNPl2Xeegvl+eV3rh3SPEuKLXwB8zyp0KCFeFmeQqofPV2FY4gRtfzf/lWFr
+ I8HbJHWln2ztdEShAGJqeb/ynhXfBAG6Wze8ZU/mhOre1A/QT99W5c9P5t+INI4wMy5adskD
+ lnmBxcHkwCg7ZE2AQ6LcXtkIKj+RopyqGlzPConez6VN4sLP+6SAFMkX8JvJ9EPrbU7pdYtF
+ qltU5vbWJxnFG+YkwnxmLGh9+SOgjz33lrWZ0JIoVEXI/ZdeuA+0oW+JFOzrXNfXnbfWAlXi
+ +TI6z43iKErH2xKZPs6otr1p79tlRDxQN5PYnY=
+IronPort-HdrOrdr: A9a23:nqvDp654H0d6fS9SJgPXwMPXdLJyesId70hD6qm+c3Nom6uj5q
+ WTdZsgtCMc5Ax9ZJhCo6HjBED/exPhHPdOiOF7V4tKNzOJhILHFu1fBPPZsl7d8+mUzJ876U
+ +mGJIObOHNMQ==
+X-Talos-CUID: 9a23:lQpwrW6dkbjzjvk3uNss1FULPZ41b3Tk41zQO1KkAmNzC+y5RgrF
+X-Talos-MUID: =?us-ascii?q?9a23=3Aw1C1JQ54CnCOAQGx6meCG41Kxoxq7r+/Cllco6w?=
+ =?us-ascii?q?fptKmGxZBYGiejA24F9o=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="6.13,207,1732579200"; 
+   d="scan'208";a="414017788"
+Received: from rcdn-l-core-05.cisco.com ([173.37.255.142])
+  by alln-iport-4.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 15 Jan 2025 18:13:14 +0000
+Received: from cisco.com (savbu-usnic-a.cisco.com [10.193.184.48])
+	by rcdn-l-core-05.cisco.com (Postfix) with ESMTP id C6A141800022E;
+	Wed, 15 Jan 2025 18:13:14 +0000 (GMT)
+Received: by cisco.com (Postfix, from userid 392789)
+	id 9D8C320F2003; Wed, 15 Jan 2025 10:13:14 -0800 (PST)
+From: John Daley <johndale@cisco.com>
+To: shuah@kernel.org,
+	kuba@kernel.org,
+	sdf@fomichev.me,
+	willemb@google.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	John Daley <johndale@cisco.com>
+Subject: [PATCH net-next 0/1] selftests: drv-net-hw: fix pp_alloc_fail test error
+Date: Wed, 15 Jan 2025 10:13:11 -0800
+Message-Id: <20250115181312.3544-1-johndale@cisco.com>
+X-Mailer: git-send-email 2.35.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250114143144.164250-1-maddy@linux.ibm.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Transfer-Encoding: 8bit
+X-Outbound-SMTP-Client: 10.193.184.48, savbu-usnic-a.cisco.com
+X-Outbound-Node: rcdn-l-core-05.cisco.com
 
-On Tue, Jan 14, 2025 at 08:01:44PM +0530, Madhavan Srinivasan wrote:
-> Some arch configs (like ppc64) enable CONFIG_PRINTK_CALLER, which
-> adds the caller id as part of the dmesg. Due to this, even though
-> the expected vs observed are same, end testcase results are failed.
-> 
->  -% insmod test_modules/test_klp_livepatch.ko
->  -livepatch: enabling patch 'test_klp_livepatch'
->  -livepatch: 'test_klp_livepatch': initializing patching transition
->  -livepatch: 'test_klp_livepatch': starting patching transition
->  -livepatch: 'test_klp_livepatch': completing patching transition
->  -livepatch: 'test_klp_livepatch': patching complete
->  -% echo 0 > /sys/kernel/livepatch/test_klp_livepatch/enabled
->  -livepatch: 'test_klp_livepatch': initializing unpatching transition
->  -livepatch: 'test_klp_livepatch': starting unpatching transition
->  -livepatch: 'test_klp_livepatch': completing unpatching transition
->  -livepatch: 'test_klp_livepatch': unpatching complete
->  -% rmmod test_klp_livepatch
->  +[   T3659] % insmod test_modules/test_klp_livepatch.ko
->  +[   T3682] livepatch: enabling patch 'test_klp_livepatch'
->  +[   T3682] livepatch: 'test_klp_livepatch': initializing patching transition
->  +[   T3682] livepatch: 'test_klp_livepatch': starting patching transition
->  +[    T826] livepatch: 'test_klp_livepatch': completing patching transition
->  +[    T826] livepatch: 'test_klp_livepatch': patching complete
->  +[   T3659] % echo 0 > /sys/kernel/livepatch/test_klp_livepatch/enabled
->  +[   T3659] livepatch: 'test_klp_livepatch': initializing unpatching transition
->  +[   T3659] livepatch: 'test_klp_livepatch': starting unpatching transition
->  +[    T789] livepatch: 'test_klp_livepatch': completing unpatching transition
->  +[    T789] livepatch: 'test_klp_livepatch': unpatching complete
->  +[   T3659] % rmmod test_klp_livepatch
-> 
->   ERROR: livepatch kselftest(s) failed
->  not ok 1 selftests: livepatch: test-livepatch.sh # exit=1
-> 
-> Currently the check_result() handles the "[time]" removal from
-> the dmesg. Enhance the check to handle removal of "[Tid]" also.
-> 
-> Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
-> ---
->  tools/testing/selftests/livepatch/functions.sh | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-> index e5d06fb40233..a1730c1864a4 100644
-> --- a/tools/testing/selftests/livepatch/functions.sh
-> +++ b/tools/testing/selftests/livepatch/functions.sh
-> @@ -306,7 +306,8 @@ function check_result {
->  	result=$(dmesg | awk -v last_dmesg="$LAST_DMESG" 'p; $0 == last_dmesg { p=1 }' | \
->  		 grep -e 'livepatch:' -e 'test_klp' | \
->  		 grep -v '\(tainting\|taints\) kernel' | \
-> -		 sed 's/^\[[ 0-9.]*\] //')
-> +		 sed 's/^\[[ 0-9.]*\] //' | \
-> +		 sed 's/^\[[ ]*T[0-9]*\] //')
+The tool pp_alloc_fail.py tested error recovery by injecting errors
+into page_pool_alloc_pages(). Perhaps due to the netmems conversion,
+page_pool_put_full_page() does not end up calling that function.
 
-Thanks for adding this to the filter.
+page_pool_alloc_netmems() seems to be the base function for all the
+the allocation functions in the API call, so put the error injection
+there instead.
 
-If I read the PRINTK_CALLER docs correctly, there is a potential CPU
-identifier as well.  Are there any instances where the livepatching code
-will use the "[C$processor_id]" (out of task context) prefix?  Or would
-it hurt to future proof with [CT][0-9]?
+Signed-off-by: John Daley <johndale@cisco.com>
 
-Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+John Daley (1):
+  page_pool: inject pp_alloc_fail errors in the right place
 
---
-Joe
+ net/core/page_pool.c                                    | 2 +-
+ tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
->  
->  	if [[ "$expect" == "$result" ]] ; then
->  		echo "ok"
-> -- 
-> 2.47.0
-> 
+-- 
+2.44.0
 
 
