@@ -1,153 +1,410 @@
-Return-Path: <linux-kselftest+bounces-24558-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24559-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82A6CA11E45
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 10:40:32 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C844AA11E54
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 10:42:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67AFA3AD0A2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 09:40:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ECA157A4298
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 09:42:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F20231EEA3D;
-	Wed, 15 Jan 2025 09:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A30724818C;
+	Wed, 15 Jan 2025 09:42:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="roDXKbdC"
+	dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b="mVoJWykJ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="wixxW+Kn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B596E248175;
-	Wed, 15 Jan 2025 09:40:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C971FC7C8;
+	Wed, 15 Jan 2025 09:42:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736934021; cv=none; b=DdxFPxYhICpC7X3ypAaZLvofScXO01vdDFtPx1XYZmWgUymCh1Cetf0ymrE5BzQeHE1da9QiTL63OFBnvl4KSgkE3RubbN1cTabYiECqOt8dqTKJRuBwAuVLz/WXj93PQhA4SRLf6NTPxWuFsN8bTVAQ3185zZx3l+gJo+ProPM=
+	t=1736934134; cv=none; b=at1jZA9rOAWQUFqBaIcGRBSUkfHDhAgxfMiURvFse259RagDrUE1dTEa4s9cs+xlPdI47Kfe2Rb/wbvDV0wMHvjQCBPx9WoSRv+FPILEkTU4FGzNzwXJrVE1ESqvf0aUezX1WRzsQGoVKKm9Q3OG76KoPYwc/k5fWU20ULx3oDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736934021; c=relaxed/simple;
-	bh=3p9UzCR9kQuU0z8Q1jLKK0c0JcS0ghAZDVUdc7YWF+k=;
+	s=arc-20240116; t=1736934134; c=relaxed/simple;
+	bh=jM9uAjCE9ZCH+BeFfF6HIVe3V2LTHVHuU46DqkTLWGI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KUrc4TNewfqF7uUJDbtBdtJyVJybzbFMbywGhDprtGANUc8iTl9WeyCJ77owUE2hbOPL90zoIBLhG0bjtvYjMgVh0kjp1PZvwEGaHe10BcehusrzhLbvFLoeyBAI6MKzf3q/KUPqCsgrvgkVBiiDD3/k2mCzkaKXoaXSRT2EafQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=roDXKbdC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BEB7C4CEE2;
-	Wed, 15 Jan 2025 09:40:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736934019;
-	bh=3p9UzCR9kQuU0z8Q1jLKK0c0JcS0ghAZDVUdc7YWF+k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=roDXKbdCcFjko/CSPHu6qfsC9e10olP2x7R2a0w5qO8OVwDDsDYyiVX1oYBoLKl2W
-	 cHyxfXDEOjiXWV7H2bx7YuNaCUT/OUKv9QDkANc7VEvuWbJPN58NmaN0X5eHyFSBs2
-	 1vc5gUGgQovAYtBpif7xEqLJdpHc9aT3T43hUr4TqVvDoE5el0MVOtfQ6Ba1Gdjot1
-	 UMPNtrjXwN3V4nNYxdoxt5K4HcRdEj8mFnufki4dqWbQunfle3cW3FQBuHYm0J7sK+
-	 hKdLgVKiHPqr9gLiuk6spKXpq7oOAH/bgHMurb26CPrTb7Vdjm/PpkNUfgfLyCPapm
-	 5wiFfY0HJtSzA==
-Message-ID: <1ff05fca-28ff-491e-ab4e-b562d310359b@kernel.org>
-Date: Wed, 15 Jan 2025 10:39:57 +0100
+	 In-Reply-To:Content-Type; b=pTM6D1lWkXAXF8/S8A8AdSsVlzmdMlOCsgX74X/DuQDlPJ+ykOJaFruyKnF8Q7vOdpPVvaZSmeHTuBcy7YEY3zlCfPEqTba19NqjaXj1oBMD7nTSd8L88E712CGzytphDG2M0XHRSEi0rgdm1sDPuMBH/mhKQoPmTw1zjjCn48M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name; spf=pass smtp.mailfrom=coelacanthus.name; dkim=pass (2048-bit key) header.d=coelacanthus.name header.i=@coelacanthus.name header.b=mVoJWykJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=wixxW+Kn; arc=none smtp.client-ip=103.168.172.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=coelacanthus.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=coelacanthus.name
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailflow.phl.internal (Postfix) with ESMTP id 825E2200C73;
+	Wed, 15 Jan 2025 04:42:10 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-09.internal (MEProxy); Wed, 15 Jan 2025 04:42:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	coelacanthus.name; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1736934130; x=1736941330; bh=YiRbxGu1UH
+	Jm8IpldfHhFbmYMUtUE+hZXcRxL0CMUCE=; b=mVoJWykJvVwY6ulcWer5cqbm6L
+	NPulbUzcxq9J2RsLAKsDDOH3VOrTe66WWakovWl2mRB/SHAz+3PtMktDWlEPc/K6
+	olTFyquzCnOYQf9EczbOebtLbJnamLoTSMaq7r5ZUb6kZwAN4G3N1J0nstL6qaFg
+	9Ve0sKcKQ6O02oM/ZcAwdWFX7XSiwYyCa9g5qUPNGskDWhHTM7HJUijAutWrOkWq
+	wFT4EZqblW/vmNoUoCWUCpoABBHXDEZDSh6B/DzgFy/+SJc6z/KV70zfR35uv41V
+	bDit6x+aztrGI1FfI/sZbg2/4M9EEnu6IKKyiy8jwuGLuMTmYQQ+fHEXFW9w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736934130; x=
+	1736941330; bh=YiRbxGu1UHJm8IpldfHhFbmYMUtUE+hZXcRxL0CMUCE=; b=w
+	ixxW+KnBVgzt8CodHWBgfKkkhveQB6iY0HmhzagaNBiXTpdlx7fGDdX1bbiEQIS8
+	mkhQyp07u3etVV2xjiGTgev36m9XkoDCVkbcLFEUMGlPkhAo19pbyP5kXJ79KVbD
+	VyD86rAIaLtVcaM0ohkK9R0oEJPtokKlPXngSaJurnOwH9EGaweOAU40AJIdhYFE
+	UgMQ8BHdv+4NSeOh2IVhMU0PDi7axAHksZZcpavH11vaZg0Y/BwGq9OV2cXcOPmO
+	R6EMMO32QrLOzXa7zHvx/3guvi6kGz2roYY/7NpFFlTFFOsSo5vFTQeb7L6m/Iln
+	K9RY2ybOkiQtMF4Wq3Wvg==
+X-ME-Sender: <xms:8IKHZw3n0DQKJyrGBRP69GOzteyZXDTDHTXWeo3cHBJABuWGhMFV3A>
+    <xme:8IKHZ7EqerpFoP0tVT_CzNuPOxRaX1mkdQobV0zKGO-3OgKaTy8AhyxA5yi9QutlA
+    KIt_tYvleAPkEjjbt0>
+X-ME-Received: <xmr:8IKHZ46L6_iwZO5yBEmYwau2LN0ntsvQPWmuXX311UopsAdMM2YjurIpipDQywXP>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehkedgtdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtvdej
+    necuhfhrohhmpeevvghlvghsthgvucfnihhuuceouhifuhestghovghlrggtrghnthhhuh
+    hsrdhnrghmvgeqnecuggftrfgrthhtvghrnhepfefhfeefteekgedvfeehhfefvedutedt
+    fefhkeeileehgefgveffvdffudehhfeknecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepuhifuhestghovghlrggtrghnthhhuhhsrdhnrghmvgdp
+    nhgspghrtghpthhtohepvdehpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrjh
+    honhgvshesvhgvnhhtrghnrghmihgtrhhordgtohhmpdhrtghpthhtohepohhlvghgsehr
+    vgguhhgrthdrtghomhdprhgtphhtthhopehprghulhdrfigrlhhmshhlvgihsehsihhfih
+    hvvgdrtghomhdprhgtphhtthhopehprghlmhgvrhesuggrsggsvghlthdrtghomhdprhgt
+    phhtthhopegvsghivgguvghrmhesgihmihhsshhiohhnrdgtohhmpdhrtghpthhtohepkh
+    gvvghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdr
+    ohhrghdprhgtphhtthhopegrohhusegvvggtshdrsggvrhhkvghlvgihrdgvughupdhrtg
+    hpthhtoheprghlvgigsehghhhithhirdhfrh
+X-ME-Proxy: <xmx:8IKHZ51rd6uijQn6Q9471j0S-XUW60UiRxY-_ZB4SEw-1zysuUZTDA>
+    <xmx:8IKHZzGkh-MMxYYiUZKWyVzOheeN6jAw6Ru4vkH0pcKu3O-mkI5e_g>
+    <xmx:8IKHZy-LVxpExg-Ya_P0DJd7h0hu8EFT1Sim3MQr1FGsIh8Y5fSL9g>
+    <xmx:8IKHZ4kORGLEQ3ErQ_H0kENQjQkLgqg4HITLYkSVRjQC9jKk1TJsyA>
+    <xmx:8oKHZ82LT6TKD1T6jJSjvJQOY7vJNz1mRZrP0KBLpK6Ev0BT_W4410Cv>
+Feedback-ID: i95c648bc:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 15 Jan 2025 04:42:00 -0500 (EST)
+Message-ID: <17dfb122-4ae3-477f-93a8-1748b819c59c@coelacanthus.name>
+Date: Wed, 15 Jan 2025 17:41:57 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH bpf-next/net v2 0/7] bpf: Add mptcp_subflow bpf_iter
- support
-Content-Language: en-GB
-To: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Martin KaFai Lau <martin.lau@kernel.org>, mptcp@lists.linux.dev,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-References: <20241219-bpf-next-net-mptcp-bpf_iter-subflows-v2-0-ae244d3cdbbc@kernel.org>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20241219-bpf-next-net-mptcp-bpf_iter-subflows-v2-0-ae244d3cdbbc@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/2] riscv: selftests: Add a ptrace test to verify a0
+ and orig_a0 access
+Content-Language: en-GB-large
+To: Andrew Jones <ajones@ventanamicro.com>
+Cc: Oleg Nesterov <oleg@redhat.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexandre Ghiti <alex@ghiti.fr>, "Dmitry V. Levin" <ldv@strace.io>,
+ Andrea Bolognani <abologna@redhat.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Ron Economos <re@w6rz.net>, Charlie Jenkins <charlie@rivosinc.com>,
+ Quan Zhou <zhouquan@iscas.ac.cn>, Felix Yan <felixonmars@archlinux.org>,
+ Ruizhe Pan <c141028@gmail.com>, Guo Ren <guoren@kernel.org>,
+ Yao Zi <ziyao@disroot.org>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@rivosinc.com>
+References: <20250115-riscv-new-regset-v5-0-d0e6ec031a23@coelacanthus.name>
+ <20250115-riscv-new-regset-v5-2-d0e6ec031a23@coelacanthus.name>
+ <20250115-28c95808502d43f84b3fe0a6@orel>
+From: Celeste Liu <uwu@coelacanthus.name>
+In-Reply-To: <20250115-28c95808502d43f84b3fe0a6@orel>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hello BPF maintainers and reviewers,
-
-On 19/12/2024 16:46, Matthieu Baerts (NGI0) wrote:
-> Here is a series from Geliang, adding mptcp_subflow bpf_iter support.
+On 2025-01-15 17:14, Andrew Jones wrote:
+> On Wed, Jan 15, 2025 at 04:24:59AM +0800, Celeste Liu wrote:
+>> This test checks that orig_a0 and a0 can be modified and accessed
+>> independently.
+>>
+>> Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
+>> Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
+>> Co-developed-by: Charlie Jenkins <charlie@rivosinc.com>
+>> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+>> Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
+>> Signed-off-by: Celeste Liu <uwu@coelacanthus.name>
+>> ---
+>>  tools/testing/selftests/riscv/abi/.gitignore |   1 +
+>>  tools/testing/selftests/riscv/abi/Makefile   |   6 +-
+>>  tools/testing/selftests/riscv/abi/ptrace.c   | 201 +++++++++++++++++++++++++++
+>>  3 files changed, 207 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/riscv/abi/.gitignore b/tools/testing/selftests/riscv/abi/.gitignore
+>> index b38358f91c4d2240ae64892871d9ca98bda1ae58..378c605919a3b3d58eec2701eb7af430cfe315d6 100644
+>> --- a/tools/testing/selftests/riscv/abi/.gitignore
+>> +++ b/tools/testing/selftests/riscv/abi/.gitignore
+>> @@ -1 +1,2 @@
+>>  pointer_masking
+>> +ptrace
+>> diff --git a/tools/testing/selftests/riscv/abi/Makefile b/tools/testing/selftests/riscv/abi/Makefile
+>> index ed82ff9c664e7eb3f760cbab81fb957ff72579c5..359a082c88a401883fb3776b35e4dacf69beaaaa 100644
+>> --- a/tools/testing/selftests/riscv/abi/Makefile
+>> +++ b/tools/testing/selftests/riscv/abi/Makefile
+>> @@ -1,10 +1,14 @@
+>>  # SPDX-License-Identifier: GPL-2.0
+>>  
+>>  CFLAGS += -I$(top_srcdir)/tools/include
+>> +CFLAGS += $(KHDR_INCLUDES)
+>>  
+>> -TEST_GEN_PROGS := pointer_masking
+>> +TEST_GEN_PROGS := pointer_masking ptrace
+>>  
+>>  include ../../lib.mk
+>>  
+>>  $(OUTPUT)/pointer_masking: pointer_masking.c
+>>  	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
+>> +
+>> +$(OUTPUT)/ptrace: ptrace.c
+>> +	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
+>> diff --git a/tools/testing/selftests/riscv/abi/ptrace.c b/tools/testing/selftests/riscv/abi/ptrace.c
+>> new file mode 100644
+>> index 0000000000000000000000000000000000000000..f1a0458adccdd040bfaa350e2e8d98b1ef34c0ad
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/riscv/abi/ptrace.c
+>> @@ -0,0 +1,201 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +#include <stdio.h>
+>> +#include <stdlib.h>
+>> +#include <string.h>
+>> +#include <unistd.h>
+>> +#include <fcntl.h>
+>> +#include <signal.h>
+>> +#include <errno.h>
+>> +#include <sys/types.h>
+>> +#include <sys/ptrace.h>
+>> +#include <sys/stat.h>
+>> +#include <sys/user.h>
+>> +#include <sys/wait.h>
+>> +#include <sys/uio.h>
+>> +#include <linux/elf.h>
+>> +#include <linux/unistd.h>
+>> +#include <linux/ptrace.h>
+>> +#include <asm/ptrace.h>
+>> +
+>> +#include "../../kselftest_harness.h"
+>> +
+>> +#ifndef sizeof_field
+>> +#define sizeof_field(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
+>> +#endif
+>> +#ifndef offsetofend
+>> +#define offsetofend(TYPE, MEMBER) \
+>> +	(offsetof(TYPE, MEMBER) + sizeof_field(TYPE, MEMBER))
+>> +#endif
 > 
-> We are working on extending MPTCP with BPF, e.g. to control the path
-> manager -- in charge of the creation, deletion, and announcements of
-> subflows (paths) -- and the packet scheduler -- in charge of selecting
-> which available path the next data will be sent to. These extensions
-> need to iterate over the list of subflows attached to an MPTCP
-> connection, and do some specific actions via some new kfunc that will be
-> added later on.
+> I think this is the sixth test to define these. We should copy
+> include/linux/stddef.h into tools/include. We already have
+> tools/include/uapi/linux/stddef.h with __struct_group and
+> __DECLARE_FLEX_ARRAY, so I think it should just work.
 
-(...)
+Agreed. But it may be better to be a separate patchset
+so we can change those definition in different selftests
+one pass.
 
-> Changes in v2:
-> - Patches 1-2: new ones.
-> - Patch 3: remove two kfunc, more restrictions. (Martin)
-> - Patch 4: add BUILD_BUG_ON(), more restrictions. (Martin)
-> - Patch 7: adaptations due to modifications in patches 1-4.
-> - Link to v1: https://lore.kernel.org/r/20241108-bpf-next-net-mptcp-bpf_iter-subflows-v1-0-cf16953035c1@kernel.org
+> 
+>> +
+>> +
+>> +#define ORIG_A0_MODIFY      0x01
+>> +#define A0_MODIFY           0x02
+>> +#define A0_OLD              0xbadbeefbeeff
+>> +#define A0_NEW              0xffeebfeebdab
+>> +
+>> +
+>> +struct a0_regs {
+>> +	__s64 orig_a0;
+>> +	__u64 a0;
+>> +};
+>> +
+>> +#define perr_and_exit(fmt, ...)						\
+>> +	({								\
+>> +		char buf[256];						\
+>> +		snprintf(buf, sizeof(buf), "%s:%d:" fmt ": %m\n",	\
+>> +			__func__, __LINE__, ##__VA_ARGS__);		\
+>> +		ksft_exit_fail_perror(buf);				\
+>> +	})
+>> +
+>> +static void ptrace_test(int opt, struct a0_regs result[])
+>> +{
+>> +	int status;
+>> +	long rc;
+>> +	pid_t pid;
+>> +	struct user_regs_struct regs;
+>> +	struct iovec iov = {
+>> +		.iov_base = &regs,
+>> +		.iov_len = sizeof(regs),
+>> +	};
+>> +
+>> +	unsigned long orig_a0;
+>> +	struct iovec a0_iov = {
+>> +		.iov_base = &orig_a0,
+>> +		.iov_len = sizeof(orig_a0),
+>> +	};
+>> +	struct ptrace_syscall_info syscall_info = {
+>> +		.op = 0xff,
+>> +	};
+>> +	const unsigned int expected_sci_entry_size =
+>> +		offsetofend(struct ptrace_syscall_info, entry.args);
+>> +	const unsigned int expected_sci_exit_size =
+>> +		offsetofend(struct ptrace_syscall_info, exit.is_error);
+>> +
+>> +	pid = fork();
+>> +	if (pid == 0) {
+>> +		/* Mark oneself being traced */
+>> +		long val = ptrace(PTRACE_TRACEME, 0, 0, 0);
+>> +
+>> +		if (val < 0)
+>> +			perr_and_exit("failed to request for tracer to trace me: %ld", val);
+>> +
+>> +		kill(getpid(), SIGSTOP);
+>> +
+>> +		/* Perform chdir syscall that will be intercepted */
+>> +		syscall(__NR_chdir, A0_OLD);
+>> +
+>> +		exit(0);
+>> +	}
+>> +
+>> +	if (pid < 0)
+>> +		ksft_exit_fail_perror("failed to fork");
+>> +
+>> +	for (int i = 0; i < 3; i++) {
+>> +		if (waitpid(pid, &status, 0) != pid)
+>> +			perr_and_exit("failed to wait for the tracee %d", pid);
+>> +		if (WIFSTOPPED(status)) {
+>> +			switch (WSTOPSIG(status)) {
+>> +			case SIGSTOP:
+>> +				if (ptrace(PTRACE_SETOPTIONS, pid, 0, PTRACE_O_TRACESYSGOOD) < 0)
+>> +					perr_and_exit("failed to set PTRACE_O_TRACESYSGOOD");
+>> +				break;
+>> +			case SIGTRAP|0x80:
+>> +				/* Modify twice so GET_SYSCALL_INFO get modified a0 and orig_a0 */
+>> +				if (ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, &iov))
+>> +					perr_and_exit("failed to get tracee registers");
+>> +				if (ptrace(PTRACE_GETREGSET, pid, NT_RISCV_ORIG_A0, &a0_iov))
+>> +					perr_and_exit("failed to get tracee registers");
+>> +
+>> +				/* Modify a0/orig_a0 for the syscall */
+>> +				switch (opt) {
+>> +				case A0_MODIFY:
+>> +					regs.a0 = A0_NEW;
+>> +					break;
+>> +				case ORIG_A0_MODIFY:
+>> +					orig_a0 = A0_NEW;
+>> +					break;
+>> +				}
+>> +
+>> +				if (ptrace(PTRACE_SETREGSET, pid, NT_PRSTATUS, &iov))
+>> +					perr_and_exit("failed to set tracee registers");
+>> +				if (ptrace(PTRACE_SETREGSET, pid, NT_RISCV_ORIG_A0, &a0_iov))
+>> +					perr_and_exit("failed to set tracee registers");
+>> +				switch (i) {
+>> +				case 1:
+>> +					/* Stop at the beginning of syscall */
+>> +					rc = ptrace(PTRACE_GET_SYSCALL_INFO, pid,
+>> +						sizeof(syscall_info), &syscall_info);
+>> +					if (rc < 0)
+>> +						perr_and_exit("failed to get syscall info of entry");
+>> +					if (rc < expected_sci_entry_size
+>> +						|| syscall_info.op != PTRACE_SYSCALL_INFO_ENTRY)
+>> +						perr_and_exit("stop position of entry mismatched");
+>> +					result[0].orig_a0 = syscall_info.entry.args[0];
+>> +					break;
+>> +
+>> +				case 2:
+>> +					/* Stop at the end of syscall */
+>> +					rc = ptrace(PTRACE_GET_SYSCALL_INFO, pid,
+>> +						sizeof(syscall_info), &syscall_info);
+>> +					if (rc < 0)
+>> +						perr_and_exit("failed to get syscall info of entry");
+>> +					if (rc < expected_sci_exit_size
+>> +						|| syscall_info.op != PTRACE_SYSCALL_INFO_EXIT)
+>> +						perr_and_exit("stop position of exit mismatched");
+>> +					result[0].a0 = syscall_info.exit.rval;
+>> +
+>> +					if (ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, &iov))
+>> +						perr_and_exit("failed to get tracee registers");
+>> +					result[1].a0 = regs.a0;
+>> +					if (ptrace(PTRACE_GETREGSET, pid, NT_RISCV_ORIG_A0,
+>> +						   &a0_iov))
+>> +						perr_and_exit("failed to get tracee registers");
+>> +					result[1].orig_a0 = orig_a0;
+>> +				}
+>> +			}
+>> +			if (ptrace(PTRACE_SYSCALL, pid, 0, 0) < 0)
+>> +				perr_and_exit("failed to resume tracee");
+>> +		}
+>> +	}
+>> +
+>> +	/* Resume the tracee */
+>> +	ptrace(PTRACE_CONT, pid, 0, 0);
+>> +	if (waitpid(pid, &status, 0) != pid)
+>> +		perr_and_exit("failed to wait for the tracee");
+>> +
+>> +}
+>> +
+>> +TEST(ptrace_access_a0)
+>> +{
+>> +	struct a0_regs result[2];
+>> +
+>> +	ptrace_test(A0_MODIFY, result);
+>> +
+>> +	/* Verify PTRACE_SETREGSET */
+>> +	/* The modification of a0 cannot affect the first argument of the syscall */
+>> +	EXPECT_EQ(A0_OLD, result[0].orig_a0);
+>> +	EXPECT_EQ(A0_NEW, result[0].a0);
+>> +
+>> +	/* Verify PTRACE_GETREGSET */
+>> +	EXPECT_EQ(result[1].orig_a0, result[0].orig_a0);
+>> +	EXPECT_EQ(result[1].a0, result[0].a0);
+>> +}
+>> +
+>> +TEST(ptrace_access_orig_a0)
+>> +{
+>> +	struct a0_regs result[2];
+>> +
+>> +	ptrace_test(ORIG_A0_MODIFY, result);
+>> +
+>> +	/* Verify PTRACE_SETREGSET */
+>> +	/* Only modify orig_a0 to change the first argument of the syscall */
+>> +	EXPECT_EQ(A0_NEW, result[0].orig_a0);
+>> +	/* a0 will keep default value, orig_a0 or -ENOSYS, depends on internal. */
+>> +	EXPECT_NE(A0_NEW, result[0].a0);
+> 
+> I don't understand this test. Why don't we know what to expect? Also, the
+> comment says orig_a0 is an option for the value, but then we don't expect
+> it to be A0_NEW, even though we expect orig_a0 to be A0_NEW?
 
-The v2 of this series didn't get any reviews, probably because it has
-been sent the week before Xmas. Do you prefer if I resend it?
+The purpose of the test is to ensure that the ORIG_A0_MODIFY operation
+will not affect the a0 register (So it will not be our A0_NEW). But there
+is a problem with the comment. It is written for some old wrong code.
+I will correct the comment.
 
-There is no hurry, I can also re-send it later if "now" is not a good time.
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
+> 
+>> +
+>> +	/* Verify PTRACE_GETREGSET */
+>> +	EXPECT_EQ(result[1].orig_a0, result[0].orig_a0);
+>> +	EXPECT_EQ(result[1].a0, result[0].a0);
+>> +}
+>> +
+>> +TEST_HARNESS_MAIN
+>>
+>> -- 
+>> 2.48.0
+>>
+> 
+> Other than the two comments/questions, this test looks great.
+> 
+> Thanks,
+> drew
 
 
