@@ -1,175 +1,153 @@
-Return-Path: <linux-kselftest+bounces-24591-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24592-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53E77A12A53
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 18:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F489A12A7B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 19:10:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF6273A5EBD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 17:57:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BC753A5A9F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 18:10:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D6041D54E3;
-	Wed, 15 Jan 2025 17:57:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BEA01A8F7D;
+	Wed, 15 Jan 2025 18:10:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WWiYQGLk"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i/9Tykbk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7565223
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2025 17:57:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5484214A630
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2025 18:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736963878; cv=none; b=QnrV9veRjNYX5Ju4i4Zp3jAmdBbvjEi8z3kRpKyKbKwMdg2xBdC83TaX3uZOfQ6nARkpLVr5xQJwtt/lKfQn/2ra5rcHIPQvNIuS4WaSgqDtmj49raCdGVRumEaqnLnVcgMXwCdQxjUStrCECi4H4IN0O8B4E8S5+2cKCzynUz4=
+	t=1736964623; cv=none; b=eInaDYB1JpdIYjzpiJcYNWk4i6G7Jl/43KnbvIa5F2drn3npwKbWz2NXW3d4R7frEirJIKFDr+1v1Q0Sh+xzfubsOhmly95ovcK3EDMKA+rwn9wCWyr6JOdrkVM1zTPrBdArXMutQKzyREb0T8mj7f103KWdcZGpieYcgmTh/4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736963878; c=relaxed/simple;
-	bh=LZQ8fPjz687OON6jUEjJHXKOtHqb1s5cvAQZuOJFRYQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Tj5G4jiyq7Kh07HxAeg3MJbxmBXZflDo74eSxpO0Ei8675ktikb1YKkrM/eK4AMlMxAAqXNZxu6VF6dtLJbwIEMjfd/OzS8yCppf8eQZm5Kp2Q80WDAl0+iuPvtdU5zsN53yTFzKqnSEOG/7zruTURPva1C5nOoip+dH3GwgWcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WWiYQGLk; arc=none smtp.client-ip=209.85.166.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-844de072603so1528739f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2025 09:57:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1736963875; x=1737568675; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kchx5FBff+Jkr7uune4RFLdzHTx4luoy6cm+6F6IEz0=;
-        b=WWiYQGLkK2BkN2Q/qjbzCk/C1hClDvGy+vbE/YezLeZVKc34PXvhgMRsyt81DuhbK1
-         vlbmXQSgr/jsQBfgfaasVtSUnGqMwofLBeylBVwrkBEuJknJk80bY6o8njRy8JKlmwsF
-         9IGmCWl+//0F/jZ2UohxulukaIu7BbibHwLVE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736963875; x=1737568675;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kchx5FBff+Jkr7uune4RFLdzHTx4luoy6cm+6F6IEz0=;
-        b=srb8w7jvn6S/QYLu0VIEaKvl/WLpb2rn/3cvvTvkj/Kn5N1V2xhXzVPmnPnwzeB9yU
-         kMLrbklynuIai8Ld1aWEEl6XlnJup8C31v8HoE7hwd6XpCMQrDmFXS6G7o2xa2CLBWHz
-         gnLmsbv5BZsrcO+WRyj43vncYz0U1EZs0IPgV7hWstyLihfxRerU3wKKA4z+BwDIEUrU
-         GP6IRjoQuY/I/9IYVViz5azQLBBY90Wm+705lXHxOJOdwvs1CfXdpuIU/yvrTtc+LtAz
-         U5ZzbqqepdUNEYhDjzU/3mBWK32faGyP54TexOuTEBbda6nRxKbEc3kj+gd1SzjK7VAW
-         fZRw==
-X-Forwarded-Encrypted: i=1; AJvYcCXIM5hoCj7+ZmHrGzzRp/T27jFqKoRi9uwr50V9MxhUQeZTdiBoLK8ajGjg4nzAm6E8mWS1jltYgIP7jmF7XB0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCy+VjOWiHmDFuiMJXoPskIwMTBkT2GBHV874ev/0pe1mTdvGY
-	UBWDWcA1YVmqjLtHQv4VLEIytHSo8HOzsV40YZ/J/LqcZTkh/V8VLdbA7/xP6pZRObx5Weq0IN8
-	/
-X-Gm-Gg: ASbGncta37kSg58RNYK5D0G4v1tnrHT9hMan7qR+3amT8rX0fCrorp48wjy3YcVFAEi
-	oZgBZZz0ArEOdEjq8IdmqGlAuXsIhFIjYwVE6QkGFjpEUUy+LA95C6NbOnVgedB3uVWrfLoavLx
-	aF31h23YKSKpu6MoPAeIcScC1fmfMbnUuQz97AdQ7geXq2rWUJyf4xHrdSMiJOJuYx9tDX626N+
-	ws/L31RZNMrkMzKYaOj3fM8YBdyz6FEK7pAB3d51o0KK8YvCkHofyg+8TUI9Sbdnfs=
-X-Google-Smtp-Source: AGHT+IGstEoRVFWLCX1rvF+GzBxjB+Sl3fQa9h+tTaAmxar0MaFf0w/59fRqmG4CurK8euJFsPuFxA==
-X-Received: by 2002:a05:6602:418d:b0:84a:7902:d424 with SMTP id ca18e2360f4ac-84cdfdce129mr2968127539f.0.1736963875219;
-        Wed, 15 Jan 2025 09:57:55 -0800 (PST)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ea1b718433sm4164039173.109.2025.01.15.09.57.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jan 2025 09:57:54 -0800 (PST)
-Message-ID: <0e4bfd16-76da-430d-a7a4-f1d31448ea43@linuxfoundation.org>
-Date: Wed, 15 Jan 2025 10:57:53 -0700
+	s=arc-20240116; t=1736964623; c=relaxed/simple;
+	bh=JXmTrsaNqVrR1MmMysbscv4cmOFjopCGy4kCDdPxb8s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b+C/7BlEO/5T37SRg/DP/CE+1ttfoqAAvscbaIpfzircBHegAxdUD7YTEN+PX0osRSmH7xXKxn4xctQtoENoTMOyxd9oLFbpWrHrgyzhbXLT0GPOfLqsV3AjSfKPiyDlL0SSvrR6qeeKBIjA+yncmZmG2iYweFc9LVGDe4b5IJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i/9Tykbk; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1736964621;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Np7pSsxaw2iUiB/sIQw22hWaNnI9by8bAfVe0S6KgrQ=;
+	b=i/9TykbknnYnH/5huvZ9sHjknCxJRASBhm64anDLferdn6FtidAKAzZIcrO9X31Z2WBqEu
+	QkSJwDAj5Pw/2wF4NwQ7eXsyZmtWzKNz3YqcFgNe4QKuNXxU4K3hbHj3+FP4gedIgqeF4E
+	67u6qATUSz3WQ+dfegZlNncUfFIg+2Q=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-279-cfTrX9eZNAu5ZcVcw0aX2w-1; Wed,
+ 15 Jan 2025 13:10:17 -0500
+X-MC-Unique: cfTrX9eZNAu5ZcVcw0aX2w-1
+X-Mimecast-MFC-AGG-ID: cfTrX9eZNAu5ZcVcw0aX2w
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 278E71956055;
+	Wed, 15 Jan 2025 18:10:15 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.81.40])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 151E719560AB;
+	Wed, 15 Jan 2025 18:10:11 +0000 (UTC)
+Date: Wed, 15 Jan 2025 13:10:09 -0500
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: Madhavan Srinivasan <maddy@linux.ibm.com>
+Cc: jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, shuah@kernel.org,
+	mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+	naveen@kernel.org, live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] selftests: livepatch: handle PRINTK_CALLER in
+ check_result()
+Message-ID: <Z4f6AbC7pQLIWuX+@redhat.com>
+References: <20250114143144.164250-1-maddy@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/rseq: Fix handling of glibc without rseq
- support
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: linux-kernel@vger.kernel.org, Raghavendra Rao Ananta
- <rananta@google.com>, Peter Zijlstra <peterz@infradead.org>,
- Boqun Feng <boqun.feng@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>,
- Carlos O'Donell <carlos@redhat.com>, Florian Weimer <fweimer@redhat.com>,
- Michael Jeanson <mjeanson@efficios.com>, linux-kselftest@vger.kernel.org,
- stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20250114145132.612569-1-mathieu.desnoyers@efficios.com>
- <9b7228cf-29ed-4f35-8b8a-b4f8482c434e@linuxfoundation.org>
- <28c050bb-d844-4b85-a49b-39f2defc20ef@efficios.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <28c050bb-d844-4b85-a49b-39f2defc20ef@efficios.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250114143144.164250-1-maddy@linux.ibm.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On 1/14/25 17:45, Mathieu Desnoyers wrote:
-> On 2025-01-14 19:14, Shuah Khan wrote:
->> On 1/14/25 07:51, Mathieu Desnoyers wrote:
->>> When porting librseq commit:
->>>
->>> commit c7b45750fa85 ("Adapt to glibc __rseq_size feature detection")
->>>
->>> from librseq to the kernel selftests, the following line was missed
->>> at the end of rseq_init():
->>>
->>>    rseq_size = get_rseq_kernel_feature_size();
->>>
->>> which effectively leaves rseq_size initialized to -1U when glibc does not
->>> have rseq support. glibc supports rseq from version 2.35 onwards.
->>>
->>> In a following librseq commit
->>>
->>> commit c67d198627c2 ("Only set 'rseq_size' on first thread registration")
->>>
->>> to mimic the libc behavior, a new approach is taken: don't set the
->>> feature size in 'rseq_size' until at least one thread has successfully
->>> registered. This allows using 'rseq_size' in fast-paths to test for both
->>> registration status and available features. The caveat is that on libc
->>> either all threads are registered or none are, while with bare librseq
->>> it is the responsability of the user to register all threads using rseq.
->>>
->>> This combines the changes from the following librseq commits:
->>>
->>> commit c7b45750fa85 ("Adapt to glibc __rseq_size feature detection")
->>> commit c67d198627c2 ("Only set 'rseq_size' on first thread registration")
->>>
->>> Fixes: 73a4f5a704a2 ("selftests/rseq: Fix mm_cid test failure")
+On Tue, Jan 14, 2025 at 08:01:44PM +0530, Madhavan Srinivasan wrote:
+> Some arch configs (like ppc64) enable CONFIG_PRINTK_CALLER, which
+> adds the caller id as part of the dmesg. Due to this, even though
+> the expected vs observed are same, end testcase results are failed.
+> 
+>  -% insmod test_modules/test_klp_livepatch.ko
+>  -livepatch: enabling patch 'test_klp_livepatch'
+>  -livepatch: 'test_klp_livepatch': initializing patching transition
+>  -livepatch: 'test_klp_livepatch': starting patching transition
+>  -livepatch: 'test_klp_livepatch': completing patching transition
+>  -livepatch: 'test_klp_livepatch': patching complete
+>  -% echo 0 > /sys/kernel/livepatch/test_klp_livepatch/enabled
+>  -livepatch: 'test_klp_livepatch': initializing unpatching transition
+>  -livepatch: 'test_klp_livepatch': starting unpatching transition
+>  -livepatch: 'test_klp_livepatch': completing unpatching transition
+>  -livepatch: 'test_klp_livepatch': unpatching complete
+>  -% rmmod test_klp_livepatch
+>  +[   T3659] % insmod test_modules/test_klp_livepatch.ko
+>  +[   T3682] livepatch: enabling patch 'test_klp_livepatch'
+>  +[   T3682] livepatch: 'test_klp_livepatch': initializing patching transition
+>  +[   T3682] livepatch: 'test_klp_livepatch': starting patching transition
+>  +[    T826] livepatch: 'test_klp_livepatch': completing patching transition
+>  +[    T826] livepatch: 'test_klp_livepatch': patching complete
+>  +[   T3659] % echo 0 > /sys/kernel/livepatch/test_klp_livepatch/enabled
+>  +[   T3659] livepatch: 'test_klp_livepatch': initializing unpatching transition
+>  +[   T3659] livepatch: 'test_klp_livepatch': starting unpatching transition
+>  +[    T789] livepatch: 'test_klp_livepatch': completing unpatching transition
+>  +[    T789] livepatch: 'test_klp_livepatch': unpatching complete
+>  +[   T3659] % rmmod test_klp_livepatch
+> 
+>   ERROR: livepatch kselftest(s) failed
+>  not ok 1 selftests: livepatch: test-livepatch.sh # exit=1
+> 
+> Currently the check_result() handles the "[time]" removal from
+> the dmesg. Enhance the check to handle removal of "[Tid]" also.
+> 
+> Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
+> ---
+>  tools/testing/selftests/livepatch/functions.sh | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+> index e5d06fb40233..a1730c1864a4 100644
+> --- a/tools/testing/selftests/livepatch/functions.sh
+> +++ b/tools/testing/selftests/livepatch/functions.sh
+> @@ -306,7 +306,8 @@ function check_result {
+>  	result=$(dmesg | awk -v last_dmesg="$LAST_DMESG" 'p; $0 == last_dmesg { p=1 }' | \
+>  		 grep -e 'livepatch:' -e 'test_klp' | \
+>  		 grep -v '\(tainting\|taints\) kernel' | \
+> -		 sed 's/^\[[ 0-9.]*\] //')
+> +		 sed 's/^\[[ 0-9.]*\] //' | \
+> +		 sed 's/^\[[ ]*T[0-9]*\] //')
 
-Fixed this commit id
-commit c7b45750fa85 ("Adapt to glibc __rseq_size feature detection")
+Thanks for adding this to the filter.
 
->>> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->>
->> Hi Mathieu,
->>
->> Can you double check these commits and make sure these are right
->> ones in the mainline rc7?
->>
->> I am seeing "Unknown commit id" warnings on all of these - my
->> repo is at 6.13 rc7
-> 
-> This is because those are commits in the librseq project at
-> https://git.kernel.org/pub/scm/libs/librseq/librseq.git/
-> which is a different tree from the Linux kernel. I am not
-> sure what is the preferred approach when citing a
-> commit ID from a different project ?
-> 
-> I've been keeping both rseq selftests and librseq in
-> sync since 2018. I plan to eventually add a dependency
-> of the rseq selftests on librseq, but this cannot
-> happen until we freeze the API and cut a librseq
-> release.
-> 
-> This was premature before we reached the major milestone
-> of having extensible rseq support in glibc.
-> 
-> Now that it's merged into glibc (as of last week),
-> we can start looking forward to a librseq release,
-> which should eventually eliminate code duplication
-> with rseq selftests.
-> 
-> Perhaps we should add a Link: to the librseq
-> repository ?
-> 
->>
->> Also would you like to add Reported-by for Raghavendra Rao Ananta?
+If I read the PRINTK_CALLER docs correctly, there is a potential CPU
+identifier as well.  Are there any instances where the livepatching code
+will use the "[C$processor_id]" (out of task context) prefix?  Or would
+it hurt to future proof with [CT][0-9]?
 
-Added. The patch is now in linux-kselftest next
+Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
 
-thanks,
--- Shuah
+--
+Joe
+
+>  
+>  	if [[ "$expect" == "$result" ]] ; then
+>  		echo "ok"
+> -- 
+> 2.47.0
+> 
+
 
