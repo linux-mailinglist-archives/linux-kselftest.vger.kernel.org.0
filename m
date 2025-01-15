@@ -1,65 +1,65 @@
-Return-Path: <linux-kselftest+bounces-24572-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24573-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3086DA124D6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 14:35:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C604A124DD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 14:36:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2EFD37A35F9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 13:35:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A4DC37A309F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 13:35:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4591E241685;
-	Wed, 15 Jan 2025 13:35:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD8C824225A;
+	Wed, 15 Jan 2025 13:35:39 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 413942459AB;
-	Wed, 15 Jan 2025 13:35:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C172419F5;
+	Wed, 15 Jan 2025 13:35:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736948137; cv=none; b=JWGIYNmzWEFuLIfOwHjPPLa9+/1RsTMqrpFED6MqW5/Zki4kAPnyNL/DA0Qud3yi5FoqNf5p9n8JjXFj5WmLE5kxEpnRpVx/+v5bpyV4eqaih0w1Rv+oHSWBFftLI2Vid8Rjo1uxu7g8HZq6Vx/P4fcDplF1VIBqwrZLzqIpui4=
+	t=1736948139; cv=none; b=f5/auFki2car/Gq7M/NG0bLBEOBCdsT/aGBZ3o5Jh4sZf3V3w57uB8m4jRD0H4x7i8feLRdO7yCnFfbFKWwGMgOWeuYNAlk9KX11X11WvKgAVpttM/0CezkpVyr33qWe0FOshUeHorMoj2kAfWG1r1kmuGgXxpT5luDJnXvryHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736948137; c=relaxed/simple;
-	bh=ulj1HOTDaNMpMqYVSJ4X3p1JpX3evQ0ThnqfDmvEpDs=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NjCJ66dNc0Pg+Bkoymg7Jx+t/SyXE5MzgYc/QE1mEtZCFP+zvapv73cCRVWDN6Jlfud1igNr40q9avtyNQplLLWcVRk+M1njb6b/95NBT4/lIb0STCfJbjYCaiqhdb2W5XsUo6Cr1PIxzkuOEbm9s6d2uO9q4v2lrGzwMgtlZMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.51
+	s=arc-20240116; t=1736948139; c=relaxed/simple;
+	bh=I44r0ohDanmuyGUNmsb93UKVYeAjH4Ix9dgCMmolnZA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=aLxwsiefkgTAl6/Wbq+TbCjeUaNWcDG+8soPYSShk2k8g04i9xQTAupqaZrPpXmnApOFKIIDceBhBCUyfAgVCn7kfVtJSBrr736mrsxg3RaaX2mzVE7n2yw8e09tIGXCAGiPlhLmDqCIyt/fie5r/nL7RtixWSYZ8G7viQcBuWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-aa6a92f863cso1270215966b.1;
-        Wed, 15 Jan 2025 05:35:35 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5d3d0205bd5so10247855a12.3;
+        Wed, 15 Jan 2025 05:35:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736948133; x=1737552933;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SALK4sDCQYvTb0KKst1+p1P7McWo3sTt16aXL5fdW8Q=;
-        b=DnyVr8PaDnnEznS/OsmTmYhg8OFFd13A+37eUkycZNPR7z0gs1C+/ezF4d3GW01PiF
-         dUfEZwN3zvoZqFizOXISgnhqYCyFV4PuJn3OkYryHzUUElv+B0+ckOoTZh1IGjXTOkF3
-         1Xa8NIgvQK0iBC7OcSzEHND9lHQYjBVIPCdU9+1/H18T0ucT8EQ0rmrSPp4jBON735vW
-         mCmSEju46z1vZ9kSaXYV0LNSNa8vxqzAyLOeJbQfiw8Or6XhBnpqNCBD+4m6t+P1Xaf7
-         M3QJ6xKqkp2RbZ6k8212wmF39VDhOTbSUofpwHKyWJ44e/Sxv69ySwqPGlSyEDUEktsJ
-         afTg==
-X-Forwarded-Encrypted: i=1; AJvYcCUbk8D5xQzNZWJ3EJ3RamcIBptdtLA6U8V12CPS2ii3mVWsNox/qERgQL5buKCNlM6pRAJSw6VFKxw=@vger.kernel.org, AJvYcCVKiTZAqj3xFvYLo1h5QJV/yF3jKHxW2DtrSoS+xiJ3lLz9eTg32CJXSXxUKq7ktMQxZO0cxzwV9sGl8Ot2@vger.kernel.org, AJvYcCW7CyWoJFKkCrHwHoenr4HBGWqcLXfnkqsEKvCxDYKuRFTql4HNjzC+ERL0b2uRRRVImZ3k3n+P462B7hcUany4@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlneaqtWPf3ZWBX3ORlAAoXI5tCnuNSlcwXM8h9i3g9eU0/rJF
-	bHaGFs8h6eOflFPfE3u4GrDqLEZYeKfMS+Zwq7YyJe46UyecB8l7
-X-Gm-Gg: ASbGnctZ0+rrJKsrgScPc/f6txqvlwu5ZXETgUqcMxijdq6HacjxuCoC7l9hUItSjRu
-	n6ajLDEIy/CKbILT/GGwBh5aa4ypjMw3NZX3r+8pXYQXmNPh+9hzS8ryjQfTDKe0EDAhI7WcN6U
-	3ZuGfSWsHSSjZF+0iGln5rEOPOex1oSQcnsGG45kI90IqQLsmOv2AXa7Fj6JZeIPMckoho2qRms
-	dMcdxIdVSM+JSekxhGpQmI5YNE5e76h3ujejcHP9g4yF8U=
-X-Google-Smtp-Source: AGHT+IGt5sXVoPCFD/NMTDdlvFSvgoOs1cqdB0gLt7NTHLg9S9IfSV9GbbpY5XrTZcAEXxmAo2TzPA==
-X-Received: by 2002:a17:907:60d5:b0:aa6:a228:afaf with SMTP id a640c23a62f3a-ab2abcb139cmr2753855966b.52.1736948133280;
-        Wed, 15 Jan 2025 05:35:33 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:4::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab2c90da0d9sm764196266b.67.2025.01.15.05.35.32
+        d=1e100.net; s=20230601; t=1736948136; x=1737552936;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=df2IhOg8gjz9sUPxNfKqvMxzOJiOqxvGrLLj83bUoYA=;
+        b=hLv3AFBX8ZVqbIlicnKbuUKUZeudhardmH9m5JK2G48NS9ACqjzq9Jb44cGHAEFmGG
+         lMWhS071vPWTEct9fN9N3JFXC/M3aAoKnbPyEPC1cuouEIycGbXfprh2baHDHhPi2Gfp
+         c7iJvi60jxArCPHcFD61rYPk8Vqe5z+6deh+DLqerjdx585tPV2yRUOtpSfI78RAeZr+
+         JU6lB+mea+EiH+LwBnkocrPaFOaKDtWqM1sH6ssfcoA84vBdlwna9Isk2Hr1u0RjwZA+
+         T6aOGZfw4JojmKE3mbDdk5NX+b9QXhXvrwEUW7IpCjZveeCqH6KEAmhWjOieNYaTxW5x
+         tVzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV+8mwTy9nxE4ZUmQg9EXXxLlNB5ItuAq1/BCQpeGC1ryzHliqi0zq80ZSeXzGNjDzpAMFWMcr9tWMyasARwq/2@vger.kernel.org, AJvYcCWQpgral8UBDvNghmQyEqxqG7xnfVQ/CHAZJAduu7PZHFpDiG1Zvm6AMXK4xZ0RmsQ0kAHlia68sNOGns8g@vger.kernel.org, AJvYcCWjjTogMtORp7XEQzuCGGHOaEpn7BNCk+XT0RMY97SOEWc6rKWOcKJs289TCZ1qke3+uZEXgJFKkhs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEmsKY1G1RAmy3PDCCHNIWy244HeYYTqoKoj6zuiqgEnTLJHs2
+	k0p28SkcJ5AB5/hbG3Ivqxe7foF5+2wvQUD6aF/okVGQk42OumUK3LMfoA==
+X-Gm-Gg: ASbGncs+DIrAZ7zGa6C+gVggdBoa6AwGr1YLkQcG+n2Or3ajrYxOPraIzRN015OvhQZ
+	35ih5e71w4ezQWff/ydTh9Boj2BIvRvgIAcBVv/LUyK/d+TL1AabNmIaNSWLjGK7DSJYfaKClSz
+	Rh3K1m1Y3sh7NR29oFduztGn+UCPGiYQVw0ZnGZuIJQU/7FX9+EJs2AnHkN9F5Q9Ku90hUOFZ8D
+	aSLS8JZCAJnhJco5Eb8hiBwXTB0L27EKzgJLScIh/w8UEw=
+X-Google-Smtp-Source: AGHT+IH+jzZB+6H7tb2ufIL0iv9VO3Ke5GHd3vthkaBLWfZZiuwGOj0yB6/tLGzksHnYgKgAypln0A==
+X-Received: by 2002:a05:6402:51d0:b0:5d2:7346:3ecb with SMTP id 4fb4d7f45d1cf-5d972e08366mr27860822a12.12.1736948135564;
+        Wed, 15 Jan 2025 05:35:35 -0800 (PST)
+Received: from localhost ([2a03:2880:30ff:1::])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d99046d7e3sm7183701a12.60.2025.01.15.05.35.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2025 05:35:32 -0800 (PST)
+        Wed, 15 Jan 2025 05:35:34 -0800 (PST)
 From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH net-next v2 0/5] netconsole: Add support for CPU population
-Date: Wed, 15 Jan 2025 05:35:17 -0800
-Message-Id: <20250115-netcon_cpu-v2-0-95971b44dc56@debian.org>
+Date: Wed, 15 Jan 2025 05:35:18 -0800
+Subject: [PATCH net-next v2 1/5] netconsole: Rename userdata to extradata
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,11 +68,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJa5h2cC/03NQQqDMBBA0auEWZuSiYKpq96jSDFx1NlMJEnFI
- t69YDddf3j/gEyJKUOnDki0ceYo0ClbKQjLIDNpHqFTYI1tEI3TQiVEeYX1rQPVd2zJuanxUCl
- YE028X9gThIoW2gv0lYKFc4npc102vPoPxPof3FAbPaJr/dQGU1t8jOR5kFtMM/TneX4B/iPkf
- K8AAAA=
-X-Change-ID: 20241108-netcon_cpu-ce3917e88f4b
+Message-Id: <20250115-netcon_cpu-v2-1-95971b44dc56@debian.org>
+References: <20250115-netcon_cpu-v2-0-95971b44dc56@debian.org>
+In-Reply-To: <20250115-netcon_cpu-v2-0-95971b44dc56@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -83,129 +81,302 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  Breno Leitao <leitao@debian.org>, kernel-team@meta.com, max@kutsevol.com, 
  thepacketgeek@gmail.com
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5085; i=leitao@debian.org;
- h=from:subject:message-id; bh=ulj1HOTDaNMpMqYVSJ4X3p1JpX3evQ0ThnqfDmvEpDs=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnh7mj4ovbpc3+8RLnALPtLdIZci51EBJyVBkvP
- Vd0ycrX0f2JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ4e5owAKCRA1o5Of/Hh3
- bTYaD/9Or/0PCBZ6RxYA9GN1yOIZRCzplMG4SkXR/D86PUqUwUdEH1SNqTB6gT7t0oXCQ+a7H0K
- RF/zPWOHHMCqVANtHwW5C1b/0N6uDDmv/mgVYFdhHMa8QJyd9/5PHBbSYbBHr7faYGL4Y/WVTXe
- pNn39H08YyewZzhAfIsh/ZLckDYCubnkUJiM4UyVeaqslrLMFkVVuwtGCLYawPoyMB9hXoezvMb
- w0wo5IL9DI3x4cvBuNDBXSze72YeoE0Bb0anloCGi5P4GWgfD7ogidSM4JkfviS2dyzjvNuvq6w
- DZoB6WpJLGClpXXJHoXejzS/2ilQogWJu5xFBC0JvEPWGtzmw26lqLIzgR8qBBgzRCLI8Y/3nRC
- jJLChsrg+cQG58rLM+G398z0ZKfxheDwOwMEEqHs+APpLEFsObwqPjxe/CXe6Y6Dz1O7Jw+0pDL
- qMDc/6Y2BxDEhz3AcbZpj5YNsr4OAL18d44m+p5G9vJtVdNiEo9bYiGRHxCTDkPeQLZppdKfjxG
- va1nkYZfUNFPnqPD8IbVWCD8yrmZBXplBrZPSXmGGNd9DRU2vwhwDKl9vnfTMZcqRAvy2PVJ8YY
- S69nc+seupuRIAfno5EPTwikmHVGQ91S0TFOLmVF0WQaN/sQRCrR80OrbasLqTnXLiC40Pqpd90
- mLGyKbkTpT0EKkQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10512; i=leitao@debian.org;
+ h=from:subject:message-id; bh=I44r0ohDanmuyGUNmsb93UKVYeAjH4Ix9dgCMmolnZA=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnh7mjB5DwkkBvfj6RL/Z/OSwlrlFr9WV/+JG6t
+ PyDuzkSsnqJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ4e5owAKCRA1o5Of/Hh3
+ bYqND/472GKbeKPvYgOZBGTzDezqgW2rctj19Zm5Ii0h2NlBEszHZue1/TtDEjZ/2yPIZ7h1tO5
+ 6vz4NkmN3vXRjDaZH/69FLVuatnWnoUrfSlwUtwiMwTwom5+SMngoK5qVZKpUnYDyruE2NY33sL
+ lMwDHqtft4fos5PHEIVetAJJO94pvvHPQVllUaTkJ4Mj5quHyxN4AUT0eHECX8rd+09mEoq1eSX
+ wt577hGMVMoOfK6nldzjeghgsCx5Gpxlw8ElXNxWkcuDMOZiqRWVol2eMGVFdI8jwqm5yl/fuWd
+ lYYtuA7KW4Jfbqb+bvKAZxJeJFVNqLBA1OQAXdSoyQB52J2ISopeIbVJC3Yc42PPq0wZUXw18r6
+ XAI/6b0PQIZ+6GNa/qeDQ39qeHdE0oxI/dbbs4xOjFsMrjQdyrQRK4tfhdXd4DCyAvqhiktiQtk
+ UxkjLmGXlPZVIx3FR9lKukmWmQgFAnT1ZcY0Yn1QetZQ2q3L9GHoQwph1eX2OFEaHpEbQw8DB2z
+ 7fLoD1coFKFdV2CJd6elbo7EQyAzoNvgxbAbg4RGVf5antS7sJgOumW63g1eAjM6ghYtczQYW8t
+ YQfGZ9zS4hYld4wcSQPYugKgrVdOIoIhy2JumPdXNK81+GoxRZxR8vYU7VRZzS0lOv2wXaJBK/S
+ xKFL8+2bDe7ELYg==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-The current implementation of netconsole sends all log messages in
-parallel, which can lead to an intermixed and interleaved output on the
-receiving side. This makes it challenging to demultiplex the messages
-and attribute them to their originating CPUs.
+Rename "userdata" to "extradata" since this structure will hold both
+user and system data in future patches. Keep "userdata" term only for
+data that comes from userspace (configfs), while "extradata" encompasses
+both userdata and future kerneldata.
 
-As a result, users and developers often struggle to effectively analyze
-and debug the parallel log output received through netconsole.
+These are the rules of the design
 
-Example of a message got from produciton hosts:
+1. extradata_complete will hold userdata and sysdata (coming)
+2. sysdata will come after userdata_length
+3. extradata_complete[userdata_length] string will be replaced at every
+   message
+5. userdata is replaced when configfs changes (update_userdata())
+6. sysdata is replaced at every message
 
-	------------[ cut here ]------------
-	------------[ cut here ]------------
-	refcount_t: saturated; leaking memory.
-	WARNING: CPU: 2 PID: 1613668 at lib/refcount.c:22 refcount_warn_saturate+0x5e/0xe0
-	refcount_t: addition on 0; use-after-free.
-	WARNING: CPU: 26 PID: 4139916 at lib/refcount.c:25 refcount_warn_saturate+0x7d/0xe0
-	Modules linked in: bpf_preload(E) vhost_net(E) tun(E) vhost(E)
+Example:
+  extradata_complete = "userkey=uservalue cpu=42"
+  userdata_length = 17
+  sysdata_length = 7 (space (" ") is part of sysdata)
 
-This series of patches introduces a new feature to the netconsole
-subsystem that allows the automatic population of the CPU number in the
-userdata field for each log message. This enhancement provides several
-benefits:
+Since sysdata is still not available, you will see the following in the
+send functions:
 
-* Improved demultiplexing of parallel log output: When multiple CPUs are
-  sending messages concurrently, the added CPU number in the userdata
-  makes it easier to differentiate and attribute the messages to their
-  originating CPUs.
+	extradata_len = nt->userdata_length;
 
-* Better visibility into message sources: The CPU number information
-  gives users and developers more insight into which specific CPU a
-  particular log message came from, which can be valuable for debugging
-  and analysis.
+The upcoming patches will, which will add support for sysdata, will
+change it to:
 
-The changes in this series are as follows:
-
-Patch 1: netconsole: Rename userdata to extradata
-=================================================
-Create the a concept of extradata, which encompasses the concept of
-userdata and the upcoming sysdatao
-
-Sysdata is a new concept being added, which is basically fields that are
-populated by the kernel. At this time only the CPU#, but, there is a
-desire to add current task name, kernel release version, etc.
-
-Patch 2: netconsole: Helper to count number of used entries
-===========================================================
-Create a simple helper to count number of entries in extradata. I am
-separating this in a function since it will need to count userdata and
-sysdata. For instance, when the user adds an extra userdata, we need to
-check if there is space, counting the previous data entries (from
-userdata and cpu data)
-
-Patch 3: netconsole: add support for sysdata and CPU population
-===============================================================
-This is the core patch. Basically add a new option to enable automatic
-CPU number population in the netconsole userdata Provides a new "cpu_nr"
-sysfs attribute to control this feature
-
-Patch 4: "netconsole: selftest: test CPU number auto-population"
-=============================================================
-Expands the existing netconsole selftest to verify the CPU number
-auto-population functionality Ensures the received netconsole messages
-contain the expected "cpu=<CPU>" entry in the message. Test different
-permutation with userdata
-
-Patch 5: "netconsole: docs: Add documentation for CPU number auto-population"
-=============================================================================
-Updates the netconsole documentation to explain the new CPU number
-auto-population feature Provides instructions on how to enable and use
-the feature
-
-I believe these changes will be a valuable addition to the netconsole
-subsystem, enhancing its usefulness for kernel developers and users.
+	extradata_len = nt->userdata_length + sysdata_len;
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-Changes in v2:
-- Create the concept of extradata and sysdata. This will make the design
-  easier to understand, and the code easier to read.
-  * Basically extradata encompasses userdata and the new sysdata.
-    Userdata originates from user, and sysdata originates in kernel.
-- Improved the test to send from a very specific CPU, which can be
-  checked to be correct on the other side, as suggested by Jakub.
-- Fixed a bug where CPU # was populated at the wrong place
-- Link to v1: https://lore.kernel.org/r/20241113-netcon_cpu-v1-0-d187bf7c0321@debian.org
+ drivers/net/netconsole.c | 84 ++++++++++++++++++++++++------------------------
+ 1 file changed, 42 insertions(+), 42 deletions(-)
 
----
-Breno Leitao (5):
-      netconsole: Rename userdata to extradata
-      netconsole: Helper to count number of used entries
-      netconsole: add support for sysdata and CPU population
-      netconsole: selftest: test for sysdata CPU
-      netconsole: docs: Add documentation for CPU number auto-population
+diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+index 86ab4a42769a49eebe5dd6f01dafafc6c86ec54f..5ef069e8277efa87d6f00d08277dcfe97a858cf9 100644
+--- a/drivers/net/netconsole.c
++++ b/drivers/net/netconsole.c
+@@ -45,12 +45,12 @@ MODULE_DESCRIPTION("Console driver for network interfaces");
+ MODULE_LICENSE("GPL");
+ 
+ #define MAX_PARAM_LENGTH		256
+-#define MAX_USERDATA_ENTRY_LENGTH	256
+-#define MAX_USERDATA_VALUE_LENGTH	200
++#define MAX_EXTRADATA_ENTRY_LEN		256
++#define MAX_EXTRADATA_VALUE_LEN	200
+ /* The number 3 comes from userdata entry format characters (' ', '=', '\n') */
+-#define MAX_USERDATA_NAME_LENGTH	(MAX_USERDATA_ENTRY_LENGTH - \
+-					MAX_USERDATA_VALUE_LENGTH - 3)
+-#define MAX_USERDATA_ITEMS		16
++#define MAX_EXTRADATA_NAME_LEN		(MAX_EXTRADATA_ENTRY_LEN - \
++					MAX_EXTRADATA_VALUE_LEN - 3)
++#define MAX_EXTRADATA_ITEMS		16
+ #define MAX_PRINT_CHUNK			1000
+ 
+ static char config[MAX_PARAM_LENGTH];
+@@ -102,8 +102,8 @@ struct netconsole_target_stats  {
+  * @list:	Links this target into the target_list.
+  * @group:	Links us into the configfs subsystem hierarchy.
+  * @userdata_group:	Links to the userdata configfs hierarchy
+- * @userdata_complete:	Cached, formatted string of append
+- * @userdata_length:	String length of userdata_complete
++ * @extradata_complete:	Cached, formatted string of append
++ * @userdata_length:	String length of usedata in extradata_complete.
+  * @stats:	Packet send stats for the target. Used for debugging.
+  * @enabled:	On / off knob to enable / disable target.
+  *		Visible from userspace (read-write).
+@@ -129,7 +129,7 @@ struct netconsole_target {
+ #ifdef	CONFIG_NETCONSOLE_DYNAMIC
+ 	struct config_group	group;
+ 	struct config_group	userdata_group;
+-	char userdata_complete[MAX_USERDATA_ENTRY_LENGTH * MAX_USERDATA_ITEMS];
++	char extradata_complete[MAX_EXTRADATA_ENTRY_LEN * MAX_EXTRADATA_ITEMS];
+ 	size_t			userdata_length;
+ #endif
+ 	struct netconsole_target_stats stats;
+@@ -687,7 +687,7 @@ static ssize_t remote_mac_store(struct config_item *item, const char *buf,
+ 
+ struct userdatum {
+ 	struct config_item item;
+-	char value[MAX_USERDATA_VALUE_LENGTH];
++	char value[MAX_EXTRADATA_VALUE_LEN];
+ };
+ 
+ static struct userdatum *to_userdatum(struct config_item *item)
+@@ -724,13 +724,13 @@ static void update_userdata(struct netconsole_target *nt)
+ 
+ 	/* Clear the current string in case the last userdatum was deleted */
+ 	nt->userdata_length = 0;
+-	nt->userdata_complete[0] = 0;
++	nt->extradata_complete[0] = 0;
+ 
+ 	list_for_each(entry, &nt->userdata_group.cg_children) {
+ 		struct userdatum *udm_item;
+ 		struct config_item *item;
+ 
+-		if (WARN_ON_ONCE(child_count >= MAX_USERDATA_ITEMS))
++		if (WARN_ON_ONCE(child_count >= MAX_EXTRADATA_ITEMS))
+ 			break;
+ 		child_count++;
+ 
+@@ -738,19 +738,19 @@ static void update_userdata(struct netconsole_target *nt)
+ 		udm_item = to_userdatum(item);
+ 
+ 		/* Skip userdata with no value set */
+-		if (strnlen(udm_item->value, MAX_USERDATA_VALUE_LENGTH) == 0)
++		if (strnlen(udm_item->value, MAX_EXTRADATA_VALUE_LEN) == 0)
+ 			continue;
+ 
+-		/* This doesn't overflow userdata_complete since it will write
+-		 * one entry length (1/MAX_USERDATA_ITEMS long), entry count is
++		/* This doesn't overflow extradata_complete since it will write
++		 * one entry length (1/MAX_EXTRADATA_ITEMS long), entry count is
+ 		 * checked to not exceed MAX items with child_count above
+ 		 */
+-		complete_idx += scnprintf(&nt->userdata_complete[complete_idx],
+-					  MAX_USERDATA_ENTRY_LENGTH, " %s=%s\n",
++		complete_idx += scnprintf(&nt->extradata_complete[complete_idx],
++					  MAX_EXTRADATA_ENTRY_LEN, " %s=%s\n",
+ 					  item->ci_name, udm_item->value);
+ 	}
+-	nt->userdata_length = strnlen(nt->userdata_complete,
+-				      sizeof(nt->userdata_complete));
++	nt->userdata_length = strnlen(nt->extradata_complete,
++				      sizeof(nt->extradata_complete));
+ }
+ 
+ static ssize_t userdatum_value_store(struct config_item *item, const char *buf,
+@@ -761,7 +761,7 @@ static ssize_t userdatum_value_store(struct config_item *item, const char *buf,
+ 	struct userdata *ud;
+ 	ssize_t ret;
+ 
+-	if (count > MAX_USERDATA_VALUE_LENGTH)
++	if (count > MAX_EXTRADATA_VALUE_LEN)
+ 		return -EMSGSIZE;
+ 
+ 	mutex_lock(&dynamic_netconsole_mutex);
+@@ -810,13 +810,13 @@ static struct config_item *userdatum_make_item(struct config_group *group,
+ 	struct userdata *ud;
+ 	size_t child_count;
+ 
+-	if (strlen(name) > MAX_USERDATA_NAME_LENGTH)
++	if (strlen(name) > MAX_EXTRADATA_NAME_LEN)
+ 		return ERR_PTR(-ENAMETOOLONG);
+ 
+ 	ud = to_userdata(&group->cg_item);
+ 	nt = userdata_to_target(ud);
+ 	child_count = list_count_nodes(&nt->userdata_group.cg_children);
+-	if (child_count >= MAX_USERDATA_ITEMS)
++	if (child_count >= MAX_EXTRADATA_ITEMS)
+ 		return ERR_PTR(-ENOSPC);
+ 
+ 	udm = kzalloc(sizeof(*udm), GFP_KERNEL);
+@@ -1118,11 +1118,11 @@ static void send_msg_no_fragmentation(struct netconsole_target *nt,
+ 				      int release_len)
+ {
+ 	static char buf[MAX_PRINT_CHUNK]; /* protected by target_list_lock */
+-	const char *userdata = NULL;
++	const char *extradata = NULL;
+ 	const char *release;
+ 
+ #ifdef CONFIG_NETCONSOLE_DYNAMIC
+-	userdata = nt->userdata_complete;
++	extradata = nt->extradata_complete;
+ #endif
+ 
+ 	if (release_len) {
+@@ -1134,10 +1134,10 @@ static void send_msg_no_fragmentation(struct netconsole_target *nt,
+ 		memcpy(buf, msg, msg_len);
+ 	}
+ 
+-	if (userdata)
++	if (extradata)
+ 		msg_len += scnprintf(&buf[msg_len],
+ 				     MAX_PRINT_CHUNK - msg_len,
+-				     "%s", userdata);
++				     "%s", extradata);
+ 
+ 	send_udp(nt, buf, msg_len);
+ }
+@@ -1154,24 +1154,24 @@ static void send_fragmented_body(struct netconsole_target *nt, char *buf,
+ 				 const char *msgbody, int header_len,
+ 				 int msgbody_len)
+ {
+-	const char *userdata = NULL;
++	const char *extradata = NULL;
+ 	int body_len, offset = 0;
+-	int userdata_len = 0;
++	int extradata_len = 0;
+ 
+ #ifdef CONFIG_NETCONSOLE_DYNAMIC
+-	userdata = nt->userdata_complete;
+-	userdata_len = nt->userdata_length;
++	extradata = nt->extradata_complete;
++	extradata_len = nt->userdata_length;
+ #endif
+ 
+ 	/* body_len represents the number of bytes that will be sent. This is
+ 	 * bigger than MAX_PRINT_CHUNK, thus, it will be split in multiple
+ 	 * packets
+ 	 */
+-	body_len = msgbody_len + userdata_len;
++	body_len = msgbody_len + extradata_len;
+ 
+ 	/* In each iteration of the while loop below, we send a packet
+ 	 * containing the header and a portion of the body. The body is
+-	 * composed of two parts: msgbody and userdata. We keep track of how
++	 * composed of two parts: msgbody and extradata. We keep track of how
+ 	 * many bytes have been sent so far using the offset variable, which
+ 	 * ranges from 0 to the total length of the body.
+ 	 */
+@@ -1198,36 +1198,36 @@ static void send_fragmented_body(struct netconsole_target *nt, char *buf,
+ 
+ 		/* msgbody was finally written, either in the previous
+ 		 * messages and/or in the current buf. Time to write
+-		 * the userdata.
++		 * the extradata.
+ 		 */
+ 		msgbody_written |= offset + this_offset >= msgbody_len;
+ 
+-		/* Msg body is fully written and there is pending userdata to
+-		 * write, append userdata in this chunk
++		/* Msg body is fully written and there is pending extradata to
++		 * write, append extradata in this chunk
+ 		 */
+ 		if (msgbody_written && offset + this_offset < body_len) {
+ 			/* Track how much user data was already sent. First
+ 			 * time here, sent_userdata is zero
+ 			 */
+-			int sent_userdata = (offset + this_offset) - msgbody_len;
++			int sent_extradata = (offset + this_offset) - msgbody_len;
+ 			/* offset of bytes used in current buf */
+ 			int preceding_bytes = this_chunk + this_header;
+ 
+-			if (WARN_ON_ONCE(sent_userdata < 0))
++			if (WARN_ON_ONCE(sent_extradata < 0))
+ 				return;
+ 
+-			this_chunk = min(userdata_len - sent_userdata,
++			this_chunk = min(extradata_len - sent_extradata,
+ 					 MAX_PRINT_CHUNK - preceding_bytes);
+ 			if (WARN_ON_ONCE(this_chunk < 0))
+ 				/* this_chunk could be zero if all the previous
+ 				 * message used all the buffer. This is not a
+-				 * problem, userdata will be sent in the next
++				 * problem, extradata will be sent in the next
+ 				 * iteration
+ 				 */
+ 				return;
+ 
+ 			memcpy(buf + this_header + this_offset,
+-			       userdata + sent_userdata,
++			       extradata + sent_extradata,
+ 			       this_chunk);
+ 			this_offset += this_chunk;
+ 		}
+@@ -1285,17 +1285,17 @@ static void send_msg_fragmented(struct netconsole_target *nt,
+ static void send_ext_msg_udp(struct netconsole_target *nt, const char *msg,
+ 			     int msg_len)
+ {
+-	int userdata_len = 0;
++	int extradata_len = 0;
+ 	int release_len = 0;
+ 
+ #ifdef CONFIG_NETCONSOLE_DYNAMIC
+-	userdata_len = nt->userdata_length;
++	extradata_len = nt->userdata_length;
+ #endif
+ 
+ 	if (nt->release)
+ 		release_len = strlen(init_utsname()->release) + 1;
+ 
+-	if (msg_len + release_len + userdata_len <= MAX_PRINT_CHUNK)
++	if (msg_len + release_len + extradata_len <= MAX_PRINT_CHUNK)
+ 		return send_msg_no_fragmentation(nt, msg, msg_len, release_len);
+ 
+ 	return send_msg_fragmented(nt, msg, msg_len, release_len);
 
- Documentation/networking/netconsole.rst            |  45 +++++
- drivers/net/netconsole.c                           | 223 ++++++++++++++++-----
- tools/testing/selftests/drivers/net/Makefile       |   1 +
- .../selftests/drivers/net/lib/sh/lib_netcons.sh    |  17 ++
- .../selftests/drivers/net/netcons_sysdata.sh       | 166 +++++++++++++++
- 5 files changed, 407 insertions(+), 45 deletions(-)
----
-base-commit: 7b24f164cf005b9649138ef6de94aaac49c9f3d1
-change-id: 20241108-netcon_cpu-ce3917e88f4b
-
-Best regards,
 -- 
-Breno Leitao <leitao@debian.org>
+2.43.5
 
 
