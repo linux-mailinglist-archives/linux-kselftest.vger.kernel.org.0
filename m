@@ -1,186 +1,153 @@
-Return-Path: <linux-kselftest+bounces-24557-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24558-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7A24A11D75
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 10:23:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82A6CA11E45
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 10:40:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1CF91650C5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 09:23:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67AFA3AD0A2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 09:40:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C05D236EB4;
-	Wed, 15 Jan 2025 09:19:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F20231EEA3D;
+	Wed, 15 Jan 2025 09:40:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iYoCJFCU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="roDXKbdC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72DA71EEA3C;
-	Wed, 15 Jan 2025 09:19:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B596E248175;
+	Wed, 15 Jan 2025 09:40:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736932786; cv=none; b=BqDd0TwvJN6TqCJATO7l71XbgEEgMqMB8y1aQI8IZRvHBHdSvbs226yr7677UkcJ8933D/6zCVNT7XLFTL+Fv4qXohQ6IsmYc3cHcH4YxRTAafDa1lVi7AGHH3HqsstrVHsl567LMSxr7wK/AQ0k8HRITbh4w5L9gRTeAAvDxCk=
+	t=1736934021; cv=none; b=DdxFPxYhICpC7X3ypAaZLvofScXO01vdDFtPx1XYZmWgUymCh1Cetf0ymrE5BzQeHE1da9QiTL63OFBnvl4KSgkE3RubbN1cTabYiECqOt8dqTKJRuBwAuVLz/WXj93PQhA4SRLf6NTPxWuFsN8bTVAQ3185zZx3l+gJo+ProPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736932786; c=relaxed/simple;
-	bh=RvhwOre/z7gR+muMadtDKtL5V3OxuoZM3Ph6e0Y81N0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VLasmJ8A0ltLZQ7je6E+USVuvVUbjMBDCatbQRPRJ+HVCNMJ2dUx6NQPR69Ty2sWP5r4X3ts6m+dZ5TTC6AqQEATIEDq8et8UqPyxDEGiE0cfiKCYUorj+9PbZElDtV2PD83o/lczSPc8mDYu2F/1LjrQYy+Xe/xqoG75mkf7U8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iYoCJFCU; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2167141dfa1so11352915ad.1;
-        Wed, 15 Jan 2025 01:19:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736932784; x=1737537584; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sXdSbSC6AwIP7P9EAjkKQv89mKJ3kko9rfa47rf4ABc=;
-        b=iYoCJFCU+awc4I4CgKNIQRb0FY44DJfQO/qeoUP2lCRS1rF5rqaIMYFKpJACsDiLfq
-         AHo6WcdxyzP6SDOzSmxXESmtsq2aKfWdh7k7JXuiCQBbPfyHIJPSHTxMypYh3keq7sf2
-         f9P5wzfcip7CBqxvCmlQw0QVVOCGpcd3drWIJH9SYhD9+ON4Uaoq2PXJF4IEQ9rCt5/r
-         hYwvQmrLuRAyNqra9zJyW1x1kqKZY6Qw9Njo9gOgSSC0L7gAa0CiTvC2KM5MiRB0uS+Y
-         BtAenVK/F30+3xv+c6r8MVCe+tH2AvUCrEeSHd+j0uA9PwVkFZv5Kj+xrUl7XXWkvS8/
-         WttQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736932784; x=1737537584;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sXdSbSC6AwIP7P9EAjkKQv89mKJ3kko9rfa47rf4ABc=;
-        b=MmvT2GheXy2/Wk/meQkomPqYCWKjcI3hSDZQhtzlRroSuAL/+oYtc3Pf5+tuHkKtou
-         Ri4Dxf/sFQTI1i/MY01uo4svVxl2fs3Af0SL7nz17BhO1hJ3Jrz6KYdnLf8p38ZlPfnj
-         2MPESy12c71fla4gaSpi9W2eBdW+FwxK0R+OxIiDI41yKbIxwzqz0P3lhbg1cYrJjyDO
-         MTXrQJHh4JhBJSLPCgVzwsS301/sCxNdRAZP548/CHsXb4agjQec934YUP8Mkptx6F60
-         m0144hBMRHnzx+KP7afWcdNbv4BrVyo6Ac66z8PxcwvhZG8IURT8WZTWwSVnUujJNEiJ
-         bpOw==
-X-Forwarded-Encrypted: i=1; AJvYcCUq5aKLQZyKH8T4Uax6ivcq8DT5D+HsmK/Uo9n8/tP7wt5RZYV6Duw7jxS8OgzcwwRNmUP4gl8km0nmUqw=@vger.kernel.org, AJvYcCWaAS60NeD6nqhn2i12uUY4jUs0M+5UmTvucjUVel3q0GDXHxJdk32nJIZxsKYlSuDBGocevMCJBt3rdrHHwRom@vger.kernel.org, AJvYcCX3x7R/dTIeQxiJ4P5fXGiGhvDSRkcBFjl4ZBFdMolvHTp3oc2j064l9V5HU0wmG5clom/m0tzu@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5wNfWJcldlRif86TqRa1fZP2xEzIQJRIuKtGwoW8ByyDuy+ps
-	HmGdzUpS4uC+dBYevdhbKtvMYKm1DvaZYDsj8JLBAQin8n9vDVP0
-X-Gm-Gg: ASbGnctROrzpJTx2iX9EdWafxsujYFQRoqsscxvN1occcg96uloxuedWAVksnG349lT
-	6ifpklQv8BhifFNGB/iSycsXia9y5Q+2r968SkvfQUebpU+rqAZFNT9T7l8WXnLL9hVX63IXCJw
-	x3tSUTKSDE5ZeCkyYAqLMd6UKqUQUTK6XTraeiECwWD35jWA8RJJbWgjwZlRTg1WfHj69mOwmyo
-	Of92QU/F+N3uYqWaV7Xnryy+BObKBoDr+TczkKeP/xb5P1OMCWcJkBEnznyRQ==
-X-Google-Smtp-Source: AGHT+IGlB215DiONNHf9EqhRn2hGW0cLM3QYP1QRMSjhhYG7i+IPrOxNCHkNUpojeqrVDfYyeu3HAQ==
-X-Received: by 2002:a17:90b:1f8c:b0:2ee:8cbb:de28 with SMTP id 98e67ed59e1d1-2f728deacf6mr3779482a91.8.1736932783628;
-        Wed, 15 Jan 2025 01:19:43 -0800 (PST)
-Received: from fedora ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f72c2f69d1sm911702a91.45.2025.01.15.01.19.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2025 01:19:42 -0800 (PST)
-Date: Wed, 15 Jan 2025 09:19:33 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Steffen Klassert <steffen.klassert@secunet.com>,
-	Jianbo Liu <jianbol@nvidia.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	Jay Vosburgh <jv@jvosburgh.net>,
-	Andy Gospodarek <andy@greyhouse.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Simon Horman <horms@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Sabrina Dubroca <sd@queasysnail.net>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 0/2] bond: fix xfrm offload feature during init
-Message-ID: <Z4d9pVshf3RKQp_o@fedora>
-References: <20241211071127.38452-1-liuhangbin@gmail.com>
- <20241212062734.182a0164@kernel.org>
- <Z1vfsAyuxcohT7th@fedora>
- <20241213193127.4c31ef80@kernel.org>
- <Z3X9pfu12GUOBUY6@fedora>
- <1d8c901f-e292-43e4-970f-8440b26e92b0@nvidia.com>
- <Z3u0q5HSOshLn2V0@fedora>
- <Z33nEKg4PxwReUu_@fedora>
- <ad289f9a-41c3-4544-8aeb-535615f45aef@nvidia.com>
- <Z34l6hpbzPP9n65Y@fedora>
+	s=arc-20240116; t=1736934021; c=relaxed/simple;
+	bh=3p9UzCR9kQuU0z8Q1jLKK0c0JcS0ghAZDVUdc7YWF+k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KUrc4TNewfqF7uUJDbtBdtJyVJybzbFMbywGhDprtGANUc8iTl9WeyCJ77owUE2hbOPL90zoIBLhG0bjtvYjMgVh0kjp1PZvwEGaHe10BcehusrzhLbvFLoeyBAI6MKzf3q/KUPqCsgrvgkVBiiDD3/k2mCzkaKXoaXSRT2EafQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=roDXKbdC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BEB7C4CEE2;
+	Wed, 15 Jan 2025 09:40:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736934019;
+	bh=3p9UzCR9kQuU0z8Q1jLKK0c0JcS0ghAZDVUdc7YWF+k=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=roDXKbdCcFjko/CSPHu6qfsC9e10olP2x7R2a0w5qO8OVwDDsDYyiVX1oYBoLKl2W
+	 cHyxfXDEOjiXWV7H2bx7YuNaCUT/OUKv9QDkANc7VEvuWbJPN58NmaN0X5eHyFSBs2
+	 1vc5gUGgQovAYtBpif7xEqLJdpHc9aT3T43hUr4TqVvDoE5el0MVOtfQ6Ba1Gdjot1
+	 UMPNtrjXwN3V4nNYxdoxt5K4HcRdEj8mFnufki4dqWbQunfle3cW3FQBuHYm0J7sK+
+	 hKdLgVKiHPqr9gLiuk6spKXpq7oOAH/bgHMurb26CPrTb7Vdjm/PpkNUfgfLyCPapm
+	 5wiFfY0HJtSzA==
+Message-ID: <1ff05fca-28ff-491e-ab4e-b562d310359b@kernel.org>
+Date: Wed, 15 Jan 2025 10:39:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z34l6hpbzPP9n65Y@fedora>
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH bpf-next/net v2 0/7] bpf: Add mptcp_subflow bpf_iter
+ support
+Content-Language: en-GB
+To: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Martin KaFai Lau <martin.lau@kernel.org>, mptcp@lists.linux.dev,
+ Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+References: <20241219-bpf-next-net-mptcp-bpf_iter-subflows-v2-0-ae244d3cdbbc@kernel.org>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20241219-bpf-next-net-mptcp-bpf_iter-subflows-v2-0-ae244d3cdbbc@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jan 08, 2025 at 07:15:00AM +0000, Hangbin Liu wrote:
-> > > > > > I don't know how to disable bonding sleeping since we use mutex_lock now.
-> > > > > > Hi Jianbo, do you have any idea?
-> > > > > > 
-> > > > > 
-> > > > > I think we should allow drivers to sleep in the callbacks. So, maybe it's
-> > > > > better to move driver's xdo_dev_state_delete out of state's spin lock.
-> > > > 
-> > > > I just check the code, xfrm_dev_state_delete() and later
-> > > > dev->xfrmdev_ops->xdo_dev_state_delete(x) have too many xfrm_state x
-> > > > checks. Can we really move it out of spin lock from xfrm_state_delete()
-> > > 
-> > > I tried to move the mutex lock code to a work queue, but found we need to
-> > > check (ipsec->xs == xs) in bonding. So we still need xfrm_state x during bond
-> > 
-> > Maybe I miss something, but why need to hold spin lock. You can keep xfrm
-> > state by its refcnt.
+Hello BPF maintainers and reviewers,
+
+On 19/12/2024 16:46, Matthieu Baerts (NGI0) wrote:
+> Here is a series from Geliang, adding mptcp_subflow bpf_iter support.
 > 
-> Do you mean move the xfrm_dev_state_delete() out of spin lock directly like:
-> 
-> diff --git a/net/xfrm/xfrm_state.c b/net/xfrm/xfrm_state.c
-> index 67ca7ac955a3..6881ddeb4360 100644
-> --- a/net/xfrm/xfrm_state.c
-> +++ b/net/xfrm/xfrm_state.c
-> @@ -766,13 +766,6 @@ int __xfrm_state_delete(struct xfrm_state *x)
->  		if (x->encap_sk)
->  			sock_put(rcu_dereference_raw(x->encap_sk));
->  
-> -		xfrm_dev_state_delete(x);
-> -
-> -		/* All xfrm_state objects are created by xfrm_state_alloc.
-> -		 * The xfrm_state_alloc call gives a reference, and that
-> -		 * is what we are dropping here.
-> -		 */
-> -		xfrm_state_put(x);
->  		err = 0;
->  	}
->  
-> @@ -787,8 +780,20 @@ int xfrm_state_delete(struct xfrm_state *x)
->  	spin_lock_bh(&x->lock);
->  	err = __xfrm_state_delete(x);
->  	spin_unlock_bh(&x->lock);
-> +	if (err)
-> +		return err;
->  
-> -	return err;
-> +	if (x->km.state == XFRM_STATE_DEAD) {
-> +		xfrm_dev_state_delete(x);
-> +
-> +		/* All xfrm_state objects are created by xfrm_state_alloc.
-> +		 * The xfrm_state_alloc call gives a reference, and that
-> +		 * is what we are dropping here.
-> +		 */
-> +		xfrm_state_put(x);
-> +	}
-> +
-> +	return 0;
->  }
->  EXPORT_SYMBOL(xfrm_state_delete);
->  
+> We are working on extending MPTCP with BPF, e.g. to control the path
+> manager -- in charge of the creation, deletion, and announcements of
+> subflows (paths) -- and the packet scheduler -- in charge of selecting
+> which available path the next data will be sent to. These extensions
+> need to iterate over the list of subflows attached to an MPTCP
+> connection, and do some specific actions via some new kfunc that will be
+> added later on.
 
-Hi Jianbo,
+(...)
 
-I talked with Sabrina and it looks we can't simply do this. Because both
-xfrm_add_sa_expire() and xfrm_timer_handler() calling __xfrm_state_delete() under
-spin lock. If we move the xfrm_dev_state_delete() out of __xfrm_state_delete(),
-all the places need to be handled correctly.
+> Changes in v2:
+> - Patches 1-2: new ones.
+> - Patch 3: remove two kfunc, more restrictions. (Martin)
+> - Patch 4: add BUILD_BUG_ON(), more restrictions. (Martin)
+> - Patch 7: adaptations due to modifications in patches 1-4.
+> - Link to v1: https://lore.kernel.org/r/20241108-bpf-next-net-mptcp-bpf_iter-subflows-v1-0-cf16953035c1@kernel.org
 
-At the same time xfrm_timer_handler() calling xfrm_dev_state_update_stats before
-__xfrm_state_delete(). Should we also take care of it to make sure the state
-change and delete are called at the same time?
+The v2 of this series didn't get any reviews, probably because it has
+been sent the week before Xmas. Do you prefer if I resend it?
 
-Hi Steffen, do you have any comments?
+There is no hurry, I can also re-send it later if "now" is not a good time.
 
-Thanks
-Hangbin
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
+
 
