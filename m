@@ -1,74 +1,77 @@
-Return-Path: <linux-kselftest+bounces-24544-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24545-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D7CEA1175F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 03:41:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5849EA11763
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 03:41:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 193923A2CB1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 02:41:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78421162B83
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 02:41:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D46F22E3F7;
-	Wed, 15 Jan 2025 02:40:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D443922DFB8;
+	Wed, 15 Jan 2025 02:41:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="JENB1jox"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="N9vqMPRe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7803B13AA2F
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2025 02:40:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 326F34206B
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2025 02:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736908853; cv=none; b=eWLGsbQ8ksCFyGeHchyDEpTW/1N0ZowVdFcZqksdB94hlVcV6zeSagAS53hN2tjdAQUQo4wU4Nbko7+WCL59x/vQF62OHM8kqQisHFEFEYnPGxuQBgRki8U7tvNXG902JGnWEC524jqMBy9vnG3DBsWWBAk820gTtKi+D1vZFUQ=
+	t=1736908864; cv=none; b=qAT787yvn+EU9MFbNxWBaaO1FWCobWbnM/wzial41efhl2yJgAa+beodojcLCKLzAa5a5WmUnHHYHKgzUcOB33XMg+JQ8IOUsXyYHwS9A5pV5mSamq3M66fX5BplPqnPQhUxYb8ixg8t5oIVewJn04rLfb1GSQ/yJFQ1WFYg/Vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736908853; c=relaxed/simple;
-	bh=ov+Jovl5slUh9ZOeOd2AFWuWkumQhEGSazSuEBrqpfY=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version; b=Q6OyqOsjFgNNS2lCpBGq3kpXQFpc3i7NzKPkPrBcmwQLcTGu50WCY94GU2O716aBXtsusRRLuMBo7oZmyJLf3VUO9OAwlOoQlmSiV86h4ukffcorx7dNmz/rpTcuB0be/U+oOG5vNStY29CPJ/HP/ZZJVFqJ2DkOmMIS5Av3OPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=JENB1jox; arc=none smtp.client-ip=209.85.214.175
+	s=arc-20240116; t=1736908864; c=relaxed/simple;
+	bh=G+K9MvSpAIpwDwMmunI0YSdJnqQJGTJZcC3ONEVxX60=;
+	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=AjMgDzCilf3jEURCofFYKPKFWhSTaOAB4DmIQgcYAmNWoU2JVL4E+JzbBojY61uPZGoBhKhDns3zSVl6AzEmbEgQHWoDHiXrEz8LnXlv8hU+19c5xX8p9dvdoHgkDSCSfJa2CJuQw2g35u2LEaB6kzd96lIA8sdfpBsaQ99ouS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=N9vqMPRe; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-21670dce0a7so134644625ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 18:40:51 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21680814d42so92271545ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 18:41:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1736908851; x=1737513651; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KiILRyRfHo+NUtJXMbpq128gxB2UW/YGfDj3MyZiOVE=;
-        b=JENB1joxvhUEl/YjMQArb4q0EEyvFNIyKdm1go+k4Lxa/tsr7j7DuAwW+eU03y1+ks
-         N5HaDHHMSEDYTLV8jqzTv8kDSf6BZbpFfLP5VsdwFJf47Y4SNOLK/rGnYMZiFr4nOx9K
-         I64sXtwi4aVKm9AFm4rsA1kndxxYiYZYnvfe86ydGbjqyhJYTrGvXCTlfSI9eOIB1Gst
-         wjH0V8kziQgg4Ub1STgoBCnektyHcwPy5zMrFyUwFfip0cCpIIM/DJ28PGfgm764at2A
-         3+o05eSW+nPMRzu5eIxoiuA/6iET4KC79lzPm5YDXJWXalQfBgISqT//BjH8OEwatqV2
-         ZfXg==
+        d=bytedance.com; s=google; t=1736908862; x=1737513662; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n+lHU8O3OzxopxeMRFW7AZqN84liiT6mDTuuIRoGMNs=;
+        b=N9vqMPRelNsEAHkyRKo7lK/eY6HPffqDkwqLLl9XD08GJblRfKsJKzA+709019O5Zg
+         fCTzTkG5qCJKrdSP1NZTC5783REeByOZADHoMnRAfy1MgewDNe6AUPmyvmb3O5+i0PAL
+         FSIdFfIGCxXploC4DPx7LPCtiX/lom8JiOdfJOIRYrsnWGlwUYssHiZmof8hCgf9PUcs
+         ga7PSF/fnvpO2Z6Ubz/UmZcZWbyN7mUc+t53sd4HWPhJaE5M3tI7uB97SXouLLrTY5l2
+         6rIE2Pt/NY+jDZpAW8U422tpJRhCo8sIQzbqeRhDrkBEJOu2i8G/Q+WFwVjci6oC1cfe
+         IQRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736908851; x=1737513651;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KiILRyRfHo+NUtJXMbpq128gxB2UW/YGfDj3MyZiOVE=;
-        b=PAiYxQtGkCOCLupZK8+hnaAgiiYDTBriKtEQZAYZM5XI3VakjRJ2d63Alw4j3e5WsF
-         PpihnP3gN2VSsOl5AidSk3lTZUpScCCRX+vCWVfDAeot90ESn73UTTeCvKElFEeWr+AT
-         MC4U8yQIAgX2MzO7++GVOtdc0FFYNahZLkHQUBA1zcv5Lg7KG15igxRTbSGDfhmkoiNq
-         ynaBqbkVrw/lQeWjbYHaYVUMUYRoOHMCvs9ZeFakoSXf/fkNu+14VcwQyP6T+1xsVq/D
-         HI9vUyhtPwZhdUrLZF7VIcbRA+xCBRRitSIdTc6SXqf0daxtlG2cHKObBmFezZqzSnR0
-         IKEw==
-X-Forwarded-Encrypted: i=1; AJvYcCVA5PQCcJZinTo3G4CZKu2fGUSRtTjn+p4upHKa5lcBOA+lMzv2hGxMCQEm+GSOeI6XMBNcqmL+BxKW8maZK9U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySlwBEajaSUJ15NCEkU3n+g1UVuxUpqUjKrkApz6uiw/XHNaez
-	AbrbMazz88/ZoV+S7s7UiHCkDm3Nw8UMYc+IQayJsh/JdlmXlL929GdIk5Iz3PY=
-X-Gm-Gg: ASbGnctUwYboQHEVvwQnKSpRSoW8nqmJTKQZ94Ys6RAmlxXhAHR6IjmPWHeYRbBmyL/
-	QLubVyLvs7LECaik4uKs+bC9CJ4qZ8STyHOSI9kC2ewuhm7mDHYKVdoaNQdCP6PRRU1VeFUWUTC
-	agVapd1SjYsBNFpWl6gmXz6dQIeZdqpxCMR0Dt33rf3EZu+rvshqRNzKauon7xZB7M1N8+GqTHT
-	R9oxjVcZ+o8kX1vbLxgC8cawmo8tO4WaFiq4bmvU4ThJD2ab0C4xayvoc/VhbdCBTBN3R0+BbR5
-	pcKpXi028Je2rIY=
-X-Google-Smtp-Source: AGHT+IFAimWtf2lTBvrnqOrM8muizhicRypBcekevc3BNNeuhbcAjrIt4O9niFCSSQRXVpLXyqpbPg==
-X-Received: by 2002:a05:6a00:6f4a:b0:72d:3861:895c with SMTP id d2e1a72fcca58-72d38618af0mr34186945b3a.8.1736908850691;
-        Tue, 14 Jan 2025 18:40:50 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736908862; x=1737513662;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n+lHU8O3OzxopxeMRFW7AZqN84liiT6mDTuuIRoGMNs=;
+        b=pvOSLuEC4WCbQZBc1f5NvqYBfh0zmCcwC0SLDi8NOIpxC3k31v66teBE1Fah3SVdHm
+         RYS3g7vf7uZZeeIojJNVjMguDbcTujNqc1bIiakVXhFIkYP6oPg+n96mTR8TfqCOihuE
+         CXt3EhK1bPacjNWbmcBH5uzoy6FKT0xV+fAHGQOnk3sCvjw2Ap9taR/UDEWcTERsEqLn
+         uapOmxqRajbstZcPPRjbVz5fgqQb2VXOwnanUNYds3I17GHt9WnWrEDyMEefQBnS4q+d
+         Pw0dw4ovaXvmZErXil5nh/f4Y3FA1LZGX85wkOaBt+kkhBcz+4V/wryGCwKQX2mDd0G0
+         y55w==
+X-Forwarded-Encrypted: i=1; AJvYcCXaKRQidj+eBadf5TKe/WcOXH66yw7RxwEgR2Fj+lRQpECBSHvywPoLizhLTRcgGXIxuaLky7xaadOg64+26j8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAF2d/qlmpUJPPQWPUncrw9Vk6VvUiYH1TyrjpWGNlweYG+OPw
+	oCCzgjdrnOSo4VvMhq5DzV8fxJYFuwN7g4G7wV0ghj5dE4BcH+D39HI+++xz1Ic=
+X-Gm-Gg: ASbGncs/aXV/yb8YAoZb4hWMZWs9xnVrpy/0jLoTWhKjC9lVw+PEj64J3FbNOsiu1jX
+	Z3ygK8EThxSoptVR8KjaSgCp8W2t7P7EBFdHRZc+PIlLAamDQdvzUwApbw1tcv7TJ6+uklnhG+d
+	GpLGz3BsmbVLFW3/8w1vX78L+nzW2v7W5CwRAVDRuc9Kg9FuarFtUdZPqVYjiSug5Omlc56Dnk4
+	245zuZcIqqug5kSxhRN2aXYVoiYuwhLI3Ga4/p91De0S4bIPhl0bvAwjLG8zqYnE0PdlqTz32ry
+	MYHH4d7GDS/yGvU=
+X-Google-Smtp-Source: AGHT+IHRs+ZLjJaMOCMFOSev5yey8o2EV/Ai+cdpqR0LkTXM3ZpNmIhiXmJyiWzASfW23X6Ls0/4fg==
+X-Received: by 2002:a05:6a00:4502:b0:724:f86e:e3d9 with SMTP id d2e1a72fcca58-72d21f64f72mr39087001b3a.14.1736908862297;
+        Tue, 14 Jan 2025 18:41:02 -0800 (PST)
 Received: from L6YN4KR4K9.bytedance.net ([139.177.225.227])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d40680e67sm8321841b3a.139.2025.01.14.18.40.42
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d40680e67sm8321841b3a.139.2025.01.14.18.40.51
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 14 Jan 2025 18:40:50 -0800 (PST)
+        Tue, 14 Jan 2025 18:41:01 -0800 (PST)
 From: Yunhui Cui <cuiyunhui@bytedance.com>
 To: ajones@ventanamicro.com,
 	alexghiti@rivosinc.com,
@@ -90,10 +93,12 @@ To: ajones@ventanamicro.com,
 	paul.walmsley@sifive.com,
 	samuel.holland@sifive.com,
 	shuah@kernel.org
-Subject: [PATCH v5 0/3] Enable Zicbom in usermode
-Date: Wed, 15 Jan 2025 10:40:21 +0800
-Message-Id: <20250115024024.84365-1-cuiyunhui@bytedance.com>
+Subject: [PATCH v5 1/3] RISC-V: Enable cbo.clean/flush in usermode
+Date: Wed, 15 Jan 2025 10:40:22 +0800
+Message-Id: <20250115024024.84365-2-cuiyunhui@bytedance.com>
 X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+In-Reply-To: <20250115024024.84365-1-cuiyunhui@bytedance.com>
+References: <20250115024024.84365-1-cuiyunhui@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -102,34 +107,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-v1/v2:
-There is only the first patch: RISC-V: Enable cbo.clean/flush in usermode,
-which mainly removes the enabling of cbo.inval in user mode.
+Enabling cbo.clean and cbo.flush in user mode makes it more
+convenient to manage the cache state and achieve better performance.
 
-v3:
-Add the functionality of Expose Zicbom and selftests for Zicbom.
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
+---
+ arch/riscv/kernel/cpufeature.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-v4:
-Modify the order of macros, The test_no_cbo_inval function is added
-separately.
-
-v5:
-1. Modify the order of RISCV_HWPROBE_KEY_ZICBOM_BLOCK_SIZE in hwprobe.rst
-2. "TEST_NO_ZICBOINVAL" -> "TEST_NO_CBO_INVAL"
-
-Yunhui Cui (3):
-  RISC-V: Enable cbo.clean/flush in usermode
-  RISC-V: hwprobe: Expose Zicbom extension and its block size
-  RISC-V: selftests: Add TEST_ZICBOM into CBO tests
-
- Documentation/arch/riscv/hwprobe.rst        |  6 ++
- arch/riscv/include/asm/hwprobe.h            |  2 +-
- arch/riscv/include/uapi/asm/hwprobe.h       |  2 +
- arch/riscv/kernel/cpufeature.c              |  8 +++
- arch/riscv/kernel/sys_hwprobe.c             |  6 ++
- tools/testing/selftests/riscv/hwprobe/cbo.c | 66 +++++++++++++++++----
- 6 files changed, 78 insertions(+), 12 deletions(-)
-
+diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+index c0916ed318c2..60d180b98f52 100644
+--- a/arch/riscv/kernel/cpufeature.c
++++ b/arch/riscv/kernel/cpufeature.c
+@@ -30,6 +30,7 @@
+ #define NUM_ALPHA_EXTS ('z' - 'a' + 1)
+ 
+ static bool any_cpu_has_zicboz;
++static bool any_cpu_has_zicbom;
+ 
+ unsigned long elf_hwcap __read_mostly;
+ 
+@@ -87,6 +88,8 @@ static int riscv_ext_zicbom_validate(const struct riscv_isa_ext_data *data,
+ 		pr_err("Zicbom disabled as cbom-block-size present, but is not a power-of-2\n");
+ 		return -EINVAL;
+ 	}
++
++	any_cpu_has_zicbom = true;
+ 	return 0;
+ }
+ 
+@@ -944,6 +947,11 @@ void __init riscv_user_isa_enable(void)
+ 		current->thread.envcfg |= ENVCFG_CBZE;
+ 	else if (any_cpu_has_zicboz)
+ 		pr_warn("Zicboz disabled as it is unavailable on some harts\n");
++
++	if (riscv_has_extension_unlikely(RISCV_ISA_EXT_ZICBOM))
++		current->thread.envcfg |= ENVCFG_CBCFE;
++	else if (any_cpu_has_zicbom)
++		pr_warn("Zicbom disabled as it is unavailable on some harts\n");
+ }
+ 
+ #ifdef CONFIG_RISCV_ALTERNATIVE
 -- 
 2.39.2
 
