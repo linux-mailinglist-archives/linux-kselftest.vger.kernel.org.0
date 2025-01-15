@@ -1,110 +1,176 @@
-Return-Path: <linux-kselftest+bounces-24608-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24609-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB006A12F0A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 00:21:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEF76A12F52
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 00:37:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A8B61885409
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 23:21:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 107E3165913
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 23:37:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEB1B1DD863;
-	Wed, 15 Jan 2025 23:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BWZRY9Uk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DD851DD88D;
+	Wed, 15 Jan 2025 23:37:52 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C6A24A7CC;
-	Wed, 15 Jan 2025 23:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7671F19E7ED;
+	Wed, 15 Jan 2025 23:37:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736983295; cv=none; b=ZLnu++vmzwOwvpxwdSHVpSpNKloD7VGgz43gG2uZY7DRrSLOQ9ksKCPncSiOfn5naRL8VV4T+xr72ByNLJhCBZNnQ7W2Ca4Vpdt9PaI4UGHc03bzBW6rIdqni3IsJSYuS1Q6nDQH0ZqYAfQY3MFiCyrtpYjTCjzqh2Z8XLnqRBA=
+	t=1736984272; cv=none; b=pHhOkjPXjbRno4OXwwKxA9WB5PQwm1Y+r23ew7adZXpsbesVK5FlnzDCIFHGLfstkIpqfJcG6BEGEpE4jGrtlUyzz96cNSnTLLFXwCkAAij5l61iD+xf9JqGvOJeC4CqiFy8j9KgbdAOqVQ307sClOF0TxLOcKXhcGpmraInFbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736983295; c=relaxed/simple;
-	bh=mPosCnzgcJbE1pjkdLDkGQw+G/s6LoErO422lPW/XII=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HICzABxa/7j7m2GS7g9OtnTOc359lxg7x8F6dEphHPaKe88HlocJW1DT8k9u2HBd4dVcXtWmN/SQzhlFEXdOSrdr/BStZuuccFSPyCX2IWQ1YCA+WHNngfy7RYHuMh8pVv2Z3esDdAvms8dCG+9wrmY5XKAmUFfgRcN4JB2S6g4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BWZRY9Uk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5B5C4CEE1;
-	Wed, 15 Jan 2025 23:21:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736983295;
-	bh=mPosCnzgcJbE1pjkdLDkGQw+G/s6LoErO422lPW/XII=;
-	h=From:To:Cc:Subject:Date:From;
-	b=BWZRY9UkEVjlxkgk+qRn0xLEFakd/Nqiw/TYpwFN14NUw3x5gDzPTzbYbzWuXUzWU
-	 ubdPFC+IXGfXjrA5Skl7MXjYIY3TaEeukJa8+afESZO/wAQj2gbw+PvrOWdkp4rrIV
-	 42eGkcz8u+Gk3bByZBHN3pUKZkPu6jj0X22d6Nq3hmMFq7Uy4njqkVP5zyIc5nbIcs
-	 74/B+Lnv776gQ5shR20t6rmyh70q6qviNOENqpXbIajdlPBNKseVz3gVpzsNipXFvJ
-	 Jh9SZlWdyI5wtt/cnQ/wtSlJzu9JvSIWTB/aVH2LbQq79B2foxC80OcEWsPNzDmypk
-	 VPhZli9hGdWVw==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	shuah@kernel.org,
-	willemb@google.com,
-	matttbe@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next] selftests/net: packetdrill: make tcp buf limited timing tests benign
-Date: Wed, 15 Jan 2025 15:21:29 -0800
-Message-ID: <20250115232129.845884-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.48.0
+	s=arc-20240116; t=1736984272; c=relaxed/simple;
+	bh=wyKwpu/yPExhJ9EsyCyXEwqnGAWKCiJz7o5YPsOA7Ok=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=V5matw5zotcfoFm/2WGlXfY2CLEAuqeDl1/b3z32Fdtm1VM15fzvmVsQD/GWekmPItIqlls/x5PeAJLsekbVMwTkRGtOUqouPmSOLU6pO42AuojK+JCEieAsovtHJl0Q5VWojzBdjs9Nbmz1dkGPpknrAY4KgtfecMfKEe8Xti4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
+Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
+	by vmicros1.altlinux.org (Postfix) with ESMTP id B792D72C8CC;
+	Thu, 16 Jan 2025 02:37:47 +0300 (MSK)
+Received: by mua.local.altlinux.org (Postfix, from userid 508)
+	id A64CD7CCB3A; Thu, 16 Jan 2025 01:37:47 +0200 (IST)
+Date: Thu, 16 Jan 2025 01:37:47 +0200
+From: "Dmitry V. Levin" <ldv@strace.io>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Oleg Nesterov <oleg@redhat.com>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>,
+	strace-devel@lists.strace.io, linux-kselftest@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] selftests/ptrace/get_syscall_info: fix for MIPS n32
+Message-ID: <20250115233747.GA28541@strace.io>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The following tests are failing on debug kernels:
+MIPS n32 is one of two ILP32 architectures supported by the kernel
+that have 64-bit syscall arguments (another one is x32).
 
-  tcp_tcp_info_tcp-info-rwnd-limited.pkt
-  tcp_tcp_info_tcp-info-sndbuf-limited.pkt
+When this test passed 32-bit arguments to syscall(), they were
+sign-extended in libc, PTRACE_GET_SYSCALL_INFO reported these
+sign-extended 64-bit values, and the test complained about the mismatch.
 
-with reports like:
+Fix this by passing arguments of the appropriate type to syscall(),
+which is "unsigned long long" on MIPS n32, and __kernel_ulong_t on other
+architectures.
 
-      assert 19000 <= tcpi_sndbuf_limited <= 21000, tcpi_sndbuf_limited; \
-  AssertionError: 18000
+As a side effect, this also extends the test on all 64-bit architectures
+by choosing constants that don't fit into 32-bit integers.
 
-and:
-
-      assert 348000 <= tcpi_busy_time <= 360000, tcpi_busy_time
-  AssertionError: 362000
-
-Extend commit 912d6f669725 ("selftests/net: packetdrill: report benign
-debug flakes as xfail") to cover them.
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Dmitry V. Levin <ldv@strace.io>
 ---
-CC: shuah@kernel.org
-CC: willemb@google.com
-CC: matttbe@kernel.org
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/net/packetdrill/ksft_runner.sh | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/net/packetdrill/ksft_runner.sh b/tools/testing/selftests/net/packetdrill/ksft_runner.sh
-index ff989c325eef..e15c43b7359b 100755
---- a/tools/testing/selftests/net/packetdrill/ksft_runner.sh
-+++ b/tools/testing/selftests/net/packetdrill/ksft_runner.sh
-@@ -43,6 +43,7 @@ if [[ -n "${KSFT_MACHINE_SLOW}" ]]; then
- 		"tcp_timestamping.*.pkt"
- 		"tcp_user_timeout_user-timeout-probe.pkt"
- 		"tcp_zerocopy_epoll_.*.pkt"
-+		"tcp_tcp_info_tcp-info-*-limited.pkt"
- 	)
- 	readonly xfail_regex="^($(printf '%s|' "${xfail_list[@]}"))$"
- 	[[ "$script" =~ ${xfail_regex} ]] && failfunc=ktap_test_xfail
+v2: Fixed MIPS #ifdef.
+
+ .../selftests/ptrace/get_syscall_info.c       | 53 +++++++++++--------
+ 1 file changed, 32 insertions(+), 21 deletions(-)
+
+diff --git a/tools/testing/selftests/ptrace/get_syscall_info.c b/tools/testing/selftests/ptrace/get_syscall_info.c
+index 5bcd1c7b5be6..2970f72d66d3 100644
+--- a/tools/testing/selftests/ptrace/get_syscall_info.c
++++ b/tools/testing/selftests/ptrace/get_syscall_info.c
+@@ -11,8 +11,19 @@
+ #include <err.h>
+ #include <signal.h>
+ #include <asm/unistd.h>
++#include <linux/types.h>
+ #include "linux/ptrace.h"
+ 
++#if defined(_MIPS_SIM) && _MIPS_SIM == _MIPS_SIM_NABI32
++/*
++ * MIPS N32 is the only architecture where __kernel_ulong_t
++ * does not match the bitness of syscall arguments.
++ */
++typedef unsigned long long kernel_ulong_t;
++#else
++typedef __kernel_ulong_t kernel_ulong_t;
++#endif
++
+ static int
+ kill_tracee(pid_t pid)
+ {
+@@ -42,37 +53,37 @@ sys_ptrace(int request, pid_t pid, unsigned long addr, unsigned long data)
+ 
+ TEST(get_syscall_info)
+ {
+-	static const unsigned long args[][7] = {
++	const kernel_ulong_t args[][7] = {
+ 		/* a sequence of architecture-agnostic syscalls */
+ 		{
+ 			__NR_chdir,
+-			(unsigned long) "",
+-			0xbad1fed1,
+-			0xbad2fed2,
+-			0xbad3fed3,
+-			0xbad4fed4,
+-			0xbad5fed5
++			(uintptr_t) "",
++			(kernel_ulong_t) 0xdad1bef1bad1fed1ULL,
++			(kernel_ulong_t) 0xdad2bef2bad2fed2ULL,
++			(kernel_ulong_t) 0xdad3bef3bad3fed3ULL,
++			(kernel_ulong_t) 0xdad4bef4bad4fed4ULL,
++			(kernel_ulong_t) 0xdad5bef5bad5fed5ULL
+ 		},
+ 		{
+ 			__NR_gettid,
+-			0xcaf0bea0,
+-			0xcaf1bea1,
+-			0xcaf2bea2,
+-			0xcaf3bea3,
+-			0xcaf4bea4,
+-			0xcaf5bea5
++			(kernel_ulong_t) 0xdad0bef0caf0bea0ULL,
++			(kernel_ulong_t) 0xdad1bef1caf1bea1ULL,
++			(kernel_ulong_t) 0xdad2bef2caf2bea2ULL,
++			(kernel_ulong_t) 0xdad3bef3caf3bea3ULL,
++			(kernel_ulong_t) 0xdad4bef4caf4bea4ULL,
++			(kernel_ulong_t) 0xdad5bef5caf5bea5ULL
+ 		},
+ 		{
+ 			__NR_exit_group,
+ 			0,
+-			0xfac1c0d1,
+-			0xfac2c0d2,
+-			0xfac3c0d3,
+-			0xfac4c0d4,
+-			0xfac5c0d5
++			(kernel_ulong_t) 0xdad1bef1fac1c0d1ULL,
++			(kernel_ulong_t) 0xdad2bef2fac2c0d2ULL,
++			(kernel_ulong_t) 0xdad3bef3fac3c0d3ULL,
++			(kernel_ulong_t) 0xdad4bef4fac4c0d4ULL,
++			(kernel_ulong_t) 0xdad5bef5fac5c0d5ULL
+ 		}
+ 	};
+-	const unsigned long *exp_args;
++	const kernel_ulong_t *exp_args;
+ 
+ 	pid_t pid = fork();
+ 
+@@ -154,7 +165,7 @@ TEST(get_syscall_info)
+ 			}
+ 			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
+ 						      pid, size,
+-						      (unsigned long) &info))) {
++						      (uintptr_t) &info))) {
+ 				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
+ 			}
+ 			ASSERT_EQ(expected_none_size, rc) {
+@@ -177,7 +188,7 @@ TEST(get_syscall_info)
+ 		case SIGTRAP | 0x80:
+ 			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
+ 						      pid, size,
+-						      (unsigned long) &info))) {
++						      (uintptr_t) &info))) {
+ 				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
+ 			}
+ 			switch (ptrace_stop) {
 -- 
-2.48.0
-
+ldv
 
