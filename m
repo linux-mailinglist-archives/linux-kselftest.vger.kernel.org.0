@@ -1,83 +1,99 @@
-Return-Path: <linux-kselftest+bounces-24542-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24544-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D76A5A116CC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 02:46:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D7CEA1175F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 03:41:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16DC71889B51
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 01:46:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 193923A2CB1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2025 02:41:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00E32227BAE;
-	Wed, 15 Jan 2025 01:46:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D46F22E3F7;
+	Wed, 15 Jan 2025 02:40:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="UkHSp+En"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="JENB1jox"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from esa12.hc1455-7.c3s2.iphmx.com (esa12.hc1455-7.c3s2.iphmx.com [139.138.37.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63F12227B88;
-	Wed, 15 Jan 2025 01:46:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.37.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7803B13AA2F
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2025 02:40:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736905610; cv=none; b=AEo8t9qWGDT872xwn4hqHBUD+4oMuLJ/3al+iWu7B4Ga6r9ng4pWvizIwR2P3O9cFR091kygyhEH42jPmaQviriLgTRugzjcSeYaIytE2vTCET+xUVG5/8xiz2GgrecCQYsnBE09MOj7GRtk72K8cInMcbl4vgGRixAH5xXVUek=
+	t=1736908853; cv=none; b=eWLGsbQ8ksCFyGeHchyDEpTW/1N0ZowVdFcZqksdB94hlVcV6zeSagAS53hN2tjdAQUQo4wU4Nbko7+WCL59x/vQF62OHM8kqQisHFEFEYnPGxuQBgRki8U7tvNXG902JGnWEC524jqMBy9vnG3DBsWWBAk820gTtKi+D1vZFUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736905610; c=relaxed/simple;
-	bh=21TcC/rql3eON+hX7CuhqWrvpu5XXzotwJKQP7ydNKM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g0foORLZqAgUW+JHT7/T+1ayDIyUnCAFWweNetv0afLonIh5tTFrPw9AWYT1t5Vx7Q6OGJn7xLRlx/IRGz0yJ126Y6mXWor550C3Az4BTdgqkEFudrsMwRq5sh0NV/FmpHmuj+cENbvhe7MxRi0DYgcrbDDeawKziCouV+ZTdyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=UkHSp+En; arc=none smtp.client-ip=139.138.37.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1736905609; x=1768441609;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=21TcC/rql3eON+hX7CuhqWrvpu5XXzotwJKQP7ydNKM=;
-  b=UkHSp+EnLmK5Y9PKG1yRGdcokuHJO7BQQDl1AIug1YMz+LtykOFY8vPD
-   YGPJo6BvrjQA6/ZEvaZf+FRSkjRiwPkCuxzFJvxoKGhfb1K+wGeNwApkb
-   pNGMEvBFVzM80XFRt5Xz/ZYXYXNkS/Xgz3o2zePYIVDICrYkkvHxrMu7M
-   iIuaiJdXQfx8VjrG4WKA9Jl8jjhICUxHCTKK7oODcvIn3aii1qXvu5ob7
-   pUqqcAJssdgfqMcJOld28OGtHZR2CcwPAYLJBHFBJE6J9J77cvlFgvAUv
-   lwA50y+Ibd8z4sEttOwDe4sh9boDq3oVwihNAfRZlKZCewxl1ePqm/fc1
-   w==;
-X-CSE-ConnectionGUID: Nzg6XFEJSGGyZ7Of+MnG7g==
-X-CSE-MsgGUID: 46L8MYSDRt2SYdtRHFf7wQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11315"; a="165479798"
-X-IronPort-AV: E=Sophos;i="6.12,315,1728918000"; 
-   d="scan'208";a="165479798"
-Received: from unknown (HELO yto-r4.gw.nic.fujitsu.com) ([218.44.52.220])
-  by esa12.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2025 10:46:40 +0900
-Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
-	by yto-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 8EA0CD500F;
-	Wed, 15 Jan 2025 10:46:37 +0900 (JST)
-Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
-	by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 5F8D6D5036;
-	Wed, 15 Jan 2025 10:46:37 +0900 (JST)
-Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
-	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id D055120071A06;
-	Wed, 15 Jan 2025 10:46:36 +0900 (JST)
-Received: from iaas-rdma.. (unknown [10.167.135.44])
-	by edo.cn.fujitsu.com (Postfix) with ESMTP id B25311A0071;
-	Wed, 15 Jan 2025 09:46:35 +0800 (CST)
-From: Li Zhijian <lizhijian@fujitsu.com>
-To: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1736908853; c=relaxed/simple;
+	bh=ov+Jovl5slUh9ZOeOd2AFWuWkumQhEGSazSuEBrqpfY=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=Q6OyqOsjFgNNS2lCpBGq3kpXQFpc3i7NzKPkPrBcmwQLcTGu50WCY94GU2O716aBXtsusRRLuMBo7oZmyJLf3VUO9OAwlOoQlmSiV86h4ukffcorx7dNmz/rpTcuB0be/U+oOG5vNStY29CPJ/HP/ZZJVFqJ2DkOmMIS5Av3OPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=JENB1jox; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-21670dce0a7so134644625ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2025 18:40:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1736908851; x=1737513651; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KiILRyRfHo+NUtJXMbpq128gxB2UW/YGfDj3MyZiOVE=;
+        b=JENB1joxvhUEl/YjMQArb4q0EEyvFNIyKdm1go+k4Lxa/tsr7j7DuAwW+eU03y1+ks
+         N5HaDHHMSEDYTLV8jqzTv8kDSf6BZbpFfLP5VsdwFJf47Y4SNOLK/rGnYMZiFr4nOx9K
+         I64sXtwi4aVKm9AFm4rsA1kndxxYiYZYnvfe86ydGbjqyhJYTrGvXCTlfSI9eOIB1Gst
+         wjH0V8kziQgg4Ub1STgoBCnektyHcwPy5zMrFyUwFfip0cCpIIM/DJ28PGfgm764at2A
+         3+o05eSW+nPMRzu5eIxoiuA/6iET4KC79lzPm5YDXJWXalQfBgISqT//BjH8OEwatqV2
+         ZfXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736908851; x=1737513651;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KiILRyRfHo+NUtJXMbpq128gxB2UW/YGfDj3MyZiOVE=;
+        b=PAiYxQtGkCOCLupZK8+hnaAgiiYDTBriKtEQZAYZM5XI3VakjRJ2d63Alw4j3e5WsF
+         PpihnP3gN2VSsOl5AidSk3lTZUpScCCRX+vCWVfDAeot90ESn73UTTeCvKElFEeWr+AT
+         MC4U8yQIAgX2MzO7++GVOtdc0FFYNahZLkHQUBA1zcv5Lg7KG15igxRTbSGDfhmkoiNq
+         ynaBqbkVrw/lQeWjbYHaYVUMUYRoOHMCvs9ZeFakoSXf/fkNu+14VcwQyP6T+1xsVq/D
+         HI9vUyhtPwZhdUrLZF7VIcbRA+xCBRRitSIdTc6SXqf0daxtlG2cHKObBmFezZqzSnR0
+         IKEw==
+X-Forwarded-Encrypted: i=1; AJvYcCVA5PQCcJZinTo3G4CZKu2fGUSRtTjn+p4upHKa5lcBOA+lMzv2hGxMCQEm+GSOeI6XMBNcqmL+BxKW8maZK9U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YySlwBEajaSUJ15NCEkU3n+g1UVuxUpqUjKrkApz6uiw/XHNaez
+	AbrbMazz88/ZoV+S7s7UiHCkDm3Nw8UMYc+IQayJsh/JdlmXlL929GdIk5Iz3PY=
+X-Gm-Gg: ASbGnctUwYboQHEVvwQnKSpRSoW8nqmJTKQZ94Ys6RAmlxXhAHR6IjmPWHeYRbBmyL/
+	QLubVyLvs7LECaik4uKs+bC9CJ4qZ8STyHOSI9kC2ewuhm7mDHYKVdoaNQdCP6PRRU1VeFUWUTC
+	agVapd1SjYsBNFpWl6gmXz6dQIeZdqpxCMR0Dt33rf3EZu+rvshqRNzKauon7xZB7M1N8+GqTHT
+	R9oxjVcZ+o8kX1vbLxgC8cawmo8tO4WaFiq4bmvU4ThJD2ab0C4xayvoc/VhbdCBTBN3R0+BbR5
+	pcKpXi028Je2rIY=
+X-Google-Smtp-Source: AGHT+IFAimWtf2lTBvrnqOrM8muizhicRypBcekevc3BNNeuhbcAjrIt4O9niFCSSQRXVpLXyqpbPg==
+X-Received: by 2002:a05:6a00:6f4a:b0:72d:3861:895c with SMTP id d2e1a72fcca58-72d38618af0mr34186945b3a.8.1736908850691;
+        Tue, 14 Jan 2025 18:40:50 -0800 (PST)
+Received: from L6YN4KR4K9.bytedance.net ([139.177.225.227])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d40680e67sm8321841b3a.139.2025.01.14.18.40.42
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 14 Jan 2025 18:40:50 -0800 (PST)
+From: Yunhui Cui <cuiyunhui@bytedance.com>
+To: ajones@ventanamicro.com,
+	alexghiti@rivosinc.com,
+	andybnac@gmail.com,
+	aou@eecs.berkeley.edu,
+	charlie@rivosinc.com,
+	cleger@rivosinc.com,
+	conor.dooley@microchip.com,
+	conor@kernel.org,
+	corbet@lwn.net,
+	cuiyunhui@bytedance.com,
+	evan@rivosinc.com,
+	jesse@rivosinc.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Li Zhijian <lizhijian@fujitsu.com>,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH bpf-next v3] selftests/Makefile: override the srctree for out-of-tree builds
-Date: Wed, 15 Jan 2025 09:47:34 +0800
-Message-ID: <20250115014734.438225-1-lizhijian@fujitsu.com>
-X-Mailer: git-send-email 2.44.0
+	linux-riscv@lists.infradead.org,
+	palmer@dabbelt.com,
+	paul.walmsley@sifive.com,
+	samuel.holland@sifive.com,
+	shuah@kernel.org
+Subject: [PATCH v5 0/3] Enable Zicbom in usermode
+Date: Wed, 15 Jan 2025 10:40:21 +0800
+Message-Id: <20250115024024.84365-1-cuiyunhui@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,90 +101,36 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28924.003
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28924.003
-X-TMASE-Result: 10--2.378300-10.000000
-X-TMASE-MatchedRID: QxNw5Kr7aBeh8NIgadoMHh1kSRHxj+Z5ohrMq0nEhQciKqWY7QWAeyJ1
-	YT6M2y/ptjClCUseMxHZ5nzC46YpxcwitucT3dE7v8fLAX0P50DNKdtHc3A3XFHpIy6wt5Uw2Ca
-	d5s625rB2Ve4lIas8vPv7YatA3DRB0ekSi+00U24ReM8i8p3vgI5UEPjB4tXTYKqjwB8QwAfkYB
-	DLwsbmZ5kvRcwHwyS1nagtny7ZPcQfE8yM4pjsDwtuKBGekqUpnH7sbImOEBRcrZUZpIpVuY0MN
-	210hdsMUVQg0hCHTxQSbjtxD1tRN3YVT44NixONSphYGXunSvyR88aL5Jmd22FLtpZ6hBUpo9GD
-	1VwsMaabDRBqS2n66yzP5xAyz9Oenvkw4sh/+PcMX5CwH5DTUmgGZNLBHGNe
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
-Fixes an issue where out-of-tree kselftest builds fail when building
-the BPF and bpftools components. The failure occurs because the top-level
-Makefile passes a relative srctree path to its sub-Makefiles, which
-leads to errors in locating necessary files.
+v1/v2:
+There is only the first patch: RISC-V: Enable cbo.clean/flush in usermode,
+which mainly removes the enabling of cbo.inval in user mode.
 
-For example, the following error is encountered:
+v3:
+Add the functionality of Expose Zicbom and selftests for Zicbom.
 
-```
-$ make V=1 O=$build/ TARGETS=hid kselftest-all
-...
-make -C ../tools/testing/selftests all
-make[4]: Entering directory '/path/to/linux/tools/testing/selftests/hid'
-make  -C /path/to/linux/tools/testing/selftests/../../../tools/lib/bpf OUTPUT=/path/to/linux/O/kselftest/hid/tools/build/libbpf/ \
-            EXTRA_CFLAGS='-g -O0'                                      \
-            DESTDIR=/path/to/linux/O/kselftest/hid/tools prefix= all install_headers
-make[5]: Entering directory '/path/to/linux/tools/lib/bpf'
-...
-make[5]: Entering directory '/path/to/linux/tools/bpf/bpftool'
-Makefile:127: ../tools/build/Makefile.feature: No such file or directory
-make[5]: *** No rule to make target '../tools/build/Makefile.feature'.  Stop.
-```
+v4:
+Modify the order of macros, The test_no_cbo_inval function is added
+separately.
 
-To resolve this, override the srctree in the kselftests's top Makefile
-when performing an out-of-tree build. This ensures that all sub-Makefiles
-have the correct path to the source tree, preventing directory resolution
-errors.
+v5:
+1. Modify the order of RISCV_HWPROBE_KEY_ZICBOM_BLOCK_SIZE in hwprobe.rst
+2. "TEST_NO_ZICBOINVAL" -> "TEST_NO_CBO_INVAL"
 
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-Tested-by: Quentin Monnet <qmo@kernel.org>
----
-Cc: Masahiro Yamada <masahiroy@kernel.org>
+Yunhui Cui (3):
+  RISC-V: Enable cbo.clean/flush in usermode
+  RISC-V: hwprobe: Expose Zicbom extension and its block size
+  RISC-V: selftests: Add TEST_ZICBOM into CBO tests
 
-V3:
-  collected Tested-by and rebased on bpf-next
+ Documentation/arch/riscv/hwprobe.rst        |  6 ++
+ arch/riscv/include/asm/hwprobe.h            |  2 +-
+ arch/riscv/include/uapi/asm/hwprobe.h       |  2 +
+ arch/riscv/kernel/cpufeature.c              |  8 +++
+ arch/riscv/kernel/sys_hwprobe.c             |  6 ++
+ tools/testing/selftests/riscv/hwprobe/cbo.c | 66 +++++++++++++++++----
+ 6 files changed, 78 insertions(+), 12 deletions(-)
 
-V2:
- - handle srctree in selftests itself rather than the linux' top Makefile # Masahiro Yamada <masahiroy@kernel.org>
-
-V1: https://lore.kernel.org/lkml/20241217031052.69744-1-lizhijian@fujitsu.com/
----
- tools/testing/selftests/Makefile | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 2401e973c359..f04a3b0003f6 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -154,15 +154,19 @@ override LDFLAGS =
- override MAKEFLAGS =
- endif
- 
-+top_srcdir ?= ../../..
-+
- # Append kselftest to KBUILD_OUTPUT and O to avoid cluttering
- # KBUILD_OUTPUT with selftest objects and headers installed
- # by selftests Makefile or lib.mk.
-+# Override the `srctree` variable to ensure it is correctly resolved in
-+# sub-Makefiles, such as those within `bpf`, when managing targets like
-+# `net` and `hid`.
- ifdef building_out_of_srctree
- override LDFLAGS =
-+override srctree := $(top_srcdir)
- endif
- 
--top_srcdir ?= ../../..
--
- ifeq ("$(origin O)", "command line")
-   KBUILD_OUTPUT := $(O)
- endif
 -- 
-2.44.0
+2.39.2
 
 
