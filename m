@@ -1,75 +1,77 @@
-Return-Path: <linux-kselftest+bounces-24668-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24669-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3C37A1407C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 18:17:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D12DA1407F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 18:17:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45C7F1696E3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 17:17:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C34B9188DB63
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 17:17:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A32A222D4DC;
-	Thu, 16 Jan 2025 17:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D2EF22F387;
+	Thu, 16 Jan 2025 17:17:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jyE9E+71"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="d5xD5AU2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E026122BAD9
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2025 17:17:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055B322E40F
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2025 17:17:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737047827; cv=none; b=JliCzJ5i80tI/gAcUG7CxM5Qw/s+a3ad8ehzZ3rjsD5IgZWwYU+h7I6E309hIZRGjt6kwKR43dHIiFeWhq74Wcpyxe5ySbWH/74hjLpjPzpiuO1AQcz7nXdZRmfXYm/lcju+/kCUry3MrtJwHc3EKBc8yd8y7wn/a4N0S7VmW9g=
+	t=1737047831; cv=none; b=GdJ+wpcZBu5ALtxBg9nbO/7mJ8WUOmNFBATTKni+5UKzlJ6qxQIV0jjCCbv5qIAAS0d01PuaPrvlyQDWkiIqxKLedftpuOMQ5P29BFqPpSsuDpr+5hA2NCi53CtGwQiiVT43sST8GrhhYhXpMryBtVT6HIzmRPML3ZgElgansXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737047827; c=relaxed/simple;
-	bh=Cfls029jt6+1ViuA9omlvupSKnHGsOVELSd35jNeE50=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=p6hC7vDnz3xcCYVDMXZbo+cWvPh1FYCT2YH9BCdnxe66vq6bQ7kdkA9vEoOAmvq5v8uuBwAfpw2sF0lXL3qn++AWCI40pWn5VyOZ5gY9qCOWts1qXGp4CAr8WxoZpCXc4jVFYEQMX5rU8gpmhJI0TB85KYutYZaY3Tx6mNsVKqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jyE9E+71; arc=none smtp.client-ip=209.85.214.175
+	s=arc-20240116; t=1737047831; c=relaxed/simple;
+	bh=7hlH5gC1HOmgHEEoKyb8tbS3Jw+S9oGiNenbBy2YmAQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=CEPD8wHsVQCJ14nOvpSydveuHbPxIn9naM91IfGDcnjud8luG0uCgtMJuPRYi1VSBq+i6gEbtZrW63um3oZj26Ktq9gja8WcKgQa5Gxyyw2/f8FKrDuLSWSddlAArr/H1q4VgTQkedbpx5kGXmwdV731ehAtv1Q7AKLPmCeTH58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=d5xD5AU2; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2166360285dso23431235ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2025 09:17:05 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21bc1512a63so23655275ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2025 09:17:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737047825; x=1737652625; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NfmKxAUKcXZh1619YtkrCCyWijhCyYLpsgHJ3rMHb7w=;
-        b=jyE9E+71SoJ+JhA+9wA/PxCkbh0c90ex8MWW4y6MPT4Vl5NRs6FoyevbTM17xEbtXp
-         clOawCyi1boGuL84okCDU3xtjP+1kj0t2eJRNvhKZ8LtYTfnUX6VLES2spmcmAzbbVTg
-         6NXK9gW+8mPeqhk04Q2btgAB6Vi0R/Ys11NvchSVhqyYH46l28jYegLY9eLMmyX7uKqe
-         p1QPzOhpicI81mjkKXHlD1Wh1816VKOAehhBE9g76GtGa31AvIOYiHjRQBn9EMnXNaR7
-         aurQ6Kd6XZCf1kvNk5fv5eiNvNQ6MwcpskQwWVpPzyV1ciVWI8PZtOrX8jmaDeTnOmtW
-         3PCg==
+        d=linaro.org; s=google; t=1737047829; x=1737652629; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LVUMi15eO0FtMXdL7HPHc6I0L1O00BPDaKk6s1ereu4=;
+        b=d5xD5AU2wDGqmKDTciujLmTc+1BAJpB+REQL+M9zz2bCOTGHH1c+78+hm5c8QsEIo0
+         hvR0magEdCL7Q8uIbbG5PQZS5VXnyILL5XFdfCZKfwT2rcC/mxKS7NTrV1NU6kz3RJnI
+         ATSrA0u/+Mh8zgwWFiCJGGCoCXuUZahCnSgrrUIOqAl7VRCveYaw3SIIBBnHcJeGVRI7
+         P2u7dHVOzQR/Hk0nIKV/T0XY0N5Fdjg/s9z/MI0yMFaBwmrNo7Jf1r6tw20rY+hSc/xy
+         fVbCrCp4vVxUnAeJ+lBpY82VmKlyKC35sH2H7SChgM2QgEvlAZ2Y7XaeoAwxICZPgORB
+         e4Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737047825; x=1737652625;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NfmKxAUKcXZh1619YtkrCCyWijhCyYLpsgHJ3rMHb7w=;
-        b=r1tCt763tYKVu629FrHObACdv4byeeS927h+5BQDNV29FfuGioPV86sDG2xqjuAs5p
-         7jXmw3+uKrWWFDIiksYfljFjISh8k50DJXKaH0twubQr0W16n/yaJ0jlVOIodjLd2sqV
-         NCrxO8HnreMKehW1LOKnPFtkWRA6LLSvT6eluDDYO78froFOh14LxrcrvtiUFRDoZcc1
-         10djkYH8uBnfuIn6jwfopMOM9YNv59S4h/GriePbbJ9br5rblMb/3qiIOm/TDe7gh2yl
-         cVZEoAxcb3vxRBKw/2sN2ULIxtsdwljjm0G4f3y5AYZBjNIukmPMnPm9eiajdrkdo1Ye
-         Q3iQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUa7fsrmQzFqPm1jM7wOHE+kEEqNLnPq0iIZqFw8VNXzWwfp2gnSKdUMLSgk66Z8sQTID4E9SluBP/vFpOhLQ8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKVGleQnAebvLDFUTkrnRTfVE6kP26lf8duGucWeNieiDXErVe
-	DcCw0XlnT58irCHzHo6Chy/15pPVTpw1j9UxqPO652B4iRm1PKwOZxgpauKXvA==
-X-Gm-Gg: ASbGncv3OxyoOxqcgBpGXUrm31I+BdQrxcgHOptgBueUBnQOL/hBcXYZRfIJ60DTeGd
-	9yXjMKLRe4W0PSjkHmpmrP1zC7sb2KwcZQXZ82LEjl1RqZO7yknMBeYkUwmJ/r7trQ8DksR3gkr
-	VAYdWVij+d3ZUY3P1P8iTea9xY+LoZ0cP3oAhU3OPoqhOSiPvOd+eBpcKiWuarTLj0+56JD3sOX
-	DVWzNUev/GgEI7wSSQ6WAqedYPvxm/Bf3MTM7LxmJf0pHO/i3njzMkLJP/Lo2nSzgZfcP/kDrAk
-	4Pm2OGrll1US5H+aWZhm2g==
-X-Google-Smtp-Source: AGHT+IGHCqVnUp8laxBsrAyjTEfGfl8hihKER1EIrc5smmXCIpNgLm5tAWS5wI017Ij/vv1nkBYrHA==
-X-Received: by 2002:a05:6a00:1bca:b0:725:e015:9082 with SMTP id d2e1a72fcca58-72d21f11f2dmr41551752b3a.5.1737047825224;
-        Thu, 16 Jan 2025 09:17:05 -0800 (PST)
+        d=1e100.net; s=20230601; t=1737047829; x=1737652629;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LVUMi15eO0FtMXdL7HPHc6I0L1O00BPDaKk6s1ereu4=;
+        b=GZ8C3nNIzdWwYJ0ddVanxczLRfaY4PEg66MQy6DqsOyufFtBSRBhsrH6rn+aJ0mSys
+         btuSB4OHu1fnX5JyQLVNNhWnEUByVJbtGNS74T3bPaAP89JeI3BwCJfKtXUnLwDXwuoz
+         Kc+SzrvAtHsqJshGPpsaThgs7HgrpEPx3bjbOaf7k7LLeA7iaCQCh8VLWTfbvUQUABSJ
+         WXgTJKPFQxBCNZ569IMnpnbz9mwyV7ZSx977oWBKw/pysaz12M3kVOoSeMmTEwffh1/4
+         t8X9BBtdcs52wnfdujqmBLvBbCRJNPul2VXkEH3FGZlh8jZk0zmJP+jxw9o9xt34FTbN
+         +VGg==
+X-Forwarded-Encrypted: i=1; AJvYcCV3Rs/XZg86HkyJRLof+1li1RAI3PkOTjborK4Fq+sE/Tnh/ywrC2fJasPn5/O+lwiZdbeiPzwM6mfe9LvktAs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgF1hXeQsXY7Esuos2odKoS5wtWay5gMSTsZprTgPDwqyl9alP
+	N6VhMpEcAwyT2jHsrHCYvk3nZqmd9QTc+AwCzkIkXXoyzZZfcAaQyZIhrF2bMw==
+X-Gm-Gg: ASbGncvJUwPqySZHY+KQ1rKxxS3KHQHBVbuC+nTxFe5uwtVgKH4nxyCGpY+8G97v7bJ
+	6swwdkUUlNKIhbXeu70aBHy1xXE1GaHR2kWeez/r9waB0VmIGTGLX55DNQ85TY46KyQdXlwG9GA
+	oWJQNPaJQBY6oQf5fHIGP+/dub3QjIWvY6ItBJMlfzirB4sT25JQszoYZnJgd96L/f6BrWR5AGw
+	ARMWu+QKjzn/WsSddpA+hEgjfSbaPEp//9txVv09o3T0WdZtD35+w7hxW9e9mYB8eKEzBoCrnQ9
+	uuh1SNpji4EXnMjUyDJhKQ==
+X-Google-Smtp-Source: AGHT+IE9XUuyOYdKnVf6z8lGmohKiyHxfdHolZzQ0LfDE00WtTj1mhef0ryAapG3wumjorO9Vo/g6g==
+X-Received: by 2002:aa7:888c:0:b0:725:df1a:275 with SMTP id d2e1a72fcca58-72d21ff51e4mr50594286b3a.23.1737047829354;
+        Thu, 16 Jan 2025 09:17:09 -0800 (PST)
 Received: from localhost.localdomain ([120.60.79.208])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72dab7f1846sm275155b3a.15.2025.01.16.09.17.01
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72dab7f1846sm275155b3a.15.2025.01.16.09.17.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2025 09:17:04 -0800 (PST)
+        Thu, 16 Jan 2025 09:17:09 -0800 (PST)
 From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To: kw@linux.com,
 	gregkh@linuxfoundation.org,
@@ -85,10 +87,12 @@ Cc: kishon@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	cassel@kernel.org,
 	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v6 0/4] Migrate PCI Endpoint Subsystem tests to Kselftest
-Date: Thu, 16 Jan 2025 22:46:46 +0530
-Message-Id: <20250116171650.33585-1-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v6 1/4] PCI: endpoint: pci-epf-test: Fix the check for DMA MEMCPY test
+Date: Thu, 16 Jan 2025 22:46:47 +0530
+Message-Id: <20250116171650.33585-2-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250116171650.33585-1-manivannan.sadhasivam@linaro.org>
+References: <20250116171650.33585-1-manivannan.sadhasivam@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -97,87 +101,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Currently, if DMA MEMCPY test is requested by the host, and if the endpoint
+DMA controller supports DMA_PRIVATE, the test will fail. This is not
+correct since there is no check for DMA_MEMCPY capability and the DMA
+controller can support both DMA_PRIVATE and DMA_MEMCPY.
 
-This series carries forward the effort to add Kselftest for PCI Endpoint
-Subsystem started by Aman Gupta [1] a while ago. I reworked the initial version
-based on another patch that fixes the return values of IOCTLs in
-pci_endpoint_test driver and did many cleanups. Since the resulting work
-modified the initial version substantially, I took over the authorship.
+So fix the check and also reword the error message.
 
-This series also incorporates the review comment by Shuah Khan [2] to move the
-existing tests from 'tools/pci' to 'tools/testing/kselftest/pci_endpoint' before
-migrating to Kselftest framework. I made sure that the tests are executable in
-each commit and updated documentation accordingly.
+Reported-by: Niklas Cassel <cassel@kernel.org>
+Closes: https://lore.kernel.org/linux-pci/Z3QtEihbiKIGogWA@ryzen
+Fixes: 8353813c88ef ("PCI: endpoint: Enable DMA tests for endpoints with DMA capabilities")
+Tested-by: Niklas Cassel <cassel@kernel.org>
+Reviewed-by: Niklas Cassel <cassel@kernel.org>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ drivers/pci/endpoint/functions/pci-epf-test.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-- Mani
-
-[1] https://lore.kernel.org/linux-pci/20221007053934.5188-1-aman1.gupta@samsung.com
-[2] https://lore.kernel.org/linux-pci/b2a5db97-dc59-33ab-71cd-f591e0b1b34d@linuxfoundation.org
-
-Changes in v6:
-
-* Fixed the documentation to pass max MSI and MSI-X count to configfs
-* Collected tags
-
-Changes in v5:
-
-* Incorporated comments from Niklas
-* Added a patch to fix the DMA MEMCPY check in pci-epf-test driver
-* Collected tags
-* Rebased on top of pci/next 0333f56dbbf7ef6bb46d2906766c3e1b2a04a94d
-
-Changes in v4:
-
-* Dropped the BAR fix patches and submitted them separately:
-  https://lore.kernel.org/linux-pci/20241231130224.38206-1-manivannan.sadhasivam@linaro.org/
-* Rebased on top of pci/next 9e1b45d7a5bc0ad20f6b5267992da422884b916e
-
-Changes in v3:
-
-* Collected tags.
-* Added a note about failing testcase 10 and command to skip it in
-  documentation.
-* Removed Aman Gupta and Padmanabhan Rajanbabu from CC as their addresses are
-  bouncing.
-
-Changes in v2:
-
-* Added a patch that fixes return values of IOCTL in pci_endpoint_test driver
-* Moved the existing tests to new location before migrating
-* Added a fix for BARs on Qcom devices
-* Updated documentation and also added fixture variants for memcpy & DMA modes
-
-
-Manivannan Sadhasivam (4):
-  PCI: endpoint: pci-epf-test: Fix the check for DMA MEMCPY test
-  misc: pci_endpoint_test: Fix the return value of IOCTL
-  selftests: Move PCI Endpoint tests from tools/pci to Kselftests
-  selftests: pci_endpoint: Migrate to Kselftest framework
-
- Documentation/PCI/endpoint/pci-test-howto.rst | 174 +++++-------
- MAINTAINERS                                   |   2 +-
- drivers/misc/pci_endpoint_test.c              | 255 +++++++++--------
- drivers/pci/endpoint/functions/pci-epf-test.c |   4 +-
- tools/pci/Build                               |   1 -
- tools/pci/Makefile                            |  58 ----
- tools/pci/pcitest.c                           | 264 ------------------
- tools/pci/pcitest.sh                          |  73 -----
- tools/testing/selftests/Makefile              |   1 +
- .../testing/selftests/pci_endpoint/.gitignore |   2 +
- tools/testing/selftests/pci_endpoint/Makefile |   7 +
- tools/testing/selftests/pci_endpoint/config   |   4 +
- .../pci_endpoint/pci_endpoint_test.c          | 221 +++++++++++++++
- 13 files changed, 437 insertions(+), 629 deletions(-)
- delete mode 100644 tools/pci/Build
- delete mode 100644 tools/pci/Makefile
- delete mode 100644 tools/pci/pcitest.c
- delete mode 100644 tools/pci/pcitest.sh
- create mode 100644 tools/testing/selftests/pci_endpoint/.gitignore
- create mode 100644 tools/testing/selftests/pci_endpoint/Makefile
- create mode 100644 tools/testing/selftests/pci_endpoint/config
- create mode 100644 tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-
+diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+index ffb534a8e50a..b94e205ae10b 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-test.c
++++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+@@ -331,8 +331,8 @@ static void pci_epf_test_copy(struct pci_epf_test *epf_test,
+ 	void *copy_buf = NULL, *buf;
+ 
+ 	if (reg->flags & FLAG_USE_DMA) {
+-		if (epf_test->dma_private) {
+-			dev_err(dev, "Cannot transfer data using DMA\n");
++		if (!dma_has_cap(DMA_MEMCPY, epf_test->dma_chan_tx->device->cap_mask)) {
++			dev_err(dev, "DMA controller doesn't support MEMCPY\n");
+ 			ret = -EINVAL;
+ 			goto set_status;
+ 		}
 -- 
 2.25.1
 
