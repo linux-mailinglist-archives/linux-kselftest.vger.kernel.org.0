@@ -1,112 +1,103 @@
-Return-Path: <linux-kselftest+bounces-24654-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24655-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A0E8A13D0C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 15:59:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05213A13D4B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 16:10:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED8F6188283E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 14:58:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17081164763
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 15:10:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9DF222B8C7;
-	Thu, 16 Jan 2025 14:58:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 413431DE886;
+	Thu, 16 Jan 2025 15:10:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vi8CmRzb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FNnXJU0M"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA3122B8C2;
-	Thu, 16 Jan 2025 14:58:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB7817578;
+	Thu, 16 Jan 2025 15:10:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737039517; cv=none; b=dxj6Vg6U3jiWPXodrZISG8JxlhgIxCipjlXMZ/GLGMiO5yihgbkz6L4MDaX5/AB4oJDjgq9hS7zCLW4sNZ05LkE8xoybM8ac+spStrHDqjouUrGvanCcexdABXSAnjvJoscCDu2ipia3jXRElyaIJsJjFLIsBP5faNEOD2EmsWI=
+	t=1737040242; cv=none; b=jcFA3PbUL9scdOdmbbQ32kh+yyAbOyZYGbBiAgUj8uTJeudSxcxyvYyCgeDvGyl5wHZLhLAtcMU2TKDvPSN+M7quf23NNLz8t4MS4Irh9PHxnDXwMYsnibDDGhcbIXmaY131GcPIad+eycWs0chL/47KjUPO+8I27hgPaWsY+JE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737039517; c=relaxed/simple;
-	bh=TiVFCV4vTQJVEsmUheRI0KBsKO4lzgyHujgevy5cSzg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=l9ug6aPL0fiG7klah7O2UVltXmwp0zOeaOYp8ZWUXUerqOkvOyHHlz2ggbc6NvtpqFSAH2jAlGs9BLmDYVtSX6MDI6iNs6+tg4j1Gaux0uRj8sEZsv3dvwLFN7otgRKmGzi1TGmW8D1ni1/fY/obFkz27J0QKzJWMe6Ga9xPuGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vi8CmRzb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D00D9C4CED6;
-	Thu, 16 Jan 2025 14:58:36 +0000 (UTC)
+	s=arc-20240116; t=1737040242; c=relaxed/simple;
+	bh=j5GydOiByw82/v7rG0aVDenUFRHV9aFpzCVemAPHuOs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CNnJkUIORotEZHG5/YaFpxPt+i2YnSdvEUjsXIttta/g1Ce0w3Xej+ONmrZPG2CWyRKzl/X/8/mYSfq2+rmrYeXkrsJOk2lXsTwzrA6dtmoR+PYl1dhOZMOjgwZdQQUPD4N6eCnXHsY4b1t3ciP7Kq24ry9utzWi/IunQTvkFdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FNnXJU0M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07085C4CEE1;
+	Thu, 16 Jan 2025 15:10:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737039517;
-	bh=TiVFCV4vTQJVEsmUheRI0KBsKO4lzgyHujgevy5cSzg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Vi8CmRzb8CBVoSUqB9HzYDg/67ZbxU0snlXxRQHkxkOeaIuAg0bEfpRVSydfKweCx
-	 pK2c/wNKCpB2Ki3nInDxqoJzSOXA2uL6H0xklDARcWtm+UGM0cGvXpyHCRuiGwNMh2
-	 i3h+68FtiEtir5YV1wSF7/S01/8Ko10ZpxloTYHDrUmwQoOqWldcv/KIIjKz6s4Xgz
-	 9zn78g28IPrdNZcJVMNe9RQMUUoxgWH3AnbFITGlFVjljDpkW1h9cjUKcARv+SYX2k
-	 y/hp9gWjorObqox6cfLA7D9cqR72e2G3vBHt4ApXyhB5WIl2dv3CMoED7tb4depLtk
-	 a72unD/FeDxHA==
-Date: Thu, 16 Jan 2025 06:58:35 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- shuah@kernel.org, willemb@google.com, matttbe@kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests/net: packetdrill: make tcp buf
- limited timing tests benign
-Message-ID: <20250116065835.1cc1eaac@kernel.org>
-In-Reply-To: <678904353ca7e_3710bc294ef@willemb.c.googlers.com.notmuch>
-References: <20250115232129.845884-1-kuba@kernel.org>
-	<678904353ca7e_3710bc294ef@willemb.c.googlers.com.notmuch>
+	s=k20201202; t=1737040241;
+	bh=j5GydOiByw82/v7rG0aVDenUFRHV9aFpzCVemAPHuOs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FNnXJU0MmlWxQpY+7XezWb6gikDC5udtX3yDpO3Lbu8uf4EMIuxHxGQ4UM151/Ce1
+	 QkFrbGWhLEYEpiCSuHxMDwrD2cBrF0HvqpM97+V/eakBd95xwgz2x+kWaCrQjyvirU
+	 1D1uUmLnV6HA63hqbJ5ggBHAk+kJb1f4fcVyzh0XCGxli/uZQPIZC8G6jWqPxPHR4d
+	 qAiXJyNOR3h9ERbEgFZAQthASK67gNgcBQdLuo54q3JBTvj1Omzehj/u8a1ygd0i4X
+	 qb807CQEYVLh2Nz2+Ap4hejkDEAZb1WmANDig9+BsrCZoiTGp1qW/ZBx16GkANmCjb
+	 tsOeAn35c+Nnw==
+Date: Thu, 16 Jan 2025 16:10:36 +0100
+From: Niklas Cassel <cassel@kernel.org>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: kw@linux.com, gregkh@linuxfoundation.org, arnd@arndb.de,
+	lpieralisi@kernel.org, shuah@kernel.org, kishon@kernel.org,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bhelgaas@google.com, linux-arm-msm@vger.kernel.org, robh@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 1/4] PCI: endpoint: pci-epf-test: Fix the check for
+ DMA MEMCPY test
+Message-ID: <Z4khbO_kQC8S2kQX@ryzen>
+References: <20250116135106.19143-1-manivannan.sadhasivam@linaro.org>
+ <20250116135106.19143-2-manivannan.sadhasivam@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250116135106.19143-2-manivannan.sadhasivam@linaro.org>
 
-On Thu, 16 Jan 2025 08:05:57 -0500 Willem de Bruijn wrote:
-> Jakub Kicinski wrote:
-> > The following tests are failing on debug kernels:
-> > 
-> >   tcp_tcp_info_tcp-info-rwnd-limited.pkt
-> >   tcp_tcp_info_tcp-info-sndbuf-limited.pkt
-> > 
-> > with reports like:
-> > 
-> >       assert 19000 <= tcpi_sndbuf_limited <= 21000, tcpi_sndbuf_limited; \
-> >   AssertionError: 18000
-> > 
-> > and:
-> > 
-> >       assert 348000 <= tcpi_busy_time <= 360000, tcpi_busy_time
-> >   AssertionError: 362000
-> > 
-> > Extend commit 912d6f669725 ("selftests/net: packetdrill: report benign
-> > debug flakes as xfail") to cover them.
-> > 
-> > Signed-off-by: Jakub Kicinski <kuba@kernel.org>  
+On Thu, Jan 16, 2025 at 07:21:03PM +0530, Manivannan Sadhasivam wrote:
+> Currently, if DMA MEMCPY test is requested by the host, and if the endpoint
+> DMA controller supports DMA_PRIVATE, the test will fail. This is not
+> correct since there is no check for DMA_MEMCPY capability and the DMA
+> controller can support both DMA_PRIVATE and DMA_MEMCPY.
 > 
-> Reviewed-by: Willem de Bruijn <willemb@google.com>
+> So fix the check and also reword the error message.
 > 
-> Thanks.
+> Reported-by: Niklas Cassel <cassel@kernel.org>
+> Closes: https://lore.kernel.org/linux-pci/Z3QtEihbiKIGogWA@ryzen
+> Fixes: 8353813c88ef ("PCI: endpoint: Enable DMA tests for endpoints with DMA capabilities")
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  drivers/pci/endpoint/functions/pci-epf-test.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> I see that we'll still have a few flakes on dbg. Perhaps one total
-> failure a day. From the following.
+> diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+> index ffb534a8e50a..b94e205ae10b 100644
+> --- a/drivers/pci/endpoint/functions/pci-epf-test.c
+> +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+> @@ -331,8 +331,8 @@ static void pci_epf_test_copy(struct pci_epf_test *epf_test,
+>  	void *copy_buf = NULL, *buf;
+>  
+>  	if (reg->flags & FLAG_USE_DMA) {
+> -		if (epf_test->dma_private) {
+> -			dev_err(dev, "Cannot transfer data using DMA\n");
+> +		if (!dma_has_cap(DMA_MEMCPY, epf_test->dma_chan_tx->device->cap_mask)) {
+> +			dev_err(dev, "DMA controller doesn't support MEMCPY\n");
+>  			ret = -EINVAL;
+>  			goto set_status;
+>  		}
+> -- 
+> 2.25.1
 > 
-> tcp-close-close-local-close-then-remote-fin-pkt
-> tcp-ecn-ecn-uses-ect0-pkt
-> tcp-eor-no-coalesce-retrans-pkt
-> tcp-slow-start-slow-start-after-win-update-pkt
 
-Argh, I missed the two above, I had the ignored cases filtered out 
-when I was looking :(
-
-> tcp-sack-sack-route-refresh-ip-tos-pkt
-> tcp-ts-recent-reset-tsval-pkt
-> tcp-zerocopy-closed-pkt
-> 
-> We'll take a look after this change whether we can make these
-> more resilient. But likely also allow-list or even xfail for
-> everything in dbg.
-
-Okay.
+Reviewed-by: Niklas Cassel <cassel@kernel.org>
 
