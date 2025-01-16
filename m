@@ -1,179 +1,116 @@
-Return-Path: <linux-kselftest+bounces-24620-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24621-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 284B1A1321F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 05:47:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55ED4A1322B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 05:58:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FE4F3A5021
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 04:47:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7485C166793
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 04:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33FF91422DD;
-	Thu, 16 Jan 2025 04:47:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB25B14884F;
+	Thu, 16 Jan 2025 04:58:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Rp9kWckM"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="k+um2YUX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768944A3C
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2025 04:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19AD824A7C0
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2025 04:58:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737002857; cv=none; b=sG0vPV7S6xOE+YclsFze+CZtST9m1uwKsfkUFflWihtmGms5jfeDaJwlaPkLmHdHrRsAElKJ54XEJC2Ua3GO368m5vmo9RcTonsZeN94s1tzS6o5EX7MsN2LLrda1uNjOy2HlpvBF+svD91YVmmY1J9RrQuQciW6cNyX6Cq973E=
+	t=1737003509; cv=none; b=Z3QnV3PWKkBhGukfzwISOhCJNx9Bb8/XuBw8jNGvjjmGktjBzX0LiwnUAErXNKKDgpCl7saGMcD7u4e6UpZ7r8M5rvhoHxs1PW6a+lQt1KdtFto20j0TNn5akAbyGjpdRKSCqfC6mK4Op6/wSebu12QKZMPAi8bSRybryI0PZ7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737002857; c=relaxed/simple;
-	bh=LX6Kpof3GqQFlFOI2OjFz/Xlb/CA76NP/oUe2XWNbz4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Lvihuyk+VV3DD3KfyEy82QKGx3UWEb5pfqUbYtJc7gJNPQFU0FcQhGa292rffABHOJFDizfyu+hq6s1WZ8PTYKpwqUfXJRke0prcmYNbOpordX5QCVYsC1UXZ/5AfZAszAl3iCxQQGL9eBmcNGyEhrqQBJIXri7OwA5GesCosPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Rp9kWckM; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-216426b0865so7425545ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2025 20:47:35 -0800 (PST)
+	s=arc-20240116; t=1737003509; c=relaxed/simple;
+	bh=pM4jq/+t6yMPA0cvFRGfhhuFmtipKif0c3FMYxgpqss=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
+	 In-Reply-To:Content-Type; b=JEDrv0xuIlQPysjo+3x9WKxwhsOUeYh+w2JSa8PsonKsbq3QJxp1nO8Ga2mCM469fiYXtt4l23AntYgg/Lk9TUEvflPdmcNncGSTyHdDK7apFMrGFbZ+E3VbhMGoZMQcmzSK2pnDdFjxHsSNVIIbZ6vAoN7aROIKRyO6Ku8FaVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=k+um2YUX; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-844d5444b3dso23177039f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2025 20:58:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737002855; x=1737607655; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=V01nO0SZ37R+JBLX/uBesYNHFkKJgAfRsOpWZID4QTg=;
-        b=Rp9kWckMO21zjCKeZ20RT0ABHl4/CQNKJQ2k3VnYGwBhVjLUD6seewsC5av6ORSgls
-         fQo4mPWBqhwxn2jMpAMlfxMkeZby16GBrq7agYxNQfm4l2Q4LDGr2ldq5SUv9BMGESd1
-         /mBSvyWdI2gH5MA5flhZ46IbxFAdcAz3YJrbIvBeTqaUotIYt7hT8D+DLQvB6X2cbfvR
-         vR1Bw7tKK7yBLeXpZY/ySUA2Ehr1A7Gm1id2rvgjU1G1PMO4jpOaVzp8N2vLA9YlOZdG
-         PHCo/F3avssvx38FHTmmQcrYOPkpvkKpHfCrlmF96VbfQXBMHyGUajUUmH9KDrecugoB
-         HVvQ==
+        d=sifive.com; s=google; t=1737003506; x=1737608306; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:cc:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=AFLg8GSDpsapBIGiAyBWLlK/6kmfSioivJ/IsRLirXs=;
+        b=k+um2YUXMbe0fDxxWVXwrCQWYptmBxfGBbbQ0mQHTUmnpDXGD9xjWxPjCPp12HFDdm
+         WMHn+Yv62cUNRW/DOVunZUGp1BKA9QUCtXdgqNGRYC7Y0JPHeu8+6lXUyH7uidgOvjG1
+         +R+EQNHw91zrfCT6R+yqWDN8YKd5N92tDR24vcVCE4bS0B077vRaykiyjfmy5ytNueAm
+         pllR7bwvbtXQKOteZJvF0hqu3H/swgTmPyTFH3D8YMT+jh0Kae3Hm64XiikppZMAMv3Q
+         KCvHdLgNc6wlbNcnN/qZxoTMvtC37M5x38EzJU9pln8uBQMJKaDx+qpyCGr+2JO2jm10
+         ytjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737002855; x=1737607655;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1737003506; x=1737608306;
+        h=content-transfer-encoding:in-reply-to:cc:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V01nO0SZ37R+JBLX/uBesYNHFkKJgAfRsOpWZID4QTg=;
-        b=MbJCq+0+nlpIrnDLKWq3dyrf1W/HDi0qyEQ/fUkBhjLfIQCyPs9UvNsn15uNmfa4N9
-         x4v8DOl79uiyTTYljO8o+b02HtqUYc8GW9o1CECHNsmLJYUPTSqyH34YyPLbqe7CwXlR
-         rLwjQnSKvRM6QQCu2JApXJylY5y2F3/EFotSOnWq3Sfk6iqb8CHbERG2Pqs0zijrDpm6
-         1B88rORI2KcrUVoDPXGiddmpfDdH2nX2K0imfsnEb6noNZWfLMqgS7j3jmpvoVWdrthL
-         2Upvdr6nF+TgIatFCd+j/4vf/ZLvCbRYPP8faazXmc4DAMauuTJsFlG18Ey8Y+SH+c2u
-         1LYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUM/8E4J8PFBZIiIhLpwa15xEXoCDAbMLxJe76ofNBt00Z0ZxTmCfsmEcYmwd8M2ZQT8qx0oSbuTR3DhBjHTJw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1FAMXapBmyX6fKzzjLzuBLnaloetvXQHSi30IxCIoQWk1WpHW
-	qwvfQzaR5ajlOQTqyai5LnlcdDaSoJqnY7gMWbPgiBgYaMqaEobnHh5HuV+b2g==
-X-Gm-Gg: ASbGncvOfCeBSDvfybwdoGknVNR509PIUy4RJ8DpeXc88Gb7PBvmQN69rDpuKAHO7Op
-	TZty6X9n+SZNcc0O9hpLXUG7GsrtQ/0xlRiDRwjmjyPbcKv+FsnBSD6hAoh1c1fSaMDJSfh6wFs
-	+LmJSCAn9redymp4lavQOsiMQOGvQ0QLvwGeMVHI+LNN8hty2TP550bhP71hql+df1uiikWsUal
-	YxL5jrsH67jkdGHJ0AJXcS4gnc8gJdweRkOIuV9acdsU+TyCh6xZ+Q33ivLm92LoHo=
-X-Google-Smtp-Source: AGHT+IHwfbiGq5loLxwv4zEURJyYuoHb37VHX9d1McOu5eZZj9jVra5zahjjNYA5h9O2VRKhhlx4Rg==
-X-Received: by 2002:a05:6a00:392a:b0:725:b347:c3cc with SMTP id d2e1a72fcca58-72d2200273bmr45899486b3a.23.1737002854546;
-        Wed, 15 Jan 2025 20:47:34 -0800 (PST)
-Received: from thinkpad ([120.60.139.68])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d405943c2sm9984852b3a.79.2025.01.15.20.47.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2025 20:47:34 -0800 (PST)
-Date: Thu, 16 Jan 2025 10:17:25 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: Niklas Cassel <cassel@kernel.org>
-Cc: Vinod Koul <vkoul@kernel.org>, kw@linux.com, gregkh@linuxfoundation.org,
-	arnd@arndb.de, lpieralisi@kernel.org, shuah@kernel.org,
-	kishon@kernel.org, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bhelgaas@google.com,
-	linux-arm-msm@vger.kernel.org, robh@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Aman Gupta <aman1.gupta@samsung.com>,
-	Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
-Subject: Re: [PATCH v4 3/3] selftests: pci_endpoint: Migrate to Kselftest
- framework
-Message-ID: <20250116044725.ooskvqlh2lpdr2xx@thinkpad>
-References: <20241231131341.39292-1-manivannan.sadhasivam@linaro.org>
- <20241231131341.39292-4-manivannan.sadhasivam@linaro.org>
- <Z3QtEihbiKIGogWA@ryzen>
- <20241231191812.ymyss2dh7naz4oda@thinkpad>
- <2C16240A-28F8-4D9B-9FD7-33E4E6F0879E@kernel.org>
- <20250102070404.aempesitsqktfnle@thinkpad>
- <Z3ahUuSjRv66L_g9@ryzen>
+        bh=AFLg8GSDpsapBIGiAyBWLlK/6kmfSioivJ/IsRLirXs=;
+        b=iYw1yV1Ah53kXhF2iN98i4aB53Z6dRz9rU4/6S7cBIgd4zpar/wM1h+8U5HQsuAPQP
+         sP5arrR33zGX6aMbZi14+/GKQRTU1l1R2lN9PkM4/h1UTUWoloUEhw2w8TFQB/YEMqnQ
+         2A9avKQKBQJ5w1aaui4UHKjkhZ+zWTioTRHpWTLdV1wEE+AyR3C4/9GauiOZtp5e/k1z
+         Q5kc3krT2CO8mJKnKyJH/RD7t6iNEszWrZ1EIZazEncD61LaPxM+c1TgK1fXvpzYgcH6
+         9hoFDHQs0aFC+IDqeDlBKKQ4e+FbHZwqKyNedb/jxKlAvtYPa23n+WQfGodtR4agJQw6
+         mXqg==
+X-Forwarded-Encrypted: i=1; AJvYcCWo6JPQn4BxAtiZIlHV6TGwARJXx8bgAnPuFU6mkRf9e9bUs7iTgvbSaCeCkT4Dkk9kGTaZVI8Ojo7ol9QDzrI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEMxxaJeh/oglEIisXPeITGVlPUaZbZTcJs4kjDWu/m0ONfnHG
+	+tQaPQn379O6vDMbLx2aV0pxogmH9cbcsEDGzbBjnXIvlJ/iNJXrfxpFquu2F80=
+X-Gm-Gg: ASbGncs/uHzutE/XeL/Lt9XEFLvqYJvKuq18XutcMsoUNTJ2u1Q2MCwRutlIWVskdIC
+	Q19M/zgLR6moVzFD5V/2OEn/mQzaN1nmT/vgqAyjIV6EoO6ctWORZ/GJM2O2pLRiaQh+n25VZ3y
+	gHBIDP2sgK4XZGJrggtRuH5gfMXJB3VcZam9B+alDP0HBooCrQv4/sbN9BPWNE12qXCQ6YFDkcv
+	epjtqUzCKJxi6FXzXTLmDJ4Y5XdK3q2uPny0Aw6QHM33a8N8EDyHULebIEl6KjjnBOLgbgGW6mB
+	piLm
+X-Google-Smtp-Source: AGHT+IGCURJWIVYousmDxQfZtWRFVgJilSrZTA63b4XTXZvjX1GtlsFKkKGE3cWs27mtEc5QXAwz2A==
+X-Received: by 2002:a05:6602:7288:b0:82a:a4e7:5539 with SMTP id ca18e2360f4ac-84f672d8530mr532921139f.2.1737003506302;
+        Wed, 15 Jan 2025 20:58:26 -0800 (PST)
+Received: from [100.64.0.1] ([165.188.116.9])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-84d61fca4f0sm425517139f.44.2025.01.15.20.58.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jan 2025 20:58:25 -0800 (PST)
+Message-ID: <8d03404e-c9eb-485e-9280-27a06937c347@sifive.com>
+Date: Wed, 15 Jan 2025 22:58:23 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z3ahUuSjRv66L_g9@ryzen>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/3] RISC-V: hwprobe: Expose Zicbom extension and its
+ block size
+To: Yunhui Cui <cuiyunhui@bytedance.com>
+References: <20250115024024.84365-1-cuiyunhui@bytedance.com>
+ <20250115024024.84365-3-cuiyunhui@bytedance.com>
+Content-Language: en-US
+From: Samuel Holland <samuel.holland@sifive.com>
+Cc: ajones@ventanamicro.com, alexghiti@rivosinc.com, andybnac@gmail.com,
+ aou@eecs.berkeley.edu, charlie@rivosinc.com, cleger@rivosinc.com,
+ conor.dooley@microchip.com, conor@kernel.org, corbet@lwn.net,
+ evan@rivosinc.com, jesse@rivosinc.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+ paul.walmsley@sifive.com, shuah@kernel.org
+In-Reply-To: <20250115024024.84365-3-cuiyunhui@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 02, 2025 at 03:23:14PM +0100, Niklas Cassel wrote:
-> Hello Mani, Vinod,
+On 2025-01-14 8:40 PM, Yunhui Cui wrote:
+> Expose Zicbom through hwprobe and also provide a key to extract its
+> respective block size.
 > 
-> On Thu, Jan 02, 2025 at 12:34:04PM +0530, Manivannan Sadhasivam wrote:
-> > On Tue, Dec 31, 2024 at 08:33:57PM +0100, Niklas Cassel wrote:
-> > > 
-> > > I have some patches that adds DMA_MEMCPY to dw-edma, but I'm not sure if the DWC eDMA hardware supports having both src and dst as PCI addresses, or if only one of them can be a PCI address (with the other one being a local address).
-> > > 
-> > > If only one of them can be a PCI address, then I'm not sure if your suggested patch is correct.
-> > > 
-> > 
-> > I don't see why that would be an issue. DMA_MEMCPY is independent of PCI/local
-> > addresses. If a dmaengine driver support doing MEMCPY, then the dma cap should
-> > be sufficient. As you said, if a controller supports both SLAVE and MEMCPY, the
-> > test currently errors out, which is wrong.
-> 
-> While I am okay with your suggested change to pci-epf-test.c:
-> > >-               if (epf_test->dma_private) {
-> > >+               if (!dma_has_cap(DMA_MEMCPY, epf_test->dma_chan_tx->device->cap_mask)) {
-> 
-> Since this will ensure that a DMA driver implementing DMA_MEMCPY,
-> which cannot be shared (has DMA_PRIVATE set), will not error out.
-> 
-> 
-> What I'm trying to explain is that in:
-> https://lore.kernel.org/linux-pci/Z2BW4CjdE1p50AhC@vaman/
-> https://lore.kernel.org/linux-pci/20241217090129.6dodrgi4tn7l3cod@thinkpad/
-> 
-> Vinod (any you) suggested that we should add support for prep_memcpy()
-> (which implies also setting cap DMA_MEMCPY) in the dw-edma DMA driver.
-> 
-> However, from section "6.3 Using the DMA" in the DWC databook,
-> the DWC eDMA hardware only supports:
-> - Transfer (copy) of a block of data from local memory to remote memory.
-> - Transfer (copy) of a block of data from remote memory to local memory.
-> 
-> 
-> Currently, we have:
-> https://github.com/torvalds/linux/blob/v6.13-rc5/include/linux/dmaengine.h#L843-L844
-> https://github.com/torvalds/linux/blob/v6.13-rc5/drivers/dma/dw-edma/dw-edma-core.c#L215-L231
-> 
-> Where we can expose per-channel capabilities, so we set MEM_TO_DEV/DEV_TO_MEM
-> per channel, however, these are returned in a struct dma_slave_caps *caps,
-> so this is AFAICT only for DMA_SLAVE, not for DMA_MEMCPY.
-> 
-> Looking at:
-> https://github.com/torvalds/linux/blob/v6.13-rc5/include/linux/dmaengine.h#L975-L979
-> it seems that DMA_MEMCPY is always assumed to be MEM_TO_MEM.
-> 
-> To me, it seems that we would either need a new dma_transaction_type (e.g. DMA_COPY)
-> where we can set dir:
-> MEM_TO_DEV, DEV_TO_MEM, or DEV_TO_DEV. (dw-edma would not support DEV_TO_DEV.)
-> 
-> Or, if we should stick with DMA_MEMCPY, we would need another way of telling
-> client drivers that only src or dst can be a remote address.
-> 
-> Until this is solved, I think I will stop my work on adding DMA_MEMCPY to the
-> dw-edma driver.
-> 
+> Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
+> ---
+>  Documentation/arch/riscv/hwprobe.rst  | 6 ++++++
+>  arch/riscv/include/asm/hwprobe.h      | 2 +-
+>  arch/riscv/include/uapi/asm/hwprobe.h | 2 ++
+>  arch/riscv/kernel/sys_hwprobe.c       | 6 ++++++
+>  4 files changed, 15 insertions(+), 1 deletion(-)
 
-I think your concern is regarding setting the DMA transfer direction for MEMCPY,
-right? And you are saying that even if we use tx/rx channels, currently we
-cannot set DEV_TO_DEV like directions?
+Reviewed-by: Samuel Holland <samuel.holland@sifive.com>
 
-But I'm somewhat confused about what is blocking you from adding MEMCPY support
-to the dw-edma driver since that driver cannot support DEV_TO_DEV. In your WIP
-driver, you were setting the direction based on the channel. Isn't that
-sufficient enough?
-
-- Mani
-
--- 
-மணிவண்ணன் சதாசிவம்
 
