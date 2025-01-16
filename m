@@ -1,173 +1,117 @@
-Return-Path: <linux-kselftest+bounces-24634-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24635-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEC88A13512
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 09:15:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FC90A135EC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 09:59:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F1887A1FD9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 08:15:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EE053A50F5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 08:59:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C5AB1CEEBB;
-	Thu, 16 Jan 2025 08:14:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B696A1D61A4;
+	Thu, 16 Jan 2025 08:59:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fTRgc7kE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DN+WlgIt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815C2198A38
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2025 08:14:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06DC322301;
+	Thu, 16 Jan 2025 08:59:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737015269; cv=none; b=fv6KeEY37rgl4eVLW5HLye2dvC3nFlTjnbixB5Ufcpoixz63FMDkobF1nPXTQFDXUTYphjz3lWRtOuAYaFaRbUN9n/l/y0nA/1N/ovvW4t28cmlaxWK6HR13K1FLEPX+4x2n+2EQp7MhnwdRCIRKKxzFqg+oIwKhpdAUb8K9mCY=
+	t=1737017989; cv=none; b=nKEb+0W/de0+VY9MaTxaacUo76D+tU3hcV1XKkK9U4AeaOiyp1cAVewumEkiz9hEa0v2g1k95ryID6uHBeZrvjiTYidqQAQh/WXnSNhiQhjTheLY4bylidnsBdAZ5wgaYjpEqXDOq/f/EUv2HJkhs0GRpub7buAufBfYrMCkNaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737015269; c=relaxed/simple;
-	bh=fort1JpzFCk9aJtnmJGBE2dcNxsiha4izVe2Fx5p3d0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KnUugfJhEBEEwMP7LmKniv5Htx9JSG+lvn8I/X8fQJOYrg6cU1AAl3awhqWDKp0Ru6hH7n0ahUPVhrI+27SBCU5Pv4jbnNqouJl86AFtJd8FZ0VPqOmovctjgrJfNyaxWtwIDyH3HD1Gzjjd2AexkGoTxetJ808og1sRt8XEhM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fTRgc7kE; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1737015266;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ERbJSuqsAOXaaj6eB/CkwpIU16l9eEjJ8jUx0oPfO3Y=;
-	b=fTRgc7kE8hh4l7jRuyDI5GItj6qh5RMHvzOX+QXmPgNF98xK0daWm6wjHWrgPH3FuqW7Q/
-	N9j8NJ9fEVzuPTjcpKNCe2c/1Oa2CA5umSGwRTcctsDSR6SfenPb1oyQsi/s65tlk5BeBr
-	g24vsliaYeVF5OYMqlwW688Ow1pFYz8=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-658-WKCsH0sYMLav-bejWJKO1A-1; Thu, 16 Jan 2025 03:14:24 -0500
-X-MC-Unique: WKCsH0sYMLav-bejWJKO1A-1
-X-Mimecast-MFC-AGG-ID: WKCsH0sYMLav-bejWJKO1A
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-385ded5e92aso265190f8f.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2025 00:14:24 -0800 (PST)
+	s=arc-20240116; t=1737017989; c=relaxed/simple;
+	bh=oyVNGXZz4OCy+CYaKUJrspWuFEkTi10N9LufJVAO1q0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=osWzPAFk6aMUluMoIpcCkcVtfbAXXR1q6oU/bPmYc82PUhMglJ8mjjVgDdD26HlQ1rd50VIkl75qZvJC3H0uBOjeKSjmYq9vY+uiyP9AOACaGOeseqa55o19Sk/sy0BBtj+Hxbr+fVWXL+eNErkGLLNg3wZLHa9x1ZvPieaF1bY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DN+WlgIt; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-38a8b17d7a7so322307f8f.2;
+        Thu, 16 Jan 2025 00:59:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737017986; x=1737622786; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oyVNGXZz4OCy+CYaKUJrspWuFEkTi10N9LufJVAO1q0=;
+        b=DN+WlgIt7k1kA/SfzeNQzCb18O6oQH7yi2tu1trh1BI19fUF59ujRvlWUYBG1UuIph
+         pPZOT079DA8QoQze4D3LPYg9UtSzSr5z/xu8HkTFvAJsMaGXJ2xXc2oJW95AD/VmYREJ
+         vvD1n+KUpxm1vKEfEkvHzW+gaW5Pt/Pb66T5tC0N3LxgaDQhdZnNsAqCdMrNyf67dWqK
+         paIxyAou8aZShLklcHhg183DjIjHuJZsfdBhtSUdpxn9MbEPPfKpe3k8eZ7C5clA3Zu5
+         zJXlzilhKJk+bswbOreT5kIXn36NmwZiE/Qa285UvPlk1u+thJhoHFPYCupEYPILX8Fd
+         l/2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737015264; x=1737620064;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ERbJSuqsAOXaaj6eB/CkwpIU16l9eEjJ8jUx0oPfO3Y=;
-        b=hGM1Y5cQceD0Oc25AT5RdgUp2bH1sH4eI1pfvw01En9No8oRzH+J9OBKXvrmb2LJ53
-         WfA+2fleZrIJ6Yg2Ax5TK0WuXzbfIL2ZCspreS4nyUDbk0Falv8gUpqE0JnCNYqFzdIn
-         Zwkn4mbK0phkpr4oqFdNqoiUUhFMKR498w+TOBhpNAaP8pko5cupVkBOBQKbBHCprlz6
-         5YFOSIIkje5ShJrGx1Py73s/cpTpXUKK7rGq/JNKKTBr3obU56Lw+KpqM1jSc3Y8/V7K
-         h4t4PX3Nv+kbkhJ/oknnz/jeK92df2Ks8PfwMqLFeqLt0WFFnmuK2SZzKNwONd8L+7NZ
-         E8Fg==
-X-Forwarded-Encrypted: i=1; AJvYcCWbeC7if+/4LadT3S1GRqJ1ybjOOrt5gonVP1Gpf0+rJMh2gV7hJR2/kX9hmhbS6WRx+C2xR/VOCvWsGizOEDU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxALEMlhqI4uZ/Hs2mSaml6edfgx72RsI/TknkIwjwciBrHiyCq
-	rJqd7lLBwcDkVZ3b9B0J0ShVir3n95v0cjB2F9rsWnSaNvLwdMhaldyUSOP5rQNe4ItlF1fSI+s
-	hSW/OBZOamQKYT9ePMVD3lGFgvMMjsqw4NdIGj6bsDK7KAGkcflk2FLsr9avOQbyxGw==
-X-Gm-Gg: ASbGncuYNJNRP5Wp9jCF2m/gLMsfuAZyySTGsfPryRg9IcydrYpS/TcZ9iPGhyh+Kc4
-	imOpI8C7AIO79u4qVCGPSRWZ7EWtFohkaAxMnTHSdDxQ7EhBOPFhkdxaX6A3+B7tNujHVmytWIG
-	UwPZ/lUtTd+F3ypUDjfkz8DtBLPmuyrnmQdSIdpNbZLSyA9z64Xu2sjEBmo4JDTBIFKXtwAP6No
-	WwMIDPm6sA3HAoF5d4F9JzpUt584KhC7gLfAnKtNucaLHK8nnJC
-X-Received: by 2002:a05:6000:2ad:b0:385:f5c4:b30d with SMTP id ffacd0b85a97d-38a8730dd17mr7142028f8f.39.1737015263723;
-        Thu, 16 Jan 2025 00:14:23 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEVuBvar1zeSUO961UzYaw/R6lkjncjPewk3IhqyjOPRMXTTO5yWHL+JU+PeFfMlECdyG2zMA==
-X-Received: by 2002:a05:6000:2ad:b0:385:f5c4:b30d with SMTP id ffacd0b85a97d-38a8730dd17mr7141999f8f.39.1737015263364;
-        Thu, 16 Jan 2025 00:14:23 -0800 (PST)
-Received: from redhat.com ([2a0d:6fc7:342:db8c:4ec4:322b:a6a8:f411])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e37d0bdsm19629001f8f.3.2025.01.16.00.14.20
+        d=1e100.net; s=20230601; t=1737017986; x=1737622786;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oyVNGXZz4OCy+CYaKUJrspWuFEkTi10N9LufJVAO1q0=;
+        b=HLHFMNn6X2qMm1PRZFjVTE/AoxG3MUvorbjpYHNluqzSKB4L9znG6TZx6AlLAa9Ccp
+         sT4W5NCocIZtAfXCHmUd8J/gK6Lkjc+7dsA4zZ/RfhvU+PRRFgQ7qFjPppdxZ5PvyXtX
+         e00jbD4XQZMfRBdhqCSh9wKItrJzovAoMkeSikcrpydtadsNhftl5rlRaZZ5/R3XLzvg
+         cMhPldVseoiGYU5m6CnEhdahoQcEDWvWO0ripQJRDqCILvnMset/9Hzkk3P6+2bvdTX3
+         CGXxc2+px6uk7aIeOaaTBNmqg1L8yu77cB4SHb+jvIblPjHaQ14BmV5DAxpHWMNweR1O
+         /etg==
+X-Forwarded-Encrypted: i=1; AJvYcCW8Tr6P5sB+9yZ5FMUL6moybaJAbJi0/pT0ezK2646WcGY9VnPOqxaMs9lf3lQY6DtxF9zfbd5TSIVMkHw=@vger.kernel.org, AJvYcCW9ZoQVfU8FxJF+diPLUmO3cmz/wIfjqwy79Bayeh/n74/XUPDKFrB3KhCq24F4qkIr1vT3dCUvhvp44JKtgJ/J@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0j7z2wY8BQhH6l/O9wi+tDa4X+vdgN8ka47wnSze/6Ks39Ekq
+	TKN9llE38V21koWfDACprS4oz25DtwLc0ag/xtqyySwZCYUreeA3eAF3Ow==
+X-Gm-Gg: ASbGncu+WcBBoeIGwmNLSBVDTwtZGInVmBpCeY/PUdnxb+2wdWsPHVJC4MYfjlwQkmC
+	pKg4u2Dy52OFfxY82RSf5YQpoUOIm/Y/cijhb0LLTbS1k+aa0q2eYuRWzfXwvJ9k55yFvyrudPv
+	ai6hC38OCz0G47nvtSgMRFhEu+g6qNEj1imgL6x3gsWCd/gqDzHrhaFPx/8HWK5m4ngI18mSIPC
+	tMHY2PGZrOul38ayvGXjaAHEC3iMyADa7NBOkFDCjf7G4cYUwI8I9R+sc2UtOjVtzjp91kcxh3L
+	ypBLvg==
+X-Google-Smtp-Source: AGHT+IE4rZp+78b1HlE7LoTR+uNySR1Aj523uXtNGikhJ3QdRwl3NnSzDDDqZc6eAiwWtfmBuMOISg==
+X-Received: by 2002:a05:6000:184d:b0:38b:ef22:d8c3 with SMTP id ffacd0b85a97d-38bef22db2cmr989876f8f.35.1737017986129;
+        Thu, 16 Jan 2025 00:59:46 -0800 (PST)
+Received: from localhost.localdomain ([197.63.255.26])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e37d090sm19655955f8f.2.2025.01.16.00.59.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2025 00:14:22 -0800 (PST)
-Date: Thu, 16 Jan 2025 03:14:18 -0500
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Jason Wang <jasowang@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        Thu, 16 Jan 2025 00:59:45 -0800 (PST)
+From: Khaled Elnaggar <eng.khaled.elnaggar@gmail.com>
+To: shuah@kernel.org
+Cc: Khaled Elnaggar <eng.khaled.elnaggar@gmail.com>,
 	linux-kselftest@vger.kernel.org,
-	Yuri Benditovich <yuri.benditovich@daynix.com>,
-	Andrew Melnychenko <andrew@daynix.com>,
-	Stephen Hemminger <stephen@networkplumber.org>,
-	gur.stavi@huawei.com, devel@daynix.com
-Subject: Re: [PATCH net v3 0/9] tun: Unify vnet implementation
-Message-ID: <20250116031331-mutt-send-email-mst@kernel.org>
-References: <20250116-tun-v3-0-c6b2871e97f7@daynix.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/.gitignore include missing log file
+Date: Thu, 16 Jan 2025 10:59:28 +0200
+Message-ID: <20250116085929.313677-1-eng.khaled.elnaggar@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250116-tun-v3-0-c6b2871e97f7@daynix.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 16, 2025 at 05:08:03PM +0900, Akihiko Odaki wrote:
-> When I implemented virtio's hash-related features to tun/tap [1],
-> I found tun/tap does not fill the entire region reserved for the virtio
-> header, leaving some uninitialized hole in the middle of the buffer
-> after read()/recvmesg().
-> 
-> This series fills the uninitialized hole. More concretely, the
-> num_buffers field will be initialized with 1, and the other fields will
-> be inialized with 0. Setting the num_buffers field to 1 is mandated by
-> virtio 1.0 [2].
-> 
-> The change to virtio header is preceded by another change that refactors
-> tun and tap to unify their virtio-related code.
-> 
-> [1]: https://lore.kernel.org/r/20241008-rss-v5-0-f3cf68df005d@daynix.com
-> [2]: https://lore.kernel.org/r/20241227084256-mutt-send-email-mst@kernel.org/
-> 
-> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+Add tpm2/AsyncTest.log to .gitignore
 
-Will review. But this does not look like net material to me.
-Not really a bugfix. More like net-next.
+Signed-off-by: Khaled Elnaggar <eng.khaled.elnaggar@gmail.com>
+---
+Hello
 
-> ---
-> Changes in v3:
-> - Dropped changes to fill the vnet header.
-> - Splitted patch "tun: Unify vnet implementation".
-> - Reverted spurious changes in patch "tun: Unify vnet implementation".
-> - Merged tun_vnet.c into TAP.
-> - Link to v2: https://lore.kernel.org/r/20250109-tun-v2-0-388d7d5a287a@daynix.com
-> 
-> Changes in v2:
-> - Fixed num_buffers endian.
-> - Link to v1: https://lore.kernel.org/r/20250108-tun-v1-0-67d784b34374@daynix.com
-> 
-> ---
-> Akihiko Odaki (9):
->       tun: Refactor CONFIG_TUN_VNET_CROSS_LE
->       tun: Avoid double-tracking iov_iter length changes
->       tun: Keep hdr_len in tun_get_user()
->       tun: Decouple vnet from tun_struct
->       tun: Decouple vnet handling
->       tun: Extract the vnet handling code
->       tap: Avoid double-tracking iov_iter length changes
->       tap: Keep hdr_len in tap_get_user()
->       tap: Use tun's vnet-related code
-> 
->  MAINTAINERS            |   2 +-
->  drivers/net/Kconfig    |   1 +
->  drivers/net/Makefile   |   3 +-
->  drivers/net/tap.c      | 172 ++++++------------------------------------
->  drivers/net/tun.c      | 200 +++++++------------------------------------------
->  drivers/net/tun_vnet.c | 180 ++++++++++++++++++++++++++++++++++++++++++++
->  drivers/net/tun_vnet.h |  25 +++++++
->  7 files changed, 260 insertions(+), 323 deletions(-)
-> ---
-> base-commit: a32e14f8aef69b42826cf0998b068a43d486a9e9
-> change-id: 20241230-tun-66e10a49b0c7
-> 
-> Best regards,
-> -- 
-> Akihiko Odaki <akihiko.odaki@daynix.com>
+After running kselftests, AsyncTest.log file showed when running git status.
+I just added it.
+---
+ tools/testing/selftests/.gitignore | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/.gitignore b/tools/testing/selftests/.gitignore
+index cb24124ac5b9..87d532c08a3e 100644
+--- a/tools/testing/selftests/.gitignore
++++ b/tools/testing/selftests/.gitignore
+@@ -4,6 +4,7 @@ gpiogpio-hammer
+ gpioinclude/
+ gpiolsgpio
+ kselftest_install/
++tpm2/AsyncTest.log
+ tpm2/SpaceTest.log
+
+ # Python bytecode and cache
+--
+2.45.2
 
 
