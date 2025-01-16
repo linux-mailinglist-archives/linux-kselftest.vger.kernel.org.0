@@ -1,105 +1,117 @@
-Return-Path: <linux-kselftest+bounces-24636-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24637-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B4BDA13621
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 10:04:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F41EA1369B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 10:29:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 085B43A12D5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 09:04:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C62871680FE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 09:29:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9670E1D7E30;
-	Thu, 16 Jan 2025 09:04:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A9661D7E4F;
+	Thu, 16 Jan 2025 09:29:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="d2sSU/zx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 665891A08BC;
-	Thu, 16 Jan 2025 09:04:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4314326AF6
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2025 09:29:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737018285; cv=none; b=N/hIjhl5cG/YvXomlTquURjfE44Wd05jA6tDhTQAbQFih4cf6owPicF5XeqcBGxb6JDv4xZiqWVtGOccsdMWPPCashwRr8xwab3g7cpFpC4OrA5JF/71f9WhI8WfZk1XKlcV/av1faDJOwwn3wFO+EX0BiFyWeuaamRICc+tgTU=
+	t=1737019792; cv=none; b=PGdp+cBA72uvxZY6di6yQ0wezW+J7zFJkci25XHrpn681jaCUqs3H+bHDmtyquZmtXMT8bb1k2Ia+JKFOeGHx5rGMJ34eenQXsAJEKAA0pJ2hM6bs2xaevzkAWuCU4+kRtziPHi3Jjv7Lkdm5Pgh8dkY7hd5vklVtC5k46Vg3pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737018285; c=relaxed/simple;
-	bh=kGkp+1pokDJpHR7iSo16jsNz+JlQ+wnqu3AQ9BEa/jA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xg/Gx5oEFJ9+7pT74sEn6Mxu710o+YeDlMQkbARc6hzDhZXQDN4OJ4gHlUJrbfgPWpEzJqbuesMbT5bAk83OLajYJy0YBpmaFIvbgVswYL+Fh66cbhd9+wb7ZRBaUxWOktqSjWlLPWoFi/pfgAKu87jth4wYFuR9Pj+QzDcJlp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C8A9911FB;
-	Thu, 16 Jan 2025 01:05:09 -0800 (PST)
-Received: from [10.57.94.252] (unknown [10.57.94.252])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 247763F673;
-	Thu, 16 Jan 2025 01:04:39 -0800 (PST)
-Message-ID: <873aede9-bfcd-4c95-a93d-ec1881554f39@arm.com>
-Date: Thu, 16 Jan 2025 09:04:37 +0000
+	s=arc-20240116; t=1737019792; c=relaxed/simple;
+	bh=ndOQe7iYVdafaQgYnE+41A58i1xptE9OdOrBo0S9x6g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FLmCOSikPvYv6otm1KafwLYvuMx70XcyE2l3e93MG2AXA/PEXStatzBdirZigM7xO4NkSDANZjPlWlisTavJPcQPX9j3Ex9qIYEfVT4YKH9e5hV5TyA415JSkSosId/V3whjj14YxAhpow+UZeM8KSuCxiQ33q1By+OsufySt7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=d2sSU/zx; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-38789e5b6a7so384324f8f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2025 01:29:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1737019788; x=1737624588; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ndOQe7iYVdafaQgYnE+41A58i1xptE9OdOrBo0S9x6g=;
+        b=d2sSU/zxhFB2TfWL9bcoZSLRQEz/Aw0/6tN3R03Lawd03W93fgwNIRTuk9i9qF7knj
+         hXUWoB2gfFsMPgaiHqXGy+EuLbEpRQJEeY/jg6GV+83zruJM4IrbPFudgS/A/BqmNmIn
+         qmdYlOcY4QJpVXhcPmtcIKYTcVfPsMpX5ZqlYlMBl3NICi8lbM5JV1R3B3H1lKAYumvv
+         DuTwY6tF+uoTb0qfTtIOpq/nj7GtsjZGXogL7mEM44+yTvCVZS+QzCe+GSCXfSb/U8HP
+         I25lRwF50lxRrs9IJs5QH4Sx6/dIA8EEulNwPeqfeRawTycbRxQJU2/6hkm6/gtcll2N
+         q+Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737019788; x=1737624588;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ndOQe7iYVdafaQgYnE+41A58i1xptE9OdOrBo0S9x6g=;
+        b=XX2jHcyWBZTOB5sws9arXSxuSHdjy8wUEztF4/+aIqedLEXHmAeoKySaP43i3g6EtJ
+         pFbEUjNwkHO/v5ECgl+tu999mAlOzZhzhZ9O8D0XzM746S7WTZ9L/vBE4DMH7DEGUPl7
+         FTPMuXgEE98m+9W2hevFr42QhHycoQ/zohmlvywa7FJX4MlTpOJ3DjaWdffkigSXclzL
+         WQDhmpDZd/H/KAtORL3KpnAuccYRmumIPrCqc35utetsvEJWMTSo/mYPj3V0M+DZID1V
+         jByIRjfVlHhFlUmkxqoYEisntwNeS9DkdPf1a0RWE5eHkikC8G7mw5RGMPtslRX0QD5O
+         rn8w==
+X-Forwarded-Encrypted: i=1; AJvYcCXCI4EWC+OelosADD7ZWdmThUtxdRik/hLa10zo50FU7mZQ/yU7lMoSjtEsFPJtAFWy6qxf13IH/I5lDl0IdC8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkEizZZrqEBF6lE2yrXtSO+kXLwFwKumGVtKE24A4pfg9Elcje
+	na1p6U7DKpNgyz3mOCwfySp/61CxOpIsmGbyLAdlQWEt7ZCFk2BRchPsHE4qLV4=
+X-Gm-Gg: ASbGncvq60ATDpKqGfFLs8KbZfmw+AS4qj8sBOQT55IcT//1I8u+OTYbeBMDtr3VN7H
+	kWH2RZ/+viGI9T42CtlMjbUZmi6sosaiNisBHsSCqQWfntve10ABIkfgPQSRaEaEYUs05MH2nZ2
+	RsvJBMcvhpUS8NRmwwcEgjrJYrM3gskhaZJHplKt7LYysPn/tKmzch6kFX82sj+0VhPI/m7DVWC
+	J9U8J+l6LMcQ/dLAyS0PiQq+s9lXtfOmfY0eWOAVz9GvI4vL626EiyZhA==
+X-Google-Smtp-Source: AGHT+IH5nuIBbL7/hc99gmUbXnHjV1QmVgQbVuzI8DIlS9I/l5k+cT/NveGuMhqp+ADX/0RVXMkBfA==
+X-Received: by 2002:a05:6000:4011:b0:385:f47b:1501 with SMTP id ffacd0b85a97d-38a87312d58mr26829937f8f.32.1737019788570;
+        Thu, 16 Jan 2025 01:29:48 -0800 (PST)
+Received: from pathway.suse.cz ([176.114.240.50])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-437c73e370fsm53343725e9.0.2025.01.16.01.29.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jan 2025 01:29:48 -0800 (PST)
+Date: Thu, 16 Jan 2025 10:29:46 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Madhavan Srinivasan <maddy@linux.ibm.com>
+Cc: jikos@kernel.org, mbenes@suse.cz, joe.lawrence@redhat.com,
+	shuah@kernel.org, mpe@ellerman.id.au, npiggin@gmail.com,
+	christophe.leroy@csgroup.eu, naveen@kernel.org,
+	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] selftests: livepatch: handle PRINTK_CALLER in
+ check_result()
+Message-ID: <Z4jRisgTXOR5-gmv@pathway.suse.cz>
+References: <20250114143144.164250-1-maddy@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] mm: Clear uffd-wp PTE/PMD state on mremap()
-Content-Language: en-GB
-To: Peter Xu <peterx@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Muchun Song <muchun.song@linux.dev>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
- Shuah Khan <shuah@kernel.org>, David Hildenbrand <david@redhat.com>,
- =?UTF-8?Q?Miko=C5=82aj_Lenczewski?= <miko.lenczewski@arm.com>,
- Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-References: <20250107144755.1871363-1-ryan.roberts@arm.com>
- <20250107144755.1871363-2-ryan.roberts@arm.com> <Z4gaUAt9w8s1rLPK@x1n>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <Z4gaUAt9w8s1rLPK@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250114143144.164250-1-maddy@linux.ibm.com>
 
-On 15/01/2025 20:28, Peter Xu wrote:
-> On Tue, Jan 07, 2025 at 02:47:52PM +0000, Ryan Roberts wrote:
->> When mremap()ing a memory region previously registered with userfaultfd
->> as write-protected but without UFFD_FEATURE_EVENT_REMAP, an
->> inconsistency in flag clearing leads to a mismatch between the vma flags
->> (which have uffd-wp cleared) and the pte/pmd flags (which do not have
->> uffd-wp cleared). This mismatch causes a subsequent mprotect(PROT_WRITE)
->> to trigger a warning in page_table_check_pte_flags() due to setting the
->> pte to writable while uffd-wp is still set.
->>
->> Fix this by always explicitly clearing the uffd-wp pte/pmd flags on any
->> such mremap() so that the values are consistent with the existing
->> clearing of VM_UFFD_WP. Be careful to clear the logical flag regardless
->> of its physical form; a PTE bit, a swap PTE bit, or a PTE marker. Cover
->> PTE, huge PMD and hugetlb paths.
->>
->> Co-developed-by: Mikołaj Lenczewski <miko.lenczewski@arm.com>
->> Signed-off-by: Mikołaj Lenczewski <miko.lenczewski@arm.com>
->> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->> Closes: https://lore.kernel.org/linux-mm/810b44a8-d2ae-4107-b665-5a42eae2d948@arm.com/
->> Fixes: 63b2d4174c4a ("userfaultfd: wp: add the writeprotect API to userfaultfd ioctl")
->> Cc: stable@vger.kernel.org
-> 
-> Nothing I see wrong:
-> 
-> Reviewed-by: Peter Xu <peterx@redhat.com>
+On Tue 2025-01-14 20:01:44, Madhavan Srinivasan wrote:
+> Some arch configs (like ppc64) enable CONFIG_PRINTK_CALLER, which
+> adds the caller id as part of the dmesg. Due to this, even though
+> the expected vs observed are same, end testcase results are failed.
 
-Great thanks!
+CONFIG_PRINTK_CALLER is not the only culprit. We (SUSE) have it enabled
+as well and the selftests pass without this patch.
 
-> 
-> One trivial thing: some multiple-line comments is following the net/ coding
-> style rather than mm/, but well.. I don't think it's a huge deal.
-> 
-> https://www.kernel.org/doc/html/v4.10/process/coding-style.html#commenting
+The difference might be in dmesg. It shows the caller only when
+the messages are read via the syslog syscall (-S) option. It should
+not show the caller when the messages are read via /dev/kmsg
+which should be the default.
 
-Noted, I'll aim to get it right in future.
+I wonder if you define an alias to dmesg which adds the "-S" option
+or if /dev/kmsg is not usable from some reason.
 
-> 
-> Thanks again.
-> 
+That said, I am fine with the patch. But I would like to better
+understand and document why you need it. Also it would be nice
+to update the filter format as suggested by Joe.
 
+Best Regards,
+Petr
 
