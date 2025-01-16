@@ -1,198 +1,179 @@
-Return-Path: <linux-kselftest+bounces-24619-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24620-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D2D2A131B6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 04:21:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 284B1A1321F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 05:47:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABC45165BEA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 03:21:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FE4F3A5021
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 04:47:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C38E43AA9;
-	Thu, 16 Jan 2025 03:21:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33FF91422DD;
+	Thu, 16 Jan 2025 04:47:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AWunwoS1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Rp9kWckM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 898AE225D6;
-	Thu, 16 Jan 2025 03:21:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768944A3C
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2025 04:47:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736997698; cv=none; b=bF/1e7250bRWuQS3XsVDg7R5t6DVvVHiTJfkWBMlkZMle4WFYnSPkQyI2AKr33bf3VSFfeR3+VLgO2ehXU64cIBMhmWbyGX0qbhihAefqfWL9UG9zfT7nPFb9kJASp3FCW6cCjffmAZUG4IhgI2ebgg49l+uIjHKArzLHafg1X0=
+	t=1737002857; cv=none; b=sG0vPV7S6xOE+YclsFze+CZtST9m1uwKsfkUFflWihtmGms5jfeDaJwlaPkLmHdHrRsAElKJ54XEJC2Ua3GO368m5vmo9RcTonsZeN94s1tzS6o5EX7MsN2LLrda1uNjOy2HlpvBF+svD91YVmmY1J9RrQuQciW6cNyX6Cq973E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736997698; c=relaxed/simple;
-	bh=1dhaLNGZsYPpOHgAFrejfhegf4kOj3M5etDsdaA1W4I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BNvSnw9ZVUVv5zY5KWS0nFQg0v3STcJHX6zM735lSzDkVyM7pAKu7aso39iHq2wZrLFTakiVTG26jYjtmJ0pQZNeLUX1qTKZhSWcnkcYkNlBf/0HVKatFN2y6Sc/z/91dcvp4DXwrrt0q4pDVXikP9ydBeAo6OAM2HUojamJ3+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=AWunwoS1; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50FNwbZb028601;
-	Thu, 16 Jan 2025 03:21:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=2+/JXF
-	F271n7zx/492hS24NZjkBavMO6mOxr6CQgAGw=; b=AWunwoS1RNu/nU+CGtjU4Z
-	DpaJenJpEiWoGnJGxSBvgy36n6NhiHKNIbRdgAW3WIE1hmlpxSoulmrt6B2rgEHk
-	8hNEgtEXS5aPc1tKDSEU5LPktnrGbgKJx618Sl+YMiYO/8YNBKHNJ57BsnTqrh7y
-	6BiomPIUtpZyMRsgedatNx77l1c5pxZRJEi02A8nxDsOA2WiU27jpEeDfFwk89ad
-	FeRGaChBnx9fkCEAgicun+JQDz9sOJQ/MEJOKcqXSeWMMsu9RiYrA0Oy4xQ1MAV2
-	CNKdOYTsnstMKCN9vpLEOphj4Y4yD9WcShyp15oM53PSyvijHZHoEuOXG0oc/W2A
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 446q5hrn6t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 Jan 2025 03:21:16 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50G3HCt2023836;
-	Thu, 16 Jan 2025 03:21:16 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 446q5hrn6p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 Jan 2025 03:21:16 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50G1vNEI016994;
-	Thu, 16 Jan 2025 03:21:14 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4444fkbp4x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 Jan 2025 03:21:14 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50G3LEmj64225776
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 16 Jan 2025 03:21:14 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1F42A5805C;
-	Thu, 16 Jan 2025 03:21:14 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7FFA458051;
-	Thu, 16 Jan 2025 03:21:07 +0000 (GMT)
-Received: from [9.43.32.49] (unknown [9.43.32.49])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 16 Jan 2025 03:21:07 +0000 (GMT)
-Message-ID: <2808cfba-a7c8-420c-ba30-1bb8efca93e9@linux.ibm.com>
-Date: Thu, 16 Jan 2025 08:51:04 +0530
+	s=arc-20240116; t=1737002857; c=relaxed/simple;
+	bh=LX6Kpof3GqQFlFOI2OjFz/Xlb/CA76NP/oUe2XWNbz4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lvihuyk+VV3DD3KfyEy82QKGx3UWEb5pfqUbYtJc7gJNPQFU0FcQhGa292rffABHOJFDizfyu+hq6s1WZ8PTYKpwqUfXJRke0prcmYNbOpordX5QCVYsC1UXZ/5AfZAszAl3iCxQQGL9eBmcNGyEhrqQBJIXri7OwA5GesCosPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Rp9kWckM; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-216426b0865so7425545ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2025 20:47:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1737002855; x=1737607655; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=V01nO0SZ37R+JBLX/uBesYNHFkKJgAfRsOpWZID4QTg=;
+        b=Rp9kWckMO21zjCKeZ20RT0ABHl4/CQNKJQ2k3VnYGwBhVjLUD6seewsC5av6ORSgls
+         fQo4mPWBqhwxn2jMpAMlfxMkeZby16GBrq7agYxNQfm4l2Q4LDGr2ldq5SUv9BMGESd1
+         /mBSvyWdI2gH5MA5flhZ46IbxFAdcAz3YJrbIvBeTqaUotIYt7hT8D+DLQvB6X2cbfvR
+         vR1Bw7tKK7yBLeXpZY/ySUA2Ehr1A7Gm1id2rvgjU1G1PMO4jpOaVzp8N2vLA9YlOZdG
+         PHCo/F3avssvx38FHTmmQcrYOPkpvkKpHfCrlmF96VbfQXBMHyGUajUUmH9KDrecugoB
+         HVvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737002855; x=1737607655;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V01nO0SZ37R+JBLX/uBesYNHFkKJgAfRsOpWZID4QTg=;
+        b=MbJCq+0+nlpIrnDLKWq3dyrf1W/HDi0qyEQ/fUkBhjLfIQCyPs9UvNsn15uNmfa4N9
+         x4v8DOl79uiyTTYljO8o+b02HtqUYc8GW9o1CECHNsmLJYUPTSqyH34YyPLbqe7CwXlR
+         rLwjQnSKvRM6QQCu2JApXJylY5y2F3/EFotSOnWq3Sfk6iqb8CHbERG2Pqs0zijrDpm6
+         1B88rORI2KcrUVoDPXGiddmpfDdH2nX2K0imfsnEb6noNZWfLMqgS7j3jmpvoVWdrthL
+         2Upvdr6nF+TgIatFCd+j/4vf/ZLvCbRYPP8faazXmc4DAMauuTJsFlG18Ey8Y+SH+c2u
+         1LYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUM/8E4J8PFBZIiIhLpwa15xEXoCDAbMLxJe76ofNBt00Z0ZxTmCfsmEcYmwd8M2ZQT8qx0oSbuTR3DhBjHTJw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1FAMXapBmyX6fKzzjLzuBLnaloetvXQHSi30IxCIoQWk1WpHW
+	qwvfQzaR5ajlOQTqyai5LnlcdDaSoJqnY7gMWbPgiBgYaMqaEobnHh5HuV+b2g==
+X-Gm-Gg: ASbGncvOfCeBSDvfybwdoGknVNR509PIUy4RJ8DpeXc88Gb7PBvmQN69rDpuKAHO7Op
+	TZty6X9n+SZNcc0O9hpLXUG7GsrtQ/0xlRiDRwjmjyPbcKv+FsnBSD6hAoh1c1fSaMDJSfh6wFs
+	+LmJSCAn9redymp4lavQOsiMQOGvQ0QLvwGeMVHI+LNN8hty2TP550bhP71hql+df1uiikWsUal
+	YxL5jrsH67jkdGHJ0AJXcS4gnc8gJdweRkOIuV9acdsU+TyCh6xZ+Q33ivLm92LoHo=
+X-Google-Smtp-Source: AGHT+IHwfbiGq5loLxwv4zEURJyYuoHb37VHX9d1McOu5eZZj9jVra5zahjjNYA5h9O2VRKhhlx4Rg==
+X-Received: by 2002:a05:6a00:392a:b0:725:b347:c3cc with SMTP id d2e1a72fcca58-72d2200273bmr45899486b3a.23.1737002854546;
+        Wed, 15 Jan 2025 20:47:34 -0800 (PST)
+Received: from thinkpad ([120.60.139.68])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d405943c2sm9984852b3a.79.2025.01.15.20.47.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jan 2025 20:47:34 -0800 (PST)
+Date: Thu, 16 Jan 2025 10:17:25 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Niklas Cassel <cassel@kernel.org>
+Cc: Vinod Koul <vkoul@kernel.org>, kw@linux.com, gregkh@linuxfoundation.org,
+	arnd@arndb.de, lpieralisi@kernel.org, shuah@kernel.org,
+	kishon@kernel.org, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bhelgaas@google.com,
+	linux-arm-msm@vger.kernel.org, robh@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Aman Gupta <aman1.gupta@samsung.com>,
+	Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
+Subject: Re: [PATCH v4 3/3] selftests: pci_endpoint: Migrate to Kselftest
+ framework
+Message-ID: <20250116044725.ooskvqlh2lpdr2xx@thinkpad>
+References: <20241231131341.39292-1-manivannan.sadhasivam@linaro.org>
+ <20241231131341.39292-4-manivannan.sadhasivam@linaro.org>
+ <Z3QtEihbiKIGogWA@ryzen>
+ <20241231191812.ymyss2dh7naz4oda@thinkpad>
+ <2C16240A-28F8-4D9B-9FD7-33E4E6F0879E@kernel.org>
+ <20250102070404.aempesitsqktfnle@thinkpad>
+ <Z3ahUuSjRv66L_g9@ryzen>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: livepatch: handle PRINTK_CALLER in
- check_result()
-To: Joe Lawrence <joe.lawrence@redhat.com>
-Cc: jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, shuah@kernel.org,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        naveen@kernel.org, live-patching@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <20250114143144.164250-1-maddy@linux.ibm.com>
- <Z4f6AbC7pQLIWuX+@redhat.com>
-Content-Language: en-US
-From: Madhavan Srinivasan <maddy@linux.ibm.com>
-In-Reply-To: <Z4f6AbC7pQLIWuX+@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Epqa_ZMM6zL-u388jDocavZ2XPAu73Gj
-X-Proofpoint-GUID: dWNJxTh6M1dmt1Y8E-tyrLr16GqbcnTu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-15_11,2025-01-15_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- phishscore=0 suspectscore=0 spamscore=0 mlxlogscore=999 clxscore=1015
- priorityscore=1501 impostorscore=0 mlxscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501160018
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z3ahUuSjRv66L_g9@ryzen>
 
-
-
-On 1/15/25 11:40 PM, Joe Lawrence wrote:
-> On Tue, Jan 14, 2025 at 08:01:44PM +0530, Madhavan Srinivasan wrote:
->> Some arch configs (like ppc64) enable CONFIG_PRINTK_CALLER, which
->> adds the caller id as part of the dmesg. Due to this, even though
->> the expected vs observed are same, end testcase results are failed.
->>
->>  -% insmod test_modules/test_klp_livepatch.ko
->>  -livepatch: enabling patch 'test_klp_livepatch'
->>  -livepatch: 'test_klp_livepatch': initializing patching transition
->>  -livepatch: 'test_klp_livepatch': starting patching transition
->>  -livepatch: 'test_klp_livepatch': completing patching transition
->>  -livepatch: 'test_klp_livepatch': patching complete
->>  -% echo 0 > /sys/kernel/livepatch/test_klp_livepatch/enabled
->>  -livepatch: 'test_klp_livepatch': initializing unpatching transition
->>  -livepatch: 'test_klp_livepatch': starting unpatching transition
->>  -livepatch: 'test_klp_livepatch': completing unpatching transition
->>  -livepatch: 'test_klp_livepatch': unpatching complete
->>  -% rmmod test_klp_livepatch
->>  +[   T3659] % insmod test_modules/test_klp_livepatch.ko
->>  +[   T3682] livepatch: enabling patch 'test_klp_livepatch'
->>  +[   T3682] livepatch: 'test_klp_livepatch': initializing patching transition
->>  +[   T3682] livepatch: 'test_klp_livepatch': starting patching transition
->>  +[    T826] livepatch: 'test_klp_livepatch': completing patching transition
->>  +[    T826] livepatch: 'test_klp_livepatch': patching complete
->>  +[   T3659] % echo 0 > /sys/kernel/livepatch/test_klp_livepatch/enabled
->>  +[   T3659] livepatch: 'test_klp_livepatch': initializing unpatching transition
->>  +[   T3659] livepatch: 'test_klp_livepatch': starting unpatching transition
->>  +[    T789] livepatch: 'test_klp_livepatch': completing unpatching transition
->>  +[    T789] livepatch: 'test_klp_livepatch': unpatching complete
->>  +[   T3659] % rmmod test_klp_livepatch
->>
->>   ERROR: livepatch kselftest(s) failed
->>  not ok 1 selftests: livepatch: test-livepatch.sh # exit=1
->>
->> Currently the check_result() handles the "[time]" removal from
->> the dmesg. Enhance the check to handle removal of "[Tid]" also.
->>
->> Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
->> ---
->>  tools/testing/selftests/livepatch/functions.sh | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
->> index e5d06fb40233..a1730c1864a4 100644
->> --- a/tools/testing/selftests/livepatch/functions.sh
->> +++ b/tools/testing/selftests/livepatch/functions.sh
->> @@ -306,7 +306,8 @@ function check_result {
->>  	result=$(dmesg | awk -v last_dmesg="$LAST_DMESG" 'p; $0 == last_dmesg { p=1 }' | \
->>  		 grep -e 'livepatch:' -e 'test_klp' | \
->>  		 grep -v '\(tainting\|taints\) kernel' | \
->> -		 sed 's/^\[[ 0-9.]*\] //')
->> +		 sed 's/^\[[ 0-9.]*\] //' | \
->> +		 sed 's/^\[[ ]*T[0-9]*\] //')
+On Thu, Jan 02, 2025 at 03:23:14PM +0100, Niklas Cassel wrote:
+> Hello Mani, Vinod,
 > 
-> Thanks for adding this to the filter.
+> On Thu, Jan 02, 2025 at 12:34:04PM +0530, Manivannan Sadhasivam wrote:
+> > On Tue, Dec 31, 2024 at 08:33:57PM +0100, Niklas Cassel wrote:
+> > > 
+> > > I have some patches that adds DMA_MEMCPY to dw-edma, but I'm not sure if the DWC eDMA hardware supports having both src and dst as PCI addresses, or if only one of them can be a PCI address (with the other one being a local address).
+> > > 
+> > > If only one of them can be a PCI address, then I'm not sure if your suggested patch is correct.
+> > > 
+> > 
+> > I don't see why that would be an issue. DMA_MEMCPY is independent of PCI/local
+> > addresses. If a dmaengine driver support doing MEMCPY, then the dma cap should
+> > be sufficient. As you said, if a controller supports both SLAVE and MEMCPY, the
+> > test currently errors out, which is wrong.
 > 
-> If I read the PRINTK_CALLER docs correctly, there is a potential CPU
-> identifier as well.  Are there any instances where the livepatching code
-> will use the "[C$processor_id]" (out of task context) prefix?  Or would
-> it hurt to future proof with [CT][0-9]?
-
-Thanks for the review.
-
-yeah, saw that case, but in my current build and boot test, seen only the Thread-id added,
-so sent out to fix that. I did not get to add a test to create "processor id" scenario,
-so cant test it at this point.
-
-Maddy
-
+> While I am okay with your suggested change to pci-epf-test.c:
+> > >-               if (epf_test->dma_private) {
+> > >+               if (!dma_has_cap(DMA_MEMCPY, epf_test->dma_chan_tx->device->cap_mask)) {
 > 
-> Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+> Since this will ensure that a DMA driver implementing DMA_MEMCPY,
+> which cannot be shared (has DMA_PRIVATE set), will not error out.
 > 
-> --
-> Joe
 > 
->>  
->>  	if [[ "$expect" == "$result" ]] ; then
->>  		echo "ok"
->> -- 
->> 2.47.0
->>
+> What I'm trying to explain is that in:
+> https://lore.kernel.org/linux-pci/Z2BW4CjdE1p50AhC@vaman/
+> https://lore.kernel.org/linux-pci/20241217090129.6dodrgi4tn7l3cod@thinkpad/
+> 
+> Vinod (any you) suggested that we should add support for prep_memcpy()
+> (which implies also setting cap DMA_MEMCPY) in the dw-edma DMA driver.
+> 
+> However, from section "6.3 Using the DMA" in the DWC databook,
+> the DWC eDMA hardware only supports:
+> - Transfer (copy) of a block of data from local memory to remote memory.
+> - Transfer (copy) of a block of data from remote memory to local memory.
+> 
+> 
+> Currently, we have:
+> https://github.com/torvalds/linux/blob/v6.13-rc5/include/linux/dmaengine.h#L843-L844
+> https://github.com/torvalds/linux/blob/v6.13-rc5/drivers/dma/dw-edma/dw-edma-core.c#L215-L231
+> 
+> Where we can expose per-channel capabilities, so we set MEM_TO_DEV/DEV_TO_MEM
+> per channel, however, these are returned in a struct dma_slave_caps *caps,
+> so this is AFAICT only for DMA_SLAVE, not for DMA_MEMCPY.
+> 
+> Looking at:
+> https://github.com/torvalds/linux/blob/v6.13-rc5/include/linux/dmaengine.h#L975-L979
+> it seems that DMA_MEMCPY is always assumed to be MEM_TO_MEM.
+> 
+> To me, it seems that we would either need a new dma_transaction_type (e.g. DMA_COPY)
+> where we can set dir:
+> MEM_TO_DEV, DEV_TO_MEM, or DEV_TO_DEV. (dw-edma would not support DEV_TO_DEV.)
+> 
+> Or, if we should stick with DMA_MEMCPY, we would need another way of telling
+> client drivers that only src or dst can be a remote address.
+> 
+> Until this is solved, I think I will stop my work on adding DMA_MEMCPY to the
+> dw-edma driver.
 > 
 
+I think your concern is regarding setting the DMA transfer direction for MEMCPY,
+right? And you are saying that even if we use tx/rx channels, currently we
+cannot set DEV_TO_DEV like directions?
+
+But I'm somewhat confused about what is blocking you from adding MEMCPY support
+to the dw-edma driver since that driver cannot support DEV_TO_DEV. In your WIP
+driver, you were setting the direction based on the channel. Isn't that
+sufficient enough?
+
+- Mani
+
+-- 
+மணிவண்ணன் சதாசிவம்
 
