@@ -1,78 +1,78 @@
-Return-Path: <linux-kselftest+bounces-24643-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24644-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60269A13A52
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 14:00:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D00FA13A6C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 14:06:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B47651889F5C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 13:00:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 453A916822F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 13:06:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 748EF1D90AE;
-	Thu, 16 Jan 2025 13:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8041A1DE8BB;
+	Thu, 16 Jan 2025 13:06:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gSek0pWF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hWB9x7MA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C54751DE8A8;
-	Thu, 16 Jan 2025 13:00:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D90FB1DBB3A;
+	Thu, 16 Jan 2025 13:05:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737032430; cv=none; b=cm6rb5uE/IoyNeEfoHmTtpkDPSMzPl9O0qt5urMFAlAgo/bRZ6r0ooYqwgMdO/CEyVzK3HF9Ayo/9XVDdNI8zxwUvcTOy5TjWTV0Irjzb8T7JfPApQsDuAbhrfu8t6ChOfgqHGOplV04NW8w/jasi8DrlFOH2rkTgBipVH4DMYI=
+	t=1737032761; cv=none; b=os/y3OnhXjlME0nJkdqimcBWIPjXpl/FfvbxAhRmy/asCNMXiQvmWcHGKwE4MfPYOAmiUjqhdo1n6dMatftCPQIQzbjcoq7IJ9BT1xCMAhnPVttx+jpQ+FzqfqgX4lXQjdW3QYGAg3yQGDDiPzRZmhOYVHHIg01qht277hEPNEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737032430; c=relaxed/simple;
-	bh=5UMbsUR3uezYmQkND+aHznqfBtOMq7AAaSselEbiyO4=;
+	s=arc-20240116; t=1737032761; c=relaxed/simple;
+	bh=xqmwHNMUxOzWQNMkjdnL99R7EvmlfjtjhNY8AJdh0J0=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=sAeYEoHhYG9alPfLOesvLaYnvPJD1qLM/meyFtaMRK/adlG3GRb807pEh/F2izuzjlq6TIFhe+8Uw+eEJ/k7p9N872dQ//DwmRYFBE3boykZOUC3ZbMoTD8Yr4obby5nBcuOHe+2s01K/iuHYCU1bgSQS1ObvbuO8BUFMxFYojY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gSek0pWF; arc=none smtp.client-ip=209.85.219.45
+	 Mime-Version:Content-Type; b=ruUqkvigdR4siBsUogcN21E8Iw/bCdsyCIGIXFKnKcFBefmwMPvI+383OmH07jXOoNfgTyCzNmjZQxSS91NexlQCK5aWEGKA747IMo/cOJbX6KKUvs1Wo8WIvEpYSCH2Z2grb0RNOAEWIfZ8lNmEeoQztSAqhamcBaA1ba9skFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hWB9x7MA; arc=none smtp.client-ip=209.85.222.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6dccccd429eso9353606d6.3;
-        Thu, 16 Jan 2025 05:00:27 -0800 (PST)
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7b7041273ddso63680285a.3;
+        Thu, 16 Jan 2025 05:05:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737032426; x=1737637226; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1737032759; x=1737637559; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jDAPDENh5j906Y6hu4L3U4UaJRAPYR+j5H8J3pj7FYA=;
-        b=gSek0pWFkEfaTr016Dq1ujsSUja4isxB39o5jWFN6j1cvNbDMyagmK9HcBwrg2eUpf
-         GC5Vc+iHLJRAMg6vdoNjVyMXqakUzvNo+Ez6lZO4QhTdG7XbnEekgSqgogvHRrfa7qxt
-         TbDWUvoxppd+W0sXVSw/WToCnEyD9ugSsI2TbE9m3ZBX5lc9VxV98oTtK+IHFsM5k3Mg
-         26PUBQVhT0Izq5juB46W4ZWiTebPvv+67sZYqifOSNlDe+keOmDppHgLeVE43jGOHEMX
-         4rGJmKV/F9rXMmI2H2Eed8uWflGp1iU4Kbns5bKj9Wd85fTULcuoXW+NDK7Q30H9OutZ
-         4ihg==
+        bh=OhBgJdxLvQes3eD3Fu4rvlsneR+YPZhZCBELAv2eIdc=;
+        b=hWB9x7MAH8Qw/ZUAlIE2Gj+r8OVstXu19ABfOyAs74y/id0+PkFbVnlHN6Eo55hLzT
+         2LpkBhT42YrDDwLIVBkSkwiNFQS6FhEGpx/V6ws//VtBHgArfyqwog21vGNHA9OVMiAH
+         o+PUSFdFJruh03QosPCM/53FMj5OJhrGnkEa0nzdEOChqBGLm2AYbPtLu67JyAK3tvmz
+         k25KCD/0Xn9Q3VHXiYZ5ggzk7kj7I1WfacGZsm8z3PDrOhBKC22U3aFskzJNghFBdL//
+         33Q/fKyp3h16UyMTjz7c+HpX4tCsA4ZhUJkYbhE6hmK++C3uzjs8RofJOvskDsZk1HsO
+         TYyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737032426; x=1737637226;
+        d=1e100.net; s=20230601; t=1737032759; x=1737637559;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=jDAPDENh5j906Y6hu4L3U4UaJRAPYR+j5H8J3pj7FYA=;
-        b=FxQka/YC+veYbEBwGwnfCqOZk/DTcbNxt0RIO+q+G2rxqJ5h48dowPvDPEMc18JxCW
-         amV1gZ3Uxtn9xLqbQPRbXpxUcPm+29xZJcfhDmLMXRAp3/rQybCjz2A2E+QK/WV04WzB
-         p+YBGIr1PfXgpfdVAbbj+hlBta626HMNJAD/8otVCnatQhKq/DLXYf8jByY2POZ2x8+E
-         1+iFZ35J29FdF1CtxZxKyweFoMz4jFoWeMb5IMwbyqEr/fp2buPipDDftKOYStuM9Prh
-         LcYNqTK88YiZfr/xNruqErTpQTqusQNYLx1IUyZuATJ04MZ4/lT88Q7Ykx/ekIFtFOTn
-         davg==
-X-Forwarded-Encrypted: i=1; AJvYcCU648T0rYKJWgZbL7MNRsBGm74YKb2Ae/SYa5chCratXwVGbYYqfsmEH8YOkyCR/QuDRtCoGTSa49wFYSXEo3Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwKRMZ8hIFjNyHzeJnjzxGxPa5rcpo9xhiU4OEaD/GcFnBYZrC
-	SkCQvtWARrRd+ElwVm1SA1u3zSwBWkGyTFT9mXcpr+PbZPXcN8lD
-X-Gm-Gg: ASbGncuGCh5AP2zQiJgC701UBMtFFZOnYoWT0a0RFdHISk523Bxq0n+JuyHRPWVsK/E
-	jRoyrlztCiyhtVV085wsJAq4W6MMacsUApfUCCXTzS2qneoJWb9Fr/J7ENdiiOkNrjdX5SqBbLs
-	tFafV0yPbo+1lSX7llFRCHiiA43D87MSWAoEg1cY6G6P2WpiSuNmgu1NGV6m6Wh4x3H8hCBY6nl
-	ErzJkj+B7yCm1kK3NVCc0F0Oi1ZW3JJjrP6cN5bezyDuK1QBIKvg0MDS8nu9UAc6Ud8STgd7JmB
-	JsuRHkB3wEjIrqum8fLo8o3vchBW
-X-Google-Smtp-Source: AGHT+IEqZd3YsXVTaJNqnc8P4/zUTq4aoOBXPiUTSi9FbqN1NFo0pmvC7/XQPrTVzPToXMZLDOx0Ag==
-X-Received: by 2002:a05:6214:19c5:b0:6d8:8256:41d4 with SMTP id 6a1803df08f44-6df9b1f00c4mr578711256d6.19.1737032426489;
-        Thu, 16 Jan 2025 05:00:26 -0800 (PST)
+        bh=OhBgJdxLvQes3eD3Fu4rvlsneR+YPZhZCBELAv2eIdc=;
+        b=NHpKUEMCNLsYTd9t6tlXfmyitAh3N+T9Wm6MmLR7FpkXLFmmC8nT3GqWnORxSkpR/q
+         D/eN4DW2hZzt1d7GSoKaYcViO7XfLIj2sm86tWgExAkwY7SiWxS3nlACFSGNqxD3lxlx
+         sFLMu2/6EE+Lor4kWVGD06eOoUdp+dwhGf9NbPsmsZRq5dXHi4FPeQMzUYIs5lNjexie
+         zWyxZfO5YOLnmhzS+iyXK466YsYxtwoQz4b/HNduApivSdrcNkLBxeLeJFv1jyt7h0jK
+         e8RayJQoeqLksVeSVvfC0G9xovEVGLKoKZP+5cyzUHhzA7gOpQSKvMMeiqjqB7X3eTcx
+         tYxg==
+X-Forwarded-Encrypted: i=1; AJvYcCWsWRngbOV8gPqDPBgakfwPC91DcVXblBt1xSzu5zi0aZ3Dt5QmDJ2tgcld38PI0t07HGSB7sgsSqzaV9Z5TiA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwoE87tMvd/ReDujvZiwicuuv8q6u4ydCaDGc+qjjh/nLpdLmwX
+	F9RqXDO1IJGZbrdhO/brQwA/74cUU3gFeF8nVqGb0en5xctuqdDM
+X-Gm-Gg: ASbGncsc87n8X2JbzEwuP0Hk1gmjc1CeoSUfouZhANLf45oeBgoiB03+Pe/4y7ClOja
+	hOl/ocrsziB8x8nhan1HIGqDjspBMn2pT9CdezDGzA7pG+1zdatFY4N7BLJfjhTxRVOAJR5Ew88
+	TKO0ONP/O8gBTg87Lq3ab0lSPz911QecjqX89bVoD9YLC2jc4uCS/CHRc54/2VIr2ll7zRgRtzO
+	pbkAmXQY7OcEkPf96eGHpyeFcNlvWW24VEkslR7cf4hcMTFpk8optPjHh0A7ICyso843X14jdJZ
+	lzVIn2jcTsVNeiLjjwbSrXm3fkVA
+X-Google-Smtp-Source: AGHT+IElbOoja7u6ZoigUpifYLw6hVVbviBYUjq+InFERrp8VSBSuxpHDrR748dJuhRz3jJqU6nUHw==
+X-Received: by 2002:a05:620a:4612:b0:7b6:d736:55c4 with SMTP id af79cd13be357-7bcd973ca24mr4672937685a.17.1737032758410;
+        Thu, 16 Jan 2025 05:05:58 -0800 (PST)
 Received: from localhost (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6dfad8add1bsm76930666d6.49.2025.01.16.05.00.25
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7be614d9989sm2130185a.83.2025.01.16.05.05.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2025 05:00:25 -0800 (PST)
-Date: Thu, 16 Jan 2025 08:00:24 -0500
+        Thu, 16 Jan 2025 05:05:57 -0800 (PST)
+Date: Thu, 16 Jan 2025 08:05:57 -0500
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: Jakub Kicinski <kuba@kernel.org>, 
  davem@davemloft.net
@@ -83,13 +83,14 @@ Cc: netdev@vger.kernel.org,
  horms@kernel.org, 
  Jakub Kicinski <kuba@kernel.org>, 
  shuah@kernel.org, 
- linux-kselftest@vger.kernel.org, 
- willemdebruijn.kernel@gmail.com
-Message-ID: <678902e8e7bd1_3710bc29490@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250116020105.931338-1-kuba@kernel.org>
-References: <20250116020105.931338-1-kuba@kernel.org>
-Subject: Re: [PATCH net-next] selftests: net: give up on the cmsg_time
- accuracy on slow machines
+ willemb@google.com, 
+ matttbe@kernel.org, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <678904353ca7e_3710bc294ef@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20250115232129.845884-1-kuba@kernel.org>
+References: <20250115232129.845884-1-kuba@kernel.org>
+Subject: Re: [PATCH net-next] selftests/net: packetdrill: make tcp buf limited
+ timing tests benign
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -101,26 +102,42 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 
 Jakub Kicinski wrote:
-> Commit b9d5f5711dd8 ("selftests: net: increase the delay for relative
-> cmsg_time.sh test") widened the accepted value range 8x but we still
-> see flakes (at a rate of around 7%).
+> The following tests are failing on debug kernels:
 > 
-> Return XFAIL for the most timing sensitive test on slow machines.
+>   tcp_tcp_info_tcp-info-rwnd-limited.pkt
+>   tcp_tcp_info_tcp-info-sndbuf-limited.pkt
 > 
-> Before:
+> with reports like:
 > 
->   # ./cmsg_time.sh
->     Case UDPv4  - TXTIME rel returned '8074us - 7397us < 4000', expected 'OK'
->   FAIL - 1/36 cases failed
+>       assert 19000 <= tcpi_sndbuf_limited <= 21000, tcpi_sndbuf_limited; \
+>   AssertionError: 18000
 > 
-> After:
+> and:
 > 
->   # ./cmsg_time.sh
->     Case UDPv4  - TXTIME rel returned '1123us - 941us < 500', expected 'OK' (XFAIL)
->     Case UDPv6  - TXTIME rel returned '1227us - 776us < 500', expected 'OK' (XFAIL)
->   OK
+>       assert 348000 <= tcpi_busy_time <= 360000, tcpi_busy_time
+>   AssertionError: 362000
+> 
+> Extend commit 912d6f669725 ("selftests/net: packetdrill: report benign
+> debug flakes as xfail") to cover them.
 > 
 > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
 Reviewed-by: Willem de Bruijn <willemb@google.com>
+
+Thanks.
+
+I see that we'll still have a few flakes on dbg. Perhaps one total
+failure a day. From the following.
+
+tcp-close-close-local-close-then-remote-fin-pkt
+tcp-ecn-ecn-uses-ect0-pkt
+tcp-eor-no-coalesce-retrans-pkt
+tcp-slow-start-slow-start-after-win-update-pkt
+tcp-sack-sack-route-refresh-ip-tos-pkt
+tcp-ts-recent-reset-tsval-pkt
+tcp-zerocopy-closed-pkt
+
+We'll take a look after this change whether we can make these
+more resilient. But likely also allow-list or even xfail for
+everything in dbg.
 
