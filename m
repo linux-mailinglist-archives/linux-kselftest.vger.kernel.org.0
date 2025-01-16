@@ -1,174 +1,303 @@
-Return-Path: <linux-kselftest+bounces-24639-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24640-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15AA7A137EA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 11:31:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67446A1388B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 12:07:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EB87166DD0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 10:30:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 284CC3A5A3A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 11:06:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B8771DDA17;
-	Thu, 16 Jan 2025 10:30:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2939C1DD525;
+	Thu, 16 Jan 2025 11:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V8s3vsPv"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SGWig83e"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 697DB1D7E4F;
-	Thu, 16 Jan 2025 10:30:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B3F35968
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2025 11:06:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737023456; cv=none; b=Rc87et5+bX0Vz1mTfu4xKeCAnB8p0ueKGwD4p034737DajypruCs8bYaeJxt+/O9A30fg3SfqLrs/Hj1dMe84PnX0scFfqTrEqhm0PdEYG08dJ8/ioWLLzFdKnBmgRytbA2mrQOrNKURip5GEpJhMBiolSOc9gbauPBir75LZL0=
+	t=1737025619; cv=none; b=cLJgFzv1xfQ6k10hUS3J62KV6TjcUu/y9EWhldNK3Ax7ROe3JDiLC/1KB5W6yYc3zfp4oYVZjhobQ8QU48A2lOjRMijDU74U5dAPbsmx/PzwXJ9P+LCGWLQwrz3BI1FIs6KGal8cNuUQ5VG0tCNjYk4lQAnHKDMWQR/JHtpu4iU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737023456; c=relaxed/simple;
-	bh=wlfP20++AfjWBWU6+BjcTU8VdaNrbUKD+zKb/eJeY+U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t3hxX87TlHKc8AQVHv9KSadQvLayeMWHidKi3CSNzAyyPQkDQe41w/w3Z/PAmCkkdw5ZHtcoL1q9WL9lttDWIy0zTc8Vzn6lnZDt8v543Q29OdjYbgiHPLJI1lEflX10xHEY17dxx7n1AX/XZkukOe505Tl14AH2ARLIFBhPt38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V8s3vsPv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3E09C4CED6;
-	Thu, 16 Jan 2025 10:30:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737023456;
-	bh=wlfP20++AfjWBWU6+BjcTU8VdaNrbUKD+zKb/eJeY+U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=V8s3vsPv3bTOW64kFyd85LWHYsm/bbinKNwqixy1CuOEIRPW7AbHbFV2UtlEn+QEN
-	 jfiUgQCR/+/TOWK8z2PaionDMPUlO/TL4v06YCw/gkjgOA/Rqhy3ZZG+1VmrPmb86f
-	 bTYRHIJihtOfmdmjYSrYwg8fCEx+PJ3Wmw/1DIIUk4k9J9DQrTocnXp0a5oYguEZVh
-	 R1UuasJmEYcRxo6rxKDZ7n2dC0j/RmrFSRRuMUG5+jhYtHMnKonLyBCZl77IJ2vfyz
-	 7ONcgSccq2JfzGPyygPwhSyizvfkyBrD8eooX62G8V7NNCkgqZ/4WvLyUb2WVTupvx
-	 DfeElf3joPBUw==
-Date: Thu, 16 Jan 2025 11:30:50 +0100
-From: Niklas Cassel <cassel@kernel.org>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc: Vinod Koul <vkoul@kernel.org>, kw@linux.com, gregkh@linuxfoundation.org,
-	arnd@arndb.de, lpieralisi@kernel.org, shuah@kernel.org,
-	kishon@kernel.org, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bhelgaas@google.com,
-	linux-arm-msm@vger.kernel.org, robh@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Aman Gupta <aman1.gupta@samsung.com>,
-	Padmanabhan Rajanbabu <p.rajanbabu@samsung.com>
-Subject: Re: [PATCH v4 3/3] selftests: pci_endpoint: Migrate to Kselftest
- framework
-Message-ID: <Z4jf2s5SaUu3wdJi@ryzen>
-References: <20241231131341.39292-1-manivannan.sadhasivam@linaro.org>
- <20241231131341.39292-4-manivannan.sadhasivam@linaro.org>
- <Z3QtEihbiKIGogWA@ryzen>
- <20241231191812.ymyss2dh7naz4oda@thinkpad>
- <2C16240A-28F8-4D9B-9FD7-33E4E6F0879E@kernel.org>
- <20250102070404.aempesitsqktfnle@thinkpad>
- <Z3ahUuSjRv66L_g9@ryzen>
- <20250116044725.ooskvqlh2lpdr2xx@thinkpad>
+	s=arc-20240116; t=1737025619; c=relaxed/simple;
+	bh=qKp3z4JMpyxDHEXYbnRXOikDAhQI5tqr+HNr1d1Knmg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qkcwCLQnMedAofTHaHSh6wl2hoYm8EDRDnWuWZLbEzKxGIi3418avqlgrCJ0E9Sppl+Gmx8MlzeQcpl7wjv94XLXJixHZR7m6CYRGJtpKircUgiiGubDu8EHdZDRnTQ25gk0p0Fzh+JnjkWaiTArzupDgNmCrXIwSZcCdX8Z0e4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SGWig83e; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1737025616;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Nv7HOWzACKVg2N6gWvqQyDjzpd3I4hP/eBlBaHF3gw0=;
+	b=SGWig83e6oXbSpqL97zY+xwXl1Tbxghy5oNj1vaIejWdK1pP3bAz3yqW5tbsjKr7I9/WcP
+	BPIpJsP0LMXllDkQbiqZWRUyG66ZGRIHy/7MEuorwDhDXkl0+2i40+Dp+uOExvEEz58YMC
+	xEWKnI31wolxvOiqOnbo4cs/SFEOJEw=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-452-u9NJ15-VPgq8REOmY8fQPA-1; Thu, 16 Jan 2025 06:06:53 -0500
+X-MC-Unique: u9NJ15-VPgq8REOmY8fQPA-1
+X-Mimecast-MFC-AGG-ID: u9NJ15-VPgq8REOmY8fQPA
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-5d3d2cccbe4so829959a12.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2025 03:06:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737025612; x=1737630412;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nv7HOWzACKVg2N6gWvqQyDjzpd3I4hP/eBlBaHF3gw0=;
+        b=spajsj8ZaQBMLH6d7+HNo3pRukQqvnWUSBU48F0/GhJp15X4oYIsNysEBSFXFN9Xfj
+         0y0BpYGSfqYaNoX3QcVc4Ym78endQ6dA59NnZchTGpAl4l6Mipg7KDdxFdILJgyNu+zK
+         Me5q7whcvahJYzsuINtxjnv3s4oblbflclKRnMy2a7B8pC1RYYy/2uMISSwgJs6ub4zT
+         2kYhPCbLFyRwJtBLSsCEzTP0rKW25WcqP3RAc5RzVqsqN2g3k8fSsw598hKy6HsY3jug
+         I84zyoy1ePvEhtLGgGcjhW+0DIRYDO7ucsHU+QMLoHn/JgviPO7mO9jtXZvAUvT+WZge
+         xwmw==
+X-Forwarded-Encrypted: i=1; AJvYcCXKbRMAfB6c6KQ8MhO4AJEaJRcHt2u7mfrTm2cXW/BIpJEMhHqmTq2EaiNHZpQtdH+ABXqshXcDvnhzUfiJkGY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzea9YCxYJL89aI58uOiBcQfJsfKhJHSAPr3z9vAwz2KjMkjzE0
+	W+tjOfvR2dBjFh+dbxYTl2UAKP4IRgRw48C4AICipsH47dro1gBxC4TARk3ljY3odPydLtoxRrJ
+	c4p7Do4IiQLln7xJ8vQVfEzu+NphC9xgz/xg/Sj9cRcqNtAkOlOwZuPo0tBbgFKtLPA==
+X-Gm-Gg: ASbGnctb/5DenfdDmh+BLVN7uz3TW8zBitr+HzZvusx9v/5lFmppyQQsqcWFoHLjP32
+	oTtrOBNLUnkJFfWTqdnJflE9clftslWAv2I3v8vdWARD9gTO25Ptajx8BvvIZMHCmOQ/o02Dc9r
+	Z3dAO/ZrnI1qrRAz/sCPSXO1S4o+KdG6O6LRPUg6mDJWGdem8oqYyf1m4LgKC2cdS1aCf1jFnAv
+	f1xBJtGa3qAnWxxWf4InnZYUXk7vu7umjEw+vfDk249c2ug3Y8IpF1crkR+9+lx90v3mIgHgWlU
+	wv0tkGCq5n0=
+X-Received: by 2002:a05:6402:5006:b0:5d0:e877:7664 with SMTP id 4fb4d7f45d1cf-5d972e178f7mr30235230a12.19.1737025611944;
+        Thu, 16 Jan 2025 03:06:51 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IG7+1RB3gyXIWLD3nNejq2NNpqGy7IPwbFJtkBypkOw2c2WJ5RjMN+wDjebJUHhRLb+a4Bx7A==
+X-Received: by 2002:a05:6402:5006:b0:5d0:e877:7664 with SMTP id 4fb4d7f45d1cf-5d972e178f7mr30235204a12.19.1737025611530;
+        Thu, 16 Jan 2025 03:06:51 -0800 (PST)
+Received: from [192.168.88.253] (146-241-15-169.dyn.eolo.it. [146.241.15.169])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d9900c3fccsm8627534a12.21.2025.01.16.03.06.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Jan 2025 03:06:51 -0800 (PST)
+Message-ID: <b7305f0a-fe4d-4dd4-aaaf-77a08fd919ac@redhat.com>
+Date: Thu, 16 Jan 2025 12:06:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250116044725.ooskvqlh2lpdr2xx@thinkpad>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next, v5] netlink: support dumping IPv4 multicast
+ addresses
+To: Yuyang Huang <yuyanghuang@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
+ netdev@vger.kernel.org, Donald Hunter <donald.hunter@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+ Hangbin Liu <liuhangbin@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>,
+ linux-kselftest@vger.kernel.org, =?UTF-8?Q?Maciej_=C5=BBenczykowski?=
+ <maze@google.com>, Lorenzo Colitti <lorenzo@google.com>
+References: <20250114023740.3753350-1-yuyanghuang@google.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20250114023740.3753350-1-yuyanghuang@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 16, 2025 at 10:17:25AM +0530, Manivannan Sadhasivam wrote:
-> On Thu, Jan 02, 2025 at 03:23:14PM +0100, Niklas Cassel wrote:
-> > Hello Mani, Vinod,
-> > 
-> > On Thu, Jan 02, 2025 at 12:34:04PM +0530, Manivannan Sadhasivam wrote:
-> > > On Tue, Dec 31, 2024 at 08:33:57PM +0100, Niklas Cassel wrote:
-> > > > 
-> > > > I have some patches that adds DMA_MEMCPY to dw-edma, but I'm not sure if the DWC eDMA hardware supports having both src and dst as PCI addresses, or if only one of them can be a PCI address (with the other one being a local address).
-> > > > 
-> > > > If only one of them can be a PCI address, then I'm not sure if your suggested patch is correct.
-> > > > 
-> > > 
-> > > I don't see why that would be an issue. DMA_MEMCPY is independent of PCI/local
-> > > addresses. If a dmaengine driver support doing MEMCPY, then the dma cap should
-> > > be sufficient. As you said, if a controller supports both SLAVE and MEMCPY, the
-> > > test currently errors out, which is wrong.
-> > 
-> > While I am okay with your suggested change to pci-epf-test.c:
-> > > >-               if (epf_test->dma_private) {
-> > > >+               if (!dma_has_cap(DMA_MEMCPY, epf_test->dma_chan_tx->device->cap_mask)) {
-> > 
-> > Since this will ensure that a DMA driver implementing DMA_MEMCPY,
-> > which cannot be shared (has DMA_PRIVATE set), will not error out.
-> > 
-> > 
-> > What I'm trying to explain is that in:
-> > https://lore.kernel.org/linux-pci/Z2BW4CjdE1p50AhC@vaman/
-> > https://lore.kernel.org/linux-pci/20241217090129.6dodrgi4tn7l3cod@thinkpad/
-> > 
-> > Vinod (any you) suggested that we should add support for prep_memcpy()
-> > (which implies also setting cap DMA_MEMCPY) in the dw-edma DMA driver.
-> > 
-> > However, from section "6.3 Using the DMA" in the DWC databook,
-> > the DWC eDMA hardware only supports:
-> > - Transfer (copy) of a block of data from local memory to remote memory.
-> > - Transfer (copy) of a block of data from remote memory to local memory.
-> > 
-> > 
-> > Currently, we have:
-> > https://github.com/torvalds/linux/blob/v6.13-rc5/include/linux/dmaengine.h#L843-L844
-> > https://github.com/torvalds/linux/blob/v6.13-rc5/drivers/dma/dw-edma/dw-edma-core.c#L215-L231
-> > 
-> > Where we can expose per-channel capabilities, so we set MEM_TO_DEV/DEV_TO_MEM
-> > per channel, however, these are returned in a struct dma_slave_caps *caps,
-> > so this is AFAICT only for DMA_SLAVE, not for DMA_MEMCPY.
-> > 
-> > Looking at:
-> > https://github.com/torvalds/linux/blob/v6.13-rc5/include/linux/dmaengine.h#L975-L979
-> > it seems that DMA_MEMCPY is always assumed to be MEM_TO_MEM.
-> > 
-> > To me, it seems that we would either need a new dma_transaction_type (e.g. DMA_COPY)
-> > where we can set dir:
-> > MEM_TO_DEV, DEV_TO_MEM, or DEV_TO_DEV. (dw-edma would not support DEV_TO_DEV.)
-> > 
-> > Or, if we should stick with DMA_MEMCPY, we would need another way of telling
-> > client drivers that only src or dst can be a remote address.
-> > 
-> > Until this is solved, I think I will stop my work on adding DMA_MEMCPY to the
-> > dw-edma driver.
-> > 
+On 1/14/25 3:37 AM, Yuyang Huang wrote:
+> Extended RTM_GETMULTICAST to support dumping joined IPv4 multicast
+> addresses, in addition to the existing IPv6 functionality. This allows
+> userspace applications to retrieve both IPv4 and IPv6 multicast
+> addresses through similar netlink command and then monitor future
+> changes by registering to RTNLGRP_IPV4_MCADDR and RTNLGRP_IPV6_MCADDR.
 > 
-> I think your concern is regarding setting the DMA transfer direction for MEMCPY,
-> right? And you are saying that even if we use tx/rx channels, currently we
-> cannot set DEV_TO_DEV like directions?
+> This change includes a new ynl based selftest case. To run the test,
+> execute the following command:
 > 
-> But I'm somewhat confused about what is blocking you from adding MEMCPY support
-> to the dw-edma driver since that driver cannot support DEV_TO_DEV. In your WIP
-> driver, you were setting the direction based on the channel. Isn't that
-> sufficient enough?
+> $ vng -v --user root --cpus 16 -- \
+>     make -C tools/testing/selftests TARGETS=net \
+>     TEST_PROGS=rtnetlink.py TEST_GEN_PROGS="" run_tests
 
-What I did in the WIP driver patches was to set the direction to either
-DEV_TO_MEM, or MEM_TO_DEV.
+Thanks for including the test!
 
-But that is wrong, since the prep_memcpy() API doesn't take a direction.
+> diff --git a/Documentation/netlink/specs/rt_link.yaml b/Documentation/netlink/specs/rt_link.yaml
+> index 0d492500c7e5..7dcd5fddac9d 100644
+> --- a/Documentation/netlink/specs/rt_link.yaml
+> +++ b/Documentation/netlink/specs/rt_link.yaml
+> @@ -92,6 +92,41 @@ definitions:
+>        -
+>          name: ifi-change
+>          type: u32
+> +  -
+> +    name: ifaddrmsg
+> +    type: struct
+> +    members:
+> +      -
+> +        name: ifa-family
+> +        type: u8
+> +      -
+> +        name: ifa-prefixlen
+> +        type: u8
+> +      -
+> +        name: ifa-flags
+> +        type: u8
+> +      -
+> +        name: ifa-scope
+> +        type: u8
+> +      -
+> +        name: ifa-index
+> +        type: u32
+> +  -
+> +    name: ifacacheinfo
+> +    type: struct
+> +    members:
+> +      -
+> +        name: ifa-prefered
+> +        type: u32
+> +      -
+> +        name: ifa-valid
+> +        type: u32
+> +      -
+> +        name: cstamp
+> +        type: u32
+> +      -
+> +        name: tstamp
+> +        type: u32
+>    -
+>      name: ifla-bridge-id
+>      type: struct
+> @@ -2253,6 +2288,18 @@ attribute-sets:
+>        -
+>          name: tailroom
+>          type: u16
+> +  -
+> +    name: ifmcaddr-attrs
+> +    attributes:
+> +      -
+> +        name: addr
+> +        type: binary
+> +        value: 7
+> +      -
+> +        name: cacheinfo
+> +        type: binary
+> +        struct: ifacacheinfo
+> +        value: 6
+>  
+>  sub-messages:
+>    -
+> @@ -2493,6 +2540,29 @@ operations:
+>          reply:
+>            value: 92
+>            attributes: *link-stats-attrs
+> +    -
+> +      name: getmaddrs
+> +      doc: Get / dump IPv4/IPv6 multicast addresses.
+> +      attribute-set: ifmcaddr-attrs
+> +      fixed-header: ifaddrmsg
+> +      do:
+> +        request:
+> +          value: 58
+> +          attributes:
+> +            - ifa-family
+> +            - ifa-index
+> +        reply:
+> +          value: 58
+> +          attributes: &mcaddr-attrs
+> +            - addr
+> +            - cacheinfo
+> +      dump:
+> +        request:
+> +          value: 58
+> +            - ifa-family
+> +        reply:
+> +          value: 58
+> +          attributes: *mcaddr-attrs
+>  
+>  mcast-groups:
+>    list:
 
-In fact, it appears that memcpy is always assumed to be MEM_TO_MEM:
-https://github.com/torvalds/linux/blob/v6.13-rc7/include/linux/dmaengine.h#L74
+IMHO the test case itself should land to a separate patch.
 
+> diff --git a/include/linux/igmp.h b/include/linux/igmp.h
+> index 073b30a9b850..a460e1ef0524 100644
+> --- a/include/linux/igmp.h
+> +++ b/include/linux/igmp.h
+> @@ -16,6 +16,7 @@
+>  #include <linux/ip.h>
+>  #include <linux/refcount.h>
+>  #include <linux/sockptr.h>
+> +#include <net/addrconf.h>
+>  #include <uapi/linux/igmp.h>
+>  
+>  static inline struct igmphdr *igmp_hdr(const struct sk_buff *skb)
+> @@ -92,6 +93,16 @@ struct ip_mc_list {
+>  	struct rcu_head		rcu;
+>  };
+>  
+> +struct inet_fill_args {
+> +	u32 portid;
+> +	u32 seq;
+> +	int event;
+> +	unsigned int flags;
+> +	int netnsid;
+> +	int ifindex;
+> +	enum addr_type_t type;
+> +};
 
-E.g. the dw-edma driver cannot have both src address and dst address as a
-local address (MEM_TO_MEM), so using DMA_MEMCPY API feels totally wrong.
+Why moving the struct definition here? IMHO addrconf.h is better suited
+and will avoid additional headers dep.
 
-Either dst or src has to be a local address (MEM), and the one that isn't
-a local address has to be a PCI address (DEV). Sure, calling a PCI address
-DEV might not be 100% correct, but I cannot think of a better way...
+> @@ -1874,6 +1894,23 @@ static int in_dev_dump_addr(struct in_device *in_dev, struct sk_buff *skb,
+>  	return err;
+>  }
+>  
+> +static int in_dev_dump_addr(struct in_device *in_dev, struct sk_buff *skb,
+> +			    struct netlink_callback *cb, int *s_ip_idx,
+> +			    struct inet_fill_args *fillargs)
+> +{
+> +	switch (fillargs->type) {
+> +	case UNICAST_ADDR:
+> +		fillargs->event = RTM_NEWADDR;
 
-We also cannot treat a PCI address as MEM, as dw-edma cannot do PCI to PCI
-transfers.
+I think that adding an additional argument for 'event' to
+inet_dump_addr() would simplify the code a bit.
 
-I think the best way forward would be to create a new _prep_slave_memcpy()
-or similar, that does take a direction, and thus does not require
-dmaengine_slave_config() to be called before every _prep_slave_memcpy() call,
-since that is basically what is not allowing us to have multiple transactions
-outstanding in parallel.
+> +		return in_dev_dump_ifaddr(in_dev, skb, cb, s_ip_idx, fillargs);
+> +	case MULTICAST_ADDR:
+> +		fillargs->event = RTM_GETMULTICAST;
+> +		return in_dev_dump_ifmcaddr(in_dev, skb, cb, s_ip_idx,
+> +					    fillargs);
+> +	default:
+> +		return 0;
 
+Why not erroring out on unknown types? should never happen, right?
 
-Kind regards,
-Niklas
+> @@ -1949,6 +1987,20 @@ static int inet_dump_ifaddr(struct sk_buff *skb, struct netlink_callback *cb)
+>  	return err;
+>  }
+>  
+> +static int inet_dump_ifaddr(struct sk_buff *skb, struct netlink_callback *cb)
+> +{
+> +	enum addr_type_t type = UNICAST_ADDR;
+> +
+> +	return inet_dump_addr(skb, cb, type);
+
+You can avoid the local variable usage.
+
+> +}
+> +
+> +static int inet_dump_ifmcaddr(struct sk_buff *skb, struct netlink_callback *cb)
+> +{
+> +	enum addr_type_t type = MULTICAST_ADDR;
+> +
+> +	return inet_dump_addr(skb, cb, type);
+
+Same here.
+
+Thanks!
+
+Paolo
+
 
