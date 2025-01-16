@@ -1,276 +1,111 @@
-Return-Path: <linux-kselftest+bounces-24652-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24653-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E46CA13C5B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 15:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B053A13CBB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 15:50:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E295188D671
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 14:35:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D4AA1883FBB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 14:50:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 830C222B8B9;
-	Thu, 16 Jan 2025 14:35:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DC2C22BAC1;
+	Thu, 16 Jan 2025 14:48:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hPq0J5sS"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6032622B8AB;
-	Thu, 16 Jan 2025 14:35:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F3622BAAD;
+	Thu, 16 Jan 2025 14:48:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737038128; cv=none; b=Y5OyqWOF6/EDe9QY2+uk0KH1DHi9ACc0xDEbC7jsr4i/KYOVkOf+Mb8bucLZEvyyMzwhjQTncHl8whoAbMpTwlv0etQDR0Ms741PWDeFszR6iwaGGouGPACe2xr7ObfWbl0RUzNd1jsZ30SUNR9rmjpNqBX6bImHEO9FtKw5ycg=
+	t=1737038907; cv=none; b=Jc6umv4lTmjZ8motg/aubJOsRh+J3LPTO9UGvFGGEayvvEMvg3I/jUKxuR15532YFODTb5eaeIPj/0q+RsZE7w0dmWuij9nvs97Yn33P5IL2uQNEmiLLN/pZ3eJilxF8abhUfesqkkSIX6Y/S04WUO0SnAbp1i4BXNhnSyrrPPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737038128; c=relaxed/simple;
-	bh=9Xk7kEPcKn4EWxPYgvqVx6KfZb68hSs13zANGFl1ZnQ=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=RNcP5js3q1QxVZIYTNOWSLTCfPT9K7IeuQx61x6uxiYaUaaEuuPID8gl1qYQGVII5bRZbqe6aIZxIDJHb17VYiLlep9BSkS9jqwMEArcmFFMK7azopFYBzROqoEuxVOH0flDag6JDvlZgB/vOqy0fsA6anhfxBO5b8P27VeEY7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0B25C4CED6;
-	Thu, 16 Jan 2025 14:35:27 +0000 (UTC)
-Received: from rostedt by gandalf with local (Exim 4.98)
-	(envelope-from <rostedt@goodmis.org>)
-	id 1tYQy6-00000000szE-0DfY;
-	Thu, 16 Jan 2025 09:35:34 -0500
-Message-ID: <20250116143533.819228058@goodmis.org>
-User-Agent: quilt/0.68
-Date: Thu, 16 Jan 2025 09:33:37 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- jochensp@jochen.sprickerhof.de,
- peter.griffin@linaro.org,
- Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org
-Subject: [PATCH 3/3] selftests/ftrace: Add test that tests event :mod: commands
-References: <20250116143334.073917300@goodmis.org>
+	s=arc-20240116; t=1737038907; c=relaxed/simple;
+	bh=4hMIJWoOuK4Lnv8RIEfuAquF3f1fyGo7d87DA83B4Uc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aAouWZcsg0ji5dZgFFkGGZ1PXFItr/7798Ptf/melAf/HbliBZFzIxvmsuS24q+v+ZDyDPiMoP8Mt0ccd7pOHSli8GA6JDs5LyxQTM8pA6FzKVWRsVgl4HGjflnYVT4UF5QHyG0A2RANuaib67HJLg4TDV4V2lUekiFtamK3B3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hPq0J5sS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAD03C4CEE2;
+	Thu, 16 Jan 2025 14:48:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737038906;
+	bh=4hMIJWoOuK4Lnv8RIEfuAquF3f1fyGo7d87DA83B4Uc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hPq0J5sST3mb/cDch4Pj6SuIAWuBtlCQiay9fDj3ljIgfDFslW6s/nT8ZjjOcTS1t
+	 UDHGaCf/UY3T9U/bcLQjyGpdlWo5fuz+z9iExBmclT+XV2ZYVZqy9ZVXkQI4JkBHkD
+	 0YLZyHQ9vnxjGScqMFgsIcfMhw/qC5Nh0MlwqER2JplHNo3Uwecr3LeBnUdKlZJDc+
+	 316cPa3zqC4gV6FqDAUuG26/4rL5w055tJ0sHKnOAR4TlagkYUUa0Y70HupXUdNuhE
+	 c67yIHw2shMm+ZDYftrspa/TrKDLp9qeifYEBt0PmDiR6a6pZjzsaMrowm5Wn0WZLu
+	 nEngm52TIaTfQ==
+Date: Thu, 16 Jan 2025 14:48:22 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	lkft-triage@lists.linaro.org,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Aishwarya TCV <Aishwarya.TCV@arm.com>,
+	Boyan Karatotev <boyan.karatotev@arm.com>
+Subject: Re: selftests: arm64: pac.c:237:pac_instructions_not_nop:Expected 0
+ (0) != keyia (35747322042253312)
+Message-ID: <27c34621-f206-44ac-a917-4c1a89d056b1@sirena.org.uk>
+References: <CA+G9fYtDLPwpiH++b_RVnMrHX3trFt-fY06UnV1Q5oSE6Nrsrg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-
-From: Steven Rostedt <rostedt@goodmis.org>
-
-Now that here's a :mod: command that can be sent into set_event, add a
-test that tests its use. Both setting events for a loaded module, as well
-as caching what events to set for a module that is not loaded yet.
-
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- .../ftrace/test.d/event/event-mod.tc          | 192 ++++++++++++++++++
- 1 file changed, 192 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/event/event-mod.tc
-
-diff --git a/tools/testing/selftests/ftrace/test.d/event/event-mod.tc b/tools/testing/selftests/ftrace/test.d/event/event-mod.tc
-new file mode 100644
-index 000000000000..6f7601c4b54b
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/event/event-mod.tc
-@@ -0,0 +1,192 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: event tracing - enable/disable with module event
-+# requires: set_event "Can enable module events via: :mod:":README
-+# flags: instance
-+
-+rmmod trace-events-sample ||:
-+if ! modprobe trace-events-sample ; then
-+  echo "No trace-events sample module - please make CONFIG_SAMPLE_TRACE_EVENTS=m"
-+  exit_unresolved;
-+fi
-+trap "rmmod trace-events-sample" EXIT
-+
-+# Set events for the module
-+echo ":mod:trace-events-sample" > set_event
-+
-+test_all_enabled() {
-+
-+	# Check if more than one is enabled
-+	grep -q sample-trace:foo_bar set_event
-+	grep -q sample-trace:foo_bar_with_cond set_event
-+	grep -q sample-trace:foo_bar_with_fn set_event
-+
-+	# All of them should be enabled. Check via the enable file
-+	val=`cat events/sample-trace/enable`
-+	if [ $val -ne 1 ]; then
-+		exit_fail
-+	fi
-+}
-+
-+clear_events() {
-+	echo > set_event
-+	val=`cat events/enable`
-+	if [ "$val" != "0" ]; then
-+		exit_fail
-+	fi
-+	count=`cat set_event | wc -l`
-+	if [ $count -ne 0 ]; then
-+		exit_fail
-+	fi
-+}
-+
-+test_all_enabled
-+
-+echo clear all events
-+echo 0 > events/enable
-+
-+echo Confirm the events are disabled
-+val=`cat events/sample-trace/enable`
-+if [ $val -ne 0 ]; then
-+	exit_fail
-+fi
-+
-+echo And the set_event file is empty
-+
-+cnt=`wc -l set_event`
-+if [ $cnt -ne 0 ]; then
-+	exit_fail
-+fi
-+
-+echo now enable all events
-+echo 1 > events/enable
-+
-+echo Confirm the events are enabled again
-+val=`cat events/sample-trace/enable`
-+if [ $val -ne 1 ]; then
-+	exit_fail
-+fi
-+
-+echo disable just the module events
-+echo '!:mod:trace-events-sample' >> set_event
-+
-+echo Should have mix of events enabled
-+val=`cat events/enable`
-+if [ "$val" != "X" ]; then
-+	exit_fail
-+fi
-+
-+echo Confirm the module events are disabled
-+val=`cat events/sample-trace/enable`
-+if [ $val -ne 0 ]; then
-+	exit_fail
-+fi
-+
-+echo 0 > events/enable
-+
-+echo now enable the system events
-+echo 'sample-trace:mod:trace-events-sample' > set_event
-+
-+test_all_enabled
-+
-+echo clear all events
-+echo 0 > events/enable
-+
-+echo Confirm the events are disabled
-+val=`cat events/sample-trace/enable`
-+if [ $val -ne 0 ]; then
-+	exit_fail
-+fi
-+
-+echo Test enabling foo_bar only
-+echo 'foo_bar:mod:trace-events-sample' > set_event
-+
-+grep -q sample-trace:foo_bar set_event
-+
-+echo make sure nothing is found besides foo_bar
-+if grep -q -v sample-trace:foo_bar set_event ; then
-+	exit_fail
-+fi
-+
-+echo Append another using the system and event name
-+echo 'sample-trace:foo_bar_with_cond:mod:trace-events-sample' >> set_event
-+
-+grep -q sample-trace:foo_bar set_event
-+grep -q sample-trace:foo_bar_with_cond set_event
-+
-+count=`cat set_event | wc -l`
-+
-+if [ $count -ne 2 ]; then
-+	exit_fail
-+fi
-+
-+clear_events
-+
-+rmmod trace-events-sample
-+
-+echo ':mod:trace-events-sample' > set_event
-+
-+echo make sure that the module shows up, and '-' is converted to '_'
-+grep -q '\*:\*:mod:trace_events_sample' set_event
-+
-+modprobe trace-events-sample
-+
-+test_all_enabled
-+
-+clear_events
-+
-+rmmod trace-events-sample
-+
-+echo Enable just the system events
-+echo 'sample-trace:mod:trace-events-sample' > set_event
-+grep -q 'sample-trace:mod:trace_events_sample' set_event
-+
-+modprobe trace-events-sample
-+
-+test_all_enabled
-+
-+clear_events
-+
-+rmmod trace-events-sample
-+
-+echo Enable event with just event name
-+echo 'foo_bar:mod:trace-events-sample' > set_event
-+grep -q 'foo_bar:mod:trace_events_sample' set_event
-+
-+echo Enable another event with both system and event name
-+echo 'sample-trace:foo_bar_with_cond:mod:trace-events-sample' >> set_event
-+grep -q 'sample-trace:foo_bar_with_cond:mod:trace_events_sample' set_event
-+echo Make sure the other event was still there
-+grep -q 'foo_bar:mod:trace_events_sample' set_event
-+
-+modprobe trace-events-sample
-+
-+echo There should be no :mod: cached events
-+if grep -q ':mod:' set_event; then
-+	exit_fail
-+fi
-+
-+echo two events should be enabled
-+count=`cat set_event | wc -l`
-+if [ $count -ne 2 ]; then
-+	exit_fail
-+fi
-+
-+echo only two events should be enabled
-+val=`cat events/sample-trace/enable`
-+if [ "$val" != "X" ]; then
-+	exit_fail
-+fi
-+
-+val=`cat events/sample-trace/foo_bar/enable`
-+if [ "$val" != "1" ]; then
-+	exit_fail
-+fi
-+
-+val=`cat events/sample-trace/foo_bar_with_cond/enable`
-+if [ "$val" != "1" ]; then
-+	exit_fail
-+fi
-+
-+clear_trace
-+
--- 
-2.45.2
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="1j09/7wkT0/4WniG"
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYtDLPwpiH++b_RVnMrHX3trFt-fY06UnV1Q5oSE6Nrsrg@mail.gmail.com>
+X-Cookie: optimist, n:
 
 
+--1j09/7wkT0/4WniG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Jan 16, 2025 at 07:56:15PM +0530, Naresh Kamboju wrote:
+> The selftests: arm64: pac getting failed on FVP, Graviton-vm and Qemu-arm=
+64
+> running Linux next-20250113..next-20250116.
+>=20
+> Started noticing from next-20250113.
+> Bad: next-20250110
+> Bad: next-20250113
+
+I reported this the other day, it looka like it's a framework bug:
+
+   https://lore.kernel.org/r/d9c290e2-f22d-41be-aa68-2aebd3eb1a67@sirena.or=
+g.uk
+
+If it's not sorted in the framework we should be able to bodge it in the
+PAC test.
+
+--1j09/7wkT0/4WniG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmeJHDUACgkQJNaLcl1U
+h9DPLwf/dPs+IKSklWUGx0NNHmmcYSRDsLXQztZe70mjWfTIQMkFM+H5zH6iLrjs
+sqaDVwmg0VUygQIlM2Qi4QaPQlEU6IazQF+OzuuCz+NAaVp7KdJ8IgXwiAAibOAq
+pFgGCkPGr8H20r8BY+lxhdSEsBB0pVcbPPfkq8By0jPh//hERhrDYfVXfT+BPeaV
+FDKHWN3+ajYEse5W5hfbbIX28JtPEBkU08bSlbO7GaQVMr8U8Y+amKARt8UsqYRc
+K9stczFWZugSG+aEuEXBrf7vusWGVK5eH6AW2+T7xtkgNBqH0WIghuLvx7EJJ+Hy
+ZNLLk1/ZAA/PRvNvIpoj/lmEXxAIbQ==
+=cqZg
+-----END PGP SIGNATURE-----
+
+--1j09/7wkT0/4WniG--
 
