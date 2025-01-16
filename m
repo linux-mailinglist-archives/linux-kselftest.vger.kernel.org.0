@@ -1,236 +1,304 @@
-Return-Path: <linux-kselftest+bounces-24665-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24666-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE630A13EF6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 17:12:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 804E6A13FA0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 17:39:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 053D3167E36
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 16:12:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96DEF188DF96
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2025 16:39:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20E7522CA11;
-	Thu, 16 Jan 2025 16:12:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63B5822D4D5;
+	Thu, 16 Jan 2025 16:39:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mUkafOqM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XN9e+NKj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4765922C356
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2025 16:12:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2656C22CA0D;
+	Thu, 16 Jan 2025 16:39:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737043961; cv=none; b=UEGtPNTl+iktGBqXazYNmHDI0OrCTofdK1IYOC+a+tBU/iiT1+/MqamURlnIYpMgski56RNeUcK6gIGiug+xBE8qzWHPa8bGoOAETMTy2Zm+SHSgn1L4KsridRrAIBAIWeJmdoraUwVRC5UocfmrlSasMoul9XeGspjqx8fp/tY=
+	t=1737045575; cv=none; b=Sm3o1CBYjP1lY0891mN8BoIc8ka2vrP+SmbtvwGd0Auvo/OFxBcV87vqjWa6MMUHfPLmZLISgHKPAWBET/or7yLcna9XE5eCWd4dEUDA+bBL0n2wpeiuXgBuNkoXX1QzXSMxIyzhein3PV+XPh/e223q19OYm1nKO/RFqh5WwO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737043961; c=relaxed/simple;
-	bh=IK3Ql96gyS4VFEeFhV8k9b3ysohqF4iypjPD7WYYkxA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LKcH/SFSSdDi/ZWQPi2hObruyFdU2cQMpLvsDogg+NUq9avILlMv/v/DvYXSnIrTltBWJOBR8jvpsfhLTx/Vqx6QP9sPZEGrYYhNxLMeD6QDlWNqQNj4ZXSUzWnzpUa3vXfv1ND2WZ/PrQHj537k94QYg1XRa9LYE8ZSeD5dDjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mUkafOqM; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2156e078563so14892015ad.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Jan 2025 08:12:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737043958; x=1737648758; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1Vs6BBUKG7PBaEM3z/slrYo3/W2WHS+37scYn69oAcA=;
-        b=mUkafOqMOjWYIKFB5Lmos8D/mTq9C8ePq+s+gcaeUYiF5usphMGp1eIhDblLX+uJOs
-         K5F+XmchSvd0DfKsdVWdxab5VF49JS3Nj49lYWLAlXbV9e1redSpB+1nok+7ASOvbps2
-         Xci2qKfWXWiYStlI2RSlAbCjHkbFjNqmS/aohapQyYeCW1V/Q+OSu/D/ksUGBEzK8NxP
-         fdaiaN1l/8UFkz+IhzoheclVxkUG+LLCnc/gQHreWl6gQ6vaj9husxQGs7VNa27gkvjh
-         2QN9s7bgEIrby2d5obfLw3Gk9ARmtsj4pj8r9cq8AGwMCWsf5KLe3jvPmjhiq7nwTpio
-         HegA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737043958; x=1737648758;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Vs6BBUKG7PBaEM3z/slrYo3/W2WHS+37scYn69oAcA=;
-        b=hYiBXuXHHkkoa+FRCH4PTBi2sDJsJTiAVOSLTBWF02SUBALGD5ttACX2a54YwLo0rk
-         /Jps3mjAIWMxHVYkrb5NMAcAF3bT/utf4l9e9ceMgcC/qYLVExMa1MN7eQNvNC2phjC0
-         Qk4q74SXNVcY7eGopMLuZs8fCVLyEGF1+14hE7xitbGdeLz8qY6fj70EJNMFOhiusQUr
-         gNL99ZP0tpuYb6VAhbXz4sNndD+NEc/8SQApbvmox1z9CnT6XbvCu5FUp1S7o3ZHNWsi
-         T8WcVLkyzBOBCXsgBmtyZ+2b0FJvGewyoBAUOtb1oCzvPS3QU+ivY650ithc9iWcJHhp
-         P71g==
-X-Forwarded-Encrypted: i=1; AJvYcCXpgukenOPPlIg0wlzRlnGojWSP+3WijftCOt62NeS9OiHe2yDuLQh6DhxJUUrnat/xqb1i5CdcKEnEnPz3QVc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzitTGA9RzzUr1vLsUzvMI8mESggq4R/BTOeq2wwz2ThbHZ68BV
-	5SM9lfcxO2BWCM0QjZzJnib8ddgnykOKXHmRAzjP+lo3f+H+077sqXMUCHTn8n9c7GCMfaKRi80
-	=
-X-Gm-Gg: ASbGncs98bGL/x6HH+DT26dia6e31BE5Wl0wd4qZp1sIiPh7uVs77puVVeQseQpV7yF
-	d3BV8YBFwd6RyMCyaO38MginvcnnB8Zo8laCpAJJEAVqgsrNiiXsno606qy7n4ZsBL2WEdoXQNa
-	8CtZlqyTvzvwzrbfeNIUPGu2GxS+rgHmhaEvj7btFY7RggVo9F+zMf41+VAiagY54NKn7w8jwPh
-	aK7twjtEir33JZ8jIZDf6FxtSxLHVYqXT6WTQA18MAoCtm873cvBb57Ln2MPQ/x6OM=
-X-Google-Smtp-Source: AGHT+IG73qQrUyxMIaRV8i9mCwuIdQXxnZ82Wm9zIN9i+4KXbSA3xGqkT4I0QTkuhM7mkhQuPiK/0g==
-X-Received: by 2002:a05:6a21:2d09:b0:1e0:d1db:4d8a with SMTP id adf61e73a8af0-1e88d0edac9mr46715628637.10.1737043958526;
-        Thu, 16 Jan 2025 08:12:38 -0800 (PST)
-Received: from thinkpad ([120.60.79.208])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-a9bdf0b5153sm198375a12.70.2025.01.16.08.12.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2025 08:12:38 -0800 (PST)
-Date: Thu, 16 Jan 2025 21:42:27 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: Niklas Cassel <cassel@kernel.org>
-Cc: kw@linux.com, gregkh@linuxfoundation.org, arnd@arndb.de,
-	lpieralisi@kernel.org, shuah@kernel.org, kishon@kernel.org,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bhelgaas@google.com, linux-arm-msm@vger.kernel.org, robh@kernel.org,
-	linux-kselftest@vger.kernel.org
+	s=arc-20240116; t=1737045575; c=relaxed/simple;
+	bh=/nZUdW72FcnZOB/BHR1IUXdW0+ZY5TCdthQyv6g7CNE=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=E/uuOrj+v9tEbe7oxneRfyLgHme6ttq9eGEYvMrxKTeXqxqSbnXXGbUIqqKzMGD07O6i6ExEjWnGLY1gqapFt5IkyhUr2Ez5cz7saLl/8fyYevY1qzAkuSYIUyDeVksljwWdyqZtzeeGbV/2pP7JNxUjRAPuURbdGLOIeli2YJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XN9e+NKj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDF37C4CEE2;
+	Thu, 16 Jan 2025 16:39:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737045574;
+	bh=/nZUdW72FcnZOB/BHR1IUXdW0+ZY5TCdthQyv6g7CNE=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=XN9e+NKjyKXJLkJc+cv+vxeeK7Ycpt/TX+nyqdAAIN5yVOi2QsaxhIV8li4uikr3o
+	 +zjD6P6bKVwM8AZgGI+nX1UPBbGV5YQ2Jz7E0aUPyrgQJJjdiT5Xt1xXi9xtLvbGSM
+	 HpmPZgg+vix5liWk23TS7kbOMRMCVWrXhl15QJbrM4srCzNCcuZqU3J24NW9c8tOpk
+	 Gg01oz+7Zr6TxSv8rzccyoHX706qE67wrizCKrOgdtDJEwSvgMB+flCD+WIbV6dXgo
+	 yZqn7leOD8VkjCNvWfkzjiFnfG0Cjg8ym1pHl5Ihw3foW/rANYPMpWM/W4FH32xkGq
+	 pY7Pj/oIda0FQ==
+Date: Thu, 16 Jan 2025 17:39:30 +0100
+From: Niklas Cassel <cassel@kernel.org>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+CC: kw@linux.com, gregkh@linuxfoundation.org, arnd@arndb.de,
+ lpieralisi@kernel.org, shuah@kernel.org, kishon@kernel.org,
+ linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, bhelgaas@google.com,
+ linux-arm-msm@vger.kernel.org, robh@kernel.org,
+ linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH v5 0/4] Migrate PCI Endpoint Subsystem tests to Kselftest
-Message-ID: <20250116161227.gk2psmbzpexswgrm@thinkpad>
-References: <20250116135106.19143-1-manivannan.sadhasivam@linaro.org>
- <Z4knZyKrEvVNopeX@ryzen>
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20250116161227.gk2psmbzpexswgrm@thinkpad>
+References: <20250116135106.19143-1-manivannan.sadhasivam@linaro.org> <Z4knZyKrEvVNopeX@ryzen> <20250116161227.gk2psmbzpexswgrm@thinkpad>
+Message-ID: <CCADFA64-D3BD-4972-994A-48E2606CCC66@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z4knZyKrEvVNopeX@ryzen>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 16, 2025 at 04:36:07PM +0100, Niklas Cassel wrote:
-> On Thu, Jan 16, 2025 at 07:21:02PM +0530, Manivannan Sadhasivam wrote:
-> > Hi,
-> > 
-> > This series carries forward the effort to add Kselftest for PCI Endpoint
-> > Subsystem started by Aman Gupta [1] a while ago. I reworked the initial version
-> > based on another patch that fixes the return values of IOCTLs in
-> > pci_endpoint_test driver and did many cleanups. Since the resulting work
-> > modified the initial version substantially, I took over the authorship.
-> > 
-> > This series also incorporates the review comment by Shuah Khan [2] to move the
-> > existing tests from 'tools/pci' to 'tools/testing/kselftest/pci_endpoint' before
-> > migrating to Kselftest framework. I made sure that the tests are executable in
-> > each commit and updated documentation accordingly.
-> > 
-> > - Mani
-> > 
-> > [1] https://lore.kernel.org/linux-pci/20221007053934.5188-1-aman1.gupta@samsung.com
-> > [2] https://lore.kernel.org/linux-pci/b2a5db97-dc59-33ab-71cd-f591e0b1b34d@linuxfoundation.org
-> > 
-> > Changes in v5:
-> > 
-> > * Incorporated comments from Niklas
-> > * Added a patch to fix the DMA MEMCPY check in pci-epf-test driver
-> > * Collected tags
-> > * Rebased on top of pci/next 0333f56dbbf7ef6bb46d2906766c3e1b2a04a94d
-> > 
-> > Changes in v4:
-> > 
-> > * Dropped the BAR fix patches and submitted them separately:
-> >   https://lore.kernel.org/linux-pci/20241231130224.38206-1-manivannan.sadhasivam@linaro.org/
-> > * Rebased on top of pci/next 9e1b45d7a5bc0ad20f6b5267992da422884b916e
-> > 
-> > Changes in v3:
-> > 
-> > * Collected tags.
-> > * Added a note about failing testcase 10 and command to skip it in
-> >   documentation.
-> > * Removed Aman Gupta and Padmanabhan Rajanbabu from CC as their addresses are
-> >   bouncing.
-> > 
-> > Changes in v2:
-> > 
-> > * Added a patch that fixes return values of IOCTL in pci_endpoint_test driver
-> > * Moved the existing tests to new location before migrating
-> > * Added a fix for BARs on Qcom devices
-> > * Updated documentation and also added fixture variants for memcpy & DMA modes
-> > 
-> > 
-> > Manivannan Sadhasivam (4):
-> >   PCI: endpoint: pci-epf-test: Fix the check for DMA MEMCPY test
-> >   misc: pci_endpoint_test: Fix the return value of IOCTL
-> >   selftests: Move PCI Endpoint tests from tools/pci to Kselftests
-> >   selftests: pci_endpoint: Migrate to Kselftest framework
-> > 
-> >  Documentation/PCI/endpoint/pci-test-howto.rst | 170 +++++------
-> >  MAINTAINERS                                   |   2 +-
-> >  drivers/misc/pci_endpoint_test.c              | 255 +++++++++--------
-> >  drivers/pci/endpoint/functions/pci-epf-test.c |   4 +-
-> >  tools/pci/Build                               |   1 -
-> >  tools/pci/Makefile                            |  58 ----
-> >  tools/pci/pcitest.c                           | 264 ------------------
-> >  tools/pci/pcitest.sh                          |  73 -----
-> >  tools/testing/selftests/Makefile              |   1 +
-> >  .../testing/selftests/pci_endpoint/.gitignore |   2 +
-> >  tools/testing/selftests/pci_endpoint/Makefile |   7 +
-> >  tools/testing/selftests/pci_endpoint/config   |   4 +
-> >  .../pci_endpoint/pci_endpoint_test.c          | 221 +++++++++++++++
-> >  13 files changed, 435 insertions(+), 627 deletions(-)
-> >  delete mode 100644 tools/pci/Build
-> >  delete mode 100644 tools/pci/Makefile
-> >  delete mode 100644 tools/pci/pcitest.c
-> >  delete mode 100644 tools/pci/pcitest.sh
-> >  create mode 100644 tools/testing/selftests/pci_endpoint/.gitignore
-> >  create mode 100644 tools/testing/selftests/pci_endpoint/Makefile
-> >  create mode 100644 tools/testing/selftests/pci_endpoint/config
-> >  create mode 100644 tools/testing/selftests/pci_endpoint/pci_endpoint_test.c
-> > 
-> > -- 
-> > 2.25.1
-> > 
-> 
-> I ran the test using simply:
-> 
-> $ ./pci_endpoint_test
-> 
-> and got:
-> 
-> #  RUN           pci_ep_basic.MSIX_TEST ...
-> # pci_endpoint_test.c:129:MSIX_TEST:Expected 0 (0) == ret (-110)
-> # pci_endpoint_test.c:129:MSIX_TEST:Test failed for MSI-X33
-> # pci_endpoint_test.c:129:MSIX_TEST:Expected 0 (0) == ret (-110)
-> # pci_endpoint_test.c:129:MSIX_TEST:Test failed for MSI-X34
-> # pci_endpoint_test.c:129:MSIX_TEST:Expected 0 (0) == ret (-110)
-> # pci_endpoint_test.c:129:MSIX_TEST:Test failed for MSI-X35
-> # pci_endpoint_test.c:129:MSIX_TEST:Expected 0 (0) == ret (-110)
-> # pci_endpoint_test.c:129:MSIX_TEST:Test failed for MSI-X36
-> # pci_endpoint_test.c:129:MSIX_TEST:Expected 0 (0) == ret (-110)
-> # pci_endpoint_test.c:129:MSIX_TEST:Test failed for MSI-X37
-> # pci_endpoint_test.c:129:MSIX_TEST:Expected 0 (0) == ret (-110)
-> # pci_endpoint_test.c:129:MSIX_TEST:Test failed for MSI-X38
-> # pci_endpoint_test.c:129:MSIX_TEST:Expected 0 (0) == ret (-110)
-> # pci_endpoint_test.c:129:MSIX_TEST:Test failed for MSI-X39
-> 
-> 
-> I think that you should also do:
-> 
-> diff --git a/Documentation/PCI/endpoint/pci-test-howto.rst b/Documentation/PCI/endpoint/pci-test-howto.rst
-> index 7d0dbad61456..7d5049c884dd 100644
-> --- a/Documentation/PCI/endpoint/pci-test-howto.rst
-> +++ b/Documentation/PCI/endpoint/pci-test-howto.rst
-> @@ -81,8 +81,8 @@ device, the following commands can be used::
->  
->         # echo 0x104c > functions/pci_epf_test/func1/vendorid
->         # echo 0xb500 > functions/pci_epf_test/func1/deviceid
-> -       # echo 16 > functions/pci_epf_test/func1/msi_interrupts
-> -       # echo 8 > functions/pci_epf_test/func1/msix_interrupts
-> +       # echo 32 > functions/pci_epf_test/func1/msi_interrupts
-> +       # echo 2048 > functions/pci_epf_test/func1/msix_interrupts
->  
-> 
-> Such that the documentation suggests values that will actually make the
-> pci_endpoint_test pass without any special parameters set.
-> 
 
-Agree and this is what I am doing locally, but that change is not really related
-to this series. So I'll submit it separately.
 
-> 
-> Other than that small nit, for the series:
-> Tested-by: Niklas Cassel <cassel@kernel.org>
+On 16 January 2025 17:12:27 CET, Manivannan Sadhasivam <manivannan=2Esadha=
+sivam@linaro=2Eorg> wrote:
+>On Thu, Jan 16, 2025 at 04:36:07PM +0100, Niklas Cassel wrote:
+>> On Thu, Jan 16, 2025 at 07:21:02PM +0530, Manivannan Sadhasivam wrote:
+>> > Hi,
+>> >=20
+>> > This series carries forward the effort to add Kselftest for PCI Endpo=
+int
+>> > Subsystem started by Aman Gupta [1] a while ago=2E I reworked the ini=
+tial version
+>> > based on another patch that fixes the return values of IOCTLs in
+>> > pci_endpoint_test driver and did many cleanups=2E Since the resulting=
+ work
+>> > modified the initial version substantially, I took over the authorshi=
+p=2E
+>> >=20
+>> > This series also incorporates the review comment by Shuah Khan [2] to=
+ move the
+>> > existing tests from 'tools/pci' to 'tools/testing/kselftest/pci_endpo=
+int' before
+>> > migrating to Kselftest framework=2E I made sure that the tests are ex=
+ecutable in
+>> > each commit and updated documentation accordingly=2E
+>> >=20
+>> > - Mani
+>> >=20
+>> > [1] https://lore=2Ekernel=2Eorg/linux-pci/20221007053934=2E5188-1-ama=
+n1=2Egupta@samsung=2Ecom
+>> > [2] https://lore=2Ekernel=2Eorg/linux-pci/b2a5db97-dc59-33ab-71cd-f59=
+1e0b1b34d@linuxfoundation=2Eorg
+>> >=20
+>> > Changes in v5:
+>> >=20
+>> > * Incorporated comments from Niklas
+>> > * Added a patch to fix the DMA MEMCPY check in pci-epf-test driver
+>> > * Collected tags
+>> > * Rebased on top of pci/next 0333f56dbbf7ef6bb46d2906766c3e1b2a04a94d
+>> >=20
+>> > Changes in v4:
+>> >=20
+>> > * Dropped the BAR fix patches and submitted them separately:
+>> >   https://lore=2Ekernel=2Eorg/linux-pci/20241231130224=2E38206-1-mani=
+vannan=2Esadhasivam@linaro=2Eorg/
+>> > * Rebased on top of pci/next 9e1b45d7a5bc0ad20f6b5267992da422884b916e
+>> >=20
+>> > Changes in v3:
+>> >=20
+>> > * Collected tags=2E
+>> > * Added a note about failing testcase 10 and command to skip it in
+>> >   documentation=2E
+>> > * Removed Aman Gupta and Padmanabhan Rajanbabu from CC as their addre=
+sses are
+>> >   bouncing=2E
+>> >=20
+>> > Changes in v2:
+>> >=20
+>> > * Added a patch that fixes return values of IOCTL in pci_endpoint_tes=
+t driver
+>> > * Moved the existing tests to new location before migrating
+>> > * Added a fix for BARs on Qcom devices
+>> > * Updated documentation and also added fixture variants for memcpy & =
+DMA modes
+>> >=20
+>> >=20
+>> > Manivannan Sadhasivam (4):
+>> >   PCI: endpoint: pci-epf-test: Fix the check for DMA MEMCPY test
+>> >   misc: pci_endpoint_test: Fix the return value of IOCTL
+>> >   selftests: Move PCI Endpoint tests from tools/pci to Kselftests
+>> >   selftests: pci_endpoint: Migrate to Kselftest framework
+>> >=20
+>> >  Documentation/PCI/endpoint/pci-test-howto=2Erst | 170 +++++------
+>> >  MAINTAINERS                                   |   2 +-
+>> >  drivers/misc/pci_endpoint_test=2Ec              | 255 +++++++++-----=
+---
+>> >  drivers/pci/endpoint/functions/pci-epf-test=2Ec |   4 +-
+>> >  tools/pci/Build                               |   1 -
+>> >  tools/pci/Makefile                            |  58 ----
+>> >  tools/pci/pcitest=2Ec                           | 264 --------------=
+----
+>> >  tools/pci/pcitest=2Esh                          |  73 -----
+>> >  tools/testing/selftests/Makefile              |   1 +
+>> >  =2E=2E=2E/testing/selftests/pci_endpoint/=2Egitignore |   2 +
+>> >  tools/testing/selftests/pci_endpoint/Makefile |   7 +
+>> >  tools/testing/selftests/pci_endpoint/config   |   4 +
+>> >  =2E=2E=2E/pci_endpoint/pci_endpoint_test=2Ec          | 221 ++++++++=
++++++++
+>> >  13 files changed, 435 insertions(+), 627 deletions(-)
+>> >  delete mode 100644 tools/pci/Build
+>> >  delete mode 100644 tools/pci/Makefile
+>> >  delete mode 100644 tools/pci/pcitest=2Ec
+>> >  delete mode 100644 tools/pci/pcitest=2Esh
+>> >  create mode 100644 tools/testing/selftests/pci_endpoint/=2Egitignore
+>> >  create mode 100644 tools/testing/selftests/pci_endpoint/Makefile
+>> >  create mode 100644 tools/testing/selftests/pci_endpoint/config
+>> >  create mode 100644 tools/testing/selftests/pci_endpoint/pci_endpoint=
+_test=2Ec
+>> >=20
+>> > --=20
+>> > 2=2E25=2E1
+>> >=20
+>>=20
+>> I ran the test using simply:
+>>=20
+>> $ =2E/pci_endpoint_test
+>>=20
+>> and got:
+>>=20
+>> #  RUN           pci_ep_basic=2EMSIX_TEST =2E=2E=2E
+>> # pci_endpoint_test=2Ec:129:MSIX_TEST:Expected 0 (0) =3D=3D ret (-110)
+>> # pci_endpoint_test=2Ec:129:MSIX_TEST:Test failed for MSI-X33
+>> # pci_endpoint_test=2Ec:129:MSIX_TEST:Expected 0 (0) =3D=3D ret (-110)
+>> # pci_endpoint_test=2Ec:129:MSIX_TEST:Test failed for MSI-X34
+>> # pci_endpoint_test=2Ec:129:MSIX_TEST:Expected 0 (0) =3D=3D ret (-110)
+>> # pci_endpoint_test=2Ec:129:MSIX_TEST:Test failed for MSI-X35
+>> # pci_endpoint_test=2Ec:129:MSIX_TEST:Expected 0 (0) =3D=3D ret (-110)
+>> # pci_endpoint_test=2Ec:129:MSIX_TEST:Test failed for MSI-X36
+>> # pci_endpoint_test=2Ec:129:MSIX_TEST:Expected 0 (0) =3D=3D ret (-110)
+>> # pci_endpoint_test=2Ec:129:MSIX_TEST:Test failed for MSI-X37
+>> # pci_endpoint_test=2Ec:129:MSIX_TEST:Expected 0 (0) =3D=3D ret (-110)
+>> # pci_endpoint_test=2Ec:129:MSIX_TEST:Test failed for MSI-X38
+>> # pci_endpoint_test=2Ec:129:MSIX_TEST:Expected 0 (0) =3D=3D ret (-110)
+>> # pci_endpoint_test=2Ec:129:MSIX_TEST:Test failed for MSI-X39
+>>=20
+>>=20
+>> I think that you should also do:
+>>=20
+>> diff --git a/Documentation/PCI/endpoint/pci-test-howto=2Erst b/Document=
+ation/PCI/endpoint/pci-test-howto=2Erst
+>> index 7d0dbad61456=2E=2E7d5049c884dd 100644
+>> --- a/Documentation/PCI/endpoint/pci-test-howto=2Erst
+>> +++ b/Documentation/PCI/endpoint/pci-test-howto=2Erst
+>> @@ -81,8 +81,8 @@ device, the following commands can be used::
+>> =20
+>>         # echo 0x104c > functions/pci_epf_test/func1/vendorid
+>>         # echo 0xb500 > functions/pci_epf_test/func1/deviceid
+>> -       # echo 16 > functions/pci_epf_test/func1/msi_interrupts
+>> -       # echo 8 > functions/pci_epf_test/func1/msix_interrupts
+>> +       # echo 32 > functions/pci_epf_test/func1/msi_interrupts
+>> +       # echo 2048 > functions/pci_epf_test/func1/msix_interrupts
+>> =20
+>>=20
+>> Such that the documentation suggests values that will actually make the
+>> pci_endpoint_test pass without any special parameters set=2E
+>>=20
+>
+>Agree and this is what I am doing locally, but that change is not really =
+related
+>to this series=2E So I'll submit it separately=2E
 
-Thanks a lot!
+I don't not agree that it is not related,
+before this series the example output was:
 
-- Mani
 
--- 
-மணிவண்ணன் சதாசிவம்
+MSI1:           OKAY
+-	MSI2:           OKAY
+-	MSI3:           OKAY
+-	MSI4:           OKAY
+-	MSI5:           OKAY
+-	MSI6:           OKAY
+-	MSI7:           OKAY
+-	MSI8:           OKAY
+-	MSI9:           OKAY
+-	MSI10:          OKAY
+-	MSI11:          OKAY
+-	MSI12:          OKAY
+-	MSI13:          OKAY
+-	MSI14:          OKAY
+-	MSI15:          OKAY
+-	MSI16:          OKAY
+-	MSI17:          NOT OKAY
+-	MSI18:          NOT OKAY
+-	MSI19:          NOT OKAY
+-	MSI20:          NOT OKAY
+-	MSI21:          NOT OKAY
+-	MSI22:          NOT OKAY
+-	MSI23:          NOT OKAY
+-	MSI24:          NOT OKAY
+-	MSI25:          NOT OKAY
+-	MSI26:          NOT OKAY
+-	MSI27:          NOT OKAY
+-	MSI28:          NOT OKAY
+-	MSI29:          NOT OKAY
+-	MSI30:          NOT OKAY
+-	MSI31:          NOT OKAY
+-	MSI32:          NOT OKAY
+-	SET IRQ TYPE TO MSI-X:          OKAY
+-	MSI-X1:         OKAY
+-	MSI-X2:         OKAY
+-	MSI-X3:         OKAY
+-	MSI-X4:         OKAY
+-	MSI-X5:         OKAY
+-	MSI-X6:         OKAY
+-	MSI-X7:         OKAY
+-	MSI-X8:         OKAY
+-	MSI-X9:         NOT OKAY
+-	MSI-X10:        NOT OKAY
+-	MSI-X11:        NOT OKAY
+-	MSI-X12:        NOT OKAY
+-	MSI-X13:        NOT OKAY
+-	MSI-X14:        NOT OKAY
+-	MSI-X15:        NOT OKAY
+-	MSI-X16:        NOT OKAY
+
+
+So the output matched the suggested values in the documentation=2E
+
+After this series, the documentation still suggests msi =3D=3D 16 and msi-=
+x =3D=3D 8,
+but the example output now shows that
+there was no failures=2E
+
+
+So I think it is most consistent to just update the example in the same co=
+mmit (in this series) that updates the output to show everything as good=2E
+
+
+
+Kind regards,
+Niklas
+
+
+
+>
+>>=20
+>> Other than that small nit, for the series:
+>> Tested-by: Niklas Cassel <cassel@kernel=2Eorg>
+>
+>Thanks a lot!
+>
+>- Mani
+>
+>--=20
+>=E0=AE=AE=E0=AE=A3=E0=AE=BF=E0=AE=B5=E0=AE=A3=E0=AF=8D=E0=AE=A3=E0=AE=A9=
+=E0=AF=8D =E0=AE=9A=E0=AE=A4=E0=AE=BE=E0=AE=9A=E0=AE=BF=E0=AE=B5=E0=AE=AE=
+=E0=AF=8D
 
