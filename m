@@ -1,79 +1,84 @@
-Return-Path: <linux-kselftest+bounces-24696-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24697-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D8B3A14AF7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 09:17:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DF6CA14AF8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 09:17:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8349B164E59
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 08:17:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E951A188D6EF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 08:17:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43D251F7088;
-	Fri, 17 Jan 2025 08:16:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74DB91F8917;
+	Fri, 17 Jan 2025 08:16:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U7rzcVRA"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T2GoPwR+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549701F8668
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2025 08:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2381F8906
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2025 08:16:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737101770; cv=none; b=WsEKITTYvFLFlcyoGkmL9XdUIYcUwiu71jt+zhpL7m+kXRauyQlrUnUC2XNGHFv8z25gFlFWROZpksS2OVjfaaFLaonl12SD1Lk94KxwrQBgxPcvQQvvRg6J8dFY4mcuEitnKKoiT1RaYQvR0Y3Whn0MMwPC4y8Wjgbvvy6TiO0=
+	t=1737101784; cv=none; b=TpGf0ZP6H/+102Y7iP8X63lXCu0yUg/tbLZu3SWKOVkZPFXkNpEKZGzoXUUPF8FwmVsFa+PYaFGQ7nTsb3TJS+EkedzF7606j6c/i5FErEI5H3lNyRZe672jv/mk6Y3IxtyyxZm4YfyWBmryLiAdrH1zeUfwUga5Nfgu95S1tsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737101770; c=relaxed/simple;
-	bh=sRBUEVrMo/0V7SdkRE5CnE/w/K0IvzD/MMONWUZYsNA=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=MB82OZ9C7nlxF2kzVMBeo/nCkWpyFGjN007Qi8UBGq+pRo1WiK5Ishqi+CJlPjpo/6nM/UGxNjPOULU3vID+TLlif3FvqPATWJFs7l/GxffTm4SggU5ojh89iI08nqJppQNKhN+16/M2UCSlYMFNFE743316J8WG6b1uJI68dDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U7rzcVRA; arc=none smtp.client-ip=209.85.214.201
+	s=arc-20240116; t=1737101784; c=relaxed/simple;
+	bh=IEstVE73bxSWMoqBp276ZR+huMjCwaHah5tR3p0yfac=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=PNUoiFHFCStqacGQ3d6RpETko2oMyVSGI3/5JW8SUDh7noe7e3ODgJlxpP7NpfNmRACovUyX0/nNvFo0WlBUjG2rsYeDtBImlZ46+i//E8mVoQk+x6v6KZJ3rhJGBnUpM7XrRMiUgMy4mRXmWq2pugPFpecv+1MiXs9BwC0I34g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=T2GoPwR+; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yuyanghuang.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-216728b170cso36576375ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2025 00:16:08 -0800 (PST)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2ef35de8901so3612726a91.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2025 00:16:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737101767; x=1737706567; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hWAd5UaNCLFpk3MqtCHOZDYrvEQhbDK50uttL23Pwro=;
-        b=U7rzcVRA6eg0u5Zuqvms+/MQMbZkcGKOj+IQPnHZ+FicFxHPwiGM042VqjWFAiV3ps
-         D1U8M1OBBgV/1Slg8Mbwb3XfQO7B3s7pU5xocM9RJwaYDYE9D4PG8y+ILHgSKiXW3M6R
-         nf+qUS1WR8fwf6vRdlpIpAmxPYJCmc1ueBzZGMNZcWpu9H9hXTmluKfVh3kwPl5+eJrq
-         dqZqlVnn6tQCVzUyN9EI9c2K/4VUd72fFvuPxU+ifFSUwiH3dlP07uHuLch20ggI6Y90
-         SAGFHN4GOChuHHoJN5RY/rftGHATbOytisaWkxYHzkHu982wEdehEU7Cp9LoALfGZcft
-         7VtA==
+        d=google.com; s=20230601; t=1737101782; x=1737706582; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jy+DCfw2XCGTlv3unkqWdeg12NadzWHbDdoF9mTjolA=;
+        b=T2GoPwR+uXPKDVzEZpINNNadwXDRN0n/IhmVIt1aSvnpKgdYXtKcs2CCPb5PKU4no8
+         6Bg5gNF5nsfKpFocXmpe2+Ci5cs6TGZjnoZeOiO6+0OJp1HNkE275qt4l/5UN3Fi5Dfd
+         F2cYFRTDACYUvSFxO5i4CMG5MqGEhb62sjjIS4OlhPmf4EARhiT5Fj7PSLFKniM2elGM
+         nrLJTIUof/lcmWswRaWOyHifjore8mhkbV26RN8P+30zcvvmmbDctj+4miSIe9mE4nZw
+         IbMD1ivcEA2gxa+H84fvpCLn+mS7Kcd+ahugdO6VrwehYrkpLU6SQlrW+c3TNrFurGOe
+         +uUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737101767; x=1737706567;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hWAd5UaNCLFpk3MqtCHOZDYrvEQhbDK50uttL23Pwro=;
-        b=podYBhPPk7m7yIOHlDZ82OVE2Lyw2jswv2Gwd/M7uEzT7isOjmVE2kLeer4oN4jNVu
-         +5Y1f9k86kl6FY6cDX7kOPq3RjuY91Ufp1ChmIW58r9Z4gcUGQLsZAY3hiaUFHqKgwjS
-         xVMWMMTUxgQsbPw/qovQqrcFUfFjryj3TsXGgz4kAG7qo0yZ2G6CdoD+KwvfuIA037P0
-         FmVDmpvKHD4uujX/YyOd3Ije00NfAPkJpFt/JosUuouPsWbceakRHOXrlxUDKyxm1zsp
-         3fVbtidpbFcPhjZzQyoWR4+iLZblDfQTXUOC95RO+o40uJm6kV/XaXV9xPEASdZlVh2V
-         LZ6A==
-X-Forwarded-Encrypted: i=1; AJvYcCVRRTVkMjx93+IqMWi2Pwcc0ve+cCuBClI89Oeetm/rEPb0PxQLH4AmleCt7S/B/+4xBCi1dWL1fOdT2owBjjY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+k14eKb523Eb6e+iWFwbuSmhaDe9uiV/K9PuMzhPI3NCPecwT
-	Lb69gGMollNb8Cp3Vitzn/lc5IlBIhXjI58mGQHs6ksZk54HOi2iZY6UhWc/i6rMlKYXJJKh9Ss
-	YRMoFRlHFQL98IbI502Kp2g==
-X-Google-Smtp-Source: AGHT+IHC8s+SghLCbRI+cpCbhYWFbOm3NCoR9cx6zlL6K/uqRp+hV1JiIhSswKub+VhEc/7DRDjY31fSPkAs1KcklQ==
-X-Received: from pgbcs10.prod.google.com ([2002:a05:6a02:418a:b0:7fd:4919:f6cf])
+        d=1e100.net; s=20230601; t=1737101782; x=1737706582;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Jy+DCfw2XCGTlv3unkqWdeg12NadzWHbDdoF9mTjolA=;
+        b=k2CESjS60gqpyTYn1VOK5/QeA3bqvOhT2mq74el5MNp5jQXwZt94kRY8VXpfukW3OE
+         eOyTy98Ap3wCMmk2M2AdqF2xOp1flBsZHtObbr40Y9ecgoOME+5DlNv3/H+qAiS6HX9O
+         cjSeOaXUKwgVJiVPOp9He1Yb2p1Xp3fJEC8veVeKQDdg4qtPIUsfy+8Jzw/pDwI87SdR
+         pvLJ6GUQ+hLvvV69q8X0ydUhENA8Mn4GjVo9hKaEDKZtx7sDDkyShBSB8r2KNvBT2qZT
+         iCRm25bdQJBAAoJSec4z99Ax3dxhzAmNLFsUSUuFWfM4aZedHju59y/pJ5SpxvwrW/mW
+         KHWw==
+X-Forwarded-Encrypted: i=1; AJvYcCXDjQvjTM2WJ0fMQjhMX1r00ad42KpGPwRYarvCYIgyQZVvfjJHurA8wI2EkMvGRlv2MJY0c5iqi88bUHh56IQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9CcdnuRZLuAGikZ4XgkjZdwrVX1g5ZjRvRIY+hyOdFjIknDdw
+	p1zGUl1gSfV0UOBiywYBkJcT2PwR3pfJvKAqd4B5g9ITmCF+HJwLpXXcSK4eZakkfrdqWfGgD9U
+	MQ/0Oo/HMmuerbLF3SWkVUA==
+X-Google-Smtp-Source: AGHT+IH9nwERlosMjdsEgTvUTZz+UtSdbMO37OfoSDYJmN7EC6YhT1wtQhFI+n2ONrpgFvtYnN8Zt+OewnGkfl5kgg==
+X-Received: from pjwx14.prod.google.com ([2002:a17:90a:c2ce:b0:2ef:d283:5089])
  (user=yuyanghuang job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:7344:b0:1e1:ab8b:dda1 with SMTP id adf61e73a8af0-1eb215ecd12mr2987719637.35.1737101767560;
- Fri, 17 Jan 2025 00:16:07 -0800 (PST)
-Date: Fri, 17 Jan 2025 17:15:58 +0900
+ 2002:a17:90b:2e41:b0:2ee:b875:6d30 with SMTP id 98e67ed59e1d1-2f782c779d1mr2586862a91.9.1737101782036;
+ Fri, 17 Jan 2025 00:16:22 -0800 (PST)
+Date: Fri, 17 Jan 2025 17:15:59 +0900
+In-Reply-To: <20250117081600.150863-1-yuyanghuang@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20250117081600.150863-1-yuyanghuang@google.com>
 X-Mailer: git-send-email 2.48.0.rc2.279.g1de40edade-goog
-Message-ID: <20250117081600.150863-1-yuyanghuang@google.com>
-Subject: [PATCH net-next, v6 1/2] netlink: support dumping IPv4 multicast addresses
+Message-ID: <20250117081600.150863-2-yuyanghuang@google.com>
+Subject: [PATCH net-next, v6 2/2] selftests/net: Add selftest for IPv4
+ RTM_GETMULTICAST support
 From: Yuyang Huang <yuyanghuang@google.com>
 To: Yuyang Huang <yuyanghuang@google.com>
 Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
@@ -86,266 +91,178 @@ Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Extended RTM_GETMULTICAST to support dumping joined IPv4 multicast
-addresses, in addition to the existing IPv6 functionality. This allows
-userspace applications to retrieve both IPv4 and IPv6 multicast
-addresses through similar netlink command and then monitor future
-changes by registering to RTNLGRP_IPV4_MCADDR and RTNLGRP_IPV6_MCADDR.
+This change introduces a new selftest case to verify the functionality
+of dumping IPv4 multicast addresses using the RTM_GETMULTICAST netlink
+message. The test utilizes the ynl library to interact with the
+netlink interface and validate that the kernel correctly reports the
+joined IPv4 multicast addresses.
+
+To run the test, execute the following command:
+
+$ vng -v --user root --cpus 16 -- \
+    make -C tools/testing/selftests TARGETS=3Dnet \
+    TEST_PROGS=3Drtnetlink.py TEST_GEN_PROGS=3D"" run_tests
 
 Cc: Maciej =C5=BBenczykowski <maze@google.com>
 Cc: Lorenzo Colitti <lorenzo@google.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
 Signed-off-by: Yuyang Huang <yuyanghuang@google.com>
 ---
+ Documentation/netlink/specs/rt_link.yaml | 70 ++++++++++++++++++++++++
+ tools/testing/selftests/net/Makefile     |  1 +
+ tools/testing/selftests/net/rtnetlink.py | 30 ++++++++++
+ 3 files changed, 101 insertions(+)
+ create mode 100755 tools/testing/selftests/net/rtnetlink.py
 
-Changelog since v5:
-- Move the test case to a separate patch.
-- Refactor the code to remove the dependency on `enum addr_type_t
-  type`.
-- Return error if `fillargs->event` is not set properly.
-- Return -EINVAL in an unreachable code path.
-
-Changelog since v4:
-- Fixes a bug where fillargs->event was not initialized in the code
-  path for dumping ifaddr.
-- Fixes a bug where reply messages contain the wrong sequence number.
-- Minor style fixes.
-- Adds a ynl selftest.
-
-Changelog since v3:
-- Refactor in_dev_dump_addr() to break down the logic into two
-  separate functions to simplify the logic.
-
-Changelog since v2:
-- Fix checkpatch.pl warnings.
-- Remove one redundant EXPORT_SYMBOL().
-
-Changelog since v1:
-- Minor style fixes.
-- Use for_each_pmc_rcu() instead of for_each_pmc_rtnl().
-
- include/linux/igmp.h | 12 +++++++
- net/ipv4/devinet.c   | 76 ++++++++++++++++++++++++++++++++++++--------
- net/ipv4/igmp.c      | 13 +++++---
- 3 files changed, 83 insertions(+), 18 deletions(-)
-
-diff --git a/include/linux/igmp.h b/include/linux/igmp.h
-index 073b30a9b850..47c3ab54d79e 100644
---- a/include/linux/igmp.h
-+++ b/include/linux/igmp.h
-@@ -92,6 +92,15 @@ struct ip_mc_list {
- 	struct rcu_head		rcu;
- };
+diff --git a/Documentation/netlink/specs/rt_link.yaml b/Documentation/netli=
+nk/specs/rt_link.yaml
+index 0d492500c7e5..7dcd5fddac9d 100644
+--- a/Documentation/netlink/specs/rt_link.yaml
++++ b/Documentation/netlink/specs/rt_link.yaml
+@@ -92,6 +92,41 @@ definitions:
+       -
+         name: ifi-change
+         type: u32
++  -
++    name: ifaddrmsg
++    type: struct
++    members:
++      -
++        name: ifa-family
++        type: u8
++      -
++        name: ifa-prefixlen
++        type: u8
++      -
++        name: ifa-flags
++        type: u8
++      -
++        name: ifa-scope
++        type: u8
++      -
++        name: ifa-index
++        type: u32
++  -
++    name: ifacacheinfo
++    type: struct
++    members:
++      -
++        name: ifa-prefered
++        type: u32
++      -
++        name: ifa-valid
++        type: u32
++      -
++        name: cstamp
++        type: u32
++      -
++        name: tstamp
++        type: u32
+   -
+     name: ifla-bridge-id
+     type: struct
+@@ -2253,6 +2288,18 @@ attribute-sets:
+       -
+         name: tailroom
+         type: u16
++  -
++    name: ifmcaddr-attrs
++    attributes:
++      -
++        name: addr
++        type: binary
++        value: 7
++      -
++        name: cacheinfo
++        type: binary
++        struct: ifacacheinfo
++        value: 6
 =20
-+struct inet_fill_args {
-+	u32 portid;
-+	u32 seq;
-+	int event;
-+	unsigned int flags;
-+	int netnsid;
-+	int ifindex;
-+};
+ sub-messages:
+   -
+@@ -2493,6 +2540,29 @@ operations:
+         reply:
+           value: 92
+           attributes: *link-stats-attrs
++    -
++      name: getmaddrs
++      doc: Get / dump IPv4/IPv6 multicast addresses.
++      attribute-set: ifmcaddr-attrs
++      fixed-header: ifaddrmsg
++      do:
++        request:
++          value: 58
++          attributes:
++            - ifa-family
++            - ifa-index
++        reply:
++          value: 58
++          attributes: &mcaddr-attrs
++            - addr
++            - cacheinfo
++      dump:
++        request:
++          value: 58
++            - ifa-family
++        reply:
++          value: 58
++          attributes: *mcaddr-attrs
+=20
+ mcast-groups:
+   list:
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests=
+/net/Makefile
+index 73ee88d6b043..e2f03211f9b3 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -36,6 +36,7 @@ TEST_PROGS +=3D cmsg_so_priority.sh
+ TEST_PROGS +=3D cmsg_time.sh cmsg_ipv6.sh
+ TEST_PROGS +=3D netns-name.sh
+ TEST_PROGS +=3D nl_netdev.py
++TEST_PROGS +=3D rtnetlink.py
+ TEST_PROGS +=3D srv6_end_dt46_l3vpn_test.sh
+ TEST_PROGS +=3D srv6_end_dt4_l3vpn_test.sh
+ TEST_PROGS +=3D srv6_end_dt6_l3vpn_test.sh
+diff --git a/tools/testing/selftests/net/rtnetlink.py b/tools/testing/selft=
+ests/net/rtnetlink.py
+new file mode 100755
+index 000000000000..9b9dfbe4dd7b
+--- /dev/null
++++ b/tools/testing/selftests/net/rtnetlink.py
+@@ -0,0 +1,30 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
 +
- /* V3 exponential field decoding */
- #define IGMPV3_MASK(value, nb) ((nb)>=3D32 ? (value) : ((1<<(nb))-1) & (va=
-lue))
- #define IGMPV3_EXP(thresh, nbmant, nbexp, value) \
-@@ -142,4 +151,7 @@ extern void __ip_mc_inc_group(struct in_device *in_dev,=
- __be32 addr,
- extern void ip_mc_inc_group(struct in_device *in_dev, __be32 addr);
- int ip_mc_check_igmp(struct sk_buff *skb);
-=20
-+int inet_fill_ifmcaddr(struct sk_buff *skb, struct net_device *dev,
-+		       const struct ip_mc_list *im,
-+		       struct inet_fill_args *args);
- #endif
-diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
-index c8b3cf5fba4c..5b561cdab31e 100644
---- a/net/ipv4/devinet.c
-+++ b/net/ipv4/devinet.c
-@@ -107,15 +107,6 @@ static const struct nla_policy ifa_ipv4_policy[IFA_MAX=
-+1] =3D {
- 	[IFA_PROTO]		=3D { .type =3D NLA_U8 },
- };
-=20
--struct inet_fill_args {
--	u32 portid;
--	u32 seq;
--	int event;
--	unsigned int flags;
--	int netnsid;
--	int ifindex;
--};
--
- #define IN4_ADDR_HSIZE_SHIFT	8
- #define IN4_ADDR_HSIZE		(1U << IN4_ADDR_HSIZE_SHIFT)
-=20
-@@ -1846,9 +1837,38 @@ static int inet_valid_dump_ifaddr_req(const struct n=
-lmsghdr *nlh,
- 	return 0;
- }
-=20
--static int in_dev_dump_addr(struct in_device *in_dev, struct sk_buff *skb,
--			    struct netlink_callback *cb, int *s_ip_idx,
--			    struct inet_fill_args *fillargs)
-+static int in_dev_dump_ifmcaddr(struct in_device *in_dev, struct sk_buff *=
-skb,
-+				struct netlink_callback *cb, int *s_ip_idx,
-+				struct inet_fill_args *fillargs)
-+{
-+	struct ip_mc_list *im;
-+	int ip_idx =3D 0;
-+	int err;
++from lib.py import ksft_exit, ksft_run, ksft_ge, RtnlFamily
++import socket
 +
-+	for (im =3D rcu_dereference(in_dev->mc_list);
-+	     im;
-+	     im =3D rcu_dereference(im->next_rcu)) {
-+		if (ip_idx < *s_ip_idx) {
-+			ip_idx++;
-+			continue;
-+		}
-+		err =3D inet_fill_ifmcaddr(skb, in_dev->dev, im, fillargs);
-+		if (err < 0)
-+			goto done;
++IPV4_ALL_HOSTS_MULTICAST =3D b'\xe0\x00\x00\x01'
 +
-+		nl_dump_check_consistent(cb, nlmsg_hdr(skb));
-+		ip_idx++;
-+	}
-+	err =3D 0;
-+	ip_idx =3D 0;
-+done:
-+	*s_ip_idx =3D ip_idx;
-+	return err;
-+}
++def dump_mcaddr_check(rtnl: RtnlFamily) -> None:
++    """
++    Verify that at least one interface has the IPv4 all-hosts multicast ad=
+dress.
++    At least the loopback interface should have this address.
++    """
 +
-+static int in_dev_dump_ifaddr(struct in_device *in_dev, struct sk_buff *sk=
-b,
-+			      struct netlink_callback *cb, int *s_ip_idx,
-+			      struct inet_fill_args *fillargs)
- {
- 	struct in_ifaddr *ifa;
- 	int ip_idx =3D 0;
-@@ -1874,6 +1894,21 @@ static int in_dev_dump_addr(struct in_device *in_dev=
-, struct sk_buff *skb,
- 	return err;
- }
-=20
-+static int in_dev_dump_addr(struct in_device *in_dev, struct sk_buff *skb,
-+			    struct netlink_callback *cb, int *s_ip_idx,
-+			    struct inet_fill_args *fillargs)
-+{
-+	switch (fillargs->event) {
-+	case RTM_NEWADDR:
-+		return in_dev_dump_ifaddr(in_dev, skb, cb, s_ip_idx, fillargs);
-+	case RTM_GETMULTICAST:
-+		return in_dev_dump_ifmcaddr(in_dev, skb, cb, s_ip_idx,
-+					    fillargs);
-+	default:
-+		return -EINVAL;
-+	}
-+}
++    addresses =3D rtnl.getmaddrs({"ifa-family": socket.AF_INET}, dump=3DTr=
+ue)
 +
- /* Combine dev_addr_genid and dev_base_seq to detect changes.
-  */
- static u32 inet_base_seq(const struct net *net)
-@@ -1889,13 +1924,14 @@ static u32 inet_base_seq(const struct net *net)
- 	return res;
- }
-=20
--static int inet_dump_ifaddr(struct sk_buff *skb, struct netlink_callback *=
-cb)
-+static int inet_dump_addr(struct sk_buff *skb, struct netlink_callback *cb=
-,
-+			  int event)
- {
- 	const struct nlmsghdr *nlh =3D cb->nlh;
- 	struct inet_fill_args fillargs =3D {
- 		.portid =3D NETLINK_CB(cb->skb).portid,
- 		.seq =3D nlh->nlmsg_seq,
--		.event =3D RTM_NEWADDR,
-+		.event =3D event,
- 		.flags =3D NLM_F_MULTI,
- 		.netnsid =3D -1,
- 	};
-@@ -1949,6 +1985,16 @@ static int inet_dump_ifaddr(struct sk_buff *skb, str=
-uct netlink_callback *cb)
- 	return err;
- }
-=20
-+static int inet_dump_ifaddr(struct sk_buff *skb, struct netlink_callback *=
-cb)
-+{
-+	return inet_dump_addr(skb, cb, RTM_NEWADDR);
-+}
++    all_host_multicasts =3D [
++        addr for addr in addresses if addr['addr'] =3D=3D IPV4_ALL_HOSTS_M=
+ULTICAST
++    ]
 +
-+static int inet_dump_ifmcaddr(struct sk_buff *skb, struct netlink_callback=
- *cb)
-+{
-+	return inet_dump_addr(skb, cb, RTM_GETMULTICAST);
-+}
++    ksft_ge(len(all_host_multicasts), 1,
++            "No interface found with the IPv4 all-hosts multicast address"=
+)
 +
- static void rtmsg_ifa(int event, struct in_ifaddr *ifa, struct nlmsghdr *n=
-lh,
- 		      u32 portid)
- {
-@@ -2845,6 +2891,8 @@ static const struct rtnl_msg_handler devinet_rtnl_msg=
-_handlers[] __initconst =3D {
- 	{.protocol =3D PF_INET, .msgtype =3D RTM_GETNETCONF,
- 	 .doit =3D inet_netconf_get_devconf, .dumpit =3D inet_netconf_dump_devcon=
-f,
- 	 .flags =3D RTNL_FLAG_DOIT_UNLOCKED | RTNL_FLAG_DUMP_UNLOCKED},
-+	{.owner =3D THIS_MODULE, .protocol =3D PF_INET, .msgtype =3D RTM_GETMULTI=
-CAST,
-+	 .dumpit =3D inet_dump_ifmcaddr, .flags =3D RTNL_FLAG_DUMP_UNLOCKED},
- };
-=20
- void __init devinet_init(void)
-diff --git a/net/ipv4/igmp.c b/net/ipv4/igmp.c
-index 3da126cea884..756db3ca3e34 100644
---- a/net/ipv4/igmp.c
-+++ b/net/ipv4/igmp.c
-@@ -1432,14 +1432,16 @@ static void ip_mc_hash_remove(struct in_device *in_=
-dev,
- 	*mc_hash =3D im->next_hash;
- }
-=20
--static int inet_fill_ifmcaddr(struct sk_buff *skb, struct net_device *dev,
--			      const struct ip_mc_list *im, int event)
-+int inet_fill_ifmcaddr(struct sk_buff *skb, struct net_device *dev,
-+		       const struct ip_mc_list *im,
-+		       struct inet_fill_args *args)
- {
- 	struct ifa_cacheinfo ci;
- 	struct ifaddrmsg *ifm;
- 	struct nlmsghdr *nlh;
-=20
--	nlh =3D nlmsg_put(skb, 0, 0, event, sizeof(struct ifaddrmsg), 0);
-+	nlh =3D nlmsg_put(skb, args->portid, args->seq, args->event,
-+			sizeof(struct ifaddrmsg), args->flags);
- 	if (!nlh)
- 		return -EMSGSIZE;
-=20
-@@ -1468,6 +1470,9 @@ static int inet_fill_ifmcaddr(struct sk_buff *skb, st=
-ruct net_device *dev,
- static void inet_ifmcaddr_notify(struct net_device *dev,
- 				 const struct ip_mc_list *im, int event)
- {
-+	struct inet_fill_args fillargs =3D {
-+		.event =3D event,
-+	};
- 	struct net *net =3D dev_net(dev);
- 	struct sk_buff *skb;
- 	int err =3D -ENOMEM;
-@@ -1479,7 +1484,7 @@ static void inet_ifmcaddr_notify(struct net_device *d=
-ev,
- 	if (!skb)
- 		goto error;
-=20
--	err =3D inet_fill_ifmcaddr(skb, dev, im, event);
-+	err =3D inet_fill_ifmcaddr(skb, dev, im, &fillargs);
- 	if (err < 0) {
- 		WARN_ON_ONCE(err =3D=3D -EMSGSIZE);
- 		nlmsg_free(skb);
++def main() -> None:
++    rtnl =3D RtnlFamily()
++    ksft_run([dump_mcaddr_check], args=3D(rtnl, ))
++    ksft_exit()
++
++if __name__ =3D=3D "__main__":
++    main()
 --=20
 2.48.0.rc2.279.g1de40edade-goog
 
