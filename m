@@ -1,80 +1,81 @@
-Return-Path: <linux-kselftest+bounces-24708-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24709-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45AB0A14D67
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 11:17:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53F7EA14D8A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 11:28:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B35C4188C0AB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 10:17:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D277188C292
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 10:28:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 633AE1FC7F3;
-	Fri, 17 Jan 2025 10:17:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A37E91FC0F8;
+	Fri, 17 Jan 2025 10:28:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TgJ5PPAP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dmFuQ4E1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69521F7093;
-	Fri, 17 Jan 2025 10:17:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F07B81FBC91;
+	Fri, 17 Jan 2025 10:28:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737109035; cv=none; b=L3aj+0PjsVBSktFbEFAW9CHjPK+NaVNjV/GpTm/run57TpvGGfor4J1x+PYPCWWHtuAlJfaXpwS8myXFXzlo6LdR/OO5amJ179GVE7UNBQNE80mBVsBN7Ua89ZGrLQATnC2hAEMaPfsL77hXcZitrZZRTBhq7F5DrUi8Bvzz934=
+	t=1737109703; cv=none; b=WHgSYwjnMZeHZycvai1dHI7SkLREPI338QlMMb0xLO2sM2qIpQRDKDuiymbt2v87W6YNl21GKn8ZmLOqBMJq3r3Zwzh+/cBZvJpbiewoyWXzYCgtGXyd4L5PY33fjR9/nDDP/bbXfIoQH8MuDBjFoybHOmRxwq6KmPhIfQDHU7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737109035; c=relaxed/simple;
-	bh=JFEi2wLeGZOf8BHQEKqWbZM9NCkw6C1VmawHgv9xFhs=;
+	s=arc-20240116; t=1737109703; c=relaxed/simple;
+	bh=kkoEmAYe2SZLE+qbTYdKkQHJdK3eWyXaa+xFMCTKA9o=;
 	h=Date:From:To:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=C37Vdt+8sbWS0AvcEuxmWt3K74MTnDok7DPV/Op2DPL7x6DtQSCPpfSQYqS31HeVNGiLi8j/vI9fZtXaa0eyK3Q2myPO40qdmmI9waLOnb8E5E1y7vwTTmP4JMVueTwq9BQyLT0WFfyWBu80XwTKLHVn+/+QYItatWi8GR3iBlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TgJ5PPAP; arc=none smtp.client-ip=209.85.160.182
+	 Mime-Version:Content-Type; b=Ke+TLSX6VezRXFbz2zZn/6YvremzTFj/v1QdPJ0MiFliFROZs0CRJMKvMspvVM36v+ATpLgU7PXOX6u+HIbZVJ2HI0mh5S5SlXZi0cI3aXV224+rxTn3XmDGaW+LDzQBPd54GeJiFyiLM/lLmhlOKssMZVhU8b7hGqPyj4wTNHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dmFuQ4E1; arc=none smtp.client-ip=209.85.222.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-46c8474d8f6so16665701cf.3;
-        Fri, 17 Jan 2025 02:17:13 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7b6ea711805so258158285a.1;
+        Fri, 17 Jan 2025 02:28:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737109032; x=1737713832; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1737109700; x=1737714500; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ScPbdVpBxzYO8pUJQAAuO4Xb4212ZYcCAfsm5wTEeKs=;
-        b=TgJ5PPAPvhZqFacs/2/4jwp+ztznExBtuPrRGjUCCpbok3CA4sxC/I3t7NVQh6KGJO
-         Zpr/wJIPquwtnB8MZuN+sTrt7IzR7XMSbOrJxpBzL4nMw5H6i756Vv1uXp56uB/MqwtZ
-         HDxo0HtBnmx94P4ohOTTy3igZBn5UHQhs1ZiP+/auhSv8qz/8UWAN4+YsViytmNE/z8l
-         VZ6DLDwF7QrlnFd41nw71KbPLKoOtiafmvzFYKcrO/1RC0foe2+eIJRgZ/o5laPealRU
-         hbgaeiY7akHyB0gb9MF/4ZnZSbhV7rnLQ/M1ukPhHiZ1+0eSnubrL1nGUCtWI/ZJVLWL
-         /3Nw==
+        bh=wYXgLu2ectYIWcNrQyXJcEHx/eKfm/mDV/W/h+cCuZM=;
+        b=dmFuQ4E1T326+Jb22GczpVumZrQ+WAuHlI2Etm71569FAKwjlWULm9ovcMIVvJEEWi
+         NNArrchkuRa0RtCdyYcMBqYFIL++AFED8+f0Sq85ZB6tzy6rFU+IEkCfyUyqQ0tjZiII
+         xMUZub3BMI3vt1eLekXVILU25jFKsDxYZc74Er5sJbgyz3HHdkr7Didb+Gc6wQ8vNC0X
+         nI05aphk0kzHqMbrd7l5zuCd6KfLXMYUIDYoaGjyAdibPyNlxm1GlMVI/L0jBs/yxo+v
+         Wm1+JOhMe1YVaxoCY2Fz4Bu2emOVr1et0QnyFoeU7/Rg+SS/N5XsSV/vLO2P8uICm3Dn
+         jrJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737109032; x=1737713832;
+        d=1e100.net; s=20230601; t=1737109700; x=1737714500;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ScPbdVpBxzYO8pUJQAAuO4Xb4212ZYcCAfsm5wTEeKs=;
-        b=G6KDaz8G3o25jZn7grmgDE/GnL02sa3p/NJF8DT8UUe9uzUYDUy6ZLuPB4lj0X37ql
-         V7uFayODdN5tpR+wFcdUsS/5fZJkqbZRDiTo7YgxqNXHPqJ1e4TskLWrQJbakGoF3Lf2
-         XCYA9hCSY2M0chYbXltSV53EFGl6wUJYIrGaktb7kIZcqZR6eUvUgezb7EvtVXdxCoaF
-         dQA1Y6S/Ta1zM/hyxEfZKdjr3C9sH5qHhoxw0NEwyMASvccHZwAYULxJMyQzTbyRxc2t
-         sTSeIMB3igXHpcWeSDhWvF0t0U0FvIrWqGqvJVYEBFpyKJbRqIDmziatkIj2g2krVLn5
-         WMSA==
-X-Forwarded-Encrypted: i=1; AJvYcCU/4JnU+LEKi92c0LfYkF8Q428Nw6UiRhJOoo4uWic9qQWf4Bsinzl5UsMQIHpaT6a/+3jF2IMqTDK8W+pi@vger.kernel.org, AJvYcCUT++/QT6d+dkD1X+fjT9Kjuuxqi+LWvr+UOIF/ksd/p+tyal6Ui+fjAvYyaI7kG09uLkIeaUNWCg3AlaGVmPmE@vger.kernel.org, AJvYcCWHrN97/LKqQJaATiw8qsUdWGB89OMZPeiMxSwvq5Y1avPIKp2JcROGyCirdmBFk/o5IQQr813a7+Co@vger.kernel.org, AJvYcCWLVp8FL8J274hEw+D0/De88K2wFS4aLp4cIIFPioEL3DRRpivygoNypFobOiHSaclP4wM=@vger.kernel.org, AJvYcCX/tX/JfywZUXLfIjoKMST7jSEnSwDANG+VUgjdtU9K9rARN4TG7NUYlVxTo/F1kHURSwR1zM2h@vger.kernel.org
-X-Gm-Message-State: AOJu0YwywVLvpN4kBhejkxJStd3XbboNO0Jig30qF5qWD99vigREWu5W
-	/aOzvflTFRTeVz8lcpP7msMAJeToKIfv9P+Iy0PrMfMs1iipsOL2
-X-Gm-Gg: ASbGnctgsOKPv1RIfWSecJRTPYxdHs264kRcCe9jjzrujoGfZmVl8vQl1q94sF+wOry
-	Ru1WBzRs9gpqL1cyJyjCoZwUFNDCbktIcFPtiploF+eHD68TPsFsOnH/KAPYy5Zt/TwvjYV6GbV
-	woJLJduwHVZygGuGNd8kaK1Q/RAqv0tG9DZGu4N0Rj04TR6sBgY3TAjmIAKjhrY3zaKMvE9DLuD
-	/e1B2LDKNudauAl29BOI2xdfDlHNpY0uV176NxPYJf+DaYfzvB092HX1a3Ty2Vnz0oOmvH2hlMo
-	WE8Jzw6XzsbrbImszIJ/ljUuBOCZ
-X-Google-Smtp-Source: AGHT+IHi7GfJK6r/tRrun8aHPOSCgfPVe7JmZONv6mDjqRyn86C/st2dbOpHBXdzCk3DyzPzJ6Egfg==
-X-Received: by 2002:a05:622a:201:b0:467:5ea8:83df with SMTP id d75a77b69052e-46e12a9a0a9mr29192481cf.30.1737109032691;
-        Fri, 17 Jan 2025 02:17:12 -0800 (PST)
+        bh=wYXgLu2ectYIWcNrQyXJcEHx/eKfm/mDV/W/h+cCuZM=;
+        b=UFK6kn+oXZI/c8llF1JqHU7XNrggBv/LPBx/Fqua1YnhwonyLENIT27HLoPfFPTJrX
+         jr9sU9n1VS9fE5UsAOvTSdSZr43oEIpxBsqIHISyhNEb1Bj+pJmUl6DAxUtNdzrU0ncp
+         eLmL5awPZmTuyvwtOfiQXvFDHD1AgvNJ0+qZitNtY3WR75rqCmpgCq4GMYG4P+pSpPci
+         vxPXAtulPJwtOPCLkust5f78NnRHnGv+NPXykmA7fruJjiMrNPpbWo5GV2iDU51lYiGi
+         NVPmtDaRR3bZ0I8ltwn2uyHqLXRzr80mkAwne67GjfRd/O09bEILR2kdciXbaS48U+KD
+         6FbA==
+X-Forwarded-Encrypted: i=1; AJvYcCU95SbQv+5I+atNX+JGVQUZlQohH5xfzs+s+HUFvAGlNb7l+7WsuucLPDz4he3eQuwJ3pI=@vger.kernel.org, AJvYcCUHq8fhcDcM9MlTnkLjjbpZu0177tg/lgbfeB9tylmgRvuYyEzN5z6lpupk7s8KqpcYwJ0O9Z6iiL3QRugV@vger.kernel.org, AJvYcCUaNeFrzCdg/jsCHBwOFQT2B9WbhUWNwsalTaz7AA32TgX6iqT/1/ZDTJhaFPfPpSXa7WOmIVCXMbBYVxZl6uN2@vger.kernel.org, AJvYcCV6mri+a6JNVVLya7dDXO9EVH4uQvQsr7Nz894eXuB0dyVTmOD8705jFHMcjb5FNdU8GTRp3IK8@vger.kernel.org, AJvYcCVsaNS+7ACdDdQdXoVZWOIMHJZTMXsP6y8B58XEdzIl5Wwmm4tPDyAeXrgebzgX4fsBtL9ztuLQlEAJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YykAOIn8X5bd1xHzhsqcz8HEZwZtHU38e+IP0Vie8QLS+1TkdNI
+	trFFl6VSEU3dLj0921KbrTZihl5LlaRi8BgdlzJyYbp70vPLYP1H
+X-Gm-Gg: ASbGncsChR96usb/MPzahIrSZ1ktX03xw7m0C+5BitTjS4Ip8V1Us85FUJbDXYH2ufF
+	HMrzzaL0VVc1viy+biCrxRH+A5RqjkSO2OzgNBdwrHup2veVhho1MAkjeqZAz+SXa1h3fw7WbVV
+	JQRw3v1/c9aFVSskUyML4be5D3VJKrTyB/H2LyMxlW5gh2D3667eXNLOh/VcuP6rWNE/yBAhQj/
+	m9cw46U7jM+o01KIbD/L96PfxWcCKqhDGZ7D/7Uz4hhHRoSDupjGYChBgfE9+xv7R2BMwwRsWry
+	6bI/QmBWoLDEL8Qg3s1Hp/e1Cj1b
+X-Google-Smtp-Source: AGHT+IFObFBUXDtDYfekB0QfBszL3tBkMMYxZKYT1erZOVR7bhzQHoC9ZWEDJqk6RDdXdB+0ChWnqw==
+X-Received: by 2002:a05:620a:4502:b0:7a9:c129:5da7 with SMTP id af79cd13be357-7be6320be98mr319611385a.29.1737109699851;
+        Fri, 17 Jan 2025 02:28:19 -0800 (PST)
 Received: from localhost (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-46e102ec299sm9805661cf.6.2025.01.17.02.17.12
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7be614743easm101344385a.24.2025.01.17.02.28.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jan 2025 02:17:12 -0800 (PST)
-Date: Fri, 17 Jan 2025 05:17:11 -0500
+        Fri, 17 Jan 2025 02:28:19 -0800 (PST)
+Date: Fri, 17 Jan 2025 05:28:18 -0500
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Akihiko Odaki <akihiko.odaki@daynix.com>, 
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Akihiko Odaki <akihiko.odaki@daynix.com>, 
  Jonathan Corbet <corbet@lwn.net>, 
  Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
  Jason Wang <jasowang@redhat.com>, 
@@ -97,11 +98,12 @@ To: Akihiko Odaki <akihiko.odaki@daynix.com>,
  gur.stavi@huawei.com, 
  devel@daynix.com, 
  Akihiko Odaki <akihiko.odaki@daynix.com>
-Message-ID: <678a2e27c25eb_3e985b29494@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250116-tun-v3-3-c6b2871e97f7@daynix.com>
+Message-ID: <678a30c2df05f_3ef8eb29481@willemb.c.googlers.com.notmuch>
+In-Reply-To: <678a1fd7d7c85_3e503c29449@willemb.c.googlers.com.notmuch>
 References: <20250116-tun-v3-0-c6b2871e97f7@daynix.com>
- <20250116-tun-v3-3-c6b2871e97f7@daynix.com>
-Subject: Re: [PATCH net v3 3/9] tun: Keep hdr_len in tun_get_user()
+ <20250116-tun-v3-4-c6b2871e97f7@daynix.com>
+ <678a1fd7d7c85_3e503c29449@willemb.c.googlers.com.notmuch>
+Subject: Re: [PATCH net v3 4/9] tun: Decouple vnet from tun_struct
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -112,10 +114,95 @@ Content-Type: text/plain;
  charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-Akihiko Odaki wrote:
-> hdr_len is repeatedly used so keep it in a local variable.
+Willem de Bruijn wrote:
+> Akihiko Odaki wrote:
+> > Decouple vnet-related functions from tun_struct so that we can reuse
+> > them for tap in the future.
+> > 
+> > Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> > ---
+> >  drivers/net/tun.c | 53 +++++++++++++++++++++++++++--------------------------
+> >  1 file changed, 27 insertions(+), 26 deletions(-)
+> > 
+> > diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> > index ec56ac865848..add09dfdada5 100644
+> > --- a/drivers/net/tun.c
+> > +++ b/drivers/net/tun.c
+> > @@ -298,16 +298,16 @@ static bool tun_napi_frags_enabled(const struct tun_file *tfile)
+> >  	return tfile->napi_frags_enabled;
+> >  }
+> >  
+> > -static inline bool tun_legacy_is_little_endian(struct tun_struct *tun)
+> > +static inline bool tun_legacy_is_little_endian(unsigned int flags)
+> >  {
+> >  	return !(IS_ENABLED(CONFIG_TUN_VNET_CROSS_LE) &&
+> > -		 (tun->flags & TUN_VNET_BE)) &&
+> > +		 (flags & TUN_VNET_BE)) &&
+> >  		virtio_legacy_is_little_endian();
+> >  }
+> >  
+> > -static long tun_get_vnet_be(struct tun_struct *tun, int __user *argp)
+> > +static long tun_get_vnet_be(unsigned int flags, int __user *argp)
+> >  {
+> > -	int be = !!(tun->flags & TUN_VNET_BE);
+> > +	int be = !!(flags & TUN_VNET_BE);
+> >  
+> >  	if (!IS_ENABLED(CONFIG_TUN_VNET_CROSS_LE))
+> >  		return -EINVAL;
+> > @@ -318,7 +318,7 @@ static long tun_get_vnet_be(struct tun_struct *tun, int __user *argp)
+> >  	return 0;
+> >  }
+> >  
+> > -static long tun_set_vnet_be(struct tun_struct *tun, int __user *argp)
+> > +static long tun_set_vnet_be(unsigned int *flags, int __user *argp)
+> >  {
+> >  	int be;
+> >  
+> > @@ -329,27 +329,26 @@ static long tun_set_vnet_be(struct tun_struct *tun, int __user *argp)
+> >  		return -EFAULT;
+> >  
+> >  	if (be)
+> > -		tun->flags |= TUN_VNET_BE;
+> > +		*flags |= TUN_VNET_BE;
+> >  	else
+> > -		tun->flags &= ~TUN_VNET_BE;
+> > +		*flags &= ~TUN_VNET_BE;
+> >  
+> >  	return 0;
+> >  }
+> >  
+> > -static inline bool tun_is_little_endian(struct tun_struct *tun)
+> > +static inline bool tun_is_little_endian(unsigned int flags)
+> >  {
+> > -	return tun->flags & TUN_VNET_LE ||
+> > -		tun_legacy_is_little_endian(tun);
+> > +	return flags & TUN_VNET_LE || tun_legacy_is_little_endian(flags);
+> >  }
+> >  
+> > -static inline u16 tun16_to_cpu(struct tun_struct *tun, __virtio16 val)
+> > +static inline u16 tun16_to_cpu(unsigned int flags, __virtio16 val)
+> >  {
+> > -	return __virtio16_to_cpu(tun_is_little_endian(tun), val);
+> > +	return __virtio16_to_cpu(tun_is_little_endian(flags), val);
+> >  }
+> >  
+> > -static inline __virtio16 cpu_to_tun16(struct tun_struct *tun, u16 val)
+> > +static inline __virtio16 cpu_to_tun16(unsigned int flags, u16 val)
+> >  {
+> > -	return __cpu_to_virtio16(tun_is_little_endian(tun), val);
+> > +	return __cpu_to_virtio16(tun_is_little_endian(flags), val);
+> >  }
+> >  
+> >  static inline u32 tun_hashfn(u32 rxhash)
+> > @@ -1764,6 +1763,7 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+> >  
+> >  	if (tun->flags & IFF_VNET_HDR) {
+> >  		int vnet_hdr_sz = READ_ONCE(tun->vnet_hdr_sz);
+> > +		int flags = tun->flags;
 > 
-> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> Here and elsewhere: instead of passing around and repeatedly parsing
+> flags, have a variable is_little_endian (or is_le)?
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+I guess this will not work everywhere, because endianness is not a
+boolean flag.. Code checks both TUN_VNET_LE and TUN_VNET_BE.
 
