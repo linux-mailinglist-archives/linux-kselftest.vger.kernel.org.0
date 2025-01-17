@@ -1,161 +1,138 @@
-Return-Path: <linux-kselftest+bounces-24700-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24701-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B7A8A14C15
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 10:24:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 058B2A14C3C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 10:34:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD7A61886E22
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 09:24:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6899F188AE5A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 09:34:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEF4C1F91FF;
-	Fri, 17 Jan 2025 09:23:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52B841F9A9C;
+	Fri, 17 Jan 2025 09:34:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gK1JSA3d"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QD8wbOia"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D2DC35960;
-	Fri, 17 Jan 2025 09:23:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F2525A659
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2025 09:34:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737105836; cv=none; b=A4+3k+CB+V2Ot0kqTH6dq3hK/e/lK+eNFjWwbcPjJqaAuj8KqC9fcJ1zE2n/tbJSKan+C6nuqHFgIFavzJNr1kC65RgK+q8AGtJCBEMcUWpdYDjpBrcKS/ULjbJ7oR7YELbh4pRums8vKqiaNghLNUweSjq8zm0H0JuapGkDjdY=
+	t=1737106490; cv=none; b=MOx7p5O1qOA5rglZBxE/ROpjLDK+IJtccvk9rv3buzedyR03kcH61DgcwktmoWZJlOrRJiEJrzjAMB6mpkXqPCbeLDv9EE7sobxyuvTD3blsXQcQuviF07w5MqNVp1WmbKRnO++GbgJk0pjG0IT0lezUMfO/XoTJFdTWPX8zabg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737105836; c=relaxed/simple;
-	bh=50hALf/6JHENCC8eS76LlBaB8m3rt1/ock6nsrhlS3M=;
-	h=Date:From:To:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=Ef0vX6ptTrO5goRey2vFRbnabjtPkXOo9K9NhBrO/rZPBf2YJsqKoi2iCgU1D+0ytFuuz2e+L97my05zxkqybimyYeeRkvLZX3nGFQPgOeU4IAgDrHd4RRq4gQvoK8ixo2cV+s8q4Nr3hRKWaK/fPf7Rz/x6OmuppYJ5g5Ad3tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gK1JSA3d; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7b6e8fe401eso165670185a.2;
-        Fri, 17 Jan 2025 01:23:55 -0800 (PST)
+	s=arc-20240116; t=1737106490; c=relaxed/simple;
+	bh=ROzhD2o7A72xobVtzbAwi0xhTjfUkNwGVhZOOvl8qKE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=FqlPwFQxwBd5vQxw+JXyGYiebjXdN1ZskPvwlzcC4fS3OqSwtsTkGMpQ9BgixhYCXLsTos0yL4RzzL4IDg+JdB5TMOrULc49iQlssKqMGpc1GxUl+wpBwWSHzzRo3mBYOZHn9VPrAvdT049yJTpPhDKL8EtLhoKAuuVC5mPMZVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QD8wbOia; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-436281c8a38so12116505e9.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2025 01:34:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737105834; x=1737710634; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LUHC+rmP5s8u9ue7y5NSHcW77KbmtVUiG9NQgfxlEs4=;
-        b=gK1JSA3d71BAh5/WdiYgNXp/rFtF1ITAyZ3o5TP8E3SV3PTg5lucma/cUpo973ywSJ
-         Y+r64seupyVMNbAtg/9ANlxieTplUYzwXhEecuyuTZ3ywlrGzU67JIe4aV7/MJ9zqwwv
-         leOUTYOfjXWAkykNBP0hxKe9elwswsvANFtbiIFWdVzBdO0EC4u5hz6xe6tLosBz+HnI
-         2rGGf5uLESKt8sv8vXkgr1ajY2jul4QgEHcnzcc3I6nw2gEGlaGroe8rxLzFFrpI+KSe
-         y1MSKBV95qymoYhb2X7xAEepY59F+bWNbDAH7b1mIWke6A2urzOIu4AbvmXdP+ulYvzr
-         irag==
+        d=linaro.org; s=google; t=1737106487; x=1737711287; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0VVP25KPJ8YWYOOPy9jroFWWCrP0LQku/RXkcTfV8rM=;
+        b=QD8wbOiaDVU+AUfiomf+c/tQJBYjoSz58WKPBLQyJ4IXTrCQnE6DH8RKOiViHerGQN
+         CJ8RxwSMqedzZuj0elw1NJZCfuZpa1gUiDcAE6M4KzYgtZUCI9eLLmXbnipBuhrN2uo7
+         GiqL0utbmrFoxuXQuO4MUZT7KIYAkux0DzObTn2a+4hoKBz2IwWtFTpxGYPWGakmJfDC
+         6kZO91DF0o9YMwTroZet6bljSf20RO5G93c0FK5UGeTd1kXAskucvNFsvEjxH219x1kB
+         E7VAv6gEnVfahVkmrZnnPfn/C0qHKabVAzQo28KroqXyVzerFzIz9MK7n8rVkWQzC4/y
+         ChxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737105834; x=1737710634;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LUHC+rmP5s8u9ue7y5NSHcW77KbmtVUiG9NQgfxlEs4=;
-        b=m/b07KyYEv7nXOxGNtNzM08BAiIRjiv+1PEiCLqAUtcNRcTEkJuNoy/f4ZAsPhKxyz
-         XB5ChqKD4NdEMCSwh+drqzEtQl59Vuvc9axfqITiY3bHtVYDBuJ2LO2dsmhxEOa61fn4
-         yINW1PRUzKC0GK6N3NJAm1IbcwaDIKzGd/a9y+Oh+Bgqme91UzpHlt4y6OgkqbErKqJj
-         39oDKXdPjiG7hOyv6fbBcRi2ITAqfK7Am5r4CR0NahwGmp26S2PNs86dDy44eOPEwqNe
-         gJTv0Xre+GwnI7XP5pziTMM2tMxiGyXyzPUuKDCRbSlBc5HLN4Q3TNL2z3+YeT/tz0MO
-         VQsg==
-X-Forwarded-Encrypted: i=1; AJvYcCUKo8EJ9KqFE18d18tK92KPJg168iR3Gl396vnfu9lv4mrRWcKMJdbq163Xdzg0ks6r+RHD39wJL5WH@vger.kernel.org, AJvYcCUwadXg4JdoY8ZJU45rYc+kt8G6Vx7FJGocp+0S62n+iuA5BjkqrGtCXtfWLMCpE/WS70wyO4LOsFMsxXxk@vger.kernel.org, AJvYcCWn2ABNmsGinFO0fJImPO34xG9bNLCK0c17UrSyhrgArIbvG2dyimEMs/LVvuOYHHNeipfq4X4MF8UXA8EZ9C3Q@vger.kernel.org, AJvYcCXleG+d8CYFyc15ecLry/zmrqU8IXN4A7an6aUspmlV59q22yukFGDieceopyhECc5NVmh2FmPy@vger.kernel.org, AJvYcCXvdSAf3Ci0H4WaPLfW4kCxD0HBVDyAKri9NdEGxyw3H3cU1EyQqQJPhVb6BVvPeboCW0g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoedeMLICSNXRVt3Rg8janOUULWvgPSOUlrNgje2eKc/YGMXkw
-	5FGBk+bDp3awVqgQj6W5x93FXYqN6qGtz61SJ73csAKER6VKFidH
-X-Gm-Gg: ASbGnculGRZswHaD955WqfZcFm5DRYjkE6TNylY983e9GJQ3cV/+VzUx0L+dceMrC98
-	vcXnI357RVDoXDkKgPE9Gp2RNz4FbYL4P9b6QY55VYHGEtr8fycQ3PQW7B0D5H49vSBkmFIM0Ot
-	loVyif2lBYcD78f+9kW+sgty/1byub6OA2SrnZfimjGYmaL37aR0+0lgWVOSvd5vsmrKoM+JUk5
-	nmtW6wqiukMVXK2YWUrtJI0hnO833sMYTYNlpb3MS1eZEjnL1+QtDWlMdBWI8ltc+QsIyw9pJsX
-	pm1vK9OSlowRaTpiJO/PCIWgkzlL
-X-Google-Smtp-Source: AGHT+IEMu06W4+1L5IGQzrWbh5FGKq2dzIxGEx4RdrkbuTSxndYZ95YVhigy3GzlsmK1SHrLp3dALg==
-X-Received: by 2002:a05:620a:3942:b0:7b6:e9db:3b19 with SMTP id af79cd13be357-7be63287a2bmr335761385a.47.1737105834081;
-        Fri, 17 Jan 2025 01:23:54 -0800 (PST)
-Received: from localhost (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e1afc0f877sm9579176d6.31.2025.01.17.01.23.53
+        d=1e100.net; s=20230601; t=1737106487; x=1737711287;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0VVP25KPJ8YWYOOPy9jroFWWCrP0LQku/RXkcTfV8rM=;
+        b=m6o51mloLfnA4z//3OXNSft6oU+g6f4v6KuggR7W5ksTvJS+n/IxmO5sbkwa8Ll/d3
+         eCRI2CY7QCB7ekNOkFo6GDfWcG18/OlzeGFxOuAobdq9tnbxeGOTYQCsAMHba2JppQS1
+         RrwlX6qSndA5cqWBu8go/sb1CH6ltjAb9cDRl/VNpAbyTQcBiv1oGCa+3JHTnpdZe2Gp
+         5cDc1NbOII/LSdm8o5q4HMFp+Y3ivWubZXnT1xzCo0tNoEXdEIpNomxfNIea3Iu9RXo/
+         F7SEUNnO8N70bzY+P19gq4MrWyzFyGBG11RM7IWQTjWwlSDRiloWLfxHxPl/fsuRMO4I
+         RrbQ==
+X-Gm-Message-State: AOJu0YwsFW28g7d81xDYxhZwVhBOKFx7fGtfpgymjlQVo8rkppdVXTEH
+	kopD8A4wxFbW4VBUMO5+Fk5F4P447q2cdKXWB+D0IQSg2Y6WPPoVc+7qboQe+9Q=
+X-Gm-Gg: ASbGncvUUpYUU1Fn1bMUJYW+ogyJf2eCxtI8Tw4/moE6z9Y6Tl+WFJXYF8TXd5CFoax
+	wy+yH+LNW14c93zgAvV8aceqPUYFvE6Un/KwfbEgAbLmo3BdIeIzbB/91mrvxcME8qWv7FunDhf
+	fIY0p2hfrGRbLgNJamwwvPfynT6y+vFytAJX9TzRj7T3do2vz1ErxwIMr7z0FsJzV9LXKP6yZpI
+	ATKWEfaNO/q2pVtwoT6kPjKv4G85p1xL+r+kUTRWjEIehhpMHH0i2znoHzLrg==
+X-Google-Smtp-Source: AGHT+IGks9Il0BahmzfJdxTXVOMxUH1ttxtW9+g6SMWOe9atW9q/Xs+2ewIQYAA6IWPx2lh7RAA7Yw==
+X-Received: by 2002:a5d:59a8:0:b0:385:fa26:f0d8 with SMTP id ffacd0b85a97d-38bf5655a0amr1817520f8f.8.1737106486638;
+        Fri, 17 Jan 2025 01:34:46 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38bf327dee3sm1993570f8f.86.2025.01.17.01.34.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jan 2025 01:23:53 -0800 (PST)
-Date: Fri, 17 Jan 2025 04:23:53 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Akihiko Odaki <akihiko.odaki@daynix.com>, 
- Jonathan Corbet <corbet@lwn.net>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Jason Wang <jasowang@redhat.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- "Michael S. Tsirkin" <mst@redhat.com>, 
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
- Shuah Khan <shuah@kernel.org>, 
- linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, 
- kvm@vger.kernel.org, 
- virtualization@lists.linux-foundation.org, 
- linux-kselftest@vger.kernel.org, 
- Yuri Benditovich <yuri.benditovich@daynix.com>, 
- Andrew Melnychenko <andrew@daynix.com>, 
- Stephen Hemminger <stephen@networkplumber.org>, 
- gur.stavi@huawei.com, 
- devel@daynix.com, 
- Akihiko Odaki <akihiko.odaki@daynix.com>
-Message-ID: <678a21a9388ae_3e503c294f4@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20250116-tun-v3-9-c6b2871e97f7@daynix.com>
-References: <20250116-tun-v3-0-c6b2871e97f7@daynix.com>
- <20250116-tun-v3-9-c6b2871e97f7@daynix.com>
-Subject: Re: [PATCH net v3 9/9] tap: Use tun's vnet-related code
+        Fri, 17 Jan 2025 01:34:46 -0800 (PST)
+Date: Fri, 17 Jan 2025 12:34:43 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Ivan Orlov <ivan.orlov0322@gmail.com>
+Cc: linux-kselftest@vger.kernel.org
+Subject: [bug report] selftests: ALSA: Cover userspace-driven timers with test
+Message-ID: <0e9c25d3-efbd-433b-9fb1-0923010101b9@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Akihiko Odaki wrote:
-> tun and tap implements the same vnet-related features so reuse the code.
-> 
-> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
-> ---
->  drivers/net/Kconfig    |   1 +
->  drivers/net/Makefile   |   6 +-
->  drivers/net/tap.c      | 152 +++++--------------------------------------------
->  drivers/net/tun_vnet.c |   5 ++
->  4 files changed, 24 insertions(+), 140 deletions(-)
-> 
-> diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
-> index 1fd5acdc73c6..c420418473fc 100644
-> --- a/drivers/net/Kconfig
-> +++ b/drivers/net/Kconfig
-> @@ -395,6 +395,7 @@ config TUN
->  	tristate "Universal TUN/TAP device driver support"
->  	depends on INET
->  	select CRC32
-> +	select TAP
->  	help
->  	  TUN/TAP provides packet reception and transmission for user space
->  	  programs.  It can be viewed as a simple Point-to-Point or Ethernet
-> diff --git a/drivers/net/Makefile b/drivers/net/Makefile
-> index bb8eb3053772..2275309a97ee 100644
-> --- a/drivers/net/Makefile
-> +++ b/drivers/net/Makefile
-> @@ -29,9 +29,9 @@ obj-y += mdio/
->  obj-y += pcs/
->  obj-$(CONFIG_RIONET) += rionet.o
->  obj-$(CONFIG_NET_TEAM) += team/
-> -obj-$(CONFIG_TUN) += tun-drv.o
-> -tun-drv-y := tun.o tun_vnet.o
-> -obj-$(CONFIG_TAP) += tap.o
-> +obj-$(CONFIG_TUN) += tun.o
+Hello Ivan Orlov,
 
-Is reversing the previous changes to tun.ko intentional?
+Commit 1026392d10af ("selftests: ALSA: Cover userspace-driven timers
+with test") from Aug 13, 2024 (linux-next), leads to the following
+Smatch static checker warning:
 
-Perhaps the previous approach with a new CONFIG_TUN_VNET is preferable
-over this. In particular over making TUN select TAP, a new dependency.
+	tools/testing/selftests/alsa/utimer-test.c:135 timer_f_utimer()
+	error: uninitialized symbol 'ticking_thread'.
 
-> +obj-$(CONFIG_TAP) += tap-drv.o
-> +tap-drv-y := tap.o tun_vnet.o
->  obj-$(CONFIG_VETH) += veth.o
->  obj-$(CONFIG_VIRTIO_NET) += virtio_net.o
->  obj-$(CONFIG_VXLAN) += vxlan/
+tools/testing/selftests/alsa/utimer-test.c
+   106  TEST_F(timer_f, utimer) {
+   107          char command[64];
+   108          pthread_t ticking_thread;
+   109          int total_ticks = 0;
+   110          FILE *rfp;
+   111          char *buf = malloc(TIMER_OUTPUT_BUF_LEN);
+   112  
+   113          ASSERT_NE(buf, NULL);
+   114  
+   115          /* The timeout should be the ticks interval * count of ticks + some delta */
+   116          sprintf(command, "./global-timer %d %d %d", SNDRV_TIMER_GLOBAL_UDRIVEN,
+   117                  self->utimer_info->id, TICKS_COUNT * TIMER_FREQ_SEC + TICKS_RECORDING_DELTA);
+   118  
+   119          rfp = popen(command, "r");
+   120          while (fgets(buf, TIMER_OUTPUT_BUF_LEN, rfp)) {
+   121                  buf[TIMER_OUTPUT_BUF_LEN - 1] = 0;
+   122                  switch (parse_timer_output(buf)) {
+   123                  case TIMER_APP_STARTED:
+   124                          /* global-timer waits for timer to trigger, so start the ticking thread */
+   125                          pthread_create(&ticking_thread, NULL, ticking_func,
+                                                ^^^^^^^^^^^^^^
+ticking_thread is only initialized here, not on other paths.
+
+   126                                         &self->utimer_info->fd);
+   127                          break;
+   128                  case TIMER_APP_RESULT:
+   129                          total_ticks = parse_timer_result(buf);
+   130                          break;
+   131                  case TIMER_NO_EVENT:
+   132                          break;
+   133                  }
+   134          }
+   135          pthread_join(ticking_thread, NULL);
+                             ^^^^^^^^^^^^^^
+uninitialized.
+
+   136          ASSERT_EQ(total_ticks, TICKS_COUNT);
+   137          pclose(rfp);
+   138  }
+
+regards,
+dan carpenter
 
