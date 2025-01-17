@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-24745-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24746-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C702A157F7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 20:12:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5389A157FC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 20:13:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8B617A49BE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 19:11:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 990901636CD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 19:13:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 169251AAA05;
-	Fri, 17 Jan 2025 19:10:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F182D1A7AD0;
+	Fri, 17 Jan 2025 19:13:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="P9TMlIEk"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="qma4aHhk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00BAC1A08DF
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2025 19:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573CC1A08DF
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2025 19:13:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737141038; cv=none; b=QcI8uBPbzovwJbNpYzy2kiI2ECL8/xPKI2RPeEHzZRBysdx+624nj/JeQfodb99IQ8yuTB4AHX+AdvleMb8HBGauUiWuOKEJN/5kNYznSoYb3hyGz5P57N4xOSjma8CjlyO4qT+y/zl4MKzGu8SZL6fjd8FSj2FcYFVg3Pjrw0E=
+	t=1737141210; cv=none; b=ryGx01UiGKEGWNzFLWRs2EuhhCyimP9RbdUevRqeugHY4xiX96/rwYDThXxkpm2HmbrAQLGu9h7egJ0tZyXSqyQh0em8uQWziTUHs+KiGyGcvFGV4Qfwe8oIEMGE+kzbzC/sw/bqpKbZqGndEn7mP6ZDBtcrS4l68z0OMw5jzYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737141038; c=relaxed/simple;
-	bh=gCQfKg0lkLVMORegKUgP9hELkSv1GYC5b5YruPAN2uk=;
+	s=arc-20240116; t=1737141210; c=relaxed/simple;
+	bh=0Hzeh9B+YaweU6u2NhaOt/XWMEt+n7uqxbTLR897Di8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U/zuCJcysjNwZd1XKJDqunnFjX1Ouy4PZOIsPi9bUKN3gA2owuv8lu+N9KyvsYgWyeEB0WbYIfcMHvkKDRxgv6FS67dBR6s3xAbomK8ZKT71hCQyZHqXvV8t7WjvDN4/pHwbrsK1gHJ2EWXuAy+LKD4xJMhYvBl4AEei9gFl1Lo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=P9TMlIEk; arc=none smtp.client-ip=209.85.214.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sw+B7Cn6qmlU9R0GmvjY+eFYI5kmiIwCmnyKcLNDwNacNSYowqVtpSPI402QykyZcYc8++eS0mk5QMjGBdLI7zDGU4/wwicfNQEhsA9skfNhlT58AmqZ3xKfNbijprf2jjCiea8Usi7rPWsAzOYtWUxTZHkpWvHbCRa6OO+aJP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=qma4aHhk; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2163b0c09afso49893885ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2025 11:10:34 -0800 (PST)
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2ee76befe58so4290676a91.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2025 11:13:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1737141034; x=1737745834; darn=vger.kernel.org;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1737141208; x=1737746008; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=684EKr0SGhUio1SIgzlKBAWtDnxxSNa6bhJ5P1eZdns=;
-        b=P9TMlIEkwped7dN/swJOyAW8oDoTAf3k6bs6Rl+MlzYXx8iihnsDSdCL3iHUhJ4cVA
-         OUbppngUjU8GGbRUyas449rVR0HQc+E3g0haZdLLpwiG6LpIILu7APY10cZ6i+lNws9k
-         ABxpNCF3EGU5H3c4PzL4p0cYh+Rk+RPtW98YA3mmO3P9n90xtS6SyqS4ka765W+1S4bm
-         D6lFTVTPK1+aHnJuFvIOC0BUuToWBct7bxezHXdObNhxxuW4EDXRXxnFa961qm9bs0rv
-         PlGUkC8MvsEjLEs3lTiYtVCpK8fqKSdV2cmKyrFqgEyN7saFCswCyH7EiwLQ6WQ+nDxl
-         4jgA==
+        bh=8UTpND2Rbn4HNA2BJ/vgMhdK6LbSWDbzp+NEMICmPTw=;
+        b=qma4aHhk8Q76UoUBYZWsRQ/LqME03Zo+Pbgilx4QgICz9Msw5+5dGDAXTlRcu/c/6P
+         eIPgIoGynfvUxuNr4hhVh0uHVwUBghRJjXe1TR53TixtRkSkf4darZVvlsVOmW8zbB9g
+         U8Ky9H4z8QU0n3M6Fd2pPGNGoeLJQqfNz/oSVX67cFs8Zp9x/dOfa5fb752L9xeZNHyh
+         tsZyGrSHnf8Deah8ZHzQBPDegERgr1D8GseyP7MfsvsLjRNne9MYHQCe130wtO3Ytmq0
+         2bdHFQZtdwEso0PG8NFzVrQWrPYAnCNpyL0mDXGDN6W+YAk9r95dTCFWbpb5Mhte/O4/
+         WiZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737141034; x=1737745834;
+        d=1e100.net; s=20230601; t=1737141208; x=1737746008;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=684EKr0SGhUio1SIgzlKBAWtDnxxSNa6bhJ5P1eZdns=;
-        b=w+sxdjt+yLCVgEiHVbSKff3KLF6SaEgeAdMS8Ub5mixwbzK2qi6SKTkAvT0GzuhJUR
-         7e4tgm77RyzsqULd6VUooI7MLZ8FAbAvNCygrjW2Lrb2KQafvG3RrPkMeSWeQBprd+y1
-         kVnAe9l+Orevjz32Ic1yG8/sE11VJqghfMT4MnkkA6IDY3vgK4xq3VOBZtgZiUieVUtX
-         Z6HeGwDkD3toWaLNjIo6qIRUngZ7vlPUIK6I9JoDeOBw3SeggfSfO/ox1HFdH3tnIybI
-         yF4CM4k7riXqdC5q4iaJkJCmx+sb8PbcOlh+SWcWtoSrXdqkspCpGykTLSLzkwJxsc6V
-         x/Ug==
-X-Forwarded-Encrypted: i=1; AJvYcCXtJoXKOlzUsEph4XLOGBNhDLRl5P2Q44CLoi+/RIWECYtEWS6EyWmPrGuss3CBSRmSCrH58LjzyJd1OFAvTqE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAHNF2EF3Etcx0oS3M9tbTdZFYb0Ox2jy/U8GAWgg1IlfbYy+8
-	YL58oLlIlol6qrScKuy6OZ32SQDv7hzj33X/wosO1beNtd5aIk4V+eCdBBvFRd8=
-X-Gm-Gg: ASbGncvXWG1LPuLmvOzoDR4D27PCxuzE8Yc8k0gWVs0ZhngJknz1hMI9Uvu28eCK9LC
-	2Cdy9yAMGkLYVLdJ3zkj90/LWzCDFD+6mDmz/zNBHsTHLtlSmGmXKZDtTECbbLJiCOG8AW06tu6
-	jB3rk/vg4HFlZE8m+EP+WlNiI5eq13hADvFx06TQd8MQth1ip6UVtTLW6njhmSgyGEU0xtABgSU
-	mgsOh2mdXbbdCMEgBKyLjbIjiHRHWPo7EKVwm7hZsKsJa1m9sqt
-X-Google-Smtp-Source: AGHT+IGsACICx7JMdEWk9qCqqQIm7K1lBo6FYA0XbVmB0NbXALlZ/AHrDJ962xz49A5qW/XaxM8X1A==
-X-Received: by 2002:a17:903:41c3:b0:216:4883:fb43 with SMTP id d9443c01a7336-21c35594385mr60556265ad.32.1737141034238;
-        Fri, 17 Jan 2025 11:10:34 -0800 (PST)
+        bh=8UTpND2Rbn4HNA2BJ/vgMhdK6LbSWDbzp+NEMICmPTw=;
+        b=FP8BJvLDxQPrYTqcmNKrdIKzXiPfzFq5dDwI86IySen4y4cfivRKo+RY7Ny5wdcAH8
+         CMlk0Xr4J7wSuUfOMcW8n6RG5X2ee78y47+94nBThujv4JdrkPGvQjwH6oiAdJx2t2gW
+         hyBI0KzQ5CtP0g6X2WHtQQXdhlRAyrvSlLqSpth4Tw7FNEJ/rApaCO20xKDzu1CoMe2w
+         fCkeEXdTwlWefTG3p8/ovdJjrIsHcfZdDvVhEvno1EwbSOI1cdrKgdJdKllgHeZU6yxE
+         CgmjZ96hiwGSiRlIv2BD/uq1otQSiuAWDEE5UJvJ1HJoFuV4nsXAdaNrSC9GP0D4mL8u
+         pelA==
+X-Forwarded-Encrypted: i=1; AJvYcCXagF3fmwYACTVIQXcBl0nx32iULKADYgfjzU461bkMHy7X9VY79OlV9wMlY/VOZp5AeWyQHhl42t1qaYJ1d48=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3nMUNowc8WEeOER22v29gerQ+I0QpQoUFoElaHyzr2TA6uAaU
+	f8SwQSFmA76dCWcKpvquK1lgR03gKjLeAv4QpRQlIt6cHwH7kLruWN/ufcti48E=
+X-Gm-Gg: ASbGncuys4HzrtPFwjokZi81xvQTDJVI/eagA44boRMU8TP8jBWNJjR8TE8EeKEmbbX
+	jLvdcqsbsIL0EM9JuyHuzkpYWV7Ju/xt7ZNARsjGSdZyvAFbfQRAod2KA6tQtmn6GopPGvKiueJ
+	s88SN+MrwRAFGd8s2iLUDOWQ8WJiiU+G5qmNzePEUVoOdGm64KcrvSgDMlRBOPpXY41fVFOlutq
+	K9NSaGhU3OpkvSHk3BzEQuWMUqoMjWpyts0KNtfltwbqcKlkecd
+X-Google-Smtp-Source: AGHT+IH7BbQoFrPmcbzptHUlbfYyMs/PsV9xf+OzCx7xvhWju21hjcZsAHHc9/vuu5cfPYcSDek9fA==
+X-Received: by 2002:a17:90b:534b:b0:2ee:edae:75e with SMTP id 98e67ed59e1d1-2f782c92720mr5484902a91.13.1737141207119;
+        Fri, 17 Jan 2025 11:13:27 -0800 (PST)
 Received: from ghost ([2601:647:6700:64d0:d0ea:9b9e:5556:aa82])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2ce9ee18sm19645235ad.52.2025.01.17.11.10.32
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f72c335093sm5637495a91.48.2025.01.17.11.13.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jan 2025 11:10:33 -0800 (PST)
-Date: Fri, 17 Jan 2025 11:10:31 -0800
+        Fri, 17 Jan 2025 11:13:26 -0800 (PST)
+Date: Fri, 17 Jan 2025 11:13:24 -0800
 From: Charlie Jenkins <charlie@rivosinc.com>
 To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
 Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
@@ -80,10 +80,10 @@ Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
 	Albert Ou <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
 	Zhangjin Wu <falcon@tinylab.org>
-Subject: Re: [PATCH 6/6] selftests/nolibc: add configurations for riscv32
-Message-ID: <Z4qrJyj6BtD3bYF3@ghost>
+Subject: Re: [PATCH 5/6] selftests/nolibc: rename riscv to riscv64
+Message-ID: <Z4qr1KMVbjGbYcFV@ghost>
 References: <20241221-nolibc-rv32-v1-0-d9ef6dab7c63@weissschuh.net>
- <20241221-nolibc-rv32-v1-6-d9ef6dab7c63@weissschuh.net>
+ <20241221-nolibc-rv32-v1-5-d9ef6dab7c63@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -93,12 +93,14 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241221-nolibc-rv32-v1-6-d9ef6dab7c63@weissschuh.net>
+In-Reply-To: <20241221-nolibc-rv32-v1-5-d9ef6dab7c63@weissschuh.net>
 
-On Sat, Dec 21, 2024 at 03:44:33PM +0100, Thomas Weiﬂschuh wrote:
-> nolibc already supports riscv32. Wire it up in the testsuite.
+On Sat, Dec 21, 2024 at 03:44:32PM +0100, Thomas Weiﬂschuh wrote:
+> riscv32 support is about the be added. To keep the naming clear and
+> consistent with other architectures rename riscv to riscv64, as that is
+> what it actually represents.
 
-Good addition!
+Seems like a reasonable change.
 
 Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
 Tested-by: Charlie Jenkins <charlie@rivosinc.com>
@@ -106,64 +108,72 @@ Tested-by: Charlie Jenkins <charlie@rivosinc.com>
 > 
 > Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
 > ---
->  tools/testing/selftests/nolibc/Makefile     | 5 +++++
+>  tools/testing/selftests/nolibc/Makefile     | 6 ++++++
 >  tools/testing/selftests/nolibc/run-tests.sh | 2 +-
->  2 files changed, 6 insertions(+), 1 deletion(-)
+>  2 files changed, 7 insertions(+), 1 deletion(-)
 > 
 > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> index 78f47e85b389ac229ac13f3e7c8299fb3ec92197..7d14a7c0cb62608f328b251495264517d333db2e 100644
+> index e92e0b88586111072a0e043cb15f3b59cf42c3a6..78f47e85b389ac229ac13f3e7c8299fb3ec92197 100644
 > --- a/tools/testing/selftests/nolibc/Makefile
 > +++ b/tools/testing/selftests/nolibc/Makefile
-> @@ -52,6 +52,7 @@ ARCH_ppc64       = powerpc
+> @@ -43,6 +43,7 @@ cc-option = $(call __cc-option, $(CC),$(CLANG_CROSS_FLAGS),$(1),$(2))
+>  # configure default variants for target kernel supported architectures
+>  XARCH_powerpc    = ppc
+>  XARCH_mips       = mips32le
+> +XARCH_riscv      = riscv64
+>  XARCH            = $(or $(XARCH_$(ARCH)),$(ARCH))
+>  
+>  # map from user input variants to their kernel supported architectures
+> @@ -51,6 +52,7 @@ ARCH_ppc64       = powerpc
 >  ARCH_ppc64le     = powerpc
 >  ARCH_mips32le    = mips
 >  ARCH_mips32be    = mips
-> +ARCH_riscv32     = riscv
->  ARCH_riscv64     = riscv
+> +ARCH_riscv64     = riscv
 >  ARCH            := $(or $(ARCH_$(XARCH)),$(XARCH))
 >  
-> @@ -67,6 +68,7 @@ IMAGE_ppc        = vmlinux
+>  # kernel image names by architecture
+> @@ -65,6 +67,7 @@ IMAGE_ppc        = vmlinux
 >  IMAGE_ppc64      = vmlinux
 >  IMAGE_ppc64le    = arch/powerpc/boot/zImage
 >  IMAGE_riscv      = arch/riscv/boot/Image
-> +IMAGE_riscv32    = arch/riscv/boot/Image
->  IMAGE_riscv64    = arch/riscv/boot/Image
+> +IMAGE_riscv64    = arch/riscv/boot/Image
 >  IMAGE_s390       = arch/s390/boot/bzImage
 >  IMAGE_loongarch  = arch/loongarch/boot/vmlinuz.efi
-> @@ -85,6 +87,7 @@ DEFCONFIG_ppc        = pmac32_defconfig
+>  IMAGE            = $(objtree)/$(IMAGE_$(XARCH))
+> @@ -82,6 +85,7 @@ DEFCONFIG_ppc        = pmac32_defconfig
 >  DEFCONFIG_ppc64      = powernv_be_defconfig
 >  DEFCONFIG_ppc64le    = powernv_defconfig
 >  DEFCONFIG_riscv      = defconfig
-> +DEFCONFIG_riscv32    = rv32_defconfig
->  DEFCONFIG_riscv64    = defconfig
+> +DEFCONFIG_riscv64    = defconfig
 >  DEFCONFIG_s390       = defconfig
 >  DEFCONFIG_loongarch  = defconfig
-> @@ -108,6 +111,7 @@ QEMU_ARCH_ppc        = ppc
+>  DEFCONFIG            = $(DEFCONFIG_$(XARCH))
+> @@ -104,6 +108,7 @@ QEMU_ARCH_ppc        = ppc
 >  QEMU_ARCH_ppc64      = ppc64
 >  QEMU_ARCH_ppc64le    = ppc64
 >  QEMU_ARCH_riscv      = riscv64
-> +QEMU_ARCH_riscv32    = riscv32
->  QEMU_ARCH_riscv64    = riscv64
+> +QEMU_ARCH_riscv64    = riscv64
 >  QEMU_ARCH_s390       = s390x
 >  QEMU_ARCH_loongarch  = loongarch64
-> @@ -135,6 +139,7 @@ QEMU_ARGS_ppc        = -M g3beige -append "console=ttyS0 panic=-1 $(TEST:%=NOLIB
+>  QEMU_ARCH            = $(QEMU_ARCH_$(XARCH))
+> @@ -130,6 +135,7 @@ QEMU_ARGS_ppc        = -M g3beige -append "console=ttyS0 panic=-1 $(TEST:%=NOLIB
 >  QEMU_ARGS_ppc64      = -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
 >  QEMU_ARGS_ppc64le    = -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
 >  QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-> +QEMU_ARGS_riscv32    = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
->  QEMU_ARGS_riscv64    = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+> +QEMU_ARGS_riscv64    = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
 >  QEMU_ARGS_s390       = -M s390-ccw-virtio -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
 >  QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+>  QEMU_ARGS            = -m 1G $(QEMU_ARGS_$(XARCH)) $(QEMU_ARGS_BIOS) $(QEMU_ARGS_EXTRA)
 > diff --git a/tools/testing/selftests/nolibc/run-tests.sh b/tools/testing/selftests/nolibc/run-tests.sh
-> index caa1ae40fe9a2faf8931c299aacd19716227e2b8..67fefc847d77165f817c3befa578cfa27e6f93d8 100755
+> index e7ecda4ae796fbf0d389f20144511e66ce4f0b30..caa1ae40fe9a2faf8931c299aacd19716227e2b8 100755
 > --- a/tools/testing/selftests/nolibc/run-tests.sh
 > +++ b/tools/testing/selftests/nolibc/run-tests.sh
 > @@ -17,7 +17,7 @@ perform_download=0
 >  test_mode=system
 >  werror=1
 >  llvm=
-> -archs="i386 x86_64 arm64 arm mips32le mips32be ppc ppc64 ppc64le riscv64 s390 loongarch"
-> +archs="i386 x86_64 arm64 arm mips32le mips32be ppc ppc64 ppc64le riscv32 riscv64 s390 loongarch"
+> -archs="i386 x86_64 arm64 arm mips32le mips32be ppc ppc64 ppc64le riscv s390 loongarch"
+> +archs="i386 x86_64 arm64 arm mips32le mips32be ppc ppc64 ppc64le riscv64 s390 loongarch"
 >  
 >  TEMP=$(getopt -o 'j:d:c:b:a:m:pelh' -n "$0" -- "$@")
 >  
