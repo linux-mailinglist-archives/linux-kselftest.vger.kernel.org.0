@@ -1,246 +1,376 @@
-Return-Path: <linux-kselftest+bounces-24715-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24716-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB511A14E85
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 12:34:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10E29A14EBE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 12:49:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B47E1168959
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 11:34:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BCA01884A48
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2025 11:49:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AC751FCFFC;
-	Fri, 17 Jan 2025 11:34:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9E4E1FA8F7;
+	Fri, 17 Jan 2025 11:49:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="QMV4ZnfG";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="I98CYozK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F2941D8E12;
-	Fri, 17 Jan 2025 11:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from fhigh-b4-smtp.messagingengine.com (fhigh-b4-smtp.messagingengine.com [202.12.124.155])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E83925A658;
+	Fri, 17 Jan 2025 11:48:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737113663; cv=none; b=T48bTB/BrpMPJY3BX05QDBcXgGkG9t9JqvV3JV59s9WB/8xysnVZLl7TF87nuU96++5gqRMZXzLmbJNDnwasL1+jXcrsccRVBZU3UG4DJth2Q1shjiqbp265Y7a84CfmT1knn1ycUbwgtysm2gLULW+Qkn0eDxafPNJBfAnV+j8=
+	t=1737114542; cv=none; b=s3WFarYcuvQ/hk26NzdUpPu2XwQr3gMAqOp2cU3olTrRvhCAaZmAuh5vUiYk8IeHoEk1VUvoQoexKy0hdufTPZViJ1D5Ae9b+rAjhl6oot782uGftrSYX4J69ynFRCKcLRjkheQQ+dM5qcTGf7ucNsA1y/PZQ7lmoJchYdKBVos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737113663; c=relaxed/simple;
-	bh=LAUrUrC3uCCxizrAG4Vg1PHnwSUsUPhIm+o7hM2izr4=;
+	s=arc-20240116; t=1737114542; c=relaxed/simple;
+	bh=pm5XyStulbdlAdZ3XkrNSd6Uh7V+g8k83ZiP5Qo02ek=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d2FqMhqWXJALlbOT5X0pGz9AxXhCpGfeMlZetEcLTAfLuvScpnwKvhno1kQQXppRQjdqq6+slIJ6OwSiw7kmmQVgdyweQ2AZeME1WtIOa/kfYgrmm3eHbQAWhayabqcWMDkRaQnXHuixoIlFHl3sXBDnbn2I9b4TKJ0E1DFgbYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4919C1476;
-	Fri, 17 Jan 2025 03:34:48 -0800 (PST)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 82BEA3F73F;
-	Fri, 17 Jan 2025 03:34:16 -0800 (PST)
-Date: Fri, 17 Jan 2025 11:34:09 +0000
-From: Mark Rutland <mark.rutland@arm.com>
-To: Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>
-Cc: Oliver Upton <oliver.upton@linux.dev>, Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC v3 09/27] KVM: arm64: Factor SVE guest exit handling
- out into a function
-Message-ID: <Z4pAMaEYvdLpmbg2@J2N7QTR9R3>
-References: <20241220-kvm-arm64-sme-v3-0-05b018c1ffeb@kernel.org>
- <20241220-kvm-arm64-sme-v3-9-05b018c1ffeb@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fovt9WkZpxkbziBF5RTptF6Hvl9VaOR77jyq1A2uHEq6vVyMKe0jp31xnrh8UiphvIR4gye/DkS2zjOk2a8lUxQeq3M8vOfMDeWbp8amXg3sdGh4I7uBooYwgop48XHE8Z4Lnchh/19VzcvwmB2yc6yCjXj+Zo1WdaVV3uiBQXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=QMV4ZnfG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=I98CYozK; arc=none smtp.client-ip=202.12.124.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 3A6B125401BF;
+	Fri, 17 Jan 2025 06:48:57 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-12.internal (MEProxy); Fri, 17 Jan 2025 06:48:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1737114537; x=
+	1737200937; bh=6UIyLdVgYKWnhZr+oc5yeC3GlXlKcnWt9bAVcdrQB+s=; b=Q
+	MV4ZnfGsdaNHcNxlL6S6E09c+lfyEqwUa3q9QMASapkW5ockhyfgfccDBuzHb0kA
+	gtvKZOMlo1KyMFSxbwXNfg0fid6cGfaL2YxJBqIK+w+VACSPrO1ipirWdP12tOdo
+	c5w4eeRsuoxsDfLkWOUh54YneO8rdcBzkyVKEP+24WhW/9KgnCvmx15oZIB64wLU
+	tFwiZgTU/C+ief+zGGUuNsw1jDjquU84o1gP6cZtQZ6FR4HffymRN/43sQRvC/cB
+	H6R9g/tKgg3LGPCP1btYD9iIRCfhU2cRx+yVFiPMUdA8jOzSa6TmLVQ8ThEi++lg
+	A5fwCzhcUo6Btn4yqYktQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1737114537; x=1737200937; bh=6UIyLdVgYKWnhZr+oc5yeC3GlXlKcnWt9bA
+	VcdrQB+s=; b=I98CYozKXcPWVIFeFyuEkQagFrB7M0qMg+X7FV4ym3lvllLy2Wv
+	FE+djnbkPRHrZSUCnsOT+iKRg04NQPfsMIksGdZ4ZrugILpDu/csV+hpSOp8S/Ox
+	NJjxBIlQsefnC3aTlspsGIB2iU+9Ntb8Uh2BG8yMmPG9lJ77KY85/ZElyy7jdZnG
+	OHIrE0FAOOd5fA4TfFrxYuuUpfPojseNmGFizkbwZB3F+C/2WBFI1jIhZ9AoCMuu
+	dmZawltVwkpWY7HGwG1nxqAt2+ZSHxHxkBBXCqF+PV0NkdNYA9ARLlk98VZihYR+
+	aMH7wErJa9CvyQrKj1sFhE7nUgewt/+tsLw==
+X-ME-Sender: <xms:qEOKZ68kyW2-T4OTBe4KiXGJi64tPQPOVAOyi9F9-yRP-Af9VX-KuQ>
+    <xme:qEOKZ6v041A9C28BXtnVB_BqbiFo9RUFZQZyz-m7PBsYBln5ZMMJX8EgQ3IpfdSt_
+    7tax4muABY60EUCbYU>
+X-ME-Received: <xmr:qEOKZwAn5Q3THpKr26_-iGB2VlCOYcSni3WzxjrG7bMQzW45u7QGMO4XWr_j>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudeifedgfeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtjeen
+    ucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrg
+    hilhdrnhgvtheqnecuggftrfgrthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfek
+    geetheegheeifffguedvuefffefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggp
+    rhgtphhtthhopedufedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnthhonh
+    hiohesohhpvghnvhhpnhdrnhgvthdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhk
+    vghrnhgvlhdrohhrghdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtoh
+    hmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggs
+    vghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepughonhgrlhgurdhhuhhnthgvrh
+    esghhmrghilhdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdp
+    rhgtphhtthhopehrhigriigrnhhovhdrshdrrgesghhmrghilhdrtghomhdprhgtphhtth
+    hopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghh
+X-ME-Proxy: <xmx:qEOKZycHfwSeT4XI1OcIdIf4jIrqH-UTndhncuVuxi-o2ClXs88V7Q>
+    <xmx:qEOKZ_PZurBAZBHUd0ml44XQciMPOv_ZDiiPdyMxxBBCeD8Csd0seA>
+    <xmx:qEOKZ8m6SUZ19KnXX_0mtqQthIhun9afeH3jhTD4ChfyLDBDQiWGDw>
+    <xmx:qEOKZxuvHh1g4uEGl4TKjtDTbRT4SxS0C5pMyjkdfW3LYsjuoj1_AQ>
+    <xmx:qUOKZ9sFwsv_E_LZPuL_agRD4zwbhfpk_XVj7c_gZNnu3S5GWW3iAyMf>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 17 Jan 2025 06:48:56 -0500 (EST)
+Date: Fri, 17 Jan 2025 12:48:54 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, ryazanov.s.a@gmail.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
+Subject: Re: [PATCH net-next v18 20/25] ovpn: implement peer
+ add/get/dump/delete via netlink
+Message-ID: <Z4pDpqN2hCc-7DGt@hog>
+References: <20250113-b4-ovpn-v18-0-1f00db9c2bd6@openvpn.net>
+ <20250113-b4-ovpn-v18-20-1f00db9c2bd6@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241220-kvm-arm64-sme-v3-9-05b018c1ffeb@kernel.org>
+In-Reply-To: <20250113-b4-ovpn-v18-20-1f00db9c2bd6@openvpn.net>
 
-On Fri, Dec 20, 2024 at 04:46:34PM +0000, Mark Brown wrote:
-> The SVE portion of kvm_vcpu_put() is quite large, especially given the
-> comments required.  When we add similar handling for SME the function
-> will get even larger, in order to keep things managable factor the SVE
-> portion out of the main kvm_vcpu_put().
+2025-01-13, 10:31:39 +0100, Antonio Quartulli wrote:
+>  int ovpn_nl_peer_new_doit(struct sk_buff *skb, struct genl_info *info)
+>  {
+> -	return -EOPNOTSUPP;
+> +	struct nlattr *attrs[OVPN_A_PEER_MAX + 1];
+> +	struct ovpn_priv *ovpn = info->user_ptr[0];
+> +	struct ovpn_socket *ovpn_sock;
+> +	struct socket *sock = NULL;
+> +	struct ovpn_peer *peer;
+> +	u32 sockfd, peer_id;
+> +	int ret;
+> +
+> +	/* peers can only be added when the interface is up and running */
+> +	if (!netif_running(ovpn->dev))
+> +		return -ENETDOWN;
 
-While investigating some problems with SVE I spotted a latent bug in
-this area where I suspect the fix will conflict with / supersede this
-rework. Details below; IIUC the bug was introduced in commit:
+Since we're not under rtnl_lock here, the device could go down while
+we're creating this peer, and we may end up with a down device that
+has a peer anyway.
 
-  8c8010d69c132273 ("KVM: arm64: Save/restore SVE state for nVHE")
+I'm not sure what this (and the peer flushing on NETDEV_DOWN) is
+trying to accomplish. Is it a problem to keep peers when the netdevice
+is down?
 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  arch/arm64/kvm/fpsimd.c | 67 +++++++++++++++++++++++++++----------------------
->  1 file changed, 37 insertions(+), 30 deletions(-)
-> 
-> diff --git a/arch/arm64/kvm/fpsimd.c b/arch/arm64/kvm/fpsimd.c
-> index 09b65abaf9db60cc57dbc554ad2108a80c2dc46b..3c2e0b96877ac5b4f3b9d8dfa38975f11b74b60d 100644
-> --- a/arch/arm64/kvm/fpsimd.c
-> +++ b/arch/arm64/kvm/fpsimd.c
-> @@ -151,6 +151,41 @@ void kvm_arch_vcpu_ctxsync_fp(struct kvm_vcpu *vcpu)
->  	}
->  }
->  
-> +static void kvm_vcpu_put_sve(struct kvm_vcpu *vcpu)
-> +{
-> +	u64 zcr;
 > +
-> +	if (!vcpu_has_sve(vcpu))
-> +		return;
+> +	if (GENL_REQ_ATTR_CHECK(info, OVPN_A_PEER))
+> +		return -EINVAL;
 > +
-> +	zcr = read_sysreg_el1(SYS_ZCR);
+> +	ret = nla_parse_nested(attrs, OVPN_A_PEER_MAX, info->attrs[OVPN_A_PEER],
+> +			       ovpn_peer_nl_policy, info->extack);
+> +	if (ret)
+> +		return ret;
 > +
-> +	/*
-> +	 * If the vCPU is in the hyp context then ZCR_EL1 is loaded
-> +	 * with its vEL2 counterpart.
-> +	 */
-> +	__vcpu_sys_reg(vcpu, vcpu_sve_zcr_elx(vcpu)) = zcr;
+> +	ret = ovpn_nl_peer_precheck(ovpn, info, attrs);
+> +	if (ret < 0)
+> +		return ret;
 > +
-> +	/*
-> +	 * Restore the VL that was saved when bound to the CPU, which
-> +	 * is the maximum VL for the guest. Because the layout of the
-> +	 * data when saving the sve state depends on the VL, we need
-> +	 * to use a consistent (i.e., the maximum) VL.  Note that this
-> +	 * means that at guest exit ZCR_EL1 is not necessarily the
-> +	 * same as on guest entry.
+> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_PEER], attrs,
+> +			      OVPN_A_PEER_SOCKET))
+> +		return -EINVAL;
+> +
+> +	peer_id = nla_get_u32(attrs[OVPN_A_PEER_ID]);
+> +	peer = ovpn_peer_new(ovpn, peer_id);
+> +	if (IS_ERR(peer)) {
+> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
+> +				       "cannot create new peer object for peer %u: %ld",
+> +				       peer_id, PTR_ERR(peer));
+> +		return PTR_ERR(peer);
+> +	}
+> +
+> +	/* lookup the fd in the kernel table and extract the socket object */
+> +	sockfd = nla_get_u32(attrs[OVPN_A_PEER_SOCKET]);
+> +	/* sockfd_lookup() increases sock's refcounter */
+> +	sock = sockfd_lookup(sockfd, &ret);
+> +	if (!sock) {
+> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
+> +				       "cannot lookup peer socket (fd=%u): %d",
+> +				       sockfd, ret);
+> +		return -ENOTSOCK;
+
+All those returns should be "goto peer_release" (and setting ret) so
+that we don't leak peer.
+
+> +	}
+> +
+> +	/* Only when using UDP as transport protocol the remote endpoint
+> +	 * can be configured so that ovpn knows where to send packets to.
 > +	 *
-> +	 * ZCR_EL2 holds the guest hypervisor's VL when running a
-> +	 * nested guest, which could be smaller than the max for the
-> +	 * vCPU. Similar to above, we first need to switch to a VL
-> +	 * consistent with the layout of the vCPU's SVE state. KVM
-> +	 * support for NV implies VHE, so using the ZCR_EL1 alias is
-> +	 * safe.
+> +	 * In case of TCP, the socket is connected to the peer and ovpn
+> +	 * will just send bytes over it, without the need to specify a
+> +	 * destination.
 > +	 */
-> +	if (!has_vhe() || (vcpu_has_nv(vcpu) && !is_hyp_ctxt(vcpu)))
-> +		sve_cond_update_zcr_vq(vcpu_sve_max_vq(vcpu) - 1,
-> +				       SYS_ZCR_EL1);
-> +}
+> +	if (sock->sk->sk_protocol != IPPROTO_UDP &&
+> +	    (attrs[OVPN_A_PEER_REMOTE_IPV4] ||
+> +	     attrs[OVPN_A_PEER_REMOTE_IPV6])) {
+> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
+> +				       "unexpected remote IP address for non UDP socket");
+> +		sockfd_put(sock);
+> +		return -EINVAL;
+
+goto peer_release
+
+> +	}
 > +
->  /*
->   * Write back the vcpu FPSIMD regs if they are dirty, and invalidate the
->   * cpu FPSIMD regs so that they can't be spuriously reused if this vcpu
-> @@ -179,38 +214,10 @@ void kvm_arch_vcpu_put_fp(struct kvm_vcpu *vcpu)
->  	}
+> +	ovpn_sock = ovpn_socket_new(sock, peer);
+> +	if (IS_ERR(ovpn_sock)) {
+> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
+> +				       "cannot encapsulate socket: %ld",
+> +				       PTR_ERR(ovpn_sock));
+> +		sockfd_put(sock);
+> +		return -ENOTSOCK;
 
-A little before this context, kvm_arch_vcpu_put_fp() calls
-local_irq_save(), which indicates that IRQs can be taken before this
-point, which is deeply suspicious.
+goto peer_release
 
-If IRQs are enabled, then it's possible to take an IRQ and potentially
-run a softirq handler which uses kernel-mode NEON. That means
-kernel_neon_begin() will try to save the live FPSIMD/SVE/SME state via
-fpsimd_save_user_state(), using the live value of ZCR_ELx.LEN, which would not
-be correct per the comment.
+> +	}
+> +
+> +	peer->sock = ovpn_sock;
+> +
+> +	ret = ovpn_nl_peer_modify(peer, info, attrs);
+> +	if (ret < 0)
+> +		goto peer_release;
+> +
+> +	ret = ovpn_peer_add(ovpn, peer);
+> +	if (ret < 0) {
+> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
+> +				       "cannot add new peer (id=%u) to hashtable: %d\n",
+> +				       peer->id, ret);
+> +		goto peer_release;
+> +	}
+> +
+> +	return 0;
+> +
+> +peer_release:
+> +	/* release right away because peer is not used in any context */
+> +	ovpn_peer_release(peer);
+> +
+> +	return ret;
+>  }
 
-Looking at kvm_arch_vcpu_ioctl_run(), the relevant logic is:
 
-	vcpu_load(vcpu); // calls kvm_arch_vcpu_load_fp()
+[...]
+>  int ovpn_nl_peer_del_doit(struct sk_buff *skb, struct genl_info *info)
+>  {
+> -	return -EOPNOTSUPP;
+> +	struct nlattr *attrs[OVPN_A_PEER_MAX + 1];
+> +	struct ovpn_priv *ovpn = info->user_ptr[0];
+> +	struct ovpn_peer *peer;
+> +	u32 peer_id;
+> +	int ret;
+> +
+> +	if (GENL_REQ_ATTR_CHECK(info, OVPN_A_PEER))
+> +		return -EINVAL;
+> +
+> +	ret = nla_parse_nested(attrs, OVPN_A_PEER_MAX, info->attrs[OVPN_A_PEER],
+> +			       ovpn_peer_nl_policy, info->extack);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (NL_REQ_ATTR_CHECK(info->extack, info->attrs[OVPN_A_PEER], attrs,
+> +			      OVPN_A_PEER_ID))
+> +		return -EINVAL;
+> +
+> +	peer_id = nla_get_u32(attrs[OVPN_A_PEER_ID]);
+> +	peer = ovpn_peer_get_by_id(ovpn, peer_id);
+> +	if (!peer) {
+> +		NL_SET_ERR_MSG_FMT_MOD(info->extack,
+> +				       "cannot find peer with id %u", peer_id);
+> +		return -ENOENT;
+> +	}
+> +
+> +	netdev_dbg(ovpn->dev, "del peer %u\n", peer->id);
+> +	ret = ovpn_peer_del(peer, OVPN_DEL_PEER_REASON_USERSPACE);
 
-	while (ret > 0) {
-		preempt_disable();
-		local_irq_disable();
+With the delayed socket release (which is similar to what was in v11,
+but now with refcounting on the netdevice which should make
+rtnl_link_unregister in ovpn_cleanup wait [*]), we may return to
+userspace as if the peer was gone, but the socket hasn't been detached
+yet.
 
-		kvm_arch_vcpu_ctxflush_fp();
-		ret = kvm_arm_vcpu_enter_exit(vcpu);
-		kvm_arch_vcpu_ctxsync_fp(vcpu);
+A userspace application that tries to remove the peer and immediately
+re-create it with the same socket could get EBUSY if the workqueue
+hasn't done its job yet. That would be quite confusing to the
+application.
 
-		local_irq_enable();
-		preempt_enable();
-	}
+So I would add a completion to wait here until the socket has been
+fully detached. Something like below.
 
-	vcpu_put(vcpu); // calls kvm_arch_vcpu_put_fp()
+[*] I don't think the current refcounting fully protects against that,
+I'll comment on 05/25
 
-... and the problem can occur at any point after the vCPU has run where IRQs
-are enabled, i.e, between local_irq_enable() and either local_irq_disable() or
-vcpu_put()'s call to kvm_arch_vcpu_put_fp().
 
-Note that kernel_neon_begin() calls:
+-------- 8< --------
 
-	fpsimd_save_user_state();
-	...
-	fpsimd_flush_cpu_state();
+diff --git a/drivers/net/ovpn/netlink.c b/drivers/net/ovpn/netlink.c
+index 72357bb5f30b..19aa4ee6d468 100644
+--- a/drivers/net/ovpn/netlink.c
++++ b/drivers/net/ovpn/netlink.c
+@@ -733,6 +733,9 @@ int ovpn_nl_peer_del_doit(struct sk_buff *skb, struct genl_info *info)
+ 
+ 	netdev_dbg(ovpn->dev, "del peer %u\n", peer->id);
+ 	ret = ovpn_peer_del(peer, OVPN_DEL_PEER_REASON_USERSPACE);
++	if (ret >= 0 && peer->sock)
++		wait_for_completion(&peer->sock_detach);
++
+ 	ovpn_peer_put(peer);
+ 
+ 	return ret;
+diff --git a/drivers/net/ovpn/peer.c b/drivers/net/ovpn/peer.c
+index b032390047fe..6120521d0c32 100644
+--- a/drivers/net/ovpn/peer.c
++++ b/drivers/net/ovpn/peer.c
+@@ -92,6 +92,7 @@ struct ovpn_peer *ovpn_peer_new(struct ovpn_priv *ovpn, u32 id)
+ 	ovpn_peer_stats_init(&peer->vpn_stats);
+ 	ovpn_peer_stats_init(&peer->link_stats);
+ 	INIT_WORK(&peer->keepalive_work, ovpn_peer_keepalive_send);
++	init_completion(&peer->sock_detach);
+ 
+ 	ret = dst_cache_init(&peer->dst_cache, GFP_KERNEL);
+ 	if (ret < 0) {
+diff --git a/drivers/net/ovpn/peer.h b/drivers/net/ovpn/peer.h
+index 7a062cc5a5a4..8c54bf5709ef 100644
+--- a/drivers/net/ovpn/peer.h
++++ b/drivers/net/ovpn/peer.h
+@@ -112,6 +112,7 @@ struct ovpn_peer {
+ 	struct rcu_head rcu;
+ 	struct work_struct remove_work;
+ 	struct work_struct keepalive_work;
++	struct completion sock_detach;
+ };
+ 
+ /**
+diff --git a/drivers/net/ovpn/socket.c b/drivers/net/ovpn/socket.c
+index a5c3bc834a35..7cefac42c3be 100644
+--- a/drivers/net/ovpn/socket.c
++++ b/drivers/net/ovpn/socket.c
+@@ -31,6 +31,8 @@ static void ovpn_socket_release_kref(struct kref *kref)
+ 
+ 	sockfd_put(sock->sock);
+ 	kfree_rcu(sock, rcu);
++
++	complete(&sock->peer->sock_detach);
+ }
+ 
+ /**
+@@ -181,12 +183,12 @@ struct ovpn_socket *ovpn_socket_new(struct socket *sock, struct ovpn_peer *peer)
+ 
+ 	ovpn_sock->sock = sock;
+ 	kref_init(&ovpn_sock->refcount);
++	ovpn_sock->peer = peer;
+ 
+ 	/* TCP sockets are per-peer, therefore they are linked to their unique
+ 	 * peer
+ 	 */
+ 	if (sock->sk->sk_protocol == IPPROTO_TCP) {
+-		ovpn_sock->peer = peer;
+ 		ovpn_peer_hold(peer);
+ 	} else if (sock->sk->sk_protocol == IPPROTO_UDP) {
+ 		/* in UDP we only link the ovpn instance since the socket is
+diff --git a/drivers/net/ovpn/socket.h b/drivers/net/ovpn/socket.h
+index 15827e347f53..3f5a35fd9048 100644
+--- a/drivers/net/ovpn/socket.h
++++ b/drivers/net/ovpn/socket.h
+@@ -28,12 +28,12 @@ struct ovpn_peer;
+  * @rcu: member used to schedule RCU destructor callback
+  */
+ struct ovpn_socket {
++	struct ovpn_peer *peer;
+ 	union {
+ 		struct {
+ 			struct ovpn_priv *ovpn;
+ 			netdevice_tracker dev_tracker;
+ 		};
+-		struct ovpn_peer *peer;
+ 	};
+ 
+ 	struct socket *sock;
 
-... and fpsimd_save_user_state() will see that the SVE VL is wrong:
 
-	if (WARN_ON(sve_get_vl() != vl)) {
-		force_signal_inject(SIGKILL, SI_KERNEL, 0, 0);
-		return;
-	}
-
-... pending a SIGKILL for the VMM thread without saving the vCPU's state
-before unbinding the live state via fpsimd_flush_cpu_state(), which'll
-set TIF_FOREIGN_FPSTATE.
-
-AFAICT it's possible to re-enter the vCPU after that happens, whereupon
-stale vCPU FPSIMD/SVE state will be restored. Upon return to userspace
-the SIGKILL will be delivered, killing the VMM.
-
-As above, it looks like that's been broken since the nVHE SVE
-save/restore was introduced in commit:
-
-  8c8010d69c132273 ("KVM: arm64: Save/restore SVE state for nVHE")
-
-The TL;DR summary is that it's not sufficient for kvm_arch_vcpu_put_fp()
-to fix up ZCR_ELx. Either:
-
-* That needs to be fixed up while IRQs are masked, e.g. by
-  saving/restoring the host and guest ZCR_EL1 and/or ZCR_ELx values in
-  kvm_arch_vcpu_ctxflush_fp() and kvm_arch_vcpu_ctxsync_fp()
-
-* The lazy save logic in fpsimd_save_user_state() needs to handle KVM
-  explicitly, saving the guest's ZCR_EL1 and restoring the host's
-  ZCR_ELx.
-
-I think we need to fix that before we extend this logic for SME.
-
-Mark.
-
->  
->  	if (guest_owns_fp_regs()) {
-> -		if (vcpu_has_sve(vcpu)) {
-> -			u64 zcr = read_sysreg_el1(SYS_ZCR);
-> -
-> -			/*
-> -			 * If the vCPU is in the hyp context then ZCR_EL1 is
-> -			 * loaded with its vEL2 counterpart.
-> -			 */
-> -			__vcpu_sys_reg(vcpu, vcpu_sve_zcr_elx(vcpu)) = zcr;
-> -
-> -			/*
-> -			 * Restore the VL that was saved when bound to the CPU,
-> -			 * which is the maximum VL for the guest. Because the
-> -			 * layout of the data when saving the sve state depends
-> -			 * on the VL, we need to use a consistent (i.e., the
-> -			 * maximum) VL.
-> -			 * Note that this means that at guest exit ZCR_EL1 is
-> -			 * not necessarily the same as on guest entry.
-> -			 *
-> -			 * ZCR_EL2 holds the guest hypervisor's VL when running
-> -			 * a nested guest, which could be smaller than the
-> -			 * max for the vCPU. Similar to above, we first need to
-> -			 * switch to a VL consistent with the layout of the
-> -			 * vCPU's SVE state. KVM support for NV implies VHE, so
-> -			 * using the ZCR_EL1 alias is safe.
-> -			 */
-> -			if (!has_vhe() || (vcpu_has_nv(vcpu) && !is_hyp_ctxt(vcpu)))
-> -				sve_cond_update_zcr_vq(vcpu_sve_max_vq(vcpu) - 1,
-> -						       SYS_ZCR_EL1);
-> -		}
-> +		kvm_vcpu_put_sve(vcpu);
->  
->  		/*
-> -		 * Flush (save and invalidate) the fpsimd/sve state so that if
-> +		 * Flush (save and invalidate) the FP state so that if
->  		 * the host tries to use fpsimd/sve, it's not using stale data
->  		 * from the guest.
->  		 *
-> 
-> -- 
-> 2.39.5
-> 
-> 
+-- 
+Sabrina
 
