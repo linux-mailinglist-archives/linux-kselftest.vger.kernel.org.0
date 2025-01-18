@@ -1,129 +1,94 @@
-Return-Path: <linux-kselftest+bounces-24750-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24751-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C64FA15B11
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jan 2025 03:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B8F5A15B4E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jan 2025 04:50:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBE353A91DF
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jan 2025 02:35:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D2D73A8C64
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jan 2025 03:50:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7330A1F60A;
-	Sat, 18 Jan 2025 02:35:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6537B14A088;
+	Sat, 18 Jan 2025 03:50:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZEcoktss"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n/CJhGQw"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D0E42077;
-	Sat, 18 Jan 2025 02:35:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D3381474A9;
+	Sat, 18 Jan 2025 03:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737167722; cv=none; b=oIX6erxLqcPBxjpLxyLgPNnF5hNvIPKF5TxBOQgVvR4EehAaluQvid6YhPPILQQgixJurtGCTISQcNctTIRga46G7iDGiQXWnxIA3IV4uKEIogUQsB8xuVdX+j0lUz5zawjDtby1fnxbKP0Rc39jmsjQchK71FrSzheoj1xgf7Y=
+	t=1737172229; cv=none; b=EJ0mI4l6Vx3321t2FNHU/S4x9zDh2G8IpsMQwvXWgsBimSwF6rlsaKSOpxdtBvgYTXSOF50QEL1P/M4hBAZRSBFiT/HhuKkXk3W8BjcvOvb+CEYFaSF2dC9xTU+l55b/8nfy2TUBy6pvYBuU2q3tTLW/lsqa0JUZjISva+IIOJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737167722; c=relaxed/simple;
-	bh=X3m9dS/6uYE0ZFgeI29Imle31bC+EF49CBQpNsA5NQ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=adwRMXKqn0cZBlDLZSjmsG0m/YG8teIQ/d3KuJqdXl8J3NwEIY62IG5PM6238tiF2UZmXTWu6GnWmVR/pYWGrNS39mdhp4SPcN4IXtJ1mSUYvKtjDI3TWfm5hZIR/Fx4ZljcVwtgPqzOH9qBxNYGhA/sJycVl2wD80X0dkhuTbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZEcoktss; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45B01C4CEDD;
-	Sat, 18 Jan 2025 02:35:21 +0000 (UTC)
+	s=arc-20240116; t=1737172229; c=relaxed/simple;
+	bh=MnoqE/Q6g5coOLxuf1HvIkumQhXCkhEEYtPnQgKYJ/w=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=aDXDB6XngnTTJfT9lq761krW1izUJHkgtmTgXxE1OcXIQ8D56I741Au0rN7INv25UuLp+6a3MerBdVDkhMFh1KcIXoin8bkyzBkHYBJ4P0PwSOdHJ/sDeNd5Rj4vZLO6GFRrSqVWxHEBFxPvJ0GWDCI6z2+aGOQ5Euc0wHBiLKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n/CJhGQw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2C9EC4CED1;
+	Sat, 18 Jan 2025 03:50:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737167721;
-	bh=X3m9dS/6uYE0ZFgeI29Imle31bC+EF49CBQpNsA5NQ8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ZEcoktssYSQY7O5sJjcTh0ibS3P3LHiLQYXP0tR8GFtV/jrXV1gj9OYrL1tIKRPJG
-	 0zA+NOIPxDvC6h69uFZWKm/zLQ8Pquol3PkWiawWerSgzlGYZ9yk6cBNWEk3Rfwk/L
-	 VGVLgo3Bk3TLUowKtbS0kHSamprQHTUIdPgbF4zTueifrUgCs1VoFZ8gD3R82S6ZVG
-	 Y1Z3gv41nOXYQMcudU44+H+bjcM6CIfsOjeZxZSmaSra/5DXzndh/yl35owmAQy5UK
-	 0oIQbMCQgzhfvxiJ3BhYwd1esOFScCkNVIKXiA+OZuUKGEYG/3PBYCdbw/wm1MMriZ
-	 EVLYBzay+PSHg==
-Date: Fri, 17 Jan 2025 18:35:20 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-team@meta.com, max@kutsevol.com,
- thepacketgeek@gmail.com
-Subject: Re: [PATCH net-next v2 3/5] netconsole: add support for sysdata and
- CPU population
-Message-ID: <20250117183520.11d93f4d@kernel.org>
-In-Reply-To: <20250117-terrestrial-clam-of-satiation-cf312f@leitao>
-References: <20250115-netcon_cpu-v2-0-95971b44dc56@debian.org>
-	<20250115-netcon_cpu-v2-3-95971b44dc56@debian.org>
-	<20250116174405.20a0e20b@kernel.org>
-	<20250117-terrestrial-clam-of-satiation-cf312f@leitao>
+	s=k20201202; t=1737172228;
+	bh=MnoqE/Q6g5coOLxuf1HvIkumQhXCkhEEYtPnQgKYJ/w=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=n/CJhGQwvOnfH3zN6hzM4BYWL4Y3UluChtUcnfSNJgUpPEPP6PaMlcliK/j6omwkV
+	 ze95xMVbNQHsFVlNyJzTEdDY2aAM3LmYUbEhDdx+QLsB91EFE0UQgF9m8Y4cpBK28q
+	 JeRM21+PYyF315aQH3C9y5vSFvSnExoYasa7ppWIvI9oJfPkqfwrEF92UE84SW7H21
+	 +6gj+1SwTpgnVfgsSxAAM55Ljf3TU05vBHtjJjPDI3mwsyac7Z7XeyyPtCg48JmvZc
+	 caYAbT8a57q2SyOWVPSYl5CArOlFCmh++eR3w8w3HHKnjNPtcP5BPB9EU4ZcJiDDFD
+	 eoR7EDYit76Fg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70B67380AA62;
+	Sat, 18 Jan 2025 03:50:53 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests: net: give up on the cmsg_time accuracy on
+ slow machines
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <173717225214.2330660.14972461592963136332.git-patchwork-notify@kernel.org>
+Date: Sat, 18 Jan 2025 03:50:52 +0000
+References: <20250116020105.931338-1-kuba@kernel.org>
+In-Reply-To: <20250116020105.931338-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, willemdebruijn.kernel@gmail.com
 
-On Fri, 17 Jan 2025 03:02:40 -0800 Breno Leitao wrote:
-> > Looks like previously all the data was on the stack, now we have a mix.  
-> 
-> Not sure I followed. The data ({userdata,extradata}_complete) was always
-> inside nt field, which belongs to target_list.
+Hello:
 
-I mean the buffer we use for formatting. Today it's this:
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-	static char buf[MAX_PRINT_CHUNK]; /* protected by target_list_lock */
-	int header_len, msgbody_len;
-	const char *msgbody;
+On Wed, 15 Jan 2025 18:01:05 -0800 you wrote:
+> Commit b9d5f5711dd8 ("selftests: net: increase the delay for relative
+> cmsg_time.sh test") widened the accepted value range 8x but we still
+> see flakes (at a rate of around 7%).
+> 
+> Return XFAIL for the most timing sensitive test on slow machines.
+> 
+> Before:
+> 
+> [...]
 
-right? I missed that "static" actually so it's not on the stack, 
-it's in the .bss section.
+Here is the summary with links:
+  - [net-next] selftests: net: give up on the cmsg_time accuracy on slow machines
+    https://git.kernel.org/netdev/net-next/c/54ea680b759c
 
-> > Maybe we can pack all the bits of state into a struct for easier
-> > passing around, but still put it on the stack?  
-> 
-> It depends on what state you need here. We can certainly pass runtime
-> (aka sysdata in this patchset) data in the stack, but doing the same for
-> userdata would require extra computation in runtime. In other words, the
-> userdata_complete and length are calculated at configfs update time
-> today, and only read during runtime, and there is no connection between
-> configfs and runtime (write_ext_msg()) except through the stack.
-> 
-> 
-> On the other side, if we want to have extradata_complete in the stack, I
-> still think that userdata will need to be in the stack, and create a
-> buffer in runtime's frame and copy userdata + sysdata at run time, doing
-> an extra copy. 
-> 
-> Trying to put this in code, this is what I thought:
-> 
-> 	/* Copy to the stack (buf) the userdata string + sysdata */
-> 	static void append_runtime_sysdata(struct netconsole_target *nt, char *buf) {
-> 		if (!(nt->sysdata_fields & CPU_NR))
-> 			return;
-> 
-> 		return scnprintf(buf,  MAX_EXTRADATA_ENTRY_LEN * MAX_EXTRADATA_ITEMS,
-> 				  "%s cpu=%u\n", nt->userdata_complete, raw_smp_processor_id());
-> 	}
-> 
-> 	/* Move complete string in the stack and send from there */
-> 	static void send_ext_msg_udp(struct netconsole_target *nt, const char *msg,
-> 				     int msg_len) {
-> 		...
-> 	#ifdef CONFIG_NETCONSOLE_DYNAMIC
-> 		struct char buf[MAX_EXTRADATA_ENTRY_LEN * MAX_EXTRADATA_ITEMS];
-> 		extradata_len = append_runtime_sysdata(nt, buf);
-> 	#endif
-> 
-> 		send_msg_{no}_fragmentation(nt, msg, buf, extradata_len, release_len)
-> 		...
-> 	}
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-My thinking was to handle it like the release.
-Print it at the send_msg_no_fragmentation() stage directly 
-into the static buffer. Does that get hairy coding-wise?
+
 
