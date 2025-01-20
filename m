@@ -1,234 +1,192 @@
-Return-Path: <linux-kselftest+bounces-24801-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24802-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15F7BA170F7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 18:06:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FCAFA171F3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 18:33:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21DB53A3AB5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 17:06:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2C391885925
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 17:32:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 520F21EBFED;
-	Mon, 20 Jan 2025 17:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WguWlmN7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15D491547E7;
+	Mon, 20 Jan 2025 17:30:55 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f73.google.com (mail-io1-f73.google.com [209.85.166.73])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91CFE1E9B31
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2025 17:06:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2281213AA5D;
+	Mon, 20 Jan 2025 17:30:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737392810; cv=none; b=YYvaX76el5r/vaz0h7UBMBc+/bs5Jz9SWRV6B8GIIk4ithUoaJNEXno8QyyzA9gOraOEMjvAo6ui1tr2NxXMHaPOgk3ZO2itBI4VKM70zqZHAZztAgT6pZ3m7OnyFbkSLZKB5sqEqrgd/D0pEyTOwTmCbDWzYksge56PvibyPow=
+	t=1737394255; cv=none; b=m3zlEzzHUMMIf1pjdyQ8pPwjzHIPiQie1mmh7O1Lc7sAD0Knfcc82yJ0ylVmayGRaInlxXzCpj27sDr7PLDbuUXFFjIQBubvu2X5bRpbkCqeYWt7fQ4V8azWJh32SQ3JOiElyRhfDPm0dizxWzCeT2MS4iOJNGA3ntYgDSxQJ6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737392810; c=relaxed/simple;
-	bh=HA30YDDKbpTQSqVYmFXdDpUCa4FAcHFXcwCxnCi8vgA=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=k+QZOmUWVhyXNOOz8bxhDLKSBEo4KgxzkU7gde/7Gq3y2GowATa/+PNT6LN0q7wNfqPi3dXVB9WsCdlE1CXySRMLpt0gpMUefhZIkjx6/QBVLU6w3w2Bz2pdhYoN/5gYV90C4SdfE7A2Y1vbEwU8L5LdjntWWUFY9sACCpVstLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WguWlmN7; arc=none smtp.client-ip=209.85.166.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
-Received: by mail-io1-f73.google.com with SMTP id ca18e2360f4ac-844ec271431so312883539f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2025 09:06:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737392808; x=1737997608; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=dbzRGIpUfEKMr1862KcWn9pE9FBrro2vsmhqYCsgXnw=;
-        b=WguWlmN7yy6+X4qF3pto0eA9ZARVxmN67rmVTzyQIKqZRZP1XZTcPRRo2kyDj8lXIt
-         k/mT4RRUfTDo4fYvkuRZW5gAaRtjBaW5y3YyEnMQy7Mf0JLE0GnPWCoXlMqLDfNF773S
-         7A2I5ORyEwIL7d3WUG2a3maKvGmnDmPFvO5GhFb9lRDMLBmNIaE4KUgzFD1UJTgeytx1
-         aq0U1zXc9dk8brDRQixkEInpVQ6d3K1rrgS3QM76ge5bzIpg56a1FMPcxgESaGYSliIY
-         nYPQuQ2pvNPLel8vhUwfgmUBIYDZGSJHbrBp441PZk9sOlIgri0Ug/10pGa4h+tus6l8
-         ccAQ==
+	s=arc-20240116; t=1737394255; c=relaxed/simple;
+	bh=co4rh7mcehuLyfpxVs2kCx5deaYX52yDp0kZrDc/z8M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HJV9cA1BHEerbKeqZF272KuyAsbR0NvfhfFGDD+Z/KL55Dg0idWg2huL+cXt7VoB/OPDgEf3KFBRLZvSB72w0jaPa8m0YrdfevyztDa92cjQeSncdg3FPPqC/q/uvlJNWnVr3QsOkoyMsEPKqpf365KNzuLt/nC4K/KVK2M8ZOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-aaef00ab172so731937366b.3;
+        Mon, 20 Jan 2025 09:30:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737392808; x=1737997608;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dbzRGIpUfEKMr1862KcWn9pE9FBrro2vsmhqYCsgXnw=;
-        b=LPDpr0tdadJQrh4tJ+jD05EzGrr2n6CxJS0vwyBtyD5RkXJ+ghCdANQru8oslx56jz
-         xC3qSA2IxXqSp1dGT+ClClwk+2rHOgNktweu9gMR583wDPxlxmKluJWADHLGh4LpOxDV
-         va9w0JWB9hmptr0PXNIQt/AsSgtJODE+mLynmq2OmvHIlWHDKK7slxBC3OmH9pU5fPLo
-         2alQk/6Qm12cX8rFs+gnXKpcZB90HbVm+c1eG1PyxqiEafCxx6r/J6YAzVjz8WmVTumL
-         5SrEyiHWkRUJWVg5+ylYF2fu/yieZ+bz3LqixK7UVCXddMy2YW/GC4+r7HKjWOwuFR1r
-         5DRg==
-X-Forwarded-Encrypted: i=1; AJvYcCWteHLLZx3wTibC9huD9lb6XJwLZ0L4R4zohjr64bJQPvxfDcZIomwkgCHCE0nSOS/e8yW8Ls6R85tJ5DGZITI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKsFdLy45zye9q8Fg3eM61CEXEkFX5csKE/FMiCHiRguy01IS2
-	h9rG84eTggLxR73ydHX4lPn+y/PrWuxfw1sa5dykTQUwBIzLAdZ6g5b5dS2F8ZEz10mXObwS7vz
-	7EUziZvWjnEZwNWS+fqfFMw==
-X-Google-Smtp-Source: AGHT+IG4x7GYL02R2P8WMU+wLeob+JkU+UOoOPCapsMLMJ+HN2IC3jxlZ7fkGf710FtXGhOHOjUVNPZMwxVgc3FATg==
-X-Received: from iox13.prod.google.com ([2002:a05:6602:490d:b0:84f:41e2:80e5])
- (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6602:6b12:b0:84a:5133:9cd8 with SMTP id ca18e2360f4ac-851b62835afmr813531839f.10.1737392807759;
- Mon, 20 Jan 2025 09:06:47 -0800 (PST)
-Date: Mon, 20 Jan 2025 17:06:45 +0000
-In-Reply-To: <Z368wnzQgMKMclFw@google.com> (message from Sean Christopherson
- on Wed, 8 Jan 2025 09:58:26 -0800)
+        d=1e100.net; s=20230601; t=1737394251; x=1737999051;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vjKwZAMnGwVfQ1uehkUpRVLkmdlR6xAZAUrURRogCUo=;
+        b=UA+tJNjEI011ydMho2eKpEGke/lnr9t3W4TkJU3JA88y+I8q4Qmp/2+8VfS+de5fZp
+         7qMFxon3YJ326lkjkBN0B++jXnwoi1VCKFgrr39w8NLavSxwW5GcNbMirINhVJQCzM6V
+         dUxCJ15KzJcSFbCwvla+TurQxfr055lzMX99QVdiGa7RKp16sJ6Ei1faz6lfDvb3VflU
+         /Wlg/NmHNfusMInhjAFbGJIIqqPjFQriTSxYNWNSPCezTAJa+H8R9sxg56oObko596w3
+         mFiSY2NVvyLU3UaPXVBLQJiYCE9idDIrg67ymp2rYeDsLO85S1kd3dofkaQ8tlK6n9l4
+         rnTg==
+X-Forwarded-Encrypted: i=1; AJvYcCV76LXJiQo9e94fk3FYMR54nkMiHghvzPGX0f2m5AdnTorBsiua2Rs+q7BxNQQ3hbIgLRuasfgo@vger.kernel.org, AJvYcCWHjn9VoDZEkYI5SC4x1HnQbl20dAT2wO5kOsf1cMD4I7SX7DTQOM822X10N6geaab8IiFIEmrIvIKgfzb/@vger.kernel.org, AJvYcCWXZ3CGBESslPQcLXu7DHZsVXrJMzJzv47Rs0YH/ekufSj8CqSHwPy09ob2fMehDGKBAjjtDTiAu9U=@vger.kernel.org, AJvYcCXdq+aVjP53tYybWRdbdWb5HW+7C9RM+zc/8QZkmNZ8twsPpxiAYyERkGLrytsFqmaAPPjfKjQNhC3YNYmmL9+d@vger.kernel.org
+X-Gm-Message-State: AOJu0YygsUuKzmLiyeuDntvjhtQ7cMUo7SK/kTF9S/jFaJp1tn9WmQ5m
+	fRrllNzFRD0kY8oDhbfQ8ZqN1H0uBW8AfM0TNWPbSrQiKUU9diQZ
+X-Gm-Gg: ASbGnctc+7zxUyYsuxCAEZJsLHBLbzNXiblKrZHlQx5/sY7aR7tHWG2R4otVWXrzVvP
+	NkwzoWhzhmEyu+k9dwP3waHI9R9K1xPzCJ2HhmS++vKj1h6mLzLF2EDAmkNzckysdhJTshJMwm0
+	Kii7nLgsjoukA/T/M+apfmkbtfNS/EenlGssH2QtymZjsywOaz1UnRudWsEK3Azp3XBT/5n6qDP
+	UYa0ZjHBCdWJglp4YCU9yTu44/CfGFx8lHD8uQhBrJQW5T89Q4cv8YHvJV3
+X-Google-Smtp-Source: AGHT+IHHBMwM1y47uiYGiCZ5wJnCsj0WmgnVWFyMm4lJpp3CtPhJHPHE4Y68jLBM9H+zTGUpmqtIfQ==
+X-Received: by 2002:a05:6402:50d4:b0:5d0:cfad:f71 with SMTP id 4fb4d7f45d1cf-5db7db2bea3mr32816210a12.32.1737394251064;
+        Mon, 20 Jan 2025 09:30:51 -0800 (PST)
+Received: from gmail.com ([2a03:2880:30ff:9::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab384fcd73dsm646619066b.178.2025.01.20.09.30.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jan 2025 09:30:50 -0800 (PST)
+Date: Mon, 20 Jan 2025 09:30:48 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kernel-team@meta.com,
+	max@kutsevol.com, thepacketgeek@gmail.com
+Subject: Re: [PATCH net-next v2 3/5] netconsole: add support for sysdata and
+ CPU population
+Message-ID: <20250120-rational-bullfrog-of-tornado-2cd6f4@leitao>
+References: <20250115-netcon_cpu-v2-0-95971b44dc56@debian.org>
+ <20250115-netcon_cpu-v2-3-95971b44dc56@debian.org>
+ <20250116174405.20a0e20b@kernel.org>
+ <20250117-terrestrial-clam-of-satiation-cf312f@leitao>
+ <20250117183520.11d93f4d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <gsntsepd2z4q.fsf@coltonlewis-kvm.c.googlers.com>
-Subject: Re: [PATCH v2 2/6] KVM: x86: selftests: Define AMD PMU CPUID leaves
-From: Colton Lewis <coltonlewis@google.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org, mizhang@google.com, ljr.kernel@gmail.com, 
-	jmattson@google.com, aaronlewis@google.com, pbonzini@redhat.com, 
-	shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250117183520.11d93f4d@kernel.org>
 
-Noted about the changelog and the ordering. No objections for how you
-want to apply it.
+On Fri, Jan 17, 2025 at 06:35:20PM -0800, Jakub Kicinski wrote:
+> On Fri, 17 Jan 2025 03:02:40 -0800 Breno Leitao wrote:
+> > > Looks like previously all the data was on the stack, now we have a mix.  
+> > 
+> > Not sure I followed. The data ({userdata,extradata}_complete) was always
+> > inside nt field, which belongs to target_list.
+> 
+> I mean the buffer we use for formatting. Today it's this:
+> 
+> 	static char buf[MAX_PRINT_CHUNK]; /* protected by target_list_lock */
+> 	int header_len, msgbody_len;
+> 	const char *msgbody;
+> 
+> right? I missed that "static" actually so it's not on the stack, 
+> it's in the .bss section.
 
-Sean Christopherson <seanjc@google.com> writes:
+Since you raised this topic, I don't think buf needs to be static
+for a functional perspective, since `buf` is completely overwritten
+every time send_msg functions are called.
 
-> The shortlog is misleading.  It's the *leaves* that are being defined,  
-> it's the
-> features and properties.
+> > > Maybe we can pack all the bits of state into a struct for easier
+> > > passing around, but still put it on the stack?  
+> > 
+> > It depends on what state you need here. We can certainly pass runtime
+> > (aka sysdata in this patchset) data in the stack, but doing the same for
+> > userdata would require extra computation in runtime. In other words, the
+> > userdata_complete and length are calculated at configfs update time
+> > today, and only read during runtime, and there is no connection between
+> > configfs and runtime (write_ext_msg()) except through the stack.
+> > 
+> > 
+> > On the other side, if we want to have extradata_complete in the stack, I
+> > still think that userdata will need to be in the stack, and create a
+> > buffer in runtime's frame and copy userdata + sysdata at run time, doing
+> > an extra copy. 
+> > 
+> > Trying to put this in code, this is what I thought:
+> > 
+> > 	/* Copy to the stack (buf) the userdata string + sysdata */
+> > 	static void append_runtime_sysdata(struct netconsole_target *nt, char *buf) {
+> > 		if (!(nt->sysdata_fields & CPU_NR))
+> > 			return;
+> > 
+> > 		return scnprintf(buf,  MAX_EXTRADATA_ENTRY_LEN * MAX_EXTRADATA_ITEMS,
+> > 				  "%s cpu=%u\n", nt->userdata_complete, raw_smp_processor_id());
+> > 	}
+> > 
+> > 	/* Move complete string in the stack and send from there */
+> > 	static void send_ext_msg_udp(struct netconsole_target *nt, const char *msg,
+> > 				     int msg_len) {
+> > 		...
+> > 	#ifdef CONFIG_NETCONSOLE_DYNAMIC
+> > 		struct char buf[MAX_EXTRADATA_ENTRY_LEN * MAX_EXTRADATA_ITEMS];
+> > 		extradata_len = append_runtime_sysdata(nt, buf);
+> > 	#endif
+> > 
+> > 		send_msg_{no}_fragmentation(nt, msg, buf, extradata_len, release_len)
+> > 		...
+> > 	}
+> 
+> My thinking was to handle it like the release.
+> Print it at the send_msg_no_fragmentation() stage directly 
+> into the static buffer. Does that get hairy coding-wise?
 
-> On Wed, Sep 18, 2024, Colton Lewis wrote:
->> This defined the CPUID calls to determine what extensions and
->> properties are available.
+I suppose the advantage of doing this approach is to reduce a
+memcpy/strcpy, right?
 
-> This is not a coherent changelog.
+If this is what your motivation, I think we cannot remove it from the
+fragmented case. Let me share my thought process:
 
->> AMD reference manual names listed below.
+1) sysdata needs to be appended to both send_msg_fragmented() and
+send_msg_no_fragmentation(). The fragmented case is the problem.
 
->> * PerfCtrExtCore (six core counters instead of four)
->> * PerfCtrExtNB (four counters for northbridge events)
->> * PerfCtrExtL2I (four counters for L2 cache events)
->> * PerfMonV2 (support for registers to control multiple
->>    counters with a single register write)
->> * LbrAndPmcFreeze (support for freezing last branch recorded stack on
->>    performance counter overflow)
->> * NumPerfCtrCore (number of core counters)
->> * NumPerfCtrNB (number of northbridge counters)
+2) It is trivially done in send_msg_fragmented() case.
 
->> Signed-off-by: Colton Lewis <coltonlewis@google.com>
->> ---
->>   tools/testing/selftests/kvm/include/x86_64/processor.h | 7 +++++++
->>   1 file changed, 7 insertions(+)
+3) For the send_msg_no_fragmentation() case, there is no trivial way to
+get it done without using a secondary buffer and then memcpy to `buf`.
 
->> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h  
->> b/tools/testing/selftests/kvm/include/x86_64/processor.h
->> index a0c1440017bb..44ddfc4c1673 100644
->> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
->> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
->> @@ -183,6 +183,9 @@ struct kvm_x86_cpu_feature {
->>   #define	X86_FEATURE_GBPAGES		KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 26)
->>   #define	X86_FEATURE_RDTSCP		KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 27)
->>   #define	X86_FEATURE_LM			KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 29)
->> +#define	X86_FEATURE_PERF_CTR_EXT_CORE	KVM_X86_CPU_FEATURE(0x80000001,  
->> 0, ECX, 23)
+Let's suppose sysdata has "cpu=42", and original `buf` has only 5 available
+chars, thus it needs to have 2 msgs to accommodate the full message.
 
-> This ordering is "broken", and confused me for quite some time.  These  
-> new features
-> are in ECX, but they're landed after features for EDX.  To make matters  
-> worse,
-> there's an existing feature, SVM, defined for ECX.
+Then the it needs to track that `cpu=4` will be sent in a msg and create
+another message with the missing `2`.
 
-> TL;DR: please be more careful about the ordering, don't just drop stuff  
-> at the
-> end.
+The only way to do it properly is having a extra buffer where we
+have `cpu=42` and copy 5 bytes from there, and then copy the last one in
+the next iteration. I am not sure we can do it in one shot.
 
->> +#define	X86_FEATURE_PERF_CTR_EXT_NB	KVM_X86_CPU_FEATURE(0x80000001, 0,  
->> ECX, 24)
->> +#define	X86_FEATURE_PERF_CTR_EXT_L2I	KVM_X86_CPU_FEATURE(0x80000001, 0,  
->> ECX, 28)
+On top of that, I am planning to increase other features in sysdata
+(such as current task name, modules and even consolidate the release as
+sysdata), which has two implications:
 
-> To make life easier for developers, I think it makes sense to use the  
-> kernel's
-> names (when the kernel also defines a feature), and adjust the property  
-> names to
-> follow suit.
+1) Average messages size will become bigger. Thus, memcpy will be needed
+one way or another.
 
-> If there are no objections, I'll apply this as:
+2) Unless we can come up with a smart solution, this solution will be
+harder to reason about.
 
-> --
-> Author:     Colton Lewis <coltonlewis@google.com>
-> AuthorDate: Wed Sep 18 20:53:15 2024 +0000
-> Commit:     Sean Christopherson <seanjc@google.com>
-> CommitDate: Wed Jan 8 09:55:57 2025 -0800
+If you want to invest more time in this direction, I am more than happy
+to create a PoC, so we can discuss more concretely. 
 
->      KVM: selftests: Add defines for AMD PMU CPUID features and properties
-
->      Add macros for AMD's PMU related CPUID features.  To make it easier to
->      cross reference selftest code with KVM/kernel code, use the same macro
->      names as the kernel for the features.
-
->      For reference, the AMD APM defines the features/properties as:
-
->        * PerfCtrExtCore (six core counters instead of four)
->        * PerfCtrExtNB (four counters for northbridge events)
->        * PerfCtrExtL2I (four counters for L2 cache events)
->        * PerfMonV2 (support for registers to control multiple
->          counters with a single register write)
->        * LbrAndPmcFreeze (support for freezing last branch recorded stack  
-> on
->          performance counter overflow)
->        * NumPerfCtrCore (number of core counters)
->        * NumPerfCtrNB (number of northbridge counters)
-
->      Signed-off-by: Colton Lewis <coltonlewis@google.com>
->      Link:  
-> https://lore.kernel.org/r/20240918205319.3517569-3-coltonlewis@google.com
->      [sean: massage changelog, use same names as the kernel]
->      Signed-off-by: Sean Christopherson <seanjc@google.com>
-
-> diff --git a/tools/testing/selftests/kvm/include/x86/processor.h  
-> b/tools/testing/selftests/kvm/include/x86/processor.h
-> index 9ec984cf8674..8de7cace1fbf 100644
-> --- a/tools/testing/selftests/kvm/include/x86/processor.h
-> +++ b/tools/testing/selftests/kvm/include/x86/processor.h
-> @@ -181,6 +181,9 @@ struct kvm_x86_cpu_feature {
->    * Extended Leafs, a.k.a. AMD defined
->    */
->   #define        X86_FEATURE_SVM                  
-> KVM_X86_CPU_FEATURE(0x80000001, 0, ECX, 2)
-> +#define        X86_FEATURE_PERFCTR_CORE         
-> KVM_X86_CPU_FEATURE(0x80000001, 0, ECX, 23)
-> +#define        X86_FEATURE_PERFCTR_NB           
-> KVM_X86_CPU_FEATURE(0x80000001, 0, ECX, 24)
-> +#define        X86_FEATURE_PERFCTR_LLC          
-> KVM_X86_CPU_FEATURE(0x80000001, 0, ECX, 28)
->   #define        X86_FEATURE_NX                   
-> KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 20)
->   #define        X86_FEATURE_GBPAGES              
-> KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 26)
->   #define        X86_FEATURE_RDTSCP               
-> KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 27)
-> @@ -197,6 +200,8 @@ struct kvm_x86_cpu_feature {
->   #define        X86_FEATURE_VGIF                 
-> KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 16)
->   #define X86_FEATURE_SEV                         
-> KVM_X86_CPU_FEATURE(0x8000001F, 0, EAX, 1)
->   #define X86_FEATURE_SEV_ES             KVM_X86_CPU_FEATURE(0x8000001F,  
-> 0, EAX, 3)
-> +#define        X86_FEATURE_PERFMON_V2           
-> KVM_X86_CPU_FEATURE(0x80000022, 0, EAX, 0)
-> +#define        X86_FEATURE_LBR_PMC_FREEZE       
-> KVM_X86_CPU_FEATURE(0x80000022, 0, EAX, 2)
-
->   /*
->    * KVM defined paravirt features.
-> @@ -283,6 +288,8 @@ struct kvm_x86_cpu_property {
->   #define X86_PROPERTY_GUEST_MAX_PHY_ADDR                 
-> KVM_X86_CPU_PROPERTY(0x80000008, 0, EAX, 16, 23)
->   #define X86_PROPERTY_SEV_C_BIT                  
-> KVM_X86_CPU_PROPERTY(0x8000001F, 0, EBX, 0, 5)
->   #define X86_PROPERTY_PHYS_ADDR_REDUCTION        
-> KVM_X86_CPU_PROPERTY(0x8000001F, 0, EBX, 6, 11)
-> +#define X86_PROPERTY_NR_PERFCTR_CORE            
-> KVM_X86_CPU_PROPERTY(0x80000022, 0, EBX, 0, 3)
-> +#define X86_PROPERTY_NR_PERFCTR_NB              
-> KVM_X86_CPU_PROPERTY(0x80000022, 0, EBX, 10, 15)
-
->   #define X86_PROPERTY_MAX_CENTAUR_LEAF           
-> KVM_X86_CPU_PROPERTY(0xC0000000, 0, EAX, 0, 31)
+Thanks,
+--breno
 
