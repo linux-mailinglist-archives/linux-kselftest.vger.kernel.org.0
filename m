@@ -1,219 +1,250 @@
-Return-Path: <linux-kselftest+bounces-24812-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24813-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31CC0A173D3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 21:52:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81EF3A17408
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 22:19:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C1103A7327
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 20:52:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 601633A754B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 21:19:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF51E1EF0AD;
-	Mon, 20 Jan 2025 20:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 308181F03E5;
+	Mon, 20 Jan 2025 21:19:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="BlHp6yuZ"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="ExslH8my"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2062.outbound.protection.outlook.com [40.107.93.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ABC8188A0E;
-	Mon, 20 Jan 2025 20:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737406347; cv=fail; b=lszpI1q5R5Z2UXV6lYovYHf4JkXTYjKEF8Lgx2Qpd4GXDyh9ossqz90kV0j7q1NgKjrMi2Qf2eEhTMrGUFItCEhMd0L6ut7h4Hdk24Wwb64/pocobLjxA7KVS3qlm8TRn8G91dJWJ2SPTvHIlykrIFNE+I5MorHuSL6Tzn+2krU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737406347; c=relaxed/simple;
-	bh=vH7ytJL5saKvi3Os9MOrECdAs+PhajJ+GzTDPb0q/co=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eA7AnsYlHYXS1igjn9W9cpeEMkhJvBRMWrwYzNAblQlBLgF6C3k6K4Xuc5NYTHYXBdIGg97rFbSXHigaETE1zVvS5KDHpqmb43spPYjg8xnf+7wqiQEfFLoKUVvQ+wFi56kgBjFEIS15RmvdMtz+AG4BfCiKEPyX0Mlup1xqStY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=BlHp6yuZ; arc=fail smtp.client-ip=40.107.93.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=GMugp/ULYC7JkRFHhC1bVxFMJhJBjye31pgAiFYf+Mc4SW+COPfQoI55Uos9f9GCGW1NUR4AhH7Zx0rNthKwbuaybYxsaKEkzqM7OlLB0QGFyeVamHIDoScbztrM3XlEO92aJncjPBkxDUBv1Rspx6EC189YJ6ITz+h90GEkl08DVuzRFoqEHboDQiakAQrFWfPGnIwHj89Mi2XO1BrcelolXl75t//myR214R92drYE5ZbnGyWWbuSsxtfoMWEBSbOprcQr4G+AzzWnsJsagKE3VQ+RWCcp9mZO31KiS+/QqHaIzNIXqzRRSxrBMBWocNod8jmsYrwFO/7PJuSW8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QexsPUeDT9DhzSr7QVukDMy8urwzeBsGzbqHBILLznk=;
- b=hE9y0csvBQX3He6C/PGetc4Iwd0/BnlQwIwjIXB0PlSxXo1IH0811R1Pk/Zqm+hwtvAswAUc79ip0tnSkZOJ8C6/sf7lbc8sh12ki4xRT+EOlXKZNn6o1CAn5lSn8YXLdC4XmeR9PmNtk+4q6uVSFtxXCZYcr1Gsavl84rEjixKVNvAJ18GzJ0n6cWzdCHlbbRjQLP2wNMmgnDXjQqcYRdNHbT8v7F4YQL4ed98GMvI19yiLpRWvAXp9GgRMew0dT4O+jWoEAxUvB4jmWo5jkCvr++8vYsckP9inDQquLvEH3ugQW9p+qkNTs8Jcbu52nDbi1wteAcNHeaNs29MFKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QexsPUeDT9DhzSr7QVukDMy8urwzeBsGzbqHBILLznk=;
- b=BlHp6yuZOVY/MLPlkEaki8lBRimJClrjccLXngzAQOAQ47g4lXgZkwPvsNHuG9hUIaABLXqsS1ezdp4Npuu8wAwVMX1EzgKhxw0UsXwbFjqSZpCdIQSxk8THIUfcwQctQFtGu2MJme8FlHUddjXyKYF/CnB3YFNdMQBa4asmy/zejrxAvmkHU9GcpzEbk14pxzPkgaZilFLkqrsyPB++QiuN5HAvm89z07Xs17SesXtFfiHJ0CegBKNf7dQiyOLQ4ILM/Tx3fHbxPrEYq9Tc91F02XFX1Z3gUMkoT3X4g5aatxtZ79GtBVPNiUx4ruBmzB3IpkPPWFTxt3DNauN68A==
-Received: from CH2PR04CA0025.namprd04.prod.outlook.com (2603:10b6:610:52::35)
- by DS0PR12MB7874.namprd12.prod.outlook.com (2603:10b6:8:141::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.21; Mon, 20 Jan
- 2025 20:52:22 +0000
-Received: from DS2PEPF00003442.namprd04.prod.outlook.com
- (2603:10b6:610:52:cafe::7e) by CH2PR04CA0025.outlook.office365.com
- (2603:10b6:610:52::35) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8356.22 via Frontend Transport; Mon,
- 20 Jan 2025 20:52:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DS2PEPF00003442.mail.protection.outlook.com (10.167.17.69) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8377.8 via Frontend Transport; Mon, 20 Jan 2025 20:52:22 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 20 Jan
- 2025 12:52:16 -0800
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 20 Jan
- 2025 12:52:16 -0800
-Received: from nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
- Transport; Mon, 20 Jan 2025 12:52:11 -0800
-Date: Mon, 20 Jan 2025 12:52:09 -0800
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: <kevin.tian@intel.com>, <corbet@lwn.net>, <will@kernel.org>,
-	<joro@8bytes.org>, <suravee.suthikulpanit@amd.com>, <robin.murphy@arm.com>,
-	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>, <shuah@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <eric.auger@redhat.com>,
-	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
-	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>,
-	<ddutile@redhat.com>, <yi.l.liu@intel.com>, <patches@lists.linux.dev>
-Subject: Re: [PATCH v5 08/14] iommufd/viommu: Add iommufd_viommu_report_event
- helper
-Message-ID: <Z463eXfgNArCOfPn@nvidia.com>
-References: <Z4FpMs4qx3NdwrnZ@Asurada-Nvidia>
- <20250110195114.GJ5556@nvidia.com>
- <Z4Smpeb4k4UF3Qso@Asurada-Nvidia>
- <20250113192144.GT5556@nvidia.com>
- <Z4Vt6DAMDfEv6tb5@Asurada-Nvidia>
- <20250113195433.GV5556@nvidia.com>
- <Z4V7NbxGyYoQN0yV@Asurada-Nvidia>
- <20250114134158.GC5556@nvidia.com>
- <Z4rVg1Xg5TCiFlSb@nvidia.com>
- <20250120181854.GQ5556@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB517192D98
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2025 21:19:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737407988; cv=none; b=Oyhn8nS1SSwMB8Dx2AnZgLhwtoHBf9lKmu9JmVRIaHH4sjGtlJh5h3mn7bdnRnz3h5W4m5QeiBHdZ8t0QKRtLdrlzYWHIsYLEoTOoDaqQ3KsN/ggGgRTNjGb00v9I8oRsEcndcblca376CMBtBaauYxpONvGbmzPANTeXkTw10c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737407988; c=relaxed/simple;
+	bh=ztHIfq+kMYRnka64Aild+IyNbHkEJmqyRdMYdvv+HVs=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=fiYYdTa/Vf9nmsGjIAO9CjPUecaF4NZ9LsMO72amPSVDw5xH86PnNoE3ELqWE4vPNBxEr+WMZi2N7OfI2cR4cx6p4grU6yX5uXqy08L5LMqwfj2dHE6zXqmTvLwrHe2JOTaAlgopGIEe+XyWHz+tHMM3kiaTihZ2hNNaC6uDMIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=ExslH8my; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-aa67ac42819so692155766b.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2025 13:19:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvpn.net; s=google; t=1737407983; x=1738012783; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:from:subject:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dLz88EtFjvCclEbYQA9vL8cyUXQFnBDlh8OoQYVWA4U=;
+        b=ExslH8myN9tumLDqWaDFUiJqeJ/dK7o0SfQ0ZhZv4HXnopuJLtUlWzLnXQ6h8sUA5V
+         t18EgeHTS5UW8YKOFphVltM4OtoKIHeuXadHqISMp7eQ+GXCizagsRsC5PBquyeu99Uy
+         mskBcCO+Lp0MVor68F8hk0nNPaEqmf4GiroAQUPIcpKy6dRrb2gmiGcTWiwcFP0kUKkH
+         VFNTqE7EsBGN4V1Hiyz0t+GEwrAlXaG0tSkfOCAVlR7KtYtjPBGy9NkDbHgAsabo+rA1
+         hWJum64ePONErXW8juCrsESMmw7oYdDY43NoFmQ8k9hhc3kftuPzWRuDu6RdWmRTqKVS
+         FBYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737407983; x=1738012783;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:from:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dLz88EtFjvCclEbYQA9vL8cyUXQFnBDlh8OoQYVWA4U=;
+        b=uLHwE0ioFM9PM0jHbYVfRgP7vwZelLEwoN32lVlGkpTLRpwsWNgouuyoo0RodDuaUy
+         QB8GVu/2T8CD1cbdYhzP+5+OWgULsl1bDbgmXG0Lknz1pw0MngqsYaoBlJhosyRJ+64v
+         TCYQPc/2vffZY7LGD1k6s+wser36ur3bNTbX49UcjphsWXeEw3yt3r5AwnOphBgOfd/z
+         5glQYlFoKlofF3zbenXleHCtDrziUQFB+8z4FDsNTBeM2tbcTmWPZ0S4K6GlMY888efj
+         HtbGq0GOnEjvBFPgrS83OQ/opgtq/uRKZ2tTA9hHu5xVWUmVrT1wDZxh5eTCZkmGbX1L
+         BLGw==
+X-Forwarded-Encrypted: i=1; AJvYcCVZiGdkS7VpoK2hjg6sHMSMYeuvxhdGBo6bkXf7KHAkr0o7eQCaWAmiTHI3crgSDzpDojEv30+I9CJwhDZ1HhE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4GVKmbZlPsOQ2no2EzHauH3fzR3mCrx9Xa8KZ4i47WPW5SHdb
+	43hYtK/4JIZtj2D880mPko5Vxj5Gbpf9ESkJ8DolnYDCR+oc+Q326rJ/8rDcwqQ=
+X-Gm-Gg: ASbGncsXxKOpk1sPuLaAL4hzJP0ZaZc5zx8wKFRYp8YHGXvVo1i7lIejiuzDHnH+SrV
+	jcHw2Ljc75MQ3fkHd0LTkGSw7tW4odq9LoXVmEYFYEOkxOS9BJ/21CTZMh+RExmpYPGBl/4ldRN
+	lZjf+ovxNj2oVXrMA4m1fsLKg0qBax1BJ2PUT9y2yXBsRaZk8nukksz4Sf3fT4f85KL5b9LJkRH
+	o9iNgr1J3JrqAKNgKshYAwOMfyLMrK0udkepgBjzlDVCJF9t3X9WomYdXpOQFJ2BN1s5UiYUw7A
+	yfDXDQ+01x3JXccArKhXG14mJinvW8VB
+X-Google-Smtp-Source: AGHT+IGfqqD+RQy/J1+9sdB7DCRmrqy9QWvzWCYOyeE/2D+11UrIwFdxyXSW3jJ9POG+4a4E96rLYg==
+X-Received: by 2002:a17:907:9721:b0:a9e:d4a9:2c28 with SMTP id a640c23a62f3a-ab38b41f651mr1366033766b.53.1737407983075;
+        Mon, 20 Jan 2025 13:19:43 -0800 (PST)
+Received: from ?IPV6:2001:67c:2fbc:1:533e:60a6:30e7:6862? ([2001:67c:2fbc:1:533e:60a6:30e7:6862])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab384ce213esm671383766b.63.2025.01.20.13.19.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jan 2025 13:19:42 -0800 (PST)
+Message-ID: <4238ae90-9d3f-4c6a-b540-bea3c2e1addc@openvpn.net>
+Date: Mon, 20 Jan 2025 22:20:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250120181854.GQ5556@nvidia.com>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS2PEPF00003442:EE_|DS0PR12MB7874:EE_
-X-MS-Office365-Filtering-Correlation-Id: eae517c9-140c-47bc-2f51-08dd39945648
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|82310400026|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?xSkYibqociC43g4Km8leDtnOjSgIES7x9r/UbPsGiSVal+Y+gE0ghXEEBN0V?=
- =?us-ascii?Q?VqEDyfOhCCD7cGouxSp481f+iGQP68HGbBGDaXDlx+wR0TlhO071p0mfidK6?=
- =?us-ascii?Q?7bJT6X6dV8eHm5aPoXYImS5bBD/LaAZSYfMPlmaesScwB8FpfUcX1Xr0dDVc?=
- =?us-ascii?Q?8VzPpGAyhstaWd4y77Kk3P7Da7i+1i5Rt8l3kSs8TwCU/ba7bFzZikCZyPXu?=
- =?us-ascii?Q?R41yy9POiWexEQqsLKANlrdIZeBQPoy/LMJNshJBJHHJZgQma+7X/bQ4ybI2?=
- =?us-ascii?Q?TpVhN18/0T55U7AISIyB2EHQdsvQA3ub3YkG7JH2XeOXNIqMbeqH/IhpymFB?=
- =?us-ascii?Q?9rtu1Jy22A3jNh3U3f3EwA4TDF4Qu10JkE0xZWxpXKUUC9SIVa+pKm8kUqen?=
- =?us-ascii?Q?Wd+QKy1tqJCSOGIPzhMVA3WG6HCb8+MdBKaNXDC2ZjKBcaeOoXkDh74jM62A?=
- =?us-ascii?Q?clpAKIKZQzSR4pF8kpBM8VJ6H1ol0UXug0d+ELu3lETQZt0oMAiIDV0ter50?=
- =?us-ascii?Q?Kfm5Fonub9LZG3tUTx/mp3LJhm4fYtGZsrorBGsCxFj9fAtPnktAxQ/ST99i?=
- =?us-ascii?Q?jl7OsLJZRd0HTD75UDWtj8wbVRlIkv4YwnevnmGlme4C3G4gL1Hi6W87O3Gv?=
- =?us-ascii?Q?VQ3aXjSt0/BVPV3gWirfOP0v9awc1jtQyaRxSuYcGmo3+NwMUV5OjS77v/32?=
- =?us-ascii?Q?ebr4nVyATQf1peQbsw0oWqoCMTrAtdM6sm0AL16MDvWcN0xcB3kJfcZ1NoBT?=
- =?us-ascii?Q?+Z5lCrLmkPg66MPSALJSIZzklfQhKfhOj066mQwHIw8o7jW+MLUwR2b32dA9?=
- =?us-ascii?Q?/H90Vi+Lufpv3dYar0SPWQ1HThV6mrh013uJtyjauwMVbGmJSeT38eL8kONS?=
- =?us-ascii?Q?TEkWrbOUoaocacbtsZNB9uPybNmv32w67UO6xD0mgRt2mxxq62X6UvOlB2uB?=
- =?us-ascii?Q?fWIPulf5m8cu5NFqkGxyDudWT4OSeQWC/H3CcmI6h0CC7+1E8POOVK4Fc3bW?=
- =?us-ascii?Q?C/a98mjqVc5Pil795C9Z4pc8b2v/zo+pBlCFIICysbUyI5gdvPY7eiMDRA72?=
- =?us-ascii?Q?GXhDF5i2PuZ1qxC85CNOt9WEajsGATELjUStxxtn119jvE/ls1sw7d2RW9nB?=
- =?us-ascii?Q?st26wOUNz7OJN9XMUL8SUC9uj4ao/FQwSC2el5oywuNiQ9N/Zqw2UkMZClOF?=
- =?us-ascii?Q?gY8bi8cw/IhosWHZOTyLl9lpKd8YmRGvO7N37lgrp2TY8yC5J1lKARdEgqTq?=
- =?us-ascii?Q?zc9xx9Xg7m/5dOSpZ4lWzyBPiQzjlRGvPk/KaH1W+DiViDoPhi/FVlys0s2c?=
- =?us-ascii?Q?vLda8TRGlN5OHL50lo7r3tMn76tvWZmBmaxo3r7UT4vEwJWphwn6GIR1rFLQ?=
- =?us-ascii?Q?J7ZHHci0+XZts/vjOtlLyfKnzF3qUk/Bw2K+uhrKxZWEWE83RX0FISfYyB7o?=
- =?us-ascii?Q?k0cRo09CuIbF+q9K1CkZ41pMh6QC/5VYhT04SnqynxuGjvLRIHHziypENO28?=
- =?us-ascii?Q?tihkp/vQ9ruMf/U=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2025 20:52:22.0586
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: eae517c9-140c-47bc-2f51-08dd39945648
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS2PEPF00003442.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7874
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v18 20/25] ovpn: implement peer
+ add/get/dump/delete via netlink
+From: Antonio Quartulli <antonio@openvpn.net>
+To: ryazanov.s.a@gmail.com, Sabrina Dubroca <sd@queasysnail.net>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Simon Horman <horms@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Xiao Liang <shaw.leon@gmail.com>
+References: <20250113-b4-ovpn-v18-0-1f00db9c2bd6@openvpn.net>
+ <20250113-b4-ovpn-v18-20-1f00db9c2bd6@openvpn.net> <Z4pDpqN2hCc-7DGt@hog>
+ <f5507529-e61c-4b81-ab93-4ea6c8df46e9@openvpn.net> <Z4qPjuK3_fQUYLJi@hog>
+ <33710520-5f4f-4d33-a28d-99dc64afc9c3@openvpn.net> <Z44gwl2d8ThTshzQ@hog>
+ <94e44fdb-314c-41b0-8091-cff5789735b2@openvpn.net>
+Content-Language: en-US
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <94e44fdb-314c-41b0-8091-cff5789735b2@openvpn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 20, 2025 at 02:18:54PM -0400, Jason Gunthorpe wrote:
-> On Fri, Jan 17, 2025 at 02:11:15PM -0800, Nicolin Chen wrote:
-> > +/**
-> > + * struct iommufd_vevent_header - Virtual Event Header for a vEVENTQ Status
-> > + * @state: One of enum iommu_veventq_state
+On 20/01/2025 11:45, Antonio Quartulli wrote:
+[...]
+>>>>>> I'm not sure what this (and the peer flushing on NETDEV_DOWN) is
+>>>>>> trying to accomplish. Is it a problem to keep peers when the 
+>>>>>> netdevice
+>>>>>> is down?
+>>>>>
+>>>>> This is the result of my discussion with Sergey that started in v23 
+>>>>> 5/23:
+>>>>>
+>>>>> https://lore.kernel.org/r/netdev/20241029-b4-ovpn-v11-5- 
+>>>>> de4698c73a25@openvpn.net/
+>>>>>
+>>>>> The idea was to match operational state with actual connectivity to 
+>>>>> peer(s).
+>>>>>
+>>>>> Originally I wanted to simply kee the carrier always on, but after 
+>>>>> further
+>>>>> discussion (including the meaning of the openvpn option --persist- 
+>>>>> tun) we
+>>>>> agreed on following the logic where an UP device has a peer 
+>>>>> connected (logic
+>>>>> is slightly different between MP and P2P).
+>>>>>
+>>>>> I am not extremely happy with the resulting complexity, but it 
+>>>>> seemed to be
+>>>>> blocker for Sergey.
+>>>>
+>>>> [after re-reading that discussion with Sergey]
+>>>>
+>>>> I don't understand why "admin does 'ip link set tun0 down'" means "we
+>>>> should get rid of all peers. For me the carrier situation goes the
+>>>> other way: no peer, no carrier (as if I unplugged the cable from my
+>>>> ethernet card), and it's independent of what the user does (ip link
+>>>> set XXX up/down). You have that with netif_carrier_{on,off}, but
+>>>> flushing peers when the admin does "ip link set tun0 down" is separate
+>>>> IMO.
+>>>
+>>> The reasoning was "the user is asking the VPN to go down - it should be
+>>> assumed that from that moment on no VPN traffic whatsoever should 
+>>> flow in
+>>> either direction".
+>>> Similarly to when you bring an Eth interface dwn - the phy link goes 
+>>> down as
+>>> well.
+>>>
+>>> Does it make sense?
+>>
+>> I'm not sure. If I turn the ovpn interface down for a second, the
+>> peers are removed. Will they come back when I bring the interface back
+>> up?  That'd have to be done by userspace (which could also watch for
+>> the DOWN events and tell the kernel to flush the peers) - but some of
+>> the peers could have timed out in the meantime.
+>>
+>> If I set the VPN interface down, I expect no packets flowing through
+>> that interface (dropping the peers isn't necessary for that), but all
+>> non-data (key exchange etc sent by openvpn's userspace) should still
+>> go through, and IMO peer keepalive fits in that "non-data" category.
 > 
-> I'd probably just make this a flag with overflow as the only current flag?
-
-Ack.
-
-> > + * @counter: A counter reflecting the state of the vEVENTQ
+> This was my original thought too and my original proposal followed this 
+> idea :-)
 > 
-> > + * ----------------------------------------------------------------------------
-> > + * | @state                       | @counter                                  |
-> > + * ----------------------------------------------------------------------------
-> > + * | IOMMU_VEVENTQ_STATE_OK       | number of readable vEVENTs in the vEVENTQ |
-> > + * | IOMMU_VEVENTQ_STATE_OVERFLOW | number of missed vEVENTs since overflow   |
-> > + * ----------------------------------------------------------------------------
+> However Sergey had a strong opinion about "the user expect no traffic 
+> whatsoever".
 > 
-> When I said counter I literally ment a counter of the number of events
-> that were sent into the queue. So if events are dropped there is a
-> trivial gap in the count. Very easy to implement
+> I'd be happy about going again with your proposed approach, but I need 
+> to be sure that on the next revision nobody will come asking to revert 
+> this logic again :(
+> 
+>>
+>>
+>> What does openvpn currently do if I do
+>>      ip link set tun0 down ; sleep 5 ; ip link set tun0 up
+>> with a tuntap interface?
+> 
+> I think nothing happens, because userspace doesn't monitor the netdev 
+> status. Therefore, unless tun closed the socket (which I think it does 
+> only when the interface is destroyed), userspace does not even realize 
+> that the interface went down.
 
-The counter of the number of events in the vEVENTQ could decrease
-when userspace reads the queue. But you were saying "the number of
-events that were sent into the queue", which is like a PROD index
-that would keep growing but reset to 0 after UINT_MAX?
+What does IPsec do in this case? Does it keep connections open and 
+keepalives flowing?
 
-> IOMMU_VEVENTQ_STATE_OVERFLOW with a 0 length event is seen if events
-> have been lost and no subsequent events are present. It exists to
-> ensure timely delivery of the overflow event to userspace. counter
-> will be the sequence number of the next successful event.
+One counter example we have in the kernel are 802.11 interfaces.
+Any 802.11 interface must be brought up before you can possibly 
+establish a WiFi link. If you bring the interface down the link is 
+closed and no 802.11 control packets flow anymore.
 
-So userspace should first read the header to decide whether or not
-to read a vEVENT. If header is overflows, it should skip the vEVENT
-struct and read the next header?
+However, 802.11 is different as we are controlling a "physical 
+behaviour", while in ovpn (like other tunneling modules) we are 
+controlling a "virtual behaviour".
 
-> If events are lost in the middle of the queue then flags will remain 0
-> but counter will become non-montonic. A counter delta > 1 indicates
-> that many events have been lost.
+Regards,
 
-I don't quite get the "no subsequent events" v.s. "in the middle of
-the queue"..
+> 
+> Regards,
+> 
+>>
+> 
 
-The producer is the driver calling iommufd_viommu_report_event that
-only produces a single vEVENT at a time. When the number of vEVENTs
-in the vEVENTQ hits the @veventq_depth, it won't insert new vEVENTs
-but add an overflow (or exception) node to the head of deliver list
-and increase the producer index so the next vEVENT that can find an
-empty space in the queue will have an index with a gap (delta >= 1)?
+-- 
+Antonio Quartulli
+OpenVPN Inc.
 
-Thanks
-Nicolin
 
