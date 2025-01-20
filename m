@@ -1,192 +1,302 @@
-Return-Path: <linux-kselftest+bounces-24802-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24803-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FCAFA171F3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 18:33:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C97BA17283
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 19:03:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2C391885925
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 17:32:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 750F87A34DC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 18:03:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15D491547E7;
-	Mon, 20 Jan 2025 17:30:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 784501EE7B6;
+	Mon, 20 Jan 2025 18:03:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OJVeEfca"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-oa1-f74.google.com (mail-oa1-f74.google.com [209.85.160.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2281213AA5D;
-	Mon, 20 Jan 2025 17:30:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E06C186E58
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2025 18:03:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737394255; cv=none; b=m3zlEzzHUMMIf1pjdyQ8pPwjzHIPiQie1mmh7O1Lc7sAD0Knfcc82yJ0ylVmayGRaInlxXzCpj27sDr7PLDbuUXFFjIQBubvu2X5bRpbkCqeYWt7fQ4V8azWJh32SQ3JOiElyRhfDPm0dizxWzCeT2MS4iOJNGA3ntYgDSxQJ6Q=
+	t=1737396210; cv=none; b=swgKuTneNB+Bm/v/uis1LgNfmXRHTp9qdjLiyVEc/tH80Y11FbPBHhOiHn930CGYJnEwrjoYB7k8HD0DcLAKkLsCqj1giwNWhGLh/Lp8dcujZQekL/aYDN3XzCSP4XkJUQERITRw1r1lpwyJ/7+FuueY1ixlUZWny226ulbXxFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737394255; c=relaxed/simple;
-	bh=co4rh7mcehuLyfpxVs2kCx5deaYX52yDp0kZrDc/z8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HJV9cA1BHEerbKeqZF272KuyAsbR0NvfhfFGDD+Z/KL55Dg0idWg2huL+cXt7VoB/OPDgEf3KFBRLZvSB72w0jaPa8m0YrdfevyztDa92cjQeSncdg3FPPqC/q/uvlJNWnVr3QsOkoyMsEPKqpf365KNzuLt/nC4K/KVK2M8ZOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-aaef00ab172so731937366b.3;
-        Mon, 20 Jan 2025 09:30:52 -0800 (PST)
+	s=arc-20240116; t=1737396210; c=relaxed/simple;
+	bh=OnYOBlwRt2h+lGmMJjZPrgCtqhuuDo3+rXHXvQquy5A=;
+	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=iCIAZlG+ra19/AK2qrzgnCjpIe4qwGeSqq8EXMCtsQ90uihw3DdR2t2mfdDyMLEV01wTFRTklB1qxn1Yx5zVrmaswxa7EJQsf1pfe6yg7wRuINBPxjv5D5l5pYTb88OYEZOyfCN97b09mvSvH+2mGeDKhS+HXDBqiEBcVmKV+ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OJVeEfca; arc=none smtp.client-ip=209.85.160.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
+Received: by mail-oa1-f74.google.com with SMTP id 586e51a60fabf-2addd5053bfso3567657fac.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2025 10:03:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1737396206; x=1738001006; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=xAielVBxCJ6WhBq7MgTSaFFDOlTnnMStQX3hT8+4ErI=;
+        b=OJVeEfcaQKTB26E/kRp3YcVZY4rgRzWsxFRP0PawMLi7FGk/hcVvOkLrKdieusgYZ7
+         HjOEnQ1sXD4xSh9T5nf2s1/HpJTZ5PG6t+VeDuEt9M++ZJF6hpJOXgvxMnuuJGAsrA5w
+         8birdADgbeSvYlaIUGp4coWWj2k2d+gmEqOlTga1P9lKmtSrlzVzc8nWaqlp0qYUdkUA
+         W4KBlyp5rzu+Ba7+PfHyYyygjX9+A8T5A2ZQdfJrV8d0k/5Hep0Lfc+P2MD5fuvYWwxM
+         6SOIwlsslQtXPi6D3flRedkLBGVVJyxm0HvuIYLky3c6825CBpZUCX12MkoNzS2sBg8Q
+         KEwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737394251; x=1737999051;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vjKwZAMnGwVfQ1uehkUpRVLkmdlR6xAZAUrURRogCUo=;
-        b=UA+tJNjEI011ydMho2eKpEGke/lnr9t3W4TkJU3JA88y+I8q4Qmp/2+8VfS+de5fZp
-         7qMFxon3YJ326lkjkBN0B++jXnwoi1VCKFgrr39w8NLavSxwW5GcNbMirINhVJQCzM6V
-         dUxCJ15KzJcSFbCwvla+TurQxfr055lzMX99QVdiGa7RKp16sJ6Ei1faz6lfDvb3VflU
-         /Wlg/NmHNfusMInhjAFbGJIIqqPjFQriTSxYNWNSPCezTAJa+H8R9sxg56oObko596w3
-         mFiSY2NVvyLU3UaPXVBLQJiYCE9idDIrg67ymp2rYeDsLO85S1kd3dofkaQ8tlK6n9l4
-         rnTg==
-X-Forwarded-Encrypted: i=1; AJvYcCV76LXJiQo9e94fk3FYMR54nkMiHghvzPGX0f2m5AdnTorBsiua2Rs+q7BxNQQ3hbIgLRuasfgo@vger.kernel.org, AJvYcCWHjn9VoDZEkYI5SC4x1HnQbl20dAT2wO5kOsf1cMD4I7SX7DTQOM822X10N6geaab8IiFIEmrIvIKgfzb/@vger.kernel.org, AJvYcCWXZ3CGBESslPQcLXu7DHZsVXrJMzJzv47Rs0YH/ekufSj8CqSHwPy09ob2fMehDGKBAjjtDTiAu9U=@vger.kernel.org, AJvYcCXdq+aVjP53tYybWRdbdWb5HW+7C9RM+zc/8QZkmNZ8twsPpxiAYyERkGLrytsFqmaAPPjfKjQNhC3YNYmmL9+d@vger.kernel.org
-X-Gm-Message-State: AOJu0YygsUuKzmLiyeuDntvjhtQ7cMUo7SK/kTF9S/jFaJp1tn9WmQ5m
-	fRrllNzFRD0kY8oDhbfQ8ZqN1H0uBW8AfM0TNWPbSrQiKUU9diQZ
-X-Gm-Gg: ASbGnctc+7zxUyYsuxCAEZJsLHBLbzNXiblKrZHlQx5/sY7aR7tHWG2R4otVWXrzVvP
-	NkwzoWhzhmEyu+k9dwP3waHI9R9K1xPzCJ2HhmS++vKj1h6mLzLF2EDAmkNzckysdhJTshJMwm0
-	Kii7nLgsjoukA/T/M+apfmkbtfNS/EenlGssH2QtymZjsywOaz1UnRudWsEK3Azp3XBT/5n6qDP
-	UYa0ZjHBCdWJglp4YCU9yTu44/CfGFx8lHD8uQhBrJQW5T89Q4cv8YHvJV3
-X-Google-Smtp-Source: AGHT+IHHBMwM1y47uiYGiCZ5wJnCsj0WmgnVWFyMm4lJpp3CtPhJHPHE4Y68jLBM9H+zTGUpmqtIfQ==
-X-Received: by 2002:a05:6402:50d4:b0:5d0:cfad:f71 with SMTP id 4fb4d7f45d1cf-5db7db2bea3mr32816210a12.32.1737394251064;
-        Mon, 20 Jan 2025 09:30:51 -0800 (PST)
-Received: from gmail.com ([2a03:2880:30ff:9::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab384fcd73dsm646619066b.178.2025.01.20.09.30.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2025 09:30:50 -0800 (PST)
-Date: Mon, 20 Jan 2025 09:30:48 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kernel-team@meta.com,
-	max@kutsevol.com, thepacketgeek@gmail.com
-Subject: Re: [PATCH net-next v2 3/5] netconsole: add support for sysdata and
- CPU population
-Message-ID: <20250120-rational-bullfrog-of-tornado-2cd6f4@leitao>
-References: <20250115-netcon_cpu-v2-0-95971b44dc56@debian.org>
- <20250115-netcon_cpu-v2-3-95971b44dc56@debian.org>
- <20250116174405.20a0e20b@kernel.org>
- <20250117-terrestrial-clam-of-satiation-cf312f@leitao>
- <20250117183520.11d93f4d@kernel.org>
+        d=1e100.net; s=20230601; t=1737396206; x=1738001006;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xAielVBxCJ6WhBq7MgTSaFFDOlTnnMStQX3hT8+4ErI=;
+        b=o9y2qQmx4A9/poaXbiKfjxklTsgZlLrPY7R1irlxE5G7VbxdH3PfwF5RIj/JmsB3xz
+         TuvRLlS/4doNw3UnVeRs4WvpDbaBkQeKZoHmjC0dY8lC8ltbWqP8yBv7f4pESPSkIg1O
+         P1tMONEIJ1iPWw7dNDuDKz1XPSbi0EX+wYanU6KJIbKqO0z2Yp9yogv4Z+8rq/y9wQUm
+         lqqfL4w5feFu6az52EJHYLVbjt6nt9DcB2Xt7HhhPdTUKIm696sVz/PfMBI0K25WgrU1
+         B5T08peDdvTwzeRXmkJEgdmF3pZE6wuBzIMT/p7KljflVexAY/at+/TrzNPsA9dGzVuu
+         zfCw==
+X-Forwarded-Encrypted: i=1; AJvYcCXDRyueccvSsviQNpSKY2IpIRlsKW2sMv4SLrNa0ESm/yMjacuzzf8KHAo7HtijUhSkUG/gvmBI1jh2+iThqFM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfCcCQWLL5TUrI2xoxwBtdv3YActcXZ5WmTfZ+NXWLcU7oNSKS
+	A7jd7EVIYUnO8wO91Y93WJm3lySofQBV+no7T1qcl73RpOdUCMst3Uf46qT7kLIW4dlvmDkcn+c
+	yiyVXXSoh3vlkXrAqh0IwKw==
+X-Google-Smtp-Source: AGHT+IG9ii1JO8QU6byqwcTmDP437YmYaXev3Cr2KOs3EWfVC/KlKymtDWFXgBz6J3IpTWlDXM21MiBsfxPyj6mkxw==
+X-Received: from oabhb18.prod.google.com ([2002:a05:6870:7812:b0:2a8:47f:e4e2])
+ (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6870:e07:b0:297:28ec:9b26 with SMTP id 586e51a60fabf-2b1c0e5233cmr8307141fac.33.1737396206701;
+ Mon, 20 Jan 2025 10:03:26 -0800 (PST)
+Date: Mon, 20 Jan 2025 18:03:25 +0000
+In-Reply-To: <Z37FYUU4ppiZsa68@google.com> (message from Sean Christopherson
+ on Wed, 8 Jan 2025 10:35:13 -0800)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250117183520.11d93f4d@kernel.org>
+Mime-Version: 1.0
+Message-ID: <gsntplkh2wia.fsf@coltonlewis-kvm.c.googlers.com>
+Subject: Re: [PATCH v2 3/6] KVM: x86: selftests: Set up AMD VM in pmu_counters_test
+From: Colton Lewis <coltonlewis@google.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: kvm@vger.kernel.org, mizhang@google.com, ljr.kernel@gmail.com, 
+	jmattson@google.com, aaronlewis@google.com, pbonzini@redhat.com, 
+	shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
-On Fri, Jan 17, 2025 at 06:35:20PM -0800, Jakub Kicinski wrote:
-> On Fri, 17 Jan 2025 03:02:40 -0800 Breno Leitao wrote:
-> > > Looks like previously all the data was on the stack, now we have a mix.  
-> > 
-> > Not sure I followed. The data ({userdata,extradata}_complete) was always
-> > inside nt field, which belongs to target_list.
-> 
-> I mean the buffer we use for formatting. Today it's this:
-> 
-> 	static char buf[MAX_PRINT_CHUNK]; /* protected by target_list_lock */
-> 	int header_len, msgbody_len;
-> 	const char *msgbody;
-> 
-> right? I missed that "static" actually so it's not on the stack, 
-> it's in the .bss section.
+Hey Sean,
 
-Since you raised this topic, I don't think buf needs to be static
-for a functional perspective, since `buf` is completely overwritten
-every time send_msg functions are called.
+Thanks for the review.
 
-> > > Maybe we can pack all the bits of state into a struct for easier
-> > > passing around, but still put it on the stack?  
-> > 
-> > It depends on what state you need here. We can certainly pass runtime
-> > (aka sysdata in this patchset) data in the stack, but doing the same for
-> > userdata would require extra computation in runtime. In other words, the
-> > userdata_complete and length are calculated at configfs update time
-> > today, and only read during runtime, and there is no connection between
-> > configfs and runtime (write_ext_msg()) except through the stack.
-> > 
-> > 
-> > On the other side, if we want to have extradata_complete in the stack, I
-> > still think that userdata will need to be in the stack, and create a
-> > buffer in runtime's frame and copy userdata + sysdata at run time, doing
-> > an extra copy. 
-> > 
-> > Trying to put this in code, this is what I thought:
-> > 
-> > 	/* Copy to the stack (buf) the userdata string + sysdata */
-> > 	static void append_runtime_sysdata(struct netconsole_target *nt, char *buf) {
-> > 		if (!(nt->sysdata_fields & CPU_NR))
-> > 			return;
-> > 
-> > 		return scnprintf(buf,  MAX_EXTRADATA_ENTRY_LEN * MAX_EXTRADATA_ITEMS,
-> > 				  "%s cpu=%u\n", nt->userdata_complete, raw_smp_processor_id());
-> > 	}
-> > 
-> > 	/* Move complete string in the stack and send from there */
-> > 	static void send_ext_msg_udp(struct netconsole_target *nt, const char *msg,
-> > 				     int msg_len) {
-> > 		...
-> > 	#ifdef CONFIG_NETCONSOLE_DYNAMIC
-> > 		struct char buf[MAX_EXTRADATA_ENTRY_LEN * MAX_EXTRADATA_ITEMS];
-> > 		extradata_len = append_runtime_sysdata(nt, buf);
-> > 	#endif
-> > 
-> > 		send_msg_{no}_fragmentation(nt, msg, buf, extradata_len, release_len)
-> > 		...
-> > 	}
-> 
-> My thinking was to handle it like the release.
-> Print it at the send_msg_no_fragmentation() stage directly 
-> into the static buffer. Does that get hairy coding-wise?
+Sean Christopherson <seanjc@google.com> writes:
 
-I suppose the advantage of doing this approach is to reduce a
-memcpy/strcpy, right?
+> On Wed, Sep 18, 2024, Colton Lewis wrote:
+>> Branch in main() depending on if the CPU is Intel or AMD. They are
+>> subject to vastly different requirements because the AMD PMU lacks
+>> many properties defined by the Intel PMU including the entire CPUID
+>> 0xa function where Intel stores all the PMU properties. AMD lacks this
+>> as well as any consistent notion of PMU versions as Intel does. Every
+>> feature is a separate flag and they aren't the same features as Intel.
 
-If this is what your motivation, I think we cannot remove it from the
-fragmented case. Let me share my thought process:
+>> Set up a VM for testing core AMD counters and ensure proper CPUID
+>> features are set.
 
-1) sysdata needs to be appended to both send_msg_fragmented() and
-send_msg_no_fragmentation(). The fragmented case is the problem.
+>> Signed-off-by: Colton Lewis <coltonlewis@google.com>
+>> ---
+>>   .../selftests/kvm/x86_64/pmu_counters_test.c  | 104 ++++++++++++++----
+>>   1 file changed, 83 insertions(+), 21 deletions(-)
 
-2) It is trivially done in send_msg_fragmented() case.
+>> diff --git a/tools/testing/selftests/kvm/x86_64/pmu_counters_test.c  
+>> b/tools/testing/selftests/kvm/x86_64/pmu_counters_test.c
+>> index 0e305e43a93b..5b240585edc5 100644
+>> --- a/tools/testing/selftests/kvm/x86_64/pmu_counters_test.c
+>> +++ b/tools/testing/selftests/kvm/x86_64/pmu_counters_test.c
+>> @@ -30,10 +30,21 @@
+>>   #define NUM_INSNS_RETIRED		(NUM_LOOPS * NUM_INSNS_PER_LOOP +  
+>> NUM_EXTRA_INSNS)
 
-3) For the send_msg_no_fragmentation() case, there is no trivial way to
-get it done without using a secondary buffer and then memcpy to `buf`.
 
-Let's suppose sysdata has "cpu=42", and original `buf` has only 5 available
-chars, thus it needs to have 2 msgs to accommodate the full message.
+>> +/*
+>> + * Limit testing to MSRs that are actually defined by Intel (in the  
+>> SDM).  MSRs
+>> + * that aren't defined counter MSRs *probably* don't exist, but there's  
+>> no
+>> + * guarantee that currently undefined MSR indices won't be used for  
+>> something
+>> + * other than PMCs in the future.
+>> + */
+>> +#define MAX_NR_GP_COUNTERS	8
+>> +#define MAX_NR_FIXED_COUNTERS	3
+>> +#define AMD_NR_CORE_COUNTERS	4
+>> +#define AMD_NR_CORE_EXT_COUNTERS	6
+>> +
+>>   static uint8_t kvm_pmu_version;
+>>   static bool kvm_has_perf_caps;
 
-Then the it needs to track that `cpu=4` will be sent in a msg and create
-another message with the missing `2`.
+>> -static struct kvm_vm *pmu_vm_create_with_one_vcpu(struct kvm_vcpu  
+>> **vcpu,
+>> +static struct kvm_vm *intel_pmu_vm_create(struct kvm_vcpu **vcpu,
+>>   						  void *guest_code,
 
-The only way to do it properly is having a extra buffer where we
-have `cpu=42` and copy 5 bytes from there, and then copy the last one in
-the next iteration. I am not sure we can do it in one shot.
+> When renaming things, please fixup the alignment as needed.  Yes, it's  
+> more
+> churn, but one-time pain is preferable to living indefinitely with funky  
+> formatting.
 
-On top of that, I am planning to increase other features in sysdata
-(such as current task name, modules and even consolidate the release as
-sysdata), which has two implications:
+Understood
 
-1) Average messages size will become bigger. Thus, memcpy will be needed
-one way or another.
+> I also don't like renaming just one symbol.  E.g. the above  
+> MAX_NR_GP_COUNTERS
+> and MAX_NR_FIXED_COUNTERS #defines are Intel specific, but that's not at  
+> all
+> clear from the code.  Ditto for guest_rd_wr_counters() vs.
+> guest_test_rdwr_core_counters().
 
-2) Unless we can come up with a smart solution, this solution will be
-harder to reason about.
+> Given how little code is actually shared between Intel and AMD, I think  
+> it makes
+> sense to have the bulk of the code live in separate .c files.  Since
+> tools/testing/selftests/kvm/lib/x86/pmu.c is already a thing, the best  
+> option is
+> probably to rename pmu_counters_test.c to intel_pmu_counters_test.c, and  
+> then
+> extract the common bits to lib/x86/pmu.c (or include/x86/pmu.h as  
+> appropriate).
 
-If you want to invest more time in this direction, I am more than happy
-to create a PoC, so we can discuss more concretely. 
+Yeah I see what you mean about making processor-specific functions more
+obvious and think separating to different files would help a lot with
+that.
 
-Thanks,
---breno
+>>   						  uint8_t pmu_version,
+>>   						  uint64_t perf_capabilities)
+>> +static void test_core_counters(void)
+>> +{
+>> +	uint8_t nr_counters = nr_core_counters();
+>> +	bool core_ext = kvm_cpu_has(X86_FEATURE_PERF_CTR_EXT_CORE);
+>> +	bool perfmon_v2 = kvm_cpu_has(X86_FEATURE_PERFMON_V2);
+>> +	struct kvm_vcpu *vcpu;
+>> +	struct kvm_vm *vm;
+>> +
+>> +	for (uint8_t ce = 0; ce <= core_ext; ce++) {
+
+> Kernel style is to not declared variables inside for-loops.
+
+I ran it through checkpatch and it didn't complain.
+
+>> +		for (uint8_t pm = 0; pm <= perfmon_v2; pm++) {
+
+> Iterating over booleans is decidedly odd, the indentation levels are  
+> painful and
+> will only get worse as more features are added, and the "ce" and "pm"  
+> variables
+> aren't all that intuitive.  More below.
+>> +			for (uint8_t nc = 0; nc <= nr_counters; nc++) {
+
+> I also find "nc" to be unintuitive.  Either use a fully descriptive name,  
+> or
+> make it obvious that the variables is an iterator.  E.g. either
+
+> 	uint8_t max_nr_counters = nr_core_counters();
+
+> 	...
+
+> 		for (nr_counters = 0; nr_counters < max_nr_counters; nr_counters++) {
+
+
+> or
+
+> 		for (j = 0; j < nr_counters; j++) {
+
+
+> 'j' is obviously not descriptive, but when reading the usage, it's more  
+> obvious
+> that it's a loop iterator (if you choose
+
+Ok I'll go with the generic loop iterator name.
+
+>> +				vm = vm_create_with_one_vcpu(&vcpu, guest_test_core_counters);
+>> +
+>> +				if (nc)
+
+> Is '0' not a legal number of counters?
+
+AMD64 Architecture Programmers Manual Volume 2 Chapter 13.2.2 states
+that only nonzero values for that property are meaningful.
+
+With 0, you are supposed to assume either 4 or 6 counters depending on
+the CoreExt feature.
+
+I could make 0 mean 0 counters inside the guest but that would break
+what hardware does.
+
+>> +					vcpu_set_cpuid_property(
+
+> Google3!  (Never, ever wrap immediately after the opening paranethesis).
+
+Checkpatch didn't complain.
+
+>> +						vcpu, X86_PROPERTY_NUM_PERF_CTR_CORE, nc);
+>> +				if (ce)
+>> +					vcpu_set_cpuid_feature(
+>> +						vcpu, X86_FEATURE_PERF_CTR_EXT_CORE);
+
+> This likely doesn't do what you want.  By default, vm_arch_vcpu_add()  
+> initializes
+> CPUID to KVM's supported CPUID.  So only _setting_ the feature means that  
+> that
+> the test is likely only ever running with the full set of supported  
+> features.
+
+Ok, so I have to explicitly unset the feature if I don't want it.
+
+> Jumping back to my complaints with the for-loops, if the features to  
+> interate on
+> are collected in an array, then the test can generate a mask of all  
+> possible
+> combinations and iterate over that (plus the array itself).  That keeps  
+> the
+> indentation bounded and eliminates the copy+paste needed to add a new  
+> feature.
+> The only downside is that the test is limited to 64 features, but we'll  
+> run into
+> run time issues long before that limit is reached.
+
+> 	const struct kvm_x86_cpu_feature pmu_features[] = {
+> 		X86_FEATURE_PERF_CTR_EXT_CORE,
+> 		X86_FEATURE_PERFMON_V2,
+> 	};
+
+> 	const u64 pmu_features_mask = BIT_ULL(ARRAY_SIZE(pmu_features)) - 1;
+
+> 	for (mask = 0; mask <= pmu_features_mask; mask++) {
+> 		for (nr_counters = 0; nr_counters < max_nr_counters; nr_counters++) {
+> 			vm = vm_create_with_one_vcpu(&vcpu, guest_test_core_counters);
+
+> 			vcpu_set_cpuid_property(vcpu, X86_PROPERTY_NUM_PERF_CTR_CORE,
+> 						nr_counters);
+
+> 			/* Comment goes here */
+> 			for (i = 0; i < ARRAY_SIZE(pmu_features); i++)
+> 				vcpu_set_or_clear_cpuid_feature(vcpu, pmu_features[i],
+> 								mask & BIT_ULL(i));
+
+> 			...
+> 	}
+
+I thought of putting the features in a bitmask but worried it obscured
+the intent too much. Listing features in an array and constructing the
+bitmask seems clear enough to me so I will use that technique now.
+
+>> +				if (pm)
+>> +					vcpu_set_cpuid_feature(
+>> +						vcpu, X86_FEATURE_PERFMON_V2);
+>> +
+>> +				pr_info("Testing core counters: CoreExt = %u, PerfMonV2 = %u,  
+>> NumCounters = %u\n",
+>> +					ce, pm, nc);
+>> +				run_vcpu(vcpu);
+>> +
+>> +				kvm_vm_free(vm);
+>> +			}
+>> +		}
+>> +	}
+>> +}
 
