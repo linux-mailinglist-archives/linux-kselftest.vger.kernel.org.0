@@ -1,65 +1,58 @@
-Return-Path: <linux-kselftest+bounces-24767-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24768-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF632A1674C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 08:25:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE56AA1675D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 08:31:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7DB73161BC3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 07:25:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 042B51662CE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 07:31:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A96B18FC80;
-	Mon, 20 Jan 2025 07:25:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E0431865E2;
+	Mon, 20 Jan 2025 07:31:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yy4zCkjS"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="ff7SyRVQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767B818E76F;
-	Mon, 20 Jan 2025 07:25:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737357915; cv=none; b=r5kFVHcquIvPE41bGQAHtmzyp7aKAjpgp4XKU/UZW0ad0YtZdZymzMBZLkfK4edXZjph4IAzfFnrJrZ77Qz4hsX9jGoYI4vdmRbnx+pRjiGPix6gxwcEOtKSDFqhyTmL9OTslICoCMXPtAj843gT19f23eSZoT2SyCMyokQnpl4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737357915; c=relaxed/simple;
-	bh=k4ykqooUPTL/roXw/fFpliH2XGWlf7OfDPK35rRh9HA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nIePsndoVQMTt/rKue3No0ShgbX5sEofY2RfKzNIynwokt1USkMSkDvvbuSG1CpZmbSEesbc7FGvisZ6Zk4qXSAIV9sJgUWdNbncVayuENLudw+OgEH1JYooiFBjT8igsvrVbKPn4DfxM1iqejO1LyzH7lF8Siv77FAXO0fWpjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yy4zCkjS; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737357913; x=1768893913;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=k4ykqooUPTL/roXw/fFpliH2XGWlf7OfDPK35rRh9HA=;
-  b=Yy4zCkjScxKE/31Z8LuC1hzfDmi3Ba3qksEZBqe3zzAOTkQJPZny9SIG
-   Xv24gcEtk5tQ4YKn98a11s/pOonob70UcPV1Qfq1IGEsFMJJHQUh7xkvL
-   zPcpnXghJ6ccDihKLiTO2jsXjDvgeofT9l4xhxqAoROr75/LKvjEGf8M1
-   JlwQnP7Yj556oVLnGgKuTnzrvDyBcXXbPx4zXg7SmHXFwFWMuxjj65zQT
-   Ela2XeHkh5o9FLHPpNTc5phEw9SVK9wPMQEKCLf9qKcedOFXWICGArhyJ
-   SmMqCbUcpfEbNXhOooPJYFrMLtCMFXRtAEoOzh8nhNijZUpqAF5Mdya6M
-   w==;
-X-CSE-ConnectionGUID: ULi5aLoRQOC6Qix1bbBL3A==
-X-CSE-MsgGUID: CkL7rpwuT8aK7RbN+EKUpg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11320"; a="37601860"
-X-IronPort-AV: E=Sophos;i="6.13,218,1732608000"; 
-   d="scan'208";a="37601860"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2025 23:25:12 -0800
-X-CSE-ConnectionGUID: vyQrnkD1RKuZNocxarZucg==
-X-CSE-MsgGUID: 4NfaGBcnSKmXfEo/7NNF7Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,218,1732608000"; 
-   d="scan'208";a="106224522"
-Received: from unknown (HELO [10.107.2.109]) ([10.107.2.109])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2025 23:25:02 -0800
-Message-ID: <20fa0b55-405c-4b7c-8c10-1f8d71c956b9@linux.intel.com>
-Date: Mon, 20 Jan 2025 15:24:46 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8697F481CD;
+	Mon, 20 Jan 2025 07:31:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737358270; cv=pass; b=BMweKur0NUIn5E1JDXybxCm79Hy4h4+IKK/iCgdmhd+H++uDaXhcDuFhYvCuZ+R3voyylUQsYuI+bezmhG+HGXmfLlj8beWKB0q3iFO1qoB0J61FWyjx3EEBLpnZOFG9Y+FIsxx67llkvHiP53MmNRGY04zxBhmMKsgBNlioZlY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737358270; c=relaxed/simple;
+	bh=al+xlw43j8Y2mPF1n6V51mVC0Qr6Oam/tZ0JS6bY/9s=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=DMqUAlMrYC/7BgV+8XEn7GZOdwg53r6dDrHmMc3c/B6VWrzw/Bo9KJh00QXQCNORho2fc7TdT/CvSTcehAcU/JyId7KCu1QvQ8jTVxnEVzdExFkGm3Cd7Ha2sEOorW+0PvlGMSPhvFDL58dBGZnvv7NhpOKdMMvwlKhDCaWS3X0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=ff7SyRVQ; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1737358256; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=e4PYzYrGNvRAZ2YjHs+jdsTlvERDq9QCXzm8wJW4VYeYkW33BiA+aEqNtbtRft8/nG6LZqNc8XbuY5UShrDp/iFGAG1jo4U0+WH2EDKRYX3BiTl4Fu4tVdQtwkDUu7IUd/ZWrELes34GM9Z+C9tz8iVTbAK2ybAkyV0ZOlzimBA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1737358256; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=QlvgLFwRRoClGPLIHJJo9Quhclrfr/hiTDD18T/O444=; 
+	b=ipP3CoNLRo4r6lywIWKT/wW6OK3zGWrQEGF5zYI3BzS546wXW5ZSe/hrAqiBV1WJH5rU4gnI6BY57kP/6HCdscU3zVDyekRvm79TLevxThh++Ip53u9W/Pp8DwmIsJNYE/Yazvhc9EhGvXKktf7Dy0v9LJJhokrRkg1rBdINqfk=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
+	dmarc=pass header.from=<Usama.Anjum@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1737358256;
+	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
+	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=QlvgLFwRRoClGPLIHJJo9Quhclrfr/hiTDD18T/O444=;
+	b=ff7SyRVQjNXxD22W3AB4k2NumvWByzO/JyZQ25Lbht25MAqRqPH+1B2s+bHzGi3o
+	jh4JttqXeCtFTpeiZS7Xy2JGyi+9CPt9+Y15QlX5sWNeJZtYGFR2kzkv1bp3Az4VlQC
+	m5PSgC8v6aEFnyih9K2Fa8wKR3mY86bIiBWN+oEQ=
+Received: by mx.zohomail.com with SMTPS id 1737358254028920.6291236623549;
+	Sun, 19 Jan 2025 23:30:54 -0800 (PST)
+Message-ID: <e4549965-bb0c-4b46-b796-265704290e42@collabora.com>
+Date: Mon, 20 Jan 2025 12:31:22 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,58 +60,48 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v6 4/4] igc: Add launch time support to XDP ZC
-To: "Abdul Rahim, Faizal" <faizal.abdul.rahim@linux.intel.com>,
- Song Yoong Siang <yoong.siang.song@intel.com>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Willem de Bruijn <willemb@google.com>,
- Florian Bezdeka <florian.bezdeka@siemens.com>,
- Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
- Bjorn Topel <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Jonathan Lemon <jonathan.lemon@gmail.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, Joe Damato <jdamato@fastly.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Mina Almasry <almasrymina@google.com>,
- Daniel Jurgens <danielj@nvidia.com>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Jose Abreu <joabreu@synopsys.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
- xdp-hints@xdp-project.net
-References: <20250116155350.555374-1-yoong.siang.song@intel.com>
- <20250116155350.555374-5-yoong.siang.song@intel.com>
- <84770113-2546-4035-8bd4-bf9cedcfb00f@linux.intel.com>
+Cc: Usama.Anjum@collabora.com, amer.shanawany@gmail.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/capabilities/test_execve: Initialize the
+ variable have_outer_privilege
+To: liuye <liuye@kylinos.cn>, shuah@kernel.org
+References: <20250114054129.73331-1-liuye@kylinos.cn>
 Content-Language: en-US
-From: Choong Yong Liang <yong.liang.choong@linux.intel.com>
-In-Reply-To: <84770113-2546-4035-8bd4-bf9cedcfb00f@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
+In-Reply-To: <20250114054129.73331-1-liuye@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
 
+On 1/14/25 10:41 AM, liuye wrote:
+>     Uninitialized variable: have_outer_privilege.
+>     Fix it.
+Please improve the description. Explain how the current code
+is wrong. After that add:
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-
-On 20/1/2025 2:25 pm, Abdul Rahim, Faizal wrote:
 > 
-> To be cautious, could we perform a stress test by sending a higher number 
-> of packets with launch time? For example, we could send 200 packets, each 
-> configured with a launch time, and verify that the driver continues to 
-> function correctly afterward.
+> Signed-off-by: liuye <liuye@kylinos.cn>
+> ---
+>  tools/testing/selftests/capabilities/test_execve.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-I agree on this point. Could you perform the same stress test on the STMMAC 
-driver as well?
+> diff --git a/tools/testing/selftests/capabilities/test_execve.c b/tools/testing/selftests/capabilities/test_execve.c
+> index 47bad7ddc5bc..c9617b38d6f7 100644
+> --- a/tools/testing/selftests/capabilities/test_execve.c
+> +++ b/tools/testing/selftests/capabilities/test_execve.c
+> @@ -83,7 +83,7 @@ static bool create_and_enter_ns(uid_t inner_uid)
+>  	uid_t outer_uid;
+>  	gid_t outer_gid;
+>  	int i, ret;
+> -	bool have_outer_privilege;
+> +	bool have_outer_privilege = false;
+>  
+>  	outer_uid = getuid();
+>  	outer_gid = getgid();
+
+
+-- 
+BR,
+Muhammad Usama Anjum
 
