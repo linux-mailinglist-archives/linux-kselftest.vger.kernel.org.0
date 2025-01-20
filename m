@@ -1,219 +1,266 @@
-Return-Path: <linux-kselftest+bounces-24765-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24766-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80DB8A1666C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 06:55:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D929CA166A5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 07:26:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 899093A8C86
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 05:55:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53ED01884B52
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 06:26:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ACD817BB16;
-	Mon, 20 Jan 2025 05:55:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6077C18787F;
+	Mon, 20 Jan 2025 06:26:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CIhh0sSL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gsI8qbEj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2075.outbound.protection.outlook.com [40.107.237.75])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50DFE155C83;
-	Mon, 20 Jan 2025 05:55:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.75
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737352533; cv=fail; b=bjjxm25qqpPoG59UWEGOH7+I+dAxXGso1XHNecWytYdbdmeJ0W8CBa9RMwLUqS9PtcvFnqBNx8wWCSUJJxvqYQo7NzEyA/yDkDKj7kL7/dIFfHMnA81QmWafL97yXrY1mphnzyoLyVMqgdqs4zBHBEwTqngg0V3VYtPDrvdRjgc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737352533; c=relaxed/simple;
-	bh=ON51j9ulIUvD1GZZlcRfQBRXITNUzjIN1YShiorszKo=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I/DbY1//1rsRTyVgl8K0tEmrtmTIKruTrfcwj4hlR7Ft/v9V4rEylZw6rGF3YITTfVIE+Sw0Vtw4RF6SfG8Hux9/o/a/YVX4vl1HNYA3D9JnS+005HqKfoep//c+RuE7U/yxt3molPIFVaS5JittNiimcvnm05H9k84DZv2T4Fo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=CIhh0sSL; arc=fail smtp.client-ip=40.107.237.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=inBLfce6oU4rKAspCxbI4L8wb+y1ciaShQMRYIFVBdTCC81ymUTKf41FUF+FcvGl1RT28FZJ9JBXa7XYcpRCsBtg36ieiPjx2NhklDvd/4pM8RIDyVpS/NxeRZXELmM+a9oJBSOKEgdTrqNPpKmc4eJjGxB4YErUNVjH3iZ3BcywMpxzWzaL2FFcCLj1CFl6c2ElwYX5FWDVC3NClGwjYvzUUEVgB9hWsn4Fk/M0VxKWJHxIz9THhXxtE9zf9TrXswOULpZgJwBXExoeVYh2EWKVBvFBg9Qgrgr1eAC4bcCLdhnl6XOBcf7BBXHY4vjpIg/EWUrS5p73u4TX1ie3gw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YoOy3iAiHkY88Q5MUtIDKvNfkDheg6dy4glGY61L6Vo=;
- b=Tnpc5UmDVWN/bspQj6H0+a/EqN/8OfhAJ+kEh1+b9uShW9MH+JL1LBQyLG1BJKU1PCsuixGq+ZJ676aO+R00cOAs6RjlWD3CDVc3hUD/o4nJej7nzhdlNRWMIg+xgADg/z1Bf8HHXI5N6PYENiAXsKa5iHX3ivGM5/VBPfA+47xi4xEINx9bz+Ha4C4alxHfuzrq7hIOrJkg7Dx5Ey5uxtf10PZEfWW2ytTaGwf9MvL5FcKFkflM6iiBV77vR4f7g6CT1AVbsJ7/OsjDc8ZMJjzRi5BTadQRLu4T1rCXZMgOVU5FW0Rh9u2ogWQqy8SVst4UeiGxF4lUtDCut2bm4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YoOy3iAiHkY88Q5MUtIDKvNfkDheg6dy4glGY61L6Vo=;
- b=CIhh0sSLwZp/uvCk4RfL9VBdJLtw/6KWHM7MsIC5aZ7sbQQlLVdCiFu+ihYCQYqIMH9I23S7g0y+9sN0hiOXT7CDE27nNuy37eHmYVxpS/RCGpUn0XuXxmUHm8TaPqZWtppI/ieKgsSmJyjSjXM74LL873rgVVAY94qahy0A39mHtYnLqyJwvvBhxojdTb4e+FwBbbp429lFbRw0hdAskuhiBN6b43WtMblx/jaUaWqJLbcXq8/x44VmULRPIISj3nYW2ooNBbiU8ixaugBfzxpVuQXA4wLdl8k1brTEFDV1gupYXGBV2vtCqGukamKep/1MOGQoZxHh9siVc3vHXQ==
-Received: from BLAPR03CA0175.namprd03.prod.outlook.com (2603:10b6:208:32f::14)
- by PH7PR12MB7819.namprd12.prod.outlook.com (2603:10b6:510:27f::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.20; Mon, 20 Jan
- 2025 05:55:26 +0000
-Received: from MN1PEPF0000ECDB.namprd02.prod.outlook.com
- (2603:10b6:208:32f:cafe::72) by BLAPR03CA0175.outlook.office365.com
- (2603:10b6:208:32f::14) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8356.21 via Frontend Transport; Mon,
- 20 Jan 2025 05:55:25 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- MN1PEPF0000ECDB.mail.protection.outlook.com (10.167.242.139) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8377.8 via Frontend Transport; Mon, 20 Jan 2025 05:55:25 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Sun, 19 Jan
- 2025 21:55:09 -0800
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Sun, 19 Jan
- 2025 21:55:09 -0800
-Received: from nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
- Transport; Sun, 19 Jan 2025 21:55:01 -0800
-Date: Sun, 19 Jan 2025 21:54:58 -0800
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Yi Liu <yi.l.liu@intel.com>
-CC: <jgg@nvidia.com>, <will@kernel.org>, <robin.murphy@arm.com>,
-	<kevin.tian@intel.com>, <tglx@linutronix.de>, <maz@kernel.org>,
-	<alex.williamson@redhat.com>, <joro@8bytes.org>, <shuah@kernel.org>,
-	<reinette.chatre@intel.com>, <eric.auger@redhat.com>, <yebin10@huawei.com>,
-	<apatel@ventanamicro.com>, <shivamurthy.shastri@linutronix.de>,
-	<bhelgaas@google.com>, <anna-maria@linutronix.de>, <yury.norov@gmail.com>,
-	<nipun.gupta@amd.com>, <iommu@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<patches@lists.linux.dev>, <jean-philippe@linaro.org>, <mdf@kernel.org>,
-	<mshavit@google.com>, <shameerali.kolothum.thodi@huawei.com>,
-	<smostafa@google.com>, <ddutile@redhat.com>
-Subject: Re: [PATCH RFCv2 06/13] iommufd: Make attach_handle generic
-Message-ID: <Z43lMrJDdFEDaArW@nvidia.com>
-References: <cover.1736550979.git.nicolinc@nvidia.com>
- <c708aedc678c63e2466b43ab9d4f8ac876e49aa1.1736550979.git.nicolinc@nvidia.com>
- <62ccc75d-3f30-4167-b9e1-21dd95a6631d@intel.com>
- <Z4wP8ad/4Q5wMryd@nvidia.com>
- <2b6c52f6-037f-43d9-8384-7b48764a3e81@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C325383;
+	Mon, 20 Jan 2025 06:26:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737354385; cv=none; b=Qu92wBZ1/Rqs0LDozU/ywQQEucVW3q8AsyON+MXifLpjNzapg9Caqfhb9mELJzkWAftb6pJap0TNQxeD9Rq6s/hGg3p+4LUplobMqUcIXAdStvlpolEBmvdbeCMO8MgZqWqSTnfAyRXoeb2gPrWt8I+U8ZVBZhZIccfZ5qx84xQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737354385; c=relaxed/simple;
+	bh=tnsWXzYfmvn62Lbs810i3rTWmbN0EXhNDxrDhCk8CD8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G7B0wRIT3T0OYAw6HeF0oFydEgCtFWhx2/GnUPlvEzG8h1SEL0FIoD6c/4HVRjXJaqwXmRPln0SKBy2kjYpIERQcxDOv9uNfC7++w9WonNej9itGDo70PVF4c9+szl8JPHQASNW9e0fIqvPgA9TKoAn5z4fIJGwYhRwy/afEBNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gsI8qbEj; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737354384; x=1768890384;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=tnsWXzYfmvn62Lbs810i3rTWmbN0EXhNDxrDhCk8CD8=;
+  b=gsI8qbEjoLH2YfFIFL5USV/VmJlo6fYr1VpQ6dWImJJyzOnnxknHu57t
+   xbtijikuJ6lN+R0mSlBYF6Jn/qCBvxUCMtC/3u4A3/5BWlsnHN1ysa5UT
+   ICHMMEXh0hkhxJtQQ2wwlFadd/mrJj+vh985wPccLawqx356IXy8zzkfv
+   6/S8XrQY3RVVgWv7R8V/UaXcrBI1Gyj0zJuo6Vl+LV95u5Qq3DK9rvNNK
+   yQKJNFHX2XNHCRV0CpapQF/EGgFJC5n13wdMNc11WiQ2gXlJBH6IyTzL8
+   Ttpg84BoVUa/WUXX7VkrU+cqb0v9sTbimDgdBS2DLv8aDdF/jTkMM2kR6
+   Q==;
+X-CSE-ConnectionGUID: 32tkYXHESoCIyNNDKXjxTQ==
+X-CSE-MsgGUID: y9NCaxrOQiKk4j+wIU0ehQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11320"; a="37622989"
+X-IronPort-AV: E=Sophos;i="6.13,218,1732608000"; 
+   d="scan'208";a="37622989"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2025 22:26:15 -0800
+X-CSE-ConnectionGUID: 2o19Sr1rR0+02sq9LFLQ2g==
+X-CSE-MsgGUID: X0kZiFOHTdmNQOkx3eVPsg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="106227294"
+Received: from mohdfai2-mobl.gar.corp.intel.com (HELO [10.247.64.131]) ([10.247.64.131])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2025 22:26:01 -0800
+Message-ID: <84770113-2546-4035-8bd4-bf9cedcfb00f@linux.intel.com>
+Date: Mon, 20 Jan 2025 14:25:45 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <2b6c52f6-037f-43d9-8384-7b48764a3e81@intel.com>
-X-NV-OnPremToCloud: AnonymousSubmission
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECDB:EE_|PH7PR12MB7819:EE_
-X-MS-Office365-Filtering-Correlation-Id: 07d86d34-844b-4bf7-a430-08dd39170933
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|36860700013|82310400026|13003099007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?dL3Gd1pK+S9fAQmPASNJ5mD30ornr4/usCchP0Fyckg4LBzTANOMVnzekveG?=
- =?us-ascii?Q?aZ5uh1Vmgm81tyL3cyDfvrekvfHuq5twkG1C7Pioq3P0mTIUuBiIkRUQJuDL?=
- =?us-ascii?Q?3lWptGQ2oHF7Fdyr6xn81mYf/YS5+ilr7Ik9KMMy77eAPmpA9z5Z1QraVNcZ?=
- =?us-ascii?Q?GAOQ6Z6FUXZfH7sO8km2WTHdtUlUt+JrtxJk9wD9yrh86TbIVJNPdbHoeQM0?=
- =?us-ascii?Q?BHjRhAERoRxsN1D8leEoEHnpP5LRAXKbQ99kkAErOi7pOhvjVQBPEt6HGjja?=
- =?us-ascii?Q?/SAODRgVuUgXLfM0jd6ISl8/tbb3bPKVEuF5QxkYMshQQuf6nP7jApudoOo6?=
- =?us-ascii?Q?oXN+q1U72M259L+zi8XDgQ2G+upr+zes4lADTI69E/KfzOOlvwy7DscZm8rR?=
- =?us-ascii?Q?kX0CL8Sa/CqdTV0IZSZUAkeAp536bj9HMBRGnw31ZqZeuw6yUh9DjS5HtWYm?=
- =?us-ascii?Q?S0lTYRQOxunXU8LYKkFt4JXct/ULl0SIe0yBpAabrCZBWHKjLfLdxPcBmKS0?=
- =?us-ascii?Q?ab/cIJw3WAEhX9mDEfEzIjewk8ssfhDjdLitt0nKxTbPWX5OTQGrrAVilvp1?=
- =?us-ascii?Q?uKiEd3V2inaO4iWy7bECPFn/XaGexSFTPaLtSRwyd0LtjDpKhRFiQ1ZXLLfx?=
- =?us-ascii?Q?jMWYOTsl1vGyE5qxoGSgCqed6zA5ULVVMjla2d37GILXiMCHjtJNEF69J9sf?=
- =?us-ascii?Q?JDnMEnv/1hbiNQ0J1Q8pKWbQ/4yaxqFB2BQvQlIao+aQOsXE0QP+GSjjen1h?=
- =?us-ascii?Q?vJIHMcJqBIP+YNAd1jXxr81Ve5gRSGhIoYdZIi5EnuP1q40fCBnV2fgTzknD?=
- =?us-ascii?Q?vR8DjHpVKjO2gT7lvr3TqmJenF2/rcV4AjBot/Lw7QlS3OL74kCu3tJzjszt?=
- =?us-ascii?Q?zXxRnhzif03trpgUgzuFytIUMMqi1c7aepClqoGGaLi8J42IQiH6QdO4XpNq?=
- =?us-ascii?Q?2G3B/29w+n+iOM7AM2bz1Nqxm0tg1RROohu5WPQ98ussXtT2W8KBln3SkVvu?=
- =?us-ascii?Q?3r8cekhUOKZ+pUzZMPtMBX1YFcTP+/Nm2IQLQiXVWutKOoIB5bB8DxOGN6wQ?=
- =?us-ascii?Q?n9CtMLfxoYcm7Rd/qWwR9VZv54ucgyASTmxQ22QVJxt2dc59x0q0i0OyI+wi?=
- =?us-ascii?Q?5hZhESOhXL0GTgfcfRn7LqSOeuiMqIRoYFexREMZgjg5D6Ju7PAoA98Nl9G4?=
- =?us-ascii?Q?MCH2erUAoKWB3B2gm9ipOwxe3IqXQPG0YFadC/TvFS737lmsSpMhgonBjMFo?=
- =?us-ascii?Q?FZa+7iIvi7XyluTTsc5zPrI6Q8TFAIvzLMQbQZyvbIsi3JuZABRIaVo0Gc+9?=
- =?us-ascii?Q?FGvhMofbexU+wud43hDmYnxFe3AwhRiWJ8BBNB149exRj4Vw5iNWMgBLjmlB?=
- =?us-ascii?Q?C3bsVJQe1UZICe8DBqNTKR9Fq9b7AaP4JkocDZ+DDrQOzxjWqpHPOJwpa3Zu?=
- =?us-ascii?Q?LL0Nn3l3eyJ6nMONP9HSbZlslLEiAzBipIPnTjeY7OrC74v8+2TjVhTJDc4v?=
- =?us-ascii?Q?iPmwVOagbeZq5Jc=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(36860700013)(82310400026)(13003099007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2025 05:55:25.6170
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07d86d34-844b-4bf7-a430-08dd39170933
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MN1PEPF0000ECDB.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7819
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v6 4/4] igc: Add launch time support to XDP ZC
+To: Song Yoong Siang <yoong.siang.song@intel.com>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Willem de Bruijn <willemb@google.com>,
+ Florian Bezdeka <florian.bezdeka@siemens.com>,
+ Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
+ Bjorn Topel <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Jonathan Lemon <jonathan.lemon@gmail.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Joe Damato <jdamato@fastly.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Xuan Zhuo
+ <xuanzhuo@linux.alibaba.com>, Mina Almasry <almasrymina@google.com>,
+ Daniel Jurgens <danielj@nvidia.com>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Jose Abreu <joabreu@synopsys.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
+ xdp-hints@xdp-project.net
+References: <20250116155350.555374-1-yoong.siang.song@intel.com>
+ <20250116155350.555374-5-yoong.siang.song@intel.com>
+Content-Language: en-US
+From: "Abdul Rahim, Faizal" <faizal.abdul.rahim@linux.intel.com>
+In-Reply-To: <20250116155350.555374-5-yoong.siang.song@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun, Jan 19, 2025 at 06:40:57PM +0800, Yi Liu wrote:
-> On 2025/1/19 04:32, Nicolin Chen wrote:
-> > On Sat, Jan 18, 2025 at 04:23:22PM +0800, Yi Liu wrote:
-> > > On 2025/1/11 11:32, Nicolin Chen wrote:
-> > > > +static int iommufd_hwpt_attach_device(struct iommufd_hw_pagetable *hwpt,
-> > > > +				      struct iommufd_device *idev)
-> > > > +{
-> > > > +	struct iommufd_attach_handle *handle;
-> > > > +	int rc;
-> > > > +
-> > > > +	if (hwpt->fault) {
-> > > > +		rc = iommufd_fault_domain_attach_dev(hwpt, idev, true);
-> > > > +		if (rc)
-> > > > +			return rc;
-> > > > +	}
-> > > > +
-> > > > +	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
-> > > > +	if (!handle) {
-> > > > +		rc = -ENOMEM;
-> > > > +		goto out_fault_detach;
-> > > > +	}
-> > > > +
-> > > > +	handle->idev = idev;
-> > > > +	rc = iommu_attach_group_handle(hwpt->domain, idev->igroup->group,
-> > > > +				       &handle->handle);
-> > > > +	if (rc)
-> > > > +		goto out_free_handle;
-> > > > +
-> > > > +	return 0;
-> > > > +
-> > > > +out_free_handle:
-> > > > +	kfree(handle);
-> > > > +	handle = NULL;
-> > > > +out_fault_detach:
-> > > > +	if (hwpt->fault)
-> > > > +		iommufd_fault_domain_detach_dev(hwpt, idev, handle, true);
-> > > > +	return rc;
-> > > > +}
-> > 
-> > Here the revert path passes in a handle=NULL..
+
+Hi Siang.
+
+On 16/1/2025 11:53 pm, Song Yoong Siang wrote:
+> Enable Launch Time Control (LTC) support to XDP zero copy via XDP Tx
+> metadata framework.
 > 
-> aha. got it. Perhaps we can allocate handle first. In the below thread, it
-> is possible that a failed domain may have pending PRIs, it would require
-> the caller to call the auto response. Although, we are likely to swap the
-> order, but it is nice to have for the caller to do it.
+> This patch is tested with tools/testing/selftests/bpf/xdp_hw_metadata on
+> Intel I225-LM Ethernet controller. Below are the test steps and result.
 > 
-> https://lore.kernel.org/linux-iommu/f685daca-081a-4ede-b1e1-559009fa9ebc@intel.com/
+> Test Steps:
+> 1. At DUT, start xdp_hw_metadata selftest application:
+>     $ sudo ./xdp_hw_metadata enp2s0 -l 1000000000 -L 1
+> 
+> 2. At Link Partner, send an UDP packet with VLAN priority 1 to port 9091 of
+>     DUT.
+> 
+> When launch time is set to 1s in the future, the delta between launch time
+> and transmit hardware timestamp is equal to 0.016us, as shown in result
+> below:
+>    0x562ff5dc8880: rx_desc[4]->addr=84110 addr=84110 comp_addr=84110 EoP
+>    rx_hash: 0xE343384 with RSS type:0x1
+>    HW RX-time:   1734578015467548904 (sec:1734578015.4675) delta to User RX-time sec:0.0002 (183.103 usec)
+>    XDP RX-time:   1734578015467651698 (sec:1734578015.4677) delta to User RX-time sec:0.0001 (80.309 usec)
+>    No rx_vlan_tci or rx_vlan_proto, err=-95
+>    0x562ff5dc8880: ping-pong with csum=561c (want c7dd) csum_start=34 csum_offset=6
+>    HW RX-time:   1734578015467548904 (sec:1734578015.4675) delta to HW Launch-time sec:1.0000 (1000000.000 usec)
+>    0x562ff5dc8880: complete tx idx=4 addr=4018
+>    HW Launch-time:   1734578016467548904 (sec:1734578016.4675) delta to HW TX-complete-time sec:0.0000 (0.016 usec)
+>    HW TX-complete-time:   1734578016467548920 (sec:1734578016.4675) delta to User TX-complete-time sec:0.0000 (32.546 usec)
+>    XDP RX-time:   1734578015467651698 (sec:1734578015.4677) delta to User TX-complete-time sec:0.9999 (999929.768 usec)
+>    HW RX-time:   1734578015467548904 (sec:1734578015.4675) delta to HW TX-complete-time sec:1.0000 (1000000.016 usec)
+>    0x562ff5dc8880: complete rx idx=132 addr=84110
 
-Hmm, I don't really see a point in letting the detach flow to
-scan the two lists in hwpt->fault against a zero-ed handle...
-which feels like a waste of CPU cycles?
+To be cautious, could we perform a stress test by sending a higher number 
+of packets with launch time? For example, we could send 200 packets, each 
+configured with a launch time, and verify that the driver continues to 
+function correctly afterward.
 
-And I am not sure how that xa_insert part is realted?
+> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+> ---
+>   drivers/net/ethernet/intel/igc/igc_main.c | 78 ++++++++++++++++-------
+>   1 file changed, 56 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+> index 27872bdea9bd..6857f5f5b4b2 100644
+> --- a/drivers/net/ethernet/intel/igc/igc_main.c
+> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
+> @@ -1566,6 +1566,26 @@ static bool igc_request_tx_tstamp(struct igc_adapter *adapter, struct sk_buff *s
+>   	return false;
+>   }
+>   
+> +static void igc_insert_empty_packet(struct igc_ring *tx_ring)
+> +{
+> +	struct igc_tx_buffer *empty_info;
+> +	struct sk_buff *empty;
+> +	void *data;
+> +
+> +	empty_info = &tx_ring->tx_buffer_info[tx_ring->next_to_use];
+> +	empty = alloc_skb(IGC_EMPTY_FRAME_SIZE, GFP_ATOMIC);
+> +	if (!empty)
+> +		return;
+> +
+> +	data = skb_put(empty, IGC_EMPTY_FRAME_SIZE);
+> +	memset(data, 0, IGC_EMPTY_FRAME_SIZE);
+> +
+> +	igc_tx_ctxtdesc(tx_ring, 0, false, 0, 0, 0);
+> +
+> +	if (igc_init_tx_empty_descriptor(tx_ring, empty, empty_info) < 0)
+> +		dev_kfree_skb_any(empty);
+> +}
+> +
 
-Thanks
-Nic
+The function igc_insert_empty_packet() appears to wrap existing code to 
+enhance reusability, with no new changes related to enabling launch-time 
+XDP ZC functionality. If so, could we split this into a separate commit? 
+This would make it clearer for the reader to distinguish between the 
+refactoring changes and the new changes related to enabling launch-time XDP 
+ZC support.
+
+>   static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
+>   				       struct igc_ring *tx_ring)
+>   {
+> @@ -1603,26 +1623,8 @@ static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
+>   	skb->tstamp = ktime_set(0, 0);
+>   	launch_time = igc_tx_launchtime(tx_ring, txtime, &first_flag, &insert_empty);
+>   
+> -	if (insert_empty) {
+> -		struct igc_tx_buffer *empty_info;
+> -		struct sk_buff *empty;
+> -		void *data;
+> -
+> -		empty_info = &tx_ring->tx_buffer_info[tx_ring->next_to_use];
+> -		empty = alloc_skb(IGC_EMPTY_FRAME_SIZE, GFP_ATOMIC);
+> -		if (!empty)
+> -			goto done;
+> -
+> -		data = skb_put(empty, IGC_EMPTY_FRAME_SIZE);
+> -		memset(data, 0, IGC_EMPTY_FRAME_SIZE);
+> -
+> -		igc_tx_ctxtdesc(tx_ring, 0, false, 0, 0, 0);
+> -
+> -		if (igc_init_tx_empty_descriptor(tx_ring,
+> -						 empty,
+> -						 empty_info) < 0)
+> -			dev_kfree_skb_any(empty);
+> -	}
+> +	if (insert_empty)
+> +		igc_insert_empty_packet(tx_ring);
+>   
+>   done:
+>   	/* record the location of the first descriptor for this packet */
+> @@ -2955,9 +2957,33 @@ static u64 igc_xsk_fill_timestamp(void *_priv)
+>   	return *(u64 *)_priv;
+>   }
+>   
+> +static void igc_xsk_request_launch_time(u64 launch_time, void *_priv)
+> +{
+> +	struct igc_metadata_request *meta_req = _priv;
+> +	struct igc_ring *tx_ring = meta_req->tx_ring;
+> +	__le32 launch_time_offset;
+> +	bool insert_empty = false;
+> +	bool first_flag = false;
+> +
+> +	if (!tx_ring->launchtime_enable)
+> +		return;
+> +
+> +	launch_time_offset = igc_tx_launchtime(tx_ring,
+> +					       ns_to_ktime(launch_time),
+> +					       &first_flag, &insert_empty);
+> +	if (insert_empty) {
+> +		igc_insert_empty_packet(tx_ring);
+> +		meta_req->tx_buffer =
+> +			&tx_ring->tx_buffer_info[tx_ring->next_to_use];
+> +	}
+> +
+> +	igc_tx_ctxtdesc(tx_ring, launch_time_offset, first_flag, 0, 0, 0);
+> +}
+> +
+>   const struct xsk_tx_metadata_ops igc_xsk_tx_metadata_ops = {
+>   	.tmo_request_timestamp		= igc_xsk_request_timestamp,
+>   	.tmo_fill_timestamp		= igc_xsk_fill_timestamp,
+> +	.tmo_request_launch_time	= igc_xsk_request_launch_time,
+>   };
+>   
+>   static void igc_xdp_xmit_zc(struct igc_ring *ring)
+> @@ -2980,7 +3006,7 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+>   	ntu = ring->next_to_use;
+>   	budget = igc_desc_unused(ring);
+>   
+> -	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget--) {
+> +	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget >= 4) {
+
+Could we add some explanation on what & why the value "4" is used ?
+
 
