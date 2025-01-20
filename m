@@ -1,236 +1,137 @@
-Return-Path: <linux-kselftest+bounces-24763-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24764-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56C84A16638
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 05:58:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DE4CA1665E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 06:29:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C95ED1889788
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 04:58:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDFAA1699D0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 05:29:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01577155A52;
-	Mon, 20 Jan 2025 04:58:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 986C91865E2;
+	Mon, 20 Jan 2025 05:29:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="1whu3BnK"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EEJIN4o2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C18F84A2B
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2025 04:58:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F6617E472
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2025 05:28:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737349087; cv=none; b=kLnqA6Ebp897i7jDSwtPNkcgsTuFU6Wkv4Q6j2YiGgfE9eIAbPTPKPq6aHkW+8jr9afHW/aJtiDkDmqjbdOWOgfUuHcstTZIdxaY4cm+8lq8ojj3Ef+oTbYKpgp/QGURS3NFIow9vNiSn9LTbQ/4S/00DSw7VKiTDJASO50qfzA=
+	t=1737350940; cv=none; b=LZBF72+WDZlMh3HYJzxAK62KGwNLqXo3qKh1145tSW+FtD4apbtmpNvQoIps4tW0wvWXHAE8ogxTw/jMrV1MtO7KhATG25ctbqEJP4t2YKV8g8x5oSvOa8ULctaiiimXeYvUvyDawIk9FetP3kBOgKLKlHdZIQS8AvZWFMu0BYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737349087; c=relaxed/simple;
-	bh=JBhx4FBRzKbzrz2Al5pNMHO5F3JgbgRL5B/gVFGVg/0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hvC2pd2rXFhROorHPSElFaG4pWZ1LWUaqIupahTUCsDLrA3wdSX9MUNnsQWjb0N4yz2mvWqJ0DngKiBAgmZ0NsFwSSLjGiiyl6hKsVFTkUTBZb0J5/WQJM/ZsSycXkKKy46fsqGwdRSB5yscdOwEgQSZqbX33LbfRz6CHRzDjzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=1whu3BnK; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-21619108a6bso67683575ad.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 19 Jan 2025 20:58:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1737349085; x=1737953885; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q4oIihNr6GZKGbnqtazZfNL+Wdu+eK7TRKf6H4jFUt4=;
-        b=1whu3BnKNwtvtqezELWKQt0hPy+FN+eYxFnvphEYfi8qsgYC7W5bmfPPeQAFhfje9v
-         CbaxUnTt6ZJUMsN9QS2shX24wJG64A76ZVHipVlxgXyEAgvl2W/LCo8UaIbMIpcWZ0X5
-         Ht6uaEyQYqQOsJy/RhVomU6JHqfZ9tvSSRWxgAfHN7lvUluRmH0VrqL7ULtJ/cg3AKhm
-         jweriYhaI57MWQQL1HLbdLdrvzjT1mJJE3knFLDLbBqku7AWN5eVh22I363rpyLfcFWm
-         yJcgtQoFIZXlMUwvua1s94+1pI0FzQy1IXT0XLOlcY4cXT0mISggZP6IZFZ1k01USb2L
-         TWVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737349085; x=1737953885;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q4oIihNr6GZKGbnqtazZfNL+Wdu+eK7TRKf6H4jFUt4=;
-        b=vl9lyDURqYjWgs5i0r13EonPKjmMl0wm9OyuQNG9wqVHW8+lUL5jfxFzJPwWYC/Pa1
-         hkre870UBAyX1l/I37LTtrNs3FCPcpToMo3HR80Lx6yr/j/l+Nz/xEhOUe3ZDfnp+3xl
-         qAHqqf2axoXyK6KoMlxQn5b1dYwdTGiodK5rUEnscsz8hALDFAeWbOUP6v87y8jOjr1c
-         0VCBb+ltJd8P429QXYlr5rWbcHDx9yGBJjjDNCMJwvpZ4pAYnZRpsS26bB6FW7DgHmPq
-         JQnqbE1w8Cq2oy4xN5MtezoJEEbfdqFqe9ehO4ZiqdjyWEn0UFMnD4R/rgDPzBG/8cYT
-         ewSg==
-X-Forwarded-Encrypted: i=1; AJvYcCXWsP0a1AMuzu18PuxpseysfXKZmAMZgSkje0DzRrnaKEKNq3Tz7HXlVRKCN5YlJ6ROdxb8NGWXjunJ/osSups=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyo5gYcb1bbSJlfeynl4k1361/rHJDdQnYwwKIrni6uGEn7OCex
-	DORlLe4eJ/yKFahTJ+KS9M8qM0g+kzTKYKre2LK3+bsNAcukxZl7xwgKv5ZE6g8=
-X-Gm-Gg: ASbGnctlZFX6aOWcEhrgl5nrwE1uXc2JXQSUv0s3ZHj/fZtheLO1Cmy7lVESDlyQ6z4
-	jgQVOcXGTPyC/YYqyIRDOkSLF+mDdzIXmQLfMq37cuLtDXmIe/VE1tRzpUdq9T0TfbfPrW75Sjl
-	8VsdVE0dZHFM5RRYS1G9rrU/8ECw5oVVKBndGnMCAf4j/nE8T8t51xiCHueaQST/qAI21/KXgH7
-	gwT8JeporPhYwxOfzKkc6DBE+xPs1hXtlhnCyiBilxf4yfFAMrBHIqu9yTFcucQhrTIgF1Usbjw
-	WdMc
-X-Google-Smtp-Source: AGHT+IE8MzXrgaBKBfP61PbTUvr8PgxgGWYeOWK4EEWyIPyWkez8gj6KrIAnQzmUFU9EFnwQTPVCzw==
-X-Received: by 2002:a05:6a20:914e:b0:1e1:70ab:b369 with SMTP id adf61e73a8af0-1eb214983dfmr16605568637.13.1737349085531;
-        Sun, 19 Jan 2025 20:58:05 -0800 (PST)
-Received: from [157.82.203.37] ([157.82.203.37])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72dab817529sm6251103b3a.67.2025.01.19.20.58.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Jan 2025 20:58:05 -0800 (PST)
-Message-ID: <8052733d-3e79-4fd5-9bea-9d3724820bb8@daynix.com>
-Date: Mon, 20 Jan 2025 13:57:59 +0900
+	s=arc-20240116; t=1737350940; c=relaxed/simple;
+	bh=d+MFB2tM0sfUZcCWcXFPkBef3mL5FOzhhCsK/ChhIR0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Z7xFLYMB9iKU9aLipwtnKn2YSN86BV3iX0bD5vZbSP9JolLjYaezhPva5HkUZcxk9Hdu+WrZ9kVPBomNg9/1XpTyWBNnjCMoDqIImapDPnqDOJJdOczYolaZNOzMnF/b8uzLlgxKw7Y1oyfbu1jDkp+LXVTGw+f6VgV3mAkBeE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EEJIN4o2; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1737350937;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KBt1FxdvSzhvBE77j+CaarPfTFYF95LU/1h0hGm5sdk=;
+	b=EEJIN4o2NTVlFEoKmqzDUmecpUkg82dirfQCIc3Txz7LQwbGEUFhD+q2XG00WtOCG4QbOC
+	CzjeyIxJFIYuazmJ5geYJo6ypDo498TNUPOz5xW/J1kNDVlnH1ckfyp/KPpgS+f/nyiyRy
+	6dcYInrb7yaPmBGZldoMYYlMg1RCKts=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-487-7RndWSoCM6-xgWK_UTZ3QA-1; Mon,
+ 20 Jan 2025 00:28:52 -0500
+X-MC-Unique: 7RndWSoCM6-xgWK_UTZ3QA-1
+X-Mimecast-MFC-AGG-ID: 7RndWSoCM6-xgWK_UTZ3QA
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5BC3B19560B1;
+	Mon, 20 Jan 2025 05:28:48 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.54])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7D1723003FD3;
+	Mon, 20 Jan 2025 05:28:40 +0000 (UTC)
+From: Florian Weimer <fweimer@redhat.com>
+To: Xi Ruoyao <xry111@xry111.site>
+Cc: Christian Brauner <brauner@kernel.org>,  Aleksa Sarai
+ <cyphar@cyphar.com>,  Ingo Molnar <mingo@redhat.com>,  Peter Zijlstra
+ <peterz@infradead.org>,  Juri Lelli <juri.lelli@redhat.com>,  Vincent
+ Guittot <vincent.guittot@linaro.org>,  Dietmar Eggemann
+ <dietmar.eggemann@arm.com>,  Steven Rostedt <rostedt@goodmis.org>,  Ben
+ Segall <bsegall@google.com>,  Mel Gorman <mgorman@suse.de>,  Valentin
+ Schneider <vschneid@redhat.com>,  Alexander Viro
+ <viro@zeniv.linux.org.uk>,  Jan Kara <jack@suse.cz>,  Arnd Bergmann
+ <arnd@arndb.de>,  Shuah Khan <shuah@kernel.org>,  Kees Cook
+ <kees@kernel.org>,  Mark Rutland <mark.rutland@arm.com>,
+  linux-kernel@vger.kernel.org,  linux-api@vger.kernel.org,
+  linux-fsdevel@vger.kernel.org,  linux-arch@vger.kernel.org,
+  linux-kselftest@vger.kernel.org,  libc-alpha@sourceware.org
+Subject: Re: [PATCH RFC v3 02/10] sched_getattr: port to copy_struct_to_user
+In-Reply-To: <82ee186ae5580548fe6b0edd2720359c18f6fa9a.camel@xry111.site> (Xi
+	Ruoyao's message of "Sat, 18 Jan 2025 21:02:54 +0800")
+References: <20241010-extensible-structs-check_fields-v3-0-d2833dfe6edd@cyphar.com>
+	<20241010-extensible-structs-check_fields-v3-2-d2833dfe6edd@cyphar.com>
+	<87y10nz9qo.fsf@oldenburg.str.redhat.com>
+	<20241211-gemsen-zuarbeiten-ae8d062ec251@brauner>
+	<82ee186ae5580548fe6b0edd2720359c18f6fa9a.camel@xry111.site>
+Date: Mon, 20 Jan 2025 06:28:37 +0100
+Message-ID: <87jzaqdpfe.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] tun: Set num_buffers for virtio 1.0
-To: Jason Wang <jasowang@redhat.com>
-Cc: "Michael S. Tsirkin" <mst@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, kvm@vger.kernel.org,
- virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
- Yuri Benditovich <yuri.benditovich@daynix.com>,
- Andrew Melnychenko <andrew@daynix.com>,
- Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com,
- devel@daynix.com
-References: <20250109-tun-v2-0-388d7d5a287a@daynix.com>
- <20250109-tun-v2-3-388d7d5a287a@daynix.com>
- <CACGkMEsm5DCb+n3NYeRjmq3rAANztZz5QmV8rbPNo+cH-=VzDQ@mail.gmail.com>
- <20250110052246-mutt-send-email-mst@kernel.org>
- <2e015ee6-8a3b-43fb-b119-e1921139c74b@daynix.com>
- <CACGkMEuiyfH-QitiiKJ__-8NiTjoOfc8Nx5BwLM-GOfPpVEitA@mail.gmail.com>
- <fcb301e8-c808-4e20-92dd-2e3b83998d18@daynix.com>
- <CACGkMEvBU3mLbW+-nOscriR-SeDvPSm1mtwwgznYFOocuao5MQ@mail.gmail.com>
- <cc79bef1-c24e-448d-bc20-f8302e341b2c@daynix.com>
- <CACGkMEsJUb3ZLm3rLuaayDAS4kf-vbY03wL4M9j1K+Z=a4BDig@mail.gmail.com>
-Content-Language: en-US
-From: Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <CACGkMEsJUb3ZLm3rLuaayDAS4kf-vbY03wL4M9j1K+Z=a4BDig@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On 2025/01/20 9:40, Jason Wang wrote:
-> On Thu, Jan 16, 2025 at 1:30 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->>
->> On 2025/01/16 10:06, Jason Wang wrote:
->>> On Wed, Jan 15, 2025 at 1:07 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->>>>
->>>> On 2025/01/13 12:04, Jason Wang wrote:
->>>>> On Fri, Jan 10, 2025 at 7:12 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->>>>>>
->>>>>> On 2025/01/10 19:23, Michael S. Tsirkin wrote:
->>>>>>> On Fri, Jan 10, 2025 at 11:27:13AM +0800, Jason Wang wrote:
->>>>>>>> On Thu, Jan 9, 2025 at 2:59 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->>>>>>>>>
->>>>>>>>> The specification says the device MUST set num_buffers to 1 if
->>>>>>>>> VIRTIO_NET_F_MRG_RXBUF has not been negotiated.
->>>>>>>>
->>>>>>>> Have we agreed on how to fix the spec or not?
->>>>>>>>
->>>>>>>> As I replied in the spec patch, if we just remove this "MUST", it
->>>>>>>> looks like we are all fine?
->>>>>>>>
->>>>>>>> Thanks
->>>>>>>
->>>>>>> We should replace MUST with SHOULD but it is not all fine,
->>>>>>> ignoring SHOULD is a quality of implementation issue.
->>>>>>>
->>>>>
->>>>> So is this something that the driver should notice?
->>>>>
->>>>>>
->>>>>> Should we really replace it? It would mean that a driver conformant with
->>>>>> the current specification may not be compatible with a device conformant
->>>>>> with the future specification.
->>>>>
->>>>> I don't get this. We are talking about devices and we want to relax so
->>>>> it should compatibile.
->>>>
->>>>
->>>> The problem is:
->>>> 1) On the device side, the num_buffers can be left uninitialized due to bugs
->>>> 2) On the driver side, the specification allows assuming the num_buffers
->>>> is set to one.
->>>>
->>>> Relaxing the device requirement will replace "due to bugs" with
->>>> "according to the specification" in 1). It still contradicts with 2) so
->>>> does not fix compatibility.
->>>
->>> Just to clarify I meant we can simply remove the following:
->>>
->>> """
->>> The device MUST use only a single descriptor if VIRTIO_NET_F_MRG_RXBUF
->>> was not negotiated. Note: This means that num_buffers will always be 1
->>> if VIRTIO_NET_F_MRG_RXBUF is not negotiated.
->>> """
->>>
->>> And
->>>
->>> """
->>> If VIRTIO_NET_F_MRG_RXBUF has not been negotiated, the device MUST set
->>> num_buffers to 1.
->>> """
->>>
->>> This seems easier as it reflects the fact where some devices don't set
->>> it. And it eases the transitional device as it doesn't need to have
->>> any special care.
->>
->> That can potentially break existing drivers that are compliant with the
->> current and assumes the num_buffers is set to 1.
-> 
-> Those drivers are already 'broken'. Aren't they?
+* Xi Ruoyao:
 
-The drivers are not broken, but vhost_net is. The driver works fine as 
-long as it's used with a device compliant with the specification. If we 
-relax the device requirement in the future specification, the drivers 
-may not work with devices compliant with the revised specification.
+> On Wed, 2024-12-11 at 11:23 +0100, Christian Brauner wrote:
+>> On Tue, Dec 10, 2024 at 07:14:07PM +0100, Florian Weimer wrote:
+>> > * Aleksa Sarai:
+>> >=20
+>> > > sched_getattr(2) doesn't care about trailing non-zero bytes in the
+>> > > (ksize > usize) case, so just use copy_struct_to_user() without chec=
+king
+>> > > ignored_trailing.
+>> >=20
+>> > I think this is what causes glibc's misc/tst-sched_setattr test to fail
+>> > on recent kernels.=C2=A0 The previous non-modifying behavior was docum=
+ented
+>> > in the manual page:
+>> >=20
+>> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 If the caller-provided attr buffe=
+r is larger than the kernel's
+>> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sched_attr structure, the additio=
+nal bytes in the user-space
+>> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 structure are not touched.
+>> >=20
+>> > I can just drop this part of the test if the kernel deems both behavio=
+rs
+>> > valid.
+>
+>> I think in general both behaviors are valid but I would consider zeroing
+>> the unknown parts of the provided buffer to be the safer option. And all
+>> newer extensible struct system calls do that.
+>
+> Florian,
+>
+> So should we drop the test before Glibc-2.41 release?  I'm seeing the
+> failure during my machine test.
 
-Regards,
-Akihiko Odaki
+I was waiting for a verdict from the kernel developers.  I didn't expect
+such a change to happen given the alleged UAPI policy.
 
-> 
-> Thanks
-> 
->>
->> Regards,
->> Akihiko Odaki
->>
->>>
->>> Then we don't need any driver normative so I don't see any conflict.
->>>
->>> Michael suggests we use "SHOULD", but if this is something that the
->>> driver needs to be aware of I don't know how "SHOULD" can help a lot
->>> or not.
->>>
->>>>
->>>> Instead, we should make the driver requirement stricter to change 2).
->>>> That is what "[PATCH v3] virtio-net: Ignore num_buffers when unused" does:
->>>> https://lore.kernel.org/r/20250110-reserved-v3-1-2ade0a5d2090@daynix.com
->>>>
->>>>>
->>>>>>
->>>>>> We are going to fix all implementations known to buggy (QEMU and Linux)
->>>>>> anyway so I think it's just fine to leave that part of specification as is.
->>>>>
->>>>> I don't think we can fix it all.
->>>>
->>>> It essentially only requires storing 16 bits. There are details we need
->>>> to work out, but it should be possible to fix.
->>>
->>> I meant it's not realistic to fix all the hypervisors. Note that
->>> modern devices have been implemented for about a decade so we may have
->>> too many versions of various hypervisors. (E.g DPDK seems to stick
->>> with the same behaviour of the current kernel).
->>   > >>
->>>> Regards,
->>>> Akihiko Odaki
->>>>
->>>
->>> Thanks
->>>
->>
-> 
+Thanks,
+Florian
 
 
