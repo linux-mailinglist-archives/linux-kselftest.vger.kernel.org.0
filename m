@@ -1,167 +1,191 @@
-Return-Path: <linux-kselftest+bounces-24792-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24793-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC094A16C93
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 13:54:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91F8AA16DD1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 14:53:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04253165F7A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 12:54:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AD8C1888EBD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2025 13:53:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3DA31E1A31;
-	Mon, 20 Jan 2025 12:54:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDB9E1E25F6;
+	Mon, 20 Jan 2025 13:53:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="UJA3fAtR";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="QvFBqHqQ";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="yoGroTVf";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="tGzZg2l+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HbMtC92I"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3DC21E1041;
-	Mon, 20 Jan 2025 12:54:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E403E33E7
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2025 13:53:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737377666; cv=none; b=U2LO93IW0Y48my5uDb94Ny9G3bc1ZvK9DJcSL/pkCReMQeyIZBiK4t+ps505BCvWIDiDY88YHA9oMnHAeB46k5MXb1IpT/Xkx+chI+mmyZ+5q3kY8SFdbRBWWH8AEV5VrgMElFbOZTSiW6NHBI3/BgZdlLV96b8svz/1+bNh180=
+	t=1737381211; cv=none; b=PchwjOGvJvWks9Ycs7Novy8HspIIKtAHNMkWBuloxaEylLDbuPY2YqoyywtIJmibIm5/vIwDFQiij9YxHY7VI9x3PdjPmyYL2bunWETJS0sEBr/hf0lBK4AB3SnaqLwJEtiPGJOeQlGpNy9IklYsnZ/0ZkVtrwEUUpkwwemMZvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737377666; c=relaxed/simple;
-	bh=VGHPiSwrdHj3zzWlkUOqJ5bcRyoq8nwz8AYfqOlegAs=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=h6l9yCwed2fZQLCRmVA9t2HTTtFyUNzlzt7Lbi7bK1o499ApFusKmtBKcE149omG6qH57241sER0ZJRZ+XOMn6Nm2PBC6Z84UdCIACTPAAR6WHt601YByB96yzYmbY9VQT7LwArTPyN5kfU4Gn8PWzC8FR/65kJ5bu0rCjfR4q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=UJA3fAtR; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=QvFBqHqQ; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=yoGroTVf; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=tGzZg2l+; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from pobox.suse.cz (unknown [10.100.2.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id E7CBF21120;
-	Mon, 20 Jan 2025 12:54:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1737377663; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	s=arc-20240116; t=1737381211; c=relaxed/simple;
+	bh=uxNVkuB1kfPiPhaAvJDAYwdoCzbbN5ig+MfWtinYkGs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=AHU8q7D5cSs2uQvk5YmCjio5PUQn1Cz09fQ2Dck3X7DTCeepjdlCpVtwqzvpe4aBdI+XT4XguNZ//6eYsMWC7Bwv2OCOQTxI7EuS4GbxDcdsZj6FDN/wHAxgau9kUNezG9VaKpCSAxR8XT8aBrCitd4/W3bB/+yLxITiyoMBrTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HbMtC92I; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1737381209;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=dENmDQuJs1xXFdoO9XY/CuTPv0FcoxD3ePEE0cuT3Sc=;
-	b=UJA3fAtRHyBiyNsNFtuZ6b1LvgrrGS8JvoZY6kg61DdCknQrzF81nWncWt684NuK/sQ74q
-	BkfoJzWYooX9nadWj39H+v4OMLNLTyhgKqI17X2d6jO1VlF6Dhyze3v4KnLax/PhW+lMcU
-	KAQtHZiE5YIFHzyxYmn3isj9Fl+zIzs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1737377663;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dENmDQuJs1xXFdoO9XY/CuTPv0FcoxD3ePEE0cuT3Sc=;
-	b=QvFBqHqQKUV6FaWuReKnInGYqqerx3MNqbkdsiLvcaxs57aAog5rQxcgCErlYbmLI6gMrP
-	GxIZj+tXnW6JRzBA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1737377662; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dENmDQuJs1xXFdoO9XY/CuTPv0FcoxD3ePEE0cuT3Sc=;
-	b=yoGroTVfoeof3PR/+HOq4a5PuQzt+cEglOhzznMQdb22FtUbh/cdlc/82uMB7upPzMTCq9
-	6LJtYXAKxVZF678sKO+uhMuqzU7vpCnGn8E3nwHq8MOUCMY8N1AJUH7kt5zx0oCSeRNuam
-	/BzuZeQMU7srxy/WR9mhMzJhHRtsoMY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1737377662;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dENmDQuJs1xXFdoO9XY/CuTPv0FcoxD3ePEE0cuT3Sc=;
-	b=tGzZg2l+gsqIeqmEuN+JWQcQYrtVKrfMEVqi0wP58YcV9+vP/IUfFB9+oJZH2XI0IPGvRS
-	PYgVANJqfqf1FTBw==
-Date: Mon, 20 Jan 2025 13:54:22 +0100 (CET)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Madhavan Srinivasan <maddy@linux.ibm.com>
-cc: jikos@kernel.org, pmladek@suse.com, joe.lawrence@redhat.com, 
-    shuah@kernel.org, mpe@ellerman.id.au, npiggin@gmail.com, 
-    christophe.leroy@csgroup.eu, naveen@kernel.org, 
-    live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-    linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2] selftests: livepatch: handle PRINTK_CALLER in
- check_result()
-In-Reply-To: <20250119163238.749847-1-maddy@linux.ibm.com>
-Message-ID: <alpine.LSU.2.21.2501201354120.12227@pobox.suse.cz>
-References: <20250119163238.749847-1-maddy@linux.ibm.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	bh=6OUKdt6VXAQzpOTUFB26LmXUDO8O/oST+Zn2uKcAtKs=;
+	b=HbMtC92IGEx8a976wcxW0kDoKugHnljw5CJ/V3bldO3EleSl4f8dkr/UxaQd0pGkdw7Vvs
+	FLaOvwZFsd3RnEuOP3KbFH5VZ/Mo3jfZrt9VEpg7hpZnAL1LxkF1kfKPvTMoqshvadb4YN
+	4Ooo0u4GxuufcBnly1qGnkquaO6lzww=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-267--0Mzo6nqMjWwfrl4zO0qKA-1; Mon, 20 Jan 2025 08:53:27 -0500
+X-MC-Unique: -0Mzo6nqMjWwfrl4zO0qKA-1
+X-Mimecast-MFC-AGG-ID: -0Mzo6nqMjWwfrl4zO0qKA
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-468f80df8caso85758801cf.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2025 05:53:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737381207; x=1737986007;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6OUKdt6VXAQzpOTUFB26LmXUDO8O/oST+Zn2uKcAtKs=;
+        b=nmVXawlyQmfpu+ZQH+PPLaIilBy+ZQeykzh3jpil7GyBCBBgEYLjOSoCiSXyokbBp8
+         rWYxCdoa+kkUrIyb8CYgAkfA2DpWJHEbMU9xnMb0TtUdsoygumLUAZTHqGsaeaBzBy64
+         2LcLTh4DTP9s8jnyZok2zyxT1EHkUR2MuTLMty0d7sxXijnOHAqH4KYl9BbUekWSPnBY
+         1QCLmdsfPRwD4KLPKcm758vom6fJpA0ZzUJqcIR2EoF+1D08B/ngUtoyt7IKjXuEoME9
+         2FLJdxduLd8Y700pm1PomHh3+AcgVKQHuhIQhhf5yo5eWLTA1YYEiSnHkz3MkQzHgiT6
+         u11g==
+X-Forwarded-Encrypted: i=1; AJvYcCVKrUrAnrmTzvoFOuggxfNVYVf8+Gp71na9G679TqT275ihEog7XXkn8FdEEXAfEf+r1nPRQKTxVLU8c//z9Xc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlJkTCKJfo2HPLeOdDqDmAADN9BU+rERu01H3ML0wb/grbt498
+	/7B7fG37SWucZZU+RMhFIGU2Z9a58p6E8E6FlYJfWbQpuuRqFp/5AMZ7kM5FY+76khwKDwcBLgB
+	EehCxs491WeSLj+SfUfm1uko+LiTWOmH3KEhhGLz6SkJiatt4FPDSB5161oP/T538MA==
+X-Gm-Gg: ASbGnctZ/jT9aNuBroJ4BRfMY0UBI7s4drMYpj5nhRgizQUI3wJykliBftWdOPt2RfJ
+	ZUiPPTjOlMz4SvfIrpDQVVECH5jZ+1iXBo/ZTiBL9Joh8PXRo5Bk6xnSmtgLQgjgsfxT+du7vSg
+	mwxjoMTpu71MS1OxL0zxrdqbok9fKY1ISZNMCndi6pKQeeEUDVkIJAklJy2pw70i1u9VafXVsjL
+	xViTsfDvFVBD+AFc0vkmhKfKlSAkvwBRbGYPXON0+hjkUbI0lJwwLWhVEbptLBAXbe30s6b5tuL
+	A7PWgQ0x/E2L4NYxzszUEEXiGfKsWS9kwBRFdJaEI/9rkhmDqkdqVpA=
+X-Received: by 2002:ac8:7d82:0:b0:467:5e61:c116 with SMTP id d75a77b69052e-46e12a1e36cmr160729001cf.7.1737381207217;
+        Mon, 20 Jan 2025 05:53:27 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGCbxGDy6CHUSfOLqTxGL3gA1S6wKRHlUvydXAdXodFBspL8+Pdog+OKdfN6k1jzDkgqmOx+A==
+X-Received: by 2002:ac8:7d82:0:b0:467:5e61:c116 with SMTP id d75a77b69052e-46e12a1e36cmr160728291cf.7.1737381206799;
+        Mon, 20 Jan 2025 05:53:26 -0800 (PST)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-46e1030da00sm42651971cf.33.2025.01.20.05.53.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jan 2025 05:53:25 -0800 (PST)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linux-perf-users@vger.kernel.org, xen-devel@lists.xenproject.org,
+ kvm@vger.kernel.org, linux-arch@vger.kernel.org, rcu@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ bcm-kernel-feedback-list@broadcom.com, Peter Zijlstra
+ <peterz@infradead.org>, Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+ Juergen Gross <jgross@suse.com>, Ajay Kaher <ajay.kaher@broadcom.com>,
+ Alexey Makhalov <alexey.amakhalov@broadcom.com>, Russell King
+ <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, Will
+ Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
+ <kernel@xen0n.name>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Thomas
+ Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav
+ Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "H.
+ Peter Anvin" <hpa@zytor.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
+ <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian Hunter
+ <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, Boris
+ Ostrovsky <boris.ostrovsky@oracle.com>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Andy Lutomirski <luto@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, Frederic Weisbecker <frederic@kernel.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>, Jason Baron <jbaron@akamai.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes
+ <joel@joelfernandes.org>, Josh Triplett <josh@joshtriplett.org>, Boqun
+ Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan
+ <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli
+ <juri.lelli@redhat.com>, Clark Williams <williams@redhat.com>, Yair
+ Podemsky <ypodemsk@redhat.com>, Tomas Glozar <tglozar@redhat.com>, Vincent
+ Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
+ <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman
+ <mgorman@suse.de>, Kees Cook <kees@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Christoph Hellwig <hch@infradead.org>, Shuah
+ Khan <shuah@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Miguel
+ Ojeda <ojeda@kernel.org>, Alice Ryhl <aliceryhl@google.com>, "Mike
+ Rapoport (Microsoft)" <rppt@kernel.org>, Samuel Holland
+ <samuel.holland@sifive.com>, Rong Xu <xur@google.com>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Yosry Ahmed <yosryahmed@google.com>, "Kirill A.
+ Shutemov" <kirill.shutemov@linux.intel.com>, "Masami Hiramatsu (Google)"
+ <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, Luis
+ Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 25/30] context_tracking,x86: Defer kernel text
+ patching IPIs
+In-Reply-To: <Z4qQL89GZ_gk0vpu@google.com>
+References: <20250114175143.81438-1-vschneid@redhat.com>
+ <20250114175143.81438-26-vschneid@redhat.com>
+ <Z4bTlZkqihaAyGb4@google.com>
+ <xhsmhed11hiuy.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <Z4qQL89GZ_gk0vpu@google.com>
+Date: Mon, 20 Jan 2025 14:53:13 +0100
+Message-ID: <xhsmhtt9tfv7a.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Score: -8.30
-X-Spamd-Result: default: False [-8.30 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	RCVD_COUNT_ZERO(0.00)[0];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FREEMAIL_CC(0.00)[kernel.org,suse.com,redhat.com,ellerman.id.au,gmail.com,csgroup.eu,vger.kernel.org,lists.ozlabs.org];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	FROM_HAS_DN(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Type: text/plain
 
-On Sun, 19 Jan 2025, Madhavan Srinivasan wrote:
+On 17/01/25 09:15, Sean Christopherson wrote:
+> On Fri, Jan 17, 2025, Valentin Schneider wrote:
+>> On 14/01/25 13:13, Sean Christopherson wrote:
+>> > On Tue, Jan 14, 2025, Valentin Schneider wrote:
+>> >> +/**
+>> >> + * is_kernel_noinstr_text - checks if the pointer address is located in the
+>> >> + *                    .noinstr section
+>> >> + *
+>> >> + * @addr: address to check
+>> >> + *
+>> >> + * Returns: true if the address is located in .noinstr, false otherwise.
+>> >> + */
+>> >> +static inline bool is_kernel_noinstr_text(unsigned long addr)
+>> >> +{
+>> >> +	return addr >= (unsigned long)__noinstr_text_start &&
+>> >> +	       addr < (unsigned long)__noinstr_text_end;
+>> >> +}
+>> >
+>> > This doesn't do the right thing for modules, which matters because KVM can be
+>> > built as a module on x86, and because context tracking understands transitions
+>> > to GUEST mode, i.e. CPUs that are running in a KVM guest will be treated as not
+>> > being in the kernel, and thus will have IPIs deferred.  If KVM uses a static key
+>> > or branch between guest_state_enter_irqoff() and guest_state_exit_irqoff(), the
+>> > patching code won't wait for CPUs to exit guest mode, i.e. KVM could theoretically
+>> > use the wrong static path.
+>>>
+>> AFAICT guest_state_{enter,exit}_irqoff() are only used in noinstr functions
+>> and thus such a static key usage should at the very least be caught and
+>> warned about by objtool - when this isn't built as a module.
+>
+> That doesn't magically do the right thing though.  If KVM is built as a module,
+> is_kernel_noinstr_text() will get false negatives even for static keys/branches
+> that are annotaed as NOINSTR.
 
-> Some arch configs (like ppc64) enable CONFIG_PRINTK_CALLER,
-> which adds the caller id as part of the dmesg. With recent
-> util-linux's update 467a5b3192f16 ('dmesg: add caller_id support')
-> the standard "dmesg" has been enhanced to print PRINTK_CALLER fields.
-> 
-> Due to this, even though the expected vs observed are same,
-> end testcase results are failed.
-> 
->  -% insmod test_modules/test_klp_livepatch.ko
->  -livepatch: enabling patch 'test_klp_livepatch'
->  -livepatch: 'test_klp_livepatch': initializing patching transition
->  -livepatch: 'test_klp_livepatch': starting patching transition
->  -livepatch: 'test_klp_livepatch': completing patching transition
->  -livepatch: 'test_klp_livepatch': patching complete
->  -% echo 0 > /sys/kernel/livepatch/test_klp_livepatch/enabled
->  -livepatch: 'test_klp_livepatch': initializing unpatching transition
->  -livepatch: 'test_klp_livepatch': starting unpatching transition
->  -livepatch: 'test_klp_livepatch': completing unpatching transition
->  -livepatch: 'test_klp_livepatch': unpatching complete
->  -% rmmod test_klp_livepatch
->  +[   T3659] % insmod test_modules/test_klp_livepatch.ko
->  +[   T3682] livepatch: enabling patch 'test_klp_livepatch'
->  +[   T3682] livepatch: 'test_klp_livepatch': initializing patching transition
->  +[   T3682] livepatch: 'test_klp_livepatch': starting patching transition
->  +[    T826] livepatch: 'test_klp_livepatch': completing patching transition
->  +[    T826] livepatch: 'test_klp_livepatch': patching complete
->  +[   T3659] % echo 0 > /sys/kernel/livepatch/test_klp_livepatch/enabled
->  +[   T3659] livepatch: 'test_klp_livepatch': initializing unpatching transition
->  +[   T3659] livepatch: 'test_klp_livepatch': starting unpatching transition
->  +[    T789] livepatch: 'test_klp_livepatch': completing unpatching transition
->  +[    T789] livepatch: 'test_klp_livepatch': unpatching complete
->  +[   T3659] % rmmod test_klp_livepatch
-> 
->   ERROR: livepatch kselftest(s) failed
->  not ok 1 selftests: livepatch: test-livepatch.sh # exit=1
-> 
-> Currently the check_result() handles the "[time]" removal from
-> the dmesg. Enhance the check to also handle removal of "[Thread Id]"
-> or "[CPU Id]".
-> 
-> Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
+Quite so.
 
-Acked-by: Miroslav Benes <mbenes@suse.cz>
+I've been looking at mod_mem_type & friends, I'm thinking adding a
+MOD_NOINSTR_TEXT type might be overkill considering modules really
+shouldn't be involved with early entry, KVM being the one exception.
 
-M
+Your suggestion to have a KVM-module-specific noinstr section sounds good
+to me, I'll have a look at that.
+
 
