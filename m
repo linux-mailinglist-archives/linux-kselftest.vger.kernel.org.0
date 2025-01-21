@@ -1,42 +1,43 @@
-Return-Path: <linux-kselftest+bounces-24821-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24820-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 471B4A176D2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 06:09:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42A99A176CD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 06:09:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8490016A1D6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 05:09:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2CC307A22F8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 05:09:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 246DB1AAE0B;
-	Tue, 21 Jan 2025 05:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Rz/DqcEg"
-X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78F1D1A724C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DDCF198E6D;
 	Tue, 21 Jan 2025 05:09:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="CYqtfD4r"
+X-Original-To: linux-kselftest@vger.kernel.org
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45E99A55;
+	Tue, 21 Jan 2025 05:09:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737436176; cv=none; b=If60nVgwlnZtmi8EhqHgM97oMgeGF9Xxg781xtclSJLcNOI8Y/7I15P5O8Xhfu6Oi7HLuN7lIY4V1dYd7N7AS2CjfHRZK/KvT6uuyF/Byv3tV73cuIpU37eqB8oL9cpeQoDBNtMgx6VnEvTll2SBYckHHB316b1iOsObkVRzjFo=
+	t=1737436171; cv=none; b=K+1t1YfM1FIquD8zWTTapt+A6b1xfeixXLj0l4AOXDYghGN99JDHQk0fITy0y8A/W59NdA2IU+nCwaOlBN8JB/3O3M1x/jkIhbx2uJBVqcDKbLuyqG2zwpBfwqjTJr/TXkHEZ4yLDTZTM0RoU4QEYsergQ4uZquUJ5F5s/WJG24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737436176; c=relaxed/simple;
-	bh=MRbFXBRyZ6VO80r/tbLavWPYGstR7hTNcSTo0dkY3NQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mwaPS8r6FheMMIcJACT37XHEJd0zumHeaFpax7SOfAItDVSPBejMZjgzAGLK5C3z/JX/NJN/v5RvM/BigzbUWLNRL5bYXorIkbOYYRS3e4v7r0gDiKAYJwU+v1yPLj7aHC1Ytg9BPnvTFYuFvksUvKZYQsL1qyYFL3FSaNL/Mlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Rz/DqcEg; arc=none smtp.client-ip=117.135.210.4
+	s=arc-20240116; t=1737436171; c=relaxed/simple;
+	bh=z6Urh4wc14X05JB3h9mGWagV2qSr0pIR99APQ4T4mVg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RSkskOtmP7m9/uaR9UIeyqOe+PBNoUxKRCeH3UwgbJlmW6Juliw9HiHrBW7ZcaEYirRhppZWyntzmgKnzZQiK63ZSDdie+BFOFERKBg0adDAf7bCs9b8nNQ/1AtYiRvxAy8NT5euygChXZgdtd4OMTHiibaZIJIYgKhmdIMwVU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=CYqtfD4r; arc=none smtp.client-ip=220.197.31.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=bTS2v
-	udIGnYCF5+bPeCAZ9C/WoAScG4XWVTYcSjmUXw=; b=Rz/DqcEghOON4BUZsxO6S
-	scO9I2lh9KWFFudRqRIF9/jeJGLZ71jNQstWO8c+U2hdvlDN009kjaexrYSW5Zwx
-	PhLWvloeWx+e9o1DR3ww/Lzbfd68P741yVio4xCgyNiSlGLrVgQLo+FEZy/L5B8E
-	Cg/7h3A054zu8Pff8zy1dk=
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=QyFc5
+	uhHFtEAQ0FPGz0v1oE7DiUl7c1R1dxohQo/yV4=; b=CYqtfD4rONGkot+oPwaQf
+	8xkaYDZIoUE2rO2q0Ljg9xJqWcymnK8L+aERp4p/bMLEuNNQDy7q6uQtmA4+FP8h
+	K5HS9T1sQYqisyvbKoeIlvAQ6+L4gYT/AOTPzJrFUI+p89E7dFCf6Sk9z9vSOeBs
+	4LN0KvdM2mPDF/q+kT7bic=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wBHwYeaK49nTErMHA--.41409S2;
-	Tue, 21 Jan 2025 13:07:49 +0800 (CST)
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wBHwYeaK49nTErMHA--.41409S3;
+	Tue, 21 Jan 2025 13:08:02 +0800 (CST)
 From: Jiayuan Chen <mrpre@163.com>
 To: bpf@vger.kernel.org,
 	jakub@cloudflare.com,
@@ -69,10 +70,12 @@ Cc: netdev@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf v8 0/5] bpf: fix wrong copied_seq calculation and add tests
-Date: Tue, 21 Jan 2025 13:07:02 +0800
-Message-ID: <20250121050707.55523-1-mrpre@163.com>
+Subject: [PATCH bpf v8 1/5] strparser: add read_sock callback
+Date: Tue, 21 Jan 2025 13:07:03 +0800
+Message-ID: <20250121050707.55523-2-mrpre@163.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20250121050707.55523-1-mrpre@163.com>
+References: <20250121050707.55523-1-mrpre@163.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,86 +83,99 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBHwYeaK49nTErMHA--.41409S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWFyrGFyfXw4kuryDAFyxKrg_yoW5Cw1DpF
-	WkC34rGr47tFyIva1DA3yIgF4Fgw4rGay5KF1Fq3yfZr4jkryYyrs293Waqrn8GrWYvF1j
-	9r13Wr4Y934DAFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0z_pnQ7UUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiDxPbp2ePHI2amQACsY
+X-CM-TRANSID:_____wBHwYeaK49nTErMHA--.41409S3
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAFW7Jr17KF4fXw15uw4DJwb_yoW5Zw18pF
+	nxCayxWr47tFy8uan3Jr97KrWqgr1rKayUCFyFq34SyF4kGryYqFyFkr4jyF1UGr4rZFWU
+	KrsxWr4avr1DZaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piAnY7UUUUU=
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiDwnbp2ePKc4lUQAAsB
 
-A previous commit described in this topic
-http://lore.kernel.org/bpf/20230523025618.113937-9-john.fastabend@gmail.com
-directly updated 'sk->copied_seq' in the tcp_eat_skb() function when the
-action of a BPF program was SK_REDIRECT. For other actions, like SK_PASS,
-the update logic for 'sk->copied_seq' was moved to
-tcp_bpf_recvmsg_parser() to ensure the accuracy of the 'fionread' feature.
+Added a new read_sock handler, allowing users to customize read operations
+instead of relying on the native socket's read_sock.
 
-That commit works for a single stream_verdict scenario, as it also
-modified 'sk_data_ready->sk_psock_verdict_data_ready->tcp_read_skb'
-to remove updating 'sk->copied_seq'.
-
-However, for programs where both stream_parser and stream_verdict are
-active(strparser purpose), tcp_read_sock() was used instead of
-tcp_read_skb() (sk_data_ready->strp_data_ready->tcp_read_sock)
-tcp_read_sock() now still update 'sk->copied_seq', leading to duplicated
-updates.
-
-In summary, for strparser + SK_PASS, copied_seq is redundantly calculated
-in both tcp_read_sock() and tcp_bpf_recvmsg_parser().
-
-The issue causes incorrect copied_seq calculations, which prevent
-correct data reads from the recv() interface in user-land.
-
-Also we added test cases for bpf + strparser and separated them from
-sockmap_basic, as strparser has more encapsulation and parsing
-capabilities compared to sockmap.
-
-Fixes: e5c6de5fa025 ("bpf, sockmap: Incorrectly handling copied_seq")
-
+Signed-off-by: Jiayuan Chen <mrpre@163.com>
 ---
-V8 -> V7:
-https://lore.kernel.org/bpf/20250116140531.108636-1-mrpre@163.com/
-Avoid using add read_sock to psock. (Jakub Sitnicki)
-Avoid using warpper function to check whether strparser is supported.
+ Documentation/networking/strparser.rst |  9 ++++++++-
+ include/net/strparser.h                |  2 ++
+ net/strparser/strparser.c              | 11 +++++++++--
+ 3 files changed, 19 insertions(+), 3 deletions(-)
 
-V3 -> V7:
-https://lore.kernel.org/bpf/20250109094402.50838-1-mrpre@163.com/
-https://lore.kernel.org/bpf/20241218053408.437295-1-mrpre@163.com/
-Avoid introducing new proto_ops. (Jakub Sitnicki).
-Add more edge test cases for strparser + bpf.
-Fix patchwork fail of test cases code.
-Fix psock fetch without rcu lock.
-Move code of modifying to tcp_bpf.c.
-
-V1 -> V3:
-https://lore.kernel.org/bpf/20241209152740.281125-1-mrpre@163.com/
-Fix patchwork fail by adding Fixes tag.
-Save skb data offset for ENOMEM. (John Fastabend)
----
-
-Jiayuan Chen (5):
-  strparser: add read_sock callback
-  bpf: fix wrong copied_seq calculation
-  bpf: disable non stream socket for strparser
-  selftests/bpf: fix invalid flag of recv()
-  selftests/bpf: add strparser test for bpf
-
- Documentation/networking/strparser.rst        |   9 +-
- include/linux/skmsg.h                         |   2 +
- include/net/strparser.h                       |   2 +
- include/net/tcp.h                             |   8 +
- net/core/skmsg.c                              |   7 +
- net/core/sock_map.c                           |   5 +-
- net/ipv4/tcp.c                                |  29 +-
- net/ipv4/tcp_bpf.c                            |  42 ++
- net/strparser/strparser.c                     |  11 +-
- .../selftests/bpf/prog_tests/sockmap_basic.c  |  59 +--
- .../selftests/bpf/prog_tests/sockmap_strp.c   | 452 ++++++++++++++++++
- .../selftests/bpf/progs/test_sockmap_strp.c   |  53 ++
- 12 files changed, 614 insertions(+), 65 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_strp.c
-
+diff --git a/Documentation/networking/strparser.rst b/Documentation/networking/strparser.rst
+index 6cab1f74ae05..7f623d1db72a 100644
+--- a/Documentation/networking/strparser.rst
++++ b/Documentation/networking/strparser.rst
+@@ -112,7 +112,7 @@ Functions
+ Callbacks
+ =========
+ 
+-There are six callbacks:
++There are seven callbacks:
+ 
+     ::
+ 
+@@ -182,6 +182,13 @@ There are six callbacks:
+     the length of the message. skb->len - offset may be greater
+     then full_len since strparser does not trim the skb.
+ 
++    ::
++
++	int (*read_sock)(struct strparser *strp, read_descriptor_t *desc,
++                     sk_read_actor_t recv_actor);
++
++    The read_sock callback is used by strparser instead of
++    sock->ops->read_sock, if provided.
+     ::
+ 
+ 	int (*read_sock_done)(struct strparser *strp, int err);
+diff --git a/include/net/strparser.h b/include/net/strparser.h
+index 41e2ce9e9e10..0a83010b3a64 100644
+--- a/include/net/strparser.h
++++ b/include/net/strparser.h
+@@ -43,6 +43,8 @@ struct strparser;
+ struct strp_callbacks {
+ 	int (*parse_msg)(struct strparser *strp, struct sk_buff *skb);
+ 	void (*rcv_msg)(struct strparser *strp, struct sk_buff *skb);
++	int (*read_sock)(struct strparser *strp, read_descriptor_t *desc,
++			 sk_read_actor_t recv_actor);
+ 	int (*read_sock_done)(struct strparser *strp, int err);
+ 	void (*abort_parser)(struct strparser *strp, int err);
+ 	void (*lock)(struct strparser *strp);
+diff --git a/net/strparser/strparser.c b/net/strparser/strparser.c
+index 8299ceb3e373..95696f42647e 100644
+--- a/net/strparser/strparser.c
++++ b/net/strparser/strparser.c
+@@ -347,7 +347,10 @@ static int strp_read_sock(struct strparser *strp)
+ 	struct socket *sock = strp->sk->sk_socket;
+ 	read_descriptor_t desc;
+ 
+-	if (unlikely(!sock || !sock->ops || !sock->ops->read_sock))
++	if (unlikely(!sock || !sock->ops))
++		return -EBUSY;
++
++	if (unlikely(!strp->cb.read_sock && !sock->ops->read_sock))
+ 		return -EBUSY;
+ 
+ 	desc.arg.data = strp;
+@@ -355,7 +358,10 @@ static int strp_read_sock(struct strparser *strp)
+ 	desc.count = 1; /* give more than one skb per call */
+ 
+ 	/* sk should be locked here, so okay to do read_sock */
+-	sock->ops->read_sock(strp->sk, &desc, strp_recv);
++	if (strp->cb.read_sock)
++		strp->cb.read_sock(strp, &desc, strp_recv);
++	else
++		sock->ops->read_sock(strp->sk, &desc, strp_recv);
+ 
+ 	desc.error = strp->cb.read_sock_done(strp, desc.error);
+ 
+@@ -468,6 +474,7 @@ int strp_init(struct strparser *strp, struct sock *sk,
+ 	strp->cb.unlock = cb->unlock ? : strp_sock_unlock;
+ 	strp->cb.rcv_msg = cb->rcv_msg;
+ 	strp->cb.parse_msg = cb->parse_msg;
++	strp->cb.read_sock = cb->read_sock;
+ 	strp->cb.read_sock_done = cb->read_sock_done ? : default_read_sock_done;
+ 	strp->cb.abort_parser = cb->abort_parser ? : strp_abort_strp;
+ 
 -- 
 2.43.5
 
