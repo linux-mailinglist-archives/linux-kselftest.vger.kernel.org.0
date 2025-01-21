@@ -1,297 +1,248 @@
-Return-Path: <linux-kselftest+bounces-24899-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24900-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 311FEA18737
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 22:19:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C268FA18765
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 22:40:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4AA283AD050
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 21:17:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0298E169F56
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 21:40:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E31F01F5433;
-	Tue, 21 Jan 2025 21:16:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D6A31F78E8;
+	Tue, 21 Jan 2025 21:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Gx/q5RgJ"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Qo3xCr82"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2041.outbound.protection.outlook.com [40.107.92.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE6761B2EFB
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jan 2025 21:16:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737494208; cv=none; b=sdNnUIASNO+0tjH40SEIMrUrKmfLpxLcMepV8Jv8UFQks5if32gyIkiUtvXpO/bjgOwRs4+WskXtCK7jy19okRdk9qoQw5FOOYYq4mkCVqEr9MF6BKUxmCeR8t7v50KK5gE6RX0F/pfuz7bnarthCqnRUd7l3rcwenTQgb+Og3U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737494208; c=relaxed/simple;
-	bh=LiYyQjSn8/Ogrz53aGmr5g28X/Q2LgJPxWJUoYLkiqU=;
-	h=Content-Type:Message-ID:Date:MIME-Version:To:From:Subject:Cc; b=iRstmyRcNRGuRkFQuPqnP8EFaPN/hPr6Ezl1wweNWhPfIlHL/bSgiWrcVvoZaIIevitI7d9ss1tUmqNvWvAQmG9YEIWnCPSjnxUnYMVXSCIjqzGeScSzLtc7Tn9quRUWc7B2DkZtGf1mSlYCW6HhQP60XXL2q36W94hg8vcny/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Gx/q5RgJ; arc=none smtp.client-ip=209.85.167.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3ebb2d8dac4so3603107b6e.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jan 2025 13:16:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1737494206; x=1738099006; darn=vger.kernel.org;
-        h=cc:subject:from:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=t0Y/E9LA5hslv08mHBG0j2fcfubf1KfMvovCy+4e7Pk=;
-        b=Gx/q5RgJ7WRy2e554q7/WtJnBM0l/eUIKYPcsAud6p0iz1t90zI04qASrAmXg8KkVL
-         s87pwlgkGbjbpMWg1YSw3ic/pxq6wfxn9t2ep0+5dVTLe74IqNvQOtBiEnpcHBHmFCOg
-         Oo8EbnY9kdkvChcgNEn4hLvoVxCDYcp93Nswk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737494206; x=1738099006;
-        h=cc:subject:from:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t0Y/E9LA5hslv08mHBG0j2fcfubf1KfMvovCy+4e7Pk=;
-        b=q7IyTDslHnwuF3XoUQlHjVXjOY0Cnj5hVmKmqbrKmwWRXdlAfec4mQmSrw8vmr0TMx
-         TB2oisCZOP237DxiwkvRivbGfj4mfjqvrjQUYL+Rj7bJQyheqYWMmCUiwOJvA8xL6+sY
-         5cLho68werZSnz6E0bwxrBbEMvM06rAW3qoa2jQtk0HGLAv8fKEHp6ioGJnyZmLmh9DL
-         YcF8kBNZJZ4DLfCRIh5pNSw/Vek93v6p9MTyt3FnYqzv6JeYOAQhJZbv6sIL6bdXJSE1
-         UoJD0Ey474w3aA7nMO9vuEvP9opgjqhg4eWgPy0EtSnVsdKBLzbiRlxUMwKew0t+Y0uL
-         +D2g==
-X-Forwarded-Encrypted: i=1; AJvYcCWnhS6a5Lq0r31EDrQcDjuae5bRirFOJrgGs0o+eH7hFL3dJOoOnC5oUTAg/T/RAnTf4zCbnRtd2DQ8IlM7aow=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBbZ45RIXrz3st8T5BE+NW2mvpzyZipvIEyXSm3a9OcqoITt53
-	fLtaNCfAZSWhQJ+gO0kTAVZhda936Qsn/ULoqczhJnH5snAY6B0iiSGTtkDw/mY=
-X-Gm-Gg: ASbGncsmjUQsI1HsbfCiK0AxNWbUN2elTykjOLHBauqn3FBKe0VhzznLarQXmLSt4z1
-	vAGVNLHxw9ilfk0hZjNRs+05PaCBzOS9peG8JlMyneotl49ne+EWheQQpR8sJfmRP2OYTLdLMCO
-	ZfpCFAu/VyzRAswkaY9XZFLVOomknLKssGz7kqeyFX8bhZzJJ9QzohSwYy0TO4bLqZG57OpxNXN
-	NMpyxFOX+CZ3/j5f3JVz5fnlSEGq6kZnMiP5bVjDPHuZltFw6+RuTvAxbk5NVZHZqbY3KQnlXYf
-	Qdso
-X-Google-Smtp-Source: AGHT+IEgQJ7un/yhJfcl29kZW4Xd6ZOqxRbG5jgg7C2Hw1ZsSghAwf7b6lBHh7LNhj+FkjeXBai1Jw==
-X-Received: by 2002:a05:6808:4494:b0:3e6:6097:847d with SMTP id 5614622812f47-3f19fc3b35amr13461858b6e.7.1737494205891;
-        Tue, 21 Jan 2025 13:16:45 -0800 (PST)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-3f19db9e8bfsm3222504b6e.44.2025.01.21.13.16.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jan 2025 13:16:45 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------S6ZVFAOyrbLHRDlIW0Gd8sQd"
-Message-ID: <70eb3d1b-6f91-48da-8854-21f25bd3f289@linuxfoundation.org>
-Date: Tue, 21 Jan 2025 14:16:44 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2BF1B6D15;
+	Tue, 21 Jan 2025 21:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737495633; cv=fail; b=FjsOq0K8zvXvXWekxbTrUerOolEO2saqJXnRecTVXxIE0Yz1USWpv+bJqQKRsVRB9PsAMgTzXEGacvsOAKXke2u/x19rHyHBzecLAv4BqeYMXDYr24EVpSWq/W7tOuWroVwp478M1kxjgj1ysmcwXzmvdUTArsaoEHFLCxx35ZQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737495633; c=relaxed/simple;
+	bh=atJRXw5jAP8vbwDl++2ytvu82FW6pVXzb+TTT35Pdfs=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TCiL7Aq84DdHYeiJry1SPFDUyejGWdmMru/+yDQKk0t6iuRlrMZowMGFzZjFFdlpiTz+KvaSHQZgxspYRtWgjLVRyRDwSfIZdzhV9nvo+zbiWhkXQxv86U/87tyZtHw9MX8B653s0lT9/u95c9U6T8wa1mi9rYukNQx55EUGnRA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Qo3xCr82; arc=fail smtp.client-ip=40.107.92.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=yaBIe2h/ZJOaL9YFUP0hNdHSu4mFh6zB/BxhkXh8Uh/20x7F2SqQwd0vqNV10xaDHRPhUuA5SIDXgwPyUYwNq/oAgBAFPbCEZlpocZi9G2WR8sVLsJAc0Sl/UyaVZo0t2VVG1o2e/gYTbZ+G6l0PLMn/FsvdKWyN1QU5q/emsIknKXylB7napcXwAqxXA03lXwH5PDOj3ez5lFQUwb5/dkseF4OPS1BTekVKYP848/6WLNFpPRrU3vC6RsPmSQkR370zbhG3epEq+UA8CZLik/Pw1YOZra+4386c1a64dil9DYSr2yJMKj0guAUpnomEAgHxpBtRA27pYJGz8LATcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eMwG0sh/wA7ZgwQU5ZTEd6lBJgpXmevxARM6TyhJrZo=;
+ b=quS+VcrNCJFX+pcM9N6ILiLpPKFBK6NUwdJNWwkjJjR9Tb7YzeT2Amz8vzdREinkFr4f9fSPE+PyAfW1A5C/D3re97u8uDzLQrj3ZL5vUSnGrNNaBkADcYzavzUXhorGzTwn1V6KECGfsHHPizZoYbZK2g81JlRneG3N0gf6hGtHxITrLSodVmXt2KaFfieD6YzdCUmeCW2qKyxMiId8q6anDEqsgfFvafTN2CjbfGWgAi9n219EDHcWxrkgipjoGFqsfIE/5asAjsIlybHKy30Bv0GCmjTYklGGtMUe8Zphu757qMZX3V5KWnESe3bebsHoP4ZSjgdGDFAHSNYlcg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eMwG0sh/wA7ZgwQU5ZTEd6lBJgpXmevxARM6TyhJrZo=;
+ b=Qo3xCr82J+JAoPlCJ6UUlvfZXl3cCtTFfyelBWKrXLT1jAEIaymF7w2J4kcVwOEaqF23Z81DnQecsndjjz6+wzQHdx1fDJiCCry+7rvTibG0/w6uanAXXJ6W/59DP/z67Pn1wE62yFuuwHNBkaY9SH9ffl2WW/8pwyqUqT/cWBA9773bpLJ4XEibVtJXxYCx2Rs9I5CiBJwDtDzcodAgix0o0p4mU8E+fCu+of/2BXfBA3k8m7xaE0qHj4ScMwGVrmLdJ5NO8o3MAsWuwXzTYd7aGlIX6m5VWKbi3a4Pjfx51uxHJzLTWHuqrqqzartFpjwDGmB5hmaU2Q82SPaIbQ==
+Received: from CH2PR18CA0005.namprd18.prod.outlook.com (2603:10b6:610:4f::15)
+ by MN0PR12MB5739.namprd12.prod.outlook.com (2603:10b6:208:372::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.22; Tue, 21 Jan
+ 2025 21:40:27 +0000
+Received: from CH1PEPF0000A349.namprd04.prod.outlook.com
+ (2603:10b6:610:4f:cafe::5) by CH2PR18CA0005.outlook.office365.com
+ (2603:10b6:610:4f::15) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8356.21 via Frontend Transport; Tue,
+ 21 Jan 2025 21:40:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CH1PEPF0000A349.mail.protection.outlook.com (10.167.244.9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8377.8 via Frontend Transport; Tue, 21 Jan 2025 21:40:27 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 21 Jan
+ 2025 13:40:12 -0800
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 21 Jan
+ 2025 13:40:11 -0800
+Received: from nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
+ Transport; Tue, 21 Jan 2025 13:40:07 -0800
+Date: Tue, 21 Jan 2025 13:40:05 -0800
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: <kevin.tian@intel.com>, <corbet@lwn.net>, <will@kernel.org>,
+	<joro@8bytes.org>, <suravee.suthikulpanit@amd.com>, <robin.murphy@arm.com>,
+	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>, <shuah@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <eric.auger@redhat.com>,
+	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
+	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>,
+	<ddutile@redhat.com>, <yi.l.liu@intel.com>, <patches@lists.linux.dev>
+Subject: Re: [PATCH v5 08/14] iommufd/viommu: Add iommufd_viommu_report_event
+ helper
+Message-ID: <Z5AUNVHzJPATVqAY@nvidia.com>
+References: <Z4V7NbxGyYoQN0yV@Asurada-Nvidia>
+ <20250114134158.GC5556@nvidia.com>
+ <Z4rVg1Xg5TCiFlSb@nvidia.com>
+ <20250120181854.GQ5556@nvidia.com>
+ <Z463eXfgNArCOfPn@nvidia.com>
+ <20250121183611.GY5556@nvidia.com>
+ <Z4/7pGx6F1mpAUuV@nvidia.com>
+ <20250121200924.GZ5556@nvidia.com>
+ <Z5ALWFVTOSC/8+ji@nvidia.com>
+ <20250121211404.GB5556@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Linus Torvalds <torvalds@linux-foundation.org>
-From: Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] kunit next update for Linux 6.14-rc1
-Cc: sfr@canb.auug.org.au, gregkh@linuxfoundation.org,
- skhan@linuxfoundation.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, brendan.higgins@linux.dev,
- davidgow@google.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250121211404.GB5556@nvidia.com>
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH1PEPF0000A349:EE_|MN0PR12MB5739:EE_
+X-MS-Office365-Filtering-Correlation-Id: a92b63f8-6c4a-4f2b-cc3b-08dd3a643885
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|82310400026|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?+/hZllBAp/xJtgAeI0vo7XVCE8LvF7j6/+Y72RXiZTDcgq5IXurMmj29trfD?=
+ =?us-ascii?Q?oymnVv9jRPTVOjAnEeB7TA3Zh1Rw9a2MLCxzJFcKyL4skcyh+AdAFCoDreNj?=
+ =?us-ascii?Q?O8NHEDsXEFE3UdxOuaCcMu2SxdiRBn3qC6vaHqdcJub9yDXqvByLgnkrO/ES?=
+ =?us-ascii?Q?QKnJHUgUj2ZqML6egMPhFDrr5KqD6aVm7UTu9jT7gxZyO91H+8Tp0eN+JxvI?=
+ =?us-ascii?Q?7Cnhxh82JjVebWnfd0havCY1QFQj1xtXiQ92IuRR9j+QNun98TZZSX2j2tFT?=
+ =?us-ascii?Q?L7/1+2RL9X5wGacULLJyyItkWWyapdord1DkYVvE4XGt1MnK6np9Kmcjtf3/?=
+ =?us-ascii?Q?k1iXGi4WlRVMq/zUO20eyrzUQQ+crhuRSz8BN0TqSPUK0DA6azeJUDEkrGlM?=
+ =?us-ascii?Q?RuX443qOpLy0IeXe6NrN+pnsCu8CUmGQXQ0Mv+MkXNy38a+rPljuBTp/7CPd?=
+ =?us-ascii?Q?R0Xwyc8BxeZpfSgR91OI5+my5XqR9dqXtIsIESqZwWvnMVSO02VNkne0DO/v?=
+ =?us-ascii?Q?in8j4gEBlYIC5qEfApgYUB2cIieIlYDuzYLtNpMIU/OVIcwxBTYH9vDF5Dy+?=
+ =?us-ascii?Q?V5sUQ/SXK8NvIafelmGCGkMmR+uE42HmOtaWnn2EYM6RyZ137QXfRoOc1sqt?=
+ =?us-ascii?Q?LAdMwsPXClKxlBJJ1wXFLIRXRFhaALs5I61XpXm4h8xDB0tlSRVoveeVfC4G?=
+ =?us-ascii?Q?EnR/gxoAVawJItpYUuw8hjExdO/c5rGyGR0IymcAATBPw1lATn7mMZppY/KI?=
+ =?us-ascii?Q?Yi7EaflnF8GwNm1vkP9upVFiphIduHdMBzC48PIjkz+r/9yihYlfIzrNxXBy?=
+ =?us-ascii?Q?jUZItPH9Dzb8FEe1gNudP+CV+BxVl7Y6PSjzd2+dLwGSsNdC6vzBunYoWrk8?=
+ =?us-ascii?Q?cWJvEM26wH0y4+mNwW1QQmZidBD0A/LdsABI8YZAow7AJkyvjCpC4ETeU3Zg?=
+ =?us-ascii?Q?8HdUlZrVn0AhcKjUsOx6RqjBf30q32CAgUVqdBY0LdOlAS34h6NmsGuckD52?=
+ =?us-ascii?Q?7019GATne4xvYLO6vMgIcVLFHwOg87pLIbQA7zk0S3X7JBCgZRYoX03HJrF5?=
+ =?us-ascii?Q?Sn/uUH+y/TH+PFbh/bB2CSkxAXSmtR5CitnZXlabCnegdOx/f4WI2Y7FN4GR?=
+ =?us-ascii?Q?aJO8zYUTP5fG/8eLEG7MMIcJYWNDqCCeLmxu6iU0ixCuTh6cAmHcrAJCBoB2?=
+ =?us-ascii?Q?AHLnbx+up2VH8MDB2o6xNYJQWX/uviSwSOOC9XsUXobd92hrWZj1bJTKEiQc?=
+ =?us-ascii?Q?opjcAXITEBSfm+OVMHhiKqygMwsONwYZozkaSzZnYCGP15t84r4LUihRBkBz?=
+ =?us-ascii?Q?sFZKe3DEjkN+Gldzr9rmrzWd7djbNj3XH/YQ9gMSKNVpEnIULMIHhlokUiWK?=
+ =?us-ascii?Q?Lw9rO19f52/JMF/PVHh8v6JV9sGwJOt+tM+LHONGOUKbsbOKdEipR+mGJ01G?=
+ =?us-ascii?Q?CzSG9To1vBRsCGHy5NJFTlAObeGdv9b/1hX/ARwKNSxNLTiafIh0xLjcNwtk?=
+ =?us-ascii?Q?CsdlNefMwr1Lav0=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(82310400026)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2025 21:40:27.4193
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a92b63f8-6c4a-4f2b-cc3b-08dd3a643885
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH1PEPF0000A349.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5739
 
-This is a multi-part message in MIME format.
---------------S6ZVFAOyrbLHRDlIW0Gd8sQd
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Tue, Jan 21, 2025 at 05:14:04PM -0400, Jason Gunthorpe wrote:
+> On Tue, Jan 21, 2025 at 01:02:16PM -0800, Nicolin Chen wrote:
+> > On Tue, Jan 21, 2025 at 04:09:24PM -0400, Jason Gunthorpe wrote:
+> > > On Tue, Jan 21, 2025 at 11:55:16AM -0800, Nicolin Chen wrote:
+> > > > > > > IOMMU_VEVENTQ_STATE_OVERFLOW with a 0 length event is seen if events
+> > > > > > > have been lost and no subsequent events are present. It exists to
+> > > > > > > ensure timely delivery of the overflow event to userspace. counter
+> > > > > > > will be the sequence number of the next successful event.
+> > > > > > 
+> > > > > > So userspace should first read the header to decide whether or not
+> > > > > > to read a vEVENT. If header is overflows, it should skip the vEVENT
+> > > > > > struct and read the next header?
+> > > > > 
+> > > > > Yes, but there won't be a next header. overflow would always be the
+> > > > > last thing in a read() response. If there is another event then
+> > > > > overflow is indicated by non-monotonic count.
+> > > > 
+> > > > I am not 100% sure why "overflow would always be the last thing
+> > > > in a read() response". I thought that kernel should immediately
+> > > > report an overflow to user space when the vEVENTQ is overflowed.
+> > > 
+> > > As below, if you observe overflow then it was at the end of the kernel
+> > > queue and there is no further events after it. So it should always end
+> > > up last.
+> > > 
+> > > Perhaps we could enforce this directly in the kernel's read by making
+> > > it the only, first and last, response to read.
+> > 
+> > Hmm, since the overflow node is the last node in the list, isn't
+> > it already an enforcement it's the only/first/last node to read?
+> > (Assuming we choose to delete the overflow node from the list if
+> >  new event can be inserted.)
+> 
+> Since we don't hold the spinlock the whole time there is a race where
+> we could pull the overflow off and then another entry could be pushed
+> while we do the copy_to_user.
 
-Hi Linus,
+I see. I'll be careful around that. I can imagine that one tricky
+thing can be to restore the overflow node back to the list when a
+copy_to_user fails..
 
-Please pull the following kunit next update for Linux 6.14-rc1.
+> > > > Yet, thinking about this once again: user space actually has its
+> > > > own queue. There's probably no point in letting it know about an
+> > > > overflow immediately when the kernel vEVENTQ overflows until its
+> > > > own user queue overflows after it reads the entire vEVENTQ so it
+> > > > can trigger a vHW event/irq to the VM?
+> > > 
+> > > The kernel has no idea what userspace is doing, the kernel's job
+> > > should be to ensure timely delivery of all events, if an event is lost
+> > > it should ensure timely delivery of the lost event notification. There
+> > > is little else it can do.
+> > 
+> > Yet, "timely" means still having an entire-queue-size-long delay
+> > since the overflow node is at the end of the queue, right?
+> 
+> Yes, but also in this case the vIOMMU isn't experiancing an overflow
+> so it doesn't need to know about it. 
+> 
+> The main point here is if we somehow loose an event the vIOMMU driver
+> may need to do something to recover from the lost event. It doesn't
+> become relavent until the lost event is present in the virtual HW
+> queue.
 
-- fixes struct completion warning
-- introduces autorun option
-- adds fallback for os.sched_getaffinity
-- enables hardware acceleration when available
+Ack.
 
-Note:
+> There is also the minor detail of what happens if the hypervisor HW
+> queue overflows - I don't know the answer here. It is security
+> concerning since the VM can spam DMA errors at high rate. :|
 
-Stephen reported duplicate patch in kunit and driver-core:
+In my view, the hypervisor queue is the vHW queue for the VM, so
+it should act like a HW, which means it's up to the guest kernel
+driver that handles the high rate DMA errors..
 
-The following commit is also in the driver-core tree as a different commit
-(but the same patch):
+The entire thing is complicated since we have a double buffer: a
+kernel queue and a hypervisor queue. I am not very sure if both 
+queues should have the same depth or perhaps the kernel one might
+have a slightly bigger size to buffer the hypervisor one. If only
+kernel could directly add events to the hypervisor queue and also
+set the overflow flag in the hypervisor..
 
-   875aec2357cd ("kunit: platform: Resolve 'struct completion' warning")
-
-This is commit
-
-   7687c66c18c6 ("kunit: platform: Resolve 'struct completion' warning")
-
-in the driver-core tree.
-
-diff is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
-
-   Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-kunit-6.14-rc1
-
-for you to fetch changes up to 31691914c392675bdc65d1e72dd8d129a1f0014f:
-
-   kunit: Introduce autorun option (2025-01-15 09:04:06 -0700)
-
-----------------------------------------------------------------
-linux_kselftest-kunit-6.14-rc1
-
-- fixes struct completion warning
-- introduces autorun option
-- adds fallback for os.sched_getaffinity
-- enables hardware acceleration when available
-
-----------------------------------------------------------------
-Brian Norris (1):
-       kunit: platform: Resolve 'struct completion' warning
-
-Stanislav Kinsburskii (1):
-       kunit: Introduce autorun option
-
-Tamir Duberstein (2):
-       kunit: add fallback for os.sched_getaffinity
-       kunit: enable hardware acceleration when available
-
-  include/kunit/platform_device.h           |  1 +
-  include/kunit/test.h                      |  4 +++-
-  lib/kunit/Kconfig                         | 12 ++++++++++++
-  lib/kunit/debugfs.c                       |  2 +-
-  lib/kunit/executor.c                      | 21 +++++++++++++++++++--
-  lib/kunit/test.c                          |  6 ++++--
-  tools/testing/kunit/kunit.py              | 11 ++++++++++-
-  tools/testing/kunit/kunit_kernel.py       |  3 +++
-  tools/testing/kunit/qemu_configs/arm64.py |  2 +-
-  9 files changed, 54 insertions(+), 8 deletions(-)
-----------------------------------------------------------------
---------------S6ZVFAOyrbLHRDlIW0Gd8sQd
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux_kselftest-kunit-6.14-rc1.diff"
-Content-Disposition: attachment;
- filename="linux_kselftest-kunit-6.14-rc1.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL2luY2x1ZGUva3VuaXQvcGxhdGZvcm1fZGV2aWNlLmggYi9pbmNsdWRl
-L2t1bml0L3BsYXRmb3JtX2RldmljZS5oCmluZGV4IDBmYzA5OTlkMjQyMC4uZjgyMzZhODUz
-NmY3IDEwMDY0NAotLS0gYS9pbmNsdWRlL2t1bml0L3BsYXRmb3JtX2RldmljZS5oCisrKyBi
-L2luY2x1ZGUva3VuaXQvcGxhdGZvcm1fZGV2aWNlLmgKQEAgLTIsNiArMiw3IEBACiAjaWZu
-ZGVmIF9LVU5JVF9QTEFURk9STV9EUklWRVJfSAogI2RlZmluZSBfS1VOSVRfUExBVEZPUk1f
-RFJJVkVSX0gKIAorc3RydWN0IGNvbXBsZXRpb247CiBzdHJ1Y3Qga3VuaXQ7CiBzdHJ1Y3Qg
-cGxhdGZvcm1fZGV2aWNlOwogc3RydWN0IHBsYXRmb3JtX2RyaXZlcjsKZGlmZiAtLWdpdCBh
-L2luY2x1ZGUva3VuaXQvdGVzdC5oIGIvaW5jbHVkZS9rdW5pdC90ZXN0LmgKaW5kZXggMzRi
-NzFlNDJmYjEwLi41OGRiYWI2MGY4NTMgMTAwNjQ0Ci0tLSBhL2luY2x1ZGUva3VuaXQvdGVz
-dC5oCisrKyBiL2luY2x1ZGUva3VuaXQvdGVzdC5oCkBAIC0zMTIsNiArMzEyLDcgQEAgc3Rh
-dGljIGlubGluZSB2b2lkIGt1bml0X3NldF9mYWlsdXJlKHN0cnVjdCBrdW5pdCAqdGVzdCkK
-IH0KIAogYm9vbCBrdW5pdF9lbmFibGVkKHZvaWQpOworYm9vbCBrdW5pdF9hdXRvcnVuKHZv
-aWQpOwogY29uc3QgY2hhciAqa3VuaXRfYWN0aW9uKHZvaWQpOwogY29uc3QgY2hhciAqa3Vu
-aXRfZmlsdGVyX2dsb2Iodm9pZCk7CiBjaGFyICprdW5pdF9maWx0ZXIodm9pZCk7CkBAIC0z
-MzQsNyArMzM1LDggQEAga3VuaXRfZmlsdGVyX3N1aXRlcyhjb25zdCBzdHJ1Y3Qga3VuaXRf
-c3VpdGVfc2V0ICpzdWl0ZV9zZXQsCiAJCSAgICBpbnQgKmVycik7CiB2b2lkIGt1bml0X2Zy
-ZWVfc3VpdGVfc2V0KHN0cnVjdCBrdW5pdF9zdWl0ZV9zZXQgc3VpdGVfc2V0KTsKIAotaW50
-IF9fa3VuaXRfdGVzdF9zdWl0ZXNfaW5pdChzdHJ1Y3Qga3VuaXRfc3VpdGUgKiBjb25zdCAq
-IGNvbnN0IHN1aXRlcywgaW50IG51bV9zdWl0ZXMpOworaW50IF9fa3VuaXRfdGVzdF9zdWl0
-ZXNfaW5pdChzdHJ1Y3Qga3VuaXRfc3VpdGUgKiBjb25zdCAqIGNvbnN0IHN1aXRlcywgaW50
-IG51bV9zdWl0ZXMsCisJCQkgICAgIGJvb2wgcnVuX3Rlc3RzKTsKIAogdm9pZCBfX2t1bml0
-X3Rlc3Rfc3VpdGVzX2V4aXQoc3RydWN0IGt1bml0X3N1aXRlICoqc3VpdGVzLCBpbnQgbnVt
-X3N1aXRlcyk7CiAKZGlmZiAtLWdpdCBhL2xpYi9rdW5pdC9LY29uZmlnIGIvbGliL2t1bml0
-L0tjb25maWcKaW5kZXggMzRkNzI0MmQ1MjZkLi5hOTc4OTdlZGQ5NjQgMTAwNjQ0Ci0tLSBh
-L2xpYi9rdW5pdC9LY29uZmlnCisrKyBiL2xpYi9rdW5pdC9LY29uZmlnCkBAIC04MSw0ICs4
-MSwxNiBAQCBjb25maWcgS1VOSVRfREVGQVVMVF9FTkFCTEVECiAJICBJbiBtb3N0IGNhc2Vz
-IHRoaXMgc2hvdWxkIGJlIGxlZnQgYXMgWS4gT25seSBpZiBhZGRpdGlvbmFsIG9wdC1pbgog
-CSAgYmVoYXZpb3IgaXMgbmVlZGVkIHNob3VsZCB0aGlzIGJlIHNldCB0byBOLgogCitjb25m
-aWcgS1VOSVRfQVVUT1JVTl9FTkFCTEVECisJYm9vbCAiRGVmYXVsdCB2YWx1ZSBvZiBrdW5p
-dC5hdXRvcnVuIgorCWRlZmF1bHQgeQorCWhlbHAKKwkgIFNldHMgdGhlIGRlZmF1bHQgdmFs
-dWUgb2Yga3VuaXQuYXV0b3J1bi4gSWYgc2V0IHRvIE4gdGhlbiBLVW5pdAorCSAgdGVzdHMg
-d2lsbCBub3QgcnVuIGFmdGVyIGluaXRpYWxpemF0aW9uIHVubGVzcyBrdW5pdC5hdXRvcnVu
-PTEgaXMKKwkgIHBhc3NlZCB0byB0aGUga2VybmVsIGNvbW1hbmQgbGluZS4gVGhlIHRlc3Qg
-Y2FuIHN0aWxsIGJlIHJ1biBtYW51YWxseQorCSAgdmlhIGRlYnVnZnMgaW50ZXJmYWNlLgor
-CisJICBJbiBtb3N0IGNhc2VzIHRoaXMgc2hvdWxkIGJlIGxlZnQgYXMgWS4gT25seSBpZiBh
-ZGRpdGlvbmFsIG9wdC1pbgorCSAgYmVoYXZpb3IgaXMgbmVlZGVkIHNob3VsZCB0aGlzIGJl
-IHNldCB0byBOLgorCiBlbmRpZiAjIEtVTklUCmRpZmYgLS1naXQgYS9saWIva3VuaXQvZGVi
-dWdmcy5jIGIvbGliL2t1bml0L2RlYnVnZnMuYwppbmRleCBhZjcxOTExZjRhMDcuLjljMzI2
-ZjE4MzdiZCAxMDA2NDQKLS0tIGEvbGliL2t1bml0L2RlYnVnZnMuYworKysgYi9saWIva3Vu
-aXQvZGVidWdmcy5jCkBAIC0xNDUsNyArMTQ1LDcgQEAgc3RhdGljIHNzaXplX3QgZGVidWdm
-c19ydW4oc3RydWN0IGZpbGUgKmZpbGUsCiAJc3RydWN0IGlub2RlICpmX2lub2RlID0gZmls
-ZS0+Zl9pbm9kZTsKIAlzdHJ1Y3Qga3VuaXRfc3VpdGUgKnN1aXRlID0gKHN0cnVjdCBrdW5p
-dF9zdWl0ZSAqKSBmX2lub2RlLT5pX3ByaXZhdGU7CiAKLQlfX2t1bml0X3Rlc3Rfc3VpdGVz
-X2luaXQoJnN1aXRlLCAxKTsKKwlfX2t1bml0X3Rlc3Rfc3VpdGVzX2luaXQoJnN1aXRlLCAx
-LCB0cnVlKTsKIAogCXJldHVybiBjb3VudDsKIH0KZGlmZiAtLWdpdCBhL2xpYi9rdW5pdC9l
-eGVjdXRvci5jIGIvbGliL2t1bml0L2V4ZWN1dG9yLmMKaW5kZXggMzRiN2I2ODMzZGYzLi4z
-ZjM5OTU1Y2IwZjEgMTAwNjQ0Ci0tLSBhL2xpYi9rdW5pdC9leGVjdXRvci5jCisrKyBiL2xp
-Yi9rdW5pdC9leGVjdXRvci5jCkBAIC0yOSw2ICsyOSwyMiBAQCBjb25zdCBjaGFyICprdW5p
-dF9hY3Rpb24odm9pZCkKIAlyZXR1cm4gYWN0aW9uX3BhcmFtOwogfQogCisvKgorICogUnVu
-IEtVbml0IHRlc3RzIGFmdGVyIGluaXRpYWxpemF0aW9uCisgKi8KKyNpZmRlZiBDT05GSUdf
-S1VOSVRfQVVUT1JVTl9FTkFCTEVECitzdGF0aWMgYm9vbCBhdXRvcnVuX3BhcmFtID0gdHJ1
-ZTsKKyNlbHNlCitzdGF0aWMgYm9vbCBhdXRvcnVuX3BhcmFtOworI2VuZGlmCittb2R1bGVf
-cGFyYW1fbmFtZWQoYXV0b3J1biwgYXV0b3J1bl9wYXJhbSwgYm9vbCwgMCk7CitNT0RVTEVf
-UEFSTV9ERVNDKGF1dG9ydW4sICJSdW4gS1VuaXQgdGVzdHMgYWZ0ZXIgaW5pdGlhbGl6YXRp
-b24iKTsKKworYm9vbCBrdW5pdF9hdXRvcnVuKHZvaWQpCit7CisJcmV0dXJuIGF1dG9ydW5f
-cGFyYW07Cit9CisKIHN0YXRpYyBjaGFyICpmaWx0ZXJfZ2xvYl9wYXJhbTsKIHN0YXRpYyBj
-aGFyICpmaWx0ZXJfcGFyYW07CiBzdGF0aWMgY2hhciAqZmlsdGVyX2FjdGlvbl9wYXJhbTsK
-QEAgLTI2MCwxMyArMjc2LDE0IEBAIGt1bml0X2ZpbHRlcl9zdWl0ZXMoY29uc3Qgc3RydWN0
-IGt1bml0X3N1aXRlX3NldCAqc3VpdGVfc2V0LAogdm9pZCBrdW5pdF9leGVjX3J1bl90ZXN0
-cyhzdHJ1Y3Qga3VuaXRfc3VpdGVfc2V0ICpzdWl0ZV9zZXQsIGJvb2wgYnVpbHRpbikKIHsK
-IAlzaXplX3QgbnVtX3N1aXRlcyA9IHN1aXRlX3NldC0+ZW5kIC0gc3VpdGVfc2V0LT5zdGFy
-dDsKKwlib29sIGF1dG9ydW4gPSBrdW5pdF9hdXRvcnVuKCk7CiAKLQlpZiAoYnVpbHRpbiB8
-fCBudW1fc3VpdGVzKSB7CisJaWYgKGF1dG9ydW4gJiYgKGJ1aWx0aW4gfHwgbnVtX3N1aXRl
-cykpIHsKIAkJcHJfaW5mbygiS1RBUCB2ZXJzaW9uIDFcbiIpOwogCQlwcl9pbmZvKCIxLi4l
-enVcbiIsIG51bV9zdWl0ZXMpOwogCX0KIAotCV9fa3VuaXRfdGVzdF9zdWl0ZXNfaW5pdChz
-dWl0ZV9zZXQtPnN0YXJ0LCBudW1fc3VpdGVzKTsKKwlfX2t1bml0X3Rlc3Rfc3VpdGVzX2lu
-aXQoc3VpdGVfc2V0LT5zdGFydCwgbnVtX3N1aXRlcywgYXV0b3J1bik7CiB9CiAKIHZvaWQg
-a3VuaXRfZXhlY19saXN0X3Rlc3RzKHN0cnVjdCBrdW5pdF9zdWl0ZV9zZXQgKnN1aXRlX3Nl
-dCwgYm9vbCBpbmNsdWRlX2F0dHIpCmRpZmYgLS1naXQgYS9saWIva3VuaXQvdGVzdC5jIGIv
-bGliL2t1bml0L3Rlc3QuYwppbmRleCAwODljODMyZTNjZGIuLjE0NmQxYjQ4YTA5NiAxMDA2
-NDQKLS0tIGEvbGliL2t1bml0L3Rlc3QuYworKysgYi9saWIva3VuaXQvdGVzdC5jCkBAIC03
-MDgsNyArNzA4LDggQEAgYm9vbCBrdW5pdF9lbmFibGVkKHZvaWQpCiAJcmV0dXJuIGVuYWJs
-ZV9wYXJhbTsKIH0KIAotaW50IF9fa3VuaXRfdGVzdF9zdWl0ZXNfaW5pdChzdHJ1Y3Qga3Vu
-aXRfc3VpdGUgKiBjb25zdCAqIGNvbnN0IHN1aXRlcywgaW50IG51bV9zdWl0ZXMpCitpbnQg
-X19rdW5pdF90ZXN0X3N1aXRlc19pbml0KHN0cnVjdCBrdW5pdF9zdWl0ZSAqIGNvbnN0ICog
-Y29uc3Qgc3VpdGVzLCBpbnQgbnVtX3N1aXRlcywKKwkJCSAgICAgYm9vbCBydW5fdGVzdHMp
-CiB7CiAJdW5zaWduZWQgaW50IGk7CiAKQEAgLTczMSw3ICs3MzIsOCBAQCBpbnQgX19rdW5p
-dF90ZXN0X3N1aXRlc19pbml0KHN0cnVjdCBrdW5pdF9zdWl0ZSAqIGNvbnN0ICogY29uc3Qg
-c3VpdGVzLCBpbnQgbnVtXwogCiAJZm9yIChpID0gMDsgaSA8IG51bV9zdWl0ZXM7IGkrKykg
-ewogCQlrdW5pdF9pbml0X3N1aXRlKHN1aXRlc1tpXSk7Ci0JCWt1bml0X3J1bl90ZXN0cyhz
-dWl0ZXNbaV0pOworCQlpZiAocnVuX3Rlc3RzKQorCQkJa3VuaXRfcnVuX3Rlc3RzKHN1aXRl
-c1tpXSk7CiAJfQogCiAJc3RhdGljX2JyYW5jaF9kZWMoJmt1bml0X3J1bm5pbmcpOwpkaWZm
-IC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9rdW5pdC9rdW5pdC5weSBiL3Rvb2xzL3Rlc3Rpbmcv
-a3VuaXQva3VuaXQucHkKaW5kZXggNjc2ZmE5OWE4YjE5Li43ZjlhZTU1ZmQ2ZDUgMTAwNzU1
-Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcva3VuaXQva3VuaXQucHkKKysrIGIvdG9vbHMvdGVzdGlu
-Zy9rdW5pdC9rdW5pdC5weQpAQCAtMzEyLDcgKzMxMiwxNiBAQCBkZWYgbWFzc2FnZV9hcmd2
-KGFyZ3Y6IFNlcXVlbmNlW3N0cl0pIC0+IFNlcXVlbmNlW3N0cl06CiAJcmV0dXJuIGxpc3Qo
-bWFwKG1hc3NhZ2VfYXJnLCBhcmd2KSkKIAogZGVmIGdldF9kZWZhdWx0X2pvYnMoKSAtPiBp
-bnQ6Ci0JcmV0dXJuIGxlbihvcy5zY2hlZF9nZXRhZmZpbml0eSgwKSkKKwlpZiBzeXMudmVy
-c2lvbl9pbmZvID49ICgzLCAxMyk6CisJCWlmIChuY3B1IDo9IG9zLnByb2Nlc3NfY3B1X2Nv
-dW50KCkpIGlzIG5vdCBOb25lOgorCQkJcmV0dXJuIG5jcHUKKwkJcmFpc2UgUnVudGltZUVy
-cm9yKCJvcy5wcm9jZXNzX2NwdV9jb3VudCgpIHJldHVybmVkIE5vbmUiKQorCSAjIFNlZSBo
-dHRwczovL2dpdGh1Yi5jb20vcHl0aG9uL2NweXRob24vYmxvYi9iNjFmZWNlL0xpYi9vcy5w
-eSNMMTE3NS1MMTE4Ni4KKwlpZiBzeXMucGxhdGZvcm0gIT0gImRhcndpbiI6CisJCXJldHVy
-biBsZW4ob3Muc2NoZWRfZ2V0YWZmaW5pdHkoMCkpCisJaWYgKG5jcHUgOj0gb3MuY3B1X2Nv
-dW50KCkpIGlzIG5vdCBOb25lOgorCQlyZXR1cm4gbmNwdQorCXJhaXNlIFJ1bnRpbWVFcnJv
-cigib3MuY3B1X2NvdW50KCkgcmV0dXJuZWQgTm9uZSIpCiAKIGRlZiBhZGRfY29tbW9uX29w
-dHMocGFyc2VyOiBhcmdwYXJzZS5Bcmd1bWVudFBhcnNlcikgLT4gTm9uZToKIAlwYXJzZXIu
-YWRkX2FyZ3VtZW50KCctLWJ1aWxkX2RpcicsCmRpZmYgLS1naXQgYS90b29scy90ZXN0aW5n
-L2t1bml0L2t1bml0X2tlcm5lbC5weSBiL3Rvb2xzL3Rlc3Rpbmcva3VuaXQva3VuaXRfa2Vy
-bmVsLnB5CmluZGV4IGU3NmQ3ODk0YjZjNS4uZDMwZjkwZWFlOWE0IDEwMDY0NAotLS0gYS90
-b29scy90ZXN0aW5nL2t1bml0L2t1bml0X2tlcm5lbC5weQorKysgYi90b29scy90ZXN0aW5n
-L2t1bml0L2t1bml0X2tlcm5lbC5weQpAQCAtMTI1LDYgKzEyNSw5IEBAIGNsYXNzIExpbnV4
-U291cmNlVHJlZU9wZXJhdGlvbnNRZW11KExpbnV4U291cmNlVHJlZU9wZXJhdGlvbnMpOgog
-CQkJCSctYXBwZW5kJywgJyAnLmpvaW4ocGFyYW1zICsgW3NlbGYuX2tlcm5lbF9jb21tYW5k
-X2xpbmVdKSwKIAkJCQknLW5vLXJlYm9vdCcsCiAJCQkJJy1ub2dyYXBoaWMnLAorCQkJCSct
-YWNjZWwnLCAna3ZtJywKKwkJCQknLWFjY2VsJywgJ2h2ZicsCisJCQkJJy1hY2NlbCcsICd0
-Y2cnLAogCQkJCSctc2VyaWFsJywgc2VsZi5fc2VyaWFsXSArIHNlbGYuX2V4dHJhX3FlbXVf
-cGFyYW1zCiAJCSMgTm90ZTogc2hsZXguam9pbigpIGRvZXMgd2hhdCB3ZSB3YW50LCBidXQg
-cmVxdWlyZXMgcHl0aG9uIDMuOCsuCiAJCXByaW50KCdSdW5uaW5nIHRlc3RzIHdpdGg6XG4k
-JywgJyAnLmpvaW4oc2hsZXgucXVvdGUoYXJnKSBmb3IgYXJnIGluIHFlbXVfY29tbWFuZCkp
-CmRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL2t1bml0L3FlbXVfY29uZmlncy9hcm02NC5w
-eSBiL3Rvb2xzL3Rlc3Rpbmcva3VuaXQvcWVtdV9jb25maWdzL2FybTY0LnB5CmluZGV4IGQz
-ZmYyNzAyNDc1NS4uNWM0NGQzYTg3ZTZkIDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5nL2t1
-bml0L3FlbXVfY29uZmlncy9hcm02NC5weQorKysgYi90b29scy90ZXN0aW5nL2t1bml0L3Fl
-bXVfY29uZmlncy9hcm02NC5weQpAQCAtOSw0ICs5LDQgQEAgQ09ORklHX1NFUklBTF9BTUJB
-X1BMMDExX0NPTlNPTEU9eScnJywKIAkJCSAgIHFlbXVfYXJjaD0nYWFyY2g2NCcsCiAJCQkg
-ICBrZXJuZWxfcGF0aD0nYXJjaC9hcm02NC9ib290L0ltYWdlLmd6JywKIAkJCSAgIGtlcm5l
-bF9jb21tYW5kX2xpbmU9J2NvbnNvbGU9dHR5QU1BMCcsCi0JCQkgICBleHRyYV9xZW11X3Bh
-cmFtcz1bJy1tYWNoaW5lJywgJ3ZpcnQnLCAnLWNwdScsICdtYXgscGF1dGgtaW1wZGVmPW9u
-J10pCisJCQkgICBleHRyYV9xZW11X3BhcmFtcz1bJy1tYWNoaW5lJywgJ3ZpcnQnLCAnLWNw
-dScsICdtYXgnXSkK
-
---------------S6ZVFAOyrbLHRDlIW0Gd8sQd--
+Thanks
+Nicolin
 
