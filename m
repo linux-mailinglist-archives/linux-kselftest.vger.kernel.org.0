@@ -1,53 +1,54 @@
-Return-Path: <linux-kselftest+bounces-24859-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24860-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21D29A17E3F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 14:01:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CE6EA17E43
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 14:01:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FB1816978A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 13:01:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F7C81889FB7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 13:01:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 540EC1F237A;
-	Tue, 21 Jan 2025 13:01:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1881F2C2D;
+	Tue, 21 Jan 2025 13:01:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jW9DudGF"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Qm7+dpma"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35C0B2E406;
-	Tue, 21 Jan 2025 13:01:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B311854;
+	Tue, 21 Jan 2025 13:01:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737464491; cv=none; b=ny5DW1OaV1yJZWq4Y85iqBD0QssB+1jLHqSUF8EtRD2xEo3vYtb2pnmesfjHnjuRR6ha47gWV6la+AuxCncmCzjhnggYlJXi75RJbwmDBkhqDWAnk/O32uveLCUcnWe4p4uaNiDcMbw23YkJy2Ua1lE6tdXBFPu0sffrMsej7gw=
+	t=1737464491; cv=none; b=DnB72xg2Y5XFnZtUFC1iBtX5Mio62KEDMaLZU34pD6G1Kbbyj+zHsxabexowZzHH2I9C4Q528CF9cH96Aq8cESiPeTiRcSq6nYBXBpG2P9/dTP94qTykNtCsNYBONRUcH5sFXia5dAjwoFiLxp0za/hMVW/ZPUf1GcqvmxqfoHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1737464491; c=relaxed/simple;
-	bh=MJp45RsaQFje74RpxQ5U4b2mNpr1YeoPxVG9xb8Ys0g=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=U5TKUcnuOE7I0RmbGqGJ8ijgaVFOvu5hhLz6AF87N9/WsQKr7AJVCW3yR8AMw3AKU3Ha/gtd+RevRgluyT5HngFZrTr6i8RtsAv/TqRPjJqimbArax4UthBasa+844IlG+qV2McgbvJ5o3LrEyM5xGwqXAz0DoE0Br2+vnjqvwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jW9DudGF; arc=none smtp.client-ip=217.70.183.201
+	bh=HHMAoSlDJKVuP3dZJwRH8IxSoi8C8BICwbQWSIV3Grs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=czGEA1OsTQ87xhaDOiaHVzr0l8cT4ci730AnSuRPLvFWkbyVO5jvHcCmFgULcZcbv8tAdb3r46HzVyKpo/k/BrvaKCRtst/JqvY8owvQZqmK73mXvx1URTXXpspiu6Zg/TIVyq8KADAMbC17FEBRMxUQYqL3XqARfpb11c+ZT7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Qm7+dpma; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CF1D41BF205;
-	Tue, 21 Jan 2025 13:01:24 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 835C81BF20B;
+	Tue, 21 Jan 2025 13:01:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1737464486;
+	t=1737464487;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=5Sa/0LkysZBdF2h/gx6EZZSqu8d0fEZn5s0devKhbTI=;
-	b=jW9DudGFQOqo0UfjarUUXDF4hyhvgUIFve5WjUi1rdA4lmY4Gl32qZ6hpM3uYHLFyJTthv
-	Uev3WWGG2mH0+sLD1mXVTYEOqytlzNOU4ebY833nqfHUFIh4adeflmdY6gJDTWf7Bhi5iG
-	eYXN7E/0sBPqVuFRrCF7N2k2igJ7z1w3AyM9uWRibAhHDkAybGtDxukWGogr0oFHwg1Y0+
-	rgCJUJ7jamvMzHXejGnyxgqJxtH42/nLMvdgCZNNP0yKrd2JNHvsST2PX1I/+NRsI7ZZAT
-	S84MREA0wl3EuDwfI/ItKsINONm98dgMVKf6W0sIqIV+fSHEHpgAaGwXx/qZQw==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rIP/D2kpXHuiCiA4b1FgciAkjA+I6XOT5D45XNGkmDE=;
+	b=Qm7+dpma83ZiKVX4K2kBrlTWwAZWWimjTU/hV61rVRHcmaoSOcDqt/t39xr7IaqmiEqF65
+	adY+fVRKRH+3K9Dmc2AP/HB2ucKg/RCuJOnqnvc68ROVaFqVVwTIcPVOLbttRFd9rSlulK
+	q9xxrCNK5JBOItEC8F0pakh7XyLoG157ei9AX5fPOhxLpOEDEByiSth2Jv3KEuKGRTaqmG
+	5a2TsDEO45e8UeX1k971YHAPjwegVni3yMM3fgHSuFIxwFui9aae5VSHODF93kUx0WCV7/
+	al+yHkEhAzy5G/CCaKzb082qPZXSY9D8frkJEFN54e/RHQO1BknTVMRNjGpPSQ==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Subject: [PATCH bpf-next v2 00/10] selftests/bpf: Migrate
- test_xdp_redirect_multi.sh to test_progs
-Date: Tue, 21 Jan 2025 14:01:22 +0100
-Message-Id: <20250121-redirect-multi-v2-0-fc9cacabc6b2@bootlin.com>
+Date: Tue, 21 Jan 2025 14:01:23 +0100
+Subject: [PATCH bpf-next v2 01/10] selftests/bpf: test_xdp_veth: Split
+ network configuration
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,11 +57,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAKKaj2cC/12NQQ6CMBBFr0Jm7Zi2OC5ceQ/DgtKpTAKtaSvBE
- O5ugzuXLy///Q0yJ+EMt2aDxItkiaGCOTUwjH14MoqrDEYZUlq1mNhJ4qHg/J6KoLmQu3LvLTk
- NdfRK7GU9gg+wL4+B1wJdNaPkEtPneFr04X9Ro/+ji0aF1mjilrwnRXcbY5kknIc4Q7fv+xfHM
- ItGuAAAAA==
-X-Change-ID: 20250103-redirect-multi-245d6eafb5d1
+Message-Id: <20250121-redirect-multi-v2-1-fc9cacabc6b2@bootlin.com>
+References: <20250121-redirect-multi-v2-0-fc9cacabc6b2@bootlin.com>
+In-Reply-To: <20250121-redirect-multi-v2-0-fc9cacabc6b2@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, 
  "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
@@ -81,60 +80,148 @@ Cc: Alexis Lothore <alexis.lothore@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: bastien.curutchet@bootlin.com
 
-Hi all,
+configure_network() does two things : it first creates the network
+topology and then configures the BPF maps to fit the test needs. This
+isn't convenient if we want to re-use the same network topology for
+different test cases.
 
-This patch series continues the work to migrate the *.sh tests into
-prog_tests framework.
-
-test_xdp_redirect_multi.sh tests the XDP redirections done through
-bpf_redirect_map().
-
-This is already partly covered by test_xdp_veth.c that already tests
-map redirections at XDP level. What isn't covered yet by test_xdp_veth is
-the use of the broadcast flags (BPF_F_BROADCAST or BPF_F_EXCLUDE_INGRESS)
-and XDP egress programs.
-
-Hence, this patch series add test cases to test_xdp_veth.c to get rid of
-the test_xdp_redirect_multi.sh:
- - PATCH 1 to 5 rework test_xdp_veth to make it more generic and allow to
-   configure different test cases
- - PATCH 6 adds test cases for 'classic' bpf_redirect_map()
- - PATCH 7 & 8 covers the broadcast flags
- - PATCH 9 covers the XDP egress programs
- - PATCH 10 removes test_xdp_redirect_multi.sh
+Rename configure_network() create_network().
+Move the BPF configuration to the test itself.
+Split the test description in two parts, first the description of the
+network topology, then the description of the test case.
+Remove the veth indexes from the ASCII art as dynamic ones are used
 
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
-Changes in v2:
-- Use serial_test_* to avoid conflict between tests
-- Link to v1: https://lore.kernel.org/r/20250121-redirect-multi-v1-0-b215e35ff505@bootlin.com
+ .../selftests/bpf/prog_tests/test_xdp_veth.c       | 78 +++++++++++++---------
+ 1 file changed, 46 insertions(+), 32 deletions(-)
 
----
-Bastien Curutchet (eBPF Foundation) (10):
-      selftests/bpf: test_xdp_veth: Split network configuration
-      selftests/bpf: Remove unused argument
-      selftests/bpf: test_xdp_veth: Rename config[]
-      selftests/bpf: test_xdp_veth: Add prog_config[] table
-      selftests/bpf: test_xdp_veth: Add XDP flags to prog_configuration
-      selftests/bpf: test_xdp_veth: Add new test cases for XDP flags
-      selftests/bpf: Optionally select broadcasting flags
-      selftests/bpf: test_xdp_veth: Add XDP broadcast redirection tests
-      selftests/bpf: test_xdp_veth: Add XDP program on egress test
-      selftests/bpf: Remove test_xdp_redirect_multi.sh
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
+index 8d75424fe6bc8b2d4eeabe3ec49b883284c834e9..8dc28274a6e8fc75b05781d827a04f01e03a6ebb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
+@@ -3,17 +3,27 @@
+ /* Create 3 namespaces with 3 veth peers, and forward packets in-between using
+  * native XDP
+  *
+- *                      XDP_TX
+- * NS1(veth11)        NS2(veth22)        NS3(veth33)
+- *      |                  |                  |
+- *      |                  |                  |
+- *   (veth1,            (veth2,            (veth3,
+- *   id:111)            id:122)            id:133)
+- *     ^ |                ^ |                ^ |
+- *     | |  XDP_REDIRECT  | |  XDP_REDIRECT  | |
+- *     | ------------------ ------------------ |
+- *     -----------------------------------------
+- *                    XDP_REDIRECT
++ * Network topology:
++ *  ----------        ----------       ----------
++ *  |  NS1   |        |  NS2   |       |  NS3   |
++ *  | veth11 |        | veth22 |       | veth33 |
++ *  ----|-----        -----|----       -----|----
++ *      |                  |                |
++ *    veth1              veth2            veth3
++ *
++ * Test cases:
++ *  - [test_xdp_veth_redirect] : ping veth33 from veth11
++ *
++ *    veth11             veth22              veth33
++ *  (XDP_PASS)          (XDP_TX)           (XDP_PASS)
++ *       |                  |                  |
++ *       |                  |                  |
++ *     veth1             veth2              veth3
++ * (XDP_REDIRECT)     (XDP_REDIRECT)     (XDP_REDIRECT)
++ *      ^ |                ^ |                ^ |
++ *      | |                | |                | |
++ *      | ------------------ ------------------ |
++ *      -----------------------------------------
+  */
+ 
+ #define _GNU_SOURCE
+@@ -121,12 +131,9 @@ static int attach_programs_to_veth_pair(struct skeletons *skeletons, int index)
+ 	return 0;
+ }
+ 
+-static int configure_network(struct skeletons *skeletons)
++static int create_network(void)
+ {
+-	int interface_id;
+-	int map_fd;
+-	int err;
+-	int i = 0;
++	int i;
+ 
+ 	/* First create and configure all interfaces */
+ 	for (i = 0; i < VETH_PAIRS_COUNT; i++) {
+@@ -141,25 +148,11 @@ static int configure_network(struct skeletons *skeletons)
+ 		    config[i].remote_veth);
+ 	}
+ 
+-	/* Then configure the redirect map and attach programs to interfaces */
+-	map_fd = bpf_map__fd(skeletons->xdp_redirect_maps->maps.tx_port);
+-	if (!ASSERT_GE(map_fd, 0, "open redirect map"))
+-		goto fail;
+-	for (i = 0; i < VETH_PAIRS_COUNT; i++) {
+-		interface_id = if_nametoindex(config[i].next_veth);
+-		if (!ASSERT_NEQ(interface_id, 0, "non zero interface index"))
+-			goto fail;
+-		err = bpf_map_update_elem(map_fd, &i, &interface_id, BPF_ANY);
+-		if (!ASSERT_OK(err, "configure interface redirection through map"))
+-			goto fail;
+-		if (attach_programs_to_veth_pair(skeletons, i))
+-			goto fail;
+-	}
+-
+ 	return 0;
+ 
+ fail:
+ 	return -1;
++
+ }
+ 
+ static void cleanup_network(void)
+@@ -184,6 +177,8 @@ static int check_ping(struct skeletons *skeletons)
+ void test_xdp_veth_redirect(void)
+ {
+ 	struct skeletons skeletons = {};
++	int map_fd;
++	int i;
+ 
+ 	skeletons.xdp_dummy = xdp_dummy__open_and_load();
+ 	if (!ASSERT_OK_PTR(skeletons.xdp_dummy, "xdp_dummy__open_and_load"))
+@@ -197,9 +192,28 @@ void test_xdp_veth_redirect(void)
+ 	if (!ASSERT_OK_PTR(skeletons.xdp_redirect_maps, "xdp_redirect_map__open_and_load"))
+ 		goto destroy_xdp_tx;
+ 
+-	if (configure_network(&skeletons))
++	if (create_network())
+ 		goto destroy_xdp_redirect_map;
+ 
++	/* Then configure the redirect map and attach programs to interfaces */
++	map_fd = bpf_map__fd(skeletons.xdp_redirect_maps->maps.tx_port);
++	if (!ASSERT_OK_FD(map_fd, "open redirect map"))
++		goto destroy_xdp_redirect_map;
++
++	for (i = 0; i < VETH_PAIRS_COUNT; i++) {
++		int interface_id;
++		int err;
++
++		interface_id = if_nametoindex(config[i].next_veth);
++		if (!ASSERT_NEQ(interface_id, 0, "non zero interface index"))
++			goto destroy_xdp_redirect_map;
++		err = bpf_map_update_elem(map_fd, &i, &interface_id, BPF_ANY);
++		if (!ASSERT_OK(err, "configure interface redirection through map"))
++			goto destroy_xdp_redirect_map;
++		if (attach_programs_to_veth_pair(&skeletons, i))
++			goto destroy_xdp_redirect_map;
++	}
++
+ 	ASSERT_OK(check_ping(&skeletons), "ping");
+ 
+ destroy_xdp_redirect_map:
 
- tools/testing/selftests/bpf/Makefile               |   2 -
- .../selftests/bpf/prog_tests/test_xdp_veth.c       | 534 +++++++++++++++++----
- .../testing/selftests/bpf/progs/xdp_redirect_map.c |  89 ++++
- .../selftests/bpf/progs/xdp_redirect_multi_kern.c  |  41 +-
- .../selftests/bpf/test_xdp_redirect_multi.sh       | 214 ---------
- tools/testing/selftests/bpf/xdp_redirect_multi.c   | 226 ---------
- 6 files changed, 553 insertions(+), 553 deletions(-)
----
-base-commit: 349e0551b929b4712b4d6127f67dfa41ed48d5a2
-change-id: 20250103-redirect-multi-245d6eafb5d1
-
-Best regards,
 -- 
-Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
+2.47.1
 
 
