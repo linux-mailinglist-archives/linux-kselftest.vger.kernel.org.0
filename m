@@ -1,177 +1,145 @@
-Return-Path: <linux-kselftest+bounces-24827-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24828-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40F13A17716
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 06:45:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A80CBA179A1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 09:55:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6ADAA7A1614
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 05:44:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AAFA23A9B8C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 08:55:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 039F91A23A0;
-	Tue, 21 Jan 2025 05:44:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0087B1B87DF;
+	Tue, 21 Jan 2025 08:55:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="x0S9cVH+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bZJCQnL0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8474385931
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jan 2025 05:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FEDD1B87C2;
+	Tue, 21 Jan 2025 08:55:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737438288; cv=none; b=oZ1o6ikA/BVr31pQntz8K//4/g9+Dy+pX5Y0rQDixzp0qekssftpIGmTudVyUkG6x0MhA64YkJetAstSKZ24g8kQ0bg8M+pba31Bk/D9YbKPTPjCt5/nNmZq/zt3RZmKjTpW2+v6dv9SM8hILrqJ8scaz1LJEWJg1T/g1rkG8xU=
+	t=1737449740; cv=none; b=fXeCtalgr5CBQvobHsG4wbx+i8soPPj9hmAixY4gYcoAdyxcOExuojSTmLp6Fps17GY1tlZ/sDNGQetgWDzuuPuuNA4FwvqclC6dhSrsCdsJlatmUoY5w7GWS+RZUbJ91mAdPHwGubMusiwnNRyhsFvU7Lph1CFI0sGRZYrTgG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737438288; c=relaxed/simple;
-	bh=KKjKQrSywZ/HAtYTFy2CTQDgCf1VU2GQ+lX5cc5vXaI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=CdVaLS0TPQ/pNWQ6F9aqEjLkh9p0YwQLLbU670LQwyFrtjB+i27PZ9RTl8CWAW7bvKQ0+UR5kKqLZQ/ukixpXIM6nWCwaEveMwXqQ+aQrs7jShQ27E3gPxTGzzxc2SQXNIkSrniLRCQz85ZNHiGUAzZpO239xgefA7+VmogaYM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=pass smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=x0S9cVH+; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=daynix.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21654fdd5daso87410735ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2025 21:44:46 -0800 (PST)
+	s=arc-20240116; t=1737449740; c=relaxed/simple;
+	bh=BDKAnm03nCMql0XP9TjPeUam+/QucEI7RrkaEzsRqWo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Mgk7829hUF7xp0K35v1NnckKLV3VyjEKk2GclF90knfZuZ9a42po0SdITEUMuw/4pkZY6yWzMJgC++PPcJh32AIbEmnR+fj5qm5v3Y7+wcx8sdpoByuI95PxxEaZohKvCjBwbVJGkd36OYorSwehsD1E0EUqeAfwS+BHyuPMiNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bZJCQnL0; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21661be2c2dso93867035ad.1;
+        Tue, 21 Jan 2025 00:55:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1737438286; x=1738043086; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=quek95SDTYVXYnePfXxFQzmJR+Lu7obq+8lhE5GmOzk=;
-        b=x0S9cVH+78ZZsjSKnRfDP0qqXDfV4PoPpohm+0pSST8TJ2V/qwePvhtGtyaATADz34
-         cMWnJAVX5i/ptl10y23jtB0aCVN2PKm0SguQmUfFcins2jgSY/jPVpqIAjZSS2OBlpsQ
-         PV7cAkrn+ALhDyHnNpo9vtqbsAdOgdK0yGIZf5sHOylSy811YQJH8230tz16b9Wb5E25
-         ll5/TrZEkikQbRR6+WSkKRHox/ZOZIE3iWVu/M4F/BrJyQyYK4h61ozMmXXehk3msD/H
-         17d8wVOEfLVAycsUnjCn74CHH+SALXwAeaHzJPM1UiptfEUTeqnMs1az81MH1G2hGhVg
-         Es7g==
+        d=gmail.com; s=20230601; t=1737449738; x=1738054538; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oa3MLh2GJnYf0RVvrJfYwNk4uvzIu7QZ3Q7ItLlQHkQ=;
+        b=bZJCQnL09gSkxQOdi7ghraUKMQT9/eIopHVn45aZR+HWh86J83e5Y4IKVtzsXjESHU
+         TR+FpJrgC58fMmuROlWg7hW/xcCVrsPhEZguBySW2Zr12g1A+rgonB8o49CN8peDJKKn
+         t5OBkGoxaLcqWkMiBwgKxp3peHf5KRB/lbPmYIZZeWvJ0nSJvDTcEp3dpb29nnGDrr00
+         8RJw7VXWNMQVvmM2314LvhgevOBFk3/iuWZd5YMtrkTRYb1QMH/oF+2sc9DilwnW0qRh
+         DOyzyteVY/mBiO8LcI2GxqntAzF90BGHaEToC952rxstZt2RXmoAJX9Cc1Lg0AVtoUnb
+         n24A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737438286; x=1738043086;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=quek95SDTYVXYnePfXxFQzmJR+Lu7obq+8lhE5GmOzk=;
-        b=nYrp168dMC6RCogWIQKBuSZVn/rHB6Al3hXdkN9FX80fhAAS1eg/bnrRKU/hE/6acy
-         XFIjkyKm/CCoDn5xKhuJ6tfcHO7XMwwuxeZ2ZZe0wGiuLCraxJ7wzEpw65o3eOEFpSd6
-         fwV/kl58URQDsAexCcQXdIHGtMcMNQu4wFquiVuV6k3nRzV7POb06mMYFs28u4oVFtVF
-         jgofWkDEb9N3Vyrd/1W70xnZjtJm9yE3jX7aNQ0nPMtCKIKLbfVLQivQd3r8feM9PBst
-         bnOE+PAd+Bj+n9ITrcj2WAuLT4rYFZgg8KX1D3HViaAboPX2dw40llxlXRa3OOUtl7F9
-         BRhA==
-X-Forwarded-Encrypted: i=1; AJvYcCXdemgrb4X1f/dnjjCMa3KsGx4vFAi+SAoL3m8qGXa1Al/xf4DLDoGb3nc1F3u3XtyS2fC1ZKauAR3udqFSTpk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygZZoI492E732uls0LXuxGWpLwkzbwWRawWsmBgdM1W+npzgF9
-	0zJStaQFiGZzrV4/sUNJ5mXgQb6A23vIh+B9bA5M63EQ5QDKgqYRmxYojPBcjmA=
-X-Gm-Gg: ASbGncsJeFmM7/6OAy33uyifkfMHT2C7igGlB5rgERJcov1/72jddHYZ+bYuMT+sbsx
-	zYz5E2krGffSf2uV/dFrtwfBpIf8dcH35ignSSGphqFq6g0GSvapR8ux3NEefOfO/UZkz8eFyle
-	ukkC6tYRLhATg0guPe1Ic9HLwwWhNBSegiOlpn4u6zdDRDpUPqVzhAJCMbeBCxxb64Hs1akLbiK
-	HZjtmphNElczSCvkSda3woPgwgJfWx6uH31NKQOfe7q/M/kVW7PgH1pDgFJCowYVa//RKqXRZ9r
-	9lCF
-X-Google-Smtp-Source: AGHT+IFTVBGY3mBtHPPZNgGiKdheqCTQ97KHaRubQObIyg1+VGXEf+v/0x6j6pVWQSFPga7FkyMokQ==
-X-Received: by 2002:a05:6a20:2524:b0:1d5:10d6:92b9 with SMTP id adf61e73a8af0-1eb215894f4mr22737961637.30.1737438285826;
-        Mon, 20 Jan 2025 21:44:45 -0800 (PST)
-Received: from [157.82.203.37] ([157.82.203.37])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72dababc174sm8360634b3a.178.2025.01.20.21.44.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jan 2025 21:44:45 -0800 (PST)
-Message-ID: <806def7d-16f3-4d53-abc8-7d18e8c22dcb@daynix.com>
-Date: Tue, 21 Jan 2025 14:44:39 +0900
+        d=1e100.net; s=20230601; t=1737449738; x=1738054538;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oa3MLh2GJnYf0RVvrJfYwNk4uvzIu7QZ3Q7ItLlQHkQ=;
+        b=O7VoZIN0MBA5BMbHtSIOCcysLM8OTSuYV33UdkGpzNu++q5exH1xWb+qGl5vhA5/fC
+         0HdHCddrAEaLaaLJo8WGt6PdMZLerWNTJVoIZ5I4yVHuvI8Goy7PYEuDDVi5mMAmYbNQ
+         XPhETvFKlELjBc0BYDluvpVzaYP/bIVA5gQ8gQRjpezX5zOrHQebeo0M6tiMnEyqeC3O
+         P/xdxBHZb9HLN/kSqUm1SmyQeObkVfIUoMBGSNpjr4eLo8JS04wpwE1YxcPMf6dkJcHM
+         c38RMkAfkW8h0Qyfj+HYGwMRWRO7uglJCz1VWN95jd+DnhnpR2+5GWf86/NZYcmON6h/
+         Mmzg==
+X-Forwarded-Encrypted: i=1; AJvYcCUGIJAOnqjBuUVLLkaWCAlNF6UX3sMpIXeAGsYWUs1QlxyubM0Y1IwsR1usrFqP1pu0XJOKfX8L5vzq0DM=@vger.kernel.org, AJvYcCWx0fTvLN3lzUZQGD/Etuk29pwikCrq5/ZyZz1V9m1lCCG7CKOwIE67SpoaYotrJ0sLxgR2THyEXPzqmP90Nbxb@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuZOmNkMac60nFdBOmOWVr5gfULJw9c4HMkNqiu77bH+l+J+ti
+	nJZOdmB93Tk+8syF2Hq7lT3vU3bFxAUyTE3ae/AHE7E6ILKChsmvjJFqnTur3qM=
+X-Gm-Gg: ASbGnctkkGlGrSlWxng/HjW3iSyWoerPnVBzPJfaOvYpDtBWBhAkPfn4MK1VKF0x+1U
+	zEwX/audU7m6RHoQB7YmwygbNJ0qHnTyNLcT/63z8CRp1Rxq59rJHfEkRA9YzVSsw4aGMS7J1qN
+	ivUBCsCimYVhIo1dwdBJWPh6FgypD2J7Cr5kxe3PGwKeZ/DhvlV1HCUOuknkbxJi+2tqE2DSdgd
+	UAwRiuox77nVK1Mgmhy5PGhCkv0/oEvCNFC3+D+myKZgXBl+snsxai5HKMlrImtbRXjlzufbAhQ
+	r+8m/DXFgKhm/A==
+X-Google-Smtp-Source: AGHT+IGmlSM7Uu2JYDRHKidCaqG33ZWHKzpI3WyJVmLe4pQ6iLpSvb0FcRTtXgskve/ciKvHz6rt+Q==
+X-Received: by 2002:a17:903:174c:b0:215:4394:40b5 with SMTP id d9443c01a7336-21c355dc59fmr239234925ad.43.1737449738403;
+        Tue, 21 Jan 2025 00:55:38 -0800 (PST)
+Received: from fedora.dns.podman ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2cebaebcsm73647475ad.99.2025.01.21.00.55.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jan 2025 00:55:37 -0800 (PST)
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: netdev@vger.kernel.org
+Cc: Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Simon Horman <horms@kernel.org>,
+	Jianbo Liu <jianbol@nvidia.com>,
+	Boris Pismenny <borisp@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	Liang Li <liali@redhat.com>
+Subject: [PATCH net] Bonding: Fix support for gso_partial_features
+Date: Tue, 21 Jan 2025 08:55:25 +0000
+Message-ID: <20250121085525.176019-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v4 8/9] tap: Keep hdr_len in tap_get_user()
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Jason Wang <jasowang@redhat.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, kvm@vger.kernel.org,
- virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
- Yuri Benditovich <yuri.benditovich@daynix.com>,
- Andrew Melnychenko <andrew@daynix.com>,
- Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com,
- devel@daynix.com
-References: <20250120-tun-v4-0-ee81dda03d7f@daynix.com>
- <20250120-tun-v4-8-ee81dda03d7f@daynix.com>
- <678e327e34602_19c737294b4@willemb.c.googlers.com.notmuch>
-Content-Language: en-US
-From: Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <678e327e34602_19c737294b4@willemb.c.googlers.com.notmuch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2025/01/20 20:24, Willem de Bruijn wrote:
-> Akihiko Odaki wrote:
->> hdr_len is repeatedly used so keep it in a local variable.
->>
->> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
->> ---
->>   drivers/net/tap.c | 17 +++++++----------
->>   1 file changed, 7 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/net/tap.c b/drivers/net/tap.c
->> index 061c2f27dfc83f5e6d0bea4da0e845cc429b1fd8..7ee2e9ee2a89fd539b087496b92d2f6198266f44 100644
->> --- a/drivers/net/tap.c
->> +++ b/drivers/net/tap.c
->> @@ -645,6 +645,7 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
->>   	int err;
->>   	struct virtio_net_hdr vnet_hdr = { 0 };
->>   	int vnet_hdr_len = 0;
->> +	int hdr_len = 0;
->>   	int copylen = 0;
->>   	int depth;
->>   	bool zerocopy = false;
->> @@ -672,6 +673,7 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
->>   		err = -EINVAL;
->>   		if (tap16_to_cpu(q, vnet_hdr.hdr_len) > iov_iter_count(from))
->>   			goto err;
->> +		hdr_len = tap16_to_cpu(q, vnet_hdr.hdr_len);
->>   	}
->>   
->>   	len = iov_iter_count(from);
->> @@ -683,11 +685,8 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
->>   	if (msg_control && sock_flag(&q->sk, SOCK_ZEROCOPY)) {
->>   		struct iov_iter i;
->>   
->> -		copylen = vnet_hdr.hdr_len ?
->> -			tap16_to_cpu(q, vnet_hdr.hdr_len) : GOODCOPY_LEN;
->> -		if (copylen > good_linear)
->> -			copylen = good_linear;
->> -		else if (copylen < ETH_HLEN)
->> +		copylen = min(hdr_len ? hdr_len : GOODCOPY_LEN, good_linear);
->> +		if (copylen < ETH_HLEN)
->>   			copylen = ETH_HLEN;
->>   		linear = copylen;
->>   		i = *from;
->> @@ -698,11 +697,9 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
->>   
->>   	if (!zerocopy) {
->>   		copylen = len;
->> -		linear = tap16_to_cpu(q, vnet_hdr.hdr_len);
->> -		if (linear > good_linear)
->> -			linear = good_linear;
->> -		else if (linear < ETH_HLEN)
->> -			linear = ETH_HLEN;
->> +		linear = min(hdr_len, good_linear);
->> +		if (copylen < ETH_HLEN)
->> +			copylen = ETH_HLEN;
-> 
-> Similar to previous patch, I don't think this patch is significant
-> enough to warrant the code churn.
+The fixed commit adds NETIF_F_GSO_ESP bit for bonding gso_partial_features.
+However, if we don't set the dev NETIF_F_GSO_PARTIAL bit, the later
+netdev_change_features() -> netdev_fix_features() will remove the
+NETIF_F_GSO_ESP bit from the dev features. This causes ethtool to show
+that the bond does not support tx-esp-segmentation. For example
 
-The following patch will require replacing
-tap16_to_cpu(q, vnet_hdr.hdr_len)
-with
-tap16_to_cpu(q->flags, vnet_hdr.hdr_len)
+ # ethtool -k bond0 | grep esp
+ tx-esp-segmentation: off [requested on]
+ esp-hw-offload: on
+ esp-tx-csum-hw-offload: on
 
-It will make some lines a bit too long. Calling tap16_to_cpu() at 
-multiple places is also not good to keep the vnet implementation unified 
-as the function inspects vnet_hdr.
+Add the NETIF_F_GSO_PARTIAL bit to bond dev features when set
+gso_partial_features to fix this issue.
 
-This patch is independently too trivial, but I think it is a worthwhile 
-cleanup combined with the following patch.
+Fixes: 4861333b4217 ("bonding: add ESP offload features when slaves support")
+Reported-by: Liang Li <liali@redhat.com>
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+---
+ drivers/net/bonding/bond_main.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 7b78c2bada81..e1c054416d5e 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -1598,10 +1598,12 @@ static void bond_compute_features(struct bonding *bond)
+ 	}
+ 	bond_dev->hard_header_len = max_hard_header_len;
+ 
+-	if (gso_partial_features & NETIF_F_GSO_ESP)
++	if (gso_partial_features & NETIF_F_GSO_ESP) {
+ 		bond_dev->gso_partial_features |= NETIF_F_GSO_ESP;
+-	else
++		bond_dev->features |= NETIF_F_GSO_PARTIAL;
++	} else {
+ 		bond_dev->gso_partial_features &= ~NETIF_F_GSO_ESP;
++	}
+ 
+ done:
+ 	bond_dev->vlan_features = vlan_features;
+-- 
+2.39.5 (Apple Git-154)
+
 
