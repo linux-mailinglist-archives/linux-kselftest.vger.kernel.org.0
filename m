@@ -1,90 +1,166 @@
-Return-Path: <linux-kselftest+bounces-24889-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24890-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 585C2A1811F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 16:29:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77657A18271
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 18:01:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 466533AB164
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 15:29:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D03073ABEB4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 17:00:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04CC51F470A;
-	Tue, 21 Jan 2025 15:29:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46CFA1F55F9;
+	Tue, 21 Jan 2025 17:00:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="OdwapAez"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gMVW1OpN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2811F37D9
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jan 2025 15:29:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D721F55E4;
+	Tue, 21 Jan 2025 17:00:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737473374; cv=none; b=bvJ0pKd2RhIRfFzHy7asFoObmfcwyGod+jap5mKTOHRY5YxulXwkU6TrdlHhMBoOW0rgYUaiOczY1HweJbbppQlfr5Oj84M4zoxqiP1tQFONjoO/3SkeCQEfbWKOmZk8sfLu3kpztxlIQYk7hiL2glipkEPolwtMEyX1cGK+QCE=
+	t=1737478819; cv=none; b=kVk0KzAUjxT9JHFl1p7PAgyXFfbvVkaDgktbM62nrbIhUTLv/QB7lVmwT6o+JylJoJNS7IIV5ZR7NYL4WILayQKhaksGea9OytSPu78pCmuVR5JbJ2VqrQJy2+sBMb06pNat9Yo29YqJg24qDdbuJPGwPlA38wUjR3jkVxotA1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737473374; c=relaxed/simple;
-	bh=0tvcxw/M0+bumfP5SQ8bUYR24B3JRc1s/ClOo9jLdZ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l9xGjWOn/TEIIBD3L4wkZyDU+8qxiRH2RF0PEWbfCajM/KhfuZzotQiPWYNKxk6slk4WDX4f0EL55N18dv6QI7VLXBtJfNPKD1o8N96Shkvzl0rTJRByLenKNNuB5270jPyO23aanTlCQu3aRqaCsiwdnIU0fdpfRX1Q9sAwR5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=OdwapAez; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-438a39e659cso21025465e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jan 2025 07:29:32 -0800 (PST)
+	s=arc-20240116; t=1737478819; c=relaxed/simple;
+	bh=9OS+xRmfz4uuv2J1YGJZ++S2O40MMdmWQmSQIuypaCI=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aU+abS1bGf7dYKs1ummvugRXTGAWYmpb4L8WEkGY2CbbQm3LdPJEq6cdSBvxNBO4ZdxduDBXeKTr4SSpfG2unbKtwUOTx1qb0oFeUi1lbLS9GmO3czfQftoFs8CiMaHLQXsoGhyhwfvFhvQVuwWs1rso6P5B6RnAEy2eC69ptsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gMVW1OpN; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-54021daa6cbso6474898e87.0;
+        Tue, 21 Jan 2025 09:00:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1737473371; x=1738078171; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1737478814; x=1738083614; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=A+SyMEFDuiz5jdFoFAlcZaoDQi4XryVJWeWGSbZvojI=;
-        b=OdwapAezYSEYlIyhGpAygosVU00OR+3P3F1srEREqb/EsDYdku835UJEmsFEtH/cHp
-         jertvLA57xEUyZjbOeefC7cm4rNC2oTnp55TtjG22FzE5DabXSUiIIffHudOe1fiG7Y4
-         rZibiKxTxmx55GlY2dCX/de9vLcfnAGA3ck9w92qKz4sDyrKSA2HYFF0xHpoY22U/l/4
-         7cy7LNq0RpWRlnRsdj9bDY9m3wNwetkVIyRJ+4t7jADGoJaenpiLHlyJzEk+FBm8gf8V
-         TGqM/Crm/vNTdLbm7b4gx/awYOZh92TYaTQq/heLy+O9bxwxyC3OTONcfXBvhVefnvAn
-         MkwQ==
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6O7kZyVX02YaNVvlK+AnjIGslDTljYFtI1mm3L3G+es=;
+        b=gMVW1OpNxZGCbfGiZJN7CWogRmhb8O/8NZQJUjl5VvDOFm8axyCM3Qpxe2lI4LTrUd
+         S23mQS6EhykZyiPZAZchKhUFyLauUNI/PTXzvvS6fpIB8YFJd0EwSz/LdLHeMo5qf/Je
+         6VVfbR2V6g55pg4cEajPSY4yrFuGdGoEoz50ZVvO2khmL7gGXhIELMHTqgr9FxkwFCO0
+         tfH2hYNk7YErLOQGsxdnMpYZwupbPa2WqU4r5r8XKk27iFdmNQZs2/Pv20ZzMCFVmkYF
+         /415sca28vufjjPWayU2xZn2j/5RKYAHoFit+W5tRiL+xJN6X2GLoRIwsp/lGkN2QDzM
+         3KMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737473371; x=1738078171;
+        d=1e100.net; s=20230601; t=1737478814; x=1738083614;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=A+SyMEFDuiz5jdFoFAlcZaoDQi4XryVJWeWGSbZvojI=;
-        b=k6mf2SAkGK3rntbeh0wOnzfc6V4fpNMwvkvx3YbmYuzrbW3k74DQR04gjdKrYxEnZO
-         wPif1P/MDOOYFvA6S9IKQGjwr6na9/6pY65bN/n51K4aaOj4Nqj2tMBcIMzch2fKdUhl
-         pVMbKBa2KD8UKJM7qiFVg8O2BetCnl/O74/64UexZPuCx5Q2W4OtTmwiwpVEH77JRiN8
-         HxmOBfBwzLWfRoy2BxMq+peX8VdhY0qdzlq4PraV1vzQS8709G/sK8mdFVHTrPoiX7xk
-         MNvQE9ixBLDSu5amHK4dmZnL5ovMM9EhEZaMvRTKNz9oLoEWKaGahC3mYsCMrxiUbQ4Q
-         pf1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVXvdGn2fWrNuTjZ5COmO4yrvjFMN6VaBUYFVoAA6zDnELGFcif8CPWnD/JJr2cqVCYKQpa/wyEgibxIEki0fg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRyyfPSsmlLo/D4VHgMkoZzKrGVKxGdgAtnXFXGTYfgKwgMtZG
-	3sXaO8QhkRWLGv5g76+s6mgJrY6+CEFujqRttjYMtAMP/+1JxXY9PHy67974nEI=
-X-Gm-Gg: ASbGncuoxR85A4jmQT9m8y7MQmPbOdY43tDse+N0zM+ofeXgjEQSaBv9qoRwKUPuA5b
-	gVxOItpEF9LMgDZKzlksvXZEbcKwvxLOvCHZsruj4Qi0ayrNvmtV5epHz0vh8yBsGtMWniN3ITz
-	aSBcR33BSQ7ztQpR/5i8MD5a+iwHr6n39mfS8KSUerkQklmM6u0dtvAe+SJPE2uRSchgz8+1rz5
-	QKVmsSAXtuJvsl4iyxJrjnRtZf39j7Ton9RgG0ko7bbs5JMC4wpymSDoSxfeHEaf8lzGB5Xe631
-	y9IdVa7kvZLihhqZ1/nvmMnP2/CD6fpA21MBwhTvoA124HKugSFJz+g=
-X-Google-Smtp-Source: AGHT+IGl2rjI0Z/X1fO7b4lQu7Bz/+RhZRQdSmN7QWCPax7hXw3N4uwdbUK9AcP8ky1wqh1l9HCJJA==
-X-Received: by 2002:a05:600c:4e08:b0:434:a4a6:51f8 with SMTP id 5b1f17b1804b1-438912d4a3bmr183994855e9.0.1737473371456;
-        Tue, 21 Jan 2025 07:29:31 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-437c7499821sm242856925e9.2.2025.01.21.07.29.30
+        bh=6O7kZyVX02YaNVvlK+AnjIGslDTljYFtI1mm3L3G+es=;
+        b=lGnTbRWrBRlK7G3M+G46ai6f4FOET4eHZIGsvePltJVuy6ulKHFIHM96u1jR16Ahv+
+         MlqF+IelPynlcok9yft6BzyNfcOodv2v0Df8bz4udphrKAb5o33faizDojADtiGmIzc3
+         BLEiPen3rNdczIJA3rTBX99YYldatJy+JQP4YmYiA1nv/Kna5FsEdUcqzz17RQy3EoEZ
+         UvtQT3apocOGImoKdBhtmHCOlaDfM7XgtEbDlhU2rVuAbWCYmfL1I7tyCsMKBCO+s7ML
+         mOOoKBDweKRmaubPYtdYQSXowFBQv+lW6gHtR5QJA8X9M7ICxRHSR9FcUIIMwHBXOU+r
+         7pvw==
+X-Forwarded-Encrypted: i=1; AJvYcCUigKuYSYVlzKBRoOyZiyvCekM9de8/BgmoF01epWwnOBzPGeufLLCysMPTIqb8vCV2WR38hiqjk3gsNb3nhHcy@vger.kernel.org, AJvYcCVNtzF3fjeLtXQZpDdR8q/KVhJGX5khPOSOMCulvucvUlhK2JGnHQ2OU5hbqfNl3AMrS5OQoEI3GeKwa41qLehO@vger.kernel.org, AJvYcCVX9kf658Bb9flmPpGTJY87XSdeeA/XrJLR/TagmZRByVCGL5YTWs/6NFt68iRpGbHiH8s0vEBdnHiVG0DdXZoMtQ==@vger.kernel.org, AJvYcCVxfB0VZE0r4TTLNqtq9Qg/wCiwgdqMY1S08/n7UCSQQZy9cAJX1oO9pYSmBKgUYqHuYE29cMW9+rlXl/ed@vger.kernel.org, AJvYcCWIFd7d3dJIXZOFjEqSqqXGsZAnLqpxHPvrGFclJTIKJMBLf5++N/JS5lZP12BW0uEMyFQ=@vger.kernel.org, AJvYcCWlOJMi9Xi/D1sWTOXFPlgdWmNj80HvNhhD9dCFNH1lLYwrOKLp5uirslT2Pd0TChwB4yleqmRh31Baxw==@vger.kernel.org, AJvYcCWppZQM2mzUCKA6kpil5RUMmVWvUAPYCfe6r4YwJ61NwYKnAr0oAyjXbz5jAl9FgX3r7MBK@vger.kernel.org, AJvYcCXn5XNKxjuU7Yn3tN4Bp54J7ly3jq96QxClg4eMau4u5ragf3oAS+gD+3a8ZY0aCLQDHZZD@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwnMRjNfrhr2ORtkPt2uwTzgrLHLRF2n4bDrukhK72y9A6qGWh
+	M6W4ovuC0MOgm/tWbLdgRs6o5r6HN52B6rXnVXcPAK+PUDRAPLQKwCLoU7w3
+X-Gm-Gg: ASbGncvtj7NdDPURSgbMGbW7o1rNFvmJ/oyRzvKReHpbORks9jSKs9ZjQDH4Exrk0Nt
+	ID/QCnEt8abXtOpldDHMNyRHEvD+89Wkk38DMe0K/EkbDansjdmpYkAAL4DwqDTpZtvrMapT7Bu
+	u4TOzZhp5YmnzYiq0p1f3fYpSOHphihAKouMGnfpXxUFqEZUrS5hATbc9Ry+jx9/M2BNube9dO6
+	9RQW0VVOnVc/fmKKjRHE/dWY/3oWsZEfTQ8UerOU3xOHwY3LiVCPCkfShdcP3wQN2LInp7oEl7U
+	DU8Y9FiOIHbo4bsGSYvCI7h7
+X-Google-Smtp-Source: AGHT+IGYPF71D1RmaKnbW82c+U5IMmpDPZJTk/HJCRRaq5z7S90tH0rTVzhA6Sl8Kwc0O/33Vf8jgg==
+X-Received: by 2002:a05:6512:104b:b0:543:9b0f:7d39 with SMTP id 2adb3069b0e04-5439c282920mr7151519e87.32.1737478813837;
+        Tue, 21 Jan 2025 09:00:13 -0800 (PST)
+Received: from pc636 (host-217-213-93-172.mobileonline.telia.com. [217.213.93.172])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5439af76fe9sm1916768e87.212.2025.01.21.09.00.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jan 2025 07:29:31 -0800 (PST)
-Date: Tue, 21 Jan 2025 16:29:30 +0100
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Yunhui Cui <cuiyunhui@bytedance.com>
-Cc: alexghiti@rivosinc.com, andybnac@gmail.com, aou@eecs.berkeley.edu, 
-	charlie@rivosinc.com, cleger@rivosinc.com, conor.dooley@microchip.com, 
-	conor@kernel.org, corbet@lwn.net, evan@rivosinc.com, jesse@rivosinc.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, palmer@dabbelt.com, paul.walmsley@sifive.com, 
-	samuel.holland@sifive.com, shuah@kernel.org
-Subject: Re: [PATCH v5 2/3] RISC-V: hwprobe: Expose Zicbom extension and its
- block size
-Message-ID: <20250121-4990d96a861a4ddd304abc33@orel>
-References: <20250115024024.84365-1-cuiyunhui@bytedance.com>
- <20250115024024.84365-3-cuiyunhui@bytedance.com>
+        Tue, 21 Jan 2025 09:00:12 -0800 (PST)
+From: Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date: Tue, 21 Jan 2025 18:00:07 +0100
+To: Valentin Schneider <vschneid@redhat.com>
+Cc: Uladzislau Rezki <urezki@gmail.com>, Jann Horn <jannh@google.com>,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	virtualization@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org,
+	xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+	linux-arch@vger.kernel.org, rcu@vger.kernel.org,
+	linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+	bcm-kernel-feedback-list@broadcom.com,
+	Juergen Gross <jgross@suse.com>,
+	Ajay Kaher <ajay.kaher@broadcom.com>,
+	Alexey Makhalov <alexey.amakhalov@broadcom.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Jason Baron <jbaron@akamai.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang1211@gmail.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Clark Williams <williams@redhat.com>,
+	Yair Podemsky <ypodemsk@redhat.com>,
+	Tomas Glozar <tglozar@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Kees Cook <kees@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christoph Hellwig <hch@infradead.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Rong Xu <xur@google.com>,
+	Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Yosry Ahmed <yosryahmed@google.com>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Jinghao Jia <jinghao7@illinois.edu>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 29/30] x86/mm, mm/vmalloc: Defer
+ flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
+Message-ID: <Z4_Sl-zu7GprkbaL@pc636>
+References: <20250114175143.81438-1-vschneid@redhat.com>
+ <20250114175143.81438-30-vschneid@redhat.com>
+ <CAG48ez1Mh+DOy0ysOo7Qioxh1W7xWQyK9CLGNU9TGOsLXbg=gQ@mail.gmail.com>
+ <xhsmh34hhh37q.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <Z4qBMqcMg16p57av@pc636>
+ <xhsmhwmetfk9d.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <Z44wSJTXknQVKWb0@pc636>
+ <xhsmhr04xfow1.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -93,37 +169,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250115024024.84365-3-cuiyunhui@bytedance.com>
+In-Reply-To: <xhsmhr04xfow1.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 
-On Wed, Jan 15, 2025 at 10:40:23AM +0800, Yunhui Cui wrote:
-> Expose Zicbom through hwprobe and also provide a key to extract its
-> respective block size.
+> >
+> > As noted before, we defer flushing for vmalloc. We have a lazy-threshold
+> > which can be exposed(if you need it) over sysfs for tuning. So, we can add it.
+> >
 > 
-> Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
-> ---
->  Documentation/arch/riscv/hwprobe.rst  | 6 ++++++
->  arch/riscv/include/asm/hwprobe.h      | 2 +-
->  arch/riscv/include/uapi/asm/hwprobe.h | 2 ++
->  arch/riscv/kernel/sys_hwprobe.c       | 6 ++++++
->  4 files changed, 15 insertions(+), 1 deletion(-)
->
+> In a CPU isolation / NOHZ_FULL context, isolated CPUs will be running a
+> single userspace application that will never enter the kernel, unless
+> forced to by some interference (e.g. IPI sent from a housekeeping CPU).
+> 
+> Increasing the lazy threshold would unfortunately only delay the
+> interference - housekeeping CPUs are free to run whatever, and so they will
+> eventually cause the lazy threshold to be hit and IPI all the CPUs,
+> including the isolated/NOHZ_FULL ones.
+> 
+Do you have any testing results for your workload? I mean how much
+potentially we can allocate. Again, maybe it is just enough to back
+and once per-hour offload it.
 
-As the bot points out, we need to add the following to this patch.
+Apart of that how critical IPIing CPUs affect your workloads?
 
-Thanks,
-drew
+> I was thinking maybe we could subdivide the vmap space into two regions
+> with their own thresholds, but a task may allocate/vmap stuff while on a HK
+> CPU and be moved to an isolated CPU afterwards, and also I still don't have
+> any strong guarantee about what accesses an isolated CPU can do in its
+> early entry code :(
+> 
+I agree this is not worth to play with a vmap space in terms of splitting it.
 
-diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwprobe.c
-index cb93adfffc48..6b5b24b399c3 100644
---- a/arch/riscv/kernel/sys_hwprobe.c
-+++ b/arch/riscv/kernel/sys_hwprobe.c
-@@ -160,7 +160,7 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
-        pair->value &= ~missing;
- }
+Sorry for later answer and thank you!
 
--static bool hwprobe_ext0_has(const struct cpumask *cpus, unsigned long ext)
-+static bool hwprobe_ext0_has(const struct cpumask *cpus, u64 ext)
- {
-        struct riscv_hwprobe pair;
-
+--
+Uladzislau Rezki
 
