@@ -1,175 +1,215 @@
-Return-Path: <linux-kselftest+bounces-24901-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24902-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C2EA18773
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 22:43:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42665A1885B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 00:26:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 65C767A43D5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 21:42:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15C4B164761
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 23:26:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68D151F893F;
-	Tue, 21 Jan 2025 21:42:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5894F1F8F0C;
+	Tue, 21 Jan 2025 23:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="UAaiESDb"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="KqSnP1X8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854891F8907;
-	Tue, 21 Jan 2025 21:42:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5DC1F8AFB
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jan 2025 23:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737495763; cv=none; b=fmTW46vOTiOB4O8fGAikePPl4FcoEbfqJHfYHC5MfYFLAsNSr3CnLVhjpOTrQfVGQUlHSYFOsXsSLmOsCtDaAnP+sXYD/XxnCwvjzqVAmtXM3eogTET2RUf7vbEga6Jb8+UVN9zCYUmIduJDt9DJ7uDflVLJIx3wBiA9nJhfNPs=
+	t=1737501959; cv=none; b=fxcyJm/87KnnpKenuwBGDYSNacKRKNw6Jbh2kORNmla4P66Llah4eXLGcY3Qib8NjSiMCcDquxxOC91R20gAuFP0mOOibLItuxwOfajK06FAnWdYemCEXYNYPAjcrnsu+IvE6kI2JKdYVhYe8mzMOPqxBus8HlEoZ/r+8xoW/KU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737495763; c=relaxed/simple;
-	bh=n4RD4dubYEheuUHrbVhCJJ//W+/igb2v1YzPOqVxCQ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OC+4T2LTYZZZ4vnTSnkmAc52YP2K8gQj4+Jo6mozQLC7OHrggvJ+7q8OyB81nzvKy7SWwICEme1YWa1O0Hw6KAAbHB0LQmTqjMyN8AaWtx/rhjQBLI9nDGX0X7PagZ6SscznACwUOPZM+otgbnE3FKDG/g4/S/YzOSrjVMa3vkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=UAaiESDb; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1737495749;
-	bh=n4RD4dubYEheuUHrbVhCJJ//W+/igb2v1YzPOqVxCQ8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UAaiESDbbzPdmNmoLHqaSS32neGSY4I4ypNS43cOa1opJYbIFzp5lwCRIdBJAVUg1
-	 SJ/flduuaUI2McTECmdux8LoW+AFAtJ4YYQarZbEhhxciSfztwrJAY4gnYGR1DKCnm
-	 yvGK4nzYCbAgq6qyPhkj/UqjJ4HCwmc0d+ihxV5k=
-Date: Tue, 21 Jan 2025 22:42:28 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, 
-	eric.snowberg@oracle.com, corbet@lwn.net, mcgrof@kernel.org, petr.pavlu@suse.com, 
-	samitolvanen@google.com, da.gomez@samsung.com, akpm@linux-foundation.org, 
-	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, shuah@kernel.org, 
-	mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, linux-integrity@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, wufan@linux.microsoft.com, pbrobinson@gmail.com, 
-	zbyszek@in.waw.pl, hch@lst.de, mjg59@srcf.ucam.org, pmatilai@redhat.com, 
-	jannh@google.com, dhowells@redhat.com, jikos@kernel.org, mkoutny@suse.com, 
-	ppavlu@suse.com, petr.vorel@gmail.com, mzerqung@0pointer.de, kgold@linux.ibm.com, 
-	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v6 01/15] lib: Add TLV parser
-Message-ID: <74b5c88d-7ab6-49f2-9b96-ac96cb4daf6e@t-8ch.de>
-References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
- <20241119104922.2772571-2-roberto.sassu@huaweicloud.com>
- <c316b1be-d18f-4bb0-8434-bcc9236619df@t-8ch.de>
- <b14358075fa56f7250d5c9000ab8ee181003ff13.camel@huaweicloud.com>
+	s=arc-20240116; t=1737501959; c=relaxed/simple;
+	bh=cz/dVmW3aJtt8LKJn620gaLE9dIYgrPkUQzRMTgPKPI=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=noY+FryD5kOMetEOVUtWLmwVEfrLFi+gjO1krYgpG/OFwokqf0OBe2qf4M5hoVlq3+8ZgIDWmX9p7cUzy5mUg6fDDgPocwu4NpW8HsGbpNBn7VyefS023zNRHF9kSdWQvkb8R0LYCdZFexFvEAvlIUn+1fo72pFReXoHMIlXPy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=KqSnP1X8; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5da135d3162so10604899a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jan 2025 15:25:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvpn.net; s=google; t=1737501955; x=1738106755; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:from:subject:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A3FkubpiIgIYRe5Vu+aYS/Wgeny8/cbFGmsF+cMds14=;
+        b=KqSnP1X8eE8aRBTAyFCPlWkKVBzqJrj08uXjUq9RvadZL3ALPYMMupqeNG4G83o8WA
+         P/x2WwFKnv9d7znIyyrR2BV0TT87yi1ZdczIAdj3yJaXwzn8+DJRXTRl26iZw8IS0hvA
+         suqkzDINZeblUt/ALZfWM1wOOiapMZSr11jdR5pZ9X8lRy4iEjalT6n0CexOrTpc64+v
+         nI/UQxhJQAAUohyd6pAR4mRlf2qdSoCGqLNxE3HuKTue57idE7pzs2iigUJ1ttH1A0IJ
+         LXxaYGHW0wqZCyA5yc9hkvIRSGm9J7wwdejUuyHTSOi23LGvGbNEYqagXkXhsIuIW3fh
+         LdwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737501955; x=1738106755;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:from:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=A3FkubpiIgIYRe5Vu+aYS/Wgeny8/cbFGmsF+cMds14=;
+        b=NjSgYsIxXSv3fRoTxnkkIQQ5nXSeB4TtS1FYGTWHFff9QZOJVD41Vs06XVNpf8CcE6
+         L3XuP3dQR8x24dN5mNO+ukfswiFE/onOJTez5akb1YykJaWIWm1rmi9l57HaNjnYtzlB
+         P7ZHfMD0EkNoeGQOKWS8lOR6AJJDs3ZfpyL9mNiuppn+104mT4oobayA+0+m1A3/QuCN
+         F4AN2Mk0lwdJOBcBOYjKJ4S+nJ/ADV0TNx00bln2e/lb6xWk+iSOgO+gREKtPuL5x9Iy
+         OScw11dWiZQzmcWRn8R/18mNQF9pgKQJ0nQsgLiWFqN4HFkwK9UVwc0Dt6qqbnT4Wwfh
+         hNsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVNjuV9x+md44FMOF9kLilPYDyzWJAKU0WLHCqZ1nAXDrFqmM6v6KyFWZMWnCObK3eUuQn0pB7VFQthkBDllY8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyoiGeAOv+EJqHHCUT21RnM0MPb7SB4RtJlSnP0SEs8HGAGe86k
+	GHkmuYiNSaB96ygkwcwnwPCPDzdV29xzOYkjqMoywq+1T8HKMNcGLWs/6+QfeAQ=
+X-Gm-Gg: ASbGncvX0w16fmVDInL6Qyt7kmfizqh1HwhinX/jTBzj2m9RoPFnZmRnXJsR6rbqCsg
+	3FoyaCZRIXSFaVHEHEsBnPwbxA/eG/RaBCLGGWNWiI+WzzdhT/PLb9ndvUwcC83Fhdb6yK7t/lX
+	mYP3BkvnCRjIYOMXzwOxlgP1tFq7oSa2ZHZbgoUuU/4MqD4bOCtAgMynG5/kyxGQRIYRrhDCGuc
+	pnzKnuAkxQ8XVijkiJ+12Y0r8F010MotHUkutznSTYSoeRhqfZRlN5hqmmlAn3e+4BdLLH6uOJY
+	VYHUjGevk0BhU0YgdWhFNHL0BS+ARSKo
+X-Google-Smtp-Source: AGHT+IF1N+2ejampxFsnZTvz1u8McOE3PVljexZG/PH7R1gxmqLbjNZfulX2Cc67rEf4xDeOdzUtlA==
+X-Received: by 2002:a05:6402:1ed4:b0:5d2:7199:ae6 with SMTP id 4fb4d7f45d1cf-5db7d2f591emr17933035a12.9.1737501955337;
+        Tue, 21 Jan 2025 15:25:55 -0800 (PST)
+Received: from ?IPV6:2001:67c:2fbc:1:2b1b:6df9:ad3c:c183? ([2001:67c:2fbc:1:2b1b:6df9:ad3c:c183])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dbcfb8ff37sm2461596a12.72.2025.01.21.15.25.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jan 2025 15:25:53 -0800 (PST)
+Message-ID: <10bb8eb7-fdcc-4ab6-8ddb-52491933659e@openvpn.net>
+Date: Wed, 22 Jan 2025 00:26:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v18 20/25] ovpn: implement peer
+ add/get/dump/delete via netlink
+From: Antonio Quartulli <antonio@openvpn.net>
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ ryazanov.s.a@gmail.com, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
+References: <20250113-b4-ovpn-v18-0-1f00db9c2bd6@openvpn.net>
+ <20250113-b4-ovpn-v18-20-1f00db9c2bd6@openvpn.net> <Z4pDpqN2hCc-7DGt@hog>
+ <30c50783-096b-4114-aa55-c3edbeb38d49@openvpn.net>
+Content-Language: en-US
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <30c50783-096b-4114-aa55-c3edbeb38d49@openvpn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b14358075fa56f7250d5c9000ab8ee181003ff13.camel@huaweicloud.com>
 
-On 2025-01-21 15:55:28+0100, Roberto Sassu wrote:
-> On Tue, 2025-01-21 at 14:29 +0100, Thomas Weißschuh wrote:
-> > On 2024-11-19 11:49:08+0100, Roberto Sassu wrote:
+On 20/01/2025 15:52, Antonio Quartulli wrote:
+> On 17/01/2025 12:48, Sabrina Dubroca wrote:
+> [...]
+>> -------- 8< --------
+>>
+>> diff --git a/drivers/net/ovpn/netlink.c b/drivers/net/ovpn/netlink.c
+>> index 72357bb5f30b..19aa4ee6d468 100644
+>> --- a/drivers/net/ovpn/netlink.c
+>> +++ b/drivers/net/ovpn/netlink.c
+>> @@ -733,6 +733,9 @@ int ovpn_nl_peer_del_doit(struct sk_buff *skb, 
+>> struct genl_info *info)
+>>       netdev_dbg(ovpn->dev, "del peer %u\n", peer->id);
+>>       ret = ovpn_peer_del(peer, OVPN_DEL_PEER_REASON_USERSPACE);
+>> +    if (ret >= 0 && peer->sock)
+>> +        wait_for_completion(&peer->sock_detach);
+>> +
+>>       ovpn_peer_put(peer);
+>>       return ret;
+>> diff --git a/drivers/net/ovpn/peer.c b/drivers/net/ovpn/peer.c
+>> index b032390047fe..6120521d0c32 100644
+>> --- a/drivers/net/ovpn/peer.c
+>> +++ b/drivers/net/ovpn/peer.c
+>> @@ -92,6 +92,7 @@ struct ovpn_peer *ovpn_peer_new(struct ovpn_priv 
+>> *ovpn, u32 id)
+>>       ovpn_peer_stats_init(&peer->vpn_stats);
+>>       ovpn_peer_stats_init(&peer->link_stats);
+>>       INIT_WORK(&peer->keepalive_work, ovpn_peer_keepalive_send);
+>> +    init_completion(&peer->sock_detach);
+>>       ret = dst_cache_init(&peer->dst_cache, GFP_KERNEL);
+>>       if (ret < 0) {
+>> diff --git a/drivers/net/ovpn/peer.h b/drivers/net/ovpn/peer.h
+>> index 7a062cc5a5a4..8c54bf5709ef 100644
+>> --- a/drivers/net/ovpn/peer.h
+>> +++ b/drivers/net/ovpn/peer.h
+>> @@ -112,6 +112,7 @@ struct ovpn_peer {
+>>       struct rcu_head rcu;
+>>       struct work_struct remove_work;
+>>       struct work_struct keepalive_work;
+>> +    struct completion sock_detach;
+>>   };
+>>   /**
+>> diff --git a/drivers/net/ovpn/socket.c b/drivers/net/ovpn/socket.c
+>> index a5c3bc834a35..7cefac42c3be 100644
+>> --- a/drivers/net/ovpn/socket.c
+>> +++ b/drivers/net/ovpn/socket.c
+>> @@ -31,6 +31,8 @@ static void ovpn_socket_release_kref(struct kref *kref)
+>>       sockfd_put(sock->sock);
+>>       kfree_rcu(sock, rcu);
+>> +
+>> +    complete(&sock->peer->sock_detach);
 
-[..]
+I am moving this line to ovpn_socket_put(), right after kref_put() so 
+that every peer going through the socket release will get their 
+complete() invoked.
 
-> > > +typedef int (*callback)(void *callback_data, __u16 field,
-> > > +			const __u8 *field_data, __u32 field_len);
-> > 
-> > No need for __underscore types in kernel-only signatures.
-> 
-> It is just for convenience. I'm reusing the same file for the userspace
-> counterpart digest-cache-tools. In that case, the parser is used for
-> example to show the content of the digest list.
+If the peer happens to be the last one owning the socket, kref_put() 
+will first do the detach and only then complete() gets called.
 
-This reuse leads to quite some ugly constructs.
-Given that the single function will be really simple after removing the
-unnecessary parts, maybe two clean copies are easier.
-One copy is needed for Frama-C anyways.
+This requires ovpn_socket_release/put() to take the peer as argument, 
+but that's ok.
 
-> > > +
-> > > +int tlv_parse(callback callback, void *callback_data, const __u8 *data,
-> > > +	      size_t data_len, const char **fields, __u32 num_fields);
-> > > +
-> > > +#endif /* _LINUX_TLV_PARSER_H */
-> > > diff --git a/include/uapi/linux/tlv_parser.h b/include/uapi/linux/tlv_parser.h
-> > > new file mode 100644
-> > > index 000000000000..171d0cfd2c4c
-> > > --- /dev/null
-> > > +++ b/include/uapi/linux/tlv_parser.h
-> > > @@ -0,0 +1,41 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> > > +/*
-> > > + * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
-> > > + *
-> > > + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> > > + *
-> > > + * Implement the user space interface for the TLV parser.
-> > > + */
-> > 
-> > Can you explain in the commit message where this will be exposed to
-> > userspace as binary?
-> 
-> I see that my explanation is not ideal.
-> 
-> This is the format for data exchange between user space and kernel
-> space, but it is still the kernel that reads and parses the TLV-
-> formatted file for extracting the digests and adding them to the digest
-> cache.
+This way we should achieve what we needed.
 
-I figured that out :-)
-It should be clear from the commit itself, though.
 
-> > > +
-> > > +#ifndef _UAPI_LINUX_TLV_PARSER_H
-> > > +#define _UAPI_LINUX_TLV_PARSER_H
-> > > +
-> > > +#include <linux/types.h>
-> > > +
-> > > +/*
-> > > + * TLV format:
-> > > + *
-> > > + * +--------------+--+---------+--------+---------+
-> > > + * | field1 (u16) | len1 (u32) | value1 (u8 len1) |
-> > > + * +--------------+------------+------------------+
-> > > + * |     ...      |    ...     |        ...       |
-> > > + * +--------------+------------+------------------+
-> > > + * | fieldN (u16) | lenN (u32) | valueN (u8 lenN) |
-> > > + * +--------------+------------+------------------+
-> > > + */
-> > > +
-> > > +/**
-> > > + * struct tlv_entry - Entry of TLV format
-> > > + * @field: Field identifier
-> > > + * @length: Data length
-> > > + * @data: Data
-> > > + *
-> > > + * This structure represents an entry of the TLV format.
-> > > + */
-> > > +struct tlv_entry {
-> > > +	__u16 field;
-> > > +	__u32 length;
+Regards,
 
-Looking at this again, the "length" field is unaligned by default.
 
-Also FYI there is already a TLV implementation in
-include/uapi/linux/tipc_config.
+-- 
+Antonio Quartulli
+OpenVPN Inc.
 
-> > > +} __attribute__((packed));
-
-[..]
-
-> > Some kunit tests would be great.
-> 
-> I implemented kselftests also injecting errors (patch 13). If it is not
-> enough, I implement kunit tests too.
-
-These selftests are for the digest_cache.
-If the TLV library is meant to be used alone, some dedicated tests would
-be nice. kunit has the advantage that it can directly call kernel
-functions with arbitrary parameters and does not require any userspace
-setup.
 
