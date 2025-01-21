@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-24864-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24865-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EA57A17E5F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 14:04:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53710A17E5B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 14:04:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90DD816A835
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 13:03:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7C07188CD17
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 13:03:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 375EC1F4705;
-	Tue, 21 Jan 2025 13:01:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33F731F473E;
+	Tue, 21 Jan 2025 13:01:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="D6s27Pqn"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GnJryEm1"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8131A1F3D34;
-	Tue, 21 Jan 2025 13:01:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A047C1F3FD6;
+	Tue, 21 Jan 2025 13:01:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737464496; cv=none; b=B+iSs7UqDZh/DUCV4zGKQ2/916jApufsHyWHVg16Rzwp1t0VVdfncstT3O75KXltH1mTFLxGr9iIC0nPbtoKsOlPPdEB919IaJPPh7vAeA2cNwkeASef7Birk2t8mFznEedccUIeazxVgWlxZDL6R6ImqlSWKf5KDAq5oPdlUXI=
+	t=1737464497; cv=none; b=A0Y4O6MQArTTVJ2E18Lyl2SP+g5fIvDv2vrrJyn3xz2TsgXf1G+GQWzUl3DUMfJ9e3uMzWHfVc16AV9619I0mRDR47/tW7PLmEXIFvhYO3aYxOriQ00NVWBCn3AbKpXpfFc4KBKKCBfaHqcf/NDLkhKprv58haIXpup76ZvxFxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737464496; c=relaxed/simple;
-	bh=Tg8M5cDmTjCtJDNBj9IXmsB9LswH3wfAHbSlZTOJ3sE=;
+	s=arc-20240116; t=1737464497; c=relaxed/simple;
+	bh=lPF21v0QCf4TQJl06JOjzYaiGuIDd/wbm8HXl/8BZTE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=i7rk5/j90xMMJjh6N8/qvME/gCGhgN9mF2SWDKMLUgZj+wX2Z5VoH1txfdgRxqZVfpRo9MHfp1BJ34JK28YUOOujhPhWw2494IHvolHcGRGGgjg82srQ1aonXWsKpBcfgogUPvt+FGgIpSWqHXpf/y6UKij4WX7mg2a0YimT69A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=D6s27Pqn; arc=none smtp.client-ip=217.70.183.201
+	 In-Reply-To:To:Cc; b=NaozkUg6VG/unEVRyW6iopy23Is3+cnEURUUUweujzTVRh7rqa2DC8qAJOtZvdNobuqZzJMa56Ghiqd2b+irocnp8FGNLhkEYmR19Xv/7O5q8C1JtsccbttJ0RIp61pJkXhZRTfj4OrFqaRAfcfVjApeZvGy5fx0z77cnHid2VI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GnJryEm1; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E9DA01BF20C;
-	Tue, 21 Jan 2025 13:01:30 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0C4291BF209;
+	Tue, 21 Jan 2025 13:01:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1737464491;
+	t=1737464493;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=zuPUMiL4noPLXhbJcS0szRr9m4xTROwgDoOzcYvBj3w=;
-	b=D6s27PqnhpNg8XgjBuwUN+ppe+6ZLWaJPgE9EXkn5NKHWaT4Th8BfAmZrqOyp+mmmfli2j
-	2sdilMWzEbnPtDuqa1TsIgJZk9qbcCIR3/l6Xa8z/RYV1FdUdmhb4SdhrKJzz/it3Irhm2
-	ByLrIzZrF1/Sshb8GKZOeTb9Z6qKIXmwL2VeEsAA/gNb4nn0D9IzVTWQC+OKZyUdi6oQVf
-	ntSUbthLuoJ1d7ZfAv9mHifB13IanMUrabKLnAk1r5skwXqVnSPfid/io02zpTmqINBosV
-	dru7mlB9Pe6bbOWeXlZ7lhkwlQGXy6bNBBILHyfLplrDSOMGLFR5MZX6RJtxqw==
+	bh=IBT+mxeaQwIc5Sp34PwBOPaxZFkUBRct8wsZOppLvVI=;
+	b=GnJryEm1swSzhCeF2lZE/Nint/jNaOEF08H6cafsE54pS/vEy5BU6u1qNoWBhuoKoFbs1w
+	EAfap+4w7FmznxUyHXKjQm9cDVTHaS84m88sfoZ0RDOfM+1AWPS6uRNeNsG+u6l3BEJMIQ
+	an0gtRCANth5m9/xz/YanCJDD8KrTwVen1wxZyZ+5ctuNpeeXyd3HTnIAtW4d22c4WW4IJ
+	GexB6A2Y6ZC595YSRbhTHBNRqMgBOb4D6v7P5xDqIFkeCMQ4UQrR4wK01EC60L9bStb5Gy
+	RA1UaoI1fHXHwrSnd/BMmbxEmkpC/fVrP1OFAvQ7j47Rlgfn3JCS3QOSWldGLA==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Tue, 21 Jan 2025 14:01:27 +0100
-Subject: [PATCH bpf-next v2 05/10] selftests/bpf: test_xdp_veth: Add XDP
- flags to prog_configuration
+Date: Tue, 21 Jan 2025 14:01:28 +0100
+Subject: [PATCH bpf-next v2 06/10] selftests/bpf: test_xdp_veth: Add new
+ test cases for XDP flags
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250121-redirect-multi-v2-5-fc9cacabc6b2@bootlin.com>
+Message-Id: <20250121-redirect-multi-v2-6-fc9cacabc6b2@bootlin.com>
 References: <20250121-redirect-multi-v2-0-fc9cacabc6b2@bootlin.com>
 In-Reply-To: <20250121-redirect-multi-v2-0-fc9cacabc6b2@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -80,70 +80,79 @@ Cc: Alexis Lothore <alexis.lothore@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: bastien.curutchet@bootlin.com
 
-XDP flags are hardcoded to 0 at attachment.
+The XDP redirection is tested without any flag provided to the
+xdp_attach() function.
 
-Add flags attributes to the struct prog_configuration to allow flag
-modifications for each test case.
+Add two subtests that check the correct behaviour with
+XDP_FLAGS_{DRV/SKB}_MODE flags
 
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
- tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/test_xdp_veth.c       | 27 ++++++++++++++++------
+ 1 file changed, 20 insertions(+), 7 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-index b2b4f6958940f7bce66953568d18fb10e12130e5..0aa1583b741b15f573bbb979b2047a0109070544 100644
+index 0aa1583b741b15f573bbb979b2047a0109070544..62a315d01e51739a7f13dddda3d5a569eab24ceb 100644
 --- a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
 +++ b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-@@ -77,6 +77,8 @@ static struct veth_configuration net_config[VETH_PAIRS_COUNT] = {
- struct prog_configuration {
- 	char local_name[PROG_NAME_MAX_LEN]; /* BPF prog to attach to local_veth */
- 	char remote_name[PROG_NAME_MAX_LEN]; /* BPF prog to attach to remote_veth */
-+	u32 local_flags; /* XDP flags to use on local_veth */
-+	u32 remote_flags; /* XDP flags to use on remote_veth */
- };
+@@ -33,6 +33,7 @@
+ #include "xdp_dummy.skel.h"
+ #include "xdp_redirect_map.skel.h"
+ #include "xdp_tx.skel.h"
++#include <uapi/linux/if_link.h>
  
- static int attach_programs_to_veth_pair(struct bpf_object **objs, size_t nb_obj,
-@@ -106,7 +108,8 @@ static int attach_programs_to_veth_pair(struct bpf_object **objs, size_t nb_obj,
- 	if (!ASSERT_NEQ(interface, 0, "non zero interface index"))
- 		return -1;
+ #define VETH_PAIRS_COUNT	3
+ #define NS_SUFFIX_LEN		6
+@@ -185,26 +186,26 @@ static int check_ping(void)
+ }
  
--	ret = bpf_xdp_attach(interface, bpf_program__fd(local_prog), 0, NULL);
-+	ret = bpf_xdp_attach(interface, bpf_program__fd(local_prog),
-+			     prog[index].local_flags, NULL);
- 	if (!ASSERT_OK(ret, "attach xdp program to local veth"))
- 		return -1;
- 
-@@ -120,7 +123,8 @@ static int attach_programs_to_veth_pair(struct bpf_object **objs, size_t nb_obj,
- 		return -1;
- 	}
- 
--	ret = bpf_xdp_attach(interface, bpf_program__fd(remote_prog), 0, NULL);
-+	ret = bpf_xdp_attach(interface, bpf_program__fd(remote_prog),
-+			     prog[index].remote_flags, NULL);
- 	if (!ASSERT_OK(ret, "attach xdp program to remote veth")) {
- 		close_netns(nstoken);
- 		return -1;
-@@ -187,14 +191,20 @@ void test_xdp_veth_redirect(void)
+ #define VETH_REDIRECT_SKEL_NB	3
+-void test_xdp_veth_redirect(void)
++static void xdp_veth_redirect(u32 flags)
+ {
+ 	struct prog_configuration ping_config[VETH_PAIRS_COUNT] = {
  		{
  			.local_name = "xdp_redirect_map_0",
  			.remote_name = "xdp_dummy_prog",
-+			.local_flags = 0,
-+			.remote_flags = 0,
+-			.local_flags = 0,
+-			.remote_flags = 0,
++			.local_flags = flags,
++			.remote_flags = flags,
  		},
  		{
  			.local_name = "xdp_redirect_map_1",
  			.remote_name = "xdp_tx",
-+			.local_flags = 0,
-+			.remote_flags = 0,
+-			.local_flags = 0,
+-			.remote_flags = 0,
++			.local_flags = flags,
++			.remote_flags = flags,
  		},
  		{
  			.local_name = "xdp_redirect_map_2",
  			.remote_name = "xdp_dummy_prog",
-+			.local_flags = 0,
-+			.remote_flags = 0,
+-			.local_flags = 0,
+-			.remote_flags = 0,
++			.local_flags = flags,
++			.remote_flags = flags,
  		}
  	};
  	struct bpf_object *bpf_objs[VETH_REDIRECT_SKEL_NB];
+@@ -262,3 +263,15 @@ void test_xdp_veth_redirect(void)
+ 
+ 	cleanup_network();
+ }
++
++void test_xdp_veth_redirect(void)
++{
++	if (test__start_subtest("0"))
++		xdp_veth_redirect(0);
++
++	if (test__start_subtest("DRV_MODE"))
++		xdp_veth_redirect(XDP_FLAGS_DRV_MODE);
++
++	if (test__start_subtest("SKB_MODE"))
++		xdp_veth_redirect(XDP_FLAGS_SKB_MODE);
++}
 
 -- 
 2.47.1
