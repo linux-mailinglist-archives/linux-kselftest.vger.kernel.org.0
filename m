@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-24839-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24840-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E5CCA17ACB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 10:59:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3E69A17AD1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 10:59:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E63841889766
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 09:59:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D6851881C41
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 09:59:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D0301EE02F;
-	Tue, 21 Jan 2025 09:58:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 687301EEA37;
+	Tue, 21 Jan 2025 09:59:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s/cyZC/2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nOcSe+zn"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47CD01E7C16;
-	Tue, 21 Jan 2025 09:58:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3506C1E570B;
+	Tue, 21 Jan 2025 09:59:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737453539; cv=none; b=h5kPCP3jLBCcx55xcJ/8RpBsduNJDga21ZEgRGnUwuqmwofP8RsvTgeZ0XeyxMgmn50yCE/4DW412hHxYzik3CuAoNsD8fjg+XvePiRO0r1jCQ8I7LiA25khFsL8L3DzSt+f6wxpvQolIJAMUattL0vCitblFSI5q2+P4kskEtI=
+	t=1737453549; cv=none; b=qj95viUv+a1fMW3tJvylxGDCjWpSbFGfwF0kseLQD9r9EWRiboTXCjQCbzZVPhw1rforlW5Wo+b/sNrIh5XLnSn96QH7gW6b8jgblOoClWL+wxd+CnedGvmDjJPGVkPGwviUGQlWnKt1LuxaqNK17kPdZTI8v5R2pFaxlJ4AuZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737453539; c=relaxed/simple;
-	bh=KoOp2bBaEgNdkErfcjUVf9WpGIAQRLrTvLS33Bc8NoU=;
+	s=arc-20240116; t=1737453549; c=relaxed/simple;
+	bh=Eo8f08lrcV3v5bdbrUA1ZQLB7ILKyWieK2yN3UVHBBw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=S0OunLNjnWg2xdtsNAuwyrEY0F+ASP/J4CWYuQHGn0Y8l2yQrN2AS6mf6cAfgR8pgIWRaX5sMDyfGr701h0nXMMWvJ+6Ev2ASkY5m6rHj6CSRQcdoiU5gbpVF9jh2eABgTspm1pu612WjBFVJ6P07mO0l2KplSt71PO4rMZCTIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s/cyZC/2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70E9CC4CEE3;
-	Tue, 21 Jan 2025 09:58:49 +0000 (UTC)
+	 MIME-Version; b=cFsPX//C/WRo2zXChOaO8EIryVdoHXLQZ2pwYP5r3DOiSnNmMb624xmzDFNn1hEEJ/HEsJ+7pDzytbLtYh4X243EJNAADecmb85RPVvcPVtO2pch0GSpR6WmPx42LSGVcCiKcmXhRa3WU1B/9XM2tztjQ5ll8CR7TrRseCwOc0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nOcSe+zn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AAB5C4CEE4;
+	Tue, 21 Jan 2025 09:58:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737453538;
-	bh=KoOp2bBaEgNdkErfcjUVf9WpGIAQRLrTvLS33Bc8NoU=;
+	s=k20201202; t=1737453548;
+	bh=Eo8f08lrcV3v5bdbrUA1ZQLB7ILKyWieK2yN3UVHBBw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=s/cyZC/2+b5qlN46eSer1ImrHb9ZvKawbx0SCNqyc80TrZ8glanv9A7kNWdwEr5Wv
-	 cilfUKrKcLj7pV0iJOxfKg0uCBgGQ+dSZfau1xxcqqREPdq8QanuA6rkhZwJ1DK+6x
-	 jwimt+tv+qCRZ1SfmxmNTdyLbo96UJCTzycvEkvyVmqSMV8u9ei9kRMiybBa196KWi
-	 3ihKXb9mZgCM9ThnLH/sDFxiQNcRUbkGOXTrdy4MRkhZWJ2YSVCqPL2XJGmCPCsgy1
-	 KaCLpZ65i+w/Eqd7w7BhkQ4Nb08JUKhwvmZFasDG4sVdJvybj0GS+bKvIJvjDUgNq/
-	 TtuScPHhkmPkQ==
+	b=nOcSe+zn+SQExzGVJmzfDbPykH2LUlPfMPtlGyAoyGfDXrLhhyMS+lUgcbHw1a4Wz
+	 jbOQJDn2RMDsmYCvo+I+LOOWAvH/t33sSG3Wxi6k4qMum2yxJuHEjZe3AEp8Thq0vm
+	 3eq9IIM/hKZW7e8raadP3VhM0smzDYZM4FufTAW+HJbROFbyCOHkPH+ER0/jXUDxNG
+	 ODBRoC1VzPp5GAbGelT61fPVZmp++PAFZ7mSlL5goi7IipJxrx5FOR0QfLFIX79ocU
+	 MVd294mCGBs7yY44AalYwmEEVPEpH0oW2DCFcLBPELvQzCiCRNisKNd+vpctP70o65
+	 y9faULu6kJT3w==
 From: Mike Rapoport <rppt@kernel.org>
 To: x86@kernel.org
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -86,9 +86,9 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-um@lists.infradead.org,
 	live-patching@vger.kernel.org
-Subject: [PATCH v2 06/10] module: introduce MODULE_STATE_GONE
-Date: Tue, 21 Jan 2025 11:57:35 +0200
-Message-ID: <20250121095739.986006-7-rppt@kernel.org>
+Subject: [PATCH v2 07/10] module: switch to execmem API for remapping as RW and restoring ROX
+Date: Tue, 21 Jan 2025 11:57:36 +0200
+Message-ID: <20250121095739.986006-8-rppt@kernel.org>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250121095739.986006-1-rppt@kernel.org>
 References: <20250121095739.986006-1-rppt@kernel.org>
@@ -102,295 +102,247 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-In order to use execmem's API for temporal remapping of the memory
-allocated from ROX cache as writable, there is a need to distinguish
-between the state when the module is being formed and the state when it is
-deconstructed and freed so that when module_memory_free() is called from
-error paths during module loading it could restore ROX mappings.
+Instead of using writable copy for module text sections, temporarily remap
+the memory allocated from execmem's ROX cache as writable and restore its
+ROX permissions after the module is formed.
 
-Replace open coded checks for MODULE_STATE_UNFORMED with a helper
-function module_is_formed() and add a new MODULE_STATE_GONE that will be
-set when the module is deconstructed and freed.
+This will allow removing nasty games with writable copy in alternatives
+patching on x86.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Acked-by: Daniel Thompson (RISCstar) <danielt@kernel.org>
 ---
- include/linux/module.h                        |  6 ++++++
- kernel/module/kallsyms.c                      |  8 ++++----
- kernel/module/kdb.c                           |  2 +-
- kernel/module/main.c                          | 19 +++++++++----------
- kernel/module/procfs.c                        |  2 +-
- kernel/tracepoint.c                           |  2 ++
- lib/kunit/test.c                              |  2 ++
- samples/livepatch/livepatch-callbacks-demo.c  |  1 +
- .../test_modules/test_klp_callbacks_demo.c    |  1 +
- .../test_modules/test_klp_callbacks_demo2.c   |  1 +
- .../livepatch/test_modules/test_klp_state.c   |  1 +
- .../livepatch/test_modules/test_klp_state2.c  |  1 +
- 12 files changed, 30 insertions(+), 16 deletions(-)
+ include/linux/module.h       |  8 +----
+ include/linux/moduleloader.h |  4 ---
+ kernel/module/main.c         | 67 ++++++------------------------------
+ kernel/module/strict_rwx.c   |  9 ++---
+ 4 files changed, 17 insertions(+), 71 deletions(-)
 
 diff --git a/include/linux/module.h b/include/linux/module.h
-index b3a643435357..624a5317d5a5 100644
+index 624a5317d5a5..e9fc9d1fa476 100644
 --- a/include/linux/module.h
 +++ b/include/linux/module.h
-@@ -320,6 +320,7 @@ enum module_state {
- 	MODULE_STATE_COMING,	/* Full formed, running module_init. */
- 	MODULE_STATE_GOING,	/* Going away. */
- 	MODULE_STATE_UNFORMED,	/* Still setting it up. */
-+	MODULE_STATE_GONE,	/* Deconstructing and freeing. */
- };
+@@ -368,7 +368,6 @@ enum mod_mem_type {
  
- struct mod_tree_node {
-@@ -620,6 +621,11 @@ static inline bool module_is_coming(struct module *mod)
-         return mod->state == MODULE_STATE_COMING;
- }
- 
-+static inline bool module_is_formed(struct module *mod)
-+{
-+	return mod->state < MODULE_STATE_UNFORMED;
-+}
-+
- struct module *__module_text_address(unsigned long addr);
- struct module *__module_address(unsigned long addr);
- bool is_module_address(unsigned long addr);
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index bf65e0c3c86f..daf9a9b3740f 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -361,7 +361,7 @@ int lookup_module_symbol_name(unsigned long addr, char *symname)
- 
- 	preempt_disable();
- 	list_for_each_entry_rcu(mod, &modules, list) {
--		if (mod->state == MODULE_STATE_UNFORMED)
-+		if (!module_is_formed(mod))
- 			continue;
- 		if (within_module(addr, mod)) {
- 			const char *sym;
-@@ -389,7 +389,7 @@ int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
- 	list_for_each_entry_rcu(mod, &modules, list) {
- 		struct mod_kallsyms *kallsyms;
- 
--		if (mod->state == MODULE_STATE_UNFORMED)
-+		if (!module_is_formed(mod))
- 			continue;
- 		kallsyms = rcu_dereference_sched(mod->kallsyms);
- 		if (symnum < kallsyms->num_symtab) {
-@@ -441,7 +441,7 @@ static unsigned long __module_kallsyms_lookup_name(const char *name)
- 	list_for_each_entry_rcu(mod, &modules, list) {
- 		unsigned long ret;
- 
--		if (mod->state == MODULE_STATE_UNFORMED)
-+		if (!module_is_formed(mod))
- 			continue;
- 		ret = __find_kallsyms_symbol_value(mod, name);
- 		if (ret)
-@@ -484,7 +484,7 @@ int module_kallsyms_on_each_symbol(const char *modname,
- 	list_for_each_entry(mod, &modules, list) {
- 		struct mod_kallsyms *kallsyms;
- 
--		if (mod->state == MODULE_STATE_UNFORMED)
-+		if (!module_is_formed(mod))
- 			continue;
- 
- 		if (modname && strcmp(modname, mod->name))
-diff --git a/kernel/module/kdb.c b/kernel/module/kdb.c
-index 995c32d3698f..14f14700ffc2 100644
---- a/kernel/module/kdb.c
-+++ b/kernel/module/kdb.c
-@@ -23,7 +23,7 @@ int kdb_lsmod(int argc, const char **argv)
- 
- 	kdb_printf("Module                  Size  modstruct     Used by\n");
- 	list_for_each_entry(mod, &modules, list) {
--		if (mod->state == MODULE_STATE_UNFORMED)
-+		if (!module_is_formed(mod))
- 			continue;
- 
- 		kdb_printf("%-20s%8u", mod->name, mod->mem[MOD_TEXT].size);
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 5399c182b3cb..ad8ef20c120f 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -153,7 +153,7 @@ EXPORT_SYMBOL(unregister_module_notifier);
-  */
- static inline int strong_try_module_get(struct module *mod)
- {
--	BUG_ON(mod && mod->state == MODULE_STATE_UNFORMED);
-+	BUG_ON(mod && !module_is_formed(mod));
- 	if (mod && mod->state == MODULE_STATE_COMING)
- 		return -EBUSY;
- 	if (try_module_get(mod))
-@@ -361,7 +361,7 @@ bool find_symbol(struct find_symbol_arg *fsa)
- 			  GPL_ONLY },
- 		};
- 
--		if (mod->state == MODULE_STATE_UNFORMED)
-+		if (!module_is_formed(mod))
- 			continue;
- 
- 		for (i = 0; i < ARRAY_SIZE(arr); i++)
-@@ -386,7 +386,7 @@ struct module *find_module_all(const char *name, size_t len,
- 
- 	list_for_each_entry_rcu(mod, &modules, list,
- 				lockdep_is_held(&module_mutex)) {
--		if (!even_unformed && mod->state == MODULE_STATE_UNFORMED)
-+		if (!even_unformed && !module_is_formed(mod))
- 			continue;
- 		if (strlen(mod->name) == len && !memcmp(mod->name, name, len))
- 			return mod;
-@@ -457,7 +457,7 @@ bool __is_module_percpu_address(unsigned long addr, unsigned long *can_addr)
- 	preempt_disable();
- 
- 	list_for_each_entry_rcu(mod, &modules, list) {
--		if (mod->state == MODULE_STATE_UNFORMED)
-+		if (!module_is_formed(mod))
- 			continue;
- 		if (!mod->percpu_size)
- 			continue;
-@@ -1326,7 +1326,7 @@ static void free_module(struct module *mod)
- 	 * that noone uses it while it's being deconstructed.
- 	 */
- 	mutex_lock(&module_mutex);
--	mod->state = MODULE_STATE_UNFORMED;
-+	mod->state = MODULE_STATE_GONE;
- 	mutex_unlock(&module_mutex);
- 
- 	/* Arch-specific cleanup. */
-@@ -3048,8 +3048,7 @@ static int module_patient_check_exists(const char *name,
- 	if (old == NULL)
- 		return 0;
- 
--	if (old->state == MODULE_STATE_COMING ||
--	    old->state == MODULE_STATE_UNFORMED) {
-+	if (old->state == MODULE_STATE_COMING || !module_is_formed(old)) {
- 		/* Wait in case it fails to load. */
- 		mutex_unlock(&module_mutex);
- 		err = wait_event_interruptible(module_wq,
-@@ -3608,7 +3607,7 @@ char *module_flags(struct module *mod, char *buf, bool show_state)
- {
- 	int bx = 0;
- 
--	BUG_ON(mod->state == MODULE_STATE_UNFORMED);
-+	BUG_ON(!module_is_formed(mod));
- 	if (!mod->taints && !show_state)
- 		goto out;
- 	if (mod->taints ||
-@@ -3702,7 +3701,7 @@ struct module *__module_address(unsigned long addr)
- 	mod = mod_find(addr, &mod_tree);
- 	if (mod) {
- 		BUG_ON(!within_module(addr, mod));
--		if (mod->state == MODULE_STATE_UNFORMED)
-+		if (!module_is_formed(mod))
- 			mod = NULL;
- 	}
- 	return mod;
-@@ -3756,7 +3755,7 @@ void print_modules(void)
- 	/* Most callers should already have preempt disabled, but make sure */
- 	preempt_disable();
- 	list_for_each_entry_rcu(mod, &modules, list) {
--		if (mod->state == MODULE_STATE_UNFORMED)
-+		if (!module_is_formed(mod))
- 			continue;
- 		pr_cont(" %s%s", mod->name, module_flags(mod, buf, true));
- 	}
-diff --git a/kernel/module/procfs.c b/kernel/module/procfs.c
-index 0a4841e88adb..2c617e6f8bc0 100644
---- a/kernel/module/procfs.c
-+++ b/kernel/module/procfs.c
-@@ -79,7 +79,7 @@ static int m_show(struct seq_file *m, void *p)
+ struct module_memory {
+ 	void *base;
+-	void *rw_copy;
+ 	bool is_rox;
  	unsigned int size;
  
- 	/* We always ignore unformed modules. */
--	if (mod->state == MODULE_STATE_UNFORMED)
-+	if (!module_is_formed(mod))
- 		return 0;
+@@ -775,14 +774,9 @@ static inline bool is_livepatch_module(struct module *mod)
  
- 	size = module_total_size(mod);
-diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
-index 1848ce7e2976..e94247afb2c6 100644
---- a/kernel/tracepoint.c
-+++ b/kernel/tracepoint.c
-@@ -668,6 +668,8 @@ static int tracepoint_module_notify(struct notifier_block *self,
- 		break;
- 	case MODULE_STATE_UNFORMED:
- 		break;
-+	case MODULE_STATE_GONE:
-+		break;
- 	}
- 	return notifier_from_errno(ret);
+ void set_module_sig_enforced(void);
+ 
+-void *__module_writable_address(struct module *mod, void *loc);
+-
+ static inline void *module_writable_address(struct module *mod, void *loc)
+ {
+-	if (!IS_ENABLED(CONFIG_ARCH_HAS_EXECMEM_ROX) || !mod ||
+-	    mod->state != MODULE_STATE_UNFORMED)
+-		return loc;
+-	return __module_writable_address(mod, loc);
++	return loc;
  }
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 089c832e3cdb..54eaed92a2d3 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -836,6 +836,8 @@ static int kunit_module_notify(struct notifier_block *nb, unsigned long val,
- 		break;
- 	case MODULE_STATE_UNFORMED:
- 		break;
-+	case MODULE_STATE_GONE:
-+		break;
+ 
+ #else /* !CONFIG_MODULES... */
+diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
+index 1f5507ba5a12..e395461d59e5 100644
+--- a/include/linux/moduleloader.h
++++ b/include/linux/moduleloader.h
+@@ -108,10 +108,6 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 		    const Elf_Shdr *sechdrs,
+ 		    struct module *mod);
+ 
+-int module_post_finalize(const Elf_Ehdr *hdr,
+-			 const Elf_Shdr *sechdrs,
+-			 struct module *mod);
+-
+ #ifdef CONFIG_MODULES
+ void flush_module_init_free_work(void);
+ #else
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index ad8ef20c120f..ee6b46e753a0 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1221,18 +1221,6 @@ void __weak module_arch_freeing_init(struct module *mod)
+ {
+ }
+ 
+-void *__module_writable_address(struct module *mod, void *loc)
+-{
+-	for_class_mod_mem_type(type, text) {
+-		struct module_memory *mem = &mod->mem[type];
+-
+-		if (loc >= mem->base && loc < mem->base + mem->size)
+-			return loc + (mem->rw_copy - mem->base);
+-	}
+-
+-	return loc;
+-}
+-
+ static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
+ {
+ 	unsigned int size = PAGE_ALIGN(mod->mem[type].size);
+@@ -1250,21 +1238,15 @@ static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
+ 	if (!ptr)
+ 		return -ENOMEM;
+ 
+-	mod->mem[type].base = ptr;
+-
+ 	if (execmem_is_rox(execmem_type)) {
+-		ptr = vzalloc(size);
++		int err = execmem_make_temp_rw(ptr, size);
+ 
+-		if (!ptr) {
+-			execmem_free(mod->mem[type].base);
++		if (err) {
++			execmem_free(ptr);
+ 			return -ENOMEM;
+ 		}
+ 
+-		mod->mem[type].rw_copy = ptr;
+ 		mod->mem[type].is_rox = true;
+-	} else {
+-		mod->mem[type].rw_copy = mod->mem[type].base;
+-		memset(mod->mem[type].base, 0, size);
  	}
  
+ 	/*
+@@ -1280,6 +1262,9 @@ static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
+ 	 */
+ 	kmemleak_not_leak(ptr);
+ 
++	memset(ptr, 0, size);
++	mod->mem[type].base = ptr;
++
  	return 0;
-diff --git a/samples/livepatch/livepatch-callbacks-demo.c b/samples/livepatch/livepatch-callbacks-demo.c
-index 11c3f4357812..324bddaef9a6 100644
---- a/samples/livepatch/livepatch-callbacks-demo.c
-+++ b/samples/livepatch/livepatch-callbacks-demo.c
-@@ -93,6 +93,7 @@ static const char *const module_state[] = {
- 	[MODULE_STATE_COMING]	= "[MODULE_STATE_COMING] Full formed, running module_init",
- 	[MODULE_STATE_GOING]	= "[MODULE_STATE_GOING] Going away",
- 	[MODULE_STATE_UNFORMED]	= "[MODULE_STATE_UNFORMED] Still setting it up",
-+	[MODULE_STATE_GONE]	= "[MODULE_STATE_GONE] Deconstructing and freeing",
- };
+ }
  
- static void callback_info(const char *callback, struct klp_object *obj)
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo.c b/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo.c
-index 3fd8fe1cd1cc..8435e3254f85 100644
---- a/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo.c
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo.c
-@@ -16,6 +16,7 @@ static const char *const module_state[] = {
- 	[MODULE_STATE_COMING]	= "[MODULE_STATE_COMING] Full formed, running module_init",
- 	[MODULE_STATE_GOING]	= "[MODULE_STATE_GOING] Going away",
- 	[MODULE_STATE_UNFORMED]	= "[MODULE_STATE_UNFORMED] Still setting it up",
-+	[MODULE_STATE_GONE]	= "[MODULE_STATE_GONE] Deconstructing and freeing",
- };
+@@ -1287,8 +1272,8 @@ static void module_memory_free(struct module *mod, enum mod_mem_type type)
+ {
+ 	struct module_memory *mem = &mod->mem[type];
  
- static void callback_info(const char *callback, struct klp_object *obj)
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo2.c b/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo2.c
-index 5417573e80af..78c1fff5d977 100644
---- a/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo2.c
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo2.c
-@@ -16,6 +16,7 @@ static const char *const module_state[] = {
- 	[MODULE_STATE_COMING]	= "[MODULE_STATE_COMING] Full formed, running module_init",
- 	[MODULE_STATE_GOING]	= "[MODULE_STATE_GOING] Going away",
- 	[MODULE_STATE_UNFORMED]	= "[MODULE_STATE_UNFORMED] Still setting it up",
-+	[MODULE_STATE_GONE]	= "[MODULE_STATE_GONE] Deconstructing and freeing",
- };
+-	if (mem->is_rox)
+-		vfree(mem->rw_copy);
++	if (mod->state == MODULE_STATE_UNFORMED && mem->is_rox)
++		execmem_restore_rox(mem->base, mem->size);
  
- static void callback_info(const char *callback, struct klp_object *obj)
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_state.c b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-index 57a4253acb01..bdebf1d24c98 100644
---- a/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-@@ -18,6 +18,7 @@ static const char *const module_state[] = {
- 	[MODULE_STATE_COMING]	= "[MODULE_STATE_COMING] Full formed, running module_init",
- 	[MODULE_STATE_GOING]	= "[MODULE_STATE_GOING] Going away",
- 	[MODULE_STATE_UNFORMED]	= "[MODULE_STATE_UNFORMED] Still setting it up",
-+	[MODULE_STATE_GONE]	= "[MODULE_STATE_GONE] Deconstructing and freeing",
- };
+ 	execmem_free(mem->base);
+ }
+@@ -2561,7 +2546,6 @@ static int move_module(struct module *mod, struct load_info *info)
+ 	for_each_mod_mem_type(type) {
+ 		if (!mod->mem[type].size) {
+ 			mod->mem[type].base = NULL;
+-			mod->mem[type].rw_copy = NULL;
+ 			continue;
+ 		}
  
- static void callback_info(const char *callback, struct klp_object *obj)
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c b/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c
-index c978ea4d5e67..1a55f84a8eb3 100644
---- a/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c
-@@ -18,6 +18,7 @@ static const char *const module_state[] = {
- 	[MODULE_STATE_COMING]	= "[MODULE_STATE_COMING] Full formed, running module_init",
- 	[MODULE_STATE_GOING]	= "[MODULE_STATE_GOING] Going away",
- 	[MODULE_STATE_UNFORMED]	= "[MODULE_STATE_UNFORMED] Still setting it up",
-+	[MODULE_STATE_GONE]	= "[MODULE_STATE_GONE] Deconstructing and freeing",
- };
+@@ -2578,7 +2562,6 @@ static int move_module(struct module *mod, struct load_info *info)
+ 		void *dest;
+ 		Elf_Shdr *shdr = &info->sechdrs[i];
+ 		const char *sname;
+-		unsigned long addr;
  
- static void callback_info(const char *callback, struct klp_object *obj)
+ 		if (!(shdr->sh_flags & SHF_ALLOC))
+ 			continue;
+@@ -2599,14 +2582,12 @@ static int move_module(struct module *mod, struct load_info *info)
+ 				ret = PTR_ERR(dest);
+ 				goto out_err;
+ 			}
+-			addr = (unsigned long)dest;
+ 			codetag_section_found = true;
+ 		} else {
+ 			enum mod_mem_type type = shdr->sh_entsize >> SH_ENTSIZE_TYPE_SHIFT;
+ 			unsigned long offset = shdr->sh_entsize & SH_ENTSIZE_OFFSET_MASK;
+ 
+-			addr = (unsigned long)mod->mem[type].base + offset;
+-			dest = mod->mem[type].rw_copy + offset;
++			dest = mod->mem[type].base + offset;
+ 		}
+ 
+ 		if (shdr->sh_type != SHT_NOBITS) {
+@@ -2629,7 +2610,7 @@ static int move_module(struct module *mod, struct load_info *info)
+ 		 * users of info can keep taking advantage and using the newly
+ 		 * minted official memory area.
+ 		 */
+-		shdr->sh_addr = addr;
++		shdr->sh_addr = (unsigned long)dest;
+ 		pr_debug("\t0x%lx 0x%.8lx %s\n", (long)shdr->sh_addr,
+ 			 (long)shdr->sh_size, info->secstrings + shdr->sh_name);
+ 	}
+@@ -2782,17 +2763,8 @@ int __weak module_finalize(const Elf_Ehdr *hdr,
+ 	return 0;
+ }
+ 
+-int __weak module_post_finalize(const Elf_Ehdr *hdr,
+-				const Elf_Shdr *sechdrs,
+-				struct module *me)
+-{
+-	return 0;
+-}
+-
+ static int post_relocation(struct module *mod, const struct load_info *info)
+ {
+-	int ret;
+-
+ 	/* Sort exception table now relocations are done. */
+ 	sort_extable(mod->extable, mod->extable + mod->num_exentries);
+ 
+@@ -2804,24 +2776,7 @@ static int post_relocation(struct module *mod, const struct load_info *info)
+ 	add_kallsyms(mod, info);
+ 
+ 	/* Arch-specific module finalizing. */
+-	ret = module_finalize(info->hdr, info->sechdrs, mod);
+-	if (ret)
+-		return ret;
+-
+-	for_each_mod_mem_type(type) {
+-		struct module_memory *mem = &mod->mem[type];
+-
+-		if (mem->is_rox) {
+-			if (!execmem_update_copy(mem->base, mem->rw_copy,
+-						 mem->size))
+-				return -ENOMEM;
+-
+-			vfree(mem->rw_copy);
+-			mem->rw_copy = NULL;
+-		}
+-	}
+-
+-	return module_post_finalize(info->hdr, info->sechdrs, mod);
++	return module_finalize(info->hdr, info->sechdrs, mod);
+ }
+ 
+ /* Call module constructors. */
+diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
+index 239e5013359d..ce47b6346f27 100644
+--- a/kernel/module/strict_rwx.c
++++ b/kernel/module/strict_rwx.c
+@@ -9,6 +9,7 @@
+ #include <linux/mm.h>
+ #include <linux/vmalloc.h>
+ #include <linux/set_memory.h>
++#include <linux/execmem.h>
+ #include "internal.h"
+ 
+ static int module_set_memory(const struct module *mod, enum mod_mem_type type,
+@@ -32,12 +33,12 @@ static int module_set_memory(const struct module *mod, enum mod_mem_type type,
+ int module_enable_text_rox(const struct module *mod)
+ {
+ 	for_class_mod_mem_type(type, text) {
++		const struct module_memory *mem = &mod->mem[type];
+ 		int ret;
+ 
+-		if (mod->mem[type].is_rox)
+-			continue;
+-
+-		if (IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
++		if (mem->is_rox)
++			ret = execmem_restore_rox(mem->base, mem->size);
++		else if (IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
+ 			ret = module_set_memory(mod, type, set_memory_rox);
+ 		else
+ 			ret = module_set_memory(mod, type, set_memory_x);
 -- 
 2.45.2
 
