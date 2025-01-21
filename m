@@ -1,133 +1,166 @@
-Return-Path: <linux-kselftest+bounces-24819-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24821-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E9C3A175F6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 03:30:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 471B4A176D2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 06:09:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A33A33AA4BA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 02:30:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8490016A1D6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 05:09:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 198A2154C00;
-	Tue, 21 Jan 2025 02:30:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 246DB1AAE0B;
+	Tue, 21 Jan 2025 05:09:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u8nO/kyE"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Rz/DqcEg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820061537C6
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jan 2025 02:30:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78F1D1A724C;
+	Tue, 21 Jan 2025 05:09:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737426605; cv=none; b=lg/Phe26cGk3adT9sDYedAWDbbwbvGhePS4mIBoboXx0jOoHgPs6wOWvGzkY0TGuODtnT7dNzc5PHTrte/O685W2nUWHCUdil7F8DgWLnox0/L1YjdeGpHR+17la7OqZf7/uAd6EywZVkok07xwdnY9mCbAjHLtdPyc7yTgCbxY=
+	t=1737436176; cv=none; b=If60nVgwlnZtmi8EhqHgM97oMgeGF9Xxg781xtclSJLcNOI8Y/7I15P5O8Xhfu6Oi7HLuN7lIY4V1dYd7N7AS2CjfHRZK/KvT6uuyF/Byv3tV73cuIpU37eqB8oL9cpeQoDBNtMgx6VnEvTll2SBYckHHB316b1iOsObkVRzjFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737426605; c=relaxed/simple;
-	bh=kkfCkGHH/5pcAL0xqI/wvdSZvH51iCZ4dgaEReAVEIE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Li9icCkqgSr2pZkTWCF7jffd7III1za7RR6M915NtRHxupS7VMgBPD4tGWBay8PNOItbGwqFT5ir8quPzIMx5Pn183LNHFiMA7NzKgpg4p1wmeCOyh5ucgd84FycQP7+OSKoiKQYqx6Gh9oxDFiqnnQMV3Xoja2NjGnvDM7yY3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=u8nO/kyE; arc=none smtp.client-ip=209.85.166.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3ce7e876317so45ab.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2025 18:30:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737426602; x=1738031402; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HPH2l5qf1qTVXhW3y6X6yrEqTd9SkGMkHh8IfEKrlFk=;
-        b=u8nO/kyE5GH6ee2wsFEwh1foOoz4DgjTuauzcqHWH1ZzPUFFMF/x1upQGnSRtuXD+O
-         Nl+kU47W5nGKMLg11zujBUY7CVn+Js7xVFRNKI8+h+xLoXFzrs/HH30sgVDtacKqdEay
-         A+Y1N+7kqVEFpaNs9ZylkYpsJq4YsIj4Ddl/3/RTi0g/FQbrOYDI/wzDY4U1X/q6IA5A
-         VBO3tQwrpO3UXrDbLN2zu/nR8yYYbP7b+vkn5DkY8ImVHFurX6HVnTuhhcRTfQZfEIBG
-         /ooaYOI0Iwfe5dbtB7xX+wkJkj63D2FeyHwgNeUi7y0ayZlLB/JCmnunBQ+2pltGc3IG
-         zGIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737426602; x=1738031402;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HPH2l5qf1qTVXhW3y6X6yrEqTd9SkGMkHh8IfEKrlFk=;
-        b=VGpzVrpmTz9dVY//gB4aNWr2bHtDkWIq/QMwnVvoGLKOXR9YPq84S7AEu3Dz4lRMeQ
-         gMBbACoNkNeiq2pvVMQ2ArpO1cAlLHcPQ4uWJGxQX0jm9WyB+nziAZxiQbUHq+/5wrXZ
-         ON7svHdIzfpPljOCp/iOc8GEC8NrW7byDGCkArkrYxs57EXgkGd6/LGUif8CBpP6ufMC
-         vf/byClWGFC8zUgaMMLQQx6Iglr5XNwKWBr6wTc6wB5M5fqkGAhgzPkV+nwtdkjg5x8I
-         qqzYg7IExCViapU4EYYlkszNZfPBOLVa4l78HXX3Z0rMJGIm0UsnZAnNy5BGTa568CoS
-         XZfg==
-X-Forwarded-Encrypted: i=1; AJvYcCW6brFgMyL4MwwRiJtpdZca+FYPVIZCkd/18Yrbpiv079H83wLA8qe+8JSUiadYsjFAdnTcKCyvCmV0Cds7SGg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YweGrsrhFl103gvX7kpx6ayD9AJ5hLiNyqdixbXn6GbfZ4U5EvS
-	hDhDwi38nUvAOJf76sH0O2bWVHYWXbnn18XrMFEzgYvBge8MwoiXtfVSY4aUxRNJeYA0xghqL9y
-	Esn09Cmya6nfGwpUn1WNPU5SjsNWIfC+7wifV
-X-Gm-Gg: ASbGncvbDnb7bNHEWf+taTI45yIqEY3dQm4eZVNnwuSxYluoD/gfuXzXuBVhYiJhW7m
-	7ieg4QEUMNVpdzeo+SrTNQPrukJLRtxgjWBWjeq+/UZdczX7e/DpmzRlZPdm2gEzDj40zYQq4s5
-	Kic5O/LQ==
-X-Google-Smtp-Source: AGHT+IFlz4TxB3vciHD96WStNcWKfDv2nt6pDTX2HSfNXumM8/MVKhR4YG5/U51YA28bK2CS8jm9EvWOsee1FBpIG28=
-X-Received: by 2002:a05:6e02:1111:b0:3ce:51bd:3b05 with SMTP id
- e9e14a558f8ab-3cfa9443651mr11835ab.2.1737426600885; Mon, 20 Jan 2025 18:30:00
- -0800 (PST)
+	s=arc-20240116; t=1737436176; c=relaxed/simple;
+	bh=MRbFXBRyZ6VO80r/tbLavWPYGstR7hTNcSTo0dkY3NQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mwaPS8r6FheMMIcJACT37XHEJd0zumHeaFpax7SOfAItDVSPBejMZjgzAGLK5C3z/JX/NJN/v5RvM/BigzbUWLNRL5bYXorIkbOYYRS3e4v7r0gDiKAYJwU+v1yPLj7aHC1Ytg9BPnvTFYuFvksUvKZYQsL1qyYFL3FSaNL/Mlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Rz/DqcEg; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=bTS2v
+	udIGnYCF5+bPeCAZ9C/WoAScG4XWVTYcSjmUXw=; b=Rz/DqcEghOON4BUZsxO6S
+	scO9I2lh9KWFFudRqRIF9/jeJGLZ71jNQstWO8c+U2hdvlDN009kjaexrYSW5Zwx
+	PhLWvloeWx+e9o1DR3ww/Lzbfd68P741yVio4xCgyNiSlGLrVgQLo+FEZy/L5B8E
+	Cg/7h3A054zu8Pff8zy1dk=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wBHwYeaK49nTErMHA--.41409S2;
+	Tue, 21 Jan 2025 13:07:49 +0800 (CST)
+From: Jiayuan Chen <mrpre@163.com>
+To: bpf@vger.kernel.org,
+	jakub@cloudflare.com,
+	john.fastabend@gmail.com
+Cc: netdev@vger.kernel.org,
+	martin.lau@linux.dev,
+	ast@kernel.org,
+	edumazet@google.com,
+	davem@davemloft.net,
+	dsahern@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	linux-kernel@vger.kernel.org,
+	song@kernel.org,
+	andrii@kernel.org,
+	mhal@rbox.co,
+	yonghong.song@linux.dev,
+	daniel@iogearbox.net,
+	xiyou.wangcong@gmail.com,
+	horms@kernel.org,
+	corbet@lwn.net,
+	eddyz87@gmail.com,
+	cong.wang@bytedance.com,
+	shuah@kernel.org,
+	mykolal@fb.com,
+	jolsa@kernel.org,
+	haoluo@google.com,
+	sdf@fomichev.me,
+	kpsingh@kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Jiayuan Chen <mrpre@163.com>
+Subject: [PATCH bpf v8 0/5] bpf: fix wrong copied_seq calculation and add tests
+Date: Tue, 21 Jan 2025 13:07:02 +0800
+Message-ID: <20250121050707.55523-1-mrpre@163.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250117081600.150863-1-yuyanghuang@google.com> <20250120164621.287af2eb@kernel.org>
-In-Reply-To: <20250120164621.287af2eb@kernel.org>
-From: Yuyang Huang <yuyanghuang@google.com>
-Date: Tue, 21 Jan 2025 11:29:24 +0900
-X-Gm-Features: AWEUYZkgAGWY6e-kgWc5FZORob9sGJ4tEP4o23gzR672JEL0GNHYtT3vCoErJAY
-Message-ID: <CADXeF1F5R+p7ohvMRDBsRSxxqqAO-zXwctSz5KvMJEPbQLy90Q@mail.gmail.com>
-Subject: Re: [PATCH net-next, v6 1/2] netlink: support dumping IPv4 multicast addresses
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	netdev@vger.kernel.org, Donald Hunter <donald.hunter@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, Nikolay Aleksandrov <razor@blackwall.org>, 
-	Hangbin Liu <liuhangbin@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	linux-kselftest@vger.kernel.org, =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>, 
-	Lorenzo Colitti <lorenzo@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wBHwYeaK49nTErMHA--.41409S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWFyrGFyfXw4kuryDAFyxKrg_yoW5Cw1DpF
+	WkC34rGr47tFyIva1DA3yIgF4Fgw4rGay5KF1Fq3yfZr4jkryYyrs293Waqrn8GrWYvF1j
+	9r13Wr4Y934DAFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0z_pnQ7UUUUU=
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiDxPbp2ePHI2amQACsY
 
-Thanks for the feedback.
+A previous commit described in this topic
+http://lore.kernel.org/bpf/20230523025618.113937-9-john.fastabend@gmail.com
+directly updated 'sk->copied_seq' in the tcp_eat_skb() function when the
+action of a BPF program was SK_REDIRECT. For other actions, like SK_PASS,
+the update logic for 'sk->copied_seq' was moved to
+tcp_bpf_recvmsg_parser() to ensure the accuracy of the 'fionread' feature.
 
->IIUC Paolo's suggestion was to create a new header file under net/ipv4,
->if you consider addrconf.h unsuitable. There is no need to expose this
->argument struct in kernel-wide headers.
+That commit works for a single stream_verdict scenario, as it also
+modified 'sk_data_ready->sk_psock_verdict_data_ready->tcp_read_skb'
+to remove updating 'sk->copied_seq'.
 
-Currently the structure is like follows:
+However, for programs where both stream_parser and stream_verdict are
+active(strparser purpose), tcp_read_sock() was used instead of
+tcp_read_skb() (sk_data_ready->strp_data_ready->tcp_read_sock)
+tcp_read_sock() now still update 'sk->copied_seq', leading to duplicated
+updates.
 
-IPv4:  `struct inet_fill_args` in igmp.h and use it in igmp.c/devinet.c
-IPv6: `struct inet6_fill_args` in addrconf.h and use it in mld.c/addrconf.c
+In summary, for strparser + SK_PASS, copied_seq is redundantly calculated
+in both tcp_read_sock() and tcp_bpf_recvmsg_parser().
 
-We could move `struct inet_fill_args` to a separate header file, but
-this would cause the IPv4 and IPv6 code to diverge. Therefore, we may
-need to modify the IPv6 header structure slightly as well.
+The issue causes incorrect copied_seq calculations, which prevent
+correct data reads from the recv() interface in user-land.
 
-I propose moving `struct inet_fill_args` to `igmp_internal.h` and, in
-a separate patch, moving struct inet6_fill_args to
-addrconf_internal.h.
+Also we added test cases for bpf + strparser and separated them from
+sockmap_basic, as strparser has more encapsulation and parsing
+capabilities compared to sockmap.
 
-Please let me know if you have any other suggestions.
+Fixes: e5c6de5fa025 ("bpf, sockmap: Incorrectly handling copied_seq")
 
-Thanks,
+---
+V8 -> V7:
+https://lore.kernel.org/bpf/20250116140531.108636-1-mrpre@163.com/
+Avoid using add read_sock to psock. (Jakub Sitnicki)
+Avoid using warpper function to check whether strparser is supported.
 
-Yuyang
+V3 -> V7:
+https://lore.kernel.org/bpf/20250109094402.50838-1-mrpre@163.com/
+https://lore.kernel.org/bpf/20241218053408.437295-1-mrpre@163.com/
+Avoid introducing new proto_ops. (Jakub Sitnicki).
+Add more edge test cases for strparser + bpf.
+Fix patchwork fail of test cases code.
+Fix psock fetch without rcu lock.
+Move code of modifying to tcp_bpf.c.
 
+V1 -> V3:
+https://lore.kernel.org/bpf/20241209152740.281125-1-mrpre@163.com/
+Fix patchwork fail by adding Fixes tag.
+Save skb data offset for ENOMEM. (John Fastabend)
+---
 
+Jiayuan Chen (5):
+  strparser: add read_sock callback
+  bpf: fix wrong copied_seq calculation
+  bpf: disable non stream socket for strparser
+  selftests/bpf: fix invalid flag of recv()
+  selftests/bpf: add strparser test for bpf
 
-On Tue, Jan 21, 2025 at 9:46=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Fri, 17 Jan 2025 17:15:58 +0900 Yuyang Huang wrote:
-> >  include/linux/igmp.h | 12 +++++++
-> >  net/ipv4/devinet.c   | 76 ++++++++++++++++++++++++++++++++++++--------
-> >  net/ipv4/igmp.c      | 13 +++++---
->
-> IIUC Paolo's suggestion was to create a new header file under net/ipv4,
-> if you consider addrconf.h unsuitable. There is no need to expose this
-> argument struct in kernel-wide headers.
+ Documentation/networking/strparser.rst        |   9 +-
+ include/linux/skmsg.h                         |   2 +
+ include/net/strparser.h                       |   2 +
+ include/net/tcp.h                             |   8 +
+ net/core/skmsg.c                              |   7 +
+ net/core/sock_map.c                           |   5 +-
+ net/ipv4/tcp.c                                |  29 +-
+ net/ipv4/tcp_bpf.c                            |  42 ++
+ net/strparser/strparser.c                     |  11 +-
+ .../selftests/bpf/prog_tests/sockmap_basic.c  |  59 +--
+ .../selftests/bpf/prog_tests/sockmap_strp.c   | 452 ++++++++++++++++++
+ .../selftests/bpf/progs/test_sockmap_strp.c   |  53 ++
+ 12 files changed, 614 insertions(+), 65 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_strp.c
+
+-- 
+2.43.5
+
 
