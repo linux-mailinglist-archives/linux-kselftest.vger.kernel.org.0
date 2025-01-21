@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-24825-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24823-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A02D4A176F5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 06:25:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FE52A176DB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 06:10:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7DF027A2991
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 05:24:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1EB9188A635
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 05:10:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6669199223;
-	Tue, 21 Jan 2025 05:24:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B1831A83F4;
+	Tue, 21 Jan 2025 05:09:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ADQEK8uJ"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="HoBCWqcw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8ACE1A83F4;
-	Tue, 21 Jan 2025 05:24:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96B87190058;
+	Tue, 21 Jan 2025 05:09:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737437097; cv=none; b=Hb1hRuMC+u6XIRyaPMFRPdQKwaTmb/kcJ+3qNT7GS6A4YiU0JrJuRDjzORmgdFSN3yqQD/vpVdmWqlGcVSrl09ZDckASqbuvmiSbOnibzEegITmdjbQMRo1b7HAkE1nQuvzITYPgPDHVvSIK8tMhHw6EOa7uejzY6hQ7OnLOoEQ=
+	t=1737436192; cv=none; b=casO7wPH05FVSAf/IxTd0k8B5Ed2JU67+Rcn0bmW2T3erU3XXt+SbXQ1otQUC0wpHMI859zR5ruaYpnUPGoW5+pQ3qEJlLW+mZyqcppn4jG4y4kRxCpDlepjX10Ln/Q5i04sfJP/T0Nhn4+yBkrEaH500cbbr1DTkc4U7SmWv5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737437097; c=relaxed/simple;
-	bh=q076FPLcnVELFIvGJ7vQmIAhrhGv9ZUwuu3/eGXujeA=;
+	s=arc-20240116; t=1737436192; c=relaxed/simple;
+	bh=6p0ZNiaedPTstsjUOKB/bKroZewqExukBImhrr1HPaE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ximhs53ZB4HYw1JRgtb/NPTiQwAmGZZ3uLVai6YeBZ3umhRuvgszpcw1G9xBvLCk88v95XUqe6hqKuEQxqDx9X9cO9Y7E9gGdkD/DQc7jpQ+VGRc3k5qWcCl7NCk7hd6LThpq3Cm7ahgcP7jGxk9H+sxb/M1RLZLkrozpUVnqtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ADQEK8uJ; arc=none smtp.client-ip=220.197.31.4
+	 MIME-Version; b=uEKFa0vkp63jxpqL5n5AvTOCh9MpiGmRMXPBJH8tws+wQad8C+j3SoOQ5HdlNtl3NLBsutGhqQbuM/aprmBzrfya/LSZvS8L0brPiLFJb8T319vdjoDZl53P09p6555L2TtJncbBRLbBMcxwKpoL3yrMECAB8PpOSdU1RQ5MhBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=HoBCWqcw; arc=none smtp.client-ip=117.135.210.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=2MNTx
-	I21IGNG+45HZA+umvOyB944fvSncQ36kJVgirg=; b=ADQEK8uJlnnMR/kIvl0OH
-	DsIeHYomgQmF9cA4amOhGwKvjTejvsBUvVo5NlZJGR6bFHbXVaY+larlxNYus8bo
-	EUi+AAd6GzuBT1YDeIXdAqCfmdYeARwB+mBr/T/7o0+40KS8y+bq/yn6A+kYMKpf
-	GULyi+6FUsXtFJAFtsOPCA=
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=QfD0x
+	ORTJ6sdWkpnFOeE2wnXCWQvBYF6SlJ27tlulQ4=; b=HoBCWqcw28Vk0oO05xx3z
+	QG5TXwHnUswlj9gQBlodT/Wx+Q0f0hyolkLDCjX7boYI3HGW20C60ViYHasxi2ei
+	VMelrD17mbYNoOxfgFvXtyH0Z5AnjGb8cpb/BdIQD8EaUnydkwFplLjcxe8Unuzg
+	/cWMKXDIo3mPLq8ywGSgVI=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wBHwYeaK49nTErMHA--.41409S5;
-	Tue, 21 Jan 2025 13:08:24 +0800 (CST)
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wBHwYeaK49nTErMHA--.41409S6;
+	Tue, 21 Jan 2025 13:08:36 +0800 (CST)
 From: Jiayuan Chen <mrpre@163.com>
 To: bpf@vger.kernel.org,
 	jakub@cloudflare.com,
@@ -70,9 +70,9 @@ Cc: netdev@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf v8 3/5] bpf: disable non stream socket for strparser
-Date: Tue, 21 Jan 2025 13:07:05 +0800
-Message-ID: <20250121050707.55523-4-mrpre@163.com>
+Subject: [PATCH bpf v8 4/5] selftests/bpf: fix invalid flag of recv()
+Date: Tue, 21 Jan 2025 13:07:06 +0800
+Message-ID: <20250121050707.55523-5-mrpre@163.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20250121050707.55523-1-mrpre@163.com>
 References: <20250121050707.55523-1-mrpre@163.com>
@@ -83,47 +83,45 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBHwYeaK49nTErMHA--.41409S5
-X-Coremail-Antispam: 1Uf129KBjvJXoW7AF18CF1DArW3Kw17uw4rZrb_yoW8JFyfp3
-	s5uw4xuFZrXr4Iv398Xan0gr109wn5KayUGF1fCa4ayw4qgr15WrWrGFyavF1jkr43WFy5
-	Zr4UG345Cw47XaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRMrWrUUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/xtbBDw3bp2ePKApFRQABs1
+X-CM-TRANSID:_____wBHwYeaK49nTErMHA--.41409S6
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KF4DCF45tFW5tFy5Xr1UWrg_yoW8GF1kpa
+	40y34YkFWSvF1aqa1kJrsruF4rGr98Xws0kF4DWry8Ar1kJrn2qF4xKay5tFn7WrZ3Z34r
+	Zwn3KFWrWw48WwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zEYFAQUUUUU=
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiWwjbp2ePK64C5gAAsm
 
-Currently, only TCP supports strparser, but sockmap doesn't intercept
-non-TCP to attach strparser. For example, with UDP, although the
-read/write handlers are replaced, strparser is not executed due to the
-lack of read_sock operation.
-
-Furthermore, in udp_bpf_recvmsg(), it checks whether psock has data, and
-if not, it falls back to the native UDP read interface, making
-UDP + strparser appear to read correctly. According to it's commit
-history, the behavior is unexpected.
-
-Moreover, since UDP lacks the concept of streams, we intercept it
-directly.
+SOCK_NONBLOCK flag is only effective during socket creation, not during
+recv. Use MSG_DONTWAIT instead.
 
 Signed-off-by: Jiayuan Chen <mrpre@163.com>
 ---
- net/core/sock_map.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/prog_tests/sockmap_basic.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index f1b9b3958792..3b0f59d9b4db 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -303,7 +303,10 @@ static int sock_map_link(struct bpf_map *map, struct sock *sk)
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 884ad87783d5..0c51b7288978 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -522,8 +522,8 @@ static void test_sockmap_skb_verdict_shutdown(void)
+ 	if (!ASSERT_EQ(err, 1, "epoll_wait(fd)"))
+ 		goto out_close;
  
- 	write_lock_bh(&sk->sk_callback_lock);
- 	if (stream_parser && stream_verdict && !psock->saved_data_ready) {
--		ret = sk_psock_init_strp(sk, psock);
-+		if (sk_is_tcp(sk))
-+			ret = sk_psock_init_strp(sk, psock);
-+		else
-+			ret = -EOPNOTSUPP;
- 		if (ret) {
- 			write_unlock_bh(&sk->sk_callback_lock);
- 			sk_psock_put(sk, psock);
+-	n = recv(c1, &b, 1, SOCK_NONBLOCK);
+-	ASSERT_EQ(n, 0, "recv_timeout(fin)");
++	n = recv(c1, &b, 1, MSG_DONTWAIT);
++	ASSERT_EQ(n, 0, "recv(fin)");
+ out_close:
+ 	close(c1);
+ 	close(p1);
+@@ -628,7 +628,7 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
+ 	ASSERT_EQ(avail, expected, "ioctl(FIONREAD)");
+ 	/* On DROP test there will be no data to read */
+ 	if (pass_prog) {
+-		recvd = recv_timeout(c1, &buf, sizeof(buf), SOCK_NONBLOCK, IO_TIMEOUT_SEC);
++		recvd = recv_timeout(c1, &buf, sizeof(buf), MSG_DONTWAIT, IO_TIMEOUT_SEC);
+ 		ASSERT_EQ(recvd, sizeof(buf), "recv_timeout(c0)");
+ 	}
+ 
 -- 
 2.43.5
 
