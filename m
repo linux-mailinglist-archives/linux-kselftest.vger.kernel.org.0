@@ -1,172 +1,143 @@
-Return-Path: <linux-kselftest+bounces-24909-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24911-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0607A18C47
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 07:47:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5ACA2A18C50
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 07:51:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29D4A163ED4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 06:47:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4693B3A81E0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 06:50:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED2891BC099;
-	Wed, 22 Jan 2025 06:47:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 043A619ABCB;
+	Wed, 22 Jan 2025 06:50:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="sPkwIaxR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dZGn0T+4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20CC11B0F1E;
-	Wed, 22 Jan 2025 06:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4543E18C936;
+	Wed, 22 Jan 2025 06:50:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737528437; cv=none; b=IJ4fJv15EcVaCRymU6+2o8Gi0fFAOV6xgwvXbAxgwzCa7mt2Efjha6KSMPySY2SahoU0mB+YgvT1pHhjPgzfw/KtBqMT/MMavV7J/mDUrMOrQ/ZQooMrpHCuk1ZC9EgzhpXrZM3Ly1xprDZFU27UyP6Obe66kkag4jukyhymyFI=
+	t=1737528657; cv=none; b=eCFhoT/6HvYpnqP+gysa7ODtOo5W2Qfg3HCUWsOzQr7s8erZxL73FdjsamTfCZk/71F8mtjdIBf7MPnzH8l5+1sbdjCe0yxCFxFiiUWUTovv8kji6pbrDeNPmM7zSSp6A0P/0g7GSNetI06TIpLd2x98jG2APORdja55tLFe9AA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737528437; c=relaxed/simple;
-	bh=hFUXKiiQ1x1vkuqDJpsOVL2cZoyb+yhyKKlxXRN0Xgw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nVxEEO8bcvVYEUkbfYByMp8JuuZnaNETcmVaL837qMEhYPGZ223Ej2C/mPkkdsBdhA5uVyjcG3eGziREiG1fPxF2/3IuSP90/s7xKNcdaNWx0P21deubQAUXnYHL6Aky2nGEyIPyqSqOJ5BCkBWmXOLLypQBt95+4625Yx0wsE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=sPkwIaxR; arc=none smtp.client-ip=115.124.30.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1737528427; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=Yj/kRrfdeQuFUnIqHOTSK2NEbqA0lq2zs119rYyDO1k=;
-	b=sPkwIaxRgHVFTUue0xXg19BtWA8p3faUM3rIOpTsiLP/sDGThUosIY/L9c/+gpDJ+ZwvHI8MIBnteJXC5glYUqOa/iNQUYtdK2HngzTpyKKCJG+0uFyFiMj6TahiHWg7QJwLW0WQp76QB8jDVUeq5j/kdzMztKky50fXE93PcHs=
-Received: from 30.74.144.123(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0WO7Ulvn_1737528425 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 22 Jan 2025 14:47:05 +0800
-Message-ID: <b556f0c9-9190-4834-8586-02a71337ee9d@linux.alibaba.com>
-Date: Wed, 22 Jan 2025 14:47:05 +0800
+	s=arc-20240116; t=1737528657; c=relaxed/simple;
+	bh=ll18vXyJoSZUrCfIEz1sxhp89TO3IMYtZn8Sqx8eEk4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cSM8+Q4827nNjIda3eWEZNc01Xi4OuejnfIViBBfkcYh+3szBouaWB9slMnJ3vkDpwIKyuHpozXH8s0yHdKhBYGB69QPV3Z7h2CI1z/hDYhzB7rWOUA0CdPzfJPT4axVm12DLXbcMhliwuVc63bY19pAgkumxoq8o3VHb9NjbwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dZGn0T+4; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-385f07cd1a4so5001602f8f.1;
+        Tue, 21 Jan 2025 22:50:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737528654; x=1738133454; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GmJpaq3a/A5O1jFcLHLDDhdU+j9AgAL9atbgwnpJ+6M=;
+        b=dZGn0T+49E7ZMCjQOVvWwHoGcRMIAbRCV/6H6fbz1uitJXqd2Oqv2V1n67hxqarBnt
+         N2SpejTWjYVChv7l/DIuglDqPi5xgvKz04A3m4OlHwd15EIhWm7CAASgQPdUs2iqkaAH
+         gyTVBKNS3VGCdXgJfNoTRoVUZ7d4Gzwr4iOPXM206Gu+so3vqxwuT+SUBQh/W5Zvlj5v
+         WC3ZyMlszkY5crbhqSLGCLdXBnho1otcwxe/9q6whWewIgTp3J+mPeeVDOCJ+FNnssF7
+         RmC1WxOMtRF2XKJh7hL/Vf3GJyeT1f6VDp+B6Iivm/Xziv13f9IHmxXuVgmGjS6/LkJK
+         aCyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737528654; x=1738133454;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GmJpaq3a/A5O1jFcLHLDDhdU+j9AgAL9atbgwnpJ+6M=;
+        b=rKaDUhdpim7Vx3ZZ+2iW+z1fRpeG7TcI4CawOi764UVmO7a/EM/vAfnGPdqMAH36gq
+         6b1vkjK5INcbk+0cbotJ0bv76lI7kzxDNE3jQhAdFvkgHGREyKT5gCaX/OHpUh755LKG
+         IcsMLVFEveKaVeS8NT6BhwwqVK4XBBSLiiqRULDZMuc1Rxc7+9+V7lucLH8+0l7Lpm7K
+         rxiZIqOznRKAF891apOZa92qoqeJpAwJBqcbKnXqqR481gY2u5hdLRuWEEHxmwa2PTf3
+         z2AcCtlt+6Xia7pZoOO46IYFMaDPQuL3W/+Y9Tr0oHKtjJpZ0M03Uea6HVtcIkOaIYbw
+         cnEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVZiDA3WdMZj01enWciFXoTMPe0w13zAjqmFz7dBV634HDL/9k78Vz2YUPa8nyIijnkGHBA0fhHZK1VjZ9/0xKk@vger.kernel.org, AJvYcCWpGhYzPJNxxGHQZdtW/XQ1fTfUt7jb4g4yoIY5l/ti5092igvt75BmSOKVcDv6gn3RAxUQl3cj8RYnKLA4@vger.kernel.org, AJvYcCX7dfvOo6spdIvxFGqrUgQ6V8vef2ey3jYSAm0GUBklNVX8/NbB8DMhUq8MioicDWeAUrpiYeJSO10Z8jKr1eU=@vger.kernel.org, AJvYcCXCc2qjHD6GECqfC88VJKfk74VN0lkdCDBjZGdM/nnx+BcsAr3obfmUzUjF4mMgSR/y7O94jj7KHE1nH3dfF+Jfv5cTHfg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5Ug4O4xeIWcFo1uYsQrT9MVqsKvWqcpOVhfcg4SW0GIOOfyh/
+	Wok6uZzlqat8A3dPvwb2aiVOHKnMfvQh5g0ZMPAyTY1vpmu5LuO5
+X-Gm-Gg: ASbGncsqk2n9e5Wpn/omL4IqmthE6kKJ2k2ehDyAi6MPw/KhzfC3zRpDXdKq7Ge+65l
+	1CuYJeCls8iwdLWoAZwE6BOWtyOpSFw/xqC0fAq+9A3PM4PZvV5JoHfGRVgULWpYa8DQKnPfFNZ
+	LMVHbg6Yz0EYL3BgT27/IPZZmKUTmi7aGFTd0g9GKJCBiOfOEEMJFUvjd8dVaeqOyjO4RJfYlBt
+	Kf2KvkqEo/hhg0/VL4Y2FaBy7zYw/H1bhV+OiLIINCBo5QhF8znmsLHQLMwSq3X03unPwMu6df/
+	0Y7Ka5qS5oMAmAIaqyOS
+X-Google-Smtp-Source: AGHT+IG312keFw5jeFNlT86CChmD/JhQjcJt+ortIX5jqch3dlXYd2FDipBO5tztTdKqHV6NuV5lwA==
+X-Received: by 2002:adf:e105:0:b0:385:fd07:85f4 with SMTP id ffacd0b85a97d-38bf5678c42mr14021990f8f.31.1737528654120;
+        Tue, 21 Jan 2025 22:50:54 -0800 (PST)
+Received: from localhost.localdomain ([197.63.212.181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38bf327dd34sm15156283f8f.83.2025.01.21.22.50.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jan 2025 22:50:53 -0800 (PST)
+From: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
+To: peterhuewe@gmx.de,
+	jarkko@kernel.org,
+	jgg@ziepe.ca,
+	shuah@kernel.org
+Cc: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>,
+	linux-kernel-mentees@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] selftests: tpm2: create a dedicated .gitignore
+Date: Wed, 22 Jan 2025 08:50:18 +0200
+Message-ID: <20250122065021.91814-1-khaledelnaggarlinux@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 03/10] selftests/mm: test splitting file-backed THP to
- any lower order.
-To: Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org,
- Andrew Morton <akpm@linux-foundation.org>,
- "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc: Ryan Roberts <ryan.roberts@arm.com>, Hugh Dickins <hughd@google.com>,
- David Hildenbrand <david@redhat.com>, Yang Shi
- <yang@os.amperecomputing.com>, Miaohe Lin <linmiaohe@huawei.com>,
- Kefeng Wang <wangkefeng.wang@huawei.com>, Yu Zhao <yuzhao@google.com>,
- John Hubbard <jhubbard@nvidia.com>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250116211042.741543-1-ziy@nvidia.com>
- <20250116211042.741543-4-ziy@nvidia.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20250116211042.741543-4-ziy@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Create a dedicated .gitignore for the tpm2 tests.
+Move tpm2 related entries from parent directory's .gitignore.
 
+Signed-off-by: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
+---
+Hello, as per Shuah's review, instead of adding another entry at
+selftests/.gitignore, I created the dedicated .gitignore for
+tpm2 tests.
 
-On 2025/1/17 05:10, Zi Yan wrote:
-> Now split_huge_page*() supports shmem THP split to any lower order.
-> Test it.
-> 
-> The test now reads file content out after split to check if the split
-> corrupts the file data.
-> 
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
+Aside: CCing linux-kernel-mentees as I am working on the mentorship
+application tasks.
 
-LGTM.
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Thanks
 
-> ---
->   .../selftests/mm/split_huge_page_test.c       | 30 ++++++++++++++-----
->   1 file changed, 23 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-> index eccaa347140b..766c1f3a1d78 100644
-> --- a/tools/testing/selftests/mm/split_huge_page_test.c
-> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
-> @@ -261,14 +261,16 @@ void split_pte_mapped_thp(void)
->   	close(kpageflags_fd);
->   }
->   
-> -void split_file_backed_thp(void)
-> +void split_file_backed_thp(int order)
->   {
->   	int status;
->   	int fd, shmem_sysctl_fd;
->   	ssize_t num_written, num_read;
->   	char tmpfs_template[] = "/tmp/thp_split_XXXXXX";
->   	const char *tmpfs_loc = mkdtemp(tmpfs_template);
-> -	char testfile[INPUT_MAX], sysctl_buf[INPUT_MAX] = {0};
-> +	char testfile[INPUT_MAX];
-> +	char sysctl_buf[INPUT_MAX] = {0};
-> +	char file_buf[INPUT_MAX] = {0};
->   	uint64_t pgoff_start = 0, pgoff_end = 1024;
->   	const char *shmem_sysctl = "/sys/kernel/mm/transparent_hugepage/shmem_enabled";
->   	char *opt1, *opt2;
-> @@ -314,7 +316,7 @@ void split_file_backed_thp(void)
->   		ksft_exit_fail_msg("Fail to create file-backed THP split testing file\n");
->   	}
->   
-> -	fd = open(testfile, O_CREAT|O_WRONLY, 0664);
-> +	fd = open(testfile, O_CREAT|O_RDWR, 0664);
->   	if (fd == -1) {
->   		ksft_perror("Cannot open testing file");
->   		goto cleanup;
-> @@ -322,7 +324,6 @@ void split_file_backed_thp(void)
->   
->   	/* write something to the file, so a file-backed THP can be allocated */
->   	num_written = write(fd, tmpfs_loc, strlen(tmpfs_loc) + 1);
-> -	close(fd);
->   
->   	if (num_written < 1) {
->   		ksft_perror("Fail to write data to testing file");
-> @@ -330,8 +331,22 @@ void split_file_backed_thp(void)
->   	}
->   
->   	/* split the file-backed THP */
-> -	write_debugfs(PATH_FMT, testfile, pgoff_start, pgoff_end, 0);
-> +	write_debugfs(PATH_FMT, testfile, pgoff_start, pgoff_end, order);
-> +
-> +	/* check file content after split */
-> +	num_read = lseek(fd, 0, SEEK_SET);
-> +	if (num_read == -1) {
-> +		ksft_perror("Cannot lseek file");
-> +		goto cleanup;
-> +	}
->   
-> +	num_read = read(fd, file_buf, num_written);
-> +	if (num_read < 1 || strncmp(file_buf, tmpfs_loc, num_read)) {
-> +		ksft_print_msg("File content changed, origin: %s, now: %s\n", tmpfs_loc, file_buf);
-> +		goto cleanup;
-> +	}
-> +
-> +	close(fd);
->   	status = unlink(testfile);
->   	if (status) {
->   		ksft_perror("Cannot remove testing file");
-> @@ -520,7 +535,7 @@ int main(int argc, char **argv)
->   	if (argc > 1)
->   		optional_xfs_path = argv[1];
->   
-> -	ksft_set_plan(1+8+2+9);
-> +	ksft_set_plan(1+8+1+9+9);
->   
->   	pagesize = getpagesize();
->   	pageshift = ffs(pagesize) - 1;
-> @@ -537,7 +552,8 @@ int main(int argc, char **argv)
->   			split_pmd_thp_to_order(i);
->   
->   	split_pte_mapped_thp();
-> -	split_file_backed_thp();
-> +	for (i = 0; i < 9; i++)
-> +		split_file_backed_thp(i);
->   
->   	created_tmp = prepare_thp_fs(optional_xfs_path, fs_loc_template,
->   			&fs_loc);
+Changes in v2:
+- Created a dedicated .gitignore
+---
+
+ tools/testing/selftests/.gitignore      | 1 -
+ tools/testing/selftests/tpm2/.gitignore | 4 ++++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/tpm2/.gitignore
+
+diff --git a/tools/testing/selftests/.gitignore b/tools/testing/selftests/.gitignore
+index cb24124ac5b9..674aaa02e396 100644
+--- a/tools/testing/selftests/.gitignore
++++ b/tools/testing/selftests/.gitignore
+@@ -4,7 +4,6 @@ gpiogpio-hammer
+ gpioinclude/
+ gpiolsgpio
+ kselftest_install/
+-tpm2/SpaceTest.log
+
+ # Python bytecode and cache
+ __pycache__/
+diff --git a/tools/testing/selftests/tpm2/.gitignore b/tools/testing/selftests/tpm2/.gitignore
+new file mode 100644
+index 000000000000..910bbdbb336a
+--- /dev/null
++++ b/tools/testing/selftests/tpm2/.gitignore
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0-only
++AsyncTest.log
++SpaceTest.log
++
+--
+2.45.2
+
 
