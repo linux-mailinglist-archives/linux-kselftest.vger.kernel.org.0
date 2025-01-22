@@ -1,47 +1,46 @@
-Return-Path: <linux-kselftest+bounces-24962-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24963-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6978AA198B4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 19:42:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E5EDA198B8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 19:43:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 432183A470E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 18:42:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 227D13A3C94
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 18:43:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F17182165E9;
-	Wed, 22 Jan 2025 18:42:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E264621576C;
+	Wed, 22 Jan 2025 18:43:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="AyIfI0C3"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="MviJPe23"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C840216387;
-	Wed, 22 Jan 2025 18:42:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338D8215F40;
+	Wed, 22 Jan 2025 18:43:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737571327; cv=none; b=g+DTcUiUGRr+fHD5rMdoHZCtiiKMW9IyPxx2mT/8d3hVXVYbK1iC29MWMH69PqiPNUor+IjUTlzkKDdCdlJPsqz9DR3h67ksFUbCc8WWPL7oRoqsbL/L4hIYLcNxKKuDUVLbeFYgY43vESIOMpXfVPkGdVq7VSI1AgTM5s4m9nU=
+	t=1737571430; cv=none; b=Iu03/onQuqtWh5E1cdr9LZZvfQm4ihpSv19XmI5+7z4HMrvR0bQxPSuxpaklNBDS0flqsnVQXLDCYT8w+9L7zxCgK/R2/ttU4fasE16VCG7zZYeQWg1IGOiP43sLyG0TcnZP4E0221/JRG3HDYj34zslsBPpUYLc3kPAQM+2lNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737571327; c=relaxed/simple;
-	bh=A8K4kEnALbhaK90EA/QltWvvng/sBatsp6gsx3xoPh4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bzClJHJcPkR2+RTjSHChc0xvxZVQXq6AgoS0SVUI8f85t3ZMQH8Zx/LA7ApijCUWTgvFXibK6MZeqsFdTIKDGT8xZze9M7UFAAONub+oeLzWtoL1HhWu6ZDoBMRgUl/o+3aQ/KDwrCp3VO7ilzx9aMtYEbkiWDgp2F9GoYGyCH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=AyIfI0C3; arc=none smtp.client-ip=159.69.126.157
+	s=arc-20240116; t=1737571430; c=relaxed/simple;
+	bh=dObc3RHK11QWaQcHlN8j4xogXBmD9s3/vCWqlX0dXRA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=k5reYy6A6DgPyRLOq5dHiME/Gu1pw3um3E/oixi/OMBT9oClWZplGCw5AJ//EP37N7eAsHGQg0m4hzWYrQ0RymRqQ+GgqHNNoHR52QUtQd8dto99nQ0PFgQVvg0pfn+XLkeNsDL02xjLr6G4TV2h5irqAU6PNeOUBWVQmF8n72M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=MviJPe23; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1737571320;
-	bh=A8K4kEnALbhaK90EA/QltWvvng/sBatsp6gsx3xoPh4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=AyIfI0C34xeeNJHWJsElgrr+J0AnfY+KBDV1oSoA5cg6FsTKrqhZXqZ48HW9tkp9m
-	 Rp5euPGHpkvum7SIX3UqcbU9expQXe5R2PfJUcWi3XnvVZ9iEzzRBTycPdInAA/uwq
-	 EKAZ/HNiqb+mYYsdKhUoPKOM2TsrCeTv1B5bCQOA=
+	s=mail; t=1737571427;
+	bh=dObc3RHK11QWaQcHlN8j4xogXBmD9s3/vCWqlX0dXRA=;
+	h=From:Subject:Date:To:Cc:From;
+	b=MviJPe23p/ltyQwNZVtwM2RahmHvzeIm91z/PBnDpq5QfrW49Vt/8zIYgkN1xfkJK
+	 AM2M8ji2LG6JiTCMRZs7hmTUZmsPLpiwwuHrp1vQ5DM8c5v93YTvu7GtldMjqZsW9t
+	 mGI+od5Wi6TGWQZxuOFXTG15EHtUOvzZI/GgllYg=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 22 Jan 2025 19:41:48 +0100
-Subject: [PATCH 5/5] selftests/nolibc: always keep test kernel
- configuration up to date
+Subject: [PATCH 0/2] tools/nolibc: support for 32-bit s390
+Date: Wed, 22 Jan 2025 19:43:44 +0100
+Message-Id: <20250122-nolibc-s390-v1-0-8c765f00e871@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,55 +49,47 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250122-nolibc-config-v1-5-a697db968b49@weissschuh.net>
-References: <20250122-nolibc-config-v1-0-a697db968b49@weissschuh.net>
-In-Reply-To: <20250122-nolibc-config-v1-0-a697db968b49@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAGA8kWcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDQyMj3bz8nMykZN1iY0sD3VRTc0MTQzMLo2QLCyWgjoKi1LTMCrBp0bG
+ 1tQA5axGrXQAAAA==
+X-Change-ID: 20250122-nolibc-s390-e57141682c88
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1737571320; l=1321;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1737571427; l=972;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=A8K4kEnALbhaK90EA/QltWvvng/sBatsp6gsx3xoPh4=;
- b=gihzhLPvfLe4M4KsafiLgYBONMRevk/riZj1XdcMGHvpkPw8mnF4ciB6TmligMzBORWq90IZ1
- dYrK0AVLgNQC1QqE9+nx6j2d7kv6bkvcROjVMUyCmSRJxfSJFdnk25z
+ bh=dObc3RHK11QWaQcHlN8j4xogXBmD9s3/vCWqlX0dXRA=;
+ b=yABwnlTUicxIg9CJ4eRhROEf8pSFLtGQwgbz9CSmo45DWfAsmbptoK/Gw0h6dKQACzoIBThy2
+ 4iVo/Yxd5kNDd+h8ZoiNsskd1l9QAwQIKyTk8hbi1Db8P/By2C97R3U
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Avoid using a stale test kernel configuration by always synchronizing
-it to the current source tree.
-kbuild is smart enough to avoid spurious rebuilds.
+Support for 32-bit s390 is very easy to implement and useful for
+testing. For example I used to test some generic compat_ptr() logic,
+which is only testable on 32-bit s390.
+
+The series depends on my other series
+"selftests/nolibc: test kernel configuration cleanups".
+(It's not a hard dependency, only a minor diff conflict)
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/run-tests.sh | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Thomas Weißschuh (2):
+      selftests/nolibc: rename s390 to s390x
+      tools/nolibc: add support for 32-bit s390
 
-diff --git a/tools/testing/selftests/nolibc/run-tests.sh b/tools/testing/selftests/nolibc/run-tests.sh
-index 9c5160c5388122deeeb59ecfced7633000d69b10..664f92e1c5500f726ab33247321b96e8602ce185 100755
---- a/tools/testing/selftests/nolibc/run-tests.sh
-+++ b/tools/testing/selftests/nolibc/run-tests.sh
-@@ -158,9 +158,6 @@ test_arch() {
- 	MAKE=(make -j"${nproc}" XARCH="${arch}" CROSS_COMPILE="${cross_compile}" LLVM="${llvm}" O="${build_dir}")
- 
- 	mkdir -p "$build_dir"
--	if [ "$test_mode" = "system" ] && [ ! -f "${build_dir}/.config" ]; then
--		swallow_output "${MAKE[@]}" defconfig
--	fi
- 	case "$test_mode" in
- 		'system')
- 			test_target=run
-@@ -173,7 +170,7 @@ test_arch() {
- 			exit 1
- 	esac
- 	printf '%-15s' "$arch:"
--	swallow_output "${MAKE[@]}" CFLAGS_EXTRA="$CFLAGS_EXTRA" "$test_target" V=1
-+	swallow_output "${MAKE[@]}" CFLAGS_EXTRA="$CFLAGS_EXTRA" defconfig "$test_target" V=1
- 	cp run.out run.out."${arch}"
- 	"${MAKE[@]}" report | grep passed
- }
+ tools/include/nolibc/arch-s390.h            |  5 +++++
+ tools/include/nolibc/arch.h                 |  2 +-
+ tools/testing/selftests/nolibc/Makefile     | 10 ++++++++--
+ tools/testing/selftests/nolibc/run-tests.sh |  8 +++++++-
+ 4 files changed, 21 insertions(+), 4 deletions(-)
+---
+base-commit: 0597614d84c8593ba906418bf3c0c0de1e02e82a
+change-id: 20250122-nolibc-s390-e57141682c88
 
+Best regards,
 -- 
-2.48.1
+Thomas Weißschuh <linux@weissschuh.net>
 
 
