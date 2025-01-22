@@ -1,215 +1,189 @@
-Return-Path: <linux-kselftest+bounces-24902-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24903-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42665A1885B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 00:26:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AA7DA188DD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 01:21:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15C4B164761
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2025 23:26:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF5BB161565
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 00:21:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5894F1F8F0C;
-	Tue, 21 Jan 2025 23:25:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 133A9946F;
+	Wed, 22 Jan 2025 00:21:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="KqSnP1X8"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="f7C1CyI/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2083.outbound.protection.outlook.com [40.107.220.83])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5DC1F8AFB
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Jan 2025 23:25:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737501959; cv=none; b=fxcyJm/87KnnpKenuwBGDYSNacKRKNw6Jbh2kORNmla4P66Llah4eXLGcY3Qib8NjSiMCcDquxxOC91R20gAuFP0mOOibLItuxwOfajK06FAnWdYemCEXYNYPAjcrnsu+IvE6kI2JKdYVhYe8mzMOPqxBus8HlEoZ/r+8xoW/KU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737501959; c=relaxed/simple;
-	bh=cz/dVmW3aJtt8LKJn620gaLE9dIYgrPkUQzRMTgPKPI=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=noY+FryD5kOMetEOVUtWLmwVEfrLFi+gjO1krYgpG/OFwokqf0OBe2qf4M5hoVlq3+8ZgIDWmX9p7cUzy5mUg6fDDgPocwu4NpW8HsGbpNBn7VyefS023zNRHF9kSdWQvkb8R0LYCdZFexFvEAvlIUn+1fo72pFReXoHMIlXPy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=KqSnP1X8; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5da135d3162so10604899a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Jan 2025 15:25:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1737501955; x=1738106755; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:from:subject:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A3FkubpiIgIYRe5Vu+aYS/Wgeny8/cbFGmsF+cMds14=;
-        b=KqSnP1X8eE8aRBTAyFCPlWkKVBzqJrj08uXjUq9RvadZL3ALPYMMupqeNG4G83o8WA
-         P/x2WwFKnv9d7znIyyrR2BV0TT87yi1ZdczIAdj3yJaXwzn8+DJRXTRl26iZw8IS0hvA
-         suqkzDINZeblUt/ALZfWM1wOOiapMZSr11jdR5pZ9X8lRy4iEjalT6n0CexOrTpc64+v
-         nI/UQxhJQAAUohyd6pAR4mRlf2qdSoCGqLNxE3HuKTue57idE7pzs2iigUJ1ttH1A0IJ
-         LXxaYGHW0wqZCyA5yc9hkvIRSGm9J7wwdejUuyHTSOi23LGvGbNEYqagXkXhsIuIW3fh
-         LdwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737501955; x=1738106755;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:from:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=A3FkubpiIgIYRe5Vu+aYS/Wgeny8/cbFGmsF+cMds14=;
-        b=NjSgYsIxXSv3fRoTxnkkIQQ5nXSeB4TtS1FYGTWHFff9QZOJVD41Vs06XVNpf8CcE6
-         L3XuP3dQR8x24dN5mNO+ukfswiFE/onOJTez5akb1YykJaWIWm1rmi9l57HaNjnYtzlB
-         P7ZHfMD0EkNoeGQOKWS8lOR6AJJDs3ZfpyL9mNiuppn+104mT4oobayA+0+m1A3/QuCN
-         F4AN2Mk0lwdJOBcBOYjKJ4S+nJ/ADV0TNx00bln2e/lb6xWk+iSOgO+gREKtPuL5x9Iy
-         OScw11dWiZQzmcWRn8R/18mNQF9pgKQJ0nQsgLiWFqN4HFkwK9UVwc0Dt6qqbnT4Wwfh
-         hNsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVNjuV9x+md44FMOF9kLilPYDyzWJAKU0WLHCqZ1nAXDrFqmM6v6KyFWZMWnCObK3eUuQn0pB7VFQthkBDllY8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyoiGeAOv+EJqHHCUT21RnM0MPb7SB4RtJlSnP0SEs8HGAGe86k
-	GHkmuYiNSaB96ygkwcwnwPCPDzdV29xzOYkjqMoywq+1T8HKMNcGLWs/6+QfeAQ=
-X-Gm-Gg: ASbGncvX0w16fmVDInL6Qyt7kmfizqh1HwhinX/jTBzj2m9RoPFnZmRnXJsR6rbqCsg
-	3FoyaCZRIXSFaVHEHEsBnPwbxA/eG/RaBCLGGWNWiI+WzzdhT/PLb9ndvUwcC83Fhdb6yK7t/lX
-	mYP3BkvnCRjIYOMXzwOxlgP1tFq7oSa2ZHZbgoUuU/4MqD4bOCtAgMynG5/kyxGQRIYRrhDCGuc
-	pnzKnuAkxQ8XVijkiJ+12Y0r8F010MotHUkutznSTYSoeRhqfZRlN5hqmmlAn3e+4BdLLH6uOJY
-	VYHUjGevk0BhU0YgdWhFNHL0BS+ARSKo
-X-Google-Smtp-Source: AGHT+IF1N+2ejampxFsnZTvz1u8McOE3PVljexZG/PH7R1gxmqLbjNZfulX2Cc67rEf4xDeOdzUtlA==
-X-Received: by 2002:a05:6402:1ed4:b0:5d2:7199:ae6 with SMTP id 4fb4d7f45d1cf-5db7d2f591emr17933035a12.9.1737501955337;
-        Tue, 21 Jan 2025 15:25:55 -0800 (PST)
-Received: from ?IPV6:2001:67c:2fbc:1:2b1b:6df9:ad3c:c183? ([2001:67c:2fbc:1:2b1b:6df9:ad3c:c183])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dbcfb8ff37sm2461596a12.72.2025.01.21.15.25.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jan 2025 15:25:53 -0800 (PST)
-Message-ID: <10bb8eb7-fdcc-4ab6-8ddb-52491933659e@openvpn.net>
-Date: Wed, 22 Jan 2025 00:26:50 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559DB4A18;
+	Wed, 22 Jan 2025 00:21:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.83
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737505298; cv=fail; b=V6jb8FJtLJSzvJnn/BtvQHvglVvlOcwriIpDf8nZdUNKFqJDKUT2Pgt5us3V7hEKpPhMoslT9A3b++ABWwkKVJD434xsqh+GwP8ms3K3YhbzeOLrpmZxPerliDZResSvDsxeZK4Y1NYJySiZiWr+V2tOqEmesfUd4eHOlbHgMEw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737505298; c=relaxed/simple;
+	bh=hR8z43IgoWvCgObx5CH9l/2LSzndC7W8zcKwMHNuWF8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=AeEAuM5Tgr3C57//iacPhGCkEMuKaTFKE2KWSxIv0eLjtiUVJUsYB5P+tabgNS44tT1Wt8Yn+aU1lmjxYDD2gFD+GyP3pTlstgrPCXYQjL1RYGFzGzxelz7Z7DuZfhlG62hw3Hdri8DR2VhV8O4YZmXNqBsDMGvaJJnk0ZJQx30=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=f7C1CyI/; arc=fail smtp.client-ip=40.107.220.83
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hALv7R9611ifhAlidgZD1PuJ7KT736DAqz2qcWyjFYlhjywng58CkyPenr+sGZ5D0NAqcbSLNKxNW8ibKs/zDzLaEyi99NY59vKuodexq2eE1jW9L5E6u3jkGJKlON8kwiI3p89WXpcWYEkD4jeBJEKN3NZg7OdkAOyd+OloxSQBcGfXJxMqqSEeB9+h8WReoT1j+jcdqYhOOY+7ZLfUyQQcjzcecUAvTs03F9iwqpIPL8UeycU/D2HVkX9HsgKxb96HamvUYJ1mhaAIB2H+QpJjEAEQcfbwXykdNqtIpsbANNJwGZ9o+JsrYxiwEn+HUnKPB+mDJ+JNRUwpo/xiXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nRRio8jcO7px1PUgS6xk6DsgAXxmilYtlC4aqxkj95I=;
+ b=W5/wUfMBdss7mXotCWvRjrvQFOlMHjQq1WJAyzMnz3VwUZmlbiqxhcNpu88J1gNtoGVk7er2o+yov9E4mHiwf+IucoZvpebIj5XA9/NoVeBHXj3WTX1AV1DewvHa8yYA4Gpm+/YU8q/pBp4s+ODwtohKJ59a6Khh5KqK2HhNBHWEkXLzBIRi1FrKtzO1S7cFmGEgnXjLzhwLmZtIhBvrW8kmp3PDGdiBMjwaCI2y0nZUNM+o2xBwyTODOSzGwk62IJ0Mr0AOWYs7L0KETyzVUN0uOtsdSZ0+vYvWDq2rwu846N7R1cDq/Hnv3pa6thIijroIn6msDTOUs53GL7ygIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nRRio8jcO7px1PUgS6xk6DsgAXxmilYtlC4aqxkj95I=;
+ b=f7C1CyI/00m5jRYBZSXwb5eAzr1coRCBjfHQ4705g7cQOGNhZFgU4ROyT+h+op/no7G/3mmFqTxgX6feY5+CUpRT1oXlMJnoaA1XYRNr044wvFEuiifNZ/g2Gw4JK9KWBVEkhCk6dhUfhCRthf8CxITFXJ35NTNib3hQIg4byf/Tl7o9KCAc0EWhvyNTig7kiMPEFv7Zo41nfixKsatV38kZbrxvaosVwzKnw75ymiPUzdFTUdPXlhJDRF7xHhK4IRQcqzyhl+l2u0cKNNG/nXLtmzk0Aim0nTAdBOMsOxQMxniQORyePYFr+5/pYtP+RyyxmRKE/djW3NFq84rsVg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
+ by PH7PR12MB7113.namprd12.prod.outlook.com (2603:10b6:510:1ec::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8335.18; Wed, 22 Jan
+ 2025 00:21:30 +0000
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732%5]) with mapi id 15.20.8356.010; Wed, 22 Jan 2025
+ 00:21:30 +0000
+Date: Tue, 21 Jan 2025 20:21:28 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: kevin.tian@intel.com, corbet@lwn.net, will@kernel.org, joro@8bytes.org,
+	suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
+	dwmw2@infradead.org, baolu.lu@linux.intel.com, shuah@kernel.org,
+	linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	eric.auger@redhat.com, jean-philippe@linaro.org, mdf@kernel.org,
+	mshavit@google.com, shameerali.kolothum.thodi@huawei.com,
+	smostafa@google.com, ddutile@redhat.com, yi.l.liu@intel.com,
+	patches@lists.linux.dev
+Subject: Re: [PATCH v5 08/14] iommufd/viommu: Add iommufd_viommu_report_event
+ helper
+Message-ID: <20250122002128.GC5556@nvidia.com>
+References: <20250114134158.GC5556@nvidia.com>
+ <Z4rVg1Xg5TCiFlSb@nvidia.com>
+ <20250120181854.GQ5556@nvidia.com>
+ <Z463eXfgNArCOfPn@nvidia.com>
+ <20250121183611.GY5556@nvidia.com>
+ <Z4/7pGx6F1mpAUuV@nvidia.com>
+ <20250121200924.GZ5556@nvidia.com>
+ <Z5ALWFVTOSC/8+ji@nvidia.com>
+ <20250121211404.GB5556@nvidia.com>
+ <Z5AUNVHzJPATVqAY@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z5AUNVHzJPATVqAY@nvidia.com>
+X-ClientProxiedBy: YQBPR0101CA0158.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:e::31) To CH3PR12MB8659.namprd12.prod.outlook.com
+ (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v18 20/25] ovpn: implement peer
- add/get/dump/delete via netlink
-From: Antonio Quartulli <antonio@openvpn.net>
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
- ryazanov.s.a@gmail.com, Andrew Lunn <andrew+netdev@lunn.ch>,
- Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Xiao Liang <shaw.leon@gmail.com>
-References: <20250113-b4-ovpn-v18-0-1f00db9c2bd6@openvpn.net>
- <20250113-b4-ovpn-v18-20-1f00db9c2bd6@openvpn.net> <Z4pDpqN2hCc-7DGt@hog>
- <30c50783-096b-4114-aa55-c3edbeb38d49@openvpn.net>
-Content-Language: en-US
-Autocrypt: addr=antonio@openvpn.net; keydata=
- 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
-Organization: OpenVPN Inc.
-In-Reply-To: <30c50783-096b-4114-aa55-c3edbeb38d49@openvpn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|PH7PR12MB7113:EE_
+X-MS-Office365-Filtering-Correlation-Id: 83a5d50e-736f-4b90-8e47-08dd3a7ab7b9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?f0/81J7sro0MpBZEt+fWb+LWBH7Z5t94LPB60xUzaTi0vq3skhUTtMp8DiEj?=
+ =?us-ascii?Q?xqAafLE4ugWdxBTd0HPZvLZsVONMZUIO4slALBy83oMufNNxNh+zZdurc+AW?=
+ =?us-ascii?Q?mB1hAW2p9m0hNawXK7p6WPfN/N8b+DoF1XwXAf8oAuXtDflOvLoSSqq+80cY?=
+ =?us-ascii?Q?uRh8QipCAF6v47W2mIDA3hKt7XOEwIlWSVUuo/QtxsIumd5mntKP1yE7DPnO?=
+ =?us-ascii?Q?3F4bFJzA5JfNzC7EoSs3TOwJ1fWa5BzpMbmDkrFBp33mT65E4to5p256X5IE?=
+ =?us-ascii?Q?R/TqoTwkDnJcmUw8WBH2YVK/eiP3oBEGxZGiqAEqZ5QDTYlz/Y3MmE8MMTM6?=
+ =?us-ascii?Q?FRKh10s1h3aIab90BnBWRKWwVjAH8q3pwRflTgyc3++KMsXp8VaXl15zfulo?=
+ =?us-ascii?Q?j16Y5oOoqOmv9RcyqY3TQQIHSoi2bWpu/uElEETKlrSF8a9RUXk0AFa+KIsJ?=
+ =?us-ascii?Q?6/DuKpLN5lu11qQ+BmodveUQJtX9UP7rpcOlIzx7ytEOFr1j15nUJhNUFxES?=
+ =?us-ascii?Q?pez6jTg7GBd1dxZvmpeJhJr1DldUpdpJPXI7iIf8poeporV1VKqqd4P57dFQ?=
+ =?us-ascii?Q?vn6ac9PIocIqWoKFo0FzrwVYBSJLDYlQe8x0obUCcU+FrljvM87dobStE8Yz?=
+ =?us-ascii?Q?VGh8Yg5tOuM1jkGOlrQeTwfiqsBtV4L7PCjTIOJRUIBx8xA9Ikiq/ve0VcAf?=
+ =?us-ascii?Q?F9jV935Lqg5bu1NB2FZZC9PosCK9gSqzpxrXQ2BIEVOEODiJxvhmRjQydNtQ?=
+ =?us-ascii?Q?nL4mm+6SMq+PCeIfkyLRnlzKRoYpq7FODtHALQueCG9AaDHBYUGriWNJW9lm?=
+ =?us-ascii?Q?KV62tTomHporSdN1KktKVIefXgegFpTZlmOnc2srPsGP6RbLokoSUz5ln23I?=
+ =?us-ascii?Q?sXp8BHRe0yPE/Cgt6oBMYSkDCRlkqfQ0Oz9b8dgRr+C+5UHFi3WGqNF94uys?=
+ =?us-ascii?Q?oqcp/yuEwklIhvtNxuZcx0lTHJ8rMXaj6hVuc3Y8sxVkMhQfzYbWR/+J2/z9?=
+ =?us-ascii?Q?+PFWwTgOAfFOcFXDGkIEVEpf3l2UjBev0y5ksX9taKCxhj2cXiBSsHa+qJAO?=
+ =?us-ascii?Q?GY+EQGM98kRl9Hed7BvMq2ctHQYJcHEVhqIvMpJTaVYO2OVvjWSWjdjPvYIV?=
+ =?us-ascii?Q?LpeWuZQViPMtY1jQptD3ebkPl3Gpo+44nY6ZRINULoz/0XFjrNddpbhxYoOz?=
+ =?us-ascii?Q?OigJo7aq1er9qntxPeWQz2Hs7qQNVZguHD1pPlG1ULIOnprrKLla02Bk4EBk?=
+ =?us-ascii?Q?bpQvwQoOqsse21n2bfUokWpc+NuNnIIJZ7gHtESo66q55UgqYlREPg04Xd1p?=
+ =?us-ascii?Q?1gkUliNgHwl1Hzaocd/ZmL0EA0hSVklFHdKjgW3+TWsITf6OuSI49IEgPTmd?=
+ =?us-ascii?Q?TKXHNNnSk0fvgbNGLu2+40fNDviP?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?0dzmuESVdV6mq1ofobwqr+eNv3YHslu4SPu1CjKN/wKYqtaV2Zo0Bgrntya2?=
+ =?us-ascii?Q?zBgWI+lgqIVYtYjNXc8sFRstqZges1CnFhIxQkoWOsFWh8RPkpUkl9zNlE/P?=
+ =?us-ascii?Q?mg/hU5xk6cdghYIpPKdZPXWUNhfMYM2BrpW0bzkEZmdoou8l2SuCz6GCT4E5?=
+ =?us-ascii?Q?1rXOaB+cABZs+qDYTRzKULhKo4WdCjFfCfn/3HcA9MDs0Alro6iD/YKA1nnf?=
+ =?us-ascii?Q?olYTFS151mimvnNlr8o5J8BMGJtMKMFfU/1mwSHs5HCBhIXVzxaATSBJwfHR?=
+ =?us-ascii?Q?oSrGKj4dZIRpGM8kR5JL3iXFB1oyDXqzBp74Ry2ly45PaDp2KvZPxk1kaxo2?=
+ =?us-ascii?Q?Ux2HO1lbOiKXZ4cM7Ia3YGIneF/zOvsMkdOI4qnKBaebbaXxYnedRFzjDcEP?=
+ =?us-ascii?Q?+P4xxF14XB/iQoWjIDYJ5obfU7lCsBnwKoB/PFiM7wpPuqHrHo/2PAde1Yob?=
+ =?us-ascii?Q?3pb7T7S8jX2a/TaZi0p1dEUQPfQ7SlezkE9H2pgIKzFceFoKfKWPznollSBL?=
+ =?us-ascii?Q?fR/iLsAecZemfmP9W0kGYRj19UYd7TLV7JR6LQCj4wI1LmTkYB9rQnXV3K39?=
+ =?us-ascii?Q?z6p4mywGp2fEJfkZXSxYrJQr/0FyRU69Euis+wdM5gI2sZE6a4ltdaqIWCcz?=
+ =?us-ascii?Q?EyHw96lBtxXBbVzHbDGXd+X+qmWAn35756H4t5BH9qW0lmHGTovjhRn+bN2C?=
+ =?us-ascii?Q?1BGODUOQv1/LEiOvSFD9Oj3GU4lTn5w4pE7/Vl4uwvKsLt6dFEz+VR2w9Vtn?=
+ =?us-ascii?Q?eWjyymxQqnT/iIn5QmSvoXA4qSJvye8SRCDdxz3D/+A3238+zeYxlcZeOGkP?=
+ =?us-ascii?Q?S5JtV4MN/TbDpV86yc6vt6Jwelzt2eW93RiF+BA8tgNX4nzat8g+Rmq2/2ej?=
+ =?us-ascii?Q?nZDcBSCvP2v5OQ4HH7T15pE5s/4CZjJ0m8R2JZWG1ko89n9CYG45YMsbXivK?=
+ =?us-ascii?Q?qnfTZQk1+aeK5FQzlQob6nGYcIhcWPRSoA3sg2GjysaSVx6D4NRD333uJ88k?=
+ =?us-ascii?Q?rijV+md6iqHgGvrWkjufkKGvAXRT9NSDZsO/dtaI21qH0S0Pw3YyIgyr8GTW?=
+ =?us-ascii?Q?0zr4r/y0R3hIA6g5IRJ1cn0mygr7kFFpWUlGEMAn5qDLK0yyC16HKixUO6r0?=
+ =?us-ascii?Q?AzWr/gAfr/Hbg8dnVhalXHMxEBN0AIUOT5kBJapcBHeCOxkZIVDFHIZreJuE?=
+ =?us-ascii?Q?g+JW10zsT+tKiOdvgpLLnoQ9O6ROEncbwFuVFGIeYVJY8jU8PphdGCtB7hep?=
+ =?us-ascii?Q?9ZlJViWgJJ302MPaPeZUMKIrQZv9TpsPzm7AQGYxbpe9ntgaOWbES3cmj5By?=
+ =?us-ascii?Q?X3eO32vCCbXhFuS15r2ZpT3do+YMULRX+T8UH9zaMZLBjKaoE/HBNIy2P/o/?=
+ =?us-ascii?Q?24+zEKUdPqdemSupyqOGYbeEm1ue77/YxV9DzhqpsKvuf3hmjqO0YsLyQttY?=
+ =?us-ascii?Q?RR2ueuiN/7refSdgK2mVmYD79vHDN16FxuS17V1nSUWqCoi/Y3lY14fLVO4n?=
+ =?us-ascii?Q?ZxtH1ygOjDvjtn2p1lMVrg133dUfxYMEAb8rE07Z0h45RWIAOXvbSr7rqDJ/?=
+ =?us-ascii?Q?5Bxm/SgzsVZVgXBVRJdA0gLtvhLZLR81SZHK4Q1X?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 83a5d50e-736f-4b90-8e47-08dd3a7ab7b9
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2025 00:21:30.1585
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: L9cHtTAwjsmJBc4yKjCYXh+aYuX7MiP5RNd5HCxhGm4PRFV2kxVlJMeAqnrAjKrD
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7113
 
-On 20/01/2025 15:52, Antonio Quartulli wrote:
-> On 17/01/2025 12:48, Sabrina Dubroca wrote:
-> [...]
->> -------- 8< --------
->>
->> diff --git a/drivers/net/ovpn/netlink.c b/drivers/net/ovpn/netlink.c
->> index 72357bb5f30b..19aa4ee6d468 100644
->> --- a/drivers/net/ovpn/netlink.c
->> +++ b/drivers/net/ovpn/netlink.c
->> @@ -733,6 +733,9 @@ int ovpn_nl_peer_del_doit(struct sk_buff *skb, 
->> struct genl_info *info)
->>       netdev_dbg(ovpn->dev, "del peer %u\n", peer->id);
->>       ret = ovpn_peer_del(peer, OVPN_DEL_PEER_REASON_USERSPACE);
->> +    if (ret >= 0 && peer->sock)
->> +        wait_for_completion(&peer->sock_detach);
->> +
->>       ovpn_peer_put(peer);
->>       return ret;
->> diff --git a/drivers/net/ovpn/peer.c b/drivers/net/ovpn/peer.c
->> index b032390047fe..6120521d0c32 100644
->> --- a/drivers/net/ovpn/peer.c
->> +++ b/drivers/net/ovpn/peer.c
->> @@ -92,6 +92,7 @@ struct ovpn_peer *ovpn_peer_new(struct ovpn_priv 
->> *ovpn, u32 id)
->>       ovpn_peer_stats_init(&peer->vpn_stats);
->>       ovpn_peer_stats_init(&peer->link_stats);
->>       INIT_WORK(&peer->keepalive_work, ovpn_peer_keepalive_send);
->> +    init_completion(&peer->sock_detach);
->>       ret = dst_cache_init(&peer->dst_cache, GFP_KERNEL);
->>       if (ret < 0) {
->> diff --git a/drivers/net/ovpn/peer.h b/drivers/net/ovpn/peer.h
->> index 7a062cc5a5a4..8c54bf5709ef 100644
->> --- a/drivers/net/ovpn/peer.h
->> +++ b/drivers/net/ovpn/peer.h
->> @@ -112,6 +112,7 @@ struct ovpn_peer {
->>       struct rcu_head rcu;
->>       struct work_struct remove_work;
->>       struct work_struct keepalive_work;
->> +    struct completion sock_detach;
->>   };
->>   /**
->> diff --git a/drivers/net/ovpn/socket.c b/drivers/net/ovpn/socket.c
->> index a5c3bc834a35..7cefac42c3be 100644
->> --- a/drivers/net/ovpn/socket.c
->> +++ b/drivers/net/ovpn/socket.c
->> @@ -31,6 +31,8 @@ static void ovpn_socket_release_kref(struct kref *kref)
->>       sockfd_put(sock->sock);
->>       kfree_rcu(sock, rcu);
->> +
->> +    complete(&sock->peer->sock_detach);
+On Tue, Jan 21, 2025 at 01:40:05PM -0800, Nicolin Chen wrote:
+> > There is also the minor detail of what happens if the hypervisor HW
+> > queue overflows - I don't know the answer here. It is security
+> > concerning since the VM can spam DMA errors at high rate. :|
+> 
+> In my view, the hypervisor queue is the vHW queue for the VM, so
+> it should act like a HW, which means it's up to the guest kernel
+> driver that handles the high rate DMA errors..
 
-I am moving this line to ovpn_socket_put(), right after kref_put() so 
-that every peer going through the socket release will get their 
-complete() invoked.
+I'm mainly wondering what happens if the single physical kernel
+event queue overflows because it is DOS'd by a VM and the hypervisor
+cannot drain it fast enough?
 
-If the peer happens to be the last one owning the socket, kref_put() 
-will first do the detach and only then complete() gets called.
+I haven't looked closely but is there some kind of rate limiting or
+otherwise to mitigate DOS attacks on the shared event queue from VMs?
 
-This requires ovpn_socket_release/put() to take the peer as argument, 
-but that's ok.
-
-This way we should achieve what we needed.
-
-
-Regards,
-
-
--- 
-Antonio Quartulli
-OpenVPN Inc.
-
+Jason
 
