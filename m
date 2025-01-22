@@ -1,204 +1,179 @@
-Return-Path: <linux-kselftest+bounces-24935-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24936-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE284A193DB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 15:28:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E5E9A19423
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 15:41:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BE523AA2F8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 14:27:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D40C31637D4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 14:41:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E53EA213E7B;
-	Wed, 22 Jan 2025 14:27:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53006214213;
+	Wed, 22 Jan 2025 14:41:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L/aWkADl"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b="mRrSeJap"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4287B17C220
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Jan 2025 14:27:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B09F145A18;
+	Wed, 22 Jan 2025 14:40:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737556075; cv=none; b=UC+qTWT6oUV9f5YLuxym7qB6/S6hrMRd69cGmOWFgL3sv7yz+dArW5v3dBhZNvLEL5JBVN8EUUMwOzl+MXeEi1CpRh4ftoS9knMPiN42Y1JLu6B67TVgG/MEx13OvIrCtxrSmwsqVs7MjiE5xLBnyFwXxjtovV4NYKWsQ+nEc4s=
+	t=1737556862; cv=none; b=sTEvHbduICjRrSDVT5rSr20qIzoPivqWDXm+mCR7F50dzgSoLD4PBykU9CynWcdP0/WJFXM1Uci05jLKdbLrLKT2gDeXnWO1ADQfaJ0xkuxPlNkJZuSgUKHMr5JpQYDhNrycBGjzH4sZA8BfFC3CdvHpxyCOTSVHlKM6Q2iQ63A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737556075; c=relaxed/simple;
-	bh=v2xuFYGs+2OBSVxnTcpg2B0/NVyTiHlAQ5vQTngbKJY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eXlib9qtroQxiXKzwfWEeO5dLEvj3PAY64uil1i5sJc3oyjiS2y0CgTflYIYjmvv5HSNHXTpZzT40ThOg/UyZBic0jTQiCIB60LVyO9UzlWqLs81S2ept90DCVcg/zdqYx91TS6ejNkrFjWS3SekPJ00tybUsRFRUMOW8ylgaE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=L/aWkADl; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1737556072;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=xeLiFVQC+FwfnjIjUD2FtqgctddtCSg/hP/Ew4X0Pzw=;
-	b=L/aWkADlT1yeHa2hwT669uPBsCcL17529KNloOf7ld1uL/5h9ElloIl/IW2QmFaSF1z0Xc
-	8asV1Dk5479i9IwOxsm9GsdnEwmsqcO+H7qql8OuPhjfZZDNwmYsrWyq1FZKCcb+BE5uA3
-	RkTQJRaYjfvrUTZz51+d8AgWioseVoM=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-131-KWAhx5-PMYiLXZEZilBwLg-1; Wed, 22 Jan 2025 09:27:51 -0500
-X-MC-Unique: KWAhx5-PMYiLXZEZilBwLg-1
-X-Mimecast-MFC-AGG-ID: KWAhx5-PMYiLXZEZilBwLg
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-38a873178f2so3603820f8f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Jan 2025 06:27:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737556070; x=1738160870;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xeLiFVQC+FwfnjIjUD2FtqgctddtCSg/hP/Ew4X0Pzw=;
-        b=LQXEDhqfWZEWUhnfroBLYGAvdUk9Blu5tGeqIgD+5A3fli9IFMw3TFNCZUANNU8fR5
-         1DXgCLJ+iJzIJmTxhIWIGQdI+Q5oJpvh9P7+t8bGKEulqaM7mK7OxvnDZ8sqD8XRM/WJ
-         UueYVIOUqmj4LYLC6maIXU/xiNlsDNH26M4YH24Cj8M5DIgxMsKKgS1Ym5AQI7UajemF
-         kbm550FL3GURnblDwn6EsPV9cjP5Y+2PlXaoulaGxkbozc/WNQmstbMbIzD4HyYA64e0
-         JvDihR2QvIJOIXnG9MQHhICOlDWmysBvP9hsP1Mx0FQQOZNMBlIC+0QUJjDh4z7CXXpM
-         +Knw==
-X-Forwarded-Encrypted: i=1; AJvYcCW82QAPByOn/rGwhKudBB5p587HY5pdaicZTbGvJ87J1DSfe0QOEvyQPlf74wcJwZEe3QzmMnazoONAnEg6fEQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yylk5b7ogBPcqtai1yNVhf4hNJUs7EB85FRiNCoqNCvBGRDOLti
-	5AjNYo+p3m58CSAfMZMXjaJwqr0V8+j28emwmzljrQEtKJnoflP4gUsvDPD4BUN1zo1XrEIan1J
-	RZAUpG75ToQVOy3afHb6ba15EaGN3zbqk7MYqVGt1QfHLV5mGM9Np4NBXzOuHxnl4bw==
-X-Gm-Gg: ASbGncuEkm3agShFwA9403PZZ7aF57/sHyJxoUfF4VQgPNnoFe0GRLaeLk+qOBYpyHC
-	9OwKPVNmxWmuGra4sWOB2YhFMDLkB9KwdRdoYjygWcjt02ItzFoy9UUMaA9135D2YkTm3QxpaqH
-	V/XYs7rqFpkGonj+2JeCRbUFJyluX4nvLXvfYxwuJ2scebiyEQwSG9VZmiDdnOFCizzWyWJMi4w
-	h+obtAEHjagQ8DaYMvxuDTfIx9+IpD+FqQCvU2sFA323ffYleFYNr7Og87rIuPElMBYiATGRYAT
-	fzAFVWblxk6GTxzz99lMi5WeyvKMqxxgQHRO+RKakg85LQqbBlegGhdm9AVxh5zJazCghSVo+Ou
-	S7uSMI6598EbQa2Y8da/oeA==
-X-Received: by 2002:adf:f682:0:b0:38b:e26d:ea0b with SMTP id ffacd0b85a97d-38bf566c314mr16875534f8f.25.1737556070035;
-        Wed, 22 Jan 2025 06:27:50 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFJI4u3iClTnYhB2b4IdMR//bzTEQCmmMUMNBAg+34VSusxZveEyCW3M9a8kzPr/C9DvHXmXw==
-X-Received: by 2002:adf:f682:0:b0:38b:e26d:ea0b with SMTP id ffacd0b85a97d-38bf566c314mr16875502f8f.25.1737556069623;
-        Wed, 22 Jan 2025 06:27:49 -0800 (PST)
-Received: from ?IPV6:2003:cb:c70b:db00:724d:8b0c:110e:3713? (p200300cbc70bdb00724d8b0c110e3713.dip0.t-ipconnect.de. [2003:cb:c70b:db00:724d:8b0c:110e:3713])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38bf32845e8sm16718293f8f.97.2025.01.22.06.27.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jan 2025 06:27:48 -0800 (PST)
-Message-ID: <3c60c603-04ee-4908-9317-7bf5d3bf24bc@redhat.com>
-Date: Wed, 22 Jan 2025 15:27:47 +0100
+	s=arc-20240116; t=1737556862; c=relaxed/simple;
+	bh=Nokc1dhJGSOrENw8A4LCZ3r/+mwWCxC2KxBLzd+3uW4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=G1S4ucAVw/QVOxWBaXbTo+K1rWjemyL7UOE7K1ix6iQWZcAt+KdxV5FgZ7oU81iNBIpaXxAtstHLuQ0Zdr+8EVskEOguDua7dVThxswpXB5/JShqAPd6yYJau6l1SQDK63CHLNMbgq0mkfXR71juiHSy34xI47st6j3mqP/BxDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=ps.report@gmx.net header.b=mRrSeJap; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1737556857; x=1738161657; i=ps.report@gmx.net;
+	bh=zHOFrdFr5x4yf59pS4XUzoVzQh5NuMEXUwZrqT6WuzI=;
+	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=mRrSeJapTEgPRlJKAS5FqEdDTHPHHozUnMyUQdZjRTc+7ES3JhxAdmju5qz3Zbby
+	 axudDfGn/PF6znNpuPBR2S5K0wuHCK5cJhTuQin9hrWvXMYieFKwNtf7FQA2IWwqP
+	 jPEGmpjvDQ+XZdpRaaR3nYnhPMkecejOTn5QPWo21NS3gmFOfximy8ke/mOJwwHyk
+	 RWIs/K050+wgcyIIZ0gEpddeLTuAAfe8GUYsGkLaMhDwsfZs8JQxCo3ExEcpGKA20
+	 rVY0s2V0Iu2QGsKdF+jmyRjzwkIG/GyeuT41OTm4sOfPemSSTW9Br68C5afFadVjH
+	 sbOoSVT+9+Xut6Fyjg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost ([82.135.81.9]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MgvrB-1t0Cl21NgT-00fyOw; Wed, 22
+ Jan 2025 15:40:57 +0100
+Date: Wed, 22 Jan 2025 15:40:55 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Toke
+ =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>, Frederic
+ Weisbecker <frederic@kernel.org>, Artem Chernyshev
+ <artem.chernyshev@red-soft.ru>, Nam Cao <namcao@linutronix.de>
+Subject: Re: [PATCH net-next v1 5/5] selftest: net: add proc_net_pktgen
+Message-ID: <20250122154055.04eb490c@gmx.net>
+In-Reply-To: <20250117131154.0f3d2057@kernel.org>
+References: <20250117141613.691452-1-ps.report@gmx.net>
+	<20250117141613.691452-6-ps.report@gmx.net>
+	<20250117131154.0f3d2057@kernel.org>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] mm/huge_memory: allow split shmem large folio to any
- lower order
-To: Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org,
- Andrew Morton <akpm@linux-foundation.org>,
- Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Ryan Roberts <ryan.roberts@arm.com>, Hugh Dickins <hughd@google.com>,
- Yang Shi <yang@os.amperecomputing.com>, Miaohe Lin <linmiaohe@huawei.com>,
- Kefeng Wang <wangkefeng.wang@huawei.com>, Yu Zhao <yuzhao@google.com>,
- John Hubbard <jhubbard@nvidia.com>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250122124047.1216024-1-ziy@nvidia.com>
- <20250122124047.1216024-2-ziy@nvidia.com>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <20250122124047.1216024-2-ziy@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:01+cQZpkgVE6SYNivB3HwadtyhOk2tflhZJCAr7088kWJG6uFO1
+ X2PLQIsoAaeHGQGDQ1YiSWfkPA7SZexUiM1ZKt9wudiXLdQORjJ1J0hQ/kKEr2bgUaYsXbR
+ GWdVrox/3LGiClIa4JKbVsAcztupg71vIkcvRJV4RaZUqkmNeNy25RB3q8TNRYOxy45nGL3
+ Qui08cYDDx1WIem2z3UjQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:v4g1awnqSD4=;T/dOyQN24p0qy3qc4G4UU4l+hv+
+ xUyeAyilt1bgxL9Wvtb5ttQ6G6g2VOWUujNB9uJ87lWMNpCGYmoZ7GyIYt/ZDl5o/2FiFhdMt
+ oG4/WbES0TJogT4xd92wXg2hxlpbWiBbMN3APpRT48L/Msgaoy2ZqR0JH0cCv4djyQNlE7l8t
+ OssjdtmaLfWuQ/wsUgyZuu0oGSd9U4gaP9wzNjsYGcVSkhb54NpS04SArob2jqACh7CQgJcXN
+ HhWb6B5tMpzublZ3/I1emT68ZGdbFlpMUeqI+IRRCGdzJACAApbT6BQuXbxSLclXAhd/LgQHl
+ NJhOmn37L99DEaZ5KclpjCcOGfeZh60U1C2UKMsICu8+kLcYtitfphe6ojKBicBGOyUJQc7QL
+ LphEOOgRYVviHG9jxR079OPKreqO6GvL/G1r41Ois0Zp7MW3ZNqlOe4N+OMIDTo0DnX2+yzqS
+ Cuqfma9oiKRd9DVcl0h2IxqxRo3+SaAo9juk2YRqnHWIGBPpqwVsu1FqjXOG1dQJyEUgo13Ic
+ 8EYqLzUX3pJhPV6R349VvrTKLlstwZQmqW5/UJ5UZwNO088Tz4G6JIDDWyATcnSkDi5plB8rs
+ KUngW/0v+53bkwkqzH37+5Q8MU+HvUAZUI0/NtJd9Bg6TfGrDGVuQR9utbcWW/5K6fjlXRNYa
+ 9ac8PXINnBKVJmuYVV1D/HD9AVTXfROe6cIZcO6bZB9trKON8RjBdGcY4jyADxHUV6TTxUBj8
+ tApzzMUdvWGe4vAc6ta9uRS7IKbhiXQhZExqQg5M9B94E+nQL4B7mZpVDE0sdy61sKMpwGVQW
+ blucLzojXtjMjzFiEGotr8Jjc8wdact+E2MrBETFs5wgHB3Z2b4l4lXxGUKb6c20uTv8wAsO3
+ qX1An/JNWQjriEuEumi22BdgQS073ZMGEhYt7ngEse29AbAiDeGMNsMZZ3tC/n0ZNX0poNoB9
+ X2RAo60wtoVvNFp3XmwKqHEyGjmvBxZ8UXur7Qp6DENmu1gGkvqqD7Xqz2jw20P4emG/HePz7
+ AhWP7PnivKEcPx9CInwprJdF7YB72uxSHVm9r0B6vzB3H9R19w6XvIrkDrvyJtpQWDZ72V+JT
+ r6nEQctHnv25ZJ2ZKiETeS1+4dGzCqxzf2gyHnkf81fn8xsFojtx0vffBuzlSQLSfoF9yfZh7
+ PKtogRMX8tWHlT0968TlypnZDUKedv/ywx8wrKMjms5Ekn5kR84hHNm8G9rDA8kSDDgRwWDC2
+ 0VzYsX+1CfDM
 
-On 22.01.25 13:40, Zi Yan wrote:
-> Commit 4d684b5f92ba ("mm: shmem: add large folio support for tmpfs") has
-> added large folio support to shmem. Remove the restriction in
-> split_huge_page*().
-> 
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> ---
->   mm/huge_memory.c | 8 +-------
->   1 file changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index 3d3ebdc002d5..deb4e72daeb9 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -3299,7 +3299,7 @@ static void __split_huge_page(struct page *page, struct list_head *list,
->   		/* Some pages can be beyond EOF: drop them from page cache */
->   		if (tail->index >= end) {
->   			if (shmem_mapping(folio->mapping))
-> -				nr_dropped++;
-> +				nr_dropped += new_nr;
->   			else if (folio_test_clear_dirty(tail))
->   				folio_account_cleaned(tail,
->   					inode_to_wb(folio->mapping->host));
-> @@ -3465,12 +3465,6 @@ int split_huge_page_to_list_to_order(struct page *page, struct list_head *list,
->   			return -EINVAL;
->   		}
->   	} else if (new_order) {
-> -		/* Split shmem folio to non-zero order not supported */
-> -		if (shmem_mapping(folio->mapping)) {
-> -			VM_WARN_ONCE(1,
-> -				"Cannot split shmem folio to non-0 order");
-> -			return -EINVAL;
-> -		}
->   		/*
->   		 * No split if the file system does not support large folio.
->   		 * Note that we might still have THPs in such mappings due to
+Hello Jakub,
 
+On Fri, 17 Jan 2025 13:11:54 -0800, Jakub Kicinski <kuba@kernel.org> wrote=
+:
 
-Acked-by: David Hildenbrand <david@redhat.com>
+> On Fri, 17 Jan 2025 15:16:13 +0100 Peter Seiderer wrote:
+> > +FIXTURE_SETUP(proc_net_pktgen) {
+> > +	ssize_t len;
+> > +
+> > +	self->ctrl_fd =3D open("/proc/net/pktgen/kpktgend_0", O_RDWR);
+> > +	ASSERT_GE(self->ctrl_fd, 0) TH_LOG("CONFIG_NET_PKTGEN not enabled, m=
+odule pktgen nod loaded?");
+>
+> nod -> not?
 
--- 
-Cheers,
+Fixed...
 
-David / dhildenb
+>
+> Please take a look at the instructions here:
+> https://github.com/linux-netdev/nipa/wiki/How-to-run-netdev-selftests-CI=
+-style
+> the test currently fails in our CI, you need to add it to
+> tools/testing/selftests/net/config, and perhaps try to call
+> modprobe in the test?
+
+Thanks for the hint, fixed (modprobe and CONFIG_NET_PKTGEN enabeled)...
+
+>
+> > +	len =3D write(self->ctrl_fd, add_loopback_0, sizeof(add_loopback_0))=
+;
+> > +	ASSERT_EQ(len, sizeof(add_loopback_0)) TH_LOG("device lo@0 already r=
+egistered?");
+>
+> FWIW we prefer to stick to 80 char line width in networking,
+> but it's not a big deal for a test, up to you.
+>
+> > +			// complete command string without/with trailing '\0'
+> > +			 EXPECT_EQ(len, i);
+
+Fixed...
+
+>
+> Run this patch thru checkpatch, please. This looks misaligned.
+
+O.k.
+
+>
+> > +		}
+> > +	}
+> > +}
+>
+> > +#if 0 // needs CONFIG_XFRM
+>
+> Add it to the config, too, then?
+>
+> > +TEST_F(proc_net_pktgen, device_command_spi) {
+> > +	ssize_t len;
+> > +
+> > +	len =3D write(self->device_fd, device_command_spi_0, sizeof(device_c=
+ommand_spi_0));
+> > +	EXPECT_EQ(len, sizeof(device_command_spi_0));
+> > +}
+> > +#endif
+
+'#if' removed as as CONFIG_XFRM is already enabled via tools/testing/selft=
+ests/net/config
+CONFIG_XFRM_INTERFACE/CONFIG_XFRM_USER...
+
+Thanks for review!
+
+New patch iteration is on the way...
+
+Regards,
+Peter
+
+>
+> Thanks for working on a test!
 
 
