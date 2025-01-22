@@ -1,699 +1,240 @@
-Return-Path: <linux-kselftest+bounces-24926-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24927-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5917EA18F73
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 11:13:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60176A190EC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 12:51:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22FA4188D0EC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 10:13:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E12316C907
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2025 11:51:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F34521128A;
-	Wed, 22 Jan 2025 10:13:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 704B4211A35;
+	Wed, 22 Jan 2025 11:51:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="SLMNzzK4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bm1/RMxc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5683211288;
-	Wed, 22 Jan 2025 10:13:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F3B1BDA99;
+	Wed, 22 Jan 2025 11:51:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737540806; cv=none; b=mPKt5bZelLsSpqcI3qfA1CtvTE3rO/NC0VJUwJYoZ7K2KQb39PmookV3Ocsp1RRLESM9jXRUHGsy13SeqalcDVpThXgr4Ge/Numz63s2HgG1IjIUzn195abzniIwHedwjPuP5fjEuvPRps3gg9/J5LvjNP82K9yjBOZDO7tpc6Q=
+	t=1737546664; cv=none; b=gAqce4/kQmMF/qXUeWr3GwKuBOU0IPXzUK15fL/HTV9+47f3RhJcGqd18ZlSlyt5AOCPjUnvtR5kixf7Kz/tzQwnpRdTzU01VbqCPGr+XX1SHXIq3hkT55k6MrD8ZLVJPBLmFWp33YHW8LShWMMByTKP8t/NLJPZT950mGtxYxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737540806; c=relaxed/simple;
-	bh=G5z7pMC45r4nJRLpe5qwR1sKLnk/5FDqvJciXhf3F3g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iaWHFVmmgETaxYpnCQnNReb5Gubb5KLln2NvzEK2N94VdkZf8KkP8tFmHMDhtQiDX0Ub93Rv2yXy5lo440QaCOzj2VdTC5WIQnZFyEKAtL8O/z9P2Sv1uXBYeDRXJOmwzihqaMqb5Qu1J5vSXIG2UPGR0V9cNe0C+KqBg8ozoW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=SLMNzzK4; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=Hz+Uv
-	DI1mcE2szDzkjAFuzI4BlNurJ16wgB0d8gEjos=; b=SLMNzzK4nCekD5JGNioiT
-	EZ5m6uVlQf5sTcG2JRYz8DzAoDzMdpx5kNrnsuyldr8GLoHCyTnpfJMgAhIV2mhW
-	lVim8rqOg/4cZncMO9jvbrVc9YoLJ94e93v4O75W/hh3WbydJK5QsrOBIjTPwWUa
-	+TAHSPpZhwuMe5EryquNLY=
-Received: from localhost.localdomain (unknown [47.252.33.72])
-	by gzsmtp3 (Coremail) with SMTP id PigvCgAHUcjUw5Bn_UIhKA--.64788S7;
-	Wed, 22 Jan 2025 18:10:34 +0800 (CST)
-From: Jiayuan Chen <mrpre@163.com>
-To: bpf@vger.kernel.org,
-	jakub@cloudflare.com,
-	john.fastabend@gmail.com
-Cc: netdev@vger.kernel.org,
-	martin.lau@linux.dev,
-	ast@kernel.org,
-	edumazet@google.com,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
+	s=arc-20240116; t=1737546664; c=relaxed/simple;
+	bh=63j/7wGwXuaZ+NknazkPZcLSbOn14PDE1Z9XGe727YY=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UXezq8AIs5TuhcICzTybXhj73kFXOp5ZAfNYD0utQZZYnSPXEsNeuzVjX/6GJ0gX3klvZCG4EsrCVBWLVANhMF4pWfzBmIg4eXjo5NG6YbdPJpgLopZA/XuchxPPXIB+3Je1anRRiE34nAoV/8ihWH4KpVi6oMteH228yVr0VyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bm1/RMxc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E212C4CED6;
+	Wed, 22 Jan 2025 11:51:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737546663;
+	bh=63j/7wGwXuaZ+NknazkPZcLSbOn14PDE1Z9XGe727YY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Bm1/RMxck4trtFrCjtNR5Hr3WVRwSzcTg8mHPDDsGFzqILgDQCTHYZPFCP7yEIW5T
+	 2Ifx9T6vuaoMd9legXGRzIRj7H0qdadj21n1znxFORY07HA1E1c8qt79AKjdjNN/aU
+	 5/gNpls7dNGiDQsBkdCgJwBBj/s6JcIMdilgZ+fobGSlYdAMQEOpFt3Fkg3oOXt7rW
+	 UuDU+Ltd4Bpi61+iEm1Sj7e5R/tPsOnmAyYIJP0udAQSHPbn40tDten9tSmjOVkMuE
+	 Do4Lh4anKNxBzar9MAqXULoRLOlFUkcdJQpusEeTZVsjcT2hPSCJFFBkG01NPHI1bk
+	 /Up+rN3Q+Ei4Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1taZG9-00ENwN-A9;
+	Wed, 22 Jan 2025 11:51:01 +0000
+Date: Wed, 22 Jan 2025 11:51:00 +0000
+Message-ID: <86o6zzukwr.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Mark Brown <broonie@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Dave Martin <Dave.Martin@arm.com>,
+	Fuad Tabba <tabba@google.com>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	song@kernel.org,
-	andrii@kernel.org,
-	mhal@rbox.co,
-	yonghong.song@linux.dev,
-	daniel@iogearbox.net,
-	xiyou.wangcong@gmail.com,
-	horms@kernel.org,
-	corbet@lwn.net,
-	eddyz87@gmail.com,
-	cong.wang@bytedance.com,
-	shuah@kernel.org,
-	mykolal@fb.com,
-	jolsa@kernel.org,
-	haoluo@google.com,
-	sdf@fomichev.me,
-	kpsingh@kernel.org,
+	kvm@vger.kernel.org,
 	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf v9 5/5] selftests/bpf: add strparser test for bpf
-Date: Wed, 22 Jan 2025 18:09:17 +0800
-Message-ID: <20250122100917.49845-6-mrpre@163.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20250122100917.49845-1-mrpre@163.com>
-References: <20250122100917.49845-1-mrpre@163.com>
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC v3 09/27] KVM: arm64: Factor SVE guest exit handling out into a function
+In-Reply-To: <Z4pAMaEYvdLpmbg2@J2N7QTR9R3>
+References: <20241220-kvm-arm64-sme-v3-0-05b018c1ffeb@kernel.org>
+	<20241220-kvm-arm64-sme-v3-9-05b018c1ffeb@kernel.org>
+	<Z4pAMaEYvdLpmbg2@J2N7QTR9R3>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PigvCgAHUcjUw5Bn_UIhKA--.64788S7
-X-Coremail-Antispam: 1Uf129KBjvAXoW3Zw1xCw15Zry3Xw18Cw1fXrb_yoW8CF47Jo
-	Z3uan5Xw4xGwnxJrykW3yUCw4fWF4xXr4DXr47J3yUuF1jyF42vayUGws3Ww1akr4Sgryf
-	JFWjva4rWr45Ar4fn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvj4Rc18vDUUUU
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/xtbBDxfcp2eQus6wvAAAss
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: mark.rutland@arm.com, broonie@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, catalin.marinas@arm.com, suzuki.poulose@arm.com, will@kernel.org, pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org, Dave.Martin@arm.com, tabba@google.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Add test cases for bpf + strparser and separated them from
-sockmap_basic, as strparser has more encapsulation and parsing
-capabilities compared to standard sockmap.
+On Fri, 17 Jan 2025 11:34:09 +0000,
+Mark Rutland <mark.rutland@arm.com> wrote:
+> 
+> On Fri, Dec 20, 2024 at 04:46:34PM +0000, Mark Brown wrote:
+> > The SVE portion of kvm_vcpu_put() is quite large, especially given the
+> > comments required.  When we add similar handling for SME the function
+> > will get even larger, in order to keep things managable factor the SVE
+> > portion out of the main kvm_vcpu_put().
+> 
+> While investigating some problems with SVE I spotted a latent bug in
+> this area where I suspect the fix will conflict with / supersede this
+> rework. Details below; IIUC the bug was introduced in commit:
+> 
+>   8c8010d69c132273 ("KVM: arm64: Save/restore SVE state for nVHE")
+> 
+> > Signed-off-by: Mark Brown <broonie@kernel.org>
+> > ---
+> >  arch/arm64/kvm/fpsimd.c | 67 +++++++++++++++++++++++++++----------------------
+> >  1 file changed, 37 insertions(+), 30 deletions(-)
+> > 
+> > diff --git a/arch/arm64/kvm/fpsimd.c b/arch/arm64/kvm/fpsimd.c
+> > index 09b65abaf9db60cc57dbc554ad2108a80c2dc46b..3c2e0b96877ac5b4f3b9d8dfa38975f11b74b60d 100644
+> > --- a/arch/arm64/kvm/fpsimd.c
+> > +++ b/arch/arm64/kvm/fpsimd.c
+> > @@ -151,6 +151,41 @@ void kvm_arch_vcpu_ctxsync_fp(struct kvm_vcpu *vcpu)
+> >  	}
+> >  }
+> >  
+> > +static void kvm_vcpu_put_sve(struct kvm_vcpu *vcpu)
+> > +{
+> > +	u64 zcr;
+> > +
+> > +	if (!vcpu_has_sve(vcpu))
+> > +		return;
+> > +
+> > +	zcr = read_sysreg_el1(SYS_ZCR);
+> > +
+> > +	/*
+> > +	 * If the vCPU is in the hyp context then ZCR_EL1 is loaded
+> > +	 * with its vEL2 counterpart.
+> > +	 */
+> > +	__vcpu_sys_reg(vcpu, vcpu_sve_zcr_elx(vcpu)) = zcr;
+> > +
+> > +	/*
+> > +	 * Restore the VL that was saved when bound to the CPU, which
+> > +	 * is the maximum VL for the guest. Because the layout of the
+> > +	 * data when saving the sve state depends on the VL, we need
+> > +	 * to use a consistent (i.e., the maximum) VL.  Note that this
+> > +	 * means that at guest exit ZCR_EL1 is not necessarily the
+> > +	 * same as on guest entry.
+> > +	 *
+> > +	 * ZCR_EL2 holds the guest hypervisor's VL when running a
+> > +	 * nested guest, which could be smaller than the max for the
+> > +	 * vCPU. Similar to above, we first need to switch to a VL
+> > +	 * consistent with the layout of the vCPU's SVE state. KVM
+> > +	 * support for NV implies VHE, so using the ZCR_EL1 alias is
+> > +	 * safe.
+> > +	 */
+> > +	if (!has_vhe() || (vcpu_has_nv(vcpu) && !is_hyp_ctxt(vcpu)))
+> > +		sve_cond_update_zcr_vq(vcpu_sve_max_vq(vcpu) - 1,
+> > +				       SYS_ZCR_EL1);
+> > +}
+> > +
+> >  /*
+> >   * Write back the vcpu FPSIMD regs if they are dirty, and invalidate the
+> >   * cpu FPSIMD regs so that they can't be spuriously reused if this vcpu
+> > @@ -179,38 +214,10 @@ void kvm_arch_vcpu_put_fp(struct kvm_vcpu *vcpu)
+> >  	}
+> 
+> A little before this context, kvm_arch_vcpu_put_fp() calls
+> local_irq_save(), which indicates that IRQs can be taken before this
+> point, which is deeply suspicious.
+> 
+> If IRQs are enabled, then it's possible to take an IRQ and potentially
+> run a softirq handler which uses kernel-mode NEON. That means
+> kernel_neon_begin() will try to save the live FPSIMD/SVE/SME state via
+> fpsimd_save_user_state(), using the live value of ZCR_ELx.LEN, which would not
+> be correct per the comment.
+> 
+> Looking at kvm_arch_vcpu_ioctl_run(), the relevant logic is:
+> 
+> 	vcpu_load(vcpu); // calls kvm_arch_vcpu_load_fp()
+> 
+> 	while (ret > 0) {
+> 		preempt_disable();
+> 		local_irq_disable();
+> 
+> 		kvm_arch_vcpu_ctxflush_fp();
+> 		ret = kvm_arm_vcpu_enter_exit(vcpu);
+> 		kvm_arch_vcpu_ctxsync_fp(vcpu);
+> 
+> 		local_irq_enable();
+> 		preempt_enable();
+> 	}
+> 
+> 	vcpu_put(vcpu); // calls kvm_arch_vcpu_put_fp()
+> 
+> ... and the problem can occur at any point after the vCPU has run where IRQs
+> are enabled, i.e, between local_irq_enable() and either local_irq_disable() or
+> vcpu_put()'s call to kvm_arch_vcpu_put_fp().
+> 
+> Note that kernel_neon_begin() calls:
+> 
+> 	fpsimd_save_user_state();
+> 	...
+> 	fpsimd_flush_cpu_state();
+> 
+> ... and fpsimd_save_user_state() will see that the SVE VL is wrong:
+> 
+> 	if (WARN_ON(sve_get_vl() != vl)) {
+> 		force_signal_inject(SIGKILL, SI_KERNEL, 0, 0);
+> 		return;
+> 	}
+> 
+> ... pending a SIGKILL for the VMM thread without saving the vCPU's state
+> before unbinding the live state via fpsimd_flush_cpu_state(), which'll
+> set TIF_FOREIGN_FPSTATE.
+> 
+> AFAICT it's possible to re-enter the vCPU after that happens, whereupon
+> stale vCPU FPSIMD/SVE state will be restored. Upon return to userspace
+> the SIGKILL will be delivered, killing the VMM.
+> 
+> As above, it looks like that's been broken since the nVHE SVE
+> save/restore was introduced in commit:
+> 
+>   8c8010d69c132273 ("KVM: arm64: Save/restore SVE state for nVHE")
+> 
+> The TL;DR summary is that it's not sufficient for kvm_arch_vcpu_put_fp()
+> to fix up ZCR_ELx. Either:
+> 
+> * That needs to be fixed up while IRQs are masked, e.g. by
+>   saving/restoring the host and guest ZCR_EL1 and/or ZCR_ELx values in
+>   kvm_arch_vcpu_ctxflush_fp() and kvm_arch_vcpu_ctxsync_fp()
+> 
+> * The lazy save logic in fpsimd_save_user_state() needs to handle KVM
+>   explicitly, saving the guest's ZCR_EL1 and restoring the host's
+>   ZCR_ELx.
+> 
+> I think we need to fix that before we extend this logic for SME.
 
-Signed-off-by: Jiayuan Chen <mrpre@163.com>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  |  53 --
- .../selftests/bpf/prog_tests/sockmap_strp.c   | 454 ++++++++++++++++++
- .../selftests/bpf/progs/test_sockmap_strp.c   |  53 ++
- 3 files changed, 507 insertions(+), 53 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_strp.c
+So save/restore ZCR_ELx eagerly? If that's what it takes, let's do
+that now.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 0c51b7288978..f8953455db29 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -531,57 +531,6 @@ static void test_sockmap_skb_verdict_shutdown(void)
- 	test_sockmap_pass_prog__destroy(skel);
- }
- 
--static void test_sockmap_stream_pass(void)
--{
--	int zero = 0, sent, recvd;
--	int verdict, parser;
--	int err, map;
--	int c = -1, p = -1;
--	struct test_sockmap_pass_prog *pass = NULL;
--	char snd[256] = "0123456789";
--	char rcv[256] = "0";
--
--	pass = test_sockmap_pass_prog__open_and_load();
--	verdict = bpf_program__fd(pass->progs.prog_skb_verdict);
--	parser = bpf_program__fd(pass->progs.prog_skb_parser);
--	map = bpf_map__fd(pass->maps.sock_map_rx);
--
--	err = bpf_prog_attach(parser, map, BPF_SK_SKB_STREAM_PARSER, 0);
--	if (!ASSERT_OK(err, "bpf_prog_attach stream parser"))
--		goto out;
--
--	err = bpf_prog_attach(verdict, map, BPF_SK_SKB_STREAM_VERDICT, 0);
--	if (!ASSERT_OK(err, "bpf_prog_attach stream verdict"))
--		goto out;
--
--	err = create_pair(AF_INET, SOCK_STREAM, &c, &p);
--	if (err)
--		goto out;
--
--	/* sk_data_ready of 'p' will be replaced by strparser handler */
--	err = bpf_map_update_elem(map, &zero, &p, BPF_NOEXIST);
--	if (!ASSERT_OK(err, "bpf_map_update_elem(p)"))
--		goto out_close;
--
--	/*
--	 * as 'prog_skb_parser' return the original skb len and
--	 * 'prog_skb_verdict' return SK_PASS, the kernel will just
--	 * pass it through to original socket 'p'
--	 */
--	sent = xsend(c, snd, sizeof(snd), 0);
--	ASSERT_EQ(sent, sizeof(snd), "xsend(c)");
--
--	recvd = recv_timeout(p, rcv, sizeof(rcv), SOCK_NONBLOCK,
--			     IO_TIMEOUT_SEC);
--	ASSERT_EQ(recvd, sizeof(rcv), "recv_timeout(p)");
--
--out_close:
--	close(c);
--	close(p);
--
--out:
--	test_sockmap_pass_prog__destroy(pass);
--}
- 
- static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- {
-@@ -1101,8 +1050,6 @@ void test_sockmap_basic(void)
- 		test_sockmap_progs_query(BPF_SK_SKB_VERDICT);
- 	if (test__start_subtest("sockmap skb_verdict shutdown"))
- 		test_sockmap_skb_verdict_shutdown();
--	if (test__start_subtest("sockmap stream parser and verdict pass"))
--		test_sockmap_stream_pass();
- 	if (test__start_subtest("sockmap skb_verdict fionread"))
- 		test_sockmap_skb_verdict_fionread(true);
- 	if (test__start_subtest("sockmap skb_verdict fionread on drop"))
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c b/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
-new file mode 100644
-index 000000000000..621b3b71888e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
-@@ -0,0 +1,454 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <error.h>
-+#include <netinet/tcp.h>
-+#include <test_progs.h>
-+#include "sockmap_helpers.h"
-+#include "test_skmsg_load_helpers.skel.h"
-+#include "test_sockmap_strp.skel.h"
-+
-+#define STRP_PKT_HEAD_LEN 4
-+#define STRP_PKT_BODY_LEN 6
-+#define STRP_PKT_FULL_LEN (STRP_PKT_HEAD_LEN + STRP_PKT_BODY_LEN)
-+
-+static const char packet[STRP_PKT_FULL_LEN] = "head+body\0";
-+static const int test_packet_num = 100;
-+
-+/* Current implementation of tcp_bpf_recvmsg_parser() invokes data_ready
-+ * with sk held if an skb exists in sk_receive_queue. Then for the
-+ * data_ready implementation of strparser, it will delay the read
-+ * operation if sk is held and EAGAIN is returned.
-+ */
-+static int sockmap_strp_consume_pre_data(int p)
-+{
-+	int recvd;
-+	bool retried = false;
-+	char rcv[10];
-+
-+retry:
-+	errno = 0;
-+	recvd = recv_timeout(p, rcv, sizeof(rcv), 0, 1);
-+	if (recvd < 0 && errno == EAGAIN && retried == false) {
-+		/* On the first call, EAGAIN will certainly be returned.
-+		 * A 1-second wait is enough for the workqueue to finish.
-+		 */
-+		sleep(1);
-+		retried = true;
-+		goto retry;
-+	}
-+
-+	if (!ASSERT_EQ(recvd, STRP_PKT_FULL_LEN, "recv error or truncated data") ||
-+	    !ASSERT_OK(memcmp(packet, rcv, STRP_PKT_FULL_LEN),
-+				"data mismatch"))
-+		return -1;
-+	return 0;
-+}
-+
-+static struct test_sockmap_strp *sockmap_strp_init(int *out_map, bool pass,
-+						   bool need_parser)
-+{
-+	struct test_sockmap_strp *strp = NULL;
-+	int verdict, parser;
-+	int err;
-+
-+	strp = test_sockmap_strp__open_and_load();
-+	*out_map = bpf_map__fd(strp->maps.sock_map);
-+
-+	if (need_parser)
-+		parser = bpf_program__fd(strp->progs.prog_skb_parser_partial);
-+	else
-+		parser = bpf_program__fd(strp->progs.prog_skb_parser);
-+
-+	if (pass)
-+		verdict = bpf_program__fd(strp->progs.prog_skb_verdict_pass);
-+	else
-+		verdict = bpf_program__fd(strp->progs.prog_skb_verdict);
-+
-+	err = bpf_prog_attach(parser, *out_map, BPF_SK_SKB_STREAM_PARSER, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach stream parser"))
-+		goto err;
-+
-+	err = bpf_prog_attach(verdict, *out_map, BPF_SK_SKB_STREAM_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach stream verdict"))
-+		goto err;
-+
-+	return strp;
-+err:
-+	test_sockmap_strp__destroy(strp);
-+	return NULL;
-+}
-+
-+/* Dispatch packets to different socket by packet size:
-+ *
-+ *                      ------  ------
-+ *                     | pkt4 || pkt1 |... > remote socket
-+ *  ------ ------     / ------  ------
-+ * | pkt8 | pkt7 |...
-+ *  ------ ------     \ ------  ------
-+ *                     | pkt3 || pkt2 |... > local socket
-+ *                      ------  ------
-+ */
-+static void test_sockmap_strp_dispatch_pkt(int family, int sotype)
-+{
-+	int i, j, zero = 0, one = 1, recvd;
-+	int err, map;
-+	int c0 = -1, p0 = -1, c1 = -1, p1 = -1;
-+	struct test_sockmap_strp *strp = NULL;
-+	int test_cnt = 6;
-+	char rcv[10];
-+	struct {
-+		char	data[7];
-+		int	data_len;
-+		int	send_cnt;
-+		int	*receiver;
-+	} send_dir[2] = {
-+		/* data expected to deliver to local */
-+		{"llllll", 6, 0, &p0},
-+		/* data expected to deliver to remote */
-+		{"rrrrr",  5, 0, &c1}
-+	};
-+
-+	strp = sockmap_strp_init(&map, false, false);
-+	if (!ASSERT_TRUE(strp, "sockmap_strp_init"))
-+		return;
-+
-+	err = create_socket_pairs(family, sotype, &c0, &c1, &p0, &p1);
-+	if (!ASSERT_OK(err, "create_socket_pairs()"))
-+		goto out;
-+
-+	err = bpf_map_update_elem(map, &zero, &p0, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(p0)"))
-+		goto out_close;
-+
-+	err = bpf_map_update_elem(map, &one, &p1, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(p1)"))
-+		goto out_close;
-+
-+	err = setsockopt(c1, IPPROTO_TCP, TCP_NODELAY, &zero, sizeof(zero));
-+	if (!ASSERT_OK(err, "setsockopt(TCP_NODELAY)"))
-+		goto out_close;
-+
-+	/* deliver data with data size greater than 5 to local */
-+	strp->data->verdict_max_size = 5;
-+
-+	for (i = 0; i < test_cnt; i++) {
-+		int d = i % 2;
-+
-+		xsend(c0, send_dir[d].data, send_dir[d].data_len, 0);
-+		send_dir[d].send_cnt++;
-+	}
-+
-+	for (i = 0; i < 2; i++) {
-+		for (j = 0; j < send_dir[i].send_cnt; j++) {
-+			int expected = send_dir[i].data_len;
-+
-+			recvd = recv_timeout(*send_dir[i].receiver, rcv,
-+					     expected, MSG_DONTWAIT,
-+					     IO_TIMEOUT_SEC);
-+			if (!ASSERT_EQ(recvd, expected, "recv_timeout()"))
-+				goto out_close;
-+			if (!ASSERT_OK(memcmp(send_dir[i].data, rcv, recvd),
-+				       "data mismatch"))
-+				goto out_close;
-+		}
-+	}
-+out_close:
-+	close(c0);
-+	close(c1);
-+	close(p0);
-+	close(p1);
-+out:
-+	test_sockmap_strp__destroy(strp);
-+}
-+
-+/* We have multiple packets in one skb
-+ * ------------ ------------ ------------
-+ * |  packet1  |   packet2  |  ...
-+ * ------------ ------------ ------------
-+ */
-+static void test_sockmap_strp_multiple_pkt(int family, int sotype)
-+{
-+	int i, zero = 0;
-+	int sent, recvd, total;
-+	int err, map;
-+	int c = -1, p = -1;
-+	struct test_sockmap_strp *strp = NULL;
-+	char *snd = NULL, *rcv = NULL;
-+
-+	strp = sockmap_strp_init(&map, true, true);
-+	if (!ASSERT_TRUE(strp, "sockmap_strp_init"))
-+		return;
-+
-+	err = create_pair(family, sotype, &c, &p);
-+	if (err)
-+		goto out;
-+
-+	err = bpf_map_update_elem(map, &zero, &p, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(zero, p)"))
-+		goto out_close;
-+
-+	/* construct multiple packets in one buffer */
-+	total = test_packet_num * STRP_PKT_FULL_LEN;
-+	snd = malloc(total);
-+	rcv = malloc(total + 1);
-+	if (!ASSERT_TRUE(snd, "malloc(snd)") ||
-+	    !ASSERT_TRUE(rcv, "malloc(rcv)"))
-+		goto out_close;
-+
-+	for (i = 0; i < test_packet_num; i++) {
-+		memcpy(snd + i * STRP_PKT_FULL_LEN,
-+		       packet, STRP_PKT_FULL_LEN);
-+	}
-+
-+	sent = xsend(c, snd, total, 0);
-+	if (!ASSERT_EQ(sent, total, "xsend(c)"))
-+		goto out_close;
-+
-+	/* try to recv one more byte to avoid truncation check */
-+	recvd = recv_timeout(p, rcv, total + 1, MSG_DONTWAIT, IO_TIMEOUT_SEC);
-+	if (!ASSERT_EQ(recvd, total, "recv(rcv)"))
-+		goto out_close;
-+
-+	/* we sent TCP segment with multiple encapsulation
-+	 * then check whether packets are handled correctly
-+	 */
-+	if (!ASSERT_OK(memcmp(snd, rcv, total), "data mismatch"))
-+		goto out_close;
-+
-+out_close:
-+	close(c);
-+	close(p);
-+	if (snd)
-+		free(snd);
-+	if (rcv)
-+		free(rcv);
-+out:
-+	test_sockmap_strp__destroy(strp);
-+}
-+
-+/* Test strparser with partial read */
-+static void test_sockmap_strp_partial_read(int family, int sotype)
-+{
-+	int zero = 0, recvd, off;
-+	int err, map;
-+	int c = -1, p = -1;
-+	struct test_sockmap_strp *strp = NULL;
-+	char rcv[STRP_PKT_FULL_LEN + 1] = "0";
-+
-+	strp = sockmap_strp_init(&map, true, true);
-+	if (!ASSERT_TRUE(strp, "sockmap_strp_init"))
-+		return;
-+
-+	err = create_pair(family, sotype, &c, &p);
-+	if (err)
-+		goto out;
-+
-+	/* sk_data_ready of 'p' will be replaced by strparser handler */
-+	err = bpf_map_update_elem(map, &zero, &p, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(zero, p)"))
-+		goto out_close;
-+
-+	/* 1.1 send partial head, 1 byte header left */
-+	off = STRP_PKT_HEAD_LEN - 1;
-+	xsend(c, packet, off, 0);
-+	recvd = recv_timeout(p, rcv, sizeof(rcv), MSG_DONTWAIT, 1);
-+	if (!ASSERT_EQ(-1, recvd, "partial head sent, expected no data"))
-+		goto out_close;
-+
-+	/* 1.2 send remaining head and body */
-+	xsend(c, packet + off, STRP_PKT_FULL_LEN - off, 0);
-+	recvd = recv_timeout(p, rcv, sizeof(rcv), MSG_DONTWAIT, IO_TIMEOUT_SEC);
-+	if (!ASSERT_EQ(recvd, STRP_PKT_FULL_LEN, "expected full data"))
-+		goto out_close;
-+
-+	/* 2.1 send partial head, 1 byte header left */
-+	off = STRP_PKT_HEAD_LEN - 1;
-+	xsend(c, packet, off, 0);
-+
-+	/* 2.2 send remaining head and partial body, 1 byte body left */
-+	xsend(c, packet + off, STRP_PKT_FULL_LEN - off - 1, 0);
-+	off = STRP_PKT_FULL_LEN - 1;
-+	recvd = recv_timeout(p, rcv, sizeof(rcv), MSG_DONTWAIT, 1);
-+	if (!ASSERT_EQ(-1, recvd, "partial body sent, expected no data"))
-+		goto out_close;
-+
-+	/* 2.3 send remaining body */
-+	xsend(c, packet + off, STRP_PKT_FULL_LEN - off, 0);
-+	recvd = recv_timeout(p, rcv, sizeof(rcv), MSG_DONTWAIT, IO_TIMEOUT_SEC);
-+	if (!ASSERT_EQ(recvd, STRP_PKT_FULL_LEN, "expected full data"))
-+		goto out_close;
-+
-+out_close:
-+	close(c);
-+	close(p);
-+
-+out:
-+	test_sockmap_strp__destroy(strp);
-+}
-+
-+/* Test simple socket read/write with strparser + FIONREAD */
-+static void test_sockmap_strp_pass(int family, int sotype, bool fionread)
-+{
-+	int zero = 0, pkt_size = STRP_PKT_FULL_LEN, sent, recvd, avail;
-+	int err, map;
-+	int c = -1, p = -1;
-+	int test_cnt = 10, i;
-+	struct test_sockmap_strp *strp = NULL;
-+	char rcv[STRP_PKT_FULL_LEN + 1] = "0";
-+
-+	strp = sockmap_strp_init(&map, true, true);
-+	if (!ASSERT_TRUE(strp, "sockmap_strp_init"))
-+		return;
-+
-+	err = create_pair(family, sotype, &c, &p);
-+	if (err)
-+		goto out;
-+
-+	/* inject some data before bpf process, it should be read
-+	 * correctly because we check sk_receive_queue in
-+	 * tcp_bpf_recvmsg_parser().
-+	 */
-+	sent = xsend(c, packet, pkt_size, 0);
-+	if (!ASSERT_EQ(sent, pkt_size, "xsend(pre-data)"))
-+		goto out_close;
-+
-+	/* sk_data_ready of 'p' will be replaced by strparser handler */
-+	err = bpf_map_update_elem(map, &zero, &p, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(p)"))
-+		goto out_close;
-+
-+	/* consume previous data we injected */
-+	if (sockmap_strp_consume_pre_data(p))
-+		goto out_close;
-+
-+	/* Previously, we encountered issues such as deadlocks and
-+	 * sequence errors that resulted in the inability to read
-+	 * continuously. Therefore, we perform multiple iterations
-+	 * of testing here.
-+	 */
-+	for (i = 0; i < test_cnt; i++) {
-+		sent = xsend(c, packet, pkt_size, 0);
-+		if (!ASSERT_EQ(sent, pkt_size, "xsend(c)"))
-+			goto out_close;
-+
-+		recvd = recv_timeout(p, rcv, sizeof(rcv), MSG_DONTWAIT,
-+				     IO_TIMEOUT_SEC);
-+		if (!ASSERT_EQ(recvd, pkt_size, "recv_timeout(p)") ||
-+		    !ASSERT_OK(memcmp(packet, rcv, pkt_size),
-+				  "memcmp, data mismatch"))
-+			goto out_close;
-+	}
-+
-+	if (fionread) {
-+		sent = xsend(c, packet, pkt_size, 0);
-+		if (!ASSERT_EQ(sent, pkt_size, "second xsend(c)"))
-+			goto out_close;
-+
-+		err = ioctl(p, FIONREAD, &avail);
-+		if (!ASSERT_OK(err, "ioctl(FIONREAD) error") ||
-+		    !ASSERT_EQ(avail, pkt_size, "ioctl(FIONREAD)"))
-+			goto out_close;
-+
-+		recvd = recv_timeout(p, rcv, sizeof(rcv), MSG_DONTWAIT,
-+				     IO_TIMEOUT_SEC);
-+		if (!ASSERT_EQ(recvd, pkt_size, "second recv_timeout(p)") ||
-+		    !ASSERT_OK(memcmp(packet, rcv, pkt_size),
-+			      "second memcmp, data mismatch"))
-+			goto out_close;
-+	}
-+
-+out_close:
-+	close(c);
-+	close(p);
-+
-+out:
-+	test_sockmap_strp__destroy(strp);
-+}
-+
-+/* Test strparser with verdict mode */
-+static void test_sockmap_strp_verdict(int family, int sotype)
-+{
-+	int zero = 0, one = 1, sent, recvd, off;
-+	int err, map;
-+	int c0 = -1, p0 = -1, c1 = -1, p1 = -1;
-+	struct test_sockmap_strp *strp = NULL;
-+	char rcv[STRP_PKT_FULL_LEN + 1] = "0";
-+
-+	strp = sockmap_strp_init(&map, false, true);
-+	if (!ASSERT_TRUE(strp, "sockmap_strp_init"))
-+		return;
-+
-+	/* We simulate a reverse proxy server.
-+	 * When p0 receives data from c0, we forward it to c1.
-+	 * From c1's perspective, it will consider this data
-+	 * as being sent by p1.
-+	 */
-+	err = create_socket_pairs(family, sotype, &c0, &c1, &p0, &p1);
-+	if (!ASSERT_OK(err, "create_socket_pairs()"))
-+		goto out;
-+
-+	err = bpf_map_update_elem(map, &zero, &p0, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(p0)"))
-+		goto out_close;
-+
-+	err = bpf_map_update_elem(map, &one, &p1, BPF_NOEXIST);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(p1)"))
-+		goto out_close;
-+
-+	sent = xsend(c0, packet, STRP_PKT_FULL_LEN, 0);
-+	if (!ASSERT_EQ(sent, STRP_PKT_FULL_LEN, "xsend(c0)"))
-+		goto out_close;
-+
-+	recvd = recv_timeout(c1, rcv, sizeof(rcv), MSG_DONTWAIT,
-+			     IO_TIMEOUT_SEC);
-+	if (!ASSERT_EQ(recvd, STRP_PKT_FULL_LEN, "recv_timeout(c1)") ||
-+	    !ASSERT_OK(memcmp(packet, rcv, STRP_PKT_FULL_LEN),
-+			  "received data does not match the sent data"))
-+		goto out_close;
-+
-+	/* send again to ensure the stream is functioning correctly. */
-+	sent = xsend(c0, packet, STRP_PKT_FULL_LEN, 0);
-+	if (!ASSERT_EQ(sent, STRP_PKT_FULL_LEN, "second xsend(c0)"))
-+		goto out_close;
-+
-+	/* partial read */
-+	off = STRP_PKT_FULL_LEN / 2;
-+	recvd = recv_timeout(c1, rcv, off, MSG_DONTWAIT,
-+			     IO_TIMEOUT_SEC);
-+	recvd += recv_timeout(c1, rcv + off, sizeof(rcv) - off, MSG_DONTWAIT,
-+			      IO_TIMEOUT_SEC);
-+
-+	if (!ASSERT_EQ(recvd, STRP_PKT_FULL_LEN, "partial recv_timeout(c1)") ||
-+	    !ASSERT_OK(memcmp(packet, rcv, STRP_PKT_FULL_LEN),
-+			  "partial received data does not match the sent data"))
-+		goto out_close;
-+
-+out_close:
-+	close(c0);
-+	close(c1);
-+	close(p0);
-+	close(p1);
-+out:
-+	test_sockmap_strp__destroy(strp);
-+}
-+
-+void test_sockmap_strp(void)
-+{
-+	if (test__start_subtest("sockmap strp tcp pass"))
-+		test_sockmap_strp_pass(AF_INET, SOCK_STREAM, false);
-+	if (test__start_subtest("sockmap strp tcp v6 pass"))
-+		test_sockmap_strp_pass(AF_INET6, SOCK_STREAM, false);
-+	if (test__start_subtest("sockmap strp tcp pass fionread"))
-+		test_sockmap_strp_pass(AF_INET, SOCK_STREAM, true);
-+	if (test__start_subtest("sockmap strp tcp v6 pass fionread"))
-+		test_sockmap_strp_pass(AF_INET6, SOCK_STREAM, true);
-+	if (test__start_subtest("sockmap strp tcp verdict"))
-+		test_sockmap_strp_verdict(AF_INET, SOCK_STREAM);
-+	if (test__start_subtest("sockmap strp tcp v6 verdict"))
-+		test_sockmap_strp_verdict(AF_INET6, SOCK_STREAM);
-+	if (test__start_subtest("sockmap strp tcp partial read"))
-+		test_sockmap_strp_partial_read(AF_INET, SOCK_STREAM);
-+	if (test__start_subtest("sockmap strp tcp multiple packets"))
-+		test_sockmap_strp_multiple_pkt(AF_INET, SOCK_STREAM);
-+	if (test__start_subtest("sockmap strp tcp dispatch"))
-+		test_sockmap_strp_dispatch_pkt(AF_INET, SOCK_STREAM);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_strp.c b/tools/testing/selftests/bpf/progs/test_sockmap_strp.c
-new file mode 100644
-index 000000000000..dde3d5bec515
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_strp.c
-@@ -0,0 +1,53 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_endian.h>
-+int verdict_max_size = 10000;
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 20);
-+	__type(key, int);
-+	__type(value, int);
-+} sock_map SEC(".maps");
-+
-+SEC("sk_skb/stream_verdict")
-+int prog_skb_verdict(struct __sk_buff *skb)
-+{
-+	__u32 one = 1;
-+
-+	if (skb->len > verdict_max_size)
-+		return SK_PASS;
-+
-+	return bpf_sk_redirect_map(skb, &sock_map, one, 0);
-+}
-+
-+SEC("sk_skb/stream_verdict")
-+int prog_skb_verdict_pass(struct __sk_buff *skb)
-+{
-+	return SK_PASS;
-+}
-+
-+SEC("sk_skb/stream_parser")
-+int prog_skb_parser(struct __sk_buff *skb)
-+{
-+	return skb->len;
-+}
-+
-+SEC("sk_skb/stream_parser")
-+int prog_skb_parser_partial(struct __sk_buff *skb)
-+{
-+	/* agreement with the test program on a 4-byte size header
-+	 * and 6-byte body.
-+	 */
-+	if (skb->len < 4) {
-+		/* need more header to determine full length */
-+		return 0;
-+	}
-+	/* return full length decoded from header.
-+	 * the return value may be larger than skb->len which
-+	 * means framework must wait body coming.
-+	 */
-+	return 10;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+Thanks,
+
+	M.
+
 -- 
-2.43.5
-
+Without deviation from the norm, progress is not possible.
 
