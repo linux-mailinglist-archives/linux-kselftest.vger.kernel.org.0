@@ -1,310 +1,186 @@
-Return-Path: <linux-kselftest+bounces-24990-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24991-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69D24A1A170
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2025 11:08:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92ABFA1A1CB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2025 11:26:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C7E6169EED
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2025 10:08:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1696A7A21A0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2025 10:26:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FBA520CCF3;
-	Thu, 23 Jan 2025 10:08:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12AC520D518;
+	Thu, 23 Jan 2025 10:26:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e8fqAKm3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mjircbjg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7318220C481;
-	Thu, 23 Jan 2025 10:08:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737626882; cv=fail; b=a6dxcqL3ZUjRDWXkLqMXiSuEZsRAb5pPHcorF/w/gfpei/oq9KG0t+pcF/950/WopV9Q/ED+8jblX0pljb8+vE71OGWaA/GLwUT7WkAowlTA5z4Z02h2A3VpqkrrbcmDAyjNJ0S1M5XuZhyFHYFcyFpDTf/RfNHYCiGlrV+DKnY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737626882; c=relaxed/simple;
-	bh=k+XpKYn+jHW5zyCSAiokk9TL69AL7WdWreP+wEHd8U4=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=a7C5ltD2bhHTNMg8evvn/7nzTAGuTYemc0zDPgmvPit+WLviZXmiIfJCvbvTZA7nCl1TcgL3Z9P8/pDREVxEcWRsXe2vbiVIHEyDtl3E3r5+2DrZc8AfwHS17Bgkb4aqrmyPWwxdej0K4IyebKahfmqH2810DgQeJxzjxQrHHeE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e8fqAKm3; arc=fail smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737626880; x=1769162880;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=k+XpKYn+jHW5zyCSAiokk9TL69AL7WdWreP+wEHd8U4=;
-  b=e8fqAKm3rVsatVwbQ6z3WSyqE7NdgqNiBELx09UXzojINFSMnSVjdU+I
-   nK+RDFF4Kzrq/VcKwRaMAqRfAnjQp5m5Yiapd0QFL+io2tKTx65EvFJSI
-   EYHASD/qkErihfaH86GmUIrizeMhYfuqCs/9jvNdhsSdx2/i+tpSJZc1Z
-   UsqYijgpONCxrgKsBrL8zSfpR5GhuN11L1BiFFTsChpTQbA3WD0ehlc2u
-   nuiyOeky0SwchwQb2rBes/jM2dEy4ZSbgdVzeMq4w31uGxAK/gKeC06v+
-   TAsVy06TH8Ipwd7NoolPNEX/CaCH7/nuZqYbDBHfpBU3zfOvYorhMGF3P
-   A==;
-X-CSE-ConnectionGUID: XwPQoHM/Q6id3p00Z/ZkLw==
-X-CSE-MsgGUID: xthus9ZDRga9czxoQPj2SQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11323"; a="49511641"
-X-IronPort-AV: E=Sophos;i="6.13,228,1732608000"; 
-   d="scan'208";a="49511641"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2025 02:08:00 -0800
-X-CSE-ConnectionGUID: kUkAq3dZQK2YQnnYurBgzQ==
-X-CSE-MsgGUID: aJ2yjeNhSkWP0Kn1C+sZ/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,228,1732608000"; 
-   d="scan'208";a="107524508"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmviesa008.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 23 Jan 2025 02:07:59 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Thu, 23 Jan 2025 02:07:57 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44 via Frontend Transport; Thu, 23 Jan 2025 02:07:57 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Thu, 23 Jan 2025 02:07:56 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IEGjCernjmE9gHkbr9ScxSXD2Qla8DXxk295XVSbDe3IIsB6u+YuzSkLL5XSGo09lZ8PTucjIC7J8Gghux5P6l3ptOh8tp+VbuRIbZMt2HZTD8Fuf+8NnU8z9Wr9ExaBeft4CSuLPdVugtL419qsklTnTlicbGTmQBc2m3Lf+m08AdkWD8mRPInx41bpa7aNQwnSIDUMFW4Cs/EshLIllRNFXtk0ZN0TJdTKIGhSGt5WGC9xTuZq0dpkU1nKGTpAuvwueTKYm6PKEkksW+vjGye4L60kHUVqH4EnxtaUfBbxkBnuTlF0zdXDUWNSV1vb6ZDMCPtQZtlSRC8sjGUtXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EtzrdqUjM2C2lItnIF+unxoYCqnMYuD2nMx6G9bOOXs=;
- b=r070k22VYQKFcCLG8/MzBJSVlXnqNxHHeNi4ByPv+/JNbp+vAgKaxUHOS5H3nzi7Cn8A99SYEtrje9phaZSxJxSti703y6iE6vC9TkXIz4Km21LWSVi157oJh7RM8joWrGEf5JoZCuej3b2NC0uzXg2k5QEiB+7S1kloHx1QV/RDUTUnHjL23oJ5Yht9wPI/CLRcEVBCrI5YlgEWWlmAqt/XltgvFyjExVZCnX8yHufb6BNE8QeT+61AxT3hgav+hs/GVD5i6qTIeZF2U+XkpniXvssdQRz/i8M83XYS+P1b03lxWmf0s0XFsuh2XV+EAH1TVDaFA1GhxDZy6VQETg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by PH0PR11MB4807.namprd11.prod.outlook.com (2603:10b6:510:3a::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.16; Thu, 23 Jan
- 2025 10:07:13 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::b576:d3bd:c8e0:4bc1]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::b576:d3bd:c8e0:4bc1%7]) with mapi id 15.20.8356.020; Thu, 23 Jan 2025
- 10:07:13 +0000
-From: "Tian, Kevin" <kevin.tian@intel.com>
-To: Nicolin Chen <nicolinc@nvidia.com>, "will@kernel.org" <will@kernel.org>,
-	"robin.murphy@arm.com" <robin.murphy@arm.com>, "jgg@nvidia.com"
-	<jgg@nvidia.com>, "tglx@linutronix.de" <tglx@linutronix.de>, "maz@kernel.org"
-	<maz@kernel.org>, "alex.williamson@redhat.com" <alex.williamson@redhat.com>
-CC: "joro@8bytes.org" <joro@8bytes.org>, "shuah@kernel.org"
-	<shuah@kernel.org>, "Chatre, Reinette" <reinette.chatre@intel.com>,
-	"eric.auger@redhat.com" <eric.auger@redhat.com>, "yebin10@huawei.com"
-	<yebin10@huawei.com>, "apatel@ventanamicro.com" <apatel@ventanamicro.com>,
-	"shivamurthy.shastri@linutronix.de" <shivamurthy.shastri@linutronix.de>,
-	"bhelgaas@google.com" <bhelgaas@google.com>, "anna-maria@linutronix.de"
-	<anna-maria@linutronix.de>, "yury.norov@gmail.com" <yury.norov@gmail.com>,
-	"nipun.gupta@amd.com" <nipun.gupta@amd.com>, "iommu@lists.linux.dev"
-	<iommu@lists.linux.dev>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "kvm@vger.kernel.org"
-	<kvm@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "patches@lists.linux.dev"
-	<patches@lists.linux.dev>, "jean-philippe@linaro.org"
-	<jean-philippe@linaro.org>, "mdf@kernel.org" <mdf@kernel.org>,
-	"mshavit@google.com" <mshavit@google.com>,
-	"shameerali.kolothum.thodi@huawei.com"
-	<shameerali.kolothum.thodi@huawei.com>, "smostafa@google.com"
-	<smostafa@google.com>, "ddutile@redhat.com" <ddutile@redhat.com>
-Subject: RE: [PATCH RFCv2 09/13] iommufd: Add IOMMU_OPTION_SW_MSI_START/SIZE
- ioctls
-Thread-Topic: [PATCH RFCv2 09/13] iommufd: Add IOMMU_OPTION_SW_MSI_START/SIZE
- ioctls
-Thread-Index: AQHbY9mYUm9C6M8MQEmAe5nZdSx/ErMkMh1A
-Date: Thu, 23 Jan 2025 10:07:13 +0000
-Message-ID: <BN9PR11MB527616A2EA6C64824576E58F8CE02@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <cover.1736550979.git.nicolinc@nvidia.com>
- <d3cb1694e07be0e214dc44dcb2cb74f014606560.1736550979.git.nicolinc@nvidia.com>
-In-Reply-To: <d3cb1694e07be0e214dc44dcb2cb74f014606560.1736550979.git.nicolinc@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|PH0PR11MB4807:EE_
-x-ms-office365-filtering-correlation-id: 793105a2-536a-4cb4-d697-08dd3b95b552
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info: =?us-ascii?Q?2S+1H+nhEbyouS8/gQ0MFfZRHQQTZ32+A3Iqe22cfDw3MzlN9vWoFtJFad6n?=
- =?us-ascii?Q?7Pc6hrNTLocyN8MNlUhbn54KerJ9qjvHt4Z+K9Di/qO1swrPxKR65/pY+veG?=
- =?us-ascii?Q?FqbFsk2q2sabLA9Ffy8na75FsMXZnde15UwdwmoPfXZnF/IbLnirKPoiHei1?=
- =?us-ascii?Q?RSFTPtaR3UmneGV5gX2rrjdAubWz4OmJee4BOrBeZt8bMffQ9uKhrnlBpQvB?=
- =?us-ascii?Q?WDptq7evEpD4mIa/SLFZ6azVE4RVcC3jJTi7KN0TiSc9NLaisa7GzUzoSaMb?=
- =?us-ascii?Q?Cu9plFn+vOK12TQKBR5ppzpGEewK35lZz74J/jVAy1pRNgd63r5vspYQvf8j?=
- =?us-ascii?Q?qioNDPwc83xlzny4fxcFeUEYx1Wyv/hpy6NMzQuR3ZfXcL9bVhNUiwtF8qxV?=
- =?us-ascii?Q?LCNL5SQaR7roBQBexuqfJMUMfmUFe3Ig2N2lKIy4SBTOWfpwUAR+soxcYiex?=
- =?us-ascii?Q?AGTjpFulZp49Aqrkl1kEu0E4f0Vb04kyOhdoYZuDpT58TeO0TacaU7Jly/bz?=
- =?us-ascii?Q?NMw9imlR/e5yi/+6SgQw/rln8FrMJn2dXzJ94QQ7DBIMEDBpa+yJSaAkD0/Y?=
- =?us-ascii?Q?M6lMuUb/rSwOPbpB+6kNwVoXtj1KYjMeI4LOSfpoHPvKakqPV0VM4md7eCY9?=
- =?us-ascii?Q?2GYHp6mMRtvkZ1yYOB1Y1iyroBlsCE+EmoTz72I2OSKgTMSI6R/HvLFNRM9o?=
- =?us-ascii?Q?8Ed2C9pyLg594ANouSSXl+HQRBZTaPpjQGJ0nIjsvhqEwqAH4TUKzczcVfA4?=
- =?us-ascii?Q?ZjQIpew48ibMjZ/pMdgUfaZgV2F7FNzDjN7V4Y8ZaMc/yWfAcbCCLkZhK7XH?=
- =?us-ascii?Q?gG+G1hisDADiPhQs8xX2mcj/eyIKPZ4uMu2xRbEfm4iaIc9jtOYTmdcKQSiu?=
- =?us-ascii?Q?dj/D9eXcT7dB0juZ/nTcN05j507uUu4ryC4f0Q9/Unr5nCECJ3ooplxPZaNX?=
- =?us-ascii?Q?+zi/ik3TgtGivaCUQA2r/7+REDvxlG3QGTWTrgsBdcFMyUZuk0R3YYLuCcSA?=
- =?us-ascii?Q?BxrE9bEAZqE940KugX5N+cZJDQcbKP+WF9GqOjG4O3NvqK+nm0eFJ0GEfzlJ?=
- =?us-ascii?Q?hycbrm4lsIYRZ1tf0ZBPMLlU4kbpuv0iZ+Wp1E3OZg1JOOIsA+UzSwrdF/a9?=
- =?us-ascii?Q?4ATsr41tIIQqsSdr3vfXqM3XJuMPzi2gKdFkOqXxOVYy5dYiuAaO3alzOKD/?=
- =?us-ascii?Q?JQ24C0deSFK2fC/3Nvk+TUVfX7IsW/wtFPLbtdd3l7i8L7oHMCc0X1YpaBec?=
- =?us-ascii?Q?mnoIsK3VxxzDsNBmVMtZ+C6xuvSBMjQ2+knOzaFC+ai3Zr6S7d3eaJvg2pcR?=
- =?us-ascii?Q?0s7umaerDAODYRWDqt4p1zQNEnGiqT1vL3qPVbhJNrDtFL2KsF/kSnRkox8J?=
- =?us-ascii?Q?EM3Htu4e+kR8qbfDlWTqg5pfCGSrhVW2PpQPSnYeAl8Bey/pgwG5uakTQAA3?=
- =?us-ascii?Q?GMANafwILcru02PQPbWhgiLAdbxXlvf3?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+VJa7WJtQVWVF/NfhF+3DZhCBMofn9HDnNp1nBTLvex96saYt5jPn4UwpDsO?=
- =?us-ascii?Q?XtGLt1YwI7FAbh84tSCZsXPVQB9LPYJShWKDdDObsTrkm6PLJRPMTnur8g6V?=
- =?us-ascii?Q?51ED1Nh03Zz5XfFEvpH4tq0nqS8DZO3WOSY8iViyc67XtOpCkla/WSeBwPTe?=
- =?us-ascii?Q?BBY4ZqmB400GozSufXYj94yrFlzK7CFR+hTzAWnvumbfsz4mlBNnPEVulSZu?=
- =?us-ascii?Q?Dx6LMtSCpR7KLfg5zCgwFDMacfQL9JbZ6/TxgeKghsDHLIQL0w3OOLzVHxPU?=
- =?us-ascii?Q?ZIvwq1ijEZbceoC4sHFXHv0QKuQwKZArX07WLXSSJIjQozRFX6qsVk7aSggN?=
- =?us-ascii?Q?tiPYMHy9oARvjYUw2x1Ug3GmLYhWcdX62m6Sw9RKZcB+p1u+o5nim9lauCxN?=
- =?us-ascii?Q?5WduKtzWuVEcSgNWZtHYd+Bx/sVTN37gFkPl+qLOyOEbFERZj/Rhkj5qHqAU?=
- =?us-ascii?Q?80eNLf93CQC6DgXwpeAPARs/zUPh8bKmZUT0F9AnNCLcGM0PhXbt/uvo6PKU?=
- =?us-ascii?Q?O9fqD4ueBBBTpAijK4hnNbXB7xiFEm5CQCLr2JN89jLPj5SQhoWLFzbUlXKP?=
- =?us-ascii?Q?+tIVwNiuBQwmTz76Ezu2HAkmqTpD2SMrNyv+oVrhwPWYExMTYDsjUloNXtnG?=
- =?us-ascii?Q?UXKqLp+Xb3hOutwDuCGEJwqAv5GMP/3wB79NNshUxVG5wk5NvkFZUvxvfe88?=
- =?us-ascii?Q?+z7ItpqXFgidinYXHGan5IwKQjr/oLiEv67pKpsQxbrNSQhtwZTPqhEmYThn?=
- =?us-ascii?Q?d522y/OIg75k0GGiTLKA/MIwnC0qaVj5t2QDq4+lh8vuvumxQ4YqG3pqHYQX?=
- =?us-ascii?Q?epPjn/rU0q28KvdOg8/D+3QVJtYxK3SSTQcXDd8raUvIq2gwMpq08gQpvWDn?=
- =?us-ascii?Q?rltnD/9NURblwzplj6VptPjQDunS0Y095TOf/YFjkMu94OpGno9deuEuyRE4?=
- =?us-ascii?Q?FxQWE91eH+U96nQ8Ha3I+Hzdbo7lcg3lpOmT7F4KE1k+TbHctVq+jkq0CJtV?=
- =?us-ascii?Q?VN0l/5x1C+k/phEcMdL5JmcPYkOrZfTNZRqr2Ug/Zp9yDfJ2rQxzk59ZVvt6?=
- =?us-ascii?Q?82HIyKMm0szRdewNGG3xRJNPAA06lbzL385RGv5nMitsXWltbp8SqALHKfKy?=
- =?us-ascii?Q?+Va5mYZlF1O95Tweo8yYusF2SE1pJiolkbJsFzAM9plrILY4uAL9HVN2Sp1n?=
- =?us-ascii?Q?jAXLZCqqozduH8FNQImpqG49/893ly+ke0pq5Ge2cBuoGu5zLCF3ZhBX/jnq?=
- =?us-ascii?Q?7ccw02uYYcW1gmZ7b33bEtX11ldg4SIgD/jrXtcD3jwF6tu7fuPWgOcj/wMk?=
- =?us-ascii?Q?yK9+2FFnqqaAejxYEFjnTZSU12U5aJ6ThtfS7Iky4zpaAmscekid90GVqQEX?=
- =?us-ascii?Q?ZiKA9y+5Tm4Az+8oGmCoy4tnCGeufOFlSZeirxXR+34wc1Lc28pD/6sG0Dgu?=
- =?us-ascii?Q?aCddJprPWy4QIpscjn8gzzLY35N8Pc9VzyeaDSTtQWAMZMcmkp71nJ3WQB8u?=
- =?us-ascii?Q?lahuprrxgzxZSveOAwsDIlL7E/Ba2uYcfogRJd5LhZe0DQkmwpW3yTVzxFxq?=
- =?us-ascii?Q?K/XAVF3j8lR/e+9HWVNjAam7Yw01FU3jphNqKafn?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD6E20C472;
+	Thu, 23 Jan 2025 10:26:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737627993; cv=none; b=toHh4yuRdwT5rEK6B1aoGopjHoLno/AKz/fILo+WPJBOV3wBZNZCUQ/7Y2Uuql0QbAfYAWCk+GJRmBjgxo65xSwFWnq8UOKOWMz0M1evHeDdssI9UJEOgEFFFhAmZB5fmUS0SfoKOcS0/+GdQXhnZOqa36r+aLO+2kSjNyNWJ2I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737627993; c=relaxed/simple;
+	bh=BqRZR+7Y7rSeO4LNNmDsfSt2O/GY348iQhI5BPtj1x8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nbLE4cuPJ5Zs2aqiHzBqzhA8V8Zcvp24fmXdoEfj9I3dxjCthL8LHwSsLxyu83Kn40ApsjG7fQNz0IM4Ce7KzPTHVjUZ/czlvhUXxazNuq9u0kRB0gY2UORW3K4bkjYIGcJtK2LqF3Fz/+YfUYfW6ah9D7vmlBjHEQ1XnZTqs6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mjircbjg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F06F4C4CEE1;
+	Thu, 23 Jan 2025 10:26:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737627992;
+	bh=BqRZR+7Y7rSeO4LNNmDsfSt2O/GY348iQhI5BPtj1x8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=mjircbjgtul1fSMMKzWV+9o8M5kXZwKHIgf46ORtN2fHsh8xu6jKhuEJkpDZc/4r1
+	 hzw+D0TY2Vawz0gjF+WhmmMuIJU92J180ClFgvlrNKWhIZ8OGlUK9FQTgfMK1+NERH
+	 dtv6b3zxlAVi7LPN0q1tB2TCTjJZLpI3bE3f1cHNDDQp41346j+tbXZSmcUUMS8Oov
+	 ktU+wiHqwF+aElv+VzCABL0xtkHq3S8Y9WQHvrHK5hfO2Vc/2Dl8ySapY7nBxaeOOZ
+	 a1WiQXcgCEkrK8o4vsrK+vyiil6mvVFyTm5gXBkKIux3NedUUq0yGa22N+Sy9Aesbt
+	 Q/XJUHKQp+34A==
+Message-ID: <8ee5ad75-c550-4559-b46f-e511767b3302@kernel.org>
+Date: Thu, 23 Jan 2025 11:26:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 793105a2-536a-4cb4-d697-08dd3b95b552
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2025 10:07:13.4504
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: v1fI0e6TnYIqiustShhgbeXr1nUIwlFml3EeM5x6kJseaX10BqMHzmzanzesgRe0a2BsJGerpwJ9KAEkckJ4qA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4807
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH] selftests: mptcp: extend CFLAGS to keep options from
+ environment
+Content-Language: en-GB
+To: Hangbin Liu <haliu@redhat.com>, Jan Stancek <jstancek@redhat.com>
+Cc: martineau@kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev,
+ linux-kselftest@vger.kernel.org
+References: <7abc701da9df39c2d6cd15bc3cf9e6cee445cb96.1737621162.git.jstancek@redhat.com>
+ <Z5IAU4X1084EFrEd@fedora> <Z5IBPOGvfPozjrl5@fedora>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
+ YBNdx5Xl74NLSgx6y/1NiMQGuKeu+2BmtnkiGxBNanfXcnl4L4Lzz+iXBvvbtCbynnnqDDqU
+ c7SPFMpMesgpcu1xFt0F6bcxE+0ojRtSCZ5HDElKlHJNYtD1uwY4UYVGWUGCF/+cY1YLmtfb
+ WdNb/SFo+Mp0HItfBC12qtDIXYvbfNUGVnA5jXeWMEyYhSNktLnpDL2gBUCsdbkov5VjiOX7
+ CRTkX0UgNWRjyFZwThaZADEvAOo12M5uSBk7h07yJ97gqvBtcx45IsJwfUJE4hy8qZqsA62A
+ nTRflBvp647IXAiCcwWsEgE5AXKwA3aL6dcpVR17JXJ6nwHHnslVi8WesiqzUI9sbO/hXeXw
+ TDSB+YhErbNOxvHqCzZEnGAAFf6ges26fRVyuU119AzO40sjdLV0l6LE7GshddyazWZf0iac
+ nEhX9NKxGnuhMu5SXmo2poIQttJuYAvTVUNwQVEx/0yY5xmiuyqvXa+XT7NKJkOZSiAPlNt6
+ VffjgOP62S7M9wDShUghN3F7CPOrrRsOHWO/l6I/qJdUMW+MHSFYPfYiFXoLUZyPvNVCYSgs
+ 3oQaFhHapq1f345XBtfG3fOYp1K2wTXd4ThFraTLl8PHxCn4ywARAQABzSRNYXR0aGlldSBC
+ YWVydHMgPG1hdHR0YmVAa2VybmVsLm9yZz7CwZEEEwEIADsCGwMFCwkIBwIGFQoJCAsCBBYC
+ AwECHgECF4AWIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZUDpDAIZAQAKCRD2t4JPQmmgcz33
+ EACjROM3nj9FGclR5AlyPUbAq/txEX7E0EFQCDtdLPrjBcLAoaYJIQUV8IDCcPjZMJy2ADp7
+ /zSwYba2rE2C9vRgjXZJNt21mySvKnnkPbNQGkNRl3TZAinO1Ddq3fp2c/GmYaW1NWFSfOmw
+ MvB5CJaN0UK5l0/drnaA6Hxsu62V5UnpvxWgexqDuo0wfpEeP1PEqMNzyiVPvJ8bJxgM8qoC
+ cpXLp1Rq/jq7pbUycY8GeYw2j+FVZJHlhL0w0Zm9CFHThHxRAm1tsIPc+oTorx7haXP+nN0J
+ iqBXVAxLK2KxrHtMygim50xk2QpUotWYfZpRRv8dMygEPIB3f1Vi5JMwP4M47NZNdpqVkHrm
+ jvcNuLfDgf/vqUvuXs2eA2/BkIHcOuAAbsvreX1WX1rTHmx5ud3OhsWQQRVL2rt+0p1DpROI
+ 3Ob8F78W5rKr4HYvjX2Inpy3WahAm7FzUY184OyfPO/2zadKCqg8n01mWA9PXxs84bFEV2mP
+ VzC5j6K8U3RNA6cb9bpE5bzXut6T2gxj6j+7TsgMQFhbyH/tZgpDjWvAiPZHb3sV29t8XaOF
+ BwzqiI2AEkiWMySiHwCCMsIH9WUH7r7vpwROko89Tk+InpEbiphPjd7qAkyJ+tNIEWd1+MlX
+ ZPtOaFLVHhLQ3PLFLkrU3+Yi3tXqpvLE3gO3LM7BTQRV4/npARAA5+u/Sx1n9anIqcgHpA7l
+ 5SUCP1e/qF7n5DK8LiM10gYglgY0XHOBi0S7vHppH8hrtpizx+7t5DBdPJgVtR6SilyK0/mp
+ 9nWHDhc9rwU3KmHYgFFsnX58eEmZxz2qsIY8juFor5r7kpcM5dRR9aB+HjlOOJJgyDxcJTwM
+ 1ey4L/79P72wuXRhMibN14SX6TZzf+/XIOrM6TsULVJEIv1+NdczQbs6pBTpEK/G2apME7vf
+ mjTsZU26Ezn+LDMX16lHTmIJi7Hlh7eifCGGM+g/AlDV6aWKFS+sBbwy+YoS0Zc3Yz8zrdbi
+ Kzn3kbKd+99//mysSVsHaekQYyVvO0KD2KPKBs1S/ImrBb6XecqxGy/y/3HWHdngGEY2v2IP
+ Qox7mAPznyKyXEfG+0rrVseZSEssKmY01IsgwwbmN9ZcqUKYNhjv67WMX7tNwiVbSrGLZoqf
+ Xlgw4aAdnIMQyTW8nE6hH/Iwqay4S2str4HZtWwyWLitk7N+e+vxuK5qto4AxtB7VdimvKUs
+ x6kQO5F3YWcC3vCXCgPwyV8133+fIR2L81R1L1q3swaEuh95vWj6iskxeNWSTyFAVKYYVskG
+ V+OTtB71P1XCnb6AJCW9cKpC25+zxQqD2Zy0dK3u2RuKErajKBa/YWzuSaKAOkneFxG3LJIv
+ Hl7iqPF+JDCjB5sAEQEAAcLBXwQYAQIACQUCVeP56QIbDAAKCRD2t4JPQmmgc5VnD/9YgbCr
+ HR1FbMbm7td54UrYvZV/i7m3dIQNXK2e+Cbv5PXf19ce3XluaE+wA8D+vnIW5mbAAiojt3Mb
+ 6p0WJS3QzbObzHNgAp3zy/L4lXwc6WW5vnpWAzqXFHP8D9PTpqvBALbXqL06smP47JqbyQxj
+ Xf7D2rrPeIqbYmVY9da1KzMOVf3gReazYa89zZSdVkMojfWsbq05zwYU+SCWS3NiyF6QghbW
+ voxbFwX1i/0xRwJiX9NNbRj1huVKQuS4W7rbWA87TrVQPXUAdkyd7FRYICNW+0gddysIwPoa
+ KrLfx3Ba6Rpx0JznbrVOtXlihjl4KV8mtOPjYDY9u+8x412xXnlGl6AC4HLu2F3ECkamY4G6
+ UxejX+E6vW6Xe4n7H+rEX5UFgPRdYkS1TA/X3nMen9bouxNsvIJv7C6adZmMHqu/2azX7S7I
+ vrxxySzOw9GxjoVTuzWMKWpDGP8n71IFeOot8JuPZtJ8omz+DZel+WCNZMVdVNLPOd5frqOv
+ mpz0VhFAlNTjU1Vy0CnuxX3AM51J8dpdNyG0S8rADh6C8AKCDOfUstpq28/6oTaQv7QZdge0
+ JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <Z5IBPOGvfPozjrl5@fedora>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-> From: Nicolin Chen <nicolinc@nvidia.com>
-> Sent: Saturday, January 11, 2025 11:32 AM
->=20
-> @@ -294,7 +294,9 @@ struct iommu_ioas_unmap {
->=20
->  /**
->   * enum iommufd_option - ioctl(IOMMU_OPTION_RLIMIT_MODE) and
-> - *                       ioctl(IOMMU_OPTION_HUGE_PAGES)
-> + *                       ioctl(IOMMU_OPTION_HUGE_PAGES) and
-> + *                       ioctl(IOMMU_OPTION_SW_MSI_START) and
-> + *                       ioctl(IOMMU_OPTION_SW_MSI_SIZE)
->   * @IOMMU_OPTION_RLIMIT_MODE:
->   *    Change how RLIMIT_MEMLOCK accounting works. The caller must have
-> privilege
->   *    to invoke this. Value 0 (default) is user based accounting, 1 uses=
- process
-> @@ -304,10 +306,24 @@ struct iommu_ioas_unmap {
->   *    iommu mappings. Value 0 disables combining, everything is mapped t=
-o
->   *    PAGE_SIZE. This can be useful for benchmarking.  This is a per-IOA=
-S
->   *    option, the object_id must be the IOAS ID.
-> + * @IOMMU_OPTION_SW_MSI_START:
-> + *    Change the base address of the IOMMU mapping region for MSI
-> doorbell(s).
-> + *    It must be set this before attaching a device to an IOAS/HWPT,
+Hi Jan, Hangbin,
 
-remove 'this'
+(-cc <eliang@kernel.org>: wrong address apparently)
 
-> otherwise
-> + *    this option will be not effective on that IOAS/HWPT. User can=20
+On 23/01/2025 09:43, Hangbin Liu wrote:
+> On Thu, Jan 23, 2025 at 08:39:53AM +0000, Hangbin Liu wrote:
+>> On Thu, Jan 23, 2025 at 09:35:42AM +0100, Jan Stancek wrote:
+>>> Package build environments like Fedora rpmbuild introduced hardening
+>>> options (e.g. -pie -Wl,-z,now) by passing a -spec option to CFLAGS
+>>> and LDFLAGS.
+>>>
+>>> mptcp Makefile currently overrides CFLAGS but not LDFLAGS, which leads
+>>> to a mismatch and build failure, for example:
+>>>   make[1]: *** [../../lib.mk:222: tools/testing/selftests/net/mptcp/mptcp_sockopt] Error 1
+>>>   /usr/bin/ld: /tmp/ccqyMVdb.o: relocation R_X86_64_32 against `.rodata.str1.8' can not be used when making a PIE object; recompile with -fPIE
+>>>   /usr/bin/ld: failed to set dynamic section sizes: bad value
+>>>   collect2: error: ld returned 1 exit status
+>>>
+>>> Signed-off-by: Jan Stancek <jstancek@redhat.com>
+>>> ---
+>>>  tools/testing/selftests/net/mptcp/Makefile | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/testing/selftests/net/mptcp/Makefile b/tools/testing/selftests/net/mptcp/Makefile
+>>> index 8e3fc05a5397..9706bc73809f 100644
+>>> --- a/tools/testing/selftests/net/mptcp/Makefile
+>>> +++ b/tools/testing/selftests/net/mptcp/Makefile
+>>> @@ -2,7 +2,7 @@
+>>>  
+>>>  top_srcdir = ../../../../..
+>>>  
+>>> -CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
+>>> +CFLAGS +=  -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
 
-Do we want to explicitly check this instead of leaving it no effect
-silently?
+Thank you for the fix, it looks good to me too:
 
-> choose to
-> + *    let kernel pick a base address, by simply ignoring this option or =
-setting
-> + *    a value 0 to IOMMU_OPTION_SW_MSI_SIZE. Global option, object_id
-> must be 0
-> + * @IOMMU_OPTION_SW_MSI_SIZE:
-> + *    Change the size of the IOMMU mapping region for MSI doorbell(s). I=
-t
-> must
-> + *    be set this before attaching a device to an IOAS/HWPT, otherwise i=
-t
-> won't
-> + *    be effective on that IOAS/HWPT. The value is in MB, and the minimu=
-m
-> value
-> + *    is 1 MB. A value 0 (default) will invalidate the MSI doorbell base=
- address
-> + *    value set to IOMMU_OPTION_SW_MSI_START. Global option, object_id
-> must be 0
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
-hmm there is no check on the minimal value and enable the effect
-of value 0 in this patch.
+>>>  
+>>>  TEST_PROGS := mptcp_connect.sh pm_netlink.sh mptcp_join.sh diag.sh \
+>>>  	      simult_flows.sh mptcp_sockopt.sh userspace_pm.sh
+>>> -- 
+>>> 2.43.0
+>>>
+>>
+>> Reviewed-by: Hangbin Liu <liuhangbin@gmail.com>
+> 
+> Hmm, net-next is closed. Not sure if we can target this to net since it fixes
+> the build errors.
 
->  iommufd_device_attach_reserved_iova(struct iommufd_device *idev,
->  				    struct iommufd_hwpt_paging
-> *hwpt_paging)
->  {
-> +	struct iommufd_ctx *ictx =3D idev->ictx;
->  	int rc;
->=20
->  	lockdep_assert_held(&idev->igroup->lock);
->=20
-> +	/* Override it with a user-programmed SW_MSI region */
-> +	if (ictx->sw_msi_size && ictx->sw_msi_start !=3D PHYS_ADDR_MAX)
-> +		idev->igroup->sw_msi_start =3D ictx->sw_msi_start;
->  	rc =3D iopt_table_enforce_dev_resv_regions(&hwpt_paging->ioas->iopt,
->  						 idev->dev,
->  						 &idev->igroup-
-> >sw_msi_start);
+I think this should target -net. It should then have a Fixes tag (and cc
+Stable). Not sure if we need to backport that all along. Maybe enough to
+use the following one, because I see it fixed the same issue in net and
+tcp_ao:
 
-what about moving above additions into=20
-iopt_table_enforce_dev_resv_regions() which is all about finding
-a sw_msi address and can check the user setting internally?
+Fixes: cc937dad85ae ("selftests: centralize -D_GNU_SOURCE= to CFLAGS in
+lib.mk")
 
-> diff --git a/drivers/iommu/iommufd/io_pagetable.c
-> b/drivers/iommu/iommufd/io_pagetable.c
-> index 8a790e597e12..5d7f5ca1eecf 100644
-> --- a/drivers/iommu/iommufd/io_pagetable.c
-> +++ b/drivers/iommu/iommufd/io_pagetable.c
-> @@ -1446,7 +1446,9 @@ int iopt_table_enforce_dev_resv_regions(struct
-> io_pagetable *iopt,
->  		if (sw_msi_start && resv->type =3D=3D IOMMU_RESV_MSI)
->  			num_hw_msi++;
->  		if (sw_msi_start && resv->type =3D=3D IOMMU_RESV_SW_MSI) {
-> -			*sw_msi_start =3D resv->start;
-> +			/* Bypass the driver-defined SW_MSI region, if preset
-> */
-> +			if (*sw_msi_start =3D=3D PHYS_ADDR_MAX)
-> +				*sw_msi_start =3D resv->start;
+BTW, I guess you will need the same fix in
+tools/testing/selftests/net/lib/Makefile and
+tools/testing/selftests/net/openvswitch/Makefile.
 
-the code is not about bypass. Instead it's to use the driver-defined
-region if user doesn't set it.
+@Jan: Do you mind fixing them too please? Also, please next time add the
+target in the subject, e.g. [PATCH net], see:
+
+  https://docs.kernel.org/process/maintainer-netdev.html
+
+@Netdev maintainers: this can be applied directly in -net, no need to go
+through the MPTCP tree first. But it can if you prefer me adding the
+Fixes tag.
+
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
 
