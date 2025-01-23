@@ -1,250 +1,205 @@
-Return-Path: <linux-kselftest+bounces-24976-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24977-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DAE5A19E85
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2025 07:44:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D55E9A19EAD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2025 08:03:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B9D4188B6F4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2025 06:44:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD2213A4943
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2025 07:03:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56A561C1AB4;
-	Thu, 23 Jan 2025 06:44:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90ABB20B21F;
+	Thu, 23 Jan 2025 07:03:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O7bh4qhc"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="qCnuGAX9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2043.outbound.protection.outlook.com [40.107.244.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4785929B0;
-	Thu, 23 Jan 2025 06:43:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737614640; cv=none; b=irrXlojQyFFUT140MSvOBt1jhkRD8M3IUyhnZFJOHRyMwk8cKcBigPIJLhKsR4SxwBFxyqdoKFTgttoSvGoO6qI8XaS7VYJ8gWnfcjd4X845Mo0HV7uRMZsEewDOdmKUqrr5+6bEb9Onb5XaKju7boEWivH5yEPrkCGNyrBxcAw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737614640; c=relaxed/simple;
-	bh=JktmtjqieTPQYIl1v06VLfluuGdkKBGUSRhw3p37YK0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gi+WXb6jip6O/0F7uyHq/RdeZa6AxHuRrGf9oJXqAcIp2HuBL08Pj690/PDQWUKLRSKASuB3UWJCrWc5llrIY6DI7t2GmRFaUNRsNqD0rsCmse/lth5tfvILX4aZ6Rj5XRTGcvvdzuKDIi+nYA2ASlYGH4G14fk2lBh8CNpAuik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O7bh4qhc; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737614638; x=1769150638;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JktmtjqieTPQYIl1v06VLfluuGdkKBGUSRhw3p37YK0=;
-  b=O7bh4qhcq3A4TG8sEpWn2fVj40C02ffQ2iSkNXivdW50pWh+3frStA5e
-   6AfIPVNqxMseQrkS4nY2S1PR/pr5yNR0f4gPD8rfUB4QzA9Zp7e5AyuPP
-   5qQT2H9I1s3A+BaYuH37qzjwluN8pSUpSj1rpt7WfLccL/YAzuagTXYBY
-   NO3bJN41at1TZQKjEYsK/64UqwqVwZkaPzPZj6opiqcY3AoSfl8VOBsDY
-   K/zVIfY4P9oWD70XaD8Q5cU1Ii4JcZKF69TA2YZ2Voo7CFALDiFWQirnz
-   JO2Q5dFoGnxrYoNv4x08lmaJKpxWDvkPW4u4ucTPo9Py6wZD6uas3G9Zq
-   g==;
-X-CSE-ConnectionGUID: cxosbnVqRGKo0Wkvv0OyzQ==
-X-CSE-MsgGUID: fPRkA9KbTOOjhUAvEaQczw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11323"; a="25699354"
-X-IronPort-AV: E=Sophos;i="6.13,227,1732608000"; 
-   d="scan'208";a="25699354"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2025 22:43:57 -0800
-X-CSE-ConnectionGUID: F9FmDasxQgqi/8cbU9OU/w==
-X-CSE-MsgGUID: Q0VSwLxLRluQdw7gRhNw9A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,227,1732608000"; 
-   d="scan'208";a="107365151"
-Received: from mev-dev.igk.intel.com ([10.237.112.144])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2025 22:43:54 -0800
-Date: Thu, 23 Jan 2025 07:40:29 +0100
-From: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
-	syzbot+2e5de9e3ab986b71d2bf@syzkaller.appspotmail.com,
-	shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net] net: netdevsim: try to close UDP port harness races
-Message-ID: <Z5HkXdx3w9aMsozu@mev-dev.igk.intel.com>
-References: <20250122224503.762705-1-kuba@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94BD20B208;
+	Thu, 23 Jan 2025 07:03:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737615800; cv=fail; b=QCTEQOsTOnnY/IAhvOvS+JZ8JaIVXaTGgiNLIe1MbhWb2DFjyfTF0rd9ZUJ9VZ9pu8qBQ0zFleYg78CkoXV6KTlgAQhJFCSQiw0UJ/u8kIz/KjksLHvSOV00Of4ClYDxxHgw5xxRNYc+o0XIO077szGxGPPn84uXb0mOAye1iG8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737615800; c=relaxed/simple;
+	bh=ByRJjAdldrDy7l+2uk0iEbjWhzGArjK9yAdxfikqPRM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JQqGw808Z5R1LfPTUuwLyLrd1xd+iuHMETzDchblAMBTSz12Aj1jVd7ynYqaFEGB0C6hPzN19uRFL4aolo9dLsipyMwO6w/yEe+d9jG4WbKxUGUHy2VOtIxQ/C1ta2BbM4ARFv+cknjLPlIMBLB4NUvwnWq7goy0pv+fNjMLn1A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=qCnuGAX9; arc=fail smtp.client-ip=40.107.244.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hI8f2fIetf+WUXjJj22guRSw8Iiq8JLL8AJ2e38lHiUPqVQIOUd4esfyNrfgOEokjcIlj3dT46r7y1pg8mpPiAAuq+/31Ogv7x6oLwPssd0PL2RMeY+Cq78PHBRZvJggToNLxFFlLjFMYaE6aOymBpKNAJySNHVayPzixQyK3M6REZZVNn59QC/5Yr2FaosymD1e7BuFt4kePdmJOZQGaFhdDO8DdetrXxTWkKAdre/NB4z57G7gN+XFUzxJkwjXoY4y5S1B7GUYNjny45nBHnE3zpIuNbjZQ/385mGDfPxl/XpaFOt3vC3bZO6ybFc/+hgUjHXKvmF4fm2zH4T9cg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7PUDWflv1IsiwIz6s7j0WbLrVTgZNrVXZBwlWJYex78=;
+ b=IYykq2JFYu7PH0fGW9ihJW/lPUH4p+LEqt53Us9x3BzUXDH1kMDL+bWXmoMqhHlo1bT6XE+XzEZFcWUXMhuz6BeW8bZSJwSwsiju14V7Jb36uQd0CW4FPT+DXQWNzxuiJghdQNm3LryuXM/tHO8kkd+eXonjMkEZSPHUYi8cE6h0CPnbK/C+xM65eXnjyc/VgXkDlozq3+2HoTKwAmEeALu1r+hCSw67rd6F9wET0pEdflo7/XGWiYLHJ07qT+xjDR76o1MY9Wy+QNGekYHoENC0pD9RQ+mgj8P03fJ1BpIkxN8PBtiPZraqHWAn1LBRzVYrX31W6e/sZiBINqL1MQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7PUDWflv1IsiwIz6s7j0WbLrVTgZNrVXZBwlWJYex78=;
+ b=qCnuGAX9X5Y1pMbmZ+sztVYMZ75hafD6kQ/dJVnyL41lf8IZBChZAV9zAH5VGcKUwdbu3NqFeji0p3lyeZQt0SdRsxi1vJddtELM9GILpVmLwNjeRQn5Huli/fvLzzWpH/Yo/2tpz58JCUAFZN0dpabJuThQCHyLmsnpeUGahizkHFAMPOObpKwiM+JZAEiLRBk9b/vchMVW/caGHNRKneDAY9+JVqjTcPrki2GmENPewtp6r6n0odzeSlBOMMeSiUbapOiJeWMQlGtuv8xgYxxhFwNLCnXscY1oy+Niu6Ivhq6wxgTiP1puxi7NuKsKXLSaeIHr8OCNawnZ2zOfDA==
+Received: from MW4PR02CA0022.namprd02.prod.outlook.com (2603:10b6:303:16d::15)
+ by PH7PR12MB6393.namprd12.prod.outlook.com (2603:10b6:510:1ff::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.16; Thu, 23 Jan
+ 2025 07:03:14 +0000
+Received: from MWH0EPF000989E7.namprd02.prod.outlook.com
+ (2603:10b6:303:16d:cafe::eb) by MW4PR02CA0022.outlook.office365.com
+ (2603:10b6:303:16d::15) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8377.14 via Frontend Transport; Thu,
+ 23 Jan 2025 07:03:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ MWH0EPF000989E7.mail.protection.outlook.com (10.167.241.134) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8377.8 via Frontend Transport; Thu, 23 Jan 2025 07:03:14 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 22 Jan
+ 2025 23:03:05 -0800
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Wed, 22 Jan 2025 23:03:05 -0800
+Received: from nvidia.com (10.127.8.9) by mail.nvidia.com (10.126.190.181)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
+ Transport; Wed, 22 Jan 2025 23:03:01 -0800
+Date: Wed, 22 Jan 2025 23:02:59 -0800
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: <kevin.tian@intel.com>, <corbet@lwn.net>, <will@kernel.org>,
+	<joro@8bytes.org>, <suravee.suthikulpanit@amd.com>, <robin.murphy@arm.com>,
+	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>, <shuah@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <eric.auger@redhat.com>,
+	<jean-philippe@linaro.org>, <mdf@kernel.org>, <mshavit@google.com>,
+	<shameerali.kolothum.thodi@huawei.com>, <smostafa@google.com>,
+	<ddutile@redhat.com>, <yi.l.liu@intel.com>, <patches@lists.linux.dev>
+Subject: Re: [PATCH v5 08/14] iommufd/viommu: Add iommufd_viommu_report_event
+ helper
+Message-ID: <Z5Hpo+Q6gcwc0+r6@nvidia.com>
+References: <20250120181854.GQ5556@nvidia.com>
+ <Z463eXfgNArCOfPn@nvidia.com>
+ <20250121183611.GY5556@nvidia.com>
+ <Z4/7pGx6F1mpAUuV@nvidia.com>
+ <20250121200924.GZ5556@nvidia.com>
+ <Z5ALWFVTOSC/8+ji@nvidia.com>
+ <20250121211404.GB5556@nvidia.com>
+ <Z5AUNVHzJPATVqAY@nvidia.com>
+ <Z5Cmvfp4JW9vmMTP@nvidia.com>
+ <Z5Eywl1o9pdYyuQO@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20250122224503.762705-1-kuba@kernel.org>
+In-Reply-To: <Z5Eywl1o9pdYyuQO@nvidia.com>
+X-NV-OnPremToCloud: AnonymousSubmission
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWH0EPF000989E7:EE_|PH7PR12MB6393:EE_
+X-MS-Office365-Filtering-Correlation-Id: 65ae463e-10ac-4ff9-b4fd-08dd3b7c0161
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|7416014|1800799024|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?g6n46JD4XoLiSogMFA2PIlth23m2HEgxWU/Dkrw2sRCRVer6O1/nSSjHn0On?=
+ =?us-ascii?Q?oZAmNcKVCLUg1zZ/nKPwyN0MHmEooJiZvnnO0bOHhN3Gj5bCT1w1z0Yq7MtH?=
+ =?us-ascii?Q?Jy8QcHn6fPIDyDZgFBrBIy8HHx16fPsZRryTakILATTog9lu+50FrA66SjI8?=
+ =?us-ascii?Q?eAzYtQDoABlCimmQ6bN2c+EijEFL8B+MQQPg6WQ/qf2bEqE6xC82oC2PU0iK?=
+ =?us-ascii?Q?5CXwq04FQZX/y/fMbWE0vDQsxmxc3WqNXZCtI4fhu+XWu1z9kElUnwBi/gem?=
+ =?us-ascii?Q?+gtLxyok4J7LtG1aTfQC0kXNLVy43m6+DwQ3xIy59rHIC56oDL0rhZQexGUs?=
+ =?us-ascii?Q?TiYRN3lDGbUObNDU1DPbmmyc/5BSOGwcLbuxxx15vxsPYwXFPybQq9CBp59k?=
+ =?us-ascii?Q?kyFtAPJ9JwltT0yUpSEFq4s+2TzcHmJDoJYbZeJDhioUS1UJpcIydMY8sYNl?=
+ =?us-ascii?Q?Gz71bBwNbSp8704TF5+wazs6BgwtBQDgLS7TiOMjMXyV/KrS7O+mWWwagrPc?=
+ =?us-ascii?Q?USqlbK+VrW556Raj9rFwBv0PwE14ofqI/QML8JZYwafjCAUmIiOer2oUke9a?=
+ =?us-ascii?Q?deWkN+pdjxJ2G47eqwHJgmb5eD64AC3p3qLep0JUV89ACm5XaZ0eXMSyxbTl?=
+ =?us-ascii?Q?f38sj5d/8Zm3VUwHMK6Nd2xwxJ2wBkAizg0pM5FtJhuDUKE+hA93ZE1Ig9o3?=
+ =?us-ascii?Q?igonZT8HR0Ch+ECBvDLNvz0IL+HO3Jbwhpw8QXkojXvEpTdOiXWa4j9SSKmf?=
+ =?us-ascii?Q?PMExCAzhx6zmAqRDEx1aOTSRqyAmIvoinV3z4DWJjyr5c8nGuLOuVrhC94ym?=
+ =?us-ascii?Q?STZAlUV/SjxsNItEqNtS772JvpTIrJ2WlHM0DTGpajqoZNQ0RvWn1OJKChJr?=
+ =?us-ascii?Q?Eg35E6TSZTAOuYePhx4O+BtGk9PYrmKJ7dlgWQzR3jVwztMpJ4KLXZu/B+py?=
+ =?us-ascii?Q?OkQYTv8fIi/5/9hAAy68qS5l4776NzxwaZR0J6wmEeNpQm1YnEGXw4JPm86W?=
+ =?us-ascii?Q?FwHj9I8QsqCLRW6BS15LAocpfQxh9skOnuM9l6fO4cGqKL2qVww7r8mG3ZTu?=
+ =?us-ascii?Q?9u3q/vq3f4dlGBxIMKubWxTUJBTBoGxFYQJGal8cM4L5gMNtL/VS8ENN8cZM?=
+ =?us-ascii?Q?vkIOudTj8J+NmMJoEbPBsZ4+Zi6bfQVoM87yJtJWtJ+t4Bp8196mJEOATcbC?=
+ =?us-ascii?Q?XuPfXFw1IBUSieMSJ2Jbl6QXEdJ8cq8b6UPParMakuHV+ypjqmKoLZLewwgf?=
+ =?us-ascii?Q?N79zpldIpyEx7ysm8mHebYGIMW+roRU+X2gj8Qvs1N8rcIL1LXEQlcWkptV3?=
+ =?us-ascii?Q?zbQEYy9PZF9fxt9KOYyFaEQvQJYCHoiDpJ27nRcCFF71+4ozk0+XapDnnhFi?=
+ =?us-ascii?Q?FBa6rp+90+G4+Q3OC2IORTO/Fc3HYZ8t6ueAVSk93wWV8pgzdWZAbKJZKSde?=
+ =?us-ascii?Q?lFOf/RtskL6/8vU7D5ynJHKFHfqdJN/rfhti6ddWFGN2xgWauYCxygFdihtH?=
+ =?us-ascii?Q?xTCMqE15z+p41nI=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2025 07:03:14.0861
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65ae463e-10ac-4ff9-b4fd-08dd3b7c0161
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MWH0EPF000989E7.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6393
 
-On Wed, Jan 22, 2025 at 02:45:03PM -0800, Jakub Kicinski wrote:
-> syzbot discovered that we remove the debugfs files after we free
-> the netdev. Try to clean up the relevant dir while the device
-> is still around.
+On Wed, Jan 22, 2025 at 10:02:49AM -0800, Nicolin Chen wrote:
+> On Wed, Jan 22, 2025 at 12:05:27AM -0800, Nicolin Chen wrote:
+> > On Tue, Jan 21, 2025 at 01:40:13PM -0800, Nicolin Chen wrote:
+> > > On Tue, Jan 21, 2025 at 05:14:04PM -0400, Jason Gunthorpe wrote:
+> > > > Since we don't hold the spinlock the whole time there is a race where
+> > > > we could pull the overflow off and then another entry could be pushed
+> > > > while we do the copy_to_user.
+> > > 
+> > > I see. I'll be careful around that. I can imagine that one tricky
+> > > thing can be to restore the overflow node back to the list when a
+> > > copy_to_user fails..
+> > 
+> > Hmm, it gets trickier because the overflow node is a preallocated
+> > single node per vEVENTQ. We must not only check list_empty for its
+> > restore, but also protect the overflow->header.sequence from races
+> > between atomic_inc and copy_to_user. However, we can't use a mutex
+> > because copy_to_user might DOS...
+> > 
+> > A simple solution could be to just duplicate overflow nodes, each
+> > of which contains a different sequence, like a regular vEVENT node.
+> > This certainly changes the uAPI for read(). Though the duplication
+> > of overflow nodes doesn't sound optimal, it's acceptable since the
+> > duplicated nodes would have been regular vEVENT nodes if there was
+> > no overflow (i.e. no extra overhead)?
 > 
-> Reported-by: syzbot+2e5de9e3ab986b71d2bf@syzkaller.appspotmail.com
-> Fixes: 424be63ad831 ("netdevsim: add UDP tunnel port offload support")
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: shuah@kernel.org
-> CC: linux-kselftest@vger.kernel.org
-> ---
->  drivers/net/netdevsim/netdevsim.h             |  1 +
->  drivers/net/netdevsim/udp_tunnels.c           | 23 +++++++++++--------
->  .../drivers/net/netdevsim/udp_tunnel_nic.sh   | 16 ++++++-------
->  3 files changed, 23 insertions(+), 17 deletions(-)
+> Ah, didn't think clearly last night.. We can't simply add overflow
+> nodes either for rate/memory limit reason that you concerned about
+> in the other email. On the other hand, though certainly not being
+> ideal, indulging the race at the sequence index might not be that
+> harmful, compared to the extreme of the other case..
 > 
-> diff --git a/drivers/net/netdevsim/netdevsim.h b/drivers/net/netdevsim/netdevsim.h
-> index dcf073bc4802..96d54c08043d 100644
-> --- a/drivers/net/netdevsim/netdevsim.h
-> +++ b/drivers/net/netdevsim/netdevsim.h
-> @@ -134,6 +134,7 @@ struct netdevsim {
->  		u32 sleep;
->  		u32 __ports[2][NSIM_UDP_TUNNEL_N_PORTS];
->  		u32 (*ports)[NSIM_UDP_TUNNEL_N_PORTS];
-> +		struct dentry *ddir;
->  		struct debugfs_u32_array dfs_ports[2];
->  	} udp_ports;
->  
-> diff --git a/drivers/net/netdevsim/udp_tunnels.c b/drivers/net/netdevsim/udp_tunnels.c
-> index 02dc3123eb6c..640b4983a9a0 100644
-> --- a/drivers/net/netdevsim/udp_tunnels.c
-> +++ b/drivers/net/netdevsim/udp_tunnels.c
-> @@ -112,9 +112,11 @@ nsim_udp_tunnels_info_reset_write(struct file *file, const char __user *data,
->  	struct net_device *dev = file->private_data;
->  	struct netdevsim *ns = netdev_priv(dev);
->  
-> -	memset(ns->udp_ports.ports, 0, sizeof(ns->udp_ports.__ports));
->  	rtnl_lock();
-> -	udp_tunnel_nic_reset_ntf(dev);
-> +	if (dev->reg_state == NETREG_REGISTERED) {
-> +		memset(ns->udp_ports.ports, 0, sizeof(ns->udp_ports.__ports));
-> +		udp_tunnel_nic_reset_ntf(dev);
-> +	}
->  	rtnl_unlock();
->  
->  	return count;
-> @@ -144,23 +146,23 @@ int nsim_udp_tunnels_info_create(struct nsim_dev *nsim_dev,
->  	else
->  		ns->udp_ports.ports = nsim_dev->udp_ports.__ports;
->  
-> -	debugfs_create_u32("udp_ports_inject_error", 0600,
-> -			   ns->nsim_dev_port->ddir,
-> +	ns->udp_ports.ddir = debugfs_create_dir("udp_ports",
-> +						ns->nsim_dev_port->ddir);
-> +
-> +	debugfs_create_u32("inject_error", 0600, ns->udp_ports.ddir,
->  			   &ns->udp_ports.inject_error);
->  
->  	ns->udp_ports.dfs_ports[0].array = ns->udp_ports.ports[0];
->  	ns->udp_ports.dfs_ports[0].n_elements = NSIM_UDP_TUNNEL_N_PORTS;
-> -	debugfs_create_u32_array("udp_ports_table0", 0400,
-> -				 ns->nsim_dev_port->ddir,
-> +	debugfs_create_u32_array("table0", 0400, ns->udp_ports.ddir,
->  				 &ns->udp_ports.dfs_ports[0]);
->  
->  	ns->udp_ports.dfs_ports[1].array = ns->udp_ports.ports[1];
->  	ns->udp_ports.dfs_ports[1].n_elements = NSIM_UDP_TUNNEL_N_PORTS;
-> -	debugfs_create_u32_array("udp_ports_table1", 0400,
-> -				 ns->nsim_dev_port->ddir,
-> +	debugfs_create_u32_array("table1", 0400, ns->udp_ports.ddir,
->  				 &ns->udp_ports.dfs_ports[1]);
->  
-> -	debugfs_create_file("udp_ports_reset", 0200, ns->nsim_dev_port->ddir,
-> +	debugfs_create_file("reset", 0200, ns->udp_ports.ddir,
->  			    dev, &nsim_udp_tunnels_info_reset_fops);
->  
->  	/* Note: it's not normal to allocate the info struct like this!
-> @@ -196,6 +198,9 @@ int nsim_udp_tunnels_info_create(struct nsim_dev *nsim_dev,
->  
->  void nsim_udp_tunnels_info_destroy(struct net_device *dev)
->  {
-> +	struct netdevsim *ns = netdev_priv(dev);
-> +
-> +	debugfs_remove_recursive(ns->udp_ports.ddir);
->  	kfree(dev->udp_tunnel_nic_info);
->  	dev->udp_tunnel_nic_info = NULL;
->  }
-> diff --git a/tools/testing/selftests/drivers/net/netdevsim/udp_tunnel_nic.sh b/tools/testing/selftests/drivers/net/netdevsim/udp_tunnel_nic.sh
-> index 384cfa3d38a6..92c2f0376c08 100755
-> --- a/tools/testing/selftests/drivers/net/netdevsim/udp_tunnel_nic.sh
-> +++ b/tools/testing/selftests/drivers/net/netdevsim/udp_tunnel_nic.sh
-> @@ -142,7 +142,7 @@ function pre_ethtool {
->  }
->  
->  function check_table {
-> -    local path=$NSIM_DEV_DFS/ports/$port/udp_ports_table$1
-> +    local path=$NSIM_DEV_DFS/ports/$port/udp_ports/table$1
->      local -n expected=$2
->      local last=$3
->  
-> @@ -212,7 +212,7 @@ function check_tables {
->  }
->  
->  function print_table {
-> -    local path=$NSIM_DEV_DFS/ports/$port/udp_ports_table$1
-> +    local path=$NSIM_DEV_DFS/ports/$port/udp_ports/table$1
->      read -a have < $path
->  
->      tree $NSIM_DEV_DFS/
-> @@ -641,7 +641,7 @@ for port in 0 1; do
->      NSIM_NETDEV=`get_netdev_name old_netdevs`
->      ip link set dev $NSIM_NETDEV up
->  
-> -    echo 110 > $NSIM_DEV_DFS/ports/$port/udp_ports_inject_error
-> +    echo 110 > $NSIM_DEV_DFS/ports/$port/udp_ports/inject_error
->  
->      msg="1 - create VxLANs v6"
->      exp0=( 0 0 0 0 )
-> @@ -663,7 +663,7 @@ for port in 0 1; do
->      new_geneve gnv0 20000
->  
->      msg="2 - destroy GENEVE"
-> -    echo 2 > $NSIM_DEV_DFS/ports/$port/udp_ports_inject_error
-> +    echo 2 > $NSIM_DEV_DFS/ports/$port/udp_ports/inject_error
->      exp1=( `mke 20000 2` 0 0 0 )
->      del_dev gnv0
->  
-> @@ -764,7 +764,7 @@ for port in 0 1; do
->      msg="create VxLANs v4"
->      new_vxlan vxlan0 10000 $NSIM_NETDEV
->  
-> -    echo 1 > $NSIM_DEV_DFS/ports/$port/udp_ports_reset
-> +    echo 1 > $NSIM_DEV_DFS/ports/$port/udp_ports/reset
->      check_tables
->  
->      msg="NIC device goes down"
-> @@ -775,7 +775,7 @@ for port in 0 1; do
->      fi
->      check_tables
->  
-> -    echo 1 > $NSIM_DEV_DFS/ports/$port/udp_ports_reset
-> +    echo 1 > $NSIM_DEV_DFS/ports/$port/udp_ports/reset
->      check_tables
->  
->      msg="NIC device goes up again"
-> @@ -789,7 +789,7 @@ for port in 0 1; do
->      del_dev vxlan0
->      check_tables
->  
-> -    echo 1 > $NSIM_DEV_DFS/ports/$port/udp_ports_reset
-> +    echo 1 > $NSIM_DEV_DFS/ports/$port/udp_ports/reset
->      check_tables
->  
->      msg="destroy NIC"
-> @@ -896,7 +896,7 @@ msg="vacate VxLAN in overflow table"
->  exp0=( `mke 10000 1` `mke 10004 1` 0 `mke 10003 1` )
->  del_dev vxlan2
->  
-> -echo 1 > $NSIM_DEV_DFS/ports/$port/udp_ports_reset
-> +echo 1 > $NSIM_DEV_DFS/ports/$port/udp_ports/reset
->  check_tables
->  
->  msg="tunnels destroyed 2"
+> I'll give another thought today if there's some other way out.
 
-Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+I made a change to duplicate the overflow node in the fetch() that
+is protected by the spinlock, which is used for copy_to_user. Then
+the other routine for vEVENT reporting, protected by the spinlock,
+can race-freely update the preallocated overflow node.
 
-> -- 
-> 2.48.1
+Nicolin
 
