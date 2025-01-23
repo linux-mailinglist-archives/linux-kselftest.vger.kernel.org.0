@@ -1,182 +1,220 @@
-Return-Path: <linux-kselftest+bounces-24998-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-24999-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D030A1A491
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2025 13:51:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBA5FA1A4D3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2025 14:24:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8BA77A1928
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2025 12:51:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CFC33AAB50
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2025 13:24:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FC5920E6FC;
-	Thu, 23 Jan 2025 12:51:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA58D20F985;
+	Thu, 23 Jan 2025 13:24:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LWYPuEkZ"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="AYrOwRZo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2049.outbound.protection.outlook.com [40.107.94.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 756CD20C492;
-	Thu, 23 Jan 2025 12:51:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737636700; cv=none; b=gX1s+1QLUszctAJaZryBYVV/t42vacRRwCBMPaoUZfNvPYHjb7tZnD2Sr75d5dEBWlhklYamcXvV9/lb9w+waTGUmwunwDJkjjQDAX3tk8UAKQGCVJjyXve5sCDT4S9XsWSn7Js3iNoIGP05cOSBlsg+YOoGzKTXNzUnalD7uGc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737636700; c=relaxed/simple;
-	bh=iyuhhFYuuwZWkhs0Pb1PUjeLATyLrHTTa1AhyAXXdLc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j/93tEkV9rFVSYwTqmefxe+BDoZNolmdpUyDC/8i8UF6n1eTLayvbZVCwcmRAANz85Au2g/NFwFHoBhBDCXoNNXHatQiUTxGznzQUfpVvwhDjot27ISICyewDjSVTvU2BPpMseH+XRQX0QclY8VFCw7pNS+Sg5kn0DcpmyIZBdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LWYPuEkZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52D6EC4CED3;
-	Thu, 23 Jan 2025 12:51:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737636700;
-	bh=iyuhhFYuuwZWkhs0Pb1PUjeLATyLrHTTa1AhyAXXdLc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=LWYPuEkZPJu3U/daeZzYuj9GDuDQ6Snkts/a7ATihnfXLnCfg3hu4hl8adCrGJyag
-	 GB0MDqTd3BshWkLWBXlQMEBKOqD1D73mqbQqP5VwUdi8v8Ro9QyQjFabEJwgXP+ecH
-	 UTSZVhgYhZEciebb3cckRY6pRtlk/uKC+5YptL9hNl1klgLJKJX9287xJ5LNygqP/g
-	 zFXNquY5sy2epg5z73y0u/yxu82eaqyQmiZZDOxrAbAkA7Bz/hAXZc++9EQbW4iIB/
-	 kcHVF1+vrPJhEpIUTJ8JInIaQYscLf9vLZ/rcIZY5ZnqfLYFkrCdDxr6+baZl/M1EJ
-	 QNq7pCaX6G3sQ==
-Message-ID: <26ad0900-bd9d-464e-be9f-c1806b96c971@kernel.org>
-Date: Thu, 23 Jan 2025 13:51:27 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB3420F094;
+	Thu, 23 Jan 2025 13:24:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737638678; cv=fail; b=OLSY7jrv0PEgoa5cHTEtfDUblFGVp/rimE13Vg7/w/+O4Jy4H8ikqBbHcwIoZXm7xuoIAHMzc79JAKXzk+0raPyZl9hL0UGn54yuEYX9sndsgCxwgJKtOJri4GZ0BLP3tIb24LzG5h7o7MzABTKYjc3G1FHY589GtA+tvRA1qKo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737638678; c=relaxed/simple;
+	bh=dOClK8VGMQmFsx3rHJllgrmaacCdHU65YKAfMP2rTCs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=BAk2h8kWBOLHX8BXIyhFgc6nVpzcdLrNBwZSHHlsnYog8pizkgRICKIPSJEa0wLt2Jifimiiv/sm43nhfbrTXkVz0NcPuoIwFw4UgJoxTdu7LxybynKR1TumK8Fe95vVuNxitz5mWjxhCz4uzbFW5E6EQiHlrTUHxW5+4YL2/CY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=AYrOwRZo; arc=fail smtp.client-ip=40.107.94.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=iActez7wJAjF+Lns+36u2wJHFgeSi4DrtAU5C1Otrux6kDKugHOqu9z2gzA9fmw5sYhwIbXnVgX+Fm1BK9hqPSjqk1CUT9rY3KpVq7gEj22Ljjrmcs2KI/REWEexhUEkrwF87qPVw+RpLK5kdS7vLvrSYTKiG2oQgkO5yW0wFNXnrKCedkDylzMDBAViDDmn7qWZFQfAduTmi0m7Nu20ivazBsUL9xaDH/tyRlllXpL/wR9CifGS+0EMohi+2MPdq4DJgFlIK2xdeRozyfdl5H+WuvSwopvz5hie1dOOscGA+4ZG29BmdrBlsF01jLS5+u/5UyWX4doEzRf5m4TXnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YDMBe9tkpgHPQpqtg06bZBRTKJ0SR8sQY/o1bRFp1/8=;
+ b=qc3N1ir035tOf4WGUF3/KmqQMcL09+uwrpuxkJFbMwYjBQ8BXb9j3uyZTA7HuGz2cQMlKPvCJ3sSBaXh8lU1oKutERVhMg1O2Z9Ru+AQ5ivVPUDIAyIgIN6lJle73GrGV5G8Z84ATLd211UMjWdUrRiE5uXbE9EN5KW5QhJqCsaMZFsjdgGWHhTglkEAGwfJuGigAWSObEyK6JHo9TyG37EYFSH3gvKW/deJopRsTkrjkhi9aDVe5404DnGyit6Co8WocllRUcoCG5/sRmlepb1wxfYm4tY7HnNEefNCZ9V6QrSbkJzQRLRk3tvQhO7ZRrpMsGk9miWkZ9YEO8As5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YDMBe9tkpgHPQpqtg06bZBRTKJ0SR8sQY/o1bRFp1/8=;
+ b=AYrOwRZoS/Zana73LzH8mE2N1sHZfJDKjbvbt6Ysc8SQ4Tvtik6ra2hGUqaCSjT1CZpWfrWKlj1iXSMLXHI6fujoF26Ao7/g6UHDqOSUw+dfxAjb1SuB8klmvf/G29CH94wnl1B2kWQ8SxFAcEn+YiPJdYk56cN5OWRU6POiAYEjrlUCUPjE2c6rYuPa97qPhZB3yeL9865Bys39pwHpzpPgi9R6myBAPKTZWlRNyxJZxX9v5OS0qbsVXgl9bsbLLU/AcJC2RJbjoP8olnR4s8WPQ/jWoUdXMc+9gnpjVzzWt2m3OP1eqWACMXbf5IJJWyfQFA1pZO0BzwfiT4oU7w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
+ by PH0PR12MB5645.namprd12.prod.outlook.com (2603:10b6:510:140::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.17; Thu, 23 Jan
+ 2025 13:24:33 +0000
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732%5]) with mapi id 15.20.8356.010; Thu, 23 Jan 2025
+ 13:24:33 +0000
+Date: Thu, 23 Jan 2025 09:24:32 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+Cc: Nicolin Chen <nicolinc@nvidia.com>, "will@kernel.org" <will@kernel.org>,
+	"robin.murphy@arm.com" <robin.murphy@arm.com>,
+	"kevin.tian@intel.com" <kevin.tian@intel.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"maz@kernel.org" <maz@kernel.org>,
+	"alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+	"joro@8bytes.org" <joro@8bytes.org>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"reinette.chatre@intel.com" <reinette.chatre@intel.com>,
+	"eric.auger@redhat.com" <eric.auger@redhat.com>,
+	"yebin (H)" <yebin10@huawei.com>,
+	"apatel@ventanamicro.com" <apatel@ventanamicro.com>,
+	"shivamurthy.shastri@linutronix.de" <shivamurthy.shastri@linutronix.de>,
+	"bhelgaas@google.com" <bhelgaas@google.com>,
+	"anna-maria@linutronix.de" <anna-maria@linutronix.de>,
+	"yury.norov@gmail.com" <yury.norov@gmail.com>,
+	"nipun.gupta@amd.com" <nipun.gupta@amd.com>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"patches@lists.linux.dev" <patches@lists.linux.dev>,
+	"jean-philippe@linaro.org" <jean-philippe@linaro.org>,
+	"mdf@kernel.org" <mdf@kernel.org>,
+	"mshavit@google.com" <mshavit@google.com>,
+	"smostafa@google.com" <smostafa@google.com>,
+	"ddutile@redhat.com" <ddutile@redhat.com>
+Subject: Re: [PATCH RFCv2 00/13] iommu: Add MSI mapping support with nested
+ SMMU
+Message-ID: <20250123132432.GJ5556@nvidia.com>
+References: <cover.1736550979.git.nicolinc@nvidia.com>
+ <4946ea266bdc4b1e8796dee1b228bd8f@huawei.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4946ea266bdc4b1e8796dee1b228bd8f@huawei.com>
+X-ClientProxiedBy: BL1P223CA0018.NAMP223.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c4::23) To CH3PR12MB8659.namprd12.prod.outlook.com
+ (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net] selftests: net/{lib,openvswitch}: extend CFLAGS to
- keep options from environment
-Content-Language: en-GB
-To: Jan Stancek <jstancek@redhat.com>
-Cc: pshelar@ovn.org, kuba@kernel.org, davem@davemloft.net,
- edumazet@google.com, pabeni@redhat.com, liuhangbin@gmail.com,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-References: <3d173603ee258f419d0403363765c9f9494ff79a.1737635092.git.jstancek@redhat.com>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <3d173603ee258f419d0403363765c9f9494ff79a.1737635092.git.jstancek@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|PH0PR12MB5645:EE_
+X-MS-Office365-Filtering-Correlation-Id: 62321417-5c24-4920-49d7-08dd3bb14627
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?3B4IAQxSizldW4TLwBtgVuBTcgVeGHjca31TTJrmEU/l3WbNAntfU/YH5ViL?=
+ =?us-ascii?Q?R/kXbGyZOQk8o2rliIF7/aLBBUNCS7fwu1sRAYQYpWHmfaX0xKK9HDkqehRO?=
+ =?us-ascii?Q?gOa/B9XimM+JL05X5tx7lX1jjy5mJSRmNHx8K5jFkb447VvCUFjhAnszj6XJ?=
+ =?us-ascii?Q?56lbcOR/6JWxf8sc61FSVni9jk4FG2/3MaLU+VEePObnVdFyNER1SHb/TjBO?=
+ =?us-ascii?Q?Py1bvi0RKzzwn9uNJ5pfr+DOZDSBSZClXYZBN4tmaM4wy0JoZDfurNXvYihY?=
+ =?us-ascii?Q?lYDIWaHRTqniWRZyqoFkKmgsUUE0TMXxyM+n1dF+n772O6uq6azTYg+nET2W?=
+ =?us-ascii?Q?FnKEKqTgVYK/0K/V/Jw2UVhGHPIFiGDIhINucQwSmbbD4JAcQBcAC/nOY3ST?=
+ =?us-ascii?Q?HoMJ3zzHv7dC7hrV00c2YTMKRU7GPP+cSr24lszFXszsmgPJFCiQbBxGVL3F?=
+ =?us-ascii?Q?XJ7l40S+I9fPQlzrUP8aPcssEHBg66dpwoK2sxbWL9yPfQovDjsqz0tvUA/C?=
+ =?us-ascii?Q?Q0uPvhFSF3Yel6+bM6rmkeLpmPCPxogttQjTm8KcNIBwpCxQKjkk1HXBjteh?=
+ =?us-ascii?Q?M3LCvWgFWbEb0qAV5sE4G4JIbpLoBVYPjImMWHCjQIvHRFnvxxOnEI4qZLDW?=
+ =?us-ascii?Q?RtYxSR9fF6f5+e6jEbCj6wOLUexWUxk72oK8jcWE4/QIEQ3PNa0Z366bmoUO?=
+ =?us-ascii?Q?1z8LzXdeGd7dps8Jv6uFRNjbfNf7Pysx9IuJDwvrHW6OGx+ZEuqZRbwTD5L8?=
+ =?us-ascii?Q?GC6AQ52lHT+U/mEHm2QE5FvAGjG6B3u+Z1884MmBNXtjrVkYX5endYpMMLY2?=
+ =?us-ascii?Q?rlAAwSQZTcdVm1C9PAjJQehKIKT9BLKPVzR7gg3/wHH2hY75ufqxj3mw3mqk?=
+ =?us-ascii?Q?xmsCXFvwi8Vahpk1zMn+zT2c8zI9GKV2eSkHfspmRIZYjtivAeXQiltKC4lo?=
+ =?us-ascii?Q?w0sdNERPumTr27Z6MTE8BQ5m86IJEt+43ygLTmxEaAN+BWAIacoLLWHtyqKP?=
+ =?us-ascii?Q?1Z8R32LeHrPh4N1+FyKYE5ZkY1x/Qy8SDQn9W/qIj3syvwOuER5nhnBDrdZw?=
+ =?us-ascii?Q?/Sna5DGv1S9MB3kiyFn1p5m7I3WulDg5f0Pmzdhzl47nrWlI9n6+hM+v11xO?=
+ =?us-ascii?Q?PeQbDIqecZfDOzq5AvL5oKlhMHCRtfjrREzaVEVwvN5uIwAOZKf6FF55rYPR?=
+ =?us-ascii?Q?JCXWa18LagcLTj0dfmTEZ3o5YrXNVjldrRca+MCG5IB+llshd88/f8k9hO1x?=
+ =?us-ascii?Q?0THPX/8BsyG5X5IjMs8s3m76cVN1aPWcuzjgVaaRLTOgX4dZp4D9u/1a6goT?=
+ =?us-ascii?Q?epbIUszRz0xNxcaHWq320KWqX5WyBmEwmGkgCxQKW+E+B7+BiS36PWY0kxRj?=
+ =?us-ascii?Q?Yjqv2xamRZa6MZpgAtby4lv/uq6z?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?FVPshtQZqipgf4r2aqZkGPRESafjsjUSLsmm/Cmqif7Kl8Q1E3PbLta/lB1o?=
+ =?us-ascii?Q?fSDM6sanFCAMfy2FMyjjaUOmnOFt92tshum8K4yTN00uCdiSf6zoydaEbIPH?=
+ =?us-ascii?Q?kgfN+GIb9FVmH+k926BzcEHW2cIab0W0j8HDNVFf1yvS0Gj8H7hREnLf7yXS?=
+ =?us-ascii?Q?1ylvA7WBl4CQgMQELYNEPDOu0gYg08d/4DeMfhUpOUOc9m3EEA3NKLVhYhGA?=
+ =?us-ascii?Q?3N1RYX5UC1fBpLGn0Fz13YkK2Aj6UMWaa983iBvOU0RFBIbjKj5e3wC5R4Ab?=
+ =?us-ascii?Q?/9tIC+M5VcN4g2wjsPZP8RapSShz+S5OdXRrS3h9rBSiAsc+iOQPBorRiR99?=
+ =?us-ascii?Q?NXgETrFTcYdLYllMwsMS0/ptiJSDknLD52y5XoB0Rho/FL9Q+HJqD6Lnv2E8?=
+ =?us-ascii?Q?u3klXTVnEDlR0jNqkx3D76mUX4v2dGy5FjueMbCQg0favsk0gfXEZ8bfCd5K?=
+ =?us-ascii?Q?72wWh/VVz4TomClr7/7f25ElYYe3FLdrnXLKTdbiLo7mU0XqfSpqc2iQ5e25?=
+ =?us-ascii?Q?Wbi7xDPwcqatt7E4DTKfojY3M0UOBXXUarQKf5nSP0Khz4G6OAw8LcMDpF2R?=
+ =?us-ascii?Q?2WBlWhga3MFDIJXYHd4b8Ct/tv7Jgk7ScFgMdP5qr2nzehXNlsq+TUbHXA9i?=
+ =?us-ascii?Q?K7BplwdQgWZ/k3Na/tAapFBlgPksshcLgj5IK/JOUkFAHMWuJEmc+kmpk4z5?=
+ =?us-ascii?Q?EqYXPM0bLZGDluzfuhNAR7zXDAIX6v7CblrZCcCTRxxxUnDQ6xjCN11ekLWt?=
+ =?us-ascii?Q?op1fLM2oj4qnnXgEUILQ+Qd1IjUTrnxc032DCRnmyzm5Jb0EP7v9q3t42mgs?=
+ =?us-ascii?Q?Jmo32UVkeBGmLwwRQIkJqexB/ARCBl8dWGkooKxrNrY04woEhmidyTJjbEue?=
+ =?us-ascii?Q?gE4aSHSxYeukX6LFQzu64aHRDqbNG9Q5pJ5XFvFSJq1CIfx0HgFVRqUR9war?=
+ =?us-ascii?Q?zNi223g0gzENZ/raH10seXu8MgVi7fVGYxcwtUmGdcvr6KIjTWQ8/Gs+HEWt?=
+ =?us-ascii?Q?eo3SBfTGHgBD+fF7LjS8G+MlWFbmnHBcQrtP8VfZd2jsiBhbdwxtDeFUKVV6?=
+ =?us-ascii?Q?4xI8hZGYucYpcYV87aCD5figU7ZDDV7HcuPlvZOfIoXaeCLQt0xC5i5xyINf?=
+ =?us-ascii?Q?D2WywaGPb1A1NPW2+Am/lZJDfhoTnGLRDTOc0SsVmDBzw0F1Y5i3QzQFuyfW?=
+ =?us-ascii?Q?1reBfquttHdQMdi/g6LSQfEYhtCTQ39LqlNjndred8SdalmETZou2jvk00x4?=
+ =?us-ascii?Q?BkEaN3FooxL56V1EQ38KQ4ryTsV8gJpwMwX3+x0CX5mMkREoJhAvC/SIEKaz?=
+ =?us-ascii?Q?FjvW2tQHDOw7vKtE24AC0pyjJe0osM9cU1c82NhPntyZ1xqc5B8zT3d92k/w?=
+ =?us-ascii?Q?gKJQKwLgYDu4yvsPw1CU2jAtCTkY54X+9ZvRV1jmFurLyN3okh6slrSiNOyi?=
+ =?us-ascii?Q?IW8Ox2hUchNVa/NC8qVIo9Mv82UBoWrjCq9xFtIjPnXGFdxb3vq1XFx716SM?=
+ =?us-ascii?Q?GJYkLeek2b9tOIrommigh8DJaIOQIhQJiF89LLevJL8eDERIheBw9nfsvhFI?=
+ =?us-ascii?Q?ov1mOGHiZnOPnOmckyY=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62321417-5c24-4920-49d7-08dd3bb14627
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2025 13:24:33.0258
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SNyv6b4d/+ZVW8SKTW0fhNogkxWAvWZ7Zr+sWh6oC4Sla2QHopI98PEG0/8rmdq/
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5645
 
-Hi Jan,
+On Thu, Jan 23, 2025 at 09:06:49AM +0000, Shameerali Kolothum Thodi wrote:
 
-On 23/01/2025 13:38, Jan Stancek wrote:
-> Package build environments like Fedora rpmbuild introduced hardening
-> options (e.g. -pie -Wl,-z,now) by passing a -spec option to CFLAGS
-> and LDFLAGS.
-> 
-> Some Makefiles currently override CFLAGS but not LDFLAGS, which leads
-> to a mismatch and build failure, for example:
->   /usr/bin/ld: /tmp/ccd2apay.o: relocation R_X86_64_32 against
->     `.rodata.str1.1' can not be used when making a PIE object; recompile with -fPIE
->   /usr/bin/ld: failed to set dynamic section sizes: bad value
->   collect2: error: ld returned 1 exit status
->   make[1]: *** [../../lib.mk:222: tools/testing/selftests/net/lib/csum] Error 1
+> One confusion I have about the above text is, do we still plan to support the
+> approach -1( Using RMR in Qemu)
 
-Thank you for the fix!
+Yes, it remains an option. The VMM would use the
+IOMMU_OPTION_SW_MSI_START/SIZE ioctls to tell the kernel where it
+wants to put the RMR region then it would send the RMR into the VM
+through ACPI.
 
-> openvswitch/Makefile CFLAGS currently do not appear to be used, but
-> fix it anyway for the case when new tests are introduced in future.
-> 
-> Fixes: 1d0dc857b5d8 ("selftests: drv-net: add checksum tests")
+The kernel side promises that the RMR region will have a consistent
+(but unpredictable!) layout of ITS pages (however many are required)
+within that RMR space, regardless of what devices/domain are attached.
 
-Note that this commit is only for the Makefile in 'lib', not in
-'openvswitch', but I guess there is no need to backport that all along.
-Maybe the two modifications should be split, but I guess that's fine here.
+I would like to start with patches up to #10 for this part as it
+solves two of the three problems here.
 
-> Signed-off-by: Jan Stancek <jstancek@redhat.com>
-> ---
->  tools/testing/selftests/net/lib/Makefile         | 2 +-
->  tools/testing/selftests/net/openvswitch/Makefile | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/lib/Makefile b/tools/testing/selftests/net/lib/Makefile
-> index 18b9443454a9..578de40cc5e3 100644
-> --- a/tools/testing/selftests/net/lib/Makefile
-> +++ b/tools/testing/selftests/net/lib/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
-> -CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g
-> +CFLAGS +=  -Wall -Wl,--no-as-needed -O2 -g
+> or you are just mentioning it here because
+> it is still possible to make use of that. I think from previous discussions the
+> argument was to adopt a more dedicated MSI pass-through model which I
+> think is  approach-2 here.  
 
-(small detail: I guess the double whitespaces after the '=' were there
-to keep the alignment with the next line, so probably there should be
-only one now, but I don't think this alone is enough to ask for a v2!)
+The basic flow of the pass through model is shown in the last two
+patches, it is not fully complete but is testable. It assumes a single
+ITS page. The VM would use IOMMU_OPTION_SW_MSI_START/SIZE to put the
+ITS page at the correct S2 location and then describe it in the ACPI
+as an ITS page not a RMR.
 
-Apart from that:
+The VMM will capture the MSI writes and use
+VFIO_IRQ_SET_ACTION_PREPARE to convey the guests's S1 translation to
+the IRQ subsystem.
 
-Acked-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+This missing peice is cleaning up the ITS mapping to allow for
+multiple ITS pages. I've imagined that kvm would someone give iommufd
+a FD that holds the specific ITS pages instead of the
+IOMMU_OPTION_SW_MSI_START/SIZE flow.
 
->  CFLAGS += -I../../../../../usr/include/ $(KHDR_INCLUDES)
->  # Additional include paths needed by kselftest.h
->  CFLAGS += -I../../
-> diff --git a/tools/testing/selftests/net/openvswitch/Makefile b/tools/testing/selftests/net/openvswitch/Makefile
-> index 2f1508abc826..1567a549ba34 100644
-> --- a/tools/testing/selftests/net/openvswitch/Makefile
-> +++ b/tools/testing/selftests/net/openvswitch/Makefile
-> @@ -2,7 +2,7 @@
->  
->  top_srcdir = ../../../../..
->  
-> -CFLAGS =  -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
-> +CFLAGS +=  -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
->  
->  TEST_PROGS := openvswitch.sh
->  
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
+Jason
 
