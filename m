@@ -1,120 +1,120 @@
-Return-Path: <linux-kselftest+bounces-25013-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25014-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C4A7A1A5E9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2025 15:44:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6614A1A5F1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2025 15:46:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B06B1886BC3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2025 14:44:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 567287A4BA9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2025 14:46:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A23C21147C;
-	Thu, 23 Jan 2025 14:44:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7702211495;
+	Thu, 23 Jan 2025 14:46:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="bwPCPgYB"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="wsTPFG0o"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9590320F083
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2025 14:44:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3687920FA99
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2025 14:46:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737643464; cv=none; b=MBw5471iz9N5lHzPk38QFZUPMBZ6mVqUBErly3qqs28nMT+NFhZf4yRwbpgpxvBgsU+vjx/7FC+IwRNNTm5562XkknRXTGeQY/j6Lun/IPzYXCwMbESwaC2gQCsK0K7W2KSc+xWWIOzaxu2uIM7qbvtjOsId3bSwh6qy0QdjlkM=
+	t=1737643591; cv=none; b=lDV67+8HeGKq7ineRTzTAMA4TMveiFQomVGRFrzhOJjUP2LzAAN/8sLkz3vX+h4sZo4wlZ/Kjqb8+Q8cq3mUB6CsaUPy8t8eMvLNIb5Y/j2UGCsyd2Fl8dujvjbLZevsHwOl8d9P/fXvL0oLQoOqDhwhxItyf+bGsZ6n1NHduh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737643464; c=relaxed/simple;
-	bh=97mFc1bfhOYsAFlqLiNffBTQY1b4ObSH5YQBwDHDbho=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZSCZhPr7JYFFWb+uT+mcfbNINHaZdpV6RiSje4ITxvsxbkCvoUaiTvq0Hh9xMK2vRMoJsEo9IfF1DCdt35r836iK/RKw+ZiWmasC9NctW0NXcsmzZqLhlrnS99OKG1FRXPB9WVQVGuU+6tCwXbpqdIVm/dNgmb/N26xySj+iE8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=bwPCPgYB; arc=none smtp.client-ip=209.85.208.176
+	s=arc-20240116; t=1737643591; c=relaxed/simple;
+	bh=ZSXcYW7RW1lm0Y5aBlQdpdnEzWwcYwnyMHayjpCNWzU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=irDgQny3qqad743ja3z6UnvkCQpHO8tQ536SZeW7akhidS4IQ6MDszUf67AefyYrlRIcElduvVPW/EGrKw6/qWqNAXAqNknWn403JVSkDuSssGcP6xH9U9F+Ra20gwlwSqFDHhqU/KFJm/rd0X6G9+QQB+yWWvM+LlaDv+W1gQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=wsTPFG0o; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-304e4562516so10016001fa.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2025 06:44:22 -0800 (PST)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4368a293339so11469535e9.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2025 06:46:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1737643461; x=1738248261; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1737643588; x=1738248388; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=97mFc1bfhOYsAFlqLiNffBTQY1b4ObSH5YQBwDHDbho=;
-        b=bwPCPgYBIr1i1D+uWkVuyktvynE1iVfe/fEVaq7618GWsU4GIZs0UsTgLRxwg5G0x8
-         AIiOsspfUApFJawDk1blWWxS5TSD6/taKGMJ56K/I+bXocbFTRv6DmGPBm15pVLZVSc3
-         hgBSk8v17igNzK0iu12gqr5uqr8H4zpSIZ3buGl9xBggHnzlz9w6PtBgMcL0m0lhG6rB
-         Q2ZF/GFcOhErRJ+Xw45rcRhyvCCYvdINqPXHV/ilEyja3VJ2daytJSfKfM2Iafci18+2
-         e5eHAuftYtYiooZBjtY52lHa8rBBTjXiUoSznNLHI0Klf5kEqF5+nuU5CnkqaxftvfVC
-         o8WQ==
+        bh=gE9njkO5rlhGWyfm/wwoDDQos0GMgUfQpTo3o3WC4dE=;
+        b=wsTPFG0oew1+KwU/0S6hYo7ggOKWl+yR8ElHOQ2+drr3jP5v+9utno8JlWOgmPM8y0
+         NQgy+0K8IL6hTnI0I+VDt7Fwy5+Ii4Omovk2bLatPNeZaYG/cSxVbi1zXJprIXZPPe1s
+         Vs2Dj/JEKnpeqxRLKsmxexQ6T1kZni/TKgzXT4fl26g7476e7tiPLjmletwQS3efWCnp
+         O3kO/nd6/dWFTx8M+Eg3gqYf9CgpsVPWuU+QmS7sWgkVS3qrDgenf8M/Y/GKAVX0veyT
+         e0Kcx0a5LioQz5T7Ozgps60E0As8B5C8KzbiOPBuhO6VE1KSmgOEE81cQPDnFJsmfKWh
+         /54A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737643461; x=1738248261;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1737643588; x=1738248388;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=97mFc1bfhOYsAFlqLiNffBTQY1b4ObSH5YQBwDHDbho=;
-        b=PKGXgQkaHRXIr9wdaToRM41F2xpUNCVnnXflXGmxmbSmQbcc/SgMw+/SzVBw0sx0PQ
-         mDvdENwXXLq5MGgzI99L/5Z30wXYIrdgmzuzwQPlAOOW4M//gpvB/GDpqF8A8kPzPinZ
-         iZiwEnAHWr+AQsnvSRII9TWBp+UTcZPqfHDyyKrDrTcQN1NwPw7GX4GCLxxzA8JzUrfg
-         yhfgGkE1rfM//ICwONiFopjLO+XB4nKCJsD5CE5QYyBIPFpbP98Tp9EOuEdbgkZd1h0c
-         m2l6dwBz7mKbpebj0nPZEwQm54vxvDiIT+6JRxJguw38PHxjJfuZsdYoQEx3GEzyccG0
-         klXw==
-X-Gm-Message-State: AOJu0YzxweIoX6xnzetEUww1DtCJX3SZG9bgy7rPrRs9KwTT1z57/166
-	W74Sviz8k4YqMEwWkQA1ouCh8yTgVOky4LlqPNhJ+1PiV9zdkla86RxpG4yF/6Ze0QsFPqOF0WA
-	gAIW6UH3vKAXx35VG8uNskyC4DD9F2ZkvHTBccA==
-X-Gm-Gg: ASbGncvItWhB3vh3dta/ye0woV9E4nwF6cnWIP3iNF5sWy4uuZ1nwxFYg6plQVXVs88
-	r4zq3MLJQ8/wXMT5qVYe+ntDUAaQCAojQguaaCkkjdeyAFIgZvZlu/hxQ3/DHlu5mnQlI9KJwr7
-	nR4MJYJvFfL5k6bIofmsW9Qn2Ip6Qb
-X-Google-Smtp-Source: AGHT+IG7GrwR/B983ouCX5cekNNgB659x3tE/CPxN4qXwQi1fqY1tndv4W5+gmPBI4Xk9AgKg3ts8y/7hothDE8fdEQ=
-X-Received: by 2002:a2e:bc83:0:b0:306:d69:904b with SMTP id
- 38308e7fff4ca-30761bcb7ddmr15096701fa.8.1737643460462; Thu, 23 Jan 2025
- 06:44:20 -0800 (PST)
+        bh=gE9njkO5rlhGWyfm/wwoDDQos0GMgUfQpTo3o3WC4dE=;
+        b=KRNaOpGc6vu/tSzDtBVs0gErhwJ+iG2q6ApEo+YVub3Wg+SkK3XXI6ihJesVz0Eost
+         JoOYqjZgJ1RnnXmJBObxFROKb3icuvfq3waH0lDoHdvK6VIEN29/a/aW+xVUaz14JcJf
+         Yptin3PYWujy3vI26rTjhfeaIOjSyMzijnlbuEViyoanfFWqe3R8XG6RO3UAVVTGdI5p
+         pjbOthZOOoVjtHclBKoz+p8ipq+y5iFY8pFsW0k0+VsnRoMXjy6jeEBObSA5l6THWQXu
+         kkGIJBxagis6hKKBKjQ824n10sfRv2XH9poyQ/IMPqsQ4C8IsK+X+a4LK7aP8iFhyv8z
+         hgAA==
+X-Gm-Message-State: AOJu0YwjJsxinMPCECfyhuy0R8yA1VFOcHsK0cWh46da2e5fliLGTo/t
+	7FMYTIW4TmZd23RtFzH1Nm2vbbXwa+Y1mK/uN99mGn/1rWrAcvxVSKruKQu0dUgyPZQaKmPQl3E
+	6Qqs=
+X-Gm-Gg: ASbGncusH+EPCm1YYW/j2JeuEYjj7K6HOIE2YZOBJLELIP4J2Wj4bfb7E9g2YHZa0Sa
+	/insy5LNkpLC9ow9YPuPPl17Kj+37PjLKgF1shOPJO7iWug5uAHpGESmBK+zG3FH7tPpzW+2ENr
+	7L3J7iDgrNPkf7YvEG4yJqaDxJJnDZUKMZc17S/pr+zwCkp+xZU2J4aWdlOUv9mWKRLxHEubBr/
+	YVYavfLWPmvHzPJECr770LREgMM+OxzjoYYLdGIZ+3gebNE9cBuGwq1Th0G0Wj/LcB5P4oV/fot
+	j7Si
+X-Google-Smtp-Source: AGHT+IHSbJRP89PUvqCfe6XVziReSXL1TAuXKxVQkpUrbJ+a9b++AdJiYrNdmEQf29DsriG4tW3pUg==
+X-Received: by 2002:a5d:6da3:0:b0:38a:4b8b:1ba with SMTP id ffacd0b85a97d-38bf5662598mr27554504f8f.14.1737643587792;
+        Thu, 23 Jan 2025 06:46:27 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:ad40:de3b:e658:a016])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38bf327df12sm19671794f8f.92.2025.01.23.06.46.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jan 2025 06:46:27 -0800 (PST)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+To: linux-kselftest@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	Koichiro Den <koichiro.den@canonical.com>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	bamv2005@gmail.com,
+	shuah@kernel.org,
+	brgl@bgdev.pl,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: gpio: gpio-sim: Fix missing chip disablements
+Date: Thu, 23 Jan 2025 15:46:25 +0100
+Message-ID: <173764358055.127143.13169466880971669873.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250122043309.304621-1-koichiro.den@canonical.com>
+References: <20250122043309.304621-1-koichiro.den@canonical.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250122043309.304621-1-koichiro.den@canonical.com>
- <CAMRc=MfRm02TRJ52CU3iLhsvwd95CBhxmkbebCJ=riiXxsCkyg@mail.gmail.com> <iyraiattza5sogq4ysmmds2uvenlhnccrdw7vhoizgsu462db3@ouuwrbrznct6>
-In-Reply-To: <iyraiattza5sogq4ysmmds2uvenlhnccrdw7vhoizgsu462db3@ouuwrbrznct6>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Thu, 23 Jan 2025 15:44:09 +0100
-X-Gm-Features: AbW1kva8MT3ORhxRkp2HOeRXNOn6lRgqgtjHUKmeJq4HTp8o3r6ABBT-ga-zhK4
-Message-ID: <CAMRc=McWYf2-2nxiRKpMumzbp6irfi46873-KXxF5UbWXxU_Hw@mail.gmail.com>
-Subject: Re: [PATCH] selftests: gpio: gpio-sim: Fix missing chip disablements
-To: Koichiro Den <koichiro.den@canonical.com>
-Cc: linux-kselftest@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	bamv2005@gmail.com, shuah@kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 23, 2025 at 2:26=E2=80=AFPM Koichiro Den <koichiro.den@canonica=
-l.com> wrote:
->
-> On Wed, Jan 22, 2025 at 10:26:27AM GMT, Bartosz Golaszewski wrote:
-> >
-> > Hi! Thanks for addressing it.
-> >
-> > Is there any place in this file where we'd call remove_chip() without
-> > calling disable_chip() first? Maybe we can fold disable_chip() into
-> > remove_chip() and make the patch much smaller?
->
-> My aplogies for being late.
->
-> Yes, there are five places where I intentionally omitted disable_chip()
-> calls before remove_chip() because the chip wasn't enabled in thoses case=
-s.
-> I scattered disable_chip() calls only where truly necessary. I also think
-> explicit enable_chip()/disable_chip() pairing look more clean and readabl=
-e.
->
-> That being said, I'm fine with your suggestion.
->
-> -Koichiro Den
->
-> >
-> > Bart
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-No, that's fine, let me pick it up as is then.
 
-Bartosz
+On Wed, 22 Jan 2025 13:33:09 +0900, Koichiro Den wrote:
+> Since upstream commit 8bd76b3d3f3a ("gpio: sim: lock up configfs that an
+> instantiated device depends on"), rmdir for an active virtual devices
+> been prohibited.
+> 
+> Update gpio-sim selftest to align with the change.
+> 
+> 
+> [...]
+
+Applied, thanks!
+
+[1/1] selftests: gpio: gpio-sim: Fix missing chip disablements
+      commit: f8524ac33cd452aef5384504b3264db6039a455e
+
+Best regards,
+-- 
+Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
