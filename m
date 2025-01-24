@@ -1,288 +1,236 @@
-Return-Path: <linux-kselftest+bounces-25096-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25097-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5D84A1B6C7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 14:27:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C51EAA1B6D7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 14:35:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2D1C16C9A8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 13:27:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 251CE16D085
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 13:35:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8A6D35979;
-	Fri, 24 Jan 2025 13:26:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 920FF200CB;
+	Fri, 24 Jan 2025 13:35:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EDzJhJYS"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="NJcOOcc/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 292CC35952;
-	Fri, 24 Jan 2025 13:26:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737725218; cv=fail; b=CIWMMzljWiCbyIuOLjzlMcwDRpDPbi8GP6cVN0hB/97s7YFIXmpH67H0TgslT5hCL2qKIehMMgTkBfjOhhxGHJOW4uF81X0ntuhVuY3yeAbTbI03nQ7Gdm6+Y2gwf1mWg5I2ap9DFnfrdpjY6aEmWuI/aizw/V0GZ27Dnw4TZUM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737725218; c=relaxed/simple;
-	bh=dLVhE9alcTRDKxrLk9cHnFW3U8OGQrNZd51D3ZxttIs=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=YRigvDWTDxxF9ivYkRjXRTkobA9eM4Wr8IaD52G4yJEsBAHr3j/YY0EN2qBroZopvYdieM/1dDNEXsHexnVys8YReVCEDCG5PHkbyB+v2KwaSNg6T4XvkI7/soMNWxhZIId8Y5xh8UnPxpXbKQ6goWAzkFaa7L1cnETTHWH80II=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EDzJhJYS; arc=fail smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737725218; x=1769261218;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=dLVhE9alcTRDKxrLk9cHnFW3U8OGQrNZd51D3ZxttIs=;
-  b=EDzJhJYSpFLfvbYssYlV/e4m3nW5yxzeaSckOO7aLF4+Vkqn3S+tJzCs
-   2nl47S+zTgef9XfCnds9znHDvDNs5Uf4EMt5FeZgvi4ZXwtEABxtnJTZf
-   Yr0AC1DxguxmaryATD2hWRlXxZh5MevbDtjgYRWkKWDQ8QmrIo8k4eUG7
-   sO2jdWy15PWHTpp2VAE6Wn4C+Zb/azxgcOce0vNFkFtV8kM5nnDpwn4ss
-   kjv0dkHe7oKI/bNhqxTKn86w0J982VNLYO2Jt+jRQAkoZfihPnRFwrsDv
-   2skfpILyKZpnlvtTuh1lrXcS5lN+Ct7dnctVKS/u7lXQt7nTU/RWzdqzn
-   Q==;
-X-CSE-ConnectionGUID: i73cDnb5TQS+fM/13tTMRQ==
-X-CSE-MsgGUID: OnQ+yG6nS3CN+HsCs1QmdA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11325"; a="55670893"
-X-IronPort-AV: E=Sophos;i="6.13,231,1732608000"; 
-   d="scan'208";a="55670893"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2025 05:26:57 -0800
-X-CSE-ConnectionGUID: ZmYRnUCvT0SaTDOCu02fLQ==
-X-CSE-MsgGUID: 7n2VO1ZNRf2X4038zk8j8g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,231,1732608000"; 
-   d="scan'208";a="138640865"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orviesa002.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 24 Jan 2025 05:26:56 -0800
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Fri, 24 Jan 2025 05:26:55 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44 via Frontend Transport; Fri, 24 Jan 2025 05:26:55 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.49) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Fri, 24 Jan 2025 05:26:55 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MLir8fv7l79N85PzEuSDpzJdi2/X/PZyPE4Em66B42VcGUt2qNaiC5+U8zlw04k27xWpt01hDPIoxOHpgNM81Qb4ZjqgeE/D/hC4xbuHu+X42gegaeyyRCg0k/z1QgHy+mjSh1ElisJmfG+aeQHfuxpg/PbbtfmoAxPB5htg5A0egYNcet+/Kom+v15Mg5u6MdSoX+xdYsK7FeDZF9nJgu213e35tujKOZhZ9magKrnzvyQyqUtZW+8H2uGlpN19ERpw3osr0Y9Tg7Eo/wlP7bifAHCPWAQFCpa0GGYDxgX7hZOudlGymUTkS102+oHbuZYkF0CMhHlWM6mBO5Nj2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L3gd6DTnQCkipaKyWTEOX5J5zoQBsMquc6yboH8QzeE=;
- b=NuIA9Nw6Vqq24tgm8b/y49LM/3/n5YrMDIgRjIEXXBTwU70wnyJ8Acd53Ju3/5u/w4ZZc8R3nsihMXZw++0ecTYU5B6pQNn4kHx9RZta35Ht5LkgudSMM99wzT/bAVhAK2rowtTHuOzNkrK0KO8pMKyuBfLzYUrg7GYOcomoAUwNA8uwbADWWTdzRBxVZ7lbbKlsZb++RKZswG/aFg/7pT5GA3g92WrZhjdSYX5RZMTdtRkzgxJnaYVkPHtsVb9uN/umlO0kIYxdI4X1+gnV703UwzkSH75FjTgGpZPI4R9gpwyuULhi4vKSEYl0J5jg4NtVapXZTQJVMUELhVQtuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
- by PH7PR11MB6331.namprd11.prod.outlook.com (2603:10b6:510:1fd::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.18; Fri, 24 Jan
- 2025 13:26:54 +0000
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::d244:15cd:1060:941a]) by DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::d244:15cd:1060:941a%4]) with mapi id 15.20.8377.009; Fri, 24 Jan 2025
- 13:26:53 +0000
-Message-ID: <84f9ab89-483f-4659-8e7c-5b69748d83b8@intel.com>
-Date: Fri, 24 Jan 2025 21:31:59 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFCv2 06/13] iommufd: Make attach_handle generic
-To: Nicolin Chen <nicolinc@nvidia.com>
-CC: <jgg@nvidia.com>, <will@kernel.org>, <robin.murphy@arm.com>,
-	<kevin.tian@intel.com>, <tglx@linutronix.de>, <maz@kernel.org>,
-	<alex.williamson@redhat.com>, <joro@8bytes.org>, <shuah@kernel.org>,
-	<reinette.chatre@intel.com>, <eric.auger@redhat.com>, <yebin10@huawei.com>,
-	<apatel@ventanamicro.com>, <shivamurthy.shastri@linutronix.de>,
-	<bhelgaas@google.com>, <anna-maria@linutronix.de>, <yury.norov@gmail.com>,
-	<nipun.gupta@amd.com>, <iommu@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<patches@lists.linux.dev>, <jean-philippe@linaro.org>, <mdf@kernel.org>,
-	<mshavit@google.com>, <shameerali.kolothum.thodi@huawei.com>,
-	<smostafa@google.com>, <ddutile@redhat.com>
-References: <cover.1736550979.git.nicolinc@nvidia.com>
- <c708aedc678c63e2466b43ab9d4f8ac876e49aa1.1736550979.git.nicolinc@nvidia.com>
- <62ccc75d-3f30-4167-b9e1-21dd95a6631d@intel.com>
- <Z4wP8ad/4Q5wMryd@nvidia.com>
- <2b6c52f6-037f-43d9-8384-7b48764a3e81@intel.com>
- <Z43lMrJDdFEDaArW@nvidia.com>
-Content-Language: en-US
-From: Yi Liu <yi.l.liu@intel.com>
-In-Reply-To: <Z43lMrJDdFEDaArW@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR04CA0007.apcprd04.prod.outlook.com
- (2603:1096:4:197::19) To DS0PR11MB7529.namprd11.prod.outlook.com
- (2603:10b6:8:141::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CB4C4F21D
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2025 13:34:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737725702; cv=none; b=leJhCrZ/4880j4ypRu9CETKe+f4+coXKUdv2gSoto+GsKIsMxxpuUslu7FVirwAhUyCXScXX2/NIqK1AW4OXHOqOx9mbD2cNKACat241epS3E05RnjRBlWb4v4xcUTRDhKbFkipqxB6C0t6jLAoG6OYSeF4Xl5HFEXASgwLyM8w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737725702; c=relaxed/simple;
+	bh=k5su0T4KRYPeGXuUJXlKRR83/GJcmT0NQhJbpLGS/aU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gy0R/oASD6uqOva0jQzBZPHQrRg2AYq77BQHMth5FVgUABsXZ36A4ZweyfL9eJVmRh3XLU/P0XCH12LG1hEE8wB6ER6CTGhGFasYpS8hYR4umC49XgFi48nXdDhixiwjw4pCNWqcsl9MGja93wiRvC7msaEH3dI2m9GllUbK2as=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=NJcOOcc/; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-385d7b4da2bso1978986f8f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2025 05:34:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1737725698; x=1738330498; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UQWWJ4GUjFEA0dJ61qiJ0w7V+q7n1+jTTHCZ/wJ2aNI=;
+        b=NJcOOcc/9jbhLdhWOeoL81tfP3dfHa/jubSxJ7OyQihrfZqEc0grgPEPBj/xNUIMyR
+         RuBrma+FsOxydbZMlr0hC/kibiLVcyBXA+JcAKvdvVla9gT4KgUh2QOEjsJZV5W8Mlrm
+         Lj+wLNJ9+mQbXBt9TSybVLGpLsKi/oTPL5oxkxoo2fDE0+oRK5i1u48s1t2j9QLJwAYQ
+         B7sroVTsyhz4WXz7mLPKPWiDBBXlA197dnuJY3kf5iLndLy2C7fObxvJbTBPfxrP67sf
+         8ZKLFwkCBCfBZwdNE9FFbiP06z5ANPjhmZWy3Ob2jdCTCqMQW8TfTdCIgGiv0NZ3sCg1
+         akgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737725698; x=1738330498;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UQWWJ4GUjFEA0dJ61qiJ0w7V+q7n1+jTTHCZ/wJ2aNI=;
+        b=wzhTd2P2MI13pvJ1uP52eQ9ZQgBmEPc3lq54v43G0w8+5Hb7H4roQdApO7Ea1eUMuY
+         gwBkVvWWqwKRbtjwmRJX1L+ADcaOx5Kb9gL59ospc8vihxqVKeb5eulBP29F3PJDkVrB
+         KbQGkVFinXRJBl064+R5Plq94EoJRxGNl3s1j9ZGedNSj58SOklrIgddQo0ho0tBwnqj
+         guC8/L/cKqBNxPn1D4189xU9IZDDckWDZi12qbu1aLGSC2X+oBHpiwyk5injfdILn/tt
+         EPrlJOdsItKYGdb5GbQEq5xQOuyDfRBww8F6Z39yS8+XE+REgCJUGfMUMuX0FytZ3cXE
+         ReWg==
+X-Forwarded-Encrypted: i=1; AJvYcCX3c6n59V2+qW7MF1XIOc/lzlN9MYqhYvyv2LFVM+X8rglg7Jum9BPWRFzcZiMB3wDDIKlqwyE3Sk7vOW5R7d8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzM4+FI1qMuHV6RnhoIvX/ZHA+R6sTVreM/e0+tlqSFykGBXtm4
+	M5j9dqt08qcg33gRB6hfCk/DwXJ5+OPCMHHsL2pbpNLuLBeUddRMq1YGuz/8F4g=
+X-Gm-Gg: ASbGncsK9/YrmAaFQFtHowDWCXePDJj8Wibaj5e2gtWr5ydwWM2gztvSVrO0RH0zxKK
+	7yylsH3LWFOLXHa6j6jn934bPoL6LGSdlKoRQOm0Q2Wpd/E7OGBagiR2ZJidYFDGGqy2YtFfgV5
+	PG26tYdZrem5dnn5a5TkgCKOfdw+mJpvrPjsNImXOCsXjO6MuAKZFVYeYhcdn523YVytU/H3MpF
+	bqm3GldmlN8WXWI8GXHg27YSphsQ34M9VbOaS7vfuwbfMuXa3KuxAKDT45Kp7MgjoID1A27CKRO
+	wSTB06A=
+X-Google-Smtp-Source: AGHT+IF3s4fU5+t8/f+hOsEy5Nf5bcm49sgfqQgftaIHUM1gK9rPTY+VC8hE4cREhJOWCxCt9EWOug==
+X-Received: by 2002:a5d:64a3:0:b0:385:f909:eb2c with SMTP id ffacd0b85a97d-38bf57a77a2mr37468273f8f.38.1737725698250;
+        Fri, 24 Jan 2025 05:34:58 -0800 (PST)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c2a1bb0besm2727227f8f.79.2025.01.24.05.34.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jan 2025 05:34:57 -0800 (PST)
+Date: Fri, 24 Jan 2025 14:34:55 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Mike Rapoport <rppt@kernel.org>, x86@kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andy Lutomirski <luto@kernel.org>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Daniel Thompson <danielt@kernel.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Gow <davidgow@google.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Jason Wessel <jason.wessel@windriver.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>, "H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>, Rae Moar <rmoar@google.com>,
+	Richard Weinberger <richard@nod.at>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	kgdb-bugreport@lists.sourceforge.net, kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	live-patching@vger.kernel.org
+Subject: Re: [PATCH v2 06/10] module: introduce MODULE_STATE_GONE
+Message-ID: <Z5OW_3dbdcZrNCgW@pathway.suse.cz>
+References: <20250121095739.986006-1-rppt@kernel.org>
+ <20250121095739.986006-7-rppt@kernel.org>
+ <4a9ca024-fc25-4fe0-94d5-65899b2cec6b@suse.com>
+ <Z5N0UVLTJrrK8evM@kernel.org>
+ <8c6972c4-c1bb-402a-a72d-f92b87ee5a89@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB7529:EE_|PH7PR11MB6331:EE_
-X-MS-Office365-Filtering-Correlation-Id: f066dfd5-022e-4a99-681b-08dd3c7ac422
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|7416014;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?RzRjbTZhNWdyZkNrN0NoZDM1ZjFxUlNiOG0wTlJtTDdYU1R3YzE4NlBoU2U1?=
- =?utf-8?B?UkxCVmVlNWVpR21LdEEvNDNsanpRTWZGeE1DSUZTcEtsYVBqQkJPSFI1OHMr?=
- =?utf-8?B?VGNETWR3djZwQVQxOVNXNW9PS3dkTTRXUDhCNy9xVzBqalRydFF2MjRwMDFL?=
- =?utf-8?B?M1padHZ6czdDb3BWUWZtaHZUQVdveDBUMityQ0pvSkQwTk5wM3A1MzBFMHAr?=
- =?utf-8?B?V0JiNGZiTzNHUVI3bm40cExUQmNFYjk0WjBnY092ZHlHOHZjRlo2Y09YZEwx?=
- =?utf-8?B?anlwUDA3QTQvOUIyaExJMisxcWswekZySkJ4d0pTaFV5NHRpNzlDTWFBTTBB?=
- =?utf-8?B?bXRQa0R2WXluVERjMGlIRVVrNnh5c3BFdVdheUlDRDh1SHExL1Bqa1VteG5B?=
- =?utf-8?B?V1dJYWtGVmttMUR3blduUDRrVEExOEZNakdYTVA1Tlk0aUFIM1hwTm1DOGly?=
- =?utf-8?B?RGhST2I2cTlia2Q2WWdNOTIxMldHVFFVVWdONHc0Ky9UT2ttMGtOSE5hNHcx?=
- =?utf-8?B?ald3WElVanhmN1N2RUFkTFJrc3Z1Tk9yWS9zdm9OcVRJTjAvTjlFWmhtZFZI?=
- =?utf-8?B?TU5wSUwzN1Y3NlE2LzRXWlpOWWdUc2R6bmlud25KNEF1bThuamtXZ3hSdHZt?=
- =?utf-8?B?alkvc0FtRVJianFqZ2dwdnFoaWZtdGZMYVZ2eEtKUG9zV3g3c0xlVGtabEtO?=
- =?utf-8?B?azk3eVZOY3ZHUzIyMnM2bXVieG5jbm4yVVZiQ0lrYm9sVzFHYVlzaWNybmd4?=
- =?utf-8?B?dE9uS05XZ3RjR1lGSEYvMFR2dnplME9MQ2tueitQdDdpWjNJVXY2SUJwSXF4?=
- =?utf-8?B?VjExdjdoZ2RjcmNxKzBGczN3cDJ6SWJXK2dxbGJpZFh2b20yZ0xVNDVpZGlC?=
- =?utf-8?B?UzhENVdCa09CTmpnK2taT2Z0d3FuK3NsN3hIcFR5eXFHbjJuQW9lbEs4bTA4?=
- =?utf-8?B?QnR1WDMwYmw5TUFPTHNiVVpMbjZVajg4QklDVEZTcExXWGQ2dWFLbFJUbitS?=
- =?utf-8?B?TEI0YWMybVd1dFkzeXpEbTB6bk5BN0FlWUNMbXRzekRGYUZLcUdvSjNmUFZw?=
- =?utf-8?B?dUw5eS9DS3UweUJpOThSZ2plVnF1cSs5bGVCSWVUdEhkV3B6VlFXRVZLYXE0?=
- =?utf-8?B?NmYxaGdjTlMzNWNESEhVR2VLWWtHM2l3QWZ6YklkeCtrWTlXTGlyV2t3WlRx?=
- =?utf-8?B?VWlkcXJPSXJhMndLd3BuK0I5L2hUdnpmNEhPZjFxdHJiSXhjZ0dQbmcrR0dR?=
- =?utf-8?B?dytjVnZBTWdiL0ZSelFHODVyQk1EUTBiSGtEWWRqOFozWjRxWkhFb3kzTkVy?=
- =?utf-8?B?VVBBOVh2SDNjL092ZWliTTRiR2JlaVUyQXNPaURCcjd1WmVNemhMTGlFUUs5?=
- =?utf-8?B?VjRENldORkV2a0EzZE1SbU5kMEYxUmFKeXJmb1hJdUsrdHM1SzIxdHZGSlVv?=
- =?utf-8?B?eXJBb2g5WTdOSTBHSDkvbG9BaGtZZXQrbnQ0QVdsN1h1aGdlMkp6a0ZhMDVD?=
- =?utf-8?B?Nm05Ukl2M3NjSTVrcjNoaXYyeWxhMmdCOTFtb3pneDVLMEYxbkVmdis1QmZp?=
- =?utf-8?B?SkxXcnpSYWNTNFBQQlNuV08rNzZRRkYrYlhBV3RzZ3phSGZudW5CWElYNjBx?=
- =?utf-8?B?aXZVeVZPY1dDanFMbW9ZV3NsTmQ2Mng5enJBR1F1L1AxVHIzWEFITmVEek9v?=
- =?utf-8?B?Z2ovdVpVV1FwMUVOWGh1aFAxRE4yREdFUW0xVmh3WXAxekxTeUhWekJSMW5w?=
- =?utf-8?B?cDhCNHNkOG9qcy9KTUNPWi9MU0ZjM0UyZVpxcHo4WCtKNkpuSkQyS1hnRDJK?=
- =?utf-8?B?MmVkVnRzV01vUmJMSG8yb0UvVUFQRkdMNTdacWNlSXBqZzhyNkh5WlY4M2Uv?=
- =?utf-8?Q?eR8Z2nrIL0XYE?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q2lET2dpRyt6QXVXSlhwc1lsenkwdFNOQmE0UWhQYmVWRy9iazk1dElqQ0NE?=
- =?utf-8?B?NkV5a3VJMDgwNVpSS3ljZVl0TnJURlhZY3pmdTJNRlpHNENNQndyQUVWOWcv?=
- =?utf-8?B?eHNacU4vNjZidkdCOHVjYU1BcmthUXF6ZzVUY0l4QlBvNHFyT3RqRktpS2tl?=
- =?utf-8?B?Mmp4VGVuZDBWUDE0QkZxWjhLSjFPVURNbjZlSHJteGVNV3Z3TlZ2d0theFE2?=
- =?utf-8?B?NWFrMzhkNHlKMVdyMGptL1I2TUJFSEMwYWl4dXhtRHEvOXo1WjUzQ3J3QzVM?=
- =?utf-8?B?dWxsYkl4RFNXeUJVR0JRYkFnMUNQRkJBa0pKenc4R1ZhM2FjQW9NWjNzL1RV?=
- =?utf-8?B?VFF5UTBJTFJic2dBSmxIaVdoc2w2WnM0NXJBOFV4Q05JWVhuSVRMSFVqTWRt?=
- =?utf-8?B?NmMreDNnQ3pZeWJCOUJ2eXBRdjA5VkQzM0owRTB2RjdiWjFtNFNEcEZsaTBD?=
- =?utf-8?B?dVNaQjN0UElCcS9LUTB5aEVncFNiazBKL3pjRmNPMXJJU1ZubGVnVFZyV2dK?=
- =?utf-8?B?bHhOOVdlNHBZWHhvOXZBSG13T2kxT3hLK04zS05Od1IxdHVpa1o5NUhPTHZ4?=
- =?utf-8?B?Q3dUc0xYM0ZrSXNicXQ1Ly9LNExET1F6VTZhWmowa0tza1M0N2pMZjIwdGsw?=
- =?utf-8?B?U1JyTWVzZFVzVVdoZzgybmpuaVB3eUNJajVmWTdxa1NLZzR6cWREZTVxMnRr?=
- =?utf-8?B?VzkrRXdwTFVXdm9QMnBROEN4bWd6a3E1bW92Ky9ic0dYa1MvUlREemcvZFRJ?=
- =?utf-8?B?SURnaUNoVmt4bFNmQzJwTUxqSWZRTGwrNE1WZ0pIZ1ZBbkc1NmFTZHVRMng0?=
- =?utf-8?B?a04xcTNZaGc4YkZKYXIzUW9XMENqYmNjdE5LSDcyaktIUDJyUFRpUno0Rklw?=
- =?utf-8?B?Mnh6ZWF0cWpjTWdjTGQxenVPVWRhL3Z1Qll4anRrbDRRbVlteXFUdHBINnNV?=
- =?utf-8?B?S0REYjZoRGNwYmRUc2N3L2xPMUpxbHZHTithczJaN0cweU42OTR0cmhPRjVr?=
- =?utf-8?B?T1ZmV0Zwcmhha3orRDdJalpuRzlkYWR3KzM2aWRndlJPRE8xSUdBaENqM3ZI?=
- =?utf-8?B?cVdQc05YZUZlbjNHa3QrWk5PdmVja1NqZ2RDb3ZZOG5TczlvZVJVbTNUQlZk?=
- =?utf-8?B?TzVSbGN4ZFowOTJpSzNOWkZhbjdyR1RUOFZObkI4L3VPaUd3NWJvTlpXYnBt?=
- =?utf-8?B?L2pIQ3p2R1QzSUtJSERKM2dINTBlUkVUeTVnOFJ1bzNpVG5Db3NzS1pkbll6?=
- =?utf-8?B?RG9IbHR2L1o5TmdDb3JxN1NJMUpDcFFpazlMVEovby8vVExMQm5oN2pNcU1M?=
- =?utf-8?B?bkk1K0x0V3FlVm9RUDM0U3k5cUt5UGhOb3dWb0VMc25PZHN1dmVNdDArUDY5?=
- =?utf-8?B?a1J1NFlUKzhDWUN3TkM0SFN2dytqdW9kRFZTeEtEQnNkMnBPazFmbkxKeUlF?=
- =?utf-8?B?SmR6MHpuZEQzUU5jbXBxV3pibXRHY0tTZzZaQ2FzbUJNTkh1d2Q3RTUwaEw0?=
- =?utf-8?B?QmJHK21RRTZWaFVtMG9Mczg4WUxzUkxXdy9GOTFXOFJIQVg1RWFOSThVcXIv?=
- =?utf-8?B?NCtqTHZidCt2V0o4dk5tMTM1dlFBdjl0NnMzeUtXa0c0QVkxam5Fbi9NUUhM?=
- =?utf-8?B?cWVQMlJCVVFNeWlMM0E3TTU4dUtOVHRBbGNUaDN5TGl2RTJoUmk0MjBpVUt4?=
- =?utf-8?B?VnFYN1FPRXFORSsrNW9IeHR1aGFjaWdIYjRwUEd4WHVRNFVVZGJNV296WHNq?=
- =?utf-8?B?Mm55T3FUTFh4NHA2U2VueEp3Z05yVGNvUEM4WnpKTkdaQ3JpeWIweUlXalpk?=
- =?utf-8?B?MVZpT0tVejhZRktEVXpYc0pONHVpRHcxdXRWU1hwTUUwZjA4L3AyOXhuT3Z5?=
- =?utf-8?B?d2loaGFIMHgrMHQzS3U4ajM0NGpMS21pVGk5MFp4V3YrK1ZxaEhwMzJaUWd0?=
- =?utf-8?B?eXB5Y1JHbEJWZndVbnlUY0xNQnllWlRsVG9LbEk3eVN4UkdPWkR4MUhzdHlw?=
- =?utf-8?B?OVRHK2RGYWtiSnlsRzJjdW1UQ2xMOXVGOGtaTXIvWXFmWURsa3J2eW5RZ2h6?=
- =?utf-8?B?ZG5EanoxRFcxZTlRSjYrMFpNS25BVS9WVzYvLzM0ZWx6RmpmWVYyUXdVVjlI?=
- =?utf-8?Q?9/s9IRRwfL09YzLF+gnAE5d+1?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f066dfd5-022e-4a99-681b-08dd3c7ac422
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2025 13:26:53.4324
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: w/ELXWnrVZsGcFK6OCsoDHWrjRVAYNN6zt7dP5TbiiL8whrTgsssmZw8tkfl1mQGEtk/+Q04ReN5AreE/jXnOQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6331
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8c6972c4-c1bb-402a-a72d-f92b87ee5a89@suse.com>
 
-On 2025/1/20 13:54, Nicolin Chen wrote:
-> On Sun, Jan 19, 2025 at 06:40:57PM +0800, Yi Liu wrote:
->> On 2025/1/19 04:32, Nicolin Chen wrote:
->>> On Sat, Jan 18, 2025 at 04:23:22PM +0800, Yi Liu wrote:
->>>> On 2025/1/11 11:32, Nicolin Chen wrote:
->>>>> +static int iommufd_hwpt_attach_device(struct iommufd_hw_pagetable *hwpt,
->>>>> +				      struct iommufd_device *idev)
->>>>> +{
->>>>> +	struct iommufd_attach_handle *handle;
->>>>> +	int rc;
->>>>> +
->>>>> +	if (hwpt->fault) {
->>>>> +		rc = iommufd_fault_domain_attach_dev(hwpt, idev, true);
->>>>> +		if (rc)
->>>>> +			return rc;
->>>>> +	}
->>>>> +
->>>>> +	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
->>>>> +	if (!handle) {
->>>>> +		rc = -ENOMEM;
->>>>> +		goto out_fault_detach;
->>>>> +	}
->>>>> +
->>>>> +	handle->idev = idev;
->>>>> +	rc = iommu_attach_group_handle(hwpt->domain, idev->igroup->group,
->>>>> +				       &handle->handle);
->>>>> +	if (rc)
->>>>> +		goto out_free_handle;
->>>>> +
->>>>> +	return 0;
->>>>> +
->>>>> +out_free_handle:
->>>>> +	kfree(handle);
->>>>> +	handle = NULL;
->>>>> +out_fault_detach:
->>>>> +	if (hwpt->fault)
->>>>> +		iommufd_fault_domain_detach_dev(hwpt, idev, handle, true);
->>>>> +	return rc;
->>>>> +}
->>>
->>> Here the revert path passes in a handle=NULL..
->>
->> aha. got it. Perhaps we can allocate handle first. In the below thread, it
->> is possible that a failed domain may have pending PRIs, it would require
->> the caller to call the auto response. Although, we are likely to swap the
->> order, but it is nice to have for the caller to do it.
->>
->> https://lore.kernel.org/linux-iommu/f685daca-081a-4ede-b1e1-559009fa9ebc@intel.com/
+On Fri 2025-01-24 13:59:55, Petr Pavlu wrote:
+> On 1/24/25 12:06, Mike Rapoport wrote:
+> > On Thu, Jan 23, 2025 at 03:16:28PM +0100, Petr Pavlu wrote:
+> >> On 1/21/25 10:57, Mike Rapoport wrote:
+> >>> In order to use execmem's API for temporal remapping of the memory
+> >>> allocated from ROX cache as writable, there is a need to distinguish
+> >>> between the state when the module is being formed and the state when it is
+> >>> deconstructed and freed so that when module_memory_free() is called from
+> >>> error paths during module loading it could restore ROX mappings.
+> >>>
+> >>> Replace open coded checks for MODULE_STATE_UNFORMED with a helper
+> >>> function module_is_formed() and add a new MODULE_STATE_GONE that will be
+> >>> set when the module is deconstructed and freed.
+> >>
+> >> I don't fully follow why this case requires a new module state. My
+> >> understanding it that the function load_module() has the necessary
+> >> context that after calling layout_and_allocate(), the updated ROX
+> >> mappings need to be restored. I would then expect the function to be
+> >> appropriately able to unwind this operation in case of an error. It
+> >> could be done by having a helper that walks the mappings and calls
+> >> execmem_restore_rox(), or if you want to keep it in module_memory_free()
+> >> as done in the patch #7 then a flag could be passed down to
+> >> module_deallocate() -> free_mod_mem() -> module_memory_free()?
+> > 
+> > Initially I wanted to track ROX <-> RW transitions in struct module_memory
+> > so that module_memory_free() could do the right thing depending on memory
+> > state. But that meant either ugly games with const'ness in strict_rwx.c,
+> > an additional helper or a new global module state. The latter seemed the
+> > most elegant to me.
+> > If a new global module state is really that intrusive, I can drop it in
+> > favor a helper that will be called from error handling paths. E.g.
+> > something like the patch below (on top of this series and with this patch
+> > reverted)
+> > 
+> > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > index 7164cd353a78..4a02503836d7 100644
+> > --- a/kernel/module/main.c
+> > +++ b/kernel/module/main.c
+> > @@ -1268,13 +1268,20 @@ static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
+> >  	return 0;
+> >  }
+> >  
+> > +static void module_memory_restore_rox(struct module *mod)
+> > +{
+> > +	for_class_mod_mem_type(type, text) {
+> > +		struct module_memory *mem = &mod->mem[type];
+> > +
+> > +		if (mem->is_rox)
+> > +			execmem_restore_rox(mem->base, mem->size);
+> > +	}
+> > +}
+> > +
+> >  static void module_memory_free(struct module *mod, enum mod_mem_type type)
+> >  {
+> >  	struct module_memory *mem = &mod->mem[type];
+> >  
+> > -	if (mod->state == MODULE_STATE_UNFORMED && mem->is_rox)
+> > -		execmem_restore_rox(mem->base, mem->size);
+> > -
+> >  	execmem_free(mem->base);
+> >  }
+> >  
+> > @@ -2617,6 +2624,7 @@ static int move_module(struct module *mod, struct load_info *info)
+> >  
+> >  	return 0;
+> >  out_err:
+> > +	module_memory_restore_rox(mod);
+> >  	for (t--; t >= 0; t--)
+> >  		module_memory_free(mod, t);
+> >  	if (codetag_section_found)
+> > @@ -3372,6 +3380,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
+> >  				       mod->mem[type].size);
+> >  	}
+> >  
+> > +	module_memory_restore_rox(mod);
+> >  	module_deallocate(mod, info);
+> >   free_copy:
+> >  	/*
+> >  
 > 
-> Hmm, I don't really see a point in letting the detach flow to
-> scan the two lists in hwpt->fault against a zero-ed handle...
-> which feels like a waste of CPU cycles?
+> This looks better to me.
+> 
+> My view is that the module_state tracks major stages of a module during
+> its lifecycle. It provides information to the module loader itself,
+> other subsystems that need to closely interact with modules, and to the
+> userspace via the initstate sysfs attribute.
+> 
+> Adding a new state means potentially more complexity for all these
+> parts. In this case, the state was needed because of a logic that is
+> local only to the module loader, or even just to the function
+> load_module(). I think it is better to avoid adding a new state only for
+> that.
 
-I meant you may call iommufd_fault_domain_attach_dev() after allocating
-handle. Then in the error path, the handle is not zeroed when calling
-iommufd_fault_domain_detach_dev(). The cpu circle will not be wasted if
-if the two lists are empty. But it would be required if the lists are not
-empty. :)
+I fully agree here.
 
-> And I am not sure how that xa_insert part is realted?
+The added complexity is already visible in the original patch.
+It updates about 15 locations where mod->state is checked.
+Every location should be reviewed whether the change is correct.
+The changes are spread in various subsystems, like kallsyms, kdb,
+tracepoint, livepatch. Many people need to understand
+the meaning of the new state and decide if the change is OK.
+So, it affects many people and touches 15 locations where
+things my go wrong.
 
-Maybe I failed to make it clear. That thread had discussed a case that the
-PRIs may be forwarded to hwpt before the attach succeeds. But it is needed
-to flush the PRIs in htwp->fault. Although I would swap the order of
-xa_insert() and __iommu_set_group_pasid(), it is still nice if iommufd side
-flushes the two lists in the error handling path.
+The alternative solution, proposed above, looks much easier to me.
 
-Regards,
-Yi Liu
+Best Regards,
+Petr
 
