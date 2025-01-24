@@ -1,190 +1,182 @@
-Return-Path: <linux-kselftest+bounces-25073-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25074-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 910AAA1B170
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 09:12:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42A63A1B174
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 09:13:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 691427A55DA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 08:12:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 15D1B7A5706
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 08:13:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4771D205AA3;
-	Fri, 24 Jan 2025 08:12:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F68F205AC2;
+	Fri, 24 Jan 2025 08:13:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="IhDaNoRL"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="d1VBjwyL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2052.outbound.protection.outlook.com [40.107.243.52])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46881D61A3;
-	Fri, 24 Jan 2025 08:12:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737706358; cv=fail; b=FlXGzzKotcQnTsWcpjpV9Bsn1+m34U9ICxd4mlNAju8v2j9Ki4EUCF3uG68eAYPrKMI0igqQiYCwulMz1dbKaoXfAHs4k8Kv1zIvx904j5smIqK4k2xf1CPMlg98+ZkBcvoZZsv6FNE+CypzydCtHu84aKX4/c8PrZq0EOCg0jc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737706358; c=relaxed/simple;
-	bh=2IqLwCU0ZLQV3Ig+pb3BH0JYCPCPHNdmwPDMHL6gdDU=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=gvh+u3QEPlmgSttourvTldi7MeY+cjAPVO9xrLL0JhLBkToq09qOm5VyL3b0NwJgN9ne0PUDc+iQsaNQmceTxwGwd9i9JBmaBEQ/pTDM4Ywh5NRvD7Z6f1UH5YgHaD8DBhnQfrDJ9WRLTbAEU/P8dz6zCGogSQnW9qZlWU6f1Xk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=IhDaNoRL; arc=fail smtp.client-ip=40.107.243.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ndYl7/t+9jUCfmOs4l6rLj6Pn1yJD7hp4D0afiRhml5sxl1tG+xiyP5ajwGo/Voa7lOMmjsndEqYsO2ZWRcpyPBmfg1wTbZvD1IJ1VKLER3xOFcfbV0o2Ptfu2An9cHYOgWeIG8H9Fxyb9zph7wNWDIkVX17QyefmeUxcTbCTxPxhUIjRi2THr52raHoAz5SfWN7wERVaPQApkYxb1Cyaf4Rwtgh7lzFcALDcLoAwciDVW/hnH90Hl8sXzk2aoTxPF8cQ65zKQk+2/oKE56mcASDlYJ1j+uuoWrHPvHPmN3D/T4WoND9l4Lnp7w/WAgHz18BAVqjZO2UuQ7/Ts0w/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2IqLwCU0ZLQV3Ig+pb3BH0JYCPCPHNdmwPDMHL6gdDU=;
- b=J++zY3sz1/h5M8kt4wKH+YBbsTmQKoE6BMehUyjLIGexf98qrZ2bIPWdTzY5cH1sJHyDYLR91zWlNn8CERhfOTKRS/DPxptcfIGKqpAsNkipfQkLYyPzmElHbWD1GxwRIHQftwJ16imZfeaqZv3YXFizmbH25fKtC0FUJ7+aZjoB6//PjTfNs7hfOjG+t6b6Q2JKamZROSzHJRVtSmiLqoGozpe1D246Zv/M1tTUNK818WlEkBHCww9HOtfz0tzc482WBkUYzXY1ufX+Xi7cSYZiGBlkr5ZpDF1NM6OD2+bqNYkSOUzwnYvdSHKtwPs9/XaCnwUImbOVHmxD8CmBHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2IqLwCU0ZLQV3Ig+pb3BH0JYCPCPHNdmwPDMHL6gdDU=;
- b=IhDaNoRLWaZek0IU5GHcN9Q5dz6+9N7twfLz05InoVKHl2CKJFXT4unibG3jKbv/wIQyKhi0/VdXX12D8Oc0Sc/WkA0CqA4N3bKYrQC3CkkfwMgJfBIbq6egEXTsQbgiJNaIn8RHIq9Bzcn8bdQAellRL0IJdO6E8lvdu3X/G0Ez6LwCNeBO2o66VF3myodkQIMa+pmDyUqRz728tjzQUiEALOKhShg3dwuf56HG/JUTey2f7ZC8xzS+bfjhPDuVdDv2MbUFWlPC7lIgJ8nrTySYoMwtQ6PxpOfHioS6hEMvT1LGK5o7f6taQ7J1HAgcgOXBwvQT3M6pse19wziuHQ==
-Received: from DS0PR12MB6560.namprd12.prod.outlook.com (2603:10b6:8:d0::22) by
- MW4PR12MB6923.namprd12.prod.outlook.com (2603:10b6:303:208::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.20; Fri, 24 Jan
- 2025 08:12:33 +0000
-Received: from DS0PR12MB6560.namprd12.prod.outlook.com
- ([fe80::4c05:4274:b769:b8af]) by DS0PR12MB6560.namprd12.prod.outlook.com
- ([fe80::4c05:4274:b769:b8af%7]) with mapi id 15.20.8356.020; Fri, 24 Jan 2025
- 08:12:33 +0000
-From: Cosmin Ratiu <cratiu@nvidia.com>
-To: "liuhangbin@gmail.com" <liuhangbin@gmail.com>
-CC: "davem@davemloft.net" <davem@davemloft.net>, "kuba@kernel.org"
-	<kuba@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"liali@redhat.com" <liali@redhat.com>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "horms@kernel.org" <horms@kernel.org>, Jianbo Liu
-	<jianbol@nvidia.com>, Boris Pismenny <borisp@nvidia.com>,
-	"edumazet@google.com" <edumazet@google.com>, "pabeni@redhat.com"
-	<pabeni@redhat.com>
-Subject: Re: [PATCH net] bonding: Correctly support GSO ESP offload
-Thread-Topic: [PATCH net] bonding: Correctly support GSO ESP offload
-Thread-Index: AQHbbajgQrlK0rrUoESpz02Rt3WX0rMlRP6AgABPHoA=
-Date: Fri, 24 Jan 2025 08:12:33 +0000
-Message-ID: <810c87b1f1c51f659b3f89001907f003973e1c3c.camel@nvidia.com>
-References: <20250123150909.387415-1-cratiu@nvidia.com>
-	 <Z5MJEShoqJqiNWP6@fedora>
-In-Reply-To: <Z5MJEShoqJqiNWP6@fedora>
-Reply-To: Cosmin Ratiu <cratiu@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR12MB6560:EE_|MW4PR12MB6923:EE_
-x-ms-office365-filtering-correlation-id: e5f31e70-ef44-4bd0-d01b-08dd3c4edb0b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?V3hKWmZOdVFpTVc4TlpiWDBlVUt6YnNaZjd5c3JYYnpDZDBtWnNGSVo1WVZj?=
- =?utf-8?B?Q3hLZXVzcWtDcGlyRElaa3dqaGNOM0tUTG1VSFlDbysrd1hXY25sOUZOOTAz?=
- =?utf-8?B?UVc3V056cG9UanFzZEFBUXhtQVJCOW5qTytjZ0xVNlpXaURUaHpkUlJuZ0kz?=
- =?utf-8?B?SFZ6V3BsbXM4bkIvVnR0V0p5d3VUOWhIZVNNQVVIZ1d0ZXcyQXBHd3IzeGpF?=
- =?utf-8?B?dUxsd0lEN2xjUEk0c0k5bHQ5WG5FNHlZb1krbHE0ZTA5bGNHTmhJcTJVZWNB?=
- =?utf-8?B?UHhPT3dmZmo3VWJHUFB6cWJ0dVZuR21pd0tmVndmNDFUeU53TWJ6eUp6ZXRx?=
- =?utf-8?B?MjJ3YnU0MnZ5eGFsR05HVEJiM3ErRXR6dGp6ZGM3bG1ncWkyUit5NG9qZGVo?=
- =?utf-8?B?bllGOWZRYS91NHhtaHI5NmF1QTBKOWd3YWM2UTNIKzFyQ2JrMThNWTdINzcw?=
- =?utf-8?B?czMzTlhyU2lodHFYSmtaU1dmUndhQW1nSm4vUWc4eVV5NkRBUHRUTWZIalJP?=
- =?utf-8?B?UUtHZ0FMR0lzSU8wQVBTQzBHTHNtNFBaQm9wMjBISnYrRmtkQXdqNXlSSG9a?=
- =?utf-8?B?OTBDazF4RCtrT1hDbHhaRTBKL0VYb2ZNTWNXeENzUGliS1YxZzRNLzJqbGxo?=
- =?utf-8?B?SHl3UDMzcFpEU0ptUVVqT3RxbVVuZlJ5aHJZdzJDQ0lpaWg3UEVBWXRQR0xM?=
- =?utf-8?B?bVZ4dHF6eUZxdUMweFBVNE1IZUF6SDJYWVdwWHUrclVNYVRETWhWM2pJckh4?=
- =?utf-8?B?VjRPamZGYmxKUkJIOTZ2SnZvUTIveWZqZGNORWRQd1UwU2xrOVpjWVg0UzBa?=
- =?utf-8?B?V3dya0ZHZnJZejlHOXRmL1FTaXZyZGw1emlrdlA4OUszbTZJNUg5RXhiS0Yv?=
- =?utf-8?B?bFNScDg1YmdETUQ2WnJ6VmFwdHFUektoeWcra3NMRHgycUlNeTVYdlB4SmJj?=
- =?utf-8?B?RnZZdzIzUTQ5Z3dLUW1YR0h0UmZmeXNFN0tCKzBNSGVqblBzVFZzc0x1NWx4?=
- =?utf-8?B?aW5iOHNmT0E3NlFMUDVxejlxdjViSE0vaHBSaGNmTGFrSFN2aVVTMWFMUm5u?=
- =?utf-8?B?ZnFUOG1yMVJTRndPZk9US2FjT2ZvdUNXaHNRUWRIUjZ4dVJ6S2k3Q0NFOTg0?=
- =?utf-8?B?MEg3V3UwMGYrY0tNV2Y4VWx3cTUyd0pCUVJmRlR2YytpcFJTdk0xUjdRaEg1?=
- =?utf-8?B?SE8rNkI4QXl3TVgyNEIwS29qc3BUeG9waXZsQnRieXFXckFhUmhDK0pkVDJ5?=
- =?utf-8?B?RlNWTVJqWXYvU3hidzkxbXRpMHpGVWdoc0lNNlZzbGcrRGZVa0RXUHBMbGk3?=
- =?utf-8?B?dTVGUHg4WE1zTnFOUFBidVhZZ1VDeWd4YVFhdjlERHJXZDIvN29NVVNzQzlt?=
- =?utf-8?B?eWRlSkYxcS9uTnlKSHcyZEV2ekZPREltUFRyUVcya3EyOHJSK1pwRjNrbEpu?=
- =?utf-8?B?YUxFNU5MRkZQTzFTVGF6SFJibFNHV3R2TVJMSmYwa0p0MmVwSWczanBwU1Vn?=
- =?utf-8?B?cW5JYVpSYmp2eEF1aDIyNE80NzNaazB2dkU1b1BFWWpVckl0NTBlYnRrL3Zs?=
- =?utf-8?B?SG5qOXFxV2ZrZFc0UzB6NXJoU3RmM012dlZQcjZueEtCRVQ5QnJQL21mSXA4?=
- =?utf-8?B?TkNLNS96SU1ObE56eWIvTWJYdUlndlRXWkFWSnRMTk9FTnpqN296NFY4WEFB?=
- =?utf-8?B?N0lsZURUR2loYkVKdURQMlQrWWJkM1lycGwxOThnVzRiQU1iQ3hzbW50ZW5G?=
- =?utf-8?B?S1pSeHo4ZXROWmtoZU9yeUdaUUI2ZnRpUkV5RHdNVDVkSFNYOS85V3A5TDly?=
- =?utf-8?B?MUNnd2g0di9Ecm41eGhjV2xwM0thNTBEbGRZMkZVbnhlQndBTWdscGJNTUR5?=
- =?utf-8?B?K0RiZklmK0hCMFNZclg2WTRpcVdqQTBJUExDNlc3QlR6MlNMcVl0UDk0RVBX?=
- =?utf-8?Q?ErACOosKORM2LNcXIQiZsEbRlLgtrW/t?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6560.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?NlJXYUIwWVdBUS9BQ1hUaXA0Nmxkai8zcitqWDFMTlFJNlNFbUw4aTlVeG9O?=
- =?utf-8?B?KzkzY1NhaUlhVHlBRFlhd2ROaXQ5QXRubXFjU2ptdjhqVERWUWpHaFpiYW12?=
- =?utf-8?B?VXJFSWsxUXhRWVBmZmpOZ0xkZE1hL0xhWTYzV05jZko5LzdXSHBrUG0xaTc4?=
- =?utf-8?B?M0gxL1ZtcUVxQ3NJeWgyWWY3M2R6SHJ0SjUvVXUxS2Q4eUgwSFJoNDlYN2to?=
- =?utf-8?B?Ujk0bmhWRmlJN2dMcFhtUkJVQ3YyeEZJUHpWdUhVUjRMMkNneGFjNzhkZ1Fo?=
- =?utf-8?B?T2xnWUxiQXBseThOUUpiVU9oNVp3OXZOSHdkK0NTSExWalROa1ZQeHd0bGxp?=
- =?utf-8?B?U2lZeGdVTXcxNkpSdzZXQ3JtVHlPbUtINkp1dkdKTHFkZFl6NUpoOVc2cStk?=
- =?utf-8?B?UUY4NHV0M2xOUi9aTVVuNStVbmZOa21wL3Q1bHBHSDAvOXBjVEoybmpvVTFS?=
- =?utf-8?B?U0JUTEx0aGlpMmtoL0JMSHlsL3pvaWdINmlFK1p6RE5FVTNHUXN2a2ErVjZM?=
- =?utf-8?B?NmFpUWJBRWl5REZKb29FWml1RkFpU0dlNUFlNW5TSVJKR1R1dmNHNkcycHI4?=
- =?utf-8?B?andhcXhzd3YwWGc5M092TE43ODRaNkNFNmw3Tng0MWptOXV5WVJiUUhiS3Z1?=
- =?utf-8?B?RU00REdrUlpKVHl6TURJZ2I3K3gvQmJScXltdmtOOTRiN21rSkcvMCs3RFVv?=
- =?utf-8?B?VFRpMDREUU1VUEV4dkFoNHBtdmFNakFsL29oNkFUZnZRUDA2NUFpdU5OV1VO?=
- =?utf-8?B?SWRQUGlwM1MyWnE0MXNtZ2o5R1BOckZxRDdCSlF2cWFWM0dvUkJxemZKbklr?=
- =?utf-8?B?OE1XTThXcVE1MG1VK0pUWERUbmRhcS9vQm4zNWVDeThyRFgwSHRJL1lPczlW?=
- =?utf-8?B?QTZpWTdHZDNCdUJOd1JBOHdibGtHQ3hIOXlOaWxMcjM2eTVzSGdzdDd2amg1?=
- =?utf-8?B?VlFhb3lQTktDeVpJYm9wZDNoMmJ1T0pHQmhCWlZxVHhlSk9SbDhwbHBvRDBz?=
- =?utf-8?B?aVJVYjBheGtWMW5yS3E5VUZwVVFUaWhNZTVIYWcxRGticHJ2SzFBQ2RzWkhv?=
- =?utf-8?B?bFo3SFhjTjVMcUprM3dCc0VqQkpzcUdUZUdOZnBHRWNvM2J5R3hEUFoyQlRz?=
- =?utf-8?B?RDM4emR5MTgwMGg4ZUZFakl4RlN6THpvajYvVDhaTUZab3YwQmR1Q0h1RTF4?=
- =?utf-8?B?V0ppOWdvcnVUSVNyakdmNFdzbFdmenZxQkRtZmNGVmxTSUtRNmIyMHZEUGtp?=
- =?utf-8?B?a2Y0RmVkeTVmaEU0dk9QSmJESE56RUEzcktpY1hJcXl4RzBtcXRweDRSMERH?=
- =?utf-8?B?MzZSWS80VHoySHo0NnY1SVBpV3A5YWFXTGhQWGVxdEhnQkh4ZmsxU1hSaGZw?=
- =?utf-8?B?KzB4RHE4L3k3eGlEWHNsZitYTjBWbytabkhXRzhBbEE2TEppK204QitBSmEx?=
- =?utf-8?B?eGNhYUxiYjZ4NWJaSzFuaG5xajVORExhWEZzQit4SHE4MHQ0eERiN21sVCta?=
- =?utf-8?B?OE1VZDdPRElFVTU4dzdVV2l4K3IwUTloQVo1ZlN4Y0pWOTNodnBEaFpTTWJz?=
- =?utf-8?B?ZWxjK0pSdER6c0p4MlR5N2tOcXdadkQzR2JqV3hPOEVDbm9Ua0RVdXFjdlcy?=
- =?utf-8?B?cmpJc1prRlVtOUJEc3JKRW1ocUZoNjZGeUZuS2hZS2paUGdQbXRHd3EzM2RM?=
- =?utf-8?B?VkcvdDNOVU5IeDYwVGVadDMvK1hoQWNyTTVpckdIZFZKMGprdnBLTnBqaTh1?=
- =?utf-8?B?VmhrRVhkM3NSKzZVL3RhVFhUbURiWnRFZzB6OGY5d3VqSy9wblEzRUlnNm5p?=
- =?utf-8?B?SUduM3JQYkl0TzJlamZnOUtYUHdwcWlhd3B6cW8yYnR5N2JCRFBGbzBIL2NT?=
- =?utf-8?B?bmlNaFhsclRqUGtZaGg2SVRrcXN6dk5HcDg5NEVEUTRGWlU1MFNLRC9yZWgv?=
- =?utf-8?B?K1FvSzRKQWN3ZW8vb1RiOUsxZTJIS1ZlY3V0bXdpb0c3VzZ2V3BCQjUxaEE4?=
- =?utf-8?B?RmVEVkhmK0NqTEczd2NZazdEdCt3dng0bisrODJoTzF6dDVsRElPeDZqTS84?=
- =?utf-8?B?MTgvSWJGbHh2N0J2UWdWTXlCUURSZExNakh0QnM4YUszZllLZ2JEbmFmNUxU?=
- =?utf-8?Q?kaXae9ShexvrtAzu3Wr/MtpaD?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3B98E3927319FD449B3DC889362B29E4@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9357A205AAC;
+	Fri, 24 Jan 2025 08:13:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737706384; cv=none; b=F5L7lQNidQYurzBzf4fiUsx6fw4VqkuhrJhEItpJt82rwHRt9ghmiufWIXjCB1Z1IR6iHVYODLJ9FqyzIARVyQyqBGuwLFa3XnG7enBIZmpq0lkYTtXaJYuRYC0k6H1h0w+K3LQ7DgKLPBg9tCd4h+OCTRW7WTd0A2Hv9MNZyiU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737706384; c=relaxed/simple;
+	bh=idLhQQ+Oo5UWIbjsyxcdZEeHw78VV8pc1CNx0UgjdPo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jlXgOTo26IcbGXcaBdOzcII0SvCX6La5I9GTHl/Vks6HEKntZ571Cvm33hSUo+yJoYLSdHFQZlzsNrkYi751OiN/KZJikBrJDblnNCWsxFL1bMDYgVN5NInVfUTKj3/WEr0MGk+iNYK7AN/kdPupIqDpKQNtOoMOnrtrBUftkck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=d1VBjwyL; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4A0ACD01;
+	Fri, 24 Jan 2025 09:11:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1737706315;
+	bh=idLhQQ+Oo5UWIbjsyxcdZEeHw78VV8pc1CNx0UgjdPo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=d1VBjwyLb5/825+b7cVXFO9bdDNfsHPuG4v+5w/PShcuhYZnEGzMi4sgSuBT/t+Vl
+	 81MAQ4hSpeZbPfdN5IsMI6Ow92B6XjP6sN03JQCziXIeLU58DsLBP6BFGAvkJAmmYb
+	 XS3nweXjhRkr7hgNRjCVLoF07N3/estJlBU9pt94=
+Date: Fri, 24 Jan 2025 10:12:50 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Leonardo =?utf-8?B?QnLDoXM=?= <leobras.c@gmail.com>
+Cc: Vignesh Raman <vignesh.raman@collabora.com>, kernelci@lists.linux.dev,
+	linuxtv-ci@linuxtv.org, dave.pigott@collabora.com,
+	mripard@kernel.org, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org,
+	gustavo.padovan@collabora.com, pawiecz@collabora.com,
+	spbnick@gmail.com, tales.aparecida@gmail.com,
+	workflows@vger.kernel.org, skhan@linuxfoundation.org,
+	kunit-dev@googlegroups.com, nfraprado@collabora.com,
+	davidgow@google.com, cocci@inria.fr, Julia.Lawall@inria.fr,
+	laura.nao@collabora.com, kernel@collabora.com,
+	torvalds@linuxfoundation.org, gregkh@linuxfoundation.org,
+	daniels@collabora.com, helen.koike@collabora.com,
+	shreeya.patel@collabora.com, denys.f@collabora.com,
+	nicolas.dufresne@collabora.com, louis.chauvet@bootlin.com,
+	hamohammed.sa@gmail.com, melissa.srw@gmail.com, simona@ffwll.ch,
+	airlied@gmail.com, Tim.Bird@sony.com, broonie@kernel.org,
+	groeck@google.com, rdunlap@infradead.org, geert@linux-m68k.org,
+	michel.daenzer@mailbox.org, sakari.ailus@iki.fi, jarkko@kernel.org
+Subject: Re: [PATCH v2 0/5] kci-gitlab: Introducing GitLab-CI Pipeline for
+ Kernel Testing
+Message-ID: <20250124081250.GA24731@pendragon.ideasonboard.com>
+References: <20250123135342.1468787-1-vignesh.raman@collabora.com>
+ <f779c9af4133629f724e366241fab7421d13d227.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6560.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5f31e70-ef44-4bd0-d01b-08dd3c4edb0b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jan 2025 08:12:33.6219
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HTdT1lP6StUzLjLIGMvjeOEeA2HNRbl6r1JZwMYBvgt9HXerAlcBq9I/35zp84k9DEdmt/ftyF8x2z8YAi2kvg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6923
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f779c9af4133629f724e366241fab7421d13d227.camel@gmail.com>
 
-T24gRnJpLCAyMDI1LTAxLTI0IGF0IDAzOjI5ICswMDAwLCBIYW5nYmluIExpdSB3cm90ZToNCj4g
-DQo+IFdoYXQncyBDaGFuZ2UtSWQgaGVyZT8gT3RoZXJzIGxvb2tzIGdvb2QgdG8gbWUuDQoNCkFw
-b2xvZ2llcywgSSBmb3Jnb3QgdG8gcmVtb3ZlIGl0LiBJdCdzIGZyb20gZ2Vycml0LCB0aGUgaW50
-ZXJuYWwgY29kZQ0KcmV2aWV3IHRvb2wgd2UgdXNlLg0KSSdsbCByZXNlbmQgdjINCg0KPiANCj4g
-UmV2aWV3ZWQtYnk6IEhhbmdiaW4gTGl1IDxsaXVoYW5nYmluQGdtYWlsLmNvbT4NCg0KVGhhbmtz
-IGZvciB0aGUgcmV2aWV3IQ0K
+On Fri, Jan 24, 2025 at 02:11:26AM -0300, Leonardo Brás wrote:
+> On Thu, 2025-01-23 at 19:23 +0530, Vignesh Raman wrote:
+> > This patch series introduces "kci-gitlab," a GitLab CI pipeline
+> > specifically designed for kernel testing. It provides kernel
+> > developers with an integrated, efficient, and flexible testing
+> > framework using GitLab's CI/CD capabilities. This patch includes
+> > a .gitlab-ci file in the tools/ci/gitlab-ci/ folder, along with
+> > additional YAML and script files, to define a basic test pipeline
+> > triggered by code pushes to a GitLab-CI instance.
+> > The initial version implements:
+> >     
+> > - Static checks: Includes checkpatch and smatch for code validation.
+> > - Build tests: Covers various architectures and configurations.
+> > - Boot tests: Utilizes virtme for basic boot testing.
+> > 
+> > Additionally, it introduces a flexible "scenarios" mechanism to
+> > support subsystem-specific extensions.
+> > 
+> > This series also introduces a drm scenario that adds a job to run IGT
+> > tests for vkms. This scenario includes helper scripts to build deqp-runner
+> > and IGT, leveraging approaches from the drm-ci/mesa-ci project.
+> > 
+> > We are working towards creating a generic, upstream GitLab-CI pipeline
+> > (kci-gitlab) that will replace DRM-CI [1]. The proposed GitLab-CI pipeline
+> > is designed with a distributed infrastructure model, making it possible
+> > to run on any gitLab instance. We plan to leverage KernelCI [2] as the
+> > backend, utilizing its hardware, rootfs, test plans, and KCIDB [3]
+> > integration.
+> > 
+> > For an example of a fully executed pipeline with drm scenario set,
+> > including documentation generation,
+> > see: https://gitlab.freedesktop.org/vigneshraman/kernel/-/pipelines/1350262
+> > 
+> > Please refer to the documentation included in the patch, or check the
+> > rendered version, here: 
+> > https://vigneshraman.pages.freedesktop.org/-/kernel/-/jobs/69787927/artifacts/artifacts/Documentation-output/ci/gitlab-ci/gitlab-ci.html
+> > 
+> > Differences from v1 to v2:
+> > - moved to tools/ci as suggested by Linus on the previous version
+> > - add arm64 containers for native compilation
+> > - added boot tests using virtme: this is the base structure for boot tests,
+> >   next steps would be adding other tests such as kselftests/kunit tests
+> > - added DRM scenario testing on vkms: this should replace current vkms test
+> >   in drm-ci. This work shows how a test scenario can be used by different
+> >   subsystems to add their tests.
+> > - update documentation
+> > 
+> > For more details on the motivation behind this work, please refer to the
+> > cover letter of v1: https://patchwork.kernel.org/project/linux-kselftest/cover/20240228225527.1052240-1-helen.koike@collabora.com/
+> > 
+> > [1] https://www.collabora.com/news-and-blog/blog/2024/02/08/drm-ci-a-gitlab-ci-pipeline-for-linux-kernel-testing/
+> > [2] https://kernelci.org/
+> > [3] https://docs.kernelci.org/kcidb/
+> > 
+> > Helen Koike (3):
+> >   kci-gitlab: Introducing GitLab-CI Pipeline for Kernel Testing
+> >   kci-gitlab: Add documentation
+> >   kci-gitlab: docs: Add images
+> > 
+> > Vignesh Raman (2):
+> >   MAINTAINERS: Add an entry for ci automated testing
+> >   kci-gitlab: Add drm scenario
+> 
+> Hi Vignesh Raman,
+> I am very happy to see this project going forward :)
+> 
+> It's been a few years since I first thought on finding a good way of helping
+> kernel developers testing their patches, while making use of the free runner
+> minutes Gitlab offers. It can greatly simplify the testing for people who are
+> new to kernel development, or students trying to understand it better.
+> 
+> And this patchset allows that to happen :)
+> 
+> Actually, I spoke to Helen last year, and to enable it to run on the free
+> Gitlab-CI runners, there is a small extra patch which is needed:
+> 
+> https://lore.kernel.org/all/20240327013055.139494-2-leobras@redhat.com/
+
+Gitlab as an open-source software project (the community edition) is one
+thing, but can we please avoid advertising specific proprietary services
+in the kernel documentation ?
+
+> Could you please apply it on top of your tree?
+> Some stuff changed places, but I can send a v2 with that fix if you want.
+> 
+> 
+> While I have yet to review this v2 patchset, I applied it on my repo for
+> testing, and cherry-picked the patch on above link, triggering a Pipeline:
+> 
+> https://gitlab.com/linux-kernel/linux/-/pipelines/1638955600
+> 
+> It seems to be working fine, please check it, as you may be more used to the
+> results.
+> 
+> Thanks!
+> Leo
+
+-- 
+Regards,
+
+Laurent Pinchart
 
