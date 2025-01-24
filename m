@@ -1,141 +1,126 @@
-Return-Path: <linux-kselftest+bounces-25064-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25065-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 023B8A1AF06
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 04:26:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC2C6A1AF0F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 04:29:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5C1F18874CC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 03:26:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87C4F3A7839
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 03:29:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B00491D5CDD;
-	Fri, 24 Jan 2025 03:26:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BE5C1D61A7;
+	Fri, 24 Jan 2025 03:29:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="Th/U/Mc7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MZhvDzX5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 164F21EA65
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2025 03:26:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17271EA65;
+	Fri, 24 Jan 2025 03:29:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737689209; cv=none; b=i8Wi413i6blRIB/nAOXKD1Mh3ttOHclIRJBCEzamZuQl+vUojk78KLlQCXhq/DnDius45qIa4HM+BEvxoiHTnzrqkDapb346P2IUHVGVAR6Bw5vwlC0R6DtqikHuUpu72bLk1RtJBG5RroBPambKcVqNq+iWES53gQLzg93ejLQ=
+	t=1737689370; cv=none; b=XXnKMTwfU+gKnGPZBq5LQrP1zhUI0N/seDSzmm9nNRyzpzTmye8WJ8g4LolLte26AJZMBY3iVi5BmzCEpmBZL1LXRZz7kZTZHZKC756u2OX5e4HDwWetSgfdh+jliqQuFHSky/XEYqrcZTHSawExMDp+chD4JBvPDnwH8jMRs18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737689209; c=relaxed/simple;
-	bh=tU2QzktmPdlYAOQVknfO8sr/6ZNOUzyHr3Z6kwiTXOI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=efDgMoCa+CN436cagkqqEDg/yXtQ/evUtPVcPo6yzN9zAD2bmJJAaOF4R1RhVp9dqg+fC7h8/H4oUXvFesU2Th4rO89/YytnV5jkFMHrYfRlyR/N6L9QIFZ3T6esUzZsZSTu1d6qbaHoOSH29I0EqMQ+ZR6466/2CS6LtBAuf7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=Th/U/Mc7; arc=none smtp.client-ip=209.85.210.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-71e2aa8d5e3so892609a34.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2025 19:26:47 -0800 (PST)
+	s=arc-20240116; t=1737689370; c=relaxed/simple;
+	bh=+4Wxuy5BCPj8fh7yuefG8SsoZEgoF+IRZmzQsBgphAs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ay58jqEPO36uwR5j7QOXdgkUhN6zb5NvVVR+ZVpJW6ZiRS4YWSDAeWjyhCtEJ9E155m96et5q/GQIoU6a/RZnKma1dNef1I7xX7GTBidUXMUUU1hCiIh4cZ15cNcdmLor5Ectv5G6UDTTl42M6ygrpe15i2f2u0rcz4IyOqQT4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MZhvDzX5; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2ee786b3277so2323043a91.1;
+        Thu, 23 Jan 2025 19:29:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1737689207; x=1738294007; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+wYF9SYVPXBWNDoppVRqkp4GObHclaiBorKPLUibZhw=;
-        b=Th/U/Mc71LQSRM0LOKGShmVw79HpErnHpIEXwwhSu+sC50mL16dTPHLAt4xUl5u47A
-         V1EtX4GlyVJGlVRlcQNlfgsYtsAaIhUJiL1/tFgYG6uGkS3+UoHgj+i/JJDLH4khErIJ
-         hl6vLLAEwwOI6HMUOj3WU5jNySuiBKEVcFkouDAt47Pw0uZ2lHO2SA3LK94S12XftsEU
-         HdfqxySVzPOK+DqWL+smg0kgXOjgOq0X7bJmiF3bhUR8R5VOuO8mCnSw/KkwBxkcrjwc
-         cqxsMCORI5x/AAylS3/3mf87N4koksvUNaxnPTc+7QkaOzFtPUIgUcd/UPAO6s6v97w/
-         nBxQ==
+        d=gmail.com; s=20230601; t=1737689368; x=1738294168; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gj1RoLoVlwQzdB1wfoIjHWpsMAIiM79D2dMStBxbBwU=;
+        b=MZhvDzX59L65BiDbFIkDo/UvmBRYaCKK7Ars2xEBFygfNl6l6hSCAkoYtoNRyeEyTC
+         0z4vqYaicwNl+RNx9IPBi4CkiNg0z2mpirA2031GFzhZ7xXaxtgtzGmcSd8C//mW+zM8
+         Weo3brHN37Ar/cn4QZX8v/Lo1K/77dCOj5KMwCP/+Qum+hwHVl6Z+M5jrw9Gm95gHZ0x
+         TTQ/FwjmkPTECHYJOou/PSGHVx7Fo0Or45A15VCd/roU4cM2Wa8ZP4v8Sf7qRQNyHtCB
+         on+8BSlfSO1kyxEp7caUsyHCHZtbJTWrheFpzyReRN7g996ZiNpxZzruehQuemfo833/
+         SCqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737689207; x=1738294007;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+wYF9SYVPXBWNDoppVRqkp4GObHclaiBorKPLUibZhw=;
-        b=cqUxNrJUFlvLUyP4G7HBDrlG9tL5QpmqBNqSYxZm2Vo0KlNgJeEBfWzldoaUjDGW4S
-         TslvCXrj5ZXjpIBMr7uB+90ozGZw1uJEKi55d4g7KySht6TUMFCrlHTMGu8N7Xv0FyOY
-         x0lUlCz6p2+9jX35hN66Rwk1GgmXiMpBEWog2NmSiPwEjso2iGqcQnXUMzJUSZDO1nJR
-         DflOWXp6qr2nD0pk9ccTCCODnnnjwbGxST/KC3zqVkfyqzoLpJo6la87K2/BBTgxuv9C
-         Eqrf9ZvJgeb9uGVVjjMIGKL6CdxatELUOmQlvJcew8GZJCZM5jEosqnWOxS+WKtGEPo/
-         Mwnw==
-X-Forwarded-Encrypted: i=1; AJvYcCVN1fzuwp6OpbBX0chIewPfE20I8kfBA6ZsvQNHwb43a1rj/JCkl0EV+UyLgiHUPgZGsFj93aiXB1+wa10D3uY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEm356oJyJXVRKrGe75/Z4yqo0cd1HBGLHBthnBtcdeT7whA86
-	CaTlJly1NDhmS9Lj8n6/CCV45i5GdiVMvAW2oeeQVrDa/tSUpjpuywkd3tNNB6cQF5qrd4W3mVJ
-	DMHu7TePMLh3rxe6d7EzJe1gNwimwGtcFKq9rJg==
-X-Gm-Gg: ASbGncuqvhxwF881sWrz5MyBHqWkYB5pTC8pYp5JM37cZXeWQwk2938Amogmz07qcsV
-	fnGvCAhd1d4gocLvr0lUtmpXWZSUUyOlkXumjorxzf3mmfDwel6mPTU3r6FVyYKBR
-X-Google-Smtp-Source: AGHT+IFGnKLva7FD+LaCZWDZWwF1THCBFHRVpsQutJS5kXSNOriJYKOl1H7ykN+A+qzX7nta9YxDL/rzI0cKEjaNzAA=
-X-Received: by 2002:a05:6870:2f0d:b0:29e:5522:8eea with SMTP id
- 586e51a60fabf-2b1c0b6cdc0mr17604012fac.38.1737689207038; Thu, 23 Jan 2025
- 19:26:47 -0800 (PST)
+        d=1e100.net; s=20230601; t=1737689368; x=1738294168;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gj1RoLoVlwQzdB1wfoIjHWpsMAIiM79D2dMStBxbBwU=;
+        b=iYA1dZqTPlcKpuILTPRxbYncNedT8v3MhtiGA/htz0W/o1aSUViBhZP0c1NNrAwiS9
+         xAqPyGX9eq2mzBt057KuMv2vK1d6eoIe082D0sLW1VRX3ZBQhkAHlMGaxXcjip9r2+NW
+         vWm8NXd123CnLnXItxE3BLkqy4/yG8gC3frQgArjOD6pTDK33nay4ancpBgRqyiQze0O
+         A4MtfdSB0CiXtrs8lHEUO3Bxa08AMGIIFlLXRC3j1VRZQO737hj20xEB83Oi3nV36I7U
+         wYk1yT/utgI32UEtvXhuUORwQJgMMbH7HcUPpi6Om4Q3ifXpuhjFMb5++Bc+GxmV9iHq
+         jwRg==
+X-Forwarded-Encrypted: i=1; AJvYcCXT5LqZ6gMi+M1qAStpz/JqsLdHtpn9MruHmKW1q3JBsH68um33pOaiqiFWV32MVGFQr4rAeffFbiiq6CSZDgo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOfx8UsBFCwEukTxbYqBFtNqxP53QkAP1X3xn2xVdBddPA9Y4J
+	LeqhrsLlBxtXd5CV3qsn2lEuzIk1AnlDzC+RN6nWiBricOYsZdj2tZYSJjt4y6U=
+X-Gm-Gg: ASbGncsQ3DzQZYmdBTmztbe6eCYrwN0edmahF5l+Fq0YNrhKgnkVoSEtLlWzFZoj2f/
+	b/wb4skUAVm++WNtUk46SMgrHpJ9a0Dg6jBzXM0Sh3L2DrebCukexzMOytJnkVzuQZXIIkVRiZ2
+	DwyOpxkK0KcZMqnujDU1mY9/Ev9U3BYJyz4PRHVta3SC6LHg/6+qK+mgsgXLkCCOcA/lLRI+7AN
+	zVe5FhK6yxcqy7tqo4qMy3iR1AoH3nG+WtvWF4RkQsJ9jjiG7XnQkwyQ0HX4CS7Dx/olrLrDvpN
+	gNF+iT9HLA==
+X-Google-Smtp-Source: AGHT+IH3IwxVBc5iCFfZ/tTdPpbMOu2GN6Xu826DtVOjZAcpvHqXcaecnnKv+c/BIi/cXVPjHrhrJQ==
+X-Received: by 2002:a17:90b:2cc5:b0:2ee:bbe0:98c6 with SMTP id 98e67ed59e1d1-2f782c73b74mr41192728a91.8.1737689367772;
+        Thu, 23 Jan 2025 19:29:27 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f7ffa82f9esm511960a91.43.2025.01.23.19.29.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jan 2025 19:29:27 -0800 (PST)
+Date: Fri, 24 Jan 2025 03:29:21 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Cosmin Ratiu <cratiu@nvidia.com>
+Cc: netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jianbo Liu <jianbol@nvidia.com>,
+	Boris Pismenny <borisp@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>, linux-kselftest@vger.kernel.org,
+	Liang Li <liali@redhat.com>
+Subject: Re: [PATCH net] bonding: Correctly support GSO ESP offload
+Message-ID: <Z5MJEShoqJqiNWP6@fedora>
+References: <20250123150909.387415-1-cratiu@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250115024024.84365-1-cuiyunhui@bytedance.com>
- <20250115024024.84365-3-cuiyunhui@bytedance.com> <20250121-4990d96a861a4ddd304abc33@orel>
-In-Reply-To: <20250121-4990d96a861a4ddd304abc33@orel>
-From: yunhui cui <cuiyunhui@bytedance.com>
-Date: Fri, 24 Jan 2025 11:26:36 +0800
-X-Gm-Features: AWEUYZmWZdjm8pzj4zzIf6rTTBzAFecQ8H3gVQ0i5poz74_c15zJ4cOjObQZY58
-Message-ID: <CAEEQ3wnZK2xkQ0+pnNCEvXJ6TUVnCHrkL_VNfhK=9Duy0yKNoA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v5 2/3] RISC-V: hwprobe: Expose Zicbom
- extension and its block size
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: alexghiti@rivosinc.com, andybnac@gmail.com, aou@eecs.berkeley.edu, 
-	charlie@rivosinc.com, cleger@rivosinc.com, conor.dooley@microchip.com, 
-	conor@kernel.org, corbet@lwn.net, evan@rivosinc.com, jesse@rivosinc.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	palmer@dabbelt.com, paul.walmsley@sifive.com, samuel.holland@sifive.com, 
-	shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250123150909.387415-1-cratiu@nvidia.com>
 
-Hi drew,
+On Thu, Jan 23, 2025 at 05:09:09PM +0200, Cosmin Ratiu wrote:
+> The referenced fix is incomplete. It correctly computes
+> bond_dev->gso_partial_features across slaves, but unfortunately
+> netdev_fix_features discards gso_partial_features from the feature set
+> if NETIF_F_GSO_PARTIAL isn't set in bond->features.
+> 
+> This is visible with ethtool -k bond0 | grep esp:
+> tx-esp-segmentation: off [requested on]
+> esp-hw-offload: on
+> esp-tx-csum-hw-offload: on
+> 
+> This patch reworks the bonding GSO offload support by:
+> - making aggregating gso_partial_features across slaves similar to the
+>   other feature sets (this part is a no-op).
+> - adding NETIF_F_GSO_PARTIAL to hw_enc_features filtered across slaves.
+> - adding NETIF_F_GSO_PARTIAL to features in bond_setup()
+> 
+> With all of these, 'ethtool -k bond0 | grep esp' now reports:
+> tx-esp-segmentation: on
+> esp-hw-offload: on
+> esp-tx-csum-hw-offload: on
+> 
+> Fixes: 4861333b4217 ("bonding: add ESP offload features when slaves support")
+> Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
+> Change-Id: Iebd2a9d903d3e056e7717e8ca2527a9adf21b2e1
 
-On Tue, Jan 21, 2025 at 11:29=E2=80=AFPM Andrew Jones <ajones@ventanamicro.=
-com> wrote:
->
-> On Wed, Jan 15, 2025 at 10:40:23AM +0800, Yunhui Cui wrote:
-> > Expose Zicbom through hwprobe and also provide a key to extract its
-> > respective block size.
-> >
-> > Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
-> > ---
-> >  Documentation/arch/riscv/hwprobe.rst  | 6 ++++++
-> >  arch/riscv/include/asm/hwprobe.h      | 2 +-
-> >  arch/riscv/include/uapi/asm/hwprobe.h | 2 ++
-> >  arch/riscv/kernel/sys_hwprobe.c       | 6 ++++++
-> >  4 files changed, 15 insertions(+), 1 deletion(-)
-> >
->
-> As the bot points out, we need to add the following to this patch.
-OK, I'll update a version and change hwprobe_ext0_has's second param to u64=
-.
+What's Change-Id here? Others looks good to me.
 
->
-> Thanks,
-> drew
->
-> diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwpr=
-obe.c
-> index cb93adfffc48..6b5b24b399c3 100644
-> --- a/arch/riscv/kernel/sys_hwprobe.c
-> +++ b/arch/riscv/kernel/sys_hwprobe.c
-> @@ -160,7 +160,7 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pa=
-ir,
->         pair->value &=3D ~missing;
->  }
->
-> -static bool hwprobe_ext0_has(const struct cpumask *cpus, unsigned long e=
-xt)
-> +static bool hwprobe_ext0_has(const struct cpumask *cpus, u64 ext)
->  {
->         struct riscv_hwprobe pair;
->
-
-Thanks,
-Yunhui
+Reviewed-by: Hangbin Liu <liuhangbin@gmail.com>
 
