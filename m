@@ -1,67 +1,66 @@
-Return-Path: <linux-kselftest+bounces-25104-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25105-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFD2CA1B8C8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 16:19:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 544ACA1B8CA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 16:19:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26B5D16BC7C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 15:18:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EDAA47A269F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 15:18:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69EBE1ACE12;
-	Fri, 24 Jan 2025 15:17:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1E6F1C1AAA;
+	Fri, 24 Jan 2025 15:17:14 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CD9C1991A8;
-	Fri, 24 Jan 2025 15:17:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F4D31A9B43;
+	Fri, 24 Jan 2025 15:17:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737731833; cv=none; b=opSrCPXqisMl9MIw4WGJYPjU7zKd496HmlhDShgfPBR3hwJBm4h7wexgSzHShSaRM47Vlqz2zL+vGCWiLoXjZBT2zR2pVSpKN/cfuzXB6JIdzQu5Odmj0FHyKbhpQTr507EyhkgBXfJ4hUsSs0uVdvrXPbD6saCr92VnWXvE4eM=
+	t=1737731834; cv=none; b=SiSEcly5JpfI8e7V8rscgCi01is6Cm6/bTGQcGyX6WZZ3q91l1rqkptJ9t2XLEL/5wujVeWpjU21EPbUo5UgmpYpVYnh4TsaiJomMbsTbV/xjp3BSoKChuxHKg5XwvfyjIn6LE/NaO0U5yAA3AIZX74MByVniutKKdUnLjURVqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737731833; c=relaxed/simple;
-	bh=VvYhMqUAo0V8kDZW6fMOYa/jXGpxQtZ/+oVgd6D3HQo=;
+	s=arc-20240116; t=1737731834; c=relaxed/simple;
+	bh=90ofQRjddhIwjY7B3NdBo3IIRS/bucBdlhjUgF+NetU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AUSeYXWmS3w7iBoYRkgfwBoyQnga2L9qJNTkKKLnFd7Lsz3PZJNqLSecx+736TINGfzVyuuP20YbeMW1vOr1z0pcL09Bsn2mJ0lErszevjwSyijr6hysmt/zyY8qoPlPQBVKQs8tb6YYTeWuxXNMC+uoT+UgB/wcENzbHUE0mb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.51
+	 In-Reply-To:To:Cc; b=Mfh0gaEsME5CZT35m4y7kqAUEmLCayLbxkoPFndDlfSuVvHCMGsFHjt0o6KSjg2Z3M08jw3My2QtTWreT/un6xf4gm0IBWaqo4dUJiVy5wizcK7/T6QEmsKcx17RtlpiiYN6Xh0BoDf1JMp7d9ll4Zet5He/Q0jPaokSsQl3EdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-aaef00ab172so370884466b.3;
-        Fri, 24 Jan 2025 07:17:11 -0800 (PST)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-436341f575fso23742855e9.1;
+        Fri, 24 Jan 2025 07:17:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737731829; x=1738336629;
+        d=1e100.net; s=20230601; t=1737731831; x=1738336631;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=A9uBJBavnRRbXIEPgvkqqS5e1E1VX0ZLnO/5iP3vrGQ=;
-        b=vIC41ywEOsrCw2QRiPLcfIDL9Hby4AnKfgPuBFdkY3NCIvEeR1Ld0Irb34YxFmH5yb
-         8noTdih5Luv/ZCwx27yjLjV8q3e8KrPu7Nu2+wlEnHnz5oFcEvR3ysdxF3ostEgaybco
-         qlEptvms6YkVpaLqBCehmIMm2s1ORRQxXuD18iV0KQSLBLROsFfFAMO4g++WEsqg1LdW
-         7bhpu+JkzqZF0loFz6lsKbLEdTYKkQHh2nowz3FVlx+4AgzklUNaGgPuIsRsr8UWwjOh
-         K+w5HAYCjAZMAOBS841nk/Xljf2Jxbudk3SqI037gb+vhJMih0PY7pHb07FFutqPQwpy
-         zk4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUWUSTmq9vUanUYnHFcM+/glTbI6OsZfpWsb07iWn0uYUwgF5K+s093ZCA53IBU7P3EdgPRv1iahlu+QEqL@vger.kernel.org, AJvYcCUfwTmc5wMx+LyoZ19WHOtQIt54EsEOU/F4fnxKVSpUmousZwyxrkg7Zm8nzQptjYpUkXz7q5RNaP9uq6SJDI7Y@vger.kernel.org, AJvYcCWpAkq2Qpv/4KQYdA4K+NlfxiVZmoHIauVNj9sJyDCpLiBArL1irS1ksVLaXOcPXxldWlyuXmIy5ME=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0QUvHY2CsDni8T5y54JeGz113kK8AC4kQI8H4hpDuvRHX6gcg
-	HsWlEU8gWWldsFoe0C5ilJzth0Uw/aGvDmuHtRtPyxqat67ekHvo3SYy6A==
-X-Gm-Gg: ASbGncuNIFUUfX9FZ4dWok9NFXrfyVyH1q2D427uzR2BboY3ED/LUU/zTgKu3hQjjgQ
-	mjHwJ6V22LIREXgdTpHYQWmcBZZYeqNZNAJVftx311vjC8gDzUu2OoEiAVxJEidkY+qXyXdhtRX
-	3PwXx2+8HFVelBR2sKwP5ANmsArezQDbCSewa5Mmrvg5Lq23DZVu9tApLVpshFRVjHxT/phsAIK
-	Pu1y/lrTL26mfKrjwuVg49sB8acExys4sy8tn4chIUpcE5Dejl6FKc+/zsyW0m2hHrGFyks3/Mh
-	TTcTVA==
-X-Google-Smtp-Source: AGHT+IEtcR7IbsNgiEZoxO8P72iS4HBHIFewAeqmpjE95N0eZ9X9crJzrzP+IyCJm8KJY/SMqxlI4g==
-X-Received: by 2002:a05:6402:4313:b0:5db:f5e9:6760 with SMTP id 4fb4d7f45d1cf-5dbf5e96a10mr25922157a12.2.1737731829217;
-        Fri, 24 Jan 2025 07:17:09 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:5::])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dc1862a17fsm1274712a12.32.2025.01.24.07.17.07
+        bh=0R5eAfrpk5/TXaX9HTiFe76PxOptLYOl1qhyiQmRyhk=;
+        b=VfwggWEazoY3kBBiFlRexoLrCBW6vsFGCRzk4XH+yPmJVWZer/1vHuXXAYUsNyOktE
+         2ajwZo7X8SMCuuHJZqwmwPRNfYdjCWMR122aPa9hR2h0FYpXAG90FSMkwl/2PPaItYdk
+         t4fKy5ulRnDeX/UtThjGr5MSMYS61B25bvGlJvm8x3d83bd2KirOucVyZeOrDmN0EUKo
+         O3aoyl8R6JgIdZzqwSNU9aQlWJEEyg9B5BlQ76Zn7MNdHgKqOYAiw4ThW60l6JS+5VrP
+         qLc2D/r+JayNIPdASCZwkIXJKTcTcOUH8jZbfCOWXc7B3/Htc7ZyACYvmQ9YE2I8wUvP
+         aKLg==
+X-Forwarded-Encrypted: i=1; AJvYcCWIeqUFQ2D+chxXKfD2dkLq7c5UBoDPSuychkpDlr0mIBkQPer1jrCCTVHHV7HxJuRki/UcSWxy/YbO3IEl@vger.kernel.org, AJvYcCWeUKmOqXSxpQUhLBq19UAZ6RlsPrZZasxdbrMuxRcYuP5OTrH8TVCx4KYJwtMfcof6A8NSH3Z7RUIH6FOIOE58@vger.kernel.org, AJvYcCX8EzwsL9NTMnEg3hjtmVloHDOnyHdO8BlEbiOr0GTGBwcL+Otpymwmko2HMXPUmo0mNOG0/72V6T8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRswVzaswOY81yl0aIzF7DgMfoVJhBhe0pyPQZyE+2zOfyNzmq
+	hhNynTH4jwP3PZJJt3qKTW0s5KBZCcp0qYLj42oM8oNU9HioNlE+xCM5rg==
+X-Gm-Gg: ASbGncu1gA/CYTnJIv6gCcu1UsgDyyt4YNdm1RUz+nY/sz77l7CqxA1Lr3ohe6X6h05
+	L9gKY72qPmZ5xUkavCJ6JIFMN09sqxtxprPMfyKKuEApFHEOyDW/C4AZ540Qmn99y2hR4o+/9tF
+	A4kO+CRWuVS8IZwmHW2S+BnulD+8tY+VWkBGVNrMIunrJdh4nPorhXOUUESmisR4ThB/fsgP54n
+	atF6pK8iLefZawwpK542jDhXUHnrjSMKJ8hEp2gJAjHaBeuhs7dsPCHM8w5bOqaC8Kp7q3B
+X-Google-Smtp-Source: AGHT+IGbwuU0YUTK5ski45/DPq5R/feN+h1iQPzoO7KXr6SpIOhTmlD9nMcHyJDhlejriWK7Mujlcw==
+X-Received: by 2002:a05:600c:468d:b0:431:542d:2599 with SMTP id 5b1f17b1804b1-4389143b715mr277099595e9.22.1737731830891;
+        Fri, 24 Jan 2025 07:17:10 -0800 (PST)
+Received: from localhost ([2a03:2880:30ff:74::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab675e13694sm143592466b.24.2025.01.24.07.17.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2025 07:17:07 -0800 (PST)
+        Fri, 24 Jan 2025 07:17:10 -0800 (PST)
 From: Breno Leitao <leitao@debian.org>
-Date: Fri, 24 Jan 2025 07:16:43 -0800
-Subject: [PATCH RFC net-next v3 4/8] netconsole: Introduce configfs helpers
- for sysdata features
+Date: Fri, 24 Jan 2025 07:16:44 -0800
+Subject: [PATCH RFC net-next v3 5/8] netconsole: Include sysdata in
+ extradata entry count
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +69,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250124-netcon_cpu-v3-4-12a0d286ba1d@debian.org>
+Message-Id: <20250124-netcon_cpu-v3-5-12a0d286ba1d@debian.org>
 References: <20250124-netcon_cpu-v3-0-12a0d286ba1d@debian.org>
 In-Reply-To: <20250124-netcon_cpu-v3-0-12a0d286ba1d@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -83,164 +82,57 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  rdunlap@infradead.org, Breno Leitao <leitao@debian.org>, 
  kernel-team@meta.com
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4808; i=leitao@debian.org;
- h=from:subject:message-id; bh=VvYhMqUAo0V8kDZW6fMOYa/jXGpxQtZ/+oVgd6D3HQo=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnk67rBC45BX5/8jV+gS22yCwvBKhXPUEbbUuWg
- qf77RGudMeJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ5Ou6wAKCRA1o5Of/Hh3
- bR0LD/4pg0J9MtjO2Qsu392AGhrbPGLkcj9ixQYU+4XWAksjxUBgY4Fg5ZbiX1TW3qgY4ccJkO6
- lhB18cMsoYHLw1UrK1nRCP+IXDydppUxwx7cYHY+L/+g3c8a1CJUDChB6bhmY8HPEczwtdTOwcn
- QK/fJfwtwPkW7W07/p5u3QJzFlpOHO4VQ2o4HO33uEZqZ2igUf56CuxGUlSLBWwJMKIhEycy9u9
- yHHhR/+udTfPs5a+HOp2UETKSF+DQuqP2VyP93xkOQloDMxqQDXnlNjvT8CwYnhsEO3e7Sj+RLZ
- nVYKotdD1dk/8gRqeTIwrYb+OMrSfPqb1cbF6WIZPL+5BjFzDW3qj0B45kMm92neX78ef6OqOTy
- x7VtSWQ9TTUIoT0D0pH7k64jl+Tbbovke4wJbP7oQ2t0c7LmQ7d/rIE6UFV0UUApxlQZbCNefaH
- zQTRNiQVMWjyd4XAohGODuV1ht+AVaqbNvZQQILT3hPEyIBc+4JZrDR36xZt3JSzaillCIRodG0
- vciUIVSZMFACesBCB88OnkS71CNBaIJNzId/dgjC8S0yVH5/QaCJ3nhwp3RvncQBMqmRXHdySAN
- FMnb9qzONPo6MFBFoTef8lhw7UWwdNZHD5uLYh63E+OrOjuHxqgNqHEtCIYsvxxkJxvNL0oXDWZ
- CZbcz6kfFojCdqQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1317; i=leitao@debian.org;
+ h=from:subject:message-id; bh=90ofQRjddhIwjY7B3NdBo3IIRS/bucBdlhjUgF+NetU=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBnk67rWYcX6SWsGuYFG8q6jneB281uW+NNRGcYr
+ Uw3FzJniseJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCZ5Ou6wAKCRA1o5Of/Hh3
+ bdZ2EACler/RBhAu5PNHtKud9KcWiGqhyUQT4SVa+YxhctC7UU8e+GDDwuCwaiG7YDSCMeN6IVK
+ Lmn1tz/AKUUqTcmufHtBpn4a5Uej0TrAIZNTt1k69TMsPDkhERZx7loY0TaF5Y58Vq8ZICBfkec
+ 3SFUZzh5NfNcUjAIJ9Y389Q0vhYUjxeeiAPnYmkqES3k7vJKGm7cMsAbu9CLNk3Na0CaLvJ5mo7
+ wXcMuYvhwJ21kyxvgz2QUBGajAhGrl69hLjDoLU3uqdRoCCtcgZoIK7wD2zrK24K/Z1WA/jLvda
+ wWWBUeLNE8BhEog4qCRw9hiBjV8+rlX24dlD3Z8OUiqi2fjB2WFZ/sinoGf2GkxxXQmp5afc8wK
+ Bz5C0wl9J1tLgGYHhTM5Rxlzs0KUMlR1rdpbC7ThnM0mDxjL/pG10q5bH2yf8rktCuFS4NL0qOo
+ wbDOT4v9QDGP9i/Lg/47aPG44pLV1vnPC0UfN8I6iyV0OTXEjIlaJrJHVCSpkqr91g+M73UbUMR
+ z/GZZ6bADwv0cpzyKWndsZyKu8FqOMCSJWd+tV/L+KdORU1zJtP90YDiikPr1ToxhHtx+bxBJ1x
+ BkumSaaMe64mRHb6c9eR2ICTw2RuprvVpBGJyF6qfBtFTiCJReaDT1xn1JoqdguindOXafiHWoF
+ O+0XIxVbAnbxLvQ==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-This patch introduces a bitfield to store sysdata features in the
-netconsole_target struct. It also adds configfs helpers to enable
-or disable the CPU_NR feature, which populates the CPU number in
-sysdata.
+Modify count_extradata_entries() to include sysdata fields when
+calculating the total number of extradata entries. This change ensures
+that the sysdata feature, specifically the CPU number field, is
+correctly counted against the MAX_EXTRADATA_ITEMS limit.
 
-The patch provides the necessary infrastructure to set or unset the
-CPU_NR feature, but does not modify the message itself.
+The modification adds a simple check for the CPU_NR flag in the
+sysdata_fields, incrementing the entry count accordingly.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- drivers/net/netconsole.c | 81 ++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
+ drivers/net/netconsole.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
-index 1c197da806962a751a3da8794def6a97cff5f701..4cefa43555aada25769b705dd8c8c89964f51a52 100644
+index 4cefa43555aada25769b705dd8c8c89964f51a52..2f1aecdf2a47f246e75061d09b9ca524a82ec994 100644
 --- a/drivers/net/netconsole.c
 +++ b/drivers/net/netconsole.c
-@@ -97,6 +97,15 @@ struct netconsole_target_stats  {
- 	struct u64_stats_sync syncp;
- };
- 
-+/* Features enabled in sysdata. Contrary to userdata, this data is populated by
-+ * the kernel. The fields are designed as bitwise flags, allowing multiple
-+ * features to be set in sysdata_fields.
-+ */
-+enum sysdata_feature {
-+	/* Populate the CPU that sends the message */
-+	CPU_NR = BIT(0),
-+};
+@@ -693,7 +693,15 @@ static ssize_t remote_ip_store(struct config_item *item, const char *buf,
+  */
+ static size_t count_extradata_entries(struct netconsole_target *nt)
+ {
+-	return list_count_nodes(&nt->userdata_group.cg_children);
++	size_t entries;
 +
- /**
-  * struct netconsole_target - Represents a configured netconsole target.
-  * @list:	Links this target into the target_list.
-@@ -104,6 +113,7 @@ struct netconsole_target_stats  {
-  * @userdata_group:	Links to the userdata configfs hierarchy
-  * @extradata_complete:	Cached, formatted string of append
-  * @userdata_length:	String length of usedata in extradata_complete.
-+ * @sysdata_fields:	Sysdata features enabled.
-  * @stats:	Packet send stats for the target. Used for debugging.
-  * @enabled:	On / off knob to enable / disable target.
-  *		Visible from userspace (read-write).
-@@ -131,6 +141,8 @@ struct netconsole_target {
- 	struct config_group	userdata_group;
- 	char extradata_complete[MAX_EXTRADATA_ENTRY_LEN * MAX_EXTRADATA_ITEMS];
- 	size_t			userdata_length;
-+	/* bit-wise with sysdata_feature bits */
-+	u32			sysdata_fields;
- #endif
- 	struct netconsole_target_stats stats;
- 	bool			enabled;
-@@ -398,6 +410,19 @@ static ssize_t transmit_errors_show(struct config_item *item, char *buf)
- 	return sysfs_emit(buf, "%llu\n", xmit_drop_count + enomem_count);
++	/* Userdata entries */
++	entries = list_count_nodes(&nt->userdata_group.cg_children);
++	/* Plus sysdata entries */
++	if (nt->sysdata_fields & CPU_NR)
++		entries += 1;
++
++	return entries;
  }
  
-+/* configfs helper to display if cpu_nr sysdata feature is enabled */
-+static ssize_t sysdata_cpu_nr_show(struct config_item *item, char *buf)
-+{
-+	struct netconsole_target *nt = to_target(item->ci_parent);
-+	bool cpu_nr_enabled;
-+
-+	mutex_lock(&dynamic_netconsole_mutex);
-+	cpu_nr_enabled = nt->sysdata_fields & CPU_NR;
-+	mutex_unlock(&dynamic_netconsole_mutex);
-+
-+	return sysfs_emit(buf, "%d\n", cpu_nr_enabled);
-+}
-+
- /*
-  * This one is special -- targets created through the configfs interface
-  * are not enabled (and the corresponding netpoll activated) by default.
-@@ -792,7 +817,62 @@ static ssize_t userdatum_value_store(struct config_item *item, const char *buf,
- 	return ret;
- }
- 
-+/* disable_sysdata_feature - Disable sysdata feature and clean sysdata
-+ * @nt: target that is diabling the feature
-+ * @feature: feature being disabled
-+ */
-+static void disable_sysdata_feature(struct netconsole_target *nt,
-+				    enum sysdata_feature feature)
-+{
-+	nt->sysdata_fields &= ~feature;
-+	nt->extradata_complete[nt->userdata_length] = 0;
-+}
-+
-+/* configfs helper to sysdata cpu_nr feature */
-+static ssize_t sysdata_cpu_nr_store(struct config_item *item, const char *buf,
-+				    size_t count)
-+{
-+	struct netconsole_target *nt = to_target(item->ci_parent);
-+	bool cpu_nr_enabled, curr;
-+	ssize_t ret;
-+
-+	ret = kstrtobool(buf, &cpu_nr_enabled);
-+	if (ret)
-+		return ret;
-+
-+	mutex_lock(&dynamic_netconsole_mutex);
-+	curr = nt->sysdata_fields & CPU_NR;
-+	if (cpu_nr_enabled == curr)
-+		/* no change requested */
-+		goto unlock_ok;
-+
-+	if (cpu_nr_enabled &&
-+	    count_extradata_entries(nt) >= MAX_EXTRADATA_ITEMS) {
-+		/* user wants the new feature, but there is no space in the
-+		 * buffer.
-+		 */
-+		ret = -ENOSPC;
-+		goto unlock;
-+	}
-+
-+	if (cpu_nr_enabled)
-+		nt->sysdata_fields |= CPU_NR;
-+	else
-+		/* This is special because extradata_complete might have
-+		 * remaining data from previous sysdata, and it needs to be
-+		 * cleaned.
-+		 */
-+		disable_sysdata_feature(nt, CPU_NR);
-+
-+unlock_ok:
-+	ret = strnlen(buf, count);
-+unlock:
-+	mutex_unlock(&dynamic_netconsole_mutex);
-+	return ret;
-+}
-+
- CONFIGFS_ATTR(userdatum_, value);
-+CONFIGFS_ATTR(sysdata_, cpu_nr);
- 
- static struct configfs_attribute *userdatum_attrs[] = {
- 	&userdatum_attr_value,
-@@ -852,6 +932,7 @@ static void userdatum_drop(struct config_group *group, struct config_item *item)
- }
- 
- static struct configfs_attribute *userdata_attrs[] = {
-+	&sysdata_attr_cpu_nr,
- 	NULL,
- };
- 
+ static ssize_t remote_mac_store(struct config_item *item, const char *buf,
 
 -- 
 2.43.5
