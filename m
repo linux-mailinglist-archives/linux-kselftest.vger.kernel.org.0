@@ -1,176 +1,205 @@
-Return-Path: <linux-kselftest+bounces-25079-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25080-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A6E9A1B31E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 10:55:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C03B7A1B321
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 10:57:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B8F67A1C59
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 09:55:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D34D1635FA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 09:57:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7459421A433;
-	Fri, 24 Jan 2025 09:55:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1897221A44F;
+	Fri, 24 Jan 2025 09:57:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="irtemr4q"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="N0OUxPgR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2058.outbound.protection.outlook.com [40.107.237.58])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E517923A0;
-	Fri, 24 Jan 2025 09:55:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737712503; cv=none; b=CGUw/3stGc6vXKf9Fk9+WnGus23doxdc4oQH2W3ZQ2sWPtwsD1ht5d+FHmssYg51jg+5KlsadY9yMGLM9UB2Ga3qSpDtdAbJfYG6xempe+59U9t7N01OO4rmtaCP7reouUGxSLjCEh/myoPZdthHVvPVenKQmG7YUneWKoEFlhQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737712503; c=relaxed/simple;
-	bh=ekBEzqmHVXsoFkfZ4bhPvyOWlylLl9N7yx+UMLISzYk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f//v1/RkKIC3wTiGG3dOK6a8VcnHpKSWYsMlYW2VPRZmYkFIWL4SN5p0OiBjfRpRQJh3v2sAHGeXthdZTWfaBau48n3O+qygV6Ur/t50DWP8/KRdkIZkgV8kdyibrFe9KKDn9k8gBCshs1dwKcp3Txvr6N+VJT9HZpwbANs5bJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=irtemr4q; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21644aca3a0so42346925ad.3;
-        Fri, 24 Jan 2025 01:55:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737712501; x=1738317301; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BIZkkKYWnNXZKqM/WO2iIxrtrYS3Hgl4WpBTQkCIUpA=;
-        b=irtemr4qdzUq57ROA3onXKjcQdbRqY+BOEolJB5sRXscyXCa1FCrj3r/v6jB07FS22
-         3OgsREGHS/vjlQV/vNzukGFjbGiDxBXyzAG52BGLqFJm1lgf/UL5m/u4/EsCp6JjTWO7
-         LrCyp1vuEedkmrtuGy3F1AdLFzK5caBPElcMenFO7AkvdPtaYbA1I/X9KKYuzYQ9cxa1
-         OQO8M3LzwqvpK6ygBDQyx9joCczASDUOGI3AoYRGmsmIMWEb7v8BdswmjRzR+mXhpxON
-         EzKTraCN30NVCrsXyv5iuWr30N8mCy2tzXrMX3n04/nkIrPZOCQRxUQCxKWuwjYFgLJX
-         7u8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737712501; x=1738317301;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BIZkkKYWnNXZKqM/WO2iIxrtrYS3Hgl4WpBTQkCIUpA=;
-        b=KEoqwRdZQ2/y/f2bEJLcQWgT/+ZCDs0bCvt16lPg0gAbM8qlnVy0yvr5dnK2mufZYS
-         yoPSGtpLtStdjGIfzHbvUyebsivkCEvZe2OljYrEm3EJUndGG26R6yv3wd1kgti804mQ
-         pMRurekhPfBr0MRzO93lZupVKOPxZic/6kqYWSZJ/aLB2vJWoFebE3dL9QjSKLPBUGVa
-         cf/GorWO81LO/ZVJjD3c0CSEnyvamyBHoQw+0Krb3seEkGokeUNIxw/auormt8P+C2OI
-         euYQPUSpj1Di0WY6O11u/fVdlSKOBAoj7nDaaYjq88hjV1aOOz2znmhq+dmqlz+7QB9F
-         q3+g==
-X-Forwarded-Encrypted: i=1; AJvYcCXE1FOgffrtwbTEqu9iqwN/lSvsEtu9UB5SQtAx8X4KrKniPeXPvZBZaQPPQMFIyEtRhpAyuL0kYPPz+c5nxMQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRQOMuyNYQF9OXYf68pZiq4N6lTgbtglLF3cB6qOO9n2sbm1qU
-	8IgKC5A79A3w29I9f6b4kXJTurZiJT55m1VNwTSlF0vou+iz9K5+
-X-Gm-Gg: ASbGncsTlrmFp7viK11o+8veJgRPCvwAc3APPjO1pC8+itJp0O/OJCo1j8e490LdfRM
-	kCE6fxaszZFP4RnvR/gqwjxxc2vDenkK2ftyRTXlWsmX1lAUiGtA9Ni05baA2s8QcL1BqSs4HBP
-	TYNQ/VsRu9G5Z7ysgNLBoVbgaMgZI2HN1Ijk0tq0t7N9qDS1or13Sa9T6CKAZVsRaxhQsC9ov6J
-	MFtUvrymfzORzYtnTSH+S830bMBKz3N28e95LYvaLg1rrybFsKecGvPA5OVuqtEiNhfSmkpHP3K
-	g/pzuEfjOA==
-X-Google-Smtp-Source: AGHT+IH/OqXcULIPeM7OIDOkr2Io3BTjD+TdF2pZ2fi0Hg5/ik4B72Pnjn7Jlv6nouU6xkrXuFyo/g==
-X-Received: by 2002:a17:902:d2d2:b0:215:b01a:627f with SMTP id d9443c01a7336-21c352de4c0mr463179785ad.4.1737712501118;
-        Fri, 24 Jan 2025 01:55:01 -0800 (PST)
-Received: from fedora ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da414dd18sm12567805ad.184.2025.01.24.01.54.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2025 01:55:00 -0800 (PST)
-Date: Fri, 24 Jan 2025 09:54:53 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Cosmin Ratiu <cratiu@nvidia.com>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jianbo Liu <jianbol@nvidia.com>,
-	Boris Pismenny <borisp@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>, linux-kselftest@vger.kernel.org,
-	Liang Li <liali@redhat.com>
-Subject: Re: [PATCH net v2] bonding: Correctly support GSO ESP offload
-Message-ID: <Z5Njbd8-ieEcbAEV@fedora>
-References: <20250124085744.434869-1-cratiu@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CA3023A0;
+	Fri, 24 Jan 2025 09:57:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.58
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737712634; cv=fail; b=BZs0K8vGIi61uBgMAv84JmPIRF0BMB+3XWPYOS+qoNl+bvZ1F8G9SS2K7D2vOQZOgJD4bkAt5Ljz7Vy+YokCsMkc+1fZlwzKKl1DLJ2vRrkLo0VBDQOJMplCZOC/AnG4vjaE1Php4SMCSqcc4VDuIWC2ybzjRSlDA5K4zYtvS8M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737712634; c=relaxed/simple;
+	bh=HX5052Y41jruVz9HPPuGtAu0e71LyvI2nvDkp0mVAV0=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=dcxyYksYcDnBMbcjN82GCTfKNJ904CvQG7ZEb9EbJP6s0XbDTud5w6DkKGBZHO/otDXWIMS3rO6sIC66bX6/SV3d2VuRdyIZslML6FWuk1Q0oT1p5Gf4WFFdNyFXwuhOr8yZRyPjq/3x+nPmB01DbIdi2WuURaF5RiVsJCfJj7A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=N0OUxPgR; arc=fail smtp.client-ip=40.107.237.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ialnn1rZYb09m4q0JmEAaYa6IG7C48AoY4+icPg5OhbkYro+D3MUBPr70yTjeWBI60pGQUGDHSNWNNvsbs83c7OMJdS9gaGXgt1sUuZUpCYXuQvULBWbddcRt5OIBZ/S9eBnPdviIiRZTwTqcGQsCzksl4zWqDYkvv3WO0AIje1eRSlx4kSQHJYI6ePQvSJcIxowQChf0gnA8JszvTqUvQeYLIGXpFMonXmgXtLlwJ4rR/ySzW+8ZgE5jMHjF9cgt6RcKXtEHfu3N9SDgkceI2OUVey6pKRSM9BtZmr3trzcSLCJ6HD9klbCv4fwSdwbTAOiK11YzxaJ/nq5cZKaUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G9uUYQ0pdhs5ObzzN6En9Xzg70EQpJByWexK7c5g2L0=;
+ b=GNB+V2twau9OUN1uBAepIXN4E82dffTSnU0wmDsHA8zVIXvjohQ+uNyg0ZY3bg0JHUnHnkrXdAqmvC5LulZRmS2EBGZHL228P/ZF1nGKM/pe+ZbCsPVCIyxSx7Z4iLkKEUFIVH8j25/hVqSInUf1hgSuW7A6jWUUaJQyFCC+Ij/v4F37c5aQ/F1tNhTWD7oXgWhEk5DZNNRbYhHn0SCZBfHiAEYg+EtIAwEkS9iJkfH+VMTUCo4gQ+Gqu8DNmiIaQLooMzZUWWRE2BEi7NYW4AXoiwqWZuJ7AV92mf7JTCSW5Jt5ScfzrWZLy4Q6cRVHrQethr3j6Cl44UZiYw6H1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G9uUYQ0pdhs5ObzzN6En9Xzg70EQpJByWexK7c5g2L0=;
+ b=N0OUxPgRzQlkwMrsxI3o9Y7rOpzuJOHlx1O3A5aNB6yNTIjCOnzNxsp4tdCtiU4hySY+zhqP5MrjpnIj8oBtx/3W3qmnyb8GrZw3pJTmUVNgXMFmv0DHMa6ioi+fcR2RPZn4xcMGk51rb1AWTUkEjWFh974mGiSbODCOYln4b5E=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB6309.namprd12.prod.outlook.com (2603:10b6:8:96::19) by
+ CH3PR12MB8209.namprd12.prod.outlook.com (2603:10b6:610:123::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.19; Fri, 24 Jan
+ 2025 09:57:08 +0000
+Received: from DS7PR12MB6309.namprd12.prod.outlook.com
+ ([fe80::b890:920f:cf3b:5fec]) by DS7PR12MB6309.namprd12.prod.outlook.com
+ ([fe80::b890:920f:cf3b:5fec%6]) with mapi id 15.20.8377.009; Fri, 24 Jan 2025
+ 09:57:08 +0000
+Message-ID: <6e7d7f4b-7a0c-436a-b6a2-5e364411ec87@amd.com>
+Date: Fri, 24 Jan 2025 15:26:57 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/9] KVM: SEV: Disable SEV on platform init failure
+To: "Pratik R. Sampat" <prsampat@amd.com>, linux-kernel@vger.kernel.org,
+ x86@kernel.org, kvm@vger.kernel.org, linux-crypto@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Cc: seanjc@google.com, pbonzini@redhat.com, thomas.lendacky@amd.com,
+ tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, shuah@kernel.org, pgonda@google.com,
+ ashish.kalra@amd.com, michael.roth@amd.com, sraithal@amd.com
+References: <20250123220100.339867-1-prsampat@amd.com>
+ <20250123220100.339867-3-prsampat@amd.com>
+Content-Language: en-US
+From: "Nikunj A. Dadhania" <nikunj@amd.com>
+In-Reply-To: <20250123220100.339867-3-prsampat@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0112.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:27::27) To DS7PR12MB6309.namprd12.prod.outlook.com
+ (2603:10b6:8:96::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250124085744.434869-1-cratiu@nvidia.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6309:EE_|CH3PR12MB8209:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4dcce58f-45fc-434f-6de0-08dd3c5d76e6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UE1IZ1N5dURIKzhjeVk5STlUNVlRbzBNaGhQeFV6azFiQUVFL1hURXgvWEVi?=
+ =?utf-8?B?OGdMQVVkQitHMHY4cXlTY2s0bHdEcEdwaXpiYzVLbEw0RWZiSitpYVorZUhl?=
+ =?utf-8?B?ZDFJMDVVdkwyZnBwN1ZQSCtvQnFoQ2Nua1drWGlaTTBCZTRQSVhHQVZDRWdr?=
+ =?utf-8?B?QUZibStnMU91YXQ1T05ZMm1HdEo4MWJoTjdOTi9PY3EwZlllYjVWNVRMQUpO?=
+ =?utf-8?B?VmV3YjRDOHlsQS9MVjB6QWNiNUZZL3RXU1pubGpGV3Yya25jWFFQelN3VnYy?=
+ =?utf-8?B?bnNLRXRzdVc1L2gvMXJjc0VsQkRVWmlCMlBjMS9QSDNxL2xiTkVaajlmQVdC?=
+ =?utf-8?B?c3dueUJmcFpQK1ZSSCtJVGtGRHA3ZnlxOXhsOUJ5d3EyZWJaTWtOZ2FQTlNs?=
+ =?utf-8?B?aUFBbzBlaDlTdzJMZzBqeGRWZ1UwcFZCZW95dlhhdTh2b0J6ek5Fd2ZlZTVk?=
+ =?utf-8?B?elJkQWxySlBiY1A1WU5oSzBXS3pJL2dyUFFZNldVUmlza3FDNXpIb2xDNXBC?=
+ =?utf-8?B?NGE0MnRxRnBNN0J2VTA3U0s3dytJL0pwWjA5MXZqVExTTUNHOXNtR3RpTmhL?=
+ =?utf-8?B?aGw5U2ZNQzRiWVFVQytDM1cyWWw2Tks2VVJHYitMK2ZNN0x3RXBIRTFwcGJR?=
+ =?utf-8?B?MHNoMUR1dVd0bW1vZ09MdEU5Y01oOHNnQlJaeFp2bXRpa1Fmeks2ZkgwSVBq?=
+ =?utf-8?B?YWpYUG9FMmhYODB5ZE9uL3dtMkNIcHBjQnZqYTRZOTRkT2tDUnJCUStaZ09k?=
+ =?utf-8?B?dnhyVDdVS1o3eXcyLzlLbDhXbkM4N2xjOWZkeWl5SVk2SWZHN01lN2NiWUxS?=
+ =?utf-8?B?NTRjMThVdnhOWkk3RlRxeDJLdzRMb1dLdjBodEx3QW0vUENpb2lxNyszcUdE?=
+ =?utf-8?B?dnRHR1l2UXptNE5ENi9nL2xPbEJ3ZTk2MXpSeHBMYnVBdER2eEVMOTZHc1dL?=
+ =?utf-8?B?dU10aFNpYmxiajNpNDQ1S3BUL0pTa0dCc3duV2JUcGRDSWxDbVByODY3eW1v?=
+ =?utf-8?B?NXNzbFF2ZE55dFFFRHZuT2lsSmp1WjVMVFBQa01JRzRQeW1lSm5oTU5mMzAx?=
+ =?utf-8?B?blZIcExEZHhjRnVBdTRISVU3Z1Y0NnFHTjNaSExsbllvbXJZMHBsaW1VeEZi?=
+ =?utf-8?B?SXRaRjZaUndlWTJZOU05RmdlUHFhR1pvVTU5cmNBajRaSG92NjRJMGRxYjZW?=
+ =?utf-8?B?eXdsNTRpRnNZOGx4NkdMRGlnWkNVZVFPR0RGMU92azZ4M2VxdE9mRmdZanc2?=
+ =?utf-8?B?ZnF2bE9IL1dlcEtwS3NIOEFibS9FYWhiNldLYVF3M2tJUXlGbWFoTCt6UGN3?=
+ =?utf-8?B?a2dpU2tnQzhaUThUNnJLMG53OU9YNWtHc3IyVmo0N0E2SEpKZWVCQU05WXo1?=
+ =?utf-8?B?TVVRWitacWpza3FFTThZV2RENmRWTEV1eStCaGQzbVdMaHZCcjhCekduNUts?=
+ =?utf-8?B?QW5RaytzM0FRdUxSRGNBNG9UcVFyYjB6SmU5dFdoTFRwVFBRVTZVRFFqekJM?=
+ =?utf-8?B?ZXJEQjIvazJrTTJlVjdsM2E5OWNMeDFkNnROU3NOWUc3cExybjkwYXNieXZ0?=
+ =?utf-8?B?WjVibWtIZTdoMjlDQWgySHJDMzR3Y0xNN24wODlISldzQkpqdkFDNzRyZ3BP?=
+ =?utf-8?B?NjlZbXI0SXlyTlVUd0wxZzBrOUptZENuMXd3TzFmNVB6TGM2eVZpN0dERVNQ?=
+ =?utf-8?B?WGdsRjhxRnFPQU5sZ3d4a1B5OXdSM1FBc0Y1Rzd0TmY3Wk5wWGticm5DdVhk?=
+ =?utf-8?B?ejZsdjJ0UGh0dGwyYXZCbzZHbFg3Q0JiUDk2OFRxNW1nQkE0YytXUG9EdktI?=
+ =?utf-8?B?UnFBMUo5b3NDTTVkMmY1M01sTzNudHZkWDlLUW11QTdVWDN1ZGNXNFdvS0FQ?=
+ =?utf-8?Q?FUBXTQHsVC26C?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6309.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?UzY1QWpoY0thdmJ3Qy83eG9sUFRoYjg1UExUYitmM05rMmNlbHNKSDgrMVRD?=
+ =?utf-8?B?ekxsWk44UkxSZnNkUU1BeVZPUTZYY0ptbjJ1Lzl2SHJBSkZkRitTeVE5SVVy?=
+ =?utf-8?B?QUFSWEs3OVdrZHRXTlBYVWN1bGc3TEl4T2g3bmxxdHpoelVsVi8vQXBPckFP?=
+ =?utf-8?B?dUEwcjArbVkxS2NxZUc3eVZaWGsyYTFQdjV1RzRkbm5nUHBTY3NIT3lMQks0?=
+ =?utf-8?B?QjYxWXE2VkZ5TXVwa1NieWoxNk9rNllzdFVTRE5RS3UrY0VoSHFiVjA0Ynhi?=
+ =?utf-8?B?VFZwbTFUQXlmTUtCTXdQM25aampxeUNOQWVYakxxcEtSN0JWelZMQ0JjeTRk?=
+ =?utf-8?B?ZWdURjNvREV6VlNpV3BOMStCQmliSitIckdRWEVhQ09FV0dLYzhYbUVXdTR1?=
+ =?utf-8?B?aTNKK2cySzlsWC9WYjMrOVFmS1BlVkpBVWFFbEs3SUx6bTIzN3dOcUFJSVMz?=
+ =?utf-8?B?dDJxOTNJeDFLWTRxMFNpOSt2SU1lTk5qZm1aUEVDTTQyTXo4NWR3SEtHbnVG?=
+ =?utf-8?B?OHdodmNsdWVzbnBCc3pnTHZFRVNlZjljQkZGL0dXR1pJY3NpWjJucnBwOEtS?=
+ =?utf-8?B?L01Vd1YzQ09MZWhNU3RkeVo1eVZrRGlkWGxTV0pQSDRGbW1wOGdtR3FqZlBG?=
+ =?utf-8?B?c00ySlU5amJ1OE0zNzZKaUE4NlhSV3I3ZXo3VUVNdm9Tc29YdFBYbXErOGMz?=
+ =?utf-8?B?VEY2c1ByeW1SSGdJNk5lS05jdkljLzZUdlg0WEpoZFI5VzlOaHltODRpQmVn?=
+ =?utf-8?B?VVM2VTlHeVhCSVdhTXVKVnZDb1dsQldIcllEZFZIOWx5Q3RUK2llTHVOSStp?=
+ =?utf-8?B?ZDJaNFN0ZkhrYmg1bkh3aEpZb0RKOGdQL1ppNTNzNHkxaVJPWllvc1gwYzVH?=
+ =?utf-8?B?aGt3MElpMWpjeDdtRks1d250b2txZWg4UHRCSDhKcmxGWHNKM2JZMDY3Nm84?=
+ =?utf-8?B?N3c3N3FCbmh3dHB0dDN0ZVk0NmUrREhsRWUwdDFDQmxLbVdHZmhUUnBCenZF?=
+ =?utf-8?B?cWdTa2NMa2JEMVlLZFNtM1d5d2l1anZhclVDcmMvNHdEQjFOckVRTFlzQU5r?=
+ =?utf-8?B?UERqSk44OXFUeG5WM3IyY0YxWE1LazhCNWdwdFlzbDFIeG9lQUpaVGI5WWNR?=
+ =?utf-8?B?ZTNuVUJUVEM4SE9Rck04MTNVbVN4U1dFbGNxYXgwSE54cVdtM0tiZDZZbDA1?=
+ =?utf-8?B?alJjUUhwNkVyUnpYbmFseUFvSWJwNWVENG53SVcycWk0cFUwZm9HVk94STdL?=
+ =?utf-8?B?MXZoeGFXZzFyRU8yWFBnalByN0tIZXJXbzdSU1dVM2JIMDhlc3MyNzdQVDFo?=
+ =?utf-8?B?Ky9td1FpZ0hITGpzV09kZ0pVM2xGR0YxWlB3YkVCYlZvSFNVQjBVcDF0aTJv?=
+ =?utf-8?B?TEJYSDUyOUR6b2l1Tm9ZdDE5aG9iYjZUK1lRaDA3OWlsZmRiVU90VU1vL2d3?=
+ =?utf-8?B?REFWbHN1UDlob0xwaFVzVkNKcDAzOGRvSjFkbEhJZXlabEFRdDB6OVA0V1Zl?=
+ =?utf-8?B?dk8yZDduaGxBQ1JyYUhSUk9rNjBJOEl0bUtrcXVIOE1WalJGTVNSK3NCREZB?=
+ =?utf-8?B?SnZrRkl1K0ZzZ09oN2RaNlh1LzExUjlEU0s3alJlV0kyc2ROc0pmNkk4alV6?=
+ =?utf-8?B?ZEdsTGRPQzlrTTFrNG0vbG82bkRZenZXY09qMWNBM1I5UXlYWDdETnUvVEtw?=
+ =?utf-8?B?V3J3Wk5EYWs2SlU1VUpVdHBaYVFBSUIzb1ZJcUZjdGVmSU5HVTNNM1pUVXR2?=
+ =?utf-8?B?V3pxTXp6aFVIdmNoSS9pR1VLNHMxc2I0SFZxdzZSZzEwYlZhV1o1QkJHNHBw?=
+ =?utf-8?B?blpRM1RwRDFVaG9GampKNXAwNWFMdnhHNWgxWCsxRXJtcWk3MGtHb0lCQnVL?=
+ =?utf-8?B?aEhEd0tyZnRHdGwzSHd1YUFuaUw2bHZYNHpFWTFLVXRuRzJTQldFWGlPakVv?=
+ =?utf-8?B?RWFlODhmL2ZkOUZ5MW5NcmFZWDV6RHlOeTk4VGFJa1ErdlpFZWtQUURCcHc1?=
+ =?utf-8?B?YjV3WlowVkN2VW5lSFpQai8xT3M0Tlp1R0k2RmFLYkYyOWgzWXdBMWVsTzVE?=
+ =?utf-8?B?VjkzWE93RmxiVExRZndsMitGTkRIV2kwL21yOUZiZ3Q5c2poUVhqR2pkQU5Q?=
+ =?utf-8?Q?X5icY4XgtxlVJff6iTFuucQZi?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4dcce58f-45fc-434f-6de0-08dd3c5d76e6
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6309.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2025 09:57:08.4589
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 26SzbZ6cR6a/Yj90bciq5OZK0EzWS7qJJij0lcnmQ1qQ7iYO7ig6K4pl63kEkjrdvByy6mbtTkMokn+34R2Fog==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8209
 
-On Fri, Jan 24, 2025 at 10:57:44AM +0200, Cosmin Ratiu wrote:
-> ---
->  drivers/net/bonding/bond_main.c | 19 ++++++++++---------
->  1 file changed, 10 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-> index 7b78c2bada81..e45bba240cbc 100644
-> --- a/drivers/net/bonding/bond_main.c
-> +++ b/drivers/net/bonding/bond_main.c
-> @@ -1538,17 +1538,20 @@ static netdev_features_t bond_fix_features(struct net_device *dev,
->  				 NETIF_F_HIGHDMA | NETIF_F_LRO)
+
+
+On 1/24/2025 3:30 AM, Pratik R. Sampat wrote:
+> diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
+> index e841a8fbbb15..3a40b79fb37f 100644
+> --- a/include/linux/psp-sev.h
+> +++ b/include/linux/psp-sev.h
+> @@ -946,6 +946,7 @@ void *psp_copy_user_blob(u64 uaddr, u32 len);
+>  void *snp_alloc_firmware_page(gfp_t mask);
+>  void snp_free_firmware_page(void *addr);
+>  bool snp_fw_valid(void);
+> +bool is_sev_platform_init(void);
 >  
->  #define BOND_ENC_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
-> -				 NETIF_F_RXCSUM | NETIF_F_GSO_SOFTWARE)
-> +				 NETIF_F_RXCSUM | NETIF_F_GSO_SOFTWARE | \
-> +				 NETIF_F_GSO_PARTIAL)
+>  #else	/* !CONFIG_CRYPTO_DEV_SP_PSP */
 >  
->  #define BOND_MPLS_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
->  				 NETIF_F_GSO_SOFTWARE)
+> @@ -982,6 +983,8 @@ static inline void snp_free_firmware_page(void *addr) { }
 >  
-> +#define BOND_GSO_PARTIAL_FEATURES (NETIF_F_GSO_ESP)
+>  static inline bool snp_fw_valid(void) { return false; }
+>  
+> +static inline bool is_sev_platform_init(void) { return false; }
 > +
->  
->  static void bond_compute_features(struct bonding *bond)
->  {
-> +	netdev_features_t gso_partial_features = BOND_GSO_PARTIAL_FEATURES;
->  	unsigned int dst_release_flag = IFF_XMIT_DST_RELEASE |
->  					IFF_XMIT_DST_RELEASE_PERM;
-> -	netdev_features_t gso_partial_features = NETIF_F_GSO_ESP;
->  	netdev_features_t vlan_features = BOND_VLAN_FEATURES;
->  	netdev_features_t enc_features  = BOND_ENC_FEATURES;
->  #ifdef CONFIG_XFRM_OFFLOAD
-> @@ -1582,8 +1585,9 @@ static void bond_compute_features(struct bonding *bond)
->  							  BOND_XFRM_FEATURES);
->  #endif /* CONFIG_XFRM_OFFLOAD */
->  
-> -		if (slave->dev->hw_enc_features & NETIF_F_GSO_PARTIAL)
-> -			gso_partial_features &= slave->dev->gso_partial_features;
-> +		gso_partial_features = netdev_increment_features(gso_partial_features,
-> +								 slave->dev->gso_partial_features,
-> +								 BOND_GSO_PARTIAL_FEATURES);
->  
->  		mpls_features = netdev_increment_features(mpls_features,
->  							  slave->dev->mpls_features,
-> @@ -1598,12 +1602,8 @@ static void bond_compute_features(struct bonding *bond)
->  	}
->  	bond_dev->hard_header_len = max_hard_header_len;
->  
-> -	if (gso_partial_features & NETIF_F_GSO_ESP)
-> -		bond_dev->gso_partial_features |= NETIF_F_GSO_ESP;
-> -	else
-> -		bond_dev->gso_partial_features &= ~NETIF_F_GSO_ESP;
-> -
->  done:
-> +	bond_dev->gso_partial_features = gso_partial_features;
->  	bond_dev->vlan_features = vlan_features;
->  	bond_dev->hw_enc_features = enc_features | NETIF_F_GSO_ENCAP_ALL |
->  				    NETIF_F_HW_VLAN_CTAG_TX |
 
-        if (!bond_has_slaves(bond))
-                goto done;
+The naming does not sound right, sev_platform_init() does the SEV firmware platform
+INIT, so how about calling it sev_fw_initialized()?
 
-If there is no slaves, should we add the gso_partial_features?
+Regards,
+Nikunj
 
-Thanks
-Hangbin
-> @@ -6046,6 +6046,7 @@ void bond_setup(struct net_device *bond_dev)
->  	bond_dev->hw_features |= NETIF_F_GSO_ENCAP_ALL;
->  	bond_dev->features |= bond_dev->hw_features;
->  	bond_dev->features |= NETIF_F_HW_VLAN_CTAG_TX | NETIF_F_HW_VLAN_STAG_TX;
-> +	bond_dev->features |= NETIF_F_GSO_PARTIAL;
->  #ifdef CONFIG_XFRM_OFFLOAD
->  	bond_dev->hw_features |= BOND_XFRM_FEATURES;
->  	/* Only enable XFRM features if this is an active-backup config */
-> -- 
-> 2.45.0
-> 
 
