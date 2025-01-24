@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-25059-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25060-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB76BA1AE58
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 02:58:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80500A1AE5A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 02:59:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0772E16987A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 01:58:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1C3C3A9FCA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 01:59:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 108FF1D5CDD;
-	Fri, 24 Jan 2025 01:58:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C40CC1D63D4;
+	Fri, 24 Jan 2025 01:58:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="YOwDyFgU"
+	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="FRq9ATeL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8721D54CF
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2025 01:58:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D811D5CDE
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2025 01:58:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737683928; cv=none; b=cRQHc1sHXN8Co4FffnAIiRmBLrY25Aqk32FVQZw5NdT5DRI7EL/1Ed4HvnpCBwUk7KPr6jlTgQsIkOsp/Z9Eac30hM6twqC0uw4BxdmkKbqohwOBzI3rxyOiausDKI4570wcOAImV7NDiPS7d5EJeXQWHgY+zsJZQ5liskXJh7k=
+	t=1737683930; cv=none; b=GyNlpLP4cTKR9SbTj/qnI3xCIurpFiTQASlf0rnLP24LzBe5eECpvAyuH3ifZxnPJsHJFFS4Bs/yBm2vk5UA0H1HFe1MfemkzmsQNRrZPE+Fa1Hzst3nddVpvcdDJTYqz2KTG5MHP+Y5jlEksG/ITYOgRQOBWcdyISjJqW9BzPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737683928; c=relaxed/simple;
-	bh=mlls54bce+0lvfNSi96vEZ6jU4CJvOJNuNga3KxcE+A=;
+	s=arc-20240116; t=1737683930; c=relaxed/simple;
+	bh=2/LB3V5JWdcgf4tsAt88qzoc3B9PT+ZPjL3M7JzTYTA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Xezieit4w/A/C9S4wzU7oQyXcCsTn7v2VJ8O0fTVpIECJ382TLull4hke64LLU2mCl4LdZJkCUxzQZqEvP2tXdaxFRXS3Z+T1HTDP5j4xc5EgoSOiOq3sHdfhTeBFHhFih2bztY6II3yQ9xYSIOHAcRW+cqiosNLFTJQllcmlFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org; spf=pass smtp.mailfrom=joelfernandes.org; dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b=YOwDyFgU; arc=none smtp.client-ip=209.85.222.173
+	 MIME-Version; b=Geh0mt4quY5bKVaXXWfax+fQfVn/3N3ctcDopIV9uRWxMN4be3YhgyvwHL5rlDoMmULOmP8PRfRV8oTa49Je1mFyJMgTOyg4GTRTvfDrFYks9Uxw2j2Q+71DLcUOA44r5dD60Qq7y2I8wXg86bNLNnZAWwgzZT+XqQSpyMQX5HQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org; spf=pass smtp.mailfrom=joelfernandes.org; dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b=FRq9ATeL; arc=none smtp.client-ip=209.85.222.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=joelfernandes.org
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7b6ed0de64aso158295785a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2025 17:58:47 -0800 (PST)
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7be44a90468so181233685a.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2025 17:58:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1737683926; x=1738288726; darn=vger.kernel.org;
+        d=joelfernandes.org; s=google; t=1737683928; x=1738288728; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qaQdwk1K6JMmpEpTCCMueooCLhtDXZocXZ+0dVMaVq8=;
-        b=YOwDyFgUkwUyUl7OAe8ejSuXAMFVvQ5NSXSJN0jOvTDHjVmxxX0cISRJMYJRgOOjiJ
-         G5k/PxzFQtJkkzvU8Yb6AROkcowPdlHMq8AlmUmHWwZFjhW1YcR6NDyoV1Zre5+KLaQz
-         j70Z0HQzByW3gGiy+XB6L4TwopPb+X0VDBBRQ=
+        bh=EOszlMe/TkxR9TrVzVzkXceOdLnBKIK5m4j/zRnrkWk=;
+        b=FRq9ATeL8byd0qZjRMKs5GoVDNwzxC79MSg+ZyeqO/OzOzHeGIX2bSn+qMpf1xifv0
+         6XvN3iMkrle08eJu/Fb3gBqaWwq/zNK5v4MvfGFeEn1tGkOSh3WAT7Y1nFxN5IB2Jb0n
+         ETVwM6N/f0Ly3R85j6OUDKXUlXuDNbNe2hfJA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737683926; x=1738288726;
+        d=1e100.net; s=20230601; t=1737683928; x=1738288728;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qaQdwk1K6JMmpEpTCCMueooCLhtDXZocXZ+0dVMaVq8=;
-        b=wv/yMc/DFS5SBbOHb8kB3CtgKrb38LcO0f5xG5tc/NXg/9gg4Acy+noTdwasGz6uFH
-         ZmFrRXMao3zbZ6EMCCFmxDplaXEjKMYqIn4ESXtyjh75St6gWdsr7+SuIxL23LxpHGLF
-         omYkA0Th7gLKXGQ6AxR4OldLxc1sckhTDXq5szHind/34uG57PmR23FNuT1JVxjMdvg9
-         sIevs7SP9CfazNNu+tkey2hYZFaK+7SYOIT13zIKxOwVzrj2NLIaMMKvrxcvlEsWQll3
-         P/iFkrFe7iplNsV1Gcp5eEgpL2FBRqKjg8fg1q6lVTytdRkApZkDrq+cK8JHmqAZOj5D
-         446g==
-X-Forwarded-Encrypted: i=1; AJvYcCV9OG4VzhFyAVM70lKdwG5qiXvf/n5rbJM1j5xJvpMxOFX1DtoZpIC40243m7Y4vDI97ZVQT+OKGCJbe4oVo+s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRG9/ntNlAT7g476IeUHu0F48WqekVjppj9m1GvbqzpcETPG1U
-	1m15aZaXSGCEJKP+QNNrh4KtbSGq0Jh8UninCCBkwyd9n85uSJsbScym6SCKiZI=
-X-Gm-Gg: ASbGncuc9ZmjsXMmw68QVzYlMrVcalkyCvalUm3+zu45eLjaM9L3qMiGj5WsumhPcKe
-	E7WCIkpRmHW6vZswnbqytSQQsmvkHohaa3SdX+pFLXyxn/1YoFdvdj6BpqKNoe/VvmKHnhJrFHf
-	EnQdRsH95i8SsUcs/LsvVPhkDBMwJ2ZwrLEGwdZCUXqctERzOEEeVaKHJ1LWDbAybRSmjEApajb
-	SAhk2tyPi51/Z5G2PXx3DS4Dmh9bbc64tO7h2p5qeFmeehPWC45+tbbmL1gEKa+VcNPo/1cAZKC
-	+Xtu15AxHfrNIno9UprQy4x26TI79GImgk++lZFNALzv2Tc=
-X-Google-Smtp-Source: AGHT+IGedeLyH46JZ6ICjRhHLoRnczUEGAXR32xcGpowOpwEm6uqWspuRRdZr/IOKsIKbb8aqDrT3A==
-X-Received: by 2002:a05:620a:278e:b0:7be:73f6:9e86 with SMTP id af79cd13be357-7be9af69755mr301087285a.20.1737683926278;
-        Thu, 23 Jan 2025 17:58:46 -0800 (PST)
+        bh=EOszlMe/TkxR9TrVzVzkXceOdLnBKIK5m4j/zRnrkWk=;
+        b=HCRPHxSyVZXaSMNrPIFSI8sT0AkHo2hV66DpWsDosO2tFMqNr1BWj+N7RXHcHfTBLf
+         PJm9SwWXWjTG21roqs5tZhJA7GyDWKLYCAxBqwniQwLijm28HQN0U0SHHy9cp/gd14gI
+         +crqqddedU659SlhrcyFTdMlI+kA96qEYzN34lyXSaE1+HVgak/S5WMrjPsFUlQGE/q/
+         GxmOm268YzdIQMRVQiPiPuX00caSFR6BEUq2et0Pnmop8p87DI+GUVkT2TouKudGp1v+
+         y6tR1vIOYraEDy4zVp545FMCY1TW7QlxlLjEp/Rx76b1QhHCBtWFzl3Ki6ARZXYTmPCW
+         7Kww==
+X-Forwarded-Encrypted: i=1; AJvYcCXYtBP7HaMUXJ0c1wXuXu1zJr5POJEFEfGGrxER0f6oiLwlnbPzyAYyuI9B9ynZ7YrcxtTGeMLH71oI8q0K85Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJyqnamhHY2keUlMfiqTlAOiMKn1sUlDcHgZyt0jgFBZynJx1m
+	70OGBmh8aHILHZH6E5MnBQCVjonbrzxFds2IP4TrQaY/ZaQhWL+aKrdw9kdibws=
+X-Gm-Gg: ASbGncuERLnlcjA5QAg+nlHeC0cBuht/Fcf7rgBQ/f8fK33YX45kImwiXPHG06At4S1
+	w4VO2IAEUyxNG0L0Z122f34MOPZ9F8DgIZ0CTnbnMKHCpEjrKDc4SrstJ2/ecApUI7To0xRmJ0G
+	UiP5xN/FvnnzIZoIRqLQup1fm1J3UwqpYM/TeION+4AfwNeGqbuX6yQ4W+OkiV6Dbt2ieU5reQa
+	+lxSmQwZJPUy6PHxhIEhmAxuaCefmHntZVhg6VTNGsYmWB+uin5S7deM1DnbVTx19TPtCMqiRSB
+	5exqTUD9A1Lvb/NDCMBuoILQpFx+/OQWdGdbFoNIRWcG418=
+X-Google-Smtp-Source: AGHT+IH9ySNTqIGTKZEGcsDbyErRXUpqlMVIGd6POYjLkXuAG73cMWZAVXL3Cixc0SCiAmr0lb4wWg==
+X-Received: by 2002:a05:620a:2b9b:b0:7b6:d1e1:a239 with SMTP id af79cd13be357-7be631e58d9mr4060955685a.2.1737683927847;
+        Thu, 23 Jan 2025 17:58:47 -0800 (PST)
 Received: from joelbox2.. (c-73-251-172-144.hsd1.va.comcast.net. [73.251.172.144])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7be9ae8a5fbsm44741985a.31.2025.01.23.17.58.44
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7be9ae8a5fbsm44741985a.31.2025.01.23.17.58.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2025 17:58:45 -0800 (PST)
+        Thu, 23 Jan 2025 17:58:47 -0800 (PST)
 From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To: linux-kernel@vger.kernel.org,
 	"Paul E. McKenney" <paulmck@kernel.org>,
@@ -80,9 +80,9 @@ To: linux-kernel@vger.kernel.org,
 Cc: "Joel Fernandes (Google)" <joel@joelfernandes.org>,
 	rcu@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH RFC 1/5] rcutorture: kvm: Simplify invocation of mkinitrd.sh
-Date: Thu, 23 Jan 2025 20:58:32 -0500
-Message-Id: <20250124015836.732086-2-joel@joelfernandes.org>
+Subject: [PATCH RFC 2/5] rcutorture: Add a stress-ng build script
+Date: Thu, 23 Jan 2025 20:58:33 -0500
+Message-Id: <20250124015836.732086-3-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250124015836.732086-1-joel@joelfernandes.org>
 References: <20250124015836.732086-1-joel@joelfernandes.org>
@@ -94,30 +94,109 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The else block is unnecessary and we can simply clarify the if condition
-to remove the else clause. It is more readable.
+This script automates the building of stress-ng and can be run from
+any directory. It also support cross-compilation. The output is placed
+into the initrd directory.
 
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- tools/testing/selftests/rcutorture/bin/kvm.sh | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ .../selftests/rcutorture/bin/mkstress-ng.sh   | 86 +++++++++++++++++++
+ 1 file changed, 86 insertions(+)
+ create mode 100755 tools/testing/selftests/rcutorture/bin/mkstress-ng.sh
 
-diff --git a/tools/testing/selftests/rcutorture/bin/kvm.sh b/tools/testing/selftests/rcutorture/bin/kvm.sh
-index 42e5e8597a1a..4766c3023fed 100755
---- a/tools/testing/selftests/rcutorture/bin/kvm.sh
-+++ b/tools/testing/selftests/rcutorture/bin/kvm.sh
-@@ -275,10 +275,7 @@ do
- 	shift
- done
- 
--if test -n "$dryrun" || test -z "$TORTURE_INITRD" || tools/testing/selftests/rcutorture/bin/mkinitrd.sh
--then
--	:
--else
-+if test -z "$dryrun" && test -n "$TORTURE_INITRD" && !tools/testing/selftests/rcutorture/bin/mkinitrd.sh
- 	echo No initrd and unable to create one, aborting test >&2
- 	exit 1
- fi
+diff --git a/tools/testing/selftests/rcutorture/bin/mkstress-ng.sh b/tools/testing/selftests/rcutorture/bin/mkstress-ng.sh
+new file mode 100755
+index 000000000000..e5a19cca6923
+--- /dev/null
++++ b/tools/testing/selftests/rcutorture/bin/mkstress-ng.sh
+@@ -0,0 +1,86 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0+
++#
++# Clone and build the stress-ng tool, placing the binary in the
++# initrd directory. Ensure binary is up-to-date.
++#
++# Usage: ./bin/mkstress-ng.sh (run from any where).
++#
++# Copyright (C) Google LLC, 2024
++# Author: Joel Fernandes (Google) <joel@joelfernandes.org>
++
++# Get the directory where the script is located
++SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
++
++REPO_URL="https://github.com/ColinIanKing/stress-ng.git"
++SRC_DIR="${SCRIPT_DIR}/../res/stress-ng"
++INITRD_DIR="${SCRIPT_DIR}/../initrd"
++BIN_NAME="stress-ng"
++export COMPILER="${CROSS_COMPILE}gcc"
++
++is_statically_linked() {
++    if file "$1" | grep -q "statically linked"; then
++        return 0
++    else
++        return 1
++    fi
++}
++
++needs_build() {
++    if [ ! -f "$INITRD_DIR/$BIN_NAME" ]; then
++        return 0
++    fi
++    if [ "$(find "$SRC_DIR" -newer "$INITRD_DIR/$BIN_NAME")" ]; then
++        return 0
++    fi
++    if ! is_statically_linked "$INITRD_DIR/$BIN_NAME"; then
++        return 0
++    fi
++    return 1
++}
++
++if [ ! -d "$INITRD_DIR" ]; then
++    echo "Error: INITRD_DIR ($INITRD_DIR) does not exist"
++    exit 1
++fi
++
++if ! which "$COMPILER" &> /dev/null; then
++    echo "Error: Compiler $COMPILER not found."
++    exit 1
++fi
++
++if [ ! -d "$SRC_DIR" ]; then
++    echo "Cloning stress-ng repository..."
++    if ! git clone "$REPO_URL" "$SRC_DIR"; then
++        echo "Failed to clone stress-ng repository."
++        rm -rf "$SRC_DIR"
++        exit 1
++    fi
++else
++    echo "Updating stress-ng repository..."
++    cd "$SRC_DIR" || exit 1
++    git pull || { echo "Failed to update stress-ng repository"; exit 1; }
++    cd - > /dev/null || exit 1
++fi
++
++# Build stress-ng binary if needed
++if needs_build; then
++    echo "Building stress-ng binary..."
++    cd "$SRC_DIR" || exit 1
++    STATIC=1 make -j 8 || { echo "stress-ng build failed"; exit 1; }
++    cd - > /dev/null || exit 1
++
++    # Verify the stress-ng binary is static
++    if ! is_statically_linked "$SRC_DIR/$BIN_NAME"; then
++        echo "Error: The stress-ng binary is not statically linked."
++        exit 1
++    fi
++
++    echo "Copying stress-ng binary to initrd directory..."
++    cp "$SRC_DIR/$BIN_NAME" "$INITRD_DIR" || { echo "Failed to copy stress-ng binary"; exit 1; }
++else
++    echo "stress-ng binary is up-to-date, no build needed."
++fi
++
++echo "stress-ng build process completed successfully."
++exit 0
+\ No newline at end of file
 -- 
 2.34.1
 
