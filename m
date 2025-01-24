@@ -1,186 +1,141 @@
-Return-Path: <linux-kselftest+bounces-25063-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25064-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 805CDA1AE60
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 02:59:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 023B8A1AF06
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 04:26:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 828FF7A4C61
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 01:59:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5C1F18874CC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2025 03:26:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEBED1D86E8;
-	Fri, 24 Jan 2025 01:58:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B00491D5CDD;
+	Fri, 24 Jan 2025 03:26:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="p9sJ16iP"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="Th/U/Mc7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA371D63E7
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2025 01:58:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 164F21EA65
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2025 03:26:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737683938; cv=none; b=JyQCwLrFTfLmr6tStbSsoP834jqPFN0lp0iGwIgsH48K1sIye3l6erPGLKFUoa7QIYBRlqntLzhjezOnNs0Qn1qAutPMf4qFki258OT45iju9kNJtU4YpRS7GcSY2CjgRK6c9uIxu4dcvVd/BlLlcc+isUekr7sY7s15AlGDR2w=
+	t=1737689209; cv=none; b=i8Wi413i6blRIB/nAOXKD1Mh3ttOHclIRJBCEzamZuQl+vUojk78KLlQCXhq/DnDius45qIa4HM+BEvxoiHTnzrqkDapb346P2IUHVGVAR6Bw5vwlC0R6DtqikHuUpu72bLk1RtJBG5RroBPambKcVqNq+iWES53gQLzg93ejLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737683938; c=relaxed/simple;
-	bh=OuvN4hSJXio2PoJiej9Y5bVI4DH3N1EbznQzh95Pj9Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=i/oNBsx+IInSE+yWIVAGGx+2lOx5q/bWMqgGRwIE0VjvgtQkj7o0VGMxmd/SCjRK4WfAXLTEdZkczc9LlPLUbA6/cTcVsYR6AI0i1zwZYoT2mMwk4WS25b8NfB7rCfTAYl9f59PTYZNBMDWistMB4d73Jiqr0pwgzTPqiOrBUeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org; spf=pass smtp.mailfrom=joelfernandes.org; dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b=p9sJ16iP; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=joelfernandes.org
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7b9bc648736so158634685a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2025 17:58:56 -0800 (PST)
+	s=arc-20240116; t=1737689209; c=relaxed/simple;
+	bh=tU2QzktmPdlYAOQVknfO8sr/6ZNOUzyHr3Z6kwiTXOI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=efDgMoCa+CN436cagkqqEDg/yXtQ/evUtPVcPo6yzN9zAD2bmJJAaOF4R1RhVp9dqg+fC7h8/H4oUXvFesU2Th4rO89/YytnV5jkFMHrYfRlyR/N6L9QIFZ3T6esUzZsZSTu1d6qbaHoOSH29I0EqMQ+ZR6466/2CS6LtBAuf7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=Th/U/Mc7; arc=none smtp.client-ip=209.85.210.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-71e2aa8d5e3so892609a34.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2025 19:26:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1737683936; x=1738288736; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=bytedance.com; s=google; t=1737689207; x=1738294007; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Y+QF5oSbZcs+JbJsvoCUbafjxE54u1Cr2sHAMeNdyY0=;
-        b=p9sJ16iPpGjmXQzZZTBy6IXvDnvihbEf5W3TycdIx+HB+x8xYDfrsA14Jom8Co5Qye
-         orhK+xwH8+i54VVjj1HuGFtetmd2P6fqdEU9WBrFz2BldUS4xGnDnON0/2q49kUlOSJc
-         eCpsJkXXfzkAfdPp9oAocY5JIcsEjnTULcyzA=
+        bh=+wYF9SYVPXBWNDoppVRqkp4GObHclaiBorKPLUibZhw=;
+        b=Th/U/Mc71LQSRM0LOKGShmVw79HpErnHpIEXwwhSu+sC50mL16dTPHLAt4xUl5u47A
+         V1EtX4GlyVJGlVRlcQNlfgsYtsAaIhUJiL1/tFgYG6uGkS3+UoHgj+i/JJDLH4khErIJ
+         hl6vLLAEwwOI6HMUOj3WU5jNySuiBKEVcFkouDAt47Pw0uZ2lHO2SA3LK94S12XftsEU
+         HdfqxySVzPOK+DqWL+smg0kgXOjgOq0X7bJmiF3bhUR8R5VOuO8mCnSw/KkwBxkcrjwc
+         cqxsMCORI5x/AAylS3/3mf87N4koksvUNaxnPTc+7QkaOzFtPUIgUcd/UPAO6s6v97w/
+         nBxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737683936; x=1738288736;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1737689207; x=1738294007;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Y+QF5oSbZcs+JbJsvoCUbafjxE54u1Cr2sHAMeNdyY0=;
-        b=clxzH/foCN/AUUiGe4ReLk7Tbgq2nTffXbQPbQHK9cw+eMkgWuCyz8M9F84onP/Ytb
-         RmL+NeyEkfbZr4n0raMyfMjbWwOAO/yD2TZT6jKuJoOI/BzBkK3678xwpYFT9hcLfjXs
-         JSMIjdPE50tVPlDEgwHPCpTrn0+jh9kOaZDXEDpcKu6+kyD+cisey/+3XdL39/Be/0i9
-         fJDM4g1SQtkguLOKnDrB78TRYKPkfunZfbtuH7Vw1pd65I4JbTYbORFEZoTxnMu06KGk
-         eswKg4a1T/BwaKyD8KTKWo1EG2FWlzZGJPz78rvLUEYbko4xSzaUdWGZgAgLuLO/txop
-         W73Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW/QT3EC+uClzSRPAGiGQtio+Jr2X7V1Xh4xlGNn2Ehu2Ul3EQaR1EX6RndpxQqjWmpjkhW1ZnLqtCiRTaFFls=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhgykYhk05hye+N05RcSn0FEIxFDPRlZQbBhEjrSY4xAszlcS1
-	LuDwT+yyO7wU94BNL8SvuEOLtg8rD10APwPvcLX+q+bd1oj8U+Wd/w9MTvSqEXY=
-X-Gm-Gg: ASbGnctIEGz47vrdf7aZfejwFtMbJ+DtujqUzVIqDcPnLxA+6P4IMEHPPilU94p1M4m
-	TkkMC+yod9fUaQC+LEsvK4ijc/3bfK/8SU2JAhiLJNrFv7DHMDqWPoIuomg35UEesiuOQqQmL/o
-	n1jOOXw6EhvciRnVL/QH2CegDYtJUxtbwKT8NFs8T8f9eW05eVr8TZS+e0819V/JT6MDbX/zzt1
-	WLA7VucetZnqV841r2IEDbxwHlceVoHgsHYk/LgCAJ++0bXTEl+7/oovUmEI4td6yA3JCXhVJBc
-	x/iCmhUMTkuJxztnoRtA8v9jECSXrE/K1U7Z9ci3lC+x+4U=
-X-Google-Smtp-Source: AGHT+IH36P6Jv8uzjmbePn9/vGkZZmN7+mVBRG1wMuKKi1ngiL7zOS7+fOI/X1b/u1OyY3fqtN5Vkw==
-X-Received: by 2002:a05:620a:1a02:b0:7b6:6a76:3a44 with SMTP id af79cd13be357-7be631f2fe6mr3884618085a.17.1737683936019;
-        Thu, 23 Jan 2025 17:58:56 -0800 (PST)
-Received: from joelbox2.. (c-73-251-172-144.hsd1.va.comcast.net. [73.251.172.144])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7be9ae8a5fbsm44741985a.31.2025.01.23.17.58.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2025 17:58:55 -0800 (PST)
-From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To: linux-kernel@vger.kernel.org,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-	rcu@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH RFC 5/5] rcutorture: kvm: Invoke stress-ng building it if necessary
-Date: Thu, 23 Jan 2025 20:58:36 -0500
-Message-Id: <20250124015836.732086-6-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250124015836.732086-1-joel@joelfernandes.org>
-References: <20250124015836.732086-1-joel@joelfernandes.org>
+        bh=+wYF9SYVPXBWNDoppVRqkp4GObHclaiBorKPLUibZhw=;
+        b=cqUxNrJUFlvLUyP4G7HBDrlG9tL5QpmqBNqSYxZm2Vo0KlNgJeEBfWzldoaUjDGW4S
+         TslvCXrj5ZXjpIBMr7uB+90ozGZw1uJEKi55d4g7KySht6TUMFCrlHTMGu8N7Xv0FyOY
+         x0lUlCz6p2+9jX35hN66Rwk1GgmXiMpBEWog2NmSiPwEjso2iGqcQnXUMzJUSZDO1nJR
+         DflOWXp6qr2nD0pk9ccTCCODnnnjwbGxST/KC3zqVkfyqzoLpJo6la87K2/BBTgxuv9C
+         Eqrf9ZvJgeb9uGVVjjMIGKL6CdxatELUOmQlvJcew8GZJCZM5jEosqnWOxS+WKtGEPo/
+         Mwnw==
+X-Forwarded-Encrypted: i=1; AJvYcCVN1fzuwp6OpbBX0chIewPfE20I8kfBA6ZsvQNHwb43a1rj/JCkl0EV+UyLgiHUPgZGsFj93aiXB1+wa10D3uY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEm356oJyJXVRKrGe75/Z4yqo0cd1HBGLHBthnBtcdeT7whA86
+	CaTlJly1NDhmS9Lj8n6/CCV45i5GdiVMvAW2oeeQVrDa/tSUpjpuywkd3tNNB6cQF5qrd4W3mVJ
+	DMHu7TePMLh3rxe6d7EzJe1gNwimwGtcFKq9rJg==
+X-Gm-Gg: ASbGncuqvhxwF881sWrz5MyBHqWkYB5pTC8pYp5JM37cZXeWQwk2938Amogmz07qcsV
+	fnGvCAhd1d4gocLvr0lUtmpXWZSUUyOlkXumjorxzf3mmfDwel6mPTU3r6FVyYKBR
+X-Google-Smtp-Source: AGHT+IFGnKLva7FD+LaCZWDZWwF1THCBFHRVpsQutJS5kXSNOriJYKOl1H7ykN+A+qzX7nta9YxDL/rzI0cKEjaNzAA=
+X-Received: by 2002:a05:6870:2f0d:b0:29e:5522:8eea with SMTP id
+ 586e51a60fabf-2b1c0b6cdc0mr17604012fac.38.1737689207038; Thu, 23 Jan 2025
+ 19:26:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250115024024.84365-1-cuiyunhui@bytedance.com>
+ <20250115024024.84365-3-cuiyunhui@bytedance.com> <20250121-4990d96a861a4ddd304abc33@orel>
+In-Reply-To: <20250121-4990d96a861a4ddd304abc33@orel>
+From: yunhui cui <cuiyunhui@bytedance.com>
+Date: Fri, 24 Jan 2025 11:26:36 +0800
+X-Gm-Features: AWEUYZmWZdjm8pzj4zzIf6rTTBzAFecQ8H3gVQ0i5poz74_c15zJ4cOjObQZY58
+Message-ID: <CAEEQ3wnZK2xkQ0+pnNCEvXJ6TUVnCHrkL_VNfhK=9Duy0yKNoA@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH v5 2/3] RISC-V: hwprobe: Expose Zicbom
+ extension and its block size
+To: Andrew Jones <ajones@ventanamicro.com>
+Cc: alexghiti@rivosinc.com, andybnac@gmail.com, aou@eecs.berkeley.edu, 
+	charlie@rivosinc.com, cleger@rivosinc.com, conor.dooley@microchip.com, 
+	conor@kernel.org, corbet@lwn.net, evan@rivosinc.com, jesse@rivosinc.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	palmer@dabbelt.com, paul.walmsley@sifive.com, samuel.holland@sifive.com, 
+	shuah@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Invoke stress-ng from init using new --stress-ng and optional
---stress-ng-args. Default --stress-ng-args are used if none are
-provided. Not passing --stress-ng does not change the behavior of kvm.sh
-from before.
+Hi drew,
 
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- tools/testing/selftests/rcutorture/bin/kvm.sh | 38 +++++++++++++++++--
- 1 file changed, 34 insertions(+), 4 deletions(-)
+On Tue, Jan 21, 2025 at 11:29=E2=80=AFPM Andrew Jones <ajones@ventanamicro.=
+com> wrote:
+>
+> On Wed, Jan 15, 2025 at 10:40:23AM +0800, Yunhui Cui wrote:
+> > Expose Zicbom through hwprobe and also provide a key to extract its
+> > respective block size.
+> >
+> > Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
+> > ---
+> >  Documentation/arch/riscv/hwprobe.rst  | 6 ++++++
+> >  arch/riscv/include/asm/hwprobe.h      | 2 +-
+> >  arch/riscv/include/uapi/asm/hwprobe.h | 2 ++
+> >  arch/riscv/kernel/sys_hwprobe.c       | 6 ++++++
+> >  4 files changed, 15 insertions(+), 1 deletion(-)
+> >
+>
+> As the bot points out, we need to add the following to this patch.
+OK, I'll update a version and change hwprobe_ext0_has's second param to u64=
+.
 
-diff --git a/tools/testing/selftests/rcutorture/bin/kvm.sh b/tools/testing/selftests/rcutorture/bin/kvm.sh
-index 4766c3023fed..d35496247ee6 100755
---- a/tools/testing/selftests/rcutorture/bin/kvm.sh
-+++ b/tools/testing/selftests/rcutorture/bin/kvm.sh
-@@ -42,13 +42,15 @@ TORTURE_JITTER_STOP=""
- TORTURE_KCONFIG_KASAN_ARG=""
- TORTURE_KCONFIG_KCSAN_ARG=""
- TORTURE_KMAKE_ARG=""
-+TORTURE_MOD=rcutorture
- TORTURE_NO_AFFINITY=""
- TORTURE_QEMU_MEM=512
- torture_qemu_mem_default=1
- TORTURE_REMOTE=
- TORTURE_SHUTDOWN_GRACE=180
-+TORTURE_STRESS_NG=
-+TORTURE_STRESS_NG_DEFAULT_ARGS="--cpu 1 --cpu-method matrixprod --cpu-ops 1000000 --perf -t 5"
- TORTURE_SUITE=rcu
--TORTURE_MOD=rcutorture
- TORTURE_TRUST_MAKE=""
- debuginfo="CONFIG_DEBUG_INFO_NONE=n CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y"
- resdir=""
-@@ -90,6 +92,8 @@ usage () {
- 	echo "       --remote"
- 	echo "       --results absolute-pathname"
- 	echo "       --shutdown-grace seconds"
-+	echo "       --stress-ng"
-+	echo "       --stress-ng-args \"stress-ng arguments\""
- 	echo "       --torture lock|rcu|rcuscale|refscale|scf|X*"
- 	echo "       --trust-make"
- 	exit 1
-@@ -251,6 +255,14 @@ do
- 		TORTURE_SHUTDOWN_GRACE=$2
- 		shift
- 		;;
-+	--stress-ng)
-+		TORTURE_STRESS_NG=1
-+		;;
-+	--stress-ng-args)
-+		checkarg --stress-ng-args "(stress-ng arguments)" "$#" "$2" '.*' '^error'
-+		TORTURE_STRESS_NG_DEFAULT_ARGS="$2"
-+		shift
-+		;;
- 	--torture)
- 		checkarg --torture "(suite name)" "$#" "$2" '^\(lock\|rcu\|rcuscale\|refscale\|scf\|X.*\)$' '^--'
- 		TORTURE_SUITE=$2
-@@ -275,9 +287,27 @@ do
- 	shift
- done
- 
--if test -z "$dryrun" && test -n "$TORTURE_INITRD" && !tools/testing/selftests/rcutorture/bin/mkinitrd.sh
--	echo No initrd and unable to create one, aborting test >&2
--	exit 1
-+if test -n "$TORTURE_STRESS_NG"
-+then
-+	if ! "$RCUTORTURE/bin/mkstress-ng.sh"
-+	then
-+		echo "Failed to build stress-ng, aborting test" >&2
-+		exit 1
-+	fi
-+fi
-+
-+if test -z "$dryrun" && test -n "$TORTURE_INITRD"
-+then
-+	stress_args=""
-+	if test -n "$TORTURE_STRESS_NG"
-+	then
-+		stress_args="stress-ng $TORTURE_STRESS_NG_DEFAULT_ARGS"
-+	fi
-+	if ! "$RCUTORTURE/bin/mkinitrd.sh" $stress_args
-+	then
-+		echo "No initrd and unable to create one, aborting test" >&2
-+		exit 1
-+	fi
- fi
- 
- CONFIGFRAG=${RCUTORTURE}/configs/${TORTURE_SUITE}; export CONFIGFRAG
--- 
-2.34.1
+>
+> Thanks,
+> drew
+>
+> diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwpr=
+obe.c
+> index cb93adfffc48..6b5b24b399c3 100644
+> --- a/arch/riscv/kernel/sys_hwprobe.c
+> +++ b/arch/riscv/kernel/sys_hwprobe.c
+> @@ -160,7 +160,7 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pa=
+ir,
+>         pair->value &=3D ~missing;
+>  }
+>
+> -static bool hwprobe_ext0_has(const struct cpumask *cpus, unsigned long e=
+xt)
+> +static bool hwprobe_ext0_has(const struct cpumask *cpus, u64 ext)
+>  {
+>         struct riscv_hwprobe pair;
+>
 
+Thanks,
+Yunhui
 
