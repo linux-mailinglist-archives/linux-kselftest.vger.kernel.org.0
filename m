@@ -1,53 +1,53 @@
-Return-Path: <linux-kselftest+bounces-25164-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25165-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8053AA1C233
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2025 09:30:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C19F3A1C234
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2025 09:30:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86AE21888968
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2025 08:30:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 999A91888AD7
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2025 08:30:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99E16207A3A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0E69207E04;
 	Sat, 25 Jan 2025 08:30:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="useGx/Wg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="URANgktB"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690F42EB10;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC131B412B;
 	Sat, 25 Jan 2025 08:30:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737793828; cv=none; b=r2AzcQa5wO/uqDGCiYto9U3cJ3M99HIebxv4RvJdSigUdxgAbf8sHYpBT7FpdCh7OdtVcZyAagOHMDmHosxHceoyg/Z6JmoGhFgS+yhjHP3fSGaH5O37iZWUrgGL6EWJBLWcwNdkGdyDqZx6OAsLiQmB0FPrHyk9IvLyLTEBWcI=
+	t=1737793828; cv=none; b=bFFisuAqMogvkMa6aq4SdhPAn5kCwJavXVE839gNvmgc9qd+H+mQO34KEd3F9CdsohTfk09jjspPqhjTGU/Awxmy8KNEI/0Ah6OstOC1KCqyLpzCnEvbEgOZ/h70EjKBJa2CRxRQTJXSgsr0Hwy+zAkcKvnWboQWeMv+S0hcufw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1737793828; c=relaxed/simple;
-	bh=P5XuJJND0nKhLbsM46EPq1luRqpUiyBNf0HrYROsyE0=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=keRhTSosjAiwE4d+n2wMpiFJpde8AsLKh5DrYqNBCNGxg0SuVnB1Hcm1SvdK1CAJz3ES3TgCCN5653q0rfLlY6zr3dWz4dPH8PUM/nwv71+w7eED2uVTwbkLgbpaHVrL7lhYOSB00ZUVeiWfKMAalGWLwVh7Jnm/tNa7D2ep5Zw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=useGx/Wg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C890BC4CED6;
+	bh=ZtcDKBYvpGO+GJwMItu+xm+YQJmprDGI/QwBss5wxAA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=VPI6hByDefiS+hVQgylRLMy8joYRfMWZ7ixPcUTUvNl4fXmeDlsZMmgPvv4o+I08SoVvjTmz0AfjJkqdU90DQWJDsfSx6GRWbKwZSuv5cnIGAHXT0TJymcB0m196xe7qF3La/yACyctMs7aryIlwryNW5NasXTu0NnLP8LFHm/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=URANgktB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EC8B4C4CEE0;
 	Sat, 25 Jan 2025 08:30:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737793827;
-	bh=P5XuJJND0nKhLbsM46EPq1luRqpUiyBNf0HrYROsyE0=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=useGx/WgDLm9SjiJn/oBJl95SvVEwfQjYspjb6ZwCbaVe7vOr+nWfHx2ev6c0vv0T
-	 hEjB0W42O4AT9uS/d5EQbEC84zdMEeLhmVTz+fJJ9S+YfPRftVENQqTqfWuzHLceyN
-	 LGVVpuDGvnuAUr4wh1uAKQmXaN5mc6BrJj2g6QxPbdAps8DNgVScOCVyGC1G6KMIdF
-	 73I2+VA7ZsQBwApqy4Np6CNy4NN9iGWDOk9M24jsKxOHCr+2oDC2K2uOuCuJpW0nbq
-	 TQMlcCFjDpSSPCWezTcj7uEFuD7kBPU1pXRc/ouCYU0Z4sZt6UoeeYK8LQ92rRkyXJ
-	 di00bEhhQYfhg==
+	s=k20201202; t=1737793828;
+	bh=ZtcDKBYvpGO+GJwMItu+xm+YQJmprDGI/QwBss5wxAA=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=URANgktB1oVQ+aNEyysZu0+3FHDV26ajhREpZxBpD9UNGnWUrdOxkvrz+YQAYlLr+
+	 /o++9NeN9jLq/evMvEf0W4kNHE5nQnsC2cRXEUcGMD51Lr8ycveNHXn/Ju4fkUwaJX
+	 sOcso6P8bIAm3meHs7Azo/YyGESKcQeZv9RgSxplWWXQmjWQwR5vbJx8ObmgIBcNgY
+	 lyejB7WCLQJcAmbPkamqCkH1lgwIUZGt3tFTmcl8qaS0Pi8OF3FlWJ5JJtWZlTm5pt
+	 S/hzCTNr3BBSlhprwGzrOkeA6NyNs6HDgZqCOe8HCl65ZiXt0ZYs+Cidl3kaBZBpln
+	 PtOmVMJZx/zDA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACFBAC0218C;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D824FC0218E;
 	Sat, 25 Jan 2025 08:30:27 +0000 (UTC)
 From: Levi Zim via B4 Relay <devnull+rsworktech.outlook.com@kernel.org>
-Subject: [PATCH bpf-next v2 0/7] bpf: Add probe_read_{kernel,user}_dynptr
- and copy_from_user_dynptr
-Date: Sat, 25 Jan 2025 16:29:47 +0800
-Message-Id: <20250125-bpf_dynptr_probe-v2-0-c42c87f97afe@outlook.com>
+Date: Sat, 25 Jan 2025 16:29:48 +0800
+Subject: [PATCH bpf-next v2 1/7] bpf: Implement
+ bpf_probe_read_kernel_dynptr helper
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,11 +56,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAPuglGcC/2WNQQ7CIBREr9L8tZh+CkZdeQ/TNIWCJSqfADZtm
- t5d0rhzOXkzb1ZIJjqT4FqtEM3kkiNfAj9UoMfePwxzQ8nAay5r5IKpYLth8SHHLkRShvVKnBs
- tpbDYQ5mFaKybd+UdSpt5M2doCxldyhSX/WvCnf+08l87IauZbrRCjvZ0kXijT34RPY+a3tBu2
- /YF9/MfKbwAAAA=
-X-Change-ID: 20250124-bpf_dynptr_probe-ab483c554f1a
+Message-Id: <20250125-bpf_dynptr_probe-v2-1-c42c87f97afe@outlook.com>
+References: <20250125-bpf_dynptr_probe-v2-0-c42c87f97afe@outlook.com>
+In-Reply-To: <20250125-bpf_dynptr_probe-v2-0-c42c87f97afe@outlook.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -78,21 +76,21 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
  Levi Zim <rsworktech@outlook.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1817;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6356;
  i=rsworktech@outlook.com; h=from:subject:message-id;
- bh=P5XuJJND0nKhLbsM46EPq1luRqpUiyBNf0HrYROsyE0=;
- b=owEBbQKS/ZANAwAIAW87mNQvxsnYAcsmYgBnlKEV+2sHhhlq/K1lAjunTXgA/d6rjPlDg3JGN
- cK3kw69poiJAjMEAAEIAB0WIQQolnD5HDY18KF0JEVvO5jUL8bJ2AUCZ5ShFQAKCRBvO5jUL8bJ
- 2HMwEADXmP+76DbBZ1IBtrqom4sXAe3aKiLOE3MIMuPQWiQqfaBzvDlhcm+cP3A05rzQ0sxvd+S
- MweuoGiHO51Xsegd0Mck/++847sj46LXAJXboCymenzgCqIYA/GCGLLpBe1OBFNJQCEnwVDcKjL
- t9/sPk6m724f1fNkZepcBuqLQBoJ6+/no7GPo2+lGN4lsU9PYnX7PAmSU0N14iJORNCvjotTK1R
- P7oSHqYpNDiq2iEx7u403QwHsUkO3lyXJA8feoOSFROi9xgCu7wR7OysANs9xZ1tvYY0789vteG
- 6XmxZay2c2iRUhxa2qt6PCxaVgZZxIAOCVgLxJr0nYXOKVAZ7V6k1/bUTZ73ZyAoH1ONu582X9O
- DNVgjqLBwZvgOTapoM+ifeWqzB5s2GBYfIRIZQZiz34RayCUP6SCTh5zfzx48X33MIZ7ZtA9Kcy
- 1hkKXNwTgyt9NgJFUQ6++BJ38/3RnREvZACz5TgoZ94+u8KQSuubmfK8CIkIoCabslRiDoc86ts
- O8WR3uE7ov+nBf1JXr7xnfjdl6hDnGXiGCBB0YhbAHvd9cvHb1GpaBWu2o/2kA4GgAUlBXwvCla
- htZkOf35wa8+pHPDK9Ybrx9tcmLjbZ7aFzIWdKRlpRv4+8nf/i8IijlBK9FUkBmgkQWgbQ+ycVj
- n3iArCud3OgaGdQ==
+ bh=A7uHiAoA3YZYbVOxcHt/y8HP3bfI8O7Zg6oKJ3y0uAs=;
+ b=owEBbQKS/ZANAwAIAW87mNQvxsnYAcsmYgBnlKEazmLRxSxN+99+LUcfUAXeS2U/PVRZTjaYH
+ b1xE1uWQeuJAjMEAAEIAB0WIQQolnD5HDY18KF0JEVvO5jUL8bJ2AUCZ5ShGgAKCRBvO5jUL8bJ
+ 2GW1EADFpjQlYxCyffskjdPxEJPfxhVA2uuid/BwoPyzoda7V25wj9O8JWKtaXbNZeE/i/v7nHd
+ KvaU/n/9Li/xuWc5AsHxIZGOEb1QaoOMcn4BpejONG/kEpuy7E/+RRzjtV5LKadnSDt2sZO3qcn
+ jb5yrGCcS3trVG1Hf9IkAC9vsCno8nrMt5o2OvkTszCBwOqWETmlMDwERuaD4g80sQT5oaNpJra
+ NSKdyJUgozDwO1osWYeG183iCKo6Tw3YsGX5Rsjqb/GQ//H6SDyMpzRILDR1HC70w9TPYmtsmt3
+ WdkIWhbc/zd8Dj8y2AsTF1/nq/N/Aa1Izux8JkuxbPlHeR9OboIOPPxg74Nm9RiJ9pjuiIlgtT/
+ TeM16kYewqImFrlO8OO1ZhBCKm06S3ArOeZuNQHZcrxIxvctNgvG/sTna4CWAxUE9+/YllCqhZb
+ IRWt/4tkMJXD5d2x5llMSLr4OmJbchDqWgAHWsUUDfcEKNGhOzGI6UrTMyUztV7qRk4rZLvzhkf
+ AY9oQhnH0MQIcNLieFep2rU++GJ1TgvdZ2DGIvAnC+n59VgVMZ0vg/xeF6DW4vufP4jrPyw2v7i
+ WevCUalflNsSDaObLDFDOwvrKLPrUOsF5Wx9KyE+bMiOdkmjgMUASyeTJpI1FQVjyljGui0vO6U
+ ADBAMjwi0ICIt8A==
 X-Developer-Key: i=rsworktech@outlook.com; a=openpgp;
  fpr=17AADD6726DDC58B8EE5881757670CCFA42CCF0A
 X-Endpoint-Received: by B4 Relay for rsworktech@outlook.com/default with
@@ -100,46 +98,168 @@ X-Endpoint-Received: by B4 Relay for rsworktech@outlook.com/default with
 X-Original-From: Levi Zim <rsworktech@outlook.com>
 Reply-To: rsworktech@outlook.com
 
-This series introduce the dynptr counterpart of the
-bpf_probe_read_{kernel,user} helpers and bpf_copy_from_user helper.
+From: Levi Zim <rsworktech@outlook.com>
 
-These helpers are helpful for reading variable-length data from kernel
-memory into dynptr without going through an intermediate buffer.
+This patch add a helper function bpf_probe_read_kernel_dynptr:
+
+long bpf_probe_read_kernel_dynptr(const struct bpf_dynptr *dst,
+	u32 offset, u32 size, const void *unsafe_ptr, u64 flags);
+
+It is useful for reading variable-length data from kernel memory into
+dynptr.
 
 Link: https://lore.kernel.org/bpf/MEYP282MB2312CFCE5F7712FDE313215AC64D2@MEYP282MB2312.AUSP282.PROD.OUTLOOK.COM/
-Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Signed-off-by: Levi Zim <rsworktech@outlook.com>
 ---
-Changes in v2:
-- Add missing bpf-next prefix. I forgot it in the initial series. Sorry
-  about that.
-- Link to v1: https://lore.kernel.org/r/20250125-bpf_dynptr_probe-v1-0-c3cb121f6951@outlook.com
+ include/linux/bpf.h      |  2 ++
+ include/uapi/linux/bpf.h | 16 ++++++++++++++++
+ kernel/bpf/helpers.c     |  8 ++++++--
+ kernel/trace/bpf_trace.c | 42 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 66 insertions(+), 2 deletions(-)
 
----
-Levi Zim (7):
-      bpf: Implement bpf_probe_read_kernel_dynptr helper
-      bpf: Implement bpf_probe_read_user_dynptr helper
-      bpf: Implement bpf_copy_from_user_dynptr helper
-      tools headers UAPI: Update tools's copy of bpf.h header
-      selftests/bpf: probe_read_kernel_dynptr test
-      selftests/bpf: probe_read_user_dynptr test
-      selftests/bpf: copy_from_user_dynptr test
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index f3f50e29d63929acaf12c81f8356173f1f5e154b..9d5ae8b4b7d82c4523bf0ab041d4b76bf134a106 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1323,6 +1323,8 @@ u32 __bpf_dynptr_size(const struct bpf_dynptr_kern *ptr);
+ const void *__bpf_dynptr_data(const struct bpf_dynptr_kern *ptr, u32 len);
+ void *__bpf_dynptr_data_rw(const struct bpf_dynptr_kern *ptr, u32 len);
+ bool __bpf_dynptr_is_rdonly(const struct bpf_dynptr_kern *ptr);
++int bpf_dynptr_check_off_len(const struct bpf_dynptr_kern *ptr, u32 offset, u32 len);
++enum bpf_dynptr_type bpf_dynptr_get_type(const struct bpf_dynptr_kern *ptr);
+ 
+ #ifdef CONFIG_BPF_JIT
+ int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 2acf9b33637174bd16b1d12ccc6410c5f55a7ea9..2e08a59527ecf56732ea14ac34446b5eb25b5690 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5805,6 +5805,21 @@ union bpf_attr {
+  *		0 on success.
+  *
+  *		**-ENOENT** if the bpf_local_storage cannot be found.
++ *
++ * long bpf_probe_read_kernel_dynptr(const struct bpf_dynptr *dst, u32 offset, u32 size, const void *unsafe_ptr, u64 flags)
++ *	Description
++ *		Safely attempt to read *size* bytes from kernel space address
++ *		*unsafe_ptr* and store the data in *dst* starting from *offset*.
++ *		*flags* is currently unused.
++ *	Return
++ *		0 on success.
++ *
++ *		**-E2BIG** if *offset* + *len* exceeds the length of *src*'s data
++ *
++ *		**-EINVAL** if *src* is an invalid dynptr or doesn't support this
++ *		support this helper, or if *flags* is not 0.
++ *
++ *		Or other negative errors on failure reading kernel memory.
+  */
+ #define ___BPF_FUNC_MAPPER(FN, ctx...)			\
+ 	FN(unspec, 0, ##ctx)				\
+@@ -6019,6 +6034,7 @@ union bpf_attr {
+ 	FN(user_ringbuf_drain, 209, ##ctx)		\
+ 	FN(cgrp_storage_get, 210, ##ctx)		\
+ 	FN(cgrp_storage_delete, 211, ##ctx)		\
++	FN(probe_read_kernel_dynptr, 212, ##ctx)		\
+ 	/* */
+ 
+ /* backwards-compatibility macros for users of __BPF_FUNC_MAPPER that don't
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index f27ce162427ab4040d2e2d2eb84a883fe57de59e..a736dc9e7be98571103ba404420be0da4dac4fbe 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1678,7 +1678,7 @@ static void bpf_dynptr_set_type(struct bpf_dynptr_kern *ptr, enum bpf_dynptr_typ
+ 	ptr->size |= type << DYNPTR_TYPE_SHIFT;
+ }
+ 
+-static enum bpf_dynptr_type bpf_dynptr_get_type(const struct bpf_dynptr_kern *ptr)
++enum bpf_dynptr_type bpf_dynptr_get_type(const struct bpf_dynptr_kern *ptr)
+ {
+ 	return (ptr->size & ~(DYNPTR_RDONLY_BIT)) >> DYNPTR_TYPE_SHIFT;
+ }
+@@ -1714,7 +1714,7 @@ void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr)
+ 	memset(ptr, 0, sizeof(*ptr));
+ }
+ 
+-static int bpf_dynptr_check_off_len(const struct bpf_dynptr_kern *ptr, u32 offset, u32 len)
++int bpf_dynptr_check_off_len(const struct bpf_dynptr_kern *ptr, u32 offset, u32 len)
+ {
+ 	u32 size = __bpf_dynptr_size(ptr);
+ 
+@@ -1900,6 +1900,7 @@ const struct bpf_func_proto bpf_probe_read_user_proto __weak;
+ const struct bpf_func_proto bpf_probe_read_user_str_proto __weak;
+ const struct bpf_func_proto bpf_probe_read_kernel_proto __weak;
+ const struct bpf_func_proto bpf_probe_read_kernel_str_proto __weak;
++const struct bpf_func_proto bpf_probe_read_kernel_dynptr_proto __weak;
+ const struct bpf_func_proto bpf_task_pt_regs_proto __weak;
+ 
+ const struct bpf_func_proto *
+@@ -2031,6 +2032,9 @@ bpf_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	case BPF_FUNC_probe_read_kernel:
+ 		return security_locked_down(LOCKDOWN_BPF_READ_KERNEL) < 0 ?
+ 		       NULL : &bpf_probe_read_kernel_proto;
++	case BPF_FUNC_probe_read_kernel_dynptr:
++		return security_locked_down(LOCKDOWN_BPF_READ_KERNEL) < 0 ?
++		       NULL : &bpf_probe_read_kernel_dynptr_proto;
+ 	case BPF_FUNC_probe_read_user_str:
+ 		return &bpf_probe_read_user_str_proto;
+ 	case BPF_FUNC_probe_read_kernel_str:
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index adc947587eb8132ebbd54778d2db937b3b8861de..75c9d1e8d04c3b8930ae81345f5586756ce8b5ec 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -248,6 +248,48 @@ const struct bpf_func_proto bpf_probe_read_kernel_proto = {
+ 	.arg3_type	= ARG_ANYTHING,
+ };
+ 
++BPF_CALL_5(bpf_probe_read_kernel_dynptr, const struct bpf_dynptr_kern *, dst,
++	u32, offset, u32, size, void *, unsafe_ptr, u64, flags)
++{
++	enum bpf_dynptr_type type;
++	int err;
++
++	if (!dst->data || __bpf_dynptr_is_rdonly(dst))
++		return -EINVAL;
++
++	err = bpf_dynptr_check_off_len(dst, offset, size);
++	if (err)
++		return err;
++
++	type = bpf_dynptr_get_type(dst);
++
++	switch (type) {
++	case BPF_DYNPTR_TYPE_LOCAL:
++	case BPF_DYNPTR_TYPE_RINGBUF:
++		if (flags)
++			return -EINVAL;
++		return bpf_probe_read_kernel_common(dst->data + dst->offset + offset,
++				size, unsafe_ptr);
++	case BPF_DYNPTR_TYPE_SKB:
++	case BPF_DYNPTR_TYPE_XDP:
++		return -EINVAL;
++	default:
++		WARN_ONCE(true, "%s: unknown dynptr type %d\n", __func__, type);
++		return -EFAULT;
++	}
++}
++
++const struct bpf_func_proto bpf_probe_read_kernel_dynptr_proto = {
++	.func		= bpf_probe_read_kernel_dynptr,
++	.gpl_only	= true,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_DYNPTR | MEM_RDONLY,
++	.arg2_type	= ARG_ANYTHING,
++	.arg3_type	= ARG_ANYTHING,
++	.arg4_type	= ARG_ANYTHING,
++	.arg5_type	= ARG_ANYTHING,
++};
++
+ static __always_inline int
+ bpf_probe_read_kernel_str_common(void *dst, u32 size, const void *unsafe_ptr)
+ {
 
- include/linux/bpf.h                                |   3 +
- include/uapi/linux/bpf.h                           |  49 ++++++++++
- kernel/bpf/helpers.c                               |  53 ++++++++++-
- kernel/trace/bpf_trace.c                           |  72 ++++++++++++++
- tools/include/uapi/linux/bpf.h                     |  49 ++++++++++
- tools/testing/selftests/bpf/prog_tests/dynptr.c    |  45 ++++++++-
- tools/testing/selftests/bpf/progs/dynptr_success.c | 106 +++++++++++++++++++++
- 7 files changed, 374 insertions(+), 3 deletions(-)
----
-base-commit: d0d106a2bd21499901299160744e5fe9f4c83ddb
-change-id: 20250124-bpf_dynptr_probe-ab483c554f1a
-
-Best regards,
 -- 
-Levi Zim <rsworktech@outlook.com>
+2.48.1
 
 
 
