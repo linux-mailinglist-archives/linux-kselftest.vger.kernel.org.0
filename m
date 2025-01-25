@@ -1,164 +1,122 @@
-Return-Path: <linux-kselftest+bounces-25173-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25175-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86208A1C403
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2025 16:26:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26426A1C46B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2025 17:59:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CCCB1885B0B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2025 15:26:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F71A3A61F8
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2025 16:58:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 098803594F;
-	Sat, 25 Jan 2025 15:25:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B31B3FBA5;
+	Sat, 25 Jan 2025 16:59:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="l2cmfGcA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jAelecxK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4899928399;
-	Sat, 25 Jan 2025 15:25:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5A7715D1;
+	Sat, 25 Jan 2025 16:58:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737818758; cv=none; b=H5gUbbPlsF/1m4D7NrT+bHF7q0W/Ffwh9Y7hyN5S6wn9XmgtysLnysAmb22aUnvgQHWj09JOy0qZ++0dr8Hij2ea+iFkTMU7Q66rN0QwFf8sXvtvRGwzxK0zebPUW4s45eQleNBzUaOVjLuQQtaiYK0vsXqyvDdOaTJ9t4FKZWM=
+	t=1737824341; cv=none; b=SESQkciZSFUu8tWCVhv2DRVyCDBTJzdP6cSw/JUJHzokDtvuwA4lC0EJwfI78QU1bKA9yalbtHufS1OrDRuYewMAg+eV24VdMZlxcnLaXYMuo+WhIOwmw0G28cS0BXOe3z4IDDW2afydWXB4YCMGa2W+6ISCfgW03xBDtQiFN88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737818758; c=relaxed/simple;
-	bh=j4Go8/i2CqR47Ci3x3eSHwaVAi3HBFYj3yAvFS/hses=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XNWtISFaSycYHyTFRXSP9DXzNO/e5Tf+Cqz8T4Q+kSounm2e2Sf5RxRuMYhEdeKzes2833PKoWuIQ6anVefZDk7rEcuCy0vWCssiJDgzxz4QeF1pTrW6mx6oOCExc9aWOvwJZmwHMriGuf6/BMWz6JfNs3vyinEUOXPj4DsRsFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=l2cmfGcA; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50P7XJvi012028;
-	Sat, 25 Jan 2025 15:25:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=11PDa0k0R1RTLaCjo
-	+/PWjMeUbaQVkOOqact7XO7iUs=; b=l2cmfGcA5SKeZ0/OFgyibsoSkCwh+GuL4
-	SGn3XnAqOroSZ83EfmtTKUhlFcbaNSRvF5bMnOuH8Q9cXZBRJHCoyYGmbkGbJuMx
-	ZkJg9IN3eDx6gkUMe+L3Tt+HykTU6cMvA/eRzMBDjn6LXIF54f+GXjGS6If9jl3d
-	i+N7/g3Ye6m+mMSzQq/FwSMGV/sW3G3EtVdTND6m0aDhBJafbOIDNI6/WNoDXOuh
-	sR0sq6VdI9k8Bj5NUFKCpW0bzruFWP7vZSAuum0ppPG1zt1HbOLciGHTR4TMG8YB
-	lGNJZRcI6sR2/e/kFJu/r0kcq9Zge0wpuAlU+LVnec16jFUD8lIbQ==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44cunn960t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 25 Jan 2025 15:25:20 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50PFPKQH025680;
-	Sat, 25 Jan 2025 15:25:20 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44cunn960m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 25 Jan 2025 15:25:20 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50PAF19Q004570;
-	Sat, 25 Jan 2025 15:25:19 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44cx1g8un6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 25 Jan 2025 15:25:19 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50PFPHYW60948990
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 25 Jan 2025 15:25:17 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 41AE12007D;
-	Sat, 25 Jan 2025 15:25:17 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5E16C2007F;
-	Sat, 25 Jan 2025 15:25:05 +0000 (GMT)
-Received: from li-621bac4c-27c7-11b2-a85c-c2bf7c4b3c07.ibm.com.com (unknown [9.43.43.213])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Sat, 25 Jan 2025 15:25:04 +0000 (GMT)
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc: ast@kernel.org, hbathini@linux.ibm.com, andrii@kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
-        song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org
-Subject: [PATCH 2/2] selftests/bpf: Select NUMA node of current CPU to create map
-Date: Sat, 25 Jan 2025 20:54:33 +0530
-Message-ID: <e9240414068ee83456d01d2bc71735705df8b36f.1737816475.git.skb99@linux.ibm.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <70fb07e980196ced9fc3e5e4dbeededce2e36fdc.1737816475.git.skb99@linux.ibm.com>
-References: <70fb07e980196ced9fc3e5e4dbeededce2e36fdc.1737816475.git.skb99@linux.ibm.com>
+	s=arc-20240116; t=1737824341; c=relaxed/simple;
+	bh=gZDB8AUYvz2NWqBs39AQ3n4LHwO1pGN/uqSdAtBPE3c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AOpuC7U7wfKb14POclsRtib8zZFjhOEWvqoOsuGnILsTAIvRR44QNC/1NvuVSs05cQIzixH//brzIvAmpOGxip4qmS+PgHUwSBwZfc/a+kfgz9jDvAw779g+YUyoLc67kwXl4qnnfUrgQSSiD+UupylAgxg6ro6iDVyaCUAN0Ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jAelecxK; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-436345cc17bso21965455e9.0;
+        Sat, 25 Jan 2025 08:58:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737824338; x=1738429138; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nnTgKL7srd9wCTgYtGcIWl4m4JCcvhenFFhIMXUTrPo=;
+        b=jAelecxKn8Lc4nYidt/BQbXTRsO5cEdLkoTp4FfeUL4VfD5T0BPwnp4z3oSk0zjIsQ
+         a0UqKA1WiQ+8maOTBiMni3vUUYP6V1jASZYWFeeiw7np9dJF6pl3J2kbEpUTuj39a2hw
+         absWZCEPpKqEuKLXNCb8ZQ4F0KFNxzhaPAkno5mlVSpG7MotnTpoSzuiwR2NE+AxusCR
+         yap9fvqP+oKI+QDEyrzTERhDVtHbMy+6TTFwooyX3+kZ8p3wJ9jKhZFmAGdB6LTNUclT
+         9/BKH2fJotVHYCgaTSbEa22k1WQ7dil9UsjK2U7KtrWXeVrcONr0VyBu5nR7qBLpoajN
+         ohQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737824338; x=1738429138;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nnTgKL7srd9wCTgYtGcIWl4m4JCcvhenFFhIMXUTrPo=;
+        b=VNWXM3ZuyhxA73S5txYXdiQW3xA4T04PwtBPzPtf4ZvP76fk2Idftq15D4dpbOmRNW
+         bJ9PlR4b3xcJP+3ODtbf9fKZD3A8YYIXaQPgnAA8tEPr3ZHsj1bwWtHduMP0CwlltKGx
+         7oSU5zjLLKRBaCwxIxGXStwboKOh4VAstfaCnZtSJAHsgUGThBnIZisRnF/ZieWl3Wdz
+         ZDewQHzaexif+DCyJVLBHCWtgIxQ3pXXkxUq8ApyOhvzvy5FIYOVkr3w7CsxRKX9Q+Sh
+         e/ifGNOF3ATkmHngxNqmRGbyclACZ1cGOoY3oMfffAN17XwJ+Dx7zwueSu12ImMi+qso
+         Hx+w==
+X-Forwarded-Encrypted: i=1; AJvYcCUJirQczjUIfTingvigc5ymQVbnPUraTH9f6rzBKmsTHG0Y+ykEsh3a+ef/NlA2RUn6C7PIQasupyH/ycnZeFy3@vger.kernel.org, AJvYcCWOiq6sUzLbX5guGvx7zWkWbGi+DY1XJB6w10nnC9ZYwuMjjPYSRm+WAtWlAPOedIQR8lE=@vger.kernel.org, AJvYcCWkNgXBEYtz7SyZXgUII9bAGgpyeQdQu5zlnCIsaqd87sJdDCMrWU+iiEu3yYHaIIXMUV78BiN4F/XMtIrNhZwu0qyQ@vger.kernel.org, AJvYcCXJmIGAB6l9e2JSlkXWuQ6drpO81dlxRp5ZDgj6Cx2PyaYdVAv3xGXAQlpMaaulMGvSl9wg7VZwD+g7/0ht@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMi/TTy42yQNyr+edg60ROKrZx3M4U6EF1/qSiEQveel6GvMLI
+	N9EEN7TlW0EQ/T2vueDOJGBlSn2Mr/deC0sFWk1ZMb+ow3Mgwn8LJMAdNp4OlE+0At6E/qEY54U
+	Ep/+Pn+ro0/mwjBlLXmsLLBMgPx0=
+X-Gm-Gg: ASbGncs3dDBjeQeKEeEE+SeB+O6DIqGoKZ34f+4Z2cbH+DSkS9Jv7B9HAyMMPVhIaWL
+	pVZ4lHn2W2B5/6wiYY1BxFB3IHsKSEP20FJC2I/fHxT0/PkC92jS14eeX+YARd+EltfgT6sSAXH
+	cJudxIUcoyeIVozR2BRA==
+X-Google-Smtp-Source: AGHT+IFovdUW+g52glJFzGKxIkyLafJVtD6B4xRKToOlzvfr/FPVc8u6gBvL8a3ba619fjVlNDEWN76CbJvMpDlTsaA=
+X-Received: by 2002:a05:600c:1c84:b0:436:1b08:4c78 with SMTP id
+ 5b1f17b1804b1-4389144fd70mr377983535e9.31.1737824336082; Sat, 25 Jan 2025
+ 08:58:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: tNHmhVy880gXblGTNasSvgYk4bgf6rkH
-X-Proofpoint-GUID: lkqylRq2SQ8HTppkdxUwfV1sl4tUa3V9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-25_06,2025-01-23_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- spamscore=0 clxscore=1015 mlxscore=0 impostorscore=0 adultscore=0
- mlxlogscore=999 malwarescore=0 priorityscore=1501 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501250109
+References: <20250125-bpf_dynptr_probe-v2-0-c42c87f97afe@outlook.com> <20250125-bpf_dynptr_probe-v2-1-c42c87f97afe@outlook.com>
+In-Reply-To: <20250125-bpf_dynptr_probe-v2-1-c42c87f97afe@outlook.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 25 Jan 2025 08:58:45 -0800
+X-Gm-Features: AWEUYZlPRO0oW0oJVlk6cBsw5KhTsGMqm3LYS7HvvoE8ARetkOn46zzaB5HOblc
+Message-ID: <CAADnVQ+bRvL-4n4ZB5QS2oUxvo3vhJHf=8=2No3WWqYHqSyBEg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/7] bpf: Implement bpf_probe_read_kernel_dynptr
+ helper
+To: rsworktech@outlook.com
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Mykola Lysenko <mykolal@fb.com>, 
+	Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On powerpc, a CPU does not necessarily originate from NUMA node 0.
-This contrasts with architectures like x86, where CPU 0 is not
-hot-pluggable, making NUMA node 0 a consistently valid node.
-This discrepancy can lead to failures when creating a map on NUMA
-node 0, which is initialized by default, if no CPUs are allocated
-from NUMA node 0.
+On Sat, Jan 25, 2025 at 12:30=E2=80=AFAM Levi Zim via B4 Relay
+<devnull+rsworktech.outlook.com@kernel.org> wrote:
+>
+> From: Levi Zim <rsworktech@outlook.com>
+>
+> This patch add a helper function bpf_probe_read_kernel_dynptr:
+>
+> long bpf_probe_read_kernel_dynptr(const struct bpf_dynptr *dst,
+>         u32 offset, u32 size, const void *unsafe_ptr, u64 flags);
 
-This patch fixes the issue by setting NUMA node for map creation
-to NUMA node of the current CPU.
+We stopped adding helpers years ago.
+Only new kfuncs are allowed.
 
-Fixes: 96eabe7a40aa ("bpf: Allow selecting numa node during map creation")
-Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
----
- tools/testing/selftests/bpf/Makefile                      | 2 +-
- tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+This particular one doesn't look useful as-is.
+The same logic can be expressed with
+- create dynptr
+- dynptr_slice
+- copy_from_kernel
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 0a016cd71..c7a996f53 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -47,7 +47,7 @@ CFLAGS += -g $(OPT_FLAGS) -rdynamic					\
- 	  -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)		\
- 	  -I$(TOOLSINCDIR) -I$(TOOLSARCHINCDIR) -I$(APIDIR) -I$(OUTPUT)
- LDFLAGS += $(SAN_LDFLAGS)
--LDLIBS += $(LIBELF_LIBS) -lz -lrt -lpthread
-+LDLIBS += $(LIBELF_LIBS) -lz -lrt -lpthread -lnuma
- 
- PCAP_CFLAGS	:= $(shell $(PKG_CONFIG) --cflags libpcap 2>/dev/null && echo "-DTRAFFIC_MONITOR=1")
- PCAP_LIBS	:= $(shell $(PKG_CONFIG) --libs libpcap 2>/dev/null)
-diff --git a/tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c b/tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c
-index cc184e442..d241d22b8 100644
---- a/tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c
-@@ -4,6 +4,7 @@
- #include <sys/syscall.h>
- #include <limits.h>
- #include <test_progs.h>
-+#include <numa.h>
- #include "bloom_filter_map.skel.h"
- 
- static void test_fail_cases(void)
-@@ -69,6 +70,7 @@ static void test_success_cases(void)
- 
- 	/* Create a map */
- 	opts.map_flags = BPF_F_ZERO_SEED | BPF_F_NUMA_NODE;
-+	opts.numa_node = numa_node_of_cpu(sched_getcpu()); // Get the NUMA node of the current CPU
- 	fd = bpf_map_create(BPF_MAP_TYPE_BLOOM_FILTER, NULL, 0, sizeof(value), 100, &opts);
- 	if (!ASSERT_GE(fd, 0, "bpf_map_create bloom filter success case"))
- 		return;
--- 
-2.43.5
-
+pw-bot: cr
 
