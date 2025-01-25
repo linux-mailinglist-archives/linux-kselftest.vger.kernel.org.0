@@ -1,157 +1,138 @@
-Return-Path: <linux-kselftest+bounces-25155-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25157-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CBEEA1C20A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2025 08:14:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFAE0A1C21E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2025 09:24:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F272818872D4
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2025 07:14:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 071DE7A4709
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2025 08:24:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9A4F20767D;
-	Sat, 25 Jan 2025 07:14:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAA38207DFB;
+	Sat, 25 Jan 2025 08:24:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wf1iiUpj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gYt6Wnle"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C0715A8;
-	Sat, 25 Jan 2025 07:14:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A38F019005D;
+	Sat, 25 Jan 2025 08:24:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737789272; cv=none; b=SGvUt4THrOmSMLb3pOlkOBMvRasoBCIV0P4Bg+92d2iFbFPJvwlmFtXwp7rahtY7FsXaHuajT2L9I+vwrJnhSeE1GU6J1CR2QO7nb7Xw4QHJRXPF0htyHzzbZJn9Hnvkw0XbdmfvXGfUISfn7K79c8lAYTyY0Z4TcRxwpiCLUBI=
+	t=1737793456; cv=none; b=jZzsR/IVpU5TFP2ndtu9FFcXo/KoQfIXlmssno/Zl5octrpWMgiY+DIIdB+9L0TMLCF57pRqNPGyhNFWOTDns2Wrmn5+4Doty/wzaPSGkYxkTN1qGq3hxYVbimZEXRwx5Y/O9YBlwzE5HiMtu29TMDp0ahbflhXm07hePwo9eTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737789272; c=relaxed/simple;
-	bh=bAEytCmIJItVawz5FtwbLf3Rs6v1xKcIjfJjz13uw38=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=F25Ey6pX0wyVD4PksqVweI2Eb8R/W3e4WcthqycdpgbckPhWXZzNXkcgGbE8eI4EVuZxqLmsfPq+QNMrZMUdS1fNwjZ7MseuRFNtkTbZ42GUoN+F7ViogLhfpAQTSsJ8lPOrq3F/oOOr/MWPHT1Ou8de94zDjVIJlendRJLCKik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wf1iiUpj; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2f43d17b0e3so5287651a91.0;
-        Fri, 24 Jan 2025 23:14:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737789270; x=1738394070; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YbT6Z5w0G7bq6lWLN+mHRo7+c/FiVemmHUOtqfnUWhk=;
-        b=Wf1iiUpjfC9DW/sWQEu4G+f8otc5ks7dTzAaLpMn+ztxSKyi5TQ6rjLcG8UF2inxT9
-         EJlKLzBE4HzrWuuVfj1XYdXNraDzJ+DizO/3Y44eb3hLtbQ4lsDTsDSG4n1FmtISrvxA
-         gf+5seAUg3UP/QH4SkCId6MocT+Z6CM9Z42/xRg+66gAqS4weiJDRWZ8LlgqeYTfTNqw
-         ItLOqeaI7CKGPVlfXCR1Il7vSXeq/b7Farh/nLD201l3TywVURiGHt0hoM/eTM3DeiUv
-         /lhgc4dd/IlPBsWrf7ZBbNU/oClpPGiPJvgKDXMShtf7gW+2yDOTD4I1H8HgFdyJBU4H
-         yQYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737789270; x=1738394070;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YbT6Z5w0G7bq6lWLN+mHRo7+c/FiVemmHUOtqfnUWhk=;
-        b=mfZyWW9UrhklwibnXSa1oUQbwwSWdNFEsNYu5e1YINUXjZJRsJCKn4A9axibEcI0CO
-         o8Wff2M3yip8ze1lJeX66qP3Bu9NrzX6V2eZDDxh/h6Wm+qj4qOlwzMnmn04d74MZweO
-         YIGQ6Cxy121e/FyufpTJ3sAbxs0Od3wXTUY3cpKoF7wNLVqiomSSK6JOXd4TLOF4abLQ
-         kY5ciliyApvqUw6+JqXuZ5MfsOGY7KEOLNmJxqowiJNt/Yulv/IcLkdyGsfp9zGN1tgi
-         braIOJSG25EyOcNa8XBev5Uy1Ec/gVeoXjqtf9yCKz1Cg70jlkGtz3SSaPVQeAXIvlt+
-         eoBg==
-X-Forwarded-Encrypted: i=1; AJvYcCVCwGpEpI8QtT+uuR74RHGOWKHEcWQCiLhURzqvj4kSSs4QVqGtb4xUQDhLxAiH6XcHgNhJPKxaBuiuhB27/yY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJ+pE9JLNTxKpwpQUxQqCM2QNeA67DPjCKhXal51qZkEOIMRT9
-	euJK+kO4UOEiGWlSWFfZHr6/TqsbLrfzLdQXfNF34ec1FXU6bN/QZcvTtvn6
-X-Gm-Gg: ASbGncs5GtVZBXeDsYWcgyMoTOZY7J5fgHScLkdBC4EWCsxSWEuFIQZi+pByV1p5MgX
-	BzmpwdGIKCi+yWTpg5zVQfF+BvOCT/W3su9Uym1yiuBTKWDLWA9CFeKlvlLjjJdzmQ4YUwDdwyU
-	3efwIhrRYMc8RBu9mnz3mo5YqXJH80iGRDuz98T/sYmvwV4rFVNKFbnZPawlJmPruZ6lfNpviFn
-	m6pKwjjEd3nQ5HU8UMlaD5ilPfZ0HmKWdPx+OtYDUR7nqGdKeawkN8e+LhG90zxpfs7toIwwoDh
-	09OWp6JVfHdOHQ8ud1Tww5mCwPJvmIgpUNufokJ03U9fg4yB
-X-Google-Smtp-Source: AGHT+IF/x5u//p/sLbrSoc+/DtEl2pQlBUwtefFUMMFvJHqqSPz/Q81Tg0l7W612xzqnDojUykvNTg==
-X-Received: by 2002:a17:90b:2548:b0:2ee:fdf3:390d with SMTP id 98e67ed59e1d1-2f782d9a164mr46743099a91.31.1737789270080;
-        Fri, 24 Jan 2025 23:14:30 -0800 (PST)
-Received: from localhost.localdomain (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f7ffa450c9sm2925910a91.9.2025.01.24.23.14.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2025 23:14:29 -0800 (PST)
-From: Tony Ambardar <tony.ambardar@gmail.com>
-X-Google-Original-From: Tony Ambardar <itugrok@yahoo.com>
-To: bpf@vger.kernel.org
-Cc: Tony Ambardar <tony.ambardar@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v1] selftests/bpf: Fix runqslower cross-endian build
-Date: Fri, 24 Jan 2025 23:14:23 -0800
-Message-Id: <20250125071423.2603588-1-itugrok@yahoo.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1737793456; c=relaxed/simple;
+	bh=hTYJU8HfjlKdIevLGmzWkOa6/jkRNnZ81llqBTx0oas=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NnNZOv22AKaSvK9B+wr3Zx6gVca/wxtS3mI+m7LMFIpzbi4+OAwyScseahTfBTirsr5ui32slDGmwp/q+2q3EAtlMbbeucFXp/BeT/iW1d0U6zKwFQPqVkynQ2vb2bWmL939+3U3onEhD0/uGLU/D+NZHXhWPt43AidbMuZsRX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gYt6Wnle; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DBF5DC4CED6;
+	Sat, 25 Jan 2025 08:24:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737793456;
+	bh=hTYJU8HfjlKdIevLGmzWkOa6/jkRNnZ81llqBTx0oas=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=gYt6Wnlew1yXP8CkRurseo59VAIS7Wt3IWUJYwQikg2Rqviv60FrwVWmhAHrOL0UC
+	 xJRuFxvgGogWsGxlKSVMQsJph3mnxGdzgx16RLDfDx+h5Dwodis1C4DAfOsNnk5i7G
+	 X2I7vG2Ye49cUeUo5a/PftyjqZVhaH4BCTGrUzyvqHePsFT1D+YRUjMQXXdR6GeQwZ
+	 EG6fstyENE1oV/x3KeIMzdJmBKAHw46o6Gma0E/VV3l3jIJ2bhDolNW/6nxiNcC/K1
+	 HqCI6kpxcYW/g1zlGlgaWC/Lu6lMF2F5hrvH8LEeEo3OcdOM4fcm/N16827cdUL2iD
+	 pdhZ8m47GYpoQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0D26C02182;
+	Sat, 25 Jan 2025 08:24:15 +0000 (UTC)
+From: Levi Zim via B4 Relay <devnull+rsworktech.outlook.com@kernel.org>
+Subject: [PATCH 0/7] bpf: Add probe_read_{kernel,user}_dynptr and
+ copy_from_user_dynptr
+Date: Sat, 25 Jan 2025 16:23:35 +0800
+Message-Id: <20250125-bpf_dynptr_probe-v1-0-c3cb121f6951@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIeflGcC/x3MQQqAIBBA0avErBPUFKKrRITWWLNRGSOK6O5Jy
+ 7f4/4GCTFhgaB5gPKlQihWqbWDZXdxQ0FoNWmorlTbC5zCvd8wHz5mTR+G86bvFWhOUg5plxkD
+ Xvxyn9/0AV9yrMmIAAAA=
+X-Change-ID: 20250124-bpf_dynptr_probe-ab483c554f1a
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
+ Levi Zim <rsworktech@outlook.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1609;
+ i=rsworktech@outlook.com; h=from:subject:message-id;
+ bh=hTYJU8HfjlKdIevLGmzWkOa6/jkRNnZ81llqBTx0oas=;
+ b=owEBbQKS/ZANAwAIAW87mNQvxsnYAcsmYgBnlJ+h5PE5cEOfd260Q563RihUGWI2X8YoRdatI
+ ccWSV2eoLSJAjMEAAEIAB0WIQQolnD5HDY18KF0JEVvO5jUL8bJ2AUCZ5SfoQAKCRBvO5jUL8bJ
+ 2GAAEACoZmnxJGr8tDW3HqH28VzCoRGdc6e7L7N4W8PmDwpBD+wCdZuaMpTeSq3GxMSVwqyqBdM
+ WPSPRj8r9dq7Azm+HWqX5PT4Mu/30JVHteVGRcNOgwoHDl1ks/+QXjffhgwMzeeBrcjVD5AIiOW
+ rmAZj0bN0I0lFvz0SL+Luj/3OwG/Ubl2fErsFXqhhXfP05b3+QPeenivg7TlPovmrcQgCX3JDaW
+ b0lNHKSxiOIROA0GMEV+2MVgg56nyghMLqdNg2VrSJFlt233sHfAPFxCWuDH9aVJJHFzO7RZikq
+ YQEikxvAE8Iv0TqKF4Auu+pCrMf6iTiA+SSsN/Mla2V2Zi+kB6aMiKSFZP1/5eCPGaG2S30jxoj
+ wfXvoLvRb8nqrJt3u7YIR8rSh6+WvCbVqQQhnuwV1oifeP1Jp88zwgT7PoI5CAH8R51jCcBOWe0
+ YEUYsXGQD0ozA/zEkMwCLfQV6b2ryEQIS1Y7ATn5V3MopC2PWz8RbUs4l1A0rORAr1tXt5Ai73J
+ AakLq64RhXZeUOHHEosmVtUJFVuUE6cwJo0Ah/MU6lm4GGUFkRTkRk4dTRjFZmqUvjJagWT1fD0
+ cSEdYa4PvELsV2+CJQ8gmrRSs4dgBhqbhAukurJ0psCMWTAOgMprL3QNywIaHzMQ7lZUtRjwlss
+ 94stLfcRYkT6+Vg==
+X-Developer-Key: i=rsworktech@outlook.com; a=openpgp;
+ fpr=17AADD6726DDC58B8EE5881757670CCFA42CCF0A
+X-Endpoint-Received: by B4 Relay for rsworktech@outlook.com/default with
+ auth_id=219
+X-Original-From: Levi Zim <rsworktech@outlook.com>
+Reply-To: rsworktech@outlook.com
 
-From: Tony Ambardar <tony.ambardar@gmail.com>
+This series introduce the dynptr counterpart of the
+bpf_probe_read_{kernel,user} helpers and bpf_copy_from_user helper.
 
-The runqslower binary from a cross-endian build currently fails to run
-because the included skeleton has host endianness. Fix this by passing the
-target BPF endianness to the runqslower sub-make.
+These helpers are helpful for reading variable-length data from kernel
+memory into dynptr without going through an intermediate buffer.
 
-Fixes: 5a63c33d6f00 ("selftests/bpf: Support cross-endian building")
-Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
+Link: https://lore.kernel.org/bpf/MEYP282MB2312CFCE5F7712FDE313215AC64D2@MEYP282MB2312.AUSP282.PROD.OUTLOOK.COM/
+Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Signed-off-by: Levi Zim <rsworktech@outlook.com>
 ---
- tools/bpf/runqslower/Makefile        | 3 ++-
- tools/testing/selftests/bpf/Makefile | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+Levi Zim (7):
+      bpf: Implement bpf_probe_read_kernel_dynptr helper
+      bpf: Implement bpf_probe_read_user_dynptr helper
+      bpf: Implement bpf_copy_from_user_dynptr helper
+      tools headers UAPI: Update tools's copy of bpf.h header
+      selftests/bpf: probe_read_kernel_dynptr test
+      selftests/bpf: probe_read_user_dynptr test
+      selftests/bpf: copy_from_user_dynptr test
 
-diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
-index c4f1f1735af6..5613b5736d93 100644
---- a/tools/bpf/runqslower/Makefile
-+++ b/tools/bpf/runqslower/Makefile
-@@ -6,6 +6,7 @@ OUTPUT ?= $(abspath .output)/
- BPFTOOL_OUTPUT := $(OUTPUT)bpftool/
- DEFAULT_BPFTOOL := $(BPFTOOL_OUTPUT)bootstrap/bpftool
- BPFTOOL ?= $(DEFAULT_BPFTOOL)
-+BPF_TARGET_ENDIAN ?= --target=bpf
- LIBBPF_SRC := $(abspath ../../lib/bpf)
- BPFOBJ_OUTPUT := $(OUTPUT)libbpf/
- BPFOBJ := $(BPFOBJ_OUTPUT)libbpf.a
-@@ -63,7 +64,7 @@ $(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
- 	$(QUIET_GEN)$(BPFTOOL) gen skeleton $< > $@
- 
- $(OUTPUT)/%.bpf.o: %.bpf.c $(BPFOBJ) | $(OUTPUT)
--	$(QUIET_GEN)$(CLANG) -g -O2 --target=bpf $(INCLUDES)		      \
-+	$(QUIET_GEN)$(CLANG) -g -O2 $(BPF_TARGET_ENDIAN) $(INCLUDES)	      \
- 		 -c $(filter %.c,$^) -o $@ &&				      \
- 	$(LLVM_STRIP) -g $@
- 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 87551628e112..6722080b2107 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -306,6 +306,7 @@ $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL) $(RUNQSLOWER_OUTPUT)
- 		    BPFTOOL_OUTPUT=$(HOST_BUILD_DIR)/bpftool/		       \
- 		    BPFOBJ_OUTPUT=$(BUILD_DIR)/libbpf/			       \
- 		    BPFOBJ=$(BPFOBJ) BPF_INCLUDE=$(INCLUDE_DIR)		       \
-+		    BPF_TARGET_ENDIAN=$(BPF_TARGET_ENDIAN)		       \
- 		    EXTRA_CFLAGS='-g $(OPT_FLAGS) $(SAN_CFLAGS) $(EXTRA_CFLAGS)' \
- 		    EXTRA_LDFLAGS='$(SAN_LDFLAGS) $(EXTRA_LDFLAGS)' &&	       \
- 		    cp $(RUNQSLOWER_OUTPUT)runqslower $@
+ include/linux/bpf.h                                |   3 +
+ include/uapi/linux/bpf.h                           |  49 ++++++++++
+ kernel/bpf/helpers.c                               |  53 ++++++++++-
+ kernel/trace/bpf_trace.c                           |  72 ++++++++++++++
+ tools/include/uapi/linux/bpf.h                     |  49 ++++++++++
+ tools/testing/selftests/bpf/prog_tests/dynptr.c    |  45 ++++++++-
+ tools/testing/selftests/bpf/progs/dynptr_success.c | 106 +++++++++++++++++++++
+ 7 files changed, 374 insertions(+), 3 deletions(-)
+---
+base-commit: d0d106a2bd21499901299160744e5fe9f4c83ddb
+change-id: 20250124-bpf_dynptr_probe-ab483c554f1a
+
+Best regards,
 -- 
-2.34.1
+Levi Zim <rsworktech@outlook.com>
+
 
 
