@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-25195-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25196-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C6CAA1C84B
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 15:11:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C36E9A1C853
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 15:12:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A18D87A047A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 14:11:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 411163A5C05
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 14:12:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2D081531C4;
-	Sun, 26 Jan 2025 14:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E707E14D28C;
+	Sun, 26 Jan 2025 14:12:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="YnG1MiVt"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="H2WWdMxT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27CCE4964F
-	for <linux-kselftest@vger.kernel.org>; Sun, 26 Jan 2025 14:11:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C9B13C3F2
+	for <linux-kselftest@vger.kernel.org>; Sun, 26 Jan 2025 14:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737900707; cv=none; b=J7cZay7n0tnlMU5oaML5m7v2UQX96z/MD/Mc1P0W2u0ZJHraFw8yOvZfnj9enkWjd/qKDtD84woqVDe33YjvxxQvldCqrrQIHpZ/a9PFXS9oik+X307xTUlZiUnA5cstbPIuZqaTUqI0Qz73ghA2bfoiaje5U/+4OxfDe5aYKAI=
+	t=1737900736; cv=none; b=N1DMzIe8sLN5qA3Fsyf+m4lndM3pU/1N6PDw8rcXJxpUnjfHHeOTO4FyPPFwV/iV3D51P0FktY5nRvoKwqnlCVmTlTOf4M5rDlaZfDsbtISGYZYjIXwdzO5WbGboj69/wOaDDqHa6eyocgiRtZauCOCcRH0i/nt8SsbRysGB3LM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737900707; c=relaxed/simple;
-	bh=12HzqKG7XNFsVb1EKgZbZZW8oeDZ1Bj4ACbSBWVyPFQ=;
+	s=arc-20240116; t=1737900736; c=relaxed/simple;
+	bh=da9YorvvFk4UIYAefIerEYb4xCuivSVbVedCiCnFYfA=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=snRRqtVa573vZjLVQR/39nP+mDnVhnfR0sz5V8gfvVQXMYcpWWjXXSKsYfy1ihnQLQxoET2IvOKGzibQbUylRlfZBiTSLHq/8sAZffzWkxpKWuSZ/CbxrmHez2X29bB0s3Vx0HULZHs7DnRO7riRC5HX4T3d56ttaPbfkQR0Yjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=YnG1MiVt; arc=none smtp.client-ip=209.85.218.48
+	 MIME-Version:Content-Type; b=i7J9epO0wpNgg0Z5dRAUiSYVmoNdHkkbKeEFppFzOrevhwWsS6rKPlmnAaUAyiw9fFsEbU0DzH/vBiIxRMGPWAaUkZq/RWbjVsWp5EbUeGUcvArz5JVkTBNs6Fc2LPYT5QOsFJ6gzYqTmTaVhjaGwdkOr+jkCatHZoNGnKwKfMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=H2WWdMxT; arc=none smtp.client-ip=209.85.208.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aaf6b1a5f2bso950124866b.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 26 Jan 2025 06:11:45 -0800 (PST)
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5db689a87cbso7246106a12.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 26 Jan 2025 06:12:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1737900704; x=1738505504; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1737900732; x=1738505532; darn=vger.kernel.org;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=12HzqKG7XNFsVb1EKgZbZZW8oeDZ1Bj4ACbSBWVyPFQ=;
-        b=YnG1MiVtxyeJ9r3CsHAYBUzy6KfIIQIxoxtPSVTXES1p+HdITODLJiD5QC+y5BSJ7d
-         KajWhHTVVXt3IWoyhJ8lAxgZwcwvXxHWtiZjyk9hAfsgDsHCWnf2AJyUzVsiVVm8ZaTA
-         uZGcoHiSLNZla1Hr1K0aaAwlQqCvVRYdzApWQPV6rruZmtA1LwXS/EYurf2Lad+YKPVw
-         9Gvp5+vd1rT53HD98Ki9zy2uOttRweItmMIgYfU52AcABSQw1PGdFS5S/CGKP4VpOwxd
-         xbD0L4A3d1yJZFead6dE2ueuMWMf2kS/dnJYZ+yytcM4ThQjrwoW3cUel0n/oEayl9k+
-         YIlg==
+        bh=da9YorvvFk4UIYAefIerEYb4xCuivSVbVedCiCnFYfA=;
+        b=H2WWdMxTEBWu8YzCIX7u2/9XZXqzo1mKYjwVtSD3h4/dByN4Z6N2UrMXOqxljunCje
+         Pqh52tYfxCAWMjPAeGKyyGiJNWpmEwGStY9IMMTuJnR7NuVVQboZTdD+xrquWP7rs2yf
+         U0j0tEdnklmUatLiNIx/OGwo1mgYooIBdN3LeeJEDJ5pD600aUBuwLsa/WRkSB9CKRdd
+         No8jyYnX/TWy747D808Bo8tsxezlEsWuJ7d/6mYbg8+pQy39bsesQR6+cEVOensfdC9L
+         GbVB/w1wrt+4nvBs1BkRlEtDmbfc1f2HUZaBvvbewkFR4ZQYYbsyhibrrHZN4nO4a+kX
+         JMkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737900704; x=1738505504;
+        d=1e100.net; s=20230601; t=1737900732; x=1738505532;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=12HzqKG7XNFsVb1EKgZbZZW8oeDZ1Bj4ACbSBWVyPFQ=;
-        b=CxR/tCh+N3Up5hh3cXrWFn2facj4XGG5m8YESxZDTCrpaxjujFKxYtYJ98rXIbFUws
-         7k8gRg7pAKAMfybNRJ8/RmvUjaKk61teKIUn5DR0fcNBTjJXs7P19uuUv3ryXB7VHIFK
-         KSHYRl4K9Rbf933F8xSTsViHbi6PFvTOsghmaWWIU3wB/fQI8SA00/GaShYc2vBWs0DL
-         aDWPOSkBu14uuqrBL9QIu67cMlxum3izPeNUn3qOZ7RHoAu2qDs5vdhIS3AJx7XoOOnx
-         YkjGq3tDM40TqfYlwYhbk6APJeHtXZlLsp+0LavTzL8fLkbmtXuJGho6DvZnfk0W5fYM
-         86BA==
-X-Forwarded-Encrypted: i=1; AJvYcCVjUFXDHcRuQXPnRqhXZKHl0K1AedFHG4TE9w+mNzVRWfAe0+u9Ifda6T9A+G4v3YwVQKjfcRU13+ejk4O05cI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyvNymseINBKKAAl3DnSRez9VM/ZR2ZIXxlWf92YnS3vWuYb1Yo
-	Ni+6peqLBJbzB9j78jaOYA6egM0K9G63lGnbGuQl7zIdTgG6eRgAf3VTumOcHq0=
-X-Gm-Gg: ASbGnctN6AmepsVUaz3fDVeKaijGQmad+RDEQbjtt7u7L1TFKg4aWG+YIz+kOp3yoNF
-	KeXGAVg1CGxD7EogoVcOGRM/qX9h3oVVQzMfGctY9fBvDsm2IUujGSRnjq6e8fQ1d9vjhF4p0jq
-	Gxeb4MgJtS3DRrIL9KJXBafH9TSLQNJlHMoOtS3vhjCwLp+KkQIhOWPzcbhK6MhDk9Mezgb5qfU
-	/KaCOkssv9ynnJ33rdFQzKv0OtIO/e3ir8PSXDY7b6chDFewX0MnXveN7zsHMV2DehiYt7JJA==
-X-Google-Smtp-Source: AGHT+IEKSJdD2dRwqzzBvy9ISrqzwSE8h91lW/SaOjyNpZpNcIf5gT5KiPiOM2vkBbUPwNzHl+oUMQ==
-X-Received: by 2002:a17:907:3206:b0:ab3:a4f6:7551 with SMTP id a640c23a62f3a-ab674600f00mr739626466b.13.1737900704480;
-        Sun, 26 Jan 2025 06:11:44 -0800 (PST)
+        bh=da9YorvvFk4UIYAefIerEYb4xCuivSVbVedCiCnFYfA=;
+        b=g1y5wItSCc5EhKAKQz1igNhpJZI9TB0MJQBGkhxOHUBE8qFBmVDK9IncNuhUEB6NaO
+         2bE1seEzQ/9ZNPLFpqs7yyLiSymdlhck2U1MzJFzJQzkK4iktgQPK64zQn31w5L4K+60
+         8KBous9WCO8oG5ZHDpeFRHv+Q/zIkzIh+0+pJDrTJEFzeCM4mkBwOPilAzuuU7++wgpp
+         OYg6Y1IXoIMwksb07OkmFxELnYLtzPSbn0O/cs+ww3LkBYbpHacQzHZ0l7KBdcPhylc7
+         +AS6sCFVCIN6CDA6pnNlTbRGJ4UUoPwQ/UUli5NuZfB5DO8RyjRdGcQP9C5cveMbiT0/
+         ivEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXsZUPyQUSpJLpMPRNpf98TN+n3DPoP5LmaozWUl6kG83GKmxQalvCG+a7pwWfTxaJxfcTwKtYgVP4dTdaz95s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmbFHD9FR2MMV7dBokHjxoV7u2UvmTWWoPiuHegOs/3ApVIKEJ
+	oWXdV0+bXxpj8ZgoglMJCOqJ4FDzjcGEMuJlhPzVqdMaQhv50kztw4O0AledMdQ=
+X-Gm-Gg: ASbGncvbyJQEvLCx968gAq9TF1YfMOMbmsdStUbDw+rmd+Q+pq3YjrcmILic1cRd2TL
+	aVGgXGOjMtvREAWbphnLm009XciNRyfvj3S448yo7ixUxYzJf5mTrGbA6HqBVAhgpOLHalxgD2G
+	TixvCTJHSjpGjZM0R9OmA5O+/TQo/d+gRE3XBQMfYuzGhte7hHPZl0wcB0le1Du27Nsl8mWvMv8
+	NoawvLqtHPYKsXeq93aGgGNzG+41npZl/MgjaUYidObNQ3lXgw8WxupnurXUhIk2T86fgRrew==
+X-Google-Smtp-Source: AGHT+IGBKFasEkaDtZZ5CWcrV1Bxnz3k+ijYYsGxkH5Dhoqoj3FM7YBEen0VjurFTCvcD+kWOyT5Vw==
+X-Received: by 2002:a05:6402:3509:b0:5d0:cfdd:2ac1 with SMTP id 4fb4d7f45d1cf-5db7d2d9958mr37213488a12.6.1737900732189;
+        Sun, 26 Jan 2025 06:12:12 -0800 (PST)
 Received: from cloudflare.com ([2a09:bac5:506b:2432::39b:69])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab675e64dc9sm420223466b.45.2025.01.26.06.11.43
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dc1863a1fasm3986231a12.37.2025.01.26.06.12.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jan 2025 06:11:43 -0800 (PST)
+        Sun, 26 Jan 2025 06:12:10 -0800 (PST)
 From: Jakub Sitnicki <jakub@cloudflare.com>
 To: Jiayuan Chen <mrpre@163.com>
 Cc: bpf@vger.kernel.org,  john.fastabend@gmail.com,  netdev@vger.kernel.org,
@@ -81,13 +81,13 @@ Cc: bpf@vger.kernel.org,  john.fastabend@gmail.com,  netdev@vger.kernel.org,
   shuah@kernel.org,  mykolal@fb.com,  jolsa@kernel.org,  haoluo@google.com,
   sdf@fomichev.me,  kpsingh@kernel.org,  linux-doc@vger.kernel.org,
   linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v9 3/5] bpf: disable non stream socket for strparser
-In-Reply-To: <20250122100917.49845-4-mrpre@163.com> (Jiayuan Chen's message of
-	"Wed, 22 Jan 2025 18:09:15 +0800")
+Subject: Re: [PATCH bpf v9 4/5] selftests/bpf: fix invalid flag of recv()
+In-Reply-To: <20250122100917.49845-5-mrpre@163.com> (Jiayuan Chen's message of
+	"Wed, 22 Jan 2025 18:09:16 +0800")
 References: <20250122100917.49845-1-mrpre@163.com>
-	<20250122100917.49845-4-mrpre@163.com>
-Date: Sun, 26 Jan 2025 15:11:42 +0100
-Message-ID: <87jzahd5r5.fsf@cloudflare.com>
+	<20250122100917.49845-5-mrpre@163.com>
+Date: Sun, 26 Jan 2025 15:12:08 +0100
+Message-ID: <87frl5d5qf.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -97,19 +97,9 @@ MIME-Version: 1.0
 Content-Type: text/plain
 
 On Wed, Jan 22, 2025 at 06:09 PM +08, Jiayuan Chen wrote:
-> Currently, only TCP supports strparser, but sockmap doesn't intercept
-> non-TCP connections to attach strparser. For example, with UDP, although
-> the read/write handlers are replaced, strparser is not executed due to
-> the lack of a read_sock operation.
+> SOCK_NONBLOCK flag is only effective during socket creation, not during
+> recv. Use MSG_DONTWAIT instead.
 >
-> Furthermore, in udp_bpf_recvmsg(), it checks whether the psock has data,
-> and if not, it falls back to the native UDP read interface, making
-> UDP + strparser appear to read correctly. According to its commit history,
-> this behavior is unexpected.
->
-> Moreover, since UDP lacks the concept of streams, we intercept it directly.
->
-> Fixes: 1fa1fe8ff161 ("bpf, sockmap: Test shutdown() correctly exits epoll and recv()=0")
 > Signed-off-by: Jiayuan Chen <mrpre@163.com>
 > ---
 
