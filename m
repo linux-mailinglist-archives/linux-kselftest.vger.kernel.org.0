@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-25189-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25190-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0863A1C6E1
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 08:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 72858A1C6E5
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 08:49:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE02E16793D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 07:49:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60F0016609A
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 07:49:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2733E14659A;
-	Sun, 26 Jan 2025 07:49:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04FED1487C8;
+	Sun, 26 Jan 2025 07:49:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WptzH7Yd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K4s+daeo"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E882C13D638;
-	Sun, 26 Jan 2025 07:49:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6729145B16;
+	Sun, 26 Jan 2025 07:49:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737877756; cv=none; b=XwfKEb5qCLNT0cOOuOAFBjKzimSRA0lEp8jJHR4eY7X2WMAWoyLakJgslytHtcVI8YdIyb9cidREz5EsoWfkOEUo0BGuN0GtJlOk8YNP+sj/XsbhpabsbYv1uFin/ovia/s2FRi7au7P/PT88pT684F59JEoARXLTq5arFYnVo4=
+	t=1737877764; cv=none; b=CVcwkyaFDusUOoDe/cAy3Pd0Xb3WMtzPNSKzWJUyMJkqnUSIuO9ce5W0+ymXATzUPHrM278ZJcmABHCzRUAPr3K3hk4BGA3rzwjeJ95hl5sjc8RBvZ922J4kasvjl9OVDaqO+FqMwCFkmEPySByk/jU2teIVxbZmhY3Yt+0K3pw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737877756; c=relaxed/simple;
-	bh=ojukvsVbrsOautblNhkpoP7wuqi3ozWbxIf3p0+h6f0=;
+	s=arc-20240116; t=1737877764; c=relaxed/simple;
+	bh=iCOJADJJ/sFPbuOid5OXzq1M+MQ1WlHyV9KAisT6QLU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=loF/G3/e6Gxc8ye/gcVPNKGZEm74OFcCy4vPJSF+/12MmEcKk4tjsUOBsOQL0chgWgRiPZyGckWgpGG4WCZPd9UHh9oY2ChbStPs61NghGUO3F4+darFgGsTOhj+idBV2/rMc9UtO0EeqbJ/SFIrZPUqg4R5058qi5pMc/1Q76E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WptzH7Yd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6817C4CEE4;
-	Sun, 26 Jan 2025 07:49:04 +0000 (UTC)
+	 MIME-Version; b=AkXzEnc94JntCnYRoj3bvjx6hqBPntyGsHP6qJhQnpXfB+F0P3L67CnNWnFoqos6qBsUKlY2B7ItrtAohi/fd1/8a+e1v9yAbPA4QbP1xYNGyK23klMoMP3p43ro1gqLbQV7vPRZ4yX1md++CL20B7YFqNjdukdGPAYmQwn1GQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K4s+daeo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1B87C4CED3;
+	Sun, 26 Jan 2025 07:49:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737877754;
-	bh=ojukvsVbrsOautblNhkpoP7wuqi3ozWbxIf3p0+h6f0=;
+	s=k20201202; t=1737877764;
+	bh=iCOJADJJ/sFPbuOid5OXzq1M+MQ1WlHyV9KAisT6QLU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WptzH7YdSogdAkUSZLvcqplIdwp+MBY+laOzNuHQ78GWRSBBOknbXpAk7uYSnJrMz
-	 wp2yZtsEj4Ft7cNz7tQlCeN1KsCLqDz9mqnl+TnipPcoTYtEO+sXiQJQboHjiChfNL
-	 vA3aEX4vPp8wpDbDReIBYoQLGzjtwfHwBMvGsAAMDNHt03hVTP8VPftd6hLurGej+P
-	 AsbRuca4pr2+C6v3mt4e73OWtBqd80b+EHsrPFjsLsq4grSJSpFTAnEyDf77cnhJcr
-	 sx71WcZSLvCbmLvRIC86nvUK0DVK2x50qb/+CGX6umGCycAkK1HmtBx/EyszcSrn67
-	 bHDc6aXclkXIg==
+	b=K4s+daeo5ZtRx6Gu4vJ/P5va2/Zc1aBNvpydz9rKkSVitnt5s4tQ4p7lT4T7koHi2
+	 wvqpFOfNIJ4JvEi6mI2AH0DeuLwKbVe3rJ5HBW4E9DuKwRa24y9nMYZzZEoMxFBPuj
+	 r3lfMvP/zDLkxMw27lf06oOh8SETm1Dsfzs9boTj7kyerxd4kK4XYTdJQnf5NnqRU7
+	 2nOaBRt/YCtwpuvvVDC9No5WR+kbAukE44WO5GnFFgtxx9m3AtHPGru2xrot7i52tK
+	 my4z9DG0wF6kJFGXr/ty1oVp9XX+EnLvBW/nOKu6f8wEe7Q70aCehyXls3uZlat3aP
+	 plrNoZEvAzEAA==
 From: Mike Rapoport <rppt@kernel.org>
 To: x86@kernel.org
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -86,9 +86,9 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-um@lists.infradead.org,
 	live-patching@vger.kernel.org
-Subject: [PATCH v3 8/9] module: drop unused module_writable_address()
-Date: Sun, 26 Jan 2025 09:47:32 +0200
-Message-ID: <20250126074733.1384926-9-rppt@kernel.org>
+Subject: [PATCH v3 9/9] x86: re-enable EXECMEM_ROX support
+Date: Sun, 26 Jan 2025 09:47:33 +0200
+Message-ID: <20250126074733.1384926-10-rppt@kernel.org>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250126074733.1384926-1-rppt@kernel.org>
 References: <20250126074733.1384926-1-rppt@kernel.org>
@@ -102,41 +102,25 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-module_writable_address() is unused and can be removed.
+after rework of execmem ROX caches
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- include/linux/module.h | 10 ----------
- 1 file changed, 10 deletions(-)
+ arch/x86/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 6a24e9395cb2..d2cf30be10cc 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -768,11 +768,6 @@ static inline bool is_livepatch_module(struct module *mod)
- 
- void set_module_sig_enforced(void);
- 
--static inline void *module_writable_address(struct module *mod, void *loc)
--{
--	return loc;
--}
--
- #else /* !CONFIG_MODULES... */
- 
- static inline struct module *__module_address(unsigned long addr)
-@@ -880,11 +875,6 @@ static inline bool module_is_coming(struct module *mod)
- {
- 	return false;
- }
--
--static inline void *module_writable_address(struct module *mod, void *loc)
--{
--	return loc;
--}
- #endif /* CONFIG_MODULES */
- 
- #ifdef CONFIG_SYSFS
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index ef6cfea9df73..9d7bd0ae48c4 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -83,6 +83,7 @@ config X86
+ 	select ARCH_HAS_DMA_OPS			if GART_IOMMU || XEN
+ 	select ARCH_HAS_EARLY_DEBUG		if KGDB
+ 	select ARCH_HAS_ELF_RANDOMIZE
++	select ARCH_HAS_EXECMEM_ROX		if X86_64
+ 	select ARCH_HAS_FAST_MULTIPLIER
+ 	select ARCH_HAS_FORTIFY_SOURCE
+ 	select ARCH_HAS_GCOV_PROFILE_ALL
 -- 
 2.45.2
 
