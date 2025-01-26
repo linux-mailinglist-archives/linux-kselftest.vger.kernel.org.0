@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-25182-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25183-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BECAA1C6BB
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 08:48:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC4DAA1C6BD
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 08:48:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCF7316750C
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 07:48:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2E8A188827D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 07:48:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A727113CA97;
-	Sun, 26 Jan 2025 07:48:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D11FD13D893;
+	Sun, 26 Jan 2025 07:48:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t5r4qgbb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ip3YgJ3Y"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB858C1E;
-	Sun, 26 Jan 2025 07:48:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB7C132103;
+	Sun, 26 Jan 2025 07:48:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737877683; cv=none; b=W5PqkoqZzk/y+iCINTtlGvG+ahOYLHjS6TUPFsD74Z+fxKMTBM9tVwPrZFk90iwDfbRjQ7iwhyoEZK+jLKGUxFry8rfeWQN/gNNFkxnZpoCzSUwDM0wvRT+sISoOiPCBUe19cLRTAnwPX5aJCa1ipOw0OHONur7SYQ7pxz8UnLw=
+	t=1737877693; cv=none; b=aUJWFnnizTfyhyXc/UwsznmQSiIn7ECW8m6mIdaAk53vBEKbVzdBHdQDQs2zbSS56DJEWh52ErN3tajuPprCgYZ4ZSgRzJe53YNlb9b4azx+3kmoHfiKiuxwXJ1CATwC1BWCjCT6v8/Wf1ze8wc4m5/80SWM7WELd+siqMSfgRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737877683; c=relaxed/simple;
-	bh=dDY3jvGc45EmH43gWTWL5MYq9/Q1o2IM8rTUBWv64F4=;
+	s=arc-20240116; t=1737877693; c=relaxed/simple;
+	bh=UnbrmexawgONPYMAXBvIF3DzXjQu5/b5KeCmUo86HRs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cAPURiWWxPRV+qUxL2mltXvUd9vbyfhhK8A+wKHg6ZCK15jYkaaPKdV2ziytvjA5z+YJ+d9drrxJEXMfcpnXR+89JYfJttCGVOMkqKoXTFBfZV+kGocflY58GLZRjDCr/gOVLD+ZCuqbLQZAl+tboqwFA+My+907mCl0c9cbYng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t5r4qgbb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34FF5C4CEEA;
-	Sun, 26 Jan 2025 07:47:53 +0000 (UTC)
+	 MIME-Version; b=H4PAdDZYepXLyeLfV/k5K2ENmVHtdAY/EAzXa0wCTOErNncdo++oVvfVb+Yryeb4/txSfSGNcvP686ZIoQY+JkHXqJm8Ci0x9M0w+lYBTff/vfPE/oCsDRxE4fePfg3PWx+kh+dVupesbyinhkcDDYhRNs2RqW4vH1Vn4P5zx30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ip3YgJ3Y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62EF0C4CED3;
+	Sun, 26 Jan 2025 07:48:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737877682;
-	bh=dDY3jvGc45EmH43gWTWL5MYq9/Q1o2IM8rTUBWv64F4=;
+	s=k20201202; t=1737877693;
+	bh=UnbrmexawgONPYMAXBvIF3DzXjQu5/b5KeCmUo86HRs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=t5r4qgbbVp+nn4AwESyq/kRBw7iTmIzwwOhO3g1QZKZPsL1LLunQnJSvESCwGNX31
-	 fLfPLM9b9UVXxJ1voOhzdE2kaPMQswbGjy8LnTPVrwb6a+JqfwGRg2d2bTNgrVscEe
-	 wSEIp2UELK9QFXarhTcBem6rAsoeTzDEztXuHCE2IDKD+8q+h8vaMBMOtMBsslCWMI
-	 LgFtJPlxWPZ4Duaypkzc9ZGfgijEAzwbLYGxqkBN05QJpFrSNxB7AbaKYpR/BrwIrv
-	 JImzfewDKD/78iXFN+lUP0nSrcuA/GyVpaKeOoJZZ9LFtTqCUm0WT0cIxtZCjp9p3E
-	 Oz/ejtI5b29RQ==
+	b=Ip3YgJ3YSP9SXdUh/kxhiQVdDs3WVvuBouH5X89T+VIIo6TzzE7FCt0gM5JJ90qdB
+	 qFokyCnFrMLuusz7d73gejhGjtpaGSOXriTKI4BIE1yBpNhZEiDufYAcmk+Bny0+pi
+	 mka5HQUFLD61qPJQ38dTyd3ZKji3uDer4OdT9bFadlUYLCQs+5YalQ3gY2xBjNUrYT
+	 hZa97zbHTVoKXZmQKChwE4mHoQs3pRngNrmPu2jrkNiOIXVi1uwbrn+txO4g/aUq6L
+	 gISj+VrDa5T7aQN4aew1n4foLfwHD83fvLl/TKDYXV703XcKmVLgmgNS/HPpngfLaF
+	 tGV4//yCmaeKQ==
 From: Mike Rapoport <rppt@kernel.org>
 To: x86@kernel.org
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -86,9 +86,9 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-um@lists.infradead.org,
 	live-patching@vger.kernel.org
-Subject: [PATCH v3 1/9] x86/mm/pat: cpa-test: fix length for CPA_ARRAY test
-Date: Sun, 26 Jan 2025 09:47:25 +0200
-Message-ID: <20250126074733.1384926-2-rppt@kernel.org>
+Subject: [PATCH v3 2/9] x86/mm/pat: drop duplicate variable in cpa_flush()
+Date: Sun, 26 Jan 2025 09:47:26 +0200
+Message-ID: <20250126074733.1384926-3-rppt@kernel.org>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250126074733.1384926-1-rppt@kernel.org>
 References: <20250126074733.1384926-1-rppt@kernel.org>
@@ -102,31 +102,32 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-The CPA_ARRAY test always uses len[1] as numpages argument to
-change_page_attr_set() although the addresses array is different each
-iteration of the test loop.
+There is a 'struct cpa_data *data' parameter in cpa_flush() that is
+assigned to a local 'struct cpa_data *cpa' variable.
 
-Replace len[1] with len[i] to have numpages matching the addresses array.
+Rename the parameter from 'data' to 'cpa' and drop declaration of the
+local 'cpa' variable.
 
-Fixes: ecc729f1f471 ("x86/mm/cpa: Add ARRAY and PAGES_ARRAY selftests")
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- arch/x86/mm/pat/cpa-test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/mm/pat/set_memory.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/x86/mm/pat/cpa-test.c b/arch/x86/mm/pat/cpa-test.c
-index 3d2f7f0a6ed1..ad3c1feec990 100644
---- a/arch/x86/mm/pat/cpa-test.c
-+++ b/arch/x86/mm/pat/cpa-test.c
-@@ -183,7 +183,7 @@ static int pageattr_test(void)
- 			break;
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index 95bc50a8541c..d43b919b11ae 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -396,9 +396,8 @@ static void __cpa_flush_tlb(void *data)
+ 		flush_tlb_one_kernel(fix_addr(__cpa_addr(cpa, i)));
+ }
  
- 		case 1:
--			err = change_page_attr_set(addrs, len[1], PAGE_CPA_TEST, 1);
-+			err = change_page_attr_set(addrs, len[i], PAGE_CPA_TEST, 1);
- 			break;
+-static void cpa_flush(struct cpa_data *data, int cache)
++static void cpa_flush(struct cpa_data *cpa, int cache)
+ {
+-	struct cpa_data *cpa = data;
+ 	unsigned int i;
  
- 		case 2:
+ 	BUG_ON(irqs_disabled() && !early_boot_irqs_disabled);
 -- 
 2.45.2
 
