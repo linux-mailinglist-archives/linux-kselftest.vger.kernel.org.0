@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-25203-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25204-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B298CA1CB96
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 16:50:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A3FCA1CBBB
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 16:53:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEA1A16AF09
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 15:46:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12A5E188664E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 15:50:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CA65227563;
-	Sun, 26 Jan 2025 15:04:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 812BB22ACDC;
+	Sun, 26 Jan 2025 15:05:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QUASVhHB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C5He/+5V"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD6A226554;
-	Sun, 26 Jan 2025 15:04:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556D922ACD1;
+	Sun, 26 Jan 2025 15:04:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737903869; cv=none; b=YmCEtjucgxsX2mK+ncvtqVEPo7X5icvj7lzCG0RBWQG7wEZcT4G4G8T2FhgQE+jGtE316aDU2VvLxc9DKl5S6wYi2kQH5V0n878ko/urcfFH5oS3p9N5YBhzF/1d5HxiHsVjGpZcCATzRcW1q2ygM2VR39aXi3fJlheaZI24Q6w=
+	t=1737903900; cv=none; b=I6aTY2q3Dsxwr6mloEX0PSMijlke576oPIU0Pj2TgjnUyEVZrSuHRMV+x69BxZ/leFETmZ+3lrwUL9L16uSkYzcJ91pYWf25ntOqkUofuq9ek+B1FS2mFLIjO/41AXNSmfYaSN753cbc7UA5KreH4AGyQut26HY/MgxJQclC2pA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737903869; c=relaxed/simple;
-	bh=ziFWZv+l/3BL/VrP9RAmntpbE18Jp94WGFFTvvMVeuU=;
+	s=arc-20240116; t=1737903900; c=relaxed/simple;
+	bh=vawUk/qXa04AQnHkGUqDCnq5OBcbHO8vec18ktLQm9g=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=d6N8Gs6msy4BLUDbdSBUA5mujoR5vViCmUzHw2SKrlXEC1sVJSqwAuE8RUX/f99buwBKjB7VqhXG2y4TO0pWB1sX2lkMOXktJJ0wfRNaEKrLXUd3VbIcRJ4vVElau2zsA1wSugbj/U/UvJ10vjap405C+Trshkgfb0QQwrdGZ1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QUASVhHB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59B40C4CEE4;
-	Sun, 26 Jan 2025 15:04:28 +0000 (UTC)
+	 MIME-Version; b=YyKKSYryH33/to3QBAUbln+C5WAKgMXgavyiXVR2G9BZ3MuXi+bhzk2Ug0VP4RUzqak3hpKZq27399LQmSJwWIvpiWY+SW2oYs7Jpoc7sGdb11nw2BC0Q3sahlq8CoyW99AncNqa/G5gCF6CyekRQKIi+Gt2bX8+6wLFcMa2o0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C5He/+5V; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 816FCC4CEE2;
+	Sun, 26 Jan 2025 15:04:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737903869;
-	bh=ziFWZv+l/3BL/VrP9RAmntpbE18Jp94WGFFTvvMVeuU=;
+	s=k20201202; t=1737903899;
+	bh=vawUk/qXa04AQnHkGUqDCnq5OBcbHO8vec18ktLQm9g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QUASVhHBRgSfpjMs3A2FjeLMCj5VUq4xRlp/fSe73/3+5Uv2me6b8L67ZjJitGUQq
-	 BNpp6dG8LXSYax3BeqYqjeA2h1+f+5XX/L3ohY+81uU2zjm0eURL+mzQyOaVEOR3NT
-	 5oQyJ9zarTCja7tq0DhTHYYGLgleKJKLZ5Gfkwp/QziV9bxnyriwRpXKIvOWqCsVEA
-	 eBbe2fsdFFuHfULh5JBni1fBCBpY4eZAi4gI9S2e7cxS+sVFkm1k8nzEwctEfPDD3+
-	 dj4NeSymI5iIyErBrskW6lHjAGiCPXu7egNszRQ7gOXgDZm+jJ/FJmJ8e24OGjCCdu
-	 +hN31szham9EQ==
+	b=C5He/+5V7rLNxrrSBxWJgWeBOGZoG7GQq9VIexHEMJ+I0oYdJ/YUL9BfJv6Px5tF4
+	 3Qvou+DwbTDHv3DCMV8n5MRloMyLUIDWiOA3F47nuLKA4W7/rzInFtJ/USmICVUbow
+	 zwyE5fFzpb3P+u3E40wzSEWuYncGcr9gwOTceTKnl6AVYRUKLPu3Umlk+PjO/iDKD9
+	 C2+LE9qL0Q+5BPxdNWq2UqhYjO49buv/NPh8SIa28B5u3hVy3PxCKUse5q3D/citE7
+	 BEUj5jnOT8/In2K+Quxrn75E09VU8vBSZAk1mA0QQHGo0F23Wjikc+OaJBx08x9sEj
+	 rAwg2KwcdaGaA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -54,12 +54,12 @@ Cc: Liu Ye <liuye@kylinos.cn>,
 	shuah@kernel.org,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 17/17] selftests/net/ipsec: Fix Null pointer dereference in rtattr_pack()
-Date: Sun, 26 Jan 2025 10:03:53 -0500
-Message-Id: <20250126150353.957794-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 14/14] selftests/net/ipsec: Fix Null pointer dereference in rtattr_pack()
+Date: Sun, 26 Jan 2025 10:04:30 -0500
+Message-Id: <20250126150430.958708-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250126150353.957794-1-sashal@kernel.org>
-References: <20250126150353.957794-1-sashal@kernel.org>
+In-Reply-To: <20250126150430.958708-1-sashal@kernel.org>
+References: <20250126150430.958708-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.127
+X-stable-base: Linux 5.15.177
 Content-Transfer-Encoding: 8bit
 
 From: Liu Ye <liuye@kylinos.cn>
@@ -100,10 +100,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/net/ipsec.c b/tools/testing/selftests/net/ipsec.c
-index be4a30a0d02ae..9b44a091802cb 100644
+index c5be3f390849b..ae3da27b00973 100644
 --- a/tools/testing/selftests/net/ipsec.c
 +++ b/tools/testing/selftests/net/ipsec.c
-@@ -227,7 +227,8 @@ static int rtattr_pack(struct nlmsghdr *nh, size_t req_sz,
+@@ -189,7 +189,8 @@ static int rtattr_pack(struct nlmsghdr *nh, size_t req_sz,
  
  	attr->rta_len = RTA_LENGTH(size);
  	attr->rta_type = rta_type;
