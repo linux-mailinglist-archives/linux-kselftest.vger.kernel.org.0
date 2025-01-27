@@ -1,204 +1,239 @@
-Return-Path: <linux-kselftest+bounces-25264-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25265-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54F7DA20167
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 00:09:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A71AA201A2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2025 00:27:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69455188244B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 23:09:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9CCA1659DC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 23:27:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE1591DD0E1;
-	Mon, 27 Jan 2025 23:09:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 512DC1DDC03;
+	Mon, 27 Jan 2025 23:25:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iU+1xvxt"
+	dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b="wMyqwg77";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Cdcce9RN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3720E82866;
-	Mon, 27 Jan 2025 23:09:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D871DC747;
+	Mon, 27 Jan 2025 23:25:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738019387; cv=none; b=MNrxw1Bfug4CHvNxLz614RNs7yt448A+8KoAdO0PNf7JXRWMd9GoO0J2fTWHQ/2QE1sAX7jTIWu1NktBbagcdhg8/FvYaYg5Dekw8Yn5ddHRKlVtiNVJetCj1Q2FmSD+U1noOD7x73EcX16Z/FhhtOppgeR2Dt/51/S5Jr01/TM=
+	t=1738020321; cv=none; b=Zm/ve9wAxzNaheOALNU8EldCTjCCq0p04xFdmkXxU1dE1avonF68ODKuhP1lAMNbXZCo4ZAolhbmgoRxSC02aZXV2FZKECpkJKDe0bOyNbOq7qXfnNU1pEhccpiS+fmMwl3D5AEwg9cCPYR8xWpoPWsnC2sak070V8nBU2HnZGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738019387; c=relaxed/simple;
-	bh=FP7Vc8RVsF7acYMFh2SH70cj4NUrqXI8MxGvQkWFYYg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=froOC+ZokBl4LTWQUdS+XdfZjN9yOE8JsD8TvyaUxLxaTK0BNm5PArRnRRDrn2IPVpHNmz/eylDo8kaiwkxst2SdauiU/QQiJIDv6/08ay8B2PdcU0rA6XMGJGdtYg0o4GYm31wsUqMHu5bemn2i4IG5UK/RxAOssT4cy2McxWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iU+1xvxt; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2164b1f05caso86132175ad.3;
-        Mon, 27 Jan 2025 15:09:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738019383; x=1738624183; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2DApiLfwXAyMPJZtTEPvPmr6XJcCUDB0Z5exLiG9NLo=;
-        b=iU+1xvxtMZiEsU/axlQ0pA3+2vjJLVxI3i4cPtkVTJNMFXn3T4xcMGBv6d9GzTK4g3
-         9tqXgFv82QATqE3bWh0Dgp995j5d4Bu2yfHND5fTGMZpU3YxnnwWec70XGffvVYu2jTA
-         3Bjd/QthnRRlHsTO7ed5wnCB2F6qDnANrEsVL/HxOLw6thNpYjmOdwESS3Z9/FP5uq1i
-         G4OtCifSkJNoq0D1K6g7ewfsXoYbiyZGd3IZfSjtYBqz7yE9UmrT1YBDZaZXJQMTsBCs
-         FVlHoy8l3WS0lHS0Pv5vCdCCaoV+vkO3kVqXUhm3CgSPUbo6DPB5UjMTQsPwVzO4NLVD
-         OIoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738019383; x=1738624183;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2DApiLfwXAyMPJZtTEPvPmr6XJcCUDB0Z5exLiG9NLo=;
-        b=RaDOCLIEpB12oMKRdiJngXxOBVLCk8JQdlA7+p2YasLOEHYUYlWBYJ+tmL3GayAx0V
-         2OEREqbvxAILmg5Slk+PKaJTWAaUlVGiSGePQOjDGySVBwGJPUEx3JSJ9/W1mtOtvlY6
-         QuAYv/kTjYlr8K23zOkWxKGRTX+Xkq56XkBvVydM5s5+g+KoHgH4gks+m+A059FLl8aD
-         dQXoQB5EQgAZJaE11NWyy/BqCfdhhdrLs5BqU8RR8MC6cPr5c9jIvf+8OmorXmxUP0ck
-         hf8+87/EjcUivAN8b0EZKiaGuVcWzP3kvHF8APp4yQZmghQkU/RvckN/axDEZqtaODB2
-         wckA==
-X-Forwarded-Encrypted: i=1; AJvYcCUFXS6nRdoQl9YY1yv7ESHQrwW8uW0tY5SF2pfPL3tzVfZgbIq33+DiBmWoPK3ur4Refl0T6vaxaGUOff+8@vger.kernel.org, AJvYcCVOH4m1NOHBxpV+TGvwEmtPvsIVpQmQhIsu4qsLTWbcFGvuTP/impFIkBEuTRfrYi34t+A3XuMDmcrhWimB1sMw@vger.kernel.org, AJvYcCVgfFkJGXh5x7vGLN0uqqCiy2cySKPT86hdlHXb9h2J3+IF2xn5DKZyLj4nfnru7OBKj4c=@vger.kernel.org, AJvYcCXIIQYiaZkEZD5t0P9il/gcogKXjuutEOEC29p/8eobPMmYVPJyf/WtN5fT0RkRyx/AxykI1K0m3LmcuiUZg0uBTGHz@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0vHweY0gOl7QBKEFfm9OBu09j/VK6Pxu2lbO4Fmm9akr8Kmpc
-	x9MfdN5s/XU4qwpdtqLEzmS5Hfu++RaApbNsLpYRK5A/kP9y3q5opRQZa9mljY4kuV1Qn+9vGnA
-	fl7ehAFhtQYdcdQRFulBVHEJKk2c=
-X-Gm-Gg: ASbGnctXvd8vES59oidqOMSUwtzr6b8cQ8H3L74fkJAb/4s0cn9ihYYr+fNyp+EehCy
-	jgGbBQGMC9KO7sg+xwZhh93NMJES0YVZlZhwjIOksfA+t2h2Cst2Buv+QdbsOmvntJcnESk2Dt/
-	4/Jw==
-X-Google-Smtp-Source: AGHT+IG94tXICPbVselslslVzXbhTY1QGlFl+ldvltAGcGCHHtOqC4B0r07qVcoK9RICZ9AxjnG0dKNo0uMtyus7jis=
-X-Received: by 2002:a05:6a00:2e15:b0:728:e906:e45a with SMTP id
- d2e1a72fcca58-72dafbfd7e4mr65550767b3a.24.1738019383217; Mon, 27 Jan 2025
- 15:09:43 -0800 (PST)
+	s=arc-20240116; t=1738020321; c=relaxed/simple;
+	bh=BYkehnIpBnocYGyjLeN0L5UEDG1dmgrbbixLoe1gkGg=;
+	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+	 Content-Type:Date:Message-ID; b=pREk1Ou4EVV0ZIpDjNmBtgtVDjFMuyVfnIMkWNNaW8g204j3Jei1MHZNA4agFXbyr7vJwwWoAtDYJKIEaAkRTmrMxxOB492yMhRs0wAD/WsnEPu3EkNLhpKhDT4lxMlsiLJF/hWet7qS8NJv/0+cpwugEJzKjQqUvyum5k71t/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net; spf=pass smtp.mailfrom=jvosburgh.net; dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b=wMyqwg77; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Cdcce9RN; arc=none smtp.client-ip=202.12.124.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jvosburgh.net
+Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id 97A0B11401D1;
+	Mon, 27 Jan 2025 18:25:16 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-04.internal (MEProxy); Mon, 27 Jan 2025 18:25:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jvosburgh.net;
+	 h=cc:cc:content-id:content-transfer-encoding:content-type
+	:content-type:date:date:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to; s=fm1; t=1738020316; x=1738106716; bh=CPjWf1wHRCpAlAPPogONS
+	Y2JicosVViIJDCkH3vIjPk=; b=wMyqwg77GSeBxiV1pSszP1qFJX04WYr40a+NJ
+	1iDsyIu9PJWNFJU7WThnwytG2T75uoXG0cDmsjQdtBh+u6LcymGNpOopItIYNcfv
+	gnVMdMOoYch29ocIkjPPsr5p09n9d1xSsV+X0z8q6l+h6QEqY9fJ+oANJlT1oG+u
+	q9MwlRyV+vVbM3nzInOZst/hBgtb/KlvNZMAHby3P6XnG4dsl7bjTeVTiBn1xH55
+	Caj6UumE+NoS8/35d1H7wP8lbQP9PeKk4lC3RxN2CpLHOQJJbOfWizrPc0AUdYIZ
+	K1z52F5WphQXctg+J7DMmdP9n5nC7q5ovXI8LttIe7uYLjYyQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-id
+	:content-transfer-encoding:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1738020316; x=1738106716; bh=CPjWf1wHRCpAlAPPogONSY2JicosVViIJDC
+	kH3vIjPk=; b=Cdcce9RNhgsq/6hRfbtz0hMVHrSUQ73uTdBrf+D/JPqx2whk+Rp
+	gSMOMl+0zmfDe4zEW9L8D6MkUL1Ujomi5w4HpXdqy1dbCiJnRjvTXURUOzKPgJFT
+	nBMAIb0dAWjFJzSxdk0htbppoHKHZH+62yq9S9kxguQITYajPPnQkfLfg50Z1yyX
+	yumFVyAoJqmduEW89r75WgJp4CFJ/OE/Su7JSjDpPrr8T4Tqqa53nf9kJS0LM5sQ
+	QhQ+2hHFX0ei2nOXINUY+173HY4XpC7yHC1L0mIfQ2rYrNjXw24T9jEw3UgK3ZoA
+	4fd0bwDcHcC0w/4Z/+4NaWIRAdiAvYYEx6w==
+X-ME-Sender: <xms:3BWYZz_pRcF_v2SpfxzvJ1xj1pAOd95q6b9V3KMgDHSO0G9yN0TakQ>
+    <xme:3BWYZ_sFXQriqa0mjuJo86kiT2TQ77yBkc0d8vBwWqdix2fcXtsl7GULd13Lqwb-1
+    fER9w7UAxG9vna-zqk>
+X-ME-Received: <xmr:3BWYZxBmvyFbGGsS-orE4Bp66KEC0idudOsrdMoZm_0gIJwuMfuopYmUUERtIAotCrZKKA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudejgedgudegheduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhephffvvefujghfofggtgfgfffksehtqhertder
+    tddvnecuhfhrohhmpeflrgihucggohhssghurhhghhcuoehjvhesjhhvohhssghurhhghh
+    drnhgvtheqnecuggftrfgrthhtvghrnhepieefvdelfeeljeevtefhfeeiudeuiedvfeei
+    veelffduvdevfedtheffffetfeffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepjhhvsehjvhhoshgsuhhrghhhrdhnvghtpdhnsggprhgtphht
+    thhopedugedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhgriihorhessghlrg
+    gtkhifrghllhdrohhrghdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhn
+    vghtpdhrtghpthhtoheplhhiuhhhrghnghgsihhnsehgmhgrihhlrdgtohhmpdhrtghpth
+    htohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehhohhrmhhs
+    sehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpd
+    hrtghpthhtohepsghorhhishhpsehnvhhiughirgdrtghomhdprhgtphhtthhopegtrhgr
+    thhiuhesnhhvihguihgrrdgtohhmpdhrtghpthhtohepjhhirghnsgholhesnhhvihguih
+    grrdgtohhm
+X-ME-Proxy: <xmx:3BWYZ_dA1I8-rxcj2W3sHtRz-tAKX8guv4I_g7riBJqHiy0QxEp8WQ>
+    <xmx:3BWYZ4NXtUGEkW-0yK-cbGqPMaYysGjh5TdwEjE00lLMBIKy0M6XBA>
+    <xmx:3BWYZxmRgK6V-zhsRRhDTJ_uwQCtG24RxgFL8oeQfhXDWRFCHlkSog>
+    <xmx:3BWYZyvPw7L6XNskcF0phxcKqQ3jEWEYTVKF-L2FofNZymgVkO2UkQ>
+    <xmx:3BWYZ_lLzvS2MzDitSxyQ6hR9O8uvYciL1_7l9sP8jhY2KVPqtWJIrNC>
+Feedback-ID: i53714940:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 27 Jan 2025 18:25:15 -0500 (EST)
+Received: by famine.localdomain (Postfix, from userid 1000)
+	id 256E99FD33; Mon, 27 Jan 2025 15:25:14 -0800 (PST)
+Received: from famine (localhost [127.0.0.1])
+	by famine.localdomain (Postfix) with ESMTP id 21E059FC62;
+	Mon, 27 Jan 2025 15:25:14 -0800 (PST)
+From: Jay Vosburgh <jv@jvosburgh.net>
+To: Cosmin Ratiu <cratiu@nvidia.com>
+cc: netdev@vger.kernel.org, Nikolay Aleksandrov <razor@blackwall.org>,
+    "David S . Miller" <davem@davemloft.net>,
+    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+    Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+    Jianbo Liu <jianbol@nvidia.com>, Boris Pismenny <borisp@nvidia.com>,
+    Tariq Toukan <tariqt@nvidia.com>, linux-kselftest@vger.kernel.org,
+    Hangbin Liu <liuhangbin@gmail.com>, Liang Li <liali@redhat.com>
+Subject: Re: [PATCH net v3] bonding: Correctly support GSO ESP offload
+In-reply-to: <20250127104147.759658-1-cratiu@nvidia.com>
+References: <20250127104147.759658-1-cratiu@nvidia.com>
+Comments: In-reply-to Cosmin Ratiu <cratiu@nvidia.com>
+   message dated "Mon, 27 Jan 2025 12:41:47 +0200."
+X-Mailer: MH-E 8.6+git; nmh 1.8+dev; Emacs 29.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250125-bpf_dynptr_probe-v2-0-c42c87f97afe@outlook.com>
- <20250125-bpf_dynptr_probe-v2-1-c42c87f97afe@outlook.com> <CAADnVQ+bRvL-4n4ZB5QS2oUxvo3vhJHf=8=2No3WWqYHqSyBEg@mail.gmail.com>
- <MEYP282MB2312A90273FF290ED5FC6F6AC6ED2@MEYP282MB2312.AUSP282.PROD.OUTLOOK.COM>
- <CAADnVQJ7bw0Qa4UM_E0zb5bqt5P09f7rryFSe6faY8ibX0zWuA@mail.gmail.com> <CABWLseu6=ZSYpQncaj=0EeVzKtP8vjPyOBJkWcFb-dxbm5OfVQ@mail.gmail.com>
-In-Reply-To: <CABWLseu6=ZSYpQncaj=0EeVzKtP8vjPyOBJkWcFb-dxbm5OfVQ@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 27 Jan 2025 15:09:30 -0800
-X-Gm-Features: AWEUYZnon7kvgvvYMaL_ZHm9YapRQ_P1RSgyURMDYpAnnbedU_ijueKRzjtt9z8
-Message-ID: <CAEf4BzYLPVqRzwzziugfV+fXbd6KQnkvsXJWOYDEgQ6rgUSH9A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/7] bpf: Implement bpf_probe_read_kernel_dynptr
- helper
-To: Andrei Matei <andreimatei1@gmail.com>, Jordan Rome <linux@jordanrome.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Levi Zim <rsworktech@outlook.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Mykola Lysenko <mykolal@fb.com>, 
-	Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <115557.1738020314.1@famine>
 Content-Transfer-Encoding: quoted-printable
+Date: Mon, 27 Jan 2025 15:25:14 -0800
+Message-ID: <115558.1738020314@famine>
 
-On Mon, Jan 27, 2025 at 2:54=E2=80=AFPM Andrei Matei <andreimatei1@gmail.co=
-m> wrote:
+Cosmin Ratiu <cratiu@nvidia.com> wrote:
+
+>The referenced fix is incomplete. It correctly computes
+>bond_dev->gso_partial_features across slaves, but unfortunately
+>netdev_fix_features discards gso_partial_features from the feature set
+>if NETIF_F_GSO_PARTIAL isn't set in bond_dev->features.
 >
-> On Mon, Jan 27, 2025 at 5:04=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Sat, Jan 25, 2025 at 5:05=E2=80=AFPM Levi Zim <rsworktech@outlook.co=
-m> wrote:
-> > >
-> > > On 2025/1/26 00:58, Alexei Starovoitov wrote:
-> > >  > On Sat, Jan 25, 2025 at 12:30=E2=80=AFAM Levi Zim via B4 Relay
-> > >  > <devnull+rsworktech.outlook.com@kernel.org> wrote:
-> > >  >> From: Levi Zim <rsworktech@outlook.com>
-> > >  >>
-> > >  >> This patch add a helper function bpf_probe_read_kernel_dynptr:
-> > >  >>
-> > >  >> long bpf_probe_read_kernel_dynptr(const struct bpf_dynptr *dst,
-> > >  >>          u32 offset, u32 size, const void *unsafe_ptr, u64 flags)=
-;
-> > >  > We stopped adding helpers years ago.
-> > >  > Only new kfuncs are allowed.
-> > >
-> > > Sorry, I didn't know that. Just asking, is there any
-> > > documentation/discussion
-> > > about stopping adding helpers?
-> > >
-> > > I will switch the implementation to kfuncs in v3.
-> > >
-> > >  > This particular one doesn't look useful as-is.
-> > >  > The same logic can be expressed with
-> > >  > - create dynptr
-> > >  > - dynptr_slice
-> > >  > - copy_from_kernel
-> > >
-> > > By copy_from_kernel I assume you mean bpf_probe_read_kernel. The prob=
-lem
-> > > with dynptr_slice_rdwr and probe_read_kernel is that they only suppor=
-t a
-> > > compile-time constant size [1].
-> > >
-> > > But in order to best utilize the space on a BPF ringbuf, it is possib=
-le
-> > > to reserve a
-> > > variable length of space as dynptr on a ringbuf with
-> > > bpf_ringbuf_reserve_dynptr.
+>This is visible with ethtool -k bond0 | grep esp:
+>tx-esp-segmentation: off [requested on]
+>esp-hw-offload: on
+>esp-tx-csum-hw-offload: on
 >
-> For our uprobes, we've run into similar issues around doing variable-size=
-d
-> bpf_probe_read_user() into ring buffers for our debugger [1]. Our use cas=
-e
-> is that we generate uprobes that recursively read data structures until w=
-e
-> fill up a buffer. The verifier's insistence on knowing statically that a =
-read
-> fits into the buffer makes for awkward code, and makes it hard to pack th=
-e
-> buffer fully; we have to split our reads into a couple of static size cla=
-sses.
+>This patch reworks the bonding GSO offload support by:
+>- making aggregating gso_partial_features across slaves similar to the
+>  other feature sets (this part is a no-op).
+>- advertising the default partial gso features on empty bond devs, same
+>  as with other feature sets (also a no-op).
+>- adding NETIF_F_GSO_PARTIAL to hw_enc_features filtered across slaves.
+>- adding NETIF_F_GSO_PARTIAL to features in bond_setup()
 >
-> Any chance there'd be interest in taking the opportunity to support
-> dynamically-sized reads from userspace too? :)
-
-That's bpf_probe_read_user_dynptr() from patch #2, no?
-
-But generally speaking, here's a list of new APIs that we'd need to
-cover all existing fixed buffer versions:
-
-- non-sleepable probe reads:
-
-  bpf_probe_read_kernel_dynptr()
-  bpf_probe_read_user_dynptr()
-  bpf_probe_read_kernel_str_dynptr()
-  bpf_probe_read_user_str_dynptr()
-
-- sleepable probe reads (copy_from_user):
-
-bpf_copy_from_user_dynptr()
-bpf_copy_from_user_str_dynptr()
-
-- and then we have complementary task-based APIs for non-current process:
-
-bpf_probe_read_user_task_dynptr()
-bpf_probe_read_user_str_task_dynptr()
-bpf_copy_from_user_task_dynptr()
-bpf_copy_from_user_str_task_dynptr()
-
-Jordan is working on non-dynptr version of
-bpf_copy_from_user_str_task(), once he's done with that, we'll add
-dynptr version, probably.
-
+>With all of these, 'ethtool -k bond0 | grep esp' now reports:
+>tx-esp-segmentation: on
+>esp-hw-offload: on
+>esp-tx-csum-hw-offload: on
 >
-> [1] https://side-eye.io
+>Fixes: 4861333b4217 ("bonding: add ESP offload features when slaves suppo=
+rt")
+>Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+>Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
+
+Acked-by: Jay Vosburgh <jv@jvosburgh.net>
+
+
+>---
+> drivers/net/bonding/bond_main.c | 19 ++++++++++---------
+> 1 file changed, 10 insertions(+), 9 deletions(-)
 >
-> >
-> > That makes sense. The commit log didn't call it out.
-> > Please spell out the motivation clearly.
-> > Also why bpf_probe_read_kernel_common ?
-> > Do we need to memset() it on failure?
-> >
+>diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_m=
+ain.c
+>index 7b78c2bada81..e45bba240cbc 100644
+>--- a/drivers/net/bonding/bond_main.c
+>+++ b/drivers/net/bonding/bond_main.c
+>@@ -1538,17 +1538,20 @@ static netdev_features_t bond_fix_features(struct=
+ net_device *dev,
+> 				 NETIF_F_HIGHDMA | NETIF_F_LRO)
+> =
+
+> #define BOND_ENC_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
+>-				 NETIF_F_RXCSUM | NETIF_F_GSO_SOFTWARE)
+>+				 NETIF_F_RXCSUM | NETIF_F_GSO_SOFTWARE | \
+>+				 NETIF_F_GSO_PARTIAL)
+> =
+
+> #define BOND_MPLS_FEATURES	(NETIF_F_HW_CSUM | NETIF_F_SG | \
+> 				 NETIF_F_GSO_SOFTWARE)
+> =
+
+>+#define BOND_GSO_PARTIAL_FEATURES (NETIF_F_GSO_ESP)
+>+
+> =
+
+> static void bond_compute_features(struct bonding *bond)
+> {
+>+	netdev_features_t gso_partial_features =3D BOND_GSO_PARTIAL_FEATURES;
+> 	unsigned int dst_release_flag =3D IFF_XMIT_DST_RELEASE |
+> 					IFF_XMIT_DST_RELEASE_PERM;
+>-	netdev_features_t gso_partial_features =3D NETIF_F_GSO_ESP;
+> 	netdev_features_t vlan_features =3D BOND_VLAN_FEATURES;
+> 	netdev_features_t enc_features  =3D BOND_ENC_FEATURES;
+> #ifdef CONFIG_XFRM_OFFLOAD
+>@@ -1582,8 +1585,9 @@ static void bond_compute_features(struct bonding *b=
+ond)
+> 							  BOND_XFRM_FEATURES);
+> #endif /* CONFIG_XFRM_OFFLOAD */
+> =
+
+>-		if (slave->dev->hw_enc_features & NETIF_F_GSO_PARTIAL)
+>-			gso_partial_features &=3D slave->dev->gso_partial_features;
+>+		gso_partial_features =3D netdev_increment_features(gso_partial_feature=
+s,
+>+								 slave->dev->gso_partial_features,
+>+								 BOND_GSO_PARTIAL_FEATURES);
+> =
+
+> 		mpls_features =3D netdev_increment_features(mpls_features,
+> 							  slave->dev->mpls_features,
+>@@ -1598,12 +1602,8 @@ static void bond_compute_features(struct bonding *=
+bond)
+> 	}
+> 	bond_dev->hard_header_len =3D max_hard_header_len;
+> =
+
+>-	if (gso_partial_features & NETIF_F_GSO_ESP)
+>-		bond_dev->gso_partial_features |=3D NETIF_F_GSO_ESP;
+>-	else
+>-		bond_dev->gso_partial_features &=3D ~NETIF_F_GSO_ESP;
+>-
+> done:
+>+	bond_dev->gso_partial_features =3D gso_partial_features;
+> 	bond_dev->vlan_features =3D vlan_features;
+> 	bond_dev->hw_enc_features =3D enc_features | NETIF_F_GSO_ENCAP_ALL |
+> 				    NETIF_F_HW_VLAN_CTAG_TX |
+>@@ -6046,6 +6046,7 @@ void bond_setup(struct net_device *bond_dev)
+> 	bond_dev->hw_features |=3D NETIF_F_GSO_ENCAP_ALL;
+> 	bond_dev->features |=3D bond_dev->hw_features;
+> 	bond_dev->features |=3D NETIF_F_HW_VLAN_CTAG_TX | NETIF_F_HW_VLAN_STAG_=
+TX;
+>+	bond_dev->features |=3D NETIF_F_GSO_PARTIAL;
+> #ifdef CONFIG_XFRM_OFFLOAD
+> 	bond_dev->hw_features |=3D BOND_XFRM_FEATURES;
+> 	/* Only enable XFRM features if this is an active-backup config */
+>-- =
+
+>2.45.0
+>
 
