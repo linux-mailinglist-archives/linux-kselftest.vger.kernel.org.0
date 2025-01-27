@@ -1,217 +1,147 @@
-Return-Path: <linux-kselftest+bounces-25226-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25227-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54D0EA1D5BC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 13:02:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73DC1A1D5E7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 13:28:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99152164DC3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 12:02:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 94F9E7A1F69
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 12:28:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAD1B1FE467;
-	Mon, 27 Jan 2025 12:02:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1718D1FF1B6;
+	Mon, 27 Jan 2025 12:28:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="h61i4lJj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JHfGpRTF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041FF291E;
-	Mon, 27 Jan 2025 12:02:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 291F41FECC7;
+	Mon, 27 Jan 2025 12:28:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737979363; cv=none; b=qnowoi9UH9MF7xF0Td5BmfgPdzL0cREg1W3gBrgsN7C8iwLoSWf0iEouHj+mrWkiy3vexcBqknYkHe7EVGhzjZ/9by6BGpOY7RoFy6vF2VJNO50M87eqzYSbeZTYoTIqgIGcCXtdCc5bJLFQ/rfnbNg9mHlYDB1+my/BsFlBy1w=
+	t=1737980886; cv=none; b=R8ZAxb/1NvVvMxG0FOH06MTaj0zbTGprVKYHdoP9M6sKtkH2S8XdmteJrHHuZrKAFFg9CLZbD+aoeVka+iEt1oaeDnuSzuybynqaTp7smot3BeF/a32s0nG0Ai/Wq40jCoxwirUlZWYFek/OexDhfDxHATIbKQbLjwRPBDCpaok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737979363; c=relaxed/simple;
-	bh=bBw03JKfcoEjUQ6Z2Ps7Vygh7/Ijlj4JWPZaf+0+Pmc=;
+	s=arc-20240116; t=1737980886; c=relaxed/simple;
+	bh=bg9amlmFdK/h2r1MnHxwVsOFVnMATC4b5ax0Y6Sl1Us=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DhFoDYzA/KW/gNtACM7ba/XcVAvLOe0wflAgNsdPznpWu3D7Hb1Q6tholITX00ZiXcaygdraG019h1TQECf3lohIYZkWAI0/SbhUkOkZwUqJ8pARyzHS9ljf+Q4ZSrbjgCeoOvXxJ6mi8ZnAKSUDmDKmAHLLwWDOXmUy9D/6u7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=h61i4lJj; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50R7X7k5029948;
-	Mon, 27 Jan 2025 12:02:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=fCKYra
-	ItNVni16k7D3kFhuJZQG/VGwhn9zNnr+WJJO0=; b=h61i4lJjONayLBtErmdWwS
-	jMPisyi1pVkCSRGAvMJDhBzOPv4WLe8YbehQvtghV1T2fKtV2o/hbqbodW0YeqRN
-	Wo7JIJS0jBtdq4ACII1Dq0kr9iYs2jVB5KG06ZX/mTbYauHSPSQVyUlLOXHsqV2X
-	u5/k/oPnt5JXWJ2+ObphHZWSZ/8MRu72//vtJiwnolteEFB0+PzNe5G0QfLpuWYx
-	fkXpSPsoobSPjSyVGBvxTHm8LdvcGP6NuWX/IZZB44gUlwU0IaNAqhFQKPnwrV7F
-	XUgut1nvCT60wtTDCX5dlDd/q4pwyGkt5/02xx888EdGd+UxRuWaKFHPp9/HE2bA
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44e5un94uq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Jan 2025 12:02:21 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50RBsfOY025313;
-	Mon, 27 Jan 2025 12:02:21 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44e5un94uk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Jan 2025 12:02:21 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50R81Pxr019213;
-	Mon, 27 Jan 2025 12:02:20 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44db9mp3hy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Jan 2025 12:02:20 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50RC2Idv56951086
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 27 Jan 2025 12:02:18 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 75EDD201DC;
-	Mon, 27 Jan 2025 12:02:18 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E2D58201CE;
-	Mon, 27 Jan 2025 12:02:03 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.43.25.97])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon, 27 Jan 2025 12:02:03 +0000 (GMT)
-Date: Mon, 27 Jan 2025 17:31:56 +0530
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>,
-        Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH 2/2] selftests/bpf: Select NUMA node of current CPU to
- create map
-Message-ID: <Z5d1tJvKsVlMFySQ@linux.ibm.com>
-References: <70fb07e980196ced9fc3e5e4dbeededce2e36fdc.1737816475.git.skb99@linux.ibm.com>
- <e9240414068ee83456d01d2bc71735705df8b36f.1737816475.git.skb99@linux.ibm.com>
- <CAADnVQJWs7Dq3E8shXNwG3tOsmRJ5YYjMboGjzeueg+uMKo+rw@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mf/HRJRm/mM52raHLzup54D4FHJhaul+w1wq1+aW/Z0QbusufkjgyF6BlRgYPT6aSwhL2HXAaqoaK4EHBuXsBjQcatlP3BTmR18zmX1mgg9lQbHdPBA4OhnDvZY1zfe8N4adD8Kvc2TX1ewjYESD+4W3UwTXFR5dPO2vEME+Tj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JHfGpRTF; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737980884; x=1769516884;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bg9amlmFdK/h2r1MnHxwVsOFVnMATC4b5ax0Y6Sl1Us=;
+  b=JHfGpRTFmfxy9nepMa2pNhD5whreQbRfxuaz5D+qkyQh+id2fQUkqJl7
+   2kjhzJokl/Fey4cMeUIWVvcJZel3EKRb6GSX3RwQwdygqLH3p6L9QtOOE
+   N15hN6bYhnARrJM0H1IepEmZtMFkfEZIq5Oy7o2JOLKjJse0JOYy2o7Il
+   yCLoXGDXnxABnD6Bj8TSixWajJUfH15KzFz/SlKY965EPtYbwo0eSmCgY
+   3V7JY8ioMct6IB6ZI3tWr6SUBr6zLlUwFc5y8vo9vfVZNfnmaimQsKJJ2
+   lD1Y+EJi5VPKAD4SFgKdoG8qMfSCHhLe/iUWgp1c4m+0y88T9IunbDbfG
+   g==;
+X-CSE-ConnectionGUID: xIQnwC+ORZu97nYLkMzWeA==
+X-CSE-MsgGUID: tcqpbMvCRSy9Ut1ujYsrqQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11328"; a="49032860"
+X-IronPort-AV: E=Sophos;i="6.13,238,1732608000"; 
+   d="scan'208";a="49032860"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 04:28:03 -0800
+X-CSE-ConnectionGUID: /nXOYI4iSHqijSeaDJ5RCQ==
+X-CSE-MsgGUID: k6fZ0skxT2KoCiodPqeCXA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,238,1732608000"; 
+   d="scan'208";a="108218730"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 27 Jan 2025 04:27:58 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tcODc-000gkp-0T;
+	Mon, 27 Jan 2025 12:27:56 +0000
+Date: Mon, 27 Jan 2025 20:27:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Levi Zim via B4 Relay <devnull+rsworktech.outlook.com@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Levi Zim <rsworktech@outlook.com>
+Subject: Re: [PATCH bpf-next v2 2/7] bpf: Implement
+ bpf_probe_read_user_dynptr helper
+Message-ID: <202501272059.wikSvChi-lkp@intel.com>
+References: <20250125-bpf_dynptr_probe-v2-2-c42c87f97afe@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQJWs7Dq3E8shXNwG3tOsmRJ5YYjMboGjzeueg+uMKo+rw@mail.gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: D8kZBlK-lyONyRJajy8XTy_3PRy8P7s1
-X-Proofpoint-ORIG-GUID: kag2PHhLpi84cIexEsQ07f_D7eRj93zy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-27_05,2025-01-27_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 adultscore=0 mlxscore=0 spamscore=0
- clxscore=1015 mlxlogscore=999 bulkscore=0 phishscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501270097
+In-Reply-To: <20250125-bpf_dynptr_probe-v2-2-c42c87f97afe@outlook.com>
 
-On Sat, Jan 25, 2025 at 09:02:37AM -0800, Alexei Starovoitov wrote:
-> On Sat, Jan 25, 2025 at 7:25 AM Saket Kumar Bhaskar <skb99@linux.ibm.com> wrote:
-> >
-> > On powerpc, a CPU does not necessarily originate from NUMA node 0.
-> > This contrasts with architectures like x86, where CPU 0 is not
-> > hot-pluggable, making NUMA node 0 a consistently valid node.
-> > This discrepancy can lead to failures when creating a map on NUMA
-> > node 0, which is initialized by default, if no CPUs are allocated
-> > from NUMA node 0.
-> >
-> > This patch fixes the issue by setting NUMA node for map creation
-> > to NUMA node of the current CPU.
-> >
-> > Fixes: 96eabe7a40aa ("bpf: Allow selecting numa node during map creation")
-> > Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-> > ---
-> >  tools/testing/selftests/bpf/Makefile                      | 2 +-
-> >  tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c | 2 ++
-> >  2 files changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> > index 0a016cd71..c7a996f53 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -47,7 +47,7 @@ CFLAGS += -g $(OPT_FLAGS) -rdynamic                                   \
-> >           -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)          \
-> >           -I$(TOOLSINCDIR) -I$(TOOLSARCHINCDIR) -I$(APIDIR) -I$(OUTPUT)
-> >  LDFLAGS += $(SAN_LDFLAGS)
-> > -LDLIBS += $(LIBELF_LIBS) -lz -lrt -lpthread
-> > +LDLIBS += $(LIBELF_LIBS) -lz -lrt -lpthread -lnuma
-> >
-> >  PCAP_CFLAGS    := $(shell $(PKG_CONFIG) --cflags libpcap 2>/dev/null && echo "-DTRAFFIC_MONITOR=1")
-> >  PCAP_LIBS      := $(shell $(PKG_CONFIG) --libs libpcap 2>/dev/null)
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c b/tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c
-> > index cc184e442..d241d22b8 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c
-> > @@ -4,6 +4,7 @@
-> >  #include <sys/syscall.h>
-> >  #include <limits.h>
-> >  #include <test_progs.h>
-> > +#include <numa.h>
-> >  #include "bloom_filter_map.skel.h"
-> >
-> >  static void test_fail_cases(void)
-> > @@ -69,6 +70,7 @@ static void test_success_cases(void)
-> >
-> >         /* Create a map */
-> >         opts.map_flags = BPF_F_ZERO_SEED | BPF_F_NUMA_NODE;
-> > +       opts.numa_node = numa_node_of_cpu(sched_getcpu()); // Get the NUMA node of the current CPU
-> 
-> let's not introduce new library deps.
-> Will NUMA_NO_NODE work ?
-> 
-Yes this change worked:
+Hi Levi,
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c b/tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c
-index d241d22b8..527825939 100644
---- a/tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c
-@@ -4,9 +4,12 @@
- #include <sys/syscall.h>
- #include <limits.h>
- #include <test_progs.h>
--#include <numa.h>
- #include "bloom_filter_map.skel.h"
- 
-+#ifndef NUMA_NO_NODE
-+#define        NUMA_NO_NODE    (-1)
-+#endif
-+
- static void test_fail_cases(void)
- {
-        LIBBPF_OPTS(bpf_map_create_opts, opts);
-@@ -70,7 +73,7 @@ static void test_success_cases(void)
- 
-        /* Create a map */
-        opts.map_flags = BPF_F_ZERO_SEED | BPF_F_NUMA_NODE;
--       opts.numa_node = numa_node_of_cpu(sched_getcpu()); // Get the NUMA node of the current CPU
-+       opts.numa_node = NUMA_NO_NODE;
-        fd = bpf_map_create(BPF_MAP_TYPE_BLOOM_FILTER, NULL, 0, sizeof(value), 100, &opts);
-        if (!ASSERT_GE(fd, 0, "bpf_map_create bloom filter success case"))
-                return;
+kernel test robot noticed the following build warnings:
 
-I will send out v2.
-> Note c++ comments are not allowed.
-> 
-Acknowledged..
+[auto build test WARNING on d0d106a2bd21499901299160744e5fe9f4c83ddb]
 
-Thanks,
-Saket
-> pw-bot: cr
+url:    https://github.com/intel-lab-lkp/linux/commits/Levi-Zim-via-B4-Relay/bpf-Implement-bpf_probe_read_kernel_dynptr-helper/20250125-163114
+base:   d0d106a2bd21499901299160744e5fe9f4c83ddb
+patch link:    https://lore.kernel.org/r/20250125-bpf_dynptr_probe-v2-2-c42c87f97afe%40outlook.com
+patch subject: [PATCH bpf-next v2 2/7] bpf: Implement bpf_probe_read_user_dynptr helper
+config: x86_64-randconfig-122-20250127 (https://download.01.org/0day-ci/archive/20250127/202501272059.wikSvChi-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250127/202501272059.wikSvChi-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501272059.wikSvChi-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+   kernel/trace/bpf_trace.c:899:41: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __user *[addressable] [assigned] [usertype] sival_ptr @@     got void * @@
+   kernel/trace/bpf_trace.c:899:41: sparse:     expected void [noderef] __user *[addressable] [assigned] [usertype] sival_ptr
+   kernel/trace/bpf_trace.c:899:41: sparse:     got void *
+>> kernel/trace/bpf_trace.c:235:39: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected void const [noderef] __user *unsafe_ptr @@     got void *unsafe_ptr @@
+   kernel/trace/bpf_trace.c:235:39: sparse:     expected void const [noderef] __user *unsafe_ptr
+   kernel/trace/bpf_trace.c:235:39: sparse:     got void *unsafe_ptr
+   kernel/trace/bpf_trace.c: note: in included file (through include/linux/smp.h, include/linux/lockdep.h, include/linux/spinlock.h, ...):
+   include/linux/list.h:83:21: sparse: sparse: self-comparison always evaluates to true
+   kernel/trace/bpf_trace.c: note: in included file (through include/linux/rbtree.h, include/linux/mm_types.h, include/linux/mmzone.h, ...):
+   include/linux/rcupdate.h:880:25: sparse: sparse: context imbalance in 'uprobe_prog_run' - unexpected unlock
+
+vim +235 kernel/trace/bpf_trace.c
+
+   228	
+   229	BPF_CALL_5(bpf_probe_read_user_dynptr, const struct bpf_dynptr_kern *, dst,
+   230		u32, offset, u32, size, void *, unsafe_ptr, u64, flags)
+   231	{
+   232		int ret = bpf_probe_read_check_dynptr(dst, offset, size, flags);
+   233	
+   234		return ret ?: bpf_probe_read_user_common(dst->data + dst->offset + offset,
+ > 235					size, unsafe_ptr);
+   236	}
+   237	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
