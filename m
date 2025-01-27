@@ -1,152 +1,122 @@
-Return-Path: <linux-kselftest+bounces-25228-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25229-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E4FDA1D632
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 13:50:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2A11A1D6C4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 14:28:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42CAC3A577A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 12:50:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DB1918876A2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 13:28:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3E601FF5F7;
-	Mon, 27 Jan 2025 12:50:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75BFB1FF7D5;
+	Mon, 27 Jan 2025 13:27:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PyQZLNMp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OOjP+ZE/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568271FC7ED
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jan 2025 12:50:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1067D1FF7BC;
+	Mon, 27 Jan 2025 13:27:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737982238; cv=none; b=NmVfozwhqW1xy//zeZHZ2jgofApFvJR3Yu2VQ5j4/QP/xBm+1A2HllMW8GYA1QU9Skjh1MaJTQCbI7EgF9nB9lezJ3cOubFqZuTPjqE3Ey29rqPsc3jHKwjruAd8LBC4zAUAjWIuioC31vatxRyFPgO84pFPY32lQ+0CFwea2Xs=
+	t=1737984476; cv=none; b=c4tTQz/FCC7IxRZEkfRJ6ZC/1nvbmCm0fMROJa+pXGREY273rqBN1eb6acZ6NSLWHUBFnkWsAgOEoMNPcZ7EhNyzauG5ZIzbyv84CqHphAYZ1IxLkp9947W/W39KNszK3XihS3VeJDqT/br1Qxb9N/RQfgsNsAwXkN4DHz4XT5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737982238; c=relaxed/simple;
-	bh=HR4noXGU7w13ZIhOM/ucls8vVM3bhmVGGYLoZmvVDTY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PKTk4g0QVC+qOpIQrL2qOV4tnzDNQ/lYTaA/EkFWcNWu+WXP9vPqPQPW+YASU6zDBllPF0M9rHR8JwbMxdY2fAn/hQiX2SenWYp9kOXh1SySRaNEIqBk2zSK2lSOi1jOeSgEm+YPSsGpLsEfqdqC9D12x4d6l1ZwLIZA78kLFSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PyQZLNMp; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43618283d48so30801665e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jan 2025 04:50:35 -0800 (PST)
+	s=arc-20240116; t=1737984476; c=relaxed/simple;
+	bh=NF/Z/6mnFJoQiKz+vwQTi2iRfm1FPQe4uNx+uFyDabs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jbFqTJJR3DqQ8jD5vNSN+3E3X6Vq4u6OxmX++pOeXfcbokuIr+g/0bEttEYdcpliJFzmXEx0TXHNrUDp61sOc5aX/pA2WsQjG7zE2cbcM5BgoUfvsju9KiBHHkvVyPOsEQnUzPDUmAwJOGnYULYk3cDwV+OkU272jlioSLJ6NJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OOjP+ZE/; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2166360285dso73191995ad.1;
+        Mon, 27 Jan 2025 05:27:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1737982234; x=1738587034; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VG6M7E++/3Ce9GXj2tezC00IBdvh1kteyj5hzR0NwA8=;
-        b=PyQZLNMpcVv/C7aBWa3i52KmbAcnYmUFq8gKJojCHwVh04N4W5Jf8S5K0rmEWApHqN
-         X93gpvF1GQFkJ1DFtHAoBHJckiAP3RU9fie6Xbw0vXq7ylpjHiww6RoOzN89jXFRN32x
-         Q+wQXO+1zwxrvukDu9Bpe0dMNdQwux3a+D9Z7MeiiQ/3C2bb2wSSvV6EJfsbBYFcj3Ng
-         vm2o+LlIeCdP/lHC7e0qSOdAB7FLP/OdrT9oyujN4J2gy6UMr7LlRiG20LsWk3jw8mJa
-         cgtGJGcT5IRkhwdT7jYeDvhrlJzGBedfWqUbeGG8pNOlegM2Y/dhITi/KOJhQS2RQczD
-         RWBQ==
+        d=gmail.com; s=20230601; t=1737984474; x=1738589274; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6fzsM1Pf9RpP5XFZ4SrQcsGyrdjLhqybOi4MsyjGDF8=;
+        b=OOjP+ZE/yKJEBWertxSUudYR16zufYgV4tw3q8Hth7uD5r6+C8eligo7gfweeSNFtA
+         tKm+Fb5H/ctq/CwBrKvAtJxpbjGPmAFPzOJzuI8ag2CXHyIGQQlZI2yBXzqym6WoNK/d
+         5VVN2pzfxp4MHzhmkqGYDe8DbkOr9QBAxjBmNkZbM/hQ2jV7lqRwIgg+x/cawaSbu05D
+         k8lzgmFSqXL2QmLhZKKO8fZakWwAyENhWZ0xrQw/wZ0/5GxVZNt0TOsJRcWbukMDLGfS
+         b+vaOz0FhLWENvvx7/9JvR8vYROiwdwzArgI74N1ND0GjbPh7y4e8NmouTN7i81ZgosB
+         qMXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737982234; x=1738587034;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VG6M7E++/3Ce9GXj2tezC00IBdvh1kteyj5hzR0NwA8=;
-        b=SDwOlozSrkRWIRYQKKJz6iy+99DTJCDioNgzxSdievcBj48EWld8cd9+v4UH+h7H+p
-         pKjcrYX3VzBYNKdSRTFhdj/quK8dsb0q87SnDGhG1oDDrYW+50P0YMUhkdrS7rt/skur
-         wqDyFrAjB+tsuTWDP+wBUaW+mO51hIZzs06Lb0/bwJ8whIDv5wSVt2DgUbDafhkp7FKg
-         CsMDMxX1hRMS7wFvxhj43WMCdqeJZkGhPACjTEtc447LKM+JN/vAZOpE50+VylqKAe+N
-         ngaXZLmR8BSHXQk2JBDgaKos1ypRkpnbk3p/qyjIHGf8vs5gVjPgKs4VDtHau7eqqhiM
-         UdJw==
-X-Forwarded-Encrypted: i=1; AJvYcCXIqZYj6Xy/ahpmJKl22xJh0acA1j3TiV0oQkwdXevWyNbHRy+dMq7S3mjwHxGJCo2gVvk+scXGeKRg0vgrsa8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqGEES0eepWQjS3oAFUcs00zY0BInJ94R19k/xza8wBLBZrGcl
-	i3gSlw0offYKr9ZiqYdI6Oi2/k/FdEPYTRdI/2qsuh3veJVKseuRa1QYfuNESaw=
-X-Gm-Gg: ASbGnctZisfD+Uw9F4yIe57NxI/t5t9UEm3i/4eCGdgeaZ+xalxAlQ15ReeV1X/kJfZ
-	PGzs36aACwJkYXgMJUyEOwpKkgFTr7L+XP0kHlcpd7MlqAdISdv0p1zM6/HZ/64LdRNtGH1I5go
-	YD6tu6tvQIyABWVa//jTj0kHQu4UG0iJ1AduKg7wZfE/mdP/WDud1BkRGhlSyBHHHFEVo0iA4Mm
-	t4j9a1qf//PWT4G5p2dFDgM+2SWisGjDAKXYB/bm1UW/5JQB6tl8M063jrn2090kJG6cszC6e9G
-	4kyda+LZ
-X-Google-Smtp-Source: AGHT+IHGKx5XPAjKkuM8tLdY/iEmI+lFN9vw68MEGkVKzufCkr8AVUadSDTJkGDjd3qRPKQy8gyy+g==
-X-Received: by 2002:a05:600c:46ca:b0:434:a367:2bd9 with SMTP id 5b1f17b1804b1-438913dfd7fmr435221995e9.14.1737982233635;
-        Mon, 27 Jan 2025 04:50:33 -0800 (PST)
-Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438bd54bfb0sm128676475e9.32.2025.01.27.04.50.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jan 2025 04:50:33 -0800 (PST)
-Message-ID: <021665c5-b017-415f-ad2b-0131dcc81068@suse.com>
-Date: Mon, 27 Jan 2025 13:50:31 +0100
+        d=1e100.net; s=20230601; t=1737984474; x=1738589274;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6fzsM1Pf9RpP5XFZ4SrQcsGyrdjLhqybOi4MsyjGDF8=;
+        b=eZijwfLjr6dww/t4jbR6hRhx1cKxwGbTAduPQv2k7N10oN2Hqoc5ZD5/GIUnvRX7qO
+         KYFkwV4rRqndxnxXihJKyi4/FXeKNqORXqU2QXHl7MS7ZESA1IgFTHeqS4ZkwNE9mWIf
+         W4enfbLgEf4RDjCoeO0UEWdBtFH/T1oWz00+5uAKQ3PEy7QNrB+0V9J/mz1qNOY0uW3W
+         HtUugE4ykOnrrACavaUqkgRZZYQKd73uuNkF7Ax9z0OsRKAvJp4EJPER1WIRBduWNV0A
+         ZkpWHJJi8/hMgUbfGmwUibTaDX/DU0j6yD8i18oZJTBBsN7MYyTRN2b5tgFKJnU0jFwv
+         s7ow==
+X-Forwarded-Encrypted: i=1; AJvYcCVEKtU6AOcHCUCKLILThOYyLsdHtaBkC714YP12JKTqvMoHyK01nix2GgmqKqXratkZ7yOHBMkFRaOSyULqJRQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRbHLYi8L8jrmzYtzzLMg+zn3I8i4qrhaVBXc2R7nYj2wMy19L
+	CRXoHpWiFyxGY5XmiWaHjfSBY8UOurgUOCp4WXd9M53Go7HSmi/0l9wMenRVzdo=
+X-Gm-Gg: ASbGncvN8T/UUD41VpNjqomnrrweRqXs2PFbmgcRl8DKT/3qnysULEGWCpRA58TPqIJ
+	wCyc0YIEio608Goi/rYoSRltEpxDWUcX2YW9FljVIqVdtmmCLT8tt3/g419n1OW9fYiAH6mT8t+
+	+LJ3CQFqQc+lt9+jjtkpdFlKv4Uv9LK5+F9rC6TNazwAgPt/v85I6VdZ3GHo7/Gj/kB03t1mLhF
+	Jojw03cWdlP6GmajOM0A6VoWJCvdrFLIvHgs63DI7hWZvt36whfTxwSjehuxPf/pYyCHmwOn9jH
+	WFFod6t5xA==
+X-Google-Smtp-Source: AGHT+IG+7LWtEYr2z9HI7ddUozeou9RSMSgcY01U1wQ6rGuPVQtRGglbs+jigdjYpH9nyrrko99Isw==
+X-Received: by 2002:a05:6a20:2591:b0:1e1:e2d9:3f31 with SMTP id adf61e73a8af0-1eb2148df72mr54770041637.16.1737984474129;
+        Mon, 27 Jan 2025 05:27:54 -0800 (PST)
+Received: from fedora ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72f8a76150csm7101435b3a.87.2025.01.27.05.27.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jan 2025 05:27:53 -0800 (PST)
+Date: Mon, 27 Jan 2025 13:27:45 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Cosmin Ratiu <cratiu@nvidia.com>
+Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"razor@blackwall.org" <razor@blackwall.org>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"liali@redhat.com" <liali@redhat.com>,
+	"jv@jvosburgh.net" <jv@jvosburgh.net>,
+	"pabeni@redhat.com" <pabeni@redhat.com>,
+	"horms@kernel.org" <horms@kernel.org>,
+	Jianbo Liu <jianbol@nvidia.com>,
+	"edumazet@google.com" <edumazet@google.com>,
+	Boris Pismenny <borisp@nvidia.com>,
+	"kuba@kernel.org" <kuba@kernel.org>
+Subject: Re: [PATCH net v3] bonding: Correctly support GSO ESP offload
+Message-ID: <Z5eJ0ZaOxdN2ZOe6@fedora>
+References: <20250127104147.759658-1-cratiu@nvidia.com>
+ <47227635d220ffd8941b65d778e23a578707aa96.camel@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 6/9] module: switch to execmem API for remapping as RW
- and restoring ROX
-To: Mike Rapoport <rppt@kernel.org>
-Cc: x86@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- Andy Lutomirski <luto@kernel.org>,
- Anton Ivanov <anton.ivanov@cambridgegreys.com>,
- Borislav Petkov <bp@alien8.de>, Brendan Higgins <brendan.higgins@linux.dev>,
- Daniel Gomez <da.gomez@samsung.com>, Daniel Thompson <danielt@kernel.org>,
- Dave Hansen <dave.hansen@linux.intel.com>, David Gow <davidgow@google.com>,
- Douglas Anderson <dianders@chromium.org>, Ingo Molnar <mingo@redhat.com>,
- Jason Wessel <jason.wessel@windriver.com>, Jiri Kosina <jikos@kernel.org>,
- Joe Lawrence <joe.lawrence@redhat.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- Josh Poimboeuf <jpoimboe@kernel.org>,
- "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Luis Chamberlain <mcgrof@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Petr Mladek <pmladek@suse.com>, Rae Moar <rmoar@google.com>,
- Richard Weinberger <richard@nod.at>, Sami Tolvanen
- <samitolvanen@google.com>, Shuah Khan <shuah@kernel.org>,
- Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Thomas Gleixner <tglx@linutronix.de>, kgdb-bugreport@lists.sourceforge.net,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-um@lists.infradead.org, live-patching@vger.kernel.org
-References: <20250126074733.1384926-1-rppt@kernel.org>
- <20250126074733.1384926-7-rppt@kernel.org>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250126074733.1384926-7-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <47227635d220ffd8941b65d778e23a578707aa96.camel@nvidia.com>
 
-On 1/26/25 08:47, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+On Mon, Jan 27, 2025 at 10:45:21AM +0000, Cosmin Ratiu wrote:
+> Same as v2, but I added Hangbin to 'Signed-off-by'.
 > 
-> Instead of using writable copy for module text sections, temporarily remap
-> the memory allocated from execmem's ROX cache as writable and restore its
-> ROX permissions after the module is formed.
-> 
-> This will allow removing nasty games with writable copy in alternatives
-> patching on x86.
-> 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-[...]
+Thanks for adding me to 'Signed-off-by'. Next time you can add the change
+log in the patch directly. e.g.
 
-> +static void module_memory_restore_rox(struct module *mod)
-> +{
-> +	for_class_mod_mem_type(type, text) {
-> +		struct module_memory *mem = &mod->mem[type];
-> +
-> +		if (mem->is_rox)
-> +			execmem_restore_rox(mem->base, mem->size);
-> +	}
-> +}
-> +
+Commit description
+---
+v3 changes
+v2 changes
+---
 
-Can the execmem_restore_rox() call here fail? I realize that there isn't
-much that the module loader can do if that happens, but should it be
-perhaps logged as a warning?
+Codes ...
 
--- 
-Thanks,
-Petr
+
+Thanks
+Hangbin
 
