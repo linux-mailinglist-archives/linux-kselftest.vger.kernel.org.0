@@ -1,104 +1,134 @@
-Return-Path: <linux-kselftest+bounces-25242-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25243-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DE6EA1DB08
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 18:11:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E60D4A1DB1C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 18:18:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E26D1888BF1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 17:11:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 373BE18838DB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 17:18:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6E10189528;
-	Mon, 27 Jan 2025 17:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B752B18952C;
+	Mon, 27 Jan 2025 17:18:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hWyylYiz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D110188736;
-	Mon, 27 Jan 2025 17:10:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EB1157493;
+	Mon, 27 Jan 2025 17:18:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737997856; cv=none; b=MbbG7tIL/T/SUHCPqEsKEFyub+WjVV5eRGfA/fhkukiO23ynvUdy6aG6Y2Oy/3zsnupBxSWuwIYXxnKYRRNVQ+Hif7NgBIFx6NG+hpEgiqSBJ7VN485KzmLAdJ6sr+0/YAnsQjn3wZgwsEH4LXLrO6EqZDr5vNCtG9xNkq4XWgY=
+	t=1737998295; cv=none; b=BGvNFL0bGNz0TdjOPdxwTe7C1Nh8JHfbbTt8yGoCSmeYGn13asefeuvy8/fp1DnQNoPjv2I7AkVZLTJrwk0sTXyUgym8P4OD6yPEg5HtECbkkdthztSXmvUz8OzNgGUfJ9LS0afH68i++WfDA0O0Kx+iSPxLF15yHgJTW6GKVdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737997856; c=relaxed/simple;
-	bh=Bi+qspMKKsh4IalPW5ItwF1IXJOMsqx915Y+atCisKE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g/eLt8hdBp5vqZJBhbdzylGN8iuL0zOELrKX2mlIxPbq2MTtgSnJNVcnUTk5zWIyC6YaNfgXaCtKEPAPeIEmpXsujFB6WqkKmOpX00EkE4Vj9es9MrZKelaZ3Sxl0RrsQPuB/3JR77pJKYx/Psc6HsOnGrQ6cwokIaI+3oh0+28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5d932eac638so9201757a12.1;
-        Mon, 27 Jan 2025 09:10:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737997852; x=1738602652;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FVF05zC6+ZNJvFRi7LzbSSs7l9kPd2AWr8fGMwkBgvQ=;
-        b=OnTM0pWEhHeBXpj7Ovj8RlOJsYqCUtDDnWAzQOErbi+57aM2kw4gHQ05FbNb1IbVd4
-         9NgMb7RWa+IfMGuFQ9y1WK2ikR0slbYcvZYFJQ8o5BwRum292N1+/UYhvm1wRg9BZKH+
-         4Bpk2ImtG3UTYXV9cbvOi8VLlDo98DiU/bv90Bxrm0MjB3UwW2TXRGIdIs+hxJFV/8R6
-         jXSpRlsGgLxR/T+zUtF7TbL4zohS6Wg2u2YbDe53OZki8uTPikWGRX7Fsoy+8PQqjtUa
-         5OQ5kjWPzwPCKUX6PMxW3jwq3M45nSuYJoMvT9F1+xiFDRssn9QnH6GRJZwB2+qHleja
-         Fwjw==
-X-Forwarded-Encrypted: i=1; AJvYcCUgG7ipDmTZ2M2e8xMCnkITN5MYgH2D7/zfj1D/cCTiDSur41MEZRXF8T9Q/766T6F5nSV6ICmoNeI=@vger.kernel.org, AJvYcCX2h0G7utKtAQFCxAGbJI42IQrMP/Hsxp/m3yzMCSjiBBc1EQJEsm5Jwcx0t9Y024+cKukxl0k1@vger.kernel.org, AJvYcCXPZ82bkyQSPekaHaJWxYAqPR4aKLG0z84Pd8OS1YgCQB1fbfEYcLHK6G2TTVF7utpfRQdXATbVWoldjmOC@vger.kernel.org, AJvYcCXiLWJhparBtVCPouam+GckBACNu4e8DggJnvaGUj00mR3EiTmtEtbOGzDPlzfhe0Sz4L79X8HMFxlj7NanCZKZ@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPMZpTE8xGosC6QDb8C5ZWRp6h9tsi3bplNit1pTYjKI5IG++1
-	tUHHqcnfRFgtGfqdv1Apy4bgdkLN0Dx2sMI3H/WtbQbJIfgwA+/J
-X-Gm-Gg: ASbGncs821rqLRe9siR4lEX4Il1nQ0qpI+eKq3OVkd0Uxila3ZR0GWMcM0/diO+Z2zT
-	Th7YotwHUuhVKH/wzOg8SVNoH8NPK4iOjl29N4fdTSVCQlj34L7lrtuXM7HqQOk2hZ9WVefMy9E
-	uR32Xfb6HKU9EJrJ1QOHKLVtPm3YN+14DuSE8obxcXimgDvafDesMpc3L4+CYWLVRZ2z7RCNPEM
-	B9LUoknKiVUgmx9RiGqdTIN5IZOOy8WpbqM6nDlCeatoZI2lSJNYGfMLQCdhlogthXk/4/C
-X-Google-Smtp-Source: AGHT+IHMnJgkyhto2i1MusAfY+8Ds920O+thYSdmOl+AWDxF3QeeuCuyz+cNSCTcLes5zVM7LriJXg==
-X-Received: by 2002:a17:907:3e1c:b0:aa6:a7ef:7f1f with SMTP id a640c23a62f3a-ab38b0bb338mr4133233766b.11.1737997852069;
-        Mon, 27 Jan 2025 09:10:52 -0800 (PST)
-Received: from gmail.com ([2a03:2880:30ff:71::])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab6760fbd46sm619285566b.135.2025.01.27.09.10.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jan 2025 09:10:51 -0800 (PST)
-Date: Mon, 27 Jan 2025 09:10:49 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, rdunlap@infradead.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH RFC net-next v3 8/8] netconsole: docs: Add documentation
- for CPU number auto-population
-Message-ID: <20250127-passionate-scallop-of-exercise-bcfa03@leitao>
-References: <20250124-netcon_cpu-v3-0-12a0d286ba1d@debian.org>
- <20250124-netcon_cpu-v3-8-12a0d286ba1d@debian.org>
- <57392381-497c-49d8-9ad7-4b50c4939448@lunn.ch>
+	s=arc-20240116; t=1737998295; c=relaxed/simple;
+	bh=WXIoF8kFaZqzhjJoVbCZJGk0IK+gZfCdqRxlUDEEYic=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=DAC1jx9AaBPPS9PL0jMPMiR+OsyFOC9PtZxJjm1p8eF0lEQBqLRMkfh42nRe1x7yCejOFesVjgvueC+hntPmSFKbTLy0twTLcfXFNPRMNKfXi9+pB+f3m/wD3KFXxeFsjpMCRKoyxwSHhV8sd5VyKolVrceucxE4r7ia2BBUrxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hWyylYiz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C748C4CED2;
+	Mon, 27 Jan 2025 17:18:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737998294;
+	bh=WXIoF8kFaZqzhjJoVbCZJGk0IK+gZfCdqRxlUDEEYic=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=hWyylYizOG4z8/rBPu/Oyb9Ddjseay59h4E3DuQWy9HaEqssoggTKcuqoZoWO91/s
+	 tO66rmI6gBlT3N+T2INqMjxR61uqHWxWrMTxT6uHuU8Slf6SoNo8mprUoiIYkDvAkX
+	 2jwwLER8xY6qIVubiGd+RRPGDPrOLcGP4EmxoAXHsYfkJwc9wiFfraRqbB8syNoWyO
+	 od5VGn8B2V/gRCXccug4zlyO/Z+mp1MOOYzbMp9KIknDEpa8UkVoZ2Sts2rndAKrYe
+	 M9t8in+sA21dlINYcTzzPoYyBQg5f8ElOP4jTRB2MXGNhU4mfelz/NcjhjyyAjgzIx
+	 W/y0lEEqgQqpA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <57392381-497c-49d8-9ad7-4b50c4939448@lunn.ch>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 27 Jan 2025 19:18:09 +0200
+Message-Id: <D7D0Z3L6SBSF.1MSDA2G2MV3QZ@kernel.org>
+Subject: Re: [PATCH v4] selftests: tpm2: create a dedicated .gitignore
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Khaled Elnaggar" <khaledelnaggarlinux@gmail.com>, <shuah@kernel.org>,
+ <peterhuewe@gmx.de>, <jgg@ziepe.ca>
+Cc: <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-integrity@vger.kernel.org>
+X-Mailer: aerc 0.18.2
+References: <20250126142250.839019-1-khaledelnaggarlinux@gmail.com>
+ <20250126195147.902608-1-khaledelnaggarlinux@gmail.com>
+In-Reply-To: <20250126195147.902608-1-khaledelnaggarlinux@gmail.com>
 
-On Fri, Jan 24, 2025 at 05:15:10PM +0100, Andrew Lunn wrote:
-> > +CPU number auto population in userdata
-> > +--------------------------------------
-> > +
-> > +Inside the netconsole configfs hierarchy, there is a file called
-> > +`cpu_nr` under the `userdata` directory. This file is used to enable or disable
-> > +the automatic CPU number population feature. This feature automatically
-> > +populates the CPU number that is sending the message.
-> 
-> Biking shedding a bit, but to me `cpu_nr` is the number of a
-> CPU. However, you want this to be an enable/disable feature. Would
-> `cpu_nr_enable`, or `cpu_nr_auto_populate` be clearer?
+On Sun Jan 26, 2025 at 9:51 PM EET, Khaled Elnaggar wrote:
+> The tpm2 selftests produce two logs: SpaceTest.log and
+> AsyncTest.log. Only SpaceTest.log was listed in selftests/.gitignore,
+> while AsyncTest.log remained untracked.
+>
+> This change creates a dedicated .gitignore in the tpm2/ directory to
+> manage these entries, keeping tpm2-specific patterns isolated from
+> parent .gitignore.
+>
+> Signed-off-by: Khaled Elnaggar <khaledelnaggarlinux@gmail.com>
+> ---
+> Oh no, I realized there was a mistake in v3. I wrote tpm2/*.log in the
+> tpm2/.gitignore file, which is unnecessary since tpm2/.gitignore is
+> already scoped to the tpm2 directory.
+> All entries are automatically relative to the tpm2 directory.
+>
+> I=E2=80=99ve fixed it by removing the redundant tpm2/ prefix from the ent=
+ries
+> in tpm2/.gitignore.
+>
+> Apologies for not catching this earlier, I tested it after submitting
+> the patch because I was confident v2 was correct, but the issue was
+> introduced in v3.
+>
+> Thanks,
+> Khaled
+>
+> Changes:
+> v4: Correct the mistake in v3
+> v3: Improve commit message (and introduce a mistake)
+> v2: Created a dedicated .gitignore
+> v1: https://lore.kernel.org/linux-kselftest/20250116085929.313677-1-eng.k=
+haled.elnaggar@gmail.com
+> ---
+>  tools/testing/selftests/.gitignore      | 1 -
+>  tools/testing/selftests/tpm2/.gitignore | 4 ++++
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/tpm2/.gitignore
+>
+> diff --git a/tools/testing/selftests/.gitignore b/tools/testing/selftests=
+/.gitignore
+> index cb24124ac5b9..674aaa02e396 100644
+> --- a/tools/testing/selftests/.gitignore
+> +++ b/tools/testing/selftests/.gitignore
+> @@ -4,7 +4,6 @@ gpiogpio-hammer
+>  gpioinclude/
+>  gpiolsgpio
+>  kselftest_install/
+> -tpm2/SpaceTest.log
+>
+>  # Python bytecode and cache
+>  __pycache__/
+> diff --git a/tools/testing/selftests/tpm2/.gitignore b/tools/testing/self=
+tests/tpm2/.gitignore
+> new file mode 100644
+> index 000000000000..910bbdbb336a
+> --- /dev/null
+> +++ b/tools/testing/selftests/tpm2/.gitignore
+> @@ -0,0 +1,4 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +AsyncTest.log
+> +SpaceTest.log
+> +
+> --
+> 2.45.2
 
-Agree, I think `cpu_nr_enable` is way better than just `cpu_nr`. I will
-update.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
+BR, Jarkko
 
