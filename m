@@ -1,262 +1,198 @@
-Return-Path: <linux-kselftest+bounces-25230-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25231-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F1CBA1D87B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 15:33:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6FE4A1D89C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 15:43:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B3487A3E11
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 14:33:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26DCE3A4B4E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 14:43:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9D9DFC0B;
-	Mon, 27 Jan 2025 14:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E32A2746B;
+	Mon, 27 Jan 2025 14:43:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RFvt2H4h"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="pGD/enfL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E783D64;
-	Mon, 27 Jan 2025 14:33:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59D29748D;
+	Mon, 27 Jan 2025 14:43:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737988401; cv=none; b=PXkgqyYyBFTNH3YCZN33QkeuBM6kxTFlX9IdIhTju8/ITnbjuXMIPkzoCpj1m2z42jejLGNrvad0Q6hVNEihjMGA/GEHAnE5/T5f+CYuseC89ae9CYYFaIKlQRxa1nhjaRdneyPYKW1TAkbeNifO3Y5ZumgknO0TK2ajGKLEVYU=
+	t=1737989013; cv=none; b=ar+NZIQioelhTkp+rL8WeysUjMUwZ1EuRhkiyPw9oJlKZN3qYP9ZiVO4b5AB9HVvjIciod/ooP9lJCSdwW5dqqKbb3ji4aGbIPJUlFWa8eSaaYplsQW+y6Y3KdokRegAtQJIuxOKOjk5npCTX5Ur/QIi2mH+YV0LL1S9oT+KjQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737988401; c=relaxed/simple;
-	bh=FaRAosq2Dn/9WrhcX9lSIG96XO9n67MGygKTNGXSyGo=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=kc1cXzu+vQU8SuH4osXD+tCfMFMBL8RnaB6cny6M5GAX9vS0q1VXz2/AYvDJkFzW/qF+2UpXaxVgt3eiIXNmeaCeyzKLbBec8u+Wv3f19BE4j+0qFotAe84apk5TRoY10lXtWFr7cs3CilYkVeqR0JfU6mNxWbn9W0OZf9hYs5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RFvt2H4h; arc=none smtp.client-ip=209.85.222.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7b6ed9ed5b9so671058985a.2;
-        Mon, 27 Jan 2025 06:33:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737988398; x=1738593198; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZTaRABt9WEj+gqGe6GqcQlVywh5NvD+IMM2h++oT6ik=;
-        b=RFvt2H4hUV9l8FAchALgP/vY6hgesORmpdTglgvKvYbNMs98J8RfnLj5o2SUNnEiYO
-         zS2W86T0K1OrT9ycG9M1UCvTjqflD5111NFpNxumMZnvuMR6sA486surUxWxSUs2/qe3
-         dayxcgJJ119fjDAwT9QGd6n8lEYRVgVi1OgTQhPJ0NPofmIjT+UXLiutNrc3FnIr9fmJ
-         wiotPZd6j9dbZ3rxfMv7hKGABuO3WK5U2LVCvgv0t3YBb1IXhIIrASvHfkaYJKEu5cIw
-         tXQr7TB4ubdDciSbu/qAaNf5OZCaFX12NasRwJBOFxNUjNr/2hyRNNxSTIrvJhugZRBD
-         w/Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737988398; x=1738593198;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZTaRABt9WEj+gqGe6GqcQlVywh5NvD+IMM2h++oT6ik=;
-        b=FKr6iA1QE0C5axz/2Okrf7xfQ+7u+sH74DvxCCc7Cyz/hnTdrnLrOCY3w9X2p15KwP
-         +oFDQyVsRAIdE9txpmPF9GmtFpiTgyR9qJD9WQmIlwbnYe/c2ekJtXGyJw5/mecTMITN
-         2A0McQK+bDWcSLk9I8HsSVaGPDVGe0SZDSJBlYzyNyuJD7qxn3Cg7+61pmXawpWH1H1d
-         N6rRoRPB84R3z9mIewfizQZ8D8WnESmF5mxhj/8ZS486ZUiu5YQPHKApg4MVp51+PMxU
-         j2Wq9s4KPWsit4sYJJyWUe+ZQsO1M3L6BcbUybG58grJhmSxr94VjQsux1d33hTvtWkH
-         GWIg==
-X-Forwarded-Encrypted: i=1; AJvYcCVZpCGNGOJDbyE4YCyD90y7qFs3oPSCn+WOe5VpFtYHik/+UYEMh0LzZ6HKJrJZKTZGVmrVExX3@vger.kernel.org, AJvYcCVl92kxQ20w5OZqT9OlEJ82osWPfbISb1d+KdGpNCDUbH6nA/IcyO5hIfsb1Zzb6+wbphSRwyJtZWYV7lQ=@vger.kernel.org, AJvYcCW+ae5PAc59k6SMRYbZdDuvi6d/jJWh7wOfI6SEd9g4dXADXhFf4znXqJp4PRtSI/MMxUcpaRlZHQr/ldrr2kx5@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLpX7viAjY/hk3g38g+FU4k+fPXFWx/hq7Hg2bWvyliC6dk8tr
-	gPkFqDyZN2dHBMv2DZdYHepTuPDydT0F+q9Xb1EsWRvfZi1k2Nilclugtw==
-X-Gm-Gg: ASbGncsMJCSwfI4RYGplhXrcNcSId/483Chgt0/+VVFLgkZh1d+gZpvAt0j9AMwVJVt
-	8JrJIEEfGeu/BNfLlGwb/AHGOW7Gd2J4zakkN6vpjQMghXbrLeBlBQ3p0Mtsm96ogx1PmQEKHRh
-	gcBNbt/pqCogu6E5offgGrlPvpB1tGZn6nEvtD8axaeXescU0BY83/TvgD+gwuVi2vZjVuw11k8
-	WZM8QMbrjeulnWESZhX1KyC23d0IIpiXN2WlTKqchx9DD08V6BYo9qbZj4KwHoGQZ55XlUJod/V
-	qY5ZZNtFQ+0Qfzyh+p5xnWppNOQOEuN45fnKD912VcK71QVqbdAf
-X-Google-Smtp-Source: AGHT+IFW9c4VoXRtbmmXIJoIVD+GxDMQBIhzDLUsHtgRq8DIDe3eTZKvXdArclp3f300/smiAEtY2w==
-X-Received: by 2002:a05:622a:15c8:b0:45d:8be9:b0e6 with SMTP id d75a77b69052e-46e12bdc8bemr668652771cf.43.1737988397639;
-        Mon, 27 Jan 2025 06:33:17 -0800 (PST)
-Received: from localhost (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-51e4ea35b4bsm1445410e0c.6.2025.01.27.06.33.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jan 2025 06:33:16 -0800 (PST)
-Date: Mon, 27 Jan 2025 09:33:16 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Yan Zhai <yan@cloudflare.com>, 
- netdev@vger.kernel.org
-Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- David Ahern <dsahern@kernel.org>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Josh Hunt <johunt@akamai.com>, 
- Alexander Duyck <alexander.h.duyck@linux.intel.com>, 
- netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Message-ID: <6797992c28a23_3f1a294d6@willemb.c.googlers.com.notmuch>
-In-Reply-To: <Z5cgWh/6bRQm9vVU@debian.debian>
-References: <Z5cgWh/6bRQm9vVU@debian.debian>
-Subject: Re: [PATCH] udp: gso: fix MTU check for small packets
+	s=arc-20240116; t=1737989013; c=relaxed/simple;
+	bh=t8H13PU+dE/XDOeVe03jIrdQNLu7F3mQVdhS5tLlG6Q=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=UavxKyR4pv2tc8Ry6u+b1x95iQ17dKwiWbijvLiNe5nu6T8Z9f3fSAUL0ZgGl/bi7jD8VLUL1ohufzfaKBPybLrr1mvCUPMXseVffzwcu8z17NdJ5oF0ttYd/XNPDV/2fBbswvvFn6QuJgWnCg9Jk4q9u64Pv4rlQ/o9EfaSCnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=pGD/enfL; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1737989009;
+	bh=t8H13PU+dE/XDOeVe03jIrdQNLu7F3mQVdhS5tLlG6Q=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=pGD/enfL8kpK87zQuoRfa+HLMtoYy4vYF3/PJkP6xitwVDD5pFD7XQGG/orOFK4UA
+	 AvM2kx0BgCQrlrkZ5bGHksoau6SrO9w8Wus+63FSvMulP9kOUs9Vj76uGBfmSdSHy0
+	 EKAO+ozERr2vk+UvVMEDq3eae9g1suBwc4ERF2Ko5u5O3fo88tFmLWckr6J96RFDhL
+	 bwo0yrAQK4z1pUPiZuH5+ykUzqUaRUBAZ4bkxqPFzlRog0PTveq+9nNBVLMqXQlYiw
+	 FZyyUslpppKaMu6f7fB/p8oQ4k669fS1XbeVTKO1ZYnVf1imNzEND5aq7/bWjRJ9jX
+	 csRNkYEwFbJDA==
+Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:11:e976::7a9])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nicolas)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 3517517E083A;
+	Mon, 27 Jan 2025 15:43:25 +0100 (CET)
+Message-ID: <c08e5bd0e55b7d9f87ba007455e92da553284dfb.camel@collabora.com>
+Subject: Re: [PATCH v2 0/5] kci-gitlab: Introducing GitLab-CI Pipeline for
+ Kernel Testing
+From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Leonardo
+ =?ISO-8859-1?Q?Br=E1s?=
+	 <leobras.c@gmail.com>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, Vignesh Raman	
+ <vignesh.raman@collabora.com>, kernelci@lists.linux.dev,
+ linuxtv-ci@linuxtv.org, 	dave.pigott@collabora.com, mripard@kernel.org,
+ linux-kernel@vger.kernel.org, 	dri-devel@lists.freedesktop.org,
+ linux-kselftest@vger.kernel.org, 	pawiecz@collabora.com,
+ tales.aparecida@gmail.com, workflows@vger.kernel.org, 
+	kunit-dev@googlegroups.com, nfraprado@collabora.com, davidgow@google.com, 
+	cocci@inria.fr, Julia.Lawall@inria.fr, kernel@collabora.com, 
+	torvalds@linuxfoundation.org, gregkh@linuxfoundation.org,
+ daniels@collabora.com, 	shreeya.patel@collabora.com, denys.f@collabora.com,
+ louis.chauvet@bootlin.com, 	hamohammed.sa@gmail.com, melissa.srw@gmail.com,
+ simona@ffwll.ch, airlied@gmail.com, 	Tim.Bird@sony.com, broonie@kernel.org,
+ groeck@google.com, rdunlap@infradead.org, 	geert@linux-m68k.org,
+ michel.daenzer@mailbox.org, sakari.ailus@iki.fi, 	jarkko@kernel.org
+Date: Mon, 27 Jan 2025 09:43:23 -0500
+In-Reply-To: <20250127060738.GA16795@pendragon.ideasonboard.com>
+References: <20250123135342.1468787-1-vignesh.raman@collabora.com>
+	 <f779c9af4133629f724e366241fab7421d13d227.camel@gmail.com>
+	 <20250124081250.GA24731@pendragon.ideasonboard.com>
+	 <20250124135203.040d0852@foz.lan>
+	 <20250124130021.GA6853@pendragon.ideasonboard.com>
+	 <f1c73327073c98ade56dfeabf629e2f9cd7d1663.camel@collabora.com>
+	 <bd37528d1c704951cb86a751a5c81e4c76962f51.camel@gmail.com>
+	 <20250127060738.GA16795@pendragon.ideasonboard.com>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Yan Zhai wrote:
-> Commit 4094871db1d6 ("udp: only do GSO if # of segs > 1") avoided GSO
-> for small packets. But the kernel currently dismisses GSO requests only
-> after checking MTU on gso_size. This means any packets, regardless of
-> their payload sizes, would be dropped when MTU is smaller than requested
-> gso_size.
+Le lundi 27 janvier 2025 à 08:07 +0200, Laurent Pinchart a écrit :
+> On Fri, Jan 24, 2025 at 06:12:24PM -0300, Leonardo Brás wrote:
+> > On Fri, 2025-01-24 at 10:45 -0500, Nicolas Dufresne wrote:
+> > > Le vendredi 24 janvier 2025 à 15:00 +0200, Laurent Pinchart a écrit :
+> > > > On Fri, Jan 24, 2025 at 01:52:03PM +0100, Mauro Carvalho Chehab wrote:
+> > > > > Em Fri, 24 Jan 2025 10:12:50 +0200 Laurent Pinchart escreveu:
+> > > > > 
+> > > > > > > It's been a few years since I first thought on finding a good way of helping
+> > > > > > > kernel developers testing their patches, while making use of the free runner
+> > > > > > > minutes Gitlab offers. It can greatly simplify the testing for people who are
+> > > > > > > new to kernel development, or students trying to understand it better.
+> > > > > > > 
+> > > > > > > And this patchset allows that to happen :)
+> > > > > > > 
+> > > > > > > Actually, I spoke to Helen last year, and to enable it to run on the free
+> > > > > > > Gitlab-CI runners, there is a small extra patch which is needed:
+> > > > > > > 
+> > > > > > > https://lore.kernel.org/all/20240327013055.139494-2-leobras@redhat.com/  
+> > > > > 
+> > > > > Sounds interesting!
+> > > > > 
+> > > > > > Gitlab as an open-source software project (the community edition) is one
+> > > > > > thing, but can we please avoid advertising specific proprietary services
+> > > > > > in the kernel documentation ?
+> > > > > 
+> > > > > Every time Gitlab is mentioned, the brand of the company that
+> > > > > developed it and has been providing proprietary services is also
+> > > > > advertised. If you're not happy with that, you should move to use
+> > > > > a git forge developed by some open source community.
+> > > > 
+> > > > I'm fine mentioning the gitlab community edition, I'm not fine
+> > > > advertising gitlab.com SaaS in the kernel source tree.
+> > 
+> > Hello Laurent,
+> > 
+> > I see your point, and I see no issue on removing the two last lines of CI_TAGS
+> > documentation.
+> > 
+> > I just added this information on documentation because the default runner used
+> > for the Free Tier of Gitlab does not work for this CI, as it needs more
+> > resources to run. This information can be added on some other place, but at the
+> > time I thought it would be ok to let it be there. 
+> > This other runner I mentioned in the patch is also available on the Free Tier
+> > (free as in beer).
+> > 
+> > I would like to make it clear that I have no connection/affiliation to Gitlab,
+> > other than a free account in their system, which I use for some CI. I have no
+> > interest on advertising anything from them.
+> > 
+> > My only objective is to make it easier to hobbyists/beginners to use those
+> > available free minutes to test some change before sending the patch, if they
+> > think that's valuable.
+> 
+> Given the 400 free computes minute per month, and the fact that the
+> saas-linux-medium-amd64 runner consumers two minutes per minute, how
+> many of the proposed CI runs would be available per month ?
+> 
+> CI pipeline runs always compile the kernel from scratch as far as  can
+> see. This may not be an issue for final testing before submission of a
+> patch series, but it just won't work for incremental testing of changes.
+> Think of how inefficient it would be to run a full pipeline just to get
+> the checkpatch.pl output for instance. This is why I believe tests
+> should focus first and foremost on ease of use in developers' local
+> environments. A standardized, from-scratch, comprehensive test run as a
+> gate keeper for integration has value as well, but that won't help
+> beginners much.
 
-Is this a realistic concern? How did you encounter this in practice.
-
-It *is* a misconfiguration to configure a gso_size larger than MTU.
-
-> Meanwhile, EINVAL would be returned in this case, making it
-> very misleading to debug.
-
-Misleading is subjective. I'm not sure what is misleading here. From
-my above comment, I believe this is correctly EINVAL.
-
-That said, if this impacts a real workload we could reconsider
-relaxing the check. I.e., allowing through packets even when an
-application has clearly misconfigured UDP_SEGMENT.
+Perhaps we can provide pointers how to run a private gitlab runner on your local
+computer. My experience is that this take few minutes, unlike figuring all the
+foreign bash scripts dependency, and debugging issues related to some tools not
+having the right version, which inevitably lead to folks criticizing distro
+choices and other counter productive discussions. Of course, it can only work if
+that process is used and tested.
 
 > 
-> Ideally, do not check any GSO related constraints when payload size is
-> smaller than requested gso_size, and return EMSGSIZE on MTU check
-> failure consistently for all packets to ease debugging.
+> > > I've just looked attentively, the intention is just to explain you may need to
+> > > set gitlab variable in your project fork in order to select correctly sized
+> > > sized runners in your own instance.
+> > 
+> > That's correct
+> > 
+> > >  Its is not strictly about commercial gitlab.com instance. 
+> > 
+> > Exactly, the change is about being able to choose the runner you want.
+> > 
+> > > The default only works with the original project used
+> > > instance (which is not gitlab.com as far as I know), but the comment refer to
+> > > companies that will choose gitlab.com internally to reduce their IT cost.
+> > 
+> > Correct.
+> > Companies can benefit on that, but my focus was on hobbyist (or begginers) who
+> > may want to test their patches on free CI before sending them to the ML.
+> > 
+> > > Its quite a stretch to call this "advertisement", that makes it looks very
+> > > dramatic. I personally believe its quite ahead of most other gitlab CI to take
+> > > into consideration running these pipelines on foreign (to the project)
+> > > instances.
+> > > 
+> > > > > The way I see, the best would be if the CI integration could work
+> > > > > with more than one type of forge and being able to use any
+> > > > > free Git??b-CI runners that would be available for developers to
+> > > > > use, as this would allow testing more subsystems with CI, thus
+> > > > > increasing code quality.
 > 
-> Fixes: 4094871db1d6 ("udp: only do GSO if # of segs > 1")
-> Signed-off-by: Yan Zhai <yan@cloudflare.com>
-> ---
->  net/ipv4/udp.c                       | 18 ++++++++----------
->  net/ipv6/udp.c                       | 18 ++++++++----------
->  tools/testing/selftests/net/udpgso.c | 14 ++++++++++++++
->  3 files changed, 30 insertions(+), 20 deletions(-)
-> 
-> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> index c472c9a57cf6..9aed1b4a871f 100644
-> --- a/net/ipv4/udp.c
-> +++ b/net/ipv4/udp.c
-> @@ -1137,13 +1137,13 @@ static int udp_send_skb(struct sk_buff *skb, struct flowi4 *fl4,
->  	uh->len = htons(len);
->  	uh->check = 0;
->  
-> -	if (cork->gso_size) {
-> +	if (cork->gso_size && datalen > cork->gso_size) {
->  		const int hlen = skb_network_header_len(skb) +
->  				 sizeof(struct udphdr);
->  
->  		if (hlen + cork->gso_size > cork->fragsize) {
->  			kfree_skb(skb);
-> -			return -EINVAL;
-> +			return -EMSGSIZE;
->  		}
->  		if (datalen > cork->gso_size * UDP_MAX_SEGMENTS) {
->  			kfree_skb(skb);
-> @@ -1158,15 +1158,13 @@ static int udp_send_skb(struct sk_buff *skb, struct flowi4 *fl4,
->  			return -EIO;
->  		}
->  
-> -		if (datalen > cork->gso_size) {
-> -			skb_shinfo(skb)->gso_size = cork->gso_size;
-> -			skb_shinfo(skb)->gso_type = SKB_GSO_UDP_L4;
-> -			skb_shinfo(skb)->gso_segs = DIV_ROUND_UP(datalen,
-> -								 cork->gso_size);
-> +		skb_shinfo(skb)->gso_size = cork->gso_size;
-> +		skb_shinfo(skb)->gso_type = SKB_GSO_UDP_L4;
-> +		skb_shinfo(skb)->gso_segs = DIV_ROUND_UP(datalen,
-> +							 cork->gso_size);
->  
-> -			/* Don't checksum the payload, skb will get segmented */
-> -			goto csum_partial;
-> -		}
-> +		/* Don't checksum the payload, skb will get segmented */
-> +		goto csum_partial;
->  	}
->  
->  	if (is_udplite)  				 /*     UDP-Lite      */
-> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-> index 6671daa67f4f..6cdc8ce4c6f9 100644
-> --- a/net/ipv6/udp.c
-> +++ b/net/ipv6/udp.c
-> @@ -1385,13 +1385,13 @@ static int udp_v6_send_skb(struct sk_buff *skb, struct flowi6 *fl6,
->  	uh->len = htons(len);
->  	uh->check = 0;
->  
-> -	if (cork->gso_size) {
-> +	if (cork->gso_size && datalen > cork->gso_size) {
->  		const int hlen = skb_network_header_len(skb) +
->  				 sizeof(struct udphdr);
->  
->  		if (hlen + cork->gso_size > cork->fragsize) {
->  			kfree_skb(skb);
-> -			return -EINVAL;
-> +			return -EMSGSIZE;
->  		}
->  		if (datalen > cork->gso_size * UDP_MAX_SEGMENTS) {
->  			kfree_skb(skb);
-> @@ -1406,15 +1406,13 @@ static int udp_v6_send_skb(struct sk_buff *skb, struct flowi6 *fl6,
->  			return -EIO;
->  		}
->  
-> -		if (datalen > cork->gso_size) {
-> -			skb_shinfo(skb)->gso_size = cork->gso_size;
-> -			skb_shinfo(skb)->gso_type = SKB_GSO_UDP_L4;
-> -			skb_shinfo(skb)->gso_segs = DIV_ROUND_UP(datalen,
-> -								 cork->gso_size);
-> +		skb_shinfo(skb)->gso_size = cork->gso_size;
-> +		skb_shinfo(skb)->gso_type = SKB_GSO_UDP_L4;
-> +		skb_shinfo(skb)->gso_segs = DIV_ROUND_UP(datalen,
-> +							 cork->gso_size);
->  
-> -			/* Don't checksum the payload, skb will get segmented */
-> -			goto csum_partial;
-> -		}
-> +		/* Don't checksum the payload, skb will get segmented */
-> +		goto csum_partial;
->  	}
->  
->  	if (is_udplite)
-> diff --git a/tools/testing/selftests/net/udpgso.c b/tools/testing/selftests/net/udpgso.c
-> index 3f2fca02fec5..fb73f1c331fb 100644
-> --- a/tools/testing/selftests/net/udpgso.c
-> +++ b/tools/testing/selftests/net/udpgso.c
-> @@ -102,6 +102,13 @@ struct testcase testcases_v4[] = {
->  		.gso_len = CONST_MSS_V4,
->  		.r_num_mss = 1,
->  	},
-> +	{
-> +		/* datalen <= MSS < gso_len: will fall back to no GSO */
-> +		.tlen = CONST_MSS_V4,
-> +		.gso_len = CONST_MSS_V4 + 1,
-> +		.r_num_mss = 0,
-> +		.r_len_last = CONST_MSS_V4,
-> +	},
->  	{
->  		/* send a single MSS + 1B */
->  		.tlen = CONST_MSS_V4 + 1,
-> @@ -205,6 +212,13 @@ struct testcase testcases_v6[] = {
->  		.gso_len = CONST_MSS_V6,
->  		.r_num_mss = 1,
->  	},
-> +	{
-> +		/* datalen <= MSS < gso_len: will fall back to no GSO */
-> +		.tlen = CONST_MSS_V6,
-> +		.gso_len = CONST_MSS_V6 + 1,
-> +		.r_num_mss = 0,
-> +		.r_len_last = CONST_MSS_V6,
-> +	},
->  	{
->  		/* send a single MSS + 1B */
->  		.tlen = CONST_MSS_V6 + 1,
-> -- 
-> 2.30.2
-> 
-> 
-
 
 
