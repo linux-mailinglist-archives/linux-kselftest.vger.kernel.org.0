@@ -1,266 +1,212 @@
-Return-Path: <linux-kselftest+bounces-25236-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25237-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 983F6A1D99A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 16:33:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BFB5A1D9EF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 16:53:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F14897A56F4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 15:33:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B8C718888DD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 15:53:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECEFA157493;
-	Mon, 27 Jan 2025 15:32:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4796E149DE8;
+	Mon, 27 Jan 2025 15:52:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KMYRJKFy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Opi/ZOMV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A62B15573F;
-	Mon, 27 Jan 2025 15:32:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E900915D5C4;
+	Mon, 27 Jan 2025 15:52:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737991961; cv=none; b=pK9yKZf4C2C3Hhh/5p1efyufnYY8I5YRSAHzpui4Ct9GXzWwNzpFe3V2/G2SfQv6SuRcdP1TVTWROkF6YpOGA/ypqFTslbBgnuYYYcjWjGMOP6beA6SAlGrHl/8Q58ZviIV6BwmFN0WPVQA7hmE5RYrNtxVSsST2zGwHHKc8WzY=
+	t=1737993125; cv=none; b=Yaixk2NT9g8JS+nz72wMIxpyoC41XThvZ1riCIksfXTtYLysSA3UrwSnQ9sWF0sHTwwS8wWOeWVqWQen2NztrCCfsLfCdgHNHMY4H5rsCkVvwW9iznH5ErGFppww+Q5Da+hytEGb2XF9MlAhdTCx+rDplukRrloFRxIriOjKrko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737991961; c=relaxed/simple;
-	bh=BESMgBwWxqrQ8LgJ1bKgxPdpSxs9VxfJab81KkvW+Nc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tU3v789+Lsw5KgX42STNn+Po7b5k4ISfdvsVmG1tA0DvGtcZvmO/FNMVv87NVkoqrX4JP827OWEULHHYqo/dPrTcqhSUAyd4P0yeyB5NrASVH/RkG45811SGIYxQqEZrp4GfB3SGNbHAh0p6QrkleRM1EMrLzcgOjnLSDq2SBhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KMYRJKFy; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737991960; x=1769527960;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BESMgBwWxqrQ8LgJ1bKgxPdpSxs9VxfJab81KkvW+Nc=;
-  b=KMYRJKFyM8t+wwcP/0Sgqmwh7aP3HoYjU6qhCQUhx6uYwo4murXS1PUS
-   v7ELSx0d1cpL+5W/87KGRstsWS+MQKUxdav4enz6u4CP3ecQNDUvPVTmX
-   QstqlCwOsDVgtLXmOLqj98fQoJByCHxvelpgOdNMH67TGAGzEgRet/pY7
-   JcM6+ar6YinbSm4nTnRRI/on4+i7B2YbySjdyq5PegQ1wPUrLjMJavAli
-   XyYs0w1ijPx2bRg9gFS57w7ftpNP8YDuVhtrz2CVqV2SJSuTWi4Cw7qSW
-   1E/FiYM4zgWfkI/VHDn4K8tuj9iT9ydyJFVDMCAObDJ1RICrTRfo0ooJY
-   A==;
-X-CSE-ConnectionGUID: 4xi4M4//R++FW6Ym2n4M8Q==
-X-CSE-MsgGUID: OFcEJ+lcQveffwZbTHubWA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11328"; a="38344130"
-X-IronPort-AV: E=Sophos;i="6.13,238,1732608000"; 
-   d="scan'208";a="38344130"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 07:32:40 -0800
-X-CSE-ConnectionGUID: 8SI6fRs7Toq1GrCbTqua3w==
-X-CSE-MsgGUID: TkKOcupjQ1W0VXRogpqXpQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,238,1732608000"; 
-   d="scan'208";a="108991074"
-Received: from oandoniu-mobl3.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.245.244.88])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 07:32:37 -0800
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: shuah@kernel.org,
-	hpa@zytor.com,
-	x86@kernel.org,
-	dave.hansen@linux.intel.com,
-	bp@alien8.de,
-	mingo@redhat.com,
-	tglx@linutronix.de
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kirill@shutemov.name,
-	maciej.wieczor-retman@intel.com
-Subject: [PATCH v6 3/3] selftests/lam: Test get_user() LAM pointer handling
-Date: Mon, 27 Jan 2025 16:31:57 +0100
-Message-ID: <1624d9d1b9502517053a056652d50dc5d26884ac.1737990375.git.maciej.wieczor-retman@intel.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <cover.1737990375.git.maciej.wieczor-retman@intel.com>
-References: <cover.1737990375.git.maciej.wieczor-retman@intel.com>
+	s=arc-20240116; t=1737993125; c=relaxed/simple;
+	bh=lKShl/TiOp2ZoXo/jImChQXPJ2hMZLXx2pOut7WiptI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DLKFJfUHVX4VaBF+Z2eMkHiaDRNcIR6mJIyT/JNL2m+bKkJMX3TblJtnnT54DblrKEvsX15pyDWE7kuIM35u8d4bjeX9e5pNGzLZ5ZEwTbUfkvo6RkcRoGtXuaRz0+LgTNClx5GXD3odvjFt/caxe4wrmdUclmbHwsiKuLhffKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Opi/ZOMV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87519C4CED2;
+	Mon, 27 Jan 2025 15:51:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737993124;
+	bh=lKShl/TiOp2ZoXo/jImChQXPJ2hMZLXx2pOut7WiptI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Opi/ZOMV/zfLovkaRrjcFN22SaJmB+XJGtnDJ/cIoGIjT25SkYRyAorU+UjcclWyd
+	 6DePEaUZ/QK4W0yHLc5Kb3ieU/uOi+zRZdhIrfh5zorrG9bSfVDQc9h0dR9gO+3bHq
+	 ul1VD9PJ3iJuekF+lfnqBztVCR/WhUeMwXxaqNSwUyFJREhVmoO8Vtntzw4FAiTB00
+	 00OvDbjpP1jbVZyUSglO9BK2uxJ3fZYicWL3MsWiS1eDM68OxCFUf3tPPbIQwtET/k
+	 cGteI6qIszlohfI51re4Bs3hb3htIsly4LrqymlfAEdhSawB5JdAEcLJmnZm2zRPZn
+	 N7W92SLp2WhHA==
+Date: Mon, 27 Jan 2025 15:51:47 +0000
+From: Will Deacon <will@kernel.org>
+To: Jann Horn <jannh@google.com>
+Cc: Valentin Schneider <vschneid@redhat.com>, linux-kernel@vger.kernel.org,
+	x86@kernel.org, virtualization@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org,
+	xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+	linux-arch@vger.kernel.org, rcu@vger.kernel.org,
+	linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+	bcm-kernel-feedback-list@broadcom.com,
+	Juergen Gross <jgross@suse.com>,
+	Ajay Kaher <ajay.kaher@broadcom.com>,
+	Alexey Makhalov <alexey.amakhalov@broadcom.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Jason Baron <jbaron@akamai.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang1211@gmail.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Clark Williams <williams@redhat.com>,
+	Yair Podemsky <ypodemsk@redhat.com>,
+	Tomas Glozar <tglozar@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Kees Cook <kees@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Christoph Hellwig <hch@infradead.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Rong Xu <xur@google.com>,
+	Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Yosry Ahmed <yosryahmed@google.com>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Jinghao Jia <jinghao7@illinois.edu>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 29/30] x86/mm, mm/vmalloc: Defer
+ flush_tlb_kernel_range() targeting NOHZ_FULL CPUs
+Message-ID: <20250127155146.GB25757@willie-the-truck>
+References: <20250114175143.81438-1-vschneid@redhat.com>
+ <20250114175143.81438-30-vschneid@redhat.com>
+ <CAG48ez1Mh+DOy0ysOo7Qioxh1W7xWQyK9CLGNU9TGOsLXbg=gQ@mail.gmail.com>
+ <xhsmh34hhh37q.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <CAG48ez3H8OVP1GxBLdmFgusvT1gQhwu2SiXbgi8T9uuCYVK52w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG48ez3H8OVP1GxBLdmFgusvT1gQhwu2SiXbgi8T9uuCYVK52w@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Recent change in how get_user() handles pointers [1] has a specific case
-for LAM. It assigns a different bitmask that's later used to check
-whether a pointer comes from userland in get_user().
+On Fri, Jan 17, 2025 at 04:52:19PM +0100, Jann Horn wrote:
+> On Fri, Jan 17, 2025 at 4:25 PM Valentin Schneider <vschneid@redhat.com> wrote:
+> > On 14/01/25 19:16, Jann Horn wrote:
+> > > On Tue, Jan 14, 2025 at 6:51 PM Valentin Schneider <vschneid@redhat.com> wrote:
+> > >> vunmap()'s issued from housekeeping CPUs are a relatively common source of
+> > >> interference for isolated NOHZ_FULL CPUs, as they are hit by the
+> > >> flush_tlb_kernel_range() IPIs.
+> > >>
+> > >> Given that CPUs executing in userspace do not access data in the vmalloc
+> > >> range, these IPIs could be deferred until their next kernel entry.
+> > >>
+> > >> Deferral vs early entry danger zone
+> > >> ===================================
+> > >>
+> > >> This requires a guarantee that nothing in the vmalloc range can be vunmap'd
+> > >> and then accessed in early entry code.
+> > >
+> > > In other words, it needs a guarantee that no vmalloc allocations that
+> > > have been created in the vmalloc region while the CPU was idle can
+> > > then be accessed during early entry, right?
+> >
+> > I'm not sure if that would be a problem (not an mm expert, please do
+> > correct me) - looking at vmap_pages_range(), flush_cache_vmap() isn't
+> > deferred anyway.
+> 
+> flush_cache_vmap() is about stuff like flushing data caches on
+> architectures with virtually indexed caches; that doesn't do TLB
+> maintenance. When you look for its definition on x86 or arm64, you'll
+> see that they use the generic implementation which is simply an empty
+> inline function.
+> 
+> > So after vmapping something, I wouldn't expect isolated CPUs to have
+> > invalid TLB entries for the newly vmapped page.
+> >
+> > However, upon vunmap'ing something, the TLB flush is deferred, and thus
+> > stale TLB entries can and will remain on isolated CPUs, up until they
+> > execute the deferred flush themselves (IOW for the entire duration of the
+> > "danger zone").
+> >
+> > Does that make sense?
+> 
+> The design idea wrt TLB flushes in the vmap code is that you don't do
+> TLB flushes when you unmap stuff or when you map stuff, because doing
+> TLB flushes across the entire system on every vmap/vunmap would be a
+> bit costly; instead you just do batched TLB flushes in between, in
+> __purge_vmap_area_lazy().
+> 
+> In other words, the basic idea is that you can keep calling vmap() and
+> vunmap() a bunch of times without ever doing TLB flushes until you run
+> out of virtual memory in the vmap region; then you do one big TLB
+> flush, and afterwards you can reuse the free virtual address space for
+> new allocations again.
+> 
+> So if you "defer" that batched TLB flush for CPUs that are not
+> currently running in the kernel, I think the consequence is that those
+> CPUs may end up with incoherent TLB state after a reallocation of the
+> virtual address space.
+> 
+> Actually, I think this would mean that your optimization is disallowed
+> at least on arm64 - I'm not sure about the exact wording, but arm64
+> has a "break before make" rule that forbids conflicting writable
+> address translations or something like that.
 
-Add test case to LAM that utilizes a ioctl (FIOASYNC) syscall which uses
-get_user() in its implementation. Execute the syscall with differently
-tagged pointers to verify that valid user pointers are passing through
-and invalid kernel/non-canonical pointers are not.
+Yes, that would definitely be a problem. There's also the more obvious
+issue that the CnP ("Common not Private") feature of some Arm CPUs means
+that TLB entries can be shared between cores, so the whole idea of using
+a CPU's exception level to predicate invalidation is flawed on such a
+system.
 
-[1] https://lore.kernel.org/all/20241024013214.129639-1-torvalds@linux-foundation.org/
-
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
----
-Changelog v6:
-- Update la57 checking function name.
-- Fix typo and add comment to the ioctl() usage.
-
-Changelog v4:
-- Use the changed cpu_has_la57() instead of mmap() to figure out current
-  paging level.
-- Apply Kirill's other comments: Remove redundant always true check,
-  close the ioctl file before exiting, change mapping size to PAGE_SIZE
-  so it looks less odd.
-- Turn this patch into a series and move some text to the cover letter.
-
-Changelog v3:
-- mmap the pointer passed to get_user to high address if 5 level paging
-  is enabled and to low address if 4 level paging is enabled.
-
-Changelog v2:
-- Use mmap with HIGH_ADDR to check if we're in 5 or 4 level pagetables.
-
- tools/testing/selftests/x86/lam.c | 108 ++++++++++++++++++++++++++++++
- 1 file changed, 108 insertions(+)
-
-diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
-index 140011bc39c0..6e013dfac35e 100644
---- a/tools/testing/selftests/x86/lam.c
-+++ b/tools/testing/selftests/x86/lam.c
-@@ -4,6 +4,7 @@
- #include <stdlib.h>
- #include <string.h>
- #include <sys/syscall.h>
-+#include <sys/ioctl.h>
- #include <time.h>
- #include <signal.h>
- #include <setjmp.h>
-@@ -43,7 +44,15 @@
- #define FUNC_INHERITE           0x20
- #define FUNC_PASID              0x40
- 
-+/* get_user() pointer test cases */
-+#define GET_USER_USER           0
-+#define GET_USER_KERNEL_TOP     1
-+#define GET_USER_KERNEL_BOT     2
-+#define GET_USER_KERNEL         3
-+
- #define TEST_MASK               0x7f
-+#define L5_SIGN_EXT_MASK        (0xFFUL << 56)
-+#define L4_SIGN_EXT_MASK        (0x1FFFFUL << 47)
- 
- #define LOW_ADDR                (0x1UL << 30)
- #define HIGH_ADDR               (0x3UL << 48)
-@@ -389,6 +398,78 @@ static int handle_syscall(struct testcases *test)
- 	return ret;
- }
- 
-+static int get_user_syscall(struct testcases *test)
-+{
-+	uint64_t ptr_address, bitmask;
-+	int fd, ret = 0;
-+	void *ptr;
-+
-+	if (la57_enabled()) {
-+		bitmask = L5_SIGN_EXT_MASK;
-+		ptr_address = HIGH_ADDR;
-+	} else {
-+		bitmask = L4_SIGN_EXT_MASK;
-+		ptr_address = LOW_ADDR;
-+	}
-+
-+	ptr = mmap((void *)ptr_address, PAGE_SIZE, PROT_READ | PROT_WRITE,
-+		   MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED, -1, 0);
-+
-+	if (ptr == MAP_FAILED) {
-+		perror("failed to map byte to pass into get_user");
-+		return 1;
-+	}
-+
-+	if (set_lam(test->lam) != 0) {
-+		ret = 2;
-+		goto error;
-+	}
-+
-+	fd = memfd_create("lam_ioctl", 0);
-+	if (fd == -1) {
-+		munmap(ptr, PAGE_SIZE);
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	switch (test->later) {
-+	case GET_USER_USER:
-+		/* Control group - properly tagged user pointer */
-+		ptr = (void *)set_metadata((uint64_t)ptr, test->lam);
-+		break;
-+	case GET_USER_KERNEL_TOP:
-+		/* Kernel address with top bit cleared */
-+		bitmask &= (bitmask >> 1);
-+		ptr = (void *)((uint64_t)ptr | bitmask);
-+		break;
-+	case GET_USER_KERNEL_BOT:
-+		/* Kernel address with bottom sign-extension bit cleared */
-+		bitmask &= (bitmask << 1);
-+		ptr = (void *)((uint64_t)ptr | bitmask);
-+		break;
-+	case GET_USER_KERNEL:
-+		/* Try to pass a kernel address */
-+		ptr = (void *)((uint64_t)ptr | bitmask);
-+		break;
-+	default:
-+		printf("Invalid test case value passed!\n");
-+		break;
-+	}
-+
-+	/*
-+	 * Use FIOASYNC ioctl because it utilizes get_user() internally and is
-+	 * very non-invasive to the system. Pass differently tagged pointers to
-+	 * get_user() in order to verify that valid user pointers are going
-+	 * through and invalid kernel/non-canonical pointers are not.
-+	 */
-+	if (ioctl(fd, FIOASYNC, ptr) != 0)
-+		ret = 1;
-+
-+	close(fd);
-+error:
-+	munmap(ptr, PAGE_SIZE);
-+	return ret;
-+}
-+
- int sys_uring_setup(unsigned int entries, struct io_uring_params *p)
- {
- 	return (int)syscall(__NR_io_uring_setup, entries, p);
-@@ -902,6 +983,33 @@ static struct testcases syscall_cases[] = {
- 		.test_func = handle_syscall,
- 		.msg = "SYSCALL:[Negative] Disable LAM. Dereferencing pointer with metadata.\n",
- 	},
-+	{
-+		.later = GET_USER_USER,
-+		.lam = LAM_U57_BITS,
-+		.test_func = get_user_syscall,
-+		.msg = "GET_USER: get_user() and pass a properly tagged user pointer.\n",
-+	},
-+	{
-+		.later = GET_USER_KERNEL_TOP,
-+		.expected = 1,
-+		.lam = LAM_U57_BITS,
-+		.test_func = get_user_syscall,
-+		.msg = "GET_USER:[Negative] get_user() with a kernel pointer and the top bit cleared.\n",
-+	},
-+	{
-+		.later = GET_USER_KERNEL_BOT,
-+		.expected = 1,
-+		.lam = LAM_U57_BITS,
-+		.test_func = get_user_syscall,
-+		.msg = "GET_USER:[Negative] get_user() with a kernel pointer and the bottom sign-extension bit cleared.\n",
-+	},
-+	{
-+		.later = GET_USER_KERNEL,
-+		.expected = 1,
-+		.lam = LAM_U57_BITS,
-+		.test_func = get_user_syscall,
-+		.msg = "GET_USER:[Negative] get_user() and pass a kernel pointer.\n",
-+	},
- };
- 
- static struct testcases mmap_cases[] = {
--- 
-2.47.1
-
+Will
 
