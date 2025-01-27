@@ -1,305 +1,114 @@
-Return-Path: <linux-kselftest+bounces-25209-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25210-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F305DA1CF04
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 23:36:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 58FC5A1CFD6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 04:56:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59E9E3A5FD6
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2025 22:36:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 612B03A1D52
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 03:56:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ECF076C61;
-	Sun, 26 Jan 2025 22:36:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B63B719B586;
+	Mon, 27 Jan 2025 03:56:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h31j1HX1"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="FD0JVqwu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E3D4AD39;
-	Sun, 26 Jan 2025 22:36:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4663C17;
+	Mon, 27 Jan 2025 03:56:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737931008; cv=none; b=ItC2VlzxQYdvN0Mtdaw3UOSZqpeqMLQqgW0pTk0f8s8NRT3GwyIgLsgIhcdoa2lb2Vw4h07jUuQYzZkZM8/Ti3KA/5ryAw+2Q9mYaGAOLmXwWTlVrVXJX7v5gZKYQbhcF7hxYyuYTvqJ93tDcIUCTL933ztZ6NuHIy19Md06J3k=
+	t=1737950192; cv=none; b=fctPjpdp9jRbgcbBoKC/r+I82+Tq91GDeZI9Uco7uwkp9TiCLIHXaN1xOOPEvf5PfyeZfDRGrIULH58PWnf6m44tbgA8uuAbo1bEXqHHlGm5Lg3rLYfhukwfg4frMktqRXIc28VNxvb1NLlOHLI2hZR1VPRCyBrdRQ5cEP0EMKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737931008; c=relaxed/simple;
-	bh=zGRnCZw8lUSv5ff0ytQ1sXTGvvDD+BS/qzjMqLoPadY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ShFQ98N62g15+Kn0niXnE8eUPTGwwXcUQS0ajUogIGSzV6tHaSjma5bwdaDsCiNiiYwioHUFyXBF+6ELyStMpixChjH33mGWRKbYY6x+rCI1o5EhXFuSYu4XZr5MNYRSwbneZpz1aQaEXbzXxeYeMEqNMeJv6hXQbcdPtFQLhS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h31j1HX1; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3863703258fso3030775f8f.1;
-        Sun, 26 Jan 2025 14:36:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737931005; x=1738535805; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rEUocpE7ltOnPKxqoqb5K1toLBI300wp5cHAtZcVdeQ=;
-        b=h31j1HX1WZj+qbw8Xm1hJeUzn+pDcscEuMlm6nglNrQpcHbQFr6cfs2h8DDgp/FHu+
-         ovc/kvtiQzXn9ENWrXm3052VFzOiGGqeZCq7uQfpdeyT6p1lCjkeIRtK3D1a5HHbtwkU
-         60RbU+PIyyw9ZwlV3jiS8dXBaNrxMpdCGS89rj7OQPGn3+jWZ3wBWwHmitrEhY+8/Hws
-         aes+vaxJXR9Sq7yI8RZHSC5VBlhaYd0QoEkWBuV5vlxfuRjk335mg+67JWHY5pdWIxCM
-         N6H4NNLVh02YP22nrYR2lQhfMlRampROHLCL+2n2th+E5SAIhSc9kBPINI7xsWpMA+PW
-         H6Vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737931005; x=1738535805;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rEUocpE7ltOnPKxqoqb5K1toLBI300wp5cHAtZcVdeQ=;
-        b=mGSrLFsBs/yL3mIj3eZtSVD60XXKZPYHRPT8MUvRYW5lShJgFMswPbnqVLWVoHGzD6
-         78RIYcTA2z3fi/ZCfbvk4nCdu3RKoL0WhjufnlqJOzr+qY/H1hXmZN2YO47tClkx6bXd
-         ja0oEKmYnVGAnnzNtruRdL0EFYqeyjsTLMGKtn0Hk4Vr71yS7RVa4C213UNjSoc9Ir4x
-         erXqbtxSBz3GHsRrPzTVXoPOir/Ahggxk+Ev5y98hFtejZKU1GvLixEzX8tZPQzF21C3
-         n/bK5VSvhL9THpt+x7Z0qz6xyNtPgc4LhcgR7GRP0iD5usi2Sy5Y+MhbJVy74AbHi9SV
-         0v7A==
-X-Forwarded-Encrypted: i=1; AJvYcCU06mdEpiMwkdENAhFqtiLjBtxtOfoHtGHOWp0VkVHyTrwN7wFbQMH1P9Yn2pkxnyFbNyheutTl0mU2t3jNJl0=@vger.kernel.org, AJvYcCWna3JHPzKtG8ZeOlwxgqdjnKq7PsMSwg2DlyGQ19+SaKZILbhx4rPRYLH490yH0ebMc6GtLLFro1vZYIBSWO8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzavb9t41tCM9Bm7/urjWpYOKTKw0lUL+Wl8xPOqhUMmBMoTGeN
-	2Fwk84GLMXgJcOInLAom5KqShZfgNtO4R/oxh1PJhmfbnvXLutUc
-X-Gm-Gg: ASbGnct95T2BKEMjZMFyN5zpb0xgvTKp1ODJWCkTkefOXXv5D7+lN7fFtR7/JmsW5+S
-	PYMW68Vc0/slbIZiSdNU6Fj2Jcn/2JkoskVFOfG+mtm6N2pMqhzSOBRc9V5DvW1rR9BYIbnYhoH
-	7+kI8PDUJ+Xznpl1izeYmiVRtiBwnHkFcvubLDTLxhYUfHykHAqkl6TFoq8ZWFSRCMEkcRhYE7x
-	lJklZ//tPihxsV5pOTOm7FLKFyn1q53rtq1y5BxkS0qnWO/WZnFmM32C+5XL3FAsBBnjNn8ACeL
-	1mRE3exmuw537yG1qwVCbKaU3zZLHP56F5I5+WvyCg==
-X-Google-Smtp-Source: AGHT+IEvf6Aj5nmtEW4W5Zj0k/wWNUEjvhQEr6jwMu2FbS2VQL+gGRkiusobaZk35IaqjsFKD/SAPA==
-X-Received: by 2002:a5d:5f47:0:b0:386:3672:73e7 with SMTP id ffacd0b85a97d-38c2b772610mr9936724f8f.9.1737931004479;
-        Sun, 26 Jan 2025 14:36:44 -0800 (PST)
-Received: from laptop.home (84.50.134.37.dynamic.jazztel.es. [37.134.50.84])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c2a188a77sm9398842f8f.51.2025.01.26.14.36.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jan 2025 14:36:44 -0800 (PST)
-From: =?UTF-8?q?Sergio=20Gonz=C3=A1lez=20Collado?= <sergio.collado@gmail.com>
-To: David Gow <davidgow@google.com>,
-	Rae Moar <rmoar@google.com>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	David Rheinsberg <david@readahead.eu>,
-	rust-for-linux@vger.kernel.org,
-	x86@kernel.org,
-	=?UTF-8?q?Sergio=20Gonz=C3=A1lez=20Collado?= <sergio.collado@gmail.com>,
-	Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v6] Kunit to check the longest symbol length
-Date: Sun, 26 Jan 2025 23:36:27 +0100
-Message-Id: <20250126223627.732451-1-sergio.collado@gmail.com>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1737950192; c=relaxed/simple;
+	bh=IObs1/3ftVIXcrcHAAaEO9FHqrki8Lsf9n0KXWbAnH4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=frLjRXSkPvArDR9ozeA7nSyTJ8CuJQscChRxHK7CH/QYaapmDPCg4h3ucslFdSzZQg3Kx1RFGW/t9HRvawQCDsDls3/WM9LmRcP49kChXe6zgD4hRdbXoROxQQY4PyE7PmGNJ6Dc2RORkzQzWZ9eiiLQNQiRrT1OZSvk+CJTbaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=FD0JVqwu; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1737950183;
+	bh=IObs1/3ftVIXcrcHAAaEO9FHqrki8Lsf9n0KXWbAnH4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=FD0JVqwuCY7goV2eSFKvQ9Ma3n/rm9HCWDy/ljIWZyjXbpYkX3L59auKgQcm3oO00
+	 8k5ZSt6oB7JpqV0rkK+45NMZoqhpXbE7xoyODimPbFff2aPEiRwy6jY5ZfjAZVmqDS
+	 WnM+w/SMrGzO7F4SWskUqzkr6BMYOSakoVMkJZfbCkN9wguQdsXTZ5YQhd21knoE7U
+	 ZD7ageo0jO5rZs5xmGXdki03e06ZhBdpOAUiJau9WtVnh+SfWfVGRO+btx1BuifKLA
+	 iDGRyy34W2gZlOoDQcw/KQ/b88BKMBoHLYOb6qVYKvF8Lo90tS5oAXPuBkvro8Hfkr
+	 3nn7wfTD2U64g==
+Received: from [192.168.50.250] (unknown [171.76.81.174])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: vignesh)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 3D93317E0B25;
+	Mon, 27 Jan 2025 04:56:14 +0100 (CET)
+Message-ID: <47538328-670e-4c71-a07f-b313f99e56cd@collabora.com>
+Date: Mon, 27 Jan 2025 09:26:06 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 5/5] kci-gitlab: docs: Add images
+To: Linus Torvalds <torvalds@linuxfoundation.org>
+Cc: kernelci@lists.linux.dev, linuxtv-ci@linuxtv.org,
+ dave.pigott@collabora.com, mripard@kernel.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org,
+ gustavo.padovan@collabora.com, pawiecz@collabora.com, spbnick@gmail.com,
+ tales.aparecida@gmail.com, workflows@vger.kernel.org,
+ skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+ nfraprado@collabora.com, davidgow@google.com, cocci@inria.fr,
+ Julia.Lawall@inria.fr, laura.nao@collabora.com, kernel@collabora.com,
+ gregkh@linuxfoundation.org, daniels@collabora.com,
+ helen.koike@collabora.com, shreeya.patel@collabora.com,
+ denys.f@collabora.com, nicolas.dufresne@collabora.com,
+ louis.chauvet@bootlin.com, hamohammed.sa@gmail.com, melissa.srw@gmail.com,
+ simona@ffwll.ch, airlied@gmail.com, Tim.Bird@sony.com,
+ laurent.pinchart@ideasonboard.com, broonie@kernel.org, leobras.c@gmail.com,
+ groeck@google.com, rdunlap@infradead.org, geert@linux-m68k.org,
+ michel.daenzer@mailbox.org, sakari.ailus@iki.fi, jarkko@kernel.org
+References: <20250123135342.1468787-1-vignesh.raman@collabora.com>
+ <20250123135342.1468787-6-vignesh.raman@collabora.com>
+ <CAHk-=wiWcw-aPcMvWYqJDqxopPYXnPnVgFYAUSkvkRPTjO83uQ@mail.gmail.com>
+Content-Language: en-US
+From: Vignesh Raman <vignesh.raman@collabora.com>
+In-Reply-To: <CAHk-=wiWcw-aPcMvWYqJDqxopPYXnPnVgFYAUSkvkRPTjO83uQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The longest length of a symbol (KSYM_NAME_LEN) was increased to 512
-in the reference [1]. This patch adds kunit test suite to check the longest
-symbol length. These tests verify that the longest symbol length defined
-is supported.
+Hi Linus,
 
-This test can also help other efforts for longer symbol length,
-like [2].
+On 23/01/25 21:16, Linus Torvalds wrote:
+> On Thu, 23 Jan 2025 at 05:56, Vignesh Raman <vignesh.raman@collabora.com> wrote:
+>>
+>>   Documentation/ci/gitlab-ci/images/drm-vkms.png | Bin 0 -> 73810 bytes
+>>   .../ci/gitlab-ci/images/job-matrix.png         | Bin 0 -> 20000 bytes
+>>   .../ci/gitlab-ci/images/new-project-runner.png | Bin 0 -> 607737 bytes
+>>   .../ci/gitlab-ci/images/pipelines-on-push.png  | Bin 0 -> 532143 bytes
+>>   .../ci/gitlab-ci/images/the-pipeline.png       | Bin 0 -> 62464 bytes
+>>   .../ci/gitlab-ci/images/variables.png          | Bin 0 -> 277518 bytes
+> 
+> 
+> This seems excessive.
+> 
+> We have a few images in the tree, but they tend to be either the
+> penguin logo or various source SVGs.
+> 
+> Not a set of random screenshots or whatever.
 
-The test suite defines one symbol with the longest possible length.
+We will remove this commit and update the documentation. Thanks.
 
-The first test verify that functions with names of the created
-symbol, can be called or not.
+Regards,
+Vignesh
 
-The second test, verify that the symbols are created (or
-not) in the kernel symbol table.
-
-[1] https://lore.kernel.org/lkml/20220802015052.10452-6-ojeda@kernel.org/
-[2] https://lore.kernel.org/lkml/20240605032120.3179157-1-song@kernel.org/
-
-Tested-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sergio González Collado <sergio.collado@gmail.com>
-Link: https://github.com/Rust-for-Linux/linux/issues/504
----
-V5 -> V6: remove tests with symbols of length KSYM_NAME_LEN+1
----
-V4 -> V5: fixed typo, added improved description
----
-V3 -> V4: add x86 mantainers, add new reference.
----
-V2 -> V3: updated base and added MODULE_DESCRIPTION() and MODULE_AUTHOR()
----
-V1 -> V2: corrected CI tests. Added fix proposed at [3]
-
-[3] https://lore.kernel.org/lkml/Y9ES4UKl%2F+DtvAVS@gmail.com/T/#m3ef0e12bb834d01ed1ebdcae12ef5f2add342077
-
-The test execution should result in something like:
-```
-[20:04:35] =============== longest-symbol (4 subtests) ================
-[20:04:35] [PASSED] test_longest_symbol
-[20:04:35] [PASSED] test_longest_symbol_kallsyms
-[20:04:35] ================= [PASSED] longest-symbol ==================
-[20:04:35] ============================================================
-[20:04:35] Testing complete. Ran 4 tests: passed: 4
-```
----
- arch/x86/tools/insn_decoder_test.c |  3 +-
- lib/Kconfig.debug                  |  9 ++++
- lib/Makefile                       |  2 +
- lib/longest_symbol_kunit.c         | 84 ++++++++++++++++++++++++++++++
- 4 files changed, 97 insertions(+), 1 deletion(-)
- create mode 100644 lib/longest_symbol_kunit.c
-
-diff --git a/arch/x86/tools/insn_decoder_test.c b/arch/x86/tools/insn_decoder_test.c
-index 472540aeabc2..3bde35ea4188 100644
---- a/arch/x86/tools/insn_decoder_test.c
-+++ b/arch/x86/tools/insn_decoder_test.c
-@@ -10,6 +10,7 @@
- #include <assert.h>
- #include <unistd.h>
- #include <stdarg.h>
-+#include <linux/kallsysms.h>
- 
- #define unlikely(cond) (cond)
- 
-@@ -106,7 +107,7 @@ static void parse_args(int argc, char **argv)
- 	}
- }
- 
--#define BUFSIZE 256
-+#define BUFSIZE (256 + KSYM_NAME_LEN)
- 
- int main(int argc, char **argv)
- {
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 5f1874622175..4c3a61862281 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2828,6 +2828,15 @@ config FORTIFY_KUNIT_TEST
- 	  by the str*() and mem*() family of functions. For testing runtime
- 	  traps of FORTIFY_SOURCE, see LKDTM's "FORTIFY_*" tests.
- 
-+config LONGEST_SYM_KUNIT_TEST
-+	tristate "Test the longest symbol possible" if !KUNIT_ALL_TESTS
-+	depends on KUNIT && KPROBES
-+	default KUNIT_ALL_TESTS
-+	help
-+	  Tests the longest symbol possible
-+
-+	  If unsure, say N.
-+
- config HW_BREAKPOINT_KUNIT_TEST
- 	bool "Test hw_breakpoint constraints accounting" if !KUNIT_ALL_TESTS
- 	depends on HAVE_HW_BREAKPOINT
-diff --git a/lib/Makefile b/lib/Makefile
-index d5cfc7afbbb8..e8fec9defec2 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -393,6 +393,8 @@ obj-$(CONFIG_FORTIFY_KUNIT_TEST) += fortify_kunit.o
- obj-$(CONFIG_CRC_KUNIT_TEST) += crc_kunit.o
- obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
- obj-$(CONFIG_USERCOPY_KUNIT_TEST) += usercopy_kunit.o
-+obj-$(CONFIG_LONGEST_SYM_KUNIT_TEST) += longest_symbol_kunit.o
-+CFLAGS_longest_symbol_kunit.o += $(call cc-disable-warning, missing-prototypes)
- 
- obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
- 
-diff --git a/lib/longest_symbol_kunit.c b/lib/longest_symbol_kunit.c
-new file mode 100644
-index 000000000000..38ae117647e4
---- /dev/null
-+++ b/lib/longest_symbol_kunit.c
-@@ -0,0 +1,84 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test the longest symbol length. Execute with:
-+ *  ./tools/testing/kunit/kunit.py run longest-symbol
-+ *  --arch=x86_64 --kconfig_add CONFIG_KPROBES=y --kconfig_add CONFIG_MODULES=y
-+ *  --kconfig_add CONFIG_RETPOLINE=n --kconfig_add CONFIG_CFI_CLANG=n
-+ *  --kconfig_add CONFIG_MITIGATION_RETPOLINE=n
-+ */
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <kunit/test.h>
-+#include <linux/stringify.h>
-+#include <linux/kprobes.h>
-+#include <linux/kallsyms.h>
-+
-+#define DI(name) s##name##name
-+#define DDI(name) DI(n##name##name)
-+#define DDDI(name) DDI(n##name##name)
-+#define DDDDI(name) DDDI(n##name##name)
-+#define DDDDDI(name) DDDDI(n##name##name)
-+
-+#define PLUS1(name) __PASTE(name, e)
-+
-+/*Generate a symbol whose name length is 511 */
-+#define LONGEST_SYM_NAME  DDDDDI(g1h2i3j4k5l6m7n)
-+
-+#define RETURN_LONGEST_SYM 0xAAAAA
-+
-+noinline int LONGEST_SYM_NAME(void);
-+noinline int LONGEST_SYM_NAME(void)
-+{
-+	return RETURN_LONGEST_SYM;
-+}
-+
-+_Static_assert(sizeof(__stringify(LONGEST_SYM_NAME)) == KSYM_NAME_LEN,
-+"Incorrect symbol length found. Expected KSYM_NAME_LEN: "
-+__stringify(KSYM_NAME) ", but found: "
-+__stringify(sizeof(LONGEST_SYM_NAME)));
-+
-+static void test_longest_symbol(struct kunit *test)
-+{
-+	KUNIT_EXPECT_EQ(test, RETURN_LONGEST_SYM, LONGEST_SYM_NAME());
-+};
-+
-+static void test_longest_symbol_kallsyms(struct kunit *test)
-+{
-+	unsigned long (*kallsyms_lookup_name)(const char *name);
-+	static int (*longest_sym)(void);
-+
-+	struct kprobe kp = {
-+		.symbol_name = "kallsyms_lookup_name",
-+	};
-+
-+	if (register_kprobe(&kp) < 0) {
-+		pr_info("%s: kprobe not registered\n", __func__);
-+		KUNIT_FAIL(test, "test_longest_symbol kallsysms: kprobe not registered\n");
-+		return;
-+	}
-+
-+	kunit_warn(test, "test_longest_symbol kallsyms: kprobe registered\n");
-+	kallsyms_lookup_name = (unsigned long (*)(const char *name))kp.addr;
-+	unregister_kprobe(&kp);
-+
-+	longest_sym =
-+		(void *) kallsyms_lookup_name(__stringify(LONGEST_SYM_NAME));
-+	KUNIT_EXPECT_EQ(test, RETURN_LONGEST_SYM, longest_sym());
-+};
-+
-+static struct kunit_case longest_symbol_test_cases[] = {
-+	KUNIT_CASE(test_longest_symbol),
-+	KUNIT_CASE(test_longest_symbol_kallsyms),
-+	{}
-+};
-+
-+static struct kunit_suite longest_symbol_test_suite = {
-+	.name = "longest-symbol",
-+	.test_cases = longest_symbol_test_cases,
-+};
-+kunit_test_suite(longest_symbol_test_suite);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Test the longest symbol length");
-+MODULE_AUTHOR("Sergio González Collado");
--- 
-2.39.2
-
+> 
+>           Linus
 
