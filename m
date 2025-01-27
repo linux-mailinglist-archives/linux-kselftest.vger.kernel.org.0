@@ -1,170 +1,216 @@
-Return-Path: <linux-kselftest+bounces-25222-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-25223-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68761A1D4B1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 11:45:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B8ECA1D52C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 12:17:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B768816560B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 10:45:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A79E7A10FC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2025 11:17:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B240E3596D;
-	Mon, 27 Jan 2025 10:45:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9815C1FE451;
+	Mon, 27 Jan 2025 11:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HE3TbI3+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="COsELM3d"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2053.outbound.protection.outlook.com [40.107.100.53])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 335321D540;
-	Mon, 27 Jan 2025 10:45:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737974726; cv=fail; b=YxObtX+LIR2tK9N+8UjnXx5CUtQ6ZBH28r9EVan0edlvmT2pcYUG38+w2NQ0Q4Om/ZZE2YfTnIQ+Qq3yCihvVU05ZgUunh1mNpkmneKE3NLsV6PoYTig64Gokcto/DN726JxObh7tTkHH9y2UP8XOuGK0VRselAyPwUkxBKjgr4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737974726; c=relaxed/simple;
-	bh=rcBQ0EDrxXhXWSfvD7UGflIPrQ6gom/AqcHE0h1hJho=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=W2shHJtE9rYpw3jIEELFrtqtlBGQHyZyO0GCdevM2Xmo+dlgohfb0SINs5hoDctICAR+/TWQnuzbVSMPt7goUVTFg32Bwp0Ayow8v2IVGG/kVEYtjNVa7LefyfCflzpL+s6Ts2xUYoN2f5Yu06GGb/VXDONl9GIiczkGh7bLKGk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=HE3TbI3+; arc=fail smtp.client-ip=40.107.100.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=DlTwkH88zoNu61NkKrK5Lh4Suyo88m8O3NgB7HWN/3MUnVJvhNBR4o7TPb0eRFKRauT5bc8UXKRjwuoqINA0QIpm/yyvqC7ZqcTYDjTrQ4TZb6A93izvHexDWniKvl5UwkDPA1kP2mFDHRn6LkgvF+7GgoCPNn8DQbq0Xj3CBsARKcJOYT/zM/MR6FyXAUm5AguE782YswO5fwRh6xET9Na8bwMAgQEnKsmV5nebLOpL9ma90JAar+E0z05r9/AIzbzf9ferFIt1Pcoo/0yli4sKpnLxMGRoKh5ddBSqxpXTOgvoeP19lq3nRVcBwFMPZVD4tfWLM6t5mFQWTabJdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rcBQ0EDrxXhXWSfvD7UGflIPrQ6gom/AqcHE0h1hJho=;
- b=WG+v3Sh9U09IOCJn0Yb/PlT8o5YV6iVixgAwVNM6oRSg+Yx4q5jlGJ7e0rCr0KKE8Oo1agJtINOAFrOzRu84aIhK7kn3BnO98eVlyLlumuFQlnoQmOKquk1esQAolvqKbiOzqp1IZphgBStm2fKPGWJKp4t4nyao0NvH8zX8biT/065PFbp73eEdHVYPsCFy8ZrBqbG7f7emXZYXFH/clZHGR6FjBqJlkulLE3BX9kvTOlZG30B2VnGi5dgI+iSRx0y4v8g9+YNJoaYq2l4NIp8wdM1nXruA+PS7AEqCBzCCjUUSSLzlOdefjSUMMxj+j+jcmvP7cb+EJdzIsg7lhA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rcBQ0EDrxXhXWSfvD7UGflIPrQ6gom/AqcHE0h1hJho=;
- b=HE3TbI3+O3bkaZMxJ2QVkZUF7sIagV+bEaLxNrvly1DWKhDr31gBw71VXU+TMHAyMQpZYB9/EptoqnTlUTKs62uAxfnSAzcTyrSeCiuhmU/OnmUHbeqYiTU70zBJxTP12hHy5buCi96eePmfP4SXBVNJIJtOy+ik8RMupnTSS6HkEokFvEucMaUN+MvJmU53hP7BF6ebl+R1RFyBLH0xUU9OwIA4xmQ+A4RpN4GToRYGBGuqc7RQ0hVR2lPEXhqHglpedGFl2JVurF+65C3NZodG9anR2O7ZI1o087X+AI0eTs1TAZRAF9sqmmj5q7PGTEvKifq6gOVYsan6snr7gQ==
-Received: from DS0PR12MB6560.namprd12.prod.outlook.com (2603:10b6:8:d0::22) by
- MN2PR12MB4304.namprd12.prod.outlook.com (2603:10b6:208:1d0::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.22; Mon, 27 Jan
- 2025 10:45:22 +0000
-Received: from DS0PR12MB6560.namprd12.prod.outlook.com
- ([fe80::4c05:4274:b769:b8af]) by DS0PR12MB6560.namprd12.prod.outlook.com
- ([fe80::4c05:4274:b769:b8af%4]) with mapi id 15.20.8377.009; Mon, 27 Jan 2025
- 10:45:21 +0000
-From: Cosmin Ratiu <cratiu@nvidia.com>
-To: "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC: "liuhangbin@gmail.com" <liuhangbin@gmail.com>, "razor@blackwall.org"
-	<razor@blackwall.org>, "davem@davemloft.net" <davem@davemloft.net>, Tariq
- Toukan <tariqt@nvidia.com>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "liali@redhat.com" <liali@redhat.com>,
-	"jv@jvosburgh.net" <jv@jvosburgh.net>, "pabeni@redhat.com"
-	<pabeni@redhat.com>, "horms@kernel.org" <horms@kernel.org>, Jianbo Liu
-	<jianbol@nvidia.com>, "edumazet@google.com" <edumazet@google.com>, Boris
- Pismenny <borisp@nvidia.com>, "kuba@kernel.org" <kuba@kernel.org>
-Subject: Re: [PATCH net v3] bonding: Correctly support GSO ESP offload
-Thread-Topic: [PATCH net v3] bonding: Correctly support GSO ESP offload
-Thread-Index: AQHbcKgqHR0megussk+A74Cd/aIoErMqb8wA
-Date: Mon, 27 Jan 2025 10:45:21 +0000
-Message-ID: <47227635d220ffd8941b65d778e23a578707aa96.camel@nvidia.com>
-References: <20250127104147.759658-1-cratiu@nvidia.com>
-In-Reply-To: <20250127104147.759658-1-cratiu@nvidia.com>
-Reply-To: Cosmin Ratiu <cratiu@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR12MB6560:EE_|MN2PR12MB4304:EE_
-x-ms-office365-filtering-correlation-id: 6cfd666d-6a06-46fd-9768-08dd3ebfb2ea
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|7416014|38070700018;
-x-microsoft-antispam-message-info:
- =?iso-8859-1?Q?An09JGWf7BVj7pWbepMOyGj0WSAckrag4TSm6lOs29oiFO8xSE863v9xEQ?=
- =?iso-8859-1?Q?liowJ5NMpaCLCP+dWlNpP9ibI9IRjJZT1G9AlzuXdgWD3SsWukE/pwIWjg?=
- =?iso-8859-1?Q?JbVTAEAl/CaA3+E6AVtFpX9u+FXUTcpFVB/g1FHEuKGKnIVpZ/BEQZjTAM?=
- =?iso-8859-1?Q?h/OJ/HJSXVqm9KpvS/8Fo3fV/VpfwOiaO0bP1cpoNPy66TK/1C5/+Ec30o?=
- =?iso-8859-1?Q?zsuNnnkWGLvUjNqg0ssYcKZetPRwIPD6c3/ppiPW2cQWecfR8Tx7ax8TzI?=
- =?iso-8859-1?Q?1A9W1/9HMf2e9r4gCOTaRWcDRCfY7hyssPHwRVb96DAi5rZfleMFgAG/FI?=
- =?iso-8859-1?Q?6c8tX5HY2ynfRtWmQTMxDQ6qJEVqHeScqrO8lW1ZhjUGCmAVy2IzHC7WWC?=
- =?iso-8859-1?Q?O6yFcDiWrOVenGerg6YLcyjxbB+/3M1xOXEnpCUEuznsl8TmlQ+GxCmB2T?=
- =?iso-8859-1?Q?iDJnu5re/6DnYOY0RkBaolJ6+18qlLVDHsAIkkZJRUNbNAvjI2qwqLOFn8?=
- =?iso-8859-1?Q?vyanEWXCIGKcYY+dZ0ffpXGfzFzMbuiiC8+0M1u+Bada+6nJtxZlK8ohEH?=
- =?iso-8859-1?Q?G5jS3N+rBJrYvcuWJsK4lFvlYktP2j2vpbPtZxwIwA0XOVAImomBF9ynWb?=
- =?iso-8859-1?Q?q3QowgCB9aZcnxPfXX6C1WMrzxpZyPqoCmiu4ZJwFNY1hBONz1PQ2jo9c4?=
- =?iso-8859-1?Q?VkM07HvfLfd2jzNaj6UfkPklBBw1p2Aw4OUyNwp9XH7QgBgf2iRahFLebX?=
- =?iso-8859-1?Q?gcQYm0TLAc9H3hA8TIT4Lt/whK+OxJ8so+dT/8iJvUJLtMpt+ek7Ev/wZD?=
- =?iso-8859-1?Q?nvGIPR64QPy7plkguIIsYQjp/gQ/UAvg8bewmVMfkOHCqeSES9lpeMDo4W?=
- =?iso-8859-1?Q?2fhGkuzub52WqptaUzoyXuJj0z0cCJ3N2HgrshpJSiHCVwf6gSobQWXxks?=
- =?iso-8859-1?Q?lhiJTF4zeVdUZUUtI2NxDoJHsmouIzNHTu0lokqIyCUCXaERiXoDVwigIC?=
- =?iso-8859-1?Q?wHmXeMHPU+toHEYw+0ICNiDjIDebaHxBQI926eeHhMQ4y2OMcYD4rN8hgp?=
- =?iso-8859-1?Q?CTZJOVzd5G6K+ZClenk6FlzH9YMEdQ0sPjjzMkcry12GTGg+osRUTj9yoB?=
- =?iso-8859-1?Q?apcCAvdczQ2YxDBnSPF/LNTB1WcfRyFTmBv6vrSHiq0ZJgbkxnkBbrxKQk?=
- =?iso-8859-1?Q?rpxZsWLwjLzz1MWJb9nkSj00VgoFnh7OtBNJdEVt22ayPqDYKxoH7SVlwI?=
- =?iso-8859-1?Q?BBMtQ5YrnCbUdDYPesx/RP4nFsUZJ5l4YP826AUIXlKe+sol95hs3Yh5k5?=
- =?iso-8859-1?Q?7+IvelvgxynD6xbAfUGJbh17h7U85sot7tD0Va9LT1UJDVk0722JHzWzIn?=
- =?iso-8859-1?Q?76I0K0mcgUcCgavXIESr/XZXUlyDl+y3yp8CU1q6zkXriX5dOFCDCCTeVD?=
- =?iso-8859-1?Q?0cc472xqSbqDMFaSqu3AGt4nFVwPYXQCR7OOW4FP0C7R+N5aD/vDgVpJKC?=
- =?iso-8859-1?Q?2ZRVUAmsmc6wz5Idqc8geu?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6560.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?98UYNqIF57U1OD1SpIMacQLJ4FcDB65GuTxDgIkaTkjX8ehsRZBW8OoVqB?=
- =?iso-8859-1?Q?0zZ9VVTXmAbItdDZ3LHY9rf0OkAZg8YHrjOQQ7FMMANm5DJRkGTBaAAk7S?=
- =?iso-8859-1?Q?FRNC6PTl7S+o5wKngQUfZ2E1qWeq9/2OxlUkHmDnhEYtNh+0+lUD+ac3qm?=
- =?iso-8859-1?Q?vbm6WSlsB49r0OK9RyyAqvyBjN03XYpgU9L03SgchjxsDyueFMZZ/wsJUc?=
- =?iso-8859-1?Q?RWIQk/E2d9iCvYfEtveqNN7lqbmAQu5iA3NNHY7OkEolvlyz61sDeExof4?=
- =?iso-8859-1?Q?qbPxowvs2CCtS49ap0UUXKabQDY9ceB/7suG9w2CubET1I/CX45jEy7H0D?=
- =?iso-8859-1?Q?wos1rV3U6hWivzTnfqLj98JFd+nwP5DOLEWlzNrikuNzFDxrRz1N+YZuAH?=
- =?iso-8859-1?Q?/2iUKkorgqteTEyrUZQyI9XHAEi+Mbdnro2ZG0C2RBL6m4kcDmQS84knyp?=
- =?iso-8859-1?Q?j7IdE41T9XtGPy7urPrE0Wr9Eap7xR2j1r9QgiHUA3dSFY3RtF/uGAKyCT?=
- =?iso-8859-1?Q?aGRW/ynR/olECU/6zLkpDw3nkz6nSzu1Pq8ir53MRszoyaMfhDuQsBUs9N?=
- =?iso-8859-1?Q?nELTd2XEzHWCtv1Ng1nzgpaM3pUm5AQRfqXqXb55pEPJkkjD0Mjzx6GHNb?=
- =?iso-8859-1?Q?eMN3y1vf6+KKLn8oP9Hryox10AgzHjTijhY2EqNZwyeb4aYxG4pLfCSM5m?=
- =?iso-8859-1?Q?tdUoMkTom0C86qkQOKV1bQFnIVatzG6kD9CM0enj1BBuxBYLf0I8AO0xAT?=
- =?iso-8859-1?Q?IWHJ19T9O+GgO4CRVYrwu6bipwiafsdCJ0d7nGLnu8Zy4SB9rMD/qFrA49?=
- =?iso-8859-1?Q?l0OIAktTtmRlPliW/+jvThHW8o0muRTo1R7WaHwQRfEQd7bDgDC8IG2A4u?=
- =?iso-8859-1?Q?DYLFCsZj0V9KXKVL89xEM4iUkJ0TOYLF1coM/ah35oRfmTDQkU/mfBus7f?=
- =?iso-8859-1?Q?QJ/wxSIFN4Xhk2cQoi54+4bl9i/LgNTgC70+66UaHQOouoKs/9hcEi6L6y?=
- =?iso-8859-1?Q?hUKw/aqGE7o0l1DDwg44hg6NfUPLv4Mns8d/0PVmrsrslnsjvmQl6WAhdH?=
- =?iso-8859-1?Q?GQcBplkDecU4wdIhfrbeH1YXXeafAVPUcCZV/JSetviem6YWiKTKVKdE8G?=
- =?iso-8859-1?Q?EkITqSHudTQS3SIJ7LB6aYoKH2WHtZuswNguxuAv6QkXdcszUxg4Z9O7Hj?=
- =?iso-8859-1?Q?I5/EHsPcqtDmjr/dh0i90LytFzhzPeGiva/ZJQYVWEvGGJijMtcQDwBQ2/?=
- =?iso-8859-1?Q?GGg9oNveIRLAVGEAmuNlhLvN/bapQyQJfsqeRQb42t2WZ64fs2H+BoxN49?=
- =?iso-8859-1?Q?E/6WTil3msg/fEScak7maIJDhgHECnkDImShMfjQ3tH+Rc/iKeFrTKAxUG?=
- =?iso-8859-1?Q?A1mLJahfa7sElrulAjmiVYFQfdWiQzc6vc02EGNklX+ypx43Z/NOAE2Igv?=
- =?iso-8859-1?Q?o6ITXBRxXxSWBiPt90cFV6rofZi6Q32XaDE7SQQJ1DaaV1B1GaAqDr4EQk?=
- =?iso-8859-1?Q?PzA2okPXHWJeNnOnmMs2FLA7Kow2+k1aOo8a22g6aGiCtSVjx9o+/XNXGH?=
- =?iso-8859-1?Q?lNP1+bkBGQIln6Me/58Gd6Citx5kaxdVLivD2t2sOoFGwH7xBw9B61vntE?=
- =?iso-8859-1?Q?zyW26OVSTeukmze+w3fpnGXntjovaApK5F?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D5C1FDE26
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Jan 2025 11:17:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737976632; cv=none; b=pS1FCzjI0OyMS7L75eH6dliU73FJiDZtQCG7bfWLqOX73gA3hZovJ3HeYx6BuQfJuxdq/CCmQMGBPwFfA6f35t89ijDnRqrQ5cqzapjr/xMYJlq6xgHrLUZZoMR+KweBDLUeeaXmXm/FtYvj6krxEdoUGtMMqCOqJhXTRbLerYk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737976632; c=relaxed/simple;
+	bh=4dbZjQGSiQ3Uvilz1uWGVxI7SQKdAeYkXY6x+87P1EE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Y6S5swD6DnHsjigdNo9GN0NZj7DhXa5VWHILxJiQQM8e57uvlEkbqGDp9zAmq6r7o27I7h/4m2Kb4ffpJa7H3X2SlG0BTQhtHh+8i+/y6XDryBn0KdJQ39b874bQgkk0T9MoWj1Y2jBukYg3Jj63mocTdITZaRswcH56LfHVF8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=COsELM3d; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1737976629;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0llw80E8nAjg6kMfEOzoPei4nanpbue7YefsY9gW++w=;
+	b=COsELM3dgMzqvxES3yiE/1iCKTW6mckRJV7B8/AVvEmfEs3SAt58Asoo0IgFILoNYu5k29
+	fBFSTjEQXJS4MWwknSPRBkiv8c2Xy/Cc+zdBfzbAHLOzoyM7Z/f6FRWzeb8BFXztoPRlie
+	qe9GX2oHEkEnaCuf0iM8NV5Gi4TtJI8=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-417-28zl1534PuyGaLK35z8uig-1; Mon, 27 Jan 2025 06:17:08 -0500
+X-MC-Unique: 28zl1534PuyGaLK35z8uig-1
+X-Mimecast-MFC-AGG-ID: 28zl1534PuyGaLK35z8uig
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-436225d4389so25044775e9.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jan 2025 03:17:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737976627; x=1738581427;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0llw80E8nAjg6kMfEOzoPei4nanpbue7YefsY9gW++w=;
+        b=hiPxonYiY/yALAVkIHTKgc+9u+iOulmOHhwPp+LtuySIm5OcrNzZvBf5wWCFJekFly
+         rbpT0Yfzsn7XuImb2RfnYHSnqmqpVw66LpF9k83srl1k/OchGAXOTgRSujBzHuRYYZS1
+         qEi8+nX0d/zk3pGjYOC7lw8E7nQK/FgiRv+ZmniesT41gr0fIjodT1He+pvQmXR85uul
+         eXyW5ROdTXApD27F3/GRHmrmX2IkxEOLVj5XcEOnEaY2LifogHvj9bk/GJerhJxKTDV9
+         74X8L10jp6gDOlaad2sME0Q49w7aNsdGpew8/Ha6wgHjdSn439OXEdKzSj/NizUJ8w+s
+         GU8g==
+X-Forwarded-Encrypted: i=1; AJvYcCW405qcLvrVaXJjkq1JlYnE7lDuOGmTiX/g5kRgUEojK6d7qQs00wBcJWBDDL1/uAsgWwTdJyr7eXynlWMeDqg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyoKGyM+qmiSBYefD8/Zrm7eNnmIaHySe5xDYXtOVNzSiIbQ9N8
+	JVOQBek0mEuwI9czxcQCd0j1VT46Faz0JmXFB2Ee3h9MyXp62rZvTamInJoYF1yPGtejHKnS6a5
+	U1+LUwka0AtggNZmonKxpyKSsjVqtrmMNDpIJfgTE5AecdtlDlG2fMA+tooal+NyaYg==
+X-Gm-Gg: ASbGncs9q2bgeaUJHvibArP7aFm20c915tXo0jd7WVuYH5IEzcS36Lvsh3P63uK+PCP
+	I09epW1MtV/6hCw8228uAVZKWiydEN1CDPgeumXESeppX8JM2TfwuPFZmJtR/G6WomnrQEytJ8x
+	IBXBsVkMxPOMSezxXIrmOsNKkJRCHerzpuHbdH4LhmpDblQlvzU6thXF9trRUnvHznz9+SIbk1Y
+	lcZvSe8F+7DYJmBGswLJgSiC0SCw4B5WP/Jx3Ky1A0WTlSe1z4MctUwJBFuw1cHf1EFXkUP8EkU
+	Orhoc3GSoEClHIZB7kEuZPCpQA26r/SEdEAwJpkkZGa+4feXFp3WN2aBKG8LmmEp7g==
+X-Received: by 2002:a05:600c:6d46:b0:434:92f8:54a8 with SMTP id 5b1f17b1804b1-438bcfd440dmr101053005e9.0.1737976626872;
+        Mon, 27 Jan 2025 03:17:06 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE5ZBkhc7Mo57S55YqkWjUaKcE0DvJ7v1EsH72AA8CbL1E0vvN/eQHzrpNG4sI4i71C/vJTUQ==
+X-Received: by 2002:a05:600c:6d46:b0:434:92f8:54a8 with SMTP id 5b1f17b1804b1-438bcfd440dmr101052395e9.0.1737976626396;
+        Mon, 27 Jan 2025 03:17:06 -0800 (PST)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438bd48a145sm128093025e9.16.2025.01.27.03.17.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jan 2025 03:17:05 -0800 (PST)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linux-perf-users@vger.kernel.org, xen-devel@lists.xenproject.org,
+ kvm@vger.kernel.org, linux-arch@vger.kernel.org, rcu@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ bcm-kernel-feedback-list@broadcom.com, Juergen Gross <jgross@suse.com>,
+ Ajay Kaher <ajay.kaher@broadcom.com>, Alexey Makhalov
+ <alexey.amakhalov@broadcom.com>, Russell King <linux@armlinux.org.uk>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Paul
+ Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Peter Zijlstra <peterz@infradead.org>, Arnaldo Carvalho de Melo
+ <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
+ Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>, Boris Ostrovsky
+ <boris.ostrovsky@oracle.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Pawan
+ Gupta <pawan.kumar.gupta@linux.intel.com>, Sean Christopherson
+ <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, Andy Lutomirski
+ <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, "Paul E. McKenney"
+ <paulmck@kernel.org>, Jason Baron <jbaron@akamai.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes <joel@joelfernandes.org>,
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli <juri.lelli@redhat.com>,
+ Clark Williams <williams@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>,
+ Tomas Glozar <tglozar@redhat.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Kees Cook
+ <kees@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Christoph
+ Hellwig <hch@infradead.org>, Shuah Khan <shuah@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, Alice Ryhl
+ <aliceryhl@google.com>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+ Samuel Holland <samuel.holland@sifive.com>, Rong Xu <xur@google.com>,
+ Nicolas Saenz Julienne <nsaenzju@redhat.com>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Yosry Ahmed <yosryahmed@google.com>, "Kirill A.
+ Shutemov" <kirill.shutemov@linux.intel.com>, "Masami Hiramatsu (Google)"
+ <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, Luis
+ Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 22/30] context_tracking: Exit CT_STATE_IDLE upon
+ irq/nmi entry
+In-Reply-To: <Z5A6NPqVGoZ32YsN@pavilion.home>
+References: <20250114175143.81438-1-vschneid@redhat.com>
+ <20250114175143.81438-23-vschneid@redhat.com>
+ <Z5A6NPqVGoZ32YsN@pavilion.home>
+Date: Mon, 27 Jan 2025 12:17:03 +0100
+Message-ID: <xhsmh5xm0pkuo.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6560.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6cfd666d-6a06-46fd-9768-08dd3ebfb2ea
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jan 2025 10:45:21.7399
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VXWXrllMUPTZ/hzywSn9c2kx0B675ODjw7S4VTGxsZd3gMbpqdygrcXzBa1ENOdLHxs3M+ZVfwnTUtBcUuJVMw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4304
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Same as v2, but I added Hangbin to 'Signed-off-by'.
+On 22/01/25 01:22, Frederic Weisbecker wrote:
+> Le Tue, Jan 14, 2025 at 06:51:35PM +0100, Valentin Schneider a =C3=A9crit=
+ :
+>> ct_nmi_{enter, exit}() only touches the RCU watching counter and doesn't
+>> modify the actual CT state part context_tracking.state. This means that
+>> upon receiving an IRQ when idle, the CT_STATE_IDLE->CT_STATE_KERNEL
+>> transition only happens in ct_idle_exit().
+>>
+>> One can note that ct_nmi_enter() can only ever be entered with the CT st=
+ate
+>> as either CT_STATE_KERNEL or CT_STATE_IDLE, as an IRQ/NMI happenning in =
+the
+>> CT_STATE_USER or CT_STATE_GUEST states will be routed down to ct_user_ex=
+it().
+>
+> Are you sure? An NMI can fire between guest_state_enter_irqoff() and
+> __svm_vcpu_run().
+
+Urgh, you're quite right.
+
+> And NMIs interrupting userspace don't call
+> enter_from_user_mode(). In fact they don't call irqentry_enter_from_user_=
+mode()
+> like regular IRQs but irqentry_nmi_enter() instead. Well that's for archs
+> implementing common entry code, I can't speak for the others.
+>
+
+That I didn't realize, so thank you for pointing it out. Having another
+look now, I mistook DEFINE_IDTENTRY_RAW(exc_int3) for the general case
+when it really isn't :(
+
+> Unifying the behaviour between user and idle such that the IRQs/NMIs exit=
+ the
+> CT_STATE can be interesting but I fear this may not come for free. You wo=
+uld
+> need to save the old state on IRQ/NMI entry and restore it on exit.
+>
+
+That's what I tried to avoid, but it sounds like there's no nice way around=
+ it.
+
+> Do we really need it?
+>
+
+Well, my problem with not doing IDLE->KERNEL transitions on IRQ/NMI is that
+this leads the IPI deferral logic to observe a technically-out-of-sync sate
+for remote CPUs. Consider:
+
+  CPUx            CPUy
+                    state :=3D CT_STATE_IDLE
+                    ...
+                    ~>IRQ
+                    ...
+                    ct_nmi_enter()
+                    [in the kernel proper by now]
+
+  text_poke_bp_batch()
+    ct_set_cpu_work(CPUy, CT_WORK_SYNC)
+      READ CPUy ct->state
+      `-> CT_IDLE_STATE
+      `-> defer IPI
+
+
+I thought this meant I would need to throw out the "defer IPIs if CPU is
+idle" part, but AIUI this also affects CT_STATE_USER and CT_STATE_GUEST,
+which is a bummer :(
 
 
